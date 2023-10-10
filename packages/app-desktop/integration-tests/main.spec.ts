@@ -1,5 +1,7 @@
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
+import activateMainMenuItem from './util/activateMainMenuItem';
+import SettingsScreen from './models/SettingsScreen';
 
 
 test.describe('main', () => {
@@ -25,7 +27,7 @@ test.describe('main', () => {
 		await editor.noteTitleInput.fill('Test note');
 
 		// Note list should contain the new note
-		await mainScreen.noteList.getByText('Test note').waitFor();
+		await mainScreen.noteListContainer.getByText('Test note').waitFor();
 
 		// Focus the editor
 		await editor.codeMirrorEditor.click();
@@ -39,5 +41,38 @@ test.describe('main', () => {
 		// Should render
 		const viewerFrame = editor.getNoteViewerIframe();
 		await expect(viewerFrame.locator('h1')).toHaveText('Test note!');
+	});
+
+	test('should be possible to remove sort order buttons in settings', async ({ electronApp, mainWindow }) => {
+		const mainScreen = new MainScreen(mainWindow);
+		await mainScreen.waitFor();
+
+		// Sort order buttons should be visible by default
+		await expect(mainScreen.noteListContainer.locator('[title^="Toggle sort order"]')).toBeVisible();
+
+		// Open settings (check both labels so that this works on MacOS)
+		expect(
+			await activateMainMenuItem(electronApp, 'Preferences...') || await activateMainMenuItem(electronApp, 'Options'),
+		).toBe(true);
+
+		// Should be on the settings screen
+		const settingsScreen = new SettingsScreen(mainWindow);
+		await settingsScreen.waitFor();
+
+		// Open the appearance tab
+		await settingsScreen.appearanceTabButton.click();
+
+		// Find the sort order visible checkbox
+		const sortOrderVisibleCheckbox = mainWindow.getByLabel(/^Show sort order/);
+
+		await expect(sortOrderVisibleCheckbox).toBeChecked();
+		await sortOrderVisibleCheckbox.click();
+		await expect(sortOrderVisibleCheckbox).not.toBeChecked();
+
+		// Save settings & close
+		await settingsScreen.okayButton.click();
+		await mainScreen.waitFor();
+
+		await expect(mainScreen.noteListContainer.locator('[title^="Toggle sort order"]')).not.toBeVisible();
 	});
 });
