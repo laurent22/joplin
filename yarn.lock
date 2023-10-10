@@ -4665,7 +4665,7 @@ __metadata:
     "@types/jest": 29.5.4
     "@types/mustache": 4.2.2
     "@types/node": 18.17.18
-    "@types/react": 18.2.21
+    "@types/react": 18.2.22
     "@types/react-redux": 7.1.26
     "@types/styled-components": 5.1.27
     async-mutex: 0.4.0
@@ -4753,7 +4753,7 @@ __metadata:
     "@tsconfig/react-native": 2.0.2
     "@types/fs-extra": 11.0.2
     "@types/jest": 29.5.4
-    "@types/react": 18.2.21
+    "@types/react": 18.2.22
     "@types/react-native": 0.70.6
     "@types/react-redux": 7.1.26
     "@types/tar-stream": 2.2.3
@@ -4855,7 +4855,7 @@ __metadata:
     "@replit/codemirror-vim": 6.0.14
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.4
-    "@types/react": 18.0.24
+    "@types/react": 18.2.21
     "@types/react-redux": 7.1.26
     "@types/styled-components": 5.1.27
     jest: 29.6.3
@@ -4938,7 +4938,7 @@ __metadata:
     "@types/nanoid": 3.0.0
     "@types/node": 18.17.18
     "@types/node-rsa": 1.1.1
-    "@types/react": 18.2.21
+    "@types/react": 18.2.22
     "@types/uuid": 9.0.4
     async-mutex: 0.4.0
     base-64: 1.0.0
@@ -5010,7 +5010,7 @@ __metadata:
     "@joplin/lib": ~2.13
     "@types/jest": 29.5.4
     "@types/pdfjs-dist": 2.10.378
-    "@types/react": 18.2.21
+    "@types/react": 18.2.22
     "@types/react-dom": 18.2.7
     "@types/styled-components": 5.1.27
     async-mutex: 0.4.0
@@ -8383,17 +8383,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:18.0.24":
-  version: 18.0.24
-  resolution: "@types/react@npm:18.0.24"
-  dependencies:
-    "@types/prop-types": "*"
-    "@types/scheduler": "*"
-    csstype: ^3.0.2
-  checksum: 7d06125bac61e1c6661e5dfbeeeb56d5b6d1d4c743292faebaa6b0f30f8414c7af3cadf674923fd86e4ca14e82566ff9156cd40c56786be024600c31b97d6c03
-  languageName: node
-  linkType: hard
-
 "@types/react@npm:18.2.21":
   version: 18.2.21
   resolution: "@types/react@npm:18.2.21"
@@ -8402,6 +8391,17 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: ffed203bfe7aad772b8286f7953305c9181ac3a8f27d3f5400fbbc2a8e27ca8e5bbff818ee014f39ca0d19d2b3bb154e5bdbec7e232c6f80b59069375aa78349
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:18.2.22":
+  version: 18.2.22
+  resolution: "@types/react@npm:18.2.22"
+  dependencies:
+    "@types/prop-types": "*"
+    "@types/scheduler": "*"
+    csstype: ^3.0.2
+  checksum: 44289523dabaadcd3fd85689abb98f9ebcc8492d7e978348d1c986138acef4801030b279e89a19e38a6319e294bcea77559e37e0c803e4bacf2b8ae3a56ba587
   languageName: node
   linkType: hard
 
