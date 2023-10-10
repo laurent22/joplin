@@ -7,9 +7,9 @@ export default defineConfig({
 	// Only match .ts files (no compiled .js files)
 	testMatch: '*.spec.ts',
 
-	// Run tests in files in sequence.
-	// Avoid running Joplin in parallel
-	fullyParallel: false,
+	// Allow running tests in parallel (note: each Joplin instance
+	// is given its own profile directory).
+	fullyParallel: true,
 
 	// Fail the build on CI if you accidentally left test.only in the source code.
 	forbidOnly: !!process.env.CI,
@@ -17,8 +17,8 @@ export default defineConfig({
 	// Retry on CI only
 	retries: process.env.CI ? 2 : 0,
 
-	// Opt out of parallel tests
-	workers: 1,
+	// Opt out of parallel tests on CI
+	workers: process.env.CI ? 1 : undefined,
 
 	// Reporter to use. See https://playwright.dev/docs/test-reporters
 	reporter: 'html',
