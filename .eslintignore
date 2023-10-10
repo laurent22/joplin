@@ -371,6 +371,10 @@ packages/app-desktop/gui/style/StyledTextInput.js
 packages/app-desktop/gui/utils/NoteListUtils.js
 packages/app-desktop/gui/utils/convertToScreenCoordinates.js
 packages/app-desktop/gui/utils/loadScript.js
+packages/app-desktop/integration-tests/main.spec.js
+packages/app-desktop/integration-tests/models/MainScreen.js
+packages/app-desktop/integration-tests/models/NoteEditorScreen.js
+packages/app-desktop/playwright.config.js
 packages/app-desktop/plugins/GotoAnything.js
 packages/app-desktop/services/bridge.js
 packages/app-desktop/services/commands/stateToWhenClauseContext.js
