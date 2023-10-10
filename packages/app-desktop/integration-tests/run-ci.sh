@@ -1,5 +1,6 @@
 #!/bin/sh
 
+echo "Running desktop integration tests..."
 
 if test "$RUNNER_OS" = "Linux" ; then
 	# The Ubuntu Github CI doesn't have a display server.
