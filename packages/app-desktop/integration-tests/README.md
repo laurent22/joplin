@@ -14,3 +14,4 @@ with Playwright:
   and [that organisation's test suite](https://github.com/kubeshop/monokle/blob/main/tests/base.test.ts).
 - [The Playwright ElectronApp docs](https://playwright.dev/docs/api/class-electronapplication)
 - [Electron Playwright example repository](https://github.com/spaceagetv/electron-playwright-example)
+- [Playwright best practices](https://playwright.dev/docs/best-practices)
