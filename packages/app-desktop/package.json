@@ -15,7 +15,7 @@
     "start": "gulp build && electron . --env dev --log-level debug --open-dev-tools",
     "test": "jest",
     "test-ui": "playwright test",
-    "test-ci": "yarn test && yarn test-ui",
+    "test-ci": "yarn test && sh ./integration-tests/run-ci.sh",
     "renameReleaseAssets": "node tools/renameReleaseAssets.js"
   },
   "repository": {
