@@ -38,6 +38,10 @@ packages/app-clipper/popup/config/webpack.config.js
 packages/app-clipper/popup/node_modules
 packages/app-clipper/popup/scripts/build.js
 packages/app-desktop/build/
+packages/app-desktop/test-results/
+packages/app-desktop/playwright-report/
+packages/app-desktop/playwright/.cache/
+packages/app-desktop/integration-tests/test-profile/
 packages/app-desktop/dist
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/supportedLocales.js
