@@ -12,7 +12,7 @@ import { countryDisplayName, countryCodeOnly } from '@joplin/lib/locale';
 import { readdirSync, writeFileSync } from 'fs';
 import { readFile } from 'fs/promises';
 import { copy, mkdirpSync, remove } from 'fs-extra';
-const { GettextExtractor, JsExtractors } = require('gettext-extractor');
+import { GettextExtractor, JsExtractors } from 'gettext-extractor';
 
 const rootDir = `${__dirname}/../..`;
 const localesDir = `${__dirname}/locales`;
@@ -20,7 +20,7 @@ const libDir = `${rootDir}/packages/lib`;
 
 function serializeTranslation(translation: string) {
 	const output = parseTranslations(translation);
-	return JSON.stringify(output, Object.keys(output).sort((a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : +1), ' ');
+	return JSON.stringify(output, Object.keys(output).sort((a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : +1), '\t');
 }
 
 function saveToFile(filePath: string, data: string) {
@@ -31,6 +31,7 @@ async function buildLocale(inputFile: string, outputFile: string) {
 	const r = await parsePoFile(inputFile);
 	const translation = serializeTranslation(r);
 	saveToFile(outputFile, translation);
+	return { headers: r.headers };
 }
 
 async function createPotFile(potFilePath: string) {
@@ -391,9 +392,10 @@ async function main() {
 		const poFilePäth = `${localesDir}/${locale}.po`;
 		const jsonFilePath = `${jsonLocalesDir}/${locale}.json`;
 		if (locale !== defaultLocale) await mergePotToPo(potFilePath, poFilePäth);
-		await buildLocale(poFilePäth, jsonFilePath);
+		const { headers } = await buildLocale(poFilePäth, jsonFilePath);
 
 		const stat = await translationStatus(defaultLocale === locale, poFilePäth);
+		stat.pluralForms = headers['Plural-Forms'];
 		stat.locale = locale;
 		stat.languageName = countryDisplayName(locale);
 		stats.push(stat);
