@@ -2,17 +2,16 @@
 import { ContextMenuEvent, ContextMenuParams } from 'electron';
 import { useEffect, RefObject } from 'react';
 import { _ } from '@joplin/lib/locale';
-import Setting from '@joplin/lib/models/Setting';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
-import convertToScreenCoordinates from '../../../../utils/convertToScreenCoordinates';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import { EditContextMenuFilterObject } from '@joplin/lib/services/plugins/api/JoplinWorkspace';
 import type CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import eventManager from '@joplin/lib/eventManager';
 import bridge from '../../../../../services/bridge';
+import Setting from '@joplin/lib/models/Setting';
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -35,7 +34,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 	// It might be buggy, refer to the below issue
 	// https://github.com/laurent22/joplin/pull/3974#issuecomment-718936703
 	useEffect(() => {
-		const isAncestorOfCodeMirrorEditor = (elem: HTMLElement) => {
+		const isAncestorOfCodeMirrorEditor = (elem: Element) => {
 			for (; elem.parentElement; elem = elem.parentElement) {
 				if (elem.classList.contains(props.editorClassName)) {
 					return true;
@@ -45,14 +44,9 @@ const useContextMenu = (props: ContextMenuProps) => {
 			return false;
 		};
 
-		let lastInCodeMirrorContextMenuTimestamp = 0;
-
-		// The browser's contextmenu event provides additional information about the
-		// target of the event, not provided by the Electron context-menu event.
-		const onBrowserContextMenu = (event: Event) => {
-			if (isAncestorOfCodeMirrorEditor(event.target as HTMLElement)) {
-				lastInCodeMirrorContextMenuTimestamp = Date.now();
-			}
+		const convertFromScreenCoordinates = (zoomPercent: number, screenXY: number) => {
+			const zoomFraction = zoomPercent / 100;
+			return screenXY / zoomFraction;
 		};
 
 		function pointerInsideEditor(params: ContextMenuParams) {
@@ -64,13 +58,15 @@ const useContextMenu = (props: ContextMenuProps) => {
 			// params.inputFieldType is "plainText". Thus, such a check would be inconsistent.
 			if (!elements.length || !isEditable) return false;
 
-			const maximumMsSinceBrowserEvent = 100;
-			if (Date.now() - lastInCodeMirrorContextMenuTimestamp > maximumMsSinceBrowserEvent) {
-				return false;
-			}
-
-			const rect = convertToScreenCoordinates(Setting.value('windowContentZoomFactor'), elements[0].getBoundingClientRect());
-			return rect.x < x && rect.y < y && rect.right > x && rect.bottom > y;
+			// Checks whether the element the pointer clicked on is inside the editor.
+			// This logic will need to be changed if the editor is eventually wrapped
+			// in an iframe, as elementFromPoint will return the iframe container (and not
+			// a child of the editor).
+			const zoom = Setting.value('windowContentZoomFactor');
+			const xScreen = convertFromScreenCoordinates(zoom, x);
+			const yScreen = convertFromScreenCoordinates(zoom, y);
+			const intersectingElement = document.elementFromPoint(xScreen, yScreen);
+			return intersectingElement && isAncestorOfCodeMirrorEditor(intersectingElement);
 		}
 
 		async function onContextMenu(event: ContextMenuEvent, params: ContextMenuParams) {
@@ -160,11 +156,8 @@ const useContextMenu = (props: ContextMenuProps) => {
 		// the listener that shows the default menu.
 		bridge().window().webContents.prependListener('context-menu', onContextMenu);
 
-		window.addEventListener('contextmenu', onBrowserContextMenu);
-
 		return () => {
 			bridge().window().webContents.off('context-menu', onContextMenu);
-			window.removeEventListener('contextmenu', onBrowserContextMenu);
 		};
 	}, [
 		props.plugins, props.editorClassName, editorRef,
