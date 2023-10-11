@@ -188,7 +188,7 @@
 		},
 
 		{
-			"matchUpdateTypes": ["minor" "patch"],
+			"matchUpdateTypes": ["minor", "patch"],
 			"automerge": true,
 			"groupName": "electron",
 			"extends": ["schedule:monthly"],
