@@ -9,16 +9,15 @@ import type { MenuItem } from 'electron';
 // `menuItemPath` should be a list of menu labels (e.g. [["&JoplinMainMenu", "&File"], "Synchronise"]).
 const activateMainMenuItem = (electronApp: ElectronApplication, menuItemLabel: string) => {
 	return electronApp.evaluate(async ({ Menu }, menuItemLabel) => {
-		const searchSubmenu = (submenu: MenuItem[]) => {
+		const activateItemInSubmenu = (submenu: MenuItem[]) => {
 			for (const item of submenu) {
 				if (item.label === menuItemLabel && item.visible) {
 					// Found!
 					item.click();
 					return true;
 				} else if (item.submenu) {
-					const foundItem = searchSubmenu(item.submenu.items);
+					const foundItem = activateItemInSubmenu(item.submenu.items);
 
-					// Stop if the item was found
 					if (foundItem) {
 						return true;
 					}
@@ -30,7 +29,7 @@ const activateMainMenuItem = (electronApp: ElectronApplication, menuItemLabel: s
 		};
 
 		const appMenu = Menu.getApplicationMenu();
-		return searchSubmenu(appMenu.items);
+		return activateItemInSubmenu(appMenu.items);
 	}, menuItemLabel);
 };
 
