@@ -42,7 +42,7 @@ const shim = {
 	isNode: () => {
 		if (typeof process === 'undefined') return false;
 		if (shim.isElectron()) return true;
-		return process.title === 'node' || (process.title && process.title.indexOf('gulp') === 0);
+		return !shim.mobilePlatform();
 	},
 
 	isReactNative: () => {
