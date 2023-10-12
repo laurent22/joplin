@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import { absoluteUrl, imageSrc, getJoplinClipperSvgClassName, baseUrl, getImageSizes, pageLocationOrigin, getStyleSheets } from '@joplin/lib/dom';
 
 (function() {
 
@@ -81,6 +80,7 @@ import { absoluteUrl, imageSrc, getJoplinClipperSvgClassName, baseUrl, getImageS
 				}
 
 				if (nodeName === 'img') {
+					// eslint-disable-next-line no-undef
 					const src = absoluteUrl(imageSrc(node));
 					node.setAttribute('src', src);
 					if (!(src in imageIndexes)) imageIndexes[src] = 0;
@@ -99,6 +99,7 @@ import { absoluteUrl, imageSrc, getJoplinClipperSvgClassName, baseUrl, getImageS
 				}
 
 				if (nodeName === 'svg') {
+					// eslint-disable-next-line no-undef
 					const className = getJoplinClipperSvgClassName(node);
 					if (!(className in imageIndexes)) imageIndexes[className] = 0;
 
@@ -116,11 +117,13 @@ import { absoluteUrl, imageSrc, getJoplinClipperSvgClassName, baseUrl, getImageS
 				}
 
 				if (nodeName === 'embed') {
+					// eslint-disable-next-line no-undef
 					const src = absoluteUrl(node.src);
 					node.setAttribute('src', src);
 				}
 
 				if (nodeName === 'object') {
+					// eslint-disable-next-line no-undef
 					const data = absoluteUrl(node.data);
 					node.setAttribute('data', data);
 				}
@@ -200,6 +203,7 @@ import { absoluteUrl, imageSrc, getJoplinClipperSvgClassName, baseUrl, getImageS
 		let svgId = 0;
 
 		for (const svg of svgs) {
+			// eslint-disable-next-line no-undef
 			if (!getJoplinClipperSvgClassName(svg)) {
 				svg.classList.add(`joplin-clipper-svg-${svgId}`);
 				svgId++;
@@ -248,7 +252,9 @@ import { absoluteUrl, imageSrc, getJoplinClipperSvgClassName, baseUrl, getImageS
 				name: shouldSendToJoplin ? 'sendContentToJoplin' : 'clippedContent',
 				title: title,
 				html: html,
+				// eslint-disable-next-line no-undef
 				base_url: baseUrl(),
+				// eslint-disable-next-line no-undef
 				url: pageLocationOrigin() + location.pathname + location.search,
 				parent_id: command.parent_id,
 				tags: command.tags || '',
@@ -273,6 +279,7 @@ import { absoluteUrl, imageSrc, getJoplinClipperSvgClassName, baseUrl, getImageS
 				response.warning = 'Could not retrieve simplified version of page - full page has been saved instead.';
 				return response;
 			}
+			// eslint-disable-next-line no-undef
 			return clippedContentResponse(article.title, article.body, getImageSizes(document), getAnchorNames(document));
 
 		} else if (command.name === 'isProbablyReaderable') {
@@ -284,6 +291,7 @@ import { absoluteUrl, imageSrc, getJoplinClipperSvgClassName, baseUrl, getImageS
 		} else if (command.name === 'completePageHtml') {
 
 			if (isPagePdf()) {
+				// eslint-disable-next-line no-undef
 				return clippedContentResponse(pageTitle(), embedPageUrl(), getImageSizes(document), getAnchorNames(document));
 			}
 
@@ -293,10 +301,12 @@ import { absoluteUrl, imageSrc, getJoplinClipperSvgClassName, baseUrl, getImageS
 			// Because cleanUpElement is going to modify the DOM and remove elements we don't want to work
 			// directly on the document, so we make a copy of it first.
 			const cleanDocument = document.body.cloneNode(true);
+			// eslint-disable-next-line no-undef
 			const imageSizes = getImageSizes(document, true);
 			const imageIndexes = {};
 			cleanUpElement(convertToMarkup, cleanDocument, imageSizes, imageIndexes);
 
+			// eslint-disable-next-line no-undef
 			const stylesheets = convertToMarkup === 'html' ? getStyleSheets(document) : null;
 
 			// The <BODY> tag may have a style in the CSS stylesheets. This
@@ -338,9 +348,11 @@ import { absoluteUrl, imageSrc, getJoplinClipperSvgClassName, baseUrl, getImageS
 				container.appendChild(range.cloneContents());
 			}
 
+			// eslint-disable-next-line no-undef
 			const imageSizes = getImageSizes(document, true);
 			const imageIndexes = {};
 			cleanUpElement(convertToMarkup, container, imageSizes, imageIndexes);
+			// eslint-disable-next-line no-undef
 			return clippedContentResponse(pageTitle(), container.innerHTML, getImageSizes(document), getAnchorNames(document));
 
 		} else if (command.name === 'screenshot') {
@@ -443,6 +455,7 @@ import { absoluteUrl, imageSrc, getJoplinClipperSvgClassName, baseUrl, getImageS
 					const content = {
 						title: pageTitle(),
 						crop_rect: selectionArea,
+						// eslint-disable-next-line no-undef
 						url: pageLocationOrigin() + location.pathname + location.search,
 						parent_id: command.parent_id,
 						tags: command.tags,
@@ -467,7 +480,9 @@ import { absoluteUrl, imageSrc, getJoplinClipperSvgClassName, baseUrl, getImageS
 
 		} else if (command.name === 'pageUrl') {
 
+			// eslint-disable-next-line no-undef
 			const url = pageLocationOrigin() + location.pathname + location.search;
+			// eslint-disable-next-line no-undef
 			return clippedContentResponse(pageTitle(), url, getImageSizes(document), getAnchorNames(document));
 
 		} else {

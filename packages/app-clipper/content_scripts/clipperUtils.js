@@ -42,7 +42,7 @@ function getJoplinClipperSvgClassName(svg) {
 }
 
 // eslint-disable-next-line
-export function getImageSizes(element, forceAbsoluteUrls) {
+function getImageSizes(element, forceAbsoluteUrls) {
 	const output = {};
 
 	const images = element.getElementsByTagName('img');
@@ -104,7 +104,7 @@ function imageSrc(image) {
 // required to render the page. Not currently used but could be as an
 // option to clip pages as HTML.
 // eslint-disable-next-line
-export function getStyleSheets(doc) {
+function getStyleSheets(doc) {
 	const output = [];
 	for (let i = 0; i < doc.styleSheets.length; i++) {
 		const sheet = doc.styleSheets[i];
