@@ -3183,6 +3183,60 @@ Note that on Windows the code signing certificate has been renewed, which some t
 - Improved: Added shortcut for tags (`Cmd+Opt+T` / `Ctrl+Alt+T`) ([#1638](https://github.com/laurent22/joplin/issues/1638))
 - Fixed: Allow opening external editor on new notes ([#1443](https://github.com/laurent22/joplin/issues/1443))
 
+## [v1.0.159](https://github.com/laurent22/joplin/releases/tag/v1.0.159) - 2019-06-08T00:00:19Z
+
+- New: Added option to open development tools, to make it easier to create custom CSS
+- Improved: Improved tag dialog to make it easier to add and remove tags ([#1589](https://github.com/laurent22/joplin/issues/1589))
+- Improved: Speed up synchronisation by allowing multiple connections when downloading items ([#1633](https://github.com/laurent22/joplin/issues/1633))
+- Improved: Better handling of items that cannot be decrypted, including those that cause crashes
+- Improved: Upgrade TOC plugin version to 4.0.0 to fix various issues ([#1603](https://github.com/laurent22/joplin/issues/1603))
+- Improved: Improve how font size is applied ([#1601](https://github.com/laurent22/joplin/issues/1601))
+- Improved: Improved workflow of downloading and decrypting data during sync
+- Fixed: Fix icon path and directory in Linux install script ([#1612](https://github.com/laurent22/joplin/issues/1612))
+- Fixed: Handle multiple lines in attributes when importing Enex files ([#1583](https://github.com/laurent22/joplin/issues/1583))
+- Fixed: Fix issue with revisions being needlessly created when decrypting notes
+
+## [v1.0.158](https://github.com/laurent22/joplin/releases/tag/v1.0.158) - 2019-05-27T19:01:18Z
+
+- Improved: Enable more options on multimd-table plugin ([#1586](https://github.com/laurent22/joplin/issues/1586))
+- Improved: Improved config screen with dark theme
+- Improved: Make bold text more visible ([#1575](https://github.com/laurent22/joplin/issues/1575))
+- Fixed: Fix internal note links ([#1587](https://github.com/laurent22/joplin/issues/1587))
+- Fixed: Fixed empty separators in menu
+
+## [v1.0.157](https://github.com/laurent22/joplin/releases/tag/v1.0.157) - 2019-05-26T17:55:53Z
+
+- New: Added Persian translation ([#1539](https://github.com/laurent22/joplin/issues/1539))
+- New: Allow downloading attachments on demand or automatically ([#1527](https://github.com/laurent22/joplin/issues/1527)) ([#1481](https://github.com/laurent22/joplin/issues/1481))
+- Improved: Make bold text more visible ([#1575](https://github.com/laurent22/joplin/issues/1575))
+- Improved: Add number of characters removed and added in revision list
+- Improved: Remove tags from Welcome item due to issue with cleaning them up afterwards
+- Improved: Handle missing resource blob when setting resource size
+- Improved: Gray out checkboxes that have been ticked inside notes
+- Improved: Put back "Fetched items" message during sync
+- Improved: When opening a note using Goto Anything, open all its parent notebooks too
+- Fixed: Clears search when clicking on a notebook. ([#1504](https://github.com/laurent22/joplin/issues/1504)) ([#1186](https://github.com/laurent22/joplin/issues/1186))
+- Fixed: Default sort order for notebooks should be title and ascending ([#1541](https://github.com/laurent22/joplin/issues/1541))
+- Fixed: Added backticks to auto-wrapping quotes. ([#1534](https://github.com/laurent22/joplin/issues/1534)) ([#1426](https://github.com/laurent22/joplin/issues/1426))
+- Fixed: Prevent app from trying to upload resource it has not downloaded yet
+
+## [v1.0.153](https://github.com/laurent22/joplin/releases/tag/v1.0.153) (Pre-release) - 2019-05-15T06:27:29Z
+
+This release only adds additional logging for the note history feature.
+
+## [v1.0.152](https://github.com/laurent22/joplin/releases/tag/v1.0.152) - 2019-05-13T09:08:07Z
+
+Same as v1.0.151 but with a fix to the migration issue, that was in turns affecting synchronisation.
+
+- New: Support for note history ([#1415](https://github.com/laurent22/joplin/issues/1415)) ([#712](https://github.com/laurent22/joplin/issues/712))
+- Improved: Save size of a resource to the database; and added mechanism to run non-database migrations
+- Improved: Improved note deletion dialog ([#1502](https://github.com/laurent22/joplin/issues/1502))
+- Fixed: Allow resources greater than 10 MB but they won't be synced on mobile ([#371](https://github.com/laurent22/joplin/issues/371))
+- Fixed: Improved handling of images when using external editor, so that it works in Atom, VSCode and Typora ([#1425](https://github.com/laurent22/joplin/issues/1425))
+- Fixed: Some images were not being displayed
+- Fixed: Resets the undo manager when creating new notes ([#1495](https://github.com/laurent22/joplin/issues/1495)) ([#355](https://github.com/laurent22/joplin/issues/355))
+- Fixed: Prevents notes with no title to break after synchronize ([#1472](https://github.com/laurent22/joplin/issues/1472))
+
 ## [v1.0.151](https://github.com/laurent22/joplin/releases/tag/v1.0.151) - 2019-05-12T15:14:32Z
 
 Same as v1.0.150 but with a small fix to set the resources file size.
@@ -3504,57 +3558,6 @@ This is mainly a release to fix a bug related to the new IMG tag support.
 ## [v1.0.110](https://github.com/laurent22/joplin/releases/tag/v1.0.110) - 2018-09-29T12:29:21Z
 
 This is a release only to get the new API out. If you do not need the functionalities of this API or you don't know what it is, you can probably skip this version.
-
-## [v1.0.109](https://github.com/laurent22/joplin/releases/tag/v1.0.109) - 2018-09-27T18:01:41Z
-
-- New: Allow loading image resources in IMG html tags. For example, this is now possible: `<img src=":/a92ac34387ff467a8c839d201dcd39aa" width="50"/>`
-- Security: Fixed security issue by enabling contextIsolation and proxying IPC messages via preload script. Thank you Yaroslav Lobachevski for discovering the issue.
-- Fixes [#801](https://github.com/laurent22/joplin/issues/801): Replaced freegeoip which is no longer free with ip-api to enable again geo-location for notes.
-- Fixes [#802](https://github.com/laurent22/joplin/issues/802): Scale note text correctly when using zoom
-- Fixes [#805](https://github.com/laurent22/joplin/issues/805): Fixed app freezing when opening note in external editor and then creating new note
-- Clipper: Fixes [#809](https://github.com/laurent22/joplin/issues/809): Saves full URL with note, including query parameters
-- Clipper: Resolves [#681](https://github.com/laurent22/joplin/issues/681): Allow adding tags from Web Clipper
-- Clipper: Fixes [#672](https://github.com/laurent22/joplin/issues/672): Make sure selected notebook is saved and restored correctly
-- Clipper: Fixes [#817](https://github.com/laurent22/joplin/issues/817): Added support for PICTURE tags, which will fix issues with certain pages from which images were not being imported
-- Clipper: Fixed importing certain images with sources that contain brackets
-- Improved: Mostly an invisible change at this point, but the REST API has been refactored to allow adding more calls and to support third-party applications.
-
-## [v1.0.108](https://github.com/laurent22/joplin/releases/tag/v1.0.108) (Pre-release) - 2018-09-29T18:49:29Z
-
-To test the latest security fix only. Won't be released officially.
-
-## [v1.0.107](https://github.com/laurent22/joplin/releases/tag/v1.0.107) - 2018-09-16T19:51:07Z
-
-- New: Resolves [#755](https://github.com/laurent22/joplin/issues/755): Added note properties dialog box to view and edit created time, updated time, source URL and geolocation
-- Added Dutch (Netherlands) translation
-- Added Romanian translation
-- Fixes [#718](https://github.com/laurent22/joplin/issues/718): Allow recursively importing Markdown folder
-- Fix [#764](https://github.com/laurent22/joplin/issues/764): Fix equation tag positioning
-- Fixes [#710](https://github.com/laurent22/joplin/issues/710): Don't unwatch file when it is temporarily deleted
-- Resolves [#781](https://github.com/laurent22/joplin/issues/781): Allow creating notebooks with duplicate titles to allow two notebooks with same name to exist under different parents
-- Fixes [#799](https://github.com/laurent22/joplin/issues/799): Handle restricted_content error for Dropbox (skip files that cannot be uploaded to copyright or other Dropbox t&c violation)
-- Provided script to install on Ubuntu (with icon)
-
-## [v1.0.106](https://github.com/laurent22/joplin/releases/tag/v1.0.106) - 2018-09-08T15:23:40Z
-
-Note: this release is no longer signed to avoid issues with renewing certificates. If you get a warning or the application cannot be installed, please report on the forum on GitHub.
-
-- Resolves [#761](https://github.com/laurent22/joplin/issues/761): Highlight single tick code segments
-- Resolves [#714](https://github.com/laurent22/joplin/issues/714): Allow starting application minimised in the tray icon
-- Fixes [#759](https://github.com/laurent22/joplin/issues/759): Add border around code block when exporting to PDF
-- Fixes [#697](https://github.com/laurent22/joplin/issues/697): Focus search text input after clearing search
-- Fixes [#709](https://github.com/laurent22/joplin/issues/709): Now that HTML is supported in notes, remove BR tag replacement hack to fix newline issues.
-
-## [v1.0.105](https://github.com/laurent22/joplin/releases/tag/v1.0.105) - 2018-09-05T11:29:36Z
-
-- Resolves [#679](https://github.com/laurent22/joplin/issues/679): Drag a note on a tag to associate the tag.
-- Resolves [#427](https://github.com/laurent22/joplin/issues/427): Import source-url from Enex files
-- Resolves [#594](https://github.com/laurent22/joplin/issues/594): Enable support for SVG graphics
-- New: replace the resource icon (for internal links) with the Joplin icon (from ForkAwesome)
-- Update: Upgraded Katex to support new features
-- Update: Improve speed of loading notes that include many resources, and prevent UI from freezing
-- Fixes [#653](https://github.com/laurent22/joplin/issues/653): Don't detect horizontal rule as bullet list item
-- Fixes [#113](https://github.com/laurent22/joplin/issues/113): Upgraded Ace Editor to try to fix Korean input issue (to be confirmed)
 
 ## [v1.0.109](https://github.com/laurent22/joplin/releases/tag/v1.0.109) - 2018-09-27T18:01:41Z
 
