@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 
 const sourcePath = `${__dirname}/../../lib/randomClipperPort.js`;
-const clipperUtilsPath = `${__dirname}/../../lib/clipperUtils.ts`;
+const clipperUtilsPath = `${__dirname}/../../lib/clipperUtils.js`;
 
 
 // Mozilla insists on building the clipper from a tarball, not from the repository
@@ -13,10 +13,7 @@ if (fs.pathExistsSync(sourcePath)) {
 }
 
 if (fs.pathExistsSync(clipperUtilsPath)) {
-	const content = fs.readFileSync(clipperUtilsPath, 'utf-8');
-	// remove referenece to module.exports
-	const contentWithoutKeywords = content.split('export ').join('');
-	fs.writeFileSync(`${__dirname}/../content_scripts/clipperUtils.js`, contentWithoutKeywords);
+	fs.copySync(clipperUtilsPath, `${__dirname}/../content_scripts/clipperUtils.js`);
 }
 
 // These files give warnings when loading the extension in Chrome, in dev mode

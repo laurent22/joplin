@@ -561,6 +561,7 @@ packages/lib/WelcomeUtils.js
 packages/lib/array.js
 packages/lib/callbackUrlUtils.test.js
 packages/lib/callbackUrlUtils.js
+packages/lib/clipperUtils.js
 packages/lib/commands/historyBackward.js
 packages/lib/commands/historyForward.js
 packages/lib/commands/index.js
