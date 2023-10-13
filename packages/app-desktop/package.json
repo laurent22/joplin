@@ -14,7 +14,8 @@
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
     "start": "gulp build && electron . --env dev --log-level debug --open-dev-tools",
     "test": "jest",
-    "test-ci": "yarn test",
+    "test-ui": "playwright test",
+    "test-ci": "yarn test && sh ./integration-tests/run-ci.sh",
     "renameReleaseAssets": "node tools/renameReleaseAssets.js"
   },
   "repository": {
@@ -116,6 +117,7 @@
   "devDependencies": {
     "@electron/rebuild": "3.3.0",
     "@joplin/tools": "~2.13",
+    "@playwright/test": "1.38.1",
     "@testing-library/react-hooks": "8.0.1",
     "@types/jest": "29.5.4",
     "@types/node": "18.17.18",
