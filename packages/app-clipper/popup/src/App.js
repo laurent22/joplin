@@ -182,6 +182,7 @@ class AppComponent extends Component {
 		await bridge().tabsExecuteScript({ file: '/content_scripts/JSDOMParser.js' });
 		await bridge().tabsExecuteScript({ file: '/content_scripts/Readability.js' });
 		await bridge().tabsExecuteScript({ file: '/content_scripts/Readability-readerable.js' });
+		await bridge().tabsExecuteScript({ file: '/content_scripts/clipperUtils.js' });
 		await bridge().tabsExecuteScript({ file: '/content_scripts/index.js' });
 	}
 
