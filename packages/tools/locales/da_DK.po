@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: ERYpTION\n"
 "Language-Team: \n"
 "Language: da_DK\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.4\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -58,7 +60,7 @@ msgstr "(wysiwyg: %s)"
 #: packages/app-mobile/components/screens/Note.tsx:641
 #: packages/lib/shim-init-node.js:211
 msgid "(You may disable this prompt in the options)"
-msgstr ""
+msgstr "(Du kan deaktivere denne prompt i indstillingerne)"
 
 #: packages/app-desktop/gui/MenuBar.tsx:674
 #: packages/app-desktop/gui/MenuBar.tsx:949
@@ -200,9 +202,8 @@ msgstr "%s: %s"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:194
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:263
-#, fuzzy
 msgid "%s: Missing password."
-msgstr "Hovedadgangskode"
+msgstr "%s: Manglende adgangskode."
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
@@ -369,14 +370,12 @@ msgid "Always"
 msgstr "Altid"
 
 #: packages/lib/models/Setting.ts:1121
-#, fuzzy
 msgid "Always ask"
-msgstr "Altid"
+msgstr "Spørg altid"
 
 #: packages/lib/models/Setting.ts:1122
-#, fuzzy
 msgid "Always resize"
-msgstr "Altid"
+msgstr "Ændr altid størrelsen"
 
 #: packages/app-cli/app/command-mv.js:36
 msgid ""
@@ -399,6 +398,8 @@ msgstr ""
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:13
 msgid "An autosaved drawing was found. Attach a copy of it to the note?"
 msgstr ""
+"Der blev fundet en automatisk gemt tegning. Vedhæfter en kopi af den til "
+"noten?"
 
 #: packages/app-desktop/checkForUpdates.ts:105
 msgid "An update is available, do you want to download it now?"
@@ -411,7 +412,7 @@ msgid ""
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
 "Enhver e-mail, der sendes til denne adresse, bliver konverteret til en note "
-"og føjet til din samling. Noten gemmes i indbakkens notesbog."
+"og føjet til din samling. Noten gemmes i indbakkens notesbog"
 
 #: packages/lib/models/Setting.ts:2596
 msgid "Appearance"
@@ -834,9 +835,8 @@ msgid "Code View"
 msgstr "Kodevisning"
 
 #: packages/lib/utils/joplinCloud.ts:172
-#, fuzzy
 msgid "Collaborate on a notebook with others"
-msgstr "Samarbejd med andre om notesbøger"
+msgstr "Samarbejd med andre om en notesbog"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:181
 msgid "Collaborate on notebooks with others"
@@ -880,9 +880,8 @@ msgid "Command palette..."
 msgstr "Kommando-udvalg..."
 
 #: packages/lib/services/noteList/defaultListRenderer.ts:22
-#, fuzzy
 msgid "Compact"
-msgstr "Fuldført"
+msgstr "Kompakt"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:53
 msgid "Completed"
@@ -1148,14 +1147,12 @@ msgid "Creates a new to-do."
 msgstr "Opretter en ny opgave."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:112
-#, fuzzy
 msgid "Creating new note..."
-msgstr "Opretter ny %s..."
+msgstr "Opretter ny note..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:112
-#, fuzzy
 msgid "Creating new to-do..."
-msgstr "Opretter ny %s..."
+msgstr "Opretter nye gøremål..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:580
 msgid "Creating report..."
@@ -1188,7 +1185,7 @@ msgstr "Brugerdefinerede TLS certifikater"
 
 #: packages/lib/utils/joplinCloud.ts:193
 msgid "Customise the note publishing banner"
-msgstr ""
+msgstr "Tilpas banneret til udgivelse af noter"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:24
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:84
@@ -1385,7 +1382,7 @@ msgstr "Destinationsformat: %s"
 
 #: packages/lib/services/noteList/defaultLeftToRightListRenderer.ts:25
 msgid "Detailed"
-msgstr ""
+msgstr "Detailed"
 
 #: packages/lib/services/interop/Module.ts:62
 msgid "Directory"
@@ -1431,9 +1428,8 @@ msgstr ""
 "synkroniseret og sendt ukrypteret til synk-modtageren. Vil du fortsætte?"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:19
-#, fuzzy
 msgid "Discard"
-msgstr "Kassér ændringer"
+msgstr "Kassér"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:101
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:274
@@ -1554,11 +1550,11 @@ msgstr "Dracula"
 
 #: packages/app-mobile/components/screens/Note.tsx:1111
 msgid "Draw picture"
-msgstr ""
+msgstr "Tegn billede"
 
 #: packages/app-mobile/components/screens/Note.tsx:810
 msgid "Drawing"
-msgstr ""
+msgstr "Tegner"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1258
 msgid "Drop notes or files here"
@@ -1862,9 +1858,8 @@ msgid "Enter notebook title"
 msgstr "Indtast notesbogstitel"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:121
-#, fuzzy
 msgid "Enter password"
-msgstr "Hovedadgangskode"
+msgstr "Indtast adgangskode"
 
 #: packages/app-cli/app/help-utils.js:56
 msgid "Enum"
@@ -2229,7 +2224,7 @@ msgstr "HTML Indeks"
 
 #: packages/lib/services/interop/InteropService.ts:92
 msgid "HTML document"
-msgstr ""
+msgstr "HTML-dokument"
 
 #: packages/lib/services/interop/InteropService.ts:151
 msgid "HTML File"
@@ -2605,7 +2600,7 @@ msgstr "Indstil knap-rækkefølge"
 
 #: packages/lib/models/Setting.ts:1767
 msgid "Leave it blank to download the language files from the default website"
-msgstr "Lad den være tom for at downloade sprogfilerne fra standardwebstedet."
+msgstr "Lad den være tom for at downloade sprogfilerne fra standardwebstedet"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -2866,7 +2861,7 @@ msgstr "N"
 
 #: packages/lib/models/Setting.ts:1123
 msgid "Never resize"
-msgstr ""
+msgstr "Ændr aldrig størrelse"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:8
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:121
@@ -3062,9 +3057,8 @@ msgid "Note list growth factor"
 msgstr "Noteliste-vækstfaktor"
 
 #: packages/app-desktop/gui/MenuBar.tsx:729
-#, fuzzy
 msgid "Note list style"
-msgstr "Noteliste"
+msgstr "Notatliste-stil"
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.ts:7
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:407
@@ -3647,7 +3641,7 @@ msgstr "Nulstil hovedadgangskode"
 
 #: packages/lib/models/Setting.ts:1117
 msgid "Resize large images:"
-msgstr ""
+msgstr "Ændr størrelsen på store billeder:"
 
 #: packages/app-cli/app/command-import.js:51
 #: packages/app-desktop/gui/ImportScreen.tsx:92
@@ -3768,9 +3762,8 @@ msgid "Save changes"
 msgstr "Gem ændringer"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:99
-#, fuzzy
 msgid "Save changes?"
-msgstr "Gem ændringer"
+msgstr "Gem ændringer?"
 
 #: packages/lib/models/Setting.ts:1024
 msgid "Save geo-location with notes"
@@ -3900,9 +3893,8 @@ msgstr ""
 "computer."
 
 #: packages/lib/utils/joplinCloud.ts:125
-#, fuzzy
 msgid "Share a notebook with others"
-msgstr "Samarbejd med andre om notesbøger"
+msgstr "Del en notesbog med andre"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:383
 msgid "Share Notebook"
@@ -3914,7 +3906,7 @@ msgstr "Del notesbog..."
 
 #: packages/lib/utils/joplinCloud.ts:212
 msgid "Share permissions"
-msgstr ""
+msgstr "Deletilladelser"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:349
 msgid "Sharing notebook..."
@@ -3970,16 +3962,15 @@ msgstr "Vis/skjul sidebjælken"
 
 #: packages/lib/models/Setting.ts:1118
 msgid "Shrink large images before adding them to notes."
-msgstr ""
+msgstr "Formindsk store billeder, før du tilføjer dem til noter."
 
 #: packages/app-mobile/root.tsx:1004
-#, fuzzy
 msgid "Side menu closed"
-msgstr "Skjul flere handlinger"
+msgstr "Sidemenu lukket"
 
 #: packages/app-mobile/root.tsx:1004
 msgid "Side menu opened"
-msgstr ""
+msgstr "Sidemenu åbnet"
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:8
 #: packages/app-mobile/components/ScreenHeader.tsx:307
@@ -4335,9 +4326,8 @@ msgid "Teams"
 msgstr "Teams"
 
 #: packages/lib/services/interop/InteropService.ts:116
-#, fuzzy
 msgid "Text document"
-msgstr "Tekstredigeringskomando"
+msgstr "Tekstdokument"
 
 #: packages/lib/models/Setting.ts:1402
 msgid "Text editor command"
@@ -4538,9 +4528,8 @@ msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr "Synk-mål skal opgraderes! Tryk på denne banner for at fortsætte."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:617
-#, fuzzy
 msgid "The synchronisation password is missing."
-msgstr "Tjek synkroniseringskonfiguration"
+msgstr "Adgangskoden til synkronisering mangler."
 
 #: packages/lib/models/Tag.ts:204
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -4657,6 +4646,9 @@ msgid ""
 "collaborate on it. It does not however allow you to share a notebook with "
 "someone else, unless you have the feature \"%s\"."
 msgstr ""
+"Dette giver en anden bruger mulighed for at dele en notesbog med dig, og I "
+"kan så begge samarbejde om den. Det giver dig dog ikke mulighed for at dele "
+"en notesbog med en anden, medmindre du har funktionen \"%s\"."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:50
 #: packages/lib/services/ResourceEditWatcher/index.ts:224
@@ -4677,9 +4669,8 @@ msgstr ""
 "tredjepartsprogrammer at tilgå Joplin."
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:99
-#, fuzzy
 msgid "This drawing may have unsaved changes."
-msgstr "Der er ikke-gemte ændringer."
+msgstr "Denne tegning kan have ændringer, der ikke er gemt."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:232
 msgid ""
@@ -4955,18 +4946,16 @@ msgid "Type: %s."
 msgstr "Tast: %s."
 
 #: packages/app-mobile/components/screens/Note.tsx:875
-#, fuzzy
 msgid "Unable to edit resource of type %s"
-msgstr "Kan ikke eksportere eller dele data. Årsag: %s"
+msgstr "Kan ikke redigere ressource af typen %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:69
 msgid "Unable to export or share data. Reason: %s"
 msgstr "Kan ikke eksportere eller dele data. Årsag: %s"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:68
-#, fuzzy
 msgid "Unable to share log data. Reason: %s"
-msgstr "Kan ikke eksportere eller dele data. Årsag: %s"
+msgstr "Kan ikke dele logdata. Årsag: %s"
 
 #: packages/lib/models/Setting.ts:914
 msgid "Uncompleted to-dos on top"
