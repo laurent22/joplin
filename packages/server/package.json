@@ -68,7 +68,7 @@
     "@types/koa": "2.13.9",
     "@types/markdown-it": "12.2.3",
     "@types/mustache": "4.2.2",
-    "@types/nodemailer": "6.4.10",
+    "@types/nodemailer": "6.4.11",
     "@types/yargs": "17.0.24",
     "@types/zxcvbn": "4.4.2",
     "gulp": "4.0.2",
