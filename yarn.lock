@@ -4990,7 +4990,7 @@ __metadata:
     sqlite3: 5.1.6
     string-padding: 1.0.2
     string-to-stream: 3.0.1
-    tar: 6.1.15
+    tar: 6.2.0
     tcp-port-used: 1.0.2
     typescript: 5.1.6
     uglifycss: 0.0.29
@@ -33411,9 +33411,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tar@npm:6.1.15, tar@npm:^6.0.5, tar@npm:^6.1.12":
-  version: 6.1.15
-  resolution: "tar@npm:6.1.15"
+"tar@npm:6.2.0":
+  version: 6.2.0
+  resolution: "tar@npm:6.2.0"
   dependencies:
     chownr: ^2.0.0
     fs-minipass: ^2.0.0
@@ -33421,7 +33421,7 @@ __metadata:
     minizlib: ^2.1.1
     mkdirp: ^1.0.3
     yallist: ^4.0.0
-  checksum: f23832fceeba7578bf31907aac744ae21e74a66f4a17a9e94507acf460e48f6db598c7023882db33bab75b80e027c21f276d405e4a0322d58f51c7088d428268
+  checksum: db4d9fe74a2082c3a5016630092c54c8375ff3b280186938cfd104f2e089c4fd9bad58688ef6be9cf186a889671bf355c7cda38f09bbf60604b281715ca57f5c
   languageName: node
   linkType: hard
 
@@ -33451,6 +33451,20 @@ __metadata:
     mkdirp: ^1.0.3
     yallist: ^4.0.0
   checksum: a04c07bb9e2d8f46776517d4618f2406fb977a74d914ad98b264fc3db0fe8224da5bec11e5f8902c5b9bcb8ace22d95fbe3c7b36b8593b7dfc8391a25898f32f
+  languageName: node
+  linkType: hard
+
+"tar@npm:^6.0.5, tar@npm:^6.1.12":
+  version: 6.1.15
+  resolution: "tar@npm:6.1.15"
+  dependencies:
+    chownr: ^2.0.0
+    fs-minipass: ^2.0.0
+    minipass: ^5.0.0
+    minizlib: ^2.1.1
+    mkdirp: ^1.0.3
+    yallist: ^4.0.0
+  checksum: f23832fceeba7578bf31907aac744ae21e74a66f4a17a9e94507acf460e48f6db598c7023882db33bab75b80e027c21f276d405e4a0322d58f51c7088d428268
   languageName: node
   linkType: hard
 
