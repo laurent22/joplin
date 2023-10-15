@@ -179,6 +179,16 @@
 		// breaking changes. Ideally we should just update existing components
 		// to rscss.
 		"styled-components",
+
+		// Have to disable `glob` auto-updates because they can randomly
+		// introduce breaking changes on patch updates:
+		// https://github.com/isaacs/node-glob/issues/567
+		//
+		// Their non-patch updates are even worse, full of undocumented breaking
+		// changes and subtle behaviour changes, which we only discover later.
+		// It doesn't seem they know what they are doing or care to properly
+		// test any of their changes.
+		"glob",
 	],
 	"packageRules": [
 		{
