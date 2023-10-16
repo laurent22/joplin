@@ -6,6 +6,7 @@ import { openDocument } from '@joplin/react-native-saf-x';
 import RNSAF, { Encoding, DocumentFileDetail, openDocumentTree } from '@joplin/react-native-saf-x';
 import { Platform } from 'react-native';
 import tarCreate from './tarCreate';
+import { Buffer } from 'buffer';
 
 
 const ANDROID_URI_PREFIX = 'content://';
@@ -38,6 +39,13 @@ export default class FsDriverRN extends FsDriverBase {
 	public writeFile(path: string, content: any, encoding = 'base64') {
 		if (isScopedUri(path)) {
 			return RNSAF.writeFile(path, content, { encoding: encoding as Encoding });
+		}
+
+		// Work around a bug in rn-fetch-blob on Android: Unicode
+		// characters were written as ??s.
+		if (encoding === 'utf-8' || encoding === 'utf8') {
+			encoding = 'base64';
+			content = Buffer.from(content, 'utf-8').toString('base64');
 		}
 
 		// We need to use rn-fetch-blob here due to this bug:
