@@ -36,6 +36,14 @@ export default class FsDriverRN extends FsDriverBase {
 		if (isScopedUri(path)) {
 			return RNSAF.writeFile(path, content, { encoding: encoding as Encoding });
 		}
+
+		// Work around a bug in rn-fetch-blob on Android: Unicode
+		// characters were written as ??s.
+		if (encoding === 'utf-8' || encoding === 'utf8') {
+			encoding = 'base64';
+			content = Buffer.from(content, 'utf-8').toString('base64');
+		}
+
 		// We need to use rn-fetch-blob here due to this bug:
 		// https://github.com/itinance/react-native-fs/issues/700
 		return RNFetchBlob.fs.writeFile(path, content, encoding);
