@@ -855,8 +855,12 @@ const createTempFile = async (content = '') => {
 	return path;
 };
 
+export const createTempDirPath = () => {
+	return `${baseTempDir}/${uuid.createNano()}`;
+};
+
 async function createTempDir() {
-	const tempDirPath = `${baseTempDir}/${uuid.createNano()}`;
+	const tempDirPath = createTempDirPath();
 	await fs.mkdirp(tempDirPath);
 	return tempDirPath;
 }

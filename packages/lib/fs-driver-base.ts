@@ -33,6 +33,7 @@ export default class FsDriverBase {
 		throw new Error('Not implemented');
 	}
 
+	// Must also create parent directories
 	public async mkdir(_path: string) {
 		throw new Error('Not implemented');
 	}
@@ -75,6 +76,10 @@ export default class FsDriverBase {
 	}
 
 	public async writeFile(_path: string, _content: string, _encoding = 'base64'): Promise<void> {
+		throw new Error('Not implemented');
+	}
+
+	public async appendFile(_path: string, _text: string, _encoding = 'base64') {
 		throw new Error('Not implemented');
 	}
 

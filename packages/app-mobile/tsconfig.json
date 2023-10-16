@@ -7,10 +7,11 @@
 	"exclude": [
 		//Files that don't need transpilation
 		"**/node_modules",
-		"**/*.test.ts",
-		"**/*.test.tsx",
 		"gulpfile.ts",
 		"tools/*.ts",
+
+		// Note: *.test.ts are included in compilation to allow
+		// for type checking based on ../../tsconfig.json
 	],
 	"compilerOptions": {
 		"types": ["jest", "node"],
