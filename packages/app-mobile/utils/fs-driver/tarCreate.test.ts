@@ -38,6 +38,9 @@ describe('tarCreate', () => {
 					cwd: tempDirectoryPath,
 				});
 			},
+			async (actual, expected) => {
+				expect(actual).toBe(expected);
+			},
 		);
 	});
 });

@@ -1,8 +1,9 @@
 import { chunkSize } from './constants';
 
-import { join, resolve, relative } from 'node:path';
+import { join, resolve, relative } from 'path';
 import uuid from '@joplin/lib/uuid';
-import { exists, mkdirp, readFile, rm, writeFile } from 'fs-extra';
+import shim from '@joplin/lib/shim';
+import FsDriverBase from '@joplin/lib/fs-driver-base';
 
 // Creates a subdirectory of parentDirectory with test data
 export const createTestFiles = async (parentDirectory: string) => {
@@ -11,10 +12,12 @@ export const createTestFiles = async (parentDirectory: string) => {
 	const initialFileContent: Record<string, string> = {};
 	const expectedPaths: string[] = [];
 
+	const fsDriver: FsDriverBase = shim.fsDriver();
+
 	// Path should be relative to the root directory
 	const addFile = async (path: string, content: string) => {
 		const absPath = resolve(rootDirectory, path);
-		await writeFile(absPath, content, 'utf-8');
+		await fsDriver.writeFile(absPath, content, 'utf-8');
 
 		const relativePath = relative(parentDirectory, absPath);
 		initialFileContent[relativePath] = content;
@@ -23,7 +26,7 @@ export const createTestFiles = async (parentDirectory: string) => {
 
 	const addDirectory = async (path: string) => {
 		const absPath = resolve(rootDirectory, path);
-		await mkdirp(absPath);
+		await fsDriver.mkdir(absPath);
 
 		const relativePath = relative(parentDirectory, absPath);
 		expectedPaths.push(relativePath);
@@ -52,18 +55,20 @@ export const createTestFiles = async (parentDirectory: string) => {
 		rootDirectory,
 
 		removeAll: async () => {
-			await rm(rootDirectory, { recursive: true, force: true });
+			await fsDriver.remove(rootDirectory);
 		},
 	};
 };
 
 type PackCallback = (tarFilePath: string, inputFilePaths: string[])=> Promise<void>;
 type ExtractCallback = (tarFilepath: string)=> Promise<void>;
+type ExpectToBeCallback = <T> (actual: T, expected: T)=> Promise<void>;
 
 export const testTarImplementations = async (
 	tempDirectoryPath: string,
 	pack: PackCallback,
 	extract: ExtractCallback,
+	expectToBe: ExpectToBeCallback,
 ) => {
 	const testFiles = await createTestFiles(tempDirectoryPath);
 
@@ -82,14 +87,16 @@ export const testTarImplementations = async (
 	// Use the node fsdriver implementation for comparison
 	await extract(tarFilePath);
 
+	const fsDriver: FsDriverBase = shim.fsDriver();
+
 	// Check that the extracted content is correct.
 	for (const path of testFiles.filesAndDirectories) {
-		expect(await exists(resolve(tempDirectoryPath, path))).toBe(true);
+		await expectToBe(await fsDriver.exists(resolve(tempDirectoryPath, path)), true);
 	}
 
 	for (const filePath in testFiles.initialFileContent) {
 		const absPath = resolve(tempDirectoryPath, filePath);
 		const expected = testFiles.initialFileContent[filePath];
-		expect(await readFile(absPath, { encoding: 'utf-8' })).toBe(expected);
+		await expectToBe(await fsDriver.readFile(absPath, 'utf-8'), expected);
 	}
 };

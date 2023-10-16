@@ -5,7 +5,7 @@ import FsDriverBase from '@joplin/lib/fs-driver-base';
 
 import Logger from '@joplin/utils/Logger';
 import { chunkSize } from './constants';
-import appendBinaryReadableToFile from './appendBinaryReadableToFile';
+import appendBinaryReadableToFile from './utils/appendBinaryReadableToFile';
 
 const logger = Logger.create('tarCreate');
 

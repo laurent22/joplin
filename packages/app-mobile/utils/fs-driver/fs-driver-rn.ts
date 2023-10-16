@@ -7,6 +7,7 @@ import RNSAF, { Encoding, DocumentFileDetail, openDocumentTree } from '@joplin/r
 import { Platform } from 'react-native';
 import tarCreate from './tarCreate';
 
+
 const ANDROID_URI_PREFIX = 'content://';
 
 function isScopedUri(path: string) {
@@ -19,11 +20,18 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	// Encoding can be either "utf8" or "base64"
-	public appendFile(path: string, content: any, encoding = 'base64') {
+	public async appendFile(path: string, content: any, encoding = 'base64') {
 		if (isScopedUri(path)) {
-			return RNSAF.writeFile(path, content, { encoding: encoding as Encoding, append: true });
+			return await RNSAF.writeFile(path, content, { encoding: encoding as Encoding, append: true });
 		}
-		return RNFS.appendFile(path, content, encoding);
+
+		// appendFile fails if the file doesn't already exist.
+		if (!(await this.exists(path))) {
+			// Create the file in this case
+			return await this.writeFile(path, content, encoding);
+		} else {
+			return await RNFS.appendFile(path, content, encoding);
+		}
 	}
 
 	// Encoding can be either "utf8" or "base64"
@@ -31,6 +39,7 @@ export default class FsDriverRN extends FsDriverBase {
 		if (isScopedUri(path)) {
 			return RNSAF.writeFile(path, content, { encoding: encoding as Encoding });
 		}
+
 		// We need to use rn-fetch-blob here due to this bug:
 		// https://github.com/itinance/react-native-fs/issues/700
 		return RNFetchBlob.fs.writeFile(path, content, encoding);
@@ -264,7 +273,7 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	public async tarExtract(_options: any) {
-		throw new Error('Not implemented!');
+		throw new Error('Not implemented');
 	}
 
 	public async tarCreate(options: any, filePaths: string[]) {
