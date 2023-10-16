@@ -39,7 +39,7 @@
     "jquery": "3.7.1",
     "knex": "2.5.1",
     "koa": "2.14.2",
-    "markdown-it": "13.0.1",
+    "markdown-it": "13.0.2",
     "mustache": "4.2.0",
     "nanoid": "2.1.11",
     "node-cron": "3.0.2",

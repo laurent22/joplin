@@ -29,7 +29,7 @@
     "fs-extra": "11.1.1",
     "gettext-parser": "7.0.1",
     "glob": "10.3.10",
-    "markdown-it": "13.0.1",
+    "markdown-it": "13.0.2",
     "md5-file": "5.0.0",
     "moment": "2.29.4",
     "mustache": "4.2.0",
