@@ -33,18 +33,16 @@ export default class FsDriverRN extends FsDriverBase {
 
 	// Encoding can be either "utf8" or "base64"
 	public writeFile(path: string, content: any, encoding = 'base64') {
-		if (isScopedUri(path)) {
-			return RNSAF.writeFile(path, content, { encoding: encoding as Encoding });
+		// rn-fetch-blob and RNSAF require the exact string "utf8", but NodeJS (and thus
+		// fs-driver-node) support variants on this like "UtF-8" and "utf-8". Convert them:
+		encoding = encoding.toLowerCase();
+
+		if (encoding === 'utf-8') {
+			encoding = 'utf8';
 		}
 
-		// rn-fetch-blob doesn't properly support saving Unicode characters on Android.
-		// With an encoding of utf-8, non-ASCII characters are written as "?".
-		//
-		// As the mobile app mostly uses utf-8, we convert other encodings.
-		encoding = encoding.toLowerCase();
-		if (encoding !== 'base64') {
-			encoding = 'base64';
-			content = Buffer.from(content, 'utf-8').toString('base64');
+		if (isScopedUri(path)) {
+			return RNSAF.writeFile(path, content, { encoding: encoding as Encoding });
 		}
 
 		// We need to use rn-fetch-blob here due to this bug:
