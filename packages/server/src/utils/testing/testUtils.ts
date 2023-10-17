@@ -15,7 +15,7 @@ import * as fs from 'fs-extra';
 import * as jsdom from 'jsdom';
 import setupAppContext from '../setupAppContext';
 import { ApiError } from '../errors';
-import { getApi, putApi } from './apiUtils';
+import { deleteApi, getApi, putApi } from './apiUtils';
 import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { initializeJoplinUtils } from '../joplinUtils';
@@ -73,6 +73,7 @@ export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOpt
 	unitName = unitName.replace(/\//g, '_');
 
 	createdDbPath_ = `${packageRootDir}/db-test-${unitName}.sqlite`;
+	await fs.remove(createdDbPath_);
 
 	const tempDir = `${packageRootDir}/temp/test-${unitName}`;
 	await fs.mkdirp(tempDir);
@@ -110,6 +111,10 @@ export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOpt
 
 	await initializeJoplinUtils(config(), models(), mustache);
 }
+
+export const createdDbPath = () => {
+	return createdDbPath_;
+};
 
 export async function afterAllTests() {
 	if (db_) {
@@ -237,7 +242,7 @@ export function koaNext(): Promise<void> {
 
 export const testAssetDir = `${packageRootDir}/assets/tests`;
 
-interface UserAndSession {
+export interface UserAndSession {
 	user: User;
 	session: Session;
 	password: string;
@@ -350,6 +355,10 @@ export async function updateItem(sessionId: string, path: string, content: strin
 	const item: Item = await putApi(sessionId, `items/${path}/content`, null, { filePath: tempFilePath });
 	await fs.remove(tempFilePath);
 	return models().item().load(item.id);
+}
+
+export async function deleteItem(sessionId: string, jopId: string): Promise<void> {
+	await deleteApi(sessionId, `items/root:/${jopId}.md:`);
 }
 
 export async function createNote(sessionId: string, note: NoteEntity): Promise<Item> {
