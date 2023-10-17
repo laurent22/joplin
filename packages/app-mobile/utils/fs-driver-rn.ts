@@ -41,6 +41,12 @@ export default class FsDriverRN extends FsDriverBase {
 			encoding = 'utf8';
 		}
 
+		const supportedEncodings = ['utf8', 'ascii', 'base64'];
+		if (!supportedEncodings.includes(encoding)) {
+			logger.error(`Unsupported encoding in writeFile: ${encoding}. Continuing anyway...`);
+		}
+
+
 		if (isScopedUri(path)) {
 			return RNSAF.writeFile(path, content, { encoding: encoding as Encoding });
 		}
