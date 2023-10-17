@@ -369,13 +369,13 @@ export const extractNoteFromHTML = async (requestNote: RequestNote, requestId: n
 
 	logger.info(`Request (${requestId}): Downloading media files: ${mediaUrls.length}`);
 
-	let result = await downloadMediaFiles(mediaUrls); // , allowFileProtocolImages);
+	const mediaFiles = await downloadMediaFiles(mediaUrls); // , allowFileProtocolImages);
 
-	logger.info(`Request (${requestId}): Creating resources from paths: ${Object.getOwnPropertyNames(result).length}`);
+	logger.info(`Request (${requestId}): Creating resources from paths: ${Object.getOwnPropertyNames(mediaFiles).length}`);
 
-	result = await createResourcesFromPaths(result);
-	await removeTempFiles(result);
-	note.body = replaceUrlsByResources(note.markup_language, note.body, result, imageSizes);
+	const resources = await createResourcesFromPaths(mediaFiles);
+	await removeTempFiles(resources);
+	note.body = replaceUrlsByResources(note.markup_language, note.body, resources, imageSizes);
 
 	logger.info(`Request (${requestId}): Saving note...`);
 
@@ -387,7 +387,7 @@ export const extractNoteFromHTML = async (requestNote: RequestNote, requestId: n
 	if (!('user_updated_time' in note)) note.user_updated_time = timestamp;
 	if (!('user_created_time' in note)) note.user_created_time = timestamp;
 
-	return { note, saveOptions, resources: result };
+	return { note, saveOptions, resources };
 };
 
 export default async function(request: Request, id: string = null, link: string = null) {
@@ -421,9 +421,9 @@ export default async function(request: Request, id: string = null, link: string 
 
 		logger.info('Images:', imageSizes);
 
-		const result = await extractNoteFromHTML(requestNote, requestId, imageSizes);
+		const extracted = await extractNoteFromHTML(requestNote, requestId, imageSizes);
 
-		let note = await Note.save(result.note, result.saveOptions);
+		let note = await Note.save(extracted.note, extracted.saveOptions);
 
 		if (requestNote.tags) {
 			const tagTitles = requestNote.tags.split(',');
