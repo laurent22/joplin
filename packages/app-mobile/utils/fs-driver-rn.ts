@@ -37,9 +37,12 @@ export default class FsDriverRN extends FsDriverBase {
 			return RNSAF.writeFile(path, content, { encoding: encoding as Encoding });
 		}
 
-		// Work around a bug in rn-fetch-blob on Android: Unicode
-		// characters were written as ??s.
-		if (encoding === 'utf-8' || encoding === 'utf8') {
+		// rn-fetch-blob doesn't properly support saving Unicode characters on Android.
+		// With an encoding of utf-8, non-ASCII characters are written as "?".
+		//
+		// As the mobile app mostly uses utf-8, we convert other encodings.
+		encoding = encoding.toLowerCase();
+		if (encoding !== 'base64') {
 			encoding = 'base64';
 			content = Buffer.from(content, 'utf-8').toString('base64');
 		}
