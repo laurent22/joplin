@@ -48,7 +48,7 @@ type ImageObject = {
 	naturalHeight?: number;
 };
 
-export function getImageSizes(element: HTMLElement, forceAbsoluteUrls = false) {
+export function getImageSizes(element: Document, forceAbsoluteUrls = false) {
 	const output: Record<string, ImageObject[]> = {};
 
 	const images = element.getElementsByTagName('img');
