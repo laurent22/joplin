@@ -4745,7 +4745,7 @@ __metadata:
     "@lezer/highlight": 1.1.4
     "@react-native-community/clipboard": 1.5.1
     "@react-native-community/datetimepicker": 7.5.0
-    "@react-native-community/geolocation": 3.0.6
+    "@react-native-community/geolocation": 3.1.0
     "@react-native-community/netinfo": 9.4.1
     "@react-native-community/push-notification-ios": 1.11.0
     "@react-native-community/slider": 4.4.3
@@ -7206,13 +7206,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/geolocation@npm:3.0.6":
-  version: 3.0.6
-  resolution: "@react-native-community/geolocation@npm:3.0.6"
+"@react-native-community/geolocation@npm:3.1.0":
+  version: 3.1.0
+  resolution: "@react-native-community/geolocation@npm:3.1.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 813df03599c064639bd5fe90922ab80d20d6224deffc8c6bfb02b7ade3d20f80e1ef6ac19c5d4394e901cca9a9fdb36eceda334a0ea6213e47c3c066921d09a9
+  checksum: defc42ed11d0a3cc697d5db56c17cc19af2ca35b32674dc7323b40a458f5066b051191e5dc58c367f2643a0ed70b47e8eb2ac87ab1566e642ca0cbab1a1f09a9
   languageName: node
   linkType: hard
 
