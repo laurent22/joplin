@@ -14,6 +14,10 @@ const logger = Logger.create('fs-driver-rn');
 
 const ANDROID_URI_PREFIX = 'content://';
 
+function isScopedUri(path: string) {
+	return path.includes(ANDROID_URI_PREFIX);
+}
+
 // Encodings supported by rn-fetch-blob, RNSAF, and
 // RNFS.
 // See also
@@ -45,10 +49,6 @@ const normalizeEncoding = (encoding: string): SupportedEncoding => {
 
 	return encoding as SupportedEncoding;
 };
-
-function isScopedUri(path: string) {
-	return path.includes(ANDROID_URI_PREFIX);
-}
 
 export default class FsDriverRN extends FsDriverBase {
 	public appendFileSync() {
