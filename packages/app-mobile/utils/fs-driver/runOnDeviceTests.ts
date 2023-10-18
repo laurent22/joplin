@@ -122,8 +122,7 @@ const runOnDeviceTests = async () => {
 		await testReadWriteFileUtf8(tempDir);
 		await testReadFileChunkUtf8(tempDir);
 	} catch (error) {
-		const errorMessage =
-			`On-device testing failed with an exception: ${error}.`;
+		const errorMessage = `On-device testing failed with an exception: ${error}.`;
 
 		logger.error(errorMessage, error);
 		alert(errorMessage);
