@@ -17,6 +17,18 @@ const testExpect = async () => {
 	// Verify that expect is working
 	await expectToBe(1, 1);
 	await expectToBe(true, true);
+
+	let failed = false;
+	try {
+		await expectToBe('a', 'test');
+		failed = true;
+	} catch (_error) {
+		failed = false;
+	}
+
+	if (failed) {
+		throw new Error('expectToBe should throw when given non-equal inputs');
+	}
 };
 
 const testReadWriteFileUtf8 = async (tempDir: string) => {
