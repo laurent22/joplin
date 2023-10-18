@@ -169,6 +169,58 @@ const testReadFileChunkUtf8 = async (tempDir: string) => {
 	}
 };
 
+const testTarCreate = async (tempDir: string) => {
+	logger.info('Testing fsDriver.tarCreate...');
+
+	const directoryToPack = join(tempDir, uuid.createNano());
+
+	const fsDriver: FsDriverBase = shim.fsDriver();
+
+	// Add test files to the directory
+	const fileContents: Record<string, string> = {};
+
+	// small utf-8 encoded files
+	for (let i = 0; i < 10; i ++) {
+		const testFilePath = join(directoryToPack, uuid.createNano());
+
+		const fileContent = `✅ Testing... ä ✅ File #${i}`;
+		await fsDriver.writeFile(testFilePath, fileContent, 'utf-8');
+
+		fileContents[testFilePath] = fileContent;
+	}
+
+	// larger utf-8 encoded files
+	for (let i = 0; i < 3; i ++) {
+		const testFilePath = join(directoryToPack, uuid.createNano());
+
+		let fileContent = `✅ Testing... ä ✅ File #${i}`;
+
+		for (let j = 0; j < 8; j ++) {
+			fileContent += fileContent;
+		}
+
+		await fsDriver.writeFile(testFilePath, fileContent, 'utf-8');
+
+		fileContents[testFilePath] = fileContent;
+	}
+
+	// Pack the files
+	const pathsToTar = Object.keys(fileContents);
+	const tarOutputPath = join(tempDir, 'test-tar.tar');
+	await fsDriver.tarCreate({
+		cwd: tempDir,
+		file: tarOutputPath,
+	}, pathsToTar);
+
+	// Read the tar file as utf-8 and search for the written file contents
+	// (which should work).
+	const rawTarData: string = await fsDriver.readFile(tarOutputPath, 'utf8');
+
+	for (const fileContent of Object.values(fileContents)) {
+		await expectToBe(rawTarData.includes(fileContent), true);
+	}
+};
+
 // In the past, some fs-driver functionality has worked correctly on some devices and not others.
 // As such, we need to be able to run some tests on-device.
 const runOnDeviceTests = async () => {
@@ -183,6 +235,7 @@ const runOnDeviceTests = async () => {
 		await testAppendFile(tempDir);
 		await testReadWriteFileUtf8(tempDir);
 		await testReadFileChunkUtf8(tempDir);
+		await testTarCreate(tempDir);
 	} catch (error) {
 		const errorMessage = `On-device testing failed with an exception: ${error}.`;
 
