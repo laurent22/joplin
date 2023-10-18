@@ -1,8 +1,10 @@
-import { NoteEntity } from '@joplin/lib/services/database/types';
+import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
-import { randomElement, removeElement } from '../array';
+import { User } from '../../services/database/types';
+import { randomElement } from '../array';
+import { CustomErrorCode } from '../errors';
 import { randomWords } from './randomWords';
-import { afterAllTests, beforeAllDb, createdDbPath, createFolder, createNote, createResource, createUserAndSession, deleteItem, randomHash, updateFolder, updateNote, UserAndSession } from './testUtils';
+import { afterAllTests, beforeAllDb, createdDbPath, makeFolderSerializedBody, makeNoteSerializedBody, makeResourceSerializedBody, models, randomHash } from './testUtils';
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 const nodeSqlite = require('sqlite3');
 
@@ -57,113 +59,190 @@ const isDeleteAction = (action: Action) => {
 	return deleteActions.includes(action);
 };
 
-type Reaction = (context: Context, sessionId: string)=> Promise<void>;
+type Reaction = (context: Context, user: User)=> Promise<boolean>;
 
 const randomInt = (min: number, max: number) => {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const createRandomNote = (sessionId: string, note: NoteEntity = null) => {
-	return createNote(sessionId, {
-		id: randomHash(),
+const createRandomNote = async (user: User, note: NoteEntity = null) => {
+	const id = randomHash();
+	const itemName = `${id}.md`;
+
+	const serializedBody = makeNoteSerializedBody({
+		id,
 		title: randomWords(randomInt(1, 10)),
 		...note,
 	});
+
+	const result = await models().item().saveFromRawContent(user, {
+		name: itemName,
+		body: Buffer.from(serializedBody),
+	});
+
+	if (result[itemName].error) throw result[itemName].error;
+
+	return result[itemName].item;
+};
+
+const createRandomFolder = async (user: User, folder: FolderEntity = null) => {
+	const id = randomHash();
+	const itemName = `${id}.md`;
+
+	const serializedBody = makeFolderSerializedBody({
+		id,
+		title: randomWords(randomInt(1, 5)),
+		...folder,
+	});
+
+	const result = await models().item().saveFromRawContent(user, {
+		name: itemName,
+		body: Buffer.from(serializedBody),
+	});
+
+	if (result[itemName].error) throw result[itemName].error;
+
+	return result[itemName].item;
 };
 
 const reactions: Record<Action, Reaction> = {
-	[Action.CreateNote]: async (context, sessionId) => {
-		const item = await createRandomNote(sessionId);
-		if (!context.createdNoteIds[sessionId]) context.createdNoteIds[sessionId] = [];
-		context.createdNoteIds[sessionId].push(item.jop_id);
+	[Action.CreateNote]: async (context, user) => {
+		const item = await createRandomNote(user);
+		if (!context.createdNoteIds[user.id]) context.createdNoteIds[user.id] = [];
+		context.createdNoteIds[user.id].push(item.jop_id);
+		return true;
 	},
 
-	[Action.CreateFolder]: async (context, sessionId) => {
-		const item = await createFolder(sessionId, {
-			id: randomHash(),
-			title: randomWords(randomInt(1, 5)),
-		});
-		if (!context.createdFolderIds[sessionId]) context.createdFolderIds[sessionId] = [];
-		context.createdFolderIds[sessionId].push(item.jop_id);
+	[Action.CreateFolder]: async (context, user) => {
+		const item = await createRandomFolder(user);
+		if (!context.createdFolderIds[user.id]) context.createdFolderIds[user.id] = [];
+		context.createdFolderIds[user.id].push(item.jop_id);
+		return true;
 	},
 
-	[Action.CreateNoteAndResource]: async (context, sessionId) => {
-		const item = await createResource(sessionId, {
-			id: randomHash(),
-			title: randomWords(randomInt(1, 5)),
-		}, randomWords(randomInt(10, 100)));
+	[Action.CreateNoteAndResource]: async (context, user) => {
+		const resourceContent = randomWords(20);
+		const resourceId = randomHash();
 
-		if (!context.createdResourceIds[sessionId]) context.createdResourceIds[sessionId] = [];
-		context.createdResourceIds[sessionId].push(item.jop_id);
-
-		const noteItem = await createRandomNote(sessionId, {
-			body: `[](:/${item.jop_id})`,
+		const metadataBody = makeResourceSerializedBody({
+			id: resourceId,
+			title: randomWords(5),
+			size: resourceContent.length,
 		});
 
-		if (!context.createdNoteIds[sessionId]) context.createdNoteIds[sessionId] = [];
-		context.createdNoteIds[sessionId].push(noteItem.jop_id);
-	},
-
-	[Action.UpdateNote]: async (context, sessionId) => {
-		const noteId = randomElement(context.createdNoteIds[sessionId]);
-		if (!noteId) return;
-
-		await updateNote(sessionId, {
-			id: noteId,
-			title: randomWords(randomInt(1, 10)),
+		await models().item().saveFromRawContent(user, {
+			name: `${resourceId}.md`,
+			body: Buffer.from(metadataBody),
 		});
-	},
 
-	[Action.UpdateFolder]: async (context, sessionId) => {
-		const folderId = randomElement(context.createdFolderIds[sessionId]);
-		if (!folderId) return;
-
-		await updateFolder(sessionId, {
-			id: folderId,
-			title: randomWords(randomInt(1, 10)),
+		await models().item().saveFromRawContent(user, {
+			name: `.resource/${resourceId}`,
+			body: Buffer.from(resourceContent),
 		});
+
+		if (!context.createdResourceIds[user.id]) context.createdResourceIds[user.id] = [];
+		context.createdResourceIds[user.id].push(resourceId);
+
+		const noteItem = await createRandomNote(user, {
+			body: `[](:/${resourceId})`,
+		});
+
+		if (!context.createdNoteIds[user.id]) context.createdNoteIds[user.id] = [];
+		context.createdNoteIds[user.id].push(noteItem.jop_id);
+
+		return true;
 	},
 
-	[Action.DeleteNote]: async (context, sessionId) => {
-		const noteId = randomElement(context.createdNoteIds[sessionId]);
-		if (!noteId) return;
-		removeElement(context.createdNoteIds[sessionId], noteId);
-		await deleteItem(sessionId, noteId);
+	[Action.UpdateNote]: async (context, user) => {
+		const noteId = randomElement(context.createdNoteIds[user.id]);
+		if (!noteId) return false;
+
+		try {
+			const noteItem = await models().item().loadByJopId(user.id, noteId);
+			const note = await models().item().loadAsJoplinItem(noteItem.id);
+			const serialized = makeNoteSerializedBody({
+				title: randomWords(10),
+				...note,
+			});
+
+			await models().item().saveFromRawContent(user, {
+				name: `${note.id}.md`,
+				body: Buffer.from(serialized),
+			});
+		} catch (error) {
+			if (error.code === CustomErrorCode.NotFound) return false;
+			throw error;
+		}
+
+		return true;
 	},
 
-	[Action.DeleteFolder]: async (context, sessionId) => {
-		const folderId = randomElement(context.createdFolderIds[sessionId]);
-		if (!folderId) return;
-		removeElement(context.createdFolderIds[sessionId], folderId);
-		await deleteItem(sessionId, folderId);
+	[Action.UpdateFolder]: async (context, user) => {
+		const folderId = randomElement(context.createdFolderIds[user.id]);
+		if (!folderId) return false;
+
+		try {
+			const folderItem = await models().item().loadByJopId(user.id, folderId);
+			const folder = await models().item().loadAsJoplinItem(folderItem.id);
+			const serialized = makeFolderSerializedBody({
+				title: randomWords(5),
+				...folder,
+			});
+
+			await models().item().saveFromRawContent(user, {
+				name: `${folder.id}.md`,
+				body: Buffer.from(serialized),
+			});
+		} catch (error) {
+			if (error.code === CustomErrorCode.NotFound) return false;
+			throw error;
+		}
+
+		return true;
+	},
+
+	[Action.DeleteNote]: async (context, user) => {
+		const noteId = randomElement(context.createdNoteIds[user.id]);
+		if (!noteId) return false;
+		const item = await models().item().loadByJopId(user.id, noteId, { fields: ['id'] });
+		await models().item().delete(item.id, { allowNoOp: true });
+		return true;
+	},
+
+	[Action.DeleteFolder]: async (context, user) => {
+		const folderId = randomElement(context.createdFolderIds[user.id]);
+		if (!folderId) return false;
+		const item = await models().item().loadByJopId(user.id, folderId, { fields: ['id'] });
+		await models().item().delete(item.id, { allowNoOp: true });
+		return true;
 	},
 };
 
 const randomActionKey = () => {
-	return randomElement(Object.keys(reactions)) as Action;
+	const r = Math.random();
+	if (r <= .5) {
+		return randomElement(createActions);
+	} else if (r <= .8) {
+		return randomElement(updateActions);
+	} else {
+		return randomElement(deleteActions);
+	}
 };
 
-const main = async (options?: Options) => {
-	options = {
-		userCount: 10,
-		minNoteCountPerUser: 0,
-		maxNoteCountPerUser: 1000,
-		minFolderCountPerUser: 0,
-		maxFolderCountPerUser: 50,
-		...options,
-	};
+const main = async (_options?: Options) => {
+	// options = {
+	// 	userCount: 10,
+	// 	minNoteCountPerUser: 0,
+	// 	maxNoteCountPerUser: 1000,
+	// 	minFolderCountPerUser: 0,
+	// 	maxFolderCountPerUser: 50,
+	// 	...options,
+	// };
 
 	shimInit({ nodeSqlite });
 	await beforeAllDb('populateDatabase');
 
 	logger().info(`Populating database: ${createdDbPath()}`);
-
-	const userAndSessions: UserAndSession[] = [];
-
-	for (let i = 0; i < options.userCount; i++) {
-		logger().info(`Creating user ${i}`);
-		userAndSessions.push(await createUserAndSession(i, false));
-	}
 
 	const context: Context = {
 		createdNoteIds: {},
@@ -183,39 +262,74 @@ const main = async (options?: Options) => {
 		if (isDeleteAction(action)) report.deleted++;
 	};
 
+	let users: User[] = [];
+
+	// -------------------------------------------------------------
+	// CREATE USERS
+	// -------------------------------------------------------------
+
 	{
 		const promises = [];
 
 		for (let i = 0; i < 1000; i++) {
-			const userAndSession = randomElement(userAndSessions);
-			const key = randomElement(createActions);
-			updateReport(key);
 			promises.push((async () => {
-				await reactions[key](context, userAndSession.session.id);
-				logger().info(`Done action ${i}: ${key}. User: ${userAndSession.user.email}`);
+				const user = await models().user().save({
+					full_name: `Toto ${i}`,
+					email: `toto${i}@example.com`,
+					password: '$2a$10$/2DMDnrx0PAspJ2DDnW/PO5x5M9H1abfSPsqxlPMhYiXgDi25751u', // Password = 111111
+				});
+
+				users.push(user);
+
+				logger().info(`Created user ${i}`);
 			})());
 		}
 
 		await Promise.all(promises);
 	}
 
+	users = await models().user().loadByIds(users.map(u => u.id));
+
+	// -------------------------------------------------------------
+	// CREATE NOTES, FOLDERS AND RESOURCES
+	// -------------------------------------------------------------
+
 	{
-		let promises = [];
+		const promises = [];
 
 		for (let i = 0; i < 1000; i++) {
-			const userAndSession = randomElement(userAndSessions);
-			const key = randomActionKey();
-			updateReport(key);
-
 			promises.push((async () => {
-				await reactions[key](context, userAndSession.session.id);
-				logger().info(`Done action ${i}: ${key}. User: ${userAndSession.user.email}`);
+				const user = randomElement(users);
+				const action = randomElement(createActions);
+				await reactions[action](context, user);
+				updateReport(action);
+				logger().info(`Done action ${i}: ${action}. User: ${user.email}`);
 			})());
+		}
 
-			if (promises.length > 100) {
-				await Promise.all(promises);
-				promises = [];
-			}
+		await Promise.all(promises);
+	}
+
+	// -------------------------------------------------------------
+	// CREATE/UPDATE/DELETE NOTES, FOLDERS AND RESOURCES
+	// -------------------------------------------------------------
+
+	{
+		const promises = [];
+
+		for (let i = 0; i < 10000; i++) {
+			promises.push((async () => {
+				const user = randomElement(users);
+				const action = randomActionKey();
+				try {
+					const done = await reactions[action](context, user);
+					if (done) updateReport(action);
+					logger().info(`Done action ${i}: ${action}. User: ${user.email}${!done ? ' (Skipped)' : ''}`);
+				} catch (error) {
+					error.message = `Could not do action ${i}: ${action}. User: ${user.email}: ${error.message}`;
+					throw error;
+				}
+			})());
 		}
 
 		await Promise.all(promises);

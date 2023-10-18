@@ -5,7 +5,7 @@ export function unique(array: any[]): any[] {
 }
 
 export const randomElement = <T>(array: T[]): T => {
-	if (!array.length) return null;
+	if (!array || !array.length) return null;
 	return array[Math.floor(Math.random() * array.length)];
 };
 

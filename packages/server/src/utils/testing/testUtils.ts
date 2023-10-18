@@ -570,7 +570,16 @@ type_: 2`;
 }
 
 export function makeResourceSerializedBody(resource: ResourceEntity = {}): string {
-	return `Test Resource
+	resource = {
+		id: randomHash(),
+		mime: 'plain/text',
+		file_extension: 'txt',
+		size: 0,
+		title: 'Test Resource',
+		...resource,
+	};
+
+	return `${resource.title}
 
 id: ${resource.id}
 mime: ${resource.mime}
