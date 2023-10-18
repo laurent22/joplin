@@ -97,7 +97,7 @@ SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 SyncTargetRegistry.addClass(SyncTargetJoplinServer);
 SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
 
-import FsDriverRN from './utils/fs-driver-rn';
+import FsDriverRN from './utils/fs-driver/fs-driver-rn';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
@@ -109,7 +109,7 @@ import { loadMasterKeysFromSettings, migrateMasterPassword } from '@joplin/lib/s
 import SyncTargetNone from '@joplin/lib/SyncTargetNone';
 import { setRSA } from '@joplin/lib/services/e2ee/ppk';
 import RSA from './services/e2ee/RSA.react-native';
-import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
+import { runIntegrationTests as runRsaIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 import { Theme, ThemeAppearance } from '@joplin/lib/themes/type';
 import { AppState } from './utils/types';
 import ProfileSwitcher from './components/ProfileSwitcher/ProfileSwitcher';
@@ -121,6 +121,7 @@ import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetche
 import { ReactNode } from 'react';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
 import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
+import runOnDeviceFsDriverTests from './utils/fs-driver/runOnDeviceTests';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -749,7 +750,10 @@ async function initialize(dispatch: Function) {
 	// call will throw an error, alerting us of the issue. Otherwise it will
 	// just print some messages in the console.
 	// ----------------------------------------------------------------------------
-	if (Setting.value('env') === 'dev') await runIntegrationTests();
+	if (Setting.value('env') === 'dev') {
+		await runRsaIntegrationTests();
+		await runOnDeviceFsDriverTests();
+	}
 
 	reg.logger().info('Application initialized');
 }

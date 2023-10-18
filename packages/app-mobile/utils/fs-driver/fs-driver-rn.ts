@@ -18,6 +18,26 @@ function isScopedUri(path: string) {
 	return path.includes(ANDROID_URI_PREFIX);
 }
 
+// Converts some encodings specifiers that work with NodeJS into encodings
+// that work with RNSAF, RNFetchBlob.fs, and RNFS.
+const normalizeEncoding = (encoding: string) => {
+	encoding = encoding.toLowerCase();
+
+	// rn-fetch-blob and RNSAF require the exact string "utf8", but NodeJS (and thus
+	// fs-driver-node) support variants on this like "UtF-8" and "utf-8". Convert them:
+	if (encoding === 'utf-8') {
+		encoding = 'utf8';
+	}
+
+	// Warn if unable to convert to a supported encoding.
+	const supportedEncodings = ['utf8', 'ascii', 'base64'];
+	if (!supportedEncodings.includes(encoding)) {
+		logger.warn(`Unsupported encoding: ${encoding}.`);
+	}
+
+	return encoding;
+};
+
 export default class FsDriverRN extends FsDriverBase {
 	public appendFileSync() {
 		throw new Error('Not implemented');
@@ -25,27 +45,17 @@ export default class FsDriverRN extends FsDriverBase {
 
 	// Encoding can be either "utf8" or "base64"
 	public appendFile(path: string, content: any, encoding = 'base64') {
+		encoding = normalizeEncoding(encoding);
+
 		if (isScopedUri(path)) {
 			return RNSAF.writeFile(path, content, { encoding: encoding as Encoding, append: true });
 		}
 		return RNFS.appendFile(path, content, encoding);
 	}
 
-	// Encoding can be either "utf8" or "base64"
+	// Encoding can be either "utf8", "utf-8", or "base64"
 	public writeFile(path: string, content: any, encoding = 'base64') {
-		// rn-fetch-blob and RNSAF require the exact string "utf8", but NodeJS (and thus
-		// fs-driver-node) support variants on this like "UtF-8" and "utf-8". Convert them:
-		encoding = encoding.toLowerCase();
-
-		if (encoding === 'utf-8') {
-			encoding = 'utf8';
-		}
-
-		const supportedEncodings = ['utf8', 'ascii', 'base64'];
-		if (!supportedEncodings.includes(encoding)) {
-			logger.error(`Unsupported encoding in writeFile: ${encoding}. Continuing anyway...`);
-		}
-
+		encoding = normalizeEncoding(encoding);
 
 		if (isScopedUri(path)) {
 			return RNSAF.writeFile(path, content, { encoding: encoding as Encoding });
@@ -211,7 +221,9 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	public readFile(path: string, encoding = 'utf8') {
+		encoding = normalizeEncoding(encoding);
 		if (encoding === 'Buffer') throw new Error('Raw buffer output not supported for FsDriverRN.readFile');
+
 		if (isScopedUri(path)) {
 			return RNSAF.readFile(path, { encoding: encoding as Encoding });
 		}
@@ -260,6 +272,8 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	public async readFileChunk(handle: any, length: number, encoding = 'base64') {
+		encoding = normalizeEncoding(encoding);
+
 		if (handle.offset + length > handle.stat.size) {
 			length = handle.stat.size - handle.offset;
 		}
