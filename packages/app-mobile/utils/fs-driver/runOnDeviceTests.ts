@@ -62,6 +62,15 @@ const testAppendFile = async (tempDir: string) => {
 	await expectToBe(
 		await fsDriver.readFile(targetFile), firstChunk + secondChunk + thirdChunk + lastChunk,
 	);
+
+	// Should throw if given an invalid encoding
+	let didThrow = false;
+	try {
+		await fsDriver.appendFile(targetFile, 'test', 'bad-encoding');
+	} catch (_error) {
+		didThrow = true;
+	}
+	await expectToBe(didThrow, true);
 };
 
 const testReadWriteFileUtf8 = async (tempDir: string) => {
