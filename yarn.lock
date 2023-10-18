@@ -5012,7 +5012,7 @@ __metadata:
     "@types/jest": 29.5.4
     "@types/pdfjs-dist": 2.10.378
     "@types/react": 18.2.23
-    "@types/react-dom": 18.2.7
+    "@types/react-dom": 18.2.8
     "@types/styled-components": 5.1.28
     async-mutex: 0.4.0
     babel-jest: 29.6.4
@@ -8338,12 +8338,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:18.2.7":
-  version: 18.2.7
-  resolution: "@types/react-dom@npm:18.2.7"
+"@types/react-dom@npm:18.2.8":
+  version: 18.2.8
+  resolution: "@types/react-dom@npm:18.2.8"
   dependencies:
     "@types/react": "*"
-  checksum: e02ea908289a7ad26053308248d2b87f6aeafd73d0e2de2a3d435947bcea0422599016ffd1c3e38ff36c42f5e1c87c7417f05b0a157e48649e4a02f21727d54f
+  checksum: d36264631028d021b73cd9e015f10b95c4959ae1ce8f7a7419f318d1f05b1d063e6afffcd2a349a6bccd64ccc9ee9d2d976e1f0437643f0e7db621fa035bca65
   languageName: node
   linkType: hard
 
