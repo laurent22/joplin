@@ -55,7 +55,9 @@ export default class FsDriverRN extends FsDriverBase {
 		throw new Error('Not implemented');
 	}
 
-	// Encoding can be either "utf8" or "base64"
+	// Requires that the file already exists.
+	// TODO: Update for compatibility with fs-driver-node's appendFile (which does not
+	//       require that the file exists).
 	public appendFile(path: string, content: any, rawEncoding = 'base64') {
 		const encoding = normalizeEncoding(rawEncoding);
 

@@ -4,6 +4,7 @@ import uuid from '@joplin/lib/uuid';
 import { join } from 'path';
 import FsDriverBase from '@joplin/lib/fs-driver-base';
 import Logger from '@joplin/utils/Logger';
+import { Buffer } from 'buffer';
 
 const logger = Logger.create('fs-driver-tests');
 
@@ -29,6 +30,38 @@ const testExpect = async () => {
 	if (failed) {
 		throw new Error('expectToBe should throw when given non-equal inputs');
 	}
+};
+
+const testAppendFile = async (tempDir: string) => {
+	logger.info('Testing fsDriver.appendFile...');
+
+	const targetFile = join(tempDir, uuid.createNano());
+
+	const fsDriver: FsDriverBase = shim.fsDriver();
+
+	// For fs-driver-rn's appendFile to work, we first need to create the file.
+	// TODO: This is different from the requirements of fs-driver-node.
+	await fsDriver.writeFile(targetFile, '');
+
+	const firstChunk = 'A 𝓊𝓃𝒾𝒸𝓸𝒹𝓮 test\n...';
+	await fsDriver.appendFile(targetFile, firstChunk, 'utf-8');
+	await expectToBe(await fsDriver.readFile(targetFile), firstChunk);
+
+	const secondChunk = '▪️  More unicode ▪️';
+	await fsDriver.appendFile(targetFile, secondChunk, 'utf8');
+	await expectToBe(await fsDriver.readFile(targetFile), firstChunk + secondChunk);
+
+	const thirdChunk = 'ASCII';
+	await fsDriver.appendFile(targetFile, thirdChunk, 'ascii');
+	await expectToBe(await fsDriver.readFile(targetFile), firstChunk + secondChunk + thirdChunk);
+
+	const lastChunk = 'Test...';
+	await fsDriver.appendFile(
+		targetFile, Buffer.from(lastChunk, 'utf8').toString('base64'), 'base64',
+	);
+	await expectToBe(
+		await fsDriver.readFile(targetFile), firstChunk + secondChunk + thirdChunk + lastChunk,
+	);
 };
 
 const testReadWriteFileUtf8 = async (tempDir: string) => {
@@ -131,6 +164,7 @@ const runOnDeviceTests = async () => {
 
 	try {
 		await testExpect();
+		await testAppendFile(tempDir);
 		await testReadWriteFileUtf8(tempDir);
 		await testReadFileChunkUtf8(tempDir);
 	} catch (error) {
