@@ -14,13 +14,23 @@ const logger = Logger.create('fs-driver-rn');
 
 const ANDROID_URI_PREFIX = 'content://';
 
-function isScopedUri(path: string) {
-	return path.includes(ANDROID_URI_PREFIX);
+// Encodings supported by rn-fetch-blob, RNSAF, and
+// RNFS.
+// See also
+// - https://github.com/itinance/react-native-fs#readfilefilepath-string-encoding-string-promisestring
+// - https://github.com/joltup/rn-fetch-blob/blob/cf9e8843599de92031df2660d5a1da18491fa3c0/android/src/main/java/com/RNFetchBlob/RNFetchBlobFS.java#L1049
+export enum NativeMobileEncoding {
+	Utf8 = 'utf8',
+	Ascii = 'ascii',
+	Base64 = 'base64',
 }
+
 
 // Converts some encodings specifiers that work with NodeJS into encodings
 // that work with RNSAF, RNFetchBlob.fs, and RNFS.
-const normalizeEncoding = (encoding: string) => {
+//
+// Throws if an encoding can't be normalized.
+const normalizeEncoding = (encoding: string): NativeMobileEncoding => {
 	encoding = encoding.toLowerCase();
 
 	// rn-fetch-blob and RNSAF require the exact string "utf8", but NodeJS (and thus
@@ -29,14 +39,16 @@ const normalizeEncoding = (encoding: string) => {
 		encoding = 'utf8';
 	}
 
-	// Warn if unable to convert to a supported encoding.
-	const supportedEncodings = ['utf8', 'ascii', 'base64'];
-	if (!supportedEncodings.includes(encoding)) {
-		logger.warn(`Unsupported encoding: ${encoding}.`);
+	if (!(encoding in NativeMobileEncoding)) {
+		throw new Error(`Unsupported encoding: ${encoding}.`);
 	}
 
-	return encoding;
+	return encoding as NativeMobileEncoding;
 };
+
+function isScopedUri(path: string) {
+	return path.includes(ANDROID_URI_PREFIX);
+}
 
 export default class FsDriverRN extends FsDriverBase {
 	public appendFileSync() {
