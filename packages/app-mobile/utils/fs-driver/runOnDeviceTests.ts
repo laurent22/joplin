@@ -112,7 +112,7 @@ const testReadFileChunkUtf8 = async (tempDir: string) => {
 
 	// 🕳️ is 7 bytes when utf-8 encoded
 	// à,á,â, and ã are each 2 bytes
-	const expectedFileContent = '01234567\nàáâã\n🕳️🕳️🕳️\ntest';
+	const expectedFileContent = '01234567\nàáâã\n🕳️🕳️🕳️\ntēst...';
 	await fsDriver.writeFile(filePath, expectedFileContent, 'utf8');
 
 	const testEncodings = ['utf-8', 'utf8', 'UtF-8'];
@@ -145,8 +145,15 @@ const testReadFileChunkUtf8 = async (tempDir: string) => {
 			await fsDriver.readFileChunk(handle, 0, encoding), null,
 		);
 
+		// Reading a different encoding (then switching back to the original)
+		// should be supported
 		await expectToBe(
-			await fsDriver.readFileChunk(handle, 100, encoding), 'test',
+			await fsDriver.readFileChunk(handle, 3, 'base64'),
+			Buffer.from('tē', 'utf-8').toString('base64'),
+		);
+
+		await expectToBe(
+			await fsDriver.readFileChunk(handle, 100, encoding), 'st...',
 		);
 
 		// Should not be able to read past the end
