@@ -222,7 +222,7 @@ export default class FsDriverRN extends FsDriverBase {
 
 	public readFile(path: string, encoding = 'utf8') {
 		encoding = normalizeEncoding(encoding);
-		if (encoding === 'Buffer') throw new Error('Raw buffer output not supported for FsDriverRN.readFile');
+		if (encoding === 'buffer') throw new Error('Raw buffer output not supported for FsDriverRN.readFile');
 
 		if (isScopedUri(path)) {
 			return RNSAF.readFile(path, { encoding: encoding as Encoding });
