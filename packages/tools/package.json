@@ -46,7 +46,7 @@
     "@rmp135/sql-ts": "1.18.0",
     "@types/fs-extra": "11.0.2",
     "@types/jest": "29.5.4",
-    "@types/markdown-it": "13.0.1",
+    "@types/markdown-it": "13.0.2",
     "@types/mustache": "4.2.3",
     "@types/node": "18.17.19",
     "@types/node-fetch": "2.6.6",

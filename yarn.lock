@@ -5197,7 +5197,7 @@ __metadata:
     "@rmp135/sql-ts": 1.18.0
     "@types/fs-extra": 11.0.2
     "@types/jest": 29.5.4
-    "@types/markdown-it": 13.0.1
+    "@types/markdown-it": 13.0.2
     "@types/mustache": 4.2.3
     "@types/node": 18.17.19
     "@types/node-fetch": 2.6.6
@@ -8149,13 +8149,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/markdown-it@npm:13.0.1":
-  version: 13.0.1
-  resolution: "@types/markdown-it@npm:13.0.1"
+"@types/markdown-it@npm:13.0.2":
+  version: 13.0.2
+  resolution: "@types/markdown-it@npm:13.0.2"
   dependencies:
     "@types/linkify-it": "*"
     "@types/mdurl": "*"
-  checksum: 184d383ac21903a9e6be1639cde2b0cc082d0366b423fd8a69d0f37d9d1d36338f66611226ba4ef1da6148f370a62e08f688e8147ead43d429d6ff213c38c062
+  checksum: fe1f6a12ee8ad2246359376431a30d22c9b603e63e93e3e27d6920840934b9764034679a4d0b01ec54b0693c8d5c42012ec34715cba4f5b0736b8a4b66db4c74
   languageName: node
   linkType: hard
 
