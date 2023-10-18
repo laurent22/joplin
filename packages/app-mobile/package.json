@@ -97,7 +97,7 @@
     "@types/jest": "29.5.4",
     "@types/react": "18.2.23",
     "@types/react-native": "0.70.6",
-    "@types/react-redux": "7.1.26",
+    "@types/react-redux": "7.1.27",
     "@types/tar-stream": "2.2.3",
     "babel-jest": "29.6.4",
     "babel-plugin-module-resolver": "4.1.0",
