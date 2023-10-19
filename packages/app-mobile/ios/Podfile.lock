@@ -288,7 +288,7 @@ PODS:
     - React-Core
   - react-native-get-random-values (1.9.0):
     - React-Core
-  - react-native-image-picker (5.6.1):
+  - react-native-image-picker (5.7.0):
     - React-Core
   - react-native-image-resizer (3.0.7):
     - React-Core
@@ -418,11 +418,11 @@ PODS:
     - React-Core
   - RNVectorIcons (10.0.0):
     - React-Core
-  - RNZipArchive (6.0.9):
+  - RNZipArchive (6.1.0):
     - React-Core
-    - RNZipArchive/Core (= 6.0.9)
+    - RNZipArchive/Core (= 6.1.0)
     - SSZipArchive (~> 2.2)
-  - RNZipArchive/Core (6.0.9):
+  - RNZipArchive/Core (6.1.0):
     - React-Core
     - SSZipArchive (~> 2.2)
   - SSZipArchive (2.4.3)
@@ -669,7 +669,7 @@ SPEC CHECKSUMS:
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
   react-native-geolocation: 0f7fe8a4c2de477e278b0365cce27d089a8c5903
   react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb
-  react-native-image-picker: 5fcac5a5ffcb3737837f0617d43fd767249290de
+  react-native-image-picker: 3269f75c251cdcd61ab51b911dd30d6fff8c6169
   react-native-image-resizer: 681f7607418b97c084ba2d0999b153b103040d8a
   react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
@@ -705,7 +705,7 @@ SPEC CHECKSUMS:
   RNSecureRandom: 07efbdf2cd99efe13497433668e54acd7df49fef
   RNShare: 32e97adc8d8c97d4a26bcdd3c45516882184f8b6
   RNVectorIcons: 8b5bb0fa61d54cd2020af4f24a51841ce365c7e9
-  RNZipArchive: 68a0c6db4b1c103f846f1559622050df254a3ade
+  RNZipArchive: ef9451b849c45a29509bf44e65b788829ab07801
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
   Yoga: e7ea9e590e27460d28911403b894722354d73479
 

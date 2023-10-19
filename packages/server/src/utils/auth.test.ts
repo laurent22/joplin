@@ -12,7 +12,7 @@ describe('hashPassword', () => {
 			'$2a$10$LMKVPiNOWDZhtw9NizNIEuNGLsjOxQAcrwQJ0lnKuiaOtyFgZEnwO',
 		],
 	)('should return a string that starts with $2a$10 for the password: %', async (plainText) => {
-		expect(hashPassword(plainText).startsWith('$2a$10')).toBe(true);
+		expect((await hashPassword(plainText)).startsWith('$2a$10')).toBe(true);
 	});
 
 });
