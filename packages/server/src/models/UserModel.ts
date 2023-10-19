@@ -640,6 +640,9 @@ export default class UserModel extends BaseModel<User> {
 		if (user.password) {
 			if (isHashedPassword(user.password)) {
 				if (!isNew) {
+					// We have this check because if an existing user is loaded,
+					// then saved again, the "password" field will be hashed a
+					// second time, and we don't want this.
 					throw new ErrorBadRequest(`Unable to save user because password already seems to be hashed. User id: ${user.id}`);
 				} else {
 					// OK - We allow supplying an already hashed password for
