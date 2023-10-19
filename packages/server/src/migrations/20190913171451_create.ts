@@ -98,7 +98,7 @@ export const up = async (db: DbConnection) => {
 	await db('users').insert({
 		id: adminId,
 		email: defaultAdminEmail,
-		password: hashPassword(defaultAdminPassword),
+		password: await hashPassword(defaultAdminPassword),
 		full_name: 'Admin',
 		is_admin: 1,
 		updated_time: now,

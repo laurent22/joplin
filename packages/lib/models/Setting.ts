@@ -1126,7 +1126,7 @@ class Setting extends BaseModel {
 				public: true,
 				appTypes: [AppType.Mobile, AppType.Desktop],
 				label: () => _('Resize large images:'),
-				description: () => _('Shrink large images before adding them to notes to save storage space.'),
+				description: () => _('Shrink large images before adding them to notes.'),
 				options: () => {
 					return {
 						alwaysAsk: _('Always ask'),

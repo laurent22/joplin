@@ -9,7 +9,7 @@ import { makeUrl, SubPath, UrlType } from '../utils/routeUtils';
 import MarkdownIt = require('markdown-it');
 import { headerAnchor } from '@joplin/renderer';
 import { _ } from '@joplin/lib/locale';
-import { adminDashboardUrl, adminEmailsUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, changesUrl, homeUrl, itemsUrl } from '../utils/urlUtils';
+import { adminDashboardUrl, adminEmailsUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, homeUrl, itemsUrl } from '../utils/urlUtils';
 import { MenuItem, setSelectedMenu } from '../utils/views/menu';
 
 export interface RenderOptions {
@@ -149,10 +149,6 @@ export default class MustacheService {
 				{
 					title: _('Items'),
 					url: itemsUrl(),
-				},
-				{
-					title: _('Logs'),
-					url: changesUrl(),
 				},
 				{
 					title: _('Admin'),

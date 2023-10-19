@@ -1,460 +1,2270 @@
 {
- "%d days": "%d päeva",
- "%d hour": "%d tund",
- "%d hours": "%d tundi",
- "%d minutes": "%d minutit",
- "%d notes match this pattern. Delete them?": "%d märkmed vastavad sellele mustrile. Kas soovite need kustutada?",
- "%s (%s): %s": "%s (%s): %s",
- "%s (pre-release)": "%s (väljalaske-eelne)",
- "%s - Copy": "%s - Kopeeri",
- "%s / %s": "%s / %s",
- "%s / %s / %s": "%s / %s / %s",
- "%s = %s": "%s = %s",
- "%s = %s (%s)": "%s = %s ( %s)",
- "%s: %d": "%s: %d",
- "%s: %d notes": "%s: %d märkused",
- "%s: %d/%d": "%s: %d/%d",
- "%s: %s": "%s: %s",
- "&Edit": "&Redigeeri",
- "&File": "&Fail",
- "&Help": "&Spikker",
- "&Tools": "&Tööriistad",
- "&View": "&Vaade",
- "- Camera: to allow taking a picture and attaching it to a note.": "-Kaamera: lubada pildistamine ja lisada see märkmele.",
- "- Location: to allow attaching geo-location information to a note.": "-Asukoht: lubada lisamine geograafilise asukoha teavet märkkele.",
- "A3": "A3",
- "A4": "A4",
- "A5": "A5",
- "About Joplin": "Teave kasutaja Joplin kohta",
- "Active": "Aktiivne",
- "Add body": "Lisa keha",
- "Add or remove tags:": "Siltide lisamine või eemaldamine:",
- "Add title": "Pealkirja lisamine",
- "Advanced options": "Täpsemad suvandid",
- "All notes": "Kõik märkmed",
- "Also displays unset and hidden config variables.": "Kuvab ka seatud ja peidetud konfiguratsioonimuutujad.",
- "Always": "Alati",
- "An update is available, do you want to download it now?": "Saadaval on värskendus, kas soovite selle kohe alla laadida?",
- "Appearance": "Välimus",
- "Application": "Rakendus",
- "Apply": "Rakenda",
- "Attach file": "Manusta fail",
- "Attach photo": "Manusta foto",
- "Attach...": "Lisada...",
- "Attaches the given file to the note.": "Manustab antud faili märkmele.",
- "Attachment download behaviour": "Manuse allalaadimise käitumine",
- "Attachments": "Manused",
- "Attachments that could not be downloaded": "Manused, mida ei saanud alla laadida",
- "Authorisation token:": "Autoriseerimis token:",
- "Auto": "Automaatne",
- "Auto-pair braces, parenthesis, quotations, etc.": "Automaatne sidumine traksid, sulg, noteeringud jne.",
- "Back": "Tagasi",
- "Bold": "Paks",
- "Browse...": "Sirvi...",
- "Bulleted List": "Täpp-loend",
- "Cancel": "Tühista",
- "Cancelling background synchronisation... Please wait.": "Tausta sünkroniseerimise tühistamine... Oota.",
- "Cancelling...": "Tühistamine...",
- "Cancelling... Please wait.": "Tühistamine... Oota.",
- "Cannot change encrypted item": "Krüpteeritud üksust ei saa muuta",
- "Cannot find \"%s\".": "Ei leia \" %s\".",
- "Cannot move notebook to this location": "Märkmiku ei saa sellesse asukohta teisaldada",
- "Check for updates...": "Otsi värskendusi...",
- "Check synchronisation configuration": "Kontrolli sünkroniseerimise konfiguratsiooni",
- "Checkbox": "Märkekast",
- "Checking... Please wait.": "Kontroll... Oota.",
- "Choose an option": "Valida suvand",
- "Chrome Web Store": "Chrome ' i veebipood",
- "Clear": "Tühjenda",
- "Clear alarm": "Tühjenda alarm",
- "Close": "Sulge",
- "Close Window": "Sule aken",
- "Code": "Kood",
- "Completed": "Lõpetatud",
- "Completed decryption.": "Dekrüpteerimine on lõpetatud.",
- "Configuration": "Seadistamine",
- "Confirm password cannot be empty": "Parooli kinnitamine ei tohi olla tühi",
- "Confirm password:": "Kinnitage parool:",
- "Conflicted: %d": "Konflikteeritud: %d",
- "Conflicts": "Konfliktid",
- "Convert to note": "Teisenda märkeks",
- "Copy": "Kopeeri",
- "Copy Link Address": "Kopeeri lingi aadress",
- "Copy Markdown link": "Kopeeri Markdown link",
- "Copy path to clipboard": "Kopeeri tee lõikelauale",
- "Copy Shareable Link": "Kopeeri jagatav link",
- "Copy token": "Kopeeri token",
- "Could not authorise application:\n\n%s\n\nPlease try again.": "Taotlust ei saanud lubada:\n\n%s\n\nPalun proovige uuesti.",
- "Create a notebook": "Märkmiku loomine",
- "Created": "Loodud",
- "created date": "loodud kuupäev",
- "Created local items: %d.": "Loodud kohalikud üksused: %d.",
- "Created remote items: %d.": "Loodud kaugüksused: %d.",
- "Created: %d.": "Loodud: %d.",
- "Created: %s": "Loodud: %s",
- "Creates a new note.": "Loob uue märkme.",
- "Creates a new notebook.": "Loob uue märkmiku.",
- "Creates a new to-do.": "Loob uue tee.",
- "Creating new %s...": "Uue %s loomine...",
- "Creating report...": "Aruande loomine...",
- "Current version is up-to-date.": "Praegune versioon on ajakohane.",
- "Custom TLS certificates": "Kohandatud TLS-i serdid",
- "Cut": "Lõika",
- "Dark": "Tume",
- "Database v%s": "Andmebaas v%s",
- "Date format": "Kuupäeva formaat",
- "days": "päeva",
- "Decrypted items: %s / %s": "Dekrüpteeritud üksused: %s / %s",
- "Decrypting items: %d/%d": "Üksuste dekrüpteerimine: %d/%d",
- "Default": "Vaikimisi",
- "Default: %s": "Default: %s",
- "Delete": "Kustuta",
- "Delete note \"%s\"?": "Kas kustutada märge \"%s\"?",
- "Delete note?": "Kas soovite märkme kustutada?",
- "Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": "Kas soovite märkmiku \"%s\"?\n\nKustutatakse ka kõik selle märkmiku märkmed ja alammärkmikud.",
- "Delete these %d notes?": "Kas kustutada %d märkmed?",
- "Deleted local items: %d.": "Kustutatud kohalikud üksused: %d.",
- "Deleted remote items: %d.": "Kustutatud kaugüksused: %d.",
- "Deletes the given notebook.": "Kustutab antud märkmiku.",
- "Deletes the notes matching <note-pattern>.": "Kustutab märkmete vastendamise <note-pattern>.",
- "Deletes the notes without asking for confirmation.": "Kustutab märkmed ilma kinnitust küsimata.",
- "Destination format: %s": "Sihtkoha Formaat: %s",
- "Directory": "Kataloogid",
- "Disable encryption": "Keela krüptimine",
- "Disable Web Clipper Service": "Keela Web Clipper Service",
- "Disabled": "Keelatud",
- "Discard changes": "Hülga muutused",
- "Displays a geolocation URL for the note.": "Kuvatakse märkme geograafilise asukoha URL.",
- "Displays only the first top <num> notes.": "Kuvab ainult esimesed <num> märkmed.",
- "Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-tnt` would display notes and to-dos.": "Kuvab ainult konkreetset tüüpi tüübid. Võib olla `n` märkmete jaoks, `t` ülesannete jaoks või `nt` märkmete ja ülesannete jaoks (nt `-tt` kuvaks ainult ülesandeid, `-tnt` aga märkmeid ja ülesanded.",
- "Displays the complete information about note.": "Kuvatakse märkme kohta täielik teave.",
- "Displays the given note.": "Kuvab antud märkme.",
- "Displays the notes in the current notebook. Use `ls /` to display the list of notebooks.": "Kuvab märkmed praeguses märkmikus. Kasutage märkmike loendi kuvamiseks ' ls /'.",
- "Displays usage information.": "Kuvab kasutusteabe.",
- "Displays version information": "Kuvab versiooniteabe",
- "Do not ask for confirmation.": "Ära küsi kinnitust.",
- "Download and install the relevant extension for your browser:": "Laadige alla ja installige brauseri vastav laiend:",
- "Downloaded": "Allalaetud",
- "Downloaded and decrypted": "Alla laaditud ja dekrüpteeritud",
- "Downloaded and encrypted": "Alla laaditud ja krüpteeritud",
- "Downloading": "Allalaadimine",
- "Downloading resources...": "Ressursside allalaadimine...",
- "Dracula": "Dracula",
- "Dropbox": "Dropbox",
- "Dropbox Login": "Dropbox-i sisselogimine",
- "Duplicate": "Paljunda",
- "Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": "Kopeerib märkmed, mis vastavad märkusele <note> ja [notebook]. Kui ühtegi märkmikku pole täpsustatud, dubleeritakse see praeguses märkmikus.",
- "Edit": "Muuda",
- "Edit in external editor": "Redigeeri välisredaktoris",
- "Edit note.": "Redigeeri märkust.",
- "Edit notebook": "Märkmiku redigeerimine",
- "Editor": "Redigeerija",
- "Editor font": "Redaktori font",
- "Editor font family": "Redaktori font pere",
- "Editor font size": "Redaktori fondi suurus",
- "Either \"text\" or \"json\"": "Kas \"tekst\" või \"JSON\"",
- "Emacs": "Emacs",
- "Enable": "Luba",
- "Enable encryption": "Luba krüptimine",
- "Enable Web Clipper Service": "Luba Web Clipper Service",
- "Enabled": "Lubatud",
- "Encrypted": "Krüpteeritud",
- "Encrypted items cannot be modified": "Krüpteeritud üksusi ei saa muuta",
- "Encryption": "Krüpteerimine",
- "Encryption Config": "Krüptimise konfiguratsioon",
- "Encryption is: %s": "Krüpteerimine on: %s",
- "Enter code here": "Sisestage kood siia",
- "Enter master password:": "Sisestage põhiparool:",
- "Enter notebook title": "Sisestage märkmiku tiitel",
- "Error": "Viga",
- "Error opening note in editor: %s": "Tõrge märkme avamisel redaktoris: %s",
- "Errors only": "Ainult tõrked",
- "Exits the application.": "Väljub rakendusest.",
- "Export": "Eksport",
- "Exports Joplin data to the given path. By default, it will export the complete database including notebooks, notes, tags and resources.": "Ekspordib Joplini andmed antud teele. Vaikimisi ekspordime täieliku andmebaasi, sealhulgas märkmikud, märkmed, sildid ja ressursid.",
- "Exports only the given note.": "Ekspordib ainult antud märkuse.",
- "Exports only the given notebook.": "Ekspordib ainult antud märkmiku.",
- "Fatal error:": "Parandamatu tõrge:",
- "Fetched items: %d/%d.": "Tõmmatud üksused: %d/%d.",
- "Fetching resources: %d/%d": "Ressursside toomine: %d/%d",
- "File": "Fail",
- "File system": "Failisüsteem",
- "Firefox Extension": "Firefoxi laiendus",
- "Fix search index": "Paranda otsinguindeks",
- "Fixing search index...": "Otsinguindeksi parandamine...",
- "Focus": "Fookus",
- "Folders": "Kaustad",
- "For information on how to customise the shortcuts please visit %s": "Teavet selle kohta, kuidas kohandada otseteed Palun külastage %s",
- "For the list of keyboard shortcuts and config options, type `help keymap`": "73/5000\nKlaviatuuri otseteede ja konfiguratsioonivõimaluste loendi jaoks tippige \"help keymap\"",
- "Found: %d.": "Leitud: %d.",
- "FTS enabled: %d": "FTS lubatud: %d",
- "General": "Üldine",
- "Generating link...": "Lingi loomine...",
- "Get it now:": "Võta nüüd:",
- "Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": "Saab või seab seadistusväärtuse. Kui väärtust [value] ei ole esitatud, näitab see [name] väärtust. Kui ei ole esitatud [name] ega [value], loetatakse praegune konfiguratsioon.",
- "Go to source URL": "Mine Allika URL-ile",
- "Heading": "Pealkiri",
- "Help": "Abi",
- "Hide %s": "Peida %s",
- "HTML Directory": "HTML-kataloog",
- "HTML File": "HTML-fail",
- "Hyperlink": "Hüperlink",
- "ID": "ID",
- "Idle": "Jõude",
- "Ignore TLS certificate errors": "Ignoreeri TLS-i serdi tõrked",
- "Import": "Impordi",
- "Importing notes...": "Märkmete importimine...",
- "Imports data into Joplin.": "Impordib andmed Joplini.",
- "In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": "Mis tahes käsu, Märkus või märkmiku saab viidatud pealkirja või ID või kasutades otseteed `$n` või `$b` vastavalt praegu valitud Märkus või märkmiku. `$c` saab kasutada praegu valitud üksusele viitamiseks.",
- "In order to use file system synchronisation your permission to write to external storage is required.": "Selleks, et kasutada failisüsteemi sünkroniseerimist, on vajalik teie õigus kirjutada välisele salvestussüsteemile.",
- "In order to use the web clipper, you need to do the following:": "Selleks, et kasutada Web Clipper, peate tegema järgmist:",
- "In progress": "Töötlemisel",
- "In: %s": "Asukoht: %s",
- "Information": "Informatsioon",
- "Insert Hyperlink": "Lisa hüperlink",
- "Invalid answer: %s": "Sobimatu vastus: %s",
- "Invalid command: \"%s\"": "Sobimatu käsk: %s",
- "Invalid option value: \"%s\". Possible values are: %s.": "Sobimatu suvandiväärtus: %s. Võimalikud väärtused on: %s.",
- "Italic": "Kald",
- "Item \"%s\" could not be downloaded: %s": "Üksust %s ei saanud alla laadida: %s",
- "Items that cannot be decrypted": "Üksused, mida ei saa dekrüptida",
- "Items that cannot be synchronised": "Üksused, mida ei saa sünkrooniseerida",
- "Joplin Forum": "Joplini Foorum",
- "Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": "Joplin Web Clipper võimaldab salvestada veebilehti ja ekraanipilte brauserist Joplini.",
- "Joplin website": "Joplini veebisait",
- "Keep note history for": "Säilita märkmete ajalugu",
- "Keyboard Mode": "Klaviatuuri režiim",
- "Landscape": "Maastik",
- "Language": "Keel",
- "Last error: %s": "Viimane tõrge: %s",
- "Layout": "Paigutus",
- "Legal": "Õiguslik",
- "Letter": "Kaaskiri",
- "Light": "Hele",
- "Link has been copied to clipboard!": "Link on kopeeritud lõikelauale!",
- "Links with protocol \"%s\" are not supported": "Linke protokolliga \"%s\" ei toetata",
- "Location": "Asukoht",
- "Log": "Logi",
- "Login with Dropbox": "Logi sisse Dropbox",
- "Login with OneDrive": "Logi sisse OneDrive ' iga",
- "Make a donation": "Annetuse tegemine",
- "Manual": "Manuaal",
- "Markdown": "Markdown",
- "Marks a to-do as done.": "Märgib, et ülesannete loetelu on tehtud .",
- "Master Key %s": "Põhivõti %s",
- "Max concurrent connections": "Maksimaalsed samaaegsed ühendused",
- "Missing Master Keys": "Puuduvad juhtklahvid",
- "Missing required argument: %s": "Puuduv nõutav argument: %s",
- "More information": "Lisainformatsioon",
- "More than one item match \"%s\". Please narrow down your query.": "\"%s\" vastab rohkem kui ühele üksusele. Palun kitsendage oma päringut.",
- "Move %d notes to notebook \"%s\"?": "Kas teisaldada %d märkmed märkmikku \"%s\"?",
- "Move to notebook...": "Teisalda märkmikku...",
- "n": "n",
- "N": "N",
- "New note": "Uus Märkus",
- "New notebook": "Uus märkmik",
- "New Notebook": "Uus märkmik",
- "New sub-notebook": "Uus alammärkmik",
- "New tags:": "Uued sildid:",
- "New version: %s": "Uus versioon: %s",
- "Nextcloud": "Nextcloud",
- "Nextcloud password": "Nextcloud-i parool",
- "Nextcloud username": "Nextcloud-i kasutajanimi",
- "Nextcloud WebDAV URL": "Nextcloud WebDAV-i URL",
- "No": "Ei",
- "No active notebook.": "Aktiivset märkmikku pole.",
- "No item with ID %s": "Üksust ID-ga %s ei ole",
- "No notebook has been specified.": "Ühtegi märkmikku pole määratud.",
- "No notebook selected.": "Ühtegi märkmikku pole valitud.",
- "No notes in here. Create one by clicking on \"New note\".": "Siin pole märkmeid. Looge üks, klõpsates nupul \"New note\".",
- "No such command: %s": "Sellist käsku pole: %s",
- "No text editor is defined. Please set it using `config editor <editor-path>`": "Tekstiredaktorit pole määratletud. Seadistage see kasutades konfiguratsiooniredaktorit <editor-path>",
- "Nord": "Nord",
- "Not downloaded": "Ei laaditud alla",
- "note": "paberraha",
- "Note": "Märge",
- "Note does not exist: \"%s\". Create it?": "Märget pole olemas: \"%s\". Kas luua?",
- "Note History": "Märkmete ajalugu",
- "Note is not a to-do: \"%s\"": "Märkus ei ole ülesannete loetelu: %s",
- "Note properties": "Märkme atribuudid",
- "Note: Does not work in all desktop environments.": "Märkus: ei tööta kõigil töölaua keskkondades.",
- "Notebook: %s": "Märkmik: %s",
- "Notebooks": "Sülearvutid",
- "Notebooks cannot be named \"%s\", which is a reserved title.": "Märkmikke ei saa nimega \"%s\", mis on reserveeritud tiitel.",
- "Notes and settings are stored in: %s": "Märkmed ja sätted talletatakse: %s",
- "Notes can only be created within a notebook.": "Märkmeid saab luua ainult märkmiku sees.",
- "Numbered List": "Nummerdatud loend",
- "OK": "OK",
- "On %s: %s": "%s: %s",
- "One or more master keys need a password.": "Üks või mitu Põhivõtit vajavad parooli.",
- "OneDrive": "OneDrive",
- "OneDrive Login": "OneDrive-i sisselogimine",
- "Open %s": "Ava %s",
- "Open...": "Avatud...",
- "Operation cancelled": "Toiming tühistati",
- "Options": "Valikud",
- "Page orientation for PDF export": "Lehekülje suund PDF-i eksportimiseks",
- "Password": "Parool",
- "Password cannot be empty": "Parool ei tohi olla tühi",
- "Password:": "Parool:",
- "Passwords do not match!": "Paroolid ei kattu!",
- "Paste": "Kleebi",
- "PDF File": "PDF-fail",
- "Permission to use camera": "Kaamera kasutamise õigus",
- "Please select a notebook first.": "Palun valige esmalt märkmik.",
- "Please select the note or notebook to be deleted first.": "Valige esmalt kustutatav märkus või märkmik.",
- "Please select where the sync status should be exported to": "Palun valige, kus sünkroonimise olekut tuleks eksportida",
- "Plugins": "Pluginad",
- "Portrait": "Portree",
- "Possible keys/values:": "Võimalikud klahvid/väärtused:",
- "Possible values: %s.": "Võimalikud väärtused: %s.",
- "Preferences...": "Eelistused...",
- "Press Ctrl+D or type \"exit\" to exit the application": "Rakendusest väljumiseks vajutage Ctrl+D või kirjutage \"exit\"",
- "Press to set the decryption password.": "Vajutage, et määrata dekrüptimisparool.",
- "Previous versions of this note": "Selle märkme eelmised versioonid",
- "Properties": "Objektid",
- "Quit": "Lõpeta",
- "Refresh": "Värskenda",
- "Remove": "Eemalda",
- "Remove tag \"%s\" from all notes?": "Kas eemaldada silt \"%s\" kõigist märkmetest?",
- "Remove this search from the sidebar?": "Kas soovite selle otsingu külgribalt eemaldada?",
- "Rename": "Nimeta ümber",
- "Rename notebook:": "Märkmiku ümbernimetamine:",
- "Rename tag:": "Nimeta silt ümber:",
- "Renames the given <item> (note or notebook) to <name>.": "Nimetab antud <item> (Märkus või märkmik) <name>.",
- "Resources: %d.": "Ressursid: %d.",
- "Restore": "Taasta",
- "Restored Notes": "Taastatud märkmed",
- "Retry": "Uuesti",
- "Reverse sort order": "Pööra sortimisjärjestus ümber",
- "Reverses the sorting order.": "Pöörab sorteerimis järjestuse ümber.",
- "Save": "Salvesta",
- "Save as...": "Salvesta kui...",
- "Save changes": "Salvesta muudatused",
- "Save geo-location with notes": "Salvesta geograafilise asukoha märkmed",
- "Search": "Otsi",
- "Search in all the notes": "Otsi kõigist märkmetest",
- "Search in current note": "Otsi praeguses märkuses",
- "Search...": "Otsi...",
- "Search:": "Otsi:",
- "Searches for the given <pattern> in all the notes.": "Otsib <pattern> kõiki märkmeid.",
- "Select all": "Vali kõik",
- "Server is already running on port %d": "Server töötab juba pordis %d",
- "Server is not running.": "Server ei tööta.",
- "Server is running on port %d": "Serveris töötab port %d",
- "Set alarm": "Alarmi seadmine",
- "Set alarm:": "Alarmi seadmine:",
- "Set the password": "Parooli seadmine",
- "Share": "Jaga",
- "Shortcuts are not available in CLI mode.": "Otseteed pole CLI režiimis saadaval.",
- "Show Advanced Settings": "Kuva täpsemad sätted",
- "Show all": "Näita kõiki",
- "Show completed to-dos": "Näita lõpuleviidud ülesandeid",
- "Show note counts": "Kuva märkmete arv",
- "Show tray icon": "Kuva salve ikoon",
- "Skipped: %d.": "Vahele jäetud: %d.",
- "Solarised Dark": "Solarised Dark",
- "Solarised Light": "Solarised Light",
- "Some items cannot be synchronised.": "Mõnda üksust ei saa sünkroonida.",
- "Some items cannot be synchronised. Press for more info.": "Mõnda üksust ei saa sünkroonida. Lisateabe saamiseks vajutage.",
- "Sort notebooks by": "Sorteeri märkmikud",
- "Sort notes by": "Märkmete sortimine",
- "Sorts the item by <field> (eg. title, updated_time, created_time).": "Sordib üksuse järgi <field> (nt pealkiri, uuendatud_aeg, loodud_aeg).",
- "Source format: %s": "Allika Formaat: %s",
- "Split View": "Tükelda vaade",
- "Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.": "Dekrüpteerimise käivitamine... Palun oodake. See võib võtta mitu minutit sõltuvalt sellest, kui palju on dekrüpteerida.",
- "Starting synchronisation...": "Sünkroonimise käivitamine...",
- "Status": "Staatus",
- "Status: %s": "Staatus: %s",
- "Status: Started on port %d": "Olek: alustatud porti %d",
- "Step 1: Enable the clipper service": "1. samm: Lubage Clipper service",
- "Step 2: Install the extension": "2. toiming: installige laiend",
- "Stop external editing": "Peata väline redigeerimine",
- "Submit": "Saada",
- "Success! Synchronisation configuration appears to be correct.": "Edu! Sünkroonimise konfiguratsioon näib olevat õige.",
- "Switch to note type": "Märkme tüübi aktiveerimine",
- "Sync Status": "Sünkroonimise olek",
- "Sync status (synced items / total items)": "Sünkroonimise olek (sünkroonitud üksused/kokku üksused)",
- "Synchronisation": "Sünkroonimine",
- "Synchronisation is already in progress.": "Sünkroniseerimine on juba teoksil.",
- "Synchronisation Status": "Sünkroonimise olek",
- "Synchronise": "Sünkroniseeri",
- "Synchronising...": "Sünkroonimine...",
- "Tagged: %d.": "Sildistatud: %d.",
- "Tags": "Sildid",
- "Take photo": "Pildista",
- "The application has been authorised!": "Taotlus on heaks kiidetud!",
- "The command \"%s\" is only available in GUI mode": "Käsk %s on saadaval ainult graafilises kasutajaliideses",
- "The Joplin mobile app does not currently support this type of link: %s": "Joplin mobiilirakendus ei toeta praegu seda tüüpi linki: %s",
- "The note \"%s\" has been successfully restored to the notebook \"%s\".": "Märkus \"%s\" on märkmikku \"%s\" edukalt taastatud.",
- "The notebook could not be saved: %s": "Märkmikku ei saanud salvestada: %s",
- "The notes have been imported: %s": "Märkmed on imporditud: %s",
- "The possible commands are:": "Võimalikud käsud on:",
- "The web clipper service is enabled and set to auto-start.": "Web Clipper service on lubatud ja seadke automaatselt käivituma.",
- "The web clipper service is not enabled.": "Web clipper service pole lubatud.",
- "Theme": "Teema",
- "There are currently no notes. Create one by clicking on the (+) button.": "Praegu pole märkmeid. Looge üks, klõpsates nupul (+).",
- "There is currently no notebook. Create one by clicking on \"New notebook\".": "Praegu pole märkmikku. Loo üks klõpsates \"New notebook\".",
- "There is no data to export.": "Eksportivaid andmeid pole.",
- "There was an error downloading this attachment:": "Selle manuse allalaadimisel ilmnes tõrge:",
- "This attachment is not downloaded or not decrypted yet": "Seda manust ei laadita alla või pole veel dekrüpteeritud",
- "This attachment is not downloaded or not decrypted yet.": "Seda manust ei ole laetud ega dekrüpteeritud veel.",
- "This authorisation token is only needed to allow third-party applications to access Joplin.": "See luba on vajalik ainult selleks, et lubada kolmanda osapoole rakendustele juurdepääsu Joplini.",
- "This note has been modified:": "Seda märkust on muudetud:",
- "This note has no content. Click on \"%s\" to toggle the editor and edit the note.": "Sellel märkel pole sisu. Klõpsake \" %s\" redaktori vahetamiseks ja märkme redigeerimiseks.",
- "This note has no history": "Sellel märkel pole ajalugu",
- "This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": "See teenus võimaldab brauseri laiendil suhelda Joplini-ga. Kui lubate selle, võib tulemüür paluda teil anda luba Joplini kuulata teatud porti.",
- "This will open a new screen. Save your current changes?": "See avab uue ekraani. Kas salvestada praegused muudatused?",
- "Time format": "Kellaaja Formaat",
- "title": "pealkiri",
- "To delete a tag, untag the associated notes.": "Sildi kustutamiseks eemaldage märkmed seotud silt.",
- "To delete: %d": "Kustutamiseks: %d",
- "To enter command line mode, press \":\"": "Käsurea režiimi sisestamiseks vajutage \":\"",
- "To exit command line mode, press ESCAPE": "Käsurea režiimist väljumiseks vajutage ESCAPE",
- "To maximise/minimise the console, press \"tc\".": "Konsooli maksimeerimiseks/minimeerimiseks vajutage \"tc\".",
- "To move from one pane to another, press Tab or Shift+Tab.": "Ühest paanist teise liikumiseks vajutage Tab või Shift + Tab.",
- "to-do": "ülesande nimekiri",
- "Toggle development tools": "Lülita arendus tööriistad",
- "Toggle editor layout": "Lülita redaktori paigutus sisse/välja",
- "Toggle note list": "Lülita märkuseloend sisse/välja",
- "Toggle sidebar": "Lülita külgriba sisse/välja",
- "Token has been copied to the clipboard!": "Token on kopeeritud lõikelauale!",
- "Tools": "Tööriistad",
- "Total: %d/%d": "Kokku: %d/%d",
- "Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": "Käsu kohta lisateabe saamiseks tippige käsk `help [command]`; või tippige täieliku kasutamise teabe saamiseks `help all`.",
- "Type `joplin help` for usage information.": "Sisestage `joplin help` kasutusteabe jaoks .",
- "Type new tags or select from list": "Tippige uued sildid või valige loendist",
- "Type: %s.": "Tüüp: %s.",
- "Uncompleted to-dos on top": "Lõpetamata ülesanded üleval",
- "Unknown flag: %s": "Tundmatu lipp: %s",
- "Unsupported image type: %s": "Toetuseta pilditüüp: %s",
- "Unsupported link or message: %s": "Toetuseta link või sõnum: %s",
- "Untitled": "Pealkirjata",
- "Updated": "Uuendatud",
- "updated date": "värskendatud kuupäev",
- "Updated remote items: %d.": "Värskendatud kaugüksused: %d.",
- "Updated: %d.": "Värskendatud: %d.",
- "Updated: %s": "Värskendatud: %s",
- "URL": "URL",
- "Usage: %s": "Kasutus: %s",
- "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE": "Kasutage pikka nimekirja vormingut. ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE",
- "Use the arrows and page up/down to scroll the lists and text areas (including this console).": "Loendite ja tekstialade (sh selle konsooli) kerimiseks kasutage nooli ja lehe üles/alla klahve.",
- "View on map": "Vaata kaardilt",
- "View them now": "Vaata neid nüüd",
- "Vim": "Vim",
- "Warning": "Hoiatus",
- "Web Clipper": "Web Clipper",
- "WebDAV": "WebDAV",
- "WebDAV password": "WebDAV-i parool",
- "WebDAV URL": "WebDAV-i URL",
- "WebDAV username": "WebDAV-i kasutajanimi",
- "Website and documentation": "Veebileht ja dokumentatsioon",
- "When creating a new note:": "Uue märkme loomisel:",
- "y": "y",
- "Y": "Y",
- "Yes": "Jah",
- "You currently have no notebooks.": "Teil pole praegu märkmikke.",
- "Your choice: ": "Sinu valik: ",
- "Your permission to use your camera is required.": "Teie luba kaamera kasutamiseks on vajalik.",
- "Your version: %s": "Teie versioon: %s"
+	"\"%s\" is missing the required \"%s\" property.": [
+		""
+	],
+	"%d days": [
+		"%d päeva"
+	],
+	"%d GB": [
+		""
+	],
+	"%d GB storage space": [
+		""
+	],
+	"%d hour": [
+		"%d tund"
+	],
+	"%d hours": [
+		"%d tundi"
+	],
+	"%d MB": [
+		""
+	],
+	"%d minutes": [
+		"%d minutit"
+	],
+	"%d notes match this pattern. Delete them?": [
+		"%d märkmed vastavad sellele mustrile. Kas soovite need kustutada?"
+	],
+	"%s": [
+		""
+	],
+	"%s (%s) would like to share a notebook with you.": [
+		""
+	],
+	"%s (%s): %s": [
+		"%s (%s): %s"
+	],
+	"%s (pre-release)": [
+		"%s (väljalaske-eelne)"
+	],
+	"%s - Copy": [
+		"%s - Kopeeri"
+	],
+	"%s / %s": [
+		"%s / %s"
+	],
+	"%s / %s / %s": [
+		"%s / %s / %s"
+	],
+	"%s = %s": [
+		"%s = %s"
+	],
+	"%s = %s (%s)": [
+		"%s = %s ( %s)"
+	],
+	"%s: %d": [
+		"%s: %d"
+	],
+	"%s: %d notes": [
+		"%s: %d märkused"
+	],
+	"%s: %d/%d": [
+		"%s: %d/%d"
+	],
+	"%s: %s": [
+		"%s: %s"
+	],
+	"&Edit": [
+		"&Redigeeri"
+	],
+	"&File": [
+		"&Fail"
+	],
+	"&Go": [
+		""
+	],
+	"&Help": [
+		"&Spikker"
+	],
+	"&Tools": [
+		"&Tööriistad"
+	],
+	"&View": [
+		"&Vaade"
+	],
+	"(%s)": [
+		""
+	],
+	"(In plugin: %s)": [
+		""
+	],
+	"(None)": [
+		""
+	],
+	"(wysiwyg: %s)": [
+		""
+	],
+	"(You may disable this prompt in the options)": [
+		""
+	],
+	"- Camera: to allow taking a picture and attaching it to a note.": [
+		"-Kaamera: lubada pildistamine ja lisada see märkmele."
+	],
+	"- Location: to allow attaching geo-location information to a note.": [
+		"-Asukoht: lubada lisamine geograafilise asukoha teavet märkkele."
+	],
+	"A3": [
+		"A3"
+	],
+	"A4": [
+		"A4"
+	],
+	"A5": [
+		"A5"
+	],
+	"About Joplin": [
+		"Teave kasutaja Joplin kohta"
+	],
+	"accelerator": [
+		""
+	],
+	"Accelerator \"%s\" is not valid.": [
+		""
+	],
+	"Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to unexpected behaviour.": [
+		""
+	],
+	"Accept": [
+		""
+	],
+	"Access denied: Please check your username and password": [
+		""
+	],
+	"Access denied: Please re-enter your password and/or username": [
+		""
+	],
+	"Account": [
+		""
+	],
+	"Active": [
+		"Aktiivne"
+	],
+	"Actual Size": [
+		""
+	],
+	"Add body": [
+		"Lisa keha"
+	],
+	"Add or remove tags:": [
+		"Siltide lisamine või eemaldamine:"
+	],
+	"Add recipient:": [
+		""
+	],
+	"Add title": [
+		"Pealkirja lisamine"
+	],
+	"Add to dictionary": [
+		""
+	],
+	"Admin": [
+		""
+	],
+	"Admin dashboard": [
+		""
+	],
+	"Advanced options": [
+		"Täpsemad suvandid"
+	],
+	"All data, including notes, notebooks and tags will be permanently deleted.": [
+		""
+	],
+	"All notes": [
+		"Kõik märkmed"
+	],
+	"All potential ports are in use - please report the issue at %s": [
+		""
+	],
+	"Also displays unset and hidden config variables.": [
+		"Kuvab ka seatud ja peidetud konfiguratsioonimuutujad."
+	],
+	"Always": [
+		"Alati"
+	],
+	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
+		""
+	],
+	"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti\" to see the short notebook id": [
+		""
+	],
+	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		""
+	],
+	"An update is available, do you want to download it now?": [
+		"Saadaval on värskendus, kas soovite selle kohe alla laadida?"
+	],
+	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
+		""
+	],
+	"Appearance": [
+		"Välimus"
+	],
+	"Application": [
+		"Rakendus"
+	],
+	"Apply": [
+		"Rakenda"
+	],
+	"Are you sure you want to renew the authorisation token?": [
+		""
+	],
+	"Are you sure you want to return to the default layout? The current layout configuration will be lost.": [
+		""
+	],
+	"Arguments:": [
+		""
+	],
+	"Aritim Dark": [
+		""
+	],
+	"Attach file": [
+		"Manusta fail"
+	],
+	"Attach photo": [
+		"Manusta foto"
+	],
+	"Attach...": [
+		"Lisada..."
+	],
+	"Attaches the given file to the note.": [
+		"Manustab antud faili märkmele."
+	],
+	"Attachment download behaviour": [
+		"Manuse allalaadimise käitumine"
+	],
+	"Attachments": [
+		"Manused"
+	],
+	"Attachments that could not be downloaded": [
+		"Manused, mida ei saanud alla laadida"
+	],
+	"Authorisation token:": [
+		"Autoriseerimis token:"
+	],
+	"Auto": [
+		"Automaatne"
+	],
+	"Auto-add disabled accounts for deletion": [
+		""
+	],
+	"Auto-pair braces, parenthesis, quotations, etc.": [
+		"Automaatne sidumine traksid, sulg, noteeringud jne."
+	],
+	"Automatically switch theme to match system theme": [
+		""
+	],
+	"Back": [
+		"Tagasi"
+	],
+	"Basic": [
+		""
+	],
+	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
+		""
+	],
+	"Bold": [
+		"Paks"
+	],
+	"Browse all plugins": [
+		""
+	],
+	"Browse...": [
+		"Sirvi..."
+	],
+	"Bulleted List": [
+		"Täpp-loend"
+	],
+	"Can view": [
+		""
+	],
+	"Can view and edit": [
+		""
+	],
+	"Cancel": [
+		"Tühista"
+	],
+	"Cancelling background synchronisation... Please wait.": [
+		"Tausta sünkroniseerimise tühistamine... Oota."
+	],
+	"Cancelling...": [
+		"Tühistamine..."
+	],
+	"Cancelling... Please wait.": [
+		"Tühistamine... Oota."
+	],
+	"Cannot change encrypted item": [
+		"Krüpteeritud üksust ei saa muuta"
+	],
+	"Cannot find \"%s\".": [
+		"Ei leia \" %s\"."
+	],
+	"Cannot move notebook to this location": [
+		"Märkmiku ei saa sellesse asukohta teisaldada"
+	],
+	"Cannot save %s \"%s\" because it is larger than the allowed limit (%s)": [
+		""
+	],
+	"Cannot save %s \"%s\" because it would go over the total allowed size (%s) for this account": [
+		""
+	],
+	"Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end encryption. They may do so from the screen Configuration > Encryption.": [
+		""
+	],
+	"Case sensitive": [
+		""
+	],
+	"Change application layout": [
+		""
+	],
+	"Characters": [
+		""
+	],
+	"Characters excluding spaces": [
+		""
+	],
+	"Check for updates...": [
+		"Otsi värskendusi..."
+	],
+	"Check synchronisation configuration": [
+		"Kontrolli sünkroniseerimise konfiguratsiooni"
+	],
+	"Checkbox": [
+		"Märkekast"
+	],
+	"Checking... Please wait.": [
+		"Kontroll... Oota."
+	],
+	"Choose an option": [
+		"Valida suvand"
+	],
+	"Chrome Web Store": [
+		"Chrome ' i veebipood"
+	],
+	"Clear": [
+		"Tühjenda"
+	],
+	"Clear alarm": [
+		"Tühjenda alarm"
+	],
+	"Close": [
+		"Sulge"
+	],
+	"Close Window": [
+		"Sule aken"
+	],
+	"Code": [
+		"Kood"
+	],
+	"Code Block": [
+		""
+	],
+	"Collapse": [
+		""
+	],
+	"command": [
+		""
+	],
+	"Command": [
+		""
+	],
+	"Command palette": [
+		""
+	],
+	"Command palette...": [
+		""
+	],
+	"Completed": [
+		"Lõpetatud"
+	],
+	"Completed decryption.": [
+		"Dekrüpteerimine on lõpetatud."
+	],
+	"Compress old changes": [
+		""
+	],
+	"Configuration": [
+		"Seadistamine"
+	],
+	"Confirm password cannot be empty": [
+		"Parooli kinnitamine ei tohi olla tühi"
+	],
+	"Confirm password:": [
+		"Kinnitage parool:"
+	],
+	"Conflicted: %d": [
+		"Konflikteeritud: %d"
+	],
+	"Conflicts": [
+		"Konfliktid"
+	],
+	"Consolidated billing": [
+		""
+	],
+	"Continue": [
+		""
+	],
+	"Convert to note": [
+		"Teisenda märkeks"
+	],
+	"Copy": [
+		"Kopeeri"
+	],
+	"Copy Link Address": [
+		"Kopeeri lingi aadress"
+	],
+	"Copy Markdown link": [
+		"Kopeeri Markdown link"
+	],
+	"Copy path to clipboard": [
+		"Kopeeri tee lõikelauale"
+	],
+	"Copy Shareable Link": [
+		"Kopeeri jagatav link",
+		"Kopeeri jagatavad lingid"
+	],
+	"Copy token": [
+		"Kopeeri token"
+	],
+	"Could not authorise application:\n\n%s\n\nPlease try again.": [
+		"Taotlust ei saanud lubada:\n\n%s\n\nPalun proovige uuesti."
+	],
+	"Could not connect to plugin repository.": [
+		""
+	],
+	"Could not export notes: %s": [
+		""
+	],
+	"Could not install plugin: %s": [
+		""
+	],
+	"Could not respond to the invitation. Please try again, or check with the notebook owner if they are still sharing it.\n\nThe error was: \"%s\"": [
+		""
+	],
+	"Could not upgrade master key: %s": [
+		""
+	],
+	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
+		""
+	],
+	"Create a notebook": [
+		"Märkmiku loomine"
+	],
+	"Created": [
+		"Loodud"
+	],
+	"created date": [
+		"loodud kuupäev"
+	],
+	"Created local items: %d.": [
+		"Loodud kohalikud üksused: %d."
+	],
+	"Created remote items: %d.": [
+		"Loodud kaugüksused: %d."
+	],
+	"Created: %d.": [
+		"Loodud: %d."
+	],
+	"Created: %s": [
+		"Loodud: %s"
+	],
+	"Creates a new note.": [
+		"Loob uue märkme."
+	],
+	"Creates a new notebook.": [
+		"Loob uue märkmiku."
+	],
+	"Creates a new to-do.": [
+		"Loob uue tee."
+	],
+	"Creating report...": [
+		"Aruande loomine..."
+	],
+	"Current version is up-to-date.": [
+		"Praegune versioon on ajakohane."
+	],
+	"custom order": [
+		""
+	],
+	"Custom order": [
+		""
+	],
+	"Custom TLS certificates": [
+		"Kohandatud TLS-i serdid"
+	],
+	"Customise the note publishing banner": [
+		""
+	],
+	"Cut": [
+		"Lõika"
+	],
+	"Dark": [
+		"Tume"
+	],
+	"Dashboard": [
+		""
+	],
+	"Database v%s": [
+		"Andmebaas v%s"
+	],
+	"Date": [
+		""
+	],
+	"Date format": [
+		"Kuupäeva formaat"
+	],
+	"days": [
+		"päeva"
+	],
+	"Decrease indent level": [
+		""
+	],
+	"Decrypted items: %s / %s": [
+		"Dekrüpteeritud üksused: %s / %s"
+	],
+	"Decrypting items: %d/%d": [
+		"Üksuste dekrüpteerimine: %d/%d"
+	],
+	"Default": [
+		"Vaikimisi"
+	],
+	"Default: %s": [
+		"Default: %s"
+	],
+	"Delete": [
+		"Kustuta"
+	],
+	"Delete local data and re-download from sync target": [
+		""
+	],
+	"Delete note \"%s\"?": [
+		"Kas kustutada märge \"%s\"?"
+	],
+	"Delete note?": [
+		"Kas soovite märkme kustutada?"
+	],
+	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
+		"Kas soovite märkmiku \"%s\"?\n\nKustutatakse ka kõik selle märkmiku märkmed ja alammärkmikud."
+	],
+	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
+		""
+	],
+	"Delete these %d notes?": [
+		"Kas kustutada %d märkmed?"
+	],
+	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
+		""
+	],
+	"Deleted local items: %d.": [
+		"Kustutatud kohalikud üksused: %d."
+	],
+	"Deleted remote items: %d.": [
+		"Kustutatud kaugüksused: %d."
+	],
+	"Deletes the given notebook.": [
+		"Kustutab antud märkmiku."
+	],
+	"Deletes the notes matching <note-pattern>.": [
+		"Kustutab märkmete vastendamise <note-pattern>."
+	],
+	"Deletes the notes without asking for confirmation.": [
+		"Kustutab märkmed ilma kinnitust küsimata."
+	],
+	"Destination format: %s": [
+		"Sihtkoha Formaat: %s"
+	],
+	"Detailed": [
+		""
+	],
+	"Directory": [
+		"Kataloogid"
+	],
+	"Disable encryption": [
+		"Keela krüptimine"
+	],
+	"Disable safe mode and restart": [
+		""
+	],
+	"Disable Web Clipper Service": [
+		"Keela Web Clipper Service"
+	],
+	"Disabled": [
+		"Keelatud"
+	],
+	"Discard changes": [
+		"Hülga muutused"
+	],
+	"Dismiss": [
+		""
+	],
+	"Displays a geolocation URL for the note.": [
+		"Kuvatakse märkme geograafilise asukoha URL."
+	],
+	"Displays only the first top <num> notes.": [
+		"Kuvab ainult esimesed <num> märkmed."
+	],
+	"Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-tnt` would display notes and to-dos.": [
+		"Kuvab ainult konkreetset tüüpi tüübid. Võib olla `n` märkmete jaoks, `t` ülesannete jaoks või `nt` märkmete ja ülesannete jaoks (nt `-tt` kuvaks ainult ülesandeid, `-tnt` aga märkmeid ja ülesanded."
+	],
+	"Displays the complete information about note.": [
+		"Kuvatakse märkme kohta täielik teave."
+	],
+	"Displays the given note.": [
+		"Kuvab antud märkme."
+	],
+	"Displays the notes in the current notebook. Use `ls /` to display the list of notebooks.": [
+		"Kuvab märkmed praeguses märkmikus. Kasutage märkmike loendi kuvamiseks ' ls /'."
+	],
+	"Displays usage information.": [
+		"Kuvab kasutusteabe."
+	],
+	"Displays version information": [
+		"Kuvab versiooniteabe"
+	],
+	"Do not ask for confirmation.": [
+		"Ära küsi kinnitust."
+	],
+	"Done": [
+		""
+	],
+	"Download and install the relevant extension for your browser:": [
+		"Laadige alla ja installige brauseri vastav laiend:"
+	],
+	"Downloaded": [
+		"Allalaetud"
+	],
+	"Downloaded and decrypted": [
+		"Alla laaditud ja dekrüpteeritud"
+	],
+	"Downloaded and encrypted": [
+		"Alla laaditud ja krüpteeritud"
+	],
+	"Downloading": [
+		"Allalaadimine"
+	],
+	"Downloading resources...": [
+		"Ressursside allalaadimine..."
+	],
+	"Dracula": [
+		"Dracula"
+	],
+	"Draw picture": [
+		""
+	],
+	"Drawing": [
+		""
+	],
+	"Drop notes or files here": [
+		""
+	],
+	"Dropbox": [
+		"Dropbox"
+	],
+	"Dropbox Login": [
+		"Dropbox-i sisselogimine"
+	],
+	"Duplicate": [
+		"Paljunda"
+	],
+	"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": [
+		"Kopeerib märkmed, mis vastavad märkusele <note> ja [notebook]. Kui ühtegi märkmikku pole täpsustatud, dubleeritakse see praeguses märkmikus."
+	],
+	"Edit": [
+		"Muuda"
+	],
+	"Edit in external editor": [
+		"Redigeeri välisredaktoris"
+	],
+	"Edit note.": [
+		"Redigeeri märkust."
+	],
+	"Edit notebook": [
+		"Märkmiku redigeerimine"
+	],
+	"Edit profile configuration...": [
+		""
+	],
+	"Editor": [
+		"Redigeerija"
+	],
+	"Editor font": [
+		"Redaktori font"
+	],
+	"Editor font family": [
+		"Redaktori font pere"
+	],
+	"Editor font size": [
+		"Redaktori fondi suurus"
+	],
+	"Editor maximum width": [
+		""
+	],
+	"Either \"text\" or \"json\"": [
+		"Kas \"tekst\" või \"JSON\""
+	],
+	"Emacs": [
+		"Emacs"
+	],
+	"Email": [
+		""
+	],
+	"Email to Note": [
+		""
+	],
+	"Emails": [
+		""
+	],
+	"Enable": [
+		"Luba"
+	],
+	"Enable biometrics authentication?": [
+		""
+	],
+	"Enable encryption": [
+		"Luba krüptimine"
+	],
+	"Enable PDF viewer": [
+		""
+	],
+	"Enable spellcheck in the text editor": [
+		""
+	],
+	"Enable video player": [
+		""
+	],
+	"Enable Web Clipper Service": [
+		"Luba Web Clipper Service"
+	],
+	"Enabled": [
+		"Lubatud"
+	],
+	"Encrypted": [
+		"Krüpteeritud"
+	],
+	"Encrypted items cannot be modified": [
+		"Krüpteeritud üksusi ei saa muuta"
+	],
+	"Encryption": [
+		"Krüpteerimine"
+	],
+	"Encryption Config": [
+		"Krüptimise konfiguratsioon"
+	],
+	"Encryption is: %s": [
+		"Krüpteerimine on: %s"
+	],
+	"Enter code here": [
+		"Sisestage kood siia"
+	],
+	"Enter master password:": [
+		"Sisestage põhiparool:"
+	],
+	"Enter notebook title": [
+		"Sisestage märkmiku tiitel"
+	],
+	"Error": [
+		"Viga"
+	],
+	"Error opening note in editor: %s": [
+		"Tõrge märkme avamisel redaktoris: %s"
+	],
+	"Errors only": [
+		"Ainult tõrked"
+	],
+	"Exits the application.": [
+		"Väljub rakendusest."
+	],
+	"Expand": [
+		""
+	],
+	"Export": [
+		"Eksport"
+	],
+	"Exported successfully!": [
+		""
+	],
+	"Exporting to \"%s\" as \"%s\" format. Please wait...": [
+		""
+	],
+	"Exports Joplin data to the given path. By default, it will export the complete database including notebooks, notes, tags and resources.": [
+		"Ekspordib Joplini andmed antud teele. Vaikimisi ekspordime täieliku andmebaasi, sealhulgas märkmikud, märkmed, sildid ja ressursid."
+	],
+	"Exports only the given note.": [
+		"Ekspordib ainult antud märkuse."
+	],
+	"Exports only the given notebook.": [
+		"Ekspordib ainult antud märkmiku."
+	],
+	"Fail-safe": [
+		""
+	],
+	"Fatal error:": [
+		"Parandamatu tõrge:"
+	],
+	"Feature flags": [
+		""
+	],
+	"Fetched items: %d/%d.": [
+		"Tõmmatud üksused: %d/%d."
+	],
+	"Fetching resources: %d/%d": [
+		"Ressursside toomine: %d/%d"
+	],
+	"File": [
+		"Fail"
+	],
+	"File system": [
+		"Failisüsteem"
+	],
+	"Find and replace": [
+		""
+	],
+	"Firefox Extension": [
+		"Firefoxi laiendus"
+	],
+	"Fix search index": [
+		"Paranda otsinguindeks"
+	],
+	"Fixing search index...": [
+		"Otsinguindeksi parandamine..."
+	],
+	"Focus": [
+		"Fookus"
+	],
+	"Folders": [
+		"Kaustad"
+	],
+	"For example \"%s\"": [
+		""
+	],
+	"For information on how to customise the shortcuts please visit %s": [
+		"Teavet selle kohta, kuidas kohandada otseteed Palun külastage %s"
+	],
+	"For the list of keyboard shortcuts and config options, type `help keymap`": [
+		"73/5000\nKlaviatuuri otseteede ja konfiguratsioonivõimaluste loendi jaoks tippige \"help keymap\""
+	],
+	"Force path style": [
+		""
+	],
+	"Forward": [
+		""
+	],
+	"Found: %d.": [
+		"Leitud: %d."
+	],
+	"FTS enabled: %d": [
+		"FTS lubatud: %d"
+	],
+	"Full changelog": [
+		""
+	],
+	"Full name": [
+		""
+	],
+	"General": [
+		"Üldine"
+	],
+	"Generating link...": [
+		"Lingi loomine...",
+		"Linkide loomine..."
+	],
+	"Get it now:": [
+		"Võta nüüd:"
+	],
+	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
+		"Saab või seab seadistusväärtuse. Kui väärtust [value] ei ole esitatud, näitab see [name] väärtust. Kui ei ole esitatud [name] ega [value], loetatakse praegune konfiguratsioon."
+	],
+	"Go to source URL": [
+		"Mine Allika URL-ile"
+	],
+	"Header %d": [
+		""
+	],
+	"Headers": [
+		""
+	],
+	"Heading": [
+		"Pealkiri"
+	],
+	"Help": [
+		"Abi"
+	],
+	"Hide %s": [
+		"Peida %s"
+	],
+	"Hide advanced": [
+		""
+	],
+	"Hide disabled keys": [
+		""
+	],
+	"Hide keyboard": [
+		""
+	],
+	"Hide more actions": [
+		""
+	],
+	"Highlight": [
+		""
+	],
+	"Home": [
+		""
+	],
+	"HTML Directory": [
+		"HTML-kataloog"
+	],
+	"HTML document": [
+		""
+	],
+	"HTML File": [
+		"HTML-fail"
+	],
+	"Hyperlink": [
+		"Hüperlink"
+	],
+	"Icon": [
+		""
+	],
+	"ID": [
+		"ID"
+	],
+	"Idle": [
+		"Jõude"
+	],
+	"Ignore": [
+		""
+	],
+	"Ignore TLS certificate errors": [
+		"Ignoreeri TLS-i serdi tõrked"
+	],
+	"Images": [
+		""
+	],
+	"Import": [
+		"Impordi"
+	],
+	"Importing from \"%s\" as \"%s\" format. Please wait...": [
+		""
+	],
+	"Importing notes...": [
+		"Märkmete importimine..."
+	],
+	"Imports data into Joplin.": [
+		"Impordib andmed Joplini."
+	],
+	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
+		"Mis tahes käsu, Märkus või märkmiku saab viidatud pealkirja või ID või kasutades otseteed `$n` või `$b` vastavalt praegu valitud Märkus või märkmiku. `$c` saab kasutada praegu valitud üksusele viitamiseks."
+	],
+	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
+		""
+	],
+	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
+		""
+	],
+	"In order to use file system synchronisation your permission to write to external storage is required.": [
+		"Selleks, et kasutada failisüsteemi sünkroniseerimist, on vajalik teie õigus kirjutada välisele salvestussüsteemile."
+	],
+	"In order to use the web clipper, you need to do the following:": [
+		"Selleks, et kasutada Web Clipper, peate tegema järgmist:"
+	],
+	"In progress": [
+		"Töötlemisel"
+	],
+	"In: %s": [
+		"Asukoht: %s"
+	],
+	"Increase indent level": [
+		""
+	],
+	"Indent less": [
+		""
+	],
+	"Indent more": [
+		""
+	],
+	"Information": [
+		"Informatsioon"
+	],
+	"Inline Code": [
+		""
+	],
+	"Insert": [
+		""
+	],
+	"Insert Hyperlink": [
+		"Lisa hüperlink"
+	],
+	"Install": [
+		""
+	],
+	"Install from file": [
+		""
+	],
+	"Installed": [
+		""
+	],
+	"Invalid answer: %s": [
+		"Sobimatu vastus: %s"
+	],
+	"Invalid command: \"%s\"": [
+		"Sobimatu käsk: %s"
+	],
+	"Invalid option value: \"%s\". Possible values are: %s.": [
+		"Sobimatu suvandiväärtus: %s. Võimalikud väärtused on: %s."
+	],
+	"Italic": [
+		"Kald"
+	],
+	"Item \"%s\" could not be downloaded: %s": [
+		"Üksust %s ei saanud alla laadida: %s"
+	],
+	"Items": [
+		""
+	],
+	"Items that cannot be decrypted": [
+		"Üksused, mida ei saa dekrüptida"
+	],
+	"Items that cannot be synchronised": [
+		"Üksused, mida ei saa sünkrooniseerida"
+	],
+	"Join us on Twitter": [
+		""
+	],
+	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
+		""
+	],
+	"Joplin Forum": [
+		"Joplini Foorum"
+	],
+	"Joplin Server URL": [
+		""
+	],
+	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
+		"Joplin Web Clipper võimaldab salvestada veebilehti ja ekraanipilte brauserist Joplini."
+	],
+	"Joplin website": [
+		"Joplini veebisait"
+	],
+	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
+		""
+	],
+	"KaTeX": [
+		""
+	],
+	"Keep note history for": [
+		"Säilita märkmete ajalugu"
+	],
+	"Keyboard Mode": [
+		"Klaviatuuri režiim"
+	],
+	"Keychain Supported: %s": [
+		""
+	],
+	"Keys that need upgrading": [
+		""
+	],
+	"Landscape": [
+		"Maastik"
+	],
+	"Language": [
+		"Keel"
+	],
+	"Last error: %s": [
+		"Viimane tõrge: %s"
+	],
+	"Later": [
+		""
+	],
+	"Layout": [
+		"Paigutus"
+	],
+	"Leave it blank to download the language files from the default website": [
+		""
+	],
+	"Legal": [
+		"Õiguslik"
+	],
+	"Letter": [
+		"Kaaskiri"
+	],
+	"Light": [
+		"Hele"
+	],
+	"Lines": [
+		""
+	],
+	"Link has been copied to clipboard!": [
+		"Link on kopeeritud lõikelauale!",
+		"Lingid on kopeeritud lõikelauale!"
+	],
+	"Links with protocol \"%s\" are not supported": [
+		"Linke protokolliga \"%s\" ei toetata"
+	],
+	"Lists": [
+		""
+	],
+	"Location": [
+		"Asukoht"
+	],
+	"Log": [
+		"Logi"
+	],
+	"Login": [
+		""
+	],
+	"Login below.": [
+		""
+	],
+	"Login with Dropbox": [
+		"Logi sisse Dropbox"
+	],
+	"Login with OneDrive": [
+		"Logi sisse OneDrive ' iga"
+	],
+	"Logout": [
+		""
+	],
+	"Logs": [
+		""
+	],
+	"Make a donation": [
+		"Annetuse tegemine"
+	],
+	"Manage your plugins": [
+		""
+	],
+	"Manual": [
+		"Manuaal"
+	],
+	"Markdown": [
+		"Markdown"
+	],
+	"Markdown + Front Matter": [
+		""
+	],
+	"Marks a to-do as done.": [
+		"Märgib, et ülesannete loetelu on tehtud ."
+	],
+	"Master Key %s": [
+		"Põhivõti %s"
+	],
+	"Max concurrent connections": [
+		"Maksimaalsed samaaegsed ühendused"
+	],
+	"Max Item Size": [
+		""
+	],
+	"Missing Master Keys": [
+		"Puuduvad juhtklahvid"
+	],
+	"Missing required argument: %s": [
+		"Puuduv nõutav argument: %s"
+	],
+	"Mobile data - auto-sync disabled": [
+		""
+	],
+	"More information": [
+		"Lisainformatsioon"
+	],
+	"More than one item match \"%s\". Please narrow down your query.": [
+		"\"%s\" vastab rohkem kui ühele üksusele. Palun kitsendage oma päringut."
+	],
+	"Move %d notes to notebook \"%s\"?": [
+		"Kas teisaldada %d märkmed märkmikku \"%s\"?"
+	],
+	"Move to notebook...": [
+		"Teisalda märkmikku..."
+	],
+	"n": [
+		"n"
+	],
+	"N": [
+		"N"
+	],
+	"Never resize": [
+		""
+	],
+	"New note": [
+		"Uus Märkus"
+	],
+	"New notebook": [
+		"Uus märkmik"
+	],
+	"New Notebook": [
+		"Uus märkmik"
+	],
+	"New sub-notebook": [
+		"Uus alammärkmik"
+	],
+	"New tags:": [
+		"Uued sildid:"
+	],
+	"New version: %s": [
+		"Uus versioon: %s"
+	],
+	"Next match": [
+		""
+	],
+	"Nextcloud": [
+		"Nextcloud"
+	],
+	"Nextcloud password": [
+		"Nextcloud-i parool"
+	],
+	"Nextcloud username": [
+		"Nextcloud-i kasutajanimi"
+	],
+	"Nextcloud WebDAV URL": [
+		"Nextcloud WebDAV-i URL"
+	],
+	"No": [
+		"Ei"
+	],
+	"No active notebook.": [
+		"Aktiivset märkmikku pole."
+	],
+	"No item with ID %s": [
+		"Üksust ID-ga %s ei ole"
+	],
+	"No notebook has been specified.": [
+		"Ühtegi märkmikku pole määratud."
+	],
+	"No notebook selected.": [
+		"Ühtegi märkmikku pole valitud."
+	],
+	"No notes in here. Create one by clicking on \"New note\".": [
+		"Siin pole märkmeid. Looge üks, klõpsates nupul \"New note\"."
+	],
+	"No resources!": [
+		""
+	],
+	"No results": [
+		""
+	],
+	"No such command: %s": [
+		"Sellist käsku pole: %s"
+	],
+	"No suggestions": [
+		""
+	],
+	"No text editor is defined. Please set it using `config editor <editor-path>`": [
+		"Tekstiredaktorit pole määratletud. Seadistage see kasutades konfiguratsiooniredaktorit <editor-path>"
+	],
+	"Nord": [
+		"Nord"
+	],
+	"Not downloaded": [
+		"Ei laaditud alla"
+	],
+	"Not generated": [
+		""
+	],
+	"note": [
+		"paberraha"
+	],
+	"Note": [
+		"Märge"
+	],
+	"Note area growth factor": [
+		""
+	],
+	"Note does not exist: \"%s\". Create it?": [
+		"Märget pole olemas: \"%s\". Kas luua?"
+	],
+	"Note History": [
+		"Märkmete ajalugu"
+	],
+	"Note is not a to-do: \"%s\"": [
+		"Märkus ei ole ülesannete loetelu: %s"
+	],
+	"Note list growth factor": [
+		""
+	],
+	"Note properties": [
+		"Märkme atribuudid"
+	],
+	"Note: Does not work in all desktop environments.": [
+		"Märkus: ei tööta kõigil töölaua keskkondades."
+	],
+	"Notebook list growth factor": [
+		""
+	],
+	"Notebook: %s": [
+		"Märkmik: %s"
+	],
+	"Notebooks": [
+		"Sülearvutid"
+	],
+	"Notebooks cannot be named \"%s\", which is a reserved title.": [
+		"Märkmikke ei saa nimega \"%s\", mis on reserveeritud tiitel."
+	],
+	"Notes and settings are stored in: %s": [
+		"Märkmed ja sätted talletatakse: %s"
+	],
+	"Notes can only be created within a notebook.": [
+		"Märkmeid saab luua ainult märkmiku sees."
+	],
+	"Numbered List": [
+		"Nummerdatud loend"
+	],
+	"OK": [
+		"OK"
+	],
+	"On %s: %s": [
+		"%s: %s"
+	],
+	"One or more master keys need a password.": [
+		"Üks või mitu Põhivõtit vajavad parooli."
+	],
+	"OneDrive": [
+		"OneDrive"
+	],
+	"OneDrive Login": [
+		"OneDrive-i sisselogimine"
+	],
+	"Only one note can be printed at a time.": [
+		""
+	],
+	"Open %s": [
+		"Ava %s"
+	],
+	"Open PDF viewer": [
+		""
+	],
+	"Open Sync Wizard...": [
+		""
+	],
+	"Open...": [
+		"Avatud..."
+	],
+	"Operation cancelled": [
+		"Toiming tühistati"
+	],
+	"Options": [
+		"Valikud"
+	],
+	"Page orientation for PDF export": [
+		"Lehekülje suund PDF-i eksportimiseks"
+	],
+	"Password": [
+		"Parool"
+	],
+	"Password cannot be empty": [
+		"Parool ei tohi olla tühi"
+	],
+	"Password:": [
+		"Parool:"
+	],
+	"Passwords do not match!": [
+		"Paroolid ei kattu!"
+	],
+	"Paste": [
+		"Kleebi"
+	],
+	"Paste as text": [
+		""
+	],
+	"Path:": [
+		""
+	],
+	"PDF File": [
+		"PDF-fail"
+	],
+	"Per user. Minimum of %d users.": [
+		""
+	],
+	"Permission to use camera": [
+		"Kaamera kasutamise õigus"
+	],
+	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
+		""
+	],
+	"Please confirm that you would like to re-encrypt your complete database.": [
+		""
+	],
+	"Please enter your password in the master key list below before upgrading the key.": [
+		""
+	],
+	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
+		""
+	],
+	"Please record your voice...": [
+		""
+	],
+	"Please select a notebook first.": [
+		"Palun valige esmalt märkmik."
+	],
+	"Please select the note or notebook to be deleted first.": [
+		"Valige esmalt kustutatav märkus või märkmik."
+	],
+	"Please select where the sync status should be exported to": [
+		"Palun valige, kus sünkroonimise olekut tuleks eksportida"
+	],
+	"Please upgrade Joplin to use this plugin": [
+		""
+	],
+	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
+		""
+	],
+	"Plugins": [
+		"Pluginad"
+	],
+	"Portrait": [
+		"Portree"
+	],
+	"Possible keys/values:": [
+		"Võimalikud klahvid/väärtused:"
+	],
+	"Possible values: %s.": [
+		"Võimalikud väärtused: %s."
+	],
+	"Preferences...": [
+		"Eelistused..."
+	],
+	"Preferred dark theme": [
+		""
+	],
+	"Preferred light theme": [
+		""
+	],
+	"Press Ctrl+D or type \"exit\" to exit the application": [
+		"Rakendusest väljumiseks vajutage Ctrl+D või kirjutage \"exit\""
+	],
+	"Press the shortcut": [
+		""
+	],
+	"Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the shortcut.": [
+		""
+	],
+	"Press to set the decryption password.": [
+		"Vajutage, et määrata dekrüptimisparool."
+	],
+	"Previous match": [
+		""
+	],
+	"Previous versions of this note": [
+		"Selle märkme eelmised versioonid"
+	],
+	"Print": [
+		""
+	],
+	"Priority support": [
+		""
+	],
+	"Privacy Policy": [
+		""
+	],
+	"Pro": [
+		""
+	],
+	"Process failed payment subscriptions": [
+		""
+	],
+	"Process oversized accounts": [
+		""
+	],
+	"Process user deletions": [
+		""
+	],
+	"Profile": [
+		""
+	],
+	"Properties": [
+		"Objektid"
+	],
+	"Proxy timeout (seconds)": [
+		""
+	],
+	"Proxy URL": [
+		""
+	],
+	"Public-private key pair:": [
+		""
+	],
+	"Publish Notes": [
+		""
+	],
+	"Publish notes to the internet": [
+		""
+	],
+	"Quit": [
+		"Lõpeta"
+	],
+	"Re-upload local data to sync target": [
+		""
+	],
+	"Read more about it": [
+		""
+	],
+	"Read time: %s min": [
+		""
+	],
+	"Recipient has accepted the invitation": [
+		""
+	],
+	"Recipient has not yet accepted the invitation": [
+		""
+	],
+	"Recipient has rejected the invitation": [
+		""
+	],
+	"Recipients:": [
+		""
+	],
+	"Redo": [
+		""
+	],
+	"Refresh": [
+		"Värskenda"
+	],
+	"Reject": [
+		""
+	],
+	"Remove": [
+		"Eemalda"
+	],
+	"Remove tag \"%s\" from all notes?": [
+		"Kas eemaldada silt \"%s\" kõigist märkmetest?"
+	],
+	"Remove this search from the sidebar?": [
+		"Kas soovite selle otsingu külgribalt eemaldada?"
+	],
+	"Rename": [
+		"Nimeta ümber"
+	],
+	"Rename notebook:": [
+		"Märkmiku ümbernimetamine:"
+	],
+	"Rename tag:": [
+		"Nimeta silt ümber:"
+	],
+	"Renames the given <item> (note or notebook) to <name>.": [
+		"Nimetab antud <item> (Märkus või märkmik) <name>."
+	],
+	"Renew token": [
+		""
+	],
+	"Replace": [
+		""
+	],
+	"Replace with...": [
+		""
+	],
+	"Replace: ": [
+		""
+	],
+	"Resize large images:": [
+		""
+	],
+	"Resources: %d.": [
+		"Ressursid: %d."
+	],
+	"Restart and upgrade": [
+		""
+	],
+	"Restore": [
+		"Taasta"
+	],
+	"Restored Notes": [
+		"Taastatud märkmed"
+	],
+	"Retry": [
+		"Uuesti"
+	],
+	"Reveal file in folder": [
+		""
+	],
+	"Reverse sort order": [
+		"Pööra sortimisjärjestus ümber"
+	],
+	"Reverses the sorting order.": [
+		"Pöörab sorteerimis järjestuse ümber."
+	],
+	"Runs the commands contained in the text file. There should be one command per line.": [
+		""
+	],
+	"S3": [
+		""
+	],
+	"S3 access key": [
+		""
+	],
+	"S3 bucket": [
+		""
+	],
+	"S3 region": [
+		""
+	],
+	"S3 secret key": [
+		""
+	],
+	"S3 URL": [
+		""
+	],
+	"Safe mode is currently active. Note rendering and all plugins are temporarily disabled.": [
+		""
+	],
+	"Save": [
+		"Salvesta"
+	],
+	"Save as...": [
+		"Salvesta kui..."
+	],
+	"Save changes": [
+		"Salvesta muudatused"
+	],
+	"Save geo-location with notes": [
+		"Salvesta geograafilise asukoha märkmed"
+	],
+	"Search": [
+		"Otsi"
+	],
+	"Search in all the notes": [
+		"Otsi kõigist märkmetest"
+	],
+	"Search in current note": [
+		"Otsi praeguses märkuses"
+	],
+	"Search...": [
+		"Otsi..."
+	],
+	"Search:": [
+		"Otsi:"
+	],
+	"Searches for the given <pattern> in all the notes.": [
+		"Otsib <pattern> kõiki märkmeid."
+	],
+	"Select all": [
+		"Vali kõik"
+	],
+	"Server is already running on port %d": [
+		"Server töötab juba pordis %d"
+	],
+	"Server is not running.": [
+		"Server ei tööta."
+	],
+	"Server is running on port %d": [
+		"Serveris töötab port %d"
+	],
+	"Set alarm": [
+		"Alarmi seadmine"
+	],
+	"Set alarm:": [
+		"Alarmi seadmine:"
+	],
+	"Set it to 0 to make it take the complete available space. Recommended width is 600.": [
+		""
+	],
+	"Set the password": [
+		"Parooli seadmine"
+	],
+	"Share": [
+		"Jaga"
+	],
+	"Share a copy of all notes in a file format that can be imported by Joplin on a computer.": [
+		""
+	],
+	"Share permissions": [
+		""
+	],
+	"Shortcuts are not available in CLI mode.": [
+		"Otseteed pole CLI režiimis saadaval."
+	],
+	"Show Advanced Settings": [
+		"Kuva täpsemad sätted"
+	],
+	"Show all": [
+		"Näita kõiki"
+	],
+	"Show completed to-dos": [
+		"Näita lõpuleviidud ülesandeid"
+	],
+	"Show note counts": [
+		"Kuva märkmete arv"
+	],
+	"Show tray icon": [
+		"Kuva salve ikoon"
+	],
+	"Show/hide the sidebar": [
+		""
+	],
+	"Shrink large images before adding them to notes.": [
+		""
+	],
+	"Side menu closed": [
+		""
+	],
+	"Side menu opened": [
+		""
+	],
+	"Sidebar": [
+		""
+	],
+	"Size": [
+		""
+	],
+	"Skip this version": [
+		""
+	],
+	"Skipped items: %d (use --retry-failed-items to retry decrypting them)": [
+		""
+	],
+	"Skipped: %d.": [
+		"Vahele jäetud: %d."
+	],
+	"Solarised Dark": [
+		"Solarised Dark"
+	],
+	"Solarised Light": [
+		"Solarised Light"
+	],
+	"Some items cannot be synchronised.": [
+		"Mõnda üksust ei saa sünkroonida."
+	],
+	"Some items cannot be synchronised. Press for more info.": [
+		"Mõnda üksust ei saa sünkroonida. Lisateabe saamiseks vajutage."
+	],
+	"Sort notebooks by": [
+		"Sorteeri märkmikud"
+	],
+	"Sort notes by": [
+		"Märkmete sortimine"
+	],
+	"Sort selected lines": [
+		""
+	],
+	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
+		"Sordib üksuse järgi <field> (nt pealkiri, uuendatud_aeg, loodud_aeg)."
+	],
+	"Source format: %s": [
+		"Allika Formaat: %s"
+	],
+	"Spell checker": [
+		""
+	],
+	"Split View": [
+		"Tükelda vaade"
+	],
+	"Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.": [
+		"Dekrüpteerimise käivitamine... Palun oodake. See võib võtta mitu minutit sõltuvalt sellest, kui palju on dekrüpteerida."
+	],
+	"Starting synchronisation...": [
+		"Sünkroonimise käivitamine..."
+	],
+	"Starting to edit note. Close the editor to get back to the prompt.": [
+		""
+	],
+	"Statistics...": [
+		""
+	],
+	"Status": [
+		"Staatus"
+	],
+	"Status: %s": [
+		"Staatus: %s"
+	],
+	"Status: Started on port %d": [
+		"Olek: alustatud porti %d"
+	],
+	"Step 1: Enable the clipper service": [
+		"1. samm: Lubage Clipper service"
+	],
+	"Step 2: Install the extension": [
+		"2. toiming: installige laiend"
+	],
+	"Stop": [
+		""
+	],
+	"Stop external editing": [
+		"Peata väline redigeerimine"
+	],
+	"Storage space": [
+		""
+	],
+	"Strikethrough": [
+		""
+	],
+	"Submit": [
+		"Saada"
+	],
+	"Subscript": [
+		""
+	],
+	"Success! Synchronisation configuration appears to be correct.": [
+		"Edu! Sünkroonimise konfiguratsioon näib olevat õige."
+	],
+	"Superscript": [
+		""
+	],
+	"Swap line down": [
+		""
+	],
+	"Swap line up": [
+		""
+	],
+	"Switch to note type": [
+		"Märkme tüübi aktiveerimine"
+	],
+	"Sync as many devices as you want": [
+		""
+	],
+	"Sync Status": [
+		"Sünkroonimise olek"
+	],
+	"Sync status (synced items / total items)": [
+		"Sünkroonimise olek (sünkroonitud üksused/kokku üksused)"
+	],
+	"Sync target must be upgraded! Run `%s` to proceed.": [
+		""
+	],
+	"Sync Target Upgrade": [
+		""
+	],
+	"Synchronisation": [
+		"Sünkroonimine"
+	],
+	"Synchronisation is already in progress.": [
+		"Sünkroniseerimine on juba teoksil."
+	],
+	"Synchronisation Status": [
+		"Sünkroonimise olek"
+	],
+	"Synchronise": [
+		"Sünkroniseeri"
+	],
+	"Synchronise only over WiFi connection": [
+		""
+	],
+	"Synchronising...": [
+		"Sünkroonimine..."
+	],
+	"tag1, tag2, ...": [
+		""
+	],
+	"Tagged: %d.": [
+		"Sildistatud: %d."
+	],
+	"Tags": [
+		"Sildid"
+	],
+	"Take photo": [
+		"Pildista"
+	],
+	"Tasks": [
+		""
+	],
+	"Teams": [
+		""
+	],
+	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
+		""
+	],
+	"The active profile cannot be deleted. Switch to a different profile and try again.": [
+		""
+	],
+	"The app is now going to close. Please relaunch it to complete the process.": [
+		""
+	],
+	"The application did not close properly. Would you like to start in safe mode?": [
+		""
+	],
+	"The application has been authorised!": [
+		"Taotlus on heaks kiidetud!"
+	],
+	"The application must be restarted for these changes to take effect.": [
+		""
+	],
+	"The attachments will no longer be watched when you switch to a different note.": [
+		""
+	],
+	"The command \"%s\" is only available in GUI mode": [
+		"Käsk %s on saadaval ainult graafilises kasutajaliideses"
+	],
+	"The default admin password is insecure and has not been changed! [Change it now](%s)": [
+		""
+	],
+	"The default encryption method has been changed to a more secure one and it is recommended that you apply it to your data.": [
+		""
+	],
+	"The default encryption method has been changed, you should re-encrypt your data.": [
+		""
+	],
+	"The default profile cannot be deleted": [
+		""
+	],
+	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
+		""
+	],
+	"The following attachments are being watched for changes:": [
+		""
+	],
+	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
+		""
+	],
+	"The Joplin mobile app does not currently support this type of link: %s": [
+		"Joplin mobiilirakendus ei toeta praegu seda tüüpi linki: %s"
+	],
+	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
+		""
+	],
+	"The master key has been upgraded successfully!": [
+		""
+	],
+	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
+		"Märkus \"%s\" on märkmikku \"%s\" edukalt taastatud."
+	],
+	"The notebook could not be saved: %s": [
+		"Märkmikku ei saanud salvestada: %s"
+	],
+	"The notes have been imported: %s": [
+		"Märkmed on imporditud: %s"
+	],
+	"The possible commands are:": [
+		"Võimalikud käsud on:"
+	],
+	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
+		""
+	],
+	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
+		""
+	],
+	"The sync target needs to be upgraded. Press this banner to proceed.": [
+		""
+	],
+	"The Web Clipper needs your authorisation to access your data.": [
+		""
+	],
+	"The web clipper service is enabled and set to auto-start.": [
+		"Web Clipper service on lubatud ja seadke automaatselt käivituma."
+	],
+	"The web clipper service is not enabled.": [
+		"Web clipper service pole lubatud."
+	],
+	"The WebDAV implementation of %s is incompatible with Joplin, and as such is no longer supported. Please use a different sync method.": [
+		""
+	],
+	"Theme": [
+		"Teema"
+	],
+	"There are currently no notes. Create one by clicking on the (+) button.": [
+		"Praegu pole märkmeid. Looge üks, klõpsates nupul (+)."
+	],
+	"There are unsaved changes.": [
+		""
+	],
+	"There is currently no notebook. Create one by clicking on \"New notebook\".": [
+		"Praegu pole märkmikku. Loo üks klõpsates \"New notebook\"."
+	],
+	"There is no data to export.": [
+		"Eksportivaid andmeid pole."
+	],
+	"There was an error downloading this attachment:": [
+		"Selle manuse allalaadimisel ilmnes tõrge:"
+	],
+	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
+		""
+	],
+	"These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.": [
+		""
+	],
+	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
+		""
+	],
+	"This attachment is not downloaded or not decrypted yet": [
+		"Seda manust ei laadita alla või pole veel dekrüpteeritud"
+	],
+	"This attachment is not downloaded or not decrypted yet.": [
+		"Seda manust ei ole laetud ega dekrüpteeritud veel."
+	],
+	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
+		"See luba on vajalik ainult selleks, et lubada kolmanda osapoole rakendustele juurdepääsu Joplini."
+	],
+	"This drawing may have unsaved changes.": [
+		""
+	],
+	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
+		""
+	],
+	"This note has been modified:": [
+		"Seda märkust on muudetud:"
+	],
+	"This note has no content. Click on \"%s\" to toggle the editor and edit the note.": [
+		"Sellel märkel pole sisu. Klõpsake \" %s\" redaktori vahetamiseks ja märkme redigeerimiseks."
+	],
+	"This note has no history": [
+		"Sellel märkel pole ajalugu"
+	],
+	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
+		""
+	],
+	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
+		"See teenus võimaldab brauseri laiendil suhelda Joplini-ga. Kui lubate selle, võib tulemüür paluda teil anda luba Joplini kuulata teatud porti."
+	],
+	"This will open a new screen. Save your current changes?": [
+		"See avab uue ekraani. Kas salvestada praegused muudatused?"
+	],
+	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
+		""
+	],
+	"Time format": [
+		"Kellaaja Formaat"
+	],
+	"title": [
+		"pealkiri"
+	],
+	"To delete a tag, untag the associated notes.": [
+		"Sildi kustutamiseks eemaldage märkmed seotud silt."
+	],
+	"To delete: %d": [
+		"Kustutamiseks: %d"
+	],
+	"To enter command line mode, press \":\"": [
+		"Käsurea režiimi sisestamiseks vajutage \":\""
+	],
+	"To exit command line mode, press ESCAPE": [
+		"Käsurea režiimist väljumiseks vajutage ESCAPE"
+	],
+	"To manually sort the notes, the sort order must be changed to \"%s\" in the menu \"%s\" > \"%s\"": [
+		""
+	],
+	"To maximise/minimise the console, press \"tc\".": [
+		"Konsooli maksimeerimiseks/minimeerimiseks vajutage \"tc\"."
+	],
+	"To move from one pane to another, press Tab or Shift+Tab.": [
+		"Ühest paanist teise liikumiseks vajutage Tab või Shift + Tab."
+	],
+	"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": [
+		""
+	],
+	"To switch the profile, the app is going to close and you will need to restart it.": [
+		""
+	],
+	"to-do": [
+		"ülesande nimekiri"
+	],
+	"Toggle development tools": [
+		"Lülita arendus tööriistad"
+	],
+	"Toggle editor layout": [
+		"Lülita redaktori paigutus sisse/välja"
+	],
+	"Toggle note list": [
+		"Lülita märkuseloend sisse/välja"
+	],
+	"Toggle sidebar": [
+		"Lülita külgriba sisse/välja"
+	],
+	"Token has been copied to the clipboard!": [
+		"Token on kopeeritud lõikelauale!"
+	],
+	"Tools": [
+		"Tööriistad"
+	],
+	"Total Size": [
+		""
+	],
+	"Total: %d/%d": [
+		"Kokku: %d/%d"
+	],
+	"Try again": [
+		""
+	],
+	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
+		"Käsu kohta lisateabe saamiseks tippige käsk `help [command]`; või tippige täieliku kasutamise teabe saamiseks `help all`."
+	],
+	"Type `joplin help` for usage information.": [
+		"Sisestage `joplin help` kasutusteabe jaoks ."
+	],
+	"Type new tags or select from list": [
+		"Tippige uued sildid või valige loendist"
+	],
+	"Type: %s.": [
+		"Tüüp: %s."
+	],
+	"Unable to edit resource of type %s": [
+		""
+	],
+	"Unable to export or share data. Reason: %s": [
+		""
+	],
+	"Unable to share log data. Reason: %s": [
+		""
+	],
+	"Uncompleted to-dos on top": [
+		"Lõpetamata ülesanded üleval"
+	],
+	"Undo": [
+		""
+	],
+	"Unknown flag: %s": [
+		"Tundmatu lipp: %s"
+	],
+	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
+		""
+	],
+	"Unshare this notebook? The recipients will no longer have access to its content.": [
+		""
+	],
+	"Unsupported image type: %s": [
+		"Toetuseta pilditüüp: %s"
+	],
+	"Unsupported link or message: %s": [
+		"Toetuseta link või sõnum: %s"
+	],
+	"Untitled": [
+		"Pealkirjata"
+	],
+	"Updated": [
+		"Uuendatud"
+	],
+	"updated date": [
+		"värskendatud kuupäev"
+	],
+	"Updated remote items: %d.": [
+		"Värskendatud kaugüksused: %d."
+	],
+	"Updated: %d.": [
+		"Värskendatud: %d."
+	],
+	"Updated: %s": [
+		"Värskendatud: %s"
+	],
+	"Upgrade": [
+		""
+	],
+	"Upgrade the sync target to the latest version.": [
+		""
+	],
+	"URL": [
+		"URL"
+	],
+	"Usage: %s": [
+		"Kasutus: %s"
+	],
+	"Use biometrics to secure access to the app": [
+		""
+	],
+	"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE": [
+		"Kasutage pikka nimekirja vormingut. ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE"
+	],
+	"Use spell checker": [
+		""
+	],
+	"Use the arrows and page up/down to scroll the lists and text areas (including this console).": [
+		"Loendite ja tekstialade (sh selle konsooli) kerimiseks kasutage nooli ja lehe üles/alla klahve."
+	],
+	"Use the arrows to move the layout items. Press \"Escape\" to exit.": [
+		""
+	],
+	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
+		""
+	],
+	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
+		""
+	],
+	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
+		""
+	],
+	"User deletions": [
+		""
+	],
+	"Users": [
+		""
+	],
+	"Verify your identity": [
+		""
+	],
+	"View on map": [
+		"Vaata kaardilt"
+	],
+	"View them now": [
+		"Vaata neid nüüd"
+	],
+	"Vim": [
+		"Vim"
+	],
+	"Voice typing language files (URL)": [
+		""
+	],
+	"Voice typing...": [
+		""
+	],
+	"Warning": [
+		"Hoiatus"
+	],
+	"Warning: not all resources shown for performance reasons (limit: %s).": [
+		""
+	],
+	"Web Clipper": [
+		"Web Clipper"
+	],
+	"WebDAV": [
+		"WebDAV"
+	],
+	"WebDAV password": [
+		"WebDAV-i parool"
+	],
+	"WebDAV URL": [
+		"WebDAV-i URL"
+	],
+	"WebDAV username": [
+		"WebDAV-i kasutajanimi"
+	],
+	"Website and documentation": [
+		"Veebileht ja dokumentatsioon"
+	],
+	"Welcome!": [
+		""
+	],
+	"When creating a new note:": [
+		"Uue märkme loomisel:"
+	],
+	"Words": [
+		""
+	],
+	"y": [
+		"y"
+	],
+	"Y": [
+		"Y"
+	],
+	"Yes": [
+		"Jah"
+	],
+	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
+		""
+	],
+	"You currently have no notebooks.": [
+		"Teil pole praegu märkmikke."
+	],
+	"You do not have any installed plugin.": [
+		""
+	],
+	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
+		""
+	],
+	"Your choice: ": [
+		"Sinu valik: "
+	],
+	"Your data is going to be re-encrypted and synced again.": [
+		""
+	],
+	"Your password is needed to decrypt some of your data.": [
+		""
+	],
+	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
+		""
+	],
+	"Your permission to use your camera is required.": [
+		"Teie luba kaamera kasutamiseks on vajalik."
+	],
+	"Your version: %s": [
+		"Teie versioon: %s"
+	],
+	"Zoom In": [
+		""
+	],
+	"Zoom Out": [
+		""
+	]
 }
