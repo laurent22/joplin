@@ -271,7 +271,7 @@ const main = async (_options?: Options) => {
 	{
 		const promises = [];
 
-		for (let i = 0; i < 1000; i++) {
+		for (let i = 0; i < 2; i++) {
 			promises.push((async () => {
 				const user = await models().user().save({
 					full_name: `Toto ${i}`,
@@ -334,6 +334,8 @@ const main = async (_options?: Options) => {
 
 		await Promise.all(promises);
 	}
+
+	// console.info(await models().change().delta(users[0].id));
 
 	await afterAllTests();
 
