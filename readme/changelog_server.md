@@ -1,5 +1,11 @@
 # Joplin Server Changelog
 
+## [server-v2.13.2](https://github.com/laurent22/joplin/releases/tag/server-v2.13.2) - 2023-10-19T19:49:44Z
+
+- Improved: Significantly improve sync performances, especially when there are many changes (5986710)
+- Improved: Updated packages compare-versions (v6.1.0), dayjs (v1.11.10), follow-redirects (v1.15.3), glob (v10.3.6), katex (v0.16.8), markdown-it (v13.0.2), node-mocks-http (v1.13.0), nodemailer (v6.9.5), nodemon (v3.0.1), react, sass (v1.66.1), sharp (v0.32.6), sprintf-js (v1.1.3), tar (v6.2.0), uuid (v9.0.1)
+- Fixed: Fixed publishing logo (01f37df)
+
 ## [server-v2.13.1](https://github.com/laurent22/joplin/releases/tag/server-v2.13.1) - 2023-09-20T15:15:32Z
 
 - New: Add Joplin Server and Joplin Cloud favicons (1b00445)
