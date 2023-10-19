@@ -271,7 +271,7 @@ const main = async (_options?: Options) => {
 	{
 		const promises = [];
 
-		for (let i = 0; i < 2; i++) {
+		for (let i = 0; i < 20; i++) {
 			promises.push((async () => {
 				const user = await models().user().save({
 					full_name: `Toto ${i}`,
@@ -317,7 +317,7 @@ const main = async (_options?: Options) => {
 	{
 		const promises = [];
 
-		for (let i = 0; i < 10000; i++) {
+		for (let i = 0; i < 20000; i++) {
 			promises.push((async () => {
 				const user = randomElement(users);
 				const action = randomActionKey();
@@ -335,7 +335,30 @@ const main = async (_options?: Options) => {
 		await Promise.all(promises);
 	}
 
-	// console.info(await models().change().delta(users[0].id));
+	// const changeIds = (await models().change().all()).map(c => c.id);
+
+	// const serverDir = (await getRootDir()) + '/packages/server';
+
+	// for (let i = 0; i < 100000; i++) {
+	// 	const user = randomElement(users);
+	// 	const cursor = Math.random() < .3 ? '' : randomElement(changeIds);
+
+	// 	try {
+	// 		const result1 = await models().change().delta(user.id, { cursor, limit: 1000 }, 1);
+	// 		const result2 = await models().change().delta(user.id, { cursor, limit: 1000 }, 2);
+
+	// 		logger().info('Test ' + i + ': Found ' + result1.items.length + ' and ' + result2.items.length + ' items');
+
+	// 		if (JSON.stringify(result1) !== JSON.stringify(result2)) {
+	// 			await writeFile(serverDir + '/result1.json', JSON.stringify(result1.items, null, '\t'));
+	// 			await writeFile(serverDir + '/result2.json', JSON.stringify(result2.items, null, '\t'));
+	// 			throw new Error('Found different results');
+	// 		}
+	// 	} catch (error) {
+	// 		error.message = 'User ' + user.id + ', Cursor ' + cursor + ': ' + error.message;
+	// 		throw error;
+	// 	}
+	// }
 
 	await afterAllTests();
 
