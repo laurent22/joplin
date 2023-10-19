@@ -1104,7 +1104,7 @@ msgstr "Utwórz nowy notatnik"
 
 #: packages/server/src/routes/admin/users.ts:253
 msgid "Create user"
-msgstr "Utwórz urzytkowanika"
+msgstr "Utwórz użytkownika"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:51
 msgid "Created"
@@ -3274,7 +3274,7 @@ msgstr "Lub utwórz nowe konto."
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:85
 #, fuzzy
 msgid "Ordered list"
-msgstr "Utwórz urzytkowanika"
+msgstr "Utwórz użytkownika"
 
 #: packages/app-desktop/gui/MenuBar.tsx:451
 msgid "Other applications..."
@@ -5064,7 +5064,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:73
 #, fuzzy
 msgid "Unordered list"
-msgstr "Utwórz urzytkowanika"
+msgstr "Utwórz użytkownika"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:163
 msgid "Unpublish note"
@@ -5456,7 +5456,7 @@ msgstr "Pomniejsz"
 
 #, fuzzy
 #~ msgid "Create KaTeX region"
-#~ msgstr "Utwórz urzytkowanika"
+#~ msgstr "Utwórz użytkownika"
 
 #, fuzzy
 #~ msgid "Create link"
@@ -5468,7 +5468,7 @@ msgstr "Pomniejsz"
 
 #, fuzzy
 #~ msgid "Remove KaTeX region"
-#~ msgstr "Utwórz urzytkowanika"
+#~ msgstr "Utwórz użytkownika"
 
 #, fuzzy
 #~ msgid "Unitalic"
