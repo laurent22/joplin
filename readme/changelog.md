@@ -1,5 +1,10 @@
 # Joplin changelog
 
+## [v2.12.19](https://github.com/laurent22/joplin/releases/tag/v2.12.19) - 2023-10-21T09:39:18Z
+
+- Security: Update Electron to 25.9.0 ([#9049](https://github.com/laurent22/joplin/issues/9049) by Henry Heino)
+- Fixed: Fixed issues related to sharing notes on read-only notebooks ([afaa2a7](https://github.com/laurent22/joplin/commit/afaa2a7))
+
 ## [v2.13.2](https://github.com/laurent22/joplin/releases/tag/v2.13.2) (Pre-release) - 2023-10-06T17:00:07Z
 
 - New: Add new beta Markdown editor based on CodeMirror 6 ([#8793](https://github.com/laurent22/joplin/issues/8793) by Henry Heino)
