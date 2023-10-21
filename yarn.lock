@@ -4789,7 +4789,7 @@ __metadata:
     react-native-device-info: 10.9.0
     react-native-dialogbox: 0.6.10
     react-native-document-picker: 9.0.1
-    react-native-dropdownalert: 5.0.0
+    react-native-dropdownalert: 5.1.0
     react-native-exit-app: 2.0.0
     react-native-file-viewer: 2.1.5
     react-native-fingerprint-scanner: 6.0.0
@@ -29295,10 +29295,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-dropdownalert@npm:5.0.0":
-  version: 5.0.0
-  resolution: "react-native-dropdownalert@npm:5.0.0"
-  checksum: 976f87fbc364a20a06c7b81f5134dff7ffb80278a42bae9aaeb65189fe2eca9a2b9b3900e21968afb46d780759f42b5c7ee3499eaac0bd045d60690154aa28b6
+"react-native-dropdownalert@npm:5.1.0":
+  version: 5.1.0
+  resolution: "react-native-dropdownalert@npm:5.1.0"
+  checksum: 595e409967a28e5305b7895407a801c6eb05091277eaa7362b30dce18213d695dcbf0811c69cbaa20f35ce9aa21f13d44235dd35717119e0020a3159bd06b0ef
   languageName: node
   linkType: hard
 
