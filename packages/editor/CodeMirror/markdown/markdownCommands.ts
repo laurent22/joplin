@@ -421,7 +421,8 @@ export const increaseIndent: Command = (view: EditorView): boolean => {
 	return true;
 };
 
-// Like `increaseIndent`, but may insert tabs in some instances.
+// Like `increaseIndent`, but may insert tabs, rather than
+// indenting, in some instances.
 export const insertOrIncreaseIndent: Command = (view: EditorView): boolean => {
 	const selection = view.state.selection;
 	const mainSelection = selection.main;
@@ -435,12 +436,16 @@ export const insertOrIncreaseIndent: Command = (view: EditorView): boolean => {
 	}
 
 	const indentUnit = indentString(view.state, getIndentUnit(view.state));
-	view.dispatch({
-		changes: {
-			from: mainSelection.from,
-			insert: indentUnit,
-		},
-	});
+	view.dispatch(view.state.changeByRange(selection => {
+		return {
+			// Move the selection to after the inserted text
+			range: EditorSelection.cursor(selection.from + indentUnit.length),
+			changes: {
+				from: selection.from,
+				insert: indentUnit,
+			},
+		};
+	}));
 
 	return true;
 };
