@@ -72,8 +72,8 @@ export default class RepositoryApi {
 		// https://github.com/joplin/plugins
 		// https://api.github.com/repos/joplin/plugins/releases
 		this.githubApiUrl_ = this.baseUrl_.replace(/^(https:\/\/)(github\.com\/)(.*)$/, '$1api.$2repos/$3');
-		const defaultContentBaseUrl = `${this.baseUrl_.replace(/github\.com/, 'raw.githubusercontent.com')}/master`;
-		this.contentBaseUrl_ = await findWorkingGitHubUrl(defaultContentBaseUrl);
+		const defaultContentBaseUrl = this.isLocalRepo ? this.baseUrl_ : `${this.baseUrl_.replace(/github\.com/, 'raw.githubusercontent.com')}/master`;
+		this.contentBaseUrl_ = this.isLocalRepo ? defaultContentBaseUrl : await findWorkingGitHubUrl(defaultContentBaseUrl);
 
 		this.isUsingDefaultContentUrl_ = this.contentBaseUrl_ === defaultContentBaseUrl;
 

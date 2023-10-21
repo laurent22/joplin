@@ -150,6 +150,7 @@ export interface FolderEntity {
   'title'?: string;
   'updated_time'?: number;
   'user_created_time'?: number;
+  'user_data'?: string;
   'user_updated_time'?: number;
   'type_'?: number;
 }
@@ -270,6 +271,7 @@ export interface ResourceEntity {
   'title'?: string;
   'updated_time'?: number;
   'user_created_time'?: number;
+  'user_data'?: string;
   'user_updated_time'?: number;
   'type_'?: number;
 }
@@ -330,6 +332,7 @@ export interface TagEntity {
   'title'?: string;
   'updated_time'?: number;
   'user_created_time'?: number;
+  'user_data'?: string;
   'user_updated_time'?: number;
   'type_'?: number;
 }
@@ -363,6 +366,7 @@ export const databaseSchema: DatabaseTables = {
 		title: { type: 'string' },
 		updated_time: { type: 'number' },
 		user_created_time: { type: 'number' },
+		user_data: { type: 'string' },
 		user_updated_time: { type: 'number' },
 		type_: { type: 'number' },
 	},
@@ -376,6 +380,7 @@ export const databaseSchema: DatabaseTables = {
 		title: { type: 'string' },
 		updated_time: { type: 'number' },
 		user_created_time: { type: 'number' },
+		user_data: { type: 'string' },
 		user_updated_time: { type: 'number' },
 		type_: { type: 'number' },
 	},
@@ -477,6 +482,7 @@ export const databaseSchema: DatabaseTables = {
 		title: { type: 'string' },
 		updated_time: { type: 'number' },
 		user_created_time: { type: 'number' },
+		user_data: { type: 'string' },
 		user_updated_time: { type: 'number' },
 		type_: { type: 'number' },
 	},
