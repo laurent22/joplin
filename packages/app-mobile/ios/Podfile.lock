@@ -284,7 +284,7 @@ PODS:
     - React-Core
   - react-native-fingerprint-scanner (6.0.0):
     - React
-  - react-native-geolocation (3.0.6):
+  - react-native-geolocation (3.1.0):
     - React-Core
   - react-native-get-random-values (1.9.0):
     - React-Core
@@ -306,7 +306,7 @@ PODS:
     - React-Core
   - react-native-version-info (1.1.1):
     - React-Core
-  - react-native-webview (13.5.1):
+  - react-native-webview (13.6.0):
     - React-Core
   - React-perflogger (0.71.10)
   - React-RCTActionSheet (0.71.10):
@@ -667,7 +667,7 @@ SPEC CHECKSUMS:
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
   react-native-document-picker: 2b8f18667caee73a96708a82b284a4f40b30a156
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
-  react-native-geolocation: 0f7fe8a4c2de477e278b0365cce27d089a8c5903
+  react-native-geolocation: ef66fb798d96284c6043f0b16c15d9d1d4955db4
   react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb
   react-native-image-picker: 3269f75c251cdcd61ab51b911dd30d6fff8c6169
   react-native-image-resizer: 681f7607418b97c084ba2d0999b153b103040d8a
@@ -678,7 +678,7 @@ SPEC CHECKSUMS:
   react-native-slider: 1cdd6ba29675df21f30544253bf7351d3c2d68c4
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-version-info: a106f23009ac0db4ee00de39574eb546682579b9
-  react-native-webview: 8baa0f5c6d336d6ba488e942bcadea5bf51f050a
+  react-native-webview: 669ae162965f629a8d6a4bdd3b99a304d36ef1f2
   React-perflogger: 217095464d5c4bb70df0742fa86bf2a363693468
   React-RCTActionSheet: 8deae9b85a4cbc6a2243618ea62a374880a2c614
   React-RCTAnimation: 59c62353a8b59ce206044786c5d30e4754bffa64
