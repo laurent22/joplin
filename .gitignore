@@ -687,6 +687,10 @@ packages/lib/services/commands/isEditorCommand.js
 packages/lib/services/commands/propsHaveChanged.js
 packages/lib/services/commands/stateToWhenClauseContext.js
 packages/lib/services/contextkey/contextkey.js
+packages/lib/services/database/addMigrationFile.js
+packages/lib/services/database/migrations/42.js
+packages/lib/services/database/migrations/43.js
+packages/lib/services/database/migrations/44.js
 packages/lib/services/database/types.js
 packages/lib/services/debug/populateDatabase.js
 packages/lib/services/e2ee/EncryptionService.test.js

@@ -15,6 +15,17 @@ export interface BaseItemEntity {
   created_time?: number;
 }
 
+export type SqlParams = any[];
+
+export interface SqlQuery {
+	sql: string;
+	params?: SqlParams;
+}
+
+export type StringOrSqlQuery = string | SqlQuery;
+
+export type Migration = () => (SqlQuery|string)[];
+
 export enum FolderIconType {
   Emoji = 1,
   DataUrl = 2,
