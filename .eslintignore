@@ -533,6 +533,7 @@ packages/editor/CodeMirror/testUtil/createTestEditor.js
 packages/editor/CodeMirror/testUtil/forceFullParse.js
 packages/editor/CodeMirror/testUtil/loadLanguages.js
 packages/editor/CodeMirror/theme.js
+packages/editor/CodeMirror/util/isInSyntaxNode.js
 packages/editor/SelectionFormatting.js
 packages/editor/events.js
 packages/editor/types.js
