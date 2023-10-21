@@ -183,7 +183,10 @@ export const toggleList = (listType: ListType): Command => {
 			const origFirstLineIndentation = firstLineIndentation;
 			const origContainerType = containerType;
 
-			// Grow [sel] to the smallest containing list
+			// Grow `sel` to the smallest containing list, unless the
+			// cursor is on an empty line, in which case, the user
+			// probably wants to add a list item (and not select the entire
+			// list).
 			if (sel.empty && fromLine.text.trim() !== '') {
 				sel = growSelectionToNode(state, sel, [orderedListTag, unorderedListTag]);
 				computeSelectionProps();
