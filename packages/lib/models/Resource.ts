@@ -373,9 +373,15 @@ export default class Resource extends BaseItem {
 		// We first save the resource metadata because this can throw, for
 		// example if modifying a resource that is read-only
 
+		const now = Date.now();
+
 		const result = await Resource.save({
 			id: resource.id,
 			size: fileStat.size,
+			updated_time: now,
+			blob_updated_time: now,
+		}, {
+			autoTimestamp: false,
 		});
 
 		// If the above call has succeeded, we save the data blob
@@ -446,9 +452,7 @@ export default class Resource extends BaseItem {
 	public static async save(o: ResourceEntity, options: SaveOptions = null): Promise<ResourceEntity> {
 		const resource = { ...o };
 
-		if (resource.updated_time) {
-			if (!resource.blob_updated_time) resource.blob_updated_time = resource.updated_time;
-		} else {
+		if (this.isNew(o, options)) {
 			const now = Date.now();
 			options = { ...options, autoTimestamp: false };
 			if (!resource.created_time) resource.created_time = now;

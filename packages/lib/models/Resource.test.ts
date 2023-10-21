@@ -96,7 +96,7 @@ describe('models/Resource', () => {
 		expect(originalStat.size).toBe(newStat.size);
 	}));
 
-	it('should set the blob_updated_time property', (async () => {
+	it('should set the blob_updated_time property if the blob is updated', (async () => {
 		const note = await Note.save({});
 		await shim.attachFileToNote(note, testImagePath);
 
@@ -105,11 +105,28 @@ describe('models/Resource', () => {
 
 		await msleep(1);
 
+		await Resource.updateResourceBlobContent(resourceA.id, testImagePath);
+
+		const resourceB: ResourceEntity = (await Resource.all())[0];
+		expect(resourceB.updated_time).toBeGreaterThan(resourceA.updated_time);
+		expect(resourceB.blob_updated_time).toBeGreaterThan(resourceA.blob_updated_time);
+	}));
+
+	it('should NOT set the blob_updated_time property if the blob is NOT updated', (async () => {
+		const note = await Note.save({});
+		await shim.attachFileToNote(note, testImagePath);
+
+		const resourceA: ResourceEntity = (await Resource.all())[0];
+
+		await msleep(1);
+
+		// We only update the resource metadata - so the blob timestamp should
+		// not change
 		await Resource.save({ id: resourceA.id, title: 'new title' });
 
 		const resourceB: ResourceEntity = (await Resource.all())[0];
-		expect(resourceA.updated_time).not.toBe(resourceB.updated_time);
-		expect(resourceB.updated_time).toBe(resourceB.blob_updated_time);
+		expect(resourceB.updated_time).toBeGreaterThan(resourceA.updated_time);
+		expect(resourceB.blob_updated_time).toBe(resourceA.blob_updated_time);
 	}));
 
 	it('should not allow modifying a read-only resource', async () => {

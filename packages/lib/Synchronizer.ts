@@ -604,7 +604,7 @@ export default class Synchronizer {
 						} else {
 							// Note: in order to know the real updated_time value, we need to load the content. In theory we could
 							// rely on the file timestamp (in remote.updated_time) but in practice it's not accurate enough and
-							// can lead to conflicts (for example when the file timestamp is slightly ahead of it's real
+							// can lead to conflicts (for example when the file timestamp is slightly ahead of its real
 							// updated_time). updated_time is set and managed by clients so it's always accurate.
 							// Same situation below for updateLocal.
 							//
@@ -701,6 +701,7 @@ export default class Synchronizer {
 										logger.warn(`Uploading a large resource (resourceId: ${local.id}, size:${resource.size} bytes) which may tie up the sync process.`);
 									}
 
+									// TODO: Compare blob_updated_time to stored sync_item.updated_time??????????????
 									await this.apiCall('put', remoteContentPath, null, { path: localResourceContentPath, source: 'file', shareId: resource.share_id });
 								} catch (error) {
 									if (isCannotSyncError(error)) {
