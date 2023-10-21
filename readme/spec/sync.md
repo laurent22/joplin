@@ -32,6 +32,14 @@ Additionally, every few minutes, the client is going to poll the server and down
 
 - `packages/lib/*Api.ts`: The `file-api-driver` will call some low-level API to perform its operations. For example `file-api-driver-local` will use the `fs` package to read/write files, `file-api-driver-amazon-s3` will use the AWS API to work with S3. In some cases however such a low-level API is not available - in that case, we usually create an `*Api.ts` file, which is used by the file API driver to perform its operations. For example, there is a `JoplinServerApi.ts`, which is used to connect to Joplin Server.
 
+- In general, each object in the database is represented by a `BaseModel` class. Then each object than can be synced is represented by a `BaseItem` class that inherits from `BaseModel`. This class is where many sync-related utilities can be found such as `itemsThatNeedSync()` or methods that encrypt items so that they can be uploaded when E2EE is enabled.
+
+- The state of each item is saved to the `sync_items` table. There is saved in particular the `sync_time` property which tells when the item was last synced. It is then used to decide what needs to be synced or not. Additional sync-related properties include `sync_disabled`, which is used in the rare case an item cannot be synced at all - for example if blocked by Dropbox for being "restricted content" (copyrighted), or is over the limit on Joplin Cloud. Each entry in `sync_items` is scoped to a sync target (`sync_target` property), so theoretically it's possible to sync the same items to multiple sync targets.
+
+## Testing
+
+By default, the test units synchronise with an in-memory sync target, which is fast and is usually enough to verify most behaviours. The test units however can be configured to sync with a specific sync target, such as the file system, Nextcloud, Joplin Server, etc. To do so, modify `packages/lib/testing/test-utils.ts` and change `setSyncTargetName()` to the relevant sync target. You may also need to add or modify the relevant files in `~/joplin-credentials/*`. See the `initFileApi()` method in `test-utils.ts` for more details.
+
 ## See also
 
 - [Synchronisation lock](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync_lock.md)
