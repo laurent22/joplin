@@ -184,7 +184,7 @@ export const toggleList = (listType: ListType): Command => {
 			const origContainerType = containerType;
 
 			// Grow [sel] to the smallest containing list
-			if (sel.empty) {
+			if (sel.empty && fromLine.text.trim() !== '') {
 				sel = growSelectionToNode(state, sel, [orderedListTag, unorderedListTag]);
 				computeSelectionProps();
 			}
