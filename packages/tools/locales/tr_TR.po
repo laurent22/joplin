@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Türkçe\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Arda Kılıçdağı <arda@kilicdagi.com>\n"
 "Language-Team: Turkish (Turkey)\n"
 "Language: tr_TR\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -199,9 +201,8 @@ msgstr "%s: %s"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:194
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:263
-#, fuzzy
 msgid "%s: Missing password."
-msgstr "Ana parola"
+msgstr "%s: Eksik parola."
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
@@ -371,14 +372,12 @@ msgid "Always"
 msgstr "Her zaman"
 
 #: packages/lib/models/Setting.ts:1121
-#, fuzzy
 msgid "Always ask"
-msgstr "Her zaman"
+msgstr "Her zaman sor"
 
 #: packages/lib/models/Setting.ts:1122
-#, fuzzy
 msgid "Always resize"
-msgstr "Her zaman"
+msgstr "Her zaman yeniden boyutlandır"
 
 #: packages/app-cli/app/command-mv.js:36
 msgid ""
@@ -835,7 +834,6 @@ msgid "Code View"
 msgstr "Kod Görünümü"
 
 #: packages/lib/utils/joplinCloud.ts:172
-#, fuzzy
 msgid "Collaborate on a notebook with others"
 msgstr "Başkalarıyla işbirliği halinde not defterlerini ortak yönetin"
 
@@ -881,9 +879,8 @@ msgid "Command palette..."
 msgstr "Komut paleti…"
 
 #: packages/lib/services/noteList/defaultListRenderer.ts:22
-#, fuzzy
 msgid "Compact"
-msgstr "Tamamlandı"
+msgstr "Kompakt"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:53
 msgid "Completed"
@@ -1148,14 +1145,12 @@ msgid "Creates a new to-do."
 msgstr "Yeni bir yapılacak öğe (to-do) oluşturur."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:112
-#, fuzzy
 msgid "Creating new note..."
-msgstr "Yeni %s oluşturuluyor..."
+msgstr "Yeni not oluşturuluyor..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:112
-#, fuzzy
 msgid "Creating new to-do..."
-msgstr "Yeni %s oluşturuluyor..."
+msgstr "Yeni yapılacaklar listesi oluşturuluyor..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:580
 msgid "Creating report..."
@@ -1430,9 +1425,8 @@ msgstr ""
 "gönderileceği anlamına gelir. Devam etmek istiyor musunuz?"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:19
-#, fuzzy
 msgid "Discard"
-msgstr "Değişiklikleri iptal et"
+msgstr "Vazgeç"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:101
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:274
@@ -1863,9 +1857,8 @@ msgid "Enter notebook title"
 msgstr "Not defteri başlığını girin"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:121
-#, fuzzy
 msgid "Enter password"
-msgstr "Ana parola"
+msgstr "Parolayı girin"
 
 #: packages/app-cli/app/help-utils.js:56
 msgid "Enum"
@@ -3068,9 +3061,8 @@ msgid "Note list growth factor"
 msgstr "Not listesi büyüme faktörü"
 
 #: packages/app-desktop/gui/MenuBar.tsx:729
-#, fuzzy
 msgid "Note list style"
-msgstr "Not listesi"
+msgstr "Not listeleme biçimi"
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.ts:7
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:407
@@ -3774,9 +3766,8 @@ msgid "Save changes"
 msgstr "Değişiklikleri kaydet"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:99
-#, fuzzy
 msgid "Save changes?"
-msgstr "Değişiklikleri kaydet"
+msgstr "Değişiklikleri kaydedilsin mi?"
 
 #: packages/lib/models/Setting.ts:1024
 msgid "Save geo-location with notes"
@@ -3906,9 +3897,8 @@ msgstr ""
 "bir dosya biçiminde paylaşın."
 
 #: packages/lib/utils/joplinCloud.ts:125
-#, fuzzy
 msgid "Share a notebook with others"
-msgstr "Başkalarıyla işbirliği halinde not defterlerini ortak yönetin"
+msgstr "Not defterini başkalarıyla paylaşın"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:383
 msgid "Share Notebook"
@@ -3979,9 +3969,8 @@ msgid "Shrink large images before adding them to notes."
 msgstr ""
 
 #: packages/app-mobile/root.tsx:1004
-#, fuzzy
 msgid "Side menu closed"
-msgstr "Daha fazla seçenekler kısmını gizle"
+msgstr "Yan menü kapalı"
 
 #: packages/app-mobile/root.tsx:1004
 msgid "Side menu opened"
@@ -4348,9 +4337,8 @@ msgid "Teams"
 msgstr "Ekipler"
 
 #: packages/lib/services/interop/InteropService.ts:116
-#, fuzzy
 msgid "Text document"
-msgstr "Metin editörü komutu"
+msgstr "Metin belgesi"
 
 #: packages/lib/models/Setting.ts:1402
 msgid "Text editor command"
@@ -4553,9 +4541,8 @@ msgstr ""
 "butona basın."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:617
-#, fuzzy
 msgid "The synchronisation password is missing."
-msgstr "Senkronizasyon yapılandırmasını kontrol et"
+msgstr "Senkronizasyon parolası eksik."
 
 #: packages/lib/models/Tag.ts:204
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -4694,9 +4681,8 @@ msgstr ""
 "izin vermek için gereklidir."
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:99
-#, fuzzy
 msgid "This drawing may have unsaved changes."
-msgstr "Kaydedilmemiş değişiklikler var."
+msgstr "Çizimde kaydedilmemiş değişiklikler olabilir."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:232
 msgid ""
@@ -4976,18 +4962,16 @@ msgid "Type: %s."
 msgstr "Tip: %s."
 
 #: packages/app-mobile/components/screens/Note.tsx:875
-#, fuzzy
 msgid "Unable to edit resource of type %s"
-msgstr "Veri dışarı akataılamadı veya paylaşılamadı. Sebep: %s"
+msgstr "Kaynak tipi %s düzenlenemedi"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:69
 msgid "Unable to export or share data. Reason: %s"
 msgstr "Veri dışarı akataılamadı veya paylaşılamadı. Sebep: %s"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:68
-#, fuzzy
 msgid "Unable to share log data. Reason: %s"
-msgstr "Veri dışarı akataılamadı veya paylaşılamadı. Sebep: %s"
+msgstr "Loglar dışarı aktarılamadı. Sebep: %s"
 
 #: packages/lib/models/Setting.ts:914
 msgid "Uncompleted to-dos on top"
