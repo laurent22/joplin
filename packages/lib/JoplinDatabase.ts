@@ -127,6 +127,7 @@ INSERT INTO version (version) VALUES (1);
 const migrations: Migration[] = [
 	migration42,
 	migration43,
+	// migration44,
 ];
 
 export interface TableField {
