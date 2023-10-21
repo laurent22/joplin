@@ -1,10 +1,11 @@
-import { supportDir, setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, expectThrow, createTempFile } from '../testing/test-utils';
+import { supportDir, setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, expectThrow, createTempFile, msleep } from '../testing/test-utils';
 import Folder from '../models/Folder';
 import Note from '../models/Note';
 import Resource from '../models/Resource';
 import shim from '../shim';
 import { ErrorCode } from '../errors';
 import { remove, pathExists } from 'fs-extra';
+import { ResourceEntity } from '../services/database/types';
 
 const testImagePath = `${supportDir}/photo.jpg`;
 
@@ -93,6 +94,22 @@ describe('models/Resource', () => {
 		const newStat = await shim.fsDriver().stat(Resource.fullPath(resource1));
 
 		expect(originalStat.size).toBe(newStat.size);
+	}));
+
+	it('should set the blob_updated_time property', (async () => {
+		const note = await Note.save({});
+		await shim.attachFileToNote(note, testImagePath);
+
+		const resourceA: ResourceEntity = (await Resource.all())[0];
+		expect(resourceA.updated_time).toBe(resourceA.blob_updated_time);
+
+		await msleep(1);
+
+		await Resource.save({ id: resourceA.id, title: 'new title' });
+
+		const resourceB: ResourceEntity = (await Resource.all())[0];
+		expect(resourceA.updated_time).not.toBe(resourceB.updated_time);
+		expect(resourceB.updated_time).toBe(resourceB.blob_updated_time);
 	}));
 
 	it('should not allow modifying a read-only resource', async () => {

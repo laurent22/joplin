@@ -15,6 +15,7 @@ import JoplinError from '../JoplinError';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
 import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 import ShareService from '../services/share/ShareService';
+import { SaveOptions } from './utils/types';
 
 export default class Resource extends BaseItem {
 
@@ -442,10 +443,20 @@ export default class Resource extends BaseItem {
 		}, { changeSource: ItemChange.SOURCE_SYNC });
 	}
 
-	// public static async save(o: ResourceEntity, options: SaveOptions = null): Promise<ResourceEntity> {
-	// 	const resource:ResourceEntity = await super.save(o, options);
-	// 	if (resource.updated_time) resource.bl
-	// 	return resource;
-	// }
+	public static async save(o: ResourceEntity, options: SaveOptions = null): Promise<ResourceEntity> {
+		const resource = { ...o };
+
+		if (resource.updated_time) {
+			if (!resource.blob_updated_time) resource.blob_updated_time = resource.updated_time;
+		} else {
+			const now = Date.now();
+			options = { ...options, autoTimestamp: false };
+			if (!resource.created_time) resource.created_time = now;
+			if (!resource.updated_time) resource.updated_time = now;
+			if (!resource.blob_updated_time) resource.blob_updated_time = now;
+		}
+
+		return await super.save(resource, options);
+	}
 
 }
