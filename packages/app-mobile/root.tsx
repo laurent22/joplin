@@ -759,6 +759,7 @@ class AppComponent extends React.Component {
 	private urlOpenListener_: EmitterSubscription|null = null;
 	private appStateChangeListener_: NativeEventSubscription|null = null;
 	private themeChangeListener_: NativeEventSubscription|null = null;
+	private dropdownAlert_ = (_data: any) => new Promise<any>(res => res);
 
 	public constructor() {
 		super();
@@ -891,7 +892,11 @@ class AppComponent extends React.Component {
 		AlarmService.setInAppNotificationHandler(async (alarmId: string) => {
 			const alarm = await Alarm.load(alarmId);
 			const notification = await Alarm.makeNotification(alarm);
-			this.dropdownAlert_.alertWithType('info', notification.title, notification.body ? notification.body : '');
+			void this.dropdownAlert_({
+				type: 'info',
+				title: notification.title,
+				message: notification.body ? notification.body : '',
+			});
 		});
 
 		this.appStateChangeListener_ = RNAppState.addEventListener('change', this.onAppStateChange_);
@@ -1082,8 +1087,7 @@ class AppComponent extends React.Component {
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
 							</View>
-							<DropdownAlert ref={(ref: any) => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
-							{ !shouldShowMainContent && <BiometricPopup
+							<DropdownAlert alert={(func: any) => (this.dropdownAlert_ = func)} />														{ !shouldShowMainContent && <BiometricPopup
 								dispatch={this.props.dispatch}
 								themeId={this.props.themeId}
 								sensorInfo={this.state.sensorInfo}
