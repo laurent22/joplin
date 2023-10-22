@@ -25,6 +25,10 @@ export default class FsDriverBase {
 		throw new Error('Not implemented');
 	}
 
+	public async appendFile(_path: string, _content: string, _encoding = 'base64'): Promise<any> {
+		throw new Error('Not implemented');
+	}
+
 	public async copy(_source: string, _dest: string) {
 		throw new Error('Not implemented');
 	}

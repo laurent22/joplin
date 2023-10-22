@@ -3,7 +3,7 @@ const RNFetchBlob = require('rn-fetch-blob').default;
 import * as RNFS from 'react-native-fs';
 const DocumentPicker = require('react-native-document-picker').default;
 import { openDocument } from '@joplin/react-native-saf-x';
-import RNSAF, { Encoding, DocumentFileDetail, openDocumentTree } from '@joplin/react-native-saf-x';
+import RNSAF, { DocumentFileDetail, openDocumentTree } from '@joplin/react-native-saf-x';
 import { Platform } from 'react-native';
 import * as tar from 'tar-stream';
 import { resolve } from 'path';
@@ -18,24 +18,63 @@ function isScopedUri(path: string) {
 	return path.includes(ANDROID_URI_PREFIX);
 }
 
+// Encodings supported by rn-fetch-blob, RNSAF, and
+// RNFS.
+// See also
+// - https://github.com/itinance/react-native-fs#readfilefilepath-string-encoding-string-promisestring
+// - https://github.com/joltup/rn-fetch-blob/blob/cf9e8843599de92031df2660d5a1da18491fa3c0/android/src/main/java/com/RNFetchBlob/RNFetchBlobFS.java#L1049
+export enum SupportedEncoding {
+	Utf8 = 'utf8',
+	Ascii = 'ascii',
+	Base64 = 'base64',
+}
+const supportedEncodings = Object.values<string>(SupportedEncoding);
+
+// Converts some encodings specifiers that work with NodeJS into encodings
+// that work with RNSAF, RNFetchBlob.fs, and RNFS.
+//
+// Throws if an encoding can't be normalized.
+const normalizeEncoding = (encoding: string): SupportedEncoding => {
+	encoding = encoding.toLowerCase();
+
+	// rn-fetch-blob and RNSAF require the exact string "utf8", but NodeJS (and thus
+	// fs-driver-node) support variants on this like "UtF-8" and "utf-8". Convert them:
+	if (encoding === 'utf-8') {
+		encoding = 'utf8';
+	}
+
+	if (!supportedEncodings.includes(encoding)) {
+		throw new Error(`Unsupported encoding: ${encoding}.`);
+	}
+
+	return encoding as SupportedEncoding;
+};
+
 export default class FsDriverRN extends FsDriverBase {
 	public appendFileSync() {
 		throw new Error('Not implemented');
 	}
 
-	// Encoding can be either "utf8" or "base64"
-	public appendFile(path: string, content: any, encoding = 'base64') {
+	// Requires that the file already exists.
+	// TODO: Update for compatibility with fs-driver-node's appendFile (which does not
+	//       require that the file exists).
+	public appendFile(path: string, content: any, rawEncoding = 'base64') {
+		const encoding = normalizeEncoding(rawEncoding);
+
 		if (isScopedUri(path)) {
-			return RNSAF.writeFile(path, content, { encoding: encoding as Encoding, append: true });
+			return RNSAF.writeFile(path, content, { encoding, append: true });
 		}
 		return RNFS.appendFile(path, content, encoding);
 	}
 
-	// Encoding can be either "utf8" or "base64"
-	public writeFile(path: string, content: any, encoding = 'base64') {
+	// Encoding can be either "utf8", "utf-8", or "base64"
+	public writeFile(path: string, content: any, rawEncoding = 'base64') {
+		const encoding = normalizeEncoding(rawEncoding);
+
 		if (isScopedUri(path)) {
-			return RNSAF.writeFile(path, content, { encoding: encoding as Encoding });
+			return RNSAF.writeFile(path, content, { encoding: encoding });
 		}
+
 		// We need to use rn-fetch-blob here due to this bug:
 		// https://github.com/itinance/react-native-fs/issues/700
 		return RNFetchBlob.fs.writeFile(path, content, encoding);
@@ -195,10 +234,11 @@ export default class FsDriverRN extends FsDriverBase {
 		return null;
 	}
 
-	public readFile(path: string, encoding = 'utf8') {
-		if (encoding === 'Buffer') throw new Error('Raw buffer output not supported for FsDriverRN.readFile');
+	public readFile(path: string, rawEncoding = 'utf8') {
+		const encoding = normalizeEncoding(rawEncoding);
+
 		if (isScopedUri(path)) {
-			return RNSAF.readFile(path, { encoding: encoding as Encoding });
+			return RNSAF.readFile(path, { encoding: encoding });
 		}
 		return RNFS.readFile(path, encoding);
 	}
@@ -244,7 +284,9 @@ export default class FsDriverRN extends FsDriverBase {
 		}
 	}
 
-	public async readFileChunk(handle: any, length: number, encoding = 'base64') {
+	public async readFileChunk(handle: any, length: number, rawEncoding = 'base64') {
+		const encoding = normalizeEncoding(rawEncoding);
+
 		if (handle.offset + length > handle.stat.size) {
 			length = handle.stat.size - handle.offset;
 		}
