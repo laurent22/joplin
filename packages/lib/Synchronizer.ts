@@ -701,8 +701,15 @@ export default class Synchronizer {
 										logger.warn(`Uploading a large resource (resourceId: ${local.id}, size:${resource.size} bytes) which may tie up the sync process.`);
 									}
 
-									// TODO: Compare blob_updated_time to stored sync_item.updated_time??????????????
-									await this.apiCall('put', remoteContentPath, null, { path: localResourceContentPath, source: 'file', shareId: resource.share_id });
+									// We skip updating the blob if it hasn't
+									// been modified since the last sync. In
+									// that case, it means the resource metadata
+									// (title, filename, etc.) has been changed,
+									// but not the data blob.
+									const syncItem = await BaseItem.syncItem(syncTargetId, resource.id, { fields: ['sync_time', 'force_sync'] });
+									if (!syncItem || syncItem.sync_time < resource.blob_updated_time || syncItem.force_sync) {
+										await this.apiCall('put', remoteContentPath, null, { path: localResourceContentPath, source: 'file', shareId: resource.share_id });
+									}
 								} catch (error) {
 									if (isCannotSyncError(error)) {
 										await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);
