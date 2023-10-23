@@ -58,12 +58,23 @@ export const createJsDrawEditor = (
 
 	const toolbar = editor.addToolbar();
 
+	const maxSpacerSize = '20px';
+	toolbar.addSpacer({
+		grow: 1,
+		maxSize: maxSpacerSize,
+	});
+
 	// Override the default "Exit" label:
 	toolbar.addExitButton(
 		() => callbacks.closeEditor(true), {
 			label: defaultLocalizations.close,
 		},
 	);
+
+	toolbar.addSpacer({
+		grow: 1,
+		maxSize: maxSpacerSize,
+	});
 
 	// saveButton needs to be defined after the following callbacks.
 	// As such, this variable can't be made const.
