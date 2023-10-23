@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, Linking, View, Switch, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions } from 'react-native';
+import { Platform, Linking, View, Switch, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions, AccessibilityInfo } from 'react-native';
 import Setting, { AppType } from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
@@ -38,6 +38,7 @@ interface ConfigScreenState {
 	showAdvancedSettings: boolean;
 
 	selectedSectionName: string|null;
+	sidebarWidth: number;
 }
 
 interface ConfigScreenProps {
@@ -64,6 +65,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			...shared.defaultScreenState,
 			selectedSectionName: null,
 			fixingSearchIndex: false,
+			sidebarWidth: 100,
 		};
 
 		this.scrollViewRef_ = React.createRef<ScrollView>();
@@ -129,11 +131,34 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		void NavService.go('Log');
 	};
 
+	private updateSidebarWidth = () => {
+		const windowWidth = Dimensions.get('window').width;
+
+		let sidebarNewWidth = windowWidth;
+
+		const sidebarValidWidths = [280, 230];
+		const maxFractionOfWindowSize = 1 / 3;
+		for (const width of sidebarValidWidths) {
+			if (width < windowWidth * maxFractionOfWindowSize) {
+				sidebarNewWidth = width;
+				break;
+			}
+		}
+
+		this.setState({ sidebarWidth: sidebarNewWidth });
+	};
+
+	private navigationFillsScreen() {
+		const windowWidth = Dimensions.get('window').width;
+		return this.state.sidebarWidth > windowWidth / 2;
+	}
+
 	private switchSectionPress_ = (section: string) => {
+		AccessibilityInfo.announceForAccessibility(_('Opening section %s', section));
 		this.setState({ selectedSectionName: section });
 	};
 
-	private showOverviewSection_ = () => {
+	private showSectionNavigation_ = () => {
 		this.setState({ selectedSectionName: null });
 	};
 
@@ -186,8 +211,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			await BackButtonService.back();
 		};
 
-		if (this.state.selectedSectionName) {
-			this.showOverviewSection_();
+		// Show navigation when pressing "back" (unless always visible).
+		if (this.state.selectedSectionName && this.navigationFillsScreen()) {
+			this.showSectionNavigation_();
 			return true;
 		}
 
@@ -228,6 +254,8 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		BackButtonService.addHandler(this.handleBackButtonPress);
+		Dimensions.addEventListener('change', this.updateSidebarWidth);
+		this.updateSidebarWidth();
 	}
 
 	public componentWillUnmount() {
@@ -504,10 +532,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	public render() {
 		const settings = this.state.settings;
 
-		const windowWidth = Dimensions.get('window').width;
-		const sectionSelectorDesiredWidth = 280;
+		const showAsSidebar = !this.navigationFillsScreen();
 
-		const showAsSidebar = windowWidth > sectionSelectorDesiredWidth * 2.3;
+		// If the navigation is a sidebar, always show a section.
 		let currentSectionName = this.state.selectedSectionName;
 		if (showAsSidebar && !currentSectionName) {
 			currentSectionName = 'general';
@@ -515,18 +542,18 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 		const sectionSelector = (
 			<SectionSelector
-				selectedSectionName={this.state.selectedSectionName}
+				selectedSectionName={currentSectionName}
 				styles={this.styles()}
 				settings={settings}
 				openSection={this.switchSectionPress_}
-				width={showAsSidebar ? sectionSelectorDesiredWidth : windowWidth}
+				width={this.state.sidebarWidth}
 			/>
 		);
 
 		let currentSection: ReactNode;
 		if (currentSectionName) {
 			const settingComps = shared.settingsToComponents2(
-				this, AppType.Mobile, settings, this.state.selectedSectionName,
+				this, AppType.Mobile, settings, currentSectionName,
 
 			// TODO: Remove this cast. Currently necessary because of different versions
 			// of React in lib/ and app-mobile/
@@ -561,8 +588,8 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		let screenHeadingText = _('Configuration');
-		if (this.state.selectedSectionName) {
-			screenHeadingText = Setting.sectionNameToLabel(this.state.selectedSectionName);
+		if (currentSectionName) {
+			screenHeadingText = Setting.sectionNameToLabel(currentSectionName);
 		}
 
 		return (
