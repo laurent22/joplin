@@ -817,6 +817,7 @@ function useMenu(props: Props) {
 						menuItemDic.setTags,
 						menuItemDic.showShareNoteDialog,
 						separator(),
+						menuItemDic.showNoteProperties,
 						menuItemDic.showNoteContentProperties,
 					],
 				},
