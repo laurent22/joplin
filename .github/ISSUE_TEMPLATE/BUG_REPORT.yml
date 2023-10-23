@@ -24,7 +24,7 @@ body:
     id: version
     attributes:
       label: Joplin version
-      description: We need the actual version number found in the `About Joplin` menu.
+      description: We need the actual version number found in the `About Joplin` menu on Desktop and under Configuration on Mobile.
       placeholder: x.y.z
     validations:
       required: true
