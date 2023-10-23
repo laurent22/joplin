@@ -9,7 +9,6 @@ export interface ConfigScreenStyleSheet {
 	settingContainer: ViewStyle;
 	settingContainerNoBottomBorder: ViewStyle;
 	headerWrapperStyle: ViewStyle;
-	selectedHeaderWrapperStyle: ViewStyle;
 
 	headerTextStyle: TextStyle;
 	settingText: TextStyle;
@@ -21,9 +20,6 @@ export interface ConfigScreenStyleSheet {
 	settingDescriptionText: TextStyle;
 	permissionText: TextStyle;
 	textInput: TextStyle;
-
-	titlebarText: TextStyle;
-	titlebarHeaderPart: ViewStyle;
 
 	switchSettingText: TextStyle;
 	switchSettingContainer: ViewStyle;
@@ -126,16 +122,6 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 			backgroundColor: theme.warningBackgroundColor,
 			fontSize: theme.fontSizeSmaller,
 		},
-		titlebarText: theme.titlebarText,
-
-		titlebarHeaderPart: {
-			...theme.titlebarText,
-			flex: 0,
-
-			// TODO(personalizedrefrigerator): Why is division by two needed for consistency?
-			paddingTop: (theme.titlebarText.paddingTop ?? 0) / 2,
-			paddingBottom: (theme.titlebarText.paddingBottom ?? 0) / 2,
-		},
 
 		sliderUnits: {
 			color: theme.color,
@@ -176,11 +162,6 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		headerWrapperStyle: {
 			...settingContainerStyle,
 			...theme.headerWrapperStyle,
-		},
-		selectedHeaderWrapperStyle: {
-			...settingContainerStyle,
-			...theme.headerWrapperStyle,
-			backgroundColor: theme.backgroundColorActive3,
 		},
 
 		switchSettingControl: {
