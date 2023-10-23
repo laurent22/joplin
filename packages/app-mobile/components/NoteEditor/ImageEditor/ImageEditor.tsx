@@ -158,7 +158,7 @@ const ImageEditor = (props: Props) => {
 	const appInfo = useMemo(() => {
 		return {
 			name: 'Joplin',
-			version: VersionInfo.appVersion,
+			description: `v${VersionInfo.appVersion}`,
 		};
 	}, []);
 
