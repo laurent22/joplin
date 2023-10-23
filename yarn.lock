@@ -4741,7 +4741,7 @@ __metadata:
     "@joplin/renderer": ~2.13
     "@joplin/tools": ~2.13
     "@joplin/utils": ~2.13
-    "@js-draw/material-icons": 1.6.1
+    "@js-draw/material-icons": 1.7.1
     "@lezer/highlight": 1.1.4
     "@react-native-community/clipboard": 1.5.1
     "@react-native-community/datetimepicker": 7.5.0
@@ -4772,7 +4772,7 @@ __metadata:
     jest: 29.6.4
     jest-environment-jsdom: 29.6.4
     jetifier: 2.0.0
-    js-draw: 1.6.1
+    js-draw: 1.7.1
     jsc-android: 241213.1.0
     jsdom: 22.1.0
     lodash: 4.17.21
@@ -5412,21 +5412,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@js-draw/material-icons@npm:1.6.1":
-  version: 1.6.1
-  resolution: "@js-draw/material-icons@npm:1.6.1"
+"@js-draw/material-icons@npm:1.7.1":
+  version: 1.7.1
+  resolution: "@js-draw/material-icons@npm:1.7.1"
   peerDependencies:
     js-draw: ^1.0.1
-  checksum: d7bca6ee6e302c9609ab4bbac3abe41445f8e8a815c674fca8c88897eff275775a36bad5767016c2ed08bdc51f4e9f606dc3b67dc24e10dada0f9b8e2aafe900
+  checksum: 42857fe8b01655545c8ee06c934406bdc7ef5ad255a868ed8f629eef8b7571b625d0a126448caa73fc0fa14a4b46acddf50027f89225a47765de2f20d122f634
   languageName: node
   linkType: hard
 
-"@js-draw/math@npm:^1.6.1":
-  version: 1.6.1
-  resolution: "@js-draw/math@npm:1.6.1"
+"@js-draw/math@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "@js-draw/math@npm:1.7.0"
   dependencies:
     bezier-js: 6.1.3
-  checksum: bab4368442d08fe49880d2de8d10769045584a2a5c8fb1b31fa65faecb32a214a5f85541b32e3aad7b3b94f4406d43cb335ff9b76bdc429dc40cc48a97f993fc
+  checksum: 81e39f1d398d04e0b77ddd55fa34b23ff95ba96ac24f9a08f5467f131c8b751be23bc942ff1ea56223ef1df127b3d2a3a6ca830b3496e995a137f97374252419
   languageName: node
   linkType: hard
 
@@ -22259,13 +22259,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-draw@npm:1.6.1":
-  version: 1.6.1
-  resolution: "js-draw@npm:1.6.1"
+"js-draw@npm:1.7.1":
+  version: 1.7.1
+  resolution: "js-draw@npm:1.7.1"
   dependencies:
-    "@js-draw/math": ^1.6.1
+    "@js-draw/math": ^1.7.0
     "@melloware/coloris": 0.21.0
-  checksum: ba72bef13f197144b3ea1204e7e568796431032139ddb6789b619776ed22a519a55fa01bf54aba831c269b1271b4e7f3636dcc42db614e1799c9041cb15e8a7a
+  checksum: b7bc92cd655d552042031e8f9bf991717f379ad493f6a49f3337e240be8a06dfb52d0ffcd4a05e821fda43615a79794db249902d37141ab415b7a9382c513cb0
   languageName: node
   linkType: hard
 
