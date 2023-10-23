@@ -67,5 +67,6 @@ export default function() {
 		'switchProfile2',
 		'switchProfile3',
 		'pasteAsText',
+		'showNoteProperties',
 	];
 }
