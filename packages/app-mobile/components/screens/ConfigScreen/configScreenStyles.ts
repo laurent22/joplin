@@ -1,6 +1,8 @@
 import { TextStyle, ViewStyle, StyleSheet } from 'react-native';
 const { themeStyle } = require('../../global-style.js');
 
+type SidebarButtonStyle = ViewStyle & { height: number };
+
 export interface ConfigScreenStyleSheet {
 	body: ViewStyle;
 
@@ -27,10 +29,12 @@ export interface ConfigScreenStyleSheet {
 	switchSettingContainer: ViewStyle;
 	switchSettingControl: TextStyle;
 
-	// height is required to allow pre-computing the positions
-	// of the buttons.
-	sidebarButtonContent: TextStyle & { height: number };
-	selectedSidebarButtonContainer: ViewStyle;
+	sidebarButton: SidebarButtonStyle;
+	sidebarIcon: TextStyle;
+	selectedSidebarButton: SidebarButtonStyle;
+	sidebarButtonMainText: TextStyle;
+	sidebarSelectedButtonText: TextStyle;
+	sidebarButtonDescriptionText: TextStyle;
 
 	settingControl: TextStyle;
 }
@@ -71,6 +75,26 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		borderBottomWidth: 1,
 		borderBottomColor: theme.dividerColor,
 	};
+
+	const sidebarButton: SidebarButtonStyle = {
+		height: theme.fontSize * 4,
+		flex: 1,
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingEnd: theme.marginRight,
+	};
+
+	const sidebarButtonMainText: TextStyle = {
+		color: theme.color,
+		fontSize: theme.fontSize,
+	};
+
+	const sidebarButtonDescriptionText: TextStyle = {
+		...sidebarButtonMainText,
+		fontSize: theme.fontSizeSmaller,
+		color: theme.colorFaded,
+	};
+
 
 	const styles: ConfigScreenStyleSheet = {
 		body: {
@@ -165,16 +189,24 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 			flex: 0,
 		},
 
-		sidebarButtonContent: {
-			justifyContent: 'flex-start',
-			alignItems: 'center',
-			height: 48,
-			color: theme.color,
-		},
 
-		selectedSidebarButtonContainer: {
+		sidebarButton,
+		selectedSidebarButton: {
+			...sidebarButton,
 			backgroundColor: theme.selectedColor,
 		},
+
+		sidebarButtonMainText: sidebarButtonMainText,
+		sidebarIcon: {
+			...sidebarButtonMainText,
+			paddingRight: theme.marginLeft,
+			paddingLeft: theme.marginRight,
+		},
+		sidebarSelectedButtonText: {
+			...sidebarButtonMainText,
+			fontWeight: 'bold',
+		},
+		sidebarButtonDescriptionText,
 	};
 
 	const styleSheet = StyleSheet.create(styles);

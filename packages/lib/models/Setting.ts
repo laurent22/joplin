@@ -221,7 +221,11 @@ const userSettingMigration: UserSettingMigration[] = [
 	},
 ];
 
-export type SettingMetadataSection = { name: string; isScreen?: boolean; metadatas: SettingItem[] };
+export type SettingMetadataSection = {
+	name: string;
+	isScreen?: boolean;
+	metadatas: SettingItem[];
+};
 export type MetadataBySection = SettingMetadataSection[];
 
 class Setting extends BaseModel {
@@ -2548,6 +2552,9 @@ class Setting extends BaseModel {
 			'revisionService',
 			'server',
 			'keymap',
+			'tools',
+			'export',
+			'moreInfo',
 		];
 	}
 
@@ -2624,6 +2631,24 @@ class Setting extends BaseModel {
 		if (this.customSections_[name] && this.customSections_[name].description) return this.customSections_[name].description;
 
 		return '';
+	}
+
+	public static sectionMetadataToSummary(metadata: SettingMetadataSection): string {
+		// TODO: This is currently specific to the mobile app
+		const sectionNameToSummary: Record<string, string> = {
+			'general': _('Language, date format'),
+			'appearance': _('App theme, editor font'),
+			'sync': _('Sync, encryption, proxy'),
+			'joplinCloud': _('Joplin Cloud settings'),
+			'markdownPlugins': _('Markdown plugins: Media player, math, footnotes, soft breaks, ...'),
+			'note': _('Geolocation, spellcheck, markdown toolbar, image resize'),
+			'revisionService': _('Enable/disable note history, keep notes for...'),
+			'tools': _('Application log, profiles, sync status'),
+			'export': _('Export all notes'),
+			'moreInfo': _('Privacy policy, donate, website'),
+		};
+
+		return sectionNameToSummary[metadata.name] ?? '';
 	}
 
 	public static sectionNameToIcon(name: string, appType: AppType) {

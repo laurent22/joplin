@@ -9,12 +9,12 @@ import { reg } from '@joplin/lib/registry';
 import { State } from '@joplin/lib/reducer';
 const { BackButtonService } = require('../../../services/back-button.js');
 const VersionInfo = require('react-native-version-info').default;
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import ScreenHeader from '../../ScreenHeader';
-const { _ } = require('@joplin/lib/locale');
+import { _ } from '@joplin/lib/locale';
 import BaseScreenComponent from '../../base-screen';
 const { themeStyle } = require('../../global-style.js');
-import * as shared from '@joplin/lib/components/shared/config/config-shared.js';
+import * as shared from '@joplin/lib/components/shared/config/config-shared';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import biometricAuthenticate from '../../biometrics/biometricAuthenticate';
 import configScreenStyles, { ConfigScreenStyles } from './configScreenStyles';
@@ -505,7 +505,13 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		const settings = this.state.settings;
 
 		const windowWidth = Dimensions.get('window').width;
-		const sectionSelectorDesiredWidth = 200;
+		const sectionSelectorDesiredWidth = 280;
+
+		const showAsSidebar = windowWidth > sectionSelectorDesiredWidth * 2.3;
+		let currentSectionName = this.state.selectedSectionName;
+		if (showAsSidebar && !currentSectionName) {
+			currentSectionName = 'general';
+		}
 
 		const sectionSelector = (
 			<SectionSelector
@@ -513,15 +519,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				styles={this.styles()}
 				settings={settings}
 				openSection={this.switchSectionPress_}
-				minWidth={Math.min(windowWidth, sectionSelectorDesiredWidth)}
+				width={showAsSidebar ? sectionSelectorDesiredWidth : windowWidth}
 			/>
 		);
-
-		const showAsSidebar = windowWidth > sectionSelectorDesiredWidth * 2.5;
-		let currentSectionName = this.state.selectedSectionName;
-		if (showAsSidebar && !currentSectionName) {
-			currentSectionName = 'general';
-		}
 
 		let currentSection: ReactNode;
 		if (currentSectionName) {
