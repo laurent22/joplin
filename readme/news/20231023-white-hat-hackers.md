@@ -1,5 +1,6 @@
 ---
 tweet: Working in the shadows with white-hat hackers
+forum_url: https://discourse.joplinapp.org/t/33283
 ---
 
 # Working in the shadows with white-hat hackers
