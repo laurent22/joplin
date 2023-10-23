@@ -144,8 +144,10 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 				{descriptionComp}
 			</View>
 		);
-	} else {
-		// throw new Error('Unsupported setting type: ' + md.type);
+	} else if (md.type === Setting.TYPE_BUTTON) {
+		// TODO: Not yet supported
+	} else if (Setting.value('env') === 'dev') {
+		throw new Error(`Unsupported setting type: ${md.type}`);
 	}
 
 	return output;
