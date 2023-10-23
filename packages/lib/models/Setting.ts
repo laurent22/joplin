@@ -303,6 +303,7 @@ class Setting extends BaseModel {
 	};
 
 	public static autoSaveEnabled = true;
+	public static allowFileStorage = true;
 
 	private static metadata_: SettingItems = null;
 	private static keychainService_: any = null;
@@ -2055,7 +2056,7 @@ class Setting extends BaseModel {
 	}
 
 	private static canUseFileStorage(): boolean {
-		return !shim.mobilePlatform();
+		return this.allowFileStorage && !shim.mobilePlatform();
 	}
 
 	private static keyStorage(key: string): SettingStorage {
