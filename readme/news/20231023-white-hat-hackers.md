@@ -2,7 +2,7 @@
 tweet: Working in the shadows with white-hat hackers
 ---
 
-## Working in the shadows with white-hat hackers
+# Working in the shadows with white-hat hackers
 
 The majority of Joplin's development is carried out in the public domain. This includes the discussion of issues on GitHub, as well as the submission of pull requests and related discussions. The transparency of these processes allows for collaborative problem-solving and shared insights.
 
