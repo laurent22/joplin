@@ -15,6 +15,7 @@ import { setLocale } from '@joplin/lib/locale';
 import applyTranslations from './utils/applyTranslations';
 import { loadSponsors } from '../utils/loadSponsors';
 import convertLinksToLocale from './utils/convertLinksToLocale';
+import { copyFile } from 'fs/promises';
 
 interface BuildConfig {
 	env: Env;
@@ -89,6 +90,38 @@ const jsBasePath = `${websiteAssetDir}/js`;
 const jsBaseUrl = `${baseUrl}/js`;
 
 async function getAssetUrls(): Promise<AssetUrls> {
+	const scriptsToImport: any[] = [
+		// {
+		// 	id: 'tippy',
+		// 	sourcePath: rootDir + '/packages/tools/node_modules/tippy.js/dist/tippy-bundle.umd.min.js',
+		// 	md5: '',
+		// 	filename: '',
+		// },
+		// {
+		// 	id: 'popper',
+		// 	sourcePath: rootDir + '/packages/tools/node_modules/@popperjs/core/dist/umd/popper.min.js',
+		// 	md5: '',
+		// 	filename: '',
+		// },
+	];
+
+	for (const s of scriptsToImport) {
+		const filename = basename(s.sourcePath);
+		const sourceMd5 = await md5File(s.sourcePath);
+		const targetPath = `${websiteAssetDir}/js/${filename}`;
+		const targetMd5 = await md5File(targetPath);
+		s.md5 = sourceMd5;
+		s.filename = filename;
+
+		// We check the MD5, otherwise it makes nodemon goes into an infinite building loop
+		if (sourceMd5 !== targetMd5) await copyFile(s.sourcePath, targetPath);
+	}
+
+	const importedJs: Record<string, string> = {};
+	for (const s of scriptsToImport) {
+		importedJs[s.id] = `${jsBaseUrl}/${s.filename}?h=${await md5File(`${websiteAssetDir}/js/${s.filename}`)}`;
+	}
+
 	return {
 		css: {
 			fontawesome: `${cssBaseUrl}/fontawesome-all.min.css?h=${await md5File(`${cssBasePath}/fontawesome-all.min.css`)}`,
@@ -96,6 +129,7 @@ async function getAssetUrls(): Promise<AssetUrls> {
 		},
 		js: {
 			script: `${jsBaseUrl}/script.js?h=${await md5File(`${jsBasePath}/script.js`)}`,
+			...importedJs,
 		},
 	};
 }

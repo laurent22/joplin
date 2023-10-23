@@ -8,7 +8,7 @@ import { rootDir } from '../tool-utils';
 import { compileWithFrontMatter, MarkdownAndFrontMatter, stripOffFrontMatter } from './utils/frontMatter';
 import { markdownToHtml } from './utils/render';
 import { getNewsDate } from './utils/news';
-import { config, execApi, getForumTopPostByExternalId, HttpMethod } from '../utils/discourse';
+import { config, createTopic, getForumTopPostByExternalId, updatePost } from '../utils/discourse';
 const RSS = require('rss');
 
 interface Post {
@@ -144,7 +144,7 @@ const main = async () => {
 				} else {
 					console.info('Post already exists and has changed: updating it...');
 
-					await execApi(HttpMethod.PUT, `posts/${existingForumPost.id}.json`, {
+					await updatePost(existingForumPost.id, {
 						title: content.title,
 						raw: content.body,
 						edit_reason: 'Auto-updated by script',
@@ -153,14 +153,14 @@ const main = async () => {
 			} else {
 				console.info('Post does not exists: creating it...');
 
-				const response = await execApi(HttpMethod.POST, 'posts', {
+				const topic = await createTopic({
 					title: content.title,
 					raw: content.body,
 					category: config.newsCategoryId,
 					external_id: post.id,
 				});
 
-				const postUrl = `https://discourse.joplinapp.org/t/${response.topic_id}`;
+				const postUrl = `https://discourse.joplinapp.org/t/${topic.topic_id}`;
 				content.parsed.forum_url = postUrl;
 				const compiled = compileWithFrontMatter(content.parsed);
 

@@ -7,6 +7,7 @@ interface StringToStringMap {
 interface CodeToCountryMap {
 	[key: string]: string[];
 }
+type ParsePluralFormFunction = (n: number)=> number;
 
 const codeToLanguageE_: StringToStringMap = {};
 codeToLanguageE_['aa'] = 'Afar';
@@ -436,11 +437,50 @@ const codeToCountry_: CodeToCountryMap = {
 let supportedLocales_: any = null;
 let localeStats_: any = null;
 
-const loadedLocales_: any = {};
+const loadedLocales_: Record<string, Record<string, string[]>> = {};
+
+const pluralFunctions_: Record<string, ParsePluralFormFunction> = {};
 
 const defaultLocale_ = 'en_GB';
 
 let currentLocale_ = defaultLocale_;
+
+// Copied from https://github.com/eugeny-dementev/parse-gettext-plural-form
+// along with the tests
+export const parsePluralForm = (form: string): ParsePluralFormFunction => {
+	const pluralFormRegex = /^(\s*nplurals\s*=\s*[0-9]+\s*;\s*plural\s*=\s*(?:\s|[-?|&=!<>+*/%:;a-zA-Z0-9_()])+)$/m;
+
+	if (!pluralFormRegex.test(form)) throw new Error(`Plural-Forms is invalid: ${form}`);
+
+	if (!/;\s*$/.test(form)) {
+		form += ';';
+	}
+
+	const code = [
+		'var plural;',
+		'var nplurals;',
+		form,
+		'return (plural === true ? 1 : plural ? plural : 0);',
+	].join('\n');
+
+	// eslint-disable-next-line no-new-func -- There's a regex to check the form but it's still slighlty unsafe, eventually we should automatically generate all the functions in advance in build-translations.ts
+	return (new Function('n', code)) as ParsePluralFormFunction;
+};
+
+const getPluralFunction = (lang: string) => {
+	if (!(lang in pluralFunctions_)) {
+		const locale = closestSupportedLocale(lang);
+		const stats = localeStats()[locale];
+
+		if (!stats.pluralForms) {
+			pluralFunctions_[lang] = null;
+		} else {
+			pluralFunctions_[lang] = parsePluralForm(stats.pluralForms);
+		}
+	}
+
+	return pluralFunctions_[lang];
+};
 
 function defaultLocale() {
 	return defaultLocale_;
@@ -589,18 +629,45 @@ function _(s: string, ...args: any[]): string {
 }
 
 function _n(singular: string, plural: string, n: number, ...args: any[]) {
-	if (n > 1) return _(plural, ...args);
-	return _(singular, ...args);
+	if (['en_GB', 'en_US'].includes(currentLocale_)) {
+		if (n > 1) return _(plural, ...args);
+		return _(singular, ...args);
+	} else {
+		const pluralFn = getPluralFunction(currentLocale_);
+		const stringIndex = pluralFn ? pluralFn(n) : 0;
+		const strings = localeStrings(currentLocale_);
+		const result = strings[singular];
+
+		let translatedString = '';
+		if (result === undefined || !result.join('')) {
+			translatedString = singular;
+		} else {
+			translatedString = stringIndex < result.length ? result[stringIndex] : result[0];
+		}
+
+		try {
+			return sprintf(translatedString, ...args);
+		} catch (error) {
+			return `${translatedString} ${args.join(', ')} (Translation error: ${error.message})`;
+		}
+	}
 }
 
 const stringByLocale = (locale: string, s: string, ...args: any[]): string => {
 	const strings = localeStrings(locale);
-	let result = strings[s];
-	if (result === '' || result === undefined) result = s;
+	const result = strings[s];
+	let translatedString = '';
+
+	if (result === undefined || !result.join('')) {
+		translatedString = s;
+	} else {
+		translatedString = result[0];
+	}
+
 	try {
-		return sprintf(result, ...args);
+		return sprintf(translatedString, ...args);
 	} catch (error) {
-		return `${result} ${args.join(', ')} (Translation error: ${error.message})`;
+		return `${translatedString} ${args.join(', ')} (Translation error: ${error.message})`;
 	}
 };
 

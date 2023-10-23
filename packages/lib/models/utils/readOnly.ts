@@ -1,9 +1,12 @@
+import Logger from '@joplin/utils/Logger';
 import { ModelType } from '../../BaseModel';
 import { ErrorCode } from '../../errors';
 import JoplinError from '../../JoplinError';
 import { State as ShareState } from '../../services/share/reducer';
 import ItemChange from '../ItemChange';
 import Setting from '../Setting';
+
+const logger = Logger.create('models/utils/readOnly');
 
 export interface ItemSlice {
 	id?: string;
@@ -43,6 +46,18 @@ export const checkIfItemCanBeChanged = (itemType: ModelType, changeSource: numbe
 export const checkIfItemCanBeAddedToFolder = async (itemType: ModelType, Folder: any, changeSource: number, shareState: ShareState, parentId: string) => {
 	if (needsReadOnlyChecks(itemType, changeSource, shareState) && parentId) {
 		const parentFolder = await Folder.load(parentId, { fields: ['id', 'share_id'] });
+
+		if (!parentFolder) {
+			// Historically it's always been possible to set the parent_id of a
+			// note to a folder that does not exist - this is to support
+			// synchronisation, where items are downloaded in random order. It
+			// is not ideal to skip the check here, but if for some reason the
+			// folder turns out to be read-only the issue will be resolved
+			// during sync.
+			logger.warn('checkIfItemCanBeAddedToFolder: Trying to add an item to a folder that does not exist - skipping check');
+			return;
+		}
+
 		if (itemIsReadOnlySync(itemType, changeSource, parentFolder, Setting.value('sync.userId'), shareState)) {
 			throw new JoplinError('Cannot add an item as a child of a read-only item', ErrorCode.IsReadOnly);
 		}

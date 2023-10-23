@@ -23,6 +23,7 @@ Icon.loadFont().catch((error: any) => { console.info(error); });
 interface Props {
 	syncStarted: boolean;
 	themeId: number;
+	sideMenuVisible: boolean;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	collapsedFolderIds: string[];
@@ -100,7 +101,7 @@ const SideMenuContentComponent = (props: Props) => {
 		styles.sideButtonSelected = { ...styles.sideButton, backgroundColor: theme.selectedColor };
 		styles.sideButtonText = { ...styles.buttonText };
 
-		styles.emptyFolderIcon = { ...styles.sidebarIcon, marginRight: folderIconRightMargin, width: 20 };
+		styles.emptyFolderIcon = { ...styles.sidebarIcon, marginRight: folderIconRightMargin, width: 21 };
 
 		return StyleSheet.create(styles);
 	}, [props.themeId]);
@@ -420,15 +421,15 @@ const SideMenuContentComponent = (props: Props) => {
 
 		items.push(makeDivider('divider_1'));
 
-		items.push(renderSidebarButton('newFolder_button', _('New Notebook'), 'md-folder-open', newFolderButton_press));
+		items.push(renderSidebarButton('newFolder_button', _('New Notebook'), 'folder-open', newFolderButton_press));
 
-		items.push(renderSidebarButton('tag_button', _('Tags'), 'md-pricetag', tagButton_press));
+		items.push(renderSidebarButton('tag_button', _('Tags'), 'pricetag', tagButton_press));
 
 		if (props.profileConfig && props.profileConfig.profiles.length > 1) {
-			items.push(renderSidebarButton('switchProfile_button', _('Switch profile'), 'md-people-circle-outline', switchProfileButton_press));
+			items.push(renderSidebarButton('switchProfile_button', _('Switch profile'), 'people-circle-outline', switchProfileButton_press));
 		}
 
-		items.push(renderSidebarButton('config_button', _('Configuration'), 'md-settings', configButton_press));
+		items.push(renderSidebarButton('config_button', _('Configuration'), 'settings', configButton_press));
 
 		items.push(makeDivider('divider_2'));
 
@@ -450,7 +451,7 @@ const SideMenuContentComponent = (props: Props) => {
 		if (resourceFetcherText) fullReport.push(resourceFetcherText);
 		if (decryptionReportText) fullReport.push(decryptionReportText);
 
-		items.push(renderSidebarButton('synchronize_button', !props.syncStarted ? _('Synchronise') : _('Cancel'), 'md-sync', synchronize_press));
+		items.push(renderSidebarButton('synchronize_button', !props.syncStarted ? _('Synchronise') : _('Cancel'), 'sync', synchronize_press));
 
 		if (fullReport.length) {
 			items.push(
@@ -479,11 +480,11 @@ const SideMenuContentComponent = (props: Props) => {
 	// using padding. So instead creating blank elements for padding bottom and top.
 	items.push(<View style={{ height: theme.marginTop }} key="bottom_top_hack" />);
 
-	items.push(renderSidebarButton('all_notes', _('All notes'), 'md-document', allNotesButton_press, props.notesParentType === 'SmartFilter'));
+	items.push(renderSidebarButton('all_notes', _('All notes'), 'document', allNotesButton_press, props.notesParentType === 'SmartFilter'));
 
 	items.push(makeDivider('divider_all'));
 
-	items.push(renderSidebarButton('folder_header', _('Notebooks'), 'md-folder'));
+	items.push(renderSidebarButton('folder_header', _('Notebooks'), 'folder'));
 
 	if (props.folders.length) {
 		const result = shared.renderFolders(props, renderFolderItem, false);
@@ -491,15 +492,29 @@ const SideMenuContentComponent = (props: Props) => {
 		items = items.concat(folderItems);
 	}
 
+	const isHidden = !props.sideMenuVisible;
+
 	const style = {
 		flex: 1,
 		borderRightWidth: 1,
 		borderRightColor: theme.dividerColor,
 		backgroundColor: theme.backgroundColor,
+
+		// Have the UI reflect whether the View is hidden to the screen reader.
+		// This way, there will be visual feedback if isHidden is incorrect.
+		opacity: isHidden ? 0.5 : undefined,
 	};
 
+	// Note: iOS uses accessibilityElementsHidden and Android uses importantForAccessibility
+	//       to hide elements from the screenreader.
+
 	return (
-		<View style={style}>
+		<View
+			style={style}
+
+			accessibilityElementsHidden={isHidden}
+			importantForAccessibility={isHidden ? 'no-hide-descendants' : undefined}
+		>
 			<View style={{ flex: 1, opacity: props.opacity }}>
 				<ScrollView scrollsToTop={false} style={styles_.menu}>
 					{items}
@@ -520,6 +535,7 @@ export default connect((state: AppState) => {
 		notesParentType: state.notesParentType,
 		locale: state.settings.locale,
 		themeId: state.settings.theme,
+		sideMenuVisible: state.showSideMenu,
 		// Don't do the opacity animation as it means re-rendering the list multiple times
 		// opacity: state.sideMenuOpenPercent,
 		collapsedFolderIds: state.collapsedFolderIds,

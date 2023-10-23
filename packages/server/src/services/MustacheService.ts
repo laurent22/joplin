@@ -9,7 +9,7 @@ import { makeUrl, SubPath, UrlType } from '../utils/routeUtils';
 import MarkdownIt = require('markdown-it');
 import { headerAnchor } from '@joplin/renderer';
 import { _ } from '@joplin/lib/locale';
-import { adminDashboardUrl, adminEmailsUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, changesUrl, homeUrl, itemsUrl } from '../utils/urlUtils';
+import { adminDashboardUrl, adminEmailsUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, homeUrl, itemsUrl } from '../utils/urlUtils';
 import { MenuItem, setSelectedMenu } from '../utils/views/menu';
 
 export interface RenderOptions {
@@ -56,6 +56,7 @@ interface GlobalParams {
 	adminMenu?: MenuItem[];
 	navbarMenu?: MenuItem[];
 	currentPath?: SubPath;
+	appShortName?: string;
 }
 
 export function isView(o: any): boolean {
@@ -150,10 +151,6 @@ export default class MustacheService {
 					url: itemsUrl(),
 				},
 				{
-					title: _('Logs'),
-					url: changesUrl(),
-				},
-				{
 					title: _('Admin'),
 					url: adminDashboardUrl(),
 					icon: 'fas fa-hammer',
@@ -179,6 +176,7 @@ export default class MustacheService {
 			showErrorStackTraces: config().showErrorStackTraces,
 			isJoplinCloud: config().isJoplinCloud,
 			fullYear: (new Date()).getFullYear(),
+			appShortName: config().isJoplinCloud ? 'cloud' : 'server',
 		};
 	}
 

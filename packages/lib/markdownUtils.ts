@@ -19,6 +19,7 @@ export interface MarkdownTableHeader {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	filter?: Function;
 	disableEscape?: boolean;
+	disableHtmlEscape?: boolean;
 	justify?: MarkdownTableJustify;
 }
 
@@ -39,10 +40,12 @@ const markdownUtils = {
 		return url;
 	},
 
-	escapeTableCell(text: string) {
+	escapeTableCell(text: string, escapeHtml = true) {
 		// Disable HTML code
-		text = text.replace(/</g, '&lt;');
-		text = text.replace(/>/g, '&gt;');
+		if (escapeHtml) {
+			text = text.replace(/</g, '&lt;');
+			text = text.replace(/>/g, '&gt;');
+		}
 		// Table cells can't contain new lines so replace with <br/>
 		text = text.replace(/\n/g, '<br/>');
 		// "|" is a reserved characters that should be escaped
@@ -173,7 +176,7 @@ const markdownUtils = {
 			for (let j = 0; j < headers.length; j++) {
 				const h = headers[j];
 				const value = (h.filter ? h.filter(row[h.name]) : row[h.name]) || '';
-				const valueMd = h.disableEscape ? value : markdownUtils.escapeTableCell(value);
+				const valueMd = h.disableEscape ? value : markdownUtils.escapeTableCell(value, !h.disableHtmlEscape);
 				rowMd.push(stringPadding(valueMd, minCellWidth, ' ', stringPadding.RIGHT));
 			}
 			output.push(`| ${rowMd.join(' | ')} |`);

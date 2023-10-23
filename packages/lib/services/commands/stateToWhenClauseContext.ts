@@ -32,6 +32,7 @@ export interface WhenClauseContext {
 	folderIsShared: boolean;
 	folderIsShareRoot: boolean;
 	joplinServerConnected: boolean;
+	joplinCloudAccountType: number;
 	hasMultiProfiles: boolean;
 	noteIsReadOnly: boolean;
 	folderIsReadOnly: boolean;
@@ -87,6 +88,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		folderIsShared: commandFolder ? !!commandFolder.share_id : false,
 
 		joplinServerConnected: [9, 10].includes(settings['sync.target']),
+		joplinCloudAccountType: settings['sync.target'] === 10 ? settings['sync.10.accountType'] : 0,
 
 		hasMultiProfiles: state.profileConfig && state.profileConfig.profiles.length > 1,
 

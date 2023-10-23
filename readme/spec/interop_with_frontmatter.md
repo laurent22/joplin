@@ -12,7 +12,11 @@ tags:
   - export
   - import
 ---
+
+Note body
 ```
+
+There should be an empty line between the `---` delimiter and the note body. Any empty line after that will be considered to be part of the note body. When importing notes, if there is no empty lines between the `---` delimiter and the note body, everything directly after `---` will be considered to be the note body.
 
 ## Supported Metadata Fields
 

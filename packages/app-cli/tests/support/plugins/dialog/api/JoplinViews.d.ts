@@ -4,6 +4,7 @@ import JoplinViewsMenuItems from './JoplinViewsMenuItems';
 import JoplinViewsMenus from './JoplinViewsMenus';
 import JoplinViewsToolbarButtons from './JoplinViewsToolbarButtons';
 import JoplinViewsPanels from './JoplinViewsPanels';
+import JoplinViewsNoteList from './JoplinViewsNoteList';
 /**
  * This namespace provides access to view-related services.
  *
@@ -13,11 +14,12 @@ import JoplinViewsPanels from './JoplinViewsPanels';
 export default class JoplinViews {
     private store;
     private plugin;
-    private dialogs_;
     private panels_;
     private menuItems_;
     private menus_;
     private toolbarButtons_;
+    private dialogs_;
+    private noteList_;
     private implementation_;
     constructor(implementation: any, plugin: Plugin, store: any);
     get dialogs(): JoplinViewsDialogs;
@@ -25,4 +27,5 @@ export default class JoplinViews {
     get menuItems(): JoplinViewsMenuItems;
     get menus(): JoplinViewsMenus;
     get toolbarButtons(): JoplinViewsToolbarButtons;
+    get noteList(): JoplinViewsNoteList;
 }

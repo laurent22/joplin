@@ -58,7 +58,7 @@ class NoteTagsDialogComponent extends React.Component {
 
 		this.renderTag = data => {
 			const tag = data.item;
-			const iconName = noteHasTag(tag.id) ? 'md-checkbox-outline' : 'md-square-outline';
+			const iconName = noteHasTag(tag.id) ? 'checkbox-outline' : 'square-outline';
 			return (
 				<TouchableOpacity key={tag.id} onPress={() => this.tag_press(tag.id)} style={this.styles().tag}>
 					<View style={this.styles().tagIconText}>

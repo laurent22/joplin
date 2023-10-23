@@ -97,6 +97,7 @@ export default function(href: string, options: Options = null): LinkReplacementR
 		js = createEventHandlingAttrs(resourceId, {
 			enableLongPress: options.enableLongPress ?? false,
 			postMessageSyntax: options.postMessageSyntax ?? 'void',
+			enableEditPopup: false,
 		}, onClick);
 	} else {
 		js = `onclick='${htmlentities(js)}'`;

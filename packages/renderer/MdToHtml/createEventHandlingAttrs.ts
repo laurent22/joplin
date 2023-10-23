@@ -6,6 +6,10 @@ import utils from '../utils';
 export interface Options {
 	enableLongPress: boolean;
 	postMessageSyntax: string;
+
+	enableEditPopup: boolean;
+	createEditPopupSyntax?: string;
+	destroyEditPopupSyntax?: string;
 }
 
 // longPressTouchStart and clearLongPressTimeout are turned into strings before being called.
@@ -56,6 +60,14 @@ export const createEventHandlingListeners = (resourceId: string, options: Option
 		eventHandlers.ontouchcancel += touchCancel;
 		eventHandlers.ontouchmove += touchCancel;
 		eventHandlers.ontouchend += touchEnd;
+	}
+
+	if (options.enableEditPopup) {
+		const editPopupClick = `(() => ${options.postMessageSyntax}('edit:${resourceId}'))`;
+		const createEditPopup = ` (${options.createEditPopupSyntax})(this, ${JSON.stringify(resourceId)}, ${editPopupClick}); `;
+		eventHandlers.ontouchstart += createEditPopup;
+
+		eventHandlers.onclick += createEditPopup;
 	}
 
 	if (onClickAction) {

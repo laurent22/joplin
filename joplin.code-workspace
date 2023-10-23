@@ -381,13 +381,14 @@
 					"!**/node_modules/**"
 				],
 				"program": "${workspaceFolder}/packages/server/src/app.ts",
+				"localRoot": "${workspaceFolder}/packages/server",
 				"args": [
 					"--env", "dev"
 				],
 				"env": {
 					"JOPLIN_IS_TESTING": "1",
-					"TERMS_URL": "https://example.com",
-					"PRIVACY_URL": "https://example.com",
+					"APP_BASE_URL": "http://joplincloud.local:22300",
+					"API_BASE_URL": "http://api.joplincloud.local:22300",
 				}
 			}
 		]

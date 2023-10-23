@@ -442,4 +442,10 @@ export default class Resource extends BaseItem {
 		}, { changeSource: ItemChange.SOURCE_SYNC });
 	}
 
+	// public static async save(o: ResourceEntity, options: SaveOptions = null): Promise<ResourceEntity> {
+	// 	const resource:ResourceEntity = await super.save(o, options);
+	// 	if (resource.updated_time) resource.bl
+	// 	return resource;
+	// }
+
 }

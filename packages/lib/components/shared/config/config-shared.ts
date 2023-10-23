@@ -234,6 +234,14 @@ export const settingsSections = createSelector(
 			});
 		}
 
+		const order = Setting.sectionOrder();
+
+		output.sort((a, b) => {
+			const o1 = order.indexOf(a.name);
+			const o2 = order.indexOf(b.name);
+			return o1 < o2 ? -1 : +1;
+		});
+
 		return output;
 	},
 );

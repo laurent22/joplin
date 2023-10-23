@@ -1,6 +1,11 @@
 import Resource from './models/Resource';
 import shim from './shim';
-import Database, { SqlQuery } from './database';
+import Database from './database';
+import migration42 from './services/database/migrations/42';
+import migration43 from './services/database/migrations/43';
+// import migration44 from './services/database/migrations/44';
+import { SqlQuery, Migration } from './services/database/types';
+import addMigrationFile from './services/database/addMigrationFile';
 
 const { promiseChain } = require('./promise-utils.js');
 const { sprintf } = require('sprintf-js');
@@ -118,6 +123,12 @@ CREATE TABLE version (
 
 INSERT INTO version (version) VALUES (1);
 `;
+
+const migrations: Migration[] = [
+	migration42,
+	migration43,
+	// migration44,
+];
 
 export interface TableField {
 	name: string;
@@ -334,16 +345,11 @@ export default class JoplinDatabase extends Database {
 			});
 	}
 
-	public addMigrationFile(num: number) {
-		const timestamp = Date.now();
-		return { sql: 'INSERT INTO migrations (number, created_time, updated_time) VALUES (?, ?, ?)', params: [num, timestamp, timestamp] };
-	}
-
 	public async upgradeDatabase(fromVersion: number) {
 		// INSTRUCTIONS TO UPGRADE THE DATABASE:
 		//
-		// 1. Add the new version number to the existingDatabaseVersions array
-		// 2. Add the upgrade logic to the "switch (targetVersion)" statement below
+		// 1. Add the migration to lib/services/database/migrations.
+		// 2. Import the migration and add it to the `migrations` array above.
 
 		// IMPORTANT:
 		//
@@ -354,7 +360,9 @@ export default class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41];
+
+		for (let i = 0; i < migrations.length; i++) existingDatabaseVersions.push(existingDatabaseVersions[existingDatabaseVersions.length - 1] + 1);
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -378,7 +386,7 @@ export default class JoplinDatabase extends Database {
 			const targetVersion = existingDatabaseVersions[currentVersionIndex + 1];
 			this.logger().info(`Converting database to version ${targetVersion}`);
 
-			let queries: any[] = [];
+			let queries: (SqlQuery|string)[] = [];
 
 			if (targetVersion === 1) {
 				queries = this.wrapQueries(this.sqlStringToLines(structureSql));
@@ -657,7 +665,7 @@ export default class JoplinDatabase extends Database {
 				queries.push(this.sqlStringToLines(newTableSql)[0]);
 
 				queries.push('ALTER TABLE resources ADD COLUMN `size` INT NOT NULL DEFAULT -1');
-				queries.push(this.addMigrationFile(20));
+				queries.push(addMigrationFile(20));
 			}
 
 			if (targetVersion === 21) {
@@ -717,7 +725,7 @@ export default class JoplinDatabase extends Database {
 			}
 
 			if (targetVersion === 27) {
-				queries.push(this.addMigrationFile(27));
+				queries.push(addMigrationFile(27));
 			}
 
 			if (targetVersion === 28) {
@@ -772,7 +780,7 @@ export default class JoplinDatabase extends Database {
 				queries.push('ALTER TABLE tags ADD COLUMN parent_id TEXT NOT NULL DEFAULT ""');
 				// Drop the tag note count view, instead compute note count on the fly
 				// queries.push('DROP VIEW tags_with_note_count');
-				// queries.push(this.addMigrationFile(31));
+				// queries.push(addMigrationFile(31));
 			}
 
 			if (targetVersion === 32) {
@@ -867,7 +875,7 @@ export default class JoplinDatabase extends Database {
 					CREATE TRIGGER notes_after_insert AFTER INSERT ON notes_normalized BEGIN
 						INSERT INTO notes_fts(docid, ${tableFields}) SELECT rowid, ${tableFields} FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
 					END;`);
-				queries.push(this.addMigrationFile(33));
+				queries.push(addMigrationFile(33));
 			}
 
 			if (targetVersion === 34) {
@@ -878,7 +886,7 @@ export default class JoplinDatabase extends Database {
 			if (targetVersion === 35) {
 				queries.push('ALTER TABLE notes_normalized ADD COLUMN todo_due INT NOT NULL DEFAULT 0');
 				queries.push('CREATE INDEX notes_normalized_todo_due ON notes_normalized (todo_due)');
-				queries.push(this.addMigrationFile(35));
+				queries.push(addMigrationFile(35));
 			}
 
 			if (targetVersion === 36) {
@@ -913,15 +921,11 @@ export default class JoplinDatabase extends Database {
 				queries.push('ALTER TABLE `folders` ADD COLUMN icon TEXT NOT NULL DEFAULT ""');
 			}
 
-			if (targetVersion === 42) {
-				queries.push(this.addMigrationFile(42));
-			}
-
-			if (targetVersion === 43) {
-				queries.push('ALTER TABLE `notes` ADD COLUMN `user_data` TEXT NOT NULL DEFAULT ""');
-				queries.push('ALTER TABLE `tags` ADD COLUMN `user_data` TEXT NOT NULL DEFAULT ""');
-				queries.push('ALTER TABLE `folders` ADD COLUMN `user_data` TEXT NOT NULL DEFAULT ""');
-				queries.push('ALTER TABLE `resources` ADD COLUMN `user_data` TEXT NOT NULL DEFAULT ""');
+			if (targetVersion > 41) {
+				const migration = migrations[targetVersion - 42];
+				if (!migration) throw new Error(`No such migration: ${targetVersion}`);
+				const migrationQueries = migration();
+				queries = queries.concat(migrationQueries);
 			}
 
 			const updateVersionQuery = { sql: 'UPDATE version SET version = ?', params: [targetVersion] };

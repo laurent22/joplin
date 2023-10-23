@@ -6,7 +6,7 @@ import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import { MarkupToHtml } from '@joplin/renderer';
-import { ResourceEntity } from '../database/types';
+import { NoteEntity, ResourceEntity } from '../database/types';
 import { contentScriptsToRendererRules } from '../plugins/utils/loadContentScripts';
 import { basename, friendlySafeFilename, rtrimSlashes, dirname } from '../../path-utils';
 import htmlpack from '@joplin/htmlpack';
@@ -48,7 +48,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		this.style_ = themeStyle(Setting.THEME_LIGHT);
 	}
 
-	private async makeDirPath_(item: any, pathPart: string = null) {
+	private async makeDirPath_(item: NoteEntity, pathPart: string = null) {
 		let output = '';
 		while (true) {
 			if (item.type_ === BaseModel.TYPE_FOLDER) {
@@ -64,7 +64,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		}
 	}
 
-	private async processNoteResources_(item: any) {
+	private async processNoteResources_(item: NoteEntity) {
 		const target = this.metadata().target;
 		const linkedResourceIds = await Note.linkedResourceIds(item.body);
 		const relativePath = target === 'directory' ? rtrimSlashes(await this.makeDirPath_(item, '..')) : '';

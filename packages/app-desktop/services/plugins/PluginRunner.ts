@@ -157,7 +157,7 @@ export default class PluginRunner extends BasePluginRunner {
 				const fullPath = `joplin.${message.path}`;
 
 				// Don't log complete HTML code, which can be long, for setHtml calls
-				const debugMappedArgs = fullPath.includes('setHtml') ? '<hidden>' : mappedArgs;
+				const debugMappedArgs = fullPath.includes('setHtml') || fullPath.includes('imaging') ? '<hidden>' : mappedArgs;
 				logger.debug(`Got message (3): ${fullPath}`, debugMappedArgs);
 
 				this.recordCallStat(plugin.id);

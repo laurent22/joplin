@@ -1,5 +1,6 @@
 import { unique } from '@joplin/lib/ArrayUtils';
 import { attributesHtml, isSelfClosingTag } from '@joplin/renderer/htmlUtils';
+import { Translations } from '../../utils/translation';
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 const htmlparser2 = require('@joplin/fork-htmlparser2');
@@ -15,7 +16,7 @@ const trimHtml = (content: string) => {
 		.replace(/\t+$/, '');
 };
 
-const findTranslation = (englishString: string, translations: Record<string, string>): string => {
+const findTranslation = (englishString: string, translations: Translations): string => {
 	const stringsToTry = unique([
 		englishString,
 		englishString.replace(/<br\/>/gi, '<br>'),
@@ -26,7 +27,8 @@ const findTranslation = (englishString: string, translations: Record<string, str
 	]) as string[];
 
 	for (const stringToTry of stringsToTry) {
-		if (translations[stringToTry]) return translations[stringToTry];
+		// Note that we don't currently support plural forms for the website
+		if (translations[stringToTry] && translations[stringToTry].length) return translations[stringToTry][0];
 	}
 
 	return englishString;
@@ -38,7 +40,7 @@ const encodeHtml = (decodedText: string): string => {
 		.replace(/{{&gt; /gi, '{{> '); // Don't break Mustache partials
 };
 
-export default (html: string, _languageCode: string, translations: Record<string, string>) => {
+export default (html: string, _languageCode: string, translations: Translations) => {
 	const output: string[] = [];
 
 	interface State {

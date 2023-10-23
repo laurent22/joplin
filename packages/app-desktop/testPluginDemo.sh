@@ -5,14 +5,22 @@
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 TEMP_PATH=~/src/plugin-tests
-PLUGIN_PATH=~/src/joplin/packages/app-cli/tests/support/plugins/user_data
+NEED_COMPILING=0
+PLUGIN_PATH=~/src/joplin/packages/app-cli/tests/support/plugins/simple
 
-mkdir -p "$TEMP_PATH"
-PLUGIN_NAME=$(echo "$PLUGIN_PATH" | awk -F/ '{print $NF}')
-TEMP_PLUGIN_PATH="$TEMP_PATH/$PLUGIN_NAME" 
+if [[ $NEED_COMPILING == 1 ]]; then
+	mkdir -p "$TEMP_PATH"
+	PLUGIN_NAME=$(echo "$PLUGIN_PATH" | awk -F/ '{print $NF}')
+	TEMP_PLUGIN_PATH="$TEMP_PATH/$PLUGIN_NAME" 
 
-rsync -a --delete "$PLUGIN_PATH/" "$TEMP_PLUGIN_PATH/" 
+	echo "Copying from: $PLUGIN_PATH"
+	echo "To: $TEMP_PLUGIN_PATH"
 
-npm install --prefix="$TEMP_PLUGIN_PATH" && yarn start --dev-plugins "$TEMP_PLUGIN_PATH"
+	rsync -a --delete "$PLUGIN_PATH/" "$TEMP_PLUGIN_PATH/" 
+
+	npm install --prefix="$TEMP_PLUGIN_PATH" && yarn start --dev-plugins "$TEMP_PLUGIN_PATH"
+else
+	yarn start --dev-plugins "$PLUGIN_PATH"
+fi
 
 # Add eg "--profile $HOME/.config/joplindev-desktop-1" to test with a different profile

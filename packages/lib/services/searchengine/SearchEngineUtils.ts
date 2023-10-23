@@ -2,9 +2,17 @@ import SearchEngine from './SearchEngine';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 
+export interface NotesForQueryOptions {
+	fields?: string[];
+	appendWildCards?: boolean;
+}
+
 export default class SearchEngineUtils {
-	public static async notesForQuery(query: string, applyUserSettings: boolean, options: any = null, searchEngine: SearchEngine = null) {
-		if (!options) options = {};
+	public static async notesForQuery(query: string, applyUserSettings: boolean, options: NotesForQueryOptions = null, searchEngine: SearchEngine = null) {
+		options = {
+			appendWildCards: false,
+			...options,
+		};
 
 		if (!searchEngine) {
 			searchEngine = SearchEngine.instance();
@@ -16,7 +24,10 @@ export default class SearchEngineUtils {
 			searchType = SearchEngine.SEARCH_TYPE_BASIC;
 		}
 
-		const results = await searchEngine.search(query, { searchType });
+		const results = await searchEngine.search(query, {
+			searchType,
+			appendWildCards: options.appendWildCards,
+		});
 
 		const noteIds = results.map((n: any) => n.id);
 
@@ -44,7 +55,7 @@ export default class SearchEngineUtils {
 			todoCompletedAutoAdded = true;
 		}
 
-		const previewOptions = { order: [],
+		const previewOptions: any = { order: [],
 			fields: fields,
 			conditions: [`id IN ("${noteIds.join('","')}")`], ...options };
 

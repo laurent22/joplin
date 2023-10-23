@@ -4,11 +4,13 @@ const React = require('react');
 const { useMemo, useState, useEffect } = require('react');
 const MaterialCommunityIcon = require('react-native-vector-icons/MaterialCommunityIcons').default;
 
-import { SearchControl, SearchState, EditorSettings } from './types';
+import { EditorSettings } from './types';
 import { _ } from '@joplin/lib/locale';
 import { BackHandler, TextInput, View, Text, StyleSheet, ViewStyle } from 'react-native';
 import { Theme } from '@joplin/lib/themes/type';
 import CustomButton from '../CustomButton';
+import { SearchState } from '@joplin/editor/types';
+import { SearchControl } from './types';
 
 const buttonSize = 48;
 
@@ -284,7 +286,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 			themeId={themeId}
 			styles={styles}
 			iconName="swap-horizontal"
-			onPress={control.replaceCurrent}
+			onPress={control.replaceNext}
 			title={_('Replace')}
 		/>
 	);

@@ -18,6 +18,7 @@ export interface GitHubRelease {
 	html_url: string;
 	prerelease: boolean;
 	draft: boolean;
+	body: string;
 }
 
 async function insertChangelog(tag: string, changelogPath: string, changelog: string, isPrerelease: boolean, repoTagUrl = '') {
@@ -375,6 +376,22 @@ export async function gitHubLatestRelease_KeepInCaseMicrosoftBreaksTheApiAgain(r
 	}
 }
 
+export const gitHubLatestReleases = async (page: number, perPage: number) => {
+	const response = await fetch(`https://api.github.com/repos/laurent22/joplin/releases?page=${page}&per_page=${perPage}`, {
+		headers: {
+			'Content-Type': 'application/json',
+			'User-Agent': 'Joplin Forum Updater',
+		},
+	});
+
+	if (!response.ok) throw new Error(`Cannot fetch releases: ${response.statusText}`);
+
+	const releases: GitHubRelease[] = await response.json();
+	if (!releases.length) throw new Error('Cannot find latest release');
+
+	return releases;
+};
+
 export async function githubRelease(project: string, tagName: string, options: any = null): Promise<GitHubRelease> {
 	options = { isDraft: false,
 		isPreRelease: false, ...options };
@@ -404,6 +421,12 @@ export async function githubRelease(project: string, tagName: string, options: a
 
 	return responseJson;
 }
+
+export const gitHubLinkify = (markdown: string) => {
+	markdown = markdown.replace(/#(\d+)/g, '[#$1](https://github.com/laurent22/joplin/issues/$1)');
+	markdown = markdown.replace(/\(([a-f0-9]+)\)/g, '([$1](https://github.com/laurent22/joplin/commit/$1))');
+	return markdown;
+};
 
 export function readline(question: string) {
 	return new Promise((resolve) => {

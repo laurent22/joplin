@@ -3,7 +3,7 @@ const { GeolocationReact } = require('./geolocation-react.js');
 const PoorManIntervals = require('@joplin/lib/PoorManIntervals').default;
 const RNFetchBlob = require('rn-fetch-blob').default;
 const { generateSecureRandom } = require('react-native-securerandom');
-const FsDriverRN = require('./fs-driver-rn').default;
+const FsDriverRN = require('./fs-driver/fs-driver-rn').default;
 const { Buffer } = require('buffer');
 const { Linking, Platform } = require('react-native');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
@@ -16,6 +16,7 @@ const { setLocale, defaultLocale, closestSupportedLocale } = require('@joplin/li
 const injectedJs = {
 	webviewLib: require('@joplin/lib/rnInjectedJs/webviewLib'),
 	codeMirrorBundle: require('../lib/rnInjectedJs/CodeMirror.bundle'),
+	svgEditorBundle: require('../lib/rnInjectedJs/createJsDrawEditor.bundle'),
 };
 
 function shimInit() {

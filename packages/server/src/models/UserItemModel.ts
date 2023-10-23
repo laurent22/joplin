@@ -186,6 +186,9 @@ export default class UserItemModel extends BaseModel<UserItem> {
 			for (const userItem of userItems) {
 				const item = items.find(i => i.id === userItem.item_id);
 
+				// The item may have been deleted between the async calls above
+				if (!item) continue;
+
 				if (options.recordChanges && this.models().item().shouldRecordChange(item.name)) {
 					await this.models().change().save({
 						item_type: ItemType.UserItem,

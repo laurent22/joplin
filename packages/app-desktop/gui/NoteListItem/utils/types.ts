@@ -1,3 +1,3 @@
 import * as React from 'react';
 
-export type OnCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>)=> void;
+export type OnInputChange = (event: React.ChangeEvent<HTMLInputElement>)=> void;

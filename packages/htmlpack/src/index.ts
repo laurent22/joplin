@@ -33,8 +33,15 @@ const htmlentities = (s: string): string => {
 };
 
 const dataUriEncode = (filePath: string): string => {
-	const result = Datauri(filePath);
-	return result.content;
+	try {
+		const result = Datauri(filePath);
+		return result.content;
+	} catch (error) {
+		// If the file path is invalid, the Datauri will throw an exception.
+		// Instead, since we can just ignore that particular file.
+		// Fixes https://github.com/laurent22/joplin/issues/8305
+		return '';
+	}
 };
 
 const attributesHtml = (attr: any) => {

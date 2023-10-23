@@ -3,6 +3,7 @@
 
 import { VersionInfo } from './api/types';
 import { Implementation as WindowImplementation } from './api/JoplinWindow';
+import { Implementation as ImagingImplementation } from './api/JoplinImaging';
 
 export interface JoplinViewsDialogs {
 	showMessageBox(message: string): Promise<number>;
@@ -44,6 +45,10 @@ export default class BasePlatformImplementation {
 	}
 
 	public get joplin(): Joplin {
+		throw new Error('Not implemented');
+	}
+
+	public get imaging(): ImagingImplementation {
 		throw new Error('Not implemented');
 	}
 

@@ -271,7 +271,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 				controlComp = (
 					<Datetime
 						ref="editField"
-						defaultValue={value}
+						initialValue={value}
 						dateFormat={time.dateFormat()}
 						timeFormat={time.timeFormat()}
 						inputProps={{

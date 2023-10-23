@@ -374,8 +374,10 @@ export async function dropTables(db: DbConnection): Promise<void> {
 	}
 }
 
-export async function truncateTables(db: DbConnection): Promise<void> {
+export async function truncateTables(db: DbConnection, includedTables: string[] = []): Promise<void> {
 	for (const tableName of allTableNames()) {
+		if (includedTables.length && !includedTables.includes(tableName)) continue;
+
 		try {
 			await db(tableName).truncate();
 		} catch (error) {

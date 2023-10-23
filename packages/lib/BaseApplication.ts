@@ -3,7 +3,7 @@ import Logger, { TargetType, LoggerWrapper } from '@joplin/utils/Logger';
 import shim from './shim';
 const { setupProxySettings } = require('./shim-init-node');
 import BaseService from './services/BaseService';
-import reducer, { setStore } from './reducer';
+import reducer, { getNotesParent, serializeNotesParent, setStore, State } from './reducer';
 import KeychainServiceDriver from './services/keychain/KeychainServiceDriver.node';
 import KeychainServiceDriverDummy from './services/keychain/KeychainServiceDriver.dummy';
 import { _, setLocale } from './locale';
@@ -544,7 +544,7 @@ export default class BaseApplication {
 		let refreshNotesHash = '';
 
 		await reduxSharedMiddleware(store, next, action);
-		const newState = store.getState();
+		const newState = store.getState() as State;
 
 		if (this.hasGui() && ['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
 			if (!(await reg.syncTarget().syncStarted())) void reg.scheduleSync(15 * 1000, { syncSteps: ['update_remote', 'delete_remote'] });
@@ -571,6 +571,10 @@ export default class BaseApplication {
 				refreshNotesUseSelectedNoteId = true;
 				refreshNotesHash = action.hash;
 			}
+		}
+
+		if (['HISTORY_BACKWARD', 'HISTORY_FORWARD', 'FOLDER_SELECT', 'TAG_SELECT', 'SMART_FILTER_SELECT', 'FOLDER_DELETE', 'FOLDER_AND_NOTE_SELECT'].includes(action.type) || (action.type === 'SEARCH_UPDATE' && newState.notesParentType === 'Folder')) {
+			Setting.setValue('notesParent', serializeNotesParent(getNotesParent(newState)));
 		}
 
 		if (this.hasGui() && (action.type === 'NOTE_IS_INSERTING_NOTES' && !action.value)) {

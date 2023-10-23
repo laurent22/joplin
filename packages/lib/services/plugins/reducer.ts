@@ -44,6 +44,7 @@ export interface PluginHtmlContents {
 export interface State {
 	plugins: PluginStates;
 	pluginHtmlContents: PluginHtmlContents;
+	allPluginsStarted: boolean;
 }
 
 export const stateRootKey = 'pluginService';
@@ -51,6 +52,7 @@ export const stateRootKey = 'pluginService';
 export const defaultState: State = {
 	plugins: {},
 	pluginHtmlContents: {},
+	allPluginsStarted: false,
 };
 
 export const utils = {
@@ -160,6 +162,11 @@ const reducer = (draftRoot: Draft<any>, action: any) => {
 		case 'PLUGIN_VIEW_PROP_PUSH':
 
 			(draft.plugins[action.pluginId].views[action.id] as any)[action.name].push(action.value);
+			break;
+
+		case 'PLUGIN_All_STARTED_SET':
+
+			draft.allPluginsStarted = action.value;
 			break;
 
 		case 'PLUGIN_CONTENT_SCRIPTS_ADD': {

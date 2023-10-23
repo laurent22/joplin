@@ -3,7 +3,7 @@ import { filename } from '@joplin/lib/path-utils';
 import * as fs from 'fs-extra';
 import { Partials, TemplateParams } from './types';
 import { headerAnchor } from '@joplin/renderer';
-const MarkdownIt = require('markdown-it');
+import * as MarkdownIt from 'markdown-it';
 
 export async function loadMustachePartials(partialDir: string) {
 	const output: Partials = {};

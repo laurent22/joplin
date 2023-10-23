@@ -1,6 +1,5 @@
-// v0.4.1 - https://github.com/mozilla/readability/commit/28843b6de84447dd6cef04058fda336938e628dc
+// v0.4.4 - https://github.com/mozilla/readability/commit/49d345a455da1f4aa93f8b41e0f50422f9959c7c
 
-/*eslint-env es6:false*/
 /*
  * Copyright (c) 2010 Arc90 Inc
  *
@@ -27,7 +26,7 @@
  * @param {HTMLDocument} doc     The document to parse.
  * @param {Object}       options The options object.
  */
- function Readability(doc, options) {
+function Readability(doc, options) {
 	// In some older versions, people passed a URI as the first argument. Cope:
 	if (options && options.documentElement) {
 	  doc = options;
@@ -56,6 +55,7 @@
 	  return el.innerHTML;
 	};
 	this._disableJSONLD = !!options.disableJSONLD;
+	this._allowedVideoRegex = options.allowedVideoRegex || this.REGEXPS.videos;
   
 	// Start with all flags set
 	this._flags = this.FLAG_STRIP_UNLIKELYS |
@@ -75,12 +75,7 @@
 		return `<${node.localName} ${attrPairs}>`;
 	  };
 	  this.log = function () {
-		if (typeof dump !== "undefined") {
-		  var msg = Array.prototype.map.call(arguments, function(x) {
-			return (x && x.nodeName) ? logNode(x) : x;
-		  }).join(" ");
-		  dump("Reader: (Readability) " + msg + "\n");
-		} else if (typeof console !== "undefined") {
+		if (typeof console !== "undefined") {
 		  let args = Array.from(arguments, arg => {
 			if (arg && arg.nodeType == this.ELEMENT_NODE) {
 			  return logNode(arg);
@@ -89,6 +84,12 @@
 		  });
 		  args.unshift("Reader: (Readability)");
 		  console.log.apply(console, args);
+		} else if (typeof dump !== "undefined") {
+		  /* global dump */
+		  var msg = Array.prototype.map.call(arguments, function(x) {
+			return (x && x.nodeName) ? logNode(x) : x;
+		  }).join(" ");
+		  dump("Reader: (Readability) " + msg + "\n");
 		}
 	  };
 	} else {
@@ -142,6 +143,9 @@
 	  hashUrl: /^#.+/,
 	  srcsetUrl: /(\S+)(\s+[\d.]+[xw])?(\s*(?:,|$))/g,
 	  b64DataUrl: /^data:\s*([^\s;,]+)\s*;\s*base64\s*,/i,
+	  // Commas as used in Latin, Sindhi, Chinese and various other scripts.
+	  // see: https://en.wikipedia.org/wiki/Comma#Comma_variants
+	  commas: /\u002C|\u060C|\uFE50|\uFE10|\uFE11|\u2E41|\u2E34|\u2E32|\uFF0C/g,
 	  // See: https://schema.org/Article
 	  jsonLdArticleTypes: /^Article|AdvertiserContentArticle|NewsArticle|AnalysisNewsArticle|AskPublicNewsArticle|BackgroundNewsArticle|OpinionNewsArticle|ReportageNewsArticle|ReviewNewsArticle|Report|SatiricalArticle|ScholarlyArticle|MedicalScholarlyArticle|SocialMediaPosting|BlogPosting|LiveBlogPosting|DiscussionForumPosting|TechArticle|APIReference$/
 	},
@@ -898,10 +902,21 @@
 		let shouldRemoveTitleHeader = true;
   
 		while (node) {
+  
+		  if (node.tagName === "HTML") {
+			this._articleLang = node.getAttribute("lang");
+		  }
+  
 		  var matchString = node.className + " " + node.id;
   
 		  if (!this._isProbablyVisible(node)) {
 			this.log("Removing hidden node - " + matchString);
+			node = this._removeAndGetNext(node);
+			continue;
+		  }
+  
+		  // User is not able to see elements applied with both "aria-modal = true" and "role = dialog"
+		  if (node.getAttribute("aria-modal") == "true" && node.getAttribute("role") == "dialog") {
 			node = this._removeAndGetNext(node);
 			continue;
 		  }
@@ -1020,7 +1035,7 @@
 		  contentScore += 1;
   
 		  // Add points for any commas within this paragraph.
-		  contentScore += innerText.split(",").length;
+		  contentScore += innerText.split(this.REGEXPS.commas).length;
   
 		  // For every 100 characters in this paragraph, add another point. Up to 3 points.
 		  contentScore += Math.min(Math.floor(innerText.length / 100), 3);
@@ -1359,72 +1374,88 @@
 	_getJSONLD: function (doc) {
 	  var scripts = this._getAllNodesWithTag(doc, ["script"]);
   
-	  var jsonLdElement = this._findNode(scripts, function(el) {
-		return el.getAttribute("type") === "application/ld+json";
-	  });
+	  var metadata;
   
-	  if (jsonLdElement) {
-		try {
-		  // Strip CDATA markers if present
-		  var content = jsonLdElement.textContent.replace(/^\s*<!\[CDATA\[|\]\]>\s*$/g, "");
-		  var parsed = JSON.parse(content);
-		  var metadata = {};
-		  if (
-			!parsed["@context"] ||
-			!parsed["@context"].match(/^https?\:\/\/schema\.org$/)
-		  ) {
-			return metadata;
-		  }
-  
-		  if (!parsed["@type"] && Array.isArray(parsed["@graph"])) {
-			parsed = parsed["@graph"].find(function(it) {
-			  return (it["@type"] || "").match(
-				this.REGEXPS.jsonLdArticleTypes
-			  );
-			});
-		  }
-  
-		  if (
-			!parsed ||
-			!parsed["@type"] ||
-			!parsed["@type"].match(this.REGEXPS.jsonLdArticleTypes)
-		  ) {
-			return metadata;
-		  }
-		  if (typeof parsed.name === "string") {
-			metadata.title = parsed.name.trim();
-		  } else if (typeof parsed.headline === "string") {
-			metadata.title = parsed.headline.trim();
-		  }
-		  if (parsed.author) {
-			if (typeof parsed.author.name === "string") {
-			  metadata.byline = parsed.author.name.trim();
-			} else if (Array.isArray(parsed.author) && parsed.author[0] && typeof parsed.author[0].name === "string") {
-			  metadata.byline = parsed.author
-				.filter(function(author) {
-				  return author && typeof author.name === "string";
-				})
-				.map(function(author) {
-				  return author.name.trim();
-				})
-				.join(", ");
+	  this._forEachNode(scripts, function(jsonLdElement) {
+		if (!metadata && jsonLdElement.getAttribute("type") === "application/ld+json") {
+		  try {
+			// Strip CDATA markers if present
+			var content = jsonLdElement.textContent.replace(/^\s*<!\[CDATA\[|\]\]>\s*$/g, "");
+			var parsed = JSON.parse(content);
+			if (
+			  !parsed["@context"] ||
+			  !parsed["@context"].match(/^https?\:\/\/schema\.org$/)
+			) {
+			  return;
 			}
+  
+			if (!parsed["@type"] && Array.isArray(parsed["@graph"])) {
+			  parsed = parsed["@graph"].find(function(it) {
+				return (it["@type"] || "").match(
+				  this.REGEXPS.jsonLdArticleTypes
+				);
+			  });
+			}
+  
+			if (
+			  !parsed ||
+			  !parsed["@type"] ||
+			  !parsed["@type"].match(this.REGEXPS.jsonLdArticleTypes)
+			) {
+			  return;
+			}
+  
+			metadata = {};
+  
+			if (typeof parsed.name === "string" && typeof parsed.headline === "string" && parsed.name !== parsed.headline) {
+			  // we have both name and headline element in the JSON-LD. They should both be the same but some websites like aktualne.cz
+			  // put their own name into "name" and the article title to "headline" which confuses Readability. So we try to check if either
+			  // "name" or "headline" closely matches the html title, and if so, use that one. If not, then we use "name" by default.
+  
+			  var title = this._getArticleTitle();
+			  var nameMatches = this._textSimilarity(parsed.name, title) > 0.75;
+			  var headlineMatches = this._textSimilarity(parsed.headline, title) > 0.75;
+  
+			  if (headlineMatches && !nameMatches) {
+				metadata.title = parsed.headline;
+			  } else {
+				metadata.title = parsed.name;
+			  }
+			} else if (typeof parsed.name === "string") {
+			  metadata.title = parsed.name.trim();
+			} else if (typeof parsed.headline === "string") {
+			  metadata.title = parsed.headline.trim();
+			}
+			if (parsed.author) {
+			  if (typeof parsed.author.name === "string") {
+				metadata.byline = parsed.author.name.trim();
+			  } else if (Array.isArray(parsed.author) && parsed.author[0] && typeof parsed.author[0].name === "string") {
+				metadata.byline = parsed.author
+				  .filter(function(author) {
+					return author && typeof author.name === "string";
+				  })
+				  .map(function(author) {
+					return author.name.trim();
+				  })
+				  .join(", ");
+			  }
+			}
+			if (typeof parsed.description === "string") {
+			  metadata.excerpt = parsed.description.trim();
+			}
+			if (
+			  parsed.publisher &&
+			  typeof parsed.publisher.name === "string"
+			) {
+			  metadata.siteName = parsed.publisher.name.trim();
+			}
+			return;
+		  } catch (err) {
+			this.log(err.message);
 		  }
-		  if (typeof parsed.description === "string") {
-			metadata.excerpt = parsed.description.trim();
-		  }
-		  if (
-			parsed.publisher &&
-			typeof parsed.publisher.name === "string"
-		  ) {
-			metadata.siteName = parsed.publisher.name.trim();
-		  }
-		  return metadata;
-		} catch (err) {
-		  this.log(err.message);
 		}
-	  }
-	  return {};
+	  });
+	  return metadata ? metadata : {};
 	},
   
 	/**
@@ -1623,12 +1654,7 @@
 	 * @param Element
 	**/
 	_removeScripts: function(doc) {
-	  this._removeNodes(this._getAllNodesWithTag(doc, ["script"]), function(scriptNode) {
-		scriptNode.nodeValue = "";
-		scriptNode.removeAttribute("src");
-		return true;
-	  });
-	  this._removeNodes(this._getAllNodesWithTag(doc, ["noscript"]));
+	  this._removeNodes(this._getAllNodesWithTag(doc, ["script", "noscript"]));
 	},
   
 	/**
@@ -1818,13 +1844,13 @@
 		if (isEmbed) {
 		  // First, check the elements attributes to see if any of them contain youtube or vimeo
 		  for (var i = 0; i < element.attributes.length; i++) {
-			if (this.REGEXPS.videos.test(element.attributes[i].value)) {
+			if (this._allowedVideoRegex.test(element.attributes[i].value)) {
 			  return false;
 			}
 		  }
   
 		  // For embed with <object> tag, check inner HTML as well.
-		  if (element.tagName === "object" && this.REGEXPS.videos.test(element.innerHTML)) {
+		  if (element.tagName === "object" && this._allowedVideoRegex.test(element.innerHTML)) {
 			return false;
 		  }
 		}
@@ -2093,13 +2119,13 @@
 		  for (var i = 0; i < embeds.length; i++) {
 			// If this embed has attribute that matches video regex, don't delete it.
 			for (var j = 0; j < embeds[i].attributes.length; j++) {
-			  if (this.REGEXPS.videos.test(embeds[i].attributes[j].value)) {
+			  if (this._allowedVideoRegex.test(embeds[i].attributes[j].value)) {
 				return false;
 			  }
 			}
   
 			// For embed with <object> tag, check inner HTML as well.
-			if (embeds[i].tagName === "object" && this.REGEXPS.videos.test(embeds[i].innerHTML)) {
+			if (embeds[i].tagName === "object" && this._allowedVideoRegex.test(embeds[i].innerHTML)) {
 			  return false;
 			}
   
@@ -2117,6 +2143,21 @@
 			(!isList && weight < 25 && linkDensity > 0.2) ||
 			(weight >= 25 && linkDensity > 0.5) ||
 			((embedCount === 1 && contentLength < 75) || embedCount > 1);
+		  // Allow simple lists of images to remain in pages
+		  if (isList && haveToRemove) {
+			for (var x = 0; x < node.children.length; x++) {
+			  let child = node.children[x];
+			  // Don't filter in lists with li's that contain more than one child
+			  if (child.children.length > 1) {
+				return haveToRemove;
+			  }
+			}
+			let li_count = node.getElementsByTagName("li").length;
+			// Only allow the list to remain if every li contains an image
+			if (img == li_count) {
+			  return false;
+			}
+		  }
 		  return haveToRemove;
 		}
 		return false;
@@ -2249,6 +2290,7 @@
 		title: this._articleTitle,
 		byline: metadata.byline || this._articleByline,
 		dir: this._articleDir,
+		lang: this._articleLang,
 		content: this._serializer(articleContent),
 		textContent: textContent,
 		length: textContent.length,
@@ -2259,5 +2301,6 @@
   };
   
   if (typeof module === "object") {
+	/* global module */
 	module.exports = Readability;
   }

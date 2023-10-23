@@ -6,7 +6,7 @@ import KvStore from '@joplin/lib/services/KvStore';
 import * as ArrayUtils from '@joplin/lib/ArrayUtils';
 import { CheckForUpdateOptions, extractVersionInfo, GitHubRelease } from './utils/checkForUpdatesUtils';
 const packageInfo = require('./packageInfo.js');
-const compareVersions = require('compare-versions');
+import { compareVersions } from 'compare-versions';
 
 const logger = Logger.create('checkForUpdates');
 

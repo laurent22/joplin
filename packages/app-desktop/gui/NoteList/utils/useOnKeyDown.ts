@@ -6,7 +6,7 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import { useCallback } from 'react';
 import { Dispatch } from 'redux';
 import { FocusNote } from './useFocusNote';
-import { ItemFlow } from './types';
+import { ItemFlow } from '@joplin/lib/services/plugins/api/noteListType';
 import { KeyboardEventKey } from '@joplin/lib/dom';
 
 const useOnKeyDown = (

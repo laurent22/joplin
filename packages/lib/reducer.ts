@@ -8,6 +8,7 @@ import { Store } from 'redux';
 import { ProfileConfig } from './services/profileConfig/types';
 import * as ArrayUtils from './ArrayUtils';
 import { FolderEntity } from './services/database/types';
+import { getListRendererIds } from './services/noteList/renderers';
 const fastDeepEqual = require('fast-deep-equal');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
@@ -98,6 +99,7 @@ export interface State {
 	hasEncryptedItems: boolean;
 	needApiAuth: boolean;
 	profileConfig: ProfileConfig;
+	noteListRendererIds: string[];
 
 	// Extra reducer keys go here:
 	pluginService: PluginServiceState;
@@ -170,6 +172,7 @@ export const defaultState: State = {
 	hasEncryptedItems: false,
 	needApiAuth: false,
 	profileConfig: null,
+	noteListRendererIds: getListRendererIds(),
 
 	pluginService: pluginServiceDefaultState,
 	shareService: shareServiceDefaultState,
@@ -460,6 +463,51 @@ function defaultNotesParentType(draft: Draft<State>, exclusion: string) {
 
 	return newNotesParentType;
 }
+
+export type NotesParentType = 'Folder' | 'Tag' | 'SmartFilter';
+
+export interface NotesParent {
+	type: NotesParentType;
+	selectedItemId: string;
+}
+
+export const serializeNotesParent = (n: NotesParent) => {
+	return JSON.stringify(n);
+};
+
+export const parseNotesParent = (s: string, activeFolderId: string): NotesParent => {
+	const defaultValue: NotesParent = {
+		type: 'Folder',
+		selectedItemId: activeFolderId,
+	};
+
+	if (!s) return defaultValue;
+
+	try {
+		const parsed = JSON.parse(s);
+		return parsed;
+	} catch (error) {
+		return defaultValue;
+	}
+};
+
+export const getNotesParent = (state: State): NotesParent => {
+	let type = state.notesParentType as NotesParentType;
+	let selectedItemId = '';
+
+	if (type === 'Folder') {
+		selectedItemId = state.selectedFolderId;
+	} else if (type === 'Tag') {
+		selectedItemId = state.selectedTagId;
+	} else if (type === 'SmartFilter') {
+		selectedItemId = state.selectedSmartFilterId;
+	} else {
+		type = 'Folder';
+		selectedItemId = state.selectedFolderId;
+	}
+
+	return { type, selectedItemId };
+};
 
 function changeSelectedFolder(draft: Draft<State>, action: any, options: any = null) {
 	if (!options) options = {};
@@ -1157,6 +1205,15 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'PROFILE_CONFIG_SET':
 			draft.profileConfig = action.value;
+			break;
+
+		case 'NOTE_LIST_RENDERER_ADD':
+			{
+				const noteListRendererIds = draft.noteListRendererIds.slice();
+				if (noteListRendererIds.includes(action.value)) throw new Error(`Note list renderer is already registered: ${action.value}`);
+				noteListRendererIds.push(action.value);
+				draft.noteListRendererIds = noteListRendererIds;
+			}
 			break;
 
 		}

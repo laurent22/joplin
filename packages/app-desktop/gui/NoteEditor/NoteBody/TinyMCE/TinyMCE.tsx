@@ -444,9 +444,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			
 
 			.tox .tox-tbtn {
-				width: ${theme.toolbarHeight}px;
 				height: ${theme.toolbarHeight}px;
-				min-width: ${theme.toolbarHeight}px;
 				min-height: ${theme.toolbarHeight}px;
 				margin: 0;
 			}

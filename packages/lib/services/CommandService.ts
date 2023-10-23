@@ -182,7 +182,7 @@ export default class CommandService extends BaseService {
 	public registerDeclaration(declaration: CommandDeclaration) {
 		declaration = { ...declaration };
 		if (!declaration.label) declaration.label = '';
-		if (!declaration.iconName) declaration.iconName = '';
+		if (!declaration.iconName) declaration.iconName = 'fas fa-cog';
 
 		this.commands_[declaration.name] = {
 			declaration: declaration,

@@ -138,6 +138,14 @@
 			} else {
 				applyPeriod('yearly');
 			}
+
+			$('.feature-description').hide();
+
+			$('.feature-title').click((event) => {
+				event.preventDefault();
+				const featureId = event.currentTarget.getAttribute('data-id');
+				$('.feature-description-' + featureId).toggle(200);
+			});
 		});
 	</script>
 </div>

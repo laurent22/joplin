@@ -1,6 +1,7 @@
 import * as fs from 'fs-extra';
 import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from '../markdownUtils';
 import { _ } from '../locale';
+import { htmlentities } from '@joplin/utils/html';
 
 type FeatureId = string;
 
@@ -12,6 +13,7 @@ export enum PlanName {
 
 interface PlanFeature {
 	title: string;
+	description?: string;
 	basic: boolean;
 	pro: boolean;
 	teams: boolean;
@@ -63,6 +65,7 @@ export interface StripePublicConfigPrice {
 export interface StripePublicConfig {
 	publishableKey: string;
 	prices: StripePublicConfigPrice[];
+	archivedPrices: StripePublicConfigPrice[];
 	webhookBaseUrl: string;
 }
 
@@ -84,26 +87,33 @@ export function loadStripeConfig(env: string, filePath: string): StripePublicCon
 	const config: StripePublicConfig = JSON.parse(fs.readFileSync(filePath, 'utf8'))[env];
 	if (!config) throw new Error(`Invalid env: ${env}`);
 
-	config.prices = config.prices.map(p => {
+	const decoratePrices = (p: StripePublicConfigPrice) => {
 		return {
 			...p,
 			formattedAmount: formatPrice(p.amount, p.currency),
 			formattedMonthlyAmount: p.period === PricePeriod.Monthly ? formatPrice(p.amount, p.currency) : formatPrice(Number(p.amount) / 12, p.currency),
 		};
-	});
+	};
+
+	config.prices = config.prices.map(decoratePrices);
+	config.archivedPrices = config.archivedPrices.map(decoratePrices);
 
 	return config;
 }
 
-export function findPrice(prices: StripePublicConfigPrice[], query: FindPriceQuery): StripePublicConfigPrice {
+export function findPrice(config: StripePublicConfig, query: FindPriceQuery): StripePublicConfigPrice {
 	let output: StripePublicConfigPrice = null;
 
-	if (query.accountType && query.period) {
-		output = prices.filter(p => p.accountType === query.accountType).find(p => p.period === query.period);
-	} else if (query.priceId) {
-		output = prices.find(p => p.id === query.priceId);
-	} else {
-		throw new Error(`Invalid query: ${JSON.stringify(query)}`);
+	for (const prices of [config.prices, config.archivedPrices]) {
+		if (query.accountType && query.period) {
+			output = prices.filter(p => p.accountType === query.accountType).find(p => p.period === query.period);
+		} else if (query.priceId) {
+			output = prices.find(p => p.id === query.priceId);
+		} else {
+			throw new Error(`Invalid query: ${JSON.stringify(query)}`);
+		}
+
+		if (output) break;
 	}
 
 	if (!output) throw new Error(`Not found: ${JSON.stringify(query)}`);
@@ -112,6 +122,8 @@ export function findPrice(prices: StripePublicConfigPrice[], query: FindPriceQue
 }
 
 const features = (): Record<FeatureId, PlanFeature> => {
+	const shareNotebookTitle = _('Share a notebook with others');
+
 	return {
 		maxItemSize: {
 			title: _('Max note or attachment size'),
@@ -139,6 +151,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 		},
 		publishNote: {
 			title: _('Publish notes to the internet'),
+			description: 'You can publish a note from the Joplin app. You will get a link that you can share with other users, who can then view the note in their browser.',
 			basic: true,
 			pro: true,
 			teams: true,
@@ -157,18 +170,28 @@ const features = (): Record<FeatureId, PlanFeature> => {
 		},
 		collaborate: {
 			title: _('Collaborate on a notebook with others'),
+			description: _('This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature "%s".', shareNotebookTitle),
 			basic: true,
 			pro: true,
 			teams: true,
 		},
 		share: {
-			title: _('Share a notebook with others'),
+			title: shareNotebookTitle,
+			description: 'You can share a notebook with other Joplin Cloud users, who can then view the notes and edit them.',
 			basic: false,
 			pro: true,
 			teams: true,
 		},
 		emailToNote: {
 			title: _('Email to Note'),
+			description: 'You can save your emails in Joplin Cloud by forwarding your emails to a special email address. The subject of the email will become the note title, and the email body will become the note content.',
+			basic: false,
+			pro: true,
+			teams: true,
+		},
+		customBanner: {
+			title: _('Customise the note publishing banner'),
+			description: 'You can customise the banner that appears on top of your published notes, for example by adding a custom logo and text, and changing the banner colour.',
 			basic: false,
 			pro: true,
 			teams: true,
@@ -185,8 +208,9 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			pro: false,
 			teams: true,
 		},
-		sharingAccessControl: {
-			title: _('Sharing access control'),
+		sharePermissions: {
+			title: _('Share permissions'),
+			description: 'With this feature you can define whether a notebook you share with someone can be edited or is read-only. It can be useful for example to share documentation that you do not want to be modified.',
 			basic: false,
 			pro: false,
 			teams: true,
@@ -225,7 +249,7 @@ export const getFeatureLabelsByPlan = (planName: PlanName, featureOn: boolean): 
 };
 
 export const getAllFeatureIds = (): FeatureId[] => {
-	return Object.keys(features);
+	return Object.keys(features());
 };
 
 export const getFeatureById = (featureId: FeatureId): PlanFeature => {
@@ -235,7 +259,7 @@ export const getFeatureById = (featureId: FeatureId): PlanFeature => {
 export const getFeaturesByPlan = (planName: PlanName, featureOn: boolean): PlanFeature[] => {
 	const output: PlanFeature[] = [];
 
-	for (const [, v] of Object.entries(features)) {
+	for (const [, v] of Object.entries(features())) {
 		if (v[planName] === featureOn) {
 			output.push(v);
 		}
@@ -261,6 +285,7 @@ export const createFeatureTableMd = () => {
 		{
 			name: 'featureLabel',
 			label: 'Feature',
+			disableHtmlEscape: true,
 		},
 		{
 			name: 'basic',
@@ -285,9 +310,20 @@ export const createFeatureTableMd = () => {
 		return '✔️';
 	};
 
-	for (const [, feature] of Object.entries(features())) {
+	const makeFeatureLabel = (featureId: string, feature: PlanFeature) => {
+		const output: string[] = [
+			`${htmlentities(feature.title)}`,
+		];
+		if (feature.description) {
+			output.push(`<a data-id=${htmlentities(featureId)} class="feature-title" name="feature-${htmlentities(featureId)}" href="#feature-${htmlentities(featureId)}">i</a>`);
+			output.push(`<div class="feature-description feature-description-${htmlentities(featureId)}">${htmlentities(feature.description)}</div>`);
+		}
+		return output.join('');
+	};
+
+	for (const [id, feature] of Object.entries(features())) {
 		const row: MarkdownTableRow = {
-			featureLabel: feature.title,
+			featureLabel: makeFeatureLabel(id, feature),
 			basic: getCellInfo(PlanName.Basic, feature),
 			pro: getCellInfo(PlanName.Pro, feature),
 			teams: getCellInfo(PlanName.Teams, feature),
@@ -304,11 +340,11 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 		basic: {
 			name: 'basic',
 			title: _('Basic'),
-			priceMonthly: findPrice(stripeConfig.prices, {
+			priceMonthly: findPrice(stripeConfig, {
 				accountType: 1,
 				period: PricePeriod.Monthly,
 			}),
-			priceYearly: findPrice(stripeConfig.prices, {
+			priceYearly: findPrice(stripeConfig, {
 				accountType: 1,
 				period: PricePeriod.Yearly,
 			}),
@@ -326,11 +362,11 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 		pro: {
 			name: 'pro',
 			title: _('Pro'),
-			priceMonthly: findPrice(stripeConfig.prices, {
+			priceMonthly: findPrice(stripeConfig, {
 				accountType: 2,
 				period: PricePeriod.Monthly,
 			}),
-			priceYearly: findPrice(stripeConfig.prices, {
+			priceYearly: findPrice(stripeConfig, {
 				accountType: 2,
 				period: PricePeriod.Yearly,
 			}),
@@ -348,11 +384,11 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 		teams: {
 			name: 'teams',
 			title: _('Teams'),
-			priceMonthly: findPrice(stripeConfig.prices, {
+			priceMonthly: findPrice(stripeConfig, {
 				accountType: 3,
 				period: PricePeriod.Monthly,
 			}),
-			priceYearly: findPrice(stripeConfig.prices, {
+			priceYearly: findPrice(stripeConfig, {
 				accountType: 3,
 				period: PricePeriod.Yearly,
 			}),

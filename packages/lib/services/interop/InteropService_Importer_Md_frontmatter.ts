@@ -59,9 +59,16 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 		const bodyLines: string[] = [];
 		for (let i = 0; i < lines.length; i++) {
 			const line = lines[i];
+			const nextLine = i + 1 <= lines.length - 1 ? lines[i + 1] : '';
+
 			if (inHeader && line.startsWith('---')) {
 				inHeader = false;
-				i++; // Need to eat the extra newline after the yaml block
+
+				// Need to eat the extra newline after the yaml block. Note that
+				// if the next line is not an empty line, we keep it. Fixes
+				// https://github.com/laurent22/joplin/issues/8802
+				if (nextLine.trim() === '') i++;
+
 				continue;
 			}
 
