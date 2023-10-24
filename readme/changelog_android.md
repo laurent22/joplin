@@ -1,6 +1,6 @@
 # Joplin Android app changelog
 
-## [android-v2.13.3](https://github.com/laurent22/joplin/releases/tag/android-v2.13.3) (Pre-release) - 2023-10-24T15:55:07Z
+## [android-v2.13.4](https://github.com/laurent22/joplin/releases/tag/android-v2.13.4) (Pre-release) - 2023-10-24T18:29:09Z
 
 - Improved: Allow modifying a resource metadata only when synchronising (#9114)
 - Improved: Support for plural translations (#9033)
