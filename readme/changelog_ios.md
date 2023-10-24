@@ -1,6 +1,6 @@
 # Joplin iOS app changelog
 
-## [ios-v12.13.1](https://github.com/laurent22/joplin/releases/tag/ios-v12.13.1) - 2023-10-24T14:50:37Z
+## [ios-v12.13.2](https://github.com/laurent22/joplin/releases/tag/ios-v12.13.2) - 2023-10-24T18:40:49Z
 
 - New: Add share button to log screen (#8364 by Henry Heino)
 - New: Add support for drawing pictures (#7588 by Henry Heino)
