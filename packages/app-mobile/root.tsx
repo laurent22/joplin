@@ -1091,7 +1091,8 @@ class AppComponent extends React.Component {
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
 							</View>
-							<DropdownAlert alert={(func: any) => (this.dropdownAlert_ = func)} />														{ !shouldShowMainContent && <BiometricPopup
+							<DropdownAlert alert={(func: any) => (this.dropdownAlert_ = func)} />
+							{ !shouldShowMainContent && <BiometricPopup
 								dispatch={this.props.dispatch}
 								themeId={this.props.themeId}
 								sensorInfo={this.state.sensorInfo}
