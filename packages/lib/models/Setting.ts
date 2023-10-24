@@ -2640,7 +2640,7 @@ class Setting extends BaseModel {
 			'appearance': _('App theme, editor font'),
 			'sync': _('Sync, encryption, proxy'),
 			'joplinCloud': _('Email To Note, login information'),
-			'markdownPlugins': _('Markdown plugins: Media player, math, footnotes, soft breaks, ...'),
+			'markdownPlugins': _('Media player, math, footnotes, soft breaks, ...'),
 			'note': _('Geolocation, spellcheck, editor toolbar, image resize'),
 			'revisionService': _('Toggle note history, keep notes for...'),
 			'tools': _('Application log, profiles, sync status'),
