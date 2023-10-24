@@ -42,7 +42,6 @@ const SectionSelector: FunctionComponent<Props> = props => {
 			>
 				<Icon
 					name={icon}
-					size={20}
 					style={styles.sidebarIcon}
 				/>
 				<View style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>

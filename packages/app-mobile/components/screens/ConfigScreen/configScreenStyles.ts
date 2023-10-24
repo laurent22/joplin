@@ -88,7 +88,8 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 	const sidebarButtonDescriptionText: TextStyle = {
 		...sidebarButtonMainText,
 		fontSize: theme.fontSizeSmaller,
-		color: theme.colorFaded,
+		color: theme.color,
+		opacity: 0.75,
 	};
 
 
@@ -182,6 +183,7 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 			...sidebarButtonMainText,
 			paddingRight: theme.marginLeft,
 			paddingLeft: theme.marginRight,
+			fontSize: 20,
 		},
 		sidebarSelectedButtonText: {
 			...sidebarButtonMainText,
