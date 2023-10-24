@@ -4692,7 +4692,7 @@ __metadata:
     md5: 2.3.0
     moment: 2.29.4
     mustache: 4.2.0
-    nan: 2.17.0
+    nan: 2.18.0
     node-fetch: 2.6.7
     node-notifier: 10.0.1
     node-rsa: 1.1.1
@@ -25827,7 +25827,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nan@npm:2.17.0, nan@npm:^2.12.1":
+"nan@npm:2.18.0":
+  version: 2.18.0
+  resolution: "nan@npm:2.18.0"
+  dependencies:
+    node-gyp: latest
+  checksum: 4fe42f58456504eab3105c04a5cffb72066b5f22bd45decf33523cb17e7d6abc33cca2a19829407b9000539c5cb25f410312d4dc5b30220167a3594896ea6a0a
+  languageName: node
+  linkType: hard
+
+"nan@npm:^2.12.1":
   version: 2.17.0
   resolution: "nan@npm:2.17.0"
   dependencies:
