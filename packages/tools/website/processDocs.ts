@@ -1,9 +1,11 @@
 import { getRootDir } from '@joplin/utils';
-import { readFile, writeFile } from 'fs/promises';
+import { readFile, readdir, stat, writeFile } from 'fs/promises';
 import * as MarkdownIt from 'markdown-it';
 import { attributesHtml, htmlentities, isSelfClosingTag } from '@joplin/utils/html';
 import { stripOffFrontMatter } from './utils/frontMatter';
 import StateCore = require('markdown-it/lib/rules_core/state_core');
+import { mkdirp } from 'fs-extra';
+import { dirname } from 'path';
 const htmlparser2 = require('@joplin/fork-htmlparser2');
 
 const parseHtml = (html: string) => {
@@ -51,14 +53,23 @@ const parseHtml = (html: string) => {
 	return output.join('');
 };
 
+const escapeForMdx = (s: string): string => {
+	return s
+		.replace(/</g, '&gt;')
+		.replace(/>/g, '&lt;');
+};
+
 const processToken = (token: any, output: string[]): void => {
 	const top = output.length ? output[output.length - 1] : '';
 	let contentProcessed = false;
 
 	if (token.type === 'heading_open') {
 		output.push(`${token.markup} `);
+		output.push('\n\n');
 	} else if (token.type === 'paragraph_open' || token.type === 'paragraph_close') {
 		if (top !== '\n\n') output.push('\n\n');
+	} else if (token.type === 'fence') {
+		output.push(`\`\`\`${token.info || ''}`);
 	} else if (token.type === 'html_block') {
 		contentProcessed = true,
 		output.push(parseHtml(token.content.trim()));
@@ -69,7 +80,11 @@ const processToken = (token: any, output: string[]): void => {
 			processToken(child, output);
 		}
 	} else if (token.content && !contentProcessed) {
-		output.push(token.content);
+		output.push(escapeForMdx(token.content));
+	}
+
+	if (token.type === 'fence') {
+		output.push('\n```');
 	}
 };
 
@@ -88,6 +103,7 @@ const processMarkdownFile = async (sourcePath: string, destPath: string) => {
 		const tokens = state.tokens;
 		for (let i = 0; i < tokens.length; i++) {
 			const token = tokens[i];
+			// if (sourcePath.endsWith('coding_style.md')) console.info(token);
 			processToken(token, output);
 		}
 	});
@@ -97,13 +113,39 @@ const processMarkdownFile = async (sourcePath: string, destPath: string) => {
 	markdownIt.render(processed);
 
 	const destContent = output.join('').trim();
-	await writeFile(destPath, destContent, 'utf-8');
+
+	await mkdirp(dirname(destPath));
+
+	const frontMatter = `---
+sidebar_label: Easy
+---`;
+
+	await writeFile(destPath, `${frontMatter}\n\n${destContent}`, 'utf-8');
+};
+
+const processMarkdownFiles = async (sourceDir: string, destDir: string, excluded: string[]) => {
+	const files = await readdir(sourceDir);
+	for (const file of files) {
+		const fullPath = `${sourceDir}/${file}`;
+		if (excluded.includes(fullPath)) continue;
+
+		const info = await stat(fullPath);
+
+		if (info.isDirectory()) {
+			await processMarkdownFiles(fullPath, `${destDir}/${file}`, excluded);
+		} else {
+			const destPath = `${destDir}/${file}`;
+			await processMarkdownFile(fullPath, destPath);
+		}
+	}
 };
 
 async function main() {
 	const rootDir = await getRootDir();
 	const destDir = `${rootDir}/packages/doc-builder/docs`;
-	await processMarkdownFile(`${rootDir}/readme/news/20210804-085003.md`, `${destDir}/news/20210804-085003.md`);
+
+	await processMarkdownFiles(`${rootDir}/readme`, destDir, [`${rootDir}/readme/download.md`]);
+	// await processMarkdownFile(`${rootDir}/readme/news/20210804-085003.md`, `${destDir}/news/20210804-085003.md`);
 }
 
 main().catch((error) => {

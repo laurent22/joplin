@@ -8,6 +8,9 @@
 .docusaurus
 .cache-loader
 
+# Docs are auto-generated using processDoc.js
+/docs
+
 # Misc
 .DS_Store
 .env.local
