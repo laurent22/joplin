@@ -2641,7 +2641,7 @@ class Setting extends BaseModel {
 			'sync': _('Sync, encryption, proxy'),
 			'joplinCloud': _('Joplin Cloud settings'),
 			'markdownPlugins': _('Markdown plugins: Media player, math, footnotes, soft breaks, ...'),
-			'note': _('Geolocation, spellcheck, markdown toolbar, image resize'),
+			'note': _('Geolocation, spellcheck, editor toolbar, image resize'),
 			'revisionService': _('Enable/disable note history, keep notes for...'),
 			'tools': _('Application log, profiles, sync status'),
 			'export': _('Export all notes'),
