@@ -995,6 +995,7 @@ packages/tools/utils/loadSponsors.js
 packages/tools/utils/translation.js
 packages/tools/website/build.js
 packages/tools/website/buildTranslations.js
+packages/tools/website/processDocs.js
 packages/tools/website/updateDownloadPage.js
 packages/tools/website/updateNews.js
 packages/tools/website/utils/applyTranslations.test.js
