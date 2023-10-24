@@ -72,8 +72,9 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		borderBottomColor: theme.dividerColor,
 	};
 
+	const sidebarButtonHeight = theme.fontSize * 4;
 	const sidebarButton: SidebarButtonStyle = {
-		height: theme.fontSize * 4,
+		height: sidebarButtonHeight,
 		flex: 1,
 		flexDirection: 'row',
 		alignItems: 'center',
@@ -181,9 +182,9 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		sidebarButtonMainText: sidebarButtonMainText,
 		sidebarIcon: {
 			...sidebarButtonMainText,
-			paddingRight: theme.marginLeft,
-			paddingLeft: theme.marginRight,
-			fontSize: 20,
+			textAlign: 'center',
+			fontSize: 18,
+			width: sidebarButtonHeight * 0.8,
 		},
 		sidebarSelectedButtonText: {
 			...sidebarButtonMainText,

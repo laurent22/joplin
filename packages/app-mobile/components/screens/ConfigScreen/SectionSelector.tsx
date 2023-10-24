@@ -5,8 +5,8 @@ import { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { ConfigScreenStyles } from './configScreenStyles';
 import { FlatList, Text, Pressable, View } from 'react-native';
 import { settingsSections } from '@joplin/lib/components/shared/config/config-shared';
-const Icon = require('react-native-vector-icons/MaterialCommunityIcons').default;
 import { _ } from '@joplin/lib/locale';
+import Icon from '../../Icon';
 
 interface Props {
 	styles: ConfigScreenStyles;
