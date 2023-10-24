@@ -316,12 +316,12 @@ function useMenu(props: Props) {
 			bridge().showErrorMessageBox(error.message);
 		}
 
+		void CommandService.instance().execute('hideModalMessage');
+
 		if (errors.length) {
 			bridge().showErrorMessageBox('There was some errors importing the notes. Please check the console for more details.');
 			props.dispatch({ type: 'NOTE_DEVTOOLS_SET', value: true });
 		}
-
-		void CommandService.instance().execute('hideModalMessage');
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.selectedFolderId]);
 
