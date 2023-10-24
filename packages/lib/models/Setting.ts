@@ -2639,7 +2639,7 @@ class Setting extends BaseModel {
 			'general': _('Language, date format'),
 			'appearance': _('App theme, editor font'),
 			'sync': _('Sync, encryption, proxy'),
-			'joplinCloud': _('Joplin Cloud settings'),
+			'joplinCloud': _('Email To Note, login information'),
 			'markdownPlugins': _('Markdown plugins: Media player, math, footnotes, soft breaks, ...'),
 			'note': _('Geolocation, spellcheck, editor toolbar, image resize'),
 			'revisionService': _('Enable/disable note history, keep notes for...'),
