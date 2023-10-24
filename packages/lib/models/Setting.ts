@@ -2642,7 +2642,7 @@ class Setting extends BaseModel {
 			'joplinCloud': _('Email To Note, login information'),
 			'markdownPlugins': _('Markdown plugins: Media player, math, footnotes, soft breaks, ...'),
 			'note': _('Geolocation, spellcheck, editor toolbar, image resize'),
-			'revisionService': _('Enable/disable note history, keep notes for...'),
+			'revisionService': _('Toggle note history, keep notes for...'),
 			'tools': _('Application log, profiles, sync status'),
 			'export': _('Export all notes'),
 			'moreInfo': _('Privacy policy, donate, website'),
