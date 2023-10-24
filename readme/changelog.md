@@ -1,5 +1,18 @@
 # Joplin changelog
 
+## [v2.13.3](https://github.com/laurent22/joplin/releases/tag/v2.13.3) (Pre-release) - 2023-10-24T09:25:33Z
+
+- Improved: Support for plural translations ([#9033](https://github.com/laurent22/joplin/issues/9033))
+- Improved: Update Electron to 25.9.0 ([90832da](https://github.com/laurent22/joplin/commit/90832da))
+- Improved: Updated packages dayjs (v1.11.10), follow-redirects (v1.15.3), glob (v10.3.6), katex (v0.16.9), markdown-it (v13.0.2), react, react-redux (v8.1.3), react-select (v5.7.7), sharp (v0.32.6), tar (v6.2.0)
+- Improved: Use plain text editor in safe mode ([#8750](https://github.com/laurent22/joplin/issues/8750)) ([#8749](https://github.com/laurent22/joplin/issues/8749) by Henry Heino)
+- Fixed: Added Note Properties to Note menu bar items ([#9119](https://github.com/laurent22/joplin/issues/9119)) ([#9108](https://github.com/laurent22/joplin/issues/9108) by [@CptMeetKat](https://github.com/CptMeetKat))
+- Fixed: Beta editor: Allow tab key to insert tabs at cursor rather than indent in some cases ([#9107](https://github.com/laurent22/joplin/issues/9107)) ([#9104](https://github.com/laurent22/joplin/issues/9104) by Henry Heino)
+- Fixed: Fix external links in PDFs break Joplin ([#9094](https://github.com/laurent22/joplin/issues/9094)) ([#9070](https://github.com/laurent22/joplin/issues/9070) by Henry Heino)
+- Fixed: Fix markdown editor context menu not displaying on some devices ([#9030](https://github.com/laurent22/joplin/issues/9030)) ([#8881](https://github.com/laurent22/joplin/issues/8881) by Henry Heino)
+- Fixed: Fixed issues related to sharing notes on read-only notebooks ([1c7d22e](https://github.com/laurent22/joplin/commit/1c7d22e))
+- Fixed: Plugins: Fix building plugins on Windows ([3ac2fe9](https://github.com/laurent22/joplin/commit/3ac2fe9))
+
 ## [v2.12.19](https://github.com/laurent22/joplin/releases/tag/v2.12.19) - 2023-10-21T09:39:18Z
 
 - Security: Update Electron to 25.9.0 ([#9049](https://github.com/laurent22/joplin/issues/9049) by Henry Heino)
