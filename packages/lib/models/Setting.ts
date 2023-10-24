@@ -2644,7 +2644,7 @@ class Setting extends BaseModel {
 			'note': _('Geolocation, spellcheck, editor toolbar, image resize'),
 			'revisionService': _('Toggle note history, keep notes for...'),
 			'tools': _('Application log, profiles, sync status'),
-			'export': _('Export all notes'),
+			'export': _('Export your data'),
 			'moreInfo': _('Privacy policy, donate, website'),
 		};
 
