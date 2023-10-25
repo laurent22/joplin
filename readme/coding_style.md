@@ -430,5 +430,5 @@ We aren't using these guides, but they may still be helpful!
 
  * Forum Post: [Troubleshooting FAQ and collecting topic for contributing to Joplin codebase](https://discourse.joplinapp.org/t/troubleshooting-faq-and-collecting-topic-for-contributing-to-joplin-codebase/6501)
  * Forum Post: [How to style your code](https://discourse.joplinapp.org/t/how-to-style-your-code/6502)
- * GSoC: [GSoC 2022 pull request guidelines](gsoc2022/pull_request_guidelines.md)
+ * GSoC: [GSoC 2022 pull request guidelines](https://github.com/laurent22/joplin/blob/dev/readme/gsoc2022/pull_request_guidelines.md)
  * GitHub: [`.eslintrc.js`](https://github.com/laurent22/joplin/blob/dev/.eslintrc.js)

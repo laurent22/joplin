@@ -9,7 +9,7 @@ You can start with:
 - creating a basic documentation is minimum expectations 
 
 # 2. Idea - introduce and describe a consistent workflow from bug report / feature request to pull request 
-- create [Wizards]() for the Discourse forum 
+- create Wizards for the Discourse forum 
 - create templates at GitHub
 - optimize the bot on GitHub
 - show and may implement how the current Bug Report and Feature Request workflow can be improved using

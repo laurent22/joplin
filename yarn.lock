@@ -6955,6 +6955,7 @@ __metadata:
     sharp: 0.32.6
     source-map-support: 0.5.21
     sqlite3: 5.1.6
+    style-to-js: 1.1.8
     typescript: 5.1.6
     uri-template: 2.0.0
     yargs: 17.7.2
@@ -23656,6 +23657,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"inline-style-parser@npm:0.2.2":
+  version: 0.2.2
+  resolution: "inline-style-parser@npm:0.2.2"
+  checksum: 698893d6542d4e7c0377936a1c7daec34a197765bd77c5599384756a95ce8804e6b79347b783aa591d5e9c6f3d33dae74c6d4cad3a94647eb05f3a785e927a3f
+  languageName: node
+  linkType: hard
+
 "inquirer@npm:^6.2.0":
   version: 6.5.2
   resolution: "inquirer@npm:6.5.2"
@@ -38583,12 +38591,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"style-to-js@npm:1.1.8":
+  version: 1.1.8
+  resolution: "style-to-js@npm:1.1.8"
+  dependencies:
+    style-to-object: 1.0.3
+  checksum: cc4d4284af587bf74559a6da17dadb88c96c8054755666cce1b768615ac2bd6231ce332a8cee118acafb577f51f243b795b716326b3c617ec12151d23f660d8f
+  languageName: node
+  linkType: hard
+
 "style-to-object@npm:0.3.0, style-to-object@npm:^0.3.0":
   version: 0.3.0
   resolution: "style-to-object@npm:0.3.0"
   dependencies:
     inline-style-parser: 0.1.1
   checksum: 4d7084015207f2a606dfc10c29cb5ba569f2fe8005551df7396110dd694d6ff650f2debafa95bd5d147dfb4ca50f57868e2a7f91bf5d11ef734fe7ccbd7abf59
+  languageName: node
+  linkType: hard
+
+"style-to-object@npm:1.0.3":
+  version: 1.0.3
+  resolution: "style-to-object@npm:1.0.3"
+  dependencies:
+    inline-style-parser: 0.2.2
+  checksum: fca6b35dc704656163c4b11d514ada9f9998fb434c9cec5995445d7d7d595ba3a4fda0476016d625cbb282d43ba5123ef0b5871d855d391400bb0dc2c2beeae1
   languageName: node
   linkType: hard
 
