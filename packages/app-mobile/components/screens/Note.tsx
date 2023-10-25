@@ -814,12 +814,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	private drawPicture_onPress = async () => {
 		// Create a new empty drawing and attach it now.
 		const resource = await this.attachNewDrawing('');
-
-		this.setState({
-			showImageEditor: true,
-			loadImageEditorData: null,
-			imageEditorResource: resource,
-		});
+		await this.editDrawing(resource);
 	};
 
 	private async updateDrawing(svgData: string) {
