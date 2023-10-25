@@ -1,5 +1,15 @@
 # Joplin Android app changelog
 
+## [android-v2.13.4](https://github.com/laurent22/joplin/releases/tag/android-v2.13.4) (Pre-release) - 2023-10-24T18:29:09Z
+
+- Improved: Allow modifying a resource metadata only when synchronising (#9114)
+- Improved: Support for plural translations (#9033)
+- Improved: Updated packages @react-native-community/datetimepicker (v7.5.0), @react-native-community/geolocation (v3.1.0), @testing-library/react-native (v12.3.0), dayjs (v1.11.10), follow-redirects (v1.15.3), glob (v10.3.6), katex (v0.16.9), markdown-it (v13.0.2), react, react-native-device-info (v10.9.0), react-native-dropdownalert (v5), react-native-image-picker (v5.7.0), react-native-paper (v5.10.6), react-native-share (v9.4.1), react-native-webview (v13.6.0), react-native-zip-archive (v6.1.0), react-redux (v8.1.3), sass (v1.67.0), sharp (v0.32.6), tar (v6.2.0)
+- Fixed: Fix sidebar folder icon (cd55a9a)
+- Fixed: Fix writing UTF-8 data to a file replaces non-ASCII characters with ?s (#9076) (#9069 by Henry Heino)
+- Fixed: Fixed issues related to sharing notes on read-only notebooks (1c7d22e)
+- Fixed: Improve list toggle logic (#9103) (#9066 by Henry Heino)
+
 ## [android-v2.13.2](https://github.com/laurent22/joplin/releases/tag/android-v2.13.2) (Pre-release) - 2023-10-07T16:42:16Z
 
 - New: Add share button to log screen (#8364 by Henry Heino)
