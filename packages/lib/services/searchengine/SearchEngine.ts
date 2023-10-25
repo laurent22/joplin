@@ -29,7 +29,8 @@ interface SearchOptions {
 	appendWildCards?: boolean;
 }
 
-interface ProcessResultsRow {
+export interface ProcessResultsRow {
+	id: string;
 	offsets: string;
 	user_updated_time: number;
 	matchinfo: Buffer;
@@ -612,7 +613,7 @@ export default class SearchEngine {
 		return SearchEngine.SEARCH_TYPE_FTS;
 	}
 
-	public async search(searchString: string, options: SearchOptions = null) {
+	public async search(searchString: string, options: SearchOptions = null): Promise<ProcessResultsRow[]> {
 		if (!searchString) return [];
 
 		options = {
@@ -627,7 +628,6 @@ export default class SearchEngine {
 		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
 			searchString = this.normalizeText_(searchString);
 			const rows = await this.basicSearch(searchString);
-
 			this.processResults_(rows, parsedQuery, true);
 			return rows;
 		} else {
@@ -654,8 +654,8 @@ export default class SearchEngine {
 			const useFts = searchType === SearchEngine.SEARCH_TYPE_FTS;
 			try {
 				const { query, params } = queryBuilder(parsedQuery.allTerms, useFts);
-				const rows = await this.db().selectAll(query, params);
-				this.processResults_(rows as ProcessResultsRow[], parsedQuery, !useFts);
+				const rows = (await this.db().selectAll(query, params)) as ProcessResultsRow[];
+				this.processResults_(rows, parsedQuery, !useFts);
 				return rows;
 			} catch (error) {
 				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);
