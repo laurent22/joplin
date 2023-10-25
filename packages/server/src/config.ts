@@ -1,5 +1,5 @@
 import { rtrimSlashes } from '@joplin/lib/path-utils';
-import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, RouteType, StripeConfig } from './utils/types';
+import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, LdapConfig, RouteType, StripeConfig } from './utils/types';
 import * as pathUtils from 'path';
 import { loadStripeConfig, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
 import { EnvVariables } from './env';
@@ -111,6 +111,32 @@ function baseUrlFromEnv(env: EnvVariables, appPort: number): string {
 	}
 }
 
+function ldapConfigFromEnv(env: EnvVariables, serverNumber: number): LdapConfig {
+	if (serverNumber === 1) {
+		return {
+			enabled: env.LDAP_1_ENABLED,
+			userCreation: env.LDAP_1_CREATE_USER,
+			host: env.LDAP_1_SERVER,
+			mailAttribute: env.LDAP_1_MAIL_ATTRIBUTE,
+			fullNameAttribute: env.LDAP_1_FULLNAME_ATTRIBUTE,
+			baseDN: env.LDAP_1_BASE_DN,
+			bindDN: env.LDAP_1_BIND_DN,
+			bindPW: env.LDAP_1_BIND_PW,
+		};
+	} else {
+		return {
+			enabled: env.LDAP_2_ENABLED,
+			userCreation: env.LDAP_2_CREATE_USER,
+			host: env.LDAP_2_SERVER,
+			mailAttribute: env.LDAP_2_MAIL_ATTRIBUTE,
+			fullNameAttribute: env.LDAP_2_FULLNAME_ATTRIBUTE,
+			baseDN: env.LDAP_2_BASE_DN,
+			bindDN: env.LDAP_2_BIND_DN,
+			bindPW: env.LDAP_2_BIND_PW,
+		};
+	}
+}
+
 let config_: Config = null;
 
 export async function initConfig(envType: Env, env: EnvVariables, overrides: any = null) {
@@ -159,6 +185,8 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		storageDriverFallback: parseStorageDriverConnectionString(env.STORAGE_DRIVER_FALLBACK),
 		itemSizeHardLimit: 250000000, // Beyond this the Postgres driver will crash the app
 		maxTimeDrift: env.MAX_TIME_DRIFT,
+		ldap_1: ldapConfigFromEnv(env, 1),
+		ldap_2: ldapConfigFromEnv(env, 2),
 		...overrides,
 	};
 }

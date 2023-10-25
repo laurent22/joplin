@@ -28,6 +28,8 @@ import changeEmailNotificationTemplate from '../views/emails/changeEmailNotifica
 import { NotificationKey } from './NotificationModel';
 import prettyBytes = require('pretty-bytes');
 import { Env } from '../utils/types';
+import config from '../config';
+import ldapLogin from '../utils/ldap';
 
 const logger = Logger.create('UserModel');
 
@@ -124,6 +126,33 @@ export default class UserModel extends BaseModel<User> {
 
 	public async login(email: string, password: string): Promise<User> {
 		const user = await this.loadByEmail(email);
+
+		if (config().ldap_1.enabled) {
+			const ldapUser = await ldapLogin(email, password, user, 1);
+			if (ldapUser && !user) {
+				const savedUser: User = await this.save(ldapUser, { skipValidation: true });
+				logger.info('return user - savedUser');
+				return savedUser;
+			}
+			if (ldapUser && user) {
+				logger.info('return user - ldap&user');
+				return ldapUser;
+			}
+		}
+
+		if (config().ldap_2.enabled) {
+			const ldapUser = await ldapLogin(email, password, user, 2);
+			if (ldapUser && !user) {
+				const savedUser: User = await this.save(ldapUser, { skipValidation: true });
+				logger.info('return user - savedUser');
+				return savedUser;
+			}
+			if (ldapUser && user) {
+				logger.info('return user - ldap&user');
+				return user;
+			}
+		}
+
 		if (!user) return null;
 		if (!(await checkPassword(password, user.password))) return null;
 		return user;
@@ -530,8 +559,8 @@ export default class UserModel extends BaseModel<User> {
 				void this.whereRaw('total_item_size > ? AND account_type = ?', [basicDefaultLimit1, AccountType.Basic])
 					.orWhereRaw('total_item_size > ? AND account_type = ?', [proDefaultLimit1, AccountType.Pro]);
 			})
-			// Users who are disabled or who cannot upload already received the
-			// notification.
+		// Users who are disabled or who cannot upload already received the
+		// notification.
 			.andWhere('enabled', '=', 1)
 			.andWhere('can_upload', '=', 1);
 
