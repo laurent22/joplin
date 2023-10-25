@@ -309,6 +309,7 @@ Deletes the folder with ID :id
 | share_id | text  |       |
 | master_key_id | text  |       |
 | user_data | text  |       |
+| blob_updated_time | int   |       |
 
 ## GET /resources
 
