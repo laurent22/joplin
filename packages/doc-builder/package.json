@@ -1,11 +1,12 @@
 {
-  "name": "website",
+  "name": "@joplin/doc-builder",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
-    "build": "docusaurus build",
+    "_build": "docusaurus build",
+    "build": "",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
