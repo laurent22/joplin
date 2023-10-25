@@ -5,7 +5,6 @@ import { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { ConfigScreenStyles } from './configScreenStyles';
 import { FlatList, Text, Pressable, View } from 'react-native';
 import { settingsSections } from '@joplin/lib/components/shared/config/config-shared';
-import { _ } from '@joplin/lib/locale';
 import Icon from '../../Icon';
 
 interface Props {
@@ -36,12 +35,14 @@ const SectionSelector: FunctionComponent<Props> = props => {
 		return (
 			<Pressable
 				key={section.name}
-				accessibilityLabel={ selected ? _('Selected: %s', label) : undefined }
+				role='tab'
+				aria-selected={selected}
 				onPress={() => props.openSection(section.name)}
 				style={selected ? styles.selectedSidebarButton : styles.sidebarButton}
 			>
 				<Icon
 					name={icon}
+					accessibilityLabel={null}
 					style={styles.sidebarIcon}
 				/>
 				<View style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
@@ -84,6 +85,7 @@ const SectionSelector: FunctionComponent<Props> = props => {
 	return (
 		<View style={{ width: props.width, flexDirection: 'column' }}>
 			<FlatList
+				role='tablist'
 				ref={setFlatListRef}
 				data={sections}
 				renderItem={onRenderButton}
