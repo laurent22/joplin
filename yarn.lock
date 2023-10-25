@@ -6563,6 +6563,21 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@joplin/doc-builder@workspace:packages/doc-builder":
+  version: 0.0.0-use.local
+  resolution: "@joplin/doc-builder@workspace:packages/doc-builder"
+  dependencies:
+    "@docusaurus/core": 2.4.3
+    "@docusaurus/module-type-aliases": 2.4.3
+    "@docusaurus/preset-classic": 2.4.3
+    "@mdx-js/react": ^1.6.22
+    clsx: ^1.2.1
+    prism-react-renderer: ^1.3.5
+    react: ^17.0.2
+    react-dom: ^17.0.2
+  languageName: unknown
+  linkType: soft
+
 "@joplin/editor@workspace:packages/editor, @joplin/editor@~2.13":
   version: 0.0.0-use.local
   resolution: "@joplin/editor@workspace:packages/editor"
@@ -42011,21 +42026,6 @@ __metadata:
   checksum: 214a734b1d4d391eb8271ed1b11085f0efe6831e93f641229b292abfd6fea871422dce121612511c17ae8047522be6d65c1a2666cabb396c79549816a3612338
   languageName: node
   linkType: hard
-
-"website@workspace:packages/doc-builder":
-  version: 0.0.0-use.local
-  resolution: "website@workspace:packages/doc-builder"
-  dependencies:
-    "@docusaurus/core": 2.4.3
-    "@docusaurus/module-type-aliases": 2.4.3
-    "@docusaurus/preset-classic": 2.4.3
-    "@mdx-js/react": ^1.6.22
-    clsx: ^1.2.1
-    prism-react-renderer: ^1.3.5
-    react: ^17.0.2
-    react-dom: ^17.0.2
-  languageName: unknown
-  linkType: soft
 
 "websocket-driver@npm:>=0.5.1, websocket-driver@npm:^0.7.4":
   version: 0.7.4
