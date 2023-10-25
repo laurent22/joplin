@@ -72,7 +72,7 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		borderBottomColor: theme.dividerColor,
 	};
 
-	const sidebarButtonHeight = theme.fontSize * 4;
+	const sidebarButtonHeight = theme.fontSize * 4 + 5;
 	const sidebarButton: SidebarButtonStyle = {
 		height: sidebarButtonHeight,
 		flex: 1,
