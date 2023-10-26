@@ -176,8 +176,7 @@ export interface Config extends EnvVariables {
 	storageDriverFallback: StorageDriverConfig;
 	itemSizeHardLimit: number;
 	maxTimeDrift: number;
-	ldap_1: LdapConfig;
-	ldap_2: LdapConfig;
+	ldap: LdapConfig[];
 }
 
 export enum HttpMethod {

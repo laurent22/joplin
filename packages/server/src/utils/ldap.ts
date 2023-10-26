@@ -1,21 +1,21 @@
-import config from '../config';
 import { Client } from 'ldapts';
 import { User } from '../services/database/types';
 import Logger from '@joplin/utils/Logger';
+import { LdapConfig } from './types';
 
-export default async function ldapLogin(email: string, password: string, user: User, serverNumber: number): Promise<User> {
+export default async function ldapLogin(email: string, password: string, user: User, config: LdapConfig): Promise<User> {
 	const logger = Logger.create('LDAP');
 
-	const enabled = serverNumber === 1 ? config().ldap_1.enabled : config().ldap_2.enabled;
-	const userCreation = serverNumber === 1 ? config().ldap_1.userCreation : config().ldap_2.userCreation;
-	const host = serverNumber === 1 ? config().ldap_1.host : config().ldap_2.host;
-	const mailAttribute = serverNumber === 1 ? config().ldap_1.mailAttribute : config().ldap_2.mailAttribute;
-	const fullNameAttribute = serverNumber === 1 ? config().ldap_1.fullNameAttribute : config().ldap_2.fullNameAttribute;
-	const baseDN = serverNumber === 1 ? config().ldap_1.baseDN : config().ldap_2.baseDN;
-	const bindDN = serverNumber === 1 ? config().ldap_1.bindDN : config().ldap_2.bindDN;
-	const bindPW = serverNumber === 1 ? config().ldap_1.bindPW : config().ldap_2.bindPW;
+	const enabled = config.enabled;
+	const userCreation = config.userCreation;
+	const host = config.host;
+	const mailAttribute = config.mailAttribute;
+	const fullNameAttribute = config.fullNameAttribute;
+	const baseDN = config.baseDN;
+	const bindDN = config.bindDN;
+	const bindPW = config.bindPW;
 
-	logger.info(`Starting authentication with Server ${serverNumber}`);
+	logger.info(`Starting authentication with Server ${host}`);
 
 	if (password === '') {
 		logger.error('no password entered');
@@ -44,7 +44,7 @@ export default async function ldapLogin(email: string, password: string, user: U
 				attributes: ['dn', fullNameAttribute],
 			});
 		} catch (ex) {
-			logger.error(`Could not search ldap server ${serverNumber}`);
+			logger.error(`Could not search ldap server ${host}`);
 			return null;
 		}
 

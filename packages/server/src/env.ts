@@ -127,6 +127,7 @@ const defaultEnvValues: EnvVariables = {
 	LDAP_2_BASE_DN: '',
 	LDAP_2_BIND_DN: '', // used for user search - leave empty if ldap server allows anonymous bind
 	LDAP_2_BIND_PW: '', // used for user search - leave empty if ldap server allows anonymous bind
+
 };
 
 export interface EnvVariables {
