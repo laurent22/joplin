@@ -1,11 +1,7 @@
 import OneDriveApi from './onedrive-api';
 import mockNetworkRequests, { HttpMethod } from './testing/mockNetworkRequests';
 
-const networkRequestMock = mockNetworkRequests()
-
-afterEach(() => {
-	networkRequestMock.reset();
-});
+const networkRequestMock = mockNetworkRequests();
 
 const makeOneDriveApi = () => {
 	return new OneDriveApi(
@@ -16,22 +12,24 @@ const makeOneDriveApi = () => {
 };
 
 describe('onedrive-api', () => {
+	beforeEach(() => {
+		networkRequestMock.reset();
+	});
+
 	test('should wait to retry on activityLimitReached error', async () => {
 		const graphUrlPattern = /^https:\/\/graph.microsoft.com\/v1\.0\/([^/]+):\/(.*)$/;
 		let lastPath: string|null = null;
-		let lastBody: string|null = null;
 		let timesCalled = 0;
-		
+
 		const acceptAfter = Date.now() + 2000;
 
-		networkRequestMock.mockRequest(graphUrlPattern, HttpMethod.Get, async (urlMatch, body, _headers) => {
+		networkRequestMock.mockRequest(graphUrlPattern, HttpMethod.Get, async (urlMatch, _body, _headers) => {
 			lastPath = urlMatch[1];
-			lastBody = body;
 			timesCalled ++;
 
 			if (acceptAfter && acceptAfter < Date.now()) {
 				return new Response(JSON.stringify({
-					soomeKey: 'Success!',
+					someKey: 'Success!',
 					note: 'This isn\'t what OneDrive would actually return in the case of success.',
 				}), {
 					status: 200,
@@ -61,5 +59,6 @@ describe('onedrive-api', () => {
 		const response: Response = await api.exec('GET', 'info.json:/content', null, null, {});
 		expect(timesCalled).toBe(2);
 		expect(await response.text()).toContain('Success!');
+		expect(lastPath).toBe('info.json');
 	});
 });

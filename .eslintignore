@@ -887,7 +887,6 @@ packages/lib/services/synchronizer/utils/syncDeleteStep.js
 packages/lib/services/synchronizer/utils/types.js
 packages/lib/shim.js
 packages/lib/testing/mockNetworkRequests.js
-packages/lib/testing/onDevice/runFsDriverTests.js
 packages/lib/testing/syncTargetUtils.js
 packages/lib/testing/test-utils-synchronizer.js
 packages/lib/testing/test-utils.js

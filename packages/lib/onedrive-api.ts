@@ -348,7 +348,7 @@ export default class OneDriveApi {
 					// Relavent Microsoft Docs: https://docs.microsoft.com/en-us/sharepoint/dev/general-development/how-to-avoid-getting-throttled-or-blocked-in-sharepoint-online#best-practices-to-handle-throttling
 					// Decrement retry count as multiple sync threads will cause repeated throttling errors - this will wait until throttling is resolved to continue, preventing a hard stop on the sync
 					i--;
-					
+
 					const retryAfter = response.headers?.get?.('retry-after') ?? 1;
 					let sleepSeconds = parseFloat(retryAfter);
 

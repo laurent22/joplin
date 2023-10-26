@@ -14,7 +14,7 @@ export enum HttpMethod {
 
 export type OnRequestCallback = (
 	urlMatch: RegExpMatchArray, body: string, headers: Record<string, string>
-)=>Promise<Response>;
+)=> Promise<Response>;
 
 export interface NetworkRequestControl {
 	reset(): void;
@@ -57,7 +57,7 @@ const mockNetworkRequests = (): NetworkRequestControl => {
 
 		if (match === null || handlingMock === null) {
 			console.warn('Request for unhandled URL', url);
-			return new Response('No handler registered', { status: 404, });
+			return new Response('No handler registered', { status: 404 });
 		} else {
 			return handlingMock.handler(match, options.body, options.headers);
 		}
@@ -78,8 +78,8 @@ const mockNetworkRequests = (): NetworkRequestControl => {
 			requestMocks.push({
 				urlPattern, method, handler: createResponse,
 			});
-		}
-	}
+		},
+	};
 };
 
 export default mockNetworkRequests;
