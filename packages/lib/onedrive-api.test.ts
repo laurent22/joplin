@@ -21,7 +21,8 @@ describe('onedrive-api', () => {
 		let lastPath: string|null = null;
 		let timesCalled = 0;
 
-		const acceptAfter = Date.now() + 2000;
+		const retryDelay = 2000;
+		const acceptAfter = Date.now() + retryDelay;
 
 		networkRequestMock.mockRequest(graphUrlPattern, HttpMethod.Get, async (urlMatch, _body, _headers) => {
 			lastPath = urlMatch[1];
@@ -42,7 +43,7 @@ describe('onedrive-api', () => {
 				};
 				const headers = {
 					// Retry after 2 seconds
-					'retry-after': '2',
+					'retry-after': `${retryDelay / 1000}`,
 				};
 
 				return new Response(JSON.stringify({ error }), {
