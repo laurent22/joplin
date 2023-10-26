@@ -9,13 +9,12 @@ import styled from 'styled-components';
 
 const StyledRoot = styled.div`
 	display: flex;
-	flex-direction: row;
-	align-items: center;
+	flex-direction: column;
 	padding-left: ${props => props.theme.editorPaddingLeft}px;
 
 	@media (max-width: 800px) {
 		flex-direction: column;
-		align-items: flex-start;
+		width: 100%;
 	}
 `;
 
@@ -23,9 +22,10 @@ const InfoGroup = styled.div`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	justify-content: space-between;
 
 	@media (max-width: 800px) {
-		border-top: 1px solid ${props => props.theme.dividerColor};
+		flex-direction: row;
 		width: 100%;
 	}
 `;
@@ -47,6 +47,8 @@ function styles_(props: Props) {
 			titleInput: {
 				flex: 1,
 				display: 'inline-block',
+				flexDirection: 'row',
+				alignItems: 'flex-start',
 				paddingTop: 5,
 				minHeight: 38,
 				boxSizing: 'border-box',
@@ -59,6 +61,7 @@ function styles_(props: Props) {
 				backgroundColor: theme.backgroundColor,
 				border: 'none',
 				width: '100%',
+				textAlign: 'left',
 			},
 
 			titleDate: {
@@ -105,6 +108,10 @@ export default function NoteTitleBar(props: Props) {
 
 	return (
 		<StyledRoot>
+			<InfoGroup>
+				{renderTitleBarDate()}
+				{renderNoteToolbar()}
+			</InfoGroup>
 			<input
 				className="title-input"
 				type="text"
@@ -116,10 +123,6 @@ export default function NoteTitleBar(props: Props) {
 				onKeyDown={onTitleKeydown}
 				value={props.noteTitle}
 			/>
-			<InfoGroup>
-				{renderTitleBarDate()}
-				{renderNoteToolbar()}
-			</InfoGroup>
 		</StyledRoot>
 	);
 }

@@ -47,6 +47,7 @@ import { ErrorCode } from '@joplin/lib/errors';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import CodeMirror6 from './NoteBody/CodeMirror/v6/CodeMirror';
 import CodeMirror5 from './NoteBody/CodeMirror/v5/CodeMirror';
+import path = require('path');
 
 const commands = [
 	require('./commands/showRevisions'),
@@ -119,7 +120,7 @@ function NoteEditor(props: NoteEditorProps) {
 		const makeAction = (formNote: FormNote) => {
 			return async function() {
 				const note = await formNoteToNote(formNote);
-				reg.logger().debug('Saving note...', note);
+				reg.logger().debug('Saving note on schedule...', note);
 				const savedNote: any = await Note.save(note);
 
 				setFormNote((prev: FormNote) => {
@@ -211,6 +212,10 @@ function NoteEditor(props: NoteEditorProps) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [formNote.id, previousNoteId]);
 
+	// let prevValue: string = '';
+	const prevValueRef = useRef<string>();
+	const prevFieldRef = useRef<string>();
+
 	const onFieldChange = useCallback((field: string, value: any, changeId = 0) => {
 		if (!isMountedRef.current) {
 			// When the component is unmounted, various actions can happen which can
@@ -223,12 +228,19 @@ function NoteEditor(props: NoteEditorProps) {
 
 		handleProvisionalFlag();
 
+		// reg.logger().debug('onFieldChange...', value, '\n', prevValueRef.current);
+		const vDiff = value.replace(prevValueRef.current, '');
+		prevValueRef.current = value;
+		const fieldChanged = field !== prevFieldRef.current && prevFieldRef.current !== null;
+		prevFieldRef.current = field;
+
 		const change = field === 'body' ? {
 			body: value,
 		} : {
 			title: value,
 		};
 
+		reg.logger().debug('onFieldChange: save note');
 		const newNote = {
 			...formNote,
 			...change,
@@ -250,8 +262,11 @@ function NoteEditor(props: NoteEditorProps) {
 			// Note was changed, but another note was loaded before save - skipping
 			// The previously loaded note, that was modified, will be saved via saveNoteIfWillChange()
 		} else {
+			if (newNote.title.indexOf(path.sep) >= 0) {
+				newNote.title = newNote.title.replace(new RegExp(path.sep, 'g'), ' ');
+			}
 			setFormNote(newNote);
-			scheduleSaveNote(newNote);
+			if (vDiff.indexOf('\n') >= 0 || fieldChanged) scheduleSaveNote(newNote);
 		}
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [handleProvisionalFlag, formNote, isNewNote, titleHasBeenManuallyChanged]);
@@ -461,11 +476,11 @@ function NoteEditor(props: NoteEditorProps) {
 	let editor = null;
 
 	if (props.bodyEditor === 'TinyMCE') {
-		editor = <TinyMCE {...editorProps}/>;
+		editor = <TinyMCE {...editorProps} />;
 	} else if (props.bodyEditor === 'CodeMirror') {
-		editor = <CodeMirror5 {...editorProps}/>;
+		editor = <CodeMirror5 {...editorProps} />;
 	} else if (props.bodyEditor === 'CodeMirror6') {
-		editor = <CodeMirror6 {...editorProps}/>;
+		editor = <CodeMirror6 {...editorProps} />;
 	} else {
 		throw new Error(`Invalid editor: ${props.bodyEditor}`);
 	}

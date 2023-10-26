@@ -180,7 +180,7 @@ const NoteList = (props: Props) => {
 
 	const renderEmptyList = () => {
 		if (props.notes.length) return null;
-		return <div className="emptylist">{props.folders.length ? _('No notes in here. Create one by clicking on "New note".') : _('There is currently no notebook. Create one by clicking on "New notebook".')}</div>;
+		return <div className="emptylist">{props.folders.length ? _('No notes in here. Create one by clicking on "Note".') : _('There is currently no notebook. Create one by clicking on "New notebook".')}</div>;
 	};
 
 	const renderFiller = (key: string, style: React.CSSProperties) => {

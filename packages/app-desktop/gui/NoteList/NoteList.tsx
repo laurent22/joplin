@@ -521,7 +521,7 @@ const NoteListComponent = (props: Props) => {
 			backgroundColor: theme.backgroundColor,
 			fontFamily: theme.fontFamily,
 		};
-		return <div style={emptyDivStyle}>{props.folders.length ? _('No notes in here. Create one by clicking on "New note".') : _('There is currently no notebook. Create one by clicking on "New notebook".')}</div>;
+		return <div style={emptyDivStyle}>{props.folders.length ? _('No notes in here. Create one by clicking on "Note".') : _('There is currently no notebook. Create one by clicking on "New notebook".')}</div>;
 	};
 
 	const renderItemList = () => {

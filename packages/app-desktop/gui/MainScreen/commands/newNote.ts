@@ -5,7 +5,7 @@ import Note from '@joplin/lib/models/Note';
 
 export const declaration: CommandDeclaration = {
 	name: 'newNote',
-	label: () => _('New note'),
+	label: () => _('Note'),
 	iconName: 'fa-file',
 };
 
@@ -17,9 +17,11 @@ export const runtime = (): CommandRuntime => {
 
 			const defaultValues = Note.previewFieldsWithDefaultValues({ includeTimestamps: false });
 
-			let newNote = { ...defaultValues, parent_id: folderId,
+			let newNote = {
+				...defaultValues, parent_id: folderId,
 				is_todo: isTodo ? 1 : 0,
-				body: body };
+				body: body
+			};
 
 			newNote = await Note.save(newNote, { provisional: true });
 

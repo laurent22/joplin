@@ -4,7 +4,11 @@ import time from './time';
 const md5File = require('md5-file');
 const fs = require('fs-extra');
 
+const os = require('os');
+
 export default class FsDriverNode extends FsDriverBase {
+
+	public homeDir = os.homedir();
 
 	private fsErrorToJsError_(error: any, path: string = null) {
 		let msg = error.toString();
@@ -100,6 +104,14 @@ export default class FsDriverNode extends FsDriverBase {
 		}
 	}
 
+	public readdirSync(path: string) {
+		return fs.readdirSync(path);
+	}
+
+	public statSync(path: string) {
+		return fs.statSync(path);
+	}
+
 	public async setTimestamp(path: string, timestampDate: any) {
 		return fs.utimes(path, timestampDate, timestampDate);
 	}
@@ -174,6 +186,16 @@ export default class FsDriverNode extends FsDriverBase {
 			throw error;
 		}
 	}
+
+	public async rmdir(path: string) {
+		try {
+			await fs.rmdir(path);
+		} catch (error) {
+			if (error.code === 'ENOENT') return; // Don't throw if the file does not exist
+			throw error;
+		}
+	}
+
 
 	public async readFileChunk(handle: any, length: number, encoding = 'base64') {
 		// let buffer = new Buffer(length);

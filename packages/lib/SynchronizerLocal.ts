@@ -1,362 +1,42 @@
 import Logger from '@joplin/utils/Logger';
-import LockHandler, { appTypeToLockType, hasActiveLock, LockClientType, LockType } from './services/synchronizer/LockHandler';
+import { LockType } from './services/synchronizer/LockHandler';
 import Setting, { AppType } from './models/Setting';
 import shim from './shim';
-import MigrationHandler from './services/synchronizer/MigrationHandler';
 import eventManager from './eventManager';
 import { _ } from './locale';
 import BaseItem from './models/BaseItem';
 import Folder from './models/Folder';
-import Note from './models/Note';
 import Resource from './models/Resource';
 import ItemChange from './models/ItemChange';
 import ResourceLocalState from './models/ResourceLocalState';
 import MasterKey from './models/MasterKey';
 import BaseModel, { ModelType } from './BaseModel';
 import time from './time';
-import ResourceService from './services/ResourceService';
-import EncryptionService from './services/e2ee/EncryptionService';
 import JoplinError from './JoplinError';
-import ShareService from './services/share/ShareService';
 import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
 import { FileApi, RemoteItem } from './file-api';
 import JoplinDatabase from './JoplinDatabase';
-import { fetchSyncInfo, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
-import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
-import { generateKeyPair } from './services/e2ee/ppk';
-import syncDebugLog from './services/synchronizer/syncDebugLog';
+import { fetchSyncInfo, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
+import { setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
 import handleConflictAction, { ConflictAction } from './services/synchronizer/utils/handleConflictAction';
 import resourceRemotePath from './services/synchronizer/utils/resourceRemotePath';
-import syncDeleteStep from './services/synchronizer/utils/syncDeleteStep';
 import { ErrorCode } from './errors';
+import Synchronizer, { isCannotSyncError } from './Synchronizer';
+import Note from './models/Note';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
 const logger = Logger.create('Synchronizer');
 
-export function isCannotSyncError(error: any): boolean {
-	if (!error) return false;
-	if (['rejectedByTarget', 'fileNotFound'].indexOf(error.code) >= 0) return true;
-
-	// If the request times out we give up too because sometimes it's due to the
-	// file being large or some other connection issues, and we don't want that
-	// file to block the sync process. The user can choose to retry later on.
-	//
-	// message: "network timeout at: .....
-	// name: "FetchError"
-	// type: "request-timeout"
-	if (error.type === 'request-timeout' || error.message.includes('network timeout')) return true;
-
-	return false;
-}
-
-export default class Synchronizer {
+export default class SynchronizerLocal extends Synchronizer {
 
 	public static verboseMode = true;
 
-	private db_: JoplinDatabase;
-	private api_: FileApi;
-	private appType_: AppType;
-	private logger_: Logger = new Logger();
-	protected state_ = 'idle';
-	protected cancelling_ = false;
-	public maxResourceSize_: number = null;
-	protected downloadQueue_: any = null;
-	protected clientId_: string;
-	private lockHandler_: LockHandler;
-	private migrationHandler_: MigrationHandler;
-	private encryptionService_: EncryptionService = null;
-	private resourceService_: ResourceService = null;
-	protected syncTargetIsLocked_ = false;
-	protected shareService_: ShareService = null;
-	private lockClientType_: LockClientType = null;
-
-	// Debug flags are used to test certain hard-to-test conditions
-	// such as cancelling in the middle of a loop.
-	public testingHooks_: string[] = [];
-
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	protected onProgress_: Function;
-	protected progressReport_: any = {};
-
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public dispatch: Function;
-
 	public constructor(db: JoplinDatabase, api: FileApi, appType: AppType) {
-		this.db_ = db;
-		this.api_ = api;
-		this.appType_ = appType;
-		this.clientId_ = Setting.value('clientId');
-
-		this.onProgress_ = function() { };
-		this.progressReport_ = {};
-
-		this.dispatch = function() { };
-
-		this.apiCall = this.apiCall.bind(this);
+		super(db, api, appType);
 	}
 
-	public state() {
-		return this.state_;
-	}
-
-	public db() {
-		return this.db_;
-	}
-
-	public api() {
-		return this.api_;
-	}
-
-	public clientId() {
-		return this.clientId_;
-	}
-
-	public setLogger(l: Logger) {
-		this.logger_ = l;
-	}
-
-	public logger() {
-		return this.logger_;
-	}
-
-	public lockHandler() {
-		if (this.lockHandler_) return this.lockHandler_;
-		this.lockHandler_ = new LockHandler(this.api());
-		return this.lockHandler_;
-	}
-
-	protected lockClientType(): LockClientType {
-		if (this.lockClientType_) return this.lockClientType_;
-		this.lockClientType_ = appTypeToLockType(this.appType_);
-		return this.lockClientType_;
-	}
-
-	public migrationHandler() {
-		if (this.migrationHandler_) return this.migrationHandler_;
-		this.migrationHandler_ = new MigrationHandler(this.api(), this.db(), this.lockHandler(), this.lockClientType(), this.clientId_);
-		return this.migrationHandler_;
-	}
-
-	public maxResourceSize() {
-		if (this.maxResourceSize_ !== null) return this.maxResourceSize_;
-		return this.appType_ === AppType.Mobile ? 100 * 1000 * 1000 : Infinity;
-	}
-
-	public setShareService(v: ShareService) {
-		this.shareService_ = v;
-	}
-
-	public setEncryptionService(v: any) {
-		this.encryptionService_ = v;
-	}
-
-	public encryptionService() {
-		return this.encryptionService_;
-	}
-
-	public setResourceService(v: ResourceService) {
-		this.resourceService_ = v;
-	}
-
-	protected resourceService(): ResourceService {
-		return this.resourceService_;
-	}
-
-	public async waitForSyncToFinish() {
-		if (this.state() === 'idle') return;
-
-		while (true) {
-			await time.sleep(1);
-			if (this.state() === 'idle') return;
-		}
-	}
-
-	protected static reportHasErrors(report: any): boolean {
-		return !!report && !!report.errors && !!report.errors.length;
-	}
-
-	private static completionTime(report: any): string {
-		const duration = report.completedTime - report.startTime;
-		if (duration > 1000) return `${Math.round(duration / 1000)}s`;
-		return `${duration}ms`;
-	}
-
-	public static reportToLines(report: any) {
-		const lines = [];
-		if (report.createLocal) lines.push(_('Created local items: %d.', report.createLocal));
-		if (report.updateLocal) lines.push(_('Updated local items: %d.', report.updateLocal));
-		if (report.createRemote) lines.push(_('Created remote items: %d.', report.createRemote));
-		if (report.updateRemote) lines.push(_('Updated remote items: %d.', report.updateRemote));
-		if (report.deleteLocal) lines.push(_('Deleted local items: %d.', report.deleteLocal));
-		if (report.deleteRemote) lines.push(_('Deleted remote items: %d.', report.deleteRemote));
-		if (report.fetchingTotal && report.fetchingProcessed) lines.push(_('Fetched items: %d/%d.', report.fetchingProcessed, report.fetchingTotal));
-		if (report.cancelling && !report.completedTime) lines.push(_('Cancelling...'));
-		if (report.completedTime) lines.push(_('Completed: %s (%s)', time.formatMsToLocal(report.completedTime), this.completionTime(report)));
-		if (this.reportHasErrors(report)) lines.push(_('Last error: %s', report.errors[report.errors.length - 1].toString().substr(0, 500)));
-
-		return lines;
-	}
-
-	public logSyncOperation(action: string, local: any = null, remote: RemoteItem = null, message: string = null, actionCount = 1) {
-		const line = ['Sync'];
-		line.push(action);
-		if (message) line.push(message);
-
-		let type = local && local.type_ ? local.type_ : null;
-		if (!type) type = remote && remote.type_ ? remote.type_ : null;
-
-		if (type) line.push(BaseItem.modelTypeToClassName(type));
-
-		if (local) {
-			const s = [];
-			s.push(local.id);
-			line.push(`(Local ${s.join(', ')})`);
-		}
-
-		if (remote) {
-			const s = [];
-			s.push(remote.id ? remote.id : remote.path);
-			line.push(`(Remote ${s.join(', ')})`);
-		}
-
-		if (Synchronizer.verboseMode) {
-			logger.info(line.join(': '));
-		} else {
-			logger.debug(line.join(': '));
-		}
-
-		if (!['fetchingProcessed', 'fetchingTotal'].includes(action)) syncDebugLog.info(line.join(': '));
-
-		if (!this.progressReport_[action]) this.progressReport_[action] = 0;
-		this.progressReport_[action] += actionCount;
-		this.progressReport_.state = this.state();
-		this.onProgress_(this.progressReport_);
-
-		// Make sure we only send a **copy** of the report since it
-		// is mutated within this class. Should probably use a lib
-		// for this but for now this simple fix will do.
-		const reportCopy: any = {};
-		for (const n in this.progressReport_) reportCopy[n] = this.progressReport_[n];
-		if (reportCopy.errors) reportCopy.errors = this.progressReport_.errors.slice();
-		this.dispatch({ type: 'SYNC_REPORT_UPDATE', report: reportCopy });
-	}
-
-	public async logSyncSummary(report: any) {
-		logger.info('Operations completed: ');
-		for (const n in report) {
-			if (!report.hasOwnProperty(n)) continue;
-			if (n === 'errors') continue;
-			if (n === 'starting') continue;
-			if (n === 'finished') continue;
-			if (n === 'state') continue;
-			if (n === 'startTime') continue;
-			if (n === 'completedTime') continue;
-			logger.info(`${n}: ${report[n] ? report[n] : '-'}`);
-		}
-		const folderCount = await Folder.count();
-		const noteCount = await Note.count();
-		const resourceCount = await Resource.count();
-		logger.info(`Total folders: ${folderCount}`);
-		logger.info(`Total notes: ${noteCount}`);
-		logger.info(`Total resources: ${resourceCount}`);
-
-		if (Synchronizer.reportHasErrors(report)) {
-			logger.warn('There was some errors:');
-			for (let i = 0; i < report.errors.length; i++) {
-				const e = report.errors[i];
-				logger.warn(e);
-			}
-		}
-	}
-
-	public async cancel() {
-		if (this.cancelling_ || this.state() === 'idle') return null;
-
-		// Stop queue but don't set it to null as it may be used to
-		// retrieve the last few downloads.
-		if (this.downloadQueue_) this.downloadQueue_.stop();
-
-		this.logSyncOperation('cancelling', null, null, '');
-		this.cancelling_ = true;
-
-		return new Promise((resolve) => {
-			const iid = shim.setInterval(() => {
-				if (this.state() === 'idle') {
-					shim.clearInterval(iid);
-					resolve(null);
-				}
-			}, 100);
-		});
-	}
-
-	public cancelling() {
-		return this.cancelling_;
-	}
-
-	public logLastRequests() {
-		const lastRequests = this.api().lastRequests();
-		if (!lastRequests || !lastRequests.length) return;
-
-		for (const r of lastRequests) {
-			const timestamp = time.unixMsToLocalHms(r.timestamp);
-			logger.info(`Req ${timestamp}: ${r.request}`);
-			logger.info(`Res ${timestamp}: ${r.response}`);
-		}
-	}
-
-	public static stateToLabel(state: string) {
-		if (state === 'idle') return _('Idle');
-		if (state === 'in_progress') return _('In progress');
-		return state;
-	}
-
-	public isFullSync(steps: string[]) {
-		return steps.includes('update_remote') && steps.includes('delete_remote') && steps.includes('delta');
-	}
-
-	private async lockErrorStatus_() {
-		const locks = await this.lockHandler().locks();
-		const currentDate = await this.lockHandler().currentDate();
-
-		const hasActiveExclusiveLock = await hasActiveLock(locks, currentDate, this.lockHandler().lockTtl, LockType.Exclusive);
-		if (hasActiveExclusiveLock) return 'hasExclusiveLock';
-
-		const hasActiveSyncLock = await hasActiveLock(locks, currentDate, this.lockHandler().lockTtl, LockType.Sync, this.lockClientType(), this.clientId_);
-		if (!hasActiveSyncLock) return 'syncLockGone';
-
-		return '';
-	}
-
-	protected async setPpkIfNotExist(localInfo: SyncInfo, remoteInfo: SyncInfo) {
-		if (localInfo.ppk || remoteInfo.ppk) return localInfo;
-
-		const password = getMasterPassword(false);
-		if (!password) return localInfo;
-
-		localInfo.ppk = await generateKeyPair(this.encryptionService(), password);
-		return localInfo;
-	}
-
-	protected async apiCall(fnName: string, ...args: any[]) {
-		if (this.syncTargetIsLocked_) throw new JoplinError('Sync target is locked - aborting API call', 'lockError');
-
-		try {
-			const output = await (this.api() as any)[fnName](...args);
-			return output;
-		} catch (error) {
-			const lockStatus = await this.lockErrorStatus_();
-			// When there's an error due to a lock, we re-wrap the error and change the error code so that error handling
-			// does not do special processing on the original error. For example, if a resource could not be downloaded,
-			// don't mark it as a "cannotSyncItem" since we don't know that.
-			if (lockStatus) {
-				throw new JoplinError(`Sync target lock error: ${lockStatus}. Original error was: ${error.message}`, 'lockError');
-			} else {
-				throw error;
-			}
-		}
-	}
 
 	// Synchronisation is done in three major steps:
 	//
@@ -398,6 +78,193 @@ export default class Synchronizer {
 
 		this.progressReport_.startTime = time.unixMs();
 
+		// const id_folder_map = await (async (): Promise<Map<string, Folder>> => {
+		// 	const localFolders = await BaseItem.loadItemsByType(BaseModel.TYPE_FOLDER);
+		// 	const id_title_map = new Map<string, Folder>();
+		// 	for (const f of localFolders) {
+		// 		id_title_map.set(f.id, f);
+		// 	}
+		// 	return id_title_map;
+		// })();
+
+		const createDir = async (path: string) => {
+			const pStat = await this.apiCall('stat', path);
+			if (!pStat) await this.apiCall('mkdir', path);
+		};
+
+		const do_DB_FS_diff = async () => {
+			const fileList: string[] = await this.apiCall('ls_RR');
+			const fileSet: Set<string> = new Set(fileList.filter((it: string) => it[0] !== '.' && it[0] !== '_' && BaseItem.isMDFile(it)));
+			logger.info('remote files:', fileSet);
+
+			const localNotes = await BaseItem.loadItemsByType(BaseModel.TYPE_NOTE);
+			const notePaths: Set<string> = new Set();
+			const path_note_map = new Map<string, any>();
+			for (const note of localNotes) {
+				const p = await BaseItem.buildPathFromRoot(note);
+				if (p[0] === '.') continue;
+				notePaths.add(p);
+				path_note_map.set(p, note);
+			}
+			logger.info('local note path list:', notePaths);
+
+			const diffLR = new Set(notePaths);	// notes in local but not remote (ie. in DB but not in FS)
+			for (const it of fileSet) {
+				diffLR.delete(it);
+			}
+			logger.info('local notes not in remote:', diffLR);
+
+			const diffRL = new Set(fileSet);	// notes in remote but not local (ie. in FS but not in DB)
+			for (const it of notePaths) {
+				diffRL.delete(it);
+			}
+			logger.info('remote notes not in local:', diffRL);
+
+			const commonLP = new Set<string>();
+			for (const it of notePaths) {
+				if (fileSet.has(it)) commonLP.add(it);
+			}
+			logger.info('notes in both local and remote:', commonLP);
+
+			const save_to_DB_as_note = async (content: any) => {
+				content = await BaseItem.unserialize(content);
+				content = BaseItem.filter(content);
+
+				// 2017-12-03: This was added because the new user_updated_time and user_created_time properties were added
+				// to the items. However changing the database is not enough since remote items that haven't been synced yet
+				// will not have these properties and, since they are required, it would cause a problem. So this check
+				// if they are present and, if not, set them to a reasonable default.
+				// Let's leave these two lines for 6 months, by which time all the clients should have been synced.
+				if (!content.user_updated_time) content.user_updated_time = content.updated_time;
+				if (!content.user_created_time) content.user_created_time = content.created_time;
+
+				const options: any = {
+					autoTimestamp: false,
+					nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, time.unixMs()),
+					changeSource: ItemChange.SOURCE_SYNC,
+				};
+				options.isNew = true;
+
+				await BaseItem.save(content, options);
+
+				if (content.encryption_applied) this.dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });
+			};
+
+			const do_commons = async () => {
+				const ids: string[] = [];
+				for (const p of commonLP) {
+					const noteL: any = path_note_map.get(p);
+					ids.push(noteL.id);
+				}
+				const sql = sprintf(
+					`
+					SELECT item_id,sync_time FROM sync_items s
+					JOIN notes n ON s.item_id = n.id
+					WHERE sync_target = %d
+					AND s.item_id IN ("${ids.join('","')}")
+					ORDER BY s.sync_time DESC
+				`,
+					syncTargetId,
+				);
+				// AND (s.sync_time >= n.updated_time)
+				const synced_times = await Note.modelSelectAll(sql);
+				const sync_map = new Map<string, number>();
+				for (const s of synced_times) {
+					sync_map.set(s.item_id, s.sync_time);
+					// logger.info('synced:', s);
+				}
+				for (const p of commonLP) {
+					const noteL: any = path_note_map.get(p);
+					const statR = await this.apiCall('stat', p);
+					const sync_time = sync_map.get(noteL.id);
+					// sync_time can be undefined
+					logger.info(p, 'remote-updated:', statR.updated_time - noteL.updated_time, 'remote-sync:', statR.updated_time - sync_time, 'synced-updated:', sync_time - noteL.updated_time);
+					// time different
+					// Welcome!/5. Joplin Privacy Policy.md remote: {path: 'Welcome!/5. Joplin Privacy Policy.md', updated_time: 1697392394529, isDir: false} local: 1697389941913
+					const updated_R_L = Math.floor((statR.updated_time - noteL.updated_time) / 1000);
+					const updateR_S = Math.floor((statR.updated_time - sync_time) / 1000);
+					if (updated_R_L === 0 || updateR_S === 0) {
+						continue;
+					} else if (updated_R_L > 0) {
+						// TODO: copy remote to local
+					} else if (updated_R_L < 0) {
+						// TODO: copy local to remote
+					}
+				}
+			};
+			// @ts-expect-error indevelopment
+			const do_remote_extras = async () => {
+				// for notes in remote but not local (ie. in FS but not in DB)
+				const deletedItems = await BaseItem.deletedItems(syncTargetId);
+				const deletedIDs: Set<string> = new Set(deletedItems.map(it => it.item_id));
+				for (const p of diffRL) {
+					const stat = await this.apiCall('stat', p);
+					if (stat.isDirectory()) {
+						// TODO
+
+						diffRL.delete(p);
+					}
+				}
+				for (const p of diffRL) {
+					// const stat = await this.apiCall('stat', p);
+					if (BaseItem.isMDFile(p)) {
+						const content = await this.apiCall('get', p);
+						if (content) {
+							const frontMatter = BaseItem.getFrontMatter(content);
+							if (frontMatter && frontMatter.id) {
+								if (deletedIDs.has(frontMatter.id)) {
+									await this.apiCall('delete', p);
+								} else {
+									const n = BaseItem.loadItemById(frontMatter.id);
+									if (n !== null) {
+										// TODO
+									} else {
+										const pList = p.split('/');
+										if (pList.length > 1) {
+											// const parents = [];
+											// for (let i = 0; i < pList.length - 2; i++) {
+											// 	const f = BaseModel.loadByTitle(pList[i]);
+
+											// }
+										}
+										await save_to_DB_as_note(content);
+									}
+								}
+							} else {
+								// if no front matter or no id
+							}
+						}
+					}
+				}
+
+			};
+
+			// @ts-expect-error indevelopment
+			const do_local_extras = async () => {
+				// for notes in local but not remote (ie. in DB but not in FS)
+				for (const p of diffLR) {
+					const stat = await this.apiCall('stat', p);
+					if (stat.isDirectory()) {
+						// TODO
+
+						// diffLR.delete(p);
+					}
+				}
+				// for (const p of diffRL) {
+				// 	if (BaseItem.isMDFile(p)) {
+				// 		const n = path_note_map.get(p);
+				// 	}
+				// }
+			};
+
+			if (commonLP.size > 0) await do_commons();
+
+			// if (diffLR.size > 0) await do_local_extras();
+
+			// if (diffRL.size > 0) await do_remote_extras();
+
+		};
+
 		this.dispatch({ type: 'SYNC_STARTED' });
 		eventManager.emit('syncStart');
 
@@ -408,44 +275,43 @@ export default class Synchronizer {
 			this.dispatch({ type: 'SYNC_HAS_DISABLED_SYNC_ITEMS' });
 		};
 
-		// We index resources before sync mostly to flag any potential orphan
-		// resource before it is being synced. That way, it can potentially be
-		// auto-deleted at a later time. Indexing resources is fast so it's fine
-		// to call it every time here.
-		//
-		// https://github.com/laurent22/joplin/issues/932#issuecomment-933736405
-		try {
-			if (this.resourceService()) {
-				logger.info('Indexing resources...');
-				await this.resourceService().indexNoteResources();
+		const do_indexing = async () => {
+			// We index resources before sync mostly to flag any potential orphan
+			// resource before it is being synced. That way, it can potentially be
+			// auto-deleted at a later time. Indexing resources is fast so it's fine
+			// to call it every time here.
+			//
+			// https://github.com/laurent22/joplin/issues/932#issuecomment-933736405
+			try {
+				if (this.resourceService()) {
+					logger.info('Indexing resources...');
+					await this.resourceService().indexNoteResources();
+				}
+			} catch (error) {
+				logger.error('Error indexing resources:', error);
 			}
-		} catch (error) {
-			logger.error('Error indexing resources:', error);
-		}
+		};
 
-		// Before synchronising make sure all share_id properties are set
-		// correctly so as to share/unshare the right items.
-		try {
-			await Folder.updateAllShareIds(this.resourceService());
-			if (this.shareService_) await this.shareService_.checkShareConsistency();
-		} catch (error) {
-			if (error && error.code === ErrorCode.IsReadOnly) {
-				// We ignore it because the functions above tried to modify a
-				// read-only item and failed. Normally it shouldn't happen since
-				// the UI should prevent, but if there's a bug in the UI or some
-				// other issue we don't want sync to fail because of this.
-				logger.error('Could not update share because an item is readonly:', error);
-			} else {
-				throw error;
+		const update_shares = async () => {
+			// Before synchronising make sure all share_id properties are set
+			// correctly so as to share/unshare the right items.
+			try {
+				await Folder.updateAllShareIds(this.resourceService());
+				if (this.shareService_) await this.shareService_.checkShareConsistency();
+			} catch (error) {
+				if (error && error.code === ErrorCode.IsReadOnly) {
+					// We ignore it because the functions above tried to modify a
+					// read-only item and failed. Normally it shouldn't happen since
+					// the UI should prevent, but if there's a bug in the UI or some
+					// other issue we don't want sync to fail because of this.
+					logger.error('Could not update share because an item is readonly:', error);
+				} else {
+					throw error;
+				}
 			}
-		}
+		};
 
-		const itemUploader = new ItemUploader(this.api(), this.apiCall);
-
-		let errorToThrow = null;
-		let syncLock = null;
-
-		try {
+		const init_syncTarget = async () => {
 			await this.api().initialize();
 			this.api().setTempDirName(Dirnames.Temp);
 
@@ -520,27 +386,63 @@ export default class Synchronizer {
 				this.syncTargetIsLocked_ = true;
 				void this.cancel();
 			});
+		};
 
+		// @ts-expect-error indevelopment
+		const do_delete = async () => {
 			// ========================================================================
 			// 2. DELETE_REMOTE
 			// ------------------------------------------------------------------------
 			// Delete the remote items that have been deleted locally.
 			// ========================================================================
 
-			if (syncSteps.indexOf('delete_remote') >= 0) {
-				await syncDeleteStep(
-					syncTargetId,
-					this.cancelling(),
-					(action, local, logSyncOperation, message, actionCount) => {
-						this.logSyncOperation(action, local, logSyncOperation, message, actionCount);
-					},
-					(fnName, ...args) => {
-						return this.apiCall(fnName, ...args);
-					},
-					action => { return this.dispatch(action); },
-				);
-			} // DELETE_REMOTE STEP
+			const deletedItems = await BaseItem.deletedItems(syncTargetId);
+			for (let i = 0; i < deletedItems.length; i++) {
+				if (this.cancelling()) break;
 
+				const item = deletedItems[i];
+				const isResource = item.item_type === BaseModel.TYPE_RESOURCE;
+				let path = '';
+				if (!isResource) {
+					const itemR = await BaseItem.loadItemByTypeAndId(item.item_type, item.item_id);	// TODO: note no longer exist in DB
+					path = await BaseItem.buildPathFromRoot(itemR);
+				} else {
+					path = resourceRemotePath(item.item_id);
+				}
+
+				try {
+					await this.apiCall('delete', path);
+					this.logSyncOperation('deleteRemote', null, { id: item.item_id }, 'local has been deleted');
+					await BaseItem.remoteDeletedItem(syncTargetId, item.item_id);
+
+				} catch (error) {
+					if (error.code === 'isReadOnly') {
+						let remoteContent = await this.apiCall('get', path);
+
+						if (remoteContent) {
+							remoteContent = await BaseItem.unserialize(remoteContent);
+							const ItemClass = BaseItem.itemClass(item.item_type);
+							let nextQueries = BaseItem.updateSyncTimeQueries(syncTargetId, remoteContent, time.unixMs());
+
+							if (isResource) {
+								nextQueries = nextQueries.concat(Resource.setLocalStateQueries(remoteContent.id, {
+									fetch_status: Resource.FETCH_STATUS_IDLE,
+								}));
+							}
+
+							await ItemClass.save(remoteContent, { isNew: true, autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries });
+
+							if (isResource) this.dispatch({ type: 'SYNC_CREATED_OR_UPDATED_RESOURCE', id: remoteContent.id });
+						}
+					} else {
+						throw error;
+					}
+				}
+			}
+		};
+
+		// @ts-expect-error indevelopment
+		const do_upload_update = async () => {
 			// ========================================================================
 			// 1. UPLOAD
 			// ------------------------------------------------------------------------
@@ -560,15 +462,39 @@ export default class Synchronizer {
 
 					const result = await BaseItem.itemsThatNeedSync(syncTargetId);
 					const locals = result.items;
-
+					// eslint-disable-next-line no-console
+					logger.info('locals:', locals.length, locals, 'syncTargetId', syncTargetId);
+					// XJ testing
 					await itemUploader.preUploadItems(result.items.filter((it: any) => result.neverSyncedItemIds.includes(it.id)));
+					// if there are folders, sync them first
+					for (let i = 0; i < locals.length; i++) {
+						if (this.cancelling()) break;
+
+						const local = locals[i];
+						if (local.type_ !== BaseModel.TYPE_FOLDER) continue;
+						const ItemClass: typeof BaseItem = BaseItem.itemClass(local);
+
+						const pathFromRoot = await BaseItem.buildPathFromRoot(local, createDir);
+						if (donePaths.indexOf(pathFromRoot) >= 0) throw new JoplinError(sprintf('Processing a path that has already been done: %s. sync_time was not updated? Remote item has an updated_time in the future?', local.title), 'processingPathTwice');
+
+						const remote: RemoteItem = result.neverSyncedItemIds.includes(local.id) ? null : await this.apiCall('stat', pathFromRoot);
+
+						if (!local.sync_time && !remote) {
+							await this.apiCall('mkdir', pathFromRoot);
+							const reason = 'remote folder does not exist, and local is new and has never been synced';
+							this.logSyncOperation('createRemote', local, remote, reason);
+							await ItemClass.saveSyncTime(syncTargetId, local, time.unixMs());
+							completeItemProcessing(pathFromRoot);
+						}
+					}
 
 					for (let i = 0; i < locals.length; i++) {
 						if (this.cancelling()) break;
 
 						let local = locals[i];
+						if (local.type_ === BaseModel.TYPE_FOLDER) continue;
 						const ItemClass: typeof BaseItem = BaseItem.itemClass(local);
-						const path = BaseItem.systemPath(local);
+						const path = BaseItem.fileNameFS(local);
 
 						// Safety check to avoid infinite loops.
 						// - In fact this error is possible if the item is marked for sync (via sync_time or force_sync) while synchronisation is in
@@ -577,9 +503,9 @@ export default class Synchronizer {
 						//   the local sync_time will be updated to Date.now() but on the next loop it will see that the remote item still has a date ahead
 						//   and will see a conflict. There's currently no automatic fix for this - the remote item on the sync target must be fixed manually
 						//   (by setting an updated_time less than current time).
-						if (donePaths.indexOf(path) >= 0) throw new JoplinError(sprintf('Processing a path that has already been done: %s. sync_time was not updated? Remote item has an updated_time in the future?', path), 'processingPathTwice');
-
-						const remote: RemoteItem = result.neverSyncedItemIds.includes(local.id) ? null : await this.apiCall('stat', path);
+						const pathFromRoot = await BaseItem.buildPathFromRoot(local, createDir);
+						if (donePaths.indexOf(pathFromRoot) >= 0) throw new JoplinError(sprintf('Processing a path that has already been done: %s. sync_time was not updated? Remote item has an updated_time in the future?', pathFromRoot), 'processingPathTwice');
+						const remote: RemoteItem = result.neverSyncedItemIds.includes(local.id) ? null : await this.apiCall('stat', pathFromRoot);
 						let action = null;
 						let itemIsReadOnly = false;
 						let reason = '';
@@ -617,18 +543,18 @@ export default class Synchronizer {
 							// OneDrive does not appear to have accurate timestamps as lastModifiedDateTime would occasionally be
 							// a few seconds ahead of what it was set with setTimestamp()
 							try {
-								remoteContent = await this.apiCall('get', path);
+								remoteContent = await this.apiCall('get', pathFromRoot);
 							} catch (error) {
 								if (error.code === 'rejectedByTarget') {
 									this.progressReport_.errors.push(error);
-									logger.warn(`Rejected by target: ${path}: ${error.message}`);
+									logger.warn(`Rejected by target: ${pathFromRoot}: ${error.message}`);
 									completeItemProcessing(path);
 									continue;
 								} else {
 									throw error;
 								}
 							}
-							if (!remoteContent) throw new Error(`Got metadata for path but could not fetch content: ${path}`);
+							if (!remoteContent) throw new Error(`Got metadata for path but could not fetch content: ${pathFromRoot}`);
 							remoteContent = await BaseItem.unserialize(remoteContent);
 
 							if (remoteContent.updated_time > local.sync_time) {
@@ -651,6 +577,7 @@ export default class Synchronizer {
 
 						this.logSyncOperation(action, local, remote, reason);
 
+						// TODO: not sure about folder of resources
 						if (local.type_ === BaseModel.TYPE_RESOURCE && (action === 'createRemote' || action === 'updateRemote')) {
 							const localState = await Resource.localState(local.id);
 							if (localState.fetch_status !== Resource.FETCH_STATUS_DONE) {
@@ -716,13 +643,13 @@ export default class Synchronizer {
 								}
 							}
 						}
-
 						if (action === 'createRemote' || action === 'updateRemote') {
 							let canSync = true;
 							try {
 								if (this.testingHooks_.indexOf('notesRejectedByTarget') >= 0 && local.type_ === BaseModel.TYPE_NOTE) throw new JoplinError('Testing rejectedByTarget', 'rejectedByTarget');
 								if (this.testingHooks_.indexOf('itemIsReadOnly') >= 0) throw new JoplinError('Testing isReadOnly', ErrorCode.IsReadOnly);
-								await itemUploader.serializeAndUploadItem(ItemClass, path, local);
+
+								await itemUploader.serializeAndUploadItem(ItemClass, pathFromRoot, local);
 							} catch (error) {
 								if (error && error.code === 'rejectedByTarget') {
 									await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);
@@ -756,7 +683,7 @@ export default class Synchronizer {
 								// above also doesn't use it because it fetches the whole remote object and read the
 								// more reliable 'updated_time' property. Basically remote.updated_time is deprecated.
 
-								await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time);
+								await ItemClass.saveSyncTime(syncTargetId, local, time.unixMs());
 							}
 						}
 
@@ -771,13 +698,16 @@ export default class Synchronizer {
 							(action: any) => this.dispatch(action),
 						);
 
-						completeItemProcessing(path);
+						completeItemProcessing(pathFromRoot);
 					}
 
 					if (!result.hasMore) break;
 				}
 			} // UPLOAD STEP
+		};
 
+		// @ts-expect-error indevelopment
+		const do_delta = async () => {
 			// ------------------------------------------------------------------------
 			// 3. DELTA
 			// ------------------------------------------------------------------------
@@ -826,18 +756,30 @@ export default class Synchronizer {
 					const remoteIds = remotes.map(r => BaseItem.pathToId(r.path));
 					const locals = await BaseItem.loadItemsByIds(remoteIds);
 
+					logger.info('deltas: locals:', locals, 'remoteIds:', remoteIds);
+
 					for (const remote of remotes) {
 						if (this.cancelling()) break;
+						logger.info('deltas: remote:', remote);
 
 						let needsToDownload = true;
+						const local = locals.find(l => l.id === BaseItem.pathToId(remote.path));
+						let romotePathFromRoot = '';
+						if (local) {
+							if (local.type_ === BaseModel.TYPE_NOTE) {
+								romotePathFromRoot = await BaseItem.buildPathFromRoot(local, createDir);
+							} else {
+								continue;
+							}
+						}
 						if (this.api().supportsAccurateTimestamp) {
-							const local = locals.find(l => l.id === BaseItem.pathToId(remote.path));
 							if (local && local.updated_time === remote.jop_updated_time) needsToDownload = false;
 						}
 
 						if (needsToDownload) {
-							this.downloadQueue_.push(remote.path, async () => {
-								return this.apiCall('get', remote.path);
+							logger.info('deltas: downloading:', romotePathFromRoot);
+							this.downloadQueue_.push(romotePathFromRoot, async () => {
+								return this.apiCall('get', romotePathFromRoot);
 							});
 						}
 					}
@@ -851,7 +793,7 @@ export default class Synchronizer {
 						this.logSyncOperation('fetchingProcessed', null, null, 'Processing fetched item');
 
 						const remote = remotes[i];
-						if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
+						if (!BaseItem.isMDFile(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
 
 						const loadContent = async () => {
 							const task = await this.downloadQueue_.waitForResult(path);
@@ -860,13 +802,19 @@ export default class Synchronizer {
 							return await BaseItem.unserialize(task.result);
 						};
 
-						const path = remote.path;
-						const remoteId = BaseItem.pathToId(path);
+						// const path = remote.path;
+						const remoteId = BaseItem.pathToId(remote.path);
 						let action = null;
 						let reason = '';
 						let local = locals.find(l => l.id === remoteId);
 						let ItemClass = null;
 						let content = null;
+						let path = remote.path;
+						if (local) {
+							if (local.type_ === BaseModel.TYPE_NOTE) {
+								path = await BaseItem.buildPathFromRoot(local);
+							}
+						}
 
 						try {
 							if (!local) {
@@ -1038,8 +986,31 @@ export default class Synchronizer {
 					await BaseItem.deleteOrphanSyncItems();
 				}
 			} // DELTA STEP
+		};
+
+		await do_indexing();
+
+		await update_shares();
+
+		const itemUploader = new ItemUploader(this.api(), this.apiCall);
+
+		let errorToThrow = null;
+		let syncLock = null;
+
+		try {
+			await init_syncTarget();
+
+			await do_DB_FS_diff();
+
+			// await do_delete();
+
+			// await do_upload_update();
+
+			// await do_delta();
+
 		} catch (error) {
 			if (throwOnError) {
+				logger.info(error.message);
 				errorToThrow = error;
 			} else if (error && ['cannotEncryptEncrypted', 'noActiveMasterKey', 'processingPathTwice', 'failSafe', 'lockError', 'outdatedSyncTarget'].indexOf(error.code) >= 0) {
 				// Only log an info statement for this since this is a common condition that is reported

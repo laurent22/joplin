@@ -3,7 +3,7 @@ import { _ } from '@joplin/lib/locale';
 
 export const declaration: CommandDeclaration = {
 	name: 'newTodo',
-	label: () => _('New to-do'),
+	label: () => _('To-do'),
 	iconName: 'fa-check-square',
 };
 

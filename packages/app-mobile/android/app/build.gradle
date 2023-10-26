@@ -151,6 +151,7 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            applicationIdSuffix = '.D'
         }
         release {
             // Caution! In production, you need to generate your own keystore file.

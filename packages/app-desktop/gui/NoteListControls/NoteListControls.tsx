@@ -118,7 +118,7 @@ function NoteListControls(props: Props) {
 	useEffect(() => {
 		// Use the longest string to calculate the amount of extra width needed
 		const smAdditional = getTextWidth(_('note')) > getTextWidth(_('to-do')) ? getTextWidth(_('note')) : getTextWidth(_('to-do'));
-		const mdAdditional = getTextWidth(_('New note')) > getTextWidth(_('New to-do')) ? getTextWidth(_('New note')) : getTextWidth(_('New to-do'));
+		const mdAdditional = getTextWidth(_('Note')) > getTextWidth(_('To-do')) ? getTextWidth(_('Note')) : getTextWidth(_('To-do'));
 
 		const Sm = BaseBreakpoint.Sm + smAdditional * 2;
 		const Md = BaseBreakpoint.Md + mdAdditional * 2;
@@ -141,7 +141,7 @@ function NoteListControls(props: Props) {
 		} else if (breakpoint === dynamicBreakpoints.Md) {
 			return _('note');
 		} else {
-			return _('New note');
+			return _('Note');
 		}
 	}, [breakpoint, dynamicBreakpoints]);
 
@@ -151,7 +151,7 @@ function NoteListControls(props: Props) {
 		} else if (breakpoint === dynamicBreakpoints.Md) {
 			return _('to-do');
 		} else {
-			return _('New to-do');
+			return _('To-do');
 		}
 	}, [breakpoint, dynamicBreakpoints]);
 
@@ -248,7 +248,7 @@ function NoteListControls(props: Props) {
 			<TopRow className="new-note-todo-buttons">
 				<StyledButton ref={newNoteRef}
 					className="new-note-button"
-					tooltip={ showTooltip ? CommandService.instance().label('newNote') : '' }
+					tooltip={showTooltip ? CommandService.instance().label('newNote') : ''}
 					iconName={noteIcon}
 					title={_('%s', noteButtonText)}
 					level={ButtonLevel.Primary}
@@ -258,7 +258,7 @@ function NoteListControls(props: Props) {
 				/>
 				<StyledButton ref={newTodoRef}
 					className="new-todo-button"
-					tooltip={ showTooltip ? CommandService.instance().label('newTodo') : '' }
+					tooltip={showTooltip ? CommandService.instance().label('newTodo') : ''}
 					iconName={todoIcon}
 					title={_('%s', todoButtonText)}
 					level={ButtonLevel.Secondary}
@@ -274,7 +274,7 @@ function NoteListControls(props: Props) {
 		<StyledRoot ref={noteControlsRef}>
 			{renderNewNoteButtons()}
 			<BottomRow ref={searchAndSortRef} className="search-and-sort">
-				<SearchBar inputRef={searchBarRef}/>
+				<SearchBar inputRef={searchBarRef} />
 				{showsSortOrderButtons() &&
 					<SortOrderButtonsContainer>
 						<StyledPairButtonL

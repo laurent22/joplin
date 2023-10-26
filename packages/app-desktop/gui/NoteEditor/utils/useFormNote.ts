@@ -114,7 +114,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 	}
 
 	useEffect(() => {
-		if (formNoteRefeshScheduled <= 0) return () => {};
+		if (formNoteRefeshScheduled <= 0) return () => { };
 
 		reg.logger().info('Sync has finished and note has never been changed - reloading it');
 
@@ -173,15 +173,26 @@ export default function useFormNote(dependencies: HookDependencies) {
 	useEffect(() => {
 		if (!noteId) {
 			if (formNote.id) setFormNote(defaultFormNote());
-			return () => {};
+			return () => { };
 		}
 
-		if (formNote.id === noteId) return () => {};
+		if (formNote.id === noteId) return () => { };
 
 		let cancelled = false;
 
-		reg.logger().debug('Loading existing note', noteId);
+		// reg.logger().debug('Saving previous note', formNote.id, formNote.title);
+		// async function handleNote(): Promise<void> {
+		// 	try {
+		// 		const note = await formNoteToNote(formNote);
+		// 		reg.logger().debug('Saving note...', note);
+		// 		await Note.save(note);
+		// 	} catch (error) {
+		// 		console.error(error);
+		// 	}
+		// }
+		// void handleNote();
 
+		reg.logger().debug('Loading existing note', noteId);
 		function handleAutoFocus(noteIsTodo: boolean) {
 			if (!isProvisional) return;
 

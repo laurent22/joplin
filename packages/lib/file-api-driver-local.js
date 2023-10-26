@@ -1,4 +1,5 @@
 const { basicDelta } = require('./file-api');
+const path = require('path');
 
 // NOTE: when synchronising with the file system the time resolution is the second (unlike milliseconds for OneDrive for instance).
 // What it means is that if, for example, client 1 changes a note at time t, and client 2 changes the same note within the same second,
@@ -26,6 +27,8 @@ class FileApiDriverLocal {
 		if (!FileApiDriverLocal.fsDriver_) { throw new Error('FileApiDriverLocal.fsDriver_ not set!'); }
 		return FileApiDriverLocal.fsDriver_;
 	}
+
+	homeDir = this.fsDriver().homeDir;
 
 	async stat(path) {
 		try {
@@ -190,6 +193,22 @@ class FileApiDriverLocal {
 		// });
 	}
 
+	async rmdir(path) {
+		try {
+			await this.fsDriver().rmdir(path);
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
+		}
+	}
+
+	async remove(path) {
+		try {
+			await this.fsDriver().remove(path);
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
+		}
+	}
+
 	async move(oldPath, newPath) {
 		try {
 			await this.fsDriver().move(oldPath, newPath);
@@ -232,6 +251,52 @@ class FileApiDriverLocal {
 			await this.fsDriver().remove(baseDir);
 			await this.fsDriver().mkdir(baseDir);
 		}
+	}
+
+	// XJ added
+	ls_R(directoryPath) {
+		// list absolute path
+		const files = [];
+
+		const scanDirectory = (currentPath) => {
+			const items = this.fsDriver().readdirSync(currentPath);
+
+			for (const item of items) {
+				const itemPath = path.join(currentPath, item);
+				const stat = this.fsDriver().statSync(itemPath);
+
+				files.push(itemPath);
+				if (stat.isDirectory()) {
+					scanDirectory(itemPath); // Recursively scan subdirectory
+				}
+			}
+		};
+
+		scanDirectory(directoryPath);
+		return files;
+	}
+
+	ls_RR(directory) {
+		// only list relative paths
+		const filepaths = [];
+
+		const traverseDirectory = (currentDirectory) => {
+			const files = this.fsDriver().readdirSync(currentDirectory);
+
+			for (const file of files) {
+				const filePath = path.join(currentDirectory, file);
+				const stat = this.fsDriver().statSync(filePath);
+
+				const relativePath = path.relative(directory, filePath);
+				filepaths.push(relativePath);
+				if (stat.isDirectory()) {
+					traverseDirectory(filePath);
+				}
+			}
+		};
+
+		traverseDirectory(directory);
+		return filepaths;
 	}
 }
 

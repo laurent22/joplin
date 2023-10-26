@@ -322,8 +322,10 @@ class MainScreenComponent extends React.Component<Props, State> {
 	public updateRootLayoutSize() {
 		this.updateMainLayout(produce(this.props.mainLayout, (draft: any) => {
 			const s = this.rootLayoutSize();
-			draft.width = s.width;
-			draft.height = s.height;
+			if (s !== null) {
+				draft.width = s.width;
+				draft.height = s.height;
+			}
 		}));
 	}
 
@@ -508,14 +510,16 @@ class MainScreenComponent extends React.Component<Props, State> {
 			height: height,
 		};
 
-		this.styles_.modalLayer = { ...theme.textStyle, zIndex: 10000,
+		this.styles_.modalLayer = {
+			...theme.textStyle, zIndex: 10000,
 			position: 'absolute',
 			top: 0,
 			left: 0,
 			backgroundColor: theme.backgroundColor,
 			width: width - 20,
 			height: height - 20,
-			padding: 10 };
+			padding: 10,
+		};
 
 		return this.styles_;
 	}
@@ -873,7 +877,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 			<div style={style}>
 				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
 				{this.renderPluginDialogs()}
-				{noteContentPropertiesDialogOptions.visible && <NoteContentPropertiesDialog markupLanguage={noteContentPropertiesDialogOptions.markupLanguage} themeId={this.props.themeId} onClose={this.noteContentPropertiesDialog_close} text={noteContentPropertiesDialogOptions.text}/>}
+				{noteContentPropertiesDialogOptions.visible && <NoteContentPropertiesDialog markupLanguage={noteContentPropertiesDialogOptions.markupLanguage} themeId={this.props.themeId} onClose={this.noteContentPropertiesDialog_close} text={noteContentPropertiesDialogOptions.text} />}
 				{notePropertiesDialogOptions.visible && <NotePropertiesDialog themeId={this.props.themeId} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
 				{shareNoteDialogOptions.visible && <ShareNoteDialog themeId={this.props.themeId} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}
 				{shareFolderDialogOptions.visible && <ShareFolderDialog themeId={this.props.themeId} folderId={shareFolderDialogOptions.folderId} onClose={this.shareFolderDialog_close} />}

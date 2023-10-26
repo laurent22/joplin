@@ -15,6 +15,8 @@ const { substrWithEllipsis } = require('../string-utils.js');
 
 const logger = Logger.create('models/Folder');
 
+export const id_folder_map = new Map<string, Folder>();
+
 export interface FolderEntityWithChildren extends FolderEntity {
 	children?: FolderEntity[];
 }
@@ -22,6 +24,14 @@ export interface FolderEntityWithChildren extends FolderEntity {
 export default class Folder extends BaseItem {
 	public static tableName() {
 		return 'folders';
+	}
+
+	public static async build_id_folder_map(): Promise<void> {
+		const folders = await BaseItem.loadItemsByType(BaseModel.TYPE_FOLDER);
+		id_folder_map.clear();
+		for (const f of folders) {
+			id_folder_map.set(f.id, f);
+		}
 	}
 
 	public static modelType() {
@@ -54,7 +64,7 @@ export default class Folder extends BaseItem {
 
 		return this.db()
 			.selectAll(`SELECT id FROM notes WHERE ${where.join(' AND ')}`, [parentId])
-		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
+			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.then((rows: any[]) => {
 				const output = [];
 				for (let i = 0; i < rows.length; i++) {
@@ -117,6 +127,11 @@ export default class Folder extends BaseItem {
 				await Folder.delete(subFolderIds[i], childrenDeleteOptions);
 			}
 		}
+		// XJ added
+		const path = await BaseItem.buildPathFromRoot(folder);
+		this.logger().info('deleting note:', path);
+		const stat = await this.fileApi.stat(path);
+		if (stat) await this.fileApi.remove(path);
 
 		await super.delete(folderId, options);
 
@@ -729,13 +744,46 @@ export default class Folder extends BaseItem {
 		// When moving a note to a different folder, the user timestamp is not updated.
 		// However updated_time is updated so that the note can be synced later on.
 
+		const f = id_folder_map.get(folderId);
+		const fPath = await BaseItem.buildPathFromRoot(f);
+		const f1 = id_folder_map.get(targetFolderId);
+		const f1Path = `${await BaseItem.buildPathFromRoot(f1)}/${this.fileNameFS(f)}`;
+		await this.fileApi.move(fPath, f1Path);
+
 		const modifiedFolder = {
 			id: folderId,
 			parent_id: targetFolderId,
 			updated_time: time.unixMs(),
 		};
 
-		return Folder.save(modifiedFolder, { autoTimestamp: false });
+		const result = Folder.save(modifiedFolder, { autoTimestamp: false });
+		await this.build_id_folder_map();
+		return result;
+	}
+
+
+	public static async saveToDisk(f: FolderEntity) {
+		// XJ added
+		const createDir = async (path: string) => {
+			const pStat = await this.fileApi.stat(path);
+			if (!pStat) await this.fileApi.mkdir(path);
+		};
+
+		const path = await BaseItem.buildPathFromRoot(f, createDir);
+		this.logger().info('creating folder:', path);
+		const stat = await this.fileApi.stat(path);
+		if (!stat) await this.fileApi.mkdir(path);
+
+		const props = [`id: ${f.id}`, `parent_id: ${f.parent_id}`];
+		const temp = [];
+		temp.push('---');
+		if (props.length) temp.push(props.join('\n'));
+		temp.push('---');
+		const content = temp.join('\n');
+		const fPath = `${path}/.dir_props.md`;
+		await this.fileApi.put(fPath, content);
+
+		await this.build_id_folder_map();
 	}
 
 	// These "duplicateCheck" and "reservedTitleCheck" should only be done when a user is
@@ -789,6 +837,8 @@ export default class Folder extends BaseItem {
 		if (!('share_id' in savedFolder) || !('parent_id' in savedFolder)) {
 			savedFolder = await this.load(savedFolder.id);
 		}
+
+		await this.saveToDisk(savedFolder);
 
 		this.dispatch({
 			type: 'FOLDER_UPDATE_ONE',

@@ -15,6 +15,7 @@ const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
 const { _ } = require('../locale');
 import { pull, unique } from '../ArrayUtils';
 import { LoadOptions, SaveOptions } from './utils/types';
+import { id_folder_map } from './Folder';
 const urlUtils = require('../urlUtils.js');
 const { isImageMimeType } = require('../resourceUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
@@ -541,6 +542,12 @@ export default class Note extends BaseItem {
 		// When moving a note to a different folder, the user timestamp is not updated.
 		// However updated_time is updated so that the note can be synced later on.
 
+		const n = await this.loadItemById(noteId);
+		const nPath = await BaseItem.buildPathFromRoot(n);
+		const f = id_folder_map.get(folderId);
+		const fPath = `${await BaseItem.buildPathFromRoot(f)}/${this.fileNameFS(n)}`;
+		await this.fileApi.move(nPath, fPath);
+
 		const modifiedNote = {
 			id: noteId,
 			parent_id: folderId,
@@ -667,6 +674,21 @@ export default class Note extends BaseItem {
 		return super.load(id, options);
 	}
 
+	public static async saveToFile(note: NoteEntity) {
+		const createDir = async (path: string) => {
+			const pStat = await this.fileApi.stat(path);
+			if (!pStat) await this.fileApi.mkdir(path);
+		};
+		const path = await this.buildPathFromRoot(note, createDir);
+		// const stat = await this.fileApi.stat(path);
+		// if (stat) {
+		// 	syncDebugLog.info('Note saveToFile:', path, 'already exist, ignored!');
+		// 	return;
+		// }
+		const content = await this.serializeForSync(note);
+		await this.fileApi.put(path, content);
+	}
+
 	public static async save(o: NoteEntity, options: SaveOptions = null): Promise<NoteEntity> {
 		const isNew = this.isNew(o, options);
 
@@ -710,11 +732,18 @@ export default class Note extends BaseItem {
 		const changedFields = [];
 
 		if (oldNote) {
-			for (const field in o) {
-				if (!o.hasOwnProperty(field)) continue;
-				if ((o as any)[field] !== (oldNote as any)[field]) {
+			for (const field in oldNote) {
+				// if (!o.hasOwnProperty(field)) continue;
+				if (o.hasOwnProperty(field) && (o as any)[field] !== (oldNote as any)[field]) {
 					changedFields.push(field);
 				}
+				if (!o.hasOwnProperty(field)) {
+					(o as any)[field] = (oldNote as any)[field];
+				}
+			}
+			if (oldNote.title !== o.title && o.title !== '') {
+				const path = await this.buildPathFromRoot(oldNote);
+				await this.fileApi.delete(path);
 			}
 		}
 
@@ -741,6 +770,10 @@ export default class Note extends BaseItem {
 			});
 		}
 
+		if (note.title !== '') {
+			await this.saveToFile(note);
+		}
+
 		return note;
 	}
 
@@ -753,6 +786,11 @@ export default class Note extends BaseItem {
 			const notes = await Note.byIds(processIds);
 			const beforeChangeItems: any = {};
 			for (const note of notes) {
+				// XJ added
+				const path = await BaseItem.buildPathFromRoot(note);
+				this.logger().info('deleting note:', path);
+				const stat = await this.fileApi.stat(path);
+				if (stat) await this.fileApi.delete(path);
 				beforeChangeItems[note.id] = JSON.stringify(note);
 			}
 
@@ -770,7 +808,7 @@ export default class Note extends BaseItem {
 		}
 	}
 
-	public static async deleteMessage(noteIds: string[]): Promise<string|null> {
+	public static async deleteMessage(noteIds: string[]): Promise<string | null> {
 		let msg = '';
 		if (noteIds.length === 1) {
 			const note = await Note.load(noteIds[0]);
@@ -832,9 +870,12 @@ export default class Note extends BaseItem {
 	// Update the note "order" field without changing the user timestamps,
 	// which is generally what we want.
 	private static async updateNoteOrder_(note: NoteEntity, order: any) {
-		return Note.save({ ...note, order: order,
+		const n = {
+			...note, order: order,
 			user_updated_time: note.user_updated_time,
-			updated_time: time.unixMs() }, { autoTimestamp: false, dispatchUpdateAction: false });
+			updated_time: time.unixMs(),
+		};
+		return Note.save(n, { autoTimestamp: false, dispatchUpdateAction: false });
 	}
 
 	// This method will disable the NOTE_UPDATE_ONE action to prevent a lot

@@ -15,8 +15,8 @@ type TData = {
 export default (dispatch: Function, folderId: string) => {
 	const userInfo = { url: '' };
 	QuickActions.setShortcutItems([
-		{ type: 'New note', title: _('New note'), icon: 'Compose', userInfo },
-		{ type: 'New to-do', title: _('New to-do'), icon: 'Add', userInfo },
+		{ type: 'Note', title: _('Note'), icon: 'Compose', userInfo },
+		{ type: 'To-do', title: _('To-do'), icon: 'Add', userInfo },
 	]);
 
 	const handleQuickAction = (data: TData) => {
@@ -35,7 +35,7 @@ export default (dispatch: Function, folderId: string) => {
 		dispatch({ type: 'NAV_BACK' });
 		dispatch({ type: 'SIDE_MENU_CLOSE' });
 
-		const isTodo = data.type === 'New to-do' ? 1 : 0;
+		const isTodo = data.type === 'To-do' ? 1 : 0;
 
 		void Note.save({
 			parent_id: folderId,

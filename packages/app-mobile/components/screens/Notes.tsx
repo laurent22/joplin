@@ -230,7 +230,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 			if (addFolderNoteButtons && this.props.folders.length > 0) {
 				const buttons = [];
 				buttons.push({
-					label: _('New to-do'),
+					label: _('To-do'),
 					onPress: () => {
 						const isTodo = true;
 						void this.newNoteNavigate(buttonFolderId, isTodo);
@@ -240,7 +240,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 				});
 
 				buttons.push({
-					label: _('New note'),
+					label: _('Note'),
 					onPress: () => {
 						const isTodo = false;
 						void this.newNoteNavigate(buttonFolderId, isTodo);
@@ -248,7 +248,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 					color: '#9b59b6',
 					icon: 'document',
 				});
-				return <ActionButton buttons={buttons}/>;
+				return <ActionButton buttons={buttons} />;
 			}
 			return null;
 		};

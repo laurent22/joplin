@@ -287,6 +287,18 @@ class FileApi {
 		return result;
 	}
 
+	public ls_R(path = ''): Promise<PaginatedList> {
+		logger.debug(`list ${this.baseDir()}`);
+
+		return this.driver_.ls_R(this.fullPath(path));
+	}
+
+	public ls_RR(path = ''): Promise<PaginatedList> {
+		logger.debug(`list ${this.baseDir()}`);
+
+		return this.driver_.ls_RR(this.fullPath(path));
+	}
+
 	// Deprectated
 	public setTimestamp(path: string, timestampMs: number) {
 		logger.debug(`setTimestamp ${this.fullPath(path)}`);
@@ -295,12 +307,12 @@ class FileApi {
 	}
 
 	public mkdir(path: string) {
-		logger.debug(`mkdir ${this.fullPath(path)}`);
+		// logger.debug(`mkdir ${this.fullPath(path)}`);
 		return tryAndRepeat(() => this.driver_.mkdir(this.fullPath(path)), this.requestRepeatCount());
 	}
 
 	public async stat(path: string) {
-		logger.debug(`stat ${this.fullPath(path)}`);
+		// logger.debug(`stat ${this.fullPath(path)}`);
 
 		const output = await tryAndRepeat(() => this.driver_.stat(this.fullPath(path)), this.requestRepeatCount());
 
@@ -318,7 +330,7 @@ class FileApi {
 	}
 
 	public async put(path: string, content: any, options: any = null) {
-		logger.debug(`put ${this.fullPath(path)}`, options);
+		// logger.debug(`put ${this.fullPath(path)}`, options);
 
 		if (options && options.source === 'file') {
 			if (!(await this.fsDriver().exists(options.path))) throw new JoplinError(`File not found: ${options.path}`, 'fileNotFound');
@@ -335,6 +347,16 @@ class FileApi {
 	public delete(path: string) {
 		logger.debug(`delete ${this.fullPath(path)}`);
 		return tryAndRepeat(() => this.driver_.delete(this.fullPath(path)), this.requestRepeatCount());
+	}
+
+	public rmdir(path: string) {
+		logger.debug(`rmdir ${this.fullPath(path)}`);
+		return tryAndRepeat(() => this.driver_.rmdir(this.fullPath(path)), this.requestRepeatCount());
+	}
+
+	public remove(path: string) {
+		logger.debug(`remove ${this.fullPath(path)}`);
+		return tryAndRepeat(() => this.driver_.remove(this.fullPath(path)), this.requestRepeatCount());
 	}
 
 	// Deprectated

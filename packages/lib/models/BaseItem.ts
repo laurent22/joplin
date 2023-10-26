@@ -14,6 +14,10 @@ import JoplinError from '../JoplinError';
 import { LoadOptions, SaveOptions } from './utils/types';
 import { State as ShareState } from '../services/share/reducer';
 import { checkIfItemCanBeAddedToFolder, checkIfItemCanBeChanged, checkIfItemsCanBeChanged, needsReadOnlyChecks } from './utils/readOnly';
+import Resource from './Resource';
+import * as path from 'path';
+
+const grayMatter = require('gray-matter');
 
 const { sprintf } = require('sprintf-js');
 const moment = require('moment');
@@ -23,13 +27,15 @@ export interface ItemsThatNeedDecryptionResult {
 	items: any[];
 }
 
+// XJ amended this to accommodate sql output
 export interface ItemThatNeedSync {
 	id: string;
-	sync_time: number;
 	type_: ModelType;
 	updated_time: number;
-	encryption_applied: number;
-	share_id: string;
+	sync_time?: number;
+	encryption_applied?: number;
+	share_id?: string;
+	[key: string]: any;
 }
 
 export interface ItemsThatNeedSyncResult {
@@ -95,6 +101,72 @@ export default class BaseItem extends BaseModel {
 		this.syncShareCache_ = v;
 	}
 
+	// XJ testing
+	public static isMDFile(path_: string): boolean {
+		// title string.md
+		if (!path_ || !path_.length) return false;
+		let p: any = path_.split(path.sep);
+		p = p[p.length - 1];
+		p = p.split('.');
+		if (p.length < 2) return false;
+		return p[p.length - 1] === 'md';
+	}
+
+	// public static parentsOfMDFile(path_: string) {
+
+	// }
+	// XJ added
+	public static fileNameFS(itemOrId: any, extension: string = null): string {
+		if (extension === null) extension = 'md';
+
+		if (typeof itemOrId === 'string') {
+			return `${itemOrId}.${extension}`;
+			// XJ testing
+		} else {
+			if (itemOrId.type_ === BaseModel.TYPE_FOLDER) {
+				return itemOrId.title;
+			} else if (itemOrId.type_ === BaseModel.TYPE_NOTE) {
+				if (itemOrId.is_todo) {
+					if (itemOrId.todo_completed) return `V | ${itemOrId.title}.${extension}`;
+					else return `X | ${itemOrId.title}.${extension}`;
+				}
+				return `${itemOrId.title}.${extension}`;
+			} else if (itemOrId.type_ === BaseModel.TYPE_RESOURCE) {
+				return `_resources/${Resource.friendlySafeFilename(itemOrId)}`;
+			}
+			return `_others/${itemOrId.id}.${extension}`;
+		}
+	}
+
+	// XJ added
+	// eslint-disable-next-line @typescript-eslint/type-annotation-spacing
+	public static async buildPathFromRoot(local: any, createDir: ((path_: string) => Promise<void>) | null = null): Promise<string> {
+		if (!local) return '';
+
+		let parent: any = local;
+		const parents: string[] = [];
+		const Folder = await import('./Folder');
+		while (true) {
+			if (parent.parent_id) {
+				parent = Folder.id_folder_map.get(parent.parent_id);
+				if (!parent) break;
+				parents.splice(0, 0, parent.title);
+			} else {
+				break;
+			}
+		}
+		let path_ = '';
+		for (const p of parents) {
+			path_ += p;
+			if (createDir !== null) await createDir(path_);
+			path_ += path.sep;
+		}
+		if (local.title.indexOf(path.sep) >= 0) {
+			local.title = local.title.replace(new RegExp(path.sep, 'g'), ' ');
+		}
+		return path_ + this.fileNameFS(local);
+	}
+
 	public static async findUniqueItemTitle(title: string, parentId: string = null) {
 		let counter = 1;
 		let titleToTry = title;
@@ -158,10 +230,10 @@ export default class BaseItem extends BaseModel {
 		else return `${itemOrId.id}.${extension}`;
 	}
 
-	public static isSystemPath(path: string) {
+	public static isSystemPath(path_: string) {
 		// 1b175bb38bba47baac22b0b47f778113.md
-		if (!path || !path.length) return false;
-		let p: any = path.split('/');
+		if (!path_ || !path_.length) return false;
+		let p: any = path_.split(path.sep);
 		p = p[p.length - 1];
 		p = p.split('.');
 		if (p.length !== 2) return false;
@@ -199,8 +271,8 @@ export default class BaseItem extends BaseModel {
 		return output;
 	}
 
-	public static pathToId(path: string) {
-		const p = path.split('/');
+	public static pathToId(path_: string) {
+		const p = path_.split(path.sep);
 		const s = p[p.length - 1].split('.');
 		let name: any = s[0];
 		if (!name) return name;
@@ -208,8 +280,8 @@ export default class BaseItem extends BaseModel {
 		return name[name.length - 1];
 	}
 
-	public static loadItemByPath(path: string) {
-		return this.loadItemById(this.pathToId(path));
+	public static loadItemByPath(path_: string) {
+		return this.loadItemById(this.pathToId(path_));
 	}
 
 	public static async loadItemById(id: string, options: LoadOptions = null) {
@@ -242,6 +314,14 @@ export default class BaseItem extends BaseModel {
 		const ItemClass = this.getClassByItemType(itemType);
 		const fieldsSql = fields.length ? this.db().escapeFields(fields) : '*';
 		const sql = `SELECT ${fieldsSql} FROM ${ItemClass.tableName()} WHERE id IN ("${ids.join('","')}")`;
+		return ItemClass.modelSelectAll(sql);
+	}
+
+	public static async loadItemsByType(itemType: ModelType, options: LoadOptions = null): Promise<any[]> {
+		const fields = options && options.fields ? options.fields : [];
+		const ItemClass = this.getClassByItemType(itemType);
+		const fieldsSql = fields.length ? this.db().escapeFields(fields) : '*';
+		const sql = `SELECT ${fieldsSql} FROM ${ItemClass.tableName()}`;
 		return ItemClass.modelSelectAll(sql);
 	}
 
@@ -384,6 +464,7 @@ export default class BaseItem extends BaseModel {
 			: propValue;
 	}
 
+	// XJ amended
 	public static async serialize(item: any, shownKeys: any[] = null) {
 		if (shownKeys === null) {
 			shownKeys = this.itemClass(item).fieldNames();
@@ -417,16 +498,22 @@ export default class BaseItem extends BaseModel {
 				value = this.serialize_format(key, item[key]);
 			}
 
-			output.props.push(`${key}: ${value}`);
+			if (value && value !== '' && value !== '0') output.props.push(`${key}: ${value}`);
 		}
 
 		const temp = [];
 
-		if (typeof output.title === 'string') temp.push(output.title);
-		if (output.body) temp.push(output.body);
+		temp.push('---');
 		if (output.props.length) temp.push(output.props.join('\n'));
+		temp.push('---');
+		if (typeof output.title === 'string') {
+			temp.push('');
+			temp.push(output.title);
+			temp.push('');
+		}
+		if (output.body) temp.push(output.body);
 
-		return temp.join('\n\n');
+		return temp.join('\n');
 	}
 
 	public static encryptionService() {
@@ -508,42 +595,25 @@ export default class BaseItem extends BaseModel {
 		return ItemClass.save(plainItem, { autoTimestamp: false, changeSource: ItemChange.SOURCE_DECRYPTION });
 	}
 
+	// XJ re-wrote
 	public static async unserialize(content: string) {
-		const lines = content.split('\n');
 		let output: any = {};
-		let state = 'readingProps';
-		const body: string[] = [];
 
-		for (let i = lines.length - 1; i >= 0; i--) {
-			let line = lines[i];
+		const parsedMarkdown = grayMatter(content);
+		const frontMatterData: Record<string, any> = parsedMarkdown.data;
+		const mainContent: string = parsedMarkdown.content;
+		output = { ...output, ...frontMatterData };
+		const lines = mainContent.split('\n').map(line => line.trim());
+		output.title = lines.find(line => line !== '');
 
-			if (state === 'readingProps') {
-				line = line.trim();
-
-				if (line === '') {
-					state = 'readingBody';
-					continue;
-				}
-
-				const p = line.indexOf(':');
-				if (p < 0) throw new Error(`Invalid property format: ${line}: ${content}`);
-				const key = line.substr(0, p).trim();
-				const value = line.substr(p + 1).trim();
-				output[key] = value;
-			} else if (state === 'readingBody') {
-				body.splice(0, 0, line);
-			}
-		}
 
 		if (!output.type_) throw new Error(`Missing required property: type_: ${content}`);
 		output.type_ = Number(output.type_);
 
-		if (body.length) {
-			const title = body.splice(0, 2);
-			output.title = title[0];
+		if (output.type_ === BaseModel.TYPE_NOTE) {
+			const restOfLines = lines.slice(lines.indexOf(output.title) + 1);
+			output.body = restOfLines.join('\n');
 		}
-
-		if (output.type_ === BaseModel.TYPE_NOTE) output.body = body.join('\n');
 
 		const ItemClass = this.itemClass(output.type_);
 		output = ItemClass.removeUnknownFields(output);
@@ -554,6 +624,11 @@ export default class BaseItem extends BaseModel {
 		}
 
 		return output;
+	}
+
+	public static getFrontMatter(content: string): Record<string, any> {
+		const parsedMarkdown = grayMatter(content);
+		return parsedMarkdown.data;
 	}
 
 	public static async encryptedItemsStats(): Promise<EncryptedItemsStats> {
@@ -675,7 +750,8 @@ export default class BaseItem extends BaseModel {
 			// data set it does. In that case it means the recent notes, those that are likely
 			// to be modified again, will be synced first, thus avoiding potential conflicts.
 
-			const sql = sprintf(`
+			const sql = sprintf(
+				`
 				SELECT %s
 				FROM %s items
 				WHERE id NOT IN (
@@ -685,11 +761,11 @@ export default class BaseItem extends BaseModel {
 				ORDER BY items.updated_time DESC
 				LIMIT %d
 			`,
-			this.db().escapeFields(fieldNames),
-			this.db().escapeField(ItemClass.tableName()),
-			Number(syncTarget),
-			extraWhere,
-			limit,
+				this.db().escapeFields(fieldNames),
+				this.db().escapeField(ItemClass.tableName()),
+				Number(syncTarget),
+				extraWhere,
+				limit,
 			);
 
 			const neverSyncedItem = await ItemClass.modelSelectAll(sql);
@@ -728,9 +804,9 @@ export default class BaseItem extends BaseModel {
 			const items = neverSyncedItem.concat(changedItems);
 
 			if (i >= classNames.length - 1) {
-				return { hasMore: items.length >= limit, items: items, neverSyncedItemIds };
+				return { hasMore: items.length >= limit, items: items, neverSyncedItemIds: neverSyncedItemIds };
 			} else {
-				if (items.length) return { hasMore: true, items: items, neverSyncedItemIds };
+				if (items.length) return { hasMore: true, items: items, neverSyncedItemIds: neverSyncedItemIds };
 			}
 		}
 

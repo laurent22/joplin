@@ -5,6 +5,7 @@ import uuid from './uuid';
 import time from './time';
 import JoplinDatabase, { TableField } from './JoplinDatabase';
 import { LoadOptions, SaveOptions } from './models/utils/types';
+import { FileApi } from './file-api';
 const Mutex = require('async-mutex').Mutex;
 
 // New code should make use of this enum
@@ -89,6 +90,8 @@ class BaseModel {
 
 	private static db_: JoplinDatabase;
 
+	protected static fileApi: FileApi;
+
 	public static modelType(): ModelType {
 		throw new Error('Must be overriden');
 	}
@@ -99,6 +102,10 @@ class BaseModel {
 
 	public static setDb(db: any) {
 		this.db_ = db;
+	}
+
+	public static setFileApi(api: FileApi) {
+		this.fileApi = api;
 	}
 
 	public static addModelMd(model: any): any {

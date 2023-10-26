@@ -107,6 +107,7 @@
 			".eslintignore": true,
 			".gitignore": true,
 			".vscode/*": true,
+			".history/*": true,
 			".yarn/cache": true,
 			".yarn/install-state.gz": true,
 			".yarn/plugins": true,
@@ -117,7 +118,9 @@
 			"**/_releases": true,
 			"**/_vieux/": true,
 			"**/.DS_Store": true,
-			"**/*?.js": { "when": "$(basename).tsx"},
+			"**/*?.js": {
+				"when": "$(basename).tsx"
+			},
 			"**/*.base64": true,
 			"**/*.bundle.js": true,
 			"**/*.eot": true,
@@ -125,7 +128,9 @@
 			"**/*.ico": true,
 			"**/*.jar": true,
 			"**/*.jpl": true,
-			"**/*.js": {"when": "$(basename).ts"},
+			"**/*.js": {
+				"when": "$(basename).ts"
+			},
 			"**/*.map": true,
 			"**/*.min.css": true,
 			"**/*.min.js": true,
@@ -352,6 +357,9 @@
 			"vendor/": true,
 			"web/bundles/": true,
 			"web/env.php": true,
+		},
+		"search.exclude": {
+			"**/*.md": true
 		}
 	},
 	"tasks": {
@@ -383,7 +391,8 @@
 				"program": "${workspaceFolder}/packages/server/src/app.ts",
 				"localRoot": "${workspaceFolder}/packages/server",
 				"args": [
-					"--env", "dev"
+					"--env",
+					"dev"
 				],
 				"env": {
 					"JOPLIN_IS_TESTING": "1",

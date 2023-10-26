@@ -60,6 +60,9 @@ import { ProfileConfig } from './services/profileConfig/types';
 import initProfile from './services/profileConfig/initProfile';
 import { parseShareCache } from './services/share/reducer';
 import RotatingLogs from './RotatingLogs';
+import path = require('path');
+import { FileApi } from './file-api';
+const { FileApiDriverLocal } = require('./file-api-driver-local');
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -701,12 +704,12 @@ export default class BaseApplication {
 
 	public deinitRedux() {
 		this.store_ = null;
-		BaseModel.dispatch = function() {};
-		FoldersScreenUtils.dispatch = function() {};
+		BaseModel.dispatch = function() { };
+		FoldersScreenUtils.dispatch = function() { };
 		// reg.dispatch = function() {};
-		BaseSyncTarget.dispatch = function() {};
-		DecryptionWorker.instance().dispatch = function() {};
-		ResourceFetcher.instance().dispatch = function() {};
+		BaseSyncTarget.dispatch = function() { };
+		DecryptionWorker.instance().dispatch = function() { };
+		ResourceFetcher.instance().dispatch = function() { };
 	}
 
 	public async readFlagsFromFile(flagPath: string) {
@@ -751,6 +754,41 @@ export default class BaseApplication {
 		};
 		shim.setTimeout(() => { void processLogs(); }, 60000);
 		shim.setInterval(() => { void processLogs(); }, 24 * 60 * 60 * 1000);
+	}
+
+	protected async initLocalFiles(_profileName: string, _isDev: boolean) {
+		const driver = new FileApiDriverLocal();
+		const homeDir = driver.homeDir;
+		const dName = _isDev ? 'JoplinDevFiles' : 'JoplinFiles';
+		const baseFilePath = `${homeDir}${path.sep}Documents${path.sep}${dName}`;
+		const filePath = `${baseFilePath}${path.sep}${_profileName}`;
+		const fileApi = new FileApi(filePath, driver);
+		fileApi.setLogger(BaseService.logger_);
+		fileApi.setSyncTargetId(111);	// TODO: how to set it?
+		BaseModel.setFileApi(fileApi);
+
+		let stat = await driver.stat(baseFilePath);
+		if (!stat) await driver.mkdir(baseFilePath);
+
+		stat = await driver.stat(filePath);
+		if (!stat) {
+			await driver.mkdir(filePath);
+
+			const folders = await BaseItem.loadItemsByType(BaseModel.TYPE_FOLDER);
+			this.logger().info('number of folders to create', folders.length);
+			for (const f of folders) {
+				await Folder.saveToDisk(f);
+				// this.logger().info('Creating folder', f.title);
+			}
+			const notes = await BaseItem.loadItemsByType(BaseModel.TYPE_NOTE);
+			this.logger().info('number of notes to save to file', notes.length);
+			for (let i = 0; i < notes.length; i++) {
+				const n = notes[i];
+				// this.logger().info('saving note', i, n.title);
+				await Note.saveToFile(n);
+			}
+		}
+		await Folder.build_id_folder_map();
 	}
 
 	public async start(argv: string[], options: StartOptions = null): Promise<any> {
@@ -857,6 +895,8 @@ export default class BaseApplication {
 
 		appLogger.info(`Client ID: ${Setting.value('clientId')}`);
 
+		await this.initLocalFiles(profileConfig.currentProfileId, initArgs.env === 'dev');
+
 		BaseItem.syncShareCache = parseShareCache(Setting.value('sync.shareCache'));
 
 		if (initArgs?.isSafeMode) {
@@ -909,7 +949,7 @@ export default class BaseApplication {
 		if (!Setting.value('api.token')) {
 			void EncryptionService.instance()
 				.generateApiToken()
-			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
+				// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 				.then((token: string) => {
 					Setting.setValue('api.token', token);
 				});
