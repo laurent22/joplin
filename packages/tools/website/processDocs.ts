@@ -239,6 +239,12 @@ export const processMarkdownDoc = (sourceContent: string, context: Context): str
 	return output.join('').trim();
 };
 
+const escapeFrontMatterValue = (v: string) => {
+	return v
+		.replace(/"/g, '\\"')
+		.replace(/[\n\r]/g, ' ');
+};
+
 const processMarkdownFile = async (sourcePath: string, destPath: string, context: Context) => {
 	const sourceContent = await readFile(sourcePath, 'utf-8');
 	const destContent = processMarkdownDoc(sourceContent, context);
@@ -247,7 +253,7 @@ const processMarkdownFile = async (sourcePath: string, destPath: string, context
 	const title = await readmeFileTitle(sourcePath);
 
 	const frontMatter = `---
-sidebar_label: ${title}
+sidebar_label: "${escapeFrontMatterValue(title)}"
 ---`;
 
 	await writeFile(destPath, `${frontMatter}\n\n${destContent}`, 'utf-8');
@@ -256,8 +262,6 @@ sidebar_label: ${title}
 const processMarkdownFiles = async (sourceDir: string, destDir: string, excluded: string[], context: Context) => {
 	const files = await readdir(sourceDir);
 	for (const file of files) {
-		if (!file.endsWith('.md')) continue;
-
 		const fullPath = `${sourceDir}/${file}`;
 		if (excluded.includes(fullPath)) continue;
 
@@ -266,6 +270,8 @@ const processMarkdownFiles = async (sourceDir: string, destDir: string, excluded
 		if (info.isDirectory()) {
 			await processMarkdownFiles(fullPath, `${destDir}/${file}`, excluded, context);
 		} else {
+			if (!file.endsWith('.md')) continue;
+			console.info(`Process ${fullPath}`);
 			const destPath = `${destDir}/${file}`;
 			await processMarkdownFile(fullPath, destPath, context);
 		}
