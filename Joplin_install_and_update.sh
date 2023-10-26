@@ -277,4 +277,3 @@ fi
 print "Cleaning up..."
 rm -rf "$TEMP_DIR"
 print "${COLOR_GREEN}OK${COLOR_RESET}"
-
