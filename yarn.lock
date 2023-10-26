@@ -5143,7 +5143,7 @@ __metadata:
     "@types/jest-expect-message": 1.0.4
     "@types/jsdom": 21.1.3
     "@types/koa": 2.13.9
-    "@types/markdown-it": 12.2.3
+    "@types/markdown-it": 13.0.0
     "@types/mustache": 4.2.3
     "@types/nodemailer": 6.4.11
     "@types/uuid": 9.0.4
@@ -8147,13 +8147,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/markdown-it@npm:12.2.3":
-  version: 12.2.3
-  resolution: "@types/markdown-it@npm:12.2.3"
+"@types/markdown-it@npm:13.0.0":
+  version: 13.0.0
+  resolution: "@types/markdown-it@npm:13.0.0"
   dependencies:
     "@types/linkify-it": "*"
     "@types/mdurl": "*"
-  checksum: 868824a3e4d00718ba9cd4762cf16694762a670860f4b402e6e9f952b6841a2027488bdc55d05c2b960bf5078df21a9d041270af7e8949514645fe88fdb722ac
+  checksum: 7bcf45d0a1c2bc2c28f91460af571b9e8a195d4983cda809af04bf1d400f98902c71849b7cb8c036e35a3be7fa2483117d4faeab24a7de059e04be3e9f641aff
   languageName: node
   linkType: hard
 
