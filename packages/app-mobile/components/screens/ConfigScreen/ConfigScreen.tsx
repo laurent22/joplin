@@ -154,7 +154,8 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	}
 
 	private switchSectionPress_ = (section: string) => {
-		AccessibilityInfo.announceForAccessibility(_('Opening section %s', section));
+		const label = Setting.sectionNameToLabel(section);
+		AccessibilityInfo.announceForAccessibility(_('Opening section %s', label));
 		this.setState({ selectedSectionName: section });
 	};
 
