@@ -213,6 +213,7 @@ if command -v lsb_release &> /dev/null; then
   if [[ $DISTVER = "Ubuntu23.10" || $DISTVER =~ Debian1. || ( "$DISTVER" = "Linuxmint4" && "$DISTCODENAME" = "debbie" ) || ( "$DISTVER" = "CentOS" && "$DISTMAJOR" =~ 6|7 ) ]]
   then
     SANDBOXPARAM="--no-sandbox"
+    print "${COLOR_YELLOW}WARNING${COLOR_RESET} Electron sandboxing disabled. Avoid loading untrusted notes/PDFs/audio/video files."
   fi
 fi
 
