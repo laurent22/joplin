@@ -1,4 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Wed, 06 Sep 2023 12:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Wed, 06 Sep 2023 12:00:00 GMT</pubDate><item><title><![CDATA[What's new in Joplin 2.12]]></title><description><![CDATA[<h1>Desktop<a name="desktop" href="#desktop" class="heading-anchor">🔗</a></h1>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Mon, 23 Oct 2023 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 23 Oct 2023 00:00:00 GMT</pubDate><item><title><![CDATA[Working in the shadows with white-hat hackers]]></title><description><![CDATA[<p>The majority of Joplin's development is carried out in the public domain. This includes the discussion of issues on GitHub, as well as the submission of pull requests and related discussions. The transparency of these processes allows for collaborative problem-solving and shared insights.</p>
+<p>However, there is one aspect that operates behind closed doors, and for good reason: addressing cybersecurity vulnerabilities. It is imperative that these issues remain undisclosed until they have been resolved. Once a solution is implemented, it is usually accompanied by discreet commits and a message in the changelog to signify the progress made.</p>
+<p>Typically, the process begins with an email from a security researcher. They provide valuable insights, such as a specially crafted note that triggers a bug, or an API call, along with an explanation of how the application's security can be circumvented. We examine the vulnerability, create a fix, and create automated test units to prevent any accidental reintroduction of the vulnerability in future code updates. An example of such a commit is: <a href="https://github.com/laurent22/joplin/commit/9e90d9016daf79b5414646a93fd369aedb035071">9e90d9016daf79b5414646a93fd369aedb035071</a></p>
+<p>We then share our fix with the researcher for validation. Additionally, we often apply the fix to previous versions of Joplin, depending on the severity of the vulnerability.</p>
+<p>The contribution of security researchers in this regard is immeasurable. They employ their ingenuity to identify inventive methods of bypassing existing security measures and often discover subtle flaws in the code that might otherwise go unnoticed.</p>
+<p>We would like to express our sincere gratitude to the security researchers who have assisted us throughout the years in identifying and rectifying security vulnerabilities!</p>
+<ul>
+<li><a href="https://github.com/a1ise">@Alise</a></li>
+<li>@hexodotsh</li>
+<li><a href="https://github.com/ly1g3">@ly1g3</a></li>
+<li><a href="https://twitter.com/maple3142">@maple3142</a></li>
+<li>Ademar Nowasky Junior</li>
+<li><a href="mailto:ben@mayhem.sg">Benjamin Harris</a></li>
+<li><a href="https://github.com/JavierOlmedo">Javier Olmedo</a></li>
+<li><a href="https://twitter.com/newfolderj">Jubair Rehman Yousafzai</a></li>
+<li>lin@UCCU Hacker</li>
+<li><a href="https://github.com/personalizedrefrigerator">personalizedrefrigerator</a></li>
+<li><a href="https://twitter.com/fhlipZero">Phil Holbrook</a></li>
+<li><a href="https://ryotak.net/">RyotaK</a></li>
+<li><a href="https://twitter.com/YNizry">Yaniv Nizry</a></li>
+</ul>
+]]></description><link>https://joplinapp.org/news/20231023-white-hat-hackers/</link><guid isPermaLink="false">20231023-white-hat-hackers</guid><pubDate>Mon, 23 Oct 2023 00:00:00 GMT</pubDate><twitter-text>Working in the shadows with white-hat hackers</twitter-text></item><item><title><![CDATA[What's new in Joplin 2.12]]></title><description><![CDATA[<h1>Desktop<a name="desktop" href="#desktop" class="heading-anchor">🔗</a></h1>
 <h2>Support for Apple Silicon<a name="support-for-apple-silicon" href="#support-for-apple-silicon" class="heading-anchor">🔗</a></h2>
 <p>A new release is now available for Apple Silicon, which provides improve performances on this architecture.</p>
 <h2>Rich Text editor<a name="rich-text-editor" href="#rich-text-editor" class="heading-anchor">🔗</a></h2>
@@ -319,17 +340,4 @@
 <p><a href="https://joplinapp.org/changelog_android/">https://joplinapp.org/changelog_android/</a></p>
 <p><a href="https://joplinapp.org/changelog_ios/">https://joplinapp.org/changelog_ios/</a></p>
 <p><a href="https://joplinapp.org/changelog_cli/">https://joplinapp.org/changelog_cli/</a></p>
-]]></description><link>https://joplinapp.org/news/20211217-120324/</link><guid isPermaLink="false">20211217-120324</guid><pubDate>Fri, 17 Dec 2021 12:03:24 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Potential breaking change in next Joplin Server update (2.5.10)]]></title><description><![CDATA[<p>Just a head up that the next Joplin Server update could potentially include a breaking change, depending on your data.</p>
-<p>One of the database migration is going to add an &quot;owner_id&quot; column to the &quot;items&quot; table (where all notes, notebooks, etc. are stored), and automatically populate it. Normally that shouldn't take too long but you might want to make sure you won't need the server right away when you process this.</p>
-<p>The second database migration will add a unique constraint on items.name and items.owner_id and that's where the breaking change might be. Normally this data is already unique because that's enforced by the application but in some rare cases, due a race condition, there could be duplicate data in there. If that happens the migration will fail and the server will not start.</p>
-<p>If that happens, you'll need to decide what to do with the data, as it's not possible to automatically decide. You can find all duplicates using this query:</p>
-<p><code><strong>select</strong> count(<em>), name, owner_id<br>
-<strong>from</strong> items <strong>group</strong> <strong>by</strong> name, owner_id<br>
-<strong>having</strong> count(</em>) &gt; 1;</code></p>
-<p>Once you have the list of IDs you have a few options:</p>
-<ul>
-<li>Find the corresponding item in Joplin (it can unfortunately be anything - a note, resource, folder, etc.), then delete it and sync.</li>
-<li>Or, just delete the data directly in the database. You'll want to delete the corresponding item_id from the user_items table too.</li>
-</ul>
-<p>But really in most cases you should be fine. Especially if you don't have that many notes it's unlikely you have duplicates.</p>
-]]></description><link>https://joplinapp.org/news/20211102-150403/</link><guid isPermaLink="false">20211102-150403</guid><pubDate>Tue, 02 Nov 2021 15:04:03 GMT</pubDate><twitter-text></twitter-text></item></channel></rss>
+]]></description><link>https://joplinapp.org/news/20211217-120324/</link><guid isPermaLink="false">20211217-120324</guid><pubDate>Fri, 17 Dec 2021 12:03:24 GMT</pubDate><twitter-text></twitter-text></item></channel></rss>

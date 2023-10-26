@@ -256,6 +256,7 @@ export interface ResourceLocalStateEntity {
   'type_'?: number;
 }
 export interface ResourceEntity {
+  'blob_updated_time'?: number;
   'created_time'?: number;
   'encryption_applied'?: number;
   'encryption_blob_encrypted'?: number;
@@ -467,6 +468,7 @@ export const databaseSchema: DatabaseTables = {
 		type_: { type: 'number' },
 	},
 	resources: {
+		blob_updated_time: { type: 'number' },
 		created_time: { type: 'number' },
 		encryption_applied: { type: 'number' },
 		encryption_blob_encrypted: { type: 'number' },

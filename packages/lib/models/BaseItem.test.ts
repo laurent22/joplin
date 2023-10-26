@@ -1,17 +1,22 @@
-const { setupDatabaseAndSynchronizer, switchClient } = require('../testing/test-utils.js');
-const Folder = require('../models/Folder').default;
-const Note = require('../models/Note').default;
+import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, syncTargetId, synchronizerStart, msleep } from '../testing/test-utils';
+import BaseItem from './BaseItem';
+import Folder from './Folder';
+import Note from './Note';
 
-describe('models/BaseItem', () => {
+describe('BaseItem', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 	});
 
+	afterAll(async () => {
+		await afterAllCleanUp();
+	});
+
 	// This is to handle the case where a property is removed from a BaseItem table - in that case files in
 	// the sync target will still have the old property but we don't need it locally.
-	it('should ignore properties that are present in sync file but not in database when serialising', (async () => {
+	it('should ignore properties that are present in sync file but not in database when serialising', async () => {
 		const folder = await Folder.save({ title: 'folder1' });
 
 		let serialized = await Folder.serialize(folder);
@@ -20,9 +25,9 @@ describe('models/BaseItem', () => {
 		const unserialized = await Folder.unserialize(serialized);
 
 		expect('ignore_me' in unserialized).toBe(false);
-	}));
+	});
 
-	it('should not modify title when unserializing', (async () => {
+	it('should not modify title when unserializing', async () => {
 		const folder1 = await Folder.save({ title: '' });
 		const folder2 = await Folder.save({ title: 'folder1' });
 
@@ -35,9 +40,9 @@ describe('models/BaseItem', () => {
 		const unserialized2 = await Folder.unserialize(serialized2);
 
 		expect(unserialized2.title).toBe(folder2.title);
-	}));
+	});
 
-	it('should correctly unserialize note timestamps', (async () => {
+	it('should correctly unserialize note timestamps', async () => {
 		const folder = await Folder.save({ title: 'folder' });
 		const note = await Note.save({ title: 'note', parent_id: folder.id });
 
@@ -48,9 +53,9 @@ describe('models/BaseItem', () => {
 		expect(unserialized.updated_time).toEqual(note.updated_time);
 		expect(unserialized.user_created_time).toEqual(note.user_created_time);
 		expect(unserialized.user_updated_time).toEqual(note.user_updated_time);
-	}));
+	});
 
-	it('should serialize geolocation fields', (async () => {
+	it('should serialize geolocation fields', async () => {
 		const folder = await Folder.save({ title: 'folder' });
 		let note = await Note.save({ title: 'note', parent_id: folder.id });
 		note = await Note.load(note.id);
@@ -76,9 +81,9 @@ describe('models/BaseItem', () => {
 		expect(unserialized.latitude).toEqual(note.latitude);
 		expect(unserialized.longitude).toEqual(note.longitude);
 		expect(unserialized.altitude).toEqual(note.altitude);
-	}));
+	});
 
-	it('should serialize and unserialize notes', (async () => {
+	it('should serialize and unserialize notes', async () => {
 		const folder = await Folder.save({ title: 'folder' });
 		const note = await Note.save({ title: 'note', parent_id: folder.id });
 		await Note.save({
@@ -93,9 +98,9 @@ describe('models/BaseItem', () => {
 		const noteAfter = await Note.unserialize(serialized);
 
 		expect(noteAfter).toEqual(noteBefore);
-	}));
+	});
 
-	it('should serialize and unserialize properties that contain new lines', (async () => {
+	it('should serialize and unserialize properties that contain new lines', async () => {
 		const sourceUrl = `
 https://joplinapp.org/ \\n
 `;
@@ -107,9 +112,9 @@ https://joplinapp.org/ \\n
 		const noteAfter = await Note.unserialize(serialized);
 
 		expect(noteAfter).toEqual(noteBefore);
-	}));
+	});
 
-	it('should not serialize the note title and body', (async () => {
+	it('should not serialize the note title and body', async () => {
 		const note = await Note.save({ title: 'my note', body: `one line
 two line
 three line \\n no escape` });
@@ -121,5 +126,27 @@ three line \\n no escape` });
 one line
 two line
 three line \\n no escape`)).toBe(0);
-	}));
+	});
+
+	it('should update item sync item', async () => {
+		const note1 = await Note.save({ });
+
+		const syncTime = async (itemId: string) => {
+			const syncItem = await BaseItem.syncItem(syncTargetId(), itemId, { fields: ['sync_time'] });
+			return syncItem ? syncItem.sync_time : 0;
+		};
+
+		expect(await syncTime(note1.id)).toBe(0);
+
+		await synchronizerStart();
+
+		const newTime = await syncTime(note1.id);
+		expect(newTime).toBeLessThanOrEqual(Date.now());
+
+		// Check that it doesn't change if we sync again
+		await msleep(1);
+		await synchronizerStart();
+		expect(await syncTime(note1.id)).toBe(newTime);
+	});
+
 });
