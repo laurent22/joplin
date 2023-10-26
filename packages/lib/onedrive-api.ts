@@ -343,14 +343,21 @@ export default class OneDriveApi {
 
 					await handleRequestRepeat(error);
 					continue;
-				} else if (error?.code === 'activityLimitReached' && response?.headers?._headers['retry-after'][0] && !isNaN(Number(response?.headers?._headers['retry-after'][0]))) {
+				} else if (error?.code === 'activityLimitReached') {
 					// Wait for OneDrive throttling
 					// Relavent Microsoft Docs: https://docs.microsoft.com/en-us/sharepoint/dev/general-development/how-to-avoid-getting-throttled-or-blocked-in-sharepoint-online#best-practices-to-handle-throttling
 					// Decrement retry count as multiple sync threads will cause repeated throttling errors - this will wait until throttling is resolved to continue, preventing a hard stop on the sync
 					i--;
-					const sleepSeconds = response.headers._headers['retry-after'][0];
+					
+					const retryAfter = response.headers?.get?.('retry-after') ?? 1;
+					let sleepSeconds = parseFloat(retryAfter);
+
+					if (isNaN(sleepSeconds)) {
+						sleepSeconds = 5;
+					}
+
 					logger.info(`OneDrive Throttle, sync thread sleeping for ${sleepSeconds} seconds...`);
-					await handleRequestRepeat(error, Number(sleepSeconds));
+					await handleRequestRepeat(error, sleepSeconds);
 					continue;
 				} else if (error.code === 'itemNotFound' && method === 'DELETE') {
 					// Deleting a non-existing item is ok - noop
