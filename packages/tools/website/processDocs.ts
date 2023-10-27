@@ -378,6 +378,7 @@ async function main() {
 		`${readmeDir}/welcome`,
 		`${readmeDir}/faq_joplin_cloud.md`,
 		`${readmeDir}/cla.md`,
+		`${readmeDir}/privacy.md`,
 	], context);
 
 	await deleteUnprocessedFiles(`${docsDir}`, context.processedFiles);

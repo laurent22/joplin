@@ -112,34 +112,6 @@ The application is available for Windows, Linux, macOS, Android and iOS. A [Web 
 | <img width="50" src="https://avatars2.githubusercontent.com/u/126279083?s=96&v=4"/></br>[matmoly](https://github.com/matmoly) | <img width="50" src="https://avatars2.githubusercontent.com/u/1788010?s=96&v=4"/></br>[maxtruxa](https://github.com/maxtruxa) | <img width="50" src="https://avatars2.githubusercontent.com/u/31054972?s=96&v=4"/></br>[saarantras](https://github.com/saarantras) | <img width="50" src="https://avatars2.githubusercontent.com/u/327998?s=96&v=4"/></br>[sif](https://github.com/sif) |
 | <img width="50" src="https://avatars2.githubusercontent.com/u/765564?s=96&v=4"/></br>[taskcruncher](https://github.com/taskcruncher) | <img width="50" src="https://avatars2.githubusercontent.com/u/333944?s=96&v=4"/></br>[tateisu](https://github.com/tateisu) |       |       |
 <!-- SPONSORS-GITHUB -->
-
-# Features
-
-- Desktop, mobile and terminal applications.
-- [Web Clipper](https://github.com/laurent22/joplin/blob/dev/readme/clipper.md) for Firefox and Chrome.
-- End To End Encryption (E2EE).
-- Note history (revisions).
-- Synchronisation with various services, including Nextcloud, Dropbox, WebDAV and OneDrive.
-- Offline first, so the entire data is always available on the device even without an internet connection.
-- Import Enex files (Evernote export format) and Markdown files.
-- Export JEX files (Joplin Export format) and raw files.
-- Support notes, to-dos, tags and notebooks.
-- Sort notes by multiple criteria - title, updated time, etc.
-- Support for alarms (notifications) in mobile and desktop applications.
-- Markdown notes, which are rendered with images and formatting in the desktop and mobile applications. Support for extra features such as math notation and checkboxes.
-- Choice of both Markdown and Rich Text (WYSIWYG) editors.
-- File attachment support - images are displayed, other files are linked and can be opened in the relevant application.
-- Inline display of PDF, video and audio files.
-- Goto Anything feature.
-- Search functionality.
-- Geo-location support.
-- Supports multiple languages.
-- External editor support - open notes in your favorite external editor with one click in Joplin.
-- Extensible functionality through plugin and data APIs.
-- Custom CSS support for customisation of both the rendered markdown and overall user interface.
-- Customisable layout allows toggling, movement and sizing of various elements.
-- Keyboard shortcuts are editable and allow binding of most Joplin commands with export/import functionality.
-- Multiple profile support.
 	
 # Donations
 
