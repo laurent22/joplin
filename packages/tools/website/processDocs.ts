@@ -293,7 +293,6 @@ const escapeFrontMatterValue = (v: string) => {
 };
 
 const processMarkdownFile = async (sourcePath: string, destPath: string, context: Context) => {
-	if (!context.processedFiles) context.processedFiles = [];
 	context.processedFiles.push(destPath);
 
 	const sourceContent = await readFile(sourcePath, 'utf-8');
@@ -318,21 +317,27 @@ sidebar_label: "${escapeFrontMatterValue(title)}"
 	await writeFile(destPath, fullContent, 'utf-8');
 };
 
-const processMarkdownFiles = async (sourceDir: string, destDir: string, excluded: string[], context: Context) => {
+const processDocFiles = async (sourceDir: string, destDir: string, excluded: string[], context: Context) => {
+	if (!context.processedFiles) context.processedFiles = [];
+
 	const files = await readdir(sourceDir);
 	for (const file of files) {
 		const fullPath = `${sourceDir}/${file}`;
 		if (excluded.includes(fullPath)) continue;
 
 		const info = await stat(fullPath);
+		const destPath = `${destDir}/${file}`;
 
 		if (info.isDirectory()) {
-			await processMarkdownFiles(fullPath, `${destDir}/${file}`, excluded, context);
+			await processDocFiles(fullPath, destPath, excluded, context);
 		} else {
-			if (!file.endsWith('.md')) continue;
-			console.info(`Process: ${fullPath}`);
-			const destPath = `${destDir}/${file}`;
-			await processMarkdownFile(fullPath, destPath, context);
+			if (file.endsWith('.md')) {
+				console.info(`Process: ${fullPath}`);
+				await processMarkdownFile(fullPath, destPath, context);
+			} else if (file === '_category_.yml') {
+				context.processedFiles.push(destPath);
+				await copy(fullPath, destPath);
+			}
 		}
 	}
 };
@@ -354,23 +359,33 @@ export const deleteUnprocessedFiles = async (dirPath: string, processedFiles: st
 	}
 };
 
+const copyFile = async (sourceFile: string, destFile: string) => {
+	console.info(`Copy: ${destFile}`);
+	await copy(sourceFile, destFile);
+};
+
 async function main() {
 	const rootDir = await getRootDir();
 	const docBuilderDir = `${rootDir}/packages/doc-builder`;
+	const docsDir = `${docBuilderDir}/docs`;
+	const readmeDir = `${rootDir}/readme`;
 
 	const context: Context = {};
 
-	await processMarkdownFiles(`${rootDir}/readme`, `${docBuilderDir}/docs`, [
-		`${rootDir}/readme/download.md`,
-		`${rootDir}/readme/_i18n`,
-		`${rootDir}/readme/welcome`,
-		`${rootDir}/readme/faq_joplin_cloud.md`,
-		`${rootDir}/readme/cla.md`,
+	await processDocFiles(readmeDir, `${docsDir}`, [
+		`${readmeDir}/download.md`,
+		`${readmeDir}/_i18n`,
+		`${readmeDir}/welcome`,
+		`${readmeDir}/faq_joplin_cloud.md`,
+		`${readmeDir}/cla.md`,
 	], context);
 
-	await deleteUnprocessedFiles(`${docBuilderDir}/docs`, context.processedFiles);
+	await deleteUnprocessedFiles(`${docsDir}`, context.processedFiles);
 
-	await copy(`${rootDir}/Assets/WebsiteAssets/images`, `${docBuilderDir}/static/images`);
+	await copyFile(`${rootDir}/Assets/WebsiteAssets/images`, `${docBuilderDir}/static/images`);
+	await copyFile(`${rootDir}/CONTRIBUTING.md`, `${docsDir}/dev/index.md`);
+	await copyFile(`${rootDir}/BUILD.md`, `${docsDir}/dev/BUILD.md`);
+	await copyFile(`${rootDir}/DEPLOY.md`, `${docsDir}/dev/DEPLOY.md`);
 }
 
 if (require.main === module) {
