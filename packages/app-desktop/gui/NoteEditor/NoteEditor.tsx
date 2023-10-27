@@ -266,7 +266,7 @@ function NoteEditor(props: NoteEditorProps) {
 				newNote.title = newNote.title.replace(new RegExp(path.sep, 'g'), ' ');
 			}
 			setFormNote(newNote);
-			if (vDiff.indexOf('\n') >= 0 || fieldChanged) scheduleSaveNote(newNote);
+			if (vDiff.length > 10 || vDiff.indexOf('\n') >= 0 || vDiff.indexOf('.') >= 0 || fieldChanged) scheduleSaveNote(newNote);
 		}
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [handleProvisionalFlag, formNote, isNewNote, titleHasBeenManuallyChanged]);

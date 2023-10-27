@@ -731,19 +731,27 @@ export default class Note extends BaseItem {
 
 		const changedFields = [];
 
-		if (oldNote) {
-			for (const field in oldNote) {
-				// if (!o.hasOwnProperty(field)) continue;
-				if (o.hasOwnProperty(field) && (o as any)[field] !== (oldNote as any)[field]) {
-					changedFields.push(field);
+		if (o.title) {
+			if (oldNote) {
+				for (const field in oldNote) {
+					// if (!o.hasOwnProperty(field)) continue;
+					if (o.hasOwnProperty(field) && (o as any)[field] !== (oldNote as any)[field]) {
+						changedFields.push(field);
+					}
+					if (!o.hasOwnProperty(field)) {
+						(o as any)[field] = (oldNote as any)[field];
+					}
 				}
-				if (!o.hasOwnProperty(field)) {
-					(o as any)[field] = (oldNote as any)[field];
+				if (oldNote.title !== o.title && o.title !== '') {
+					const path = await this.buildPathFromRoot(oldNote);
+					await this.fileApi.delete(path);
+					const sameTitleNotes = await Note.loadByFields({ title: o.title, parent_id: o.parent_id });
+					if (sameTitleNotes) o.title = await this.findUniqueItemTitle(o.title, o.parent_id);
 				}
-			}
-			if (oldNote.title !== o.title && o.title !== '') {
-				const path = await this.buildPathFromRoot(oldNote);
-				await this.fileApi.delete(path);
+			} else {
+				// use a different title if given title already exist in the same notebook
+				const sameTitleNotes = await Note.loadByFields({ title: o.title, parent_id: o.parent_id });
+				if (sameTitleNotes) o.title = await this.findUniqueItemTitle(o.title, o.parent_id);
 			}
 		}
 
