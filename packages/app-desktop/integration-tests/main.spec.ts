@@ -2,6 +2,9 @@ import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import activateMainMenuItem from './util/activateMainMenuItem';
 import SettingsScreen from './models/SettingsScreen';
+import mockNextShowMessageCall from './util/mockNextShowMessageDialog';
+import { readFile } from 'fs-extra';
+import { join } from 'path';
 
 
 test.describe('main', () => {
@@ -121,4 +124,37 @@ test.describe('main', () => {
 
 		expect(await nextExternalUrlPromise).toBe(linkHref);
 	});
+
+	test(
+		'restart in safe mode prompt should work',
+		async ({ profileDirectory, electronApp, mainWindow }) => {
+			// Ensure everything has loaded before crashing the renderer
+			const mainScreen = new MainScreen(mainWindow);
+			await mainScreen.waitFor();
+
+			// Choose the "restart in safe mode" option
+			await mockNextShowMessageCall(electronApp, /an error/i, /restart in safe mode/i);
+
+			// Click "OK" on the "exiting" dialog on Linux
+			await mockNextShowMessageCall(electronApp, /Please relaunch/i, /ok/i);
+
+			const appCloseEvent = electronApp.waitForEvent('close');
+
+			void mainWindow.evaluate(() => {
+				// Calling process.crash() causes Playwright to fail the test.
+				// Simulate process.crash() by calling the crash handler directly.
+				console.log((window as any).joplin.bridge);
+				const appWrapper = (window as any).joplin.bridge.electronApp();
+				appWrapper.handleAppFailure('Test message', false);
+			});
+
+			await appCloseEvent;
+
+			// Should have added a "start in safe mode" file to the profile
+			// directory.
+			expect(
+				await readFile(join(profileDirectory, 'force-safe-mode-on-next-start'), 'utf8')
+			).toBe('true');
+		},
+	);
 });
