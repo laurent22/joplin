@@ -1,10 +1,8 @@
 # Note History
 
-Joplin has support for note history. The applications (desktop, mobile and CLI) now preserve previous versions of the notes, so you can inspect or restore them later on as needed.
+The Joplin applications automatically save previous versions of your notes at regular intervals. These versions are synced across devices and can be viewed from the desktop application.
 
 A common complain with many sync-based note taking apps is that they work in an opaque way - sometimes notes are changed or they disappear and it's not clear why - it could be a user error, or some bug, but regardless it makes it hard to trust the app with thousands of notes. So this feature give transparency over what's happening - if some note seems to be gone or changed when it shouldn't, the redundant data allows investigating the issue and restoring content.
-
-Another medium term goal is to allow the implementation of a recycle bin. Behind the scene, this is essentially already done since whenever a note is deleted, a final revision of that note is preserved. What's missing is a user interface (i.e. the recycle bin) to view these deleted notes.
 
 ### How does it work?
 

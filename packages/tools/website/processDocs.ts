@@ -6,7 +6,7 @@ import * as MarkdownIt from 'markdown-it';
 import { htmlentities, isSelfClosingTag } from '@joplin/utils/html';
 import { stripOffFrontMatter } from './utils/frontMatter';
 import StateCore = require('markdown-it/lib/rules_core/state_core');
-import { copy, mkdirp } from 'fs-extra';
+import { copy, mkdirp, remove } from 'fs-extra';
 import { dirname } from 'path';
 import markdownUtils, { MarkdownTable } from '@joplin/lib/markdownUtils';
 import { readmeFileTitle } from './utils/parser';
@@ -86,9 +86,11 @@ const parseHtml = (html: string) => {
 
 const escapeForMdx = (s: string): string => {
 	return s
-		.replace(/</g, '&gt;')
-		.replace(/>/g, '&lt;');
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;');
 };
+
+// const ParagraphBreak = '///PARAGRAPH_BREAK///';
 
 const processToken = (token: any, output: string[], context: Context): void => {
 	if (!context.listStack) context.listStack = [];
@@ -135,6 +137,7 @@ const processToken = (token: any, output: string[], context: Context): void => {
 		context.currentTable.header.push({
 			label: '',
 			name: `${context.currentTable.header.length}`,
+			disableHtmlEscape: true,
 		});
 	} else if (type === 'thead_open') {
 		context.inHeader = true;
@@ -159,6 +162,7 @@ const processToken = (token: any, output: string[], context: Context): void => {
 	} else if (type === 'table_close') {
 		const tableMd = markdownUtils.createMarkdownTable(context.currentTable.header, context.currentTable.rows);
 		content.push(tableMd);
+		content.push('\n\n');
 		context.currentTable = null;
 	} else if (type === 'bullet_list_open') {
 		context.listStarting = !context.listStack.length;
@@ -225,7 +229,7 @@ export const processMarkdownDoc = (sourceContent: string, context: Context): str
 
 	markdownIt.core.ruler.push('converter', (state: StateCore) => {
 		const tokens = state.tokens;
-		// console.info(JSON.stringify(tokens, null, '\t'));
+		console.info(JSON.stringify(tokens, null, '\t'));
 		for (let i = 0; i < tokens.length; i++) {
 			const token = tokens[i];
 			processToken(token, output, context);
@@ -278,21 +282,30 @@ const processMarkdownFiles = async (sourceDir: string, destDir: string, excluded
 	}
 };
 
+const deleteDirContent = async (dirPath: string) => {
+	const files = await readdir(dirPath);
+	for (const file of files) {
+		const fullPath = `${dirPath}/${file}`;
+		await remove(fullPath);
+	}
+};
+
 async function main() {
 	const rootDir = await getRootDir();
 	const docBuilderDir = `${rootDir}/packages/doc-builder`;
+
+	await deleteDirContent(`${docBuilderDir}/docs`);
 
 	const context: Context = {};
 
 	await processMarkdownFiles(`${rootDir}/readme`, `${docBuilderDir}/docs`, [
 		`${rootDir}/readme/download.md`,
 		`${rootDir}/readme/_i18n`,
+		`${rootDir}/readme/welcome`,
+		`${rootDir}/readme/faq_joplin_cloud.md`,
 	], context);
 
 	await copy(`${rootDir}/Assets/WebsiteAssets/images`, `${docBuilderDir}/static/images`);
-	await copy(`${rootDir}/readme/welcome/AllClients.png`, `${docBuilderDir}/static/AllClients.png`);
-	await copy(`${rootDir}/readme/welcome/WebClipper.png`, `${docBuilderDir}/static/WebClipper.png`);
-	await copy(`${rootDir}/readme/welcome/SubNotebooks.png`, `${docBuilderDir}/static/SubNotebooks.png`);
 }
 
 if (require.main === module) {

@@ -10,7 +10,7 @@ describe('website/processDocs', () => {
 		for (const file of files) {
 			if (file.endsWith('.mdx')) continue;
 
-			if (!file.endsWith('style.md')) continue;
+			if (!file.endsWith('table.md')) continue;
 
 			const sourcePath = `${sampleDir}/${file}`;
 			const outputPath = `${sampleDir}/${basename(file, '.md')}.mdx`;

@@ -1,6 +1,6 @@
-# About End-To-End Encryption (E2EE)
+# End-To-End Encryption (E2EE)
 
-End-to-end encryption (E2EE) is a system where only the owner of the data (i.e. notes, notebooks, tags or resources) can read it. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data.
+Joplin supports end-to-end encryption (E2EE) on all the applications. End-to-end encryption (E2EE) is a system where only the owner of the data (i.e. notes, notebooks, tags or resources) can read it. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data.
 
 The system is designed to defeat any attempts at surveillance or tampering because no third party can decipher the data being communicated or stored.
 
