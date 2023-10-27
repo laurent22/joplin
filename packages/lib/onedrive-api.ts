@@ -349,7 +349,7 @@ export default class OneDriveApi {
 					// Decrement retry count as multiple sync threads will cause repeated throttling errors - this will wait until throttling is resolved to continue, preventing a hard stop on the sync
 					i--;
 
-					const retryAfter = response.headers?.get?.('retry-after') ?? 1;
+					const retryAfter = response.headers?.get?.('retry-after') ?? '1';
 					let sleepSeconds = parseFloat(retryAfter);
 
 					if (isNaN(sleepSeconds)) {

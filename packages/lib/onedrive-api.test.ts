@@ -42,7 +42,6 @@ describe('onedrive-api', () => {
 					message: 'Activity limit reached.',
 				};
 				const headers = {
-					// Retry after 2 seconds
 					'retry-after': `${retryDelay / 1000}`,
 				};
 
@@ -50,7 +49,6 @@ describe('onedrive-api', () => {
 					headers: new Headers(headers),
 
 					// "Too many requests"
-					// See https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
 					status: 429,
 				});
 			}
