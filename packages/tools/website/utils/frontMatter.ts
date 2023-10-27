@@ -1,7 +1,8 @@
+import * as yaml from 'js-yaml';
+
 const moment = require('moment');
 
-export interface MarkdownAndFrontMatter {
-	doc: string;
+export interface FrontMatter {
 	created?: Date;
 	updated?: Date;
 	source_url?: string;
@@ -13,22 +14,18 @@ export interface MarkdownAndFrontMatter {
 	sidebar_position?: number;
 }
 
-const readProp = (line: string): string[] => {
-	line = line.trim();
-	const d = line.indexOf(':');
-	return [line.substr(0, d).trim(), line.substr(d + 1).trim()];
-};
+export interface MarkdownAndFrontMatter {
+	doc: string;
+	header: FrontMatter;
+}
 
 export const stripOffFrontMatter = (md: string): MarkdownAndFrontMatter => {
-	if (md.indexOf('---') !== 0) return { doc: md };
+	if (md.indexOf('---') !== 0) return { doc: md, header: {} };
 
 	let state = 'start';
 	const lines = md.split('\n');
 	const docLines: string[] = [];
-
-	const output: MarkdownAndFrontMatter = {
-		doc: '',
-	};
+	const headerLines: string[] = [];
 
 	for (const line of lines) {
 		if (state === 'start') {
@@ -44,10 +41,7 @@ export const stripOffFrontMatter = (md: string): MarkdownAndFrontMatter => {
 			}
 
 			const propLine = line.trim();
-			if (propLine) {
-				const p = readProp(propLine);
-				(output as any)[p[0]] = p[1];
-			}
+			headerLines.push(propLine);
 		}
 
 		if (state === 'out') {
@@ -61,13 +55,13 @@ export const stripOffFrontMatter = (md: string): MarkdownAndFrontMatter => {
 
 	if (state !== 'doc') throw new Error('Front matter block was not closed with "---"');
 
-	output.doc = docLines.join('\n');
+	const header: Record<string, any> = yaml.load(headerLines.join('\n'), { schema: yaml.FAILSAFE_SCHEMA });
 
-	if (output.created) output.created = moment(output.created).toDate();
-	if (output.updated) output.updated = moment(output.updated).toDate();
-	if ('sidebar_position' in output) output.sidebar_position = Number(output.sidebar_position);
+	if (header.created) header.created = moment(header.created).toDate();
+	if (header.updated) header.updated = moment(header.updated).toDate();
+	if ('sidebar_position' in header) header.sidebar_position = Number(header.sidebar_position);
 
-	return output;
+	return { header, doc: docLines.join('\n') };
 };
 
 // ---
@@ -95,8 +89,7 @@ export const compileWithFrontMatter = (md: MarkdownAndFrontMatter): string => {
 	const output: string[] = [];
 	const header: string[] = [];
 
-	for (const [key, value] of Object.entries(md)) {
-		if (key === 'doc') continue;
+	for (const [key, value] of Object.entries(md.header)) {
 		header.push(`${key}: ${formatFrontMatterValue(key, value)}`);
 	}
 

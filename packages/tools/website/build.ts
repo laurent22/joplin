@@ -229,7 +229,7 @@ function makeHomePageMd(readmePath: string) {
 const processNewsMarkdown = (md: string, mdFilePath: string): string => {
 	const info = stripOffFrontMatter(md);
 	md = info.doc.trim();
-	const dateString = getNewsDateString(info, mdFilePath);
+	const dateString = getNewsDateString(info.header, mdFilePath);
 	md = md.replace(/^# (.*)/, `# [$1](https://github.com/laurent22/joplin/blob/dev/readme/news/${path.basename(mdFilePath)})\n\n*Published on **${dateString}***\n\n`);
 	md += `\n\n* * *\n\n[<i class="fab fa-discourse"></i> Discuss on the forum](${discussLink})`;
 	return md;

@@ -299,15 +299,9 @@ const processMarkdownFile = async (sourcePath: string, destPath: string, context
 	const title = await readmeFileTitle(sourcePath);
 
 	const mdAndFrontMatter = stripOffFrontMatter(destContent);
-	mdAndFrontMatter.sidebar_label = title;
-
-	// 	const frontMatter = `---
-	// sidebar_label: "${escapeFrontMatterValue(title)}"
-	// ---`;
+	mdAndFrontMatter.header.sidebar_label = title;
 
 	const fullContent = compileWithFrontMatter(mdAndFrontMatter);
-
-	// const fullContent = `${frontMatter}\n\n${destContent}`;
 
 	if (await pathExists(destPath)) {
 		const existingMd5 = await md5File(destPath);
@@ -369,12 +363,12 @@ const copyFile = async (sourceFile: string, destFile: string) => {
 async function main() {
 	const rootDir = await getRootDir();
 	const docBuilderDir = `${rootDir}/packages/doc-builder`;
-	const docsDir = `${docBuilderDir}/docs`;
+	const helpDir = `${docBuilderDir}/help`;
 	const readmeDir = `${rootDir}/readme`;
 
 	const context: Context = {};
 
-	await processDocFiles(readmeDir, `${docsDir}`, [
+	await processDocFiles(readmeDir, `${helpDir}`, [
 		`${readmeDir}/download.md`,
 		`${readmeDir}/_i18n`,
 		`${readmeDir}/welcome`,
@@ -383,12 +377,12 @@ async function main() {
 		`${readmeDir}/privacy.md`,
 	], context);
 
-	await deleteUnprocessedFiles(`${docsDir}`, context.processedFiles);
+	await deleteUnprocessedFiles(`${helpDir}`, context.processedFiles);
 
 	await copyFile(`${rootDir}/Assets/WebsiteAssets/images`, `${docBuilderDir}/static/images`);
-	await copyFile(`${rootDir}/CONTRIBUTING.md`, `${docsDir}/dev/index.md`);
-	await copyFile(`${rootDir}/BUILD.md`, `${docsDir}/dev/BUILD.md`);
-	await copyFile(`${rootDir}/DEPLOY.md`, `${docsDir}/dev/DEPLOY.md`);
+	await copyFile(`${rootDir}/CONTRIBUTING.md`, `${helpDir}/dev/index.md`);
+	await copyFile(`${rootDir}/BUILD.md`, `${helpDir}/dev/BUILD.md`);
+	await copyFile(`${rootDir}/DEPLOY.md`, `${helpDir}/dev/DEPLOY.md`);
 }
 
 if (require.main === module) {

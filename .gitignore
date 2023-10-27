@@ -1004,6 +1004,7 @@ packages/tools/website/utils/applyTranslations.test.js
 packages/tools/website/utils/applyTranslations.js
 packages/tools/website/utils/convertLinksToLocale.test.js
 packages/tools/website/utils/convertLinksToLocale.js
+packages/tools/website/utils/frontMatter.test.js
 packages/tools/website/utils/frontMatter.js
 packages/tools/website/utils/news.js
 packages/tools/website/utils/openGraph.test.js

@@ -92,7 +92,7 @@ async function main() {
 
 	if (updateStats && await pathExists(statsFilePath)) {
 		const md = await readFile(statsFilePath, 'utf8');
-		const info = stripOffFrontMatter(md);
+		const info = stripOffFrontMatter(md).header;
 		if (!info.updated) throw new Error('Missing front matter property: updated');
 
 		const now = new Date();
