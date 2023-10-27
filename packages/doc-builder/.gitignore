@@ -10,6 +10,7 @@
 
 # Docs are auto-generated using processDoc.js
 /docs
+/help
 
 # Misc
 .DS_Store
