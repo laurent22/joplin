@@ -259,6 +259,14 @@ const resolveParagraphBreaks = (output: string[]): string[] => {
 	return newOutput;
 };
 
+const processUrls = (md: string) => {
+	md = md
+		.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/dev\/readme\/(.*)\/index\.md/g, '/help/$1')
+		.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/dev\/readme\/(.*)\.md/g, '/help/$1');
+
+	return md;
+};
+
 export const processMarkdownDoc = (sourceContent: string, context: Context): string => {
 	const markdownIt = new MarkdownIt({
 		breaks: true,
@@ -266,14 +274,14 @@ export const processMarkdownDoc = (sourceContent: string, context: Context): str
 		html: true,
 	});
 
-	let output: string[] = [];
+	let lines: string[] = [];
 
 	markdownIt.core.ruler.push('converter', (state: StateCore) => {
 		const tokens = state.tokens;
 		// console.info(JSON.stringify(tokens, null, '\t'));
 		for (let i = 0; i < tokens.length; i++) {
 			const token = tokens[i];
-			processToken(token, output, context);
+			processToken(token, lines, context);
 		}
 	});
 
@@ -281,11 +289,13 @@ export const processMarkdownDoc = (sourceContent: string, context: Context): str
 
 	markdownIt.render(mdAndFrontMatter.doc);
 
-	output = resolveParagraphBreaks(output);
+	lines = resolveParagraphBreaks(lines);
+
+	const output = processUrls(lines.join('').trim());
 
 	return compileWithFrontMatter({
 		...mdAndFrontMatter,
-		doc: output.join('').trim(),
+		doc: output,
 	});
 };
 
@@ -308,7 +318,6 @@ const processMarkdownFile = async (sourcePath: string, destPath: string, context
 		const newMd5 = md5(fullContent);
 		if (existingMd5 === newMd5) return;
 	}
-
 
 	await writeFile(destPath, fullContent, 'utf-8');
 };
@@ -369,20 +378,17 @@ async function main() {
 	const context: Context = {};
 
 	await processDocFiles(readmeDir, `${helpDir}`, [
-		`${readmeDir}/download.md`,
 		`${readmeDir}/_i18n`,
-		`${readmeDir}/welcome`,
-		`${readmeDir}/faq_joplin_cloud.md`,
 		`${readmeDir}/cla.md`,
+		`${readmeDir}/download.md`,
+		`${readmeDir}/faq_joplin_cloud.md`,
 		`${readmeDir}/privacy.md`,
+		`${readmeDir}/welcome`,
 	], context);
 
 	await deleteUnprocessedFiles(`${helpDir}`, context.processedFiles);
 
 	await copyFile(`${rootDir}/Assets/WebsiteAssets/images`, `${docBuilderDir}/static/images`);
-	await copyFile(`${rootDir}/CONTRIBUTING.md`, `${helpDir}/dev/index.md`);
-	await copyFile(`${rootDir}/BUILD.md`, `${helpDir}/dev/BUILD.md`);
-	await copyFile(`${rootDir}/DEPLOY.md`, `${helpDir}/dev/DEPLOY.md`);
 }
 
 if (require.main === module) {

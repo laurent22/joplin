@@ -20,7 +20,7 @@ We suggest you read carefully these important documents and bookmark the links a
 
 - [How to submit a pull request for GSoC](https://joplinapp.org/gsoc2021/pull_request_guidelines/)
 - [How to build the apps](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
-- [How to contribute](https://github.com/laurent22/joplin/blob/dev/CONTRIBUTING.md)
+- [How to contribute](https://github.com/laurent22/joplin/blob/dev/readme/dev/index.md)
 
 ## Programming Language
 

@@ -4,7 +4,7 @@ Any kind of file can be attached to a note. In Markdown, links to these files ar
 
 In the **desktop application**, files can be attached either by clicking the "Attach file" icon in the editor or via drag and drop. If you prefer to create a link to a local file instead, hold the ALT key while performing the drag and drop operation. You can also copy and paste images directly in the editor via Ctrl+V.
 
-Resources that are not attached to any note will be automatically deleted in accordance to the [Note History](#note-history) settings.
+Resources that are not attached to any note will be automatically deleted in accordance to the [Note History](https://github.com/laurent22/joplin/blob/dev/readme/apps/note_history.md) settings.
 
 **Important:** Resources larger than 10 MB are not currently supported on mobile. They will crash the application when synchronising so it is recommended not to attach such resources at the moment. The issue is being looked at.
 

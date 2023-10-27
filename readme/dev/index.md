@@ -49,7 +49,7 @@ All contributors to the project must sign our [Individual Contributor License Ag
 
 ## Coding style
 
-Please see [readme/coding_style.md](readme/coding_style.md).
+Please see [readme/coding_style.md](https://github.com/laurent22/joplin/blob/dev/readme/dev/coding_style.md).
 
 ## GUI style
 

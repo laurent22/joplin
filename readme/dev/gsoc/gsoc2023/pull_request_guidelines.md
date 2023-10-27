@@ -20,7 +20,7 @@ Due to our limited resources and in order to give everyone a chance to submit a 
 
 4. **If you are borrowing code, please disclose it**. It is fine and sometimes even recommended to borrow code, but we need to know about it to assess your work.
 
-5. **All pull request must have test units**. In some cases it might be almost impossible to add such tests (for example integration tests), but for anything else we insist on having them, and we may close the pull request if we see they could have been added but weren't. If you don't know how to add test units, please ask on the forum or Discord. If really it's not possible to add tests, we'll let you know at this point. Also please check again the [Automated Tests](https://github.com/laurent22/joplin/blob/dev/CONTRIBUTING.md#automated-tests) documentation for more information.
+5. **All pull request must have test units**. In some cases it might be almost impossible to add such tests (for example integration tests), but for anything else we insist on having them, and we may close the pull request if we see they could have been added but weren't. If you don't know how to add test units, please ask on the forum or Discord. If really it's not possible to add tests, we'll let you know at this point. Also please check again the [Automated Tests](https://github.com/laurent22/joplin/blob/dev/readme/dev/index.md#automated-tests) documentation for more information.
 
 6. **No Work In Progress**. ONLY completed and working pull requests, and with test units, will be accepted. A WIP would fall under rule 3 and be closed immediately.
 
