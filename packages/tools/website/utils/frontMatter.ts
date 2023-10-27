@@ -69,33 +69,25 @@ export const stripOffFrontMatter = (md: string): MarkdownAndFrontMatter => {
 // source_url: https://www.patreon.com/posts/any-ideas-for-53317699
 // ---
 
-const escapeFrontMatterValue = (v: string) => {
-	return v
-		.replace(/"/g, '\\"')
-		.replace(/[\n\r]/g, ' ');
-};
-
 const formatFrontMatterValue = (key: string, value: any) => {
 	if (['created', 'updated'].includes(key)) {
 		return moment((value as Date)).toISOString();
-	} else if (typeof value === 'string') {
-		return `"${escapeFrontMatterValue(value.toString())}"`;
 	} else {
-		return value.toString();
+		return value;
 	}
 };
 
 export const compileWithFrontMatter = (md: MarkdownAndFrontMatter): string => {
 	const output: string[] = [];
-	const header: string[] = [];
 
-	for (const [key, value] of Object.entries(md.header)) {
-		header.push(`${key}: ${formatFrontMatterValue(key, value)}`);
-	}
-
-	if (header.length) {
+	if (Object.keys(md.header).length) {
+		const header = { ...md.header };
+		for (const [key, value] of Object.entries(header)) {
+			(header as any)[key] = formatFrontMatterValue(key, value);
+		}
+		const headerString = yaml.dump(header, { noCompatMode: true, schema: yaml.FAILSAFE_SCHEMA });
 		output.push('---');
-		output.push(header.join('\n'));
+		output.push(headerString.trim());
 		output.push('---');
 		output.push('');
 	}

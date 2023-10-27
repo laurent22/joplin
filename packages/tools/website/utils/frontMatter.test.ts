@@ -1,4 +1,5 @@
 import { compileWithFrontMatter, stripOffFrontMatter } from './frontMatter';
+const moment = require('moment');
 
 const testCases: any[][] = [
 
@@ -9,6 +10,8 @@ const testCases: any[][] = [
 ---
 tweet: Introducing the "GitHub Action Raw Log Viewer" extension for Chrome
 forum_url: https://discourse.joplinapp.org/t/29139
+created: 2019-09-29T14:28:34.000+00:00
+updated: 2019-09-29T14:30:50.000+00:00
 ---
 
 Body
@@ -19,14 +22,18 @@ Body
 		{
 			tweet: 'Introducing the "GitHub Action Raw Log Viewer" extension for Chrome',
 			forum_url: 'https://discourse.joplinapp.org/t/29139',
+			created: moment('2019-09-29T14:28:34.000+00:00').toDate(),
+			updated: moment('2019-09-29T14:30:50.000+00:00').toDate(),
 		},
 
 		'Body',
 
 		`
 ---
-tweet: "Introducing the \\"GitHub Action Raw Log Viewer\\" extension for Chrome"
-forum_url: "https://discourse.joplinapp.org/t/29139"
+tweet: Introducing the "GitHub Action Raw Log Viewer" extension for Chrome
+forum_url: https://discourse.joplinapp.org/t/29139
+created: 2019-09-29T14:28:34.000Z
+updated: 2019-09-29T14:30:50.000Z
 ---
 
 Body
