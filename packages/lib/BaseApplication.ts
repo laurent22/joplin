@@ -6,7 +6,7 @@ import BaseService from './services/BaseService';
 import reducer, { getNotesParent, serializeNotesParent, setStore, State } from './reducer';
 import KeychainServiceDriver from './services/keychain/KeychainServiceDriver.node';
 import KeychainServiceDriverDummy from './services/keychain/KeychainServiceDriver.dummy';
-import { _, setLocale } from './locale';
+import { setLocale } from './locale';
 import KvStore from './services/KvStore';
 import SyncTargetJoplinServer from './SyncTargetJoplinServer';
 import SyncTargetOneDrive from './SyncTargetOneDrive';
@@ -26,8 +26,7 @@ import time from './time';
 import BaseSyncTarget from './BaseSyncTarget';
 const reduxSharedMiddleware = require('./components/shared/reduxSharedMiddleware');
 const os = require('os');
-const fs = require('fs-extra');
-import JoplinError from './JoplinError';
+import fs = require('fs-extra');
 const EventEmitter = require('events');
 const syswidecas = require('./vendor/syswide-cas');
 import SyncTargetRegistry from './SyncTargetRegistry';
@@ -60,6 +59,8 @@ import { ProfileConfig } from './services/profileConfig/types';
 import initProfile from './services/profileConfig/initProfile';
 import { parseShareCache } from './services/share/reducer';
 import RotatingLogs from './RotatingLogs';
+import { join } from 'path';
+import processStartFlags, { MatchedStartFlags } from './utils/processStartFlags';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -163,154 +164,15 @@ export default class BaseApplication {
 	// Handles the initial flags passed to main script and
 	// returns the remaining args.
 	private async handleStartFlags_(argv: string[], setDefaults = true) {
-		const matched: any = {};
-		argv = argv.slice(0);
-		argv.splice(0, 2); // First arguments are the node executable, and the node JS file
+		const flags = await processStartFlags(argv, setDefaults);
 
-		while (argv.length) {
-			const arg = argv[0];
-			const nextArg = argv.length >= 2 ? argv[1] : null;
-
-			if (arg === '--profile') {
-				if (!nextArg) throw new JoplinError(_('Usage: %s', '--profile <dir-path>'), 'flagError');
-				matched.profileDir = nextArg;
-				argv.splice(0, 2);
-				continue;
-			}
-
-			if (arg === '--no-welcome') {
-				matched.welcomeDisabled = true;
-				argv.splice(0, 1);
-				continue;
-			}
-
-			if (arg === '--env') {
-				if (!nextArg) throw new JoplinError(_('Usage: %s', '--env <dev|prod>'), 'flagError');
-				matched.env = nextArg;
-				argv.splice(0, 2);
-				continue;
-			}
-
-			if (arg === '--is-demo') {
-				Setting.setConstant('isDemo', true);
-				argv.splice(0, 1);
-				continue;
-			}
-
-			if (arg === '--safe-mode') {
-				matched.isSafeMode = true;
-				argv.splice(0, 1);
-				continue;
-			}
-
-			if (arg === '--open-dev-tools') {
-				Setting.setConstant('flagOpenDevTools', true);
-				argv.splice(0, 1);
-				continue;
-			}
-
-			if (arg === '--debug') {
-				// Currently only handled by ElectronAppWrapper (isDebugMode property)
-				argv.splice(0, 1);
-				continue;
-			}
-
-			if (arg === '--update-geolocation-disabled') {
-				Note.updateGeolocationEnabled_ = false;
-				argv.splice(0, 1);
-				continue;
-			}
-
-			if (arg === '--stack-trace-enabled') {
-				this.showStackTraces_ = true;
-				argv.splice(0, 1);
-				continue;
-			}
-
-			if (arg === '--log-level') {
-				if (!nextArg) throw new JoplinError(_('Usage: %s', '--log-level <none|error|warn|info|debug>'), 'flagError');
-				matched.logLevel = Logger.levelStringToId(nextArg);
-				argv.splice(0, 2);
-				continue;
-			}
-
-			if (arg.indexOf('-psn') === 0) {
-				// Some weird flag passed by macOS - can be ignored.
-				// https://github.com/laurent22/joplin/issues/480
-				// https://stackoverflow.com/questions/10242115
-				argv.splice(0, 1);
-				continue;
-			}
-
-			if (arg === '--enable-logging') {
-				// Electron-specific flag used for debugging - ignore it
-				argv.splice(0, 1);
-				continue;
-			}
-
-			if (arg === '--dev-plugins') {
-				Setting.setConstant('startupDevPlugins', nextArg.split(',').map(p => p.trim()));
-				argv.splice(0, 2);
-				continue;
-			}
-
-			if (arg.indexOf('--remote-debugging-port=') === 0) {
-				// Electron-specific flag used for debugging - ignore it. Electron expects this flag in '--x=y' form, a single string.
-				argv.splice(0, 1);
-				continue;
-			}
-
-			if (arg === '--no-sandbox') {
-				// Electron-specific flag for running the app without chrome-sandbox
-				// Allows users to use it as a workaround for the electron+AppImage issue
-				// https://github.com/laurent22/joplin/issues/2246
-				argv.splice(0, 1);
-				continue;
-			}
-
-			if (arg.indexOf('--user-data-dir=') === 0) {
-				// Electron-specific flag. Allows users to run the app with chromedriver.
-				argv.splice(0, 1);
-				continue;
-			}
-
-			if (arg.indexOf('--enable-features=') === 0) {
-				// Electron-specific flag - ignore it
-				// Allows users to run the app on native wayland
-				argv.splice(0, 1);
-				continue;
-			}
-
-			if (arg.indexOf('--ozone-platform=') === 0) {
-				// Electron-specific flag - ignore it
-				// Allows users to run the app on native wayland
-				argv.splice(0, 1);
-				continue;
-			}
-
-			if (arg === '--disable-smooth-scrolling') {
-				// Electron-specific flag - ignore it
-				// Allows users to disable smooth scrolling
-				argv.splice(0, 1);
-				continue;
-			}
-
-			if (arg.length && arg[0] === '-') {
-				throw new JoplinError(_('Unknown flag: %s', arg), 'flagError');
-			} else {
-				break;
-			}
-		}
-
-		if (setDefaults) {
-			if (!matched.logLevel) matched.logLevel = Logger.LEVEL_INFO;
-			if (!matched.env) matched.env = 'prod';
-			if (!matched.devPlugins) matched.devPlugins = [];
+		if (flags.matched.showStackTraces) {
+			this.showStackTraces_ = true;
 		}
 
 		return {
-			matched: matched,
-			argv: argv,
+			matched: flags.matched,
+			argv: flags.argv,
 		};
 	}
 
@@ -725,7 +587,7 @@ export default class BaseApplication {
 		return flags.matched;
 	}
 
-	public determineProfileDir(initArgs: any) {
+	public static determineProfileDir(initArgs: MatchedStartFlags) {
 		let output = '';
 
 		if (initArgs.profileDir) {
@@ -773,7 +635,7 @@ export default class BaseApplication {
 		// https://immerjs.github.io/immer/docs/freezing
 		setAutoFreeze(initArgs.env === 'dev');
 
-		const rootProfileDir = this.determineProfileDir(initArgs);
+		const rootProfileDir = BaseApplication.determineProfileDir(initArgs);
 		const { profileDir, profileConfig, isSubProfile } = await initProfile(rootProfileDir);
 		this.profileConfig_ = profileConfig;
 
@@ -861,6 +723,13 @@ export default class BaseApplication {
 
 		if (initArgs?.isSafeMode) {
 			Setting.setValue('isSafeMode', true);
+		}
+
+		const safeModeFlagFile = join(profileDir, 'force-safe-mode-on-next-start');
+		if (await fs.pathExists(safeModeFlagFile) && fs.readFileSync(safeModeFlagFile, 'utf8') === 'true') {
+			appLogger.info(`Safe mode enabled because of file: ${safeModeFlagFile}`);
+			Setting.setValue('isSafeMode', true);
+			fs.removeSync(safeModeFlagFile);
 		}
 
 		if (Setting.value('firstStart')) {

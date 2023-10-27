@@ -158,5 +158,5 @@ app().start(bridge().processArgv()).then((result) => {
 	}
 
 	// In dev, we leave the app open as debug statements in the console can be useful
-	if (env !== 'dev') bridge().electronApp().exit(1);
+	if (env !== 'dev') bridge().electronApp().attemptSafeModeRestartOrExit();
 });
