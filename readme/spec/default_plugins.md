@@ -6,17 +6,17 @@ To add a new default plugin for desktop:
 
 - For example, if you wanted to add 2 default settings, `settingName1` and `settingName2`, then you will modify the `defaultPlugins` object in following way:
 
-    ```
-    const defaultPlugins = {
-        'samplePluginId': {
-            version: '1.0.0',
-            settings: {
-                'settingName1': 'setting-value1',
-                'settingName2': 'setting-value2',
-            },
+```
+const defaultPlugins = {
+    'samplePluginId': {
+        version: '1.0.0',
+        settings: {
+            'settingName1': 'setting-value1',
+            'settingName2': 'setting-value2',
         },
-    };
-    ```
+    },
+};
+```
 
 ## Bundling of default plugins
 

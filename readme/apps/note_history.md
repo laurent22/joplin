@@ -14,13 +14,13 @@ While all the apps save revisions, currently only the desktop one allow viewing 
 
 To do so, click on the Information icon in the toolbar, then select "Previous version of this note".
 
-![](https://raw.githubusercontent.com/laurent22/joplin/dev/readme/blog/images/20190523-231026_0.png)
+![](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20190523-231026_0.png)
 
 The next screen will show the latest version of the note. You can then choose to view a different version, if any, or to restore one of them.
 
 To restore a note, simply click on the "Restore" button. The old version of the note will be copied in a folder called "Restored Notes". The current version of the note will not be replaced or modified.
 
-![](https://raw.githubusercontent.com/laurent22/joplin/dev/readme/blog/images/20190523-231026_1.png)
+![](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20190523-231026_1.png)
 
 ### How to configure the note history feature?
 

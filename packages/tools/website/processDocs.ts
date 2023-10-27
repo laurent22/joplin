@@ -6,13 +6,14 @@ import * as MarkdownIt from 'markdown-it';
 import { htmlentities, isSelfClosingTag } from '@joplin/utils/html';
 import { stripOffFrontMatter } from './utils/frontMatter';
 import StateCore = require('markdown-it/lib/rules_core/state_core');
-import { copy, mkdirp, remove } from 'fs-extra';
+import { copy, mkdirp, remove, pathExists } from 'fs-extra';
 import { dirname } from 'path';
 import markdownUtils, { MarkdownTable } from '@joplin/lib/markdownUtils';
 import { readmeFileTitle } from './utils/parser';
-
+const md5File = require('md5-file');
 const htmlparser2 = require('@joplin/fork-htmlparser2');
 const styleToJs = require('style-to-js').default;
+const crypto = require('crypto');
 
 interface List {
 	type: 'bullet' | 'number';
@@ -26,7 +27,13 @@ interface Context {
 	listStack?: List[];
 	listStarting?: boolean;
 	currentLinkAttrs?: any;
+	inFence?: boolean;
+	processedFiles?: string[];
 }
+
+const md5 = (s: string) => {
+	return crypto.createHash('md5').update(s).digest('hex');
+};
 
 const parseHtml = (html: string) => {
 	const output: string[] = [];
@@ -87,7 +94,8 @@ const parseHtml = (html: string) => {
 const escapeForMdx = (s: string): string => {
 	return s
 		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;');
+		.replace(/>/g, '&gt;')
+		.replace(/`/g, '\\`');
 };
 
 const ParagraphBreak = '///PARAGRAPH_BREAK///';
@@ -99,6 +107,11 @@ const processToken = (token: any, output: string[], context: Context): void => {
 	const type = token.type as string;
 
 	const currentList = context.listStack.length ? context.listStack[context.listStack.length - 1] : null;
+
+	const doEscapeForMdx = (text: string) => {
+		if (context.inFence) return text;
+		return escapeForMdx(text);
+	};
 
 	const content: string[] = [];
 
@@ -112,6 +125,7 @@ const processToken = (token: any, output: string[], context: Context): void => {
 			content.push(ParagraphBreak);
 		}
 	} else if (type === 'fence') {
+		context.inFence = true;
 		content.push(`\`\`\`${token.info || ''}\n`);
 	} else if (type === 'html_block') {
 		contentProcessed = true,
@@ -199,18 +213,19 @@ const processToken = (token: any, output: string[], context: Context): void => {
 			processToken(child, content, context);
 		}
 	} else if (token.content && !contentProcessed) {
-		content.push(escapeForMdx(token.content));
+		content.push(doEscapeForMdx(token.content));
 	}
 
 	if (type === 'fence') {
 		content.push('```');
 		content.push(ParagraphBreak);
+		context.inFence = false;
 	}
 
 	if (type === 'image') {
 		let src: string = token.attrs.find((a: string[]) => a[0] === 'src')[1];
 		if (!src.startsWith('http') && !src.startsWith('/')) src = `/${src}`;
-		content.push(`](${escapeForMdx(src)})`);
+		content.push(`](${doEscapeForMdx(src)})`);
 	}
 
 	for (const c of content) {
@@ -278,6 +293,9 @@ const escapeFrontMatterValue = (v: string) => {
 };
 
 const processMarkdownFile = async (sourcePath: string, destPath: string, context: Context) => {
+	if (!context.processedFiles) context.processedFiles = [];
+	context.processedFiles.push(destPath);
+
 	const sourceContent = await readFile(sourcePath, 'utf-8');
 	const destContent = processMarkdownDoc(sourceContent, context);
 	await mkdirp(dirname(destPath));
@@ -288,7 +306,16 @@ const processMarkdownFile = async (sourcePath: string, destPath: string, context
 sidebar_label: "${escapeFrontMatterValue(title)}"
 ---`;
 
-	await writeFile(destPath, `${frontMatter}\n\n${destContent}`, 'utf-8');
+	const fullContent = `${frontMatter}\n\n${destContent}`;
+
+	if (await pathExists(destPath)) {
+		const existingMd5 = await md5File(destPath);
+		const newMd5 = md5(fullContent);
+		if (existingMd5 === newMd5) return;
+	}
+
+
+	await writeFile(destPath, fullContent, 'utf-8');
 };
 
 const processMarkdownFiles = async (sourceDir: string, destDir: string, excluded: string[], context: Context) => {
@@ -303,26 +330,33 @@ const processMarkdownFiles = async (sourceDir: string, destDir: string, excluded
 			await processMarkdownFiles(fullPath, `${destDir}/${file}`, excluded, context);
 		} else {
 			if (!file.endsWith('.md')) continue;
-			console.info(`Process ${fullPath}`);
+			console.info(`Process: ${fullPath}`);
 			const destPath = `${destDir}/${file}`;
 			await processMarkdownFile(fullPath, destPath, context);
 		}
 	}
 };
 
-const deleteDirContent = async (dirPath: string) => {
+export const deleteUnprocessedFiles = async (dirPath: string, processedFiles: string[]) => {
 	const files = await readdir(dirPath);
 	for (const file of files) {
 		const fullPath = `${dirPath}/${file}`;
-		await remove(fullPath);
+		const info = await stat(fullPath);
+
+		if (info.isDirectory()) {
+			await deleteUnprocessedFiles(fullPath, processedFiles);
+		} else {
+			if (!processedFiles.includes(fullPath)) {
+				console.info(`Delete: ${fullPath}`);
+				await remove(fullPath);
+			}
+		}
 	}
 };
 
 async function main() {
 	const rootDir = await getRootDir();
 	const docBuilderDir = `${rootDir}/packages/doc-builder`;
-
-	await deleteDirContent(`${docBuilderDir}/docs`);
 
 	const context: Context = {};
 
@@ -331,7 +365,10 @@ async function main() {
 		`${rootDir}/readme/_i18n`,
 		`${rootDir}/readme/welcome`,
 		`${rootDir}/readme/faq_joplin_cloud.md`,
+		`${rootDir}/readme/cla.md`,
 	], context);
+
+	await deleteUnprocessedFiles(`${docBuilderDir}/docs`, context.processedFiles);
 
 	await copy(`${rootDir}/Assets/WebsiteAssets/images`, `${docBuilderDir}/static/images`);
 }

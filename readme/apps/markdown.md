@@ -18,7 +18,7 @@ This is a quick summary of the Markdown syntax.
 | **Bold** | <pre>This is some `**bold text**`</pre> | This is some <strong>bold text</strong>
 | **Italic** | <pre>This is some `*italic text*`</pre> | This is some <i>italic text</i>
 | **Blockquotes** | <pre>> Kent.<br/>> Where's the king?<br/><br/>> Gent.<br/>> Contending with the<br/>> fretful elements</pre> | <blockquote>Kent.<br/>Where's the king?<br/><br/>Gent.<br/>Contending with<br/>the fretful elements</blockquote>
-| **List** | <pre>* Milk<br/>* Eggs<br/>* Beers<br/>    * Desperados<br/>    * Heineken<br/>* Ham</pre> | <ul><li>Milk</li><li>Eggs</li><li>Beers<ul><li>Desperados</li><li>Heineken</li></ul></li><li>Ham</li></ul>
+| **List** | <pre>- Milk<br/>- Eggs<br/>- Beers<br/>    - Desperados<br/>    - Heineken<br/>- Ham</pre> | <ul><li>Milk</li><li>Eggs</li><li>Beers<ul><li>Desperados</li><li>Heineken</li></ul></li><li>Ham</li></ul>
 | **Ordered list** | <pre>1. Introduction<br/>2. Main topic<br/>    1. First sub-topic<br/>    2. Second sub-topic<br/>3. Conclusion</pre> | <ol><li>Introduction</li><li>Main topic<ol><li>First sub-topic</li><li>Second sub-topic</li></ol></li><li>Conclusion</li></ol>
 | **Inline code** | <pre>This is \`someJavaScript()\`</pre> | This is `someJavaScript()`
 | **Code block** | <pre>Here's some JavaScript code:<br><br>\`\`\`<br>function hello() {<br>    alert('hello');<br>}<br>\`\`\`<br><br>Language is normally auto-detected,<br>but it can also be specified:<br><br>\`\`\`sql<br>SELECT * FROM users;<br>DELETE FROM sessions;<br>\`\`\`</pre> | Here's some JavaScript code:<br><br><pre>function hello() {<br>&nbsp;&nbsp;&nbsp;&nbsp;alert('hello');<br>}</pre><br>Language is normally auto-detected, but it can also be specified:<br><br><pre>SELECT * FROM users;<br>DELETE FROM sessions;</pre>
@@ -102,13 +102,13 @@ Joplin supports chemical equations via the mhchem plugin for KaTeX. This plugin 
 
 You can create diagrams in Joplin using the [Mermaid syntax](https://mermaidjs.github.io/). To add such a graph, wrap the Mermaid script inside a "\`\`\`mermaid" code block like this:
 
-	```mermaid
-	graph TD;
-	    A-->B;
-	    A-->C;
-	    B-->D;
-	    C-->D;
-	```
+\`\`\`mermaid<br/>
+graph TD;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;A-->B;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;A-->C;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;B-->D;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;C-->D;<br/>
+\`\`\`
 
 This is how it would look with the Markdown on the left, and rendered graph on the right:
 
