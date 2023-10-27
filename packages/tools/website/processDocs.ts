@@ -184,21 +184,17 @@ const processToken = (token: any, output: string[], context: Context): void => {
 		if (currentList.type === 'bullet') content.push(`${indent}- `);
 		if (currentList.type === 'number') content.push(`${indent + token.info}. `);
 	} else if (type === 'image') {
-		console.info('OPEN IMAGE');
-		content.push('![');
+		(context.currentTable ? context.currentTableContent : content).push('![');
 	} else if (type === 'link_open') {
-		console.info('OPEN LINK');
 		content.push('[');
 		context.currentLinkAttrs = token.attrs;
 	} else if (type === 'link_close') {
-		console.info('CLOSE LINK');
 		const href = context.currentLinkAttrs.find((a: string[]) => a[0] === 'href')[1];
 		content.push(`](${escapeForMdx(href)})`);
 		context.currentLinkAttrs = null;
 	}
 
 	if (token.children) {
-		console.info('CHILDREN');
 		for (const child of token.children) {
 			processToken(child, content, context);
 		}
@@ -212,7 +208,6 @@ const processToken = (token: any, output: string[], context: Context): void => {
 	}
 
 	if (type === 'image') {
-		console.info('CLOSE IMAGE');
 		let src: string = token.attrs.find((a: string[]) => a[0] === 'src')[1];
 		if (!src.startsWith('http') && !src.startsWith('/')) src = `/${src}`;
 		content.push(`](${escapeForMdx(src)})`);
@@ -220,7 +215,6 @@ const processToken = (token: any, output: string[], context: Context): void => {
 
 	for (const c of content) {
 		if (context.currentTable) {
-			console.info('APPEND TABLE', c);
 			context.currentTableContent.push(c);
 		} else {
 			output.push(c);

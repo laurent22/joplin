@@ -16,7 +16,7 @@ const makeTestCases = () => {
 	for (const file of files) {
 		if (file.endsWith('.mdx')) continue;
 
-		if (!file.endsWith('image_in_link.md')) continue;
+		// if (!file.endsWith('image_in_link.md')) continue;
 
 		const sourcePath = `${sampleDir}/${file}`;
 		const outputPath = `${sampleDir}/${basename(file, '.md')}.mdx`;
