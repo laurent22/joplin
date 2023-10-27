@@ -2,13 +2,18 @@
 import type { ElectronApplication } from '@playwright/test';
 import { BrowserWindow, MessageBoxOptions } from 'electron';
 
-// API inspired by https://github.com/spaceagetv/electron-playwright-helpers/
 const mockNextShowMessageCall = (
 	electronApp: ElectronApplication,
+
+	// Only matches messages that match
 	messagePattern: RegExp,
+
+	// Chooses the answer that matches this pattern
 	answerPattern: RegExp,
 ) => {
 	return electronApp.evaluate(({ BrowserWindow, dialog }, [messagePattern, answerPattern]) => {
+		// Mock both showMessageBox and showMessageBoxSync. The app should be able to switch between
+		// the two without affecting the tests.
 		const mockDialogMethod = (methodName: 'showMessageBox'|'showMessageBoxSync') => {
 			let originalShowMessageBox = dialog[methodName];
 
@@ -50,9 +55,8 @@ const mockNextShowMessageCall = (
 					try {
 						result = originalShowMessageBox(optionsArgOrWindow as any, optionsArg);
 					} finally {
-						// Handle the case where result is a version of this function
-						// and it attempted to restore dialog.showMessageBox to the
-						// function it originally overrode.
+						// Handle the case where `originalShowMessageBox` is a version of this function.
+						// If dialog.showMessageBox changes, it should be treated as the new `originalShowMessageBox`.
 						if (previousToplevelShowMessageBox !== dialog.showMessageBox) {
 							const temp = dialog[methodName];
 							dialog[methodName] = previousToplevelShowMessageBox as any;
