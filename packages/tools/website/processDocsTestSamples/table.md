@@ -10,3 +10,9 @@
 | Content |
 
 Paragraph
+
+# With a BR tag
+
+| Header |
+| --- |
+| Line 1<br>Line 2 |

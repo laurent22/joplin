@@ -25,7 +25,7 @@ interface Context {
 	inHeader?: boolean;
 	listStack?: List[];
 	listStarting?: boolean;
-	currentListAttrs?: any;
+	currentLinkAttrs?: any;
 }
 
 const parseHtml = (html: string) => {
@@ -90,12 +90,11 @@ const escapeForMdx = (s: string): string => {
 		.replace(/>/g, '&gt;');
 };
 
-// const ParagraphBreak = '///PARAGRAPH_BREAK///';
+const ParagraphBreak = '///PARAGRAPH_BREAK///';
 
 const processToken = (token: any, output: string[], context: Context): void => {
 	if (!context.listStack) context.listStack = [];
 
-	const top = output.length ? output[output.length - 1] : '';
 	let contentProcessed = false;
 	const type = token.type as string;
 
@@ -104,16 +103,20 @@ const processToken = (token: any, output: string[], context: Context): void => {
 	const content: string[] = [];
 
 	if (type === 'heading_open') {
+		content.push(ParagraphBreak);
 		content.push(`${token.markup} `);
 	} else if (type === 'heading_close') {
-		content.push('\n\n');
+		content.push(ParagraphBreak);
 	} else if (type === 'paragraph_open' || type === 'paragraph_close') {
 		if (!currentList) {
-			if (top !== '\n\n') content.push('\n\n');
+			content.push(ParagraphBreak);
 		}
 	} else if (type === 'fence') {
 		content.push(`\`\`\`${token.info || ''}\n`);
 	} else if (type === 'html_block') {
+		contentProcessed = true,
+		content.push(parseHtml(token.content.trim()));
+	} else if (type === 'html_inline') {
 		contentProcessed = true,
 		content.push(parseHtml(token.content.trim()));
 	} else if (type === 'code_inline') {
@@ -122,7 +125,7 @@ const processToken = (token: any, output: string[], context: Context): void => {
 	} else if (type === 'code_block') {
 		contentProcessed = true;
 		content.push(`\`\`\`\n${token.content}\`\`\``);
-		content.push('\n\n');
+		content.push(ParagraphBreak);
 	} else if (type === 'strong_open' || type === 'strong_close') {
 		content.push('**');
 	} else if (type === 'em_open' || type === 'em_close') {
@@ -161,8 +164,9 @@ const processToken = (token: any, output: string[], context: Context): void => {
 		context.currentTableContent = [];
 	} else if (type === 'table_close') {
 		const tableMd = markdownUtils.createMarkdownTable(context.currentTable.header, context.currentTable.rows);
+		content.push(ParagraphBreak);
 		content.push(tableMd);
-		content.push('\n\n');
+		content.push(ParagraphBreak);
 		context.currentTable = null;
 	} else if (type === 'bullet_list_open') {
 		context.listStarting = !context.listStack.length;
@@ -172,7 +176,7 @@ const processToken = (token: any, output: string[], context: Context): void => {
 		context.listStack.push({ type: 'number' });
 	} else if (type === 'bullet_list_close' || type === 'ordered_list_close') {
 		context.listStack.pop();
-		if (!context.listStack.length) content.push('\n\n');
+		if (!context.listStack.length) content.push(ParagraphBreak);
 	} else if (type === 'list_item_open') {
 		if (!context.listStarting) content.push('\n');
 		context.listStarting = false;
@@ -180,17 +184,21 @@ const processToken = (token: any, output: string[], context: Context): void => {
 		if (currentList.type === 'bullet') content.push(`${indent}- `);
 		if (currentList.type === 'number') content.push(`${indent + token.info}. `);
 	} else if (type === 'image') {
+		console.info('OPEN IMAGE');
 		content.push('![');
 	} else if (type === 'link_open') {
+		console.info('OPEN LINK');
 		content.push('[');
-		context.currentListAttrs = token.attrs;
+		context.currentLinkAttrs = token.attrs;
 	} else if (type === 'link_close') {
-		const href = context.currentListAttrs.find((a: string[]) => a[0] === 'href')[1];
+		console.info('CLOSE LINK');
+		const href = context.currentLinkAttrs.find((a: string[]) => a[0] === 'href')[1];
 		content.push(`](${escapeForMdx(href)})`);
-		context.currentListAttrs = null;
+		context.currentLinkAttrs = null;
 	}
 
 	if (token.children) {
+		console.info('CHILDREN');
 		for (const child of token.children) {
 			processToken(child, content, context);
 		}
@@ -200,10 +208,11 @@ const processToken = (token: any, output: string[], context: Context): void => {
 
 	if (type === 'fence') {
 		content.push('```');
-		content.push('\n\n');
+		content.push(ParagraphBreak);
 	}
 
 	if (type === 'image') {
+		console.info('CLOSE IMAGE');
 		let src: string = token.attrs.find((a: string[]) => a[0] === 'src')[1];
 		if (!src.startsWith('http') && !src.startsWith('/')) src = `/${src}`;
 		content.push(`](${escapeForMdx(src)})`);
@@ -211,11 +220,34 @@ const processToken = (token: any, output: string[], context: Context): void => {
 
 	for (const c of content) {
 		if (context.currentTable) {
+			console.info('APPEND TABLE', c);
 			context.currentTableContent.push(c);
 		} else {
 			output.push(c);
 		}
 	}
+};
+
+const resolveParagraphBreaks = (output: string[]): string[] => {
+	if (!output.length) return output;
+
+	while (output.length && output[0] === ParagraphBreak) {
+		output.splice(0, 1);
+	}
+
+	while (output.length && output[output.length - 1] === ParagraphBreak) {
+		output.pop();
+	}
+
+	let previous = '';
+	const newOutput: string[] = [];
+	for (const s of output) {
+		if (s === ParagraphBreak && previous === ParagraphBreak) continue;
+		newOutput.push(s === ParagraphBreak ? '\n\n' : s);
+		previous = s;
+	}
+
+	return newOutput;
 };
 
 export const processMarkdownDoc = (sourceContent: string, context: Context): string => {
@@ -225,11 +257,11 @@ export const processMarkdownDoc = (sourceContent: string, context: Context): str
 		html: true,
 	});
 
-	const output: string[] = [];
+	let output: string[] = [];
 
 	markdownIt.core.ruler.push('converter', (state: StateCore) => {
 		const tokens = state.tokens;
-		console.info(JSON.stringify(tokens, null, '\t'));
+		// console.info(JSON.stringify(tokens, null, '\t'));
 		for (let i = 0; i < tokens.length; i++) {
 			const token = tokens[i];
 			processToken(token, output, context);
@@ -239,6 +271,8 @@ export const processMarkdownDoc = (sourceContent: string, context: Context): str
 	const processed = stripOffFrontMatter(sourceContent).doc;
 
 	markdownIt.render(processed);
+
+	output = resolveParagraphBreaks(output);
 
 	return output.join('').trim();
 };
