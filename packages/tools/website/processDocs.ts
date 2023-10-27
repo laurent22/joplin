@@ -4,7 +4,7 @@ import { getRootDir } from '@joplin/utils';
 import { readFile, readdir, stat, writeFile } from 'fs/promises';
 import * as MarkdownIt from 'markdown-it';
 import { htmlentities, isSelfClosingTag } from '@joplin/utils/html';
-import { stripOffFrontMatter } from './utils/frontMatter';
+import { compileWithFrontMatter, stripOffFrontMatter } from './utils/frontMatter';
 import StateCore = require('markdown-it/lib/rules_core/state_core');
 import { copy, mkdirp, remove, pathExists } from 'fs-extra';
 import { dirname } from 'path';
@@ -277,19 +277,16 @@ export const processMarkdownDoc = (sourceContent: string, context: Context): str
 		}
 	});
 
-	const processed = stripOffFrontMatter(sourceContent).doc;
+	const mdAndFrontMatter = stripOffFrontMatter(sourceContent);
 
-	markdownIt.render(processed);
+	markdownIt.render(mdAndFrontMatter.doc);
 
 	output = resolveParagraphBreaks(output);
 
-	return output.join('').trim();
-};
-
-const escapeFrontMatterValue = (v: string) => {
-	return v
-		.replace(/"/g, '\\"')
-		.replace(/[\n\r]/g, ' ');
+	return compileWithFrontMatter({
+		...mdAndFrontMatter,
+		doc: output.join('').trim(),
+	});
 };
 
 const processMarkdownFile = async (sourcePath: string, destPath: string, context: Context) => {
@@ -301,11 +298,16 @@ const processMarkdownFile = async (sourcePath: string, destPath: string, context
 
 	const title = await readmeFileTitle(sourcePath);
 
-	const frontMatter = `---
-sidebar_label: "${escapeFrontMatterValue(title)}"
----`;
+	const mdAndFrontMatter = stripOffFrontMatter(destContent);
+	mdAndFrontMatter.sidebar_label = title;
 
-	const fullContent = `${frontMatter}\n\n${destContent}`;
+	// 	const frontMatter = `---
+	// sidebar_label: "${escapeFrontMatterValue(title)}"
+	// ---`;
+
+	const fullContent = compileWithFrontMatter(mdAndFrontMatter);
+
+	// const fullContent = `${frontMatter}\n\n${destContent}`;
 
 	if (await pathExists(destPath)) {
 		const existingMd5 = await md5File(destPath);

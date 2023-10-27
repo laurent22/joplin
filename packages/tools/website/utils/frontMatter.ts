@@ -7,6 +7,10 @@ export interface MarkdownAndFrontMatter {
 	source_url?: string;
 	forum_url?: string;
 	tweet?: string;
+
+	// Docusaurus
+	sidebar_label?: string;
+	sidebar_position?: number;
 }
 
 const readProp = (line: string): string[] => {
@@ -61,6 +65,7 @@ export const stripOffFrontMatter = (md: string): MarkdownAndFrontMatter => {
 
 	if (output.created) output.created = moment(output.created).toDate();
 	if (output.updated) output.updated = moment(output.updated).toDate();
+	if ('sidebar_position' in output) output.sidebar_position = Number(output.sidebar_position);
 
 	return output;
 };
@@ -70,9 +75,17 @@ export const stripOffFrontMatter = (md: string): MarkdownAndFrontMatter => {
 // source_url: https://www.patreon.com/posts/any-ideas-for-53317699
 // ---
 
+const escapeFrontMatterValue = (v: string) => {
+	return v
+		.replace(/"/g, '\\"')
+		.replace(/[\n\r]/g, ' ');
+};
+
 const formatFrontMatterValue = (key: string, value: any) => {
 	if (['created', 'updated'].includes(key)) {
 		return moment((value as Date)).toISOString();
+	} else if (typeof value === 'string') {
+		return `"${escapeFrontMatterValue(value.toString())}"`;
 	} else {
 		return value.toString();
 	}
