@@ -37,7 +37,7 @@ For usage information, please refer to the full [Joplin Terminal Application Doc
 
 ## Web Clipper
 
-The Web Clipper is a browser extension that allows you to save web pages and screenshots from your browser. For more information on how to install and use it, see the [Web Clipper Help Page](https://github.com/laurent22/joplin/blob/dev/readme/clipper.md).
+The Web Clipper is a browser extension that allows you to save web pages and screenshots from your browser. For more information on how to install and use it, see the [Web Clipper Help Page](https://github.com/laurent22/joplin/blob/dev/readme/apps/clipper.md).
 
 ## Unofficial Alternative Distributions
 

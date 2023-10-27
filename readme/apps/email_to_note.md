@@ -10,13 +10,13 @@ This feature is available for Pro and Teams members.
 
 ### Desktop
 
-To copy your Joplin Cloud email address you will need to navigate to the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md) and locate to the Joplin Cloud tab. You will need to have your [synchronisation set to Joplin Cloud](https://github.com/laurent22/joplin/blob/dev/readme/welcome/3_synchronising_your_notes.md#setting-up-joplin-cloud-synchronisation)
+To copy your Joplin Cloud email address you will need to navigate to the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md) and locate to the Joplin Cloud tab. You will need to have your [synchronisation set to Joplin Cloud](https://github.com/laurent22/joplin/blob/dev/readme/welcome/3_synchronising_your_notes.md#setting-up-joplin-cloud-synchronisation)
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/email_to_note/desktop.png" width="80%"/>
 
 ### Mobile
 
-To copy your Joplin Cloud email address you will need to navigate to the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md) and find the Joplin Cloud section. You will need to have your [synchronisation set to Joplin Cloud](https://github.com/laurent22/joplin/blob/dev/readme/welcome/3_synchronising_your_notes.md#setting-up-joplin-cloud-synchronisation)
+To copy your Joplin Cloud email address you will need to navigate to the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md) and find the Joplin Cloud section. You will need to have your [synchronisation set to Joplin Cloud](https://github.com/laurent22/joplin/blob/dev/readme/welcome/3_synchronising_your_notes.md#setting-up-joplin-cloud-synchronisation)
 
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/email_to_note/mobile.png" width="50%"/>

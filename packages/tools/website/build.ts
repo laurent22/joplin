@@ -467,7 +467,7 @@ async function main() {
 			const filenameNoExt = basename(input, '.md');
 			return `news/${filenameNoExt}/index.html`;
 		} else {
-			// Input is for example "readme/spec/interop_with_frontmatter.md",
+			// Input is for example "readme/dev/spec/interop_with_frontmatter.md",
 			// and we need to convert it to
 			// "docs/spec/interop_with_frontmatter/index.html" and prefix it
 			// with the website repo full path.

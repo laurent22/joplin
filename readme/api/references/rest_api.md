@@ -27,7 +27,7 @@ curl http://localhost:41184/notes?token=ABCD123ABCD123ABCD123ABCD123ABCD123
 
 In the documentation below, the token will not be specified every time however you will need to include it.
 
-If needed you may also [request the token programmatically](https://github.com/laurent22/joplin/blob/dev/readme/spec/clipper_auth.md)
+If needed you may also [request the token programmatically](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/clipper_auth.md)
 
 # Using the API
 

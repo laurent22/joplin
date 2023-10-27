@@ -100,4 +100,4 @@ It still requires you to quit the application each time you want it to rebuild, 
 
 # Troubleshooting
 
-Please read for the [Build Troubleshooting Document](https://github.com/laurent22/joplin/blob/dev/readme/build_troubleshooting.md) for various tips on how to get the build working.
+Please read for the [Build Troubleshooting Document](https://github.com/laurent22/joplin/blob/dev/readme/dev/build_troubleshooting.md) for various tips on how to get the build working.

@@ -19,15 +19,15 @@ The application is available for Windows, Linux, macOS, Android and iOS. A [Web 
 
 - Applications
 
-	- [Desktop application](https://github.com/laurent22/joplin/blob/dev/readme/desktop.md)
-	- [Mobile applications](https://github.com/laurent22/joplin/blob/dev/readme/mobile.md)
-	- [Terminal application](https://github.com/laurent22/joplin/blob/dev/readme/terminal.md)
-	- [Web Clipper](https://github.com/laurent22/joplin/blob/dev/readme/clipper.md)
+	- [Desktop application](https://github.com/laurent22/joplin/blob/dev/readme/apps/desktop.md)
+	- [Mobile applications](https://github.com/laurent22/joplin/blob/dev/readme/apps/mobile.md)
+	- [Terminal application](https://github.com/laurent22/joplin/blob/dev/readme/apps/terminal.md)
+	- [Web Clipper](https://github.com/laurent22/joplin/blob/dev/readme/apps/clipper.md)
 
 - Support
 
 	- [Joplin Forum](https://discourse.joplinapp.org)
-	- [Markdown Guide](https://github.com/laurent22/joplin/blob/dev/readme/markdown.md)
+	- [Markdown Guide](https://github.com/laurent22/joplin/blob/dev/readme/apps/markdown.md)
 	- [How to enable end-to-end encryption](https://github.com/laurent22/joplin/blob/dev/readme/e2ee.md)
 	- [What is a conflict?](https://github.com/laurent22/joplin/blob/dev/readme/conflict.md)
 	- [How to enable debug mode](https://github.com/laurent22/joplin/blob/dev/readme/debugging.md)
@@ -60,20 +60,20 @@ The application is available for Windows, Linux, macOS, Android and iOS. A [Web 
 
 	- [How to build the apps](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
 	- [Writing a technical spec](https://github.com/laurent22/joplin/blob/dev/readme/technical_spec.md)
-	- [Desktop application styling](https://github.com/laurent22/joplin/blob/dev/readme/spec/desktop_styling.md)
-	- [Note history spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/history.md)
-	- [Synchronisation spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync.md)
-	- [Sync Lock spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync_lock.md)
-	- [Synchronous Scroll spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync_scroll.md)
-	- [Overall Architecture spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/architecture.md)
-	- [Plugin Architecture spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/plugins.md)
-	- [Search Sorting spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/search_sorting.md)
-	- [E2EE: Technical spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md)
-	- [E2EE: Workflow](https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee/workflow.md)
-	- [Server: File URL Format](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_file_url_format.md)
-	- [Server: Delta Sync](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_delta_sync.md)
-	- [Server: Sharing](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_sharing.md)
-	- [Read-only items](https://github.com/laurent22/joplin/blob/dev/readme/spec/read_only.md)
+	- [Desktop application styling](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/desktop_styling.md)
+	- [Note history spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/history.md)
+	- [Synchronisation spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/sync.md)
+	- [Sync Lock spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/sync_lock.md)
+	- [Synchronous Scroll spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/sync_scroll.md)
+	- [Overall Architecture spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/architecture.md)
+	- [Plugin Architecture spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/plugins.md)
+	- [Search Sorting spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/search_sorting.md)
+	- [E2EE: Technical spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/e2ee.md)
+	- [E2EE: Workflow](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/e2ee/workflow.md)
+	- [Server: File URL Format](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/server_file_url_format.md)
+	- [Server: Delta Sync](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/server_delta_sync.md)
+	- [Server: Sharing](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/server_sharing.md)
+	- [Read-only items](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/read_only.md)
 
 - Google Summer of Code 2022
 

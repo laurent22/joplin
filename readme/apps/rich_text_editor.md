@@ -2,7 +2,7 @@
 
 **TLDR:** Avoid using Markdown plugins if you primarily intend to use the Rich Text editor, and be aware of the editor's limitations.
 
-At its core, Joplin stores notes in [Markdown format](https://github.com/laurent22/joplin/blob/dev/readme/markdown.md). Markdown is a simple way to format text that looks great on any device and, while it's formatted text, it still looks perfectly readable in a plain text editor.
+At its core, Joplin stores notes in [Markdown format](https://github.com/laurent22/joplin/blob/dev/readme/apps/markdown.md). Markdown is a simple way to format text that looks great on any device and, while it's formatted text, it still looks perfectly readable in a plain text editor.
 
 In some cases however, the extra markup format that appears in notes can be seen as a drawback. Bold text will `look **like this**` for example, and tables might not be particularly readable. For that reason, Joplin also features a Rich Text editor, which allows you to edit notes with a [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG) editing experience. Bold text will "look **like this**" and tables will be more readable, among others.
 
