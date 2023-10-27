@@ -45,7 +45,6 @@ export const test = base.extend<JoplinFixtures>({
 
 	mainWindow: async ({ electronApp }, use) => {
 		const window = await electronApp.firstWindow();
-		window.on('console', console.log);
 		await use(window);
 	},
 });

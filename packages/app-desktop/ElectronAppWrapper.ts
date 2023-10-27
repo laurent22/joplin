@@ -73,7 +73,7 @@ export default class ElectronAppWrapper {
 	//
 	// Assumes that the renderer process may be in an invalid state and so cannot
 	// be accessed.
-	public async handleAppFailure(errorMessage: string, canIgnore: boolean) {
+	public async handleAppFailure(errorMessage: string, canIgnore: boolean, isTesting?: boolean) {
 		const buttons = [];
 		buttons.push(_('Quit'));
 		const exitIndex = 0;
@@ -94,7 +94,10 @@ export default class ElectronAppWrapper {
 
 			// A hung renderer seems to prevent the process from exiting completely.
 			// In this case, crashing the renderer allows the window to close.
-			if (this.win_ && !this.win_.webContents.isCrashed()) {
+			//
+			// Also only run this if not testing (crashing the renderer breaks automated
+			// tests).
+			if (this.win_ && !this.win_.webContents.isCrashed() && !isTesting) {
 				this.win_.webContents.forcefullyCrashRenderer();
 			}
 		} else if (response === exitIndex) {

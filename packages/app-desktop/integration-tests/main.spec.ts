@@ -3,7 +3,8 @@ import MainScreen from './models/MainScreen';
 import activateMainMenuItem from './util/activateMainMenuItem';
 import SettingsScreen from './models/SettingsScreen';
 import mockNextShowMessageCall from './util/mockNextShowMessageDialog';
-import { readFile } from 'fs-extra';
+import { _electron as electron } from '@playwright/test';
+import { readFile, writeFile } from 'fs-extra';
 import { join } from 'path';
 
 
@@ -125,6 +126,24 @@ test.describe('main', () => {
 		expect(await nextExternalUrlPromise).toBe(linkHref);
 	});
 
+	test('should start in safe mode if profile-dir/force-safe-mode-on-next-start exists', async ({ profileDirectory }) => {
+		await writeFile(join(profileDirectory, 'force-safe-mode-on-next-start'), 'true', 'utf8');
+
+		// We need to write to the force-safe-mode file before opening the Electron app.
+		// Open the app ourselves:
+		const startupArgs = [
+			'main.js', '--env', 'dev', '--profile', profileDirectory,
+		];
+		const electronApp = await electron.launch({ args: startupArgs });
+		const mainWindow = await electronApp.firstWindow();
+
+		const safeModeDisableLink = mainWindow.getByText('Disable safe mode and restart');
+		await safeModeDisableLink.waitFor();
+		await expect(safeModeDisableLink).toBeInViewport();
+
+		await electronApp.close();
+	});
+
 	test(
 		'restart in safe mode prompt should work',
 		async ({ profileDirectory, electronApp, mainWindow }) => {
@@ -138,22 +157,38 @@ test.describe('main', () => {
 			// Click "OK" on the "exiting" dialog on Linux
 			await mockNextShowMessageCall(electronApp, /Please relaunch/i, /ok/i);
 
-			const appCloseEvent = electronApp.waitForEvent('close');
+			const restartPromise = electronApp.evaluate(({ app }) => {
+				return new Promise<void>((resolve) => {
+					const originalExit = app.exit;
+					const originalRelaunch = app.relaunch;
 
-			void mainWindow.evaluate(() => {
-				// Calling process.crash() causes Playwright to fail the test.
-				// Simulate process.crash() by calling the crash handler directly.
-				console.log((window as any).joplin.bridge);
-				const appWrapper = (window as any).joplin.bridge.electronApp();
-				appWrapper.handleAppFailure('Test message', false);
+					// Prevent the app from actually relaunching/exiting.
+					// Allowing this breaks Playwright.
+					app.relaunch = () => {};
+					app.exit = () => {
+						app.relaunch = originalRelaunch;
+						app.exit = originalExit;
+						resolve();
+					};
+				});
 			});
 
-			await appCloseEvent;
+			await mainWindow.evaluate(() => {
+				const bridge = (window as any).joplin.bridge;
+				const appWrapper = bridge.electronApp();
+
+				// Calling process.crash() causes Playwright to fail the test.
+				// Simulate process.crash() by calling the crash handler directly.
+				const isTesting = true;
+				appWrapper.handleAppFailure('Test message', false, isTesting);
+			});
+
+			await restartPromise;
 
 			// Should have added a "start in safe mode" file to the profile
 			// directory.
 			expect(
-				await readFile(join(profileDirectory, 'force-safe-mode-on-next-start'), 'utf8')
+				await readFile(join(profileDirectory, 'force-safe-mode-on-next-start'), 'utf8'),
 			).toBe('true');
 		},
 	);
