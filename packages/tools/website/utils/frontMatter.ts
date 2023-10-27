@@ -73,7 +73,7 @@ const formatFrontMatterValue = (key: string, value: any) => {
 	if (['created', 'updated'].includes(key)) {
 		return moment((value as Date)).toISOString();
 	} else {
-		return value;
+		return value.toString();
 	}
 };
 
@@ -85,7 +85,7 @@ export const compileWithFrontMatter = (md: MarkdownAndFrontMatter): string => {
 		for (const [key, value] of Object.entries(header)) {
 			(header as any)[key] = formatFrontMatterValue(key, value);
 		}
-		const headerString = yaml.dump(header, { noCompatMode: true, schema: yaml.FAILSAFE_SCHEMA });
+		const headerString = yaml.dump(header, { noCompatMode: true, schema: yaml.FAILSAFE_SCHEMA, lineWidth: 100000 });
 		output.push('---');
 		output.push(headerString.trim());
 		output.push('---');
