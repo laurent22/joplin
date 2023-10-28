@@ -125,7 +125,7 @@ If synchronisation does not work, please consult the logs in the app profile dir
 
 Select the "WebDAV" synchronisation target and follow the same instructions as for Nextcloud above (for the **terminal application** you will need to select sync target 6 rather than 5).
 
-For WebDAV-compatible services that are known to work with Joplin see [WebDAV synchronisation](https://github.com/laurent22/joplin#webdav-synchronisation).
+For WebDAV-compatible services that are known to work with Joplin see [WebDAV synchronisation](https://github.com/laurent22/joplin/blob/dev/readme/apps/sync/webdav.md).
 
 
 ## Dropbox synchronisation

@@ -1,4 +1,4 @@
-# Joplin terminal app changelog
+# Joplin Terminal App Changelog
 
 ## [cli-v2.12.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.12.1) - 2023-08-23T12:53:19Z
 

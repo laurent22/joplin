@@ -113,7 +113,7 @@ export default async function checkForUpdates(inBackground: boolean, parentWindo
 				} else if (buttonIndex === 1) {
 					await addSkippedVersion(release.version);
 				} else if (buttonIndex === 2) {
-					void bridge().openExternal('https://joplinapp.org/help/about/changelog');
+					void bridge().openExternal('https://joplinapp.org/help/about/changelog/desktop');
 				}
 			}
 		}

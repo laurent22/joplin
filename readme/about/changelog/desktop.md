@@ -1,4 +1,4 @@
-# Joplin changelog
+# Joplin Desktop Changelog
 
 ## [v2.13.3](https://github.com/laurent22/joplin/releases/tag/v2.13.3) (Pre-release) - 2023-10-24T09:25:33Z
 

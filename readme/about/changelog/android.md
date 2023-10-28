@@ -1,4 +1,4 @@
-# Joplin Android app changelog
+# Joplin Android Changelog
 
 ## [android-v2.13.4](https://github.com/laurent22/joplin/releases/tag/android-v2.13.4) (Pre-release) - 2023-10-24T18:29:09Z
 

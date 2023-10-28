@@ -1,4 +1,4 @@
-# Joplin iOS app changelog
+# Joplin iOS Changelog
 
 ## [ios-v12.13.2](https://github.com/laurent22/joplin/releases/tag/ios-v12.13.2) - 2023-10-24T18:40:49Z
 
