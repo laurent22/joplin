@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-import { getRootDir } from '@joplin/utils';
+import { execCommand, getRootDir } from '@joplin/utils';
 import { readFile, readdir, stat, writeFile } from 'fs/promises';
 import * as MarkdownIt from 'markdown-it';
 import { htmlentities, isSelfClosingTag } from '@joplin/utils/html';
@@ -10,6 +10,7 @@ import { copy, mkdirp, remove, pathExists } from 'fs-extra';
 import { basename, dirname } from 'path';
 import markdownUtils, { MarkdownTable } from '@joplin/lib/markdownUtils';
 import { readmeFileTitle } from './utils/parser';
+import { chdir } from 'process';
 const md5File = require('md5-file');
 const htmlparser2 = require('@joplin/fork-htmlparser2');
 const styleToJs = require('style-to-js').default;
@@ -389,6 +390,11 @@ async function getDonateLinks(readmePath: string) {
 	return `<div className="donate-links">\n\n${matches[1].trim()}\n\n</div>`;
 }
 
+const buildDocusaurus = async (docBuilderDir: string) => {
+	chdir(docBuilderDir);
+	await execCommand('yarn run _build');
+};
+
 async function main() {
 	const rootDir = await getRootDir();
 	const readmePath = `${rootDir}/README.md`;
@@ -403,7 +409,7 @@ async function main() {
 
 	await processDocFiles(readmeDir, destHelpDir, [
 		`${readmeDir}/_i18n`,
-		`${readmeDir}/cla.md`,
+		// `${readmeDir}/cla.md`,
 		`${readmeDir}/download.md`,
 		`${readmeDir}/faq_joplin_cloud.md`,
 		`${readmeDir}/privacy.md`,
@@ -418,6 +424,8 @@ async function main() {
 	await deleteUnprocessedFiles(newsDestDir, newsContext.processedFiles);
 
 	await copyFile(`${rootDir}/Assets/WebsiteAssets/images`, `${docBuilderDir}/static/images`);
+
+	await buildDocusaurus(docBuilderDir);
 }
 
 if (require.main === module) {
