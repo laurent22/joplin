@@ -381,7 +381,7 @@ packages/app-desktop/integration-tests/models/MainScreen.js
 packages/app-desktop/integration-tests/models/NoteEditorScreen.js
 packages/app-desktop/integration-tests/models/SettingsScreen.js
 packages/app-desktop/integration-tests/util/activateMainMenuItem.js
-packages/app-desktop/integration-tests/util/mockNextShowMessageDialog.js
+packages/app-desktop/integration-tests/util/respondToMessageBoxesMatching.js
 packages/app-desktop/integration-tests/util/test.js
 packages/app-desktop/playwright.config.js
 packages/app-desktop/plugins/GotoAnything.js

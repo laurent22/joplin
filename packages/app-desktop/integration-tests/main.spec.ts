@@ -2,10 +2,10 @@ import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import activateMainMenuItem from './util/activateMainMenuItem';
 import SettingsScreen from './models/SettingsScreen';
-import mockNextShowMessageCall from './util/mockNextShowMessageDialog';
 import { _electron as electron } from '@playwright/test';
 import { readFile, writeFile } from 'fs-extra';
 import { join } from 'path';
+import respondToMessageBoxesMatching from './util/respondToMessageBoxesMatching';
 
 
 test.describe('main', () => {
@@ -152,10 +152,10 @@ test.describe('main', () => {
 			await mainScreen.waitFor();
 
 			// Choose the "restart in safe mode" option
-			await mockNextShowMessageCall(electronApp, /an error/i, /restart in safe mode/i);
+			await respondToMessageBoxesMatching(electronApp, /an error/i, /restart in safe mode/i);
 
 			// Click "OK" on the "exiting" dialog on Linux
-			await mockNextShowMessageCall(electronApp, /Please relaunch/i, /ok/i);
+			await respondToMessageBoxesMatching(electronApp, /Please relaunch/i, /ok/i);
 
 			const restartPromise = electronApp.evaluate(({ app }) => {
 				return new Promise<void>((resolve) => {
