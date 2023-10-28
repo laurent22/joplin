@@ -18,8 +18,8 @@ All participants will need a Google account in order to join the program. So, sa
 
 We suggest you read carefully these important documents and bookmark the links as you will need to refer to them throughout GSoC:
 
-- [How to submit a pull request for GSoC](https://joplinapp.org/gsoc2021/pull_request_guidelines/)
-- [How to build the apps](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
+- [How to submit a pull request for GSoC](https://joplinapp.org/help/dev/gsoc/gsoc2021/pull_request_guidelines/)
+- [How to build the apps](https://github.com/laurent22/joplin/blob/dev/readme/dev/BUILD.md)
 - [How to contribute](https://github.com/laurent22/joplin/blob/dev/readme/dev/index.md)
 
 ## Programming Language
@@ -31,7 +31,7 @@ We suggest you read carefully these important documents and bookmark the links a
 
 In general, all applications share the same back-end written in TypeScript or JavaScript (Node.js), with Redux for state management. The back-end runs locally.
 
-The desktop GUI, as listed on the [Joplin's website](https://joplinapp.org/help/#installation) is done using Electron and React.
+The desktop GUI, as listed on the [Joplin's website](https://joplinapp.org/help/install) is done using Electron and React.
 
 The mobile app is done using React Native.
 
@@ -59,7 +59,7 @@ Before you can be accepted as a student we expect you to write some code and lin
 
 - Please **do not submit a pull request just to fix some typo**.
 
-Before submitting a pull request, please make sure you read the [pull request guidelines for GSoC 2021](https://joplinapp.org/gsoc2021/pull_request_guidelines/).
+Before submitting a pull request, please make sure you read the [pull request guidelines for GSoC 2021](https://joplinapp.org/help/dev/gsoc/gsoc2021/pull_request_guidelines/).
 
 ## General instructions
 
@@ -69,7 +69,7 @@ First of all, please read the above referenced resources and the [GSoC FAQ](http
 
 1. Join the [Joplin Forum](https://discourse.joplinapp.org), introduce yourself in a structured manner, share your GitHub username, and meet your fellow developers in the [GSoC category](https://discourse.joplinapp.org/c/gsoc). The subject of the topic shall contain your username, e.g. _Introducing \<username>_.
 2. Read Student proposal guidelines and the [GSoC Student Manual](https://developers.google.com/open-source/gsoc/resources/manual#student_manual)
-3. Take a look at the [list of ideas](https://joplinapp.org/gsoc2021/ideas/). You can have you own idea added by posting it in the [Features category](https://discourse.joplinapp.org/c/features)
+3. Take a look at the [list of ideas](https://joplinapp.org/help/dev/gsoc/gsoc2021/ideas/). You can have you own idea added by posting it in the [Features category](https://discourse.joplinapp.org/c/features)
 4. Come up with project that you're interested in and discuss it in [Features category](https://discourse.joplinapp.org/c/features)
 5. Write a first draft and get someone to review it
 6. Remember: you must link to work such as commits in your proposal. A private place will be created within the forum for that purposes.
@@ -166,4 +166,4 @@ Finally, know that we will never assign you to a project you do not want to work
 
 Please see below for a list of project ideas:
 
-https://joplinapp.org/gsoc2021/ideas/
+https://joplinapp.org/help/dev/gsoc/gsoc2021/ideas/

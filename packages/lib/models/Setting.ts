@@ -393,7 +393,7 @@ class Setting extends BaseModel {
 			wysiwygNo = ` ${_('(wysiwyg: %s)', _('no'))}`;
 		}
 
-		const emptyDirWarning = _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplinapp.org/faq/');
+		const emptyDirWarning = _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplinapp.org/help/faq');
 
 		// A "public" setting means that it will show up in the various config screens (or config command for the CLI tool), however
 		// if if private a setting might still be handled and modified by the app. For instance, the settings related to sorting notes are not

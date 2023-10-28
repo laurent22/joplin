@@ -77,7 +77,7 @@ function setupDownloadPage() {
 		} else if (os === 'linux') {
 			// If it's Linux, the user should probably install it using the
 			// install script so we redirect to the install section
-			window.location = 'https://joplinapp.org/help/#desktop-applications';
+			window.location = 'https://joplinapp.org/help/install';
 		} else {
 			// Otherwise, start the download
 			const downloadLink = downloadLinks[os];

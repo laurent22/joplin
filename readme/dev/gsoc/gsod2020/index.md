@@ -128,5 +128,5 @@ Finally, know that we will never assign you to a project you do not want to work
 # Ideas
 Please see below for a list of project ideas:
 
-https://joplinapp.org/gsod2020/ideas/
+https://joplinapp.org/help/dev/gsoc/gsod2020/ideas/
 

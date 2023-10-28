@@ -1,6 +1,6 @@
 # GSoC 2023 Ideas
 
-2023 is Joplin third round at Google Summer of Code. Detailed information on how to get involved and apply are given in the [general Summer of Code introduction](https://joplinapp.org/gsoc2023/)
+2023 is Joplin third round at Google Summer of Code. Detailed information on how to get involved and apply are given in the [general Summer of Code introduction](https://joplinapp.org/help/dev/gsoc/gsoc2023/)
 
 **These are all proposals! We are open to new ideas you might have!!** Do you have an awesome idea you want to work on with Joplin but that is not among the ideas below? That's cool. We love that! But please do us a favour: Get in touch with a mentor early on and make sure your project is realistic and within the scope of Joplin. This year's themes are:
 
@@ -155,6 +155,6 @@ Potential Mentor(s):
 
 # More info
 
-- Make sure you read the [Joplin Google Summer of Code Introduction](https://joplinapp.org/gsoc2023/)
-- To build the application, please read [BUILD.md](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
+- Make sure you read the [Joplin Google Summer of Code Introduction](https://joplinapp.org/help/dev/gsoc/gsoc2023)
+- To build the application, please read [BUILD.md](https://github.com/laurent22/joplin/blob/dev/help/dev/BUILD.md)
 - And before creating a pull request, please read the [pull request guidelines](https://joplinapp.org/gsoc2023/pull_request_guidelines/)

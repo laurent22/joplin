@@ -37,7 +37,7 @@ macOS, Linux, or Windows (via [WSL](https://msdn.microsoft.com/en-us/commandline
 
 To start it, type `joplin`.
 
-For usage information, please refer to the full [Joplin Terminal Application Documentation](https://joplinapp.org/terminal/).
+For usage information, please refer to the full [Joplin Terminal Application Documentation](https://joplinapp.org/help/apps/terminal/).
 
 ## Web Clipper
 

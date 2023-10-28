@@ -16,8 +16,8 @@ All participants will need a Google account in order to join the program. So, sa
 
 We suggest you read carefully these important documents and bookmark the links as you will need to refer to them throughout GSoC:
 
-- [How to submit a pull request for GSoC](https://joplinapp.org/gsoc2022/pull_request_guidelines/)
-- [How to build the apps](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
+- [How to submit a pull request for GSoC](https://joplinapp.org/help/dev/gsoc/gsoc2022/pull_request_guidelines/)
+- [How to build the apps](https://github.com/laurent22/joplin/blob/dev/help/dev/BUILD.md)
 - [How to contribute](https://github.com/laurent22/joplin/blob/dev/readme/dev/index.md)
 
 ## Programming Language
@@ -29,7 +29,7 @@ We suggest you read carefully these important documents and bookmark the links a
 
 In general, all applications share the same back-end written in TypeScript or JavaScript (Node.js), with Redux for state management. The back-end runs locally.
 
-The desktop GUI, as listed on the [Joplin's website](https://joplinapp.org/help/#installation) is done using Electron and React.
+The desktop GUI, as listed on the [Joplin's website](https://joplinapp.org/help/install) is done using Electron and React.
 
 The mobile app is done using React Native.
 
@@ -55,7 +55,7 @@ Before you can be accepted as a contributor we expect you to write some code and
 
 - Please **do not submit a pull request just to fix some typo**.
 
-Before submitting a pull request, please make sure you read the [pull request guidelines for GSoC 2022](https://joplinapp.org/gsoc2022/pull_request_guidelines/).
+Before submitting a pull request, please make sure you read the [pull request guidelines for GSoC 2022](https://joplinapp.org/help/dev/gsoc/gsoc2022/pull_request_guidelines/).
 
 ## General instructions
 
@@ -162,4 +162,4 @@ Finally, know that we will never assign you to a project you do not want to work
 
 Please see below for a list of project ideas:
 
-https://joplinapp.org/gsoc2022/ideas/
+https://joplinapp.org/help/dev/gsoc/gsoc2022/ideas/

@@ -1,6 +1,6 @@
 # GSoC 2022 Ideas
 
-2022 is Joplin third round at Google Summer of Code. Detailed information on how to get involved and apply are given in the [general Summer of Code introduction](https://joplinapp.org/gsoc2022/)
+2022 is Joplin third round at Google Summer of Code. Detailed information on how to get involved and apply are given in the [general Summer of Code introduction](https://joplinapp.org/help/dev/gsoc/gsoc2022/)
 
 **These are all proposals! We are open to new ideas you might have!!** Do you have an awesome idea you want to work on with Joplin but that is not among the ideas below? That's cool. We love that! But please do us a favour: Get in touch with a mentor early on and make sure your project is realistic and within the scope of Joplin. This year's themes are:
 
@@ -106,7 +106,7 @@ Joplin offers a richtext/WYSIWYG typing experience alongside the Markdown editor
 
 Areas for consideration include increasing compatibility with Joplin-wide keybindings (many are currently static), limiting features of the editor not compatible with markdown formatting, reducing the impact of data changes caused by swapping between editors.
 
-Also read the document about limitations of the editor: [https://joplinapp.org/rich_text_editor/](https://joplinapp.org/rich_text_editor/)
+Also read the document about limitations of the editor: [https://joplinapp.org/rich_text_editor/](https://joplinapp.org/help/apps/rich_text_editor/)
 
 Expected Outcome: Removal of non-functional formatting options, alignment of generic Joplin editor options as well general improvements in editor usability.
 
@@ -266,6 +266,6 @@ Expected size of project: 350 hours
 
 # More info
 
-- Make sure you read the [Joplin Google Summer of Code Introduction](https://joplinapp.org/gsoc2022/)
-- To build the application, please read [BUILD.md](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
-- And before creating a pull request, please read the [pull request guidelines](https://joplinapp.org/gsoc2022/pull_request_guidelines/)
+- Make sure you read the [Joplin Google Summer of Code Introduction](https://joplinapp.org/help/dev/gsoc/gsoc2022/)
+- To build the application, please read [BUILD.md](https://github.com/laurent22/joplin/blob/dev/readme/dev/BUILD.md)
+- And before creating a pull request, please read the [pull request guidelines](https://joplinapp.org/help/dev/gsoc/gsoc2022/pull_request_guidelines/)
