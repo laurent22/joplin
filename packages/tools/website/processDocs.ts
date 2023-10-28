@@ -380,7 +380,7 @@ async function main() {
 	const rootDir = await getRootDir();
 	const docBuilderDir = `${rootDir}/packages/doc-builder`;
 	const destHelpDir = `${docBuilderDir}/help`;
-	const newsDestDir = `${docBuilderDir}/blog`;
+	const newsDestDir = `${docBuilderDir}/news`;
 	const readmeDir = `${rootDir}/readme`;
 
 	const mainContext: Context = {};
