@@ -288,8 +288,12 @@ async function main() {
 
 	setLocale('en_GB');
 
-	await remove(`${docDir}`);
-	await copy(websiteAssetDir, `${docDir}`);
+	await remove(docDir);
+
+	const docBuilderDir = `${rootDir}/packages/doc-builder`;
+	await copy(`${docBuilderDir}/build`, docDir);
+
+	await copy(websiteAssetDir, docDir);
 
 	const sponsors = process.env.SKIP_SPONSOR_PROCESSING ? { github: [], orgs: [] } : await loadSponsors();
 	const partials = await loadMustachePartials(partialDir);
