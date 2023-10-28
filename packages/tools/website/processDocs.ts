@@ -390,7 +390,7 @@ const getDonateLinks = () => {
 
 const buildDocusaurus = async (docBuilderDir: string) => {
 	chdir(docBuilderDir);
-	await execCommand('yarn run _build');
+	await execCommand('yarn _build');
 };
 
 async function main() {
