@@ -10,7 +10,7 @@ import { readmeFileTitle, replaceGitHubByWebsiteLinks } from './utils/parser';
 import { extractOpenGraphTags, OpenGraphTags } from './utils/openGraph';
 import { readCredentialFileJson } from '@joplin/lib/utils/credentialFiles';
 import { getNewsDateString } from './utils/news';
-import { parsePoFile, parseTranslations, Translations } from '../utils/translation';
+import { Translations } from '../utils/translation';
 import { setLocale } from '@joplin/lib/locale';
 import applyTranslations from './utils/applyTranslations';
 import { loadSponsors } from '../utils/loadSponsors';
@@ -36,7 +36,7 @@ const path = require('path');
 const md5File = require('md5-file');
 const docDir = `${dirname(dirname(dirname(dirname(__dirname))))}/joplin-website/docs`;
 
-if (!pathExistsSync(docDir)) throw new Error(`Doc directory does not exist: ${docDir}`);
+if (!pathExistsSync(docDir)) throw new Error(`"docs" directory does not exist: ${docDir}`);
 
 const websiteAssetDir = `${rootDir}/Assets/WebsiteAssets`;
 const readmeDir = `${rootDir}/readme`;
@@ -235,20 +235,20 @@ const processNewsMarkdown = (md: string, mdFilePath: string): string => {
 	return md;
 };
 
-const makeNewsFrontPage = async (sourceFilePaths: string[], targetFilePath: string, templateParams: TemplateParams) => {
-	const maxNewsPerPage = 20;
+// const makeNewsFrontPage = async (sourceFilePaths: string[], targetFilePath: string, templateParams: TemplateParams) => {
+// 	const maxNewsPerPage = 20;
 
-	const frontPageMd: string[] = [];
+// 	const frontPageMd: string[] = [];
 
-	for (const mdFilePath of sourceFilePaths) {
-		let md = await readFile(mdFilePath, 'utf8');
-		md = processNewsMarkdown(md, mdFilePath);
-		frontPageMd.push(md);
-		if (frontPageMd.length >= maxNewsPerPage) break;
-	}
+// 	for (const mdFilePath of sourceFilePaths) {
+// 		let md = await readFile(mdFilePath, 'utf8');
+// 		md = processNewsMarkdown(md, mdFilePath);
+// 		frontPageMd.push(md);
+// 		if (frontPageMd.length >= maxNewsPerPage) break;
+// 	}
 
-	renderPageToHtml(frontPageMd.join('\n\n* * *\n\n'), targetFilePath, templateParams);
-};
+// 	renderPageToHtml(frontPageMd.join('\n\n* * *\n\n'), targetFilePath, templateParams);
+// };
 
 const isNewsFile = (filePath: string): boolean => {
 	return filePath.includes('readme/news/');
@@ -271,16 +271,16 @@ const updatePageLanguage = (html: string, lang: string): string => {
 async function main() {
 	const supportedLocales: Record<string, Locale> = {
 		'en_GB': enGbLocale,
-		'zh_CN': {
-			htmlTranslations: parseTranslations(await parsePoFile(`${websiteAssetDir}/locales/zh_CN.po`)),
-			lang: 'zh-cn',
-			pathPrefix: 'cn',
-		},
-		'fr_FR': {
-			htmlTranslations: {},
-			lang: 'fr-fr',
-			pathPrefix: 'fr',
-		},
+		// 'zh_CN': {
+		// 	htmlTranslations: parseTranslations(await parsePoFile(`${websiteAssetDir}/locales/zh_CN.po`)),
+		// 	lang: 'zh-cn',
+		// 	pathPrefix: 'cn',
+		// },
+		// 'fr_FR': {
+		// 	htmlTranslations: {},
+		// 	lang: 'fr-fr',
+		// 	pathPrefix: 'fr',
+		// },
 	};
 
 	// delete supportedLocales['zh_CN'];
@@ -444,10 +444,24 @@ async function main() {
 
 	setLocale('en_GB');
 
-	// =============================================================
-	// All other pages are generated dynamically from the
-	// Markdown files under /readme
-	// =============================================================
+	// ==========================================================================
+	// All other pages are generated dynamically from the Markdown files under
+	// /readme
+	//
+	// 2023-10-23: This was used to build the Help pages from the Markdown
+	// files, however this is now done using Docusaurus. A few files still need
+	// to be at the root however, and so we keep that process here for now. Any
+	// file that need to be processed should go in the `filesToProcess`  array.
+	// Eventually all that should probably be moved to Docusaurus or to some
+	// static pages.
+	// ==========================================================================
+
+	const filesToProcess = [
+		'download.md',
+		'privacy.md',
+		'donate.md',
+		'connection_check.md',
+	];
 
 	interface SourceInfo {
 		title: string;
@@ -498,6 +512,7 @@ async function main() {
 	const newsFilePaths: string[] = [];
 
 	for (const mdFile of mdFiles) {
+		if (!filesToProcess.includes(basename(mdFile))) continue;
 		if (mdFile.startsWith('readme/_i18n')) continue;
 
 		for (const [localeName, locale] of Object.entries(supportedLocales)) {
@@ -545,24 +560,27 @@ async function main() {
 		});
 	}
 
-	newsFilePaths.sort((a, b) => {
-		return a.toLowerCase() > b.toLowerCase() ? -1 : +1;
-	});
+	// newsFilePaths.sort((a, b) => {
+	// 	return a.toLowerCase() > b.toLowerCase() ? -1 : +1;
+	// });
 
-	await makeNewsFrontPage(newsFilePaths, `${docDir}/news/index.html`, {
-		...defaultTemplateParams(assetUrls, null),
-		title: 'What\'s new',
-		pageName: 'news',
-		partials,
-		showToc: false,
-		showImproveThisDoc: false,
-		donateLinksMd,
-		openGraph: {
-			title: 'Joplin - what\'s new',
-			description: 'News about the Joplin open source application',
-			url: 'https://joplinapp.org/news/',
-		},
-	});
+	// await makeNewsFrontPage(newsFilePaths, `${docDir}/news/index.html`, {
+	// 	...defaultTemplateParams(assetUrls, null),
+	// 	title: 'What\'s new',
+	// 	pageName: 'news',
+	// 	partials,
+	// 	showToc: false,
+	// 	showImproveThisDoc: false,
+	// 	donateLinksMd,
+	// 	openGraph: {
+	// 		title: 'Joplin - what\'s new',
+	// 		description: 'News about the Joplin open source application',
+	// 		url: 'https://joplinapp.org/news/',
+	// 	},
+	// });
+
+
+
 
 	// setLocale('zh_CN');
 	// const translations = parseTranslations(await parsePoFile(`${websiteAssetDir}/locales/zh_CN.po`));
