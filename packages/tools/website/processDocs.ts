@@ -30,6 +30,7 @@ interface Context {
 	inFence?: boolean;
 	processedFiles?: string[];
 	isNews?: boolean;
+	donateLinks?: string;
 }
 
 const md5 = (s: string) => {
@@ -318,6 +319,8 @@ const processMarkdownFile = async (sourcePath: string, destPath: string, context
 		mdAndFrontMatter.header.date = formatted;
 	}
 
+	mdAndFrontMatter.doc = mdAndFrontMatter.doc.replace(/^# (.*)\n/, `# $1\n\n${context.donateLinks}\n\n`);
+
 	const fullContent = compileWithFrontMatter(mdAndFrontMatter);
 
 	if (await pathExists(destPath)) {
@@ -376,14 +379,27 @@ const copyFile = async (sourceFile: string, destFile: string) => {
 	await copy(sourceFile, destFile);
 };
 
+const donateLinksRegex_ = /<!-- DONATELINKS -->([^]*)<!-- DONATELINKS -->/;
+async function getDonateLinks(readmePath: string) {
+	const md = await readFile(readmePath, 'utf8');
+	const matches = md.match(donateLinksRegex_);
+
+	if (!matches) throw new Error('Cannot fetch donate links');
+
+	return `<div className="donate-links">\n\n${matches[1].trim()}\n\n</div>`;
+}
+
 async function main() {
 	const rootDir = await getRootDir();
+	const readmePath = `${rootDir}/README.md`;
 	const docBuilderDir = `${rootDir}/packages/doc-builder`;
 	const destHelpDir = `${docBuilderDir}/help`;
 	const newsDestDir = `${docBuilderDir}/news`;
 	const readmeDir = `${rootDir}/readme`;
 
-	const mainContext: Context = {};
+	const donateLinks = await getDonateLinks(readmePath);
+
+	const mainContext: Context = { donateLinks };
 
 	await processDocFiles(readmeDir, destHelpDir, [
 		`${readmeDir}/_i18n`,
@@ -397,7 +413,7 @@ async function main() {
 
 	await deleteUnprocessedFiles(destHelpDir, mainContext.processedFiles);
 
-	const newsContext: Context = { isNews: true };
+	const newsContext: Context = { isNews: true, donateLinks };
 	await processDocFiles(`${readmeDir}/news`, newsDestDir, [], newsContext);
 	await deleteUnprocessedFiles(newsDestDir, newsContext.processedFiles);
 
