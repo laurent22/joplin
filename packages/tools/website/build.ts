@@ -49,16 +49,16 @@ const partialDir = `${websiteAssetDir}/templates/partials`;
 
 const discussLink = 'https://discourse.joplinapp.org/c/news/9';
 
-let tocMd_: string = null;
-const tocHtml_: Record<string, string> = {};
-const tocRegex_ = /<!-- TOC -->([^]*)<!-- TOC -->/;
-function tocMd() {
-	if (tocMd_) return tocMd_;
-	const md = readFileSync(`${rootDir}/README.md`, 'utf8');
-	const toc = md.match(tocRegex_);
-	tocMd_ = toc[1];
-	return tocMd_;
-}
+// let tocMd_: string = null;
+// const tocHtml_: Record<string, string> = {};
+// const tocRegex_ = /<!-- TOC -->([^]*)<!-- TOC -->/;
+// function tocMd() {
+// 	if (tocMd_) return tocMd_;
+// 	const md = readFileSync(`${rootDir}/README.md`, 'utf8');
+// 	const toc = md.match(tocRegex_);
+// 	tocMd_ = toc[1];
+// 	return tocMd_;
+// }
 
 const donateLinksRegex_ = /<!-- DONATELINKS -->([^]*)<!-- DONATELINKS -->/;
 async function getDonateLinks() {
@@ -70,18 +70,18 @@ async function getDonateLinks() {
 	return `<div class="donate-links">\n\n${matches[1].trim()}\n\n</div>`;
 }
 
-function tocHtml(locale: Locale) {
-	if (tocHtml_[locale.lang]) return tocHtml_[locale.lang];
-	const markdownIt = getMarkdownIt();
-	let md = tocMd();
-	md = md.replace(/# Table of contents/, '');
-	md = replaceGitHubByWebsiteLinks(md);
-	md = convertLinksToLocale(md, locale);
-	let output = markdownIt.render(md);
-	output = `<div>${output}</div>`;
-	tocHtml_[locale.lang] = output;
-	return output;
-}
+// function tocHtml(locale: Locale) {
+// 	if (tocHtml_[locale.lang]) return tocHtml_[locale.lang];
+// 	const markdownIt = getMarkdownIt();
+// 	let md = tocMd();
+// 	md = md.replace(/# Table of contents/, '');
+// 	md = replaceGitHubByWebsiteLinks(md);
+// 	md = convertLinksToLocale(md, locale);
+// 	let output = markdownIt.render(md);
+// 	output = `<div>${output}</div>`;
+// 	tocHtml_[locale.lang] = output;
+// 	return output;
+// }
 
 const baseUrl = '';
 const cssBasePath = `${websiteAssetDir}/css`;
@@ -143,7 +143,7 @@ function defaultTemplateParams(assetUrls: AssetUrls, locale: Locale = null): Tem
 		imageBaseUrl: `${baseUrl}/images`,
 		cssBaseUrl,
 		jsBaseUrl,
-		tocHtml: tocHtml(locale),
+		// tocHtml: tocHtml(locale),
 		yyyy: (new Date()).getFullYear().toString(),
 		templateHtml: mainTemplateHtml,
 		forumUrl: 'https://discourse.joplinapp.org/',
@@ -211,20 +211,20 @@ function renderFileToHtml(sourcePath: string, targetPath: string, templateParams
 	}
 }
 
-function makeHomePageMd(readmePath: string) {
-	let md = readFileSync(readmePath, 'utf8');
-	md = md.replace(tocRegex_, '');
+// function makeHomePageMd(readmePath: string) {
+// 	let md = readFileSync(readmePath, 'utf8');
+// 	md = md.replace(tocRegex_, '');
 
-	// HACK: GitHub needs the \| or the inline code won't be displayed correctly inside the table,
-	// while MarkdownIt doesn't and will in fact display the \. So we remove it here.
-	md = md.replace(/\\\| bash/g, '| bash');
+// 	// HACK: GitHub needs the \| or the inline code won't be displayed correctly inside the table,
+// 	// while MarkdownIt doesn't and will in fact display the \. So we remove it here.
+// 	md = md.replace(/\\\| bash/g, '| bash');
 
-	// We strip-off the donate links because they are added back (with proper
-	// classes and CSS).
-	md = md.replace(donateLinksRegex_, '');
+// 	// We strip-off the donate links because they are added back (with proper
+// 	// classes and CSS).
+// 	md = md.replace(donateLinksRegex_, '');
 
-	return md;
-}
+// 	return md;
+// }
 
 const processNewsMarkdown = (md: string, mdFilePath: string): string => {
 	const info = stripOffFrontMatter(md);
@@ -306,38 +306,38 @@ async function main() {
 		// HELP PAGE
 		// =============================================================
 
-		let readmePath = `${rootDir}/README.md`;
+		// let readmePath = `${rootDir}/README.md`;
 
-		let sourceMarkdownFile = 'README.md';
-		let targetDocDir = docDir;
+		// let sourceMarkdownFile = 'README.md';
+		// let targetDocDir = docDir;
 
-		if (localeName !== 'en_GB') {
-			const possibleSource = `${rootDir}/readme/_i18n/${localeName}/README.md`;
-			if (await pathExists(possibleSource)) {
-				sourceMarkdownFile = possibleSource;
-				readmePath = possibleSource;
-			} else {
-				console.warn(`Cannot find source file: ${possibleSource}`);
-			}
+		// if (localeName !== 'en_GB') {
+		// 	const possibleSource = `${rootDir}/readme/_i18n/${localeName}/README.md`;
+		// 	if (await pathExists(possibleSource)) {
+		// 		sourceMarkdownFile = possibleSource;
+		// 		readmePath = possibleSource;
+		// 	} else {
+		// 		console.warn(`Cannot find source file: ${possibleSource}`);
+		// 	}
 
-			targetDocDir = `${docDir}/${locale.pathPrefix}`;
-		}
+		// 	targetDocDir = `${docDir}/${locale.pathPrefix}`;
+		// }
 
-		const readmeMd = makeHomePageMd(readmePath);
+		// const readmeMd = makeHomePageMd(readmePath);
 
-		renderPageToHtml(readmeMd, `${targetDocDir}/help/index.html`, {
-			sourceMarkdownFile,
-			donateLinksMd,
-			partials,
-			sponsors,
-			assetUrls,
-			openGraph: {
-				title: 'Joplin documentation',
-				description: '',
-				url: 'https://joplinapp.org/help/',
-			},
-			locale,
-		});
+		// renderPageToHtml(readmeMd, `${targetDocDir}/help/index.html`, {
+		// 	sourceMarkdownFile,
+		// 	donateLinksMd,
+		// 	partials,
+		// 	sponsors,
+		// 	assetUrls,
+		// 	openGraph: {
+		// 		title: 'Joplin documentation',
+		// 		description: '',
+		// 		url: 'https://joplinapp.org/help/',
+		// 	},
+		// 	locale,
+		// });
 
 		// =============================================================
 		// FRONT PAGE

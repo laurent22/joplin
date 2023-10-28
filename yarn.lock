@@ -6936,6 +6936,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/tools@workspace:packages/tools"
   dependencies:
+    "@docusaurus/plugin-sitemap": 2.4.3
     "@joplin/fork-htmlparser2": ^4.1.46
     "@joplin/lib": ~2.13
     "@joplin/renderer": ~2.13

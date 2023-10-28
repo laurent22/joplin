@@ -16,86 +16,9 @@ The application is available for Windows, Linux, macOS, Android and iOS. A [Web 
 
 <div class="top-screenshot"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/home-top-img.png" style="max-width: 100%; max-height: 35em;"></div>
 
-<!-- TOC -->
-# Table of contents
+# Help and documentation
 
-- Applications
-
-	- [Desktop application](https://github.com/laurent22/joplin/blob/dev/readme/apps/desktop.md)
-	- [Mobile applications](https://github.com/laurent22/joplin/blob/dev/readme/apps/mobile.md)
-	- [Terminal application](https://github.com/laurent22/joplin/blob/dev/readme/apps/terminal.md)
-	- [Web Clipper](https://github.com/laurent22/joplin/blob/dev/readme/apps/clipper.md)
-
-- Support
-
-	- [Joplin Forum](https://discourse.joplinapp.org)
-	- [Markdown Guide](https://github.com/laurent22/joplin/blob/dev/readme/apps/markdown.md)
-	- [How to enable end-to-end encryption](https://github.com/laurent22/joplin/blob/dev/readme/e2ee.md)
-	- [What is a conflict?](https://github.com/laurent22/joplin/blob/dev/readme/conflict.md)
-	- [How to enable debug mode](https://github.com/laurent22/joplin/blob/dev/readme/debugging.md)
-	- [About the Rich Text editor limitations](https://github.com/laurent22/joplin/blob/dev/readme/rich_text_editor.md)
-	- [External links](https://github.com/laurent22/joplin/blob/dev/readme/external_links.md)
-	- [FAQ](https://github.com/laurent22/joplin/blob/dev/readme/faq.md)
-
-- Joplin Cloud
-
-	- [Sharing a notebook](https://github.com/laurent22/joplin/blob/dev/readme/share_notebook.md)
-	- [Publishing a note](https://github.com/laurent22/joplin/blob/dev/readme/publish_note.md)
-	- [Email to Note](https://github.com/laurent22/joplin/blob/dev/readme/email_to_note.md)
-
-- Joplin API - Get Started
-
-	- [Joplin API Overview](https://github.com/laurent22/joplin/blob/dev/readme/api/overview.md)
-	- [Plugin development](https://github.com/laurent22/joplin/blob/dev/readme/api/get_started/plugins.md)
-	- [Plugin tutorial](https://github.com/laurent22/joplin/blob/dev/readme/api/tutorials/toc_plugin.md)
-
-
-- Joplin API - References
-
-	- [Plugin API](https://joplinapp.org/api/references/plugin_api/classes/joplin.html)
-	- [Data API](https://github.com/laurent22/joplin/blob/dev/readme/api/references/rest_api.md)
-	- [Plugin manifest](https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_manifest.md)
-	- [Plugin loading rules](https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_loading_rules.md)
-	- [Plugin theming](https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_theming.md)
-
-- Development
-
-	- [How to build the apps](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
-	- [Writing a technical spec](https://github.com/laurent22/joplin/blob/dev/readme/technical_spec.md)
-	- [Desktop application styling](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/desktop_styling.md)
-	- [Note history spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/history.md)
-	- [Synchronisation spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/sync.md)
-	- [Sync Lock spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/sync_lock.md)
-	- [Synchronous Scroll spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/sync_scroll.md)
-	- [Overall Architecture spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/architecture.md)
-	- [Plugin Architecture spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/plugins.md)
-	- [Search Sorting spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/search_sorting.md)
-	- [E2EE: Technical spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/e2ee.md)
-	- [E2EE: Workflow](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/e2ee/workflow.md)
-	- [Server: File URL Format](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/server_file_url_format.md)
-	- [Server: Delta Sync](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/server_delta_sync.md)
-	- [Server: Sharing](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/server_sharing.md)
-	- [Read-only items](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/read_only.md)
-
-- Google Summer of Code 2022
-
-	- [Google Summer of Code 2022](https://github.com/laurent22/joplin/blob/dev/readme/gsoc2022/index.md)
-	- [How to submit a GSoC pull request](https://github.com/laurent22/joplin/blob/dev/readme/gsoc2022/pull_request_guidelines.md)
-	- [Project Ideas](https://github.com/laurent22/joplin/blob/dev/readme/gsoc2022/ideas.md)
-
-- About
-
-	- [Changelog (Desktop App)](https://github.com/laurent22/joplin/blob/dev/readme/changelog.md)
-	- [Changelog (Android)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_android.md)
-	- [Changelog (iOS)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_ios.md)
-	- [Changelog (CLI App)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md)
-	- [Changelog (Server)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md)
-	- [Guiding principles](https://github.com/laurent22/joplin/blob/dev/readme/principles.md)
-	- [Stats](https://github.com/laurent22/joplin/blob/dev/readme/stats.md)
-	- [Brand guidelines](https://joplinapp.org/brand)
-	- [Release cycle](https://github.com/laurent22/joplin/blob/dev/readme/release_cycle.md)
-	- [Donate](https://github.com/laurent22/joplin/blob/dev/readme/donate.md)
-<!-- TOC -->
+For more information about the applications, see the [Joplin documentation](https://joplinapp.org)
 
 # Sponsors
 
