@@ -7,7 +7,7 @@ import { htmlentities, isSelfClosingTag } from '@joplin/utils/html';
 import { compileWithFrontMatter, stripOffFrontMatter } from './utils/frontMatter';
 import StateCore = require('markdown-it/lib/rules_core/state_core');
 import { copy, mkdirp, remove, pathExists } from 'fs-extra';
-import { dirname } from 'path';
+import { basename, dirname } from 'path';
 import markdownUtils, { MarkdownTable } from '@joplin/lib/markdownUtils';
 import { readmeFileTitle } from './utils/parser';
 const md5File = require('md5-file');
@@ -29,6 +29,7 @@ interface Context {
 	currentLinkAttrs?: any;
 	inFence?: boolean;
 	processedFiles?: string[];
+	isNews?: boolean;
 }
 
 const md5 = (s: string) => {
@@ -311,6 +312,12 @@ const processMarkdownFile = async (sourcePath: string, destPath: string, context
 	const mdAndFrontMatter = stripOffFrontMatter(destContent);
 	mdAndFrontMatter.header.sidebar_label = title;
 
+	if (context.isNews) {
+		const dateString = basename(sourcePath).split('-')[0];
+		const formatted = `${dateString.substring(0, 4)}-${dateString.substring(4, 6)}-${dateString.substring(6, 8)}`;
+		mdAndFrontMatter.header.date = formatted;
+	}
+
 	const fullContent = compileWithFrontMatter(mdAndFrontMatter);
 
 	if (await pathExists(destPath)) {
@@ -372,21 +379,27 @@ const copyFile = async (sourceFile: string, destFile: string) => {
 async function main() {
 	const rootDir = await getRootDir();
 	const docBuilderDir = `${rootDir}/packages/doc-builder`;
-	const helpDir = `${docBuilderDir}/help`;
+	const destHelpDir = `${docBuilderDir}/help`;
+	const newsDestDir = `${docBuilderDir}/blog`;
 	const readmeDir = `${rootDir}/readme`;
 
-	const context: Context = {};
+	const mainContext: Context = {};
 
-	await processDocFiles(readmeDir, `${helpDir}`, [
+	await processDocFiles(readmeDir, destHelpDir, [
 		`${readmeDir}/_i18n`,
 		`${readmeDir}/cla.md`,
 		`${readmeDir}/download.md`,
 		`${readmeDir}/faq_joplin_cloud.md`,
 		`${readmeDir}/privacy.md`,
 		`${readmeDir}/welcome`,
-	], context);
+		`${readmeDir}/news`,
+	], mainContext);
 
-	await deleteUnprocessedFiles(`${helpDir}`, context.processedFiles);
+	await deleteUnprocessedFiles(destHelpDir, mainContext.processedFiles);
+
+	const newsContext: Context = { isNews: true };
+	await processDocFiles(`${readmeDir}/news`, newsDestDir, [], newsContext);
+	await deleteUnprocessedFiles(newsDestDir, newsContext.processedFiles);
 
 	await copyFile(`${rootDir}/Assets/WebsiteAssets/images`, `${docBuilderDir}/static/images`);
 }

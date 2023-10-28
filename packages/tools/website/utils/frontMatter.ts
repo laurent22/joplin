@@ -12,6 +12,7 @@ export interface FrontMatter {
 	// Docusaurus
 	sidebar_label?: string;
 	sidebar_position?: number;
+	date?: string;
 }
 
 export interface MarkdownAndFrontMatter {
