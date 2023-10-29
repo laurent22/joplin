@@ -78,7 +78,7 @@ const generateRssFeed = async (posts: Post[]) => {
 		feedItems.push({
 			title: content.title,
 			description: html,
-			url: `https://joplinapp.org/news/${post.id}/`,
+			url: `https://joplinapp.org/news/${post.id}`,
 			guid: post.id,
 			date: postDate,
 			custom_elements: [
