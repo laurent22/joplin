@@ -382,13 +382,13 @@ const copyFile = async (sourceFile: string, destFile: string) => {
 
 const getDonateLinks = () => {
 	return `<div className="donate-links">
-<!-- DONATELINKS -->
+
 [![Donate using PayPal](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?business=E8JMYD2LQ8MMA&no_recurring=0&item_name=I+rely+on+donations+to+maintain+and+improve+the+Joplin+open+source+project.+Thank+you+for+your+help+-+it+makes+a+difference%21&currency_code=EUR) [![Sponsor on GitHub](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg)](https://github.com/sponsors/laurent22/) [![Become a patron](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg)](https://www.patreon.com/joplin) [![Donate using IBAN](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg)](https://joplinapp.org/donate/#donations)
-<!-- DONATELINKS -->
+
 </div>`;
 };
 
-const buildDocusaurus = async (docBuilderDir: string) => {
+export const buildDocusaurus = async (docBuilderDir: string) => {
 	chdir(docBuilderDir);
 	await execCommand('yarn _build');
 };

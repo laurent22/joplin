@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "docusaurus start",
-    "_build": "docusaurus build",
+    "start": "BROWSERSLIST_IGNORE_OLD_DATA=true docusaurus start",
+    "_build": "BROWSERSLIST_IGNORE_OLD_DATA=true docusaurus build",
     "build": "",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
