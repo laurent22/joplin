@@ -3978,9 +3978,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/autocomplete@npm:6.9.1":
-  version: 6.9.1
-  resolution: "@codemirror/autocomplete@npm:6.9.1"
+"@codemirror/autocomplete@npm:6.9.2":
+  version: 6.9.2
+  resolution: "@codemirror/autocomplete@npm:6.9.2"
   dependencies:
     "@codemirror/language": ^6.0.0
     "@codemirror/state": ^6.0.0
@@ -3991,7 +3991,7 @@ __metadata:
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.0.0
     "@lezer/common": ^1.0.0
-  checksum: 96dad7a12429bf61e6f1bf75da731bf0dcbfeb56c33400b60a0de22049226e0926a53a174e84701812a235f8f144595ce53f0928054481bdf9cdc2ed3b8be20f
+  checksum: 8bdf06c2b4eb1cd6c8a6e1df2eb5c92011fda0bc8970f9d68cc8dad8e4f9d3c243aaa3e42505252af542be8bbaf0a3ed7e23a6b7f603171077cc36845e188190
   languageName: node
   linkType: hard
 
@@ -6474,7 +6474,7 @@ __metadata:
     "@js-draw/material-icons": 1.5.0
     "@lezer/highlight": 1.1.4
     "@react-native-community/clipboard": 1.5.1
-    "@react-native-community/datetimepicker": 7.5.0
+    "@react-native-community/datetimepicker": 7.6.0
     "@react-native-community/geolocation": 3.1.0
     "@react-native-community/netinfo": 9.4.1
     "@react-native-community/push-notification-ios": 1.11.0
@@ -6541,7 +6541,7 @@ __metadata:
     react-native-vector-icons: 10.0.0
     react-native-version-info: 1.1.1
     react-native-vosk: 0.1.12
-    react-native-webview: 13.6.0
+    react-native-webview: 13.6.2
     react-native-zip-archive: 6.1.0
     react-redux: 8.1.3
     react-test-renderer: 18.2.0
@@ -6582,7 +6582,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/editor@workspace:packages/editor"
   dependencies:
-    "@codemirror/autocomplete": 6.9.1
+    "@codemirror/autocomplete": 6.9.2
     "@codemirror/commands": 6.2.5
     "@codemirror/lang-cpp": 6.0.2
     "@codemirror/lang-html": 6.4.6
@@ -6685,7 +6685,7 @@ __metadata:
     "@types/node": 18.17.19
     "@types/node-rsa": 1.1.2
     "@types/react": 18.2.31
-    "@types/uuid": 9.0.4
+    "@types/uuid": 9.0.5
     async-mutex: 0.4.0
     base-64: 1.0.0
     base64-stream: 1.0.0
@@ -6888,11 +6888,11 @@ __metadata:
     "@types/jest-expect-message": 1.0.4
     "@types/jsdom": 21.1.3
     "@types/koa": 2.13.9
-    "@types/markdown-it": 12.2.3
+    "@types/markdown-it": 13.0.0
     "@types/mustache": 4.2.3
     "@types/nodemailer": 6.4.11
-    "@types/uuid": 9.0.4
-    "@types/yargs": 17.0.26
+    "@types/uuid": 9.0.5
+    "@types/yargs": 17.0.28
     "@types/zxcvbn": 4.4.2
     bcryptjs: 2.4.3
     bulma: 0.9.4
@@ -6949,7 +6949,7 @@ __metadata:
     "@types/mustache": 4.2.3
     "@types/node": 18.17.19
     "@types/node-fetch": 2.6.6
-    "@types/yargs": 17.0.26
+    "@types/yargs": 17.0.28
     compare-versions: 6.1.0
     dayjs: 1.11.10
     execa: 4.1.0
@@ -9004,12 +9004,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/datetimepicker@npm:7.5.0":
-  version: 7.5.0
-  resolution: "@react-native-community/datetimepicker@npm:7.5.0"
+"@react-native-community/datetimepicker@npm:7.6.0":
+  version: 7.6.0
+  resolution: "@react-native-community/datetimepicker@npm:7.6.0"
   dependencies:
     invariant: ^2.2.4
-  checksum: 579a32a7e8efa489ff2fbbb918429b55164a49585aaa46ce6ef49f5bbdfe6bea4ad354da82f437d54e0ffd38ccd85a32b744d61f1bfe79cc9ed6de0c737ae307
+  checksum: 029b37eba026137f49cfcc257025f78fecdd2aa621df326acf1763087cc586db18b311feb0e54f2524927a9b91210af411c1c50912bee795776f0f62e80ed47e
   languageName: node
   linkType: hard
 
@@ -10255,13 +10255,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/markdown-it@npm:12.2.3":
-  version: 12.2.3
-  resolution: "@types/markdown-it@npm:12.2.3"
+"@types/markdown-it@npm:13.0.0":
+  version: 13.0.0
+  resolution: "@types/markdown-it@npm:13.0.0"
   dependencies:
     "@types/linkify-it": "*"
     "@types/mdurl": "*"
-  checksum: 868824a3e4d00718ba9cd4762cf16694762a670860f4b402e6e9f952b6841a2027488bdc55d05c2b960bf5078df21a9d041270af7e8949514645fe88fdb722ac
+  checksum: 7bcf45d0a1c2bc2c28f91460af571b9e8a195d4983cda809af04bf1d400f98902c71849b7cb8c036e35a3be7fa2483117d4faeab24a7de059e04be3e9f641aff
   languageName: node
   linkType: hard
 
@@ -10738,10 +10738,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:9.0.4":
-  version: 9.0.4
-  resolution: "@types/uuid@npm:9.0.4"
-  checksum: 356e2504456eaebbc43a5af5ca6c07d71f5ae5520b5767cb1c62cd0ec55475fc4ee3d16a2874f4a5fce78e40e8583025afd3a7d9ba41f82939de310665f53f0e
+"@types/uuid@npm:9.0.5":
+  version: 9.0.5
+  resolution: "@types/uuid@npm:9.0.5"
+  checksum: 7577940949619768303c0bf0a7cc235fac3cfae1c0bb4a2e85bfb87b2eb1024955ab446f775394d259442cd769b663b6ce43c39bdfc955d946bf833804ddb421
   languageName: node
   linkType: hard
 
@@ -10768,12 +10768,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:17.0.26":
-  version: 17.0.26
-  resolution: "@types/yargs@npm:17.0.26"
+"@types/yargs@npm:17.0.28":
+  version: 17.0.28
+  resolution: "@types/yargs@npm:17.0.28"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: 26611969674f4972080c3b22239d4579eaadc5287f95f7802f893c4a9bb292c141467bd70f1e66eb834486c63a23c4f10032618b3d2e7b1ddc05051d08db4078
+  checksum: f78c5e5c29903933c0557b4ffcd1d0b8564d66859c8ca4aa51da3714e49109ed7c2644334a1918d033df19028f4cecc91fd2e502651bb8e8451f246c371da847
   languageName: node
   linkType: hard
 
@@ -34627,16 +34627,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-webview@npm:13.6.0":
-  version: 13.6.0
-  resolution: "react-native-webview@npm:13.6.0"
+"react-native-webview@npm:13.6.2":
+  version: 13.6.2
+  resolution: "react-native-webview@npm:13.6.2"
   dependencies:
     escape-string-regexp: 2.0.0
     invariant: 2.2.4
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: f7220fb18dcf5e9631674831ac8beb3bc4b99863f812676c25394a3cce487975b05c8fc795b0ee4ff1ead43da304ddea104f5e6683ea3f4c3a135b14ae193069
+  checksum: 20cbad5bf47410f8aabab3c12610770204edb26b9ad8690f2f868c6b784a84b05231718bae2ea72a2ac2ebcbc0af89fe05a37b56615c4e8363f9aafadbe64b5a
   languageName: node
   linkType: hard
 

@@ -306,7 +306,7 @@ PODS:
     - React-Core
   - react-native-version-info (1.1.1):
     - React-Core
-  - react-native-webview (13.6.0):
+  - react-native-webview (13.6.2):
     - React-Core
   - React-perflogger (0.71.10)
   - React-RCTActionSheet (0.71.10):
@@ -398,7 +398,7 @@ PODS:
     - React-Core
   - RNCPushNotificationIOS (1.11.0):
     - React-Core
-  - RNDateTimePicker (7.5.0):
+  - RNDateTimePicker (7.6.0):
     - React-Core
   - RNDeviceInfo (10.9.0):
     - React-Core
@@ -678,7 +678,7 @@ SPEC CHECKSUMS:
   react-native-slider: 1cdd6ba29675df21f30544253bf7351d3c2d68c4
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-version-info: a106f23009ac0db4ee00de39574eb546682579b9
-  react-native-webview: 669ae162965f629a8d6a4bdd3b99a304d36ef1f2
+  react-native-webview: 8fc09f66a1a5b16bbe37c3878fda27d5982bb776
   React-perflogger: 217095464d5c4bb70df0742fa86bf2a363693468
   React-RCTActionSheet: 8deae9b85a4cbc6a2243618ea62a374880a2c614
   React-RCTAnimation: 59c62353a8b59ce206044786c5d30e4754bffa64
@@ -695,7 +695,7 @@ SPEC CHECKSUMS:
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
-  RNDateTimePicker: b722c23030b744763cf51d80fc22f354653f65e0
+  RNDateTimePicker: ccd988deb223cbb2e669e157ec576c2c6217128c
   RNDeviceInfo: 02ea8b23e2280fa18e00a06d7e62804d74028579
   RNExitApp: 00036cabe7bacbb413d276d5520bf74ba39afa6a
   RNFileViewer: ce7ca3ac370e18554d35d6355cffd7c30437c592

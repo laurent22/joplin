@@ -52,7 +52,7 @@
     "@types/mustache": "4.2.3",
     "@types/node": "18.17.19",
     "@types/node-fetch": "2.6.6",
-    "@types/yargs": "17.0.26",
+    "@types/yargs": "17.0.28",
     "gettext-extractor": "3.8.0",
     "gulp": "4.0.2",
     "html-entities": "1.4.0",
