@@ -18,8 +18,8 @@ Nextcloud est une solution de cloud pouvant être auto-hébergée. Pour le confi
 
 ## Configuration de la synchronisation OneDrive ou WebDAV
 
-OneDrive et WebDAV sont également pris en charge en tant que services de synchronisation. Veuillez consulter [la documentation de synchronisation](https://github.com/laurent22/joplin#synchronisation) pour plus d'informations.
+OneDrive et WebDAV sont également pris en charge en tant que services de synchronisation. Veuillez consulter [la documentation de synchronisation](https://joplinapp.org/help/apps/sync/) pour plus d'informations.
 
 ## Utilisation du chiffrement de bout en bout
 
-Joplin prend en charge le chiffrement de bout en bout (E2EE) sur toutes les applications. E2EE est un système où seul le propriétaire des données peut les lire. Il empêche les espions potentiels, y compris les fournisseurs de télécommunications, les fournisseurs d'accès Internet et même les développeurs de Joplin, d'accéder aux données. Veuillez consulter le [tutoriel sur le chiffrement de bout en bout](https://joplinapp.org/e2ee/) pour plus d'informations sur cette fonctionnalité et comment l'activer.
+Joplin prend en charge le chiffrement de bout en bout (E2EE) sur toutes les applications. E2EE est un système où seul le propriétaire des données peut les lire. Il empêche les espions potentiels, y compris les fournisseurs de télécommunications, les fournisseurs d'accès Internet et même les développeurs de Joplin, d'accéder aux données. Veuillez consulter le [tutoriel sur le chiffrement de bout en bout](https://joplinapp.org/help/apps/sync/e2ee) pour plus d'informations sur cette fonctionnalité et comment l'activer.

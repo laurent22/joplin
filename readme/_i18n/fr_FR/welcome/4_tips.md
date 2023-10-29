@@ -8,7 +8,7 @@ Les premières notes vous ont donné un aperçu des principales fonctionnalités
 
 Le Web Clipper est une extension de navigateur qui vous permet d'enregistrer des pages Web et des captures d'écran à partir de votre navigateur. Pour commencer à l'utiliser, ouvrez l'application de bureau Joplin, accédez aux options du Web Clipper et suivez les instructions.
 
-Plus d'infos sur le site officiel : https://joplinapp.org/clipper/
+Plus d'infos sur le site officiel : https://joplinapp.org/help/apps/clipper/
 
 ## Plugins
 
@@ -20,19 +20,19 @@ Tout type de fichier peut être joint à une note. Dans Markdown, les liens vers
 
 Les images peuvent être jointes soit en cliquant sur "Joindre un fichier", soit en collant (avec `Ctrl+V` ou `Cmd+V`) une image directement dans l'éditeur, soit en glissant-déposant une image.
 
-Plus d'infos sur les pièces jointes : https://joplinapp.org/help/#attachments
+Plus d'infos sur les pièces jointes : https://joplinapp.org/help/apps/attachments
 
 ## Recherche
 
-Joplin prend en charge les requêtes de recherche avancées, qui sont entièrement documentées sur le site officiel : https://joplinapp.org/help/#searching
+Joplin prend en charge les requêtes de recherche avancées, qui sont entièrement documentées sur le site officiel : https://joplinapp.org/help/apps/search
 
 ## Alarmes
 
-Une alarme peut être associée à n'importe quelle tâche. Elle sera déclenchée à l'heure indiquée par l'affichage d'une notification. Pour utiliser cette fonctionnalité, consultez la documentation : https://joplinapp.org/help/#notifications
+Une alarme peut être associée à n'importe quelle tâche. Elle sera déclenchée à l'heure indiquée par l'affichage d'une notification. Pour utiliser cette fonctionnalité, consultez la documentation : https://joplinapp.org/help/apps/notifications
 
 ## Conseils avancés Markdown
 
-Joplin utilise et rend [Github-flavored Markdown](https://joplinapp.org/markdown/) avec quelques variations et ajouts.
+Joplin utilise et rend [Github-flavored Markdown](https://joplinapp.org/help/apps/markdown) avec quelques variations et ajouts.
 
 Par exemple, les tableaux sont pris en charge :
 
