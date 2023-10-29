@@ -11,7 +11,7 @@
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
-    "serve": "docusaurus serve",
+    "serve": "WEBSITE_BASE_URL=http://localhost:8077 docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids"
   },
@@ -25,7 +25,8 @@
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "2.4.3"
+    "@docusaurus/module-type-aliases": "2.4.3",
+    "docusaurus-lunr-search": "3.2.0"
   },
   "browserslist": {
     "production": [

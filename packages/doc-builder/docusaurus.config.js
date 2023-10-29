@@ -35,6 +35,16 @@ const config = {
 		locales: ['en'],
 	},
 
+	plugins: [
+		[
+			//require.resolve("@cmfcmf/docusaurus-search-local"),
+			require.resolve('docusaurus-lunr-search'),
+			{
+				// Options here
+			},
+		],
+	],
+
 	presets: [
 		[
 			'classic',
