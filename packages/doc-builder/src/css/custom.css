@@ -67,3 +67,7 @@
 pre code {
 	white-space: pre-wrap;
 }
+
+.sidebarItemLinkActive_node_modules-\@docusaurus-theme-classic-lib-theme-BlogSidebar-Desktop-styles-module {
+	font-weight: bold;
+}

@@ -19,11 +19,6 @@ const config = {
 	// For GitHub pages deployment, it is often '/<projectName>/'
 	baseUrl: '/',
 
-	// GitHub pages deployment config.
-	// If you aren't using GitHub pages, you don't need these.
-	// organizationName: 'facebook', // Usually your GitHub org/user name.
-	// projectName: 'docusaurus', // Usually your repo name.
-
 	onBrokenLinks: 'throw',
 	onBrokenMarkdownLinks: 'warn',
 
@@ -37,7 +32,6 @@ const config = {
 
 	plugins: [
 		[
-			//require.resolve("@cmfcmf/docusaurus-search-local"),
 			require.resolve('docusaurus-lunr-search'),
 			{
 				// Options here
@@ -55,20 +49,18 @@ const config = {
 					routeBasePath: 'help',
 					sidebarPath: require.resolve('./sidebars.js'),
 					breadcrumbs: false,
-					// Please change this to your repo.
-					// Remove this to remove the "edit this page" links.
-					editUrl:
-						'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+					editUrl: (params) => {
+						return 'https://github.com/laurent22/joplin/tree/dev/readme/' + params.docPath;
+					},
 				},
 				blog: {
 					showReadingTime: true,
 					blogSidebarCount: 'ALL',
 					path: 'news',
 					routeBasePath: 'news',
-					// Please change this to your repo.
-					// Remove this to remove the "edit this page" links.
-					editUrl:
-						'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+					editUrl: (params) => {
+						return 'https://github.com/laurent22/joplin/tree/dev/readme/news/' + params.blogPath;
+					},
 				},
 				theme: {
 					customCss: require.resolve('./src/css/custom.css'),
@@ -85,8 +77,6 @@ const config = {
 	themeConfig:
 		/** @type {import('@docusaurus/preset-classic').ThemeConfig} */
 		({
-			// Replace with your project's social card
-			image: 'img/docusaurus-social-card.jpg',
 			navbar: {
 				title: '',
 				logo: {
@@ -97,15 +87,20 @@ const config = {
 				},
 				items: [
 					{
+						to: '/news',
+						label: 'News',
+						position: 'right',
+					},
+					{
 						type: 'docSidebar',
 						sidebarId: 'helpSidebar',
-						position: 'left',
+						position: 'right',
 						label: 'Help',
 					},
 					{
-						to: '/news',
-						label: 'News',
-						position: 'left',
+						to: 'https://discourse.joplinapp.org',
+						label: 'Forum',
+						position: 'right',						
 					},
 					{
 						to: process.env.WEBSITE_BASE_URL + '/plans',
@@ -119,55 +114,53 @@ const config = {
 						position: 'right',
 						className: 'navbar-custom-buttons sponsor-button',
 					},
-					// {
-					// 	href: 'https://github.com/facebook/docusaurus',
-					// 	label: 'GitHub',
-					// 	position: 'right',
-					// },
 				],
 			},
 			footer: {
 				style: 'dark',
 				links: [
-					// {
-					// 	title: 'Docs',
-					// 	items: [
-					// 		{
-					// 			label: 'Tutorial',
-					// 			to: '/docs/intro',
-					// 		},
-					// 	],
-					// },
 					{
 						title: 'Community',
 						items: [
 							{
-								label: 'Stack Overflow',
-								href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+								label: 'Twitter',
+								href: 'https://twitter.com/joplinapp',
+							},
+							{
+								label: 'Patreon',
+								href: 'https://www.patreon.com/joplin',
+							},
+							{
+								label: 'LinkedIn',
+								href: 'https://www.linkedin.com/company/joplin',
 							},
 							{
 								label: 'Discord',
-								href: 'https://discordapp.com/invite/docusaurus',
+								href: 'https://discord.gg/VSj7AFHvpq',
 							},
 							{
-								label: 'Twitter',
-								href: 'https://twitter.com/docusaurus',
+								label: 'Mastodon',
+								href: 'https://mastodon.social/@joplinapp',
+							},
+							{
+								label: 'Lemmy',
+								href: 'https://sopuli.xyz/c/joplinapp',
+							},
+							{
+								label: 'GitHub',
+								href: 'https://github.com/laurent22/joplin/',
 							},
 						],
 					},
-					// {
-					// 	title: 'More',
-					// 	items: [
-					// 		{
-					// 			label: 'Blog',
-					// 			to: '/blog',
-					// 		},
-					// 		{
-					// 			label: 'GitHub',
-					// 			href: 'https://github.com/facebook/docusaurus',
-					// 		},
-					// 	],
-					// },
+					{
+						title: 'Legal',
+						items: [
+							{
+								label: 'Privacy Policy',
+								to: process.env.WEBSITE_BASE_URL + '/privacy',
+							},
+						],
+					},
 				],
 				copyright: `Copyright © 2016-${new Date().getFullYear()} Laurent Cozic`,
 			},

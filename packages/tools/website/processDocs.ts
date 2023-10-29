@@ -372,6 +372,11 @@ const processMarkdownFile = async (sourcePath: string, destPath: string, context
 
 	mdAndFrontMatter.doc = mdAndFrontMatter.doc.replace(/^# (.*)\n/, `# $1\n\n${context.donateLinks}\n\n`);
 
+	if (mdAndFrontMatter.header.forum_url) {
+		// mdAndFrontMatter.doc +=  `\n\n* * *\n\n[<i class="fab fa-discourse"></i> Discuss on the forum](${mdAndFrontMatter.header.forum_url})`;
+		mdAndFrontMatter.doc += `\n\n* * *\n\n[<icon icon="fa-brands fa-discourse" size="lg" /> Discuss on the forum](${mdAndFrontMatter.header.forum_url})`;
+	}
+
 	const fullContent = compileWithFrontMatter(mdAndFrontMatter);
 
 	if (await pathExists(destPath)) {
