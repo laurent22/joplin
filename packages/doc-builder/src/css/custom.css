@@ -62,3 +62,8 @@
 	background-color: var(--ifm-color-primary-lighter);
 	color: white;
 }
+
+/* So that the code in markdown.md wraps. Otherwise the table takes too much space horizontally */
+pre code {
+	white-space: pre-wrap;
+}
