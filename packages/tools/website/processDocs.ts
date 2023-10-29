@@ -11,10 +11,17 @@ import { basename, dirname } from 'path';
 import markdownUtils, { MarkdownTable } from '@joplin/lib/markdownUtils';
 import { readmeFileTitle } from './utils/parser';
 import { chdir } from 'process';
+import yargs = require('yargs');
+
 const md5File = require('md5-file');
 const htmlparser2 = require('@joplin/fork-htmlparser2');
 const styleToJs = require('style-to-js').default;
 const crypto = require('crypto');
+
+interface Config {
+	baseUrl: string;
+	docusaurusBuildCommand: string;
+}
 
 interface List {
 	type: 'bullet' | 'number';
@@ -33,6 +40,17 @@ interface Context {
 	isNews?: boolean;
 	donateLinks?: string;
 }
+
+const configs: Record<string, Config> = {
+	dev: {
+		baseUrl: 'http://localhost:8077',
+		docusaurusBuildCommand: 'buildDev',
+	},
+	prod: {
+		baseUrl: 'https://joplinapp.org',
+		docusaurusBuildCommand: '_build',
+	},
+};
 
 const md5 = (s: string) => {
 	return crypto.createHash('md5').update(s).digest('hex');
@@ -388,12 +406,23 @@ const getDonateLinks = () => {
 </div>`;
 };
 
-export const buildDocusaurus = async (docBuilderDir: string) => {
+export const buildDocusaurus = async (docBuilderDir: string, buildCommand: string, baseUrl: string) => {
 	chdir(docBuilderDir);
-	await execCommand('yarn _build');
+	await execCommand(`yarn ${buildCommand}`, {
+		env: {
+			WEBSITE_BASE_URL: baseUrl,
+		},
+	});
 };
 
 async function main() {
+	const argv = await yargs.argv;
+	const env = argv.env as string;
+
+	if (!env) throw new Error('Env must be specified: either "dev" or "prod"');
+
+	const config = configs[env];
+
 	const rootDir = await getRootDir();
 	const docBuilderDir = `${rootDir}/packages/doc-builder`;
 	const destHelpDir = `${docBuilderDir}/help`;
@@ -422,7 +451,7 @@ async function main() {
 
 	await copyFile(`${rootDir}/Assets/WebsiteAssets/images`, `${docBuilderDir}/static/images`);
 
-	await buildDocusaurus(docBuilderDir);
+	await buildDocusaurus(docBuilderDir, config.docusaurusBuildCommand, config.baseUrl);
 }
 
 if (require.main === module) {

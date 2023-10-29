@@ -58,7 +58,7 @@
     "updateIgnored": "node packages/tools/gulp/tasks/updateIgnoredTypeScriptBuildRun.js",
     "updatePluginTypes": "./packages/generator-joplin/updateTypes.sh",
     "watch": "yarn workspaces foreach --parallel --verbose --interlaced --jobs 999 run watch",
-    "watchWebsite": "nodemon --verbose --watch Assets/WebsiteAssets --watch packages/tools/website --watch packages/tools/website/utils --ext md,ts,js,mustache,css,tsx,gif,png,svg --exec \"node packages/tools/website/build.js && http-server --port 8077 ../joplin-website/docs -a localhost\""
+    "watchWebsite": "nodemon --delay 1 --watch Assets/WebsiteAssets --watch packages/tools/website --watch packages/tools/website/utils --watch packages/doc-builder/build --ext md,ts,js,mustache,css,tsx,gif,png,svg --exec \"node packages/tools/website/build.js && http-server --port 8077 ../joplin-website/docs -a localhost\""
   },
   "husky": {
     "hooks": {

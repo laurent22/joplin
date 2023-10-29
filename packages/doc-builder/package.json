@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "BROWSERSLIST_IGNORE_OLD_DATA=true docusaurus start",
+    "start": "WEBSITE_BASE_URL=http://localhost:8077 BROWSERSLIST_IGNORE_OLD_DATA=true docusaurus start --no-minify",
     "_build": "BROWSERSLIST_IGNORE_OLD_DATA=true docusaurus build",
+    "buildDev": "NODE_ENV=development BROWSERSLIST_IGNORE_OLD_DATA=true docusaurus build --no-minify",
     "build": "",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",

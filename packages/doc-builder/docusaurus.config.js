@@ -78,6 +78,8 @@ const config = {
 				logo: {
 					alt: 'My Site Logo',
 					src: 'img/logo.svg',
+					href: process.env.WEBSITE_BASE_URL,
+					target: '_self',
 				},
 				items: [
 					{
