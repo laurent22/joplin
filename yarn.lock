@@ -2860,6 +2860,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@codemirror/commands@npm:^6.0.0":
+  version: 6.3.0
+  resolution: "@codemirror/commands@npm:6.3.0"
+  dependencies:
+    "@codemirror/language": ^6.0.0
+    "@codemirror/state": ^6.2.0
+    "@codemirror/view": ^6.0.0
+    "@lezer/common": ^1.1.0
+  checksum: d6ade0ba7d4f80c2e44163935783d2f2f35c8b641a4b4f62452c0630211670abe5093786cf5a4af14147102d4284dae660a26f3ae58fd840e838685a81107d11
+  languageName: node
+  linkType: hard
+
 "@codemirror/lang-cpp@npm:6.0.2":
   version: 6.0.2
   resolution: "@codemirror/lang-cpp@npm:6.0.2"
@@ -3005,6 +3017,17 @@ __metadata:
     "@codemirror/view": ^6.0.0
     crelt: ^1.0.5
   checksum: bc535151277fda0a370ac496b9b0d5751fd91bd8e3eb29dafbfe6bf3125dc450a7e361ebc302f0ebc4193ac337bdf555ab3d5ec753dbb44452225618a5630dd3
+  languageName: node
+  linkType: hard
+
+"@codemirror/search@npm:^6.0.0":
+  version: 6.5.4
+  resolution: "@codemirror/search@npm:6.5.4"
+  dependencies:
+    "@codemirror/state": ^6.0.0
+    "@codemirror/view": ^6.0.0
+    crelt: ^1.0.5
+  checksum: 32a68e40486730949ee79f54b9fcc6c744559aef188d3c5bf82881f62e5fc9468fa21cf227507638160043c797eb054205802a649cf4a2350928fc161d5aac40
   languageName: node
   linkType: hard
 
@@ -4768,6 +4791,7 @@ __metadata:
     events: 3.3.0
     execa: 4.1.0
     fs-extra: 11.1.1
+    gray-matter: ^4.0.3
     gulp: 4.0.2
     jest: 29.6.4
     jest-environment-jsdom: 29.6.4
@@ -4816,7 +4840,7 @@ __metadata:
     react-redux: 8.1.2
     react-test-renderer: 18.2.0
     redux: 4.2.1
-    rn-fetch-blob: 0.12.0
+    rn-fetch-blob: ^0.12.0
     sqlite3: 5.1.6
     stream: 0.0.2
     stream-browserify: 3.0.0
@@ -5063,7 +5087,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/react-native-alarm-notification@workspace:packages/react-native-alarm-notification, @joplin/react-native-alarm-notification@~2.13":
+"@joplin/react-native-alarm-notification@workspace:^, @joplin/react-native-alarm-notification@workspace:packages/react-native-alarm-notification, @joplin/react-native-alarm-notification@~2.13":
   version: 0.0.0-use.local
   resolution: "@joplin/react-native-alarm-notification@workspace:packages/react-native-alarm-notification"
   dependencies:
@@ -6245,6 +6269,13 @@ __metadata:
   version: 1.0.4
   resolution: "@lezer/common@npm:1.0.4"
   checksum: 0bea82da76e0b89afad4e5159d3add460022916352c47906ec67b26d6fe5ec9cb8e23df0e2bf0adef765ae78bed1706fc573a11506d01a80112a5b6dd317730c
+  languageName: node
+  linkType: hard
+
+"@lezer/common@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@lezer/common@npm:1.1.0"
+  checksum: 93c208a44d1c0bdf7407853ba7c4ddcedf1c52d1b82170813d83b9bd6301aa23587405ac54332fe39ce8bc37f706936ab237ceb4d3d535d1dead650153b6474c
   languageName: node
   linkType: hard
 
@@ -12380,6 +12411,21 @@ __metadata:
   version: 5.65.9
   resolution: "codemirror@npm:5.65.9"
   checksum: bbdb3991d4641d5c2a044c53907fb7b0d856f67e1190b7063e6a164e7b17f1390faf961d8264394b1ef8ca7e1f21acea2117bb4a0ed8394b3a92875f07beae3d
+  languageName: node
+  linkType: hard
+
+"codemirror@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "codemirror@npm:6.0.1"
+  dependencies:
+    "@codemirror/autocomplete": ^6.0.0
+    "@codemirror/commands": ^6.0.0
+    "@codemirror/language": ^6.0.0
+    "@codemirror/lint": ^6.0.0
+    "@codemirror/search": ^6.0.0
+    "@codemirror/state": ^6.0.0
+    "@codemirror/view": ^6.0.0
+  checksum: 1a78f7077ac5801bdbff162aa0c61bf2b974603c7e9a477198c3ce50c789af674a061d7c293c58b73807eda345c2b5228c38ad2aabb9319d552d5486f785cbef
   languageName: node
   linkType: hard
 
@@ -30875,7 +30921,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rn-fetch-blob@npm:0.12.0":
+"rn-fetch-blob@npm:^0.12.0":
   version: 0.12.0
   resolution: "rn-fetch-blob@npm:0.12.0"
   dependencies:
@@ -30969,11 +31015,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root@workspace:."
   dependencies:
+    "@joplin/react-native-alarm-notification": "workspace:^"
     "@joplin/utils": ~2.12
     "@seiyab/eslint-plugin-react-hooks": 4.5.1-beta.0
     "@types/fs-extra": 11.0.2
     "@typescript-eslint/eslint-plugin": 6.0.0
     "@typescript-eslint/parser": 6.0.0
+    codemirror: ^6.0.1
     cspell: 5.21.2
     eslint: 8.47.0
     eslint-interactive: 10.8.0

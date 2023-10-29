@@ -6,12 +6,19 @@ import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.UriPermission;
+import android.content.SharedPreferences;
+import android.content.Context;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.DocumentsContract;
 import android.util.Base64;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,6 +47,7 @@ public class EfficientDocumentHelper {
   private static final int DOCUMENT_TREE_REQUEST_CODE = 1;
   private static final int DOCUMENT_REQUEST_CODE = 2;
   private static final int DOCUMENT_CREATE_CODE = 3;
+  private static final int DOCUMENT_TREE_TAG_REQUEST_CODE = 4;
   private final ReactApplicationContext context;
   private ActivityEventListener activityEventListener;
 
@@ -618,6 +626,20 @@ public class EfficientDocumentHelper {
     });
   }
 
+  public boolean hasPermission(String uriString) {
+    // List of all persisted permissions for our app
+    List<UriPermission> uriList = context.getContentResolver().getPersistedUriPermissions();
+    
+    for (UriPermission uriPermission : uriList) {
+      // Log.i("checkPermission", uriPermission.toString() + " " + uriString);
+      if (permissionMatchesAndHasAccess(uriPermission, UriHelper.normalize(uriString))) {
+          return true;
+      }
+    }
+    
+    return false;
+  }
+
   public void renameTo(final String unknownStr, final String newName, final Promise promise) {
     Async.execute(new Async.Task<Object>() {
       @Override
@@ -846,8 +868,10 @@ public class EfficientDocumentHelper {
   public void openDocumentTree(final boolean persist, final Promise promise) {
     try {
 
+      // Log.i("checkPermission", "openDocumentTree init intent");
       Intent intent = new Intent();
       intent.setAction(Intent.ACTION_OPEN_DOCUMENT_TREE);
+      // Log.i("checkPermission", "openDocumentTree actioned intent");
 
       if (activityEventListener != null) {
         context.removeActivityEventListener(activityEventListener);
@@ -900,6 +924,101 @@ public class EfficientDocumentHelper {
 
     } catch (Exception e) {
       rejectWithException(e, promise);
+    }
+  }
+
+  public void openDocumentTreeTag(final String tag, final Promise promise) {
+    // Log.i("checkPermission", "openDocumentTreeTag get SharedPreferences");
+    SharedPreferences preferences = context.getSharedPreferences("JoplinPrefs", Context.MODE_PRIVATE);
+    // Log.i("checkPermission", "openDocumentTreeTag got preferences");
+    String uriString = preferences.getString(tag, null);
+    // Log.i("checkPermission", "openDocumentTreeTag uriString: " + uriString);
+    if (uriString != null) {
+        // Use the uriString in your app
+        stat(uriString, promise);
+    } else {
+      try {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_OPEN_DOCUMENT_TREE);
+
+        if (activityEventListener != null) {
+          context.removeActivityEventListener(activityEventListener);
+          activityEventListener = null;
+        }
+
+        activityEventListener =
+          new ActivityEventListener() {
+            @SuppressLint("WrongConstant")
+            @Override
+            public void onActivityResult(
+              Activity activity, int requestCode, int resultCode, Intent intent) {
+              if (requestCode == DOCUMENT_TREE_TAG_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+                if (intent != null) {
+                  Uri uri = intent.getData();
+                  // Log.i("checkPermission", "openDocumentTreeTag get result: " + uri.toString());
+                  final int takeFlags =
+                    intent.getFlags()
+                      & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                      | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                  context.getContentResolver().takePersistableUriPermission(uri, takeFlags);
+                  // Log.i("checkPermission", "openDocumentTreeTag persisted: " + uri.toString());
+
+                  // Storing the selected directory URI in SharedPreferences
+                  // SharedPreferences preferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                  SharedPreferences.Editor editor = preferences.edit();
+                  editor.putString(tag, uri.toString());
+                  editor.apply();
+
+                  // stat is async
+                  stat(uri.toString(), promise);
+                } else {
+                  promise.resolve(null);
+                }
+              } else {
+                promise.resolve(null);
+              }
+              context.removeActivityEventListener(activityEventListener);
+              activityEventListener = null;
+            }
+
+            @Override
+            public void onNewIntent(Intent intent) {
+            }
+          };
+
+        context.addActivityEventListener(activityEventListener);
+
+        // Log.i("checkPermission", "openDocumentTreeTag getting activity");
+        Activity activity = context.getCurrentActivity();
+        if (activity != null) {
+          // Log.i("checkPermission", "openDocumentTreeTag starting for result");
+          // Create an AlertDialog to inform the user
+          AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+          builder.setMessage("Please choose a directory for " + tag);
+          // Add a button to continue with the action
+          builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+                  // Start the intent when the user clicks "OK"
+                  activity.startActivityForResult(intent, DOCUMENT_TREE_TAG_REQUEST_CODE);
+              }
+          });
+          // Add a button to cancel the action
+          builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+                  // Handle cancellation if needed
+              }
+          });
+          // Create and show the AlertDialog
+          AlertDialog dialog = builder.create();
+          dialog.show();
+        } else {
+          context.removeActivityEventListener(activityEventListener);
+          throw new ExceptionFast("Cannot get current activity, so cannot launch document picker");
+        }
+      
+      } catch (Exception e) {
+        rejectWithException(e, promise);
+      }
     }
   }
 

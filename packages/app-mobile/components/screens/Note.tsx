@@ -101,6 +101,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			voiceTypingDialogShown: false,
 		};
 
+		this.prevSaveTime = React.createRef(0);
+
 		this.saveActionQueues_ = {};
 
 		// this.markdownEditorRef = React.createRef(); // For focusing the Markdown editor
@@ -261,26 +263,40 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return this.props.useEditorBeta;
 	}
 
+	private checkToSave() {
+		const currentDate = new Date();
+		const curTime = Math.floor(currentDate.getTime() / 1000);
+		const tDiff = curTime - this.prevSaveTime.current;
+		if (tDiff > 60) {
+			this.prevSaveTime.current = curTime;
+			this.scheduleSave();
+		}
+	}
+
 	private onBodyChange(event: EditorChangeEvent) {
 		shared.noteComponent_change(this, 'body', event.value);
-		this.scheduleSave();
+		this.checkToSave();
 	}
 
 	private onUndoRedoDepthChange(event: UndoRedoDepthChangeEvent) {
 		if (this.useEditorBeta()) {
-			this.setState({ undoRedoButtonState: {
-				canUndo: !!event.undoDepth,
-				canRedo: !!event.redoDepth,
-			} });
+			this.setState({
+				undoRedoButtonState: {
+					canUndo: !!event.undoDepth,
+					canRedo: !!event.redoDepth,
+				},
+			});
 		}
 	}
 
 	private undoRedoService_stackChange() {
 		if (!this.useEditorBeta()) {
-			this.setState({ undoRedoButtonState: {
-				canUndo: this.undoRedoService_.canUndo,
-				canRedo: this.undoRedoService_.canRedo,
-			} });
+			this.setState({
+				undoRedoButtonState: {
+					canUndo: this.undoRedoService_.canUndo,
+					canRedo: this.undoRedoService_.canRedo,
+				},
+			});
 		}
 	}
 
@@ -434,6 +450,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		BackButtonService.addHandler(this.backHandler);
 		NavService.addHandler(this.navHandler);
 
+		this.prevSaveTime.current = 0;
+
 		shared.clearResourceCache();
 		shared.installResourceHandling(this.refreshResource);
 
@@ -503,7 +521,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	private title_changeText(text: string) {
 		shared.noteComponent_change(this, 'title', text);
 		this.setState({ newAndNoTitleChangeNoteId: null });
-		this.scheduleSave();
+		this.checkToSave();
 	}
 
 	private body_changeText(text: string) {
@@ -512,9 +530,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		} else {
 			this.undoRedoService_.schedulePush(this.undoState());
 		}
-
 		shared.noteComponent_change(this, 'body', text);
-		this.scheduleSave();
+		this.checkToSave();
 	}
 
 	private body_selectionChange(event: any) {
@@ -539,6 +556,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	public scheduleSave() {
+		reg.logger().info('Prepare saving note');
 		this.saveActionQueue(this.state.note.id).push(this.makeSaveAction());
 	}
 
@@ -654,7 +672,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return await saveOriginalImage();
 	}
 
-	public async attachFile(pickerResponse: any, fileType: string): Promise<ResourceEntity|null> {
+	public async attachFile(pickerResponse: any, fileType: string): Promise<ResourceEntity | null> {
 		if (!pickerResponse) {
 			// User has cancelled
 			return null;
@@ -823,7 +841,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	};
 
 	private async updateDrawing(svgData: string) {
-		let resource: ResourceEntity|null = this.state.imageEditorResource;
+		let resource: ResourceEntity | null = this.state.imageEditorResource;
 
 		if (!resource) {
 			throw new Error('No resource is loaded in the editor');
@@ -1370,7 +1388,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 						placeholderTextColor={theme.colorFaded}
 						// need some extra padding for iOS so that the keyboard won't cover last line of the note
 						// see https://github.com/laurent22/joplin/issues/3607
-						paddingBottom={ Platform.OS === 'ios' ? 40 : 0}
+						paddingBottom={Platform.OS === 'ios' ? 40 : 0}
 					/>
 				);
 			} else {
@@ -1452,7 +1470,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const renderVoiceTypingDialog = () => {
 			if (!this.state.voiceTypingDialogShown) return null;
-			return <VoiceTypingDialog locale={currentLocale()} onText={this.voiceTypingDialog_onText} onDismiss={this.voiceTypingDialog_onDismiss}/>;
+			return <VoiceTypingDialog locale={currentLocale()} onText={this.voiceTypingDialog_onText} onDismiss={this.voiceTypingDialog_onDismiss} />;
 		};
 
 		return (

@@ -40,6 +40,11 @@ public class SafXModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void openDocumentTreeTag(final String tag, final Promise promise) {
+    this.efficientDocumentHelper.openDocumentTreeTag(tag, promise);
+  }
+
+  @ReactMethod
   public void openDocument(final boolean persist, final boolean multiple, final Promise promise) {
     this.efficientDocumentHelper.openDocument(persist, multiple, promise);
   }

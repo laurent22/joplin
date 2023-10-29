@@ -90,6 +90,10 @@ function NoteEditor(props: NoteEditorProps) {
 	});
 
 	const formNoteRef = useRef<FormNote>();
+	// if (formNoteRef.current) {
+	// 	reg.logger().info('previous note: ', formNoteRef.current.title, formNoteRef.current.id);
+	// }
+	// reg.logger().info('curent note: ', formNote.title, formNote.id);
 	formNoteRef.current = { ...formNote };
 
 	const formNoteFolder = useFolder({ folderId: formNote.parent_id });
@@ -120,7 +124,7 @@ function NoteEditor(props: NoteEditorProps) {
 		const makeAction = (formNote: FormNote) => {
 			return async function() {
 				const note = await formNoteToNote(formNote);
-				reg.logger().debug('Saving note on schedule...', note);
+				reg.logger().debug('Saving note on schedule...', note.title);
 				const savedNote: any = await Note.save(note);
 
 				setFormNote((prev: FormNote) => {
@@ -194,10 +198,13 @@ function NoteEditor(props: NoteEditorProps) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.isProvisional, formNote.id]);
 
-	const previousNoteId = usePrevious(formNote.id);
-
+	const previousNote = usePrevious(formNote);
+	const previousId = previousNote ? previousNote.id : '';
 	useEffect(() => {
-		if (formNote.id === previousNoteId) return;
+		reg.logger().info('formNote.id: ', formNote.id, ' previousId', previousId);
+		if (formNote.id === previousId) return;
+
+		if (previousId) scheduleSaveNote(previousNote);
 
 		if (editorRef.current) {
 			editorRef.current.resetScroll();
@@ -210,12 +217,10 @@ function NoteEditor(props: NoteEditorProps) {
 
 		void ResourceEditWatcher.instance().stopWatchingAll();
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [formNote.id, previousNoteId]);
+	}, [formNote.id, previousId]);
 
 	// let prevValue: string = '';
-	const prevValueRef = useRef<string>();
-	const prevFieldRef = useRef<string>();
-
+	const prevSaveTime = useRef<number>(0);
 	const onFieldChange = useCallback((field: string, value: any, changeId = 0) => {
 		if (!isMountedRef.current) {
 			// When the component is unmounted, various actions can happen which can
@@ -228,11 +233,10 @@ function NoteEditor(props: NoteEditorProps) {
 
 		handleProvisionalFlag();
 
-		// reg.logger().debug('onFieldChange...', value, '\n', prevValueRef.current);
-		const vDiff = value.replace(prevValueRef.current, '');
-		prevValueRef.current = value;
-		const fieldChanged = field !== prevFieldRef.current && prevFieldRef.current !== null;
-		prevFieldRef.current = field;
+		const currentDate = new Date();
+		const curTime = Math.floor(currentDate.getTime() / 1000);
+		if (prevSaveTime.current === 0) prevSaveTime.current = curTime;
+		const tDiff = curTime - prevSaveTime.current;
 
 		const change = field === 'body' ? {
 			body: value,
@@ -240,7 +244,7 @@ function NoteEditor(props: NoteEditorProps) {
 			title: value,
 		};
 
-		reg.logger().debug('onFieldChange: save note');
+		// reg.logger().debug('onFieldChange: save note');
 		const newNote = {
 			...formNote,
 			...change,
@@ -266,7 +270,11 @@ function NoteEditor(props: NoteEditorProps) {
 				newNote.title = newNote.title.replace(new RegExp(path.sep, 'g'), ' ');
 			}
 			setFormNote(newNote);
-			if (vDiff.length > 10 || vDiff.indexOf('\n') >= 0 || vDiff.indexOf('.') >= 0 || fieldChanged) scheduleSaveNote(newNote);
+			// save note every 60 seconds
+			if (tDiff > 60) {
+				prevSaveTime.current = curTime;
+				scheduleSaveNote(newNote);
+			}
 		}
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [handleProvisionalFlag, formNote, isNewNote, titleHasBeenManuallyChanged]);

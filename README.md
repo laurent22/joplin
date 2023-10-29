@@ -2,11 +2,11 @@ This is a modified version of Joplin based on 2.13.2. Among the main features ad
 
 So far, this feature works only with the desktop application. The default directory where the notebooks and notes are saved to are under "JoplinFiles" under "Documents" of the user's home directory, in Linux notion: "/home/yourname/Documents/JoplinFiles/" (it can not be customized now). Under there, there are sub-directories based on Joplin's profile ID. If the user hasn't added additional profiles when using Joplin, all the notebooks and notes are saved under the "default" directory. Notebooks are organized as directory trees and note files are under the associated notebook folders. (Note, if you are running a dev version from source, the directory would be "/home/yourname/Documents/JoplinDevFiles/").
 
-Upon the start of Joplin when the said directories don't exist, Joplin will create them and populate them with sub-directories and files. Directories are named with the titles of the notebooks. Files are named with the titles of the notes, as: "the note title.md". If the note is a to-do note, it is named as "X | note title.md" (if the to-do is not completed), or "V | note title.md" (if the to-do has been completed).
+Upon the start of Joplin when the said directories don't exist, Joplin will create them and populate them with sub-directories and files. Directories are named with the titles of the notebooks. Files are named with the titles of the notes, as: "the note title.md". If the note is a to-do note, it is named as "X - note title.md" (if the to-do is not completed), or "V - note title.md" (if the to-do has been completed).
 
 You can create, update, move, delete notes or notebooks in Joplin and the files and directories are promptly updated.
 
-One efficiency improvement is on the frequency of saving notes during editing. Originally, Joplin saves the note to DB on every key stroke, which appears quite inefficient. Now, note is saved upon receiving the addition or extraction of a return character or a ".", or a block cut or paste, or upon change of focus (like pointer changed to title from body, or vice versa), or starting a new note.
+One efficiency improvement is on the frequency of saving notes during editing. Originally, Joplin saves the note to DB on every key stroke, which appears quite inefficient. Now, note is saved every 60 seconds, or upon leaving the note editor.
 
 Rich text editor is currently not supported.
 
@@ -14,7 +14,7 @@ The Linux application appears to work well. And an AppImage file is included in 
 
 Currently, modifications of directories or files outside of Joplin are not updated back into Joplin, but this is being worked on.
 
-This feature is also being ported to mobile apps (specifically the Android app).
+This feature is also being ported to mobile apps. The Android version will be released shortly.
 
 <img width="64" src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/LinuxIcons/256x256.png" align="left" /> **Joplin** is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](#markdown).
 
@@ -103,111 +103,111 @@ A community maintained list of these distributions can be found here: [Unofficia
 
 # Table of contents
 
-- Applications
+-   Applications
 
-  - [Desktop application](https://github.com/laurent22/joplin/blob/dev/readme/desktop.md)
-  - [Mobile applications](https://github.com/laurent22/joplin/blob/dev/readme/mobile.md)
-  - [Terminal application](https://github.com/laurent22/joplin/blob/dev/readme/terminal.md)
-  - [Web Clipper](https://github.com/laurent22/joplin/blob/dev/readme/clipper.md)
+    -   [Desktop application](https://github.com/laurent22/joplin/blob/dev/readme/desktop.md)
+    -   [Mobile applications](https://github.com/laurent22/joplin/blob/dev/readme/mobile.md)
+    -   [Terminal application](https://github.com/laurent22/joplin/blob/dev/readme/terminal.md)
+    -   [Web Clipper](https://github.com/laurent22/joplin/blob/dev/readme/clipper.md)
 
-- Support
+-   Support
 
-  - [Joplin Forum](https://discourse.joplinapp.org)
-  - [Markdown Guide](https://github.com/laurent22/joplin/blob/dev/readme/markdown.md)
-  - [How to enable end-to-end encryption](https://github.com/laurent22/joplin/blob/dev/readme/e2ee.md)
-  - [What is a conflict?](https://github.com/laurent22/joplin/blob/dev/readme/conflict.md)
-  - [How to enable debug mode](https://github.com/laurent22/joplin/blob/dev/readme/debugging.md)
-  - [About the Rich Text editor limitations](https://github.com/laurent22/joplin/blob/dev/readme/rich_text_editor.md)
-  - [External links](https://github.com/laurent22/joplin/blob/dev/readme/external_links.md)
-  - [FAQ](https://github.com/laurent22/joplin/blob/dev/readme/faq.md)
+    -   [Joplin Forum](https://discourse.joplinapp.org)
+    -   [Markdown Guide](https://github.com/laurent22/joplin/blob/dev/readme/markdown.md)
+    -   [How to enable end-to-end encryption](https://github.com/laurent22/joplin/blob/dev/readme/e2ee.md)
+    -   [What is a conflict?](https://github.com/laurent22/joplin/blob/dev/readme/conflict.md)
+    -   [How to enable debug mode](https://github.com/laurent22/joplin/blob/dev/readme/debugging.md)
+    -   [About the Rich Text editor limitations](https://github.com/laurent22/joplin/blob/dev/readme/rich_text_editor.md)
+    -   [External links](https://github.com/laurent22/joplin/blob/dev/readme/external_links.md)
+    -   [FAQ](https://github.com/laurent22/joplin/blob/dev/readme/faq.md)
 
-- Joplin Cloud
+-   Joplin Cloud
 
-  - [Sharing a notebook](https://github.com/laurent22/joplin/blob/dev/readme/share_notebook.md)
-  - [Publishing a note](https://github.com/laurent22/joplin/blob/dev/readme/publish_note.md)
-  - [Email to Note](https://github.com/laurent22/joplin/blob/dev/readme/email_to_note.md)
+    -   [Sharing a notebook](https://github.com/laurent22/joplin/blob/dev/readme/share_notebook.md)
+    -   [Publishing a note](https://github.com/laurent22/joplin/blob/dev/readme/publish_note.md)
+    -   [Email to Note](https://github.com/laurent22/joplin/blob/dev/readme/email_to_note.md)
 
-- Joplin API - Get Started
+-   Joplin API - Get Started
 
-  - [Joplin API Overview](https://github.com/laurent22/joplin/blob/dev/readme/api/overview.md)
-  - [Plugin development](https://github.com/laurent22/joplin/blob/dev/readme/api/get_started/plugins.md)
-  - [Plugin tutorial](https://github.com/laurent22/joplin/blob/dev/readme/api/tutorials/toc_plugin.md)
+    -   [Joplin API Overview](https://github.com/laurent22/joplin/blob/dev/readme/api/overview.md)
+    -   [Plugin development](https://github.com/laurent22/joplin/blob/dev/readme/api/get_started/plugins.md)
+    -   [Plugin tutorial](https://github.com/laurent22/joplin/blob/dev/readme/api/tutorials/toc_plugin.md)
 
-- Joplin API - References
+-   Joplin API - References
 
-  - [Plugin API](https://joplinapp.org/api/references/plugin_api/classes/joplin.html)
-  - [Data API](https://github.com/laurent22/joplin/blob/dev/readme/api/references/rest_api.md)
-  - [Plugin manifest](https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_manifest.md)
-  - [Plugin loading rules](https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_loading_rules.md)
-  - [Plugin theming](https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_theming.md)
+    -   [Plugin API](https://joplinapp.org/api/references/plugin_api/classes/joplin.html)
+    -   [Data API](https://github.com/laurent22/joplin/blob/dev/readme/api/references/rest_api.md)
+    -   [Plugin manifest](https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_manifest.md)
+    -   [Plugin loading rules](https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_loading_rules.md)
+    -   [Plugin theming](https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_theming.md)
 
-- Development
+-   Development
 
-  - [How to build the apps](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
-  - [Writing a technical spec](https://github.com/laurent22/joplin/blob/dev/readme/technical_spec.md)
-  - [Desktop application styling](https://github.com/laurent22/joplin/blob/dev/readme/spec/desktop_styling.md)
-  - [Note history spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/history.md)
-  - [Synchronisation spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync.md)
-  - [Sync Lock spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync_lock.md)
-  - [Synchronous Scroll spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync_scroll.md)
-  - [Overall Architecture spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/architecture.md)
-  - [Plugin Architecture spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/plugins.md)
-  - [Search Sorting spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/search_sorting.md)
-  - [E2EE: Technical spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md)
-  - [E2EE: Workflow](https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee/workflow.md)
-  - [Server: File URL Format](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_file_url_format.md)
-  - [Server: Delta Sync](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_delta_sync.md)
-  - [Server: Sharing](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_sharing.md)
-  - [Read-only items](https://github.com/laurent22/joplin/blob/dev/readme/spec/read_only.md)
+    -   [How to build the apps](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
+    -   [Writing a technical spec](https://github.com/laurent22/joplin/blob/dev/readme/technical_spec.md)
+    -   [Desktop application styling](https://github.com/laurent22/joplin/blob/dev/readme/spec/desktop_styling.md)
+    -   [Note history spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/history.md)
+    -   [Synchronisation spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync.md)
+    -   [Sync Lock spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync_lock.md)
+    -   [Synchronous Scroll spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync_scroll.md)
+    -   [Overall Architecture spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/architecture.md)
+    -   [Plugin Architecture spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/plugins.md)
+    -   [Search Sorting spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/search_sorting.md)
+    -   [E2EE: Technical spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md)
+    -   [E2EE: Workflow](https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee/workflow.md)
+    -   [Server: File URL Format](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_file_url_format.md)
+    -   [Server: Delta Sync](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_delta_sync.md)
+    -   [Server: Sharing](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_sharing.md)
+    -   [Read-only items](https://github.com/laurent22/joplin/blob/dev/readme/spec/read_only.md)
 
-- Google Summer of Code 2022
+-   Google Summer of Code 2022
 
-  - [Google Summer of Code 2022](https://github.com/laurent22/joplin/blob/dev/readme/gsoc2022/index.md)
-  - [How to submit a GSoC pull request](https://github.com/laurent22/joplin/blob/dev/readme/gsoc2022/pull_request_guidelines.md)
-  - [Project Ideas](https://github.com/laurent22/joplin/blob/dev/readme/gsoc2022/ideas.md)
+    -   [Google Summer of Code 2022](https://github.com/laurent22/joplin/blob/dev/readme/gsoc2022/index.md)
+    -   [How to submit a GSoC pull request](https://github.com/laurent22/joplin/blob/dev/readme/gsoc2022/pull_request_guidelines.md)
+    -   [Project Ideas](https://github.com/laurent22/joplin/blob/dev/readme/gsoc2022/ideas.md)
 
-- About
+-   About
 
-      - [Changelog (Desktop App)](https://github.com/laurent22/joplin/blob/dev/readme/changelog.md)
-      - [Changelog (Android)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_android.md)
-      - [Changelog (iOS)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_ios.md)
-      - [Changelog (CLI App)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md)
-      - [Changelog (Server)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md)
-      - [Guiding principles](https://github.com/laurent22/joplin/blob/dev/readme/principles.md)
-      - [Stats](https://github.com/laurent22/joplin/blob/dev/readme/stats.md)
-      - [Brand guidelines](https://joplinapp.org/brand)
-      - [Release cycle](https://github.com/laurent22/joplin/blob/dev/readme/release_cycle.md)
-      - [Donate](https://github.com/laurent22/joplin/blob/dev/readme/donate.md)
+        - [Changelog (Desktop App)](https://github.com/laurent22/joplin/blob/dev/readme/changelog.md)
+        - [Changelog (Android)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_android.md)
+        - [Changelog (iOS)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_ios.md)
+        - [Changelog (CLI App)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md)
+        - [Changelog (Server)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md)
+        - [Guiding principles](https://github.com/laurent22/joplin/blob/dev/readme/principles.md)
+        - [Stats](https://github.com/laurent22/joplin/blob/dev/readme/stats.md)
+        - [Brand guidelines](https://joplinapp.org/brand)
+        - [Release cycle](https://github.com/laurent22/joplin/blob/dev/readme/release_cycle.md)
+        - [Donate](https://github.com/laurent22/joplin/blob/dev/readme/donate.md)
 
-  <!-- TOC -->
+    <!-- TOC -->
 
 # Features
 
-- Desktop, mobile and terminal applications.
-- [Web Clipper](https://github.com/laurent22/joplin/blob/dev/readme/clipper.md) for Firefox and Chrome.
-- End To End Encryption (E2EE).
-- Note history (revisions).
-- Synchronisation with various services, including Nextcloud, Dropbox, WebDAV and OneDrive.
-- Offline first, so the entire data is always available on the device even without an internet connection.
-- Import Enex files (Evernote export format) and Markdown files.
-- Export JEX files (Joplin Export format) and raw files.
-- Support notes, to-dos, tags and notebooks.
-- Sort notes by multiple criteria - title, updated time, etc.
-- Support for alarms (notifications) in mobile and desktop applications.
-- Markdown notes, which are rendered with images and formatting in the desktop and mobile applications. Support for extra features such as math notation and checkboxes.
-- Choice of both Markdown and Rich Text (WYSIWYG) editors.
-- File attachment support - images are displayed, other files are linked and can be opened in the relevant application.
-- Inline display of PDF, video and audio files.
-- Goto Anything feature.
-- Search functionality.
-- Geo-location support.
-- Supports multiple languages.
-- External editor support - open notes in your favorite external editor with one click in Joplin.
-- Extensible functionality through plugin and data APIs.
-- Custom CSS support for customisation of both the rendered markdown and overall user interface.
-- Customisable layout allows toggling, movement and sizing of various elements.
-- Keyboard shortcuts are editable and allow binding of most Joplin commands with export/import functionality.
-- Multiple profile support.
+-   Desktop, mobile and terminal applications.
+-   [Web Clipper](https://github.com/laurent22/joplin/blob/dev/readme/clipper.md) for Firefox and Chrome.
+-   End To End Encryption (E2EE).
+-   Note history (revisions).
+-   Synchronisation with various services, including Nextcloud, Dropbox, WebDAV and OneDrive.
+-   Offline first, so the entire data is always available on the device even without an internet connection.
+-   Import Enex files (Evernote export format) and Markdown files.
+-   Export JEX files (Joplin Export format) and raw files.
+-   Support notes, to-dos, tags and notebooks.
+-   Sort notes by multiple criteria - title, updated time, etc.
+-   Support for alarms (notifications) in mobile and desktop applications.
+-   Markdown notes, which are rendered with images and formatting in the desktop and mobile applications. Support for extra features such as math notation and checkboxes.
+-   Choice of both Markdown and Rich Text (WYSIWYG) editors.
+-   File attachment support - images are displayed, other files are linked and can be opened in the relevant application.
+-   Inline display of PDF, video and audio files.
+-   Goto Anything feature.
+-   Search functionality.
+-   Geo-location support.
+-   Supports multiple languages.
+-   External editor support - open notes in your favorite external editor with one click in Joplin.
+-   Extensible functionality through plugin and data APIs.
+-   Custom CSS support for customisation of both the rendered markdown and overall user interface.
+-   Customisable layout allows toggling, movement and sizing of various elements.
+-   Keyboard shortcuts are editable and allow binding of most Joplin commands with export/import functionality.
+-   Multiple profile support.
 
 # Importing
 
@@ -215,9 +215,9 @@ A community maintained list of these distributions can be found here: [Unofficia
 
 Joplin was designed as a replacement for Evernote and so can import complete Evernote notebooks, as well as notes, tags, resources (attached files) and note metadata (such as author, geo-location, etc.) via ENEX files. In terms of data, the only two things that might slightly differ are:
 
-- Recognition data - Evernote images, in particular scanned (or photographed) documents have [recognition data](https://en.wikipedia.org/wiki/Optical_character_recognition) associated with them. It is the text that Evernote has been able to recognise in the document. This data is not preserved when the note are imported into Joplin. However, should it become supported in the search tool or other parts of Joplin, it should be possible to regenerate this recognition data since the actual image would still be available.
+-   Recognition data - Evernote images, in particular scanned (or photographed) documents have [recognition data](https://en.wikipedia.org/wiki/Optical_character_recognition) associated with them. It is the text that Evernote has been able to recognise in the document. This data is not preserved when the note are imported into Joplin. However, should it become supported in the search tool or other parts of Joplin, it should be possible to regenerate this recognition data since the actual image would still be available.
 
-- Colour, font sizes and faces - Evernote text is stored as HTML and this is converted to Markdown during the import process. For notes that are mostly plain text or with basic formatting (bold, italic, bullet points, links, etc.) this is a lossless conversion, and the note, once rendered back to HTML should be very similar. Tables are also imported and converted to Markdown tables. For very complex notes, some formatting data might be lost - in particular colours, font sizes and font faces will not be imported. The text itself however is always imported in full regardless of formatting. If it is essential that this extra data is preserved then Joplin also allows import of ENEX files as HTML.
+-   Colour, font sizes and faces - Evernote text is stored as HTML and this is converted to Markdown during the import process. For notes that are mostly plain text or with basic formatting (bold, italic, bullet points, links, etc.) this is a lossless conversion, and the note, once rendered back to HTML should be very similar. Tables are also imported and converted to Markdown tables. For very complex notes, some formatting data might be lost - in particular colours, font sizes and font faces will not be imported. The text itself however is always imported in full regardless of formatting. If it is essential that this extra data is preserved then Joplin also allows import of ENEX files as HTML.
 
 To import Evernote data, first export your Evernote notebooks to ENEX files as described [here](https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks). Then follow these steps:
 
@@ -231,8 +231,8 @@ Joplin can import notes from plain Markdown file. You can either import a comple
 
 In the **desktop application**:
 
-- **File import**: Go to File > Import > MD - Markdown (file) and select the Markdown file. This file will then be imported to the currently selected Notebook.
-- **Directory import**: Go to File > Import > MD - Markdown (directory) and select the top level of the directory that is being imported. Directory (folder) structure will be preserved in the Notebook > Subnotebook > Note structure within Joplin.
+-   **File import**: Go to File > Import > MD - Markdown (file) and select the Markdown file. This file will then be imported to the currently selected Notebook.
+-   **Directory import**: Go to File > Import > MD - Markdown (directory) and select the top level of the directory that is being imported. Directory (folder) structure will be preserved in the Notebook > Subnotebook > Note structure within Joplin.
 
 In the **terminal application**, in [command-line mode](https://github.com/laurent22/joplin/blob/dev/readme/terminal.md#command-line-mode), type `import --format md /path/to/file.md` or `import --format md /path/to/directory/`.
 
@@ -240,10 +240,10 @@ In the **terminal application**, in [command-line mode](https://github.com/laure
 
 In general the way to import notes from any application into Joplin is to convert the notes to ENEX files (Evernote format) and to import these ENEX files into Joplin using the method above. Most note-taking applications support ENEX files so it should be relatively straightforward. For help about specific applications, see below:
 
-- Standard Notes: Please see [this tutorial](https://programadorwebvalencia.com/migrate-notes-from-standard-notes-to-joplin/)
-- Tomboy Notes: Export the notes to ENEX files [as described here](https://askubuntu.com/questions/243691/how-can-i-export-my-tomboy-notes-into-evernote/608551) for example, and import these ENEX files into Joplin.
-- OneNote: First [import the notes from OneNote into Evernote](https://discussion.evernote.com/topic/107736-is-there-a-way-to-import-from-onenote-into-evernote-on-the-mac/). Then export the ENEX file from Evernote and import it into Joplin.
-- NixNote: Synchronise with Evernote, then export the ENEX files and import them into Joplin. More info [in this thread](https://discourse.joplinapp.org/t/import-from-nixnote/183/3).
+-   Standard Notes: Please see [this tutorial](https://programadorwebvalencia.com/migrate-notes-from-standard-notes-to-joplin/)
+-   Tomboy Notes: Export the notes to ENEX files [as described here](https://askubuntu.com/questions/243691/how-can-i-export-my-tomboy-notes-into-evernote/608551) for example, and import these ENEX files into Joplin.
+-   OneNote: First [import the notes from OneNote into Evernote](https://discussion.evernote.com/topic/107736-is-there-a-way-to-import-from-onenote-into-evernote-on-the-mac/). Then export the ENEX file from Evernote and import it into Joplin.
+-   NixNote: Synchronise with Evernote, then export the ENEX files and import them into Joplin. More info [in this thread](https://discourse.joplinapp.org/t/import-from-nixnote/183/3).
 
 # Exporting
 
@@ -281,18 +281,18 @@ Select the "WebDAV" synchronisation target and follow the same instructions as f
 
 WebDAV-compatible services that are known to work with Joplin:
 
-- [Apache WebDAV Module](https://httpd.apache.org/docs/current/mod/mod_dav.html)
-- [DriveHQ](https://www.drivehq.com)
-- [Fastmail](https://www.fastmail.com/)
-- [HiDrive](https://www.strato.fr/stockage-en-ligne/) from Strato. [Setup help](https://github.com/laurent22/joplin/issues/309)
-- [Nginx WebDAV Module](https://nginx.org/en/docs/http/ngx_http_dav_module.html)
-- [Nextcloud](https://nextcloud.com/)
-- [OwnCloud](https://owncloud.org/)
-- [Seafile](https://www.seafile.com/)
-- [Stack](https://www.transip.nl/stack/)
-- [Synology WebDAV Server](https://www.synology.com/en-us/dsm/packages/WebDAVServer)
-- [WebDAV Nav](https://www.schimera.com/products/webdav-nav-server/), a macOS server.
-- [Zimbra](https://www.zimbra.com/)
+-   [Apache WebDAV Module](https://httpd.apache.org/docs/current/mod/mod_dav.html)
+-   [DriveHQ](https://www.drivehq.com)
+-   [Fastmail](https://www.fastmail.com/)
+-   [HiDrive](https://www.strato.fr/stockage-en-ligne/) from Strato. [Setup help](https://github.com/laurent22/joplin/issues/309)
+-   [Nginx WebDAV Module](https://nginx.org/en/docs/http/ngx_http_dav_module.html)
+-   [Nextcloud](https://nextcloud.com/)
+-   [OwnCloud](https://owncloud.org/)
+-   [Seafile](https://www.seafile.com/)
+-   [Stack](https://www.transip.nl/stack/)
+-   [Synology WebDAV Server](https://www.synology.com/en-us/dsm/packages/WebDAVServer)
+-   [WebDAV Nav](https://www.schimera.com/products/webdav-nav-server/), a macOS server.
+-   [Zimbra](https://www.zimbra.com/)
 
 ## Dropbox synchronisation
 
@@ -316,11 +316,11 @@ As of Joplin 2.x.x, Joplin supports multiple S3 providers. We expose some option
 
 In the **desktop application** or **mobile application**, select "S3 (Beta)" as the synchronisation target in the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md).
 
-- **S3 Bucket:** The name of your Bucket, such as `joplin-bucket`
-- **S3 URL:** Fully qualified URL; For AWS this should be `https://s3.<regionName>.amazonaws.com/`
-- **S3 Access Key & S3 Secret Key:** The User's programmatic access key. To create a new key & secret on AWS, visit [IAM Security Credentials](https://console.aws.amazon.com/iam/home#/security_credentials). For other providers follow their documentation.
-- **S3 Region:** Some providers require you to provide the region of your bucket. This is usually in the form of "eu-west1" or something similar depending on your region. For providers that do not require a region, you can leave it blank.
-- **Force Path Style**: This setting enables Joplin to talk to S3 providers using an older style S3 Path. Depending on your provider you may need to try with this on and off.
+-   **S3 Bucket:** The name of your Bucket, such as `joplin-bucket`
+-   **S3 URL:** Fully qualified URL; For AWS this should be `https://s3.<regionName>.amazonaws.com/`
+-   **S3 Access Key & S3 Secret Key:** The User's programmatic access key. To create a new key & secret on AWS, visit [IAM Security Credentials](https://console.aws.amazon.com/iam/home#/security_credentials). For other providers follow their documentation.
+-   **S3 Region:** Some providers require you to provide the region of your bucket. This is usually in the form of "eu-west1" or something similar depending on your region. For providers that do not require a region, you can leave it blank.
+-   **Force Path Style**: This setting enables Joplin to talk to S3 providers using an older style S3 Path. Depending on your provider you may need to try with this on and off.
 
 While creating a new Bucket for Joplin, disable **Bucket Versioning**, enable **Block all public access** and enable **Default encryption** with `Amazon S3 key (SSE-S3)`. Some providers do not expose these options, and it could create a syncing problem. Do attempt and report back so we can update the documentation appropriately.
 
@@ -358,21 +358,21 @@ If you provide a configuration and you receive "success!" on the "check config" 
 
 ### AWS
 
-- URL: `https://s3.<region>.amazonaws.com/` (fill in your region, a complete list of endpoint adresses can be found [here](https://docs.aws.amazon.com/general/latest/gr/s3.html))
-- Region: required
-- Force Path Style: unchecked
+-   URL: `https://s3.<region>.amazonaws.com/` (fill in your region, a complete list of endpoint adresses can be found [here](https://docs.aws.amazon.com/general/latest/gr/s3.html))
+-   Region: required
+-   Force Path Style: unchecked
 
 ### Linode
 
-- URL: `https://<region>.linodeobjects.com` (region is in the URL provided by Linode; this URL is also the same as the URL provided by Linode with the bucket name removed)
-- Region: Anything you want to type, can't be left empty
-- Force Path Style: unchecked
+-   URL: `https://<region>.linodeobjects.com` (region is in the URL provided by Linode; this URL is also the same as the URL provided by Linode with the bucket name removed)
+-   Region: Anything you want to type, can't be left empty
+-   Force Path Style: unchecked
 
 ### UpCloud
 
-- URL: `https://<account>.<region>.upcloudobjects.com` (They will provide you with multiple URLs, the one that follows this pattern should work.)
-- Region: required
-- Force Path Style: unchecked
+-   URL: `https://<account>.<region>.upcloudobjects.com` (They will provide you with multiple URLs, the one that follows this pattern should work.)
+-   Region: required
+-   Force Path Style: unchecked
 
 # Encryption
 
@@ -410,9 +410,9 @@ The way the attachments are downloaded during synchronisation can be customised 
 
 In the desktop and mobile apps, an alarm can be associated with any to-do. It will be triggered at the given time by displaying a notification. How the notification will be displayed depends on the operating system since each has a different way to handle this. Please see below for the requirements for the desktop applications:
 
-- **Windows**: >= 8. Make sure the Action Center is enabled on Windows. Task bar balloon for Windows < 8. Growl as fallback. Growl takes precedence over Windows balloons.
-- **macOS**: >= 10.8 or Growl if earlier.
-- **Linux**: `notify-send` tool, delivered through packages `notify-osd`, `libnotify-bin` or `libnotify-tools`. GNOME should have this by default, but install `libnotify-tools` if using KDE Plasma.
+-   **Windows**: >= 8. Make sure the Action Center is enabled on Windows. Task bar balloon for Windows < 8. Growl as fallback. Growl takes precedence over Windows balloons.
+-   **macOS**: >= 10.8 or Growl if earlier.
+-   **Linux**: `notify-send` tool, delivered through packages `notify-osd`, `libnotify-bin` or `libnotify-tools`. GNOME should have this by default, but install `libnotify-tools` if using KDE Plasma.
 
 See [documentation and flow chart for reporter choice](https://github.com/mikaelbr/node-notifier/blob/master/DECISION_FLOW.md)
 
@@ -426,9 +426,9 @@ Sub-notebooks allow organising multiple notebooks into a tree of notebooks. For 
 
 ![](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/SubNotebooks.png)
 
-- In the **desktop application**, to create a subnotebook, drag and drop it onto another notebook. To move it back to the root, drag and drop it on the "Notebooks" header. Currently only the desktop app can be used to organise the notebooks.
-- The **mobile application** supports displaying and collapsing/expanding the tree of notebooks, however it does not currently support moving the subnotebooks to different notebooks.
-- The **terminal app** supports displaying the tree of subnotebooks but it does not support collapsing/expanding them or moving the subnotebooks around.
+-   In the **desktop application**, to create a subnotebook, drag and drop it onto another notebook. To move it back to the root, drag and drop it on the "Notebooks" header. Currently only the desktop app can be used to organise the notebooks.
+-   The **mobile application** supports displaying and collapsing/expanding the tree of notebooks, however it does not currently support moving the subnotebooks to different notebooks.
+-   The **terminal app** supports displaying the tree of subnotebooks but it does not support collapsing/expanding them or moving the subnotebooks around.
 
 # Markdown
 
@@ -457,10 +457,10 @@ Joplin implements the SQLite Full Text Search (FTS4) extension. It means the con
 
 One caveat of SQLite FTS is that it does not support languages which do not use Latin word boundaries (spaces, tabs, punctuation). To solve this issue, Joplin has a custom search mode, that does not use FTS, but still has all of its features (multi term search, filters, etc.). One of its drawbacks is that it can get slow on larger note collections. Also, the sorting of the results will be less accurate, as the ranking algorithm (BM25) is, for now, only implemented for FTS. Finally, in this mode there are no restrictions on using the `*` wildcard (`swim*`, `*swim` and `ast*rix` all work). This search mode is currently enabled if one of the following languages are detected:
 
-- Chinese
-- Japanese
-- Korean
-- Thai
+-   Chinese
+-   Japanese
+-   Korean
+-   Thai
 
 ## Supported queries
 
@@ -496,9 +496,9 @@ Eg. `:search -- "-tag:tag1"`.
 
 The filters are implicitly connected by and/or connectives depending on the following rules:
 
-- By default, all filters are connected by "AND".
-- To override this default behaviour, use the `any` filter, in which case the search terms will be connected by "OR" instead.
-- There's an exception for the `notebook` filters which are connected by "OR". The reason being that no note can be in multiple notebooks at once.
+-   By default, all filters are connected by "AND".
+-   To override this default behaviour, use the `any` filter, in which case the search terms will be connected by "OR" instead.
+-   There's an exception for the `notebook` filters which are connected by "OR". The reason being that no note can be in multiple notebooks at once.
 
 Incorrect search filters are interpreted as a phrase search, e.g. misspelled `nootebook:Example` or non-existing `https://joplinapp.org`.
 
@@ -546,11 +546,11 @@ Please see the guide for information on how to contribute to the development of 
 
 Joplin is currently available in the languages below. If you would like to contribute a **new translation**, it is quite straightforward, please follow these steps:
 
-- [Download Poedit](https://poedit.net/), the translation editor, and install it.
-- [Download the file to be translated](https://raw.githubusercontent.com/laurent22/joplin/dev/packages/tools/locales/joplin.pot).
-- In Poedit, open this .pot file, go into the Catalog menu and click Configuration. Change "Country" and "Language" to your own country and language.
-- From then you can translate the file.
-- Once it is done, please [open a pull request](https://github.com/laurent22/joplin/pulls) and add the file to it.
+-   [Download Poedit](https://poedit.net/), the translation editor, and install it.
+-   [Download the file to be translated](https://raw.githubusercontent.com/laurent22/joplin/dev/packages/tools/locales/joplin.pot).
+-   In Poedit, open this .pot file, go into the Catalog menu and click Configuration. Change "Country" and "Language" to your own country and language.
+-   From then you can translate the file.
+-   Once it is done, please [open a pull request](https://github.com/laurent22/joplin/pulls) and add the file to it.
 
 This translation will apply to the three applications - desktop, mobile and terminal.
 

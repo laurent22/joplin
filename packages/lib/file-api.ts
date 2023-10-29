@@ -7,6 +7,7 @@ const { isHidden } = require('./path-utils');
 import JoplinError from './JoplinError';
 import { Lock, LockClientType, LockType } from './services/synchronizer/LockHandler';
 import * as ArrayUtils from './ArrayUtils';
+import path = require('path');
 const { sprintf } = require('sprintf-js');
 const Mutex = require('async-mutex').Mutex;
 
@@ -248,16 +249,16 @@ class FileApi {
 		return this.logger_;
 	}
 
-	public fullPath(path: string) {
+	public fullPath(path_: string) {
 		const output = [];
 		if (this.baseDir()) output.push(this.baseDir());
-		if (path) output.push(path);
-		return output.join('/');
+		if (path_) output.push(path_);
+		return output.join(path.sep);
 	}
 
-	// DRIVER MUST RETURN PATHS RELATIVE TO `path`
+	// DRIVER MUST RETURN PATHS RELATIVE TO `path_`
 	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-	public async list(path = '', options: any = null): Promise<PaginatedList> {
+	public async list(path_ = '', options: any = null): Promise<PaginatedList> {
 		if (!options) options = {};
 		if (!('includeHidden' in options)) options.includeHidden = false;
 		if (!('context' in options)) options.context = null;
@@ -266,7 +267,7 @@ class FileApi {
 
 		logger.debug(`list ${this.baseDir()}`);
 
-		const result: PaginatedList = await tryAndRepeat(() => this.driver_.list(this.fullPath(path), options), this.requestRepeatCount());
+		const result: PaginatedList = await tryAndRepeat(() => this.driver_.list(this.fullPath(path_), options), this.requestRepeatCount());
 
 		if (!options.includeHidden) {
 			const temp = [];
@@ -287,56 +288,56 @@ class FileApi {
 		return result;
 	}
 
-	public ls_R(path = ''): Promise<PaginatedList> {
+	public ls_R(path_ = ''): Promise<PaginatedList> {
 		logger.debug(`list ${this.baseDir()}`);
 
-		return this.driver_.ls_R(this.fullPath(path));
+		return this.driver_.ls_R(this.fullPath(path_));
 	}
 
-	public ls_RR(path = ''): Promise<PaginatedList> {
+	public ls_RR(path_ = ''): Promise<PaginatedList> {
 		logger.debug(`list ${this.baseDir()}`);
 
-		return this.driver_.ls_RR(this.fullPath(path));
+		return this.driver_.ls_RR(this.fullPath(path_));
 	}
 
 	// Deprectated
-	public setTimestamp(path: string, timestampMs: number) {
-		logger.debug(`setTimestamp ${this.fullPath(path)}`);
-		return tryAndRepeat(() => this.driver_.setTimestamp(this.fullPath(path), timestampMs), this.requestRepeatCount());
-		// return this.driver_.setTimestamp(this.fullPath(path), timestampMs);
+	public setTimestamp(path_: string, timestampMs: number) {
+		logger.debug(`setTimestamp ${this.fullPath(path_)}`);
+		return tryAndRepeat(() => this.driver_.setTimestamp(this.fullPath(path_), timestampMs), this.requestRepeatCount());
+		// return this.driver_.setTimestamp(this.fullPath(path_), timestampMs);
 	}
 
-	public mkdir(path: string) {
-		// logger.debug(`mkdir ${this.fullPath(path)}`);
-		return tryAndRepeat(() => this.driver_.mkdir(this.fullPath(path)), this.requestRepeatCount());
+	public mkdir(path_: string) {
+		// logger.debug(`mkdir ${this.fullPath(path_)}`);
+		return tryAndRepeat(() => this.driver_.mkdir(this.fullPath(path_)), this.requestRepeatCount());
 	}
 
-	public async stat(path: string) {
-		// logger.debug(`stat ${this.fullPath(path)}`);
+	public async stat(path_: string) {
+		// logger.debug(`stat ${this.fullPath(path_)}`);
 
-		const output = await tryAndRepeat(() => this.driver_.stat(this.fullPath(path)), this.requestRepeatCount());
+		const output = await tryAndRepeat(() => this.driver_.stat(this.fullPath(path_)), this.requestRepeatCount());
 
 		if (!output) return output;
-		output.path = path;
+		output.path = path_;
 		return output;
 	}
 
 	// Returns UTF-8 encoded string by default, or a Response if `options.target = 'file'`
-	public get(path: string, options: any = null) {
+	public get(path_: string, options: any = null) {
 		if (!options) options = {};
 		if (!options.encoding) options.encoding = 'utf8';
-		logger.debug(`get ${this.fullPath(path)}`);
-		return tryAndRepeat(() => this.driver_.get(this.fullPath(path), options), this.requestRepeatCount());
+		logger.debug(`get ${this.fullPath(path_)}`);
+		return tryAndRepeat(() => this.driver_.get(this.fullPath(path_), options), this.requestRepeatCount());
 	}
 
-	public async put(path: string, content: any, options: any = null) {
-		// logger.debug(`put ${this.fullPath(path)}`, options);
+	public async put(path_: string, content: any, options: any = null) {
+		// logger.debug(`put ${this.fullPath(path_)}`, options);
 
 		if (options && options.source === 'file') {
 			if (!(await this.fsDriver().exists(options.path))) throw new JoplinError(`File not found: ${options.path}`, 'fileNotFound');
 		}
 
-		return tryAndRepeat(() => this.driver_.put(this.fullPath(path), content, options), this.requestRepeatCount());
+		return tryAndRepeat(() => this.driver_.put(this.fullPath(path_), content, options), this.requestRepeatCount());
 	}
 
 	public async multiPut(items: MultiPutItem[], options: any = null) {
@@ -344,19 +345,19 @@ class FileApi {
 		return tryAndRepeat(() => this.driver_.multiPut(items, options), this.requestRepeatCount());
 	}
 
-	public delete(path: string) {
-		logger.debug(`delete ${this.fullPath(path)}`);
-		return tryAndRepeat(() => this.driver_.delete(this.fullPath(path)), this.requestRepeatCount());
+	public delete(path_: string) {
+		logger.debug(`delete ${this.fullPath(path_)}`);
+		return tryAndRepeat(() => this.driver_.delete(this.fullPath(path_)), this.requestRepeatCount());
 	}
 
-	public rmdir(path: string) {
-		logger.debug(`rmdir ${this.fullPath(path)}`);
-		return tryAndRepeat(() => this.driver_.rmdir(this.fullPath(path)), this.requestRepeatCount());
+	public rmdir(path_: string) {
+		logger.debug(`rmdir ${this.fullPath(path_)}`);
+		return tryAndRepeat(() => this.driver_.rmdir(this.fullPath(path_)), this.requestRepeatCount());
 	}
 
-	public remove(path: string) {
-		logger.debug(`remove ${this.fullPath(path)}`);
-		return tryAndRepeat(() => this.driver_.remove(this.fullPath(path)), this.requestRepeatCount());
+	public remove(path_: string) {
+		logger.debug(`remove ${this.fullPath(path_)}`);
+		return tryAndRepeat(() => this.driver_.remove(this.fullPath(path_)), this.requestRepeatCount());
 	}
 
 	// Deprectated
@@ -374,9 +375,9 @@ class FileApi {
 		return tryAndRepeat(() => this.driver_.clearRoot(this.baseDir()), this.requestRepeatCount());
 	}
 
-	public delta(path: string, options: any = null) {
-		logger.debug(`delta ${this.fullPath(path)}`);
-		return tryAndRepeat(() => this.driver_.delta(this.fullPath(path), options), this.requestRepeatCount());
+	public delta(path_: string, options: any = null) {
+		logger.debug(`delta ${this.fullPath(path_)}`);
+		return tryAndRepeat(() => this.driver_.delta(this.fullPath(path_), options), this.requestRepeatCount());
 	}
 
 	public async acquireLock(type: LockType, clientType: LockClientType, clientId: string): Promise<Lock> {
@@ -422,7 +423,7 @@ function basicDeltaContextFromOptions_(options: any) {
 // a built-in delta API. OneDrive and Dropbox have one for example, but Nextcloud and obviously
 // the file system do not.
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-async function basicDelta(path: string, getDirStatFn: Function, options: any) {
+async function basicDelta(path_: string, getDirStatFn: Function, options: any) {
 	const outputLimit = 50;
 	const itemIds = await options.allItemIdsHandler();
 	if (!Array.isArray(itemIds)) throw new Error('Delta API not supported - local IDs must be provided');
@@ -446,7 +447,7 @@ async function basicDelta(path: string, getDirStatFn: Function, options: any) {
 
 	// Stats are cached until all items have been processed (until hasMore is false)
 	if (newContext.statsCache === null) {
-		newContext.statsCache = await getDirStatFn(path);
+		newContext.statsCache = await getDirStatFn(path_);
 		newContext.statsCache.sort((a: any, b: any) => {
 			return a.updated_time - b.updated_time;
 		});

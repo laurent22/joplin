@@ -2,6 +2,8 @@ const React = require('react');
 import shim from '@joplin/lib/shim';
 shim.setReact(React);
 
+import path = require('path');
+
 import setupQuickActions from './setupQuickActions';
 import PluginAssetsLoader from './PluginAssetsLoader';
 import AlarmService from '@joplin/lib/services/AlarmService';
@@ -97,7 +99,7 @@ SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 SyncTargetRegistry.addClass(SyncTargetJoplinServer);
 SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
 
-import FsDriverRN from './utils/fs-driver-rn';
+// import FsDriverRN from './utils/fs-driver-rn';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
@@ -121,12 +123,13 @@ import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetche
 import { ReactNode } from 'react';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
 import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
+import { FileApi } from '@joplin/lib/file-api';
 
 type SideMenuPosition = 'left' | 'right';
 
 const logger = Logger.create('root');
 
-let storeDispatch = function(_action: any) {};
+let storeDispatch = function(_action: any) { };
 
 const logReducerAction = function(action: any) {
 	if (['SIDE_MENU_OPEN_PERCENT', 'SYNC_REPORT_UPDATE'].indexOf(action.type) >= 0) return;
@@ -237,7 +240,8 @@ const DEFAULT_ROUTE = {
 	smartFilterId: 'c3176726992c11e9ac940492261af972',
 };
 
-const appDefaultState: AppState = { ...defaultState, sideMenuOpenPercent: 0,
+const appDefaultState: AppState = {
+	...defaultState, sideMenuOpenPercent: 0,
 	route: DEFAULT_ROUTE,
 	noteSelectionEnabled: false,
 	noteSideMenuOptions: null,
@@ -273,11 +277,11 @@ const appReducer = (state = appDefaultState, action: any) => {
 				const currentRoute = state.route;
 
 				if (!historyGoingBack && historyCanGoBackTo(currentRoute)) {
-				// If the route *name* is the same (even if the other parameters are different), we
-				// overwrite the last route in the history with the current one. If the route name
-				// is different, we push a new history entry.
+					// If the route *name* is the same (even if the other parameters are different), we
+					// overwrite the last route in the history with the current one. If the route name
+					// is different, we push a new history entry.
 					if (currentRoute.routeName === action.routeName) {
-					// nothing
+						// nothing
 					} else {
 						navHistory.push(currentRoute);
 					}
@@ -451,6 +455,44 @@ const initializeTempDir = async () => {
 	return tempDir;
 };
 
+async function initLocalFiles(_profileName: string) {
+	const driver = new FileApiDriverLocal();
+	reg.logger().info('Initializing for local files');
+	const fileDir = await driver.homeDir;
+	reg.logger().info('Local file dir', fileDir);
+	const dName = 'JoplinFiles';
+	const baseFilePath = `${fileDir}${path.sep}${dName}`;
+	const filePath = `${baseFilePath}${path.sep}${_profileName}`;
+	const fileApi = new FileApi(filePath, driver);
+	fileApi.setLogger(BaseService.logger_);
+	fileApi.setSyncTargetId(111);	// TODO: how to set it?
+	BaseModel.setFileApi(fileApi);
+
+	let stat = await driver.stat(baseFilePath);
+	if (!stat) await driver.mkdir(baseFilePath);
+
+	stat = await driver.stat(filePath);
+	if (!stat) {
+		await driver.mkdir(filePath);
+
+		const folders = await BaseItem.loadItemsByType(BaseModel.TYPE_FOLDER);
+		reg.logger().info('number of folders to create', folders.length);
+		for (const f of folders) {
+			await Folder.saveToDisk(f);
+			// reg.logger().info('Creating folder', f.title);
+		}
+		const notes = await BaseItem.loadItemsByType(BaseModel.TYPE_NOTE);
+		reg.logger().info('number of notes to save to file', notes.length);
+		for (let i = 0; i < notes.length; i++) {
+			const n = notes[i];
+			// reg.logger().info('saving note', i, n.title);
+			await Note.saveToFile(n);
+		}
+	}
+	await Folder.build_id_folder_map();
+}
+
+
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 async function initialize(dispatch: Function) {
 	shimInit();
@@ -528,8 +570,8 @@ async function initialize(dispatch: Function) {
 	BaseItem.loadClass('MasterKey', MasterKey);
 	BaseItem.loadClass('Revision', Revision);
 
-	const fsDriver = new FsDriverRN();
-
+	// const fsDriver = new FsDriverRN();
+	const fsDriver = shim.fsDriver();
 	Resource.fsDriver_ = fsDriver;
 	FileApiDriverLocal.fsDriver_ = fsDriver;
 
@@ -548,13 +590,16 @@ async function initialize(dispatch: Function) {
 		}
 
 		reg.logger().info('Database is ready.');
-		reg.logger().info('Loading settings...');
+		reg.logger().info('Loading settings......');
 
 		await loadKeychainServiceAndSettings(KeychainServiceDriverMobile);
 		await migrateMasterPassword();
 
 		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 		reg.logger().info(`Client ID: ${Setting.value('clientId')}`);
+
+		reg.logger().info('Going to initialize local files');
+		await initLocalFiles(profileConfig.currentProfileId);
 
 		BaseItem.syncShareCache = parseShareCache(Setting.value('sync.shareCache'));
 
@@ -756,9 +801,9 @@ async function initialize(dispatch: Function) {
 
 class AppComponent extends React.Component {
 
-	private urlOpenListener_: EmitterSubscription|null = null;
-	private appStateChangeListener_: NativeEventSubscription|null = null;
-	private themeChangeListener_: NativeEventSubscription|null = null;
+	private urlOpenListener_: EmitterSubscription | null = null;
+	private appStateChangeListener_: NativeEventSubscription | null = null;
+	private themeChangeListener_: NativeEventSubscription | null = null;
 
 	public constructor() {
 		super();
@@ -1025,10 +1070,10 @@ class AppComponent extends React.Component {
 		let menuPosition: SideMenuPosition = 'left';
 
 		if (this.props.routeName === 'Note') {
-			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
+			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContentNote options={this.props.noteSideMenuOptions} /></SafeAreaView>;
 			menuPosition = 'right';
 		} else {
-			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContent/></SafeAreaView>;
+			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContent /></SafeAreaView>;
 		}
 
 		const appNavInit = {
@@ -1077,17 +1122,17 @@ class AppComponent extends React.Component {
 				>
 					<StatusBar barStyle={statusBarStyle} />
 					<MenuContext style={{ flex: 1 }}>
-						<SafeAreaView style={{ flex: 0, backgroundColor: theme.backgroundColor2 }}/>
+						<SafeAreaView style={{ flex: 0, backgroundColor: theme.backgroundColor2 }} />
 						<SafeAreaView style={{ flex: 1 }}>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
-								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
+								{shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} />}
 							</View>
 							<DropdownAlert ref={(ref: any) => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
-							{ !shouldShowMainContent && <BiometricPopup
+							{!shouldShowMainContent && <BiometricPopup
 								dispatch={this.props.dispatch}
 								themeId={this.props.themeId}
 								sensorInfo={this.state.sensorInfo}
-							/> }
+							/>}
 						</SafeAreaView>
 					</MenuContext>
 				</SideMenu>
@@ -1140,7 +1185,7 @@ export default class Root extends React.Component {
 	public render() {
 		return (
 			<Provider store={store}>
-				<App/>
+				<App />
 			</Provider>
 		);
 	}

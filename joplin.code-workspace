@@ -357,7 +357,23 @@
       "vendor/": true,
       "web/bundles/": true,
       "web/env.php": true
-    }
+    },
+    "prettier.printWidth": 800,
+    "prettier.tabWidth": 4,
+    "prettier.useTabs": true,
+    "prettier.singleQuote": true,
+    "eslint.format.enable": true,
+    "eslint.run": "onType",
+    "javascript.format.enable": false,
+    "typescript.format.enable": false,
+    "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
+    "javascript.inlayHints.parameterNames.enabled": "literals",
+    "javascript.inlayHints.parameterTypes.enabled": true,
+    "javascript.inlayHints.propertyDeclarationTypes.enabled": true,
+    "javascript.inlayHints.variableTypes.enabled": true,
+    "typescript.check.npmIsInstalled": false,
+    "cSpell.enabled": true,
+    "cSpell.diagnosticLevel": "Hint"
   },
   "tasks": {
     "version": "2.0.0",
@@ -373,6 +389,13 @@
   "launch": {
     "version": "0.2.0",
     "configurations": [
+    {
+      "name": "Attach to Chrome",
+      "port": 9222,
+      "request": "attach",
+      "type": "chrome",
+      "webRoot": "${workspaceFolder}"
+    },
       {
         "name": "Server",
         "type": "node",

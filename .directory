@@ -1,4 +1,6 @@
 [Dolphin]
-Timestamp=2023,10,26,15,2,54.123
+SortOrder=1
+SortRole=modificationtime
+Timestamp=2023,10,29,11,42,11.623
 Version=4
 ViewMode=1

@@ -19,6 +19,7 @@
 		"allowUmdGlobalAccess": true,
 	},
 	"exclude": [
+		"node_modules",
 		"**/node_modules",
 		"packages/app-desktop/dist/**/*",
 		"packages/app-cli/tests/support/**/*",

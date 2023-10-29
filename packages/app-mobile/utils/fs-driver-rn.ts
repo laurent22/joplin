@@ -3,7 +3,7 @@ const RNFetchBlob = require('rn-fetch-blob').default;
 import * as RNFS from 'react-native-fs';
 const DocumentPicker = require('react-native-document-picker').default;
 import { openDocument } from '@joplin/react-native-saf-x';
-import RNSAF, { Encoding, DocumentFileDetail, openDocumentTree } from '@joplin/react-native-saf-x';
+import RNSAF, { Encoding, DocumentFileDetail, openDocumentTree, openDocumentTreeTag } from '@joplin/react-native-saf-x';
 import { Platform } from 'react-native';
 import * as tar from 'tar-stream';
 import { resolve } from 'path';
@@ -19,6 +19,9 @@ function isScopedUri(path: string) {
 }
 
 export default class FsDriverRN extends FsDriverBase {
+
+	public homeDir = this.getExternalDirectoryPathTag('homeDir');
+
 	public appendFileSync() {
 		throw new Error('Not implemented');
 	}
@@ -307,7 +310,7 @@ export default class FsDriverRN extends FsDriverBase {
 
 		// The streams used by tar-stream seem not to support a chunk size
 		// (it seems despite the typings provided).
-		let data: number[]|null = null;
+		let data: number[] | null = null;
 		while ((data = pack.read()) !== null) {
 			const buff = Buffer.from(data);
 			const base64Data = buff.toString('base64');
@@ -319,6 +322,19 @@ export default class FsDriverRN extends FsDriverBase {
 		let directory;
 		if (this.isUsingAndroidSAF()) {
 			const doc = await openDocumentTree(true);
+			if (doc?.uri) {
+				directory = doc?.uri;
+			}
+		} else {
+			directory = RNFS.ExternalDirectoryPath;
+		}
+		return directory;
+	}
+
+	public async getExternalDirectoryPathTag(tag: string): Promise<string | undefined> {
+		let directory;
+		if (this.isUsingAndroidSAF()) {
+			const doc = await openDocumentTreeTag(tag);
 			if (doc?.uri) {
 				directory = doc?.uri;
 			}

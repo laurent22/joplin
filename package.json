@@ -89,7 +89,9 @@
     "typescript": "5.1.6"
   },
   "dependencies": {
+    "@joplin/react-native-alarm-notification": "workspace:^",
     "@types/fs-extra": "11.0.2",
+    "codemirror": "^6.0.1",
     "eslint-plugin-github": "4.9.2",
     "gray-matter": "^4.0.3",
     "http-server": "14.1.1",

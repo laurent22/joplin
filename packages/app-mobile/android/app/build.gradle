@@ -152,10 +152,12 @@ android {
         debug {
             signingConfig signingConfigs.debug
             applicationIdSuffix = '.D'
+//             manifestPlaceholders.appName = "Joplin.D"
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
+//             manifestPlaceholders.appName = "@string/app_name"
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"

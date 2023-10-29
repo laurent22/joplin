@@ -1,11 +1,14 @@
 {
 	"extends": "../../tsconfig.json",
 	"include": [
+		"*.ts",
 		"**/*.ts",
+		"*.tsx",
 		"**/*.tsx",
 	],
 	"exclude": [
 		//Files that don't need transpilation
+		"node_modules",
 		"**/node_modules",
 		"**/*.test.ts",
 		"**/*.test.tsx",

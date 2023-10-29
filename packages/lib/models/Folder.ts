@@ -738,17 +738,22 @@ export default class Folder extends BaseItem {
 		return true;
 	}
 
+	public static async moveOnDisk(folderId: string, targetFolderId: string) {
+		const f = id_folder_map.get(folderId);
+		const fPath = await BaseItem.buildPathFromRoot(f);
+		const f1 = id_folder_map.get(targetFolderId);
+		const f1Path = `${await BaseItem.buildPathFromRoot(f1)}/${this.fileNameFS(f)}`;
+		await this.fileApi.move(fPath, f1Path);
+		await this.build_id_folder_map();
+	}
+
 	public static async moveToFolder(folderId: string, targetFolderId: string) {
 		if (!(await this.canNestUnder(folderId, targetFolderId))) throw new Error(_('Cannot move notebook to this location'));
 
 		// When moving a note to a different folder, the user timestamp is not updated.
 		// However updated_time is updated so that the note can be synced later on.
 
-		const f = id_folder_map.get(folderId);
-		const fPath = await BaseItem.buildPathFromRoot(f);
-		const f1 = id_folder_map.get(targetFolderId);
-		const f1Path = `${await BaseItem.buildPathFromRoot(f1)}/${this.fileNameFS(f)}`;
-		await this.fileApi.move(fPath, f1Path);
+		await this.moveOnDisk(folderId, targetFolderId);
 
 		const modifiedFolder = {
 			id: folderId,

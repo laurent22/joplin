@@ -127,8 +127,8 @@ export default class BaseItem extends BaseModel {
 				return itemOrId.title;
 			} else if (itemOrId.type_ === BaseModel.TYPE_NOTE) {
 				if (itemOrId.is_todo) {
-					if (itemOrId.todo_completed) return `V | ${itemOrId.title}.${extension}`;
-					else return `X | ${itemOrId.title}.${extension}`;
+					if (itemOrId.todo_completed) return `V - ${itemOrId.title}.${extension}`;
+					else return `X - ${itemOrId.title}.${extension}`;
 				}
 				return `${itemOrId.title}.${extension}`;
 			} else if (itemOrId.type_ === BaseModel.TYPE_RESOURCE) {
@@ -161,7 +161,7 @@ export default class BaseItem extends BaseModel {
 			if (createDir !== null) await createDir(path_);
 			path_ += path.sep;
 		}
-		if (local.title.indexOf(path.sep) >= 0) {
+		if (local.title && local.title.indexOf(path.sep) >= 0) {
 			local.title = local.title.replace(new RegExp(path.sep, 'g'), ' ');
 		}
 		return path_ + this.fileNameFS(local);

@@ -65,12 +65,14 @@ class FolderScreenComponent extends BaseScreenComponent {
 		this.folderComponent_change('parent_id', parent);
 	}
 
-
 	async saveFolderButton_press() {
 		let folder = { ...this.state.folder };
 
 		try {
 			if (folder.id && !(await Folder.canNestUnder(folder.id, folder.parent_id))) throw new Error(_('Cannot move notebook to this location'));
+			// eslint-disable-next-line no-console
+			console.log('saveFolderButton_press', folder.parent_id, ' ', this.state.lastSavedFolder.parent_id);
+			if (folder.parent_id !== this.state.lastSavedFolder.parent_id) Folder.moveOnDisk(folder.id, folder.parent_id);
 			folder = await Folder.save(folder, { userSideValidation: true });
 		} catch (error) {
 			dialogs.error(this, _('The notebook could not be saved: %s', error.message));

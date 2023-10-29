@@ -30,6 +30,7 @@ export type Encoding = 'utf8' | 'base64' | 'ascii';
 /** Native interface of the module */
 interface SafxInterface {
 	openDocumentTree(persist: boolean): Promise<DocumentFileDetail | null>;
+	openDocumentTreeTag(tag: string): Promise<DocumentFileDetail | null>;
 	openDocument(
 		persist: boolean,
 		multiple: boolean,
@@ -95,6 +96,10 @@ export type CreateDocumentOptions = FileOperationOptions & {
 // Returns an object of type `DocumentFileDetail` or `null` if user did not select a folder.
 export function openDocumentTree(persist: boolean) {
 	return SafX.openDocumentTree(persist);
+}
+
+export function openDocumentTreeTag(tag: string) {
+	return SafX.openDocumentTreeTag(tag);
 }
 
 export type OpenDocumentOptions = {
