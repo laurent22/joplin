@@ -45,7 +45,7 @@ Building the apps is relatively easy - please [see the build instructions](https
 
 ## Signing the Individual Contributor License Agreement
 
-All contributors to the project must sign our [Individual Contributor License Agreement](https://github.com/laurent22/joplin/blob/dev/readme/cla.md).
+All contributors to the project must sign our [Individual Contributor License Agreement](https://raw.githubusercontent.com/laurent22/joplin/dev/readme/cla.md).
 
 ## Coding style
 

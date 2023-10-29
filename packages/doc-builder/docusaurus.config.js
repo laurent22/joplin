@@ -4,22 +4,25 @@
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
+// To make their weird linter happy
+process.env.WEBSITE_BASE_URL = process.env.WEBSITE_BASE_URL || '';
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-	title: 'My Site',
-	tagline: 'Dinosaurs are cool',
+	title: 'Joplin',
+	tagline: 'Free your notes!',
 	favicon: 'img/favicon.ico',
 
 	// Set the production url of your site here
-	url: 'https://your-docusaurus-test-site.com',
+	url: process.env.WEBSITE_BASE_URL,
 	// Set the /<baseUrl>/ pathname under which your site is served
 	// For GitHub pages deployment, it is often '/<projectName>/'
 	baseUrl: '/',
 
 	// GitHub pages deployment config.
 	// If you aren't using GitHub pages, you don't need these.
-	organizationName: 'facebook', // Usually your GitHub org/user name.
-	projectName: 'docusaurus', // Usually your repo name.
+	// organizationName: 'facebook', // Usually your GitHub org/user name.
+	// projectName: 'docusaurus', // Usually your repo name.
 
 	onBrokenLinks: 'throw',
 	onBrokenMarkdownLinks: 'warn',
@@ -41,6 +44,7 @@ const config = {
 					path: 'help',
 					routeBasePath: 'help',
 					sidebarPath: require.resolve('./sidebars.js'),
+					breadcrumbs: false,
 					// Please change this to your repo.
 					// Remove this to remove the "edit this page" links.
 					editUrl:
@@ -74,10 +78,10 @@ const config = {
 			// Replace with your project's social card
 			image: 'img/docusaurus-social-card.jpg',
 			navbar: {
-				title: 'My Site',
+				title: '',
 				logo: {
-					alt: 'My Site Logo',
-					src: 'img/logo.svg',
+					alt: 'Joplin',
+					src: 'images/logo-text-blue.svg',
 					href: process.env.WEBSITE_BASE_URL,
 					target: '_self',
 				},
@@ -94,10 +98,22 @@ const config = {
 						position: 'left',
 					},
 					{
-						href: 'https://github.com/facebook/docusaurus',
-						label: 'GitHub',
+						to: process.env.WEBSITE_BASE_URL + '/plans',
+						label: 'Joplin Cloud',
 						position: 'right',
+						className: 'navbar-custom-buttons plans-button',
 					},
+					{
+						to: process.env.WEBSITE_BASE_URL + '/donate',
+						label: '♡ Support us',
+						position: 'right',
+						className: 'navbar-custom-buttons sponsor-button',
+					},
+					// {
+					// 	href: 'https://github.com/facebook/docusaurus',
+					// 	label: 'GitHub',
+					// 	position: 'right',
+					// },
 				],
 			},
 			footer: {
@@ -143,7 +159,7 @@ const config = {
 					// 	],
 					// },
 				],
-				copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+				copyright: `Copyright © 2016-${new Date().getFullYear()} Laurent Cozic`,
 			},
 			prism: {
 				theme: lightCodeTheme,

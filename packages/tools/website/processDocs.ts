@@ -20,6 +20,7 @@ const crypto = require('crypto');
 
 interface Config {
 	baseUrl: string;
+	docusaurusBuildEnabled: boolean;
 	docusaurusBuildCommand: string;
 }
 
@@ -45,10 +46,12 @@ const configs: Record<string, Config> = {
 	dev: {
 		baseUrl: 'http://localhost:8077',
 		docusaurusBuildCommand: 'buildDev',
+		docusaurusBuildEnabled: true,
 	},
 	prod: {
 		baseUrl: 'https://joplinapp.org',
 		docusaurusBuildCommand: '_build',
+		docusaurusBuildEnabled: true,
 	},
 };
 
@@ -421,7 +424,9 @@ async function main() {
 
 	if (!env) throw new Error('Env must be specified: either "dev" or "prod"');
 
-	const config = configs[env];
+	const config = { ...configs[env] };
+
+	if ('docuBuild' in argv && !argv.docuBuild) config.docusaurusBuildEnabled = false;
 
 	const rootDir = await getRootDir();
 	const docBuilderDir = `${rootDir}/packages/doc-builder`;
@@ -435,10 +440,12 @@ async function main() {
 
 	await processDocFiles(readmeDir, destHelpDir, [
 		`${readmeDir}/_i18n`,
-		// `${readmeDir}/cla.md`,
+		`${readmeDir}/cla.md`,
 		`${readmeDir}/download.md`,
 		`${readmeDir}/faq_joplin_cloud.md`,
 		`${readmeDir}/privacy.md`,
+		`${readmeDir}/donate.md`,
+		`${readmeDir}/connection_check.md`,
 		`${readmeDir}/welcome`,
 		`${readmeDir}/news`,
 	], mainContext);
@@ -451,7 +458,11 @@ async function main() {
 
 	await copyFile(`${rootDir}/Assets/WebsiteAssets/images`, `${docBuilderDir}/static/images`);
 
-	await buildDocusaurus(docBuilderDir, config.docusaurusBuildCommand, config.baseUrl);
+	if (config.docusaurusBuildEnabled) {
+		await buildDocusaurus(docBuilderDir, config.docusaurusBuildCommand, config.baseUrl);
+	} else {
+		console.info('Skipping Docusaurus build...');
+	}
 }
 
 if (require.main === module) {
