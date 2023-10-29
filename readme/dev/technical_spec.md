@@ -18,23 +18,23 @@ The technical spec template they provide however is too detailed for our needs, 
 
 > Investing in a technical spec ultimately results in a superior product.  Since the team is aligned and in agreement on what needs to be done through the spec, big projects can progress faster.
 
-# Technical spec template
+## Technical spec template
 
-## Overview
+### Overview
 
 Give a general overview of the issue. You should **always start from the user's perspective**: what specific problem does the user have? Provide as much context as possible and provide links to relevant forum threads or GitHub issues.
 
 Then give a general idea on how you propose to solve it. Do NOT go into technical details at this point (no code, no filenames, etc.).
 
-## Problem description
+### Problem description
 
 This is where you provide more details about the problem that needs to be solved. You can provide user stories, or quote from forum threads.
 
 In this section, your goal is also to explain why this problem is actually worth solving.
 
-## Solution
+### Solution
 
-### User experience
+#### User experience
 
 Again, **always start from the user's perspective**:
 
@@ -50,7 +50,7 @@ It's also an easy way for everybody, even non-technical people, to get involved 
 
 Also, if you can, provide UI mockups.
 
-### Technical solution
+#### Technical solution
 
 Explain in general terms how you are going to a solve the issue at a technical level.
 
@@ -60,7 +60,7 @@ Mention what services or parts of the application you'll need to modify and how.
 
 In this section you may mention code and filenames, but try not to go into too much technical details. These tend to become obsolete very quickly, unlike the rest of the spec.
 
-## Testing plan
+### Testing plan
 
 How do you plan to test your changes?
 

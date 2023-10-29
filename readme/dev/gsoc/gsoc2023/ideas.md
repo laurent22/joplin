@@ -9,15 +9,15 @@
 - **Independent modules** - create self-contains modules within the core application
 - And you are welcome to suggest your own ideas.
 
-# Information for Contributors
+## Information for Contributors
 
 These ideas were contributed by our developers and users. They are sometimes vague or incomplete. If you wish to submit a proposal based on these ideas, you are urged to contact the developers and find out more about the particular suggestion you're looking at.
 
 Becoming accepted as a Google Summer of Code contributor is quite competitive. Accepted contributors typically have thoroughly researched the technologies of their proposed project and have been in frequent contact with potential mentors. **Simply copying and pasting an idea here will not work.** On the other hand, creating a completely new idea without first consulting potential mentors rarely works.
 
-# List of ideas
+## List of ideas
 
-## 1. Plugin system on mobile
+### 1. Plugin system on mobile
 
 The plugin system is currently available on desktop and CLI. We believe it could work on mobile too although some work will have to be done to make the plugin API compatible, as well as add a mechanism to load plugins.
 
@@ -31,7 +31,7 @@ Potential Mentor(s):
 
 Expected size of project: 350 hours
 
-## 2. Seamless desktop application updates
+### 2. Seamless desktop application updates
 
 The desktop application currently supports automatic updates, however the process is not particularly smooth: the user is presented with a modal dialog, where they need to click "Download" and that opens the default browser to download the file. Then they need to run this file and go through the installer.
 
@@ -53,7 +53,7 @@ Potential Mentor(s):
 
 Expected size of project: 175 hours
 
-## 3. Improve PDF export
+### 3. Improve PDF export
 
 Joplin uses Chrome's built-in print to PDF function which is very limited. This can be improved by using a 3rd party library to convert notes to PDF. Applies to desktop and CLI versions.
 
@@ -75,7 +75,7 @@ Potential Mentor(s):
 
 Expected size of project: 350 hours
 
-## 4. Desktop application integration testing
+### 4. Desktop application integration testing
 
 The desktop app front end has a few unit tests to verify things like React hooks and certain utility functions. However we currently have no integration testing to verify for example that a change in one component didn't break something in another component. This project would be about setting up this integration testing for the desktop app. You would do the setup and probably also write a few tests to demonstrate that it's working as expected. More info at https://www.electronjs.org/docs/latest/tutorial/automated-testing
 
@@ -89,7 +89,7 @@ Potential Mentor(s):
 
 Expected size of project: 350 hours
 
-## 5. OCR plugin
+### 5. OCR plugin
 
 It is possible to add support for OCR content in Joplin via the [Tesseract library](http://tesseract.projectnaptha.com/). A first step would be to assess the feasibility of this project by integrating the lib in the desktop app and trying to OCR an image. OCR support should be implemented as a service of the desktop app. It would extract the text from the images, and append the content as plain text to the notes.
 
@@ -101,7 +101,7 @@ Skills Required: JavaScript, Image processing
 
 Potential Mentor(s):
 
-## 6. Voice to text on mobile
+### 6. Voice to text on mobile
 
 Add support for voice to text on mobile.
 
@@ -113,7 +113,7 @@ Skills Required: JavaScript, React Native
 
 Potential Mentor(s): 
 
-## 7. PDF annotations
+### 7. PDF annotations
 
 We would like to add annotation support to the beta PDF viewer on desktop. The annotation tools should be similar to what's in Apple Preview for instance - ability to draw over a PDF, to add text boxes, to draw lines and arrow, etc. These annotations must be saved to the file.
 
@@ -125,7 +125,7 @@ Skills Required: JavaScript
 
 Potential Mentor(s): 
 
-## 8. Plugin inspector
+### 8. Plugin inspector
 
 Electron provides an API that allows inspecting any sub-process it creates. We can use that to monitor the performance of each plugin - how much CPU they use, how much memory, etc. We would also like to display an alert in the app if a plugin is using too much resources over a long period of time.
 
@@ -137,7 +137,7 @@ Skills Required: JavaScript, Electron
 
 Potential Mentor(s): 
 
-## 9. Template insertion tool
+### 9. Template insertion tool
 
 Joplinc can store general templates as notes that can be used in various context. For example, it could have email templates that could be inserted into a Thunderbird email. Or code snippets that could be inserted into a text editor. The workflow will be as follow
 
@@ -153,7 +153,7 @@ Skills Required: JavaScript, Windows/macOS programming
 
 Potential Mentor(s): 
 
-# More info
+## More info
 
 - Make sure you read the [Joplin Google Summer of Code Introduction](https://joplinapp.org/help/dev/gsoc/gsoc2023)
 - To build the application, please read [BUILD.md](https://github.com/laurent22/joplin/blob/dev/help/dev/BUILD.md)

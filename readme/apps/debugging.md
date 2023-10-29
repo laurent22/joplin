@@ -37,7 +37,7 @@ There's two ways to start in safe mode:
 
 If you recently (within two weeks) upgraded from 12.11.x to version 12.12.x, [be sure to check the log for and remove any sensitive data shared with Joplin](https://github.com/laurent22/joplin/issues/8211).
 
-# Creating a low-level bug report on Android
+### Creating a low-level bug report on Android
 
 https://developer.android.com/studio/debug/bug-report
 
@@ -49,7 +49,7 @@ To get a bug report directly from your device, do the following:
 
 After a moment you get a notification that the bug report is ready. To share the bug report, tap the notification.
 
-# Creating a low-level bug report on iOS
+### Creating a low-level bug report on iOS
 
 Some crashes cannot be investigated using Joplin's own tools. In that case, it can be very helpful to provide a native iOS crash report.
 

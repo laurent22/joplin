@@ -6,7 +6,7 @@ The system is designed to defeat any attempts at surveillance or tampering becau
 
 There is a small overhead to using E2EE since data constantly has to be encrypted and decrypted so consider whether you really need the feature.
 
-# Enabling E2EE
+## Enabling E2EE
 
 Due to the decentralised nature of Joplin, E2EE needs to be manually enabled on a single device first (this will create a Master Key for encryption secured by your password) and then it must be synced with all other remaining devices. It is recommended to start with the desktop or terminal application since they generally run on more powerful devices (unlike the mobile application), and so they can encrypt the initial data faster.
 
@@ -23,10 +23,10 @@ Do not manually enable encryption on multiple devices in parallel, but rather wa
 
 Once all the devices are in sync with E2EE enabled, the encryption/decryption should be mostly transparent. Occasionally you may see encrypted items but they will get decrypted in the background eventually.
 
-# Disabling E2EE
+## Disabling E2EE
 
 Follow the same procedure as above but instead disable E2EE on each device one by one. Again it might be simpler to do it one device at a time and to wait every time for the synchronisation to complete.
 
-# Technical specification
+## Technical specification
 
 For a more technical description, mostly relevant for development or to review the method being used, please see the [Encryption specification](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/e2ee.md).

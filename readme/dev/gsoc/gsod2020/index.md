@@ -17,7 +17,7 @@ All participants will need a Google account in order to join the program. So, sa
 
 ---
 
-# Instructions for students
+## Instructions for students
 Students wishing to participate in Season of Docs must realize, that this is a important professional opportunity. You will be required to produce applicable and readable documentation for Joplin in 3 months. Your mentors, will dedicate a portion of their time to mentoring you. Therefore, we seek candidates who are committed to helping Joplin and its community long-term and are willing to both do quality work, and be proactive in communicating with your mentor(s).
 
 You don't have to be a proven technical writer - in fact, this whole program is meant to facilitate to support Joplin and other Open Source communities by technical writers. However, experience in technical writing and/or coding experience is welcome.
@@ -38,14 +38,14 @@ Moreover, we require that you come to clear agreement on how to commit, test and
 Students who neglect active communication will be failed!
 
 
-## General instructions
+### General instructions
 
 First of all, please read the above referenced resources and the [GSoC FAQ](https://developers.google.com/open-source/gsoc/faq). Pay special attention to the **Eligibility** section of the FAQ.
 
 We strongly recommend to follow the recommended steps, see next section, closely. It is slightly differs from the steps given for the closed GSoC application period. 
 The procedure reflects some of the lessons learnt in the GSOC 2020 campaign, so you may compare the recommended steps and scan the change history of the [GSoC 2020 live blog](https://discourse.joplinapp.org/t/gsoc-2020-live-blog/6219).
 
-## Recommended steps
+### Recommended steps
 
 1. Join the [Joplin Forum](https://discourse.joplinapp.org), introduce yourself in a structured manner, share your GitHub username, and meet your fellow developers in the [GSoC category](https://discourse.joplinapp.org/c/gsoc). The subject of the topic shall contain your username, e.g. `_Introducing \<username>_`.
 2. Read Student proposal guidelines and the [GSoD Student Manual](https://developers.google.com/season-of-docs/docs/tech-writer-guide)
@@ -63,7 +63,7 @@ Coming up with an interesting idea is probably the most difficult part. It shoul
 
 A good start is finding out what the most pressing issues are in the projects in which you are interested. Join the forum and subscribe to GitHub repository for that project or go into its discourse channel: meet developers and your potential mentor, as well as start learning the code-base. We recommend strongly getting involved in advance of the beginning of GSoC, and we will look favourably on applications from students who have already started to act like Open Source developers.
 
-## Student proposal guidelines
+### Student proposal guidelines
 
 A project proposal is what you will be judged upon. Write a clear proposal on what you plan to do, the scope of your project, and why we should choose you to do it. Proposals are the basis of the GSoC projects and therefore one of the most important things to do well. The proposal is not only the basis of our decision of which student to choose, it has also an effect on Google's decision as to how many student slots are assigned to Joplin.
 
@@ -103,20 +103,20 @@ Below is the application template:
 >
 > - After you have written your proposal, you should get it reviewed. Do not rely on the Joplin mentors to do it for you via the web interface, although we will try to comment on every proposal. It is wise to ask a colleague or a developer to critique your proposal. Clarity and completeness are important.
 
-## Accepted Students
+### Accepted Students
 Your primary responsibility is finishing your project under the guidance of your mentors. To do that, you must submit code regularly and stay in frequent and effective communication with your mentors and team. To pass the evaluations, you must do both the communication and the documentation.
 
 All students will create a report page by tool up to their choice. Keep this up-to-date, as this is one of our primary evaluation tools.
 
-# Instructions for mentors
-## Ideas 
+## Instructions for mentors
+### Ideas 
 If you're a Joplin developer or motivated user and you wish to participate in Summer of Code, make a proposal in the the [Features category of the Joplin Forum](https://discourse.joplinapp.org/c/features), based what your Joplin project needs.
 
 If you wish to mentor, please read the [GSoD Mentor Guide](https://developers.google.com/season-of-docs/docs/admin-guide) and the [Season of Doc FAQ](https://developers.google.com/season-of-docs/docs/faq). Also, please contact the staff and get the go-ahead from them before editing the ideas page, adding your idea.
 
 Your idea proposal should be a brief description of what the project is, what the desired goals would be, what the student should know and an email address for contact. Students are not required to follow your idea to the letter, so regard your proposal as inspiration for the students.
 
-## Mentoring
+### Mentoring
 Anyone developer can be a mentor if you meet the GSoD eligibility requirements. We will potentially assign a student to you who has never worked on such a large project and will need some help. Make sure you're up for the task. Mentoring takes time, and lots and lots of communication.
 
 Before subscribing yourself as a mentor, please make sure that the staff is aware of that. Ask them to send the Summer of Code Administrators an email confirming your involvement in the team. This is just a formality to make sure you are a real person we can trust; the administrators cannot know all active developers by their Google account ID. Then drop us an message in the forum.
@@ -125,7 +125,7 @@ You will subscribe to the relevant tags in the forum to discuss ideas. You will 
 
 Finally, know that we will never assign you to a project you do not want to work on. We will not assign you more projects than you can/want to take on either. And you will have a backup mentor, just in case something unforeseen takes place.
 
-# Ideas
+## Ideas
 Please see below for a list of project ideas:
 
 https://joplinapp.org/help/dev/gsoc/gsod2020/ideas/

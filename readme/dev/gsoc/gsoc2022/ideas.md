@@ -8,15 +8,15 @@
 - **Plugin and external apps** - leverage the Joplin API to create plugins and external apps.
 - And you are welcome to suggest your own ideas.
 
-# Information for Contributors
+## Information for Contributors
 
 These ideas were contributed by our developers and users. They are sometimes vague or incomplete. If you wish to submit a proposal based on these ideas, you are urged to contact the developers and find out more about the particular suggestion you're looking at.
 
 Becoming accepted as a Google Summer of Code contributor is quite competitive. Accepted contributors typically have thoroughly researched the technologies of their proposed project and have been in frequent contact with potential mentors. **Simply copying and pasting an idea here will not work.** On the other hand, creating a completely new idea without first consulting potential mentors rarely works.
 
-# List of ideas
+## List of ideas
 
-## 1. Plugin system on mobile
+### 1. Plugin system on mobile
 
 The plugin system is currently available on desktop and CLI. We believe it could work on mobile too although some work will have to be done to make the plugin API compatible, as well as add a mechanism to load plugins.
 
@@ -30,7 +30,7 @@ Potential Mentor(s): [PackElend](https://discourse.joplinapp.org/u/PackElend), [
 
 Expected size of project: 350 hours
 
-## 2. Seamless desktop application updates
+### 2. Seamless desktop application updates
 
 The desktop application currently supports automatic updates, however the process is not particularly smooth: the user is presented with a modal dialog, where they need to click "Download" and that opens the default browser to download the file. Then they need to run this file and go through the installer.
 
@@ -52,7 +52,7 @@ Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/)
 
 Expected size of project: 175 hours
 
-## 3. Refactor the project documentation
+### 3. Refactor the project documentation
 
 The current documentation (under [joplinapp.org/help](https://joplinapp.org/help)) is mainly a giant README.md file and various smaller Markdown files under /readme. All this is then built into the HTML website by a script.
 
@@ -72,7 +72,7 @@ Potential Mentor(s): [Daeraxa](https://discourse.joplinapp.org/u/Daeraxa), [Laur
 
 Expected size of project: 350 hours
 
-## 4. Implement default plugins on desktop application
+### 4. Implement default plugins on desktop application
 
 We would like to bundle certain plugins with the desktop application, such as the Backup or Rich Markdown plugin. Some process needs to be implemented so that they are bundled and updated automatically. You'll have to consider how it will work on CI, and across platform. The process should be fault tolerant and retry when something fails.
 
@@ -86,7 +86,7 @@ Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [JackGruber](ht
 
 Expected size of project: 350 hours
 
-## 5. Implement a toolbar for the mobile beta code editor
+### 5. Implement a toolbar for the mobile beta code editor
 
 We would like the Beta code editor to eventually become the main editor, and for that a number of changes need to be made. The main one would be the addition of a toolbar to it, to set the various styles, such as Bold, Bullet list, Header, etc. Additionally there are number of bugs that will have to be fixed to get the editor ready for production - you will find them in the list of issues (under the "high" and "mobile" label).
 
@@ -100,7 +100,7 @@ Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [Laurent](https
 
 Expected size of project: 350 hours
 
-## 6. Improve integration of the richtext/WYSIWYG editor
+### 6. Improve integration of the richtext/WYSIWYG editor
 
 Joplin offers a richtext/WYSIWYG typing experience alongside the Markdown editor but there are a number of areas that could do with improvement when it comes to integration with Joplin as a whole.
 
@@ -118,7 +118,7 @@ Potential Mentor(s): [Daeraxa](https://discourse.joplinapp.org/u/Daeraxa)
 
 Expected size of project: 175 hours
 
-## 7. Improve PDF export
+### 7. Improve PDF export
 
 Joplin uses Chrome's built-in print to PDF function which is very limited. This can be improved by using a 3rd party library to convert notes to PDF. Applies to desktop and CLI versions.
 
@@ -140,7 +140,7 @@ Potential Mentor(s): [Roman](https://discourse.joplinapp.org/u/roman_r_m), [Cale
 
 Expected size of project: 350 hours
 
-## 8. Replace built-in PDF renderer with a library
+### 8. Replace built-in PDF renderer with a library
 
 Just like with export, Joplin relies on the built-in PDF renderer to show PDF attachments. Replacing it with a 3rd-party library has a number of advantages:
 
@@ -160,7 +160,7 @@ Potential Mentor(s): [Roman](https://discourse.joplinapp.org/u/roman_r_m), [Cale
 
 Expected size of project: 350 hours
 
-## 9. Rebuild file system sync on Android
+### 9. Rebuild file system sync on Android
 
 A recent update broke file system synchronization on Android, as applications are now required to use a new API to access storage. Currently there are no libraries that would proxy this API for React Native. If we want to get file system sync working again it has to be written from scratch.
 
@@ -174,7 +174,7 @@ Potential Mentor(s): [Roman](https://discourse.joplinapp.org/u/roman_r_m)
 
 Expected size of project: 175 hours
 
-## 10. Tablet layout
+### 10. Tablet layout
 
 On wide screens devices like tables Joplin could use a different layout, e.g. with note list always showing, or have both editor and viewer visible at the same time. What component is visible shoud be optional - for example, the user may want to see the note list, but hide the sidebar. This change will have to be implemented in such a way that it doesn't break the regular, mobile-only layout.
 
@@ -188,7 +188,7 @@ Potential Mentor(s): [Laurent](https://github.com/laurent22/)
 
 Expected size of project: 350 hours
 
-## 11. Improve plugin search and discoverability
+### 11. Improve plugin search and discoverability
 
 As there are more and more plugins it would be good to improve how they are discovered, and to improve search - in particular improve search relevance.
 
@@ -212,7 +212,7 @@ Potential Mentor(s): [JackGruber](https://discourse.joplinapp.org/u/JackGruber),
 
 Expected size of project: 350 hours
 
-## 12. Email plugin
+### 12. Email plugin
 
 Create a plugin to fetch mail via IMAP and convert messages to notes (including attachments). The plugin should be able to filter what messages it donwloads, e.g. based on the folder.
 
@@ -234,7 +234,7 @@ Potential Mentor(s): [Roman](https://discourse.joplinapp.org/u/roman_r_m), [Laur
 
 Expected size of project: 350 hours
 
-## 13. Desktop application integration testing
+### 13. Desktop application integration testing
 
 The desktop app front end has a few unit tests to verify things like React hooks and certain utility functions. However we currently have no integration testing to verify for example that a change in one component didn't break something in another component. This project would be about setting up this integration testing for the desktop app. You would do the setup and probably also write a few tests to demonstrate that it's working as expected. More info at https://www.electronjs.org/docs/latest/tutorial/automated-testing
 
@@ -248,7 +248,7 @@ Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [Laurent](https
 
 Expected size of project: 350 hours
 
-## 14. Client settings sync
+### 14. Client settings sync
 
 Whenever settings are changed on one client these are not replicated to other clients connected to the same sync target.
 
@@ -264,7 +264,7 @@ Potential Mentor(s): [Daeraxa](https://discourse.joplinapp.org/u/Daeraxa), [Jack
 
 Expected size of project: 350 hours
 
-# More info
+## More info
 
 - Make sure you read the [Joplin Google Summer of Code Introduction](https://joplinapp.org/help/dev/gsoc/gsoc2022/)
 - To build the application, please read [BUILD.md](https://github.com/laurent22/joplin/blob/dev/readme/dev/BUILD.md)

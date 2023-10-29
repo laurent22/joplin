@@ -2,7 +2,7 @@
 
 A conflict happens when one note or one attachment is modified in two different places, and then synchronised. In that case, it is not possible to determine which version of the note or attachment you want to keep, and thus a conflict is generated.
 
-# How to resolve a conflict?
+## How to resolve a conflict?
 
 When Joplin detects a conflict, it creates a _Conflict_ notebook and copies the local note to it.  Then the remote note replaces the local note. You can then inspect the notes in the Conflict notebook, compare it with your other version, and copy any change that might have been overwritten.
 
@@ -11,6 +11,7 @@ If you are sure that the local version on one of your devices was good, you can 
 There is a Joplin plugin that deals with conflict resolution: https://discourse.joplinapp.org/t/plugin-conflict-resolution/
 
 ## If you do not remember your changes since the last failed synchronisation
+
 1. Use a merge tool, for example www.diffchecker.com
 2. Copy the entire content of your _Conflict_/note
 3. Paste it to the left side of your merge tool
@@ -22,8 +23,7 @@ There is a Joplin plugin that deals with conflict resolution: https://discourse.
 9. Synchronise
 10. Delete the Conflict/note (right-click, Delete)
 
-
-# How to avoid conflicts?
+## How to avoid conflicts?
 
 Conflicts are always annoying to deal with so it is best to avoid them as much as possible.
 

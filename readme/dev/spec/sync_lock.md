@@ -1,11 +1,11 @@
-# Lock types
+# Synchronisation locks
 
 There are two types of locks:
 
 - **SYNC**: Used when synchronising a client with a target. There can be multiple SYNC locks simultaneously.
 - **EXCLUSIVE**: Used when a client upgrades a sync target. There can be only one EXCLUSIVE lock.
 
-# Timeout
+## Timeout
 
 When a client acquires a lock, it must refresh it every X seconds. A lock timeout after Y seconds (where X < Y). A lock with a timestamp greater than Y is considered expired and can be ignored by other clients. A client that tries to refresh a lock that has expired should fail.
 
@@ -17,7 +17,7 @@ If the previous lock has expired, we shouldn't try to acquire a new one. This is
 
 In some cases it should be safe to re-acquire a lock but adding support for this would make the algorithm more complex without much benefits.
 
-# Acquiring a SYNC lock
+## Acquiring a SYNC lock
 
 - The client check if there is a valid EXCLUSIVE lock on the target
 - If there is, it must stop the sync process
@@ -26,7 +26,7 @@ In some cases it should be safe to re-acquire a lock but adding support for this
         - When syncing is done, it releases the SYNC lock
     - If it doesn't, it acquires a SYNC lock and repeat the complete process from the beginning (to avoid race conditions)
 
-# Acquiring an EXCLUSIVE lock
+## Acquiring an EXCLUSIVE lock
 
 - The client check if there is a valid EXCLUSIVE or SYNC lock on the target
 - If there is, it must stop the upgrade process (or wait till target is unlocked)
@@ -35,7 +35,7 @@ In some cases it should be safe to re-acquire a lock but adding support for this
         - When upgrading is done, it releases the EXCLUSIVE lock
     - If it doesn't, it acquires an EXCLUSIVE lock and repeat the complete process from the beginning (to avoid race conditions)
 
-# Lock files
+## Lock files
 
 The lock files are in format `<lockType>_<clientType>_<clientId>.json` with lockType being "exclusive" or "sync", clientType being "desktop", "mobile" or "cli" and clientId is the globally unique ID assigned to a client profile when it is created.
 
@@ -54,7 +54,7 @@ The have the following content:
 
 Although only one client can acquire an exclusive lock, there can be multiple `exclusive_*.json` lock files in the lock folder (for example if a client crashed before releasing a lock or if two clients try to acquire a lock at the exact same time). In this case, only the oldest lock amongst the active ones is the valid one. If there are two locks with the same timestamp, the one with lowest client ID is the valid one.
 
-# Sync Target Migration
+## Sync Target Migration
 
 First the app checks the sync target version - if it's new (no version), it set it up by upgrading to the latest sync version.
 

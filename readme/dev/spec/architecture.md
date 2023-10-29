@@ -64,7 +64,7 @@ The Web Clipper is a browser extension for Firefox and Chrome. It is used to cap
 
 It is developed using the [WebExtensions API](https://extensionworkshop.com/documentation/develop/about-the-webextensions-api/) with the popup being done using React.
 
-# More information
+## More information
 
 - [Plugin Architecture spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/plugins.md)
 - [E2EE: Technical spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/e2ee.md)

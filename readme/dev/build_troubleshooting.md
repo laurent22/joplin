@@ -1,6 +1,8 @@
-# Desktop application
+# Build troubleshooting
 
-## On Windows
+## Desktop application
+
+### On Windows
 
 If `yarn dist` fails, it may need administrative rights.
 
@@ -13,7 +15,7 @@ call "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliar
 set "PATH=C:\Program Files\nodejs;%PATH%"
 ```
 
-## On Linux and macOS
+### On Linux and macOS
 
 If there's an error `while loading shared libraries: libgconf-2.so.4: cannot open shared object file: No such file or directory`, run `sudo apt-get install libgconf-2-4`
 
@@ -31,7 +33,7 @@ Try `sudo apt install python` (or the `apt` equivalent for your operating system
 
 If you get the error `libtool: unrecognized option '-static'`, follow the instructions [in this post](https://stackoverflow.com/a/38552393/561309) to use the correct libtool version.
 
-## Other issues
+### Other issues
 
 > The application window doesn't open or is white
 
@@ -48,9 +50,9 @@ This is an indication that there's an early initialisation error. Try this:
 
 So everything should be done from a Windows Command prompt or Windows PowerShell running as Administrator. All build and start commands are designed to work cross-platform, including on Windows.
 
-# Mobile application
+## Mobile application
 
-## iOS
+### iOS
 
 If there is an error `/joplin/packages/app-mobile/ios/Pods/Target Support Files/Pods-Joplin/Pods-Joplin.debug.xcconfig: unable to open file (in target "Joplin" in project "Joplin") (in target 'Joplin' from project 'Joplin')` run the following commands:
 

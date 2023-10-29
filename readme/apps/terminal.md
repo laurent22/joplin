@@ -1,4 +1,4 @@
-# Joplin
+# Joplin Terminal Application
 
 Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor.
 
@@ -8,13 +8,13 @@ The notes can be [synchronised](#synchronisation) with various targets including
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/ScreenshotTerminal.png" style="max-width: 60%">
 
-# Installation
+## Installation
 
 Operating system | Method
 -----------------|----------------
 macOS, Linux, or Windows (via [WSL](https://docs.microsoft.com/en-us/windows/wsl/faq)) | 1. First, [install Node 12+](https://nodejs.org/en/download/package-manager/).<br/><br/>2. Issue the following commands to install Joplin Terminal: <br/>`NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin`<br/>`sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin`<br><br>3. Enter the following command to start Joplin Terminal:<br>`joplin`<br><br>By default, the application binary will be installed under `~/.joplin-bin`. You may change this directory if needed. Alternatively, if your npm permissions are setup as described [here](https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory) (Option 2) then simply running `npm -g install joplin` would work.
 
-## Unsupported methods
+### Unsupported methods
 
 There are other ways to install the terminal application. However, they are not supported and problems must be reported to the upstream projects.
 
@@ -22,21 +22,21 @@ Operating system | Method
 -----------------|----------------
 Arch Linux       | An Arch Linux package is available [here](https://aur.archlinux.org/packages/joplin/). To install it, use an AUR wrapper such as yay: `yay -S joplin`. Both the CLI tool (type `joplin`) and desktop app (type `joplin-desktop`) are packaged. You can also install a compiled version with the [chaotic-aur](https://wiki.archlinux.org/index.php/Unofficial_user_repositories#chaotic-aur) repository. For support, please go to the [GitHub repo](https://github.com/masterkorp/joplin-pkgbuild).
 
-# Usage
+## Usage
 
 To start the application type `joplin`. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via [shortcuts](#shortcuts).
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/ScreenshotTerminalCaptions.png" height="450px">
 
-## Input modes
+### Input modes
 
 Joplin user interface is partly based on the text editor Vim and offers two different modes to interact with the notes and notebooks:
 
-### Normal mode
+#### Normal mode
 
 Allows moving from one pane to another using the `Tab` and `Shift-Tab` keys, and to select/view notes using the arrow keys. Text area can be scrolled using the arrow keys too. Press `Enter` to edit a note. Various other [shortcuts](#shortcuts) are available.
 
-### Command-line mode
+#### Command-line mode
 
 Press `:` to enter command line mode. From there, the Joplin commands such as `mknote` or `search` are available. See the [full list of commands](#commands).
 
@@ -74,11 +74,11 @@ The configuration can also be changed from command-line mode. For example, to ch
 
 	config editor "subl -w"
 
-## Editing a note
+### Editing a note
 
 To edit a note, select it and press `ENTER`. Or, in command-line mode, type `edit $n` to edit the currently selected note, or `edit "Note title"` to edit a particular note.
 
-## Getting help
+### Getting help
 
 The complete usage information is available from command-line mode, by typing one of these commands:
 
@@ -92,7 +92,7 @@ If the help is not fully visible, press `Tab` multiple times till the console is
 
 For general information relevant to all the applications, see also [Joplin home page](https://joplinapp.org).
 
-# Importing notes from Evernote
+## Importing notes from Evernote
 
 To import Evernote data, follow these steps:
 
@@ -100,7 +100,7 @@ To import Evernote data, follow these steps:
 * In Joplin, in [command-line mode](#command-line-mode), type `import /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
 * Then repeat the process for each notebook that needs to be imported.
 
-# Synchronisation
+## Synchronisation
 
 One of the goals of Joplin is to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as Nextcloud or Dropbox, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another.
 
@@ -110,7 +110,7 @@ If the **terminal client** has been installed, it is possible to also synchronis
 
  */30 * * * * /path/to/joplin sync
 
-## Nextcloud synchronisation
+### Nextcloud synchronisation
 
 You will need to set the `sync.target` config variable and all the `sync.5.path`, `sync.5.username` and `sync.5.password` config variables to, respectively the Nextcloud WebDAV URL, your username and your password. This can be done from the command line mode using:
 
@@ -121,14 +121,14 @@ You will need to set the `sync.target` config variable and all the `sync.5.path`
 
 If synchronisation does not work, please consult the logs in the app profile directory (`~/.config/joplin`)- it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.
 
-## WebDAV synchronisation
+### WebDAV synchronisation
 
 Select the "WebDAV" synchronisation target and follow the same instructions as for Nextcloud above (for the **terminal application** you will need to select sync target 6 rather than 5).
 
 For WebDAV-compatible services that are known to work with Joplin see [WebDAV synchronisation](https://github.com/laurent22/joplin/blob/dev/readme/apps/sync/webdav.md).
 
 
-## Dropbox synchronisation
+### Dropbox synchronisation
 
 You will need to set the `sync.target` config variable from the command line mode using:
 
@@ -138,20 +138,20 @@ When syncing with Dropbox, Joplin creates a sub-directory in Dropbox, in `/Apps/
 
 To initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application.
 
-## Local filesystem synchronisation
+### Local filesystem synchronisation
 
 Local filesystem sync can be initiated after starting the joplin terminal app by using the [command-line mode](#command-line-mode)
 
 	:config sync.target 2
 	:config sync.2.path <path to local sync dir>
 
-## OneDrive synchronisation
+### OneDrive synchronisation
 
 When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
 
 To initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive).
 
-# URLs
+## URLs
 
 When Ctrl+Clicking a URL (or opening with the shortcut 'o' while it is highlighted), most terminals will open that URL in the default browser. However, one issue, especially with long URLs, is that they can end up like this:
 
@@ -165,11 +165,11 @@ As a solution Joplin tries to start a mini-server in the background and, if succ
 
 Since this is still an actual URL, the terminal will still make it clickable. And with shorter URLs, the text is more readable and the links unlikely to be cut. Both resources (files that are attached to notes) and external links are handled in this way.
 
-# Attachments / Resources
+## Attachments / Resources
 
 In Markdown, links to resources are represented as a simple ID to the resource. In order to give access to these resources, they will be, like links, converted to local URLs. Clicking this link will then open a browser, which will handle the file - i.e. display the image, open the PDF file, etc.
 
-# Shell mode
+## Shell mode
 
 Commands can also be used directly from a shell. To view the list of available commands, type `joplin help all`. To reference a note, notebook or tag you can either use the ID (type `joplin ls -l` to view the ID) or by title.
 
@@ -188,7 +188,7 @@ Give a new title to the note:
 
 	$ joplin set fe889 title "New title"
 
-# Shortcuts
+## Shortcuts
 
 There are two types of shortcuts: those that manipulate the user interface directly, such as `TAB` to move from one pane to another, and those that are simply shortcuts to actual commands. In a way similar to Vim, these shortcuts are generally a verb followed by an object. For example, typing `mn` ([m]ake [n]ote), is used to create a new note: it will switch the interface to command line mode and pre-fill it with `mknote ""` from where the title of the note can be entered. See below for the full list of default shortcuts:
 
@@ -272,7 +272,7 @@ delete | Deletes the selected item
 toggle_console | Toggle the console
 toggle_metadata | Toggle note metadata
 
-# Commands
+## Commands
 
 The following commands are available in [command-line mode](#command-line-mode):
 
@@ -742,7 +742,7 @@ version
 	Displays version information
 ```
 
-# License
+## License
 
 Copyright (c) 2016-2023 Laurent Cozic
 
