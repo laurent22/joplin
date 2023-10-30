@@ -444,7 +444,7 @@ export default class Resource extends BaseItem {
 
 		await Note.save({
 			title: _('Attachment conflict: "%s"', resource.title),
-			body: _('There was a [conflict](%s) on the attachment below.\n\n%s', 'https://joplinapp.org/conflict/', Resource.markdownTag(conflictResource)),
+			body: _('There was a [conflict](%s) on the attachment below.\n\n%s', 'https://joplinapp.org/help/apps/conflict', Resource.markdownTag(conflictResource)),
 			parent_id: await this.resourceConflictFolderId(),
 		}, { changeSource: ItemChange.SOURCE_SYNC });
 	}

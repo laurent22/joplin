@@ -26,4 +26,4 @@ Access your notes on your phone or tablet from the Android and iOS apps.
 
 ## More Joplin Versions
 
-For other options, such as the portable application, terminal application or Android APK file, see the [full installation details](https://github.com/laurent22/joplin/blob/dev/README.md#installation).
+For other options, such as the portable application, terminal application or Android APK file, see the [full installation details](https://github.com/laurent22/joplin/blob/dev/readme/install.md).

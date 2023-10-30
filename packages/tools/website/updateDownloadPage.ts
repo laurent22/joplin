@@ -2,7 +2,7 @@ import { readFile } from 'fs-extra';
 import { rootDir, insertContentIntoFile } from '../tool-utils';
 
 async function getReadmeMd() {
-	return readFile(`${rootDir}/README.md`, 'utf8');
+	return readFile(`${rootDir}/readme/install.md`, 'utf8');
 }
 
 async function createDownloadButtonsHtml(readmeMd: string): Promise<Record<string, string>> {

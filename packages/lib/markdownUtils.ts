@@ -27,6 +27,11 @@ export interface MarkdownTableRow {
 	[key: string]: string;
 }
 
+export interface MarkdownTable {
+	header: MarkdownTableHeader[];
+	rows: MarkdownTableRow[];
+}
+
 const markdownUtils = {
 	// Titles for markdown links only need escaping for [ and ]
 	escapeTitleText(text: string) {

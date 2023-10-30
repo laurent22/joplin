@@ -473,7 +473,7 @@ function NoteEditor(props: NoteEditorProps) {
 	}
 
 	const onRichTextReadMoreLinkClick = useCallback(() => {
-		bridge().openExternal('https://joplinapp.org/rich_text_editor');
+		bridge().openExternal('https://joplinapp.org/help/apps/rich_text_editor');
 	}, []);
 
 	const onRichTextDismissLinkClick = useCallback(() => {

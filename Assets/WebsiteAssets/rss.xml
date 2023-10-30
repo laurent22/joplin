@@ -42,8 +42,8 @@
 <p>This is just an overview of the main features. The full changelog is available there:</p>
 <ul>
 <li>Desktop: <a href="https://joplinapp.org/changelog">https://joplinapp.org/changelog</a></li>
-<li>Android: <a href="https://joplinapp.org/changelog_android">https://joplinapp.org/changelog_android</a></li>
-<li>iOS: <a href="https://joplinapp.org/changelog_ios">https://joplinapp.org/changelog_ios</a></li>
+<li>Android: <a href="https://joplinapp.org/help/about/changelog/android">https://joplinapp.org/help/about/changelog/android</a></li>
+<li>iOS: <a href="https://joplinapp.org/help/about/changelog/ios">https://joplinapp.org/help/about/changelog/ios</a></li>
 </ul>
 ]]></description><link>https://joplinapp.org/news/20230508-release-2-12/</link><guid isPermaLink="false">20230508-release-2-12</guid><pubDate>Wed, 06 Sep 2023 12:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 2.12</twitter-text></item><item><title><![CDATA[What's new in Joplin 2.11]]></title><description><![CDATA[<h2>Desktop<a name="desktop" href="#desktop" class="heading-anchor">🔗</a></h2>
 <h3>Add support for plugin user data<a name="add-support-for-plugin-user-data" href="#add-support-for-plugin-user-data" class="heading-anchor">🔗</a></h3>
@@ -72,8 +72,8 @@
 <p>This is just an overview of the main features. The full changelog is available there:</p>
 <ul>
 <li>Desktop: <a href="https://joplinapp.org/changelog">https://joplinapp.org/changelog</a></li>
-<li>Android: <a href="https://joplinapp.org/changelog_android">https://joplinapp.org/changelog_android</a></li>
-<li>iOS: <a href="https://joplinapp.org/changelog_ios">https://joplinapp.org/changelog_ios</a></li>
+<li>Android: <a href="https://joplinapp.org/help/about/changelog/android">https://joplinapp.org/help/about/changelog/android</a></li>
+<li>iOS: <a href="https://joplinapp.org/help/about/changelog/ios">https://joplinapp.org/help/about/changelog/ios</a></li>
 </ul>
 ]]></description><link>https://joplinapp.org/news/20230508-release-2-11/</link><guid isPermaLink="false">20230508-release-2-11</guid><pubDate>Fri, 14 Jul 2023 12:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 2.11</twitter-text></item><item><title><![CDATA[What's new in Joplin 2.10]]></title><description><![CDATA[<p>Great news! Joplin 2.10 is here and we've made some amazing improvements and bug fixes, with a focus on the mobile app.</p>
 <h1>New design for &quot;New note&quot; and &quot;New to-do&quot; buttons<a name="new-design-for-new-note-and-new-to-do-buttons" href="#new-design-for-new-note-and-new-to-do-buttons" class="heading-anchor">🔗</a></h1>
@@ -181,8 +181,8 @@
 <p>As always, a lot of work went into the Android and iOS app too, which include 37 improvements, bug fixes, and security fixes.</p>
 <p>See here for the changelogs:</p>
 <ul>
-<li><a href="https://joplinapp.org/changelog/">Desktop app changelog</a></li>
-<li><a href="https://joplinapp.org/changelog_android/">Android app changelog</a></li>
+<li><a href="https://joplinapp.org/help/about/changelog">Desktop app changelog</a></li>
+<li><a href="https://joplinapp.org/help/about/changelog/android/">Android app changelog</a></li>
 </ul>
 <h2>About the Android version<a name="about-the-android-version" href="#about-the-android-version" class="heading-anchor">🔗</a></h2>
 <p>Unfortunately we cannot publish the Android version because it is based on a framework version that Google does not accept. To upgrade the app a lot of changes are needed and another round of pre-releases, and therefore there will not be a 2.9 version for Google Play. You may however download the official APK directly from there: <a href="https://github.com/laurent22/joplin-android/releases/tag/android-v2.9.8">Android 2.9 Official Release</a></p>
@@ -232,7 +232,7 @@
 <p>To make use of this feature, simply select <strong>Also publish linked notes</strong> when publishing a note.</p>
 <p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20220606-publish-website.png" alt=""></p>
 <h1>And more!<a name="and-more" href="#and-more" class="heading-anchor">🔗</a></h1>
-<p>In total there are 38 changes to improve the app reliability, security and usability. Full changelog is at <a href="https://joplinapp.org/changelog/">https://joplinapp.org/changelog/</a></p>
+<p>In total there are 38 changes to improve the app reliability, security and usability. Full changelog is at <a href="https://joplinapp.org/help/about/changelog">https://joplinapp.org/help/about/changelog</a></p>
 ]]></description><link>https://joplinapp.org/news/20220606-release-2-8/</link><guid isPermaLink="false">20220606-release-2-8</guid><pubDate>Mon, 06 Jun 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Joplin received 6 Contributor Projects for GSoC 2022!]]></title><description><![CDATA[<p>We are glad to announce that Google allocated us six projects this year for Google Summer of Code! So this is six contributors who will be working on various parts of the apps, both desktop and mobile, over the summer.</p>
 <p>Over the next few weeks, till 13 June, will be the Community Bonding Period during which GSoC contributors get to know mentors, read documentation, and get up to speed to begin working on their projects.</p>
 <p>Here's the full list of projects, contributors and mentors.</p>
@@ -291,7 +291,7 @@
 <p>In the coming month (<strong>March 7 - April 3</strong>), contributors will start getting involved in the forum and start discussing project ideas with the mentors and community. It's also a good time to start looking at Joplin's source code, perhaps work on fixing bugs or implement small features to get familiar with the source code, and to show us your skills.</p>
 <p>One difference with previous years is that anyone, not just students, are allowed to participate.</p>
 <p>Additionally, last year Google only allowed smaller projects, while this year they allow again small and large projects, so we've indicated this in the idea list - the small ones are <strong>175 hours</strong>, and the large ones <strong>350 hours</strong>.</p>
-]]></description><link>https://joplinapp.org/news/20220308-gsoc2022-start/</link><guid isPermaLink="false">20220308-gsoc2022-start</guid><pubDate>Tue, 08 Mar 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Joplin 2.7 is available!]]></title><description><![CDATA[<p>This new release is largely focused on bug fixing and optimising various parts of the apps. There's about 26 improvements and 25 bugs and security fixes included - as always many of these apply to both the mobile and desktop app (see the <a href="https://joplinapp.org/changelog/">desktop changelog</a> and <a href="https://joplinapp.org/changelog_android/">mobile changelog</a>).</p>
+]]></description><link>https://joplinapp.org/news/20220308-gsoc2022-start/</link><guid isPermaLink="false">20220308-gsoc2022-start</guid><pubDate>Tue, 08 Mar 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Joplin 2.7 is available!]]></title><description><![CDATA[<p>This new release is largely focused on bug fixing and optimising various parts of the apps. There's about 26 improvements and 25 bugs and security fixes included - as always many of these apply to both the mobile and desktop app (see the <a href="https://joplinapp.org/help/about/changelog">desktop changelog</a> and <a href="https://joplinapp.org/help/about/changelog/android/">mobile changelog</a>).</p>
 <p>Many thanks to all the contributors who helped create this release!</p>
 <p>Below are some of the more noticeable changes:</p>
 <h1>Notebook custom icons<a name="notebook-custom-icons" href="#notebook-custom-icons" class="heading-anchor">🔗</a></h1>
@@ -336,8 +336,8 @@
 <p>Exporting a single note as HTML is now more user friendly as all images, scripts, styles and other attachments are all packed into a single HTML file (Previously it would create multiples files and directories). This makes it easier to share the complete note with someone who doesn't have Joplin.</p>
 <p><strong>Other changes and bug fixes</strong></p>
 <p>This release includes a total of 19 new features and improvements and 16 bug fixes. See the 2.6.x changelogs for more details:</p>
-<p><a href="https://joplinapp.org/changelog/">https://joplinapp.org/changelog/</a></p>
-<p><a href="https://joplinapp.org/changelog_android/">https://joplinapp.org/changelog_android/</a></p>
-<p><a href="https://joplinapp.org/changelog_ios/">https://joplinapp.org/changelog_ios/</a></p>
-<p><a href="https://joplinapp.org/changelog_cli/">https://joplinapp.org/changelog_cli/</a></p>
+<p><a href="https://joplinapp.org/help/about/changelog">https://joplinapp.org/help/about/changelog</a></p>
+<p><a href="https://joplinapp.org/help/about/changelog/android/">https://joplinapp.org/help/about/changelog/android/</a></p>
+<p><a href="https://joplinapp.org/help/about/changelog/ios/">https://joplinapp.org/help/about/changelog/ios/</a></p>
+<p><a href="https://joplinapp.org/help/about/changelog/cli/">https://joplinapp.org/help/about/changelog/cli/</a></p>
 ]]></description><link>https://joplinapp.org/news/20211217-120324/</link><guid isPermaLink="false">20211217-120324</guid><pubDate>Fri, 17 Dec 2021 12:03:24 GMT</pubDate><twitter-text></twitter-text></item></channel></rss>
