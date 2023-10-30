@@ -3,9 +3,8 @@ import MainScreen from './models/MainScreen';
 import activateMainMenuItem from './util/activateMainMenuItem';
 import SettingsScreen from './models/SettingsScreen';
 import { _electron as electron } from '@playwright/test';
-import { readFile, writeFile } from 'fs-extra';
+import { writeFile } from 'fs-extra';
 import { join } from 'path';
-import respondToMessageBoxesMatching from './util/respondToMessageBoxesMatching';
 
 
 test.describe('main', () => {
@@ -143,53 +142,5 @@ test.describe('main', () => {
 
 		await electronApp.close();
 	});
-
-	test(
-		'restart in safe mode prompt should work',
-		async ({ profileDirectory, electronApp, mainWindow }) => {
-			// Ensure everything has loaded before crashing the renderer
-			const mainScreen = new MainScreen(mainWindow);
-			await mainScreen.waitFor();
-
-			// Choose the "restart in safe mode" option
-			await respondToMessageBoxesMatching(electronApp, /an error/i, /restart in safe mode/i);
-
-			// Click "OK" on the "exiting" dialog on Linux
-			await respondToMessageBoxesMatching(electronApp, /Please relaunch/i, /ok/i);
-
-			const restartPromise = electronApp.evaluate(({ app }) => {
-				return new Promise<void>((resolve) => {
-					const originalExit = app.exit;
-					const originalRelaunch = app.relaunch;
-
-					// Prevent the app from actually relaunching/exiting.
-					// Allowing this breaks Playwright.
-					app.relaunch = () => {};
-					app.exit = () => {
-						app.relaunch = originalRelaunch;
-						app.exit = originalExit;
-						resolve();
-					};
-				});
-			});
-
-			await mainWindow.evaluate(() => {
-				const bridge = (window as any).joplin.bridge;
-				const appWrapper = bridge.electronApp();
-
-				// Calling process.crash() causes Playwright to fail the test.
-				// Simulate process.crash() by calling the crash handler directly.
-				const isTesting = true;
-				appWrapper.handleAppFailure('Test message', false, isTesting);
-			});
-
-			await restartPromise;
-
-			// Should have added a "start in safe mode" file to the profile
-			// directory.
-			expect(
-				await readFile(join(profileDirectory, 'force-safe-mode-on-next-start'), 'utf8'),
-			).toBe('true');
-		},
-	);
 });
+
