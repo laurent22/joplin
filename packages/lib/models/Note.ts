@@ -9,7 +9,6 @@ import { NoteEntity } from '../services/database/types';
 import Tag from './Tag';
 const { sprintf } = require('sprintf-js');
 import Resource from './Resource';
-import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import { toFileProtocolPath, toForwardSlashes } from '../path-utils';
 const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
 const { _ } = require('../locale');
@@ -722,7 +721,7 @@ export default class Note extends BaseItem {
 		// Trying to fix: https://github.com/laurent22/joplin/issues/3893
 		const oldNote = !isNew && o.id ? await Note.load(o.id) : null;
 
-		syncDebugLog.info('Save Note: P:', oldNote);
+		// this.logger().info('Save Note: P:', oldNote);
 
 		let beforeNoteJson = null;
 		if (oldNote && this.revisionService().isOldNote(o.id)) {
@@ -755,7 +754,9 @@ export default class Note extends BaseItem {
 			}
 		}
 
-		syncDebugLog.info('Save Note: N:', o);
+		// if (o.title === undefined) o.title = '';
+
+		// this.logger().info('Save Note: N:', o);
 
 		const note = await super.save(o, options);
 
@@ -778,7 +779,7 @@ export default class Note extends BaseItem {
 			});
 		}
 
-		if (note.title !== '') {
+		if (note.title) {
 			await this.saveToFile(note);
 		}
 

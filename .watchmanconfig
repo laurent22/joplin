@@ -1,0 +1,11 @@
+{
+  "ignore_dirs": ["node_modules"],
+  "watch": ["packages"],
+  "triggers": [
+    {
+      "name": "ts-file-changes",
+      "expression": ["allof", ["suffix", "ts"], ["suffix", "tsx"]],
+      "command": ["yarn", "tsc"]
+    }
+  ]
+}

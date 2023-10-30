@@ -10,7 +10,7 @@ import Setting from '../../models/Setting';
 import { Mutex } from 'async-mutex';
 import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
 import ItemChange from '../../models/ItemChange';
-import BaseItem from '../../models/BaseItem';
+import BaseItem, { unwantedCharacters } from '../../models/BaseItem';
 
 interface Shared {
 	noteExists?: (noteId: string)=> Promise<boolean>;
@@ -60,6 +60,7 @@ shared.saveNoteButton_press = async function(comp: any, folderId: string = null,
 	const releaseMutex = await saveNoteMutex_.acquire();
 
 	let note = { ...comp.state.note };
+	// reg.logger().info('saveNoteButton_press', note.title);
 
 	const recreatedNote = await shared.handleNoteDeletedWhileEditing_(note);
 	if (recreatedNote) note = recreatedNote;
@@ -84,6 +85,7 @@ shared.saveNoteButton_press = async function(comp: any, folderId: string = null,
 	const hasAutoTitle = comp.state.newAndNoTitleChangeNoteId || (isProvisionalNote && !note.title);
 	if (hasAutoTitle && options.autoTitle) {
 		note.title = Note.defaultTitle(note.body);
+		note.title = note.title.replace(unwantedCharacters, '');
 		if (saveOptions.fields && saveOptions.fields.indexOf('title') < 0) saveOptions.fields.push('title');
 	}
 
@@ -171,7 +173,15 @@ shared.noteComponent_change = function(comp: any, propName: string, propValue: a
 	const newState: any = {};
 
 	const note = { ...comp.state.note };
+	if (propName === 'body' && comp.state.newAndNoTitleChangeNoteId) {
+		note.title = Note.defaultTitle(note.body);
+		note.title = note.title.replace(unwantedCharacters, '');
+	}
 	note[propName] = propValue;
+	if (propName === 'title') {
+		note.title = note.title.replace(unwantedCharacters, '');
+	}
+	// reg.logger().info('noteComponent_change note title:', note.title);
 	newState.note = note;
 
 	comp.setState(newState);

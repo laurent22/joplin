@@ -1,4 +1,4 @@
-package net.cozic.joplin;
+package net.cozic.joplinx;
 
 import android.app.Application;
 import android.database.CursorWindow;
@@ -15,9 +15,9 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
 
-import net.cozic.joplin.share.SharePackage;
-import net.cozic.joplin.ssl.SslPackage;
-import net.cozic.joplin.textinput.TextInputPackage;
+import net.cozic.joplinx.share.SharePackage;
+import net.cozic.joplinx.ssl.SslPackage;
+import net.cozic.joplinx.textinput.TextInputPackage;
 
 import java.lang.reflect.Field;
 import java.util.List;

@@ -1,4 +1,4 @@
-package net.cozic.joplin.share;
+package net.cozic.joplinx.share;
 
 import android.app.Activity;
 import android.content.ContentResolver;

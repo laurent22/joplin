@@ -105,9 +105,9 @@ android {
     //     javaMaxHeapSize "4g"
     // }
 
-    namespace "net.cozic.joplin"
+    namespace "net.cozic.joplinx"
     defaultConfig {
-        applicationId "net.cozic.joplin"
+        applicationId "net.cozic.joplinx"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 		versionCode 2097722
@@ -152,7 +152,7 @@ android {
         debug {
             signingConfig signingConfigs.debug
             applicationIdSuffix = '.D'
-//             manifestPlaceholders.appName = "Joplin.D"
+//             manifestPlaceholders.appName = "JoplinX"
         }
         release {
             // Caution! In production, you need to generate your own keystore file.

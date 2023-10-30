@@ -1,4 +1,4 @@
-package net.cozic.joplin.textinput;
+package net.cozic.joplinx.textinput;
 
 import android.text.Selection;
 

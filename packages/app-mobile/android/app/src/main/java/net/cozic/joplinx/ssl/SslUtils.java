@@ -1,4 +1,4 @@
-package net.cozic.joplin.ssl;
+package net.cozic.joplinx.ssl;
 
 import android.annotation.SuppressLint;
 

@@ -1,4 +1,4 @@
-package net.cozic.joplin;
+package net.cozic.joplinx;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

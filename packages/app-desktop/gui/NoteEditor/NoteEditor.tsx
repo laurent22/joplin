@@ -42,12 +42,12 @@ import NoteRevisionViewer from '../NoteRevisionViewer';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { ModelType } from '@joplin/lib/BaseModel';
-import BaseItem from '@joplin/lib/models/BaseItem';
+import BaseItem, { unwantedCharacters } from '@joplin/lib/models/BaseItem';
 import { ErrorCode } from '@joplin/lib/errors';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import CodeMirror6 from './NoteBody/CodeMirror/v6/CodeMirror';
 import CodeMirror5 from './NoteBody/CodeMirror/v5/CodeMirror';
-import path = require('path');
+// import path = require('path');
 
 const commands = [
 	require('./commands/showRevisions'),
@@ -266,9 +266,10 @@ function NoteEditor(props: NoteEditorProps) {
 			// Note was changed, but another note was loaded before save - skipping
 			// The previously loaded note, that was modified, will be saved via saveNoteIfWillChange()
 		} else {
-			if (newNote.title.indexOf(path.sep) >= 0) {
-				newNote.title = newNote.title.replace(new RegExp(path.sep, 'g'), ' ');
-			}
+			newNote.title = newNote.title.replace(unwantedCharacters, '');
+			// if (newNote.title.indexOf(path.sep) >= 0) {
+			// 	newNote.title = newNote.title.replace(new RegExp(path.sep, 'g'), ' ');
+			// }
 			setFormNote(newNote);
 			// save note every 60 seconds
 			if (tDiff > 60) {

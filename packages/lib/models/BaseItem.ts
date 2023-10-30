@@ -22,6 +22,8 @@ const grayMatter = require('gray-matter');
 const { sprintf } = require('sprintf-js');
 const moment = require('moment');
 
+export const unwantedCharacters = /[?:"*|/\\<>]/g;
+
 export interface ItemsThatNeedDecryptionResult {
 	hasMore: boolean;
 	items: any[];
@@ -161,9 +163,7 @@ export default class BaseItem extends BaseModel {
 			if (createDir !== null) await createDir(path_);
 			path_ += path.sep;
 		}
-		if (local.title && local.title.indexOf(path.sep) >= 0) {
-			local.title = local.title.replace(new RegExp(path.sep, 'g'), ' ');
-		}
+		local.title = local.title.replace(unwantedCharacters, '');
 		return path_ + this.fileNameFS(local);
 	}
 

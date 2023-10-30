@@ -35,12 +35,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "net.cozic.joplin",
+    package = "net.cozic.joplinx",
 )
 
 android_resource(
     name = "res",
-    package = "net.cozic.joplin",
+    package = "net.cozic.joplinx",
     res = "src/main/res",
 )
 
