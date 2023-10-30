@@ -65,7 +65,7 @@ First of all, please read the above referenced resources and the [GSoC FAQ](http
 
 1. Join the [Joplin Forum](https://discourse.joplinapp.org), introduce yourself in a structured manner, share your GitHub username, and meet your fellow developers in the [GSoC category](https://discourse.joplinapp.org/c/gsoc). The subject of the topic shall contain your username, e.g. _Introducing \<username>_.
 2. Read Contributor proposal guidelines and the [GSoC Contributor/Student Guide](https://google.github.io/gsocguides/student/)
-3. Take a look at the [list of ideas](https://joplinapp.org/gsoc2023/ideas/). You can have you own idea added by posting it in the [Features category](https://discourse.joplinapp.org/c/features)
+3. Take a look at the [list of ideas](https://github.com/laurent22/joplin/blob/dev/readme/dev/gsoc/gsoc2023/ideas.md). You can have you own idea added by posting it in the [Features category](https://discourse.joplinapp.org/c/features)
 4. Come up with project that you're interested in and discuss it in [Features category](https://discourse.joplinapp.org/c/features)
 5. Write a first draft and get someone to review it
 6. Remember: you must link to work such as commits in your proposal. A private place will be created within the forum for that purposes.

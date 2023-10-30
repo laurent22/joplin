@@ -126,7 +126,7 @@ You will subscribe to the relevant tags in the forum to discuss ideas. You will 
 Finally, know that we will never assign you to a project you do not want to work on. We will not assign you more projects than you can/want to take on either. And you will have a backup mentor, just in case something unforeseen takes place.
 
 ## Ideas
+
 Please see below for a list of project ideas:
 
-https://joplinapp.org/help/dev/gsoc/gsod2020/ideas/
-
+https://github.com/laurent22/joplin/blob/dev/readme/dev/gsoc/gsod2020/ideas.md
