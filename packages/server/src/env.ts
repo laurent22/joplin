@@ -111,8 +111,8 @@ const defaultEnvValues: EnvVariables = {
 	// ==================================================
 
 	LDAP_1_ENABLED: false,
-	LDAP_1_CREATE_USER: true,
-	LDAP_1_SERVER: '', // ldap server in following format ldap(s)://servername:port
+	LDAP_1_USER_AUTO_CREATION: true, // if set to true, users will be created on the fly with data from ldap
+	LDAP_1_HOST: '', // ldap server in following format ldap(s)://servername:port
 	LDAP_1_MAIL_ATTRIBUTE: 'mail',
 	LDAP_1_FULLNAME_ATTRIBUTE: 'displayName',
 	LDAP_1_BASE_DN: '',
@@ -120,8 +120,8 @@ const defaultEnvValues: EnvVariables = {
 	LDAP_1_BIND_PW: '', // used for user search - leave empty if ldap server allows anonymous bind
 
 	LDAP_2_ENABLED: false,
-	LDAP_2_CREATE_USER: true,
-	LDAP_2_SERVER: '', // ldap server in following format ldap(s)://servername:port
+	LDAP_2_USER_AUTO_CREATION: true, // if set to true, users will be created on the fly after ldap authentication
+	LDAP_2_HOST: '', // ldap server in following format ldap(s)://servername:port
 	LDAP_2_MAIL_ATTRIBUTE: 'mail',
 	LDAP_2_FULLNAME_ATTRIBUTE: 'fullName',
 	LDAP_2_BASE_DN: '',
@@ -187,8 +187,8 @@ export interface EnvVariables {
 	USER_DATA_AUTO_DELETE_AFTER_DAYS: number;
 
 	LDAP_1_ENABLED: boolean;
-	LDAP_1_CREATE_USER: boolean;
-	LDAP_1_SERVER: string;
+	LDAP_1_USER_AUTO_CREATION: boolean;
+	LDAP_1_HOST: string;
 	LDAP_1_MAIL_ATTRIBUTE: string;
 	LDAP_1_FULLNAME_ATTRIBUTE: string;
 	LDAP_1_BASE_DN: string;
@@ -196,8 +196,8 @@ export interface EnvVariables {
 	LDAP_1_BIND_PW: string;
 
 	LDAP_2_ENABLED: boolean;
-	LDAP_2_CREATE_USER: boolean;
-	LDAP_2_SERVER: string;
+	LDAP_2_USER_AUTO_CREATION: boolean;
+	LDAP_2_HOST: string;
 	LDAP_2_MAIL_ATTRIBUTE: string;
 	LDAP_2_FULLNAME_ATTRIBUTE: string;
 	LDAP_2_BASE_DN: string;

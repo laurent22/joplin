@@ -2,9 +2,11 @@ import { Client } from 'ldapts';
 import { User } from '../services/database/types';
 import Logger from '@joplin/utils/Logger';
 import { LdapConfig } from './types';
+import { ErrorForbidden } from './errors';
+
+const logger = Logger.create('LDAP');
 
 export default async function ldapLogin(email: string, password: string, user: User, config: LdapConfig): Promise<User> {
-	const logger = Logger.create('LDAP');
 
 	const enabled = config.enabled;
 	const userCreation = config.userCreation;
@@ -18,8 +20,7 @@ export default async function ldapLogin(email: string, password: string, user: U
 	logger.info(`Starting authentication with Server ${host}`);
 
 	if (password === '') {
-		logger.error('no password entered');
-		throw new Error('no password entered');
+		throw new ErrorForbidden('no password entered');
 	}
 
 	if (enabled) {
@@ -33,8 +34,9 @@ export default async function ldapLogin(email: string, password: string, user: U
 		if (bindDN.length !== 0) {
 			try {
 				await client.bind(bindDN, bindPW);
-			} catch (ex) {
-				throw new Error('Could not bind to LDAP server.');
+			} catch (error) {
+				error.message = `Could not bind to the ldap server ${host}: ${error.message}`;
+				throw error;
 			}
 		}
 
@@ -43,9 +45,9 @@ export default async function ldapLogin(email: string, password: string, user: U
 				filter: `(${mailAttribute}=${email})`,
 				attributes: ['dn', fullNameAttribute],
 			});
-		} catch (ex) {
-			logger.error(`Could not search ldap server ${host}`);
-			return null;
+		} catch (error) {
+			error.message = `Could not search the ldap server ${host}: ${error.message}`;
+			throw error;
 		}
 
 		if (bindDN.length !== 0) {
@@ -54,8 +56,9 @@ export default async function ldapLogin(email: string, password: string, user: U
 
 		try {
 			await client.bind(searchResults.searchEntries[0].dn, password);
-		} catch (ex) {
-			return null;
+		} catch (error) {
+			error.message = `Could not bind to the ldap server ${host}: ${error.message}`;
+			throw error;
 		} finally {
 			await client.unbind();
 		}

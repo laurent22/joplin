@@ -27,9 +27,10 @@ import changeEmailConfirmationTemplate from '../views/emails/changeEmailConfirma
 import changeEmailNotificationTemplate from '../views/emails/changeEmailNotificationTemplate';
 import { NotificationKey } from './NotificationModel';
 import prettyBytes = require('pretty-bytes');
-import { Env } from '../utils/types';
-import config from '../config';
-import ldapLogin from '../utils/ldap';
+import { Config, Env, LdapConfig } from '../utils/types';
+import ldapLogin from '../utils/ldapLogin';
+import { DbConnection } from '../db';
+import { NewModelFactoryHandler } from './factory';
 
 const logger = Logger.create('UserModel');
 
@@ -115,6 +116,14 @@ export function accountTypeToString(accountType: AccountType): string {
 
 export default class UserModel extends BaseModel<User> {
 
+	private ldapConfig_: LdapConfig[];
+
+	public constructor(db: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
+		super(db, modelFactory, config);
+
+		this.ldapConfig_ = config.ldap;
+	}
+
 	public get tableName(): string {
 		return 'users';
 	}
@@ -126,9 +135,9 @@ export default class UserModel extends BaseModel<User> {
 
 	public async login(email: string, password: string): Promise<User> {
 		const user = await this.loadByEmail(email);
-		const ldap_config = config().ldap;
+		// const ldapConfig = config().ldap;
 
-		for (const config of ldap_config) {
+		for (const config of this.ldapConfig_) {
 			if (config.enabled) {
 				const ldapUser = await ldapLogin(email, password, user, config);
 				if (ldapUser && !user) {

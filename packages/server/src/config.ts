@@ -112,28 +112,33 @@ function baseUrlFromEnv(env: EnvVariables, appPort: number): string {
 }
 
 function ldapConfigFromEnv(env: EnvVariables): LdapConfig[] {
-	return [
-		{
+	const ldapConfig = [];
+	if (env.LDAP_1_ENABLED) {
+		ldapConfig.push({
 			enabled: env.LDAP_1_ENABLED,
-			userCreation: env.LDAP_1_CREATE_USER,
-			host: env.LDAP_1_SERVER,
+			userCreation: env.LDAP_1_USER_AUTO_CREATION,
+			host: env.LDAP_1_HOST,
 			mailAttribute: env.LDAP_1_MAIL_ATTRIBUTE,
 			fullNameAttribute: env.LDAP_1_FULLNAME_ATTRIBUTE,
 			baseDN: env.LDAP_1_BASE_DN,
 			bindDN: env.LDAP_1_BIND_DN,
 			bindPW: env.LDAP_1_BIND_PW,
-		},
-		{
+		});
+	}
+
+	if (env.LDAP_2_ENABLED) {
+		ldapConfig.push({
 			enabled: env.LDAP_2_ENABLED,
-			userCreation: env.LDAP_2_CREATE_USER,
-			host: env.LDAP_2_SERVER,
+			userCreation: env.LDAP_2_USER_AUTO_CREATION,
+			host: env.LDAP_2_HOST,
 			mailAttribute: env.LDAP_2_MAIL_ATTRIBUTE,
 			fullNameAttribute: env.LDAP_2_FULLNAME_ATTRIBUTE,
 			baseDN: env.LDAP_2_BASE_DN,
 			bindDN: env.LDAP_2_BIND_DN,
 			bindPW: env.LDAP_2_BIND_PW,
-		},
-	];
+		});
+	}
+	return ldapConfig;
 }
 
 let config_: Config = null;
