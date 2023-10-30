@@ -1,7 +1,3 @@
----
-sidebar_position: 2
----
-
 # Joplin Data API
 
 This API is available when the clipper server is running. It provides access to the notes, notebooks, tags and other Joplin object via a REST API. Plugins can also access this API even when the clipper server is not running.

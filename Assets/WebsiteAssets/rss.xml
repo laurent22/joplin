@@ -41,9 +41,9 @@
 <h2>Full changelog<a name="full-changelog" href="#full-changelog" class="heading-anchor">🔗</a></h2>
 <p>This is just an overview of the main features. The full changelog is available there:</p>
 <ul>
-<li>Desktop: <a href="https://joplinapp.org/changelog">https://joplinapp.org/changelog</a></li>
-<li>Android: <a href="https://joplinapp.org/help/about/changelog/android">https://joplinapp.org/changelog_android</a></li>
-<li>iOS: <a href="https://joplinapp.org/help/about/changelog/ios">https://joplinapp.org/changelog_ios</a></li>
+<li>Desktop: <a href="https://joplinapp.org/help/about/changelog/desktop">https://joplinapp.org/help/about/changelog/desktop</a></li>
+<li>Android: <a href="https://joplinapp.org/help/about/changelog/android">https://joplinapp.org/help/about/changelog/android</a></li>
+<li>iOS: <a href="https://joplinapp.org/help/about/changelog/ios">https://joplinapp.org/help/about/changelog/ios</a></li>
 </ul>
 ]]></description><link>https://joplinapp.org/news/20230508-release-2-12</link><guid isPermaLink="false">20230508-release-2-12</guid><pubDate>Wed, 06 Sep 2023 12:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 2.12</twitter-text></item><item><title><![CDATA[What's new in Joplin 2.11]]></title><description><![CDATA[<h2>Desktop<a name="desktop" href="#desktop" class="heading-anchor">🔗</a></h2>
 <h3>Add support for plugin user data<a name="add-support-for-plugin-user-data" href="#add-support-for-plugin-user-data" class="heading-anchor">🔗</a></h3>
@@ -71,7 +71,7 @@
 <h2>Full changelog<a name="full-changelog" href="#full-changelog" class="heading-anchor">🔗</a></h2>
 <p>This is just an overview of the main features. The full changelog is available there:</p>
 <ul>
-<li>Desktop: <a href="https://joplinapp.org/changelog">https://joplinapp.org/changelog</a></li>
+<li>Desktop: <a href="https://joplinapp.org/help/about/changelog/desktop">https://joplinapp.org/help/about/changelog/desktop</a></li>
 <li>Android: <a href="https://joplinapp.org/help/about/changelog/android">https://joplinapp.org/help/about/changelog/android</a></li>
 <li>iOS: <a href="https://joplinapp.org/help/about/changelog/ios">https://joplinapp.org/help/about/changelog/ios</a></li>
 </ul>
@@ -287,7 +287,7 @@
 <li><strong>Plugin and external apps</strong> - leverage the Joplin API to create plugins and external apps.</li>
 <li>And of course contributors are welcome to suggest their own ideas.</li>
 </ul>
-<p>Our full idea list is available here: <a href="https://joplinapp.org/gsoc2022/ideas/">GSoC 2022 idea list</a></p>
+<p>Our full idea list is available here: <a href="https://joplinapp.org/help/dev/gsoc/gsoc2022/ideas">GSoC 2022 idea list</a></p>
 <p>In the coming month (<strong>March 7 - April 3</strong>), contributors will start getting involved in the forum and start discussing project ideas with the mentors and community. It's also a good time to start looking at Joplin's source code, perhaps work on fixing bugs or implement small features to get familiar with the source code, and to show us your skills.</p>
 <p>One difference with previous years is that anyone, not just students, are allowed to participate.</p>
 <p>Additionally, last year Google only allowed smaller projects, while this year they allow again small and large projects, so we've indicated this in the idea list - the small ones are <strong>175 hours</strong>, and the large ones <strong>350 hours</strong>.</p>
