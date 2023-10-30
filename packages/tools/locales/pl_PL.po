@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
 "|| n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -1322,9 +1322,8 @@ msgid "Delete plugin \"%s\"?"
 msgstr "Usunąć wtyczkę \"%s\"?"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:102
-#, fuzzy
 msgid "Delete profile \"%s\""
-msgstr "Usunąć notatkę \"%s\"?"
+msgstr "Usuń profil “%s”"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:438
 #, fuzzy
@@ -4963,9 +4962,8 @@ msgid "Tools"
 msgstr "Narzędzia"
 
 #: packages/server/src/routes/admin/users.ts:149
-#, fuzzy
 msgid "Total Size"
-msgstr "Rozmiar rzeczywisty"
+msgstr "Łączny rozmiar"
 
 #: packages/lib/services/ReportService.ts:285
 msgid "Total: %d/%d"
