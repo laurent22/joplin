@@ -71,6 +71,7 @@ interface StartOptions {
 	keychainEnabled?: boolean;
 	setupGlobalLogger?: boolean;
 }
+export const safeModeFlagFilename = 'force-safe-mode-on-next-start';
 
 export default class BaseApplication {
 
@@ -725,7 +726,7 @@ export default class BaseApplication {
 			Setting.setValue('isSafeMode', true);
 		}
 
-		const safeModeFlagFile = join(profileDir, 'force-safe-mode-on-next-start');
+		const safeModeFlagFile = join(profileDir, safeModeFlagFilename);
 		if (await fs.pathExists(safeModeFlagFile) && fs.readFileSync(safeModeFlagFile, 'utf8') === 'true') {
 			appLogger.info(`Safe mode enabled because of file: ${safeModeFlagFile}`);
 			Setting.setValue('isSafeMode', true);

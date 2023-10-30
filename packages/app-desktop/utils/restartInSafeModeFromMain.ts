@@ -1,10 +1,11 @@
 import Setting from '@joplin/lib/models/Setting';
 import bridge from '../bridge';
 import processStartFlags from '@joplin/lib/utils/processStartFlags';
-import BaseApplication from '@joplin/lib/BaseApplication';
+import BaseApplication, { safeModeFlagFilename } from '@joplin/lib/BaseApplication';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 import { writeFile } from 'fs-extra';
 import { join } from 'path';
+
 
 const restartInSafeModeFromMain = async () => {
 	// Only set constants here -- the main process doesn't have easy access (without loading
@@ -23,7 +24,7 @@ const restartInSafeModeFromMain = async () => {
 	const { profileDir } = await initProfile(rootProfileDir);
 
 	// We can't access the database, so write to a file instead.
-	const safeModeFlagFile = join(profileDir, 'force-safe-mode-on-next-start');
+	const safeModeFlagFile = join(profileDir, safeModeFlagFilename);
 	await writeFile(safeModeFlagFile, 'true', 'utf8');
 
 	bridge().restart();

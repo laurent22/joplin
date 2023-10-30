@@ -415,6 +415,7 @@ packages/app-desktop/utils/checkForUpdatesUtils.test.js
 packages/app-desktop/utils/checkForUpdatesUtils.js
 packages/app-desktop/utils/checkForUpdatesUtilsTestData.js
 packages/app-desktop/utils/markupLanguageUtils.js
+packages/app-desktop/utils/restartInSafeModeFromMain.test.js
 packages/app-desktop/utils/restartInSafeModeFromMain.js
 packages/app-mobile/PluginAssetsLoader.js
 packages/app-mobile/components/ActionButton.js
