@@ -1,5 +1,11 @@
 # Joplin iOS Changelog
 
+## [ios-v12.13.3](https://github.com/laurent22/joplin/releases/tag/ios-v12.13.3) - 2023-10-30T22:21:13Z
+
+- Improved: Allow searching by note ID or using a callback URL (3667bf3)
+- Improved: Updated packages @react-native-community/datetimepicker (v7.6.0), react-native-device-info (v10.11.0), react-native-webview (v13.6.2)
+- Fixed: Beta editor: Fix image timestamps not updated after editing (#9176) (#9175 by Henry Heino)
+
 ## [ios-v12.13.2](https://github.com/laurent22/joplin/releases/tag/ios-v12.13.2) - 2023-10-24T18:40:49Z
 
 - New: Add share button to log screen (#8364 by Henry Heino)
