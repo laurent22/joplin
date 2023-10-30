@@ -1,5 +1,11 @@
 # Joplin Android Changelog
 
+## [android-v2.13.5](https://github.com/laurent22/joplin/releases/tag/android-v2.13.5) (Pre-release) - 2023-10-30T22:49:19Z
+
+- Improved: Allow searching by note ID or using a callback URL (3667bf3)
+- Improved: Updated packages @react-native-community/datetimepicker (v7.6.0), react-native-device-info (v10.11.0), react-native-webview (v13.6.2)
+- Fixed: Beta editor: Fix image timestamps not updated after editing (#9176) (#9175 by Henry Heino)
+
 ## [android-v2.13.4](https://github.com/laurent22/joplin/releases/tag/android-v2.13.4) (Pre-release) - 2023-10-24T18:29:09Z
 
 - Improved: Allow modifying a resource metadata only when synchronising (#9114)
