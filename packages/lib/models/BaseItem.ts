@@ -1,5 +1,5 @@
 import { ModelType, DeleteOptions } from '../BaseModel';
-import { BaseItemEntity, DeletedItemEntity, NoteEntity } from '../services/database/types';
+import { BaseItemEntity, DeletedItemEntity, NoteEntity, SyncItemEntity } from '../services/database/types';
 import Setting from './Setting';
 import BaseModel from '../BaseModel';
 import time from '../time';
@@ -192,6 +192,14 @@ export default class BaseItem extends BaseModel {
 			output.push(temp[i].item_id);
 		}
 		return output;
+	}
+
+	public static async syncItem(syncTarget: number, itemId: string, options: LoadOptions = null): Promise<SyncItemEntity> {
+		options = {
+			fields: '*',
+			...options,
+		};
+		return await this.db().selectOne(`SELECT ${this.db().escapeFieldsToString(options.fields)} FROM sync_items WHERE sync_target = ? AND item_id = ?`, [syncTarget, itemId]);
 	}
 
 	public static async allSyncItems(syncTarget: number) {

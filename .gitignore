@@ -609,12 +609,14 @@ packages/lib/import-enex.js
 packages/lib/initLib.js
 packages/lib/locale.test.js
 packages/lib/locale.js
+packages/lib/makeDiscourseDebugUrl.js
 packages/lib/markdownUtils.test.js
 packages/lib/markdownUtils.js
 packages/lib/markdownUtils2.test.js
 packages/lib/markupLanguageUtils.js
 packages/lib/migrations/42.js
 packages/lib/models/Alarm.js
+packages/lib/models/BaseItem.test.js
 packages/lib/models/BaseItem.js
 packages/lib/models/Folder.sharing.test.js
 packages/lib/models/Folder.test.js
@@ -640,6 +642,7 @@ packages/lib/models/SmartFilter.js
 packages/lib/models/Tag.js
 packages/lib/models/dateTimeFormats.test.js
 packages/lib/models/settings/FileHandler.js
+packages/lib/models/utils/isItemId.js
 packages/lib/models/utils/itemCanBeEncrypted.js
 packages/lib/models/utils/paginatedFeed.js
 packages/lib/models/utils/paginationToSql.js

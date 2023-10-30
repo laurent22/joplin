@@ -2814,9 +2814,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/autocomplete@npm:6.9.1":
-  version: 6.9.1
-  resolution: "@codemirror/autocomplete@npm:6.9.1"
+"@codemirror/autocomplete@npm:6.9.2":
+  version: 6.9.2
+  resolution: "@codemirror/autocomplete@npm:6.9.2"
   dependencies:
     "@codemirror/language": ^6.0.0
     "@codemirror/state": ^6.0.0
@@ -2827,7 +2827,7 @@ __metadata:
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.0.0
     "@lezer/common": ^1.0.0
-  checksum: 96dad7a12429bf61e6f1bf75da731bf0dcbfeb56c33400b60a0de22049226e0926a53a174e84701812a235f8f144595ce53f0928054481bdf9cdc2ed3b8be20f
+  checksum: 8bdf06c2b4eb1cd6c8a6e1df2eb5c92011fda0bc8970f9d68cc8dad8e4f9d3c243aaa3e42505252af542be8bbaf0a3ed7e23a6b7f603171077cc36845e188190
   languageName: node
   linkType: hard
 
@@ -4666,7 +4666,7 @@ __metadata:
     "@types/jest": 29.5.4
     "@types/mustache": 4.2.3
     "@types/node": 18.17.19
-    "@types/react": 18.2.24
+    "@types/react": 18.2.31
     "@types/react-redux": 7.1.27
     "@types/styled-components": 5.1.28
     async-mutex: 0.4.0
@@ -4692,7 +4692,7 @@ __metadata:
     md5: 2.3.0
     moment: 2.29.4
     mustache: 4.2.0
-    nan: 2.17.0
+    nan: 2.18.0
     node-fetch: 2.6.7
     node-notifier: 10.0.1
     node-rsa: 1.1.1
@@ -4744,7 +4744,7 @@ __metadata:
     "@js-draw/material-icons": 1.5.0
     "@lezer/highlight": 1.1.4
     "@react-native-community/clipboard": 1.5.1
-    "@react-native-community/datetimepicker": 7.5.0
+    "@react-native-community/datetimepicker": 7.6.0
     "@react-native-community/geolocation": 3.1.0
     "@react-native-community/netinfo": 9.4.1
     "@react-native-community/push-notification-ios": 1.11.0
@@ -4754,7 +4754,7 @@ __metadata:
     "@tsconfig/react-native": 2.0.2
     "@types/fs-extra": 11.0.2
     "@types/jest": 29.5.4
-    "@types/react": 18.2.24
+    "@types/react": 18.2.31
     "@types/react-native": 0.70.6
     "@types/react-redux": 7.1.27
     "@types/tar-stream": 2.2.3
@@ -4786,7 +4786,7 @@ __metadata:
     react: 18.2.0
     react-native: 0.71.10
     react-native-camera: 4.2.1
-    react-native-device-info: 10.9.0
+    react-native-device-info: 10.11.0
     react-native-dialogbox: 0.6.10
     react-native-document-picker: 9.0.1
     react-native-dropdownalert: 5.1.0
@@ -4811,7 +4811,7 @@ __metadata:
     react-native-vector-icons: 10.0.0
     react-native-version-info: 1.1.1
     react-native-vosk: 0.1.12
-    react-native-webview: 13.6.0
+    react-native-webview: 13.6.2
     react-native-zip-archive: 6.1.0
     react-redux: 8.1.3
     react-test-renderer: 18.2.0
@@ -4837,7 +4837,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/editor@workspace:packages/editor"
   dependencies:
-    "@codemirror/autocomplete": 6.9.1
+    "@codemirror/autocomplete": 6.9.2
     "@codemirror/commands": 6.2.5
     "@codemirror/lang-cpp": 6.0.2
     "@codemirror/lang-html": 6.4.6
@@ -4856,7 +4856,7 @@ __metadata:
     "@replit/codemirror-vim": 6.0.14
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.4
-    "@types/react": 18.2.24
+    "@types/react": 18.2.31
     "@types/react-redux": 7.1.27
     "@types/styled-components": 5.1.28
     jest: 29.6.3
@@ -4939,8 +4939,8 @@ __metadata:
     "@types/nanoid": 3.0.0
     "@types/node": 18.17.19
     "@types/node-rsa": 1.1.2
-    "@types/react": 18.2.24
-    "@types/uuid": 9.0.4
+    "@types/react": 18.2.31
+    "@types/uuid": 9.0.5
     async-mutex: 0.4.0
     base-64: 1.0.0
     base64-stream: 1.0.0
@@ -5011,8 +5011,8 @@ __metadata:
     "@joplin/lib": ~2.13
     "@types/jest": 29.5.4
     "@types/pdfjs-dist": 2.10.378
-    "@types/react": 18.2.24
-    "@types/react-dom": 18.2.8
+    "@types/react": 18.2.31
+    "@types/react-dom": 18.2.14
     "@types/styled-components": 5.1.28
     async-mutex: 0.4.0
     babel-jest: 29.6.4
@@ -5143,11 +5143,11 @@ __metadata:
     "@types/jest-expect-message": 1.0.4
     "@types/jsdom": 21.1.3
     "@types/koa": 2.13.9
-    "@types/markdown-it": 12.2.3
+    "@types/markdown-it": 13.0.0
     "@types/mustache": 4.2.3
     "@types/nodemailer": 6.4.11
-    "@types/uuid": 9.0.4
-    "@types/yargs": 17.0.26
+    "@types/uuid": 9.0.5
+    "@types/yargs": 17.0.28
     "@types/zxcvbn": 4.4.2
     bcryptjs: 2.4.3
     bulma: 0.9.4
@@ -5169,7 +5169,7 @@ __metadata:
     nanoid: 2.1.11
     node-cron: 3.0.2
     node-mocks-http: 1.13.0
-    nodemailer: 6.9.5
+    nodemailer: 6.9.6
     nodemon: 3.0.1
     pg: 8.11.3
     pretty-bytes: 5.6.0
@@ -5202,7 +5202,7 @@ __metadata:
     "@types/mustache": 4.2.3
     "@types/node": 18.17.19
     "@types/node-fetch": 2.6.6
-    "@types/yargs": 17.0.26
+    "@types/yargs": 17.0.28
     compare-versions: 6.1.0
     dayjs: 1.11.10
     execa: 4.1.0
@@ -5221,7 +5221,7 @@ __metadata:
     relative: 3.0.2
     request: 2.88.2
     rss: 1.2.2
-    sass: 1.66.1
+    sass: 1.67.0
     sharp: 0.32.6
     source-map-support: 0.5.21
     sqlite3: 5.1.6
@@ -7198,12 +7198,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/datetimepicker@npm:7.5.0":
-  version: 7.5.0
-  resolution: "@react-native-community/datetimepicker@npm:7.5.0"
+"@react-native-community/datetimepicker@npm:7.6.0":
+  version: 7.6.0
+  resolution: "@react-native-community/datetimepicker@npm:7.6.0"
   dependencies:
     invariant: ^2.2.4
-  checksum: 579a32a7e8efa489ff2fbbb918429b55164a49585aaa46ce6ef49f5bbdfe6bea4ad354da82f437d54e0ffd38ccd85a32b744d61f1bfe79cc9ed6de0c737ae307
+  checksum: 029b37eba026137f49cfcc257025f78fecdd2aa621df326acf1763087cc586db18b311feb0e54f2524927a9b91210af411c1c50912bee795776f0f62e80ed47e
   languageName: node
   linkType: hard
 
@@ -8147,13 +8147,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/markdown-it@npm:12.2.3":
-  version: 12.2.3
-  resolution: "@types/markdown-it@npm:12.2.3"
+"@types/markdown-it@npm:13.0.0":
+  version: 13.0.0
+  resolution: "@types/markdown-it@npm:13.0.0"
   dependencies:
     "@types/linkify-it": "*"
     "@types/mdurl": "*"
-  checksum: 868824a3e4d00718ba9cd4762cf16694762a670860f4b402e6e9f952b6841a2027488bdc55d05c2b960bf5078df21a9d041270af7e8949514645fe88fdb722ac
+  checksum: 7bcf45d0a1c2bc2c28f91460af571b9e8a195d4983cda809af04bf1d400f98902c71849b7cb8c036e35a3be7fa2483117d4faeab24a7de059e04be3e9f641aff
   languageName: node
   linkType: hard
 
@@ -8346,12 +8346,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:18.2.8":
-  version: 18.2.8
-  resolution: "@types/react-dom@npm:18.2.8"
+"@types/react-dom@npm:18.2.14":
+  version: 18.2.14
+  resolution: "@types/react-dom@npm:18.2.14"
   dependencies:
     "@types/react": "*"
-  checksum: d36264631028d021b73cd9e015f10b95c4959ae1ce8f7a7419f318d1f05b1d063e6afffcd2a349a6bccd64ccc9ee9d2d976e1f0437643f0e7db621fa035bca65
+  checksum: 890289c70d1966c168037637c09cacefe6205bdd27a33252144a6b432595a2943775ac1a1accac0beddaeb67f8fdf721e076acb1adc990b08e51c3d9fd4e780c
   languageName: node
   linkType: hard
 
@@ -8405,14 +8405,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:18.2.24":
-  version: 18.2.24
-  resolution: "@types/react@npm:18.2.24"
+"@types/react@npm:18.2.31":
+  version: 18.2.31
+  resolution: "@types/react@npm:18.2.31"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: ea5d8204e71b1c9c6631f429a93f8e7be0614cdbdb464e92b3181bdccd8a7c45e30ded8b13da726684b6393f651317c36d54832e3d3cdea0da480a3f26268909
+  checksum: b11be8e39174d3303e308461400889e353e422d22b01d09795b2c35b7b99d5351716503d9ec5c58e4c2c871249603fa52840d45a34fb5901dd7a26e06129c716
   languageName: node
   linkType: hard
 
@@ -8522,10 +8522,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:9.0.4":
-  version: 9.0.4
-  resolution: "@types/uuid@npm:9.0.4"
-  checksum: 356e2504456eaebbc43a5af5ca6c07d71f5ae5520b5767cb1c62cd0ec55475fc4ee3d16a2874f4a5fce78e40e8583025afd3a7d9ba41f82939de310665f53f0e
+"@types/uuid@npm:9.0.5":
+  version: 9.0.5
+  resolution: "@types/uuid@npm:9.0.5"
+  checksum: 7577940949619768303c0bf0a7cc235fac3cfae1c0bb4a2e85bfb87b2eb1024955ab446f775394d259442cd769b663b6ce43c39bdfc955d946bf833804ddb421
   languageName: node
   linkType: hard
 
@@ -8543,12 +8543,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:17.0.26":
-  version: 17.0.26
-  resolution: "@types/yargs@npm:17.0.26"
+"@types/yargs@npm:17.0.28":
+  version: 17.0.28
+  resolution: "@types/yargs@npm:17.0.28"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: 26611969674f4972080c3b22239d4579eaadc5287f95f7802f893c4a9bb292c141467bd70f1e66eb834486c63a23c4f10032618b3d2e7b1ddc05051d08db4078
+  checksum: f78c5e5c29903933c0557b4ffcd1d0b8564d66859c8ca4aa51da3714e49109ed7c2644334a1918d033df19028f4cecc91fd2e502651bb8e8451f246c371da847
   languageName: node
   linkType: hard
 
@@ -25827,7 +25827,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nan@npm:2.17.0, nan@npm:^2.12.1":
+"nan@npm:2.18.0":
+  version: 2.18.0
+  resolution: "nan@npm:2.18.0"
+  dependencies:
+    node-gyp: latest
+  checksum: 4fe42f58456504eab3105c04a5cffb72066b5f22bd45decf33523cb17e7d6abc33cca2a19829407b9000539c5cb25f410312d4dc5b30220167a3594896ea6a0a
+  languageName: node
+  linkType: hard
+
+"nan@npm:^2.12.1":
   version: 2.17.0
   resolution: "nan@npm:2.17.0"
   dependencies:
@@ -26296,10 +26305,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemailer@npm:6.9.5":
-  version: 6.9.5
-  resolution: "nodemailer@npm:6.9.5"
-  checksum: e39282795e09f0685691b1511f74e2dc4703ba6ecd55d964c2f8a1b54591e5b284228c90cd6a203b498a5a1ea2610415306e8d7eda0b3cd9ebdcb210f05b2846
+"nodemailer@npm:6.9.6":
+  version: 6.9.6
+  resolution: "nodemailer@npm:6.9.6"
+  checksum: f5a8b438fb2f077bf04661fe2f4d2f73ea9df278bab7bde62e03a7ab8c28830182223090a73c5de571e8501bbfed06eb3917010a5729fe8572e2f79fe6d9464c
   languageName: node
   linkType: hard
 
@@ -29258,12 +29267,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-device-info@npm:10.9.0":
-  version: 10.9.0
-  resolution: "react-native-device-info@npm:10.9.0"
+"react-native-device-info@npm:10.11.0":
+  version: 10.11.0
+  resolution: "react-native-device-info@npm:10.11.0"
   peerDependencies:
     react-native: "*"
-  checksum: 529404d80da56b88deaea0294e7a372159d027e1eb55a91ecd46d1281d04a36197f8ba8bfe56dbd786c89dd2e64b4f7cb0784513f003724289ac3af7f8b7a9d8
+  checksum: 3f2de34df4e95e87291673fe69b09d3b96f9088177a8dadd92eccec86549cea63ca08ab82f120d4150eb0302ac721ad8a5e4b3a8136c9f54f0212e4c055762b0
   languageName: node
   linkType: hard
 
@@ -29542,16 +29551,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-webview@npm:13.6.0":
-  version: 13.6.0
-  resolution: "react-native-webview@npm:13.6.0"
+"react-native-webview@npm:13.6.2":
+  version: 13.6.2
+  resolution: "react-native-webview@npm:13.6.2"
   dependencies:
     escape-string-regexp: 2.0.0
     invariant: 2.2.4
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: f7220fb18dcf5e9631674831ac8beb3bc4b99863f812676c25394a3cce487975b05c8fc795b0ee4ff1ead43da304ddea104f5e6683ea3f4c3a135b14ae193069
+  checksum: 20cbad5bf47410f8aabab3c12610770204edb26b9ad8690f2f868c6b784a84b05231718bae2ea72a2ac2ebcbc0af89fe05a37b56615c4e8363f9aafadbe64b5a
   languageName: node
   linkType: hard
 
@@ -31135,16 +31144,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:1.66.1":
-  version: 1.66.1
-  resolution: "sass@npm:1.66.1"
+"sass@npm:1.67.0":
+  version: 1.67.0
+  resolution: "sass@npm:1.67.0"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
     immutable: ^4.0.0
     source-map-js: ">=0.6.2 <2.0.0"
   bin:
     sass: sass.js
-  checksum: 74fc11d0fcd5e16c5331b57dd59865705a299c64e89f2b99646869caeb011dc8d0b6144a6c74a90c264e9ef70654207dbf44fc9b7e3393f8bd14809b904c8a52
+  checksum: 9e7566e8b7386cf265dddcdb266a023fb5759c5a8f48a11da199c8bf419e5f08f4ff6404d85d6bf5eac01e1f7c7061fdb6b7b65cbfda164e59b0a06b72ac8567
   languageName: node
   linkType: hard
 

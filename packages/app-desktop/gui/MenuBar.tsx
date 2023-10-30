@@ -9,6 +9,7 @@ import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import versionInfo from '@joplin/lib/versionInfo';
+import makeDiscourseDebugUrl from '@joplin/lib/makeDiscourseDebugUrl';
 import { ImportModule } from '@joplin/lib/services/interop/Module';
 import InteropServiceHelper from '../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
@@ -316,14 +317,30 @@ function useMenu(props: Props) {
 			bridge().showErrorMessageBox(error.message);
 		}
 
-		if (errors.length) {
-			bridge().showErrorMessageBox('There was some errors importing the notes. Please check the console for more details.');
-			props.dispatch({ type: 'NOTE_DEVTOOLS_SET', value: true });
-		}
-
 		void CommandService.instance().execute('hideModalMessage');
+
+		if (errors.length) {
+			const response = bridge().showErrorMessageBox('There was some errors importing the notes - check the console for more details.\n\nPlease consider sending a bug report to the forum!', {
+				buttons: [_('Close'), _('Send bug report')],
+			});
+
+			props.dispatch({ type: 'NOTE_DEVTOOLS_SET', value: true });
+
+			if (response === 1) {
+				const url = makeDiscourseDebugUrl(
+					`Error importing notes from format: ${module.format}`,
+					`- Input format: ${module.format}\n- Output format: ${module.outputFormat}`,
+					errors,
+					packageInfo,
+					PluginService.instance(),
+					props.pluginSettings,
+				);
+
+				void bridge().openExternal(url);
+			}
+		}
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [props.selectedFolderId]);
+	}, [props.selectedFolderId, props.pluginSettings]);
 
 	const onMenuItemClickRef = useRef(null);
 	onMenuItemClickRef.current = onMenuItemClick;
