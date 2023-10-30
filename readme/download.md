@@ -22,7 +22,7 @@ To synchronise your notes on all your devices, whether it's on desktop, mobile o
 
 Access your notes on your phone or tablet from the Android and iOS apps.
 
-<!-- MOBILE-DOWNLOAD-LINKS --><a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeAndroid.png'/></a> <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeIOS.png'/></a><!-- MOBILE-DOWNLOAD-LINKS -->
+<!-- MOBILE-DOWNLOAD-LINKS --><a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' style="max-height: 40px;" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeAndroid.png'/></a> <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' style="max-height: 40px;" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeIOS.png'/></a><!-- MOBILE-DOWNLOAD-LINKS -->
 
 ## More Joplin Versions
 
