@@ -2,7 +2,9 @@
 [![Donate using PayPal](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?business=E8JMYD2LQ8MMA&no_recurring=0&item_name=I+rely+on+donations+to+maintain+and+improve+the+Joplin+open+source+project.+Thank+you+for+your+help+-+it+makes+a+difference%21&currency_code=EUR) [![Sponsor on GitHub](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg)](https://github.com/sponsors/laurent22/) [![Become a patron](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg)](https://www.patreon.com/joplin) [![Donate using IBAN](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg)](https://joplinapp.org/donate/#donations)
 <!-- DONATELINKS -->
 
-<img width="64" src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/LinuxIcons/256x256.png" align="left" style="margin-right:15px"/> <b>Joplin</b> is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](#markdown).
+<img width="64" src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/LinuxIcons/256x256.png" align="left" style="margin-right:15px"/>
+
+**Joplin** is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](https://github.com/laurent22/joplin/blob/dev/readme/apps/markdown.md).
 
 Notes exported from Evernote [can be imported](https://github.com/laurent22/joplin/blob/dev/readme/apps/import_export.md) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
 
@@ -18,7 +20,13 @@ The application is available for Windows, Linux, macOS, Android and iOS. A [Web 
 
 # Help and documentation
 
-For more information about the applications, see the [Joplin documentation](https://joplinapp.org)
+For more information about the applications, see the [full Joplin documentation](https://joplinapp.org)
+
+# Donations
+
+Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.
+
+Please see the [donation page](https://github.com/laurent22/joplin/blob/dev/readme/about/donate.md) for information on how to support the development of Joplin.
 
 # Sponsors
 
@@ -38,12 +46,6 @@ For more information about the applications, see the [Joplin documentation](http
 | <img width="50" src="https://avatars2.githubusercontent.com/u/765564?s=96&v=4"/></br>[taskcruncher](https://github.com/taskcruncher) | <img width="50" src="https://avatars2.githubusercontent.com/u/333944?s=96&v=4"/></br>[tateisu](https://github.com/tateisu) |       |       |
 <!-- SPONSORS-GITHUB -->
 	
-# Donations
-
-Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.
-
-Please see the [donation page](https://github.com/laurent22/joplin/blob/dev/readme/about/donate.md) for information on how to support the development of Joplin.
-
 # Community
 
 Name | Description
@@ -58,7 +60,7 @@ Name | Description
 
 # Contributing
 
-Please see the guide for information on how to contribute to the development of Joplin: https://github.com/laurent22/joplin/blob/dev/CONTRIBUTING.md
+Please see the guide for information on how to contribute to the development of Joplin: https://github.com/laurent22/joplin/blob/dev/readme/dev/index.md
 
 # Contributors
 
