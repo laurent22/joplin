@@ -51,6 +51,7 @@ import VoiceTypingDialog from '../voiceTyping/VoiceTypingDialog';
 import { voskEnabled } from '../../services/voiceTyping/vosk';
 import { isSupportedLanguage } from '../../services/voiceTyping/vosk.android';
 import { ChangeEvent as EditorChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
+import { join } from 'path';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 // import Vosk from 'react-native-vosk';
@@ -829,13 +830,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 			throw new Error('No resource is loaded in the editor');
 		}
 
-		const resourcePath = Resource.fullPath(resource);
+		logger.info('Saving drawing to resource', resource.id);
 
-		const filePath = resourcePath;
-		await shim.fsDriver().writeFile(filePath, svgData, 'utf8');
-		logger.info('Saved drawing to', filePath);
+		const tempFilePath = join(Setting.value('tempDir'), uuid.createNano());
+		await shim.fsDriver().writeFile(tempFilePath, svgData, 'utf8');
 
-		resource = await Resource.save(resource, { isNew: false });
+		resource = await Resource.updateResourceBlobContent(
+			resource.id,
+			tempFilePath,
+		);
+		await shim.fsDriver().remove(tempFilePath);
+
 		await this.refreshResource(resource);
 	}
 
