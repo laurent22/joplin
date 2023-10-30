@@ -100,19 +100,21 @@ const config = {
 					{
 						to: 'https://discourse.joplinapp.org',
 						label: 'Forum',
-						position: 'right',						
+						position: 'right',
 					},
 					{
 						to: process.env.WEBSITE_BASE_URL + '/plans',
 						label: 'Joplin Cloud',
 						position: 'right',
 						className: 'navbar-custom-buttons plans-button',
+						target: '_self',
 					},
 					{
 						to: process.env.WEBSITE_BASE_URL + '/donate',
 						label: '♡ Support us',
 						position: 'right',
 						className: 'navbar-custom-buttons sponsor-button',
+						target: '_self',
 					},
 				],
 			},
