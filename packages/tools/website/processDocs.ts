@@ -12,6 +12,7 @@ import markdownUtils, { MarkdownTable } from '@joplin/lib/markdownUtils';
 import { readmeFileTitle } from './utils/parser';
 import { chdir } from 'process';
 import yargs = require('yargs');
+import { extractOpenGraphTags } from './utils/openGraph';
 
 const md5File = require('md5-file');
 const htmlparser2 = require('@joplin/fork-htmlparser2');
@@ -370,10 +371,14 @@ const processMarkdownFile = async (sourcePath: string, destPath: string, context
 		mdAndFrontMatter.header.date = formatted;
 	}
 
+	const og = await extractOpenGraphTags(sourcePath);
+	mdAndFrontMatter.header.title = og.title;
+	mdAndFrontMatter.header.description = og.description;
+	if (og.image) mdAndFrontMatter.header.image = og.image;
+
 	mdAndFrontMatter.doc = mdAndFrontMatter.doc.replace(/^# (.*)\n/, `# $1\n\n${context.donateLinks}\n\n`);
 
 	if (mdAndFrontMatter.header.forum_url) {
-		// mdAndFrontMatter.doc +=  `\n\n* * *\n\n[<i class="fab fa-discourse"></i> Discuss on the forum](${mdAndFrontMatter.header.forum_url})`;
 		mdAndFrontMatter.doc += `\n\n* * *\n\n[<icon icon="fa-brands fa-discourse" size="lg" /> Discuss on the forum](${mdAndFrontMatter.header.forum_url})`;
 	}
 

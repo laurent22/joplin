@@ -13,6 +13,9 @@ export interface FrontMatter {
 	sidebar_label?: string;
 	sidebar_position?: number;
 	date?: string;
+	title?: string;
+	description?: string;
+	image?: string;
 }
 
 export interface MarkdownAndFrontMatter {

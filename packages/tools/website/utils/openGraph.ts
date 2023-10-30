@@ -28,13 +28,13 @@ const getImageUrl = (content: string): string | null => {
 	return imageUrl;
 };
 
-export const extractOpenGraphTags = async (sourcePath: string, url: string): Promise<OpenGraphTags> => {
+export const extractOpenGraphTags = async (sourcePath: string, url?: string): Promise<OpenGraphTags> => {
 	const doc = await readmeFileTitleAndBody(sourcePath);
 
 	const output: OpenGraphTags = {
 		title: substrWithEllipsis(doc.title, 0, 70),
 		description: substrWithEllipsis(markupToHtml().stripMarkup(MarkupLanguage.Markdown, doc.body), 0, 200),
-		url,
+		url: url ? url : '',
 	};
 
 	const imageUrl = getImageUrl(doc.body);
