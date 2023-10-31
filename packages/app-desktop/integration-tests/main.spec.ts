@@ -2,6 +2,9 @@ import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import activateMainMenuItem from './util/activateMainMenuItem';
 import SettingsScreen from './models/SettingsScreen';
+import { _electron as electron } from '@playwright/test';
+import { writeFile } from 'fs-extra';
+import { join } from 'path';
 
 
 test.describe('main', () => {
@@ -121,4 +124,23 @@ test.describe('main', () => {
 
 		expect(await nextExternalUrlPromise).toBe(linkHref);
 	});
+
+	test('should start in safe mode if profile-dir/force-safe-mode-on-next-start exists', async ({ profileDirectory }) => {
+		await writeFile(join(profileDirectory, 'force-safe-mode-on-next-start'), 'true', 'utf8');
+
+		// We need to write to the force-safe-mode file before opening the Electron app.
+		// Open the app ourselves:
+		const startupArgs = [
+			'main.js', '--env', 'dev', '--profile', profileDirectory,
+		];
+		const electronApp = await electron.launch({ args: startupArgs });
+		const mainWindow = await electronApp.firstWindow();
+
+		const safeModeDisableLink = mainWindow.getByText('Disable safe mode and restart');
+		await safeModeDisableLink.waitFor();
+		await expect(safeModeDisableLink).toBeInViewport();
+
+		await electronApp.close();
+	});
 });
+
