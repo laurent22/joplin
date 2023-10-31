@@ -12,7 +12,7 @@ Due to the decentralised nature of Joplin, E2EE needs to be manually enabled on 
 
 To enable it, please follow these steps:
 
-1. On your first device (eg. on the desktop application), go to the Encryption Config screen and click "Enable encryption"
+1. On your first device (eg. on the desktop application), go to the Encryption  [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md) and click "Enable encryption"
 2. Input your password. This is the Master Key password which will be used to encrypt all your notes. Make sure you do not forget it since, for security reason, it cannot be recovered.
 3. Now you need to synchronise all your notes so that they are sent encrypted to the sync target (eg. to OneDrive, Nextcloud, etc.). Wait for any synchronisation that might be in progress and click on "Synchronise".
 4. Wait for this synchronisation operation to complete. Since all the data needs to be re-sent (encrypted) to the sync target, it may take a long time, especially if you have many notes and resources. Note that even if synchronisation seems stuck, most likely it is still running - do not cancel it and simply let it run over night if needed.
