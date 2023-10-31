@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
 "|| n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -138,9 +138,8 @@ msgstr "%d notatki spełniają wzór. Usunąć je?"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:253
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:263
-#, fuzzy
 msgid "%s"
-msgstr "(%s)"
+msgstr "%s"
 
 #: packages/app-desktop/gui/MainScreen/commands/duplicateNote.ts:18
 msgid "%s - Copy"
@@ -205,9 +204,8 @@ msgstr "%s: %s"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:194
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:263
-#, fuzzy
 msgid "%s: Missing password."
-msgstr "Główne hasło"
+msgstr "%s: Brak hasła."
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
@@ -374,14 +372,12 @@ msgid "Always"
 msgstr "Zawsze"
 
 #: packages/lib/models/Setting.ts:1121
-#, fuzzy
 msgid "Always ask"
-msgstr "Zawsze"
+msgstr "Zawsze pytaj"
 
 #: packages/lib/models/Setting.ts:1122
-#, fuzzy
 msgid "Always resize"
-msgstr "Zawsze"
+msgstr "Zmień rozmiar"
 
 #: packages/app-cli/app/command-mv.js:36
 msgid ""
@@ -632,9 +628,8 @@ msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Nie można skopiować notatki do notatnika \"%s\""
 
 #: packages/app-mobile/components/screens/Notes.tsx:165
-#, fuzzy
 msgid "Cannot create a new note: %s"
-msgstr "Tworzy nową notatkę."
+msgstr "Nie można utworzyć notatki: %s"
 
 #: packages/app-cli/app/command-attach.js:21
 #: packages/app-cli/app/command-cat.js:25 packages/app-cli/app/command-cp.js:24
@@ -1155,9 +1150,8 @@ msgid "Creates a new to-do."
 msgstr "Tworzy nowe zadanie."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:112
-#, fuzzy
 msgid "Creating new note..."
-msgstr "Tworzenie nowego %s..."
+msgstr "Tworzenie nowej notatki..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:112
 #, fuzzy
@@ -1287,9 +1281,8 @@ msgstr ""
 "Usuń dane lokalne i pobierz je ponownie z miejsca docelowego synchronizacji"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:8
-#, fuzzy
 msgid "Delete note"
-msgstr "Usunąć notatkę?"
+msgstr "Usuń notatkę"
 
 #: packages/lib/models/Note.ts:778
 msgid "Delete note \"%s\"?"
@@ -1301,9 +1294,8 @@ msgid "Delete note?"
 msgstr "Usunąć notatkę?"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:9
-#, fuzzy
 msgid "Delete notebook"
-msgstr "Usunąć notatkę?"
+msgstr "Usuń notatnik"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:163
@@ -1330,9 +1322,8 @@ msgid "Delete plugin \"%s\"?"
 msgstr "Usunąć wtyczkę \"%s\"?"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:102
-#, fuzzy
 msgid "Delete profile \"%s\""
-msgstr "Usunąć notatkę \"%s\"?"
+msgstr "Usuń profil “%s”"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:438
 #, fuzzy
@@ -1595,9 +1586,8 @@ msgid "Duplicate line"
 msgstr "Duplikuj wiersz"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:456
-#, fuzzy
 msgid "Duplicate selected notes"
-msgstr "Duplikuj wiersz"
+msgstr "Duplikuj zaznaczone"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -2913,7 +2903,7 @@ msgstr "N"
 
 #: packages/lib/models/Setting.ts:1123
 msgid "Never resize"
-msgstr ""
+msgstr "Nie zmieniaj rozmiaru"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:8
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:121
@@ -3049,9 +3039,8 @@ msgid "Not generated"
 msgstr "Nie wygenerowano"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:91
-#, fuzzy
 msgid "Not now"
-msgstr "Zrób to teraz"
+msgstr "Nie teraz"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:120
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:142
@@ -3507,9 +3496,8 @@ msgid "Privacy Policy"
 msgstr "Polityka Prywatności"
 
 #: packages/lib/utils/joplinCloud.ts:364
-#, fuzzy
 msgid "Pro"
-msgstr "Profil"
+msgstr "Pro"
 
 #: packages/server/src/services/TaskService.ts:26
 msgid "Process failed payment subscriptions"
@@ -3528,9 +3516,8 @@ msgid "Profile"
 msgstr "Profil"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:96
-#, fuzzy
 msgid "Profile name"
-msgstr "Nazwa profilu:"
+msgstr "Nazwa profilu"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
 msgid "Profile name:"
@@ -3541,18 +3528,16 @@ msgid "Profile Version: %s"
 msgstr "Wersja profilu: %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:156
-#, fuzzy
 msgid "Profiles"
-msgstr "Profil"
+msgstr "Profile"
 
 #: packages/app-mobile/components/screens/Note.tsx:1170
 msgid "Properties"
 msgstr "Właściwości"
 
 #: packages/lib/models/Setting.ts:1543
-#, fuzzy
 msgid "Proxy enabled"
-msgstr "Aktywowano"
+msgstr "Proxy włączone"
 
 #: packages/lib/models/Setting.ts:1565
 msgid "Proxy timeout (seconds)"
@@ -3560,7 +3545,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.ts:1553
 msgid "Proxy URL"
-msgstr ""
+msgstr "Adres URL serwera proxy"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:238
 msgid "Public-private key pair:"
@@ -3828,9 +3813,8 @@ msgid "Save changes"
 msgstr "Zapisz zmiany"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:99
-#, fuzzy
 msgid "Save changes?"
-msgstr "Zapisz zmiany"
+msgstr "Zapisać zmiany?"
 
 #: packages/lib/models/Setting.ts:1024
 msgid "Save geo-location with notes"
@@ -4391,9 +4375,8 @@ msgid "Take photo"
 msgstr "Wykonaj zdjęcie"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:97
-#, fuzzy
 msgid "Task list"
-msgstr "Zadania"
+msgstr "Lista zadań"
 
 #: packages/server/src/services/MustacheService.ts:125
 #: packages/server/src/services/MustacheService.ts:279
@@ -4979,9 +4962,8 @@ msgid "Tools"
 msgstr "Narzędzia"
 
 #: packages/server/src/routes/admin/users.ts:149
-#, fuzzy
 msgid "Total Size"
-msgstr "Rozmiar rzeczywisty"
+msgstr "Łączny rozmiar"
 
 #: packages/lib/services/ReportService.ts:285
 msgid "Total: %d/%d"
@@ -4994,9 +4976,8 @@ msgstr "Spróbuj ponownie"
 
 #: packages/lib/utils/joplinCloud.ts:357 packages/lib/utils/joplinCloud.ts:379
 #: packages/lib/utils/joplinCloud.ts:401
-#, fuzzy
 msgid "Try it now"
-msgstr "Zrób to teraz"
+msgstr "Wypróbuj teraz"
 
 #: packages/app-cli/app/command-help.js:71
 msgid ""
@@ -5288,11 +5269,12 @@ msgstr ""
 "wyświetlone (limit: %s)."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:100
-#, fuzzy
 msgid ""
 "Warnings:\n"
 "%s"
-msgstr "Uwaga"
+msgstr ""
+"Uwaga:\n"
+"%s"
 
 #: packages/lib/models/Setting.ts:2604 packages/lib/utils/joplinCloud.ts:166
 msgid "Web Clipper"
@@ -5337,9 +5319,8 @@ msgstr ""
 "naciśnij `mn`."
 
 #: packages/lib/WelcomeUtils.ts:63
-#, fuzzy
 msgid "Welcome!"
-msgstr "Witaj"
+msgstr "Witaj!"
 
 #: packages/lib/models/Setting.ts:1100
 msgid "When creating a new note:"
