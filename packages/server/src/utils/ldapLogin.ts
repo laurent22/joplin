@@ -27,7 +27,7 @@ export default async function ldapLogin(email: string, password: string, user: U
 		let searchResults;
 		const client = new Client({
 			url: host,
-			timeout: 2000,
+			timeout: 5000,
 			connectTimeout: 1000,
 		});
 
@@ -45,6 +45,9 @@ export default async function ldapLogin(email: string, password: string, user: U
 				filter: `(${mailAttribute}=${email})`,
 				attributes: ['dn', fullNameAttribute],
 			});
+
+			if (searchResults.searchEntries.length === 0) return null;
+
 		} catch (error) {
 			error.message = `Could not search the ldap server ${host}: ${error.message}`;
 			throw error;
@@ -57,7 +60,8 @@ export default async function ldapLogin(email: string, password: string, user: U
 		try {
 			await client.bind(searchResults.searchEntries[0].dn, password);
 		} catch (error) {
-			error.message = `Could not bind to the ldap server ${host}: ${error.message}`;
+			if (error.code === 49) return null;
+			error.message = `Could not login ${host}: ${error.message}`;
 			throw error;
 		} finally {
 			await client.unbind();

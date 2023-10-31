@@ -135,7 +135,6 @@ export default class UserModel extends BaseModel<User> {
 
 	public async login(email: string, password: string): Promise<User> {
 		const user = await this.loadByEmail(email);
-		// const ldapConfig = config().ldap;
 
 		for (const config of this.ldapConfig_) {
 			if (config.enabled) {
