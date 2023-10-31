@@ -670,7 +670,6 @@ packages/lib/models/utils/userData.test.js
 packages/lib/models/utils/userData.js
 packages/lib/net-utils.js
 packages/lib/ntp.js
-packages/lib/onedrive-api.test.js
 packages/lib/onedrive-api.js
 packages/lib/path-utils.js
 packages/lib/reducer.js
@@ -886,7 +885,6 @@ packages/lib/services/synchronizer/utils/resourceRemotePath.js
 packages/lib/services/synchronizer/utils/syncDeleteStep.js
 packages/lib/services/synchronizer/utils/types.js
 packages/lib/shim.js
-packages/lib/testing/mockNetworkRequests.js
 packages/lib/testing/syncTargetUtils.js
 packages/lib/testing/test-utils-synchronizer.js
 packages/lib/testing/test-utils.js
