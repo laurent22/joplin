@@ -5,6 +5,7 @@ import createViewHandle from '../utils/createViewHandle';
 import WebviewController, { ContainerType } from '../WebviewController';
 import { ButtonSpec, ViewHandle, DialogResult } from './types';
 import { _ } from '../../../locale';
+import { JoplinViewsDialogs as JoplinViewsDialogsImplementation } from '../BasePlatformImplementation';
 
 /**
  * Allows creating and managing dialogs. A dialog is modal window that
@@ -39,7 +40,7 @@ export default class JoplinViewsDialogs {
 
 	private store: any;
 	private plugin: Plugin;
-	private implementation_: any;
+	private implementation_: JoplinViewsDialogsImplementation;
 
 	public constructor(implementation: any, plugin: Plugin, store: any) {
 		this.store = store;
@@ -71,6 +72,15 @@ export default class JoplinViewsDialogs {
 	 */
 	public async showMessageBox(message: string): Promise<number> {
 		return this.implementation_.showMessageBox(`${_('(In plugin: %s)', this.plugin.manifest.name)}\n\n${message}`);
+	}
+
+	/**
+	 * Displays a dialog to select a file or a directory. Same options and
+	 * output as
+	 * https://www.electronjs.org/docs/latest/api/dialog#dialogshowopendialogbrowserwindow-options
+	 */
+	public async showOpenDialog(options: any): Promise<any> {
+		return this.implementation_.showOpenDialog(options);
 	}
 
 	/**
