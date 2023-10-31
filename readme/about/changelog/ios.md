@@ -1,5 +1,10 @@
 # Joplin iOS Changelog
 
+## [ios-v12.13.4](https://github.com/laurent22/joplin/releases/tag/ios-v12.13.4) - 2023-10-31T20:38:31Z
+
+- Improved: Image editor: Allow loading from save when the image editor is reloaded in the background (#9135) (#9134 by Henry Heino)
+- Improved: Updated packages sass (v1.68.0)
+
 ## [ios-v12.13.3](https://github.com/laurent22/joplin/releases/tag/ios-v12.13.3) - 2023-10-30T22:21:13Z
 
 - Improved: Allow searching by note ID or using a callback URL (3667bf3)
