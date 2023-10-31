@@ -67,7 +67,7 @@ git checkout master
 git pull --rebase
 
 cd "$JOPLIN_ROOT_DIR"
-yarn crowdinDownload
+CROWDIN_PERSONAL_TOKEN="$CROWDIN_PERSONAL_TOKEN" yarn crowdinDownload
 yarn buildWebsite
 
 cd "$JOPLIN_WEBSITE_ROOT_DIR"
