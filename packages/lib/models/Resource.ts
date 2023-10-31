@@ -16,6 +16,8 @@ import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
 import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 import ShareService from '../services/share/ShareService';
 import { SaveOptions } from './utils/types';
+import { MarkupLanguage } from '@joplin/renderer';
+import { htmlentities } from '@joplin/utils/html';
 
 export default class Resource extends BaseItem {
 
@@ -231,18 +233,28 @@ export default class Resource extends BaseItem {
 		return { path: encryptedPath, resource: resourceCopy };
 	}
 
-	public static markdownTag(resource: any) {
+	public static markupTag(resource: any, markupLanguage: MarkupLanguage = MarkupLanguage.Markdown) {
 		let tagAlt = resource.alt ? resource.alt : resource.title;
 		if (!tagAlt) tagAlt = '';
 		const lines = [];
 		if (Resource.isSupportedImageMimeType(resource.mime)) {
-			lines.push('![');
-			lines.push(markdownUtils.escapeTitleText(tagAlt));
-			lines.push(`](:/${resource.id})`);
+			if (markupLanguage === MarkupLanguage.Markdown) {
+				lines.push('![');
+				lines.push(markdownUtils.escapeTitleText(tagAlt));
+				lines.push(`](:/${resource.id})`);
+			} else {
+				const altHtml = tagAlt ? `alt="${htmlentities(tagAlt)}"` : '';
+				lines.push(`<img src=":/${resource.id}" ${altHtml}/>`);
+			}
 		} else {
-			lines.push('[');
-			lines.push(markdownUtils.escapeTitleText(tagAlt));
-			lines.push(`](:/${resource.id})`);
+			if (markupLanguage === MarkupLanguage.Markdown) {
+				lines.push('[');
+				lines.push(markdownUtils.escapeTitleText(tagAlt));
+				lines.push(`](:/${resource.id})`);
+			} else {
+				const altHtml = tagAlt ? `alt="${htmlentities(tagAlt)}"` : '';
+				lines.push(`<a href=":/${resource.id}" ${altHtml}>${htmlentities(tagAlt ? tagAlt : resource.id)}</a>`);
+			}
 		}
 		return lines.join('');
 	}
@@ -444,7 +456,7 @@ export default class Resource extends BaseItem {
 
 		await Note.save({
 			title: _('Attachment conflict: "%s"', resource.title),
-			body: _('There was a [conflict](%s) on the attachment below.\n\n%s', 'https://joplinapp.org/help/apps/conflict', Resource.markdownTag(conflictResource)),
+			body: _('There was a [conflict](%s) on the attachment below.\n\n%s', 'https://joplinapp.org/help/apps/conflict', Resource.markupTag(conflictResource)),
 			parent_id: await this.resourceConflictFolderId(),
 		}, { changeSource: ItemChange.SOURCE_SYNC });
 	}

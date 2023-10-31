@@ -332,7 +332,7 @@ function shimInit(options = null) {
 	};
 
 	shim.attachFileToNoteBody = async function(noteBody, filePath, position = null, options = null) {
-		options = { createFileURL: false, ...options };
+		options = { createFileURL: false, markupLanguage: 1, ...options };
 
 		const { basename } = require('path');
 		const { escapeTitleText } = require('./markdownUtils').default;
@@ -353,7 +353,7 @@ function shimInit(options = null) {
 		if (noteBody && position) newBody.push(noteBody.substr(0, position));
 
 		if (!options.createFileURL) {
-			newBody.push(Resource.markdownTag(resource));
+			newBody.push(Resource.markupTag(resource, options.markupLanguage));
 		} else {
 			const filename = escapeTitleText(basename(filePath)); // to get same filename as standard drag and drop
 			const fileURL = `[${filename}](${toFileProtocolPath(filePath)})`;
@@ -366,6 +366,7 @@ function shimInit(options = null) {
 	};
 
 	shim.attachFileToNote = async function(note, filePath, position = null, options = null) {
+		if (note.markup_language) options.markupLanguage = note.markup_language;
 		const newBody = await shim.attachFileToNoteBody(note.body, filePath, position, options);
 		if (!newBody) return null;
 

@@ -727,7 +727,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		resource = await Resource.save(resource, { isNew: true });
 
-		const resourceTag = Resource.markdownTag(resource);
+		const resourceTag = Resource.markupTag(resource);
 
 		const newNote = { ...this.state.note };
 
