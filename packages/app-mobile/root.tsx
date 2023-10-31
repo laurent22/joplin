@@ -111,7 +111,7 @@ import { loadMasterKeysFromSettings, migrateMasterPassword } from '@joplin/lib/s
 import SyncTargetNone from '@joplin/lib/SyncTargetNone';
 import { setRSA } from '@joplin/lib/services/e2ee/ppk';
 import RSA from './services/e2ee/RSA.react-native';
-import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
+import { runIntegrationTests as runRsaIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 import { Theme, ThemeAppearance } from '@joplin/lib/themes/type';
 import { AppState } from './utils/types';
 import ProfileSwitcher from './components/ProfileSwitcher/ProfileSwitcher';
@@ -124,6 +124,7 @@ import { ReactNode } from 'react';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
 import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
 import { FileApi } from '@joplin/lib/file-api';
+import runOnDeviceFsDriverTests from './utils/fs-driver/runOnDeviceTests';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -256,168 +257,168 @@ const appReducer = (state = appDefaultState, action: any) => {
 	try {
 		switch (action.type) {
 
-		case 'NAV_BACK':
-		case 'NAV_GO':
+			case 'NAV_BACK':
+			case 'NAV_GO':
 
-			if (action.type === 'NAV_BACK') {
-				if (!navHistory.length) break;
+				if (action.type === 'NAV_BACK') {
+					if (!navHistory.length) break;
 
-				let newAction = null;
-				while (navHistory.length) {
-					newAction = navHistory.pop();
-					if (newAction.routeName !== state.route.routeName) break;
+					let newAction = null;
+					while (navHistory.length) {
+						newAction = navHistory.pop();
+						if (newAction.routeName !== state.route.routeName) break;
+					}
+
+					action = newAction ? newAction : navHistory.pop();
+
+					historyGoingBack = true;
 				}
 
-				action = newAction ? newAction : navHistory.pop();
+				{
+					const currentRoute = state.route;
 
-				historyGoingBack = true;
-			}
+					if (!historyGoingBack && historyCanGoBackTo(currentRoute)) {
+						// If the route *name* is the same (even if the other parameters are different), we
+						// overwrite the last route in the history with the current one. If the route name
+						// is different, we push a new history entry.
+						if (currentRoute.routeName === action.routeName) {
+							// nothing
+						} else {
+							navHistory.push(currentRoute);
+						}
+					}
 
-			{
-				const currentRoute = state.route;
+					// HACK: whenever a new screen is loaded, all the previous screens of that type
+					// are overwritten with the new screen parameters. This is because the way notes
+					// are currently loaded is not optimal (doesn't retain history properly) so
+					// this is a simple fix without doing a big refactoring to change the way notes
+					// are loaded. Might be good enough since going back to different folders
+					// is probably not a common workflow.
+					for (let i = 0; i < navHistory.length; i++) {
+						const n = navHistory[i];
+						if (n.routeName === action.routeName) {
+							navHistory[i] = { ...action };
+						}
+					}
 
-				if (!historyGoingBack && historyCanGoBackTo(currentRoute)) {
-					// If the route *name* is the same (even if the other parameters are different), we
-					// overwrite the last route in the history with the current one. If the route name
-					// is different, we push a new history entry.
-					if (currentRoute.routeName === action.routeName) {
-						// nothing
+					newState = { ...state };
+
+					newState.selectedNoteHash = '';
+
+					if ('noteId' in action) {
+						newState.selectedNoteIds = action.noteId ? [action.noteId] : [];
+					}
+
+					if ('folderId' in action) {
+						newState.selectedFolderId = action.folderId;
+						newState.notesParentType = 'Folder';
+					}
+
+					if ('tagId' in action) {
+						newState.selectedTagId = action.tagId;
+						newState.notesParentType = 'Tag';
+					}
+
+					if ('smartFilterId' in action) {
+						newState.smartFilterId = action.smartFilterId;
+						newState.notesParentType = 'SmartFilter';
+					}
+
+					if ('itemType' in action) {
+						newState.selectedItemType = action.itemType;
+					}
+
+					if ('noteHash' in action) {
+						newState.selectedNoteHash = action.noteHash;
+					}
+
+					if ('sharedData' in action) {
+						newState.sharedData = action.sharedData;
 					} else {
-						navHistory.push(currentRoute);
+						newState.sharedData = null;
 					}
-				}
 
-				// HACK: whenever a new screen is loaded, all the previous screens of that type
-				// are overwritten with the new screen parameters. This is because the way notes
-				// are currently loaded is not optimal (doesn't retain history properly) so
-				// this is a simple fix without doing a big refactoring to change the way notes
-				// are loaded. Might be good enough since going back to different folders
-				// is probably not a common workflow.
-				for (let i = 0; i < navHistory.length; i++) {
-					const n = navHistory[i];
-					if (n.routeName === action.routeName) {
-						navHistory[i] = { ...action };
+					newState.route = action;
+					newState.historyCanGoBack = !!navHistory.length;
+				}
+				break;
+
+			case 'SIDE_MENU_TOGGLE':
+
+				newState = { ...state };
+				newState.showSideMenu = !newState.showSideMenu;
+				break;
+
+			case 'SIDE_MENU_OPEN':
+
+				newState = { ...state };
+				newState.showSideMenu = true;
+				break;
+
+			case 'SIDE_MENU_CLOSE':
+
+				newState = { ...state };
+				newState.showSideMenu = false;
+				break;
+
+			case 'SIDE_MENU_OPEN_PERCENT':
+
+				newState = { ...state };
+				newState.sideMenuOpenPercent = action.value;
+				break;
+
+			case 'NOTE_SELECTION_TOGGLE':
+
+				{
+					newState = { ...state };
+
+					const noteId = action.id;
+					const newSelectedNoteIds = state.selectedNoteIds.slice();
+					const existingIndex = state.selectedNoteIds.indexOf(noteId);
+
+					if (existingIndex >= 0) {
+						newSelectedNoteIds.splice(existingIndex, 1);
+					} else {
+						newSelectedNoteIds.push(noteId);
 					}
+
+					newState.selectedNoteIds = newSelectedNoteIds;
+					newState.noteSelectionEnabled = !!newSelectedNoteIds.length;
 				}
+				break;
+
+			case 'NOTE_SELECTION_START':
+
+				if (!state.noteSelectionEnabled) {
+					newState = { ...state };
+					newState.noteSelectionEnabled = true;
+					newState.selectedNoteIds = [action.id];
+				}
+				break;
+
+			case 'NOTE_SELECTION_END':
 
 				newState = { ...state };
+				newState.noteSelectionEnabled = false;
+				newState.selectedNoteIds = [];
+				break;
 
-				newState.selectedNoteHash = '';
+			case 'NOTE_SIDE_MENU_OPTIONS_SET':
 
-				if ('noteId' in action) {
-					newState.selectedNoteIds = action.noteId ? [action.noteId] : [];
-				}
-
-				if ('folderId' in action) {
-					newState.selectedFolderId = action.folderId;
-					newState.notesParentType = 'Folder';
-				}
-
-				if ('tagId' in action) {
-					newState.selectedTagId = action.tagId;
-					newState.notesParentType = 'Tag';
-				}
-
-				if ('smartFilterId' in action) {
-					newState.smartFilterId = action.smartFilterId;
-					newState.notesParentType = 'SmartFilter';
-				}
-
-				if ('itemType' in action) {
-					newState.selectedItemType = action.itemType;
-				}
-
-				if ('noteHash' in action) {
-					newState.selectedNoteHash = action.noteHash;
-				}
-
-				if ('sharedData' in action) {
-					newState.sharedData = action.sharedData;
-				} else {
-					newState.sharedData = null;
-				}
-
-				newState.route = action;
-				newState.historyCanGoBack = !!navHistory.length;
-			}
-			break;
-
-		case 'SIDE_MENU_TOGGLE':
-
-			newState = { ...state };
-			newState.showSideMenu = !newState.showSideMenu;
-			break;
-
-		case 'SIDE_MENU_OPEN':
-
-			newState = { ...state };
-			newState.showSideMenu = true;
-			break;
-
-		case 'SIDE_MENU_CLOSE':
-
-			newState = { ...state };
-			newState.showSideMenu = false;
-			break;
-
-		case 'SIDE_MENU_OPEN_PERCENT':
-
-			newState = { ...state };
-			newState.sideMenuOpenPercent = action.value;
-			break;
-
-		case 'NOTE_SELECTION_TOGGLE':
-
-			{
 				newState = { ...state };
+				newState.noteSideMenuOptions = action.options;
+				break;
 
-				const noteId = action.id;
-				const newSelectedNoteIds = state.selectedNoteIds.slice();
-				const existingIndex = state.selectedNoteIds.indexOf(noteId);
-
-				if (existingIndex >= 0) {
-					newSelectedNoteIds.splice(existingIndex, 1);
-				} else {
-					newSelectedNoteIds.push(noteId);
-				}
-
-				newState.selectedNoteIds = newSelectedNoteIds;
-				newState.noteSelectionEnabled = !!newSelectedNoteIds.length;
-			}
-			break;
-
-		case 'NOTE_SELECTION_START':
-
-			if (!state.noteSelectionEnabled) {
+			case 'SET_SIDE_MENU_TOUCH_GESTURES_DISABLED':
 				newState = { ...state };
-				newState.noteSelectionEnabled = true;
-				newState.selectedNoteIds = [action.id];
-			}
-			break;
+				newState.disableSideMenuGestures = action.disableSideMenuGestures;
+				break;
 
-		case 'NOTE_SELECTION_END':
+			case 'MOBILE_DATA_WARNING_UPDATE':
 
-			newState = { ...state };
-			newState.noteSelectionEnabled = false;
-			newState.selectedNoteIds = [];
-			break;
-
-		case 'NOTE_SIDE_MENU_OPTIONS_SET':
-
-			newState = { ...state };
-			newState.noteSideMenuOptions = action.options;
-			break;
-
-		case 'SET_SIDE_MENU_TOUCH_GESTURES_DISABLED':
-			newState = { ...state };
-			newState.disableSideMenuGestures = action.disableSideMenuGestures;
-			break;
-
-		case 'MOBILE_DATA_WARNING_UPDATE':
-
-			newState = { ...state };
-			newState.isOnMobileData = action.isOnMobileData;
-			break;
+				newState = { ...state };
+				newState.isOnMobileData = action.isOnMobileData;
+				break;
 
 		}
 	} catch (error) {
@@ -794,7 +795,10 @@ async function initialize(dispatch: Function) {
 	// call will throw an error, alerting us of the issue. Otherwise it will
 	// just print some messages in the console.
 	// ----------------------------------------------------------------------------
-	if (Setting.value('env') === 'dev') await runIntegrationTests();
+	if (Setting.value('env') === 'dev') {
+		await runRsaIntegrationTests();
+		await runOnDeviceFsDriverTests();
+	}
 
 	reg.logger().info('Application initialized');
 }
@@ -804,6 +808,7 @@ class AppComponent extends React.Component {
 	private urlOpenListener_: EmitterSubscription | null = null;
 	private appStateChangeListener_: NativeEventSubscription | null = null;
 	private themeChangeListener_: NativeEventSubscription | null = null;
+	private dropdownAlert_ = (_data: any) => new Promise<any>(res => res);
 
 	public constructor() {
 		super();
@@ -936,7 +941,11 @@ class AppComponent extends React.Component {
 		AlarmService.setInAppNotificationHandler(async (alarmId: string) => {
 			const alarm = await Alarm.load(alarmId);
 			const notification = await Alarm.makeNotification(alarm);
-			this.dropdownAlert_.alertWithType('info', notification.title, notification.body ? notification.body : '');
+			void this.dropdownAlert_({
+				type: 'info',
+				title: notification.title,
+				message: notification.body ? notification.body : '',
+			});
 		});
 
 		this.appStateChangeListener_ = RNAppState.addEventListener('change', this.onAppStateChange_);
@@ -1127,7 +1136,7 @@ class AppComponent extends React.Component {
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 								{shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} />}
 							</View>
-							<DropdownAlert ref={(ref: any) => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
+							<DropdownAlert alert={(func: any) => (this.dropdownAlert_ = func)} />
 							{!shouldShowMainContent && <BiometricPopup
 								dispatch={this.props.dispatch}
 								themeId={this.props.themeId}

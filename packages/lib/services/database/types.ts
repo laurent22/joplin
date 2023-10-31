@@ -15,6 +15,17 @@ export interface BaseItemEntity {
   created_time?: number;
 }
 
+export type SqlParams = any[];
+
+export interface SqlQuery {
+	sql: string;
+	params?: SqlParams;
+}
+
+export type StringOrSqlQuery = string | SqlQuery;
+
+export type Migration = () => (SqlQuery|string)[];
+
 export enum FolderIconType {
   Emoji = 1,
   DataUrl = 2,
@@ -139,6 +150,7 @@ export interface FolderEntity {
   'title'?: string;
   'updated_time'?: number;
   'user_created_time'?: number;
+  'user_data'?: string;
   'user_updated_time'?: number;
   'type_'?: number;
 }
@@ -244,6 +256,7 @@ export interface ResourceLocalStateEntity {
   'type_'?: number;
 }
 export interface ResourceEntity {
+  'blob_updated_time'?: number;
   'created_time'?: number;
   'encryption_applied'?: number;
   'encryption_blob_encrypted'?: number;
@@ -259,6 +272,7 @@ export interface ResourceEntity {
   'title'?: string;
   'updated_time'?: number;
   'user_created_time'?: number;
+  'user_data'?: string;
   'user_updated_time'?: number;
   'type_'?: number;
 }
@@ -319,6 +333,7 @@ export interface TagEntity {
   'title'?: string;
   'updated_time'?: number;
   'user_created_time'?: number;
+  'user_data'?: string;
   'user_updated_time'?: number;
   'type_'?: number;
 }
@@ -352,6 +367,7 @@ export const databaseSchema: DatabaseTables = {
 		title: { type: 'string' },
 		updated_time: { type: 'number' },
 		user_created_time: { type: 'number' },
+		user_data: { type: 'string' },
 		user_updated_time: { type: 'number' },
 		type_: { type: 'number' },
 	},
@@ -365,6 +381,7 @@ export const databaseSchema: DatabaseTables = {
 		title: { type: 'string' },
 		updated_time: { type: 'number' },
 		user_created_time: { type: 'number' },
+		user_data: { type: 'string' },
 		user_updated_time: { type: 'number' },
 		type_: { type: 'number' },
 	},
@@ -451,6 +468,7 @@ export const databaseSchema: DatabaseTables = {
 		type_: { type: 'number' },
 	},
 	resources: {
+		blob_updated_time: { type: 'number' },
 		created_time: { type: 'number' },
 		encryption_applied: { type: 'number' },
 		encryption_blob_encrypted: { type: 'number' },
@@ -466,6 +484,7 @@ export const databaseSchema: DatabaseTables = {
 		title: { type: 'string' },
 		updated_time: { type: 'number' },
 		user_created_time: { type: 'number' },
+		user_data: { type: 'string' },
 		user_updated_time: { type: 'number' },
 		type_: { type: 'number' },
 	},

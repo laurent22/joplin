@@ -303,6 +303,7 @@ class Setting extends BaseModel {
 	};
 
 	public static autoSaveEnabled = true;
+	public static allowFileStorage = true;
 
 	private static metadata_: SettingItems = null;
 	private static keychainService_: any = null;
@@ -392,7 +393,7 @@ class Setting extends BaseModel {
 			wysiwygNo = ` ${_('(wysiwyg: %s)', _('no'))}`;
 		}
 
-		const emptyDirWarning = _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplinapp.org/faq/');
+		const emptyDirWarning = _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplinapp.org/help/faq');
 
 		// A "public" setting means that it will show up in the various config screens (or config command for the CLI tool), however
 		// if if private a setting might still be handled and modified by the app. For instance, the settings related to sorting notes are not
@@ -1115,7 +1116,7 @@ class Setting extends BaseModel {
 				public: true,
 				appTypes: [AppType.Mobile, AppType.Desktop],
 				label: () => _('Resize large images:'),
-				description: () => _('Shrink large images before adding them to notes to save storage space.'),
+				description: () => _('Shrink large images before adding them to notes.'),
 				options: () => {
 					return {
 						alwaysAsk: _('Always ask'),
@@ -1363,7 +1364,7 @@ class Setting extends BaseModel {
 
 
 			autoUpdateEnabled: { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'application', public: platform !== 'linux', appTypes: [AppType.Desktop], label: () => _('Automatically check for updates') },
-			'autoUpdate.includePreReleases': { value: false, type: SettingItemType.Bool, section: 'application', storage: SettingStorage.File, isGlobal: true, public: true, appTypes: [AppType.Desktop], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/prereleases') },
+			'autoUpdate.includePreReleases': { value: false, type: SettingItemType.Bool, section: 'application', storage: SettingStorage.File, isGlobal: true, public: true, appTypes: [AppType.Desktop], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/help/about/prereleases') },
 			'clipperServer.autoStart': { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: false },
 			'sync.interval': {
 				value: 300,
@@ -2055,7 +2056,7 @@ class Setting extends BaseModel {
 	}
 
 	private static canUseFileStorage(): boolean {
-		return !shim.mobilePlatform();
+		return this.allowFileStorage && !shim.mobilePlatform();
 	}
 
 	private static keyStorage(key: string): SettingStorage {

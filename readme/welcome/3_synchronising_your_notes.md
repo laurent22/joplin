@@ -22,4 +22,4 @@ OneDrive and WebDAV are also supported as synchronisation services. Please see [
 
 ## Using End-To-End Encryption
 
-Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the data can read it. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the [End-To-End Encryption Tutorial](https://joplinapp.org/e2ee/) for more information about this feature and how to enable it.
+Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the data can read it. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the [End-To-End Encryption Tutorial](https://joplinapp.org/help/apps/sync/e2ee) for more information about this feature and how to enable it.

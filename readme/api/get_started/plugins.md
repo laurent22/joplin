@@ -55,7 +55,7 @@ This should be the path to your main plugin directory, i.e. `path/to/your/root/p
 ## Test the Plugin, Hello World!
 Restart the Development app from the command line/terminal, and Joplin should load the plugin and execute its `onStart` handler. If all went well you should see the test message in the plugin console: "Hello world. Test plugin started!". You will also be able to see the information from the manifest in the **Settings > Plugins**
 
-# Next steps
+## Next steps
 Great, you now have the basics of a working plugin! 
 
 - Start the [plugin tutorial](https://github.com/laurent22/joplin/blob/dev/readme/api/tutorials/toc_plugin.md) to learn how to use the plugin API.

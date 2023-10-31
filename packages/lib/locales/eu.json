@@ -1,240 +1,2305 @@
 {
- "%d hour": "% ordua",
- "%d hours": "% orduak",
- "%d minutes": "%d minutuak",
- "%d notes match this pattern. Delete them?": "%d oharrak bat datoz ereduarekin. Ezabatu nahi dituzu?",
- "%s %s (%s, %s)": "%s %s (%s, %s)",
- "%s (%s): %s": "%s (%s): %s",
- "%s = %s": "%s = %s",
- "%s = %s (%s)": "%s = %s (%s)",
- "%s: %d notes": "%s: %d oharrak",
- "%s: %d/%d": "%s: %d/%d",
- "%s: %s": "%s: %s",
- "<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": "<todo-command> erabil daiteke \"txandakatzeko\" edo \"garbitzeko\". Erabili \"txandakatu\", emandako zeregina txandakatzeko bete ala ez-betea txandaketzeko (helburua ohar arrunta bada, zeregin bihurtuko da. Erabili \"garbitu\" zeregina ohar arrunt bilakatzeko.",
- "About Joplin": "Joplin-i buruz",
- "Active": "Aktibo",
- "Add or remove tags:": "Gehitu edo ezabatu etiketak:",
- "Also displays unset and hidden config variables.": "Ezkutuko edo zehaztu gabeko konfigurazio aldagaiak ere erakusten ditu.",
- "Attach file": "Erantsi fitxategia",
- "Attach photo": "Argazkia erantsi",
- "Attaches the given file to the note.": "Erantsi fitxategia notan",
- "Authentication was not completed (did not receive an authentication token).": "Autentifikazioa ez da egin osorik (ez du token-ik hartu).",
- "Back": "Atzera",
- "Cancel": "Utzi",
- "Cancelling background synchronisation... Please wait.": "Atzeko sinkronizazioa uzten... Mesedez itxaron.",
- "Cancelling...": "Bertan behera uzten...",
- "Cancelling... Please wait.": "Bertan behera uzten... itxaron, mesedez.",
- "Cannot access %s": "Ezin atzituta %s",
- "Cannot change encrypted item": "Ezinezkoa zifratutako itema aldatzea",
- "Cannot copy note to \"%s\" notebook": "Ezin kopia daiteke oharra \"%s\" koadernora",
- "Cannot find \"%s\".": "Ezin aurkitu \"%s\"",
- "Cannot move note to \"%s\" notebook": "Ezin eraman daiteke oharra \"%s\" koadernora",
- "Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem.": "Tokena ezin eguneratu daiteke: egiaztatze-datuak desagertuta daude. Agian, berriro sinkronizatzeak arazoa konpon lezake.",
- "Clear": "Garbitu",
- "Coming alarms": "Hurrengo alarmak",
- "Completed decryption.": "Deszifratuta.",
- "Configuration": "Konfigurazioa",
- "Conflicted: %d": "Gatazkatsua: %d",
- "Conflicts": "Gatazkak",
- "Convert to note": "Oharra bihurtu",
- "Convert to todo": "Zeregina bihurtu",
- "Copy": "Kopiatu",
- "Created": "Sortua",
- "Created local items: %d.": "Item lokalak sortuta: %d.",
- "Created remote items: %d.": "Urruneko itemak sortuta: %d.",
- "Created: %d.": "Sortuta: %d.",
- "Created: %s": "Sortuta: %s",
- "Creates a new note.": "Ohar berria sortzen du.",
- "Creates a new notebook.": "Koaderno berria sortzen du.",
- "Creates a new to-do.": "Zeregin berria sortu.",
- "Cut": "Moztu",
- "Dark": "Iluna",
- "Date format": "Data-formatua",
- "Default: %s": "Lehenetsia: %s",
- "Delete": "Ezabatu",
- "Delete note?": "Oharra ezabatu?",
- "Deleted local items: %d.": "Item lokala ezabatuta: %d.",
- "Deleted remote items: %d.": "Urruneko itemak ezabatuta: %d.",
- "Deletes the given notebook.": "Ezabatu emandako koadernoak.",
- "Deletes the notebook without asking for confirmation.": "Ezabatu koadernoak berrespenik gabe.",
- "Deletes the notes matching <note-pattern>.": "Ezabatu bat datozen oharrak: <note-patern> .",
- "Deletes the notes without asking for confirmation.": "Ezabatu oharrak berrespenik eskatu gabe.",
- "Directory to synchronise with (absolute path)": "Sinkronizatzeko direktorioa (bide-izena osorik)",
- "Disable encryption": "Zifratzea desgaitu",
- "Disabled": "Desgaituta",
- "Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": "Zifratua desgaitzeak esan nahi du zure ohar eta eranskin *guztiak* berriro deszifratuta sinkronizatuko eta bidaliko direla sinkronizazio helburura. Segitu nahi duzu?",
- "Discard changes": "Bertan behera utzi aldaketak",
- "Displays a geolocation URL for the note.": "Erakutsi URL geolokalizazioa oharrean.",
- "Displays only the first top <num> notes.": "Erakusten ditu soilik gorengo <num> oharrak.",
- "Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-tnt` would display notes and to-dos.": "Zehaztutako item motak baino ez du erakusten. Izan daiteke `n` oharretarako, `t` zereginetarako, edo `nt` ohar eta zereginetarako (esate batrako, `-tt` zereginak erakutsiko ditu soilik, `-tnt` berriz zereginak eta oharrak.",
- "Displays summary about the notes and notebooks.": "Oharren eta koadernoen laburpena erakusten du.",
- "Displays the complete information about note.": "Erakutsi oharrari buruzko informazio guztia.",
- "Displays the given note.": "Oharra erakutsi",
- "Displays the notes in the current notebook. Use `ls /` to display the list of notebooks.": "Oraingo koadernoko oharrak erakusten ditu. Erabili `ls /` koadernoen zerrenda erakusteko.",
- "Displays usage information.": "Erakutsi erabilera datuak.",
- "Displays version information": "Erakutsi bertsioko informazioa",
- "Do not ask for confirmation.": "Ez galdetu berresteko.",
- "Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": "<oharra>rekin bat datozen oharrak [koaderno]ra kopiatzen ditu. Koadernorik ez bada zehazten, oharra oraingo koadernoan bikoiztuko da",
- "Edit": "Editatu",
- "Edit note.": "Oharra editatu.",
- "Edit notebook": "Editatu koadernoa",
- "Enable": "Gaituta",
- "Enable encryption": "Zifratua gaitu",
- "Enabled": "Gaituta",
- "Encrypted": "Zifratuta",
- "Encrypted items cannot be modified": "Zifratutako itemak ezin aldatu daitezke",
- "Encryption Config": "Zifratze Ezarpenak",
- "Encryption is: %s": "Zifratzea da: %s",
- "Enter master password:": "Sartu pasahitz nagusia:",
- "Enum": "Zenbakitu",
- "Error opening note in editor: %s": "Errorea editorean oharra zabaltzean: %s",
- "Exits the application.": "Irten aplikaziotik.",
- "Export Debug Report": "Esportatu arazketa txostena",
- "Exports only the given note.": "Esportatu emandako oharra soilik.",
- "Exports only the given notebook.": "Esportatu emandako koadernoa soilik.",
- "Fatal error:": "Aio! Agur! :_( ",
- "Fetched items: %d/%d.": "Itemak eskuratuta: %d%d.",
- "File": "Fitxategia",
- "File system": "Fitxategi sistema",
- "Folders": "Karpetak",
- "Found: %d.": "Aurkitua: %d",
- "Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": "Konfigurazio balioa hartu edo ezartzen du. Baldin eta [balioa] ez bada ematen, [izena]ren balioa erakutsiko du. Ez bada ematen [izena] ez [balioa], oraingo konfigurazioaren zerrenda erakutsiko da.",
- "ID": "ID",
- "Import": "Inportatu",
- "Importing notes...": "Oharrak inportatzen...",
- "In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": "Edozein komandotan, oharra edo koadernoari erreferentzia egin ahal zaio izenburuz edo ID erabilita, edo `$n` edo `$b` lasterbideak erabilita, aukeratuta dagoen oharra edo koadernoa erabiltzeko. `$c` ere erabil daiteke aukeratutako elementua erabiltzeko.",
- "Invalid answer: %s": "Erantzun baliogabea: %s",
- "Invalid command: \"%s\"": "Komando baliogabea: \"%s\"",
- "Invalid option value: \"%s\". Possible values are: %s.": "Balio aukera baliogabea: \"%s\". Litezkeen balioak: %s.",
- "Items that cannot be synchronised": "Itemok ezin sinkronizatu",
- "Language": "Hizkuntza",
- "Layout": "Diseinua",
- "Light": "Argia",
- "Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": "Giltzatzeko fitxategia dagoeneko eutsita dagoeneko. Baldin eta badakizu ez dena sinkronizaziorik egiten ari, ken dezakezu giltzatzeko fitxategia \"%s\"-n eta berrekin eragiketari.",
- "Log": "Egunkaria",
- "Login with OneDrive": "Login with OneDrive",
- "Marks a to-do as done.": "Markatu zeregina egindakotzat.",
- "Marks a to-do as non-completed.": "Markatu zeregina betegabe moduan.",
- "Master Key %s": "Pasahitz Nagusia %s",
- "Missing required argument: %s": "Beharrezko argumentua faltan: %s",
- "More than one item match \"%s\". Please narrow down your query.": "Elementu bat baino gehiago bat dator \"%s\" bilaketarekin. Mugatu zure bilaketa, mesedez.",
- "Move %d notes to notebook \"%s\"?": "Mugitu %d oharrak \"%s\" koadernora?",
- "n": "e",
- "N": "E",
- "New note": "Ohar berria",
- "New notebook": "Koaderno berria",
- "New notebook \"%s\" will be created and file \"%s\" will be imported into it": "\"%s\" koaderno berria sortuko da eta \"%s\" Fitxategia inportatuko da bertara",
- "New to-do": "Zeregin berria",
- "Nextcloud password": "Nextcloud pasahitza",
- "Nextcloud username": "Nextcloud erabiltzaile-izena",
- "Nextcloud WebDAV URL": "Nextcloud WebDAV URL",
- "No active notebook.": "Ez dago koadernorik aukeratuta.",
- "No notebook has been specified.": "Ez dago koadernorik aukeratuta.",
- "No notebook selected.": "Ez dago koadernorik aukeratuta",
- "No notes in here. Create one by clicking on \"New note\".": "Hemen ez dago oharrik. Sortu bat \"Ohar berria\" sakatuta.",
- "No such command: %s": "Ez dago komandorik: %s",
- "No text editor is defined. Please set it using `config editor <editor-path>`": "Testu editorerik ez dago definituta. Egin hau erabilita, mesedez: `config editor <editorearen-helbidea>`",
- "Not authentified with %s. Please provide any missing credentials.": "Ez da autentifikatu %s -rekin. Eman galdutako kredentzialak.",
- "Note does not exist: \"%s\". Create it?": "Ez dago oharrik: \"%s\". Sortu?",
- "Note has been saved.": "Oharra gorde da.",
- "Note is not a to-do: \"%s\"": "Oharra ez da zeregina: \"%s\"",
- "Notebooks": "Koadernoak",
- "Notebooks cannot be named \"%s\", which is a reserved title.": "Koadernoak ezin izendatu daitezke \"%s\", izen hori Joplinek gordeta dauka",
- "Notes and settings are stored in: %s": "Oharrak eta ezarpenak hemen daude gordeta: %s",
- "Notes can only be created within a notebook.": "Oharrak soilik sor daitezke koaderno baten barruan.",
- "OK": "OK",
- "One or more items are currently encrypted and you may need to supply a master password. To do so please type `e2ee decrypt`. If you have already supplied the password, the encrypted items are being decrypted in the background and will be available soon.": "Item bat edo gehiago orain zifratuta daude eta baliteke zuk pasahitz nagusia ordezkatu behar izatea. Horixe egiteko, mesedez, idatz `e2ee decrypt`. Dagoeneko pasahitza ordezkatua baduzu, itemak deszifratzen ari izango dira atzeko planoan eta laster izango dira eskuragarri.",
- "OneDrive": "OneDrive",
- "OneDrive Login": "Logeatu OneDriven",
- "Operation cancelled": " Eragiketa utzita",
- "Options": "Aukerak",
- "Password": "Pasahitza",
- "Password cannot be empty": "Pasahitza ezin utz daiteke hutsik",
- "Password:": "Pasahitza:",
- "Paste": "Itsatsi",
- "Please select a notebook first.": "Aurretik aukeratu formatua, mesedez.",
- "Please select the note or notebook to be deleted first.": "Aurretik aukeratu ezabatzeko oharra edo koadernoa, mesedez.",
- "Possible keys/values:": "Litezkeen balioak:",
- "Possible values: %s.": "Litezkeen balioak: %s.",
- "Press Ctrl+D or type \"exit\" to exit the application": "Sakatu Ktrl+D edo idatzi \"exit\" aplikaziotik irteteko",
- "Press to set the decryption password.": "Sakatu deszifratze pasahitza ezartzeko.",
- "Quit": "Irten",
- "Remove this search from the sidebar?": "Kendu bilaketa hori ohar guztietatik?",
- "Rename": "Berrizendatu",
- "Rename notebook:": "Berrizendatu koadernoa:",
- "Renames the given <item> (note or notebook) to <name>.": "Ber izendatu emandako <item> (oharra edo koadernoa) <name> izen berriaz.",
- "Resources: %d.": "Baliabideak: %d.",
- "Reverses the sorting order.": "Alderantziz antolatzen du.",
- "Save": "Gorde",
- "Save changes": "Gorde aldaketak",
- "Save geo-location with notes": "Gore geokokapena oharrekin",
- "Search": "Bilatu",
- "Search in all the notes": "Bilatu ohar guztietan",
- "Search:": "Bilatu:",
- "Searches for the given <pattern> in all the notes.": "Emandako <pattern> bilatzen du ohar guztietan.",
- "Set alarm": "Ezarri alarma",
- "Set alarm:": "Ezarri alarma:",
- "Set the password": "Ezarri pasahitza",
- "Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": "Emandako <note>ren <name> ezaugarrian emandako [value] balioa ezartzen du. Litezkeen ezaugarriak dira:\n\n%s",
- "Shortcuts are not available in CLI mode.": "CLI moduan ez dago lasterbiderik erabilgarri.",
- "Skipped: %d.": "Saltatuta: %d.",
- "Some items cannot be decrypted.": "Zenbait item ezin dira deszifratu.",
- "Some items cannot be synchronised.": "Zenbait item ezin dira sinkronizatu.",
- "Sorts the item by <field> (eg. title, updated_time, created_time).": "Itemak antolatzen ditu <field> arabera (esate baterako, izenburua, eguneratze_unea, sortze_unea).",
- "Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.": "Deszifratzearen hasiera... Mesedez itxaron, prozesua luzea izan daiteke, zenbat dagoen prozesatzeko.",
- "Starting synchronisation...": "Sinkronizazioa hasten...",
- "Starting to edit note. Close the editor to get back to the prompt.": "Oharra editatzearen hasiera. Itxi editorea prompt-era bueltatzeko.",
- "Status": "Egoera",
- "Switch between note and to-do type": "Aldatu oharra eta zeregin eren artean.",
- "Switches to [notebook] - all further operations will happen within this notebook.": "Aldatu [koaderno]ra - hurrengo eragiketak koaderno horretan jazoko dira.",
- "Sync status (synced items / total items)": "Sinkronizazio egoera (sinkronizatutako itemak/itemak guztira)",
- "Synchronisation interval": "Sinkronizazio tartea",
- "Synchronisation is already in progress.": "Sinkronizazio prozesua dagoeneko abian da.",
- "Synchronisation Status": "Sinkronizazioaren egoera",
- "Synchronisation target": "Sinkronizazio helbudua",
- "Synchronisation target: %s (%s)": "Sinkronizazio helburua: %s (%s)",
- "Synchronise": "Sinkronizatu",
- "Synchronises with remote storage.": "Urruneko biltegiarekin sinkronizatzen du.",
- "Tagged: %d.": "Etiketatuta: %d.",
- "Tags": "Etiketak",
- "The application has been authorised - you may now close this browser tab.": "Aplikazioak baimena hartu du - Orain fitxa hau zarratu dezakezu.",
- "The application has been successfully authorised.": "Aplikazioak baimena hartu du.",
- "The command \"%s\" is only available in GUI mode": "\"%s\" komandoa  soilik eskuragarri GUI moduan",
- "The notebook could not be saved: %s": "Koadernoa ezin gorde daiteke: %s",
- "The notes have been imported: %s": "Oharrak inportatu dira: %s",
- "The possible commands are:": "Litezkeen komandoak hauek dira:",
- "The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": "Sinkronizazio helburua. Sinkronizazio aukera bakoitzak izan ditzake parametro gehigarriak, horrela izendatuta `sync.NUM.NAME` (dena beherago dokumentatuta).",
- "Theme": "Gaia",
- "There are currently no notes. Create one by clicking on the (+) button.": "Ez dago oharrik. Sortu bat (+) botoian klik eginaz.",
- "There is currently no notebook. Create one by clicking on \"New notebook\".": "Momentuz ez dago koadernorik. Sortu bat \"Koaderno berria\" sakatuta.",
- "These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": "Itemok gailuan geratuko dira baina ez dira sinkronizatuko. Horiek aurkitzeko bilaketak egin titulu edo goiko parentesien arteko IDaren arabera.",
- "This note does not have geolocation information.": "Ohar honek ez du geokokapen informaziorik.",
- "This note has been modified:": "Ohar hau mugitua izan da:",
- "Time format": "Ordu formatua",
- "To delete a tag, untag the associated notes.": "Etiketa ezabatzeko, kendu etiketa duten oharrei",
- "To delete: %d": "Ezabatzeko: %d",
- "To enter command line mode, press \":\"": "Komando lerroa sartzeko, idatzi \":\"",
- "To exit command line mode, press ESCAPE": "Komando lerrotik irteteko, sakatu ESC, mesedez",
- "To move from one pane to another, press Tab or Shift+Tab.": "Panel batetik bestera mugitzeko, sakatu Tab edo Shifft + Tab.",
- "Total: %d/%d": "Denera: %d/%d",
- "Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": "Idatzi `help [command]` komandoari buruzko informazio gehiagorako; edo idatzi `help all` erabilerari buruzko informazio osoa lortzeko.",
- "Type: %s.": "Idatz: %s.",
- "Unknown flag: %s": "Marka ezezaguna: %s",
- "Unsupported image type: %s": "Irudi formatua ez onartua: %s",
- "Unsupported link or message: %s": "Esteka edo mezu ez dago onartua: %s",
- "Untitled": "Titulu gabekoa",
- "Updated": "Eguneratua",
- "Updated local items: %d.": "Item lokalak eguneratuta: %d.",
- "Updated remote items: %d.": "Urruneko itemak eguneratuta: %d.",
- "Updated: %d.": "Eguneratuta: %d.",
- "Usage: %s": "Erabili: %s",
- "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE": "Zerrenda luzearen formatua erabili. Formatua hau da, ID, NOTE_COUNT (libururako), DATE, TODO_CHECKED (zereginetarako), TITLE",
- "Use the arrows and page up/down to scroll the lists and text areas (including this console).": "Erabili geziak edo page up/down list eta testu guneen artean aldatzeko (kontsola hau ere kontuan izanda).",
- "View on map": "Ikusi mapan",
- "View them now": "Ikusi hori orain",
- "Website and documentation": "Web orria eta dokumentazioa (en)",
- "Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": "Ongi etorri Joplin-era!\n\nIdatz `:help shortcuts` lasterbideak ikusteko, edo soilik `:help`erabilerako informaziorako.\n\nEsate baterako, koadernoa sortzeko sakatu `mb`: oharra sortzeko sakatu `mn`",
- "y": "b",
- "Y": "B",
- "Your choice: ": "Zure aukera:"
+	"\"%s\" is missing the required \"%s\" property.": [
+		""
+	],
+	"%d days": [
+		""
+	],
+	"%d GB": [
+		""
+	],
+	"%d GB storage space": [
+		""
+	],
+	"%d hour": [
+		"% ordua"
+	],
+	"%d hours": [
+		"% orduak"
+	],
+	"%d MB": [
+		""
+	],
+	"%d minutes": [
+		"%d minutuak"
+	],
+	"%d notes match this pattern. Delete them?": [
+		"%d oharrak bat datoz ereduarekin. Ezabatu nahi dituzu?"
+	],
+	"%s": [
+		""
+	],
+	"%s %s (%s, %s)": [
+		"%s %s (%s, %s)"
+	],
+	"%s (%s) would like to share a notebook with you.": [
+		""
+	],
+	"%s (%s): %s": [
+		"%s (%s): %s"
+	],
+	"%s (pre-release)": [
+		""
+	],
+	"%s / %s": [
+		""
+	],
+	"%s = %s": [
+		"%s = %s"
+	],
+	"%s = %s (%s)": [
+		"%s = %s (%s)"
+	],
+	"%s: %d notes": [
+		"%s: %d oharrak"
+	],
+	"%s: %d/%d": [
+		"%s: %d/%d"
+	],
+	"%s: %s": [
+		"%s: %s"
+	],
+	"&Go": [
+		""
+	],
+	"&View": [
+		""
+	],
+	"(%s)": [
+		""
+	],
+	"(In plugin: %s)": [
+		""
+	],
+	"(None)": [
+		""
+	],
+	"(wysiwyg: %s)": [
+		""
+	],
+	"(You may disable this prompt in the options)": [
+		""
+	],
+	"- Camera: to allow taking a picture and attaching it to a note.": [
+		""
+	],
+	"- Location: to allow attaching geo-location information to a note.": [
+		""
+	],
+	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
+		""
+	],
+	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
+		"<todo-command> erabil daiteke \"txandakatzeko\" edo \"garbitzeko\". Erabili \"txandakatu\", emandako zeregina txandakatzeko bete ala ez-betea txandaketzeko (helburua ohar arrunta bada, zeregin bihurtuko da. Erabili \"garbitu\" zeregina ohar arrunt bilakatzeko."
+	],
+	"A3": [
+		""
+	],
+	"A4": [
+		""
+	],
+	"A5": [
+		""
+	],
+	"About Joplin": [
+		"Joplin-i buruz"
+	],
+	"accelerator": [
+		""
+	],
+	"Accelerator \"%s\" is not valid.": [
+		""
+	],
+	"Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to unexpected behaviour.": [
+		""
+	],
+	"Accept": [
+		""
+	],
+	"Access denied: Please check your username and password": [
+		""
+	],
+	"Access denied: Please re-enter your password and/or username": [
+		""
+	],
+	"Account": [
+		""
+	],
+	"Active": [
+		"Aktibo"
+	],
+	"Actual Size": [
+		""
+	],
+	"Add body": [
+		""
+	],
+	"Add or remove tags:": [
+		"Gehitu edo ezabatu etiketak:"
+	],
+	"Add recipient:": [
+		""
+	],
+	"Add to dictionary": [
+		""
+	],
+	"Admin": [
+		""
+	],
+	"Admin dashboard": [
+		""
+	],
+	"All data, including notes, notebooks and tags will be permanently deleted.": [
+		""
+	],
+	"All potential ports are in use - please report the issue at %s": [
+		""
+	],
+	"Also displays unset and hidden config variables.": [
+		"Ezkutuko edo zehaztu gabeko konfigurazio aldagaiak ere erakusten ditu."
+	],
+	"Always": [
+		""
+	],
+	"Always ask": [
+		""
+	],
+	"Always resize": [
+		""
+	],
+	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
+		""
+	],
+	"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti\" to see the short notebook id": [
+		""
+	],
+	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		""
+	],
+	"An update is available, do you want to download it now?": [
+		""
+	],
+	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
+		""
+	],
+	"Appearance": [
+		""
+	],
+	"Apply": [
+		""
+	],
+	"Are you sure you want to renew the authorisation token?": [
+		""
+	],
+	"Are you sure you want to return to the default layout? The current layout configuration will be lost.": [
+		""
+	],
+	"Arguments:": [
+		""
+	],
+	"Aritim Dark": [
+		""
+	],
+	"Attach file": [
+		"Erantsi fitxategia"
+	],
+	"Attach photo": [
+		"Argazkia erantsi"
+	],
+	"Attaches the given file to the note.": [
+		"Erantsi fitxategia notan"
+	],
+	"Attachment download behaviour": [
+		""
+	],
+	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
+		""
+	],
+	"Authentication was not completed (did not receive an authentication token).": [
+		"Autentifikazioa ez da egin osorik (ez du token-ik hartu)."
+	],
+	"Authorisation token:": [
+		""
+	],
+	"Auto": [
+		""
+	],
+	"Auto-add disabled accounts for deletion": [
+		""
+	],
+	"Auto-pair braces, parenthesis, quotations, etc.": [
+		""
+	],
+	"Automatically check for updates": [
+		""
+	],
+	"Automatically switch theme to match system theme": [
+		""
+	],
+	"Back": [
+		"Atzera"
+	],
+	"Basic": [
+		""
+	],
+	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
+		""
+	],
+	"Bold": [
+		""
+	],
+	"Browse all plugins": [
+		""
+	],
+	"Browse...": [
+		""
+	],
+	"Bulleted List": [
+		""
+	],
+	"Can Share": [
+		""
+	],
+	"Can view": [
+		""
+	],
+	"Can view and edit": [
+		""
+	],
+	"Cancel": [
+		"Utzi"
+	],
+	"Cancelling background synchronisation... Please wait.": [
+		"Atzeko sinkronizazioa uzten... Mesedez itxaron."
+	],
+	"Cancelling...": [
+		"Bertan behera uzten..."
+	],
+	"Cancelling... Please wait.": [
+		"Bertan behera uzten... itxaron, mesedez."
+	],
+	"Cannot access %s": [
+		"Ezin atzituta %s"
+	],
+	"Cannot change encrypted item": [
+		"Ezinezkoa zifratutako itema aldatzea"
+	],
+	"Cannot copy note to \"%s\" notebook": [
+		"Ezin kopia daiteke oharra \"%s\" koadernora"
+	],
+	"Cannot find \"%s\".": [
+		"Ezin aurkitu \"%s\""
+	],
+	"Cannot load \"%s\" module for format \"%s\" and output \"%s\"": [
+		""
+	],
+	"Cannot load \"%s\" module for format \"%s\" and target \"%s\"": [
+		""
+	],
+	"Cannot move note to \"%s\" notebook": [
+		"Ezin eraman daiteke oharra \"%s\" koadernora"
+	],
+	"Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem.": [
+		"Tokena ezin eguneratu daiteke: egiaztatze-datuak desagertuta daude. Agian, berriro sinkronizatzeak arazoa konpon lezake."
+	],
+	"Cannot save %s \"%s\" because it is larger than the allowed limit (%s)": [
+		""
+	],
+	"Cannot save %s \"%s\" because it would go over the total allowed size (%s) for this account": [
+		""
+	],
+	"Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end encryption. They may do so from the screen Configuration > Encryption.": [
+		""
+	],
+	"Case sensitive": [
+		""
+	],
+	"Change application layout": [
+		""
+	],
+	"Characters": [
+		""
+	],
+	"Characters excluding spaces": [
+		""
+	],
+	"Check for updates...": [
+		""
+	],
+	"Checkbox": [
+		""
+	],
+	"Checkbox list": [
+		""
+	],
+	"Chrome Web Store": [
+		""
+	],
+	"Clear": [
+		"Garbitu"
+	],
+	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
+		""
+	],
+	"Click to add tags...": [
+		""
+	],
+	"Close": [
+		""
+	],
+	"Close Window": [
+		""
+	],
+	"Code": [
+		""
+	],
+	"Code Block": [
+		""
+	],
+	"Code View": [
+		""
+	],
+	"Collapse": [
+		""
+	],
+	"Coming alarms": [
+		"Hurrengo alarmak"
+	],
+	"Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on \"Check synchronisation configuration\".": [
+		""
+	],
+	"command": [
+		""
+	],
+	"Command": [
+		""
+	],
+	"Command palette": [
+		""
+	],
+	"Command palette...": [
+		""
+	],
+	"Completed decryption.": [
+		"Deszifratuta."
+	],
+	"Compress old changes": [
+		""
+	],
+	"Configuration": [
+		"Konfigurazioa"
+	],
+	"Conflicted: %d": [
+		"Gatazkatsua: %d"
+	],
+	"Conflicts": [
+		"Gatazkak"
+	],
+	"Consolidated billing": [
+		""
+	],
+	"Continue": [
+		""
+	],
+	"Convert to note": [
+		"Oharra bihurtu"
+	],
+	"Convert to todo": [
+		"Zeregina bihurtu"
+	],
+	"Copy": [
+		"Kopiatu"
+	],
+	"Copy dev mode command to clipboard": [
+		""
+	],
+	"Copy image": [
+		""
+	],
+	"Copy Link Address": [
+		""
+	],
+	"Copy Markdown link": [
+		""
+	],
+	"Copy path to clipboard": [
+		""
+	],
+	"Copy Shareable Link": [
+		"",
+		""
+	],
+	"Copy to clipboard": [
+		""
+	],
+	"Copy token": [
+		""
+	],
+	"Could not authorise application:\n\n%s\n\nPlease try again.": [
+		""
+	],
+	"Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s": [
+		""
+	],
+	"Could not connect to plugin repository.": [
+		""
+	],
+	"Could not export notes: %s": [
+		""
+	],
+	"Could not install plugin: %s": [
+		""
+	],
+	"Could not respond to the invitation. Please try again, or check with the notebook owner if they are still sharing it.\n\nThe error was: \"%s\"": [
+		""
+	],
+	"Could not upgrade master key: %s": [
+		""
+	],
+	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
+		""
+	],
+	"Created": [
+		"Sortua"
+	],
+	"Created local items: %d.": [
+		"Item lokalak sortuta: %d."
+	],
+	"Created remote items: %d.": [
+		"Urruneko itemak sortuta: %d."
+	],
+	"Created: %d.": [
+		"Sortuta: %d."
+	],
+	"Created: %s": [
+		"Sortuta: %s"
+	],
+	"Creates a new note.": [
+		"Ohar berria sortzen du."
+	],
+	"Creates a new notebook.": [
+		"Koaderno berria sortzen du."
+	],
+	"Creates a new to-do.": [
+		"Zeregin berria sortu."
+	],
+	"Current version is up-to-date.": [
+		""
+	],
+	"custom order": [
+		""
+	],
+	"Custom order": [
+		""
+	],
+	"Custom stylesheet for Joplin-wide app styles": [
+		""
+	],
+	"Custom stylesheet for rendered Markdown": [
+		""
+	],
+	"Custom TLS certificates": [
+		""
+	],
+	"Customise the note publishing banner": [
+		""
+	],
+	"Cut": [
+		"Moztu"
+	],
+	"Dark": [
+		"Iluna"
+	],
+	"Dashboard": [
+		""
+	],
+	"Database v%s": [
+		""
+	],
+	"Date": [
+		""
+	],
+	"Date format": [
+		"Data-formatua"
+	],
+	"days": [
+		""
+	],
+	"Decrease indent level": [
+		""
+	],
+	"Default: %s": [
+		"Lehenetsia: %s"
+	],
+	"Delete": [
+		"Ezabatu"
+	],
+	"Delete local data and re-download from sync target": [
+		""
+	],
+	"Delete note?": [
+		"Oharra ezabatu?"
+	],
+	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
+		""
+	],
+	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
+		""
+	],
+	"Deleted local items: %d.": [
+		"Item lokala ezabatuta: %d."
+	],
+	"Deleted remote items: %d.": [
+		"Urruneko itemak ezabatuta: %d."
+	],
+	"Deletes the given notebook.": [
+		"Ezabatu emandako koadernoak."
+	],
+	"Deletes the notebook without asking for confirmation.": [
+		"Ezabatu koadernoak berrespenik gabe."
+	],
+	"Deletes the notes matching <note-pattern>.": [
+		"Ezabatu bat datozen oharrak: <note-patern> ."
+	],
+	"Deletes the notes without asking for confirmation.": [
+		"Ezabatu oharrak berrespenik eskatu gabe."
+	],
+	"Detailed": [
+		""
+	],
+	"Directory": [
+		""
+	],
+	"Directory to synchronise with (absolute path)": [
+		"Sinkronizatzeko direktorioa (bide-izena osorik)"
+	],
+	"Disable encryption": [
+		"Zifratzea desgaitu"
+	],
+	"Disable safe mode and restart": [
+		""
+	],
+	"Disable Web Clipper Service": [
+		""
+	],
+	"Disabled": [
+		"Desgaituta"
+	],
+	"Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": [
+		"Zifratua desgaitzeak esan nahi du zure ohar eta eranskin *guztiak* berriro deszifratuta sinkronizatuko eta bidaliko direla sinkronizazio helburura. Segitu nahi duzu?"
+	],
+	"Discard changes": [
+		"Bertan behera utzi aldaketak"
+	],
+	"Dismiss": [
+		""
+	],
+	"Displays a geolocation URL for the note.": [
+		"Erakutsi URL geolokalizazioa oharrean."
+	],
+	"Displays only the first top <num> notes.": [
+		"Erakusten ditu soilik gorengo <num> oharrak."
+	],
+	"Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-tnt` would display notes and to-dos.": [
+		"Zehaztutako item motak baino ez du erakusten. Izan daiteke `n` oharretarako, `t` zereginetarako, edo `nt` ohar eta zereginetarako (esate batrako, `-tt` zereginak erakutsiko ditu soilik, `-tnt` berriz zereginak eta oharrak."
+	],
+	"Displays summary about the notes and notebooks.": [
+		"Oharren eta koadernoen laburpena erakusten du."
+	],
+	"Displays the complete information about note.": [
+		"Erakutsi oharrari buruzko informazio guztia."
+	],
+	"Displays the given note.": [
+		"Oharra erakutsi"
+	],
+	"Displays the notes in the current notebook. Use `ls /` to display the list of notebooks.": [
+		"Oraingo koadernoko oharrak erakusten ditu. Erabili `ls /` koadernoen zerrenda erakusteko."
+	],
+	"Displays usage information.": [
+		"Erakutsi erabilera datuak."
+	],
+	"Displays version information": [
+		"Erakutsi bertsioko informazioa"
+	],
+	"Do it now": [
+		""
+	],
+	"Do not ask for confirmation.": [
+		"Ez galdetu berresteko."
+	],
+	"Done": [
+		""
+	],
+	"Download": [
+		""
+	],
+	"Download and install the relevant extension for your browser:": [
+		""
+	],
+	"Downloaded": [
+		""
+	],
+	"Downloaded and decrypted": [
+		""
+	],
+	"Downloaded and encrypted": [
+		""
+	],
+	"Downloading": [
+		""
+	],
+	"Downloading %s language files...": [
+		""
+	],
+	"Downloading resources...": [
+		""
+	],
+	"Dracula": [
+		""
+	],
+	"Draw picture": [
+		""
+	],
+	"Drawing": [
+		""
+	],
+	"Drop notes or files here": [
+		""
+	],
+	"Dropbox": [
+		""
+	],
+	"Dropbox Login": [
+		""
+	],
+	"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": [
+		"<oharra>rekin bat datozen oharrak [koaderno]ra kopiatzen ditu. Koadernorik ez bada zehazten, oharra oraingo koadernoan bikoiztuko da"
+	],
+	"Edit": [
+		"Editatu"
+	],
+	"Edit in external editor": [
+		""
+	],
+	"Edit note.": [
+		"Oharra editatu."
+	],
+	"Edit notebook": [
+		"Editatu koadernoa"
+	],
+	"Edit profile configuration...": [
+		""
+	],
+	"Editor font family": [
+		""
+	],
+	"Editor maximum width": [
+		""
+	],
+	"Editor monospace font family": [
+		""
+	],
+	"Emacs": [
+		""
+	],
+	"Email": [
+		""
+	],
+	"Email to Note": [
+		""
+	],
+	"Emails": [
+		""
+	],
+	"emphasised text": [
+		""
+	],
+	"Enable": [
+		"Gaituta"
+	],
+	"Enable ++insert++ syntax": [
+		""
+	],
+	"Enable ==mark== syntax": [
+		""
+	],
+	"Enable ^sup^ syntax": [
+		""
+	],
+	"Enable abbreviation syntax": [
+		""
+	],
+	"Enable audio player": [
+		""
+	],
+	"Enable biometrics authentication?": [
+		""
+	],
+	"Enable deflist syntax": [
+		""
+	],
+	"Enable encryption": [
+		"Zifratua gaitu"
+	],
+	"Enable footnotes": [
+		""
+	],
+	"Enable Fountain syntax support": [
+		""
+	],
+	"Enable markdown emoji": [
+		""
+	],
+	"Enable Mermaid diagrams support": [
+		""
+	],
+	"Enable multimarkdown table extension": [
+		""
+	],
+	"Enable PDF viewer": [
+		""
+	],
+	"Enable soft breaks": [
+		""
+	],
+	"Enable spellcheck in the text editor": [
+		""
+	],
+	"Enable table of contents extension": [
+		""
+	],
+	"Enable the Markdown toolbar": [
+		""
+	],
+	"Enable typographer support": [
+		""
+	],
+	"Enable video player": [
+		""
+	],
+	"Enable Web Clipper Service": [
+		""
+	],
+	"Enable ~sub~ syntax": [
+		""
+	],
+	"Enabled": [
+		"Gaituta"
+	],
+	"Encrypted": [
+		"Zifratuta"
+	],
+	"Encrypted items cannot be modified": [
+		"Zifratutako itemak ezin aldatu daitezke"
+	],
+	"Encryption Config": [
+		"Zifratze Ezarpenak"
+	],
+	"Encryption is: %s": [
+		"Zifratzea da: %s"
+	],
+	"Enter master password:": [
+		"Sartu pasahitz nagusia:"
+	],
+	"Enum": [
+		"Zenbakitu"
+	],
+	"Error": [
+		""
+	],
+	"Error opening note in editor: %s": [
+		"Errorea editorean oharra zabaltzean: %s"
+	],
+	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
+		""
+	],
+	"Exits the application.": [
+		"Irten aplikaziotik."
+	],
+	"Expand": [
+		""
+	],
+	"Export Debug Report": [
+		"Esportatu arazketa txostena"
+	],
+	"Exported successfully!": [
+		""
+	],
+	"Exporting to \"%s\" as \"%s\" format. Please wait...": [
+		""
+	],
+	"Exports only the given note.": [
+		"Esportatu emandako oharra soilik."
+	],
+	"Exports only the given notebook.": [
+		"Esportatu emandako koadernoa soilik."
+	],
+	"Fail-safe": [
+		""
+	],
+	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
+		""
+	],
+	"Fatal error:": [
+		"Aio! Agur! :_( "
+	],
+	"Feature flags": [
+		""
+	],
+	"Fetched items: %d/%d.": [
+		"Itemak eskuratuta: %d%d."
+	],
+	"File": [
+		"Fitxategia"
+	],
+	"File system": [
+		"Fitxategi sistema"
+	],
+	"Filter tags": [
+		""
+	],
+	"Find and replace": [
+		""
+	],
+	"Firefox Extension": [
+		""
+	],
+	"Fix search index": [
+		""
+	],
+	"Fixing search index...": [
+		""
+	],
+	"Focus": [
+		""
+	],
+	"Focus body": [
+		""
+	],
+	"Focus title": [
+		""
+	],
+	"Folders": [
+		"Karpetak"
+	],
+	"For debugging purpose only: export your profile to an external SD card.": [
+		""
+	],
+	"For example \"%s\"": [
+		""
+	],
+	"For information on how to customise the shortcuts please visit %s": [
+		""
+	],
+	"For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:": [
+		""
+	],
+	"Force path style": [
+		""
+	],
+	"Forward": [
+		""
+	],
+	"Found: %d.": [
+		"Aurkitua: %d"
+	],
+	"Full changelog": [
+		""
+	],
+	"Full name": [
+		""
+	],
+	"Get it now:": [
+		""
+	],
+	"Get pre-releases when checking for updates": [
+		""
+	],
+	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
+		"Konfigurazio balioa hartu edo ezartzen du. Baldin eta [balioa] ez bada ematen, [izena]ren balioa erakutsiko du. Ez bada ematen [izena] ez [balioa], oraingo konfigurazioaren zerrenda erakutsiko da."
+	],
+	"Go to source URL": [
+		""
+	],
+	"Goto Anything...": [
+		""
+	],
+	"Grant authorisation": [
+		""
+	],
+	"Header %d": [
+		""
+	],
+	"Headers": [
+		""
+	],
+	"Heading": [
+		""
+	],
+	"Hide %s": [
+		""
+	],
+	"Hide disabled keys": [
+		""
+	],
+	"Highlight": [
+		""
+	],
+	"Home": [
+		""
+	],
+	"Horizontal Rule": [
+		""
+	],
+	"HTML Directory": [
+		""
+	],
+	"HTML document": [
+		""
+	],
+	"Hyperlink": [
+		""
+	],
+	"Icon": [
+		""
+	],
+	"ID": [
+		"ID"
+	],
+	"Idle": [
+		""
+	],
+	"Ignore": [
+		""
+	],
+	"Ignore TLS certificate errors": [
+		""
+	],
+	"Images": [
+		""
+	],
+	"Import": [
+		"Inportatu"
+	],
+	"Importing from \"%s\" as \"%s\" format. Please wait...": [
+		""
+	],
+	"Importing notes...": [
+		"Oharrak inportatzen..."
+	],
+	"Imports data into Joplin.": [
+		""
+	],
+	"In \"Manual\" mode, attachments are downloaded only when you click on them. In \"Auto\", they are downloaded when you open the note. In \"Always\", all the attachments are downloaded whether you open the note or not.": [
+		""
+	],
+	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
+		"Edozein komandotan, oharra edo koadernoari erreferentzia egin ahal zaio izenburuz edo ID erabilita, edo `$n` edo `$b` lasterbideak erabilita, aukeratuta dagoen oharra edo koadernoa erabiltzeko. `$c` ere erabil daiteke aukeratutako elementua erabiltzeko."
+	],
+	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
+		""
+	],
+	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
+		""
+	],
+	"In order to use file system synchronisation your permission to write to external storage is required.": [
+		""
+	],
+	"In order to use the web clipper, you need to do the following:": [
+		""
+	],
+	"In progress": [
+		""
+	],
+	"Increase indent level": [
+		""
+	],
+	"Indent less": [
+		""
+	],
+	"Indent more": [
+		""
+	],
+	"Inline Code": [
+		""
+	],
+	"Insert": [
+		""
+	],
+	"Insert Hyperlink": [
+		""
+	],
+	"Insert time": [
+		""
+	],
+	"Install": [
+		""
+	],
+	"Install from file": [
+		""
+	],
+	"Installed": [
+		""
+	],
+	"Invalid answer: %s": [
+		"Erantzun baliogabea: %s"
+	],
+	"Invalid command: \"%s\"": [
+		"Komando baliogabea: \"%s\""
+	],
+	"Invalid option value: \"%s\". Possible values are: %s.": [
+		"Balio aukera baliogabea: \"%s\". Litezkeen balioak: %s."
+	],
+	"Italic": [
+		""
+	],
+	"Items": [
+		""
+	],
+	"Items that cannot be synchronised": [
+		"Itemok ezin sinkronizatu"
+	],
+	"Join us on Twitter": [
+		""
+	],
+	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
+		""
+	],
+	"Joplin Export Directory": [
+		""
+	],
+	"Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.": [
+		""
+	],
+	"Joplin Server URL": [
+		""
+	],
+	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
+		""
+	],
+	"Joplin website": [
+		""
+	],
+	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
+		""
+	],
+	"KaTeX": [
+		""
+	],
+	"Keep note history for": [
+		""
+	],
+	"Keyboard Mode": [
+		""
+	],
+	"Keyboard Shortcut": [
+		""
+	],
+	"Keyboard Shortcuts": [
+		""
+	],
+	"Keychain Supported: %s": [
+		""
+	],
+	"Keys that need upgrading": [
+		""
+	],
+	"Landscape": [
+		""
+	],
+	"Language": [
+		"Hizkuntza"
+	],
+	"Later": [
+		""
+	],
+	"Layout": [
+		"Diseinua"
+	],
+	"Layout button sequence": [
+		""
+	],
+	"Leave it blank to download the language files from the default website": [
+		""
+	],
+	"Legal": [
+		""
+	],
+	"Letter": [
+		""
+	],
+	"Light": [
+		"Argia"
+	],
+	"Lines": [
+		""
+	],
+	"Link has been copied to clipboard!": [
+		"",
+		""
+	],
+	"Link text": [
+		""
+	],
+	"Links with protocol \"%s\" are not supported": [
+		""
+	],
+	"List item": [
+		""
+	],
+	"Lists": [
+		""
+	],
+	"Loaded": [
+		""
+	],
+	"Location": [
+		""
+	],
+	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
+		"Giltzatzeko fitxategia dagoeneko eutsita dagoeneko. Baldin eta badakizu ez dena sinkronizaziorik egiten ari, ken dezakezu giltzatzeko fitxategia \"%s\"-n eta berrekin eragiketari."
+	],
+	"Log": [
+		"Egunkaria"
+	],
+	"Login": [
+		""
+	],
+	"Login below.": [
+		""
+	],
+	"Login with OneDrive": [
+		"Login with OneDrive"
+	],
+	"Logout": [
+		""
+	],
+	"Logs": [
+		""
+	],
+	"Manage your plugins": [
+		""
+	],
+	"Manual": [
+		""
+	],
+	"Markdown": [
+		""
+	],
+	"Markdown + Front Matter": [
+		""
+	],
+	"Marks a to-do as done.": [
+		"Markatu zeregina egindakotzat."
+	],
+	"Marks a to-do as non-completed.": [
+		"Markatu zeregina betegabe moduan."
+	],
+	"Markup": [
+		""
+	],
+	"Master Key %s": [
+		"Pasahitz Nagusia %s"
+	],
+	"Max concurrent connections": [
+		""
+	],
+	"Max Item Size": [
+		""
+	],
+	"Missing required argument: %s": [
+		"Beharrezko argumentua faltan: %s"
+	],
+	"Mobile data - auto-sync disabled": [
+		""
+	],
+	"More than one item match \"%s\". Please narrow down your query.": [
+		"Elementu bat baino gehiago bat dator \"%s\" bilaketarekin. Mugatu zure bilaketa, mesedez."
+	],
+	"Move %d notes to notebook \"%s\"?": [
+		"Mugitu %d oharrak \"%s\" koadernora?"
+	],
+	"n": [
+		"e"
+	],
+	"N": [
+		"E"
+	],
+	"Never resize": [
+		""
+	],
+	"New note": [
+		"Ohar berria"
+	],
+	"New notebook": [
+		"Koaderno berria"
+	],
+	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
+		"\"%s\" koaderno berria sortuko da eta \"%s\" Fitxategia inportatuko da bertara"
+	],
+	"New tags:": [
+		""
+	],
+	"New to-do": [
+		"Zeregin berria"
+	],
+	"New version: %s": [
+		""
+	],
+	"Next match": [
+		""
+	],
+	"Nextcloud password": [
+		"Nextcloud pasahitza"
+	],
+	"Nextcloud username": [
+		"Nextcloud erabiltzaile-izena"
+	],
+	"Nextcloud WebDAV URL": [
+		"Nextcloud WebDAV URL"
+	],
+	"No active notebook.": [
+		"Ez dago koadernorik aukeratuta."
+	],
+	"No item with ID %s": [
+		""
+	],
+	"No notebook has been specified.": [
+		"Ez dago koadernorik aukeratuta."
+	],
+	"No notebook selected.": [
+		"Ez dago koadernorik aukeratuta"
+	],
+	"No notes in here. Create one by clicking on \"New note\".": [
+		"Hemen ez dago oharrik. Sortu bat \"Ohar berria\" sakatuta."
+	],
+	"No resources!": [
+		""
+	],
+	"No results": [
+		""
+	],
+	"No such command: %s": [
+		"Ez dago komandorik: %s"
+	],
+	"No suggestions": [
+		""
+	],
+	"No text editor is defined. Please set it using `config editor <editor-path>`": [
+		"Testu editorerik ez dago definituta. Egin hau erabilita, mesedez: `config editor <editorearen-helbidea>`"
+	],
+	"Nord": [
+		""
+	],
+	"Not authentified with %s. Please provide any missing credentials.": [
+		"Ez da autentifikatu %s -rekin. Eman galdutako kredentzialak."
+	],
+	"Not downloaded": [
+		""
+	],
+	"Not generated": [
+		""
+	],
+	"Not now": [
+		""
+	],
+	"Note area growth factor": [
+		""
+	],
+	"Note does not exist: \"%s\". Create it?": [
+		"Ez dago oharrik: \"%s\". Sortu?"
+	],
+	"Note has been saved.": [
+		"Oharra gorde da."
+	],
+	"Note is not a to-do: \"%s\"": [
+		"Oharra ez da zeregina: \"%s\""
+	],
+	"Note list growth factor": [
+		""
+	],
+	"Note: Does not work in all desktop environments.": [
+		""
+	],
+	"Note: When a note is shared, it will no longer be encrypted on the server.": [
+		""
+	],
+	"Notebook list growth factor": [
+		""
+	],
+	"Notebooks": [
+		"Koadernoak"
+	],
+	"Notebooks cannot be named \"%s\", which is a reserved title.": [
+		"Koadernoak ezin izendatu daitezke \"%s\", izen hori Joplinek gordeta dauka"
+	],
+	"Notes and settings are stored in: %s": [
+		"Oharrak eta ezarpenak hemen daude gordeta: %s"
+	],
+	"Notes can only be created within a notebook.": [
+		"Oharrak soilik sor daitezke koaderno baten barruan."
+	],
+	"Numbered List": [
+		""
+	],
+	"OK": [
+		"OK"
+	],
+	"One or more items are currently encrypted and you may need to supply a master password. To do so please type `e2ee decrypt`. If you have already supplied the password, the encrypted items are being decrypted in the background and will be available soon.": [
+		"Item bat edo gehiago orain zifratuta daude eta baliteke zuk pasahitz nagusia ordezkatu behar izatea. Horixe egiteko, mesedez, idatz `e2ee decrypt`. Dagoeneko pasahitza ordezkatua baduzu, itemak deszifratzen ari izango dira atzeko planoan eta laster izango dira eskuragarri."
+	],
+	"OneDrive": [
+		"OneDrive"
+	],
+	"OneDrive Login": [
+		"Logeatu OneDriven"
+	],
+	"Only one note can be printed at a time.": [
+		""
+	],
+	"Open PDF viewer": [
+		""
+	],
+	"Open Sync Wizard...": [
+		""
+	],
+	"Open...": [
+		""
+	],
+	"Operation cancelled": [
+		" Eragiketa utzita"
+	],
+	"Options": [
+		"Aukerak"
+	],
+	"Page orientation for PDF export": [
+		""
+	],
+	"Page size for PDF export": [
+		""
+	],
+	"Password": [
+		"Pasahitza"
+	],
+	"Password cannot be empty": [
+		"Pasahitza ezin utz daiteke hutsik"
+	],
+	"Password:": [
+		"Pasahitza:"
+	],
+	"Paste": [
+		"Itsatsi"
+	],
+	"Paste as text": [
+		""
+	],
+	"Path:": [
+		""
+	],
+	"Per user. Minimum of %d users.": [
+		""
+	],
+	"Permission needed": [
+		""
+	],
+	"Permission to use camera": [
+		""
+	],
+	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
+		""
+	],
+	"Please confirm that you would like to re-encrypt your complete database.": [
+		""
+	],
+	"Please enter your password in the master key list below before upgrading the key.": [
+		""
+	],
+	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
+		""
+	],
+	"Please record your voice...": [
+		""
+	],
+	"Please select a notebook first.": [
+		"Aurretik aukeratu formatua, mesedez."
+	],
+	"Please select the note or notebook to be deleted first.": [
+		"Aurretik aukeratu ezabatzeko oharra edo koadernoa, mesedez."
+	],
+	"Please specify import format for %s": [
+		""
+	],
+	"Please upgrade Joplin to use this plugin": [
+		""
+	],
+	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
+		""
+	],
+	"Plugin tools": [
+		""
+	],
+	"Plugins": [
+		""
+	],
+	"Portrait": [
+		""
+	],
+	"Possible keys/values:": [
+		"Litezkeen balioak:"
+	],
+	"Possible values: %s.": [
+		"Litezkeen balioak: %s."
+	],
+	"Preferences": [
+		""
+	],
+	"Preferences...": [
+		""
+	],
+	"Preferred dark theme": [
+		""
+	],
+	"Preferred light theme": [
+		""
+	],
+	"Press Ctrl+D or type \"exit\" to exit the application": [
+		"Sakatu Ktrl+D edo idatzi \"exit\" aplikaziotik irteteko"
+	],
+	"Press the shortcut": [
+		""
+	],
+	"Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the shortcut.": [
+		""
+	],
+	"Press to set the decryption password.": [
+		"Sakatu deszifratze pasahitza ezartzeko."
+	],
+	"Previous match": [
+		""
+	],
+	"Previous versions of this note": [
+		""
+	],
+	"Print": [
+		""
+	],
+	"Priority support": [
+		""
+	],
+	"Privacy Policy": [
+		""
+	],
+	"Pro": [
+		""
+	],
+	"Process failed payment subscriptions": [
+		""
+	],
+	"Process oversized accounts": [
+		""
+	],
+	"Process user deletions": [
+		""
+	],
+	"Profile": [
+		""
+	],
+	"Properties": [
+		""
+	],
+	"Proxy timeout (seconds)": [
+		""
+	],
+	"Proxy URL": [
+		""
+	],
+	"Public-private key pair:": [
+		""
+	],
+	"Publish note...": [
+		""
+	],
+	"Publish Notes": [
+		""
+	],
+	"Publish notes to the internet": [
+		""
+	],
+	"Quit": [
+		"Irten"
+	],
+	"Re-upload local data to sync target": [
+		""
+	],
+	"Read more about it": [
+		""
+	],
+	"Read time: %s min": [
+		""
+	],
+	"Recipient has accepted the invitation": [
+		""
+	],
+	"Recipient has not yet accepted the invitation": [
+		""
+	],
+	"Recipient has rejected the invitation": [
+		""
+	],
+	"Recipients:": [
+		""
+	],
+	"Redo": [
+		""
+	],
+	"Reject": [
+		""
+	],
+	"Remove": [
+		""
+	],
+	"Remove this search from the sidebar?": [
+		"Kendu bilaketa hori ohar guztietatik?"
+	],
+	"Rename": [
+		"Berrizendatu"
+	],
+	"Rename notebook:": [
+		"Berrizendatu koadernoa:"
+	],
+	"Renames the given <item> (note or notebook) to <name>.": [
+		"Ber izendatu emandako <item> (oharra edo koadernoa) <name> izen berriaz."
+	],
+	"Renew token": [
+		""
+	],
+	"Replace": [
+		""
+	],
+	"Replace with...": [
+		""
+	],
+	"Replace: ": [
+		""
+	],
+	"Resize large images:": [
+		""
+	],
+	"Resources: %d.": [
+		"Baliabideak: %d."
+	],
+	"Restart and upgrade": [
+		""
+	],
+	"Restart now": [
+		""
+	],
+	"Restore": [
+		""
+	],
+	"Retry": [
+		""
+	],
+	"Retry All": [
+		""
+	],
+	"Reveal file in folder": [
+		""
+	],
+	"Reverses the sorting order.": [
+		"Alderantziz antolatzen du."
+	],
+	"Runs the commands contained in the text file. There should be one command per line.": [
+		""
+	],
+	"S3": [
+		""
+	],
+	"S3 access key": [
+		""
+	],
+	"S3 bucket": [
+		""
+	],
+	"S3 region": [
+		""
+	],
+	"S3 secret key": [
+		""
+	],
+	"S3 URL": [
+		""
+	],
+	"Safe mode is currently active. Note rendering and all plugins are temporarily disabled.": [
+		""
+	],
+	"Save": [
+		"Gorde"
+	],
+	"Save changes": [
+		"Gorde aldaketak"
+	],
+	"Save geo-location with notes": [
+		"Gore geokokapena oharrekin"
+	],
+	"Search": [
+		"Bilatu"
+	],
+	"Search in all the notes": [
+		"Bilatu ohar guztietan"
+	],
+	"Search:": [
+		"Bilatu:"
+	],
+	"Searches for the given <pattern> in all the notes.": [
+		"Emandako <pattern> bilatzen du ohar guztietan."
+	],
+	"See the pre-release page for more details: %s": [
+		""
+	],
+	"Server is already running on port %d": [
+		""
+	],
+	"Server is not running.": [
+		""
+	],
+	"Server is running on port %d": [
+		""
+	],
+	"Set alarm": [
+		"Ezarri alarma"
+	],
+	"Set alarm:": [
+		"Ezarri alarma:"
+	],
+	"Set it to 0 to make it take the complete available space. Recommended width is 600.": [
+		""
+	],
+	"Set the password": [
+		"Ezarri pasahitza"
+	],
+	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
+		"Emandako <note>ren <name> ezaugarrian emandako [value] balioa ezartzen du. Litezkeen ezaugarriak dira:\n\n%s"
+	],
+	"Share": [
+		""
+	],
+	"Share a copy of all notes in a file format that can be imported by Joplin on a computer.": [
+		""
+	],
+	"Share permissions": [
+		""
+	],
+	"Shortcuts are not available in CLI mode.": [
+		"CLI moduan ez dago lasterbiderik erabilgarri."
+	],
+	"Show all": [
+		""
+	],
+	"Show note counts": [
+		""
+	],
+	"Show sort order buttons": [
+		""
+	],
+	"Show tray icon": [
+		""
+	],
+	"Show/hide the sidebar": [
+		""
+	],
+	"Shrink large images before adding them to notes.": [
+		""
+	],
+	"Side menu opened": [
+		""
+	],
+	"Sidebar": [
+		""
+	],
+	"Size": [
+		""
+	],
+	"Skip this version": [
+		""
+	],
+	"Skipped items: %d (use --retry-failed-items to retry decrypting them)": [
+		""
+	],
+	"Skipped: %d.": [
+		"Saltatuta: %d."
+	],
+	"Solarised Dark": [
+		""
+	],
+	"Solarised Light": [
+		""
+	],
+	"Some items cannot be decrypted.": [
+		"Zenbait item ezin dira deszifratu."
+	],
+	"Some items cannot be synchronised.": [
+		"Zenbait item ezin dira sinkronizatu."
+	],
+	"Sort notes by": [
+		""
+	],
+	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
+		"Itemak antolatzen ditu <field> arabera (esate baterako, izenburua, eguneratze_unea, sortze_unea)."
+	],
+	"Specify the port that should be used by the API server. If not set, a default will be used.": [
+		""
+	],
+	"Spell checker": [
+		""
+	],
+	"Split View": [
+		""
+	],
+	"Start application minimised in the tray icon": [
+		""
+	],
+	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
+		""
+	],
+	"Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.": [
+		"Deszifratzearen hasiera... Mesedez itxaron, prozesua luzea izan daiteke, zenbat dagoen prozesatzeko."
+	],
+	"Starting synchronisation...": [
+		"Sinkronizazioa hasten..."
+	],
+	"Starting to edit note. Close the editor to get back to the prompt.": [
+		"Oharra editatzearen hasiera. Itxi editorea prompt-era bueltatzeko."
+	],
+	"Statistics...": [
+		""
+	],
+	"Status": [
+		"Egoera"
+	],
+	"Status: Started on port %d": [
+		""
+	],
+	"Step 1: Enable the clipper service": [
+		""
+	],
+	"Step 1: Open this URL in your browser to authorise the application:": [
+		""
+	],
+	"Step 2: Enter the code provided by Dropbox:": [
+		""
+	],
+	"Step 2: Install the extension": [
+		""
+	],
+	"Stop": [
+		""
+	],
+	"Stop external editing": [
+		""
+	],
+	"Storage space": [
+		""
+	],
+	"Strikethrough": [
+		""
+	],
+	"strong text": [
+		""
+	],
+	"Submit": [
+		""
+	],
+	"Subscript": [
+		""
+	],
+	"Superscript": [
+		""
+	],
+	"Swap line down": [
+		""
+	],
+	"Swap line up": [
+		""
+	],
+	"Switch between note and to-do type": [
+		"Aldatu oharra eta zeregin eren artean."
+	],
+	"Switches to [notebook] - all further operations will happen within this notebook.": [
+		"Aldatu [koaderno]ra - hurrengo eragiketak koaderno horretan jazoko dira."
+	],
+	"Sync as many devices as you want": [
+		""
+	],
+	"Sync status (synced items / total items)": [
+		"Sinkronizazio egoera (sinkronizatutako itemak/itemak guztira)"
+	],
+	"Sync target must be upgraded! Run `%s` to proceed.": [
+		""
+	],
+	"Sync Target Upgrade": [
+		""
+	],
+	"Sync your notes": [
+		""
+	],
+	"Synchronisation interval": [
+		"Sinkronizazio tartea"
+	],
+	"Synchronisation is already in progress.": [
+		"Sinkronizazio prozesua dagoeneko abian da."
+	],
+	"Synchronisation Status": [
+		"Sinkronizazioaren egoera"
+	],
+	"Synchronisation target": [
+		"Sinkronizazio helbudua"
+	],
+	"Synchronisation target: %s (%s)": [
+		"Sinkronizazio helburua: %s (%s)"
+	],
+	"Synchronise": [
+		"Sinkronizatu"
+	],
+	"Synchronise only over WiFi connection": [
+		""
+	],
+	"Synchronises with remote storage.": [
+		"Urruneko biltegiarekin sinkronizatzen du."
+	],
+	"Tabloid": [
+		""
+	],
+	"tag1, tag2, ...": [
+		""
+	],
+	"Tagged: %d.": [
+		"Etiketatuta: %d."
+	],
+	"Tags": [
+		"Etiketak"
+	],
+	"Tasks": [
+		""
+	],
+	"Teams": [
+		""
+	],
+	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
+		""
+	],
+	"The active profile cannot be deleted. Switch to a different profile and try again.": [
+		""
+	],
+	"The app is now going to close. Please relaunch it to complete the process.": [
+		""
+	],
+	"The application did not close properly. Would you like to start in safe mode?": [
+		""
+	],
+	"The application has been authorised - you may now close this browser tab.": [
+		"Aplikazioak baimena hartu du - Orain fitxa hau zarratu dezakezu."
+	],
+	"The application has been successfully authorised.": [
+		"Aplikazioak baimena hartu du."
+	],
+	"The application must be restarted for these changes to take effect.": [
+		""
+	],
+	"The attachments will no longer be watched when you switch to a different note.": [
+		""
+	],
+	"The command \"%s\" is only available in GUI mode": [
+		"\"%s\" komandoa  soilik eskuragarri GUI moduan"
+	],
+	"The default admin password is insecure and has not been changed! [Change it now](%s)": [
+		""
+	],
+	"The default encryption method has been changed to a more secure one and it is recommended that you apply it to your data.": [
+		""
+	],
+	"The default encryption method has been changed, you should re-encrypt your data.": [
+		""
+	],
+	"The default profile cannot be deleted": [
+		""
+	],
+	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
+		""
+	],
+	"The following attachments are being watched for changes:": [
+		""
+	],
+	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
+		""
+	],
+	"The Joplin mobile app does not currently support this type of link: %s": [
+		""
+	],
+	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
+		""
+	],
+	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
+		""
+	],
+	"The master key has been upgraded successfully!": [
+		""
+	],
+	"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
+		""
+	],
+	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
+		""
+	],
+	"The notebook could not be saved: %s": [
+		"Koadernoa ezin gorde daiteke: %s"
+	],
+	"The notes have been imported: %s": [
+		"Oharrak inportatu dira: %s"
+	],
+	"The possible commands are:": [
+		"Litezkeen komandoak hauek dira:"
+	],
+	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
+		""
+	],
+	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
+		""
+	],
+	"The sync target needs to be upgraded. Press this banner to proceed.": [
+		""
+	],
+	"The tag \"%s\" already exists. Please choose a different name.": [
+		""
+	],
+	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
+		"Sinkronizazio helburua. Sinkronizazio aukera bakoitzak izan ditzake parametro gehigarriak, horrela izendatuta `sync.NUM.NAME` (dena beherago dokumentatuta)."
+	],
+	"The Web Clipper needs your authorisation to access your data.": [
+		""
+	],
+	"The web clipper service is enabled and set to auto-start.": [
+		""
+	],
+	"The web clipper service is not enabled.": [
+		""
+	],
+	"The WebDAV implementation of %s is incompatible with Joplin, and as such is no longer supported. Please use a different sync method.": [
+		""
+	],
+	"Theme": [
+		"Gaia"
+	],
+	"There are currently no notes. Create one by clicking on the (+) button.": [
+		"Ez dago oharrik. Sortu bat (+) botoian klik eginaz."
+	],
+	"There are unsaved changes.": [
+		""
+	],
+	"There is currently no notebook. Create one by clicking on \"New notebook\".": [
+		"Momentuz ez dago koadernorik. Sortu bat \"Koaderno berria\" sakatuta."
+	],
+	"There is no data to export.": [
+		""
+	],
+	"There was a [conflict](%s) on the attachment below.\n\n%s": [
+		""
+	],
+	"There was an error downloading this attachment:": [
+		""
+	],
+	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
+		""
+	],
+	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
+		"Itemok gailuan geratuko dira baina ez dira sinkronizatuko. Horiek aurkitzeko bilaketak egin titulu edo goiko parentesien arteko IDaren arabera."
+	],
+	"These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.": [
+		""
+	],
+	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
+		""
+	],
+	"This attachment is not downloaded or not decrypted yet": [
+		""
+	],
+	"This attachment is not downloaded or not decrypted yet.": [
+		""
+	],
+	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
+		""
+	],
+	"This drawing may have unsaved changes.": [
+		""
+	],
+	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
+		""
+	],
+	"This note does not have geolocation information.": [
+		"Ohar honek ez du geokokapen informaziorik."
+	],
+	"This note has been modified:": [
+		"Ohar hau mugitua izan da:"
+	],
+	"This note has no content. Click on \"%s\" to toggle the editor and edit the note.": [
+		""
+	],
+	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
+		""
+	],
+	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
+		""
+	],
+	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
+		""
+	],
+	"This will open a new screen. Save your current changes?": [
+		""
+	],
+	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
+		""
+	],
+	"Time format": [
+		"Ordu formatua"
+	],
+	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
+		""
+	],
+	"To delete a tag, untag the associated notes.": [
+		"Etiketa ezabatzeko, kendu etiketa duten oharrei"
+	],
+	"To delete: %d": [
+		"Ezabatzeko: %d"
+	],
+	"To enter command line mode, press \":\"": [
+		"Komando lerroa sartzeko, idatzi \":\""
+	],
+	"To exit command line mode, press ESCAPE": [
+		"Komando lerrotik irteteko, sakatu ESC, mesedez"
+	],
+	"To manually sort the notes, the sort order must be changed to \"%s\" in the menu \"%s\" > \"%s\"": [
+		""
+	],
+	"To move from one pane to another, press Tab or Shift+Tab.": [
+		"Panel batetik bestera mugitzeko, sakatu Tab edo Shifft + Tab."
+	],
+	"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": [
+		""
+	],
+	"To switch the profile, the app is going to close and you will need to restart it.": [
+		""
+	],
+	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
+		""
+	],
+	"Toggle sidebar": [
+		""
+	],
+	"Token has been copied to the clipboard!": [
+		""
+	],
+	"Total Size": [
+		""
+	],
+	"Total: %d/%d": [
+		"Denera: %d/%d"
+	],
+	"Try again": [
+		""
+	],
+	"Try it now": [
+		""
+	],
+	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
+		"Idatzi `help [command]` komandoari buruzko informazio gehiagorako; edo idatzi `help all` erabilerari buruzko informazio osoa lortzeko."
+	],
+	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
+		""
+	],
+	"Type new tags or select from list": [
+		""
+	],
+	"Type: %s.": [
+		"Idatz: %s."
+	],
+	"Unable to edit resource of type %s": [
+		""
+	],
+	"Unable to export or share data. Reason: %s": [
+		""
+	],
+	"Unable to share log data. Reason: %s": [
+		""
+	],
+	"Undo": [
+		""
+	],
+	"Unknown flag: %s": [
+		"Marka ezezaguna: %s"
+	],
+	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
+		""
+	],
+	"Unshare": [
+		""
+	],
+	"Unshare this notebook? The recipients will no longer have access to its content.": [
+		""
+	],
+	"Unsupported image type: %s": [
+		"Irudi formatua ez onartua: %s"
+	],
+	"Unsupported link or message: %s": [
+		"Esteka edo mezu ez dago onartua: %s"
+	],
+	"Untitled": [
+		"Titulu gabekoa"
+	],
+	"Updated": [
+		"Eguneratua"
+	],
+	"Updated local items: %d.": [
+		"Item lokalak eguneratuta: %d."
+	],
+	"Updated remote items: %d.": [
+		"Urruneko itemak eguneratuta: %d."
+	],
+	"Updated: %d.": [
+		"Eguneratuta: %d."
+	],
+	"Upgrade": [
+		""
+	],
+	"Upgrade the sync target to the latest version.": [
+		""
+	],
+	"URL": [
+		""
+	],
+	"Usage: %s": [
+		"Erabili: %s"
+	],
+	"Use biometrics to secure access to the app": [
+		""
+	],
+	"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE": [
+		"Zerrenda luzearen formatua erabili. Formatua hau da, ID, NOTE_COUNT (libururako), DATE, TODO_CHECKED (zereginetarako), TITLE"
+	],
+	"Use spell checker": [
+		""
+	],
+	"Use the arrows and page up/down to scroll the lists and text areas (including this console).": [
+		"Erabili geziak edo page up/down list eta testu guneen artean aldatzeko (kontsola hau ere kontuan izanda)."
+	],
+	"Use the arrows to move the layout items. Press \"Escape\" to exit.": [
+		""
+	],
+	"Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.": [
+		""
+	],
+	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
+		""
+	],
+	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
+		""
+	],
+	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
+		""
+	],
+	"User deletions": [
+		""
+	],
+	"Users": [
+		""
+	],
+	"Verify your identity": [
+		""
+	],
+	"View": [
+		""
+	],
+	"View on map": [
+		"Ikusi mapan"
+	],
+	"View them now": [
+		"Ikusi hori orain"
+	],
+	"Viewer": [
+		""
+	],
+	"Vim": [
+		""
+	],
+	"Voice typing language files (URL)": [
+		""
+	],
+	"Voice typing...": [
+		""
+	],
+	"Warning": [
+		""
+	],
+	"Warning: not all resources shown for performance reasons (limit: %s).": [
+		""
+	],
+	"Warnings:\n%s": [
+		""
+	],
+	"Web Clipper": [
+		""
+	],
+	"Website and documentation": [
+		"Web orria eta dokumentazioa (en)"
+	],
+	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
+		"Ongi etorri Joplin-era!\n\nIdatz `:help shortcuts` lasterbideak ikusteko, edo soilik `:help`erabilerako informaziorako.\n\nEsate baterako, koadernoa sortzeko sakatu `mb`: oharra sortzeko sakatu `mn`"
+	],
+	"Words": [
+		""
+	],
+	"y": [
+		"b"
+	],
+	"Y": [
+		"B"
+	],
+	"yes": [
+		""
+	],
+	"Yes": [
+		""
+	],
+	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
+		""
+	],
+	"You do not have any installed plugin.": [
+		""
+	],
+	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
+		""
+	],
+	"Your choice: ": [
+		"Zure aukera:"
+	],
+	"Your data is going to be re-encrypted and synced again.": [
+		""
+	],
+	"Your password is needed to decrypt some of your data.": [
+		""
+	],
+	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
+		""
+	],
+	"Your permission to use your camera is required.": [
+		""
+	],
+	"Your version: %s": [
+		""
+	],
+	"Zoom In": [
+		""
+	],
+	"Zoom Out": [
+		""
+	]
 }

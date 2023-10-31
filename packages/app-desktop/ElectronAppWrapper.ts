@@ -4,6 +4,7 @@ import shim from '@joplin/lib/shim';
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
 import { BrowserWindow, Tray, screen } from 'electron';
+import bridge from './bridge';
 const url = require('url');
 const path = require('path');
 const { dirname } = require('@joplin/lib/path-utils');
@@ -141,6 +142,15 @@ export default class ElectronAppWrapper {
 				}
 			}, 3000);
 		}
+
+		// will-frame-navigate is fired by clicking on a link within the BrowserWindow.
+		this.win_.webContents.on('will-frame-navigate', event => {
+			// If the link changes the URL of the browser window,
+			if (event.isMainFrame) {
+				event.preventDefault();
+				void bridge().openExternal(event.url);
+			}
+		});
 
 		this.win_.on('close', (event: any) => {
 			// If it's on macOS, the app is completely closed only if the user chooses to close the app (willQuitApp_ will be true)

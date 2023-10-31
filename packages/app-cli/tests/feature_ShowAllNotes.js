@@ -1,4 +1,12 @@
 /* eslint-disable no-unused-vars */
+
+// ====================== IMPORTANT ============================================
+// As of 2023-10-23 we should not use these tests anymore as they are too flaky.
+// To test the reducer we can use `reducer.test.js` or `app.reducer.test.ts`. If
+// it becomes too much of a burden to maintain these `feature_*` tests we may to
+// remove them.
+// ====================== IMPORTANT ============================================
+
 const { setupDatabaseAndSynchronizer, switchClient, id, ids, sortedIds, at, createNTestFolders, createNTestNotes, createNTestTags, TestApp } = require('@joplin/lib/testing/test-utils.js');
 const Setting = require('@joplin/lib/models/Setting').default;
 const Folder = require('@joplin/lib/models/Folder').default;
@@ -7,22 +15,25 @@ const Tag = require('@joplin/lib/models/Tag').default;
 const time = require('@joplin/lib/time').default;
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids.js');
 
-//
-// The integration tests are to test the integration of the core system, comprising the
-// base application with middleware, reducer and models in response to dispatched events.
+// The integration tests are to test the integration of the core system,
+// comprising the base application with middleware, reducer and models in
+// response to dispatched events.
 //
 // The general strategy for each integration test is:
 //  - create a starting application state,
 //  - inject the event to be tested
 //  - check the resulting application state
 //
-// Important: TestApp.wait() must be used after TestApp dispatch to allow the async
-// processing to complete
-//
+// Important: TestApp.wait() must be used after TestApp dispatch to allow the
+// async processing to complete
 
 let testApp = null;
 
 describe('integration_ShowAllNotes', () => {
+
+	// The below tests can randomly fail, probably due to timing issues, so
+	// repeat them.
+	jest.retryTimes(2);
 
 	beforeEach(async () => {
 		testApp = new TestApp();

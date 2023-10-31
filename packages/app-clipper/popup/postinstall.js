@@ -1,6 +1,8 @@
 const fs = require('fs-extra');
 
 const sourcePath = `${__dirname}/../../lib/randomClipperPort.js`;
+const clipperUtilsPath = `${__dirname}/../../lib/clipperUtils.js`;
+
 
 // Mozilla insists on building the clipper from a tarball, not from the repository
 // so we add this check and only copy the file if it's present. Normally it rarely
@@ -8,6 +10,10 @@ const sourcePath = `${__dirname}/../../lib/randomClipperPort.js`;
 
 if (fs.pathExistsSync(sourcePath)) {
 	fs.copySync(sourcePath, `${__dirname}/src/randomClipperPort.js`);
+}
+
+if (fs.pathExistsSync(clipperUtilsPath)) {
+	fs.copySync(clipperUtilsPath, `${__dirname}/../content_scripts/clipperUtils.js`);
 }
 
 // These files give warnings when loading the extension in Chrome, in dev mode

@@ -21,13 +21,15 @@ export default class TaskStateModel extends BaseModel<TaskState> {
 	}
 
 	public async init(taskId: TaskId) {
-		const taskState: TaskState = await this.loadByTaskId(taskId);
-		if (taskState) return taskState;
+		return this.withTransaction(async () => {
+			const taskState: TaskState = await this.loadByTaskId(taskId);
+			if (taskState) return taskState;
 
-		return this.save({
-			task_id: taskId,
-			enabled: 1,
-			running: 0,
+			return this.save({
+				task_id: taskId,
+				enabled: 1,
+				running: 0,
+			});
 		});
 	}
 

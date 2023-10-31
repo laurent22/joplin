@@ -9,6 +9,9 @@ import filterParser, { Term } from './filterParser';
 import queryBuilder from './queryBuilder';
 import { ItemChangeEntity, NoteEntity } from '../database/types';
 import JoplinDatabase from '../../JoplinDatabase';
+import isItemId from '../../models/utils/isItemId';
+import BaseItem from '../../models/BaseItem';
+import { isCallbackUrl, parseCallbackUrl } from '../../callbackUrlUtils';
 const { sprintf } = require('sprintf-js');
 const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.js');
 
@@ -29,9 +32,13 @@ interface SearchOptions {
 	appendWildCards?: boolean;
 }
 
-interface ProcessResultsRow {
+export interface ProcessResultsRow {
+	id: string;
+	parent_id: string;
+	title: string;
 	offsets: string;
 	user_updated_time: number;
+	user_created_time: number;
 	matchinfo: Buffer;
 	item_type?: ModelType;
 	fields?: string[];
@@ -612,7 +619,40 @@ export default class SearchEngine {
 		return SearchEngine.SEARCH_TYPE_FTS;
 	}
 
-	public async search(searchString: string, options: SearchOptions = null) {
+	private async searchFromItemIds(searchString: string): Promise<ProcessResultsRow[]> {
+		let itemId = '';
+
+		if (isCallbackUrl(searchString)) {
+			const parsed = parseCallbackUrl(searchString);
+			itemId = parsed.params.id;
+		} else if (isItemId(searchString)) {
+			itemId = searchString;
+		}
+
+		if (itemId) {
+			const item = await BaseItem.loadItemById(itemId);
+
+			// We only return notes for now because the UI doesn't handle anything else.
+			if (item && item.type_ === ModelType.Note) {
+				return [
+					{
+						id: item.id,
+						parent_id: item.parent_id || '',
+						matchinfo: Buffer.from(''),
+						offsets: '',
+						title: item.title || item.id,
+						user_updated_time: item.user_updated_time || item.updated_time,
+						user_created_time: item.user_created_time || item.created_time,
+						fields: ['id'],
+					},
+				];
+			}
+		}
+
+		return [];
+	}
+
+	public async search(searchString: string, options: SearchOptions = null): Promise<ProcessResultsRow[]> {
 		if (!searchString) return [];
 
 		options = {
@@ -624,12 +664,12 @@ export default class SearchEngine {
 		const searchType = this.determineSearchType_(searchString, options.searchType);
 		const parsedQuery = await this.parseQuery(searchString);
 
+		let rows: ProcessResultsRow[] = [];
+
 		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
 			searchString = this.normalizeText_(searchString);
-			const rows = await this.basicSearch(searchString);
-
+			rows = await this.basicSearch(searchString);
 			this.processResults_(rows, parsedQuery, true);
-			return rows;
 		} else {
 			// SEARCH_TYPE_FTS
 			// FTS will ignore all special characters, like "-" in the index. So if
@@ -654,14 +694,19 @@ export default class SearchEngine {
 			const useFts = searchType === SearchEngine.SEARCH_TYPE_FTS;
 			try {
 				const { query, params } = queryBuilder(parsedQuery.allTerms, useFts);
-				const rows = await this.db().selectAll(query, params);
-				this.processResults_(rows as ProcessResultsRow[], parsedQuery, !useFts);
-				return rows;
+				rows = (await this.db().selectAll(query, params)) as ProcessResultsRow[];
+				this.processResults_(rows, parsedQuery, !useFts);
 			} catch (error) {
 				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);
-				return [];
+				rows = [];
 			}
 		}
+
+		if (!rows.length) {
+			rows = await this.searchFromItemIds(searchString);
+		}
+
+		return rows;
 	}
 
 	public async destroy() {

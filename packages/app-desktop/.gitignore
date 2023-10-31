@@ -14,3 +14,7 @@ style.min.css
 build/lib/
 vendor/*
 !vendor/loadEmojiLib.js
+test-results/
+playwright-report/
+playwright/.cache/
+integration-tests/test-profile/

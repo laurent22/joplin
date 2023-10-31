@@ -2,7 +2,16 @@ import { execCommand, isMac } from '../tool-utils';
 import { existsSync, readFile } from 'fs-extra';
 const gettextParser = require('gettext-parser');
 
-export type Translations = Record<string, string>;
+export interface TranslationStatus {
+	locale?: string;
+	languageName?: string;
+	translatorName: string;
+	percentDone: number;
+	untranslatedCount: number;
+	pluralForms?: string;
+}
+
+export type Translations = Record<string, string[]>;
 
 export const removePoHeaderDate = async (filePath: string) => {
 	let sedPrefix = 'sed -i';
@@ -59,14 +68,14 @@ export const parseTranslations = (gettextTranslations: any) => {
 			if (!translations.hasOwnProperty(n)) continue;
 			if (n === '') continue;
 			const t = translations[n];
-			let translated = '';
+			let translated: string[] = [];
 			if (t.comments && t.comments.flag && t.comments.flag.indexOf('fuzzy') >= 0) {
 				// Don't include fuzzy translations
 			} else {
-				translated = t['msgstr'][0];
+				translated = t['msgstr'];
 			}
 
-			if (translated) output[n] = translated;
+			if (translated.length) output[n] = translated;
 		}
 	}
 

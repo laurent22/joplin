@@ -33,7 +33,7 @@ class Command extends BaseCommand {
 		const stdoutWidth = app().commandStdoutMaxWidth();
 
 		if (args.command === 'shortcuts' || args.command === 'keymap') {
-			this.stdout(_('For information on how to customise the shortcuts please visit %s', 'https://joplinapp.org/terminal/#shortcuts'));
+			this.stdout(_('For information on how to customise the shortcuts please visit %s', 'https://joplinapp.org/help/apps/terminal#shortcuts'));
 			this.stdout('');
 
 			if (

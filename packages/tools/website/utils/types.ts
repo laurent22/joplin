@@ -1,5 +1,6 @@
 import { Plan, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
 import { Sponsors } from '../../utils/loadSponsors';
+import { Translations } from '../../utils/translation';
 import { OpenGraphTags } from './openGraph';
 
 export enum Env {
@@ -8,7 +9,7 @@ export enum Env {
 }
 
 export interface Locale {
-	htmlTranslations: Record<string, string>;
+	htmlTranslations: Translations;
 	lang: string;
 	pathPrefix: string;
 }

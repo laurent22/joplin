@@ -85,6 +85,14 @@ class Logger {
 		this.enabled_ = v;
 	}
 
+	public status(): string {
+		const output: string[] = [];
+		output.push(`Enabled: ${this.enabled}`);
+		output.push(`Level: ${this.level()}`);
+		output.push(`Targets: ${this.targets().map(t => t.type).join(', ')}`);
+		return output.join('\n');
+	}
+
 	public static initializeGlobalLogger(logger: Logger) {
 		this.globalLogger_ = logger;
 	}

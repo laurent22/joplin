@@ -14,7 +14,7 @@ import useFormNote, { OnLoadEvent } from './utils/useFormNote';
 import useEffectiveNoteId from './utils/useEffectiveNoteId';
 import useFolder from './utils/useFolder';
 import styles_ from './styles';
-import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps, AllAssetsOptions } from './utils/types';
+import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps, AllAssetsOptions, NoteBodyEditorRef } from './utils/types';
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
 import CommandService from '@joplin/lib/services/CommandService';
 import ToolbarButton from '../ToolbarButton/ToolbarButton';
@@ -45,6 +45,7 @@ import { ModelType } from '@joplin/lib/BaseModel';
 import BaseItem, { unwantedCharacters } from '@joplin/lib/models/BaseItem';
 import { ErrorCode } from '@joplin/lib/errors';
 import ItemChange from '@joplin/lib/models/ItemChange';
+import PlainEditor from './NoteBody/PlainEditor/PlainEditor';
 import CodeMirror6 from './NoteBody/CodeMirror/v6/CodeMirror';
 import CodeMirror5 from './NoteBody/CodeMirror/v5/CodeMirror';
 // import path = require('path');
@@ -61,7 +62,7 @@ function NoteEditor(props: NoteEditorProps) {
 	const [scrollWhenReady, setScrollWhenReady] = useState<ScrollOptions>(null);
 	const [isReadOnly, setIsReadOnly] = useState<boolean>(false);
 
-	const editorRef = useRef<any>();
+	const editorRef = useRef<NoteBodyEditorRef>();
 	const titleInputRef = useRef<any>();
 	const isMountedRef = useRef(true);
 	const noteSearchBarRef = useRef(null);
@@ -414,8 +415,7 @@ function NoteEditor(props: NoteEditorProps) {
 			noteId: formNoteRef.current.id,
 			percent: event.percent,
 		});
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [props.dispatch, formNote]);
+	}, [props.dispatch]);
 
 	function renderNoNotes(rootStyle: any) {
 		const emptyDivStyle = {
@@ -486,6 +486,8 @@ function NoteEditor(props: NoteEditorProps) {
 
 	if (props.bodyEditor === 'TinyMCE') {
 		editor = <TinyMCE {...editorProps} />;
+	} else if (props.bodyEditor === 'PlainText') {
+		editor = <PlainEditor {...editorProps} />;
 	} else if (props.bodyEditor === 'CodeMirror') {
 		editor = <CodeMirror5 {...editorProps} />;
 	} else if (props.bodyEditor === 'CodeMirror6') {
@@ -495,7 +497,7 @@ function NoteEditor(props: NoteEditorProps) {
 	}
 
 	const onRichTextReadMoreLinkClick = useCallback(() => {
-		bridge().openExternal('https://joplinapp.org/rich_text_editor');
+		bridge().openExternal('https://joplinapp.org/help/apps/rich_text_editor');
 	}, []);
 
 	const onRichTextDismissLinkClick = useCallback(() => {

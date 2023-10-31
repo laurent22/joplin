@@ -25,6 +25,13 @@ const userFetcher = async () => {
 	const fileApi = await syncTarget.fileApi();
 	const api = fileApi.driver().api();
 
+	if (!api.userId) {
+		// That can happen if we don't have a session yet or if it has been
+		// cleared
+		logger.info('Skipping fetching user because user ID is not available');
+		return;
+	}
+
 	const owner: UserApiResponse = await api.exec('GET', `api/users/${api.userId}`);
 
 	logger.info('Got user:', owner);

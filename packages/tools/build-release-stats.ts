@@ -1,3 +1,5 @@
+/* eslint-disable import/prefer-default-export */
+
 import fetch from 'node-fetch';
 import { writeFile, readFile, pathExists } from 'fs-extra';
 import { dirname } from '@joplin/lib/path-utils';
@@ -30,7 +32,7 @@ interface Release extends GitHubRelease {
 }
 
 const rootDir = dirname(dirname(__dirname));
-const statsFilePath = `${rootDir}/readme/stats.md`;
+const statsFilePath = `${rootDir}/readme/about/stats.md`;
 
 function endsWith(str: string, suffix: string) {
 	return str.indexOf(suffix, str.length - suffix.length) !== -1;
@@ -61,10 +63,26 @@ function downloadCounts(release: GitHubRelease) {
 	return output;
 }
 
+export const replaceGitHubInternalLinks = (body: string) => {
+	body = body.replace(/#(\d+)(.{2})/g, (_match: string, v1: string, v2: string) => {
+		if (v2.startsWith('](')) {
+			// The issue number is already a link, so skip it
+			return `#${v1}${v2}`;
+		} else {
+			return `[#${v1}](https://github.com/laurent22/joplin/issues/${v1})${v2}`;
+		}
+	});
+
+
+	body = body.replace(/\(([0-9a-z]{7})\)/g, '([$1](https://github.com/laurent22/joplin/commit/$1))');
+
+	return body;
+};
+
 function createChangeLog(releases: Release[]) {
 	const output = [];
 
-	output.push('# Joplin changelog');
+	output.push('# Joplin Desktop Changelog');
 
 	for (let i = 0; i < releases.length; i++) {
 		const r = releases[i];
@@ -72,8 +90,7 @@ function createChangeLog(releases: Release[]) {
 		const preReleaseString = r.prerelease ? ' (Pre-release)' : '';
 		s.push(`## ${r.tag_name}${preReleaseString} - ${r.published_at}`);
 		s.push('');
-		let body = r.body.replace(/#(\d+)/g, '[#$1](https://github.com/laurent22/joplin/issues/$1)');
-		body = body.replace(/\(([0-9a-z]{7})\)/g, '([$1](https://github.com/laurent22/joplin/commit/$1))');
+		const body = replaceGitHubInternalLinks(r.body);
 		s.push(body);
 		output.push(s.join('\n'));
 	}
@@ -92,7 +109,7 @@ async function main() {
 
 	if (updateStats && await pathExists(statsFilePath)) {
 		const md = await readFile(statsFilePath, 'utf8');
-		const info = stripOffFrontMatter(md);
+		const info = stripOffFrontMatter(md).header;
 		if (!info.updated) throw new Error('Missing front matter property: updated');
 
 		const now = new Date();
@@ -179,7 +196,7 @@ async function main() {
 	if (updateChangelog) {
 		console.info('Build stats: Updating changelog...');
 		const changelogText = createChangeLog(rows);
-		await writeFile(`${rootDir}/readme/changelog.md`, changelogText);
+		await writeFile(`${rootDir}/readme/about/changelog/desktop.md`, changelogText);
 	}
 
 	if (!updateStats) return;
@@ -238,8 +255,11 @@ async function main() {
 	await writeFile(statsFilePath, statsText);
 }
 
-main().catch((error) => {
-	console.error('Fatal error');
-	console.error(error);
-	process.exit(1);
-});
+if (require.main === module) {
+	// eslint-disable-next-line promise/prefer-await-to-then
+	main().catch((error) => {
+		console.error('Fatal error');
+		console.error(error);
+		process.exit(1);
+	});
+}

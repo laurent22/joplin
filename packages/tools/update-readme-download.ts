@@ -1,7 +1,7 @@
 import * as fs from 'fs-extra';
 import { fileExtension } from '@joplin/lib/path-utils';
 import { gitHubLatestRelease, GitHubRelease } from './tool-utils';
-const readmePath = `${__dirname}/../../README.md`;
+const destMarkdownPath = `${__dirname}/../../readme/install.md`;
 
 async function msleep(ms: number) {
 	return new Promise((resolve) => {
@@ -52,13 +52,13 @@ export const downloadUrl = (release: GitHubRelease, os: OS, portable = false) =>
 };
 
 function readmeContent() {
-	if (!fs.existsSync(readmePath)) throw new Error(`Cannot find ${readmePath}`);
-	return fs.readFileSync(readmePath, 'utf8');
+	if (!fs.existsSync(destMarkdownPath)) throw new Error(`Cannot find ${destMarkdownPath}`);
+	return fs.readFileSync(destMarkdownPath, 'utf8');
 }
 
 function setReadmeContent(content: string) {
-	if (!fs.existsSync(readmePath)) throw new Error(`Cannot find ${readmePath}`);
-	return fs.writeFileSync(readmePath, content);
+	if (!fs.existsSync(destMarkdownPath)) throw new Error(`Cannot find ${destMarkdownPath}`);
+	return fs.writeFileSync(destMarkdownPath, content);
 }
 
 async function main(argv: any) {
