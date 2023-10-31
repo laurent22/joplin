@@ -1,5 +1,15 @@
 # Joplin Desktop Changelog
 
+## [v2.13.4](https://github.com/laurent22/joplin/releases/tag/v2.13.4) (Pre-release) - 2023-10-31T00:01:00Z
+
+- Improved: Allow modifying a resource metadata only when synchronising ([#911](https://github.com/laurent22/joplin/issues/911)4)
+- Improved: Allow searching by note ID or using a callback URL ([3667bf3](https://github.com/laurent22/joplin/commit/3667bf3))
+- Improved: Automatically create a bug report when import fails, and allow uploading it to the forum ([11eead1](https://github.com/laurent22/joplin/commit/11eead1))
+- Improved: Make sure that the import screen is cleared even when import fails ([df9db9c](https://github.com/laurent22/joplin/commit/df9db9c))
+- Improved: Updated packages nan (v2.18.0), react, sass (v1.67.0)
+- Fixed: Beta editor: Improve performance on large documents ([#9116](https://github.com/laurent22/joplin/issues/9116)) ([#9115](https://github.com/laurent22/joplin/issues/9115) by Henry Heino)
+- Fixed: Save to file after keyboard shortcuts are imported ([#9128](https://github.com/laurent22/joplin/issues/9128)) ([#8916](https://github.com/laurent22/joplin/issues/8916) by [@CptMeetKat](https://github.com/CptMeetKat))
+
 ## [v2.13.3](https://github.com/laurent22/joplin/releases/tag/v2.13.3) (Pre-release) - 2023-10-24T09:25:33Z
 
 - Improved: Support for plural translations ([#903](https://github.com/laurent22/joplin/issues/903)3)
