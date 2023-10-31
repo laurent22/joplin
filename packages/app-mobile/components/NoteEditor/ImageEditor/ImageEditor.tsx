@@ -16,11 +16,13 @@ const logger = Logger.create('ImageEditor');
 
 type OnSaveCallback = (svgData: string)=> void;
 type OnCancelCallback = ()=> void;
+
+// Returns the empty string to load from a template.
 type LoadInitialSVGCallback = ()=> Promise<string>;
 
 interface Props {
 	themeId: number;
-	loadInitialSVGData: LoadInitialSVGCallback|null;
+	loadInitialSVGData: LoadInitialSVGCallback;
 	onSave: OnSaveCallback;
 	onExit: OnCancelCallback;
 }
