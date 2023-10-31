@@ -24,6 +24,10 @@ describe('build-release-stats', () => {
 				'list (#8825) (#8194 by [@CptMeetKat](https://github.com/CptMeetKat))',
 				'list ([#8825](https://github.com/laurent22/joplin/issues/8825)) ([#8194](https://github.com/laurent22/joplin/issues/8194) by [@CptMeetKat](https://github.com/CptMeetKat))',
 			],
+			[
+				'- Improved: Support for plural translations (#9033)',
+				'- Improved: Support for plural translations ([#9033](https://github.com/laurent22/joplin/issues/9033))',
+			],
 		];
 
 		for (const [input, expected] of testCases) {

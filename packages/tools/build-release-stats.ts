@@ -64,7 +64,7 @@ function downloadCounts(release: GitHubRelease) {
 }
 
 export const replaceGitHubInternalLinks = (body: string) => {
-	body = body.replace(/#(\d+)(.{2})/g, (_match: string, v1: string, v2: string) => {
+	body = body.replace(/#(\d+)(.{1,2}|)/g, (_match: string, v1: string, v2: string) => {
 		if (v2.startsWith('](')) {
 			// The issue number is already a link, so skip it
 			return `#${v1}${v2}`;
