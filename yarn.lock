@@ -4225,6 +4225,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@crowdin/cli@npm:3":
+  version: 3.15.0
+  resolution: "@crowdin/cli@npm:3.15.0"
+  dependencies:
+    command-exists-promise: ^2.0.2
+    node-fetch: 2.6.7
+    shelljs: ^0.8.4
+    tar: ^4.4.8
+    yauzl: ^2.10.0
+  bin:
+    crowdin: jdeploy-bundle/jdeploy.js
+  checksum: 232f455d9ba44357d8f107ed7471b642e20ae724ebe8ce28175219223225f1c6ca77d7c69b220fe45db7ce1f06774d5d9a5a46100e5aa948a89743ea0eb6b7c1
+  languageName: node
+  linkType: hard
+
 "@cspell/cspell-bundled-dicts@npm:^5.21.2":
   version: 5.21.2
   resolution: "@cspell/cspell-bundled-dicts@npm:5.21.2"
@@ -15498,6 +15513,13 @@ __metadata:
   version: 1.0.8
   resolution: "comma-separated-tokens@npm:1.0.8"
   checksum: 0adcb07174fa4d08cf0f5c8e3aec40a36b5ff0c2c720e5e23f50fe02e6789d1d00a67036c80e0c1e1539f41d3e7f0101b074039dd833b4e4a59031b659d6ca0d
+  languageName: node
+  linkType: hard
+
+"command-exists-promise@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "command-exists-promise@npm:2.0.2"
+  checksum: f6674abbc7d9cc704255999adb42e8b8fe165d941de207d1df8177e1ccea2afb9ff57aad7a70f9235056dd317e45b31f9726ecb2c39826f9a1f98a50f4de1b31
   languageName: node
   linkType: hard
 
@@ -36493,6 +36515,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root@workspace:."
   dependencies:
+    "@crowdin/cli": 3
     "@joplin/utils": ~2.12
     "@seiyab/eslint-plugin-react-hooks": 4.5.1-beta.0
     "@types/fs-extra": 11.0.2

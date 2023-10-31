@@ -313,10 +313,10 @@ const resolveBlockQuotes = (output: string): string => {
 	return newOutput.join('\n');
 };
 
-const processUrls = (md: string) => {
+export const processUrls = (md: string) => {
 	md = md
-		.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/dev\/readme\/(.*)\/index\.md/g, '/help/$1')
-		.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/dev\/readme\/(.*)\.md/g, '/help/$1');
+		.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/dev\/readme\/(.*?)\/index\.md/g, '/help/$1')
+		.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/dev\/readme\/(.*?)\.md/g, '/help/$1');
 
 	return md;
 };
@@ -479,6 +479,7 @@ async function main() {
 
 	await processDocFiles(readmeDir, destHelpDir, [
 		`${readmeDir}/_i18n`,
+		`${readmeDir}/i18n`,
 		`${readmeDir}/cla.md`,
 		`${readmeDir}/download.md`,
 		`${readmeDir}/faq_joplin_cloud.md`,
@@ -494,6 +495,14 @@ async function main() {
 	const newsContext: Context = { isNews: true, donateLinks };
 	await processDocFiles(`${readmeDir}/news`, newsDestDir, [], newsContext);
 	await deleteUnprocessedFiles(newsDestDir, newsContext.processedFiles);
+
+	if (await pathExists(`${readmeDir}/i18n`)) {
+		const localeContext: Context = { donateLinks };
+		await processDocFiles(`${readmeDir}/i18n`, `${docBuilderDir}/i18n`, [], localeContext);
+		await deleteUnprocessedFiles(`${docBuilderDir}/i18n`, localeContext.processedFiles);
+	} else {
+		console.info('i18n folder is missing - skipping it');
+	}
 
 	await copyFile(`${rootDir}/Assets/WebsiteAssets/images`, `${docBuilderDir}/static/images`);
 

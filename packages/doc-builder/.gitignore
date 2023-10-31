@@ -8,11 +8,12 @@
 .docusaurus
 .cache-loader
 
-# Docs are auto-generated using processDoc.js
+# Folders that are auto-generated using processDocs.js
 /docs
 /help
 /blog
 /news
+/i18n
 
 # Misc
 .DS_Store
