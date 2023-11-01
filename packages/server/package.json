@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start-dev": "yarn run build && JOPLIN_IS_TESTING=1 nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
-    "start-dev-no-watch": "node dist/app.js --env dev",
+    "start-prod": "pm2 kill && pm2 start --no-daemon --exp-backoff-restart-delay=1000 dist/app.js",
     "rebuild": "yarn run clean && yarn run build && yarn run tsc",
     "build": "gulp build",
     "devCreateDb": "node dist/app.js --env dev --create-db",
@@ -47,6 +47,7 @@
     "nodemailer": "6.9.6",
     "nodemon": "3.0.1",
     "pg": "8.11.3",
+    "pm2": "5.3.0",
     "pretty-bytes": "5.6.0",
     "prettycron": "0.10.0",
     "query-string": "7.1.3",
