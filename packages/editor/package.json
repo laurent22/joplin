@@ -6,7 +6,6 @@
 	"scripts": {
 		"tsc": "tsc --project tsconfig.json",
 		"watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
-		"postinstall": "yarn run tsc",
 		"test": "jest",
 		"test-ci": "yarn test"
 	},
