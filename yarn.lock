@@ -27115,9 +27115,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:13.3.0":
-  version: 13.3.0
-  resolution: "lint-staged@npm:13.3.0"
+"lint-staged@npm:14.0.0":
+  version: 14.0.0
+  resolution: "lint-staged@npm:14.0.0"
   dependencies:
     chalk: 5.3.0
     commander: 11.0.0
@@ -27131,7 +27131,7 @@ __metadata:
     yaml: 2.3.1
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: f7c146cc2849c9ce4f1d2808d990fcbdef5e0bb79e6e79cc895f53c91f5ac4dcefdb8c3465156b38a015dcb051f2795c6bda4f20a1e2f2fa654c7ba521b2d2e0
+  checksum: 7269cd21c15a7b5734a28775f879a91f6b59291bec9a897a1f2faae1cd8316dd50e19fd13207fb6798c705eb5371a25caee0e2dfd5932fbcd38ea5f8155f918c
   languageName: node
   linkType: hard
 
@@ -36389,7 +36389,7 @@ __metadata:
     http-server: 14.1.1
     husky: 3.1.0
     lerna: 3.22.1
-    lint-staged: 13.3.0
+    lint-staged: 14.0.0
     madge: 6.1.0
     node-gyp: 9.4.0
     nodemon: 3.0.1
