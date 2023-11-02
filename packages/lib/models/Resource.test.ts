@@ -155,7 +155,7 @@ describe('models/Resource', () => {
 	it('should return resources since a certain time and ID', async () => {
 		expect((await Resource.allForNormalization(0, '')).length).toBe(0);
 
-		const testData = [
+		const testData: [string, number][] = [
 			['00000000000000000000000000000001', 1536700000000],
 			['ddddddddddddddddddddddddddddddd1', 1536700000001],
 			['ddddddddddddddddddddddddddddddd3', 1536700000001],

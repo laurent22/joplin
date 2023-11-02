@@ -9,7 +9,7 @@ import { ProfileConfig } from './services/profileConfig/types';
 import * as ArrayUtils from './ArrayUtils';
 import { FolderEntity } from './services/database/types';
 import { getListRendererIds } from './services/noteList/renderers';
-import { SearchResult } from './services/searchengine/types';
+import { ProcessResultsRow } from './services/searchengine/SearchEngine';
 const fastDeepEqual = require('fast-deep-equal');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
@@ -78,7 +78,7 @@ export interface State {
 	syncStarted: boolean;
 	syncReport: any;
 	searchQuery: string;
-	searchResults: SearchResult[];
+	searchResults: ProcessResultsRow[];
 	settings: any;
 	sharedData: any;
 	appState: string;

@@ -38,7 +38,7 @@ const SyncTargetAmazonS3 = require('./SyncTargetAmazonS3.js');
 import EncryptionService from './services/e2ee/EncryptionService';
 import ResourceFetcher from './services/ResourceFetcher';
 import SearchEngineUtils from './services/searchengine/SearchEngineUtils';
-import SearchEngine from './services/searchengine/SearchEngine';
+import SearchEngine, { ProcessResultsRow } from './services/searchengine/SearchEngine';
 import RevisionService from './services/RevisionService';
 import ResourceService from './services/ResourceService';
 import DecryptionWorker from './services/DecryptionWorker';
@@ -60,7 +60,6 @@ import initProfile from './services/profileConfig/initProfile';
 import { parseShareCache } from './services/share/reducer';
 import RotatingLogs from './RotatingLogs';
 import { NoteEntity } from './services/database/types';
-import { SearchResult } from './services/searchengine/types';
 import { join } from 'path';
 import processStartFlags, { MatchedStartFlags } from './utils/processStartFlags';
 
@@ -223,7 +222,7 @@ export default class BaseApplication {
 
 		let notes: NoteEntity[] = [];
 		let highlightedWords: string[] = [];
-		let searchResults: SearchResult[] = [];
+		let searchResults: ProcessResultsRow[] = [];
 
 		if (parentId) {
 			if (parentType === Folder.modelType()) {
