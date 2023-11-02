@@ -64,15 +64,19 @@ export async function formParse(request: IncomingMessage): Promise<FormParseResu
 
 	if (req.__parsed) return req.__parsed;
 
-	const isFormContentType = req.headers['content-type'] === 'application/x-www-form-urlencoded';
+	const isFormContentType = req.headers['content-type'] === 'application/x-www-form-urlencoded' || req.headers['content-type'].startsWith('multipart/form-data');
 
 	// Note that for Formidable to work, the content-type must be set in the
 	// headers
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	return new Promise((resolve: Function, reject: Function) => {
-		const form = formidable({ multiples: true });
+		const form = formidable({
+			allowEmptyFiles: true,
+			minFileSize: 0,
+		});
 		form.parse(req, (error: any, fields: Fields, files: Files) => {
 			if (error) {
+				error.message = `Could not parse form: ${error.message}`;
 				reject(error);
 				return;
 			}
@@ -95,6 +99,11 @@ export async function bodyFields<T>(req: any/* , filter:string[] = null*/): Prom
 	const form = await formParse(req);
 	return form.fields as T;
 }
+
+export const bodyFiles = async <T>(req: any/* , filter:string[] = null*/): Promise<T> => {
+	const form = await formParse(req);
+	return form.files as T;
+};
 
 export function ownerRequired(ctx: AppContext) {
 	if (!ctx.joplin.owner) throw new ErrorForbidden();

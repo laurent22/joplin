@@ -51,6 +51,7 @@ lerna-debug.log
 .env
 docs/**/*.mustache
 .idea
+/readme/i18n
 
 # Yarn stuff
 # https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
@@ -224,6 +225,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/Editor.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/Editor.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/useEditorCommands.js
+packages/app-desktop/gui/NoteEditor/NoteBody/PlainEditor/PlainEditor.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/joplinCommandToTinyMceCommands.js
@@ -395,6 +397,8 @@ packages/app-desktop/utils/checkForUpdatesUtils.test.js
 packages/app-desktop/utils/checkForUpdatesUtils.js
 packages/app-desktop/utils/checkForUpdatesUtilsTestData.js
 packages/app-desktop/utils/markupLanguageUtils.js
+packages/app-desktop/utils/restartInSafeModeFromMain.test.js
+packages/app-desktop/utils/restartInSafeModeFromMain.js
 packages/app-mobile/PluginAssetsLoader.js
 packages/app-mobile/components/ActionButton.js
 packages/app-mobile/components/BackButtonDialogBox.js
@@ -481,7 +485,8 @@ packages/app-mobile/utils/autodetectTheme.js
 packages/app-mobile/utils/checkPermissions.js
 packages/app-mobile/utils/createRootStyle.js
 packages/app-mobile/utils/debounce.js
-packages/app-mobile/utils/fs-driver-rn.js
+packages/app-mobile/utils/fs-driver/fs-driver-rn.js
+packages/app-mobile/utils/fs-driver/runOnDeviceTests.js
 packages/app-mobile/utils/setupNotifications.js
 packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/types.js
@@ -515,6 +520,7 @@ packages/editor/CodeMirror/testUtil/createTestEditor.js
 packages/editor/CodeMirror/testUtil/forceFullParse.js
 packages/editor/CodeMirror/testUtil/loadLanguages.js
 packages/editor/CodeMirror/theme.js
+packages/editor/CodeMirror/util/isInSyntaxNode.js
 packages/editor/SelectionFormatting.js
 packages/editor/events.js
 packages/editor/types.js
@@ -606,12 +612,14 @@ packages/lib/import-enex.js
 packages/lib/initLib.js
 packages/lib/locale.test.js
 packages/lib/locale.js
+packages/lib/makeDiscourseDebugUrl.js
 packages/lib/markdownUtils.test.js
 packages/lib/markdownUtils.js
 packages/lib/markdownUtils2.test.js
 packages/lib/markupLanguageUtils.js
 packages/lib/migrations/42.js
 packages/lib/models/Alarm.js
+packages/lib/models/BaseItem.test.js
 packages/lib/models/BaseItem.js
 packages/lib/models/Folder.sharing.test.js
 packages/lib/models/Folder.test.js
@@ -637,6 +645,7 @@ packages/lib/models/SmartFilter.js
 packages/lib/models/Tag.js
 packages/lib/models/dateTimeFormats.test.js
 packages/lib/models/settings/FileHandler.js
+packages/lib/models/utils/isItemId.js
 packages/lib/models/utils/itemCanBeEncrypted.js
 packages/lib/models/utils/paginatedFeed.js
 packages/lib/models/utils/paginationToSql.js
@@ -687,6 +696,12 @@ packages/lib/services/commands/isEditorCommand.js
 packages/lib/services/commands/propsHaveChanged.js
 packages/lib/services/commands/stateToWhenClauseContext.js
 packages/lib/services/contextkey/contextkey.js
+packages/lib/services/database/addMigrationFile.js
+packages/lib/services/database/migrations/42.js
+packages/lib/services/database/migrations/43.js
+packages/lib/services/database/migrations/44.js
+packages/lib/services/database/migrations/45.js
+packages/lib/services/database/sqlStringToLines.js
 packages/lib/services/database/types.js
 packages/lib/services/debug/populateDatabase.js
 packages/lib/services/e2ee/EncryptionService.test.js
@@ -826,7 +841,6 @@ packages/lib/services/searchengine/filterParser.js
 packages/lib/services/searchengine/gotoAnythingStyleQuery.test.js
 packages/lib/services/searchengine/gotoAnythingStyleQuery.js
 packages/lib/services/searchengine/queryBuilder.js
-packages/lib/services/searchengine/types.js
 packages/lib/services/share/ShareService.test.js
 packages/lib/services/share/ShareService.js
 packages/lib/services/share/reducer.js
@@ -883,6 +897,7 @@ packages/lib/themes/type.js
 packages/lib/time.js
 packages/lib/utils/credentialFiles.js
 packages/lib/utils/joplinCloud.js
+packages/lib/utils/processStartFlags.js
 packages/lib/utils/userFetcher.js
 packages/lib/utils/webDAVUtils.test.js
 packages/lib/utils/webDAVUtils.js
@@ -958,6 +973,7 @@ packages/renderer/index.js
 packages/renderer/noteStyle.js
 packages/renderer/pathUtils.js
 packages/renderer/utils.js
+packages/tools/build-release-stats.test.js
 packages/tools/build-release-stats.js
 packages/tools/build-translation.js
 packages/tools/build-welcome.js
@@ -996,12 +1012,15 @@ packages/tools/utils/loadSponsors.js
 packages/tools/utils/translation.js
 packages/tools/website/build.js
 packages/tools/website/buildTranslations.js
+packages/tools/website/processDocs.test.js
+packages/tools/website/processDocs.js
 packages/tools/website/updateDownloadPage.js
 packages/tools/website/updateNews.js
 packages/tools/website/utils/applyTranslations.test.js
 packages/tools/website/utils/applyTranslations.js
 packages/tools/website/utils/convertLinksToLocale.test.js
 packages/tools/website/utils/convertLinksToLocale.js
+packages/tools/website/utils/frontMatter.test.js
 packages/tools/website/utils/frontMatter.js
 packages/tools/website/utils/news.js
 packages/tools/website/utils/openGraph.test.js

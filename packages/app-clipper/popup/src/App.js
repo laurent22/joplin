@@ -132,7 +132,7 @@ class AppComponent extends Component {
 		};
 
 		this.clipperServerHelpLink_click = () => {
-			bridge().tabsCreate({ url: 'https://joplinapp.org/clipper/' });
+			bridge().tabsCreate({ url: 'https://joplinapp.org/help/apps/clipper' });
 		};
 
 		this.folderSelect_change = (event) => {

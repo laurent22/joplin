@@ -63,6 +63,35 @@ describe('markdownCommands.toggleList', () => {
 		);
 	});
 
+	it('should not toggle a the full list when the cursor is on a blank line', async () => {
+		const checklistStartText = [
+			'# Test',
+			'',
+			'- [ ] This',
+			'- [ ] is',
+			'',
+		].join('\n');
+
+		const checklistEndText = [
+			'- [ ] a',
+			'- [ ] test',
+		].join('\n');
+
+		const editor = await createTestEditor(
+			`${checklistStartText}\n${checklistEndText}`,
+
+			// Place the cursor on the blank line between the checklist
+			// regions
+			EditorSelection.cursor(unorderedListText.length + 1),
+			['BulletList', 'ATXHeading1'],
+		);
+
+		// Should create a checkbox on the blank line
+		toggleList(ListType.CheckList)(editor);
+		expect(editor.state.doc.toString()).toBe(
+			`${checklistStartText}- [ ] \n${checklistEndText}`,
+		);
+	});
 
 	// it('should correctly replace an unordered list with a checklist', async () => {
 	// 	const editor = await createEditor(

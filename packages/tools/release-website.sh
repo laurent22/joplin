@@ -40,11 +40,11 @@ yarn install
 # to change after installation.
 git reset --hard
 
-JOPLIN_GITHUB_OAUTH_TOKEN=$JOPLIN_GITHUB_OAUTH_TOKEN yarn run updateMarkdownDoc
+JOPLIN_GITHUB_OAUTH_TOKEN=$JOPLIN_GITHUB_OAUTH_TOKEN yarn updateMarkdownDoc
 
 # Automatically update certain forum posts
-yarn run updateNews $DISCOURSE_API_KEY $DISCOURSE_USERNAME
-yarn run postPreReleasesToForum $DISCOURSE_API_KEY $DISCOURSE_USERNAME
+yarn updateNews $DISCOURSE_API_KEY $DISCOURSE_USERNAME
+yarn postPreReleasesToForum $DISCOURSE_API_KEY $DISCOURSE_USERNAME
 
 # We commit and push the change. It will be a noop if nothing was actually
 # changed
@@ -67,7 +67,8 @@ git checkout master
 git pull --rebase
 
 cd "$JOPLIN_ROOT_DIR"
-yarn run buildWebsite
+CROWDIN_PERSONAL_TOKEN="$CROWDIN_PERSONAL_TOKEN" yarn crowdinDownload
+yarn buildWebsite
 
 cd "$JOPLIN_WEBSITE_ROOT_DIR"
 git add -A

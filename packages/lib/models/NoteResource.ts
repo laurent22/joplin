@@ -1,5 +1,5 @@
 import BaseModel from '../BaseModel';
-import { SqlQuery } from '../database';
+import { SqlQuery } from '../services/database/types';
 import BaseItem from './BaseItem';
 
 // - If is_associated = 1, note_resources indicates which note_id is currently associated with the given resource_id

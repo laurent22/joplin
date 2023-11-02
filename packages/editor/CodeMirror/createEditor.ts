@@ -20,6 +20,7 @@ import { SearchState, EditorProps, EditorSettings } from '../types';
 import { EditorEventType, SelectionRangeChangeEvent } from '../events';
 import {
 	decreaseIndent, increaseIndent,
+	insertOrIncreaseIndent,
 	toggleBolded, toggleCode,
 	toggleItalicized, toggleMath,
 } from './markdown/markdownCommands';
@@ -254,7 +255,7 @@ const createEditor = (
 						notifyLinkEditRequest();
 						return true;
 					}),
-					keyCommand('Tab', increaseIndent, true),
+					keyCommand('Tab', insertOrIncreaseIndent, true),
 					keyCommand('Shift-Tab', decreaseIndent, true),
 
 					...standardKeymap, ...historyKeymap, ...searchKeymap,

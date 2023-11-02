@@ -184,11 +184,16 @@ export class Bridge {
 		return dialog.showMessageBoxSync(window, options);
 	}
 
-	public showErrorMessageBox(message: string) {
+	public showErrorMessageBox(message: string, options: any = null) {
+		options = {
+			buttons: [_('OK')],
+			...options,
+		};
+
 		return this.showMessageBox_(this.window(), {
 			type: 'error',
 			message: message,
-			buttons: [_('OK')],
+			buttons: options.buttons,
 		});
 	}
 

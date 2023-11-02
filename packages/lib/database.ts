@@ -1,17 +1,9 @@
 import Logger from '@joplin/utils/Logger';
 import time from './time';
 import shim from './shim';
+import { SqlParams, SqlQuery, StringOrSqlQuery } from './services/database/types';
 
 const Mutex = require('async-mutex').Mutex;
-
-type SqlParams = any[];
-
-export interface SqlQuery {
-	sql: string;
-	params?: SqlParams;
-}
-
-type StringOrSqlQuery = string | SqlQuery;
 
 export type Row = Record<string, any>;
 
@@ -262,24 +254,6 @@ export default class Database {
 		if (type === this.TYPE_TEXT) return value;
 		if (type === this.TYPE_NUMERIC) return Number(value);
 		throw new Error(`Unknown type: ${type}`);
-	}
-
-	public sqlStringToLines(sql: string) {
-		const output = [];
-		const lines = sql.split('\n');
-		let statement = '';
-		for (let i = 0; i < lines.length; i++) {
-			const line = lines[i];
-			if (line === '') continue;
-			if (line.substr(0, 2) === '--') continue;
-			statement += line.trim();
-			if (line[line.length - 1] === ',') statement += ' ';
-			if (line[line.length - 1] === ';') {
-				output.push(statement);
-				statement = '';
-			}
-		}
-		return output;
 	}
 
 	public logQuery(sql: string, params: SqlParams = null) {

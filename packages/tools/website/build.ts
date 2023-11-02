@@ -10,7 +10,7 @@ import { readmeFileTitle, replaceGitHubByWebsiteLinks } from './utils/parser';
 import { extractOpenGraphTags, OpenGraphTags } from './utils/openGraph';
 import { readCredentialFileJson } from '@joplin/lib/utils/credentialFiles';
 import { getNewsDateString } from './utils/news';
-import { parsePoFile, parseTranslations, Translations } from '../utils/translation';
+import { Translations } from '../utils/translation';
 import { setLocale } from '@joplin/lib/locale';
 import applyTranslations from './utils/applyTranslations';
 import { loadSponsors } from '../utils/loadSponsors';
@@ -36,7 +36,7 @@ const path = require('path');
 const md5File = require('md5-file');
 const docDir = `${dirname(dirname(dirname(dirname(__dirname))))}/joplin-website/docs`;
 
-if (!pathExistsSync(docDir)) throw new Error(`Doc directory does not exist: ${docDir}`);
+if (!pathExistsSync(docDir)) throw new Error(`"docs" directory does not exist: ${docDir}`);
 
 const websiteAssetDir = `${rootDir}/Assets/WebsiteAssets`;
 const readmeDir = `${rootDir}/readme`;
@@ -49,16 +49,16 @@ const partialDir = `${websiteAssetDir}/templates/partials`;
 
 const discussLink = 'https://discourse.joplinapp.org/c/news/9';
 
-let tocMd_: string = null;
-const tocHtml_: Record<string, string> = {};
-const tocRegex_ = /<!-- TOC -->([^]*)<!-- TOC -->/;
-function tocMd() {
-	if (tocMd_) return tocMd_;
-	const md = readFileSync(`${rootDir}/README.md`, 'utf8');
-	const toc = md.match(tocRegex_);
-	tocMd_ = toc[1];
-	return tocMd_;
-}
+// let tocMd_: string = null;
+// const tocHtml_: Record<string, string> = {};
+// const tocRegex_ = /<!-- TOC -->([^]*)<!-- TOC -->/;
+// function tocMd() {
+// 	if (tocMd_) return tocMd_;
+// 	const md = readFileSync(`${rootDir}/README.md`, 'utf8');
+// 	const toc = md.match(tocRegex_);
+// 	tocMd_ = toc[1];
+// 	return tocMd_;
+// }
 
 const donateLinksRegex_ = /<!-- DONATELINKS -->([^]*)<!-- DONATELINKS -->/;
 async function getDonateLinks() {
@@ -70,18 +70,18 @@ async function getDonateLinks() {
 	return `<div class="donate-links">\n\n${matches[1].trim()}\n\n</div>`;
 }
 
-function tocHtml(locale: Locale) {
-	if (tocHtml_[locale.lang]) return tocHtml_[locale.lang];
-	const markdownIt = getMarkdownIt();
-	let md = tocMd();
-	md = md.replace(/# Table of contents/, '');
-	md = replaceGitHubByWebsiteLinks(md);
-	md = convertLinksToLocale(md, locale);
-	let output = markdownIt.render(md);
-	output = `<div>${output}</div>`;
-	tocHtml_[locale.lang] = output;
-	return output;
-}
+// function tocHtml(locale: Locale) {
+// 	if (tocHtml_[locale.lang]) return tocHtml_[locale.lang];
+// 	const markdownIt = getMarkdownIt();
+// 	let md = tocMd();
+// 	md = md.replace(/# Table of contents/, '');
+// 	md = replaceGitHubByWebsiteLinks(md);
+// 	md = convertLinksToLocale(md, locale);
+// 	let output = markdownIt.render(md);
+// 	output = `<div>${output}</div>`;
+// 	tocHtml_[locale.lang] = output;
+// 	return output;
+// }
 
 const baseUrl = '';
 const cssBasePath = `${websiteAssetDir}/css`;
@@ -143,7 +143,7 @@ function defaultTemplateParams(assetUrls: AssetUrls, locale: Locale = null): Tem
 		imageBaseUrl: `${baseUrl}/images`,
 		cssBaseUrl,
 		jsBaseUrl,
-		tocHtml: tocHtml(locale),
+		// tocHtml: tocHtml(locale),
 		yyyy: (new Date()).getFullYear().toString(),
 		templateHtml: mainTemplateHtml,
 		forumUrl: 'https://discourse.joplinapp.org/',
@@ -211,44 +211,44 @@ function renderFileToHtml(sourcePath: string, targetPath: string, templateParams
 	}
 }
 
-function makeHomePageMd(readmePath: string) {
-	let md = readFileSync(readmePath, 'utf8');
-	md = md.replace(tocRegex_, '');
+// function makeHomePageMd(readmePath: string) {
+// 	let md = readFileSync(readmePath, 'utf8');
+// 	md = md.replace(tocRegex_, '');
 
-	// HACK: GitHub needs the \| or the inline code won't be displayed correctly inside the table,
-	// while MarkdownIt doesn't and will in fact display the \. So we remove it here.
-	md = md.replace(/\\\| bash/g, '| bash');
+// 	// HACK: GitHub needs the \| or the inline code won't be displayed correctly inside the table,
+// 	// while MarkdownIt doesn't and will in fact display the \. So we remove it here.
+// 	md = md.replace(/\\\| bash/g, '| bash');
 
-	// We strip-off the donate links because they are added back (with proper
-	// classes and CSS).
-	md = md.replace(donateLinksRegex_, '');
+// 	// We strip-off the donate links because they are added back (with proper
+// 	// classes and CSS).
+// 	md = md.replace(donateLinksRegex_, '');
 
-	return md;
-}
+// 	return md;
+// }
 
 const processNewsMarkdown = (md: string, mdFilePath: string): string => {
 	const info = stripOffFrontMatter(md);
 	md = info.doc.trim();
-	const dateString = getNewsDateString(info, mdFilePath);
+	const dateString = getNewsDateString(info.header, mdFilePath);
 	md = md.replace(/^# (.*)/, `# [$1](https://github.com/laurent22/joplin/blob/dev/readme/news/${path.basename(mdFilePath)})\n\n*Published on **${dateString}***\n\n`);
 	md += `\n\n* * *\n\n[<i class="fab fa-discourse"></i> Discuss on the forum](${discussLink})`;
 	return md;
 };
 
-const makeNewsFrontPage = async (sourceFilePaths: string[], targetFilePath: string, templateParams: TemplateParams) => {
-	const maxNewsPerPage = 20;
+// const makeNewsFrontPage = async (sourceFilePaths: string[], targetFilePath: string, templateParams: TemplateParams) => {
+// 	const maxNewsPerPage = 20;
 
-	const frontPageMd: string[] = [];
+// 	const frontPageMd: string[] = [];
 
-	for (const mdFilePath of sourceFilePaths) {
-		let md = await readFile(mdFilePath, 'utf8');
-		md = processNewsMarkdown(md, mdFilePath);
-		frontPageMd.push(md);
-		if (frontPageMd.length >= maxNewsPerPage) break;
-	}
+// 	for (const mdFilePath of sourceFilePaths) {
+// 		let md = await readFile(mdFilePath, 'utf8');
+// 		md = processNewsMarkdown(md, mdFilePath);
+// 		frontPageMd.push(md);
+// 		if (frontPageMd.length >= maxNewsPerPage) break;
+// 	}
 
-	renderPageToHtml(frontPageMd.join('\n\n* * *\n\n'), targetFilePath, templateParams);
-};
+// 	renderPageToHtml(frontPageMd.join('\n\n* * *\n\n'), targetFilePath, templateParams);
+// };
 
 const isNewsFile = (filePath: string): boolean => {
 	return filePath.includes('readme/news/');
@@ -271,16 +271,16 @@ const updatePageLanguage = (html: string, lang: string): string => {
 async function main() {
 	const supportedLocales: Record<string, Locale> = {
 		'en_GB': enGbLocale,
-		'zh_CN': {
-			htmlTranslations: parseTranslations(await parsePoFile(`${websiteAssetDir}/locales/zh_CN.po`)),
-			lang: 'zh-cn',
-			pathPrefix: 'cn',
-		},
-		'fr_FR': {
-			htmlTranslations: {},
-			lang: 'fr-fr',
-			pathPrefix: 'fr',
-		},
+		// 'zh_CN': {
+		// 	htmlTranslations: parseTranslations(await parsePoFile(`${websiteAssetDir}/locales/zh_CN.po`)),
+		// 	lang: 'zh-cn',
+		// 	pathPrefix: 'cn',
+		// },
+		// 'fr_FR': {
+		// 	htmlTranslations: {},
+		// 	lang: 'fr-fr',
+		// 	pathPrefix: 'fr',
+		// },
 	};
 
 	// delete supportedLocales['zh_CN'];
@@ -288,8 +288,12 @@ async function main() {
 
 	setLocale('en_GB');
 
-	await remove(`${docDir}`);
-	await copy(websiteAssetDir, `${docDir}`);
+	await remove(docDir);
+
+	const docBuilderDir = `${rootDir}/packages/doc-builder`;
+	await copy(`${docBuilderDir}/build`, docDir);
+
+	await copy(websiteAssetDir, docDir);
 
 	const sponsors = process.env.SKIP_SPONSOR_PROCESSING ? { github: [], orgs: [] } : await loadSponsors();
 	const partials = await loadMustachePartials(partialDir);
@@ -306,38 +310,38 @@ async function main() {
 		// HELP PAGE
 		// =============================================================
 
-		let readmePath = `${rootDir}/README.md`;
+		// let readmePath = `${rootDir}/README.md`;
 
-		let sourceMarkdownFile = 'README.md';
-		let targetDocDir = docDir;
+		// let sourceMarkdownFile = 'README.md';
+		// let targetDocDir = docDir;
 
-		if (localeName !== 'en_GB') {
-			const possibleSource = `${rootDir}/readme/_i18n/${localeName}/README.md`;
-			if (await pathExists(possibleSource)) {
-				sourceMarkdownFile = possibleSource;
-				readmePath = possibleSource;
-			} else {
-				console.warn(`Cannot find source file: ${possibleSource}`);
-			}
+		// if (localeName !== 'en_GB') {
+		// 	const possibleSource = `${rootDir}/readme/_i18n/${localeName}/README.md`;
+		// 	if (await pathExists(possibleSource)) {
+		// 		sourceMarkdownFile = possibleSource;
+		// 		readmePath = possibleSource;
+		// 	} else {
+		// 		console.warn(`Cannot find source file: ${possibleSource}`);
+		// 	}
 
-			targetDocDir = `${docDir}/${locale.pathPrefix}`;
-		}
+		// 	targetDocDir = `${docDir}/${locale.pathPrefix}`;
+		// }
 
-		const readmeMd = makeHomePageMd(readmePath);
+		// const readmeMd = makeHomePageMd(readmePath);
 
-		renderPageToHtml(readmeMd, `${targetDocDir}/help/index.html`, {
-			sourceMarkdownFile,
-			donateLinksMd,
-			partials,
-			sponsors,
-			assetUrls,
-			openGraph: {
-				title: 'Joplin documentation',
-				description: '',
-				url: 'https://joplinapp.org/help/',
-			},
-			locale,
-		});
+		// renderPageToHtml(readmeMd, `${targetDocDir}/help/index.html`, {
+		// 	sourceMarkdownFile,
+		// 	donateLinksMd,
+		// 	partials,
+		// 	sponsors,
+		// 	assetUrls,
+		// 	openGraph: {
+		// 		title: 'Joplin documentation',
+		// 		description: '',
+		// 		url: 'https://joplinapp.org/help/',
+		// 	},
+		// 	locale,
+		// });
 
 		// =============================================================
 		// FRONT PAGE
@@ -444,10 +448,24 @@ async function main() {
 
 	setLocale('en_GB');
 
-	// =============================================================
-	// All other pages are generated dynamically from the
-	// Markdown files under /readme
-	// =============================================================
+	// ==========================================================================
+	// All other pages are generated dynamically from the Markdown files under
+	// /readme
+	//
+	// 2023-10-23: This was used to build the Help pages from the Markdown
+	// files, however this is now done using Docusaurus. A few files still need
+	// to be at the root however, and so we keep that process here for now. Any
+	// file that need to be processed should go in the `filesToProcess`  array.
+	// Eventually all that should probably be moved to Docusaurus or to some
+	// static pages.
+	// ==========================================================================
+
+	const filesToProcess = [
+		'download.md',
+		'privacy.md',
+		'donate.md',
+		'connection_check.md',
+	];
 
 	interface SourceInfo {
 		title: string;
@@ -467,7 +485,7 @@ async function main() {
 			const filenameNoExt = basename(input, '.md');
 			return `news/${filenameNoExt}/index.html`;
 		} else {
-			// Input is for example "readme/spec/interop_with_frontmatter.md",
+			// Input is for example "readme/dev/spec/interop_with_frontmatter.md",
 			// and we need to convert it to
 			// "docs/spec/interop_with_frontmatter/index.html" and prefix it
 			// with the website repo full path.
@@ -498,6 +516,7 @@ async function main() {
 	const newsFilePaths: string[] = [];
 
 	for (const mdFile of mdFiles) {
+		if (!filesToProcess.includes(basename(mdFile))) continue;
 		if (mdFile.startsWith('readme/_i18n')) continue;
 
 		for (const [localeName, locale] of Object.entries(supportedLocales)) {
@@ -545,24 +564,27 @@ async function main() {
 		});
 	}
 
-	newsFilePaths.sort((a, b) => {
-		return a.toLowerCase() > b.toLowerCase() ? -1 : +1;
-	});
+	// newsFilePaths.sort((a, b) => {
+	// 	return a.toLowerCase() > b.toLowerCase() ? -1 : +1;
+	// });
 
-	await makeNewsFrontPage(newsFilePaths, `${docDir}/news/index.html`, {
-		...defaultTemplateParams(assetUrls, null),
-		title: 'What\'s new',
-		pageName: 'news',
-		partials,
-		showToc: false,
-		showImproveThisDoc: false,
-		donateLinksMd,
-		openGraph: {
-			title: 'Joplin - what\'s new',
-			description: 'News about the Joplin open source application',
-			url: 'https://joplinapp.org/news/',
-		},
-	});
+	// await makeNewsFrontPage(newsFilePaths, `${docDir}/news/index.html`, {
+	// 	...defaultTemplateParams(assetUrls, null),
+	// 	title: 'What\'s new',
+	// 	pageName: 'news',
+	// 	partials,
+	// 	showToc: false,
+	// 	showImproveThisDoc: false,
+	// 	donateLinksMd,
+	// 	openGraph: {
+	// 		title: 'Joplin - what\'s new',
+	// 		description: 'News about the Joplin open source application',
+	// 		url: 'https://joplinapp.org/news/',
+	// 	},
+	// });
+
+
+
 
 	// setLocale('zh_CN');
 	// const translations = parseTranslations(await parsePoFile(`${websiteAssetDir}/locales/zh_CN.po`));

@@ -7,12 +7,13 @@ import ItemChangeUtils from '../ItemChangeUtils';
 import shim from '../../shim';
 import filterParser, { Term } from './filterParser';
 import queryBuilder from './queryBuilder';
-import { ItemChangeEntity, NoteEntity } from '../database/types';
+import { ItemChangeEntity, NoteEntity, SqlQuery } from '../database/types';
 import Resource from '../../models/Resource';
 import JoplinDatabase from '../../JoplinDatabase';
-import { SqlQuery } from '../../database';
 import NoteResource from '../../models/NoteResource';
-import { SearchResult } from './types';
+import isItemId from '../../models/utils/isItemId';
+import BaseItem from '../../models/BaseItem';
+import { isCallbackUrl, parseCallbackUrl } from '../../callbackUrlUtils';
 const { sprintf } = require('sprintf-js');
 const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.js');
 
@@ -34,6 +35,22 @@ interface SearchOptions {
 
 	// Include resources that are not associated with any notes.
 	includeOrphanedResources?: boolean;
+}
+
+export interface ProcessResultsRow {
+	id: string;
+	parent_id: string;
+	title: string;
+	offsets: string;
+	item_id: string;
+	user_updated_time: number;
+	user_created_time: number;
+	matchinfo: Buffer;
+	item_type?: ModelType;
+	fields?: string[];
+	weight?: number;
+	is_todo?: number;
+	todo_completed?: number;
 }
 
 export interface ComplexTerm {
@@ -327,7 +344,7 @@ export default class SearchEngine {
 		return output;
 	}
 
-	private calculateWeightBM25_(rows: SearchResult[]) {
+	private calculateWeightBM25_(rows: ProcessResultsRow[]) {
 		// https://www.sqlite.org/fts3.html#matchinfo
 		// pcnalx are the arguments passed to matchinfo
 		// p - The number of matchable phrases in the query.
@@ -391,7 +408,7 @@ export default class SearchEngine {
 
 		const msSinceEpoch = Math.round(new Date().getTime());
 		const msPerDay = 86400000;
-		const weightForDaysSinceLastUpdate = (row: SearchResult) => {
+		const weightForDaysSinceLastUpdate = (row: ProcessResultsRow) => {
 			// BM25 weights typically range 0-10, and last updated date should weight similarly, though prioritizing recency logarithmically.
 			// An alpha of 200 ensures matches in the last week will show up front (11.59) and often so for matches within 2 weeks (5.99),
 			// but is much less of a factor at 30 days (2.84) or very little after 90 days (0.95), focusing mostly on content at that point.
@@ -441,7 +458,7 @@ export default class SearchEngine {
 		}
 	}
 
-	private processResults_(rows: SearchResult[], parsedQuery: any, isBasicSearchResults = false) {
+	private processResults_(rows: ProcessResultsRow[], parsedQuery: any, isBasicSearchResults = false) {
 		if (isBasicSearchResults) {
 			this.processBasicSearchResults_(rows, parsedQuery);
 		} else {
@@ -642,7 +659,42 @@ export default class SearchEngine {
 		return SearchEngine.SEARCH_TYPE_FTS;
 	}
 
-	public async search(searchString: string, options: SearchOptions = null): Promise<SearchResult[]> {
+	private async searchFromItemIds(searchString: string): Promise<ProcessResultsRow[]> {
+		let itemId = '';
+
+		if (isCallbackUrl(searchString)) {
+			const parsed = parseCallbackUrl(searchString);
+			itemId = parsed.params.id;
+		} else if (isItemId(searchString)) {
+			itemId = searchString;
+		}
+
+		if (itemId) {
+			const item = await BaseItem.loadItemById(itemId);
+
+			// We only return notes for now because the UI doesn't handle anything else.
+			if (item && item.type_ === ModelType.Note) {
+				return [
+					{
+						id: item.id,
+						item_id: item.id,
+						parent_id: item.parent_id || '',
+						matchinfo: Buffer.from(''),
+						offsets: '',
+						title: item.title || item.id,
+						user_updated_time: item.user_updated_time || item.updated_time,
+						user_created_time: item.user_created_time || item.created_time,
+						fields: ['id'],
+					},
+				];
+			}
+		}
+
+		return [];
+	}
+
+	// public async search(searchString: string, options: SearchOptions = null): Promise<SearchResult[]> {
+	public async search(searchString: string, options: SearchOptions = null): Promise<ProcessResultsRow[]> {
 		if (!searchString) return [];
 
 		options = {
@@ -655,12 +707,12 @@ export default class SearchEngine {
 		const searchType = this.determineSearchType_(searchString, options.searchType);
 		const parsedQuery = await this.parseQuery(searchString);
 
+		let rows: ProcessResultsRow[] = [];
+
 		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
 			searchString = this.normalizeText_(searchString);
-			const rows = await this.basicSearch(searchString);
-
-			this.processResults_(rows as SearchResult[], parsedQuery, true);
-			return rows as SearchResult[];
+			rows = (await this.basicSearch(searchString)) as any[];
+			this.processResults_(rows, parsedQuery, true);
 		} else {
 			// SEARCH_TYPE_FTS
 			// FTS will ignore all special characters, like "-" in the index. So if
@@ -685,7 +737,8 @@ export default class SearchEngine {
 			const useFts = searchType === SearchEngine.SEARCH_TYPE_FTS;
 			try {
 				const { query, params } = queryBuilder(parsedQuery.allTerms, useFts);
-				let rows = await this.db().selectAll<SearchResult>(query, params);
+
+				rows = await this.db().selectAll<ProcessResultsRow>(query, params);
 				const queryHasFilters = !!parsedQuery.allTerms.find(t => t.name !== 'text');
 
 				rows = rows.map(r => {
@@ -696,7 +749,7 @@ export default class SearchEngine {
 				});
 
 				if (!queryHasFilters) {
-					let itemRows = await this.db().selectAll<SearchResult>(`
+					let itemRows = await this.db().selectAll<ProcessResultsRow>(`
 						SELECT
 							id,
 							title,
@@ -721,13 +774,18 @@ export default class SearchEngine {
 					rows = rows.concat(itemRows);
 				}
 
-				this.processResults_(rows as SearchResult[], parsedQuery, !useFts);
-				return rows;
+				this.processResults_(rows as ProcessResultsRow[], parsedQuery, !useFts);
 			} catch (error) {
 				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);
-				return [];
+				rows = [];
 			}
 		}
+
+		if (!rows.length) {
+			rows = await this.searchFromItemIds(searchString);
+		}
+
+		return rows;
 	}
 
 	public async destroy() {

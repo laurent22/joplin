@@ -1,5 +1,6 @@
 import { EditorSelection } from '@codemirror/state';
 import {
+	insertOrIncreaseIndent,
 	toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleMath, updateLink,
 } from './markdownCommands';
 import createTestEditor from '../testUtil/createTestEditor';
@@ -237,6 +238,42 @@ describe('markdownCommands', () => {
 		const sel = editor.state.selection.main;
 		expect(sel.from).toBe('> Testing...> \n> \n'.length);
 		expect(sel.to).toBe(editor.state.doc.length);
+	});
+
+	it('insertOrIncreaseIndent should indent when text is selected', async () => {
+		const initialText = '> Testing...\n> Test.';
+		const editor = await createTestEditor(
+			initialText,
+			EditorSelection.range(0, initialText.length),
+			['Blockquote'],
+		);
+
+		insertOrIncreaseIndent(editor);
+
+		expect(editor.state.doc.toString()).toBe('> \tTesting...\n> \tTest.');
+	});
+
+	it('insertOrIncreaseIndent should insert tabs when selection is empty, in a paragraph', async () => {
+		const initialText = 'This is a test\nof indentation.';
+		const editor = await createTestEditor(
+			initialText,
+			EditorSelection.cursor(initialText.length),
+			[],
+		);
+
+		insertOrIncreaseIndent(editor);
+
+		const finalText = editor.state.doc.toString();
+
+		// Should add tab character at the cursor
+		expect(finalText).toBe('This is a test\nof indentation.\t');
+
+		// Should move the selection after the tab
+		expect(editor.state.selection.ranges).toHaveLength(1);
+		expect(editor.state.selection.main).toMatchObject({
+			from: finalText.length,
+			to: finalText.length,
+		});
 	});
 });
 

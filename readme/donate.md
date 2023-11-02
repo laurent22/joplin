@@ -22,6 +22,6 @@ Finally, there are other ways to support the development of Joplin:
 
 - Vote for or review the app on [alternativeTo](https://alternativeto.net/software/joplin/about/) or [Product Hunt](https://www.producthunt.com/posts/joplin).
 
-- [Help us test pre-releases](https://joplinapp.org/prereleases/).
+- [Help us test pre-releases](https://joplinapp.org/help/about/prereleases/).
 
 - [Improve the Wikipedia article](https://en.wikipedia.org/wiki/Joplin_(software)).

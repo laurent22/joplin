@@ -95,6 +95,17 @@ if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
 fi
 
 # =============================================================================
+# Check that the website builder can run without errors
+# =============================================================================
+
+if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
+	if [ "$IS_LINUX" == "1" ]; then
+		echo "Step: Running website builder..."
+		node packages/tools/website/processDocs.js --env dev
+	fi
+fi
+
+# =============================================================================
 # Run linter for pull requests only. We also don't want this to make the desktop
 # release randomly fail.
 # =============================================================================

@@ -174,7 +174,7 @@ From `packages/server`, run `npm run start-dev`
 
 # Changelog
 
-[View the changelog](https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md)
+[View the changelog](https://github.com/laurent22/joplin/blob/dev/readme/about/changelog/changelog_server.md)
 
 # License
 

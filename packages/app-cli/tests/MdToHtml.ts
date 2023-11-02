@@ -66,8 +66,10 @@ describe('MdToHtml', () => {
 					actualHtml,
 					'--------------------------------- Raw:',
 					actualHtml.split('\n'),
-					'--------------------------------- Expected:',
+					'--------------------------------- Expected (Lines)',
 					expectedHtml.split('\n'),
+					'--------------------------------- Expected (Text)',
+					expectedHtml,
 					'--------------------------------------------',
 					'',
 				];

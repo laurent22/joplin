@@ -99,7 +99,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 
 		if (query) {
 			if (this.props.settings['db.ftsEnabled']) {
-				const r = await SearchEngineUtils.notesForQuery(query, true);
+				const r = await SearchEngineUtils.notesForQuery(query, true, { appendWildCards: true });
 				notes = r.notes;
 			} else {
 				const p = query.split(' ');

@@ -2,9 +2,14 @@ import { CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { joplinCommandToTinyMceCommands } from './NoteBody/TinyMCE/utils/joplinCommandToTinyMceCommands';
 
+const workWithHtmlNotes = [
+	'attachFile',
+];
+
 export const enabledCondition = (commandName: string) => {
 	const markdownEditorOnly = !Object.keys(joplinCommandToTinyMceCommands).includes(commandName);
-	return `(!modalDialogVisible || gotoAnythingVisible) ${markdownEditorOnly ? '&& markdownEditorPaneVisible' : ''} && oneNoteSelected && noteIsMarkdown && !noteIsReadOnly`;
+	const noteMustBeMarkdown = !workWithHtmlNotes.includes(commandName);
+	return `(!modalDialogVisible || gotoAnythingVisible) ${markdownEditorOnly ? '&& markdownEditorPaneVisible' : ''} && oneNoteSelected ${noteMustBeMarkdown ? '&& noteIsMarkdown' : ''} && !noteIsReadOnly`;
 };
 
 const declarations: CommandDeclaration[] = [

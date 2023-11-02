@@ -62,6 +62,7 @@ const useKeymap = (): [
 			// Then, update the state with the data from KeymapService
 			// Side-effect: Changes will also be saved to the disk
 			setKeymapItems(keymapService.getKeymapItems());
+			setMustSave(true);
 		} catch (error) {
 			// oldKeymapItems includes even the unchanged keymap items
 			// However, it is not an issue because the logic accounts for such scenarios

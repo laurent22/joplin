@@ -17,19 +17,19 @@
   },
   "devDependencies": {
     "@types/fs-extra": "11.0.2",
-    "@types/jest": "29.5.4",
-    "@types/js-yaml": "4.0.6",
+    "@types/jest": "29.5.5",
+    "@types/js-yaml": "4.0.7",
     "@types/node": "18.17.19",
     "@types/node-rsa": "1.1.2",
-    "@types/react": "18.2.23",
-    "@types/uuid": "9.0.4",
+    "@types/react": "18.2.31",
+    "@types/uuid": "9.0.5",
     "canvas": "2.11.2",
     "clean-html": "1.5.0",
-    "jest": "29.6.4",
+    "jest": "29.7.0",
     "pdfjs-dist": "3.11.174",
     "sharp": "0.32.6",
     "tesseract.js": "4.1.2",
-    "typescript": "5.1.6"
+    "typescript": "5.2.2"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.296.0",
