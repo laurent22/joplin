@@ -17,7 +17,7 @@ var escapes = [
   [/\]/g, '\\]'],
   [/^>/g, '\\>'],
   // A list of valid \p values can be found here: https://unicode.org/reports/tr44/#GC_Values_Table
-  [/(^|\p{Punctuation}|\p{Separator}|\p{Symbol})_/ug, '$1\\_'],
+  [/(^|\p{Punctuation}|\p{Separator}|\p{Symbol})_(\P{Separator})/ug, '$1\\_$2'],
   [/^(\d+)\. /g, '$1\\. ']
 ]
 
