@@ -164,27 +164,32 @@ TurndownService.prototype = {
 function process (parentNode, escapeContent = 'auto') {
   if (this.options.disableEscapeContent) escapeContent = false;
 
-  var self = this
-  return reduce.call(parentNode.childNodes, function (output, node) {
-    node = new Node(node, self.options)
+  let output = '';
+  let previousNode = null;
+
+  for (let node of parentNode.childNodes) {
+    node = new Node(node, this.options);
 
     var replacement = ''
     if (node.nodeType === 3) {
       if (node.isCode || escapeContent === false) {
         replacement = node.nodeValue
       } else {
-        replacement = self.escape(node.nodeValue)
+        replacement = this.escape(node.nodeValue);
 
         // Escape < and > so that, for example, this kind of HTML text: "This is a tag: &lt;p&gt;" is still rendered as "This is a tag: &lt;p&gt;"
         // and not "This is a tag: <p>". If the latter, it means the HTML will be rendered if the viewer supports HTML (which, in Joplin, it does).
         replacement = replacement.replace(/<(.+?)>/g, '&lt;$1&gt;');
       }
     } else if (node.nodeType === 1) {
-      replacement = replacementForNode.call(self, node)
+      replacement = replacementForNode.call(this, node, previousNode);
     }
 
-    return join(output, replacement)
-  }, '')
+    output = join(output, replacement);
+    previousNode = node;
+  }
+
+  return output;
 }
 
 /**
@@ -210,11 +215,12 @@ function postProcess (output) {
  * Converts an element node to its Markdown equivalent
  * @private
  * @param {HTMLElement} node The node to convert
+ * @param {HTMLElement|null} previousNode The node immediately before this node.
  * @returns A Markdown representation of the node
  * @type String
  */
 
-function replacementForNode (node) {
+function replacementForNode (node, previousNode) {
   var rule = this.rules.forNode(node)
   var content = process.call(this, node, rule.escapeContent ? rule.escapeContent(node) : 'auto')
   var whitespace = node.flankingWhitespace
@@ -222,7 +228,7 @@ function replacementForNode (node) {
 
   return (
     whitespace.leading +
-    rule.replacement(content, node, this.options) +
+    rule.replacement(content, node, this.options, previousNode) +
     whitespace.trailing
   )
 }

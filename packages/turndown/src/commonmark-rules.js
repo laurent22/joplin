@@ -45,11 +45,18 @@ rules.paragraph = {
 rules.lineBreak = {
   filter: 'br',
 
-  replacement: function (content, node, options) {
+  replacement: function (_content, node, options, previousNode) {
+    let brReplacement = options.br + '\n';
+
     // Code blocks may include <br/>s -- replacing them should not be necessary
     // in code blocks.
-    const brReplacement = node.isCode ? '' : options.br;
-    return brReplacement + '\n'
+    if (node.isCode) {
+      brReplacement = '\n';
+    } else if (previousNode && previousNode.nodeName === 'BR') {
+      brReplacement = '<br/>';
+    }
+
+    return brReplacement;
   }
 }
 
