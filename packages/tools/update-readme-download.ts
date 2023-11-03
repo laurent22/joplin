@@ -13,6 +13,7 @@ async function msleep(ms: number) {
 
 export enum OS {
 	MacOs = 'macos',
+	MacOsM1 = 'macosm1',
 	Windows = 'windows',
 	Android = 'android',
 	Android32 = 'android32',
@@ -31,7 +32,11 @@ export const downloadUrl = (release: GitHubRelease, os: OS, portable = false) =>
 		const githubUrl = 'github.com/laurent22/joplin/releases/download/';
 		const joplinDomain = 'objects.joplinusercontent.com/';
 
-		if (ext === 'dmg' && os === OS.MacOs) return asset.browser_download_url.replace(githubUrl, joplinDomain);
+		if (name.endsWith('arm64.DMG') && os === OS.MacOsM1) {
+			return asset.browser_download_url.replace(githubUrl, joplinDomain);
+		} else if (ext === 'dmg' && os === OS.MacOs) {
+			return asset.browser_download_url.replace(githubUrl, joplinDomain);
+		}
 
 		if (ext === 'exe' && os === OS.Windows) {
 			if (portable) {
@@ -81,29 +86,28 @@ async function main(argv: any) {
 
 	const androidRelease = await gitHubLatestRelease('joplin-android');
 
-	// const android32Url = downloadUrl(androidRelease, OS.Android32);
 	const androidUrl = downloadUrl(androidRelease, OS.Android);
 	const winUrl = downloadUrl(release, OS.Windows);
 	const winPortableUrl = downloadUrl(release, OS.Windows, true);
 	const macOsUrl = downloadUrl(release, OS.MacOs);
+	const macOsM1Url = downloadUrl(release, OS.MacOsM1);
 	const linuxUrl = downloadUrl(release, OS.Linux);
 
 	console.info('Windows: ', winUrl);
 	console.info('Windows Portable: ', winPortableUrl);
 	console.info('macOS: ', macOsUrl);
+	console.info('macOSM1: ', macOsM1Url);
 	console.info('Linux: ', linuxUrl);
 	console.info('Android: ', androidUrl);
-	// console.info('Android 32: ', android32Url);
 
 	let content = readmeContent();
 
 	if (winUrl) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/Joplin-Setup-.*?\.exe)/, winUrl);
 	if (winPortableUrl) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/JoplinPortable.exe)/, winPortableUrl);
 	if (macOsUrl) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/Joplin-.*?\.dmg)/, macOsUrl);
+	if (macOsM1Url) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/Joplin-.*?arm64\.DMG)/, macOsM1Url);
 	if (linuxUrl) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/Joplin-.*?\.AppImage)/, linuxUrl);
-
 	if (androidUrl) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+\.apk)/, androidUrl);
-	// if (android32Url) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+-32bit\.apk)/, android32Url);
 
 	setReadmeContent(content);
 }
