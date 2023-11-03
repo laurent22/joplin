@@ -7,10 +7,10 @@ import { ItemIdToUrlHandler } from './utils';
 import { RenderResult, RenderResultPluginAsset } from './MarkupToHtml';
 import { Options as NoteStyleOptions } from './noteStyle';
 import hljs from './highlight';
+import * as MarkdownIt from 'markdown-it';
 
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
-const MarkdownIt = require('markdown-it');
 const md5 = require('md5');
 
 export interface RenderOptions {
@@ -32,6 +32,7 @@ export interface RenderOptions {
 	useCustomPdfViewer?: boolean;
 	noteId?: string;
 	vendorDir?: string;
+	settingValue?: (pluginId: string, key: string)=> any;
 }
 
 interface RendererRule {
@@ -40,6 +41,7 @@ interface RendererRule {
 	plugin?: any;
 	assetPath?: string;
 	assetPathIsAbsolute?: boolean;
+	pluginId?: string;
 }
 
 interface RendererRules {
@@ -102,6 +104,7 @@ export interface ExtraRendererRule {
 	id: string;
 	module: any;
 	assetPath: string;
+	pluginId: string;
 }
 
 export interface Options {
@@ -233,7 +236,7 @@ export default class MdToHtml {
 
 		if (options.extraRendererRules) {
 			for (const rule of options.extraRendererRules) {
-				this.loadExtraRendererRule(rule.id, rule.assetPath, rule.module);
+				this.loadExtraRendererRule(rule.id, rule.assetPath, rule.module, rule.pluginId);
 			}
 		}
 
@@ -268,11 +271,13 @@ export default class MdToHtml {
 	}
 
 	// `module` is a file that has already been `required()`
-	public loadExtraRendererRule(id: string, assetPath: string, module: any) {
+	public loadExtraRendererRule(id: string, assetPath: string, module: any, pluginId: string) {
 		if (this.extraRendererRules_[id]) throw new Error(`A renderer rule with this ID has already been loaded: ${id}`);
+
 		this.extraRendererRules_[id] = {
 			...module,
 			assetPath,
+			pluginId: pluginId,
 			assetPathIsAbsolute: true,
 		};
 	}
@@ -451,6 +456,7 @@ export default class MdToHtml {
 			pdfViewerEnabled: this.pluginEnabled('pdfViewer'),
 
 			contentMaxWidth: 0,
+			settingValue: (_pluginId: string, _key: string) => { throw new Error('settingValue is not implemented'); },
 			...options,
 		};
 
@@ -467,8 +473,11 @@ export default class MdToHtml {
 		const cachedOutput = this.cachedOutputs_[cacheKey];
 		if (cachedOutput) return cachedOutput;
 
-		const ruleOptions = { ...options, resourceBaseUrl: this.resourceBaseUrl_,
-			ResourceModel: this.ResourceModel_ };
+		const ruleOptions = {
+			...options,
+			resourceBaseUrl: this.resourceBaseUrl_,
+			ResourceModel: this.ResourceModel_,
+		};
 
 		const context: PluginContext = {
 			css: {},
@@ -478,12 +487,12 @@ export default class MdToHtml {
 			currentLinks: [],
 		};
 
-		const markdownIt = new MarkdownIt({
+		const markdownIt: MarkdownIt = new MarkdownIt({
 			breaks: !this.pluginEnabled('softbreaks'),
 			typographer: this.pluginEnabled('typographer'),
 			linkify: this.pluginEnabled('linkify'),
 			html: true,
-			highlight: (str: string, lang: string) => {
+			highlight: (str: string, lang: string, _attrs: any): any => {
 				let outputCodeHtml = '';
 
 				// The strings includes the last \n that is part of the fence,
@@ -567,6 +576,9 @@ export default class MdToHtml {
 				context: context,
 				...ruleOptions,
 				...(ruleOptions.plugins[key] ? ruleOptions.plugins[key] : {}),
+				settingValue: (key: string) => {
+					return options.settingValue(rule.pluginId, key);
+				},
 			});
 		}
 
