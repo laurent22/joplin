@@ -124,7 +124,7 @@
     "@types/react": "18.2.31",
     "@types/react-redux": "7.1.27",
     "@types/styled-components": "5.1.28",
-    "electron": "25.9.1",
+    "electron": "26.0.0",
     "electron-builder": "24.6.4",
     "glob": "10.3.10",
     "gulp": "4.0.2",
