@@ -9,8 +9,8 @@ import Modal from '../Modal';
 import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
 import { EditorControl } from './types';
-import SelectionFormatting from './SelectionFormatting';
 import { useCallback } from 'react';
+import SelectionFormatting from '@joplin/editor/SelectionFormatting';
 
 interface LinkDialogProps {
 	editorControl: EditorControl;
@@ -21,7 +21,7 @@ interface LinkDialogProps {
 
 const EditLinkDialog = (props: LinkDialogProps) => {
 	// The content of the link selected in the editor (if any)
-	const editorLinkData = props.selectionState.linkData ?? {};
+	const editorLinkData = props.selectionState.linkData;
 	const [linkLabel, setLinkLabel] = useState('');
 	const [linkURL, setLinkURL] = useState('');
 

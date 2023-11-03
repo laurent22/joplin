@@ -30,7 +30,7 @@ export default function useSyncTargetUpgrade(): SyncTargetUpgradeResult {
 				reg.db(),
 				synchronizer.lockHandler(),
 				appTypeToLockType(Setting.value('appType')),
-				Setting.value('clientId')
+				Setting.value('clientId'),
 			);
 
 			reg.logger().info('useSyncTargetUpgrade: Start upgrade...');

@@ -182,6 +182,11 @@
 			"docs/images/flags": true,
 			"lerna-debug.log": true,
 			"node_modules/": true,
+			"packages/doc-builder/build": true,
+			"packages/doc-builder/help": true,
+			"packages/doc-builder/news": true,
+			"packages/doc-builder/i18n": true,
+			"readme/i18n": true,
 			"packages/app-cli/**/*.*~": true,
 			"packages/app-cli/**/*.mo": true,
 			"packages/app-cli/**/build/": true,
@@ -381,13 +386,14 @@
 					"!**/node_modules/**"
 				],
 				"program": "${workspaceFolder}/packages/server/src/app.ts",
+				"localRoot": "${workspaceFolder}/packages/server",
 				"args": [
 					"--env", "dev"
 				],
 				"env": {
 					"JOPLIN_IS_TESTING": "1",
-					"TERMS_URL": "https://example.com",
-					"PRIVACY_URL": "https://example.com",
+					"APP_BASE_URL": "http://joplincloud.local:22300",
+					"API_BASE_URL": "http://api.joplincloud.local:22300",
 				}
 			}
 		]

@@ -4,7 +4,7 @@ import { Banner, ActivityIndicator } from 'react-native-paper';
 import { _, languageName } from '@joplin/lib/locale';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import { getVosk, Recorder, startRecording, Vosk } from '../../services/voiceTyping/vosk';
-import { IconSource } from 'react-native-paper/lib/typescript/src/components/Icon';
+import { IconSource } from 'react-native-paper/lib/typescript/components/Icon';
 import { modelIsDownloaded } from '../../services/voiceTyping/vosk.android';
 
 interface Props {

@@ -1,5 +1,5 @@
 import { ModelType, DeleteOptions } from '../BaseModel';
-import { BaseItemEntity, DeletedItemEntity, NoteEntity } from '../services/database/types';
+import { BaseItemEntity, DeletedItemEntity, NoteEntity, SyncItemEntity } from '../services/database/types';
 import Setting from './Setting';
 import BaseModel from '../BaseModel';
 import time from '../time';
@@ -192,6 +192,14 @@ export default class BaseItem extends BaseModel {
 			output.push(temp[i].item_id);
 		}
 		return output;
+	}
+
+	public static async syncItem(syncTarget: number, itemId: string, options: LoadOptions = null): Promise<SyncItemEntity> {
+		options = {
+			fields: '*',
+			...options,
+		};
+		return await this.db().selectOne(`SELECT ${this.db().escapeFieldsToString(options.fields)} FROM sync_items WHERE sync_target = ? AND item_id = ?`, [syncTarget, itemId]);
 	}
 
 	public static async allSyncItems(syncTarget: number) {
@@ -626,7 +634,7 @@ export default class BaseItem extends BaseModel {
 				`,
 				this.db().escapeField(ItemClass.tableName()),
 				whereSql.join(' AND '),
-				limit
+				limit,
 			);
 
 			const items = await ItemClass.modelSelectAll(sql);
@@ -689,7 +697,7 @@ export default class BaseItem extends BaseModel {
 			this.db().escapeField(ItemClass.tableName()),
 			Number(syncTarget),
 			extraWhere,
-			limit
+			limit,
 			);
 
 			const neverSyncedItem = await ItemClass.modelSelectAll(sql);
@@ -718,7 +726,7 @@ export default class BaseItem extends BaseModel {
 					this.db().escapeField(ItemClass.tableName()),
 					Number(syncTarget),
 					extraWhere,
-					newLimit
+					newLimit,
 				);
 
 				changedItems = await ItemClass.modelSelectAll(sql);
@@ -855,7 +863,7 @@ export default class BaseItem extends BaseModel {
 				SELECT id
 				FROM %s
 				WHERE encryption_applied = 0`,
-				this.db().escapeField(ItemClass.tableName())
+				this.db().escapeField(ItemClass.tableName()),
 			);
 
 			const items = await ItemClass.modelSelectAll(sql);
@@ -918,7 +926,7 @@ export default class BaseItem extends BaseModel {
 					this.getClass('Folder'),
 					options.changeSource,
 					BaseItem.syncShareCache,
-					o.parent_id
+					o.parent_id,
 				);
 			}
 		}

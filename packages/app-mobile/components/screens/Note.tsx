@@ -6,11 +6,11 @@ import UndoRedoService from '@joplin/lib/services/UndoRedoService';
 import NoteBodyViewer from '../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../utils/checkPermissions';
 import NoteEditor from '../NoteEditor/NoteEditor';
-import { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/types';
 
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
-const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid } = require('react-native');
+const { Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
+import { Platform, PermissionsAndroid } from 'react-native';
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
 import Note from '@joplin/lib/models/Note';
@@ -42,11 +42,16 @@ import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-pick
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
-import { NoteEntity } from '@joplin/lib/services/database/types';
+import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/utils/Logger';
+import ImageEditor from '../NoteEditor/ImageEditor/ImageEditor';
+import promptRestoreAutosave from '../NoteEditor/ImageEditor/promptRestoreAutosave';
+import isEditableResource from '../NoteEditor/ImageEditor/isEditableResource';
 import VoiceTypingDialog from '../voiceTyping/VoiceTypingDialog';
 import { voskEnabled } from '../../services/voiceTyping/vosk';
 import { isSupportedLanguage } from '../../services/voiceTyping/vosk.android';
+import { ChangeEvent as EditorChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
+import { join } from 'path';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 // import Vosk from 'react-native-vosk';
@@ -75,6 +80,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 			noteTagDialogShown: false,
 			fromShare: false,
 			showCamera: false,
+			showImageEditor: false,
+			loadImageEditorData: null,
+			imageEditorResource: null,
 			noteResources: {},
 
 			// HACK: For reasons I can't explain, when the WebView is present, the TextInput initially does not display (It's just a white rectangle with
@@ -194,8 +202,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 						}, 5);
 					} else if (item.type_ === BaseModel.TYPE_RESOURCE) {
 						if (!(await Resource.isReady(item))) throw new Error(_('This attachment is not downloaded or not decrypted yet.'));
-						const resourcePath = Resource.fullPath(item);
 
+						const resourcePath = Resource.fullPath(item);
 						logger.info(`Opening resource: ${resourcePath}`);
 						await FileViewer.open(resourcePath);
 					} else {
@@ -254,7 +262,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return this.props.useEditorBeta;
 	}
 
-	private onBodyChange(event: ChangeEvent) {
+	private onBodyChange(event: EditorChangeEvent) {
 		shared.noteComponent_change(this, 'body', event.value);
 		this.scheduleSave();
 	}
@@ -450,7 +458,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		void ResourceFetcher.instance().markForDownload(event.resourceId);
 	}
 
-	public componentDidUpdate(prevProps: any) {
+	public componentDidUpdate(prevProps: any, prevState: any) {
 		if (this.doFocusUpdate_) {
 			this.doFocusUpdate_ = false;
 			this.focusUpdate();
@@ -460,6 +468,22 @@ class NoteScreenComponent extends BaseScreenComponent {
 			this.props.dispatch({
 				type: 'NOTE_SIDE_MENU_OPTIONS_SET',
 				options: this.sideMenuOptions(),
+			});
+		}
+
+		if (prevState.isLoading !== this.state.isLoading && !this.state.isLoading) {
+			// If there's autosave data, prompt the user to restore it.
+			void promptRestoreAutosave((drawingData: string) => {
+				void this.attachNewDrawing(drawingData);
+			});
+		}
+
+		// Disable opening/closing the side menu with touch gestures
+		// when the image editor is open.
+		if (prevState.showImageEditor !== this.state.showImageEditor) {
+			this.props.dispatch({
+				type: 'SET_SIDE_MENU_TOUCH_GESTURES_DISABLED',
+				disableSideMenuGestures: this.state.showImageEditor,
 			});
 		}
 	}
@@ -565,7 +589,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				},
 				(error: any) => {
 					reject(error);
-				}
+				},
 			);
 		});
 	}
@@ -594,7 +618,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				85, // quality
 				undefined, // rotation
 				undefined, // outputPath
-				true // keep metadata
+				true, // keep metadata
 			);
 
 			const resizedImagePath = resizedImage.uri;
@@ -631,10 +655,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return await saveOriginalImage();
 	}
 
-	public async attachFile(pickerResponse: any, fileType: string) {
+	public async attachFile(pickerResponse: any, fileType: string): Promise<ResourceEntity|null> {
 		if (!pickerResponse) {
 			// User has cancelled
-			return;
+			return null;
 		}
 
 		const localFilePath = Platform.select({
@@ -661,7 +685,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		reg.logger().info(`Got file: ${localFilePath}`);
 		reg.logger().info(`Got type: ${mimeType}`);
 
-		let resource = Resource.new();
+		let resource: ResourceEntity = Resource.new();
 		resource.id = uuid.create();
 		resource.mime = mimeType;
 		resource.title = pickerResponse.name ? pickerResponse.name : '';
@@ -674,11 +698,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		try {
 			if (mimeType === 'image/jpeg' || mimeType === 'image/jpg' || mimeType === 'image/png') {
 				const done = await this.resizeImage(localFilePath, targetPath, mimeType);
-				if (!done) return;
+				if (!done) return null;
 			} else {
-				if (fileType === 'image') {
+				if (fileType === 'image' && mimeType !== 'image/svg+xml') {
 					dialogs.error(this, _('Unsupported image type: %s', mimeType));
-					return;
+					return null;
 				} else {
 					await shim.fsDriver().copy(localFilePath, targetPath);
 					const stat = await shim.fsDriver().stat(targetPath);
@@ -692,7 +716,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		} catch (error) {
 			reg.logger().warn('Could not attach file:', error);
 			await dialogs.error(this, error.message);
-			return;
+			return null;
 		}
 
 		const itDoes = await shim.fsDriver().waitTillExists(targetPath);
@@ -703,7 +727,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		resource = await Resource.save(resource, { isNew: true });
 
-		const resourceTag = Resource.markdownTag(resource);
+		const resourceTag = Resource.markupTag(resource);
 
 		const newNote = { ...this.state.note };
 
@@ -734,6 +758,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.refreshResource(resource, newNote.body);
 
 		this.scheduleSave();
+
+		return resource;
 	}
 
 	private async attachPhoto_onPress() {
@@ -765,7 +791,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				uri: data.uri,
 				type: 'image/jpg',
 			},
-			'image'
+			'image',
 		);
 
 		this.setState({ showCamera: false });
@@ -774,6 +800,81 @@ class NoteScreenComponent extends BaseScreenComponent {
 	private cameraView_onCancel() {
 		this.setState({ showCamera: false });
 	}
+
+	private async attachNewDrawing(svgData: string) {
+		const filePath = `${Setting.value('resourceDir')}/saved-drawing.joplin.svg`;
+		await shim.fsDriver().writeFile(filePath, svgData, 'utf8');
+		logger.info('Saved new drawing to', filePath);
+
+		return await this.attachFile({
+			uri: filePath,
+			name: _('Drawing'),
+		}, 'image');
+	}
+
+	private drawPicture_onPress = async () => {
+		// Create a new empty drawing and attach it now.
+		const resource = await this.attachNewDrawing('');
+		await this.editDrawing(resource);
+	};
+
+	private async updateDrawing(svgData: string) {
+		let resource: ResourceEntity|null = this.state.imageEditorResource;
+
+		if (!resource) {
+			throw new Error('No resource is loaded in the editor');
+		}
+
+		logger.info('Saving drawing to resource', resource.id);
+
+		const tempFilePath = join(Setting.value('tempDir'), uuid.createNano());
+		await shim.fsDriver().writeFile(tempFilePath, svgData, 'utf8');
+
+		resource = await Resource.updateResourceBlobContent(
+			resource.id,
+			tempFilePath,
+		);
+		await shim.fsDriver().remove(tempFilePath);
+
+		await this.refreshResource(resource);
+	}
+
+	private onSaveDrawing = async (svgData: string) => {
+		await this.updateDrawing(svgData);
+	};
+
+	private onCloseDrawing = () => {
+		this.setState({ showImageEditor: false });
+	};
+
+	private async editDrawing(item: BaseItem) {
+		const filePath = Resource.fullPath(item);
+		this.setState({
+			showImageEditor: true,
+			loadImageEditorData: async () => {
+				return await shim.fsDriver().readFile(filePath);
+			},
+			imageEditorResource: item,
+		});
+	}
+
+	private onEditResource = async (message: string) => {
+		const messageData = /^edit:(.*)$/.exec(message);
+		if (!messageData) {
+			throw new Error('onEditResource: Error: Invalid message');
+		}
+
+		const resourceId = messageData[1];
+
+		const resource = await BaseItem.loadItemById(resourceId);
+		await Resource.requireIsReady(resource);
+
+		if (isEditableResource(resource.mime)) {
+			await this.editDrawing(resource);
+		} else {
+			throw new Error(_('Unable to edit resource of type %s', resource.mime));
+		}
+	};
 
 	private async attachFile_onPress() {
 		const response = await this.pickDocuments();
@@ -807,8 +908,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	public async onAlarmDialogAccept(date: Date) {
 		const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
-		if (response !== PermissionsAndroid.RESULTS.GRANTED) {
-			logger.warn('POST_NOTIFICATION permission was not granted');
+
+		// The POST_NOTIFICATIONS permission isn't supported on Android API < 33.
+		// (If unsupported, returns NEVER_ASK_AGAIN).
+		// On earlier releases, notifications should work without this permission.
+		if (response === PermissionsAndroid.RESULTS.DENIED) {
+			logger.warn('POST_NOTIFICATIONS permission was not granted');
 			return;
 		}
 
@@ -885,6 +990,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	public async showAttachMenu() {
+		// If the keyboard is editing a WebView, the standard Keyboard.dismiss()
+		// may not work. As such, we also need to call hideKeyboard on the editorRef
+		this.editorRef.current?.hideKeyboard();
+
 		const buttons = [];
 
 		// On iOS, it will show "local files", which means certain files saved from the browser
@@ -997,6 +1106,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 				disabled: readOnly,
 			});
 		}
+
+		output.push({
+			title: _('Draw picture'),
+			onPress: () => this.drawPicture_onPress(),
+			disabled: readOnly,
+		});
 
 		if (isTodo) {
 			output.push({
@@ -1185,6 +1300,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		if (this.state.showCamera) {
 			return <CameraView themeId={this.props.themeId} style={{ flex: 1 }} onPhoto={this.cameraView_onPhoto} onCancel={this.cameraView_onCancel} />;
+		} else if (this.state.showImageEditor) {
+			return <ImageEditor
+				loadInitialSVGData={this.state.loadImageEditorData}
+				themeId={this.props.themeId}
+				onSave={this.onSaveDrawing}
+				onExit={this.onCloseDrawing}
+			/>;
 		}
 
 		// Currently keyword highlighting is supported only when FTS is available.
@@ -1210,6 +1332,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 						noteHash={this.props.noteHash}
 						onCheckboxChange={this.onBodyViewerCheckboxChange}
 						onMarkForDownload={this.onMarkForDownload}
+						onRequestEditResource={this.onEditResource}
 						onLoadEnd={this.onBodyViewerLoadEnd}
 					/>
 				);
@@ -1283,7 +1406,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			const editButton = {
 				label: _('Edit'),
-				icon: 'md-create',
+				icon: 'create',
 				onPress: () => {
 					this.setState({ mode: 'edit' });
 

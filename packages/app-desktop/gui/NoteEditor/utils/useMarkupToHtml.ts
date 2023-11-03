@@ -12,6 +12,7 @@ interface HookDependencies {
 	themeId: number;
 	customCss: string;
 	plugins: PluginStates;
+	settingValue: (pluginId: string, key: string)=> any;
 }
 
 export interface MarkupToHtmlOptions {
@@ -59,12 +60,16 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 
 		delete options.replaceResourceInternalToExternalLinks;
 
-		const result = await markupToHtml.render(markupLanguage, md, theme, { codeTheme: theme.codeThemeCss,
+		const result = await markupToHtml.render(markupLanguage, md, theme, {
+			codeTheme: theme.codeThemeCss,
 			resources: resources,
 			postMessageSyntax: 'ipcProxySendToHost',
 			splitted: true,
 			externalAssetsOnly: true,
-			codeHighlightCacheKey: 'useMarkupToHtml', ...options });
+			codeHighlightCacheKey: 'useMarkupToHtml',
+			settingValue: deps.settingValue,
+			...options,
+		});
 
 		return result;
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied

@@ -29,7 +29,7 @@ const callHook = (isUpdate: boolean, pluginEnabled = true, pluginInstalledViaGUI
 	},
 	repoApi,
 	onPluginSettingsChange,
-	isUpdate
+	isUpdate,
 );
 
 describe('useOnInstallHandler', () => {
@@ -37,7 +37,7 @@ describe('useOnInstallHandler', () => {
 	beforeAll(() => {
 		(PluginService.instance as jest.Mock).mockReturnValue(pluginServiceInstance);
 		(defaultPluginSetting as jest.Mock).mockImplementation(
-			jest.requireActual('@joplin/lib/services/plugins/PluginService').defaultPluginSetting
+			jest.requireActual('@joplin/lib/services/plugins/PluginService').defaultPluginSetting,
 		);
 	});
 

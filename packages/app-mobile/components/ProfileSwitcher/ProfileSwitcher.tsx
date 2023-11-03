@@ -71,7 +71,7 @@ export default (props: Props) => {
 					onPress: () => {},
 					style: 'cancel',
 				},
-			]
+			],
 		);
 	}, []);
 
@@ -108,7 +108,7 @@ export default (props: Props) => {
 					onPress: () => {},
 					style: 'cancel',
 				},
-			]
+			],
 		);
 	}, [profileConfig]);
 
@@ -144,7 +144,7 @@ export default (props: Props) => {
 								onPress: () => {},
 								style: 'cancel',
 							},
-						]
+						],
 					);
 				}}
 			/>

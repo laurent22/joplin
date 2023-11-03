@@ -31,7 +31,7 @@ const tasks = {
 		fn: async () => {
 			await compileSass(
 				`${__dirname}/style.scss`,
-				`${__dirname}/style.min.css`
+				`${__dirname}/style.min.css`,
 			);
 		},
 	},

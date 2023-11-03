@@ -17,7 +17,7 @@ import ItemList from '../ItemList';
 const { connect } = require('react-redux');
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-import { Props } from './types';
+import { Props } from './utils/types';
 import usePrevious from '../hooks/usePrevious';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
 import { FolderEntity } from '@joplin/lib/services/database/types';

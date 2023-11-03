@@ -21,10 +21,12 @@ describe('createEventHandlingAttrs', () => {
 		const options: Options = {
 			enableLongPress: false,
 			postMessageSyntax: 'postMessageFn',
+			enableEditPopup: false,
 		};
 		const listeners = createEventHandlingListeners('someresourceid', options, 'postMessage("click")');
 
-		// Should not add touchstart/mouseenter/leave listeners when not long-pressing.
+		// Should not add touchstart/mouseenter/leave listeners when not creating
+		// an edit popup or long-pressing.
 		expect(listeners.onmouseenter).toBe('');
 		expect(listeners.onmouseleave).toBe('');
 		expect(listeners.ontouchstart).toBe('');
@@ -37,6 +39,7 @@ describe('createEventHandlingAttrs', () => {
 		const options: Options = {
 			enableLongPress: false,
 			postMessageSyntax: 'postMessageFn',
+			enableEditPopup: false,
 		};
 		const clickAction = 'postMessageFn("click")';
 		const listeners = createEventHandlingListeners('someresourceid', options, clickAction);
@@ -51,6 +54,7 @@ describe('createEventHandlingAttrs', () => {
 		const options: Options = {
 			enableLongPress: true,
 			postMessageSyntax: 'postMessageFn',
+			enableEditPopup: false,
 		};
 		const clickAction: null|string = null;
 		const listeners = createEventHandlingListeners('resourceidhere', options, clickAction);
@@ -71,6 +75,7 @@ describe('createEventHandlingAttrs', () => {
 		const options: Options = {
 			enableLongPress: true,
 			postMessageSyntax: 'postMessageFn',
+			enableEditPopup: false,
 		};
 		const listeners = createEventHandlingListeners('id', options, null);
 

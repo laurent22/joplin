@@ -1,6 +1,5 @@
-// v0.4.1 - https://github.com/mozilla/readability/commit/28843b6de84447dd6cef04058fda336938e628dc
+// v0.4.4 - https://github.com/mozilla/readability/commit/49d345a455da1f4aa93f8b41e0f50422f9959c7c
 
-/* eslint-env es6:false */
 /*
  * Copyright (c) 2010 Arc90 Inc
  *
@@ -55,7 +54,7 @@ var REGEXPS = {
 	var defaultOptions = { minScore: 20, minContentLength: 140, visibilityChecker: isNodeVisible };
 	options = Object.assign(defaultOptions, options);
   
-	var nodes = doc.querySelectorAll("p, pre");
+	var nodes = doc.querySelectorAll("p, pre, article");
   
 	// Get <div> nodes which have <br> node(s) and append them into the `nodes` variable.
 	// Some articles' DOM structures might look like
@@ -106,5 +105,6 @@ var REGEXPS = {
   }
   
   if (typeof module === "object") {
+	/* global module */
 	module.exports = isProbablyReaderable;
   }

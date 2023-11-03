@@ -436,7 +436,7 @@ export default class ItemModel extends BaseModel<Item> {
 				.whereIn('id', this.db(this.tableName)
 					.select(['id'])
 					.where('content', '!=', Buffer.from(''))
-					.limit(options.batchSize)
+					.limit(options.batchSize),
 				);
 
 			totalDone += updatedRows.length;
@@ -1037,7 +1037,7 @@ export default class ItemModel extends BaseModel<Item> {
 					const userIds: Uuid[] = unique(
 						userItems
 							.map(u => u.user_id)
-							.concat(changes.map(c => c.user_id))
+							.concat(changes.map(c => c.user_id)),
 					);
 
 					const totalSizes: TotalSizeRow[] = [];

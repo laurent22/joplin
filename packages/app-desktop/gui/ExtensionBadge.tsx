@@ -53,7 +53,7 @@ const styleSelector = createSelector(
 		};
 
 		return output;
-	}
+	},
 );
 
 function platformAssets(type: string) {

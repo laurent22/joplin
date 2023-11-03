@@ -2,12 +2,16 @@ import Logger from '@joplin/utils/Logger';
 import ItemChange from '../../models/ItemChange';
 import Setting from '../../models/Setting';
 import Note from '../../models/Note';
-import BaseModel from '../../BaseModel';
+import BaseModel, { ModelType } from '../../BaseModel';
 import ItemChangeUtils from '../ItemChangeUtils';
 import shim from '../../shim';
 import filterParser, { Term } from './filterParser';
 import queryBuilder from './queryBuilder';
 import { ItemChangeEntity, NoteEntity } from '../database/types';
+import JoplinDatabase from '../../JoplinDatabase';
+import isItemId from '../../models/utils/isItemId';
+import BaseItem from '../../models/BaseItem';
+import { isCallbackUrl, parseCallbackUrl } from '../../callbackUrlUtils';
 const { sprintf } = require('sprintf-js');
 const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.js');
 
@@ -20,6 +24,27 @@ enum SearchType {
 
 interface SearchOptions {
 	searchType: SearchType;
+
+	// When this is on, the search engine automatically appends "*" to each word
+	// of the query. So "hello world" is turned into "hello* world*". This
+	// allows returning results quickly, in particular on mobile, and it seems
+	// to be what users generally expect.
+	appendWildCards?: boolean;
+}
+
+export interface ProcessResultsRow {
+	id: string;
+	parent_id: string;
+	title: string;
+	offsets: string;
+	user_updated_time: number;
+	user_created_time: number;
+	matchinfo: Buffer;
+	item_type?: ModelType;
+	fields?: string[];
+	weight?: number;
+	is_todo?: number;
+	todo_completed?: number;
 }
 
 export interface ComplexTerm {
@@ -47,7 +72,7 @@ export default class SearchEngine {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public dispatch: Function = (_o: any) => {};
 	private logger_ = new Logger();
-	private db_: any = null;
+	private db_: JoplinDatabase = null;
 	private isIndexing_ = false;
 	private syncCalls_: any[] = [];
 	private scheduleSyncTablesIID_: any;
@@ -87,8 +112,8 @@ export default class SearchEngine {
 	}
 
 	private async rebuildIndex_() {
-		let noteIds: string[] = await this.db().selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
-		noteIds = noteIds.map((n: any) => n.id);
+		const notes = await this.db().selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
+		const noteIds = notes.map(n => n.id);
 
 		const lastChangeId = await ItemChange.lastChangeId();
 
@@ -109,7 +134,7 @@ export default class SearchEngine {
 				queries.push({ sql: `
 				INSERT INTO notes_normalized(${SearchEngine.relevantFields})
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-				params: [n.id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.todo_due, n.parent_id, n.latitude, n.longitude, n.altitude, n.source_url] }
+				params: [n.id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.todo_due, n.parent_id, n.latitude, n.longitude, n.altitude, n.source_url] },
 				);
 			}
 
@@ -174,7 +199,7 @@ export default class SearchEngine {
 					ORDER BY id ASC
 					LIMIT 10
 				`,
-					[BaseModel.TYPE_NOTE, lastChangeId]
+					[BaseModel.TYPE_NOTE, lastChangeId],
 				);
 
 				if (!changes.length) break;
@@ -184,7 +209,7 @@ export default class SearchEngine {
 				const noteIds = changes.map(a => a.item_id);
 				const notes = await Note.modelSelectAll(`
 					SELECT ${SearchEngine.relevantFields}
-					FROM notes WHERE id IN ("${noteIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`
+					FROM notes WHERE id IN ("${noteIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`,
 				);
 
 				for (let i = 0; i < changes.length; i++) {
@@ -286,7 +311,7 @@ export default class SearchEngine {
 
 
 
-	private calculateWeightBM25_(rows: any[]) {
+	private calculateWeightBM25_(rows: ProcessResultsRow[]) {
 		// https://www.sqlite.org/fts3.html#matchinfo
 		// pcnalx are the arguments passed to matchinfo
 		// p - The number of matchable phrases in the query.
@@ -312,7 +337,6 @@ export default class SearchEngine {
 		const TITLE_COLUMN = 1;
 		const BODY_COLUMN = 2;
 		const columns = [TITLE_COLUMN, BODY_COLUMN];
-		// const NUM_COLS = 12;
 
 		const numPhrases = generalInfo[0]; // p
 		const numColumns = generalInfo[1]; // c
@@ -326,21 +350,23 @@ export default class SearchEngine {
 		const numBodyTokens = matchInfo.map(m => m[5 + numColumns]);
 		const numTokens = [null, numTitleTokens, numBodyTokens];
 
-		const X = matchInfo.map(m => m.slice(27)); // x
+		// In byte size, we have for notes_normalized:
+		//
+		// p 1
+		// c 1
+		// n 1
+		// a 12
+		// l 12
+		const X = matchInfo.map(m => m.slice(1 + 1 + 1 + numColumns + numColumns)); // x
 
 		const hitsThisRow = (array: any, c: number, p: number) => array[3 * (c + p * numColumns) + 0];
 		// const hitsAllRows = (array, c, p) => array[3 * (c + p*NUM_COLS) + 1];
 		const docsWithHits = (array: any, c: number, p: number) => array[3 * (c + p * numColumns) + 2];
 
-
-		// if a term occurs in over half the documents in the collection
-		// then this model gives a negative term weight, which is presumably undesirable.
-		// But, assuming the use of a stop list, this normally doesn't happen,
-		// and the value for each summand can be given a floor of 0.
-		const IDF = (n: number, N: number) => Math.max(Math.log((N - n + 0.5) / (n + 0.5)), 0);
+		const IDF = (n: number, N: number) => Math.max(Math.log(((N - n + 0.5) / (n + 0.5)) + 1), 0);
 
 		// https://en.wikipedia.org/wiki/Okapi_BM25
-		const BM25 = (idf: any, freq: any, numTokens: number, avgTokens: any) => {
+		const BM25 = (idf: number, freq: number, numTokens: number, avgTokens: number) => {
 			if (avgTokens === 0) {
 				return 0; // To prevent division by zero
 			}
@@ -349,7 +375,7 @@ export default class SearchEngine {
 
 		const msSinceEpoch = Math.round(new Date().getTime());
 		const msPerDay = 86400000;
-		const weightForDaysSinceLastUpdate = (row: any) => {
+		const weightForDaysSinceLastUpdate = (row: ProcessResultsRow) => {
 			// BM25 weights typically range 0-10, and last updated date should weight similarly, though prioritizing recency logarithmically.
 			// An alpha of 200 ensures matches in the last week will show up front (11.59) and often so for matches within 2 weeks (5.99),
 			// but is much less of a factor at 30 days (2.84) or very little after 90 days (0.95), focusing mostly on content at that point.
@@ -399,7 +425,7 @@ export default class SearchEngine {
 		}
 	}
 
-	private processResults_(rows: any[], parsedQuery: any, isBasicSearchResults = false) {
+	private processResults_(rows: ProcessResultsRow[], parsedQuery: any, isBasicSearchResults = false) {
 		if (isBasicSearchResults) {
 			this.processBasicSearchResults_(rows, parsedQuery);
 		} else {
@@ -593,23 +619,57 @@ export default class SearchEngine {
 		return SearchEngine.SEARCH_TYPE_FTS;
 	}
 
-	public async search(searchString: string, options: SearchOptions = null) {
+	private async searchFromItemIds(searchString: string): Promise<ProcessResultsRow[]> {
+		let itemId = '';
+
+		if (isCallbackUrl(searchString)) {
+			const parsed = parseCallbackUrl(searchString);
+			itemId = parsed.params.id;
+		} else if (isItemId(searchString)) {
+			itemId = searchString;
+		}
+
+		if (itemId) {
+			const item = await BaseItem.loadItemById(itemId);
+
+			// We only return notes for now because the UI doesn't handle anything else.
+			if (item && item.type_ === ModelType.Note) {
+				return [
+					{
+						id: item.id,
+						parent_id: item.parent_id || '',
+						matchinfo: Buffer.from(''),
+						offsets: '',
+						title: item.title || item.id,
+						user_updated_time: item.user_updated_time || item.updated_time,
+						user_created_time: item.user_created_time || item.created_time,
+						fields: ['id'],
+					},
+				];
+			}
+		}
+
+		return [];
+	}
+
+	public async search(searchString: string, options: SearchOptions = null): Promise<ProcessResultsRow[]> {
 		if (!searchString) return [];
 
 		options = {
 			searchType: SearchEngine.SEARCH_TYPE_AUTO,
+			appendWildCards: false,
 			...options,
 		};
 
 		const searchType = this.determineSearchType_(searchString, options.searchType);
 		const parsedQuery = await this.parseQuery(searchString);
 
+		let rows: ProcessResultsRow[] = [];
+
 		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
 			searchString = this.normalizeText_(searchString);
-			const rows = await this.basicSearch(searchString);
-
+			rows = await this.basicSearch(searchString);
 			this.processResults_(rows, parsedQuery, true);
-			return rows;
 		} else {
 			// SEARCH_TYPE_FTS
 			// FTS will ignore all special characters, like "-" in the index. So if
@@ -618,17 +678,35 @@ export default class SearchEngine {
 			// when searching.
 			// https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
 
+			if (options.appendWildCards) {
+				parsedQuery.allTerms = parsedQuery.allTerms.map(t => {
+					if (t.name === 'text' && !t.wildcard) {
+						t = {
+							...t,
+							wildcard: true,
+							value: t.value.endsWith('"') ? `${t.value.substring(0, t.value.length - 1)}*"` : `${t.value}*`,
+						};
+					}
+					return t;
+				});
+			}
+
 			const useFts = searchType === SearchEngine.SEARCH_TYPE_FTS;
 			try {
 				const { query, params } = queryBuilder(parsedQuery.allTerms, useFts);
-				const rows = await this.db().selectAll(query, params);
+				rows = (await this.db().selectAll(query, params)) as ProcessResultsRow[];
 				this.processResults_(rows, parsedQuery, !useFts);
-				return rows;
 			} catch (error) {
 				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);
-				return [];
+				rows = [];
 			}
 		}
+
+		if (!rows.length) {
+			rows = await this.searchFromItemIds(searchString);
+		}
+
+		return rows;
 	}
 
 	public async destroy() {

@@ -125,7 +125,7 @@ export default class UserModel extends BaseModel<User> {
 	public async login(email: string, password: string): Promise<User> {
 		const user = await this.loadByEmail(email);
 		if (!user) return null;
-		if (!checkPassword(password, user.password)) return null;
+		if (!(await checkPassword(password, user.password))) return null;
 		return user;
 	}
 
@@ -219,7 +219,7 @@ export default class UserModel extends BaseModel<User> {
 			throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it is larger than the allowed limit (%s)',
 				isNote ? _('note') : _('attachment'),
 				itemTitle ? itemTitle : item.name,
-				formatBytes(maxItemSize)
+				formatBytes(maxItemSize),
 			));
 		}
 
@@ -236,7 +236,7 @@ export default class UserModel extends BaseModel<User> {
 				throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it would go over the total allowed size (%s) for this account',
 					isNote ? _('note') : _('attachment'),
 					itemTitle ? itemTitle : item.name,
-					formatBytes(maxTotalItemSize)
+					formatBytes(maxTotalItemSize),
 				));
 			}
 		}
@@ -635,15 +635,25 @@ export default class UserModel extends BaseModel<User> {
 	public async save(object: User, options: SaveOptions = {}): Promise<User> {
 		const user = this.formatValues(object);
 
+		const isNew = await this.isNew(object, options);
+
 		if (user.password) {
 			if (isHashedPassword(user.password)) {
-				throw new ErrorBadRequest(`Unable to save user because password already seems to be hashed. User id: ${user.id}`);
+				if (!isNew) {
+					// We have this check because if an existing user is loaded,
+					// then saved again, the "password" field will be hashed a
+					// second time, and we don't want this.
+					throw new ErrorBadRequest(`Unable to save user because password already seems to be hashed. User id: ${user.id}`);
+				} else {
+					// OK - We allow supplying an already hashed password for
+					// new users. This is mostly used for testing, because
+					// generating a bcrypt hash for each user is slow.
+				}
+			} else {
+				if (!options.skipValidation) this.validatePassword(user.password);
+				user.password = await hashPassword(user.password);
 			}
-			if (!options.skipValidation) this.validatePassword(user.password);
-			user.password = hashPassword(user.password);
 		}
-
-		const isNew = await this.isNew(object, options);
 
 		return this.withTransaction(async () => {
 			const savedUser = await super.save(user, options);

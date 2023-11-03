@@ -13,10 +13,20 @@ interface Source {
 interface Operation {
 	source: number;
 	dest: string;
+
+	// Name of the destination image - it can be used to reference it from `.images`
+	imageName?: string;
+
+	// The width and height of the generated image
 	width?: number;
 	height?: number;
+
+	// Resize the source image to that dimensions before adding to the final image
 	iconWidth?: number;
 	iconHeight?: number;
+
+	// For images that contain multiple images, such as .ico files
+	images?: string[];
 }
 
 interface Results {
@@ -59,6 +69,18 @@ const sources: Source[] = [
 	{
 		id: 9,
 		name: 'WebsiteTopImageCn.png',
+	},
+	{
+		id: 10,
+		name: 'JoplinServerIcon.svg',
+	},
+	{
+		id: 11,
+		name: 'JoplinCloudIcon.svg',
+	},
+	{
+		id: 12,
+		name: 'JoplinCloudIcon2.svg',
 	},
 ];
 
@@ -447,6 +469,96 @@ const operations: Operation[] = [
 		width: 1205,
 		height: 734,
 	},
+
+	// ============================================================================
+	// Joplin Server Icons
+	// ============================================================================
+
+	{
+		source: 10,
+		dest: 'packages/server/public/images/icons/server/icon-512.png',
+		width: 512,
+		height: 512,
+	},
+	{
+		source: 10,
+		dest: 'packages/server/public/images/icons/server/icon-192.png',
+		width: 192,
+		height: 192,
+	},
+	{
+		source: 10,
+		dest: 'packages/server/public/images/icons/server/icon-180.png',
+		width: 180,
+		height: 180,
+	},
+	{
+		source: 10,
+		dest: 'packages/server/public/images/server_logo.png',
+		width: 512,
+		height: 512,
+	},
+	{
+		source: 10,
+		dest: 'packages/server/public/images/icons/server/icon-32.png',
+		width: 32,
+		height: 32,
+		imageName: 'joplinServer32',
+	},
+	{
+		source: 10,
+		dest: 'packages/server/public/images/icons/server/icon.svg',
+	},
+	{
+		source: 10,
+		dest: 'packages/server/public/images/icons/server/favicon.ico',
+		images: ['joplinServer32'],
+	},
+
+	// ============================================================================
+	// Joplin Cloud Icons
+	// ============================================================================
+
+	{
+		source: 11,
+		dest: 'packages/server/public/images/icons/cloud/icon-512.png',
+		width: 512,
+		height: 512,
+	},
+	{
+		source: 11,
+		dest: 'packages/server/public/images/icons/cloud/icon-192.png',
+		width: 192,
+		height: 192,
+	},
+	{
+		source: 11,
+		dest: 'packages/server/public/images/icons/cloud/icon-180.png',
+		width: 180,
+		height: 180,
+	},
+	{
+		source: 11,
+		dest: 'packages/server/public/images/cloud_logo.png',
+		width: 512,
+		height: 512,
+	},
+	{
+		source: 12,
+		dest: 'packages/server/public/images/icons/cloud/icon-32.png',
+		width: 32,
+		height: 32,
+		imageName: 'joplinCloud32',
+	},
+	{
+		source: 12,
+		dest: 'packages/server/public/images/icons/cloud/icon.svg',
+	},
+	{
+		source: 12,
+		dest: 'packages/server/public/images/icons/cloud/favicon.ico',
+		images: ['joplinCloud32'],
+	},
 ];
 
 const md5Dir = async (dirPath: string): Promise<string> => {
@@ -478,6 +590,8 @@ const makeOperationKey = async (source: Source, sourcePath: string, operation: O
 	output.push(operation.height);
 	output.push(operation.iconWidth);
 	output.push(operation.iconHeight);
+	output.push(operation.imageName);
+	output.push(operation.images ? operation.images.join(':') : '');
 	return output.join('_');
 };
 
@@ -534,6 +648,14 @@ async function main() {
 				s.webp({
 					// quality: 90,
 				});
+			} else if (destExt === 'ico') {
+				const sources: string[] = operations.filter(o => {
+					return operation.images.includes(o.imageName);
+				}).map(o => {
+					return `${rootDir}/${o.dest}`;
+				});
+
+				await execCommand(`convert ${sources.map(s => `'${s}'`).join(' ')} "${operation.dest}"`);
 			} else {
 				throw new Error(`Unsupported extension: ${destExt}`);
 			}

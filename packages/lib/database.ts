@@ -1,17 +1,9 @@
 import Logger from '@joplin/utils/Logger';
 import time from './time';
 import shim from './shim';
+import { SqlParams, SqlQuery, StringOrSqlQuery } from './services/database/types';
 
 const Mutex = require('async-mutex').Mutex;
-
-type SqlParams = any[];
-
-export interface SqlQuery {
-	sql: string;
-	params?: SqlParams;
-}
-
-type StringOrSqlQuery = string | SqlQuery;
 
 export type Row = Record<string, any>;
 

@@ -112,7 +112,7 @@ markJsUtils.markKeyword = (mark, keyword, stringUtils, extraOptions = null) => {
 				return true;
 			},
 			...extraOptions,
-		}
+		},
 	);
 };
 

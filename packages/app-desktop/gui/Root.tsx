@@ -267,5 +267,5 @@ root.render(
 		<ErrorBoundary>
 			<Root />
 		</ErrorBoundary>
-	</Provider>
+	</Provider>,
 );

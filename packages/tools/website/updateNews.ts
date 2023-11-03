@@ -8,7 +8,7 @@ import { rootDir } from '../tool-utils';
 import { compileWithFrontMatter, MarkdownAndFrontMatter, stripOffFrontMatter } from './utils/frontMatter';
 import { markdownToHtml } from './utils/render';
 import { getNewsDate } from './utils/news';
-import { config, execApi, getForumTopPostByExternalId, HttpMethod } from '../utils/discourse';
+import { config, createTopic, getForumTopPostByExternalId, updatePost } from '../utils/discourse';
 const RSS = require('rss');
 
 interface Post {
@@ -70,7 +70,7 @@ const generateRssFeed = async (posts: Post[]) => {
 	const feedItems: any[] = [];
 	for (const post of posts.reverse()) {
 		const content = await getPostContent(post);
-		const postDate = getNewsDate(content.parsed, post.path);
+		const postDate = getNewsDate(content.parsed.header, post.path);
 		const html = markdownToHtml(content.body);
 
 		if (pubDate === null) pubDate = postDate;
@@ -78,11 +78,11 @@ const generateRssFeed = async (posts: Post[]) => {
 		feedItems.push({
 			title: content.title,
 			description: html,
-			url: `https://joplinapp.org/news/${post.id}/`,
+			url: `https://joplinapp.org/news/${post.id}`,
 			guid: post.id,
 			date: postDate,
 			custom_elements: [
-				{ 'twitter-text': content.parsed.tweet },
+				{ 'twitter-text': content.parsed.header.tweet },
 			],
 		});
 
@@ -144,7 +144,7 @@ const main = async () => {
 				} else {
 					console.info('Post already exists and has changed: updating it...');
 
-					await execApi(HttpMethod.PUT, `posts/${existingForumPost.id}.json`, {
+					await updatePost(existingForumPost.id, {
 						title: content.title,
 						raw: content.body,
 						edit_reason: 'Auto-updated by script',
@@ -153,15 +153,15 @@ const main = async () => {
 			} else {
 				console.info('Post does not exists: creating it...');
 
-				const response = await execApi(HttpMethod.POST, 'posts', {
+				const topic = await createTopic({
 					title: content.title,
 					raw: content.body,
 					category: config.newsCategoryId,
 					external_id: post.id,
 				});
 
-				const postUrl = `https://discourse.joplinapp.org/t/${response.topic_id}`;
-				content.parsed.forum_url = postUrl;
+				const postUrl = `https://discourse.joplinapp.org/t/${topic.topic_id}`;
+				content.parsed.header.forum_url = postUrl;
 				const compiled = compileWithFrontMatter(content.parsed);
 
 				await writeFile(post.path, compiled, 'utf8');

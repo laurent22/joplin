@@ -89,7 +89,7 @@ function createPluginArchive(sourceDir, destPath) {
 			cwd: sourceDir,
 			sync: true,
 		},
-		distFiles
+		distFiles,
 	);
 
 	console.info(chalk.cyan(`Plugin archive has been created in ${destPath}`));

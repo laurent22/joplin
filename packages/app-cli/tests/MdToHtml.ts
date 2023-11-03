@@ -66,8 +66,10 @@ describe('MdToHtml', () => {
 					actualHtml,
 					'--------------------------------- Raw:',
 					actualHtml.split('\n'),
-					'--------------------------------- Expected:',
+					'--------------------------------- Expected (Lines)',
 					expectedHtml.split('\n'),
+					'--------------------------------- Expected (Text)',
+					expectedHtml,
 					'--------------------------------------------',
 					'',
 				];
@@ -248,7 +250,7 @@ describe('MdToHtml', () => {
 			const result = await mdToHtml.render(input, null, { bodyOnly: true, mapsToLine: true });
 			expect(result.html.trim()).toBe('<h1 id="head" class="maps-to-line" source-line="0" source-line-end="1">Head</h1>\n' +
 				'<p class="maps-to-line" source-line="1" source-line-end="2">Fruits</p>\n' +
-				'<ul>\n<li class="maps-to-line" source-line="2" source-line-end="3">Apple</li>\n</ul>'
+				'<ul>\n<li class="maps-to-line" source-line="2" source-line-end="3">Apple</li>\n</ul>',
 			);
 		}
 	}));

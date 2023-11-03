@@ -25,7 +25,7 @@ const autodetectTheme = () => {
 	const colorScheme = systemColorScheme;
 	logger.debug(
 		'Autodetecting theme. getColorScheme returns', Appearance.getColorScheme(),
-		'and the expected theme is', systemColorScheme
+		'and the expected theme is', systemColorScheme,
 	);
 
 	if (colorScheme === 'dark') {

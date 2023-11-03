@@ -6,7 +6,7 @@ import KvStore from '@joplin/lib/services/KvStore';
 import * as ArrayUtils from '@joplin/lib/ArrayUtils';
 import { CheckForUpdateOptions, extractVersionInfo, GitHubRelease } from './utils/checkForUpdatesUtils';
 const packageInfo = require('./packageInfo.js');
-const compareVersions = require('compare-versions');
+import { compareVersions } from 'compare-versions';
 
 const logger = Logger.create('checkForUpdates');
 
@@ -113,7 +113,7 @@ export default async function checkForUpdates(inBackground: boolean, parentWindo
 				} else if (buttonIndex === 1) {
 					await addSkippedVersion(release.version);
 				} else if (buttonIndex === 2) {
-					void bridge().openExternal('https://joplinapp.org/changelog/');
+					void bridge().openExternal('https://joplinapp.org/help/about/changelog/desktop');
 				}
 			}
 		}

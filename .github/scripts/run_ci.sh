@@ -86,11 +86,22 @@ if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
 	# Allocation failed - JavaScript heap out of memory
 	#
 	# https://stackoverflow.com/questions/38558989
-	export NODE_OPTIONS="--max-old-space-size=4096"
+	export NODE_OPTIONS="--max-old-space-size=32768"
 	yarn run test-ci
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
 		exit $testResult
+	fi
+fi
+
+# =============================================================================
+# Check that the website builder can run without errors
+# =============================================================================
+
+if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
+	if [ "$IS_LINUX" == "1" ]; then
+		echo "Step: Running website builder..."
+		node packages/tools/website/processDocs.js --env dev
 	fi
 fi
 

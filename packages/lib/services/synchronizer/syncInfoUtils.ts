@@ -1,3 +1,4 @@
+import Logger from '@joplin/utils/Logger';
 import { FileApi } from '../../file-api';
 import JoplinDatabase from '../../JoplinDatabase';
 import Setting from '../../models/Setting';
@@ -5,6 +6,8 @@ import { State } from '../../reducer';
 import { PublicPrivateKeyPair } from '../e2ee/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
 const fastDeepEqual = require('fast-deep-equal');
+
+const logger = Logger.create('syncInfoUtils');
 
 export interface SyncInfoValueBoolean {
 	value: boolean;
@@ -75,15 +78,25 @@ export async function fetchSyncInfo(api: FileApi): Promise<SyncInfo> {
 		if (oldVersion) output = { version: 1 };
 	}
 
-	return new SyncInfo(JSON.stringify(output));
+	return fixSyncInfo(new SyncInfo(JSON.stringify(output)));
 }
 
 export function saveLocalSyncInfo(syncInfo: SyncInfo) {
 	Setting.setValue('syncInfoCache', syncInfo.serialize());
 }
 
+const fixSyncInfo = (syncInfo: SyncInfo) => {
+	if (syncInfo.activeMasterKeyId) {
+		if (!syncInfo.masterKeys || !syncInfo.masterKeys.find(mk => mk.id === syncInfo.activeMasterKeyId)) {
+			logger.warn(`Sync info is using a non-existent key as the active key - clearing it: ${syncInfo.activeMasterKeyId}`);
+			syncInfo.activeMasterKeyId = '';
+		}
+	}
+	return syncInfo;
+};
+
 export function localSyncInfo(): SyncInfo {
-	return new SyncInfo(Setting.value('syncInfoCache'));
+	return fixSyncInfo(new SyncInfo(Setting.value('syncInfoCache')));
 }
 
 export function localSyncInfoFromState(state: State): SyncInfo {

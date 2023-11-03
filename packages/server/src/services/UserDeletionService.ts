@@ -71,7 +71,7 @@ export default class UserDeletionService extends BaseService {
 				user,
 				flags,
 			}),
-			userId
+			userId,
 		);
 
 		await this.models.userFlag().add(userId, UserFlagType.UserDeletionInProgress);
@@ -130,7 +130,7 @@ export default class UserDeletionService extends BaseService {
 			{
 				processAccount: true,
 				processData: true,
-			}
+			},
 		);
 
 		if (addedUserIds.length) {

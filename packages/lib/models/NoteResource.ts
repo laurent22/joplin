@@ -1,5 +1,5 @@
 import BaseModel from '../BaseModel';
-import { SqlQuery } from '../database';
+import { SqlQuery } from '../services/database/types';
 import BaseItem from './BaseItem';
 
 // - If is_associated = 1, note_resources indicates which note_id is currently associated with the given resource_id
@@ -119,7 +119,7 @@ export default class NoteResource extends BaseModel {
 
 			queries.push({
 				sql: 'INSERT INTO note_resources (note_id, resource_id, is_associated, last_seen_time) VALUES (?, ?, ?, ?)',
-				params: ['', id, 0, lastSeenTime] }
+				params: ['', id, 0, lastSeenTime] },
 			);
 		}
 		await this.db().transactionExecBatch(queries);
@@ -141,7 +141,7 @@ export default class NoteResource extends BaseModel {
 			AND last_seen_time < ?
 			AND last_seen_time != 0
 		`,
-			[cutOffTime]
+			[cutOffTime],
 		);
 		return output.map((r: any) => r.resource_id);
 	}

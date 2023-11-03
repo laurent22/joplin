@@ -1,0 +1,18 @@
+| First Header    | Second Header   |
+| --------------- | --------------- |
+| Content Cell A1 | Content Cell A2 |
+| Content Cell A2 | Content Cell B2 |
+
+<img src="https://test"/>
+
+| Header |
+| --- |
+| Content |
+
+Paragraph
+
+# With a BR tag
+
+| Header |
+| --- |
+| Line 1<br>Line 2 |

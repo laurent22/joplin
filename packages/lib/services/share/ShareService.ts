@@ -337,7 +337,7 @@ export default class ShareService {
 				this.encryptionService_,
 				masterKey,
 				getMasterPassword(),
-				recipientPublicKey
+				recipientPublicKey,
 			);
 		}
 
@@ -404,7 +404,7 @@ export default class ShareService {
 					masterKey,
 					localSyncInfo().ppk,
 					getMasterPassword(),
-					getMasterPassword()
+					getMasterPassword(),
 				);
 
 				logger.info('respondInvitation: Key has been reencrypted using master password', reencryptedMasterKey);

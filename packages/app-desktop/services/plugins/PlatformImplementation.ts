@@ -5,6 +5,7 @@ import { VersionInfo } from '@joplin/lib/services/plugins/api/types';
 import Setting from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry';
 import BasePlatformImplementation, { Joplin } from '@joplin/lib/services/plugins/BasePlatformImplementation';
+import { Implementation as ImagingImplementation } from '@joplin/lib/services/plugins/api/JoplinImaging';
 const { clipboard, nativeImage } = require('electron');
 const packageInfo = require('../../packageInfo');
 
@@ -56,8 +57,11 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 		this.joplin_ = {
 			views: {
 				dialogs: {
-					showMessageBox: async function(message: string) {
+					showMessageBox: async (message: string) => {
 						return bridge().showMessageBox(message);
+					},
+					showOpenDialog: async (options) => {
+						return bridge().showOpenDialog(options);
 					},
 				},
 			},
@@ -74,6 +78,12 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 
 	public get joplin(): Joplin {
 		return this.joplin_;
+	}
+
+	public get imaging(): ImagingImplementation {
+		return {
+			nativeImage: nativeImage,
+		};
 	}
 
 }

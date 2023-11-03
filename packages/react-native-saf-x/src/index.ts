@@ -18,7 +18,7 @@ if (Platform.OS === 'android') {
 					get() {
 						throw new Error(LINKING_ERROR);
 					},
-				}
+				},
 			)
 	) as SafxInterface;
 } else {
@@ -133,7 +133,7 @@ export function exists(uriString: string) {
 /** Read contents of the given uri. uri must point to a file. */
 export function readFile(
 	uriString: string,
-	options?: Pick<FileOperationOptions, 'encoding'>
+	options?: Pick<FileOperationOptions, 'encoding'>,
 ) {
 	if (!options) options = {};
 	const { encoding } = options;
@@ -146,7 +146,7 @@ export function readFile(
 export function writeFile(
 	uriString: string,
 	data: string,
-	options?: FileOperationOptions
+	options?: FileOperationOptions,
 ) {
 	if (!options) options = {};
 	const { encoding, append, mimeType } = options;
@@ -157,7 +157,7 @@ export function writeFile(
 // Rejects if a file or directory exist at given uri.
 export function createFile(
 	uriString: string,
-	options?: Pick<FileOperationOptions, 'mimeType'>
+	options?: Pick<FileOperationOptions, 'mimeType'>,
 ) {
 	if (!options) options = {};
 	const { mimeType } = options;
@@ -215,7 +215,7 @@ type FileTransferOptions = {
 export function copyFile(
 	srcUri: string,
 	destUri: string,
-	options?: FileTransferOptions
+	options?: FileTransferOptions,
 ) {
 	if (!options) options = {};
 	const { replaceIfDestinationExists = false } = options;
@@ -228,7 +228,7 @@ export function copyFile(
 export function moveFile(
 	srcUri: string,
 	destUri: string,
-	options?: FileTransferOptions
+	options?: FileTransferOptions,
 ) {
 	if (!options) options = {};
 	const { replaceIfDestinationExists = false } = options;

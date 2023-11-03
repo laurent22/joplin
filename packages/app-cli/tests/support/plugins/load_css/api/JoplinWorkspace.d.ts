@@ -1,9 +1,13 @@
 import { FolderEntity } from '../../database/types';
-import { Disposable } from './types';
+import { Disposable, MenuItem } from './types';
+export interface EditContextMenuFilterObject {
+    items: MenuItem[];
+}
+type FilterHandler<T> = (object: T) => Promise<void>;
 declare enum ItemChangeEventType {
     Create = 1,
     Update = 2,
-    Delete = 3,
+    Delete = 3
 }
 interface ItemChangeEvent {
     id: string;
@@ -12,8 +16,12 @@ interface ItemChangeEvent {
 interface SyncStartEvent {
     withErrors: boolean;
 }
-declare type ItemChangeHandler = (event: ItemChangeEvent)=> void;
-declare type SyncStartHandler = (event: SyncStartEvent)=> void;
+interface ResourceChangeEvent {
+    id: string;
+}
+type ItemChangeHandler = (event: ItemChangeEvent) => void;
+type SyncStartHandler = (event: SyncStartEvent) => void;
+type ResourceChangeHandler = (event: ResourceChangeEvent) => void;
 /**
  * The workspace service provides access to all the parts of Joplin that
  * are being worked on - i.e. the currently selected notes or notebooks as
@@ -39,6 +47,11 @@ export default class JoplinWorkspace {
      */
     onNoteChange(handler: ItemChangeHandler): Promise<Disposable>;
     /**
+     * Called when a resource is changed. Currently this handled will not be
+     * called when a resource is added or deleted.
+     */
+    onResourceChange(handler: ResourceChangeHandler): Promise<void>;
+    /**
      * Called when an alarm associated with a to-do is triggered.
      */
     onNoteAlarmTrigger(handler: Function): Promise<Disposable>;
@@ -50,6 +63,11 @@ export default class JoplinWorkspace {
      * Called when the synchronisation process has finished.
      */
     onSyncComplete(callback: Function): Promise<Disposable>;
+    /**
+     * Called just before the editor context menu is about to open. Allows
+     * adding items to it.
+     */
+    filterEditorContextMenu(handler: FilterHandler<EditContextMenuFilterObject>): void;
     /**
      * Gets the currently selected note
      */

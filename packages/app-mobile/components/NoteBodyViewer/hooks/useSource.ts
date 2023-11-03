@@ -3,6 +3,7 @@ import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 const { themeStyle } = require('../../global-style.js');
 import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
+import useEditPopup from './useEditPopup';
 import Logger from '@joplin/utils/Logger';
 const { assetsToHeaders } = require('@joplin/renderer');
 
@@ -90,6 +91,8 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 	const onlyNoteBodyHasChanged = Object.keys(changedDeps).length === 1 && changedDeps[0];
 	const onlyCheckboxesHaveChanged = previousDeps[0] && changedDeps[0] && onlyCheckboxHasChangedHack(previousDeps[0], noteBody);
 
+	const { createEditPopupSyntax, destroyEditPopupSyntax, editPopupCss } = useEditPopup(themeId);
+
 	useEffect(() => {
 		if (onlyNoteBodyHasChanged && onlyCheckboxesHaveChanged) {
 			logger.info('Only a checkbox has changed - not updating HTML');
@@ -112,6 +115,11 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 				codeTheme: theme.codeThemeCss,
 				postMessageSyntax: 'window.joplinPostMessage_',
 				enableLongPress: true,
+
+				// Show an 'edit' popup over SVG images
+				editPopupFiletypes: ['image/svg+xml'],
+				createEditPopupSyntax,
+				destroyEditPopupSyntax,
 			};
 
 			// Whenever a resource state changes, for example when it goes from "not downloaded" to "downloaded", the "noteResources"
@@ -125,7 +133,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 				noteMarkupLanguage,
 				bodyToRender,
 				rendererTheme,
-				mdOptions
+				mdOptions,
 			);
 
 			if (cancelled) return;
@@ -194,6 +202,12 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 					padding: 0;
 				}
 			`;
+			const defaultCss = `
+				code {
+					white-space: pre-wrap;
+					overflow-x: hidden;
+				}
+			`;
 
 			html =
 				`
@@ -203,7 +217,9 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 						<meta charset="UTF-8">
 						<meta name="viewport" content="width=device-width, initial-scale=1">
 						<style>
+							${defaultCss}
 							${shim.mobilePlatform() === 'ios' ? iOSSpecificCss : ''}
+							${editPopupCss}
 						</style>
 						${assetsToHeaders(result.pluginAssets, { asHtml: true })}
 					</head>

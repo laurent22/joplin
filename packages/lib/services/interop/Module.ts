@@ -10,6 +10,7 @@ interface BaseMetadata {
 	fileExtensions: string[];
 	description: string;
 	isDefault: boolean;
+	separatorAfter: boolean; // this isn't a property of the importer, but of how it should be displayed in the GUI
 
 	supportsMobile: boolean;
 
@@ -51,6 +52,7 @@ const defaultBaseMetadata = {
 	isNoteArchive: true,
 	supportsMobile: true,
 	isDefault: false,
+	separatorAfter: false,
 };
 
 const moduleFullLabel = (metadata: ImportMetadata|ExportMetadata, moduleSource: FileSystemItem = null) => {
@@ -63,7 +65,7 @@ const moduleFullLabel = (metadata: ImportMetadata|ExportMetadata, moduleSource: 
 };
 
 export const makeImportModule = (
-	metadata: Partial<ImportMetadata>, factory: ()=> InteropService_Importer_Base
+	metadata: Partial<ImportMetadata>, factory: ()=> InteropService_Importer_Base,
 ): ImportModule => {
 	const importerDefaults: ImportMetadata = {
 		...defaultBaseMetadata,
@@ -93,7 +95,7 @@ export const makeImportModule = (
 };
 
 export const makeExportModule = (
-	metadata: Partial<ExportMetadata>, factory: ()=> InteropService_Exporter_Base
+	metadata: Partial<ExportMetadata>, factory: ()=> InteropService_Exporter_Base,
 ): ExportModule => {
 	const exporterDefaults: ExportMetadata = {
 		...defaultBaseMetadata,

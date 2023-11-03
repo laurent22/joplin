@@ -262,7 +262,7 @@ const EncryptionConfigScreen = (props: Props) => {
 			rows.push(
 				<Text style={styles.normalText} key={id}>
 					{id}
-				</Text>
+				</Text>,
 			);
 		}
 
@@ -291,10 +291,10 @@ const EncryptionConfigScreen = (props: Props) => {
 						<Text>{_('For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:')}</Text>
 						<TouchableOpacity
 							onPress={() => {
-								Linking.openURL('https://joplinapp.org/e2ee/');
+								Linking.openURL('https://joplinapp.org/help/apps/sync/e2ee');
 							}}
 						>
-							<Text>https://joplinapp.org/e2ee/</Text>
+							<Text>https://joplinapp.org/help/apps/sync/e2ee</Text>
 						</TouchableOpacity>
 					</View>
 				}

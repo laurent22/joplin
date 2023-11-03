@@ -32,7 +32,7 @@ export default class Tag extends BaseItem {
 
 		return Note.previews(
 			null,
-			{ ...options, conditions: [`id IN ("${noteIds.join('","')}")`] }
+			{ ...options, conditions: [`id IN ("${noteIds.join('","')}")`] },
 		);
 	}
 
@@ -120,10 +120,14 @@ export default class Tag extends BaseItem {
 		return this.search(options);
 	}
 
-	public static async tagsByNoteId(noteId: string) {
+	public static async tagsByNoteId(noteId: string, options: any = null) {
+		options = {
+			...options,
+		};
+
 		const tagIds = await NoteTag.tagIdsByNoteId(noteId);
 		if (!tagIds.length) return [];
-		return this.modelSelectAll(`SELECT * FROM tags WHERE id IN ("${tagIds.join('","')}")`);
+		return this.modelSelectAll(`SELECT ${options.fields ? this.db().escapeFields(options.fields) : '*'} FROM tags WHERE id IN ("${tagIds.join('","')}")`);
 	}
 
 	public static async commonTagsByNoteIds(noteIds: string[]) {

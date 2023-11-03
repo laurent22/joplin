@@ -1,3 +1,5 @@
+/* eslint-disable multiline-comment-style */
+
 // =================================================================
 // Command API types
 // =================================================================
@@ -357,6 +359,18 @@ export interface DialogResult {
 	formData?: any;
 }
 
+export interface Size {
+	width?: number;
+	height?: number;
+}
+
+export interface Rectangle {
+	x?: number;
+	y?: number;
+	width?: number;
+	height?: number;
+}
+
 // =================================================================
 // Settings types
 // =================================================================
@@ -505,6 +519,20 @@ export interface ContentScriptContext {
 	postMessage: PostMessageHandler;
 }
 
+export interface ContentScriptModuleLoadedEvent {
+	userData?: any;
+}
+
+export interface ContentScriptModule {
+	onLoaded?: (event:ContentScriptModuleLoadedEvent) => void;
+	plugin: () => any;
+	assets?: () => void;
+}
+
+export interface MarkdownItContentScriptModule extends Omit<ContentScriptModule, 'plugin'> {
+	plugin: (markdownIt:any, options:any) => any;
+}
+
 export enum ContentScriptType {
 	/**
 	 * Registers a new Markdown-It plugin, which should follow the template
@@ -514,7 +542,7 @@ export enum ContentScriptType {
 	 * module.exports = {
 	 *     default: function(context) {
 	 *         return {
-	 *             plugin: function(markdownIt, options) {
+	 *             plugin: function(markdownIt, pluginOptions) {
 	 *                 // ...
 	 *             },
 	 *             assets: {
@@ -524,6 +552,7 @@ export enum ContentScriptType {
 	 *     }
 	 * }
 	 * ```
+	 * 
 	 * See [the
 	 * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/content_script)
 	 * for a simple Markdown-it plugin example.
@@ -536,16 +565,18 @@ export enum ContentScriptType {
 	 *
 	 * - The **required** `plugin` key is the actual Markdown-It plugin - check
 	 *   the [official doc](https://github.com/markdown-it/markdown-it) for more
-	 *   information. The `options` parameter is of type
-	 *   [RuleOptions](https://github.com/laurent22/joplin/blob/dev/packages/renderer/MdToHtml.ts),
-	 *   which contains a number of options, mostly useful for Joplin's internal
-	 *   code.
+	 *   information.
 	 *
 	 * - Using the **optional** `assets` key you may specify assets such as JS
 	 *   or CSS that should be loaded in the rendered HTML document. Check for
 	 *   example the Joplin [Mermaid
 	 *   plugin](https://github.com/laurent22/joplin/blob/dev/packages/renderer/MdToHtml/rules/mermaid.ts)
 	 *   to see how the data should be structured.
+	 *
+	 * ## Getting the settings from the renderer
+	 *
+	 * You can access your plugin settings from the renderer by calling
+	 * `pluginOptions.settingValue("your-setting-key')`.
 	 *
 	 * ## Posting messages from the content script to your plugin
 	 *

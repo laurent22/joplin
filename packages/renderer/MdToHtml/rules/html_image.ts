@@ -1,11 +1,11 @@
 import { RuleOptions } from '../../MdToHtml';
-import htmlUtils from '../../htmlUtils';
+import { attributesHtml } from '../../htmlUtils';
 import utils from '../../utils';
 
 function renderImageHtml(before: string, src: string, after: string, ruleOptions: RuleOptions) {
 	const r = utils.imageReplacement(ruleOptions.ResourceModel, src, ruleOptions.resources, ruleOptions.resourceBaseUrl, ruleOptions.itemIdToUrl);
 	if (typeof r === 'string') return r;
-	if (r) return `<img ${before} ${htmlUtils.attributesHtml(r)} ${after}/>`;
+	if (r) return `<img ${before} ${attributesHtml(r)} ${after}/>`;
 	return `[Image: ${src}]`;
 }
 

@@ -267,7 +267,7 @@ async function main() {
 
 	console.info(`Main download URL: ${releaseFiles['main'].downloadUrl}`);
 
-	const changelogPath = `${rootDir}/readme/changelog_android.md`;
+	const changelogPath = `${rootDir}/readme/about/changelog/android.md`;
 	await completeReleaseWithChangelog(changelogPath, version, tagName, 'Android', isPreRelease);
 }
 

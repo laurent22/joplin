@@ -428,9 +428,14 @@ describe('UserModel', () => {
 	test('should throw an error if the password being saved seems to be hashed', async () => {
 		const passwordSimilarToHash = '$2a$10';
 
-		const error = await checkThrowAsync(async () => await models().user().save({ password: passwordSimilarToHash }));
+		const user = await models().user().save({
+			email: 'test@example.com',
+			password: '111111',
+		});
 
-		expect(error.message).toBe('Unable to save user because password already seems to be hashed. User id: undefined');
+		const error = await checkThrowAsync(async () => await models().user().save({ id: user.id, password: passwordSimilarToHash }));
+
+		expect(error.message).toBe(`Unable to save user because password already seems to be hashed. User id: ${user.id}`);
 		expect(error instanceof ErrorBadRequest).toBe(true);
 	});
 

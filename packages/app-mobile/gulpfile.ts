@@ -22,5 +22,5 @@ utils.registerGulpTasks(gulp, tasks);
 gulp.task('build', gulp.series(
 	'buildInjectedJs',
 	'encodeAssets',
-	'podInstall'
+	'podInstall',
 ));

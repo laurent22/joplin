@@ -1,6 +1,6 @@
-# generator-joplin
+# Plugin development
 
-Scaffolds out a new Joplin plugin
+This documentation describes how to create a plugin, and how to work with the plugin builder framework and API.
 
 ## Installation
 
@@ -16,11 +16,6 @@ Then generate your new project:
 ```bash
 yo --node-package-manager npm joplin
 ```
-
-## Development
-
-To test the generator for development purposes, follow the instructions there: https://yeoman.io/authoring/#running-the-generator
-This is a template to create a new Joplin plugin.
 
 ## Structure
 

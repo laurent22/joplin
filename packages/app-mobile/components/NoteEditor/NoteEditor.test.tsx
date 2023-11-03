@@ -31,7 +31,7 @@ describe('NoteEditor', () => {
 					onUndoRedoDepthChange={()=>{}}
 					onAttach={()=>{}}
 				/>
-			</MenuProvider>
+			</MenuProvider>,
 		);
 
 		// Maps from screen height to whether the markdown toolbar should be visible.

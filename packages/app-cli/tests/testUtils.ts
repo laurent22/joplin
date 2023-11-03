@@ -19,7 +19,7 @@ export function newPluginService(appVersion = '1.4', options: PluginServiceOptio
 		{
 			dispatch: () => {},
 			getState: options.getState ? options.getState : () => {},
-		}
+		},
 	);
 	return service;
 }

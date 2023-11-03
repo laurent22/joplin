@@ -6,9 +6,10 @@ import Resource from './models/Resource';
 import Setting from './models/Setting';
 import time from './time';
 import shim from './shim';
-import { NoteEntity } from './services/database/types';
+import { NoteEntity, ResourceEntity } from './services/database/types';
 import { enexXmlToMd } from './import-enex-md-gen';
 import { MarkupToHtml } from '@joplin/renderer';
+import { fileExtension, friendlySafeFilename } from './path-utils';
 const moment = require('moment');
 const { wrapError } = require('./errorUtils');
 const { enexXmlToHtml } = require('./import-enex-html-gen.js');
@@ -196,10 +197,16 @@ async function saveNoteResources(note: ExtractedNote) {
 	for (let i = 0; i < note.resources.length; i++) {
 		const resource = note.resources[i];
 
-		const toSave = { ...resource };
-		delete toSave.dataFilePath;
-		delete toSave.dataEncoding;
-		delete toSave.hasData;
+		const toSave: ResourceEntity = { ...resource };
+		delete (toSave as any).dataFilePath;
+		delete (toSave as any).dataEncoding;
+		delete (toSave as any).hasData;
+		toSave.file_extension = resource.filename ? fileExtension(resource.filename) : '';
+
+		// ENEX resource filenames can contain slashes, which may confuse other
+		// parts of the app, which expect this `filename` field to be safe.
+		// Fixes https://github.com/laurent22/joplin/issues/8823
+		toSave.filename = toSave.filename ? friendlySafeFilename(toSave.filename, 255, true) : '';
 
 		// The same resource sometimes appear twice in the same enex (exact same ID and file).
 		// In that case, just skip it - it means two different notes might be linked to the
@@ -356,7 +363,7 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 	const fileToProcess = await preProcessFile(filePath);
 	const needToDeleteFileToProcess = fileToProcess !== filePath;
 
-	return new Promise((resolve) => {
+	return new Promise((resolve, reject) => {
 		const progressState = {
 			loaded: 0,
 			created: 0,
@@ -491,6 +498,11 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 
 		saxStream.on('error', function(error: any) {
 			importOptions.onError(createErrorWithNoteTitle(this, error));
+
+			// We need to reject the promise here, or parsing will get stuck
+			// ("end" handler will never be called).
+			// https://github.com/laurent22/joplin/issues/8699
+			reject(error);
 		});
 
 		saxStream.on('text', handleSaxStreamEvent(function(text: string) {

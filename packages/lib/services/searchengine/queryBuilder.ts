@@ -91,7 +91,7 @@ const filterByTableName = (
 	requirement: Requirement,
 	withs: string[],
 	tableName: string,
-	useFts: boolean
+	useFts: boolean,
 ) => {
 	const operator: Operation = getOperator(requirement, relation);
 

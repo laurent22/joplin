@@ -13,7 +13,7 @@ describe('Module', () => {
 
 		const importModuleMultiSource = makeImportModule(
 			baseMetadata,
-			() => new InteropService_Importer_Base()
+			() => new InteropService_Importer_Base(),
 		);
 
 		const importModuleSingleSource = makeImportModule({

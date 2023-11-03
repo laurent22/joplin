@@ -36,7 +36,7 @@ class BundledFile {
 
 	public constructor(
 		public readonly bundleName: string,
-		private readonly sourceFilePath: string
+		private readonly sourceFilePath: string,
 	) {
 		this.rootFileDirectory = dirname(sourceFilePath);
 		this.bundleBaseName = basename(sourceFilePath, extname(sourceFilePath));
@@ -200,7 +200,11 @@ class BundledFile {
 const bundledFiles: BundledFile[] = [
 	new BundledFile(
 		'codeMirrorBundle',
-		`${mobileDir}/components/NoteEditor/CodeMirror/CodeMirror.ts`
+		`${mobileDir}/components/NoteEditor/CodeMirror/CodeMirror.ts`,
+	),
+	new BundledFile(
+		'svgEditorBundle',
+		`${mobileDir}/components/NoteEditor/ImageEditor/js-draw/createJsDrawEditor.ts`,
 	),
 ];
 

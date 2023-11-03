@@ -150,7 +150,7 @@ module.exports = class extends Generator {
 							const newContent = mergePackageKey(null, sourceContent, destContent);
 							return JSON.stringify(newContent, null, 2);
 						},
-					}
+					},
 				);
 			} else if (this.options.update && destFile === 'plugin.config.json' && this.fs.exists(destFilePath)) {
 				// Keep existing content for now. Maybe later we could merge the configs.
@@ -163,20 +163,20 @@ module.exports = class extends Generator {
 						process: (sourceBuffer) => {
 							return mergeIgnoreFile(sourceBuffer.toString(), destContent);
 						},
-					}
+					},
 				);
 			} else {
 				this.fs.copyTpl(
 					this.templatePath(file),
 					destFilePath,
-					this.props
+					this.props,
 				);
 			}
 		}
 
 		this.fs.copy(
 			this.templatePath('api'),
-			this.destinationPath('api')
+			this.destinationPath('api'),
 		);
 	}
 

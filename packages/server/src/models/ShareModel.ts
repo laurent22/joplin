@@ -130,7 +130,7 @@ export default class ShareModel extends BaseModel<Share> {
 			.whereIn('id', this
 				.db('share_users')
 				.select('share_id')
-				.where('user_id', '=', userId)
+				.where('user_id', '=', userId),
 			);
 
 		const query2 = this
@@ -165,7 +165,7 @@ export default class ShareModel extends BaseModel<Share> {
 			.whereIn('id', this.db('share_users')
 				.select('share_id')
 				.where('user_id', '=', userId)
-				.andWhere('status', '=', ShareUserStatus.Accepted
+				.andWhere('status', '=', ShareUserStatus.Accepted,
 				));
 
 		if (type) void query.andWhere('type', '=', type);
@@ -463,7 +463,7 @@ export default class ShareModel extends BaseModel<Share> {
 			.whereIn('item_id',
 				this.db('items')
 					.select('id')
-					.where('jop_share_id', '=', shareId)
+					.where('jop_share_id', '=', shareId),
 			).groupBy('user_id') as any;
 	}
 

@@ -24,9 +24,10 @@ import * as ArrayUtils from '../../../ArrayUtils';
 import Logger from '@joplin/utils/Logger';
 const { mimeTypeFromHeaders } = require('../../../net-utils');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('../../../path-utils');
-const { fileUriToPath } = require('../../../urlUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
 const { ErrorNotFound } = require('../utils/errors');
+import { fileUriToPath } from '@joplin/utils/url';
+import { NoteEntity } from '../../database/types';
 
 const logger = Logger.create('routes/notes');
 
@@ -38,7 +39,31 @@ function htmlToMdParser() {
 	return htmlToMdParser_;
 }
 
-async function requestNoteToNote(requestNote: any) {
+type RequestNote = {
+	id?: any;
+	parent_id?: string;
+	title: string;
+	body?: string;
+	latitude?: number;
+	longitude?: number;
+	altitude?: number;
+	author?: string;
+	source_url?: string;
+	is_todo?: number;
+	todo_due?: number;
+	todo_completed?: number;
+	user_updated_time?: number;
+	user_created_time?: number;
+	markup_language?: number;
+	body_html: string;
+	base_url?: string;
+	convert_to: string;
+	anchor_names?: any[];
+	image_sizes?: object;
+	stylesheets: any;
+};
+
+async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> {
 	const output: any = {
 		title: requestNote.title ? requestNote.title : '',
 		body: requestNote.body ? requestNote.body : '',
@@ -337,6 +362,34 @@ async function attachImageFromDataUrl(note: any, imageDataUrl: string, cropRect:
 	return await shim.attachFileToNote(note, tempFilePath);
 }
 
+export const extractNoteFromHTML = async (requestNote: RequestNote, requestId: number, imageSizes: any) => {
+	const note = await requestNoteToNote(requestNote);
+
+	const mediaUrls = extractMediaUrls(note.markup_language, note.body);
+
+	logger.info(`Request (${requestId}): Downloading media files: ${mediaUrls.length}`);
+
+	const mediaFiles = await downloadMediaFiles(mediaUrls); // , allowFileProtocolImages);
+
+	logger.info(`Request (${requestId}): Creating resources from paths: ${Object.getOwnPropertyNames(mediaFiles).length}`);
+
+	const resources = await createResourcesFromPaths(mediaFiles);
+	await removeTempFiles(resources);
+	note.body = replaceUrlsByResources(note.markup_language, note.body, resources, imageSizes);
+
+	logger.info(`Request (${requestId}): Saving note...`);
+
+	const saveOptions = defaultSaveOptions('POST', note.id);
+	saveOptions.autoTimestamp = false; // No auto-timestamp because user may have provided them
+	const timestamp = Date.now();
+	note.updated_time = timestamp;
+	note.created_time = timestamp;
+	if (!('user_updated_time' in note)) note.user_updated_time = timestamp;
+	if (!('user_created_time' in note)) note.user_created_time = timestamp;
+
+	return { note, saveOptions, resources };
+};
+
 export default async function(request: Request, id: string = null, link: string = null) {
 	if (request.method === 'GET') {
 		if (link && link === 'tags') {
@@ -368,31 +421,9 @@ export default async function(request: Request, id: string = null, link: string 
 
 		logger.info('Images:', imageSizes);
 
-		let note: any = await requestNoteToNote(requestNote);
+		const extracted = await extractNoteFromHTML(requestNote, requestId, imageSizes);
 
-		const mediaUrls = extractMediaUrls(note.markup_language, note.body);
-
-		logger.info(`Request (${requestId}): Downloading media files: ${mediaUrls.length}`);
-
-		let result = await downloadMediaFiles(mediaUrls); // , allowFileProtocolImages);
-
-		logger.info(`Request (${requestId}): Creating resources from paths: ${Object.getOwnPropertyNames(result).length}`);
-
-		result = await createResourcesFromPaths(result);
-		await removeTempFiles(result);
-		note.body = replaceUrlsByResources(note.markup_language, note.body, result, imageSizes);
-
-		logger.info(`Request (${requestId}): Saving note...`);
-
-		const saveOptions = defaultSaveOptions('POST', note.id);
-		saveOptions.autoTimestamp = false; // No auto-timestamp because user may have provided them
-		const timestamp = Date.now();
-		note.updated_time = timestamp;
-		note.created_time = timestamp;
-		if (!('user_updated_time' in note)) note.user_updated_time = timestamp;
-		if (!('user_created_time' in note)) note.user_created_time = timestamp;
-
-		note = await Note.save(note, saveOptions);
+		let note = await Note.save(extracted.note, extracted.saveOptions);
 
 		if (requestNote.tags) {
 			const tagTitles = requestNote.tags.split(',');

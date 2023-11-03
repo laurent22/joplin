@@ -49,7 +49,7 @@ const ActionButton = (props: ActionButtonProps) => {
 		};
 	}), [props.buttons]);
 
-	const closedIcon = useIcon(props.mainButton?.icon ?? 'md-add');
+	const closedIcon = useIcon(props.mainButton?.icon ?? 'add');
 	const openIcon = useIcon('close');
 
 	return (

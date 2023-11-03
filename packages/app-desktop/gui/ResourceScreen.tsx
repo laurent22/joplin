@@ -111,7 +111,7 @@ const ResourceTableComp = (props: ResourceTable) => {
 						<td style={cellStyle} className="dataCell">
 							<button style={theme.buttonStyle} onClick={() => props.onResourceDelete(resource)}>{_('Delete')}</button>
 						</td>
-					</tr>
+					</tr>,
 				)}
 			</tbody>
 		</table>

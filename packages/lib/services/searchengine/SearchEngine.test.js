@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars, prefer-const */
 
-const { setupDatabaseAndSynchronizer, db, sleep, switchClient } = require('../../testing/test-utils.js');
+const { setupDatabaseAndSynchronizer, db, sleep, switchClient, msleep } = require('../../testing/test-utils.js');
 const SearchEngine = require('../../services/searchengine/SearchEngine').default;
 const Note = require('../../models/Note').default;
+const Folder = require('../../models/Folder').default;
 const ItemChange = require('../../models/ItemChange').default;
 const Setting = require('../../models/Setting').default;
 
@@ -147,6 +148,21 @@ describe('services_SearchEngine', () => {
 		expect(rows[0].id).toBe(n1.id); // shorter note; also 'efgh' is more rare than 'abcd'.
 		expect(rows[1].id).toBe(n2.id);
 	}));
+
+	it('should order search results by relevance BM25 - 2', async () => {
+		// This simple test case didn't even work before due to a bug in the IDF
+		// calculation, and would just order by timestamp.
+		const n1 = await Note.save({ title: 'abcd abcd' }); // 1
+		await msleep(1);
+		const n2 = await Note.save({ title: 'abcd' }); // 2
+
+		await engine.syncTables();
+
+		const rows = await engine.search('abcd');
+
+		expect(rows[0].id).toBe(n1.id);
+		expect(rows[1].id).toBe(n2.id);
+	});
 
 	// TODO: Need to update and replace jasmine.mockDate() calls with Jest
 	// equivalent
@@ -500,5 +516,32 @@ describe('services_SearchEngine', () => {
 
 		expect((await engine.search('л')).length).toBe(1);
 		expect((await engine.search('л'))[0].id).toBe(n2.id);
+	}));
+
+	it('should automatically add wildcards', (async () => {
+		const n1 = await Note.save({ title: 'hello1' });
+		const n2 = await Note.save({ title: 'hello2' });
+
+		await engine.syncTables();
+
+		expect((await engine.search('hello')).length).toBe(0);
+		expect((await engine.search('hello', { appendWildCards: true })).length).toBe(2);
+	}));
+
+	it('should search by item ID if no other result was found', (async () => {
+		const f1 = await Folder.save({});
+		const n1 = await Note.save({ title: 'hello1', parent_id: f1.id });
+		const n2 = await Note.save({ title: 'hello2' });
+
+		await engine.syncTables();
+
+		const results = await engine.search(n1.id);
+		expect(results.length).toBe(1);
+		expect(results[0].id).toBe(n1.id);
+		expect(results[0].title).toBe(n1.title);
+		expect(results[0].parent_id).toBe(n1.parent_id);
+
+		expect((await engine.search(n2.id))[0].id).toBe(n2.id);
+		expect(await engine.search(f1.id)).toEqual([]);
 	}));
 });

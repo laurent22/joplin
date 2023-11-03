@@ -132,7 +132,7 @@ class AppComponent extends Component {
 		};
 
 		this.clipperServerHelpLink_click = () => {
-			bridge().tabsCreate({ url: 'https://joplinapp.org/clipper/' });
+			bridge().tabsCreate({ url: 'https://joplinapp.org/help/apps/clipper' });
 		};
 
 		this.folderSelect_change = (event) => {
@@ -182,6 +182,7 @@ class AppComponent extends Component {
 		await bridge().tabsExecuteScript({ file: '/content_scripts/JSDOMParser.js' });
 		await bridge().tabsExecuteScript({ file: '/content_scripts/Readability.js' });
 		await bridge().tabsExecuteScript({ file: '/content_scripts/Readability-readerable.js' });
+		await bridge().tabsExecuteScript({ file: '/content_scripts/clipperUtils.js' });
 		await bridge().tabsExecuteScript({ file: '/content_scripts/index.js' });
 	}
 

@@ -24,7 +24,7 @@ function newPluginService(appVersion = '1.4') {
 		{
 			dispatch: () => {},
 			getState: () => {},
-		}
+		},
 	);
 	return service;
 }
@@ -206,7 +206,7 @@ describe('services_PluginService', () => {
 
 		const mdToHtml = new MdToHtml();
 		const module = require(contentScript.path).default;
-		mdToHtml.loadExtraRendererRule(contentScript.id, tempDir, module({}));
+		mdToHtml.loadExtraRendererRule(contentScript.id, tempDir, module({}), '');
 
 		const result = await mdToHtml.render([
 			'```justtesting',

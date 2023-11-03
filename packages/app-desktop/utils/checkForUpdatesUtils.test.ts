@@ -1,4 +1,4 @@
-import { extractVersionInfo, Release, Platform, Architecture } from './checkForUpdatesUtils';
+import { extractVersionInfo, Release, Platform, Architecture, GitHubRelease } from './checkForUpdatesUtils';
 import { releases1, releases2 } from './checkForUpdatesUtilsTestData';
 
 describe('checkForUpdates', () => {
@@ -102,6 +102,49 @@ describe('checkForUpdates', () => {
 			expect(actual.pageUrl).toBe(expected.pageUrl);
 			expect(actual.version).toBe(expected.version);
 		}
+	});
+
+	it('macOS should match both .DMG and .dmg extensions', () => {
+		// A .DMG may be used to prevent older versions of Joplin from downloading an incompatible
+		// release. Ensure that newer versions of Joplin can download these releases.
+		const releaseDataWithExtension = (extension: string) => {
+			const downloadURL = `https://github.com/laurent22/joplin/releases/download/v2.12.4/Joplin-2.12.4${extension}`;
+			const releaseData: GitHubRelease = {
+				prerelease: false,
+				body: 'this is a test',
+				tag_name: 'v2.12.4',
+				assets: [
+					{
+						name: `Joplin-2.12.4${extension}`,
+						browser_download_url: downloadURL,
+					},
+				],
+				html_url: 'https://github.com/laurent22/joplin/releases/tag/v2.12.4',
+			};
+
+			return releaseData;
+		};
+
+		const releaseData = releaseDataWithExtension('-arm64.DMG');
+		const releaseInfo = extractVersionInfo([releaseData], 'darwin', 'arm64', false, { });
+
+		// Should match, with uppercase .DMG
+		expect(releaseInfo).toMatchObject({
+			version: '2.12.4',
+			downloadUrl: 'https://objects.joplinusercontent.com/v2.12.4/Joplin-2.12.4-arm64.DMG',
+			pageUrl: releaseData.html_url,
+			prerelease: releaseData.prerelease,
+		});
+
+		// Should not match when the extension is invalid
+		expect(
+			extractVersionInfo([releaseDataWithExtension('-arm64.dmG')], 'darwin', 'arm64', false, { }),
+		).toMatchObject({
+			version: '2.12.4',
+			downloadUrl: null,
+			pageUrl: releaseData.html_url,
+			prerelease: releaseData.prerelease,
+		});
 	});
 
 });

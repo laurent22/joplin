@@ -158,11 +158,11 @@ class CameraView extends Component {
 	}
 
 	public render() {
-		const photoIcon = this.state.snapping ? 'md-checkmark' : 'md-camera';
+		const photoIcon = this.state.snapping ? 'checkmark' : 'camera';
 
 		const displayRatios = this.supportsRatios() && this.state.ratios.length > 1;
 
-		const reverseCameraButton = this.renderButton(this.reverse_onPress, 'md-camera-reverse', { flex: 1, flexDirection: 'row', justifyContent: 'flex-start', marginLeft: 20 });
+		const reverseCameraButton = this.renderButton(this.reverse_onPress, 'camera-reverse', { flex: 1, flexDirection: 'row', justifyContent: 'flex-start', marginLeft: 20 });
 		const ratioButton = !displayRatios ? <View style={{ flex: 1 }}/> : this.renderButton(this.ratio_onPress, <Text style={{ fontWeight: 'bold', fontSize: 20 }}>{Setting.value('camera.ratio')}</Text>, { flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginRight: 20 });
 
 		let cameraRatio = '4:3';
@@ -202,7 +202,7 @@ class CameraView extends Component {
 							<TouchableOpacity onPress={this.back_onPress}>
 								<View style={{ marginLeft: 5, marginTop: 5, borderColor: '#00000040', borderWidth: 1, borderStyle: 'solid', borderRadius: 90, width: 50, height: 50, display: 'flex', backgroundColor: '#ffffff77', justifyContent: 'center', alignItems: 'center' }}>
 									<Icon
-										name={'md-arrow-back'}
+										name={'arrow-back'}
 										style={{
 											fontSize: 40,
 											color: 'black',

@@ -307,7 +307,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			} else { // Note TITLE or BODY
 				listType = BaseModel.TYPE_NOTE;
 				searchQuery = gotoAnythingStyleQuery(this.state.query);
-				results = await SearchEngine.instance().search(searchQuery);
+				results = (await SearchEngine.instance().search(searchQuery)) as any[];
 
 				resultsInBody = !!results.find((row: any) => row.fields.includes('body'));
 

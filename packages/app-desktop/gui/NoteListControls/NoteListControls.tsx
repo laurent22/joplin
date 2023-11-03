@@ -27,7 +27,6 @@ interface Props {
 	notesParentType: string;
 	height: number;
 	width: number;
-	onContentHeightChange: (sameRow: boolean)=> void;
 	newNoteButtonEnabled: boolean;
 	newTodoButtonEnabled: boolean;
 }
@@ -41,7 +40,6 @@ interface Breakpoints {
 
 const StyledRoot = styled.div`
 	box-sizing: border-box;
-	height: ${(props: any) => props.height}px;
 	display: flex;
 	flex-direction: column;
 	padding: ${(props: any) => props.theme.mainPadding}px;
@@ -185,12 +183,10 @@ function NoteListControls(props: Props) {
 		if (breakpoint === dynamicBreakpoints.Xl) {
 			noteControlsRef.current.style.flexDirection = 'row';
 			searchAndSortRef.current.style.flex = '2 1 50%';
-			props.onContentHeightChange(true);
 		} else {
 			noteControlsRef.current.style.flexDirection = 'column';
-			props.onContentHeightChange(false);
 		}
-	}, [breakpoint, dynamicBreakpoints, props.onContentHeightChange]);
+	}, [breakpoint, dynamicBreakpoints]);
 
 	useEffect(() => {
 		CommandService.instance().registerRuntime('focusSearch', focusSearchRuntime(searchBarRef));

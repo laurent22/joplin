@@ -2,13 +2,13 @@ import { AppContext, KoaNext } from '../utils/types';
 import { isApiRequest } from '../utils/requestUtils';
 import config from '../config';
 import { ErrorPreconditionFailed } from '../utils/errors';
-const compareVersions = require('compare-versions');
+import { compareVersions } from 'compare-versions';
 
 export default async function(ctx: AppContext, next: KoaNext): Promise<void> {
 	if (!isApiRequest(ctx)) return next();
 
 	const joplinServerVersion = config().joplinServerVersion;
-	const minVersion = ctx.headers['x-api-min-version'];
+	const minVersion = ctx.headers['x-api-min-version'] as string;
 
 	// For now we don't require this header to be set to keep compatibility with
 	// older clients.

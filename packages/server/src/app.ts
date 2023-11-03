@@ -3,7 +3,7 @@ require('source-map-support').install();
 
 import * as Koa from 'koa';
 import * as fs from 'fs-extra';
-import Logger, { LoggerWrapper, TargetType } from '@joplin/utils/Logger';
+import Logger, { LogLevel, LoggerWrapper, TargetType } from '@joplin/utils/Logger';
 import config, { fullVersionString, initConfig, runningInDocker } from './config';
 import { migrateLatest, waitForConnection, sqliteDefaultDir, latestMigration, needsMigration, migrateList } from './db';
 import { AppContext, Env, KoaNext } from './utils/types';
@@ -224,8 +224,10 @@ async function main() {
 	const globalLogger = new Logger();
 	const instancePrefix = config().INSTANCE_NAME ? `${config().INSTANCE_NAME}: ` : '';
 	globalLogger.addTarget(TargetType.Console, {
-		format: `%(date_time)s: ${instancePrefix}[%(level)s] %(prefix)s: %(message)s`,
-		formatInfo: `%(date_time)s: ${instancePrefix}%(prefix)s: %(message)s`,
+		format: (level: LogLevel, _prefix: string) => {
+			if (level === LogLevel.Info) return `%(date_time)s: ${instancePrefix}%(prefix)s: %(message)s`;
+			return `%(date_time)s: ${instancePrefix}[%(level)s] %(prefix)s: %(message)s`;
+		},
 	});
 	Logger.initializeGlobalLogger(globalLogger);
 	initLib(globalLogger);

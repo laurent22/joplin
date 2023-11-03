@@ -1,5 +1,5 @@
 import { RuleOptions } from '../../MdToHtml';
-import htmlUtils from '../../htmlUtils';
+import { attributesHtml } from '../../htmlUtils';
 import utils from '../../utils';
 import createEventHandlingAttrs from '../createEventHandlingAttrs';
 
@@ -20,12 +20,20 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 		if (r) {
 			const id = r['data-resource-id'];
 
+			// Show the edit popup if any MIME type matches that in editPopupFiletypes
+			const mimeType = ruleOptions.resources[id]?.item?.mime?.toLowerCase();
+			const enableEditPopup = ruleOptions.editPopupFiletypes?.some(showForMime => mimeType === showForMime);
+
 			const js = createEventHandlingAttrs(id, {
 				enableLongPress: ruleOptions.enableLongPress ?? false,
 				postMessageSyntax: ruleOptions.postMessageSyntax ?? 'void',
+
+				enableEditPopup,
+				createEditPopupSyntax: ruleOptions.createEditPopupSyntax,
+				destroyEditPopupSyntax: ruleOptions.destroyEditPopupSyntax,
 			}, null);
 
-			return `<img data-from-md ${htmlUtils.attributesHtml({ ...r, title: title, alt: token.content })} ${js}/>`;
+			return `<img data-from-md ${attributesHtml({ ...r, title: title, alt: token.content })} ${js}/>`;
 		}
 		return defaultRender(tokens, idx, options, env, self);
 	};

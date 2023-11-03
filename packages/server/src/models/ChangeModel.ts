@@ -6,7 +6,7 @@ import { md5 } from '../utils/crypto';
 import { ErrorResyncRequired } from '../utils/errors';
 import { Day, formatDateTime } from '../utils/time';
 import BaseModel, { SaveOptions } from './BaseModel';
-import { PaginatedResults, Pagination, PaginationOrderDir } from './utils/pagination';
+import { PaginatedResults } from './utils/pagination';
 
 const logger = Logger.create('ChangeModel');
 
@@ -88,7 +88,44 @@ export default class ChangeModel extends BaseModel<Change> {
 		};
 	}
 
-	private changesForUserQuery(userId: Uuid, count: boolean): Knex.QueryBuilder {
+	// private changesForUserQuery(userId: Uuid, count: boolean): Knex.QueryBuilder {
+	// 	// When need to get:
+	// 	//
+	// 	// - All the CREATE and DELETE changes associated with the user
+	// 	// - All the UPDATE changes that applies to items associated with the
+	// 	//   user.
+	// 	//
+	// 	// UPDATE changes do not have the user_id set because they are specific
+	// 	// to the item, not to a particular user.
+
+	// 	const query = this
+	// 		.db('changes')
+	// 		.where(function() {
+	// 			void this.whereRaw('((type = ? OR type = ?) AND user_id = ?)', [ChangeType.Create, ChangeType.Delete, userId])
+	// 				// Need to use a RAW query here because Knex has a "not a
+	// 				// bug" bug that makes it go into infinite loop in some
+	// 				// contexts, possibly only when running inside Jest (didn't
+	// 				// test outside).
+	// 				// https://github.com/knex/knex/issues/1851
+	// 				.orWhereRaw('type = ? AND item_id IN (SELECT item_id FROM user_items WHERE user_id = ?)', [ChangeType.Update, userId]);
+	// 		});
+
+	// 	if (count) {
+	// 		void query.countDistinct('id', { as: 'total' });
+	// 	} else {
+	// 		void query.select([
+	// 			'id',
+	// 			'item_id',
+	// 			'item_name',
+	// 			'type',
+	// 			'updated_time',
+	// 		]);
+	// 	}
+
+	// 	return query;
+	// }
+
+	public async changesForUserQuery(userId: Uuid, fromCounter: number, limit: number, doCountQuery: boolean): Promise<Change[]> {
 		// When need to get:
 		//
 		// - All the CREATE and DELETE changes associated with the user
@@ -98,61 +135,125 @@ export default class ChangeModel extends BaseModel<Change> {
 		// UPDATE changes do not have the user_id set because they are specific
 		// to the item, not to a particular user.
 
-		const query = this
-			.db('changes')
-			.where(function() {
-				void this.whereRaw('((type = ? OR type = ?) AND user_id = ?)', [ChangeType.Create, ChangeType.Delete, userId])
-					// Need to use a RAW query here because Knex has a "not a
-					// bug" bug that makes it go into infinite loop in some
-					// contexts, possibly only when running inside Jest (didn't
-					// test outside).
-					// https://github.com/knex/knex/issues/1851
-					.orWhereRaw('type = ? AND item_id IN (SELECT item_id FROM user_items WHERE user_id = ?)', [ChangeType.Update, userId]);
-			});
+		// This used to be just one query but it kept getting slower and slower
+		// as the `changes` table grew. So it is now split into two queries
+		// merged by a UNION ALL.
 
-		if (count) {
-			void query.countDistinct('id', { as: 'total' });
+		const fields = [
+			'id',
+			'item_id',
+			'item_name',
+			'type',
+			'updated_time',
+			'counter',
+		];
+
+		const fieldsSql = `"${fields.join('", "')}"`;
+
+		const subQuery1 = `
+			SELECT ${fieldsSql}
+			FROM "changes"
+			WHERE counter > ?
+			AND (type = ? OR type = ?)
+			AND user_id = ?
+			ORDER BY "counter" ASC
+			${doCountQuery ? '' : 'LIMIT ?'}
+		`;
+
+		const subParams1 = [
+			fromCounter,
+			ChangeType.Create,
+			ChangeType.Delete,
+			userId,
+		];
+
+		if (!doCountQuery) subParams1.push(limit);
+
+		const subQuery2 = `
+			SELECT ${fieldsSql}
+			FROM "changes"
+			WHERE counter > ?
+			AND type = ?
+			AND item_id IN (SELECT item_id FROM user_items WHERE user_id = ?)
+			ORDER BY "counter" ASC
+			${doCountQuery ? '' : 'LIMIT ?'}
+		`;
+
+		const subParams2 = [
+			fromCounter,
+			ChangeType.Update,
+			userId,
+		];
+
+		if (!doCountQuery) subParams2.push(limit);
+
+		let query: Knex.Raw<any> = null;
+
+		const finalParams = subParams1.concat(subParams2);
+
+		if (!doCountQuery) {
+			finalParams.push(limit);
+
+			query = this.db.raw(`
+				SELECT ${fieldsSql} FROM (${subQuery1}) as sub1
+				UNION ALL				
+				SELECT ${fieldsSql} FROM (${subQuery2}) as sub2
+				ORDER BY counter ASC
+				LIMIT ?
+			`, finalParams);
 		} else {
-			void query.select([
-				'id',
-				'item_id',
-				'item_name',
-				'type',
-				'updated_time',
-			]);
+			query = this.db.raw(`
+				SELECT count(*) as total
+				FROM (
+					(${subQuery1})
+					UNION ALL				
+					(${subQuery2})
+				) AS merged
+			`, finalParams);
 		}
 
-		return query;
+		const results = await query;
+
+		// Because it's a raw query, we need to handle the results manually:
+		// Postgres returns an object with a "rows" property, while SQLite
+		// returns the rows directly;
+		const output: Change[] = results.rows ? results.rows : results;
+
+		// This property is present only for the purpose of ordering the results
+		// and can be removed afterwards.
+		for (const change of output) delete change.counter;
+
+		return output;
 	}
 
-	public async allByUser(userId: Uuid, pagination: Pagination = null): Promise<PaginatedDeltaChanges> {
-		pagination = {
-			page: 1,
-			limit: 100,
-			order: [{ by: 'counter', dir: PaginationOrderDir.ASC }],
-			...pagination,
-		};
+	// public async allByUser(userId: Uuid, pagination: Pagination = null): Promise<PaginatedDeltaChanges> {
+	// 	pagination = {
+	// 		page: 1,
+	// 		limit: 100,
+	// 		order: [{ by: 'counter', dir: PaginationOrderDir.ASC }],
+	// 		...pagination,
+	// 	};
 
-		const query = this.changesForUserQuery(userId, false);
-		const countQuery = this.changesForUserQuery(userId, true);
-		const itemCount = (await countQuery.first()).total;
+	// 	const query = this.changesForUserQuery(userId, false);
+	// 	const countQuery = this.changesForUserQuery(userId, true);
+	// 	const itemCount = (await countQuery.first()).total;
 
-		void query
-			.orderBy(pagination.order[0].by, pagination.order[0].dir)
-			.offset((pagination.page - 1) * pagination.limit)
-			.limit(pagination.limit) as any[];
+	// 	void query
+	// 		.orderBy(pagination.order[0].by, pagination.order[0].dir)
+	// 		.offset((pagination.page - 1) * pagination.limit)
+	// 		.limit(pagination.limit) as any[];
 
-		const changes = await query;
+	// 	const changes = await query;
 
-		return {
-			items: changes,
-			// If we have changes, we return the ID of the latest changes from which delta sync can resume.
-			// If there's no change, we return the previous cursor.
-			cursor: changes.length ? changes[changes.length - 1].id : pagination.cursor,
-			has_more: changes.length >= pagination.limit,
-			page_count: itemCount !== null ? Math.ceil(itemCount / pagination.limit) : undefined,
-		};
-	}
+	// 	return {
+	// 		items: changes,
+	// 		// If we have changes, we return the ID of the latest changes from which delta sync can resume.
+	// 		// If there's no change, we return the previous cursor.
+	// 		cursor: changes.length ? changes[changes.length - 1].id : pagination.cursor,
+	// 		has_more: changes.length >= pagination.limit,
+	// 		page_count: itemCount !== null ? Math.ceil(itemCount / pagination.limit) : undefined,
+	// 	};
+	// }
 
 	public async delta(userId: Uuid, pagination: ChangePagination = null): Promise<PaginatedDeltaChanges> {
 		pagination = {
@@ -167,18 +268,12 @@ export default class ChangeModel extends BaseModel<Change> {
 			if (!changeAtCursor) throw new ErrorResyncRequired();
 		}
 
-		const query = this.changesForUserQuery(userId, false);
-
-		// If a cursor was provided, apply it to the query.
-		if (changeAtCursor) {
-			void query.where('counter', '>', changeAtCursor.counter);
-		}
-
-		void query
-			.orderBy('counter', 'asc')
-			.limit(pagination.limit) as any[];
-
-		const changes: Change[] = await query;
+		const changes = await this.changesForUserQuery(
+			userId,
+			changeAtCursor ? changeAtCursor.counter : -1,
+			pagination.limit,
+			false,
+		);
 
 		const items: Item[] = await this.db('items').select('id', 'jop_updated_time').whereIn('items.id', changes.map(c => c.item_id));
 

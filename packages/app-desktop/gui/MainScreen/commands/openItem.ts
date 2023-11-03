@@ -3,7 +3,8 @@ import shim from '@joplin/lib/shim';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../../services/bridge';
 import { openItemById } from '../../NoteEditor/utils/contextMenu';
-const { parseResourceUrl, urlProtocol, fileUriToPath } = require('@joplin/lib/urlUtils');
+const { parseResourceUrl, urlProtocol } = require('@joplin/lib/urlUtils');
+import { fileUriToPath } from '@joplin/utils/url';
 const { urlDecode } = require('@joplin/lib/string-utils');
 
 export const declaration: CommandDeclaration = {

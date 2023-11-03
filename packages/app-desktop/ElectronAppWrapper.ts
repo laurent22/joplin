@@ -4,11 +4,15 @@ import shim from '@joplin/lib/shim';
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
 import { BrowserWindow, Tray, screen } from 'electron';
+import bridge from './bridge';
 const url = require('url');
 const path = require('path');
 const { dirname } = require('@joplin/lib/path-utils');
 const fs = require('fs-extra');
-const { ipcMain } = require('electron');
+
+import { dialog, ipcMain } from 'electron';
+import { _ } from '@joplin/lib/locale';
+import restartInSafeModeFromMain from './utils/restartInSafeModeFromMain';
 
 interface RendererProcessQuitReply {
 	canClose: boolean;
@@ -33,7 +37,7 @@ export default class ElectronAppWrapper {
 	private pluginWindows_: PluginWindows = {};
 	private initialCallbackUrl_: string = null;
 
-	public constructor(electronApp: any, env: string, profilePath: string, isDebugMode: boolean, initialCallbackUrl: string) {
+	public constructor(electronApp: any, env: string, profilePath: string|null, isDebugMode: boolean, initialCallbackUrl: string) {
 		this.electronApp_ = electronApp;
 		this.env_ = env;
 		this.isDebugMode_ = isDebugMode;
@@ -63,6 +67,42 @@ export default class ElectronAppWrapper {
 
 	public initialCallbackUrl() {
 		return this.initialCallbackUrl_;
+	}
+
+	// Call when the app fails in a significant way.
+	//
+	// Assumes that the renderer process may be in an invalid state and so cannot
+	// be accessed.
+	public async handleAppFailure(errorMessage: string, canIgnore: boolean, isTesting?: boolean) {
+		const buttons = [];
+		buttons.push(_('Quit'));
+		const exitIndex = 0;
+
+		if (canIgnore) {
+			buttons.push(_('Ignore'));
+		}
+		const restartIndex = buttons.length;
+		buttons.push(_('Restart in safe mode'));
+
+		const { response } = await dialog.showMessageBox({
+			message: _('An error occurred: %s', errorMessage),
+			buttons,
+		});
+
+		if (response === restartIndex) {
+			await restartInSafeModeFromMain();
+
+			// A hung renderer seems to prevent the process from exiting completely.
+			// In this case, crashing the renderer allows the window to close.
+			//
+			// Also only run this if not testing (crashing the renderer breaks automated
+			// tests).
+			if (this.win_ && !this.win_.webContents.isCrashed() && !isTesting) {
+				this.win_.webContents.forcefullyCrashRenderer();
+			}
+		} else if (response === exitIndex) {
+			process.exit(1);
+		}
 	}
 
 	public createWindow() {
@@ -120,6 +160,20 @@ export default class ElectronAppWrapper {
 			this.win_.setPosition(primaryDisplayWidth / 2 - windowWidth, primaryDisplayHeight / 2 - windowHeight);
 		}
 
+		this.win_.webContents.on('unresponsive', async () => {
+			await this.handleAppFailure(_('Window unresponsive.'), true);
+		});
+
+		this.win_.webContents.on('render-process-gone', async _event => {
+			await this.handleAppFailure('Renderer process gone.', false);
+		});
+
+		this.win_.webContents.on('did-fail-load', async event => {
+			if ((event as any).isMainFrame) {
+				await this.handleAppFailure('Renderer process failed to load', false);
+			}
+		});
+
 		void this.win_.loadURL(url.format({
 			pathname: path.join(__dirname, 'index.html'),
 			protocol: 'file:',
@@ -141,6 +195,15 @@ export default class ElectronAppWrapper {
 				}
 			}, 3000);
 		}
+
+		// will-frame-navigate is fired by clicking on a link within the BrowserWindow.
+		this.win_.webContents.on('will-frame-navigate', event => {
+			// If the link changes the URL of the browser window,
+			if (event.isMainFrame) {
+				event.preventDefault();
+				void bridge().openExternal(event.url);
+			}
+		});
 
 		this.win_.on('close', (event: any) => {
 			// If it's on macOS, the app is completely closed only if the user chooses to close the app (willQuitApp_ will be true)

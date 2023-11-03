@@ -48,5 +48,5 @@ OS specifics:
 
 <!--
   Please attach a debug log. Issues without a debug log are likely to stall.
-  For information on how to collect a log file: https://joplinapp.org/debugging/
+  For information on how to collect a log file: https://joplinapp.org/help/apps/debugging/
 -->

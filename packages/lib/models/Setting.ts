@@ -303,6 +303,7 @@ class Setting extends BaseModel {
 	};
 
 	public static autoSaveEnabled = true;
+	public static allowFileStorage = true;
 
 	private static metadata_: SettingItems = null;
 	private static keychainService_: any = null;
@@ -392,7 +393,7 @@ class Setting extends BaseModel {
 			wysiwygNo = ` ${_('(wysiwyg: %s)', _('no'))}`;
 		}
 
-		const emptyDirWarning = _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplinapp.org/faq/');
+		const emptyDirWarning = _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplinapp.org/help/faq');
 
 		// A "public" setting means that it will show up in the various config screens (or config command for the CLI tool), however
 		// if if private a setting might still be handled and modified by the app. For instance, the settings related to sorting notes are not
@@ -723,6 +724,8 @@ class Setting extends BaseModel {
 
 			'sync.10.canUseSharePermissions': { value: false, type: SettingItemType.Bool, public: false },
 
+			'sync.10.accountType': { value: 0, type: SettingItemType.Int, public: false },
+
 			'sync.5.syncTargets': { value: {}, type: SettingItemType.Object, public: false },
 
 			'sync.resourceDownloadMode': {
@@ -769,6 +772,7 @@ class Setting extends BaseModel {
 			// selected folder. It corresponds in general to the currently selected folder or
 			// to the last folder that was selected.
 			activeFolderId: { value: '', type: SettingItemType.String, public: false },
+			notesParent: { value: '', type: SettingItemType.String, public: false },
 
 			richTextBannerDismissed: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: false },
 
@@ -1020,23 +1024,6 @@ class Setting extends BaseModel {
 			'folders.sortOrder.reverse': { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: true, label: () => _('Reverse sort order'), appTypes: [AppType.Cli] },
 			trackLocation: { value: true, type: SettingItemType.Bool, section: 'note', storage: SettingStorage.File, isGlobal: true, public: true, label: () => _('Save geo-location with notes') },
 
-			// 2020-10-29: For now disable the beta editor due to
-			// underlying bugs in the TextInput component which we cannot
-			// fix. Also the editor crashes in Android and in some cases in
-			// iOS.
-			// https://discourse.joplinapp.org/t/anyone-using-the-beta-editor-on-ios/11658/9
-			'editor.beta': {
-				value: false,
-				type: SettingItemType.Bool,
-				section: 'note',
-				public: false,
-				appTypes: [AppType.Mobile],
-				label: () => 'Opt-in to the editor beta',
-				description: () => 'This beta adds list continuation and syntax highlighting. If you find bugs, please report them in the Discourse forum.',
-				storage: SettingStorage.File,
-				isGlobal: true,
-			},
-
 			'editor.usePlainText': {
 				value: false,
 				type: SettingItemType.Bool,
@@ -1129,7 +1116,7 @@ class Setting extends BaseModel {
 				public: true,
 				appTypes: [AppType.Mobile, AppType.Desktop],
 				label: () => _('Resize large images:'),
-				description: () => _('Shrink large images before adding them to notes to save storage space.'),
+				description: () => _('Shrink large images before adding them to notes.'),
 				options: () => {
 					return {
 						alwaysAsk: _('Always ask'),
@@ -1140,6 +1127,16 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
+
+			'notes.listRendererId': {
+				value: 'compact',
+				type: SettingItemType.String,
+				public: false,
+				appTypes: [AppType.Desktop],
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
 			'plugins.states': {
 				value: '',
 				type: SettingItemType.Object,
@@ -1312,7 +1309,7 @@ class Setting extends BaseModel {
 				onClick: () => {
 					shim.openOrCreateFile(
 						this.customCssFilePath(Setting.customCssFilenames.RENDERED_MARKDOWN),
-						'/* For styling the rendered Markdown */'
+						'/* For styling the rendered Markdown */',
 					);
 				},
 				type: SettingItemType.Button,
@@ -1329,7 +1326,7 @@ class Setting extends BaseModel {
 				onClick: () => {
 					shim.openOrCreateFile(
 						this.customCssFilePath(Setting.customCssFilenames.JOPLIN_APP),
-						`/* For styling the entire Joplin app (except the rendered Markdown, which is defined in \`${Setting.customCssFilenames.RENDERED_MARKDOWN}\`) */`
+						`/* For styling the entire Joplin app (except the rendered Markdown, which is defined in \`${Setting.customCssFilenames.RENDERED_MARKDOWN}\`) */`,
 					);
 				},
 				type: SettingItemType.Button,
@@ -1367,7 +1364,7 @@ class Setting extends BaseModel {
 
 
 			autoUpdateEnabled: { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'application', public: platform !== 'linux', appTypes: [AppType.Desktop], label: () => _('Automatically check for updates') },
-			'autoUpdate.includePreReleases': { value: false, type: SettingItemType.Bool, section: 'application', storage: SettingStorage.File, isGlobal: true, public: true, appTypes: [AppType.Desktop], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/prereleases') },
+			'autoUpdate.includePreReleases': { value: false, type: SettingItemType.Bool, section: 'application', storage: SettingStorage.File, isGlobal: true, public: true, appTypes: [AppType.Desktop], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/help/about/prereleases') },
 			'clipperServer.autoStart': { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: false },
 			'sync.interval': {
 				value: 300,
@@ -1463,6 +1460,38 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 
+			'imageeditor.jsdrawToolbar': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+				appTypes: [AppType.Mobile],
+				label: () => '',
+				storage: SettingStorage.File,
+			},
+
+			'imageeditor.imageTemplate': {
+				value: '{ }',
+				type: SettingItemType.String,
+				public: false,
+				appTypes: [AppType.Mobile],
+				label: () => 'Template for the image editor',
+				storage: SettingStorage.File,
+			},
+
+			// 2023-09-07: This setting is now used to track the desktop beta editor. It
+			// was used to track the mobile beta editor previously.
+			'editor.beta': {
+				value: false,
+				type: SettingItemType.Bool,
+				section: 'general',
+				public: true,
+				appTypes: [AppType.Desktop],
+				label: () => 'Opt-in to the editor beta',
+				description: () => 'This beta adds improved accessibility and plugin API compatibility with the mobile editor. If you find bugs, please report them in the Discourse forum.',
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
 			'net.customCertificates': {
 				value: '',
 				type: SettingItemType.String,
@@ -1470,6 +1499,7 @@ class Setting extends BaseModel {
 				advanced: true,
 				show: (settings: any) => {
 					return [
+						SyncTargetRegistry.nameToId('amazon_s3'),
 						SyncTargetRegistry.nameToId('nextcloud'),
 						SyncTargetRegistry.nameToId('webdav'),
 						SyncTargetRegistry.nameToId('joplinServer'),
@@ -1489,6 +1519,7 @@ class Setting extends BaseModel {
 				show: (settings: any) => {
 					return (shim.isNode() || shim.mobilePlatform() === 'android') &&
 						[
+							SyncTargetRegistry.nameToId('amazon_s3'),
 							SyncTargetRegistry.nameToId('nextcloud'),
 							SyncTargetRegistry.nameToId('webdav'),
 							SyncTargetRegistry.nameToId('joplinServer'),
@@ -2025,7 +2056,7 @@ class Setting extends BaseModel {
 	}
 
 	private static canUseFileStorage(): boolean {
-		return !shim.mobilePlatform();
+		return this.allowFileStorage && !shim.mobilePlatform();
 	}
 
 	private static keyStorage(key: string): SettingStorage {
@@ -2500,9 +2531,30 @@ class Setting extends BaseModel {
 		throw new Error(`Invalid type ID: ${typeId}`);
 	}
 
+	public static sectionOrder() {
+		return [
+			'general',
+			'application',
+			'appearance',
+			'sync',
+			'encryption',
+			'joplinCloud',
+			'plugins',
+			'markdownPlugins',
+			'note',
+			'revisionService',
+			'server',
+			'keymap',
+		];
+	}
+
 	private static sectionSource(sectionName: string): SettingSectionSource {
 		if (this.customSections_[sectionName]) return this.customSections_[sectionName].source || SettingSectionSource.Default;
 		return SettingSectionSource.Default;
+	}
+
+	public static isSubSection(sectionName: string) {
+		return ['encryption', 'application', 'appearance', 'joplinCloud'].includes(sectionName);
 	}
 
 	public static groupMetadatasBySections(metadatas: SettingItem[]) {
