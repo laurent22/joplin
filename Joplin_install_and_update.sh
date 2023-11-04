@@ -143,7 +143,7 @@ else
 fi
 
 # Check if it's in the latest version
-if [[ -e ${INSTALL_DIR}/joplin/VERSION ]] && [[ $(< ${INSTALL_DIR}/joplin/VERSION) == "${RELEASE_VERSION}" ]]; then
+if [[ -e ${INSTALL_DIR}/VERSION ]] && [[ $(< ${INSTALL_DIR}/VERSION) == "${RELEASE_VERSION}" ]]; then
     print "${COLOR_GREEN}You already have the latest version${COLOR_RESET} ${RELEASE_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
     ([[ "$FORCE" == true ]] && print "Forcing installation...") || exit 0
 else
