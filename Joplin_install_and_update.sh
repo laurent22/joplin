@@ -147,13 +147,13 @@ if [[ -e ${INSTALL_DIR}/VERSION ]] && [[ $(< ${INSTALL_DIR}/VERSION) == "${RELEA
     print "${COLOR_GREEN}You already have the latest version${COLOR_RESET} ${RELEASE_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
     ([[ "$FORCE" == true ]] && print "Forcing installation...") || exit 0
 else
-    [[ -e ${INSTALL_DIR}/joplin/VERSION ]] && CURRENT_VERSION=$(< ${INSTALL_DIR}/joplin/VERSION)
+    [[ -e ${INSTALL_DIR}/VERSION ]] && CURRENT_VERSION=$(< ${INSTALL_DIR}/VERSION)
     print "The latest version is ${RELEASE_VERSION}, but you have ${CURRENT_VERSION:-no version} installed."
 fi
 
 # Check if it's an update or a new install
 DOWNLOAD_TYPE="New"
-if [[ -f ${INSTALL_DIR}/joplin/Joplin.AppImage ]]; then
+if [[ -f ${INSTALL_DIR}/Joplin.AppImage ]]; then
     DOWNLOAD_TYPE="Update"
 fi
 
@@ -166,16 +166,16 @@ wget -O "${TEMP_DIR}/joplin.png" https://joplinapp.org/images/Icon512.png
 #-----------------------------------------------------
 print 'Installing Joplin...'
 # Delete previous version (in future versions joplin.desktop shouldn't exist)
-rm -f ${INSTALL_DIR}/joplin/*.AppImage ~/.local/share/applications/joplin.desktop ${INSTALL_DIR}/joplin/VERSION
+rm -f ${INSTALL_DIR}/*.AppImage ~/.local/share/applications/joplin.desktop ${INSTALL_DIR}/VERSION
 
 # Creates the folder where the binary will be stored
-mkdir -p ${INSTALL_DIR}/joplin/
+mkdir -p ${INSTALL_DIR}/
 
 # Download the latest version
-mv "${TEMP_DIR}/Joplin.AppImage" ${INSTALL_DIR}/joplin/Joplin.AppImage
+mv "${TEMP_DIR}/Joplin.AppImage" ${INSTALL_DIR}/Joplin.AppImage
 
 # Gives execution privileges
-chmod +x ${INSTALL_DIR}/joplin/Joplin.AppImage
+chmod +x ${INSTALL_DIR}/Joplin.AppImage
 
 print "${COLOR_GREEN}OK${COLOR_RESET}"
 
@@ -263,7 +263,7 @@ fi
 print "${COLOR_GREEN}Joplin version${COLOR_RESET} ${RELEASE_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
 
 # Record version
-echo "$RELEASE_VERSION" > ${INSTALL_DIR}/joplin/VERSION
+echo "$RELEASE_VERSION" > ${INSTALL_DIR}/VERSION
 
 #-----------------------------------------------------
 if [[ "$SHOW_CHANGELOG" == true ]]; then
