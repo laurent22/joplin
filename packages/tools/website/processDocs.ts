@@ -396,6 +396,8 @@ const processMarkdownFile = async (sourcePath: string, destPath: string, context
 const processDocFiles = async (sourceDir: string, destDir: string, excluded: string[], context: Context) => {
 	if (!context.processedFiles) context.processedFiles = [];
 
+	await mkdirp(destDir);
+
 	const files = await readdir(sourceDir);
 	for (const file of files) {
 		const fullPath = `${sourceDir}/${file}`;

@@ -157,4 +157,4 @@ Finally, know that we will never assign you to a project you do not want to work
 
 Please see below for a list of project ideas:
 
-https://joplinapp.org/gsoc2020/ideas/
+[List of ideas](https://github.com/laurent22/joplin/blob/dev/readme/dev/gsoc/gsoc2020/ideas.md)
