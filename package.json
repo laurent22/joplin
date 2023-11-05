@@ -32,7 +32,7 @@
     "cspell": "cspell",
     "dependencyTree": "madge",
     "generateDatabaseTypes": "node packages/tools/generate-database-types",
-    "linkChecker": "linkchecker https://joplinapp.org",
+    "linkChecker": "linkchecker https://joplinapp.org/ && linkchecker --check-extern https://joplinapp.org/api/references/plugin_api/classes/joplin.html",
     "linter-ci": "eslint --resolve-plugins-relative-to . --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter-interactive": "eslint-interactive --resolve-plugins-relative-to . --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter-precommit": "eslint --resolve-plugins-relative-to . --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
