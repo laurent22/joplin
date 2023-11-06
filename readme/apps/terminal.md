@@ -325,7 +325,7 @@ Possible keys/values:
 									make sure you copy all your content to it
 									before syncing, otherwise all files will be
 									removed! See the FAQ for more details:
-									https://joplinapp.org/help/faq/
+									https://joplinapp.org/faq/
 									Type: string.
 
 	sync.5.path                    Nextcloud WebDAV URL.
@@ -333,7 +333,7 @@ Possible keys/values:
 									make sure you copy all your content to it
 									before syncing, otherwise all files will be
 									removed! See the FAQ for more details:
-									https://joplinapp.org/help/faq/
+									https://joplinapp.org/faq/
 									Type: string.
 
 	sync.5.username                Nextcloud username.
