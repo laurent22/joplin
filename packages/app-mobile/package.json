@@ -93,7 +93,7 @@
     "@testing-library/jest-native": "5.4.3",
     "@testing-library/react-native": "12.3.0",
     "@tsconfig/react-native": "2.0.2",
-    "@types/fs-extra": "11.0.2",
+    "@types/fs-extra": "11.0.3",
     "@types/jest": "29.5.5",
     "@types/react": "18.2.31",
     "@types/react-native": "0.70.6",

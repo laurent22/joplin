@@ -71,7 +71,7 @@
   },
   "devDependencies": {
     "@joplin/tools": "~2.13",
-    "@types/fs-extra": "11.0.2",
+    "@types/fs-extra": "11.0.3",
     "@types/jest": "29.5.5",
     "@types/node": "18.18.5",
     "@types/proper-lockfile": "^4.1.2",
