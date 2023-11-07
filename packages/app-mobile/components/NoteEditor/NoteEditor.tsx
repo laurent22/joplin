@@ -6,8 +6,8 @@ import { defaultSearchState, SearchPanel } from './SearchPanel';
 import ExtendedWebView from '../ExtendedWebView';
 
 import * as React from 'react';
-import { forwardRef, RefObject, useImperativeHandle } from 'react';
-import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
+import { forwardRef, useImperativeHandle } from 'react';
+import { useMemo, useState, useCallback, useRef } from 'react';
 import { LayoutChangeEvent, View, ViewStyle } from 'react-native';
 const { editorFont } = require('../global-style');
 
@@ -126,7 +126,6 @@ type OnSearchStateChangeCallback = (state: SearchState)=> void;
 const useEditorControl = (
 	injectJS: OnInjectJSCallback, setLinkDialogVisible: OnSetVisibleCallback,
 	setSearchState: OnSearchStateChangeCallback,
-	searchStateRef: RefObject<SearchState>,
 ): EditorControl => {
 	return useMemo(() => {
 		const execCommand = (command: EditorCommandType) => {
@@ -252,16 +251,10 @@ const useEditorControl = (
 				},
 
 				showSearch() {
-					setSearchState({
-						...searchStateRef.current,
-						dialogVisible: true,
-					});
+					execCommand(EditorCommandType.ShowSearch);
 				},
 				hideSearch() {
-					setSearchState({
-						...searchStateRef.current,
-						dialogVisible: false,
-					});
+					execCommand(EditorCommandType.HideSearch);
 				},
 
 				setSearchState: setSearchStateCallback,
@@ -269,7 +262,7 @@ const useEditorControl = (
 		};
 
 		return control;
-	}, [injectJS, searchStateRef, setLinkDialogVisible, setSearchState]);
+	}, [injectJS, setLinkDialogVisible, setSearchState]);
 };
 
 function NoteEditor(props: Props, ref: any) {
@@ -356,22 +349,13 @@ function NoteEditor(props: Props, ref: any) {
 	const [linkDialogVisible, setLinkDialogVisible] = useState(false);
 	const [searchState, setSearchState] = useState(defaultSearchState);
 
-	// Having a [searchStateRef] allows [editorControl] to not be re-created
-	// whenever [searchState] changes.
-	const searchStateRef = useRef(defaultSearchState);
-
-	// Keep the reference and the [searchState] in sync
-	useEffect(() => {
-		searchStateRef.current = searchState;
-	}, [searchState]);
-
 	// Runs [js] in the context of the CodeMirror frame.
 	const injectJS = (js: string) => {
 		webviewRef.current.injectJS(js);
 	};
 
 	const editorControl = useEditorControl(
-		injectJS, setLinkDialogVisible, setSearchState, searchStateRef,
+		injectJS, setLinkDialogVisible, setSearchState,
 	);
 
 	useImperativeHandle(ref, () => {
