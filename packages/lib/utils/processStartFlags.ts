@@ -1,5 +1,3 @@
-
-
 import Logger, { LogLevel } from '@joplin/utils/Logger';
 import JoplinError from '../JoplinError';
 import { _ } from '../locale';
@@ -148,6 +146,13 @@ const processStartFlags = async (argv: string[], setDefaults = true) => {
 		if (arg === '--disable-smooth-scrolling') {
 			// Electron-specific flag - ignore it
 			// Allows users to disable smooth scrolling
+			argv.splice(0, 1);
+			continue;
+		}
+
+		if (arg === '--disable-gpu') {
+			// Electron-specific flag - ignore it
+			// Allows users to disable GPU acceleration
 			argv.splice(0, 1);
 			continue;
 		}
