@@ -214,7 +214,7 @@ if command -v lsb_release &> /dev/null; then
   then
     SANDBOXPARAM="--no-sandbox"
     print "${COLOR_YELLOW}WARNING${COLOR_RESET} Electron sandboxing disabled."
-	print "    See https://discourse.joplinapp.org/t/32160/5 for details."
+    print "    See https://discourse.joplinapp.org/t/32160/5 for details."
   fi
 fi
 
