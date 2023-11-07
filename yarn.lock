@@ -6508,7 +6508,7 @@ __metadata:
     "@joplin/utils": ~2.13
     "@types/fs-extra": 11.0.2
     "@types/jest": 29.5.5
-    "@types/js-yaml": 4.0.7
+    "@types/js-yaml": 4.0.8
     "@types/nanoid": 3.0.0
     "@types/node": 18.18.5
     "@types/node-rsa": 1.1.2
@@ -10026,13 +10026,6 @@ __metadata:
     expect: ^29.0.0
     pretty-format: ^29.0.0
   checksum: 56e55cde9949bcc0ee2fa34ce5b7c32c2bfb20e53424aa4ff3a210859eeaaa3fdf6f42f81a3f655238039cdaaaf108b054b7a8602f394e6c52b903659338d8c6
-  languageName: node
-  linkType: hard
-
-"@types/js-yaml@npm:4.0.7":
-  version: 4.0.7
-  resolution: "@types/js-yaml@npm:4.0.7"
-  checksum: e02eca876f3f19dbba62a26a18e59ec5df4e29300b99808fb0b4ca980cbfbb60e4a2c7d75d521728f5b2a3b92a0da5b9343497b2acf621b8ea019d48b40bbd78
   languageName: node
   linkType: hard
 
