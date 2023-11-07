@@ -145,6 +145,7 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		tabIndex={0}
 		className={className}
 		data-id={noteId}
+		style={{ height: props.itemSize.height }}
 		onContextMenu={props.onContextMenu}
 		onDragStart={props.onDragStart}
 		onDragOver={props.onDragOver}
