@@ -15,7 +15,4 @@ however.
 Because it isn't
 
 necessary.  
-  
-  
-  
-...
+<br/><br/><br/>...
