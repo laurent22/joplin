@@ -63,7 +63,7 @@
     "@joplin/tools": "~2.13",
     "@rmp135/sql-ts": "1.18.0",
     "@types/bcryptjs": "2.4.5",
-    "@types/formidable": "3.4.3",
+    "@types/formidable": "3.4.4",
     "@types/fs-extra": "11.0.2",
     "@types/jest": "29.5.5",
     "@types/jest-expect-message": "1.0.4",
