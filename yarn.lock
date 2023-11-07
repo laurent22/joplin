@@ -6216,7 +6216,7 @@ __metadata:
     "@playwright/test": 1.38.1
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.5
-    "@types/mustache": 4.2.3
+    "@types/mustache": 4.2.4
     "@types/node": 18.18.5
     "@types/react": 18.2.31
     "@types/react-redux": 7.1.27
@@ -6716,7 +6716,7 @@ __metadata:
     "@types/jsdom": 21.1.4
     "@types/koa": 2.13.9
     "@types/markdown-it": 13.0.2
-    "@types/mustache": 4.2.3
+    "@types/mustache": 4.2.4
     "@types/nodemailer": 6.4.11
     "@types/uuid": 9.0.5
     "@types/yargs": 17.0.28
@@ -6774,7 +6774,7 @@ __metadata:
     "@types/jest": 29.5.5
     "@types/js-yaml": 4.0.8
     "@types/markdown-it": 13.0.2
-    "@types/mustache": 4.2.3
+    "@types/mustache": 4.2.4
     "@types/node": 18.18.5
     "@types/node-fetch": 2.6.6
     "@types/yargs": 17.0.28
@@ -10387,10 +10387,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mustache@npm:4.2.3":
-  version: 4.2.3
-  resolution: "@types/mustache@npm:4.2.3"
-  checksum: c2c7cf749a84a622648c7088fb10350b84ea935145514b6c51d17e808a4b4972fb137273339f4d93160a3c496a3943dab3be93251d74c185730daa300a299e2f
+"@types/mustache@npm:4.2.4":
+  version: 4.2.4
+  resolution: "@types/mustache@npm:4.2.4"
+  checksum: ed6ad7a5a6178bf93cc7b6febd7245b6d69f539b278a4203fd5edc2075ef1e605d81574ea5ccadd9f29340afd9afbdae4cae27bf2da8752f5d67066372525f67
   languageName: node
   linkType: hard
 

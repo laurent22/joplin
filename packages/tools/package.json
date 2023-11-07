@@ -49,7 +49,7 @@
     "@types/jest": "29.5.5",
     "@types/js-yaml": "4.0.8",
     "@types/markdown-it": "13.0.2",
-    "@types/mustache": "4.2.3",
+    "@types/mustache": "4.2.4",
     "@types/node": "18.18.5",
     "@types/node-fetch": "2.6.6",
     "@types/yargs": "17.0.28",

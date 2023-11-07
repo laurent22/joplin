@@ -70,7 +70,7 @@
     "@types/jsdom": "21.1.4",
     "@types/koa": "2.13.9",
     "@types/markdown-it": "13.0.2",
-    "@types/mustache": "4.2.3",
+    "@types/mustache": "4.2.4",
     "@types/nodemailer": "6.4.11",
     "@types/yargs": "17.0.28",
     "@types/zxcvbn": "4.4.2",
