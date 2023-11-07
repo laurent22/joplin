@@ -149,7 +149,7 @@
     "@joplin/lib": "~2.13",
     "@joplin/renderer": "~2.13",
     "@joplin/utils": "~2.13",
-    "@types/mustache": "4.2.3",
+    "@types/mustache": "4.2.4",
     "async-mutex": "0.4.0",
     "codemirror": "5.65.9",
     "color": "3.2.1",
