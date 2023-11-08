@@ -1,3 +1,4 @@
+import Logger from '@joplin/utils/Logger';
 import shim from '../../../shim';
 import uuid from '../../../uuid';
 import { downloadMediaFile } from './notes';
@@ -64,7 +65,9 @@ describe('services_rest_routes_notes', () => {
 	test('should not process URLs with data that is not image type', async () => {
 		const url = 'data:application/octet-stream;base64,dGhpcyBpcyBhIG1lc3NhZ2UK';
 
+		Logger.globalLogger.enabled = false;
 		const response = await downloadMediaFile(url);
+		Logger.globalLogger.enabled = true;
 
 		expect(response).toBe('');
 	});
