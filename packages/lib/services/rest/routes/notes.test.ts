@@ -71,4 +71,12 @@ describe('services_rest_routes_notes', () => {
 
 		expect(response).toBe('');
 	});
+
+	test('should not process URLs from cid: protocol', async () => {
+		const url = 'cid:ii_loq3d1100';
+
+		const response = await downloadMediaFile(url);
+
+		expect(response).toBe('');
+	});
 });

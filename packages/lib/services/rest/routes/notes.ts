@@ -212,7 +212,7 @@ export async function downloadMediaFile(url: string /* , allowFileProtocolImages
 	try {
 		if (isDataUrl) {
 			await shim.imageFromDataUrl(url, mediaPath);
-		} else if (!urlUtils.urlProtocol(url)) {
+		} else if (!urlUtils.urlProtocol(url) || urlUtils.urlProtocol(url).toLowerCase() === 'cid:') {
 			return '';
 		} else if (urlUtils.urlProtocol(url).toLowerCase() === 'file:') {
 			// Can't think of any reason to disallow this at this point
