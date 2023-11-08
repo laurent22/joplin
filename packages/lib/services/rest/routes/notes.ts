@@ -184,7 +184,7 @@ async function tryToGuessExtFromMimeType(response: any, mediaPath: string) {
 	return newMediaPath;
 }
 
-async function downloadMediaFile(url: string /* , allowFileProtocolImages */) {
+export async function downloadMediaFile(url: string /* , allowFileProtocolImages */) {
 	logger.info('Downloading media file', url);
 
 	const tempDir = Setting.value('tempDir');
