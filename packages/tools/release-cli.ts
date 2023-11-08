@@ -2,7 +2,7 @@ import { execCommand } from '@joplin/utils';
 import { rootDir, completeReleaseWithChangelog } from './tool-utils';
 
 const appDir = `${rootDir}/packages/app-cli`;
-const changelogPath = `${rootDir}/readme/changelog_cli.md`;
+const changelogPath = `${rootDir}/readme/about/changelog/cli.md`;
 
 // Start with node Tools/release-cli.js --changelog-from cli-v1.0.126
 // to specify from where the changelog should be created

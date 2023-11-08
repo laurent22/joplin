@@ -1,8 +1,7 @@
 import { Compartment, EditorState } from '@codemirror/state';
 import { indentOnInput, syntaxHighlighting } from '@codemirror/language';
 import {
-	openSearchPanel, closeSearchPanel, getSearchQuery,
-	highlightSelectionMatches, search,
+	openSearchPanel, closeSearchPanel, getSearchQuery, search,
 } from '@codemirror/search';
 
 import { classHighlighter } from '@lezer/highlight';
@@ -206,7 +205,6 @@ const createEditor = (
 				} : undefined),
 				drawSelection(),
 				highlightSpecialChars(),
-				highlightSelectionMatches(),
 				indentOnInput(),
 
 				EditorView.domEventHandlers({

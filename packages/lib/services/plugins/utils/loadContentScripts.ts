@@ -1,5 +1,5 @@
 import { PluginStates } from '../reducer';
-import { ContentScriptType, ContentScriptContext, PostMessageHandler } from '../api/types';
+import { ContentScriptType, ContentScriptContext, PostMessageHandler, ContentScriptModule } from '../api/types';
 import { dirname } from '@joplin/renderer/pathUtils';
 import shim from '../../../shim';
 import Logger from '@joplin/utils/Logger';
@@ -11,6 +11,7 @@ export interface ExtraContentScript {
 	id: string;
 	module: any;
 	assetPath: string;
+	pluginId: string;
 }
 
 function postMessageHandler(pluginId: string, scriptType: ContentScriptType, contentScriptId: string): PostMessageHandler {
@@ -53,14 +54,15 @@ function loadContentScripts(plugins: PluginStates, scriptType: ContentScriptType
 					postMessage: postMessageHandler(pluginId, scriptType, contentScript.id),
 				};
 
-				const loadedModule = module.default(context);
+				const loadedModule = module.default(context) as ContentScriptModule;
 
-				if (!loadedModule.plugin && !loadedModule.codeMirrorResources && !loadedModule.codeMirrorOptions) throw new Error(`Content script must export a "plugin" key or a list of CodeMirror assets or define a CodeMirror option: Plugin: ${pluginId}: Script: ${contentScript.id}`);
+				if (!loadedModule.plugin && !(loadedModule as any).codeMirrorResources && !(loadedModule as any).codeMirrorOptions) throw new Error(`Content script must export a "plugin" key or a list of CodeMirror assets or define a CodeMirror option: Plugin: ${pluginId}: Script: ${contentScript.id}`);
 
 				output.push({
 					id: contentScript.id,
 					module: loadedModule,
 					assetPath: dirname(contentScript.path),
+					pluginId,
 				});
 			} catch (error) {
 				// This function must not throw as doing so would crash the

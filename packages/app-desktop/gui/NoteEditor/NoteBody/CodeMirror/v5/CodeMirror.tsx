@@ -136,7 +136,11 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 						editorRef.current.insertAtCursor(cmd.value.markdownTags.join('\n'));
 					} else if (cmd.value.type === 'files') {
 						const pos = cursorPositionToTextOffset(editorRef.current.getCursor(), props.content);
-						const newBody = await commandAttachFileToBody(props.content, cmd.value.paths, { createFileURL: !!cmd.value.createFileURL, position: pos });
+						const newBody = await commandAttachFileToBody(props.content, cmd.value.paths, {
+							createFileURL: !!cmd.value.createFileURL,
+							position: pos,
+							markupLanguage: props.contentMarkupLanguage,
+						});
 						editorRef.current.updateBody(newBody);
 					} else {
 						reg.logger().warn('CodeMirror: unsupported drop item: ', cmd);
@@ -214,7 +218,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 							const cursor = editorRef.current.getCursor();
 							const pos = cursorPositionToTextOffset(cursor, props.content);
 
-							const newBody = await commandAttachFileToBody(props.content, null, { position: pos });
+							const newBody = await commandAttachFileToBody(props.content, null, { position: pos, markupLanguage: props.contentMarkupLanguage });
 							if (newBody) editorRef.current.updateBody(newBody);
 						},
 						textNumberedList: () => {
@@ -255,7 +259,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			},
 		};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [props.content, props.visiblePanes, addListItem, wrapSelectionWithStrings, setEditorPercentScroll, setViewerPercentScroll, resetScroll]);
+	}, [props.content, props.visiblePanes, props.contentMarkupLanguage, addListItem, wrapSelectionWithStrings, setEditorPercentScroll, setViewerPercentScroll, resetScroll]);
 
 	const onEditorPaste = useCallback(async (event: any = null) => {
 		const resourceMds = await getResourcesFromPasteEvent(event);

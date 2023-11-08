@@ -72,7 +72,7 @@ async function main() {
 	const tagName = `ios-v${newVersion}`;
 	console.info(`Tag name: ${tagName}`);
 
-	const changelogPath = `${rootDir}/readme/changelog_ios.md`;
+	const changelogPath = `${rootDir}/readme/about/changelog/ios.md`;
 	await completeReleaseWithChangelog(changelogPath, newVersion, tagName, 'iOS', false);
 }
 

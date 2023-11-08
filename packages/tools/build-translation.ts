@@ -310,7 +310,7 @@ function translationStatusToMdTable(status: TranslationStatus[]) {
 
 async function updateReadmeWithStats(stats: TranslationStatus[]) {
 	await insertContentIntoFile(
-		`${rootDir}/README.md`,
+		`${rootDir}/readme/dev/localisation.md`,
 		'<!-- LOCALE-TABLE-AUTO-GENERATED -->\n',
 		'\n<!-- LOCALE-TABLE-AUTO-GENERATED -->',
 		translationStatusToMdTable(stats),
