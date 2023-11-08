@@ -16,7 +16,7 @@
     "test-ci": "yarn test"
   },
   "devDependencies": {
-    "@types/fs-extra": "11.0.2",
+    "@types/fs-extra": "11.0.3",
     "@types/jest": "29.5.5",
     "@types/js-yaml": "4.0.8",
     "@types/node": "18.18.5",
