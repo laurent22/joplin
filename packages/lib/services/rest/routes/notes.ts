@@ -212,6 +212,8 @@ async function downloadMediaFile(url: string /* , allowFileProtocolImages */) {
 	try {
 		if (isDataUrl) {
 			await shim.imageFromDataUrl(url, mediaPath);
+		} else if (!urlUtils.urlProtocol(url)) {
+			return '';
 		} else if (urlUtils.urlProtocol(url).toLowerCase() === 'file:') {
 			// Can't think of any reason to disallow this at this point
 			// if (!allowFileProtocolImages) throw new Error('For security reasons, this URL with file:// protocol cannot be downloaded');
