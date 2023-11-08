@@ -200,6 +200,13 @@ export async function downloadMediaFile(url: string /* , allowFileProtocolImages
 		return '';
 	}
 
+	const invalidProtocols = ['cid:'];
+	const urlProtocol = urlUtils.urlProtocol(url)?.toLowerCase();
+
+	if (!urlProtocol || invalidProtocols.includes(urlProtocol)) {
+		return '';
+	}
+
 	const name = isDataUrl ? md5(`${Math.random()}_${Date.now()}`) : filename(url);
 	let fileExt = isDataUrl ? mimeUtils.toFileExtension(mimeUtils.fromDataUrl(url)) : safeFileExtension(fileExtension(url).toLowerCase());
 	if (!mimeUtils.fromFileExtension(fileExt)) fileExt = ''; // If the file extension is unknown - clear it.
@@ -212,9 +219,7 @@ export async function downloadMediaFile(url: string /* , allowFileProtocolImages
 	try {
 		if (isDataUrl) {
 			await shim.imageFromDataUrl(url, mediaPath);
-		} else if (!urlUtils.urlProtocol(url) || urlUtils.urlProtocol(url).toLowerCase() === 'cid:') {
-			return '';
-		} else if (urlUtils.urlProtocol(url).toLowerCase() === 'file:') {
+		} else if (urlProtocol === 'file:') {
 			// Can't think of any reason to disallow this at this point
 			// if (!allowFileProtocolImages) throw new Error('For security reasons, this URL with file:// protocol cannot be downloaded');
 			const localPath = fileUriToPath(url);
