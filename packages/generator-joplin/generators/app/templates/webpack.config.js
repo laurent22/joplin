@@ -97,7 +97,9 @@ function validateScreenshots(screenshots) {
 		if (!screenshot.src) throw new Error('You must specify a src for each screenshot');
 
 		// Avoid attempting to download and verify URL screenshots.
-		if (screenshot.src.startsWith('https://')) continue;
+		if (screenshot.src.startsWith('https://') || screenshot.src.startsWith('http://')) {
+			continue;
+		}
 
 		const screenshotType = screenshot.src.split('.').pop();
 		if (!allPossibleScreenshotsType.includes(screenshotType)) throw new Error(`${screenshotType} is not a valid screenshot type. Valid types are: \n${allPossibleScreenshotsType}\n`);
