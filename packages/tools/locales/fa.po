@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Mohammad Ashouri <mimeyn.git@gmail.com>\n"
 "Language-Team: \n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Enco"X-Generator: Poedit 2.2\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -26,14 +27,13 @@ msgid "- Location: to allow attaching geo-location information to a note."
 msgstr "- موقعیت: دسترسی برای پیوست اطلاعات موقعیت جغرافیایی به یک یادداشت."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:615
-msgid ""
-"- Storage: to allow attaching files to notes and to enable filesystem synchronisation."
+msgid "- Storage: to allow attaching files to notes and to enable filesystem synchronisation."
 msgstr ""
 "- فضای ذخیره‌سازی: برای پیوست فایل‌ها به یادداشت‌ها و فعال کردن همگام‌سازی فایل‌های سیستمی ."
 
 #: packages/lib/services/KeymapService.ts:317 packages/lib/services/KeymapService.ts:323
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr "\"%s\" ویژگی ضروری \"%s\" را ندارد."
+msgstr "«%s» ویژگی ضروری «%s» را ندارد."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:252
 msgid "(%s)"
@@ -195,27 +195,25 @@ msgstr "%s: گذرواژه وجود ندارد."
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
-"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or "
-"remove [tag] from [note], to list notes associated with [tag], or to list tags "
-"associated with [note]. The command `tag list` can be used to list all the tags (use -"
-"l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove "
+"[tag] from [note], to list notes associated with [tag], or to list tags associated with "
+"[note]. The command `tag list` can be used to list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> می‌تواند \"افزودن\"، \"حذف\"، \"فهرست\" یا \"برچسب یادداشت\" برای تخصیص "
-"یا حذف [tag] از [note]، برای فهرست کردن یادداشت های مرتبط با [tag] و یا برای فهرست "
-"کردن برچسب های مرتبط با [note] باشد. دستور `tag list` می تواند برای فهرست کردن تمام "
-"برچسب‌ها باشد (از -l برای جزئیات بیشتر استفاده نمایید)."
+"<tag-command> می‌تواند \"افزودن\"، \"حذف\"، \"فهرست\" یا \"برچسب یادداشت\" برای تخصیص یا حذف "
+"[tag] از [note]، برای فهرست کردن یادداشت های مرتبط با [tag] و یا برای فهرست کردن برچسب های "
+"مرتبط با [note] باشد. دستور `tag list` می تواند برای فهرست کردن تمام برچسب‌ها باشد (از -l "
+"برای جزئیات بیشتر استفاده نمایید)."
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
-"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the "
-"given to-do between completed and uncompleted state (If the target is a regular note "
-"it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular "
-"note."
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-"
+"do between completed and uncompleted state (If the target is a regular note it will be "
+"converted to a to-do). Use \"clear\" to convert the to-do back to a regular note."
 msgstr ""
-"<todo-command> می‌تواند \"تغییر وضعیت\" یا \"پاکسازی\" باشد. از \"تغییر وضعیت\" برای "
-"تغییر وضعیت کارها بین حالت تکمیل شده و ناتمام استفاده نمایید. (اگر هدف یک یادداشت "
-"معمولی باشد، تبدیل به یک کار می‌شود). از \"پاکسازی\" برای تبدیل یک کار به یک یادداشت "
-"معمولی استفاده نمایید."
+"<todo-command> می‌تواند \"تغییر وضعیت\" یا \"پاکسازی\" باشد. از \"تغییر وضعیت\" برای تغییر "
+"وضعیت کارها بین حالت تکمیل شده و ناتمام استفاده نمایید. (اگر هدف یک یادداشت معمولی باشد، "
+"تبدیل به یک کار می‌شود). از \"پاکسازی\" برای تبدیل یک کار به یک یادداشت معمولی استفاده "
+"نمایید."
 
 #: packages/lib/models/Setting.ts:1407
 msgid "A3"
@@ -239,15 +237,15 @@ msgstr "شتابدهنده"
 
 #: packages/lib/services/KeymapService.ts:380
 msgid "Accelerator \"%s\" is not valid."
-msgstr "شتابدهنده \"%s\" نامعتبر است."
+msgstr "شتابدهنده «%s» نامعتبر است."
 
 #: packages/lib/services/KeymapService.ts:349
 msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to unexpected "
 "behaviour."
 msgstr ""
-"شتابدهنده \"%s\" برای دستورات \"%s\" و \"%s\" استفاده شده است. این ممکن است منجر به "
-"رفتار غیرمنتظره‌ای شود."
+"شتابدهنده «%s» برای دستورات «%s» و «%s» استفاده شده است. این ممکن است منجر به رفتار "
+"غیرمنتظره‌ای شود."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:651
 msgid "Accept"
@@ -361,19 +359,19 @@ msgstr "همیشه اندازه را تغییر بده"
 
 #: packages/app-cli/app/command-mv.js:36
 msgid ""
-"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the "
-"short notebook id or use $b for current selected notebook"
+"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short "
+"notebook id or use $b for current selected notebook"
 msgstr ""
-"دفترچه \"%s\" دارای ابهام است. لطفا از شناسه دفترچه استفاده نمایید - برای دیدن شناسه "
-"کوتاه دفترچه از \"ti\" و یا برای دفترچه انتخاب شده از $b استفاده نمایید"
+"دفترچه «%s» دارای ابهام است. لطفا از شناسه دفترچه استفاده نمایید - برای دیدن شناسه کوتاه "
+"دفترچه از \"ti\" و یا برای دفترچه انتخاب شده از $b استفاده نمایید"
 
 #: packages/app-cli/app/command-mkbook.ts:33 packages/app-cli/app/command-mv.js:29
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti\" to see "
-"the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti\" to see the "
+"short notebook id"
 msgstr ""
-"دفترچه \"%s\" دارای ابهام است. لطفا از شناسه دفترچه استفاده نمایید - برای دیدن شناسه "
-"کوتاه دفترچه از \"ti\" استفاده کنید"
+"دفترچه «%s» دارای ابهام است. لطفا از شناسه دفترچه استفاده نمایید - برای دیدن شناسه کوتاه "
+"دفترچه از \"ti\" استفاده کنید"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:13
 msgid "An autosaved drawing was found. Attach a copy of it to the note?"
@@ -387,8 +385,8 @@ msgstr "یک بروزرسانی موجود است، آیا میخواهید ال
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:19
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:360
 msgid ""
-"Any email sent to this address will be converted into a note and added to your "
-"collection. The note will be saved into the Inbox notebook"
+"Any email sent to this address will be converted into a note and added to your collection. "
+"The note will be saved into the Inbox notebook"
 msgstr ""
 "هر ایمیلی که به این آدرس ارسال شود به یادداشت تبدیل شده و به مجموعه شما اضافه می شود. "
 "یادداشت در صندوق دفترچه ذخیره خواهد شد"
@@ -411,11 +409,11 @@ msgstr "آیا مطمئن هستید که می خواهید توکن مجوز ر
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:14
 msgid ""
-"Are you sure you want to return to the default layout? The current layout "
-"configuration will be lost."
+"Are you sure you want to return to the default layout? The current layout configuration "
+"will be lost."
 msgstr ""
-"آیا مطمئن هستید که می خواهید به چیدمان پیش فرض بازگردید؟ در صورت تایید، نحوه  چیدمان "
-"فعلی از بین خواهد رفت."
+"آیا مطمئن هستید که می خواهید به چیدمان پیش فرض بازگردید؟ در صورت تایید، نحوه  چیدمان فعلی "
+"از بین خواهد رفت."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:517
 msgid "Arguments:"
@@ -448,14 +446,13 @@ msgstr "پیوست..."
 msgid "Attaches the given file to the note."
 msgstr "فایل مشخص شده را به یادداشت پیوست کن."
 
-#: packages/server/src/models/UserModel.ts:220
-#: packages/server/src/models/UserModel.ts:237
+#: packages/server/src/models/UserModel.ts:220 packages/server/src/models/UserModel.ts:237
 msgid "attachment"
 msgstr "پیوست"
 
 #: packages/lib/models/Resource.ts:439
 msgid "Attachment conflict: \"%s\""
-msgstr "تداخل پیوست: \"%s\""
+msgstr "تداخل پیوست: «%s»"
 
 #: packages/lib/models/Setting.ts:738
 msgid "Attachment download behaviour"
@@ -471,12 +468,12 @@ msgstr "پیوست‌هایی که دانلود نشده‌اند"
 
 #: packages/lib/models/Setting.ts:395
 msgid ""
-"Attention: If you change this location, make sure you copy all your content to it "
-"before syncing, otherwise all files will be removed! See the FAQ for more details: %s"
+"Attention: If you change this location, make sure you copy all your content to it before "
+"syncing, otherwise all files will be removed! See the FAQ for more details: %s"
 msgstr ""
-"هشدار: اگر این مکان را تغییر دادید، قبل از همگام‌سازی مطمئن شوید که تمام محتوای خود را "
-"در آن کپی کنید، در غیر این صورت تمام فایل ها حذف خواهند شد! برای جزئیات بیشتر به "
-"سوالات متداول مراجعه کنید:  %s"
+"هشدار: اگر این مکان را تغییر دادید، قبل از همگام‌سازی مطمئن شوید که تمام محتوای خود را در آن "
+"کپی کنید، در غیر این صورت تمام فایل ها حذف خواهند شد! برای جزئیات بیشتر به سوالات متداول "
+"مراجعه کنید:  %s"
 
 #: packages/app-cli/app/command-sync.ts:65 packages/app-cli/app/command-sync.ts:79
 #: packages/app-desktop/gui/OneDriveLoginScreen.tsx:45
@@ -521,13 +518,12 @@ msgstr "پایه"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:17
 msgid ""
-"Biometric unlock is not setup on the device. Please set it up in order to unlock "
-"Joplin. If the device is on lockout, consider switching it off and on to reset "
-"biometrics scanning."
+"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If "
+"the device is on lockout, consider switching it off and on to reset biometrics scanning."
 msgstr ""
-"باز کردن قفل بیومتریک روی دستگاه تنظیم نشده است. لطفاً از آن را برای باز کردن قفل "
-"joplin تنظیم کنید. اگر دستگاه در حالت قفل است، برای بازنشانی اسکن بیومتریک، آن را "
-"خاموش و روشن کنید."
+"باز کردن قفل بیومتریک روی دستگاه تنظیم نشده است. لطفاً از آن را برای باز کردن قفل joplin "
+"تنظیم کنید. اگر دستگاه در حالت قفل است، برای بازنشانی اسکن بیومتریک، آن را خاموش و روشن "
+"کنید."
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:39
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:135
@@ -582,8 +578,7 @@ msgstr "امکان مشاهده و ویرایش"
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:152
 #: packages/app-mobile/components/side-menu-content.tsx:151
 #: packages/app-mobile/components/side-menu-content.tsx:188
-#: packages/app-mobile/components/side-menu-content.tsx:454
-#: packages/lib/shim-init-node.js:212
+#: packages/app-mobile/components/side-menu-content.tsx:454 packages/lib/shim-init-node.js:212
 msgid "Cancel"
 msgstr "لغو"
 
@@ -627,8 +622,7 @@ msgstr "نمی‌توان یادداشت جدید ایجاد نمود: %s"
 #: packages/app-cli/app/command-tag.js:36 packages/app-cli/app/command-tag.js:42
 #: packages/app-cli/app/command-tag.js:43 packages/app-cli/app/command-tag.js:81
 #: packages/app-cli/app/command-tag.js:87 packages/app-cli/app/command-todo.js:21
-#: packages/app-cli/app/command-use.js:21
-#: packages/lib/services/interop/InteropService.ts:252
+#: packages/app-cli/app/command-use.js:21 packages/lib/services/interop/InteropService.ts:252
 #: packages/lib/services/interop/InteropService.ts:269
 msgid "Cannot find \"%s\"."
 msgstr "«%s» یافت نشد."
@@ -659,11 +653,11 @@ msgstr "دفترچه را نمی‌توان به این مکان انتقال د
 
 #: packages/lib/onedrive-api.ts:409
 msgid ""
-"Cannot refresh token: authentication data is missing. Starting the synchronisation "
-"again may fix the problem."
+"Cannot refresh token: authentication data is missing. Starting the synchronisation again "
+"may fix the problem."
 msgstr ""
-"توکن را نمی‌توان تازه‌سازی کرد: داده های احراز هویت یافت نشد. با همگام‌سازی مجدد، ممکن "
-"است این مشکل را حل کند."
+"توکن را نمی‌توان تازه‌سازی کرد: داده های احراز هویت یافت نشد. با همگام‌سازی مجدد، ممکن است این "
+"مشکل را حل کند."
 
 #: packages/server/src/models/UserModel.ts:219
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
@@ -671,19 +665,17 @@ msgstr "«%s» «%s» را نمی‌توان  به علت بزرگ بودن بی
 
 #: packages/server/src/models/UserModel.ts:236
 msgid ""
-"Cannot save %s \"%s\" because it would go over the total allowed size (%s) for this "
-"account"
-msgstr ""
-"«%s» «%s» را نمی‌توان به علت عبور از مقدار اندازه مجاز برای این حساب (%s) ذخیره نمود"
+"Cannot save %s \"%s\" because it would go over the total allowed size (%s) for this account"
+msgstr "«%s» «%s» را نمی‌توان به علت عبور از مقدار اندازه مجاز برای این حساب (%s) ذخیره نمود"
 
 #: packages/lib/services/share/ShareService.ts:332
 msgid ""
-"Cannot share encrypted notebook with recipient %s because they have not enabled end-to-"
-"end encryption. They may do so from the screen Configuration > Encryption."
+"Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end "
+"encryption. They may do so from the screen Configuration > Encryption."
 msgstr ""
-"نمی توان دفترچه رمزنگاری شده را با گیرنده %s به اشتراک گذاشت؛ زیرا آنها رمزنگاری انتها "
-"به انتها (end-to-end) را فعال نکرده‌اند. آنها می‌توانند از طریق صفحه تنظیمات > رمزنگاری، "
-"این کار را انجام دهند."
+"نمی توان دفترچه رمزنگاری شده را با گیرنده %s به اشتراک گذاشت؛ زیرا آنها رمزنگاری انتها به "
+"انتها (end-to-end) را فعال نکرده‌اند. آنها می‌توانند از طریق صفحه تنظیمات > رمزنگاری، این کار "
+"را انجام دهند."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:330
 msgid "Case sensitive"
@@ -749,8 +741,8 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The "
 "current version of the note will not be replaced or modified."
 msgstr ""
-"برای بازیابی یادداشت بر روی «%s» کلیک نمایید. یادداشت در دفترچه‌ای به نام «%s» کپی "
-"می‌شود. این نسخه از یادداشت جایگزین یا تغییر داده نمی‌شود."
+"برای بازیابی یادداشت بر روی «%s» کلیک نمایید. یادداشت در دفترچه‌ای به نام «%s» کپی می‌شود. "
+"این نسخه از یادداشت جایگزین یا تغییر داده نمی‌شود."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:415
 msgid "Click to add tags..."
@@ -814,14 +806,14 @@ msgstr "هشدار‌های آینده"
 #: packages/lib/models/Setting.ts:1510
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, or path to "
-"individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you "
-"make changes to the TLS settings, you must save your changes before clicking on "
-"\"Check synchronisation configuration\"."
+"individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make "
+"changes to the TLS settings, you must save your changes before clicking on \"Check "
+"synchronisation configuration\"."
 msgstr ""
-"لیست مسیرهای دایرکتوری های جدا شده با کاما برای دانلود گواهی‌نامه‌ها، یا مسیری به "
-"فایل‌های گواهی‌نامه شخصی. برای مثال: /my/cert_dir, /other/custom.pem . توجه داشته باشید "
-"که اگر تغییراتی در تنظیمات TLS ایجاد کنید، باید تغییرات خود را قبل از کلیک بر روی "
-"گزینه \"بررسی پیکربندی همگام سازی\" ذخیره نمایید."
+"لیست مسیرهای دایرکتوری های جدا شده با کاما برای دانلود گواهی‌نامه‌ها، یا مسیری به فایل‌های "
+"گواهی‌نامه شخصی. برای مثال: /my/cert_dir, /other/custom.pem . توجه داشته باشید که اگر "
+"تغییراتی در تنظیمات TLS ایجاد کنید، باید تغییرات خود را قبل از کلیک بر روی گزینه \"بررسی "
+"پیکربندی همگام سازی\" ذخیره نمایید."
 
 #: packages/lib/services/KeymapService.ts:317
 msgid "command"
@@ -980,13 +972,13 @@ msgstr ""
 
 #: packages/lib/JoplinServerApi.ts:93
 msgid ""
-"Could not connect to Joplin Server. Please check the Synchronisation options in the "
-"config screen. Full error was:\n"
+"Could not connect to Joplin Server. Please check the Synchronisation options in the config "
+"screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
-"اتصال به سرور joplin برقرار نشد. لطفاً گزینه‌های همگام‌سازی را در صفحه تنظیمات بررسی "
-"نمایید. جزئیات کامل خطا:\n"
+"اتصال به سرور joplin برقرار نشد. لطفاً گزینه‌های همگام‌سازی را در صفحه تنظیمات بررسی نمایید. "
+"جزئیات کامل خطا:\n"
 "\n"
 "%s"
 
@@ -1004,13 +996,13 @@ msgstr "افزونه نصب نصب نشد: %s"
 
 #: packages/app-desktop/services/share/invitationRespond.ts:20
 msgid ""
-"Could not respond to the invitation. Please try again, or check with the notebook "
-"owner if they are still sharing it.\n"
+"Could not respond to the invitation. Please try again, or check with the notebook owner if "
+"they are still sharing it.\n"
 "\n"
 "The error was: \"%s\""
 msgstr ""
-"به دعوت نمی‌توان پاسخ داد. لطفاً دوباره امتحان کنید و یا با صاحب دفترچه بررسی کنید که "
-"آیا کماکان آن را به اشتراک گذاشته است.\n"
+"به دعوت نمی‌توان پاسخ داد. لطفاً دوباره امتحان کنید و یا با صاحب دفترچه بررسی کنید که آیا "
+"کماکان آن را به اشتراک گذاشته است.\n"
 "\n"
 "خطا: %s"
 
@@ -1024,11 +1016,11 @@ msgstr "کلید اصلی ارتقا نیافت: %s"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:26
 msgid ""
-"Could not verify the share status of this notebook - aborting. Please try again when "
-"you are connected to the internet."
+"Could not verify the share status of this notebook - aborting. Please try again when you "
+"are connected to the internet."
 msgstr ""
-"وضعیت اشتراک‌گذاری این دفترچه تأیید نشد و بی‌نتیحه ماند. لطفاً زمانی که به اینترنت وصل "
-"شدید، دوباره امتحان نمایید."
+"وضعیت اشتراک‌گذاری این دفترچه تأیید نشد و بی‌نتیحه ماند. لطفاً زمانی که به اینترنت وصل شدید، "
+"دوباره امتحان نمایید."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
 msgid "Could not verify your identify: %s"
@@ -1283,13 +1275,12 @@ msgstr "حذف یادداشت‌های انتخاب شده"
 msgid ""
 "Delete the Inbox notebook?\n"
 "\n"
-"If you delete the inbox notebook, any email that's recently been sent to it may be "
-"lost."
+"If you delete the inbox notebook, any email that's recently been sent to it may be lost."
 msgstr ""
 "دفترچه‌ی صندوق ورودی حذف شود؟\n"
 "\n"
-"اگر دفترچه صندوق ورودی را حذف کنید، ممکن است هر ایمیلی که اخیراً به آن ارسال شده است "
-"نیز از بین برود."
+"اگر دفترچه صندوق ورودی را حذف کنید، ممکن است هر ایمیلی که اخیراً به آن ارسال شده است نیز از "
+"بین برود."
 
 #: packages/lib/models/Note.ts:780
 msgid "Delete these %d notes?"
@@ -1297,8 +1288,7 @@ msgstr "این %d یادداشت حذف شود؟"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:237
 msgid ""
-"Delete this invitation? The recipient will no longer have access to this shared "
-"notebook."
+"Delete this invitation? The recipient will no longer have access to this shared notebook."
 msgstr "این دعوتنامه حذف شود؟ گیرنده دیگر به این دفترچه‌ی مشترک دسترسی نخواهد داشت."
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:98
@@ -1373,11 +1363,11 @@ msgstr "غیر‌فعال شده"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:198
 #: packages/app-mobile/components/screens/encryption-config.tsx:240
 msgid ""
-"Disabling encryption means *all* your notes and attachments are going to be re-"
-"synchronised and sent unencrypted to the sync target. Do you wish to continue?"
+"Disabling encryption means *all* your notes and attachments are going to be re-synchronised "
+"and sent unencrypted to the sync target. Do you wish to continue?"
 msgstr ""
-"غیرفعال کردن رمزنگاری به این معنی است که *تمام* یادداشت‌ها و پیوست‌های شما دوباره "
-"همگام‌سازی شده و بدون رمزنگاری به هدف همگام‌سازی ارسال ‌شوند. آیا مایل هستید ادامه دهید؟"
+"غیرفعال کردن رمزنگاری به این معنی است که *تمام* یادداشت‌ها و پیوست‌های شما دوباره همگام‌سازی "
+"شده و بدون رمزنگاری به هدف همگام‌سازی ارسال ‌شوند. آیا مایل هستید ادامه دهید؟"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:19
 msgid "Discard"
@@ -1403,13 +1393,13 @@ msgstr "فقط <num> یادداشت اول را نمایش می‌دهد."
 
 #: packages/app-cli/app/command-ls.js:30
 msgid ""
-"Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, "
-"or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-tnt` "
-"would display notes and to-dos."
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or "
+"`nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-tnt` would "
+"display notes and to-dos."
 msgstr ""
-"تنها موارد نوع/انواع مشخص شده را نمایش می‌دهد. می‌تواند برای یادداشت‌ها `n`، برای فهرست "
-"کار‌ها `t` یا برای یادداشت‌ها و فهرست کار‌ها `nt` باشد. (به عنوان مثال: `-tt` تنها فهرست "
-"کار‌ها را نمایش خواهد داد در حالی که `-tnt` یادداشت‌ها و فهرست کار‌ها را نمایش خواهد داد.)"
+"تنها موارد نوع/انواع مشخص شده را نمایش می‌دهد. می‌تواند برای یادداشت‌ها `n`، برای فهرست کار‌ها "
+"`t` یا برای یادداشت‌ها و فهرست کار‌ها `nt` باشد. (به عنوان مثال: `-tt` تنها فهرست کار‌ها را "
+"نمایش خواهد داد در حالی که `-tnt` یادداشت‌ها و فهرست کار‌ها را نمایش خواهد داد.)"
 
 #: packages/app-cli/app/command-status.js:13
 msgid "Displays summary about the notes and notebooks."
@@ -1425,8 +1415,7 @@ msgstr "یادداشت مشخص شده را نمایش بده."
 
 #: packages/app-cli/app/command-ls.js:18
 msgid ""
-"Displays the notes in the current notebook. Use `ls /` to display the list of "
-"notebooks."
+"Displays the notes in the current notebook. Use `ls /` to display the list of notebooks."
 msgstr ""
 "یادداشت های موجود در دفترچه کنونی را نمایش می‌دهد. برای نمایش لیست دفترچه ها از `ls /` "
 "استفاده کنید."
@@ -1451,11 +1440,11 @@ msgstr "برای تایید سوال نکن."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:55
 msgid ""
-"Do not lose the password as, for security purposes, this will be the *only* way to "
-"decrypt the data! To enable encryption, please enter your password below."
+"Do not lose the password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
 msgstr ""
-"گذرواژه را از دست ندهید زیرا، برای اهداف امنیتی، این *تنها* راه برای رمزگشایی داده ها "
-"خواهد بود! برای فعال نمودن رمزنگاری، لطفا گذرواژه خود را در زیر وارد نمایید."
+"گذرواژه را از دست ندهید زیرا، برای اهداف امنیتی، این *تنها* راه برای رمزگشایی داده ها خواهد "
+"بود! برای فعال نمودن رمزنگاری، لطفا گذرواژه خود را در زیر وارد نمایید."
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:115
@@ -1534,11 +1523,11 @@ msgstr "یادداشت‌های انتخاب‌شده تکراری"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
-"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the "
-"note is duplicated in the current notebook."
+"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is "
+"duplicated in the current notebook."
 msgstr ""
-"یادداشت های مطابق با <note> را در [notebook] کپی می‌کند. اگر هیچ دفترچه‌ای مشخص نشده "
-"باشد، یادداشت در دفترچه کنونی کپی می‌شود."
+"یادداشت های مطابق با <note> را در [notebook] کپی می‌کند. اگر هیچ دفترچه‌ای مشخص نشده باشد، "
+"یادداشت در دفترچه کنونی کپی می‌شود."
 
 #: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:85
@@ -1753,8 +1742,8 @@ msgstr "فعال‌شده"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:50
 msgid ""
-"Enabling encryption means *all* your notes and attachments are going to be re-"
-"synchronised and sent encrypted to the sync target."
+"Enabling encryption means *all* your notes and attachments are going to be re-synchronised "
+"and sent encrypted to the sync target."
 msgstr ""
 "فعال‌سازی رمزنگاری به این معنی است که *تمام* یادداشت‌ها و پیوست‌های شما دوباره همگام‌سازی "
 "می‌شوند و به صورت رمزنگاری شده به هدف همگام‌سازی ارسال می‌شوند."
@@ -1815,8 +1804,7 @@ msgid "Enum"
 msgstr "قابل شمارش"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:69
-#: packages/app-mobile/components/screens/LogScreen.tsx:68
-#: packages/lib/models/Resource.ts:362
+#: packages/app-mobile/components/screens/LogScreen.tsx:68 packages/lib/models/Resource.ts:362
 msgid "Error"
 msgstr "خطا"
 
@@ -1834,11 +1822,11 @@ msgstr "خطا: %s"
 
 #: packages/lib/components/shared/config/config-shared.js:71
 msgid ""
-"Error. Please check that URL, username, password, etc. are correct and that the sync "
-"target is accessible. The reported error was:"
+"Error. Please check that URL, username, password, etc. are correct and that the sync target "
+"is accessible. The reported error was:"
 msgstr ""
-"خطا. لطفا بررسی کنید که آدرس اینترنتی، نام‌کاربری، گذرواژه و غیره صحیح هستند و هدف "
-"همگام‌سازی قابل دسترس است. خطای گزارش شده:"
+"خطا. لطفا بررسی کنید که آدرس اینترنتی، نام‌کاربری، گذرواژه و غیره صحیح هستند و هدف همگام‌سازی "
+"قابل دسترس است. خطای گزارش شده:"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:177
 msgid "Errors only"
@@ -1905,11 +1893,11 @@ msgstr "در حال ضدور..."
 
 #: packages/app-cli/app/command-export.js:13
 msgid ""
-"Exports Joplin data to the given path. By default, it will export the complete "
-"database including notebooks, notes, tags and resources."
+"Exports Joplin data to the given path. By default, it will export the complete database "
+"including notebooks, notes, tags and resources."
 msgstr ""
-"داده‌های joplin را در محل مورد نظر صدور می‌کند. به طور پیش‌فرض، تمام پایگاه‌داده شامل "
-"دفترچه‌ها، یادداشت‌ها، برچسب‌ها و منابع را صدور می‌کند."
+"داده‌های joplin را در محل مورد نظر صدور می‌کند. به طور پیش‌فرض، تمام پایگاه‌داده شامل دفترچه‌ها، "
+"یادداشت‌ها، برچسب‌ها و منابع را صدور می‌کند."
 
 #: packages/app-cli/app/command-export.js:23
 msgid "Exports only the given note."
@@ -1928,8 +1916,8 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the result of a "
 "misconfiguration or bug)"
 msgstr ""
-"شکست ایمن: وقتی هدف همگام‌سازی خالی است، داده‌های محلی را پاک نکنید (اغلب نتیجه یک "
-"پیکربندی اشتباه یا اشکال است)"
+"شکست ایمن: وقتی هدف همگام‌سازی خالی است، داده‌های محلی را پاک نکنید (اغلب نتیجه یک پیکربندی "
+"اشتباه یا اشکال است)"
 
 #: packages/app-cli/app/main.js:100
 msgid "Fatal error:"
@@ -2006,7 +1994,7 @@ msgstr "تنها به منظور اشکال‌زدایی: صدور حساب‌ک
 
 #: packages/lib/models/Setting.ts:1554
 msgid "For example \"%s\""
-msgstr "برای مثال \"%s\""
+msgstr "برای مثال «%s»"
 
 #: packages/app-cli/app/command-help.js:36
 msgid "For information on how to customise the shortcuts please visit %s"
@@ -2017,8 +2005,8 @@ msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to enable it "
 "please check the documentation:"
 msgstr ""
-"برای اطلاعات بیشتر در مورد رمزنگاری انتها به انتها (E2EE یا End-To-Encryption) و آگاهی "
-"از نحوه‌ی فعال‌سازی آن، لطفا به مستندات مراجعه نمایید:"
+"برای اطلاعات بیشتر در مورد رمزنگاری انتها به انتها (E2EE یا End-To-Encryption) و آگاهی از "
+"نحوه‌ی فعال‌سازی آن، لطفا به مستندات مراجعه نمایید:"
 
 #: packages/app-cli/app/command-help.js:84
 msgid "For the list of keyboard shortcuts and config options, type `help keymap`"
@@ -2052,8 +2040,7 @@ msgstr "تغییرات کامل"
 msgid "Full name"
 msgstr "نام کامل"
 
-#: packages/lib/models/Setting.ts:2594
-#: packages/server/src/services/MustacheService.ts:110
+#: packages/lib/models/Setting.ts:2594 packages/server/src/services/MustacheService.ts:110
 msgid "General"
 msgstr "عمومی"
 
@@ -2077,13 +2064,12 @@ msgstr "دریافت نسخه پیش از انتشار در زمان بررسی 
 
 #: packages/app-cli/app/command-config.js:13
 msgid ""
-"Gets or sets a config value. If [value] is not provided, it will show the value of "
-"[name]. If neither [name] nor [value] is provided, it will list the current "
-"configuration."
+"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. "
+"If neither [name] nor [value] is provided, it will list the current configuration."
 msgstr ""
-"یک مقدار تنظیمات را دریافت یا قرار می‌دهد. اگر [value] (مقدار) داده نشود، مقدار [name] "
-"(اسم) نمایش داده خواهد شد. اگر نه [name] (اسم) و نه [value] (مقدار) داده نشده باشند، "
-"تنظیمات فعلی لیست می‌شود."
+"یک مقدار تنظیمات را دریافت یا قرار می‌دهد. اگر [value] (مقدار) داده نشود، مقدار [name] (اسم) "
+"نمایش داده خواهد شد. اگر نه [name] (اسم) و نه [value] (مقدار) داده نشده باشند، تنظیمات فعلی "
+"لیست می‌شود."
 
 #: packages/app-mobile/components/screens/Note.tsx:982
 msgid "Go to source URL"
@@ -2225,70 +2211,70 @@ msgstr "داده را در joplin وارد می‌کند."
 
 #: packages/lib/models/Setting.ts:739
 msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. In \"Auto"
-"\", they are downloaded when you open the note. In \"Always\", all the attachments are "
+"In \"Manual\" mode, attachments are downloaded only when you click on them. In \"Auto\", "
+"they are downloaded when you open the note. In \"Always\", all the attachments are "
 "downloaded whether you open the note or not."
 msgstr ""
-"در حالت «دستی»، پیوست‌ها تنها زمانی دانلود می‌شوند که روی آن‌ها کلیک کنید. در حالت "
-"«خودکار»، وقتی یادداشت را باز می‌کنید، دانلود می‌شوند. در حالت«همیشه»، چه یادداشت را باز "
-"کنید یا نه، همه پیوست‌ها دانلود می‌شوند."
+"در حالت «دستی»، پیوست‌ها تنها زمانی دانلود می‌شوند که روی آن‌ها کلیک کنید. در حالت «خودکار»، "
+"وقتی یادداشت را باز می‌کنید، دانلود می‌شوند. در حالت«همیشه»، چه یادداشت را باز کنید یا نه، "
+"همه پیوست‌ها دانلود می‌شوند."
 
 #: packages/app-cli/app/command-help.js:77
 msgid ""
 "In any command, a note or notebook can be referred to by title or ID, or using the "
-"shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `"
-"$c` can be used to refer to the currently selected item."
+"shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can "
+"be used to refer to the currently selected item."
 msgstr ""
-"در هر دستوری، یک یادداشت یا دفترچه را می توان با عنوان یا شناسه یا با استفاده از "
-"میانبرهای `$n` یا `$b` به ترتیب برای یادداشت یا دفترچه انتخاب شده در حال حاضر ارجاع "
-"داد. میانبر `$c` را می توان برای اشاره به مورد انتخاب شده فعلی استفاده نمود."
+"در هر دستوری، یک یادداشت یا دفترچه را می توان با عنوان یا شناسه یا با استفاده از میانبرهای "
+"`$n` یا `$b` به ترتیب برای یادداشت یا دفترچه انتخاب شده در حال حاضر ارجاع داد. میانبر `$c` "
+"را می توان برای اشاره به مورد انتخاب شده فعلی استفاده نمود."
 
 #: packages/app-mobile/components/screens/Note.tsx:420
 msgid ""
-"In order to associate a geo-location with the note, the app needs your permission to "
-"access your location.\n"
+"In order to associate a geo-location with the note, the app needs your permission to access "
+"your location.\n"
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
-"برای مرتبط نمودن یک موقعیت جغرافیایی با یادداشت، برنامه برای دسترسی به موقعیت مکانی، "
-"به اجازه شما نیاز دارد.\n"
+"برای مرتبط نمودن یک موقعیت جغرافیایی با یادداشت، برنامه برای دسترسی به موقعیت مکانی، به "
+"اجازه شما نیاز دارد.\n"
 "\n"
 "شما می‌توانید این گزینه را در هر زمانی در صفحه تنظیمات غیرفعال نمایید."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:344
 msgid ""
-"In order to do so, your entire data set will have to be encrypted and synchronised, so "
-"it is best to run it overnight.\n"
+"In order to do so, your entire data set will have to be encrypted and synchronised, so it "
+"is best to run it overnight.\n"
 "\n"
 "To start, please follow these instructions:\n"
 "\n"
 "1. Synchronise all your devices.\n"
 "2. Click \"%s\".\n"
-"3. Let it run to completion. While it runs, avoid changing any note on your other "
-"devices, to avoid conflicts.\n"
+"3. Let it run to completion. While it runs, avoid changing any note on your other devices, "
+"to avoid conflicts.\n"
 "4. Once sync is done on this device, sync all your other devices and let it run to "
 "completion.\n"
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
-"برای انجام این کار، کل مجموعه داده شما باید رمزنگاری و همگام شود، بنابراین بهتر است آن "
-"را به یکباره اجرا نماید.\n"
+"برای انجام این کار، کل مجموعه داده شما باید رمزنگاری و همگام شود، بنابراین بهتر است آن را "
+"به یکباره اجرا نماید.\n"
 "\n"
 "برای شروع، لطفا این دستورالعمل‌ها را دنبال کنید:\n"
 "1. همه دستگاه های خود را همگام سازی کنید.\n"
-"2. بر روی \"%s\" کلیک نمایید.\n"
-"3. اجازه دهید تا کامل شود. در حین اجرا، از تغییر هر یادداشتی در دستگاه‌های دیگر خود "
-"اجتناب نمایید  تا از بروز تداخل جلوگیری شود.\n"
-"4.پس از انجام همگام‌سازی در این دستگاه، همه دستگاه‌های دیگر خود را همگام‌سازی کنید و "
-"اجازه دهید تا کامل شود.\n"
+"2. بر روی «%s» کلیک نمایید.\n"
+"3. اجازه دهید تا کامل شود. در حین اجرا، از تغییر هر یادداشتی در دستگاه‌های دیگر خود اجتناب "
+"نمایید  تا از بروز تداخل جلوگیری شود.\n"
+"4.پس از انجام همگام‌سازی در این دستگاه، همه دستگاه‌های دیگر خود را همگام‌سازی کنید و اجازه "
+"دهید تا کامل شود.\n"
 "\n"
 "نکته‌ی مهم: شما فقط باید این عملیات را یک مرتبه و تنها روی یک دستگاه اجرا کنید."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:219
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:87
 msgid ""
-"In order to use file system synchronisation your permission to write to external "
-"storage is required."
+"In order to use file system synchronisation your permission to write to external storage is "
+"required."
 msgstr "برای استفاده از همگام‌سازی سیستم فایل، اجازه نوشتن روی حافظه خارجی مورد نیاز است."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:117
@@ -2406,11 +2392,10 @@ msgstr "به توئیتر ما بپیوندید"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:332
 msgid ""
-"Joplin can synchronise your notes using various providers. Select one from the list "
-"below."
+"Joplin can synchronise your notes using various providers. Select one from the list below."
 msgstr ""
-"joplin می تواند یادداشت های شما را با استفاده از ارائه دهندگان مختلف همگام سازی کند. "
-"از لیست زیر یکی را انتخاب کنید."
+"جاپلین می تواند یادداشت های شما را با استفاده از ارائه دهندگان مختلف همگام سازی کند. از "
+"لیست زیر یکی را انتخاب کنید."
 
 #: packages/lib/models/Setting.ts:2606 packages/lib/SyncTargetJoplinCloud.ts:30
 msgid "Joplin Cloud"
@@ -2436,13 +2421,13 @@ msgstr "فایل صدور joplin"
 
 #: packages/lib/services/ReportService.ts:213
 msgid ""
-"Joplin failed to decrypt these items multiple times, possibly because they are "
-"corrupted or too large. These items will remain on the device but Joplin will no "
-"longer attempt to decrypt them."
+"Joplin failed to decrypt these items multiple times, possibly because they are corrupted or "
+"too large. These items will remain on the device but Joplin will no longer attempt to "
+"decrypt them."
 msgstr ""
-"joplin چندین بار نتوانست این موارد را رمزگشایی کند، احتمالا به این خاطر که خراب یا "
-"بسیار بزرگ هستند. این موارد بر روی دستگاه باقی می‌مانند اما joplin دیگر تلاشی برای "
-"رمزگشایی آن‌ها نخواهد کرد."
+"جاپلین چندین بار نتوانست این موارد را رمزگشایی کند، احتمالا به این خاطر که خراب یا بسیار "
+"بزرگ هستند. این موارد بر روی دستگاه باقی می‌مانند اما joplin دیگر تلاشی برای رمزگشایی آن‌ها "
+"نخواهد کرد."
 
 #: packages/app-desktop/gui/MenuBar.tsx:835
 msgid "Joplin Forum"
@@ -2468,8 +2453,8 @@ msgstr "آدرس سرور joplin"
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin."
 msgstr ""
-"Joplin Web Clipper اجازه می دهد تا صفحات وب و اسکرین‌شات ها را از مرورگر خود در joplin "
-"ذخیره کنید."
+"Joplin Web Clipper اجازه می دهد تا صفحات وب و اسکرین‌شات ها را از مرورگر خود در joplin ذخیره "
+"کنید."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:650
 msgid "Joplin website"
@@ -2477,11 +2462,11 @@ msgstr "سایت joplin"
 
 #: packages/lib/SyncTargetJoplinCloud.ts:34
 msgid ""
-"Joplin's own sync service. Also gives access to Joplin-specific features such as "
-"publishing notes or collaborating on notebooks with others."
+"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing "
+"notes or collaborating on notebooks with others."
 msgstr ""
-"سرویس همگام‌سازی اختصاصی joplin. همچنین به ویژگی‌های خاص joplin مانند انتشار یادداشت‌ها "
-"یا همکاری در دفترچه‌ها با دیگران دسترسی می‌دهد."
+"سرویس همگام‌سازی اختصاصی joplin. همچنین به ویژگی‌های خاص joplin مانند انتشار یادداشت‌ها یا "
+"همکاری در دفترچه‌ها با دیگران دسترسی می‌دهد."
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:168
 msgid "KaTeX"
@@ -2606,11 +2591,11 @@ msgstr "موقعیت"
 
 #: packages/app-cli/app/command-sync.ts:120
 msgid ""
-"Lock file is already being hold. If you know that no synchronisation is taking place, "
-"you may delete the lock file at \"%s\" and resume the operation."
+"Lock file is already being hold. If you know that no synchronisation is taking place, you "
+"may delete the lock file at \"%s\" and resume the operation."
 msgstr ""
-"فایل قفل در حال حاضر نگه داشته شده است. اگر می‌دانید که هیچ همگام‌سازی صورت نمی‌گیرد، "
-"می‌توانید فایل قفل را در \"%s\" حذف کرده و عملیات را ادامه دهید."
+"فایل قفل در حال حاضر نگه داشته شده است. اگر می‌دانید که هیچ همگام‌سازی صورت نمی‌گیرد، می‌توانید "
+"فایل قفل را در «%s» حذف کرده و عملیات را ادامه دهید."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:573
 #: packages/app-mobile/components/screens/LogScreen.tsx:159
@@ -2670,18 +2655,17 @@ msgstr "مدیریت افزونه‌های شما"
 #. `generate-ppk`
 #: packages/app-cli/app/command-e2ee.ts:20
 msgid ""
-"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, "
-"`decrypt-file`, and `target-status`."
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-"
+"file`, and `target-status`."
 msgstr ""
-"تنظیمات رمزنگاری انتها به انتها (E2EE) را مدیریت می‌کند. دستورات شامل `enable`، "
-"`disable`، `decrypt`، `status`، `decrypt-file` و `target-status` هستند."
+"تنظیمات رمزنگاری انتها به انتها (E2EE) را مدیریت می‌کند. دستورات شامل `enable`، `disable`، "
+"`decrypt`، `status`، `decrypt-file` و `target-status` هستند."
 
 #: packages/lib/models/Setting.ts:743
 msgid "Manual"
 msgstr "دستی"
 
-#: packages/lib/models/Setting.ts:2599
-#: packages/lib/services/interop/InteropService.ts:100
+#: packages/lib/models/Setting.ts:2599 packages/lib/services/interop/InteropService.ts:100
 #: packages/lib/services/interop/InteropService.ts:137
 msgid "Markdown"
 msgstr "نشانه‌گذاری"
@@ -2908,8 +2892,8 @@ msgstr "هیچ پیشنهادی وجود ندارد"
 #: packages/app-cli/app/command-edit.js:30
 msgid "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
-"هیچ ویرایشگر متنی مشخص نشده است. لطفا با استفاده از `<editor-path> تنظیمات ویرایشگر` "
-"آن را مشخص کنید"
+"هیچ ویرایشگر متنی مشخص نشده است. لطفا با استفاده از `<editor-path> تنظیمات ویرایشگر` آن را "
+"مشخص کنید"
 
 #: packages/lib/models/Setting.ts:408
 msgid "Nord"
@@ -2933,8 +2917,7 @@ msgstr "فعلاً نه"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:120
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:142
-#: packages/server/src/models/UserModel.ts:220
-#: packages/server/src/models/UserModel.ts:237
+#: packages/server/src/models/UserModel.ts:220 packages/server/src/models/UserModel.ts:237
 msgid "note"
 msgstr "یادداشت"
 
@@ -2970,8 +2953,7 @@ msgstr "ویرایشگر یادداشت"
 msgid "Note has been saved."
 msgstr "یادداشت ذخیره شد."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:56
-#: packages/lib/models/Setting.ts:2602
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:56 packages/lib/models/Setting.ts:2602
 msgid "Note History"
 msgstr "تاریخچه‌ی یادداشت"
 
@@ -3053,8 +3035,8 @@ msgstr "لیست شماره گذاری شده"
 #: packages/app-desktop/bridge.ts:191 packages/app-desktop/bridge.ts:197
 #: packages/app-desktop/bridge.ts:215 packages/app-desktop/bridge.ts:223
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:31
-#: packages/app-desktop/gui/DialogButtonRow.tsx:70
-#: packages/app-desktop/gui/MenuBar.tsx:536 packages/app-desktop/gui/PromptDialog.tsx:284
+#: packages/app-desktop/gui/DialogButtonRow.tsx:70 packages/app-desktop/gui/MenuBar.tsx:536
+#: packages/app-desktop/gui/PromptDialog.tsx:284
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:194
 #: packages/app-mobile/components/ModalDialog.js:67
@@ -3077,15 +3059,13 @@ msgstr "یکی از کلید‌های اصلی شما از یک روش رمزن�
 
 #: packages/app-cli/app/gui/NoteWidget.js:48
 msgid ""
-"One or more items are currently encrypted and you may need to supply a master "
-"password. To do so please type `e2ee decrypt`. If you have already supplied the "
-"password, the encrypted items are being decrypted in the background and will be "
-"available soon."
+"One or more items are currently encrypted and you may need to supply a master password. To "
+"do so please type `e2ee decrypt`. If you have already supplied the password, the encrypted "
+"items are being decrypted in the background and will be available soon."
 msgstr ""
-"در حال حاضر یک یا چند مورد رمزنگاری شده‌اند و ممکن است شما به ارائه یک گذرواژه اصلی "
-"نیاز داشته باشید. برای اینکار لطفا «e2ee decrypt» را تایپ کنید. اگر در حال حاضر "
-"گذرواژه را ارائه کرده‌اید، موارد رمزنگاری شده در پس‌زمینه در حال رمزگشایی هستند و به "
-"زودی در دسترس خواهند بود."
+"در حال حاضر یک یا چند مورد رمزنگاری شده‌اند و ممکن است شما به ارائه یک گذرواژه اصلی نیاز "
+"داشته باشید. برای اینکار لطفا «e2ee decrypt» را تایپ کنید. اگر در حال حاضر گذرواژه را ارائه "
+"کرده‌اید، موارد رمزنگاری شده در پس‌زمینه در حال رمزگشایی هستند و به زودی در دسترس خواهند بود."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:664
 msgid "One or more master keys need a password."
@@ -3214,8 +3194,7 @@ msgstr "اجازه برای استفاده از دوربین"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:259
 msgid "Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below."
-msgstr ""
-"لطفاً برای ادامه روی \"%s\" کلیک کنید یا گذرواژه‌ها را در لیست \"%s\" زیر تنظیم نمایید."
+msgstr "لطفاً برای ادامه روی «%s» کلیک کنید یا گذرواژه‌ها را در لیست «%s» زیر تنظیم نمایید."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:64
 msgid "Please confirm that you would like to re-encrypt your complete database."
@@ -3227,8 +3206,8 @@ msgstr "لطفا قبل از ارتقای کلید، گذرواژه خود را 
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
 msgid ""
-"Please note that if it is a large notebook, it may take a few minutes for all the "
-"notes to show up on the recipient's device."
+"Please note that if it is a large notebook, it may take a few minutes for all the notes to "
+"show up on the recipient's device."
 msgstr ""
 "لطفاً توجه داشته باشید که اگر یک دفترچه حجیم باشد، ممکن است چند دقیقه طول بکشد تا همه "
 "یادداشت‌ها در دستگاه گیرنده نمایش داده شوند."
@@ -3236,14 +3215,14 @@ msgstr ""
 #: packages/lib/onedrive-api-node-utils.js:118
 msgid ""
 "Please open the following URL in your browser to authenticate the application. The "
-"application will create a directory in \"Apps/Joplin\" and will only read and write "
-"files in this directory. It will have no access to any files outside this directory "
-"nor to any other personal data. No data will be shared with any third party."
+"application will create a directory in \"Apps/Joplin\" and will only read and write files "
+"in this directory. It will have no access to any files outside this directory nor to any "
+"other personal data. No data will be shared with any third party."
 msgstr ""
-"لطفاً آدرس زیر را در مرورگر خود باز کنید تا برنامه تأیید اعتبار شود. برنامه یک "
-"دایرکتوری در \"Apps/Joplin\" ایجاد می کند و فقط فایل ها را در این فهرست می خواند و می "
-"نویسد. به هیچ فایلی خارج از این فهرست دسترسی نخواهد داشت و به هیچ اطلاعات شخصی دیگری "
-"دسترسی نخواهد داشت. هیچ داده ای با هیچ شخص ثالثی به اشتراک گذاشته نخواهد شد."
+"لطفاً آدرس زیر را در مرورگر خود باز کنید تا برنامه تأیید اعتبار شود. برنامه یک دایرکتوری در "
+"\"Apps/Joplin\" ایجاد می کند و فقط فایل ها را در این فهرست می خواند و می نویسد. به هیچ "
+"فایلی خارج از این فهرست دسترسی نخواهد داشت و به هیچ اطلاعات شخصی دیگری دسترسی نخواهد داشت. "
+"هیچ داده ای با هیچ شخص ثالثی به اشتراک گذاشته نخواهد شد."
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:88
 msgid "Please record your voice..."
@@ -3275,11 +3254,11 @@ msgstr "لطفاً برای استفاده از این افزونه، joplin ر�
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1258
 msgid ""
-"Please wait for all attachments to be downloaded and decrypted. You may also switch to "
-"%s to edit the note."
+"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s "
+"to edit the note."
 msgstr ""
-"لطفا صبر کنید تا همه پیوست‌ها دانلود و رمزگشایی شوند. شما همچنین می‌توانید به %s برای "
-"ویرایش یادداشت بروید."
+"لطفا صبر کنید تا همه پیوست‌ها دانلود و رمزگشایی شوند. شما همچنین می‌توانید به %s برای ویرایش "
+"یادداشت بروید."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:123
 #: packages/app-desktop/gui/ResourceScreen.tsx:234
@@ -3290,8 +3269,7 @@ msgstr "لطفاً صبور باشید..."
 msgid "Plugin tools"
 msgstr "ابزارهای افزونه"
 
-#: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:107
-#: packages/lib/models/Setting.ts:2600
+#: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:107 packages/lib/models/Setting.ts:2600
 msgid "Plugins"
 msgstr "پلاگین‌ها"
 
@@ -3332,11 +3310,9 @@ msgid "Press the shortcut"
 msgstr "میانبر را فشار دهید"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:70
-msgid ""
-"Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the shortcut."
+msgid "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the shortcut."
 msgstr ""
-"میانبر را فشار دهید و سپس ENTER را فشار دهید. یا BACKSPACE برای پاکسازی میانبر، فشار "
-"دهید."
+"میانبر را فشار دهید و سپس ENTER را فشار دهید. یا BACKSPACE برای پاکسازی میانبر، فشار دهید."
 
 #: packages/app-mobile/components/ScreenHeader.tsx:564
 msgid "Press to set the decryption password."
@@ -3426,13 +3402,11 @@ msgstr "اشتراک‌گذاری یادداشت..."
 msgid "Publish Notes"
 msgstr "اشتراک‌گذاری یادداشت‌ها"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:180
-#: packages/lib/utils/joplinCloud.ts:153
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:180 packages/lib/utils/joplinCloud.ts:153
 msgid "Publish notes to the internet"
 msgstr "اشتراک‌گذاری یادداشت‌ها در اینترنت"
 
-#: packages/app-desktop/app.ts:182
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
+#: packages/app-desktop/app.ts:182 packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
 #: packages/app-desktop/gui/MenuBar.tsx:358
 msgid "Quit"
 msgstr "خروج"
@@ -3607,10 +3581,8 @@ msgid "Revision: %s (%s)"
 msgstr "تجدید نظر: %s (%s)"
 
 #: packages/app-cli/app/command-batch.js:10
-msgid ""
-"Runs the commands contained in the text file. There should be one command per line."
-msgstr ""
-"دستورات موجود در فایل متنی را اجرا می کند. در هر خط باید یک دستور وجود داشته باشد."
+msgid "Runs the commands contained in the text file. There should be one command per line."
+msgstr "دستورات موجود در فایل متنی را اجرا می کند. در هر خط باید یک دستور وجود داشته باشد."
 
 #: packages/lib/SyncTargetAmazonS3.js:28
 msgid "S3"
@@ -3640,8 +3612,7 @@ msgstr "آدرس S3"
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are temporarily disabled."
 msgstr ""
-"حالت ایمن در حال حاضر فعال است. ارائه یادداشت و همه افزونه ها به طور موقت غیرفعال "
-"هستند."
+"حالت ایمن در حال حاضر فعال است. ارائه یادداشت و همه افزونه ها به طور موقت غیرفعال هستند."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:128
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:76
@@ -3763,8 +3734,7 @@ msgid "Set alarm:"
 msgstr "تنظیم هشدار:"
 
 #: packages/lib/models/Setting.ts:1297
-msgid ""
-"Set it to 0 to make it take the complete available space. Recommended width is 600."
+msgid "Set it to 0 to make it take the complete available space. Recommended width is 600."
 msgstr "آن را روی 0 تنظیم کنید تا فضای کامل موجود را اشغال کند. عرض پیشنهادی 600 است."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:618
@@ -3793,11 +3763,10 @@ msgstr "اشتراک گذاری"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:83
 msgid ""
-"Share a copy of all notes in a file format that can be imported by Joplin on a "
-"computer."
+"Share a copy of all notes in a file format that can be imported by Joplin on a computer."
 msgstr ""
-"یک کپی از همه یادداشت ها را در قالب فایلی که می تواند توسط joplin در رایانه وارد شود، "
-"به اشتراک بگذارید."
+"یک کپی از همه یادداشت ها را در قالب فایلی که می تواند توسط joplin در رایانه وارد شود، به "
+"اشتراک بگذارید."
 
 #: packages/lib/utils/joplinCloud.ts:125
 msgid "Share a notebook with others"
@@ -3894,8 +3863,7 @@ msgstr "از این نسخه بگذرید"
 
 #: packages/app-cli/app/command-e2ee.ts:65
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
-msgstr ""
-"موارد رد شده: %d (از retry-failed-items-- برای تلاش مجدد رمزگشایی آن‌ها استفاده کنید)"
+msgstr "موارد رد شده: %d (از retry-failed-items-- برای تلاش مجدد رمزگشایی آن‌ها استفاده کنید)"
 
 #: packages/app-cli/app/command-import.js:50 packages/app-desktop/gui/ImportScreen.tsx:91
 msgid "Skipped: %d."
@@ -3951,8 +3919,7 @@ msgstr "منبع "
 
 #: packages/lib/models/Setting.ts:1580
 msgid ""
-"Specify the port that should be used by the API server. If not set, a default will be "
-"used."
+"Specify the port that should be used by the API server. If not set, a default will be used."
 msgstr ""
 "پورتی که باید توسط سرور API استفاده شود را مشخص نمایید. در غیر اینصورت، یک پورت پیشفرض "
 "استفاده خواهد شد."
@@ -3973,16 +3940,16 @@ msgstr "شروع برنامه و کوچک‌شده در آیکن تسک‌بار
 
 #: packages/app-cli/app/command-server.js:14
 msgid ""
-"Start, stop or check the API server. To specify on which port it should run, set the "
-"api.port config variable. Commands are (%s)."
+"Start, stop or check the API server. To specify on which port it should run, set the api."
+"port config variable. Commands are (%s)."
 msgstr ""
-"شروع، توقف یا بررسی سرور API. از متغیر تنظیمات api.port برای مشخص کردن پورتی که باید "
-"روی آن اجرا شود استفاده کنید. دستورات بصورت (%s) هستند."
+"شروع، توقف یا بررسی سرور API. از متغیر تنظیمات api.port برای مشخص کردن پورتی که باید روی آن "
+"اجرا شود استفاده کنید. دستورات بصورت (%s) هستند."
 
 #: packages/app-cli/app/command-e2ee.ts:56
 msgid ""
-"Starting decryption... Please wait as it may take several minutes depending on how "
-"much there is to decrypt."
+"Starting decryption... Please wait as it may take several minutes depending on how much "
+"there is to decrypt."
 msgstr "شروع رمزگشایی... این کار ممکن است چند دقیقه طول بکشد، لطفا صبور باشید."
 
 #: packages/app-cli/app/command-sync.ts:196
@@ -4018,15 +3985,12 @@ msgstr "وضعیت: آغاز شده بر روی پورت %d"
 msgid "Step 1: Enable the clipper service"
 msgstr "مرحله 1: سرویس Clipper را فعال نمایید"
 
-#: packages/app-cli/app/command-sync.ts:75
-#: packages/app-desktop/gui/DropboxLoginScreen.tsx:44
+#: packages/app-cli/app/command-sync.ts:75 packages/app-desktop/gui/DropboxLoginScreen.tsx:44
 #: packages/app-mobile/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr ""
-"مرحله ۱: برای اجازه دادن به برنامه این آدرس اینترنتی را در مرورگر خود باز نمایید:"
+msgstr "مرحله ۱: برای اجازه دادن به برنامه این آدرس اینترنتی را در مرورگر خود باز نمایید:"
 
-#: packages/app-cli/app/command-sync.ts:77
-#: packages/app-desktop/gui/DropboxLoginScreen.tsx:48
+#: packages/app-cli/app/command-sync.ts:77 packages/app-desktop/gui/DropboxLoginScreen.tsx:48
 #: packages/app-mobile/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "مرحله ۲: کدی که توسط Dropbox داده شده را وارد نمایید:"
@@ -4232,19 +4196,15 @@ msgstr "دستور ویرایشگر متن"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:217
 msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
-msgstr ""
-"از شما سپاسگزاریم! حساب ابری joplin شما هم اکنون راه‌اندازی شده و آماده استفاده است."
+msgstr "از شما سپاسگزاریم! حساب ابری joplin شما هم اکنون راه‌اندازی شده و آماده استفاده است."
 
 #: packages/lib/services/profileConfig/index.ts:105
-msgid ""
-"The active profile cannot be deleted. Switch to a different profile and try again."
-msgstr ""
-"حساب‌کاربری فعال را نمی توان حذف کرد. به حساب‌کاربری دیگری بروید و دوباره امتحان کنید."
+msgid "The active profile cannot be deleted. Switch to a different profile and try again."
+msgstr "حساب‌کاربری فعال را نمی توان حذف کرد. به حساب‌کاربری دیگری بروید و دوباره امتحان کنید."
 
 #: packages/app-desktop/bridge.ts:276
 msgid "The app is now going to close. Please relaunch it to complete the process."
-msgstr ""
-"برنامه اکنون در حال بسته شدن است. لطفاً برای تکمیل مراحل آن را مجدداً راه اندازی کنید."
+msgstr "برنامه اکنون در حال بسته شدن است. لطفاً برای تکمیل مراحل آن را مجدداً راه اندازی کنید."
 
 #: packages/app-desktop/app.ts:345
 msgid "The application did not close properly. Would you like to start in safe mode?"
@@ -4275,23 +4235,21 @@ msgid "The command \"%s\" is only available in GUI mode"
 msgstr "دستور «%s» فقط در حالت گرافیکی (GUI) کاربرد دارد"
 
 #: packages/server/src/middleware/notificationHandler.ts:25
-msgid ""
-"The default admin password is insecure and has not been changed! [Change it now](%s)"
+msgid "The default admin password is insecure and has not been changed! [Change it now](%s)"
 msgstr ""
 "رمز عبور پیشفرض مدیر امن نیست و تا کنون تغییر نکرده است! [اکنون آن را تغییر دهید] (%s)"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:342
 msgid ""
-"The default encryption method has been changed to a more secure one and it is "
-"recommended that you apply it to your data."
+"The default encryption method has been changed to a more secure one and it is recommended "
+"that you apply it to your data."
 msgstr ""
-"روش پیش فرض رمزنگاری به یک روش امن‌تر تغییر پیدا کرده و پیشنهاد می‌شود که آن را بر داده "
-"خود اعمال کنید."
+"روش پیش فرض رمزنگاری به یک روش امن‌تر تغییر پیدا کرده و پیشنهاد می‌شود که آن را بر داده خود "
+"اعمال کنید."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:641
 msgid "The default encryption method has been changed, you should re-encrypt your data."
-msgstr ""
-"روش رمزنگاری پیش فرض تغییر یافته است،‌ شما باید داده‌های خود را دوباره رمزنگاری کنید."
+msgstr "روش رمزنگاری پیش فرض تغییر یافته است،‌ شما باید داده‌های خود را دوباره رمزنگاری کنید."
 
 #: packages/lib/services/profileConfig/index.ts:104
 msgid "The default profile cannot be deleted"
@@ -4299,23 +4257,22 @@ msgstr "حساب‌کاربری پیش فرض را نمی توان حذف نمو
 
 #: packages/lib/models/Setting.ts:1402
 msgid ""
-"The editor command (may include arguments) that will be used to open a note. If none "
-"is provided it will try to auto-detect the default editor."
+"The editor command (may include arguments) that will be used to open a note. If none is "
+"provided it will try to auto-detect the default editor."
 msgstr ""
-"دستور ویرایشگر (ممکن است شامل آرگومان‌هایی نیز باشد) که برای باز کردن یادداشت استفاده "
-"می‌شود. اگر هیچ کدام ارائه نشده باشد، سعی می‌کند ویرایشگر پیش فرض را به طور خودکار "
-"شناسایی کند."
+"دستور ویرایشگر (ممکن است شامل آرگومان‌هایی نیز باشد) که برای باز کردن یادداشت استفاده می‌شود. "
+"اگر هیچ کدام ارائه نشده باشد، سعی می‌کند ویرایشگر پیش فرض را به طور خودکار شناسایی کند."
 
 #: packages/lib/models/Setting.ts:1636 packages/lib/models/Setting.ts:1651
 #: packages/lib/models/Setting.ts:1666
 msgid ""
-"The factor property sets how the item will grow or shrink to fit the available space "
-"in its container with respect to the other items. Thus an item with a factor of 2 will "
-"take twice as much space as an item with a factor of 1.Restart app to see changes."
+"The factor property sets how the item will grow or shrink to fit the available space in its "
+"container with respect to the other items. Thus an item with a factor of 2 will take twice "
+"as much space as an item with a factor of 1.Restart app to see changes."
 msgstr ""
-"ویژگی فاکتور نحوه رشد یا کوچک شدن آیتم را تعیین می‌کند تا فضای موجود در ظرف خود را با "
-"توجه به سایر موارد متناسب کند. بنابراین یک مورد با ضریب 2، دو برابر فضای بیشتری نسبت "
-"به یک مورد با ضریب 1 اشغال می‌کند. برای مشاهده تغییرات، برنامه را مجدد راه‌اندازی کنید."
+"ویژگی فاکتور نحوه رشد یا کوچک شدن آیتم را تعیین می‌کند تا فضای موجود در ظرف خود را با توجه "
+"به سایر موارد متناسب کند. بنابراین یک مورد با ضریب 2، دو برابر فضای بیشتری نسبت به یک مورد "
+"با ضریب 1 اشغال می‌کند. برای مشاهده تغییرات، برنامه را مجدد راه‌اندازی کنید."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:556
 msgid "The following attachments are being watched for changes:"
@@ -4323,13 +4280,11 @@ msgstr "پیوست های زیر برای تغییرات در حال مشاهد�
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:74
 msgid ""
-"The following keys use an out-dated encryption algorithm and it is recommended to "
-"upgrade them. The upgraded key will still be able to decrypt and encrypt your data as "
-"usual."
+"The following keys use an out-dated encryption algorithm and it is recommended to upgrade "
+"them. The upgraded key will still be able to decrypt and encrypt your data as usual."
 msgstr ""
 "کلیدهای زیر از یک الگوریتم رمزنگاری قدیمی استفاده می کنند و توصیه می شود آنها را ارتقا "
-"دهید. کلید ارتقا یافته همچنان می‌تواند مانند همیشه داده‌های شما را رمزگشایی و رمزنگاری "
-"کند."
+"دهید. کلید ارتقا یافته همچنان می‌تواند مانند همیشه داده‌های شما را رمزگشایی و رمزنگاری کند."
 
 #: packages/app-mobile/components/screens/Note.tsx:209
 msgid "The Joplin mobile app does not currently support this type of link: %s"
@@ -4340,18 +4295,18 @@ msgid ""
 "The Joplin team has vetted this plugin and it meets our standards for security and "
 "performance."
 msgstr ""
-"تیم joplin این افزونه را بررسی کرده است و استانداردهای ما را برای امنیت و عملکرد "
-"مطابقت دارد."
+"تیم joplin این افزونه را بررسی کرده است و استانداردهای ما را برای امنیت و عملکرد مطابقت "
+"دارد."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:319
 msgid ""
-"The keys with these IDs are used to encrypt some of your items, however the "
-"application does not currently have access to them. It is likely they will eventually "
-"be downloaded via synchronisation."
+"The keys with these IDs are used to encrypt some of your items, however the application "
+"does not currently have access to them. It is likely they will eventually be downloaded via "
+"synchronisation."
 msgstr ""
-"کلیدهای دارای این شناسه‌ها برای رمزگذاری برخی از آیتم‌های شما استفاده می‌شوند، اما برنامه "
-"در حال حاضر به آنها دسترسی ندارد. این احتمال وجود دارد که آنها در نهایت از طریق همگام "
-"سازی دانلود شوند."
+"کلیدهای دارای این شناسه‌ها برای رمزگذاری برخی از آیتم‌های شما استفاده می‌شوند، اما برنامه در "
+"حال حاضر به آنها دسترسی ندارد. این احتمال وجود دارد که آنها در نهایت از طریق همگام سازی "
+"دانلود شوند."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:217
 msgid "The master key has been upgraded successfully!"
@@ -4360,12 +4315,12 @@ msgstr "کلید اصلی با موفقیت ارتقا یافت!"
 #: packages/app-mobile/components/screens/encryption-config.tsx:272
 msgid ""
 "The master keys with these IDs are used to encrypt some of your items, however the "
-"application does not currently have access to them. It is likely they will eventually "
-"be downloaded via synchronisation."
+"application does not currently have access to them. It is likely they will eventually be "
+"downloaded via synchronisation."
 msgstr ""
-"کلیدهای اصلی با این شناسه ها برای رمزگذاری برخی از موارد شما استفاده می‌شوند، اما "
-"برنامه در حال حاضر به آنها دسترسی ندارد. این احتمال وجود دارد که آنها در نهایت از طریق "
-"همگام سازی دانلود شوند."
+"کلیدهای اصلی با این شناسه ها برای رمزگذاری برخی از موارد شما استفاده می‌شوند، اما برنامه در "
+"حال حاضر به آنها دسترسی ندارد. این احتمال وجود دارد که آنها در نهایت از طریق همگام سازی "
+"دانلود شوند."
 
 #: packages/lib/services/RevisionService.ts:265
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
@@ -4375,8 +4330,7 @@ msgstr "یادداشت «%s» با موفقیت به دفترچه «%s» باز�
 msgid "The notebook could not be saved: %s"
 msgstr "دفترچه نتوانست ذخیره شود: %s"
 
-#: packages/app-cli/app/command-import.js:70
-#: packages/app-desktop/gui/ImportScreen.tsx:108
+#: packages/app-cli/app/command-import.js:70 packages/app-desktop/gui/ImportScreen.tsx:108
 msgid "The notes have been imported: %s"
 msgstr "یادداشت‌ها وارد شدند: %s"
 
@@ -4392,17 +4346,15 @@ msgid ""
 msgstr ""
 "گیرنده را نمی توان از لیست حذف کرد. لطفا دوباره تلاش کنید.\n"
 "\n"
-"جزئیات خطا: \"%s\""
+"جزئیات خطا: «%s»"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:623
 msgid ""
-"The sync target needs to be upgraded before Joplin can sync. The operation may take a "
-"few minutes to complete and the app needs to be restarted. To proceed please click on "
-"the link."
+"The sync target needs to be upgraded before Joplin can sync. The operation may take a few "
+"minutes to complete and the app needs to be restarted. To proceed please click on the link."
 msgstr ""
-"قبل از اینکه joplin بتواند همگام‌سازی کند، هدف همگام‌سازی باید ارتقا یابد. ممکن است "
-"عملیات چند دقیقه طول بکشد و برنامه باید دوباره راه‌اندازی شود. برای ادامه لطفا روی لینک "
-"کلیک کنید."
+"قبل از اینکه joplin بتواند همگام‌سازی کند، هدف همگام‌سازی باید ارتقا یابد. ممکن است عملیات "
+"چند دقیقه طول بکشد و برنامه باید دوباره راه‌اندازی شود. برای ادامه لطفا روی لینک کلیک کنید."
 
 #: packages/app-mobile/components/ScreenHeader.tsx:566
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
@@ -4418,11 +4370,11 @@ msgstr "برچسب «%s» وجود دارد. لطفا نام دیگری انتخ
 
 #: packages/lib/models/Setting.ts:447
 msgid ""
-"The target to synchronise to. Each sync target may have additional parameters which "
-"are named as `sync.NUM.NAME` (all documented below)."
+"The target to synchronise to. Each sync target may have additional parameters which are "
+"named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"هدف برای همگام سازی. هر هدف همگام‌سازی ممکن است پارامترهای دیگری داشته باشد که به‌عنوان "
-"«sync.NUM.NAME» نام‌گذاری شده‌اند (همه در زیر مستند شده‌اند)."
+"هدف برای همگام سازی. هر هدف همگام‌سازی ممکن است پارامترهای دیگری داشته باشد که به‌عنوان «sync."
+"NUM.NAME» نام‌گذاری شده‌اند (همه در زیر مستند شده‌اند)."
 
 #: packages/app-desktop/gui/Root.tsx:179
 msgid "The Web Clipper needs your authorisation to access your data."
@@ -4441,8 +4393,8 @@ msgid ""
 "The WebDAV implementation of %s is incompatible with Joplin, and as such is no longer "
 "supported. Please use a different sync method."
 msgstr ""
-"نمونه‌سازی WebDAV با %s با joplin ناسازگار است و به همین دلیل دیگر پشتیبانی نمی‌شود. "
-"لطفاً از روش همگام‌سازی دیگری استفاده کنید."
+"نمونه‌سازی WebDAV با %s با joplin ناسازگار است و به همین دلیل دیگر پشتیبانی نمی‌شود. لطفاً از "
+"روش همگام‌سازی دیگری استفاده کنید."
 
 #: packages/lib/models/Setting.ts:841
 msgid "Theme"
@@ -4460,8 +4412,8 @@ msgstr "تغییرات ذخیره نشده‌ای وجود دارد."
 #: packages/app-desktop/gui/NoteList/NoteList2.tsx:183
 msgid "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
-"در حال حاظر هیچ یادداشتی وجود ندارد. با کلیک بر روی «یادداشت جدید» یک یادداشت جدید "
-"ایجاد کنید."
+"در حال حاظر هیچ یادداشتی وجود ندارد. با کلیک بر روی «یادداشت جدید» یک یادداشت جدید ایجاد "
+"کنید."
 
 #: packages/lib/services/interop/InteropService_Exporter_Jex.ts:33
 msgid "There is no data to export."
@@ -4488,45 +4440,45 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"هنگام تنظیم حساب Joplin Cloud شما خطایی روی داد. لطفا ایمیل و رمز عبور خود را تأیید "
-"کنید و دوباره امتحان کنید. :\n"
+"هنگام تنظیم حساب Joplin Cloud شما خطایی روی داد. لطفا ایمیل و رمز عبور خود را تأیید کنید و "
+"دوباره امتحان کنید. :\n"
 "\n"
 "جزئیات خطا: %s"
 
 #: packages/lib/services/ReportService.ts:178
 msgid ""
-"These items will remain on the device but will not be uploaded to the sync target. In "
-"order to find these items, either search for the title or the ID (which is displayed "
-"in brackets above)."
+"These items will remain on the device but will not be uploaded to the sync target. In order "
+"to find these items, either search for the title or the ID (which is displayed in brackets "
+"above)."
 msgstr ""
-"این موارد در دستگاه باقی می‌مانند اما در هدف همگام‌سازی آپلود نمی‌شوند. برای یافتن این "
-"موارد، عنوان یا شناسه (که در پرانتز بالا نمایش داده شده است) را جستجو نمایید."
+"این موارد در دستگاه باقی می‌مانند اما در هدف همگام‌سازی آپلود نمی‌شوند. برای یافتن این موارد، "
+"عنوان یا شناسه (که در پرانتز بالا نمایش داده شده است) را جستجو نمایید."
 
 #: packages/lib/models/Setting.ts:2614
 msgid ""
-"These plugins enhance the Markdown renderer with additional features. Please note "
-"that, while these features might be useful, they are not standard Markdown and thus "
-"most of them will only work in Joplin. Additionally, some of them are *incompatible* "
-"with the WYSIWYG editor. If you open a note that uses one of these plugins in that "
-"editor, you will lose the plugin formatting. It is indicated below which plugins are "
-"compatible or not with the WYSIWYG editor."
+"These plugins enhance the Markdown renderer with additional features. Please note that, "
+"while these features might be useful, they are not standard Markdown and thus most of them "
+"will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG "
+"editor. If you open a note that uses one of these plugins in that editor, you will lose the "
+"plugin formatting. It is indicated below which plugins are compatible or not with the "
+"WYSIWYG editor."
 msgstr ""
-"این افزونه ها رندر نشانه‌گذاری را با ویژگی های اضافی تقویت می کنند. لطفاً توجه داشته "
-"باشید که اگرچه این ویژگی‌ها ممکن است مفید باشند، اما نشانه‌گذاری استاندارد نیستند و "
-"بنابراین اکثر آنها فقط در joplin کار می‌کنند. علاوه بر این، برخی از آنها با ویرایشگر "
-"WYSIWYG *ناسازگار* هستند. اگر یادداشتی را باز کنید که از یکی از این افزونه ها در آن "
-"ویرایشگر استفاده می کند، قالب بندی افزونه را از دست خواهید داد. در زیر مشخص شده است که "
-"کدام افزونه ها با ویرایشگر WYSIWYG سازگار هستند یا خیر."
+"این افزونه ها رندر نشانه‌گذاری را با ویژگی های اضافی تقویت می کنند. لطفاً توجه داشته باشید که "
+"اگرچه این ویژگی‌ها ممکن است مفید باشند، اما نشانه‌گذاری استاندارد نیستند و بنابراین اکثر آنها "
+"فقط در joplin کار می‌کنند. علاوه بر این، برخی از آنها با ویرایشگر WYSIWYG *ناسازگار* هستند. "
+"اگر یادداشتی را باز کنید که از یکی از این افزونه ها در آن ویرایشگر استفاده می کند، قالب "
+"بندی افزونه را از دست خواهید داد. در زیر مشخص شده است که کدام افزونه ها با ویرایشگر WYSIWYG "
+"سازگار هستند یا خیر."
 
 #: packages/lib/utils/joplinCloud.ts:173
 msgid ""
-"This allows another user to share a notebook with you, and you can then both "
-"collaborate on it. It does not however allow you to share a notebook with someone "
-"else, unless you have the feature \"%s\"."
+"This allows another user to share a notebook with you, and you can then both collaborate on "
+"it. It does not however allow you to share a notebook with someone else, unless you have "
+"the feature \"%s\"."
 msgstr ""
-"این به کاربر دیگری اجازه می دهد تا یک دفترچه‌ را با شما به اشتراک بگذارد و سپس می "
-"توانید هر دو در آن همکاری کنید. با این حال به شما اجازه نمی‌دهد یک دفترچه را با شخص "
-"دیگری به اشتراک بگذارید، مگر اینکه ویژگی \"%s\" را داشته باشید."
+"این به کاربر دیگری اجازه می دهد تا یک دفترچه‌ را با شما به اشتراک بگذارد و سپس می توانید هر "
+"دو در آن همکاری کنید. با این حال به شما اجازه نمی‌دهد یک دفترچه را با شخص دیگری به اشتراک "
+"بگذارید، مگر اینکه ویژگی «%s» را داشته باشید."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:50
 #: packages/lib/services/ResourceEditWatcher/index.ts:224
@@ -4539,11 +4491,10 @@ msgstr "این پیوست هنوز دانلود یا رمزگشایی نشده."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:143
 msgid ""
-"This authorisation token is only needed to allow third-party applications to access "
-"Joplin."
+"This authorisation token is only needed to allow third-party applications to access Joplin."
 msgstr ""
-"این توکن مجوز تنها برای اجازه دادن به برنامه‌های شخص ثالث برای دسترسی به joplin مورد "
-"نیاز است."
+"این توکن مجوز تنها برای اجازه دادن به برنامه‌های شخص ثالث برای دسترسی به joplin مورد نیاز "
+"است."
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:99
 msgid "This drawing may have unsaved changes."
@@ -4551,11 +4502,11 @@ msgstr "این طراحی ممکن است دارای تغییرات ذخیره �
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:232
 msgid ""
-"This is an advanced tool to show the attachments that are linked to your notes. Please "
-"be careful when deleting one of them as they cannot be restored afterwards."
+"This is an advanced tool to show the attachments that are linked to your notes. Please be "
+"careful when deleting one of them as they cannot be restored afterwards."
 msgstr ""
-"این یک ابزار پیشرفته برای نشان دادن پیوست‌هایی است که به یادداشت‌های شما پیوند داده "
-"شده‌اند. لطفاً هنگام حذف یکی از آنها مراقب باشید زیرا پس از آن قابل بازیابی نیستند."
+"این یک ابزار پیشرفته برای نشان دادن پیوست‌هایی است که به یادداشت‌های شما پیوند داده شده‌اند. "
+"لطفاً هنگام حذف یکی از آنها مراقب باشید زیرا پس از آن قابل بازیابی نیستند."
 
 #: packages/app-mobile/components/ScreenHeader.tsx:278
 msgid "This note could not be deleted: %s"
@@ -4587,8 +4538,8 @@ msgstr "این یادداشت تغییر یافته است:"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:224
 msgid "This note has no content. Click on \"%s\" to toggle the editor and edit the note."
 msgstr ""
-"این یادداشت هیچ محتوایی ندارد. برای تغییر وضعیت ویرایشگر و ویرایش یادداشت ، روی \"%s\" "
-"کلیک کنید."
+"این یادداشت هیچ محتوایی ندارد. برای تغییر وضعیت ویرایشگر و ویرایش یادداشت ، روی «%s» کلیک "
+"کنید."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:128
 msgid "This note has no history"
@@ -4596,29 +4547,28 @@ msgstr "این یادداشت هیچ تاریخچه ای ندارد"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:483
 msgid ""
-"This Rich Text editor has a number of limitations and it is recommended to be aware of "
-"them before using it."
+"This Rich Text editor has a number of limitations and it is recommended to be aware of them "
+"before using it."
 msgstr ""
-"ویرایشگر Rich Text دارای تعدادی محدودیت است و توصیه می شود قبل از استفاده از آن ها "
-"آگاه باشید."
+"ویرایشگر Rich Text دارای تعدادی محدودیت است و توصیه می شود قبل از استفاده از آن ها آگاه "
+"باشید."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:121
 msgid ""
-"This service allows the browser extension to communicate with Joplin. When enabling it "
-"your firewall may ask you to give permission to Joplin to listen to a particular port."
+"This service allows the browser extension to communicate with Joplin. When enabling it your "
+"firewall may ask you to give permission to Joplin to listen to a particular port."
 msgstr ""
-"این سرویس به افزونه مرورگر اجازه می دهد تا با joplin  ارتباط برقرار کند. هنگام فعال "
-"کردن آن، فایروال شما ممکن است از شما بخواهد که به joplin  اجازه دهید تا به یک پورت خاص "
-"در ارتباط باشد."
+"این سرویس به افزونه مرورگر اجازه می دهد تا با joplin  ارتباط برقرار کند. هنگام فعال کردن "
+"آن، فایروال شما ممکن است از شما بخواهد که به joplin  اجازه دهید تا به یک پورت خاص در ارتباط "
+"باشد."
 
 #: packages/lib/models/Setting.ts:1200
 msgid ""
-"This will allow Joplin to run in the background. It is recommended to enable this "
-"setting so that your notes are constantly being synchronised, thus reducing the number "
-"of conflicts."
+"This will allow Joplin to run in the background. It is recommended to enable this setting "
+"so that your notes are constantly being synchronised, thus reducing the number of conflicts."
 msgstr ""
-"این به joplin اجازه می‌دهد تا در پس زمینه اجرا شود. توصیه می‌شود این تنظیم را فعال کنید "
-"تا یادداشت های شما دائماً همگام شوند و در نتیجه تعداد تداخل‌ها کاهش یابند."
+"این به joplin اجازه می‌دهد تا در پس زمینه اجرا شود. توصیه می‌شود این تنظیم را فعال کنید تا "
+"یادداشت های شما دائماً همگام شوند و در نتیجه تعداد تداخل‌ها کاهش یابند."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:125
 msgid "This will open a new screen. Save your current changes?"
@@ -4626,11 +4576,11 @@ msgstr "این یک صفحه جدید باز می‌کند. تغییرات فع�
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
 msgid ""
-"This will remove the notebook from your collection and you will no longer have access "
-"to its content. Do you wish to continue?"
+"This will remove the notebook from your collection and you will no longer have access to "
+"its content. Do you wish to continue?"
 msgstr ""
-"با این کار، دفترچه از مجموعه شما حذف می شود و دیگر به محتوای آن دسترسی نخواهید داشت. "
-"آیا مایل هستید ادامه دهید؟"
+"با این کار، دفترچه از مجموعه شما حذف می شود و دیگر به محتوای آن دسترسی نخواهید داشت. آیا "
+"مایل هستید ادامه دهید؟"
 
 #: packages/lib/models/Setting.ts:819
 msgid "Time format"
@@ -4645,12 +4595,10 @@ msgstr "عنوان"
 msgid "Title"
 msgstr "عنوان"
 
-#: packages/app-cli/app/command-sync.ts:74
-#: packages/app-desktop/gui/DropboxLoginScreen.tsx:43
+#: packages/app-cli/app/command-sync.ts:74 packages/app-desktop/gui/DropboxLoginScreen.tsx:43
 #: packages/app-mobile/components/screens/dropbox-login.js:58
 msgid "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
-msgstr ""
-"برای اینکه به joplin اجازه همگام‌سازی با Dropbox را بدهید، مراحل زیر را دنبال نمایید:"
+msgstr "برای اینکه به joplin اجازه همگام‌سازی با Dropbox را بدهید، مراحل زیر را دنبال نمایید:"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:53
 msgid "To continue, please enter your master password below."
@@ -4675,11 +4623,10 @@ msgstr "برای خروج از حالت خط فرمان، دکمه ی Esc را �
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:170
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:9
 msgid ""
-"To manually sort the notes, the sort order must be changed to \"%s\" in the menu \"%s"
-"\" > \"%s\""
+"To manually sort the notes, the sort order must be changed to \"%s\" in the menu \"%s\" > "
+"\"%s\""
 msgstr ""
-"برای مرتب‌سازی دستی یادداشت‌ها، ترتیب مرتب‌سازی باید به «%s» از منوی «%s» > «%s» تغییر "
-"پیدا کند"
+"برای مرتب‌سازی دستی یادداشت‌ها، ترتیب مرتب‌سازی باید به «%s» از منوی «%s» > «%s» تغییر پیدا کند"
 
 #: packages/app-cli/app/command-help.js:81
 msgid "To maximise/minimise the console, press \"tc\"."
@@ -4691,8 +4638,7 @@ msgstr "برای انتقال از یک پنجره به پنجره دیگر ، T
 
 #: packages/app-cli/app/command-status.js:44
 msgid "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
-msgstr ""
-"برای تلاش مجدد رمزگشایی این موارد «e2ee decrypt --retry-failed-items» را اجرا کنید"
+msgstr "برای تلاش مجدد رمزگشایی این موارد «e2ee decrypt --retry-failed-items» را اجرا کنید"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:62
 msgid "To switch the profile, the app is going to close and you will need to restart it."
@@ -4703,8 +4649,8 @@ msgid ""
 "To work correctly, the app needs the following permissions. Please enable them in your "
 "phone settings, in Apps > Joplin > Permissions"
 msgstr ""
-"برای کارکرد صحیح، برنامه به این دسترسی‌ها نیاز دارد. لطفا آن‌ها را در تنظیمات گوشی خود "
-"در برنامه‌ها > joplin > دسترسی‌ها فعال کنید"
+"برای کارکرد صحیح، برنامه به این دسترسی‌ها نیاز دارد. لطفا آن‌ها را در تنظیمات گوشی خود در "
+"برنامه‌ها > joplin > دسترسی‌ها فعال کنید"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:120
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:152
@@ -4786,8 +4732,8 @@ msgid ""
 "Type `help [command]` for more information about a command; or type `help all` for the "
 "complete usage information."
 msgstr ""
-"برای اطلاعات بیشتر درباره یک فرمان، 'help [command]' را تایپ کنید. یا برای اطلاعات "
-"کامل استفاده، «help all» را تایپ کنید."
+"برای اطلاعات بیشتر درباره یک فرمان، 'help [command]' را تایپ کنید. یا برای اطلاعات کامل "
+"استفاده، «help all» را تایپ کنید."
 
 #: packages/app-cli/app/main.js:98
 msgid "Type `joplin help` for usage information."
@@ -4795,12 +4741,11 @@ msgstr "`joplin help` را برای راهنمای استفاده تایپ کن�
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:576
 msgid ""
-"Type a note title or part of its content to jump to it. Or type # followed by a tag "
-"name, or @ followed by a notebook name. Or type : to search for commands."
+"Type a note title or part of its content to jump to it. Or type # followed by a tag name, "
+"or @ followed by a notebook name. Or type : to search for commands."
 msgstr ""
-"عنوان یادداشت یا بخشی از محتوای آن را تایپ کنید تا به آن بروید. یا # به دنبال نام "
-"برچسب یا @ و به دنبال آن نام دفترچه را تایپ کنید. یا برای جستجوی دستورات، دستور «:» "
-"تایپ نمایید."
+"عنوان یادداشت یا بخشی از محتوای آن را تایپ کنید تا به آن بروید. یا # به دنبال نام برچسب یا "
+"@ و به دنبال آن نام دفترچه را تایپ کنید. یا برای جستجوی دستورات، دستور «:» تایپ نمایید."
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:201
 msgid "Type new tags or select from list"
@@ -4875,8 +4820,7 @@ msgstr "بدون عنوان"
 msgid "Update"
 msgstr "بروزرسانی"
 
-#: packages/server/src/routes/admin/users.ts:253
-#: packages/server/src/routes/index/users.ts:89
+#: packages/server/src/routes/admin/users.ts:253 packages/server/src/routes/index/users.ts:89
 msgid "Update profile"
 msgstr "بروز رسانی حساب‌ کاربری"
 
@@ -4943,8 +4887,8 @@ msgstr "از بیومتریک برای ایمن کردن دسترسی به بر�
 
 #: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
 msgid ""
-"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for "
-"to-dos), TITLE"
+"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-"
+"dos), TITLE"
 msgstr ""
 "استفاده از فرمت لیست طولانی. فرمت به صورت ID (شناسه)، NOTE_COUNT (تعداد یادداشت (برای "
 "دفترچه))، DATE (تاریخ)، TODO_CHECKED (فهرست کار بررسی شده (برای فهرست کار‌ها))، TITLE "
@@ -4956,49 +4900,47 @@ msgstr "استفاده از بررسی کننده غلط املایی"
 
 #: packages/app-cli/app/command-help.js:80
 msgid ""
-"Use the arrows and page up/down to scroll the lists and text areas (including this "
-"console)."
+"Use the arrows and page up/down to scroll the lists and text areas (including this console)."
 msgstr ""
-"از فلش ها و صفحه به بالا/پایین برای پیمایش لیست ها و نواحی متن (از جمله این کنسول) "
-"استفاده کنید."
+"از فلش ها و صفحه به بالا/پایین برای پیمایش لیست ها و نواحی متن (از جمله این کنسول) استفاده "
+"کنید."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:868
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
-msgstr ""
-"از فلش ها برای جابجایی آیتم های چیدمان استفاده کنید. برای خروج، \"Esc\" را فشار دهید."
+msgstr "از فلش ها برای جابجایی آیتم های چیدمان استفاده کنید. برای خروج، \"Esc\" را فشار دهید."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:574
 msgid ""
-"Use this to rebuild the search index if there is a problem with search. It may take a "
-"long time depending on the number of notes."
+"Use this to rebuild the search index if there is a problem with search. It may take a long "
+"time depending on the number of notes."
 msgstr ""
-"اگر مشکلی در جستجو وجود دارد از این برای بازسازی فهرست جستجو استفاده کنید. بسته به "
-"تعداد یادداشت ها ممکن است زمان زیادی طول بکشد."
+"اگر مشکلی در جستجو وجود دارد از این برای بازسازی فهرست جستجو استفاده کنید. بسته به تعداد "
+"یادداشت ها ممکن است زمان زیادی طول بکشد."
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:83
 msgid ""
-"Use your biometrics to secure access to your application. You can always set it up "
-"later in Settings."
+"Use your biometrics to secure access to your application. You can always set it up later in "
+"Settings."
 msgstr ""
-"از بیومتریک خود برای دسترسی ایمن به برنامه خود استفاده کنید. همواره می‌توانید بعداً آن "
-"را در تنظیمات، تنظیم کنید."
+"از بیومتریک خود برای دسترسی ایمن به برنامه خود استفاده کنید. همواره می‌توانید بعداً آن را در "
+"تنظیمات، تنظیم کنید."
 
 #: packages/lib/models/Setting.ts:1280
 msgid ""
-"Used for most text in the markdown editor. If not found, a generic proportional "
-"(variable width) font is used."
+"Used for most text in the markdown editor. If not found, a generic proportional (variable "
+"width) font is used."
 msgstr ""
-"برای اکثر متن ها در ویرایشگر نشانه گذاری استفاده می شود. اگر یافت نشد، از یک فونت "
-"متناسب (یا عرض متغیر) عمومی استفاده می شود."
+"برای اکثر متن ها در ویرایشگر نشانه گذاری استفاده می شود. اگر یافت نشد، از یک فونت متناسب "
+"(یا عرض متغیر) عمومی استفاده می شود."
 
 #: packages/lib/models/Setting.ts:1292
 msgid ""
-"Used where a fixed width font is needed to lay out text legibly (e.g. tables, "
-"checkboxes, code). If not found, a generic monospace (fixed width) font is used."
+"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, "
+"code). If not found, a generic monospace (fixed width) font is used."
 msgstr ""
-"در جاهایی استفاده می شود که برای چیدمان متن به صورت خوانا به یک فونت با عرض ثابت نیاز "
-"است (مانند جداول، چک باکس ها، کد). اگر پیدا نشد، از فونت تک فضایی (یا عرض ثابت) عمومی "
-"استفاده می شود."
+"در جاهایی استفاده می شود که برای چیدمان متن به صورت خوانا به یک فونت با عرض ثابت نیاز است "
+"(مانند جداول، چک باکس ها، کد). اگر پیدا نشد، از فونت تک فضایی (یا عرض ثابت) عمومی استفاده "
+"می شود."
 
 #: packages/server/src/services/MustacheService.ts:121
 msgid "User deletions"
@@ -5103,11 +5045,11 @@ msgid ""
 msgstr ""
 "به joplin خوش آمدید! \n"
 "\n"
-"برای فهرست میانبرهای صفحه‌کلید «:help shortcuts» یا برای اطلاعات نحوه استفاده فقط «:"
-"help» را تایپ کنید.\n"
+"برای فهرست میانبرهای صفحه‌کلید «:help shortcuts» یا برای اطلاعات نحوه استفاده فقط «:help» را "
+"تایپ کنید.\n"
 "\n"
-"به عنوان مثال ، برای ایجاد یکدفترچه `mb` را بفشارید؛ برای ایجاد یک یادداشت `mn` را "
-"فشار دهید."
+"به عنوان مثال ، برای ایجاد یکدفترچه `mb` را بفشارید؛ برای ایجاد یک یادداشت `mn` را فشار "
+"دهید."
 
 #: packages/lib/WelcomeUtils.ts:63
 msgid "Welcome!"
@@ -5145,11 +5087,11 @@ msgstr "بله"
 
 #: packages/app-mobile/components/screens/Note.tsx:641 packages/lib/shim-init-node.js:211
 msgid ""
-"You are about to attach a large image (%dx%d pixels). Would you like to resize it down "
-"to %d pixels before attaching it?"
+"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to "
+"%d pixels before attaching it?"
 msgstr ""
-"شما در شرف پیوست کردن یک تصویر بزرگ هستید (%dx%d پیکسل). آیا می خواهید اندازه آن را "
-"قبل از پیوست کردن به %d پیکسل تغییر دهید؟"
+"شما در شرف پیوست کردن یک تصویر بزرگ هستید (%dx%d پیکسل). آیا می خواهید اندازه آن را قبل از "
+"پیوست کردن به %d پیکسل تغییر دهید؟"
 
 #: packages/app-mobile/components/NoteList.tsx:94
 msgid "You currently have no notebooks."
@@ -5165,11 +5107,11 @@ msgstr "شما همچنین می‌توانید `status` را برای اطلا�
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:342
 msgid ""
-"You may use the tool below to re-encrypt your data, for example if you know that some "
-"of your notes are encrypted with an obsolete encryption method."
+"You may use the tool below to re-encrypt your data, for example if you know that some of "
+"your notes are encrypted with an obsolete encryption method."
 msgstr ""
-"می‌توانید از ابزار زیر برای رمزگذاری مجدد داده‌های خود استفاده کنید، برای مثال اگر "
-"می‌دانید برخی از یادداشت‌های شما با روش رمزگذاری منسوخ رمزگذاری شده‌اند."
+"می‌توانید از ابزار زیر برای رمزگذاری مجدد داده‌های خود استفاده کنید، برای مثال اگر می‌دانید "
+"برخی از یادداشت‌های شما با روش رمزگذاری منسوخ رمزگذاری شده‌اند."
 
 #: packages/app-cli/app/cli-utils.js:160
 msgid "Your choice: "
@@ -5184,11 +5126,10 @@ msgid "Your password is needed to decrypt some of your data."
 msgstr "گذرواژه شما برای رمزگشایی برخی از داده های شما مورد نیاز است."
 
 #: packages/app-cli/app/command-sync.ts:225
-msgid ""
-"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it."
+msgid "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it."
 msgstr ""
-"گذرواژه شما برای رمزگشایی برخی از داده‌های شما مورد نیاز است. «:e2ee decrypt» را تایپ "
-"کنید تا آن را تنظیم کنید."
+"گذرواژه شما برای رمزگشایی برخی از داده‌های شما مورد نیاز است. «:e2ee decrypt» را تایپ کنید "
+"تا آن را تنظیم کنید."
 
 #: packages/app-mobile/components/CameraView.tsx:193
 msgid "Your permission to use your camera is required."
@@ -5266,13 +5207,13 @@ msgstr "کوچک نمایی"
 #~ msgstr "کلید‌های اصلی به ارتقا نیاز دارند"
 
 #~ msgid ""
-#~ "The following master keys use an out-dated encryption algorithm and it is "
-#~ "recommended to upgrade them. The upgraded master key will still be able to decrypt "
-#~ "and encrypt your data as usual."
+#~ "The following master keys use an out-dated encryption algorithm and it is recommended to "
+#~ "upgrade them. The upgraded master key will still be able to decrypt and encrypt your "
+#~ "data as usual."
 #~ msgstr ""
-#~ "این کلید‌های اصلی از یک الگوریتم رمزنگاری تاریخ گذشته استفاده می‌کنند و پیشنهاد می‌شود "
-#~ "که آن‌ها رو ارتقا دهید. کلید اصلی ارتقا یافته همچنان طبق معمول قادر به رمزگشایی و "
-#~ "رمزنگاری داده شما خواهد بود."
+#~ "این کلید‌های اصلی از یک الگوریتم رمزنگاری تاریخ گذشته استفاده می‌کنند و پیشنهاد می‌شود که "
+#~ "آن‌ها رو ارتقا دهید. کلید اصلی ارتقا یافته همچنان طبق معمول قادر به رمزگشایی و رمزنگاری "
+#~ "داده شما خواهد بود."
 
 #, fuzzy
 #~ msgid "Master Keys"
@@ -5346,8 +5287,8 @@ msgstr "کوچک نمایی"
 #~ "Type a note title or part of its content to jump to it. Or type # followed by a tag "
 #~ "name, or @ followed by a notebook name."
 #~ msgstr ""
-#~ "عنوان یادداشت یا بخشی از محتوای آن را تایپ کنید تا به آن بروید. یا # و به دنبال آن "
-#~ "یک نام برچسب تایپ کنید ، یا @ و به دنبال آن یک نام دفترچه یادداشت وارد کنید."
+#~ "عنوان یادداشت یا بخشی از محتوای آن را تایپ کنید تا به آن بروید. یا # و به دنبال آن یک "
+#~ "نام برچسب تایپ کنید ، یا @ و به دنبال آن یک نام دفترچه یادداشت وارد کنید."
 
 #~ msgid "Name"
 #~ msgstr "نام"
@@ -5389,11 +5330,11 @@ msgstr "کوچک نمایی"
 #~ msgstr "پوشه استخراجی JSON"
 
 #~ msgid ""
-#~ "This item is currently encrypted: %s \"%s\". Please wait for all items to be "
-#~ "decrypted and try again."
+#~ "This item is currently encrypted: %s \"%s\". Please wait for all items to be decrypted "
+#~ "and try again."
 #~ msgstr ""
-#~ "این مورد در حال حاضر رمزنگاری شده است: %s «%s». لطفا تا رمزگشایی تمامی موارد صبر "
-#~ "کرده و سپس دوباره امتحان کنید."
+#~ "این مورد در حال حاضر رمزنگاری شده است: %s «%s». لطفا تا رمزگشایی تمامی موارد صبر کرده و "
+#~ "سپس دوباره امتحان کنید."
 
 #~ msgid "Cannot move tag to this location."
 #~ msgstr "نمی‌توان برچسب را به این محل انتقال داد."
@@ -5455,254 +5396,7 @@ msgstr "کوچک نمایی"
 #~ msgstr "نمایش متادیتا"
 
 #~ msgid "You currently have no notebook. Create one by clicking on (+) button."
-#~ msgstr ""
-#~ "شما هیچ دفترچه ای ندارید. با کلیک کردن بر روی (+) یک دفترچه ی جدید ایجاد کنید."
-ذاری شده نمی‌توانند تغییر نام داده شوند"
-
-#, fuzzy
-#~ msgid "Changes have been saved"
-#~ msgstr "یادداشت ذخیره شد."
-
-#, fuzzy
-#~ msgid "Create KaTeX region"
-#~ msgstr "ایجاد شده: %s"
-
-#, fuzzy
-#~ msgid "Create link"
-#~ msgstr "ایجاد شده"
-
-#, fuzzy
-#~ msgid "Remove KaTeX region"
-#~ msgstr "ایجاد شده: %s"
-
-#, fuzzy
-#~ msgid "Unitalic"
-#~ msgstr "مورب"
-
-#, fuzzy
-#~ msgid "Bold text"
-#~ msgstr "پررنگ"
-
-#, fuzzy
-#~ msgid "Edit Link"
-#~ msgstr "ویرایش دفترچه"
-
-#~ msgid "Insert Date Time"
-#~ msgstr "درج تاریخ و ساعت"
-
-#, fuzzy
-#~ msgid "Italicize"
-#~ msgstr "مورب"
-
-#, fuzzy
-#~ msgid "Save as SVG"
-#~ msgstr "ذخیره به عنوان..."
-
-#~ msgid "Automatically update the application"
-#~ msgstr "به طور خودکار نرم‌افزار را به‌روز کن"
-
-#~ msgid "Notebook title:"
-#~ msgstr "عنوان دفترچه:"
-
-#~ msgid "Master keys that need upgrading"
-#~ msgstr "کلید‌های اصلی به ارتقا نیاز دارند"
-
-#~ msgid ""
-#~ "The following master keys use an out-dated encryption algorithm and it is "
-#~ "recommended to upgrade them. The upgraded master key will still be able "
-#~ "to decrypt and encrypt your data as usual."
-#~ msgstr ""
-#~ "این کلید‌های اصلی از یک الگوریتم رمزنگاری تاریخ گذشته استفاده می‌کنند و "
-#~ "پیشنهاد می‌شود که آن‌ها رو ارتقا دهید. کلید اصلی ارتقا یافته همچنان طبق "
-#~ "معمول قادر به رمزگشایی و رمزنگاری داده شما خواهد بود."
-
-#, fuzzy
-#~ msgid "Master Keys"
-#~ msgstr "کلید اصلی %s"
-
-#~ msgid "Source"
-#~ msgstr "منبع"
-
-#, fuzzy
-#~ msgid "Password OK"
-#~ msgstr "رمز صحیح است"
-
-#~ msgid "Encryption is:"
-#~ msgstr "رمزگذاری:"
-
-#, javascript-format
-#~ msgid "%s %s (%s)"
-#~ msgstr "%s %s (%s)"
-
-#~ msgid "Insert template"
-#~ msgstr "درج الگو"
-
-#~ msgid "Template file:"
-#~ msgstr "فایل الگو:"
-
-#~ msgid "Create note from template"
-#~ msgstr "ساخت یادداشت از الگو"
-
-#~ msgid "Create to-do from template"
-#~ msgstr "ساخت فهرست کار از الگو"
-
-#~ msgid "Open template directory"
-#~ msgstr "بازکردن پوشه الگو"
-
-#~ msgid "Refresh templates"
-#~ msgstr "تازه‌سازی الگو‌‌ها"
-
-#~ msgid "Templates"
-#~ msgstr "الگو‌ها"
-
-#~ msgid "Share Notes"
-#~ msgstr "به اشتراک گذاری یادداشت‌ها"
-
-#, fuzzy
-#~ msgid "Joplin Server Directory"
-#~ msgstr "پوشه استخراجی Joplin"
-
-#, fuzzy
-#~ msgid "marked text"
-#~ msgstr "متن تأکید شده"
-
-#, fuzzy
-#~ msgid "Mark"
-#~ msgstr "نشانه گذاری"
-
-#~ msgid "Full Release Notes"
-#~ msgstr "انتشار کامل یادداشت‌ها"
-
-#~ msgid "Unknown"
-#~ msgstr "ناشناس"
-
-#~ msgid "Checking..."
-#~ msgstr "در حال بررسی..."
-
-#~ msgid "Show Log"
-#~ msgstr "نمایش لاگ"
-
-#~ msgid "Check Status"
-#~ msgstr "بررسی وضعیت"
-
-#~ msgid ""
-#~ "Type a note title or part of its content to jump to it. Or type # "
-#~ "followed by a tag name, or @ followed by a notebook name."
-#~ msgstr ""
-#~ "عنوان یادداشت یا بخشی از محتوای آن را تایپ کنید تا به آن بروید. یا # و به "
-#~ "دنبال آن یک نام برچسب تایپ کنید ، یا @ و به دنبال آن یک نام دفترچه "
-#~ "یادداشت وارد کنید."
-
-#~ msgid "Name"
-#~ msgstr "نام"
-
-#~ msgid "Notebook properties"
-#~ msgstr "جزییات دفترچه"
-
-#~ msgid "emphasized text"
-#~ msgstr "متن تأکید شده"
-
-#~ msgid "Click to stop external editing"
-#~ msgstr "کلیک کنید تا ویرایش خارجی را متوقف کنید"
-
-#~ msgid "Content Properties"
-#~ msgstr "جزییات محتوا"
-
-#~ msgid "Please create a notebook first."
-#~ msgstr "لطفا ابتدا یک دفترچه ایجاد کنید."
-
-#~ msgid "Usage"
-#~ msgstr "کارکرد"
-
-#~ msgid "Exit"
-#~ msgstr "خروج"
-
-#~ msgid "Confirm"
-#~ msgstr "تایید"
-
-#~ msgid "Attach any file"
-#~ msgstr "ضمیمه‌ی فایل"
-
-#~ msgid "An unexpected error occured while importing the keymap!"
-#~ msgstr "هنگام وارد کردن نقشه کلید خطایی غیرمنتظره رخ داد!"
-
-#~ msgid "Synchronize"
-#~ msgstr "همگام سازی"
-
-#~ msgid "Json Export Directory"
-#~ msgstr "پوشه استخراجی JSON"
-
-#~ msgid ""
-#~ "This item is currently encrypted: %s \"%s\". Please wait for all items to "
-#~ "be decrypted and try again."
-#~ msgstr ""
-#~ "این مورد در حال حاضر رمزنگاری شده است: %s «%s». لطفا تا رمزگشایی تمامی "
-#~ "موارد صبر کرده و سپس دوباره امتحان کنید."
-
-#~ msgid "Cannot move tag to this location."
-#~ msgstr "نمی‌توان برچسب را به این محل انتقال داد."
-
-#~ msgid "Tag name cannot start or end with a `/`."
-#~ msgstr "نام برچسب نمی‌تواند با یک «/» شروع یا پایان یابد."
-
-#~ msgid "Tag name cannot contain `//`."
-#~ msgstr "نام برچسب نمی‌تواند دارای «//» باشد."
-
-#, fuzzy
-#~ msgid "Resources"
-#~ msgstr "منابع: %d."
-
-#~ msgid "Global zoom percentage"
-#~ msgstr "درصد برزگنمایی کلی"
-
-#~ msgid "Synchronisation is already in progress. State: %s"
-#~ msgstr "سینک کردن در حال انجام است. وضعیت: %s"
-
-#, fuzzy
-#~ msgid "Confirm master password:"
-#~ msgstr "رمز اصلی را وارد کنید:"
-
-#, fuzzy
-#~ msgid "Confirm password"
-#~ msgstr "رمز اصلی را وارد کنید:"
-
-#, fuzzy
-#~ msgid "Missing required argument: note"
-#~ msgstr "کمبود آرگمان در دستور: %s"
-
-#, fuzzy
-#~ msgid "Synchronisation status"
-#~ msgstr "وضعیت سینک"
-
-#~ msgid "General Options"
-#~ msgstr "تنظیمات کلی"
-
-#~ msgid "Encryption options"
-#~ msgstr "تنظیمات رمزنگاری"
-
-#~ msgid "Encryption Options"
-#~ msgstr "گزینه های رمزنگاری"
-
-#~ msgid "Clipper Options"
-#~ msgstr "تنظیمات کلیپر"
-
-#, fuzzy
-#~ msgid "Permission to write to external storage"
-#~ msgstr "اجازه برای استفاده از دوربین"
-
-#, fuzzy
-#~ msgid "Cancel synchronisation"
-#~ msgstr "لغو سینک"
-
-#, fuzzy
-#~ msgid "Show metadata"
-#~ msgstr "نمایش متادیتا"
-
-#~ msgid ""
-#~ "You currently have no notebook. Create one by clicking on (+) button."
-#~ msgstr ""
-#~ "شما هیچ دفترچه ای ندارید. با کلیک کردن بر روی (+) یک دفترچه ی جدید ایجاد "
-#~ "کنید."
+#~ msgstr "شما هیچ دفترچه ای ندارید. با کلیک کردن بر روی (+) یک دفترچه ی جدید ایجاد کنید."
 
 #~ msgid "Separate each tag by a comma."
 #~ msgstr "هر برچسب را با ویرگول شده کنید."
