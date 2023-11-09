@@ -23,21 +23,23 @@ enum ReportItemType {
 
 type RerportItemOrString = ReportItem | string;
 
-interface ReportSection {
+export type RetryAllHandler = ()=> void;
+
+export interface ReportSection {
 	title: string;
 	body: RerportItemOrString[];
 	name?: string;
 	canRetryAll?: boolean;
-	retryAllHandler?: ()=> void;
+	retryAllHandler?: RetryAllHandler;
 }
 
-interface ReportItem {
+export interface ReportItem {
 	type?: ReportItemType;
 	key?: string;
 	text?: string;
 	canRetry?: boolean;
 	canRetryType?: CanRetryType;
-	retryHandler?: ()=> void;
+	retryHandler?: RetryAllHandler;
 }
 
 export default class ReportService {
@@ -271,6 +273,8 @@ export default class ReportService {
 					},
 				});
 			}
+
+			section = this.addRetryAllHandler(section);
 
 			sections.push(section);
 		}

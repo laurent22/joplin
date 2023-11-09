@@ -69,7 +69,7 @@ To get such an external script file to compile, you need to add it to the `extra
 ## More information
 
 - [Joplin Plugin API](https://joplinapp.org/api/references/plugin_api/classes/joplin.html)
-- [Joplin Data API](https://joplinapp.org/api/references/rest_api/)
+- [Joplin Data API](https://joplinapp.org/help/api/references/rest_api)
 - [Joplin Plugin Manifest](https://joplinapp.org/api/references/plugin_manifest/)
 - Ask for help on the [forum](https://discourse.joplinapp.org/) or our [Discord channel](https://discord.gg/VSj7AFHvpq)
 

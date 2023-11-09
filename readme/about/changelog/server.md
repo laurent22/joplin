@@ -1,5 +1,11 @@
 # Joplin Server Changelog
 
+## [server-v2.13.3](https://github.com/laurent22/joplin/releases/tag/server-v2.13.3) - 2023-11-01T16:29:32Z
+
+- Improved: Automatically restarts the server when it crashes, with exponentiel back-off (0c8b475)
+- Improved: Improve parsing of uploaded content and error handling (db88dfc)
+- Improved: Updated packages katex (v0.16.9), nodemailer (v6.9.6), react, sass (v1.68.0)
+
 ## [server-v2.13.2](https://github.com/laurent22/joplin/releases/tag/server-v2.13.2) - 2023-10-19T19:49:44Z
 
 - Improved: Significantly improve sync performances, especially when there are many changes (5986710)

@@ -7,10 +7,10 @@ import { FunctionComponent, useCallback, useState } from 'react';
 import shim from '@joplin/lib/shim';
 import { join } from 'path';
 import Share from 'react-native-share';
-import exportAllFolders, { makeExportCacheDirectory } from './exportAllFolders';
+import exportAllFolders, { makeExportCacheDirectory } from './utils/exportAllFolders';
 import { ExportProgressState } from '@joplin/lib/services/interop/types';
 import { ConfigScreenStyles } from '../configScreenStyles';
-import ConfigScreenButton from '../ConfigScreenButton';
+import SettingsButton from '../SettingsButton';
 
 const logger = Logger.create('NoteExportButton');
 
@@ -83,7 +83,7 @@ const NoteExportButton: FunctionComponent<Props> = props => {
 		const descriptionText = _('Share a copy of all notes in a file format that can be imported by Joplin on a computer.');
 
 		const startOrCancelExportButton = (
-			<ConfigScreenButton
+			<SettingsButton
 				title={exportStatus === ExportStatus.Exporting ? _('Exporting...') : _('Export all notes as JEX')}
 				disabled={exportStatus === ExportStatus.Exporting}
 				description={exportStatus === ExportStatus.NotStarted ? descriptionText : null}
@@ -96,14 +96,14 @@ const NoteExportButton: FunctionComponent<Props> = props => {
 		return startOrCancelExportButton;
 	} else {
 		const warningComponent = (
-			<Text style={props.styles.warningText}>
+			<Text style={props.styles.styleSheet.warningText}>
 				{_('Warnings:\n%s', warnings)}
 			</Text>
 		);
 
 		const exportSummary = (
-			<View style={props.styles.settingContainer}>
-				<Text style={props.styles.descriptionText}>{_('Exported successfully!')}</Text>
+			<View style={props.styles.styleSheet.settingContainer}>
+				<Text style={props.styles.styleSheet.descriptionText}>{_('Exported successfully!')}</Text>
 				{warnings.length > 0 ? warningComponent : null}
 			</View>
 		);

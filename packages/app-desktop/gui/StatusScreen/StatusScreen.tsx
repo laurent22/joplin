@@ -2,18 +2,18 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import ButtonBar from '../ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
-
 const { connect } = require('react-redux');
 import Setting from '@joplin/lib/models/Setting';
-const { themeStyle } = require('@joplin/lib/theme');
-import ReportService from '@joplin/lib/services/ReportService';
+import { themeStyle } from '@joplin/lib/theme';
+import ReportService, { ReportItem, ReportSection, RetryAllHandler } from '@joplin/lib/services/ReportService';
 import Button, { ButtonLevel } from '../Button/Button';
 import bridge from '../../services/bridge';
-const fs = require('fs-extra');
 import styled from 'styled-components';
+import { AppState } from '../../app.reducer';
+import { writeFileSync } from 'fs';
 
 interface Props {
-	themeId: string;
+	themeId: number;
 	style: any;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
@@ -34,12 +34,12 @@ async function exportDebugReportClick() {
 	if (!filePath) return;
 
 	const service = new ReportService();
-	const csv = await service.basicItemList({ format: 'csv' });
-	await fs.writeFileSync(filePath, csv);
+	const csv = (await service.basicItemList({ format: 'csv' })) as string;
+	await writeFileSync(filePath, csv);
 }
 
 function StatusScreen(props: Props) {
-	const [report, setReport] = useState<any[]>([]);
+	const [report, setReport] = useState<ReportSection[]>([]);
 
 	async function resfreshScreen() {
 		const service = new ReportService();
@@ -65,7 +65,7 @@ function StatusScreen(props: Props) {
 	const containerStyle = { ...theme.containerStyle, padding: containerPadding,
 		flex: 1 };
 
-	function renderSectionTitleHtml(key: string, title: string) {
+	function renderSectionTitle(key: string, title: string) {
 		return (
 			<h2 key={`section_${key}`} style={theme.h2Style}>
 				{title}
@@ -73,7 +73,7 @@ function StatusScreen(props: Props) {
 		);
 	}
 
-	function renderSectionRetryAllHtml(key: string, retryAllHandler: any) {
+	function renderSectionRetryAll(key: string, retryAllHandler: RetryAllHandler) {
 		return (
 			<a key={`retry_all_${key}`} href="#" onClick={retryAllHandler} style={retryAllStyle}>
 				{_('Retry All')}
@@ -81,13 +81,26 @@ function StatusScreen(props: Props) {
 		);
 	}
 
-	const renderSectionHtml = (key: string, section: any) => {
-		const itemsHtml = [];
+	const renderRetryAll = (section: ReportSection) => {
+		const items: React.JSX.Element[] = [];
+		if (section.canRetryAll) {
+			items.push(renderSectionRetryAll(section.title, async () => {
+				await section.retryAllHandler();
+				void resfreshScreen();
+			}));
+		}
+		return items;
+	};
 
-		itemsHtml.push(renderSectionTitleHtml(section.title, section.title));
+	const renderSection = (key: string, section: ReportSection) => {
+		let items = [];
+
+		items.push(renderSectionTitle(section.title, section.title));
+
+		items = items.concat(renderRetryAll(section));
 
 		let currentListKey = '';
-		let listItems: any[] = [];
+		let listItems: React.JSX.Element[] = [];
 		for (const n in section.body) {
 			if (!section.body.hasOwnProperty(n)) continue;
 			const item = section.body[n];
@@ -115,12 +128,12 @@ function StatusScreen(props: Props) {
 			}
 
 			if (itemType === 'openList') {
-				currentListKey = item.key;
+				currentListKey = (item as ReportItem).key;
 				continue;
 			}
 
 			if (itemType === 'closeList') {
-				itemsHtml.push(<ul key={currentListKey}>{listItems}</ul>);
+				items.push(<ul key={currentListKey}>{listItems}</ul>);
 				currentListKey = '';
 				listItems = [];
 				continue;
@@ -136,7 +149,7 @@ function StatusScreen(props: Props) {
 					</li>,
 				);
 			} else {
-				itemsHtml.push(
+				items.push(
 					<div style={theme.textStyle} key={`item_${n}`}>
 						<span>{text}</span>
 						{retryLink}
@@ -145,26 +158,21 @@ function StatusScreen(props: Props) {
 			}
 		}
 
-		if (section.canRetryAll) {
-			itemsHtml.push(renderSectionRetryAllHtml(section.title, async () => {
-				await section.retryAllHandler();
-				void resfreshScreen();
-			}));
-		}
+		items = items.concat(renderRetryAll(section));
 
-		return <div key={key}>{itemsHtml}</div>;
+		return <div key={key}>{items}</div>;
 	};
 
-	function renderBodyHtml(report: any) {
-		const sectionsHtml = [];
+	function renderBody(report: ReportSection[]) {
+		const sections = [];
 
 		for (let i = 0; i < report.length; i++) {
 			const section = report[i];
 			if (!section.body.length) continue;
-			sectionsHtml.push(renderSectionHtml(`${i}`, section));
+			sections.push(renderSection(`${i}`, section));
 		}
 
-		return <div>{sectionsHtml}</div>;
+		return <div>{sections}</div>;
 	}
 
 	function renderTools() {
@@ -180,7 +188,7 @@ function StatusScreen(props: Props) {
 		);
 	}
 
-	const body = renderBodyHtml(report);
+	const body = renderBody(report);
 
 	return (
 		<div style={style}>
@@ -195,7 +203,7 @@ function StatusScreen(props: Props) {
 	);
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 		settings: state.settings,

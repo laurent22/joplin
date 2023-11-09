@@ -130,20 +130,31 @@ const ImageEditor = (props: Props) => {
 	}, [onRequestCloseEditor]);
 
 	const css = useCss(editorTheme);
-	const html = useMemo(() => `
-		<!DOCTYPE html>
-		<html>
-			<head>
-				<meta charset="utf-8"/>
-				<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+	const [html, setHtml] = useState('');
 
-				<style>
-					${css}
-				</style>
-			</head>
-			<body></body>
-		</html>
-	`, [css]);
+	useEffect(() => {
+		setHtml(`
+			<!DOCTYPE html>
+			<html>
+				<head>
+					<meta charset="utf-8"/>
+					<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+
+					<style id='main-style'>
+						${css}
+					</style>
+				</head>
+				<body></body>
+			</html>
+		`);
+
+		// Only set HTML initially (and don't reset). Changing the HTML reloads
+		// the page.
+		//
+		// We need the HTML to initially have the correct CSS to prevent color
+		// changes on load.
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps
+	}, []);
 
 	// A set of localization overrides (Joplin is better localized than js-draw).
 	// All localizable strings (some unused?) can be found at
@@ -235,11 +246,13 @@ const ImageEditor = (props: Props) => {
 
 	useEffect(() => {
 		webviewRef.current?.injectJS(`
+			document.querySelector('#main-style').innerText = ${JSON.stringify(css)};
+
 			if (window.editorControl) {
 				window.editorControl.onThemeUpdate();
 			}
 		`);
-	}, [editorTheme]);
+	}, [css]);
 
 	const onReadyToLoadData = useCallback(async () => {
 		const initialSVGData = await props.loadInitialSVGData?.() ?? '';

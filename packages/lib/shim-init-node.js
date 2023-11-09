@@ -366,6 +366,7 @@ function shimInit(options = null) {
 	};
 
 	shim.attachFileToNote = async function(note, filePath, position = null, options = null) {
+		if (!options) options = {};
 		if (note.markup_language) options.markupLanguage = note.markup_language;
 		const newBody = await shim.attachFileToNoteBody(note.body, filePath, position, options);
 		if (!newBody) return null;

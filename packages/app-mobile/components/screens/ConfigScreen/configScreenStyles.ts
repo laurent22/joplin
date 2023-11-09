@@ -1,13 +1,16 @@
 import { TextStyle, ViewStyle, StyleSheet } from 'react-native';
 const { themeStyle } = require('../../global-style.js');
 
-export interface ConfigScreenStyles {
+type SidebarButtonStyle = ViewStyle & { height: number };
+
+export interface ConfigScreenStyleSheet {
 	body: ViewStyle;
 
 	settingContainer: ViewStyle;
 	settingContainerNoBottomBorder: ViewStyle;
 	headerWrapperStyle: ViewStyle;
 
+	headerTextStyle: TextStyle;
 	settingText: TextStyle;
 	linkText: TextStyle;
 	descriptionText: TextStyle;
@@ -22,7 +25,22 @@ export interface ConfigScreenStyles {
 	switchSettingContainer: ViewStyle;
 	switchSettingControl: TextStyle;
 
+	sidebarButton: SidebarButtonStyle;
+	sidebarIcon: TextStyle;
+	selectedSidebarButton: SidebarButtonStyle;
+	sidebarButtonMainText: TextStyle;
+	sidebarSelectedButtonText: TextStyle;
+	sidebarButtonDescriptionText: TextStyle;
+
 	settingControl: TextStyle;
+}
+
+export interface ConfigScreenStyles {
+	styleSheet: ConfigScreenStyleSheet;
+
+	selectedSectionButtonColor: string;
+	keyboardAppearance: 'default'|'light'|'dark';
+	getContainerStyle(hasDescription: boolean): ViewStyle;
 }
 
 const configScreenStyles = (themeId: number): ConfigScreenStyles => {
@@ -54,7 +72,29 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		borderBottomColor: theme.dividerColor,
 	};
 
-	const styles: ConfigScreenStyles = {
+	const sidebarButtonHeight = theme.fontSize * 4 + 5;
+	const sidebarButton: SidebarButtonStyle = {
+		height: sidebarButtonHeight,
+		flex: 1,
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingEnd: theme.marginRight,
+	};
+
+	const sidebarButtonMainText: TextStyle = {
+		color: theme.color,
+		fontSize: theme.fontSize,
+	};
+
+	const sidebarButtonDescriptionText: TextStyle = {
+		...sidebarButtonMainText,
+		fontSize: theme.fontSizeSmaller,
+		color: theme.color,
+		opacity: 0.75,
+	};
+
+
+	const styles: ConfigScreenStyleSheet = {
 		body: {
 			flex: 1,
 			justifyContent: 'flex-start',
@@ -119,6 +159,8 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 			justifyContent: 'space-between',
 		},
 
+		headerTextStyle: theme.headerStyle,
+
 		headerWrapperStyle: {
 			...settingContainerStyle,
 			...theme.headerWrapperStyle,
@@ -129,9 +171,39 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 			color: undefined,
 			flex: 0,
 		},
+
+
+		sidebarButton,
+		selectedSidebarButton: {
+			...sidebarButton,
+			backgroundColor: theme.selectedColor,
+		},
+
+		sidebarButtonMainText: sidebarButtonMainText,
+		sidebarIcon: {
+			...sidebarButtonMainText,
+			textAlign: 'center',
+			fontSize: 18,
+			width: sidebarButtonHeight * 0.8,
+		},
+		sidebarSelectedButtonText: {
+			...sidebarButtonMainText,
+			fontWeight: 'bold',
+		},
+		sidebarButtonDescriptionText,
 	};
 
-	return StyleSheet.create(styles);
+	const styleSheet = StyleSheet.create(styles);
+
+	return {
+		styleSheet,
+
+		selectedSectionButtonColor: theme.selectedColor,
+		keyboardAppearance: theme.keyboardAppearance,
+		getContainerStyle: (hasDescription) => {
+			return !hasDescription ? styleSheet.settingContainer : styleSheet.settingContainerNoBottomBorder;
+		},
+	};
 };
 
 export default configScreenStyles;

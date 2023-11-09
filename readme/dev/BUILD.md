@@ -49,12 +49,21 @@ You can also run it under WSL 2. To do so, [follow these instructions](https://w
 
 First you need to setup React Native to build projects with native code. For this, follow the instructions in the [Setting up the development environment](https://reactnative.dev/docs/environment-setup) tutorial, in the "React Native CLI Quickstart" tab.
 
-Then, for **Android**:
+### Android
+
+Run this to build and install the app on the emmulator:
 
 	cd packages/app-mobile/android
 	./gradlew installDebug # or gradlew.bat installDebug on Windows
 
-On **iOS**, open the file `ios/Joplin.xcworkspace` on XCode and run the app from there.
+### iOS
+
+On iOS, you need to run `pod install`, which is not done automatically during build time (since it takes too long). You have two options:
+
+- Build the app using `RUN_POD_INSTALL=1 yarn install`
+- Or manually run `pod install` from `packages/app-mobile/ios`
+
+Once this is done, open the file `ios/Joplin.xcworkspace` on XCode and run the app from there.
 
 Normally the **bundler** should start automatically with the application. If it doesn't, run `yarn start` from `packages/app-mobile`.
 

@@ -57,6 +57,10 @@ class Command extends BaseCommand {
 
 		const lines = [];
 
+		lines.push('---');
+		lines.push('sidebar_position: 2');
+		lines.push('---');
+		lines.push('');
 		lines.push('# Joplin Data API');
 		lines.push('');
 		lines.push('This API is available when the clipper server is running. It provides access to the notes, notebooks, tags and other Joplin object via a REST API. Plugins can also access this API even when the clipper server is not running.');
