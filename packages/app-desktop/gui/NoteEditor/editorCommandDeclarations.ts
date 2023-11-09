@@ -9,7 +9,17 @@ const workWithHtmlNotes = [
 export const enabledCondition = (commandName: string) => {
 	const markdownEditorOnly = !Object.keys(joplinCommandToTinyMceCommands).includes(commandName);
 	const noteMustBeMarkdown = !workWithHtmlNotes.includes(commandName);
-	return `(!modalDialogVisible || gotoAnythingVisible) ${markdownEditorOnly ? '&& markdownEditorPaneVisible' : ''} && oneNoteSelected ${noteMustBeMarkdown ? '&& noteIsMarkdown' : ''} && !noteIsReadOnly`;
+
+	const output = [
+		'!modalDialogVisible',
+		'!gotoAnythingVisible',
+		markdownEditorOnly ? 'markdownEditorPaneVisible' : '(markdownEditorPaneVisible || richTextEditorVisible)',
+		'oneNoteSelected',
+		noteMustBeMarkdown ? 'noteIsMarkdown' : '',
+		'!noteIsReadOnly',
+	];
+
+	return output.filter(c => !!c).join(' && ');
 };
 
 const declarations: CommandDeclaration[] = [
