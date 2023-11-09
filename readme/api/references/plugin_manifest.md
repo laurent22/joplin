@@ -46,10 +46,10 @@ Name | Type | Required? | Description
 
 | Properties | Description |
 | --- | --- |
-| 16 | a relative path to a PNG icon. |
-| 32 | a relative path to a PNG icon. |
-| 48 | a relative path to a PNG icon. |
-| 128 | a relative path to a PNG icon. |
+| 16 | a path to a PNG icon. |
+| 32 | a path to a PNG icon. |
+| 48 | a path to a PNG icon. |
+| 128 | a path to a PNG icon. |
 
 ## Manifest example
 
@@ -62,10 +62,16 @@ Name | Type | Required? | Description
     "author": "John Smith",
     "app_min_version": "1.4",
     "homepage_url": "https://joplinapp.org",
-    "screenshots": [{
+    "screenshots": [
+      {
         "src": "path/to/image.png",
         "label": "image description"
-    }],
+      },
+      {
+        "src": "https://example.com/path/to/the/screenshot.png",
+        "label": "image description"
+      }
+    ],
     "icons": {
       "16": "path/to/icon16.png",
       "32": "path/to/icon32.png",
