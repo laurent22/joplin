@@ -32,7 +32,7 @@ const { Checkbox } = require('../checkbox.js');
 import { _, currentLocale } from '@joplin/lib/locale';
 import { reg } from '@joplin/lib/registry';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
-const { BaseScreenComponent } = require('../base-screen.js');
+const { BaseScreenComponent } = require('../base-screen');
 const { themeStyle, editorFont } = require('../global-style.js');
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
