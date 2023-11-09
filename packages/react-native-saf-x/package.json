@@ -52,5 +52,6 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*"
-  }
+  },
+  "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"
 }
