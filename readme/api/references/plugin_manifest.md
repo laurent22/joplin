@@ -46,10 +46,10 @@ Name | Type | Required? | Description
 
 | Properties | Description |
 | --- | --- |
-| 16 | a path to a PNG icon. |
-| 32 | a path to a PNG icon. |
-| 48 | a path to a PNG icon. |
-| 128 | a path to a PNG icon. |
+| 16 | a relative path to a PNG icon. |
+| 32 | a relative path to a PNG icon. |
+| 48 | a relative path to a PNG icon. |
+| 128 | a relative path to a PNG icon. |
 
 ## Manifest example
 
