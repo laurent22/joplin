@@ -260,6 +260,7 @@ packages/app-desktop/gui/NoteEditor/commands/index.js
 packages/app-desktop/gui/NoteEditor/commands/pasteAsText.js
 packages/app-desktop/gui/NoteEditor/commands/showLocalSearch.js
 packages/app-desktop/gui/NoteEditor/commands/showRevisions.js
+packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.test.js
 packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js
 packages/app-desktop/gui/NoteEditor/styles/index.js
 packages/app-desktop/gui/NoteEditor/utils/clipboardUtils.test.js
@@ -825,6 +826,7 @@ packages/lib/services/rest/routes/events.test.js
 packages/lib/services/rest/routes/events.js
 packages/lib/services/rest/routes/folders.js
 packages/lib/services/rest/routes/master_keys.js
+packages/lib/services/rest/routes/notes.test.js
 packages/lib/services/rest/routes/notes.js
 packages/lib/services/rest/routes/ping.js
 packages/lib/services/rest/routes/resources.js
