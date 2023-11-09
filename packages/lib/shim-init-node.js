@@ -490,6 +490,10 @@ function shimInit(options = null) {
 			method: method,
 			path: url.pathname + (url.query ? `?${url.query}` : ''),
 			headers: headers,
+			timeout: options.timeout,
+			// 21 redirects is the default amount from follow-redirects library
+			// 20 seems to be the max amount that most popular browsers will allow
+			maxRedirects: options.maxRedirects ?? 21,
 		};
 
 		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
@@ -549,6 +553,10 @@ function shimInit(options = null) {
 								}
 							});
 						});
+					});
+
+					request.on('timeout', () => {
+						request.destroy(new Error('Request timed out.'));
 					});
 
 					request.on('error', (error) => {

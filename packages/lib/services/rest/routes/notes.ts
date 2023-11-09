@@ -63,6 +63,11 @@ type RequestNote = {
 	stylesheets: any;
 };
 
+type FetchOptions = {
+	timeout?: number;
+	maxRedirects?: number;
+};
+
 async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> {
 	const output: any = {
 		title: requestNote.title ? requestNote.title : '',
@@ -184,7 +189,7 @@ async function tryToGuessExtFromMimeType(response: any, mediaPath: string) {
 	return newMediaPath;
 }
 
-export async function downloadMediaFile(url: string /* , allowFileProtocolImages */) {
+export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions) {
 	logger.info('Downloading media file', url);
 
 	const tempDir = Setting.value('tempDir');
@@ -225,7 +230,7 @@ export async function downloadMediaFile(url: string /* , allowFileProtocolImages
 			const localPath = fileUriToPath(url);
 			await shim.fsDriver().copy(localPath, mediaPath);
 		} else {
-			const response = await shim.fetchBlob(url, { path: mediaPath, maxRetry: 1 });
+			const response = await shim.fetchBlob(url, { path: mediaPath, maxRetry: 1, ...fetchOptions });
 
 			// If we could not find the file extension from the URL, try to get it
 			// now based on the Content-Type header.
@@ -238,13 +243,14 @@ export async function downloadMediaFile(url: string /* , allowFileProtocolImages
 	}
 }
 
-async function downloadMediaFiles(urls: string[] /* , allowFileProtocolImages:boolean */) {
+async function downloadMediaFiles(urls: string[], shouldTimeoutFaster: boolean) {
 	const PromisePool = require('es6-promise-pool');
 
 	const output: any = {};
 
 	const downloadOne = async (url: string) => {
-		const mediaPath = await downloadMediaFile(url); // , allowFileProtocolImages);
+		const fetchOptions = shouldTimeoutFaster ? { timeout: 1000 * 10, maxRedirects: 7 } : {};
+		const mediaPath = await downloadMediaFile(url, fetchOptions); // , allowFileProtocolImages);
 		if (mediaPath) output[url] = { path: mediaPath, originalUrl: url };
 	};
 
@@ -369,14 +375,14 @@ async function attachImageFromDataUrl(note: any, imageDataUrl: string, cropRect:
 	return await shim.attachFileToNote(note, tempFilePath);
 }
 
-export const extractNoteFromHTML = async (requestNote: RequestNote, requestId: number, imageSizes: any) => {
+export const extractNoteFromHTML = async (requestNote: RequestNote, requestId: number, imageSizes: any, shouldTimeoutFaster: boolean) => {
 	const note = await requestNoteToNote(requestNote);
 
 	const mediaUrls = extractMediaUrls(note.markup_language, note.body);
 
 	logger.info(`Request (${requestId}): Downloading media files: ${mediaUrls.length}`);
 
-	const mediaFiles = await downloadMediaFiles(mediaUrls); // , allowFileProtocolImages);
+	const mediaFiles = await downloadMediaFiles(mediaUrls, shouldTimeoutFaster); // , allowFileProtocolImages);
 
 	logger.info(`Request (${requestId}): Creating resources from paths: ${Object.getOwnPropertyNames(mediaFiles).length}`);
 
@@ -428,7 +434,7 @@ export default async function(request: Request, id: string = null, link: string 
 
 		logger.info('Images:', imageSizes);
 
-		const extracted = await extractNoteFromHTML(requestNote, requestId, imageSizes);
+		const extracted = await extractNoteFromHTML(requestNote, requestId, imageSizes, false);
 
 		let note = await Note.save(extracted.note, extracted.saveOptions);
 
