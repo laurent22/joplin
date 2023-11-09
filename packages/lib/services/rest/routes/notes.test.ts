@@ -14,8 +14,7 @@ describe('routes/notes', () => {
 		'htp/asdfasf.com',
 		'https//joplinapp.org',
 	])('should not return a local file for invalid protocols', async (invalidUrl) => {
-
-		expect(downloadMediaFile(invalidUrl)).resolves.toBe('');
+		await expect(downloadMediaFile(invalidUrl)).resolves.toBe('');
 	});
 
 	test.each([
