@@ -3,7 +3,7 @@ import shim from '../../../shim';
 import uuid from '../../../uuid';
 import { downloadMediaFile } from './notes';
 
-describe('services_rest_routes_notes', () => {
+describe('routes/notes', () => {
 
 	beforeEach(() => {
 		jest.resetAllMocks();
