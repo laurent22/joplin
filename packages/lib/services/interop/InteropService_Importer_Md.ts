@@ -42,6 +42,20 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 			await this.importFile(filePaths[i], parentFolderId);
 		}
 
+		try {
+			for (const importedLocalPath of Object.keys(this.importedNotes)) {
+				const note = this.importedNotes[importedLocalPath];
+				const updatedBody = await this.importLocalFiles(importedLocalPath, note.body, note.parent_id);
+				const updatedNote = {
+					...this.importedNotes[importedLocalPath],
+					body: updatedBody || note.body,
+				};
+				this.importedNotes[importedLocalPath] = await Note.save(updatedNote, { isNew: false });
+			}
+		} catch (error) {
+			// console.error(`Problem importing links for file ${resolvedPath}, error:\n ${error}`);
+		}
+
 		return result;
 	}
 
@@ -162,17 +176,6 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 			markup_language: ext === 'html' ? MarkupToHtml.MARKUP_LANGUAGE_HTML : MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN,
 		};
 		this.importedNotes[resolvedPath] = await Note.save(note, { autoTimestamp: false });
-
-		try {
-			const updatedBody = await this.importLocalFiles(resolvedPath, body, parentFolderId);
-			const updatedNote = {
-				...this.importedNotes[resolvedPath],
-				body: updatedBody || body,
-			};
-			this.importedNotes[resolvedPath] = await Note.save(updatedNote, { isNew: false });
-		} catch (error) {
-			// console.error(`Problem importing links for file ${resolvedPath}, error:\n ${error}`);
-		}
 
 		return this.importedNotes[resolvedPath];
 	}
