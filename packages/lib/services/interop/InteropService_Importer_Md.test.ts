@@ -150,11 +150,12 @@ describe('InteropService_Importer_Md', () => {
 		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('non-empty')).toBeGreaterThanOrEqual(0);
 	});
 	it('should not import empty directory', async () => {
-		await fs.mkdirp(`${tempDir}/empty/empty`);
+		await fs.mkdirp(`${tempDir}/empty1/empty2`);
 
-		await importNoteDirectory(`${tempDir}/empty`);
+		await importNoteDirectory(`${tempDir}/empty1`);
 		const allFolders = await Folder.all();
-		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('empty')).toBe(-1);
+		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('empty1')).toBe(0);
+		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('empty2')).toBe(-1);
 	});
 	it('should import directory with non-empty subdirectory', async () => {
 		await fs.mkdirp(`${tempDir}/non-empty-subdir/non-empty-subdir/subdir-empty`);
