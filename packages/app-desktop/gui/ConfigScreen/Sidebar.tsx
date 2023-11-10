@@ -92,7 +92,15 @@ export default function Sidebar(props: Props) {
 	function renderButton(section: any) {
 		const selected = props.selection === section.name;
 		return (
-			<StyledListItem key={section.name} isSubSection={Setting.isSubSection(section.name)} selected={selected} onClick={() => { props.onSelectionChange({ section: section }); }}>
+			<StyledListItem
+				key={section.name}
+				href='#'
+				aria-role='tab'
+				aria-selected={selected}
+				isSubSection={Setting.isSubSection(section.name)}
+				selected={selected}
+				onClick={() => { props.onSelectionChange({ section: section }); }}
+			>
 				<StyledListItemIcon
 					className={Setting.sectionNameToIcon(section.name, AppType.Desktop)}
 				/>
@@ -123,7 +131,7 @@ export default function Sidebar(props: Props) {
 	}
 
 	return (
-		<StyledRoot>
+		<StyledRoot aria-role='tablist'>
 			{buttons}
 		</StyledRoot>
 	);
