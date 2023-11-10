@@ -179,9 +179,9 @@ describe('InteropService_Importer_Md', () => {
 
 		const allFolders = await Folder.all();
 		const allNotes = await Note.all();
-		const Page_1_folder = allFolders.find(f => f.title === 'Target_folder');
+		const targetFolder = allFolders.find(f => f.title === 'Target_folder');
 		const noteBeingReferenced = allNotes.find(n => n.title === 'Targeted_note');
 
-		expect(noteBeingReferenced.parent_id).toBe(Page_1_folder.id);
+		expect(noteBeingReferenced.parent_id).toBe(targetFolder.id);
 	});
 });
