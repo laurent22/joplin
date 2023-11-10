@@ -74,7 +74,7 @@
     "@types/mustache": "4.2.4",
     "@types/nodemailer": "6.4.13",
     "@types/yargs": "17.0.29",
-    "@types/zxcvbn": "4.4.2",
+    "@types/zxcvbn": "4.4.3",
     "gulp": "4.0.2",
     "jest": "29.7.0",
     "jest-expect-message": "1.1.3",
