@@ -3,30 +3,14 @@
 // files: First here we convert the JS file to a plain string, and that string
 // is then loaded by eg. the Mermaid plugin, and finally injected in the WebView.
 
-import { mkdirp, readFile, writeFile } from 'fs-extra';
 import { dirname, extname, basename } from 'path';
 
 // We need this to be transpiled to `const webpack = require('webpack')`.
 // As such, do a namespace import. See https://www.typescriptlang.org/tsconfig#esModuleInterop
 import * as webpack from 'webpack';
+import copyJs from './copyJs';
 
-const rootDir = dirname(dirname(dirname(__dirname)));
-const mobileDir = `${rootDir}/packages/app-mobile`;
-const outputDir = `${mobileDir}/lib/rnInjectedJs`;
-
-// Stores the contents of the file at [filePath] as an importable string.
-// [name] should be the name (excluding the .js extension) of the output file that will contain
-// the JSON-ified file content.
-async function copyJs(name: string, filePath: string) {
-	const outputPath = `${outputDir}/${name}.js`;
-	console.info(`Creating: ${outputPath}`);
-	const js = await readFile(filePath, 'utf-8');
-	const json = `module.exports = ${JSON.stringify(js)};`;
-	await writeFile(outputPath, json);
-}
-
-
-class BundledFile {
+export default class BundledFile {
 	private readonly bundleOutputPath: string;
 	private readonly bundleBaseName: string;
 	private readonly rootFileDirectory: string;
@@ -82,17 +66,23 @@ class BundledFile {
 		return config;
 	}
 
+	// Creates a file that can be imported by React native. This file contains the
+	// bundled JS as a string.
+	private async copyToImportableFile() {
+		await copyJs(`${this.bundleBaseName}.bundle`, this.bundleOutputPath);
+	}
+
 	private handleErrors(error: Error | undefined | null, stats: webpack.Stats | undefined): boolean {
 		let failed = false;
 
 		if (error) {
-			console.error(`Error: ${error.name}`, error.message, error.stack);
+			console.error(`Error (${this.bundleName}): ${error.name}`, error.message, error.stack);
 			failed = true;
 		} else if (stats?.hasErrors() || stats?.hasWarnings()) {
 			const data = stats.toJson();
 
 			if (data.warnings && data.warningsCount) {
-				console.warn('Warnings: ', data.warningsCount);
+				console.warn(`Warnings (${this.bundleName}): `, data.warningsCount);
 				for (const warning of data.warnings) {
 					// Stack contains the message
 					if (warning.stack) {
@@ -103,7 +93,7 @@ class BundledFile {
 				}
 			}
 			if (data.errors && data.errorsCount) {
-				console.error('Errors: ', data.errorsCount);
+				console.error(`Errors (${this.bundleName}): `, data.errorsCount);
 				for (const error of data.errors) {
 					if (error.stack) {
 						console.error(error.stack);
@@ -127,19 +117,34 @@ class BundledFile {
 		return new Promise<void>((resolve, reject) => {
 			console.info(`Building bundle: ${this.bundleName}...`);
 
-			compiler.run((error, stats) => {
-				let failed = this.handleErrors(error, stats);
+			compiler.run((buildError, stats) => {
+				// Always output stats, even on success
+				console.log(`Bundle ${this.bundleName} built: `, stats?.toString());
+
+				let failed = this.handleErrors(buildError, stats);
 
 				// Clean up.
-				compiler.close(async (error) => {
-					if (error) {
-						console.error('Error cleaning up:', error);
+				compiler.close(async (closeError) => {
+					if (closeError) {
+						console.error('Error cleaning up:', closeError);
 						failed = true;
 					}
+
+					let copyError;
+					if (!failed) {
+						try {
+							await this.copyToImportableFile();
+						} catch (error) {
+							console.error('Error copying', error);
+							failed = true;
+							copyError = error;
+						}
+					}
+
 					if (!failed) {
 						resolve();
 					} else {
-						reject();
+						reject(closeError ?? buildError ?? copyError);
 					}
 				});
 			});
@@ -160,44 +165,4 @@ class BundledFile {
 			}
 		});
 	}
-
-	// Creates a file that can be imported by React native. This file contains the
-	// bundled JS as a string.
-	public async copyToImportableFile() {
-		await copyJs(`${this.bundleBaseName}.bundle`, this.bundleOutputPath);
-	}
 }
-
-
-const bundledFiles: BundledFile[] = [
-	new BundledFile(
-		'codeMirrorBundle',
-		`${mobileDir}/components/NoteEditor/CodeMirror/CodeMirror.ts`,
-	),
-	new BundledFile(
-		'svgEditorBundle',
-		`${mobileDir}/components/NoteEditor/ImageEditor/js-draw/createJsDrawEditor.ts`,
-	),
-];
-
-export async function buildInjectedJS() {
-	await mkdirp(outputDir);
-
-
-	// Build all in parallel
-	await Promise.all(bundledFiles.map(async file => {
-		await file.build();
-		await file.copyToImportableFile();
-	}));
-
-	await copyJs('webviewLib', `${mobileDir}/../lib/renderers/webviewLib.js`);
-}
-
-export async function watchInjectedJS() {
-	// Watch for changes
-	for (const file of bundledFiles) {
-		file.startWatching();
-	}
-}
-
-
