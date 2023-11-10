@@ -86,11 +86,12 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		fontSize: theme.fontSize,
 	};
 
+	const fadedOpacity = 0.75;
 	const sidebarButtonDescriptionText: TextStyle = {
 		...sidebarButtonMainText,
 		fontSize: theme.fontSizeSmaller,
 		color: theme.color,
-		opacity: 0.75,
+		opacity: fadedOpacity,
 	};
 
 
@@ -185,6 +186,7 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 			textAlign: 'center',
 			fontSize: 18,
 			width: sidebarButtonHeight * 0.8,
+			opacity: fadedOpacity,
 		},
 		sidebarSelectedButtonText: {
 			...sidebarButtonMainText,
