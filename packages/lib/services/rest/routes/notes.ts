@@ -243,13 +243,12 @@ export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions
 	}
 }
 
-async function downloadMediaFiles(urls: string[], shouldTimeoutFaster: boolean) {
+async function downloadMediaFiles(urls: string[], fetchOptions?: FetchOptions) {
 	const PromisePool = require('es6-promise-pool');
 
 	const output: any = {};
 
 	const downloadOne = async (url: string) => {
-		const fetchOptions = shouldTimeoutFaster ? { timeout: 1000 * 10, maxRedirects: 7 } : {};
 		const mediaPath = await downloadMediaFile(url, fetchOptions); // , allowFileProtocolImages);
 		if (mediaPath) output[url] = { path: mediaPath, originalUrl: url };
 	};
@@ -375,14 +374,14 @@ async function attachImageFromDataUrl(note: any, imageDataUrl: string, cropRect:
 	return await shim.attachFileToNote(note, tempFilePath);
 }
 
-export const extractNoteFromHTML = async (requestNote: RequestNote, requestId: number, imageSizes: any, shouldTimeoutFaster: boolean) => {
+export const extractNoteFromHTML = async (requestNote: RequestNote, requestId: number, imageSizes: any, fetchOptions?: FetchOptions) => {
 	const note = await requestNoteToNote(requestNote);
 
 	const mediaUrls = extractMediaUrls(note.markup_language, note.body);
 
 	logger.info(`Request (${requestId}): Downloading media files: ${mediaUrls.length}`);
 
-	const mediaFiles = await downloadMediaFiles(mediaUrls, shouldTimeoutFaster); // , allowFileProtocolImages);
+	const mediaFiles = await downloadMediaFiles(mediaUrls, fetchOptions); // , allowFileProtocolImages);
 
 	logger.info(`Request (${requestId}): Creating resources from paths: ${Object.getOwnPropertyNames(mediaFiles).length}`);
 
@@ -434,7 +433,7 @@ export default async function(request: Request, id: string = null, link: string 
 
 		logger.info('Images:', imageSizes);
 
-		const extracted = await extractNoteFromHTML(requestNote, requestId, imageSizes, false);
+		const extracted = await extractNoteFromHTML(requestNote, requestId, imageSizes);
 
 		let note = await Note.save(extracted.note, extracted.saveOptions);
 
