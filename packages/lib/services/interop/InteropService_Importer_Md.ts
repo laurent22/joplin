@@ -111,7 +111,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		const markdownLinks = markdownUtils.extractFileUrls(md);
 		const htmlLinks = htmlUtils.extractFileUrls(md);
 		const fileLinks = unique(markdownLinks.concat(htmlLinks));
-		await Promise.all(fileLinks.map(async (encodedLink: string) => {
+		for (const encodedLink of fileLinks) {
 			const link = decodeURI(encodedLink);
 			// Handle anchor links appropriately
 			const trimmedLink = this.trimAnchorLink(link);
@@ -152,7 +152,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 					updated = htmlUtils.replaceResourceUrl(updated, linkToReplace, id);
 				}
 			}
-		}));
+		}
 		return updated;
 	}
 
