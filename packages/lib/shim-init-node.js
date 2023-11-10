@@ -559,7 +559,7 @@ function shimInit(options = null) {
 					});
 
 					request.on('timeout', () => {
-						request.destroy(new Error('Request timed out.'));
+						request.destroy(new Error(`Request timed out. Timeout value: ${requestOptions.timeout}ms.`));
 					});
 
 					request.on('error', (error) => {
