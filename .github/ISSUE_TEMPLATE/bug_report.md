@@ -7,10 +7,13 @@ assignees: ''
 
 ---
 
+## Important
+
+- [ ] I undersand that if I do not read and complete the below template, my post will be deleted and I will be blocked.
+
 <!--
   Please provide a clear and concise description of what the bug is. (In the section Steps To Reproduce.)
   Include screenshots for UI problems if needed.
-  DO NOT create screenshots of text !!! Copy and paste the text into a code block.
   Please test using the latest Joplin release to make sure your issue has not already been fixed.
 -->
 
@@ -21,13 +24,14 @@ assignees: ''
 
 ## Environment
 
-Joplin version: 
-Platform: 
-OS specifics: 
+<!-- On desktop, open the About dialog and simply copy and paste its content here -->
+
+- Joplin version: 
+- Operating system:
 
 <!--
-  Platform can be one of: macOS, Linux, Windows, Android, iOS, terminal (or a combination)
-  OS specifics: e.g. OS version, Linux distribution, Android/iOS version...
+  Operating system can be one of: macOS, Linux, Windows, Android, iOS, terminal
+  Please also specificy the specific version (eg. Windows 10, macOS 12.5, etc.)
 -->
 
 ## Steps to reproduce
@@ -36,9 +40,7 @@ OS specifics:
 2. 
 3. 
 
-<!--
-  Issues without reproduction steps are likely to stall.
--->
+<!-- Issues without reproduction steps are likely to stall. -->
 
 ## Describe what you expected to happen
 
