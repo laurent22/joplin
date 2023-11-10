@@ -10,14 +10,29 @@ import { FolderEntity } from '../database/types';
 describe('InteropService_Importer_Md', () => {
 	let tempDir: string;
 	async function importNote(path: string) {
+		const newFolder = await Folder.save({ title: 'folder' });
 		const importer = new InteropService_Importer_Md();
-		importer.setMetadata({ fileExtensions: ['md', 'html'] });
-		return await importer.importFile(path, 'notebook');
+		await importer.init(path, {
+			format: 'md',
+			outputFormat: 'md',
+			path,
+			destinationFolder: newFolder,
+			destinationFolderId: newFolder.id,
+		});
+		importer.setMetadata({ fileExtensions: ['md'] });
+		await importer.exec({ warnings: [] });
+		const allNotes = await Note.all();
+		return allNotes[0];
 	}
 	async function importNoteDirectory(path: string) {
 		const importer = new InteropService_Importer_Md();
+		await importer.init(path, {
+			format: 'md',
+			outputFormat: 'md',
+			path,
+		});
 		importer.setMetadata({ fileExtensions: ['md', 'html'] });
-		return await importer.importDirectory(path, 'notebook');
+		return await importer.exec({ warnings: [] });
 	}
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
