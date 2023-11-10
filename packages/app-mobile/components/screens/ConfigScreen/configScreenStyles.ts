@@ -92,6 +92,7 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		color: theme.color,
 		opacity: 0.75,
 		paddingTop: 3,
+		paddingBottom: 3,
 	};
 
 
