@@ -92,10 +92,8 @@ describe('InteropService_Importer_Md', () => {
 		expect(noteIds.length).toBe(1);
 	});
 	it('should gracefully handle reference cycles in notes', async () => {
-		const importer = new InteropService_Importer_Md();
-		importer.setMetadata({ fileExtensions: ['md'] });
-		const noteA = await importer.importFile(`${supportDir}/test_notes/md/sample-cycles-a.md`, 'notebook');
-		const noteB = await importer.importFile(`${supportDir}/test_notes/md/sample-cycles-b.md`, 'notebook');
+		await importNoteDirectory(`${supportDir}/test_notes/md/cycle-reference`);
+		const [noteA, noteB] = await Note.all();
 
 		const noteAIds = await Note.linkedNoteIds(noteA.body);
 		expect(noteAIds.length).toBe(1);
