@@ -154,4 +154,20 @@ describe('InteropService_Importer_Md', () => {
 		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('subdir-empty')).toBe(-1);
 		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('subdir-non-empty')).toBeGreaterThanOrEqual(0);
 	});
+
+	it('should import all files before replacing links', async () => {
+		await fs.mkdirp(`${tempDir}/links/0/1/2`);
+		await fs.mkdirp(`${tempDir}/links/Target_folder`);
+		await fs.writeFile(`${tempDir}/links/Target_folder/Targeted_note.md`, '# Targeted_note');
+		await fs.writeFile(`${tempDir}/links/0/1/2/Note_with_reference_to_another_note.md`, '# 20\n[Target_folder:Targeted_note](../../../Target_folder/Targeted_note.md)');
+
+		await importNoteDirectory(`${tempDir}/links`);
+
+		const allFolders = await Folder.all();
+		const allNotes = await Note.all();
+		const Page_1_folder = allFolders.find(f => f.title === 'Target_folder');
+		const noteBeingReferenced = allNotes.find(n => n.title === 'Targeted_note');
+
+		expect(noteBeingReferenced.parent_id).toBe(Page_1_folder.id);
+	});
 });
