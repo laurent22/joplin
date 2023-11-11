@@ -10,15 +10,15 @@ body:
 
   - type: dropdown
     id: os
-    options:
-      - "Windows"
-      - "macOS"
-      - "Linux"
-      - "Android"
-      - "iOS"
     attributes:
       label: "Operating system"
       multiple: false
+      options:
+        - "Windows"
+        - "macOS"
+        - "Linux"
+        - "Android"
+        - "iOS"
     validations:
       required: true
       
