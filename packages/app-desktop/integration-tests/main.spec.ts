@@ -5,6 +5,8 @@ import SettingsScreen from './models/SettingsScreen';
 import { _electron as electron } from '@playwright/test';
 import { writeFile } from 'fs-extra';
 import { join } from 'path';
+import createStartupArgs from './util/createStartupArgs';
+import firstNonDevToolsWindow from './util/firstNonDevToolsWindow';
 
 
 test.describe('main', () => {
@@ -130,11 +132,9 @@ test.describe('main', () => {
 
 		// We need to write to the force-safe-mode file before opening the Electron app.
 		// Open the app ourselves:
-		const startupArgs = [
-			'main.js', '--env', 'dev', '--profile', profileDirectory,
-		];
+		const startupArgs = createStartupArgs(profileDirectory);
 		const electronApp = await electron.launch({ args: startupArgs });
-		const mainWindow = await electronApp.firstWindow();
+		const mainWindow = await firstNonDevToolsWindow(electronApp);
 
 		const safeModeDisableLink = mainWindow.getByText('Disable safe mode and restart');
 		await safeModeDisableLink.waitFor();
