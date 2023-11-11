@@ -3,78 +3,41 @@ description: Report a reproducible bug or regression in Joplin.
 labels: ['type: bug']
 
 body:
-  - type: markdown
-    attributes:
-      value: |
-        Thanks for taking the time to fill out this bug report!
 
-  - type: checkboxes
-    id: checklist
+  - type: dropdown
+    id: os
+    choices:
+      - "Windows"
+      - "macOS"
+      - "Linux"
+      - "Android"
+      - "iOS"
     attributes:
-      label: Checklist
-      options:
-        - label: I have used the search function for [open](https://github.com/laurent22/joplin/issues) **and** [closed](https://github.com/laurent22/joplin/issues?q=is%3Aissue+is%3Aclosed) issues to see if someone else has already submitted the same bug report.
-          required: true
-        - label: I will describe the problem with as much detail as possible.
-          required: true
-        - label: I will update Joplin to the latest version before reporting a bug.
-          required: true
-        
+      label: "Operating system"
+      multiple: false
+    validations:
+      required: true
+      
   - type: input
     id: version
     attributes:
-      label: Joplin version
-      description: We need the actual version number found in the `About Joplin` menu on Desktop and under Configuration on Mobile.
-      placeholder: x.y.z
+      label: "Application version"
+      placeholder: "x.y.z"
+      description: 
     validations:
       required: true
-
-  - type: dropdown
-    id: platform
+      
+  - type: textarea
+    id: desktop-about-content
     attributes:
-      label: Platform
-      multiple: false
-      options:
-        - MacOS
-        - Linux
-        - Windows
-        - Android
-        - iOS
-        - Terminal
-    validations:
-      required: true
-
-  - type: input
-    id: os_specifics
-    attributes:
-      label: OS specifics
-      description: e.g. OS version, Linux distribution, Android/iOS version...
-    validations:
-      required: true
-
-  - type: input
-    id: first
-    attributes:
-      label: First occurred
-      placeholder: about x days/weeks ago
-    
+      label: "Desktop: About dialog content"
+      description: "If this issue is about the **desktop app**, please copy and paste the content of the About dialog here"
   
   - type: textarea
     id: current
     attributes:
       label: Current behaviour
-      description: What did Joplin do instead? Include screenshots and video recordings for UI problems if needed. DO NOT create screenshots of text !!! Copy and paste the text into a code block. If you are reporting a clipper bug, please include an example URL that shows the issue. Without the URL the issue is likely to be closed.
-
-  - type: textarea
-    id: expected
-    attributes:
-      label: Expected behaviour
-      description: After following the steps, what did you think Joplin would do?
-
-  - type: textarea
-    id: steps
-    attributes:
-      label: Steps to reproduce
+      description: What did Joplin do? Include screenshots and video recordings for UI problems if needed. If you are reporting a clipper bug, please include an example URL that shows the issue.
       placeholder: |
         1. This
         2. Then that
@@ -82,7 +45,13 @@ body:
         4. Etc.
 
   - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: What did you expect Joplin to do?
+
+  - type: textarea
     id: logs
     attributes:
       label: Logs
-      description: Please include a debug log. For information on how to collect a log file https://joplinapp.org/debugging/
+      description: "If relevant, please provide a log file as described here: https://joplinapp.org/help/apps/debugging"
