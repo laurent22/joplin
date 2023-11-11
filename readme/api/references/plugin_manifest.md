@@ -37,10 +37,10 @@ Name | Type | Required? | Description
 
 | Properties | Description |
 | --- | --- |
-| src | a path or URL to an icon. If a path, `src` should either be relative to the root of the repository (e.g. `screenshots/a.png`) or relative to the `src` directory (e.g. `../screenshots/a.png`). |
+| src | a path or URL to a screenshot. If a path, `src` should either be relative to the root of the repository (e.g. `screenshots/a.png`) or relative to the `src` directory (e.g. `../screenshots/a.png`). |
 | label | description of the image. This label will be used by screen readers or if the image cannot be loaded. |
 
-**Note**: If `src` is a path and not a URL, either `repository_url` or `homepage_url` must point to a GitHub repository for the icon to appear on the Joplin Plugins Website. See [the relevant issue](https://github.com/joplin/website-plugin-discovery/issues/35).
+**Note**: If `src` is a path and not a URL, either `repository_url` or `homepage_url` must point to a GitHub repository for the screenshot to appear on the Joplin Plugins Website. See [the relevant issue](https://github.com/joplin/website-plugin-discovery/issues/35).
 
 ## Icons
 
