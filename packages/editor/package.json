@@ -6,7 +6,6 @@
 	"scripts": {
 		"tsc": "tsc --project tsconfig.json",
 		"watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
-		"postinstall": "yarn run tsc",
 		"test": "jest",
 		"test-ci": "yarn test"
 	},
@@ -17,17 +16,17 @@
 	"devDependencies": {
 		"@joplin/lib": "~2.13",
 		"@testing-library/react-hooks": "8.0.1",
-		"@types/jest": "29.5.4",
-		"@types/react": "18.2.23",
-		"@types/react-redux": "7.1.27",
-		"@types/styled-components": "5.1.28",
-		"jest": "29.6.3",
-		"jest-environment-jsdom": "29.6.3",
+		"@types/jest": "29.5.5",
+		"@types/react": "18.2.31",
+		"@types/react-redux": "7.1.28",
+		"@types/styled-components": "5.1.29",
+		"jest": "29.7.0",
+		"jest-environment-jsdom": "29.7.0",
 		"ts-jest": "29.1.1",
-		"typescript": "5.1.6"
+		"typescript": "5.2.2"
 	},
 	"dependencies": {
-		"@codemirror/autocomplete": "6.9.1",
+		"@codemirror/autocomplete": "6.9.2",
 		"@codemirror/commands": "6.2.5",
 		"@codemirror/lang-cpp": "6.0.2",
 		"@codemirror/lang-html": "6.4.6",

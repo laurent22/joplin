@@ -1,4 +1,4 @@
-import { SettingSectionSource } from '@joplin/lib/models/Setting';
+import { AppType, SettingSectionSource } from '@joplin/lib/models/Setting';
 import * as React from 'react';
 import { useMemo } from 'react';
 import Setting from '@joplin/lib/models/Setting';
@@ -92,8 +92,18 @@ export default function Sidebar(props: Props) {
 	function renderButton(section: any) {
 		const selected = props.selection === section.name;
 		return (
-			<StyledListItem key={section.name} isSubSection={Setting.isSubSection(section.name)} selected={selected} onClick={() => { props.onSelectionChange({ section: section }); }}>
-				<StyledListItemIcon className={Setting.sectionNameToIcon(section.name)} />
+			<StyledListItem
+				key={section.name}
+				href='#'
+				aria-role='tab'
+				aria-selected={selected}
+				isSubSection={Setting.isSubSection(section.name)}
+				selected={selected}
+				onClick={() => { props.onSelectionChange({ section: section }); }}
+			>
+				<StyledListItemIcon
+					className={Setting.sectionNameToIcon(section.name, AppType.Desktop)}
+				/>
 				<StyledListItemLabel>
 					{Setting.sectionNameToLabel(section.name)}
 				</StyledListItemLabel>
@@ -121,7 +131,7 @@ export default function Sidebar(props: Props) {
 	}
 
 	return (
-		<StyledRoot>
+		<StyledRoot aria-role='tablist'>
 			{buttons}
 		</StyledRoot>
 	);

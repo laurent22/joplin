@@ -10,7 +10,7 @@ interface Props {
 }
 
 const openMissingPasswordFAQ = () =>
-	bridge().openExternal('https://joplinapp.org/faq#why-did-my-sync-and-encryption-passwords-disappear-after-updating-joplin');
+	bridge().openExternal('https://joplinapp.org/help/faq#why-did-my-sync-and-encryption-passwords-disappear-after-updating-joplin');
 
 // A link to a specific part of the FAQ related to passwords being cleared when upgrading
 // to a MacOS/ARM release.

@@ -1,6 +1,6 @@
 {
   "name": "@joplin/react-native-saf-x",
-  "version": "2.13.0",
+  "version": "2.13.2",
   "description": "a module to help work with scoped storages on android easily",
   "main": "src/index",
   "react-native": "src/index",
@@ -14,6 +14,7 @@
     "react-native-saf-x.podspec",
     "!lib/typescript/example",
     "!android/build",
+    "!android/build-main",
     "!ios/build",
     "!**/__tests__",
     "!**/__fixtures__",
@@ -47,10 +48,11 @@
     "@types/react-native": "0.64.19",
     "react": "18.2.0",
     "react-native": "0.70.6",
-    "typescript": "5.1.6"
+    "typescript": "5.2.2"
   },
   "peerDependencies": {
     "react": "*",
     "react-native": "*"
-  }
+  },
+  "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"
 }

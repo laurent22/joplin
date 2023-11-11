@@ -70,7 +70,7 @@ const generateRssFeed = async (posts: Post[]) => {
 	const feedItems: any[] = [];
 	for (const post of posts.reverse()) {
 		const content = await getPostContent(post);
-		const postDate = getNewsDate(content.parsed, post.path);
+		const postDate = getNewsDate(content.parsed.header, post.path);
 		const html = markdownToHtml(content.body);
 
 		if (pubDate === null) pubDate = postDate;
@@ -78,11 +78,11 @@ const generateRssFeed = async (posts: Post[]) => {
 		feedItems.push({
 			title: content.title,
 			description: html,
-			url: `https://joplinapp.org/news/${post.id}/`,
+			url: `https://joplinapp.org/news/${post.id}`,
 			guid: post.id,
 			date: postDate,
 			custom_elements: [
-				{ 'twitter-text': content.parsed.tweet },
+				{ 'twitter-text': content.parsed.header.tweet },
 			],
 		});
 
@@ -161,7 +161,7 @@ const main = async () => {
 				});
 
 				const postUrl = `https://discourse.joplinapp.org/t/${topic.topic_id}`;
-				content.parsed.forum_url = postUrl;
+				content.parsed.header.forum_url = postUrl;
 				const compiled = compileWithFrontMatter(content.parsed);
 
 				await writeFile(post.path, compiled, 'utf8');

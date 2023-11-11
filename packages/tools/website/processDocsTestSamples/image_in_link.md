@@ -1,0 +1,3 @@
+| Link |
+| --- |
+| [![Image description](https://example.com/image.svg)](https://example.com/link) |

@@ -32,7 +32,7 @@ export default function(frameWindow: any, isReady: boolean, postMessage: Functio
 		frameWindow.addEventListener('message', onMessage);
 
 		return () => {
-			frameWindow.removeEventListener('message', onMessage);
+			if (frameWindow.removeEventListener) frameWindow.removeEventListener('message', onMessage);
 		};
 	}, [frameWindow, htmlHash]);
 

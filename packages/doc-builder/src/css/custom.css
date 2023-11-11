@@ -1,0 +1,73 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+	--ifm-color-primary: #0557ba;
+	--ifm-color-primary-dark: #003a81;
+	--ifm-color-primary-darker: #003a81;
+	--ifm-color-primary-darkest: #002450;
+	--ifm-color-primary-light: #4f9cf9;
+	--ifm-color-primary-lighter: #71adf7;
+	--ifm-color-primary-lightest: #a0c9fc;
+	--ifm-code-font-size: 95%;
+	--docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+	--ifm-color-primary: #1e74dd;
+	--ifm-color-primary-dark: #1e74dd;
+	--ifm-color-primary-darker: #1e74dd;
+	--ifm-color-primary-darkest: #175aac;
+	--ifm-color-primary-light: #1e74dd;
+	--ifm-color-primary-lighter: #1e74dd;
+	--ifm-color-primary-lightest: #4b89d4;
+	--docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+.menu__link {
+	font-weight: normal;
+}
+
+.menu__link--active {
+	font-weight: bold;
+}
+
+.navbar-custom-buttons {
+	margin-right: 15px;
+}
+
+.plans-button {
+	border: 1px solid var(--ifm-color-primary);
+    border-radius: 100px;
+    color: var(--ifm-color-primary);
+}
+
+.plans-button:hover {
+	border-color: var(--ifm-color-primary-lighter);
+	color: var(--ifm-color-primary-lighter);
+}
+
+.sponsor-button {
+    border-radius: 100px;
+    color: white;
+	background-color: var(--ifm-color-primary-light);
+}
+
+.sponsor-button:hover {
+	background-color: var(--ifm-color-primary-lighter);
+	color: white;
+}
+
+/* So that the code in markdown.md wraps. Otherwise the table takes too much space horizontally */
+pre code {
+	white-space: pre-wrap;
+}
+
+.sidebarItemLinkActive_node_modules-\@docusaurus-theme-classic-lib-theme-BlogSidebar-Desktop-styles-module {
+	font-weight: bold;
+}

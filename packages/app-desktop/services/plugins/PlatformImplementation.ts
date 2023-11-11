@@ -57,8 +57,11 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 		this.joplin_ = {
 			views: {
 				dialogs: {
-					showMessageBox: async function(message: string) {
+					showMessageBox: async (message: string) => {
 						return bridge().showMessageBox(message);
+					},
+					showOpenDialog: async (options) => {
+						return bridge().showOpenDialog(options);
 					},
 				},
 			},

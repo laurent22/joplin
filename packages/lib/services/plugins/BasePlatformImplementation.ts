@@ -7,6 +7,7 @@ import { Implementation as ImagingImplementation } from './api/JoplinImaging';
 
 export interface JoplinViewsDialogs {
 	showMessageBox(message: string): Promise<number>;
+	showOpenDialog(options: any): Promise<any>;
 }
 
 export interface JoplinViews {

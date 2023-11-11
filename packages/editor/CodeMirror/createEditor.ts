@@ -1,8 +1,7 @@
 import { Compartment, EditorState } from '@codemirror/state';
 import { indentOnInput, syntaxHighlighting } from '@codemirror/language';
 import {
-	openSearchPanel, closeSearchPanel, getSearchQuery,
-	highlightSelectionMatches, search,
+	openSearchPanel, closeSearchPanel, getSearchQuery, search,
 } from '@codemirror/search';
 
 import { classHighlighter } from '@lezer/highlight';
@@ -20,6 +19,7 @@ import { SearchState, EditorProps, EditorSettings } from '../types';
 import { EditorEventType, SelectionRangeChangeEvent } from '../events';
 import {
 	decreaseIndent, increaseIndent,
+	insertOrIncreaseIndent,
 	toggleBolded, toggleCode,
 	toggleItalicized, toggleMath,
 } from './markdown/markdownCommands';
@@ -205,7 +205,6 @@ const createEditor = (
 				} : undefined),
 				drawSelection(),
 				highlightSpecialChars(),
-				highlightSelectionMatches(),
 				indentOnInput(),
 
 				EditorView.domEventHandlers({
@@ -254,7 +253,7 @@ const createEditor = (
 						notifyLinkEditRequest();
 						return true;
 					}),
-					keyCommand('Tab', increaseIndent, true),
+					keyCommand('Tab', insertOrIncreaseIndent, true),
 					keyCommand('Shift-Tab', decreaseIndent, true),
 
 					...standardKeymap, ...historyKeymap, ...searchKeymap,

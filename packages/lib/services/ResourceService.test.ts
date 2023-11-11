@@ -63,7 +63,7 @@ describe('services/ResourceService', () => {
 
 		await service.indexNoteResources();
 
-		await Note.save({ id: note2.id, body: Resource.markdownTag(resource1) });
+		await Note.save({ id: note2.id, body: Resource.markupTag(resource1) });
 
 		await service.indexNoteResources();
 

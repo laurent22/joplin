@@ -17,7 +17,7 @@ async function main() {
 	const versionSuffix = ''; // isPreRelease ? '-beta' : '';
 	const tagName = `server-${version}${versionSuffix}`;
 
-	const changelogPath = `${rootDir}/readme/changelog_server.md`;
+	const changelogPath = `${rootDir}/readme/about/changelog/server.md`;
 
 	await completeReleaseWithChangelog(changelogPath, version, tagName, 'Server', false);
 }

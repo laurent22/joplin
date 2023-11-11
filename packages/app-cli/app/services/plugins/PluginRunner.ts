@@ -52,7 +52,7 @@ export default class PluginRunner extends BasePluginRunner {
 			this.activeSandboxCalls_[callId] = true;
 			const promise = executeSandboxCall(pluginId, sandbox, `joplin.${path}`, mapEventHandlersToIds(args, this.eventHandlers_), this.eventHandler);
 			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-			promise.finally(() => {
+			void promise.finally(() => {
 				delete this.activeSandboxCalls_[callId];
 			});
 			return promise;

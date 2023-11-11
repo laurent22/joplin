@@ -12,6 +12,7 @@ import {
 	toggleInlineFormatGlobally, toggleRegionFormatGlobally, toggleSelectedLinesStartWith,
 	isIndentationEquivalent, stripBlockquote, tabsToSpaces,
 } from './markdownReformatter';
+import intersectsSyntaxNode from '../util/isInSyntaxNode';
 
 const startingSpaceRegex = /^(\s*)/;
 
@@ -183,8 +184,11 @@ export const toggleList = (listType: ListType): Command => {
 			const origFirstLineIndentation = firstLineIndentation;
 			const origContainerType = containerType;
 
-			// Grow [sel] to the smallest containing list
-			if (sel.empty) {
+			// Grow `sel` to the smallest containing list, unless the
+			// cursor is on an empty line, in which case, the user
+			// probably wants to add a list item (and not select the entire
+			// list).
+			if (sel.empty && fromLine.text.trim() !== '') {
 				sel = growSelectionToNode(state, sel, [orderedListTag, unorderedListTag]);
 				computeSelectionProps();
 			}
@@ -415,6 +419,35 @@ export const increaseIndent: Command = (view: EditorView): boolean => {
 	// Fix any lists
 	view.dispatch(view.state.changeByRange((sel: SelectionRange) => {
 		return renumberList(view.state, sel);
+	}));
+
+	return true;
+};
+
+// Like `increaseIndent`, but may insert tabs, rather than
+// indenting, in some instances.
+export const insertOrIncreaseIndent: Command = (view: EditorView): boolean => {
+	const selection = view.state.selection;
+	const mainSelection = selection.main;
+	if (selection.ranges.length !== 1 || !mainSelection.empty) {
+		return increaseIndent(view);
+	}
+
+
+	if (intersectsSyntaxNode(view.state, mainSelection, 'ListItem')) {
+		return increaseIndent(view);
+	}
+
+	const indentUnit = indentString(view.state, getIndentUnit(view.state));
+	view.dispatch(view.state.changeByRange(selection => {
+		return {
+			// Move the selection to after the inserted text
+			range: EditorSelection.cursor(selection.from + indentUnit.length),
+			changes: {
+				from: selection.from,
+				insert: indentUnit,
+			},
+		};
 	}));
 
 	return true;

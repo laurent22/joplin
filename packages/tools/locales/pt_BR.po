@@ -11,6 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Fernando Nagase <nagase.fernando@gmail.com>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -18,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -61,7 +63,7 @@ msgstr "(wysiwyg: %s)"
 #: packages/app-mobile/components/screens/Note.tsx:641
 #: packages/lib/shim-init-node.js:211
 msgid "(You may disable this prompt in the options)"
-msgstr ""
+msgstr "(Você pode desativar este prompt nas opções)"
 
 #: packages/app-desktop/gui/MenuBar.tsx:674
 #: packages/app-desktop/gui/MenuBar.tsx:949
@@ -203,9 +205,8 @@ msgstr "%s: %s"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:194
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:263
-#, fuzzy
 msgid "%s: Missing password."
-msgstr "Senha mestra"
+msgstr "Senha ausente."
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
@@ -1158,14 +1159,12 @@ msgid "Creates a new to-do."
 msgstr "Cria uma nova tarefa."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:112
-#, fuzzy
 msgid "Creating new note..."
-msgstr "Criando novo %s..."
+msgstr "Criando nova %s..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:112
-#, fuzzy
 msgid "Creating new to-do..."
-msgstr "Criando novo %s..."
+msgstr "Criando nova %s..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:580
 msgid "Creating report..."
@@ -3668,7 +3667,7 @@ msgstr "Redefinir senha mestra"
 
 #: packages/lib/models/Setting.ts:1117
 msgid "Resize large images:"
-msgstr ""
+msgstr "Redimensionar imagens grandes:"
 
 #: packages/app-cli/app/command-import.js:51
 #: packages/app-desktop/gui/ImportScreen.tsx:92
@@ -3790,9 +3789,8 @@ msgid "Save changes"
 msgstr "Salvar alterações"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:99
-#, fuzzy
 msgid "Save changes?"
-msgstr "Salvar alterações"
+msgstr "Salvar alterações?"
 
 #: packages/lib/models/Setting.ts:1024
 msgid "Save geo-location with notes"
@@ -4687,6 +4685,9 @@ msgid ""
 "collaborate on it. It does not however allow you to share a notebook with "
 "someone else, unless you have the feature \"%s\"."
 msgstr ""
+"Permite que outros compartilhem cadernos com você para editarem de forma "
+"colaborativa. No entanto, não permite que você compartilhe de forma "
+"colaborativa, a menos que você tenha a funcionalidade \"%s\" ativa."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:50
 #: packages/lib/services/ResourceEditWatcher/index.ts:224

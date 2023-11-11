@@ -7,6 +7,7 @@ import dialogs from '../../../../dialogs';
 import { EditorCommandType } from '@joplin/editor/types';
 import Logger from '@joplin/utils/Logger';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
+import { MarkupLanguage } from '@joplin/renderer';
 
 const logger = Logger.create('CodeMirror 6 commands');
 
@@ -40,6 +41,7 @@ interface Props {
 	selectionRange: { from: number; to: number };
 
 	visiblePanes: string[];
+	contentMarkupLanguage: MarkupLanguage;
 }
 
 const useEditorCommands = (props: Props) => {
@@ -57,7 +59,7 @@ const useEditorCommands = (props: Props) => {
 					editorRef.current.insertText(cmd.markdownTags.join('\n'));
 				} else if (cmd.type === 'files') {
 					const pos = props.selectionRange.from;
-					const newBody = await commandAttachFileToBody(props.editorContent, cmd.paths, { createFileURL: !!cmd.createFileURL, position: pos });
+					const newBody = await commandAttachFileToBody(props.editorContent, cmd.paths, { createFileURL: !!cmd.createFileURL, position: pos, markupLanguage: props.contentMarkupLanguage });
 					editorRef.current.updateBody(newBody);
 				} else {
 					logger.warn('CodeMirror: unsupported drop item: ', cmd);
@@ -92,7 +94,7 @@ const useEditorCommands = (props: Props) => {
 			insertText: (value: any) => editorRef.current.insertText(value),
 			attachFile: async () => {
 				const newBody = await commandAttachFileToBody(
-					props.editorContent, null, { position: props.selectionRange.from },
+					props.editorContent, null, { position: props.selectionRange.from, markupLanguage: props.contentMarkupLanguage },
 				);
 				if (newBody) {
 					editorRef.current.updateBody(newBody);
@@ -129,7 +131,7 @@ const useEditorCommands = (props: Props) => {
 	}, [
 		props.visiblePanes, props.editorContent, props.editorCopyText, props.editorCutText, props.editorPaste,
 		props.selectionRange,
-
+		props.contentMarkupLanguage,
 		props.webviewRef, editorRef,
 	]);
 };

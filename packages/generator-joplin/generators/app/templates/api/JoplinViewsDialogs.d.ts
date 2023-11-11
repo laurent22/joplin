@@ -44,6 +44,12 @@ export default class JoplinViewsDialogs {
      */
     showMessageBox(message: string): Promise<number>;
     /**
+     * Displays a dialog to select a file or a directory. Same options and
+     * output as
+     * https://www.electronjs.org/docs/latest/api/dialog#dialogshowopendialogbrowserwindow-options
+     */
+    showOpenDialog(options: any): Promise<any>;
+    /**
      * Sets the dialog HTML content
      */
     setHtml(handle: ViewHandle, html: string): Promise<string>;

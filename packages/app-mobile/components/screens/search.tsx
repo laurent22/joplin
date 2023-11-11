@@ -7,7 +7,7 @@ const Icon = require('react-native-vector-icons/Ionicons').default;
 import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 const { NoteItem } = require('../note-item.js');
-const { BaseScreenComponent } = require('../base-screen.js');
+const { BaseScreenComponent } = require('../base-screen');
 const { themeStyle } = require('../global-style.js');
 const DialogBox = require('react-native-dialogbox').default;
 import SearchEngineUtils from '@joplin/lib/services/searchengine/SearchEngineUtils';
@@ -98,7 +98,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 
 		if (query) {
 			if (this.props.settings['db.ftsEnabled']) {
-				notes = await SearchEngineUtils.notesForQuery(query, true);
+				notes = await SearchEngineUtils.notesForQuery(query, true, { appendWildCards: true });
 			} else {
 				const p = query.split(' ');
 				const temp = [];

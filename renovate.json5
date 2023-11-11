@@ -28,6 +28,7 @@
 		"packages/app-mobile/android/app/build.gradle",
 		"packages/generate-plugin-doc/**",
 		"packages/plugins/**",
+		"packages/doc-builder/**",
 	],
 	"ignoreDeps": [
 		"@babel/core",

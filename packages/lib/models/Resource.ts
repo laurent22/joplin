@@ -15,6 +15,9 @@ import JoplinError from '../JoplinError';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
 import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 import ShareService from '../services/share/ShareService';
+import { SaveOptions } from './utils/types';
+import { MarkupLanguage } from '@joplin/renderer';
+import { htmlentities } from '@joplin/utils/html';
 
 export default class Resource extends BaseItem {
 
@@ -221,7 +224,11 @@ export default class Resource extends BaseItem {
 				masterKeyId: share && share.master_key_id ? share.master_key_id : '',
 			});
 		} catch (error) {
-			if (error.code === 'ENOENT') throw new JoplinError(`File not found:${error.toString()}`, 'fileNotFound');
+			if (error.code === 'ENOENT') {
+				throw new JoplinError(
+					`Trying to encrypt resource but only metadata is present: ${error.toString()}`, 'fileNotFound',
+				);
+			}
 			throw error;
 		}
 
@@ -230,18 +237,28 @@ export default class Resource extends BaseItem {
 		return { path: encryptedPath, resource: resourceCopy };
 	}
 
-	public static markdownTag(resource: any) {
+	public static markupTag(resource: any, markupLanguage: MarkupLanguage = MarkupLanguage.Markdown) {
 		let tagAlt = resource.alt ? resource.alt : resource.title;
 		if (!tagAlt) tagAlt = '';
 		const lines = [];
 		if (Resource.isSupportedImageMimeType(resource.mime)) {
-			lines.push('![');
-			lines.push(markdownUtils.escapeTitleText(tagAlt));
-			lines.push(`](:/${resource.id})`);
+			if (markupLanguage === MarkupLanguage.Markdown) {
+				lines.push('![');
+				lines.push(markdownUtils.escapeTitleText(tagAlt));
+				lines.push(`](:/${resource.id})`);
+			} else {
+				const altHtml = tagAlt ? `alt="${htmlentities(tagAlt)}"` : '';
+				lines.push(`<img src=":/${resource.id}" ${altHtml}/>`);
+			}
 		} else {
-			lines.push('[');
-			lines.push(markdownUtils.escapeTitleText(tagAlt));
-			lines.push(`](:/${resource.id})`);
+			if (markupLanguage === MarkupLanguage.Markdown) {
+				lines.push('[');
+				lines.push(markdownUtils.escapeTitleText(tagAlt));
+				lines.push(`](:/${resource.id})`);
+			} else {
+				const altHtml = tagAlt ? `alt="${htmlentities(tagAlt)}"` : '';
+				lines.push(`<a href=":/${resource.id}" ${altHtml}>${htmlentities(tagAlt ? tagAlt : resource.id)}</a>`);
+			}
 		}
 		return lines.join('');
 	}
@@ -372,9 +389,15 @@ export default class Resource extends BaseItem {
 		// We first save the resource metadata because this can throw, for
 		// example if modifying a resource that is read-only
 
+		const now = Date.now();
+
 		const result = await Resource.save({
 			id: resource.id,
 			size: fileStat.size,
+			updated_time: now,
+			blob_updated_time: now,
+		}, {
+			autoTimestamp: false,
 		});
 
 		// If the above call has succeeded, we save the data blob
@@ -437,9 +460,23 @@ export default class Resource extends BaseItem {
 
 		await Note.save({
 			title: _('Attachment conflict: "%s"', resource.title),
-			body: _('There was a [conflict](%s) on the attachment below.\n\n%s', 'https://joplinapp.org/conflict/', Resource.markdownTag(conflictResource)),
+			body: _('There was a [conflict](%s) on the attachment below.\n\n%s', 'https://joplinapp.org/help/apps/conflict', Resource.markupTag(conflictResource)),
 			parent_id: await this.resourceConflictFolderId(),
 		}, { changeSource: ItemChange.SOURCE_SYNC });
+	}
+
+	public static async save(o: ResourceEntity, options: SaveOptions = null): Promise<ResourceEntity> {
+		const resource = { ...o };
+
+		if (this.isNew(o, options)) {
+			const now = Date.now();
+			options = { ...options, autoTimestamp: false };
+			if (!resource.created_time) resource.created_time = now;
+			if (!resource.updated_time) resource.updated_time = now;
+			if (!resource.blob_updated_time) resource.blob_updated_time = now;
+		}
+
+		return await super.save(resource, options);
 	}
 
 }
