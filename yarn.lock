@@ -6293,7 +6293,7 @@ __metadata:
     "@joplin/renderer": ~2.13
     "@joplin/tools": ~2.13
     "@joplin/utils": ~2.13
-    "@js-draw/material-icons": 1.11.1
+    "@js-draw/material-icons": 1.11.2
     "@lezer/highlight": 1.1.4
     "@react-native-community/clipboard": 1.5.1
     "@react-native-community/datetimepicker": 7.6.1
@@ -6323,7 +6323,7 @@ __metadata:
     jest: 29.7.0
     jest-environment-jsdom: 29.7.0
     jetifier: 2.0.0
-    js-draw: 1.11.1
+    js-draw: 1.11.2
     jsc-android: 241213.1.0
     jsdom: 22.1.0
     lodash: 4.17.21
@@ -6990,12 +6990,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@js-draw/material-icons@npm:1.11.1":
-  version: 1.11.1
-  resolution: "@js-draw/material-icons@npm:1.11.1"
+"@js-draw/material-icons@npm:1.11.2":
+  version: 1.11.2
+  resolution: "@js-draw/material-icons@npm:1.11.2"
   peerDependencies:
     js-draw: ^1.0.1
-  checksum: ede70585831b3c174821b5cf29f159414e6615bc938c0e882041882c05490b2e64342bafeca7369ef8a4945016bf619b8af3f21ef6fb7f4d06c4a76e233e5ea3
+  checksum: 6a6bbdf936d3a97fab43321d807672f157b12201290a98bd3fd33a7e53966647ed9c5a8aba5dfd6d743bfc37ab9ddff14cbb7fc3f4ffb8b79ff7617a7e886160
   languageName: node
   linkType: hard
 
@@ -26293,13 +26293,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-draw@npm:1.11.1":
-  version: 1.11.1
-  resolution: "js-draw@npm:1.11.1"
+"js-draw@npm:1.11.2":
+  version: 1.11.2
+  resolution: "js-draw@npm:1.11.2"
   dependencies:
     "@js-draw/math": ^1.11.1
     "@melloware/coloris": 0.22.0
-  checksum: 52be651eab82bbed6acbe0c976bd89e6ef006638593cc956357f935d95bba414d634f5c927e37c4e28348bef0fba9fd04c9531ff329106315f74624fd7b6002d
+  checksum: 59669bbe37f4c980f8532b96ec7a80880966beca3a82973fa0681c3988d8ed12745d5c1b27645853806087664c14fa49530fc8815a471346f03b3ef7c4366ea9
   languageName: node
   linkType: hard
 
