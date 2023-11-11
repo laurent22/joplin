@@ -3,6 +3,10 @@ description: Report a reproducible bug or regression in Joplin.
 labels: ['type: bug']
 
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
 
   - type: dropdown
     id: os
