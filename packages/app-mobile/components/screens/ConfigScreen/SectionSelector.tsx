@@ -3,7 +3,7 @@ import * as React from 'react';
 import Setting, { AppType, SettingMetadataSection } from '@joplin/lib/models/Setting';
 import { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { ConfigScreenStyles } from './configScreenStyles';
-import { FlatList, Text, Pressable, View } from 'react-native';
+import { FlatList, Text, Pressable, View, ViewStyle } from 'react-native';
 import { settingsSections } from '@joplin/lib/components/shared/config/config-shared';
 import Icon from '../../Icon';
 
@@ -82,8 +82,15 @@ const SectionSelector: FunctionComponent<Props> = props => {
 		}
 	}, [props.selectedSectionName, flatListRef, sections]);
 
+	const containerStyle: ViewStyle = useMemo(() => ({
+		width: props.width,
+		maxWidth: props.width,
+		minWidth: props.width,
+		flex: 1,
+	}), [props.width]);
+
 	return (
-		<View style={{ width: props.width, flexDirection: 'column' }}>
+		<View style={containerStyle}>
 			<FlatList
 				role='tablist'
 				ref={setFlatListRef}
