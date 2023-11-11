@@ -43,7 +43,7 @@ If you want to start contributing to the project's code, please follow these gui
 - Pull requests that address multiple issues will most likely stall and eventually be closed. This is because we might be fine with one of the changes but not with others and untangling that kind of pull request is too much hassle both for maintainers and the person who submitted it. So most of the time someone gives up and the PR gets closed. So please keep the pull request focused on one issue.
 - **Do not mark your reviewer's comments as "resolved"**. If you do that, the comments will be hidden and the reviewer will not know what are the pending issues in the pull request. Only the reviewer should resolve the comments.
 
-Building the apps is relatively easy - please [see the build instructions](https://github.com/laurent22/joplin/blob/dev/BUILD.md) for more details.
+Building the apps is relatively easy - please [see the build instructions](https://github.com/laurent22/joplin/blob/dev/readme/dev/BUILD.md) for more details.
 
 ### Signing the Individual Contributor License Agreement
 
