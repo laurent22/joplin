@@ -26,7 +26,7 @@ const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
 import Folder from '@joplin/lib/models/Folder';
 import Tag from '@joplin/lib/models/Tag';
 import { reg } from '@joplin/lib/registry';
-const packageInfo = require('./packageInfo.js');
+const packageInfo: PackageInfo = require('./packageInfo.js');
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import ClipperServer from '@joplin/lib/ClipperServer';
 const { webFrame } = require('electron');
@@ -68,6 +68,7 @@ import path = require('path');
 import { checkPreInstalledDefaultPlugins, installDefaultPlugins, setSettingsForDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
 import { parseNotesParent } from '@joplin/lib/reducer';
+import { PackageInfo } from '@joplin/lib/versionInfo';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,

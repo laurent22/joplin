@@ -3,6 +3,19 @@ import Setting from './models/Setting';
 import { reg } from './registry';
 import { Plugins } from './services/plugins/PluginService';
 
+export interface PackageInfo {
+	name: string;
+	version: string;
+	description: string;
+	build: {
+		appId: string;
+	};
+	git: {
+		branch: string;
+		hash: string;
+	};
+}
+
 interface PluginList {
 	completeList: string;
 	summary: string;
@@ -40,7 +53,7 @@ function getPluginLists(plugins: Plugins): PluginList {
 	};
 }
 
-export default function versionInfo(packageInfo: any, plugins: Plugins) {
+export default function versionInfo(packageInfo: PackageInfo, plugins: Plugins) {
 	const p = packageInfo;
 	let gitInfo = '';
 	if ('git' in p) {

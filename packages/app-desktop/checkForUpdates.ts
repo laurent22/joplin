@@ -5,8 +5,9 @@ import bridge from './services/bridge';
 import KvStore from '@joplin/lib/services/KvStore';
 import * as ArrayUtils from '@joplin/lib/ArrayUtils';
 import { CheckForUpdateOptions, extractVersionInfo, GitHubRelease } from './utils/checkForUpdatesUtils';
-const packageInfo = require('./packageInfo.js');
+import { PackageInfo } from '@joplin/lib/versionInfo';
 import { compareVersions } from 'compare-versions';
+const packageInfo: PackageInfo = require('./packageInfo.js');
 
 const logger = Logger.create('checkForUpdates');
 
