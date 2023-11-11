@@ -7,10 +7,6 @@ assignees: ''
 
 ---
 
-## Important
-
-- [ ] I undersand that if I do not read and complete the below template, my post will be deleted and I will be blocked.
-
 <!--
   Please provide a clear and concise description of what the bug is. (In the section Steps To Reproduce.)
   Include screenshots for UI problems if needed.
