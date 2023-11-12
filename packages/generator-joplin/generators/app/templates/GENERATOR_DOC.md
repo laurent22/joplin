@@ -7,7 +7,7 @@ This documentation describes how to create a plugin, and how to work with the pl
 First, install [Yeoman](http://yeoman.io) and generator-joplin using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
 
 ```bash
-npm install -g yo
+npm install -g yo@4.3.1
 npm install -g generator-joplin
 ```
 
