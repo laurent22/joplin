@@ -6742,7 +6742,7 @@ __metadata:
     nanoid: 2.1.11
     node-cron: 3.0.2
     node-mocks-http: 1.13.0
-    nodemailer: 6.9.6
+    nodemailer: 6.9.7
     nodemon: 3.0.1
     pg: 8.11.3
     pm2: 5.3.0
@@ -30684,10 +30684,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemailer@npm:6.9.6":
-  version: 6.9.6
-  resolution: "nodemailer@npm:6.9.6"
-  checksum: f5a8b438fb2f077bf04661fe2f4d2f73ea9df278bab7bde62e03a7ab8c28830182223090a73c5de571e8501bbfed06eb3917010a5729fe8572e2f79fe6d9464c
+"nodemailer@npm:6.9.7":
+  version: 6.9.7
+  resolution: "nodemailer@npm:6.9.7"
+  checksum: 0cf66d27aed3bd2cbdff9939402cec3d2119c31b2b9ff4af3bcd59f48287ea75b90c0ce2cd9eb0df838164972cd25581b4b723c91fd673e2608bcb28445ccb1b
   languageName: node
   linkType: hard
 
