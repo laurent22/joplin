@@ -524,13 +524,13 @@ export interface ContentScriptModuleLoadedEvent {
 }
 
 export interface ContentScriptModule {
-	onLoaded?: (event:ContentScriptModuleLoadedEvent) => void;
-	plugin: () => any;
-	assets?: () => void;
+	onLoaded?: (event: ContentScriptModuleLoadedEvent)=> void;
+	plugin: ()=> any;
+	assets?: ()=> void;
 }
 
 export interface MarkdownItContentScriptModule extends Omit<ContentScriptModule, 'plugin'> {
-	plugin: (markdownIt:any, options:any) => any;
+	plugin: (markdownIt: any, options: any)=> any;
 }
 
 export enum ContentScriptType {
@@ -552,7 +552,7 @@ export enum ContentScriptType {
 	 *     }
 	 * }
 	 * ```
-	 * 
+	 *
 	 * See [the
 	 * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/content_script)
 	 * for a simple Markdown-it plugin example.
