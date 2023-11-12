@@ -11,6 +11,8 @@ import { WebViewMessageEvent } from 'react-native-webview';
 import ExtendedWebView, { WebViewControl } from '../../ExtendedWebView';
 import { clearAutosave, writeAutosave } from './autosave';
 import { LocalizedStrings } from './js-draw/types';
+import VersionInfo from 'react-native-version-info';
+
 
 const logger = Logger.create('ImageEditor');
 
@@ -166,6 +168,13 @@ const ImageEditor = (props: Props) => {
 		redo: _('Redo'),
 	}), []);
 
+	const appInfo = useMemo(() => {
+		return {
+			name: 'Joplin',
+			description: `v${VersionInfo.appVersion}`,
+		};
+	}, []);
+
 	const injectedJavaScript = useMemo(() => `
 		window.onerror = (message, source, lineno) => {
 			window.ReactNativeWebView.postMessage(
@@ -229,6 +238,7 @@ const ImageEditor = (props: Props) => {
 					${JSON.stringify(Setting.value('imageeditor.jsdrawToolbar'))},
 					${JSON.stringify(Setting.value('locale'))},
 					${JSON.stringify(localizedStrings)},
+					${JSON.stringify({ appInfo })},
 				);
 
 				// Start loading the SVG file (if present) after loading the editor.
@@ -242,7 +252,7 @@ const ImageEditor = (props: Props) => {
 			);
 		}
 		true;
-	`, [localizedStrings]);
+	`, [localizedStrings, appInfo]);
 
 	useEffect(() => {
 		webviewRef.current?.injectJS(`
