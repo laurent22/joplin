@@ -6690,7 +6690,7 @@ __metadata:
     markdown-it-sup: 1.0.0
     markdown-it-toc-done-right: 4.2.0
     md5: 2.3.0
-    mermaid: 10.5.0
+    mermaid: 10.5.1
     ts-jest: 29.1.1
     typescript: 5.2.2
   languageName: unknown
@@ -28486,9 +28486,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mermaid@npm:10.5.0":
-  version: 10.5.0
-  resolution: "mermaid@npm:10.5.0"
+"mermaid@npm:10.5.1":
+  version: 10.5.1
+  resolution: "mermaid@npm:10.5.1"
   dependencies:
     "@braintree/sanitize-url": ^6.0.1
     "@types/d3-scale": ^4.0.3
@@ -28510,7 +28510,7 @@ __metadata:
     ts-dedent: ^2.2.0
     uuid: ^9.0.0
     web-worker: ^1.2.0
-  checksum: 443a84f517045342dac8f8968229eaaf7c6d83a88dfd996e17ac5fe04cd4a44710f4324634fbff2d7af5c1136f28cab1db84eb58ecb042f5e2635c26c620fafc
+  checksum: bf1fb1e4e9a3b2fa600fb82f6606dd608da92146b80a1cade11b8cd86512945b71af19797a1ba6f15b1aed59b6a3f504af1dcf5428e4f5abc1756e8fe4ca538e
   languageName: node
   linkType: hard
 
