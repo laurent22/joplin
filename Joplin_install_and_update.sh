@@ -124,7 +124,7 @@ else
 fi
 if [[ $LIBFUSE == "" ]] ; then
   print "${COLOR_RED}Error: Can't get libfuse2 on system, please install libfuse2${COLOR_RESET}"
-  print "See https://joplinapp.org/faq/#desktop-application-will-not-launch-on-linux and https://github.com/AppImage/AppImageKit/wiki/FUSE for more information"
+  print "See https://joplinapp.org/help/faq/#desktop-application-will-not-launch-on-linux and https://github.com/AppImage/AppImageKit/wiki/FUSE for more information"
   exit 1
 fi
 

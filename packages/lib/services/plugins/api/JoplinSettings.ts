@@ -70,6 +70,17 @@ export interface ChangeEvent {
 
 export type ChangeHandler = (event: ChangeEvent)=> void;
 
+const keyPrefix = (pluginId: string): string => {
+	return `plugin-${pluginId}.`;
+};
+
+// Ensures that the plugin settings and sections are within their own namespace,
+// to prevent them from overwriting other plugin settings or the default
+// settings.
+export const namespacedKey = (pluginId: string, key: string): string => {
+	return `${keyPrefix(pluginId)}${key}`;
+};
+
 /**
  * This API allows registering new settings and setting sections, as well as getting and setting settings. Once a setting has been registered it will appear in the config screen and be editable by the user.
  *
@@ -84,16 +95,6 @@ export default class JoplinSettings {
 
 	public constructor(plugin: Plugin) {
 		this.plugin_ = plugin;
-	}
-
-	private get keyPrefix(): string {
-		return `plugin-${this.plugin_.id}.`;
-	}
-
-	// Ensures that the plugin settings and sections are within their own namespace, to prevent them from
-	// overwriting other plugin settings or the default settings.
-	private namespacedKey(key: string): string {
-		return `${this.keyPrefix}${key}`;
 	}
 
 	/**
@@ -116,7 +117,7 @@ export default class JoplinSettings {
 
 			if ('subType' in setting) internalSettingItem.subType = setting.subType;
 			if ('isEnum' in setting) internalSettingItem.isEnum = setting.isEnum;
-			if ('section' in setting) internalSettingItem.section = this.namespacedKey(setting.section);
+			if ('section' in setting) internalSettingItem.section = namespacedKey(this.plugin_.id, setting.section);
 			if ('options' in setting) internalSettingItem.options = () => setting.options;
 			if ('appTypes' in setting) internalSettingItem.appTypes = setting.appTypes;
 			if ('secure' in setting) internalSettingItem.secure = setting.secure;
@@ -126,7 +127,7 @@ export default class JoplinSettings {
 			if ('step' in setting) internalSettingItem.step = setting.step;
 			if ('storage' in setting) internalSettingItem.storage = setting.storage;
 
-			await Setting.registerSetting(this.namespacedKey(key), internalSettingItem);
+			await Setting.registerSetting(namespacedKey(this.plugin_.id, key), internalSettingItem);
 		}
 	}
 
@@ -150,21 +151,21 @@ export default class JoplinSettings {
 	 * Registers a new setting section. Like for registerSetting, it is dynamic and needs to be done every time the plugin starts.
 	 */
 	public async registerSection(name: string, section: SettingSection) {
-		return Setting.registerSection(this.namespacedKey(name), SettingSectionSource.Plugin, section);
+		return Setting.registerSection(namespacedKey(this.plugin_.id, name), SettingSectionSource.Plugin, section);
 	}
 
 	/**
 	 * Gets a setting value (only applies to setting you registered from your plugin)
 	 */
 	public async value(key: string): Promise<any> {
-		return Setting.value(this.namespacedKey(key));
+		return Setting.value(namespacedKey(this.plugin_.id, key));
 	}
 
 	/**
 	 * Sets a setting value (only applies to setting you registered from your plugin)
 	 */
 	public async setValue(key: string, value: any) {
-		return Setting.setValue(this.namespacedKey(key), value);
+		return Setting.setValue(namespacedKey(this.plugin_.id, key), value);
 	}
 
 	/**
@@ -187,8 +188,8 @@ export default class JoplinSettings {
 		// Filter out keys that are not related to this plugin
 		eventManager.on('settingsChange', (event: ChangeEvent) => {
 			const keys = event.keys
-				.filter(k => k.indexOf(this.keyPrefix) === 0)
-				.map(k => k.substr(this.keyPrefix.length));
+				.filter(k => k.indexOf(keyPrefix(this.plugin_.id)) === 0)
+				.map(k => k.substr(keyPrefix(this.plugin_.id).length));
 			if (!keys.length) return;
 			handler({ keys });
 		});

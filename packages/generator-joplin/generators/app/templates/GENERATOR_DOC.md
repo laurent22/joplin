@@ -7,7 +7,7 @@ This documentation describes how to create a plugin, and how to work with the pl
 First, install [Yeoman](http://yeoman.io) and generator-joplin using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
 
 ```bash
-npm install -g yo
+npm install -g yo@4.3.1
 npm install -g generator-joplin
 ```
 
@@ -69,7 +69,7 @@ To get such an external script file to compile, you need to add it to the `extra
 ## More information
 
 - [Joplin Plugin API](https://joplinapp.org/api/references/plugin_api/classes/joplin.html)
-- [Joplin Data API](https://joplinapp.org/api/references/rest_api/)
+- [Joplin Data API](https://joplinapp.org/help/api/references/rest_api)
 - [Joplin Plugin Manifest](https://joplinapp.org/api/references/plugin_manifest/)
 - Ask for help on the [forum](https://discourse.joplinapp.org/) or our [Discord channel](https://discord.gg/VSj7AFHvpq)
 

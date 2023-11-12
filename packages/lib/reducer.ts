@@ -79,7 +79,7 @@ export interface State {
 	syncReport: any;
 	searchQuery: string;
 	searchResults: ProcessResultsRow[];
-	settings: any;
+	settings: Record<string, any>;
 	sharedData: any;
 	appState: string;
 	biometricsDone: boolean;

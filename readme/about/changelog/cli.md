@@ -1,5 +1,22 @@
 # Joplin Terminal App Changelog
 
+## [cli-v2.13.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.13.1) - 2023-11-09T20:08:17Z
+
+- Improved: Allow modifying a resource metadata only when synchronising (#9114)
+- Improved: Allow searching by note ID or using a callback URL (3667bf3)
+- Improved: Apply correct size to images imported from ENEX files (#8684)
+- Improved: Enable ignoreTlsErrors and custom certificates for S3 sync (#8980 by Jens Böttge)
+- Improved: Improved handling of invalid sync info (#6978)
+- Improved: Support for plural translations (#9033)
+- Improved: Updated packages compare-versions (v6.1.0), dayjs (v1.11.10), follow-redirects (v1.15.3), glob (v10.3.6), katex (v0.16.9), markdown-it (v13.0.2), markdown-it-multimd-table (v4.2.3), react, sass (v1.68.0), sharp (v0.32.6), sprintf-js (v1.1.3), tar (v6.2.0), terminal-kit (v3.0.1), uuid (v9.0.1), word-wrap (v1.2.5)
+- Fixed: ENEX files that contain resources with invalid mime types are imported correctly (#8363)
+- Fixed: Ensure that ENEX resources with invalid filenames are imported correctly (#8823)
+- Fixed: Fix OneDrive sync crash on throttle (#9143) (#8561 by Henry Heino)
+- Fixed: Fix search engine ranking algorithm (f504cf1)
+- Fixed: Fixed issues related to sharing notes on read-only notebooks (1c7d22e)
+- Fixed: Improved import of invalid Markdown+FrontMatter files (#8802)
+- Fixed: Prevent application from being stuck when importing an invalid ENEX file (#8699)
+
 ## [cli-v2.12.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.12.1) - 2023-08-23T12:53:19Z
 
 - New: Add support for share permissions (#8491)

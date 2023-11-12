@@ -49,6 +49,7 @@ import PlainEditor from './NoteBody/PlainEditor/PlainEditor';
 import CodeMirror6 from './NoteBody/CodeMirror/v6/CodeMirror';
 import CodeMirror5 from './NoteBody/CodeMirror/v5/CodeMirror';
 import { openItemById } from './utils/contextMenu';
+import { namespacedKey } from '@joplin/lib/services/plugins/api/JoplinSettings';
 
 const commands = [
 	require('./commands/showRevisions'),
@@ -160,10 +161,15 @@ function NoteEditor(props: NoteEditorProps) {
 		return formNote.saveActionQueue.waitForAllDone();
 	}
 
+	const settingValue = useCallback((pluginId: string, key: string) => {
+		return Setting.value(namespacedKey(pluginId, key));
+	}, []);
+
 	const markupToHtml = useMarkupToHtml({
 		themeId: props.themeId,
 		customCss: props.customCss,
 		plugins: props.plugins,
+		settingValue,
 	});
 
 	const allAssets = useCallback(async (markupLanguage: number, options: AllAssetsOptions = null): Promise<any[]> => {

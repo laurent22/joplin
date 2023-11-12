@@ -11,7 +11,7 @@ process.env.WEBSITE_BASE_URL = process.env.WEBSITE_BASE_URL || '';
 const config = {
 	title: 'Joplin',
 	tagline: 'Free your notes!',
-	favicon: 'favicon.ico',
+	favicon: process.env.WEBSITE_BASE_URL + '/favicon.ico',
 
 	// Set the production url of your site here
 	url: process.env.WEBSITE_BASE_URL,

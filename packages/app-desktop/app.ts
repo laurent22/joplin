@@ -26,7 +26,7 @@ const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
 import Folder from '@joplin/lib/models/Folder';
 import Tag from '@joplin/lib/models/Tag';
 import { reg } from '@joplin/lib/registry';
-const packageInfo = require('./packageInfo.js');
+const packageInfo: PackageInfo = require('./packageInfo.js');
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import ClipperServer from '@joplin/lib/ClipperServer';
 const { webFrame } = require('electron');
@@ -71,6 +71,7 @@ import { parseNotesParent } from '@joplin/lib/reducer';
 import OcrService from '@joplin/lib/services/ocr/OcrService';
 import OcrDriverTesseract from '@joplin/lib/services/ocr/drivers/OcrDriverTesseract';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
+import { PackageInfo } from '@joplin/lib/versionInfo';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,

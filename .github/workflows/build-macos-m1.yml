@@ -39,6 +39,11 @@ jobs:
           # Required for building the canvas package
           brew install pango
 
+      # See github-action-main.yml for explanation
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
       - name: Build macOS M1 app
         env:
           APPLE_ASC_PROVIDER: ${{ secrets.APPLE_ASC_PROVIDER }}

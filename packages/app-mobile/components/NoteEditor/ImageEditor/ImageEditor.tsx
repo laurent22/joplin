@@ -11,18 +11,17 @@ import { WebViewMessageEvent } from 'react-native-webview';
 import ExtendedWebView, { WebViewControl } from '../../ExtendedWebView';
 import { clearAutosave, writeAutosave } from './autosave';
 import { LocalizedStrings } from './js-draw/types';
+import VersionInfo from 'react-native-version-info';
+
 
 const logger = Logger.create('ImageEditor');
 
 type OnSaveCallback = (svgData: string)=> void;
 type OnCancelCallback = ()=> void;
 
-// Returns the empty string to load from a template.
-type LoadInitialSVGCallback = ()=> Promise<string>;
-
 interface Props {
 	themeId: number;
-	loadInitialSVGData: LoadInitialSVGCallback;
+	resourceFilename: string|null;
 	onSave: OnSaveCallback;
 	onExit: OnCancelCallback;
 }
@@ -166,10 +165,23 @@ const ImageEditor = (props: Props) => {
 		redo: _('Redo'),
 	}), []);
 
+	const appInfo = useMemo(() => {
+		return {
+			name: 'Joplin',
+			description: `v${VersionInfo.appVersion}`,
+		};
+	}, []);
+
 	const injectedJavaScript = useMemo(() => `
 		window.onerror = (message, source, lineno) => {
 			window.ReactNativeWebView.postMessage(
-				"error: " + message + " in file://" + source + ", line " + lineno
+				"error: " + message + " in file://" + source + ", line " + lineno,
+			);
+		};
+
+		window.onunhandledrejection = (error) => {
+			window.ReactNativeWebView.postMessage(
+				"error: " + error.reason,
 			);
 		};
 
@@ -229,6 +241,7 @@ const ImageEditor = (props: Props) => {
 					${JSON.stringify(Setting.value('imageeditor.jsdrawToolbar'))},
 					${JSON.stringify(Setting.value('locale'))},
 					${JSON.stringify(localizedStrings)},
+					${JSON.stringify({ appInfo })},
 				);
 
 				// Start loading the SVG file (if present) after loading the editor.
@@ -242,7 +255,7 @@ const ImageEditor = (props: Props) => {
 			);
 		}
 		true;
-	`, [localizedStrings]);
+	`, [localizedStrings, appInfo]);
 
 	useEffect(() => {
 		webviewRef.current?.injectJS(`
@@ -255,19 +268,17 @@ const ImageEditor = (props: Props) => {
 	}, [css]);
 
 	const onReadyToLoadData = useCallback(async () => {
-		const initialSVGData = await props.loadInitialSVGData?.() ?? '';
-
 		// It can take some time for initialSVGData to be transferred to the WebView.
 		// Thus, do so after the main content has been loaded.
 		webviewRef.current.injectJS(`(async () => {
 			if (window.editorControl) {
-				const initialSVGData = ${JSON.stringify(initialSVGData)};
+				const initialSVGPath = ${JSON.stringify(props.resourceFilename)};
 				const initialTemplateData = ${JSON.stringify(Setting.value('imageeditor.imageTemplate'))};
 
-				editorControl.loadImageOrTemplate(initialSVGData, initialTemplateData);
+				editorControl.loadImageOrTemplate(initialSVGPath, initialTemplateData);
 			}
 		})();`);
-	}, [webviewRef, props.loadInitialSVGData]);
+	}, [webviewRef, props.resourceFilename]);
 
 	const onMessage = useCallback(async (event: WebViewMessageEvent) => {
 		const data = event.nativeEvent.data;
@@ -306,6 +317,7 @@ const ImageEditor = (props: Props) => {
 			themeId={props.themeId}
 			html={html}
 			injectedJavaScript={injectedJavaScript}
+			allowFileAccessFromJs={true}
 			onMessage={onMessage}
 			onError={onError}
 			ref={webviewRef}

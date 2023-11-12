@@ -1,21 +1,32 @@
 import { PluginSettings } from './services/plugins/PluginService';
 import type PluginService from './services/plugins/PluginService';
-import versionInfo from './versionInfo';
+import versionInfo, { PackageInfo } from './versionInfo';
 
 const renderErrorBlock = (errors: any[]): string => {
 	if (!errors.length) return '';
 	return `\`\`\`\n${errors.map(e => typeof e === 'string' ? e.trim() : e.message.trim())}\n\`\`\``;
 };
 
-export default (title: string, body: string, errors: any[], packageInfo: any, pluginService: PluginService, pluginSettings: PluginSettings) => {
+const getOsName = (platform: typeof process.platform) => {
+	if (platform === 'win32') return 'Windows';
+	if (platform === 'darwin') return 'macOS';
+	if (platform === 'linux') return 'Linux';
+	if (platform === 'android') return 'Android';
+	return '';
+};
+
+export default (title: string, body: string, errors: any[], packageInfo: PackageInfo, pluginService: PluginService, pluginSettings: PluginSettings) => {
 	const v = versionInfo(packageInfo, pluginService.enabledPlugins(pluginSettings));
 
 	const errorBlock = renderErrorBlock(errors);
 
 	const query: Record<string, string> = {
 		title,
-		body: `# About\n\n${v.body.trim()}\n\n# Body\n\n${body}${errorBlock ? `\n\n# Errors\n\n${errorBlock}` : ''}`,
 		category: 'support',
+		version: packageInfo.version,
+		os: getOsName(process.platform),
+		'desktop-about-content': v.body,
+		content: `#### Body\n\n${body}${errorBlock ? `\n\n#### Errors\n\n${errorBlock}` : ''}`,
 	};
 
 	const queryString = Object.keys(query).map(k => `${k}=${encodeURIComponent(query[k])}`).join('&');

@@ -6,25 +6,27 @@ import { ConfigScreenStyles } from './configScreenStyles';
 
 interface Props {
 	title: string;
-	description: string;
+	description?: string;
 	clickHandler: ()=> void;
 	styles: ConfigScreenStyles;
 	disabled?: boolean;
 	statusComponent?: ReactNode;
 }
 
-const ConfigScreenButton: FunctionComponent<Props> = props => {
+const SettingsButton: FunctionComponent<Props> = props => {
+	const styles = props.styles.styleSheet;
+
 	let descriptionComp = null;
 	if (props.description) {
 		descriptionComp = (
 			<View style={{ flex: 1, marginTop: 10 }}>
-				<Text style={props.styles.descriptionText}>{props.description}</Text>
+				<Text style={styles.descriptionText}>{props.description}</Text>
 			</View>
 		);
 	}
 
 	return (
-		<View style={props.styles.settingContainer}>
+		<View style={styles.settingContainer}>
 			<View style={{ flex: 1, flexDirection: 'column' }}>
 				<View style={{ flex: 1 }}>
 					<Button title={props.title} onPress={props.clickHandler} disabled={!!props.disabled} />
@@ -35,4 +37,4 @@ const ConfigScreenButton: FunctionComponent<Props> = props => {
 		</View>
 	);
 };
-export default ConfigScreenButton;
+export default SettingsButton;

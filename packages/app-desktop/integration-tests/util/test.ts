@@ -2,6 +2,8 @@ import { resolve, join, dirname } from 'path';
 import { remove, mkdirp } from 'fs-extra';
 import { _electron as electron, Page, ElectronApplication, test as base } from '@playwright/test';
 import uuid from '@joplin/lib/uuid';
+import createStartupArgs from './createStartupArgs';
+import firstNonDevToolsWindow from './firstNonDevToolsWindow';
 
 
 
@@ -32,9 +34,7 @@ export const test = base.extend<JoplinFixtures>({
 	},
 
 	electronApp: async ({ profileDirectory }, use) => {
-		const startupArgs = [
-			'main.js', '--env', 'dev', '--profile', profileDirectory,
-		];
+		const startupArgs = createStartupArgs(profileDirectory);
 		const electronApp = await electron.launch({ args: startupArgs });
 
 		await use(electronApp);
@@ -44,8 +44,8 @@ export const test = base.extend<JoplinFixtures>({
 	},
 
 	mainWindow: async ({ electronApp }, use) => {
-		const window = await electronApp.firstWindow();
-		await use(window);
+		const mainWindow = await firstNonDevToolsWindow(electronApp);
+		await use(mainWindow);
 	},
 });
 

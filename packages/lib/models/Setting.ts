@@ -90,7 +90,7 @@ export interface SettingItem {
 	isGlobal?: boolean;
 }
 
-interface SettingItems {
+export interface SettingItems {
 	[key: string]: SettingItem;
 }
 
@@ -220,6 +220,13 @@ const userSettingMigration: UserSettingMigration[] = [
 		transformValue: (value: string) => { return [value]; },
 	},
 ];
+
+export type SettingMetadataSection = {
+	name: string;
+	isScreen?: boolean;
+	metadatas: SettingItem[];
+};
+export type MetadataBySection = SettingMetadataSection[];
 
 class Setting extends BaseModel {
 
@@ -2557,6 +2564,9 @@ class Setting extends BaseModel {
 			'revisionService',
 			'server',
 			'keymap',
+			'tools',
+			'export',
+			'moreInfo',
 		];
 	}
 
@@ -2569,7 +2579,7 @@ class Setting extends BaseModel {
 		return ['encryption', 'application', 'appearance', 'joplinCloud'].includes(sectionName);
 	}
 
-	public static groupMetadatasBySections(metadatas: SettingItem[]) {
+	public static groupMetadatasBySections(metadatas: SettingItem[]): MetadataBySection {
 		const sections = [];
 		const generalSection: any = { name: 'general', metadatas: [] };
 		const nameToSections: any = {};
@@ -2617,6 +2627,9 @@ class Setting extends BaseModel {
 		if (name === 'server') return _('Web Clipper');
 		if (name === 'keymap') return _('Keyboard Shortcuts');
 		if (name === 'joplinCloud') return _('Joplin Cloud');
+		if (name === 'tools') return _('Tools');
+		if (name === 'export') return _('Export');
+		if (name === 'moreInfo') return _('More information');
 
 		if (this.customSections_[name] && this.customSections_[name].label) return this.customSections_[name].label;
 
@@ -2632,20 +2645,68 @@ class Setting extends BaseModel {
 		return '';
 	}
 
-	public static sectionNameToIcon(name: string) {
-		if (name === 'general') return 'icon-general';
-		if (name === 'sync') return 'icon-sync';
-		if (name === 'appearance') return 'icon-appearance';
-		if (name === 'note') return 'icon-note';
-		if (name === 'folder') return 'icon-notebooks';
-		if (name === 'plugins') return 'icon-plugins';
-		if (name === 'markdownPlugins') return 'fab fa-markdown';
-		if (name === 'application') return 'icon-application';
-		if (name === 'revisionService') return 'icon-note-history';
-		if (name === 'encryption') return 'icon-encryption';
-		if (name === 'server') return 'far fa-hand-scissors';
-		if (name === 'keymap') return 'fa fa-keyboard';
-		if (name === 'joplinCloud') return 'fa fa-cloud';
+	public static sectionMetadataToSummary(metadata: SettingMetadataSection): string {
+		// TODO: This is currently specific to the mobile app
+		const sectionNameToSummary: Record<string, string> = {
+			'general': _('Language, date format'),
+			'appearance': _('App theme, editor font'),
+			'sync': _('Sync, encryption, proxy'),
+			'joplinCloud': _('Email To Note, login information'),
+			'markdownPlugins': _('Media player, math, diagrams, table of contents'),
+			'note': _('Geolocation, spellcheck, editor toolbar, image resize'),
+			'revisionService': _('Toggle note history, keep notes for'),
+			'tools': _('Application log, profiles, sync status'),
+			'export': _('Export your data'),
+			'moreInfo': _('Privacy policy, donate, website'),
+		};
+
+		return sectionNameToSummary[metadata.name] ?? '';
+	}
+
+	public static sectionNameToIcon(name: string, appType: AppType) {
+		const nameToIconMap: Record<string, string> = {
+			'general': 'icon-general',
+			'sync': 'icon-sync',
+			'appearance': 'icon-appearance',
+			'note': 'icon-note',
+			'folder': 'icon-notebooks',
+			'plugins': 'icon-plugins',
+			'markdownPlugins': 'fab fa-markdown',
+			'application': 'icon-application',
+			'revisionService': 'icon-note-history',
+			'encryption': 'icon-encryption',
+			'server': 'far fa-hand-scissors',
+			'keymap': 'fa fa-keyboard',
+			'joplinCloud': 'fa fa-cloud',
+			'tools': 'fa fa-toolbox',
+			'export': 'fa fa-file-export',
+			'moreInfo': 'fa fa-info-circle',
+		};
+
+		// Icomoon icons are currently not present in the mobile app -- we override these
+		// below.
+		//
+		// These icons come from react-native-vector-icons.
+		// See https://oblador.github.io/react-native-vector-icons/
+		const mobileNameToIconMap: Record<string, string> = {
+			'general': 'fa fa-sliders-h',
+			'sync': 'fa fa-sync',
+			'appearance': 'fa fa-ruler',
+			'note': 'fa fa-sticky-note',
+			'revisionService': 'far fa-history',
+			'plugins': 'fa fa-puzzle-piece',
+			'application': 'fa fa-cog',
+			'encryption': 'fa fa-key',
+		};
+
+		// Overridden?
+		if (appType === AppType.Mobile && name in mobileNameToIconMap) {
+			return mobileNameToIconMap[name];
+		}
+
+		if (name in nameToIconMap) {
+			return nameToIconMap[name];
+		}
 
 		if (this.customSections_[name] && this.customSections_[name].iconName) return this.customSections_[name].iconName;
 

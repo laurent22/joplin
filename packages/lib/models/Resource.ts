@@ -225,7 +225,11 @@ export default class Resource extends BaseItem {
 				masterKeyId: share && share.master_key_id ? share.master_key_id : '',
 			});
 		} catch (error) {
-			if (error.code === 'ENOENT') throw new JoplinError(`File not found:${error.toString()}`, 'fileNotFound');
+			if (error.code === 'ENOENT') {
+				throw new JoplinError(
+					`Trying to encrypt resource but only metadata is present: ${error.toString()}`, 'fileNotFound',
+				);
+			}
 			throw error;
 		}
 

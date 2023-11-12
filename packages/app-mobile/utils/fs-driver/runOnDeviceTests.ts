@@ -167,6 +167,18 @@ const testReadFileChunkUtf8 = async (tempDir: string) => {
 
 		await fsDriver.close(filePath);
 	}
+
+	// Should throw when the file doesn't exist
+	let readData = undefined;
+	try {
+		const handle = await fsDriver.open(`${filePath}.noexist`, 'r');
+		readData = await fsDriver.readFileChunk(handle, 1, 'utf8');
+	} catch (error) {
+		await expectToBe(error.code, 'ENOENT');
+	}
+
+	// Should not have read any data
+	await expectToBe(readData, undefined);
 };
 
 const testTarCreate = async (tempDir: string) => {

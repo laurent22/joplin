@@ -83,8 +83,8 @@ describe('HtmlToMd', () => {
 
 	it('should allow disabling escape', async () => {
 		const htmlToMd = new HtmlToMd();
-		expect(htmlToMd.parse('https://test.com/1_2_3.pdf', { disableEscapeContent: true })).toBe('https://test.com/1_2_3.pdf');
-		expect(htmlToMd.parse('https://test.com/1_2_3.pdf', { disableEscapeContent: false })).toBe('https://test.com/1\\_2\\_3.pdf');
+		expect(htmlToMd.parse('> 1 _2_ 3.pdf', { disableEscapeContent: true })).toBe('> 1 _2_ 3.pdf');
+		expect(htmlToMd.parse('> 1 _2_ 3.pdf', { disableEscapeContent: false })).toBe('\\> 1 \\_2_ 3.pdf');
 	});
 
 });
