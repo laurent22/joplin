@@ -1,7 +1,7 @@
 {
   "name": "@joplin/fork-htmlparser2",
   "description": "Fast & forgiving HTML/XML/RSS parser",
-  "version": "4.1.46",
+  "version": "4.1.48",
   "author": "Felix Boehm <me@feedic.com>",
   "publishConfig": {
     "access": "public"
@@ -64,5 +64,5 @@
   "prettier": {
     "tabWidth": 4
   },
-  "gitHead": "eb4b0e64eab40a51b0895d3a40a9d8c3cb7b1b14"
+  "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"
 }

@@ -75,6 +75,10 @@ if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
 	if [ "$IS_LINUX" == "1" ]; then
 		echo "Running Joplin Server tests using PostgreSQL..."
 		sudo docker-compose --file docker-compose.db-dev.yml up -d
+		cmdResult=$?
+		if [ $cmdResult -ne 0 ]; then
+			exit $cmdResult
+		fi
 		export JOPLIN_TESTS_SERVER_DB=pg
 	else
 		echo "Running Joplin Server tests using SQLite..."

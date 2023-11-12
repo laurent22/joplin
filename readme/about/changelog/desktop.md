@@ -1,5 +1,23 @@
 # Joplin Desktop Changelog
 
+## [v2.13.5](https://github.com/laurent22/joplin/releases/tag/v2.13.5) (Pre-release) - 2023-11-09T20:24:09Z
+
+- New: Plugins: Add support for getting plugin settings from a Markdown renderer ([8be22ed](https://github.com/laurent22/joplin/commit/8be22ed))
+- New: Plugins: Add support for showOpenDialog method ([dd47571](https://github.com/laurent22/joplin/commit/dd47571))
+- Improved: Add a "Retry all" button when multiple resources could not be downloaded ([#9158](https://github.com/laurent22/joplin/issues/9158))
+- Improved: Allow attaching a file from the Markdown editor for HTML notes ([a7dddaf](https://github.com/laurent22/joplin/commit/a7dddaf))
+- Improved: Prompt to restart in safe mode on renderer process hang/crash ([#9153](https://github.com/laurent22/joplin/issues/9153)) ([#8742](https://github.com/laurent22/joplin/issues/8742) by Henry Heino)
+- Improved: Updated packages electron (v26), sass (v1.68.0)
+- Fixed: Allow Electron `--disable-gpu` flag ([#9179](https://github.com/laurent22/joplin/issues/9179)) ([#9130](https://github.com/laurent22/joplin/issues/9130) by [@orl0](https://github.com/orl0))
+- Fixed: Disable selection match highlighting ([#9202](https://github.com/laurent22/joplin/issues/9202)) ([#9201](https://github.com/laurent22/joplin/issues/9201) by Henry Heino)
+- Fixed: Fix OneDrive sync crash on throttle ([#9143](https://github.com/laurent22/joplin/issues/9143)) ([#8561](https://github.com/laurent22/joplin/issues/8561) by Henry Heino)
+- Fixed: Fix inserting resources into TinyMCE from plugins (insertText command) ([#9225](https://github.com/laurent22/joplin/issues/9225)) ([#7547](https://github.com/laurent22/joplin/issues/7547) by Henry Heino)
+- Fixed: Fix note list scroll ([#9211](https://github.com/laurent22/joplin/issues/9211)) ([#9036](https://github.com/laurent22/joplin/issues/9036) by Henry Heino)
+- Fixed: Fix rare crash when developing a plugin ([#8961](https://github.com/laurent22/joplin/issues/8961))
+- Fixed: Fix underscores escaped within some text-only URLs ([#9198](https://github.com/laurent22/joplin/issues/9198)) ([#9122](https://github.com/laurent22/joplin/issues/9122) by Henry Heino)
+- Fixed: Rich text editor: Fix repeated newline characters discarded on save to markdown ([#9199](https://github.com/laurent22/joplin/issues/9199)) ([#8978](https://github.com/laurent22/joplin/issues/8978) by Henry Heino)
+- Fixed: Toolbar icons in view mode are partly not grayed out and can be used ([#9149](https://github.com/laurent22/joplin/issues/9149))
+
 ## [v2.13.4](https://github.com/laurent22/joplin/releases/tag/v2.13.4) (Pre-release) - 2023-10-31T00:01:00Z
 
 - Improved: Allow modifying a resource metadata only when synchronising ([#9114](https://github.com/laurent22/joplin/issues/9114))

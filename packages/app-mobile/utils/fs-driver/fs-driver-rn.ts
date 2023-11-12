@@ -9,6 +9,7 @@ import * as tar from 'tar-stream';
 import { resolve } from 'path';
 import { Buffer } from 'buffer';
 import Logger from '@joplin/utils/Logger';
+import JoplinError from '@joplin/lib/JoplinError';
 
 const logger = Logger.create('fs-driver-rn');
 
@@ -285,6 +286,10 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	public async readFileChunk(handle: any, length: number, rawEncoding = 'base64') {
+		if (!handle?.stat) {
+			throw new JoplinError('File does not exist (reading file chunk).', 'ENOENT');
+		}
+
 		const encoding = normalizeEncoding(rawEncoding);
 
 		if (handle.offset + length > handle.stat.size) {

@@ -1,5 +1,17 @@
 # Joplin Android Changelog
 
+## [android-v2.13.6](https://github.com/laurent22/joplin/releases/tag/android-v2.13.6) (Pre-release) - 2023-11-09T19:45:21Z
+
+- Improved: Add a "Retry all" button when multiple resources could not be downloaded (#9158)
+- Improved: Image editor: Allow loading from save when the image editor is reloaded in the background (#9135) (#9134 by Henry Heino)
+- Improved: Settings screen: Create separate pages for each screen (#8567 by Henry Heino)
+- Improved: Updated packages @react-native-community/datetimepicker (v7.6.1), deprecated-react-native-prop-types (v4.2.3), sass (v1.68.0)
+- Fixed: Disable selection match highlighting (#9202) (#9201 by Henry Heino)
+- Fixed: Fix OneDrive sync crash on throttle (#9143) (#8561 by Henry Heino)
+- Fixed: Fix fast search (#9191) (#9159 by Henry Heino)
+- Fixed: Fix search highlighting (#9206) (#9207 by Henry Heino)
+- Fixed: Image editor resets on theme change (#9190) (#9188 by Henry Heino)
+
 ## [android-v2.13.5](https://github.com/laurent22/joplin/releases/tag/android-v2.13.5) (Pre-release) - 2023-10-30T22:49:19Z
 
 - Improved: Allow searching by note ID or using a callback URL (3667bf3)
