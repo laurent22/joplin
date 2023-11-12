@@ -1,6 +1,6 @@
 name: Bug Report
 description: Report a reproducible bug or regression in Joplin.
-labels: ['type: bug']
+labels: ['bug']
 
 body:
   - type: markdown
