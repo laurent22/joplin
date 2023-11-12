@@ -18,6 +18,7 @@ const timers = require('timers');
 const zlib = require('zlib');
 const dgram = require('dgram');
 const { basename, fileExtension, safeFileExtension } = require('./path-utils');
+const dns = require('dns');
 
 const proxySettings = {};
 
@@ -97,6 +98,10 @@ function shimInit(options = null) {
 		nodeSqlite: null,
 		...options,
 	};
+	// Work around issues with ipv6 resolution
+	// (possibly incorrect URL serialization see https://github.com/mswjs/msw/issues/1388#issuecomment-1241180921).
+	// See also https://github.com/node-fetch/node-fetch/issues/1624#issuecomment-1407717012
+	dns.setDefaultResultOrder('ipv4first');
 
 	const sharp = options.sharp;
 	const keytar = (shim.isWindows() || shim.isMac()) && !shim.isPortable() ? options.keytar : null;
