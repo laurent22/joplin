@@ -12,17 +12,6 @@ module.exports = class extends Generator {
 
 		this.option('silent');
 		this.option('update');
-
-		// This appears to be deprecated and undocumented
-		// Maybe need this instead?
-		// https://github.com/yeoman/generator/issues/1294#issuecomment-841668595
-
-		// this.option('nodePackageManager', 'npm');
-
-		if (this.options.update) {
-			// When updating, overwrite files without prompting
-			this.conflicter.force = true;
-		}
 	}
 
 	async prompting() {
@@ -162,6 +151,15 @@ module.exports = class extends Generator {
 					destFilePath, {
 						process: (sourceBuffer) => {
 							return mergeIgnoreFile(sourceBuffer.toString(), destContent);
+						},
+					},
+				);
+			} else if (this.options.update) {
+				this.fs.copy(
+					this.templatePath(file),
+					destFilePath, {
+						process: (sourceBuffer) => {
+							return sourceBuffer.toString();
 						},
 					},
 				);
