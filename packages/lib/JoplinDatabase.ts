@@ -308,8 +308,10 @@ export default class JoplinDatabase extends Database {
 		const queries: SqlQuery[] = [];
 		queries.push(this.wrapQuery('DELETE FROM table_fields'));
 
-		if (await this.countFields('notes_fts') !== await this.countFields('items_fts')) {
-			throw new Error('`notes_fts` must have the same number of fields than `items_fts` for the search engine BM25 algorithm to work');
+		const countFieldsNotesFts = await this.countFields('notes_fts');
+		const countFieldsItemsFts = await this.countFields('items_fts');
+		if (countFieldsNotesFts !== countFieldsItemsFts) {
+			throw new Error(`\`notes_fts\` (${countFieldsNotesFts} fields) must have the same number of fields as \`items_fts\` (${countFieldsItemsFts} fields) for the search engine BM25 algorithm to work`);
 		}
 
 		const tableRows = await this.selectAll('SELECT name FROM sqlite_master WHERE type="table"');
