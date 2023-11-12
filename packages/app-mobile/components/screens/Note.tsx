@@ -81,7 +81,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			fromShare: false,
 			showCamera: false,
 			showImageEditor: false,
-			loadImageEditorData: null,
 			imageEditorResource: null,
 			noteResources: {},
 
@@ -851,9 +850,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const filePath = Resource.fullPath(item);
 		this.setState({
 			showImageEditor: true,
-			loadImageEditorData: async () => {
-				return await shim.fsDriver().readFile(filePath);
-			},
+			imageEditorResourceFilepath: filePath,
 			imageEditorResource: item,
 		});
 	}
@@ -1302,7 +1299,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			return <CameraView themeId={this.props.themeId} style={{ flex: 1 }} onPhoto={this.cameraView_onPhoto} onCancel={this.cameraView_onCancel} />;
 		} else if (this.state.showImageEditor) {
 			return <ImageEditor
-				loadInitialSVGData={this.state.loadImageEditorData}
+				resourceFilename={this.state.imageEditorResourceFilepath}
 				themeId={this.props.themeId}
 				onSave={this.onSaveDrawing}
 				onExit={this.onCloseDrawing}
