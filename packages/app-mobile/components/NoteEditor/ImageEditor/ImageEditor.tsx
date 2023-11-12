@@ -166,7 +166,13 @@ const ImageEditor = (props: Props) => {
 	const injectedJavaScript = useMemo(() => `
 		window.onerror = (message, source, lineno) => {
 			window.ReactNativeWebView.postMessage(
-				"error: " + message + " in file://" + source + ", line " + lineno
+				"error: " + message + " in file://" + source + ", line " + lineno,
+			);
+		};
+
+		window.onunhandledrejection = (error) => {
+			window.ReactNativeWebView.postMessage(
+				"error: " + error.reason,
 			);
 		};
 
