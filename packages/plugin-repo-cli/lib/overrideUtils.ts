@@ -53,7 +53,7 @@ export async function readManifestOverrides(repoDir: string): Promise<ManifestOv
 export type IgnoredPackages = Record<string, boolean>;
 
 export const readIgnoredPackages = (repoDir: string): Promise<IgnoredPackages> => {
-	return readJsonFile(path.resolve(repoDir, 'ignoredNpmPackages.json'), {});
+	return readJsonFile(path.resolve(repoDir, 'ignoredPackages.json'), {});
 };
 
 export const isPackageIgnored = (packageName: string, ignoredPackages: IgnoredPackages) => {
