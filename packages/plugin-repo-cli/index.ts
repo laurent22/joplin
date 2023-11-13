@@ -16,7 +16,7 @@ import { NpmPackage } from './lib/types';
 import gitCompareUrl from './lib/gitCompareUrl';
 import commandUpdateRelease from './commands/updateRelease';
 import { isJoplinPluginPackage, readJsonFile } from './lib/utils';
-import { applyManifestOverrides, getObsoleteManifests, readManifestOverrides } from './lib/overrideUtils';
+import { applyManifestOverrides, getObsoleteManifests, isPackageIgnored, readIgnoredPackages, readManifestOverrides } from './lib/overrideUtils';
 import { execCommand } from '@joplin/utils';
 
 function pluginInfoFromSearchResults(results: any[]): NpmPackage[] {
@@ -237,9 +237,12 @@ async function commandBuild(args: CommandBuildArgs) {
 
 	const searchResults = (await execCommand('npm search joplin-plugin --searchlimit 5000 --json', { showStdout: false, showStderr: false })).trim();
 	const npmPackages = pluginInfoFromSearchResults(JSON.parse(searchResults));
+	const ignoredPackages = await readIgnoredPackages(repoDir);
 
 	for (const npmPackage of npmPackages) {
-		await processNpmPackage(npmPackage, repoDir, dryRun);
+		if (!isPackageIgnored(npmPackage.name, ignoredPackages)) {
+			await processNpmPackage(npmPackage, repoDir, dryRun);
+		}
 	}
 
 	if (!dryRun) {

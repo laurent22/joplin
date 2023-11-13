@@ -1,4 +1,4 @@
-import { applyManifestOverrides, getObsoleteManifests, ManifestOverrides } from './overrideUtils';
+import { applyManifestOverrides, getObsoleteManifests, isPackageIgnored, ManifestOverrides } from './overrideUtils';
 
 describe('overrideUtils', () => {
 
@@ -92,4 +92,14 @@ describe('overrideUtils', () => {
 		expect(updatedManifests['joplin.plugin.ambrt.backlinksToNote']._recommended).toBe(undefined);
 	});
 
+	test('isPackageIgnored should correctly return true if a package is ignored', () => {
+		const ignoredPackages = {
+			'test': true,
+			'joplin-plugin-some-plugin-name-here': true,
+		};
+
+		expect(isPackageIgnored('test', ignoredPackages)).toBe(true);
+		expect(isPackageIgnored('not-ignored', ignoredPackages)).toBe(false);
+		expect(isPackageIgnored('__proto__', ignoredPackages)).toBe(true);
+	});
 });

@@ -49,3 +49,13 @@ function pluginManifestOverridesPath(repoDir: string): string {
 export async function readManifestOverrides(repoDir: string): Promise<ManifestOverrides> {
 	return readJsonFile(pluginManifestOverridesPath(repoDir), {});
 }
+
+export type IgnoredPackages = Record<string, boolean>;
+
+export const readIgnoredPackages = (repoDir: string): Promise<IgnoredPackages> => {
+	return readJsonFile(path.resolve(repoDir, 'ignoredNpmPackages.json'), {});
+};
+
+export const isPackageIgnored = (packageName: string, ignoredPackages: IgnoredPackages) => {
+	return packageName in ignoredPackages;
+};
