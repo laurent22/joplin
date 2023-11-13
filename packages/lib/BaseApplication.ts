@@ -172,6 +172,13 @@ export default class BaseApplication {
 			this.showStackTraces_ = true;
 		}
 
+		// Work around issues with ipv6 resolution -- default to ipv4first.
+		// (possibly incorrect URL serialization see https://github.com/mswjs/msw/issues/1388#issuecomment-1241180921).
+		// See also https://github.com/node-fetch/node-fetch/issues/1624#issuecomment-1407717012
+		if (flags.matched.allowOverridingDnsResultOrder) {
+			dns.setDefaultResultOrder('ipv4first');
+		}
+
 		return {
 			matched: flags.matched,
 			argv: flags.argv,
@@ -636,11 +643,6 @@ export default class BaseApplication {
 
 		// https://immerjs.github.io/immer/docs/freezing
 		setAutoFreeze(initArgs.env === 'dev');
-
-		// Work around issues with ipv6 resolution
-		// (possibly incorrect URL serialization see https://github.com/mswjs/msw/issues/1388#issuecomment-1241180921).
-		// See also https://github.com/node-fetch/node-fetch/issues/1624#issuecomment-1407717012
-		dns.setDefaultResultOrder('ipv4first');
 
 		const rootProfileDir = BaseApplication.determineProfileDir(initArgs);
 		const { profileDir, profileConfig, isSubProfile } = await initProfile(rootProfileDir);
