@@ -53,7 +53,7 @@ const SectionSelector: FunctionComponent<Props> = props => {
 					</Text>
 					<Text
 						style={styles.sidebarButtonDescriptionText}
-						numberOfLines={2}
+						numberOfLines={1}
 						ellipsizeMode='tail'
 					>
 						{shortDescription ?? ''}

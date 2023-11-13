@@ -48,6 +48,8 @@ interface Props {
 	// See react-native-webview's prop with the same name.
 	mixedContentMode?: 'never' | 'always';
 
+	allowFileAccessFromJs?: boolean;
+
 	// Initial javascript. Must evaluate to true.
 	injectedJavaScript: string;
 
@@ -143,6 +145,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			originWhitelist={['file://*', './*', 'http://*', 'https://*']}
 			mixedContentMode={props.mixedContentMode}
 			allowFileAccess={true}
+			allowFileAccessFromFileURLs={props.allowFileAccessFromJs}
 			injectedJavaScript={props.injectedJavaScript}
 			onMessage={props.onMessage}
 			onError={props.onError}

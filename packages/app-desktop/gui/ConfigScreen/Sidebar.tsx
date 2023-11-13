@@ -95,7 +95,7 @@ export default function Sidebar(props: Props) {
 			<StyledListItem
 				key={section.name}
 				href='#'
-				aria-role='tab'
+				role='tab'
 				aria-selected={selected}
 				isSubSection={Setting.isSubSection(section.name)}
 				selected={selected}
@@ -131,7 +131,7 @@ export default function Sidebar(props: Props) {
 	}
 
 	return (
-		<StyledRoot aria-role='tablist'>
+		<StyledRoot role='tablist'>
 			{buttons}
 		</StyledRoot>
 	);

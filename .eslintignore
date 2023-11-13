@@ -383,6 +383,8 @@ packages/app-desktop/integration-tests/models/MainScreen.js
 packages/app-desktop/integration-tests/models/NoteEditorScreen.js
 packages/app-desktop/integration-tests/models/SettingsScreen.js
 packages/app-desktop/integration-tests/util/activateMainMenuItem.js
+packages/app-desktop/integration-tests/util/createStartupArgs.js
+packages/app-desktop/integration-tests/util/firstNonDevToolsWindow.js
 packages/app-desktop/integration-tests/util/test.js
 packages/app-desktop/playwright.config.js
 packages/app-desktop/plugins/GotoAnything.js
@@ -508,7 +510,10 @@ packages/app-mobile/services/profiles/index.js
 packages/app-mobile/services/voiceTyping/vosk.android.js
 packages/app-mobile/services/voiceTyping/vosk.ios.js
 packages/app-mobile/setupQuickActions.js
-packages/app-mobile/tools/buildInjectedJs.js
+packages/app-mobile/tools/buildInjectedJs/BundledFile.js
+packages/app-mobile/tools/buildInjectedJs/constants.js
+packages/app-mobile/tools/buildInjectedJs/copyJs.js
+packages/app-mobile/tools/buildInjectedJs/gulpTasks.js
 packages/app-mobile/utils/ShareExtension.js
 packages/app-mobile/utils/ShareUtils.test.js
 packages/app-mobile/utils/ShareUtils.js

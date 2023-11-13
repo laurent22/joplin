@@ -120,20 +120,48 @@ export const createJsDrawEditor = (
 	editor.showLoadingWarning(0);
 	editor.setReadOnly(true);
 
+	const fetchInitialSvgData = (resourceUrl: string) => {
+		return new Promise<string>((resolve, reject) => {
+			if (!resourceUrl) {
+				resolve('');
+			}
+
+			// fetch seems to be unable to request file:// URLs.
+			// https://github.com/react-native-webview/react-native-webview/issues/1560#issuecomment-1783611805
+			const request = new XMLHttpRequest();
+
+			const onError = () => {
+				reject(`Failed to load initial SVG data: ${request.status}, ${request.statusText}, ${request.responseText}`);
+			};
+
+			request.addEventListener('load', _ => {
+				resolve(request.responseText);
+			});
+			request.addEventListener('error', onError);
+			request.addEventListener('abort', onError);
+
+			request.open('GET', resourceUrl);
+			request.send();
+		});
+	};
+
 	const editorControl = {
 		editor,
-		loadImageOrTemplate: async (svgData: string|undefined, templateData: string) => {
+		loadImageOrTemplate: async (resourceUrl: string, templateData: string) => {
 			// loadFromSVG shows its own loading message. Hide the original.
 			editor.hideLoadingWarning();
 
-			if (svgData && svgData.length > 0) {
-				await editor.loadFromSVG(svgData);
-			} else {
+			const svgData = await fetchInitialSvgData(resourceUrl);
+
+			// Load from a template if no initial data
+			if (svgData === '') {
 				await applyTemplateToEditor(editor, templateData);
 
 				// The editor expects to be saved initially (without
 				// unsaved changes). Save now.
 				saveNow();
+			} else {
+				await editor.loadFromSVG(svgData);
 			}
 
 			// We can now edit and save safely (without data loss).
