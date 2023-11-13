@@ -559,11 +559,21 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 			const toolbarPluginButtons = pluginCommandNames.length ? ` | ${pluginCommandNames.join(' ')}` : '';
 
+			// The toolbar is going to wrap based on groups of buttons
+			// (delimited by |). It means that if we leave large groups of
+			// buttons towards the end of the toolbar it's going to needlessly
+			// hide many buttons even when there is space. So this is why below,
+			// we create small groups of just one button towards the end.
+
 			const toolbar = [
 				'bold', 'italic', 'joplinHighlight', 'joplinStrikethrough', 'formattingExtras', '|',
 				'link', 'joplinInlineCode', 'joplinCodeBlock', 'joplinAttach', '|',
 				'bullist', 'numlist', 'joplinChecklist', '|',
-				'h1', 'h2', 'h3', 'hr', 'blockquote', 'table', `joplinInsertDateTime${toolbarPluginButtons}`,
+				'h1', 'h2', 'h3', '|',
+				'hr', '|',
+				'blockquote', '|',
+				'table', '|',
+				`joplinInsertDateTime${toolbarPluginButtons}`,
 			];
 
 			const editors = await (window as any).tinymce.init({
