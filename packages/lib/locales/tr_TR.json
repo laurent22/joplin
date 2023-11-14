@@ -74,6 +74,9 @@
 	"%s: %s": [
 		"%s: %s"
 	],
+	"%s: Missing password.": [
+		"%s: Eksik parola."
+	],
 	"&Edit": [
 		"&Düzenle"
 	],
@@ -218,6 +221,12 @@
 	"Always": [
 		"Her zaman"
 	],
+	"Always ask": [
+		"Her zaman sor"
+	],
+	"Always resize": [
+		"Her zaman yeniden boyutlandır"
+	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
 		"\"%s\" not defteri belirlenemedi. Lütfen not defteri id'lerini kulllanın. \"ti\" a basarak not defterinin kısa id'sini görebilir, veya $b ile mevcut seçili not defteri hakkında bilgiye erişebilirsiniz"
 	],
@@ -225,6 +234,9 @@
 		"\"%s\" not defteri belirlenemedi. Lütfen kısa not defteri id'sini kullanın. \"ti\" a basarak kısa not defteri id'sini görebilirsiniz"
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		""
+	],
+	"An error occurred: %s": [
 		""
 	],
 	"An update is available, do you want to download it now?": [
@@ -464,6 +476,9 @@
 	"Code View": [
 		"Kod Görünümü"
 	],
+	"Collaborate on a notebook with others": [
+		"Başkalarıyla işbirliği halinde not defterlerini ortak yönetin"
+	],
 	"Collaborate on notebooks with others": [
 		"Başkalarıyla işbirliği halinde not defterlerini ortak yönetin"
 	],
@@ -487,6 +502,9 @@
 	],
 	"Command palette...": [
 		"Komut paleti…"
+	],
+	"Compact": [
+		"Kompakt"
 	],
 	"Completed": [
 		"Tamamlandı"
@@ -650,6 +668,12 @@
 	],
 	"Creates a new to-do.": [
 		"Yeni bir yapılacak öğe (to-do) oluşturur."
+	],
+	"Creating new note...": [
+		"Yeni not oluşturuluyor..."
+	],
+	"Creating new to-do...": [
+		"Yeni yapılacaklar listesi oluşturuluyor..."
 	],
 	"Creating report...": [
 		"Rapor oluşturuluyor..."
@@ -818,6 +842,9 @@
 	],
 	"Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": [
 		"Şifrelemeyi devre dışı bırakmak *tüm* notlarınızın ve eklerinizin yeniden senkronize edileceği ve senkronizasyon hedefine şifrelenmemiş olarak gönderileceği anlamına gelir. Devam etmek istiyor musunuz?"
+	],
+	"Discard": [
+		"Vazgeç"
 	],
 	"Discard changes": [
 		"Değişiklikleri iptal et"
@@ -1098,6 +1125,9 @@
 	"Enter notebook title": [
 		"Not defteri başlığını girin"
 	],
+	"Enter password": [
+		"Parolayı girin"
+	],
 	"Enum": [
 		"Enum"
 	],
@@ -1266,6 +1296,9 @@
 	"Generating link...": [
 		"Bağlantı oluşturuluyor...",
 		"Bağlantılar oluşturuluyor..."
+	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
 	],
 	"Get it now:": [
 		"Hemen al:"
@@ -1622,8 +1655,8 @@
 	"Logout": [
 		"Çıkış Yap"
 	],
-	"Logs": [
-		"Kayıtlar"
+	"Logs, profiles, sync status": [
+		""
 	],
 	"Make a donation": [
 		"Bağış yapın"
@@ -1684,6 +1717,9 @@
 	],
 	"Max Total Size": [
 		"Maks. Toplam Boyut"
+	],
+	"Media player, math, diagrams, table of contents": [
+		""
 	],
 	"Missing keys": [
 		"Eksik anahtarar"
@@ -1862,6 +1898,9 @@
 	"Note list growth factor": [
 		"Not listesi büyüme faktörü"
 	],
+	"Note list style": [
+		"Not listeleme biçimi"
+	],
 	"Note properties": [
 		"Not özellikleri"
 	],
@@ -1948,6 +1987,9 @@
 	],
 	"Open...": [
 		"Aç..."
+	],
+	"Opening section %s": [
+		""
 	],
 	"Operation cancelled": [
 		"İşlem iptal edildi"
@@ -2312,6 +2354,9 @@
 	"Save changes": [
 		"Değişiklikleri kaydet"
 	],
+	"Save changes?": [
+		"Değişiklikleri kaydedilsin mi?"
+	],
 	"Save geo-location with notes": [
 		"Coğrafi konumu notlarla kaydedin"
 	],
@@ -2387,6 +2432,9 @@
 	"Share a copy of all notes in a file format that can be imported by Joplin on a computer.": [
 		"Tüm notların bir kopyasını Joplin tarafından bir bilgisayara aktarılabilecek bir dosya biçiminde paylaşın."
 	],
+	"Share a notebook with others": [
+		"Not defterini başkalarıyla paylaşın"
+	],
 	"Share Notebook": [
 		"Not Defterini Paylaş"
 	],
@@ -2437,6 +2485,9 @@
 	],
 	"Shrink large images before adding them to notes.": [
 		""
+	],
+	"Side menu closed": [
+		"Yan menü kapalı"
 	],
 	"Side menu opened": [
 		""
@@ -2672,6 +2723,9 @@
 	"Teams": [
 		"Ekipler"
 	],
+	"Text document": [
+		"Metin belgesi"
+	],
 	"Text editor command": [
 		"Metin editörü komutu"
 	],
@@ -2765,6 +2819,9 @@
 	"The sync target needs to be upgraded. Press this banner to proceed.": [
 		"Senkronizasyon hedefinin güncellenmesi gerekmekte. Devam etmek için bu butona basın."
 	],
+	"The synchronisation password is missing.": [
+		"Senkronizasyon parolası eksik."
+	],
 	"The tag \"%s\" already exists. Please choose a different name.": [
 		"\"%s\" etiketi mevcut. Lütfen başka isim seçin."
 	],
@@ -2824,6 +2881,9 @@
 	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"Bu yetkilendirme yalnızca üçüncü taraf uygulamaların Joplin'e erişmesine izin vermek için gereklidir."
+	],
+	"This drawing may have unsaved changes.": [
+		"Çizimde kaydedilmemiş değişiklikler olabilir."
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Bu gelişmiş araç notlarınıza iliştirdiğiniz ek dosyaları görmenizi sağlar. Lütfen bu aracı kullanırken dikkatli olun, çünkü bu dosyalar silinirse sonrasında geri döndürülemez."
@@ -2981,8 +3041,14 @@
 	"Type: %s.": [
 		"Tip: %s."
 	],
+	"Unable to edit resource of type %s": [
+		"Kaynak tipi %s düzenlenemedi"
+	],
 	"Unable to export or share data. Reason: %s": [
 		"Veri dışarı akataılamadı veya paylaşılamadı. Sebep: %s"
+	],
+	"Unable to share log data. Reason: %s": [
+		"Loglar dışarı aktarılamadı. Sebep: %s"
 	],
 	"Uncompleted to-dos on top": [
 		"Tamamlanmamış yap-list yukarıda"
@@ -3160,6 +3226,9 @@
 	],
 	"When creating a new to-do:": [
 		"Yeni bir yapılacak oluşturulurken:"
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		"Kelime"

@@ -29,6 +29,9 @@
 	"%d notes match this pattern. Delete them?": [
 		"%d notatki spełniają wzór. Usunąć je?"
 	],
+	"%s": [
+		"%s"
+	],
 	"%s %s (%s, %s)": [
 		"%s %s (%s, %s)"
 	],
@@ -70,6 +73,9 @@
 	],
 	"%s: %s": [
 		"%s: %s"
+	],
+	"%s: Missing password.": [
+		"%s: Brak hasła."
 	],
 	"&Edit": [
 		"&Edytuj"
@@ -215,6 +221,12 @@
 	"Always": [
 		"Zawsze"
 	],
+	"Always ask": [
+		"Zawsze pytaj"
+	],
+	"Always resize": [
+		"Zmień rozmiar"
+	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
 		""
 	],
@@ -222,6 +234,9 @@
 		""
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		""
+	],
+	"An error occurred: %s": [
 		""
 	],
 	"An update is available, do you want to download it now?": [
@@ -352,6 +367,9 @@
 	],
 	"Cannot copy note to \"%s\" notebook": [
 		"Nie można skopiować notatki do notatnika \"%s\""
+	],
+	"Cannot create a new note: %s": [
+		"Nie można utworzyć notatki: %s"
 	],
 	"Cannot find \"%s\".": [
 		"Nie można znaleźć \"%s\"."
@@ -587,7 +605,7 @@
 		"Utwórz nowy notatnik"
 	],
 	"Create user": [
-		"Utwórz urzytkowanika"
+		"Utwórz użytkownika"
 	],
 	"Created": [
 		"Utworzono"
@@ -621,6 +639,9 @@
 	],
 	"Creates a new to-do.": [
 		"Tworzy nowe zadanie."
+	],
+	"Creating new note...": [
+		"Tworzenie nowej notatki..."
 	],
 	"Creating report...": [
 		"Tworzenie raportu..."
@@ -703,11 +724,17 @@
 	"Delete local data and re-download from sync target": [
 		"Usuń dane lokalne i pobierz je ponownie z miejsca docelowego synchronizacji"
 	],
+	"Delete note": [
+		"Usuń notatkę"
+	],
 	"Delete note \"%s\"?": [
 		"Usunąć notatkę \"%s\"?"
 	],
 	"Delete note?": [
 		"Usunąć notatkę?"
+	],
+	"Delete notebook": [
+		"Usuń notatnik"
 	],
 	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
 		"Usunąć notatnik \"%s:?\n\nWszystkie notatki i notatniki podrzędne zawarte w tym notatniku także zostaną usunięte."
@@ -717,6 +744,9 @@
 	],
 	"Delete plugin \"%s\"?": [
 		"Usunąć wtyczkę \"%s\"?"
+	],
+	"Delete profile \"%s\"": [
+		"Usuń profil “%s”"
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
@@ -864,6 +894,9 @@
 	],
 	"Duplicate line": [
 		"Duplikuj wiersz"
+	],
+	"Duplicate selected notes": [
+		"Duplikuj zaznaczone"
 	],
 	"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": [
 		"Duplikuje notatki określone <note> do [notatnik]. Jeżeli notatnik nie zostanie określony, notatki zostaną zduplikowane w obecnym notatniku."
@@ -1194,6 +1227,9 @@
 		"Generowanie linków...",
 		"Generowanie linków..."
 	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
 	"Get it now:": [
 		"Pobierz teraz:"
 	],
@@ -1520,8 +1556,8 @@
 	"Logout": [
 		"Wyloguj"
 	],
-	"Logs": [
-		"Logi"
+	"Logs, profiles, sync status": [
+		""
 	],
 	"Make a donation": [
 		"Przekaż datek"
@@ -1571,6 +1607,9 @@
 	"Max Item Size": [
 		""
 	],
+	"Media player, math, diagrams, table of contents": [
+		""
+	],
 	"Missing keys": [
 		"Brakujące Klucze"
 	],
@@ -1611,7 +1650,7 @@
 		"N"
 	],
 	"Never resize": [
-		""
+		"Nie zmieniaj rozmiaru"
 	],
 	"New note": [
 		"Nowa notatka"
@@ -1699,6 +1738,9 @@
 	],
 	"Not generated": [
 		"Nie wygenerowano"
+	],
+	"Not now": [
+		"Nie teraz"
 	],
 	"note": [
 		"notatka"
@@ -1820,6 +1862,9 @@
 	"Open...": [
 		"Otwórz..."
 	],
+	"Opening section %s": [
+		""
+	],
 	"Operation cancelled": [
 		"Operacja anulowana"
 	],
@@ -1828,6 +1873,9 @@
 	],
 	"Or create an account.": [
 		"Lub utwórz nowe konto."
+	],
+	"Ordered list": [
+		"Lista posortowana"
 	],
 	"Other applications...": [
 		"Inne aplikacje..."
@@ -1970,6 +2018,9 @@
 	"Privacy Policy": [
 		"Polityka Prywatności"
 	],
+	"Pro": [
+		"Pro"
+	],
 	"Process failed payment subscriptions": [
 		"Przetwarzanie nieudanych subskrypcji płatności"
 	],
@@ -1982,20 +2033,29 @@
 	"Profile": [
 		"Profil"
 	],
+	"Profile name": [
+		"Nazwa profilu"
+	],
 	"Profile name:": [
 		"Nazwa profilu:"
 	],
 	"Profile Version: %s": [
 		"Wersja profilu: %s"
 	],
+	"Profiles": [
+		"Profile"
+	],
 	"Properties": [
 		"Właściwości"
+	],
+	"Proxy enabled": [
+		"Proxy włączone"
 	],
 	"Proxy timeout (seconds)": [
 		""
 	],
 	"Proxy URL": [
-		""
+		"Adres URL serwera proxy"
 	],
 	"Public-private key pair:": [
 		"Para kluczy publiczno-prywatnych:"
@@ -2158,6 +2218,9 @@
 	],
 	"Save changes": [
 		"Zapisz zmiany"
+	],
+	"Save changes?": [
+		"Zapisać zmiany?"
 	],
 	"Save geo-location with notes": [
 		"Zapisz lokalizację geograficzną z notatkami"
@@ -2495,6 +2558,9 @@
 	"Take photo": [
 		"Wykonaj zdjęcie"
 	],
+	"Task list": [
+		"Lista zadań"
+	],
 	"Tasks": [
 		"Zadania"
 	],
@@ -2774,11 +2840,17 @@
 	"Tools": [
 		"Narzędzia"
 	],
+	"Total Size": [
+		"Łączny rozmiar"
+	],
 	"Total: %d/%d": [
 		"Ogółem: %d/%d"
 	],
 	"Try again": [
 		"Spróbuj ponownie"
+	],
+	"Try it now": [
+		"Wypróbuj teraz"
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Wpisz `help [komenda]` aby uzyskać więcej informacji o komendzie; lub wpisz `help all` aby uzyskać wszystkie  informacje na temat funkcji programu."
@@ -2815,6 +2887,9 @@
 	],
 	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
 		"Pobrano nieznany typ pliku - proszę zaaktualizować Joplin do najnowszej wersji"
+	],
+	"Unordered list": [
+		"Lista nieposortowana"
 	],
 	"Unpublish note": [
 		"Niepublikowana notatka"
@@ -2945,6 +3020,9 @@
 	"Warning: not all resources shown for performance reasons (limit: %s).": [
 		"Uwaga, aby zachować dobrą wydajność, nie wszystkie zasoby zostały wyświetlone (limit: %s)."
 	],
+	"Warnings:\n%s": [
+		"Uwaga:\n%s"
+	],
 	"Web Clipper": [
 		"Web clipper"
 	],
@@ -2966,11 +3044,17 @@
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Witaj w Joplin!\n\nWpisz: `:help shortcuts` aby uzyskać listę skrótów klawiaturowych lub `help` aby uzyskać informacje o użytkowaniu.\n\nNa przykład, aby utworzyć notatnik, naciśnij `mb`; aby utworzyć notatkę, naciśnij `mn`."
 	],
+	"Welcome!": [
+		"Witaj!"
+	],
 	"When creating a new note:": [
 		"Podczas tworzenia nowej notatki:"
 	],
 	"When creating a new to-do:": [
 		"Podczas tworzenia nowego zadania:"
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		"Słowa"

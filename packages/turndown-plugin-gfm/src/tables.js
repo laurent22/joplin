@@ -174,20 +174,29 @@ const nodeContains = (node, types) => {
   return false;
 }
 
-const tableShouldBeHtml = (tableNode) => {
+const tableShouldBeHtml = (tableNode, preserveNestedTables) => {
+  const possibleTags = [
+    'UL',
+    'OL',
+    'H1',
+    'H2',
+    'H3',
+    'H4',
+    'H5',
+    'H6',
+    'HR',
+    'BLOCKQUOTE',
+  ];
+
+  // In general we should leave as HTML tables that include other tables. The
+  // exception is with the Web Clipper when we import a web page with a layout
+  // that's made of HTML tables. In that case we have this logic of removing the
+  // outer table and keeping only the inner ones. For the Rich Text editor
+  // however we always want to keep nested tables.
+  if (preserveNestedTables) possibleTags.push('TABLE');
+
   return nodeContains(tableNode, 'code') ||
-    nodeContains(tableNode, [
-      'UL',
-      'OL',
-      'H1',
-      'H2',
-      'H3',
-      'H4',
-      'H5',
-      'H6',
-      'HR',
-      'BLOCKQUOTE',
-    ]);
+    nodeContains(tableNode, possibleTags);
 }
 
 // Various conditions under which a table should be skipped - i.e. each cell
@@ -240,7 +249,7 @@ export default function tables (turndownService) {
   isCodeBlock_ = turndownService.isCodeBlock;
 
   turndownService.keep(function (node) {
-    if (node.nodeName === 'TABLE' && tableShouldBeHtml(node)) return true;
+    if (node.nodeName === 'TABLE' && tableShouldBeHtml(node, turndownService.options.preserveNestedTables)) return true;
     return false;
   });
   for (var key in rules) turndownService.addRule(key, rules[key])

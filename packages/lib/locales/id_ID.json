@@ -218,6 +218,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred: %s": [
+		""
+	],
 	"An update is available, do you want to download it now?": [
 		"Pembaruan tersedia, apakah Anda ingin mengunduhnya sekarang?"
 	],
@@ -1178,6 +1181,9 @@
 	"Generating link...": [
 		"Menghasilkan tautan..."
 	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
 	"Get it now:": [
 		"Dapatkan sekarang:"
 	],
@@ -1511,8 +1517,8 @@
 	"Logout": [
 		"Keluar"
 	],
-	"Logs": [
-		"Log"
+	"Logs, profiles, sync status": [
+		""
 	],
 	"Make a donation": [
 		"Beri donasi"
@@ -1560,6 +1566,9 @@
 		"Koneksi bersamaan maksimum"
 	],
 	"Max Item Size": [
+		""
+	],
+	"Media player, math, diagrams, table of contents": [
 		""
 	],
 	"Missing keys": [
@@ -1810,6 +1819,9 @@
 	],
 	"Open...": [
 		"Buka..."
+	],
+	"Opening section %s": [
+		""
 	],
 	"Operation cancelled": [
 		"Operasi dibatalkan"
@@ -2965,6 +2977,9 @@
 	],
 	"When creating a new to-do:": [
 		"Ketika membuat tugas baru:"
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		"Kata"

@@ -2637,15 +2637,15 @@ class Setting extends BaseModel {
 		// TODO: This is currently specific to the mobile app
 		const sectionNameToSummary: Record<string, string> = {
 			'general': _('Language, date format'),
-			'appearance': _('App theme, editor font'),
+			'appearance': _('Themes, editor font'),
 			'sync': _('Sync, encryption, proxy'),
 			'joplinCloud': _('Email To Note, login information'),
 			'markdownPlugins': _('Media player, math, diagrams, table of contents'),
 			'note': _('Geolocation, spellcheck, editor toolbar, image resize'),
 			'revisionService': _('Toggle note history, keep notes for'),
-			'tools': _('Application log, profiles, sync status'),
+			'tools': _('Logs, profiles, sync status'),
 			'export': _('Export your data'),
-			'moreInfo': _('Privacy policy, donate, website'),
+			'moreInfo': _('Donate, website'),
 		};
 
 		return sectionNameToSummary[metadata.name] ?? '';

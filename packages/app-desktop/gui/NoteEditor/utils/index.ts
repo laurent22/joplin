@@ -9,7 +9,10 @@ export async function htmlToMarkdown(markupLanguage: number, html: string, origi
 
 	if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN) {
 		const htmlToMd = new HtmlToMd();
-		newBody = htmlToMd.parse(html, { preserveImageTagsWithSize: true });
+		newBody = htmlToMd.parse(html, {
+			preserveImageTagsWithSize: true,
+			preserveNestedTables: true,
+		});
 		newBody = await Note.replaceResourceExternalToInternalLinks(newBody, { useAbsolutePaths: true });
 	} else {
 		newBody = await Note.replaceResourceExternalToInternalLinks(html, { useAbsolutePaths: true });

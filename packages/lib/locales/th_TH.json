@@ -188,6 +188,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred: %s": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		""
 	],
@@ -902,6 +905,9 @@
 	"Generating link...": [
 		"กำลังสร้างลิงก์..."
 	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
 	"Get it now:": [
 		""
 	],
@@ -1163,7 +1169,7 @@
 	"Logout": [
 		""
 	],
-	"Logs": [
+	"Logs, profiles, sync status": [
 		""
 	],
 	"Manage your plugins": [
@@ -1194,6 +1200,9 @@
 		""
 	],
 	"Max Item Size": [
+		""
+	],
+	"Media player, math, diagrams, table of contents": [
 		""
 	],
 	"Missing keys": [
@@ -1387,6 +1396,9 @@
 	],
 	"Open...": [
 		"เปิด..."
+	],
+	"Opening section %s": [
+		""
 	],
 	"Operation cancelled": [
 		"ระบวนการถูกยกเลิก"
@@ -2287,6 +2299,9 @@
 	],
 	"When creating a new to-do:": [
 		"เมื่อสร้าง to-do ใหม่:"
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		"คำ"

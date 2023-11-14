@@ -191,6 +191,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred: %s": [
+		""
+	],
 	"An update is available, do you want to download it now?": [
 		"Nova je verzija dostupna. Želite li je preuzeti?"
 	],
@@ -938,6 +941,9 @@
 	"General": [
 		"Opće"
 	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
 	"Get it now:": [
 		"Preuzmite sada:"
 	],
@@ -1202,7 +1208,7 @@
 	"Logout": [
 		""
 	],
-	"Logs": [
+	"Logs, profiles, sync status": [
 		""
 	],
 	"Make a donation": [
@@ -1236,6 +1242,9 @@
 		"Maksimalni broj istovremenih konekcija"
 	],
 	"Max Item Size": [
+		""
+	],
+	"Media player, math, diagrams, table of contents": [
 		""
 	],
 	"Missing Master Keys": [
@@ -1423,6 +1432,9 @@
 	],
 	"Open...": [
 		"Otvori..."
+	],
+	"Opening section %s": [
+		""
 	],
 	"Operation cancelled": [
 		"Radnja je prekinuta"
@@ -2386,6 +2398,9 @@
 	],
 	"When creating a new to-do:": [
 		"Prilikom kreiranja novog zadatka:"
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		"Riječi"

@@ -173,6 +173,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred: %s": [
+		""
+	],
 	"An update is available, do you want to download it now?": [
 		"Hai unha actualización dispoñíbel, desexa descargala agora?"
 	],
@@ -900,6 +903,9 @@
 	"Full name": [
 		""
 	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
 	"Get it now:": [
 		""
 	],
@@ -1168,7 +1174,7 @@
 	"Logout": [
 		""
 	],
-	"Logs": [
+	"Logs, profiles, sync status": [
 		""
 	],
 	"Make a donation": [
@@ -1202,6 +1208,9 @@
 		""
 	],
 	"Max Item Size": [
+		""
+	],
+	"Media player, math, diagrams, table of contents": [
 		""
 	],
 	"Missing Master Keys": [
@@ -1380,6 +1389,9 @@
 	],
 	"Open...": [
 		"Abrir…"
+	],
+	"Opening section %s": [
+		""
 	],
 	"Operation cancelled": [
 		"Operación cancelada"
@@ -2137,6 +2149,9 @@
 	"Toggle editor layout": [
 		"Cambiar a disposición do editor"
 	],
+	"Toggle note history, keep notes for": [
+		""
+	],
 	"Toggle sidebar": [
 		""
 	],
@@ -2316,6 +2331,9 @@
 	],
 	"When creating a new to-do:": [
 		"Cando se crea unha nova tarefa:"
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		""

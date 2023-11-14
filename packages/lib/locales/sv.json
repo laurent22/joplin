@@ -227,6 +227,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred: %s": [
+		""
+	],
 	"An update is available, do you want to download it now?": [
 		"En uppdatering är tillgänglig, vill du hämta den nu?"
 	],
@@ -1267,6 +1270,9 @@
 		"Skapar länk...",
 		"Skapar länkar..."
 	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
 	"Get it now:": [
 		"Hämta det nu:"
 	],
@@ -1622,8 +1628,8 @@
 	"Logout": [
 		"Logga ut"
 	],
-	"Logs": [
-		"Loggar"
+	"Logs, profiles, sync status": [
+		""
 	],
 	"Make a donation": [
 		"Gör en donation"
@@ -1684,6 +1690,9 @@
 	],
 	"Max Total Size": [
 		"Max total storlek"
+	],
+	"Media player, math, diagrams, table of contents": [
+		""
 	],
 	"Missing keys": [
 		"Saknade nycklar"
@@ -1948,6 +1957,9 @@
 	],
 	"Open...": [
 		"Öppna..."
+	],
+	"Opening section %s": [
+		""
 	],
 	"Operation cancelled": [
 		"Operation avbruten"
@@ -3160,6 +3172,9 @@
 	],
 	"When creating a new to-do:": [
 		"När du skapar en ny att-göra:"
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		"Ord"

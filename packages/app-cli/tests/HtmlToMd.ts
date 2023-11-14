@@ -36,6 +36,10 @@ describe('HtmlToMd', () => {
 				htmlToMdOptions.preserveImageTagsWithSize = true;
 			}
 
+			if (htmlFilename.indexOf('preserve_nested_tables') === 0) {
+				htmlToMdOptions.preserveNestedTables = true;
+			}
+
 			const html = await readFile(htmlPath, 'utf8');
 			let expectedMd = await readFile(mdPath, 'utf8');
 

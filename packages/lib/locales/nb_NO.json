@@ -215,6 +215,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred: %s": [
+		""
+	],
 	"An update is available, do you want to download it now?": [
 		"En oppdatering er tilgjengelig. Vil du laste den ned nå?"
 	],
@@ -1165,6 +1168,9 @@
 		"Genererer lenke…",
 		"Genererer lenker..."
 	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
 	"Get it now:": [
 		"Få den nå:"
 	],
@@ -1490,8 +1496,8 @@
 	"Logout": [
 		"Logg ut"
 	],
-	"Logs": [
-		"Logger"
+	"Logs, profiles, sync status": [
+		""
 	],
 	"Make a donation": [
 		"Gi et bidrag"
@@ -1539,6 +1545,9 @@
 		"Maksimalt samtidige tilkoblinger"
 	],
 	"Max Item Size": [
+		""
+	],
+	"Media player, math, diagrams, table of contents": [
 		""
 	],
 	"Missing keys": [
@@ -1789,6 +1798,9 @@
 	],
 	"Open...": [
 		"Åpne..."
+	],
+	"Opening section %s": [
+		""
 	],
 	"Operation cancelled": [
 		"Operasjon avbrutt"
@@ -2926,6 +2938,9 @@
 	],
 	"When creating a new to-do:": [
 		"Når et nytt gjøremål opprettes:"
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		"Ord"

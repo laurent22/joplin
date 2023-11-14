@@ -227,6 +227,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred: %s": [
+		""
+	],
 	"An update is available, do you want to download it now?": [
 		"アップデートがあります。すぐにダウンロードしますか？"
 	],
@@ -1265,6 +1268,9 @@
 	"Generating link...": [
 		"リンクを生成中..."
 	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
 	"Get it now:": [
 		"今すぐ取得:"
 	],
@@ -1619,8 +1625,8 @@
 	"Logout": [
 		"ログアウト"
 	],
-	"Logs": [
-		"ログ"
+	"Logs, profiles, sync status": [
+		""
 	],
 	"Make a donation": [
 		"寄付する"
@@ -1681,6 +1687,9 @@
 	],
 	"Max Total Size": [
 		"最大合計サイズ"
+	],
+	"Media player, math, diagrams, table of contents": [
+		""
 	],
 	"Missing keys": [
 		"キーがありません"
@@ -1945,6 +1954,9 @@
 	],
 	"Open...": [
 		"開く..."
+	],
+	"Opening section %s": [
+		""
 	],
 	"Operation cancelled": [
 		"操作をキャンセルしました"
@@ -3154,6 +3166,9 @@
 	],
 	"When creating a new to-do:": [
 		"新しいToDoを作成した場合:"
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		"単語数"

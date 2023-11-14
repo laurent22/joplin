@@ -74,6 +74,9 @@
 	"%s: %s": [
 		"%s: %s"
 	],
+	"%s: Missing password.": [
+		"%s: Manglende adgangskode."
+	],
 	"&Edit": [
 		"&Redigér"
 	],
@@ -108,7 +111,7 @@
 		"(wysiwyg: %s)"
 	],
 	"(You may disable this prompt in the options)": [
-		""
+		"(Du kan deaktivere denne prompt i indstillingerne)"
 	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"- Kamera: Tilladelse til fotografering og vedhæftning af et billede til en note."
@@ -218,6 +221,12 @@
 	"Always": [
 		"Altid"
 	],
+	"Always ask": [
+		"Spørg altid"
+	],
+	"Always resize": [
+		"Ændr altid størrelsen"
+	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
 		"Tvetydig notesbog \"%s\". Brug venligst notesbog-id i stedet - tryk på \"ti\" for at se det korte notebogs-id eller brug $b for den aktuelle valgte notesbog"
 	],
@@ -225,13 +234,16 @@
 		"Tvetydig notesbog \"%s\". Brug venligst kort notesbog-id i stedet - tryk på \"ti\" for at se det korte notebogs-id"
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		"Der blev fundet en automatisk gemt tegning. Vedhæfter en kopi af den til noten?"
+	],
+	"An error occurred: %s": [
 		""
 	],
 	"An update is available, do you want to download it now?": [
 		"Opdatering er tilgængelig, vil du hente den nu?"
 	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
-		"Enhver e-mail, der sendes til denne adresse, bliver konverteret til en note og føjet til din samling. Noten gemmes i indbakkens notesbog."
+		"Enhver e-mail, der sendes til denne adresse, bliver konverteret til en note og føjet til din samling. Noten gemmes i indbakkens notesbog"
 	],
 	"Appearance": [
 		"Udseende"
@@ -464,6 +476,9 @@
 	"Code View": [
 		"Kodevisning"
 	],
+	"Collaborate on a notebook with others": [
+		"Samarbejd med andre om en notesbog"
+	],
 	"Collaborate on notebooks with others": [
 		"Samarbejd med andre om notesbøger"
 	],
@@ -487,6 +502,9 @@
 	],
 	"Command palette...": [
 		"Kommando-udvalg..."
+	],
+	"Compact": [
+		"Kompakt"
 	],
 	"Completed": [
 		"Fuldført"
@@ -651,6 +669,12 @@
 	"Creates a new to-do.": [
 		"Opretter en ny opgave."
 	],
+	"Creating new note...": [
+		"Opretter ny note..."
+	],
+	"Creating new to-do...": [
+		"Opretter nye gøremål..."
+	],
 	"Creating report...": [
 		"Opretter rapport..."
 	],
@@ -673,7 +697,7 @@
 		"Brugerdefinerede TLS certifikater"
 	],
 	"Customise the note publishing banner": [
-		""
+		"Tilpas banneret til udgivelse af noter"
 	],
 	"Cut": [
 		"Klip"
@@ -793,7 +817,7 @@
 		"Destinationsformat: %s"
 	],
 	"Detailed": [
-		""
+		"Detailed"
 	],
 	"Directory": [
 		"Indeks"
@@ -818,6 +842,9 @@
 	],
 	"Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": [
 		"Slås kryptering fra vil *alle* dine noter og vedhæftninger blive re-synkroniseret og sendt ukrypteret til synk-modtageren. Vil du fortsætte?"
+	],
+	"Discard": [
+		"Kassér"
 	],
 	"Discard changes": [
 		"Kassér ændringer"
@@ -892,10 +919,10 @@
 		"Dracula"
 	],
 	"Draw picture": [
-		""
+		"Tegn billede"
 	],
 	"Drawing": [
-		""
+		"Tegner"
 	],
 	"Drop notes or files here": [
 		"Slip noter eller filer her"
@@ -1098,6 +1125,9 @@
 	"Enter notebook title": [
 		"Indtast notesbogstitel"
 	],
+	"Enter password": [
+		"Indtast adgangskode"
+	],
 	"Enum": [
 		"Enum"
 	],
@@ -1267,6 +1297,9 @@
 		"Opretter link...",
 		"Opretter links..."
 	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
 	"Get it now:": [
 		"Få den nu:"
 	],
@@ -1334,7 +1367,7 @@
 		"HTML Indeks"
 	],
 	"HTML document": [
-		""
+		"HTML-dokument"
 	],
 	"HTML File": [
 		"HTML fil"
@@ -1553,7 +1586,7 @@
 		"Indstil knap-rækkefølge"
 	],
 	"Leave it blank to download the language files from the default website": [
-		"Lad den være tom for at downloade sprogfilerne fra standardwebstedet."
+		"Lad den være tom for at downloade sprogfilerne fra standardwebstedet"
 	],
 	"Leave notebook...": [
 		"Forlad notesbog..."
@@ -1622,8 +1655,8 @@
 	"Logout": [
 		"Log ud"
 	],
-	"Logs": [
-		"Logfiler"
+	"Logs, profiles, sync status": [
+		""
 	],
 	"Make a donation": [
 		"Giv en donation"
@@ -1685,6 +1718,9 @@
 	"Max Total Size": [
 		"Maks samlet størrelse"
 	],
+	"Media player, math, diagrams, table of contents": [
+		""
+	],
 	"Missing keys": [
 		"Manglende nøgler"
 	],
@@ -1731,7 +1767,7 @@
 		"N"
 	],
 	"Never resize": [
-		""
+		"Ændr aldrig størrelse"
 	],
 	"New note": [
 		"Ny note"
@@ -1862,6 +1898,9 @@
 	"Note list growth factor": [
 		"Noteliste-vækstfaktor"
 	],
+	"Note list style": [
+		"Notatliste-stil"
+	],
 	"Note properties": [
 		"Noteegenskaber"
 	],
@@ -1948,6 +1987,9 @@
 	],
 	"Open...": [
 		"Åbn..."
+	],
+	"Opening section %s": [
+		""
 	],
 	"Operation cancelled": [
 		"Udførelse annulleret"
@@ -2238,7 +2280,7 @@
 		"Nulstil hovedadgangskode"
 	],
 	"Resize large images:": [
-		""
+		"Ændr størrelsen på store billeder:"
 	],
 	"Resources: %d.": [
 		"Ressourcer: %d."
@@ -2311,6 +2353,9 @@
 	],
 	"Save changes": [
 		"Gem ændringer"
+	],
+	"Save changes?": [
+		"Gem ændringer?"
 	],
 	"Save geo-location with notes": [
 		"Gem geo-lokation i noter"
@@ -2387,6 +2432,9 @@
 	"Share a copy of all notes in a file format that can be imported by Joplin on a computer.": [
 		"Del en kopi af alle noter i et filformat, der kan importeres af Joplin på en computer."
 	],
+	"Share a notebook with others": [
+		"Del en notesbog med andre"
+	],
 	"Share Notebook": [
 		"Del notesbog"
 	],
@@ -2394,7 +2442,7 @@
 		"Del notesbog..."
 	],
 	"Share permissions": [
-		""
+		"Deletilladelser"
 	],
 	"Sharing notebook...": [
 		"Deler notesbog..."
@@ -2436,10 +2484,13 @@
 		"Vis/skjul sidebjælken"
 	],
 	"Shrink large images before adding them to notes.": [
-		""
+		"Formindsk store billeder, før du tilføjer dem til noter."
+	],
+	"Side menu closed": [
+		"Sidemenu lukket"
 	],
 	"Side menu opened": [
-		""
+		"Sidemenu åbnet"
 	],
 	"Sidebar": [
 		"Sidebjælke"
@@ -2672,6 +2723,9 @@
 	"Teams": [
 		"Teams"
 	],
+	"Text document": [
+		"Tekstdokument"
+	],
 	"Text editor command": [
 		"Tekstredigeringskomando"
 	],
@@ -2765,6 +2819,9 @@
 	"The sync target needs to be upgraded. Press this banner to proceed.": [
 		"Synk-mål skal opgraderes! Tryk på denne banner for at fortsætte."
 	],
+	"The synchronisation password is missing.": [
+		"Adgangskoden til synkronisering mangler."
+	],
 	"The tag \"%s\" already exists. Please choose a different name.": [
 		"Etiketten \"%s\" eksisterer allerede. Vælg venligst et andet navn."
 	],
@@ -2814,7 +2871,7 @@
 		"Disse udvidelser forbedrer Markdown-fortolkeren med yderligere funktioner. Vær opmærksom på, at selvom disse funktioner kan være nyttige, er de ikke standard Markdown og derfor vil de fleste kun virke i Joplin. Derudover er nogle af dem ikke kompatible med WYSIWYG editoren. Hvis du åbner en note, som bruger en af disse udvidelser i den editor, vil du miste udvidelsesformatteringen. Det angives nedenfor, hvilke udvidelser der er kompatible eller ikke med WYSIWYG editoren."
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
-		""
+		"Dette giver en anden bruger mulighed for at dele en notesbog med dig, og I kan så begge samarbejde om den. Det giver dig dog ikke mulighed for at dele en notesbog med en anden, medmindre du har funktionen \"%s\"."
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Denne vedhæftning er ikke downloadet eller ikke dekrypteret endnu"
@@ -2824,6 +2881,9 @@
 	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"Denne autoriseringstoken er kun nødvendig for at tillade tredjepartsprogrammer at tilgå Joplin."
+	],
+	"This drawing may have unsaved changes.": [
+		"Denne tegning kan have ændringer, der ikke er gemt."
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Dette er et avanceret værktøj til at vise de vedhæftninger, som er knyttet til dine noter. Vær forsigtig med at slette dem, da de ikke kan gendannes bagefter."
@@ -2981,8 +3041,14 @@
 	"Type: %s.": [
 		"Tast: %s."
 	],
+	"Unable to edit resource of type %s": [
+		"Kan ikke redigere ressource af typen %s"
+	],
 	"Unable to export or share data. Reason: %s": [
 		"Kan ikke eksportere eller dele data. Årsag: %s"
+	],
+	"Unable to share log data. Reason: %s": [
+		"Kan ikke dele logdata. Årsag: %s"
 	],
 	"Uncompleted to-dos on top": [
 		"Ufærdige opgaver øverst"
@@ -3160,6 +3226,9 @@
 	],
 	"When creating a new to-do:": [
 		"Ved oprettelse af ny opgave:"
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		"Ord"

@@ -227,6 +227,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred: %s": [
+		""
+	],
 	"An update is available, do you want to download it now?": [
 		"Es ist eine Aktualisierung verfügbar. Soll sie jetzt heruntergeladen werden?"
 	],
@@ -1267,6 +1270,9 @@
 		"Link wird erzeugt ...",
 		"Links werden erzeugt ..."
 	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
 	"Get it now:": [
 		"Hole es jetzt:"
 	],
@@ -1622,8 +1628,8 @@
 	"Logout": [
 		"Abmelden"
 	],
-	"Logs": [
-		"Protokolle"
+	"Logs, profiles, sync status": [
+		""
 	],
 	"Make a donation": [
 		"Spenden"
@@ -1684,6 +1690,9 @@
 	],
 	"Max Total Size": [
 		"Maximale Gesamtgröße"
+	],
+	"Media player, math, diagrams, table of contents": [
+		""
 	],
 	"Missing keys": [
 		"Fehlende Schlüssel"
@@ -1948,6 +1957,9 @@
 	],
 	"Open...": [
 		"Öffnen ..."
+	],
+	"Opening section %s": [
+		""
 	],
 	"Operation cancelled": [
 		"Vorgang abgebrochen"
@@ -3157,6 +3169,9 @@
 	],
 	"When creating a new to-do:": [
 		"Wenn eine neue Aufgabe erstellt wird:"
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		"Wörter"
