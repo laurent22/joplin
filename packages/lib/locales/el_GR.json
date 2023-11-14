@@ -227,6 +227,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred: %s": [
+		""
+	],
 	"An update is available, do you want to download it now?": [
 		"Υπάρχει διαθέσιμη μια ενημέρωση, θέλετε να την κατεβάσετε τώρα;"
 	],
@@ -1243,6 +1246,9 @@
 		"Δημιουργία συνδέσμου...",
 		"Δημιουργία νεου %s..."
 	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
 	"Get it now:": [
 		"Λήψη τώρα:"
 	],
@@ -1598,8 +1604,8 @@
 	"Logout": [
 		"Αποσύνδεση"
 	],
-	"Logs": [
-		"Αρχεία Καταγραφής"
+	"Logs, profiles, sync status": [
+		""
 	],
 	"Make a donation": [
 		"Κάντε μια δωρεά"
@@ -1660,6 +1666,9 @@
 	],
 	"Max Total Size": [
 		"Μέγιστο συνολικό μέγεθος"
+	],
+	"Media player, math, diagrams, table of contents": [
+		""
 	],
 	"Missing keys": [
 		"Απουσία κλειδιών"
@@ -1924,6 +1933,9 @@
 	],
 	"Open...": [
 		"Άνοιγμα..."
+	],
+	"Opening section %s": [
+		""
 	],
 	"Operation cancelled": [
 		"Η λειτουργία ακυρώθηκε"
@@ -3127,6 +3139,9 @@
 	],
 	"When creating a new to-do:": [
 		"Κατά τη δημιουργία ενός νέου to-do:"
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		"Λέξεις"

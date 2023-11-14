@@ -227,6 +227,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred: %s": [
+		""
+	],
 	"An update is available, do you want to download it now?": [
 		"Доступне оновлення, ви хочете завантажити його зараз?"
 	],
@@ -1248,6 +1251,9 @@
 		"Генерування посилань…",
 		"Генерування посилань…"
 	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
 	"Get it now:": [
 		"Отримати зараз:"
 	],
@@ -1604,8 +1610,8 @@
 	"Logout": [
 		"Вийти"
 	],
-	"Logs": [
-		"Журнали"
+	"Logs, profiles, sync status": [
+		""
 	],
 	"Make a donation": [
 		"Зробити пожертву"
@@ -1666,6 +1672,9 @@
 	],
 	"Max Total Size": [
 		"Максимальний загальний розмір"
+	],
+	"Media player, math, diagrams, table of contents": [
+		""
 	],
 	"Missing keys": [
 		"Відсутні ключі"
@@ -1930,6 +1939,9 @@
 	],
 	"Open...": [
 		"Відкрити..."
+	],
+	"Opening section %s": [
+		""
 	],
 	"Operation cancelled": [
 		"Операцію скасовано"
@@ -3133,6 +3145,9 @@
 	],
 	"When creating a new to-do:": [
 		"Коли створюжться новий список справ:"
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		"Слова"

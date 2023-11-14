@@ -176,6 +176,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred: %s": [
+		""
+	],
 	"An update is available, do you want to download it now?": [
 		""
 	],
@@ -627,6 +630,9 @@
 	"Do not ask for confirmation.": [
 		"Ez galdetu berresteko."
 	],
+	"Donate, website": [
+		""
+	],
 	"Done": [
 		""
 	],
@@ -909,6 +915,9 @@
 	"Full name": [
 		""
 	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
 	"Get it now:": [
 		""
 	],
@@ -1174,7 +1183,7 @@
 	"Logout": [
 		""
 	],
-	"Logs": [
+	"Logs, profiles, sync status": [
 		""
 	],
 	"Manage your plugins": [
@@ -1205,6 +1214,9 @@
 		""
 	],
 	"Max Item Size": [
+		""
+	],
+	"Media player, math, diagrams, table of contents": [
 		""
 	],
 	"Missing required argument: %s": [
@@ -1364,6 +1376,9 @@
 		""
 	],
 	"Open...": [
+		""
+	],
+	"Opening section %s": [
 		""
 	],
 	"Operation cancelled": [
@@ -2092,6 +2107,9 @@
 	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
 		""
 	],
+	"Toggle note history, keep notes for": [
+		""
+	],
 	"Toggle sidebar": [
 		""
 	],
@@ -2253,6 +2271,9 @@
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Ongi etorri Joplin-era!\n\nIdatz `:help shortcuts` lasterbideak ikusteko, edo soilik `:help`erabilerako informaziorako.\n\nEsate baterako, koadernoa sortzeko sakatu `mb`: oharra sortzeko sakatu `mn`"
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		""

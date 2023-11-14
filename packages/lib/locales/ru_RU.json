@@ -221,6 +221,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred: %s": [
+		""
+	],
 	"An update is available, do you want to download it now?": [
 		"Доступно обновление, хотите загрузить его сейчас?"
 	],
@@ -1261,6 +1264,9 @@
 		"Создание ссылки...",
 		"Создание ссылок..."
 	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
 	"Get it now:": [
 		"Загрузить сейчас:"
 	],
@@ -1616,8 +1622,8 @@
 	"Logout": [
 		"Выйти из системы"
 	],
-	"Logs": [
-		"Логи"
+	"Logs, profiles, sync status": [
+		""
 	],
 	"Make a donation": [
 		"Пожертвовать"
@@ -1678,6 +1684,9 @@
 	],
 	"Max Total Size": [
 		"Максимальный общий размер"
+	],
+	"Media player, math, diagrams, table of contents": [
+		""
 	],
 	"Missing keys": [
 		"Отсутствующие ключи"
@@ -1942,6 +1951,9 @@
 	],
 	"Open...": [
 		"Открыть..."
+	],
+	"Opening section %s": [
+		""
 	],
 	"Operation cancelled": [
 		"Операция отменена"
@@ -3151,6 +3163,9 @@
 	],
 	"When creating a new to-do:": [
 		"При создании новой задачи:"
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		"Cлова"

@@ -74,6 +74,9 @@
 	"%s: %s": [
 		"%s: %s"
 	],
+	"%s: Missing password.": [
+		"Senha ausente."
+	],
 	"&Edit": [
 		"&Editar"
 	],
@@ -108,7 +111,7 @@
 		"(wysiwyg: %s)"
 	],
 	"(You may disable this prompt in the options)": [
-		""
+		"(Você pode desativar este prompt nas opções)"
 	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"- Câmera: para permitir tirar fotos e anexar a uma nota."
@@ -225,6 +228,9 @@
 		"O título do caderno é ambíguo: \"%s\". Por favor, utilize o identificador do caderno em vez disso - pressione \"ti\" para consultar os identificadores"
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		""
+	],
+	"An error occurred: %s": [
 		""
 	],
 	"An update is available, do you want to download it now?": [
@@ -650,6 +656,12 @@
 	],
 	"Creates a new to-do.": [
 		"Cria uma nova tarefa."
+	],
+	"Creating new note...": [
+		"Criando nova %s..."
+	],
+	"Creating new to-do...": [
+		"Criando nova %s..."
 	],
 	"Creating report...": [
 		"Criando relatório..."
@@ -1267,6 +1279,9 @@
 		"Gerando link...",
 		"Gerando links..."
 	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
 	"Get it now:": [
 		"Tenha agora:"
 	],
@@ -1622,8 +1637,8 @@
 	"Logout": [
 		"Logout"
 	],
-	"Logs": [
-		"Logs"
+	"Logs, profiles, sync status": [
+		""
 	],
 	"Make a donation": [
 		"Fazer uma doação"
@@ -1684,6 +1699,9 @@
 	],
 	"Max Total Size": [
 		"Tamanho total máximo"
+	],
+	"Media player, math, diagrams, table of contents": [
+		""
 	],
 	"Missing keys": [
 		"Chaves faltando"
@@ -1948,6 +1966,9 @@
 	],
 	"Open...": [
 		"Abrir..."
+	],
+	"Opening section %s": [
+		""
 	],
 	"Operation cancelled": [
 		"Operação cancelada"
@@ -2238,7 +2259,7 @@
 		"Redefinir senha mestra"
 	],
 	"Resize large images:": [
-		""
+		"Redimensionar imagens grandes:"
 	],
 	"Resources: %d.": [
 		"Recursos: %d."
@@ -2311,6 +2332,9 @@
 	],
 	"Save changes": [
 		"Salvar alterações"
+	],
+	"Save changes?": [
+		"Salvar alterações?"
 	],
 	"Save geo-location with notes": [
 		"Salvar geolocalização com notas"
@@ -2814,7 +2838,7 @@
 		"Esses plug-ins melhoram o renderizador de Markdown com funções adicionais. Por favor note que, enquanto essas funções possam ser úteis, elas não fazem parte do padrão Markdown e assim sua maioria funcionará apenas no Joplin. Adicionalmente, algumas delas são *incompatíveis* com o editor WYSIWYG. Se você abrir a nota que usa um desses plug-ins no editor, você perderá a formatação do plugin. É indicado abaixo quais plug-ins são compatíveis ou não com o editor WYSIWYG."
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
-		""
+		"Permite que outros compartilhem cadernos com você para editarem de forma colaborativa. No entanto, não permite que você compartilhe de forma colaborativa, a menos que você tenha a funcionalidade \"%s\" ativa."
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"O anexo ainda não foi baixado ou descriptografado"
@@ -3160,6 +3184,9 @@
 	],
 	"When creating a new to-do:": [
 		"Quando criar uma nova tarefa:"
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		"Palavras"

@@ -227,6 +227,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred: %s": [
+		""
+	],
 	"An update is available, do you want to download it now?": [
 		"Päivitys on saatavilla. Haluatko ladata sen nyt?"
 	],
@@ -1234,6 +1237,9 @@
 		"Luodaan linkki...",
 		"Luodaan linkkejä..."
 	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
 	"Get it now:": [
 		"Hae se nyt:"
 	],
@@ -1583,8 +1589,8 @@
 	"Logout": [
 		"Uloskirjaus"
 	],
-	"Logs": [
-		"Lokit"
+	"Logs, profiles, sync status": [
+		""
 	],
 	"Make a donation": [
 		"Tee lahjoitus"
@@ -1645,6 +1651,9 @@
 	],
 	"Max Total Size": [
 		"Suurin kokonaiskoko"
+	],
+	"Media player, math, diagrams, table of contents": [
+		""
 	],
 	"Missing keys": [
 		"Puuttuvat avaimet"
@@ -1909,6 +1918,9 @@
 	],
 	"Open...": [
 		"Avaa..."
+	],
+	"Opening section %s": [
+		""
 	],
 	"Operation cancelled": [
 		"Toiminto peruutettu"
@@ -3106,6 +3118,9 @@
 	],
 	"When creating a new to-do:": [
 		"Kun luot uuden tehtävän:"
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		"Sanat"
