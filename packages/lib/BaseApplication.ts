@@ -26,6 +26,7 @@ import time from './time';
 import BaseSyncTarget from './BaseSyncTarget';
 const reduxSharedMiddleware = require('./components/shared/reduxSharedMiddleware');
 const os = require('os');
+import dns = require('dns');
 import fs = require('fs-extra');
 const EventEmitter = require('events');
 const syswidecas = require('./vendor/syswide-cas');
@@ -169,6 +170,13 @@ export default class BaseApplication {
 
 		if (flags.matched.showStackTraces) {
 			this.showStackTraces_ = true;
+		}
+
+		// Work around issues with ipv6 resolution -- default to ipv4first.
+		// (possibly incorrect URL serialization see https://github.com/mswjs/msw/issues/1388#issuecomment-1241180921).
+		// See also https://github.com/node-fetch/node-fetch/issues/1624#issuecomment-1407717012
+		if (flags.matched.allowOverridingDnsResultOrder) {
+			dns.setDefaultResultOrder('ipv4first');
 		}
 
 		return {
