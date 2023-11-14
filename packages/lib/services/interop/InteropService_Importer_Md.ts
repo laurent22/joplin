@@ -49,7 +49,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 				...this.importedNotes[importedLocalPath],
 				body: updatedBody || note.body,
 			};
-			this.importedNotes[importedLocalPath] = await Note.save(updatedNote, { isNew: false });
+			this.importedNotes[importedLocalPath] = await Note.save(updatedNote, { isNew: false, autoTimestamp: false });
 		}
 
 		return result;
