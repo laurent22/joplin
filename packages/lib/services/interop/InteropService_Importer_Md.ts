@@ -14,7 +14,7 @@ const { pregQuote } = require('../../string-utils-common');
 import { MarkupToHtml } from '@joplin/renderer';
 
 export default class InteropService_Importer_Md extends InteropService_Importer_Base {
-	private importedNotes: Record<string, NoteEntity> = {};
+	protected importedNotes: Record<string, NoteEntity> = {};
 
 	public async exec(result: ImportExportResult) {
 		let parentFolderId = null;

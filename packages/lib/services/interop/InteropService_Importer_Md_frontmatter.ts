@@ -5,6 +5,7 @@ import time from '../../time';
 import { NoteEntity } from '../database/types';
 
 import * as yaml from 'js-yaml';
+import shim from '../../shim';
 
 interface ParsedMeta {
 	metadata: NoteEntity;
@@ -161,6 +162,9 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 		const updatedNote = { ...note, ...metadata };
 
 		const noteItem = await Note.save(updatedNote, { isNew: false, autoTimestamp: false });
+
+		const resolvedPath = shim.fsDriver().resolve(filePath);
+		this.importedNotes[resolvedPath] = noteItem;
 
 		for (const tag of tags) { await Tag.addNoteTagByTitle(noteItem.id, tag); }
 
