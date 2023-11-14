@@ -242,6 +242,8 @@ async function commandBuild(args: CommandBuildArgs) {
 	for (const npmPackage of npmPackages) {
 		if (!isPackageIgnored(npmPackage.name, ignoredPackages)) {
 			await processNpmPackage(npmPackage, repoDir, dryRun);
+		} else {
+			console.log('Ignoring package', npmPackage.name);
 		}
 	}
 
