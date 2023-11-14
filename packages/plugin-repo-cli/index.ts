@@ -16,7 +16,7 @@ import { NpmPackage } from './lib/types';
 import gitCompareUrl from './lib/gitCompareUrl';
 import commandUpdateRelease from './commands/updateRelease';
 import { isJoplinPluginPackage, readJsonFile } from './lib/utils';
-import { applyManifestOverrides, getObsoleteManifests, isPackageIgnored, readIgnoredPackages, readManifestOverrides } from './lib/overrideUtils';
+import { applyManifestOverrides, getObsoleteManifests, getSupersededPackages, readManifestOverrides } from './lib/overrideUtils';
 import { execCommand } from '@joplin/utils';
 
 function pluginInfoFromSearchResults(results: any[]): NpmPackage[] {
@@ -139,17 +139,23 @@ function chdir(path: string): string {
 }
 
 async function processNpmPackage(npmPackage: NpmPackage, repoDir: string, dryRun: boolean) {
-	const tempDir = `${repoDir}/temp`;
-
-	await fs.mkdirp(tempDir);
-
 	const originalPluginManifests = await readManifests(repoDir);
 	const manifestOverrides = await readManifestOverrides(repoDir);
+	const supersededPackages = getSupersededPackages(manifestOverrides);
+
+	if (supersededPackages.includes(npmPackage.name)) {
+		console.log('Skipping superseded package', npmPackage.name);
+		return;
+	}
+
 	const obsoleteManifests = getObsoleteManifests(manifestOverrides);
 	const existingManifests = {
 		...originalPluginManifests,
 		...obsoleteManifests,
 	};
+
+	const tempDir = `${repoDir}/temp`;
+	await fs.mkdirp(tempDir);
 
 	const packageTempDir = `${tempDir}/packages`;
 
@@ -237,14 +243,9 @@ async function commandBuild(args: CommandBuildArgs) {
 
 	const searchResults = (await execCommand('npm search joplin-plugin --searchlimit 5000 --json', { showStdout: false, showStderr: false })).trim();
 	const npmPackages = pluginInfoFromSearchResults(JSON.parse(searchResults));
-	const ignoredPackages = await readIgnoredPackages(repoDir);
 
 	for (const npmPackage of npmPackages) {
-		if (!isPackageIgnored(npmPackage.name, ignoredPackages)) {
-			await processNpmPackage(npmPackage, repoDir, dryRun);
-		} else {
-			console.log('Ignoring package', npmPackage.name);
-		}
+		await processNpmPackage(npmPackage, repoDir, dryRun);
 	}
 
 	if (!dryRun) {

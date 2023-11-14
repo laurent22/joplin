@@ -1,4 +1,4 @@
-import { applyManifestOverrides, getObsoleteManifests, isPackageIgnored, ManifestOverrides } from './overrideUtils';
+import { applyManifestOverrides, getObsoleteManifests, getSupersededPackages, ManifestOverrides } from './overrideUtils';
 
 describe('overrideUtils', () => {
 
@@ -92,14 +92,16 @@ describe('overrideUtils', () => {
 		expect(updatedManifests['joplin.plugin.ambrt.backlinksToNote']._recommended).toBe(undefined);
 	});
 
-	test('isPackageIgnored should correctly return true if a package is ignored', () => {
-		const ignoredPackages = {
-			'test': true,
-			'joplin-plugin-some-plugin-name-here': true,
+	test('should get superseded packages', () => {
+		const manifestOverrides = {
+			'joplin.plugin.benji.favorites': {
+				_superseded_package: 'joplin-plugin-benji-favorites',
+			},
+			'io.github.jackgruber.copytags': {
+				_recommended: true,
+			},
 		};
-
-		expect(isPackageIgnored('test', ignoredPackages)).toBe(true);
-		expect(isPackageIgnored('not-ignored', ignoredPackages)).toBe(false);
-		expect(isPackageIgnored('__proto__', ignoredPackages)).toBe(true);
+		const supersededPackages = getSupersededPackages(manifestOverrides);
+		expect(supersededPackages).toMatchObject(['joplin-plugin-benji-favorites']);
 	});
 });
