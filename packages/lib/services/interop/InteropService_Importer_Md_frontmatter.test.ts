@@ -35,6 +35,7 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', () => {
 		const format = 'DD/MM/YYYY HH:mm';
 
 		expect(note.title).toBe('Test Note Title');
+		expect(time.formatMsToLocal(note.user_updated_time, format)).toBe('01/05/2019 16:54');
 		expect(time.formatMsToLocal(note.user_created_time, format)).toBe('01/05/2019 16:54');
 		expect(note.source_url).toBe('https://joplinapp.org');
 		expect(note.author).toBe('Joplin');
@@ -105,6 +106,7 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', () => {
 		const note = await importTestFile('short_date.md');
 		const format = 'YYYY-MM-DD HH:mm';
 
+		expect(time.formatMsToLocal(note.user_updated_time, format)).toBe('2021-01-01 00:00');
 		expect(time.formatMsToLocal(note.user_created_time, format)).toBe('2017-01-01 00:00');
 	});
 	it('should load tags even with the inline syntax', async () => {
@@ -120,6 +122,7 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', () => {
 		const format = 'YYYY-MM-DD HH:mm';
 
 		expect(note.title).toBe('YAML metadata for R Markdown with examples');
+		expect(time.formatMsToLocal(note.user_updated_time, format)).toBe('2021-06-10 00:00');
 		expect(time.formatMsToLocal(note.user_created_time, format)).toBe('2021-06-10 00:00');
 		expect(note.author).toBe('Hao Liang');
 
@@ -139,6 +142,7 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', () => {
 	it('should handle date formats with timezone information', async () => {
 		const note = await importTestFile('utc.md');
 
+		expect(note.user_updated_time).toBe(1556729640000);
 		expect(note.user_created_time).toBe(1556754840000);
 	});
 
