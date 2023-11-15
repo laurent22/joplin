@@ -134,10 +134,15 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		void NavService.go('Log');
 	};
 
+	private setShowSearch_(searching: boolean) {
+		if (searching !== this.state.searching) {
+			this.setState({ searching });
+			AccessibilityInfo.announceForAccessibility(searching ? _('Search shown') : _('Search hidden'));
+		}
+	}
+
 	private onSearchButtonPress_ = () => {
-		this.setState({
-			searching: !this.state.searching,
-		});
+		this.setShowSearch_(!this.state.searching);
 	};
 
 	private onSearchUpdate_ = (newQuery: string) => {
@@ -266,7 +271,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 		// Cancel search on back
 		if (this.state.searching) {
-			this.setState({ searching: false });
+			this.setShowSearch_(false);
 			return true;
 		}
 
@@ -370,6 +375,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 						onPress={() => {
 							void Linking.openURL(target);
 						}}
+						accessibilityRole='link'
 					>
 						<Text key="label" style={styleSheet.linkText}>
 							{title}
