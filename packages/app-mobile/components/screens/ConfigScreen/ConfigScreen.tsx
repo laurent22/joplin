@@ -654,6 +654,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				label={_('Search')}
 				placeholder={_('Search...')}
 				onChangeText={this.onSearchUpdate_}
+				autoFocus={true}
 			/>;
 
 			currentSection = (
