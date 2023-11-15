@@ -178,6 +178,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 					onRequestClose={() => {
 						closeList();
 					}}
+					supportedOrientations={['landscape', 'portrait']}
 				>
 					<TouchableWithoutFeedback
 						accessibilityElementsHidden={true}
