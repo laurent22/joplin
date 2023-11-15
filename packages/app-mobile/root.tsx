@@ -1032,10 +1032,13 @@ class AppComponent extends React.Component {
 
 		let sideMenuContent: ReactNode = null;
 		let menuPosition: SideMenuPosition = 'left';
+		let disableSideMenuGestures = this.props.disableSideMenuGestures;
 
 		if (this.props.routeName === 'Note') {
 			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
 			menuPosition = 'right';
+		} else if (this.props.routeName === 'Config') {
+			disableSideMenuGestures = true;
 		} else {
 			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContent/></SafeAreaView>;
 		}
@@ -1076,7 +1079,7 @@ class AppComponent extends React.Component {
 					openMenuOffset={this.state.sideMenuWidth}
 					menuPosition={menuPosition}
 					onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}
-					disableGestures={this.props.disableSideMenuGestures}
+					disableGestures={disableSideMenuGestures}
 					onSliding={(percent: number) => {
 						this.props.dispatch({
 							type: 'SIDE_MENU_OPEN_PERCENT',
