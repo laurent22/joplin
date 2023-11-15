@@ -115,10 +115,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	};
 
 	private manageProfilesButtonPress_ = () => {
-		this.props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'ProfileSwitcher',
-		});
+		void NavService.go('ProfileSwitcher');
 	};
 
 	private fixSearchEngineIndexButtonPress_ = async () => {
@@ -206,6 +203,42 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		return 0;
 	}
 
+	private hasUnsavedChanges() {
+		return this.state.changedSettingKeys.length > 0;
+	}
+
+	private promptSaveChanges(): Promise<void> {
+		return new Promise(resolve => {
+			if (this.hasUnsavedChanges()) {
+				const dialogTitle: string|null = null;
+				Alert.alert(
+					dialogTitle,
+					_('There are unsaved changes.'),
+					[{
+						text: _('Save changes'),
+						onPress: async () => {
+							await this.saveButton_press();
+							resolve();
+						},
+					},
+					{
+						text: _('Discard changes'),
+						onPress: () => resolve(),
+					}],
+				);
+			} else {
+				resolve();
+			}
+		});
+	}
+
+	private handleNavigateToNewScren = async (): Promise<boolean> => {
+		await this.promptSaveChanges();
+
+		// Continue navigation
+		return false;
+	};
+
 	private handleBackButtonPress = (): boolean => {
 		const goBack = async () => {
 			BackButtonService.removeHandler(this.handleBackButtonPress);
@@ -218,24 +251,11 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			return true;
 		}
 
-		if (this.state.changedSettingKeys.length > 0) {
-			const dialogTitle: string|null = null;
-			Alert.alert(
-				dialogTitle,
-				_('There are unsaved changes.'),
-				[{
-					text: _('Save changes'),
-					onPress: async () => {
-						await this.saveButton_press();
-						await goBack();
-					},
-				},
-				{
-					text: _('Discard changes'),
-					onPress: goBack,
-				}],
-			);
-
+		if (this.hasUnsavedChanges()) {
+			void (async () => {
+				await this.promptSaveChanges();
+				await goBack();
+			})();
 			return true;
 		}
 
@@ -255,12 +275,14 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		BackButtonService.addHandler(this.handleBackButtonPress);
+		NavService.addHandler(this.handleNavigateToNewScren);
 		Dimensions.addEventListener('change', this.updateSidebarWidth);
 		this.updateSidebarWidth();
 	}
 
 	public componentWillUnmount() {
 		BackButtonService.removeHandler(this.handleBackButtonPress);
+		NavService.removeHandler(this.handleNavigateToNewScren);
 	}
 
 	private renderButton(key: string, title: string, clickHandler: ()=> void, options: any = null) {
@@ -600,7 +622,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 					showSaveButton={true}
 					showSearchButton={false}
 					showSideMenuButton={false}
-					saveButtonDisabled={!this.state.changedSettingKeys.length}
+					saveButtonDisabled={!this.hasUnsavedChanges()}
 					onSaveButtonPress={this.saveButton_press}
 				/>
 				{mainComponent}
