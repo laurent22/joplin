@@ -343,11 +343,8 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				headerTitle.toLocaleLowerCase() === searchQuery
 				|| searchThrough.includes(searchQuery);
 
-			if (this.state.searchQuery.length === 0 || !hasSearchMatches) {
-				return false;
-			}
-
-			return true;
+			// Don't show results when the search input is empty
+			return this.state.searchQuery.length > 0 && hasSearchMatches;
 		};
 
 		const addSettingComponent = (component: ReactElement, relatedText: string|string[]) => {
@@ -382,6 +379,15 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			);
 
 			addSettingComponent(component, title);
+		};
+
+		const addSettingText = (key: string, text: string) => {
+			addSettingComponent(
+				<View key={key} style={styleSheet.settingContainer}>
+					<Text style={styleSheet.settingText}>{text}</Text>
+				</View>,
+				text,
+			);
 		};
 
 		for (let i = 0; i < section.metadatas.length; i++) {
@@ -493,34 +499,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			addSettingLink('website_link', _('Joplin website'), 'https://joplinapp.org/');
 			addSettingLink('privacy_link', _('Privacy Policy'), 'https://joplinapp.org/privacy/');
 
-			const versionLabel = _('Version');
-			addSettingComponent(
-				<View key="version_info_app" style={styleSheet.settingContainer}>
-					<Text style={styleSheet.settingText}>{`Joplin ${VersionInfo.appVersion}`}</Text>
-				</View>,
-				versionLabel,
-			);
-
-			addSettingComponent(
-				<View key="version_info_db" style={styleSheet.settingContainer}>
-					<Text style={styleSheet.settingText}>{_('Database v%s', reg.db().version())}</Text>
-				</View>,
-				versionLabel,
-			);
-
-			addSettingComponent(
-				<View key="version_info_fts" style={styleSheet.settingContainer}>
-					<Text style={styleSheet.settingText}>{_('FTS enabled: %d', this.props.settings['db.ftsEnabled'])}</Text>
-				</View>,
-				versionLabel,
-			);
-
-			addSettingComponent(
-				<View key="version_info_hermes" style={styleSheet.settingContainer}>
-					<Text style={styleSheet.settingText}>{_('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0)}</Text>
-				</View>,
-				versionLabel,
-			);
+			addSettingText('version_info_app', `Joplin ${VersionInfo.appVersion}`);
+			addSettingText('version_info_db', _('Database v%s', reg.db().version()));
+			addSettingText('version_info_fts', _('FTS enabled: %d', this.props.settings['db.ftsEnabled']));
+			addSettingText('version_info_hermes', _('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0));
 
 			const featureFlagKeys = Setting.featureFlagKeys(AppType.Mobile);
 			if (featureFlagKeys.length) {
