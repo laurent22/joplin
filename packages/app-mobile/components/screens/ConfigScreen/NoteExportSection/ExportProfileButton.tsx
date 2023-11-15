@@ -13,6 +13,8 @@ interface Props {
 	styles: ConfigScreenStyles;
 }
 
+export const exportProfileButtonTitle = () => _('Export profile');
+
 const ExportProfileButton = (props: Props) => {
 	const [profileExportStatus, setProfileExportStatus] = useState<'idle'|'prompt'|'exporting'>('idle');
 	const [profileExportPath, setProfileExportPath] = useState<string>('');
@@ -31,7 +33,7 @@ const ExportProfileButton = (props: Props) => {
 	const exportProfileButton = (
 		<SettingsButton
 			styles={props.styles}
-			title={profileExportStatus === 'exporting' ? _('Exporting profile...') : _('Export profile')}
+			title={profileExportStatus === 'exporting' ? _('Exporting profile...') : exportProfileButtonTitle()}
 			clickHandler={exportProfileButtonPress}
 			description={_('For debugging purpose only: export your profile to an external SD card.')}
 			disabled={profileExportStatus === 'exporting'}

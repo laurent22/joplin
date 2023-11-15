@@ -70,6 +70,7 @@ interface ScreenHeaderProps {
 	onRedoButtonPress: OnPressCallback;
 	onSaveButtonPress: OnPressCallback;
 	sortButton_press?: OnPressCallback;
+	onSearchButtonPress?: OnPressCallback;
 
 	showSideMenuButton?: boolean;
 	showSearchButton?: boolean;
@@ -242,7 +243,11 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 	}
 
 	private searchButton_press() {
-		void NavService.go('Search');
+		if (this.props.onSearchButtonPress) {
+			this.props.onSearchButtonPress();
+		} else {
+			void NavService.go('Search');
+		}
 	}
 
 	private async duplicateButton_press() {
