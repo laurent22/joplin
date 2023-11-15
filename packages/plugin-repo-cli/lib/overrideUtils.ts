@@ -4,6 +4,7 @@ import { readJsonFile } from './utils';
 export interface ManifestOverride {
 	_obsolete?: boolean;
 	_recommended?: boolean;
+	_superseded_package?: string;
 }
 
 export type ManifestOverrides = Record<string, ManifestOverride>;
@@ -49,3 +50,16 @@ function pluginManifestOverridesPath(repoDir: string): string {
 export async function readManifestOverrides(repoDir: string): Promise<ManifestOverrides> {
 	return readJsonFile(pluginManifestOverridesPath(repoDir), {});
 }
+
+export const getSupersededPackages = (manifsetOverrides: ManifestOverrides): string[] => {
+	const supersededPackages = [];
+
+	for (const id in manifsetOverrides) {
+		const supersededPackage = manifsetOverrides[id]._superseded_package;
+		if (supersededPackage) {
+			supersededPackages.push(supersededPackage);
+		}
+	}
+
+	return supersededPackages;
+};

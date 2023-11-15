@@ -14,7 +14,7 @@ const { pregQuote } = require('../../string-utils-common');
 import { MarkupToHtml } from '@joplin/renderer';
 
 export default class InteropService_Importer_Md extends InteropService_Importer_Base {
-	private importedNotes: Record<string, NoteEntity> = {};
+	protected importedNotes: Record<string, NoteEntity> = {};
 
 	public async exec(result: ImportExportResult) {
 		let parentFolderId = null;
@@ -40,6 +40,16 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 
 		for (let i = 0; i < filePaths.length; i++) {
 			await this.importFile(filePaths[i], parentFolderId);
+		}
+
+		for (const importedLocalPath of Object.keys(this.importedNotes)) {
+			const note = this.importedNotes[importedLocalPath];
+			const updatedBody = await this.importLocalFiles(importedLocalPath, note.body, note.parent_id);
+			const updatedNote = {
+				...this.importedNotes[importedLocalPath],
+				body: updatedBody || note.body,
+			};
+			this.importedNotes[importedLocalPath] = await Note.save(updatedNote, { isNew: false, autoTimestamp: false });
 		}
 
 		return result;
@@ -97,7 +107,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		const markdownLinks = markdownUtils.extractFileUrls(md);
 		const htmlLinks = htmlUtils.extractFileUrls(md);
 		const fileLinks = unique(markdownLinks.concat(htmlLinks));
-		await Promise.all(fileLinks.map(async (encodedLink: string) => {
+		for (const encodedLink of fileLinks) {
 			const link = decodeURI(encodedLink);
 			// Handle anchor links appropriately
 			const trimmedLink = this.trimAnchorLink(link);
@@ -138,7 +148,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 					updated = htmlUtils.replaceResourceUrl(updated, linkToReplace, id);
 				}
 			}
-		}));
+		}
 		return updated;
 	}
 
@@ -162,17 +172,6 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 			markup_language: ext === 'html' ? MarkupToHtml.MARKUP_LANGUAGE_HTML : MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN,
 		};
 		this.importedNotes[resolvedPath] = await Note.save(note, { autoTimestamp: false });
-
-		try {
-			const updatedBody = await this.importLocalFiles(resolvedPath, body, parentFolderId);
-			const updatedNote = {
-				...this.importedNotes[resolvedPath],
-				body: updatedBody || body,
-			};
-			this.importedNotes[resolvedPath] = await Note.save(updatedNote, { isNew: false });
-		} catch (error) {
-			// console.error(`Problem importing links for file ${resolvedPath}, error:\n ${error}`);
-		}
 
 		return this.importedNotes[resolvedPath];
 	}
