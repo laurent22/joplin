@@ -1,13 +1,24 @@
-import InteropService_Importer_Md_frontmatter from '../../services/interop/InteropService_Importer_Md_frontmatter';
 import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 import time from '../../time';
 import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
+import { ImportModuleOutputFormat, ImportOptions } from './types';
+import InteropService from './InteropService';
+import Folder from '../../models/Folder';
 
 async function importNote(path: string) {
-	const importer = new InteropService_Importer_Md_frontmatter();
-	importer.setMetadata({ fileExtensions: ['md', 'html'] });
-	return await importer.importFile(path, 'notebook');
+	const folder = await Folder.save({});
+	const importOptions: ImportOptions = {
+		path: path,
+		format: 'md_frontmatter',
+		destinationFolderId: folder.id,
+		outputFormat: ImportModuleOutputFormat.Markdown,
+	};
+
+	await InteropService.instance().import(importOptions);
+
+	const allNotes = await Note.all();
+	return allNotes[0];
 }
 
 const importTestFile = async (name: string) => {
@@ -32,7 +43,7 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', () => {
 		expect(note.longitude).toBe('-94.51350100');
 		expect(note.altitude).toBe('0.0000');
 		expect(note.is_todo).toBe(1);
-		expect(note.todo_completed).toBeUndefined();
+		expect(note.todo_completed).toBe(0);
 		expect(time.formatMsToLocal(note.todo_due, format)).toBe('22/08/2021 00:00');
 		expect(note.body).toBe('This is the note body\n');
 
@@ -84,7 +95,7 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', () => {
 
 		expect(note.longitude).toBe('-94.51350100');
 		expect(note.is_todo).toBe(1);
-		expect(note.todo_completed).toBeUndefined();
+		expect(note.todo_completed).toBe(0);
 	});
 	it('should load notes with newline in the title', async () => {
 		const note = await importTestFile('title_newline.md');
