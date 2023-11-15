@@ -157,6 +157,8 @@ module.exports = {
 		//   In user-facing text, it should be "notebook".
 		'id-denylist': ['error', 'err', 'notebook', 'notebooks'],
 		'prefer-arrow-callback': ['error'],
+
+		'no-constant-binary-expression': ['error'],
 	},
 	'plugins': [
 		'react',
