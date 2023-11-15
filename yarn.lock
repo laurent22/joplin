@@ -6358,7 +6358,7 @@ __metadata:
     react-native-side-menu-updated: 1.3.2
     react-native-sqlite-storage: 6.0.1
     react-native-url-polyfill: 2.0.0
-    react-native-vector-icons: 10.0.0
+    react-native-vector-icons: 10.0.1
     react-native-version-info: 1.1.1
     react-native-vosk: 0.1.12
     react-native-webview: 13.6.2
@@ -34822,9 +34822,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-vector-icons@npm:10.0.0":
-  version: 10.0.0
-  resolution: "react-native-vector-icons@npm:10.0.0"
+"react-native-vector-icons@npm:10.0.1":
+  version: 10.0.1
+  resolution: "react-native-vector-icons@npm:10.0.1"
   dependencies:
     prop-types: ^15.7.2
     yargs: ^16.1.1
@@ -34833,7 +34833,7 @@ __metadata:
     fa5-upgrade: bin/fa5-upgrade.sh
     fa6-upgrade: bin/fa6-upgrade.sh
     generate-icon: bin/generate-icon.js
-  checksum: c4e39deb5218b6ba047c378217bbc7f24c1db153d2171e42176703a775049ed24f2a140f35d962d215265032722a24cba8acc83397ef6e14bd300db470609bf5
+  checksum: def1a601f9ee5fcc66d319665808ecc3c0f23c6a2d744693f842ce70efcb642f774a6f04e3dadbfc86ef02ee4596c141ac70dea53e3847c2c71efec04d3e6d2d
   languageName: node
   linkType: hard
 
