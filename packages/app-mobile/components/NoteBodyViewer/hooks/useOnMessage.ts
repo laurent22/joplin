@@ -40,8 +40,7 @@ export default function useOnMessage(
 
 		const isScrollMessage = msg.startsWith('onscroll:');
 
-		// Scroll messages are very frequent. If we log each, it's much harder to find
-		// non-scroll messages.
+		// Scroll messages are very frequent so we avoid logging them.
 		if (!isScrollMessage) {
 			// eslint-disable-next-line no-console
 			console.info('Got IPC message: ', msg);
