@@ -44,6 +44,7 @@ export default function NoteBodyViewer(props: Props) {
 		props.noteResources,
 		props.paddingBottom,
 		props.noteHash,
+		props.initialScroll,
 	);
 
 	const onResourceLongPress = useOnResourceLongPress(
@@ -68,13 +69,7 @@ export default function NoteBodyViewer(props: Props) {
 
 	const onLoadEnd = useCallback(() => {
 		if (props.onLoadEnd) props.onLoadEnd();
-
-		if (props.initialScroll) {
-			webviewRef.current.injectJS(`
-				window.scrollContentToPosition(${JSON.stringify(props.initialScroll)});
-			`);
-		}
-	}, [props.onLoadEnd, props.initialScroll]);
+	}, [props.onLoadEnd]);
 
 	function onError() {
 		reg.logger().error('WebView error');

@@ -40,7 +40,16 @@ const onlyCheckboxHasChangedHack = (previousBody: string, newBody: string) => {
 	return true;
 };
 
-export default function useSource(noteBody: string, noteMarkupLanguage: number, themeId: number, highlightedKeywords: string[], noteResources: any, paddingBottom: number, noteHash: string): UseSourceResult {
+export default function useSource(
+	noteBody: string,
+	noteMarkupLanguage: number,
+	themeId: number,
+	highlightedKeywords: string[],
+	noteResources: any,
+	paddingBottom: number,
+	noteHash: string,
+	initialScroll: number|null,
+): UseSourceResult {
 	const [html, setHtml] = useState<string>('');
 	const [injectedJs, setInjectedJs] = useState<string[]>([]);
 	const [resourceLoadedTime, setResourceLoadedTime] = useState(0);
@@ -156,28 +165,6 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 			js.push('window.joplinPostMessage_ = (msg, args) => { return window.ReactNativeWebView.postMessage(msg); };');
 			js.push('webviewLib.initialize({ postMessage: msg => { return window.ReactNativeWebView.postMessage(msg); } });');
 			js.push(`
-				const readyStateCheckInterval = setInterval(function() {
-					if (document.readyState === "complete") {
-						clearInterval(readyStateCheckInterval);
-						if ("${resourceDownloadMode}" === "manual") webviewLib.setupResourceManualDownload();
-
-						const hash = "${noteHash}";
-						// Gives it a bit of time before scrolling to the anchor
-						// so that images are loaded.
-						if (hash) {
-							setTimeout(() => { 
-								const e = document.getElementById(hash);
-								if (!e) {
-									console.warn('Cannot find hash', hash);
-									return;
-								}
-								e.scrollIntoView();
-							}, 500);
-						}
-					}
-				}, 10);
-			`);
-			js.push(`
 				const scrollingElement =
 					${scrollRenderedMdContainer ? 'document.querySelector("#rendered-md")' : 'document.scrollingElement'};
 				let lastScrollTop;
@@ -191,9 +178,37 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 				window.addEventListener('scroll', onMainContentScroll);
 				scrollingElement.addEventListener('scroll', onMainContentScroll);
 
-				window.scrollContentToPosition = (position) => {
+				const scrollContentToPosition = (position) => {
 					scrollingElement.scrollTop = position;
 				};
+			`);
+			js.push(`
+				const readyStateCheckInterval = setInterval(function() {
+					if (document.readyState === "complete") {
+						clearInterval(readyStateCheckInterval);
+						if ("${resourceDownloadMode}" === "manual") webviewLib.setupResourceManualDownload();
+
+						const hash = "${noteHash}";
+						const initialScroll = ${JSON.stringify(initialScroll)};
+
+						// Don't scroll to a hash if we're given initial scroll (initial scroll
+						// overrides scrolling to a hash).
+						if ((initialScroll ?? null) !== null) {
+							scrollContentToPosition(initialScroll);
+					 	} else if (hash) {
+							// Gives it a bit of time before scrolling to the anchor
+							// so that images are loaded.
+							setTimeout(() => { 
+								const e = document.getElementById(hash);
+								if (!e) {
+									console.warn('Cannot find hash', hash);
+									return;
+								}
+								e.scrollIntoView();
+							}, 500);
+						}
+					}
+				}, 10);
 			`);
 			js.push('} catch (e) {');
 			js.push('	console.error(e);');
