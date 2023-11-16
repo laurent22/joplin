@@ -132,7 +132,7 @@ export interface EditorSettings {
 	spellcheckEnabled: boolean;
 	readOnly: boolean;
 
-	indentWithTabs: boolean;
+	indentUnit: string;
 }
 
 export type LogMessageCallback = (message: string)=> void;

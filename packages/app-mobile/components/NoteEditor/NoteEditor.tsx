@@ -286,7 +286,7 @@ function NoteEditor(props: Props, ref: any) {
 		automatchBraces: false,
 		ignoreModifiers: false,
 
-		indentWithTabs: false,
+		indentUnit: Setting.value('editor.indentUnit'),
 	};
 
 	const injectedJavaScript = `

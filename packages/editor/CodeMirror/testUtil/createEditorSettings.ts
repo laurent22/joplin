@@ -15,7 +15,7 @@ const createEditorSettings = (themeId: number) => {
 		language: EditorLanguageType.Markdown,
 		themeData,
 
-		indentWithTabs: true,
+		indentUnit: '\t',
 	};
 
 	return editorSettings;

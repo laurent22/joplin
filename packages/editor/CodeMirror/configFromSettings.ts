@@ -47,7 +47,7 @@ const configFromSettings = (settings: EditorSettings) => {
 			spellcheck: settings.spellcheckEnabled ? 'true' : 'false',
 		}),
 		EditorState.readOnly.of(settings.readOnly),
-		indentUnit.of(settings.indentWithTabs ? '\t' : '    '),
+		indentUnit.of(settings.indentUnit ?? '\t'),
 	];
 
 	if (settings.automatchBraces) {

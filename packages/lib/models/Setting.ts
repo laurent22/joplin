@@ -1467,6 +1467,26 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 
+			'editor.indentUnit': {
+				value: '    ',
+				type: SettingItemType.String,
+				section: 'note',
+				public: true,
+				isEnum: true,
+				appTypes: [AppType.Mobile],
+				label: () => _('Indent with'),
+				description: () => _('Determines the text to insert at the beginning of the line when creating sublists or indenting text in code blocks.'),
+				options: () => {
+					return {
+						'\t': _('Tabs'),
+						'  ': _('Two spaces'),
+						'    ': _('Four spaces'),
+					};
+				},
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
 			'imageeditor.jsdrawToolbar': {
 				value: '',
 				type: SettingItemType.String,
