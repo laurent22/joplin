@@ -1,6 +1,6 @@
 # Joplin iOS Changelog
 
-## [ios-v12.13.6](https://github.com/laurent22/joplin/releases/tag/ios-v12.13.6) - 2023-11-16T13:27:26Z
+## [ios-v12.13.7](https://github.com/laurent22/joplin/releases/tag/ios-v12.13.7) - 2023-11-16T13:37:03Z
 
 - Improved: Add more space between settings title and description (#9270) (#9258 by Henry Heino)
 - Improved: Fade settings screen icons (#9268) (#9260 by Henry Heino)
