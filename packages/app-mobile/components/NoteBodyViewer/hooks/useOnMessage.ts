@@ -38,10 +38,24 @@ export default function useOnMessage(
 		// https://github.com/laurent22/joplin/issues/4494
 		const msg = event.nativeEvent.data;
 
-		// eslint-disable-next-line no-console
-		console.info('Got IPC message: ', msg);
+		const isScrollMessage = msg.startsWith('onscroll:');
 
-		if (msg.indexOf('checkboxclick:') === 0) {
+		// Scroll messages are very frequent. If we log each, it's much harder to find
+		// non-scroll messages.
+		if (!isScrollMessage) {
+			// eslint-disable-next-line no-console
+			console.info('Got IPC message: ', msg);
+		}
+
+		if (isScrollMessage) {
+			const eventData = JSON.parse(msg.substring(msg.indexOf(':') + 1));
+
+			if (typeof eventData.scrollTop !== 'number') {
+				throw new Error(`Invalid scroll message, ${msg}`);
+			}
+
+			onMainContainerScroll?.(eventData.scrollTop);
+		} else if (msg.indexOf('checkboxclick:') === 0) {
 			const newBody = shared.toggleCheckbox(msg, noteBody);
 			onCheckboxChange?.(newBody);
 		} else if (msg.indexOf('markForDownload:') === 0) {
@@ -52,14 +66,6 @@ export default function useOnMessage(
 			onResourceLongPress(msg);
 		} else if (msg.startsWith('edit:')) {
 			onRequestEditResource?.(msg);
-		} else if (msg.startsWith('onscroll:')) {
-			const eventData = JSON.parse(msg.substring(msg.indexOf(':') + 1));
-
-			if (typeof eventData.scrollTop !== 'number') {
-				throw new Error(`Invalid scroll message, ${msg}`);
-			}
-
-			onMainContainerScroll?.(eventData.scrollTop);
 		} else if (msg.startsWith('joplin:')) {
 			onJoplinLinkClick(msg);
 		} else if (msg.startsWith('error:')) {
