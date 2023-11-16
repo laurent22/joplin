@@ -119,4 +119,37 @@ describe('createEditor', () => {
 		editor.remove();
 		expect(document.querySelectorAll('#joplin-plugin-scripts-container')).toHaveLength(0);
 	});
+
+	it('should support different indent units', () => {
+		const createEditorWithIndentUnit = (indentUnit: string, initialText: string) => {
+			return createEditor(document.body, {
+				initialText,
+				settings: {
+					...createEditorSettings(Setting.THEME_LIGHT),
+					indentUnit,
+				},
+				onEvent: _event => {},
+				onLogMessage: _message => {},
+			});
+		};
+
+		const editorWithSpaceIndent = createEditorWithIndentUnit('  ', 'Test');
+		editorWithSpaceIndent.indentMore();
+		expect(editorWithSpaceIndent.getValue()).toBe('  Test');
+
+		const editorWithTabIndent = createEditorWithIndentUnit('\t', 'Test');
+		editorWithTabIndent.indentMore();
+		expect(editorWithTabIndent.getValue()).toBe('\tTest');
+
+		// Should be possible to change indent unit
+		editorWithSpaceIndent.updateSettings({
+			...createEditorSettings(Setting.THEME_LIGHT),
+			indentUnit: '    ',
+		});
+
+		editorWithSpaceIndent.indentLess();
+		expect(editorWithSpaceIndent.getValue()).toBe('Test');
+		editorWithSpaceIndent.indentMore();
+		expect(editorWithSpaceIndent.getValue()).toBe('    Test');
+	});
 });
