@@ -359,9 +359,9 @@ PODS:
     - React-Core
   - react-native-rsa-native (2.0.5):
     - React
-  - react-native-saf-x (2.13.3):
+  - react-native-saf-x (2.13.2):
     - React-Core
-  - react-native-safe-area-context (4.7.4):
+  - react-native-safe-area-context (4.7.3):
     - React-Core
   - react-native-slider (4.4.3):
     - React-Core
@@ -479,8 +479,7 @@ PODS:
     - React
   - RNShare (9.4.1):
     - React-Core
-  - RNVectorIcons (10.0.1):
-    - RCT-Folly (= 2021.07.22.00)
+  - RNVectorIcons (10.0.0):
     - React-Core
   - RNZipArchive (6.1.0):
     - React-Core
@@ -787,8 +786,8 @@ SPEC CHECKSUMS:
   react-native-image-resizer: 681f7607418b97c084ba2d0999b153b103040d8a
   react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
-  react-native-saf-x: 0f7531c9f8bdbb62bbd55ceb7433de7bb756cd73
-  react-native-safe-area-context: 2cd91d532de12acdb0a9cbc8d43ac72a8e4c897c
+  react-native-saf-x: a93121b21f9d5ec84d5e7fc99fdeebfbf232920a
+  react-native-safe-area-context: 238cd8b619e05cb904ccad97ef42e84d1b5ae6ec
   react-native-slider: 1cdd6ba29675df21f30544253bf7351d3c2d68c4
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-version-info: a106f23009ac0db4ee00de39574eb546682579b9
@@ -818,7 +817,7 @@ SPEC CHECKSUMS:
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
   RNSecureRandom: 07efbdf2cd99efe13497433668e54acd7df49fef
   RNShare: 32e97adc8d8c97d4a26bcdd3c45516882184f8b6
-  RNVectorIcons: ace237de89f1574ef3c963ae9d5da3bd6fbeb02a
+  RNVectorIcons: 8b5bb0fa61d54cd2020af4f24a51841ce365c7e9
   RNZipArchive: ef9451b849c45a29509bf44e65b788829ab07801
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
