@@ -66,7 +66,7 @@ const { SearchScreen } = require('./components/screens/search.js');
 const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js');
 import EncryptionConfigScreen from './components/screens/encryption-config';
 const { DropboxLoginScreen } = require('./components/screens/dropbox-login.js');
-const { MenuContext } = require('react-native-popup-menu');
+import { MenuProvider } from 'react-native-popup-menu';
 import SideMenu from './components/SideMenu';
 import SideMenuContent from './components/side-menu-content';
 const { SideMenuContentNote } = require('./components/side-menu-content-note.js');
@@ -1088,7 +1088,7 @@ class AppComponent extends React.Component {
 					}}
 				>
 					<StatusBar barStyle={statusBarStyle} />
-					<MenuContext style={{ flex: 1 }}>
+					<MenuProvider style={{ flex: 1 }}>
 						<SafeAreaView style={{ flex: 0, backgroundColor: theme.backgroundColor2 }}/>
 						<SafeAreaView style={{ flex: 1 }}>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
@@ -1101,7 +1101,7 @@ class AppComponent extends React.Component {
 								sensorInfo={this.state.sensorInfo}
 							/> }
 						</SafeAreaView>
-					</MenuContext>
+					</MenuProvider>
 				</SideMenu>
 			</View>
 		);
