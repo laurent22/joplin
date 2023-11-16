@@ -1,5 +1,20 @@
 # Joplin iOS Changelog
 
+## [ios-v12.13.6](https://github.com/laurent22/joplin/releases/tag/ios-v12.13.6) - 2023-11-16T13:27:26Z
+
+- Improved: Add more space between settings title and description (#9270) (#9258 by Henry Heino)
+- Improved: Fade settings screen icons (#9268) (#9260 by Henry Heino)
+- Improved: Implement settings search (#9320) (#9294 by Henry Heino)
+- Improved: Improve image editor load performance (#9281 by Henry Heino)
+- Improved: Update js-draw to version 1.11.2 (#9120) (#9195 by Henry Heino)
+- Improved: Updated packages @testing-library/react-native (v12.3.1), mermaid (v10.5.1), react-native-safe-area-context (v4.7.4), react-native-vector-icons (v10.0.1), sass (v1.69.5)
+- Fixed: Allow showing dropdowns in landscape mode (#9309) (#9271 by Henry Heino)
+- Fixed: Config screen: Fix section list scroll (#9267) (#9259 by Henry Heino)
+- Fixed: Disable notebook list side menu in config screen (#9311) (#9308 by Henry Heino)
+- Fixed: Fix encryption when a resource doesn't have an associated file (#9222) (#9123 by Henry Heino)
+- Fixed: Fix settings save confirmation not shown when navigating to encryption/profile/log screens (#9313) (#9312 by Henry Heino)
+- Fixed: Restore scroll position when returning to the note viewer from the editor or camera (#9324) (#9321 by Henry Heino)
+
 ## [ios-v12.13.5](https://github.com/laurent22/joplin/releases/tag/ios-v12.13.5) - 2023-11-10T13:20:09Z
 
 - Improved: Add a "Retry all" button when multiple resources could not be downloaded (#9158)
