@@ -142,6 +142,12 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 
 			const resourceDownloadMode = Setting.value('sync.resourceDownloadMode');
 
+			// On iOS, the root container has slow inertial scroll, which feels very different from
+			// the native scroll in other apps. This is not the case, however, when a child (e.g. a div)
+			// scrolls the content instead.
+			// Use a div to scroll on iOS instead of the main container:
+			const scrollRenderedMdContainer = shim.mobilePlatform() === 'ios';
+
 			const js = [];
 			js.push('try {');
 			js.push(shim.injectedJs('webviewLib'));
@@ -154,6 +160,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 					if (document.readyState === "complete") {
 						clearInterval(readyStateCheckInterval);
 						if ("${resourceDownloadMode}" === "manual") webviewLib.setupResourceManualDownload();
+
 						const hash = "${noteHash}";
 						// Gives it a bit of time before scrolling to the anchor
 						// so that images are loaded.
@@ -170,7 +177,26 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 					}
 				}, 10);
 			`);
+			js.push(`
+				const scrollingElement =
+					${scrollRenderedMdContainer ? 'document.querySelector("#rendered-md")' : 'document.scrollingElement'};
+				let lastScrollTop;
+				const onMainContentScroll = () => {
+					const newScrollTop = scrollingElement.scrollTop;
+					if (lastScrollTop !== newScrollTop) {
+						const eventData = { scrollTop: newScrollTop };
+						window.ReactNativeWebView.postMessage('onscroll:' + JSON.stringify(eventData));
+					}
+				};
+				window.addEventListener('scroll', onMainContentScroll);
+				scrollingElement.addEventListener('scroll', onMainContentScroll);
+
+				window.scrollContentToPosition = (position) => {
+					scrollingElement.scrollTop = position;
+				};
+			`);
 			js.push('} catch (e) {');
+			js.push('	console.error(e);');
 			js.push('	window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))');
 			js.push('	true;');
 			js.push('}');
@@ -186,20 +212,17 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 					}
 				}
 
-				/*
-				 iOS seems to increase inertial scrolling friction when the WebView body/root elements
-				 scroll. Scroll the main container instead.
-				*/
+				:root > body {
+					padding: 0;
+				}
+			`;
+			const scrollRenderedMdCss = `
 				body > #rendered-md {
 					width: 100vw;
 					overflow: auto;
 					height: calc(100vh - ${paddingBottom}px - ${paddingTop});
 					padding-bottom: ${paddingBottom}px;
 					padding-top: ${paddingTop};
-				}
-
-				:root > body {
-					padding: 0;
 				}
 			`;
 			const defaultCss = `
@@ -219,6 +242,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 						<style>
 							${defaultCss}
 							${shim.mobilePlatform() === 'ios' ? iOSSpecificCss : ''}
+							${scrollRenderedMdContainer ? scrollRenderedMdCss : ''}
 							${editPopupCss}
 						</style>
 						${assetsToHeaders(result.pluginAssets, { asHtml: true })}

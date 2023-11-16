@@ -1,14 +1,14 @@
 import { useRef, useCallback } from 'react';
 
 import useSource from './hooks/useSource';
-import useOnMessage, { HandleMessageCallback, OnMarkForDownloadCallback } from './hooks/useOnMessage';
+import useOnMessage, { HandleMessageCallback, HandleScrollCallback, OnMarkForDownloadCallback } from './hooks/useOnMessage';
 import useOnResourceLongPress from './hooks/useOnResourceLongPress';
 
 const React = require('react');
 import { View } from 'react-native';
 import BackButtonDialogBox from '../BackButtonDialogBox';
 import { reg } from '@joplin/lib/registry';
-import ExtendedWebView from '../ExtendedWebView';
+import ExtendedWebView, { WebViewControl } from '../ExtendedWebView';
 
 interface Props {
 	themeId: number;
@@ -18,11 +18,13 @@ interface Props {
 	highlightedKeywords: string[];
 	noteResources: any;
 	paddingBottom: number;
+	initialScroll: number|null;
 	noteHash: string;
 	onJoplinLinkClick: HandleMessageCallback;
 	onCheckboxChange?: HandleMessageCallback;
 	onRequestEditResource?: HandleMessageCallback;
 	onMarkForDownload?: OnMarkForDownloadCallback;
+	onScroll: HandleScrollCallback;
 	onLoadEnd?: ()=> void;
 }
 
@@ -32,6 +34,7 @@ const webViewStyle = {
 
 export default function NoteBodyViewer(props: Props) {
 	const dialogBoxRef = useRef(null);
+	const webviewRef = useRef<WebViewControl>(null);
 
 	const { html, injectedJs } = useSource(
 		props.noteBody,
@@ -59,12 +62,19 @@ export default function NoteBodyViewer(props: Props) {
 			onJoplinLinkClick: props.onJoplinLinkClick,
 			onRequestEditResource: props.onRequestEditResource,
 			onResourceLongPress,
+			onMainContainerScroll: props.onScroll,
 		},
 	);
 
 	const onLoadEnd = useCallback(() => {
 		if (props.onLoadEnd) props.onLoadEnd();
-	}, [props.onLoadEnd]);
+
+		if (props.initialScroll) {
+			webviewRef.current.injectJS(`
+				window.scrollContentToPosition(${JSON.stringify(props.initialScroll)});
+			`);
+		}
+	}, [props.onLoadEnd, props.initialScroll]);
 
 	function onError() {
 		reg.logger().error('WebView error');
@@ -96,6 +106,7 @@ export default function NoteBodyViewer(props: Props) {
 	return (
 		<View style={props.style}>
 			<ExtendedWebView
+				ref={webviewRef}
 				webviewInstanceId='NoteBodyViewer'
 				themeId={props.themeId}
 				style={webViewStyle}

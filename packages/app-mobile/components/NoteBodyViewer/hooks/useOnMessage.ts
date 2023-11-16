@@ -3,6 +3,7 @@ import shared from '@joplin/lib/components/shared/note-screen-shared';
 
 export type HandleMessageCallback = (message: string)=> void;
 export type OnMarkForDownloadCallback = (resource: { resourceId: string })=> void;
+export type HandleScrollCallback = (scrollTop: number)=> void;
 
 interface MessageCallbacks {
 	onMarkForDownload?: OnMarkForDownloadCallback;
@@ -10,6 +11,7 @@ interface MessageCallbacks {
 	onResourceLongPress: HandleMessageCallback;
 	onRequestEditResource?: HandleMessageCallback;
 	onCheckboxChange: HandleMessageCallback;
+	onMainContainerScroll: HandleScrollCallback;
 }
 
 export default function useOnMessage(
@@ -24,6 +26,7 @@ export default function useOnMessage(
 	// Thus, useCallback should depend on each callback individually.
 	const {
 		onMarkForDownload, onResourceLongPress, onCheckboxChange, onRequestEditResource, onJoplinLinkClick,
+		onMainContainerScroll,
 	} = callbacks;
 
 	return useCallback((event: any) => {
@@ -49,6 +52,14 @@ export default function useOnMessage(
 			onResourceLongPress(msg);
 		} else if (msg.startsWith('edit:')) {
 			onRequestEditResource?.(msg);
+		} else if (msg.startsWith('onscroll:')) {
+			const eventData = JSON.parse(msg.substring(msg.indexOf(':') + 1));
+
+			if (typeof eventData.scrollTop !== 'number') {
+				throw new Error(`Invalid scroll message, ${msg}`);
+			}
+
+			onMainContainerScroll?.(eventData.scrollTop);
 		} else if (msg.startsWith('joplin:')) {
 			onJoplinLinkClick(msg);
 		} else if (msg.startsWith('error:')) {
@@ -63,5 +74,6 @@ export default function useOnMessage(
 		onJoplinLinkClick,
 		onResourceLongPress,
 		onRequestEditResource,
+		onMainContainerScroll,
 	]);
 }
