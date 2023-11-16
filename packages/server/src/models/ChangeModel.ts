@@ -34,7 +34,7 @@ export interface ChangePreviousItem {
 
 export function defaultDeltaPagination(): ChangePagination {
 	return {
-		limit: 100,
+		limit: 200,
 		cursor: '',
 	};
 }
@@ -139,6 +139,8 @@ export default class ChangeModel extends BaseModel<Change> {
 		// as the `changes` table grew. So it is now split into two queries
 		// merged by a UNION ALL.
 
+		const subQueryLimit = Math.ceil(limit / 2);
+
 		const fields = [
 			'id',
 			'item_id',
@@ -167,7 +169,7 @@ export default class ChangeModel extends BaseModel<Change> {
 			userId,
 		];
 
-		if (!doCountQuery) subParams1.push(limit);
+		if (!doCountQuery) subParams1.push(subQueryLimit);
 
 		const subQuery2 = `
 			SELECT ${fieldsSql}
@@ -185,7 +187,7 @@ export default class ChangeModel extends BaseModel<Change> {
 			userId,
 		];
 
-		if (!doCountQuery) subParams2.push(limit);
+		if (!doCountQuery) subParams2.push(subQueryLimit);
 
 		let query: Knex.Raw<any> = null;
 
