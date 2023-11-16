@@ -40,7 +40,7 @@
     "jquery": "3.7.1",
     "knex": "2.5.1",
     "koa": "2.14.2",
-    "ldapts": "7.0.5",
+    "ldapts": "7.0.6",
     "markdown-it": "13.0.2",
     "mustache": "4.2.0",
     "nanoid": "2.1.11",
