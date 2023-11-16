@@ -1,6 +1,6 @@
 import { Knex } from 'knex';
 import Logger from '@joplin/utils/Logger';
-import { SqliteMaxVariableNum } from '../db';
+import { SqliteMaxVariableNum, isPostgres } from '../db';
 import { Change, ChangeType, Item, Uuid } from '../services/database/types';
 import { md5 } from '../utils/crypto';
 import { ErrorResyncRequired } from '../utils/errors';
@@ -191,16 +191,41 @@ export default class ChangeModel extends BaseModel<Change> {
 
 		const finalParams = subParams1.concat(subParams2);
 
+		// For Postgres, we need to use materialized tables because, even
+		// though each independant query is fast, the query planner end up going
+		// for a very slow plan when they are combined with UNION ALL.
+		// https://dba.stackexchange.com/a/333147/37012
+		//
+		// Normally we could use the same query for SQLite since it supports
+		// materialized views too, but it doesn't work for some reason so we
+		// keep the non-optimised query.
+
 		if (!doCountQuery) {
 			finalParams.push(limit);
 
-			query = this.db.raw(`
-				SELECT ${fieldsSql} FROM (${subQuery1}) as sub1
-				UNION ALL				
-				SELECT ${fieldsSql} FROM (${subQuery2}) as sub2
-				ORDER BY counter ASC
-				LIMIT ?
-			`, finalParams);
+			if (isPostgres(this.db)) {
+				query = this.db.raw(`
+					WITH cte1 AS MATERIALIZED (
+						${subQuery1}
+					)
+					, cte2 AS MATERIALIZED (
+						${subQuery2}
+					)
+					TABLE cte1
+					UNION ALL
+					TABLE cte2
+					ORDER BY counter ASC
+					LIMIT ?
+				`, finalParams);
+			} else {
+				query = this.db.raw(`
+					SELECT ${fieldsSql} FROM (${subQuery1}) as sub1
+					UNION ALL				
+					SELECT ${fieldsSql} FROM (${subQuery2}) as sub2
+					ORDER BY counter ASC
+					LIMIT ?
+				`, finalParams);
+			}
 		} else {
 			query = this.db.raw(`
 				SELECT count(*) as total
