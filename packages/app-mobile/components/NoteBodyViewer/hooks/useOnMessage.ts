@@ -3,6 +3,7 @@ import shared from '@joplin/lib/components/shared/note-screen-shared';
 
 export type HandleMessageCallback = (message: string)=> void;
 export type OnMarkForDownloadCallback = (resource: { resourceId: string })=> void;
+export type HandleScrollCallback = (scrollTop: number)=> void;
 
 interface MessageCallbacks {
 	onMarkForDownload?: OnMarkForDownloadCallback;
@@ -10,6 +11,7 @@ interface MessageCallbacks {
 	onResourceLongPress: HandleMessageCallback;
 	onRequestEditResource?: HandleMessageCallback;
 	onCheckboxChange: HandleMessageCallback;
+	onMainContainerScroll: HandleScrollCallback;
 }
 
 export default function useOnMessage(
@@ -24,6 +26,7 @@ export default function useOnMessage(
 	// Thus, useCallback should depend on each callback individually.
 	const {
 		onMarkForDownload, onResourceLongPress, onCheckboxChange, onRequestEditResource, onJoplinLinkClick,
+		onMainContainerScroll,
 	} = callbacks;
 
 	return useCallback((event: any) => {
@@ -35,10 +38,23 @@ export default function useOnMessage(
 		// https://github.com/laurent22/joplin/issues/4494
 		const msg = event.nativeEvent.data;
 
-		// eslint-disable-next-line no-console
-		console.info('Got IPC message: ', msg);
+		const isScrollMessage = msg.startsWith('onscroll:');
 
-		if (msg.indexOf('checkboxclick:') === 0) {
+		// Scroll messages are very frequent so we avoid logging them.
+		if (!isScrollMessage) {
+			// eslint-disable-next-line no-console
+			console.info('Got IPC message: ', msg);
+		}
+
+		if (isScrollMessage) {
+			const eventData = JSON.parse(msg.substring(msg.indexOf(':') + 1));
+
+			if (typeof eventData.scrollTop !== 'number') {
+				throw new Error(`Invalid scroll message, ${msg}`);
+			}
+
+			onMainContainerScroll?.(eventData.scrollTop);
+		} else if (msg.indexOf('checkboxclick:') === 0) {
 			const newBody = shared.toggleCheckbox(msg, noteBody);
 			onCheckboxChange?.(newBody);
 		} else if (msg.indexOf('markForDownload:') === 0) {
@@ -63,5 +79,6 @@ export default function useOnMessage(
 		onJoplinLinkClick,
 		onResourceLongPress,
 		onRequestEditResource,
+		onMainContainerScroll,
 	]);
 }

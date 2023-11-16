@@ -61,6 +61,9 @@ const emptyArray: any[] = [];
 const logger = Logger.create('screens/Note');
 
 class NoteScreenComponent extends BaseScreenComponent {
+	// This isn't in this.state because we don't want changing scroll to trigger
+	// a re-render.
+	private lastBodyScroll: number|undefined = undefined;
 
 	public static navigationOptions(): any {
 		return { header: null };
@@ -1257,6 +1260,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}, 5);
 	}
 
+	private onBodyViewerScroll = (scrollTop: number) => {
+		this.lastBodyScroll = scrollTop;
+	};
+
 	public onBodyViewerCheckboxChange(newBody: string) {
 		void this.saveOneProperty('body', newBody);
 	}
@@ -1331,6 +1338,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 						onMarkForDownload={this.onMarkForDownload}
 						onRequestEditResource={this.onEditResource}
 						onLoadEnd={this.onBodyViewerLoadEnd}
+						onScroll={this.onBodyViewerScroll}
+						initialScroll={this.lastBodyScroll}
 					/>
 				);
 		} else {
