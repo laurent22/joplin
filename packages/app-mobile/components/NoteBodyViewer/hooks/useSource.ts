@@ -175,8 +175,14 @@ export default function useSource(
 						window.ReactNativeWebView.postMessage('onscroll:' + JSON.stringify(eventData));
 					}
 				};
-				window.addEventListener('scroll', onMainContentScroll);
+
+				// Listen for events on both scrollingElement and window
+				// - On Android, scrollingElement.addEventListener('scroll', callback) doesn't call callback on
+				// scroll. However, window.addEventListener('scroll', callback) does.
+				// - iOS needs a listener to be added to scrollingElement -- events aren't received when
+				//   the listener is added to window with window.addEventListener('scroll', ...).
 				scrollingElement.addEventListener('scroll', onMainContentScroll);
+				window.addEventListener('scroll', onMainContentScroll);
 
 				const scrollContentToPosition = (position) => {
 					scrollingElement.scrollTop = position;
@@ -231,7 +237,7 @@ export default function useSource(
 					padding: 0;
 				}
 			`;
-			const scrollRenderedMdCss = `
+			const scrollRenderedMdContainerCss = `
 				body > #rendered-md {
 					width: 100vw;
 					overflow: auto;
@@ -257,7 +263,7 @@ export default function useSource(
 						<style>
 							${defaultCss}
 							${shim.mobilePlatform() === 'ios' ? iOSSpecificCss : ''}
-							${scrollRenderedMdContainer ? scrollRenderedMdCss : ''}
+							${scrollRenderedMdContainer ? scrollRenderedMdContainerCss : ''}
 							${editPopupCss}
 						</style>
 						${assetsToHeaders(result.pluginAssets, { asHtml: true })}
