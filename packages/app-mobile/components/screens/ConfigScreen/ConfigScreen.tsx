@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Platform, Linking, View, Switch, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions, AccessibilityInfo } from 'react-native';
-import Setting, { AppType } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingMetadataSection } from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 import checkPermissions from '../../../utils/checkPermissions';
@@ -18,20 +18,24 @@ import * as shared from '@joplin/lib/components/shared/config/config-shared';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import biometricAuthenticate from '../../biometrics/biometricAuthenticate';
 import configScreenStyles, { ConfigScreenStyles } from './configScreenStyles';
-import NoteExportButton from './NoteExportSection/NoteExportButton';
+import NoteExportButton, { exportButtonDescription, exportButtonTitle } from './NoteExportSection/NoteExportButton';
 import SettingsButton from './SettingsButton';
 import Clipboard from '@react-native-community/clipboard';
-import { ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 import { Dispatch } from 'redux';
 import SectionHeader from './SectionHeader';
-import ExportProfileButton from './NoteExportSection/ExportProfileButton';
+import ExportProfileButton, { exportProfileButtonTitle } from './NoteExportSection/ExportProfileButton';
 import SettingComponent from './SettingComponent';
-import ExportDebugReportButton from './NoteExportSection/ExportDebugReportButton';
+import ExportDebugReportButton, { exportDebugReportTitle } from './NoteExportSection/ExportDebugReportButton';
 import SectionSelector from './SectionSelector';
+import { TextInput } from 'react-native-paper';
 
 interface ConfigScreenState {
 	settings: any;
 	changedSettingKeys: string[];
+
+	searchQuery: string;
+	searching: boolean;
 
 	fixingSearchIndex: boolean;
 	checkSyncConfigResult: { ok: boolean; errorMessage: string }|'checking'|null;
@@ -66,6 +70,8 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			selectedSectionName: null,
 			fixingSearchIndex: false,
 			sidebarWidth: 100,
+			searchQuery: '',
+			searching: false,
 		};
 
 		this.scrollViewRef_ = React.createRef<ScrollView>();
@@ -128,6 +134,21 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		void NavService.go('Log');
 	};
 
+	private setShowSearch_(searching: boolean) {
+		if (searching !== this.state.searching) {
+			this.setState({ searching });
+			AccessibilityInfo.announceForAccessibility(searching ? _('Search shown') : _('Search hidden'));
+		}
+	}
+
+	private onSearchButtonPress_ = () => {
+		this.setShowSearch_(!this.state.searching);
+	};
+
+	private onSearchUpdate_ = (newQuery: string) => {
+		this.setState({ searchQuery: newQuery });
+	};
+
 	private updateSidebarWidth = () => {
 		const windowWidth = Dimensions.get('window').width;
 
@@ -150,10 +171,13 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		return this.state.sidebarWidth > windowWidth / 2;
 	}
 
-	private switchSectionPress_ = (section: string) => {
+	private onJumpToSection_ = (section: string) => {
 		const label = Setting.sectionNameToLabel(section);
 		AccessibilityInfo.announceForAccessibility(_('Opening section %s', label));
-		this.setState({ selectedSectionName: section });
+		this.setState({
+			selectedSectionName: section,
+			searching: false,
+		});
 	};
 
 	private showSectionNavigation_ = () => {
@@ -245,6 +269,12 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			await BackButtonService.back();
 		};
 
+		// Cancel search on back
+		if (this.state.searching) {
+			this.setShowSearch_(false);
+			return true;
+		}
+
 		// Show navigation when pressing "back" (unless always visible).
 		if (this.state.selectedSectionName && this.navigationFillsScreen()) {
 			this.showSectionNavigation_();
@@ -298,10 +328,73 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		);
 	}
 
-	public sectionToComponent(key: string, section: any, settings: any, isSelected: boolean) {
-		const settingComps = [];
+	public sectionToComponent(key: string, section: SettingMetadataSection, settings: any, isSelected: boolean) {
+		const settingComps: ReactElement[] = [];
+
+		const headerTitle = Setting.sectionNameToLabel(section.name);
+
+		const matchesSearchQuery = (relatedText: string|string[]) => {
+			let searchThrough;
+			if (Array.isArray(relatedText)) {
+				searchThrough = relatedText.join('\n');
+			} else {
+				searchThrough = relatedText;
+			}
+			searchThrough = searchThrough.toLocaleLowerCase();
+
+			const searchQuery = this.state.searchQuery.toLocaleLowerCase().trim();
+
+			const hasSearchMatches =
+				headerTitle.toLocaleLowerCase() === searchQuery
+				|| searchThrough.includes(searchQuery);
+
+			// Don't show results when the search input is empty
+			return this.state.searchQuery.length > 0 && hasSearchMatches;
+		};
+
+		const addSettingComponent = (component: ReactElement, relatedText: string|string[]) => {
+			const hiddenBySearch = this.state.searching && !matchesSearchQuery(relatedText);
+			if (component && !hiddenBySearch) {
+				settingComps.push(component);
+			}
+		};
+
+		const addSettingButton = (key: string, title: string, clickHandler: ()=> void, options: any = null) => {
+			const relatedText = [title];
+			if (typeof options === 'object' && options?.description) {
+				relatedText.push(options.description);
+			}
+			addSettingComponent(this.renderButton(key, title, clickHandler, options), relatedText);
+		};
 
 		const styleSheet = this.styles().styleSheet;
+		const addSettingLink = (key: string, title: string, target: string) => {
+			const component = (
+				<View key={key} style={styleSheet.settingContainer}>
+					<TouchableOpacity
+						onPress={() => {
+							void Linking.openURL(target);
+						}}
+						accessibilityRole='link'
+					>
+						<Text key="label" style={styleSheet.linkText}>
+							{title}
+						</Text>
+					</TouchableOpacity>
+				</View>
+			);
+
+			addSettingComponent(component, title);
+		};
+
+		const addSettingText = (key: string, text: string) => {
+			addSettingComponent(
+				<View key={key} style={styleSheet.settingContainer}>
+					<Text style={styleSheet.settingText}>{text}</Text>
+				</View>,
+				text,
+			);
+		};
 
 		for (let i = 0; i < section.metadatas.length; i++) {
 			const md = section.metadatas[i];
@@ -322,24 +415,29 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 						</View>
 					);
 
-					settingComps.push(this.renderButton('check_sync_config_button', _('Check synchronisation configuration'), this.checkSyncConfig_, { statusComp: statusComp }));
+					addSettingButton('check_sync_config_button', _('Check synchronisation configuration'), this.checkSyncConfig_, { statusComp: statusComp });
 				}
 			}
 
 			const settingComp = this.settingToComponent(md.key, settings[md.key]);
-			settingComps.push(settingComp);
+			const relatedText = [md.label?.() ?? '', md.description?.() ?? ''];
+			addSettingComponent(
+				settingComp,
+				relatedText,
+			);
 		}
 
 		if (section.name === 'sync') {
-			settingComps.push(this.renderButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_));
+			addSettingButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_);
 		}
 
 		if (section.name === 'joplinCloud') {
+			const label = _('Email to note');
 			const description = _('Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook');
-			settingComps.push(
+			addSettingComponent(
 				<View key="joplinCloud">
 					<View style={this.styles().styleSheet.settingContainerNoBottomBorder}>
-						<Text style={this.styles().styleSheet.settingText}>{_('Email to note')}</Text>
+						<Text style={this.styles().styleSheet.settingText}>{label}</Text>
 						<Text style={{ fontWeight: 'bold' }}>{this.props.settings['sync.10.inboxEmail']}</Text>
 					</View>
 					{
@@ -351,20 +449,30 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 						)
 					}
 				</View>,
+				[label, description],
 			);
 		}
 
 		if (section.name === 'tools') {
-			settingComps.push(this.renderButton('profiles_buttons', _('Manage profiles'), this.manageProfilesButtonPress_));
-			settingComps.push(this.renderButton('status_button', _('Sync Status'), this.syncStatusButtonPress_));
-			settingComps.push(this.renderButton('log_button', _('Log'), this.logButtonPress_));
-			settingComps.push(this.renderButton('fix_search_engine_index', this.state.fixingSearchIndex ? _('Fixing search index...') : _('Fix search index'), this.fixSearchEngineIndexButtonPress_, { disabled: this.state.fixingSearchIndex, description: _('Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.') }));
+			addSettingButton('profiles_buttons', _('Manage profiles'), this.manageProfilesButtonPress_);
+			addSettingButton('status_button', _('Sync Status'), this.syncStatusButtonPress_);
+			addSettingButton('log_button', _('Log'), this.logButtonPress_);
+			addSettingButton('fix_search_engine_index', this.state.fixingSearchIndex ? _('Fixing search index...') : _('Fix search index'), this.fixSearchEngineIndexButtonPress_, { disabled: this.state.fixingSearchIndex, description: _('Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.') });
 		}
 
 		if (section.name === 'export') {
-			settingComps.push(<NoteExportButton key='export_as_jex_button' styles={this.styles()} />);
-			settingComps.push(<ExportDebugReportButton key='export_report_button' styles={this.styles()}/>);
-			settingComps.push(<ExportProfileButton key='export_data' styles={this.styles()}/>);
+			addSettingComponent(
+				<NoteExportButton key='export_as_jex_button' styles={this.styles()} />,
+				[exportButtonTitle(), exportButtonDescription()],
+			);
+			addSettingComponent(
+				<ExportDebugReportButton key='export_report_button' styles={this.styles()}/>,
+				exportDebugReportTitle(),
+			);
+			addSettingComponent(
+				<ExportProfileButton key='export_data' styles={this.styles()}/>,
+				exportProfileButtonTitle(),
+			);
 		}
 
 		if (section.name === 'moreInfo') {
@@ -372,7 +480,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				// Note: `PermissionsAndroid` doesn't work so we have to ask the user to manually
 				// set these permissions. https://stackoverflow.com/questions/49771084/permission-always-returns-never-ask-again
 
-				settingComps.push(
+				addSettingComponent(
 					<View key="permission_info" style={styleSheet.settingContainer}>
 						<View key="permission_info_wrapper">
 							<Text key="perm1a" style={styleSheet.settingText}>
@@ -389,95 +497,60 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 							</Text>
 						</View>
 					</View>,
+					'',
 				);
 			}
 
-			settingComps.push(
-				<View key="donate_link" style={styleSheet.settingContainer}>
-					<TouchableOpacity
-						onPress={() => {
-							void Linking.openURL('https://joplinapp.org/donate/');
-						}}
-					>
-						<Text key="label" style={styleSheet.linkText}>
-							{_('Make a donation')}
-						</Text>
-					</TouchableOpacity>
-				</View>,
-			);
+			addSettingLink('donate_link', _('Make a donation'), 'https://joplinapp.org/donate/');
+			addSettingLink('website_link', _('Joplin website'), 'https://joplinapp.org/');
+			addSettingLink('privacy_link', _('Privacy Policy'), 'https://joplinapp.org/privacy/');
 
-			settingComps.push(
-				<View key="website_link" style={styleSheet.settingContainer}>
-					<TouchableOpacity
-						onPress={() => {
-							void Linking.openURL('https://joplinapp.org/');
-						}}
-					>
-						<Text key="label" style={styleSheet.linkText}>
-							{_('Joplin website')}
-						</Text>
-					</TouchableOpacity>
-				</View>,
-			);
-
-			settingComps.push(
-				<View key="privacy_link" style={styleSheet.settingContainer}>
-					<TouchableOpacity
-						onPress={() => {
-							void Linking.openURL('https://joplinapp.org/privacy/');
-						}}
-					>
-						<Text key="label" style={styleSheet.linkText}>
-							{_('Privacy Policy')}
-						</Text>
-					</TouchableOpacity>
-				</View>,
-			);
-
-			settingComps.push(
-				<View key="version_info_app" style={styleSheet.settingContainer}>
-					<Text style={styleSheet.settingText}>{`Joplin ${VersionInfo.appVersion}`}</Text>
-				</View>,
-			);
-
-			settingComps.push(
-				<View key="version_info_db" style={styleSheet.settingContainer}>
-					<Text style={styleSheet.settingText}>{_('Database v%s', reg.db().version())}</Text>
-				</View>,
-			);
-
-			settingComps.push(
-				<View key="version_info_fts" style={styleSheet.settingContainer}>
-					<Text style={styleSheet.settingText}>{_('FTS enabled: %d', this.props.settings['db.ftsEnabled'])}</Text>
-				</View>,
-			);
-
-			settingComps.push(
-				<View key="version_info_hermes" style={styleSheet.settingContainer}>
-					<Text style={styleSheet.settingText}>{_('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0)}</Text>
-				</View>,
-			);
+			addSettingText('version_info_app', `Joplin ${VersionInfo.appVersion}`);
+			addSettingText('version_info_db', _('Database v%s', reg.db().version()));
+			addSettingText('version_info_fts', _('FTS enabled: %d', this.props.settings['db.ftsEnabled']));
+			addSettingText('version_info_hermes', _('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0));
 
 			const featureFlagKeys = Setting.featureFlagKeys(AppType.Mobile);
 			if (featureFlagKeys.length) {
 				const headerKey = 'featureFlags';
-				settingComps.push(<SectionHeader
-					key={headerKey}
-					styles={this.styles().styleSheet}
-					title={_('Feature flags')}
-					onLayout={event => this.onHeaderLayout(headerKey, event)}
-				/>);
+				const featureFlagsTitle = _('Feature flags');
+				addSettingComponent(
+					<SectionHeader
+						key={headerKey}
+						styles={this.styles().styleSheet}
+						title={featureFlagsTitle}
+						onLayout={event => this.onHeaderLayout(headerKey, event)}
+					/>,
+					_('Feature flags'),
+				);
 
-				settingComps.push(<View key="featureFlagsContainer">{this.renderFeatureFlags(settings, featureFlagKeys)}</View>);
+				addSettingComponent(
+					<View key="featureFlagsContainer">{this.renderFeatureFlags(settings, featureFlagKeys)}</View>,
+					featureFlagsTitle,
+				);
 			}
 		}
 
 		if (!settingComps.length) return null;
-		if (!isSelected) return null;
+		if (!isSelected && !this.state.searching) return null;
+
+		const headerComponent = (
+			<TouchableOpacity onPress={() => {
+				this.onJumpToSection_(section.name);
+			}}>
+				<SectionHeader
+					styles={styleSheet}
+					title={headerTitle}
+				/>
+			</TouchableOpacity>
+		);
 
 		return (
 			<View key={key} onLayout={(event: any) => this.onSectionLayout(key, event)}>
-				<View>{settingComps}</View>
+				<View>
+					{this.state.searching ? headerComponent : null}
+					{settingComps}
+				</View>
 			</View>
 		);
 	}
@@ -563,18 +636,22 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			currentSectionName = 'general';
 		}
 
+		if (this.state.searching) {
+			currentSectionName = null;
+		}
+
 		const sectionSelector = (
 			<SectionSelector
 				selectedSectionName={currentSectionName}
 				styles={this.styles()}
 				settings={settings}
-				openSection={this.switchSectionPress_}
+				openSection={this.onJumpToSection_}
 				width={this.state.sidebarWidth}
 			/>
 		);
 
 		let currentSection: ReactNode;
-		if (currentSectionName) {
+		if (currentSectionName || this.state.searching) {
 			const settingComps = shared.settingsToComponents2(
 				this, AppType.Mobile, settings, currentSectionName,
 
@@ -582,11 +659,20 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			// of React in lib/ and app-mobile/
 			) as ReactNode[];
 
+			const searchInput = <TextInput
+				value={this.state.searchQuery}
+				label={_('Search')}
+				placeholder={_('Search...')}
+				onChangeText={this.onSearchUpdate_}
+				autoFocus={true}
+			/>;
+
 			currentSection = (
 				<ScrollView
 					ref={this.scrollViewRef_}
 					style={{ flexGrow: 1 }}
 				>
+					{this.state.searching ? searchInput : null}
 					{settingComps}
 				</ScrollView>
 			);
@@ -620,10 +706,11 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				<ScreenHeader
 					title={screenHeadingText}
 					showSaveButton={true}
-					showSearchButton={false}
+					showSearchButton={true}
 					showSideMenuButton={false}
 					saveButtonDisabled={!this.hasUnsavedChanges()}
 					onSaveButtonPress={this.saveButton_press}
+					onSearchButtonPress={this.onSearchButtonPress_}
 				/>
 				{mainComponent}
 			</View>
