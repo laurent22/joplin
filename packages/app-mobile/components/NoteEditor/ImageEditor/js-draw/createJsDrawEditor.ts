@@ -124,6 +124,7 @@ export const createJsDrawEditor = (
 		return new Promise<string>((resolve, reject) => {
 			if (!resourceUrl) {
 				resolve('');
+				return;
 			}
 
 			// fetch seems to be unable to request file:// URLs.
