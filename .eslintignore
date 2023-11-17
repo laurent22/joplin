@@ -494,7 +494,8 @@ packages/app-mobile/components/screens/ConfigScreen/SettingsToggle.js
 packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
 packages/app-mobile/components/screens/ConfigScreen/types.js
 packages/app-mobile/components/screens/LogScreen.js
-packages/app-mobile/components/screens/Note.js
+packages/app-mobile/components/screens/Note/Note.js
+packages/app-mobile/components/screens/Note/shareNote.js
 packages/app-mobile/components/screens/Notes.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/encryption-config.js

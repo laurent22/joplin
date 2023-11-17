@@ -3,13 +3,13 @@ import uuid from '@joplin/lib/uuid';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import UndoRedoService from '@joplin/lib/services/UndoRedoService';
-import NoteBodyViewer from '../NoteBodyViewer/NoteBodyViewer';
-import checkPermissions from '../../utils/checkPermissions';
-import NoteEditor from '../NoteEditor/NoteEditor';
+import NoteBodyViewer from '../../NoteBodyViewer/NoteBodyViewer';
+import checkPermissions from '../../../utils/checkPermissions';
+import NoteEditor from '../../NoteEditor/NoteEditor';
 
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
-const { Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
+const { Keyboard, View, TextInput, StyleSheet, Linking, Image } = require('react-native');
 import { Platform, PermissionsAndroid } from 'react-native';
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
@@ -19,39 +19,40 @@ import Resource from '@joplin/lib/models/Resource';
 import Folder from '@joplin/lib/models/Folder';
 const Clipboard = require('@react-native-community/clipboard').default;
 const md5 = require('md5');
-const { BackButtonService } = require('../../services/back-button.js');
+const { BackButtonService } = require('../../../services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
 import BaseModel from '@joplin/lib/BaseModel';
-import ActionButton from '../ActionButton';
+import ActionButton from '../../ActionButton';
 const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
-import ScreenHeader, { MenuOptionType } from '../ScreenHeader';
-const NoteTagsDialog = require('./NoteTagsDialog');
+import ScreenHeader, { MenuOptionType } from '../../ScreenHeader';
+const NoteTagsDialog = require('../NoteTagsDialog');
 import time from '@joplin/lib/time';
-const { Checkbox } = require('../checkbox.js');
+const { Checkbox } = require('../../checkbox.js');
 import { _, currentLocale } from '@joplin/lib/locale';
 import { reg } from '@joplin/lib/registry';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
-const { BaseScreenComponent } = require('../base-screen');
-const { themeStyle, editorFont } = require('../global-style.js');
-const { dialogs } = require('../../utils/dialogs.js');
+const { BaseScreenComponent } = require('../../base-screen');
+const { themeStyle, editorFont } = require('../../global-style.js');
+const { dialogs } = require('../../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 import ImageResizer from '@bam.tech/react-native-image-resizer';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
 import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
-import SelectDateTimeDialog from '../SelectDateTimeDialog';
-import ShareExtension from '../../utils/ShareExtension.js';
-import CameraView from '../CameraView';
+import SelectDateTimeDialog from '../../SelectDateTimeDialog';
+import ShareExtension from '../../../utils/ShareExtension.js';
+import CameraView from '../../CameraView';
 import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/utils/Logger';
-import ImageEditor from '../NoteEditor/ImageEditor/ImageEditor';
-import promptRestoreAutosave from '../NoteEditor/ImageEditor/promptRestoreAutosave';
-import isEditableResource from '../NoteEditor/ImageEditor/isEditableResource';
-import VoiceTypingDialog from '../voiceTyping/VoiceTypingDialog';
-import { voskEnabled } from '../../services/voiceTyping/vosk';
-import { isSupportedLanguage } from '../../services/voiceTyping/vosk.android';
+import ImageEditor from '../../NoteEditor/ImageEditor/ImageEditor';
+import promptRestoreAutosave from '../../NoteEditor/ImageEditor/promptRestoreAutosave';
+import isEditableResource from '../../NoteEditor/ImageEditor/isEditableResource';
+import VoiceTypingDialog from '../../voiceTyping/VoiceTypingDialog';
+import { voskEnabled } from '../../../services/voiceTyping/vosk.ios';
+import { isSupportedLanguage } from '../../../services/voiceTyping/vosk.android';
 import { ChangeEvent as EditorChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
 import { join } from 'path';
+import shareNote from './shareNote';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 // import Vosk from 'react-native-vosk';
@@ -896,10 +897,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	private async share_onPress() {
-		await Share.share({
-			message: `${this.state.note.title}\n\n${this.state.note.body}`,
-			title: this.state.note.title,
-		});
+		await shareNote(this.state.note, this.state.noteResources, this.dialogbox);
 	}
 
 	private properties_onPress() {

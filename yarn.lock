@@ -7533,6 +7533,7 @@ __metadata:
     deprecated-react-native-prop-types: 4.2.3
     events: 3.3.0
     expo: 49.0.18
+    expo-print: 12.4.2
     fs-extra: 11.1.1
     gulp: 4.0.2
     jest: 29.7.0
@@ -21981,6 +21982,15 @@ __metadata:
     compare-versions: ^3.4.0
     invariant: ^2.2.4
   checksum: 85a48a6d1983671458a37ddece9e151ff8179814dd368d67b39dcf34fcdc6b44419d045ac8efcdd8179848d826b67678ce706f5533314ff8ab84537befcf7915
+  languageName: node
+  linkType: hard
+
+"expo-print@npm:12.4.2":
+  version: 12.4.2
+  resolution: "expo-print@npm:12.4.2"
+  peerDependencies:
+    expo: "*"
+  checksum: 85d092335b827bddba832b197d0628f6411ebcb1ffacb3b8d2912990a8e6698619261dcb1b316dd0d06a1b67aba053014e17f4a0bc5e1b0eb991c7d00fa27b0b
   languageName: node
   linkType: hard
 

@@ -12,7 +12,7 @@ import BaseModel from '@joplin/lib/BaseModel';
 import BaseService from '@joplin/lib/services/BaseService';
 import ResourceService from '@joplin/lib/services/ResourceService';
 import KvStore from '@joplin/lib/services/KvStore';
-import NoteScreen from './components/screens/Note';
+import NoteScreen from './components/screens/Note/Note';
 import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
 import Setting, { Env } from '@joplin/lib/models/Setting';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';

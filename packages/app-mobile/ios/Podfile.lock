@@ -19,6 +19,8 @@ PODS:
     - React-Core
     - React-RCTAppDelegate
     - ReactCommon/turbomodule/core
+  - ExpoPrint (12.4.2):
+    - ExpoModulesCore
   - FBLazyVector (0.71.10)
   - FBReactNativeSpec (0.71.10):
     - RCT-Folly (= 2021.07.22.00)
@@ -522,6 +524,7 @@ DEPENDENCIES:
   - Expo (from `../node_modules/expo`)
   - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
+  - ExpoPrint (from `../node_modules/expo-print/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - Flipper (= 0.125.0)
@@ -650,6 +653,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-keep-awake/ios"
   ExpoModulesCore:
     :path: "../node_modules/expo-modules-core"
+  ExpoPrint:
+    :path: "../node_modules/expo-print/ios"
   FBLazyVector:
     :path: "../node_modules/react-native/Libraries/FBLazyVector"
   FBReactNativeSpec:
@@ -790,6 +795,7 @@ SPEC CHECKSUMS:
   Expo: f446f9811b9dfc0abc05a1613966c8475bc6795e
   ExpoKeepAwake: be4cbd52d9b177cde0fd66daa1913afa3161fc1d
   ExpoModulesCore: d9d45dcbb86a5dba2ec62253267720cb58516f75
+  ExpoPrint: e1531d216196f51b431c7cc4d906e569f79f10e7
   FBLazyVector: ddb55c55295ea51ed98aa7e2e08add2f826309d5
   FBReactNativeSpec: 90fc1a90b4b7a171e0a7c20ea426c1bf6ce4399c
   Flipper: 26fc4b7382499f1281eb8cb921e5c3ad6de91fe0
