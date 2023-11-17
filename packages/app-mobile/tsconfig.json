@@ -7,8 +7,6 @@
 	"exclude": [
 		//Files that don't need transpilation
 		"**/node_modules",
-		"**/*.test.ts",
-		"**/*.test.tsx",
 		"gulpfile.ts",
 		"tools/*.ts",
 	],
