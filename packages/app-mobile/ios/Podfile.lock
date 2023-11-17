@@ -2,6 +2,23 @@ PODS:
   - boost (1.76.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
+  - EXApplication (5.3.1):
+    - ExpoModulesCore
+  - EXConstants (14.4.2):
+    - ExpoModulesCore
+  - EXFileSystem (15.4.4):
+    - ExpoModulesCore
+  - EXFont (11.4.0):
+    - ExpoModulesCore
+  - Expo (49.0.18):
+    - ExpoModulesCore
+  - ExpoKeepAwake (12.3.0):
+    - ExpoModulesCore
+  - ExpoModulesCore (1.5.11):
+    - RCT-Folly (= 2021.07.22.00)
+    - React-Core
+    - React-RCTAppDelegate
+    - ReactCommon/turbomodule/core
   - FBLazyVector (0.71.10)
   - FBReactNativeSpec (0.71.10):
     - RCT-Folly (= 2021.07.22.00)
@@ -359,9 +376,9 @@ PODS:
     - React-Core
   - react-native-rsa-native (2.0.5):
     - React
-  - react-native-saf-x (2.13.2):
+  - react-native-saf-x (2.13.3):
     - React-Core
-  - react-native-safe-area-context (4.7.3):
+  - react-native-safe-area-context (4.7.4):
     - React-Core
   - react-native-slider (4.4.3):
     - React-Core
@@ -479,7 +496,8 @@ PODS:
     - React
   - RNShare (9.4.1):
     - React-Core
-  - RNVectorIcons (10.0.0):
+  - RNVectorIcons (10.0.1):
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - RNZipArchive (6.1.0):
     - React-Core
@@ -497,6 +515,13 @@ PODS:
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
+  - EXApplication (from `../node_modules/expo-application/ios`)
+  - EXConstants (from `../node_modules/expo-constants/ios`)
+  - EXFileSystem (from `../node_modules/expo-file-system/ios`)
+  - EXFont (from `../node_modules/expo-font/ios`)
+  - Expo (from `../node_modules/expo`)
+  - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
+  - ExpoModulesCore (from `../node_modules/expo-modules-core`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - Flipper (= 0.125.0)
@@ -611,6 +636,20 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
+  EXApplication:
+    :path: "../node_modules/expo-application/ios"
+  EXConstants:
+    :path: "../node_modules/expo-constants/ios"
+  EXFileSystem:
+    :path: "../node_modules/expo-file-system/ios"
+  EXFont:
+    :path: "../node_modules/expo-font/ios"
+  Expo:
+    :path: "../node_modules/expo"
+  ExpoKeepAwake:
+    :path: "../node_modules/expo-keep-awake/ios"
+  ExpoModulesCore:
+    :path: "../node_modules/expo-modules-core"
   FBLazyVector:
     :path: "../node_modules/react-native/Libraries/FBLazyVector"
   FBReactNativeSpec:
@@ -744,6 +783,13 @@ SPEC CHECKSUMS:
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
+  EXApplication: 042aa2e3f05258a16962ea1a9914bf288db9c9a1
+  EXConstants: ce5bbea779da8031ac818c36bea41b10e14d04e1
+  EXFileSystem: 2b826a3bf1071a4b80a8457e97124783d1ac860e
+  EXFont: 738c44c390953ebcbab075a4848bfbef025fd9ee
+  Expo: f446f9811b9dfc0abc05a1613966c8475bc6795e
+  ExpoKeepAwake: be4cbd52d9b177cde0fd66daa1913afa3161fc1d
+  ExpoModulesCore: d9d45dcbb86a5dba2ec62253267720cb58516f75
   FBLazyVector: ddb55c55295ea51ed98aa7e2e08add2f826309d5
   FBReactNativeSpec: 90fc1a90b4b7a171e0a7c20ea426c1bf6ce4399c
   Flipper: 26fc4b7382499f1281eb8cb921e5c3ad6de91fe0
@@ -786,8 +832,8 @@ SPEC CHECKSUMS:
   react-native-image-resizer: 681f7607418b97c084ba2d0999b153b103040d8a
   react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
-  react-native-saf-x: a93121b21f9d5ec84d5e7fc99fdeebfbf232920a
-  react-native-safe-area-context: 238cd8b619e05cb904ccad97ef42e84d1b5ae6ec
+  react-native-saf-x: 0f7531c9f8bdbb62bbd55ceb7433de7bb756cd73
+  react-native-safe-area-context: 2cd91d532de12acdb0a9cbc8d43ac72a8e4c897c
   react-native-slider: 1cdd6ba29675df21f30544253bf7351d3c2d68c4
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-version-info: a106f23009ac0db4ee00de39574eb546682579b9
@@ -817,13 +863,13 @@ SPEC CHECKSUMS:
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
   RNSecureRandom: 07efbdf2cd99efe13497433668e54acd7df49fef
   RNShare: 32e97adc8d8c97d4a26bcdd3c45516882184f8b6
-  RNVectorIcons: 8b5bb0fa61d54cd2020af4f24a51841ce365c7e9
+  RNVectorIcons: ace237de89f1574ef3c963ae9d5da3bd6fbeb02a
   RNZipArchive: ef9451b849c45a29509bf44e65b788829ab07801
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
   Yoga: e7ea9e590e27460d28911403b894722354d73479
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 3b2cace838120977b5b54871752c9dddf5a11cea
+PODFILE CHECKSUM: 11ade02502ffe6c20252ce6a7433a7cf82d78983
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.14.2
