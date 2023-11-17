@@ -6,11 +6,13 @@ import { friendlySafeFilename } from '@joplin/lib/path-utils';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
+import Logger from '@joplin/utils/Logger';
 const { dialogs } = require('../../../utils/dialogs.js');
 import { printToFileAsync } from 'expo-print';
 import { Share } from 'react-native';
 import ExtendedShare from 'react-native-share';
 
+const logger = Logger.create('shareNote');
 
 const shareNote = async (note: NoteEntity, noteResources: any, dialogbox: any) => {
 	const markdownId = 'markdown';
@@ -20,6 +22,8 @@ const shareNote = async (note: NoteEntity, noteResources: any, dialogbox: any) =
 		{ text: _('PDF'), id: pdfId },
 	];
 	const action = await dialogs.pop({ dialogbox }, _('Share as:'), actions);
+
+	logger.info(`Sharing note ${note.id} as ${action}`);
 
 	if (action === markdownId) {
 		await Share.share({
@@ -41,7 +45,9 @@ const shareNote = async (note: NoteEntity, noteResources: any, dialogbox: any) =
 
 		const html = renderResult.html;
 		const savedPdf = await printToFileAsync({ html });
+		const pdfUri = savedPdf.uri;
 
+		logger.debug(`Saved PDF to ${pdfUri}. Now sharing...`);
 		await ExtendedShare.open({
 			type: 'application/pdf',
 			filename: friendlySafeFilename(note.title),
@@ -49,8 +55,9 @@ const shareNote = async (note: NoteEntity, noteResources: any, dialogbox: any) =
 			failOnCancel: false,
 		});
 
+		logger.debug('Shared. Removing saved PDF.');
 		const fsDriver: FsDriverBase = await shim.fsDriver();
-		await fsDriver.remove(savedPdf.uri);
+		await fsDriver.remove(pdfUri);
 	}
 };
 
