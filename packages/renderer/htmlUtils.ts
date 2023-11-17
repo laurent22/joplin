@@ -404,4 +404,33 @@ export const extractHtmlBody = (html: string) => {
 	return bodyFound ? output.join('') : html;
 };
 
+export const htmlDocIsImageOnly = (html: string) => {
+	let imageCount = 0;
+	let nonImageFound = false;
+	let textFound = false;
+
+	const parser = new htmlparser2.Parser({
+
+		onopentag: (name: string) => {
+			if (name === 'img') {
+				imageCount++;
+			} else if (['meta'].includes(name)) {
+				// We allow these tags since they don't print anything
+			} else {
+				nonImageFound = true;
+			}
+		},
+
+		ontext: (text: string) => {
+			if (text.trim()) textFound = true;
+		},
+
+	});
+
+	parser.write(html);
+	parser.end();
+
+	return imageCount === 1 && !nonImageFound && !textFound;
+};
+
 export default new HtmlUtils();

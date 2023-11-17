@@ -27,6 +27,7 @@ import bridge from '../../../../services/bridge';
 import { TinyMceEditorEvents } from './utils/types';
 import type { Editor } from 'tinymce';
 import { joplinCommandToTinyMceCommands, TinyMceCommand } from './utils/joplinCommandToTinyMceCommands';
+import shouldPasteResources from './utils/shouldPasteResources';
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
@@ -1085,15 +1086,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			// formatted text.
 			const pastedHtml = event.clipboardData.getData('text/html') ? clipboard.readHTML() : '';
 
-			// We should only process the images if there is no plain text or
-			// HTML text in the clipboard. This is because certain applications,
-			// such as Word, are going to add multiple versions of the copied
-			// data to the clipboard - one with the text formatted as HTML, and
-			// one with the text as an image. In that case, we need to ignore
-			// the image and only process the HTML.
+			const resourceMds = await getResourcesFromPasteEvent(event);
 
-			if (!pastedText && !pastedHtml) {
-				const resourceMds = await getResourcesFromPasteEvent(event);
+			if (shouldPasteResources(pastedText, pastedHtml, resourceMds)) {
 				if (resourceMds.length) {
 					const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMds.join('\n'), markupRenderOptions({ bodyOnly: true }));
 					editor.insertContent(result.html);
