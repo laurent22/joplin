@@ -37,8 +37,10 @@ Name | Type | Required? | Description
 
 | Properties | Description |
 | --- | --- |
-| src | a relative path to src dir. |
-| label | description of the image. |
+| src | a path or URL to a screenshot. If a path, `src` should be relative to the root of the repository (e.g. `screenshots/a.png`). |
+| label | description of the image. This label will be used by screen readers or if the image cannot be loaded. |
+
+**Note**: If `src` is a path and not a URL, either `repository_url` or `homepage_url` must point to a GitHub repository for the screenshot to appear on the Joplin Plugins Website. See [the relevant issue](https://github.com/joplin/website-plugin-discovery/issues/35).
 
 ## Icons
 
@@ -60,10 +62,16 @@ Name | Type | Required? | Description
     "author": "John Smith",
     "app_min_version": "1.4",
     "homepage_url": "https://joplinapp.org",
-    "screenshots": [{
+    "screenshots": [
+      {
         "src": "path/to/image.png",
         "label": "image description"
-    }],
+      },
+      {
+        "src": "https://example.com/path/to/the/screenshot.png",
+        "label": "image description"
+      }
+    ],
     "icons": {
       "16": "path/to/icon16.png",
       "32": "path/to/icon32.png",

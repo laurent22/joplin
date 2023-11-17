@@ -209,6 +209,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred: %s": [
+		""
+	],
 	"An update is available, do you want to download it now?": [
 		"Egy frissítés elérhető, le szeretné tölteni most?"
 	],
@@ -1159,6 +1162,9 @@
 		"Link létrehozása...",
 		"Linkek létrehozása..."
 	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
 	"Get it now:": [
 		"Szerezze be most:"
 	],
@@ -1478,8 +1484,8 @@
 	"Logout": [
 		"Kilépés"
 	],
-	"Logs": [
-		"Log-ok"
+	"Logs, profiles, sync status": [
+		""
 	],
 	"Make a donation": [
 		"Adakozzon"
@@ -1524,6 +1530,9 @@
 		"Maximális konkurrens kapcsolat"
 	],
 	"Max Item Size": [
+		""
+	],
+	"Media player, math, diagrams, table of contents": [
 		""
 	],
 	"Missing keys": [
@@ -1774,6 +1783,9 @@
 	],
 	"Open...": [
 		"Megnyitás..."
+	],
+	"Opening section %s": [
+		""
 	],
 	"Operation cancelled": [
 		"Művelet megszakítva"
@@ -2896,6 +2908,9 @@
 	],
 	"When creating a new to-do:": [
 		"Amikor egy új to-do-t hoz létre:"
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		"Szavak"

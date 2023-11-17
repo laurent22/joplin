@@ -66,7 +66,7 @@ const { SearchScreen } = require('./components/screens/search.js');
 const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js');
 import EncryptionConfigScreen from './components/screens/encryption-config';
 const { DropboxLoginScreen } = require('./components/screens/dropbox-login.js');
-const { MenuContext } = require('react-native-popup-menu');
+import { MenuProvider } from 'react-native-popup-menu';
 import SideMenu from './components/SideMenu';
 import SideMenuContent from './components/side-menu-content';
 const { SideMenuContentNote } = require('./components/side-menu-content-note.js');
@@ -1032,10 +1032,13 @@ class AppComponent extends React.Component {
 
 		let sideMenuContent: ReactNode = null;
 		let menuPosition: SideMenuPosition = 'left';
+		let disableSideMenuGestures = this.props.disableSideMenuGestures;
 
 		if (this.props.routeName === 'Note') {
 			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
 			menuPosition = 'right';
+		} else if (this.props.routeName === 'Config') {
+			disableSideMenuGestures = true;
 		} else {
 			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContent/></SafeAreaView>;
 		}
@@ -1076,7 +1079,7 @@ class AppComponent extends React.Component {
 					openMenuOffset={this.state.sideMenuWidth}
 					menuPosition={menuPosition}
 					onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}
-					disableGestures={this.props.disableSideMenuGestures}
+					disableGestures={disableSideMenuGestures}
 					onSliding={(percent: number) => {
 						this.props.dispatch({
 							type: 'SIDE_MENU_OPEN_PERCENT',
@@ -1085,7 +1088,7 @@ class AppComponent extends React.Component {
 					}}
 				>
 					<StatusBar barStyle={statusBarStyle} />
-					<MenuContext style={{ flex: 1 }}>
+					<MenuProvider style={{ flex: 1 }}>
 						<SafeAreaView style={{ flex: 0, backgroundColor: theme.backgroundColor2 }}/>
 						<SafeAreaView style={{ flex: 1 }}>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
@@ -1098,7 +1101,7 @@ class AppComponent extends React.Component {
 								sensorInfo={this.state.sensorInfo}
 							/> }
 						</SafeAreaView>
-					</MenuContext>
+					</MenuProvider>
 				</SideMenu>
 			</View>
 		);

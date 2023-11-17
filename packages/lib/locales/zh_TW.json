@@ -218,6 +218,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred: %s": [
+		""
+	],
 	"An update is available, do you want to download it now?": [
 		"已有更新，您想立即下載嗎？"
 	],
@@ -1178,6 +1181,9 @@
 	"Generating link...": [
 		"建立連結..."
 	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
 	"Get it now:": [
 		"立即取得："
 	],
@@ -1502,8 +1508,8 @@
 	"Logout": [
 		"登出"
 	],
-	"Logs": [
-		"日誌"
+	"Logs, profiles, sync status": [
+		""
 	],
 	"Make a donation": [
 		"捐助"
@@ -1551,6 +1557,9 @@
 		"最大同時連接數"
 	],
 	"Max Item Size": [
+		""
+	],
+	"Media player, math, diagrams, table of contents": [
 		""
 	],
 	"Missing keys": [
@@ -1801,6 +1810,9 @@
 	],
 	"Open...": [
 		"開啟舊檔..."
+	],
+	"Opening section %s": [
+		""
 	],
 	"Operation cancelled": [
 		"操作已取消"
@@ -2947,6 +2959,9 @@
 	],
 	"When creating a new to-do:": [
 		"當新增待辦事項時："
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		"單字數"

@@ -227,6 +227,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred: %s": [
+		""
+	],
 	"An update is available, do you want to download it now?": [
 		"Je k dispozici aktualizace, chcete ji stáhnout?"
 	],
@@ -1236,6 +1239,9 @@
 		"Vytváření odkazů...",
 		"Vytváření odkazů..."
 	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
 	"Get it now:": [
 		"Získat hned:"
 	],
@@ -1586,8 +1592,8 @@
 	"Logout": [
 		"Odhlásit se"
 	],
-	"Logs": [
-		"Logy"
+	"Logs, profiles, sync status": [
+		""
 	],
 	"Make a donation": [
 		"Přispět"
@@ -1648,6 +1654,9 @@
 	],
 	"Max Total Size": [
 		"Maximální celková velikost"
+	],
+	"Media player, math, diagrams, table of contents": [
+		""
 	],
 	"Missing keys": [
 		"Chybějící klíče"
@@ -1912,6 +1921,9 @@
 	],
 	"Open...": [
 		"Otevřít..."
+	],
+	"Opening section %s": [
+		""
 	],
 	"Operation cancelled": [
 		"Operace zrušena"
@@ -3109,6 +3121,9 @@
 	],
 	"When creating a new to-do:": [
 		"Při vytváření nového úkolu:"
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		"Slova"

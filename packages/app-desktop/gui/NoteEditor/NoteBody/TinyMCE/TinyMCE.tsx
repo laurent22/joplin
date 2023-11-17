@@ -27,6 +27,7 @@ import bridge from '../../../../services/bridge';
 import { TinyMceEditorEvents } from './utils/types';
 import type { Editor } from 'tinymce';
 import { joplinCommandToTinyMceCommands, TinyMceCommand } from './utils/joplinCommandToTinyMceCommands';
+import shouldPasteResources from './utils/shouldPasteResources';
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
@@ -559,11 +560,21 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 			const toolbarPluginButtons = pluginCommandNames.length ? ` | ${pluginCommandNames.join(' ')}` : '';
 
+			// The toolbar is going to wrap based on groups of buttons
+			// (delimited by |). It means that if we leave large groups of
+			// buttons towards the end of the toolbar it's going to needlessly
+			// hide many buttons even when there is space. So this is why below,
+			// we create small groups of just one button towards the end.
+
 			const toolbar = [
 				'bold', 'italic', 'joplinHighlight', 'joplinStrikethrough', 'formattingExtras', '|',
 				'link', 'joplinInlineCode', 'joplinCodeBlock', 'joplinAttach', '|',
 				'bullist', 'numlist', 'joplinChecklist', '|',
-				'h1', 'h2', 'h3', 'hr', 'blockquote', 'table', `joplinInsertDateTime${toolbarPluginButtons}`,
+				'h1', 'h2', 'h3', '|',
+				'hr', '|',
+				'blockquote', '|',
+				'table', '|',
+				`joplinInsertDateTime${toolbarPluginButtons}`,
 			];
 
 			const editors = await (window as any).tinymce.init({
@@ -1075,15 +1086,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			// formatted text.
 			const pastedHtml = event.clipboardData.getData('text/html') ? clipboard.readHTML() : '';
 
-			// We should only process the images if there is no plain text or
-			// HTML text in the clipboard. This is because certain applications,
-			// such as Word, are going to add multiple versions of the copied
-			// data to the clipboard - one with the text formatted as HTML, and
-			// one with the text as an image. In that case, we need to ignore
-			// the image and only process the HTML.
+			const resourceMds = await getResourcesFromPasteEvent(event);
 
-			if (!pastedText && !pastedHtml) {
-				const resourceMds = await getResourcesFromPasteEvent(event);
+			if (shouldPasteResources(pastedText, pastedHtml, resourceMds)) {
 				if (resourceMds.length) {
 					const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMds.join('\n'), markupRenderOptions({ bodyOnly: true }));
 					editor.insertContent(result.html);

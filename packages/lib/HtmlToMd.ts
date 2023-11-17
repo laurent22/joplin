@@ -7,6 +7,7 @@ const pdfUrlRegex = /[\s\S]*?\.pdf$/i;
 export interface ParseOptions {
 	anchorNames?: string[];
 	preserveImageTagsWithSize?: boolean;
+	preserveNestedTables?: boolean;
 	baseUrl?: string;
 	disableEscapeContent?: boolean;
 	convertEmbeddedPdfsToLinks?: boolean;
@@ -20,6 +21,7 @@ export default class HtmlToMd {
 			anchorNames: options.anchorNames ? options.anchorNames.map(n => n.trim().toLowerCase()) : [],
 			codeBlockStyle: 'fenced',
 			preserveImageTagsWithSize: !!options.preserveImageTagsWithSize,
+			preserveNestedTables: !!options.preserveNestedTables,
 			bulletListMarker: '-',
 			emDelimiter: '*',
 			strongDelimiter: '**',

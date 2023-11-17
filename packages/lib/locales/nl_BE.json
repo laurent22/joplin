@@ -209,6 +209,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred: %s": [
+		""
+	],
 	"An update is available, do you want to download it now?": [
 		"Er is een update beschikbaar; wil je dit nu downloaden?"
 	],
@@ -1075,6 +1078,9 @@
 		"Generatie koppeling ...",
 		"Generatie koppelingen ..."
 	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
 	"Get it now:": [
 		"Nu ophalen:"
 	],
@@ -1370,7 +1376,7 @@
 	"Logout": [
 		"Afmelden"
 	],
-	"Logs": [
+	"Logs, profiles, sync status": [
 		""
 	],
 	"Make a donation": [
@@ -1404,6 +1410,9 @@
 		"Maximum aantal gelijktijdige connecties"
 	],
 	"Max Item Size": [
+		""
+	],
+	"Media player, math, diagrams, table of contents": [
 		""
 	],
 	"Missing Master Keys": [
@@ -1642,6 +1651,9 @@
 	],
 	"Open...": [
 		"Openen ..."
+	],
+	"Opening section %s": [
+		""
 	],
 	"Operation cancelled": [
 		"Actie geannuleerd"
@@ -2683,6 +2695,9 @@
 	],
 	"When creating a new to-do:": [
 		"Wanneer u een nieuwe to-do aanmaakt:"
+	],
+	"Window unresponsive.": [
+		""
 	],
 	"Words": [
 		"Woorden"

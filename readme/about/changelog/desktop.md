@@ -4037,12 +4037,6 @@ IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before 
 
 - Fixes [#22](https://github.com/laurent22/joplin/issues/22) - keyboard cursor jumps while typing.
 
-## [v0.10.30](https://github.com/laurent22/joplin/releases/tag/v0.10.30) - 2017-11-30T20:28:16Z
-
-- Added Spanish locale (thank you Erick Rodríguez Ponce)
-- Fixed copy/cut/paste issue in macOS
-- Fixed checkbox issue in Option screen.
-
 ## [v0.10.28](https://github.com/laurent22/joplin/releases/tag/v0.10.28) - 2017-11-30T01:07:46Z
 
 - Added toolbar to set alarms and attach files

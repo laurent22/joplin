@@ -25,8 +25,8 @@ body:
   - type: input
     id: version
     attributes:
-      label: "Application version"
-      placeholder: "x.y.z"
+      label: "Joplin version"
+      placeholder: "For example 2.3.6"
       description: 
     validations:
       required: true
@@ -34,8 +34,9 @@ body:
   - type: textarea
     id: desktop-about-content
     attributes:
-      label: "Desktop: About dialog content"
-      description: "If this issue is about the **desktop app**, please copy and paste the content of the About dialog here"
+      label: "Desktop version info"
+      description: "If this issue is about the **desktop app**, please open the \"About\" dialog under the \"Help\" or \"Joplin\" menu and copy its content here."
+      placeholder: "Joplin 2.13.5 (dev, darwin)\n\nClient ID: ..."
   
   - type: textarea
     id: current

@@ -236,6 +236,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred: %s": [
+		""
+	],
 	"An update is available, do you want to download it now?": [
 		""
 	],
@@ -885,6 +888,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		""
 	],
+	"Donate, website": [
+		""
+	],
 	"Done": [
 		""
 	],
@@ -997,6 +1003,9 @@
 		""
 	],
 	"Email to Note": [
+		""
+	],
+	"Email To Note, login information": [
 		""
 	],
 	"Emails": [
@@ -1173,6 +1182,9 @@
 	"Export profile": [
 		""
 	],
+	"Export your data": [
+		""
+	],
 	"Exported successfully!": [
 		""
 	],
@@ -1292,6 +1304,9 @@
 	],
 	"Generating link...": [
 		"",
+		""
+	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
 		""
 	],
 	"Get it now:": [
@@ -1567,6 +1582,9 @@
 	"Language": [
 		""
 	],
+	"Language, date format": [
+		""
+	],
 	"Last error: %s": [
 		""
 	],
@@ -1649,7 +1667,7 @@
 	"Logout": [
 		""
 	],
-	"Logs": [
+	"Logs, profiles, sync status": [
 		""
 	],
 	"Make a donation": [
@@ -1710,6 +1728,9 @@
 		""
 	],
 	"Max Total Size": [
+		""
+	],
+	"Media player, math, diagrams, table of contents": [
 		""
 	],
 	"Missing keys": [
@@ -1977,6 +1998,9 @@
 		""
 	],
 	"Open...": [
+		""
+	],
+	"Opening section %s": [
 		""
 	],
 	"Operation cancelled": [
@@ -2276,6 +2300,9 @@
 	"Restart and upgrade": [
 		""
 	],
+	"Restart in safe mode": [
+		""
+	],
 	"Restart now": [
 		""
 	],
@@ -2388,6 +2415,9 @@
 		""
 	],
 	"Select parent notebook": [
+		""
+	],
+	"Send bug report": [
 		""
 	],
 	"Server is already running on port %d": [
@@ -2654,6 +2684,9 @@
 	"Sync your notes": [
 		""
 	],
+	"Sync, encryption, proxy": [
+		""
+	],
 	"Synchronisation": [
 		""
 	],
@@ -2831,6 +2864,9 @@
 	"Theme": [
 		""
 	],
+	"Themes, editor font": [
+		""
+	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		""
 	],
@@ -2979,6 +3015,9 @@
 		""
 	],
 	"Toggle external editing": [
+		""
+	],
+	"Toggle note history, keep notes for": [
 		""
 	],
 	"Toggle note list": [
@@ -3213,6 +3252,9 @@
 		""
 	],
 	"When creating a new to-do:": [
+		""
+	],
+	"Window unresponsive.": [
 		""
 	],
 	"Words": [

@@ -39,6 +39,7 @@ export default function TurndownService (options) {
     br: '  ',
     disableEscapeContent: false,
     preformattedCode: false,
+    preserveNestedTables: false,
     blankReplacement: function (content, node) {
       return node.isBlock ? '\n\n' : ''
     },

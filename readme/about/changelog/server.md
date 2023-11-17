@@ -1,5 +1,10 @@
 # Joplin Server Changelog
 
+## [server-v2.13.4](https://github.com/laurent22/joplin/releases/tag/server-v2.13.4) - 2023-11-15T15:30:19Z
+
+- New: Added LDAP authentication (#9150 by Marco Rombach)
+- Improved: Updated packages mermaid (v10.5.1), nodemailer (v6.9.7), sass (v1.69.0)
+
 ## [server-v2.13.3](https://github.com/laurent22/joplin/releases/tag/server-v2.13.3) - 2023-11-01T16:29:32Z
 
 - Improved: Automatically restarts the server when it crashes, with exponentiel back-off (0c8b475)

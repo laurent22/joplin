@@ -24,6 +24,9 @@ enum ExportStatus {
 	Exported,
 }
 
+export const exportButtonTitle = () => _('Export all notes as JEX');
+export const exportButtonDescription = () => _('Share a copy of all notes in a file format that can be imported by Joplin on a computer.');
+
 const NoteExportButton: FunctionComponent<Props> = props => {
 	const [exportStatus, setExportStatus] = useState<ExportStatus>(ExportStatus.NotStarted);
 	const [exportProgress, setExportProgress] = useState<number|undefined>(0);
@@ -80,13 +83,12 @@ const NoteExportButton: FunctionComponent<Props> = props => {
 				indeterminate={exportProgress === undefined}
 				progress={exportProgress}/>
 		);
-		const descriptionText = _('Share a copy of all notes in a file format that can be imported by Joplin on a computer.');
 
 		const startOrCancelExportButton = (
 			<SettingsButton
-				title={exportStatus === ExportStatus.Exporting ? _('Exporting...') : _('Export all notes as JEX')}
+				title={exportStatus === ExportStatus.Exporting ? _('Exporting...') : exportButtonTitle()}
 				disabled={exportStatus === ExportStatus.Exporting}
-				description={exportStatus === ExportStatus.NotStarted ? descriptionText : null}
+				description={exportStatus === ExportStatus.NotStarted ? exportButtonDescription() : null}
 				statusComponent={progressComponent}
 				clickHandler={startExport}
 				styles={props.styles}

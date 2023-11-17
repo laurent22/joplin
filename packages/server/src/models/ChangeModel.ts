@@ -1,6 +1,6 @@
 import { Knex } from 'knex';
 import Logger from '@joplin/utils/Logger';
-import { SqliteMaxVariableNum } from '../db';
+import { SqliteMaxVariableNum, isPostgres } from '../db';
 import { Change, ChangeType, Item, Uuid } from '../services/database/types';
 import { md5 } from '../utils/crypto';
 import { ErrorResyncRequired } from '../utils/errors';
@@ -34,7 +34,7 @@ export interface ChangePreviousItem {
 
 export function defaultDeltaPagination(): ChangePagination {
 	return {
-		limit: 100,
+		limit: 200,
 		cursor: '',
 	};
 }
@@ -139,6 +139,8 @@ export default class ChangeModel extends BaseModel<Change> {
 		// as the `changes` table grew. So it is now split into two queries
 		// merged by a UNION ALL.
 
+		const subQueryLimit = Math.ceil(limit / 2);
+
 		const fields = [
 			'id',
 			'item_id',
@@ -167,7 +169,7 @@ export default class ChangeModel extends BaseModel<Change> {
 			userId,
 		];
 
-		if (!doCountQuery) subParams1.push(limit);
+		if (!doCountQuery) subParams1.push(subQueryLimit);
 
 		const subQuery2 = `
 			SELECT ${fieldsSql}
@@ -185,22 +187,47 @@ export default class ChangeModel extends BaseModel<Change> {
 			userId,
 		];
 
-		if (!doCountQuery) subParams2.push(limit);
+		if (!doCountQuery) subParams2.push(subQueryLimit);
 
 		let query: Knex.Raw<any> = null;
 
 		const finalParams = subParams1.concat(subParams2);
 
+		// For Postgres, we need to use materialized tables because, even
+		// though each independant query is fast, the query planner end up going
+		// for a very slow plan when they are combined with UNION ALL.
+		// https://dba.stackexchange.com/a/333147/37012
+		//
+		// Normally we could use the same query for SQLite since it supports
+		// materialized views too, but it doesn't work for some reason so we
+		// keep the non-optimised query.
+
 		if (!doCountQuery) {
 			finalParams.push(limit);
 
-			query = this.db.raw(`
-				SELECT ${fieldsSql} FROM (${subQuery1}) as sub1
-				UNION ALL				
-				SELECT ${fieldsSql} FROM (${subQuery2}) as sub2
-				ORDER BY counter ASC
-				LIMIT ?
-			`, finalParams);
+			if (isPostgres(this.db)) {
+				query = this.db.raw(`
+					WITH cte1 AS MATERIALIZED (
+						${subQuery1}
+					)
+					, cte2 AS MATERIALIZED (
+						${subQuery2}
+					)
+					TABLE cte1
+					UNION ALL
+					TABLE cte2
+					ORDER BY counter ASC
+					LIMIT ?
+				`, finalParams);
+			} else {
+				query = this.db.raw(`
+					SELECT ${fieldsSql} FROM (${subQuery1}) as sub1
+					UNION ALL				
+					SELECT ${fieldsSql} FROM (${subQuery2}) as sub2
+					ORDER BY counter ASC
+					LIMIT ?
+				`, finalParams);
+			}
 		} else {
 			query = this.db.raw(`
 				SELECT count(*) as total

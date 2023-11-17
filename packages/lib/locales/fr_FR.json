@@ -236,6 +236,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"Un dessin automatiquement sauvegardé a été trouvé. Le joindre à la note ?"
 	],
+	"An error occurred: %s": [
+		"Erreur : %s"
+	],
 	"An update is available, do you want to download it now?": [
 		"Une mise à jour est disponible, souhaitez vous la télécharger maintenant ?"
 	],
@@ -885,6 +888,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Ne perdez pas le mot de passe car, par sécurité, ce sera la seule façon de déchiffrer les données. Pour activer le chiffrement, veuillez entrer votre mot de passe ci-dessous."
 	],
+	"Donate, website": [
+		"Donations, site web"
+	],
 	"Done": [
 		"Terminé"
 	],
@@ -998,6 +1004,9 @@
 	],
 	"Email to Note": [
 		"Conversion email en note"
+	],
+	"Email To Note, login information": [
+		"\"Email to note\", info de connexion"
 	],
 	"Emails": [
 		"Emails"
@@ -1173,6 +1182,9 @@
 	"Export profile": [
 		"Exporter le profil"
 	],
+	"Export your data": [
+		"Exporter vos données"
+	],
 	"Exported successfully!": [
 		"Exporté avec succès !"
 	],
@@ -1293,6 +1305,9 @@
 	"Generating link...": [
 		"Génération du lien…",
 		"Génération des liens…"
+	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		"Géolocalisation, vérification orthographique, barre d'outils, taille des images"
 	],
 	"Get it now:": [
 		"L'obtenir maintenant :"
@@ -1567,6 +1582,9 @@
 	"Language": [
 		"Langue"
 	],
+	"Language, date format": [
+		"Langue, format de la date"
+	],
 	"Last error: %s": [
 		"Dernière erreur : %s"
 	],
@@ -1649,8 +1667,8 @@
 	"Logout": [
 		"Se déconnecter"
 	],
-	"Logs": [
-		"Journal"
+	"Logs, profiles, sync status": [
+		"Logs, profils, info synchronisation"
 	],
 	"Make a donation": [
 		"Faire un don"
@@ -1711,6 +1729,9 @@
 	],
 	"Max Total Size": [
 		"Taille max totale"
+	],
+	"Media player, math, diagrams, table of contents": [
+		"Lecteur média, math, diagrammes, sommaire"
 	],
 	"Missing keys": [
 		"Clefs manquantes"
@@ -1978,6 +1999,9 @@
 	],
 	"Open...": [
 		"Ouvrir…"
+	],
+	"Opening section %s": [
+		"Ouverture section %s"
 	],
 	"Operation cancelled": [
 		"Opération annulée"
@@ -2276,6 +2300,9 @@
 	"Restart and upgrade": [
 		"Redémarrer et mettre à jour"
 	],
+	"Restart in safe mode": [
+		"Redémarrer en mode sans échec"
+	],
 	"Restart now": [
 		"Redémarrer maintenant"
 	],
@@ -2389,6 +2416,9 @@
 	],
 	"Select parent notebook": [
 		"Sélectionner le carnet parent"
+	],
+	"Send bug report": [
+		"Envoyer rapport de débogage"
 	],
 	"Server is already running on port %d": [
 		"Le serveur tourne déjà sur le port %d"
@@ -2654,6 +2684,9 @@
 	"Sync your notes": [
 		"Synchroniser vos notes"
 	],
+	"Sync, encryption, proxy": [
+		"Synchronisation, chiffrement, proxy"
+	],
 	"Synchronisation": [
 		"Synchronisation"
 	],
@@ -2831,6 +2864,9 @@
 	"Theme": [
 		"Apparence"
 	],
+	"Themes, editor font": [
+		"Thèmes, police de l'éditeur"
+	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"Ce carnet ne contient aucune note. Créez‑en une en appuyant sur le bouton (+)."
 	],
@@ -2980,6 +3016,9 @@
 	],
 	"Toggle external editing": [
 		"Basculer l'édition externe"
+	],
+	"Toggle note history, keep notes for": [
+		"Activation historique des notes"
 	],
 	"Toggle note list": [
 		"Basculer liste de notes"
@@ -3214,6 +3253,9 @@
 	],
 	"When creating a new to-do:": [
 		"Lors de la création d'une tâche :"
+	],
+	"Window unresponsive.": [
+		"La fenêtre ne répond pas."
 	],
 	"Words": [
 		"Mots"

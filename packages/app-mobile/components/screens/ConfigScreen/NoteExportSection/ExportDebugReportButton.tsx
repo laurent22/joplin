@@ -11,6 +11,8 @@ interface Props {
 	styles: ConfigScreenStyles;
 }
 
+export const exportDebugReportTitle = () => _('Export Debug Report');
+
 const ExportDebugReportButton = (props: Props) => {
 	const [creatingReport, setCreatingReport] = useState(false);
 
@@ -24,7 +26,7 @@ const ExportDebugReportButton = (props: Props) => {
 
 	const exportDebugReportButton = (
 		<SettingsButton
-			title={creatingReport ? _('Creating report...') : _('Export Debug Report')}
+			title={creatingReport ? _('Creating report...') : exportDebugReportTitle()}
 			clickHandler={exportDebugButtonPress}
 			styles={props.styles}
 			disabled={creatingReport}

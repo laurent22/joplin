@@ -367,6 +367,12 @@
 				"type": "shell",
 				"command": "cd ${workspaceFolder}/packages/server && yarn tsc",
 				"group": "build",
+			},
+			{
+				"label": "transpile-lib",
+				"type": "shell",
+				"command": "cd ${workspaceFolder}/packages/lib && yarn tsc",
+				"group": "build",
 			}
 		]
 	},
@@ -395,6 +401,19 @@
 					"APP_BASE_URL": "http://joplincloud.local:22300",
 					"API_BASE_URL": "http://api.joplincloud.local:22300",
 				}
+			},
+			{
+				"type": "node",
+				"request": "launch",
+				"name": "lib: debug test file",
+				"preLaunchTask": "transpile-lib",
+				"program": "${workspaceFolder}/packages/lib/node_modules/.bin/jest",
+				"args": [
+					"${fileBasenameNoExtension}",
+					"--config", 
+					"packages/lib/jest.config.js",
+				],
+				"console": "integratedTerminal",
 			}
 		]
 	}

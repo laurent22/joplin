@@ -40,7 +40,16 @@ const onlyCheckboxHasChangedHack = (previousBody: string, newBody: string) => {
 	return true;
 };
 
-export default function useSource(noteBody: string, noteMarkupLanguage: number, themeId: number, highlightedKeywords: string[], noteResources: any, paddingBottom: number, noteHash: string): UseSourceResult {
+export default function useSource(
+	noteBody: string,
+	noteMarkupLanguage: number,
+	themeId: number,
+	highlightedKeywords: string[],
+	noteResources: any,
+	paddingBottom: number,
+	noteHash: string,
+	initialScroll: number|null,
+): UseSourceResult {
 	const [html, setHtml] = useState<string>('');
 	const [injectedJs, setInjectedJs] = useState<string[]>([]);
 	const [resourceLoadedTime, setResourceLoadedTime] = useState(0);
@@ -142,6 +151,12 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 
 			const resourceDownloadMode = Setting.value('sync.resourceDownloadMode');
 
+			// On iOS, the root container has slow inertial scroll, which feels very different from
+			// the native scroll in other apps. This is not the case, however, when a child (e.g. a div)
+			// scrolls the content instead.
+			// Use a div to scroll on iOS instead of the main container:
+			const scrollRenderedMdContainer = shim.mobilePlatform() === 'ios';
+
 			const js = [];
 			js.push('try {');
 			js.push(shim.injectedJs('webviewLib'));
@@ -150,14 +165,45 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 			js.push('window.joplinPostMessage_ = (msg, args) => { return window.ReactNativeWebView.postMessage(msg); };');
 			js.push('webviewLib.initialize({ postMessage: msg => { return window.ReactNativeWebView.postMessage(msg); } });');
 			js.push(`
+				const scrollingElement =
+					${scrollRenderedMdContainer ? 'document.querySelector("#rendered-md")' : 'document.scrollingElement'};
+				let lastScrollTop;
+				const onMainContentScroll = () => {
+					const newScrollTop = scrollingElement.scrollTop;
+					if (lastScrollTop !== newScrollTop) {
+						const eventData = { scrollTop: newScrollTop };
+						window.ReactNativeWebView.postMessage('onscroll:' + JSON.stringify(eventData));
+					}
+				};
+
+				// Listen for events on both scrollingElement and window
+				// - On Android, scrollingElement.addEventListener('scroll', callback) doesn't call callback on
+				// scroll. However, window.addEventListener('scroll', callback) does.
+				// - iOS needs a listener to be added to scrollingElement -- events aren't received when
+				//   the listener is added to window with window.addEventListener('scroll', ...).
+				scrollingElement.addEventListener('scroll', onMainContentScroll);
+				window.addEventListener('scroll', onMainContentScroll);
+
+				const scrollContentToPosition = (position) => {
+					scrollingElement.scrollTop = position;
+				};
+			`);
+			js.push(`
 				const readyStateCheckInterval = setInterval(function() {
 					if (document.readyState === "complete") {
 						clearInterval(readyStateCheckInterval);
 						if ("${resourceDownloadMode}" === "manual") webviewLib.setupResourceManualDownload();
+
 						const hash = "${noteHash}";
-						// Gives it a bit of time before scrolling to the anchor
-						// so that images are loaded.
-						if (hash) {
+						const initialScroll = ${JSON.stringify(initialScroll)};
+
+						// Don't scroll to a hash if we're given initial scroll (initial scroll
+						// overrides scrolling to a hash).
+						if ((initialScroll ?? null) !== null) {
+							scrollContentToPosition(initialScroll);
+					 	} else if (hash) {
+							// Gives it a bit of time before scrolling to the anchor
+							// so that images are loaded.
 							setTimeout(() => { 
 								const e = document.getElementById(hash);
 								if (!e) {
@@ -171,6 +217,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 				}, 10);
 			`);
 			js.push('} catch (e) {');
+			js.push('	console.error(e);');
 			js.push('	window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))');
 			js.push('	true;');
 			js.push('}');
@@ -186,20 +233,17 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 					}
 				}
 
-				/*
-				 iOS seems to increase inertial scrolling friction when the WebView body/root elements
-				 scroll. Scroll the main container instead.
-				*/
+				:root > body {
+					padding: 0;
+				}
+			`;
+			const scrollRenderedMdContainerCss = `
 				body > #rendered-md {
 					width: 100vw;
 					overflow: auto;
 					height: calc(100vh - ${paddingBottom}px - ${paddingTop});
 					padding-bottom: ${paddingBottom}px;
 					padding-top: ${paddingTop};
-				}
-
-				:root > body {
-					padding: 0;
 				}
 			`;
 			const defaultCss = `
@@ -219,6 +263,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 						<style>
 							${defaultCss}
 							${shim.mobilePlatform() === 'ios' ? iOSSpecificCss : ''}
+							${scrollRenderedMdContainer ? scrollRenderedMdContainerCss : ''}
 							${editPopupCss}
 						</style>
 						${assetsToHeaders(result.pluginAssets, { asHtml: true })}

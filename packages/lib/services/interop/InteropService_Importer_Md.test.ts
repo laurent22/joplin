@@ -10,14 +10,29 @@ import { FolderEntity } from '../database/types';
 describe('InteropService_Importer_Md', () => {
 	let tempDir: string;
 	async function importNote(path: string) {
+		const newFolder = await Folder.save({ title: 'folder' });
 		const importer = new InteropService_Importer_Md();
-		importer.setMetadata({ fileExtensions: ['md', 'html'] });
-		return await importer.importFile(path, 'notebook');
+		await importer.init(path, {
+			format: 'md',
+			outputFormat: 'md',
+			path,
+			destinationFolder: newFolder,
+			destinationFolderId: newFolder.id,
+		});
+		importer.setMetadata({ fileExtensions: ['md'] });
+		await importer.exec({ warnings: [] });
+		const allNotes = await Note.all();
+		return allNotes[0];
 	}
 	async function importNoteDirectory(path: string) {
 		const importer = new InteropService_Importer_Md();
+		await importer.init(path, {
+			format: 'md',
+			outputFormat: 'md',
+			path,
+		});
 		importer.setMetadata({ fileExtensions: ['md', 'html'] });
-		return await importer.importDirectory(path, 'notebook');
+		return await importer.exec({ warnings: [] });
 	}
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -77,10 +92,8 @@ describe('InteropService_Importer_Md', () => {
 		expect(noteIds.length).toBe(1);
 	});
 	it('should gracefully handle reference cycles in notes', async () => {
-		const importer = new InteropService_Importer_Md();
-		importer.setMetadata({ fileExtensions: ['md'] });
-		const noteA = await importer.importFile(`${supportDir}/test_notes/md/sample-cycles-a.md`, 'notebook');
-		const noteB = await importer.importFile(`${supportDir}/test_notes/md/sample-cycles-b.md`, 'notebook');
+		await importNoteDirectory(`${supportDir}/test_notes/md/cycle-reference`);
+		const [noteA, noteB] = await Note.all();
 
 		const noteAIds = await Note.linkedNoteIds(noteA.body);
 		expect(noteAIds.length).toBe(1);
@@ -137,11 +150,12 @@ describe('InteropService_Importer_Md', () => {
 		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('non-empty')).toBeGreaterThanOrEqual(0);
 	});
 	it('should not import empty directory', async () => {
-		await fs.mkdirp(`${tempDir}/empty/empty`);
+		await fs.mkdirp(`${tempDir}/empty1/empty2`);
 
-		await importNoteDirectory(`${tempDir}/empty`);
+		await importNoteDirectory(`${tempDir}/empty1`);
 		const allFolders = await Folder.all();
-		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('empty')).toBe(-1);
+		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('empty1')).toBe(0);
+		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('empty2')).toBe(-1);
 	});
 	it('should import directory with non-empty subdirectory', async () => {
 		await fs.mkdirp(`${tempDir}/non-empty-subdir/non-empty-subdir/subdir-empty`);
@@ -153,5 +167,21 @@ describe('InteropService_Importer_Md', () => {
 		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('non-empty-subdir')).toBeGreaterThanOrEqual(0);
 		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('subdir-empty')).toBe(-1);
 		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('subdir-non-empty')).toBeGreaterThanOrEqual(0);
+	});
+
+	it('should import all files before replacing links', async () => {
+		await fs.mkdirp(`${tempDir}/links/0/1/2`);
+		await fs.mkdirp(`${tempDir}/links/Target_folder`);
+		await fs.writeFile(`${tempDir}/links/Target_folder/Targeted_note.md`, '# Targeted_note');
+		await fs.writeFile(`${tempDir}/links/0/1/2/Note_with_reference_to_another_note.md`, '# 20\n[Target_folder:Targeted_note](../../../Target_folder/Targeted_note.md)');
+
+		await importNoteDirectory(`${tempDir}/links`);
+
+		const allFolders = await Folder.all();
+		const allNotes = await Note.all();
+		const targetFolder = allFolders.find(f => f.title === 'Target_folder');
+		const noteBeingReferenced = allNotes.find(n => n.title === 'Targeted_note');
+
+		expect(noteBeingReferenced.parent_id).toBe(targetFolder.id);
 	});
 });

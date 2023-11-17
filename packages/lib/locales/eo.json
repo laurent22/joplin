@@ -194,6 +194,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred: %s": [
+		""
+	],
 	"An update is available, do you want to download it now?": [
 		""
 	],
@@ -770,6 +773,9 @@
 	"Email to Note": [
 		""
 	],
+	"Email To Note, login information": [
+		""
+	],
 	"Emails": [
 		""
 	],
@@ -1009,6 +1015,9 @@
 	],
 	"General": [
 		"Ĝenerala"
+	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
 	],
 	"Get it now:": [
 		"Akiri ĝin nun:"
@@ -1296,7 +1305,7 @@
 	"Logout": [
 		""
 	],
-	"Logs": [
+	"Logs, profiles, sync status": [
 		""
 	],
 	"Make a donation": [
@@ -1333,6 +1342,9 @@
 		""
 	],
 	"Max Item Size": [
+		""
+	],
+	"Media player, math, diagrams, table of contents": [
 		""
 	],
 	"Missing keys": [
@@ -1538,6 +1550,9 @@
 	],
 	"Open...": [
 		"Malfermi..."
+	],
+	"Opening section %s": [
+		""
 	],
 	"Operation cancelled": [
 		"Operacio nuligita"
@@ -1857,6 +1872,9 @@
 	"Select all": [
 		"Elekti ĉiujn"
 	],
+	"Send bug report": [
+		""
+	],
 	"Server is already running on port %d": [
 		""
 	],
@@ -2071,6 +2089,9 @@
 		""
 	],
 	"Sync to provided target (defaults to sync.target config value)": [
+		""
+	],
+	"Sync, encryption, proxy": [
 		""
 	],
 	"Synchronisation interval": [
@@ -2357,6 +2378,9 @@
 	"to-do": [
 		"tasko"
 	],
+	"Toggle note history, keep notes for": [
+		""
+	],
 	"Toggle sidebar": [
 		""
 	],
@@ -2535,6 +2559,9 @@
 		""
 	],
 	"When creating a new to-do:": [
+		""
+	],
+	"Window unresponsive.": [
 		""
 	],
 	"Words": [
