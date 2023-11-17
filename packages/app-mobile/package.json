@@ -15,7 +15,7 @@
     "test": "jest",
     "test-ci": "yarn test",
     "watchInjectedJs": "gulp watchInjectedJs",
-    "postinstall": "jetify && yarn run build"
+    "postinstall": "jetify"
   },
   "dependencies": {
     "@bam.tech/react-native-image-resizer": "3.0.7",
