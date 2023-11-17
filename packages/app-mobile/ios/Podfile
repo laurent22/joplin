@@ -1,3 +1,4 @@
+require File.join(File.dirname(`node --print "require.resolve('expo/package.json')"`), "scripts/autolinking")
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
@@ -9,7 +10,9 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 #
 # 2021-12-17: Changed back to 11.0 because after the fix it works with at least
 # 12.x, and probably 11.0 too, which is the version supported by React Native.
-platform :ios, min_ios_version_supported
+#
+# 2023-11-16: Changed to 13.0 to get Expo to work.
+platform :ios, 13.0
 prepare_react_native_project!
 # If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
 # because `react-native-flipper` depends on (FlipperKit,...) that will be excluded
@@ -28,6 +31,19 @@ if linkage != nil
 end
 
 target 'Joplin' do
+  use_expo_modules!
+  post_integrate do |installer|
+    begin
+      expo_patch_react_imports!(installer)
+    rescue => e
+      Pod::UI.warn e
+    end
+    begin
+      expo_patch_react_imports!(installer)
+    rescue => e
+      Pod::UI.warn e
+    end
+  end
   config = use_native_modules!
 
   # Flags change depending on the env values.
