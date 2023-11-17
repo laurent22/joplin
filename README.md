@@ -26,7 +26,7 @@ For more information about the applications, see the [full Joplin documentation]
 
 Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.
 
-Please see the [donation page](https://github.com/laurent22/joplin/blob/dev/readme/about/donate.md) for information on how to support the development of Joplin.
+Please see the [donation page](https://github.com/laurent22/joplin/blob/dev/readme/donate.md) for information on how to support the development of Joplin.
 
 # Sponsors
 
