@@ -15,8 +15,9 @@ document.createRange = () => {
 	return range;
 };
 
-// Mock DataTransfer (to mock clipboard events)
-window.DataTransfer = class {
+// We use DataTransfer and ClipboardEvent to mock paste events.
+// They don't seem to be supported by jsdom, so we mock them here:
+window.DataTransfer ??= class {
 	#data = new Map();
 	files = [];
 
@@ -33,7 +34,7 @@ window.DataTransfer = class {
 	}
 };
 
-window.ClipboardEvent = class extends Event {
+window.ClipboardEvent ??= class extends Event {
 	constructor(type, init) {
 		super(type, init);
 		this.clipboardData = init.clipboardData ?? null;
