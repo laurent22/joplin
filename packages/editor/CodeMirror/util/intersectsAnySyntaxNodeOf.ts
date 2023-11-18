@@ -6,14 +6,14 @@ interface Range {
 	to: number;
 }
 
-const intersectsSyntaxNode = (state: EditorState, range: Range, nodeName: string) => {
+const intersectsAnySyntaxNodeOf = (state: EditorState, range: Range, nodeNames: string[]) => {
 	let foundNode = false;
 
 	syntaxTree(state).iterate({
 		from: range.from,
 		to: range.to,
 		enter: node => {
-			if (node.name === nodeName) {
+			if (nodeNames.includes(node.name)) {
 				foundNode = true;
 
 				// Skip children
@@ -28,5 +28,5 @@ const intersectsSyntaxNode = (state: EditorState, range: Range, nodeName: string
 	return foundNode;
 };
 
-export default intersectsSyntaxNode;
+export default intersectsAnySyntaxNodeOf;
 

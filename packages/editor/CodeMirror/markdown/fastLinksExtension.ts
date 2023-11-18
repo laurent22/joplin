@@ -1,6 +1,6 @@
 import { EditorSelection, Extension } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
-import intersectsSyntaxNode from '../util/isInSyntaxNode';
+import intersectsAnySyntaxNodeOf from '../util/intersectsAnySyntaxNodeOf';
 
 const fastLinksExtension: ()=> Extension = () => {
 	const eventHandlers = EditorView.domEventHandlers({
@@ -24,7 +24,7 @@ const fastLinksExtension: ()=> Extension = () => {
 			}
 
 			// Don't linkify if the user could be trying to change an existing link
-			if (intersectsSyntaxNode(view.state, view.state.selection.main, 'Link')) {
+			if (intersectsAnySyntaxNodeOf(view.state, view.state.selection.main, ['Link', 'Image', 'URL'])) {
 				return false;
 			}
 

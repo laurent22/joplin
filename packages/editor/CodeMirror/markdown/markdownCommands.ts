@@ -12,7 +12,7 @@ import {
 	toggleInlineFormatGlobally, toggleRegionFormatGlobally, toggleSelectedLinesStartWith,
 	isIndentationEquivalent, stripBlockquote, tabsToSpaces,
 } from './markdownReformatter';
-import intersectsSyntaxNode from '../util/isInSyntaxNode';
+import intersectsAnySyntaxNodeOf from '../util/intersectsAnySyntaxNodeOf';
 
 const startingSpaceRegex = /^(\s*)/;
 
@@ -434,7 +434,7 @@ export const insertOrIncreaseIndent: Command = (view: EditorView): boolean => {
 	}
 
 
-	if (intersectsSyntaxNode(view.state, mainSelection, 'ListItem')) {
+	if (intersectsAnySyntaxNodeOf(view.state, mainSelection, ['ListItem'])) {
 		return increaseIndent(view);
 	}
 
