@@ -6,6 +6,7 @@ import { EditorView } from '@codemirror/view';
 import { MarkdownMathExtension } from '../markdown/markdownMathParser';
 import forceFullParse from './forceFullParse';
 import loadLangauges from './loadLanguages';
+import fastLinksExtension from '../markdown/fastLinksExtension';
 
 // Creates and returns a minimal editor with markdown extensions. Waits to return the editor
 // until all syntax tree tags in `expectedSyntaxTreeTags` exist.
@@ -23,6 +24,7 @@ const createTestEditor = async (
 			}),
 			indentUnit.of('\t'),
 			EditorState.tabSize.of(4),
+			fastLinksExtension(),
 		],
 	});
 

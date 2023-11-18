@@ -11,6 +11,7 @@ import { html } from '@codemirror/lang-html';
 import { defaultKeymap, emacsStyleKeymap } from '@codemirror/commands';
 import { vim } from '@replit/codemirror-vim';
 import { indentUnit } from '@codemirror/language';
+import fastLinksExtension from './markdown/fastLinksExtension';
 
 const configFromSettings = (settings: EditorSettings) => {
 	const languageExtension = (() => {
@@ -29,6 +30,8 @@ const configFromSettings = (settings: EditorSettings) => {
 					codeLanguages: syntaxHighlightingLanguages,
 				}),
 				markdownLanguage.data.of({ closeBrackets: openingBrackets }),
+
+				fastLinksExtension(),
 			];
 		} else if (language === EditorLanguageType.Html) {
 			return html();

@@ -527,6 +527,8 @@ packages/editor/CodeMirror/getScrollFraction.js
 packages/editor/CodeMirror/markdown/computeSelectionFormatting.test.js
 packages/editor/CodeMirror/markdown/computeSelectionFormatting.js
 packages/editor/CodeMirror/markdown/decoratorExtension.js
+packages/editor/CodeMirror/markdown/fastLinksExtension.test.js
+packages/editor/CodeMirror/markdown/fastLinksExtension.js
 packages/editor/CodeMirror/markdown/markdownCommands.bulletedVsChecklist.test.js
 packages/editor/CodeMirror/markdown/markdownCommands.test.js
 packages/editor/CodeMirror/markdown/markdownCommands.toggleList.test.js
