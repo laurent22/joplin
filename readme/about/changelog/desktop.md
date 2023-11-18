@@ -1,5 +1,16 @@
 # Joplin Desktop Changelog
 
+## [v2.13.6](https://github.com/laurent22/joplin/releases/tag/v2.13.6) (Pre-release) - 2023-11-17T19:24:03Z
+
+- Improved: Improve toolbar button wrapping on RTE ([ccf1c8e](https://github.com/laurent22/joplin/commit/ccf1c8e))
+- Improved: Install script: Work around unprivileged user namespace restrictions by adding the --no-sandbox flag to the launcher ([#9137](https://github.com/laurent22/joplin/issues/9137)) ([#9136](https://github.com/laurent22/joplin/issues/9136) by Henry Heino)
+- Improved: Make settings tabs focusable by keyboard ([#9253](https://github.com/laurent22/joplin/issues/9253)) ([#9250](https://github.com/laurent22/joplin/issues/9250) by Henry Heino)
+- Improved: Preserve nested tables in RTE ([#9293](https://github.com/laurent22/joplin/issues/9293))
+- Improved: Updated packages mermaid (v10.5.1), sass (v1.69.5)
+- Fixed: Fixed import error report ([6211606](https://github.com/laurent22/joplin/commit/6211606))
+- Fixed: Import of inter-linked md files has incorrect notebook structure ([#9269](https://github.com/laurent22/joplin/issues/9269)) ([#9151](https://github.com/laurent22/joplin/issues/9151) by [@pedr](https://github.com/pedr))
+- Fixed: Work around WebDAV sync issues over ipv6 ([#9286](https://github.com/laurent22/joplin/issues/9286)) ([#8788](https://github.com/laurent22/joplin/issues/8788) by Henry Heino)
+
 ## [v2.13.5](https://github.com/laurent22/joplin/releases/tag/v2.13.5) (Pre-release) - 2023-11-09T20:24:09Z
 
 - New: Plugins: Add support for getting plugin settings from a Markdown renderer ([8be22ed](https://github.com/laurent22/joplin/commit/8be22ed))
@@ -4036,6 +4047,12 @@ IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before 
 ## [v0.10.31](https://github.com/laurent22/joplin/releases/tag/v0.10.31) - 2017-12-01T09:56:44Z
 
 - Fixes [#22](https://github.com/laurent22/joplin/issues/22) - keyboard cursor jumps while typing.
+
+## [v0.10.30](https://github.com/laurent22/joplin/releases/tag/v0.10.30) - 2017-11-30T20:28:16Z
+
+- Added Spanish locale (thank you Erick Rodríguez Ponce)
+- Fixed copy/cut/paste issue in macOS
+- Fixed checkbox issue in Option screen.
 
 ## [v0.10.28](https://github.com/laurent22/joplin/releases/tag/v0.10.28) - 2017-11-30T01:07:46Z
 
