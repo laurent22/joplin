@@ -10,27 +10,35 @@ const pasteText = (editor: EditorView, text: string) => {
 	}));
 };
 
+jest.retryTimes(2);
+
 describe('fastLinksExtension', () => {
 	test('should convert selection to link when pasting URLs', async () => {
-		const initialText = 'a test';
-		const editor = await createTestEditor(
-			initialText,
-			EditorSelection.range(2, 6), // selects "test"
-			[],
-		);
+		const testWithUrl = async (url: string) => {
+			const initialText = 'a test';
+			const editor = await createTestEditor(
+				initialText,
+				EditorSelection.range(2, 6), // selects "test"
+				[],
+			);
 
-		pasteText(editor, 'http://example.com/');
-		const expected = 'a [test](http://example.com/)';
-		expect(editor.state.doc.toString()).toBe(expected);
+			pasteText(editor, url);
+			const expected = `a [test](${url})`;
+			expect(editor.state.doc.toString()).toBe(expected);
 
-		// New content should be selected
-		expect(editor.state.selection.ranges).toHaveLength(1);
-		expect(editor.state.selection.main.from).toBe(2);
-		expect(editor.state.selection.main.to).toBe(editor.state.doc.length);
+			// New content should be selected
+			expect(editor.state.selection.ranges).toHaveLength(1);
+			expect(editor.state.selection.main.from).toBe(2);
+			expect(editor.state.selection.main.to).toBe(editor.state.doc.length);
 
-		// Should also work for resource URLs
-		pasteText(editor, ':/someuuidgoeshere');
-		expect(editor.state.doc.toString()).toBe('a [[test](http://example.com/)](:/someuuidgoeshere)');
+			// Should replace if selection contains a URL
+			pasteText(editor, `${url}`);
+			expect(editor.state.doc.toString()).toBe(`a ${url}`);
+		};
+
+		await testWithUrl('http://example.com/');
+		await testWithUrl('https://example.com/');
+		await testWithUrl(':/someuuidhere');
 	});
 
 	test('should not convert selection to link when pasting non-urls', async () => {

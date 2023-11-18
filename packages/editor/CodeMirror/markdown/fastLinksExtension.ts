@@ -1,5 +1,6 @@
 import { EditorSelection, Extension } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
+import intersectsSyntaxNode from '../util/isInSyntaxNode';
 
 const fastLinksExtension: ()=> Extension = () => {
 	const eventHandlers = EditorView.domEventHandlers({
@@ -22,8 +23,15 @@ const fastLinksExtension: ()=> Extension = () => {
 				return false;
 			}
 
+			// Don't linkify if the user could be trying to change an existing link
+			if (intersectsSyntaxNode(view.state, view.state.selection.main, 'Link')) {
+				return false;
+			}
+
 			view.dispatch(view.state.changeByRange(selection => {
-				if (selection.empty) {
+				const selectedText = view.state.sliceDoc(selection.from, selection.to);
+
+				if (selection.empty || selectedText.includes('\n')) {
 					return {
 						range: EditorSelection.range(selection.from, selection.from + clipboardText.length),
 						changes: [{
@@ -33,7 +41,7 @@ const fastLinksExtension: ()=> Extension = () => {
 						}],
 					};
 				} else {
-					const replaceWith = `[${view.state.sliceDoc(selection.from, selection.to)}](${clipboardText})`;
+					const replaceWith = `[${selectedText}](${clipboardText})`;
 					return {
 						range: EditorSelection.range(selection.from, selection.from + replaceWith.length),
 						changes: [{
