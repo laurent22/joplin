@@ -460,6 +460,11 @@ function shimInit(options = null) {
 		if (!options.method) options.method = 'GET';
 		// if (!('maxRetry' in options)) options.maxRetry = 5;
 
+		// 21 maxRedirects is the default amount from follow-redirects library
+		// 20 seems to be the max amount that most popular browsers will allow
+		if (!options.maxRedirects) options.maxRedirects = 21;
+		if (!options.timeout) options.timeout = undefined;
+
 		const urlParse = require('url').parse;
 
 		url = urlParse(url.trim());
@@ -490,6 +495,8 @@ function shimInit(options = null) {
 			method: method,
 			path: url.pathname + (url.query ? `?${url.query}` : ''),
 			headers: headers,
+			timeout: options.timeout,
+			maxRedirects: options.maxRedirects,
 		};
 
 		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
@@ -549,6 +556,10 @@ function shimInit(options = null) {
 								}
 							});
 						});
+					});
+
+					request.on('timeout', () => {
+						request.destroy(new Error(`Request timed out. Timeout value: ${requestOptions.timeout}ms.`));
 					});
 
 					request.on('error', (error) => {
