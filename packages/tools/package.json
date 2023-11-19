@@ -51,7 +51,7 @@
     "@types/markdown-it": "13.0.5",
     "@types/mustache": "4.2.4",
     "@types/node": "18.18.7",
-    "@types/node-fetch": "2.6.7",
+    "@types/node-fetch": "2.6.8",
     "@types/yargs": "17.0.29",
     "gettext-extractor": "3.8.0",
     "gulp": "4.0.2",
