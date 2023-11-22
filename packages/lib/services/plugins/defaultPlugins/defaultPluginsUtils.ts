@@ -35,7 +35,10 @@ export async function installDefaultPlugins(service: PluginService, defaultPlugi
 		pluginId = pluginId.path;
 
 		// if pluginId is present in 'installedDefaultPlugins' array or it doesn't have default plugin ID, then we won't install it again as default plugin
-		if (installedPlugins.includes(pluginId) || !defaultPluginsId.includes(pluginId)) continue;
+		if (installedPlugins.includes(pluginId) || !defaultPluginsId.includes(pluginId)) {
+			logger.debug(`Skipping default plugin ${pluginId}, ${!defaultPluginsId.includes(pluginId) ? '(Not a default)' : ''}`);
+			continue;
+		}
 		const defaultPluginPath: string = path.join(defaultPluginsDir, pluginId, 'plugin.jpl');
 		await service.installPlugin(defaultPluginPath, false);
 

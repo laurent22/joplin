@@ -5,24 +5,10 @@ __metadata:
   version: 6
   cacheKey: 8
 
-"7zip-bin-linux@npm:^1.0.1":
-  version: 1.3.1
-  resolution: "7zip-bin-linux@npm:1.3.1"
-  conditions: os=linux
-  languageName: node
-  linkType: hard
-
-"7zip-bin-mac@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "7zip-bin-mac@npm:1.0.1"
-  conditions: os=darwin
-  languageName: node
-  linkType: hard
-
-"7zip-bin-win@npm:^2.1.1":
-  version: 2.2.0
-  resolution: "7zip-bin-win@npm:2.2.0"
-  conditions: os=win32
+"7zip-bin@npm:5.2.0":
+  version: 5.2.0
+  resolution: "7zip-bin@npm:5.2.0"
+  checksum: 85d3102275342f1f4ba7d17e778e526dee3dbec0f57d29be7afaa6e3c26687d40a6eccf520e9140143f85a51f3353f6b545f760eff3f776c6ffb30dc5252fb7c
   languageName: node
   linkType: hard
 
@@ -6207,9 +6193,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/app-desktop@workspace:packages/app-desktop"
   dependencies:
-    7zip-bin-linux: ^1.0.1
-    7zip-bin-mac: ^1.0.1
-    7zip-bin-win: ^2.1.1
+    7zip-bin: 5.2.0
     "@electron/notarize": 2.1.0
     "@electron/rebuild": 3.3.0
     "@electron/remote": 2.0.12
@@ -6275,13 +6259,6 @@ __metadata:
     taboverride: 4.0.3
     tinymce: 5.10.6
     typescript: 5.2.2
-  dependenciesMeta:
-    7zip-bin-linux:
-      optional: true
-    7zip-bin-mac:
-      optional: true
-    7zip-bin-win:
-      optional: true
   languageName: unknown
   linkType: soft
 
@@ -6397,6 +6374,7 @@ __metadata:
     "@joplin/utils": ~2.13
     "@types/yargs": 17.0.32
     fs-extra: 11.1.1
+    ts-node: 10.9.1
     typescript: 5.2.2
     yargs: 17.7.2
   languageName: unknown

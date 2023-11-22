@@ -304,14 +304,43 @@ index ef2a527..ebe5c9c 100644
  import { exec } from "child_process";
  import joplin from "api";
 diff --git a/webpack.config.js b/webpack.config.js
-index aeda377..20113a3 100644
+index aeda377..04fe2fd 100644
 --- a/webpack.config.js
 +++ b/webpack.config.js
-@@ -179,6 +179,7 @@ const baseConfig = {
- 			},
- 		],
+@@ -181,7 +181,17 @@ const baseConfig = {
  	},
-+	externals: { '7zip-bin': { commonjs: '7zip-bin' }, },
  };
  
- const pluginConfig = { ...baseConfig, entry: './src/index.ts',
+-const pluginConfig = { ...baseConfig, entry: './src/index.ts',
++const backgroundScriptConfig = {
++	...baseConfig,
++
++	// We support requiring 7zip-bin through require('7zip-bin')
++	externalsType: 'commonjs',
++	externals: {
++		'7zip-bin': { commonjs: '7zip-bin' },
++	},
++};
++
++const pluginConfig = { ...backgroundScriptConfig, entry: './src/index.ts',
+ 	resolve: {
+ 		alias: {
+ 			api: path.resolve(__dirname, 'api'),
+@@ -213,7 +223,8 @@ const pluginConfig = { ...baseConfig, entry: './src/index.ts',
+ 				},
+ 			],
+ 		}),
+-	] };
++	],
++};
+ 
+ const extraScriptConfig = { ...baseConfig, resolve: {
+ 	alias: {
+@@ -224,6 +235,7 @@ const extraScriptConfig = { ...baseConfig, resolve: {
+ } };
+ 
+ const createArchiveConfig = {
++	...backgroundScriptConfig,
+ 	stats: 'errors-only',
+ 	entry: './dist/index.js',
+ 	resolve: {

@@ -18,3 +18,4 @@ test-results/
 playwright-report/
 playwright/.cache/
 integration-tests/test-profile/
+build/defaultPlugins/

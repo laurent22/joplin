@@ -136,6 +136,7 @@
     "typescript": "5.2.2"
   },
   "dependencies": {
+    "7zip-bin": "5.2.0",
     "@electron/notarize": "2.1.0",
     "@electron/remote": "2.0.12",
     "@fortawesome/fontawesome-free": "5.15.4",
@@ -181,7 +182,6 @@
     "styled-components": "5.3.11",
     "styled-system": "5.1.5",
     "taboverride": "4.0.3",
-    "tinymce": "5.10.6",
-    "7zip-bin": "5.2.0"
+    "tinymce": "5.10.6"
   }
 }

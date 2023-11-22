@@ -1,8 +1,7 @@
 /* eslint-disable no-console */
 
-import { copy, exists, remove } from 'fs-extra';
-import { readdir, mkdtemp } from 'fs/promises';
-import { join, resolve } from 'path';
+import { copy, exists, remove, mkdir, readdir, mkdtemp } from 'fs-extra';
+import { dirname, join, resolve } from 'path';
 import { tmpdir } from 'os';
 import { chdir, cwd } from 'process';
 import { execCommand } from '@joplin/utils';
@@ -35,7 +34,8 @@ const patchFilePathFor = (pluginName: string) => {
 };
 
 const buildDefaultPlugins = async (afterInstall: AfterEachCallback) => {
-	const pluginOutputDir = resolve(join(__dirname, 'built-plugins'));
+	const packagesDir = dirname(__dirname);
+	const outputParentDir = resolve(join(packagesDir, 'app-desktop', 'build', 'defaultPlugins'));
 	const pluginSourcesDir = resolve(join(__dirname, 'plugin-sources'));
 	const pluginSources = await readdir(pluginSourcesDir);
 
@@ -87,7 +87,12 @@ const buildDefaultPlugins = async (afterInstall: AfterEachCallback) => {
 				throw new Error(`No published files found in ${publishDir}`);
 			}
 
-			await copy(jplFiles[0], join(pluginOutputDir, `${pluginName}.jpl`));
+			const outputDirectory = join(outputParentDir, pluginName);
+			if (await exists(outputDirectory)) {
+				await remove(outputDirectory);
+			}
+			await mkdir(outputDirectory);
+			await copy(jplFiles[0], join(outputDirectory, 'plugin.jpl'));
 		} catch (error) {
 			console.error(error);
 			console.log('Build directory', buildDir);

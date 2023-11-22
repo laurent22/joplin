@@ -33,7 +33,6 @@ export interface SettingAndValue {
 }
 
 export interface DefaultPluginSettings {
-	version: string;
 	settings?: SettingAndValue;
 }
 
