@@ -1,0 +1,135 @@
+/* eslint-disable no-console */
+
+import { copy, exists, remove } from 'fs-extra';
+import { readdir, mkdtemp } from 'fs/promises';
+import { join, resolve } from 'path';
+import { tmpdir } from 'os';
+import { chdir, cwd } from 'process';
+import { execCommand } from '@joplin/utils';
+import { glob } from 'glob';
+const readline = require('readline/promises');
+const yargs = require('yargs');
+
+
+type AfterEachCallback = (buildDir: string, pluginName: string)=> Promise<void>;
+
+let readlineInterface: any = null;
+const waitForInput = async () => {
+	readlineInterface ??= readline.createInterface({
+		input: process.stdin,
+		output: process.stdout,
+	});
+	if (process.stdin.isTTY) {
+		const green = '\x1b[92m';
+		const reset = '\x1b[0m';
+		await readlineInterface.question(`${green}[Press enter to continue]${reset}`);
+
+		console.log('Continuing...');
+	} else {
+		console.warn('Input is not from a TTY -- not waiting for input.');
+	}
+};
+
+const patchFilePathFor = (pluginName: string) => {
+	return join(__dirname, 'plugin-patches', `${pluginName}.diff`);
+};
+
+const buildDefaultPlugins = async (afterInstall: AfterEachCallback) => {
+	const pluginOutputDir = resolve(join(__dirname, 'built-plugins'));
+	const pluginSourcesDir = resolve(join(__dirname, 'plugin-sources'));
+	const pluginSources = await readdir(pluginSourcesDir);
+
+	const originalDirectory = cwd();
+
+	const logStatus = (...message: string[]) => {
+		console.log('\x1b[96m', ...message, '\x1b[0m');
+	};
+
+	for (const pluginName of pluginSources) {
+		console.log('plugin', pluginName);
+		const buildDir = await mkdtemp(join(tmpdir(), 'default-plugin-build'));
+		try {
+			logStatus('Building plugin', pluginName, 'at', buildDir);
+			const pluginDir = resolve(join(pluginSourcesDir, pluginName));
+
+			logStatus('Copying default repository files...');
+			const pluginBaseRepo = join(__dirname, 'plugin-base-repo');
+			await copy(pluginBaseRepo, buildDir);
+
+			chdir(buildDir);
+
+			logStatus('Initialized! Replacing ./src directory.');
+			const pluginSrcDir = join(pluginDir, 'src');
+			await remove('./src');
+			await copy(pluginSrcDir, './src');
+
+			logStatus('Initializing repository.');
+			await execCommand('git init . -b main');
+			await execCommand('git add .');
+			await execCommand(['git', 'commit', '--author="Build script <>"', '-m', 'Initial commit']);
+
+			const patchFile = patchFilePathFor(pluginName);
+			if (await exists(patchFile)) {
+				logStatus('Applying patch.');
+				await execCommand(['git', 'apply', patchFile]);
+			}
+
+			logStatus('Installing dependencies.');
+			await execCommand('npm install');
+
+			await afterInstall(buildDir, pluginName);
+
+			logStatus('Copying published file.');
+			const publishDir = join(buildDir, 'publish');
+			const jplFiles = await glob(join(publishDir, '*.jpl'));
+
+			if (jplFiles.length === 0) {
+				throw new Error(`No published files found in ${publishDir}`);
+			}
+
+			await copy(jplFiles[0], join(pluginOutputDir, `${pluginName}.jpl`));
+		} catch (error) {
+			console.error(error);
+			console.log('Build directory', buildDir);
+			await waitForInput();
+			throw error;
+		} finally {
+			chdir(originalDirectory);
+			await remove(buildDir);
+			logStatus('Removed build directory');
+		}
+	}
+
+};
+
+const build = () => {
+	yargs
+		.usage('$0 <cmd> [args]')
+		.command('build', 'build all', () => { }, async () => {
+			await buildDefaultPlugins(async () => { });
+			process.exit(0);
+		})
+		.command('patch <plugin>', 'build all, but stop for patching', (yargs: any) => {
+			yargs.positional('plugin', {
+				type: 'string',
+				describe: 'Name of the plugin to patch',
+			});
+		}, async (args: any) => {
+			await buildDefaultPlugins(async (buildDir, pluginName) => {
+				if (pluginName !== args.plugin) {
+					return;
+				}
+
+				console.log('Make changes to', buildDir, 'to create a patch.');
+				await waitForInput();
+				await execCommand(['sh', '-c', 'git diff -p > diff.diff']);
+
+				await copy(join(buildDir, './diff.diff'), patchFilePathFor(pluginName));
+			});
+			process.exit(0);
+		})
+		.help()
+		.argv;
+};
+
+build();

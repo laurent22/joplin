@@ -1,0 +1,317 @@
+diff --git a/package-lock.json b/package-lock.json
+index db76500..1a30a98 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -10,11 +10,15 @@
+       "license": "MIT",
+       "devDependencies": {
+         "@joplin/lib": "~2.9",
++        "@types/i18n": "0.13.10",
+         "@types/node": "^18.7.13",
+         "chalk": "^4.1.0",
+         "copy-webpack-plugin": "^11.0.0",
++        "electron-log": "5.0.1",
+         "fs-extra": "^10.1.0",
+         "glob": "^8.0.3",
++        "i18n": "0.15.1",
++        "node-7z": "3.0.0",
+         "tar": "^6.1.11",
+         "ts-loader": "^9.3.1",
+         "typescript": "^4.8.2",
+@@ -1557,6 +1561,50 @@
+         "webidl-conversions": "^3.0.0"
+       }
+     },
++    "node_modules/@messageformat/core": {
++      "version": "3.3.0",
++      "resolved": "https://registry.npmjs.org/@messageformat/core/-/core-3.3.0.tgz",
++      "integrity": "sha512-YcXd3remTDdeMxAlbvW6oV9d/01/DZ8DHUFwSttO3LMzIZj3iO0NRw+u1xlsNNORFI+u0EQzD52ZX3+Udi0T3g==",
++      "dev": true,
++      "dependencies": {
++        "@messageformat/date-skeleton": "^1.0.0",
++        "@messageformat/number-skeleton": "^1.0.0",
++        "@messageformat/parser": "^5.1.0",
++        "@messageformat/runtime": "^3.0.1",
++        "make-plural": "^7.0.0",
++        "safe-identifier": "^0.4.1"
++      }
++    },
++    "node_modules/@messageformat/date-skeleton": {
++      "version": "1.0.1",
++      "resolved": "https://registry.npmjs.org/@messageformat/date-skeleton/-/date-skeleton-1.0.1.tgz",
++      "integrity": "sha512-jPXy8fg+WMPIgmGjxSlnGJn68h/2InfT0TNSkVx0IGXgp4ynnvYkbZ51dGWmGySEK+pBiYUttbQdu5XEqX5CRg==",
++      "dev": true
++    },
++    "node_modules/@messageformat/number-skeleton": {
++      "version": "1.2.0",
++      "resolved": "https://registry.npmjs.org/@messageformat/number-skeleton/-/number-skeleton-1.2.0.tgz",
++      "integrity": "sha512-xsgwcL7J7WhlHJ3RNbaVgssaIwcEyFkBqxHdcdaiJzwTZAWEOD8BuUFxnxV9k5S0qHN3v/KzUpq0IUpjH1seRg==",
++      "dev": true
++    },
++    "node_modules/@messageformat/parser": {
++      "version": "5.1.0",
++      "resolved": "https://registry.npmjs.org/@messageformat/parser/-/parser-5.1.0.tgz",
++      "integrity": "sha512-jKlkls3Gewgw6qMjKZ9SFfHUpdzEVdovKFtW1qRhJ3WI4FW5R/NnGDqr8SDGz+krWDO3ki94boMmQvGke1HwUQ==",
++      "dev": true,
++      "dependencies": {
++        "moo": "^0.5.1"
++      }
++    },
++    "node_modules/@messageformat/runtime": {
++      "version": "3.0.1",
++      "resolved": "https://registry.npmjs.org/@messageformat/runtime/-/runtime-3.0.1.tgz",
++      "integrity": "sha512-6RU5ol2lDtO8bD9Yxe6CZkl0DArdv0qkuoZC+ZwowU+cdRlVE1157wjCmlA5Rsf1Xc/brACnsZa5PZpEDfTFFg==",
++      "dev": true,
++      "dependencies": {
++        "make-plural": "^7.0.0"
++      }
++    },
+     "node_modules/@nodelib/fs.scandir": {
+       "version": "2.1.5",
+       "resolved": "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz",
+@@ -2380,6 +2428,12 @@
+       "integrity": "sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==",
+       "dev": true
+     },
++    "node_modules/@types/i18n": {
++      "version": "0.13.10",
++      "resolved": "https://registry.npmjs.org/@types/i18n/-/i18n-0.13.10.tgz",
++      "integrity": "sha512-V5uwFXEzC1BRvDSQkd5zWB7ktZa1yfLKFimlluTFrgBGeFJQNNaLk3J67Sje+c0+m2C7r1BU47cItOk/WRfJcQ==",
++      "dev": true
++    },
+     "node_modules/@types/json-schema": {
+       "version": "7.0.15",
+       "resolved": "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.15.tgz",
+@@ -2950,6 +3004,12 @@
+         "node": ">=8"
+       }
+     },
++    "node_modules/boolean": {
++      "version": "3.2.0",
++      "resolved": "https://registry.npmjs.org/boolean/-/boolean-3.2.0.tgz",
++      "integrity": "sha512-d0II/GO9uf9lfUHH2BQsjxzRJZBdsjgsBiW4BvhWk/3qoKwQFjIDVN19PfX8F2D/r9PCMTtLWjYVCFrpeYUzsw==",
++      "dev": true
++    },
+     "node_modules/bowser": {
+       "version": "2.11.0",
+       "resolved": "https://registry.npmjs.org/bowser/-/bowser-2.11.0.tgz",
+@@ -4313,6 +4373,15 @@
+         "safer-buffer": "^2.1.0"
+       }
+     },
++    "node_modules/electron-log": {
++      "version": "5.0.1",
++      "resolved": "https://registry.npmjs.org/electron-log/-/electron-log-5.0.1.tgz",
++      "integrity": "sha512-x4wnwHg00h/onWQgjmvcdLV7Mrd9TZjxNs8LmXVpqvANDf4FsSs5wLlzOykWLcaFzR3+5hdVEQ8ctmrUxgHlPA==",
++      "dev": true,
++      "engines": {
++        "node": ">= 14"
++      }
++    },
+     "node_modules/electron-to-chromium": {
+       "version": "1.4.590",
+       "resolved": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.590.tgz",
+@@ -4533,6 +4602,18 @@
+       "integrity": "sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==",
+       "dev": true
+     },
++    "node_modules/fast-printf": {
++      "version": "1.6.9",
++      "resolved": "https://registry.npmjs.org/fast-printf/-/fast-printf-1.6.9.tgz",
++      "integrity": "sha512-FChq8hbz65WMj4rstcQsFB0O7Cy++nmbNfLYnD9cYv2cRn8EG6k/MGn9kO/tjO66t09DLDugj3yL+V2o6Qftrg==",
++      "dev": true,
++      "dependencies": {
++        "boolean": "^3.1.4"
++      },
++      "engines": {
++        "node": ">=10.0"
++      }
++    },
+     "node_modules/fast-xml-parser": {
+       "version": "3.21.1",
+       "resolved": "https://registry.npmjs.org/fast-xml-parser/-/fast-xml-parser-3.21.1.tgz",
+@@ -5113,6 +5194,26 @@
+         "ms": "^2.0.0"
+       }
+     },
++    "node_modules/i18n": {
++      "version": "0.15.1",
++      "resolved": "https://registry.npmjs.org/i18n/-/i18n-0.15.1.tgz",
++      "integrity": "sha512-yue187t8MqUPMHdKjiZGrX+L+xcUsDClGO0Cz4loaKUOK9WrGw5pgan4bv130utOwX7fHE9w2iUeHFalVQWkXA==",
++      "dev": true,
++      "dependencies": {
++        "@messageformat/core": "^3.0.0",
++        "debug": "^4.3.3",
++        "fast-printf": "^1.6.9",
++        "make-plural": "^7.0.0",
++        "math-interval-parser": "^2.0.1",
++        "mustache": "^4.2.0"
++      },
++      "engines": {
++        "node": ">=10"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/mashpie"
++      }
++    },
+     "node_modules/iconv-lite": {
+       "version": "0.6.3",
+       "resolved": "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.6.3.tgz",
+@@ -6004,6 +6105,36 @@
+       "integrity": "sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==",
+       "dev": true
+     },
++    "node_modules/lodash.defaultsdeep": {
++      "version": "4.6.1",
++      "resolved": "https://registry.npmjs.org/lodash.defaultsdeep/-/lodash.defaultsdeep-4.6.1.tgz",
++      "integrity": "sha512-3j8wdDzYuWO3lM3Reg03MuQR957t287Rpcxp1njpEa8oDrikb+FwGdW3n+FELh/A6qib6yPit0j/pv9G/yeAqA==",
++      "dev": true
++    },
++    "node_modules/lodash.defaultto": {
++      "version": "4.14.0",
++      "resolved": "https://registry.npmjs.org/lodash.defaultto/-/lodash.defaultto-4.14.0.tgz",
++      "integrity": "sha512-G6tizqH6rg4P5j32Wy4Z3ZIip7OfG8YWWlPFzUFGcYStH1Ld0l1tWs6NevEQNEDnO1M3NZYjuHuraaFSN5WqeQ==",
++      "dev": true
++    },
++    "node_modules/lodash.flattendeep": {
++      "version": "4.4.0",
++      "resolved": "https://registry.npmjs.org/lodash.flattendeep/-/lodash.flattendeep-4.4.0.tgz",
++      "integrity": "sha512-uHaJFihxmJcEX3kT4I23ABqKKalJ/zDrDg0lsFtc1h+3uw49SIJ5beyhx5ExVRti3AvKoOJngIj7xz3oylPdWQ==",
++      "dev": true
++    },
++    "node_modules/lodash.isempty": {
++      "version": "4.4.0",
++      "resolved": "https://registry.npmjs.org/lodash.isempty/-/lodash.isempty-4.4.0.tgz",
++      "integrity": "sha512-oKMuF3xEeqDltrGMfDxAPGIVMSSRv8tbRSODbrs4KGsRRLEhrW8N8Rd4DRgB2+621hY8A8XwwrTVhXWpxFvMzg==",
++      "dev": true
++    },
++    "node_modules/lodash.negate": {
++      "version": "3.0.2",
++      "resolved": "https://registry.npmjs.org/lodash.negate/-/lodash.negate-3.0.2.tgz",
++      "integrity": "sha512-JGJYYVslKYC0tRMm/7igfdHulCjoXjoganRNWM8AgS+RXfOvFnPkOveDhPI65F9aAypCX9QEEQoBqWf7Q6uAeA==",
++      "dev": true
++    },
+     "node_modules/lodash.padend": {
+       "version": "4.6.1",
+       "resolved": "https://registry.npmjs.org/lodash.padend/-/lodash.padend-4.6.1.tgz",
+@@ -6135,6 +6266,12 @@
+         "node": ">= 6"
+       }
+     },
++    "node_modules/make-plural": {
++      "version": "7.3.0",
++      "resolved": "https://registry.npmjs.org/make-plural/-/make-plural-7.3.0.tgz",
++      "integrity": "sha512-/K3BC0KIsO+WK2i94LkMPv3wslMrazrQhfi5We9fMbLlLjzoOSJWr7TAdupLlDWaJcWxwoNosBkhFDejiu5VDw==",
++      "dev": true
++    },
+     "node_modules/markdown-it": {
+       "version": "10.0.0",
+       "resolved": "https://registry.npmjs.org/markdown-it/-/markdown-it-10.0.0.tgz",
+@@ -6250,6 +6387,15 @@
+       "integrity": "sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==",
+       "dev": true
+     },
++    "node_modules/math-interval-parser": {
++      "version": "2.0.1",
++      "resolved": "https://registry.npmjs.org/math-interval-parser/-/math-interval-parser-2.0.1.tgz",
++      "integrity": "sha512-VmlAmb0UJwlvMyx8iPhXUDnVW1F9IrGEd9CIOmv+XL8AErCUUuozoDMrgImvnYt2A+53qVX/tPW6YJurMKYsvA==",
++      "dev": true,
++      "engines": {
++        "node": ">=0.10.0"
++      }
++    },
+     "node_modules/md5": {
+       "version": "2.3.0",
+       "resolved": "https://registry.npmjs.org/md5/-/md5-2.3.0.tgz",
+@@ -7006,6 +7152,12 @@
+         "node": "*"
+       }
+     },
++    "node_modules/moo": {
++      "version": "0.5.2",
++      "resolved": "https://registry.npmjs.org/moo/-/moo-0.5.2.tgz",
++      "integrity": "sha512-iSAJLHYKnX41mKcJKjqvnAN9sf0LMDTXDEvFv+ffuRR9a1MIuXLjMNL6EsnDHSkKLTWNqQQ5uo61P4EbU4NU+Q==",
++      "dev": true
++    },
+     "node_modules/mri": {
+       "version": "1.2.0",
+       "resolved": "https://registry.npmjs.org/mri/-/mri-1.2.0.tgz",
+@@ -7087,6 +7239,24 @@
+         "lower-case": "^1.1.1"
+       }
+     },
++    "node_modules/node-7z": {
++      "version": "3.0.0",
++      "resolved": "https://registry.npmjs.org/node-7z/-/node-7z-3.0.0.tgz",
++      "integrity": "sha512-KIznWSxIkOYO/vOgKQfJEaXd7rgoFYKZbaurainCEdMhYc7V7mRHX+qdf2HgbpQFcdJL/Q6/XOPrDLoBeTfuZA==",
++      "dev": true,
++      "dependencies": {
++        "debug": "^4.3.2",
++        "lodash.defaultsdeep": "^4.6.1",
++        "lodash.defaultto": "^4.14.0",
++        "lodash.flattendeep": "^4.4.0",
++        "lodash.isempty": "^4.4.0",
++        "lodash.negate": "^3.0.2",
++        "normalize-path": "^3.0.0"
++      },
++      "engines": {
++        "node": ">=10"
++      }
++    },
+     "node_modules/node-addon-api": {
+       "version": "4.3.0",
+       "resolved": "https://registry.npmjs.org/node-addon-api/-/node-addon-api-4.3.0.tgz",
+@@ -8259,6 +8429,12 @@
+         }
+       ]
+     },
++    "node_modules/safe-identifier": {
++      "version": "0.4.2",
++      "resolved": "https://registry.npmjs.org/safe-identifier/-/safe-identifier-0.4.2.tgz",
++      "integrity": "sha512-6pNbSMW6OhAi9j+N8V+U715yBQsaWJ7eyEUaOrawX+isg5ZxhUlV1NipNtgaKHmFGiABwt+ZF04Ii+3Xjkg+8w==",
++      "dev": true
++    },
+     "node_modules/safer-buffer": {
+       "version": "2.1.2",
+       "resolved": "https://registry.npmjs.org/safer-buffer/-/safer-buffer-2.1.2.tgz",
+diff --git a/package.json b/package.json
+index 8fd1577..2934adc 100644
+--- a/package.json
++++ b/package.json
+@@ -25,6 +25,10 @@
+     "typescript": "^4.8.2",
+     "webpack": "^5.74.0",
+     "webpack-cli": "^4.10.0",
+-    "@joplin/lib": "~2.9"
++    "@joplin/lib": "~2.9",
++    "node-7z": "3.0.0",
++    "i18n": "0.15.1",
++    "@types/i18n": "0.13.10",
++    "electron-log": "5.0.1"
+   }
+ }
+diff --git a/src/sevenZip.ts b/src/sevenZip.ts
+index ef2a527..ebe5c9c 100644
+--- a/src/sevenZip.ts
++++ b/src/sevenZip.ts
+@@ -1,7 +1,7 @@
+ // https://sevenzip.osdn.jp/chm/cmdline/exit_codes.htm
+ // https://sevenzip.osdn.jp/chm/cmdline/commands/index.htm
+ import * as _7z from "node-7z";
+-import * as sevenBin from "7zip-bin";
++const sevenBin = require("7zip-bin");
+ import * as path from "path";
+ import { exec } from "child_process";
+ import joplin from "api";
+diff --git a/webpack.config.js b/webpack.config.js
+index aeda377..20113a3 100644
+--- a/webpack.config.js
++++ b/webpack.config.js
+@@ -179,6 +179,7 @@ const baseConfig = {
+ 			},
+ 		],
+ 	},
++	externals: { '7zip-bin': { commonjs: '7zip-bin' }, },
+ };
+ 
+ const pluginConfig = { ...baseConfig, entry: './src/index.ts',

@@ -6390,6 +6390,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@joplin/default-plugins@workspace:packages/default-plugins":
+  version: 0.0.0-use.local
+  resolution: "@joplin/default-plugins@workspace:packages/default-plugins"
+  dependencies:
+    "@joplin/utils": ~2.13
+    "@types/yargs": 17.0.32
+    fs-extra: 11.1.1
+    typescript: 5.2.2
+    yargs: 17.7.2
+  languageName: unknown
+  linkType: soft
+
 "@joplin/doc-builder@workspace:packages/doc-builder":
   version: 0.0.0-use.local
   resolution: "@joplin/doc-builder@workspace:packages/doc-builder"
@@ -10881,6 +10893,15 @@ __metadata:
   dependencies:
     "@types/yargs-parser": "*"
   checksum: 8bbc0edd573a5a084cb13a9985c124490fd74e73b1ed8a3058861c13124e103b00a19770dc55c53215653a7845d7033e0695917b75153cfe9618d5b2fd3cf86e
+  languageName: node
+  linkType: hard
+
+"@types/yargs@npm:17.0.32":
+  version: 17.0.32
+  resolution: "@types/yargs@npm:17.0.32"
+  dependencies:
+    "@types/yargs-parser": "*"
+  checksum: 4505bdebe8716ff383640c6e928f855b5d337cb3c68c81f7249fc6b983d0aa48de3eee26062b84f37e0d75a5797bc745e0c6e76f42f81771252a758c638f36ba
   languageName: node
   linkType: hard
 

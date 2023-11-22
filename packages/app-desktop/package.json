@@ -135,11 +135,6 @@
     "react-test-renderer": "18.2.0",
     "typescript": "5.2.2"
   },
-  "optionalDependencies": {
-    "7zip-bin-linux": "^1.0.1",
-    "7zip-bin-mac": "^1.0.1",
-    "7zip-bin-win": "^2.1.1"
-  },
   "dependencies": {
     "@electron/notarize": "2.1.0",
     "@electron/remote": "2.0.12",
@@ -186,6 +181,7 @@
     "styled-components": "5.3.11",
     "styled-system": "5.1.5",
     "taboverride": "4.0.3",
-    "tinymce": "5.10.6"
+    "tinymce": "5.10.6",
+    "7zip-bin": "5.2.0"
   }
 }

@@ -1,0 +1,6 @@
+[submodule "packages/default-plugins/plugin-sources/joplin-note-tabs"]
+	path = packages/default-plugins/plugin-sources/joplin-note-tabs
+	url = https://github.com/benji300/joplin-note-tabs.git
+[submodule "packages/default-plugins/plugin-sources/joplin-plugin-backup"]
+	path = packages/default-plugins/plugin-sources/joplin-plugin-backup
+	url = https://github.com/JackGruber/joplin-plugin-backup.git

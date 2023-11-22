@@ -56,7 +56,8 @@
 				return require('../../node_modules/@joplin/lib/node_modules/sqlite3/lib/sqlite3.js');
 			}
 
-			if (['fs-extra'].includes(modulePath)) return require(modulePath);
+			// 7zip-bin is required by one of the default plugins (simple-backup)
+			if (['fs-extra', '7zip-bin'].includes(modulePath)) return require(modulePath);
 
 			throw new Error(`Module not found: ${modulePath}`);
 		}

@@ -213,7 +213,13 @@ const pluginConfig = { ...baseConfig, entry: './src/index.ts',
 				},
 			],
 		}),
-	] };
+	],
+
+	// We support requiring 7zip-bin through require('7zip-bin')
+	externals: {
+		'7zip-bin': { commonjs: '7zip-bin' },
+	},
+};
 
 const extraScriptConfig = { ...baseConfig, resolve: {
 	alias: {
