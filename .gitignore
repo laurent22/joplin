@@ -512,10 +512,6 @@ packages/app-mobile/utils/setupNotifications.js
 packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/types.js
 packages/default-plugins/build.js
-packages/default-plugins/plugin-base-repo/api/index.js
-packages/default-plugins/plugin-base-repo/api/noteListType.js
-packages/default-plugins/plugin-base-repo/api/types.js
-packages/default-plugins/plugin-base-repo/src/index.js
 packages/default-plugins/plugin-sources/io.github.jackgruber.backup/__test__/backup.test.js
 packages/default-plugins/plugin-sources/io.github.jackgruber.backup/__test__/help.test.js
 packages/default-plugins/plugin-sources/io.github.jackgruber.backup/__test__/pw.test.js

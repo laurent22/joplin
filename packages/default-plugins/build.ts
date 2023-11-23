@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 import { copy, exists, remove, mkdir, readdir, mkdtemp } from 'fs-extra';
-import { dirname, join, resolve } from 'path';
+import { dirname, join, resolve, basename } from 'path';
 import { tmpdir } from 'os';
 import { chdir, cwd } from 'process';
 import { execCommand } from '@joplin/utils';
@@ -10,7 +10,7 @@ const readline = require('readline/promises');
 const yargs = require('yargs');
 
 
-type AfterEachCallback = (buildDir: string, pluginName: string)=> Promise<void>;
+type BeforeEachInstallCallback = (buildDir: string, pluginName: string)=> Promise<void>;
 
 let readlineInterface: any = null;
 const waitForInput = async () => {
@@ -33,7 +33,7 @@ const patchFilePathFor = (pluginName: string) => {
 	return join(__dirname, 'plugin-patches', `${pluginName}.diff`);
 };
 
-const buildDefaultPlugins = async (afterInstall: AfterEachCallback) => {
+const buildDefaultPlugins = async (beforeInstall: BeforeEachInstallCallback) => {
 	const packagesDir = dirname(__dirname);
 	const outputParentDir = resolve(join(packagesDir, 'app-desktop', 'build', 'defaultPlugins'));
 	const pluginSourcesDir = resolve(join(__dirname, 'plugin-sources'));
@@ -52,16 +52,14 @@ const buildDefaultPlugins = async (afterInstall: AfterEachCallback) => {
 			logStatus('Building plugin', pluginName, 'at', buildDir);
 			const pluginDir = resolve(join(pluginSourcesDir, pluginName));
 
-			logStatus('Copying default repository files...');
-			const pluginBaseRepo = join(__dirname, 'plugin-base-repo');
-			await copy(pluginBaseRepo, buildDir);
+			logStatus('Copying repository files...');
+			await copy(pluginDir, buildDir, {
+				filter: fileName => {
+					return basename(fileName) !== '.git';
+				},
+			});
 
 			chdir(buildDir);
-
-			logStatus('Initialized! Replacing ./src directory.');
-			const pluginSrcDir = join(pluginDir, 'src');
-			await remove('./src');
-			await copy(pluginSrcDir, './src');
 
 			logStatus('Initializing repository.');
 			await execCommand('git init . -b main');
@@ -74,10 +72,10 @@ const buildDefaultPlugins = async (afterInstall: AfterEachCallback) => {
 				await execCommand(['git', 'apply', patchFile]);
 			}
 
+			await beforeInstall(buildDir, pluginName);
+
 			logStatus('Installing dependencies.');
 			await execCommand('npm install');
-
-			await afterInstall(buildDir, pluginName);
 
 			logStatus('Copying published file.');
 			const publishDir = join(buildDir, 'publish');
