@@ -528,13 +528,6 @@ packages/default-plugins/plugin-sources/io.github.jackgruber.backup/src/helper.j
 packages/default-plugins/plugin-sources/io.github.jackgruber.backup/src/index.js
 packages/default-plugins/plugin-sources/io.github.jackgruber.backup/src/settings.js
 packages/default-plugins/plugin-sources/io.github.jackgruber.backup/src/sevenZip.js
-packages/default-plugins/plugin-sources/joplin.plugin.note.tabs/api/index.js
-packages/default-plugins/plugin-sources/joplin.plugin.note.tabs/api/types.js
-packages/default-plugins/plugin-sources/joplin.plugin.note.tabs/src/index.js
-packages/default-plugins/plugin-sources/joplin.plugin.note.tabs/src/lastActiveNote.js
-packages/default-plugins/plugin-sources/joplin.plugin.note.tabs/src/noteTabs.js
-packages/default-plugins/plugin-sources/joplin.plugin.note.tabs/src/panel.js
-packages/default-plugins/plugin-sources/joplin.plugin.note.tabs/src/settings.js
 packages/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation.test.js
 packages/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation.js
 packages/editor/CodeMirror/CodeMirror5Emulation/Decorator.js

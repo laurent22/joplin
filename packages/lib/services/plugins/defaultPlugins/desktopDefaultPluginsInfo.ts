@@ -8,7 +8,6 @@ const getDefaultPluginsInfo = (): DefaultPluginsInfo => {
 				'path': `${Setting.value('profileDir')}`,
 			},
 		},
-		'joplin.plugin.note.tabs': { },
 	};
 	return defaultPlugins;
 };
