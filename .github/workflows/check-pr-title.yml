@@ -2,6 +2,7 @@ name: Check pull request title
 on: [pull_request]
 jobs:
   main:
+    runs-on: ubuntu-latest
     steps:
       - uses: Slashgear/action-check-pr-title@v4.3.0
         with:
