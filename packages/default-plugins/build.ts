@@ -73,15 +73,15 @@ const buildDefaultPlugins = async (beforeInstall: BeforeEachInstallCallback) => 
 
 			logStatus('Initializing repository.');
 			await execCommand('git init . -b main');
-			await execCommand('git add .');
 
 			logStatus('Marking manifest as built-in');
 			const manifestFile = './src/manifest.json';
 			const manifest = JSON.parse(await readFile(manifestFile, 'utf8'));
 			manifest._built_in = true;
-			await writeFile(manifestFile, JSON.stringify(manifest));
+			await writeFile(manifestFile, JSON.stringify(manifest, undefined, '\t'));
 
 			logStatus('Creating initial commit.');
+			await execCommand('git add .');
 			await execCommand(['git', 'config', 'user.name', 'Build script']);
 			await execCommand(['git', 'config', 'user.email', '']);
 			await execCommand(['git', 'commit', '-m', 'Initial commit']);
