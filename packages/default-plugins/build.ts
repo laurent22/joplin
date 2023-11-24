@@ -53,6 +53,15 @@ const buildDefaultPlugins = async (beforeInstall: BeforeEachInstallCallback) => 
 			logStatus('Building plugin', pluginName, 'at', buildDir);
 			const pluginDir = resolve(join(pluginSourcesDir, pluginName));
 
+			// Plugins are stored as submodules, which require additional git commands to be run
+			// when cloning.
+			const repositoryFiles = await readdir(pluginDir);
+			if (repositoryFiles.length === 0) {
+				logStatus(`Initializing submodule for ${pluginName}.`);
+				await execCommand(['git', 'submodule', 'init', '--', pluginDir]);
+				await execCommand(['git', 'submodule', 'update', '--', pluginDir]);
+			}
+
 			logStatus('Copying repository files...');
 			await copy(pluginDir, buildDir, {
 				filter: fileName => {
