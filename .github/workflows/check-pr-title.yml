@@ -1,5 +1,5 @@
 name: Check pull request title
-on: [push, pull_request]
+on: [pull_request]
 jobs:
   main:
     steps:
