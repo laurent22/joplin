@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import { copy, exists, remove, mkdir, readdir, mkdtemp } from 'fs-extra';
+import { copy, exists, remove, mkdirp, readdir, mkdtemp } from 'fs-extra';
 import { dirname, join, resolve, basename } from 'path';
 import { tmpdir } from 'os';
 import { chdir, cwd } from 'process';
@@ -47,6 +47,7 @@ const buildDefaultPlugins = async (beforeInstall: BeforeEachInstallCallback) => 
 
 	for (const pluginName of pluginSources) {
 		console.log('plugin', pluginName);
+
 		const buildDir = await mkdtemp(join(tmpdir(), 'default-plugin-build'));
 		try {
 			logStatus('Building plugin', pluginName, 'at', buildDir);
@@ -89,7 +90,7 @@ const buildDefaultPlugins = async (beforeInstall: BeforeEachInstallCallback) => 
 			if (await exists(outputDirectory)) {
 				await remove(outputDirectory);
 			}
-			await mkdir(outputDirectory);
+			await mkdirp(outputDirectory);
 			await copy(jplFiles[0], join(outputDirectory, 'plugin.jpl'));
 		} catch (error) {
 			console.error(error);
@@ -102,7 +103,6 @@ const buildDefaultPlugins = async (beforeInstall: BeforeEachInstallCallback) => 
 			logStatus('Removed build directory');
 		}
 	}
-
 };
 
 const build = () => {

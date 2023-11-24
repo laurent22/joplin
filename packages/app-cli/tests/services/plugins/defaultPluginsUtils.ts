@@ -189,13 +189,11 @@ describe('defaultPluginsUtils', () => {
 
 		const defaultPluginsInfo: DefaultPluginsInfo = {
 			'io.github.jackgruber.backup': {
-				version: '1.0.2',
 				settings: {
 					'path': `${Setting.value('profileDir')}`,
 				},
 			},
 			'plugin.calebjohn.rich-markdown': {
-				version: '0.8.3',
 			},
 		};
 
@@ -245,14 +243,12 @@ describe('defaultPluginsUtils', () => {
 
 		const defaultPluginsInfo: DefaultPluginsInfo = {
 			'io.github.jackgruber.backup': {
-				version: '1.0.2',
 				settings: {
 					'path': `${Setting.value('profileDir')}`,
 					'missing-key1': 'someValue',
 				},
 			},
 			'plugin.calebjohn.rich-markdown': {
-				version: '0.8.3',
 				settings: {
 					'missing-key2': 'someValue',
 				},
