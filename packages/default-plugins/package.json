@@ -18,7 +18,7 @@
 		"typescript": "5.2.2"
 	},
 	"dependencies": {
-		"@joplin/utils": "^2.13.3",
+		"@joplin/utils": "~2.13",
 		"fs-extra": "11.1.1",
 		"yargs": "17.7.2"
 	}
