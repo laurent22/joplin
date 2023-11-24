@@ -74,7 +74,9 @@ const buildDefaultPlugins = async (beforeInstall: BeforeEachInstallCallback) => 
 			logStatus('Initializing repository.');
 			await execCommand('git init . -b main');
 			await execCommand('git add .');
-			await execCommand(['git', 'commit', '--author="Build script <>"', '-m', 'Initial commit']);
+			await execCommand(['git', 'config', 'user.name', 'Build script']);
+			await execCommand(['git', 'config', 'user.email', '']);
+			await execCommand(['git', 'commit', '-m', 'Initial commit']);
 
 			const patchFile = patchFilePathFor(pluginName);
 			if (await exists(patchFile)) {
