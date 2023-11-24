@@ -1,0 +1,8 @@
+name: Check pull request title
+on: [push, pull_request]
+jobs:
+  main:
+    steps:
+      - uses: Slashgear/action-check-pr-title@v4.3.0
+        with:
+          regexp: "(Desktop|Mobile|All|Cli|Tools|Chore|Clipper|Server|Android|iOS|Plugins): (Fixes|Resolves) #[0-9]+: .+"
