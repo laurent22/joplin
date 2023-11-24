@@ -90,11 +90,10 @@ const buildDefaultPlugins = async (beforeInstall: BeforeEachInstallCallback) => 
 			await execCommand('npm install');
 
 			logStatus('Copying published file.');
-			const publishDir = join(buildDir, 'publish');
-			const jplFiles = await glob(join(publishDir, '*.jpl'));
+			const jplFiles = await glob('publish/*.jpl');
 
 			if (jplFiles.length === 0) {
-				throw new Error(`No published files found in ${publishDir}`);
+				throw new Error(`No published files found in ${buildDir}/publish`);
 			}
 
 			const outputDirectory = join(outputParentDir, pluginName);
