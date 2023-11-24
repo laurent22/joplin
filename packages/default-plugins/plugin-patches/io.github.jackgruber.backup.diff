@@ -40081,18 +40081,37 @@ index 2ef60f1..1f9f6b3 100644
 +  }
  }
 diff --git a/src/sevenZip.ts b/src/sevenZip.ts
-index ef2a527..ebe5c9c 100644
+index ef2a527..1c42566 100644
 --- a/src/sevenZip.ts
 +++ b/src/sevenZip.ts
-@@ -1,7 +1,7 @@
+@@ -1,20 +1,19 @@
  // https://sevenzip.osdn.jp/chm/cmdline/exit_codes.htm
  // https://sevenzip.osdn.jp/chm/cmdline/commands/index.htm
  import * as _7z from "node-7z";
 -import * as sevenBin from "7zip-bin";
+-import * as path from "path";
 +const sevenBin = require("7zip-bin");
- import * as path from "path";
  import { exec } from "child_process";
- import joplin from "api";
+-import joplin from "api";
+ 
+ export let pathTo7zip = sevenBin.path7za;
+ 
+ export namespace sevenZip {
+   export async function updateBinPath() {
+-    pathTo7zip = path.join(
+-      await joplin.plugins.installationDir(),
+-      "7zip-bin",
+-      pathTo7zip
+-    );
++    // Not necessary with 7zip required from Joplin
++    // pathTo7zip = path.join(
++    //   await joplin.plugins.installationDir(),
++    //   "7zip-bin",
++    //   pathTo7zip
++    // );
+   }
+ 
+   export async function setExecutionFlag() {
 diff --git a/tsconfig.json b/tsconfig.json
 index 4474cab..1a81e44 100644
 --- a/tsconfig.json
