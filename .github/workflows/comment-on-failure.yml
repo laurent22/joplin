@@ -1,3 +1,4 @@
+name: comment-on-failure
 on:
   workflow_run:
     workflows:
