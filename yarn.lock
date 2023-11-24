@@ -3978,9 +3978,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/autocomplete@npm:6.9.2":
-  version: 6.9.2
-  resolution: "@codemirror/autocomplete@npm:6.9.2"
+"@codemirror/autocomplete@npm:6.10.2":
+  version: 6.10.2
+  resolution: "@codemirror/autocomplete@npm:6.10.2"
   dependencies:
     "@codemirror/language": ^6.0.0
     "@codemirror/state": ^6.0.0
@@ -3991,7 +3991,7 @@ __metadata:
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.0.0
     "@lezer/common": ^1.0.0
-  checksum: 8bdf06c2b4eb1cd6c8a6e1df2eb5c92011fda0bc8970f9d68cc8dad8e4f9d3c243aaa3e42505252af542be8bbaf0a3ed7e23a6b7f603171077cc36845e188190
+  checksum: 360cea6a87ae9c4e3c996903f636a8f47f8ea6cd44504181e69dd8ccf666bad3e8cc6d8935e0eedd8aa118fdfe86ea78f41bc15288f3a7517dbb87115e057563
   languageName: node
   linkType: hard
 
@@ -6415,7 +6415,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/editor@workspace:packages/editor"
   dependencies:
-    "@codemirror/autocomplete": 6.9.2
+    "@codemirror/autocomplete": 6.10.2
     "@codemirror/commands": 6.2.5
     "@codemirror/lang-cpp": 6.0.2
     "@codemirror/lang-html": 6.4.6
