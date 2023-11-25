@@ -52,6 +52,7 @@ const setUpItemChecker = (parent, onSubmit) => {
 		outputContainer.classList.remove('error');
 		outputContainer.classList.remove('empty');
 		outputContainer.classList.add('loading');
+		button.disabled = true;
 
 		try {
 			await onSubmit(itemLinkToId(input.value), outputHeading, outputDetailsContent);
@@ -60,6 +61,8 @@ const setUpItemChecker = (parent, onSubmit) => {
 			outputHeading.innerText = `⚠️ Error: ${error}`;
 			outputContainer.classList.add('error');
 		}
+
+		button.disabled = false;
 	};
 
 	parent.appendChild(button);
