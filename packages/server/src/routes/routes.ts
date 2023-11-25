@@ -19,7 +19,7 @@ import adminUserDeletions from './admin/user_deletions';
 import adminUsers from './admin/users';
 
 import indexChanges from './index/changes';
-import indexDebugReport from './index/debug_report';
+import indexSyncDebug from './index/sync_debug';
 import indexHelp from './index/help';
 import indexHome from './index/home';
 import indexItems from './index/items';
@@ -57,7 +57,7 @@ const routes: Routers = {
 	'admin/users': adminUsers,
 
 	'changes': indexChanges,
-	'debug_report': indexDebugReport,
+	'sync_debug': indexSyncDebug,
 	'help': indexHelp,
 	'home': indexHome,
 	'items': indexItems,

@@ -1,0 +1,174 @@
+<h1 class="title">Debugging</h1>
+<p>
+	Use these tools to debug sync issues with Joplin Server.
+</p>
+
+<div id="debug-tools-container">
+	<fieldset id="note-on-server-check">
+		<legend>
+			Check if an item (note, notebook, resource, tag) is present on the server
+		</legend>
+		<label for="note-on-server-input">External link or ID:</label>
+		<input type="text" id="note-on-server-input"/>
+		<noscript>JavaScript required</noscript>
+	</fieldset>
+
+	<fieldset id="note-in-diff-check">
+		<legend>
+			Check if an item is in the diff used for an initial sync.
+		</legend>
+		<label for="note-on-server-input">External link or ID:</label>
+		<input type="text" id="note-in-diff-input"/>
+		<noscript>JavaScript required</noscript>
+	</fieldset>
+</div>
+
+<script>
+	"use strict";
+
+	const itemLinkToId = (link) => {
+		// Examples of supported links:
+		// - joplin://x-callback-url/openFolder?id=6c8caeec01a34c0f95487a04ebb79cb9
+		// - joplin://x-callback-url/openNote?id=6c8caeec01a34c0f95487a04ebb79cb9
+		// - :/6c8caeec01a34c0f95487a04ebb79cb9
+		// - /home/user/.config/joplin-desktop/resources/6c8caeec01a34c0f95487a04ebb79cb9.svg
+		// - [title](:/6c8caeec01a34c0f95487a04ebb79cb9)
+		const linkRegexs = [
+			// External item
+			/^joplin:\/\/x-callback-url\/(?:openFolder|openNote)\?id=(\w+)$/,
+
+			// Internal links
+			/^\/:(\w+)$/,
+			/^\!?\[.*\]\(:\/(\w+)\)$/,
+
+			// Resource file URLs
+			/^(?:file:\/\/)?.*[/\\]resources[/\\](\w+)\.\w+$/,
+		];
+
+		for (const regex of linkRegexs) {
+			const match = regex.exec(link);
+			if (match) {
+				return match[1];
+			}
+		}
+
+		return link;
+	};
+
+	const setUpItemChecker = (parent, onSubmit) => {
+		const button = document.createElement('button');
+		button.innerText = 'Submit';
+
+		const input = parent.querySelector('input');
+		const outputContainer = document.createElement('div');
+		outputContainer.classList.add('output', 'empty');
+
+		const outputHeading = document.createElement('h3');
+		const outputDetailsContainer = document.createElement('details');
+		const outputDetailsContent = document.createElement('pre');
+
+		outputHeading.setAttribute('aria-live', 'polite');
+
+		outputDetailsContainer.appendChild(outputDetailsContent);
+		outputContainer.replaceChildren(outputHeading, outputDetailsContainer);
+
+		button.onclick = async () => {
+			outputHeading.innerText = '⏳ Loading...';
+			outputDetailsContent.innerText = '';
+			outputContainer.classList.remove('error');
+			outputContainer.classList.remove('empty');
+			outputContainer.classList.add('loading');
+
+			try {
+				await onSubmit(itemLinkToId(input.value), outputHeading, outputDetailsContent);
+				outputContainer.classList.remove('loading');
+			} catch (error) {
+				outputHeading.innerText = `⚠️ Error: ${error}`;
+				outputContainer.classList.add('error');
+			}
+		};
+
+		parent.appendChild(button);
+		parent.appendChild(outputContainer);
+	};
+
+	const checkForItemOnServer = async (itemId, outputHeading, outputDetails) => {
+		const fetchResult = await fetch(`/api/items/root:/${encodeURIComponent(itemId)}.md:/`);
+
+		if (fetchResult.ok) {
+			const result = await fetchResult.text();
+			outputHeading.innerText = `Item found!`;
+			outputDetails.innerText = result;
+		} else {
+			outputHeading.innerText = `Item ${itemId}: ${fetchResult.statusText}`;
+			outputDetails.innerText = '';
+		}
+	};
+	setUpItemChecker(
+		document.querySelector('#note-on-server-check'),
+		checkForItemOnServer,
+	);
+
+	const checkForItemInInitialDiff = async (itemId, outputHeading, outputDetails) => {
+		let cursor = undefined;
+
+		const waitForTimeout = (timeout) => {
+			return new Promise(resolve => {
+				setTimeout(() => resolve(), timeout);
+			});
+		};
+
+		const readDiff = async function*() {
+			let hasMore = true;
+			let page = 1;
+			while (hasMore) {
+				const fetchResult = await fetch(
+					`/api/items/root/delta${
+						cursor ? `?cursor=${encodeURIComponent(cursor)}` : ''
+					}`
+				);
+				if (!fetchResult.ok) {
+					throw new Error(`Error fetching items: ${fetchResult.statusText}`);
+				}
+
+				const json = await fetchResult.json();
+				hasMore = json.has_more;
+				cursor = json.cursor;
+
+				for (const item of json.items) {
+					yield item;
+				}
+
+				outputHeading.innerText = `Processing page ${page++}...`;
+
+				// Avoid sending requests too frequently
+				await waitForTimeout(250); // ms
+			}
+		};
+
+		const allItems = [];
+		const matches = [];
+		let stoppedEarly = false;
+		for await (const item of readDiff()) {
+			console.log(item);
+
+			if (item.item_name === `${itemId}.md`) {
+				matches.push(item);
+				stoppedEarly = true;
+			}
+			allItems.push(item);
+		}
+
+		outputHeading.innerText = matches.length > 0 ? 'Found in diff' : `Item ${itemId}: Not in diff`;
+
+		const stoppedEarlyDescription = (
+			stoppedEarly ? '\n Stopped fetching items after finding a match. Item list is incomplete.' : ''
+		);
+		outputDetails.innerText
+			= JSON.stringify(allItems, undefined, '  ') + stoppedEarlyDescription;
+	};
+	setUpItemChecker(
+		document.querySelector('#note-in-diff-check'),
+		checkForItemInInitialDiff,
+	);
+</script>
