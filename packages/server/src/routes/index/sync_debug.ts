@@ -17,6 +17,7 @@ router.get('sync_debug', async (_path: SubPath, ctx: AppContext) => {
 
 	const view = defaultView('sync_debug', 'Sync Debug');
 	view.cssFiles = ['index/sync_debug'];
+	view.jsFiles = ['index/sync_debug'];
 	return view;
 });
 
