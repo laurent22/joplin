@@ -3978,9 +3978,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/autocomplete@npm:6.9.2":
-  version: 6.9.2
-  resolution: "@codemirror/autocomplete@npm:6.9.2"
+"@codemirror/autocomplete@npm:6.10.2":
+  version: 6.10.2
+  resolution: "@codemirror/autocomplete@npm:6.10.2"
   dependencies:
     "@codemirror/language": ^6.0.0
     "@codemirror/state": ^6.0.0
@@ -3991,7 +3991,7 @@ __metadata:
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.0.0
     "@lezer/common": ^1.0.0
-  checksum: 8bdf06c2b4eb1cd6c8a6e1df2eb5c92011fda0bc8970f9d68cc8dad8e4f9d3c243aaa3e42505252af542be8bbaf0a3ed7e23a6b7f603171077cc36845e188190
+  checksum: 360cea6a87ae9c4e3c996903f636a8f47f8ea6cd44504181e69dd8ccf666bad3e8cc6d8935e0eedd8aa118fdfe86ea78f41bc15288f3a7517dbb87115e057563
   languageName: node
   linkType: hard
 
@@ -6220,12 +6220,12 @@ __metadata:
     "@joplin/renderer": ~2.13
     "@joplin/tools": ~2.13
     "@joplin/utils": ~2.13
-    "@playwright/test": 1.38.1
+    "@playwright/test": 1.39.0
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.5
     "@types/mustache": 4.2.4
     "@types/node": 18.18.8
-    "@types/react": 18.2.33
+    "@types/react": 18.2.34
     "@types/react-redux": 7.1.28
     "@types/styled-components": 5.1.29
     async-mutex: 0.4.0
@@ -6305,7 +6305,7 @@ __metadata:
     "@react-native-community/clipboard": 1.5.1
     "@react-native-community/datetimepicker": 7.6.1
     "@react-native-community/geolocation": 3.1.0
-    "@react-native-community/netinfo": 9.4.1
+    "@react-native-community/netinfo": 9.4.2
     "@react-native-community/push-notification-ios": 1.11.0
     "@react-native-community/slider": 4.4.3
     "@testing-library/jest-native": 5.4.3
@@ -6313,7 +6313,7 @@ __metadata:
     "@tsconfig/react-native": 2.0.2
     "@types/fs-extra": 11.0.3
     "@types/jest": 29.5.5
-    "@types/react": 18.2.33
+    "@types/react": 18.2.34
     "@types/react-native": 0.70.6
     "@types/react-redux": 7.1.28
     "@types/tar-stream": 2.2.3
@@ -6415,7 +6415,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/editor@workspace:packages/editor"
   dependencies:
-    "@codemirror/autocomplete": 6.9.2
+    "@codemirror/autocomplete": 6.10.2
     "@codemirror/commands": 6.2.5
     "@codemirror/lang-cpp": 6.0.2
     "@codemirror/lang-html": 6.4.6
@@ -6434,7 +6434,7 @@ __metadata:
     "@replit/codemirror-vim": 6.0.14
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.5
-    "@types/react": 18.2.33
+    "@types/react": 18.2.34
     "@types/react-redux": 7.1.28
     "@types/styled-components": 5.1.29
     jest: 29.7.0
@@ -6517,7 +6517,7 @@ __metadata:
     "@types/nanoid": 3.0.0
     "@types/node": 18.18.8
     "@types/node-rsa": 1.1.3
-    "@types/react": 18.2.33
+    "@types/react": 18.2.34
     "@types/uuid": 9.0.6
     async-mutex: 0.4.0
     base-64: 1.0.0
@@ -6589,7 +6589,7 @@ __metadata:
     "@joplin/lib": ~2.13
     "@types/jest": 29.5.5
     "@types/pdfjs-dist": 2.10.378
-    "@types/react": 18.2.33
+    "@types/react": 18.2.34
     "@types/react-dom": 18.2.14
     "@types/styled-components": 5.1.29
     async-mutex: 0.4.0
@@ -6809,7 +6809,7 @@ __metadata:
     sharp: 0.32.6
     source-map-support: 0.5.21
     sqlite3: 5.1.6
-    style-to-js: 1.1.8
+    style-to-js: 1.1.9
     typescript: 5.2.2
     uri-template: 2.0.0
     yargs: 17.7.2
@@ -8486,14 +8486,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:1.38.1":
-  version: 1.38.1
-  resolution: "@playwright/test@npm:1.38.1"
+"@playwright/test@npm:1.39.0":
+  version: 1.39.0
+  resolution: "@playwright/test@npm:1.39.0"
   dependencies:
-    playwright: 1.38.1
+    playwright: 1.39.0
   bin:
     playwright: cli.js
-  checksum: c5ec0b23261fe1ef163b6234f69263bc10e7e5a3fb676c7773ffc70b87459a7ab225f57c03b9de649475771638a04c2e00d9b2739304a4dcf5d3edf20a7a4a82
+  checksum: e93e58fc1af4239f239b890374f066c9a758e2492d25e2c1a532f3f00782ab8e7706956a07540fd14882c74e75f5de36273621adce9b79afb8e36e6c15f1d539
   languageName: node
   linkType: hard
 
@@ -8976,12 +8976,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/netinfo@npm:9.4.1":
-  version: 9.4.1
-  resolution: "@react-native-community/netinfo@npm:9.4.1"
+"@react-native-community/netinfo@npm:9.4.2":
+  version: 9.4.2
+  resolution: "@react-native-community/netinfo@npm:9.4.2"
   peerDependencies:
     react-native: ">=0.59"
-  checksum: cf6471a50a5282f858797cda7531c61ac3d94de2e1c379b14a11f6b049f582606dae55a041dd900c56b01faf69eb5cfef9b4e84b0ea7f02de52804aa5a6e22df
+  checksum: b7783d615dec52e89dfd5f435101c06a1b17b11d6702685ad0ad73fb5c9d3ab6997e7a640b7f0f1f5bb068135331adfb5fb77280ec7b3a19e4332f50f055efd8
   languageName: node
   linkType: hard
 
@@ -10659,14 +10659,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:18.2.33":
-  version: 18.2.33
-  resolution: "@types/react@npm:18.2.33"
+"@types/react@npm:18.2.34":
+  version: 18.2.34
+  resolution: "@types/react@npm:18.2.34"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 75903c4d53898c69dd23d0b2730eac4676dc5ade15c25c793dec855f0d7c650cb823832bb1dd881efe8895724f15b06d4bf7081ea0b82391aa3059512ad49ccf
+  checksum: 16446542228cba827143caf0ecb4718cbf02ae5befd4a6bc6d67ed144fe1c0cb4b06b20facf3d2b972d86c67a17cc82f5ec8a03fce42d50e12b2dcd0592fc66e
   languageName: node
   linkType: hard
 
@@ -32860,27 +32860,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.38.1":
-  version: 1.38.1
-  resolution: "playwright-core@npm:1.38.1"
+"playwright-core@npm:1.39.0":
+  version: 1.39.0
+  resolution: "playwright-core@npm:1.39.0"
   bin:
     playwright-core: cli.js
-  checksum: 66e83fe040f309b13ad94ba39dea40ac207bfcbbc22de13141af88dbdedd64e1c4e3ce1d0cb070d4efd8050d7e579953ec3681dd8a0acf2c1cc738d9c50e545e
+  checksum: 556e78dee4f9890facf2af8249972e0d6e01a5ae98737b0f6b0166c660a95ffee4cb79350335b1ef96430a0ef01d3669daae9099fa46c8d403d11c623988238b
   languageName: node
   linkType: hard
 
-"playwright@npm:1.38.1":
-  version: 1.38.1
-  resolution: "playwright@npm:1.38.1"
+"playwright@npm:1.39.0":
+  version: 1.39.0
+  resolution: "playwright@npm:1.39.0"
   dependencies:
     fsevents: 2.3.2
-    playwright-core: 1.38.1
+    playwright-core: 1.39.0
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 4e01d4ee52d9ccf75a80d8492829106802590721d56bff7c5957ff1f21eb3c328ee5bc3c1784a59c4b515df1b98d08ef92e4a35a807f454cd00dc481d30fadc2
+  checksum: 96d8ca5aa25465c1c5d554d0d6071981d55e22477800ff8f5d47a53ca75193d60ece2df538a01b7165b3277dd5493c67603a5acda713029df7fbd95ce2417bc9
   languageName: node
   linkType: hard
 
@@ -39048,12 +39048,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"style-to-js@npm:1.1.8":
-  version: 1.1.8
-  resolution: "style-to-js@npm:1.1.8"
+"style-to-js@npm:1.1.9":
+  version: 1.1.9
+  resolution: "style-to-js@npm:1.1.9"
   dependencies:
-    style-to-object: 1.0.3
-  checksum: cc4d4284af587bf74559a6da17dadb88c96c8054755666cce1b768615ac2bd6231ce332a8cee118acafb577f51f243b795b716326b3c617ec12151d23f660d8f
+    style-to-object: 1.0.4
+  checksum: f05dcd9edc7c2b530159c3eea7be558ebd324073dad444220ca3c12a15bdfa55f5690625238597190d0e21cc87433d6b745eb757055e0e781998153863fdc105
   languageName: node
   linkType: hard
 
@@ -39066,12 +39066,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"style-to-object@npm:1.0.3":
-  version: 1.0.3
-  resolution: "style-to-object@npm:1.0.3"
+"style-to-object@npm:1.0.4":
+  version: 1.0.4
+  resolution: "style-to-object@npm:1.0.4"
   dependencies:
     inline-style-parser: 0.2.2
-  checksum: fca6b35dc704656163c4b11d514ada9f9998fb434c9cec5995445d7d7d595ba3a4fda0476016d625cbb282d43ba5123ef0b5871d855d391400bb0dc2c2beeae1
+  checksum: d3d2ea838b7777d3d6db165df8322e0f6b4f550f081e5833c89c4d91e5de2f7a09fa81cfd2208221683a94e476d4fc24df65c4d3ab75ddd45b419bef9426fbaf
   languageName: node
   linkType: hard
 

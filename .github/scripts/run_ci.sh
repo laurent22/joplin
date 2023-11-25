@@ -8,16 +8,23 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 ROOT_DIR="$SCRIPT_DIR/../.."
 
 IS_PULL_REQUEST=0
-IS_DEV_BRANCH=0
+IS_DESKTOP_RELEASE=0
+IS_SERVER_RELEASE=0
 IS_LINUX=0
 IS_MACOS=0
 
+# If pull requests are coming from a branch of the main repository,
+# IS_PULL_REQUEST will be zero.
 if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
 	IS_PULL_REQUEST=1
 fi
 
-if [ "$GITHUB_REF" == "refs/heads/dev" ]; then
-	IS_DEV_BRANCH=1
+if [[ $GIT_TAG_NAME = $SERVER_TAG_PREFIX-* ]]; then
+	IS_SERVER_RELEASE=1
+fi
+
+if [[ $GIT_TAG_NAME = v* ]]; then
+	IS_DESKTOP_RELEASE=1
 fi
 
 if [ "$RUNNER_OS" == "Linux" ]; then
@@ -26,6 +33,14 @@ if [ "$RUNNER_OS" == "Linux" ]; then
 else
 	IS_LINUX=0
 	IS_MACOS=1
+fi
+
+# Tests can randomly fail in some cases, so only run them when not publishing
+# a release
+RUN_TESTS=0
+
+if [ "$IS_SERVER_RELEASE" = 0 ] && [ "$IS_DESKTOP_RELEASE" = 0 ]; then
+	RUN_TESTS=1
 fi
 
 # =============================================================================
@@ -43,7 +58,9 @@ echo "SERVER_TAG_PREFIX=$SERVER_TAG_PREFIX"
 
 echo "IS_CONTINUOUS_INTEGRATION=$IS_CONTINUOUS_INTEGRATION"
 echo "IS_PULL_REQUEST=$IS_PULL_REQUEST"
-echo "IS_DEV_BRANCH=$IS_DEV_BRANCH"
+echo "IS_DESKTOP_RELEASE=$IS_DESKTOP_RELEASE"
+echo "IS_SERVER_RELEASE=$IS_SERVER_RELEASE"
+echo "RUN_TESTS=$RUN_TESTS"
 echo "IS_LINUX=$IS_LINUX"
 echo "IS_MACOS=$IS_MACOS"
 
@@ -64,11 +81,10 @@ if [ $testResult -ne 0 ]; then
 fi
 
 # =============================================================================
-# Run test units. Only do it for pull requests and dev branch because we don't
-# want it to randomly fail when trying to create a desktop release.
+# Run test units
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
+if [ "$RUN_TESTS" == "1" ]; then
 	echo "Step: Running tests..."
 
 	# On Linux, we run the Joplin Server tests using PostgreSQL
@@ -102,7 +118,7 @@ fi
 # Check that the website builder can run without errors
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
+if [ "$RUN_TESTS" == "1" ]; then
 	if [ "$IS_LINUX" == "1" ]; then
 		echo "Step: Running website builder..."
 		node packages/tools/website/processDocs.js --env dev
@@ -114,7 +130,7 @@ fi
 # release randomly fail.
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
+if [ "$RUN_TESTS" == "1" ]; then
 	echo "Step: Running linter..."
 
 	yarn run linter-ci ./
@@ -154,7 +170,7 @@ fi
 # what commit may have broken translation building.
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
+if [ "$RUN_TESTS" == "1" ]; then
 	if [ "$IS_LINUX" == "1" ]; then
 		echo "Step: Checking for lost translation strings..."
 
@@ -190,7 +206,7 @@ fi
 # Check that the website still builds
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
+if [ "$RUN_TESTS" == "1" ]; then
 	echo "Step: Check that the website still builds..."
 
 	mkdir -p ../joplin-website/docs
@@ -226,7 +242,7 @@ fi
 
 cd "$ROOT_DIR/packages/app-desktop"
 
-if [[ $GIT_TAG_NAME = v* ]]; then
+if [ "$IS_DESKTOP_RELEASE" == "1" ]; then
 	echo "Step: Building and publishing desktop application..."
 	# cd "$ROOT_DIR/packages/tools"
 	# node bundleDefaultPlugins.js
@@ -251,7 +267,7 @@ if [[ $GIT_TAG_NAME = v* ]]; then
 	else
 		USE_HARD_LINKS=false yarn run dist
 	fi	
-elif [[ $IS_LINUX = 1 ]] && [[ $GIT_TAG_NAME = $SERVER_TAG_PREFIX-* ]]; then
+elif [[ $IS_LINUX = 1 ]] && [ "$IS_SERVER_RELEASE" == "1" ]; then
 	echo "Step: Building Docker Image..."
 	cd "$ROOT_DIR"
 	yarn run buildServerDocker --tag-name $GIT_TAG_NAME --push-images --repository $SERVER_REPOSITORY
