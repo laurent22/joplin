@@ -133,7 +133,7 @@ const checkForItemInInitialDiff = async (itemId, outputHeadingElement, outputDet
 	}
 
 	outputHeadingElement.innerText
-		= matches.length > 0 ? 'Found in diff' : `Item ${itemId}: Not in diff`;
+		= matches.length > 0 ? 'Found in initial sync diff' : `Item ${itemId}: Not in initial sync diff`;
 
 	const stoppedEarlyDescription = (
 		stoppedEarly ? '\n Stopped fetching items after finding a match. Item list is incomplete.' : ''
