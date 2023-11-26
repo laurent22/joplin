@@ -4801,6 +4801,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@docusaurus/plugin-client-redirects@npm:2.4.3":
+  version: 2.4.3
+  resolution: "@docusaurus/plugin-client-redirects@npm:2.4.3"
+  dependencies:
+    "@docusaurus/core": 2.4.3
+    "@docusaurus/logger": 2.4.3
+    "@docusaurus/utils": 2.4.3
+    "@docusaurus/utils-common": 2.4.3
+    "@docusaurus/utils-validation": 2.4.3
+    eta: ^2.0.0
+    fs-extra: ^10.1.0
+    lodash: ^4.17.21
+    tslib: ^2.4.0
+  peerDependencies:
+    react: ^16.8.4 || ^17.0.0
+    react-dom: ^16.8.4 || ^17.0.0
+  checksum: f039f89ad2658524819543ff4a370e409053bfd3b4851be82c3cceb6fcd39e954a1ca3bfd13e99fbd1f7fbb9cd69ed28545a852c8dbca2e8300eec23586767a4
+  languageName: node
+  linkType: hard
+
 "@docusaurus/plugin-content-blog@npm:2.4.3":
   version: 2.4.3
   resolution: "@docusaurus/plugin-content-blog@npm:2.4.3"
@@ -6396,6 +6416,7 @@ __metadata:
   dependencies:
     "@docusaurus/core": 2.4.3
     "@docusaurus/module-type-aliases": 2.4.3
+    "@docusaurus/plugin-client-redirects": 2.4.3
     "@docusaurus/preset-classic": 2.4.3
     "@fortawesome/fontawesome-svg-core": 6.4.2
     "@fortawesome/free-brands-svg-icons": 6.4.2
