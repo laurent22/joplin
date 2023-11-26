@@ -6225,7 +6225,7 @@ __metadata:
     "@types/jest": 29.5.5
     "@types/mustache": 4.2.4
     "@types/node": 18.18.8
-    "@types/react": 18.2.35
+    "@types/react": 18.2.36
     "@types/react-redux": 7.1.28
     "@types/styled-components": 5.1.29
     async-mutex: 0.4.0
@@ -6313,7 +6313,7 @@ __metadata:
     "@tsconfig/react-native": 2.0.2
     "@types/fs-extra": 11.0.3
     "@types/jest": 29.5.5
-    "@types/react": 18.2.35
+    "@types/react": 18.2.36
     "@types/react-native": 0.70.6
     "@types/react-redux": 7.1.28
     "@types/tar-stream": 2.2.3
@@ -6434,7 +6434,7 @@ __metadata:
     "@replit/codemirror-vim": 6.0.14
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.5
-    "@types/react": 18.2.35
+    "@types/react": 18.2.36
     "@types/react-redux": 7.1.28
     "@types/styled-components": 5.1.29
     jest: 29.7.0
@@ -6517,7 +6517,7 @@ __metadata:
     "@types/nanoid": 3.0.0
     "@types/node": 18.18.8
     "@types/node-rsa": 1.1.3
-    "@types/react": 18.2.35
+    "@types/react": 18.2.36
     "@types/uuid": 9.0.6
     async-mutex: 0.4.0
     base-64: 1.0.0
@@ -6589,7 +6589,7 @@ __metadata:
     "@joplin/lib": ~2.13
     "@types/jest": 29.5.5
     "@types/pdfjs-dist": 2.10.378
-    "@types/react": 18.2.35
+    "@types/react": 18.2.36
     "@types/react-dom": 18.2.14
     "@types/styled-components": 5.1.29
     async-mutex: 0.4.0
@@ -10659,14 +10659,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:18.2.35":
-  version: 18.2.35
-  resolution: "@types/react@npm:18.2.35"
+"@types/react@npm:18.2.36":
+  version: 18.2.36
+  resolution: "@types/react@npm:18.2.36"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: d3f1c39116c82e3a504f3332b9198f94f34a33d8535604434b1e387ecabd41ec995961775e2e1c08feefdde878a5b86220879350900137980d681ae3983db462
+  checksum: 561fab294117983f3d245a63730bcffb423fc2a1b0f27d20c870abc5d980bc206a74f741cb11b5170fcdf0e747ac05448369cd930fbf345f74ed567f8fef3a9e
   languageName: node
   linkType: hard
 
