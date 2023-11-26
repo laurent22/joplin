@@ -1422,7 +1422,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			if (this.state.mode === 'edit') return null;
 
-			return <ActionButton mainButton={editButton} />;
+			return <ActionButton mainButton={editButton} dispatch={this.props.dispatch} />;
 		};
 
 		// Save button is not really needed anymore with the improved save logic

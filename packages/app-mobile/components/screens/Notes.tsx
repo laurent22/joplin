@@ -265,7 +265,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 					color: '#9b59b6',
 					icon: 'document',
 				});
-				return <ActionButton buttons={buttons}/>;
+				return <ActionButton buttons={buttons} dispatch={this.props.dispatch}/>;
 			}
 			return null;
 		};
