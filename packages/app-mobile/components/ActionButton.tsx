@@ -1,10 +1,12 @@
 const React = require('react');
 import { useState, useCallback, useMemo } from 'react';
-
-const Icon = require('react-native-vector-icons/Ionicons').default;
 import { FAB, Portal } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
+import { Dispatch } from 'redux';
+const Icon = require('react-native-vector-icons/Ionicons').default;
 
+// eslint-disable-next-line no-undef -- Don't know why it says React is undefined when it's defined above
+type FABGroupProps = React.ComponentProps<typeof FAB.Group>;
 
 type OnButtonPress = ()=> void;
 interface ButtonSpec {
@@ -19,6 +21,7 @@ interface ActionButtonProps {
 
 	// If not given, an "add" button will be used.
 	mainButton?: ButtonSpec;
+	dispatch: Dispatch;
 }
 
 const defaultOnPress = () => {};
@@ -36,10 +39,12 @@ const useIcon = (iconName: string) => {
 
 const ActionButton = (props: ActionButtonProps) => {
 	const [open, setOpen] = useState(false);
-	const onMenuToggled = useCallback(
-		(state: { open: boolean }) => setOpen(state.open)
-		, [setOpen]);
-
+	const onMenuToggled: FABGroupProps['onStateChange'] = useCallback(state => {
+		props.dispatch({
+			type: 'SIDE_MENU_CLOSE',
+		});
+		setOpen(state.open);
+	}, [setOpen, props.dispatch]);
 
 	const actions = useMemo(() => (props.buttons ?? []).map(button => {
 		return {
