@@ -6736,7 +6736,7 @@ __metadata:
     "@joplin/utils": ~2.13
     "@koa/cors": 3.4.3
     "@rmp135/sql-ts": 1.18.0
-    "@types/bcryptjs": 2.4.5
+    "@types/bcryptjs": 2.4.6
     "@types/formidable": 3.4.4
     "@types/fs-extra": 11.0.3
     "@types/jest": 29.5.5
@@ -9868,10 +9868,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/bcryptjs@npm:2.4.5":
-  version: 2.4.5
-  resolution: "@types/bcryptjs@npm:2.4.5"
-  checksum: f721d72d8e1374ee2a342ce90cc902e2308cd059317af6e663d752537e704ea73bb119a2d34a6a68475f80abc1342635f48570119e0381f83a202724974f1e9f
+"@types/bcryptjs@npm:2.4.6":
+  version: 2.4.6
+  resolution: "@types/bcryptjs@npm:2.4.6"
+  checksum: 25ae1fd1e8a9bd688e22a8de905581d6d7bf26e823b797f895d2c488100b1f15d3c12a7d1a94f553087b010d316bf3978106df860e8e58fd13f52b4c708df5fd
   languageName: node
   linkType: hard
 
