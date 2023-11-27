@@ -156,10 +156,6 @@ export const createJsDrawEditor = (
 			// Load from a template if no initial data
 			if (svgData === '') {
 				await applyTemplateToEditor(editor, templateData);
-
-				// The editor expects to be saved initially (without
-				// unsaved changes). Save now.
-				saveNow();
 			} else {
 				await editor.loadFromSVG(svgData);
 			}
