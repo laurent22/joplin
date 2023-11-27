@@ -6805,7 +6805,7 @@ __metadata:
     "@types/markdown-it": 13.0.6
     "@types/mustache": 4.2.5
     "@types/node": 18.18.8
-    "@types/node-fetch": 2.6.8
+    "@types/node-fetch": 2.6.9
     "@types/yargs": 17.0.29
     compare-versions: 6.1.0
     dayjs: 1.11.10
@@ -6872,7 +6872,7 @@ __metadata:
   dependencies:
     "@types/fs-extra": 11.0.3
     "@types/jest": 29.5.5
-    "@types/node-fetch": 2.6.8
+    "@types/node-fetch": 2.6.9
     async-mutex: 0.4.0
     execa: 5.1.1
     fs-extra: 11.1.1
@@ -10461,13 +10461,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node-fetch@npm:2.6.8":
-  version: 2.6.8
-  resolution: "@types/node-fetch@npm:2.6.8"
+"@types/node-fetch@npm:2.6.9":
+  version: 2.6.9
+  resolution: "@types/node-fetch@npm:2.6.9"
   dependencies:
     "@types/node": "*"
     form-data: ^4.0.0
-  checksum: f40e5e2fa3ca05a45453397e891776619739f093f913199c00c141735f8098e4f2ffdea04b9d608182aede2df9607605c71e0fdb97d2614899545ce81bac7005
+  checksum: 212269aff4b251477c13c33cee6cea23e4fd630be6c0bfa3714968cce7efd7055b52f2f82aab3394596d8c758335cc802e7c5fa3f775e7f2a472fa914c90dc15
   languageName: node
   linkType: hard
 
