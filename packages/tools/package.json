@@ -48,7 +48,7 @@
     "@types/fs-extra": "11.0.3",
     "@types/jest": "29.5.5",
     "@types/js-yaml": "4.0.8",
-    "@types/markdown-it": "13.0.5",
+    "@types/markdown-it": "13.0.6",
     "@types/mustache": "4.2.4",
     "@types/node": "18.18.8",
     "@types/node-fetch": "2.6.8",
