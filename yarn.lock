@@ -6742,7 +6742,7 @@ __metadata:
     "@types/jest": 29.5.5
     "@types/jest-expect-message": 1.0.4
     "@types/jsdom": 21.1.5
-    "@types/koa": 2.13.10
+    "@types/koa": 2.13.11
     "@types/markdown-it": 13.0.5
     "@types/mustache": 4.2.4
     "@types/nodemailer": 6.4.13
@@ -10361,9 +10361,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/koa@npm:2.13.10":
-  version: 2.13.10
-  resolution: "@types/koa@npm:2.13.10"
+"@types/koa@npm:2.13.11":
+  version: 2.13.11
+  resolution: "@types/koa@npm:2.13.11"
   dependencies:
     "@types/accepts": "*"
     "@types/content-disposition": "*"
@@ -10373,7 +10373,7 @@ __metadata:
     "@types/keygrip": "*"
     "@types/koa-compose": "*"
     "@types/node": "*"
-  checksum: dd3b3cbe1bb2fc0b5edd44672a64816abdc7bc0281d2913389ef7926681dd602a53842e29d59853926cf2c74ffa1fc0ebc44e83be9c172c5cead417866b3ecac
+  checksum: 8116669411d5a01e1430a3c39bb62195bc41c3a0eaa4565fff0a902fc7851fe22003ae9ca4c4680d46a71a40d0c48e092f8d8a7c7e9776885bada2cfa31a84e2
   languageName: node
   linkType: hard
 
