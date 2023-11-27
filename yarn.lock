@@ -6694,7 +6694,7 @@ __metadata:
     "@joplin/fork-uslug": ^1.0.14
     "@joplin/utils": ^2.13.3
     "@types/jest": 29.5.5
-    "@types/markdown-it": 13.0.5
+    "@types/markdown-it": 13.0.6
     "@types/node": 18.18.8
     font-awesome-filetypes: 2.1.0
     fs-extra: 11.1.1
@@ -6743,7 +6743,7 @@ __metadata:
     "@types/jest-expect-message": 1.0.4
     "@types/jsdom": 21.1.5
     "@types/koa": 2.13.11
-    "@types/markdown-it": 13.0.5
+    "@types/markdown-it": 13.0.6
     "@types/mustache": 4.2.4
     "@types/nodemailer": 6.4.13
     "@types/uuid": 9.0.6
@@ -6802,7 +6802,7 @@ __metadata:
     "@types/fs-extra": 11.0.3
     "@types/jest": 29.5.5
     "@types/js-yaml": 4.0.8
-    "@types/markdown-it": 13.0.5
+    "@types/markdown-it": 13.0.6
     "@types/mustache": 4.2.4
     "@types/node": 18.18.8
     "@types/node-fetch": 2.6.8
@@ -10384,13 +10384,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/markdown-it@npm:13.0.5":
-  version: 13.0.5
-  resolution: "@types/markdown-it@npm:13.0.5"
+"@types/markdown-it@npm:13.0.6":
+  version: 13.0.6
+  resolution: "@types/markdown-it@npm:13.0.6"
   dependencies:
     "@types/linkify-it": "*"
     "@types/mdurl": "*"
-  checksum: 3c87efe8e24f77dc9aa1962b8f18d37530b63e33ab363653e568816de6d5b6185a65690da729e2757ba370a3499635da6b4fc4d9a99df9d85959d8c64c7fe8e9
+  checksum: 2d840372f909d6c000c37c89f720f17a6c3cfecfa1c2f10ec51d5b63a301a5316a3d9ca6855f2922420c23961600af83385cca142c2f2169db3126ad37215341
   languageName: node
   linkType: hard
 

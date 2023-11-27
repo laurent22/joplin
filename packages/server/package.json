@@ -70,7 +70,7 @@
     "@types/jest-expect-message": "1.0.4",
     "@types/jsdom": "21.1.5",
     "@types/koa": "2.13.11",
-    "@types/markdown-it": "13.0.5",
+    "@types/markdown-it": "13.0.6",
     "@types/mustache": "4.2.4",
     "@types/nodemailer": "6.4.13",
     "@types/yargs": "17.0.29",
