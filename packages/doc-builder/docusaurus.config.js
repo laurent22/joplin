@@ -155,8 +155,8 @@ const config = {
 					routeBasePath: 'help',
 					sidebarPath: require.resolve('./sidebars.js'),
 					breadcrumbs: false,
-					editUrl: (params) => {
-						return 'https://github.com/laurent22/joplin/tree/dev/readme/' + params.docPath;
+					editUrl: ({ docPath }) => {
+						return `https://holocron.so/github/pr/laurent22/joplin/dev/editor/readme/${docPath}`
 					},
 				},
 				blog: {
@@ -164,8 +164,8 @@ const config = {
 					blogSidebarCount: 'ALL',
 					path: 'news',
 					routeBasePath: 'news',
-					editUrl: (params) => {
-						return 'https://github.com/laurent22/joplin/tree/dev/readme/news/' + params.blogPath;
+					editUrl: ({ docPath }) => {
+						return `https://holocron.so/github/pr/laurent22/joplin/dev/editor/readme/news/${docPath}`
 					},
 				},
 				theme: {
