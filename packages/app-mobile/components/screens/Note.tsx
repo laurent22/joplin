@@ -749,7 +749,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 			if (this.useEditorBeta()) {
 				// The beta editor needs to be explicitly informed of changes
 				// to the note's body
-				this.editorRef.current.insertText(newText);
+				if (this.editorRef.current) {
+					this.editorRef.current.insertText(newText);
+				} else {
+					logger.error(`Tried to attach resource ${resource.id} to the note when the editor is not visible!`);
+				}
 			}
 		} else {
 			newNote.body += `\n${resourceTag}`;
@@ -853,12 +857,20 @@ class NoteScreenComponent extends BaseScreenComponent {
 	};
 
 	private drawPicture_onPress = async () => {
-		logger.info('Showing image editor...');
-		this.setState({
-			showImageEditor: true,
-			imageEditorResourceFilepath: null,
-			imageEditorResource: null,
-		});
+		if (this.state.mode === 'edit') {
+			// Create a new empty drawing and attach it now, before the image editor is opened.
+			// With the present structure of Note.tsx, the we can't use this.editorRef while
+			// the image editor is open, and thus can't attach drawings at the cursor locaiton.
+			const resource = await this.attachNewDrawing('');
+			await this.editDrawing(resource);
+		} else {
+			logger.info('Showing image editor...');
+			this.setState({
+				showImageEditor: true,
+				imageEditorResourceFilepath: null,
+				imageEditorResource: null,
+			});
+		}
 	};
 
 	private async editDrawing(item: BaseItem) {
