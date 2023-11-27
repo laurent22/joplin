@@ -799,7 +799,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 			if (this.useEditorBeta()) {
 				// The beta editor needs to be explicitly informed of changes
 				// to the note's body
-				this.editorRef.current.insertText(newText);
+				if (this.editorRef.current) {
+					this.editorRef.current.insertText(newText);
+				} else {
+					logger.error(`Tried to attach resource ${resource.id} to the note when the editor is not visible!`);
+				}
 			}
 		} else {
 			newNote.body += `\n${resourceTag}`;
@@ -864,31 +868,34 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}, 'image');
 	}
 
-	private drawPicture_onPress = async () => {
-		// Create a new empty drawing and attach it now.
-		const resource = await this.attachNewDrawing('');
-		await this.editDrawing(resource);
-	};
-
 	private async updateDrawing(svgData: string) {
 		let resource: ResourceEntity|null = this.state.imageEditorResource;
 
 		if (!resource) {
-			throw new Error('No resource is loaded in the editor');
+			resource = await this.attachNewDrawing(svgData);
+
+			// Set resouce and file path to allow
+			// 1. subsequent saves to update the resource
+			// 2. the editor to load from the resource's filepath (can happen
+			//    if the webview is reloaded).
+			this.setState({
+				imageEditorResourceFilepath: Resource.fullPath(resource),
+				imageEditorResource: resource,
+			});
+		} else {
+			logger.info('Saving drawing to resource', resource.id);
+
+			const tempFilePath = join(Setting.value('tempDir'), uuid.createNano());
+			await shim.fsDriver().writeFile(tempFilePath, svgData, 'utf8');
+
+			resource = await Resource.updateResourceBlobContent(
+				resource.id,
+				tempFilePath,
+			);
+			await shim.fsDriver().remove(tempFilePath);
+
+			await this.refreshResource(resource);
 		}
-
-		logger.info('Saving drawing to resource', resource.id);
-
-		const tempFilePath = join(Setting.value('tempDir'), uuid.createNano());
-		await shim.fsDriver().writeFile(tempFilePath, svgData, 'utf8');
-
-		resource = await Resource.updateResourceBlobContent(
-			resource.id,
-			tempFilePath,
-		);
-		await shim.fsDriver().remove(tempFilePath);
-
-		await this.refreshResource(resource);
 	}
 
 	private onSaveDrawing = async (svgData: string) => {
@@ -897,6 +904,23 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	private onCloseDrawing = () => {
 		this.setState({ showImageEditor: false });
+	};
+
+	private drawPicture_onPress = async () => {
+		if (this.state.mode === 'edit') {
+			// Create a new empty drawing and attach it now, before the image editor is opened.
+			// With the present structure of Note.tsx, the we can't use this.editorRef while
+			// the image editor is open, and thus can't attach drawings at the cursor locaiton.
+			const resource = await this.attachNewDrawing('');
+			await this.editDrawing(resource);
+		} else {
+			logger.info('Showing image editor...');
+			this.setState({
+				showImageEditor: true,
+				imageEditorResourceFilepath: null,
+				imageEditorResource: null,
+			});
+		}
 	};
 
 	private async editDrawing(item: BaseItem) {
