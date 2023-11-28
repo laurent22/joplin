@@ -1,5 +1,5 @@
-'use strict';
-const itemLinkToId = (link) => {
+
+const itemLinkToId = (link: string) => {
 	// Examples of supported links:
 	// - joplin://x-callback-url/openFolder?id=6c8caeec01a34c0f95487a04ebb79cb9
 	// - joplin://x-callback-url/openNote?id=6c8caeec01a34c0f95487a04ebb79cb9
@@ -9,32 +9,46 @@ const itemLinkToId = (link) => {
 	const linkRegexs = [
 		// External item
 		/^joplin:\/\/x-callback-url\/(?:openFolder|openNote)\?id=(\w+)$/,
+
 		// Internal links
 		/^\/:(\w+)$/,
 		/^!?\[.*\]\(:\/(\w+)\)$/,
+
 		// Resource file URLs
 		/^(?:file:\/\/)?.*[/\\]resources[/\\](\w+)\.\w+$/,
 	];
+
 	for (const regex of linkRegexs) {
 		const match = regex.exec(link);
 		if (match) {
 			return match[1];
 		}
 	}
+
 	return link;
 };
-const setUpItemChecker = (parent, onSubmit) => {
+
+type OnItemCheckerSubmitCallback = (
+	itemId: string, outputHeading: HTMLElement, outputDetails: HTMLElement,
+)=> Promise<void>;
+
+const setUpItemChecker = (parent: HTMLElement, onSubmit: OnItemCheckerSubmitCallback) => {
 	const button = document.createElement('button');
 	button.innerText = 'Submit';
+
 	const input = parent.querySelector('input');
 	const outputContainer = document.createElement('div');
 	outputContainer.classList.add('output', 'empty');
+
 	const outputHeading = document.createElement('h3');
 	const outputDetailsContainer = document.createElement('details');
 	const outputDetailsContent = document.createElement('pre');
+
 	outputHeading.setAttribute('aria-live', 'polite');
+
 	outputDetailsContainer.appendChild(outputDetailsContent);
 	outputContainer.replaceChildren(outputHeading, outputDetailsContainer);
+
 	button.onclick = async () => {
 		outputHeading.innerText = '⏳ Loading...';
 		outputDetailsContent.innerText = '';
@@ -42,6 +56,7 @@ const setUpItemChecker = (parent, onSubmit) => {
 		outputContainer.classList.remove('empty');
 		outputContainer.classList.add('loading');
 		button.disabled = true;
+
 		try {
 			await onSubmit(itemLinkToId(input.value), outputHeading, outputDetailsContent);
 			outputContainer.classList.remove('loading');
@@ -49,13 +64,19 @@ const setUpItemChecker = (parent, onSubmit) => {
 			outputHeading.innerText = `⚠️ Error: ${error}`;
 			outputContainer.classList.add('error');
 		}
+
 		button.disabled = false;
 	};
+
 	parent.appendChild(button);
 	parent.appendChild(outputContainer);
 };
-const checkForItemOnServer = async (itemId, outputHeadingElement, outputDetailsElement) => {
+
+const checkForItemOnServer = async (
+	itemId: string, outputHeadingElement: HTMLElement, outputDetailsElement: HTMLElement,
+) => {
 	const fetchResult = await fetch(`/api/items/root:/${encodeURIComponent(itemId)}.md:/`);
+
 	if (fetchResult.ok) {
 		const result = await fetchResult.text();
 		outputHeadingElement.innerText = 'Item found!';
@@ -65,32 +86,46 @@ const checkForItemOnServer = async (itemId, outputHeadingElement, outputDetailsE
 		outputDetailsElement.innerText = '';
 	}
 };
-const checkForItemInInitialDiff = async (itemId, outputHeadingElement, outputDetailsElement) => {
-	let cursor = undefined;
-	const waitForTimeout = (timeout) => {
-		return new Promise(resolve => {
+
+const checkForItemInInitialDiff = async (
+	itemId: string, outputHeadingElement: HTMLElement, outputDetailsElement: HTMLElement,
+) => {
+	let cursor: string|undefined = undefined;
+
+	const waitForTimeout = (timeout: number) => {
+		return new Promise<void>(resolve => {
 			setTimeout(() => resolve(), timeout);
 		});
 	};
-	const readDiff = async function* () {
+
+	const readDiff = async function*() {
 		let hasMore = true;
 		let page = 1;
 		while (hasMore) {
-			const fetchResult = await fetch(`/api/items/root/delta${cursor ? `?cursor=${encodeURIComponent(cursor)}` : ''}`);
+			const fetchResult = await fetch(
+				`/api/items/root/delta${
+					cursor ? `?cursor=${encodeURIComponent(cursor)}` : ''
+				}`,
+			);
 			if (!fetchResult.ok) {
 				throw new Error(`Error fetching items: ${fetchResult.statusText}`);
 			}
+
 			const json = await fetchResult.json();
 			hasMore = json.has_more;
 			cursor = json.cursor;
+
 			for (const item of json.items) {
 				yield item;
 			}
+
 			outputHeadingElement.innerText = `Processing page ${page++}...`;
+
 			// Avoid sending requests too frequently
 			await waitForTimeout(200); // ms
 		}
 	};
+
 	const allItems = [];
 	const matches = [];
 	let stoppedEarly = false;
@@ -99,20 +134,25 @@ const checkForItemInInitialDiff = async (itemId, outputHeadingElement, outputDet
 		// readDiff() fails.
 		// eslint-disable-next-line no-console
 		console.log('Checking item', item);
+
 		if (item.item_name === `${itemId}.md`) {
 			matches.push(item);
 			stoppedEarly = true;
 		}
 		allItems.push(item);
 	}
+
 	outputHeadingElement.innerText
-        = matches.length > 0 ? 'Found in initial sync diff' : `Item ${itemId}: Not in initial sync diff`;
-	const stoppedEarlyDescription = (stoppedEarly ? '\n Stopped fetching items after finding a match. Item list is incomplete.' : '');
+		= matches.length > 0 ? 'Found in initial sync diff' : `Item ${itemId}: Not in initial sync diff`;
+
+	const stoppedEarlyDescription = (
+		stoppedEarly ? '\n Stopped fetching items after finding a match. Item list is incomplete.' : ''
+	);
 	outputDetailsElement.innerText
-        = JSON.stringify(allItems, undefined, '  ') + stoppedEarlyDescription;
+		= JSON.stringify(allItems, undefined, '  ') + stoppedEarlyDescription;
 };
+
 document.addEventListener('DOMContentLoaded', () => {
 	setUpItemChecker(document.querySelector('#note-on-server-check'), checkForItemOnServer);
 	setUpItemChecker(document.querySelector('#note-in-diff-check'), checkForItemInInitialDiff);
 });
-// # sourceMappingURL=sync_debug.js.map

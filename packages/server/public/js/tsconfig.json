@@ -1,0 +1,17 @@
+{
+	"extends": "../../../../tsconfig.json",
+	"compilerOptions": {
+		"module": "ES6",
+		"target": "ES2020",
+		"declaration": true,
+		"composite": true,
+		"outDir": "./"
+	},
+	"rootDir": ".",
+	"include": [
+        "**/*.ts"
+	],
+	"exclude": [
+		"*.test.ts"
+	]
+}
