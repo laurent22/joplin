@@ -985,6 +985,7 @@ packages/renderer/index.js
 packages/renderer/noteStyle.js
 packages/renderer/pathUtils.js
 packages/renderer/utils.js
+packages/server/public/js/index/sync_debug.js
 packages/tools/build-release-stats.test.js
 packages/tools/build-release-stats.js
 packages/tools/build-translation.js

@@ -33,7 +33,8 @@ module.exports = {
 				'packages/app-mobile/ios/**',
 				'packages/fork-sax/**',
 				'packages/lib/plugin_types/**',
-				'packages/server/**',
+				'packages/server/src/**',
+				'packages/server/dist/**',
 				'packages/utils/**',
 			],
 		}).filter(f => !f.endsWith('.d.ts'));
@@ -41,8 +42,8 @@ module.exports = {
 		// Use this to check what files are being scanned.
 		// Also change glob call to `glob.sync('**/*',`
 		//
-		// const fs = require('fs-extra');
-		// fs.writeFileSync('/Users/laurent/listfile.txt', JSON.stringify(tsFiles, null, '\t'));
+		const fs = require('fs-extra');
+		fs.writeFileSync('/tmp/listfile.txt', JSON.stringify(tsFiles, null, '\t'));
 
 		const ignoredJsFiles = tsFiles.map(f => {
 			const s = f.split('.');

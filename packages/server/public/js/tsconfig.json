@@ -2,7 +2,10 @@
 	"extends": "../../../../tsconfig.json",
 	"compilerOptions": {
 		"module": "ES6",
-		"target": "ES2020",
+		"target": "ES6",
+
+		// "declaration" and "composite" must be `true` to use TypeScript
+		// projects.
 		"declaration": true,
 		"composite": true,
 		"outDir": "./"
