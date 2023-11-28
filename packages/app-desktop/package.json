@@ -123,7 +123,7 @@
     "@types/node": "18.18.9",
     "@types/react": "18.2.36",
     "@types/react-redux": "7.1.29",
-    "@types/styled-components": "5.1.29",
+    "@types/styled-components": "5.1.30",
     "electron": "26.5.0",
     "electron-builder": "24.6.4",
     "glob": "10.3.10",
