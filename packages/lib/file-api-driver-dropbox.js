@@ -186,7 +186,9 @@ class FileApiDriverDropbox {
 			);
 		} catch (error) {
 			if (this.hasErrorCode_(error, 'restricted_content')) {
-				throw new JoplinError('Cannot upload because content is restricted by Dropbox', 'rejectedByTarget');
+				throw new JoplinError('Cannot upload because content is restricted by Dropbox (restricted_content)', 'rejectedByTarget');
+			} else if (this.hasErrorCode_(error, 'payload_too_large')) {
+				throw new JoplinError('Cannot upload because payload size is rejected by Dropbox (payload_too_large)', 'rejectedByTarget');
 			} else {
 				throw error;
 			}

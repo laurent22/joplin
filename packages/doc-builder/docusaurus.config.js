@@ -7,6 +7,22 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 // To make their weird linter happy
 process.env.WEBSITE_BASE_URL = process.env.WEBSITE_BASE_URL || '';
 
+function rtrimSlashes(path) {
+	return path.replace(/[\/\\]+$/, '');
+}
+
+function ltrimSlashes(path) {
+	return path.replace(/^\/+/, '');
+}
+
+const explodePath = (path) => {
+	return ltrimSlashes(rtrimSlashes(path)).split('/');
+}
+
+const createRedirect = (path) => {
+	return path;
+}
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
 	title: 'Joplin',
@@ -33,8 +49,98 @@ const config = {
 	plugins: [
 		[
 			require.resolve('docusaurus-lunr-search'),
+			{},
+		],
+		[
+			'@docusaurus/plugin-client-redirects',
 			{
-				// Options here
+				createRedirects(existingPath) {
+					try {
+						const oldAppsPages = [
+							'attachments',
+							'clipper',
+							'config_screen',
+							'conflict',
+							'custom_css',
+							'debugging',
+							'desktop',
+							'email_to_note',
+							'external_links',
+							'external_text_editor',
+							'import_export',
+							'markdown',
+							'mobile',
+							'note_history',
+							'notifications',
+							'plugins',
+							'profiles',
+							'publish_note',
+							'rich_text_editor',
+							'search',
+							'share_notebook',
+							'subnotebooks',
+							'terminal',
+						];
+
+						for (const p of oldAppsPages) {
+							if (existingPath.startsWith('/help/apps/' + p)) {
+								return createRedirect('/' + p);
+							}
+						}
+
+						const oldAboutPages = [
+							'prereleases',
+							'principles',
+							'release_cycle',
+							'stats',
+						];
+
+						for (const p of oldAboutPages) {
+							if (existingPath.startsWith('/help/about/' + p)) {
+								return createRedirect('/' + p);
+							}
+						}
+
+						if (existingPath.startsWith('/help/dev/spec')) {
+							const s = explodePath(existingPath);
+							s.splice(0, 2);
+							return createRedirect('/' + s.join('/'));
+						}
+
+						if (existingPath.startsWith('/help/api')) {
+							const s = explodePath(existingPath);
+							s.splice(0, 2);
+							return createRedirect('/api/' + s.join('/'));
+						}
+
+						if (existingPath.startsWith('/help/about/changelog/')) {
+							const s = explodePath(existingPath);
+							const last = s.pop();
+							if (last === 'desktop') {
+								return createRedirect('/changelog');
+							} else {
+								return createRedirect('/changelog_' + last);
+							}
+						}
+
+						if (existingPath === '/help/faq') {
+							return createRedirect('/faq');
+						}
+
+						if (existingPath === '/help/apps/sync/e2ee') {
+							return createRedirect('/e2ee');
+						}
+
+						if (existingPath === '/help/api') {
+							return createRedirect('/api/overview');
+						}
+					} catch (error) {
+						console.error('For existingPath = ', existingPath);
+						throw error;
+					}
+
+					return undefined;
+				},
 			},
 		],
 	],

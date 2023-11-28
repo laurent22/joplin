@@ -21,7 +21,7 @@
     "html-entities": "1.4.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "11.0.3"
+    "@types/fs-extra": "11.0.4"
   },
   "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"
 }
