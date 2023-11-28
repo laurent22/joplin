@@ -6747,7 +6747,7 @@ __metadata:
     "@types/mustache": 4.2.5
     "@types/nodemailer": 6.4.14
     "@types/uuid": 9.0.6
-    "@types/yargs": 17.0.29
+    "@types/yargs": 17.0.31
     "@types/zxcvbn": 4.4.3
     bcryptjs: 2.4.3
     bulma: 0.9.4
@@ -6806,7 +6806,7 @@ __metadata:
     "@types/mustache": 4.2.5
     "@types/node": 18.18.9
     "@types/node-fetch": 2.6.9
-    "@types/yargs": 17.0.29
+    "@types/yargs": 17.0.31
     compare-versions: 6.1.0
     dayjs: 1.11.10
     execa: 4.1.0
@@ -10896,12 +10896,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:17.0.29":
-  version: 17.0.29
-  resolution: "@types/yargs@npm:17.0.29"
+"@types/yargs@npm:17.0.31":
+  version: 17.0.31
+  resolution: "@types/yargs@npm:17.0.31"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: 8bbc0edd573a5a084cb13a9985c124490fd74e73b1ed8a3058861c13124e103b00a19770dc55c53215653a7845d7033e0695917b75153cfe9618d5b2fd3cf86e
+  checksum: a7f4fe5b05162790cbcbccceb22821e2cb3e49d95a4d8403352f258744cd504124f3ab502eddb2262f5d2d9cc6a0547851ae44621b14fe4c505d8f1434c2a19e
   languageName: node
   linkType: hard
 
