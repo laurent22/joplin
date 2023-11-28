@@ -93,7 +93,7 @@
     "typescript": "5.2.2"
   },
   "dependencies": {
-    "@types/fs-extra": "11.0.3",
+    "@types/fs-extra": "11.0.4",
     "eslint-plugin-github": "4.10.0",
     "http-server": "14.1.1",
     "node-gyp": "9.4.1",
