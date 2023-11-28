@@ -6,6 +6,7 @@ import { tmpdir } from 'os';
 import { chdir, cwd } from 'process';
 import { execCommand } from '@joplin/utils';
 import { glob } from 'glob';
+import readRepositoryJson from './utils/readRepositoryJson';
 const readline = require('readline/promises');
 const yargs = require('yargs');
 
@@ -37,8 +38,7 @@ const buildDefaultPlugins = async (beforeInstall: BeforeEachInstallCallback) => 
 	const packagesDir = dirname(__dirname);
 	const outputParentDir = resolve(join(packagesDir, 'app-desktop', 'build', 'defaultPlugins'));
 	const pluginSourcesDir = resolve(join(__dirname, 'plugin-sources'));
-	const pluginRepositoryData =
-		JSON.parse(await readFile(join(__dirname, 'pluginRepositories.json'), 'utf8'));
+	const pluginRepositoryData = await readRepositoryJson(join(__dirname, 'pluginRepositories.json'));
 
 	const originalDirectory = cwd();
 
@@ -50,12 +50,6 @@ const buildDefaultPlugins = async (beforeInstall: BeforeEachInstallCallback) => 
 		console.log('plugin', pluginId);
 
 		const repositoryData = pluginRepositoryData[pluginId];
-		const getStringRepositoryDataField = (fieldName: string): string => {
-			if (typeof repositoryData[fieldName] !== 'string') {
-				throw new Error(`Plugin ${pluginId} should have field '${fieldName}' of type string.`);
-			}
-			return repositoryData[fieldName];
-		};
 
 		const buildDir = await mkdtemp(join(tmpdir(), 'default-plugin-build'));
 		try {
@@ -64,22 +58,18 @@ const buildDefaultPlugins = async (beforeInstall: BeforeEachInstallCallback) => 
 
 			// Clone the repository if not done yet
 			if (!(await exists(pluginDir)) || (await readdir(pluginDir)).length === 0) {
-				const gitRepository = getStringRepositoryDataField('git');
-
-				logStatus(`Cloning from repository ${gitRepository}`);
-				await execCommand(['git', 'clone', '--', gitRepository, pluginDir]);
+				logStatus(`Cloning from repository ${repositoryData.cloneUrl}`);
+				await execCommand(['git', 'clone', '--', repositoryData.cloneUrl, pluginDir]);
 				chdir(pluginDir);
 			}
 
 			chdir(pluginDir);
 			const currentCommitHash = (await execCommand(['git', 'rev-parse', 'HEAD~'])).trim();
-			const expectedCommitHash = getStringRepositoryDataField('commit');
+			const expectedCommitHash = repositoryData.commit;
 
 			if (currentCommitHash !== expectedCommitHash) {
-				const branchName = getStringRepositoryDataField('branch');
-
 				logStatus(`Switching to commit ${expectedCommitHash}`);
-				await execCommand(['git', 'switch', branchName]);
+				await execCommand(['git', 'switch', repositoryData.branch]);
 				await execCommand(['git', 'checkout', expectedCommitHash]);
 			}
 
