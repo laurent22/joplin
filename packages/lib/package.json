@@ -19,7 +19,7 @@
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.5",
     "@types/js-yaml": "4.0.9",
-    "@types/node": "18.18.8",
+    "@types/node": "18.18.9",
     "@types/node-rsa": "1.1.4",
     "@types/react": "18.2.36",
     "@types/uuid": "9.0.6",
