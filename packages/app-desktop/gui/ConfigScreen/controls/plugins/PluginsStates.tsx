@@ -281,10 +281,17 @@ export default function(props: Props) {
 				</UserPluginsRoot>
 			);
 		} else {
+			const nonDefaultPlugins = pluginItems.filter(item => !item.manifest._built_in);
+			const defaultPlugins = pluginItems.filter(item => item.manifest._built_in);
 			return (
-				<UserPluginsRoot>
-					{renderCells(pluginItems)}
-				</UserPluginsRoot>
+				<>
+					<UserPluginsRoot>
+						{renderCells(nonDefaultPlugins)}
+					</UserPluginsRoot>
+					<UserPluginsRoot>
+						{renderCells(defaultPlugins)}
+					</UserPluginsRoot>
+				</>
 			);
 		}
 	}
