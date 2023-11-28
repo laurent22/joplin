@@ -1,71 +1,55 @@
-diff --git a/package.json b/package.json
-index 2ef60f1..85d2180 100644
---- a/package.json
-+++ b/package.json
-@@ -2,8 +2,8 @@
-   "name": "joplin-plugin-backup",
-   "version": "1.3.3",
-   "scripts": {
--    "dist": "webpack --joplin-plugin-config buildMain && webpack --joplin-plugin-config buildExtraScripts && webpack --joplin-plugin-config createArchive",
--    "prepare": "npm run dist && husky install",
-+    "dist": "export NODE_OPTIONS=\"--openssl-legacy-provider $NODE_OPTIONS\" && webpack --joplin-plugin-config buildMain && webpack --joplin-plugin-config buildExtraScripts && webpack --joplin-plugin-config createArchive",
-+    "prepare": "npm run dist",
-     "update": "npm install -g generator-joplin && yo joplin --update",
-     "release": "npm test && node ./node_modules/joplinplugindevtools/dist/createRelease.js",
-     "preRelease": "npm test && node ./node_modules/joplinplugindevtools/dist/createRelease.js --prerelease",
 diff --git a/src/sevenZip.ts b/src/sevenZip.ts
-index ef2a527..029f18e 100644
+index ef2a527..253d21a 100644
 --- a/src/sevenZip.ts
 +++ b/src/sevenZip.ts
-@@ -1,20 +1,22 @@
+@@ -1,21 +1,21 @@
  // https://sevenzip.osdn.jp/chm/cmdline/exit_codes.htm
  // https://sevenzip.osdn.jp/chm/cmdline/commands/index.htm
  import * as _7z from "node-7z";
 -import * as sevenBin from "7zip-bin";
 -import * as path from "path";
-+
-+// Use `eval('require')` to work around Webpack import resolution.
-+// We want to use the version of 7zip bundled with Joplin.
-+const sevenBin = eval('require("7zip-bin")');
++const sevenBin = require("7zip-bin");
  import { exec } from "child_process";
--import joplin from "api";
+ import joplin from "api";
  
- export let pathTo7zip = sevenBin.path7za;
- 
- export namespace sevenZip {
-   export async function updateBinPath() {
+-export let pathTo7zip = sevenBin.path7za;
+-
+-export namespace sevenZip {
+-  export async function updateBinPath() {
 -    pathTo7zip = path.join(
 -      await joplin.plugins.installationDir(),
 -      "7zip-bin",
 -      pathTo7zip
 -    );
+-  }
++ export let pathTo7zip = sevenBin.path7za;
++
++ export namespace sevenZip {
++   export async function updateBinPath() {
 +    // Not necessary with 7zip required from Joplin
 +    // pathTo7zip = path.join(
 +    //   await joplin.plugins.installationDir(),
 +    //   "7zip-bin",
 +    //   pathTo7zip
 +    // );
-   }
++   }
  
    export async function setExecutionFlag() {
+     if (process.platform !== "win32") {
 diff --git a/webpack.config.js b/webpack.config.js
-index 7dec671..7251061 100644
+index 34a1797..b5fad8d 100644
 --- a/webpack.config.js
 +++ b/webpack.config.js
-@@ -154,15 +154,7 @@ const pluginConfig = Object.assign({}, baseConfig, {
- 		path: distDir,
+@@ -175,6 +175,12 @@ const baseConfig = {
+ 		],
  	},
- 	plugins: [
--		new CopyPlugin({
--			patterns: [
--				{
--					from: '**/*',
--					context: path.resolve(__dirname, 'node_modules','7zip-bin'),
--					to: path.resolve(__dirname, 'dist/7zip-bin/'),
--				},
--			]
--		}),
-+		// Removed code that bundles 7zip with the plugin.
- 		new CopyPlugin({
- 			patterns: [
- 				{
+ 
++	// We support requiring 7zip-bin through require('7zip-bin')
++	externalsType: 'commonjs',
++	externals: {
++		'7zip-bin': { commonjs: '7zip-bin' },
++	},
++
+ 	// 7zip-bin uses __dirname to determine the path to bundled binaries.
+ 	// In Joplin, __dirname points to the plugin directory (for example
+ 	// /tmp/.mount_Joplinf4CQVb/resources/app.asar/services/plugins/),

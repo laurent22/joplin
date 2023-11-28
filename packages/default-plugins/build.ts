@@ -37,7 +37,8 @@ const buildDefaultPlugins = async (beforeInstall: BeforeEachInstallCallback) => 
 	const packagesDir = dirname(__dirname);
 	const outputParentDir = resolve(join(packagesDir, 'app-desktop', 'build', 'defaultPlugins'));
 	const pluginSourcesDir = resolve(join(__dirname, 'plugin-sources'));
-	const pluginSources = await readdir(pluginSourcesDir);
+	const pluginRepositoryData =
+		JSON.parse(await readFile(join(__dirname, 'pluginRepositories.json'), 'utf8'));
 
 	const originalDirectory = cwd();
 
@@ -45,21 +46,41 @@ const buildDefaultPlugins = async (beforeInstall: BeforeEachInstallCallback) => 
 		console.log('\x1b[96m', ...message, '\x1b[0m');
 	};
 
-	for (const pluginName of pluginSources) {
-		console.log('plugin', pluginName);
+	for (const pluginId in pluginRepositoryData) {
+		console.log('plugin', pluginId);
+
+		const repositoryData = pluginRepositoryData[pluginId];
+		const getStringRepositoryDataField = (fieldName: string): string => {
+			if (typeof repositoryData[fieldName] !== 'string') {
+				throw new Error(`Plugin ${pluginId} should have field '${fieldName}' of type string.`);
+			}
+			return repositoryData[fieldName];
+		};
 
 		const buildDir = await mkdtemp(join(tmpdir(), 'default-plugin-build'));
 		try {
-			logStatus('Building plugin', pluginName, 'at', buildDir);
-			const pluginDir = resolve(join(pluginSourcesDir, pluginName));
+			logStatus('Building plugin', pluginId, 'at', buildDir);
+			const pluginDir = resolve(join(pluginSourcesDir, pluginId));
 
-			// Plugins are stored as submodules, which require additional git commands to be run
-			// when cloning.
-			const repositoryFiles = await readdir(pluginDir);
-			if (repositoryFiles.length === 0) {
-				logStatus(`Initializing submodule for ${pluginName}.`);
-				await execCommand(['git', 'submodule', 'init', '--', pluginDir]);
-				await execCommand(['git', 'submodule', 'update', '--', pluginDir]);
+			// Clone the repository if not done yet
+			if (!(await exists(pluginDir)) || (await readdir(pluginDir)).length === 0) {
+				const gitRepository = getStringRepositoryDataField('git');
+
+				logStatus(`Cloning from repository ${gitRepository}`);
+				await execCommand(['git', 'clone', '--', gitRepository, pluginDir]);
+				chdir(pluginDir);
+			}
+
+			chdir(pluginDir);
+			const currentCommitHash = (await execCommand(['git', 'rev-parse', 'HEAD~'])).trim();
+			const expectedCommitHash = getStringRepositoryDataField('commit');
+
+			if (currentCommitHash !== expectedCommitHash) {
+				const branchName = getStringRepositoryDataField('branch');
+
+				logStatus(`Switching to commit ${expectedCommitHash}`);
+				await execCommand(['git', 'switch', branchName]);
+				await execCommand(['git', 'checkout', expectedCommitHash]);
 			}
 
 			logStatus('Copying repository files...');
@@ -86,13 +107,13 @@ const buildDefaultPlugins = async (beforeInstall: BeforeEachInstallCallback) => 
 			await execCommand(['git', 'config', 'user.email', '']);
 			await execCommand(['git', 'commit', '-m', 'Initial commit']);
 
-			const patchFile = patchFilePathFor(pluginName);
+			const patchFile = patchFilePathFor(pluginId);
 			if (await exists(patchFile)) {
 				logStatus('Applying patch.');
 				await execCommand(['git', 'apply', patchFile]);
 			}
 
-			await beforeInstall(buildDir, pluginName);
+			await beforeInstall(buildDir, pluginId);
 
 			logStatus('Installing dependencies.');
 			await execCommand('npm install');
@@ -104,7 +125,7 @@ const buildDefaultPlugins = async (beforeInstall: BeforeEachInstallCallback) => 
 				throw new Error(`No published files found in ${buildDir}/publish`);
 			}
 
-			const outputDirectory = join(outputParentDir, pluginName);
+			const outputDirectory = join(outputParentDir, pluginId);
 			if (await exists(outputDirectory)) {
 				await remove(outputDirectory);
 			}
