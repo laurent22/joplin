@@ -6537,7 +6537,7 @@ __metadata:
     "@types/js-yaml": 4.0.8
     "@types/nanoid": 3.0.0
     "@types/node": 18.18.8
-    "@types/node-rsa": 1.1.3
+    "@types/node-rsa": 1.1.4
     "@types/react": 18.2.36
     "@types/uuid": 9.0.6
     async-mutex: 0.4.0
@@ -10471,12 +10471,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node-rsa@npm:1.1.3":
-  version: 1.1.3
-  resolution: "@types/node-rsa@npm:1.1.3"
+"@types/node-rsa@npm:1.1.4":
+  version: 1.1.4
+  resolution: "@types/node-rsa@npm:1.1.4"
   dependencies:
     "@types/node": "*"
-  checksum: 03606729a96722623e316b1728d45ba452e008e01e886127d1d964221119dd4196be724ec062fc81be5beb28ce8e5fcc9c55109275cdae60545ddc293b89e77d
+  checksum: cd607463b7954dd0eda390e0710fa5fdc1a26e716baefd77134f54893ed57bfbf1906f3a354f43f89174aa37ac6f05fa450b708e516a4a8fa643e0d2f8e26106
   languageName: node
   linkType: hard
 
