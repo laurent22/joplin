@@ -13,6 +13,6 @@
 		"public/js/"
 	],
 	"references": [
-		{ "path": "./public/js/tsconfig.json" }
+		{ "path": "./public/js/" }
 	]
 }

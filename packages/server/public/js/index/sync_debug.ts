@@ -130,8 +130,7 @@ const checkForItemInInitialDiff = async (
 	const matches = [];
 	let stoppedEarly = false;
 	for await (const item of readDiff()) {
-		// We also include console logging to provide more information if
-		// readDiff() fails.
+		// Include console logging to provide more information if readDiff() fails.
 		// eslint-disable-next-line no-console
 		console.log('Checking item', item);
 
