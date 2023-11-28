@@ -6737,7 +6737,7 @@ __metadata:
     "@koa/cors": 3.4.3
     "@rmp135/sql-ts": 1.18.0
     "@types/bcryptjs": 2.4.6
-    "@types/formidable": 3.4.4
+    "@types/formidable": 3.4.5
     "@types/fs-extra": 11.0.3
     "@types/jest": 29.5.5
     "@types/jest-expect-message": 1.0.4
@@ -10074,12 +10074,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/formidable@npm:3.4.4":
-  version: 3.4.4
-  resolution: "@types/formidable@npm:3.4.4"
+"@types/formidable@npm:3.4.5":
+  version: 3.4.5
+  resolution: "@types/formidable@npm:3.4.5"
   dependencies:
     "@types/node": "*"
-  checksum: c4ee985b121555894accb1d3885b2c6ab1420a18cbc7a5ac54fbf6631f827f1a07b2ddebdaca578d4e2c41a80a237db36a5c4d11e33607e9b65e02faf0faca54
+  checksum: 27384c8459e44f5e167922927bd31fcd1259555062faacaa490b52f8896a0a5614918ee4ec6ec9123c1418ac127908270c1182a2441d49681b37dc34737c3646
   languageName: node
   linkType: hard
 
