@@ -12,14 +12,14 @@
     "devDropDb": "node dist/app.js --env dev --drop-db",
     "start": "node dist/app.js",
     "generateTypes": "rm -f db-buildTypes.sqlite && yarn run start --env buildTypes migrate latest && node dist/tools/generateTypes.js && mv db-buildTypes.sqlite schema.sqlite",
-    "tsc": "tsc --build",
+    "tsc": "gulp tsc",
     "test": "jest --verbose=false",
     "test-ci": "yarn test",
     "test-debug": "node --inspect node_modules/.bin/jest -- --verbose=false",
     "clean": "gulp clean",
     "populateDatabase": "JOPLIN_TESTS_SERVER_DB=pg node dist/utils/testing/populateDatabase",
     "stripeListen": "stripe listen --forward-to http://joplincloud.local:22300/stripe/webhook",
-    "watch": "tsc --build --watch --preserveWatchOutput"
+    "watch": "gulp watch"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.296.0",

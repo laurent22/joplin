@@ -8,5 +8,3 @@ logs/
 tests/temp/
 temp/
 .env
-public/**/*.d.ts
-public/js/tsconfig.tsbuildinfo

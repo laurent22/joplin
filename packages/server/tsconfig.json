@@ -11,8 +11,5 @@
 	"exclude": [
 		"**/node_modules",
 		"public/js/"
-	],
-	"references": [
-		{ "path": "./public/js/" }
 	]
 }

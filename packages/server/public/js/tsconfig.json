@@ -1,13 +1,9 @@
 {
 	"extends": "../../../../tsconfig.json",
 	"compilerOptions": {
+		// ES6 (when there are no imports/exports) generates code that can be run in a web browser.
 		"module": "ES6",
-
-		// "declaration" and "composite" must be `true` to use TypeScript
-		// projects.
-		"declaration": true,
-		"composite": true,
-		"outDir": "./"
+		"declaration": false
 	},
 	"rootDir": ".",
 	"include": [
