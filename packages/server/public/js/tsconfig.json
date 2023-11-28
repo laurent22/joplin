@@ -11,7 +11,7 @@
 	},
 	"rootDir": ".",
 	"include": [
-        "**/*.ts"
+		"**/*.ts"
 	],
 	"exclude": [
 		"*.test.ts"
