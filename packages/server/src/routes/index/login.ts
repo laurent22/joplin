@@ -22,7 +22,10 @@ const router: Router = new Router(RouteType.Web);
 
 router.public = true;
 
-router.get('login', async (_path: SubPath, _ctx: AppContext) => {
+router.get('login', async (_path: SubPath, ctx: AppContext) => {
+	if (ctx.joplin.owner) {
+		return redirect(ctx, `${config().baseUrl}/home`);
+	}
 	return makeView();
 });
 
