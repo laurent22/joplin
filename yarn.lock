@@ -6230,8 +6230,8 @@ __metadata:
     "@types/mustache": 4.2.5
     "@types/node": 18.18.9
     "@types/react": 18.2.36
-    "@types/react-redux": 7.1.29
-    "@types/styled-components": 5.1.29
+    "@types/react-redux": 7.1.30
+    "@types/styled-components": 5.1.30
     async-mutex: 0.4.0
     codemirror: 5.65.9
     color: 3.2.1
@@ -6312,7 +6312,7 @@ __metadata:
     "@types/jest": 29.5.5
     "@types/react": 18.2.36
     "@types/react-native": 0.70.6
-    "@types/react-redux": 7.1.29
+    "@types/react-redux": 7.1.30
     "@types/tar-stream": 2.2.3
     assert-browserify: 2.0.0
     babel-jest: 29.7.0
@@ -6350,7 +6350,7 @@ __metadata:
     react-native-fs: 2.20.0
     react-native-get-random-values: 1.9.0
     react-native-image-picker: 5.7.0
-    react-native-localize: 3.0.2
+    react-native-localize: 3.0.3
     react-native-modal-datetime-picker: 17.1.0
     react-native-paper: 5.11.1
     react-native-popup-menu: 0.16.1
@@ -6446,8 +6446,8 @@ __metadata:
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.5
     "@types/react": 18.2.36
-    "@types/react-redux": 7.1.29
-    "@types/styled-components": 5.1.29
+    "@types/react-redux": 7.1.30
+    "@types/styled-components": 5.1.30
     jest: 29.7.0
     jest-environment-jsdom: 29.7.0
     ts-jest: 29.1.1
@@ -6602,7 +6602,7 @@ __metadata:
     "@types/pdfjs-dist": 2.10.378
     "@types/react": 18.2.36
     "@types/react-dom": 18.2.14
-    "@types/styled-components": 5.1.29
+    "@types/styled-components": 5.1.30
     async-mutex: 0.4.0
     babel-jest: 29.7.0
     css-loader: 6.8.1
@@ -6737,7 +6737,7 @@ __metadata:
     "@types/mustache": 4.2.5
     "@types/nodemailer": 6.4.14
     "@types/uuid": 9.0.6
-    "@types/yargs": 17.0.29
+    "@types/yargs": 17.0.31
     "@types/zxcvbn": 4.4.3
     bcryptjs: 2.4.3
     bulma: 0.9.4
@@ -6796,7 +6796,7 @@ __metadata:
     "@types/mustache": 4.2.5
     "@types/node": 18.18.9
     "@types/node-fetch": 2.6.9
-    "@types/yargs": 17.0.29
+    "@types/yargs": 17.0.31
     compare-versions: 6.1.0
     dayjs: 1.11.10
     execa: 4.1.0
@@ -10606,15 +10606,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-redux@npm:7.1.29":
-  version: 7.1.29
-  resolution: "@types/react-redux@npm:7.1.29"
+"@types/react-redux@npm:7.1.30":
+  version: 7.1.30
+  resolution: "@types/react-redux@npm:7.1.30"
   dependencies:
     "@types/hoist-non-react-statics": ^3.3.0
     "@types/react": "*"
     hoist-non-react-statics: ^3.3.0
     redux: ^4.0.0
-  checksum: 74041cfdce9588e4999657c616f7e3c81661850789131582935df80f634907565d498fc26b680659220524cd8bb74141a9c3444caab92536268cee9dcde01f3f
+  checksum: df86069aae0b2dd79752a45265b36ad5583f4c87a05731607192a4df6dd4e1ed151e458957cced31df37cbb60c58c41211f7186a783305a8af62d8cd69ae6789
   languageName: node
   linkType: hard
 
@@ -10808,14 +10808,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/styled-components@npm:5.1.29":
-  version: 5.1.29
-  resolution: "@types/styled-components@npm:5.1.29"
+"@types/styled-components@npm:5.1.30":
+  version: 5.1.30
+  resolution: "@types/styled-components@npm:5.1.30"
   dependencies:
     "@types/hoist-non-react-statics": "*"
     "@types/react": "*"
     csstype: ^3.0.2
-  checksum: 9447f26056d05268fb271024388f636c0cb27fc53181baf411c46332c76efa7bf130148ff6c4b1b5565e758ce7dbdc402027ec8ee0e7bdc17418e3d745d06eae
+  checksum: 22948191a2de0187ab20383c1d9a6b7c9dfda9e6d58f104e03fd8bb8f3ee150b800806e90efa888f1d0fbb53d404613e4b6cccf0c77eb4287e8b1aeb1d7c1cb5
   languageName: node
   linkType: hard
 
@@ -10886,12 +10886,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:17.0.29":
-  version: 17.0.29
-  resolution: "@types/yargs@npm:17.0.29"
+"@types/yargs@npm:17.0.31":
+  version: 17.0.31
+  resolution: "@types/yargs@npm:17.0.31"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: 8bbc0edd573a5a084cb13a9985c124490fd74e73b1ed8a3058861c13124e103b00a19770dc55c53215653a7845d7033e0695917b75153cfe9618d5b2fd3cf86e
+  checksum: a7f4fe5b05162790cbcbccceb22821e2cb3e49d95a4d8403352f258744cd504124f3ab502eddb2262f5d2d9cc6a0547851ae44621b14fe4c505d8f1434c2a19e
   languageName: node
   linkType: hard
 
@@ -34845,9 +34845,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-localize@npm:3.0.2":
-  version: 3.0.2
-  resolution: "react-native-localize@npm:3.0.2"
+"react-native-localize@npm:3.0.3":
+  version: 3.0.3
+  resolution: "react-native-localize@npm:3.0.3"
   peerDependencies:
     react: ">=18.1.0"
     react-native: ">=0.70.0"
@@ -34855,7 +34855,7 @@ __metadata:
   peerDependenciesMeta:
     react-native-macos:
       optional: true
-  checksum: 46abd6046dfb1fb5426f9e51971894e893556646206b7fa387c5eb9394a3f3b9ddce190bc94ffc9c51c65326f60bbad57219d8330b4a1dcfaf46dd2eb4ef43ae
+  checksum: bcaf37e4889d44cb68bd93930dfa77f83ce6ef2c389f48248132d45e2b77eab8386c7d9a8c5011e8c8e0f0f93497fedb3c92c229247f6eb9232021a726bf1c29
   languageName: node
   linkType: hard
 
