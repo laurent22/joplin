@@ -6,7 +6,7 @@ export enum ApplicationPlatform {
 	Android = 4,
 }
 
-export enum ApplicationSource {
+export enum ApplicationType {
 	Unknown = 0,
 	Desktop = 1,
 	Mobile = 2,
