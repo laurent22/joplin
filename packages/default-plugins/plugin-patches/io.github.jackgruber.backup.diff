@@ -37,7 +37,7 @@ index ef2a527..253d21a 100644
    export async function setExecutionFlag() {
      if (process.platform !== "win32") {
 diff --git a/webpack.config.js b/webpack.config.js
-index 34a1797..b5fad8d 100644
+index 34a1797..fbf655b 100644
 --- a/webpack.config.js
 +++ b/webpack.config.js
 @@ -175,6 +175,12 @@ const baseConfig = {
@@ -53,3 +53,22 @@ index 34a1797..b5fad8d 100644
  	// 7zip-bin uses __dirname to determine the path to bundled binaries.
  	// In Joplin, __dirname points to the plugin directory (for example
  	// /tmp/.mount_Joplinf4CQVb/resources/app.asar/services/plugins/),
+@@ -200,15 +206,9 @@ const pluginConfig = { ...baseConfig, entry: './src/index.ts',
+ 		path: distDir,
+ 	},
+ 	plugins: [
+-		new CopyPlugin({
+-			patterns: [
+-				{
+-					from: '**/*',
+-					context: path.resolve(__dirname, 'node_modules','7zip-bin'),
+-					to: path.resolve(__dirname, 'dist/7zip-bin/'),
+-				},
+-			]
+-		}),
++		// Removed a CopyPlugin (added by Simple Backup, not necessary when using
++		// Joplin's built-in 7zip)
++
+ 		new CopyPlugin({
+ 			patterns: [
+ 				{
