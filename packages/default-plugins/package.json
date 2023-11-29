@@ -13,7 +13,7 @@
 		"url": "git+https://github.com/laurent22/joplin.git"
 	},
 	"devDependencies": {
-		"@types/yargs": "17.0.29",
+		"@types/yargs": "17.0.31",
 		"ts-node": "10.9.1",
 		"typescript": "5.2.2"
 	},
