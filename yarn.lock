@@ -6556,7 +6556,7 @@ __metadata:
     react-native-fingerprint-scanner: 6.0.0
     react-native-fs: 2.20.0
     react-native-get-random-values: 1.9.0
-    react-native-image-picker: 7.0.0
+    react-native-image-picker: 7.0.2
     react-native-localize: 3.0.3
     react-native-modal-datetime-picker: 17.1.0
     react-native-paper: 5.11.1
@@ -35027,13 +35027,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-image-picker@npm:7.0.0":
-  version: 7.0.0
-  resolution: "react-native-image-picker@npm:7.0.0"
+"react-native-image-picker@npm:7.0.2":
+  version: 7.0.2
+  resolution: "react-native-image-picker@npm:7.0.2"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 3985c1741089c12c056f94dcf088aee8f6e2eeb6e3c7a86867c0f865f1f8cdc5b9e1ad072967dc0a031bcd1f5556ae501136d90eea7fc5a179ab2b03aebe456c
+  checksum: f2965bd84338f0d901afa8f8c2ff804b70c2f45cb46a5b1d241e12f357a19bf831410b427bad8a25834d7aafdb1f586c2cd893bd822e1d1bb6408129db6ca544
   languageName: node
   linkType: hard
 
