@@ -6952,7 +6952,7 @@ __metadata:
     markdown-it: 13.0.2
     mustache: 4.2.0
     nanoid: 2.1.11
-    node-cron: 3.0.2
+    node-cron: 3.0.3
     node-mocks-http: 1.13.0
     nodemailer: 6.9.7
     nodemon: 3.0.1
@@ -30753,12 +30753,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-cron@npm:3.0.2":
-  version: 3.0.2
-  resolution: "node-cron@npm:3.0.2"
+"node-cron@npm:3.0.3":
+  version: 3.0.3
+  resolution: "node-cron@npm:3.0.3"
   dependencies:
     uuid: 8.3.2
-  checksum: dd21585c0d4069a0752022dad9b8380a4393c4783ec78355ffa99ff32b018c3743a35d4ebf9d7c7863949e94e302b440f58c884eb4960e71c7260d817e2d3f25
+  checksum: 351c37491ebf717d0ae69cc941465de118e5c2ef5d48bc3f87c98556241b060f100402c8a618c7b86f9f626b44756b20d8b5385b70e52f80716f21e55db0f1c5
   languageName: node
   linkType: hard
 
