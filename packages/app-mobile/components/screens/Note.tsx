@@ -6,13 +6,15 @@ import UndoRedoService from '@joplin/lib/services/UndoRedoService';
 import NoteBodyViewer from '../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../utils/checkPermissions';
 import NoteEditor from '../NoteEditor/NoteEditor';
-
+import { Size } from '@joplin/utils/types';
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
-const { Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
+import { Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } from 'react-native';
 import { Platform, PermissionsAndroid } from 'react-native';
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
+import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
+import { openDocument } from '@joplin/react-native-saf-x';
 import Note from '@joplin/lib/models/Note';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Resource from '@joplin/lib/models/Resource';
@@ -38,7 +40,7 @@ const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 import ImageResizer from '@bam.tech/react-native-image-resizer';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
-import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
+import { Asset, ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
@@ -54,11 +56,63 @@ import { ChangeEvent as EditorChangeEvent, UndoRedoDepthChangeEvent } from '@jop
 import { join } from 'path';
 const urlUtils = require('@joplin/lib/urlUtils');
 
-// import Vosk from 'react-native-vosk';
-
 const emptyArray: any[] = [];
 
 const logger = Logger.create('screens/Note');
+
+interface SelectedDocument {
+	type: string;
+	mime: string;
+	uri: string;
+	fileName: string;
+}
+
+const pickDocument = async (multiple: boolean): Promise<SelectedDocument[]> => {
+	let result: SelectedDocument[] = [];
+	try {
+		if (shim.fsDriver().isUsingAndroidSAF()) {
+			const openDocResult = await openDocument({ multiple });
+			if (!openDocResult) {
+				throw new Error('User canceled document picker');
+			}
+			result = openDocResult.map(r => {
+				const converted: SelectedDocument = {
+					type: r.mime,
+					fileName: r.name,
+					mime: r.mime,
+					uri: r.uri,
+				};
+
+				return converted;
+			});
+		} else {
+			let docPickerResult: DocumentPickerResponse[] = [];
+			if (multiple) {
+				docPickerResult = await DocumentPicker.pick({ allowMultiSelection: true });
+			} else {
+				docPickerResult = [await DocumentPicker.pickSingle()];
+			}
+
+			result = docPickerResult.map(r => {
+				return {
+					mime: '',
+					type: r.type,
+					uri: r.uri,
+					fileName: r.name,
+				};
+			});
+		}
+	} catch (error) {
+		if (DocumentPicker.isCancel(error) || error?.message?.includes('cancel')) {
+			logger.info('pickDocuments: user has cancelled');
+			return [];
+		} else {
+			throw error;
+		}
+	}
+
+	return result;
+};
 
 class NoteScreenComponent extends BaseScreenComponent {
 	// This isn't in this.state because we don't want changing scroll to trigger
@@ -215,7 +269,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					if (msg.indexOf('file://') === 0) {
 						throw new Error(_('Links with protocol "%s" are not supported', 'file://'));
 					} else {
-						Linking.openURL(msg);
+						await Linking.openURL(msg);
 					}
 				}
 			} catch (error) {
@@ -574,15 +628,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	private async pickDocuments() {
-		const result = await shim.fsDriver().pickDocument({ multiple: true });
-		if (!result) {
-			// eslint-disable-next-line no-console
-			console.info('pickDocuments: user has cancelled');
-		}
+		const result = await pickDocument(true);
 		return result;
 	}
 
-	public async imageDimensions(uri: string) {
+	public async imageDimensions(uri: string): Promise<Size> {
 		return new Promise((resolve, reject) => {
 			Image.getSize(
 				uri,
@@ -598,7 +648,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	public async resizeImage(localFilePath: string, targetPath: string, mimeType: string) {
 		const maxSize = Resource.IMAGE_MAX_DIMENSION;
-		const dimensions: any = await this.imageDimensions(localFilePath);
+		const dimensions = await this.imageDimensions(localFilePath);
 		reg.logger().info('Original dimensions ', dimensions);
 
 		const saveOriginalImage = async () => {
@@ -657,7 +707,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return await saveOriginalImage();
 	}
 
-	public async attachFile(pickerResponse: any, fileType: string): Promise<ResourceEntity|null> {
+	public async attachFile(pickerResponse: Asset, fileType: string): Promise<ResourceEntity|null> {
 		if (!pickerResponse) {
 			// User has cancelled
 			return null;
@@ -690,8 +740,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let resource: ResourceEntity = Resource.new();
 		resource.id = uuid.create();
 		resource.mime = mimeType;
-		resource.title = pickerResponse.name ? pickerResponse.name : '';
-		resource.file_extension = safeFileExtension(fileExtension(pickerResponse.name ? pickerResponse.name : localFilePath));
+		resource.title = pickerResponse.fileName ? pickerResponse.fileName : '';
+		resource.file_extension = safeFileExtension(fileExtension(pickerResponse.fileName ? pickerResponse.fileName : localFilePath));
 
 		if (!resource.mime) resource.mime = 'application/octet-stream';
 
@@ -810,7 +860,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		return await this.attachFile({
 			uri: filePath,
-			name: _('Drawing'),
+			fileName: _('Drawing'),
 		}, 'image');
 	}
 
@@ -935,7 +985,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const note = await Note.load(this.state.note.id);
 		try {
 			const url = Note.geolocationUrl(note);
-			Linking.openURL(url);
+			await Linking.openURL(url);
 		} catch (error) {
 			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 			await dialogs.error(this, error.message);
@@ -947,7 +997,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const note = await Note.load(this.state.note.id);
 		try {
-			Linking.openURL(note.source_url);
+			await Linking.openURL(note.source_url);
 		} catch (error) {
 			await dialogs.error(this, error.message);
 		}
@@ -1376,7 +1426,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 						placeholderTextColor={theme.colorFaded}
 						// need some extra padding for iOS so that the keyboard won't cover last line of the note
 						// see https://github.com/laurent22/joplin/issues/3607
-						paddingBottom={ Platform.OS === 'ios' ? 40 : 0}
+						// Property is gone as of RN 0.72?
+						// paddingBottom={ (Platform.OS === 'ios' ? 40 : 0) as any}
 					/>
 				);
 			} else {
