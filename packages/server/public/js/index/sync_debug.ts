@@ -38,10 +38,12 @@ const setUpItemChecker = (parent: HTMLElement, onSubmit: OnItemCheckerSubmitCall
 
 	const input = parent.querySelector('input');
 	const outputContainer = document.createElement('div');
-	outputContainer.classList.add('output', 'empty');
+	outputContainer.classList.add('command-output', '-empty');
 
 	const outputHeading = document.createElement('h3');
 	const outputDetailsContainer = document.createElement('details');
+	outputDetailsContainer.classList.add('output');
+
 	const outputDetailsContent = document.createElement('pre');
 
 	outputHeading.setAttribute('aria-live', 'polite');
@@ -52,17 +54,17 @@ const setUpItemChecker = (parent: HTMLElement, onSubmit: OnItemCheckerSubmitCall
 	button.onclick = async () => {
 		outputHeading.innerText = '⏳ Loading...';
 		outputDetailsContent.innerText = '';
-		outputContainer.classList.remove('error');
-		outputContainer.classList.remove('empty');
-		outputContainer.classList.add('loading');
+		outputContainer.classList.remove('-error');
+		outputContainer.classList.remove('-empty');
+		outputContainer.classList.add('-loading');
 		button.disabled = true;
 
 		try {
 			await onSubmit(itemLinkToId(input.value), outputHeading, outputDetailsContent);
-			outputContainer.classList.remove('loading');
+			outputContainer.classList.remove('-loading');
 		} catch (error) {
 			outputHeading.innerText = `⚠️ Error: ${error}`;
-			outputContainer.classList.add('error');
+			outputContainer.classList.add('-error');
 		}
 
 		button.disabled = false;
