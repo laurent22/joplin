@@ -1,5 +1,10 @@
 # Joplin Android Changelog
 
+## [android-v2.13.9](https://github.com/laurent22/joplin/releases/tag/android-v2.13.9) (Pre-release) - 2023-11-30T17:55:54Z
+
+- Improved: Don't attach empty drawings when a user exits without saving (#9386) (#9377 by Henry Heino)
+- Fixed: Fix tooltips don't disappear on some devices (upgrade to js-draw 1.13.2) (#9401) (#9374 by Henry Heino)
+
 ## [android-v2.13.8](https://github.com/laurent22/joplin/releases/tag/android-v2.13.8) (Pre-release) - 2023-11-26T12:37:00Z
 
 - Fixed: Fix to-dos options toggle don't toggle a rerender (#9364) (#9361 by [@pedr](https://github.com/pedr))
