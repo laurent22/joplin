@@ -21996,7 +21996,7 @@ __metadata:
     chalk: 2.4.2
     jest: 29.7.0
     slugify: 1.6.6
-    yeoman-generator: 5.9.0
+    yeoman-generator: 5.10.0
     yosay: 2.0.2
   languageName: unknown
   linkType: soft
@@ -43691,9 +43691,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yeoman-generator@npm:5.9.0":
-  version: 5.9.0
-  resolution: "yeoman-generator@npm:5.9.0"
+"yeoman-generator@npm:5.10.0":
+  version: 5.10.0
+  resolution: "yeoman-generator@npm:5.10.0"
   dependencies:
     chalk: ^4.1.0
     dargs: ^7.0.0
@@ -43715,7 +43715,7 @@ __metadata:
   peerDependenciesMeta:
     yeoman-environment:
       optional: true
-  checksum: f9e76e21af33acf9b8421f889fccac45e6f335f7a3b8d6741f5efc0eb2f950e9e04a5cbb20897e0084fd8a52a4a12a8221200b1bd40b948c94e1f32204019fed
+  checksum: 73ffc1fb0390e3b528283585763b67cf9a1cbec8445ab47076e3165ae469f1e264601c8e62a8167a6c7b5defddd6e0eb4fe0c8d55ea589d827821bbf92edbd15
   languageName: node
   linkType: hard
 
