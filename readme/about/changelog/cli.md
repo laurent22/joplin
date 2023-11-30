@@ -1,5 +1,11 @@
 # Joplin Terminal App Changelog
 
+## [cli-v2.13.2](https://github.com/laurent22/joplin/releases/tag/cli-v2.13.2) - 2023-11-30T18:11:38Z
+
+- Improved: Updated packages mermaid (v10.5.1), sass (v1.69.5)
+- Fixed: Import of inter-linked md files has incorrect notebook structure (#9269) (#9151 by [@pedr](https://github.com/pedr))
+- Fixed: Work around WebDAV sync issues over ipv6 (#9286) (#8788 by Henry Heino)
+
 ## [cli-v2.13.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.13.1) - 2023-11-09T20:08:17Z
 
 - Improved: Allow modifying a resource metadata only when synchronising (#9114)
