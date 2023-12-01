@@ -119,7 +119,7 @@
     "@joplin/tools": "~2.13",
     "@playwright/test": "1.39.0",
     "@testing-library/react-hooks": "8.0.1",
-    "@types/jest": "29.5.5",
+    "@types/jest": "29.5.8",
     "@types/node": "18.18.9",
     "@types/react": "18.2.37",
     "@types/react-redux": "7.1.30",
