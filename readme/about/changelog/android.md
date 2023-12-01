@@ -1,5 +1,9 @@
 # Joplin Android Changelog
 
+## [android-v2.13.10](https://github.com/laurent22/joplin/releases/tag/android-v2.13.10) (Pre-release) - 2023-12-01T11:16:17Z
+
+- Improved: Drawing: Revert recent changes to input system (#9426) (#9427 by Henry Heino)
+
 ## [android-v2.13.9](https://github.com/laurent22/joplin/releases/tag/android-v2.13.9) (Pre-release) - 2023-11-30T17:55:54Z
 
 - Improved: Don't attach empty drawings when a user exits without saving (#9386) (#9377 by Henry Heino)
