@@ -1,5 +1,9 @@
 # Joplin iOS Changelog
 
+## [ios-v12.13.10](https://github.com/laurent22/joplin/releases/tag/ios-v12.13.10) - 2023-12-01T12:07:57Z
+
+- Improved: Drawing: Revert recent changes to input system (#9426) (#9427 by Henry Heino)
+
 ## [ios-v12.13.9](https://github.com/laurent22/joplin/releases/tag/ios-v12.13.9) - 2023-11-30T17:56:37Z
 
 - Improved: Don't attach empty drawings when a user exits without saving (#9386) (#9377 by Henry Heino)
