@@ -94,7 +94,7 @@
     "@testing-library/react-native": "12.3.2",
     "@tsconfig/react-native": "2.0.2",
     "@types/fs-extra": "11.0.4",
-    "@types/jest": "29.5.5",
+    "@types/jest": "29.5.8",
     "@types/react": "18.2.37",
     "@types/react-native": "0.70.6",
     "@types/react-redux": "7.1.30",

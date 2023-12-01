@@ -66,7 +66,7 @@
     "@types/bcryptjs": "2.4.6",
     "@types/formidable": "3.4.5",
     "@types/fs-extra": "11.0.4",
-    "@types/jest": "29.5.5",
+    "@types/jest": "29.5.8",
     "@types/jest-expect-message": "1.0.4",
     "@types/jsdom": "21.1.5",
     "@types/koa": "2.13.11",
