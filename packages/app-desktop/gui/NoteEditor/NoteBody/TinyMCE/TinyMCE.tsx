@@ -43,7 +43,6 @@ function markupRenderOptions(override: MarkupToHtmlOptions = null): MarkupToHtml
 			},
 		},
 		replaceResourceInternalToExternalLinks: true,
-		allowedFilePrefixes: [Setting.value('resourceDir')],
 		...override,
 	};
 }
@@ -859,7 +858,18 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			const resourcesEqual = resourceInfosEqual(lastOnChangeEventInfo.current.resourceInfos, props.resourceInfos);
 
 			if (lastOnChangeEventInfo.current.content !== props.content || !resourcesEqual) {
-				const result = await props.markupToHtml(props.contentMarkupLanguage, props.content, markupRenderOptions({ resourceInfos: props.resourceInfos }));
+				const result = await props.markupToHtml(
+					props.contentMarkupLanguage,
+					props.content,
+					markupRenderOptions({
+						resourceInfos: props.resourceInfos,
+
+						// Allow file:// URLs that point to the resource directory.
+						// This prevents HTML-style resource URLs (e.g. <a href="file://path/to/resource/.../"></a>)
+						// from being discarded.
+						allowedFilePrefixes: [Setting.value('resourceDir')],
+					}),
+				);
 				if (cancelled) return;
 
 				editor.setContent(awfulBrHack(result.html));

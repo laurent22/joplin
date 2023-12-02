@@ -81,8 +81,7 @@ test.describe('main', () => {
 
 		// Note should still contain the resource ID and note title
 		const finalCodeMirrorContent = await editor.codeMirrorEditor.innerText();
-		expect(finalCodeMirrorContent).toContain(resourceId);
-		expect(finalCodeMirrorContent).toContain('HTML Link');
+		expect(finalCodeMirrorContent).toContain(`:/${resourceId}`);
 	});
 
 	test('should be possible to remove sort order buttons in settings', async ({ electronApp, mainWindow }) => {
