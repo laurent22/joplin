@@ -26,6 +26,9 @@ export default class NoteEditorPage {
 	}
 
 	public getTinyMCEFrameLocator() {
+		// We use frameLocator(':scope') to convert the richTextEditor Locator into
+		// a FrameLocator. (:scope selects the locator itself).
+		// https://playwright.dev/docs/api/class-framelocator
 		return this.richTextEditor.frameLocator(':scope');
 	}
 
