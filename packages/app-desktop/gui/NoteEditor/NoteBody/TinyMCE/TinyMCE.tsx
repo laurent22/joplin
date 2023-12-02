@@ -28,6 +28,7 @@ import { TinyMceEditorEvents } from './utils/types';
 import type { Editor } from 'tinymce';
 import { joplinCommandToTinyMceCommands, TinyMceCommand } from './utils/joplinCommandToTinyMceCommands';
 import shouldPasteResources from './utils/shouldPasteResources';
+import Setting from '@joplin/lib/models/Setting';
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
@@ -42,6 +43,7 @@ function markupRenderOptions(override: MarkupToHtmlOptions = null): MarkupToHtml
 			},
 		},
 		replaceResourceInternalToExternalLinks: true,
+		allowedFilePrefixes: [Setting.value('resourceDir')],
 		...override,
 	};
 }
