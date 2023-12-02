@@ -13,14 +13,9 @@ const tsConfigPaths = [
 ];
 
 const tasks = {
-	tsc: {
-		fn: async () => {
-			for (const tsConfigPath of tsConfigPaths) {
-				await execCommand(['tsc', '--project', tsConfigPath]);
-			}
-		},
-	},
-
+	// We use gulp for watching, but avoid it for compiling.
+	// We avoid this for tsc because historically there were issues with running tsc from gulp.
+	// (Although running commands with a slightly different method).
 	watch: {
 		fn: async () => {
 			const watchTasks = tsConfigPaths.map(tsConfigPath => {
