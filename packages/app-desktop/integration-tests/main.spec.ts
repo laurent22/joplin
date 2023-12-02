@@ -7,6 +7,7 @@ import { writeFile } from 'fs-extra';
 import { join } from 'path';
 import createStartupArgs from './util/createStartupArgs';
 import firstNonDevToolsWindow from './util/firstNonDevToolsWindow';
+import setFilePickerResponse from './util/setFilePickerResponse';
 
 
 test.describe('main', () => {
@@ -20,17 +21,7 @@ test.describe('main', () => {
 
 	test('should be able to create and edit a new note', async ({ mainWindow }) => {
 		const mainScreen = new MainScreen(mainWindow);
-		await mainScreen.newNoteButton.click();
-
-		const editor = mainScreen.noteEditor;
-		await editor.waitFor();
-
-		// Wait for the title input to have the correct placeholder
-		await mainWindow.locator('input[placeholder^="Creating new note"]').waitFor();
-
-		// Fill the title
-		await editor.noteTitleInput.click();
-		await editor.noteTitleInput.fill('Test note');
+		const editor = await mainScreen.createNewNote('Test note');
 
 		// Note list should contain the new note
 		await expect(mainScreen.noteListContainer.getByText('Test note')).toBeVisible();
@@ -47,6 +38,51 @@ test.describe('main', () => {
 		// Should render
 		const viewerFrame = editor.getNoteViewerIframe();
 		await expect(viewerFrame.locator('h1')).toHaveText('Test note!');
+	});
+
+	test('HTML links should be preserved when editing a note in the WYSIWYG editor', async ({ electronApp, mainWindow }) => {
+		const mainScreen = new MainScreen(mainWindow);
+		await mainScreen.createNewNote('Testing!');
+		const editor = mainScreen.noteEditor;
+
+		// Set the note's content
+		await editor.codeMirrorEditor.click();
+
+		// Attach this file to the note (create a resource ID)
+		await setFilePickerResponse(electronApp, [__filename]);
+		await editor.attachFileButton.click();
+
+		// Wait to render
+		const viewerFrame = editor.getNoteViewerIframe();
+		await viewerFrame.locator('a[data-from-md]').waitFor();
+
+		// Should have an attached resource
+		const codeMirrorContent = await editor.codeMirrorEditor.innerText();
+
+		const resourceUrlExpression = /\[.*\]\(:\/(\w+)\)/;
+		expect(codeMirrorContent).toMatch(resourceUrlExpression);
+		const resourceId = codeMirrorContent.match(resourceUrlExpression)[1];
+
+		// Create a new note with just an HTML link
+		await mainScreen.createNewNote('Another test');
+		await editor.codeMirrorEditor.click();
+		await mainWindow.keyboard.type(`<a href=":/${resourceId}">HTML Link</a>`);
+
+		// Switch to the RTE
+		await editor.toggleEditorsButton.click();
+		await editor.richTextEditor.waitFor();
+
+		// Edit the note to cause the original content to update
+		await editor.getTinyMCEFrameLocator().locator('a').click();
+		await mainWindow.keyboard.type('Test...');
+
+		await editor.toggleEditorsButton.click();
+		await editor.codeMirrorEditor.waitFor();
+
+		// Note should still contain the resource ID and note title
+		const finalCodeMirrorContent = await editor.codeMirrorEditor.innerText();
+		expect(finalCodeMirrorContent).toContain(resourceId);
+		expect(finalCodeMirrorContent).toContain('HTML Link');
 	});
 
 	test('should be possible to remove sort order buttons in settings', async ({ electronApp, mainWindow }) => {
