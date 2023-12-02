@@ -1,5 +1,20 @@
 # Joplin Android Changelog
 
+## [android-v2.13.10](https://github.com/laurent22/joplin/releases/tag/android-v2.13.10) (Pre-release) - 2023-12-01T11:16:17Z
+
+- Improved: Drawing: Revert recent changes to input system (#9426) (#9427 by Henry Heino)
+
+## [android-v2.13.9](https://github.com/laurent22/joplin/releases/tag/android-v2.13.9) (Pre-release) - 2023-11-30T17:55:54Z
+
+- Improved: Don't attach empty drawings when a user exits without saving (#9386) (#9377 by Henry Heino)
+- Fixed: Fix tooltips don't disappear on some devices (upgrade to js-draw 1.13.2) (#9401) (#9374 by Henry Heino)
+
+## [android-v2.13.8](https://github.com/laurent22/joplin/releases/tag/android-v2.13.8) (Pre-release) - 2023-11-26T12:37:00Z
+
+- Fixed: Fix to-dos options toggle don't toggle a rerender (#9364) (#9361 by [@pedr](https://github.com/pedr))
+- Fixed: Fix new note/to-do buttons not visible on app startup in some cases (#9329) (#9328 by Henry Heino)
+- Fixed: Sidebar is not dismissed when creating a note (#9376)
+
 ## [android-v2.13.7](https://github.com/laurent22/joplin/releases/tag/android-v2.13.7) (Pre-release) - 2023-11-16T13:17:53Z
 
 - Improved: Add more space between settings title and description (#9270) (#9258 by Henry Heino)

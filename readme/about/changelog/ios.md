@@ -1,5 +1,20 @@
 # Joplin iOS Changelog
 
+## [ios-v12.13.10](https://github.com/laurent22/joplin/releases/tag/ios-v12.13.10) - 2023-12-01T12:07:57Z
+
+- Improved: Drawing: Revert recent changes to input system (#9426) (#9427 by Henry Heino)
+
+## [ios-v12.13.9](https://github.com/laurent22/joplin/releases/tag/ios-v12.13.9) - 2023-11-30T17:56:37Z
+
+- Improved: Don't attach empty drawings when a user exits without saving (#9386) (#9377 by Henry Heino)
+- Fixed: Fix tooltips don't disappear on some devices (upgrade to js-draw 1.13.2) (#9401) (#9374 by Henry Heino)
+
+## [ios-v12.13.8](https://github.com/laurent22/joplin/releases/tag/ios-v12.13.8) - 2023-11-26T12:54:44Z
+
+- Fixed: Fix to-dos options toggle don't toggle a rerender (#9364) (#9361 by [@pedr](https://github.com/pedr))
+- Fixed: Fix new note/to-do buttons not visible on app startup in some cases (#9329) (#9328 by Henry Heino)
+- Fixed: Sidebar is not dismissed when creating a note (#9376)
+
 ## [ios-v12.13.7](https://github.com/laurent22/joplin/releases/tag/ios-v12.13.7) - 2023-11-16T13:37:03Z
 
 - Improved: Add more space between settings title and description (#9270) (#9258 by Henry Heino)

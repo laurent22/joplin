@@ -30,6 +30,12 @@ WEBSITE_BASE_URL=http://localhost:8077 yarn buildDev --locale fr
 
 `processDocs.js` will also build everything by default, but it takes a long time, so using the above commands is convenient for dev.
 
+### Watching
+
+To watch the doc website, run `yarn start` from `packages/doc-builder`
+
+Alternatively, to test the doc website after it has been built, build it using one of the above commands, then run `yarn watchWebsite` from the root. This allows testing the website in "production" conditions, after prod-only plugins have been executed.
+
 ## Translation
 
 Translation is done using https://crowdin.com/

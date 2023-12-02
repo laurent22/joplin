@@ -115,17 +115,6 @@ if [ "$RUN_TESTS" == "1" ]; then
 fi
 
 # =============================================================================
-# Check that the website builder can run without errors
-# =============================================================================
-
-if [ "$RUN_TESTS" == "1" ]; then
-	if [ "$IS_LINUX" == "1" ]; then
-		echo "Step: Running website builder..."
-		node packages/tools/website/processDocs.js --env dev
-	fi
-fi
-
-# =============================================================================
 # Run linter for pull requests only. We also don't want this to make the desktop
 # release randomly fail.
 # =============================================================================
@@ -210,6 +199,7 @@ if [ "$RUN_TESTS" == "1" ]; then
 	echo "Step: Check that the website still builds..."
 
 	mkdir -p ../joplin-website/docs
+	ll ../joplin-website/docs/api/references/plugin_api
 	SKIP_SPONSOR_PROCESSING=1 yarn run buildWebsite
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
