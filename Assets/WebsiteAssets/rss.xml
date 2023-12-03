@@ -1,4 +1,50 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Mon, 23 Oct 2023 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 23 Oct 2023 00:00:00 GMT</pubDate><item><title><![CDATA[Working in the shadows with white-hat hackers]]></title><description><![CDATA[<p>The majority of Joplin's development is carried out in the public domain. This includes the discussion of issues on GitHub, as well as the submission of pull requests and related discussions. The transparency of these processes allows for collaborative problem-solving and shared insights.</p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Sun, 03 Dec 2023 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Sun, 03 Dec 2023 00:00:00 GMT</pubDate><item><title><![CDATA[What's new in Joplin 2.13]]></title><description><![CDATA[<h2>Desktop<a name="desktop" href="#desktop" class="heading-anchor">🔗</a></h2>
+<h3>RTE<a name="rte" href="#rte" class="heading-anchor">🔗</a></h3>
+<p>We made many improvements to the Rich Text Editor in this release to improve its usability. For example, you can now embed any content with the tables, including lists and other tables, which was a frequently requested feature:</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20231203-rte-table.png" alt=""></p>
+<p>The interoperability with other text editors such as Word and Excel as also been improved, in particular when copying and pasting content between these tools and Joplin.</p>
+<h3>Improved ENEX import<a name="improved-enex-import" href="#improved-enex-import" class="heading-anchor">🔗</a></h3>
+<p>The Evernote Export format, known as ENEX, has always been very challenging to support. This is because Evernote frequently changes it, breaking importers, and may also occasionally introduce bugs, to the point where their application sometimes can't even import back the files they've exported!</p>
+<p>At this point, after having worked on this importer for nearly 7 years it is relatively stable and most of the issues we encounter are due to invalid files that Evernote generates due to bugs they introduced in recent versions. We still try to import these files as well as possible by processing the invalid data using various heuristics.</p>
+<p>The list of bug fixes is below:</p>
+<ul>
+<li>Apply correct size to images imported from ENEX files</li>
+<li>ENEX files that contain resources with invalid mime types are imported correctly</li>
+<li>Ensure that ENEX resources with invalid filenames are imported correctly</li>
+<li>Prevent application from being stuck when importing an invalid ENEX file</li>
+</ul>
+<h3>New plugins APIs<a name="new-plugins-apis" href="#new-plugins-apis" class="heading-anchor">🔗</a></h3>
+<h4>Note list<a name="note-list" href="#note-list" class="heading-anchor">🔗</a></h4>
+<p>We are continuously improving the plugin API to make it as easy as possible to customize the application.</p>
+<p>One of the main addition is support note list plugins - it allows any plugins to customise what the note list should display.</p>
+<p>See the <a href="https://joplinapp.org/api/references/plugin_api/classes/joplinviewsnotelist.html">Joplin Plugin Note List API</a></p>
+<p>And the <a href="https://github.com/laurent22/joplin/blob/dev/packages/app-cli/tests/support/plugins/note_list_renderer/src/index.ts">Note List Demo</a></p>
+<p>Which includes three note list examples, a basic &quot;top to bottom&quot; one, a more advanced &quot;left to right&quot; one, which also renders a thumbnail of the note, and another one which shows how to create an interactive note list item to directly modify the title of the note from the list.</p>
+<p>This API was developed based on the feedback we got and we hope it will be useful! We are still keen to hear more from users and plugin developers on what features may still be missing and what could be improved!</p>
+<h4>Imaging API<a name="imaging-api" href="#imaging-api" class="heading-anchor">🔗</a></h4>
+<p>The imaging API was created to allow plugin developer to easily load and manipulate images. For now it is possible to load PNG and JPG files, and to resize and crop them.</p>
+<p><a href="https://joplinapp.org/api/references/plugin_api/classes/joplinimaging.html">https://joplinapp.org/api/references/plugin_api/classes/joplinimaging.html</a></p>
+<h4>And more<a name="and-more" href="#and-more" class="heading-anchor">🔗</a></h4>
+<p>A few more APIs have been added such as one to <a href="https://joplinapp.org/api/references/plugin_api/classes/joplinviewsdialogs.html#showopendialog">open dialog to select a file or folder</a> and a way to <a href="https://joplinapp.org/api/references/plugin_api/enums/contentscripttype.html#getting-the-settings-from-the-renderer">access the plugin settings from a renderer script</a></p>
+<h3>New beta Markdown editor<a name="new-beta-markdown-editor" href="#new-beta-markdown-editor" class="heading-anchor">🔗</a></h3>
+<p>This version also features a new Markdown editor based on <a href="https://codemirror.net/">CodeMirror 6</a>. This change means that we'll be able to use the same editor on both the desktop and mobile application (which already uses CodeMirror 6), which will allow a more consistent user experience across devices.</p>
+<p>Another benefit is that, in a future version, it will allow us to support plugins on the mobile application. There are several other advantages that Henry <a href="https://discourse.joplinapp.org/t/pre-release-v2-13-is-now-available-updated-18-11-2023/32697/12?u=laurent">listed in this forum post</a>.</p>
+<h2>Mobile<a name="mobile" href="#mobile" class="heading-anchor">🔗</a></h2>
+<h3>Drawing option<a name="drawing-option" href="#drawing-option" class="heading-anchor">🔗</a></h3>
+<p>In this new version, Henry integrated the js-draw editor to the mobile app. Js-draw is a powerful freehand drawing library which allows you to draw using a pen, touch screen or mouse.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20231203-drawing.png" alt=""></p>
+<p>The editor is integrated to the mobile application. On desktop application, you can use the same library and edit your drawings using the <a href="https://github.com/personalizedrefrigerator/joplin-plugin-freehand-drawing">Freehand Drawing plugin</a>. We will make this plugin available by default in a future desktop release.</p>
+<h3>Setting screen<a name="setting-screen" href="#setting-screen" class="heading-anchor">🔗</a></h3>
+<p>The mobile version also features a redesigned configuration screen. It is now divided into multiple sections with clear titles, and you can also search for settings using the built-in search option.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20231203-settings.png" alt=""></p>
+<h1>Full changelog<a name="full-changelog" href="#full-changelog" class="heading-anchor">🔗</a></h1>
+<p>This is just an overview of the main features. The full changelog is available there:</p>
+<ul>
+<li>Desktop: <a href="https://joplinapp.org/help/about/changelog/desktop">https://joplinapp.org/help/about/changelog/desktop</a></li>
+<li>Android: <a href="https://joplinapp.org/help/about/changelog/android/">https://joplinapp.org/help/about/changelog/android/</a></li>
+<li>iOS: <a href="https://joplinapp.org/help/about/changelog/ios/">https://joplinapp.org/help/about/changelog/ios/</a></li>
+</ul>
+]]></description><link>https://joplinapp.org/news/20231203-release-2-13</link><guid isPermaLink="false">20231203-release-2-13</guid><pubDate>Sun, 03 Dec 2023 00:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 2.13</twitter-text></item><item><title><![CDATA[Working in the shadows with white-hat hackers]]></title><description><![CDATA[<p>The majority of Joplin's development is carried out in the public domain. This includes the discussion of issues on GitHub, as well as the submission of pull requests and related discussions. The transparency of these processes allows for collaborative problem-solving and shared insights.</p>
 <p>However, there is one aspect that operates behind closed doors, and for good reason: addressing cybersecurity vulnerabilities. It is imperative that these issues remain undisclosed until they have been resolved. Once a solution is implemented, it is usually accompanied by discreet commits and a message in the changelog to signify the progress made.</p>
 <p>Typically, the process begins with an email from a security researcher. They provide valuable insights, such as a specially crafted note that triggers a bug, or an API call, along with an explanation of how the application's security can be circumvented. We examine the vulnerability, create a fix, and create automated test units to prevent any accidental reintroduction of the vulnerability in future code updates. An example of such a commit is: <a href="https://github.com/laurent22/joplin/commit/9e90d9016daf79b5414646a93fd369aedb035071">9e90d9016daf79b5414646a93fd369aedb035071</a></p>
 <p>We then share our fix with the researcher for validation. Additionally, we often apply the fix to previous versions of Joplin, depending on the severity of the vulnerability.</p>
@@ -309,35 +355,4 @@
 ]]></description><link>https://joplinapp.org/news/20220224-release-2-7</link><guid isPermaLink="false">20220224-release-2-7</guid><pubDate>Thu, 24 Feb 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Automatic deletion of disabled accounts on Joplin Cloud]]></title><description><![CDATA[<p>As of 15 Feb 2022, disabled accounts on Joplin Cloud will be automatically deleted after 90 days. A disabled account is one where the Stripe subscription has been cancelled either by the user or automatically (eg for unpaid invoices).</p>
 <p>Although it is an automated system, I will manually verify each account that's queued for deletion over the next few days for additional safety (for now everything's working as expected).</p>
 <p>When an account is queued for deletion, all notes, notebooks, tags, etc are removed from the system within 2 days, and permanently deleted within 7 days. User information, in particular email and full name will be removed from the system within 2 days, but archived for an additional 90 days for legal reasons, after which they will be deleted too.</p>
-]]></description><link>https://joplinapp.org/news/20220215-142000</link><guid isPermaLink="false">20220215-142000</guid><pubDate>Tue, 15 Feb 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Joplin 2.6 is available!]]></title><description><![CDATA[<p>Many changes in this new release, available on mobile, desktop and CLI:</p>
-<p><strong>Per-notebook sort order and sort buttons</strong></p>
-<p>This new feature adds a number of changes to the way notes are sorted. The most visible one is the addition of a sort button above the note list - it allows sorting by modification date, creation date, title or by custom order, in either ascending or descending order:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20211217-120324_0.png" alt=""></p>
-<p>By default, this sort order is going to apply to all notebooks, however you can now also assign a per-notebook sort order. In this case, any sort order will be apply to that notebook only. To enable this behaviour, simply right-click on a notebook and select &quot;Toggle own sort order&quot;:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20211217-120324_1.png" alt=""></p>
-<p>Thanks to Kenichi Kobayashi for developing this feature!</p>
-<p><strong>Support for notebook icons</strong></p>
-<p>It is now possible to associate icons with notebooks no both the desktop and mobile applications. To do so, right-click on a notebook and selected &quot;Edit&quot;.</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20211217-120324_2.png" alt=""></p>
-<p>This will open the new notebook dialog from which can change the title and assign an icon. For now the icons are emojis but perhaps custom icons could be supported later on.</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20211217-120324_3.png" alt=""></p>
-<p><strong>Allow collaborating on encrypted notebooks using Joplin Cloud</strong></p>
-<p>Thanks to the encryption improvements in the previous Joplin versions it is now possible to share and collaborated on encrypted notebooks, when synchronising with Joplin Cloud (or Joplin Server).</p>
-<p>To get this working, you and the recipient will need to have Joplin 2.6 and the person who shares will need to have encryption enabled. After that most of the process is handled automatically by the apps - in particular it will automatically generate and share the required encryption keys for each users.</p>
-<p><strong>Improved synchronisation startup speed</strong></p>
-<p>Synchronisation is also a bit faster in this release due to an optimisation on the startup process. When syncing, the app needs to acquire a lock, which may be time consuming since it requires making multiple requests. This has now been optimised so that less requests are necessary and also each request consumes less resources. This will have a postive impact on Joplin Cloud in particular, but you should also see improvements with Joplin Server and smaller improvements with the other sync targets.</p>
-<p><strong>Improved Markdown editor split view scrolling</strong></p>
-<p>Kenichi Kobayashi made some great improvements to the Markdown editor scrolling in this release. The issue before was that the editor on the left and the viewer on the right would often not be in sync, in particular if the note contains several images and other media.</p>
-<p>With Kenichi's change the editor and viewer stay nicely in sync, regardless of the note content. In fact it looks a bit like magic when you scroll through large notes - notice in particular how each side appear to wait for the other or speed up in order to make sure both sides are aligned as well possible. Kenichi provides a nice technical documentation about the feature <a href="https://github.com/laurent22/joplin/pull/5512#issuecomment-931277022">here</a>.</p>
-<p><a href="https://www.youtube.com/watch?v=Wbs5XZR0oeU">https://www.youtube.com/watch?v=Wbs5XZR0oeU</a></p>
-<p><strong>Improved and optimised S3 synchronisation</strong></p>
-<p>Thanks to the efforts of Lee Matos, synchronisation with S3 is now more reliable and errors are also better handled. The underlying S3 SDK has also been upgraded from v2 to v3 which results in a smaller executable size (about 3-5 MB depending on the operating system)</p>
-<p><strong>Export notes as self-contained HTML files</strong></p>
-<p>Exporting a single note as HTML is now more user friendly as all images, scripts, styles and other attachments are all packed into a single HTML file (Previously it would create multiples files and directories). This makes it easier to share the complete note with someone who doesn't have Joplin.</p>
-<p><strong>Other changes and bug fixes</strong></p>
-<p>This release includes a total of 19 new features and improvements and 16 bug fixes. See the 2.6.x changelogs for more details:</p>
-<p><a href="https://joplinapp.org/help/about/changelog/desktop">https://joplinapp.org/help/about/changelog/desktop</a></p>
-<p><a href="https://joplinapp.org/help/about/changelog/android/">https://joplinapp.org/help/about/changelog/android/</a></p>
-<p><a href="https://joplinapp.org/help/about/changelog/ios/">https://joplinapp.org/help/about/changelog/ios/</a></p>
-<p><a href="https://joplinapp.org/help/about/changelog/cli/">https://joplinapp.org/help/about/changelog/cli/</a></p>
-]]></description><link>https://joplinapp.org/news/20211217-120324</link><guid isPermaLink="false">20211217-120324</guid><pubDate>Fri, 17 Dec 2021 12:03:24 GMT</pubDate><twitter-text></twitter-text></item></channel></rss>
+]]></description><link>https://joplinapp.org/news/20220215-142000</link><guid isPermaLink="false">20220215-142000</guid><pubDate>Tue, 15 Feb 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item></channel></rss>
