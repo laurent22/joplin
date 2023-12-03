@@ -155,7 +155,7 @@ describe('ShareService', () => {
 		});
 	}
 
-	async function testShareFolder(service: ShareService) {
+	const prepareNoteFolderResource = async () => {
 		const folder = await Folder.save({});
 		let note = await Note.save({ parent_id: folder.id });
 		note = await shim.attachFileToNote(note, testImagePath);
@@ -164,6 +164,11 @@ describe('ShareService', () => {
 
 		await resourceService().indexNoteResources();
 
+		return { folder, note, resource };
+	};
+
+	async function testShareFolder(service: ShareService) {
+		const { folder, note, resource } = await prepareNoteFolderResource();
 		const share = await service.shareFolder(folder.id);
 		expect(share.id).toBe('share_1');
 		expect((await Folder.load(folder.id)).share_id).toBe('share_1');
@@ -187,7 +192,13 @@ describe('ShareService', () => {
 
 		expect(await MasterKey.count()).toBe(1);
 
-		let { folder, note, resource } = await testShareFolder(shareService);
+		let { folder, note, resource } = await prepareNoteFolderResource();
+
+		BaseItem.shareService_ = shareService;
+		Resource.shareService_ = shareService;
+
+		await shareService.shareFolder(folder.id);
+
 		await Folder.updateAllShareIds(resourceService());
 
 		// The share service should automatically create a new encryption key
@@ -223,6 +234,12 @@ describe('ShareService', () => {
 			const result = await Resource.fullPathForSyncUpload(resource);
 			const content = await readFile(result.path, 'utf8');
 			expect(content).toContain(folderKey.id);
+
+			{
+				await synchronizerStart();
+				const remoteItems = await remoteNotesFoldersResources();
+				expect(remoteItems.map(it => it.encryption_applied)).toEqual([1, 1, 1]);
+			}
 		} finally {
 			BaseItem.shareService_ = shareService;
 			Resource.shareService_ = null;
