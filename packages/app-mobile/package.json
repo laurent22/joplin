@@ -91,7 +91,7 @@
     "@js-draw/material-icons": "1.14.0",
     "@lezer/highlight": "1.1.4",
     "@testing-library/jest-native": "5.4.3",
-    "@testing-library/react-native": "12.3.2",
+    "@testing-library/react-native": "12.3.3",
     "@tsconfig/react-native": "2.0.2",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.8",
