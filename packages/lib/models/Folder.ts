@@ -1,4 +1,4 @@
-import { defaultFolderIcon, FolderEntity, FolderIcon, NoteEntity } from '../services/database/types';
+import { defaultFolderIcon, FolderEntity, FolderIcon, NoteEntity, ResourceEntity } from '../services/database/types';
 import BaseModel, { DeleteOptions } from '../BaseModel';
 import time from '../time';
 import { _ } from '../locale';
@@ -411,14 +411,21 @@ export default class Folder extends BaseItem {
 		// resume the process from the start (thus the loop) so that we deal
 		// with the right note/resource associations.
 
+		interface Row {
+			id: string;
+			share_id: string;
+			is_shared: number;
+			resource_is_shared: number;
+		}
+
 		for (let i = 0; i < 5; i++) {
 			// Find all resources where share_id is different from parent note
 			// share_id. Then update share_id on all these resources. Essentially it
 			// makes it match the resource share_id to the note share_id. At the
 			// same time we also process the is_shared property.
 
-			const rows = await this.db().selectAll(`
-				SELECT r.id, n.share_id, n.is_shared
+			const rows = (await this.db().selectAll(`
+				SELECT r.id, n.share_id, n.is_shared, r.is_shared as resource_is_shared
 				FROM note_resources nr
 				LEFT JOIN resources r ON nr.resource_id = r.id
 				LEFT JOIN notes n ON nr.note_id = n.id
@@ -426,7 +433,7 @@ export default class Folder extends BaseItem {
 					n.share_id != r.share_id
 					OR n.is_shared != r.is_shared
 				) AND nr.is_associated = 1
-			`);
+			`)) as Row[];
 
 			if (!rows.length) return;
 
@@ -434,7 +441,7 @@ export default class Folder extends BaseItem {
 
 			const resourceIds = rows.map(r => r.id);
 
-			interface Row {
+			interface NoteResourceRow {
 				resource_id: string;
 				note_id: string;
 				share_id: string;
@@ -450,9 +457,9 @@ export default class Folder extends BaseItem {
 				LEFT JOIN notes ON notes.id = note_resources.note_id
 				WHERE resource_id IN ('${resourceIds.join('\',\'')}')
 				AND is_associated = 1
-			`) as Row[];
+			`) as NoteResourceRow[];
 
-			const resourceIdToNotes: Record<string, Row[]> = {};
+			const resourceIdToNotes: Record<string, NoteResourceRow[]> = {};
 
 			for (const r of noteResourceAssociations) {
 				if (!resourceIdToNotes[r.resource_id]) resourceIdToNotes[r.resource_id] = [];
@@ -496,13 +503,20 @@ export default class Folder extends BaseItem {
 			} else {
 				// If all is good, we can set the share_id and is_shared
 				// property of the resource.
+				const now = Date.now();
 				for (const row of rows) {
-					await Resource.save({
+					const resource: ResourceEntity = {
 						id: row.id,
 						share_id: row.share_id || '',
 						is_shared: row.is_shared,
-						updated_time: Date.now(),
-					}, { autoTimestamp: false });
+						updated_time: now,
+					};
+
+					if (row.is_shared !== row.resource_is_shared) {
+						resource.blob_updated_time = now;
+					}
+
+					await Resource.save(resource, { autoTimestamp: false });
 				}
 				return;
 			}
