@@ -6,7 +6,7 @@
 	"scripts": {
 		"tsc": "tsc --project tsconfig.json",
 		"watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
-		"build": "ts-node build.ts build"
+		"build": "ts-node build.ts build ../app-desktop/build/defaultPlugins/"
 	},
 	"repository": {
 		"type": "git",
