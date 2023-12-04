@@ -6219,6 +6219,7 @@ __metadata:
     "@electron/remote": 2.0.12
     "@fortawesome/fontawesome-free": 5.15.4
     "@joeattardi/emoji-button": 4.6.4
+    "@joplin/default-plugins": ~2.13
     "@joplin/editor": ~2.13
     "@joplin/lib": ~2.13
     "@joplin/renderer": ~2.13
@@ -6278,6 +6279,7 @@ __metadata:
     styled-system: 5.1.5
     taboverride: 4.0.3
     tinymce: 5.10.6
+    ts-node: 10.9.1
     typescript: 5.2.2
   languageName: unknown
   linkType: soft
@@ -6387,7 +6389,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/default-plugins@workspace:packages/default-plugins":
+"@joplin/default-plugins@workspace:packages/default-plugins, @joplin/default-plugins@~2.13":
   version: 0.0.0-use.local
   resolution: "@joplin/default-plugins@workspace:packages/default-plugins"
   dependencies:

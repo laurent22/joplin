@@ -5,7 +5,7 @@ import { join } from 'path';
 import buildDefaultPlugins from '../buildDefaultPlugins';
 import getPathToPatchFileFor from '../utils/getPathToPatchFileFor';
 
-const editPatch = async (targetPluginId: string, outputParentDir: string) => {
+const editPatch = async (targetPluginId: string, outputParentDir: string|null) => {
 	let patchedPlugin = false;
 
 	await buildDefaultPlugins(outputParentDir, async (buildDir, pluginId) => {

@@ -15,17 +15,13 @@ const build = () => {
 			await buildAll(args.outputDir);
 			process.exit(0);
 		})
-		.command('patch <plugin> <outputDir>', 'build all, but stop for patching', (yargs: any) => {
+		.command('patch <plugin>', 'Edit the patch file for the given plugin ID', (yargs: any) => {
 			yargs.positional('plugin', {
 				type: 'string',
 				describe: 'ID of the plugin to patch',
 			});
-			yargs.positional('outputDir', {
-				type: 'string',
-				describe: 'Name of the plugin to patch',
-			});
 		}, async (args: any) => {
-			await editPatch(args.plugin, args.outputDir);
+			await editPatch(args.plugin, null);
 			process.exit(0);
 		})
 		.help()

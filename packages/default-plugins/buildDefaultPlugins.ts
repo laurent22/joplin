@@ -13,14 +13,16 @@ import getPathToPatchFileFor from './utils/getPathToPatchFileFor';
 
 type BeforeEachInstallCallback = (buildDir: string, pluginName: string)=> Promise<void>;
 
-const buildDefaultPlugins = async (outputParentDir: string, beforeInstall: BeforeEachInstallCallback) => {
+const buildDefaultPlugins = async (outputParentDir: string|null, beforeInstall: BeforeEachInstallCallback) => {
 	const pluginSourcesDir = resolve(join(__dirname, 'plugin-sources'));
 	const pluginRepositoryData = await readRepositoryJson(join(__dirname, 'pluginRepositories.json'));
 
 	const originalDirectory = cwd();
 
 	const logStatus = (...message: string[]) => {
-		console.log('\x1b[96m', ...message, '\x1b[0m');
+		const blue = '\x1b[96m';
+		const reset = '\x1b[0m';
+		console.log(blue, ...message, reset);
 	};
 
 	for (const pluginId in pluginRepositoryData) {
@@ -90,18 +92,22 @@ const buildDefaultPlugins = async (outputParentDir: string, beforeInstall: Befor
 				throw new Error(`No published files found in ${buildDir}/publish`);
 			}
 
-			logStatus(`Checking output directory in ${outputParentDir}`);
-			const outputDirectory = join(outputParentDir, pluginId);
-			if (await exists(outputDirectory)) {
-				await remove(outputDirectory);
+			if (outputParentDir !== null) {
+				logStatus(`Checking output directory in ${outputParentDir}`);
+				const outputDirectory = join(outputParentDir, pluginId);
+				if (await exists(outputDirectory)) {
+					await remove(outputDirectory);
+				}
+				await mkdirp(outputDirectory);
+
+				const sourceFile = jplFiles[0];
+				const destFile = join(outputDirectory, 'plugin.jpl');
+
+				logStatus(`Copying built file from ${sourceFile} to ${destFile}`);
+				await copy(sourceFile, destFile);
+			} else {
+				console.warn('No output directory specified. Not copying built .jpl files.');
 			}
-			await mkdirp(outputDirectory);
-
-			const sourceFile = jplFiles[0];
-			const destFile = join(outputDirectory, 'plugin.jpl');
-
-			logStatus(`Copying built file from ${sourceFile} to ${destFile}`);
-			await copy(sourceFile, destFile);
 		} catch (error) {
 			console.error(error);
 			console.log('Build directory', buildDir);

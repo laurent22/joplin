@@ -382,6 +382,7 @@ packages/app-desktop/gui/style/StyledTextInput.js
 packages/app-desktop/gui/utils/NoteListUtils.js
 packages/app-desktop/gui/utils/convertToScreenCoordinates.js
 packages/app-desktop/gui/utils/loadScript.js
+packages/app-desktop/gulpfile.js
 packages/app-desktop/integration-tests/main.spec.js
 packages/app-desktop/integration-tests/models/MainScreen.js
 packages/app-desktop/integration-tests/models/NoteEditorScreen.js
