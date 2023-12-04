@@ -702,6 +702,14 @@ class Setting extends BaseModel {
 				public: false,
 				storage: SettingStorage.Database,
 			},
+			'sync.10.id': {
+				value: '',
+				type: SettingItemType.String,
+				section: 'sync',
+				public: false,
+				storage: SettingStorage.File,
+				secure: true,
+			},
 			'sync.10.username': {
 				value: '',
 				type: SettingItemType.String,

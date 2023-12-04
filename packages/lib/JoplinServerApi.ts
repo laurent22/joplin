@@ -42,8 +42,8 @@ interface Session {
 
 export default class JoplinServerApi {
 
-	private options_: Options;
-	private session_: Session;
+	protected options_: Options;
+	protected session_: Session;
 	private debugRequests_ = false;
 	private debugRequestsShowPasswords_ = false;
 
@@ -63,7 +63,7 @@ export default class JoplinServerApi {
 		return personalizedUserContentBaseUrl(userId, this.baseUrl(), this.options_.userContentBaseUrl());
 	}
 
-	private async session() {
+	protected async session() {
 		if (this.session_) return this.session_;
 
 		try {
@@ -79,7 +79,7 @@ export default class JoplinServerApi {
 		}
 	}
 
-	private async sessionId() {
+	protected async sessionId() {
 		const session = await this.session();
 		return session ? session.id : '';
 	}
@@ -132,7 +132,7 @@ export default class JoplinServerApi {
 		return output.join(' ');
 	}
 
-	private async exec_(method: string, path = '', query: Record<string, any> = null, body: any = null, headers: any = null, options: ExecOptions = null) {
+	protected async exec_(method: string, path = '', query: Record<string, any> = null, body: any = null, headers: any = null, options: ExecOptions = null) {
 		if (headers === null) headers = {};
 		if (options === null) options = {};
 		if (!options.responseFormat) options.responseFormat = ExecOptionsResponseFormat.Json;

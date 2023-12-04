@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useRef, useCallback } from 'react';
+import { useRef, useCallback } from 'react';
 import { _ } from '@joplin/lib/locale';
 import DialogButtonRow from '../DialogButtonRow';
 import Dialog from '../Dialog';
@@ -9,10 +9,7 @@ import SyncTargetRegistry, { SyncTargetInfo } from '@joplin/lib/SyncTargetRegist
 import useElementSize from '@joplin/lib/hooks/useElementSize';
 import Button, { ButtonLevel } from '../Button/Button';
 import bridge from '../../services/bridge';
-import StyledInput from '../style/StyledInput';
 import Setting from '@joplin/lib/models/Setting';
-import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
-import StyledLink from '../style/StyledLink';
 
 interface Props {
 	themeId: number;
@@ -29,10 +26,6 @@ const SyncTargetDescription = styled.div<{ height: number }>`
 	${props => props.height ? `height: ${props.height}px` : ''};
 	margin-bottom: 1.3em;
 	line-height: ${props => props.theme.lineHeight};
-	font-size: 16px;
-`;
-
-const CreateAccountLink = styled(StyledLink)`
 	font-size: 16px;
 `;
 
@@ -117,16 +110,6 @@ const SelectButton = styled(Button)`
     font-size: 1em;
 `;
 
-const JoplinCloudLoginForm = styled.div`
-	display: flex;
-	flex-direction: column;
-`;
-
-const FormLabel = styled.label`
-	font-weight: bold;
-	margin: 1em 0 0.6em 0;
-`;
-
 const syncTargetNames: string[] = [
 	'joplinCloud',
 	'dropbox',
@@ -144,12 +127,11 @@ const logosImageNames: Record<string, string> = {
 	'onedrive': 'SyncTarget_OneDrive.svg',
 };
 
+type SyncTargetInfoName = 'dropbox' | 'onedrive' | 'joplinCloud';
+
 export default function(props: Props) {
-	const [showJoplinCloudForm, setShowJoplinCloudForm] = useState(false);
+	const showJoplinCloudForm = false;
 	const joplinCloudDescriptionRef = useRef(null);
-	const [joplinCloudEmail, setJoplinCloudEmail] = useState('');
-	const [joplinCloudPassword, setJoplinCloudPassword] = useState('');
-	const [joplinCloudLoginInProgress, setJoplinCloudLoginInProgress] = useState(false);
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	function closeDialog(dispatch: Function) {
@@ -184,93 +166,33 @@ export default function(props: Props) {
 		);
 	}
 
-	const onJoplinCloudEmailChange = useCallback((event: any) => {
-		setJoplinCloudEmail(event.target.value);
-	}, []);
+	const onSelectButtonClick = useCallback(async (name: SyncTargetInfoName) => {
+		const routes = {
+			'dropbox': { name: 'DropboxLogin', target: 7 },
+			'onedrive': { name: 'OneDriveLogin', target: 3 },
+			'joplinCloud': { name: 'JoplinCloudLogin', target: 10 },
+		};
+		const route = routes[name];
+		if (!route) return; // throw error??
 
-	const onJoplinCloudPasswordChange = useCallback((event: any) => {
-		setJoplinCloudPassword(event.target.value);
-	}, []);
-
-	const onJoplinCloudLoginClick = useCallback(async () => {
-		setJoplinCloudLoginInProgress(true);
-
-		let result = null;
-
-		try {
-			result = await SyncTargetJoplinCloud.checkConfig({
-				password: () => joplinCloudPassword,
-				path: () => Setting.value('sync.10.path'),
-				userContentPath: () => Setting.value('sync.10.userContentPath'),
-				username: () => joplinCloudEmail,
-			});
-		} finally {
-			setJoplinCloudLoginInProgress(false);
-		}
-
-		if (result.ok) {
-			Setting.setValue('sync.target', 10);
-			Setting.setValue('sync.10.username', joplinCloudEmail);
-			Setting.setValue('sync.10.password', joplinCloudPassword);
-			await Setting.saveAll();
-
-			alert(_('Thank you! Your Joplin Cloud account is now setup and ready to use.'));
-
-			closeDialog(props.dispatch);
-
-			props.dispatch({
-				type: 'NAV_GO',
-				routeName: 'Main',
-			});
-		} else {
-			alert(_('There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s', result.errorMessage));
-		}
-	}, [joplinCloudEmail, joplinCloudPassword, props.dispatch]);
-
-	const onJoplinCloudCreateAccountClick = useCallback(() => {
-		void bridge().openExternal('https://joplinapp.org/plans/');
-	}, []);
-
-	function renderJoplinCloudLoginForm() {
-		return (
-			<JoplinCloudLoginForm>
-				<div style={{ fontSize: '16px' }}>{_('Login below.')} <CreateAccountLink href="#" onClick={onJoplinCloudCreateAccountClick}>{_('Or create an account.')}</CreateAccountLink></div>
-				<FormLabel>{_('Email')}</FormLabel>
-				<StyledInput type="email" onChange={onJoplinCloudEmailChange}/>
-				<FormLabel>{_('Password')}</FormLabel>
-				<StyledInput type="password" onChange={onJoplinCloudPasswordChange}/>
-				<SelectButton mt="1.3em" disabled={joplinCloudLoginInProgress} level={ButtonLevel.Primary} title={_('Login')} onClick={onJoplinCloudLoginClick}/>
-			</JoplinCloudLoginForm>
-		);
-	}
-
-	const onSelectButtonClick = useCallback(async (name: string) => {
-		if (name === 'joplinCloud') {
-			setShowJoplinCloudForm(true);
-		} else {
-			Setting.setValue('sync.target', name === 'dropbox' ? 7 : 3);
-			await Setting.saveAll();
-			closeDialog(props.dispatch);
-			props.dispatch({
-				type: 'NAV_GO',
-				routeName: name === 'dropbox' ? 'DropboxLogin' : 'OneDriveLogin',
-			});
-		}
+		Setting.setValue('sync.target', route.target);
+		await Setting.saveAll();
+		closeDialog(props.dispatch);
+		props.dispatch({
+			type: 'NAV_GO',
+			routeName: route.name,
+		});
 	}, [props.dispatch]);
 
 	function renderSelectArea(info: SyncTargetInfo) {
-		if (info.name === 'joplinCloud' && showJoplinCloudForm) {
-			return renderJoplinCloudLoginForm();
-		} else {
-			return (
-				<SelectButton
-					level={ButtonLevel.Primary}
-					title={_('Select')}
-					onClick={() => onSelectButtonClick(info.name)}
-					disabled={joplinCloudLoginInProgress}
-				/>
-			);
-		}
+		return (
+			<SelectButton
+				level={ButtonLevel.Primary}
+				title={_('Select')}
+				onClick={() => onSelectButtonClick(info.name as SyncTargetInfoName)}
+				disabled={false}
+			/>
+		);
 	}
 
 	function renderSyncTarget(info: SyncTargetInfo) {

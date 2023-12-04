@@ -28,6 +28,7 @@ import ImportScreen from './ImportScreen';
 const { ResourceScreen } = require('./ResourceScreen.js');
 import Navigator from './Navigator';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
+import JoplinCloudLoginScreen from './JoplinCloudLoginScreen';
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
 const bridge = require('@electron/remote').require('./bridge').default;
 
@@ -224,6 +225,7 @@ class RootComponent extends React.Component<Props, any> {
 			Main: { screen: MainScreen },
 			OneDriveLogin: { screen: OneDriveLoginScreen, title: () => _('OneDrive Login') },
 			DropboxLogin: { screen: DropboxLoginScreen, title: () => _('Dropbox Login') },
+			JoplinCloudLogin: { screen: JoplinCloudLoginScreen, title: () => _('Joplin Cloud Login') },
 			Import: { screen: ImportScreen, title: () => _('Import') },
 			Config: { screen: ConfigScreen, title: () => _('Options') },
 			Resources: { screen: ResourceScreen, title: () => _('Note attachments') },

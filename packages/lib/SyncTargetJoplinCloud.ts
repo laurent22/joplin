@@ -3,13 +3,39 @@ import Synchronizer from './Synchronizer';
 import { _ } from './locale.js';
 import BaseSyncTarget from './BaseSyncTarget';
 import { FileApi } from './file-api';
-import SyncTargetJoplinServer, { initFileApi } from './SyncTargetJoplinServer';
+import SyncTargetJoplinServer from './SyncTargetJoplinServer';
+import JoplinCloudApi from './JoplinCloudApi';
+import FileApiDriverJoplinServer from './file-api-driver-joplinServer';
+import Logger from '@joplin/utils/Logger';
 
 interface FileApiOptions {
 	path(): string;
 	userContentPath(): string;
-	username(): string;
+	id(): string;
 	password(): string;
+}
+
+export async function newFileApi(id: number, options: FileApiOptions) {
+	const apiOptions = {
+		baseUrl: () => options.path(),
+		userContentBaseUrl: () => options.userContentPath(),
+		password: () => options.password(),
+		env: Setting.value('env'),
+		username: () => options.id(),
+	};
+
+	const api = new JoplinCloudApi(apiOptions);
+	const driver = new FileApiDriverJoplinServer(api);
+	const fileApi = new FileApi('', driver);
+	fileApi.setSyncTargetId(id);
+	await fileApi.initialize();
+	return fileApi;
+}
+
+export async function initFileApi(syncTargetId: number, logger: Logger, options: FileApiOptions) {
+	const fileApi = await newFileApi(syncTargetId, options);
+	fileApi.setLogger(logger);
+	return fileApi;
 }
 
 export default class SyncTargetJoplinCloud extends BaseSyncTarget {
@@ -57,17 +83,18 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 		return super.fileApi();
 	}
 
-	public static async checkConfig(options: FileApiOptions) {
-		return SyncTargetJoplinServer.checkConfig({
-			...options,
-		}, SyncTargetJoplinCloud.id());
+	public static async checkConfig() {
+		return true;
+		// return SyncTargetJoplinServer.checkConfig({
+		// 	...options,
+		// }, SyncTargetJoplinCloud.id());
 	}
 
 	protected async initFileApi() {
 		return initFileApi(SyncTargetJoplinCloud.id(), this.logger(), {
 			path: () => Setting.value('sync.10.path'),
 			userContentPath: () => Setting.value('sync.10.userContentPath'),
-			username: () => Setting.value('sync.10.username'),
+			id: () => Setting.value('sync.10.id'),
 			password: () => Setting.value('sync.10.password'),
 		});
 	}
