@@ -1,6 +1,6 @@
 # Joplin Desktop Changelog
 
-## [v2.13.8](https://github.com/laurent22/joplin/releases/tag/v2.13.8) (Pre-release) - 2023-12-03T12:07:08Z
+## [v2.13.8](https://github.com/laurent22/joplin/releases/tag/v2.13.8) - 2023-12-03T12:07:08Z
 
 - Fixed: Fixed images not being visible on encrypted published notes ([b459ba7](https://github.com/laurent22/joplin/commit/b459ba7))
 

@@ -456,14 +456,15 @@ describe('services/RevisionService', () => {
 		await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
 		const timeRev1 = Date.now();
-		await msleep(200);
+		const sleepTime = 500;
+		await msleep(sleepTime);
 
 		const timeRev2 = Date.now();
 		await Note.save({ id: n1_v0.id, title: 'hello 2' });
 		await revisionService().collectRevisions(); // REV 2
 		expect((await Revision.all()).length).toBe(2);
 
-		const interval = Date.now() - timeRev1 + 1;
+		const interval = Date.now() - timeRev1 + sleepTime / 2;
 		Setting.setValue('revisionService.intervalBetweenRevisions', interval);
 
 		await Note.save({ id: n1_v0.id, title: 'hello 3' });
