@@ -58,9 +58,9 @@ const buildBeforeStartParallel = [
 
 gulp.task('before-start', gulp.parallel(...buildBeforeStartParallel));
 
-const buildAllParallel = [
-	...buildBeforeStartParallel,
+const buildAllSequential = [
+	'before-start',
 	'buildDefaultPlugins',
 ];
 
-gulp.task('build', gulp.parallel(buildAllParallel));
+gulp.task('build', gulp.series(buildAllSequential));
