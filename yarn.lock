@@ -6585,7 +6585,7 @@ __metadata:
     tar-stream: 3.1.6
     timers: 0.1.1
     ts-jest: 29.1.1
-    ts-loader: 9.5.0
+    ts-loader: 9.5.1
     ts-node: 10.9.1
     typescript: 5.2.2
     uglify-js: 3.17.4
@@ -6808,7 +6808,7 @@ __metadata:
     style-loader: 3.3.3
     styled-components: 5.3.11
     ts-jest: 29.1.1
-    ts-loader: 9.5.0
+    ts-loader: 9.5.1
     typescript: 5.2.2
     webpack: 5.74.0
     webpack-cli: 4.10.0
@@ -40628,9 +40628,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-loader@npm:9.5.0":
-  version: 9.5.0
-  resolution: "ts-loader@npm:9.5.0"
+"ts-loader@npm:9.5.1":
+  version: 9.5.1
+  resolution: "ts-loader@npm:9.5.1"
   dependencies:
     chalk: ^4.1.0
     enhanced-resolve: ^5.0.0
@@ -40640,7 +40640,7 @@ __metadata:
   peerDependencies:
     typescript: "*"
     webpack: ^5.0.0
-  checksum: a319575faa07145917a7050ac6be7e7f8d97745c6b6ecf8097ac51cebd2d459e8f8b2519d0c39066a065f4d73ae331d2aba9de3d62ea38bc59fd84395794d428
+  checksum: 7cf396e656d905388ea2a9b5e82f16d3c955fda8d3df2fbf219f4bee16ff50a3c995c44ae3e584634e9443f056cec70bb3151add3917ffb4588ecd7394bac0ec
   languageName: node
   linkType: hard
 
