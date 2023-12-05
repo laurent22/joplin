@@ -71,7 +71,7 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		props.flow,
 	);
 
-	useItemEventHandlers(rootElement, itemElement, onInputChange);
+	useItemEventHandlers(rootElement, itemElement, onInputChange, null);
 
 	const className = useMemo(() => {
 		return [

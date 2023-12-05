@@ -1,5 +1,6 @@
 import { _ } from '../../locale';
-import { ItemFlow, ListRenderer } from '../plugins/api/noteListType';
+import CommandService from '../CommandService';
+import { ItemFlow, ListRenderer, OnClickEvent } from '../plugins/api/noteListType';
 
 interface Props {
 	note: {
@@ -114,6 +115,16 @@ const defaultListRenderer: ListRenderer = {
 			}
 		}
 	`,
+
+	headerTemplate: // html
+		`
+		<button data-id="title">Title</button><button data-id="updated">Updated</button>
+	`,
+
+	onHeaderClick: async (event:OnClickEvent) => {
+		const field = event.elementId === 'title' ? 'title' : 'user_updated_time';
+		void CommandService.instance().execute('toggleNotesSortOrderField', field);
+	},
 
 	itemTemplate: // html
 		`

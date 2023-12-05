@@ -19,8 +19,13 @@ export interface OnChangeEvent {
 	noteId: string;
 }
 
+export interface OnClickEvent {
+	elementId: string;
+}
+
 export type OnRenderNoteHandler = (props: any)=> Promise<RenderNoteView>;
 export type OnChangeHandler = (event: OnChangeEvent)=> Promise<void>;
+export type OnClickHandler = (event: OnClickEvent) => Promise<void>;
 
 /**
  * Most of these are the built-in note properties, such as `note.title`,
@@ -97,6 +102,10 @@ export interface ListRenderer {
 	 * penalty for each property.
 	 */
 	dependencies: ListRendererDepependency[];
+
+	headerTemplate?:string;
+	headerHeight?: number;
+	onHeaderClick?: OnClickHandler;
 
 	/**
 	 * This is the HTML template that will be used to render the note list item.

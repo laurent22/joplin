@@ -7,6 +7,7 @@ import { Size } from '../ResizableLayout/utils/types';
 import styled from 'styled-components';
 import { getDefaultListRenderer, getListRendererById } from '@joplin/lib/services/noteList/renderers';
 import Logger from '@joplin/utils/Logger';
+import NoteListHeader from '../NoteListHeader/NoteListHeader';
 
 const logger = Logger.create('NoteListWrapper');
 
@@ -52,6 +53,16 @@ export default function NoteListWrapper(props: Props) {
 		};
 	}, [props.size]);
 
+	const renderHeader = () => {
+		if (!listRenderer || !listRenderer.headerTemplate) return null;
+
+		return <NoteListHeader
+			height={listRenderer.headerHeight}
+			template={listRenderer.headerTemplate}
+			onClick={listRenderer.onHeaderClick}
+		/>
+	}
+
 	const renderNoteList = () => {
 		if (!listRenderer) return null;
 		return <NoteList2
@@ -65,6 +76,7 @@ export default function NoteListWrapper(props: Props) {
 	return (
 		<StyledRoot>
 			<NoteListControls height={controlHeight} width={noteListSize.width}/>
+			{renderHeader()}
 			{renderNoteList()}
 		</StyledRoot>
 	);
