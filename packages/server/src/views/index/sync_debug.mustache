@@ -1,6 +1,6 @@
 <h1 class="title">Debugging</h1>
 <p>
-	Use these tools to debug sync issues with Joplin Server.
+	The tools on this page can be used to debug sync issues with Joplin Server.
 </p>
 
 <div class="debug-tools-container">
@@ -15,10 +15,52 @@
 
 	<fieldset class="resource-check-container" id="note-in-diff-check">
 		<legend>
-			Check if an item is sent to Joplin to download on an initial sync
+			Check if an item is sent to a Joplin client to download during an initial sync
 		</legend>
 		<label for="note-on-server-input">External link or ID:</label>
 		<input type="text" id="note-in-diff-input"/>
 		<noscript>JavaScript required</noscript>
 	</fieldset>
+</div>
+
+<hr/>
+
+<div class="usage-container">
+	<h2 class="title is-2" id="getting-an-id">Getting an external link or ID</h2>
+	<p>
+		The above tools accept either an item ID, an internal link to an item, or an external link
+		to an item. Here's how you can get these:
+	</p>
+
+	<details class="usage-section">
+		<summary class="title">Getting an external notebook link on desktop</summary>
+
+		<p>This is an example external notebook link: <code>joplin://x-callback-url/openFolder?id=54b111edd8664a5c8ece04d80ac7b9ae</code></p>
+
+		<ol>
+			<li>Right-click on a notebook (in the notebook list).</li>
+			<li>In the right-click menu, click "copy external link"</li>
+		</ol>
+	</details>
+
+	<details class="usage-section">
+		<summary class="title">Getting an external note link on desktop</summary>
+
+		<ol>
+			<li>Right-click on a note (in the notes list).</li>
+			<li>Click "copy external link"</li>
+		</ol>
+	</details>
+
+
+	<details class="usage-section">
+		<summary class="title">Getting an external note link on mobile</summary>
+
+		<ol>
+			<li>Open a note</li>
+			<li>Open the actions menu (the three vertical dots on the top right of the screen).</li>
+			<li>Click "Copy markdown link"</li>
+		</ol>
+	</details>
+
 </div>

@@ -37,6 +37,25 @@
 	border-radius: 5px;
 }
 
+.usage-section {
+	margin-top: 10px;
+}
+
+.usage-section[open] {
+	border: 1px solid var(--border-color);
+	border-radius: 10px;
+	padding-bottom: 15px;
+}
+
+.usage-section > .title {
+	font-weight: bold;
+	font-size: 1.3em;
+}
+
+.usage-section > ol {
+	padding-left: 40px;
+}
+
 
 details > summary {
 	cursor: pointer;
