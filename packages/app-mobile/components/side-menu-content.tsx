@@ -113,6 +113,7 @@ const SideMenuContentComponent = (props: Props) => {
 					toValue: 1,
 					duration: 3000,
 					easing: Easing.linear,
+					useNativeDriver: false,
 				}),
 			);
 
