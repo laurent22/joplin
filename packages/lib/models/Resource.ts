@@ -507,7 +507,6 @@ export default class Resource extends BaseItem {
 			id: resourceId,
 			ocr_error: '',
 			ocr_text: '',
-			ocr_words: '',
 			ocr_status: ResourceOcrStatus.Todo,
 		});
 	}
