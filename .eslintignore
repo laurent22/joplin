@@ -385,6 +385,7 @@ packages/app-desktop/integration-tests/models/SettingsScreen.js
 packages/app-desktop/integration-tests/util/activateMainMenuItem.js
 packages/app-desktop/integration-tests/util/createStartupArgs.js
 packages/app-desktop/integration-tests/util/firstNonDevToolsWindow.js
+packages/app-desktop/integration-tests/util/setFilePickerResponse.js
 packages/app-desktop/integration-tests/util/test.js
 packages/app-desktop/playwright.config.js
 packages/app-desktop/plugins/GotoAnything.js
