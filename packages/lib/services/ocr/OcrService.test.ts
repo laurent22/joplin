@@ -1,4 +1,4 @@
-import { createNoteAndResource, ocrSampleDir, setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
+import { createNoteAndResource, ocrSampleDir, resourceFetcher, setupDatabaseAndSynchronizer, supportDir, switchClient, synchronizerStart } from '../../testing/test-utils';
 import OcrDriverTesseract from './drivers/OcrDriverTesseract';
 import OcrService from './OcrService';
 import { supportedMimeTypes } from './OcrService';
@@ -6,6 +6,7 @@ import { createWorker } from 'tesseract.js';
 import Resource from '../../models/Resource';
 import { ResourceEntity, ResourceOcrStatus } from '../database/types';
 import { msleep } from '@joplin/utils/time';
+import Logger from '@joplin/utils/Logger';
 
 const newService = () => {
 	const driver = new OcrDriverTesseract({ createWorker });
@@ -16,6 +17,7 @@ describe('OcrService', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
+		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
 	});
 
@@ -92,6 +94,128 @@ describe('OcrService', () => {
 
 		await service.dispose();
 	});
+
+	it('should handle case where resource blob has not yet been downloaded', async () => {
+		await createNoteAndResource({ path: `${ocrSampleDir}/dummy.pdf` });
+
+		await synchronizerStart();
+
+		await switchClient(2);
+
+		await synchronizerStart();
+
+		await msleep(1);
+
+		const service = newService();
+
+		await service.processResources();
+
+		{
+			const resource: ResourceEntity = (await Resource.all())[0];
+			expect(resource.ocr_text).toBe('');
+			expect(resource.ocr_error).toBe('');
+			expect(resource.ocr_status).toBe(ResourceOcrStatus.Todo);
+		}
+
+		await resourceFetcher().start();
+		await resourceFetcher().waitForAllFinished();
+
+		await service.processResources();
+
+		{
+			const resource: ResourceEntity = (await Resource.all())[0];
+			expect(resource.ocr_text).toBe('Dummy PDF file');
+			expect(resource.ocr_error).toBe('');
+			expect(resource.ocr_status).toBe(ResourceOcrStatus.Done);
+		}
+
+		await service.dispose();
+	});
+
+	it('should handle case where resource blob cannot be downloaded', async () => {
+		await createNoteAndResource({ path: `${ocrSampleDir}/dummy.pdf` });
+
+		await synchronizerStart();
+
+		await switchClient(2);
+
+		await synchronizerStart();
+
+		const resource: ResourceEntity = (await Resource.all())[0];
+
+		// ----------------------------------------------------------------
+		// Fetch status is an error so OCR status will be an error too
+		// ----------------------------------------------------------------
+
+		await Resource.setLocalState(resource.id, {
+			resource_id: resource.id,
+			fetch_status: Resource.FETCH_STATUS_ERROR,
+			fetch_error: 'cannot be downloaded',
+		});
+
+		const service = newService();
+
+		// The service will print a warnign so we disable it in tests
+		Logger.globalLogger.enabled = false;
+		await service.processResources();
+		Logger.globalLogger.enabled = true;
+
+		{
+			const resource: ResourceEntity = (await Resource.all())[0];
+			expect(resource.ocr_text).toBe('');
+			expect(resource.ocr_error).toContain('Cannot process resource');
+			expect(resource.ocr_error).toContain('cannot be downloaded');
+			expect(resource.ocr_status).toBe(ResourceOcrStatus.Error);
+		}
+
+		// ----------------------------------------------------------------
+		// After the fetch status is reset and the resource downloaded, it
+		// should also retry OCR and succeed.
+		// ----------------------------------------------------------------
+
+		await Resource.resetFetchErrorStatus(resource.id);
+
+		await resourceFetcher().start();
+		await resourceFetcher().waitForAllFinished();
+
+		await service.processResources();
+
+		{
+			const resource: ResourceEntity = (await Resource.all())[0];
+			expect(resource.ocr_text).toBe('Dummy PDF file');
+			expect(resource.ocr_error).toBe('');
+			expect(resource.ocr_status).toBe(ResourceOcrStatus.Done);
+		}
+
+		await service.dispose();
+	});
+
+	// it('should handle conflicts if two clients process the resources then sync', async () => {
+	// 	const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/dummy.pdf` });
+
+	// 	const service1 = newService();
+
+	// 	await synchronizerStart();
+
+	// 	await service1.processResources();
+
+	// 	await switchClient(2);
+
+	// 	await synchronizerStart();
+
+	// 	await msleep(1);
+
+	// 	const service2 = newService();
+
+	// 	await service2.processResources();
+
+	// 	console.info(await Resource.all());
+
+	// 	// await synchronizerStart();
+
+	// 	await service1.dispose();
+	// 	await service2.dispose();
+	// });
 
 	// Use this to quickly test with specific images:
 

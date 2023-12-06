@@ -79,6 +79,7 @@ export default class OcrService {
 		this.isProcessingResources_ = true;
 
 		const totalResourcesToProcess = await Resource.needOcrCount(supportedMimeTypes);
+		const skippedResourceIds: string[] = [];
 
 		const resourceInfo = (resource: ResourceEntity) => {
 			return `${resource.id} (type ${resource.mime})`;
@@ -92,7 +93,7 @@ export default class OcrService {
 			let totalProcessed = 0;
 
 			while (true) {
-				const resources = await Resource.needOcr(supportedMimeTypes, {
+				const resources = await Resource.needOcr(supportedMimeTypes, skippedResourceIds, {
 					fields: [
 						'id',
 						'mime',
@@ -111,6 +112,17 @@ export default class OcrService {
 					};
 
 					try {
+						const fetchStatus = await Resource.localState(resource.id);
+						if (fetchStatus.fetch_status === Resource.FETCH_STATUS_ERROR) {
+							throw new Error(`Cannot process resource ${resourceInfo(resource)} because it cannot be fetched from the server: ${fetchStatus.fetch_error}`);
+						}
+
+						if (fetchStatus.fetch_status !== Resource.FETCH_STATUS_DONE) {
+							skippedResourceIds.push(resource.id);
+							logger.info(`Skipping resource ${resourceInfo(resource)} because it has not been downloaded yet`);
+							continue;
+						}
+
 						const result = await this.recognize(language, resource);
 						toSave.ocr_status = ResourceOcrStatus.Done;
 						toSave.ocr_text = filterOcrText(result.text);

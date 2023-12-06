@@ -5,7 +5,7 @@ import NoteResource from './NoteResource';
 import Setting from './Setting';
 import markdownUtils from '../markdownUtils';
 import { _ } from '../locale';
-import { ResourceEntity, ResourceLocalStateEntity, ResourceOcrStatus } from '../services/database/types';
+import { ResourceEntity, ResourceLocalStateEntity, ResourceOcrStatus, SqlQuery } from '../services/database/types';
 import ResourceLocalState from './ResourceLocalState';
 const pathUtils = require('../path-utils');
 const { mime } = require('../mime-utils.js');
@@ -88,8 +88,9 @@ export default class Resource extends BaseItem {
 		return await this.db().exec('UPDATE resource_local_states SET fetch_status = ? WHERE fetch_status = ?', [Resource.FETCH_STATUS_IDLE, Resource.FETCH_STATUS_STARTED]);
 	}
 
-	public static resetErrorStatus(resourceId: string) {
-		return this.db().exec('UPDATE resource_local_states SET fetch_status = ?, fetch_error = "" WHERE resource_id = ?', [Resource.FETCH_STATUS_IDLE, resourceId]);
+	public static async resetFetchErrorStatus(resourceId: string) {
+		await this.db().exec('UPDATE resource_local_states SET fetch_status = ?, fetch_error = "" WHERE resource_id = ?', [Resource.FETCH_STATUS_IDLE, resourceId]);
+		await this.resetOcrStatus(resourceId);
 	}
 
 	public static fsDriver() {
@@ -285,7 +286,7 @@ export default class Resource extends BaseItem {
 		return url.substr(2);
 	}
 
-	public static async localState(resourceOrId: any) {
+	public static async localState(resourceOrId: any): Promise<ResourceLocalStateEntity> {
 		return ResourceLocalState.byResourceId(typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId);
 	}
 
@@ -467,30 +468,48 @@ export default class Resource extends BaseItem {
 		}, { changeSource: ItemChange.SOURCE_SYNC });
 	}
 
-	public static async needOcrCount(supportedMimeTypes: string[]): Promise<number> {
-		const r = await this.db().selectOne(`
-			SELECT count(*) as total
-			FROM resources
-			WHERE
-				ocr_status = ? AND
-				encryption_applied = 0 AND
-				mime IN ("${supportedMimeTypes.join('","')}")
-		`, [ResourceOcrStatus.Todo]);
+	private static baseNeedOcrQuery(selectSql: string, supportedMimeTypes: string[]): SqlQuery {
+		return {
+			sql: `
+				SELECT ${selectSql}
+				FROM resources
+				WHERE
+					ocr_status = ? AND
+					encryption_applied = 0 AND
+					mime IN ("${supportedMimeTypes.join('","')}")
+			`,
+			params: [
+				ResourceOcrStatus.Todo,
+			],
+		};
+	}
 
+	public static async needOcrCount(supportedMimeTypes: string[]): Promise<number> {
+		const query = this.baseNeedOcrQuery('count(*) as total', supportedMimeTypes);
+		const r = await this.db().selectOne(query.sql, query.params);
 		return r ? r['total'] : 0;
 	}
 
-	public static async needOcr(supportedMimeTypes: string[], options: LoadOptions): Promise<ResourceEntity[]> {
+	public static async needOcr(supportedMimeTypes: string[], skippedResourceIds: string[], options: LoadOptions): Promise<ResourceEntity[]> {
+		const query = this.baseNeedOcrQuery(this.selectFields(options), supportedMimeTypes);
+		const skippedResourcesSql = skippedResourceIds.length ? `AND resources.id NOT IN  ("${skippedResourceIds.join('","')}")` : '';
+
 		return await this.db().selectAll(`
-			SELECT ${this.selectFields(options)}
-			FROM resources
-			WHERE
-				ocr_status = ? AND
-				encryption_applied = 0 AND
-				mime IN ("${supportedMimeTypes.join('","')}")
+			${query.sql}
+			${skippedResourcesSql}			
 			ORDER BY updated_time DESC
 			LIMIT 100
-		`, [ResourceOcrStatus.Todo]);
+		`, query.params);
+	}
+
+	private static async resetOcrStatus(resourceId: string) {
+		await Resource.save({
+			id: resourceId,
+			ocr_error: '',
+			ocr_text: '',
+			ocr_words: '',
+			ocr_status: ResourceOcrStatus.Todo,
+		});
 	}
 
 	public static allForNormalization(updatedTime: number, id: string, limit = 100, options: LoadOptions = null) {
