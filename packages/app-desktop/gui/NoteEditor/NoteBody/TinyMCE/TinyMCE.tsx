@@ -28,7 +28,6 @@ import { TinyMceEditorEvents } from './utils/types';
 import type { Editor } from 'tinymce';
 import { joplinCommandToTinyMceCommands, TinyMceCommand } from './utils/joplinCommandToTinyMceCommands';
 import shouldPasteResources from './utils/shouldPasteResources';
-import Setting from '@joplin/lib/models/Setting';
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
@@ -867,7 +866,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						// Allow file:// URLs that point to the resource directory.
 						// This prevents HTML-style resource URLs (e.g. <a href="file://path/to/resource/.../"></a>)
 						// from being discarded.
-						allowedFilePrefixes: [Setting.value('resourceDir')],
+						allowedFilePrefixes: [props.resourceDirectory],
 					}),
 				);
 				if (cancelled) return;
