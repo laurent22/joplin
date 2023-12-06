@@ -27,7 +27,7 @@ body:
     attributes:
       label: "Joplin version"
       placeholder: "For example 1.0.5"
-      description: Please note that we will close the issue if this is not provided, as we cannot help without the version informatin.
+      description: Please note that we will close the issue if the exact version is not provided, as we cannot help without this.
     validations:
       required: true
       
