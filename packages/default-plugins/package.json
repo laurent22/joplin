@@ -1,7 +1,7 @@
 {
 	"name": "@joplin/default-plugins",
 	"version": "2.13.0",
-	"description": "Default plugins bundeler",
+	"description": "Default plugins bundler",
 	"private": true,
 	"scripts": {
 		"tsc": "tsc --project tsconfig.json",
