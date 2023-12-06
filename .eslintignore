@@ -967,6 +967,8 @@ packages/plugin-repo-cli/lib/types.js
 packages/plugin-repo-cli/lib/updateReadme.test.js
 packages/plugin-repo-cli/lib/updateReadme.js
 packages/plugin-repo-cli/lib/utils.js
+packages/plugin-repo-cli/lib/validateUntrustedManifest.test.js
+packages/plugin-repo-cli/lib/validateUntrustedManifest.js
 packages/plugins/ToggleSidebars/api/index.js
 packages/plugins/ToggleSidebars/api/types.js
 packages/plugins/ToggleSidebars/src/index.js
