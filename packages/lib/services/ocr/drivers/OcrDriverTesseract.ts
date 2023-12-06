@@ -62,8 +62,6 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 			tsv: false,
 		});
 
-		result.data.paragraphs;
-
 		interface GoodParagraph {
 			lines: string[];
 			text: string;
@@ -75,6 +73,7 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 			const goodLines: string[] = [];
 
 			for (const line of paragraph.lines) {
+				// console.info('LINE', line.confidence, line.text);
 				if (line.confidence < minConfidence) continue;
 
 				const goodWords = line.words.map(w => {

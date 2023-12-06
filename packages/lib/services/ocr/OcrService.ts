@@ -152,7 +152,7 @@ export default class OcrService {
 		await this.processResources();
 	}
 
-	public runInBackground() {
+	public async runInBackground() {
 		if (this.isRunningInBackground_) return;
 
 		this.isRunningInBackground_ = true;
@@ -160,6 +160,8 @@ export default class OcrService {
 		if (this.maintenanceTimer_) return;
 
 		logger.info('Starting background service...');
+
+		await this.maintenance();
 
 		this.maintenanceTimer_ = shim.setInterval(async () => {
 			await this.maintenance();

@@ -22,7 +22,7 @@ import Button, { ButtonLevel } from '../Button/Button';
 import eventManager from '@joplin/lib/eventManager';
 import { AppState } from '../../app.reducer';
 import ToolbarButtonUtils from '@joplin/lib/services/commands/ToolbarButtonUtils';
-import { _ } from '@joplin/lib/locale';
+import { _, _n } from '@joplin/lib/locale';
 import TagList from '../TagList';
 import NoteTitleBar from './NoteTitle/NoteTitleBar';
 import markupLanguageUtils from '../../utils/markupLanguageUtils';
@@ -584,7 +584,7 @@ function NoteEditor(props: NoteEditorProps) {
 
 		return (
 			<div style={styles.resourceWatchBanner}>
-				<p style={styles.resourceWatchBannerLine}>{_('Search found the following attachments:')}</p>
+				<p style={styles.resourceWatchBannerLine}>{_n('The following attachment matches your search query:', 'The following attachments match your search query:', resourceResults.length)}</p>
 				<ul>
 					{resourceResults.map(r => renderResource(r.item_id, r.title))}
 				</ul>
