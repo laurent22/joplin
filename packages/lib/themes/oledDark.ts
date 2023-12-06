@@ -14,7 +14,7 @@ const theme: Theme = {
 	raisedColor: '#788BC3',
 	tableBackgroundColor: 'rgb(0, 0, 0)',
 	codeBackgroundColor: 'rgb(47, 48, 49)',
-	codeBorderColor: 'rgb(70, 70, 70)',
+	codeBorderColor: 'rgb(185,185,185)',
 	codeThemeCss: 'atom-one-dark-reasonable.css',
 };
 
