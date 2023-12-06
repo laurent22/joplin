@@ -49,7 +49,7 @@ import ResourceFetcher from '../services/ResourceFetcher';
 const WebDavApi = require('../WebDavApi');
 const DropboxApi = require('../DropboxApi');
 import JoplinServerApi from '../JoplinServerApi';
-import { FolderEntity } from '../services/database/types';
+import { FolderEntity, ResourceEntity } from '../services/database/types';
 import { credentialFile, readCredentialFile } from '../utils/credentialFiles';
 import SyncTargetJoplinCloud from '../SyncTargetJoplinCloud';
 import KeychainService from '../services/keychain/KeychainService';
@@ -436,7 +436,7 @@ const createNoteAndResource = async (options: CreateNoteAndResourceOptions = nul
 	let note = await Note.save({});
 	note = await shim.attachFileToNote(note, options.path);
 	const resourceIds = await Note.linkedItemIds(note.body);
-	const resource = await Resource.load(resourceIds[0]);
+	const resource: ResourceEntity = await Resource.load(resourceIds[0]);
 	return { note, resource };
 };
 

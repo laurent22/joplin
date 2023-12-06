@@ -5,6 +5,7 @@ import { supportedMimeTypes } from './OcrService';
 import { createWorker } from 'tesseract.js';
 import Resource from '../../models/Resource';
 import { ResourceEntity, ResourceOcrStatus } from '../database/types';
+import { msleep } from '@joplin/utils/time';
 
 const newService = () => {
 	const driver = new OcrDriverTesseract({ createWorker });
@@ -22,6 +23,9 @@ describe('OcrService', () => {
 		const { resource: resource1 } = await createNoteAndResource({ path: `${ocrSampleDir}/testocr.png` });
 		const { resource: resource2 } = await createNoteAndResource({ path: `${supportDir}/photo.jpg` });
 		const { resource: resource3 } = await createNoteAndResource({ path: `${ocrSampleDir}/with_bullets.png` });
+
+		// Wait to make sure that updated_time is updated
+		await msleep(1);
 
 		expect(await Resource.needOcrCount(supportedMimeTypes)).toBe(3);
 
@@ -41,6 +45,10 @@ describe('OcrService', () => {
 		);
 		expect(processedResource1.ocr_status).toBe(ResourceOcrStatus.Done);
 		expect(processedResource1.ocr_error).toBe('');
+
+		// Also check that the resource blob has not been updated
+		expect(processedResource1.blob_updated_time).toBe(resource1.blob_updated_time);
+		expect(processedResource1.updated_time).toBeGreaterThan(resource1.updated_time);
 
 		const processedResource2: ResourceEntity = await Resource.load(resource2.id);
 		expect(processedResource2.ocr_text).toBe('');
@@ -62,6 +70,10 @@ describe('OcrService', () => {
 		);
 		expect(processedResource3.ocr_status).toBe(ResourceOcrStatus.Done);
 		expect(processedResource3.ocr_error).toBe('');
+
+		// Also check that the resource blob has not been updated
+		expect(processedResource2.blob_updated_time).toBe(resource2.blob_updated_time);
+		expect(processedResource2.updated_time).toBeGreaterThan(resource2.updated_time);
 
 		await service.dispose();
 	});
