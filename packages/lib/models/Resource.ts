@@ -457,6 +457,21 @@ export default class Resource extends BaseItem {
 		return folder;
 	}
 
+	public static mustHandleConflict(local: ResourceEntity, remote: ResourceEntity) {
+		// That shouldn't happen so throw an exception
+		if (local.id !== remote.id) throw new Error('Cannot handle conflict for two different resources');
+
+		// If the content has changed, we need to handle the conflict
+		if (local.blob_updated_time !== remote.blob_updated_time) return true;
+
+		// If nothing has been changed, or if only the metadata has been
+		// changed, we just keep the remote version. Most of the resource
+		// metadata is not user-editable so there won't be any data loss. Such a
+		// conflict might happen for example if a resource is OCRed by two
+		// different clients.
+		return false;
+	}
+
 	public static async createConflictResourceNote(resource: ResourceEntity) {
 		const Note = this.getClass('Note');
 		const conflictResource = await Resource.duplicateResource(resource.id);

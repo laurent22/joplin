@@ -117,8 +117,7 @@ describe('OcrService', () => {
 			expect(resource.ocr_status).toBe(ResourceOcrStatus.Todo);
 		}
 
-		await resourceFetcher().start();
-		await resourceFetcher().waitForAllFinished();
+		await resourceFetcher().startAndWait();
 
 		await service.processResources();
 
@@ -175,8 +174,7 @@ describe('OcrService', () => {
 
 		await Resource.resetFetchErrorStatus(resource.id);
 
-		await resourceFetcher().start();
-		await resourceFetcher().waitForAllFinished();
+		await resourceFetcher().startAndWait();
 
 		await service.processResources();
 
@@ -190,32 +188,43 @@ describe('OcrService', () => {
 		await service.dispose();
 	});
 
-	// it('should handle conflicts if two clients process the resources then sync', async () => {
-	// 	const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/dummy.pdf` });
+	it('should handle conflicts if two clients process the same resource then sync', async () => {
+		await createNoteAndResource({ path: `${ocrSampleDir}/dummy.pdf` });
 
-	// 	const service1 = newService();
+		const service1 = newService();
+		await synchronizerStart();
+		await service1.processResources();
 
-	// 	await synchronizerStart();
+		await switchClient(2);
 
-	// 	await service1.processResources();
+		await synchronizerStart();
+		await msleep(1);
+		await resourceFetcher().startAndWait();
+		const service2 = newService();
+		await service2.processResources();
+		await synchronizerStart();
+		const expectedResouceUpatedTime = (await Resource.all())[0].updated_time;
 
-	// 	await switchClient(2);
+		await switchClient(1);
 
-	// 	await synchronizerStart();
+		await synchronizerStart();
 
-	// 	await msleep(1);
+		// A conflict happened during sync, but it is resolved by keeping the
+		// remote version.
 
-	// 	const service2 = newService();
+		expect((await Resource.all()).length).toBe(1);
 
-	// 	await service2.processResources();
+		{
+			const resource: ResourceEntity = (await Resource.all())[0];
+			expect(resource.ocr_text).toBe('Dummy PDF file');
+			expect(resource.ocr_error).toBe('');
+			expect(resource.ocr_status).toBe(ResourceOcrStatus.Done);
+			expect(resource.updated_time).toBe(expectedResouceUpatedTime);
+		}
 
-	// 	console.info(await Resource.all());
-
-	// 	// await synchronizerStart();
-
-	// 	await service1.dispose();
-	// 	await service2.dispose();
-	// });
+		await service1.dispose();
+		await service2.dispose();
+	});
 
 	// Use this to quickly test with specific images:
 

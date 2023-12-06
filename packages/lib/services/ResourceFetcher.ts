@@ -259,6 +259,11 @@ export default class ResourceFetcher extends BaseService {
 		void this.autoAddResources(10);
 	}
 
+	public async startAndWait() {
+		await this.start();
+		await this.waitForAllFinished();
+	}
+
 	public scheduleQueueProcess() {
 		if (this.scheduleQueueProcessIID_) {
 			shim.clearTimeout(this.scheduleQueueProcessIID_);
