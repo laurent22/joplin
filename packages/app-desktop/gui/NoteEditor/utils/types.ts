@@ -82,6 +82,7 @@ export interface NoteBodyEditorProps {
 	visiblePanes: string[];
 	keyboardMode: string;
 	resourceInfos: ResourceInfos;
+	resourceDirectory: string;
 	locale: string;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onDrop: Function;
