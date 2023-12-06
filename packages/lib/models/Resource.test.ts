@@ -5,7 +5,7 @@ import Resource from '../models/Resource';
 import shim from '../shim';
 import { ErrorCode } from '../errors';
 import { remove, pathExists } from 'fs-extra';
-import { ResourceEntity } from '../services/database/types';
+import { ResourceEntity, ResourceOcrStatus } from '../services/database/types';
 
 const testImagePath = `${supportDir}/photo.jpg`;
 
@@ -171,6 +171,8 @@ describe('models/Resource', () => {
 				user_updated_time: updatedTime,
 				user_created_time: updatedTime,
 				mime: 'application/octet-stream',
+				ocr_text: 'test',
+				ocr_status: ResourceOcrStatus.Done,
 			}, { isNew: true, autoTimestamp: false });
 		}
 
