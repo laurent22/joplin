@@ -4,8 +4,8 @@ import { filename, fileExtension } from './path-utils';
 const md5 = require('md5');
 
 export interface Stat {
-	birthtime: number;
-	mtime: number;
+	birthtime: Date;
+	mtime: Date;
 	isDirectory(): boolean;
 	path: string;
 	size: number;
@@ -49,6 +49,10 @@ export default class FsDriverBase {
 		throw new Error('Not implemented');
 	}
 
+	public async rename(source: string, dest: string) {
+		return this.move(source, dest);
+	}
+
 	public async readFileChunk(_handle: any, _length: number, _encoding = 'base64'): Promise<string> {
 		throw new Error('Not implemented');
 	}
@@ -80,6 +84,26 @@ export default class FsDriverBase {
 
 	public async writeFile(_path: string, _content: string, _encoding = 'base64'): Promise<void> {
 		throw new Error('Not implemented');
+	}
+
+	public async md5File(_path: string): Promise<string> {
+		throw new Error('Not implemented: md5File');
+	}
+
+	public resolve(..._paths: string[]): string {
+		throw new Error('Not implemented: resolve');
+	}
+
+	public resolveRelativePathWithinDir(_baseDir: string, relativePath: string): string {
+		throw new Error(`Not implemented: resolveRelativePathWithinDir(): ${relativePath}`);
+	}
+
+	public getExternalDirectoryPath(): Promise<string | undefined> {
+		throw new Error('Not implemented: getExternalDirectoryPath');
+	}
+
+	public isUsingAndroidSAF() {
+		return false;
 	}
 
 	protected async readDirStatsHandleRecursion_(basePath: string, stat: Stat, output: Stat[], options: ReadDirStatsOptions): Promise<Stat[]> {
