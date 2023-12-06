@@ -17,6 +17,7 @@ const { BaseScreenComponent } = require('../base-screen');
 const { BackButtonService } = require('../../services/back-button.js');
 import { AppState } from '../../utils/types';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids.js');
 
 class NotesScreenComponent extends BaseScreenComponent<any> {
 
@@ -109,7 +110,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 	}
 
 	public async componentDidUpdate(prevProps: any) {
-		if (prevProps.notesOrder !== this.props.notesOrder || prevProps.selectedFolderId !== this.props.selectedFolderId || prevProps.selectedTagId !== this.props.selectedTagId || prevProps.selectedSmartFilterId !== this.props.selectedSmartFilterId || prevProps.notesParentType !== this.props.notesParentType) {
+		if (prevProps.notesOrder !== this.props.notesOrder || prevProps.selectedFolderId !== this.props.selectedFolderId || prevProps.selectedTagId !== this.props.selectedTagId || prevProps.selectedSmartFilterId !== this.props.selectedSmartFilterId || prevProps.notesParentType !== this.props.notesParentType || prevProps.uncompletedTodosOnTop !== this.props.uncompletedTodosOnTop || prevProps.showCompletedTodos !== this.props.showCompletedTodos) {
 			await this.refreshNotes(this.props);
 		}
 	}
@@ -224,17 +225,32 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		let buttonFolderId = this.props.selectedFolderId !== Folder.conflictFolderId() ? this.props.selectedFolderId : null;
 		if (!buttonFolderId) buttonFolderId = this.props.activeFolderId;
 
-		const addFolderNoteButtons = !!buttonFolderId;
+		const isAllNotes =
+			this.props.notesParentType === 'SmartFilter'
+			&& this.props.selectedSmartFilterId === ALL_NOTES_FILTER_ID;
+
+		// Usually, when showing all notes, activeFolderId/selectedFolderId is set to the last
+		// active folder.
+		// If the app starts showing all notes, activeFolderId/selectedFolderId are
+		// empty or null. As such, we need a special case to show the buttons:
+		const addFolderNoteButtons = !!buttonFolderId || isAllNotes;
 		const thisComp = this;
 
 		const makeActionButtonComp = () => {
+			const getTargetFolderId = async () => {
+				if (!buttonFolderId && isAllNotes) {
+					return (await Folder.defaultFolder()).id;
+				}
+				return buttonFolderId;
+			};
 			if (addFolderNoteButtons && this.props.folders.length > 0) {
 				const buttons = [];
 				buttons.push({
 					label: _('New to-do'),
-					onPress: () => {
+					onPress: async () => {
+						const folderId = await getTargetFolderId();
 						const isTodo = true;
-						void this.newNoteNavigate(buttonFolderId, isTodo);
+						void this.newNoteNavigate(folderId, isTodo);
 					},
 					color: '#9b59b6',
 					icon: 'checkbox-outline',
@@ -242,14 +258,15 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 
 				buttons.push({
 					label: _('New note'),
-					onPress: () => {
+					onPress: async () => {
+						const folderId = await getTargetFolderId();
 						const isTodo = false;
-						void this.newNoteNavigate(buttonFolderId, isTodo);
+						void this.newNoteNavigate(folderId, isTodo);
 					},
 					color: '#9b59b6',
 					icon: 'document',
 				});
-				return <ActionButton buttons={buttons}/>;
+				return <ActionButton buttons={buttons} dispatch={this.props.dispatch}/>;
 			}
 			return null;
 		};

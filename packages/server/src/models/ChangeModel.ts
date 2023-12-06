@@ -139,8 +139,6 @@ export default class ChangeModel extends BaseModel<Change> {
 		// as the `changes` table grew. So it is now split into two queries
 		// merged by a UNION ALL.
 
-		const subQueryLimit = Math.ceil(limit / 2);
-
 		const fields = [
 			'id',
 			'item_id',
@@ -169,7 +167,7 @@ export default class ChangeModel extends BaseModel<Change> {
 			userId,
 		];
 
-		if (!doCountQuery) subParams1.push(subQueryLimit);
+		if (!doCountQuery) subParams1.push(limit);
 
 		const subQuery2 = `
 			SELECT ${fieldsSql}
@@ -187,7 +185,7 @@ export default class ChangeModel extends BaseModel<Change> {
 			userId,
 		];
 
-		if (!doCountQuery) subParams2.push(subQueryLimit);
+		if (!doCountQuery) subParams2.push(limit);
 
 		let query: Knex.Raw<any> = null;
 

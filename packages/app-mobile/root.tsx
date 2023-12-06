@@ -317,6 +317,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 				if ('smartFilterId' in action) {
 					newState.smartFilterId = action.smartFilterId;
+					newState.selectedSmartFilterId = action.smartFilterId;
 					newState.notesParentType = 'SmartFilter';
 				}
 

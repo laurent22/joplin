@@ -40,9 +40,7 @@ interface ActionButtonProps {
 	onPress: Callback;
 }
 
-const ActionButton = (
-	props: ActionButtonProps,
-) => {
+const ActionButton = (props: ActionButtonProps) => {
 	return (
 		<CustomButton
 			themeId={props.themeId}

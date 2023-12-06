@@ -178,6 +178,14 @@ describe('ChangeModel', () => {
 		expect(changeCount).toBe(SqliteMaxVariableNum);
 	});
 
+	test('should tell if there are more changes', async () => {
+		const { user } = await createUserAndSession(1, true);
+		await models().item().makeTestItems(user.id, 500);
+
+		const result = await models().change().delta(user.id, { limit: 100 });
+		expect(result.has_more).toBe(true);
+	});
+
 	test('should delete old changes', async () => {
 		// Create the following events:
 		//

@@ -5,8 +5,8 @@ import { ErrorBadRequest, ErrorMethodNotAllowed } from '../utils/errors';
 import requestFields from '../utils/requestFields';
 import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
 import BaseItem from '../../../models/BaseItem';
-import SearchEngineUtils from '../../searchengine/SearchEngineUtils';
 import { NoteEntity } from '../../database/types';
+import SearchEngineUtils, { NotesForQueryOptions } from '../../searchengine/SearchEngineUtils';
 
 export default async function(request: Request) {
 	if (request.method !== 'GET') throw new ErrorMethodNotAllowed();
@@ -29,7 +29,11 @@ export default async function(request: Request) {
 		options.caseInsensitive = true;
 		results = await ModelClass.all(options);
 	} else {
-		results = (await SearchEngineUtils.notesForQuery(query, false, defaultLoadOptions(request, ModelType.Note))).notes;
+		const options: NotesForQueryOptions = {
+			...defaultLoadOptions(request, ModelType.Note),
+			appendWildCards: true,
+		};
+		results = (await SearchEngineUtils.notesForQuery(query, false, options)).notes;
 	}
 
 	return collectionToPaginatedResults(modelType, results, request);

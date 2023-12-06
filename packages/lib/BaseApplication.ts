@@ -239,7 +239,7 @@ export default class BaseApplication {
 				notes = await Tag.notes(parentId, options);
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				const search = BaseModel.byId(state.searches, parentId);
-				const response = await SearchEngineUtils.notesForQuery(search.query_pattern, true);
+				const response = await SearchEngineUtils.notesForQuery(search.query_pattern, true, { appendWildCards: true });
 				notes = response.notes;
 				searchResults = response.results;
 				const parsedQuery = await SearchEngine.instance().parseQuery(search.query_pattern);

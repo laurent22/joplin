@@ -1,5 +1,12 @@
 # Joplin Server Changelog
 
+## [server-v2.13.5](https://github.com/laurent22/joplin/releases/tag/server-v2.13.5) - 2023-11-19T09:33:53Z
+
+- Improved: Increase number of items that are returned during sync (767bf9f)
+- Improved: Updated packages highlight.js (v11.9.0), ldapts (v7.0.6), sass (v1.69.5)
+- Fixed: Fix severe performance issue for certain delta calls (f698068)
+- Fixed: Fixed issue with sync not immediately returning all items in certain cases (87aeffa)
+
 ## [server-v2.13.4](https://github.com/laurent22/joplin/releases/tag/server-v2.13.4) - 2023-11-15T15:30:19Z
 
 - New: Added LDAP authentication (#9150 by Marco Rombach)
