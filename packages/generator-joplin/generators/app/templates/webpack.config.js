@@ -181,17 +181,7 @@ const baseConfig = {
 	},
 };
 
-const backgroundScriptConfig = {
-	...baseConfig,
-
-	// We support requiring 7zip-bin through require('7zip-bin')
-	externalsType: 'commonjs',
-	externals: {
-		'7zip-bin': { commonjs: '7zip-bin' },
-	},
-};
-
-const pluginConfig = { ...backgroundScriptConfig, entry: './src/index.ts',
+const pluginConfig = { ...baseConfig, entry: './src/index.ts',
 	resolve: {
 		alias: {
 			api: path.resolve(__dirname, 'api'),
@@ -223,8 +213,7 @@ const pluginConfig = { ...backgroundScriptConfig, entry: './src/index.ts',
 				},
 			],
 		}),
-	],
-};
+	] };
 
 const extraScriptConfig = { ...baseConfig, resolve: {
 	alias: {
@@ -235,7 +224,6 @@ const extraScriptConfig = { ...baseConfig, resolve: {
 } };
 
 const createArchiveConfig = {
-	...backgroundScriptConfig,
 	stats: 'errors-only',
 	entry: './dist/index.js',
 	resolve: {
