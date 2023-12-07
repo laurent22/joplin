@@ -20,3 +20,4 @@ playwright/.cache/
 integration-tests/test-profile/
 build/defaultPlugins/
 build/7zip/7za
+build/7zip/7za.exe

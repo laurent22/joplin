@@ -65,7 +65,9 @@
 			if (modulePath === '7zip-bin') {
 				// 7zip-bin is very large -- return the path to a version of 7zip
 				// copied from 7zip-bin.
-				return { path7za: nodePath.resolve('../../build/7zip/7za') };
+				const executableName = process.platform === 'win32' ? '7za.exe' : '7za';
+				const pathTo7za = nodePath.join('../../build/7zip/', executableName);
+				return { path7za: nodePath.resolve(pathTo7za) };
 			}
 
 			throw new Error(`Module not found: ${modulePath}`);
