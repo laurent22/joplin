@@ -22,7 +22,7 @@ import Folder from '@joplin/lib/models/Folder';
 const Clipboard = require('@react-native-community/clipboard').default;
 const md5 = require('md5');
 const { BackButtonService } = require('../../services/back-button.js');
-import NavService from '@joplin/lib/services/NavService';
+import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';
 import BaseModel from '@joplin/lib/BaseModel';
 import ActionButton from '../ActionButton';
 const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
@@ -34,17 +34,17 @@ const { Checkbox } = require('../checkbox.js');
 import { _, currentLocale } from '@joplin/lib/locale';
 import { reg } from '@joplin/lib/registry';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
-const { BaseScreenComponent } = require('../base-screen');
+import { BaseScreenComponent } from '../base-screen';
 const { themeStyle, editorFont } = require('../global-style.js');
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 import ImageResizer from '@bam.tech/react-native-image-resizer';
-import shared from '@joplin/lib/components/shared/note-screen-shared';
+import shared, { BaseNoteScreenComponent } from '@joplin/lib/components/shared/note-screen-shared';
 import { Asset, ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
-import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
+import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/utils/Logger';
 import ImageEditor from '../NoteEditor/ImageEditor/ImageEditor';
 import promptRestoreAutosave from '../NoteEditor/ImageEditor/promptRestoreAutosave';
@@ -54,6 +54,8 @@ import { voskEnabled } from '../../services/voiceTyping/vosk';
 import { isSupportedLanguage } from '../../services/voiceTyping/vosk.android';
 import { ChangeEvent as EditorChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
 import { join } from 'path';
+import { Dispatch } from 'redux';
+import { RefObject } from 'react';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -114,20 +116,84 @@ const pickDocument = async (multiple: boolean): Promise<SelectedDocument[]> => {
 	return result;
 };
 
-class NoteScreenComponent extends BaseScreenComponent {
+interface Props {
+	provisionalNoteIds: string[];
+	dispatch: Dispatch;
+	noteId: string;
+	useEditorBeta: boolean;
+	themeId: number;
+	editorFontSize: number;
+	editorFont: number; // e.g. Setting.FONT_MENLO
+	showSideMenu: boolean;
+	searchQuery: string[];
+	ftsEnabled: boolean;
+	highlightedWords: string[];
+	noteHash: string;
+	toolbarEnabled: boolean;
+}
+
+interface State {
+	note: any;
+	mode: 'view'|'edit';
+	readOnly: boolean;
+	folder: FolderEntity|null;
+	lastSavedNote: any;
+	isLoading: boolean;
+	titleTextInputHeight: number;
+	alarmDialogShown: boolean;
+	heightBumpView: number;
+	noteTagDialogShown: boolean;
+	fromShare: boolean;
+	showCamera: boolean;
+	showImageEditor: boolean;
+	imageEditorResource: ResourceEntity;
+	imageEditorResourceFilepath: string;
+	noteResources: Record<string, ResourceEntity>;
+	newAndNoTitleChangeNoteId: boolean|null;
+
+	HACK_webviewLoadingState: number;
+
+	undoRedoButtonState: {
+		canUndo: boolean;
+		canRedo: boolean;
+	};
+
+	voiceTypingDialogShown: boolean;
+}
+
+class NoteScreenComponent extends BaseScreenComponent<Props, State> implements BaseNoteScreenComponent {
 	// This isn't in this.state because we don't want changing scroll to trigger
 	// a re-render.
 	private lastBodyScroll: number|undefined = undefined;
+
+	private saveActionQueues_: any;
+	private doFocusUpdate_: boolean;
+	private styles_: any;
+	private editorRef: any;
+	private titleTextFieldRef: RefObject<TextInput>;
+	private navHandler: OnNavigateCallback;
+	private backHandler: ()=> Promise<boolean>;
+	private undoRedoService_: UndoRedoService;
+	private noteTagDialog_closeRequested: any;
+	private onJoplinLinkClick_: any;
+	private refreshResource: (resource: any, noteBody?: string)=> Promise<void>;
+	private selection: any;
+	private menuOptionsCache_: Record<string, any>;
+	private focusUpdateIID_: any;
+	private folderPickerOptions_: any;
+	public dialogbox: any;
 
 	public static navigationOptions(): any {
 		return { header: null };
 	}
 
-	public constructor() {
-		super();
+	public constructor(props: Props) {
+		super(props);
+
 		this.state = {
 			note: Note.new(),
 			mode: 'view',
+			readOnly: false,
 			folder: null,
 			lastSavedNote: null,
 			isLoading: true,
@@ -140,6 +206,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			showImageEditor: false,
 			imageEditorResource: null,
 			noteResources: {},
+			imageEditorResourceFilepath: null,
+			newAndNoTitleChangeNoteId: null,
 
 			// HACK: For reasons I can't explain, when the WebView is present, the TextInput initially does not display (It's just a white rectangle with
 			// no visible text). It will only appear when tapping it or doing certain action like selecting text on the webview. The bug started to
@@ -163,8 +231,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// this.markdownEditorRef = React.createRef(); // For focusing the Markdown editor
 
 		this.doFocusUpdate_ = false;
-
-		this.saveButtonHasBeenShown_ = false;
 
 		this.styles_ = {};
 
@@ -341,7 +407,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	private async undoRedo(type: string) {
+	private async undoRedo(type: 'undo'|'redo') {
 		const undoState = await this.undoRedoService_[type](this.undoState());
 		if (!undoState) return;
 
@@ -811,7 +877,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		this.setState({ note: newNote });
 
-		this.refreshResource(resource, newNote.body);
+		void this.refreshResource(resource, newNote.body);
 
 		this.scheduleSave();
 
@@ -1281,8 +1347,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let fieldToFocus = this.state.note.is_todo ? 'title' : 'body';
 		if (this.state.mode === 'view') fieldToFocus = '';
 
-		if (fieldToFocus === 'title' && this.refs.titleTextField) {
-			this.refs.titleTextField.focus();
+		if (fieldToFocus === 'title' && this.titleTextFieldRef.current) {
+			this.titleTextFieldRef.current.focus();
 		}
 		// if (fieldToFocus === 'body' && this.markdownEditorRef.current) {
 		// 	if (this.markdownEditorRef.current) {
@@ -1504,8 +1570,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const showSaveButton = false; // this.state.mode === 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
 		const saveButtonDisabled = true;// !this.isModified();
 
-		if (showSaveButton) this.saveButtonHasBeenShown_ = true;
-
 		const titleContainerStyle = isTodo ? this.styles().titleContainerTodo : this.styles().titleContainer;
 
 		const dueDate = Note.dueDateObject(note);
@@ -1514,7 +1578,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			<View style={titleContainerStyle}>
 				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
 				<TextInput
-					ref="titleTextField"
+					ref={this.titleTextFieldRef}
 					underlineColorAndroid="#ffffff00"
 					autoCapitalize="sentences"
 					style={this.styles().titleTextInput}
