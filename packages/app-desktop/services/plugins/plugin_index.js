@@ -66,7 +66,14 @@
 				// 7zip-bin is very large -- return the path to a version of 7zip
 				// copied from 7zip-bin.
 				const executableName = process.platform === 'win32' ? '7za.exe' : '7za';
-				const pathTo7za = nodePath.join('../../build/7zip/', executableName);
+
+				let rootDir = nodePath.dirname(nodePath.dirname(nodePath.dirname(__dirname)));
+				// Different path to build/ when bundled
+				if (nodePath.basename(rootDir).startsWith('app.asar')) {
+					rootDir = nodePath.dirname(rootDir);
+				}
+
+				const pathTo7za = nodePath.join(rootDir, 'build', '7zip', executableName);
 				return { path7za: nodePath.resolve(pathTo7za) };
 			}
 
