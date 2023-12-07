@@ -18,7 +18,6 @@ export interface BaseNoteScreenComponent {
 	setState: (newState: any)=> void;
 
 	scheduleFocusUpdate(): void;
-	scheduleSave(): void;
 	attachFile(asset: any, fileType: any): void;
 	lastLoadedNoteId_?: string;
 }
