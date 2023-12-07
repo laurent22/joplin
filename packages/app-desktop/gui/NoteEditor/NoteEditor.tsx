@@ -439,6 +439,7 @@ function NoteEditor(props: NoteEditorProps) {
 		contentMarkupLanguage: formNote.markup_language,
 		contentOriginalCss: formNote.originalCss,
 		resourceInfos: resourceInfos,
+		resourceDirectory: Setting.value('resourceDir'),
 		htmlToMarkdown: htmlToMarkdown,
 		markupToHtml: markupToHtml,
 		allAssets: allAssets,

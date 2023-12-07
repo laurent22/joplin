@@ -390,6 +390,7 @@ packages/app-desktop/integration-tests/models/SettingsScreen.js
 packages/app-desktop/integration-tests/util/activateMainMenuItem.js
 packages/app-desktop/integration-tests/util/createStartupArgs.js
 packages/app-desktop/integration-tests/util/firstNonDevToolsWindow.js
+packages/app-desktop/integration-tests/util/setFilePickerResponse.js
 packages/app-desktop/integration-tests/util/test.js
 packages/app-desktop/playwright.config.js
 packages/app-desktop/plugins/GotoAnything.js
@@ -935,6 +936,7 @@ packages/lib/themes/solarizedDark.js
 packages/lib/themes/solarizedLight.js
 packages/lib/themes/type.js
 packages/lib/time.js
+packages/lib/types.js
 packages/lib/utils/credentialFiles.js
 packages/lib/utils/joplinCloud.js
 packages/lib/utils/processStartFlags.js

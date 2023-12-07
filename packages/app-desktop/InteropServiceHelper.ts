@@ -50,7 +50,7 @@ export default class InteropServiceHelper {
 
 		const cleanup = () => {
 			if (win) win.destroy();
-			if (htmlFile) shim.fsDriver().remove(htmlFile);
+			if (htmlFile) void shim.fsDriver().remove(htmlFile);
 		};
 
 		try {
@@ -67,7 +67,7 @@ export default class InteropServiceHelper {
 
 			win = bridge().newBrowserWindow(windowOptions);
 
-			return new Promise((resolve, reject) => {
+			return new Promise<any>((resolve, reject) => {
 				win.webContents.on('did-finish-load', () => {
 
 					// did-finish-load will trigger when most assets are done loading, probably

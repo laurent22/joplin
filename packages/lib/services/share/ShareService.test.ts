@@ -1,9 +1,9 @@
 import Note from '../../models/Note';
-import { createFolderTree, encryptionService, loadEncryptionMasterKey, msleep, resourceService, setupDatabaseAndSynchronizer, simulateReadOnlyShareEnv, supportDir, switchClient } from '../../testing/test-utils';
+import { createFolderTree, encryptionService, loadEncryptionMasterKey, msleep, resourceService, setupDatabaseAndSynchronizer, simulateReadOnlyShareEnv, supportDir, switchClient, synchronizerStart } from '../../testing/test-utils';
 import ShareService from './ShareService';
 import reducer, { defaultState } from '../../reducer';
 import { createStore } from 'redux';
-import { NoteEntity } from '../database/types';
+import { NoteEntity, ResourceEntity } from '../database/types';
 import Folder from '../../models/Folder';
 import { setEncryptionEnabled, setPpk } from '../synchronizer/syncInfoUtils';
 import { generateKeyPair } from '../e2ee/ppk';
@@ -18,6 +18,7 @@ import BaseItem from '../../models/BaseItem';
 import ResourceService from '../ResourceService';
 import Setting from '../../models/Setting';
 import { ModelType } from '../../BaseModel';
+import { remoteNotesFoldersResources } from '../../testing/test-utils-synchronizer';
 
 interface TestShareFolderServiceOptions {
 	master_key_id?: string;
@@ -36,6 +37,18 @@ function mockService(api: any) {
 	return service;
 }
 
+const mockServiceForNoteSharing = () => {
+	return mockService({
+		exec: (method: string, path = '', _query: Record<string, any> = null, _body: any = null, _headers: any = null, _options: any = null): Promise<any> => {
+			if (method === 'GET' && path === 'api/shares') return { items: [] } as any;
+			return null;
+		},
+		personalizedUserContentBaseUrl(_userId: string) {
+
+		},
+	});
+};
+
 describe('ShareService', () => {
 
 	beforeEach(async () => {
@@ -45,15 +58,7 @@ describe('ShareService', () => {
 
 	it('should not change the note user timestamps when sharing or unsharing', async () => {
 		let note = await Note.save({});
-		const service = mockService({
-			exec: (method: string, path = '', _query: Record<string, any> = null, _body: any = null, _headers: any = null, _options: any = null): Promise<any> => {
-				if (method === 'GET' && path === 'api/shares') return { items: [] } as any;
-				return null;
-			},
-			personalizedUserContentBaseUrl(_userId: string) {
-
-			},
-		});
+		const service = mockServiceForNoteSharing();
 		await msleep(1);
 		await service.shareNote(note.id, false);
 
@@ -79,6 +84,46 @@ describe('ShareService', () => {
 		{
 			const noteReloaded = await Note.load(note.id);
 			checkTimestamps(note, noteReloaded);
+		}
+	});
+
+	it('should not encrypt items that are shared', async () => {
+		const folder = await Folder.save({});
+		const note = await Note.save({ parent_id: folder.id });
+		await shim.attachFileToNote(note, testImagePath);
+
+		const service = mockServiceForNoteSharing();
+
+		setEncryptionEnabled(true);
+		await loadEncryptionMasterKey();
+
+		await synchronizerStart();
+
+		let previousBlobUpdatedTime = Infinity;
+		{
+			const allItems = await remoteNotesFoldersResources();
+			expect(allItems.map(it => it.encryption_applied)).toEqual([1, 1, 1]);
+			previousBlobUpdatedTime = allItems.find(it => it.type_ === ModelType.Resource).blob_updated_time;
+		}
+
+		await service.shareNote(note.id, false);
+		await msleep(1);
+		await Folder.updateAllShareIds(resourceService());
+
+		await synchronizerStart();
+
+		{
+			const allItems = await remoteNotesFoldersResources();
+			expect(allItems.find(it => it.type_ === ModelType.Note).encryption_applied).toBe(0);
+			expect(allItems.find(it => it.type_ === ModelType.Folder).encryption_applied).toBe(1);
+
+			const resource: ResourceEntity = allItems.find(it => it.type_ === ModelType.Resource);
+			expect(resource.encryption_applied).toBe(0);
+
+			// Indicates that both the metadata and blob have been decrypted on
+			// the sync target.
+			expect(resource.blob_updated_time).toBe(resource.updated_time);
+			expect(resource.blob_updated_time).toBeGreaterThan(previousBlobUpdatedTime);
 		}
 	});
 
@@ -110,7 +155,7 @@ describe('ShareService', () => {
 		});
 	}
 
-	async function testShareFolder(service: ShareService) {
+	const prepareNoteFolderResource = async () => {
 		const folder = await Folder.save({});
 		let note = await Note.save({ parent_id: folder.id });
 		note = await shim.attachFileToNote(note, testImagePath);
@@ -119,6 +164,11 @@ describe('ShareService', () => {
 
 		await resourceService().indexNoteResources();
 
+		return { folder, note, resource };
+	};
+
+	async function testShareFolder(service: ShareService) {
+		const { folder, note, resource } = await prepareNoteFolderResource();
 		const share = await service.shareFolder(folder.id);
 		expect(share.id).toBe('share_1');
 		expect((await Folder.load(folder.id)).share_id).toBe('share_1');
@@ -142,7 +192,13 @@ describe('ShareService', () => {
 
 		expect(await MasterKey.count()).toBe(1);
 
-		let { folder, note, resource } = await testShareFolder(shareService);
+		let { folder, note, resource } = await prepareNoteFolderResource();
+
+		BaseItem.shareService_ = shareService;
+		Resource.shareService_ = shareService;
+
+		await shareService.shareFolder(folder.id);
+
 		await Folder.updateAllShareIds(resourceService());
 
 		// The share service should automatically create a new encryption key
@@ -178,6 +234,12 @@ describe('ShareService', () => {
 			const result = await Resource.fullPathForSyncUpload(resource);
 			const content = await readFile(result.path, 'utf8');
 			expect(content).toContain(folderKey.id);
+
+			{
+				await synchronizerStart();
+				const remoteItems = await remoteNotesFoldersResources();
+				expect(remoteItems.map(it => it.encryption_applied)).toEqual([1, 1, 1]);
+			}
 		} finally {
 			BaseItem.shareService_ = shareService;
 			Resource.shareService_ = null;
