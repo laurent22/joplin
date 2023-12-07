@@ -4,7 +4,11 @@ import SettingsScreen from './models/SettingsScreen';
 import activateMainMenuItem from './util/activateMainMenuItem';
 
 test.describe('simpleBackup', () => {
-	test('should have a section in settings', async ({ electronApp, mainWindow }) => {
+	// Grouping both the check for a settings section and attempting to create
+	// a backup makes the test less flaky.
+	// Navigating to settings first allows us to wait for the "Create backup" section
+	// to load.
+	test('should have a section in settings and backups should work', async ({ electronApp, mainWindow }) => {
 		const mainScreen = new MainScreen(mainWindow);
 		await mainScreen.waitFor();
 
@@ -17,12 +21,11 @@ test.describe('simpleBackup', () => {
 
 		const backupTab = settingsScreen.getTabLocator('Backup');
 		await backupTab.waitFor();
-	});
 
-	test('should create a backup', async ({ electronApp, mainWindow }) => {
-		const mainScreen = new MainScreen(mainWindow);
+		await settingsScreen.backButton.click();
 		await mainScreen.waitFor();
 
+		// Backups should work
 		expect(await activateMainMenuItem(electronApp, 'Create backup')).toBe(true);
 
 		const successDialog = mainWindow.locator('iframe[id$=backup-backupDialog]');

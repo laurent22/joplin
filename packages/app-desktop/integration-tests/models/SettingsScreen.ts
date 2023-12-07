@@ -3,10 +3,13 @@ import { Page, Locator } from '@playwright/test';
 
 export default class SettingsScreen {
 	public readonly okayButton: Locator;
+	public readonly backButton: Locator;
 	public readonly appearanceTabButton: Locator;
 
 	public constructor(private page: Page) {
 		this.okayButton = page.locator('button', { hasText: 'OK' });
+		// Back button may start with an icon
+		this.backButton = page.locator('button', { hasText: /.*Back$/ });
 		this.appearanceTabButton = this.getTabLocator('Appearance');
 	}
 
@@ -16,6 +19,7 @@ export default class SettingsScreen {
 
 	public async waitFor() {
 		await this.okayButton.waitFor();
+		await this.backButton.waitFor();
 		await this.appearanceTabButton.waitFor();
 	}
 }
