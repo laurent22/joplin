@@ -11,6 +11,8 @@ const copy7Zip = async () => {
 	const targetArch = process.env['npm_config_target_arch'] || process.arch;
 	const targetPlatform = process.env['npm_config_target_platform'] || process.platform;
 
+	console.info('Copying 7zip for platform', targetPlatform, 'and architecture', targetArch);
+
 	// To use the custom architecture/platform, we copy the relevant files from 7zip-bin
 	// directly:
 
