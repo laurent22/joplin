@@ -67,8 +67,10 @@
 				// copied from 7zip-bin.
 				const executableName = process.platform === 'win32' ? '7za.exe' : '7za';
 
-				let rootDir = nodePath.dirname(nodePath.dirname(nodePath.dirname(__dirname)));
-				// Different path to build/ when bundled
+				let rootDir = nodePath.dirname(nodePath.dirname(__dirname));
+
+				// When bundled, __dirname points to a file within app.asar. The build/ directory
+				// is outside of app.asar, and thus, we need an extra dirname(...).
 				if (nodePath.basename(rootDir).startsWith('app.asar')) {
 					rootDir = nodePath.dirname(rootDir);
 				}
