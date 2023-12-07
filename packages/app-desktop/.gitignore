@@ -19,3 +19,4 @@ playwright-report/
 playwright/.cache/
 integration-tests/test-profile/
 build/defaultPlugins/
+build/7zip/7za

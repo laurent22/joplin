@@ -114,6 +114,7 @@
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
+    "7zip-bin": "5.2.0",
     "@electron/rebuild": "3.3.0",
     "@joplin/default-plugins": "~2.13",
     "@joplin/tools": "~2.13",
@@ -137,7 +138,6 @@
     "typescript": "5.2.2"
   },
   "dependencies": {
-    "7zip-bin": "5.2.0",
     "@electron/notarize": "2.1.0",
     "@electron/remote": "2.0.12",
     "@fortawesome/fontawesome-free": "5.15.4",

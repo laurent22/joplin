@@ -3,6 +3,7 @@ const utils = require('@joplin/tools/gulp/utils');
 const compileSass = require('@joplin/tools/compileSass');
 const compilePackageInfo = require('@joplin/tools/compilePackageInfo');
 import buildDefaultPlugins from '@joplin/default-plugins/commands/buildAll';
+import copy7Zip from './tools/copy7Zip';
 
 const tasks = {
 	compileScripts: {
@@ -24,6 +25,11 @@ const tasks = {
 	},
 	electronBuilder: {
 		fn: require('./tools/electronBuilder.js'),
+	},
+	copyDefaultPluginsAssets: {
+		fn: async () => {
+			await copy7Zip();
+		},
 	},
 	buildDefaultPlugins: {
 		fn: async () => {
@@ -60,6 +66,7 @@ gulp.task('before-start', gulp.parallel(...buildBeforeStartParallel));
 
 const buildAllSequential = [
 	'before-start',
+	'copyDefaultPluginsAssets',
 	'buildDefaultPlugins',
 ];
 
