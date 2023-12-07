@@ -5,9 +5,13 @@ export default class SettingsScreen {
 	public readonly okayButton: Locator;
 	public readonly appearanceTabButton: Locator;
 
-	public constructor(page: Page) {
+	public constructor(private page: Page) {
 		this.okayButton = page.locator('button', { hasText: 'OK' });
-		this.appearanceTabButton = page.getByText('Appearance');
+		this.appearanceTabButton = this.getTabLocator('Appearance');
+	}
+
+	public getTabLocator(tabName: string) {
+		return this.page.locator('a[role="tab"] > span', { hasText: tabName });
 	}
 
 	public async waitFor() {
