@@ -6635,7 +6635,7 @@ __metadata:
     "@codemirror/state": 6.2.1
     "@codemirror/view": 6.18.0
     "@joplin/lib": ~2.13
-    "@lezer/markdown": 1.1.0
+    "@lezer/markdown": 1.1.1
     "@replit/codemirror-vim": 6.0.14
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.8
@@ -8124,7 +8124,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/markdown@npm:1.1.0, @lezer/markdown@npm:^1.0.0":
+"@lezer/markdown@npm:1.1.1":
+  version: 1.1.1
+  resolution: "@lezer/markdown@npm:1.1.1"
+  dependencies:
+    "@lezer/common": ^1.0.0
+    "@lezer/highlight": ^1.0.0
+  checksum: 1cd2105ca897012883aae2a53627380a5f883ac8058139c1b1987eb9943fa4748266fe54aae1f06cf4726a24ea5808b683f37c384b7c8245b4116a37e3562663
+  languageName: node
+  linkType: hard
+
+"@lezer/markdown@npm:^1.0.0":
   version: 1.1.0
   resolution: "@lezer/markdown@npm:1.1.0"
   dependencies:
