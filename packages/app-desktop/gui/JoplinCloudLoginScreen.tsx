@@ -1,4 +1,4 @@
-import { Reducer, useEffect, useReducer, useState } from 'react';
+import { CSSProperties, Reducer, useEffect, useReducer, useState } from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 import { AppState } from '../app.reducer';
@@ -58,8 +58,8 @@ const reducer: Reducer<IntitialValues, Events> = (state: IntitialValues, action:
 	}
 };
 
-const styles = {
-	page: { display: 'flex', flexDirection: 'columns' height: '100%' },
+const styles: Record<string, CSSProperties> = {
+	page: { display: 'flex', flexDirection: 'column', height: '100%' },
 	buttonsContainer: { marginBottom: '2em', display: 'flex' },
 };
 
