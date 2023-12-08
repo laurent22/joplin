@@ -97,7 +97,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		}
 	};
 
-	const tryUniqueLoginCode = () => {
+	const periodicallyCheckForCredentials = () => {
 		if (intervalIdentifier) return;
 
 		const interval = setInterval(async () => {
@@ -118,7 +118,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		if (state.next === 'LINK_USED') {
 			dispatch('LINK_USED');
 		}
-		tryUniqueLoginCode();
+		periodicallyCheckForCredentials();
 	};
 
 	const onAuthoriseClicked = () => {
