@@ -794,6 +794,18 @@ CAUTION: This release will ask you to upgrade your sync target, whether it's Dro
 
 - Improved: Improved E2EE usability by making its state a property of the sync target ([#5276](https://github.com/laurent22/joplin/issues/5276))
 
+## [v2.2.7](https://github.com/laurent22/joplin/releases/tag/v2.2.7) - 2021-08-11T11:03:26Z
+
+- Revert "Plugins: Add ability to make dialogs fit the application window ([#5219](https://github.com/laurent22/joplin/issues/5219))" as it breaks several plugin webviews.
+- Revert "Resolves [#4810](https://github.com/laurent22/joplin/issues/4810), Resolves [#4610](https://github.com/laurent22/joplin/issues/4610): Fix AWS S3 sync error and upgrade framework to v3 ([#5212](https://github.com/laurent22/joplin/issues/5212))" due to incompatibility with some AWS providers.
+
+## [v2.2.6](https://github.com/laurent22/joplin/releases/tag/v2.2.6) (Pre-release) - 2021-08-09T19:29:20Z
+
+- Improved: Fix AWS S3 sync error and upgrade framework to v3 ([#5212](https://github.com/laurent22/joplin/issues/5212)) ([#4810](https://github.com/laurent22/joplin/issues/4810) by Lee Matos)
+- Improved: Handles OneDrive throttling responses and sets User-Agent based on Microsoft best practices ([#5246](https://github.com/laurent22/joplin/issues/5246)) ([#5244](https://github.com/laurent22/joplin/issues/5244) by [@alec](https://github.com/alec))
+- Improved: Plugins: Hide note list menu items for commands that are disabled ([#5270](https://github.com/laurent22/joplin/issues/5270) by [@Ahmad45123](https://github.com/Ahmad45123))
+- Improved: Prevent plugins from crashing the application ([#5273](https://github.com/laurent22/joplin/issues/5273))
+
 ## [v2.2.5](https://github.com/laurent22/joplin/releases/tag/v2.2.5) (Pre-release) - 2021-08-07T10:35:24Z
 
 - Improved: Remove template feature (replaced by template plugin) ([e9d5901](https://github.com/laurent22/joplin/commit/e9d5901))
@@ -1108,17 +1120,6 @@ Attention: The default font size has been changed in the Markdown editor. You ca
 ## [v1.6.8](https://github.com/laurent22/joplin/releases/tag/v1.6.8) - 2021-01-20T18:11:34Z
 
 - Fixed: Fixed infinite sync issue with OneDrive ([#4305](https://github.com/laurent22/joplin/issues/4305))
-
-## [v1.7.3](https://github.com/laurent22/joplin/releases/tag/v1.7.3) (Pre-release) - 2021-01-20T11:23:50Z
-
-- New: Plugins: Add support for "keywords" manifest field
-- New: Plugins: Added support for bi-directional messages in content scripts and webview scripts using postMessage
-- New: Allow updating a plugin
-- Fixed: Some commands were no longer working ([#4343](https://github.com/laurent22/joplin/issues/4343)) ([#4338](https://github.com/laurent22/joplin/issues/4338) by [@CalebJohn](https://github.com/CalebJohn))
-
-## [v1.6.7](https://github.com/laurent22/joplin/releases/tag/v1.6.7) - 2021-01-11T23:20:33Z
-
-- Fixed (regression): Some commands were no longer working ([#4343](https://github.com/laurent22/joplin/issues/4343)) ([#4338](https://github.com/laurent22/joplin/issues/4338) by [@CalebJohn](https://github.com/CalebJohn))
 
 ## [v1.7.3](https://github.com/laurent22/joplin/releases/tag/v1.7.3) (Pre-release) - 2021-01-20T11:23:50Z
 
