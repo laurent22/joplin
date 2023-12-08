@@ -44,7 +44,7 @@
   "devDependencies": {
     "@docusaurus/plugin-sitemap": "2.4.3",
     "@joplin/fork-htmlparser2": "^4.1.50",
-    "@rmp135/sql-ts": "1.18.0",
+    "@rmp135/sql-ts": "1.18.1",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.8",
     "@types/js-yaml": "4.0.9",
