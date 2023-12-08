@@ -1,5 +1,6 @@
 import { LogMessageCallback, PluginData } from '../types';
 import CodeMirrorControl from './CodeMirrorControl';
+import createCodeMirror6PluginApi from './createCodeMirror6PluginApi';
 
 let pluginScriptIdCounter = 0;
 
@@ -118,7 +119,10 @@ export default class PluginLoader {
 			};
 			const loadedPlugin = exports.default(context);
 
-			loadedPlugin.plugin?.(this.editor);
+			loadedPlugin.plugin?.(
+				this.editor,
+				createCodeMirror6PluginApi(this.editor.cm6),
+			);
 
 			if (loadedPlugin.codeMirrorOptions) {
 				for (const key in loadedPlugin.codeMirrorOptions) {
