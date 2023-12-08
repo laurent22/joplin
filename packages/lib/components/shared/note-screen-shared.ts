@@ -12,17 +12,27 @@ import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
 import ItemChange from '../../models/ItemChange';
 import BaseItem from '../../models/BaseItem';
 
+export interface BaseNoteScreenComponent {
+	props: any;
+	state: any;
+	setState: (newState: any)=> void;
+
+	scheduleFocusUpdate(): void;
+	attachFile(asset: any, fileType: any): void;
+	lastLoadedNoteId_?: string;
+}
+
 interface Shared {
 	noteExists?: (noteId: string)=> Promise<boolean>;
 	handleNoteDeletedWhileEditing_?: (note: NoteEntity)=> Promise<NoteEntity>;
-	saveNoteButton_press?: (comp: any, folderId: string, options: any)=> Promise<void>;
-	saveOneProperty?: (comp: any, name: string, value: any)=> void;
-	noteComponent_change?: (comp: any, propName: string, propValue: any)=> void;
+	saveNoteButton_press?: (comp: BaseNoteScreenComponent, folderId: string, options: any)=> Promise<void>;
+	saveOneProperty?: (comp: BaseNoteScreenComponent, name: string, value: any)=> void;
+	noteComponent_change?: (comp: BaseNoteScreenComponent, propName: string, propValue: any)=> void;
 	clearResourceCache?: ()=> void;
 	attachedResources?: (noteBody: string)=> Promise<any>;
-	isModified?: (comp: any)=> boolean;
-	initState?: (comp: any)=> void;
-	toggleIsTodo_onPress?: (comp: any)=> void;
+	isModified?: (comp: BaseNoteScreenComponent)=> boolean;
+	initState?: (comp: BaseNoteScreenComponent)=> Promise<void>;
+	toggleIsTodo_onPress?: (comp: BaseNoteScreenComponent)=> void;
 	toggleCheckboxRange?: (ipcMessage: string, noteBody: string)=> any;
 	toggleCheckbox?: (ipcMessage: string, noteBody: string)=> string;
 	installResourceHandling?: (refreshResourceHandler: any)=> void;
@@ -54,7 +64,7 @@ shared.handleNoteDeletedWhileEditing_ = async (note: NoteEntity) => {
 	return Note.load(newNote.id);
 };
 
-shared.saveNoteButton_press = async function(comp: any, folderId: string = null, options: any = null) {
+shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, folderId: string = null, options: any = null) {
 	options = { autoTitle: true, ...options };
 
 	const releaseMutex = await saveNoteMutex_.acquire();
@@ -150,7 +160,7 @@ shared.saveNoteButton_press = async function(comp: any, folderId: string = null,
 	releaseMutex();
 };
 
-shared.saveOneProperty = async function(comp: any, name: string, value: any) {
+shared.saveOneProperty = async function(comp: BaseNoteScreenComponent, name: string, value: any) {
 	let note = { ...comp.state.note };
 
 	const recreatedNote = await shared.handleNoteDeletedWhileEditing_(note);
@@ -167,7 +177,7 @@ shared.saveOneProperty = async function(comp: any, name: string, value: any) {
 	});
 };
 
-shared.noteComponent_change = function(comp: any, propName: string, propValue: any) {
+shared.noteComponent_change = function(comp: BaseNoteScreenComponent, propName: string, propValue: any) {
 	const newState: any = {};
 
 	const note = { ...comp.state.note };
@@ -211,14 +221,14 @@ shared.attachedResources = async function(noteBody: string) {
 	return output;
 };
 
-shared.isModified = function(comp: any) {
+shared.isModified = function(comp: BaseNoteScreenComponent) {
 	if (!comp.state.note || !comp.state.lastSavedNote) return false;
 	const diff = BaseModel.diffObjects(comp.state.lastSavedNote, comp.state.note);
 	delete diff.type_;
 	return !!Object.getOwnPropertyNames(diff).length;
 };
 
-shared.initState = async function(comp: any) {
+shared.initState = async function(comp: BaseNoteScreenComponent) {
 	const isProvisionalNote = comp.props.provisionalNoteIds.includes(comp.props.noteId);
 
 	const note = await Note.load(comp.props.noteId);
@@ -268,7 +278,7 @@ shared.initState = async function(comp: any) {
 	comp.lastLoadedNoteId_ = note.id;
 };
 
-shared.toggleIsTodo_onPress = function(comp: any) {
+shared.toggleIsTodo_onPress = function(comp: BaseNoteScreenComponent) {
 	const newNote = Note.toggleIsTodo(comp.state.note);
 	const newState = { note: newNote };
 	comp.setState(newState);

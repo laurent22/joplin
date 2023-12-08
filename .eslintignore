@@ -387,6 +387,7 @@ packages/app-desktop/integration-tests/models/SettingsScreen.js
 packages/app-desktop/integration-tests/util/activateMainMenuItem.js
 packages/app-desktop/integration-tests/util/createStartupArgs.js
 packages/app-desktop/integration-tests/util/firstNonDevToolsWindow.js
+packages/app-desktop/integration-tests/util/setFilePickerResponse.js
 packages/app-desktop/integration-tests/util/test.js
 packages/app-desktop/playwright.config.js
 packages/app-desktop/plugins/GotoAnything.js
@@ -978,6 +979,8 @@ packages/plugin-repo-cli/lib/types.js
 packages/plugin-repo-cli/lib/updateReadme.test.js
 packages/plugin-repo-cli/lib/updateReadme.js
 packages/plugin-repo-cli/lib/utils.js
+packages/plugin-repo-cli/lib/validateUntrustedManifest.test.js
+packages/plugin-repo-cli/lib/validateUntrustedManifest.js
 packages/plugins/ToggleSidebars/api/index.js
 packages/plugins/ToggleSidebars/api/types.js
 packages/plugins/ToggleSidebars/src/index.js
