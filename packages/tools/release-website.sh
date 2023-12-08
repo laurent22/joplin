@@ -58,6 +58,33 @@ Auto-updated using $SCRIPT_NAME" || true
 git pull --rebase
 git push
 
+
+# Copy and update the plugin website.
+# 
+# For security, the plugin website is built in a separate job without access to SSH
+# keys. This file contains the built output of the other job.
+BUILT_PLUGIN_WEBSITE_FILE="$JOPLIN_ROOT_DIR/../plugin-website.tar.gz"
+
+if [ -f "$BUILT_PLUGIN_WEBSITE_FILE" ]; then
+	cd "$JOPLIN_WEBSITE_ROOT_DIR"
+
+	mkdir -p plugins
+	cd plugins
+
+	tar -xzvf "$BUILT_PLUGIN_WEBSITE_FILE"
+	cd "$JOPLIN_WEBSITE_ROOT_DIR"
+
+	git add -A
+	git commit -m "Updated plugin discovery website
+
+Auto-updated using $SCRIPT_NAME" || true
+
+	git pull --rebase
+	git push
+else
+	echo "WARNING: Not updating plugin website -- release not present."
+fi
+
 # ------------------------------------------------------------------------------
 # Build and deploy the website
 # ------------------------------------------------------------------------------
