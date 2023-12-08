@@ -45,7 +45,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		const interval = setInterval(async () => {
 			const r = await checkIfLoginWasSuccessful(ulc);
 			if (r && (r.id && r.password)) {
-				Setting.setValue('sync.10.id', r.id);
+				Setting.setValue('sync.10.username', r.id);
 				Setting.setValue('sync.10.password', r.password);
 				clearInterval(interval);
 				return;
