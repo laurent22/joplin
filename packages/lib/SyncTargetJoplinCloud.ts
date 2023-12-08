@@ -4,6 +4,7 @@ import { _ } from './locale.js';
 import BaseSyncTarget from './BaseSyncTarget';
 import { FileApi } from './file-api';
 import SyncTargetJoplinServer, { initFileApi } from './SyncTargetJoplinServer';
+import { convertValuesToFunctions } from './ObjectUtils';
 
 interface FileApiOptions {
 	path(): string;
@@ -46,7 +47,19 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 	}
 
 	public async isAuthenticated() {
-		return true;
+		const syncTargetId = SyncTargetJoplinCloud.id();
+		const settings = Setting.toPlainObject();
+		const options = {
+			...Setting.subValues(`sync.${syncTargetId}`, settings),
+			...Setting.subValues('net', settings),
+		};
+		const result = await SyncTargetJoplinCloud.checkConfig(convertValuesToFunctions(options));
+
+		return Boolean(result.ok);
+	}
+
+	public authRouteName() {
+		return 'JoplinCloudLogin';
 	}
 
 	public static requiresPassword() {
