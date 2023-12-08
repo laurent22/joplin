@@ -1,8 +1,8 @@
 diff --git a/src/sevenZip.ts b/src/sevenZip.ts
-index ef2a527..20045b6 100644
+index ef2a527..d98c777 100644
 --- a/src/sevenZip.ts
 +++ b/src/sevenZip.ts
-@@ -1,30 +1,31 @@
+@@ -1,21 +1,21 @@
  // https://sevenzip.osdn.jp/chm/cmdline/exit_codes.htm
  // https://sevenzip.osdn.jp/chm/cmdline/commands/index.htm
  import * as _7z from "node-7z";
@@ -10,11 +10,9 @@ index ef2a527..20045b6 100644
 -import * as path from "path";
  import { exec } from "child_process";
  import joplin from "api";
-+const sevenBin = joplin.require("7zip-bin");
- 
+-
 -export let pathTo7zip = sevenBin.path7za;
-+ export let pathTo7zip = sevenBin.path7za;
- 
+-
 -export namespace sevenZip {
 -  export async function updateBinPath() {
 -    pathTo7zip = path.join(
@@ -23,6 +21,10 @@ index ef2a527..20045b6 100644
 -      pathTo7zip
 -    );
 -  }
++const sevenBin = joplin.require("7zip-bin");
++
++ export let pathTo7zip = sevenBin.path7za;
++
 + export namespace sevenZip {
 +   export async function updateBinPath() {
 +    // Not necessary with 7zip required from Joplin
@@ -35,22 +37,6 @@ index ef2a527..20045b6 100644
  
    export async function setExecutionFlag() {
      if (process.platform !== "win32") {
--      exec(`chmod +x ${pathTo7zip}`, (error, stdout, stderr) => {
--        if (error) {
--          console.error(`exec error: ${error}`);
--          return;
--        }
--      });
-+    // Disabled in Electron ("read only file system")
-+    //  exec(`chmod +x ${pathTo7zip}`, (error, stdout, stderr) => {
-+    //    if (error) {
-+    //      console.error(`exec error: ${error}`);
-+    //      return;
-+    //    }
-+    //  });
-     }
-   }
- 
 diff --git a/webpack.config.js b/webpack.config.js
 index 34a1797..7b2a480 100644
 --- a/webpack.config.js
