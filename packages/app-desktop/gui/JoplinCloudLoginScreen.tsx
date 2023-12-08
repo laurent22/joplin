@@ -3,6 +3,8 @@ import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 import { AppState } from '../app.reducer';
 import Setting from '@joplin/lib/models/Setting';
+import { clipboard } from 'electron';
+import Button, { ButtonLevel } from './Button/Button';
 const bridge = require('@electron/remote').require('./bridge').default;
 
 const { connect } = require('react-redux');
@@ -59,17 +61,27 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
 			<div style={containerStyle}>
-				<p style={theme.textStyle}>{_('To make login in Joplin Cloud, please follow the link bellow, make the login if necessary, and authorise the application.')}</p>
-				<a
-					style={theme.link}
-					onClick={() => bridge().openExternal(`http://joplincloud.local:22300/login?unique_login_code=${uniqueLoginCode}`)}
-					href="#">
-					{_('Go to Joplin Cloud')}
-				</a>
-			</div>
-			<div style={containerStyle}>
-				<p style={theme.textStyle}>{_('After you authorised the application you might have to wait some seconds for it work.')}</p>
-				<p style={theme.textStyle}>{_('Not authorised yet')}</p>
+				<p style={theme.textStyle}>{_('To allow Joplin to synchronise with Joplin Cloud, open this URL in your browser to authorise the application:')}</p>
+				<div style={{ marginBottom: '2em', display: 'flex' }}>
+					<Button
+						onClick={() => bridge().openExternal(`http://joplincloud.local:22300/login?unique_login_code=${uniqueLoginCode}`)}
+						title={_('Authorise')}
+						iconName='fa fa-external-link-alt'
+						level={ButtonLevel.Recommended}
+						style={{ marginRight: '2em' }}
+					/>
+					<Button
+						title={_('Copy link to website')}
+						onClick={() => clipboard.writeText(`http://joplincloud.local:22300/login?unique_login_code=${uniqueLoginCode}`)}
+						iconName='fa fa-clone'
+						level={ButtonLevel.Secondary}
+					/>
+
+				</div>
+				<p style={theme.textStyle}>{_('Waiting for authorisation...')}</p>
+				<p style={theme.textStyle}>{_('If you have already authorised, please wait for the application to sync to Joplin Cloud.')}</p>
+				<div id="loading-animation" />
+				<p style={{ ...theme.textStyle, fontWeight: 'bold' }}>{_('You are logged in into Joplin Cloud, you can leave this page now.')}</p>
 			</div>
 			<ButtonBar
 				onCancelClick={() => props.dispatch({ type: 'NAV_BACK' })}
