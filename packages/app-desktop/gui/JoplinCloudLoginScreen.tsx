@@ -59,7 +59,7 @@ const reducer: Reducer<IntitialValues, Events> = (state: IntitialValues, action:
 };
 
 const styles = {
-	page: { display: 'flex', height: '100%' },
+	page: { display: 'flex', flexDirection: 'columns' height: '100%' },
 	buttonsContainer: { marginBottom: '2em', display: 'flex' },
 };
 
@@ -77,7 +77,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 
 	const checkIfLoginWasSuccessful = async (ulc: string) => {
 		try {
-			const response = await fetch(`http://api.joplincloud.local:22300/api/applications?unique_login_code=${ulc}`);
+			const response = await fetch(`${Setting.value('sync.10.path')}/api/applications?unique_login_code=${ulc}`);
 			if (!response) return undefined;
 
 			if (response.status === 200) {
@@ -120,12 +120,12 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	};
 
 	const onAuthoriseClicked = () => {
-		bridge().openExternal(`http://joplincloud.local:22300/login?unique_login_code=${uniqueLoginCode}`);
+		bridge().openExternal(`${Setting.value('sync.10.website')}/login?unique_login_code=${uniqueLoginCode}`);
 		onButtonUsed();
 	};
 
 	const onCopyToClipboardClicked = () => {
-		clipboard.writeText(`http://joplincloud.local:22300/login?unique_login_code=${uniqueLoginCode}`);
+		clipboard.writeText(`${Setting.value('sync.10.website')}/login?unique_login_code=${uniqueLoginCode}`);
 		onButtonUsed();
 	};
 

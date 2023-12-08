@@ -702,6 +702,12 @@ class Setting extends BaseModel {
 				public: false,
 				storage: SettingStorage.Database,
 			},
+			'sync.10.website': {
+				value: 'https://joplincloud.com',
+				type: SettingItemType.String,
+				public: false,
+				storage: SettingStorage.Database,
+			},
 			'sync.10.username': {
 				value: '',
 				type: SettingItemType.String,
