@@ -98,6 +98,8 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	};
 
 	const tryUniqueLoginCode = () => {
+		if (intervalIdentifier) return;
+
 		const interval = setInterval(async () => {
 			const r = await checkIfLoginWasSuccessful(uniqueLoginCode);
 			if (r && (r.id && r.password)) {
