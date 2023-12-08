@@ -46,6 +46,7 @@
 		"@codemirror/state",
 		"@codemirror/view",
 		"@lezer/highlight",
+		"@lezer/markdown",
 		"@fortawesome/fontawesome-svg-core",
 		"@fortawesome/free-solid-svg-icons",
 		"@svgr/webpack",
