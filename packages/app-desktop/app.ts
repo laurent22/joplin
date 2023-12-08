@@ -372,7 +372,7 @@ class Application extends BaseApplication {
 				this.ocrService_ = new OcrService(driver);
 			}
 
-			this.ocrService_.runInBackground();
+			void this.ocrService_.runInBackground();
 		} else {
 			if (!this.ocrService_) return;
 			this.ocrService_.stopRunInBackground();
