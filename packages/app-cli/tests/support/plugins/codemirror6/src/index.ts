@@ -1,8 +1,12 @@
 import joplin from 'api';
+import { ContentScriptType } from 'api/types';
 
 joplin.plugins.register({
 	onStart: async function() {
-		// eslint-disable-next-line no-console
-		console.info('Hello world. Test plugin started!');
+		joplin.contentScripts.register(
+			ContentScriptType.CodeMirrorPlugin,
+			'cm6-example',
+			'./contentScript.js',
+		);
 	},
 });

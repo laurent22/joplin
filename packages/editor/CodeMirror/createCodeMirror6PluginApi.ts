@@ -12,7 +12,6 @@ import * as lezerMarkdown from '@lezer/markdown';
 // the CodeMirror library twice or more times breaks this assumption.
 //
 // As such, we export these packages with the main plugin API.
-//
 const createCodeMirror6PluginApi = (view: EditorView) => {
 	return {
 		view,
