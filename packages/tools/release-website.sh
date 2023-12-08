@@ -59,6 +59,33 @@ git pull --rebase
 git push
 
 # ------------------------------------------------------------------------------
+# Build the plugin discovery website
+# ------------------------------------------------------------------------------
+
+PLUGIN_DISCOVERY_WEBSITE_PATH="$JOPLIN_ROOT_DIR/../website-plugin-discovery"
+if [ -d "$PLUGIN_DISCOVERY_WEBSITE_PATH" ]; then
+	cd "$PLUGIN_DISCOVERY_WEBSITE_PATH"
+	yarn install
+
+	# /plugins specifies the base URL for the website.
+	# Change this if moving the plugin discovery website from joplinapp.org/plugins
+	# to some other URL.
+	yarn build-production /plugins
+
+	rm -rf "$JOPLIN_WEBSITE_ROOT_DIR/plugins/"
+	cp -r "./site/" "$JOPLIN_WEBSITE_ROOT_DIR/plugins"
+
+	cd "$JOPLIN_WEBSITE_ROOT_DIR"
+
+	git add -A
+	git commit -m "Updated plugin discovery website
+Auto-updated using $SCRIPT_NAME" || true
+
+	git pull --rebase
+	git push
+fi
+
+# ------------------------------------------------------------------------------
 # Build and deploy the website
 # ------------------------------------------------------------------------------
 

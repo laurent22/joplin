@@ -72,7 +72,6 @@ const config = {
 							'mobile',
 							'note_history',
 							'notifications',
-							'plugins',
 							'profiles',
 							'publish_note',
 							'rich_text_editor',
@@ -80,6 +79,10 @@ const config = {
 							'share_notebook',
 							'subnotebooks',
 							'terminal',
+
+							// Redirect disabled: This URL is now used for the plugin discovery
+							// website. 
+							// 'plugins',
 						];
 
 						for (const p of oldAppsPages) {
