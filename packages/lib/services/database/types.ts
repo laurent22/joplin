@@ -332,6 +332,7 @@ export interface ResourceEntity {
   'is_shared'?: number;
   'master_key_id'?: string;
   'mime'?: string;
+  'ocr_details'?: string;
   'ocr_error'?: string;
   'ocr_status'?: number;
   'ocr_text'?: string;
@@ -547,6 +548,7 @@ export const databaseSchema: DatabaseTables = {
 		is_shared: { type: 'number' },
 		master_key_id: { type: 'string' },
 		mime: { type: 'string' },
+		ocr_details: { type: 'string' },
 		ocr_error: { type: 'string' },
 		ocr_status: { type: 'number' },
 		ocr_text: { type: 'string' },

@@ -5,6 +5,7 @@ export default (): (SqlQuery|string)[] => {
 	const queries: (SqlQuery|string)[] = [];
 
 	queries.push('ALTER TABLE `resources` ADD COLUMN `ocr_text` TEXT NOT NULL DEFAULT ""');
+	queries.push('ALTER TABLE `resources` ADD COLUMN `ocr_details` TEXT NOT NULL DEFAULT ""');
 	queries.push('ALTER TABLE `resources` ADD COLUMN `ocr_status` INT NOT NULL DEFAULT 0');
 	queries.push('ALTER TABLE `resources` ADD COLUMN `ocr_error` TEXT NOT NULL DEFAULT ""');
 

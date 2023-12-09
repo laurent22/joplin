@@ -34,19 +34,24 @@ describe('OcrService', () => {
 		const service = newService();
 		await service.processResources();
 
-		const processedResource1: ResourceEntity = await Resource.load(resource1.id);
-		expect(processedResource1.ocr_text).toBe(
-			'This is a lot of 12 point text to test the\n' +
+		const expectedText = 'This is a lot of 12 point text to test the\n' +
 			'ocr code and see if it works on all types\n' +
 			'of file format.\n' +
 			'The quick brown dog jumped over the\n' +
 			'lazy fox. The quick brown dog jumped\n' +
 			'over the lazy fox. The quick brown dog\n' +
 			'jumped over the lazy fox. The quick\n' +
-			'brown dog jumped over the lazy fox.',
-		);
+			'brown dog jumped over the lazy fox.';
+		const processedResource1: ResourceEntity = await Resource.load(resource1.id);
+		expect(processedResource1.ocr_text).toBe(expectedText);
 		expect(processedResource1.ocr_status).toBe(ResourceOcrStatus.Done);
 		expect(processedResource1.ocr_error).toBe('');
+
+		const details = Resource.unserializeOcrDetails(processedResource1.ocr_details);
+		const lines = details.map(l => l.words.map(w => w.t).join(' ')).join('\n');
+		expect(lines).toBe(expectedText);
+		expect(details[0].words[0].t).toBe('This');
+		expect(details[0].words[0]).toEqual({ 't': 'This', 'bb': [36, 96, 92, 116], 'bl': [36, 96, 116, 116] });
 
 		// Also check that the resource blob has not been updated
 		expect(processedResource1.blob_updated_time).toBe(resource1.blob_updated_time);

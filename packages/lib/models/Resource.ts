@@ -19,6 +19,7 @@ import { LoadOptions } from './utils/types';
 import { SaveOptions } from './utils/types';
 import { MarkupLanguage } from '@joplin/renderer';
 import { htmlentities } from '@joplin/utils/html';
+import { RecognizeResultLine } from '../services/ocr/utils/types';
 
 export default class Resource extends BaseItem {
 
@@ -524,6 +525,24 @@ export default class Resource extends BaseItem {
 			ocr_text: '',
 			ocr_status: ResourceOcrStatus.Todo,
 		});
+	}
+
+	public static serializeOcrDetails(details: RecognizeResultLine[]) {
+		if (!details || !details.length) return '';
+		return JSON.stringify(details);
+	}
+
+	public static unserializeOcrDetails(s: string): RecognizeResultLine[] | null {
+		if (!s) return null;
+		try {
+			const r = JSON.parse(s);
+			if (!r) return null;
+			if (!Array.isArray(r)) throw new Error('OCR details are not valid (not an array');
+			return r;
+		} catch (error) {
+			error.message = `Could not unserialized OCR data: ${error.message}`;
+			throw error;
+		}
 	}
 
 	public static allForNormalization(updatedTime: number, id: string, limit = 100, options: LoadOptions = null) {

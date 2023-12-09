@@ -1,10 +1,14 @@
-import { RecognizeResult } from '../utils/types';
+import { RecognizeResult, RecognizeResultBoundingBox, RecognizeResultLine, RecognizeResultWord } from '../utils/types';
 import { Worker, WorkerOptions, createWorker } from 'tesseract.js';
 import OcrDriverBase from '../OcrDriverBase';
 
 interface Tesseract {
 	createWorker: typeof createWorker;
 }
+
+const formatTesseractBoundingBox = (boundingBox: Tesseract.Bbox): RecognizeResultBoundingBox => {
+	return [boundingBox.x0, boundingBox.x1, boundingBox.y0, boundingBox.y1];
+};
 
 // Empirically, it seems anything below 70 is not usable. Between 70 and 75 it's
 // hit and miss, but often it's good enough that we should keep the result.
@@ -63,32 +67,43 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 		});
 
 		interface GoodParagraph {
-			lines: string[];
 			text: string;
 		}
 
 		const goodParagraphs: GoodParagraph[] = [];
+		let goodLines: RecognizeResultLine[] = [];
 
 		for (const paragraph of result.data.paragraphs) {
-			const goodLines: string[] = [];
+			const lines: RecognizeResultLine[] = [];
 
 			for (const line of paragraph.lines) {
-				// console.info('LINE', line.confidence, line.text);
+				// If the line confidence is above the threshold we keep the
+				// whole text. The confidence of individual words will vary and
+				// may be below the treshold, but there's a chance they will
+				// still be correct if the line as a whole is well recognised.
 				if (line.confidence < minConfidence) continue;
 
-				const goodWords = line.words.map(w => {
-					return {
-						text: w.text,
+				const goodWords: RecognizeResultWord[] = line.words.map(w => {
+					const output: RecognizeResultWord = {
+						t: w.text,
+						bb: formatTesseractBoundingBox(w.bbox),
 					};
+
+					if (w.baseline && w.baseline.has_baseline) output.bl = formatTesseractBoundingBox(w.baseline);
+
+					return output;
 				});
 
-				goodLines.push(goodWords.map(w => w.text).join(' '));
+				lines.push({
+					words: goodWords,
+				});
 			}
 
 			goodParagraphs.push({
-				lines: goodLines,
-				text: goodLines.join('\n'),
+				text: lines.map(l => l.words.map(w => w.t).join(' ')).join('\n'),
 			});
+
+			goodLines = goodLines.concat(lines);
 		}
 
 		return {
@@ -96,6 +111,7 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 			// concatenation of all lines, even those with a low confidence
 			// score, so we recreate it here based on the good lines.
 			text: goodParagraphs.map(p => p.text).join('\n'),
+			lines: goodLines,
 		};
 	}
 
