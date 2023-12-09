@@ -1,18 +1,20 @@
-
 import type * as CodeMirrorState from '@codemirror/state';
 import type * as CodeMirrorView from '@codemirror/view';
 
+import { CodeMirrorContentScriptModule } from 'api/types';
+
 
 export default (_context: { contentScriptId: string }) => {
-	return {
-		plugin: (codeMirror: any, codeMirrorPackages: any) => {
-			console.warn('content script', codeMirrorPackages);
-			(window as any).cmp = codeMirrorPackages;
+	const plugin: CodeMirrorContentScriptModule = {
+		plugin: (codeMirror, codeMirrorLibraries) => {
+			// Use the same versions and instances of libraries as Joplin:
+			const { lineNumbers } = codeMirrorLibraries.codemirror.view as typeof CodeMirrorView;
+			const { StateEffect } = codeMirrorLibraries.codemirror.state as typeof CodeMirrorState;
+			
+			const editorView: CodeMirrorView.EditorView = codeMirror.editor;
 
-			const { lineNumbers } = codeMirrorPackages.codemirror.view as typeof CodeMirrorView;
-			const { StateEffect } = codeMirrorPackages.codemirror.state as typeof CodeMirrorState;
-			const editorView: CodeMirrorView.EditorView = codeMirrorPackages.view;
-
+			// We use an appendConfig effect to add extensions to the editor.
+			// See https://codemirror.net/examples/config/ for more information.
 			editorView.dispatch({
 				effects: [
 					StateEffect.appendConfig.of([
@@ -22,4 +24,6 @@ export default (_context: { contentScriptId: string }) => {
 			});
 		},
 	};
+
+	return plugin;
 };
