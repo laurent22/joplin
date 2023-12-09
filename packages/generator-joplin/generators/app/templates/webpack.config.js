@@ -215,13 +215,41 @@ const pluginConfig = { ...baseConfig, entry: './src/index.ts',
 		}),
 	] };
 
-const extraScriptConfig = { ...baseConfig, resolve: {
-	alias: {
-		api: path.resolve(__dirname, 'api'),
+
+// These libraries can be included with require(...) or
+// joplin.require(...) from content scripts.
+const externalContentScriptLibraries = [
+	'@codemirror/view',
+	'@codemirror/state',
+	'@codemirror/language',
+	'@codemirror/autocomplete',
+	'@codemirror/commands',
+	'@codemirror/highlight',
+	'@codemirror/lint',
+	'@codemirror/lang-html',
+	'@lezer/common',
+	'@lezer/markdown',
+];
+
+const extraScriptExternals = {};
+for (const library of externalContentScriptLibraries) {
+	extraScriptExternals[library] = { commonjs: library };
+}
+
+const extraScriptConfig = {
+	...baseConfig,
+	resolve: {
+		alias: {
+			api: path.resolve(__dirname, 'api'),
+		},
+		fallback: moduleFallback,
+		extensions: ['.js', '.tsx', '.ts', '.json'],
 	},
-	fallback: moduleFallback,
-	extensions: ['.js', '.tsx', '.ts', '.json'],
-} };
+
+	// We support requiring @codemirror/... libraries through require('@codemirror/...')
+	externalsType: 'commonjs',
+	externals: extraScriptExternals,
+};
 
 const createArchiveConfig = {
 	stats: 'errors-only',

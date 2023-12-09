@@ -4150,7 +4150,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lint@npm:^6.0.0":
+"@codemirror/lint@npm:6.4.1, @codemirror/lint@npm:^6.0.0":
   version: 6.4.1
   resolution: "@codemirror/lint@npm:6.4.1"
   dependencies:
@@ -6631,10 +6631,13 @@ __metadata:
     "@codemirror/lang-rust": 6.0.1
     "@codemirror/language": 6.9.0
     "@codemirror/legacy-modes": 6.3.3
+    "@codemirror/lint": 6.4.1
     "@codemirror/search": 6.5.2
     "@codemirror/state": 6.2.1
     "@codemirror/view": 6.18.0
     "@joplin/lib": ~2.13
+    "@lezer/common": 1.0.4
+    "@lezer/highlight": 1.1.6
     "@lezer/markdown": 1.1.0
     "@replit/codemirror-vim": 6.0.14
     "@testing-library/react-hooks": 8.0.1
@@ -8039,7 +8042,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/common@npm:^1.0.0, @lezer/common@npm:^1.0.2":
+"@lezer/common@npm:1.0.4, @lezer/common@npm:^1.0.0, @lezer/common@npm:^1.0.2":
   version: 1.0.4
   resolution: "@lezer/common@npm:1.0.4"
   checksum: 0bea82da76e0b89afad4e5159d3add460022916352c47906ec67b26d6fe5ec9cb8e23df0e2bf0adef765ae78bed1706fc573a11506d01a80112a5b6dd317730c
@@ -8075,7 +8078,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/highlight@npm:^1.0.0, @lezer/highlight@npm:^1.1.3":
+"@lezer/highlight@npm:1.1.6, @lezer/highlight@npm:^1.0.0, @lezer/highlight@npm:^1.1.3":
   version: 1.1.6
   resolution: "@lezer/highlight@npm:1.1.6"
   dependencies:

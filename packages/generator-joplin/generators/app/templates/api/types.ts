@@ -533,49 +533,6 @@ export interface MarkdownItContentScriptModule extends Omit<ContentScriptModule,
 	plugin: (markdownIt: any, options: any)=> any;
 }
 
-/**
- * Provides access to [CodeMirror 6](https://codemirror.net/) libraries within an editor
- * content script.
- *
- * For example, `.codemirror.view` corresponds to the [`@codemirror/view`](https://codemirror.net/docs/ref/#view)
- * library and `.lezer.common` corresponds to `@lezer/common`.
- */
-export interface CodeMirrorContentScriptLibraries {
-	codemirror: {
-		view: any;
-		state: any;
-		language: any;
-		autocomplete: any;
-		commands: any;
-	};
-
-	lezer: {
-		highlight: any;
-		common: any;
-		markdown: any;
-	};
-}
-
-/**
- * The expected type of a default export for a CodeMirror content script.
- *
- * The parameters to the `plugin` function have different values depending on whether the
- * plugin is running in CodeMirror 5 or CodeMirror 6.
- *
- * **In CodeMirror 5**:
- * - `editor` will be a [CodeMirror](https://codemirror.net/5/doc/manual.html#usage) 5 object
- * - `codeMirrorLibraries` will be `undefined`.
- *
- * **In CodeMirror 6**:
- * - `editor` will be a compatibility layer that emulates CodeMirror 5's API.
- *     - `editor.editor` is a reference to a CodeMirror 6 [`EditorView`](https://codemirror.net/docs/ref/#view.EditorView)
- * - `codeMirrorLibraries` allows accessing various CodeMirror libraries, as importing them
- *   normally may cause duplicate library issues.
- */
-export interface CodeMirrorContentScriptModule extends Omit<ContentScriptModule, 'plugin'> {
-	plugin: (editor: any, codeMirrorLibraries?: CodeMirrorContentScriptLibraries)=> any;
-}
-
 export enum ContentScriptType {
 	/**
 	 * Registers a new Markdown-It plugin, which should follow the template

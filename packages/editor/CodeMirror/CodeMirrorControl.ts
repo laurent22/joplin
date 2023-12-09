@@ -5,7 +5,7 @@ import editorCommands from './editorCommands/editorCommands';
 import { EditorSelection, Extension, StateEffect } from '@codemirror/state';
 import { updateLink } from './markdown/markdownCommands';
 import { SearchQuery, setSearchQuery } from '@codemirror/search';
-import PluginLoader from './PluginLoader';
+import PluginLoader from './pluginApi/PluginLoader';
 
 interface Callbacks {
 	onUndoRedo(): void;
