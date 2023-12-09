@@ -1,5 +1,9 @@
-# Joplin Plugin
+# CodeMirror 6 sample plugin
 
-This is your new Joplin plugin. It is suggested that you use this README file to document your plugin.
+This plugin demonstrates how to use the CodeMirror 6 plugin API. See `src/contentScript.ts`.
 
-For information on how to build or publish the plugin, please see [GENERATOR_DOC.md](./GENERATOR_DOC.md)
+> [!NOTE]
+>
+> At the time of this writing, the CodeMirror 6 editor is in beta and must be enabled
+> in settings.
+>
