@@ -6428,7 +6428,7 @@ __metadata:
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.8
     "@types/mustache": 4.2.5
-    "@types/node": 18.18.9
+    "@types/node": 18.18.10
     "@types/react": 18.2.37
     "@types/react-redux": 7.1.30
     "@types/styled-components": 5.1.32
@@ -6657,7 +6657,7 @@ __metadata:
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
     "@types/jest": 29.5.8
-    "@types/node": 18.18.9
+    "@types/node": 18.18.10
     "@typescript-eslint/eslint-plugin": 6.8.0
     "@typescript-eslint/parser": 6.8.0
     coveralls: 3.1.1
@@ -6723,7 +6723,7 @@ __metadata:
     "@types/jest": 29.5.8
     "@types/js-yaml": 4.0.9
     "@types/nanoid": 3.0.0
-    "@types/node": 18.18.9
+    "@types/node": 18.18.10
     "@types/node-rsa": 1.1.4
     "@types/react": 18.2.37
     "@types/uuid": 9.0.7
@@ -6830,7 +6830,7 @@ __metadata:
     "@joplin/utils": ^2.13.4
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
-    "@types/node": 18.18.9
+    "@types/node": 18.18.10
     fs-extra: 11.1.1
     gh-release-assets: 2.0.1
     jest: 29.7.0
@@ -6885,7 +6885,7 @@ __metadata:
     "@joplin/utils": ^2.13.4
     "@types/jest": 29.5.8
     "@types/markdown-it": 13.0.6
-    "@types/node": 18.18.9
+    "@types/node": 18.18.10
     font-awesome-filetypes: 2.1.0
     fs-extra: 11.1.1
     highlight.js: 11.9.0
@@ -6925,7 +6925,7 @@ __metadata:
     "@joplin/tools": ~2.13
     "@joplin/utils": ~2.13
     "@koa/cors": 3.4.3
-    "@rmp135/sql-ts": 1.18.0
+    "@rmp135/sql-ts": 1.18.1
     "@types/bcryptjs": 2.4.6
     "@types/formidable": 3.4.5
     "@types/fs-extra": 11.0.4
@@ -6988,13 +6988,13 @@ __metadata:
     "@joplin/lib": ^2.13.4
     "@joplin/renderer": ^2.13.4
     "@joplin/utils": ^2.13.4
-    "@rmp135/sql-ts": 1.18.0
+    "@rmp135/sql-ts": 1.18.1
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
     "@types/js-yaml": 4.0.9
     "@types/markdown-it": 13.0.6
     "@types/mustache": 4.2.5
-    "@types/node": 18.18.9
+    "@types/node": 18.18.10
     "@types/node-fetch": 2.6.9
     "@types/yargs": 17.0.31
     compare-versions: 6.1.0
@@ -9263,9 +9263,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rmp135/sql-ts@npm:1.18.0":
-  version: 1.18.0
-  resolution: "@rmp135/sql-ts@npm:1.18.0"
+"@rmp135/sql-ts@npm:1.18.1":
+  version: 1.18.1
+  resolution: "@rmp135/sql-ts@npm:1.18.1"
   dependencies:
     change-case: ^4.1.2
     handlebars: ^4.7.7
@@ -9293,7 +9293,7 @@ __metadata:
       optional: true
   bin:
     sql-ts: bin/sql-ts
-  checksum: c1a9bf4a4447fab0823e5200ed9c879900c9c744a5f0ff2f49a96b1e072035e37cb58e7be5e19cc6e0ab4e4446bdaeebe25acb7c2b551221b26b9a88e3542f00
+  checksum: 01b882400c6fbba141fa95ed37ba3b2af04fdefe3834b60bc9e056960449da6b11fa9e2949817f13f23c133f45f5e56da79d916a9741dfb0a7ff7ac91606c3b7
   languageName: node
   linkType: hard
 
@@ -10677,12 +10677,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.18.9":
-  version: 18.18.9
-  resolution: "@types/node@npm:18.18.9"
+"@types/node@npm:18.18.10":
+  version: 18.18.10
+  resolution: "@types/node@npm:18.18.10"
   dependencies:
     undici-types: ~5.26.4
-  checksum: 629ce20357586144031cb43d601617eef45e59460dea6b1e123f708e6885664f44d54f65e5b72b2614af5b8613f3652ced832649c0b991accbc6a85139befa51
+  checksum: 1245a14a38bfbe115b8af9792dbe87a1c015f2532af5f0a25a073343fefa7b2edfd95ff3830003d1a1278ce7f9ee0e78d4e5454d7a60af65832c8d77f4032ac8
   languageName: node
   linkType: hard
 
@@ -26567,7 +26567,7 @@ __metadata:
     "@joplin/utils": ~2.13
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
-    "@types/node": 18.18.9
+    "@types/node": 18.18.10
     "@types/proper-lockfile": ^4.1.2
     aws-sdk: 2.1340.0
     chalk: 4.1.2
