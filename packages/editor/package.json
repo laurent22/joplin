@@ -26,21 +26,21 @@
 		"typescript": "5.2.2"
 	},
 	"dependencies": {
-		"@codemirror/autocomplete": "6.10.2",
-		"@codemirror/commands": "6.2.5",
+		"@codemirror/autocomplete": "6.11.1",
+		"@codemirror/commands": "6.3.2",
 		"@codemirror/lang-cpp": "6.0.2",
-		"@codemirror/lang-html": "6.4.6",
+		"@codemirror/lang-html": "6.4.7",
 		"@codemirror/lang-java": "6.0.1",
 		"@codemirror/lang-javascript": "6.2.1",
-		"@codemirror/lang-markdown": "6.2.1",
+		"@codemirror/lang-markdown": "6.2.3",
 		"@codemirror/lang-php": "6.0.1",
 		"@codemirror/lang-rust": "6.0.1",
-		"@codemirror/language": "6.9.0",
+		"@codemirror/language": "6.9.3",
 		"@codemirror/legacy-modes": "6.3.3",
-		"@codemirror/search": "6.5.2",
-		"@codemirror/state": "6.2.1",
-		"@codemirror/view": "6.18.0",
-		"@lezer/markdown": "1.1.0",
+		"@codemirror/search": "6.5.5",
+		"@codemirror/state": "6.3.3",
+		"@codemirror/view": "6.22.2",
+		"@lezer/markdown": "1.1.2",
 		"@replit/codemirror-vim": "6.0.14"
 	}
 }
