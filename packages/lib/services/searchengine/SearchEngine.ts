@@ -693,7 +693,6 @@ export default class SearchEngine {
 		return [];
 	}
 
-	// public async search(searchString: string, options: SearchOptions = null): Promise<SearchResult[]> {
 	public async search(searchString: string, options: SearchOptions = null): Promise<ProcessResultsRow[]> {
 		if (!searchString) return [];
 
@@ -749,6 +748,8 @@ export default class SearchEngine {
 				});
 
 				if (!queryHasFilters) {
+					const toSearch = parsedQuery.allTerms.map(t => t.value).join(' ');
+
 					let itemRows = await this.db().selectAll<ProcessResultsRow>(`
 						SELECT
 							id,
@@ -760,7 +761,7 @@ export default class SearchEngine {
 							item_type
 						FROM items_fts
 						WHERE title MATCH ? OR body MATCH ?
-					`, [searchString, searchString]);
+					`, [toSearch, toSearch]);
 
 					const resourcesToNotes = await NoteResource.associatedResourceNotes(itemRows.map(r => r.item_id), { fields: ['note_id', 'parent_id'] });
 
