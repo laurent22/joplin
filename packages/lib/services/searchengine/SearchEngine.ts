@@ -762,11 +762,13 @@ export default class SearchEngine {
 						WHERE title MATCH ? OR body MATCH ?
 					`, [searchString, searchString]);
 
-					const resourceToNoteIds = await NoteResource.associatedResourceNoteIds(itemRows.map(r => r.item_id));
+					const resourcesToNotes = await NoteResource.associatedResourceNotes(itemRows.map(r => r.item_id), { fields: ['note_id', 'parent_id'] });
 
 					for (const itemRow of itemRows) {
-						const r = resourceToNoteIds[itemRow.item_id];
-						itemRow.id = r && r.length ? r[0] : null;
+						const notes = resourcesToNotes[itemRow.item_id];
+						const note = notes && notes.length ? notes[0] : null;
+						itemRow.id = note ? note.note_id : null;
+						itemRow.parent_id = note ? note.parent_id : null;
 					}
 
 					if (!options.includeOrphanedResources) itemRows = itemRows.filter(r => !!r.id);

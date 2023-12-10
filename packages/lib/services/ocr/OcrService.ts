@@ -51,10 +51,11 @@ export default class OcrService {
 			const imageFilePaths = await shim.pdfToImages(resourceFilePath, await this.pdfExtractDir());
 			const results: RecognizeResult[] = [];
 
-			logger.info(`Processing ${imageFilePaths.length} PDF pages...`);
-
+			let pageIndex = 0;
 			for (const imageFilePath of imageFilePaths) {
+				logger.info(`Processing PDF page ${pageIndex + 1} / ${imageFilePaths.length}...`);
 				results.push(await this.driver_.recognize(language, imageFilePath));
+				pageIndex++;
 			}
 
 			for (const imageFilePath of imageFilePaths) {

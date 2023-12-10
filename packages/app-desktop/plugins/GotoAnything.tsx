@@ -8,7 +8,7 @@ import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '@joplin/lib/theme';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 import gotoAnythingStyleQuery from '@joplin/lib/services/searchengine/gotoAnythingStyleQuery';
-import BaseModel from '@joplin/lib/BaseModel';
+import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import Tag from '@joplin/lib/models/Tag';
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
@@ -19,7 +19,9 @@ import { mergeOverlappingIntervals } from '@joplin/lib/ArrayUtils';
 import markupLanguageUtils from '../utils/markupLanguageUtils';
 import focusEditorIfEditorCommand from '@joplin/lib/services/commands/focusEditorIfEditorCommand';
 import Logger from '@joplin/utils/Logger';
-import { MarkupToHtml } from '@joplin/renderer';
+import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
+import Resource from '@joplin/lib/models/Resource';
+import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 
 const logger = Logger.create('GotoAnything');
 
@@ -33,6 +35,8 @@ interface GotoAnythingSearchResult {
 	fragments?: string;
 	path?: string;
 	type?: number;
+	item_id?: string;
+	item_type?: ModelType;
 }
 
 interface Props {
@@ -59,6 +63,21 @@ interface CommandQuery {
 	name: string;
 	args: string[];
 }
+
+const getContentMarkupLanguageAndBody = (result: GotoAnythingSearchResult, notesById: Record<string, NoteEntity>, resources: ResourceEntity[]) => {
+	if (result.item_type === ModelType.Resource) {
+		const resource = resources.find(r => r.id === result.item_id);
+		if (!resource) {
+			logger.warn('Could not find resources associated with result:', result);
+			return { markupLanguage: MarkupLanguage.Markdown, content: '' };
+		} else {
+			return { markupLanguage: MarkupLanguage.Markdown, content: resource.ocr_text };
+		}
+	} else { // a note
+		const note = notesById[result.id];
+		return { markupLanguage: note.markup_language, content: note.body };
+	}
+};
 
 class GotoAnything {
 
@@ -311,6 +330,9 @@ class Dialog extends React.PureComponent<Props, State> {
 
 				resultsInBody = !!results.find((row: any) => row.fields.includes('body'));
 
+				const resourceIds = results.filter(r => r.item_type === ModelType.Resource).map(r => r.item_id);
+				const resources = await Resource.resourceOcrTextsByIds(resourceIds);
+
 				if (!resultsInBody || this.state.query.length <= 1) {
 					for (let i = 0; i < results.length; i++) {
 						const row = results[i];
@@ -336,9 +358,14 @@ class Dialog extends React.PureComponent<Props, State> {
 							let fragments = '...';
 
 							if (i < limit) { // Display note fragments of search keyword matches
+								const { markupLanguage, content } = getContentMarkupLanguageAndBody(
+									row,
+									notesById,
+									resources,
+								);
+
 								const indices = [];
-								const note = notesById[row.id];
-								const body = this.markupToHtml().stripMarkup(note.markup_language, note.body, { collapseWhiteSpaces: true });
+								const body = this.markupToHtml().stripMarkup(markupLanguage, content, { collapseWhiteSpaces: true });
 
 								// Iterate over all matches in the body for each search keyword
 								for (let { valueRegex } of searchKeywords) {
@@ -359,7 +386,6 @@ class Dialog extends React.PureComponent<Props, State> {
 								fragments = mergedIndices.map((f: any) => body.slice(f[0], f[1])).join(' ... ');
 								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
 								if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
-
 							}
 
 							results[i] = { ...row, path, fragments };
@@ -490,8 +516,10 @@ class Dialog extends React.PureComponent<Props, State> {
 		const pathComp = !item.path ? null : <div style={style.rowPath}>{folderIcon} {item.path}</div>;
 		const fragmentComp = !fragmentsHtml ? null : <div style={style.rowFragments} dangerouslySetInnerHTML={{ __html: (fragmentsHtml) }}></div>;
 
+		const key = item.item_id ? item.item_id : item.id;
+
 		return (
-			<div key={item.id} className={isSelected ? 'selected' : null} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id} data-type={item.type}>
+			<div key={key} className={isSelected ? 'selected' : null} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id} data-type={item.type}>
 				<div style={style.rowTitle} dangerouslySetInnerHTML={{ __html: titleHtml }}></div>
 				{fragmentComp}
 				{pathComp}

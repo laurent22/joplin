@@ -21,6 +21,7 @@ import { MarkupLanguage } from '@joplin/renderer';
 import { htmlentities } from '@joplin/utils/html';
 import { RecognizeResultLine } from '../services/ocr/utils/types';
 import eventManager, { EventName } from '../eventManager';
+import { unique } from '../array';
 
 export default class Resource extends BaseItem {
 
@@ -544,6 +545,12 @@ export default class Resource extends BaseItem {
 			error.message = `Could not unserialized OCR data: ${error.message}`;
 			throw error;
 		}
+	}
+
+	public static async resourceOcrTextsByIds(ids: string[]): Promise<ResourceEntity[]> {
+		if (!ids.length) return [];
+		ids = unique(ids);
+		return this.modelSelectAll(`SELECT id, ocr_text FROM resources WHERE id IN ("${ids.join('","')}")`);
 	}
 
 	public static allForNormalization(updatedTime: number, id: string, limit = 100, options: LoadOptions = null) {
