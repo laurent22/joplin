@@ -20,6 +20,7 @@ import { SaveOptions } from './utils/types';
 import { MarkupLanguage } from '@joplin/renderer';
 import { htmlentities } from '@joplin/utils/html';
 import { RecognizeResultLine } from '../services/ocr/utils/types';
+import eventManager, { EventName } from '../eventManager';
 
 export default class Resource extends BaseItem {
 
@@ -559,7 +560,9 @@ export default class Resource extends BaseItem {
 	public static async save(o: ResourceEntity, options: SaveOptions = null): Promise<ResourceEntity> {
 		const resource = { ...o };
 
-		if (this.isNew(o, options)) {
+		const isNew = this.isNew(o, options);
+
+		if (isNew) {
 			const now = Date.now();
 			options = { ...options, autoTimestamp: false };
 			if (!resource.created_time) resource.created_time = now;
@@ -567,7 +570,9 @@ export default class Resource extends BaseItem {
 			if (!resource.blob_updated_time) resource.blob_updated_time = now;
 		}
 
-		return await super.save(resource, options);
+		const output = await super.save(resource, options);
+		if (isNew) eventManager.emit(EventName.ResourceCreate);
+		return output;
 	}
 
 }

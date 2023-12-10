@@ -74,7 +74,10 @@ export default class OcrService {
 	}
 
 	public async processResources() {
-		if (this.isProcessingResources_) return;
+		if (this.isProcessingResources_) {
+			logger.info('Already processing resources - skipping');
+			return;
+		}
 
 		this.isProcessingResources_ = true;
 

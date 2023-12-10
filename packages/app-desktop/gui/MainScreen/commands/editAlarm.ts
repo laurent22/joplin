@@ -1,5 +1,5 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
-import eventManager from '@joplin/lib/eventManager';
+import eventManager, { EventName } from '@joplin/lib/eventManager';
 import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
 import Note from '@joplin/lib/models/Note';
@@ -45,7 +45,7 @@ export const runtime = (comp: any): CommandRuntime => {
 
 						if (newNote) {
 							await Note.save(newNote);
-							eventManager.emit('alarmChange', { noteId: note.id, note: newNote });
+							eventManager.emit(EventName.AlarmChange, { noteId: note.id, note: newNote });
 						}
 
 						comp.setState({ promptOptions: null });

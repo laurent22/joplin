@@ -2,6 +2,22 @@ const fastDeepEqual = require('fast-deep-equal');
 
 const events = require('events');
 
+export enum EventName {
+	ResourceCreate = 'resourceCreate',
+	ResourceChange = 'resourceChange',
+	SettingsChange = 'settingsChange',
+	TodoToggle = 'todoToggle',
+	NoteTypeToggle = 'noteTypeToggle',
+	SyncStart = 'syncStart',
+	SessionEstablished = 'sessionEstablished',
+	SyncComplete = 'syncComplete',
+	ItemChange = 'itemChange',
+	NoteAlarmTrigger = 'noteAlarmTrigger',
+	AlarmChange = 'alarmChange',
+	KeymapChange = 'keymapChange',
+	NoteContentChange = 'noteContentChange',
+}
+
 export class EventManager {
 
 	private emitter_: any;
@@ -22,11 +38,11 @@ export class EventManager {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public on(eventName: string, callback: Function) {
+	public on(eventName: EventName, callback: Function) {
 		return this.emitter_.on(eventName, callback);
 	}
 
-	public emit(eventName: string, object: any = null) {
+	public emit(eventName: EventName, object: any = null) {
 		return this.emitter_.emit(eventName, object);
 	}
 
@@ -36,7 +52,7 @@ export class EventManager {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public off(eventName: string, callback: Function) {
+	public off(eventName: EventName, callback: Function) {
 		return this.removeListener(eventName, callback);
 	}
 

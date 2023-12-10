@@ -1,6 +1,6 @@
 import shim from '../shim';
 import { _, supportedLocalesToLanguages, defaultLocale } from '../locale';
-import eventManager from '../eventManager';
+import eventManager, { EventName } from '../eventManager';
 import BaseModel from '../BaseModel';
 import Database from '../database';
 import SyncTargetRegistry from '../SyncTargetRegistry';
@@ -2502,7 +2502,7 @@ class Setting extends BaseModel {
 
 		const keys = this.changedKeys_.slice();
 		this.changedKeys_ = [];
-		eventManager.emit('settingsChange', { keys });
+		eventManager.emit(EventName.SettingsChange, { keys });
 	}
 
 	public static scheduleSave() {

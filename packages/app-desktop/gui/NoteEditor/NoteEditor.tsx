@@ -19,7 +19,7 @@ import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index'
 import CommandService from '@joplin/lib/services/CommandService';
 import ToolbarButton from '../ToolbarButton/ToolbarButton';
 import Button, { ButtonLevel } from '../Button/Button';
-import eventManager from '@joplin/lib/eventManager';
+import eventManager, { EventName } from '@joplin/lib/eventManager';
 import { AppState } from '../../app.reducer';
 import ToolbarButtonUtils from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import { _, _n } from '@joplin/lib/locale';
@@ -136,7 +136,7 @@ function NoteEditor(props: NoteEditorProps) {
 					id: formNote.id,
 				});
 
-				eventManager.emit('noteContentChange', { note: savedNote });
+				eventManager.emit(EventName.NoteContentChange, { note: savedNote });
 			};
 		};
 
@@ -368,11 +368,11 @@ function NoteEditor(props: NoteEditorProps) {
 	}, []);
 
 	useEffect(() => {
-		eventManager.on('alarmChange', onNotePropertyChange);
+		eventManager.on(EventName.AlarmChange, onNotePropertyChange);
 		ExternalEditWatcher.instance().on('noteChange', externalEditWatcher_noteChange);
 
 		return () => {
-			eventManager.off('alarmChange', onNotePropertyChange);
+			eventManager.off(EventName.AlarmChange, onNotePropertyChange);
 			ExternalEditWatcher.instance().off('noteChange', externalEditWatcher_noteChange);
 		};
 	}, [externalEditWatcher_noteChange, onNotePropertyChange]);

@@ -63,7 +63,7 @@ import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
 import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
-import eventManager from '@joplin/lib/eventManager';
+import eventManager, { EventName } from '@joplin/lib/eventManager';
 import path = require('path');
 import { checkPreInstalledDefaultPlugins, installDefaultPlugins, setSettingsForDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
@@ -377,6 +377,13 @@ class Application extends BaseApplication {
 			if (!this.ocrService_) return;
 			this.ocrService_.stopRunInBackground();
 		}
+
+		const handleResourceChange = () => {
+			void this.ocrService_.maintenance();
+		};
+
+		eventManager.on(EventName.ResourceCreate, handleResourceChange);
+		eventManager.on(EventName.ResourceChange, handleResourceChange);
 	}
 
 	public async start(argv: string[]): Promise<any> {
@@ -595,7 +602,7 @@ class Application extends BaseApplication {
 		// Forwards the local event to the global event manager, so that it can
 		// be picked up by the plugin manager.
 		ResourceEditWatcher.instance().on('resourceChange', (event: any) => {
-			eventManager.emit('resourceChange', event);
+			eventManager.emit(EventName.ResourceChange, event);
 		});
 
 		RevisionService.instance().runInBackground();
