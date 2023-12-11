@@ -6925,7 +6925,7 @@ __metadata:
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
     "@types/jest-expect-message": 1.0.4
-    "@types/jsdom": 21.1.5
+    "@types/jsdom": 21.1.6
     "@types/koa": 2.13.11
     "@types/markdown-it": 13.0.6
     "@types/mustache": 4.2.5
@@ -10429,14 +10429,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsdom@npm:21.1.5":
-  version: 21.1.5
-  resolution: "@types/jsdom@npm:21.1.5"
+"@types/jsdom@npm:21.1.6":
+  version: 21.1.6
+  resolution: "@types/jsdom@npm:21.1.6"
   dependencies:
     "@types/node": "*"
     "@types/tough-cookie": "*"
     parse5: ^7.0.0
-  checksum: f80a01ef8d712c9d0118ec3af492c41706629305cd55366c15c4c539c322407e1f1ea9f7d297d9050d41e5fbecab9064f8b1697749d54ab4516746ed193f83bf
+  checksum: d6fbaab3065ec0bc5b54ae2f15eb18f28045ffa5cece438f96f4bc86819fc8c547e96cede650d14516429dfdc45075b36a46c135849f868b1ae8281717c8e591
   languageName: node
   linkType: hard
 
