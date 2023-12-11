@@ -43,7 +43,6 @@
     "ldapts": "7.0.6",
     "markdown-it": "13.0.2",
     "mustache": "4.2.0",
-    "nanoid": "2.1.11",
     "node-cron": "3.0.3",
     "nodemailer": "6.9.7",
     "nodemon": "3.0.1",
