@@ -5,10 +5,10 @@ import { cookieGet } from '../../utils/cookies';
 import { ErrorForbidden } from '../../utils/errors';
 import { execRequest, execRequestC } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, expectHttpError, expectThrow } from '../../utils/testing/testUtils';
-import uuidgen from '../../utils/uuidgen';
+import uuid from '@joplin/lib/uuid';
 
 async function postUser(sessionId: string, email: string, password: string = null, props: any = null): Promise<User> {
-	password = password === null ? uuidgen() : password;
+	password = password === null ? uuid.uuidgen() : password;
 
 	const context = await koaAppContext({
 		sessionId: sessionId,
@@ -79,7 +79,7 @@ describe('index/users', () => {
 	test('new user should be able to login', async () => {
 		const { session } = await createUserAndSession(1, true);
 
-		const password = uuidgen();
+		const password = uuid.uuidgen();
 		await postUser(session.id, 'test@example.com', password);
 		const loggedInUser = await models().user().login('test@example.com', password);
 		expect(!!loggedInUser).toBe(true);
@@ -101,7 +101,7 @@ describe('index/users', () => {
 
 		const userModel = models().user();
 
-		const password = uuidgen();
+		const password = uuid.uuidgen();
 		await patchUser(session.id, { id: user.id, password: password, password2: password });
 		const modUser = await userModel.login('user1@localhost', password);
 		expect(!!modUser).toBe(true);
@@ -123,7 +123,7 @@ describe('index/users', () => {
 			email: 'user1@localhost',
 			must_set_password: 1,
 			email_confirmed: 0,
-			password: uuidgen(),
+			password: uuid.uuidgen(),
 		});
 
 		const { user: user2 } = await createUserAndSession(2);
@@ -147,7 +147,7 @@ describe('index/users', () => {
 
 		// Check that we can't set the password without the token
 		{
-			const newPassword = uuidgen();
+			const newPassword = uuid.uuidgen();
 			const context = await execRequestC('', 'POST', path, {
 				password: newPassword,
 				password2: newPassword,
@@ -158,7 +158,7 @@ describe('index/users', () => {
 
 		// Check that we can't set the password with someone else's token
 		{
-			const newPassword = uuidgen();
+			const newPassword = uuid.uuidgen();
 			const token2 = (await models().token().allByUserId(user2.id))[0].value;
 			const context = await execRequestC('', 'POST', path, {
 				password: newPassword,
@@ -169,7 +169,7 @@ describe('index/users', () => {
 			expect(sessionId).toBeFalsy();
 		}
 
-		const newPassword = uuidgen();
+		const newPassword = uuid.uuidgen();
 
 		const context = await execRequestC('', 'POST', path, {
 			password: newPassword,
@@ -202,7 +202,7 @@ describe('index/users', () => {
 			email: 'user1@localhost',
 			must_set_password: 1,
 			email_confirmed: 0,
-			password: uuidgen(),
+			password: uuid.uuidgen(),
 		});
 
 		const email = (await models().email().all()).find(e => e.recipient_id === user1.id);
@@ -223,7 +223,7 @@ describe('index/users', () => {
 			email: 'user1@localhost',
 			must_set_password: 0,
 			email_confirmed: 0,
-			password: uuidgen(),
+			password: uuid.uuidgen(),
 		});
 
 		const email = (await models().email().all()).find(e => e.recipient_id === user1.id);

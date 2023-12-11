@@ -2,11 +2,11 @@ import { User } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
 import { execRequest } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, checkContextError, expectHttpError } from '../../utils/testing/testUtils';
-import uuidgen from '../../utils/uuidgen';
+import uuid from '@joplin/lib/uuid';
 import { ErrorForbidden } from '../../utils/errors';
 
 async function postUser(sessionId: string, email: string, password: string = null, props: any = null): Promise<User> {
-	password = password === null ? uuidgen() : password;
+	password = password === null ? uuid.uuidgen() : password;
 
 	const context = await koaAppContext({
 		sessionId: sessionId,
@@ -63,7 +63,7 @@ describe('admin/users', () => {
 	test('should create a new user', async () => {
 		const { session } = await createUserAndSession(1, true);
 
-		const password = uuidgen();
+		const password = uuid.uuidgen();
 		await postUser(session.id, 'test@example.com', password, {
 			max_item_size: '',
 		});
@@ -112,7 +112,7 @@ describe('admin/users', () => {
 
 		const { session } = await createUserAndSession(1, true);
 
-		const password = uuidgen();
+		const password = uuid.uuidgen();
 		await postUser(session.id, email, password);
 		const loggedInUser = await models().user().login(email, password);
 		expect(!!loggedInUser).toBe(true);
@@ -124,7 +124,7 @@ describe('admin/users', () => {
 
 		const userModel = models().user();
 
-		const password = uuidgen();
+		const password = uuid.uuidgen();
 		await postUser(session.id, 'test@example.com', password);
 
 		const beforeUserCount = (await userModel.all()).length;

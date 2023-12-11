@@ -1,6 +1,6 @@
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, expectHttpError } from '../../utils/testing/testUtils';
 import { execRequest } from '../../utils/testing/apiUtils';
-import uuidgen from '../../utils/uuidgen';
+import uuid from '@joplin/lib/uuid';
 import { ErrorNotFound } from '../../utils/errors';
 
 describe('index/password', () => {
@@ -34,7 +34,7 @@ describe('index/password', () => {
 		const match = emails[0].body.match(/(password\/reset)\?token=(.{32})/);
 		expect(match).toBeTruthy();
 
-		const newPassword = uuidgen();
+		const newPassword = uuid.uuidgen();
 		await execRequest('', 'POST', match[1], {
 			password: newPassword,
 			password2: newPassword,
@@ -58,7 +58,7 @@ describe('index/password', () => {
 		const { user } = await createUserAndSession(1);
 		await models().email().deleteAll();
 
-		const newPassword = uuidgen();
+		const newPassword = uuid.uuidgen();
 
 		await expectHttpError(async () => {
 			await execRequest('', 'POST', 'password/reset', {

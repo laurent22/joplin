@@ -2,7 +2,7 @@ import { Knex } from 'knex';
 import { EmailSender, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
 import { ErrorNotFound } from '../utils/errors';
 import { Day } from '../utils/time';
-import uuidgen from '../utils/uuidgen';
+import uuid from '@joplin/lib/uuid';
 import paymentFailedTemplate from '../views/emails/paymentFailedTemplate';
 import BaseModel from './BaseModel';
 import { AccountType } from './UserModel';
@@ -135,7 +135,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 				email,
 				full_name: fullName,
 				email_confirmed: 0, // Email is not confirmed, because Stripe doesn't check this
-				password: uuidgen(),
+				password: uuid.uuidgen(),
 				must_set_password: 1,
 			});
 

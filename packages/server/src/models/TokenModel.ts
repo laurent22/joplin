@@ -1,6 +1,6 @@
 import { Token, User, Uuid } from '../services/database/types';
 import { ErrorForbidden, ErrorNotFound } from '../utils/errors';
-import uuidgen from '../utils/uuidgen';
+import uuid from '@joplin/lib/uuid';
 import BaseModel from './BaseModel';
 
 export default class TokenModel extends BaseModel<Token> {
@@ -17,7 +17,7 @@ export default class TokenModel extends BaseModel<Token> {
 
 	public async generate(userId: Uuid): Promise<string> {
 		const token = await this.save({
-			value: uuidgen(32),
+			value: uuid.uuidgen(32),
 			user_id: userId,
 		});
 

@@ -1,6 +1,6 @@
 import BaseModel from './BaseModel';
 import { User, Session, Uuid } from '../services/database/types';
-import uuidgen from '../utils/uuidgen';
+import uuid from '@joplin/lib/uuid';
 import { ErrorForbidden } from '../utils/errors';
 import { Hour } from '../utils/time';
 
@@ -21,7 +21,7 @@ export default class SessionModel extends BaseModel<Session> {
 
 	public async createUserSession(userId: string): Promise<Session> {
 		return this.save({
-			id: uuidgen(),
+			id: uuid.uuidgen(),
 			user_id: userId,
 		}, { isNew: true });
 	}

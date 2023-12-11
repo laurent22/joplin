@@ -6,7 +6,7 @@ import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { ErrorNotFound } from '../../utils/errors';
 import { AclAction } from '../../models/BaseModel';
-import uuidgen from '../../utils/uuidgen';
+import uuid from '@joplin/lib/uuid';
 
 const router = new Router(RouteType.Api);
 
@@ -48,7 +48,7 @@ router.post('api/users', async (_path: SubPath, ctx: AppContext) => {
 
 	// We set a random password because it's required, but user will have to
 	// set it after clicking on the confirmation link.
-	user.password = uuidgen();
+	user.password = uuid.uuidgen();
 	user.must_set_password = 1;
 	user.email_confirmed = 0;
 	const output = await ctx.joplin.models.user().save(user);

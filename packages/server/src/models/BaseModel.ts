@@ -1,7 +1,7 @@
 import { WithDates, WithUuid, databaseSchema, ItemType, Uuid, User } from '../services/database/types';
 import { DbConnection, QueryContext } from '../db';
 import TransactionHandler from '../utils/TransactionHandler';
-import uuidgen from '../utils/uuidgen';
+import uuid from '@joplin/lib/uuid';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 import { Models, NewModelFactoryHandler } from './factory';
 import { Config, Env } from '../utils/types';
@@ -321,7 +321,7 @@ export default abstract class BaseModel<T> {
 		const isNew = await this.isNew(object, options);
 
 		if (this.hasUuid() && isNew && !(toSave as WithUuid).id) {
-			(toSave as WithUuid).id = this.uuidType() === UuidType.NanoId ? uuidgen() : dbuuid();
+			(toSave as WithUuid).id = this.uuidType() === UuidType.NanoId ? uuid.uuidgen() : dbuuid();
 		}
 
 		if (this.autoTimestampEnabled()) {
@@ -359,7 +359,7 @@ export default abstract class BaseModel<T> {
 	}
 
 	public async setSavePoint(): Promise<SavePoint> {
-		const name = `sp_${uuidgen()}`;
+		const name = `sp_${uuid.uuidgen()}`;
 		await this.db.raw(`SAVEPOINT ${name}`);
 		this.savePoints_.push(name);
 		return name;
