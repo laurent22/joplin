@@ -375,7 +375,7 @@ class Application extends BaseApplication {
 			void this.ocrService_.runInBackground();
 		} else {
 			if (!this.ocrService_) return;
-			this.ocrService_.stopRunInBackground();
+			void this.ocrService_.stopRunInBackground();
 		}
 
 		const handleResourceChange = () => {

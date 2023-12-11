@@ -508,7 +508,7 @@ export default class Resource extends BaseItem {
 		return r ? r['total'] : 0;
 	}
 
-	public static async needOcr(supportedMimeTypes: string[], skippedResourceIds: string[], options: LoadOptions): Promise<ResourceEntity[]> {
+	public static async needOcr(supportedMimeTypes: string[], skippedResourceIds: string[], limit: number, options: LoadOptions): Promise<ResourceEntity[]> {
 		const query = this.baseNeedOcrQuery(this.selectFields(options), supportedMimeTypes);
 		const skippedResourcesSql = skippedResourceIds.length ? `AND resources.id NOT IN  ("${skippedResourceIds.join('","')}")` : '';
 
@@ -516,7 +516,7 @@ export default class Resource extends BaseItem {
 			${query.sql}
 			${skippedResourcesSql}			
 			ORDER BY updated_time DESC
-			LIMIT 100
+			LIMIT ${limit}
 		`, query.params);
 	}
 

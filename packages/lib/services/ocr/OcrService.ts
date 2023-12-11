@@ -8,6 +8,7 @@ import { RecognizeResult } from './utils/types';
 import { Minute } from '@joplin/utils/time';
 import Logger from '@joplin/utils/Logger';
 import filterOcrText from './utils/filterOcrText';
+import TaskQueue from '../../TaskQueue';
 
 const logger = Logger.create('OcrService');
 
@@ -22,6 +23,10 @@ export const supportedMimeTypes = [
 	'image/x-portable-bitmap',
 ];
 
+const resourceInfo = (resource: ResourceEntity) => {
+	return `${resource.id} (type ${resource.mime})`;
+};
+
 export default class OcrService {
 
 	private driver_: OcrDriverBase;
@@ -29,9 +34,13 @@ export default class OcrService {
 	private maintenanceTimer_: any = null;
 	private pdfExtractDir_: string = null;
 	private isProcessingResources_ = false;
+	private recognizeQueue_: TaskQueue = null;
 
 	public constructor(driver: OcrDriverBase) {
 		this.driver_ = driver;
+		this.recognizeQueue_ = new TaskQueue('recognize', logger);
+		this.recognizeQueue_.setConcurrency(5);
+		this.recognizeQueue_.keepTaskResults = false;
 	}
 
 	private async pdfExtractDir(): Promise<string> {
@@ -40,6 +49,10 @@ export default class OcrService {
 		await shim.fsDriver().mkdir(p);
 		this.pdfExtractDir_ = p;
 		return this.pdfExtractDir_;
+	}
+
+	public get running() {
+		return this.runInBackground;
 	}
 
 	private async recognize(language: string, resource: ResourceEntity): Promise<RecognizeResult> {
@@ -53,7 +66,7 @@ export default class OcrService {
 
 			let pageIndex = 0;
 			for (const imageFilePath of imageFilePaths) {
-				logger.info(`Processing PDF page ${pageIndex + 1} / ${imageFilePaths.length}...`);
+				logger.info(`Recognize: ${resourceInfo(resource)}: Processing PDF page ${pageIndex + 1} / ${imageFilePaths.length}...`);
 				results.push(await this.driver_.recognize(language, imageFilePath));
 				pageIndex++;
 			}
@@ -75,21 +88,54 @@ export default class OcrService {
 	}
 
 	public async processResources() {
-		if (this.isProcessingResources_) {
-			logger.info('Already processing resources - skipping');
-			return;
-		}
+		if (this.isProcessingResources_) return;
 
 		this.isProcessingResources_ = true;
 
 		const totalResourcesToProcess = await Resource.needOcrCount(supportedMimeTypes);
+		const inProcessResourceIds: string[] = [];
 		const skippedResourceIds: string[] = [];
 
-		const resourceInfo = (resource: ResourceEntity) => {
-			return `${resource.id} (type ${resource.mime})`;
-		};
-
 		logger.info(`Found ${totalResourcesToProcess} resources to process...`);
+
+		const makeQueueAction = (totalProcessed: number, language: string, resource: ResourceEntity) => {
+			return async () => {
+				logger.info(`Processing resource ${totalProcessed + 1} / ${totalResourcesToProcess}: ${resourceInfo(resource)}...`);
+
+				const toSave: ResourceEntity = {
+					id: resource.id,
+				};
+
+				try {
+					const fetchStatus = await Resource.localState(resource.id);
+
+					if (fetchStatus.fetch_status === Resource.FETCH_STATUS_ERROR) {
+						throw new Error(`Cannot process resource ${resourceInfo(resource)} because it cannot be fetched from the server: ${fetchStatus.fetch_error}`);
+					}
+
+					if (fetchStatus.fetch_status !== Resource.FETCH_STATUS_DONE) {
+						skippedResourceIds.push(resource.id);
+						logger.info(`Skipping resource ${resourceInfo(resource)} because it has not been downloaded yet`);
+						return;
+					}
+
+					const result = await this.recognize(language, resource);
+					toSave.ocr_status = ResourceOcrStatus.Done;
+					toSave.ocr_text = filterOcrText(result.text);
+					toSave.ocr_details = Resource.serializeOcrDetails(result.lines),
+					toSave.ocr_error = '';
+				} catch (error) {
+					const errorMessage = typeof error === 'string' ? error : error?.message;
+					logger.warn(`Could not process resource ${resourceInfo(resource)}`, error);
+					toSave.ocr_status = ResourceOcrStatus.Error;
+					toSave.ocr_text = '';
+					toSave.ocr_details = '';
+					toSave.ocr_error = errorMessage || 'Unknown error';
+				}
+
+				await Resource.save(toSave);
+			};
+		};
 
 		try {
 			const language = toIso639(Setting.value('locale'));
@@ -97,7 +143,7 @@ export default class OcrService {
 			let totalProcessed = 0;
 
 			while (true) {
-				const resources = await Resource.needOcr(supportedMimeTypes, skippedResourceIds, {
+				const resources = await Resource.needOcr(supportedMimeTypes, skippedResourceIds.concat(inProcessResourceIds), 100, {
 					fields: [
 						'id',
 						'mime',
@@ -109,44 +155,12 @@ export default class OcrService {
 				if (!resources.length) break;
 
 				for (const resource of resources) {
-					logger.info(`Processing resource ${totalProcessed + 1} / ${totalResourcesToProcess}: ${resourceInfo(resource)}...`);
-
-					const toSave: ResourceEntity = {
-						id: resource.id,
-					};
-
-					try {
-						const fetchStatus = await Resource.localState(resource.id);
-						if (fetchStatus.fetch_status === Resource.FETCH_STATUS_ERROR) {
-							throw new Error(`Cannot process resource ${resourceInfo(resource)} because it cannot be fetched from the server: ${fetchStatus.fetch_error}`);
-						}
-
-						if (fetchStatus.fetch_status !== Resource.FETCH_STATUS_DONE) {
-							skippedResourceIds.push(resource.id);
-							logger.info(`Skipping resource ${resourceInfo(resource)} because it has not been downloaded yet`);
-							continue;
-						}
-
-						const result = await this.recognize(language, resource);
-						toSave.ocr_status = ResourceOcrStatus.Done;
-						toSave.ocr_text = filterOcrText(result.text);
-						toSave.ocr_details = Resource.serializeOcrDetails(result.lines),
-						toSave.ocr_error = '';
-					} catch (error) {
-						const errorMessage = typeof error === 'string' ? error : error?.message;
-						logger.warn(`Could not process resource ${resourceInfo(resource)}`, error);
-						toSave.ocr_status = ResourceOcrStatus.Error;
-						toSave.ocr_text = '';
-						toSave.ocr_details = '';
-						toSave.ocr_error = errorMessage || 'Unknown error';
-					}
-
-					await Resource.save(toSave);
-					totalProcessed++;
+					inProcessResourceIds.push(resource.id);
+					await this.recognizeQueue_.pushAsync(resource.id, makeQueueAction(totalProcessed++, language, resource));
 				}
-
-				logger.info(`Processed ${totalProcessed} / ${totalResourcesToProcess} resources...`);
 			}
+
+			await this.recognizeQueue_.waitForAll();
 
 			logger.info(`${totalProcessed} resources have been processed.`);
 		} finally {
@@ -175,12 +189,13 @@ export default class OcrService {
 		}, 5 * Minute);
 	}
 
-	public stopRunInBackground() {
+	public async stopRunInBackground() {
 		logger.info('Stopping background service...');
 
 		if (this.maintenanceTimer_) shim.clearInterval(this.maintenanceTimer_);
 		this.maintenanceTimer_ = null;
 		this.isRunningInBackground_ = false;
+		await this.recognizeQueue_.stop();
 	}
 
 }
