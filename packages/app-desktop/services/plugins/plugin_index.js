@@ -2,6 +2,7 @@
 	// TODO: Not sure if that will work once packaged in Electron
 	const sandboxProxy = require('../../vendor/lib/@joplin/lib/services/plugins/sandboxProxy.js');
 	const ipcRenderer = require('electron').ipcRenderer;
+	const nodePath = require('path');
 
 	const ipcRendererSend = (message, args) => {
 		try {
@@ -56,7 +57,27 @@
 				return require('../../node_modules/@joplin/lib/node_modules/sqlite3/lib/sqlite3.js');
 			}
 
-			if (['fs-extra'].includes(modulePath)) return require(modulePath);
+			if (modulePath === 'fs-extra') {
+				return require('fs-extra');
+			}
+
+			// 7zip-bin is required by one of the default plugins (simple-backup)
+			if (modulePath === '7zip-bin') {
+				// 7zip-bin is very large -- return the path to a version of 7zip
+				// copied from 7zip-bin.
+				const executableName = process.platform === 'win32' ? '7za.exe' : '7za';
+
+				let rootDir = nodePath.dirname(nodePath.dirname(__dirname));
+
+				// When bundled, __dirname points to a file within app.asar. The build/ directory
+				// is outside of app.asar, and thus, we need an extra dirname(...).
+				if (nodePath.basename(rootDir).startsWith('app.asar')) {
+					rootDir = nodePath.dirname(rootDir);
+				}
+
+				const pathTo7za = nodePath.join(rootDir, 'build', '7zip', executableName);
+				return { path7za: nodePath.resolve(pathTo7za) };
+			}
 
 			throw new Error(`Module not found: ${modulePath}`);
 		}

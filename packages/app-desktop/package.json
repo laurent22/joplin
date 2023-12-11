@@ -7,12 +7,11 @@
   "scripts": {
     "dist": "yarn run electronRebuild && npx electron-builder",
     "build": "gulp build",
-    "postinstall": "yarn run build",
     "electronBuilder": "gulp electronBuilder",
     "electronRebuild": "gulp electronRebuild",
     "tsc": "tsc --project tsconfig.json",
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
-    "start": "gulp build && electron . --env dev --log-level debug --open-dev-tools",
+    "start": "gulp before-start && electron . --env dev --log-level debug --open-dev-tools",
     "test": "jest",
     "test-ui": "playwright test",
     "test-ci": "yarn test && sh ./integration-tests/run-ci.sh",
@@ -36,7 +35,8 @@
     "extraResources": [
       "build/icons/**",
       "build/images/**",
-      "build/defaultPlugins/**"
+      "build/defaultPlugins/**",
+      "build/7zip/**"
     ],
     "afterAllArtifactBuild": "./generateSha512.js",
     "asar": true,
@@ -115,7 +115,9 @@
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
+    "7zip-bin": "5.2.0",
     "@electron/rebuild": "3.3.0",
+    "@joplin/default-plugins": "~2.13",
     "@joplin/tools": "~2.13",
     "@playwright/test": "1.39.0",
     "@testing-library/react-hooks": "8.0.1",
@@ -133,12 +135,8 @@
     "js-sha512": "0.8.0",
     "nan": "2.18.0",
     "react-test-renderer": "18.2.0",
+    "ts-node": "10.9.1",
     "typescript": "5.2.2"
-  },
-  "optionalDependencies": {
-    "7zip-bin-linux": "^1.0.1",
-    "7zip-bin-mac": "^1.0.1",
-    "7zip-bin-win": "^2.1.1"
   },
   "dependencies": {
     "@electron/notarize": "2.1.0",

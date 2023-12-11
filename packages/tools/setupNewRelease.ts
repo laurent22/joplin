@@ -140,6 +140,7 @@ async function main() {
 	await updatePackageVersion(`${rootDir}/packages/server/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/tools/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/utils/package.json`, majorMinorVersion, options);
+	await updatePackageVersion(`${rootDir}/packages/default-plugins/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/editor/package.json`, majorMinorVersion, options);
 
 	if (options.updateVersion) {

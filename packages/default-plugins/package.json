@@ -1,0 +1,25 @@
+{
+	"name": "@joplin/default-plugins",
+	"version": "2.13.0",
+	"description": "Default plugins bundler",
+	"private": true,
+	"scripts": {
+		"tsc": "tsc --project tsconfig.json",
+		"watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
+		"patch": "ts-node build.ts patch"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/laurent22/joplin.git"
+	},
+	"devDependencies": {
+		"@types/yargs": "17.0.31",
+		"ts-node": "10.9.1",
+		"typescript": "5.2.2"
+	},
+	"dependencies": {
+		"@joplin/utils": "~2.13",
+		"fs-extra": "11.1.1",
+		"yargs": "17.7.2"
+	}
+}

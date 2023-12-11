@@ -1,5 +1,6 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, ElectronApplication } from '@playwright/test';
 import NoteEditorScreen from './NoteEditorScreen';
+import activateMainMenuItem from '../util/activateMainMenuItem';
 
 export default class MainScreen {
 	public readonly newNoteButton: Locator;
@@ -32,5 +33,15 @@ export default class MainScreen {
 		await this.noteEditor.noteTitleInput.fill(title);
 
 		return this.noteEditor;
+	}
+
+	public async openSettings(electronApp: ElectronApplication) {
+		// Check both labels so this works on MacOS
+		const openedWithPreferences = await activateMainMenuItem(electronApp, 'Preferences...');
+		const openedWithOptions = await activateMainMenuItem(electronApp, 'Options');
+
+		if (!openedWithOptions && !openedWithPreferences) {
+			throw new Error('Unable to find settings menu item in application menus.');
+		}
 	}
 }
