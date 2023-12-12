@@ -354,9 +354,7 @@ export const toggleList = (listType: ListType): Command => {
 		doc = state.doc;
 
 		// Renumber the list
-		view.dispatch(state.changeByRange((sel: SelectionRange) => {
-			return renumberList(state, sel);
-		}));
+		view.dispatch(renumberList(state, state.selection.ranges));
 
 		return true;
 	};
@@ -417,9 +415,7 @@ export const increaseIndent: Command = (view: EditorView): boolean => {
 	view.dispatch(changes);
 
 	// Fix any lists
-	view.dispatch(view.state.changeByRange((sel: SelectionRange) => {
-		return renumberList(view.state, sel);
-	}));
+	view.dispatch(renumberList(view.state, view.state.selection.ranges));
 
 	return true;
 };
@@ -468,9 +464,7 @@ export const decreaseIndent: Command = (view: EditorView): boolean => {
 	view.dispatch(changes);
 
 	// Fix any lists
-	view.dispatch(view.state.changeByRange((sel: SelectionRange) => {
-		return renumberList(view.state, sel);
-	}));
+	view.dispatch(renumberList(view.state, view.state.selection.ranges));
 
 	return true;
 };

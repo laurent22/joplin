@@ -204,6 +204,7 @@ const createEditor = (
 					},
 				} : undefined),
 				drawSelection(),
+				EditorState.allowMultipleSelections.of(true),
 				highlightSpecialChars(),
 				indentOnInput(),
 

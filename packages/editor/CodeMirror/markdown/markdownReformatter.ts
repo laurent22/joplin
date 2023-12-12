@@ -619,17 +619,16 @@ export const toggleSelectedLinesStartWith = (
 };
 
 // Ensures that ordered lists within [sel] are numbered in ascending order.
-export const renumberList = (state: EditorState, sel: SelectionRange): SelectionUpdate => {
+export const renumberList = (state: EditorState, sels: readonly SelectionRange[]): TransactionSpec => {
 	const doc = state.doc;
 
 	const listItemRegex = /^(\s*)(\d+)\.\s?/;
 	const changes: ChangeSpec[] = [];
-	const fromLine = doc.lineAt(sel.from);
-	const toLine = doc.lineAt(sel.to);
-	let charsAdded = 0;
 
 	// Re-numbers ordered lists and sublists with numbers on each line in [linesToHandle]
 	const handleLines = (linesToHandle: Line[]) => {
+		let charsAdded = 0;
+
 		let currentGroupIndentation = '';
 		let nextListNumber = 1;
 		const listNumberStack: number[] = [];
@@ -672,41 +671,71 @@ export const renumberList = (state: EditorState, sel: SelectionRange): Selection
 			charsAdded -= to - from;
 			charsAdded += inserted.length;
 		}
+
+		return charsAdded;
 	};
 
-	const linesToHandle: Line[] = [];
-	syntaxTree(state).iterate({
-		from: sel.from,
-		to: sel.to,
-		enter: (nodeRef: SyntaxNodeRef) => {
-			if (nodeRef.name === 'ListItem') {
-				for (const node of nodeRef.node.parent.getChildren('ListItem')) {
-					const line = doc.lineAt(node.from);
-					const filteredText = stripBlockquote(line);
-					const match = filteredText.match(listItemRegex);
-					if (match) {
-						linesToHandle.push(line);
+	const selectedListRanges: SelectionRange[] = [];
+	for (const sel of sels) {
+		const listLines: Line[] = [];
+
+		syntaxTree(state).iterate({
+			from: sel.from,
+			to: sel.to,
+			enter: (nodeRef: SyntaxNodeRef) => {
+				if (nodeRef.name === 'ListItem') {
+					for (const node of nodeRef.node.parent.getChildren('ListItem')) {
+						const line = doc.lineAt(node.from);
+						const filteredText = stripBlockquote(line);
+						const match = filteredText.match(listItemRegex);
+						if (match) {
+							listLines.push(line);
+						}
 					}
 				}
-			}
-		},
-	});
+			},
+		});
 
-	linesToHandle.sort((a, b) => a.number - b.number);
-	handleLines(linesToHandle);
+		listLines.sort((a, b) => a.number - b.number);
 
-	// Re-position the selection in a way that makes sense
-	if (sel.empty) {
-		sel = EditorSelection.cursor(toLine.to + charsAdded);
-	} else {
-		sel = EditorSelection.range(
-			fromLine.from,
-			toLine.to + charsAdded,
-		);
+		if (listLines.length > 0) {
+			const fromLine = listLines[0];
+			const toLine = listLines[listLines.length - 1];
+
+			selectedListRanges.push(
+				EditorSelection.range(fromLine.from, toLine.to),
+			);
+		}
+	}
+
+	const listsToHandle = EditorSelection.create(selectedListRanges).ranges;
+
+	const newSelections: SelectionRange[] = [];
+	for (const listSelection of listsToHandle) {
+		const lines = [];
+
+		const startLine = doc.lineAt(listSelection.from);
+		const endLine = doc.lineAt(listSelection.to);
+
+		for (let i = startLine.number; i <= endLine.number; i++) {
+			lines.push(doc.line(i));
+		}
+
+		const charsAdded = handleLines(lines);
+
+		// Re-position the selection in a way that makes sense
+		if (listSelection.empty) {
+			newSelections.push(EditorSelection.cursor(listSelection.to + charsAdded));
+		} else {
+			newSelections.push(EditorSelection.range(
+				listSelection.from,
+				listSelection.to + charsAdded,
+			));
+		}
 	}
 
 	return {
-		range: sel,
+		selection: EditorSelection.create(newSelections),
 		changes,
 	};
 };
