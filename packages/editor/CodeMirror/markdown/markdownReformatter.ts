@@ -712,21 +712,23 @@ export const renumberSelectedLists = (state: EditorState): TransactionSpec => {
 		}
 	}
 
-	// Use EditorSelection.create to merge overlapping lists
-	const listsToHandle = EditorSelection.create(selectedListRanges).ranges;
-
 	const changes: ChangeSpec[] = [];
-	for (const listSelection of listsToHandle) {
-		const lines = [];
+	if (selectedListRanges.length > 0) {
+		// Use EditorSelection.create to merge overlapping lists
+		const listsToHandle = EditorSelection.create(selectedListRanges).ranges;
 
-		const startLine = doc.lineAt(listSelection.from);
-		const endLine = doc.lineAt(listSelection.to);
+		for (const listSelection of listsToHandle) {
+			const lines = [];
 
-		for (let i = startLine.number; i <= endLine.number; i++) {
-			lines.push(doc.line(i));
+			const startLine = doc.lineAt(listSelection.from);
+			const endLine = doc.lineAt(listSelection.to);
+
+			for (let i = startLine.number; i <= endLine.number; i++) {
+				lines.push(doc.line(i));
+			}
+
+			changes.push(...handleLines(lines));
 		}
-
-		changes.push(...handleLines(lines));
 	}
 
 	return {
