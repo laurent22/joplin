@@ -1,6 +1,5 @@
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
-import activateMainMenuItem from './util/activateMainMenuItem';
 import SettingsScreen from './models/SettingsScreen';
 import { _electron as electron } from '@playwright/test';
 import { writeFile } from 'fs-extra';
@@ -91,10 +90,7 @@ test.describe('main', () => {
 		// Sort order buttons should be visible by default
 		await expect(mainScreen.noteListContainer.locator('[title^="Toggle sort order"]')).toBeVisible();
 
-		// Open settings (check both labels so that this works on MacOS)
-		expect(
-			await activateMainMenuItem(electronApp, 'Preferences...') || await activateMainMenuItem(electronApp, 'Options'),
-		).toBe(true);
+		await mainScreen.openSettings(electronApp);
 
 		// Should be on the settings screen
 		const settingsScreen = new SettingsScreen(mainWindow);

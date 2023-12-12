@@ -9,7 +9,6 @@ To add a new default plugin for desktop:
 ```
 const defaultPlugins = {
     'samplePluginId': {
-        version: '1.0.0',
         settings: {
             'settingName1': 'setting-value1',
             'settingName2': 'setting-value2',
@@ -18,13 +17,37 @@ const defaultPlugins = {
 };
 ```
 
+After this, add the commit, branch, and clone URL to be build from to `pluginRepositories.json`.
+
+For example,
+```json
+{
+	"plugin.id.here": {
+		"cloneUrl": "https://example.com/plugin-repo/plugin-repo-here.git",
+		"branch": "main",
+		"commit": "840d2e84b70adf6de961e167dcd27ddad088b286"
+	}
+}
+```
+
+## Patching the plugin
+
+Some plugins need patching. To create or update a plugin's patch, run the `patch` command in the `packages/default-plugins/` directory.
+
+For example,
+```shell
+$ cd packages/default-plugins
+$ yarn run patch plugin.id.here
+```
+
+The script will create a temporary directory in which changes can be made. Do not stage the changes that should appear in the patch.
+
 ## Bundling of default plugins
 
-Script for bundling default plugins is present in [bundleDefaultPlugins.ts](https://github.com/laurent22/joplin/blob/eb7083d7888433ff6ef76ccfb7fb87ba951d513f/packages/tools/bundleDefaultPlugins.ts)
+Scripts for bundling default plugins are present in `packages/default-plugins/`.
 
-Every time a new desktop release is being built, we compare the local default plugins version with pinned plugin version mentioned in [desktopDefaultPluginsInfo.ts](https://github.com/laurent22/joplin/blob/eb7083d7888433ff6ef76ccfb7fb87ba951d513f/packages/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo.ts)
+These are run by the `app-desktop` package on a full `build` (e.g. on `postinstall`).
 
-If there is a newer version available, we will pull the `tgz` file of plugin from NPM registry and extract it. We will then move `manifest.json` and `plugin.jpl` to the build folder of desktop.
 
 ## Installing of default plugins
 

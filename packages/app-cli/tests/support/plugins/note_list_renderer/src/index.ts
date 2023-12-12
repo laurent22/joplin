@@ -4,9 +4,9 @@ import { ItemFlow, OnChangeEvent, OnChangeHandler } from 'api/noteListType';
 const thumbnailCache_:Record<string, string> = {};
 
 // This renderer displays the notes top to bottom. It's a minimal example that
-// only displays the note title. For a full renderer, it's recommended to also
-// handle whether the notes is a regular note or to-do (in which case a checkbox
-// should be displayed).
+// displays the note title, updated time and a preview of the content. For a
+// full renderer, it's recommended to also handle whether the notes is a regular
+// note or to-do (in which case a checkbox should be displayed).
 const registerSimpleTopToBottomRenderer = async () => {
 	await joplin.views.noteList.registerRenderer({
 		id: 'simpleTopToBottom',
@@ -17,22 +17,34 @@ const registerSimpleTopToBottomRenderer = async () => {
 	
 		itemSize: {
 			width: 0,
-			height: 34,
+			height: 100,
 		},
 	
 		dependencies: [
 			'item.selected',
 			'note.titleHtml',
+			'note.body',
+			'note.user_updated_time',
 		],
 
 		itemCss: // css
 			`
 			> .content {
-				display: flex;
-				align-items: center;
 				width: 100%;
 				box-sizing: border-box;
-				padding-left: 10px;
+				padding: 10px;
+			}
+
+			> .content p {
+				margin-bottom: 7px;
+			}
+
+			>.content > .title {
+				font-weight: bold;
+			}
+
+			>.content > .body {
+				opacity: 0.7;
 			}
 
 			> .content.-selected {
@@ -43,12 +55,18 @@ const registerSimpleTopToBottomRenderer = async () => {
 		itemTemplate: // html
 			`
 			<div class="content {{#item.selected}}-selected{{/item.selected}}">
-				{{{note.titleHtml}}}
+				<p class="title">{{{note.titleHtml}}}</p>
+				<p class="date">{{{updatedTime}}}</p>
+				<p class="body">{{noteBody}}</p>
 			</div>
 		`,
 	
 		onRenderNote: async (props: any) => {
-			return props;
+			return {
+				...props,
+				noteBody: props.note.body.substring(0, 100),
+				updatedTime: new Date(props.note.user_updated_time).toLocaleString(),
+			}
 		},
 	});
 }
@@ -65,8 +83,8 @@ const registerSimpleLeftToRightRenderer = async() => {
 		flow: ItemFlow.LeftToRight,
 	
 		itemSize: {
-			width: 100,
-			height: 100,
+			width: 150,
+			height: 150,
 		},
 	
 		dependencies: [
@@ -166,7 +184,11 @@ const registerBuildInEditorRenderer = async () => {
 				align-items: center;
 				width: 100%;
 				box-sizing: border-box;
-				padding-left: 10px;
+				padding: 10px;
+			}
+
+			> .content > input {
+				width: 100%;
 			}
 
 			> .content.-selected {

@@ -147,11 +147,18 @@ export default function(props: Props) {
 		let cancelled = false;
 
 		async function fetchPluginIds() {
-			const pluginIds = await repoApi().canBeUpdatedPlugins(pluginItems.map(p => p.manifest), pluginService.appVersion);
+			// Built-in plugins can't be updated from the main repoApi
+			const nonDefaultPlugins = pluginItems
+				.map(p => p.manifest)
+				.filter(manifest => !manifest._built_in);
+
+			const pluginIds = await repoApi().canBeUpdatedPlugins(nonDefaultPlugins, pluginService.appVersion);
 			if (cancelled) return;
+
 			const conv: Record<string, boolean> = {};
-			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
-			pluginIds.forEach(id => conv[id] = true);
+			for (const id of pluginIds) {
+				conv[id] = true;
+			}
 			setCanBeUpdatedPluginIds(conv);
 		}
 
@@ -281,10 +288,17 @@ export default function(props: Props) {
 				</UserPluginsRoot>
 			);
 		} else {
+			const nonDefaultPlugins = pluginItems.filter(item => !item.manifest._built_in);
+			const defaultPlugins = pluginItems.filter(item => item.manifest._built_in);
 			return (
-				<UserPluginsRoot>
-					{renderCells(pluginItems)}
-				</UserPluginsRoot>
+				<>
+					<UserPluginsRoot>
+						{renderCells(nonDefaultPlugins)}
+					</UserPluginsRoot>
+					<UserPluginsRoot>
+						{renderCells(defaultPlugins)}
+					</UserPluginsRoot>
+				</>
 			);
 		}
 	}

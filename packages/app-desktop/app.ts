@@ -29,7 +29,7 @@ import { reg } from '@joplin/lib/registry';
 const packageInfo: PackageInfo = require('./packageInfo.js');
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import ClipperServer from '@joplin/lib/ClipperServer';
-const { webFrame } = require('electron');
+import { ipcRenderer, webFrame } from 'electron';
 const Menu = bridge().Menu;
 const PluginManager = require('@joplin/lib/services/PluginManager');
 import RevisionService from '@joplin/lib/services/RevisionService';
@@ -341,6 +341,11 @@ class Application extends BaseApplication {
 					type: 'STARTUP_PLUGINS_LOADED',
 					value: true,
 				});
+
+				// Sends an event to the main process -- this is used by the Playwright
+				// tests to wait for plugins to load.
+				ipcRenderer.send('startup-plugins-loaded');
+
 				setSettingsForDefaultPlugins(getDefaultPluginsInfo());
 			}
 		}, 500);

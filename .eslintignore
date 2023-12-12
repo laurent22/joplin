@@ -59,6 +59,8 @@ packages/app-mobile/locales
 packages/app-mobile/node_modules
 packages/app-mobile/pluginAssets/
 packages/fork-*
+packages/default-plugins/plugin-base-repo/
+packages/default-plugins/plugin-sources/
 packages/htmlpack/dist/
 packages/lib/assets/
 packages/lib/lib/lib.js
@@ -380,10 +382,12 @@ packages/app-desktop/gui/style/StyledTextInput.js
 packages/app-desktop/gui/utils/NoteListUtils.js
 packages/app-desktop/gui/utils/convertToScreenCoordinates.js
 packages/app-desktop/gui/utils/loadScript.js
+packages/app-desktop/gulpfile.js
 packages/app-desktop/integration-tests/main.spec.js
 packages/app-desktop/integration-tests/models/MainScreen.js
 packages/app-desktop/integration-tests/models/NoteEditorScreen.js
 packages/app-desktop/integration-tests/models/SettingsScreen.js
+packages/app-desktop/integration-tests/simpleBackup.spec.js
 packages/app-desktop/integration-tests/util/activateMainMenuItem.js
 packages/app-desktop/integration-tests/util/createStartupArgs.js
 packages/app-desktop/integration-tests/util/firstNonDevToolsWindow.js
@@ -415,6 +419,7 @@ packages/app-desktop/services/sortOrder/PerFolderSortOrderService.js
 packages/app-desktop/services/sortOrder/notesSortOrderUtils.test.js
 packages/app-desktop/services/sortOrder/notesSortOrderUtils.js
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
+packages/app-desktop/tools/copy7Zip.js
 packages/app-desktop/tools/notarizeMacApp.js
 packages/app-desktop/tools/renameReleaseAssets.js
 packages/app-desktop/utils/checkForUpdatesUtils.test.js
@@ -530,6 +535,13 @@ packages/app-mobile/utils/fs-driver/runOnDeviceTests.js
 packages/app-mobile/utils/setupNotifications.js
 packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/types.js
+packages/default-plugins/build.js
+packages/default-plugins/buildDefaultPlugins.js
+packages/default-plugins/commands/buildAll.js
+packages/default-plugins/commands/editPatch.js
+packages/default-plugins/utils/getPathToPatchFileFor.js
+packages/default-plugins/utils/readRepositoryJson.js
+packages/default-plugins/utils/waitForCliInput.js
 packages/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation.test.js
 packages/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation.js
 packages/editor/CodeMirror/CodeMirror5Emulation/Decorator.js
@@ -1024,8 +1036,6 @@ packages/tools/build-translation.js
 packages/tools/build-welcome.js
 packages/tools/buildServerDocker.test.js
 packages/tools/buildServerDocker.js
-packages/tools/bundleDefaultPlugins.test.js
-packages/tools/bundleDefaultPlugins.js
 packages/tools/checkIgnoredFiles.js
 packages/tools/checkLibPaths.test.js
 packages/tools/checkLibPaths.js

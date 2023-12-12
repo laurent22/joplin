@@ -5,24 +5,10 @@ __metadata:
   version: 6
   cacheKey: 8
 
-"7zip-bin-linux@npm:^1.0.1":
-  version: 1.3.1
-  resolution: "7zip-bin-linux@npm:1.3.1"
-  conditions: os=linux
-  languageName: node
-  linkType: hard
-
-"7zip-bin-mac@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "7zip-bin-mac@npm:1.0.1"
-  conditions: os=darwin
-  languageName: node
-  linkType: hard
-
-"7zip-bin-win@npm:^2.1.1":
-  version: 2.2.0
-  resolution: "7zip-bin-win@npm:2.2.0"
-  conditions: os=win32
+"7zip-bin@npm:5.2.0":
+  version: 5.2.0
+  resolution: "7zip-bin@npm:5.2.0"
+  checksum: 85d3102275342f1f4ba7d17e778e526dee3dbec0f57d29be7afaa6e3c26687d40a6eccf520e9140143f85a51f3353f6b545f760eff3f776c6ffb30dc5252fb7c
   languageName: node
   linkType: hard
 
@@ -6411,14 +6397,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/app-desktop@workspace:packages/app-desktop"
   dependencies:
-    7zip-bin-linux: ^1.0.1
-    7zip-bin-mac: ^1.0.1
-    7zip-bin-win: ^2.1.1
+    7zip-bin: 5.2.0
     "@electron/notarize": 2.1.0
     "@electron/rebuild": 3.3.0
     "@electron/remote": 2.0.12
     "@fortawesome/fontawesome-free": 5.15.4
     "@joeattardi/emoji-button": 4.6.4
+    "@joplin/default-plugins": ~2.13
     "@joplin/editor": ~2.13
     "@joplin/lib": ~2.13
     "@joplin/renderer": ~2.13
@@ -6481,14 +6466,8 @@ __metadata:
     taboverride: 4.0.3
     tesseract.js: 4.1.2
     tinymce: 5.10.6
+    ts-node: 10.9.1
     typescript: 5.2.2
-  dependenciesMeta:
-    7zip-bin-linux:
-      optional: true
-    7zip-bin-mac:
-      optional: true
-    7zip-bin-win:
-      optional: true
   languageName: unknown
   linkType: soft
 
@@ -6594,6 +6573,19 @@ __metadata:
     uglify-js: 3.17.4
     url: 0.11.3
     webpack: 5.74.0
+  languageName: unknown
+  linkType: soft
+
+"@joplin/default-plugins@workspace:packages/default-plugins, @joplin/default-plugins@~2.13":
+  version: 0.0.0-use.local
+  resolution: "@joplin/default-plugins@workspace:packages/default-plugins"
+  dependencies:
+    "@joplin/utils": ~2.13
+    "@types/yargs": 17.0.31
+    fs-extra: 11.1.1
+    ts-node: 10.9.1
+    typescript: 5.2.2
+    yargs: 17.7.2
   languageName: unknown
   linkType: soft
 
@@ -6931,8 +6923,8 @@ __metadata:
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
     "@types/jest-expect-message": 1.0.4
-    "@types/jsdom": 21.1.5
-    "@types/koa": 2.13.11
+    "@types/jsdom": 21.1.6
+    "@types/koa": 2.13.12
     "@types/markdown-it": 13.0.6
     "@types/mustache": 4.2.5
     "@types/nodemailer": 6.4.14
@@ -10435,14 +10427,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsdom@npm:21.1.5":
-  version: 21.1.5
-  resolution: "@types/jsdom@npm:21.1.5"
+"@types/jsdom@npm:21.1.6":
+  version: 21.1.6
+  resolution: "@types/jsdom@npm:21.1.6"
   dependencies:
     "@types/node": "*"
     "@types/tough-cookie": "*"
     parse5: ^7.0.0
-  checksum: f80a01ef8d712c9d0118ec3af492c41706629305cd55366c15c4c539c322407e1f1ea9f7d297d9050d41e5fbecab9064f8b1697749d54ab4516746ed193f83bf
+  checksum: d6fbaab3065ec0bc5b54ae2f15eb18f28045ffa5cece438f96f4bc86819fc8c547e96cede650d14516429dfdc45075b36a46c135849f868b1ae8281717c8e591
   languageName: node
   linkType: hard
 
@@ -10551,9 +10543,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/koa@npm:2.13.11":
-  version: 2.13.11
-  resolution: "@types/koa@npm:2.13.11"
+"@types/koa@npm:2.13.12":
+  version: 2.13.12
+  resolution: "@types/koa@npm:2.13.12"
   dependencies:
     "@types/accepts": "*"
     "@types/content-disposition": "*"
@@ -10563,7 +10555,7 @@ __metadata:
     "@types/keygrip": "*"
     "@types/koa-compose": "*"
     "@types/node": "*"
-  checksum: 8116669411d5a01e1430a3c39bb62195bc41c3a0eaa4565fff0a902fc7851fe22003ae9ca4c4680d46a71a40d0c48e092f8d8a7c7e9776885bada2cfa31a84e2
+  checksum: 4a2e7e19bf91779d0a3c46b8838d6faba5ee0e9a888e5ef8683722c21aa8efcf35f86d1a661adb56ca9f239f7724e306055e33bfa1b2dc008b9c0fa9fcc12bee
   languageName: node
   linkType: hard
 
