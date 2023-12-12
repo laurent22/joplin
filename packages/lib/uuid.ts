@@ -8,7 +8,6 @@ import { customAlphabet } from 'nanoid/non-secure';
 // > indefinitely
 const nanoid = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 22);
 
-const createUuidgenCustomAlphabet = (length: number) => customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', length);
 
 export default {
 	create: function(): string {
@@ -20,8 +19,21 @@ export default {
 	createNanoForInboxEmail: (): string => {
 		return customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 8)();
 	},
-	uuidgen: (length = 22) => {
-		const uuidgenCustomAlphabet = createUuidgenCustomAlphabet(length);
-		return uuidgenCustomAlphabet();
-	},
+};
+
+type FuncUiidGen = (length?: number)=> string;
+
+const cachedUuidgen: Record<number, FuncUiidGen> = {};
+const createUuidgenCustomAlphabet = (length: number) => customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', length);
+
+const getCachedUuidgen = (length: number) => {
+	if (cachedUuidgen[length]) return cachedUuidgen[length];
+
+	cachedUuidgen[length] = createUuidgenCustomAlphabet(length);
+	return cachedUuidgen[length];
+};
+
+export const uuidgen = (length = 22) => {
+	const cachedUuidgen = getCachedUuidgen(length);
+	return cachedUuidgen();
 };
