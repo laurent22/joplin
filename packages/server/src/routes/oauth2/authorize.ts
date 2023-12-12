@@ -36,7 +36,7 @@
 // import BaseController from '../BaseController';
 // import mustacheService from '../../services/MustacheService';
 // import { ErrorNotFound } from '../../utils/errors';
-// import uuid from '@joplin/lib/uuid';
+// import { uuidgen } from '@joplin/lib/uuid';
 // import controllers from '../factory';
 
 // export default class OAuthController extends BaseController {
@@ -66,7 +66,7 @@
 // 			if (!client) throw new ErrorNotFound(`client_id missing or invalid client ID: ${query.client_id}`);
 
 // 			const session = await sessionController.authenticate(query.email, query.password);
-// 			const authCode = uuid.uuidgen(32);
+// 			const authCode = uuidgen(32);
 // 			await sessionModel.save({ id: session.id, auth_code: authCode });
 
 // 			return mustacheService.render('oauth2/authcode', {

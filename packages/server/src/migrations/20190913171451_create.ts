@@ -1,7 +1,7 @@
 import { Knex } from 'knex';
 import { DbConnection, defaultAdminEmail, defaultAdminPassword } from '../db';
 import { hashPassword } from '../utils/auth';
-import uuid from '@joplin/lib/uuid';
+import { uuidgen } from '@joplin/lib/uuid';
 
 export const up = async (db: DbConnection) => {
 	await db.schema.createTable('users', (table: Knex.CreateTableBuilder) => {
@@ -91,8 +91,8 @@ export const up = async (db: DbConnection) => {
 		table.bigInteger('created_time').notNullable();
 	});
 
-	const adminId = uuid.uuidgen();
-	const adminRootFileId = uuid.uuidgen();
+	const adminId = uuidgen();
+	const adminRootFileId = uuidgen();
 	const now = Date.now();
 
 	await db('users').insert({
@@ -117,7 +117,7 @@ export const up = async (db: DbConnection) => {
 	});
 
 	await db('api_clients').insert({
-		id: uuid.uuidgen(),
+		id: uuidgen(),
 		name: 'Joplin',
 		secret: 'sdrNUPtKNdY5Z5tF4bthqu',
 		updated_time: now,

@@ -11,7 +11,7 @@ import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
 import { AclAction } from '../../models/BaseModel';
 import { AccountType, accountTypeOptions, accountTypeToString } from '../../models/UserModel';
-import uuid from '@joplin/lib/uuid';
+import { uuidgen } from '@joplin/lib/uuid';
 import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSizePercent, yesOrNo } from '../../utils/strings';
 import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
 import { yesNoDefaultOptions, yesNoOptions } from '../../utils/views/select';
@@ -75,7 +75,7 @@ function makeUser(isNew: boolean, fields: any): User {
 
 	if (isNew) {
 		user.must_set_password = user.password ? 0 : 1;
-		user.password = user.password ? user.password : uuid.uuidgen();
+		user.password = user.password ? user.password : uuidgen();
 	}
 
 	return user;

@@ -1,6 +1,6 @@
 import { Notification, NotificationLevel, Uuid } from '../services/database/types';
 import { ErrorUnprocessableEntity } from '../utils/errors';
-import uuid from '@joplin/lib/uuid';
+import { uuidgen } from '@joplin/lib/uuid';
 import BaseModel, { ValidateOptions } from './BaseModel';
 
 export enum NotificationKey {
@@ -83,7 +83,7 @@ export default class NotificationModel extends BaseModel<Notification> {
 			}
 		}
 
-		const actualKey = key === NotificationKey.Any ? `any_${uuid.uuidgen()}` : key;
+		const actualKey = key === NotificationKey.Any ? `any_${uuidgen()}` : key;
 
 		return this.save({ key: actualKey, message, level, owner_id: userId });
 	}

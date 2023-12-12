@@ -4,7 +4,7 @@ import { AccountType } from '../../models/UserModel';
 import { betaUserTrialPeriodDays, isBetaUser, stripeConfig } from '../../utils/stripe';
 import { beforeAllDb, afterAllTests, beforeEachDb, models, koaAppContext, expectNotThrow } from '../../utils/testing/testUtils';
 import { AppContext } from '../../utils/types';
-import uuid from '@joplin/lib/uuid';
+import { uuidgen } from '@joplin/lib/uuid';
 import { postHandlers } from './stripe';
 
 interface StripeOptions {
@@ -44,7 +44,7 @@ interface WebhookOptions {
 async function simulateWebhook(ctx: AppContext, type: string, object: any, options: WebhookOptions = {}) {
 	options = {
 		stripe: mockStripe({ userEmail: options.userEmail }),
-		eventId: uuid.uuidgen(),
+		eventId: uuidgen(),
 		...options,
 	};
 
@@ -59,8 +59,8 @@ async function simulateWebhook(ctx: AppContext, type: string, object: any, optio
 
 async function createUserViaSubscription(ctx: AppContext, options: WebhookOptions = {}) {
 	options = {
-		subscriptionId: `sub_${uuid.uuidgen()}`,
-		customerId: `cus_${uuid.uuidgen()}`,
+		subscriptionId: `sub_${uuidgen()}`,
+		customerId: `cus_${uuidgen()}`,
 		...options,
 	};
 
@@ -123,8 +123,8 @@ describe('index/stripe', () => {
 	});
 
 	test('should check if it is a beta user', async () => {
-		const user1 = await models().user().save({ email: 'toto@example.com', password: uuid.uuidgen() });
-		const user2 = await models().user().save({ email: 'tutu@example.com', password: uuid.uuidgen() });
+		const user1 = await models().user().save({ email: 'toto@example.com', password: uuidgen() });
+		const user2 = await models().user().save({ email: 'tutu@example.com', password: uuidgen() });
 		await models().user().save({ id: user2.id, created_time: 1624441295775 });
 
 		expect(await isBetaUser(models(), user1.id)).toBe(false);
@@ -151,7 +151,7 @@ describe('index/stripe', () => {
 		// and then later they setup their subscription. Applies to beta users
 		// for instance.
 		const ctx = await koaAppContext();
-		const user = await models().user().save({ email: 'toto@example.com', password: uuid.uuidgen() });
+		const user = await models().user().save({ email: 'toto@example.com', password: uuidgen() });
 		expect(await models().subscription().byUserId(user.id)).toBeFalsy();
 		await createUserViaSubscription(ctx, { userEmail: 'toto@example.com', subscriptionId: 'sub_123' });
 

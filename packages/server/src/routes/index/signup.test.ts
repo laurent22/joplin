@@ -5,7 +5,7 @@ import { MB } from '../../utils/bytes';
 import { cookieGet } from '../../utils/cookies';
 import { execRequestC } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, models } from '../../utils/testing/testUtils';
-import uuid from '@joplin/lib/uuid';
+import { uuidgen } from '@joplin/lib/uuid';
 import { FormUser } from './signup';
 
 describe('index_signup', () => {
@@ -23,7 +23,7 @@ describe('index_signup', () => {
 	});
 
 	test('should create a new account', async () => {
-		const password = uuid.uuidgen();
+		const password = uuidgen();
 		const formUser: FormUser = {
 			full_name: 'Toto',
 			email: 'toto@example.com',

@@ -3,7 +3,7 @@ import { Uuid } from '../services/database/types';
 import { LockType, Lock, LockClientType, defaultLockTtl, activeLock } from '@joplin/lib/services/synchronizer/LockHandler';
 import { Value } from './KeyValueModel';
 import { ErrorConflict, ErrorUnprocessableEntity, ErrorCode } from '../utils/errors';
-import uuid from '@joplin/lib/uuid';
+import { uuidgen } from '@joplin/lib/uuid';
 
 export default class LockModel extends BaseModel<Lock> {
 
@@ -73,7 +73,7 @@ export default class LockModel extends BaseModel<Lock> {
 				locks = locks.map(l => l.id === syncLock.id ? output : l);
 			} else {
 				output = {
-					id: uuid.uuidgen(),
+					id: uuidgen(),
 					type: LockType.Sync,
 					clientId,
 					clientType,
@@ -126,7 +126,7 @@ export default class LockModel extends BaseModel<Lock> {
 			}
 
 			output = {
-				id: uuid.uuidgen(),
+				id: uuidgen(),
 				type: LockType.Exclusive,
 				clientId,
 				clientType,

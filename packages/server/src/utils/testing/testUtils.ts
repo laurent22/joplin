@@ -20,7 +20,7 @@ import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/d
 import { ModelType } from '@joplin/lib/BaseModel';
 import { initializeJoplinUtils } from '../joplinUtils';
 import MustacheService from '../../services/MustacheService';
-import uuid from '@joplin/lib/uuid';
+import { uuidgen } from '@joplin/lib/uuid';
 import { createCsrfToken } from '../csrf';
 import { cookieSet } from '../cookies';
 import { parseEnv } from '../../env';
@@ -267,7 +267,7 @@ interface CreateUserAndSessionOptions {
 }
 
 export const createUserAndSession = async function(index = 1, isAdmin = false, options: CreateUserAndSessionOptions = null): Promise<UserAndSession> {
-	const password = uuid.uuidgen();
+	const password = uuidgen();
 
 	options = {
 		email: `user${index}@localhost`,
