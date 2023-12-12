@@ -619,15 +619,14 @@ export const toggleSelectedLinesStartWith = (
 };
 
 // Ensures that ordered lists within [sel] are numbered in ascending order.
-export const renumberList = (state: EditorState, sels: readonly SelectionRange[]): TransactionSpec => {
+export const renumberSelectedLists = (state: EditorState): TransactionSpec => {
 	const doc = state.doc;
 
 	const listItemRegex = /^(\s*)(\d+)\.\s?/;
-	const changes: ChangeSpec[] = [];
 
 	// Re-numbers ordered lists and sublists with numbers on each line in [linesToHandle]
 	const handleLines = (linesToHandle: Line[]) => {
-		let charsAdded = 0;
+		const changes: ChangeSpec[] = [];
 
 		let currentGroupIndentation = '';
 		let nextListNumber = 1;
@@ -643,6 +642,12 @@ export const renumberList = (state: EditorState, sels: readonly SelectionRange[]
 
 			const filteredText = stripBlockquote(line);
 			const match = filteredText.match(listItemRegex);
+
+			// Skip lines that aren't the correct type (e.g. blank lines)
+			if (!match) {
+				continue;
+			}
+
 			const indentation = match[1];
 
 			const indentationLen = tabsToSpaces(state, indentation).length;
@@ -668,20 +673,19 @@ export const renumberList = (state: EditorState, sels: readonly SelectionRange[]
 				to,
 				insert: inserted,
 			});
-			charsAdded -= to - from;
-			charsAdded += inserted.length;
 		}
 
-		return charsAdded;
+		return changes;
 	};
 
+	// Find all selected lists
 	const selectedListRanges: SelectionRange[] = [];
-	for (const sel of sels) {
+	for (const selection of state.selection.ranges) {
 		const listLines: Line[] = [];
 
 		syntaxTree(state).iterate({
-			from: sel.from,
-			to: sel.to,
+			from: selection.from,
+			to: selection.to,
 			enter: (nodeRef: SyntaxNodeRef) => {
 				if (nodeRef.name === 'ListItem') {
 					for (const node of nodeRef.node.parent.getChildren('ListItem')) {
@@ -708,9 +712,10 @@ export const renumberList = (state: EditorState, sels: readonly SelectionRange[]
 		}
 	}
 
+	// Use EditorSelection.create to merge overlapping lists
 	const listsToHandle = EditorSelection.create(selectedListRanges).ranges;
 
-	const newSelections: SelectionRange[] = [];
+	const changes: ChangeSpec[] = [];
 	for (const listSelection of listsToHandle) {
 		const lines = [];
 
@@ -721,21 +726,10 @@ export const renumberList = (state: EditorState, sels: readonly SelectionRange[]
 			lines.push(doc.line(i));
 		}
 
-		const charsAdded = handleLines(lines);
-
-		// Re-position the selection in a way that makes sense
-		if (listSelection.empty) {
-			newSelections.push(EditorSelection.cursor(listSelection.to + charsAdded));
-		} else {
-			newSelections.push(EditorSelection.range(
-				listSelection.from,
-				listSelection.to + charsAdded,
-			));
-		}
+		changes.push(...handleLines(lines));
 	}
 
 	return {
-		selection: EditorSelection.create(newSelections),
 		changes,
 	};
 };
