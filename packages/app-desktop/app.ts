@@ -635,6 +635,10 @@ class Application extends BaseApplication {
 
 		await this.setupOcrService();
 
+		eventManager.on(EventName.OcrServiceResourcesProcessed, () => {
+			SearchEngine.instance().scheduleSyncTables();
+		});
+
 		// await populateDatabase(reg.db(), {
 		// 	clearDatabase: true,
 		// 	folderCount: 1000,

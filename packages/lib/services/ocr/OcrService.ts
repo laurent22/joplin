@@ -9,6 +9,7 @@ import { Minute } from '@joplin/utils/time';
 import Logger from '@joplin/utils/Logger';
 import filterOcrText from './utils/filterOcrText';
 import TaskQueue from '../../TaskQueue';
+import eventManager, { EventName } from '../../eventManager';
 
 const logger = Logger.create('OcrService');
 
@@ -161,6 +162,10 @@ export default class OcrService {
 			}
 
 			await this.recognizeQueue_.waitForAll();
+
+			if (totalProcessed) {
+				eventManager.emit(EventName.OcrServiceResourcesProcessed);
+			}
 
 			logger.info(`${totalProcessed} resources have been processed.`);
 		} finally {

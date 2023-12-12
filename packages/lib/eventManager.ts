@@ -16,6 +16,7 @@ export enum EventName {
 	AlarmChange = 'alarmChange',
 	KeymapChange = 'keymapChange',
 	NoteContentChange = 'noteContentChange',
+	OcrServiceResourcesProcessed = 'ocrServiceResourcesProcessed',
 }
 
 export class EventManager {
