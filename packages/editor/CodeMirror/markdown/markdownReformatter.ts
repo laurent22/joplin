@@ -628,9 +628,13 @@ export const renumberSelectedLists = (state: EditorState): TransactionSpec => {
 	const handleLines = (linesToHandle: Line[]) => {
 		const changes: ChangeSpec[] = [];
 
+		type ListItemRecord = {
+			nextListNumber: number;
+			indentationLength: number;
+		};
+		const listNumberStack: ListItemRecord[] = [];
 		let currentGroupIndentation = '';
 		let nextListNumber = 1;
-		const listNumberStack: number[] = [];
 		let prevLineNumber;
 
 		for (const line of linesToHandle) {
@@ -651,12 +655,29 @@ export const renumberSelectedLists = (state: EditorState): TransactionSpec => {
 			const indentation = match[1];
 
 			const indentationLen = tabsToSpaces(state, indentation).length;
-			const targetIndentLen = tabsToSpaces(state, currentGroupIndentation).length;
+			let targetIndentLen = tabsToSpaces(state, currentGroupIndentation).length;
 			if (targetIndentLen < indentationLen) {
-				listNumberStack.push(nextListNumber);
+				listNumberStack.push({ nextListNumber, indentationLength: indentationLen });
 				nextListNumber = 1;
 			} else if (targetIndentLen > indentationLen) {
-				nextListNumber = listNumberStack.pop() ?? parseInt(match[2], 10);
+				nextListNumber = parseInt(match[2], 10);
+
+				// Handle the case where we deindent multiple times. For example,
+				// 1. test
+				//    1. test
+				//      1. test
+				// 2. test
+				while (targetIndentLen > indentationLen) {
+					const listNumberRecord = listNumberStack.pop();
+
+					if (!listNumberRecord) {
+						break;
+					} else {
+						targetIndentLen = listNumberRecord.indentationLength;
+						nextListNumber = listNumberRecord.nextListNumber;
+					}
+				}
+
 			}
 
 			if (targetIndentLen !== indentationLen) {
