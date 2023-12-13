@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useMemo, useEffect, useState, useRef, useCallback } from 'react';
 import { AppState } from '../../app.reducer';
-import eventManager from '@joplin/lib/eventManager';
+import eventManager, { EventName } from '@joplin/lib/eventManager';
 import NoteListUtils from '../utils/NoteListUtils';
 import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
@@ -202,7 +202,7 @@ const NoteListComponent = (props: Props) => {
 			todo_completed: checked ? time.unixMs() : 0,
 		};
 		await Note.save(newNote, { userSideValidation: true });
-		eventManager.emit('todoToggle', { noteId: item.id, note: newNote });
+		eventManager.emit(EventName.TodoToggle, { noteId: item.id, note: newNote });
 	};
 
 	const noteItem_titleClick = async (event: any, item: any) => {

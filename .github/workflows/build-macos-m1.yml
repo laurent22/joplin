@@ -33,6 +33,12 @@ jobs:
           # https://yarnpkg.com/getting-started/install
           corepack enable
 
+      - name: Install macOs dependencies
+        if: runner.os == 'macOS'
+        run: |
+          # Required for building the canvas package
+          brew install pango
+
       # See github-action-main.yml for explanation
       - uses: actions/setup-python@v4
         with:

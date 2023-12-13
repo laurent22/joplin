@@ -25,7 +25,7 @@ describe('services_SearchEngineUtils', () => {
 
 			Setting.setValue('showCompletedTodos', true);
 
-			const rows = await SearchEngineUtils.notesForQuery('abcd', true, null, searchEngine);
+			const rows = (await SearchEngineUtils.notesForQuery('abcd', true, null, searchEngine)).notes;
 
 			expect(rows.length).toBe(3);
 			expect(rows.map(r=>r.id)).toContain(note1.id);
@@ -35,7 +35,7 @@ describe('services_SearchEngineUtils', () => {
 			const options: any = {};
 			options.fields = ['id', 'title'];
 
-			const rows2 = await SearchEngineUtils.notesForQuery('abcd', true, options, searchEngine);
+			const rows2 = (await SearchEngineUtils.notesForQuery('abcd', true, options, searchEngine)).notes;
 			expect(rows2.length).toBe(3);
 			expect(rows2.map(r=>r.id)).toContain(note1.id);
 			expect(rows2.map(r=>r.id)).toContain(todo1.id);
@@ -51,7 +51,7 @@ describe('services_SearchEngineUtils', () => {
 
 			Setting.setValue('showCompletedTodos', false);
 
-			const rows = await SearchEngineUtils.notesForQuery('abcd', true, null, searchEngine);
+			const rows = (await SearchEngineUtils.notesForQuery('abcd', true, null, searchEngine)).notes;
 
 			expect(rows.length).toBe(2);
 			expect(rows.map(r=>r.id)).toContain(note1.id);
@@ -59,7 +59,7 @@ describe('services_SearchEngineUtils', () => {
 
 			const options: any = {};
 			options.fields = ['id', 'title'];
-			const rows2 = await SearchEngineUtils.notesForQuery('abcd', true, options, searchEngine);
+			const rows2 = (await SearchEngineUtils.notesForQuery('abcd', true, options, searchEngine)).notes;
 			expect(rows2.length).toBe(2);
 			expect(rows2.map(r=>r.id)).toContain(note1.id);
 			expect(rows2.map(r=>r.id)).toContain(todo1.id);
@@ -74,7 +74,7 @@ describe('services_SearchEngineUtils', () => {
 
 			Setting.setValue('showCompletedTodos', false);
 
-			const rows = await SearchEngineUtils.notesForQuery('abcd', false, null, searchEngine);
+			const rows = (await SearchEngineUtils.notesForQuery('abcd', false, null, searchEngine)).notes;
 
 			expect(rows.length).toBe(3);
 			expect(rows.map(r=>r.id)).toContain(note1.id);
@@ -95,7 +95,7 @@ describe('services_SearchEngineUtils', () => {
 		];
 
 		for (const testCase of testCases) {
-			const rows = await SearchEngineUtils.notesForQuery('abcd', false, { fields: [...testCase] }, searchEngine);
+			const rows = (await SearchEngineUtils.notesForQuery('abcd', false, { fields: [...testCase] }, searchEngine)).notes;
 			testCase.push('type_');
 			expect(Object.keys(rows[0]).length).toBe(testCase.length);
 			for (const field of testCase) {
