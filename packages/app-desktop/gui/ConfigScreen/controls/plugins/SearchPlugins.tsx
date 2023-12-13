@@ -77,8 +77,8 @@ export default function(props: Props) {
 
 	function getInstallState(pluginId: string): InstallState {
 		const settings = props.pluginSettings[pluginId];
-		if (settings && !settings.deleted) return InstallState.Installed;
 		if (installingPluginsIds[pluginId]) return InstallState.Installing;
+		if (settings && !settings.deleted) return InstallState.Installed;
 		return InstallState.NotInstalled;
 	}
 

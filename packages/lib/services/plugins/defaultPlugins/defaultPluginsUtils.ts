@@ -3,34 +3,41 @@ import Setting from '../../../models/Setting';
 import shim from '../../../shim';
 import PluginService, { defaultPluginSetting, DefaultPluginsInfo, PluginSettings } from '../PluginService';
 import Logger from '@joplin/utils/Logger';
+import { join } from 'path';
 
 const logger = Logger.create('defaultPluginsUtils');
 
-export async function loadAndRunDefaultPlugins(
-	service: PluginService, defaultPluginsDir: string, pluginSettings: PluginSettings,
-): Promise<PluginSettings> {
+
+// Use loadAndRunDefaultPlugins
+// Exported for testing.
+export const getDefaultPluginPathsAndSettings = async (
+	defaultPluginsDir: string, defaultPluginsInfo: DefaultPluginsInfo, pluginSettings: PluginSettings,
+) => {
+	const pluginPaths: string[] = [];
+
 	if (!await shim.fsDriver().exists(defaultPluginsDir)) {
 		logger.info(`Could not find default plugins' directory: ${defaultPluginsDir} - skipping installation.`);
-		return pluginSettings;
+		return { pluginPaths, pluginSettings };
 	}
+
 	const defaultPluginsPaths = await shim.fsDriver().readDirStats(defaultPluginsDir);
 	if (defaultPluginsPaths.length <= 0) {
-		logger.info(`Default plugins' directory is empty: ${defaultPluginsDir} - skipping installation.`);
-		return pluginSettings;
+		logger.info(`Default plugins' directory is empty: ${defaultPluginsDir} - no default plugins will be installed.`);
 	}
 
-	pluginSettings = produce(pluginSettings, (draft: PluginSettings) => {
-		for (const pluginStat of defaultPluginsPaths) {
-			// Each plugin should be named pluginIdHere.jpl
-			const pluginFileName = pluginStat.path;
-			const pluginIdMatch = pluginFileName.match(/^(.+)\.jpl$/);
-			if (!pluginIdMatch) {
-				logger.warn(`Unknown plugin file type ${pluginFileName}.`);
-				continue;
-			}
+	for (const pluginStat of defaultPluginsPaths) {
+		// Each plugin should be within a folder with the same ID as the plugin
+		const pluginFolderName = pluginStat.path;
+		const pluginId = pluginFolderName;
 
-			const pluginId = pluginIdMatch[1];
+		if (!defaultPluginsInfo.hasOwnProperty(pluginId)) {
+			logger.warn(`Default plugin ${pluginId} is missing in defaultPluginsInfo. Not loading.`);
+			continue;
+		}
 
+		pluginPaths.push(join(defaultPluginsDir, pluginFolderName, 'plugin.jpl'));
+
+		pluginSettings = produce(pluginSettings, (draft: PluginSettings) => {
 			// Default plugins can be overridden but not uninstalled (as they're part of
 			// the app bundle). When overriding and unoverriding a default plugin, the plugin's
 			// state may be deleted.
@@ -38,14 +45,29 @@ export async function loadAndRunDefaultPlugins(
 			if (!draft[pluginId]) {
 				draft[pluginId] = defaultPluginSetting();
 			}
-		}
-	});
+		});
+	}
 
-	await service.loadAndRunPlugins(defaultPluginsDir, pluginSettings);
+	return { pluginSettings, pluginPaths };
+};
+
+export const loadAndRunDefaultPlugins = async (
+	service: PluginService,
+	defaultPluginsDir: string,
+	defaultPluginsInfo: DefaultPluginsInfo,
+	originalPluginSettings: PluginSettings,
+): Promise<PluginSettings> => {
+	const { pluginPaths, pluginSettings } = await getDefaultPluginPathsAndSettings(
+		defaultPluginsDir, defaultPluginsInfo, originalPluginSettings,
+	) ?? { pluginPaths: [], pluginSettings: originalPluginSettings };
+
+	await service.loadAndRunPlugins(pluginPaths, pluginSettings);
 	return pluginSettings;
-}
+};
 
-export function afterDefaultPluginsLoaded(defaultPluginsInfo: DefaultPluginsInfo, pluginSettings: PluginSettings) {
+// Applies setting overrides and marks default plugins as installed.
+// Should be called after plugins have finished loading.
+export const afterDefaultPluginsLoaded = async (defaultPluginsInfo: DefaultPluginsInfo, pluginSettings: PluginSettings) => {
 	const installedDefaultPlugins: string[] = Setting.value('installedDefaultPlugins');
 	const allDefaultPlugins = Object.keys(defaultPluginsInfo);
 
@@ -64,4 +86,4 @@ export function afterDefaultPluginsLoaded(defaultPluginsInfo: DefaultPluginsInfo
 			Setting.setArrayValue('installedDefaultPlugins', pluginId);
 		}
 	}
-}
+};

@@ -307,7 +307,7 @@ class Application extends BaseApplication {
 		// ID.
 		const defaultPluginsDir = path.join(bridge().buildDir(), 'defaultPlugins');
 		try {
-			pluginSettings = await loadAndRunDefaultPlugins(service, defaultPluginsDir, pluginSettings);
+			pluginSettings = await loadAndRunDefaultPlugins(service, defaultPluginsDir, getDefaultPluginsInfo(), pluginSettings);
 		} catch (error) {
 			this.logger().error(`There was an error loading plugins from ${defaultPluginsDir}:`, error);
 		}
@@ -344,7 +344,7 @@ class Application extends BaseApplication {
 				// tests to wait for plugins to load.
 				ipcRenderer.send('startup-plugins-loaded');
 
-				afterDefaultPluginsLoaded(getDefaultPluginsInfo(), pluginSettings);
+				void afterDefaultPluginsLoaded(getDefaultPluginsInfo(), pluginSettings);
 			}
 		}, 500);
 	}
