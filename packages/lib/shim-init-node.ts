@@ -238,7 +238,7 @@ function shimInit(options: ShimInitOptions = null) {
 			const md = await image.metadata();
 
 			if (md.width <= maxDim && md.height <= maxDim) {
-				shim.fsDriver().copy(filePath, targetPath);
+				await shim.fsDriver().copy(filePath, targetPath);
 				return true;
 			}
 
@@ -562,7 +562,7 @@ function shimInit(options: ShimInitOptions = null) {
 										cleanUpOnError(error);
 									}
 
-									shim.fsDriver().remove(gzipFilePath);
+									await shim.fsDriver().remove(gzipFilePath);
 								} else {
 									resolve(makeResponse(response));
 								}
