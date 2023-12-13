@@ -82,7 +82,8 @@ Auto-updated using $SCRIPT_NAME" || true
 	git pull --rebase
 	git push
 else
-	echo "WARNING: Not updating plugin website -- release not present."
+	echo "Not updating plugin website -- release ($BUILT_PLUGIN_WEBSITE_FILE) not present"
+	exit 1
 fi
 
 # ------------------------------------------------------------------------------
