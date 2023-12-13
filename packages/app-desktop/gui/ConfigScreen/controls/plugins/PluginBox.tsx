@@ -196,26 +196,12 @@ export default function(props: Props) {
 		if (!props.onInstall) return null;
 
 		let title = _('Install');
-		let canInstall = true;
-
-		if (props.installState === InstallState.Installing) {
-			title = _('Installing...');
-			canInstall = false;
-		} else if (props.installState === InstallState.Installed) {
-			title = _('Installed');
-			canInstall = false;
-
-			// We can replace a built-in version of the plugin with a version from the
-			// plugin repo.
-			if (props.builtInEquivalentInstalled && !props.manifest?._built_in) {
-				canInstall = true;
-				title = _('Replace built-in');
-			}
-		}
+		if (props.installState === InstallState.Installing) title = _('Installing...');
+		if (props.installState === InstallState.Installed) title = _('Installed');
 
 		return <Button
 			level={ButtonLevel.Secondary}
-			disabled={!canInstall}
+			disabled={props.installState !== InstallState.NotInstalled}
 			onClick={() => props.onInstall({ item })}
 			title={title}
 		/>;
@@ -224,14 +210,30 @@ export default function(props: Props) {
 	function renderUpdateButton() {
 		if (!props.onUpdate) return null;
 
-		let title = _('Update');
-		if (props.updateState === UpdateState.Updating) title = _('Updating...');
-		if (props.updateState === UpdateState.Idle) title = _('Updated');
-		if (props.updateState === UpdateState.HasBeenUpdated) title = _('Updated');
+		// We show a different title when updating from a built-in version of a plugin
+		// to an NPM version.
+		let title;
+		if (props.updateState === UpdateState.Updating) {
+			title = _('Updating...');
+		} else if (props.updateState === UpdateState.Idle) {
+			title = _('Updated');
+		} else if (props.updateState === UpdateState.HasBeenUpdated) {
+			if (props.builtInEquivalentInstalled) {
+				title = _('Replaced built-in');
+			} else {
+				title = _('Updated');
+			}
+		} else {
+			title = _('Update');
+
+			if (props.builtInEquivalentInstalled) {
+				title = _('Replace built-in');
+			}
+		}
 
 		return <Button
 			ml={1}
-			level={ButtonLevel.Recommended}
+			level={props.builtInEquivalentInstalled ? ButtonLevel.Secondary : ButtonLevel.Recommended}
 			onClick={() => props.onUpdate({ item })}
 			title={title}
 			disabled={props.updateState === UpdateState.HasBeenUpdated}
