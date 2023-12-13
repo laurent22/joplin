@@ -28,6 +28,7 @@ interface Props {
 	item?: PluginItem;
 	manifest?: PluginManifest;
 	installState?: InstallState;
+	builtInEquivalentInstalled?: boolean;
 	updateState?: UpdateState;
 	themeId: number;
 	isCompatible: boolean;
@@ -184,7 +185,10 @@ export default function(props: Props) {
 	}
 
 	function renderDeleteButton() {
+		// Built-in plugins can only be disabled
+		if (item.manifest._built_in) return null;
 		if (!props.onDelete) return null;
+
 		return <Button level={ButtonLevel.Secondary} onClick={() => props.onDelete({ item })} title={_('Delete')}/>;
 	}
 
@@ -192,12 +196,26 @@ export default function(props: Props) {
 		if (!props.onInstall) return null;
 
 		let title = _('Install');
-		if (props.installState === InstallState.Installing) title = _('Installing...');
-		if (props.installState === InstallState.Installed) title = _('Installed');
+		let canInstall = true;
+
+		if (props.installState === InstallState.Installing) {
+			title = _('Installing...');
+			canInstall = false;
+		} else if (props.installState === InstallState.Installed) {
+			title = _('Installed');
+			canInstall = false;
+
+			// We can replace a built-in version of the plugin with a version from the
+			// plugin repo.
+			if (props.builtInEquivalentInstalled && !props.manifest?._built_in) {
+				canInstall = true;
+				title = _('Replace built-in');
+			}
+		}
 
 		return <Button
 			level={ButtonLevel.Secondary}
-			disabled={props.installState !== InstallState.NotInstalled}
+			disabled={!canInstall}
 			onClick={() => props.onInstall({ item })}
 			title={title}
 		/>;
@@ -221,7 +239,6 @@ export default function(props: Props) {
 	}
 
 	const renderDefaultPluginLabel = () => {
-		// Built-in plugins can only be disabled
 		if (item.manifest._built_in) {
 			return (
 				<BoxedLabel>{_('Built in')}</BoxedLabel>

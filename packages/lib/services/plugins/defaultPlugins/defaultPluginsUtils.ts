@@ -1,5 +1,4 @@
 import produce from 'immer';
-import path = require('path');
 import Setting from '../../../models/Setting';
 import shim from '../../../shim';
 import PluginService, { defaultPluginSetting, DefaultPluginsInfo, PluginSettings } from '../PluginService';
@@ -18,7 +17,9 @@ export function checkPreInstalledDefaultPlugins(defaultPluginsId: string[], plug
 	}
 }
 
-export async function installDefaultPlugins(service: PluginService, defaultPluginsDir: string, defaultPluginsId: string[], pluginSettings: PluginSettings): Promise<PluginSettings> {
+export async function loadAndRunDefaultPlugins(
+	service: PluginService, defaultPluginsDir: string, pluginSettings: PluginSettings,
+): Promise<PluginSettings> {
 	if (!await shim.fsDriver().exists(defaultPluginsDir)) {
 		logger.info(`Could not find default plugins' directory: ${defaultPluginsDir} - skipping installation.`);
 		return pluginSettings;
@@ -29,23 +30,29 @@ export async function installDefaultPlugins(service: PluginService, defaultPlugi
 		return pluginSettings;
 	}
 
-	const installedPlugins = Setting.value('installedDefaultPlugins');
+	pluginSettings = produce(pluginSettings, (draft: PluginSettings) => {
+		for (const pluginStat of defaultPluginsPaths) {
+			// Each plugin should be named pluginIdHere.jpl
+			const pluginFileName = pluginStat.path;
+			const pluginIdMatch = pluginFileName.match(/^(.+)\.jpl$/);
+			if (!pluginIdMatch) {
+				logger.warn(`Unknown plugin file type ${pluginFileName}.`);
+				continue;
+			}
 
-	for (const pluginStat of defaultPluginsPaths) {
-		const pluginId = pluginStat.path;
+			const pluginId = pluginIdMatch[1];
 
-		// if pluginId is present in 'installedDefaultPlugins' array or it doesn't have default plugin ID, then we won't install it again as default plugin
-		if (installedPlugins.includes(pluginId) || !defaultPluginsId.includes(pluginId)) {
-			logger.debug(`Skipping default plugin ${pluginId}, ${!defaultPluginsId.includes(pluginId) ? '(Not a default)' : ''}`);
-			continue;
+			// Default plugins can be overridden but not uninstalled (as they're part of
+			// the app bundle). When overriding and unoverriding a default plugin, the plugin's
+			// state may be deleted.
+			// As such, we recreate the plugin state if necessary.
+			if (!draft[pluginId]) {
+				draft[pluginId] = defaultPluginSetting();
+			}
 		}
-		const defaultPluginPath: string = path.join(defaultPluginsDir, pluginId, 'plugin.jpl');
-		await service.installPlugin(defaultPluginPath, false);
+	});
 
-		pluginSettings = produce(pluginSettings, (draft: PluginSettings) => {
-			draft[pluginId] = defaultPluginSetting();
-		});
-	}
+	await service.loadAndRunPlugins(defaultPluginsDir, pluginSettings);
 	return pluginSettings;
 }
 

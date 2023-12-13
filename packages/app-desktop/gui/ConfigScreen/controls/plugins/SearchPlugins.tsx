@@ -75,7 +75,7 @@ export default function(props: Props) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
-	function installState(pluginId: string): InstallState {
+	function getInstallState(pluginId: string): InstallState {
 		const settings = props.pluginSettings[pluginId];
 		if (settings && !settings.deleted) return InstallState.Installed;
 		if (installingPluginsIds[pluginId]) return InstallState.Installing;
@@ -90,13 +90,22 @@ export default function(props: Props) {
 			const output = [];
 
 			for (const manifest of manifests) {
+				const installState = getInstallState(manifest.id);
+
+				let hasBuiltInVersion = false;
+				if (installState === InstallState.Installed) {
+					const existingManifest = PluginService.instance().pluginById(manifest.id)?.manifest;
+					hasBuiltInVersion = existingManifest._built_in ?? false;
+				}
+
 				output.push(<PluginBox
 					key={manifest.id}
 					manifest={manifest}
 					themeId={props.themeId}
 					isCompatible={PluginService.instance().isCompatible(manifest.app_min_version)}
 					onInstall={onInstall}
-					installState={installState(manifest.id)}
+					installState={installState}
+					builtInEquivalentInstalled={hasBuiltInVersion}
 				/>);
 			}
 
