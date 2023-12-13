@@ -65,7 +65,7 @@ import { AppState } from './app.reducer';
 import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
 import eventManager from '@joplin/lib/eventManager';
 import path = require('path');
-import { checkPreInstalledDefaultPlugins, loadAndRunDefaultPlugins, setSettingsForDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
+import { afterDefaultPluginsLoaded, loadAndRunDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
 import { parseNotesParent } from '@joplin/lib/reducer';
 import { PackageInfo } from '@joplin/lib/versionInfo';
@@ -269,7 +269,6 @@ class Application extends BaseApplication {
 		const pluginRunner = new PluginRunner();
 		service.initialize(packageInfo.version, PlatformImplementation.instance(), pluginRunner, this.store());
 		service.isSafeMode = Setting.value('isSafeMode');
-		const defaultPluginsId = Object.keys(getDefaultPluginsInfo());
 
 		let pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
 		{
@@ -280,8 +279,6 @@ class Application extends BaseApplication {
 			pluginSettings = service.clearUpdateState(await service.uninstallPlugins(pluginSettings));
 			Setting.setValue('plugins.states', pluginSettings);
 		}
-
-		checkPreInstalledDefaultPlugins(defaultPluginsId, pluginSettings);
 
 		try {
 			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
@@ -332,6 +329,7 @@ class Application extends BaseApplication {
 				newSettings[pluginId] = oldSettings[pluginId];
 			}
 			Setting.setValue('plugins.states', newSettings);
+			pluginSettings = newSettings;
 		}
 
 		this.checkAllPluginStartedIID_ = setInterval(() => {
@@ -346,7 +344,7 @@ class Application extends BaseApplication {
 				// tests to wait for plugins to load.
 				ipcRenderer.send('startup-plugins-loaded');
 
-				setSettingsForDefaultPlugins(getDefaultPluginsInfo());
+				afterDefaultPluginsLoaded(getDefaultPluginsInfo(), pluginSettings);
 			}
 		}, 500);
 	}

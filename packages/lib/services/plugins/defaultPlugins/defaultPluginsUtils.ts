@@ -3,19 +3,8 @@ import Setting from '../../../models/Setting';
 import shim from '../../../shim';
 import PluginService, { defaultPluginSetting, DefaultPluginsInfo, PluginSettings } from '../PluginService';
 import Logger from '@joplin/utils/Logger';
-import * as React from 'react';
-const shared = require('../../../components/shared/config/config-shared.js');
 
 const logger = Logger.create('defaultPluginsUtils');
-
-export function checkPreInstalledDefaultPlugins(defaultPluginsId: string[], pluginSettings: PluginSettings) {
-	const installedDefaultPlugins: string[] = Setting.value('installedDefaultPlugins');
-	for (const pluginId of defaultPluginsId) {
-		// if pluginId is present in pluginSettings and not in installedDefaultPlugins array,
-		// then its either pre-installed by user or just uninstalled
-		if (pluginSettings[pluginId] && !installedDefaultPlugins.includes(pluginId)) Setting.setArrayValue('installedDefaultPlugins', pluginId);
-	}
-}
 
 export async function loadAndRunDefaultPlugins(
 	service: PluginService, defaultPluginsDir: string, pluginSettings: PluginSettings,
@@ -56,42 +45,23 @@ export async function loadAndRunDefaultPlugins(
 	return pluginSettings;
 }
 
-export function setSettingsForDefaultPlugins(defaultPluginsInfo: DefaultPluginsInfo) {
-	const installedDefaultPlugins = Setting.value('installedDefaultPlugins');
+export function afterDefaultPluginsLoaded(defaultPluginsInfo: DefaultPluginsInfo, pluginSettings: PluginSettings) {
+	const installedDefaultPlugins: string[] = Setting.value('installedDefaultPlugins');
+	const allDefaultPlugins = Object.keys(defaultPluginsInfo);
 
-	// only set initial settings if the plugin is not present in installedDefaultPlugins array
-	for (const pluginId of Object.keys(defaultPluginsInfo)) {
-		if (!defaultPluginsInfo[pluginId].settings) continue;
-		for (const settingName of Object.keys(defaultPluginsInfo[pluginId].settings)) {
-			if (!installedDefaultPlugins.includes(pluginId) && Setting.keyExists(`plugin-${pluginId}.${settingName}`)) {
-				Setting.setValue(`plugin-${pluginId}.${settingName}`, defaultPluginsInfo[pluginId].settings[settingName]);
+	for (const pluginId of allDefaultPlugins) {
+		// if pluginId is present in pluginSettings and not in installedDefaultPlugins array,
+		// then it's a new default plugin and needs overrides applied.
+		if (pluginSettings[pluginId] && !installedDefaultPlugins.includes(pluginId)) {
+			// Postprocess: Apply setting overrides
+			for (const settingName of Object.keys(defaultPluginsInfo[pluginId].settings ?? {})) {
+				if (!installedDefaultPlugins.includes(pluginId) && Setting.keyExists(`plugin-${pluginId}.${settingName}`)) {
+					Setting.setValue(`plugin-${pluginId}.${settingName}`, defaultPluginsInfo[pluginId].settings[settingName]);
+				}
 			}
+
+			// Mark the plugin as installed so that postprocessing won't be done again.
+			Setting.setArrayValue('installedDefaultPlugins', pluginId);
 		}
-	}
-}
-
-export function getDefaultPluginsInstallState(service: PluginService, defaultPluginsId: string[]): PluginSettings {
-	const settings: PluginSettings = {};
-	for (const pluginId of defaultPluginsId) {
-		if (!service.pluginIds.includes(pluginId)) continue;
-		if (!Setting.setArrayValue('installedDefaultPlugins', pluginId)) {
-			settings[pluginId] = defaultPluginSetting();
-		}
-	}
-	return settings;
-}
-
-export function updateDefaultPluginsInstallState(newPluginStates: PluginSettings, ConfigScreen: React.Component<any, any>) {
-	if (Object.keys(newPluginStates).length === 0) return;
-	const key = 'plugins.states';
-	const md = Setting.settingMetadata(key);
-	let newValue = Setting.value('plugins.states');
-	newValue = {
-		...newValue, ...newPluginStates,
-	};
-	shared.updateSettingValue(ConfigScreen, key, newValue);
-
-	if (md.autoSave) {
-		shared.scheduleSaveSettings(ConfigScreen);
 	}
 }
