@@ -8,7 +8,7 @@ import {
 } from '@codemirror/state';
 import { getIndentUnit, indentString, syntaxTree } from '@codemirror/language';
 import {
-	RegionSpec, growSelectionToNode, renumberList,
+	RegionSpec, growSelectionToNode, renumberSelectedLists,
 	toggleInlineFormatGlobally, toggleRegionFormatGlobally, toggleSelectedLinesStartWith,
 	isIndentationEquivalent, stripBlockquote, tabsToSpaces,
 } from './markdownReformatter';
@@ -354,9 +354,7 @@ export const toggleList = (listType: ListType): Command => {
 		doc = state.doc;
 
 		// Renumber the list
-		view.dispatch(state.changeByRange((sel: SelectionRange) => {
-			return renumberList(state, sel);
-		}));
+		view.dispatch(renumberSelectedLists(state));
 
 		return true;
 	};
@@ -417,9 +415,7 @@ export const increaseIndent: Command = (view: EditorView): boolean => {
 	view.dispatch(changes);
 
 	// Fix any lists
-	view.dispatch(view.state.changeByRange((sel: SelectionRange) => {
-		return renumberList(view.state, sel);
-	}));
+	view.dispatch(renumberSelectedLists(view.state));
 
 	return true;
 };
@@ -468,9 +464,7 @@ export const decreaseIndent: Command = (view: EditorView): boolean => {
 	view.dispatch(changes);
 
 	// Fix any lists
-	view.dispatch(view.state.changeByRange((sel: SelectionRange) => {
-		return renumberList(view.state, sel);
-	}));
+	view.dispatch(renumberSelectedLists(view.state));
 
 	return true;
 };
