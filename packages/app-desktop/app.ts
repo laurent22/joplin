@@ -65,7 +65,7 @@ import { AppState } from './app.reducer';
 import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
 import eventManager from '@joplin/lib/eventManager';
 import path = require('path');
-import { checkPreInstalledDefaultPlugins, installDefaultPlugins, setSettingsForDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
+import { checkPreInstalledDefaultPlugins, setSettingsForDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
 import { parseNotesParent } from '@joplin/lib/reducer';
 import { PackageInfo } from '@joplin/lib/versionInfo';
@@ -271,7 +271,7 @@ class Application extends BaseApplication {
 		service.isSafeMode = Setting.value('isSafeMode');
 		const defaultPluginsId = Object.keys(getDefaultPluginsInfo());
 
-		let pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
+		const pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
 		{
 			// Users can add and remove plugins from the config screen at any
 			// time, however we only effectively uninstall the plugin the next
@@ -284,13 +284,18 @@ class Application extends BaseApplication {
 		checkPreInstalledDefaultPlugins(defaultPluginsId, pluginSettings);
 
 		try {
-			const defaultPluginsDir = path.join(bridge().buildDir(), 'defaultPlugins');
-			pluginSettings = await installDefaultPlugins(service, defaultPluginsDir, defaultPluginsId, pluginSettings);
 			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
 				await service.loadAndRunPlugins(Setting.value('pluginDir'), pluginSettings);
 			}
 		} catch (error) {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('pluginDir')}:`, error);
+		}
+
+		const defaultPluginsDir = path.join(bridge().buildDir(), 'defaultPlugins');
+		try {
+			await service.loadAndRunPlugins(defaultPluginsDir, pluginSettings);
+		} catch (error) {
+			this.logger().error(`There was an error loading plugins from ${defaultPluginsDir}:`, error);
 		}
 
 		try {
