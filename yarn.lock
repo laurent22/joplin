@@ -6415,7 +6415,7 @@ __metadata:
     "@types/mustache": 4.2.5
     "@types/node": 18.18.10
     "@types/react": 18.2.37
-    "@types/react-redux": 7.1.30
+    "@types/react-redux": 7.1.31
     "@types/styled-components": 5.1.32
     async-mutex: 0.4.0
     codemirror: 5.65.9
@@ -6498,7 +6498,7 @@ __metadata:
     "@types/jest": 29.5.8
     "@types/react": 18.2.37
     "@types/react-native": 0.70.6
-    "@types/react-redux": 7.1.30
+    "@types/react-redux": 7.1.31
     "@types/tar-stream": 2.2.3
     assert-browserify: 2.0.0
     babel-jest: 29.7.0
@@ -6632,7 +6632,7 @@ __metadata:
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.8
     "@types/react": 18.2.37
-    "@types/react-redux": 7.1.30
+    "@types/react-redux": 7.1.31
     "@types/styled-components": 5.1.32
     jest: 29.7.0
     jest-environment-jsdom: 29.7.0
@@ -10792,15 +10792,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-redux@npm:7.1.30":
-  version: 7.1.30
-  resolution: "@types/react-redux@npm:7.1.30"
+"@types/react-redux@npm:7.1.31":
+  version: 7.1.31
+  resolution: "@types/react-redux@npm:7.1.31"
   dependencies:
     "@types/hoist-non-react-statics": ^3.3.0
     "@types/react": "*"
     hoist-non-react-statics: ^3.3.0
     redux: ^4.0.0
-  checksum: df86069aae0b2dd79752a45265b36ad5583f4c87a05731607192a4df6dd4e1ed151e458957cced31df37cbb60c58c41211f7186a783305a8af62d8cd69ae6789
+  checksum: d4274b77fdcc3de06c9a44f809430b36145fdd95d1c1840ece61e00b045b24e65825b6b0441efd73f3251cb386381fbfc64c5e7ab78818ed7229319afa9dd525
   languageName: node
   linkType: hard
 
