@@ -43,12 +43,22 @@ function stringifyKatexOptions(options: any) {
 	//     \prob: {tokens: Array(12), numArgs: 1}
 	//     \expval: {tokens: Array(14), numArgs: 2}
 	//     \wf: {tokens: Array(6), numArgs: 0}
+	//     \@eqnsw: "1"
+	//
+	// Additionally, some KaTeX macros don't follow this general format. For example
+	//     \@eqnsw: "1"
+	// is created by \begin{align}...\end{align} environments, and doesn't have a "tokens" property.
 
 	if (options.macros) {
 		const toSerialize: any = {};
 		for (const k of Object.keys(options.macros)) {
-			const macroText: string[] = options.macros[k].tokens.map((t: any) => t.text);
-			toSerialize[k] = `${macroText.join('')}_${options.macros[k].numArgs}`;
+			const macro = options.macros[k];
+			if (typeof macro === 'string') {
+				toSerialize[k] = `${macro}_string`;
+			} else {
+				const macroText: string[] = macro.tokens.map((t: any) => t.text);
+				toSerialize[k] = `${macroText.join('')}_${macro.numArgs}`;
+			}
 		}
 		newOptions.macros = toSerialize;
 	}

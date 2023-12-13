@@ -1,8 +1,6 @@
 import FsDriverBase, { ReadDirStatsOptions } from '@joplin/lib/fs-driver-base';
 const RNFetchBlob = require('rn-fetch-blob').default;
 import * as RNFS from 'react-native-fs';
-const DocumentPicker = require('react-native-document-picker').default;
-import { openDocument } from '@joplin/react-native-saf-x';
 import RNSAF, { DocumentFileDetail, openDocumentTree } from '@joplin/react-native-saf-x';
 import { Platform } from 'react-native';
 import * as tar from 'tar-stream';
@@ -303,12 +301,8 @@ export default class FsDriverRN extends FsDriverBase {
 		return output ? output : null;
 	}
 
-	public resolve(path: string) {
-		throw new Error(`Not implemented: resolve(): ${path}`);
-	}
-
-	public resolveRelativePathWithinDir(_baseDir: string, relativePath: string) {
-		throw new Error(`Not implemented: resolveRelativePathWithinDir(): ${relativePath}`);
+	public resolve(...paths: string[]): string {
+		throw new Error(`Not implemented: resolve(): ${JSON.stringify(paths)}`);
 	}
 
 	public async md5File(path: string): Promise<string> {
@@ -379,40 +373,4 @@ export default class FsDriverRN extends FsDriverBase {
 		return Platform.OS === 'android' && Platform.Version > 28;
 	}
 
-	/** always returns an array */
-	public async pickDocument(options: { multiple: false }) {
-		const { multiple = false } = options || {};
-		let result;
-		try {
-			if (this.isUsingAndroidSAF()) {
-				result = await openDocument({ multiple });
-				if (!result) {
-					// to catch the error down below using the 'cancel' keyword
-					throw new Error('User canceled document picker');
-				}
-				result = result.map(r => {
-					(r.type as string) = r.mime;
-					((r as any).fileCopyUri as string) = r.uri;
-					return r;
-				});
-			} else {
-				// the result is an array
-				if (multiple) {
-					result = await DocumentPicker.pick({ allowMultiSelection: true });
-				} else {
-					result = [await DocumentPicker.pick()];
-				}
-			}
-		} catch (error) {
-			if (DocumentPicker.isCancel(error) || error?.message?.includes('cancel')) {
-				// eslint-disable-next-line no-console
-				console.info('pickDocuments: user has cancelled');
-				return null;
-			} else {
-				throw error;
-			}
-		}
-
-		return result;
-	}
 }

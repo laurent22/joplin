@@ -42,7 +42,7 @@ export type OnChangeHandler = (event: OnChangeEvent)=> Promise<void>;
  * `note.isWatched` tells you if the note is currently opened in an external
  * editor. In which case you would generally display some indicator.
  */
-export type ListRendererDepependency =
+export type ListRendererDependency =
 	ListRendererDatabaseDependency |
 	'item.size.width' |
 	'item.size.height' |
@@ -96,7 +96,7 @@ export interface ListRenderer {
 	 * that you do not add more than what you need since there is a performance
 	 * penalty for each property.
 	 */
-	dependencies: ListRendererDepependency[];
+	dependencies: ListRendererDependency[];
 
 	/**
 	 * This is the HTML template that will be used to render the note list item.

@@ -6,13 +6,15 @@ import UndoRedoService from '@joplin/lib/services/UndoRedoService';
 import NoteBodyViewer from '../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../utils/checkPermissions';
 import NoteEditor from '../NoteEditor/NoteEditor';
-
+import { Size } from '@joplin/utils/types';
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
-const { Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
+import { Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } from 'react-native';
 import { Platform, PermissionsAndroid } from 'react-native';
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
+import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
+import { openDocument } from '@joplin/react-native-saf-x';
 import Note from '@joplin/lib/models/Note';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Resource from '@joplin/lib/models/Resource';
@@ -20,7 +22,7 @@ import Folder from '@joplin/lib/models/Folder';
 const Clipboard = require('@react-native-community/clipboard').default;
 const md5 = require('md5');
 const { BackButtonService } = require('../../services/back-button.js');
-import NavService from '@joplin/lib/services/NavService';
+import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';
 import BaseModel from '@joplin/lib/BaseModel';
 import ActionButton from '../ActionButton';
 const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
@@ -32,17 +34,17 @@ const { Checkbox } = require('../checkbox.js');
 import { _, currentLocale } from '@joplin/lib/locale';
 import { reg } from '@joplin/lib/registry';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
-const { BaseScreenComponent } = require('../base-screen');
+import { BaseScreenComponent } from '../base-screen';
 const { themeStyle, editorFont } = require('../global-style.js');
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 import ImageResizer from '@bam.tech/react-native-image-resizer';
-import shared from '@joplin/lib/components/shared/note-screen-shared';
-import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
+import shared, { BaseNoteScreenComponent } from '@joplin/lib/components/shared/note-screen-shared';
+import { Asset, ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
-import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
+import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/utils/Logger';
 import ImageEditor from '../NoteEditor/ImageEditor/ImageEditor';
 import promptRestoreAutosave from '../NoteEditor/ImageEditor/promptRestoreAutosave';
@@ -52,28 +54,146 @@ import { voskEnabled } from '../../services/voiceTyping/vosk';
 import { isSupportedLanguage } from '../../services/voiceTyping/vosk.android';
 import { ChangeEvent as EditorChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
 import { join } from 'path';
+import { Dispatch } from 'redux';
+import { RefObject } from 'react';
 const urlUtils = require('@joplin/lib/urlUtils');
-
-// import Vosk from 'react-native-vosk';
 
 const emptyArray: any[] = [];
 
 const logger = Logger.create('screens/Note');
 
-class NoteScreenComponent extends BaseScreenComponent {
+interface SelectedDocument {
+	type: string;
+	mime: string;
+	uri: string;
+	fileName: string;
+}
+
+const pickDocument = async (multiple: boolean): Promise<SelectedDocument[]> => {
+	let result: SelectedDocument[] = [];
+	try {
+		if (shim.fsDriver().isUsingAndroidSAF()) {
+			const openDocResult = await openDocument({ multiple });
+			if (!openDocResult) {
+				throw new Error('User canceled document picker');
+			}
+			result = openDocResult.map(r => {
+				const converted: SelectedDocument = {
+					type: r.mime,
+					fileName: r.name,
+					mime: r.mime,
+					uri: r.uri,
+				};
+
+				return converted;
+			});
+		} else {
+			let docPickerResult: DocumentPickerResponse[] = [];
+			if (multiple) {
+				docPickerResult = await DocumentPicker.pick({ allowMultiSelection: true });
+			} else {
+				docPickerResult = [await DocumentPicker.pickSingle()];
+			}
+
+			result = docPickerResult.map(r => {
+				return {
+					mime: '',
+					type: r.type,
+					uri: r.uri,
+					fileName: r.name,
+				};
+			});
+		}
+	} catch (error) {
+		if (DocumentPicker.isCancel(error) || error?.message?.includes('cancel')) {
+			logger.info('pickDocuments: user has cancelled');
+			return [];
+		} else {
+			throw error;
+		}
+	}
+
+	return result;
+};
+
+interface Props {
+	provisionalNoteIds: string[];
+	dispatch: Dispatch;
+	noteId: string;
+	useEditorBeta: boolean;
+	themeId: number;
+	editorFontSize: number;
+	editorFont: number; // e.g. Setting.FONT_MENLO
+	showSideMenu: boolean;
+	searchQuery: string[];
+	ftsEnabled: boolean;
+	highlightedWords: string[];
+	noteHash: string;
+	toolbarEnabled: boolean;
+}
+
+interface State {
+	note: any;
+	mode: 'view'|'edit';
+	readOnly: boolean;
+	folder: FolderEntity|null;
+	lastSavedNote: any;
+	isLoading: boolean;
+	titleTextInputHeight: number;
+	alarmDialogShown: boolean;
+	heightBumpView: number;
+	noteTagDialogShown: boolean;
+	fromShare: boolean;
+	showCamera: boolean;
+	showImageEditor: boolean;
+	imageEditorResource: ResourceEntity;
+	imageEditorResourceFilepath: string;
+	noteResources: Record<string, ResourceEntity>;
+	newAndNoTitleChangeNoteId: boolean|null;
+
+	HACK_webviewLoadingState: number;
+
+	undoRedoButtonState: {
+		canUndo: boolean;
+		canRedo: boolean;
+	};
+
+	voiceTypingDialogShown: boolean;
+}
+
+class NoteScreenComponent extends BaseScreenComponent<Props, State> implements BaseNoteScreenComponent {
 	// This isn't in this.state because we don't want changing scroll to trigger
 	// a re-render.
 	private lastBodyScroll: number|undefined = undefined;
+
+	private saveActionQueues_: any;
+	private doFocusUpdate_: boolean;
+	private styles_: any;
+	private editorRef: any;
+	private titleTextFieldRef: RefObject<TextInput>;
+	private navHandler: OnNavigateCallback;
+	private backHandler: ()=> Promise<boolean>;
+	private undoRedoService_: UndoRedoService;
+	private noteTagDialog_closeRequested: any;
+	private onJoplinLinkClick_: any;
+	private refreshResource: (resource: any, noteBody?: string)=> Promise<void>;
+	private selection: any;
+	private menuOptionsCache_: Record<string, any>;
+	private focusUpdateIID_: any;
+	private folderPickerOptions_: any;
+	public dialogbox: any;
 
 	public static navigationOptions(): any {
 		return { header: null };
 	}
 
-	public constructor() {
-		super();
+	public constructor(props: Props) {
+		super(props);
+
 		this.state = {
 			note: Note.new(),
 			mode: 'view',
+			readOnly: false,
 			folder: null,
 			lastSavedNote: null,
 			isLoading: true,
@@ -86,6 +206,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			showImageEditor: false,
 			imageEditorResource: null,
 			noteResources: {},
+			imageEditorResourceFilepath: null,
+			newAndNoTitleChangeNoteId: null,
 
 			// HACK: For reasons I can't explain, when the WebView is present, the TextInput initially does not display (It's just a white rectangle with
 			// no visible text). It will only appear when tapping it or doing certain action like selecting text on the webview. The bug started to
@@ -109,8 +231,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// this.markdownEditorRef = React.createRef(); // For focusing the Markdown editor
 
 		this.doFocusUpdate_ = false;
-
-		this.saveButtonHasBeenShown_ = false;
 
 		this.styles_ = {};
 
@@ -215,7 +335,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					if (msg.indexOf('file://') === 0) {
 						throw new Error(_('Links with protocol "%s" are not supported', 'file://'));
 					} else {
-						Linking.openURL(msg);
+						await Linking.openURL(msg);
 					}
 				}
 			} catch (error) {
@@ -287,7 +407,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	private async undoRedo(type: string) {
+	private async undoRedo(type: 'undo'|'redo') {
 		const undoState = await this.undoRedoService_[type](this.undoState());
 		if (!undoState) return;
 
@@ -574,15 +694,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	private async pickDocuments() {
-		const result = await shim.fsDriver().pickDocument({ multiple: true });
-		if (!result) {
-			// eslint-disable-next-line no-console
-			console.info('pickDocuments: user has cancelled');
-		}
+		const result = await pickDocument(true);
 		return result;
 	}
 
-	public async imageDimensions(uri: string) {
+	public async imageDimensions(uri: string): Promise<Size> {
 		return new Promise((resolve, reject) => {
 			Image.getSize(
 				uri,
@@ -598,7 +714,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	public async resizeImage(localFilePath: string, targetPath: string, mimeType: string) {
 		const maxSize = Resource.IMAGE_MAX_DIMENSION;
-		const dimensions: any = await this.imageDimensions(localFilePath);
+		const dimensions = await this.imageDimensions(localFilePath);
 		reg.logger().info('Original dimensions ', dimensions);
 
 		const saveOriginalImage = async () => {
@@ -657,7 +773,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return await saveOriginalImage();
 	}
 
-	public async attachFile(pickerResponse: any, fileType: string): Promise<ResourceEntity|null> {
+	public async attachFile(pickerResponse: Asset, fileType: string): Promise<ResourceEntity|null> {
 		if (!pickerResponse) {
 			// User has cancelled
 			return null;
@@ -690,8 +806,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let resource: ResourceEntity = Resource.new();
 		resource.id = uuid.create();
 		resource.mime = mimeType;
-		resource.title = pickerResponse.name ? pickerResponse.name : '';
-		resource.file_extension = safeFileExtension(fileExtension(pickerResponse.name ? pickerResponse.name : localFilePath));
+		resource.title = pickerResponse.fileName ? pickerResponse.fileName : '';
+		resource.file_extension = safeFileExtension(fileExtension(pickerResponse.fileName ? pickerResponse.fileName : localFilePath));
 
 		if (!resource.mime) resource.mime = 'application/octet-stream';
 
@@ -749,7 +865,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 			if (this.useEditorBeta()) {
 				// The beta editor needs to be explicitly informed of changes
 				// to the note's body
-				this.editorRef.current.insertText(newText);
+				if (this.editorRef.current) {
+					this.editorRef.current.insertText(newText);
+				} else {
+					logger.error(`Tried to attach resource ${resource.id} to the note when the editor is not visible!`);
+				}
 			}
 		} else {
 			newNote.body += `\n${resourceTag}`;
@@ -757,7 +877,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		this.setState({ note: newNote });
 
-		this.refreshResource(resource, newNote.body);
+		void this.refreshResource(resource, newNote.body);
 
 		this.scheduleSave();
 
@@ -810,35 +930,38 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		return await this.attachFile({
 			uri: filePath,
-			name: _('Drawing'),
+			fileName: _('Drawing'),
 		}, 'image');
 	}
-
-	private drawPicture_onPress = async () => {
-		// Create a new empty drawing and attach it now.
-		const resource = await this.attachNewDrawing('');
-		await this.editDrawing(resource);
-	};
 
 	private async updateDrawing(svgData: string) {
 		let resource: ResourceEntity|null = this.state.imageEditorResource;
 
 		if (!resource) {
-			throw new Error('No resource is loaded in the editor');
+			resource = await this.attachNewDrawing(svgData);
+
+			// Set resouce and file path to allow
+			// 1. subsequent saves to update the resource
+			// 2. the editor to load from the resource's filepath (can happen
+			//    if the webview is reloaded).
+			this.setState({
+				imageEditorResourceFilepath: Resource.fullPath(resource),
+				imageEditorResource: resource,
+			});
+		} else {
+			logger.info('Saving drawing to resource', resource.id);
+
+			const tempFilePath = join(Setting.value('tempDir'), uuid.createNano());
+			await shim.fsDriver().writeFile(tempFilePath, svgData, 'utf8');
+
+			resource = await Resource.updateResourceBlobContent(
+				resource.id,
+				tempFilePath,
+			);
+			await shim.fsDriver().remove(tempFilePath);
+
+			await this.refreshResource(resource);
 		}
-
-		logger.info('Saving drawing to resource', resource.id);
-
-		const tempFilePath = join(Setting.value('tempDir'), uuid.createNano());
-		await shim.fsDriver().writeFile(tempFilePath, svgData, 'utf8');
-
-		resource = await Resource.updateResourceBlobContent(
-			resource.id,
-			tempFilePath,
-		);
-		await shim.fsDriver().remove(tempFilePath);
-
-		await this.refreshResource(resource);
 	}
 
 	private onSaveDrawing = async (svgData: string) => {
@@ -847,6 +970,23 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	private onCloseDrawing = () => {
 		this.setState({ showImageEditor: false });
+	};
+
+	private drawPicture_onPress = async () => {
+		if (this.state.mode === 'edit') {
+			// Create a new empty drawing and attach it now, before the image editor is opened.
+			// With the present structure of Note.tsx, the we can't use this.editorRef while
+			// the image editor is open, and thus can't attach drawings at the cursor locaiton.
+			const resource = await this.attachNewDrawing('');
+			await this.editDrawing(resource);
+		} else {
+			logger.info('Showing image editor...');
+			this.setState({
+				showImageEditor: true,
+				imageEditorResourceFilepath: null,
+				imageEditorResource: null,
+			});
+		}
 	};
 
 	private async editDrawing(item: BaseItem) {
@@ -935,7 +1075,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const note = await Note.load(this.state.note.id);
 		try {
 			const url = Note.geolocationUrl(note);
-			Linking.openURL(url);
+			await Linking.openURL(url);
 		} catch (error) {
 			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 			await dialogs.error(this, error.message);
@@ -947,7 +1087,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const note = await Note.load(this.state.note.id);
 		try {
-			Linking.openURL(note.source_url);
+			await Linking.openURL(note.source_url);
 		} catch (error) {
 			await dialogs.error(this, error.message);
 		}
@@ -1207,8 +1347,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let fieldToFocus = this.state.note.is_todo ? 'title' : 'body';
 		if (this.state.mode === 'view') fieldToFocus = '';
 
-		if (fieldToFocus === 'title' && this.refs.titleTextField) {
-			this.refs.titleTextField.focus();
+		if (fieldToFocus === 'title' && this.titleTextFieldRef.current) {
+			this.titleTextFieldRef.current.focus();
 		}
 		// if (fieldToFocus === 'body' && this.markdownEditorRef.current) {
 		// 	if (this.markdownEditorRef.current) {
@@ -1376,7 +1516,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 						placeholderTextColor={theme.colorFaded}
 						// need some extra padding for iOS so that the keyboard won't cover last line of the note
 						// see https://github.com/laurent22/joplin/issues/3607
-						paddingBottom={ Platform.OS === 'ios' ? 40 : 0}
+						// Property is gone as of RN 0.72?
+						// paddingBottom={ (Platform.OS === 'ios' ? 40 : 0) as any}
 					/>
 				);
 			} else {
@@ -1429,8 +1570,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const showSaveButton = false; // this.state.mode === 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
 		const saveButtonDisabled = true;// !this.isModified();
 
-		if (showSaveButton) this.saveButtonHasBeenShown_ = true;
-
 		const titleContainerStyle = isTodo ? this.styles().titleContainerTodo : this.styles().titleContainer;
 
 		const dueDate = Note.dueDateObject(note);
@@ -1439,7 +1578,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			<View style={titleContainerStyle}>
 				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
 				<TextInput
-					ref="titleTextField"
+					ref={this.titleTextFieldRef}
 					underlineColorAndroid="#ffffff00"
 					autoCapitalize="sentences"
 					style={this.styles().titleTextInput}

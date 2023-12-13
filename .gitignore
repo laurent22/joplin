@@ -362,13 +362,16 @@ packages/app-desktop/gui/style/StyledTextInput.js
 packages/app-desktop/gui/utils/NoteListUtils.js
 packages/app-desktop/gui/utils/convertToScreenCoordinates.js
 packages/app-desktop/gui/utils/loadScript.js
+packages/app-desktop/gulpfile.js
 packages/app-desktop/integration-tests/main.spec.js
 packages/app-desktop/integration-tests/models/MainScreen.js
 packages/app-desktop/integration-tests/models/NoteEditorScreen.js
 packages/app-desktop/integration-tests/models/SettingsScreen.js
+packages/app-desktop/integration-tests/simpleBackup.spec.js
 packages/app-desktop/integration-tests/util/activateMainMenuItem.js
 packages/app-desktop/integration-tests/util/createStartupArgs.js
 packages/app-desktop/integration-tests/util/firstNonDevToolsWindow.js
+packages/app-desktop/integration-tests/util/setFilePickerResponse.js
 packages/app-desktop/integration-tests/util/test.js
 packages/app-desktop/playwright.config.js
 packages/app-desktop/plugins/GotoAnything.js
@@ -396,6 +399,7 @@ packages/app-desktop/services/sortOrder/PerFolderSortOrderService.js
 packages/app-desktop/services/sortOrder/notesSortOrderUtils.test.js
 packages/app-desktop/services/sortOrder/notesSortOrderUtils.js
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
+packages/app-desktop/tools/copy7Zip.js
 packages/app-desktop/tools/notarizeMacApp.js
 packages/app-desktop/tools/renameReleaseAssets.js
 packages/app-desktop/utils/checkForUpdatesUtils.test.js
@@ -511,6 +515,13 @@ packages/app-mobile/utils/fs-driver/runOnDeviceTests.js
 packages/app-mobile/utils/setupNotifications.js
 packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/types.js
+packages/default-plugins/build.js
+packages/default-plugins/buildDefaultPlugins.js
+packages/default-plugins/commands/buildAll.js
+packages/default-plugins/commands/editPatch.js
+packages/default-plugins/utils/getPathToPatchFileFor.js
+packages/default-plugins/utils/readRepositoryJson.js
+packages/default-plugins/utils/waitForCliInput.js
 packages/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation.test.js
 packages/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation.js
 packages/editor/CodeMirror/CodeMirror5Emulation/Decorator.js
@@ -907,6 +918,7 @@ packages/lib/themes/solarizedDark.js
 packages/lib/themes/solarizedLight.js
 packages/lib/themes/type.js
 packages/lib/time.js
+packages/lib/types.js
 packages/lib/utils/credentialFiles.js
 packages/lib/utils/joplinCloud.js
 packages/lib/utils/processStartFlags.js
@@ -948,6 +960,8 @@ packages/plugin-repo-cli/lib/types.js
 packages/plugin-repo-cli/lib/updateReadme.test.js
 packages/plugin-repo-cli/lib/updateReadme.js
 packages/plugin-repo-cli/lib/utils.js
+packages/plugin-repo-cli/lib/validateUntrustedManifest.test.js
+packages/plugin-repo-cli/lib/validateUntrustedManifest.js
 packages/plugins/ToggleSidebars/api/index.js
 packages/plugins/ToggleSidebars/api/types.js
 packages/plugins/ToggleSidebars/src/index.js
@@ -991,8 +1005,6 @@ packages/tools/build-translation.js
 packages/tools/build-welcome.js
 packages/tools/buildServerDocker.test.js
 packages/tools/buildServerDocker.js
-packages/tools/bundleDefaultPlugins.test.js
-packages/tools/bundleDefaultPlugins.js
 packages/tools/checkIgnoredFiles.js
 packages/tools/checkLibPaths.test.js
 packages/tools/checkLibPaths.js

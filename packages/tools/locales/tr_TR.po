@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Türkçe\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Arda Kılıçdağı <arda@kilicdagi.com>\n"
 "Language-Team: Turkish (Turkey)\n"
 "Language: tr_TR\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:363
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -57,7 +59,7 @@ msgstr "(ne görürsen onu alırsın: %s)"
 #: packages/app-mobile/components/screens/Note.tsx:641
 #: packages/lib/shim-init-node.js:211
 msgid "(You may disable this prompt in the options)"
-msgstr ""
+msgstr "(Ayarlardan bu istemi kapatabilirsiniz)"
 
 #: packages/app-desktop/gui/MenuBar.tsx:691
 #: packages/app-desktop/gui/MenuBar.tsx:967
@@ -398,10 +400,12 @@ msgstr ""
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:13
 msgid "An autosaved drawing was found. Attach a copy of it to the note?"
 msgstr ""
+"Otomatik kaydedilmiş bir çizim bulundu. Not'a bunun kopyasını iliştirmek "
+"ister misiniz?"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:88
 msgid "An error occurred: %s"
-msgstr ""
+msgstr "Bir hata oluştu: %s"
 
 #: packages/app-desktop/checkForUpdates.ts:106
 msgid "An update is available, do you want to download it now?"
@@ -1186,7 +1190,7 @@ msgstr "Özel TLS sertifikaları"
 
 #: packages/lib/utils/joplinCloud.ts:193
 msgid "Customise the note publishing banner"
-msgstr ""
+msgstr "Not yayımlama başlığını özelleştir"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:39
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:84
@@ -1381,7 +1385,7 @@ msgstr "Hedef biçimi: %s"
 
 #: packages/lib/services/noteList/defaultLeftToRightListRenderer.ts:25
 msgid "Detailed"
-msgstr ""
+msgstr "Detaylı"
 
 #: packages/lib/services/interop/Module.ts:62
 msgid "Directory"
@@ -1509,9 +1513,8 @@ msgstr ""
 "aşağıya girin."
 
 #: packages/lib/models/Setting.ts:2648
-#, fuzzy
 msgid "Donate, website"
-msgstr "Joplin Web Sitesi"
+msgstr "Bağış yap, web sitesi"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:115
@@ -1556,11 +1559,11 @@ msgstr "Dracula"
 
 #: packages/app-mobile/components/screens/Note.tsx:1108
 msgid "Draw picture"
-msgstr ""
+msgstr "Çizim yap"
 
 #: packages/app-mobile/components/screens/Note.tsx:810
 msgid "Drawing"
-msgstr ""
+msgstr "Çizim"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1268
 msgid "Drop notes or files here"
@@ -1686,9 +1689,8 @@ msgid "Email to Note"
 msgstr "E-postadan Nota"
 
 #: packages/lib/models/Setting.ts:2642
-#, fuzzy
 msgid "Email To Note, login information"
-msgstr "Sürüm bilgisini görüntüler"
+msgstr "Not'u e-posta'dan gönder, giriş bilgileri"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:129
@@ -1952,9 +1954,8 @@ msgid "Export profile"
 msgstr "Profili dışarı aktar"
 
 #: packages/lib/models/Setting.ts:2647
-#, fuzzy
 msgid "Export your data"
-msgstr "Tümünü dışa aktar"
+msgstr "Verini dışarı aktar"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:106
 msgid "Exported successfully!"
@@ -2147,6 +2148,8 @@ msgstr[1] "Bağlantılar oluşturuluyor..."
 #: packages/lib/models/Setting.ts:2644
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
 msgstr ""
+"Yerel konum, dil doğrulaması, düzenleyici araç çubuğu, resim yeniden "
+"boyutlandır"
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:91
 msgid "Get it now:"
@@ -2248,7 +2251,7 @@ msgstr "HTML Dizini"
 
 #: packages/lib/services/interop/InteropService.ts:92
 msgid "HTML document"
-msgstr ""
+msgstr "HTML dökümanı"
 
 #: packages/lib/services/interop/InteropService.ts:151
 msgid "HTML File"
@@ -2610,9 +2613,8 @@ msgid "Language"
 msgstr "Dil"
 
 #: packages/lib/models/Setting.ts:2639
-#, fuzzy
 msgid "Language, date format"
-msgstr "Tarih biçimi"
+msgstr "Dil, tarih biçimi"
 
 #: packages/lib/Synchronizer.ts:197
 msgid "Last error: %s"
@@ -2736,7 +2738,7 @@ msgstr "Çıkış Yap"
 
 #: packages/lib/models/Setting.ts:2646
 msgid "Logs, profiles, sync status"
-msgstr ""
+msgstr "Loglar, profiller, senkronizasyon durumu"
 
 #: packages/app-desktop/gui/MenuBar.tsx:859
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:381
@@ -2832,7 +2834,7 @@ msgstr "Maks. Toplam Boyut"
 
 #: packages/lib/models/Setting.ts:2643
 msgid "Media player, math, diagrams, table of contents"
-msgstr ""
+msgstr "Medya oynatıcı, matematik, diyagramlar, içindekiler"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:318
 msgid "Missing keys"
@@ -2897,7 +2899,7 @@ msgstr "H"
 
 #: packages/lib/models/Setting.ts:1131
 msgid "Never resize"
-msgstr ""
+msgstr "Asla yeniden boyutlandırma"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:8
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:121
@@ -3239,7 +3241,7 @@ msgstr "Aç..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:158
 msgid "Opening section %s"
-msgstr ""
+msgstr "Şu bölüm açılıyor: %s"
 
 #: packages/app-cli/app/command-e2ee.ts:40
 #: packages/app-cli/app/command-e2ee.ts:86
@@ -3683,7 +3685,7 @@ msgstr "Ana parolayı sıfırla"
 
 #: packages/lib/models/Setting.ts:1125
 msgid "Resize large images:"
-msgstr ""
+msgstr "Büyük resimleri yeniden boyutlandır:"
 
 #: packages/app-cli/app/command-import.js:51
 #: packages/app-desktop/gui/ImportScreen.tsx:92
@@ -3695,9 +3697,8 @@ msgid "Restart and upgrade"
 msgstr "Yeniden başlat ve güncelle"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:85
-#, fuzzy
 msgid "Restart in safe mode"
-msgstr "Yeniden başlat ve güncelle"
+msgstr "Güvenli modda yeniden başlat"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:717
 msgid "Restart now"
@@ -3878,9 +3879,8 @@ msgid "Select parent notebook"
 msgstr "Ana not defterini seç"
 
 #: packages/app-desktop/gui/MenuBar.tsx:324
-#, fuzzy
 msgid "Send bug report"
-msgstr "Hata Ayıklama Raporunu Dışa Aktar"
+msgstr "Hata raporu gönder"
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -3959,7 +3959,7 @@ msgstr "No deferini paylaş..."
 
 #: packages/lib/utils/joplinCloud.ts:212
 msgid "Share permissions"
-msgstr ""
+msgstr "Paylaşım izinleri"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:349
 msgid "Sharing notebook..."
@@ -4015,7 +4015,7 @@ msgstr "Kenar çubuğunu göster/gizle"
 
 #: packages/lib/models/Setting.ts:1126
 msgid "Shrink large images before adding them to notes."
-msgstr ""
+msgstr "Büyük resimleri notlara eklemeden önce yeniden boyutlandırır."
 
 #: packages/app-mobile/root.tsx:1013
 msgid "Side menu closed"
@@ -4023,7 +4023,7 @@ msgstr "Yan menü kapalı"
 
 #: packages/app-mobile/root.tsx:1013
 msgid "Side menu opened"
-msgstr ""
+msgstr "Yan menü açık"
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:8
 #: packages/app-mobile/components/ScreenHeader.tsx:307
@@ -4301,9 +4301,8 @@ msgid "Sync your notes"
 msgstr "Notları senkron et"
 
 #: packages/lib/models/Setting.ts:2641
-#, fuzzy
 msgid "Sync, encryption, proxy"
-msgstr "Şifrelemeyi etkinleştir"
+msgstr "Senkronizasyon, şifreleme, proxy"
 
 #: packages/lib/models/Setting.ts:2606
 msgid "Synchronisation"
@@ -4637,9 +4636,8 @@ msgid "Theme"
 msgstr "Tema"
 
 #: packages/lib/models/Setting.ts:2640
-#, fuzzy
 msgid "Themes, editor font"
-msgstr "Editör fontu"
+msgstr "Temalar, editör yazı tipi"
 
 #: packages/app-mobile/components/NoteList.tsx:102
 msgid "There are currently no notes. Create one by clicking on the (+) button."
@@ -4721,6 +4719,10 @@ msgid ""
 "collaborate on it. It does not however allow you to share a notebook with "
 "someone else, unless you have the feature \"%s\"."
 msgstr ""
+"Bu başka bir kullanıcının sizinle not defterini paylaşabilmesini sağlar, ve "
+"de ikinizin de notun içeriğini düzenleyip değiştirebilmenizi sağlar. Lakin "
+"bu özellik eğer \"%s\" özelliği yoksa bu notları başka biriyle "
+"paylaşamazsınız."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:50
 #: packages/lib/services/ResourceEditWatcher/index.ts:224
@@ -4944,9 +4946,10 @@ msgid "Toggle external editing"
 msgstr "Dış düzenlemeyi aç/kapat"
 
 #: packages/lib/models/Setting.ts:2645
-#, fuzzy
 msgid "Toggle note history, keep notes for"
-msgstr "Not tarihçesini şu kadar süre tut"
+msgstr ""
+"Not geçmişi özelliğinin durumunu değiştirip, bu not geçmişlerini şu kadar "
+"süre tut"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNoteList.ts:9
 msgid "Toggle note list"
@@ -5351,7 +5354,7 @@ msgstr "Yeni bir yapılacak oluşturulurken:"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:164
 msgid "Window unresponsive."
-msgstr ""
+msgstr "Pencere tepkisiz, cevap vermiyor."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:102
 msgid "Words"

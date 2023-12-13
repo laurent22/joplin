@@ -72,4 +72,38 @@ describe('index_login', () => {
 		}
 	});
 
+	test('should redirect if already logged in', async () => {
+		const user = await createUser(1);
+
+		const context = await doLogin(user.email, '123456');
+		const sessionId = cookieGet(context, 'sessionId');
+
+		const getContext = await koaAppContext({
+			sessionId: sessionId,
+			request: {
+				method: 'GET',
+				url: '/login',
+			},
+		});
+
+		await routeHandler(getContext);
+
+		expect(getContext.response.status).toBe(302);
+	});
+
+	test('should not redirect if sessionId is not valid', async () => {
+
+		const getContext = await koaAppContext({
+			sessionId: 'no-sense',
+			request: {
+				method: 'GET',
+				url: '/login',
+			},
+		});
+
+		await routeHandler(getContext);
+
+		expect(getContext.response.status).toBe(200);
+	});
+
 });

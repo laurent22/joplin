@@ -38,7 +38,7 @@ describe('routes/notes', () => {
 		jest.spyOn(shim, 'fsDriver').mockImplementation(() => {
 			return {
 				copy: fsDriverCopySpy,
-			};
+			} as any;
 		});
 		jest.spyOn(uuid, 'create').mockReturnValue('mocked_uuid_value');
 

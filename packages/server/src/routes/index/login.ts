@@ -8,6 +8,7 @@ import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
 import limiterLoginBruteForce from '../../utils/request/limiterLoginBruteForce';
 import { cookieSet } from '../../utils/cookies';
+import { homeUrl } from '../../utils/urlUtils';
 
 function makeView(error: any = null): View {
 	const view = defaultView('login', 'Login');
@@ -22,7 +23,10 @@ const router: Router = new Router(RouteType.Web);
 
 router.public = true;
 
-router.get('login', async (_path: SubPath, _ctx: AppContext) => {
+router.get('login', async (_path: SubPath, ctx: AppContext) => {
+	if (ctx.joplin.owner) {
+		return redirect(ctx, homeUrl());
+	}
 	return makeView();
 });
 

@@ -7,10 +7,7 @@ require('source-map-support').install();
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as process from 'process';
-import validatePluginId from '@joplin/lib/services/plugins/utils/validatePluginId';
-import validatePluginVersion from '@joplin/lib/services/plugins/utils/validatePluginVersion';
 import { resolveRelativePathWithinDir, gitPullTry, gitRepoCleanTry, gitRepoClean } from '@joplin/tools/tool-utils.js';
-import checkIfPluginCanBeAdded from './lib/checkIfPluginCanBeAdded';
 import updateReadme from './lib/updateReadme';
 import { NpmPackage } from './lib/types';
 import gitCompareUrl from './lib/gitCompareUrl';
@@ -18,6 +15,7 @@ import commandUpdateRelease from './commands/updateRelease';
 import { isJoplinPluginPackage, readJsonFile } from './lib/utils';
 import { applyManifestOverrides, getObsoleteManifests, getSupersededPackages, readManifestOverrides } from './lib/overrideUtils';
 import { execCommand } from '@joplin/utils';
+import validateUntrustedManifest from './lib/validateUntrustedManifest';
 
 function pluginInfoFromSearchResults(results: any[]): NpmPackage[] {
 	const output: NpmPackage[] = [];
@@ -63,17 +61,12 @@ async function extractPluginFilesFromPackage(existingManifests: any, workDir: st
 	if (!(await fs.pathExists(manifestFilePath))) throw new Error(`Could not find manifest file at ${manifestFilePath}`);
 	if (!(await fs.pathExists(pluginFilePath))) throw new Error(`Could not find plugin file at ${pluginFilePath}`);
 
-	// At this point, we need to check the manifest ID as it's used in various
-	// places including as directory name and object key in manifests.json, so
-	// it needs to be correct. It's mostly for security reasons. The other
-	// manifest properties are checked when the plugin is loaded into the app.
 	const manifest = await readJsonFile(manifestFilePath);
-	validatePluginId(manifest.id);
-	validatePluginVersion(manifest.version);
-
 	manifest._npm_package_name = packageName;
 
-	checkIfPluginCanBeAdded(existingManifests, manifest);
+	// We need to validate the manifest to make sure the plugin author isn't
+	// trying to override an existing plugin, use an invalid ID, etc..
+	validateUntrustedManifest(manifest, existingManifests);
 
 	const pluginDestDir = resolveRelativePathWithinDir(destDir, manifest.id);
 	await fs.mkdirp(pluginDestDir);

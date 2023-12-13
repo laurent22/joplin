@@ -4,13 +4,9 @@ import Setting from '../../../models/Setting';
 const getDefaultPluginsInfo = (): DefaultPluginsInfo => {
 	const defaultPlugins = {
 		'io.github.jackgruber.backup': {
-			version: '1.1.1',
 			settings: {
 				'path': `${Setting.value('profileDir')}`,
 			},
-		},
-		'plugin.calebjohn.rich-markdown': {
-			version: '0.8.3',
 		},
 	};
 	return defaultPlugins;
