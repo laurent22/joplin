@@ -42,6 +42,7 @@
 		"@codemirror/lang-rust",
 		"@codemirror/language",
 		"@codemirror/legacy-modes",
+		"@codemirror/lint",
 		"@codemirror/search",
 		"@codemirror/state",
 		"@codemirror/view",
