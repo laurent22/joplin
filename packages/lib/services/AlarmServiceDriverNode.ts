@@ -1,4 +1,4 @@
-import eventManager from '../eventManager';
+import eventManager, { EventName } from '../eventManager';
 import { Notification } from '../models/Alarm';
 import shim from '../shim';
 import Setting from '../models/Setting';
@@ -173,7 +173,7 @@ export default class AlarmServiceDriverNode {
 
 				this.clearNotification(notification.id);
 
-				eventManager.emit('noteAlarmTrigger', { noteId: notification.noteId });
+				eventManager.emit(EventName.NoteAlarmTrigger, { noteId: notification.noteId });
 			}, interval);
 		}
 

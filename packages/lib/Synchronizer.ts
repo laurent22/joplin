@@ -3,7 +3,7 @@ import LockHandler, { appTypeToLockType, hasActiveLock, LockClientType, LockType
 import Setting, { AppType } from './models/Setting';
 import shim from './shim';
 import MigrationHandler from './services/synchronizer/MigrationHandler';
-import eventManager from './eventManager';
+import eventManager, { EventName } from './eventManager';
 import { _ } from './locale';
 import BaseItem from './models/BaseItem';
 import Folder from './models/Folder';
@@ -399,7 +399,7 @@ export default class Synchronizer {
 		this.progressReport_.startTime = time.unixMs();
 
 		this.dispatch({ type: 'SYNC_STARTED' });
-		eventManager.emit('syncStart');
+		eventManager.emit(EventName.SyncStart);
 
 		this.logSyncOperation('starting', null, null, `Starting synchronisation to target ${syncTargetId}... supportsAccurateTimestamp = ${this.api().supportsAccurateTimestamp}; supportsMultiPut = ${this.api().supportsMultiPut} [${synchronizationId}]`);
 
@@ -452,7 +452,7 @@ export default class Synchronizer {
 			try {
 				let remoteInfo = await fetchSyncInfo(this.api());
 				logger.info('Sync target remote info:', remoteInfo);
-				eventManager.emit('sessionEstablished');
+				eventManager.emit(EventName.SessionEstablished);
 
 				let syncTargetIsNew = false;
 
@@ -1103,7 +1103,7 @@ export default class Synchronizer {
 
 		await this.logSyncSummary(this.progressReport_);
 
-		eventManager.emit('syncComplete', {
+		eventManager.emit(EventName.SyncComplete, {
 			withErrors: Synchronizer.reportHasErrors(this.progressReport_),
 		});
 

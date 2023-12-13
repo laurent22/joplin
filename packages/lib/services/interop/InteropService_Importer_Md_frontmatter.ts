@@ -156,18 +156,23 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 	}
 
 	public async importFile(filePath: string, parentFolderId: string) {
-		const note = await super.importFile(filePath, parentFolderId);
-		const { metadata, tags } = this.parseYamlNote(note.body);
+		try {
+			const note = await super.importFile(filePath, parentFolderId);
+			const { metadata, tags } = this.parseYamlNote(note.body);
 
-		const updatedNote = { ...note, ...metadata };
+			const updatedNote = { ...note, ...metadata };
 
-		const noteItem = await Note.save(updatedNote, { isNew: false, autoTimestamp: false });
+			const noteItem = await Note.save(updatedNote, { isNew: false, autoTimestamp: false });
 
-		const resolvedPath = shim.fsDriver().resolve(filePath);
-		this.importedNotes[resolvedPath] = noteItem;
+			const resolvedPath = shim.fsDriver().resolve(filePath);
+			this.importedNotes[resolvedPath] = noteItem;
 
-		for (const tag of tags) { await Tag.addNoteTagByTitle(noteItem.id, tag); }
+			for (const tag of tags) { await Tag.addNoteTagByTitle(noteItem.id, tag); }
 
-		return noteItem;
+			return noteItem;
+		} catch (error) {
+			error.message = `On ${filePath}: ${error.message}`;
+			throw error;
+		}
 	}
 }

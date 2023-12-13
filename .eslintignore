@@ -547,7 +547,6 @@ packages/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation.js
 packages/editor/CodeMirror/CodeMirror5Emulation/Decorator.js
 packages/editor/CodeMirror/CodeMirrorControl.test.js
 packages/editor/CodeMirror/CodeMirrorControl.js
-packages/editor/CodeMirror/PluginLoader.js
 packages/editor/CodeMirror/configFromSettings.js
 packages/editor/CodeMirror/createEditor.test.js
 packages/editor/CodeMirror/createEditor.js
@@ -567,6 +566,8 @@ packages/editor/CodeMirror/markdown/markdownMathParser.js
 packages/editor/CodeMirror/markdown/markdownReformatter.test.js
 packages/editor/CodeMirror/markdown/markdownReformatter.js
 packages/editor/CodeMirror/markdown/syntaxHighlightingLanguages.js
+packages/editor/CodeMirror/pluginApi/PluginLoader.js
+packages/editor/CodeMirror/pluginApi/codeMirrorRequire.js
 packages/editor/CodeMirror/testUtil/createEditorSettings.js
 packages/editor/CodeMirror/testUtil/createTestEditor.js
 packages/editor/CodeMirror/testUtil/forceFullParse.js
@@ -753,6 +754,8 @@ packages/lib/services/database/addMigrationFile.js
 packages/lib/services/database/migrations/42.js
 packages/lib/services/database/migrations/43.js
 packages/lib/services/database/migrations/44.js
+packages/lib/services/database/migrations/45.js
+packages/lib/services/database/sqlStringToLines.js
 packages/lib/services/database/types.js
 packages/lib/services/debug/populateDatabase.js
 packages/lib/services/e2ee/EncryptionService.test.js
@@ -799,6 +802,13 @@ packages/lib/services/keychain/KeychainServiceDriverBase.js
 packages/lib/services/noteList/defaultLeftToRightListRenderer.js
 packages/lib/services/noteList/defaultListRenderer.js
 packages/lib/services/noteList/renderers.js
+packages/lib/services/ocr/OcrDriverBase.js
+packages/lib/services/ocr/OcrService.test.js
+packages/lib/services/ocr/OcrService.js
+packages/lib/services/ocr/drivers/OcrDriverTesseract.js
+packages/lib/services/ocr/utils/filterOcrText.test.js
+packages/lib/services/ocr/utils/filterOcrText.js
+packages/lib/services/ocr/utils/types.js
 packages/lib/services/plugins/BasePlatformImplementation.js
 packages/lib/services/plugins/BasePluginRunner.js
 packages/lib/services/plugins/MenuController.js
@@ -876,6 +886,7 @@ packages/lib/services/rest/utils/paginatedResults.js
 packages/lib/services/rest/utils/readonlyProperties.js
 packages/lib/services/rest/utils/requestFields.js
 packages/lib/services/rest/utils/requestPaginationOptions.js
+packages/lib/services/searchengine/SearchEngine.resources.test.js
 packages/lib/services/searchengine/SearchEngine.js
 packages/lib/services/searchengine/SearchEngineUtils.test.js
 packages/lib/services/searchengine/SearchEngineUtils.js
@@ -923,6 +934,7 @@ packages/lib/services/synchronizer/utils/handleSyncStartupOperation.js
 packages/lib/services/synchronizer/utils/resourceRemotePath.js
 packages/lib/services/synchronizer/utils/syncDeleteStep.js
 packages/lib/services/synchronizer/utils/types.js
+packages/lib/shim-init-node.js
 packages/lib/shim.js
 packages/lib/testing/syncTargetUtils.js
 packages/lib/testing/test-utils-synchronizer.js

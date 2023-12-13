@@ -1,7 +1,7 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
-import eventManager from '@joplin/lib/eventManager';
+import eventManager, { EventName } from '@joplin/lib/eventManager';
 
 export const declaration: CommandDeclaration = {
 	name: 'toggleNoteType',
@@ -22,7 +22,7 @@ export const runtime = (): CommandRuntime => {
 					todo_due: newNote.todo_due,
 					todo_completed: newNote.todo_completed,
 				};
-				eventManager.emit('noteTypeToggle', { noteId: note.id, note: eventNote });
+				eventManager.emit(EventName.NoteTypeToggle, { noteId: note.id, note: eventNote });
 			}
 		},
 		enabledCondition: '!noteIsReadOnly',

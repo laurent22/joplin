@@ -52,20 +52,18 @@ export default async (action: ConflictAction, ItemClass: any, remoteExists: bool
 			await Note.createConflictNote(local, ItemChange.SOURCE_SYNC);
 		}
 	} else if (action === 'resourceConflict') {
-		// ------------------------------------------------------------------------------
-		// Unlike notes we always handle the conflict for resources
-		// ------------------------------------------------------------------------------
+		if (!remoteContent || Resource.mustHandleConflict(local, remoteContent)) {
+			await Resource.createConflictResourceNote(local);
 
-		await Resource.createConflictResourceNote(local);
+			if (remoteExists) {
+				// The local content we have is no longer valid and should be re-downloaded
+				await Resource.setLocalState(local.id, {
+					fetch_status: Resource.FETCH_STATUS_IDLE,
+				});
+			}
 
-		if (remoteExists) {
-			// The local content we have is no longer valid and should be re-downloaded
-			await Resource.setLocalState(local.id, {
-				fetch_status: Resource.FETCH_STATUS_IDLE,
-			});
+			dispatch({ type: 'SYNC_CREATED_OR_UPDATED_RESOURCE', id: local.id });
 		}
-
-		dispatch({ type: 'SYNC_CREATED_OR_UPDATED_RESOURCE', id: local.id });
 	}
 
 	if (['noteConflict', 'resourceConflict'].includes(action)) {

@@ -4,7 +4,7 @@ import loadStorageDriver from '../models/items/storage/loadStorageDriver';
 import parseStorageConnectionString from '../models/items/storage/parseStorageConnectionString';
 import { Context } from '../models/items/storage/StorageDriverBase';
 import { StorageDriverConfig, StorageDriverType } from './types';
-import uuidgen from './uuidgen';
+import { uuidgen } from '@joplin/lib/uuid';
 
 export default async function(connection: string | StorageDriverConfig, db: DbConnection, models: Models): Promise<string> {
 	const storageConfig = typeof connection === 'string' ? parseStorageConnectionString(connection) : connection;

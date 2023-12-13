@@ -1,0 +1,15 @@
+{
+	"manifest_version": 1,
+	"id": "com.example.codemirror6-line-numbers",
+	"app_min_version": "2.13",
+	"version": "1.0.0",
+	"name": "CodeMirror6 line numbers",
+	"description": "Displays line numbers in the CodeMirror 6 editor",
+	"author": "",
+	"homepage_url": "",
+	"repository_url": "",
+	"keywords": [],
+	"categories": [],
+	"screenshots": [],
+	"icons": {}
+}

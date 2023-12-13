@@ -7,8 +7,10 @@ import ItemChangeUtils from '../ItemChangeUtils';
 import shim from '../../shim';
 import filterParser, { Term } from './filterParser';
 import queryBuilder from './queryBuilder';
-import { ItemChangeEntity, NoteEntity } from '../database/types';
+import { ItemChangeEntity, NoteEntity, SqlQuery } from '../database/types';
+import Resource from '../../models/Resource';
 import JoplinDatabase from '../../JoplinDatabase';
+import NoteResource from '../../models/NoteResource';
 import isItemId from '../../models/utils/isItemId';
 import BaseItem from '../../models/BaseItem';
 import { isCallbackUrl, parseCallbackUrl } from '../../callbackUrlUtils';
@@ -23,13 +25,16 @@ enum SearchType {
 }
 
 interface SearchOptions {
-	searchType: SearchType;
+	searchType?: SearchType;
 
 	// When this is on, the search engine automatically appends "*" to each word
 	// of the query. So "hello world" is turned into "hello* world*". This
 	// allows returning results quickly, in particular on mobile, and it seems
 	// to be what users generally expect.
 	appendWildCards?: boolean;
+
+	// Include resources that are not associated with any notes.
+	includeOrphanedResources?: boolean;
 }
 
 export interface ProcessResultsRow {
@@ -37,6 +42,7 @@ export interface ProcessResultsRow {
 	parent_id: string;
 	title: string;
 	offsets: string;
+	item_id: string;
 	user_updated_time: number;
 	user_created_time: number;
 	matchinfo: Buffer;
@@ -111,8 +117,8 @@ export default class SearchEngine {
 		return null;
 	}
 
-	private async rebuildIndex_() {
-		const notes = await this.db().selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
+	private async doInitialNoteIndexing_() {
+		const notes = await this.db().selectAll<NoteEntity>('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
 		const noteIds = notes.map(n => n.id);
 
 		const lastChangeId = await ItemChange.lastChangeId();
@@ -160,6 +166,7 @@ export default class SearchEngine {
 	public async rebuildIndex() {
 		Setting.setValue('searchEngine.lastProcessedChangeId', 0);
 		Setting.setValue('searchEngine.initialIndexingDone', false);
+		Setting.setValue('searchEngine.lastProcessedResource', '');
 		return this.syncTables();
 	}
 
@@ -173,10 +180,8 @@ export default class SearchEngine {
 		await ItemChange.waitForAllSaved();
 
 		if (!Setting.value('searchEngine.initialIndexingDone')) {
-			await this.rebuildIndex_();
+			await this.doInitialNoteIndexing_();
 			Setting.setValue('searchEngine.initialIndexingDone', true);
-			this.isIndexing_ = false;
-			return;
 		}
 
 		const startTime = Date.now();
@@ -246,6 +251,66 @@ export default class SearchEngine {
 
 		await ItemChangeUtils.deleteProcessedChanges();
 
+		interface LastProcessedResource {
+			id: string;
+			updated_time: number;
+		}
+
+		const lastProcessedResource: LastProcessedResource = !Setting.value('searchEngine.lastProcessedResource') ? { updated_time: 0, id: '' } : JSON.parse(Setting.value('searchEngine.lastProcessedResource'));
+
+		this.logger().info('Updating items_normalized from', lastProcessedResource);
+
+		try {
+			while (true) {
+				const resources = await Resource.allForNormalization(
+					lastProcessedResource.updated_time,
+					lastProcessedResource.id,
+					100,
+					{
+						fields: ['id', 'title', 'ocr_text', 'updated_time'],
+					},
+				);
+
+				if (!resources.length) break;
+
+				const queries: SqlQuery[] = [];
+
+				for (const resource of resources) {
+					queries.push({
+						sql: 'DELETE FROM items_normalized WHERE item_id = ? AND item_type = ?',
+						params: [
+							resource.id,
+							ModelType.Resource,
+						],
+					});
+
+					queries.push({
+						sql: `
+							INSERT INTO items_normalized(item_id, item_type, title, body, user_updated_time)
+							VALUES (?, ?, ?, ?, ?)`,
+						params: [
+							resource.id,
+							ModelType.Resource,
+							this.normalizeText_(resource.title),
+							this.normalizeText_(resource.ocr_text),
+							resource.updated_time,
+						],
+					});
+
+					report.inserted++;
+
+					lastProcessedResource.id = resource.id;
+					lastProcessedResource.updated_time = resource.updated_time;
+				}
+
+				await this.db().transactionExecBatch(queries);
+				Setting.setValue('searchEngine.lastProcessedResource', JSON.stringify(lastProcessedResource));
+				await Setting.saveAll();
+			}
+		} catch (error) {
+			this.logger().error('SearchEngine: Error while processing resources:', error);
+		}
+
 		this.logger().info(sprintf('SearchEngine: Updated FTS table in %dms. Inserted: %d. Deleted: %d', Date.now() - startTime, report.inserted, report.deleted));
 
 		this.isIndexing_ = false;
@@ -278,38 +343,6 @@ export default class SearchEngine {
 
 		return output;
 	}
-
-	// protected calculateWeight_(offsets: any[], termCount: number) {
-	// 	// Offset doc: https://www.sqlite.org/fts3.html#offsets
-
-	// 	// - If there's only one term in the query string, the content with the most matches goes on top
-	// 	// - If there are multiple terms, the result with the most occurences that are closest to each others go on top.
-	// 	//   eg. if query is "abcd efgh", "abcd efgh" will go before "abcd XX efgh".
-
-	// 	const occurenceCount = Math.floor(offsets.length / 4);
-
-	// 	if (termCount === 1) return occurenceCount;
-
-	// 	let spread = 0;
-	// 	let previousDist = null;
-	// 	for (let i = 0; i < occurenceCount; i++) {
-	// 		const dist = offsets[i * 4 + 2];
-
-	// 		if (previousDist !== null) {
-	// 			const delta = dist - previousDist;
-	// 			spread += delta;
-	// 		}
-
-	// 		previousDist = dist;
-	// 	}
-
-	// 	// Divide the number of occurences by the spread so even if a note has many times the searched terms
-	// 	// but these terms are very spread appart, they'll be given a lower weight than a note that has the
-	// 	// terms once or twice but just next to each others.
-	// 	return occurenceCount / spread;
-	// }
-
-
 
 	private calculateWeightBM25_(rows: ProcessResultsRow[]) {
 		// https://www.sqlite.org/fts3.html#matchinfo
@@ -438,12 +471,19 @@ export default class SearchEngine {
 		}
 
 		rows.sort((a, b) => {
+			const aIsNote = a.item_type === ModelType.Note;
+			const bIsNote = b.item_type === ModelType.Note;
+
 			if (a.fields.includes('title') && !b.fields.includes('title')) return -1;
 			if (!a.fields.includes('title') && b.fields.includes('title')) return +1;
 			if (a.weight < b.weight) return +1;
 			if (a.weight > b.weight) return -1;
-			if (a.is_todo && a.todo_completed) return +1;
-			if (b.is_todo && b.todo_completed) return -1;
+
+			if (aIsNote && bIsNote) {
+				if (a.is_todo && a.todo_completed) return +1;
+				if (b.is_todo && b.todo_completed) return -1;
+			}
+
 			if (a.user_updated_time < b.user_updated_time) return +1;
 			if (a.user_updated_time > b.user_updated_time) return -1;
 			return 0;
@@ -637,6 +677,7 @@ export default class SearchEngine {
 				return [
 					{
 						id: item.id,
+						item_id: item.id,
 						parent_id: item.parent_id || '',
 						matchinfo: Buffer.from(''),
 						offsets: '',
@@ -658,6 +699,7 @@ export default class SearchEngine {
 		options = {
 			searchType: SearchEngine.SEARCH_TYPE_AUTO,
 			appendWildCards: false,
+			includeOrphanedResources: false,
 			...options,
 		};
 
@@ -668,7 +710,7 @@ export default class SearchEngine {
 
 		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
 			searchString = this.normalizeText_(searchString);
-			rows = await this.basicSearch(searchString);
+			rows = (await this.basicSearch(searchString)) as any[];
 			this.processResults_(rows, parsedQuery, true);
 		} else {
 			// SEARCH_TYPE_FTS
@@ -694,8 +736,48 @@ export default class SearchEngine {
 			const useFts = searchType === SearchEngine.SEARCH_TYPE_FTS;
 			try {
 				const { query, params } = queryBuilder(parsedQuery.allTerms, useFts);
-				rows = (await this.db().selectAll(query, params)) as ProcessResultsRow[];
-				this.processResults_(rows, parsedQuery, !useFts);
+
+				rows = await this.db().selectAll<ProcessResultsRow>(query, params);
+				const queryHasFilters = !!parsedQuery.allTerms.find(t => t.name !== 'text');
+
+				rows = rows.map(r => {
+					return {
+						...r,
+						item_type: ModelType.Note,
+					};
+				});
+
+				if (!queryHasFilters) {
+					const toSearch = parsedQuery.allTerms.map(t => t.value).join(' ');
+
+					let itemRows = await this.db().selectAll<ProcessResultsRow>(`
+						SELECT
+							id,
+							title,
+							user_updated_time,
+							offsets(items_fts) AS offsets,
+							matchinfo(items_fts, 'pcnalx') AS matchinfo,
+							item_id,
+							item_type
+						FROM items_fts
+						WHERE title MATCH ? OR body MATCH ?
+					`, [toSearch, toSearch]);
+
+					const resourcesToNotes = await NoteResource.associatedResourceNotes(itemRows.map(r => r.item_id), { fields: ['note_id', 'parent_id'] });
+
+					for (const itemRow of itemRows) {
+						const notes = resourcesToNotes[itemRow.item_id];
+						const note = notes && notes.length ? notes[0] : null;
+						itemRow.id = note ? note.note_id : null;
+						itemRow.parent_id = note ? note.parent_id : null;
+					}
+
+					if (!options.includeOrphanedResources) itemRows = itemRows.filter(r => !!r.id);
+
+					rows = rows.concat(itemRows);
+				}
+
+				this.processResults_(rows as ProcessResultsRow[], parsedQuery, !useFts);
 			} catch (error) {
 				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);
 				rows = [];

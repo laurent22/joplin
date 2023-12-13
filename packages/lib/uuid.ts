@@ -9,6 +9,7 @@ import { nanoid as nanoidSecure } from 'nanoid';
 // > indefinitely
 const nanoid = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 22);
 
+
 export default {
 	create: function(): string {
 		return uuidv4().replace(/-/g, '');
@@ -22,4 +23,21 @@ export default {
 	createSecureRandom: (size = 32) => {
 		return nanoidSecure(size);
 	},
+};
+
+type FuncUiidGen = (length?: number)=> string;
+
+const cachedUuidgen: Record<number, FuncUiidGen> = {};
+const createUuidgenCustomAlphabet = (length: number) => customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', length);
+
+const getCachedUuidgen = (length: number) => {
+	if (cachedUuidgen[length]) return cachedUuidgen[length];
+
+	cachedUuidgen[length] = createUuidgenCustomAlphabet(length);
+	return cachedUuidgen[length];
+};
+
+export const uuidgen = (length = 22) => {
+	const cachedUuidgen = getCachedUuidgen(length);
+	return cachedUuidgen();
 };
