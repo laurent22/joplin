@@ -37,7 +37,7 @@
 		"@codemirror/lang-rust": "6.0.1",
 		"@codemirror/language": "6.9.0",
 		"@codemirror/legacy-modes": "6.3.3",
-		"@codemirror/lint": "6.4.1",
+		"@codemirror/lint": "6.4.2",
 		"@codemirror/search": "6.5.2",
 		"@codemirror/state": "6.2.1",
 		"@codemirror/view": "6.18.0",
