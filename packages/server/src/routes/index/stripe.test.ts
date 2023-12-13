@@ -4,7 +4,7 @@ import { AccountType } from '../../models/UserModel';
 import { betaUserTrialPeriodDays, isBetaUser, stripeConfig } from '../../utils/stripe';
 import { beforeAllDb, afterAllTests, beforeEachDb, models, koaAppContext, expectNotThrow } from '../../utils/testing/testUtils';
 import { AppContext } from '../../utils/types';
-import uuidgen from '../../utils/uuidgen';
+import { uuidgen } from '@joplin/lib/uuid';
 import { postHandlers } from './stripe';
 
 interface StripeOptions {
