@@ -102,7 +102,9 @@ describe('defaultPluginsUtils', () => {
 		});`;
 
 		const plugin = await service.loadPluginFromJsBundle('', pluginScript);
+		plugin.builtIn = true;
 		await service.runPlugin(plugin);
+		const runningPlugins = { 'io.github.jackgruber.backup': plugin };
 
 		const defaultPluginsInfo: DefaultPluginsInfo = {
 			'io.github.jackgruber.backup': {
@@ -119,15 +121,16 @@ describe('defaultPluginsUtils', () => {
 		const pluginSettings = { 'io.github.jackgruber.backup': defaultPluginSetting() };
 
 		await afterDefaultPluginsLoaded(
+			runningPlugins,
 			defaultPluginsInfo,
 			pluginSettings,
 		);
 		expect(Setting.value('plugin-io.github.jackgruber.backup.path')).toBe('initial-path');
-		await service.destroy();
 
 		// with no pre-installed default plugin
 		Setting.setValue('installedDefaultPlugins', ['']);
 		await afterDefaultPluginsLoaded(
+			runningPlugins,
 			defaultPluginsInfo,
 			pluginSettings,
 		);
@@ -164,6 +167,7 @@ describe('defaultPluginsUtils', () => {
 		});`;
 
 		const plugin = await service.loadPluginFromJsBundle('', pluginScript);
+		plugin.builtIn = true;
 		await service.runPlugin(plugin);
 
 		const defaultPluginsInfo: DefaultPluginsInfo = {
@@ -182,8 +186,9 @@ describe('defaultPluginsUtils', () => {
 
 		Setting.setValue('installedDefaultPlugins', ['']);
 		const pluginSettings = { 'io.github.jackgruber.backup': defaultPluginSetting() };
+		const runningPlugins = { 'io.github.jackgruber.backup': plugin };
 
-		expect(checkThrow(() => afterDefaultPluginsLoaded(defaultPluginsInfo, pluginSettings))).toBe(false);
+		expect(checkThrow(() => afterDefaultPluginsLoaded(runningPlugins, defaultPluginsInfo, pluginSettings))).toBe(false);
 		expect(Setting.value('plugin-io.github.jackgruber.backup.path')).toBe(`${Setting.value('profileDir')}`);
 		await service.destroy();
 	});

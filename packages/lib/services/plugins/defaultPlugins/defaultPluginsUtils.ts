@@ -1,7 +1,7 @@
 import produce from 'immer';
 import Setting from '../../../models/Setting';
 import shim from '../../../shim';
-import PluginService, { defaultPluginSetting, DefaultPluginsInfo, PluginSettings } from '../PluginService';
+import PluginService, { defaultPluginSetting, DefaultPluginsInfo, Plugins, PluginSettings } from '../PluginService';
 import Logger from '@joplin/utils/Logger';
 import { join } from 'path';
 
@@ -67,14 +67,36 @@ export const loadAndRunDefaultPlugins = async (
 
 // Applies setting overrides and marks default plugins as installed.
 // Should be called after plugins have finished loading.
-export const afterDefaultPluginsLoaded = async (defaultPluginsInfo: DefaultPluginsInfo, pluginSettings: PluginSettings) => {
+export const afterDefaultPluginsLoaded = async (
+	allLoadedPlugins: Plugins,
+	defaultPluginsInfo: DefaultPluginsInfo,
+	pluginSettings: PluginSettings,
+) => {
 	const installedDefaultPlugins: string[] = Setting.value('installedDefaultPlugins');
 	const allDefaultPlugins = Object.keys(defaultPluginsInfo);
+
+	const isFirstLoadOfDefaultPlugin = (pluginId: string) => {
+		// Not installed?
+		if (!pluginSettings[pluginId]) {
+			return false;
+		}
+
+		// Not the first load
+		if (installedDefaultPlugins.includes(pluginId)) {
+			return false;
+		}
+
+		// Return true only if the plugin is built-in (and not a user-installed
+		// copy).
+		//
+		// This avoids overriding existing user-set settings.
+		return allLoadedPlugins[pluginId]?.builtIn ?? false;
+	};
 
 	for (const pluginId of allDefaultPlugins) {
 		// if pluginId is present in pluginSettings and not in installedDefaultPlugins array,
 		// then it's a new default plugin and needs overrides applied.
-		if (pluginSettings[pluginId] && !installedDefaultPlugins.includes(pluginId)) {
+		if (isFirstLoadOfDefaultPlugin(pluginId)) {
 			// Postprocess: Apply setting overrides
 			for (const settingName of Object.keys(defaultPluginsInfo[pluginId].settings ?? {})) {
 				if (!installedDefaultPlugins.includes(pluginId) && Setting.keyExists(`plugin-${pluginId}.${settingName}`)) {

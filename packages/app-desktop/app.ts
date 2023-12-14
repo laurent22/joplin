@@ -354,7 +354,7 @@ class Application extends BaseApplication {
 				// tests to wait for plugins to load.
 				ipcRenderer.send('startup-plugins-loaded');
 
-				void afterDefaultPluginsLoaded(getDefaultPluginsInfo(), pluginSettings);
+				void afterDefaultPluginsLoaded(service.plugins, getDefaultPluginsInfo(), pluginSettings);
 			}
 		}, 500);
 	}
