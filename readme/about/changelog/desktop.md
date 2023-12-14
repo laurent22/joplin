@@ -1,5 +1,9 @@
 # Joplin Desktop Changelog
 
+## [v2.13.9](https://github.com/laurent22/joplin/releases/tag/v2.13.9) - 2023-12-09T17:18:58Z
+
+- Fixed: Fix KaTeX rendering ([#9456](https://github.com/laurent22/joplin/issues/9456)) ([#9455](https://github.com/laurent22/joplin/issues/9455) by Henry Heino)
+
 ## [v2.13.8](https://github.com/laurent22/joplin/releases/tag/v2.13.8) - 2023-12-03T12:07:08Z
 
 - Fixed: Fixed images not being visible on encrypted published notes ([b459ba7](https://github.com/laurent22/joplin/commit/b459ba7))
