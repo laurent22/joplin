@@ -338,6 +338,10 @@ Deletes the folder with ID :id
 | master_key_id | text  |       |
 | user_data | text  |       |
 | blob_updated_time | int   |       |
+| ocr_text | text  |       |
+| ocr_details | text  |       |
+| ocr_status | int   |       |
+| ocr_error | text  |       |
 
 ### GET /resources
 
