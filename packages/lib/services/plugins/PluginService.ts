@@ -382,6 +382,10 @@ export default class PluginService extends BaseService {
 				// such folders but to keep things sane we disallow it.
 				if (this.plugins_[plugin.id]) throw new Error(`There is already a plugin with this ID: ${plugin.id}`);
 
+				// We mark the plugin as built-in even if not enabled (being built-in affects
+				// update UI).
+				plugin.builtIn = options.builtIn;
+
 				this.setPluginAt(plugin.id, plugin);
 
 				if (!this.pluginEnabled(settings, plugin.id)) {
@@ -390,7 +394,6 @@ export default class PluginService extends BaseService {
 				}
 
 				plugin.devMode = options.devMode;
-				plugin.builtIn = options.builtIn;
 
 				await this.runPlugin(plugin);
 			} catch (error) {
