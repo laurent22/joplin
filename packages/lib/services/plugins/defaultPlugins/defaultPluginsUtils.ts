@@ -61,7 +61,7 @@ export const loadAndRunDefaultPlugins = async (
 		defaultPluginsDir, defaultPluginsInfo, originalPluginSettings,
 	) ?? { pluginPaths: [], pluginSettings: originalPluginSettings };
 
-	await service.loadAndRunPlugins(pluginPaths, pluginSettings);
+	await service.loadAndRunPlugins(pluginPaths, pluginSettings, { builtIn: true, devMode: false });
 	return pluginSettings;
 };
 

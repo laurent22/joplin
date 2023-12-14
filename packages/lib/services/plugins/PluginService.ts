@@ -63,6 +63,11 @@ export interface PluginSettings {
 	[pluginId: string]: PluginSetting;
 }
 
+interface PluginLoadOptions {
+	devMode: boolean;
+	builtIn: boolean;
+}
+
 function makePluginId(source: string): string {
 	// https://www.npmjs.com/package/slug#options
 	return uslug(source).substr(0, 32);
@@ -340,7 +345,14 @@ export default class PluginService extends BaseService {
 		return this.runner_.callStatsSummary(pluginId, duration);
 	}
 
-	public async loadAndRunPlugins(pluginDirOrPaths: string | string[], settings: PluginSettings, devMode = false) {
+	public async loadAndRunPlugins(
+		pluginDirOrPaths: string | string[], settings: PluginSettings, options?: PluginLoadOptions,
+	) {
+		options ??= {
+			builtIn: false,
+			devMode: false,
+		};
+
 		let pluginPaths = [];
 
 		if (Array.isArray(pluginDirOrPaths)) {
@@ -377,7 +389,8 @@ export default class PluginService extends BaseService {
 					continue;
 				}
 
-				plugin.devMode = devMode;
+				plugin.devMode = options.devMode;
+				plugin.builtIn = options.builtIn;
 
 				await this.runPlugin(plugin);
 			} catch (error) {

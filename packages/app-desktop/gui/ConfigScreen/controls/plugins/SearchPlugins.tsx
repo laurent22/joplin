@@ -110,7 +110,7 @@ export default function(props: Props) {
 				let hasBuiltInVersion = false;
 				if (installState === InstallState.Installed) {
 					const existingItem = PluginService.instance().pluginById(manifest.id);
-					hasBuiltInVersion = existingItem.manifest._built_in ?? false;
+					hasBuiltInVersion = existingItem.builtIn ?? false;
 
 					if (hasBuiltInVersion) {
 						updateState = UpdateState.CanUpdate;

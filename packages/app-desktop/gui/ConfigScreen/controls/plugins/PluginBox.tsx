@@ -44,6 +44,7 @@ function manifestToItem(manifest: PluginManifest): PluginItem {
 		enabled: true,
 		deleted: false,
 		devMode: false,
+		builtIn: false,
 		hasBeenUpdated: false,
 	};
 }
@@ -53,6 +54,7 @@ export interface PluginItem {
 	enabled: boolean;
 	deleted: boolean;
 	devMode: boolean;
+	builtIn: boolean;
 	hasBeenUpdated: boolean;
 }
 
@@ -186,7 +188,7 @@ export default function(props: Props) {
 
 	function renderDeleteButton() {
 		// Built-in plugins can only be disabled
-		if (item.manifest._built_in) return null;
+		if (item.builtIn) return null;
 		if (!props.onDelete) return null;
 
 		return <Button level={ButtonLevel.Secondary} onClick={() => props.onDelete({ item })} title={_('Delete')}/>;
@@ -241,7 +243,7 @@ export default function(props: Props) {
 	}
 
 	const renderDefaultPluginLabel = () => {
-		if (item.manifest._built_in) {
+		if (item.builtIn) {
 			return (
 				<BoxedLabel>{_('Built in')}</BoxedLabel>
 			);
