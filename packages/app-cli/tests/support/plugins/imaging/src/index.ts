@@ -1,6 +1,5 @@
 import joplin from 'api';
 import { ToolbarButtonLocation } from 'api/types';
-import { writeFile } from 'fs-extra';
 
 joplin.plugins.register({
 	onStart: async function() {

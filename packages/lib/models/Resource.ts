@@ -5,7 +5,7 @@ import NoteResource from './NoteResource';
 import Setting from './Setting';
 import markdownUtils from '../markdownUtils';
 import { _ } from '../locale';
-import { ResourceEntity, ResourceLocalStateEntity } from '../services/database/types';
+import { ResourceEntity, ResourceLocalStateEntity, ResourceOcrStatus, SqlQuery } from '../services/database/types';
 import ResourceLocalState from './ResourceLocalState';
 const pathUtils = require('../path-utils');
 const { mime } = require('../mime-utils.js');
@@ -15,9 +15,13 @@ import JoplinError from '../JoplinError';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
 import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 import ShareService from '../services/share/ShareService';
+import { LoadOptions } from './utils/types';
 import { SaveOptions } from './utils/types';
 import { MarkupLanguage } from '@joplin/renderer';
 import { htmlentities } from '@joplin/utils/html';
+import { RecognizeResultLine } from '../services/ocr/utils/types';
+import eventManager, { EventName } from '../eventManager';
+import { unique } from '../array';
 
 export default class Resource extends BaseItem {
 
@@ -87,8 +91,9 @@ export default class Resource extends BaseItem {
 		return await this.db().exec('UPDATE resource_local_states SET fetch_status = ? WHERE fetch_status = ?', [Resource.FETCH_STATUS_IDLE, Resource.FETCH_STATUS_STARTED]);
 	}
 
-	public static resetErrorStatus(resourceId: string) {
-		return this.db().exec('UPDATE resource_local_states SET fetch_status = ?, fetch_error = "" WHERE resource_id = ?', [Resource.FETCH_STATUS_IDLE, resourceId]);
+	public static async resetFetchErrorStatus(resourceId: string) {
+		await this.db().exec('UPDATE resource_local_states SET fetch_status = ?, fetch_error = "" WHERE resource_id = ?', [Resource.FETCH_STATUS_IDLE, resourceId]);
+		await this.resetOcrStatus(resourceId);
 	}
 
 	public static fsDriver() {
@@ -284,7 +289,7 @@ export default class Resource extends BaseItem {
 		return url.substr(2);
 	}
 
-	public static async localState(resourceOrId: any) {
+	public static async localState(resourceOrId: any): Promise<ResourceLocalStateEntity> {
 		return ResourceLocalState.byResourceId(typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId);
 	}
 
@@ -323,6 +328,7 @@ export default class Resource extends BaseItem {
 			await super.batchDelete([id], options);
 			await this.fsDriver().remove(path);
 			await NoteResource.deleteByResource(id); // Clean up note/resource relationships
+			await this.db().exec('DELETE FROM items_normalized WHERE item_id = ?', [id]);
 		}
 
 		await ResourceLocalState.batchDelete(ids);
@@ -454,6 +460,21 @@ export default class Resource extends BaseItem {
 		return folder;
 	}
 
+	public static mustHandleConflict(local: ResourceEntity, remote: ResourceEntity) {
+		// That shouldn't happen so throw an exception
+		if (local.id !== remote.id) throw new Error('Cannot handle conflict for two different resources');
+
+		// If the content has changed, we need to handle the conflict
+		if (local.blob_updated_time !== remote.blob_updated_time) return true;
+
+		// If nothing has been changed, or if only the metadata has been
+		// changed, we just keep the remote version. Most of the resource
+		// metadata is not user-editable so there won't be any data loss. Such a
+		// conflict might happen for example if a resource is OCRed by two
+		// different clients.
+		return false;
+	}
+
 	public static async createConflictResourceNote(resource: ResourceEntity) {
 		const Note = this.getClass('Note');
 		const conflictResource = await Resource.duplicateResource(resource.id);
@@ -465,10 +486,90 @@ export default class Resource extends BaseItem {
 		}, { changeSource: ItemChange.SOURCE_SYNC });
 	}
 
+	private static baseNeedOcrQuery(selectSql: string, supportedMimeTypes: string[]): SqlQuery {
+		return {
+			sql: `
+				SELECT ${selectSql}
+				FROM resources
+				WHERE
+					ocr_status = ? AND
+					encryption_applied = 0 AND
+					mime IN ("${supportedMimeTypes.join('","')}")
+			`,
+			params: [
+				ResourceOcrStatus.Todo,
+			],
+		};
+	}
+
+	public static async needOcrCount(supportedMimeTypes: string[]): Promise<number> {
+		const query = this.baseNeedOcrQuery('count(*) as total', supportedMimeTypes);
+		const r = await this.db().selectOne(query.sql, query.params);
+		return r ? r['total'] : 0;
+	}
+
+	public static async needOcr(supportedMimeTypes: string[], skippedResourceIds: string[], limit: number, options: LoadOptions): Promise<ResourceEntity[]> {
+		const query = this.baseNeedOcrQuery(this.selectFields(options), supportedMimeTypes);
+		const skippedResourcesSql = skippedResourceIds.length ? `AND resources.id NOT IN  ("${skippedResourceIds.join('","')}")` : '';
+
+		return await this.db().selectAll(`
+			${query.sql}
+			${skippedResourcesSql}			
+			ORDER BY updated_time DESC
+			LIMIT ${limit}
+		`, query.params);
+	}
+
+	private static async resetOcrStatus(resourceId: string) {
+		await Resource.save({
+			id: resourceId,
+			ocr_error: '',
+			ocr_text: '',
+			ocr_status: ResourceOcrStatus.Todo,
+		});
+	}
+
+	public static serializeOcrDetails(details: RecognizeResultLine[]) {
+		if (!details || !details.length) return '';
+		return JSON.stringify(details);
+	}
+
+	public static unserializeOcrDetails(s: string): RecognizeResultLine[] | null {
+		if (!s) return null;
+		try {
+			const r = JSON.parse(s);
+			if (!r) return null;
+			if (!Array.isArray(r)) throw new Error('OCR details are not valid (not an array');
+			return r;
+		} catch (error) {
+			error.message = `Could not unserialized OCR data: ${error.message}`;
+			throw error;
+		}
+	}
+
+	public static async resourceOcrTextsByIds(ids: string[]): Promise<ResourceEntity[]> {
+		if (!ids.length) return [];
+		ids = unique(ids);
+		return this.modelSelectAll(`SELECT id, ocr_text FROM resources WHERE id IN ("${ids.join('","')}")`);
+	}
+
+	public static allForNormalization(updatedTime: number, id: string, limit = 100, options: LoadOptions = null) {
+		return this.modelSelectAll<ResourceEntity>(`
+			SELECT ${this.selectFields(options)} FROM resources
+			WHERE (updated_time, id) > (?, ?)
+			AND ocr_text != ""
+			AND ocr_status = ?
+			ORDER BY updated_time ASC, id ASC
+			LIMIT ?
+		`, [updatedTime, id, ResourceOcrStatus.Done, limit]);
+	}
+
 	public static async save(o: ResourceEntity, options: SaveOptions = null): Promise<ResourceEntity> {
 		const resource = { ...o };
 
-		if (this.isNew(o, options)) {
+		const isNew = this.isNew(o, options);
+
+		if (isNew) {
 			const now = Date.now();
 			options = { ...options, autoTimestamp: false };
 			if (!resource.created_time) resource.created_time = now;
@@ -476,7 +577,9 @@ export default class Resource extends BaseItem {
 			if (!resource.blob_updated_time) resource.blob_updated_time = now;
 		}
 
-		return await super.save(resource, options);
+		const output = await super.save(resource, options);
+		if (isNew) eventManager.emit(EventName.ResourceCreate);
+		return output;
 	}
 
 }

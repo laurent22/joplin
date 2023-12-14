@@ -39,7 +39,7 @@ const SyncTargetAmazonS3 = require('./SyncTargetAmazonS3.js');
 import EncryptionService from './services/e2ee/EncryptionService';
 import ResourceFetcher from './services/ResourceFetcher';
 import SearchEngineUtils from './services/searchengine/SearchEngineUtils';
-import SearchEngine from './services/searchengine/SearchEngine';
+import SearchEngine, { ProcessResultsRow } from './services/searchengine/SearchEngine';
 import RevisionService from './services/RevisionService';
 import ResourceService from './services/ResourceService';
 import DecryptionWorker from './services/DecryptionWorker';
@@ -60,6 +60,7 @@ import { ProfileConfig } from './services/profileConfig/types';
 import initProfile from './services/profileConfig/initProfile';
 import { parseShareCache } from './services/share/reducer';
 import RotatingLogs from './RotatingLogs';
+import { NoteEntity } from './services/database/types';
 import { join } from 'path';
 import processStartFlags, { MatchedStartFlags } from './utils/processStartFlags';
 
@@ -227,8 +228,9 @@ export default class BaseApplication {
 			parentId: parentId,
 		});
 
-		let notes = [];
-		let highlightedWords = [];
+		let notes: NoteEntity[] = [];
+		let highlightedWords: string[] = [];
+		let searchResults: ProcessResultsRow[] = [];
 
 		if (parentId) {
 			if (parentType === Folder.modelType()) {
@@ -237,7 +239,9 @@ export default class BaseApplication {
 				notes = await Tag.notes(parentId, options);
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				const search = BaseModel.byId(state.searches, parentId);
-				notes = await SearchEngineUtils.notesForQuery(search.query_pattern, true, { appendWildCards: true });
+				const response = await SearchEngineUtils.notesForQuery(search.query_pattern, true, { appendWildCards: true });
+				notes = response.notes;
+				searchResults = response.results;
 				const parsedQuery = await SearchEngine.instance().parseQuery(search.query_pattern);
 				highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 			} else if (parentType === BaseModel.TYPE_SMART_FILTER) {
@@ -248,6 +252,11 @@ export default class BaseApplication {
 		this.store().dispatch({
 			type: 'SET_HIGHLIGHTED',
 			words: highlightedWords,
+		});
+
+		this.store().dispatch({
+			type: 'SEARCH_RESULTS_SET',
+			value: searchResults,
 		});
 
 		this.store().dispatch({

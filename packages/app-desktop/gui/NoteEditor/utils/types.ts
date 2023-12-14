@@ -5,6 +5,7 @@ import { MarkupLanguage } from '@joplin/renderer';
 import { RenderResult, RenderResultPluginAsset } from '@joplin/renderer/MarkupToHtml';
 import { MarkupToHtmlOptions } from './useMarkupToHtml';
 import { Dispatch } from 'redux';
+import { ProcessResultsRow } from '@joplin/lib/services/searchengine/SearchEngine';
 
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
@@ -46,6 +47,7 @@ export interface NoteEditorProps {
 	useCustomPdfViewer: boolean;
 	shareCacheSetting: string;
 	syncUserId: string;
+	searchResults: ProcessResultsRow[];
 }
 
 export interface NoteBodyEditorRef {
@@ -82,6 +84,7 @@ export interface NoteBodyEditorProps {
 	visiblePanes: string[];
 	keyboardMode: string;
 	resourceInfos: ResourceInfos;
+	resourceDirectory: string;
 	locale: string;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onDrop: Function;

@@ -29,7 +29,7 @@ import { reg } from '@joplin/lib/registry';
 const packageInfo: PackageInfo = require('./packageInfo.js');
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import ClipperServer from '@joplin/lib/ClipperServer';
-const { webFrame } = require('electron');
+import { ipcRenderer, webFrame } from 'electron';
 const Menu = bridge().Menu;
 const PluginManager = require('@joplin/lib/services/PluginManager');
 import RevisionService from '@joplin/lib/services/RevisionService';
@@ -63,11 +63,14 @@ import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
 import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
-import eventManager from '@joplin/lib/eventManager';
+import eventManager, { EventName } from '@joplin/lib/eventManager';
 import path = require('path');
 import { checkPreInstalledDefaultPlugins, installDefaultPlugins, setSettingsForDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
 import { parseNotesParent } from '@joplin/lib/reducer';
+import OcrService from '@joplin/lib/services/ocr/OcrService';
+import OcrDriverTesseract from '@joplin/lib/services/ocr/drivers/OcrDriverTesseract';
+import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 import { PackageInfo } from '@joplin/lib/versionInfo';
 
 const pluginClasses = [
@@ -83,6 +86,7 @@ class Application extends BaseApplication {
 
 	private checkAllPluginStartedIID_: any = null;
 	private initPluginServiceDone_ = false;
+	private ocrService_: OcrService;
 
 	public constructor() {
 		super();
@@ -119,6 +123,10 @@ class Application extends BaseApplication {
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'showTrayIcon' || action.type === 'SETTING_UPDATE_ALL') {
 			this.updateTray();
+		}
+
+		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'ocr.enabled' || action.type === 'SETTING_UPDATE_ALL') {
+			this.setupOcrService();
 		}
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'style.editor.fontFamily' || action.type === 'SETTING_UPDATE_ALL') {
@@ -333,6 +341,11 @@ class Application extends BaseApplication {
 					type: 'STARTUP_PLUGINS_LOADED',
 					value: true,
 				});
+
+				// Sends an event to the main process -- this is used by the Playwright
+				// tests to wait for plugins to load.
+				ipcRenderer.send('startup-plugins-loaded');
+
 				setSettingsForDefaultPlugins(getDefaultPluginsInfo());
 			}
 		}, 500);
@@ -348,6 +361,34 @@ class Application extends BaseApplication {
 		}
 
 		Setting.setValue('wasClosedSuccessfully', false);
+	}
+
+	private setupOcrService() {
+		if (Setting.value('ocr.enabled')) {
+			if (!this.ocrService_) {
+				const Tesseract = (window as any).Tesseract;
+
+				const driver = new OcrDriverTesseract(
+					{ createWorker: Tesseract.createWorker },
+					`${bridge().buildDir()}/tesseract.js/worker.min.js`,
+					`${bridge().buildDir()}/tesseract.js-core`,
+				);
+
+				this.ocrService_ = new OcrService(driver);
+			}
+
+			void this.ocrService_.runInBackground();
+		} else {
+			if (!this.ocrService_) return;
+			void this.ocrService_.stopRunInBackground();
+		}
+
+		const handleResourceChange = () => {
+			void this.ocrService_.maintenance();
+		};
+
+		eventManager.on(EventName.ResourceCreate, handleResourceChange);
+		eventManager.on(EventName.ResourceChange, handleResourceChange);
 	}
 
 	public async start(argv: string[]): Promise<any> {
@@ -566,7 +607,7 @@ class Application extends BaseApplication {
 		// Forwards the local event to the global event manager, so that it can
 		// be picked up by the plugin manager.
 		ResourceEditWatcher.instance().on('resourceChange', (event: any) => {
-			eventManager.emit('resourceChange', event);
+			eventManager.emit(EventName.ResourceChange, event);
 		});
 
 		RevisionService.instance().runInBackground();
@@ -582,6 +623,8 @@ class Application extends BaseApplication {
 				bridge: bridge(),
 				debug: new DebugService(reg.db()),
 				resourceService: ResourceService.instance(),
+				searchEngine: SearchEngine.instance(),
+				ocrService: () => this.ocrService_,
 			};
 		}
 
@@ -594,6 +637,12 @@ class Application extends BaseApplication {
 		await SpellCheckerService.instance().initialize(new SpellCheckerServiceDriverNative());
 
 		this.startRotatingLogMaintenance(Setting.value('profileDir'));
+
+		await this.setupOcrService();
+
+		eventManager.on(EventName.OcrServiceResourcesProcessed, () => {
+			SearchEngine.instance().scheduleSyncTables();
+		});
 
 		// await populateDatabase(reg.db(), {
 		// 	clearDatabase: true,

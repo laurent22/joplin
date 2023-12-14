@@ -36,7 +36,7 @@
 // import BaseController from '../BaseController';
 // import mustacheService from '../../services/MustacheService';
 // import { ErrorNotFound } from '../../utils/errors';
-// import uuidgen from '../../utils/uuidgen';
+// import { uuidgen } from '@joplin/lib/uuid';
 // import controllers from '../factory';
 
 // export default class OAuthController extends BaseController {

@@ -13,6 +13,7 @@ const fs = require('fs-extra');
 import { dialog, ipcMain } from 'electron';
 import { _ } from '@joplin/lib/locale';
 import restartInSafeModeFromMain from './utils/restartInSafeModeFromMain';
+import { clearTimeout, setTimeout } from 'timers';
 
 interface RendererProcessQuitReply {
 	canClose: boolean;
@@ -160,8 +161,28 @@ export default class ElectronAppWrapper {
 			this.win_.setPosition(primaryDisplayWidth / 2 - windowWidth, primaryDisplayHeight / 2 - windowHeight);
 		}
 
-		this.win_.webContents.on('unresponsive', async () => {
-			await this.handleAppFailure(_('Window unresponsive.'), true);
+		let unresponsiveTimeout: ReturnType<typeof setTimeout>|null = null;
+
+		this.win_.webContents.on('unresponsive', () => {
+			// Don't show the "unresponsive" dialog immediately -- the "unresponsive" event
+			// can be fired when showing a dialog or modal (e.g. the update dialog).
+			//
+			// This gives us an opportunity to cancel it.
+			if (unresponsiveTimeout === null) {
+				const delayMs = 1000;
+
+				unresponsiveTimeout = setTimeout(() => {
+					unresponsiveTimeout = null;
+					void this.handleAppFailure(_('Window unresponsive.'), true);
+				}, delayMs);
+			}
+		});
+
+		this.win_.webContents.on('responsive', () => {
+			if (unresponsiveTimeout !== null) {
+				clearTimeout(unresponsiveTimeout);
+				unresponsiveTimeout = null;
+			}
 		});
 
 		this.win_.webContents.on('render-process-gone', async _event => {

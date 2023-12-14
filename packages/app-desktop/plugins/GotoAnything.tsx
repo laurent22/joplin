@@ -8,7 +8,7 @@ import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '@joplin/lib/theme';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 import gotoAnythingStyleQuery from '@joplin/lib/services/searchengine/gotoAnythingStyleQuery';
-import BaseModel from '@joplin/lib/BaseModel';
+import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import Tag from '@joplin/lib/models/Tag';
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
@@ -19,13 +19,15 @@ import { mergeOverlappingIntervals } from '@joplin/lib/ArrayUtils';
 import markupLanguageUtils from '../utils/markupLanguageUtils';
 import focusEditorIfEditorCommand from '@joplin/lib/services/commands/focusEditorIfEditorCommand';
 import Logger from '@joplin/utils/Logger';
-import { MarkupToHtml } from '@joplin/renderer';
+import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
+import Resource from '@joplin/lib/models/Resource';
+import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 
 const logger = Logger.create('GotoAnything');
 
 const PLUGIN_NAME = 'gotoAnything';
 
-interface SearchResult {
+interface GotoAnythingSearchResult {
 	id: string;
 	title: string;
 	parent_id: string;
@@ -33,6 +35,8 @@ interface SearchResult {
 	fragments?: string;
 	path?: string;
 	type?: number;
+	item_id?: string;
+	item_type?: ModelType;
 }
 
 interface Props {
@@ -46,7 +50,7 @@ interface Props {
 
 interface State {
 	query: string;
-	results: SearchResult[];
+	results: GotoAnythingSearchResult[];
 	selectedItemId: string;
 	keywords: string[];
 	listType: number;
@@ -59,6 +63,35 @@ interface CommandQuery {
 	name: string;
 	args: string[];
 }
+
+const getContentMarkupLanguageAndBody = (result: GotoAnythingSearchResult, notesById: Record<string, NoteEntity>, resources: ResourceEntity[]) => {
+	if (result.item_type === ModelType.Resource) {
+		const resource = resources.find(r => r.id === result.item_id);
+		if (!resource) {
+			logger.warn('Could not find resources associated with result:', result);
+			return { markupLanguage: MarkupLanguage.Markdown, content: '' };
+		} else {
+			return { markupLanguage: MarkupLanguage.Markdown, content: resource.ocr_text };
+		}
+	} else { // a note
+		const note = notesById[result.id];
+		return { markupLanguage: note.markup_language, content: note.body };
+	}
+};
+
+// A result row contains an `id` property (the note ID) and, if the current row
+// is a resource, an `item_id` property, which is the resource ID. In that case,
+// the row also has an `id` property, which is the note that contains the
+// resource.
+//
+// It means a result set may include multiple results with the same `id`
+// property, if it contains one or more resources that are in a note that's
+// already in the result set. For that reason, when we need a unique ID for the
+// result, we use this function - which returns either the item_id, if present,
+// or the note ID.
+const getResultId = (result: GotoAnythingSearchResult) => {
+	return result.item_id ? result.item_id : result.id;
+};
 
 class GotoAnything {
 
@@ -266,7 +299,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		if (!this.state.query) {
 			this.setState({ results: [], keywords: [] });
 		} else {
-			let results: SearchResult[] = [];
+			let results: GotoAnythingSearchResult[] = [];
 			let listType = null;
 			let searchQuery = '';
 			let keywords = null;
@@ -311,6 +344,9 @@ class Dialog extends React.PureComponent<Props, State> {
 
 				resultsInBody = !!results.find((row: any) => row.fields.includes('body'));
 
+				const resourceIds = results.filter(r => r.item_type === ModelType.Resource).map(r => r.item_id);
+				const resources = await Resource.resourceOcrTextsByIds(resourceIds);
+
 				if (!resultsInBody || this.state.query.length <= 1) {
 					for (let i = 0; i < results.length; i++) {
 						const row = results[i];
@@ -336,9 +372,14 @@ class Dialog extends React.PureComponent<Props, State> {
 							let fragments = '...';
 
 							if (i < limit) { // Display note fragments of search keyword matches
+								const { markupLanguage, content } = getContentMarkupLanguageAndBody(
+									row,
+									notesById,
+									resources,
+								);
+
 								const indices = [];
-								const note = notesById[row.id];
-								const body = this.markupToHtml().stripMarkup(note.markup_language, note.body, { collapseWhiteSpaces: true });
+								const body = this.markupToHtml().stripMarkup(markupLanguage, content, { collapseWhiteSpaces: true });
 
 								// Iterate over all matches in the body for each search keyword
 								for (let { valueRegex } of searchKeywords) {
@@ -359,7 +400,6 @@ class Dialog extends React.PureComponent<Props, State> {
 								fragments = mergedIndices.map((f: any) => body.slice(f[0], f[1])).join(' ... ');
 								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
 								if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
-
 							}
 
 							results[i] = { ...row, path, fragments };
@@ -381,7 +421,7 @@ class Dialog extends React.PureComponent<Props, State> {
 				listType: listType,
 				results: results,
 				keywords: keywords ? keywords : await this.keywords(searchQuery),
-				selectedItemId: results.length === 0 ? null : results[0].id,
+				selectedItemId: results.length === 0 ? null : getResultId(results[0]),
 				resultsInBody: resultsInBody,
 				commandArgs: commandArgs,
 			});
@@ -475,10 +515,10 @@ class Dialog extends React.PureComponent<Props, State> {
 		});
 	}
 
-	public renderItem(item: SearchResult) {
+	public renderItem(item: GotoAnythingSearchResult) {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
-		const isSelected = item.id === this.state.selectedItemId;
+		const isSelected = getResultId(item) === this.state.selectedItemId;
 		const rowStyle = isSelected ? style.rowSelected : style.row;
 		const titleHtml = item.fragments
 			? `<span style="font-weight: bold; color: ${theme.color};">${item.title}</span>`
@@ -491,7 +531,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		const fragmentComp = !fragmentsHtml ? null : <div style={style.rowFragments} dangerouslySetInnerHTML={{ __html: (fragmentsHtml) }}></div>;
 
 		return (
-			<div key={item.id} className={isSelected ? 'selected' : null} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id} data-type={item.type}>
+			<div key={getResultId(item)} className={isSelected ? 'selected' : null} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id} data-type={item.type}>
 				<div style={style.rowTitle} dangerouslySetInnerHTML={{ __html: titleHtml }}></div>
 				{fragmentComp}
 				{pathComp}
@@ -504,7 +544,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		if (typeof itemId === 'undefined') itemId = this.state.selectedItemId;
 		for (let i = 0; i < results.length; i++) {
 			const r = results[i];
-			if (r.id === itemId) return i;
+			if (getResultId(r) === itemId) return i;
 		}
 		return -1;
 	}
@@ -529,7 +569,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			if (index < 0) index = 0;
 			if (index >= this.state.results.length) index = this.state.results.length - 1;
 
-			const newId = this.state.results[index].id;
+			const newId = getResultId(this.state.results[index]);
 
 			this.makeItemIndexVisible(index);
 

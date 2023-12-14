@@ -31,6 +31,7 @@ module.exports = {
 				'packages/app-desktop/dist/**',
 				'packages/app-mobile/android/**',
 				'packages/app-mobile/ios/**',
+				'packages/default-plugins/plugin-sources/**',
 				'packages/fork-sax/**',
 				'packages/lib/plugin_types/**',
 				'packages/server/**',

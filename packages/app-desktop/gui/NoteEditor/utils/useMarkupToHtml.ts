@@ -26,6 +26,7 @@ export interface MarkupToHtmlOptions {
 	noteId?: string;
 	vendorDir?: string;
 	platformName?: string;
+	allowedFilePrefixes?: string[];
 }
 
 export default function useMarkupToHtml(deps: HookDependencies) {

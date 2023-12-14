@@ -23,6 +23,7 @@ module.exports = {
 		return `joplin.${camelCaseToDots(p)
 			.replace(/menu\.items/, 'menuItems')
 			.replace(/toolbar\.buttons/, 'toolbarButtons')
+			.replace(/note\.list/, 'noteList')
 			.replace(/content\.scripts/, 'contentScripts')}`;
 	},
 

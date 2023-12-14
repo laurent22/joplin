@@ -1,6 +1,6 @@
 /* eslint-disable multiline-comment-style */
 
-import eventManager from '../../../eventManager';
+import eventManager, { EventName } from '../../../eventManager';
 import Setting, { SettingItem as InternalSettingItem, SettingSectionSource } from '../../../models/Setting';
 import Plugin from '../Plugin';
 import { SettingItem, SettingSection } from './types';
@@ -186,7 +186,7 @@ export default class JoplinSettings {
 	 */
 	public async onChange(handler: ChangeHandler): Promise<void> {
 		// Filter out keys that are not related to this plugin
-		eventManager.on('settingsChange', (event: ChangeEvent) => {
+		eventManager.on(EventName.SettingsChange, (event: ChangeEvent) => {
 			const keys = event.keys
 				.filter(k => k.indexOf(keyPrefix(this.plugin_.id)) === 0)
 				.map(k => k.substr(keyPrefix(this.plugin_.id).length));

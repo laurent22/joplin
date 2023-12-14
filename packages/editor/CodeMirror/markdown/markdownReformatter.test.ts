@@ -1,8 +1,9 @@
 import {
-	findInlineMatch, MatchSide, RegionSpec, tabsToSpaces, toggleRegionFormatGlobally,
+	findInlineMatch, MatchSide, RegionSpec, renumberSelectedLists, tabsToSpaces, toggleRegionFormatGlobally,
 } from './markdownReformatter';
 import { Text as DocumentText, EditorSelection, EditorState } from '@codemirror/state';
 import { indentUnit } from '@codemirror/language';
+import createTestEditor from '../testUtil/createTestEditor';
 
 describe('markdownReformatter', () => {
 
@@ -141,5 +142,56 @@ describe('markdownReformatter', () => {
 		expect(tabsToSpaces(state, '\t')).toBe('    ');
 		expect(tabsToSpaces(state, '\t  ')).toBe('      ');
 		expect(tabsToSpaces(state, '  \t  ')).toBe('      ');
+	});
+
+	it('should correctly renumber a list with multiple selections', async () => {
+		const firstListText = [
+			'1. This',
+			'\t2. is',
+			'\t3. a',
+			'4. test',
+			'',
+			'',
+		].join('\n');
+
+		const secondListText = [
+			'## List 2',
+			'',
+			'1. Test',
+			'\t2. 2',
+		].join('\n');
+
+		const editor = await createTestEditor(
+			`${firstListText}${secondListText}\n\n# End`,
+			EditorSelection.cursor(firstListText.length + secondListText.length),
+			['OrderedList', 'ATXHeading1', 'ATXHeading2'],
+		);
+
+		// Include a selection twice in the same list -- previously,
+		const initialSelection = EditorSelection.create([
+			EditorSelection.cursor('1. This\n2.'.length), // Middle of second line
+			EditorSelection.cursor('1. This\n2. is\n3'.length), // Beginning of third line
+			EditorSelection.cursor(firstListText.length + secondListText.length - 1), // End
+		]);
+
+		editor.dispatch({
+			selection: initialSelection,
+		});
+
+		editor.dispatch(renumberSelectedLists(editor.state));
+
+		expect(editor.state.doc.toString()).toBe([
+			'1. This',
+			'\t1. is',
+			'\t2. a',
+			'2. test',
+			'',
+			'## List 2',
+			'',
+			'1. Test',
+			'\t1. 2',
+			'',
+			'# End',
+		].join('\n'));
 	});
 });

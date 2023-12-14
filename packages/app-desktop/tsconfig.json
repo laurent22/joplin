@@ -7,5 +7,9 @@
 	"exclude": [
 		"**/node_modules",
 		"**/dist",
+
+		// Exclude gulpfile.ts to prevent Gulp from trying to build from
+		// gulpfile.js.
+		"gulpfile.ts"
 	],
 }

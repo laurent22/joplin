@@ -1,6 +1,6 @@
 import shim from '../shim';
 import { _, supportedLocalesToLanguages, defaultLocale } from '../locale';
-import eventManager from '../eventManager';
+import eventManager, { EventName } from '../eventManager';
 import BaseModel from '../BaseModel';
 import Database from '../database';
 import SyncTargetRegistry from '../SyncTargetRegistry';
@@ -843,6 +843,17 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 
+			'ocr.enabled': {
+				value: false,
+				type: SettingItemType.Bool,
+				public: true,
+				appTypes: [AppType.Desktop],
+				label: () => _('Enable optical character recognition (OCR)'),
+				description: () => _('When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.'),
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
 			theme: {
 				value: Setting.THEME_LIGHT,
 				type: SettingItemType.Int,
@@ -1598,6 +1609,7 @@ class Setting extends BaseModel {
 			'revisionService.lastProcessedChangeId': { value: 0, type: SettingItemType.Int, public: false },
 
 			'searchEngine.initialIndexingDone': { value: false, type: SettingItemType.Bool, public: false },
+			'searchEngine.lastProcessedResource': { value: '', type: SettingItemType.String, public: false },
 
 			'revisionService.enabled': { section: 'revisionService', storage: SettingStorage.File, value: true, type: SettingItemType.Bool, public: true, label: () => _('Enable note history') },
 			'revisionService.ttlDays': {
@@ -2496,7 +2508,7 @@ class Setting extends BaseModel {
 
 		const keys = this.changedKeys_.slice();
 		this.changedKeys_ = [];
-		eventManager.emit('settingsChange', { keys });
+		eventManager.emit(EventName.SettingsChange, { keys });
 	}
 
 	public static scheduleSave() {

@@ -436,7 +436,7 @@ export default class Note extends BaseItem {
 		return this.modelSelectOne(`SELECT ${this.previewFieldsSql(options.fields)} FROM notes WHERE is_conflict = 0 AND id = ?`, [noteId]);
 	}
 
-	public static async search(options: any = null) {
+	public static async search(options: any = null): Promise<NoteEntity[]> {
 		if (!options) options = {};
 		if (!options.conditions) options.conditions = [];
 		if (!options.conditionsParams) options.conditionsParams = [];

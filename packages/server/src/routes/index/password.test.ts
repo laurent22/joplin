@@ -1,6 +1,6 @@
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, expectHttpError } from '../../utils/testing/testUtils';
 import { execRequest } from '../../utils/testing/apiUtils';
-import uuidgen from '../../utils/uuidgen';
+import { uuidgen } from '@joplin/lib/uuid';
 import { ErrorNotFound } from '../../utils/errors';
 
 describe('index/password', () => {

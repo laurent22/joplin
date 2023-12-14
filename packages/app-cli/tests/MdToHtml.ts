@@ -291,4 +291,29 @@ describe('MdToHtml', () => {
 			expect(html.html).toContain(opening + trimmedTex + closing);
 		}
 	});
+
+	it('should render inline KaTeX after a numbered equation', async () => {
+		const mdToHtml = newTestMdToHtml();
+
+		// This test is intended to verify that inline KaTeX renders correctly
+		// after creating a numbered equation with \begin{align}...\end{align}.
+		//
+		// See https://github.com/laurent22/joplin/issues/9455 for details.
+
+		const markdown = [
+			'$$',
+			'\\begin{align}\\text{Block}\\end{align}',
+			'$$',
+			'',
+			'$\\text{Inline}$',
+		].join('\n');
+		const { html } = await mdToHtml.render(markdown, null, { bodyOnly: true });
+
+		// Because we don't control the output of KaTeX, this test should be as general as
+		// possible while still verifying that rendering (without an error) occurs.
+
+		// Should have rendered the inline and block content without errors
+		expect(html).toContain('Inline</span>');
+		expect(html).toContain('Block</span>');
+	});
 });

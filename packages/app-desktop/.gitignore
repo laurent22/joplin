@@ -14,7 +14,12 @@ style.min.css
 build/lib/
 vendor/*
 !vendor/loadEmojiLib.js
+build/pdf.worker.min.js
+build/tesseract.js*
 test-results/
 playwright-report/
 playwright/.cache/
 integration-tests/test-profile/
+build/defaultPlugins/
+build/7zip/7za
+build/7zip/7za.exe

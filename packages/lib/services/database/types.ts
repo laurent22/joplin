@@ -55,6 +55,13 @@ export interface UserDataValue {
   d?: Number; // deleted - 0 or 1 (default = 0)
 }
 
+export enum ResourceOcrStatus {
+	Todo = 0,
+	Processing = 1,
+	Done = 2,
+	Error = 3,
+}
+
 export type UserData = Record<string, Record<string, UserDataValue>>;
 
 interface DatabaseTableColumn {
@@ -68,6 +75,10 @@ interface DatabaseTable {
 interface DatabaseTables {
 	[key: string]: DatabaseTable;
 }
+
+
+
+
 
 
 
@@ -162,6 +173,60 @@ export interface ItemChangeEntity {
   'item_type'?: number;
   'source'?: number;
   'type'?: number;
+  'type_'?: number;
+}
+export interface ItemsFtEntity {
+  'body'?: any | null;
+  'id'?: any | null;
+  'item_id'?: any | null;
+  'item_type'?: any | null;
+  'reserved1'?: any | null;
+  'reserved2'?: any | null;
+  'reserved3'?: any | null;
+  'reserved4'?: any | null;
+  'reserved5'?: any | null;
+  'reserved6'?: any | null;
+  'title'?: any | null;
+  'user_updated_time'?: any | null;
+  'type_'?: number;
+}
+export interface ItemsFtsDocsizeEntity {
+  'docid'?: number | null;
+  'size'?: any | null;
+  'type_'?: number;
+}
+export interface ItemsFtsSegdirEntity {
+  'end_block'?: number | null;
+  'idx'?: number | null;
+  'leaves_end_block'?: number | null;
+  'level'?: number | null;
+  'root'?: any | null;
+  'start_block'?: number | null;
+  'type_'?: number;
+}
+export interface ItemsFtsSegmentEntity {
+  'block'?: any | null;
+  'blockid'?: number | null;
+  'type_'?: number;
+}
+export interface ItemsFtsStatEntity {
+  'id'?: number | null;
+  'value'?: any | null;
+  'type_'?: number;
+}
+export interface ItemsNormalizedEntity {
+  'body'?: string;
+  'id'?: number | null;
+  'item_id'?: string;
+  'item_type'?: number;
+  'reserved1'?: number | null;
+  'reserved2'?: number | null;
+  'reserved3'?: number | null;
+  'reserved4'?: number | null;
+  'reserved5'?: number | null;
+  'reserved6'?: number | null;
+  'title'?: string;
+  'user_updated_time'?: number;
   'type_'?: number;
 }
 export interface KeyValueEntity {
@@ -267,6 +332,10 @@ export interface ResourceEntity {
   'is_shared'?: number;
   'master_key_id'?: string;
   'mime'?: string;
+  'ocr_details'?: string;
+  'ocr_error'?: string;
+  'ocr_status'?: number;
+  'ocr_text'?: string;
   'share_id'?: string;
   'size'?: number;
   'title'?: string;
@@ -479,6 +548,10 @@ export const databaseSchema: DatabaseTables = {
 		is_shared: { type: 'number' },
 		master_key_id: { type: 'string' },
 		mime: { type: 'string' },
+		ocr_details: { type: 'string' },
+		ocr_error: { type: 'string' },
+		ocr_status: { type: 'number' },
+		ocr_text: { type: 'string' },
 		share_id: { type: 'string' },
 		size: { type: 'number' },
 		title: { type: 'string' },
@@ -580,6 +653,60 @@ export const databaseSchema: DatabaseTables = {
 		title: { type: 'string' },
 		todo_completed_count: { type: 'any' },
 		updated_time: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	items_normalized: {
+		body: { type: 'string' },
+		id: { type: 'number' },
+		item_id: { type: 'string' },
+		item_type: { type: 'number' },
+		reserved1: { type: 'number' },
+		reserved2: { type: 'number' },
+		reserved3: { type: 'number' },
+		reserved4: { type: 'number' },
+		reserved5: { type: 'number' },
+		reserved6: { type: 'number' },
+		title: { type: 'string' },
+		user_updated_time: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	items_fts: {
+		body: { type: 'any' },
+		id: { type: 'any' },
+		item_id: { type: 'any' },
+		item_type: { type: 'any' },
+		reserved1: { type: 'any' },
+		reserved2: { type: 'any' },
+		reserved3: { type: 'any' },
+		reserved4: { type: 'any' },
+		reserved5: { type: 'any' },
+		reserved6: { type: 'any' },
+		title: { type: 'any' },
+		user_updated_time: { type: 'any' },
+		type_: { type: 'number' },
+	},
+	items_fts_segments: {
+		block: { type: 'any' },
+		blockid: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	items_fts_segdir: {
+		end_block: { type: 'number' },
+		idx: { type: 'number' },
+		leaves_end_block: { type: 'number' },
+		level: { type: 'number' },
+		root: { type: 'any' },
+		start_block: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	items_fts_docsize: {
+		docid: { type: 'number' },
+		size: { type: 'any' },
+		type_: { type: 'number' },
+	},
+	items_fts_stat: {
+		id: { type: 'number' },
+		value: { type: 'any' },
 		type_: { type: 'number' },
 	},
 };
