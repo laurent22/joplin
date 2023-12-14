@@ -150,7 +150,7 @@ export default function(props: Props) {
 		async function fetchPluginIds() {
 			// Built-in plugins can't be updated from the main repoApi
 			const nonDefaultPlugins = pluginItems
-				.filter(plugin => plugin.builtIn)
+				.filter(plugin => !plugin.builtIn)
 				.map(p => p.manifest);
 
 			const pluginIds = await repoApi().canBeUpdatedPlugins(nonDefaultPlugins, pluginService.appVersion);

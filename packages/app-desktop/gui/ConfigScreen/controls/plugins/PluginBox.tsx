@@ -28,7 +28,7 @@ interface Props {
 	item?: PluginItem;
 	manifest?: PluginManifest;
 	installState?: InstallState;
-	builtInEquivalentInstalled?: boolean;
+	builtInEquivalentInstalledAndLoaded?: boolean;
 	updateState?: UpdateState;
 	themeId: number;
 	isCompatible: boolean;
@@ -220,7 +220,7 @@ export default function(props: Props) {
 		} else if (props.updateState === UpdateState.Idle) {
 			title = _('Updated');
 		} else if (props.updateState === UpdateState.HasBeenUpdated) {
-			if (props.builtInEquivalentInstalled) {
+			if (props.builtInEquivalentInstalledAndLoaded) {
 				title = _('Replaced built-in');
 			} else {
 				title = _('Updated');
@@ -228,14 +228,14 @@ export default function(props: Props) {
 		} else {
 			title = _('Update');
 
-			if (props.builtInEquivalentInstalled) {
+			if (props.builtInEquivalentInstalledAndLoaded) {
 				title = _('Replace built-in');
 			}
 		}
 
 		return <Button
 			ml={1}
-			level={props.builtInEquivalentInstalled ? ButtonLevel.Secondary : ButtonLevel.Recommended}
+			level={props.builtInEquivalentInstalledAndLoaded ? ButtonLevel.Secondary : ButtonLevel.Recommended}
 			onClick={() => props.onUpdate({ item })}
 			title={title}
 			disabled={props.updateState === UpdateState.HasBeenUpdated}

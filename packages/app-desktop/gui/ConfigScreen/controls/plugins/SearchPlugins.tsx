@@ -133,7 +133,7 @@ export default function(props: Props) {
 					onUpdate={updateCallback}
 					updateState={updateState}
 					installState={installState}
-					builtInEquivalentInstalled={hasBuiltInVersion}
+					builtInEquivalentInstalledAndLoaded={hasBuiltInVersion}
 				/>);
 			}
 
