@@ -20,9 +20,10 @@ export default {
 	createNanoForInboxEmail: (): string => {
 		return customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 8)();
 	},
-	createSecureRandom: (size = 32) => {
-		return nanoidSecure(size);
-	},
+};
+
+export const createSecureRandom = (size = 32) => {
+	return nanoidSecure(size);
 };
 
 type FuncUiidGen = (length?: number)=> string;
