@@ -63,7 +63,7 @@ const SyncTargetLogo = styled.img`
 	margin-right: 0.4em;
 `;
 
-const SyncTargetBox = styled.div<{ faded: boolean }>`
+const SyncTargetBox = styled.div`
 	display: flex;
 	flex: 1;
 	flex-direction: column;
@@ -75,7 +75,7 @@ const SyncTargetBox = styled.div<{ faded: boolean }>`
 	padding: 0.8em 2.2em 2em 2.2em;
 	margin-right: 1em;
 	max-width: 400px;
-	opacity: ${props => props.faded ? 0.5 : 1};
+	opacity: 1;
 `;
 
 const FeatureList = styled.div`
@@ -130,7 +130,6 @@ const logosImageNames: Record<string, string> = {
 type SyncTargetInfoName = 'dropbox' | 'onedrive' | 'joplinCloud';
 
 export default function(props: Props) {
-	const showJoplinCloudForm = false;
 	const joplinCloudDescriptionRef = useRef(null);
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -203,10 +202,10 @@ export default function(props: Props) {
 		const logoImageSrc = logoImageName ? `${bridge().buildDir()}/images/${logoImageName}` : '';
 		const logo = logoImageSrc ? <SyncTargetLogo src={logoImageSrc}/> : null;
 		const descriptionComp = <SyncTargetDescription height={height} ref={info.name === 'joplinCloud' ? joplinCloudDescriptionRef : null}>{info.description}</SyncTargetDescription>;
-		const featuresComp = showJoplinCloudForm && info.name === 'joplinCloud' ? null : renderFeatures(info.name);
+		const featuresComp = renderFeatures(info.name);
 
 		return (
-			<SyncTargetBox id={key} key={key} faded={showJoplinCloudForm && info.name !== 'joplinCloud'}>
+			<SyncTargetBox id={key} key={key}>
 				<SyncTargetTitle>{logo}{info.label}</SyncTargetTitle>
 				{descriptionComp}
 				{featuresComp}
@@ -236,7 +235,7 @@ export default function(props: Props) {
 			boxes.push(renderSyncTarget(info));
 		}
 
-		const selfHostingMessage = showJoplinCloudForm ? null : <SelfHostingMessage>Self-hosting? Joplin also supports various self-hosting options such as Nextcloud, WebDAV, AWS S3 and Joplin Server. <a href="#" onClick={onSelfHostingClick}>Click here to select one</a>.</SelfHostingMessage>;
+		const selfHostingMessage = <SelfHostingMessage>Self-hosting? Joplin also supports various self-hosting options such as Nextcloud, WebDAV, AWS S3 and Joplin Server. <a href="#" onClick={onSelfHostingClick}>Click here to select one</a>.</SelfHostingMessage>;
 
 		return (
 			<ContentRoot>
