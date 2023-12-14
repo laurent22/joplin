@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { customAlphabet } from 'nanoid/non-secure';
+import { nanoid as nanoidSecure } from 'nanoid';
 
 // https://zelark.github.io/nano-id-cc/
 // https://security.stackexchange.com/a/41749/1873
@@ -19,6 +20,10 @@ export default {
 	createNanoForInboxEmail: (): string => {
 		return customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 8)();
 	},
+};
+
+export const createSecureRandom = (size = 32) => {
+	return nanoidSecure(size);
 };
 
 type FuncUiidGen = (length?: number)=> string;
