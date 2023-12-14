@@ -9,6 +9,7 @@ import { reg } from '@joplin/lib/registry';
 import shim from '@joplin/lib/shim';
 const bridge = require('@electron/remote').require('./bridge').default;
 import { ApplicationType, ApplicationPlatform } from '@joplin/lib/types';
+import { uuidgen } from '@joplin/lib/uuid';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
@@ -165,7 +166,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	};
 
 	useEffect(() => {
-		const ulc = Math.random().toString().split('.')[1];
+		const ulc = uuidgen();
 		setUniqueLoginCode(ulc);
 	}, []);
 
