@@ -10,6 +10,7 @@ import shim from '@joplin/lib/shim';
 const bridge = require('@electron/remote').require('./bridge').default;
 import { ApplicationType, ApplicationPlatform } from '@joplin/lib/types';
 import { uuidgen } from '@joplin/lib/uuid';
+import { Dispatch } from 'redux';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
@@ -17,8 +18,7 @@ const { themeStyle } = require('@joplin/lib/theme');
 interface Props {
 	themeId: string;
 	style: any;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 }
 
 type Events = 'LINK_USED' | 'COMPLETED';
@@ -90,6 +90,28 @@ const generateLoginWithUniqueLoginCode = async (uniqueloginCode: string) => {
 	return `${loginUrl}?${searchParams.toString()}`;
 };
 
+const checkIfLoginWasSuccessful = async (ulc: string) => {
+	try {
+		const response = await fetch(`${Setting.value('sync.10.path')}/api/applications?unique_login_code=${ulc}`);
+		if (!response) return undefined;
+
+		if (response.status === 200) {
+			return response?.json();
+		}
+
+		const jsonBody = await response?.json();
+
+		if (jsonBody && response.status >= 400 && response.status <= 500) {
+			reg.logger().warn('Server could not retrieve application credential', jsonBody);
+			return undefined;
+		}
+
+		reg.logger().error('Server error when trying to get the application credential', jsonBody);
+	} catch (error) {
+		reg.logger().error('Not able to complete request to api/applications', error);
+	}
+};
+
 const styles: Record<string, CSSProperties> = {
 	page: { display: 'flex', flexDirection: 'column', height: '100%' },
 	buttonsContainer: { marginBottom: '2em', display: 'flex' },
@@ -107,39 +129,16 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		height: style.height - theme.margin * 2,
 		flex: 1 };
 
-	const checkIfLoginWasSuccessful = async (ulc: string) => {
-		try {
-			const response = await fetch(`${Setting.value('sync.10.path')}/api/applications?unique_login_code=${ulc}`);
-			if (!response) return undefined;
-
-			if (response.status === 200) {
-				return response?.json();
-			}
-
-			const jsonBody = await response?.json();
-
-			if (jsonBody && response.status >= 400 && response.status <= 500) {
-				reg.logger().warn('Server could not retrieve application credential', jsonBody);
-				return undefined;
-			}
-
-			reg.logger().error('Server error when trying to get the application credential', jsonBody);
-		} catch (error) {
-			reg.logger().error('Not able to complete request to api/applications', error);
-		}
-	};
-
 	const periodicallyCheckForCredentials = () => {
 		if (intervalIdentifier) return;
 
 		const interval = setInterval(async () => {
-			const r = await checkIfLoginWasSuccessful(uniqueLoginCode);
-			if (r && (r.id && r.password)) {
-				Setting.setValue('sync.10.username', r.id);
-				Setting.setValue('sync.10.password', r.password);
-				clearInterval(interval);
+			const response = await checkIfLoginWasSuccessful(uniqueLoginCode);
+			if (response && (response.id && response.password)) {
+				Setting.setValue('sync.10.username', response.id);
+				Setting.setValue('sync.10.password', response.password);
 				dispatch('COMPLETED');
-				return;
+				clearInterval(interval);
 			}
 		}, 5 * 1000);
 
