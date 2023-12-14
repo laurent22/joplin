@@ -66,7 +66,7 @@ git push
 BUILT_PLUGIN_WEBSITE_FILE="$JOPLIN_ROOT_DIR/../plugin-website.tar.gz"
 
 if [ -f "$BUILT_PLUGIN_WEBSITE_FILE" ]; then
-	cd "$JOPLIN_WEBSITE_ROOT_DIR"
+	cd "$JOPLIN_WEBSITE_ROOT_DIR/docs"
 
 	mkdir -p plugins
 	cd plugins
