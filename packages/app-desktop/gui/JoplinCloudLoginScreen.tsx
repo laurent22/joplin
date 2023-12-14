@@ -6,7 +6,9 @@ import Setting from '@joplin/lib/models/Setting';
 import { clipboard } from 'electron';
 import Button, { ButtonLevel } from './Button/Button';
 import { reg } from '@joplin/lib/registry';
+import shim from '@joplin/lib/shim';
 const bridge = require('@electron/remote').require('./bridge').default;
+import { ApplicationType, ApplicationPlatform } from '@joplin/lib/types';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
@@ -56,6 +58,35 @@ const reducer: Reducer<IntitialValues, Events> = (state: IntitialValues, action:
 		return state;
 	}
 	}
+};
+
+const getApplicationInformation = async () => {
+	const platformName = await shim.platformName();
+	switch (platformName) {
+	case 'ios':
+		return { type: ApplicationType.Mobile, platform: ApplicationPlatform.Ios };
+	case 'android':
+		return { type: ApplicationType.Mobile, platform: ApplicationPlatform.Android };
+	case 'darwin':
+		return { type: ApplicationType.Desktop, platform: ApplicationPlatform.MacOs };
+	case 'win32':
+		return { type: ApplicationType.Desktop, platform: ApplicationPlatform.Windows };
+	case 'linux':
+		return { type: ApplicationType.Desktop, platform: ApplicationPlatform.Linux };
+	default:
+		return { type: ApplicationType.Unknown, platform: ApplicationPlatform.Unknown };
+	}
+};
+
+const generateLoginWithUniqueLoginCode = async (uniqueloginCode: string) => {
+	const loginUrl = `${Setting.value('sync.10.website')}/login`;
+	const applicationInfo = await getApplicationInformation();
+	const searchParams = new URLSearchParams();
+	searchParams.append('unique_login_code', uniqueloginCode);
+	searchParams.append('platform', applicationInfo.platform.toString());
+	searchParams.append('type', applicationInfo.type.toString());
+
+	return `${loginUrl}?${searchParams.toString()}`;
 };
 
 const styles: Record<string, CSSProperties> = {
@@ -121,13 +152,15 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		periodicallyCheckForCredentials();
 	};
 
-	const onAuthoriseClicked = () => {
-		bridge().openExternal(`${Setting.value('sync.10.website')}/login?unique_login_code=${uniqueLoginCode}`);
+	const onAuthoriseClicked = async () => {
+		const url = await generateLoginWithUniqueLoginCode(uniqueLoginCode);
+		bridge().openExternal(url);
 		onButtonUsed();
 	};
 
-	const onCopyToClipboardClicked = () => {
-		clipboard.writeText(`${Setting.value('sync.10.website')}/login?unique_login_code=${uniqueLoginCode}`);
+	const onCopyToClipboardClicked = async () => {
+		const url = await generateLoginWithUniqueLoginCode(uniqueLoginCode);
+		clipboard.writeText(url);
 		onButtonUsed();
 	};
 
