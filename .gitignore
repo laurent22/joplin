@@ -704,6 +704,7 @@ packages/lib/services/DecryptionWorker.js
 packages/lib/services/ExternalEditWatcher.js
 packages/lib/services/ExternalEditWatcher/utils.js
 packages/lib/services/ItemChangeUtils.js
+packages/lib/services/JoplinCloudLogin.js
 packages/lib/services/KeymapService.js
 packages/lib/services/KeymapService_keycodeToElectronMap.js
 packages/lib/services/KeymapService_keysRegExp.js

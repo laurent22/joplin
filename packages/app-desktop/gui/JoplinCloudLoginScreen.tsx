@@ -1,16 +1,13 @@
-import { CSSProperties, Reducer, useEffect, useReducer, useState } from 'react';
+import { CSSProperties, useEffect, useReducer, useState } from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 import { AppState } from '../app.reducer';
-import Setting from '@joplin/lib/models/Setting';
 import { clipboard } from 'electron';
 import Button, { ButtonLevel } from './Button/Button';
-import { reg } from '@joplin/lib/registry';
-import shim from '@joplin/lib/shim';
 const bridge = require('@electron/remote').require('./bridge').default;
-import { ApplicationType, ApplicationPlatform } from '@joplin/lib/types';
 import { uuidgen } from '@joplin/lib/uuid';
 import { Dispatch } from 'redux';
+import { reducer, intitialValues, generateLoginWithUniqueLoginCode, checkIfLoginWasSuccessful } from '@joplin/lib/services/JoplinCloudLogin';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
@@ -20,97 +17,6 @@ interface Props {
 	style: any;
 	dispatch: Dispatch;
 }
-
-type Events = 'LINK_USED' | 'COMPLETED';
-
-type IntitialValues = {
-	style: string;
-	message: string;
-	next: Events;
-	active: Events | 'INITIAL';
-};
-
-const intitialValues: IntitialValues = {
-	style: 'textStyle',
-	message: _('Waiting for authorisation...'),
-	next: 'LINK_USED',
-	active: 'INITIAL',
-};
-
-const reducer: Reducer<IntitialValues, Events> = (state: IntitialValues, action: Events) => {
-	switch (action) {
-	case 'LINK_USED': {
-		return {
-			style: 'textStyle',
-			message: _('If you have already authorised, please wait for the application to sync to Joplin Cloud.'),
-			next: 'COMPLETED',
-			active: 'LINK_USED',
-		};
-	}
-	case 'COMPLETED': {
-		return {
-			style: 'h2Style',
-			message: _('You are logged in into Joplin Cloud, you can leave this page now.'),
-			active: 'COMPLETED',
-			next: 'COMPLETED',
-		};
-	}
-	default: {
-		return state;
-	}
-	}
-};
-
-const getApplicationInformation = async () => {
-	const platformName = await shim.platformName();
-	switch (platformName) {
-	case 'ios':
-		return { type: ApplicationType.Mobile, platform: ApplicationPlatform.Ios };
-	case 'android':
-		return { type: ApplicationType.Mobile, platform: ApplicationPlatform.Android };
-	case 'darwin':
-		return { type: ApplicationType.Desktop, platform: ApplicationPlatform.MacOs };
-	case 'win32':
-		return { type: ApplicationType.Desktop, platform: ApplicationPlatform.Windows };
-	case 'linux':
-		return { type: ApplicationType.Desktop, platform: ApplicationPlatform.Linux };
-	default:
-		return { type: ApplicationType.Unknown, platform: ApplicationPlatform.Unknown };
-	}
-};
-
-const generateLoginWithUniqueLoginCode = async (uniqueloginCode: string) => {
-	const loginUrl = `${Setting.value('sync.10.website')}/login`;
-	const applicationInfo = await getApplicationInformation();
-	const searchParams = new URLSearchParams();
-	searchParams.append('unique_login_code', uniqueloginCode);
-	searchParams.append('platform', applicationInfo.platform.toString());
-	searchParams.append('type', applicationInfo.type.toString());
-
-	return `${loginUrl}?${searchParams.toString()}`;
-};
-
-const checkIfLoginWasSuccessful = async (ulc: string) => {
-	try {
-		const response = await fetch(`${Setting.value('sync.10.path')}/api/applications?unique_login_code=${ulc}`);
-		if (!response) return undefined;
-
-		if (response.status === 200) {
-			return response?.json();
-		}
-
-		const jsonBody = await response?.json();
-
-		if (jsonBody && response.status >= 400 && response.status <= 500) {
-			reg.logger().warn('Server could not retrieve application credential', jsonBody);
-			return undefined;
-		}
-
-		reg.logger().error('Server error when trying to get the application credential', jsonBody);
-	} catch (error) {
-		reg.logger().error('Not able to complete request to api/applications', error);
-	}
-};
 
 const styles: Record<string, CSSProperties> = {
 	page: { display: 'flex', flexDirection: 'column', height: '100%' },
@@ -134,10 +40,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 
 		const interval = setInterval(async () => {
 			const response = await checkIfLoginWasSuccessful(uniqueLoginCode);
-			if (response && (response.id && response.password)) {
-				Setting.setValue('sync.10.username', response.id);
-				Setting.setValue('sync.10.password', response.password);
-				await Setting.saveAll();
+			if (response && response.success) {
 				dispatch('COMPLETED');
 				clearInterval(interval);
 			}
