@@ -28,7 +28,6 @@ interface Props {
 	item?: PluginItem;
 	manifest?: PluginManifest;
 	installState?: InstallState;
-	builtInEquivalentInstalledAndLoaded?: boolean;
 	updateState?: UpdateState;
 	themeId: number;
 	isCompatible: boolean;
@@ -212,30 +211,14 @@ export default function(props: Props) {
 	function renderUpdateButton() {
 		if (!props.onUpdate) return null;
 
-		// We show a different title when updating from a built-in version of a plugin
-		// to an NPM version.
-		let title;
-		if (props.updateState === UpdateState.Updating) {
-			title = _('Updating...');
-		} else if (props.updateState === UpdateState.Idle) {
-			title = _('Updated');
-		} else if (props.updateState === UpdateState.HasBeenUpdated) {
-			if (props.builtInEquivalentInstalledAndLoaded) {
-				title = _('Replaced built-in');
-			} else {
-				title = _('Updated');
-			}
-		} else {
-			title = _('Update');
-
-			if (props.builtInEquivalentInstalledAndLoaded) {
-				title = _('Replace built-in');
-			}
-		}
+		let title = _('Update');
+		if (props.updateState === UpdateState.Updating) title = _('Updating...');
+		if (props.updateState === UpdateState.Idle) title = _('Updated');
+		if (props.updateState === UpdateState.HasBeenUpdated) title = _('Updated');
 
 		return <Button
 			ml={1}
-			level={props.builtInEquivalentInstalledAndLoaded ? ButtonLevel.Secondary : ButtonLevel.Recommended}
+			level={ButtonLevel.Recommended}
 			onClick={() => props.onUpdate({ item })}
 			title={title}
 			disabled={props.updateState === UpdateState.HasBeenUpdated}

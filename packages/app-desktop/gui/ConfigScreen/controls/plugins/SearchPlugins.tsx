@@ -5,12 +5,11 @@ import styled from 'styled-components';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
-import PluginBox, { InstallState, ItemEvent, UpdateState } from './PluginBox';
+import PluginBox, { InstallState } from './PluginBox';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { _ } from '@joplin/lib/locale';
 import useOnInstallHandler from './useOnInstallHandler';
 import { themeStyle } from '@joplin/lib/theme';
-import bridge from '../../../../services/bridge';
 
 const Root = styled.div`
 `;
@@ -50,19 +49,6 @@ export default function(props: Props) {
 
 	const onInstall = useOnInstallHandler(setInstallingPluginIds, props.pluginSettings, props.repoApi, props.onPluginSettingsChange, false);
 
-	// We use an onUpdate callback to replace built-in plugins with non-built-in plugins
-	const onUpdate = useOnInstallHandler(setInstallingPluginIds, props.pluginSettings, props.repoApi, props.onPluginSettingsChange, true);
-	const onReplaceDefault = useCallback(async (event: ItemEvent) => {
-		const itemId = event.item.manifest.id;
-
-		const confirmResult = bridge().showConfirmMessageBox(
-			_('Override the built-in version of %s?\n\nThe Joplin team may not have reviewed this version for stability or security.', itemId),
-		);
-		if (confirmResult) {
-			await onUpdate(event);
-		}
-	}, [onUpdate]);
-
 	useEffect(() => {
 		setSearchResultCount(null);
 		asyncSearchQueue.current.push(async () => {
@@ -89,10 +75,10 @@ export default function(props: Props) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
-	function getInstallState(pluginId: string): InstallState {
+	function installState(pluginId: string): InstallState {
 		const settings = props.pluginSettings[pluginId];
-		if (installingPluginsIds[pluginId]) return InstallState.Installing;
 		if (settings && !settings.deleted) return InstallState.Installed;
+		if (installingPluginsIds[pluginId]) return InstallState.Installing;
 		return InstallState.NotInstalled;
 	}
 
@@ -104,36 +90,13 @@ export default function(props: Props) {
 			const output = [];
 
 			for (const manifest of manifests) {
-				const installState = getInstallState(manifest.id);
-				let updateState = UpdateState.Idle;
-
-				let hasBuiltInVersion = false;
-				if (installState === InstallState.Installed) {
-					const existingItem = PluginService.instance().pluginById(manifest.id);
-					hasBuiltInVersion = existingItem.builtIn ?? false;
-
-					if (hasBuiltInVersion) {
-						updateState = UpdateState.CanUpdate;
-					}
-
-					if (props.pluginSettings[manifest.id]?.hasBeenUpdated) {
-						updateState = UpdateState.HasBeenUpdated;
-					}
-				}
-
-				const installCallback = !hasBuiltInVersion ? onInstall : undefined;
-				const updateCallback = hasBuiltInVersion ? onReplaceDefault : undefined;
-
 				output.push(<PluginBox
 					key={manifest.id}
 					manifest={manifest}
 					themeId={props.themeId}
 					isCompatible={PluginService.instance().isCompatible(manifest.app_min_version)}
-					onInstall={installCallback}
-					onUpdate={updateCallback}
-					updateState={updateState}
-					installState={installState}
-					builtInEquivalentInstalledAndLoaded={hasBuiltInVersion}
+					onInstall={onInstall}
+					installState={installState(manifest.id)}
 				/>);
 			}
 
