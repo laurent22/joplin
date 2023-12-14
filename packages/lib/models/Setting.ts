@@ -711,23 +711,13 @@ class Setting extends BaseModel {
 			'sync.10.username': {
 				value: '',
 				type: SettingItemType.String,
-				section: 'sync',
-				show: (settings: any) => {
-					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud');
-				},
-				public: true,
-				label: () => _('Joplin Cloud email'),
+				public: false,
 				storage: SettingStorage.File,
 			},
 			'sync.10.password': {
 				value: '',
 				type: SettingItemType.String,
-				section: 'sync',
-				show: (settings: any) => {
-					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud');
-				},
-				public: true,
-				label: () => _('Joplin Cloud password'),
+				public: false,
 				secure: true,
 			},
 
