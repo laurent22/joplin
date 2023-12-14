@@ -74,34 +74,35 @@ describe('defaultPluginsUtils', () => {
 		).toBe(false);
 	}));
 
+	const sampleJsBundlePlugin = `
+	/* joplin-manifest:
+	{
+		"id": "io.github.jackgruber.backup",
+		"manifest_version": 1,
+		"app_min_version": "1.4",
+		"name": "JS Bundle test",
+		"version": "1.0.0"
+	}
+	*/
+	joplin.plugins.register({
+		onStart: async function() {
+			await joplin.settings.registerSettings({
+				path: {
+					value: "initial-path",
+					type: 2,
+					section: "backupSection",
+					public: true,
+					label: "Backup path",
+				  },
+			})
+		},
+	});`;
+
 	it('should set initial settings for default plugins', async () => {
 		const service = newPluginService();
 
-		const pluginScript = `
-		/* joplin-manifest:
-		{
-			"id": "io.github.jackgruber.backup",
-			"manifest_version": 1,
-			"app_min_version": "1.4",
-			"name": "JS Bundle test",
-			"version": "1.0.0"
-		}
-		*/
-		joplin.plugins.register({
-			onStart: async function() {
-				await joplin.settings.registerSettings({
-					path: {
-						value: "initial-path",
-						type: 2,
-						section: "backupSection",
-						public: true,
-						label: "Backup path",
-					  },
-				})
-			},
-		});`;
 
-		const plugin = await service.loadPluginFromJsBundle('', pluginScript);
+		const plugin = await service.loadPluginFromJsBundle('', sampleJsBundlePlugin);
 		plugin.builtIn = true;
 		await service.runPlugin(plugin);
 		const runningPlugins = { 'io.github.jackgruber.backup': plugin };
@@ -138,35 +139,43 @@ describe('defaultPluginsUtils', () => {
 		await service.destroy();
 	});
 
+	it('should not overwrite existing settings for a user-installed version of a built-in plugin', async () => {
+		const service = newPluginService();
+
+		const plugin = await service.loadPluginFromJsBundle('', sampleJsBundlePlugin);
+		plugin.builtIn = false;
+		await service.runPlugin(plugin);
+
+		const defaultPluginsInfo: DefaultPluginsInfo = {
+			'io.github.jackgruber.backup': {
+				settings: {
+					'path': 'overwrite?',
+				},
+			},
+		};
+
+		// No pre-installed default plugins
+		Setting.setValue('installedDefaultPlugins', []);
+
+		// The plugin is running and enabled
+		const runningPlugins = { 'io.github.jackgruber.backup': plugin };
+		const pluginSettings = { 'io.github.jackgruber.backup': defaultPluginSetting() };
+
+		await afterDefaultPluginsLoaded(
+			runningPlugins,
+			defaultPluginsInfo,
+			pluginSettings,
+		);
+
+		// Should not overwrite
+		expect(Setting.value('plugin-io.github.jackgruber.backup.path')).toBe('initial-path');
+	});
+
 	it('should not throw error on missing setting key', async () => {
 
 		const service = newPluginService();
 
-		const pluginScript = `
-		/* joplin-manifest:
-		{
-			"id": "io.github.jackgruber.backup",
-			"manifest_version": 1,
-			"app_min_version": "1.4",
-			"name": "JS Bundle test",
-			"version": "1.0.0"
-		}
-		*/
-		joplin.plugins.register({
-			onStart: async function() {
-				await joplin.settings.registerSettings({
-					path: {
-						value: "initial-path",
-						type: 2,
-						section: "backupSection",
-						public: true,
-						label: "Backup path",
-					  },
-				})
-			},
-		});`;
-
-		const plugin = await service.loadPluginFromJsBundle('', pluginScript);
+		const plugin = await service.loadPluginFromJsBundle('', sampleJsBundlePlugin);
 		plugin.builtIn = true;
 		await service.runPlugin(plugin);
 
