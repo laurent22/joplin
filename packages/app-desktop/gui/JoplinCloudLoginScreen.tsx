@@ -137,6 +137,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 			if (response && (response.id && response.password)) {
 				Setting.setValue('sync.10.username', response.id);
 				Setting.setValue('sync.10.password', response.password);
+				await Setting.saveAll();
 				dispatch('COMPLETED');
 				clearInterval(interval);
 			}
