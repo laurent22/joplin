@@ -438,7 +438,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				<View key="joplinCloud">
 					<View style={this.styles().styleSheet.settingContainerNoBottomBorder}>
 						<Text style={this.styles().styleSheet.settingText}>{label}</Text>
-						<Text style={{ fontWeight: 'bold' }}>{this.props.settings['sync.10.inboxEmail']}</Text>
+						<Text style={this.styles().styleSheet.settingTextEmphasis}>{this.props.settings['sync.10.inboxEmail']}</Text>
 					</View>
 					{
 						this.renderButton(

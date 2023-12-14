@@ -5,6 +5,7 @@ import { EditorCommand } from '../../../utils/types';
 import shim from '@joplin/lib/shim';
 import { reg } from '@joplin/lib/registry';
 import setupVim from './setupVim';
+import { EventName } from '@joplin/lib/eventManager';
 
 export default function useKeymap(CodeMirror: any) {
 
@@ -174,7 +175,7 @@ export default function useKeymap(CodeMirror: any) {
 		const keymapService = KeymapService.instance();
 
 		registerKeymap();
-		keymapService.on('keymapChange', registerKeymap);
+		keymapService.on(EventName.KeymapChange, registerKeymap);
 
 		setupEmacs();
 		setupVim(CodeMirror);

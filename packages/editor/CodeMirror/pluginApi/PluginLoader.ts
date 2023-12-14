@@ -1,7 +1,9 @@
-import { LogMessageCallback, PluginData } from '../types';
-import CodeMirrorControl from './CodeMirrorControl';
+import { LogMessageCallback, PluginData } from '../../types';
+import CodeMirrorControl from '../CodeMirrorControl';
+import codeMirrorRequire from './codeMirrorRequire';
 
 let pluginScriptIdCounter = 0;
+let pluginLoaderCounter = 0;
 
 type OnScriptLoadCallback = (exports: any)=> void;
 type OnPluginRemovedCallback = ()=> void;
@@ -10,6 +12,7 @@ export default class PluginLoader {
 	private pluginScriptsContainer: HTMLElement;
 	private loadedPluginIds: string[] = [];
 	private pluginRemovalCallbacks: Record<string, OnPluginRemovedCallback> = {};
+	private pluginLoaderId: number;
 
 	public constructor(private editor: CodeMirrorControl, private logMessage: LogMessageCallback) {
 		this.pluginScriptsContainer = document.createElement('div');
@@ -20,7 +23,13 @@ export default class PluginLoader {
 
 		document.body.appendChild(this.pluginScriptsContainer);
 
-		(window as any).scriptLoadCallbacks ??= Object.create(null);
+		// addPlugin works by creating <script> elements with the plugin's content. To pass
+		// information to this <script>, we use global objects:
+		(window as any).__pluginLoaderScriptLoadCallbacks ??= Object.create(null);
+		(window as any).__pluginLoaderRequireFunctions ??= Object.create(null);
+
+		this.pluginLoaderId = pluginLoaderCounter++;
+		(window as any).__pluginLoaderRequireFunctions[this.pluginLoaderId] = codeMirrorRequire;
 	}
 
 	public async setPlugins(plugins: PluginData[]) {
@@ -66,14 +75,18 @@ export default class PluginLoader {
 				scriptElement.innerText = `
 				(async () => {
 					const exports = {};
+					const require = window.__pluginLoaderRequireFunctions[${JSON.stringify(this.pluginLoaderId)}];
+					const joplin = {
+						require,
+					};
 		
 					${js};
 		
-					window.scriptLoadCallbacks[${scriptId}](exports);
+					window.__pluginLoaderScriptLoadCallbacks[${JSON.stringify(scriptId)}](exports);
 				})();
 				`;
 
-				(window as any).scriptLoadCallbacks[scriptId] = onLoad;
+				(window as any).__pluginLoaderScriptLoadCallbacks[scriptId] = onLoad;
 
 				this.pluginScriptsContainer.appendChild(scriptElement);
 			})();

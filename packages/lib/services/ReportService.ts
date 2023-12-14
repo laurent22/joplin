@@ -268,7 +268,7 @@ export default class ReportService {
 					canRetry: true,
 					canRetryType: CanRetryType.ResourceDownload,
 					retryHandler: async () => {
-						await Resource.resetErrorStatus(row.resource_id);
+						await Resource.resetFetchErrorStatus(row.resource_id);
 						void ResourceFetcher.instance().autoAddResources();
 					},
 				});

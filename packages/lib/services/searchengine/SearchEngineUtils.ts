@@ -29,7 +29,7 @@ export default class SearchEngineUtils {
 			appendWildCards: options.appendWildCards,
 		});
 
-		const noteIds = results.map((n: any) => n.id);
+		const noteIds = results.map(n => n.id);
 
 		// We need at least the note ID to be able to sort them below so if not
 		// present in field list, add it.L Also remember it was auto-added so that
@@ -83,6 +83,9 @@ export default class SearchEngineUtils {
 		// contain references to notes that don't exist. Not clear how it can
 		// happen, but anyway handle it here. Was causing this issue:
 		// https://discourse.joplinapp.org/t/how-to-recover-corrupted-database/9367
-		return sortedNotes.filter(n => n);
+		return {
+			notes: sortedNotes.filter(n => n),
+			results,
+		};
 	}
 }

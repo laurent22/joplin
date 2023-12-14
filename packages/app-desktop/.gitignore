@@ -14,6 +14,8 @@ style.min.css
 build/lib/
 vendor/*
 !vendor/loadEmojiLib.js
+build/pdf.worker.min.js
+build/tesseract.js*
 test-results/
 playwright-report/
 playwright/.cache/

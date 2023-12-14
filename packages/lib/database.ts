@@ -80,7 +80,10 @@ export default class Database {
 	}
 
 	public escapeFieldsToString(fields: string[] | string): string {
-		if (fields === '*') return '*';
+		if (typeof fields === 'string') {
+			if (fields === '*') return '*';
+			throw new Error(`Invalid field value (only "*" is supported): ${fields}`);
+		}
 
 		const output = [];
 		for (let i = 0; i < fields.length; i++) {
@@ -165,7 +168,7 @@ export default class Database {
 		// }
 	}
 
-	public async selectAll(sql: string, params: SqlParams = null): Promise<Row[]> {
+	public async selectAll<T = Row>(sql: string, params: SqlParams = null): Promise<T[]> {
 		return this.tryCall('selectAll', sql, params);
 	}
 
@@ -251,24 +254,6 @@ export default class Database {
 		if (type === this.TYPE_TEXT) return value;
 		if (type === this.TYPE_NUMERIC) return Number(value);
 		throw new Error(`Unknown type: ${type}`);
-	}
-
-	public sqlStringToLines(sql: string) {
-		const output = [];
-		const lines = sql.split('\n');
-		let statement = '';
-		for (let i = 0; i < lines.length; i++) {
-			const line = lines[i];
-			if (line === '') continue;
-			if (line.substr(0, 2) === '--') continue;
-			statement += line.trim();
-			if (line[line.length - 1] === ',') statement += ' ';
-			if (line[line.length - 1] === ';') {
-				output.push(statement);
-				statement = '';
-			}
-		}
-		return output;
 	}
 
 	public logQuery(sql: string, params: SqlParams = null) {

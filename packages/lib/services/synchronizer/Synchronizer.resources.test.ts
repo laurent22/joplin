@@ -287,8 +287,7 @@ describe('Synchronizer.resources', () => {
 
 		{
 			await synchronizerStart();
-			await resourceFetcher().start();
-			await resourceFetcher().waitForAllFinished();
+			await resourceFetcher().startAndWait();
 		}
 
 		await switchClient(1);

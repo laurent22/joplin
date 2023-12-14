@@ -2,7 +2,7 @@ import { User } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
 import { execRequest } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, checkContextError, expectHttpError } from '../../utils/testing/testUtils';
-import uuidgen from '../../utils/uuidgen';
+import { uuidgen } from '@joplin/lib/uuid';
 import { ErrorForbidden } from '../../utils/errors';
 
 async function postUser(sessionId: string, email: string, password: string = null, props: any = null): Promise<User> {

@@ -25,6 +25,7 @@ import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { getListRendererById, getListRendererIds } from '@joplin/lib/services/noteList/renderers';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
+import { EventName } from '@joplin/lib/eventManager';
 const packageInfo: PackageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;
@@ -1011,10 +1012,10 @@ function useMenu(props: Props) {
 			setKeymapLastChangeTime(Date.now());
 		}
 
-		KeymapService.instance().on('keymapChange', onKeymapChange);
+		KeymapService.instance().on(EventName.KeymapChange, onKeymapChange);
 
 		return () => {
-			KeymapService.instance().off('keymapChange', onKeymapChange);
+			KeymapService.instance().off(EventName.KeymapChange, onKeymapChange);
 		};
 	}, []);
 
