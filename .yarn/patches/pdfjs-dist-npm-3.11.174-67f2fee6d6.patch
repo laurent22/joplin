@@ -1,0 +1,15 @@
+
+# We remove the `canvas` optional dependency because electron-rebuild fails to build it, and
+# the `canvas` API is already part of Electron
+diff --git a/package.json b/package.json
+index 105811f53d508486e08a60dc1b6e437cd24d7427..dea6a4e6612c4a4006cc482e46ff5270dcfda1e5 100644
+--- a/package.json
++++ b/package.json
+@@ -13,7 +13,6 @@
+   "bugs": "https://github.com/mozilla/pdf.js/issues",
+   "license": "Apache-2.0",
+   "optionalDependencies": {
+-    "canvas": "^2.11.2",
+     "path2d-polyfill": "^2.0.1"
+   },
+   "browser": {

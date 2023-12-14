@@ -20,7 +20,7 @@
   "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "@types/jest": "29.5.8",
-    "@types/markdown-it": "13.0.6",
+    "@types/markdown-it": "13.0.7",
     "@types/node": "18.18.10",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",

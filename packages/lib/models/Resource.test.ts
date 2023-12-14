@@ -5,7 +5,7 @@ import Resource from '../models/Resource';
 import shim from '../shim';
 import { ErrorCode } from '../errors';
 import { remove, pathExists } from 'fs-extra';
-import { ResourceEntity } from '../services/database/types';
+import { ResourceEntity, ResourceOcrStatus } from '../services/database/types';
 
 const testImagePath = `${supportDir}/photo.jpg`;
 
@@ -150,6 +150,45 @@ describe('models/Resource', () => {
 		// Also check that the resource blob has not been deleted
 		expect(await pathExists(Resource.fullPath(resource))).toBe(true);
 		cleanup();
+	});
+
+	it('should return resources since a certain time and ID', async () => {
+		expect((await Resource.allForNormalization(0, '')).length).toBe(0);
+
+		const testData: [string, number][] = [
+			['00000000000000000000000000000001', 1536700000000],
+			['ddddddddddddddddddddddddddddddd1', 1536700000001],
+			['ddddddddddddddddddddddddddddddd3', 1536700000001],
+			['ddddddddddddddddddddddddddddddd2', 1536700000001],
+			['bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb1', 1536700000002],
+		];
+
+		for (const [id, updatedTime] of testData) {
+			await Resource.save({
+				id,
+				created_time: updatedTime,
+				updated_time: updatedTime,
+				user_updated_time: updatedTime,
+				user_created_time: updatedTime,
+				mime: 'application/octet-stream',
+				ocr_text: 'test',
+				ocr_status: ResourceOcrStatus.Done,
+			}, { isNew: true, autoTimestamp: false });
+		}
+
+		expect((await Resource.allForNormalization(0, '')).length).toBe(testData.length);
+
+		{
+			const resources = await Resource.allForNormalization(1536700000001, 'ddddddddddddddddddddddddddddddd2');
+			expect(resources.length).toBe(2);
+			expect(resources.map(r => r.id)).toEqual(['ddddddddddddddddddddddddddddddd3', 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb1']);
+		}
+
+		{
+			const resources = await Resource.allForNormalization(1536700000000, '00000000000000000000000000000001');
+			expect(resources.length).toBe(4);
+			expect(resources.map(r => r.id)).toEqual(['ddddddddddddddddddddddddddddddd1', 'ddddddddddddddddddddddddddddddd2', 'ddddddddddddddddddddddddddddddd3', 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb1']);
+		}
 	});
 
 });

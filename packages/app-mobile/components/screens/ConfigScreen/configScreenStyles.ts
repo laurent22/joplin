@@ -12,6 +12,7 @@ export interface ConfigScreenStyleSheet {
 
 	headerTextStyle: TextStyle;
 	settingText: TextStyle;
+	settingTextEmphasis: TextStyle;
 	linkText: TextStyle;
 	descriptionText: TextStyle;
 	warningText: TextStyle;
@@ -109,6 +110,10 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 			paddingBottom: theme.marginBottom / 2,
 		},
 		settingText: settingTextStyle,
+		settingTextEmphasis: {
+			fontWeight: 'bold',
+			color: theme.color,
+		},
 		descriptionText: {
 			color: theme.colorFaded,
 			fontSize: theme.fontSizeSmaller,

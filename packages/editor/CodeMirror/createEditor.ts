@@ -7,7 +7,7 @@ import {
 import { classHighlighter } from '@lezer/highlight';
 
 import {
-	EditorView, drawSelection, highlightSpecialChars, ViewUpdate, Command,
+	EditorView, drawSelection, highlightSpecialChars, ViewUpdate, Command, rectangularSelection,
 } from '@codemirror/view';
 import { history, undoDepth, redoDepth, standardKeymap } from '@codemirror/commands';
 
@@ -203,7 +203,13 @@ const createEditor = (
 						};
 					},
 				} : undefined),
+
+				// Allows multiple selections and allows selecting a rectangle
+				// with ctrl (as in CodeMirror 5)
+				EditorState.allowMultipleSelections.of(true),
+				rectangularSelection(),
 				drawSelection(),
+
 				highlightSpecialChars(),
 				indentOnInput(),
 
