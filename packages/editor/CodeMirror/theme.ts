@@ -9,6 +9,7 @@ import { EditorView } from '@codemirror/view';
 import { Extension } from '@codemirror/state';
 
 import { inlineMathTag, mathTag } from './markdown/markdownMathParser';
+import { EditorTheme } from '../types';
 
 // For an example on how to customize the theme, see:
 //
@@ -24,7 +25,7 @@ import { inlineMathTag, mathTag } from './markdown/markdownMathParser';
 // use '&.cm-focused' in the theme.
 //
 // [theme] should be a joplin theme (see @joplin/lib/theme)
-const createTheme = (theme: any): Extension[] => {
+const createTheme = (theme: EditorTheme): Extension[] => {
 	// If the theme hasn't loaded yet, return nothing.
 	// (createTheme should be called again after the theme has loaded).
 	if (!theme) {
@@ -160,6 +161,15 @@ const createTheme = (theme: any): Extension[] => {
 
 		'& .cm-tableHeader, & .cm-tableRow, & .cm-tableDelimiter': monospaceStyle,
 		'& .cm-taskMarker': monospaceStyle,
+
+		// Applies maximum width styles to individual lines.
+		'& .cm-line': theme.contentMaxWidth ? {
+			maxWidth: theme.contentMaxWidth,
+
+			// Center
+			marginLeft: 'auto',
+			marginRight: 'auto',
+		} : undefined,
 
 		// Override the default URL style when the URL is within a link
 		'& .tok-url.tok-link, & .tok-link.tok-meta, & .tok-link.tok-string': {
