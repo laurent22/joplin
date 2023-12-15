@@ -4,7 +4,8 @@ import Folder from '../../models/Folder';
 import * as fs from 'fs-extra';
 import { createTempDir, setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
 import { MarkupToHtml } from '@joplin/renderer';
-import { FolderEntity } from '../database/types';
+import { FolderEntity, NoteEntity, ResourceEntity } from '../database/types';
+import Resource from '../../models/Resource';
 
 
 describe('InteropService_Importer_Md', () => {
@@ -21,7 +22,7 @@ describe('InteropService_Importer_Md', () => {
 		});
 		importer.setMetadata({ fileExtensions: ['md'] });
 		await importer.exec({ warnings: [] });
-		const allNotes = await Note.all();
+		const allNotes: NoteEntity[] = await Note.all();
 		return allNotes[0];
 	}
 	async function importNoteDirectory(path: string) {
@@ -183,5 +184,15 @@ describe('InteropService_Importer_Md', () => {
 		const noteBeingReferenced = allNotes.find(n => n.title === 'Targeted_note');
 
 		expect(noteBeingReferenced.parent_id).toBe(targetFolder.id);
+	});
+
+	it('should not fail to import file that contains a link to a file that does not exist', async () => {
+		// The first implicit test is that the below call doesn't throw due to the invalid image
+		const note = await importNote(`${supportDir}/test_notes/md/invalid-image-link.md`);
+		const links = Note.linkedItemIds(note.body);
+		expect(links.length).toBe(1);
+		const resource: ResourceEntity = await Resource.load(links[0]);
+		// The invalid image is imported as-is
+		expect(resource.title).toBe('invalid-image.jpg');
 	});
 });

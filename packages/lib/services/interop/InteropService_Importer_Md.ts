@@ -134,7 +134,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 
 						id = this.importedNotes[resolvedPath].id;
 					} else {
-						const resource = await shim.createResourceFromPath(pathWithExtension);
+						const resource = await shim.createResourceFromPath(pathWithExtension, null, { resizeLargeImages: 'never' });
 						id = resource.id;
 					}
 

@@ -2,6 +2,12 @@ import * as React from 'react';
 import { NoteEntity, ResourceEntity } from './services/database/types';
 import type FsDriverBase from './fs-driver-base';
 
+export interface CreateResourceFromPathOptions {
+	resizeLargeImages?: 'always' | 'never' | 'ask';
+	userSideValidation?: boolean;
+	destinationResourceId?: string;
+}
+
 let isTestingEnv_ = false;
 
 // We need to ensure that there's only one instance of React being used by all
@@ -202,7 +208,7 @@ const shim = {
 		return r.text();
 	},
 
-	createResourceFromPath: async (_filePath: string, _defaultProps: any = null, _options: any = null): Promise<ResourceEntity> => {
+	createResourceFromPath: async (_filePath: string, _defaultProps: ResourceEntity = null, _options: CreateResourceFromPathOptions = null): Promise<ResourceEntity> => {
 		throw new Error('Not implemented');
 	},
 

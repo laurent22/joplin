@@ -1,4 +1,4 @@
-import shim from './shim';
+import shim, { CreateResourceFromPathOptions } from './shim';
 import GeolocationNode from './geolocation-node';
 import { setLocale, defaultLocale, closestSupportedLocale } from './locale';
 import FsDriverNode from './fs-driver-node';
@@ -8,6 +8,7 @@ import { basename, fileExtension, safeFileExtension } from './path-utils';
 import * as fs from 'fs-extra';
 import * as pdfJsNamespace from 'pdfjs-dist';
 import { writeFile } from 'fs/promises';
+import { ResourceEntity } from './services/database/types';
 
 const { FileApiDriverLocal } = require('./file-api-driver-local');
 const mimeUtils = require('./mime-utils.js').mime;
@@ -263,10 +264,13 @@ function shimInit(options: ShimInitOptions = null) {
 	// from a file, and update one. To update a resource, pass the
 	// destinationResourceId option. This method is indirectly tested in
 	// Api.test.ts.
-	shim.createResourceFromPath = async function(filePath, defaultProps = null, options = null) {
-		options = { resizeLargeImages: 'always', // 'always', 'ask' or 'never'
+	shim.createResourceFromPath = async function(filePath, defaultProps: ResourceEntity = null, options: CreateResourceFromPathOptions = null) {
+		options = {
+			resizeLargeImages: 'always', // 'always', 'ask' or 'never'
 			userSideValidation: false,
-			destinationResourceId: '', ...options };
+			destinationResourceId: '',
+			...options,
+		};
 
 		const readChunk = require('read-chunk');
 		const imageType = require('image-type');
