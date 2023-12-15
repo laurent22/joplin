@@ -78,6 +78,11 @@ const createTheme = (theme: any): Extension[] => {
 	// be at least this specific.
 	const selectionBackgroundSelector = '&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground';
 
+	const baseHeadingStyle = {
+		fontWeight: 'bold',
+		fontFamily: theme.fontFamily,
+	};
+
 	const codeMirrorTheme = EditorView.theme({
 		'&': baseGlobalStyle,
 
@@ -145,7 +150,7 @@ const createTheme = (theme: any): Extension[] => {
 		// span with a larger font-size, the .cm-inlineCode's bounding box won't
 		// be big enough for its content.
 		// As such, we need to style whichever element directly wraps its content.
-		'& .cm-headerLine > .cm-inlineCode > *, & :not(.cm-headerLine) > .cm-inlineCode': {
+		'& .cm-inlineCode': {
 			borderWidth: '1px',
 			borderStyle: 'solid',
 			borderColor: isDarkTheme ? 'rgba(200, 200, 200, 0.5)' : 'rgba(100, 100, 100, 0.5)',
@@ -166,6 +171,34 @@ const createTheme = (theme: any): Extension[] => {
 			opacity: theme.isDesktop ? 0.6 : 1,
 		},
 
+		// Applying font size changes with CSS rather than the theme below works
+		// around an issue where the border for code blocks in headings was too
+		// small.
+		'& .cm-h1': {
+			...baseHeadingStyle,
+			fontSize: '1.6em',
+		},
+		'& .cm-h2': {
+			...baseHeadingStyle,
+			fontSize: '1.4em',
+		},
+		'& .cm-h3': {
+			...baseHeadingStyle,
+			fontSize: '1.3em',
+		},
+		'& .cm-h4': {
+			...baseHeadingStyle,
+			fontSize: '1.2em',
+		},
+		'& .cm-h5': {
+			...baseHeadingStyle,
+			fontSize: '1.1em',
+		},
+		'& .cm-h6': {
+			...baseHeadingStyle,
+			fontSize: '1.0em',
+		},
+
 		// Style the search widget. Use ':root' to increase the selector's precedence
 		// (override the existing preset styles).
 		':root & .cm-panel.cm-search': {
@@ -176,11 +209,6 @@ const createTheme = (theme: any): Extension[] => {
 		},
 	}, { dark: isDarkTheme });
 
-	const baseHeadingStyle = {
-		fontWeight: 'bold',
-		fontFamily: theme.fontFamily,
-	};
-
 	const highlightingStyle = HighlightStyle.define([
 		{
 			tag: tags.strong,
@@ -189,36 +217,6 @@ const createTheme = (theme: any): Extension[] => {
 		{
 			tag: tags.emphasis,
 			fontStyle: 'italic',
-		},
-		{
-			...baseHeadingStyle,
-			tag: tags.heading1,
-			fontSize: '1.6em',
-		},
-		{
-			...baseHeadingStyle,
-			tag: tags.heading2,
-			fontSize: '1.4em',
-		},
-		{
-			...baseHeadingStyle,
-			tag: tags.heading3,
-			fontSize: '1.3em',
-		},
-		{
-			...baseHeadingStyle,
-			tag: tags.heading4,
-			fontSize: '1.2em',
-		},
-		{
-			...baseHeadingStyle,
-			tag: tags.heading5,
-			fontSize: '1.1em',
-		},
-		{
-			...baseHeadingStyle,
-			tag: tags.heading6,
-			fontSize: '1.0em',
 		},
 		{
 			tag: tags.list,
