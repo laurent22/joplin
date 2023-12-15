@@ -1,6 +1,6 @@
 import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import InteropService from '@joplin/lib/services/interop/InteropService';
-import { ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
+import { ExportModuleOutputFormat, ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
 
 export const declaration: CommandDeclaration = {
 	name: 'exportNotes',
@@ -8,7 +8,7 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (_context: any, noteIds: string[], format: string, targetDirectoryPath: string) => {
+		execute: async (_context: any, noteIds: string[], format: ExportModuleOutputFormat, targetDirectoryPath: string) => {
 			const exportOptions: ExportOptions = {
 				path: targetDirectoryPath,
 				format: format,

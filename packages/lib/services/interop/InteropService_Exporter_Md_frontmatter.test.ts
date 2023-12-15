@@ -6,6 +6,7 @@ import Tag from '../../models/Tag';
 import time from '../../time';
 import { fieldOrder } from './InteropService_Exporter_Md_frontmatter';
 import * as fs from 'fs-extra';
+import { ExportModuleOutputFormat } from './types';
 
 async function recreateExportDir() {
 	const dir = exportDir();
@@ -19,7 +20,7 @@ describe('interop/InteropService_Exporter_Md_frontmatter', () => {
 
 		await service.export({
 			path: exportDir(),
-			format: 'md_frontmatter',
+			format: ExportModuleOutputFormat.MarkdownFrontMatter,
 		});
 
 		return await fs.readFile(path, 'utf8');

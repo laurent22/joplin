@@ -11,6 +11,7 @@ import { NoteEntity, ResourceEntity } from '../database/types.js';
 import InteropService from './InteropService.js';
 import { fileExtension } from '../../path-utils.js';
 import { readdir } from 'fs/promises';
+import { ExportModuleOutputFormat } from './types.js';
 
 describe('interop/InteropService_Exporter_Md', () => {
 
@@ -440,7 +441,7 @@ describe('interop/InteropService_Exporter_Md', () => {
 
 		await service.export({
 			path: exportDir(),
-			format: 'md',
+			format: ExportModuleOutputFormat.Markdown,
 		});
 
 		const resourceFilename = (await fs.readdir(`${exportDir()}/_resources`))[0];
@@ -459,7 +460,7 @@ describe('interop/InteropService_Exporter_Md', () => {
 
 		await service.export({
 			path: exportDir(),
-			format: 'md',
+			format: ExportModuleOutputFormat.Markdown,
 		});
 
 		const note_body = await shim.fsDriver().readFile(`${exportDir()}/testing/mynote.md`);
@@ -478,7 +479,7 @@ describe('interop/InteropService_Exporter_Md', () => {
 
 		await service.export({
 			path: exportDir(),
-			format: 'md',
+			format: ExportModuleOutputFormat.Markdown,
 		});
 
 		const files = await readdir(`${exportDir()}/_resources`);

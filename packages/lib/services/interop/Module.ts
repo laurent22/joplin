@@ -2,11 +2,10 @@ import { _ } from '../../locale';
 import shim from '../../shim';
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
 import InteropService_Importer_Base from './InteropService_Importer_Base';
-import { ExportOptions, FileSystemItem, ImportModuleOutputFormat, ImportOptions, ModuleType } from './types';
+import { ExportModuleOutputFormat, ExportOptions, FileSystemItem, ImportModuleOutputFormat, ImportOptions, ModuleType } from './types';
 
 // Metadata shared between importers and exporters.
 interface BaseMetadata {
-	format: string;
 	fileExtensions: string[];
 	description: string;
 	isDefault: boolean;
@@ -26,6 +25,7 @@ interface BaseMetadata {
 
 interface ImportMetadata extends BaseMetadata {
 	type: ModuleType.Importer;
+	format: string;
 
 	sources: FileSystemItem[];
 	outputFormat: ImportModuleOutputFormat;
@@ -37,6 +37,7 @@ export interface ImportModule extends ImportMetadata {
 
 interface ExportMetadata extends BaseMetadata {
 	type: ModuleType.Exporter;
+	format: ExportModuleOutputFormat;
 
 	target: FileSystemItem;
 }
@@ -46,7 +47,6 @@ export interface ExportModule extends ExportMetadata {
 }
 
 const defaultBaseMetadata = {
-	format: '',
 	fileExtensions: [] as string[],
 	description: '',
 	isNoteArchive: true,
@@ -69,6 +69,7 @@ export const makeImportModule = (
 ): ImportModule => {
 	const importerDefaults: ImportMetadata = {
 		...defaultBaseMetadata,
+		format: '',
 		type: ModuleType.Importer,
 		sources: [],
 		outputFormat: ImportModuleOutputFormat.Markdown,
@@ -99,6 +100,7 @@ export const makeExportModule = (
 ): ExportModule => {
 	const exporterDefaults: ExportMetadata = {
 		...defaultBaseMetadata,
+		format: '' as any,
 		type: ModuleType.Exporter,
 		target: FileSystemItem.File,
 

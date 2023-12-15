@@ -26,6 +26,17 @@ export enum ImportModuleOutputFormat {
 	Html = 'html',
 }
 
+export enum ExportModuleOutputFormat {
+	Enex = 'enex',
+	Html = 'html',
+	Jex = 'jex',
+	Markdown = 'md',
+	MarkdownFrontMatter = 'md_frontmatter',
+	Memory = 'memory',
+	Pdf = 'pdf',
+	Raw = 'raw',
+}
+
 export interface ImportOptions {
 	path?: string;
 	format?: string;
@@ -44,7 +55,7 @@ export enum ExportProgressState {
 export type OnExportProgressCallback = (status: ExportProgressState, progress: number)=> void;
 
 export interface ExportOptions {
-	format?: string;
+	format?: ExportModuleOutputFormat;
 	path?: string;
 	sourceFolderIds?: string[];
 	sourceNoteIds?: string[];

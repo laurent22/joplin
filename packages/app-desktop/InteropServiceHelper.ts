@@ -1,7 +1,7 @@
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import CommandService from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
-import { ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
+import { ExportModuleOutputFormat, ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
 import { ExportModule } from '@joplin/lib/services/interop/Module';
 
 import { _ } from '@joplin/lib/locale';
@@ -31,7 +31,7 @@ export default class InteropServiceHelper {
 		const tempFile = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.html`;
 
 		const fullExportOptions: ExportOptions = { path: tempFile,
-			format: 'html',
+			format: ExportModuleOutputFormat.Html,
 			target: FileSystemItem.File,
 			sourceNoteIds: [noteId],
 			customCss: '', ...exportOptions };
