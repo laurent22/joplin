@@ -9,15 +9,6 @@ import { EditorView } from '@codemirror/view';
 import { Extension } from '@codemirror/state';
 
 import { inlineMathTag, mathTag } from './markdown/markdownMathParser';
-import type { Theme } from '@joplin/lib/themes/type';
-
-interface ThemeType extends Theme {
-	fontFamily?: string;
-	fontSize?: number;
-	fontSizeUnits?: string;
-	isDesktop?: boolean;
-	monospaceFont?: string;
-}
 
 // For an example on how to customize the theme, see:
 //
@@ -33,7 +24,7 @@ interface ThemeType extends Theme {
 // use '&.cm-focused' in the theme.
 //
 // [theme] should be a joplin theme (see @joplin/lib/theme)
-const createTheme = (theme: ThemeType): Extension[] => {
+const createTheme = (theme: any): Extension[] => {
 	// If the theme hasn't loaded yet, return nothing.
 	// (createTheme should be called again after the theme has loaded).
 	if (!theme) {
