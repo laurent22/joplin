@@ -1,5 +1,6 @@
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 const nodeSqlite = require('sqlite3');
+require('../../jest.base-setup.js')();
 
 shimInit({ nodeSqlite });
 

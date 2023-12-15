@@ -7,6 +7,7 @@ const path = require('path');
 const { tmpdir } = require('os');
 const uuid = require('@joplin/lib/uuid').default;
 const sqlite3 = require('sqlite3');
+require('../../jest.base-setup.js')();
 
 import { setImmediate } from 'timers';
 
