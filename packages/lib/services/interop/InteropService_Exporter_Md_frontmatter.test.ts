@@ -142,4 +142,12 @@ describe('interop/InteropService_Exporter_Md_frontmatter', () => {
 		const content = await exportAndLoad(`${exportDir()}/folder1/NoTag.md`);
 		expect(content).not.toContain('tag');
 	}));
+
+	test('should export a valid file when the title starts with a dash', (async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		await Note.save({ title: '- title with dash', body: '**ma note**', parent_id: folder1.id });
+
+		const content = await exportAndLoad(`${exportDir()}/folder1/- title with dash.md`);
+		expect(content).toContain('title: \'- title with dash\'');
+	}));
 });

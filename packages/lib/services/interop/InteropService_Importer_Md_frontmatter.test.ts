@@ -155,4 +155,9 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', () => {
 		const note = await importTestFile('multiple_newlines_after_marker.md');
 		expect(note.body).toBe('\n\nnote body');
 	});
+
+	it('should accept note with a title that starts with a dash', async () => {
+		const note = await importTestFile('title_start_with_dash.md');
+		expect(note.title).toBe('-Start with dash');
+	});
 });
