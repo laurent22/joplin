@@ -56,6 +56,7 @@ import { ChangeEvent as EditorChangeEvent, SelectionRangeChangeEvent, UndoRedoDe
 import { join } from 'path';
 import { Dispatch } from 'redux';
 import { RefObject } from 'react';
+import { SelectionRange } from '../NoteEditor/types';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -177,7 +178,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	private noteTagDialog_closeRequested: any;
 	private onJoplinLinkClick_: any;
 	private refreshResource: (resource: any, noteBody?: string)=> Promise<void>;
-	private selection: any;
+	private selection: SelectionRange;
 	private menuOptionsCache_: Record<string, any>;
 	private focusUpdateIID_: any;
 	private folderPickerOptions_: any;
@@ -644,7 +645,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	};
 
 	private onMarkdownEditorSelectionChange = (event: SelectionRangeChangeEvent) => {
-		this.selection = { from: event.from, to: event.to };
+		this.selection = { start: event.from, end: event.to };
 	};
 
 	public makeSaveAction() {
