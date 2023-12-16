@@ -48,6 +48,6 @@ export interface EditorSettings extends EditorBodySettings {
 }
 
 export interface SelectionRange {
-	start: number;
-	end: number;
+	from: number;
+	to: number;
 }

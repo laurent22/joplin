@@ -269,7 +269,8 @@ function NoteEditor(props: Props, ref: any) {
 	const webviewRef = useRef(null);
 
 	const setInitialSelectionJS = props.initialSelection ? `
-		cm.select(${props.initialSelection.start}, ${props.initialSelection.end});
+		cm.select(${props.initialSelection.from}, ${props.initialSelection.to});
+		cm.execCommand('scrollSelectionIntoView');
 	` : '';
 
 	const editorSettings: EditorSettings = {
@@ -331,6 +332,7 @@ function NoteEditor(props: Props, ref: any) {
 				const settings = ${JSON.stringify(editorSettings)};
 
 				cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, settings);
+
 				${setInitialSelectionJS}
 
 				window.onresize = () => {
