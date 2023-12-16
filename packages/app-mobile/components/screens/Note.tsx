@@ -53,6 +53,7 @@ import { voskEnabled } from '../../services/voiceTyping/vosk';
 import { isSupportedLanguage } from '../../services/voiceTyping/vosk.android';
 import { ChangeEvent as EditorChangeEvent, SelectionRangeChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
 import { join } from 'path';
+import { SelectionRange } from '../NoteEditor/types';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 // import Vosk from 'react-native-vosk';
@@ -65,6 +66,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	// This isn't in this.state because we don't want changing scroll to trigger
 	// a re-render.
 	private lastBodyScroll: number|undefined = undefined;
+	private selection: SelectionRange;
 
 	public static navigationOptions(): any {
 		return { header: null };
@@ -525,7 +527,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	};
 
 	private onMarkdownEditorSelectionChange = (event: SelectionRangeChangeEvent) => {
-		this.selection = { from: event.from, to: event.to };
+		this.selection = { start: event.from, end: event.to };
 	};
 
 	public makeSaveAction() {

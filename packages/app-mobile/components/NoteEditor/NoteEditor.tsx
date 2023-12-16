@@ -269,7 +269,7 @@ function NoteEditor(props: Props, ref: any) {
 	const webviewRef = useRef(null);
 
 	const setInitialSelectionJS = props.initialSelection ? `
-		cm.select(${props.initialSelection.from}, ${props.initialSelection.to});
+		cm.select(${props.initialSelection.start}, ${props.initialSelection.end});
 		cm.execCommand('scrollSelectionIntoView');
 	` : '';
 
