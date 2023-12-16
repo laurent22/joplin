@@ -1246,6 +1246,14 @@ function drawTable(table: Section) {
 		for (let tdIndex = 0; tdIndex < tr.lines.length; tdIndex++) {
 			const td = tr.lines[tdIndex];
 
+			if (typeof td === 'string') {
+				// A <TR> tag should only have <TD> tags as direct children.
+				// However certain Evernote notes can contain other random tags
+				// such as empty DIVs. In that case we just skip the content.
+				// See test "table_with_invalid_content.html".
+				continue;
+			}
+
 			if (flatRender) {
 				line.push(BLOCK_OPEN);
 
