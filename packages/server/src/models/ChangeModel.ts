@@ -14,6 +14,7 @@ export const defaultChangeTtl = 180 * Day;
 
 export interface DeltaChange extends Change {
 	jop_updated_time?: number;
+	jopItem: any;
 }
 
 export type PaginatedDeltaChanges = PaginatedResults<DeltaChange>;
@@ -300,18 +301,33 @@ export default class ChangeModel extends BaseModel<Change> {
 			false,
 		);
 
-		const items: Item[] = await this.db('items').select('id', 'jop_updated_time').whereIn('items.id', changes.map(c => c.item_id));
+		let items: Item[] = await this.db('items').select('id', 'jop_updated_time').whereIn('items.id', changes.map(c => c.item_id));
 
 		let processedChanges = this.compressChanges(changes);
 		processedChanges = await this.removeDeletedItems(processedChanges, items);
 
-		const finalChanges: DeltaChange[] = processedChanges.map(c => {
-			const item = items.find(item => item.id === c.item_id);
-			if (!item) return c;
-			return {
-				...c,
+		items = await this.models().item().loadWithContentMulti(processedChanges.map(c => c.item_id), {
+			fields: [
+				'content',
+				'id',
+				'jop_encryption_applied',
+				'jop_id',
+				'jop_parent_id',
+				'jop_share_id',
+				'jop_type',
+				'jop_updated_time',
+			],
+		});
+
+		const finalChanges = processedChanges.map(change => {
+			const item = items.find(item => item.id === change.item_id);
+			if (!item) return { ...change, jopItem: null };
+			const deltaChange: DeltaChange = {
+				...change,
 				jop_updated_time: item.jop_updated_time,
+				jopItem: item.jop_type ? this.models().item().itemToJoplinItem(item) : null,
 			};
+			return deltaChange;
 		});
 
 		return {

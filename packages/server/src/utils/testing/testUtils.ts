@@ -376,6 +376,11 @@ export async function updateNote(sessionId: string, note: NoteEntity): Promise<I
 	return updateItem(sessionId, `root:/${note.id}.md:`, makeNoteSerializedBody(note));
 }
 
+export async function deleteNote(userId: Uuid, noteJopId: string): Promise<void> {
+	const item = await models().item().loadByJopId(userId, noteJopId, { fields: ['id'] });
+	await models().item().delete(item.id);
+}
+
 export async function updateFolder(sessionId: string, folder: FolderEntity): Promise<Item> {
 	return updateItem(sessionId, `root:/${folder.id}.md:`, makeFolderSerializedBody(folder));
 }
