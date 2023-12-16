@@ -36,6 +36,7 @@
 	],
 	"ignoreDeps": [
 		"@babel/core",
+		"@codemirror/autocomplete",
 		"@codemirror/commands",
 		"@codemirror/lang-cpp",
 		"@codemirror/lang-html",
