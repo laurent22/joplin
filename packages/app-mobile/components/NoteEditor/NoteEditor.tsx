@@ -332,7 +332,6 @@ function NoteEditor(props: Props, ref: any) {
 				const settings = ${JSON.stringify(editorSettings)};
 
 				cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, settings);
-
 				${setInitialSelectionJS}
 
 				window.onresize = () => {
