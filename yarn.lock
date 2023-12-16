@@ -6631,7 +6631,7 @@ __metadata:
     "@codemirror/state": 6.2.1
     "@codemirror/view": 6.18.0
     "@joplin/lib": ~2.13
-    "@lezer/common": 1.0.4
+    "@lezer/common": 1.1.0
     "@lezer/highlight": 1.1.6
     "@lezer/markdown": 1.1.0
     "@replit/codemirror-vim": 6.0.14
@@ -8039,7 +8039,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/common@npm:1.0.4, @lezer/common@npm:^1.0.0, @lezer/common@npm:^1.0.2":
+"@lezer/common@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@lezer/common@npm:1.1.0"
+  checksum: 93c208a44d1c0bdf7407853ba7c4ddcedf1c52d1b82170813d83b9bd6301aa23587405ac54332fe39ce8bc37f706936ab237ceb4d3d535d1dead650153b6474c
+  languageName: node
+  linkType: hard
+
+"@lezer/common@npm:^1.0.0, @lezer/common@npm:^1.0.2":
   version: 1.0.4
   resolution: "@lezer/common@npm:1.0.4"
   checksum: 0bea82da76e0b89afad4e5159d3add460022916352c47906ec67b26d6fe5ec9cb8e23df0e2bf0adef765ae78bed1706fc573a11506d01a80112a5b6dd317730c
