@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: ERYpTION\n"
 "Language-Team: \n"
 "Language: da_DK\n"
@@ -401,7 +403,7 @@ msgstr ""
 
 #: packages/app-desktop/ElectronAppWrapper.ts:88
 msgid "An error occurred: %s"
-msgstr ""
+msgstr "Der opstod en fejl: %s"
 
 #: packages/app-desktop/checkForUpdates.ts:106
 msgid "An update is available, do you want to download it now?"
@@ -1511,9 +1513,8 @@ msgstr ""
 "din adgangskode herunder."
 
 #: packages/lib/models/Setting.ts:2648
-#, fuzzy
 msgid "Donate, website"
-msgstr "Joplin hjemmeside"
+msgstr "Donér, hjemmeside"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:115
@@ -1688,9 +1689,8 @@ msgid "Email to Note"
 msgstr "E-mail til note"
 
 #: packages/lib/models/Setting.ts:2642
-#, fuzzy
 msgid "Email To Note, login information"
-msgstr "Viser versionsinfo"
+msgstr "E-mail til note, loginoplysninger"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:129
@@ -1953,9 +1953,8 @@ msgid "Export profile"
 msgstr "Eksporter profil"
 
 #: packages/lib/models/Setting.ts:2647
-#, fuzzy
 msgid "Export your data"
-msgstr "Eksporter alle"
+msgstr "Eksportér dine data"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:106
 msgid "Exported successfully!"
@@ -2144,6 +2143,8 @@ msgstr[1] "Opretter links..."
 #: packages/lib/models/Setting.ts:2644
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
 msgstr ""
+"Geolokalisering, stavekontrol, redigeringsværktøjslinje, ændring af "
+"billedstørrelse"
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:91
 msgid "Get it now:"
@@ -2605,9 +2606,8 @@ msgid "Language"
 msgstr "Sprog"
 
 #: packages/lib/models/Setting.ts:2639
-#, fuzzy
 msgid "Language, date format"
-msgstr "Datoformat"
+msgstr "Sprog, datoformat"
 
 #: packages/lib/Synchronizer.ts:197
 msgid "Last error: %s"
@@ -2731,7 +2731,7 @@ msgstr "Log ud"
 
 #: packages/lib/models/Setting.ts:2646
 msgid "Logs, profiles, sync status"
-msgstr ""
+msgstr "Logfiler, profiler, synkroniseringsstatus"
 
 #: packages/app-desktop/gui/MenuBar.tsx:859
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:381
@@ -2828,7 +2828,7 @@ msgstr "Maks samlet størrelse"
 
 #: packages/lib/models/Setting.ts:2643
 msgid "Media player, math, diagrams, table of contents"
-msgstr ""
+msgstr "Medieafspiller, matematik, diagrammer, indholdsfortegnelse"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:318
 msgid "Missing keys"
@@ -3236,7 +3236,7 @@ msgstr "Åbn..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:158
 msgid "Opening section %s"
-msgstr ""
+msgstr "Åbner sektion %s"
 
 #: packages/app-cli/app/command-e2ee.ts:40
 #: packages/app-cli/app/command-e2ee.ts:86
@@ -3692,9 +3692,8 @@ msgid "Restart and upgrade"
 msgstr "Genstart og upgradér"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:85
-#, fuzzy
 msgid "Restart in safe mode"
-msgstr "Genstart og upgradér"
+msgstr "Genstart i fejlsikret tilstand"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:717
 msgid "Restart now"
@@ -3874,9 +3873,8 @@ msgid "Select parent notebook"
 msgstr "Vælg overordnet notesbog"
 
 #: packages/app-desktop/gui/MenuBar.tsx:324
-#, fuzzy
 msgid "Send bug report"
-msgstr "Eksporter fejlrapport"
+msgstr "Send fejlrapport"
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -4290,9 +4288,8 @@ msgid "Sync your notes"
 msgstr "Synk dine noter"
 
 #: packages/lib/models/Setting.ts:2641
-#, fuzzy
 msgid "Sync, encryption, proxy"
-msgstr "Aktivér kryptering"
+msgstr "Synkronisering, kryptering, proxy"
 
 #: packages/lib/models/Setting.ts:2606
 msgid "Synchronisation"
@@ -4623,9 +4620,8 @@ msgid "Theme"
 msgstr "Tema"
 
 #: packages/lib/models/Setting.ts:2640
-#, fuzzy
 msgid "Themes, editor font"
-msgstr "Tekstredigeringsskrifttype"
+msgstr "Temaer, editorskrifttype"
 
 #: packages/app-mobile/components/NoteList.tsx:102
 msgid "There are currently no notes. Create one by clicking on the (+) button."
@@ -4929,9 +4925,8 @@ msgid "Toggle external editing"
 msgstr "Slå ekstern redigering til eller fra"
 
 #: packages/lib/models/Setting.ts:2645
-#, fuzzy
 msgid "Toggle note history, keep notes for"
-msgstr "Behold note-historie i"
+msgstr "Skift notehistorik, gem noter til"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNoteList.ts:9
 msgid "Toggle note list"
@@ -5337,7 +5332,7 @@ msgstr "Ved oprettelse af ny opgave:"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:164
 msgid "Window unresponsive."
-msgstr ""
+msgstr "Vinduet reagerer ikke."
 
 # skal være fleretal
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:102
