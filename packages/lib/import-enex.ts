@@ -151,18 +151,22 @@ interface ExtractedNote extends NoteEntity {
 	tags?: string[];
 	title?: string;
 	bodyXml?: string;
-	// is_todo?: boolean;
 }
 
-// At this point we have the resource has it's been parsed from the XML, but additional
-// processing needs to be done to get the final resource file, its size, MD5, etc.
+// At this point we have the resource as it's been parsed from the XML, but
+// additional processing needs to be done to get the final resource file, its
+// size, MD5, etc.
 async function processNoteResource(resource: ExtractedResource) {
-	if (!resource.hasData) {
-		// Some resources have no data, go figure, so we need a special case for this.
-		resource.id = md5(Date.now() + Math.random());
+	const handleNoDataResource = async (resource: ExtractedResource, setId: boolean) => {
+		if (setId) resource.id = md5(Date.now() + Math.random());
 		resource.size = 0;
 		resource.dataFilePath = `${Setting.value('tempDir')}/${resource.id}.empty`;
 		await fs.writeFile(resource.dataFilePath, '');
+	};
+
+	if (!resource.hasData) {
+		// Some resources have no data, go figure, so we need a special case for this.
+		await handleNoDataResource(resource, true);
 	} else {
 		if (resource.dataEncoding === 'base64') {
 			const decodedFilePath = `${resource.dataFilePath}.decoded`;
@@ -176,16 +180,19 @@ async function processNoteResource(resource: ExtractedResource) {
 		resource.size = stats.size;
 
 		if (!resource.id) {
-			// If no resource ID is present, the resource ID is actually the MD5 of the data.
-			// This ID will match the "hash" attribute of the corresponding <en-media> tag.
-			// resourceId = md5(decodedData);
+			// If no resource ID is present, the resource ID is actually the MD5
+			// of the data. This ID will match the "hash" attribute of the
+			// corresponding <en-media> tag. resourceId = md5(decodedData);
 			resource.id = await md5File(resource.dataFilePath);
 		}
 
 		if (!resource.id || !resource.size) {
-			const debugTemp = { ...resource };
-			debugTemp.data = debugTemp.data ? `${debugTemp.data.substr(0, 32)}...` : debugTemp.data;
-			throw new Error(`This resource was not added because it has no ID or no content: ${JSON.stringify(debugTemp)}`);
+			// Don't throw an error because it happens semi-frequently,
+			// especially on notes that comes from the Evernote Web Clipper and
+			// we can't do anything about it. Previously we would throw the
+			// error "This resource was not added because it has no ID or no
+			// content".
+			await handleNoDataResource(resource, !resource.id);
 		}
 	}
 
