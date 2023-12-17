@@ -258,6 +258,14 @@ const createTheme = (theme: any): Extension[] => {
 			tag: tags.typeName,
 			color: isDarkTheme ? '#7ff' : '#a00',
 		},
+		{
+			tag: tags.inserted,
+			color: isDarkTheme ? '#7f7' : '#471',
+		},
+		{
+			tag: tags.deleted,
+			color: isDarkTheme ? '#f96' : '#a21',
+		},
 	]);
 
 	return [
