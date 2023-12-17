@@ -401,7 +401,7 @@ export default class Synchronizer {
 		this.dispatch({ type: 'SYNC_STARTED' });
 		eventManager.emit(EventName.SyncStart);
 
-		this.logSyncOperation('starting', null, null, `Starting synchronisation to target ${syncTargetId}... supportsAccurateTimestamp = ${this.api().supportsAccurateTimestamp}; supportsMultiPut = ${this.api().supportsMultiPut} [${synchronizationId}]`);
+		this.logSyncOperation('starting', null, null, `Starting synchronisation to target ${syncTargetId}... supportsAccurateTimestamp = ${this.api().supportsAccurateTimestamp}; supportsMultiPut = ${this.api().supportsMultiPut}; supportsDeltaWithItems = ${this.api().supportsDeltaWithItems} [${synchronizationId}]`);
 
 		const handleCannotSyncItem = async (ItemClass: any, syncTargetId: any, item: any, cannotSyncReason: string, itemLocation: any = null) => {
 			await ItemClass.saveSyncDisabled(syncTargetId, item, cannotSyncReason, itemLocation);
@@ -843,6 +843,10 @@ export default class Synchronizer {
 							if (local && local.updated_time === remote.jop_updated_time) needsToDownload = false;
 						}
 
+						if (this.api().supportsDeltaWithItems) {
+							needsToDownload = false;
+						}
+
 						if (needsToDownload) {
 							this.downloadQueue_.push(remote.path, async () => {
 								return this.apiCall('get', remote.path);
@@ -862,6 +866,10 @@ export default class Synchronizer {
 						if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
 
 						const loadContent = async () => {
+							if (this.api().supportsDeltaWithItems) {
+								return remote.jopItem;
+							}
+
 							const task = await this.downloadQueue_.waitForResult(path);
 							if (task.error) throw task.error;
 							if (!task.result) return null;

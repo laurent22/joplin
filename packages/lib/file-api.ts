@@ -33,6 +33,8 @@ export interface RemoteItem {
 	// value will always be ahead. However for synchronising we need to know the
 	// exact Joplin item updated_time value.
 	jop_updated_time?: number;
+
+	jopItem?: any;
 }
 
 export interface PaginatedList {
@@ -135,6 +137,13 @@ class FileApi {
 
 	public get supportsLocks(): boolean {
 		return !!this.driver().supportsLocks;
+	}
+
+	// Tells whether the delta call is going to include the items themselves or
+	// just the metadata (which is the default). If the items are included it
+	// means less http request and faster processing.
+	public get supportsDeltaWithItems(): boolean {
+		return !!this.driver().supportsDeltaWithItems;
 	}
 
 	private async fetchRemoteDateOffset_() {

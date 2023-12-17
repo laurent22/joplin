@@ -45,6 +45,10 @@ export default class FileApiDriverJoplinServer {
 		return true;
 	}
 
+	public get supportsDeltaWithItems() {
+		return true;
+	}
+
 	public requestRepeatCount() {
 		return 3;
 	}
@@ -56,6 +60,7 @@ export default class FileApiDriverJoplinServer {
 			jop_updated_time: md.jop_updated_time,
 			isDir: false,
 			isDeleted: isDeleted,
+			jopItem: md.jopItem,
 		};
 
 		return output;
