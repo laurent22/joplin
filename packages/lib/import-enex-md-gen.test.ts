@@ -145,9 +145,11 @@ describe('import-enex-md-gen', () => {
 	it('should keep importing notes when one of them is corrupted', async () => {
 		const filePath = `${enexSampleBaseDir}/ImportTestCorrupt.enex`;
 		const errors: any[] = [];
+		const consoleSpy = jest.spyOn(console, 'warn').mockImplementation(jest.fn());
 		await importEnex('', filePath, {
 			onError: (error: any) => errors.push(error),
 		});
+		consoleSpy.mockRestore();
 		const notes = await Note.all();
 		expect(notes.length).toBe(2);
 
