@@ -51,6 +51,7 @@
 		"@codemirror/search",
 		"@codemirror/state",
 		"@codemirror/view",
+		"@lezer/common",
 		"@lezer/highlight",
 		"@lezer/markdown",
 		"@fortawesome/fontawesome-svg-core",
