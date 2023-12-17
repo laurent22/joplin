@@ -10,6 +10,7 @@ import NoteEditor from '../NoteEditor/NoteEditor';
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
 const { Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
+import type { NativeSyntheticEvent } from 'react-native';
 import { Platform, PermissionsAndroid } from 'react-native';
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
@@ -50,8 +51,9 @@ import isEditableResource from '../NoteEditor/ImageEditor/isEditableResource';
 import VoiceTypingDialog from '../voiceTyping/VoiceTypingDialog';
 import { voskEnabled } from '../../services/voiceTyping/vosk';
 import { isSupportedLanguage } from '../../services/voiceTyping/vosk.android';
-import { ChangeEvent as EditorChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
+import { ChangeEvent as EditorChangeEvent, SelectionRangeChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
 import { join } from 'path';
+import { SelectionRange } from '../NoteEditor/types';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 // import Vosk from 'react-native-vosk';
@@ -64,6 +66,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	// This isn't in this.state because we don't want changing scroll to trigger
 	// a re-render.
 	private lastBodyScroll: number|undefined = undefined;
+	private selection: SelectionRange;
 
 	public static navigationOptions(): any {
 		return { header: null };
@@ -251,7 +254,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.undoRedoService_stackChange = this.undoRedoService_stackChange.bind(this);
 		this.screenHeader_undoButtonPress = this.screenHeader_undoButtonPress.bind(this);
 		this.screenHeader_redoButtonPress = this.screenHeader_redoButtonPress.bind(this);
-		this.body_selectionChange = this.body_selectionChange.bind(this);
 		this.onBodyViewerLoadEnd = this.onBodyViewerLoadEnd.bind(this);
 		this.onBodyViewerCheckboxChange = this.onBodyViewerCheckboxChange.bind(this);
 		this.onBodyChange = this.onBodyChange.bind(this);
@@ -520,13 +522,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.scheduleSave();
 	}
 
-	private body_selectionChange(event: any) {
-		if (this.useEditorBeta()) {
-			this.selection = event.selection;
-		} else {
-			this.selection = event.nativeEvent.selection;
-		}
-	}
+	private onPlainEdtiorSelectionChange = (event: NativeSyntheticEvent<any>) => {
+		this.selection = event.nativeEvent.selection;
+	};
+
+	private onMarkdownEditorSelectionChange = (event: SelectionRangeChangeEvent) => {
+		this.selection = { start: event.from, end: event.to };
+	};
 
 	public makeSaveAction() {
 		return async () => {
@@ -1392,7 +1394,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 						multiline={true}
 						value={note.body}
 						onChangeText={(text: string) => this.body_changeText(text)}
-						onSelectionChange={this.body_selectionChange}
+						onSelectionChange={this.onPlainEdtiorSelectionChange}
 						blurOnSubmit={false}
 						selectionColor={theme.textSelectionColor}
 						keyboardAppearance={theme.keyboardAppearance}
@@ -1413,7 +1415,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					initialText={note.body}
 					initialSelection={this.selection}
 					onChange={this.onBodyChange}
-					onSelectionChange={this.body_selectionChange}
+					onSelectionChange={this.onMarkdownEditorSelectionChange}
 					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
 					onAttach={() => this.showAttachMenu()}
 					readOnly={this.state.readOnly}
