@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import Logger from '@joplin/utils/Logger';
-import { View, Text, StyleSheet, Linking } from 'react-native';
+import { View, Text, StyleSheet, Linking, Animated, Easing } from 'react-native';
 const { connect } = require('react-redux');
 const { _ } = require('@joplin/lib/locale');
 const { themeStyle } = require('../global-style.js');
@@ -11,11 +11,20 @@ import { uuidgen } from '@joplin/lib/uuid';
 import { Button } from 'react-native-paper';
 import createRootStyle from '../../utils/createRootStyle';
 import ScreenHeader from '../ScreenHeader';
+const Icon = require('react-native-vector-icons/Ionicons').default;
 
 interface Props {
 	themeId: number;
 	style: any;
 }
+const syncIconRotationValue = new Animated.Value(0);
+
+const syncIconRotation = syncIconRotationValue.interpolate({
+	inputRange: [0, 1],
+	outputRange: ['0deg', '360deg'],
+});
+
+let syncIconAnimation: any;
 
 const useStyle = (themeId: number) => {
 	return React.useMemo(() => {
@@ -46,6 +55,11 @@ const useStyle = (themeId: number) => {
 				...theme.normalText,
 				fontSize: 18,
 				fontWeight: 'bold',
+			},
+			loadingIcon: {
+				marginVertical: theme.fontSize * 1.2,
+				fontSize: 38,
+				textAlign: 'center',
 			},
 		});
 	}, [themeId]);
@@ -108,6 +122,21 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		};
 	}, [intervalIdentifier]);
 
+	React.useEffect(() => {
+		if (intervalIdentifier && state.next === 'COMPLETED') {
+			syncIconAnimation = Animated.loop(
+				Animated.timing(syncIconRotationValue, {
+					toValue: 1,
+					duration: 1800,
+					easing: Easing.linear,
+					useNativeDriver: false,
+				}),
+			);
+
+			syncIconAnimation.start();
+		}
+	}, [intervalIdentifier, state]);
+
 	return (
 		<View style={styles.root}>
 			<ScreenHeader title={_('Login with Joplin Cloud')} />
@@ -135,7 +164,11 @@ const JoplinCloudScreenComponent = (props: Props) => {
 
 				</View>
 				<Text style={styles[state.style]}>{state.message}</Text>
-				{state.active === 'LINK_USED' ? <Text>Carregando...</Text> : null}
+				{state.active === 'LINK_USED' ? (
+					<Animated.View style={{ transform: [{ rotate: syncIconRotation }] }}>
+						<Icon name='sync' style={styles.loadingIcon}/>
+					</Animated.View>
+				) : null }
 			</View>
 		</View>
 	);
