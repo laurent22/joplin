@@ -1,28 +1,28 @@
-const BaseCommand = require('./base-command').default;
+import BaseCommand from './base-command';
 const { app } = require('./app.js');
-const { _ } = require('@joplin/lib/locale');
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const Folder = require('@joplin/lib/models/Folder').default;
-const Setting = require('@joplin/lib/models/Setting').default;
-const Note = require('@joplin/lib/models/Note').default;
+import { _ } from '@joplin/lib/locale';
+import BaseModel from '@joplin/lib/BaseModel';
+import Folder from '@joplin/lib/models/Folder';
+import Setting from '@joplin/lib/models/Setting';
+import Note from '@joplin/lib/models/Note';
 const { sprintf } = require('sprintf-js');
-const time = require('@joplin/lib/time').default;
+import time from '@joplin/lib/time';
 const { cliUtils } = require('./cli-utils.js');
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'ls [note-pattern]';
 	}
 
-	description() {
+	public override description() {
 		return _('Displays the notes in the current notebook. Use `ls /` to display the list of notebooks.');
 	}
 
-	enabled() {
+	public override enabled() {
 		return true;
 	}
 
-	options() {
+	public override options() {
 		return [
 			['-n, --limit <num>', _('Displays only the first top <num> notes.')],
 			['-s, --sort <field>', _('Sorts the item by <field> (eg. title, updated_time, created_time).')],
@@ -33,12 +33,12 @@ class Command extends BaseCommand {
 		];
 	}
 
-	async action(args) {
+	public override async action(args: any) {
 		const pattern = args['note-pattern'];
 		let items = [];
 		const options = args.options;
 
-		const queryOptions = {};
+		const queryOptions: any = {};
 		if (options.limit) queryOptions.limit = options.limit;
 		if (options.sort) {
 			queryOptions.orderBy = options.sort;

@@ -1,20 +1,20 @@
-const BaseCommand = require('./base-command').default;
+import BaseCommand from './base-command';
 const { app } = require('./app.js');
-const { _ } = require('@joplin/lib/locale');
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const Folder = require('@joplin/lib/models/Folder').default;
-const Note = require('@joplin/lib/models/Note').default;
+import { _ } from '@joplin/lib/locale';
+import BaseModel from '@joplin/lib/BaseModel';
+import Folder from '@joplin/lib/models/Folder';
+import Note from '@joplin/lib/models/Note';
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'mv <item> [notebook]';
 	}
 
-	description() {
+	public override description() {
 		return _('Moves the given <item> to [notebook]');
 	}
 
-	async action(args) {
+	public override async action(args: any) {
 		const pattern = args['item'];
 		const destination = args['notebook'];
 		let folder = null;

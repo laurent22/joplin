@@ -1,19 +1,19 @@
-const BaseCommand = require('./base-command').default;
+import BaseCommand from './base-command';
 const { app } = require('./app.js');
-const { _ } = require('@joplin/lib/locale');
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const Note = require('@joplin/lib/models/Note').default;
+import { _ } from '@joplin/lib/locale';
+import BaseModel from '@joplin/lib/BaseModel';
+import Note from '@joplin/lib/models/Note';
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'cp <note> [notebook]';
 	}
 
-	description() {
+	public override description() {
 		return _('Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.');
 	}
 
-	async action(args) {
+	public override async action(args: any) {
 		let folder = null;
 		if (args['notebook']) {
 			folder = await app().loadItem(BaseModel.TYPE_FOLDER, args['notebook']);
@@ -28,7 +28,7 @@ class Command extends BaseCommand {
 
 		for (let i = 0; i < notes.length; i++) {
 			const newNote = await Note.copyToFolder(notes[i].id, folder.id);
-			Note.updateGeolocation(newNote.id);
+			void Note.updateGeolocation(newNote.id);
 		}
 	}
 }

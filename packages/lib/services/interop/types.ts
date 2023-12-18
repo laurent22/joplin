@@ -44,6 +44,10 @@ export interface ImportOptions {
 	destinationFolderId?: string;
 	destinationFolder?: any;
 	outputFormat?: ImportModuleOutputFormat;
+
+	// Only supported by some importers.
+	onProgress?: (progressState: any, progress?: any)=> void;
+	onError?: (error: any)=> void;
 }
 
 export enum ExportProgressState {

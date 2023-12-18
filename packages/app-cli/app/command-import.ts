@@ -1,20 +1,21 @@
-const BaseCommand = require('./base-command').default;
-const InteropService = require('@joplin/lib/services/interop/InteropService').default;
-const BaseModel = require('@joplin/lib/BaseModel').default;
+import BaseCommand from './base-command';
+import InteropService from '@joplin/lib/services/interop/InteropService';
+import BaseModel from '@joplin/lib/BaseModel';
 const { cliUtils } = require('./cli-utils.js');
 const { app } = require('./app.js');
-const { _ } = require('@joplin/lib/locale');
+import { _ } from '@joplin/lib/locale';
+import { ImportOptions } from '@joplin/lib/services/interop/types';
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'import <path> [notebook]';
 	}
 
-	description() {
+	public override description() {
 		return _('Imports data into Joplin.');
 	}
 
-	options() {
+	public override options() {
 		const service = InteropService.instance();
 		const formats = service
 			.modules()
@@ -28,12 +29,12 @@ class Command extends BaseCommand {
 		];
 	}
 
-	async action(args) {
+	public override async action(args: any) {
 		const folder = await app().loadItem(BaseModel.TYPE_FOLDER, args.notebook);
 
 		if (args.notebook && !folder) throw new Error(_('Cannot find "%s".', args.notebook));
 
-		const importOptions = {};
+		const importOptions: ImportOptions = {};
 		importOptions.path = args.path;
 		importOptions.format = args.options.format ? args.options.format : 'auto';
 		importOptions.destinationFolderId = folder ? folder.id : null;

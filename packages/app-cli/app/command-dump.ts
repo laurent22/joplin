@@ -1,22 +1,22 @@
-const BaseCommand = require('./base-command').default;
-const Folder = require('@joplin/lib/models/Folder').default;
-const Note = require('@joplin/lib/models/Note').default;
-const Tag = require('@joplin/lib/models/Tag').default;
+import BaseCommand from './base-command';
+import Folder from '@joplin/lib/models/Folder';
+import Note from '@joplin/lib/models/Note';
+import Tag from '@joplin/lib/models/Tag';
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'dump';
 	}
 
-	description() {
+	public override description() {
 		return 'Dumps the complete database as JSON.';
 	}
 
-	hidden() {
+	public override hidden() {
 		return true;
 	}
 
-	async action() {
+	public override async action() {
 		let items = [];
 		const folders = await Folder.all();
 		for (let i = 0; i < folders.length; i++) {

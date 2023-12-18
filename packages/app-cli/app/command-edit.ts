@@ -1,24 +1,24 @@
-const fs = require('fs-extra');
-const BaseCommand = require('./base-command').default;
-const { splitCommandString } = require('@joplin/utils');
-const uuid = require('@joplin/lib/uuid').default;
+import * as fs from 'fs-extra';
+import BaseCommand from './base-command';
+import { splitCommandString } from '@joplin/utils';
+import uuid from '@joplin/lib/uuid';
 const { app } = require('./app.js');
-const { _ } = require('@joplin/lib/locale');
-const Note = require('@joplin/lib/models/Note').default;
-const Setting = require('@joplin/lib/models/Setting').default;
-const BaseModel = require('@joplin/lib/BaseModel').default;
+import { _ } from '@joplin/lib/locale';
+import Note from '@joplin/lib/models/Note';
+import Setting from '@joplin/lib/models/Setting';
+import BaseModel from '@joplin/lib/BaseModel';
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'edit <note>';
 	}
 
-	description() {
+	public override description() {
 		return _('Edit note.');
 	}
 
-	async action(args) {
-		let tempFilePath = null;
+	public override async action(args: any) {
+		let tempFilePath: string|null = null;
 
 		const onFinishedEditing = async () => {
 			if (tempFilePath) fs.removeSync(tempFilePath);

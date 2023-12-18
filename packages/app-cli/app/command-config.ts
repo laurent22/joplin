@@ -1,19 +1,20 @@
-const BaseCommand = require('./base-command').default;
-const { _, setLocale } = require('@joplin/lib/locale');
+import BaseCommand from './base-command';
+import { _, setLocale } from '@joplin/lib/locale';
 const { app } = require('./app.js');
-const fs = require('fs-extra');
-const Setting = require('@joplin/lib/models/Setting').default;
+import * as fs from 'fs-extra';
+import Setting, { AppType } from '@joplin/lib/models/Setting';
+import { ReadStream } from 'tty';
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'config [name] [value]';
 	}
 
-	description() {
+	public override description() {
 		return _('Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.');
 	}
 
-	options() {
+	public override options() {
 		return [
 			['-v, --verbose', _('Also displays unset and hidden config variables.')],
 			['--export', 'Writes all settings to STDOUT as JSON including secure variables.'],
@@ -21,11 +22,12 @@ class Command extends BaseCommand {
 			['--import-file <file>', 'Reads in settings from <file>. <file> must contain valid JSON.'],
 		];
 	}
-	async __importSettings(inputStream) {
-		return new Promise((resolve, reject) => {
+
+	private async __importSettings(inputStream: ReadStream|fs.ReadStream) {
+		return new Promise<void>((resolve, reject) => {
 			// being defensive and not attempting to settle twice
 			let isSettled = false;
-			const chunks = [];
+			const chunks: any = [];
 
 			inputStream.on('readable', () => {
 				let chunk;
@@ -64,13 +66,14 @@ class Command extends BaseCommand {
 			});
 		});
 	}
-	async action(args) {
+
+	public override async action(args: any) {
 		const verbose = args.options.verbose;
 		const isExport = args.options.export;
 		const isImport = args.options.import || args.options.importFile;
 		const importFile = args.options.importFile;
 
-		const renderKeyValue = name => {
+		const renderKeyValue = (name: string) => {
 			const md = Setting.settingMetadata(name);
 			let value = Setting.value(name);
 			if (typeof value === 'object' || Array.isArray(value)) value = JSON.stringify(value);
@@ -84,11 +87,11 @@ class Command extends BaseCommand {
 		};
 
 		if (isExport || (!isImport && !args.value)) {
-			const keys = Setting.keys(!verbose, 'cli');
+			const keys = Setting.keys(!verbose, AppType.Cli);
 			keys.sort();
 
 			if (isExport) {
-				const resultObj = keys.reduce((acc, key) => {
+				const resultObj = keys.reduce<Record<string, any>>((acc, key) => {
 					const value = Setting.value(key);
 					if (!verbose && !value) return acc;
 					acc[key] = value;
@@ -113,7 +116,7 @@ class Command extends BaseCommand {
 		}
 
 		if (isImport) {
-			let fileStream = process.stdin;
+			let fileStream: ReadStream|fs.ReadStream = process.stdin;
 			if (importFile) {
 				fileStream = fs.createReadStream(importFile, { autoClose: true });
 			}

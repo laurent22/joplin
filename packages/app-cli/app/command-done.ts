@@ -1,20 +1,20 @@
-const BaseCommand = require('./base-command').default;
+import BaseCommand from './base-command';
 const { app } = require('./app.js');
-const { _ } = require('@joplin/lib/locale');
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const Note = require('@joplin/lib/models/Note').default;
-const time = require('@joplin/lib/time').default;
+import { _ } from '@joplin/lib/locale';
+import BaseModel from '@joplin/lib/BaseModel';
+import Note from '@joplin/lib/models/Note';
+import time from '@joplin/lib/time';
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'done <note>';
 	}
 
-	description() {
+	public override description() {
 		return _('Marks a to-do as done.');
 	}
 
-	static async handleAction(commandInstance, args, isCompleted) {
+	public static async handleAction(commandInstance: BaseCommand, args: any, isCompleted: boolean) {
 		const note = await app().loadItem(BaseModel.TYPE_NOTE, args.note);
 		commandInstance.encryptionCheck(note);
 		if (!note) throw new Error(_('Cannot find "%s".', args.note));
@@ -30,7 +30,7 @@ class Command extends BaseCommand {
 		});
 	}
 
-	async action(args) {
+	public override async action(args: any) {
 		await Command.handleAction(this, args, true);
 	}
 }

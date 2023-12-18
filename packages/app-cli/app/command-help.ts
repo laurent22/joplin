@@ -1,19 +1,19 @@
-const BaseCommand = require('./base-command').default;
+import BaseCommand from './base-command';
 const { app } = require('./app.js');
 const { renderCommandHelp } = require('./help-utils.js');
-const { _ } = require('@joplin/lib/locale');
+import { _ } from '@joplin/lib/locale';
 const { cliUtils } = require('./cli-utils.js');
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'help [command]';
 	}
 
-	description() {
+	public override description() {
 		return _('Displays usage information.');
 	}
 
-	allCommands() {
+	private allCommands() {
 		const commands = app().commands(app().uiType());
 		const output = [];
 		for (const n in commands) {
@@ -29,7 +29,7 @@ class Command extends BaseCommand {
 		return output;
 	}
 
-	async action(args) {
+	public override async action(args: any) {
 		const stdoutWidth = app().commandStdoutMaxWidth();
 
 		if (args.command === 'shortcuts' || args.command === 'keymap') {
@@ -52,7 +52,7 @@ class Command extends BaseCommand {
 
 			for (let i = 0; i < keymap.length; i++) {
 				const item = keymap[i];
-				const keys = item.keys.map(k => (k === ' ' ? '(SPACE)' : k));
+				const keys = item.keys.map((k: string) => (k === ' ' ? '(SPACE)' : k));
 				rows.push([keys.join(', '), item.command]);
 			}
 

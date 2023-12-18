@@ -1,19 +1,19 @@
-const BaseCommand = require('./base-command').default;
+import BaseCommand from './base-command';
 const { app } = require('./app.js');
-const { _ } = require('@joplin/lib/locale');
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const shim = require('@joplin/lib/shim').default;
+import { _ } from '@joplin/lib/locale';
+import BaseModel from '@joplin/lib/BaseModel';
+import shim from '@joplin/lib/shim';
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'attach <note> <file>';
 	}
 
-	description() {
+	public override description() {
 		return _('Attaches the given file to the note.');
 	}
 
-	async action(args) {
+	public override async action(args: any) {
 		const title = args['note'];
 
 		const note = await app().loadItem(BaseModel.TYPE_NOTE, title, { parent: app().currentFolder() });
