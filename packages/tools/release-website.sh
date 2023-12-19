@@ -71,7 +71,13 @@ cd "$JOPLIN_ROOT_DIR"
 CROWDIN_PERSONAL_TOKEN="$CROWDIN_PERSONAL_TOKEN" yarn crowdinDownload
 yarn buildWebsite
 
+
 cd "$JOPLIN_WEBSITE_ROOT_DIR"
+
+# yarn buildWebsite removes docs/plugins. Restoring the original version
+# significantly decreases the size of commits.
+git restore docs/plugins || true
+
 git add -A
 git commit -m "Updated website
 
