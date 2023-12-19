@@ -11,6 +11,7 @@ import { uuidgen } from '@joplin/lib/uuid';
 import { Button } from 'react-native-paper';
 import createRootStyle from '../../utils/createRootStyle';
 import ScreenHeader from '../ScreenHeader';
+import Clipboard from '@react-native-community/clipboard';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 
 interface Props {
@@ -106,8 +107,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 
 	const onCopyToClipboardClicked = async () => {
 		const url = await generateLoginWithUniqueLoginCode(uniqueLoginCode);
-		// eslint-disable-next-line
-		console.log({ url });
+		Clipboard.setString(url);
 		onButtonUsed();
 	};
 
