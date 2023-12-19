@@ -37,7 +37,7 @@ export const reducer: Reducer<IntitialValues, Events> = (state: IntitialValues, 
 	case 'COMPLETED': {
 		return {
 			style: 'h2Style',
-			message: _('You are logged in into Joplin Cloud, you can leave this page now.'),
+			message: _('You are logged in into Joplin Cloud, you can leave this screen now.'),
 			active: 'COMPLETED',
 			next: 'COMPLETED',
 		};
