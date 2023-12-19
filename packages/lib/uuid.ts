@@ -17,9 +17,6 @@ export default {
 	createNano: function(): string {
 		return nanoid();
 	},
-	createNanoForInboxEmail: (): string => {
-		return customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 8)();
-	},
 };
 
 export const createSecureRandom = (size = 32) => {
@@ -42,3 +39,8 @@ export const uuidgen = (length = 22) => {
 	const cachedUuidgen = getCachedUuidgen(length);
 	return cachedUuidgen();
 };
+
+export const createNanoForInboxEmail = (): string => {
+	return customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 8)();
+};
+
