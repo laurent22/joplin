@@ -11,7 +11,7 @@ const applicationsUrl = `${Setting.value('sync.10.path')}/api/applications`;
 type Events = 'LINK_USED' | 'COMPLETED';
 
 type IntitialValues = {
-	style: string;
+	style: 'textStyle' | 'h2Style';
 	message: string;
 	next: Events;
 	active: Events | 'INITIAL';
