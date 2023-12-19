@@ -49,7 +49,7 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 		try {
 			const fileApi = await this.fileApi();
 			const api = fileApi.driver().api();
-			const sessionId = api.sessionId();
+			const sessionId = await api.sessionId();
 			return Boolean(sessionId);
 		} catch (error) {
 			return false;
