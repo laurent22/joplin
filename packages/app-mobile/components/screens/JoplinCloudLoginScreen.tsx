@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import Logger from '@joplin/utils/Logger';
 import { View, Text, StyleSheet, Linking, Animated, Easing } from 'react-native';
 const { connect } = require('react-redux');
 const { _ } = require('@joplin/lib/locale');
@@ -66,9 +65,6 @@ const useStyle = (themeId: number) => {
 	}, [themeId]);
 };
 
-
-const logger = Logger.create('JoplinCloudScreenComponent');
-
 const JoplinCloudScreenComponent = (props: Props) => {
 
 	const [uniqueLoginCode, setUniqueLoginCode] = React.useState(undefined);
@@ -83,7 +79,6 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		const interval = setInterval(async () => {
 			const response = await checkIfLoginWasSuccessful(uniqueLoginCode);
 			if (response && response.success) {
-				logger.info('completed!!');
 				dispatch('COMPLETED');
 				clearInterval(interval);
 			}
