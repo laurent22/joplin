@@ -7065,7 +7065,7 @@ __metadata:
     jsdom: 22.1.0
     knex: 2.5.1
     koa: 2.14.2
-    ldapts: 7.0.6
+    ldapts: 7.0.7
     markdown-it: 13.0.2
     mustache: 4.2.0
     node-cron: 3.0.3
@@ -10149,12 +10149,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/asn1@npm:>=0.2.2":
-  version: 0.2.3
-  resolution: "@types/asn1@npm:0.2.3"
+"@types/asn1@npm:>=0.2.4":
+  version: 0.2.4
+  resolution: "@types/asn1@npm:0.2.4"
   dependencies:
     "@types/node": "*"
-  checksum: c5debd9088d664e71d87816d15a3dcd1d200ffd36b22fc82d0a0f53fba4b7a35f83e1ad1142abfb8052e47a9e516e14d4256341a11415f8b67cfb032f01a08a1
+  checksum: 01fee5a896a650f92c95556c83678d66677060b5aba7936b714b5c8ca2945cc8cabf57441e323f1800a783a55958b6230d109e988ca45e83b2d7a0e071c24069
   languageName: node
   linkType: hard
 
@@ -27630,17 +27630,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ldapts@npm:7.0.6":
-  version: 7.0.6
-  resolution: "ldapts@npm:7.0.6"
+"ldapts@npm:7.0.7":
+  version: 7.0.7
+  resolution: "ldapts@npm:7.0.7"
   dependencies:
-    "@types/asn1": ">=0.2.2"
+    "@types/asn1": ">=0.2.4"
     "@types/uuid": ">=9"
     asn1: ~0.2.6
     debug: ~4.3.4
     strict-event-emitter-types: ~2.0.0
     uuid: ~9.0.1
-  checksum: 43ca9b4924459154b3692147dbe140274e164c1dc34a31692c23b742541a97ba0fe42a52193854ee0aa6f5fd9dcdaa70bc39fc16a617768ea1a260fa2ff49cb3
+  checksum: 98a1702cd972c60d8689c8cf5ef7cc5269f0563d4d30fefbfc0eca4c21fa01f29d5ae3eea2e823057b3d96bc8e525d457093f5f8c3ae86a3dc6f58b7f93923a4
   languageName: node
   linkType: hard
 
