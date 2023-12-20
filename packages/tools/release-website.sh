@@ -72,13 +72,6 @@ CROWDIN_PERSONAL_TOKEN="$CROWDIN_PERSONAL_TOKEN" yarn crowdinDownload
 yarn buildWebsite
 
 cd "$JOPLIN_WEBSITE_ROOT_DIR"
-git add -A
-git commit -m "Updated website
-
-Auto-updated using $SCRIPT_NAME" || true
-
-git pull --rebase
-git push
 
 # Copy and update the plugin website.
 # 
@@ -95,16 +88,17 @@ if [ -f "$BUILT_PLUGIN_WEBSITE_FILE" ]; then
 	cd plugins
 
 	tar -xzvf "$BUILT_PLUGIN_WEBSITE_FILE"
-	cd "$JOPLIN_WEBSITE_ROOT_DIR"
-
-	git add -A
-	git commit -m "Updated plugin discovery website
-
-Auto-updated using $SCRIPT_NAME" || true
-
-	git pull --rebase
-	git push
 else
 	echo "Not updating plugin website -- release ($BUILT_PLUGIN_WEBSITE_FILE) not present"
 	exit 1
 fi
+
+
+cd "$JOPLIN_WEBSITE_ROOT_DIR"
+git add -A
+git commit -m "Updated website
+
+Auto-updated using $SCRIPT_NAME" || true
+
+git pull --rebase
+git push
