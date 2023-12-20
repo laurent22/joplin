@@ -98,7 +98,7 @@
     "@types/react": "18.2.37",
     "@types/react-native": "0.70.6",
     "@types/react-redux": "7.1.31",
-    "@types/tar-stream": "2.2.3",
+    "@types/tar-stream": "3.1.1",
     "babel-jest": "29.7.0",
     "babel-plugin-module-resolver": "4.1.0",
     "fs-extra": "11.1.1",
