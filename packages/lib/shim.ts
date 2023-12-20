@@ -69,10 +69,26 @@ const shim = {
 	},
 
 	isGNOME: () => {
+		if ((!shim.isLinux() && !shim.isFreeBSD()) || !process) {
+			return false;
+		}
+
+		const currentDesktop = process.env['XDG_CURRENT_DESKTOP'] ?? '';
+
 		// XDG_CURRENT_DESKTOP may be something like "ubuntu:GNOME" and not just "GNOME".
 		// Thus, we use .includes and not ===.
-		return (shim.isLinux() || shim.isFreeBSD())
-			&& process && (process.env['XDG_CURRENT_DESKTOP'] ?? '').includes('GNOME');
+		if (currentDesktop.includes('GNOME')) {
+			return true;
+		}
+
+		// On Ubuntu, "XDG_CURRENT_DESKTOP=ubuntu:GNOME" is replaced with "Unity" and
+		// ORIGINAL_XDG_CURRENT_DESKTOP stores the original desktop.
+		const originalCurrentDesktop = process.env['ORIGINAL_XDG_CURRENT_DESKTOP'] ?? '';
+		if (originalCurrentDesktop.includes('GNOME')) {
+			return true;
+		}
+
+		return false;
 	},
 
 	isFreeBSD: () => {
