@@ -1,23 +1,23 @@
-const BaseCommand = require('./base-command').default;
+import BaseCommand from './base-command';
 const { app } = require('./app.js');
-const { _ } = require('@joplin/lib/locale');
-const Note = require('@joplin/lib/models/Note').default;
-const BaseModel = require('@joplin/lib/BaseModel').default;
+import { _ } from '@joplin/lib/locale';
+import Note from '@joplin/lib/models/Note';
+import BaseModel from '@joplin/lib/BaseModel';
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'rmnote <note-pattern>';
 	}
 
-	description() {
+	public override description() {
 		return _('Deletes the notes matching <note-pattern>.');
 	}
 
-	options() {
+	public override options() {
 		return [['-f, --force', _('Deletes the notes without asking for confirmation.')]];
 	}
 
-	async action(args) {
+	public override async action(args: any) {
 		const pattern = args['note-pattern'];
 		const force = args.options && args.options.force === true;
 
@@ -26,7 +26,7 @@ class Command extends BaseCommand {
 
 		const ok = force ? true : await this.prompt(notes.length > 1 ? _('%d notes match this pattern. Delete them?', notes.length) : _('Delete note?'), { booleanAnswerDefault: 'n' });
 		if (!ok) return;
-		const ids = notes.map(n => n.id);
+		const ids = notes.map((n: any) => n.id);
 		await Note.batchDelete(ids);
 	}
 }

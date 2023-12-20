@@ -1,22 +1,22 @@
-const BaseCommand = require('./base-command').default;
+import BaseCommand from './base-command';
 const { app } = require('./app.js');
-const { _ } = require('@joplin/lib/locale');
-const BaseModel = require('@joplin/lib/BaseModel').default;
+import { _ } from '@joplin/lib/locale';
+import BaseModel from '@joplin/lib/BaseModel';
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'use <notebook>';
 	}
 
-	description() {
+	public override description() {
 		return _('Switches to [notebook] - all further operations will happen within this notebook.');
 	}
 
-	compatibleUis() {
+	public override compatibleUis() {
 		return ['cli'];
 	}
 
-	async action(args) {
+	public override async action(args: any) {
 		const folder = await app().loadItem(BaseModel.TYPE_FOLDER, args['notebook']);
 		if (!folder) throw new Error(_('Cannot find "%s".', args['notebook']));
 		app().switchCurrentFolder(folder);

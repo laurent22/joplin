@@ -1,33 +1,34 @@
-const BaseCommand = require('./base-command').default;
-const BaseItem = require('@joplin/lib/models/BaseItem').default;
-const BaseModel = require('@joplin/lib/BaseModel').default;
+import BaseCommand from './base-command';
+import BaseItem from '@joplin/lib/models/BaseItem';
+import BaseModel from '@joplin/lib/BaseModel';
 const { toTitleCase } = require('@joplin/lib/string-utils.js');
-const { reg } = require('@joplin/lib/registry.js');
-const markdownUtils = require('@joplin/lib/markdownUtils').default;
-const Database = require('@joplin/lib/database').default;
-const shim = require('@joplin/lib/shim').default;
+import { reg } from '@joplin/lib/registry.js';
+import markdownUtils, { MarkdownTableRow } from '@joplin/lib/markdownUtils';
+import Database from '@joplin/lib/database';
+import shim from '@joplin/lib/shim';
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'apidoc <file>';
 	}
 
-	description() {
+	public override description() {
 		return 'Build the API doc';
 	}
 
-	enabled() {
+	public override enabled() {
 		return false;
 	}
 
-	createPropertiesTable(tableFields) {
+	private createPropertiesTable(tableFields: MarkdownTableRow[]) {
 		const headers = [
 			{ name: 'name', label: 'Name' },
 			{
 				name: 'type',
 				label: 'Type',
-				filter: value => {
-					return Database.enumName('fieldType', value);
+				filter: (value: string|number) => {
+					const valueAsNumber = typeof value === 'number' ? value : parseInt(value, 10);
+					return Database.enumName('fieldType', valueAsNumber);
 				},
 			},
 			{ name: 'description', label: 'Description' },
@@ -36,7 +37,7 @@ class Command extends BaseCommand {
 		return markdownUtils.createMarkdownTable(headers, tableFields);
 	}
 
-	async action(args) {
+	public override async action(args: any) {
 		const models = [
 			{
 				type: BaseModel.TYPE_NOTE,

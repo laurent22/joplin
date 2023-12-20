@@ -1,24 +1,24 @@
-const BaseCommand = require('./base-command').default;
+import BaseCommand from './base-command';
 const { app } = require('./app.js');
-const { _ } = require('@joplin/lib/locale');
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const BaseItem = require('@joplin/lib/models/BaseItem').default;
-const Note = require('@joplin/lib/models/Note').default;
+import { _ } from '@joplin/lib/locale';
+import BaseModel from '@joplin/lib/BaseModel';
+import BaseItem from '@joplin/lib/models/BaseItem';
+import Note from '@joplin/lib/models/Note';
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'cat <note>';
 	}
 
-	description() {
+	public override description() {
 		return _('Displays the given note.');
 	}
 
-	options() {
+	public override options() {
 		return [['-v, --verbose', _('Displays the complete information about note.')]];
 	}
 
-	async action(args) {
+	public override async action(args: any) {
 		const title = args['note'];
 
 		const item = await app().loadItem(BaseModel.TYPE_NOTE, title, { parent: app().currentFolder() });

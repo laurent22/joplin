@@ -1,23 +1,23 @@
-const BaseCommand = require('./base-command').default;
+import BaseCommand from './base-command';
 const { app } = require('./app.js');
-const { _ } = require('@joplin/lib/locale');
-const Folder = require('@joplin/lib/models/Folder').default;
-const BaseModel = require('@joplin/lib/BaseModel').default;
+import { _ } from '@joplin/lib/locale';
+import Folder from '@joplin/lib/models/Folder';
+import BaseModel from '@joplin/lib/BaseModel';
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'rmbook <notebook>';
 	}
 
-	description() {
+	public override description() {
 		return _('Deletes the given notebook.');
 	}
 
-	options() {
+	public override options() {
 		return [['-f, --force', _('Deletes the notebook without asking for confirmation.')]];
 	}
 
-	async action(args) {
+	public override async action(args: any) {
 		const pattern = args['notebook'];
 		const force = args.options && args.options.force === true;
 

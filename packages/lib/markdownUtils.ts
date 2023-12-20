@@ -16,8 +16,7 @@ export enum MarkdownTableJustify {
 export interface MarkdownTableHeader {
 	name: string;
 	label: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	filter?: Function;
+	filter?: (content: string)=> string;
 	disableEscape?: boolean;
 	disableHtmlEscape?: boolean;
 	justify?: MarkdownTableJustify;

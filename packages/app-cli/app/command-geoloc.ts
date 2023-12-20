@@ -1,19 +1,19 @@
-const BaseCommand = require('./base-command').default;
+import BaseCommand from './base-command';
 const { app } = require('./app.js');
-const { _ } = require('@joplin/lib/locale');
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const Note = require('@joplin/lib/models/Note').default;
+import { _ } from '@joplin/lib/locale';
+import BaseModel from '@joplin/lib/BaseModel';
+import Note from '@joplin/lib/models/Note';
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'geoloc <note>';
 	}
 
-	description() {
+	public override description() {
 		return _('Displays a geolocation URL for the note.');
 	}
 
-	async action(args) {
+	public override async action(args: any) {
 		const title = args['note'];
 
 		const item = await app().loadItem(BaseModel.TYPE_NOTE, title, { parent: app().currentFolder() });

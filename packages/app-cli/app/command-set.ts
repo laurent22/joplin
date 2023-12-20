@@ -1,16 +1,16 @@
-const BaseCommand = require('./base-command').default;
+import BaseCommand from './base-command';
 const { app } = require('./app.js');
-const { _ } = require('@joplin/lib/locale');
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const Database = require('@joplin/lib/database').default;
-const Note = require('@joplin/lib/models/Note').default;
+import { _ } from '@joplin/lib/locale';
+import BaseModel from '@joplin/lib/BaseModel';
+import Database from '@joplin/lib/database';
+import Note from '@joplin/lib/models/Note';
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'set <note> <name> [value]';
 	}
 
-	description() {
+	public override description() {
 		const fields = Note.fields();
 		const s = [];
 		for (let i = 0; i < fields.length; i++) {
@@ -22,7 +22,7 @@ class Command extends BaseCommand {
 		return _('Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s', s.join(', '));
 	}
 
-	async action(args) {
+	public override async action(args: any) {
 		const title = args['note'];
 		const propName = args['name'];
 		let propValue = args['value'];
@@ -36,7 +36,7 @@ class Command extends BaseCommand {
 
 			const timestamp = Date.now();
 
-			const newNote = {
+			const newNote: any = {
 				id: notes[i].id,
 				type_: notes[i].type_,
 				updated_time: timestamp,

@@ -1,19 +1,20 @@
-const BaseCommand = require('./base-command').default;
-const InteropService = require('@joplin/lib/services/interop/InteropService').default;
-const BaseModel = require('@joplin/lib/BaseModel').default;
+import BaseCommand from './base-command';
+import InteropService from '@joplin/lib/services/interop/InteropService';
+import BaseModel from '@joplin/lib/BaseModel';
 const { app } = require('./app.js');
-const { _ } = require('@joplin/lib/locale');
+import { _ } from '@joplin/lib/locale';
+import { ExportOptions } from '@joplin/lib/services/interop/types';
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'export <path>';
 	}
 
-	description() {
+	public override description() {
 		return _('Exports Joplin data to the given path. By default, it will export the complete database including notebooks, notes, tags and resources.');
 	}
 
-	options() {
+	public override options() {
 		const service = InteropService.instance();
 		const formats = service
 			.modules()
@@ -23,8 +24,8 @@ class Command extends BaseCommand {
 		return [['--format <format>', _('Destination format: %s', formats.join(', '))], ['--note <note>', _('Exports only the given note.')], ['--notebook <notebook>', _('Exports only the given notebook.')]];
 	}
 
-	async action(args) {
-		const exportOptions = {};
+	public override async action(args: any) {
+		const exportOptions: ExportOptions = {};
 		exportOptions.path = args.path;
 
 		exportOptions.format = args.options.format ? args.options.format : 'jex';
@@ -34,11 +35,11 @@ class Command extends BaseCommand {
 		if (args.options.note) {
 			const notes = await app().loadItems(BaseModel.TYPE_NOTE, args.options.note, { parent: app().currentFolder() });
 			if (!notes.length) throw new Error(_('Cannot find "%s".', args.options.note));
-			exportOptions.sourceNoteIds = notes.map(n => n.id);
+			exportOptions.sourceNoteIds = notes.map((n: any) => n.id);
 		} else if (args.options.notebook) {
 			const folders = await app().loadItems(BaseModel.TYPE_FOLDER, args.options.notebook);
 			if (!folders.length) throw new Error(_('Cannot find "%s".', args.options.notebook));
-			exportOptions.sourceFolderIds = folders.map(n => n.id);
+			exportOptions.sourceFolderIds = folders.map((n: any) => n.id);
 		}
 
 		const service = InteropService.instance();
