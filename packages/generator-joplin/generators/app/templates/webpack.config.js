@@ -227,6 +227,7 @@ const externalContentScriptLibraries = [
 	'@codemirror/highlight',
 	'@codemirror/lint',
 	'@codemirror/lang-html',
+	'@codemirror/language-data',
 	'@lezer/common',
 	'@lezer/markdown',
 ];

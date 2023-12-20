@@ -276,6 +276,15 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 			tag: tags.deleted,
 			color: isDarkTheme ? '#f96' : '#a21',
 		},
+		{
+			tag: tags.propertyName,
+			color: isDarkTheme ? '#d96' : '#940',
+		},
+		{
+			// CSS class names (and class names in other languages)
+			tag: tags.className,
+			color: isDarkTheme ? '#d8a' : '#904',
+		},
 	]);
 
 	return [
