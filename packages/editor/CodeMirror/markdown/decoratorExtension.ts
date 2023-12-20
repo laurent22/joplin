@@ -123,7 +123,7 @@ const nodeNameToMarkDecoration: Record<string, Decoration> = {
 };
 
 
-type DecorationDescription = { pos: number; length?: number; decoration: Decoration };
+type DecorationDescription = { pos: number; length: number; decoration: Decoration };
 
 // Returns a set of [Decoration]s, associated with block syntax groups that require
 // full-line styling.
@@ -138,6 +138,7 @@ const computeDecorations = (view: EditorView) => {
 			const line = view.state.doc.lineAt(pos);
 			decorations.push({
 				pos: line.from,
+				length: 0,
 				decoration,
 			});
 
@@ -193,13 +194,23 @@ const computeDecorations = (view: EditorView) => {
 		});
 	}
 
-	decorations.sort((a, b) => a.pos - b.pos);
+	// Decorations need to be sorted in ascending order first by start position,
+	// then by length. Adding items to the RangeSetBuilder in an incorrect order
+	// causes an exception to be thrown.
+	decorations.sort((a, b) => {
+		const posComparison = a.pos - b.pos;
+		if (posComparison !== 0) {
+			return posComparison;
+		}
 
-	// Items need to be added to a RangeSetBuilder in ascending order
+		const lengthComparison = a.length - b.length;
+		return lengthComparison;
+	});
+
 	const decorationBuilder = new RangeSetBuilder<Decoration>();
 	for (const { pos, length, decoration } of decorations) {
-		// Null length => entire line
-		decorationBuilder.add(pos, pos + (length ?? 0), decoration);
+		// Zero length => entire line
+		decorationBuilder.add(pos, pos + length, decoration);
 	}
 	return decorationBuilder.finish();
 };
