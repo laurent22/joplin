@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { customAlphabet } from 'nanoid/non-secure';
-import { nanoid as nanoidSecure } from 'nanoid';
+import { nanoid as nanoidSecure, customAlphabet as customAlphabetSecure } from 'nanoid';
 
 // https://zelark.github.io/nano-id-cc/
 // https://security.stackexchange.com/a/41749/1873
@@ -16,9 +16,6 @@ export default {
 	},
 	createNano: function(): string {
 		return nanoid();
-	},
-	createNanoForInboxEmail: (): string => {
-		return customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 8)();
 	},
 };
 
@@ -42,3 +39,9 @@ export const uuidgen = (length = 22) => {
 	const cachedUuidgen = getCachedUuidgen(length);
 	return cachedUuidgen();
 };
+
+export const createNanoForInboxEmail = (): string => {
+	return customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 8)();
+};
+
+export { customAlphabetSecure };
