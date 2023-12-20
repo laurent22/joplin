@@ -8,6 +8,7 @@ import { languages } from '@codemirror/language-data';
 const additionalAliases: Record<string, string[]> = {
 	'python': ['py'],
 	'rust': ['rs'],
+	'markdown': ['md'],
 };
 
 // Convert supportedLanguages to a CodeMirror-readable list
