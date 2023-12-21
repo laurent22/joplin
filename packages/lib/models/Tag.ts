@@ -41,10 +41,10 @@ export default class Tag extends BaseItem {
 	public static async untagAll(tagId: string) {
 		const noteTags = await NoteTag.modelSelectAll('SELECT id FROM note_tags WHERE tag_id = ?', [tagId]);
 		for (let i = 0; i < noteTags.length; i++) {
-			await NoteTag.delete(noteTags[i].id, { source: 'untagAll' });
+			await NoteTag.delete(noteTags[i].id, { source: 'untagAll/disassociate note' });
 		}
 
-		await Tag.delete(tagId, { source: 'untagAll' });
+		await Tag.delete(tagId, { source: 'untagAll/delete tag' });
 	}
 
 	public static async delete(id: string, options: DeleteOptions) {
