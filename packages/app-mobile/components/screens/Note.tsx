@@ -1347,7 +1347,9 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		let fieldToFocus = this.state.note.is_todo ? 'title' : 'body';
 		if (this.state.mode === 'view') fieldToFocus = '';
 
-		if (fieldToFocus === 'title' && this.titleTextFieldRef.current) {
+		// Avoid writing `this.titleTextFieldRef.current` -- titleTextFieldRef may
+		// be undefined.
+		if (fieldToFocus === 'title' && this.titleTextFieldRef?.current) {
 			this.titleTextFieldRef.current.focus();
 		}
 		// if (fieldToFocus === 'body' && this.markdownEditorRef.current) {
