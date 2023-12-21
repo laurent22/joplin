@@ -50,7 +50,7 @@ describe('SearchEngine.resources', () => {
 
 		expect((await db().selectAll('select * from items_normalized')).length).toBe(1);
 
-		await Resource.delete(resource.id);
+		await Resource.delete(resource.id, { source: 'SearchEngine tests' });
 
 		expect((await db().selectAll('select * from items_normalized')).length).toBe(0);
 	});

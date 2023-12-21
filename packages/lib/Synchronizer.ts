@@ -403,7 +403,7 @@ export default class Synchronizer {
 
 		this.logSyncOperation('starting', null, null, `Starting synchronisation to target ${syncTargetId}... supportsAccurateTimestamp = ${this.api().supportsAccurateTimestamp}; supportsMultiPut = ${this.api().supportsMultiPut}; supportsDeltaWithItems = ${this.api().supportsDeltaWithItems} [${synchronizationId}]`);
 
-		const handleCannotSyncItem = async (ItemClass: any, syncTargetId: any, item: any, cannotSyncReason: string, itemLocation: any = null) => {
+		const handleCannotSyncItem = async (ItemClass: typeof BaseItem, syncTargetId: any, item: any, cannotSyncReason: string, itemLocation: any = null) => {
 			await ItemClass.saveSyncDisabled(syncTargetId, item, cannotSyncReason, itemLocation);
 			this.dispatch({ type: 'SYNC_HAS_DISABLED_SYNC_ITEMS' });
 		};
@@ -1001,7 +1001,14 @@ export default class Synchronizer {
 							}
 
 							const ItemClass = BaseItem.itemClass(local.type_);
-							await ItemClass.delete(local.id, { trackDeleted: false, changeSource: ItemChange.SOURCE_SYNC });
+							await ItemClass.delete(
+								local.id,
+								{
+									trackDeleted: false,
+									changeSource: ItemChange.SOURCE_SYNC,
+									source: 'sync: deleteLocal',
+								},
+							);
 						}
 					}
 
@@ -1046,7 +1053,14 @@ export default class Synchronizer {
 							// CONFLICT
 							await Folder.markNotesAsConflict(item.id);
 						}
-						await Folder.delete(item.id, { deleteChildren: false, changeSource: ItemChange.SOURCE_SYNC, trackDeleted: false });
+
+						const deletionOptions = {
+							deleteChildren: false,
+							trackDeleted: false,
+							changeSource: ItemChange.SOURCE_SYNC,
+							source: 'Sync',
+						};
+						await Folder.delete(item.id, deletionOptions);
 					}
 				}
 

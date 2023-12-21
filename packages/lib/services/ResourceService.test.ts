@@ -11,6 +11,8 @@ import { loadMasterKeysFromSettings, setupAndEnableEncryption } from './e2ee/uti
 
 describe('services/ResourceService', () => {
 
+	const defaultDeleteOptions = { source: 'ResourceService tests' };
+
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(2);
@@ -31,7 +33,7 @@ describe('services/ResourceService', () => {
 
 		expect(!!(await Resource.load(resource1.id))).toBe(true);
 
-		await Note.delete(note1.id);
+		await Note.delete(note1.id, defaultDeleteOptions);
 		await service.deleteOrphanResources(0);
 
 		expect(!!(await Resource.load(resource1.id))).toBe(true);
@@ -59,7 +61,7 @@ describe('services/ResourceService', () => {
 
 		await service.indexNoteResources();
 
-		await Note.delete(note1.id);
+		await Note.delete(note1.id, defaultDeleteOptions);
 
 		await service.indexNoteResources();
 
@@ -200,7 +202,7 @@ describe('services/ResourceService', () => {
 
 		const note = await Note.save({});
 		await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
-		await Note.delete(note.id);
+		await Note.delete(note.id, defaultDeleteOptions);
 		const resource = (await Resource.all())[0];
 
 		await resourceService().indexNoteResources();
@@ -223,7 +225,7 @@ describe('services/ResourceService', () => {
 
 		const note = await Note.save({});
 		await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
-		await Note.delete(note.id);
+		await Note.delete(note.id, defaultDeleteOptions);
 		const resource = (await Resource.all())[0];
 		await synchronizer().start();
 

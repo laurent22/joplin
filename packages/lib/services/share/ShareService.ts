@@ -204,8 +204,9 @@ export default class ShareService {
 		// call deleteAllByShareId()
 		await Folder.updateAllShareIds(ResourceService.instance());
 
-		await Folder.delete(folderId, { deleteChildren: false, disableReadOnlyCheck: true });
-		await Folder.deleteAllByShareId(folder.share_id, { disableReadOnlyCheck: true, trackDeleted: false });
+		const source = 'ShareService.leaveSharedFolder';
+		await Folder.delete(folderId, { deleteChildren: false, disableReadOnlyCheck: true, source });
+		await Folder.deleteAllByShareId(folder.share_id, { disableReadOnlyCheck: true, trackDeleted: false, source });
 	}
 
 	// Finds any folder that is associated with a share, but the user no longer

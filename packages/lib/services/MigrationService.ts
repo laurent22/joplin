@@ -24,7 +24,7 @@ export default class MigrationService extends BaseService {
 
 			try {
 				await this.runScript(migration.number);
-				await Migration.delete(migration.id);
+				await Migration.delete(migration.id, { source: 'MigrationService' });
 			} catch (error) {
 				this.logger().error(`Cannot run migration: ${migration.number}`, error);
 				break;

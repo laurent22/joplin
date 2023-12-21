@@ -26,7 +26,7 @@ class Command extends BaseCommand {
 		const ok = force ? true : await this.prompt(_('Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.'), { booleanAnswerDefault: 'n' });
 		if (!ok) return;
 
-		await Folder.delete(folder.id);
+		await Folder.delete(folder.id, { source: 'rmbook command' });
 	}
 }
 

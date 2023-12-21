@@ -46,7 +46,7 @@ describe('Synchronizer.revisions', () => {
 		await switchClient(2);
 
 		await synchronizerStart();
-		await Note.delete(n1.id);
+		await Note.delete(n1.id, { source: 'Synchronizer tests' });
 		await revisionService().collectRevisions(); // REV 1
 		{
 			const allRevs = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);

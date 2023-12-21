@@ -20,6 +20,8 @@ async function allItems() {
 }
 
 describe('models/Note', () => {
+	const defaultDeleteOptions = { source: 'Note tests' };
+
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
@@ -175,7 +177,7 @@ describe('models/Note', () => {
 		await createNTestNotes(noOfNotes, folder1);
 
 		const noteIds = await Folder.noteIds(folder1.id);
-		await Note.batchDelete(noteIds);
+		await Note.batchDelete(noteIds, defaultDeleteOptions);
 
 		const all = await allItems();
 		expect(all.length).toBe(1);
@@ -198,8 +200,8 @@ describe('models/Note', () => {
 		const notesToRemoveFromFolder1 = notesInFolder1IDs.slice(0, 6);
 		const notesToRemoveFromFolder2 = notesInFolder2IDs.slice(11, 14);
 
-		await Note.batchDelete(notesToRemoveFromFolder1);
-		await Note.batchDelete(notesToRemoveFromFolder2);
+		await Note.batchDelete(notesToRemoveFromFolder1, defaultDeleteOptions);
+		await Note.batchDelete(notesToRemoveFromFolder2, defaultDeleteOptions);
 
 		const allAfterDelete = await allItems();
 
@@ -225,7 +227,7 @@ describe('models/Note', () => {
 		await createNTestNotes(noOfNotes, f4, null, 'note4');
 
 		const beforeDelete = await allItems();
-		await Note.batchDelete([]);
+		await Note.batchDelete([], defaultDeleteOptions);
 		const afterDelete = await allItems();
 
 		expect(sortedIds(afterDelete)).toEqual(sortedIds(beforeDelete));
@@ -473,7 +475,10 @@ describe('models/Note', () => {
 		await Folder.save({ id: folder.id, share_id: '123456789' });
 		await Note.save({ id: note1.id, share_id: '123456789' });
 
-		await expectThrow(async () => await Note.delete(note1.id), ErrorCode.IsReadOnly);
+		await expectThrow(
+			async () => await Note.delete(note1.id, defaultDeleteOptions),
+			ErrorCode.IsReadOnly,
+		);
 
 		cleanup();
 	});

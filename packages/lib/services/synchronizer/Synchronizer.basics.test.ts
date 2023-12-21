@@ -8,6 +8,7 @@ import WelcomeUtils from '../../WelcomeUtils';
 import { NoteEntity } from '../database/types';
 
 describe('Synchronizer.basics', () => {
+	const defaultDeleteOptions = { source: 'Synchronizer tests' };
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -96,7 +97,7 @@ describe('Synchronizer.basics', () => {
 
 		await sleep(0.1);
 
-		await Note.delete(note1.id);
+		await Note.delete(note1.id, defaultDeleteOptions);
 
 		await synchronizerStart();
 
@@ -116,7 +117,7 @@ describe('Synchronizer.basics', () => {
 		await switchClient(2);
 
 		await synchronizerStart();
-		await Folder.delete(folder1.id);
+		await Folder.delete(folder1.id, defaultDeleteOptions);
 		await synchronizerStart();
 
 		await switchClient(1);
@@ -135,7 +136,7 @@ describe('Synchronizer.basics', () => {
 		await switchClient(2);
 
 		await synchronizerStart();
-		await Note.delete(note1.id);
+		await Note.delete(note1.id, defaultDeleteOptions);
 		await synchronizerStart();
 
 		await switchClient(1);
@@ -145,7 +146,7 @@ describe('Synchronizer.basics', () => {
 		expect(items.length).toBe(2);
 		const deletedItems = await BaseItem.deletedItems(syncTargetId());
 		expect(deletedItems.length).toBe(0);
-		await Note.delete(note2.id);
+		await Note.delete(note2.id, defaultDeleteOptions);
 		await synchronizerStart();
 	}));
 
@@ -160,7 +161,7 @@ describe('Synchronizer.basics', () => {
 
 		await sleep(0.1);
 
-		await Folder.delete(folder2.id);
+		await Folder.delete(folder2.id, defaultDeleteOptions);
 
 		await synchronizerStart();
 
@@ -176,7 +177,7 @@ describe('Synchronizer.basics', () => {
 		await switchClient(2);
 
 		await synchronizerStart();
-		await Folder.delete(folder2.id);
+		await Folder.delete(folder2.id, defaultDeleteOptions);
 		await synchronizerStart();
 
 		await switchClient(1);
@@ -198,11 +199,11 @@ describe('Synchronizer.basics', () => {
 
 		await synchronizerStart();
 		await sleep(0.1);
-		await Folder.delete(folder1.id);
+		await Folder.delete(folder1.id, defaultDeleteOptions);
 
 		await switchClient(1);
 
-		await Folder.delete(folder2.id);
+		await Folder.delete(folder2.id, defaultDeleteOptions);
 		await synchronizerStart();
 
 		await switchClient(2);
@@ -443,7 +444,7 @@ describe('Synchronizer.basics', () => {
 		await switchClient(2);
 
 		await synchronizerStart();
-		await Note.delete(note.id);
+		await Note.delete(note.id, defaultDeleteOptions);
 		await synchronizerStart();
 
 		await switchClient(1);

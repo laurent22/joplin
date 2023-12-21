@@ -78,7 +78,7 @@ describe('services_SearchEngine', () => {
 		expect(rows.length).toBe(1);
 		expect(rows[0].title).toBe('a');
 
-		await Note.delete(n1.id);
+		await Note.delete(n1.id, { source: 'tests' });
 		await engine.syncTables();
 		rows = await engine.search('a');
 		expect(rows.length).toBe(0);
@@ -490,7 +490,7 @@ describe('services_SearchEngine', () => {
 			expect(rows.length).toBe(1);
 
 
-			await Note.delete(n.id);
+			await Note.delete(n.id, { source: 'tests' });
 		}
 	}));
 

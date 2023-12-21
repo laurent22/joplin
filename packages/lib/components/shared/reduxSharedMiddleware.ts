@@ -63,7 +63,7 @@ const reduxSharedMiddleware = async function(store: any, _next: any, action: any
 		for (const noteId of noteIds) {
 			if (action.id === noteId) continue;
 			reg.logger().info('Provisional was not modified - deleting it');
-			await Note.delete(noteId);
+			await Note.delete(noteId, { source: 'reduxSharedMiddleware: Delete provisional note' });
 		}
 	}
 

@@ -15,6 +15,7 @@ const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
 const { _ } = require('../locale');
 import { pull, unique } from '../ArrayUtils';
 import { LoadOptions, SaveOptions } from './utils/types';
+import ActionLogger from '../utils/ActionLogger';
 const urlUtils = require('../urlUtils.js');
 const { isImageMimeType } = require('../resourceUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
@@ -744,8 +745,10 @@ export default class Note extends BaseItem {
 		return note;
 	}
 
-	public static async batchDelete(ids: string[], options: DeleteOptions = null) {
+	public static async batchDelete(ids: string[], options: DeleteOptions) {
 		ids = ids.slice();
+
+		const actionLogger = ActionLogger.from(options.source);
 
 		while (ids.length) {
 			const processIds = ids.splice(0, 50);
@@ -756,7 +759,9 @@ export default class Note extends BaseItem {
 				beforeChangeItems[note.id] = JSON.stringify(note);
 			}
 
-			await super.batchDelete(processIds, options);
+			actionLogger.addDescription('Note/batchDelete', notes.map(note => note.title).join(', '));
+
+			await super.batchDelete(processIds, { ...options, source: actionLogger });
 			const changeSource = options && options.changeSource ? options.changeSource : null;
 			for (let i = 0; i < processIds.length; i++) {
 				const id = processIds[i];

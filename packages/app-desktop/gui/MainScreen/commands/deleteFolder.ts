@@ -25,7 +25,7 @@ export const runtime = (): CommandRuntime => {
 			const ok = bridge().showConfirmMessageBox(deleteMessage);
 			if (!ok) return;
 
-			await Folder.delete(folderId);
+			await Folder.delete(folderId, { source: 'deleteFolder command' });
 		},
 		enabledCondition: '!folderIsReadOnly',
 	};

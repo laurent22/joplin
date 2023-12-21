@@ -25,7 +25,7 @@ export const runtime = (): CommandRuntime => {
 			});
 
 			if (!ok) return;
-			await Note.batchDelete(noteIds);
+			await Note.batchDelete(noteIds, { source: 'deleteNote command' });
 		},
 		enabledCondition: '!noteIsReadOnly',
 	};

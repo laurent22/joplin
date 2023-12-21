@@ -28,6 +28,8 @@ const setupFolderNoteResourceReadOnly = async (shareId: string) => {
 
 describe('models/Resource', () => {
 
+	const defaultDeleteOptions = { source: 'Resource tests' };
+
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
@@ -64,7 +66,7 @@ describe('models/Resource', () => {
 		expect(!!ls.id).toBe(true);
 		expect(ls.fetch_status).toBe(Resource.FETCH_STATUS_IDLE);
 
-		await Resource.delete(resource1.id);
+		await Resource.delete(resource1.id, defaultDeleteOptions);
 		ls = await Resource.localState(resource1);
 		expect(!ls.id).toBe(true);
 	}));
@@ -146,7 +148,10 @@ describe('models/Resource', () => {
 	it('should not allow deleting a read-only resource', async () => {
 		const { cleanup, resource } = await setupFolderNoteResourceReadOnly('123456789');
 		expect(await pathExists(Resource.fullPath(resource))).toBe(true);
-		await expectThrow(async () => Resource.delete(resource.id), ErrorCode.IsReadOnly);
+		await expectThrow(
+			async () => Resource.delete(resource.id, defaultDeleteOptions),
+			ErrorCode.IsReadOnly,
+		);
 		// Also check that the resource blob has not been deleted
 		expect(await pathExists(Resource.fullPath(resource))).toBe(true);
 		cleanup();

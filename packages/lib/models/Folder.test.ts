@@ -12,6 +12,8 @@ async function allItems() {
 
 describe('models/Folder', () => {
 
+	const defaultDeleteOptions = { source: 'Folder tests' };
+
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
@@ -45,7 +47,7 @@ describe('models/Folder', () => {
 		await createNTestNotes(noOfNotes, f3, null, 'note3');
 		await createNTestNotes(noOfNotes, f4, null, 'note4');
 
-		await Folder.delete(f1.id);
+		await Folder.delete(f1.id, defaultDeleteOptions);
 
 		const all = await allItems();
 		expect(all.length).toBe(0);
@@ -318,7 +320,7 @@ describe('models/Folder', () => {
 		const cleanup = simulateReadOnlyShareEnv('123456789');
 
 		const readonlyFolder = await Folder.save({ share_id: '123456789' });
-		await expectThrow(async () => Folder.delete(readonlyFolder.id), ErrorCode.IsReadOnly);
+		await expectThrow(async () => Folder.delete(readonlyFolder.id, defaultDeleteOptions), ErrorCode.IsReadOnly);
 
 		cleanup();
 	});

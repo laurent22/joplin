@@ -1,10 +1,11 @@
 import { TagEntity } from '../services/database/types';
 
-import BaseModel from '../BaseModel';
+import BaseModel, { DeleteOptions } from '../BaseModel';
 import BaseItem from './BaseItem';
 import NoteTag from './NoteTag';
 import Note from './Note';
 import { _ } from '../locale';
+import ActionLogger from '../utils/ActionLogger';
 
 export default class Tag extends BaseItem {
 	public static tableName() {
@@ -40,14 +41,21 @@ export default class Tag extends BaseItem {
 	public static async untagAll(tagId: string) {
 		const noteTags = await NoteTag.modelSelectAll('SELECT id FROM note_tags WHERE tag_id = ?', [tagId]);
 		for (let i = 0; i < noteTags.length; i++) {
-			await NoteTag.delete(noteTags[i].id);
+			await NoteTag.delete(noteTags[i].id, { source: 'untagAll' });
 		}
 
-		await Tag.delete(tagId);
+		await Tag.delete(tagId, { source: 'untagAll' });
 	}
 
-	public static async delete(id: string, options: any = null) {
-		if (!options) options = {};
+	public static async delete(id: string, options: DeleteOptions) {
+		const actionLogger = ActionLogger.from(options.source);
+		const tagTitle = (await Tag.load(id)).title;
+		actionLogger.addDescription('Tag.delete', `title: ${tagTitle}`);
+
+		options = {
+			...options,
+			source: actionLogger,
+		};
 
 		await super.delete(id, options);
 
@@ -90,7 +98,7 @@ export default class Tag extends BaseItem {
 	public static async removeNote(tagId: string, noteId: string) {
 		const noteTags = await NoteTag.modelSelectAll('SELECT id FROM note_tags WHERE tag_id = ? and note_id = ?', [tagId, noteId]);
 		for (let i = 0; i < noteTags.length; i++) {
-			await NoteTag.delete(noteTags[i].id);
+			await NoteTag.delete(noteTags[i].id, { source: 'Tag/removeNote' });
 		}
 
 		this.dispatch({

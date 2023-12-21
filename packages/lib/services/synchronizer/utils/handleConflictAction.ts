@@ -10,7 +10,7 @@ const logger = Logger.create('handleConflictAction');
 
 export type ConflictAction = 'itemConflict' | 'noteConflict' | 'resourceConflict';
 
-export default async (action: ConflictAction, ItemClass: any, remoteExists: boolean, remoteContent: any, local: any, syncTargetId: number, itemIsReadOnly: boolean, dispatch: Dispatch) => {
+export default async (action: ConflictAction, ItemClass: typeof BaseItem, remoteExists: boolean, remoteContent: any, local: any, syncTargetId: number, itemIsReadOnly: boolean, dispatch: Dispatch) => {
 	logger.debug(`Handling conflict: ${action}`);
 	logger.debug('remoteExists:', remoteExists);
 
@@ -28,6 +28,7 @@ export default async (action: ConflictAction, ItemClass: any, remoteExists: bool
 		} else {
 			await ItemClass.delete(local.id, {
 				changeSource: ItemChange.SOURCE_SYNC,
+				source: 'sync: handleConflictAction: non-note conflict',
 				trackDeleted: false,
 			});
 		}
@@ -82,7 +83,14 @@ export default async (action: ConflictAction, ItemClass: any, remoteExists: bool
 			if (local.encryption_applied) dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });
 		} else {
 			// Remote no longer exists (note deleted) so delete local one too
-			await ItemClass.delete(local.id, { changeSource: ItemChange.SOURCE_SYNC, trackDeleted: false });
+			await ItemClass.delete(
+				local.id,
+				{
+					changeSource: ItemChange.SOURCE_SYNC,
+					trackDeleted: false,
+					source: 'sync: handleConflictAction: note/resource conflict',
+				},
+			);
 		}
 	}
 };
