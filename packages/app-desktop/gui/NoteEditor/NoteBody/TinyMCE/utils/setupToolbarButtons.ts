@@ -59,6 +59,7 @@ export default function(editor: any) {
 	}
 
 	const items: string[] = definitions.filter(d => !!d.grouped).map(d => d.name);
+	items.push('forecolor');
 
 	editor.ui.registry.addGroupToolbarButton('formattingExtras', {
 		icon: 'image-options',

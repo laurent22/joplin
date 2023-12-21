@@ -127,6 +127,16 @@ rules.subscript = {
   }
 }
 
+rules.foregroundColor = {
+  filter: function (node, options) {
+    return node.nodeName === 'SPAN' && node.getAttribute('joplin-color')?.match(/^\#[a-zA-Z0-9]+$/);
+  },
+
+  replacement: function (content, node, options) {
+    return `<span style="color: ${node.getAttribute('joplin-color')};">${content}</span>`;
+  },
+}
+
 // ==============================
 // END Joplin format support
 // ==============================
