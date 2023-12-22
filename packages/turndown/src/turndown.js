@@ -51,20 +51,8 @@ export default function TurndownService (options) {
       // We run the replacement multiple times to handle multiple blank
       // lines in a row.
       //
-      // For example,
-      // ```
-      // Foo
-      //
-      //
-      // Bar
-      // ```
-      // in which the first replacement produces
-      // ```
-      // Foo
-      // <!-- -->
-      //
-      // Bar
-      // ```
+      // For example, "Foo\n\n\nBar" becomes "Foo\n<!-- -->\n\nBar" after the
+      // first replacement.
       let html = node.outerHTML;
       while (html.match(mutliBlankLineRegex)) {
         html = html.replace(mutliBlankLineRegex, '\n<!-- -->$1\n');
