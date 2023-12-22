@@ -96,14 +96,18 @@ export default class Tag extends BaseItem {
 	}
 
 	public static async removeNote(tagId: string, noteId: string) {
+		const tag = await Tag.load(tagId);
+
+		const actionLogger = ActionLogger.from(`Tag/removeNote - tag: ${tag.title}`);
+
 		const noteTags = await NoteTag.modelSelectAll('SELECT id FROM note_tags WHERE tag_id = ? and note_id = ?', [tagId, noteId]);
 		for (let i = 0; i < noteTags.length; i++) {
-			await NoteTag.delete(noteTags[i].id, { source: 'Tag/removeNote' });
+			await NoteTag.delete(noteTags[i].id, { source: actionLogger.clone() });
 		}
 
 		this.dispatch({
 			type: 'NOTE_TAG_REMOVE',
-			item: await Tag.load(tagId),
+			item: tag,
 		});
 	}
 
