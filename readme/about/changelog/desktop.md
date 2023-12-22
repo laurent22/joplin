@@ -1,5 +1,11 @@
 # Joplin Desktop Changelog
 
+## [v2.13.10](https://github.com/laurent22/joplin/releases/tag/v2.13.10) - 2023-12-22T10:11:08Z
+
+- Improved: Remove unnecessary warning when importing ENEX file ([495f088](https://github.com/laurent22/joplin/commit/495f088))
+- Fixed: Fix nested tables not preserved in rich text editor ([#9579](https://github.com/laurent22/joplin/issues/9579)) ([#9543](https://github.com/laurent22/joplin/issues/9543) by Henry Heino)
+- Fixed: Fixed importing invalid tables from ENEX files ([d264bdd](https://github.com/laurent22/joplin/commit/d264bdd))
+
 ## [v2.13.9](https://github.com/laurent22/joplin/releases/tag/v2.13.9) - 2023-12-09T17:18:58Z
 
 - Fixed: Fix KaTeX rendering ([#9456](https://github.com/laurent22/joplin/issues/9456)) ([#9455](https://github.com/laurent22/joplin/issues/9455) by Henry Heino)
