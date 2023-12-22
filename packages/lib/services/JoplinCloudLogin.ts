@@ -72,6 +72,7 @@ export const generateLoginWithUniqueLoginCode = async (uniqueloginCode: string) 
 	searchParams.append('unique_login_code', uniqueloginCode);
 	searchParams.append('platform', applicationInfo.platform.toString());
 	searchParams.append('type', applicationInfo.type.toString());
+	searchParams.append('version', shim.appVersion());
 
 	return `${loginUrl}?${searchParams.toString()}`;
 };
