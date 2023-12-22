@@ -1,1 +1,1 @@
-<table border="5px" bordercolor="#8707B0"><tbody><tr><td>Left side of the main table</td><td><h4 align="center">Nested Table</h4><table border="5px" bordercolor="#F35557"><tbody><tr><td>nested table C1</td><td>nested table C2</td></tr><tr><td>nested table</td><td>nested table</td></tr></tbody></table></td></tr></tbody></table>
+<table><tbody><tr><td>Left side of the main table</td><td><b>Nested Table</b><table><tbody><tr><td>nested table C1</td><td>nested table C2</td></tr><tr><td>nested table</td><td>nested table</td></tr></tbody></table></td></tr></tbody></table>

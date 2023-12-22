@@ -74,8 +74,8 @@ rules.tableRow = {
 rules.table = {
   // Only convert tables that can result in valid Markdown
   // Other tables are kept as HTML using `keep` (see below).
-  filter: function (node) {
-    return node.nodeName === 'TABLE' && !tableShouldBeHtml(node);
+  filter: function (node, options) {
+    return node.nodeName === 'TABLE' && !tableShouldBeHtml(node, options);
   },
 
   replacement: function (content, node) {
@@ -174,7 +174,7 @@ const nodeContains = (node, types) => {
   return false;
 }
 
-const tableShouldBeHtml = (tableNode, preserveNestedTables) => {
+const tableShouldBeHtml = (tableNode, options) => {
   const possibleTags = [
     'UL',
     'OL',
@@ -193,7 +193,7 @@ const tableShouldBeHtml = (tableNode, preserveNestedTables) => {
   // that's made of HTML tables. In that case we have this logic of removing the
   // outer table and keeping only the inner ones. For the Rich Text editor
   // however we always want to keep nested tables.
-  if (preserveNestedTables) possibleTags.push('TABLE');
+  if (options.preserveNestedTables) possibleTags.push('TABLE');
 
   return nodeContains(tableNode, 'code') ||
     nodeContains(tableNode, possibleTags);
@@ -249,7 +249,7 @@ export default function tables (turndownService) {
   isCodeBlock_ = turndownService.isCodeBlock;
 
   turndownService.keep(function (node) {
-    if (node.nodeName === 'TABLE' && tableShouldBeHtml(node, turndownService.options.preserveNestedTables)) return true;
+    if (node.nodeName === 'TABLE' && tableShouldBeHtml(node, turndownService.options)) return true;
     return false;
   });
   for (var key in rules) turndownService.addRule(key, rules[key])
