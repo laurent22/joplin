@@ -1,5 +1,5 @@
 import { RecognizeResult, RecognizeResultBoundingBox, RecognizeResultLine, RecognizeResultWord } from '../utils/types';
-import { Worker, WorkerOptions, createWorker, RecognizeResult as TesseractRecognizeResult } from 'tesseract.js';
+import { Worker, WorkerOptions, createWorker, RecognizeResult as TesseractRecognizeResult, OEM } from 'tesseract.js';
 import OcrDriverBase from '../OcrDriverBase';
 import { Minute } from '@joplin/utils/time';
 import shim from '../../../shim';
@@ -59,10 +59,7 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 		if (this.workerPath_) createWorkerOptions.workerPath = this.workerPath_;
 		if (this.corePath_) createWorkerOptions.corePath = this.corePath_;
 
-		const worker = await this.tesseract_.createWorker(createWorkerOptions);
-
-		await worker.loadLanguage(language);
-		await worker.initialize(language);
+		const worker = await this.tesseract_.createWorker(language, OEM.LSTM_ONLY, createWorkerOptions);
 
 		const output: WorkerWrapper = {
 			id: workerId_++,
