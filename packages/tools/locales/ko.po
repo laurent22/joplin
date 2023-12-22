@@ -937,7 +937,7 @@ msgstr "계속하기"
 
 #: packages/app-mobile/components/screens/Note.tsx:1152
 msgid "Convert to note"
-msgstr "기노트로 변환"
+msgstr "노트로 변환"
 
 #: packages/app-mobile/components/screens/Note.tsx:1152
 msgid "Convert to todo"
@@ -1043,7 +1043,7 @@ msgid ""
 "The error was: \"%s\""
 msgstr ""
 "초대에 응답할 수 없습니다. 노트북 소유자가 계속 공유 중인지 확인한 후에 다시 "
-"시도해보보세요.\n"
+"시도해보세요.\n"
 "\n"
 "발생한 오류: \"%s\""
 
