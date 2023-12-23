@@ -776,6 +776,7 @@ packages/lib/services/commands/propsHaveChanged.js
 packages/lib/services/commands/stateToWhenClauseContext.js
 packages/lib/services/contextkey/contextkey.js
 packages/lib/services/database/addMigrationFile.js
+packages/lib/services/database/isSqliteSyntaxError.js
 packages/lib/services/database/migrations/42.js
 packages/lib/services/database/migrations/43.js
 packages/lib/services/database/migrations/44.js

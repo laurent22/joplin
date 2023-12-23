@@ -22,6 +22,7 @@ import { htmlentities } from '@joplin/utils/html';
 import { RecognizeResultLine } from '../services/ocr/utils/types';
 import eventManager, { EventName } from '../eventManager';
 import { unique } from '../array';
+import isSqliteSyntaxError from '../services/database/isSqliteSyntaxError';
 
 export default class Resource extends BaseItem {
 
@@ -553,15 +554,47 @@ export default class Resource extends BaseItem {
 		return this.modelSelectAll(`SELECT id, ocr_text FROM resources WHERE id IN ("${ids.join('","')}")`);
 	}
 
-	public static allForNormalization(updatedTime: number, id: string, limit = 100, options: LoadOptions = null) {
-		return this.modelSelectAll<ResourceEntity>(`
-			SELECT ${this.selectFields(options)} FROM resources
-			WHERE (updated_time, id) > (?, ?)
-			AND ocr_text != ""
-			AND ocr_status = ?
-			ORDER BY updated_time ASC, id ASC
-			LIMIT ?
-		`, [updatedTime, id, ResourceOcrStatus.Done, limit]);
+	public static async allForNormalization(updatedTime: number, id: string, limit = 100, options: LoadOptions = null) {
+		const makeQuery = (useRowValue: boolean): SqlQuery => {
+			const whereSql = useRowValue ? '(updated_time, id) > (?, ?)' : 'updated_time > ?';
+
+			const params: any[] = [updatedTime];
+			if (useRowValue) {
+				params.push(id);
+			}
+			params.push(ResourceOcrStatus.Done);
+			params.push(limit);
+
+			return {
+				sql: `
+					SELECT ${this.selectFields(options)} FROM resources
+					WHERE ${whereSql}
+					AND ocr_text != ""
+					AND ocr_status = ?
+					ORDER BY updated_time ASC, id ASC
+					LIMIT ?
+				`,
+				params,
+			};
+		};
+
+		// We use a row value in this query, and that's not supported on certain
+		// Android devices (API level <= 24). So if the query fails, we fallback
+		// to a non-row value query. Although it may be inaccurate in some cases
+		// it wouldn't be a critical issue (some OCRed resources may not be part
+		// of the search engine results) and it means we can keep supporting old
+		// Android devices.
+		try {
+			const r = await this.modelSelectAll(makeQuery(true));
+			return r;
+		} catch (error) {
+			if (isSqliteSyntaxError(error)) {
+				const r = await this.modelSelectAll(makeQuery(false));
+				return r;
+			} else {
+				throw error;
+			}
+		}
 	}
 
 	public static async save(o: ResourceEntity, options: SaveOptions = null): Promise<ResourceEntity> {
