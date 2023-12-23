@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Sat, 23 Dec 2023 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Sat, 23 Dec 2023 00:00:00 GMT</pubDate><item><title><![CDATA[Faster synchronisation in upcoming Joplin version!]]></title><description><![CDATA[<p>The next version of Joplin Cloud (and Joplin Server) will include a change that will make synchronisation, in particular when synchronising a new device for the first time, significantly faster. This is achieved by bundling more data with the calls that retrieve notes and other data, thus reducing the number of unnecessary requests.</p>
 <p>This change will be applied soon to Joplin Cloud (and Server), and the Joplin mobile, desktop and CLI applications will be able to use it from version 2.14.</p>
-<p>In my tests with about 26,000 items, synchronisation was approximately 60% faster on Joplin Cloud (22.5 minutes vs 9.5 minutes):</p>
+<p>In my tests with about 26,000 items, synchronisation was more than twice as fast on Joplin Cloud (22.5 minutes vs 9.5 minutes):</p>
 <h2>Before<a name="before" href="#before" class="heading-anchor">🔗</a></h2>
 <p>Created local items: 21814. Fetched items: 26591/26591. Completed: 23/12/2023 10:38 (<strong>1346s</strong>)</p>
-<p><strong>real 22m35.810s</strong><br>
-user 3m19.182s<br>
+<p><strong>real 22m35.810s</strong><br/><br>
+user 3m19.182s<br/><br>
 sys 1m24.207s</p>
 <h2>Optimised<a name="optimised" href="#optimised" class="heading-anchor">🔗</a></h2>
 <p>Created local items: 21822. Fetched items: 26600/26600. Completed: 23/12/2023 11:48 (<strong>571s</strong>)</p>
-<p><strong>real 9m38.932s</strong><br>
-user 1m10.119s<br>
+<p><strong>real 9m38.932s</strong><br/><br>
+user 1m10.119s<br/><br>
 sys 0m38.013s</p>
 ]]></description><link>https://joplinapp.org/news/20231223-faster-sync</link><guid isPermaLink="false">20231223-faster-sync</guid><pubDate>Sat, 23 Dec 2023 00:00:00 GMT</pubDate><twitter-text>Faster synchronisation in upcoming Joplin version!</twitter-text></item><item><title><![CDATA[What's new in Joplin 2.13]]></title><description><![CDATA[<h2>Desktop<a name="desktop" href="#desktop" class="heading-anchor">🔗</a></h2>
 <h3>Rich Text Editor improvements<a name="rich-text-editor-improvements" href="#rich-text-editor-improvements" class="heading-anchor">🔗</a></h3>
