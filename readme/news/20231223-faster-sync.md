@@ -1,5 +1,6 @@
 ---
 tweet: Faster synchronisation in upcoming Joplin version!
+forum_url: https://discourse.joplinapp.org/t/34623
 ---
 
 # Faster synchronisation in upcoming Joplin version!
