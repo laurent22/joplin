@@ -45,10 +45,6 @@ export default class FileApiDriverJoplinServer {
 		return true;
 	}
 
-	public get supportsDeltaWithItems() {
-		return true;
-	}
-
 	public requestRepeatCount() {
 		return 3;
 	}

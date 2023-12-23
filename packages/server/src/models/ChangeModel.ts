@@ -16,7 +16,7 @@ export const defaultChangeTtl = 180 * Day;
 
 export interface DeltaChange extends Change {
 	jop_updated_time?: number;
-	jopItem: any;
+	jopItem?: any;
 }
 
 export type PaginatedDeltaChanges = PaginatedResults<DeltaChange>;
@@ -53,7 +53,7 @@ export function requestDeltaPagination(query: any): ChangePagination {
 
 export default class ChangeModel extends BaseModel<Change> {
 
-	private deltaIncludesItems_: boolean;
+	public deltaIncludesItems_: boolean;
 
 	public constructor(db: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
 		super(db, modelFactory, config);
@@ -266,12 +266,14 @@ export default class ChangeModel extends BaseModel<Change> {
 
 		const finalChanges = processedChanges.map(change => {
 			const item = items.find(item => item.id === change.item_id);
-			if (!item) return { ...change, jopItem: null };
+			if (!item) return this.deltaIncludesItems_ ? { ...change, jopItem: null } : { ...change };
 			const deltaChange: DeltaChange = {
 				...change,
 				jop_updated_time: item.jop_updated_time,
-				jopItem: this.deltaIncludesItems_ && item.jop_type ? this.models().item().itemToJoplinItem(item) : null,
 			};
+			if (this.deltaIncludesItems_) {
+				deltaChange.jopItem = item.jop_type ? this.models().item().itemToJoplinItem(item) : null;
+			}
 			return deltaChange;
 		});
 

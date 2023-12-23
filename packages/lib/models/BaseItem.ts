@@ -207,7 +207,7 @@ export default class BaseItem extends BaseModel {
 		return output;
 	}
 
-	public static pathToId(path: string) {
+	public static pathToId(path: string): string {
 		const p = path.split('/');
 		const s = p[p.length - 1].split('.');
 		let name: any = s[0];

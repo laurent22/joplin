@@ -20,7 +20,7 @@ import JoplinError from './JoplinError';
 import ShareService from './services/share/ShareService';
 import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
-import { FileApi, RemoteItem } from './file-api';
+import { FileApi, getSupportsDeltaWithItems, PaginatedList, RemoteItem } from './file-api';
 import JoplinDatabase from './JoplinDatabase';
 import { fetchSyncInfo, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
 import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
@@ -389,9 +389,6 @@ export default class Synchronizer {
 		this.syncTargetIsLocked_ = false;
 		this.cancelling_ = false;
 
-		// const masterKeysBefore = await MasterKey.count();
-		// let hasAutoEnabledEncryption = false;
-
 		const synchronizationId = time.unixMs().toString();
 
 		const outputContext = { ...lastContext };
@@ -401,7 +398,7 @@ export default class Synchronizer {
 		this.dispatch({ type: 'SYNC_STARTED' });
 		eventManager.emit(EventName.SyncStart);
 
-		this.logSyncOperation('starting', null, null, `Starting synchronisation to target ${syncTargetId}... supportsAccurateTimestamp = ${this.api().supportsAccurateTimestamp}; supportsMultiPut = ${this.api().supportsMultiPut}; supportsDeltaWithItems = ${this.api().supportsDeltaWithItems} [${synchronizationId}]`);
+		this.logSyncOperation('starting', null, null, `Starting synchronisation to target ${syncTargetId}... supportsAccurateTimestamp = ${this.api().supportsAccurateTimestamp}; supportsMultiPut = ${this.api().supportsMultiPut}} [${synchronizationId}]`);
 
 		const handleCannotSyncItem = async (ItemClass: any, syncTargetId: any, item: any, cannotSyncReason: string, itemLocation: any = null) => {
 			await ItemClass.saveSyncDisabled(syncTargetId, item, cannotSyncReason, itemLocation);
@@ -810,7 +807,7 @@ export default class Synchronizer {
 				while (true) {
 					if (this.cancelling() || hasCancelled) break;
 
-					const listResult: any = await this.apiCall('delta', '', {
+					const listResult: PaginatedList = await this.apiCall('delta', '', {
 						context: context,
 
 						// allItemIdsHandler() provides a way for drivers that don't have a delta API to
@@ -827,7 +824,9 @@ export default class Synchronizer {
 						logger: logger,
 					});
 
-					const remotes: RemoteItem[] = listResult.items;
+					const supportsDeltaWithItems = getSupportsDeltaWithItems(listResult);
+
+					const remotes = listResult.items;
 
 					this.logSyncOperation('fetchingTotal', null, null, 'Fetching delta items from sync target', remotes.length);
 
@@ -843,7 +842,7 @@ export default class Synchronizer {
 							if (local && local.updated_time === remote.jop_updated_time) needsToDownload = false;
 						}
 
-						if (this.api().supportsDeltaWithItems) {
+						if (supportsDeltaWithItems) {
 							needsToDownload = false;
 						}
 
@@ -866,9 +865,7 @@ export default class Synchronizer {
 						if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
 
 						const loadContent = async () => {
-							if (this.api().supportsDeltaWithItems) {
-								return remote.jopItem;
-							}
+							if (supportsDeltaWithItems) return remote.jopItem;
 
 							const task = await this.downloadQueue_.waitForResult(path);
 							if (task.error) throw task.error;
