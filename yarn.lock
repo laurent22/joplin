@@ -6642,7 +6642,7 @@ __metadata:
     lodash: 4.17.21
     md5: 2.3.0
     metro-react-native-babel-preset: 0.73.9
-    nodemon: 3.0.1
+    nodemon: 3.0.2
     path-browserify: 1.0.1
     prop-types: 15.8.1
     punycode: 2.3.1
@@ -7071,7 +7071,7 @@ __metadata:
     node-cron: 3.0.3
     node-mocks-http: 1.13.0
     nodemailer: 6.9.7
-    nodemon: 3.0.1
+    nodemon: 3.0.2
     pg: 8.11.3
     pm2: 5.3.0
     pretty-bytes: 5.6.0
@@ -17920,7 +17920,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:4.3.4, debug@npm:^4.3.2, debug@npm:^4.3.3, debug@npm:^4.3.4, debug@npm:~4.3.1, debug@npm:~4.3.4":
+"debug@npm:4.3.4, debug@npm:^4, debug@npm:^4.3.2, debug@npm:^4.3.3, debug@npm:^4.3.4, debug@npm:~4.3.1, debug@npm:~4.3.4":
   version: 4.3.4
   resolution: "debug@npm:4.3.4"
   dependencies:
@@ -31194,12 +31194,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemon@npm:3.0.1":
-  version: 3.0.1
-  resolution: "nodemon@npm:3.0.1"
+"nodemon@npm:3.0.2":
+  version: 3.0.2
+  resolution: "nodemon@npm:3.0.2"
   dependencies:
     chokidar: ^3.5.2
-    debug: ^3.2.7
+    debug: ^4
     ignore-by-default: ^1.0.1
     minimatch: ^3.1.2
     pstree.remy: ^1.1.8
@@ -31210,7 +31210,7 @@ __metadata:
     undefsafe: ^2.0.5
   bin:
     nodemon: bin/nodemon.js
-  checksum: 6a5d81855760d6617049eccce10ccf02bddb482dab13ceea5280ae595ec7004eee13e7b934368e3f46c37fe4d970342a8c38c99cae7e93e4d7a3ed1c1ecb6acf
+  checksum: 61f3dd207ad444f4a7a2f1aa44adc886605c96c7bc6286291c2360e5e2cd26c3828c90a1418a60783a9da2463593383149135a5a4c099918c54d34a611745499
   languageName: node
   linkType: hard
 
@@ -37097,7 +37097,7 @@ __metadata:
     lint-staged: 14.0.1
     madge: 6.1.0
     node-gyp: 9.4.1
-    nodemon: 3.0.1
+    nodemon: 3.0.2
     npm-package-json-lint: 7.1.0
     typescript: 5.2.2
   languageName: unknown
