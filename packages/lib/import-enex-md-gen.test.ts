@@ -204,4 +204,12 @@ describe('import-enex-md-gen', () => {
 		expect(resource.title).toBe('app_images/resizable/961b875f-24ac-402f-9b76-37e2d4f03a6c/house_500.jpg.png');
 	});
 
+	it('should sanitize resource filenames with colons', async () => {
+		await importEnexFile('resource_filename_with_colons.enex');
+		const resource: ResourceEntity = (await Resource.all())[0];
+		expect(resource.filename).toBe('08.06.2014165855');
+		expect(resource.file_extension).toBe('2014165855');
+		expect(resource.title).toBe('08.06.2014 16:58:55');
+	});
+
 });
