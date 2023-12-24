@@ -6750,7 +6750,7 @@ __metadata:
     "@lezer/common": 1.1.2
     "@lezer/highlight": 1.2.0
     "@lezer/markdown": 1.1.2
-    "@replit/codemirror-vim": 6.0.14
+    "@replit/codemirror-vim": 6.1.0
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.8
     "@types/react": 18.2.39
@@ -9391,16 +9391,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replit/codemirror-vim@npm:6.0.14":
-  version: 6.0.14
-  resolution: "@replit/codemirror-vim@npm:6.0.14"
+"@replit/codemirror-vim@npm:6.1.0":
+  version: 6.1.0
+  resolution: "@replit/codemirror-vim@npm:6.1.0"
   peerDependencies:
     "@codemirror/commands": ^6.0.0
     "@codemirror/language": ^6.1.0
     "@codemirror/search": ^6.2.0
     "@codemirror/state": ^6.0.1
     "@codemirror/view": ^6.0.3
-  checksum: 43d14512172df23a47818a8f19ead1733cc1dc7c77cf27d6fd3bc75d645b0400affd96c15e32d2985404b603a09b9296dab9173c501096b42e5e8e8092dbfe0f
+  checksum: 9643e2210c847b0eee0b2ed648e4390f11f270449f26ed39d282f9b09656c249f148c7a616b8fd58e305dc5063289a1c87c4da95788137bf2636b9182609309a
   languageName: node
   linkType: hard
 

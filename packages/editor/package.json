@@ -40,6 +40,6 @@
     "@lezer/common": "1.1.2",
     "@lezer/highlight": "1.2.0",
     "@lezer/markdown": "1.1.2",
-    "@replit/codemirror-vim": "6.0.14"
+    "@replit/codemirror-vim": "6.1.0"
   }
 }
