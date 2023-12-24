@@ -6615,7 +6615,7 @@ __metadata:
     "@react-native-community/push-notification-ios": 1.11.0
     "@react-native-community/slider": 4.4.3
     "@testing-library/jest-native": 5.4.3
-    "@testing-library/react-native": 12.3.3
+    "@testing-library/react-native": 12.4.0
     "@tsconfig/react-native": 2.0.2
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
@@ -10041,9 +10041,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react-native@npm:12.3.3":
-  version: 12.3.3
-  resolution: "@testing-library/react-native@npm:12.3.3"
+"@testing-library/react-native@npm:12.4.0":
+  version: 12.4.0
+  resolution: "@testing-library/react-native@npm:12.4.0"
   dependencies:
     jest-matcher-utils: ^29.7.0
     pretty-format: ^29.7.0
@@ -10056,7 +10056,7 @@ __metadata:
   peerDependenciesMeta:
     jest:
       optional: true
-  checksum: 0697548966f77b00cd1dd91dd31aff218bcc607a082735810a5b950a40250fcfa7d5acf9d1262ad5cf66bdb69bc07567c91f92ce5d4720e219872ebe0ed54627
+  checksum: 417c6deaddda3c853c23ae9db21ee817c91cdeefebf6a905bbf85ff5038863f240a8f0a6c91e48a7171030e4d7ead093d7c4e1d075fb65e48b2b266b7fa0a5f3
   languageName: node
   linkType: hard
 
