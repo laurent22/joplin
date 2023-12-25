@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: genneko <genneko217@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:363
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -364,14 +366,12 @@ msgid "Always"
 msgstr "いつも"
 
 #: packages/lib/models/Setting.ts:1129
-#, fuzzy
 msgid "Always ask"
-msgstr "いつも"
+msgstr "常に確認する"
 
 #: packages/lib/models/Setting.ts:1130
-#, fuzzy
 msgid "Always resize"
-msgstr "いつも"
+msgstr "常にリサイズする"
 
 #: packages/app-cli/app/command-mv.js:36
 msgid ""
@@ -397,7 +397,7 @@ msgstr ""
 
 #: packages/app-desktop/ElectronAppWrapper.ts:88
 msgid "An error occurred: %s"
-msgstr ""
+msgstr "エラーが発生しました: %s"
 
 #: packages/app-desktop/checkForUpdates.ts:106
 msgid "An update is available, do you want to download it now?"
@@ -1143,14 +1143,12 @@ msgid "Creates a new to-do."
 msgstr "新しいToDoを作成します。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:112
-#, fuzzy
 msgid "Creating new note..."
-msgstr "新しい %s を作成中..."
+msgstr "新しいノートを作成中..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:112
-#, fuzzy
 msgid "Creating new to-do..."
-msgstr "新しい %s を作成中..."
+msgstr "新しい ToDoを作成中..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:27
 msgid "Creating report..."
@@ -1507,9 +1505,8 @@ msgstr ""
 "ワードを入力してください。"
 
 #: packages/lib/models/Setting.ts:2648
-#, fuzzy
 msgid "Donate, website"
-msgstr "JoplinのWebサイト"
+msgstr "寄付、Webサイト"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:115
@@ -1950,9 +1947,8 @@ msgid "Export profile"
 msgstr "プロファイルをエクスポート"
 
 #: packages/lib/models/Setting.ts:2647
-#, fuzzy
 msgid "Export your data"
-msgstr "すべてをエクスポート"
+msgstr "データをエクスポートする"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:106
 msgid "Exported successfully!"
@@ -2140,7 +2136,7 @@ msgstr[0] "リンクを生成中..."
 
 #: packages/lib/models/Setting.ts:2644
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
-msgstr ""
+msgstr "位置情報、スペルチェック、エディタツールバー、画像リサイズ"
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:91
 msgid "Get it now:"
@@ -2598,9 +2594,8 @@ msgid "Language"
 msgstr "言語"
 
 #: packages/lib/models/Setting.ts:2639
-#, fuzzy
 msgid "Language, date format"
-msgstr "日付の形式"
+msgstr "言語、日付の形式"
 
 #: packages/lib/Synchronizer.ts:197
 msgid "Last error: %s"
@@ -2725,7 +2720,7 @@ msgstr "ログアウト"
 
 #: packages/lib/models/Setting.ts:2646
 msgid "Logs, profiles, sync status"
-msgstr ""
+msgstr "ログ、プロファイル、同期の状態"
 
 #: packages/app-desktop/gui/MenuBar.tsx:859
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:381
@@ -2821,7 +2816,7 @@ msgstr "最大合計サイズ"
 
 #: packages/lib/models/Setting.ts:2643
 msgid "Media player, math, diagrams, table of contents"
-msgstr ""
+msgstr "メディアプレーヤー、数式、作図、目次"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:318
 msgid "Missing keys"
@@ -2887,7 +2882,7 @@ msgstr "N"
 
 #: packages/lib/models/Setting.ts:1131
 msgid "Never resize"
-msgstr ""
+msgstr "リサイズしない"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:8
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:121
@@ -3676,7 +3671,7 @@ msgstr "マスターパスワードをリセット"
 
 #: packages/lib/models/Setting.ts:1125
 msgid "Resize large images:"
-msgstr ""
+msgstr "大きな画像のリサイズ:"
 
 #: packages/app-cli/app/command-import.js:51
 #: packages/app-desktop/gui/ImportScreen.tsx:92
@@ -3688,9 +3683,8 @@ msgid "Restart and upgrade"
 msgstr "再起動してアップグレード"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:85
-#, fuzzy
 msgid "Restart in safe mode"
-msgstr "再起動してアップグレード"
+msgstr "セーフモードで再起動"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:717
 msgid "Restart now"
@@ -4009,7 +4003,7 @@ msgstr "サイドバーの表示切り替え"
 
 #: packages/lib/models/Setting.ts:1126
 msgid "Shrink large images before adding them to notes."
-msgstr ""
+msgstr "大きな画像をノートに添付する前に縮小します。"
 
 #: packages/app-mobile/root.tsx:1013
 #, fuzzy
@@ -4291,9 +4285,8 @@ msgid "Sync your notes"
 msgstr "ノートを同期する"
 
 #: packages/lib/models/Setting.ts:2641
-#, fuzzy
 msgid "Sync, encryption, proxy"
-msgstr "暗号化を有効にする"
+msgstr "同期、暗号化、プロキシ"
 
 #: packages/lib/models/Setting.ts:2606
 msgid "Synchronisation"
@@ -4626,9 +4619,8 @@ msgid "Theme"
 msgstr "テーマ"
 
 #: packages/lib/models/Setting.ts:2640
-#, fuzzy
 msgid "Themes, editor font"
-msgstr "エディターのフォント"
+msgstr "テーマ、エディターのフォント"
 
 #: packages/app-mobile/components/NoteList.tsx:102
 msgid "There are currently no notes. Create one by clicking on the (+) button."
@@ -4922,9 +4914,8 @@ msgid "Toggle external editing"
 msgstr "外部エディターでの編集を開始・終了"
 
 #: packages/lib/models/Setting.ts:2645
-#, fuzzy
 msgid "Toggle note history, keep notes for"
-msgstr "ノート履歴の保存期間"
+msgstr "履歴の有効化/無効化、保存期間"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNoteList.ts:9
 msgid "Toggle note list"
@@ -5012,9 +5003,8 @@ msgid "Unable to export or share data. Reason: %s"
 msgstr "データをエクスポートまたは共有できません。理由: %s"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:68
-#, fuzzy
 msgid "Unable to share log data. Reason: %s"
-msgstr "データをエクスポートまたは共有できません。理由: %s"
+msgstr "ログを共有できません。理由: %s"
 
 #: packages/lib/models/Setting.ts:922
 msgid "Uncompleted to-dos on top"
