@@ -125,6 +125,10 @@ class Application extends BaseApplication {
 			this.updateTray();
 		}
 
+		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'hideMenuBar' || action.type === 'SETTING_UPDATE_ALL') {
+			this.updateMenuBar();
+		}
+
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'ocr.enabled' || action.type === 'SETTING_UPDATE_ALL') {
 			this.setupOcrService();
 		}
@@ -192,6 +196,13 @@ class Application extends BaseApplication {
 			]);
 			app.createTray(contextMenu);
 		}
+	}
+
+	public updateMenuBar() {
+		const window = bridge().window();
+
+		window.setAutoHideMenuBar(Setting.value('hideMenuBar'));
+		window.setMenuBarVisibility(!Setting.value('hideMenuBar'));
 	}
 
 	public updateEditorFont() {
