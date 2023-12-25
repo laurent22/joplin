@@ -1431,26 +1431,22 @@ class Setting extends BaseModel {
 			tagHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
 			folderHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
 			editor: { value: '', type: SettingItemType.String, subType: 'file_path_and_args', storage: SettingStorage.File, isGlobal: true, public: true, appTypes: [AppType.Cli, AppType.Desktop], label: () => _('Text editor command'), description: () => _('The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
-			'export.pdfPageSize': {
-				value: 'A4', type: SettingItemType.String, advanced: true, storage: SettingStorage.File, isGlobal: true, isEnum: true, public: true, appTypes: [AppType.Desktop], label: () => _('Page size for PDF export'), options: () => {
-					return {
-						'A4': _('A4'),
-						'Letter': _('Letter'),
-						'A3': _('A3'),
-						'A5': _('A5'),
-						'Tabloid': _('Tabloid'),
-						'Legal': _('Legal'),
-					};
-				},
-			},
-			'export.pdfPageOrientation': {
-				value: 'portrait', type: SettingItemType.String, storage: SettingStorage.File, isGlobal: true, advanced: true, isEnum: true, public: true, appTypes: [AppType.Desktop], label: () => _('Page orientation for PDF export'), options: () => {
-					return {
-						'portrait': _('Portrait'),
-						'landscape': _('Landscape'),
-					};
-				},
-			},
+			'export.pdfPageSize': { value: 'A4', type: SettingItemType.String, advanced: true, storage: SettingStorage.File, isGlobal: true, isEnum: true, public: true, appTypes: [AppType.Desktop], label: () => _('Page size for PDF export'), options: () => {
+				return {
+					'A4': _('A4'),
+					'Letter': _('Letter'),
+					'A3': _('A3'),
+					'A5': _('A5'),
+					'Tabloid': _('Tabloid'),
+					'Legal': _('Legal'),
+				};
+			} },
+			'export.pdfPageOrientation': { value: 'portrait', type: SettingItemType.String, storage: SettingStorage.File, isGlobal: true, advanced: true, isEnum: true, public: true, appTypes: [AppType.Desktop], label: () => _('Page orientation for PDF export'), options: () => {
+				return {
+					'portrait': _('Portrait'),
+					'landscape': _('Landscape'),
+				};
+			} },
 
 			useCustomPdfViewer: {
 				value: false,
@@ -1670,9 +1666,9 @@ class Setting extends BaseModel {
 				label: () => _('Notebook list growth factor'),
 				description: () =>
 					_('The factor property sets how the item will grow or shrink ' +
-						'to fit the available space in its container with respect to the other items. ' +
-						'Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.' +
-						'Restart app to see changes.'),
+				'to fit the available space in its container with respect to the other items. ' +
+				'Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.' +
+				'Restart app to see changes.'),
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
@@ -1685,9 +1681,9 @@ class Setting extends BaseModel {
 				label: () => _('Note list growth factor'),
 				description: () =>
 					_('The factor property sets how the item will grow or shrink ' +
-						'to fit the available space in its container with respect to the other items. ' +
-						'Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.' +
-						'Restart app to see changes.'),
+				'to fit the available space in its container with respect to the other items. ' +
+				'Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.' +
+				'Restart app to see changes.'),
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
@@ -1700,9 +1696,9 @@ class Setting extends BaseModel {
 				label: () => _('Note area growth factor'),
 				description: () =>
 					_('The factor property sets how the item will grow or shrink ' +
-						'to fit the available space in its container with respect to the other items. ' +
-						'Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.' +
-						'Restart app to see changes.'),
+				'to fit the available space in its container with respect to the other items. ' +
+				'Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.' +
+				'Restart app to see changes.'),
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
