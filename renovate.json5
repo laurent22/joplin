@@ -51,6 +51,7 @@
 		"@codemirror/search",
 		"@codemirror/state",
 		"@codemirror/view",
+		"@replit/codemirror-vim",
 		"@lezer/common",
 		"@lezer/highlight",
 		"@lezer/markdown",
