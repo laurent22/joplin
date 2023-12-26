@@ -6833,6 +6833,7 @@ __metadata:
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
     "@types/js-yaml": 4.0.9
+    "@types/markdown-it": 13.0.7
     "@types/nanoid": 3.0.0
     "@types/node": 18.18.14
     "@types/node-rsa": 1.1.4
@@ -7185,8 +7186,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/utils@workspace:packages/utils"
   dependencies:
+    "@joplin/fork-htmlparser2": ^4.1.50
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
+    "@types/markdown-it": 13.0.7
     "@types/node-fetch": 2.6.9
     async-mutex: 0.4.0
     execa: 5.1.1
@@ -7194,6 +7197,7 @@ __metadata:
     glob: 10.3.10
     html-entities: 1.4.0
     jest: 29.7.0
+    markdown-it: 13.0.2
     moment: 2.29.4
     node-fetch: 2.6.7
     sprintf-js: 1.1.3

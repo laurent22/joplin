@@ -10,6 +10,8 @@ import { NoteEntity, ResourceEntity } from './services/database/types';
 import { enexXmlToMd } from './import-enex-md-gen';
 import { MarkupToHtml } from '@joplin/renderer';
 import { fileExtension, friendlySafeFilename, safeFileExtension } from './path-utils';
+import { extractUrls as extractUrlsFromHtml } from '@joplin/utils/html';
+import { extractUrls as extractUrlsFromMarkdown } from '@joplin/utils/markdown';
 const moment = require('moment');
 const { wrapError } = require('./errorUtils');
 const { enexXmlToHtml } = require('./import-enex-html-gen.js');
@@ -435,6 +437,15 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 			processingNotes = true;
 			stream.pause();
 
+			// Set the note ID so that we can create a title-to-id map, which
+			// will be needed to recreate the note links below.
+			const noteTitleToId: Record<string, string[]> = {};
+			for (const note of notes) {
+				if (!noteTitleToId[note.title]) noteTitleToId[note.title] = [];
+				note.id = uuid.create();
+				noteTitleToId[note.title].push(note.id);
+			}
+
 			while (notes.length) {
 				const note = notes.shift();
 
@@ -452,20 +463,40 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 						note.resources[i] = resource;
 					}
 
-					const body = importOptions.outputFormat === 'html' ?
+					// --------------------------------------------------------
+					// Convert the ENEX body to either Markdown or HTML
+					// --------------------------------------------------------
+
+					let body: string = importOptions.outputFormat === 'html' ?
 						await enexXmlToHtml(note.bodyXml, note.resources) :
 						await enexXmlToMd(note.bodyXml, note.resources, note.tasks);
 					delete note.bodyXml;
+
+					// --------------------------------------------------------
+					// Convert the Evernote note links to Joplin note links. If
+					// we don't find a matching note, or if there are multiple
+					// matching notes, we leave the Evernote links as is.
+					// --------------------------------------------------------
+
+					const links = importOptions.outputFormat === 'html' ?
+						extractUrlsFromHtml(body) :
+						extractUrlsFromMarkdown(body);
+
+					for (const link of links) {
+						const matchingNoteIds = noteTitleToId[link.title];
+						if (matchingNoteIds && matchingNoteIds.length === 1) {
+							body = body.replace(link.url, `:/${matchingNoteIds[0]}`);
+						}
+					}
+
+					// --------------------------------------------------------
+					// Finish setting up the note
+					// --------------------------------------------------------
 
 					note.markup_language = importOptions.outputFormat === 'html' ?
 						MarkupToHtml.MARKUP_LANGUAGE_HTML :
 						MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 
-					// console.info('*************************************************************************');
-					// console.info(body);
-					// console.info('*************************************************************************');
-
-					note.id = uuid.create();
 					note.parent_id = parentFolderId;
 					note.body = body;
 
