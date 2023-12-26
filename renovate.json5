@@ -105,6 +105,7 @@
 		"@babel/runtime",
 		"@tsconfig/react-native",
 		"@types/react-native",
+		"@testing-library/react-native",
 		"androidx.appcompat:appcompat",
 		"babel-plugin-module-resolver",
 		"com.android.tools.build:gradle",
