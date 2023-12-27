@@ -132,12 +132,11 @@ rules.subscript = {
 // this may leave unwanted formatting when saving websites as markdown.
 rules.foregroundColor = {
   filter: function (node, options) {
-    const hexColorRegex = /^\#[a-zA-Z0-9]+$/;
-    return node.nodeName === 'SPAN' && node.getAttribute('joplin-color')?.match(hexColorRegex);
+    return options.preserveColorStyles && node.nodeName === 'SPAN' && getStyleProp(node, 'color');
   },
 
   replacement: function (content, node, options) {
-    return `<span style="color: ${node.getAttribute('joplin-color')};">${content}</span>`;
+    return `<span style="color: ${htmlentities(getStyleProp(node, 'color'))};">${content}</span>`;
   },
 }
 

@@ -631,7 +631,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					joplinSub: { inline: 'sub', remove: 'all' },
 					joplinSup: { inline: 'sup', remove: 'all' },
 					code: { inline: 'code', remove: 'all', attributes: { spellcheck: false } },
-					forecolor: { inline: 'span', styles: { color: '%value' }, attributes: { 'joplin-color': '%value' } },
+					forecolor: { inline: 'span', styles: { color: '%value' } },
 				},
 				setup: (editor: Editor) => {
 					editor.addCommand('joplinAttach', () => {
