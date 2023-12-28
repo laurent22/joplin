@@ -7064,7 +7064,7 @@ __metadata:
     jest-expect-message: 1.1.3
     jquery: 3.7.1
     jsdom: 22.1.0
-    knex: 2.5.1
+    knex: 3.0.1
     koa: 2.14.2
     ldapts: 7.0.7
     markdown-it: 13.0.2
@@ -27384,9 +27384,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"knex@npm:2.5.1":
-  version: 2.5.1
-  resolution: "knex@npm:2.5.1"
+"knex@npm:3.0.1":
+  version: 3.0.1
+  resolution: "knex@npm:3.0.1"
   dependencies:
     colorette: 2.0.19
     commander: ^10.0.0
@@ -27419,7 +27419,7 @@ __metadata:
       optional: true
   bin:
     knex: bin/cli.js
-  checksum: 4f2da7fda51a450de25274eb76034c869de0427c17831dc8472b8116e879d23aae0592c2ce4e9b2a473417867063ac6e7b29021b39b4a4d502335017a5a09278
+  checksum: bcfc3f8da9a7e898a873d2a122856ac9355f5ee1c0ab39534d6cac9ea69388da2fe0fa607b20d65298e191a4377af72f8ff7f4430f8b8c4abc144010b7e9796c
   languageName: node
   linkType: hard
 
