@@ -6530,7 +6530,7 @@ __metadata:
     "@joplin/renderer": ~2.14
     "@joplin/tools": ~2.14
     "@joplin/utils": ~2.14
-    "@playwright/test": 1.40.0
+    "@playwright/test": 1.40.1
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.8
     "@types/mustache": 4.2.5
@@ -8842,14 +8842,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:1.40.0":
-  version: 1.40.0
-  resolution: "@playwright/test@npm:1.40.0"
+"@playwright/test@npm:1.40.1":
+  version: 1.40.1
+  resolution: "@playwright/test@npm:1.40.1"
   dependencies:
-    playwright: 1.40.0
+    playwright: 1.40.1
   bin:
     playwright: cli.js
-  checksum: 128f05978f9f5a557f0b7924ec134d43cb70c78d74bc3bf7b18576f00e72399100ddf1f4a139e05ea8275407d8e27be0203ac34f514319a2cbeb01eaf0be5be4
+  checksum: ae094e6cb809365c0707ee2b184e42d2a2542569ada020d2d44ca5866066941262bd9a67af185f86c2fb0133c9b712ea8cb73e2959a289e4261c5fd17077283c
   languageName: node
   linkType: hard
 
@@ -33256,27 +33256,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.40.0":
-  version: 1.40.0
-  resolution: "playwright-core@npm:1.40.0"
+"playwright-core@npm:1.40.1":
+  version: 1.40.1
+  resolution: "playwright-core@npm:1.40.1"
   bin:
     playwright-core: cli.js
-  checksum: 57de5c91a4c404b120ed2af8541b21cdedcbc4f27477341157666d356bbee3b3fab8e61d020f0f450708fa2e8f6dc244b9224cb1985d5426e609cebed15af095
+  checksum: 84d92fb9b86e3c225b16b6886bf858eb5059b4e60fa1205ff23336e56a06dcb2eac62650992dede72f406c8e70a7b6a5303e511f9b4bc0b85022ede356a01ee0
   languageName: node
   linkType: hard
 
-"playwright@npm:1.40.0":
-  version: 1.40.0
-  resolution: "playwright@npm:1.40.0"
+"playwright@npm:1.40.1":
+  version: 1.40.1
+  resolution: "playwright@npm:1.40.1"
   dependencies:
     fsevents: 2.3.2
-    playwright-core: 1.40.0
+    playwright-core: 1.40.1
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 7ba49e5376a6cfd1d32048dbdb2fd38e09182aa2e4619fdb23d3e6530fa6987f2f3fd34ad1d9d906fb4ec2da69ee7536eeb881982d60750fde809183caa607fc
+  checksum: 9e36791c1b4a649c104aa365fdd9d049924eeb518c5967c0e921aa38b9b00994aa6ee54784d6c2af194b3b494b6f69772673081ef53c6c4a4b2065af9955c4ba
   languageName: node
   linkType: hard
 
