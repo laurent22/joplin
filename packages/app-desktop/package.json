@@ -139,7 +139,7 @@
     "js-sha512": "0.8.0",
     "nan": "2.18.0",
     "react-test-renderer": "18.2.0",
-    "ts-node": "10.9.1",
+    "ts-node": "10.9.2",
     "typescript": "5.2.2"
   },
   "dependencies": {

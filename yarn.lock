@@ -6587,7 +6587,7 @@ __metadata:
     taboverride: 4.0.3
     tesseract.js: 5.0.3
     tinymce: 5.10.6
-    ts-node: 10.9.1
+    ts-node: 10.9.2
     typescript: 5.2.2
   languageName: unknown
   linkType: soft
@@ -6688,7 +6688,7 @@ __metadata:
     timers: 0.1.1
     ts-jest: 29.1.1
     ts-loader: 9.5.1
-    ts-node: 10.9.1
+    ts-node: 10.9.2
     typescript: 5.2.2
     uglify-js: 3.17.4
     url: 0.11.3
@@ -6703,7 +6703,7 @@ __metadata:
     "@joplin/utils": ~2.14
     "@types/yargs": 17.0.32
     fs-extra: 11.1.1
-    ts-node: 10.9.1
+    ts-node: 10.9.2
     typescript: 5.2.2
     yargs: 17.7.2
   languageName: unknown
@@ -40880,9 +40880,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-node@npm:10.9.1":
-  version: 10.9.1
-  resolution: "ts-node@npm:10.9.1"
+"ts-node@npm:10.9.2":
+  version: 10.9.2
+  resolution: "ts-node@npm:10.9.2"
   dependencies:
     "@cspotcode/source-map-support": ^0.8.0
     "@tsconfig/node10": ^1.0.7
@@ -40914,7 +40914,7 @@ __metadata:
     ts-node-script: dist/bin-script.js
     ts-node-transpile-only: dist/bin-transpile.js
     ts-script: dist/bin-script-deprecated.js
-  checksum: 090adff1302ab20bd3486e6b4799e90f97726ed39e02b39e566f8ab674fd5bd5f727f43615debbfc580d33c6d9d1c6b1b3ce7d8e3cca3e20530a145ffa232c35
+  checksum: fde256c9073969e234526e2cfead42591b9a2aec5222bac154b0de2fa9e4ceb30efcd717ee8bc785a56f3a119bdd5aa27b333d9dbec94ed254bd26f8944c67ac
   languageName: node
   linkType: hard
 
