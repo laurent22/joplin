@@ -45,7 +45,7 @@
     "mustache": "4.2.0",
     "node-cron": "3.0.3",
     "nodemailer": "6.9.7",
-    "nodemon": "3.0.1",
+    "nodemon": "3.0.2",
     "pg": "8.11.3",
     "pm2": "5.3.0",
     "pretty-bytes": "5.6.0",
