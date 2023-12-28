@@ -593,7 +593,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				valid_elements: '#p,*[*]',
 
 				menubar: false,
-				relative_urls: false,
+				convert_urls: false,
 				branding: false,
 				statusbar: false,
 				target_list: false,
