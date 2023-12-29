@@ -16,10 +16,10 @@ function mermaidReady() {
 	return typeof mermaid !== 'undefined' && mermaid !== null && typeof mermaid === 'object' && !!mermaid.initialize;
 }
 
-const isDarkMode = (mermaidTargetNodes) => {
-	if (!mermaidTargetNodes.length) return false;
-
-	return mermaidTargetNodes[0].classList.contains('theme-dark');
+const isDarkMode = () => {
+	// If any mermaid elements are marked as requiring dark mode, render *all*
+	// mermaid elements in dark mode.
+	return !!document.querySelector('.mermaid.joplin--mermaid-use-dark-theme');
 };
 
 function mermaidInit() {
@@ -27,13 +27,13 @@ function mermaidInit() {
 		const mermaidTargetNodes = document.getElementsByClassName('mermaid');
 
 		try {
-			const darkMode = isDarkMode(mermaidTargetNodes);
+			const darkMode = isDarkMode();
 			mermaid.initialize({
 				// We call mermaid.run ourselves whenever the note updates. Don't auto-start
 				startOnLoad: false,
 
-				//darkMode,
-				theme: darkMode ? 'dark' : 'base',
+				darkMode,
+				theme: darkMode ? 'dark' : 'default',
 			});
 			mermaid.run({
 				nodes: mermaidTargetNodes,
@@ -53,11 +53,19 @@ document.addEventListener('joplin-noteDidUpdate', () => {
 	mermaidInit();
 });
 
-const initIID_ = setInterval(() => {
-	const isReady = mermaidReady();
-	if (isReady) {
-		clearInterval(initIID_);
-
+document.addEventListener('DOMContentLoaded', () => {
+	// In some environments, we can load Mermaid immediately (e.g. mobile).
+	// If we don't load it immediately in these environments, Mermaid seems
+	// to initialize and auto-run itself.
+	if (mermaidReady()) {
 		mermaidInit();
+	} else {
+		const initIID_ = setInterval(() => {
+			const isReady = mermaidReady();
+			if (isReady) {
+				clearInterval(initIID_);
+				mermaidInit();
+			}
+		}, 100);
 	}
-}, 100);
+});
