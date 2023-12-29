@@ -7078,7 +7078,7 @@ __metadata:
     pretty-bytes: 5.6.0
     prettycron: 0.10.0
     query-string: 7.1.3
-    rate-limiter-flexible: 3.0.4
+    rate-limiter-flexible: 3.0.6
     raw-body: 2.5.2
     source-map-support: 0.5.21
     sqlite3: 5.1.6
@@ -34775,10 +34775,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rate-limiter-flexible@npm:3.0.4":
-  version: 3.0.4
-  resolution: "rate-limiter-flexible@npm:3.0.4"
-  checksum: d7af8a07e13e53704b35bef274f9293e40986cc3f92898098b650fe0466f686f0fb01778694e852107e2c2cf45192c0e43fb47ee2e01096e09621a9232dfccd3
+"rate-limiter-flexible@npm:3.0.6":
+  version: 3.0.6
+  resolution: "rate-limiter-flexible@npm:3.0.6"
+  checksum: 65cf8edacde55b78255d5de0286b1297ec897fee128f4f18734f36a230297d75433fa599ea423f7726b61b8f8ebf108d66ee09e7155e37aa25f506015b5166a4
   languageName: node
   linkType: hard
 
