@@ -53,6 +53,14 @@ document.addEventListener('joplin-noteDidUpdate', () => {
 	mermaidInit();
 });
 
+const initIID_ = setInterval(() => {
+	const isReady = mermaidReady();
+	if (isReady) {
+		clearInterval(initIID_);
+		mermaidInit();
+	}
+}, 100);
+
 document.addEventListener('DOMContentLoaded', () => {
 	// In some environments, we can load Mermaid immediately (e.g. mobile).
 	// If we don't load it immediately in these environments, Mermaid seems
@@ -60,12 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	if (mermaidReady()) {
 		mermaidInit();
 	} else {
-		const initIID_ = setInterval(() => {
-			const isReady = mermaidReady();
-			if (isReady) {
-				clearInterval(initIID_);
-				mermaidInit();
-			}
-		}, 100);
+		clearInterval(initIID_);
 	}
 });
