@@ -90,6 +90,7 @@
         ]
       },
       "hardenedRuntime": true,
+      "notarize": false,
       "entitlements": "./build-mac/entitlements.mac.inherit.plist",
       "extendInfo": {
         "CFBundleURLTypes": [
