@@ -125,7 +125,7 @@ class Application extends BaseApplication {
 			this.updateTray();
 		}
 
-		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'hideMenuBar' || action.type === 'SETTING_UPDATE_ALL') {
+		if (!shim.isMac() && (action.type === 'SETTING_UPDATE_ONE' && action.key === 'hideMenuBar' || action.type === 'SETTING_UPDATE_ALL')) {
 			this.updateMenuBar();
 		}
 
@@ -199,8 +199,11 @@ class Application extends BaseApplication {
 	}
 
 	public updateMenuBar() {
-		const window = bridge().window();
+		// Safety to not even try to call these methods on a mac, as the
+		// menu bar cannot be hidden on a Mac.
+		if (shim.isMac()) return;
 
+		const window = bridge().window();
 		window.setAutoHideMenuBar(Setting.value('hideMenuBar'));
 		window.setMenuBarVisibility(!Setting.value('hideMenuBar'));
 	}
