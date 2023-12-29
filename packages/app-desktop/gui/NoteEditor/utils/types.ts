@@ -9,6 +9,8 @@ import { ProcessResultsRow } from '@joplin/lib/services/searchengine/SearchEngin
 
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
+	themeId?: number;
+	whiteBackgroundNoteRendering?: boolean;
 }
 
 export interface ToolbarButtonInfos {
@@ -63,6 +65,14 @@ export interface NoteBodyEditorProps {
 	style: any;
 	ref: any;
 	themeId: number;
+
+	// When this is true it means the note must always be rendered using a white
+	// background theme. This applies to the Markdown editor note view, and to
+	// the RTE. It does not apply to other elements such as the toolbar, dialogs
+	// or the CodeMirror editor. This is used to correctly render HTML notes and
+	// avoid cases where black text is rendered over a dark background.
+	whiteBackgroundNoteRendering: boolean;
+
 	content: string;
 	contentKey: string;
 	contentMarkupLanguage: number;
