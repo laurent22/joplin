@@ -333,7 +333,7 @@ PODS:
   - React-jsinspector (0.71.10)
   - React-logger (0.71.10):
     - glog
-  - react-native-alarm-notification (2.13.0):
+  - react-native-alarm-notification (2.14.0):
     - React
   - react-native-camera (4.2.1):
     - React-Core
@@ -351,25 +351,26 @@ PODS:
     - React-Core
   - react-native-get-random-values (1.9.0):
     - React-Core
-  - react-native-image-picker (5.7.0):
+  - react-native-image-picker (7.0.3):
     - React-Core
   - react-native-image-resizer (3.0.7):
     - React-Core
-  - react-native-netinfo (9.4.1):
+  - react-native-netinfo (9.5.0):
     - React-Core
   - react-native-rsa-native (2.0.5):
     - React
-  - react-native-saf-x (2.13.3):
+  - react-native-saf-x (2.14.0):
     - React-Core
   - react-native-safe-area-context (4.7.4):
     - React-Core
-  - react-native-slider (4.4.3):
+  - react-native-slider (4.4.4):
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-sqlite-storage (6.0.1):
     - React-Core
   - react-native-version-info (1.1.1):
     - React-Core
-  - react-native-webview (13.6.2):
+  - react-native-webview (13.6.3):
     - React-Core
   - React-perflogger (0.71.10)
   - React-RCTActionSheet (0.71.10):
@@ -461,7 +462,7 @@ PODS:
     - React-Core
   - RNCPushNotificationIOS (1.11.0):
     - React-Core
-  - RNDateTimePicker (7.6.1):
+  - RNDateTimePicker (7.6.2):
     - React-Core
   - RNDeviceInfo (10.11.0):
     - React-Core
@@ -471,7 +472,7 @@ PODS:
     - React-Core
   - RNFS (2.20.0):
     - React-Core
-  - RNLocalize (3.0.2):
+  - RNLocalize (3.0.4):
     - React-Core
   - RNQuickAction (0.3.13):
     - React
@@ -479,7 +480,7 @@ PODS:
     - React
   - RNShare (9.4.1):
     - React-Core
-  - RNVectorIcons (10.0.1):
+  - RNVectorIcons (10.0.2):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - RNZipArchive (6.1.0):
@@ -777,22 +778,22 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 4bb480a183a354e4dbfb1012936b1a2bb9357de7
   React-jsinspector: cdc854f8b13abd202afa54bc12578e5afb9cfae1
   React-logger: ef2269b3afa6ba868da90496c3e17a4ec4f4cee0
-  react-native-alarm-notification: a0fb2ff7ad6973faf141f6a87db7dd924468ad91
+  react-native-alarm-notification: f27565d7b14c206fd1b0caac4aee82d2e7939b7d
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
   react-native-document-picker: 2b8f18667caee73a96708a82b284a4f40b30a156
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
   react-native-geolocation: ef66fb798d96284c6043f0b16c15d9d1d4955db4
   react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb
-  react-native-image-picker: 3269f75c251cdcd61ab51b911dd30d6fff8c6169
+  react-native-image-picker: 2381c008bbb09e72395a2d043c147b11bd1523d9
   react-native-image-resizer: 681f7607418b97c084ba2d0999b153b103040d8a
-  react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
+  react-native-netinfo: 48c5f79a84fbc3ba1d28a8b0d04adeda72885fa8
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
-  react-native-saf-x: 0f7531c9f8bdbb62bbd55ceb7433de7bb756cd73
+  react-native-saf-x: e0d30813901e54dad462dacda96555f725c2284f
   react-native-safe-area-context: 2cd91d532de12acdb0a9cbc8d43ac72a8e4c897c
-  react-native-slider: 1cdd6ba29675df21f30544253bf7351d3c2d68c4
+  react-native-slider: ae9441a884f8465762f1f68d31eafad42663adb4
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-version-info: a106f23009ac0db4ee00de39574eb546682579b9
-  react-native-webview: 8fc09f66a1a5b16bbe37c3878fda27d5982bb776
+  react-native-webview: 88293a0f23eca8465c0433c023ec632930e644d0
   React-perflogger: 217095464d5c4bb70df0742fa86bf2a363693468
   React-RCTActionSheet: 8deae9b85a4cbc6a2243618ea62a374880a2c614
   React-RCTAnimation: 59c62353a8b59ce206044786c5d30e4754bffa64
@@ -809,16 +810,16 @@ SPEC CHECKSUMS:
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
-  RNDateTimePicker: 8fb39263b721223e095248acaf6f406d5b7f6713
+  RNDateTimePicker: fc2e4f2795877d45e84d85659bebe627eba5c931
   RNDeviceInfo: bf8a32acbcb875f568217285d1793b0e8588c974
   RNExitApp: 00036cabe7bacbb413d276d5520bf74ba39afa6a
   RNFileViewer: ce7ca3ac370e18554d35d6355cffd7c30437c592
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
-  RNLocalize: dbea38dcb344bf80ff18a1757b1becf11f70cae4
+  RNLocalize: 1ce4263770515f53d3de442ce7657b3661b16a37
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
   RNSecureRandom: 07efbdf2cd99efe13497433668e54acd7df49fef
   RNShare: 32e97adc8d8c97d4a26bcdd3c45516882184f8b6
-  RNVectorIcons: ace237de89f1574ef3c963ae9d5da3bd6fbeb02a
+  RNVectorIcons: 23b6e11af4aaf104d169b1b0afa7e5cf96c676ce
   RNZipArchive: ef9451b849c45a29509bf44e65b788829ab07801
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
