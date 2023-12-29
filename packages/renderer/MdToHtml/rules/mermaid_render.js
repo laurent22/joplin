@@ -22,20 +22,19 @@ const isDarkMode = (mermaidTargetNodes) => {
 	return mermaidTargetNodes[0].classList.contains('theme-dark');
 };
 
-function rerenderMermaid() {
+function mermaidInit() {
 	if (mermaidReady()) {
 		const mermaidTargetNodes = document.getElementsByClassName('mermaid');
 
 		try {
 			const darkMode = isDarkMode(mermaidTargetNodes);
-			const config = {
+			mermaid.initialize({
 				// We call mermaid.run ourselves whenever the note updates. Don't auto-start
 				startOnLoad: false,
 
 				darkMode,
 				theme: darkMode ? 'dark' : 'base',
-			};
-			mermaid.initialize(config);
+			});
 			mermaid.run({
 				nodes: mermaidTargetNodes,
 			});
@@ -51,7 +50,7 @@ function rerenderMermaid() {
 }
 
 document.addEventListener('joplin-noteDidUpdate', () => {
-	rerenderMermaid();
+	mermaidInit();
 });
 
 const initIID_ = setInterval(() => {
@@ -59,6 +58,6 @@ const initIID_ = setInterval(() => {
 	if (isReady) {
 		clearInterval(initIID_);
 
-		rerenderMermaid();
+		mermaidInit();
 	}
 }, 100);
