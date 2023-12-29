@@ -229,7 +229,7 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 			note: {
 				...note,
 				bodyHtml: result.html,
-				updatedDateTime: formatDateTime(note.updated_time),
+				updatedDateTime: formatDateTime(note.user_updated_time),
 			},
 			cssStrings: result.cssStrings.join('\n'),
 			assetsJs: `
