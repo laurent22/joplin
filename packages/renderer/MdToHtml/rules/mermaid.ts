@@ -11,7 +11,7 @@ export default {
 				// Note: Mermaid is buggy when rendering below a certain width (500px?)
 				// so set an arbitrarily high width here for the container. Once the
 				// diagram is rendered it will be reset to 100% in mermaid_render.js
-				text: '.mermaid { background-color: white; width: 640px; }',
+				text: '.mermaid { width: 640px; }',
 				mime: 'text/css',
 			},
 			{
@@ -48,7 +48,7 @@ export default {
 				<div class="joplin-editable">
 					<pre class="joplin-source" data-joplin-language="mermaid" data-joplin-source-open="\`\`\`mermaid&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${contentHtml}</pre>
 					${exportButtonMarkup}
-					<pre class="mermaid">${contentHtml}</pre>
+					<pre class="mermaid${ruleOptions.theme.appearance === 'dark' ? ' theme-dark' : ''}">${contentHtml}</pre>
 				</div>
 			`;
 		};

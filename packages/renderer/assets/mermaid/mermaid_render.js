@@ -13,36 +13,52 @@ function mermaidReady() {
 	//
 	// And that's going to make the lib set the `mermaid` object to the H1 element.
 	// So below, we double-check that what we have really is an instance of the library.
-	return typeof mermaid !== 'undefined' && mermaid !== null && typeof mermaid === 'object' && !!mermaid.init;
+	return typeof mermaid !== 'undefined' && mermaid !== null && typeof mermaid === 'object' && !!mermaid.initialize;
 }
 
-function mermaidInit() {
-	// Mermaid's wonderful API has two init methods: init() and initialize().
-	// init() is deprectated but works, and initialize() is recommended but doesn't
-	// work, so let's use init() for now.
+const isDarkMode = (mermaidTargetNodes) => {
+	if (!mermaidTargetNodes.length) return false;
+
+	return mermaidTargetNodes[0].classList.contains('theme-dark');
+};
+
+function rerenderMermaid() {
 	if (mermaidReady()) {
+		const mermaidTargetNodes = document.getElementsByClassName('mermaid');
+
 		try {
-			mermaid.init();
+			const darkMode = isDarkMode(mermaidTargetNodes);
+			const config = {
+				// We call mermaid.run ourselves whenever the note updates. Don't auto-start
+				startOnLoad: false,
+
+				darkMode,
+				theme: darkMode ? 'dark' : 'base',
+			};
+			mermaid.initialize(config);
+			mermaid.run({
+				nodes: mermaidTargetNodes,
+			});
 		} catch (error) {
 			console.error('Mermaid error', error);
 		}
 
 		// Resetting elements size - see mermaid.ts
-		const elements = document.getElementsByClassName('mermaid');
-		for (const element of elements) {
+		for (const element of mermaidTargetNodes) {
 			element.style.width = '100%';
 		}
 	}
 }
 
 document.addEventListener('joplin-noteDidUpdate', () => {
-	mermaidInit();
+	rerenderMermaid();
 });
 
 const initIID_ = setInterval(() => {
 	const isReady = mermaidReady();
 	if (isReady) {
 		clearInterval(initIID_);
-		mermaidInit();
+
+		rerenderMermaid();
 	}
 }, 100);
