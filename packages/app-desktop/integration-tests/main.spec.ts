@@ -76,7 +76,8 @@ test.describe('main', () => {
 		).toBeVisible();
 
 		// Should render KaTeX (block)
-		await expect(viewerFrame.locator('.joplin-editable > .katex-display')).toBeVisible();
+		// toBeAttached: To be added to the DOM.
+		await expect(viewerFrame.locator('.joplin-editable > .katex-display').first()).toBeAttached();
 		await expect(
 			viewerFrame.locator(
 				'.katex-display *', { hasText: 'cos' },
@@ -84,7 +85,7 @@ test.describe('main', () => {
 		).toBeVisible();
 
 		// Should render KaTeX (inline)
-		await expect(viewerFrame.locator('.joplin-editable > .katex')).toBeVisible();
+		await expect(viewerFrame.locator('.joplin-editable > .katex').first()).toBeAttached();
 	});
 
 	test('HTML links should be preserved when editing a note in the WYSIWYG editor', async ({ electronApp, mainWindow }) => {

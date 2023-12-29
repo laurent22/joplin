@@ -214,4 +214,17 @@ describe('import-enex-md-gen', () => {
 		expect(resource.title).toBe('08.06.2014 16:58:55');
 	});
 
+	it('should resolve note links', async () => {
+		await importEnexFile('linked_notes.enex');
+		const notes: NoteEntity[] = await Note.all();
+
+		const note1 = notes.find(n => n.title === 'Note 1');
+		const note2 = notes.find(n => n.title === 'Note 2');
+		const note3 = notes.find(n => n.title === 'Note 3');
+
+		expect(notes.length).toBe(5);
+		expect(note1.body).toBe(`[Note 2](:/${note2.id})[Note 3](:/${note3.id})`);
+		expect(note3.body).toBe('[Ambiguous note](evernote:///view/5223870/s49/9cd5e810-fa03-429a-8194-ab847f2f1ab2/c99d9e01-ca35-4c75-ba63-f0c0ef97787d/)');
+	});
+
 });

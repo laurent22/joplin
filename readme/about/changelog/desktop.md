@@ -1,5 +1,9 @@
 # Joplin Desktop Changelog
 
+## [v2.13.11](https://github.com/laurent22/joplin/releases/tag/v2.13.11) - 2023-12-24T12:58:53Z
+
+- Fixed: Import ENEX archives that contain files with invalid names ([#9548](https://github.com/laurent22/joplin/issues/9548))
+
 ## [v2.13.10](https://github.com/laurent22/joplin/releases/tag/v2.13.10) - 2023-12-22T10:11:08Z
 
 - Improved: Remove unnecessary warning when importing ENEX file ([495f088](https://github.com/laurent22/joplin/commit/495f088))

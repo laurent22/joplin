@@ -51,6 +51,7 @@
 		"@codemirror/search",
 		"@codemirror/state",
 		"@codemirror/view",
+		"@replit/codemirror-vim",
 		"@lezer/common",
 		"@lezer/highlight",
 		"@lezer/markdown",
@@ -104,6 +105,7 @@
 		"@babel/runtime",
 		"@tsconfig/react-native",
 		"@types/react-native",
+		"@testing-library/react-native",
 		"androidx.appcompat:appcompat",
 		"babel-plugin-module-resolver",
 		"com.android.tools.build:gradle",
@@ -123,10 +125,6 @@
 		// (https://github.com/laurent22/joplin/issues/8456), we disable auto
 		// updates for it:
 		"react-native-reanimated",
-
-		// Need special processing when upgrading
-		// "katex",
-		// "mermaid",
 
 		// Cannot upgrade further due to ESM support
 		"node-fetch",
@@ -188,6 +186,7 @@
 		// breaking changes. Ideally we should just update existing components
 		// to rscss.
 		"styled-components",
+		"@types/styled-components",
 	],
 	"packageRules": [
 		{

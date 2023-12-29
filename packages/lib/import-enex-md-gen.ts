@@ -58,6 +58,7 @@ interface ParserState {
 	spanAttributes: string[];
 	tags: ParserStateTag[];
 	currentCode?: string;
+	evernoteLinkTitles: Record<string, string>;
 }
 
 
@@ -607,6 +608,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 			anchorAttributes: [],
 			spanAttributes: [],
 			tags: [],
+			evernoteLinkTitles: {},
 		};
 
 		const options = {};
