@@ -1226,7 +1226,7 @@ class Setting extends BaseModel {
 				value: false,
 				type: SettingItemType.Bool,
 				section: 'application',
-				public: true,
+				public: !shim.isMac(),
 				appTypes: [AppType.Desktop],
 				label: () => _('Hide menu bar'),
 				description: () => _('Automatically hides the menu bar. It can be shown by pressing the `alt` key.'),
