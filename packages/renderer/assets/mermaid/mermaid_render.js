@@ -64,7 +64,7 @@ const initIID_ = setInterval(() => {
 document.addEventListener('DOMContentLoaded', () => {
 	// In some environments, we can load Mermaid immediately (e.g. mobile).
 	// If we don't load it immediately in these environments, Mermaid seems
-	// to initialize and auto-run itself.
+	// to initialize and auto-run, but without our configuration changes.
 	if (mermaidReady()) {
 		mermaidInit();
 	} else {
