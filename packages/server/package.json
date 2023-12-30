@@ -51,7 +51,7 @@
     "pretty-bytes": "5.6.0",
     "prettycron": "0.10.0",
     "query-string": "7.1.3",
-    "rate-limiter-flexible": "3.0.4",
+    "rate-limiter-flexible": "3.0.6",
     "raw-body": "2.5.2",
     "sqlite3": "5.1.6",
     "stripe": "8.222.0",
