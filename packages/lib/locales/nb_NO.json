@@ -56,6 +56,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -313,6 +316,9 @@
 	],
 	"Browse...": [
 		"Utforsk..."
+	],
+	"Built in": [
+		""
 	],
 	"Bulleted List": [
 		"Kulepunktliste"
@@ -953,6 +959,9 @@
 	],
 	"Enable note history": [
 		"Aktiver notathistorikk"
+	],
+	"Enable optical character recognition (OCR)": [
+		""
 	],
 	"Enable PDF viewer": [
 		"Aktiver PDF-visning"
@@ -2938,6 +2947,9 @@
 	],
 	"When creating a new to-do:": [
 		"Når et nytt gjøremål opprettes:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""

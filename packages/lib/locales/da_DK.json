@@ -62,6 +62,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -237,7 +240,7 @@
 		"Der blev fundet en automatisk gemt tegning. Vedhæfter en kopi af den til noten?"
 	],
 	"An error occurred: %s": [
-		""
+		"Der opstod en fejl: %s"
 	],
 	"An update is available, do you want to download it now?": [
 		"Opdatering er tilgængelig, vil du hente den nu?"
@@ -337,6 +340,9 @@
 	],
 	"Browse...": [
 		"Gennemse..."
+	],
+	"Built in": [
+		""
 	],
 	"Bulleted List": [
 		"Punktliste"
@@ -888,6 +894,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Glem ikke adgangkoden, da den af sikkerhedshensyn er den *eneste* mulighed for dekryptering af data! For at aktivere kryptering til, skal du indtaste din adgangskode herunder."
 	],
+	"Donate, website": [
+		"Donér, hjemmeside"
+	],
 	"Done": [
 		"Færdig"
 	],
@@ -1002,6 +1011,9 @@
 	"Email to Note": [
 		"E-mail til note"
 	],
+	"Email To Note, login information": [
+		"E-mail til note, loginoplysninger"
+	],
 	"Emails": [
 		"E-mails"
 	],
@@ -1058,6 +1070,9 @@
 	],
 	"Enable note history": [
 		"Slå note-historie til"
+	],
+	"Enable optical character recognition (OCR)": [
+		""
 	],
 	"Enable PDF viewer": [
 		"Aktivér PDF-viser"
@@ -1175,6 +1190,9 @@
 	],
 	"Export profile": [
 		"Eksporter profil"
+	],
+	"Export your data": [
+		"Eksportér dine data"
 	],
 	"Exported successfully!": [
 		"Eksporteret med succes!"
@@ -1298,7 +1316,7 @@
 		"Opretter links..."
 	],
 	"Geolocation, spellcheck, editor toolbar, image resize": [
-		""
+		"Geolokalisering, stavekontrol, redigeringsværktøjslinje, ændring af billedstørrelse"
 	],
 	"Get it now:": [
 		"Få den nu:"
@@ -1573,6 +1591,9 @@
 	"Language": [
 		"Sprog"
 	],
+	"Language, date format": [
+		"Sprog, datoformat"
+	],
 	"Last error: %s": [
 		"Sidste fejl: %s"
 	],
@@ -1656,7 +1677,7 @@
 		"Log ud"
 	],
 	"Logs, profiles, sync status": [
-		""
+		"Logfiler, profiler, synkroniseringsstatus"
 	],
 	"Make a donation": [
 		"Giv en donation"
@@ -1719,7 +1740,7 @@
 		"Maks samlet størrelse"
 	],
 	"Media player, math, diagrams, table of contents": [
-		""
+		"Medieafspiller, matematik, diagrammer, indholdsfortegnelse"
 	],
 	"Missing keys": [
 		"Manglende nøgler"
@@ -1989,7 +2010,7 @@
 		"Åbn..."
 	],
 	"Opening section %s": [
-		""
+		"Åbner sektion %s"
 	],
 	"Operation cancelled": [
 		"Udførelse annulleret"
@@ -2288,6 +2309,9 @@
 	"Restart and upgrade": [
 		"Genstart og upgradér"
 	],
+	"Restart in safe mode": [
+		"Genstart i fejlsikret tilstand"
+	],
 	"Restart now": [
 		"Genstart nu"
 	],
@@ -2401,6 +2425,9 @@
 	],
 	"Select parent notebook": [
 		"Vælg overordnet notesbog"
+	],
+	"Send bug report": [
+		"Send fejlrapport"
 	],
 	"Server is already running on port %d": [
 		"Serveren kører allerede på port %d"
@@ -2666,6 +2693,9 @@
 	"Sync your notes": [
 		"Synk dine noter"
 	],
+	"Sync, encryption, proxy": [
+		"Synkronisering, kryptering, proxy"
+	],
 	"Synchronisation": [
 		"Synkronisering"
 	],
@@ -2843,6 +2873,9 @@
 	"Theme": [
 		"Tema"
 	],
+	"Themes, editor font": [
+		"Temaer, editorskrifttype"
+	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"Der er ingen noter. Opret note ved at klikke på (+) knappen."
 	],
@@ -2992,6 +3025,9 @@
 	],
 	"Toggle external editing": [
 		"Slå ekstern redigering til eller fra"
+	],
+	"Toggle note history, keep notes for": [
+		"Skift notehistorik, gem noter til"
 	],
 	"Toggle note list": [
 		"Slå noteliste til eller fra"
@@ -3227,8 +3263,11 @@
 	"When creating a new to-do:": [
 		"Ved oprettelse af ny opgave:"
 	],
-	"Window unresponsive.": [
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
+	],
+	"Window unresponsive.": [
+		"Vinduet reagerer ikke."
 	],
 	"Words": [
 		"Ord"
