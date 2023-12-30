@@ -119,7 +119,8 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 					hocr: false,
 					tsv: false,
 				});
-			} catch (error) {
+			} catch (e) {
+				const error: Error = typeof e === 'string' ? new Error(e) : e;
 				error.message = `Recognition failed on: ${filePath}: ${error.message}`;
 				if (!hasTimedOut) reject(error);
 				return;
