@@ -3,22 +3,26 @@
 # This file is distributed under the same license as the Joplin-CLI package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Updated by Renato Xavier da Silveira Rosa <renatoxsr@gmail.com>, 2018.
+# Renato Nunes Bastos <rnbastos@gmail.com>, 2020.
 # Updated by Sailon Bispo Nascimento (forshaw/forsh4w/forsh4w4) <sailonbr@gmail.com>, 2021.
 # Nicolas Suzuki <nicolas.suzuki@pm.me>, 2021.
 # Felipe Viggiano <felipeviggiano@gmail.com>, 2021.
+# Renato Nunes Bastos <rnbastos@gmail.com>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Fernando Nagase <nagase.fernando@gmail.com>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Renato Nunes Bastos <rnbastos@gmail.com>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:363
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -373,14 +377,12 @@ msgid "Always"
 msgstr "Sempre"
 
 #: packages/lib/models/Setting.ts:1129
-#, fuzzy
 msgid "Always ask"
-msgstr "Sempre"
+msgstr "Sempre perguntar"
 
 #: packages/lib/models/Setting.ts:1130
-#, fuzzy
 msgid "Always resize"
-msgstr "Sempre"
+msgstr "Sempre redimensionar"
 
 #: packages/app-cli/app/command-mv.js:36
 msgid ""
@@ -402,11 +404,11 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:13
 msgid "An autosaved drawing was found. Attach a copy of it to the note?"
-msgstr ""
+msgstr "Um desenho foi salvo automaticamente. Anexar uma cópia dele na Nota?"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:88
 msgid "An error occurred: %s"
-msgstr ""
+msgstr "Um erro aconteceu: %s"
 
 #: packages/app-desktop/checkForUpdates.ts:106
 msgid "An update is available, do you want to download it now?"
@@ -848,9 +850,8 @@ msgid "Code View"
 msgstr "Visualizar Código"
 
 #: packages/lib/utils/joplinCloud.ts:172
-#, fuzzy
 msgid "Collaborate on a notebook with others"
-msgstr "Edite cadernos de forma colaborativa"
+msgstr "Colaborar em um caderno com outras pessoas"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:181
 msgid "Collaborate on notebooks with others"
@@ -894,9 +895,8 @@ msgid "Command palette..."
 msgstr "Guia de comandos..."
 
 #: packages/lib/services/noteList/defaultListRenderer.ts:22
-#, fuzzy
 msgid "Compact"
-msgstr "Completado"
+msgstr "Compactar"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:53
 msgid "Completed"
@@ -1200,7 +1200,7 @@ msgstr "Certificados TLS personalizados"
 
 #: packages/lib/utils/joplinCloud.ts:193
 msgid "Customise the note publishing banner"
-msgstr ""
+msgstr "Customizar o banner de publicação da nota"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:39
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:84
@@ -1397,7 +1397,7 @@ msgstr "Formato do destino: %s"
 
 #: packages/lib/services/noteList/defaultLeftToRightListRenderer.ts:25
 msgid "Detailed"
-msgstr ""
+msgstr "Detalhado"
 
 #: packages/lib/services/interop/Module.ts:62
 msgid "Directory"
@@ -1443,9 +1443,8 @@ msgstr ""
 "serão ressincronizados e enviados sem criptografia. Você quer continuar?"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:19
-#, fuzzy
 msgid "Discard"
-msgstr "Descartar alterações"
+msgstr "Descartar"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:102
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:234
@@ -1523,9 +1522,8 @@ msgstr ""
 "senha abaixo."
 
 #: packages/lib/models/Setting.ts:2648
-#, fuzzy
 msgid "Donate, website"
-msgstr "Site do Joplin"
+msgstr "Doar, website"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:115
@@ -1570,11 +1568,11 @@ msgstr "Drácula"
 
 #: packages/app-mobile/components/screens/Note.tsx:1108
 msgid "Draw picture"
-msgstr ""
+msgstr "Desenhar imagem"
 
 #: packages/app-mobile/components/screens/Note.tsx:810
 msgid "Drawing"
-msgstr ""
+msgstr "Desenhar"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1268
 msgid "Drop notes or files here"
@@ -1700,9 +1698,8 @@ msgid "Email to Note"
 msgstr "Notas por e-mail"
 
 #: packages/lib/models/Setting.ts:2642
-#, fuzzy
 msgid "Email To Note, login information"
-msgstr "Exibe informações da versão"
+msgstr "Email Para Nota, informação de login"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:129
@@ -1883,9 +1880,8 @@ msgid "Enter notebook title"
 msgstr "Digite o título do caderno"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:121
-#, fuzzy
 msgid "Enter password"
-msgstr "Senha mestra"
+msgstr "Entre a senha"
 
 #: packages/app-cli/app/help-utils.js:56
 msgid "Enum"
@@ -1967,9 +1963,8 @@ msgid "Export profile"
 msgstr "Exportar perfil"
 
 #: packages/lib/models/Setting.ts:2647
-#, fuzzy
 msgid "Export your data"
-msgstr "Exportar tudo"
+msgstr "Exportar seus dados"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:106
 msgid "Exported successfully!"
@@ -2159,7 +2154,7 @@ msgstr[1] "Gerando links..."
 
 #: packages/lib/models/Setting.ts:2644
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
-msgstr ""
+msgstr "Geolocalização, ortografia, barra de edição, redimensionar imagem"
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:91
 msgid "Get it now:"
@@ -2261,7 +2256,7 @@ msgstr "Pasta HTML"
 
 #: packages/lib/services/interop/InteropService.ts:92
 msgid "HTML document"
-msgstr ""
+msgstr "Documento HTML"
 
 #: packages/lib/services/interop/InteropService.ts:151
 msgid "HTML File"
@@ -2623,9 +2618,8 @@ msgid "Language"
 msgstr "Idioma"
 
 #: packages/lib/models/Setting.ts:2639
-#, fuzzy
 msgid "Language, date format"
-msgstr "Formato de data"
+msgstr "Idioma, formato de data"
 
 #: packages/lib/Synchronizer.ts:197
 msgid "Last error: %s"
@@ -2750,7 +2744,7 @@ msgstr "Logout"
 
 #: packages/lib/models/Setting.ts:2646
 msgid "Logs, profiles, sync status"
-msgstr ""
+msgstr "Logo, perfis, status de sincronização"
 
 #: packages/app-desktop/gui/MenuBar.tsx:859
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:381
@@ -2846,7 +2840,7 @@ msgstr "Tamanho total máximo"
 
 #: packages/lib/models/Setting.ts:2643
 msgid "Media player, math, diagrams, table of contents"
-msgstr ""
+msgstr "Player de mídia, matemática, diagramas, tabela de conteúdo"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:318
 msgid "Missing keys"
@@ -2911,7 +2905,7 @@ msgstr "N"
 
 #: packages/lib/models/Setting.ts:1131
 msgid "Never resize"
-msgstr ""
+msgstr "Nunca redimensionar"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:8
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:121
@@ -3108,9 +3102,8 @@ msgid "Note list growth factor"
 msgstr "Fator de crescimento da lista de notas"
 
 #: packages/app-desktop/gui/MenuBar.tsx:746
-#, fuzzy
 msgid "Note list style"
-msgstr "Lista de notas"
+msgstr "Estilo de lista da Nota"
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.ts:7
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:407
@@ -3256,7 +3249,7 @@ msgstr "Abrir..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:158
 msgid "Opening section %s"
-msgstr ""
+msgstr "Abrindo seção %s"
 
 #: packages/app-cli/app/command-e2ee.ts:40
 #: packages/app-cli/app/command-e2ee.ts:86
@@ -3718,9 +3711,8 @@ msgid "Restart and upgrade"
 msgstr "Reiniciar e fazer upgrade"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:85
-#, fuzzy
 msgid "Restart in safe mode"
-msgstr "Reiniciar e fazer upgrade"
+msgstr "Reiniciar em modo de segurança"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:717
 msgid "Restart now"
@@ -3901,9 +3893,8 @@ msgid "Select parent notebook"
 msgstr "Selecione o caderno pai"
 
 #: packages/app-desktop/gui/MenuBar.tsx:324
-#, fuzzy
 msgid "Send bug report"
-msgstr "Exportar relatório de depuração"
+msgstr "Enviar relatório de bugs"
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -3969,9 +3960,8 @@ msgstr ""
 "pode ser importado pelo Joplin em um computador."
 
 #: packages/lib/utils/joplinCloud.ts:125
-#, fuzzy
 msgid "Share a notebook with others"
-msgstr "Edite cadernos de forma colaborativa"
+msgstr "Compartilhar um caderno com outros"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:383
 msgid "Share Notebook"
@@ -3983,7 +3973,7 @@ msgstr "Compartilhar caderno..."
 
 #: packages/lib/utils/joplinCloud.ts:212
 msgid "Share permissions"
-msgstr ""
+msgstr "Permissões de compartilhamento"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:349
 msgid "Sharing notebook..."
@@ -4039,16 +4029,15 @@ msgstr "Mostrar/esconder a barra lateral"
 
 #: packages/lib/models/Setting.ts:1126
 msgid "Shrink large images before adding them to notes."
-msgstr ""
+msgstr "Diminua imagens grandes antes de adicionar nas notas."
 
 #: packages/app-mobile/root.tsx:1013
-#, fuzzy
 msgid "Side menu closed"
-msgstr "Esconder mais ações"
+msgstr "Menu lateral fechado"
 
 #: packages/app-mobile/root.tsx:1013
 msgid "Side menu opened"
-msgstr ""
+msgstr "Menu lateral aberto"
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:8
 #: packages/app-mobile/components/ScreenHeader.tsx:307
@@ -4323,9 +4312,8 @@ msgid "Sync your notes"
 msgstr "Sincronizar suas notas"
 
 #: packages/lib/models/Setting.ts:2641
-#, fuzzy
 msgid "Sync, encryption, proxy"
-msgstr "Habilitar criptografia"
+msgstr "Sincronizar, criptografia, proxy"
 
 #: packages/lib/models/Setting.ts:2606
 msgid "Synchronisation"
@@ -4413,9 +4401,8 @@ msgid "Teams"
 msgstr "Equipes"
 
 #: packages/lib/services/interop/InteropService.ts:116
-#, fuzzy
 msgid "Text document"
-msgstr "Comando do editor de texto"
+msgstr "Documento texto"
 
 #: packages/lib/models/Setting.ts:1410
 msgid "Text editor command"
@@ -4619,9 +4606,8 @@ msgstr ""
 "executar."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:617
-#, fuzzy
 msgid "The synchronisation password is missing."
-msgstr "Verificar a configuração da sincronização"
+msgstr "A senha de sincronização está faltando."
 
 #: packages/lib/models/Tag.ts:204
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -4661,9 +4647,8 @@ msgid "Theme"
 msgstr "Tema"
 
 #: packages/lib/models/Setting.ts:2640
-#, fuzzy
 msgid "Themes, editor font"
-msgstr "Fonte do editor"
+msgstr "Temas, fonte do editor"
 
 #: packages/app-mobile/components/NoteList.tsx:102
 msgid "There are currently no notes. Create one by clicking on the (+) button."
@@ -4766,9 +4751,8 @@ msgstr ""
 "terceiros acessem o Joplin."
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:100
-#, fuzzy
 msgid "This drawing may have unsaved changes."
-msgstr "Há alterações não salvas."
+msgstr "Essa figura pode ter alterações não salvas."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:232
 msgid ""
@@ -4971,9 +4955,8 @@ msgid "Toggle external editing"
 msgstr "Alternar edição externa"
 
 #: packages/lib/models/Setting.ts:2645
-#, fuzzy
 msgid "Toggle note history, keep notes for"
-msgstr "Manter histórico de nota por"
+msgstr "Alternar histórico de nota, manter notas"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNoteList.ts:9
 msgid "Toggle note list"
@@ -5052,18 +5035,16 @@ msgid "Type: %s."
 msgstr "Tipo: %s."
 
 #: packages/app-mobile/components/screens/Note.tsx:872
-#, fuzzy
 msgid "Unable to edit resource of type %s"
-msgstr "Não foi possível exportar ou compartilhar os dados. Motivo: %s"
+msgstr "Impossível editar o recurso do tipo %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:69
 msgid "Unable to export or share data. Reason: %s"
 msgstr "Não foi possível exportar ou compartilhar os dados. Motivo: %s"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:68
-#, fuzzy
 msgid "Unable to share log data. Reason: %s"
-msgstr "Não foi possível exportar ou compartilhar os dados. Motivo: %s"
+msgstr "Impossível compartilhar os dados do log. Motivo: %s"
 
 #: packages/lib/models/Setting.ts:922
 msgid "Uncompleted to-dos on top"
@@ -5380,7 +5361,7 @@ msgstr "Quando criar uma nova tarefa:"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:164
 msgid "Window unresponsive."
-msgstr ""
+msgstr "Janela não responde."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:102
 msgid "Words"
