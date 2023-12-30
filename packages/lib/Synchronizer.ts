@@ -26,10 +26,11 @@ import { fetchSyncInfo, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveL
 import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
 import { generateKeyPair } from './services/e2ee/ppk';
 import syncDebugLog from './services/synchronizer/syncDebugLog';
-import handleConflictAction, { ConflictAction } from './services/synchronizer/utils/handleConflictAction';
+import handleConflictAction from './services/synchronizer/utils/handleConflictAction';
 import resourceRemotePath from './services/synchronizer/utils/resourceRemotePath';
 import syncDeleteStep from './services/synchronizer/utils/syncDeleteStep';
 import { ErrorCode } from './errors';
+import { SyncAction } from './services/synchronizer/utils/types';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -199,7 +200,7 @@ export default class Synchronizer {
 		return lines;
 	}
 
-	public logSyncOperation(action: string, local: any = null, remote: RemoteItem = null, message: string = null, actionCount = 1) {
+	public logSyncOperation(action: SyncAction | 'cancelling' | 'starting' | 'fetchingTotal' | 'fetchingProcessed' | 'finished', local: any = null, remote: RemoteItem = null, message: string = null, actionCount = 1) {
 		const line = ['Sync'];
 		line.push(action);
 		if (message) line.push(message);
@@ -577,20 +578,20 @@ export default class Synchronizer {
 						if (donePaths.indexOf(path) >= 0) throw new JoplinError(sprintf('Processing a path that has already been done: %s. sync_time was not updated? Remote item has an updated_time in the future?', path), 'processingPathTwice');
 
 						const remote: RemoteItem = result.neverSyncedItemIds.includes(local.id) ? null : await this.apiCall('stat', path);
-						let action = null;
+						let action: SyncAction = null;
 						let itemIsReadOnly = false;
 						let reason = '';
 						let remoteContent = null;
 
 						const getConflictType = (conflictedItem: any) => {
-							if (conflictedItem.type_ === BaseModel.TYPE_NOTE) return 'noteConflict';
-							if (conflictedItem.type_ === BaseModel.TYPE_RESOURCE) return 'resourceConflict';
-							return 'itemConflict';
+							if (conflictedItem.type_ === BaseModel.TYPE_NOTE) return SyncAction.NoteConflict;
+							if (conflictedItem.type_ === BaseModel.TYPE_RESOURCE) return SyncAction.ResourceConflict;
+							return SyncAction.ItemConflict;
 						};
 
 						if (!remote) {
 							if (!local.sync_time) {
-								action = 'createRemote';
+								action = SyncAction.CreateRemote;
 								reason = 'remote does not exist, and local is new and has never been synced';
 							} else {
 								// Note or item was modified after having been deleted remotely
@@ -635,7 +636,7 @@ export default class Synchronizer {
 								action = getConflictType(local);
 								reason = 'both remote and local have changes';
 							} else {
-								action = 'updateRemote';
+								action = SyncAction.UpdateRemote;
 								reason = 'local has changes';
 							}
 						}
@@ -648,7 +649,7 @@ export default class Synchronizer {
 
 						this.logSyncOperation(action, local, remote, reason);
 
-						if (local.type_ === BaseModel.TYPE_RESOURCE && (action === 'createRemote' || action === 'updateRemote')) {
+						if (local.type_ === BaseModel.TYPE_RESOURCE && (action === SyncAction.CreateRemote || action === SyncAction.UpdateRemote)) {
 							const localState = await Resource.localState(local.id);
 							if (localState.fetch_status !== Resource.FETCH_STATUS_DONE) {
 								// This condition normally shouldn't happen
@@ -722,7 +723,7 @@ export default class Synchronizer {
 							}
 						}
 
-						if (action === 'createRemote' || action === 'updateRemote') {
+						if (action === SyncAction.CreateRemote || action === SyncAction.UpdateRemote) {
 							let canSync = true;
 							try {
 								if (this.testingHooks_.indexOf('notesRejectedByTarget') >= 0 && local.type_ === BaseModel.TYPE_NOTE) throw new JoplinError('Testing rejectedByTarget', 'rejectedByTarget');
@@ -766,7 +767,7 @@ export default class Synchronizer {
 						}
 
 						await handleConflictAction(
-							action as ConflictAction,
+							action,
 							ItemClass,
 							!!remote,
 							remoteContent,
@@ -875,7 +876,7 @@ export default class Synchronizer {
 
 						const path = remote.path;
 						const remoteId = BaseItem.pathToId(path);
-						let action = null;
+						let action: SyncAction = null;
 						let reason = '';
 						let local = locals.find(l => l.id === remoteId);
 						let ItemClass = null;
@@ -884,7 +885,7 @@ export default class Synchronizer {
 						try {
 							if (!local) {
 								if (remote.isDeleted !== true) {
-									action = 'createLocal';
+									action = SyncAction.CreateLocal;
 									reason = 'remote exists but local does not';
 									content = await loadContent();
 									ItemClass = content ? BaseItem.itemClass(content) : null;
@@ -893,7 +894,7 @@ export default class Synchronizer {
 								ItemClass = BaseItem.itemClass(local);
 								local = ItemClass.filter(local);
 								if (remote.isDeleted) {
-									action = 'deleteLocal';
+									action = SyncAction.DeleteLocal;
 									reason = 'remote has been deleted';
 								} else {
 									if (this.api().supportsAccurateTimestamp && remote.jop_updated_time === local.updated_time) {
@@ -901,7 +902,7 @@ export default class Synchronizer {
 									} else {
 										content = await loadContent();
 										if (content && content.updated_time > local.updated_time) {
-											action = 'updateLocal';
+											action = SyncAction.UpdateLocal;
 											reason = 'remote is more recent than local';
 										}
 									}
@@ -924,7 +925,7 @@ export default class Synchronizer {
 
 						this.logSyncOperation(action, local, remote, reason);
 
-						if (action === 'createLocal' || action === 'updateLocal') {
+						if (action === SyncAction.CreateLocal || action === SyncAction.UpdateLocal) {
 							if (content === null) {
 								logger.warn(`Remote has been deleted between now and the delta() call? In that case it will be handled during the next sync: ${path}`);
 								continue;
@@ -944,10 +945,10 @@ export default class Synchronizer {
 								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, time.unixMs()),
 								changeSource: ItemChange.SOURCE_SYNC,
 							};
-							if (action === 'createLocal') options.isNew = true;
-							if (action === 'updateLocal') options.oldItem = local;
+							if (action === SyncAction.CreateLocal) options.isNew = true;
+							if (action === SyncAction.UpdateLocal) options.oldItem = local;
 
-							const creatingOrUpdatingResource = content.type_ === BaseModel.TYPE_RESOURCE && (action === 'createLocal' || action === 'updateLocal');
+							const creatingOrUpdatingResource = content.type_ === BaseModel.TYPE_RESOURCE && (action === SyncAction.CreateLocal || action === SyncAction.UpdateLocal);
 
 							if (creatingOrUpdatingResource) {
 								if (content.size >= this.maxResourceSize()) {
@@ -991,7 +992,7 @@ export default class Synchronizer {
 							// }
 
 							if (content.encryption_applied) this.dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });
-						} else if (action === 'deleteLocal') {
+						} else if (action === SyncAction.DeleteLocal) {
 							if (local.type_ === BaseModel.TYPE_FOLDER) {
 								localFoldersToDelete.push(local);
 								continue;
