@@ -6,28 +6,30 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: qx100 <ztymaxwell@gmail.com>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Mr.X <1725338233@qq.com>\n"
 "Language-Team: zh_CN <737445366KG@Gmail.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:363
 msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr "- 照相机：允许拍照并将照片附加到一条笔记中。"
+msgstr "- 照相机权限：允许拍照并将照片添加到一条笔记中。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:366
 msgid "- Location: to allow attaching geo-location information to a note."
-msgstr "- 定位：允许将地理位置信息附加到一条笔记中。"
+msgstr "- 定位权限：允许将地理位置信息添加到一条笔记中。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:360
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
-msgstr "- 存储：允许将文件附加到笔记中并启用文件系统同步。"
+msgstr "- 存储权限：允许将文件添加到笔记中并启用文件系统同步。"
 
 #: packages/lib/services/KeymapService.ts:317
 #: packages/lib/services/KeymapService.ts:323
@@ -53,7 +55,7 @@ msgstr "（兼容所见即所得编辑器：%s）"
 #: packages/app-mobile/components/screens/Note.tsx:641
 #: packages/lib/shim-init-node.js:211
 msgid "(You may disable this prompt in the options)"
-msgstr ""
+msgstr "您可以在设置中禁用此提示"
 
 #: packages/app-desktop/gui/MenuBar.tsx:691
 #: packages/app-desktop/gui/MenuBar.tsx:967
@@ -116,7 +118,7 @@ msgstr "%d MB"
 #: packages/lib/utils/joplinCloud.ts:133 packages/lib/utils/joplinCloud.ts:134
 #: packages/lib/utils/joplinCloud.ts:135
 msgid "%d MB per note or attachment"
-msgstr "每个笔记或附件%d MB"
+msgstr "每个笔记或附件大小%d MB"
 
 #: packages/lib/models/Setting.ts:1386 packages/lib/models/Setting.ts:1387
 #: packages/lib/models/Setting.ts:1388
@@ -195,9 +197,8 @@ msgstr "%s：%s"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:195
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:263
-#, fuzzy
 msgid "%s: Missing password."
-msgstr "主密码"
+msgstr "缺少主密码。"
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
@@ -263,7 +264,7 @@ msgstr "访问被拒绝：请检查您的用户名和密码"
 
 #: packages/lib/WebDavApi.js:449
 msgid "Access denied: Please re-enter your password and/or username"
-msgstr "访问被拒绝：请重新输入您的密码和/或用户名"
+msgstr "拒绝访问： 请重新输入密码和/或用户名"
 
 #: packages/server/src/routes/admin/users.ts:141
 msgid "Account"
@@ -357,14 +358,12 @@ msgid "Always"
 msgstr "总是"
 
 #: packages/lib/models/Setting.ts:1129
-#, fuzzy
 msgid "Always ask"
-msgstr "总是"
+msgstr "每次询问"
 
 #: packages/lib/models/Setting.ts:1130
-#, fuzzy
 msgid "Always resize"
-msgstr "总是"
+msgstr "自动缩放"
 
 #: packages/app-cli/app/command-mv.js:36
 msgid ""
@@ -383,11 +382,11 @@ msgstr "不明确的笔记本“%s”。请改用短笔记本id - 按\"ti\"查�
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:13
 msgid "An autosaved drawing was found. Attach a copy of it to the note?"
-msgstr ""
+msgstr "发现一张自动保存的绘图。是否将其添加到笔记中？"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:88
 msgid "An error occurred: %s"
-msgstr ""
+msgstr "出现异常: %s"
 
 #: packages/app-desktop/checkForUpdates.ts:106
 msgid "An update is available, do you want to download it now?"
@@ -435,21 +434,21 @@ msgstr "暗黑 (Aritim)"
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:25
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:215
 msgid "Attach"
-msgstr "附加"
+msgstr "添加附件"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:74
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:623
 #: packages/app-mobile/components/screens/Note.tsx:1000
 msgid "Attach file"
-msgstr "附加文件"
+msgstr "添加文件"
 
 #: packages/app-mobile/components/screens/Note.tsx:1004
 msgid "Attach photo"
-msgstr "附加照片"
+msgstr "添加照片"
 
 #: packages/app-mobile/components/screens/Note.tsx:1101
 msgid "Attach..."
-msgstr "附加..."
+msgstr "添加附件..."
 
 #: packages/app-cli/app/command-attach.js:13
 msgid "Attaches the given file to the note."
@@ -526,7 +525,7 @@ msgstr "返回"
 
 #: packages/lib/utils/joplinCloud.ts:342
 msgid "Basic"
-msgstr "基本"
+msgstr "Basic"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:17
 msgid ""
@@ -749,7 +748,7 @@ msgstr "选择一个选项"
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:70
 msgid "Chrome Web Store"
-msgstr "Chrome 网上商店"
+msgstr "Chrome 商店"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:149
 #: packages/app-desktop/gui/PromptDialog.tsx:298
@@ -814,9 +813,8 @@ msgid "Code View"
 msgstr "代码视图"
 
 #: packages/lib/utils/joplinCloud.ts:172
-#, fuzzy
 msgid "Collaborate on a notebook with others"
-msgstr "与他人共同协作笔记本"
+msgstr "与他人共同协作笔记"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:181
 msgid "Collaborate on notebooks with others"
@@ -858,9 +856,8 @@ msgid "Command palette..."
 msgstr "命令面板..."
 
 #: packages/lib/services/noteList/defaultListRenderer.ts:22
-#, fuzzy
 msgid "Compact"
-msgstr "已完成"
+msgstr "紧凑"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:53
 msgid "Completed"
@@ -882,7 +879,7 @@ msgstr "压缩旧的更改"
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:591
 #: packages/app-mobile/components/side-menu-content.tsx:432
 msgid "Configuration"
-msgstr "配置"
+msgstr "设置"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:137
 msgid "Confirm password cannot be empty"
@@ -1120,14 +1117,12 @@ msgid "Creates a new to-do."
 msgstr "新建待办事项。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:112
-#, fuzzy
 msgid "Creating new note..."
-msgstr "新建 %s..."
+msgstr "新建笔记 %s..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:112
-#, fuzzy
 msgid "Creating new to-do..."
-msgstr "新建 %s..."
+msgstr "新建待办 %s..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:27
 msgid "Creating report..."
@@ -1160,7 +1155,7 @@ msgstr "自定义 TLS 证书"
 
 #: packages/lib/utils/joplinCloud.ts:193
 msgid "Customise the note publishing banner"
-msgstr ""
+msgstr "自定义笔记发布横幅"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:39
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:84
@@ -1352,7 +1347,7 @@ msgstr "目标格式：%s"
 
 #: packages/lib/services/noteList/defaultLeftToRightListRenderer.ts:25
 msgid "Detailed"
-msgstr ""
+msgstr "详细内容"
 
 #: packages/lib/services/interop/Module.ts:62
 msgid "Directory"
@@ -1398,7 +1393,6 @@ msgstr ""
 "标。确定继续吗？"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:19
-#, fuzzy
 msgid "Discard"
 msgstr "放弃更改"
 
@@ -1472,13 +1466,12 @@ msgid ""
 "way to decrypt the data! To enable encryption, please enter your password "
 "below."
 msgstr ""
-"不要丢失密码，因为出于安全考虑，这将是解密数据的*唯一*方式！要启用加密功能，"
-"请在下面输入密码。"
+"请妥善保管密码，因为出于安全考虑，这将是解密数据的*唯一*方式！要启用加密功"
+"能，请在下面输入密码。"
 
 #: packages/lib/models/Setting.ts:2648
-#, fuzzy
 msgid "Donate, website"
-msgstr "Joplin 官网"
+msgstr "捐助与官网信息"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:115
@@ -1523,11 +1516,11 @@ msgstr "德古拉紫(Dracula)"
 
 #: packages/app-mobile/components/screens/Note.tsx:1108
 msgid "Draw picture"
-msgstr ""
+msgstr "添加绘图"
 
 #: packages/app-mobile/components/screens/Note.tsx:810
 msgid "Drawing"
-msgstr ""
+msgstr "绘制中"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1268
 msgid "Drop notes or files here"
@@ -1653,9 +1646,8 @@ msgid "Email to Note"
 msgstr "将电子邮件转存为笔记"
 
 #: packages/lib/models/Setting.ts:2642
-#, fuzzy
 msgid "Email To Note, login information"
-msgstr "显示版本信息"
+msgstr "邮箱与登录信息"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:129
@@ -1835,9 +1827,8 @@ msgid "Enter notebook title"
 msgstr "输入笔记本标题"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:121
-#, fuzzy
 msgid "Enter password"
-msgstr "主密码"
+msgstr "输入密码"
 
 #: packages/app-cli/app/help-utils.js:56
 msgid "Enum"
@@ -1918,9 +1909,8 @@ msgid "Export profile"
 msgstr "导出配置文件"
 
 #: packages/lib/models/Setting.ts:2647
-#, fuzzy
 msgid "Export your data"
-msgstr "全部导出"
+msgstr "导出数据"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:106
 msgid "Exported successfully!"
@@ -2104,7 +2094,7 @@ msgstr[0] "生成链接中..."
 
 #: packages/lib/models/Setting.ts:2644
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
-msgstr ""
+msgstr "地理位置, 拼写检查, 编辑器工具栏等设置"
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:91
 msgid "Get it now:"
@@ -2205,7 +2195,7 @@ msgstr "HTML 目录"
 
 #: packages/lib/services/interop/InteropService.ts:92
 msgid "HTML document"
-msgstr ""
+msgstr "HTML 文档"
 
 #: packages/lib/services/interop/InteropService.ts:151
 msgid "HTML File"
@@ -2332,11 +2322,11 @@ msgstr "要使用网页剪藏器，您需要执行以下步骤："
 
 #: packages/lib/Synchronizer.ts:311
 msgid "In progress"
-msgstr "正在进行"
+msgstr "正在处理"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:578
 msgid "In: %s"
-msgstr "位于：%s"
+msgstr "已处理：%s"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:121
 msgid "Increase indent level"
@@ -2551,9 +2541,8 @@ msgid "Language"
 msgstr "语言"
 
 #: packages/lib/models/Setting.ts:2639
-#, fuzzy
 msgid "Language, date format"
-msgstr "日期格式"
+msgstr "语言与日期格式设置"
 
 #: packages/lib/Synchronizer.ts:197
 msgid "Last error: %s"
@@ -2676,7 +2665,7 @@ msgstr "登出"
 
 #: packages/lib/models/Setting.ts:2646
 msgid "Logs, profiles, sync status"
-msgstr ""
+msgstr "日志, 配置文件与同步状态"
 
 #: packages/app-desktop/gui/MenuBar.tsx:859
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:381
@@ -2772,7 +2761,7 @@ msgstr "最大总大小"
 
 #: packages/lib/models/Setting.ts:2643
 msgid "Media player, math, diagrams, table of contents"
-msgstr ""
+msgstr "媒体播放器, 数学公式, 图表等设置"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:318
 msgid "Missing keys"
@@ -2837,7 +2826,7 @@ msgstr "N"
 
 #: packages/lib/models/Setting.ts:1131
 msgid "Never resize"
-msgstr ""
+msgstr "从不缩放"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:8
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:121
@@ -3029,9 +3018,8 @@ msgid "Note list growth factor"
 msgstr "笔记列表增长因子"
 
 #: packages/app-desktop/gui/MenuBar.tsx:746
-#, fuzzy
 msgid "Note list style"
-msgstr "笔记列表"
+msgstr "笔记列表样式"
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.ts:7
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:407
@@ -3174,7 +3162,7 @@ msgstr "打开..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:158
 msgid "Opening section %s"
-msgstr ""
+msgstr "正在打开节%s"
 
 #: packages/app-cli/app/command-e2ee.ts:40
 #: packages/app-cli/app/command-e2ee.ts:86
@@ -3609,7 +3597,7 @@ msgstr "重置主密码(master password)"
 
 #: packages/lib/models/Setting.ts:1125
 msgid "Resize large images:"
-msgstr ""
+msgstr "缩放大尺寸图片:"
 
 #: packages/app-cli/app/command-import.js:51
 #: packages/app-desktop/gui/ImportScreen.tsx:92
@@ -3621,9 +3609,8 @@ msgid "Restart and upgrade"
 msgstr "重启并升级"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:85
-#, fuzzy
 msgid "Restart in safe mode"
-msgstr "重启并升级"
+msgstr "重启并进入安全模式"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:717
 msgid "Restart now"
@@ -3732,9 +3719,8 @@ msgid "Save changes"
 msgstr "保存更改"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:100
-#, fuzzy
 msgid "Save changes?"
-msgstr "保存更改"
+msgstr "是否保存更改？"
 
 #: packages/lib/models/Setting.ts:1032
 msgid "Save geo-location with notes"
@@ -3801,9 +3787,8 @@ msgid "Select parent notebook"
 msgstr "选择父笔记本"
 
 #: packages/app-desktop/gui/MenuBar.tsx:324
-#, fuzzy
 msgid "Send bug report"
-msgstr "导出调试报告"
+msgstr "发送错误日志"
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -3864,7 +3849,6 @@ msgid ""
 msgstr "以 Joplin 可在计算机上导入的文件格式共享所有笔记的副本。"
 
 #: packages/lib/utils/joplinCloud.ts:125
-#, fuzzy
 msgid "Share a notebook with others"
 msgstr "与他人共同协作笔记本"
 
@@ -3878,7 +3862,7 @@ msgstr "分享笔记本..."
 
 #: packages/lib/utils/joplinCloud.ts:212
 msgid "Share permissions"
-msgstr ""
+msgstr "共享权限"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:349
 msgid "Sharing notebook..."
@@ -3934,16 +3918,15 @@ msgstr "显示/隐藏侧边栏"
 
 #: packages/lib/models/Setting.ts:1126
 msgid "Shrink large images before adding them to notes."
-msgstr ""
+msgstr "在添加大尺寸图片进笔记之前将其缩放到合适尺寸。"
 
 #: packages/app-mobile/root.tsx:1013
-#, fuzzy
 msgid "Side menu closed"
-msgstr "隐藏更多操作"
+msgstr "关闭侧边栏"
 
 #: packages/app-mobile/root.tsx:1013
 msgid "Side menu opened"
-msgstr ""
+msgstr "打开侧边菜单"
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:8
 #: packages/app-mobile/components/ScreenHeader.tsx:307
@@ -4205,9 +4188,8 @@ msgid "Sync your notes"
 msgstr "同步笔记"
 
 #: packages/lib/models/Setting.ts:2641
-#, fuzzy
 msgid "Sync, encryption, proxy"
-msgstr "启用加密"
+msgstr "同步与加密, 代理设置"
 
 #: packages/lib/models/Setting.ts:2606
 msgid "Synchronisation"
@@ -4295,9 +4277,8 @@ msgid "Teams"
 msgstr "团队"
 
 #: packages/lib/services/interop/InteropService.ts:116
-#, fuzzy
 msgid "Text document"
-msgstr "文本编辑器命令"
+msgstr "文本文档"
 
 #: packages/lib/models/Setting.ts:1410
 msgid "Text editor command"
@@ -4477,9 +4458,8 @@ msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr "同步目标需要升级。按这个横幅继续。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:617
-#, fuzzy
 msgid "The synchronisation password is missing."
-msgstr "检查同步配置"
+msgstr "缺少同步密码。"
 
 #: packages/lib/models/Tag.ts:204
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -4516,9 +4496,8 @@ msgid "Theme"
 msgstr "主题"
 
 #: packages/lib/models/Setting.ts:2640
-#, fuzzy
 msgid "Themes, editor font"
-msgstr "编辑器字体"
+msgstr "主题与编辑器字体设置"
 
 #: packages/app-mobile/components/NoteList.tsx:102
 msgid "There are currently no notes. Create one by clicking on the (+) button."
@@ -4595,6 +4574,8 @@ msgid ""
 "collaborate on it. It does not however allow you to share a notebook with "
 "someone else, unless you have the feature \"%s\"."
 msgstr ""
+"这允许其他用户与你共享笔记本，然后你们可以在笔记本上进行协作。但它不允许您与"
+"他人共享笔记本，除非您拥有\"%s\"功能。"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:50
 #: packages/lib/services/ResourceEditWatcher/index.ts:224
@@ -4612,9 +4593,8 @@ msgid ""
 msgstr "该授权令牌仅用于允许第三方应用程序访问 Joplin。"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:100
-#, fuzzy
 msgid "This drawing may have unsaved changes."
-msgstr "一些修改尚未保存。"
+msgstr "该本次绘图可能有未保存的更改。"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:232
 msgid ""
@@ -4795,9 +4775,8 @@ msgid "Toggle external editing"
 msgstr "切换外部编辑"
 
 #: packages/lib/models/Setting.ts:2645
-#, fuzzy
 msgid "Toggle note history, keep notes for"
-msgstr "保留笔记历史"
+msgstr "设置是否保留笔记历史版本"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNoteList.ts:9
 msgid "Toggle note list"
@@ -4875,18 +4854,16 @@ msgid "Type: %s."
 msgstr "类型：%s。"
 
 #: packages/app-mobile/components/screens/Note.tsx:872
-#, fuzzy
 msgid "Unable to edit resource of type %s"
-msgstr "无法导出或共享数据。 原因：%s"
+msgstr "无法编辑类型为 %s 的资源"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:69
 msgid "Unable to export or share data. Reason: %s"
 msgstr "无法导出或共享数据。 原因：%s"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:68
-#, fuzzy
 msgid "Unable to share log data. Reason: %s"
-msgstr "无法导出或共享数据。 原因：%s"
+msgstr "发送日志数据失败: %s"
 
 #: packages/lib/models/Setting.ts:922
 msgid "Uncompleted to-dos on top"
@@ -5115,7 +5092,7 @@ msgstr "语音输入语言文件（URL）"
 #: packages/app-mobile/components/screens/Note.tsx:1134
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:119
 msgid "Voice typing..."
-msgstr "语音输入中..."
+msgstr "使用语音输入..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:195
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:95
@@ -5188,7 +5165,7 @@ msgstr "当新建待办事项时："
 
 #: packages/app-desktop/ElectronAppWrapper.ts:164
 msgid "Window unresponsive."
-msgstr ""
+msgstr "窗口没有响应。"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:102
 msgid "Words"
@@ -5219,7 +5196,8 @@ msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
-"您将要附加一个大图片 (%dx%d 像素) 。您是否要将其调整为 %d 像素后附加吗？"
+"正在尝试将大图片 (%dx%d 像素) 添加到笔记中，是否要需要将其缩放为 %d 像素后再"
+"添加？"
 
 #: packages/app-mobile/components/NoteList.tsx:94
 msgid "You currently have no notebooks."
