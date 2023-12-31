@@ -80,6 +80,7 @@
 		"typedoc",
 		"webpack-cli",
 		"webpack",
+		"yeoman-generator",
 
 		// pdfjs-dist requires the canvas package, which cannot be built in
 		// Windows.
