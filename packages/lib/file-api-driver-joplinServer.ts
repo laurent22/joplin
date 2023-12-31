@@ -50,14 +50,18 @@ export default class FileApiDriverJoplinServer {
 	}
 
 	private metadataToStat_(md: any, path: string, isDeleted = false, rootPath: string) {
-		const output = {
+		const output: any = {
 			path: rootPath ? path.substr(rootPath.length + 1) : path,
 			updated_time: md.updated_time,
 			jop_updated_time: md.jop_updated_time,
 			isDir: false,
 			isDeleted: isDeleted,
-			jopItem: md.jopItem,
 		};
+
+		// Only add this object is it's also present in the raw data. This is
+		// because `getSupportsDeltaWithItems()` relies on it being present or
+		// not to decide if the sync target supports "delta with items".
+		if ('jopItem' in md) output.jopItem = md.jopItem;
 
 		return output;
 	}

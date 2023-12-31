@@ -827,6 +827,8 @@ export default class Synchronizer {
 
 					const supportsDeltaWithItems = getSupportsDeltaWithItems(listResult);
 
+					logger.info('supportsDeltaWithItems = ', supportsDeltaWithItems);
+
 					const remotes = listResult.items;
 
 					this.logSyncOperation('fetchingTotal', null, null, 'Fetching delta items from sync target', remotes.length);
