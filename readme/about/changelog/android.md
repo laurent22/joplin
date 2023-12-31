@@ -1,5 +1,9 @@
 # Joplin Android Changelog
 
+## [android-v2.14.2](https://github.com/laurent22/joplin/releases/tag/android-v2.14.2) (Pre-release) - 2023-12-31T16:14:25Z
+
+- Improved: Updated packages react-native-get-random-values (v1.10.0)
+
 ## [android-v2.14.1](https://github.com/laurent22/joplin/releases/tag/android-v2.14.1) (Pre-release) - 2023-12-29T22:12:14Z
 
 - Improved: CodeMirror 6 markdown editor: Support highlighting more languages (#9563) (#9562 by Henry Heino)
