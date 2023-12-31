@@ -142,20 +142,28 @@ describe('import-enex-md-gen', () => {
 		expect(all[0].mime).toBe('application/zip');
 	});
 
-	it('should keep importing notes when one of them is corrupted', async () => {
-		const filePath = `${enexSampleBaseDir}/ImportTestCorrupt.enex`;
-		const errors: any[] = [];
-		await importEnex('', filePath, {
-			onError: (error: any) => errors.push(error),
-		});
-		const notes = await Note.all();
-		expect(notes.length).toBe(2);
+	// Disabled for now because the ENEX parser has become so error-tolerant
+	// that it's no longer possible to generate a note that would generate a
+	// failure.
+	
+	// it('should keep importing notes when one of them is corrupted', async () => {
+	// 	const filePath = `${enexSampleBaseDir}/ImportTestCorrupt.enex`;
+	// 	const errors: any[] = [];
+	// 	const consoleSpy = jest.spyOn(console, 'warn').mockImplementation(jest.fn());
+	// 	await importEnex('', filePath, {
+	// 		onError: (error: any) => errors.push(error),
+	// 	});
+	// 	consoleSpy.mockRestore();
+	// 	const notes:NoteEntity[] = await Note.all();
+	// 	expect(notes.length).toBe(2);
+	// 	expect(notes.find(n => n.title === 'Note 1')).toBeTruthy();
+	// 	expect(notes.find(n => n.title === 'Note 3')).toBeTruthy();
 
-		// Check that an error was recorded and that it includes the title
-		// of the note, so that it can be found back by the user
-		expect(errors.length).toBe(1);
-		expect(errors[0].message.includes('Note 2')).toBe(true);
-	});
+	// 	// Check that an error was recorded and that it includes the title
+	// 	// of the note, so that it can be found back by the user
+	// 	expect(errors.length).toBe(1);
+	// 	expect(errors[0].message.includes('Note 2')).toBe(true);
+	// });
 
 	it('should throw an error and stop if the outer XML is invalid', async () => {
 		await expectThrow(async () => importEnexFile('invalid_html.enex'));

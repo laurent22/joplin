@@ -1239,6 +1239,14 @@ function drawTable(table: Section) {
 			continue;
 		}
 
+		if (typeof tr === 'string') {
+			// A <TABLE> tag should only have <TR> tags as direct children.
+			// However certain Evernote notes can contain other random tags
+			// such as empty DIVs. In that case we just skip the content.
+			// See test "table_with_invalid_content.html".
+			continue;
+		}
+
 		const isHeader = tr.isHeader;
 		const line = [];
 		const headerLine = [];
@@ -1247,10 +1255,7 @@ function drawTable(table: Section) {
 			const td = tr.lines[tdIndex];
 
 			if (typeof td === 'string') {
-				// A <TR> tag should only have <TD> tags as direct children.
-				// However certain Evernote notes can contain other random tags
-				// such as empty DIVs. In that case we just skip the content.
-				// See test "table_with_invalid_content.html".
+				// Same comment as above the <TR> tags.
 				continue;
 			}
 
