@@ -1,5 +1,9 @@
 # Joplin Desktop Changelog
 
+## [v2.13.12](https://github.com/laurent22/joplin/releases/tag/v2.13.12) - 2023-12-31T16:08:02Z
+
+- Fixed: Fix importing certain ENEX notes that include invalid tables ([229b9a5](https://github.com/laurent22/joplin/commit/229b9a5))
+
 ## [v2.13.11](https://github.com/laurent22/joplin/releases/tag/v2.13.11) - 2023-12-24T12:58:53Z
 
 - Fixed: Import ENEX archives that contain files with invalid names ([#9548](https://github.com/laurent22/joplin/issues/9548))
