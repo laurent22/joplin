@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: ERYpTION\n"
 "Language-Team: \n"
 "Language: da_DK\n"
@@ -183,6 +185,8 @@ msgid ""
 "%s is not optimised for synchronising many small files so your initial "
 "synchronisation will be slow."
 msgstr ""
+"%s er ikke optimeret til at synkronisere mange små filer, så din første "
+"synkronisering vil være langsom."
 
 #: packages/lib/services/ReportService.ts:247
 #: packages/lib/services/ReportService.ts:248
@@ -581,7 +585,7 @@ msgstr "Gennemse..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:231
 msgid "Built in"
-msgstr ""
+msgstr "Indbygget"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:84
 msgid "Bulleted List"
@@ -1802,7 +1806,7 @@ msgstr "Slå note-historie til"
 
 #: packages/lib/models/Setting.ts:845
 msgid "Enable optical character recognition (OCR)"
-msgstr ""
+msgstr "Aktivér optisk tegngenkendelse (OCR)"
 
 #: packages/lib/models/Setting.ts:1195
 msgid "Enable PDF viewer"
@@ -3874,9 +3878,8 @@ msgid "Search for..."
 msgstr "Søg efter..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:140
-#, fuzzy
 msgid "Search hidden"
-msgstr "Søgninger"
+msgstr "Søg skjulte"
 
 #: packages/app-desktop/gui/NoteListControls/commands/focusSearch.ts:6
 msgid "Search in all the notes"
@@ -3887,9 +3890,8 @@ msgid "Search in current note"
 msgstr "Søg i denne note"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:140
-#, fuzzy
 msgid "Search shown"
-msgstr "Søgninger"
+msgstr "Søg viste"
 
 #: packages/app-cli/app/gui/FolderListWidget.js:51
 msgid "Search:"
@@ -4552,11 +4554,10 @@ msgstr ""
 "element med en faktor 1. Genstart app'en for at se ændringer."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:594
-#, fuzzy
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
-msgstr[0] "Følgende vedhæftninger overvåges for ændringer:"
-msgstr[1] "Følgende vedhæftninger overvåges for ændringer:"
+msgstr[0] "Følgende vedhæftede fil matcher din søgeforespørgsel:"
+msgstr[1] "Følgende vedhæftede filer matcher din søgeforespørgsel:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:578
 msgid "The following attachments are being watched for changes:"
@@ -5419,6 +5420,9 @@ msgid ""
 "When enabled, the application will scan your attachments and extract the "
 "text from it. This will allow you to search for text in these attachments."
 msgstr ""
+"Når det er aktiveret, vil applikationen scanne dine vedhæftede filer og "
+"udtrække teksten fra dem. Dette giver dig mulighed for at søge efter tekst i "
+"disse vedhæftede filer."
 
 #: packages/app-desktop/ElectronAppWrapper.ts:176
 msgid "Window unresponsive."
