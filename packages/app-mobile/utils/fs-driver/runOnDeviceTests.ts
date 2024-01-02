@@ -193,17 +193,19 @@ const testTarCreate = async (tempDir: string) => {
 
 	// small utf-8 encoded files
 	for (let i = 0; i < 10; i ++) {
-		const testFilePath = join(directoryToPack, uuid.createNano());
+		const testFileName = uuid.createNano();
+		const testFilePath = join(directoryToPack, testFileName);
 
 		const fileContent = `✅ Testing... ä ✅ File #${i}`;
 		await fsDriver.writeFile(testFilePath, fileContent, 'utf-8');
 
-		fileContents[testFilePath] = fileContent;
+		fileContents[testFileName] = fileContent;
 	}
 
 	// larger utf-8 encoded files
 	for (let i = 0; i < 3; i ++) {
-		const testFilePath = join(directoryToPack, uuid.createNano());
+		const testFileName = uuid.createNano();
+		const testFilePath = join(directoryToPack, testFileName);
 
 		let fileContent = `✅ Testing... ä ✅ File #${i}`;
 
@@ -213,14 +215,14 @@ const testTarCreate = async (tempDir: string) => {
 
 		await fsDriver.writeFile(testFilePath, fileContent, 'utf-8');
 
-		fileContents[testFilePath] = fileContent;
+		fileContents[testFileName] = fileContent;
 	}
 
 	// Pack the files
 	const pathsToTar = Object.keys(fileContents);
 	const tarOutputPath = join(tempDir, 'test-tar.tar');
 	await fsDriver.tarCreate({
-		cwd: tempDir,
+		cwd: directoryToPack,
 		file: tarOutputPath,
 	}, pathsToTar);
 
@@ -230,6 +232,21 @@ const testTarCreate = async (tempDir: string) => {
 
 	for (const fileContent of Object.values(fileContents)) {
 		await expectToBe(rawTarData.includes(fileContent), true);
+	}
+
+
+	logger.info('Testing fsDriver.tarExtract...');
+
+	const outputDirectory = join(tempDir, uuid.createNano());
+	await fsDriver.mkdir(outputDirectory);
+	await fsDriver.tarExtract({
+		cwd: outputDirectory,
+		file: tarOutputPath,
+	});
+
+	for (const fileName in fileContents) {
+		const fileContent = await fsDriver.readFile(join(outputDirectory, fileName), 'utf8');
+		await expectToBe(fileContent, fileContents[fileName]);
 	}
 };
 
@@ -248,6 +265,8 @@ const runOnDeviceTests = async () => {
 		await testReadWriteFileUtf8(tempDir);
 		await testReadFileChunkUtf8(tempDir);
 		await testTarCreate(tempDir);
+
+		logger.info('Done');
 	} catch (error) {
 		const errorMessage = `On-device testing failed with an exception: ${error}.`;
 

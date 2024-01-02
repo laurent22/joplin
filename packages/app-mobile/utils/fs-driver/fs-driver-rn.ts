@@ -3,13 +3,10 @@ const RNFetchBlob = require('rn-fetch-blob').default;
 import * as RNFS from 'react-native-fs';
 import RNSAF, { DocumentFileDetail, openDocumentTree } from '@joplin/react-native-saf-x';
 import { Platform } from 'react-native';
-import * as tar from 'tar-stream';
-import { resolve } from 'path';
-import { Buffer } from 'buffer';
-import Logger from '@joplin/utils/Logger';
+import tarCreate from './tarCreate';
+import tarExtract from './tarExtract';
 import JoplinError from '@joplin/lib/JoplinError';
 
-const logger = Logger.create('fs-driver-rn');
 
 const ANDROID_URI_PREFIX = 'content://';
 
@@ -212,7 +209,7 @@ export default class FsDriverRN extends FsDriverBase {
 		// return RNFS.touch(path, timestampDate, timestampDate);
 	}
 
-	public async open(path: string, mode: number) {
+	public async open(path: string, mode: string) {
 		if (isScopedUri(path)) {
 			throw new Error('open() not implemented in FsDriverAndroid');
 		}
@@ -228,7 +225,7 @@ export default class FsDriverRN extends FsDriverBase {
 		};
 	}
 
-	public close(): Promise<void> {
+	public close(_handle: any): Promise<void> {
 		// Nothing
 		return null;
 	}
@@ -309,51 +306,18 @@ export default class FsDriverRN extends FsDriverBase {
 		throw new Error(`Not implemented: md5File(): ${path}`);
 	}
 
-	public async tarExtract(_options: any) {
-		throw new Error('Not implemented: tarExtract');
+	public async tarExtract(options: any) {
+		await tarExtract(this, {
+			cwd: RNFS.DocumentDirectoryPath,
+			...options,
+		});
 	}
 
 	public async tarCreate(options: any, filePaths: string[]) {
-		// Choose a default cwd if not given
-		const cwd = options.cwd ?? RNFS.DocumentDirectoryPath;
-		const file = resolve(cwd, options.file);
-
-		if (await this.exists(file)) {
-			throw new Error('Error! Destination already exists');
-		}
-
-		const pack = tar.pack();
-
-		for (const path of filePaths) {
-			const absPath = resolve(cwd, path);
-			const stat = await this.stat(absPath);
-			const sizeBytes: number = stat.size;
-
-			const entry = pack.entry({ name: path, size: sizeBytes }, (error) => {
-				if (error) {
-					logger.error(`Tar error: ${error}`);
-				}
-			});
-
-			const chunkSize = 1024 * 100; // 100 KiB
-			for (let offset = 0; offset < sizeBytes; offset += chunkSize) {
-				// The RNFS documentation suggests using base64 for binary files.
-				const part = await RNFS.read(absPath, chunkSize, offset, 'base64');
-				entry.write(Buffer.from(part, 'base64'));
-			}
-			entry.end();
-		}
-
-		pack.finalize();
-
-		// The streams used by tar-stream seem not to support a chunk size
-		// (it seems despite the typings provided).
-		let data: number[]|null = null;
-		while ((data = pack.read()) !== null) {
-			const buff = Buffer.from(data);
-			const base64Data = buff.toString('base64');
-			await this.appendFile(file, base64Data, 'base64');
-		}
+		await tarCreate(this, {
+			cwd: RNFS.DocumentDirectoryPath,
+			...options,
+		}, filePaths);
 	}
 
 	public async getExternalDirectoryPath(): Promise<string | undefined> {

@@ -84,7 +84,7 @@ export default class FsDriverNode extends FsDriverBase {
 		return r;
 	}
 
-	public async stat(path: string) {
+	public async stat(path: string): Promise<Stat> {
 		try {
 			const stat = await fs.stat(path);
 			return {

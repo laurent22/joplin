@@ -755,6 +755,7 @@ async function initialize(dispatch: Function) {
 		await runRsaIntegrationTests();
 		await runOnDeviceFsDriverTests();
 	}
+	loadPlugins();
 
 	reg.logger().info('Application initialized');
 }
