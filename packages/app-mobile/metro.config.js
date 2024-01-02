@@ -44,10 +44,9 @@ for (const [, v] of Object.entries(localPackages)) {
 	watchedFolders.push(v);
 }
 
-const defaultConfig = getDefaultConfig(__dirname);
+const defaultConfig = getDefaultConfig.getDefaultValues(__dirname);
 
 module.exports = {
-	...defaultConfig,
 	transformer: {
 		getTransformOptions: async () => ({
 			transform: {

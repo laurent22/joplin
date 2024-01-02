@@ -512,6 +512,8 @@ packages/app-mobile/components/screens/search.js
 packages/app-mobile/components/side-menu-content.js
 packages/app-mobile/components/voiceTyping/VoiceTypingDialog.js
 packages/app-mobile/gulpfile.js
+packages/app-mobile/plugins/PluginRunner/PluginRunnerWebView.js
+packages/app-mobile/plugins/loadPlugins.js
 packages/app-mobile/root.js
 packages/app-mobile/services/AlarmServiceDriver.android.js
 packages/app-mobile/services/AlarmServiceDriver.ios.js

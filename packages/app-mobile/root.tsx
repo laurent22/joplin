@@ -122,6 +122,7 @@ import { ReactNode } from 'react';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
 import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
 import runOnDeviceFsDriverTests from './utils/fs-driver/runOnDeviceTests';
+import loadPlugins from './plugins/loadPlugins';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -755,7 +756,7 @@ async function initialize(dispatch: Function) {
 		await runRsaIntegrationTests();
 		await runOnDeviceFsDriverTests();
 	}
-	loadPlugins();
+	void loadPlugins();
 
 	reg.logger().info('Application initialized');
 }
