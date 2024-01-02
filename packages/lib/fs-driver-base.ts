@@ -2,6 +2,7 @@ import time from './time';
 import Setting from './models/Setting';
 import { filename, fileExtension } from './path-utils';
 const md5 = require('md5');
+import { Buffer } from 'buffer';
 
 export interface Stat {
 	birthtime: Date;
@@ -37,6 +38,7 @@ export default class FsDriverBase {
 		throw new Error('Not implemented');
 	}
 
+	// Must also create parent directories
 	public async mkdir(_path: string) {
 		throw new Error('Not implemented');
 	}
@@ -104,6 +106,15 @@ export default class FsDriverBase {
 
 	public isUsingAndroidSAF() {
 		return false;
+	}
+
+	public async appendBinaryReadableToFile(path: string, readable: { read(): number[]|null }) {
+		let data: number[]|null = null;
+		while ((data = readable.read()) !== null) {
+			const buff = Buffer.from(data);
+			const base64Data = buff.toString('base64');
+			await this.appendFile(path, base64Data, 'base64');
+		}
 	}
 
 	protected async readDirStatsHandleRecursion_(basePath: string, stat: Stat, output: Stat[], options: ReadDirStatsOptions): Promise<Stat[]> {
