@@ -38,6 +38,7 @@
     "deprecated-react-native-prop-types": "4.2.3",
     "events": "3.3.0",
     "expo": "49.0.18",
+    "expo-asset": "8.10.1",
     "jsc-android": "241213.1.0",
     "lodash": "4.17.21",
     "md5": "2.3.0",
