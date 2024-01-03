@@ -14,6 +14,11 @@ const jsDrawBundle = new BundledFile(
 	`${mobileDir}/components/NoteEditor/ImageEditor/js-draw/createJsDrawEditor.ts`,
 );
 
+const pluginBackgroundPageBundle = new BundledFile(
+	'pluginBackgroundPage',
+	`${mobileDir}/plugins/PluginRunner/injectedJs/pluginRunnerBackgroundPage.ts`,
+);
+
 const gulpTasks = {
 	beforeBundle: {
 		fn: () => mkdirp(outputDir),
@@ -29,6 +34,12 @@ const gulpTasks = {
 	},
 	watchJsDrawEditor: {
 		fn: () => jsDrawBundle.startWatching(),
+	},
+	buildPluginBackgroundScript: {
+		fn: () => pluginBackgroundPageBundle.build(),
+	},
+	watchPluginBackgroundScript: {
+		fn: () => pluginBackgroundPageBundle.startWatching(),
 	},
 	copyWebviewLib: {
 		fn: () => copyJs('webviewLib', `${mobileDir}/../lib/renderers/webviewLib.js`),

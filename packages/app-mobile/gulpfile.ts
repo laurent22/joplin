@@ -19,6 +19,7 @@ gulp.task('buildInjectedJs', gulp.series(
 	'beforeBundle',
 	'buildCodeMirrorEditor',
 	'buildJsDrawEditor',
+	'buildPluginBackgroundScript',
 	'copyWebviewLib',
 ));
 
@@ -28,6 +29,7 @@ gulp.task('watchInjectedJs', gulp.series(
 	gulp.parallel(
 		'watchCodeMirrorEditor',
 		'watchJsDrawEditor',
+		'watchPluginBackgroundScript',
 	),
 ));
 

@@ -19,6 +19,7 @@ export interface WebViewControl {
 	// Evaluate the given [script] in the context of the page.
 	// Unlike react-native-webview/WebView, this does not need to return true.
 	injectJS(script: string): void;
+	postMessage(message: string): void;
 }
 
 interface SourceFileUpdateEvent {
@@ -28,9 +29,9 @@ interface SourceFileUpdateEvent {
 	filePath: string;
 }
 
-type OnMessageCallback = (event: WebViewMessageEvent)=> void;
-type OnErrorCallback = (event: WebViewErrorEvent)=> void;
-type OnLoadEndCallback = (event: WebViewEvent)=> void;
+export type OnMessageCallback = (event: WebViewMessageEvent)=> void;
+export type OnErrorCallback = (event: WebViewErrorEvent)=> void;
+export type OnLoadEndCallback = (event: WebViewEvent)=> void;
 type OnFileUpdateCallback = (event: SourceFileUpdateEvent)=> void;
 
 interface Props {
@@ -84,6 +85,9 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 				};
 
 				true;`);
+			},
+			postMessage(message: string) {
+				webviewRef.current.postMessage(message);
 			},
 		};
 	});
