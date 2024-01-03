@@ -7,13 +7,19 @@ import ResourceFetcher from '../../services/ResourceFetcher';
 import DecryptionWorker from '../../services/DecryptionWorker';
 import eventManager from '../../eventManager';
 import BaseItem from '../../models/BaseItem';
+import shim from '../../shim';
+import { Dispatch } from 'redux';
+import { State } from '../../reducer';
 
-const reduxSharedMiddleware = async function(store: any, _next: any, action: any) {
-	const newState = store.getState();
+let sortNoteListTimeout: any = null;
+
+export default async (store: any, _next: any, action: any, dispatch: Dispatch) => {
+	const newState: State = store.getState();
 
 	eventManager.appStateEmit(newState);
 
 	let refreshTags = false;
+	let sortNoteList = false;
 
 	if (action.type === 'FOLDER_SET_COLLAPSED' || action.type === 'FOLDER_TOGGLE') {
 		Setting.setValue('collapsedFolderIds', newState.collapsedFolderIds);
@@ -57,6 +63,9 @@ const reduxSharedMiddleware = async function(store: any, _next: any, action: any
 		refreshTags = true;
 	}
 
+	if (action.type === 'NOTE_UPDATE_ONE') {
+		sortNoteList = true;
+	}
 
 	if (action.type === 'NOTE_SELECT' || action.type === 'NAV_BACK') {
 		const noteIds = newState.provisionalNoteIds.slice();
@@ -98,6 +107,22 @@ const reduxSharedMiddleware = async function(store: any, _next: any, action: any
 		});
 	}
 
+	if (sortNoteList) {
+		if (sortNoteListTimeout) shim.clearTimeout(sortNoteListTimeout);
+		sortNoteListTimeout = null;
+
+		// We sort the note lists with two seconds debounce because doing can be
+		// very slow and would have to be done every time a note is added.
+		if (Date.now() - newState.noteListLastSortTime > 10000) {
+			dispatch({ type: 'NOTE_SORT' });
+		} else {
+			sortNoteListTimeout = shim.setTimeout(() => {
+				sortNoteListTimeout = null;
+				dispatch({ type: 'NOTE_SORT' });
+			}, 2000);
+		}
+	}
+
 	if (action.type.startsWith('SHARE_')) {
 		const serialized = JSON.stringify(newState.shareService);
 		Setting.setValue('sync.shareCache', serialized);
@@ -116,6 +141,3 @@ const reduxSharedMiddleware = async function(store: any, _next: any, action: any
 		}
 	}
 };
-
-module.exports = reduxSharedMiddleware;
-
