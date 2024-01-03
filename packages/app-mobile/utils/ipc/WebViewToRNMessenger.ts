@@ -9,9 +9,11 @@ export default class WebViewToRNMessenger<LocalInterface, RemoteInterface> exten
 		(window as any).handleReactNativeMessage = (message: any) => {
 			void this.onMessage(message);
 		};
+
+		this.onReadyToReceive();
 	}
 
 	protected override postMessage(message: SerializableData): void {
-		(window as any).ReactNativeWebView.postMessage(message);
+		(window as any).ReactNativeWebView.postMessage(JSON.stringify(message));
 	}
 }

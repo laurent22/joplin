@@ -1,4 +1,5 @@
 import { VersionInfo } from '@joplin/lib/services/plugins/api/types';
+import { Implementation as WindowImplementation } from '@joplin/lib/services/plugins/api/JoplinWindow';
 import Setting from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry';
 import BasePlatformImplementation, { Joplin } from '@joplin/lib/services/plugins/BasePlatformImplementation';
@@ -87,4 +88,17 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 		};
 	}
 
+	public get nativeImage(): any {
+		return null;
+	}
+
+	public get clipboard(): any {
+		return null;
+	}
+
+	public get window(): WindowImplementation {
+		return {
+			injectCustomStyles: null,
+		};
+	}
 }

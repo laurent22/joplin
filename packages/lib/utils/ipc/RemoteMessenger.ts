@@ -250,6 +250,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 		// If ready, re-send the RemoteReady message, it may have been sent before
 		// the remote first loaded.
 		if (this.isLocalReady) {
+			console.log('resend remote ready')
 			this.postMessage({
 				kind: MessageType.RemoteReady,
 				channelId: this.channelId,
@@ -282,6 +283,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 
 	// Should be called by subclasses when a message is received.
 	protected async onMessage(message: SerializableData): Promise<void> {
+		console.log('onMessage!', message);
 		if (!(typeof message === 'object')) {
 			throw new Error('Invalid message. Messages passed to onMessage must have type "object".');
 		}
@@ -304,8 +306,11 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 
 		// If intended for a different set of messengers...
 		if (asInternalMessage.channelId !== this.channelId) {
+			console.log(asInternalMessage.channelId, '!==', this.channelId);
 			return;
 		}
+		console.log(asInternalMessage.kind);
+
 
 		if (asInternalMessage.kind === MessageType.InvokeMethod) {
 			await this.invokeLocalMethod(asInternalMessage);
@@ -344,6 +349,8 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 
 	public setLocalInterface(localInterface: LocalInterface) {
 		this.localInterface = localInterface;
+
+		console.log('setLocalInterface', this.waitingForLocalInterface, this);
 
 		if (this.waitingForLocalInterface) {
 			this.waitingForLocalInterface = false;

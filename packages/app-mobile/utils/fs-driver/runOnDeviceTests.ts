@@ -181,7 +181,7 @@ const testReadFileChunkUtf8 = async (tempDir: string) => {
 	await expectToBe(readData, undefined);
 };
 
-const testTarCreate = async (tempDir: string) => {
+const testTarCreateAndExtract = async (tempDir: string) => {
 	logger.info('Testing fsDriver.tarCreate...');
 
 	const directoryToPack = join(tempDir, uuid.createNano());
@@ -250,6 +250,16 @@ const testTarCreate = async (tempDir: string) => {
 	}
 };
 
+const testMd5File = async (tempDir: string) => {
+	logger.info('Testing fsDriver.md5file...');
+	const fsDriver = shim.fsDriver();
+
+	const testFilePath = join(tempDir, `test-md5-${uuid.createNano()}`);
+	await fsDriver.writeFile(testFilePath, '🚧test', 'utf8');
+
+	await expectToBe(await fsDriver.md5File(testFilePath), 'ba11ba1be5042133a71874731e3d42cd');
+};
+
 // In the past, some fs-driver functionality has worked correctly on some devices and not others.
 // As such, we need to be able to run some tests on-device.
 const runOnDeviceTests = async () => {
@@ -264,7 +274,8 @@ const runOnDeviceTests = async () => {
 		await testAppendFile(tempDir);
 		await testReadWriteFileUtf8(tempDir);
 		await testReadFileChunkUtf8(tempDir);
-		await testTarCreate(tempDir);
+		await testTarCreateAndExtract(tempDir);
+		await testMd5File(tempDir);
 
 		logger.info('Done');
 	} catch (error) {

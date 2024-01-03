@@ -10,7 +10,7 @@ import shim from '@joplin/lib/shim';
 
 
 export default class PluginRunner extends BasePluginRunner {
-	private messageEventListeners: OnMessageCallback[];
+	private messageEventListeners: OnMessageCallback[] = [];
 
 	public constructor(private webviewRef: RefObject<WebViewControl>) {
 		super();
@@ -24,16 +24,19 @@ export default class PluginRunner extends BasePluginRunner {
 		);
 
 		this.messageEventListeners.push(messenger.onWebViewMessage);
-		messenger.onWebViewLoaded();
 
 		this.webviewRef.current.injectJS(`
 			const pluginScript = ${JSON.stringify(plugin.scriptText)};
-			pluginBackgroundPageBundle.runPlugin(
+			console.log('Running plugin with script', pluginScript);
+
+			pluginBackgroundPage.runPlugin(
 				${JSON.stringify(shim.injectedJs('pluginBackgroundPage'))},
 				${JSON.stringify(plugin.scriptText)},
 				${JSON.stringify(messageChannelId)},
 			);
 		`);
+
+		messenger.onWebViewLoaded();
 	}
 
 	public onWebviewMessage(event: WebViewMessageEvent) {

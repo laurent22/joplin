@@ -80,7 +80,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 					${js}
 				}
 				catch(e) {
-					logMessage('Error in injected JS:' + e, e);
+					(window.logMessage || console.log)('Error in injected JS:' + e, e);
 					throw e;
 				};
 

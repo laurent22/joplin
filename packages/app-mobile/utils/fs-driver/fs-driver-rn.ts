@@ -6,6 +6,8 @@ import { Platform } from 'react-native';
 import tarCreate from './tarCreate';
 import tarExtract from './tarExtract';
 import JoplinError from '@joplin/lib/JoplinError';
+const md5 = require('md5');
+import { resolve } from 'path';
 
 
 const ANDROID_URI_PREFIX = 'content://';
@@ -48,7 +50,7 @@ const normalizeEncoding = (encoding: string): SupportedEncoding => {
 
 export default class FsDriverRN extends FsDriverBase {
 	public appendFileSync() {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: appendFileSync');
 	}
 
 	// Requires that the file already exists.
@@ -299,11 +301,12 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	public resolve(...paths: string[]): string {
-		throw new Error(`Not implemented: resolve(): ${JSON.stringify(paths)}`);
+		return resolve(...paths);
 	}
 
 	public async md5File(path: string): Promise<string> {
-		throw new Error(`Not implemented: md5File(): ${path}`);
+		const fileData = Buffer.from(await this.readFile(path, 'base64'), 'base64');
+		return md5(fileData);
 	}
 
 	public async tarExtract(options: any) {

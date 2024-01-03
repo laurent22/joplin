@@ -2,12 +2,14 @@
 import * as React from 'react';
 import ExtendedWebView, { WebViewControl } from '../../components/ExtendedWebView';
 import Setting from '@joplin/lib/models/Setting';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import shim from '@joplin/lib/shim';
 import { WebViewMessageEvent } from 'react-native-webview';
 import PluginRunner from './PluginRunner';
 import loadPlugins from '../loadPlugins';
 import { useStore } from 'react-redux';
+import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
+import Logger from '@joplin/utils/Logger';
 
 interface Props {
 }
@@ -23,6 +25,8 @@ const html = `
 </html>
 `;
 
+const logger = Logger.create('PluginRunnerWebView');
+
 const PluginRunnerWebView = (_props: Props) => {
 	const webviewRef = useRef<WebViewControl>();
 
@@ -30,19 +34,26 @@ const PluginRunnerWebView = (_props: Props) => {
 		return new PluginRunner(webviewRef);
 	}, []);
 
+	const [webviewLoaded, setLoaded] = useState(false);
 	const store = useStore();
 
-	useEffect(() => {
-		void loadPlugins(pluginRunner, store);
-	}, [pluginRunner, store]);
+	useAsyncEffect(async () => {
+		if (!webviewLoaded) {
+			return;
+		}
+
+		await loadPlugins(pluginRunner, store);
+	}, [pluginRunner, store, webviewLoaded]);
 
 	const injectedJs = useMemo(() => {
 		return `
 			${shim.injectedJs('pluginBackgroundPage')}
+			console.log('Loaded PluginRunnerWebView.');
 		`;
 	}, []);
 
 	const onMessage = useCallback((event: WebViewMessageEvent) => {
+		logger.debug('plugin message', event.nativeEvent.data);
 		pluginRunner.onWebviewMessage(event);
 	}, [pluginRunner]);
 
@@ -55,6 +66,7 @@ const PluginRunnerWebView = (_props: Props) => {
 			injectedJavaScript={injectedJs}
 			onMessage={onMessage}
 			onError={()=>{}}
+			onLoadEnd={() => setLoaded(true)}
 			ref={webviewRef}
 		/>
 	);

@@ -57,6 +57,11 @@ export default class BundledFile {
 			},
 			resolve: {
 				extensions: ['.tsx', '.ts', '.js'],
+
+				// Some of these are used by the plugin background script
+				fallback: {
+					'path': require.resolve('path-browserify'),
+				},
 			},
 			cache: {
 				type: 'filesystem',

@@ -10,10 +10,12 @@ export default class RNToWebViewMessenger<LocalInterface, RemoteInterface> exten
 	}
 
 	protected override postMessage(message: SerializableData): void {
+		console.log('postMsg', message);
 		this.webviewControl.postMessage(JSON.stringify(message));
 	}
 
 	public onWebViewMessage = (event: WebViewMessageEvent) => {
+		console.log('RNToWebViewMessenger', event.nativeEvent.data);
 		void this.onMessage(JSON.parse(event.nativeEvent.data));
 	};
 

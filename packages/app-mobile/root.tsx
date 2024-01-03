@@ -471,8 +471,10 @@ async function initialize(dispatch: Function) {
 	Setting.setConstant('appId', 'net.cozic.joplin-mobile');
 	Setting.setConstant('appType', 'mobile');
 	Setting.setConstant('tempDir', await initializeTempDir());
+	Setting.setConstant('cacheDir', `${getProfilesRootDir()}/cache`);
 	const resourceDir = getResourceDir(currentProfile, isSubProfile);
 	Setting.setConstant('resourceDir', resourceDir);
+	Setting.setConstant('pluginDir', `${getProfilesRootDir()}/plugins`);
 
 	await shim.fsDriver().mkdir(resourceDir);
 
