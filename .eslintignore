@@ -53,6 +53,7 @@ packages/app-desktop/services/electron-context-menu.js
 packages/app-desktop/vendor/lib/
 packages/app-mobile/android
 packages/app-mobile/components/NoteEditor/**/*.bundle.js
+packages/app-mobile/plugins/PluginRunner/*.bundle.js
 packages/app-mobile/ios
 packages/app-mobile/lib/rnInjectedJs/
 packages/app-mobile/locales
@@ -532,9 +533,10 @@ packages/app-mobile/components/screens/search.js
 packages/app-mobile/components/side-menu-content.js
 packages/app-mobile/components/voiceTyping/VoiceTypingDialog.js
 packages/app-mobile/gulpfile.js
+packages/app-mobile/plugins/PlatformImplementation.js
 packages/app-mobile/plugins/PluginRunner/PluginRunner.js
 packages/app-mobile/plugins/PluginRunner/PluginRunnerWebView.js
-packages/app-mobile/plugins/PluginRunner/injectedJs/pluginRunnerBackgroundPage.js
+packages/app-mobile/plugins/PluginRunner/pluginRunnerBackgroundPage.js
 packages/app-mobile/plugins/PluginRunner/types.js
 packages/app-mobile/plugins/loadPlugins.js
 packages/app-mobile/root.js

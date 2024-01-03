@@ -1,5 +1,5 @@
-import WebViewToRNMessenger from '../../../utils/ipc/WebViewToRNMessenger';
-import { PluginApi, PluginWebViewApi } from '../types';
+import WebViewToRNMessenger from '../../utils/ipc/WebViewToRNMessenger';
+import { PluginApi, PluginWebViewApi } from './types';
 import WindowMessenger from '@joplin/lib/utils/ipc/WindowMessenger';
 
 export const runPlugin = (

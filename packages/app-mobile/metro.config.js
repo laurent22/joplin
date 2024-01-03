@@ -16,6 +16,8 @@ const { getDefaultConfig } = require('metro-config');
 const localPackages = {
 	'@joplin/lib': path.resolve(__dirname, '../lib/'),
 	'@joplin/renderer': path.resolve(__dirname, '../renderer/'),
+	'@joplin/turndown': path.resolve(__dirname, '../turndown/'),
+	'@joplin/turndown-plugin-gfm': path.resolve(__dirname, '../turndown-plugin-gfm/'),
 	'@joplin/editor': path.resolve(__dirname, '../editor/'),
 	'@joplin/tools': path.resolve(__dirname, '../tools/'),
 	'@joplin/utils': path.resolve(__dirname, '../utils/'),

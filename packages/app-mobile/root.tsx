@@ -122,7 +122,7 @@ import { ReactNode } from 'react';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
 import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
 import runOnDeviceFsDriverTests from './utils/fs-driver/runOnDeviceTests';
-import loadPlugins from './plugins/loadPlugins';
+import PluginRunnerWebView from './plugins/PluginRunner/PluginRunnerWebView';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -756,7 +756,6 @@ async function initialize(dispatch: Function) {
 		await runRsaIntegrationTests();
 		await runOnDeviceFsDriverTests();
 	}
-	void loadPlugins();
 
 	reg.logger().info('Application initialized');
 }
@@ -1106,6 +1105,7 @@ class AppComponent extends React.Component {
 						</SafeAreaView>
 					</MenuProvider>
 				</SideMenu>
+				<PluginRunnerWebView/>
 			</View>
 		);
 
