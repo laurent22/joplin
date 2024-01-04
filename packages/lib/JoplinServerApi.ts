@@ -15,6 +15,9 @@ interface Options {
 	userContentBaseUrl(): string;
 	username(): string;
 	password(): string;
+	platform(): number | undefined;
+	type(): number | undefined;
+	version(): string | undefined;
 	env?: Env;
 }
 
@@ -63,6 +66,16 @@ export default class JoplinServerApi {
 		return personalizedUserContentBaseUrl(userId, this.baseUrl(), this.options_.userContentBaseUrl());
 	}
 
+	private getClientInfo() {
+		const clientInfo = {
+			platform: this.options_.platform(),
+			type: this.options_.type(),
+			version: this.options_.version(),
+		};
+
+		return clientInfo;
+	}
+
 	private async session() {
 		if (this.session_) return this.session_;
 
@@ -70,6 +83,7 @@ export default class JoplinServerApi {
 			this.session_ = await this.exec_('POST', 'api/sessions', null, {
 				email: this.options_.username(),
 				password: this.options_.password(),
+				clientInfo: this.getClientInfo(),
 			});
 
 			return this.session_;
