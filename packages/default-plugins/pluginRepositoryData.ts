@@ -8,7 +8,7 @@ const pluginRepositoryData: AllRepositoryData = {
 		'appTypes': [AppType.Desktop],
 	},
 	'com.example.show-message-box-on-startup': {
-		'path': '/home/builder/Documents/joplin/packages/app-cli/tests/support/plugins/message_box',
+		'path': 'packages/app-cli/tests/support/plugins/message_box',
 		'appTypes': [AppType.Mobile],
 	},
 };
