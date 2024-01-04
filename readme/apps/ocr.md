@@ -8,7 +8,7 @@ You can enable OCR from the [Configuration screen](https://github.com/laurent22/
 
 Then, when you search, the application will be able to tell you what notes but also what attachments match the query. In this case, a banner will be displayed at the top of the note that contains the attachment(s):
 
-<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/ocr/search_results.png" width="80%"/>
+![](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/ocr/search_results.png)
 
 Searching in OCR text is enabled on the desktop and mobile app. Scanning documents however is only available on the desktop app since this is a relatively resource-intensive process. The mobile app will have access to that OCR data via sync.
 
