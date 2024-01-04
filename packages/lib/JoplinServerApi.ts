@@ -6,6 +6,7 @@ import { Env } from './models/Setting';
 import Logger from '@joplin/utils/Logger';
 import personalizedUserContentBaseUrl from './services/joplinServer/personalizedUserContentBaseUrl';
 import { getHttpStatusMessage } from './net-utils';
+import { getApplicationInformation } from './services/JoplinCloudLogin';
 const { stringify } = require('query-string');
 
 const logger = Logger.create('JoplinServerApi');
@@ -63,13 +64,27 @@ export default class JoplinServerApi {
 		return personalizedUserContentBaseUrl(userId, this.baseUrl(), this.options_.userContentBaseUrl());
 	}
 
+	private async getClientInfo() {
+		const { platform, type } = await getApplicationInformation();
+		const clientInfo = {
+			platform,
+			type,
+			version: shim.appVersion(),
+		};
+
+		return clientInfo;
+	}
+
 	private async session() {
 		if (this.session_) return this.session_;
+
+		const clientInfo = await this.getClientInfo();
 
 		try {
 			this.session_ = await this.exec_('POST', 'api/sessions', null, {
 				email: this.options_.username(),
 				password: this.options_.password(),
+				clientInfo,
 			});
 
 			return this.session_;
