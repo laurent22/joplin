@@ -11,22 +11,29 @@
 
 import { EditorSettings } from '@joplin/editor/types';
 import createEditor from '@joplin/editor/CodeMirror/createEditor';
-import { logMessage, postMessage } from './webviewLogger';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
+import WebViewToRNMessenger from '../../../utils/ipc/WebViewToRNMessenger';
+import { WebViewToEditorApi } from '../types';
 
-export function initCodeMirror(
-	parentElement: HTMLElement, initialText: string, settings: EditorSettings,
-): CodeMirrorControl {
-	return createEditor(parentElement, {
+export const initCodeMirror = (
+	parentElement: HTMLElement,
+	initialText: string,
+	settings: EditorSettings,
+): CodeMirrorControl => {
+	const messenger = new WebViewToRNMessenger<CodeMirrorControl, WebViewToEditorApi>('editor', null);
+
+	const control = createEditor(parentElement, {
 		initialText,
 		settings,
 
 		onLogMessage: message => {
-			logMessage(message);
+			void messenger.remoteApi.logMessage(message);
 		},
 		onEvent: (event): void => {
-			postMessage('onEditorEvent', event);
+			void messenger.remoteApi.onEditorEvent(event);
 		},
 	});
-}
 
+	messenger.setLocalInterface(control);
+	return control;
+};

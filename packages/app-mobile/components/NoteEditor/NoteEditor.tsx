@@ -6,18 +6,25 @@ import { defaultSearchState, SearchPanel } from './SearchPanel';
 import ExtendedWebView from '../ExtendedWebView';
 
 import * as React from 'react';
-import { forwardRef, useImperativeHandle } from 'react';
+import { forwardRef, useEffect, useImperativeHandle } from 'react';
 import { useMemo, useState, useCallback, useRef } from 'react';
 import { LayoutChangeEvent, View, ViewStyle } from 'react-native';
 const { editorFont } = require('../global-style');
 
-import { EditorControl, EditorSettings, SelectionRange } from './types';
+import { EditorControl as EditorBodyControl, PluginData } from '@joplin/editor/types';
+import { EditorControl, EditorSettings, SelectionRange, WebViewToEditorApi } from './types';
 import { _ } from '@joplin/lib/locale';
 import MarkdownToolbar from './MarkdownToolbar/MarkdownToolbar';
 import { ChangeEvent, EditorEvent, EditorEventType, SelectionRangeChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
-import { EditorCommandType, EditorKeymap, EditorLanguageType, PluginData, SearchState } from '@joplin/editor/types';
+import { EditorCommandType, EditorKeymap, EditorLanguageType, SearchState } from '@joplin/editor/types';
 import supportsCommand from '@joplin/editor/CodeMirror/editorCommands/supportsCommand';
 import SelectionFormatting, { defaultSelectionFormatting } from '@joplin/editor/SelectionFormatting';
+import useCodeMirrorPlugins from './hooks/useCodeMirrorPlugins';
+import RNToWebViewMessenger from '../../utils/ipc/RNToWebViewMessenger';
+import { WebViewMessageEvent } from 'react-native-webview';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('NoteEditor');
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
@@ -130,16 +137,18 @@ type OnInjectJSCallback = (js: string)=> void;
 type OnSetVisibleCallback = (visible: boolean)=> void;
 type OnSearchStateChangeCallback = (state: SearchState)=> void;
 const useEditorControl = (
-	injectJS: OnInjectJSCallback, setLinkDialogVisible: OnSetVisibleCallback,
+	bodyControl: EditorBodyControl,
+	injectJS: OnInjectJSCallback,
+	setLinkDialogVisible: OnSetVisibleCallback,
 	setSearchState: OnSearchStateChangeCallback,
 ): EditorControl => {
 	return useMemo(() => {
 		const execCommand = (command: EditorCommandType) => {
-			injectJS(`cm.execCommand(${JSON.stringify(command)})`);
+			bodyControl.execCommand(command);
 		};
 
 		const setSearchStateCallback = (state: SearchState) => {
-			injectJS(`cm.setSearchState(${JSON.stringify(state)})`);
+			bodyControl.setSearchState(state);
 			setSearchState(state);
 		};
 
@@ -150,27 +159,25 @@ const useEditorControl = (
 			execCommand,
 
 			undo() {
-				injectJS('cm.undo()');
+				bodyControl.undo();
 			},
 			redo() {
-				injectJS('cm.redo()');
+				bodyControl.redo();
 			},
 			select(anchor: number, head: number) {
-				injectJS(
-					`cm.select(${JSON.stringify(anchor)}, ${JSON.stringify(head)});`,
-				);
+				bodyControl.select(anchor, head);
 			},
 			setScrollPercent(fraction: number) {
-				injectJS(`cm.setScrollFraction(${JSON.stringify(fraction)})`);
+				bodyControl.setScrollPercent(fraction);
 			},
 			insertText(text: string) {
-				injectJS(`cm.insertText(${JSON.stringify(text)});`);
+				bodyControl.insertText(text);
 			},
 			updateBody(newBody: string) {
-				injectJS(`cm.updateBody(${JSON.stringify(newBody)});`);
+				bodyControl.updateBody(newBody);
 			},
 			updateSettings(newSettings: EditorSettings) {
-				injectJS(`cm.updateSettings(${JSON.stringify(newSettings)})`);
+				bodyControl.updateSettings(newSettings);
 			},
 
 			toggleBolded() {
@@ -218,10 +225,7 @@ const useEditorControl = (
 				execCommand(EditorCommandType.IndentLess);
 			},
 			updateLink(label: string, url: string) {
-				injectJS(`cm.updateLink(
-					${JSON.stringify(label)},
-					${JSON.stringify(url)}
-				);`);
+				bodyControl.updateLink(label, url);
 			},
 			scrollSelectionIntoView() {
 				execCommand(EditorCommandType.ScrollSelectionIntoView);
@@ -237,7 +241,7 @@ const useEditorControl = (
 			},
 
 			setPlugins: async (plugins: PluginData[]) => {
-				injectJS(`cm.setPlugins(${JSON.stringify(plugins)});`);
+				return bodyControl.setPlugins(plugins);
 			},
 
 			setSearchState: setSearchStateCallback,
@@ -268,7 +272,7 @@ const useEditorControl = (
 		};
 
 		return control;
-	}, [injectJS, setLinkDialogVisible, setSearchState]);
+	}, [injectJS, setLinkDialogVisible, setSearchState, bodyControl]);
 };
 
 function NoteEditor(props: Props, ref: any) {
@@ -297,21 +301,6 @@ function NoteEditor(props: Props, ref: any) {
 	};
 
 	const injectedJavaScript = `
-		function postMessage(name, data) {
-			window.ReactNativeWebView.postMessage(JSON.stringify({
-				data,
-				name,
-			}));
-		}
-
-		function logMessage(...msg) {
-			postMessage('onLog', { value: msg });
-		}
-
-		// Globalize logMessage, postMessage
-		window.logMessage = logMessage;
-		window.postMessage = postMessage;
-
 		window.onerror = (message, source, lineno) => {
 			window.ReactNativeWebView.postMessage(
 				"error: " + message + " in file://" + source + ", line " + lineno
@@ -362,76 +351,89 @@ function NoteEditor(props: Props, ref: any) {
 		webviewRef.current.injectJS(js);
 	};
 
+	const onEditorEvent = useRef((_event: EditorEvent) => {});
+
+	const editorMessenger = useMemo(() => {
+		const localApi: WebViewToEditorApi = {
+			async onEditorEvent(event) {
+				onEditorEvent.current(event);
+			},
+			async logMessage(message) {
+				logger.debug('CodeMirror:', message);
+			},
+		};
+		const messenger = new RNToWebViewMessenger<WebViewToEditorApi, EditorBodyControl>(
+			'editor', webviewRef, localApi,
+		);
+		return messenger;
+	}, []);
+
 	const editorControl = useEditorControl(
-		injectJS, setLinkDialogVisible, setSearchState,
+		editorMessenger.remoteApi, injectJS, setLinkDialogVisible, setSearchState,
 	);
 
 	useImperativeHandle(ref, () => {
 		return editorControl;
 	});
 
-	const onMessage = useCallback((event: any) => {
+	useEffect(() => {
+		onEditorEvent.current = (event: EditorEvent) => {
+			let exhaustivenessCheck: never;
+			switch (event.kind) {
+			case EditorEventType.Change:
+				props.onChange(event);
+				break;
+			case EditorEventType.UndoRedoDepthChange:
+				props.onUndoRedoDepthChange(event);
+				break;
+			case EditorEventType.SelectionRangeChange:
+				props.onSelectionChange(event);
+				break;
+			case EditorEventType.SelectionFormattingChange:
+				setSelectionState(event.formatting);
+				break;
+			case EditorEventType.EditLink:
+				editorControl.showLinkDialog();
+				break;
+			case EditorEventType.UpdateSearchDialog:
+				setSearchState(event.searchState);
+
+				if (event.searchState.dialogVisible) {
+					editorControl.searchControl.showSearch();
+				} else {
+					editorControl.searchControl.hideSearch();
+				}
+				break;
+			case EditorEventType.Scroll:
+				// Not handled
+				break;
+			default:
+				exhaustivenessCheck = event;
+				return exhaustivenessCheck;
+			}
+			return;
+		};
+	}, [props.onChange, props.onUndoRedoDepthChange, props.onSelectionChange, editorControl]);
+
+	const codeMirrorPlugins = useCodeMirrorPlugins();
+	useEffect(() => {
+		void editorControl.setPlugins(codeMirrorPlugins);
+	}, [codeMirrorPlugins, editorControl]);
+
+	const onLoadEnd = useCallback(() => {
+		editorMessenger.onWebViewLoaded();
+	}, [editorMessenger]);
+
+	const onMessage = useCallback((event: WebViewMessageEvent) => {
 		const data = event.nativeEvent.data;
 
 		if (data.indexOf('error:') === 0) {
-			console.error('CodeMirror:', data);
+			logger.error('CodeMirror error', data);
 			return;
 		}
 
-		const msg = JSON.parse(data);
-
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-		const handlers: Record<string, Function> = {
-			onLog: (event: any) => {
-				// eslint-disable-next-line no-console
-				console.info('CodeMirror:', ...event.value);
-			},
-
-			onEditorEvent: (event: EditorEvent) => {
-				let exhaustivenessCheck: never;
-				switch (event.kind) {
-				case EditorEventType.Change:
-					props.onChange(event);
-					break;
-				case EditorEventType.UndoRedoDepthChange:
-					props.onUndoRedoDepthChange(event);
-					break;
-				case EditorEventType.SelectionRangeChange:
-					props.onSelectionChange(event);
-					break;
-				case EditorEventType.SelectionFormattingChange:
-					setSelectionState(event.formatting);
-					break;
-				case EditorEventType.EditLink:
-					editorControl.showLinkDialog();
-					break;
-				case EditorEventType.UpdateSearchDialog:
-					setSearchState(event.searchState);
-
-					if (event.searchState.dialogVisible) {
-						editorControl.searchControl.showSearch();
-					} else {
-						editorControl.searchControl.hideSearch();
-					}
-					break;
-				case EditorEventType.Scroll:
-					// Not handled
-					break;
-				default:
-					exhaustivenessCheck = event;
-					return exhaustivenessCheck;
-				}
-				return;
-			},
-		};
-
-		if (handlers[msg.name]) {
-			handlers[msg.name](msg.data);
-		} else {
-			// eslint-disable-next-line no-console
-			console.info('Unsupported CodeMirror message:', msg);
-		}
-	}, [props.onSelectionChange, props.onUndoRedoDepthChange, props.onChange, editorControl]);
+		editorMessenger.onWebViewMessage(event);
+	}, [editorMessenger]);
 
 	const onError = useCallback(() => {
 		console.error('NoteEditor: webview error');
@@ -493,6 +495,7 @@ function NoteEditor(props: Props, ref: any) {
 					html={html}
 					injectedJavaScript={injectedJavaScript}
 					onMessage={onMessage}
+					onLoadEnd={onLoadEnd}
 					onError={onError}
 				/>
 			</View>

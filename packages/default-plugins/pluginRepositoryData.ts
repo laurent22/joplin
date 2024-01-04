@@ -7,8 +7,8 @@ const pluginRepositoryData: AllRepositoryData = {
 		'commit': '021085cc37ed83a91a7950744e462782e27c04a6',
 		'appTypes': [AppType.Desktop],
 	},
-	'com.example.show-message-box-on-startup': {
-		'path': 'packages/app-cli/tests/support/plugins/message_box',
+	'com.example.codemirror6-line-numbers': {
+		'path': 'packages/app-cli/tests/support/plugins/codemirror6',
 		'appTypes': [AppType.Mobile],
 	},
 };

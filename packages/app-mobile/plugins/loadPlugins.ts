@@ -10,7 +10,7 @@ import { Store } from 'redux';
 import Logger from '@joplin/utils/Logger';
 
 const defaultPlugins: Record<string, string|number> = {
-	'com.example.show-message-box-on-startup': require('./sources/com.example.show-message-box-on-startup/plugin.jpl'),
+	'com.example.codemirror6-line-numbers': require('./sources/com.example.codemirror6-line-numbers/plugin.jpl'),
 };
 
 const logger = Logger.create('loadPlugins');
