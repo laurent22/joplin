@@ -12,10 +12,14 @@ export const requireModule = (moduleName: string) => {
 	throw new Error(`Unable to require module ${moduleName} on mobile.`);
 };
 
+const pluginIdToIframe: Record<string, HTMLIFrameElement> = Object.create(null);
+
 export const runPlugin = (
-	pluginBackgroundScript: string, pluginScript: string, messageChannelId: string,
+	pluginBackgroundScript: string, pluginScript: string, messageChannelId: string, pluginId: string,
 ) => {
 	const backgroundIframe = document.createElement('iframe');
+	pluginIdToIframe[pluginId] = backgroundIframe;
+
 	backgroundIframe.addEventListener('load', async () => {
 		backgroundIframe.contentWindow.postMessage({
 			kind: 'add-script',
@@ -73,6 +77,12 @@ export const runPlugin = (
 	`;
 
 	document.body.appendChild(backgroundIframe);
+};
+
+export const stopPlugin = async (pluginId: string) => {
+	pluginIdToIframe[pluginId].srcdoc = '';
+	pluginIdToIframe[pluginId].remove();
+	delete pluginIdToIframe[pluginId];
 };
 
 export const createPluginApiProxy = async (messageChannelId: string) => {

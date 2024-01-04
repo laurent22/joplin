@@ -139,6 +139,14 @@ export default class PluginService extends BaseService {
 		delete this.plugins_[pluginId];
 	}
 
+	public async unloadPlugin(pluginId: string) {
+		const plugin = this.plugins_[pluginId];
+		if (plugin) {
+			this.deletePluginAt(pluginId);
+			await this.runner_.stop(plugin);
+		}
+	}
+
 	private async deletePluginFiles(plugin: Plugin) {
 		await shim.fsDriver().remove(plugin.baseDir);
 	}

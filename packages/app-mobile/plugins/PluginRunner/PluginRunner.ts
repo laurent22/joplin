@@ -7,7 +7,9 @@ import { WebViewMessageEvent } from 'react-native-webview';
 import RNToWebViewMessenger from '../../utils/ipc/RNToWebViewMessenger';
 import { PluginApi, PluginWebViewApi } from './types';
 import shim from '@joplin/lib/shim';
+import Logger from '@joplin/utils/Logger';
 
+const logger = Logger.create('PluginRunner');
 
 export default class PluginRunner extends BasePluginRunner {
 	private messageEventListeners: OnMessageCallback[] = [];
@@ -18,6 +20,8 @@ export default class PluginRunner extends BasePluginRunner {
 
 	public override async run(plugin: Plugin, pluginApi: PluginApiGlobal) {
 		const pluginId = plugin.id;
+		logger.info('Running plugin with id', pluginId);
+
 		const messageChannelId = `plugin-message-channel-${pluginId}`;
 		const messenger = new RNToWebViewMessenger<PluginApi, PluginWebViewApi>(
 			messageChannelId, this.webviewRef.current, { api: pluginApi },
@@ -33,10 +37,19 @@ export default class PluginRunner extends BasePluginRunner {
 				${JSON.stringify(shim.injectedJs('pluginBackgroundPage'))},
 				${JSON.stringify(plugin.scriptText)},
 				${JSON.stringify(messageChannelId)},
+				${JSON.stringify(plugin.id)},
 			);
 		`);
 
 		messenger.onWebViewLoaded();
+	}
+
+	public override async stop(plugin: Plugin) {
+		logger.info('Stopping plugin with id', plugin.id);
+
+		this.webviewRef.current.injectJS(`
+			pluginBackgroundPage.stopPlugin(${JSON.stringify(plugin.id)});
+		`);
 	}
 
 	public onWebviewMessage(event: WebViewMessageEvent) {
