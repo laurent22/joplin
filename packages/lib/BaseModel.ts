@@ -41,6 +41,8 @@ export interface DeleteOptions {
 	trackDeleted?: boolean;
 
 	disableReadOnlyCheck?: boolean;
+
+	toTrash?: boolean;
 }
 
 class BaseModel {

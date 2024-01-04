@@ -2,7 +2,7 @@ import Setting from './Setting';
 import BaseModel from '../BaseModel';
 import shim from '../shim';
 import markdownUtils from '../markdownUtils';
-import { sortedIds, createNTestNotes, expectThrow, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, supportDir, expectNotThrow, simulateReadOnlyShareEnv } from '../testing/test-utils';
+import { sortedIds, createNTestNotes, expectThrow, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, supportDir, expectNotThrow, simulateReadOnlyShareEnv, msleep, db } from '../testing/test-utils';
 import Folder from './Folder';
 import Note from './Note';
 import Tag from './Tag';
@@ -12,6 +12,7 @@ import { ResourceEntity } from '../services/database/types';
 import { toForwardSlashes } from '../path-utils';
 import * as ArrayUtils from '../ArrayUtils';
 import { ErrorCode } from '../errors';
+import SearchEngine from '../services/searchengine/SearchEngine';
 
 async function allItems() {
 	const folders = await Folder.all();
@@ -495,6 +496,49 @@ describe('models/Note', () => {
 		await expectThrow(async () => Note.save({ id: note.id, parent_id: readonlyFolder.id }), ErrorCode.IsReadOnly);
 
 		cleanup();
+	}));
+
+	it('should delete a note to trash', (async () => {
+		const folder = await Folder.save({});
+		const note1 = await Note.save({ title: 'note1', parent_id: folder.id });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder.id });
+
+		const previousUpdatedTime = note1.updated_time;
+
+		await msleep(1);
+
+		await Note.delete(note1.id, { toTrash: true });
+
+		{
+			const n1 = await Note.load(note1.id);
+			expect(n1.deleted_time).toBeGreaterThan(0);
+			expect(n1.updated_time).toBeGreaterThan(previousUpdatedTime);
+			expect(n1.deleted_time).toBe(n1.updated_time);
+
+			const n2 = await Note.load(note2.id);
+			expect(n2.deleted_time).toBe(0);
+		}
+
+		{
+			const previews = await Note.previews(folder.id);
+			expect(previews.length).toBe(1);
+			expect(previews.find(n => n.id === note2.id)).toBeTruthy();
+		}
+
+		{
+			const engine = new SearchEngine();
+			engine.setDb(db());
+			await engine.syncTables();
+
+			const results = await engine.search('note*');
+			expect(results.length).toBe(1);
+			expect(results[0].id).toBe(note2.id);
+		}
+
+		// TODO: Check GotoAnything
+		// TODO: Check resource search (ocr_text);
+		// TODO: Check tags
+		// TODO: Search for "is_conflict" and "encryption_applied" - similar rules are applied
 	}));
 
 });

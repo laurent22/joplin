@@ -150,6 +150,7 @@ export interface DeletedItemEntity {
 }
 export interface FolderEntity {
   'created_time'?: number;
+  'deleted_time'?: number;
   'encryption_applied'?: number;
   'encryption_cipher_text'?: string;
   'icon'?: string;
@@ -272,6 +273,7 @@ export interface NoteEntity {
   'body'?: string;
   'conflict_original_id'?: string;
   'created_time'?: number;
+  'deleted_time'?: number;
   'encryption_applied'?: number;
   'encryption_cipher_text'?: string;
   'id'?: string | null;
@@ -425,6 +427,7 @@ export interface VersionEntity {
 export const databaseSchema: DatabaseTables = {
 	folders: {
 		created_time: { type: 'number' },
+		deleted_time: { type: 'number' },
 		encryption_applied: { type: 'number' },
 		encryption_cipher_text: { type: 'string' },
 		icon: { type: 'string' },
@@ -605,6 +608,7 @@ export const databaseSchema: DatabaseTables = {
 		body: { type: 'string' },
 		conflict_original_id: { type: 'string' },
 		created_time: { type: 'number' },
+		deleted_time: { type: 'number' },
 		encryption_applied: { type: 'number' },
 		encryption_cipher_text: { type: 'string' },
 		id: { type: 'string' },

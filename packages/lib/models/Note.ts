@@ -20,6 +20,22 @@ const { isImageMimeType } = require('../resourceUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
 const { ALL_NOTES_FILTER_ID } = require('../reserved-ids');
 
+interface PreviewsOptions {
+	order?: {
+		by: string;
+		dir: string;
+	}[];
+	conditions?: string[];
+	conditionsParams?: any[];
+	fields?: string[] | string;
+	uncompletedTodosOnTop?: boolean;
+	showCompletedTodos?: boolean;
+	anywherePattern?: string;
+	itemTypes?: string[];
+	limit?: number;
+	includeDeleted?: boolean;
+}
+
 export default class Note extends BaseItem {
 
 	public static updateGeolocationEnabled_ = true;
@@ -332,7 +348,7 @@ export default class Note extends BaseItem {
 	public static async loadFolderNoteByField(folderId: string, field: string, value: any) {
 		if (!folderId) throw new Error('folderId is undefined');
 
-		const options = {
+		const options: PreviewsOptions = {
 			conditions: [`\`${field}\` = ?`],
 			conditionsParams: [value],
 			fields: '*',
@@ -342,7 +358,7 @@ export default class Note extends BaseItem {
 		return results.length ? results[0] : null;
 	}
 
-	public static async previews(parentId: string, options: any = null) {
+	public static async previews(parentId: string, options: PreviewsOptions = null) {
 		// Note: ordering logic must be duplicated in sortNotes(), which is used
 		// to sort already loaded notes.
 
@@ -353,6 +369,7 @@ export default class Note extends BaseItem {
 		if (!options.fields) options.fields = this.previewFields();
 		if (!options.uncompletedTodosOnTop) options.uncompletedTodosOnTop = false;
 		if (!('showCompletedTodos' in options)) options.showCompletedTodos = true;
+		if (!('includeDeleted' in options)) options.includeDeleted = false;
 
 		const Folder = BaseItem.getClass('Folder');
 
@@ -395,7 +412,7 @@ export default class Note extends BaseItem {
 			let cond = options.conditions.slice();
 			cond.push('is_todo = 1');
 			cond.push('(todo_completed <= 0 OR todo_completed IS NULL)');
-			let tempOptions = { ...options };
+			let tempOptions: PreviewsOptions = { ...options };
 			tempOptions.conditions = cond;
 
 			const uncompletedTodos = await this.search(tempOptions);
@@ -423,6 +440,10 @@ export default class Note extends BaseItem {
 			options.conditions.push('is_todo = 0');
 		} else if (hasTodos) {
 			options.conditions.push('is_todo = 1');
+		}
+
+		if (!options.includeDeleted) {
+			options.conditions.push('deleted_time = 0');
 		}
 
 		const results = await this.search(options);
@@ -745,7 +766,12 @@ export default class Note extends BaseItem {
 	}
 
 	public static async batchDelete(ids: string[], options: DeleteOptions = null) {
+		if (!ids.length) return;
+
 		ids = ids.slice();
+
+		const changeSource = options && options.changeSource ? options.changeSource : null;
+		const changeType = options && options.toTrash ? ItemChange.TYPE_UPDATE : ItemChange.TYPE_DELETE;
 
 		while (ids.length) {
 			const processIds = ids.splice(0, 50);
@@ -753,14 +779,28 @@ export default class Note extends BaseItem {
 			const notes = await Note.byIds(processIds);
 			const beforeChangeItems: any = {};
 			for (const note of notes) {
-				beforeChangeItems[note.id] = JSON.stringify(note);
+				beforeChangeItems[note.id] = options.toTrash ? null : JSON.stringify(note);
 			}
 
-			await super.batchDelete(processIds, options);
-			const changeSource = options && options.changeSource ? options.changeSource : null;
+			if (options && options.toTrash) {
+				const sql = `
+					UPDATE notes
+					SET	
+						deleted_time = ?,
+						updated_time = ?
+					WHERE id IN ("${processIds.join('","')}")
+				`;
+
+				const now = Date.now();
+				const params = [now, now];
+				await this.db().exec({ sql, params });
+			} else {
+				await super.batchDelete(processIds, options);
+			}
+
 			for (let i = 0; i < processIds.length; i++) {
 				const id = processIds[i];
-				void ItemChange.add(BaseModel.TYPE_NOTE, id, ItemChange.TYPE_DELETE, changeSource, beforeChangeItems[id]);
+				void ItemChange.add(BaseModel.TYPE_NOTE, id, changeType, changeSource, beforeChangeItems[id]);
 
 				this.dispatch({
 					type: 'NOTE_DELETE',
