@@ -5,9 +5,6 @@ import shim from '../shim';
 import { _ } from '../locale';
 import { reg } from '../registry';
 
-const loginUrl = `${Setting.value('sync.10.website')}/login`;
-const applicationsUrl = `${Setting.value('sync.10.path')}/api/applications`;
-
 type Events = 'LINK_USED' | 'COMPLETED';
 
 type IntitialValues = {
@@ -48,7 +45,7 @@ export const reducer: Reducer<IntitialValues, Events> = (state: IntitialValues, 
 	}
 };
 
-const getApplicationInformation = async () => {
+export const getApplicationInformation = async () => {
 	const platformName = await shim.platformName();
 	switch (platformName) {
 	case 'ios':
@@ -66,7 +63,7 @@ const getApplicationInformation = async () => {
 	}
 };
 
-export const generateLoginWithUniqueLoginCode = async (uniqueloginCode: string) => {
+export const generateLoginWithUniqueLoginCode = async (loginUrl: string, uniqueloginCode: string) => {
 	const applicationInfo = await getApplicationInformation();
 	const searchParams = new URLSearchParams();
 	searchParams.append('unique_login_code', uniqueloginCode);
@@ -77,7 +74,7 @@ export const generateLoginWithUniqueLoginCode = async (uniqueloginCode: string) 
 	return `${loginUrl}?${searchParams.toString()}`;
 };
 
-export const checkIfLoginWasSuccessful = async (ulc: string) => {
+export const checkIfLoginWasSuccessful = async (applicationsUrl: string, ulc: string) => {
 	try {
 		const response = await fetch(`${applicationsUrl}?unique_login_code=${ulc}`);
 		if (!response) return undefined;

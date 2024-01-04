@@ -8,9 +8,13 @@ const bridge = require('@electron/remote').require('./bridge').default;
 import { uuidgen } from '@joplin/lib/uuid';
 import { Dispatch } from 'redux';
 import { reducer, intitialValues, generateLoginWithUniqueLoginCode, checkIfLoginWasSuccessful } from '@joplin/lib/services/JoplinCloudLogin';
+import Setting from '@joplin/lib/models/Setting';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
+
+const loginUrl = `${Setting.value('sync.10.website')}/login`;
+const applicationsUrl = `${Setting.value('sync.10.path')}/api/applications`;
 
 interface Props {
 	themeId: string;
@@ -39,7 +43,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		if (intervalIdentifier) return;
 
 		const interval = setInterval(async () => {
-			const response = await checkIfLoginWasSuccessful(uniqueLoginCode);
+			const response = await checkIfLoginWasSuccessful(applicationsUrl, uniqueLoginCode);
 			if (response && response.success) {
 				dispatch('COMPLETED');
 				clearInterval(interval);
@@ -57,13 +61,13 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	};
 
 	const onAuthoriseClicked = async () => {
-		const url = await generateLoginWithUniqueLoginCode(uniqueLoginCode);
+		const url = await generateLoginWithUniqueLoginCode(loginUrl, uniqueLoginCode);
 		bridge().openExternal(url);
 		onButtonUsed();
 	};
 
 	const onCopyToClipboardClicked = async () => {
-		const url = await generateLoginWithUniqueLoginCode(uniqueLoginCode);
+		const url = await generateLoginWithUniqueLoginCode(loginUrl, uniqueLoginCode);
 		clipboard.writeText(url);
 		onButtonUsed();
 	};
