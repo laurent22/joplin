@@ -19,6 +19,7 @@ export const runPlugin = (
 ) => {
 	const backgroundIframe = document.createElement('iframe');
 	pluginIdToIframe[pluginId] = backgroundIframe;
+	backgroundIframe.setAttribute('sandbox', 'allow-scripts allow-modals');
 
 	backgroundIframe.addEventListener('load', async () => {
 		backgroundIframe.contentWindow.postMessage({
@@ -32,7 +33,7 @@ export const runPlugin = (
 					${pluginScript}
 				})();
 			`,
-		});
+		}, '*');
 
 		// Chain connectionToParent with connectionToIframe
 		const connectionToParent = new WebViewToRNMessenger<PluginWebViewApi, PluginApi>(messageChannelId, null);
