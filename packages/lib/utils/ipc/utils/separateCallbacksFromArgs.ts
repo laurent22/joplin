@@ -32,18 +32,21 @@ const separateCallbacksFromArgs = (args: SerializableDataAndCallbacks[]): Separa
 			if (Array.isArray(object)) {
 				return processArray(object, path);
 			} else {
-				const result = Object.create(null);
+				const argsWithoutCallbacks = Object.create(null);
+				const callbackArgs = Object.create(null);
 
 				for (const key in object) {
-					result[key] = processObject(object[key], [...path, key]);
+					const processed = processObject(object[key], [...path, key]);
+					argsWithoutCallbacks[key] = processed.argsWithoutCallbacks;
+					callbackArgs[key] = processed.callbackArgs;
 				}
 
-				return result;
+				return { argsWithoutCallbacks, callbackArgs };
 			}
 		} else if (typeof object === 'function') {
 			const callbackId = makeCallbackId(path);
 			idToCallbacks[callbackId] = object;
-			return { argsWithoutCallbacks: undefined, callbackArgs: callbackId };
+			return { argsWithoutCallbacks: null, callbackArgs: callbackId };
 		} else {
 			return { argsWithoutCallbacks: object, callbackArgs: undefined };
 		}

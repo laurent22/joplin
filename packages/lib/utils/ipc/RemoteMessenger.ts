@@ -5,7 +5,6 @@ import separateCallbacksFromArgs from './utils/separateCallbacksFromArgs';
 enum MessageType {
 	RemoteReady = 'RemoteReady',
 	InvokeMethod = 'InvokeMethod',
-	InvokeArgumentCallback = 'InvokeArgumentCallback',
 	ErrorResponse = 'ErrorResponse',
 	ReturnValueResponse = 'ReturnValueResponse',
 }
@@ -29,12 +28,6 @@ type InvokeMethodMessage = Readonly<{
 	eventHandlerArguments: CallbackArguments[];
 }>;
 
-type InvokeArgumentCallbackMessage = Readonly<{
-	kind: MessageType.InvokeArgumentCallback;
-	callbackId: string;
-	arguments: SerializableData[];
-}>;
-
 type ErrorResponse = Readonly<{
 	kind: MessageType.ErrorResponse;
 
@@ -53,7 +46,7 @@ type BaseMessage = Readonly<{
 	channelId: string;
 }>;
 
-type InternalMessage = (RemoteReadyMessage|InvokeMethodMessage|InvokeArgumentCallbackMessage|ErrorResponse|ReturnValueResponse) & BaseMessage;
+type InternalMessage = (RemoteReadyMessage|InvokeMethodMessage|ErrorResponse|ReturnValueResponse) & BaseMessage;
 
 // Listeners for a remote method to resolve or reject.
 type OnMethodResolveListener = (returnValue: SerializableData)=> void;
@@ -163,8 +156,16 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 	// Calls a local method and sends the result to the remote connection.
 	private async invokeLocalMethod(message: InvokeMethodMessage) {
 		try {
-			let messageArguments = message.arguments;
 			const methodFromPath = (path: string[]) => {
+				// We also use invokeLocalMethod to call callbacks that were previously
+				// passed as arguments. In this case, path should be [ '__callbacks', callbackIdHere ].
+				if (path.length === 2 && path[0] === '__callbacks' && this.argumentCallbacks.has(path[1])) {
+					return {
+						parentObject: undefined,
+						method: this.argumentCallbacks.get(path[1]),
+					};
+				}
+
 				let parentObject: any;
 				let currentObject: any = this.localInterface;
 				for (let i = 0; i < path.length; i++) {
@@ -172,13 +173,6 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 
 					if (!this.canRemoteAccessProperty(currentObject, propertyName)) {
 						throw new Error(`Cannot access property ${propertyName}`);
-					}
-
-					if (['call', 'apply', 'then'].includes(propertyName) && i === path.length - 1 && typeof parentObject === 'function') {
-						if (propertyName !== 'then') {
-							messageArguments = messageArguments.slice(1);
-						}
-						break;
 					}
 
 					parentObject = currentObject;
@@ -195,19 +189,14 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 			}
 
 			const args = mergeCallbacksAndArgs(
-				messageArguments,
+				message.arguments,
 				message.eventHandlerArguments,
 				(callbackId: string, callbackArgs: SerializableData[]) => {
-					this.postMessage({
-						kind: MessageType.InvokeArgumentCallback,
-						callbackId,
-						arguments: callbackArgs,
-						channelId: this.channelId,
-					});
+					return this.invokeRemoteMethod(['__callbacks', callbackId], callbackArgs);
 				},
 			);
 
-			const result = this.preserveThis ? await method.apply(parentObject, args) : await method(args);
+			const result = this.preserveThis ? await method.apply(parentObject, args) : await method(...args);
 
 			this.postMessage({
 				kind: MessageType.ReturnValueResponse,
@@ -225,14 +214,6 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 				channelId: this.channelId,
 			});
 		}
-	}
-
-	private invokeArgumentCallback(message: InvokeArgumentCallbackMessage) {
-		if (!this.argumentCallbacks.has(message.callbackId)) {
-			throw new Error(`Cannot call callback with ID ${message.callbackId} -- has not been registered.`);
-		}
-
-		this.argumentCallbacks.get(message.callbackId)(...message.arguments);
 	}
 
 	private onMethodRespondedTo(responseId: string) {
@@ -333,8 +314,6 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 
 		if (asInternalMessage.kind === MessageType.InvokeMethod) {
 			await this.invokeLocalMethod(asInternalMessage);
-		} else if (asInternalMessage.kind === MessageType.InvokeArgumentCallback) {
-			this.invokeArgumentCallback(asInternalMessage);
 		} else if (asInternalMessage.kind === MessageType.ReturnValueResponse) {
 			await this.onRemoteResolve(asInternalMessage);
 		} else if (asInternalMessage.kind === MessageType.ErrorResponse) {

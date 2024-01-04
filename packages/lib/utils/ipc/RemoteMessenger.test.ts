@@ -9,7 +9,7 @@ interface TestApi1 {
 		bar: (test: number, arg: string, arg2: string[])=> Promise<void>;
 		multiplyAndCallCallback: MultiplyAndCallCallback;
 	};
-	registerCallback: (callback: TwoNumberCallback)=> Promise<boolean>;
+	registerCallback: (options: { callback: TwoNumberCallback })=> Promise<boolean>;
 }
 
 interface TestApi2 {
@@ -41,8 +41,8 @@ describe('RemoteMessenger', () => {
 					callback(n * 3);
 				}),
 			},
-			registerCallback: async (callback) => {
-				callbacks.push(callback);
+			registerCallback: async (options) => {
+				callbacks.push(options.callback);
 				return true;
 			},
 		};
@@ -63,7 +63,7 @@ describe('RemoteMessenger', () => {
 
 		// Test accessing the registerCallback method
 		const resgisterCallbackTest = jest.fn();
-		await api1Messenger.remoteApi.registerCallback(resgisterCallbackTest);
+		await api1Messenger.remoteApi.registerCallback({ callback: resgisterCallbackTest });
 		expect(callbacks).toHaveLength(1);
 	});
 });
