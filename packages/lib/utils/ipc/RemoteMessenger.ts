@@ -10,8 +10,13 @@ enum MessageType {
 	ReturnValueResponse = 'ReturnValueResponse',
 }
 
+type ApiMap = Readonly<{
+	[key: string]: 'function'|ApiMap;
+}>;
+
 type RemoteReadyMessage = Readonly<{
 	kind: MessageType.RemoteReady;
+	apiMap: ApiMap;
 }>;
 
 type InvokeMethodMessage = Readonly<{
@@ -82,6 +87,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 	private waitingForLocalInterface = false;
 
 	public readonly remoteApi: RemoteInterface;
+	private remoteApiMap: ApiMap|null = null;
 
 	// channelId should be the same as the id of the messenger this will communicate with.
 	//
@@ -89,17 +95,30 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 	// This allows chaining multiple messengers together.
 	public constructor(private channelId: string, private localInterface: LocalInterface|null) {
 		const makeApiFor = (methodPath: string[]) => {
-			// Use a function as the base object so that .apply works.
-			const baseObject = () => {};
+			const getRemoteApi = () => {
+				let remoteApi: any = this.remoteApiMap;
+				for (const key of methodPath) {
+					remoteApi = remoteApi[key];
+				}
+				console.log('remoteApi0', remoteApi);
+				return remoteApi;
+			};
 
-			return new Proxy(baseObject, {
+			return new Proxy({}, {
 				// Map all properties to functions that invoke remote
 				// methods.
 				get: (_target, property: string): any => {
+					const remoteApi = getRemoteApi();
+					console.log('remoteApi', remoteApi);
+					if (remoteApi[property] === 'function') {
+						return (argumentsList: SerializableDataAndCallbacks[]) => {
+							return this.invokeRemoteMethod(methodPath, argumentsList);
+						};
+					}
 					return makeApiFor([...methodPath, property]);
 				},
-				apply: (_target, _thisArg, argumentsList: SerializableDataAndCallbacks[]) => {
-					return this.invokeRemoteMethod(methodPath, argumentsList);
+				ownKeys: (_target) => {
+					return Object.keys(getRemoteApi() ?? []);
 				},
 			});
 		};
@@ -157,16 +176,25 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 	// Calls a local method and sends the result to the remote connection.
 	private async invokeLocalMethod(message: InvokeMethodMessage) {
 		try {
-			let currentObject: any = this.localInterface;
-			for (const propertyName of message.methodPath) {
-				if (!this.canRemoteAccessProperty(currentObject, propertyName)) {
-					throw new Error(`Cannot access property ${propertyName}`);
+			const methodFromPath = (path: string[]) => {
+				let parentObject: any;
+				let currentObject: any = this.localInterface;
+				for (const propertyName of path) {
+					if (!this.canRemoteAccessProperty(currentObject, propertyName)) {
+						throw new Error(`Cannot access property ${propertyName}`);
+					}
+
+					parentObject = currentObject;
+					currentObject = currentObject[propertyName];
 				}
 
-				currentObject = currentObject[propertyName];
-			}
+				return { parentObject, method: currentObject };
+			};
 
-			if (typeof currentObject !== 'function') {
+			const { method, parentObject } = methodFromPath(message.methodPath);
+			console.log('found method', method, 'in', parentObject, 'path', message.methodPath)
+
+			if (typeof method !== 'function') {
 				throw new Error(`Property ${message.methodPath.join('.')} is not a function.`);
 			}
 
@@ -183,7 +211,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 				},
 			);
 
-			const result = await currentObject(...args);
+			const result = await method.apply(parentObject, args);
 
 			this.postMessage({
 				kind: MessageType.ReturnValueResponse,
@@ -192,7 +220,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 				channelId: this.channelId,
 			});
 		} catch (error) {
-			console.error('Error: ', error);
+            console.error('Error: ', error, error.stack);
 
 			this.postMessage({
 				kind: MessageType.ErrorResponse,
@@ -237,11 +265,12 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 		this.onMethodRespondedTo(message.responseId);
 	}
 
-	private async onRemoteReadyToReceive() {
+	private async onRemoteReadyToReceive(message: RemoteReadyMessage) {
 		if (this.isRemoteReady) {
 			return;
 		}
 
+		this.remoteApiMap = message.apiMap;
 		this.isRemoteReady = true;
 		for (const listener of this.remoteReadyListeners) {
 			listener();
@@ -254,11 +283,12 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 			this.postMessage({
 				kind: MessageType.RemoteReady,
 				channelId: this.channelId,
+				apiMap: this.makeLocalApiMap(),
 			});
 		}
 	}
 
-	private awaitRemoteReady() {
+	public awaitRemoteReady() {
 		return new Promise<void>(resolve => {
 			if (this.isRemoteReady) {
 				resolve();
@@ -321,7 +351,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 		} else if (asInternalMessage.kind === MessageType.ErrorResponse) {
 			await this.onRemoteReject(asInternalMessage);
 		} else if (asInternalMessage.kind === MessageType.RemoteReady) {
-			await this.onRemoteReadyToReceive();
+			await this.onRemoteReadyToReceive(asInternalMessage);
 		} else {
 			// Have TypeScipt verify that the above cases are exhaustive
 			const exhaustivenessCheck: never = asInternalMessage;
@@ -344,6 +374,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 		this.postMessage({
 			kind: MessageType.RemoteReady,
 			channelId: this.channelId,
+			apiMap: this.makeLocalApiMap(),
 		});
 	}
 
@@ -356,6 +387,26 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 			this.waitingForLocalInterface = false;
 			this.onReadyToReceive();
 		}
+	}
+
+	private makeLocalApiMap() {
+		const makeApiMap = (object: any) => {
+			if (typeof object === 'function') {
+				return 'function';
+			} else if (typeof object === 'object') {
+				const apiMap = Object.create(null);
+
+				for (const key in object) {
+					apiMap[key] = makeApiMap(object[key]);
+				}
+
+				return apiMap;
+			}
+
+			return undefined;
+		};
+
+		return makeApiMap(this.localInterface);
 	}
 
 	protected abstract postMessage(message: InternalMessage): void;

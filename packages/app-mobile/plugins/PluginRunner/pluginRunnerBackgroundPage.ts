@@ -16,7 +16,7 @@ export const runPlugin = (
 	pluginBackgroundScript: string, pluginScript: string, messageChannelId: string,
 ) => {
 	const backgroundIframe = document.createElement('iframe');
-	backgroundIframe.addEventListener('load', () => {
+	backgroundIframe.addEventListener('load', async () => {
 		console.log('backgroundIframe loaded');
 
 		backgroundIframe.contentWindow.postMessage({
@@ -24,9 +24,11 @@ export const runPlugin = (
 			script: `"use strict";
 				${pluginBackgroundScript}
 
-				window.require = pluginBackgroundPage.requireModule;
-				window.joplin = pluginBackgroundPage.createPluginApiProxy(${JSON.stringify(messageChannelId)});
-				${pluginScript}
+				(async () => {
+					window.require = pluginBackgroundPage.requireModule;
+					window.joplin = await pluginBackgroundPage.createPluginApiProxy(${JSON.stringify(messageChannelId)});
+					${pluginScript}
+				})();
 			`,
 		});
 
@@ -69,9 +71,10 @@ export const runPlugin = (
 	document.body.appendChild(backgroundIframe);
 };
 
-export const createPluginApiProxy = (messageChannelId: string) => {
+export const createPluginApiProxy = async (messageChannelId: string) => {
 	const localApi = { };
 	const messenger = new WindowMessenger<PluginWebViewApi, PluginApi>(messageChannelId, parent, localApi);
-	(window as any).messenger = messenger;
-	return messenger.remoteApi.api;
+	await messenger.awaitRemoteReady();
+
+	return messenger.remoteApi.api.joplin;
 };
