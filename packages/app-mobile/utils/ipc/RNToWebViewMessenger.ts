@@ -10,12 +10,10 @@ export default class RNToWebViewMessenger<LocalInterface, RemoteInterface> exten
 	}
 
 	protected override postMessage(message: SerializableData): void {
-		console.log('RNToWebView: postMsg', message);
 		this.webviewControl.injectJS(`window.handleReactNativeMessage?.(${JSON.stringify(message)});`);
 	}
 
 	public onWebViewMessage = (event: WebViewMessageEvent) => {
-		console.log('RNToWebViewMessenger', event.nativeEvent.data);
 		void this.onMessage(JSON.parse(event.nativeEvent.data));
 	};
 

@@ -11,9 +11,7 @@ export default class WindowMessenger<LocalInterface, RemoteInterface> extends Re
 	}
 
 	private handleMessageEvent = (event: MessageEvent) => {
-		console.log('got message event', event);
 		if (event.source !== this.remoteWindow) {
-			console.log('ignore');
 			return;
 		}
 
@@ -21,7 +19,6 @@ export default class WindowMessenger<LocalInterface, RemoteInterface> extends Re
 	};
 
 	protected override postMessage(message: SerializableData): void {
-		console.log('windowMessenger post', message);
 		this.remoteWindow.postMessage(message, '*');
 	}
 }
