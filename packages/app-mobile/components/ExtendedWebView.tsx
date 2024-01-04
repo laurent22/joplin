@@ -149,7 +149,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			setSupportMultipleWindows={true}
 			hideKeyboardAccessoryView={true}
 			allowingReadAccessToURL={`file://${Setting.value('resourceDir')}`}
-			originWhitelist={['file://*', './*', 'http://*', 'https://*']}
+			originWhitelist={['file://*', 'about:srcdoc', './*', 'http://*', 'https://*']}
 			mixedContentMode={props.mixedContentMode}
 			allowFileAccess={true}
 			allowFileAccessFromFileURLs={props.allowFileAccessFromJs}
