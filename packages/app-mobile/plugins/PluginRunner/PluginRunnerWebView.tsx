@@ -10,6 +10,7 @@ import loadPlugins from '../loadPlugins';
 import { useStore } from 'react-redux';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import Logger from '@joplin/utils/Logger';
+import { View } from 'react-native';
 
 interface Props {
 }
@@ -58,17 +59,19 @@ const PluginRunnerWebView = (_props: Props) => {
 	}, [pluginRunner]);
 
 	return (
-		<ExtendedWebView
-			style={{ display: 'none' }}
-			themeId={Setting.THEME_LIGHT}
-			webviewInstanceId='PluginRunner'
-			html={html}
-			injectedJavaScript={injectedJs}
-			onMessage={onMessage}
-			onError={()=>{}}
-			onLoadEnd={() => setLoaded(true)}
-			ref={webviewRef}
-		/>
+		<View style={{ display: 'none', zIndex: -1, position: 'absolute' }}>
+			<ExtendedWebView
+				style={{ width: 0, height: 0 }}
+				themeId={Setting.THEME_LIGHT}
+				webviewInstanceId='PluginRunner'
+				html={html}
+				injectedJavaScript={injectedJs}
+				onMessage={onMessage}
+				onError={()=>{}}
+				onLoadEnd={() => setLoaded(true)}
+				ref={webviewRef}
+			/>
+		</View>
 	);
 };
 
