@@ -1,8 +1,6 @@
 import { Theme } from '../../themes/type';
 
-// Need to include it that way due to a bug in the lib:
-// https://github.com/reworkcss/css/pull/146#issuecomment-740412799
-const cssParse = require('css/lib/parse');
+import { CssRuleAST, parse as cssParse } from '@adobe/css-tools';
 
 function formatCssToThemeVariable(cssVariable: string): string {
 	const elements = cssVariable.substr(2).split('-');
@@ -31,10 +29,10 @@ export default function cssToTheme(css: string, sourceFilePath: string): Theme {
 
 	// Need "as any" because outdated TS definition file
 
-	const rootRule = o.stylesheet.rules[0];
+	const rootRule = o.stylesheet.rules[0] as CssRuleAST;
 	if (!rootRule.selectors.includes(':root')) throw new Error('`:root` rule not found');
 
-	const declarations: any[] = rootRule.declarations;
+	const declarations = rootRule.declarations;
 
 	const output: any = {};
 	for (const declaration of declarations) {
