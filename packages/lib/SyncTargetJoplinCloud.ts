@@ -4,17 +4,12 @@ import { _ } from './locale.js';
 import BaseSyncTarget from './BaseSyncTarget';
 import { FileApi } from './file-api';
 import SyncTargetJoplinServer, { initFileApi } from './SyncTargetJoplinServer';
-import shim from './shim';
-import { getApplicationInformation } from './services/JoplinCloudLogin';
 
 interface FileApiOptions {
 	path(): string;
 	userContentPath(): string;
 	username(): string;
 	password(): string;
-	platform(): number | undefined;
-	type(): number | undefined;
-	version(): string | undefined;
 }
 
 export default class SyncTargetJoplinCloud extends BaseSyncTarget {
@@ -74,25 +69,17 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 	}
 
 	public static async checkConfig(options: FileApiOptions) {
-		const { type, platform } = await getApplicationInformation();
 		return SyncTargetJoplinServer.checkConfig({
 			...options,
-			platform: () => platform,
-			type: () => type,
-			version: () => shim.appVersion(),
 		}, SyncTargetJoplinCloud.id());
 	}
 
 	protected async initFileApi() {
-		const { type, platform } = await getApplicationInformation();
 		return initFileApi(SyncTargetJoplinCloud.id(), this.logger(), {
 			path: () => Setting.value('sync.10.path'),
 			userContentPath: () => Setting.value('sync.10.userContentPath'),
 			username: () => Setting.value('sync.10.username'),
 			password: () => Setting.value('sync.10.password'),
-			platform: () => platform,
-			type: () => type,
-			version: () => shim.appVersion(),
 		});
 	}
 

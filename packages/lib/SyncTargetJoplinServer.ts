@@ -14,24 +14,14 @@ interface FileApiOptions {
 	userContentPath(): string;
 	username(): string;
 	password(): string;
-	platform(): number | undefined;
-	type(): number | undefined;
-	version(): string | undefined;
 }
 
 export async function newFileApi(id: number, options: FileApiOptions) {
-	// checkConfig is called from config-shared without Joplin Cloud specific properties
-	const checkIfFunction = (property: any) => {
-		return typeof property === 'function' ? property() : undefined;
-	};
 	const apiOptions = {
 		baseUrl: () => options.path(),
 		userContentBaseUrl: () => options.userContentPath(),
 		username: () => options.username(),
 		password: () => options.password(),
-		platform: () => checkIfFunction(options.platform),
-		type: () => checkIfFunction(options.type),
-		version: () => checkIfFunction(options.version),
 		env: Setting.value('env'),
 	};
 
@@ -146,9 +136,6 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 			userContentPath: () => Setting.value('sync.9.userContentPath'),
 			username: () => Setting.value('sync.9.username'),
 			password: () => Setting.value('sync.9.password'),
-			platform: () => undefined,
-			type: () => undefined,
-			version: () => undefined,
 		});
 	}
 

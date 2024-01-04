@@ -681,9 +681,6 @@ async function initFileApi() {
 			userContentBaseUrl: () => joplinServerAuth.userContentBaseUrl,
 			username: () => joplinServerAuth.email,
 			password: () => joplinServerAuth.password,
-			platform: () => undefined,
-			type: () => undefined,
-			version: () => undefined,
 		});
 
 		fileApi = new FileApi('', new FileApiDriverJoplinServer(api));

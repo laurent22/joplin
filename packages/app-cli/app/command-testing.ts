@@ -102,9 +102,6 @@ class Command extends BaseCommand {
 				userContentBaseUrl: () => joplinServerAuth.userContentBaseUrl,
 				username: () => joplinServerAuth.email,
 				password: () => joplinServerAuth.password,
-				platform: () => undefined,
-				type: () => undefined,
-				version: () => undefined,
 			});
 
 			const apiPut = async () => {

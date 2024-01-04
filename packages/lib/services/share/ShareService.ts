@@ -79,9 +79,6 @@ export default class ShareService {
 			userContentBaseUrl: () => Setting.value(`sync.${syncTargetId}.userContentPath`),
 			username: () => Setting.value(`sync.${syncTargetId}.username`),
 			password: () => Setting.value(`sync.${syncTargetId}.password`),
-			platform: () => undefined,
-			type: () => undefined,
-			version: () => undefined,
 		});
 
 		return this.api_;
