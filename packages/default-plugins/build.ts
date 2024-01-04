@@ -1,5 +1,6 @@
 import buildAll from './commands/buildAll';
 import editPatch from './commands/editPatch';
+import { AppType } from './types';
 const yargs = require('yargs');
 
 
@@ -12,7 +13,7 @@ const build = () => {
 				describe: 'Path to the parent directory for built output',
 			});
 		}, async (args: any) => {
-			await buildAll(args.outputDir);
+			await buildAll(AppType.All, args.outputDir);
 			process.exit(0);
 		})
 		.command('patch <plugin>', 'Edit the patch file for the given plugin ID', (yargs: any) => {

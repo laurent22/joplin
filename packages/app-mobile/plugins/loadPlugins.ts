@@ -10,7 +10,7 @@ import { Store } from 'redux';
 import Logger from '@joplin/utils/Logger';
 
 const defaultPlugins: Record<string, string|number> = {
-	'io.github.personalizedrefrigerator.joplinvimrc': require('./sources/io.github.personalizedrefrigerator.joplin-vimrc.jpl'),
+	'com.example.show-message-box-on-startup': require('./sources/com.example.show-message-box-on-startup/plugin.jpl'),
 };
 
 const logger = Logger.create('loadPlugins');
@@ -27,7 +27,7 @@ const loadPlugins = async (pluginRunner: BasePluginRunner, store: Store<any>) =>
 		const pluginPaths: string[] = [];
 
 		for (const pluginId in defaultPlugins) {
-			// TODO: Don't copy all plugins on startup
+			// TODO: Don't copy all plugins on startup (just changed)
 			logger.info(`Copying plugin with ID ${pluginId}`);
 
 			const pluginAsset = Asset.fromModule(defaultPlugins[pluginId]);

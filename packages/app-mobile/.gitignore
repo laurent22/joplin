@@ -66,6 +66,7 @@ yarn-error.log
 lib/csstojs/
 lib/rnInjectedJs/
 dist/
+plugins/sources/*
 plugins/PluginRunner/*.bundle.js
 components/NoteEditor/**/*.bundle.js
 components/NoteEditor/**/*.bundle.js.md5

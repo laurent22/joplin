@@ -1,7 +1,8 @@
 import buildDefaultPlugins from '../buildDefaultPlugins';
+import { AppType } from '../types';
 
-const buildAll = (outputDirectory: string) => {
-	return buildDefaultPlugins(outputDirectory, async () => { });
+const buildAll = (appType: AppType, outputDirectory: string) => {
+	return buildDefaultPlugins(appType, outputDirectory, async () => { });
 };
 
 export default buildAll;

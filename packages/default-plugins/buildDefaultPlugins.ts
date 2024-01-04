@@ -2,20 +2,23 @@
 /* eslint-disable no-console */
 
 import { copy, exists, remove, mkdirp, readdir, mkdtemp } from 'fs-extra';
-import { join, resolve, basename } from 'path';
+import { join, resolve, basename, dirname } from 'path';
 import { tmpdir } from 'os';
 import { chdir, cwd } from 'process';
 import { execCommand } from '@joplin/utils';
 import { glob } from 'glob';
-import readRepositoryJson from './utils/readRepositoryJson';
 import waitForCliInput from './utils/waitForCliInput';
 import getPathToPatchFileFor from './utils/getPathToPatchFileFor';
+import isGitRepository from './utils/isGitRepository';
+import { AppType } from './types';
+import pluginRepositoryData from './pluginRepositoryData';
+
+const monorepoRootDir = dirname(dirname(__dirname));
 
 type BeforeEachInstallCallback = (buildDir: string, pluginName: string)=> Promise<void>;
 
-const buildDefaultPlugins = async (outputParentDir: string|null, beforeInstall: BeforeEachInstallCallback) => {
+const buildDefaultPlugins = async (appType: AppType, outputParentDir: string|null, beforeInstall: BeforeEachInstallCallback) => {
 	const pluginSourcesDir = resolve(join(__dirname, 'plugin-sources'));
-	const pluginRepositoryData = await readRepositoryJson(join(__dirname, 'pluginRepositories.json'));
 
 	const originalDirectory = cwd();
 
@@ -28,26 +31,38 @@ const buildDefaultPlugins = async (outputParentDir: string|null, beforeInstall: 
 	for (const pluginId in pluginRepositoryData) {
 		const repositoryData = pluginRepositoryData[pluginId];
 
+		if (appType !== AppType.All && !repositoryData.appTypes.includes(appType)) {
+			logStatus(`Skipping plugin ${pluginId} -- we're building for ${appType} and not ${repositoryData.appTypes}`);
+			continue;
+		}
+
 		const buildDir = await mkdtemp(join(tmpdir(), 'default-plugin-build'));
 		try {
 			logStatus('Building plugin', pluginId, 'at', buildDir);
 			const pluginDir = resolve(join(pluginSourcesDir, pluginId));
 
-			// Clone the repository if not done yet
-			if (!(await exists(pluginDir)) || (await readdir(pluginDir)).length === 0) {
-				logStatus(`Cloning from repository ${repositoryData.cloneUrl}`);
-				await execCommand(['git', 'clone', '--', repositoryData.cloneUrl, pluginDir]);
+			if (isGitRepository(repositoryData)) {
+				// Clone the repository if not done yet
+				if (!(await exists(pluginDir)) || (await readdir(pluginDir)).length === 0) {
+					logStatus(`Cloning from repository ${repositoryData.cloneUrl}`);
+					await execCommand(['git', 'clone', '--', repositoryData.cloneUrl, pluginDir]);
+					chdir(pluginDir);
+				}
+
 				chdir(pluginDir);
-			}
+				const currentCommitHash = (await execCommand(['git', 'rev-parse', 'HEAD~'])).trim();
+				const expectedCommitHash = repositoryData.commit;
 
-			chdir(pluginDir);
-			const currentCommitHash = (await execCommand(['git', 'rev-parse', 'HEAD~'])).trim();
-			const expectedCommitHash = repositoryData.commit;
+				if (currentCommitHash !== expectedCommitHash) {
+					logStatus(`Switching to commit ${expectedCommitHash}`);
+					await execCommand(['git', 'switch', repositoryData.branch]);
+					await execCommand(['git', 'checkout', expectedCommitHash]);
+				}
+			} else {
+				const pathToSource = resolve(monorepoRootDir, repositoryData.path);
 
-			if (currentCommitHash !== expectedCommitHash) {
-				logStatus(`Switching to commit ${expectedCommitHash}`);
-				await execCommand(['git', 'switch', repositoryData.branch]);
-				await execCommand(['git', 'checkout', expectedCommitHash]);
+				logStatus(`Copying from path ${pathToSource}`);
+				await copy(pathToSource, pluginDir);
 			}
 
 			logStatus('Copying repository files...');

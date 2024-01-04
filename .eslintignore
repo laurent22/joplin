@@ -575,8 +575,10 @@ packages/default-plugins/build.js
 packages/default-plugins/buildDefaultPlugins.js
 packages/default-plugins/commands/buildAll.js
 packages/default-plugins/commands/editPatch.js
+packages/default-plugins/pluginRepositoryData.js
+packages/default-plugins/types.js
 packages/default-plugins/utils/getPathToPatchFileFor.js
-packages/default-plugins/utils/readRepositoryJson.js
+packages/default-plugins/utils/isGitRepository.js
 packages/default-plugins/utils/waitForCliInput.js
 packages/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation.test.js
 packages/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation.js

@@ -7948,6 +7948,7 @@ __metadata:
     "@babel/preset-env": 7.20.2
     "@babel/runtime": 7.20.0
     "@bam.tech/react-native-image-resizer": 3.0.7
+    "@joplin/default-plugins": ~2.14
     "@joplin/editor": ~2.14
     "@joplin/lib": ~2.14
     "@joplin/react-native-alarm-notification": ~2.14

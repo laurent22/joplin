@@ -89,6 +89,7 @@
     "@babel/core": "7.20.2",
     "@babel/preset-env": "7.20.2",
     "@babel/runtime": "7.20.0",
+    "@joplin/default-plugins": "~2.14",
     "@joplin/tools": "~2.14",
     "@js-draw/material-icons": "1.14.0",
     "@testing-library/jest-native": "5.4.3",

@@ -4,11 +4,12 @@ import { copy } from 'fs-extra';
 import { join } from 'path';
 import buildDefaultPlugins from '../buildDefaultPlugins';
 import getPathToPatchFileFor from '../utils/getPathToPatchFileFor';
+import { AppType } from '../types';
 
 const editPatch = async (targetPluginId: string, outputParentDir: string|null) => {
 	let patchedPlugin = false;
 
-	await buildDefaultPlugins(outputParentDir, async (buildDir, pluginId) => {
+	await buildDefaultPlugins(AppType.All, outputParentDir, async (buildDir, pluginId) => {
 		if (pluginId !== targetPluginId) {
 			return;
 		}
