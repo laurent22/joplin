@@ -39,6 +39,11 @@ interface RenderOptions {
 	enableLongPress: boolean;
 	itemIdToUrl?: ItemIdToUrlHandler;
 	allowedFilePrefixes?: string[];
+
+	// For compatibility with MdToHtml options:
+	plugins?: {
+		link_open?: { linkRenderingType?: number };
+	};
 }
 
 // https://github.com/es-shims/String.prototype.trimStart/blob/main/implementation.js
@@ -96,7 +101,7 @@ export default class HtmlToHtml {
 			...options,
 		};
 
-		const cacheKey = md5(escape(markup));
+		const cacheKey = md5(escape(JSON.stringify({ markup, options })));
 		let html = this.cache_.value(cacheKey);
 
 		if (!html) {
@@ -131,6 +136,7 @@ export default class HtmlToHtml {
 					ResourceModel: this.ResourceModel_,
 					postMessageSyntax: options.postMessageSyntax,
 					enableLongPress: options.enableLongPress,
+					...options.plugins?.link_open,
 				});
 
 				if (!r.html) return null;
