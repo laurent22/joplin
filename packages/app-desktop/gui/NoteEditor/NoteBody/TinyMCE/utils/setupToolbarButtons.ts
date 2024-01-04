@@ -60,6 +60,9 @@ export default function(editor: any) {
 
 	const items: string[] = definitions.filter(d => !!d.grouped).map(d => d.name);
 
+	// Additional built-in buttons to show in the formatting sub-menu:
+	items.push('forecolor');
+
 	editor.ui.registry.addGroupToolbarButton('formattingExtras', {
 		icon: 'image-options',
 		items: items.join(' '),
