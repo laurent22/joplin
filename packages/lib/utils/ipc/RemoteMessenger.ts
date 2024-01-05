@@ -233,6 +233,10 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 	}
 
 	private async onRemoteResolve(message: ReturnValueResponse) {
+		if (!this.resolveMethodCallbacks[message.responseId]) {
+			throw new Error(`RemoteMessenger: Missing method callback with ID ${message.responseId}`);
+		}
+
 		this.resolveMethodCallbacks[message.responseId](message.returnValue);
 		this.onMethodRespondedTo(message.responseId);
 	}

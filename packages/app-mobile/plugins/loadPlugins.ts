@@ -3,7 +3,7 @@
 // import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import BasePluginRunner from '@joplin/lib/services/plugins/BasePluginRunner';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { Asset } from 'expo-asset';
 import PlatformImplementation from './PlatformImplementation';
 import { Store } from 'redux';
@@ -15,7 +15,7 @@ const defaultPlugins: Record<string, string|number> = {
 
 const logger = Logger.create('loadPlugins');
 
-const loadPlugins = async (pluginRunner: BasePluginRunner, store: Store<any>) => {
+const loadPlugins = async (pluginRunner: BasePluginRunner, pluginSettings: PluginSettings, store: Store<any>) => {
 	try {
 		const pluginService = PluginService.instance();
 		const platformImplementation = PlatformImplementation.instance();
@@ -37,8 +37,11 @@ const loadPlugins = async (pluginRunner: BasePluginRunner, store: Store<any>) =>
 			pluginPaths.push(assetFilePath);
 		}
 
+		// Unload any existing plugins (important for React Native's fast refresh)
+		for (const pluginId in pluginSettings) {
+			await pluginService.unloadPlugin(pluginId);
+		}
 
-		const pluginSettings = pluginService.unserializePluginSettings(Setting.value('plugins.states'));
 		await pluginService.loadAndRunPlugins(pluginPaths, pluginSettings);
 	} catch (error) {
 		console.error(error);

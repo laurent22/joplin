@@ -81,6 +81,11 @@ export const runPlugin = (
 };
 
 export const stopPlugin = async (pluginId: string) => {
+	// Plugin not running?
+	if (!pluginIdToIframe[pluginId]) {
+		return;
+	}
+
 	pluginIdToIframe[pluginId].srcdoc = '';
 	pluginIdToIframe[pluginId].remove();
 	delete pluginIdToIframe[pluginId];

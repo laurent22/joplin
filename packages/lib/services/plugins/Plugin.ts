@@ -190,4 +190,11 @@ export default class Plugin {
 		return this.contentScriptMessageListeners_[id](message);
 	}
 
+	public onUnload() {
+		this.dispatch_({
+			type: 'PLUGIN_UNLOAD',
+			pluginId: this.id,
+		});
+	}
+
 }

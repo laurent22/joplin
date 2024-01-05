@@ -181,6 +181,10 @@ const reducer = (draftRoot: Draft<any>, action: any) => {
 			break;
 		}
 
+		case 'PLUGIN_UNLOAD':
+			delete draft.plugins[action.pluginId];
+			break;
+
 		}
 	} catch (error) {
 		error.message = `In plugin reducer: ${error.message} Action: ${JSON.stringify(action)}`;

@@ -7,12 +7,14 @@ import shim from '@joplin/lib/shim';
 import { WebViewMessageEvent } from 'react-native-webview';
 import PluginRunner from './PluginRunner';
 import loadPlugins from '../loadPlugins';
-import { useStore } from 'react-redux';
+import { connect, useStore } from 'react-redux';
 import Logger from '@joplin/utils/Logger';
 import { View } from 'react-native';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
+import { AppState } from '../../utils/types';
 
 interface Props {
+	serializedPluginSettings: string;
 }
 
 const html = `
@@ -28,7 +30,7 @@ const html = `
 
 const logger = Logger.create('PluginRunnerWebView');
 
-const PluginRunnerWebView = (_props: Props) => {
+const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 	const webviewRef = useRef<WebViewControl>();
 
 	const pluginRunner = useMemo(() => {
@@ -40,18 +42,14 @@ const PluginRunnerWebView = (_props: Props) => {
 
 	useEffect(() => {
 		if (!webviewLoaded) {
-			return () => {};
+			return;
 		}
 
-		void loadPlugins(pluginRunner, store);
+		const pluginService = PluginService.instance();
+		const pluginSettings = pluginService.unserializePluginSettings(props.serializedPluginSettings);
 
-		return () => {
-			const pluginService = PluginService.instance();
-			for (const id of pluginService.pluginIds) {
-				void pluginService.unloadPlugin(id);
-			}
-		};
-	}, [pluginRunner, store, webviewLoaded]);
+		void loadPlugins(pluginRunner, pluginSettings, store);
+	}, [pluginRunner, store, webviewLoaded, props.serializedPluginSettings]);
 
 	const injectedJs = useMemo(() => {
 		return `
@@ -82,4 +80,9 @@ const PluginRunnerWebView = (_props: Props) => {
 	);
 };
 
-export default PluginRunnerWebView;
+export default connect((state: AppState) => {
+	const result: Props = {
+		serializedPluginSettings: state.settings['plugins.states'],
+	};
+	return result;
+})(PluginRunnerWebViewComponent);

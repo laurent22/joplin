@@ -142,7 +142,10 @@ export default class PluginService extends BaseService {
 	public async unloadPlugin(pluginId: string) {
 		const plugin = this.plugins_[pluginId];
 		if (plugin) {
+			plugin.onUnload();
+
 			this.deletePluginAt(pluginId);
+			delete this.startedPlugins_[pluginId];
 			await this.runner_.stop(plugin);
 		}
 	}
