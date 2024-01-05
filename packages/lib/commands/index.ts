@@ -4,7 +4,7 @@ import * as historyForward from './historyForward';
 import * as openMasterPasswordDialog from './openMasterPasswordDialog';
 import * as synchronize from './synchronize';
 
-const index:any[] = [
+const index: any[] = [
 	historyBackward,
 	historyForward,
 	openMasterPasswordDialog,

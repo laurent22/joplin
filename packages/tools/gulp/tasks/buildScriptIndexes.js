@@ -30,7 +30,7 @@ async function processDirectory(dir, indexFilePath = null, typeScriptType = null
 		fileContent.push('');
 	}
 
-	fileContent.push(`const index:${typeScriptType}[] = [`);
+	fileContent.push(`const index: ${typeScriptType}[] = [`);
 
 	for (const tsFile of tsFiles) {
 		const f = utils.getFilename(tsFile);
