@@ -185,8 +185,8 @@ export default class FsDriverNode extends FsDriverBase {
 		throw new Error(`Unsupported encoding: ${encoding}`);
 	}
 
-	public resolve(path: string) {
-		return require('path').resolve(path);
+	public resolve(...pathComponents: string[]) {
+		return require('path').resolve(...pathComponents);
 	}
 
 	public async md5File(path: string): Promise<string> {
