@@ -52,7 +52,8 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 			const sessionId = await api.sessionId();
 			return !!sessionId;
 		} catch (error) {
-			return false;
+			if (error.code === 403) return false;
+			throw error;
 		}
 	}
 
