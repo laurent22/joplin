@@ -1,7 +1,7 @@
-const { setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('../testing/test-utils.js');
-const Folder = require('../models/Folder').default;
-const Note = require('../models/Note').default;
-const Tag = require('../models/Tag').default;
+import { setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } from '../testing/test-utils';
+import Folder from '../models/Folder';
+import Note from '../models/Note';
+import Tag from '../models/Tag';
 
 describe('models/Tag', () => {
 
