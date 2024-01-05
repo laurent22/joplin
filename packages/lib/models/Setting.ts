@@ -1162,7 +1162,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.Object,
 				section: 'plugins',
 				public: true,
-				appTypes: [AppType.Desktop],
+				appTypes: [AppType.Desktop, AppType.Mobile],
 				needRestart: true,
 				autoSave: true,
 			},
@@ -2659,6 +2659,7 @@ class Setting extends BaseModel {
 			'revisionService': _('Toggle note history, keep notes for'),
 			'tools': _('Logs, profiles, sync status'),
 			'export': _('Export your data'),
+			'plugins': _('Enable or disable plugins'),
 			'moreInfo': _('Donate, website'),
 		};
 

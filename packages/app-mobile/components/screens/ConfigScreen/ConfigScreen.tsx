@@ -29,6 +29,8 @@ import SettingComponent from './SettingComponent';
 import ExportDebugReportButton, { exportDebugReportTitle } from './NoteExportSection/ExportDebugReportButton';
 import SectionSelector from './SectionSelector';
 import { TextInput } from 'react-native-paper';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
+import PluginToggle from './plugins/PluginToggle';
 
 interface ConfigScreenState {
 	settings: any;
@@ -399,6 +401,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		for (let i = 0; i < section.metadatas.length; i++) {
 			const md = section.metadatas[i];
 
+			// Handled below
+			if (md.key === 'plugins.states') continue;
+
 			if (section.name === 'sync' && md.key === 'sync.resourceDownloadMode') {
 				const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
 
@@ -425,6 +430,27 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				settingComp,
 				relatedText,
 			);
+		}
+
+		if (section.name === 'plugins') {
+			const pluginService = PluginService.instance();
+			for (const key in pluginService.plugins) {
+				const plugin = pluginService.plugins[key];
+
+				const settingKey = 'plugins.states';
+				addSettingComponent(
+					<PluginToggle
+						key={`plugin-${key}`}
+						pluginId={plugin.id}
+						styles={this.styles()}
+						pluginSettings={settings[settingKey]}
+						updatePluginStates={(value) => {
+							shared.updateSettingValue(this, settingKey, value);
+						}}
+					/>,
+					[plugin.manifest.name],
+				);
+			}
 		}
 
 		if (section.name === 'sync') {
