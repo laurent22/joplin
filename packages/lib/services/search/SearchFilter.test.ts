@@ -1,14 +1,14 @@
 /* @typescript-eslint/prefer-const */
 
 import time from '../../time';
-import { setupDatabaseAndSynchronizer, supportDir, db, createNTestNotes, switchClient } from '../../testing//test-utils';
-import SearchEngine from '../../services/searchengine/SearchEngine';
+import { setupDatabaseAndSynchronizer, supportDir, db, createNTestNotes, switchClient } from '../../testing/test-utils';
+import SearchEngine from './SearchEngine';
 import Note from '../../models/Note';
 import Folder from '../../models/Folder';
 import Tag from '../../models/Tag';
 import shim from '../../shim';
-import ResourceService from '../../services/ResourceService';
-import { NoteEntity } from '../../services/database/types';
+import ResourceService from '../ResourceService';
+import { NoteEntity } from '../database/types';
 
 
 let engine: any = null;

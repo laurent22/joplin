@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Platform, Linking, View, Switch, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions, AccessibilityInfo } from 'react-native';
 import Setting, { AppType, SettingMetadataSection } from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
-import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
+import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import checkPermissions from '../../../utils/checkPermissions';
 import setIgnoreTlsErrors from '../../../utils/TlsUtils';
 import { reg } from '@joplin/lib/registry';
