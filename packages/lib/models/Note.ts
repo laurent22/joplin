@@ -772,6 +772,7 @@ export default class Note extends BaseItem {
 
 		const changeSource = options && options.changeSource ? options.changeSource : null;
 		const changeType = options && options.toTrash ? ItemChange.TYPE_UPDATE : ItemChange.TYPE_DELETE;
+		const toTrash = options && !!options.toTrash;
 
 		while (ids.length) {
 			const processIds = ids.splice(0, 50);
@@ -779,10 +780,10 @@ export default class Note extends BaseItem {
 			const notes = await Note.byIds(processIds);
 			const beforeChangeItems: any = {};
 			for (const note of notes) {
-				beforeChangeItems[note.id] = options.toTrash ? null : JSON.stringify(note);
+				beforeChangeItems[note.id] = toTrash ? null : JSON.stringify(note);
 			}
 
-			if (options && options.toTrash) {
+			if (toTrash) {
 				const sql = `
 					UPDATE notes
 					SET	
