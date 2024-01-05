@@ -63,6 +63,8 @@ describe('SearchEngine.resources', () => {
 		expect(results[0].id).toBe(note.id);
 		expect(results[0].item_id).toBe(resource.id);
 		expect(results[0].item_type).toBe(ModelType.Resource);
+
+		await ocrService.dispose();
 	}));
 
 	it('should not return resources associated with deleted notes', (async () => {
