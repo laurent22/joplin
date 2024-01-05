@@ -39,7 +39,7 @@ const tasks = {
 	},
 	tsc: require('@joplin/tools/gulp/tasks/tsc'),
 	updateIgnoredTypeScriptBuild: require('@joplin/tools/gulp/tasks/updateIgnoredTypeScriptBuild'),
-	buildCommandIndex: require('@joplin/tools/gulp/tasks/buildCommandIndex'),
+	buildScriptIndexes: require('@joplin/tools/gulp/tasks/buildScriptIndexes'),
 	compileSass: {
 		fn: async () => {
 			await compileSass(
@@ -58,7 +58,7 @@ const buildBeforeStartParallel = [
 	'copyPluginAssets',
 	'copyApplicationAssets',
 	'updateIgnoredTypeScriptBuild',
-	'buildCommandIndex',
+	'buildScriptIndexes',
 	'compileSass',
 ];
 

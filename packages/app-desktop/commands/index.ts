@@ -1,4 +1,4 @@
-// AUTO-GENERATED using `gulp buildCommandIndex`
+// AUTO-GENERATED using `gulp buildScriptIndexes`
 import * as copyDevCommand from './copyDevCommand';
 import * as editProfileConfig from './editProfileConfig';
 import * as exportFolders from './exportFolders';
@@ -16,7 +16,7 @@ import * as switchProfile3 from './switchProfile3';
 import * as toggleExternalEditing from './toggleExternalEditing';
 import * as toggleSafeMode from './toggleSafeMode';
 
-const index:any[] = [
+const index: any[] = [
 	copyDevCommand,
 	editProfileConfig,
 	exportFolders,
@@ -36,4 +36,4 @@ const index:any[] = [
 ];
 
 export default index;
-// AUTO-GENERATED using `gulp buildCommandIndex`
+// AUTO-GENERATED using `gulp buildScriptIndexes`
