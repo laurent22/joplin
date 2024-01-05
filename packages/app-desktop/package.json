@@ -128,7 +128,7 @@
     "@types/jest": "29.5.8",
     "@types/node": "18.18.14",
     "@types/react": "18.2.43",
-    "@types/react-redux": "7.1.32",
+    "@types/react-redux": "7.1.33",
     "@types/styled-components": "5.1.32",
     "@types/tesseract.js": "2.0.0",
     "electron": "26.5.0",
