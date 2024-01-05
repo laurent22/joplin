@@ -1,7 +1,7 @@
 // AUTO-GENERATED using `gulp buildScriptIndexes`
 import * as focusElementNoteList from './focusElementNoteList';
 
-const index:any[] = [
+const index: any[] = [
 	focusElementNoteList,
 ];
 
