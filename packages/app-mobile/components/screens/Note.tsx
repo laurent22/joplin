@@ -57,6 +57,8 @@ import { join } from 'path';
 import { Dispatch } from 'redux';
 import { RefObject } from 'react';
 import { SelectionRange } from '../NoteEditor/types';
+import { AppState } from '../../utils/types';
+import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -131,6 +133,7 @@ interface Props {
 	highlightedWords: string[];
 	noteHash: string;
 	toolbarEnabled: boolean;
+	plugins: PluginStates;
 }
 
 interface State {
@@ -1536,6 +1539,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
 					onAttach={() => this.showAttachMenu()}
 					readOnly={this.state.readOnly}
+					plugins={this.props.plugins}
 					style={{
 						...editorStyle,
 						paddingLeft: 0,
@@ -1637,7 +1641,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	}
 }
 
-const NoteScreen = connect((state: any) => {
+const NoteScreen = connect((state: AppState) => {
 	return {
 		noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 		noteHash: state.selectedNoteHash,
@@ -1654,6 +1658,7 @@ const NoteScreen = connect((state: any) => {
 		showSideMenu: state.showSideMenu,
 		provisionalNoteIds: state.provisionalNoteIds,
 		highlightedWords: state.highlightedWords,
+		plugins: state.pluginService.plugins,
 
 		// What we call "beta editor" in this component is actually the (now
 		// default) CodeMirror editor. That should be refactored to make it less

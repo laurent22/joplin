@@ -24,6 +24,7 @@ import useCodeMirrorPlugins from './hooks/useCodeMirrorPlugins';
 import RNToWebViewMessenger from '../../utils/ipc/RNToWebViewMessenger';
 import { WebViewMessageEvent } from 'react-native-webview';
 import Logger from '@joplin/utils/Logger';
+import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 
 const logger = Logger.create('NoteEditor');
 
@@ -40,6 +41,7 @@ interface Props {
 	contentStyle?: ViewStyle;
 	toolbarEnabled: boolean;
 	readOnly: boolean;
+	plugins: PluginStates;
 
 	onChange: ChangeEventHandler;
 	onSelectionChange: SelectionChangeEventHandler;
@@ -419,7 +421,7 @@ function NoteEditor(props: Props, ref: any) {
 		};
 	}, [props.onChange, props.onUndoRedoDepthChange, props.onSelectionChange, editorControl]);
 
-	const codeMirrorPlugins = useCodeMirrorPlugins();
+	const codeMirrorPlugins = useCodeMirrorPlugins(props.plugins);
 	useEffect(() => {
 		void editorControl.setPlugins(codeMirrorPlugins);
 	}, [codeMirrorPlugins, editorControl]);

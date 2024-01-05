@@ -1,19 +1,21 @@
 import { PluginData } from '@joplin/editor/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
+import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import shim from '@joplin/lib/shim';
 import { useMemo } from 'react';
 
-const useCodeMirrorPlugins = () => {
+const useCodeMirrorPlugins = (pluginStates: PluginStates) => {
 	return useMemo(() => {
 		const pluginService = PluginService.instance();
 
 		const plugins: PluginData[] = [];
 
-		for (const pluginId of pluginService.pluginIds) {
+		for (const pluginState of Object.values(pluginStates)) {
+			const pluginId = pluginState.id;
+			const contentScripts = pluginState.contentScripts[ContentScriptType.CodeMirrorPlugin] ?? [];
 			const plugin = pluginService.pluginById(pluginId);
 
-			const contentScripts = plugin.contentScriptsByType(ContentScriptType.CodeMirrorPlugin);
 			for (const contentScript of contentScripts) {
 				const contentScriptId = contentScript.id;
 				plugins.push({
@@ -30,7 +32,7 @@ const useCodeMirrorPlugins = () => {
 		}
 
 		return plugins;
-	}, []);
+	}, [pluginStates]);
 };
 
 export default useCodeMirrorPlugins;

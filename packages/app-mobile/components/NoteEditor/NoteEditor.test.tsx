@@ -30,6 +30,7 @@ describe('NoteEditor', () => {
 					onSelectionChange={()=>{}}
 					onUndoRedoDepthChange={()=>{}}
 					onAttach={()=>{}}
+					plugins={{}}
 				/>
 			</MenuProvider>,
 		);

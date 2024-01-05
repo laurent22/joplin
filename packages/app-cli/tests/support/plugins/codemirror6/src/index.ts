@@ -5,7 +5,7 @@ joplin.plugins.register({
 	onStart: async function() {
 		const contentScriptId = 'cm6-example';
 
-		joplin.contentScripts.register(
+		await joplin.contentScripts.register(
 			ContentScriptType.CodeMirrorPlugin,
 			contentScriptId,
 			'./contentScript.js',

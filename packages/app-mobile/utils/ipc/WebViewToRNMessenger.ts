@@ -10,7 +10,13 @@ export default class WebViewToRNMessenger<LocalInterface, RemoteInterface> exten
 			void this.onMessage(message);
 		};
 
-		this.onReadyToReceive();
+		// Allow the event loop to run -- without this, calling
+		//   injectJS('window.handleReactNativeMessage("message")')
+		// in ReactNative can (but doesn't always) fail if called immediately after
+		// sending ReadyToReceive.
+		setTimeout(() => {
+			this.onReadyToReceive();
+		}, 0);
 	}
 
 	protected override postMessage(message: SerializableData): void {
