@@ -1,5 +1,5 @@
 import { setupDatabaseAndSynchronizer, db, sleep, switchClient, msleep } from '../../testing/test-utils';
-import SearchEngine from '../../services/searchengine/SearchEngine';
+import SearchEngine from './SearchEngine';
 import Note from '../../models/Note';
 import Folder from '../../models/Folder';
 import ItemChange from '../../models/ItemChange';

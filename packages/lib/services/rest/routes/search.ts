@@ -6,7 +6,7 @@ import requestFields from '../utils/requestFields';
 import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
 import BaseItem from '../../../models/BaseItem';
 import { NoteEntity } from '../../database/types';
-import SearchEngineUtils, { NotesForQueryOptions } from '../../searchengine/SearchEngineUtils';
+import SearchEngineUtils, { NotesForQueryOptions } from '../../search/SearchEngineUtils';
 
 export default async function(request: Request) {
 	if (request.method !== 'GET') throw new ErrorMethodNotAllowed();
