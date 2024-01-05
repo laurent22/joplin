@@ -225,6 +225,8 @@ export type SettingMetadataSection = {
 	name: string;
 	isScreen?: boolean;
 	metadatas: SettingItem[];
+
+	source?: SettingSectionSource;
 };
 export type MetadataBySection = SettingMetadataSection[];
 
@@ -2660,7 +2662,25 @@ class Setting extends BaseModel {
 			'moreInfo': _('Donate, website'),
 		};
 
-		return sectionNameToSummary[metadata.name] ?? '';
+		// In some cases (e.g. plugin settings pages) there is no preset summary.
+		// In those cases, we generate the summary:
+		const generateSummary = () => {
+			const summary = [];
+			for (const item of metadata.metadatas) {
+				if (!item.public || item.advanced) {
+					continue;
+				}
+
+				if (item.label) {
+					const label = item.label?.();
+					summary.push(label);
+				}
+			}
+
+			return summary.join(', ');
+		};
+
+		return sectionNameToSummary[metadata.name] ?? generateSummary();
 	}
 
 	public static sectionNameToIcon(name: string, appType: AppType) {
