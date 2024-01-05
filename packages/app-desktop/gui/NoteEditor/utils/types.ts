@@ -5,7 +5,7 @@ import { MarkupLanguage } from '@joplin/renderer';
 import { RenderResult, RenderResultPluginAsset } from '@joplin/renderer/MarkupToHtml';
 import { MarkupToHtmlOptions } from './useMarkupToHtml';
 import { Dispatch } from 'redux';
-import { ProcessResultsRow } from '@joplin/lib/services/searchengine/SearchEngine';
+import { ProcessResultsRow } from '@joplin/lib/services/search/SearchEngine';
 
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;

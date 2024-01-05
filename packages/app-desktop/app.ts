@@ -70,7 +70,7 @@ import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetche
 import { parseNotesParent } from '@joplin/lib/reducer';
 import OcrService from '@joplin/lib/services/ocr/OcrService';
 import OcrDriverTesseract from '@joplin/lib/services/ocr/drivers/OcrDriverTesseract';
-import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
+import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { PackageInfo } from '@joplin/lib/versionInfo';
 
 const pluginClasses = [
