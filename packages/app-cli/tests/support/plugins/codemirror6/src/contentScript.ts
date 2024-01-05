@@ -4,7 +4,7 @@
 // This is necessary. Having multiple copies of the CodeMirror libraries loaded can cause
 // the editor to not work properly.
 //
-import { lineNumbers } from '@codemirror/view';
+import { EditorView, highlightActiveLineGutter, lineNumbers } from '@codemirror/view';
 //
 // For the above import to work, you may also need to add @codemirror/view as a dev dependency
 // to package.json. (For the type information only).
@@ -13,7 +13,7 @@ import { lineNumbers } from '@codemirror/view';
 //  const { lineNumbers } = joplin.require('@codemirror/view');
 
 
-export default (_context: { contentScriptId: string }) => {
+export default (context: { contentScriptId: string, postMessage: (message: any)=>Promise<any> }) => {
 	return {
 		// - codeMirrorWrapper: A thin wrapper around CodeMirror 6, designed to be similar to the
 		//     CodeMirror 5 API. If running in CodeMirror 5, a CodeMirror object is provided instead.
@@ -26,6 +26,26 @@ export default (_context: { contentScriptId: string }) => {
 
 			// See https://codemirror.net/ for more built-in extensions and configuration
 			// options.
+
+			// We can also send/receive messages. We define a message handler in index.ts.
+			(async () => {
+				const config = await context.postMessage('get-config');
+
+				if (config.highlightGutter) {
+					codeMirrorWrapper.addExtension([
+						// Adds the cm-activeLineGutter CSS class to the active line.
+						highlightActiveLineGutter(),
+
+						// Add additional CSS to the editor. CodeMirror replaces "&" with
+						// the CSS seletor for the editor.
+						EditorView.theme({
+							'& .cm-activeLineGutter': {
+								outline: '1px solid var(--joplin-color)',
+							},
+						}),
+					]);
+				}
+			})();
 		},
 	};
 };

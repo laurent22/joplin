@@ -1,6 +1,7 @@
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
+import themeToCss from '@joplin/lib/services/style/themeToCss';
 import EditLinkDialog from './EditLinkDialog';
 import { defaultSearchState, SearchPanel } from './SearchPanel';
 import ExtendedWebView from '../ExtendedWebView';
@@ -54,7 +55,10 @@ function fontFamilyFromSettings() {
 function useCss(themeId: number): string {
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
+		const themeVariableCss = themeToCss(theme);
 		return `
+			${themeVariableCss}
+
 			:root {
 				background-color: ${theme.backgroundColor};
 			}
