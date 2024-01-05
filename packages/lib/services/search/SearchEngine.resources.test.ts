@@ -57,6 +57,8 @@ describe('SearchEngine.resources', () => {
 		expect(results[0].id).toBe(note1.id);
 		expect(results[0].item_id).toBe(resource.id);
 		expect(results[0].item_type).toBe(ModelType.Resource);
+
+		await ocrService.dispose();
 	}));
 
 	it('should delete normalized data when a resource is deleted', async () => {

@@ -309,20 +309,21 @@ async function clearDatabase(id: number = null) {
 	await ItemChange.waitForAllSaved();
 
 	const tableNames = [
-		'notes',
-		'folders',
-		'resources',
-		'tags',
-		'note_tags',
-		'master_keys',
-		'item_changes',
-		'note_resources',
-		'settings',
 		'deleted_items',
-		'sync_items',
-		'notes_normalized',
-		'revisions',
+		'folders',
+		'item_changes',
+		'items_normalized',
 		'key_values',
+		'master_keys',
+		'note_resources',
+		'note_tags',
+		'notes_normalized',
+		'notes',
+		'resources',
+		'revisions',
+		'settings',
+		'sync_items',
+		'tags',
 	];
 
 	const queries = [];
