@@ -534,4 +534,5 @@ describe('services/SearchEngine', () => {
 		expect((await engine.search(n2.id))[0].id).toBe(n2.id);
 		expect(await engine.search(f1.id)).toEqual([]);
 	}));
+
 });
