@@ -33,7 +33,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 				dispatch('COMPLETED');
 				clearInterval(interval);
 			}
-		}, 5 * 1000);
+		}, 2 * 1000);
 
 		setIntervalIdentifier(interval);
 	};
