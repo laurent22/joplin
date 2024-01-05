@@ -6,7 +6,7 @@ import Button, { ButtonLevel } from './Button/Button';
 const bridge = require('@electron/remote').require('./bridge').default;
 import { uuidgen } from '@joplin/lib/uuid';
 import { Dispatch } from 'redux';
-import { reducer, intitialValues, generateLoginWithUniqueLoginCode, checkIfLoginWasSuccessful } from '@joplin/lib/services/JoplinCloudLogin';
+import { reducer, intitialValues, generateLoginWithUniqueLoginCode, checkIfLoginWasSuccessful } from '@joplin/lib/services/joplinCloudUtils';
 import { AppState } from '../app.reducer';
 
 const { connect } = require('react-redux');
