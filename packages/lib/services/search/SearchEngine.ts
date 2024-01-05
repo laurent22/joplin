@@ -763,16 +763,25 @@ export default class SearchEngine {
 						WHERE title MATCH ? OR body MATCH ?
 					`, [toSearch, toSearch]);
 
-					const resourcesToNotes = await NoteResource.associatedResourceNotes(itemRows.map(r => r.item_id), { fields: ['note_id', 'parent_id'] });
+					const resourcesToNotes = await NoteResource.associatedResourceNotes(
+						itemRows.map(r => r.item_id),
+						{
+							fields: ['note_id', 'parent_id', 'deleted_time'],
+						},
+					);
+
+					const deletedNoteIds: string[] = [];
 
 					for (const itemRow of itemRows) {
 						const notes = resourcesToNotes[itemRow.item_id];
 						const note = notes && notes.length ? notes[0] : null;
+						if (note && note.deleted_time) deletedNoteIds.push(note.note_id);
 						itemRow.id = note ? note.note_id : null;
 						itemRow.parent_id = note ? note.parent_id : null;
 					}
 
 					if (!options.includeOrphanedResources) itemRows = itemRows.filter(r => !!r.id);
+					itemRows = itemRows.filter(r => !deletedNoteIds.includes(r.id));
 
 					rows = rows.concat(itemRows);
 				}

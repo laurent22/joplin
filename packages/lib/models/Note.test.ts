@@ -12,7 +12,7 @@ import { ResourceEntity } from '../services/database/types';
 import { toForwardSlashes } from '../path-utils';
 import * as ArrayUtils from '../ArrayUtils';
 import { ErrorCode } from '../errors';
-import SearchEngine from '../services/searchengine/SearchEngine';
+import SearchEngine from '../services/search/SearchEngine';
 
 async function allItems() {
 	const folders = await Folder.all();
