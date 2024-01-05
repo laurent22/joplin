@@ -7,18 +7,20 @@ const bridge = require('@electron/remote').require('./bridge').default;
 import { uuidgen } from '@joplin/lib/uuid';
 import { Dispatch } from 'redux';
 import { reducer, intitialValues, generateLoginWithUniqueLoginCode, checkIfLoginWasSuccessful } from '@joplin/lib/services/JoplinCloudLogin';
-import Setting from '@joplin/lib/models/Setting';
+import { AppState } from '../app.reducer';
 
 const { connect } = require('react-redux');
 
-const loginUrl = `${Setting.value('sync.10.website')}/login`;
-const applicationsUrl = `${Setting.value('sync.10.path')}/api/applications`;
-
 interface Props {
 	dispatch: Dispatch;
+	joplinCloudWebsite: string;
+	joplinCloudApi: string;
 }
 
 const JoplinCloudScreenComponent = (props: Props) => {
+
+	const loginUrl = `${props.joplinCloudWebsite}/login`;
+	const applicationsUrl = `${props.joplinCloudApi}/api/applications`;
 
 	const [uniqueLoginCode, setUniqueLoginCode] = useState(undefined);
 	const [intervalIdentifier, setIntervalIdentifier] = useState(undefined);
@@ -95,4 +97,11 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	);
 };
 
-export default connect()(JoplinCloudScreenComponent);
+const mapStateToProps = (state: AppState) => {
+	return {
+		joplinCloudWebsite: state.settings['sync.10.website'],
+		joplinCloudApi: state.settings['sync.10.path'],
+	};
+};
+
+export default connect(mapStateToProps)(JoplinCloudScreenComponent);
