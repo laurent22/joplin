@@ -47,7 +47,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		periodicallyCheckForCredentials();
 	};
 
-	const onAuthoriseClicked = async () => {
+	const onAuthorizeClicked = async () => {
 		const url = await generateLoginWithUniqueLoginCode(loginUrl, uniqueLoginCode);
 		bridge().openExternal(url);
 		onButtonUsed();
@@ -76,7 +76,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 				<p className="text">{_('To allow Joplin to synchronise with Joplin Cloud, open this URL in your browser to authorise the application:')}</p>
 				<div className="buttons-container">
 					<Button
-						onClick={onAuthoriseClicked}
+						onClick={onAuthorizeClicked}
 						title={_('Authorise')}
 						iconName='fa fa-external-link-alt'
 						level={ButtonLevel.Primary}
