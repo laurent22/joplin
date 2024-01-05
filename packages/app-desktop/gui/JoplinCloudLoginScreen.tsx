@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useMemo, useReducer, useState } from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 import { clipboard } from 'electron';
@@ -22,9 +22,10 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	const loginUrl = `${props.joplinCloudWebsite}/login`;
 	const applicationsUrl = `${props.joplinCloudApi}/api/applications`;
 
-	const [uniqueLoginCode, setUniqueLoginCode] = useState(undefined);
 	const [intervalIdentifier, setIntervalIdentifier] = useState(undefined);
 	const [state, dispatch] = useReducer(reducer, intitialValues);
+
+	const uniqueLoginCode = useMemo(() => uuidgen(), []);
 
 	const periodicallyCheckForCredentials = () => {
 		if (intervalIdentifier) return;
@@ -58,11 +59,6 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		clipboard.writeText(url);
 		onButtonUsed();
 	};
-
-	useEffect(() => {
-		const ulc = uuidgen();
-		setUniqueLoginCode(ulc);
-	}, []);
 
 	useEffect(() => {
 		return () => {
