@@ -24,6 +24,14 @@ interface FrontMatterContext extends NoteTagContext, TagContext {}
 function trimQuotes(rawOutput: string): string {
 	return rawOutput.split('\n').map(line => {
 		const index = line.indexOf(': \'-');
+		const indexWithSpace = line.indexOf(': \'- ');
+
+		// We don't apply this processing if the string starts with a dash
+		// followed by a space. Those should actually be in quotes, otherwise
+		// they are detected as invalid list items when we later try to import
+		// the file.
+		if (index === indexWithSpace) return line;
+
 		if (index >= 0) {
 			// The plus 2 eats the : and space characters
 			const start = line.substring(0, index + 2);
@@ -31,6 +39,7 @@ function trimQuotes(rawOutput: string): string {
 			const end = line.substring(index + 3, line.length - 1);
 			return start + end;
 		}
+
 		return line;
 	}).join('\n');
 }

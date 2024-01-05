@@ -129,6 +129,9 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	// to avoid various crashes and errors:
 	// https://github.com/react-native-webview/react-native-webview/issues/2920
 	// https://github.com/react-native-webview/react-native-webview/issues/2995
+	//
+	// decelerationRate='normal' is necessary on iOS for a native-like inertial scroll
+	// (the default deaccelerates too quickly).
 	return (
 		<WebView
 			style={{
@@ -150,6 +153,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			onMessage={props.onMessage}
 			onError={props.onError}
 			onLoadEnd={props.onLoadEnd}
+			decelerationRate='normal'
 		/>
 	);
 };

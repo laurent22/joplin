@@ -58,6 +58,7 @@ interface ParserState {
 	spanAttributes: string[];
 	tags: ParserStateTag[];
 	currentCode?: string;
+	evernoteLinkTitles: Record<string, string>;
 }
 
 
@@ -607,6 +608,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 			anchorAttributes: [],
 			spanAttributes: [],
 			tags: [],
+			evernoteLinkTitles: {},
 		};
 
 		const options = {};
@@ -1239,12 +1241,25 @@ function drawTable(table: Section) {
 			continue;
 		}
 
+		if (typeof tr === 'string') {
+			// A <TABLE> tag should only have <TR> tags as direct children.
+			// However certain Evernote notes can contain other random tags
+			// such as empty DIVs. In that case we just skip the content.
+			// See test "table_with_invalid_content.html".
+			continue;
+		}
+
 		const isHeader = tr.isHeader;
 		const line = [];
 		const headerLine = [];
 		let emptyHeader = null;
 		for (let tdIndex = 0; tdIndex < tr.lines.length; tdIndex++) {
 			const td = tr.lines[tdIndex];
+
+			if (typeof td === 'string') {
+				// Same comment as above the <TR> tags.
+				continue;
+			}
 
 			if (flatRender) {
 				line.push(BLOCK_OPEN);

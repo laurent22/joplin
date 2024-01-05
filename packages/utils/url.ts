@@ -96,3 +96,7 @@ export const fileUriToPath = (path: string, platform = 'linux') => {
 
 	return output;
 };
+
+export const isDataUrl = (path: string) => {
+	return path.startsWith('data:');
+};

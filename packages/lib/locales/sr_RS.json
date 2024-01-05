@@ -56,6 +56,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -289,6 +292,9 @@
 	],
 	"Browse...": [
 		"Пронађи..."
+	],
+	"Built in": [
+		""
 	],
 	"Bulleted List": [
 		"Листа са знаковима за набрајање"
@@ -799,6 +805,9 @@
 	],
 	"Enable note history": [
 		"Омогући историју бележнице"
+	],
+	"Enable optical character recognition (OCR)": [
+		""
 	],
 	"Enable PDF viewer": [
 		"Омогући ПДФ прегледач"
@@ -2452,6 +2461,9 @@
 	],
 	"When creating a new to-do:": [
 		"Приликом креирања нове ставке задужења:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""

@@ -15,6 +15,10 @@
 	"prConcurrentLimit": 5,
 	"prHourlyLimit": 0,
 
+	// Tell Renovate to rebase only when there's a conflict, otherwise pull
+	// requests never get auto-merged because there are always new changes.
+	"rebaseWhen": "conflicted",
+
 	// It seems we need to delete the branches after merge or else it causes this problem:
 	// https://github.com/renovatebot/renovate/discussions/21256#discussioncomment-5898418
 	"pruneBranchAfterAutomerge": true,
@@ -32,6 +36,7 @@
 	],
 	"ignoreDeps": [
 		"@babel/core",
+		"@codemirror/autocomplete",
 		"@codemirror/commands",
 		"@codemirror/lang-cpp",
 		"@codemirror/lang-html",
@@ -46,6 +51,8 @@
 		"@codemirror/search",
 		"@codemirror/state",
 		"@codemirror/view",
+		"@replit/codemirror-vim",
+		"@lezer/common",
 		"@lezer/highlight",
 		"@lezer/markdown",
 		"@fortawesome/fontawesome-svg-core",
@@ -73,6 +80,7 @@
 		"typedoc",
 		"webpack-cli",
 		"webpack",
+		"yeoman-generator",
 
 		// pdfjs-dist requires the canvas package, which cannot be built in
 		// Windows.
@@ -98,6 +106,7 @@
 		"@babel/runtime",
 		"@tsconfig/react-native",
 		"@types/react-native",
+		"@testing-library/react-native",
 		"androidx.appcompat:appcompat",
 		"babel-plugin-module-resolver",
 		"com.android.tools.build:gradle",
@@ -117,10 +126,6 @@
 		// (https://github.com/laurent22/joplin/issues/8456), we disable auto
 		// updates for it:
 		"react-native-reanimated",
-
-		// Need special processing when upgrading
-		// "katex",
-		// "mermaid",
 
 		// Cannot upgrade further due to ESM support
 		"node-fetch",
@@ -182,6 +187,7 @@
 		// breaking changes. Ideally we should just update existing components
 		// to rscss.
 		"styled-components",
+		"@types/styled-components",
 	],
 	"packageRules": [
 		{

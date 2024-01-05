@@ -13,7 +13,7 @@
   },
   "scripts": {
     "buildApiDoc": "yarn workspace joplin start apidoc ../../readme/api/references/rest_api.md",
-    "buildCommandIndex": "node packages/tools/gulp/tasks/buildCommandIndexRun.js",
+    "buildScriptIndexes": "node packages/tools/gulp/tasks/buildScriptIndexesRun.js",
     "buildParallel": "yarn workspaces foreach --verbose --interlaced --parallel --jobs 2 --topological run build && yarn run tsc",
     "buildPluginDoc": "cd packages/generate-plugin-doc && yarn run buildPluginDoc_",
     "buildSequential": "yarn workspaces foreach --verbose --interlaced --topological run build && yarn run tsc",
@@ -89,7 +89,7 @@
     "lerna": "3.22.1",
     "lint-staged": "14.0.1",
     "madge": "6.1.0",
-    "npm-package-json-lint": "7.0.0",
+    "npm-package-json-lint": "7.1.0",
     "typescript": "5.2.2"
   },
   "dependencies": {
@@ -97,7 +97,7 @@
     "eslint-plugin-github": "4.10.1",
     "http-server": "14.1.1",
     "node-gyp": "9.4.1",
-    "nodemon": "3.0.1"
+    "nodemon": "3.0.2"
   },
   "packageManager": "yarn@3.6.4",
   "resolutions": {
@@ -106,6 +106,7 @@
     "eslint": "patch:eslint@8.52.0#./.yarn/patches/eslint-npm-8.39.0-d92bace04d.patch",
     "app-builder-lib@24.4.0": "patch:app-builder-lib@npm%3A24.4.0#./.yarn/patches/app-builder-lib-npm-24.4.0-05322ff057.patch",
     "react-native@0.71.10": "patch:react-native@npm%3A0.71.10#./.yarn/patches/react-native-animation-fix/react-native-npm-0.71.10-f9c32562d8.patch",
+    "nanoid": "patch:nanoid@npm%3A3.3.7#./.yarn/patches/nanoid-npm-3.3.7-98824ba130.patch",
     "pdfjs-dist": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch"
   }
 }

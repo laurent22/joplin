@@ -23,7 +23,7 @@ export default class JoplinInterop {
 
 	public async registerExportModule(module: ExportModule) {
 		const internalModule = makeExportModule({
-			...module,
+			...module as any,
 			type: ModuleType.Exporter,
 			fileExtensions: module.fileExtensions ? module.fileExtensions : [],
 		}, () => new InteropService_Exporter_Custom(module));

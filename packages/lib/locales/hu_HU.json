@@ -56,6 +56,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -307,6 +310,9 @@
 	],
 	"Browse...": [
 		"Tallózás..."
+	],
+	"Built in": [
+		""
 	],
 	"Bulleted List": [
 		"Felsorolás"
@@ -950,6 +956,9 @@
 	],
 	"Enable note history": [
 		"Jegyzet előélet engedélyezése"
+	],
+	"Enable optical character recognition (OCR)": [
+		""
 	],
 	"Enable PDF viewer": [
 		"PDF megjelenítő engedélyezése"
@@ -2908,6 +2917,9 @@
 	],
 	"When creating a new to-do:": [
 		"Amikor egy új to-do-t hoz létre:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""

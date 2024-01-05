@@ -9,7 +9,7 @@ import NoteEditor from '../NoteEditor/NoteEditor';
 import { Size } from '@joplin/utils/types';
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
-import { Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } from 'react-native';
+import { Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, NativeSyntheticEvent } from 'react-native';
 import { Platform, PermissionsAndroid } from 'react-native';
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
@@ -52,10 +52,11 @@ import isEditableResource from '../NoteEditor/ImageEditor/isEditableResource';
 import VoiceTypingDialog from '../voiceTyping/VoiceTypingDialog';
 import { voskEnabled } from '../../services/voiceTyping/vosk';
 import { isSupportedLanguage } from '../../services/voiceTyping/vosk.android';
-import { ChangeEvent as EditorChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
+import { ChangeEvent as EditorChangeEvent, SelectionRangeChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
 import { join } from 'path';
 import { Dispatch } from 'redux';
 import { RefObject } from 'react';
+import { SelectionRange } from '../NoteEditor/types';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -177,7 +178,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	private noteTagDialog_closeRequested: any;
 	private onJoplinLinkClick_: any;
 	private refreshResource: (resource: any, noteBody?: string)=> Promise<void>;
-	private selection: any;
+	private selection: SelectionRange;
 	private menuOptionsCache_: Record<string, any>;
 	private focusUpdateIID_: any;
 	private folderPickerOptions_: any;
@@ -371,7 +372,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		this.undoRedoService_stackChange = this.undoRedoService_stackChange.bind(this);
 		this.screenHeader_undoButtonPress = this.screenHeader_undoButtonPress.bind(this);
 		this.screenHeader_redoButtonPress = this.screenHeader_redoButtonPress.bind(this);
-		this.body_selectionChange = this.body_selectionChange.bind(this);
 		this.onBodyViewerLoadEnd = this.onBodyViewerLoadEnd.bind(this);
 		this.onBodyViewerCheckboxChange = this.onBodyViewerCheckboxChange.bind(this);
 		this.onBodyChange = this.onBodyChange.bind(this);
@@ -640,13 +640,13 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		this.scheduleSave();
 	}
 
-	private body_selectionChange(event: any) {
-		if (this.useEditorBeta()) {
-			this.selection = event.selection;
-		} else {
-			this.selection = event.nativeEvent.selection;
-		}
-	}
+	private onPlainEdtiorSelectionChange = (event: NativeSyntheticEvent<any>) => {
+		this.selection = event.nativeEvent.selection;
+	};
+
+	private onMarkdownEditorSelectionChange = (event: SelectionRangeChangeEvent) => {
+		this.selection = { start: event.from, end: event.to };
+	};
 
 	public makeSaveAction() {
 		return async () => {
@@ -1347,7 +1347,9 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		let fieldToFocus = this.state.note.is_todo ? 'title' : 'body';
 		if (this.state.mode === 'view') fieldToFocus = '';
 
-		if (fieldToFocus === 'title' && this.titleTextFieldRef.current) {
+		// Avoid writing `this.titleTextFieldRef.current` -- titleTextFieldRef may
+		// be undefined.
+		if (fieldToFocus === 'title' && this.titleTextFieldRef?.current) {
 			this.titleTextFieldRef.current.focus();
 		}
 		// if (fieldToFocus === 'body' && this.markdownEditorRef.current) {
@@ -1508,7 +1510,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 						multiline={true}
 						value={note.body}
 						onChangeText={(text: string) => this.body_changeText(text)}
-						onSelectionChange={this.body_selectionChange}
+						onSelectionChange={this.onPlainEdtiorSelectionChange}
 						blurOnSubmit={false}
 						selectionColor={theme.textSelectionColor}
 						keyboardAppearance={theme.keyboardAppearance}
@@ -1530,7 +1532,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 					initialText={note.body}
 					initialSelection={this.selection}
 					onChange={this.onBodyChange}
-					onSelectionChange={this.body_selectionChange}
+					onSelectionChange={this.onMarkdownEditorSelectionChange}
 					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
 					onAttach={() => this.showAttachMenu()}
 					readOnly={this.state.readOnly}

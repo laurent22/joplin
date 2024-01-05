@@ -40,11 +40,26 @@ export default function TurndownService (options) {
     disableEscapeContent: false,
     preformattedCode: false,
     preserveNestedTables: false,
+    preserveColorStyles: false,
     blankReplacement: function (content, node) {
       return node.isBlock ? '\n\n' : ''
     },
     keepReplacement: function (content, node) {
-      return node.isBlock ? '\n\n' + node.outerHTML + '\n\n' : node.outerHTML
+      // In markdown, multiple blank lines end an HTML block. We thus
+      // include an HTML comment to make otherwise blank lines not blank.
+      const mutliBlankLineRegex = /\n([ \t\r]*)\n/g;
+
+      // We run the replacement multiple times to handle multiple blank
+      // lines in a row.
+      //
+      // For example, "Foo\n\n\nBar" becomes "Foo\n<!-- -->\n\nBar" after the
+      // first replacement.
+      let html = node.outerHTML;
+      while (html.match(mutliBlankLineRegex)) {
+        html = html.replace(mutliBlankLineRegex, '\n<!-- -->$1\n');
+      }
+
+      return node.isBlock ? '\n\n' + html + '\n\n' : html
     },
     defaultReplacement: function (content, node) {
       return node.isBlock ? '\n\n' + content + '\n\n' : content

@@ -38,7 +38,7 @@ describe('Module', () => {
 
 	it('should return correct default fullLabel for an ExportModule', () => {
 		const testExportModule = makeExportModule({
-			format: 'format_test_______TEST',
+			format: 'format_test_______TEST' as any,
 			description: 'Testing...',
 		}, () => new InteropService_Exporter_Base());
 

@@ -1,7 +1,7 @@
 import { validateLinks } from '@joplin/renderer';
 const stringPadding = require('string-padding');
 const urlUtils = require('./urlUtils');
-const MarkdownIt = require('markdown-it');
+import * as MarkdownIt from 'markdown-it';
 
 // Taken from codemirror/addon/edit/continuelist.js
 const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]\s))(\s*)/;
@@ -16,8 +16,7 @@ export enum MarkdownTableJustify {
 export interface MarkdownTableHeader {
 	name: string;
 	label: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	filter?: Function;
+	filter?: (content: string)=> string;
 	disableEscape?: boolean;
 	disableHtmlEscape?: boolean;
 	justify?: MarkdownTableJustify;

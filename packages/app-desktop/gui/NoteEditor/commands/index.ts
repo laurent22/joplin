@@ -1,4 +1,4 @@
-// AUTO-GENERATED using `gulp buildCommandIndex`
+// AUTO-GENERATED using `gulp buildScriptIndexes`
 import * as focusElementNoteBody from './focusElementNoteBody';
 import * as focusElementNoteTitle from './focusElementNoteTitle';
 import * as pasteAsText from './pasteAsText';
@@ -14,4 +14,4 @@ const index:any[] = [
 ];
 
 export default index;
-// AUTO-GENERATED using `gulp buildCommandIndex`
+// AUTO-GENERATED using `gulp buildScriptIndexes`

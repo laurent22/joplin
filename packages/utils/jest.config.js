@@ -16,4 +16,6 @@ module.exports = {
 	testPathIgnorePatterns: ['<rootDir>/node_modules/'],
 
 	slowTestThreshold: 40,
+
+	setupFilesAfterEnv: [`${__dirname}/jest.setup.js`],
 };

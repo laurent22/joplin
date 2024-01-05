@@ -52,6 +52,7 @@ These are run by the `app-desktop` package on a full `build` (e.g. on `postinsta
 ## Installing of default plugins
 
 - All the functions related to default plugins are located in [defaultPluginsUtils.ts](https://github.com/laurent22/joplin/blob/eb7083d7888433ff6ef76ccfb7fb87ba951d513f/packages/lib/services/plugins/defaultPlugins/defaultPluginsUtils.ts)
-- On every startup, we check if there are new plugins available in build folder that have not been installed yet. After installing the new plugin, we update the `installedDefaultPlugins` array in `Setting.ts` with respective plugin ID for future reference.
-- After installing is complete, we apply the default settings for each default plugin. Default settings are located in [desktopDefaultPluginsInfo.ts](https://github.com/laurent22/joplin/blob/eb7083d7888433ff6ef76ccfb7fb87ba951d513f/packages/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo.ts)
+- Default plugins are bundled with the app (included in the `build/` directory) and loaded from this directory.
+- To allow loading `dev` and NPM versions of the plugin, default plugins are loaded after non-default plugins. The plugin service refuses to load additional copies of already-loaded plugins. As such, non-default plugins take precedence over default plugins.
+- After loading is complete, we apply the default settings for each default plugin. Default settings are located in [desktopDefaultPluginsInfo.ts](https://github.com/laurent22/joplin/blob/eb7083d7888433ff6ef76ccfb7fb87ba951d513f/packages/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo.ts). The `installedDefaultPlugins` setting is used to ensure that settnigs are only overridden once.
 - If the plugin is already installed by the user, then we don't apply default settings to avoid overriding user's settings.

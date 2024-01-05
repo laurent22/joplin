@@ -56,6 +56,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -307,6 +310,9 @@
 	],
 	"Browse...": [
 		"Truy xuất…"
+	],
+	"Built in": [
+		""
 	],
 	"Bulleted List": [
 		"Danh sách"
@@ -901,6 +907,9 @@
 	],
 	"Enable note history": [
 		"Bật lịch sử note"
+	],
+	"Enable optical character recognition (OCR)": [
+		""
 	],
 	"Enable PDF viewer": [
 		"Bật trình xem PDF"
@@ -2776,6 +2785,9 @@
 	],
 	"When creating a new to-do:": [
 		"Khi tạo một to-do mới:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""

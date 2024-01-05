@@ -3,6 +3,7 @@ const { shimInit } = require('@joplin/lib/shim-init-node.js');
 const shim = require('@joplin/lib/shim').default;
 const sharp = require('sharp');
 const nodeSqlite = require('sqlite3');
+require('../../jest.base-setup.js')();
 
 let keytar;
 try {

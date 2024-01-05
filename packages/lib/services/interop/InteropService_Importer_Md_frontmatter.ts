@@ -97,7 +97,7 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 
 		const { header, body } = this.getNoteHeader(note);
 
-		const md: Record<string, any> = this.toLowerCase(yaml.load(header, { schema: yaml.FAILSAFE_SCHEMA }));
+		const md = this.toLowerCase(yaml.load(header, { schema: yaml.FAILSAFE_SCHEMA }));
 		const metadata: NoteEntity = {
 			title: md['title'] || '',
 			source_url: md['source'] || '',
@@ -148,7 +148,7 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 		}
 
 		// Only create unique tags
-		tags = [...new Set(tags)] as string[];
+		tags = [...new Set(tags)];
 
 		metadata['body'] = body;
 

@@ -9,7 +9,9 @@ import shim from './shim';
 import { NoteEntity, ResourceEntity } from './services/database/types';
 import { enexXmlToMd } from './import-enex-md-gen';
 import { MarkupToHtml } from '@joplin/renderer';
-import { fileExtension, friendlySafeFilename } from './path-utils';
+import { fileExtension, friendlySafeFilename, safeFileExtension } from './path-utils';
+import { extractUrls as extractUrlsFromHtml } from '@joplin/utils/html';
+import { extractUrls as extractUrlsFromMarkdown } from '@joplin/utils/markdown';
 const moment = require('moment');
 const { wrapError } = require('./errorUtils');
 const { enexXmlToHtml } = require('./import-enex-html-gen.js');
@@ -151,18 +153,22 @@ interface ExtractedNote extends NoteEntity {
 	tags?: string[];
 	title?: string;
 	bodyXml?: string;
-	// is_todo?: boolean;
 }
 
-// At this point we have the resource has it's been parsed from the XML, but additional
-// processing needs to be done to get the final resource file, its size, MD5, etc.
+// At this point we have the resource as it's been parsed from the XML, but
+// additional processing needs to be done to get the final resource file, its
+// size, MD5, etc.
 async function processNoteResource(resource: ExtractedResource) {
-	if (!resource.hasData) {
-		// Some resources have no data, go figure, so we need a special case for this.
-		resource.id = md5(Date.now() + Math.random());
+	const handleNoDataResource = async (resource: ExtractedResource, setId: boolean) => {
+		if (setId) resource.id = md5(Date.now() + Math.random());
 		resource.size = 0;
 		resource.dataFilePath = `${Setting.value('tempDir')}/${resource.id}.empty`;
 		await fs.writeFile(resource.dataFilePath, '');
+	};
+
+	if (!resource.hasData) {
+		// Some resources have no data, go figure, so we need a special case for this.
+		await handleNoDataResource(resource, true);
 	} else {
 		if (resource.dataEncoding === 'base64') {
 			const decodedFilePath = `${resource.dataFilePath}.decoded`;
@@ -176,16 +182,19 @@ async function processNoteResource(resource: ExtractedResource) {
 		resource.size = stats.size;
 
 		if (!resource.id) {
-			// If no resource ID is present, the resource ID is actually the MD5 of the data.
-			// This ID will match the "hash" attribute of the corresponding <en-media> tag.
-			// resourceId = md5(decodedData);
+			// If no resource ID is present, the resource ID is actually the MD5
+			// of the data. This ID will match the "hash" attribute of the
+			// corresponding <en-media> tag. resourceId = md5(decodedData);
 			resource.id = await md5File(resource.dataFilePath);
 		}
 
 		if (!resource.id || !resource.size) {
-			const debugTemp = { ...resource };
-			debugTemp.data = debugTemp.data ? `${debugTemp.data.substr(0, 32)}...` : debugTemp.data;
-			throw new Error(`This resource was not added because it has no ID or no content: ${JSON.stringify(debugTemp)}`);
+			// Don't throw an error because it happens semi-frequently,
+			// especially on notes that comes from the Evernote Web Clipper and
+			// we can't do anything about it. Previously we would throw the
+			// error "This resource was not added because it has no ID or no
+			// content".
+			await handleNoDataResource(resource, !resource.id);
 		}
 	}
 
@@ -201,7 +210,7 @@ async function saveNoteResources(note: ExtractedNote) {
 		delete (toSave as any).dataFilePath;
 		delete (toSave as any).dataEncoding;
 		delete (toSave as any).hasData;
-		toSave.file_extension = resource.filename ? fileExtension(resource.filename) : '';
+		toSave.file_extension = resource.filename ? safeFileExtension(fileExtension(resource.filename)) : '';
 
 		// ENEX resource filenames can contain slashes, which may confuse other
 		// parts of the app, which expect this `filename` field to be safe.
@@ -428,6 +437,15 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 			processingNotes = true;
 			stream.pause();
 
+			// Set the note ID so that we can create a title-to-id map, which
+			// will be needed to recreate the note links below.
+			const noteTitleToId: Record<string, string[]> = {};
+			for (const note of notes) {
+				if (!noteTitleToId[note.title]) noteTitleToId[note.title] = [];
+				note.id = uuid.create();
+				noteTitleToId[note.title].push(note.id);
+			}
+
 			while (notes.length) {
 				const note = notes.shift();
 
@@ -445,20 +463,40 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 						note.resources[i] = resource;
 					}
 
-					const body = importOptions.outputFormat === 'html' ?
+					// --------------------------------------------------------
+					// Convert the ENEX body to either Markdown or HTML
+					// --------------------------------------------------------
+
+					let body: string = importOptions.outputFormat === 'html' ?
 						await enexXmlToHtml(note.bodyXml, note.resources) :
 						await enexXmlToMd(note.bodyXml, note.resources, note.tasks);
 					delete note.bodyXml;
+
+					// --------------------------------------------------------
+					// Convert the Evernote note links to Joplin note links. If
+					// we don't find a matching note, or if there are multiple
+					// matching notes, we leave the Evernote links as is.
+					// --------------------------------------------------------
+
+					const links = importOptions.outputFormat === 'html' ?
+						extractUrlsFromHtml(body) :
+						extractUrlsFromMarkdown(body);
+
+					for (const link of links) {
+						const matchingNoteIds = noteTitleToId[link.title];
+						if (matchingNoteIds && matchingNoteIds.length === 1) {
+							body = body.replace(link.url, `:/${matchingNoteIds[0]}`);
+						}
+					}
+
+					// --------------------------------------------------------
+					// Finish setting up the note
+					// --------------------------------------------------------
 
 					note.markup_language = importOptions.outputFormat === 'html' ?
 						MarkupToHtml.MARKUP_LANGUAGE_HTML :
 						MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 
-					// console.info('*************************************************************************');
-					// console.info(body);
-					// console.info('*************************************************************************');
-
-					note.id = uuid.create();
 					note.parent_id = parentFolderId;
 					note.body = body;
 

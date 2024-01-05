@@ -83,8 +83,14 @@ function useHtml(css: string): string {
 					<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 					<title>${_('Note editor')}</title>
 					<style>
-						.cm-editor {
-							height: 100%;
+						/* For better scrolling on iOS (working scrollbar) we use external, rather than internal,
+						   scrolling. */
+						.cm-scroller {
+							overflow: none;
+
+							/* Ensure that the editor can be foused by clicking on the lower half of the screen.
+							   Don't use 100vh to prevent a scrollbar being present for empty notes. */
+							min-height: 80vh;
 						}
 
 						${css}
@@ -270,6 +276,7 @@ function NoteEditor(props: Props, ref: any) {
 
 	const setInitialSelectionJS = props.initialSelection ? `
 		cm.select(${props.initialSelection.start}, ${props.initialSelection.end});
+		cm.execCommand('scrollSelectionIntoView');
 	` : '';
 
 	const editorSettings: EditorSettings = {
@@ -331,6 +338,7 @@ function NoteEditor(props: Props, ref: any) {
 				const settings = ${JSON.stringify(editorSettings)};
 
 				cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, settings);
+
 				${setInitialSelectionJS}
 
 				window.onresize = () => {
@@ -456,8 +464,6 @@ function NoteEditor(props: Props, ref: any) {
 		readOnly={props.readOnly}
 	/>;
 
-	// - `scrollEnabled` prevents iOS from scrolling the document (has no effect on Android)
-	//    when an editable region (e.g. a the full-screen NoteEditor) is focused.
 	return (
 		<View
 			testID='note-editor-root'
@@ -482,7 +488,7 @@ function NoteEditor(props: Props, ref: any) {
 				<ExtendedWebView
 					webviewInstanceId='NoteEditor'
 					themeId={props.themeId}
-					scrollEnabled={false}
+					scrollEnabled={true}
 					ref={webviewRef}
 					html={html}
 					injectedJavaScript={injectedJavaScript}

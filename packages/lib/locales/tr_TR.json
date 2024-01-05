@@ -62,6 +62,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -111,7 +114,7 @@
 		"(ne görürsen onu alırsın: %s)"
 	],
 	"(You may disable this prompt in the options)": [
-		""
+		"(Ayarlardan bu istemi kapatabilirsiniz)"
 	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"-Kamera: fotoğraf çekimi ve fotoğrafın nota eklenebilmesi için."
@@ -234,10 +237,10 @@
 		"\"%s\" not defteri belirlenemedi. Lütfen kısa not defteri id'sini kullanın. \"ti\" a basarak kısa not defteri id'sini görebilirsiniz"
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
-		""
+		"Otomatik kaydedilmiş bir çizim bulundu. Not'a bunun kopyasını iliştirmek ister misiniz?"
 	],
 	"An error occurred: %s": [
-		""
+		"Bir hata oluştu: %s"
 	],
 	"An update is available, do you want to download it now?": [
 		"Güncelleme mevcut, şimdi indirmek ister misiniz?"
@@ -337,6 +340,9 @@
 	],
 	"Browse...": [
 		"Gözat..."
+	],
+	"Built in": [
+		""
 	],
 	"Bulleted List": [
 		"Maddeli liste"
@@ -697,7 +703,7 @@
 		"Özel TLS sertifikaları"
 	],
 	"Customise the note publishing banner": [
-		""
+		"Not yayımlama başlığını özelleştir"
 	],
 	"Cut": [
 		"Kes"
@@ -817,7 +823,7 @@
 		"Hedef biçimi: %s"
 	],
 	"Detailed": [
-		""
+		"Detaylı"
 	],
 	"Directory": [
 		"Dizin"
@@ -888,6 +894,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Şifrenizi kaybetmeyin, verilerinizin şifresini çözmenin \"*tek yolu* bu şifreyi girmek olacaktır. Şifrelemeyi etkinleştirmek için lütfen parolanızı aşağıya girin."
 	],
+	"Donate, website": [
+		"Bağış yap, web sitesi"
+	],
 	"Done": [
 		"Tamam"
 	],
@@ -919,10 +928,10 @@
 		"Dracula"
 	],
 	"Draw picture": [
-		""
+		"Çizim yap"
 	],
 	"Drawing": [
-		""
+		"Çizim"
 	],
 	"Drop notes or files here": [
 		"Not veya dosyaları buraya sürükleyin"
@@ -1002,6 +1011,9 @@
 	"Email to Note": [
 		"E-postadan Nota"
 	],
+	"Email To Note, login information": [
+		"Not'u e-posta'dan gönder, giriş bilgileri"
+	],
 	"Emails": [
 		"E-posta"
 	],
@@ -1058,6 +1070,9 @@
 	],
 	"Enable note history": [
 		"Not tarihçesini etkinleştir"
+	],
+	"Enable optical character recognition (OCR)": [
+		""
 	],
 	"Enable PDF viewer": [
 		"PDF görüntüleyiciyi aktifleştir"
@@ -1175,6 +1190,9 @@
 	],
 	"Export profile": [
 		"Profili dışarı aktar"
+	],
+	"Export your data": [
+		"Verini dışarı aktar"
 	],
 	"Exported successfully!": [
 		"Başarıyla dışa aktarıldı!"
@@ -1298,7 +1316,7 @@
 		"Bağlantılar oluşturuluyor..."
 	],
 	"Geolocation, spellcheck, editor toolbar, image resize": [
-		""
+		"Yerel konum, dil doğrulaması, düzenleyici araç çubuğu, resim yeniden boyutlandır"
 	],
 	"Get it now:": [
 		"Hemen al:"
@@ -1367,7 +1385,7 @@
 		"HTML Dizini"
 	],
 	"HTML document": [
-		""
+		"HTML dökümanı"
 	],
 	"HTML File": [
 		"HTML Dosyası"
@@ -1573,6 +1591,9 @@
 	"Language": [
 		"Dil"
 	],
+	"Language, date format": [
+		"Dil, tarih biçimi"
+	],
 	"Last error: %s": [
 		"Son hata: %s"
 	],
@@ -1656,7 +1677,7 @@
 		"Çıkış Yap"
 	],
 	"Logs, profiles, sync status": [
-		""
+		"Loglar, profiller, senkronizasyon durumu"
 	],
 	"Make a donation": [
 		"Bağış yapın"
@@ -1719,7 +1740,7 @@
 		"Maks. Toplam Boyut"
 	],
 	"Media player, math, diagrams, table of contents": [
-		""
+		"Medya oynatıcı, matematik, diyagramlar, içindekiler"
 	],
 	"Missing keys": [
 		"Eksik anahtarar"
@@ -1767,7 +1788,7 @@
 		"H"
 	],
 	"Never resize": [
-		""
+		"Asla yeniden boyutlandırma"
 	],
 	"New note": [
 		"Yeni not"
@@ -1989,7 +2010,7 @@
 		"Aç..."
 	],
 	"Opening section %s": [
-		""
+		"Şu bölüm açılıyor: %s"
 	],
 	"Operation cancelled": [
 		"İşlem iptal edildi"
@@ -2280,13 +2301,16 @@
 		"Ana parolayı sıfırla"
 	],
 	"Resize large images:": [
-		""
+		"Büyük resimleri yeniden boyutlandır:"
 	],
 	"Resources: %d.": [
 		"Kaynaklar: %d."
 	],
 	"Restart and upgrade": [
 		"Yeniden başlat ve güncelle"
+	],
+	"Restart in safe mode": [
+		"Güvenli modda yeniden başlat"
 	],
 	"Restart now": [
 		"Şimdi yeniden başlat"
@@ -2402,6 +2426,9 @@
 	"Select parent notebook": [
 		"Ana not defterini seç"
 	],
+	"Send bug report": [
+		"Hata raporu gönder"
+	],
 	"Server is already running on port %d": [
 		"Sunucu zaten %d portunda çalışıyor"
 	],
@@ -2442,7 +2469,7 @@
 		"No deferini paylaş..."
 	],
 	"Share permissions": [
-		""
+		"Paylaşım izinleri"
 	],
 	"Sharing notebook...": [
 		"Not paylaşılıyor..."
@@ -2484,13 +2511,13 @@
 		"Kenar çubuğunu göster/gizle"
 	],
 	"Shrink large images before adding them to notes.": [
-		""
+		"Büyük resimleri notlara eklemeden önce yeniden boyutlandırır."
 	],
 	"Side menu closed": [
 		"Yan menü kapalı"
 	],
 	"Side menu opened": [
-		""
+		"Yan menü açık"
 	],
 	"Sidebar": [
 		"Kenar çubuğu"
@@ -2665,6 +2692,9 @@
 	],
 	"Sync your notes": [
 		"Notları senkron et"
+	],
+	"Sync, encryption, proxy": [
+		"Senkronizasyon, şifreleme, proxy"
 	],
 	"Synchronisation": [
 		"Senkronizasyon"
@@ -2843,6 +2873,9 @@
 	"Theme": [
 		"Tema"
 	],
+	"Themes, editor font": [
+		"Temalar, editör yazı tipi"
+	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"Şu anda not yok. (+) butonuna tıklayarak bir tane oluşturun."
 	],
@@ -2871,7 +2904,7 @@
 		"Bu eklentiler Markdown tipi gösterimi ek özelliklerle iyileştirir. Bu özellikleri kullanırken unutulmamalıdır ki bu özellikler standart Markdown söz dizimine dahil değildir, ve de bunların çoğu sadece Joplin içerisinde çalışacaktır. Buna ek olarak, bu eklentilerin bazıları zengin metin editörü ile *uyumlu değildir*. Eğer zengin metin editörünüzde bu eklentiyi kullanan bir notu açmaya çalışırsanız eklentinin biçimlendirmesini kaybedersiniz. Zengin metin editörünün hangi eklentileri desteklediği altta belirtilmiştir."
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
-		""
+		"Bu başka bir kullanıcının sizinle not defterini paylaşabilmesini sağlar, ve de ikinizin de notun içeriğini düzenleyip değiştirebilmenizi sağlar. Lakin bu özellik eğer \"%s\" özelliği yoksa bu notları başka biriyle paylaşamazsınız."
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Bu ek henüz indirilmedi veya şifresi çözülmedi"
@@ -2992,6 +3025,9 @@
 	],
 	"Toggle external editing": [
 		"Dış düzenlemeyi aç/kapat"
+	],
+	"Toggle note history, keep notes for": [
+		"Not geçmişi özelliğinin durumunu değiştirip, bu not geçmişlerini şu kadar süre tut"
 	],
 	"Toggle note list": [
 		"Not listesini aç/kapat"
@@ -3227,8 +3263,11 @@
 	"When creating a new to-do:": [
 		"Yeni bir yapılacak oluşturulurken:"
 	],
-	"Window unresponsive.": [
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
+	],
+	"Window unresponsive.": [
+		"Pencere tepkisiz, cevap vermiyor."
 	],
 	"Words": [
 		"Kelime"
