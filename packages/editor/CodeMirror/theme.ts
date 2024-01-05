@@ -84,23 +84,16 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 		fontFamily: theme.fontFamily,
 	};
 
-	// Apply maximum width styles to individual lines.
-	const lineCenteringStyles = theme.contentMaxWidth ? {
-		maxWidth: theme.contentMaxWidth,
-
-		// Center
-		marginLeft: 'auto',
-		marginRight: 'auto',
-	} : undefined;
-
 	const codeMirrorTheme = EditorView.theme({
 		'&': baseGlobalStyle,
 
 		// These must be !important or more specific than CodeMirror's built-ins
-		'.cm-content': {
+		'& .cm-content': {
 			fontFamily: theme.fontFamily,
 			...baseContentStyle,
 			paddingBottom: theme.isDesktop ? '400px' : undefined,
+			marginLeft: `${theme.marginLeft}px`,
+			marginRight: `${theme.marginRight}px`,
 		},
 		'&.cm-focused .cm-cursor': baseCursorStyle,
 
@@ -176,12 +169,14 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 		'& .cm-tableHeader, & .cm-tableRow, & .cm-tableDelimiter': monospaceStyle,
 		'& .cm-taskMarker': monospaceStyle,
 
-		'& .cm-line': {
-			...lineCenteringStyles,
+		// Apply maximum width styles to individual lines.
+		'& .cm-line': theme.contentMaxWidth ? {
+			maxWidth: theme.contentMaxWidth,
 
-			paddingLeft: theme.marginLeft,
-			paddingRight: theme.marginRight,
-		},
+			// Center
+			marginLeft: 'auto',
+			marginRight: 'auto',
+		} : undefined,
 
 		// Override the default URL style when the URL is within a link
 		'& .tok-url.tok-link, & .tok-link.tok-meta, & .tok-link.tok-string': {
