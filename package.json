@@ -13,7 +13,7 @@
   },
   "scripts": {
     "buildApiDoc": "yarn workspace joplin start apidoc ../../readme/api/references/rest_api.md",
-    "buildCommandIndex": "node packages/tools/gulp/tasks/buildCommandIndexRun.js",
+    "buildScriptIndexes": "node packages/tools/gulp/tasks/buildScriptIndexesRun.js",
     "buildParallel": "yarn workspaces foreach --verbose --interlaced --parallel --jobs 2 --topological run build && yarn run tsc",
     "buildPluginDoc": "cd packages/generate-plugin-doc && yarn run buildPluginDoc_",
     "buildSequential": "yarn workspaces foreach --verbose --interlaced --topological run build && yarn run tsc",

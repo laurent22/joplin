@@ -12,6 +12,7 @@ export async function htmlToMarkdown(markupLanguage: number, html: string, origi
 		newBody = htmlToMd.parse(html, {
 			preserveImageTagsWithSize: true,
 			preserveNestedTables: true,
+			preserveColorStyles: true,
 		});
 		newBody = await Note.replaceResourceExternalToInternalLinks(newBody, { useAbsolutePaths: true });
 	} else {

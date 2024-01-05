@@ -377,12 +377,19 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			.tox .tox-dialog,
 			.tox textarea,
 			.tox input,
+			.tox .tox-menu,
 			.tox .tox-dialog__footer {
 				background-color: ${theme.backgroundColor} !important;
 			}
 
 			.tox .tox-dialog__body-content {
 				color: ${theme.color};
+			}
+
+			.tox .tox-menu {
+				/* Ensures that popover menus (the color swatch menu) has a visible border
+				   even in dark mode. */
+				border: 1px solid rgba(140, 140, 140, 0.3);
 			}
 
 			/*
@@ -406,6 +413,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 			.tox .tox-tbtn,
 			.tox .tox-tbtn svg,
+			.tox .tox-menu button > svg,
+			.tox .tox-split-button,
 			.tox .tox-dialog__header,
 			.tox .tox-button--icon .tox-icon svg,
 			.tox .tox-button.tox-button--icon .tox-icon svg,
@@ -427,7 +436,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 
 			.tox .tox-tbtn--enabled,
-			.tox .tox-tbtn--enabled:hover {
+			.tox .tox-tbtn--enabled:hover,
+			.tox .tox-menu button:hover,
+			.tox .tox-split-button {
 				background-color: ${theme.selectedColor};
 			}
 
@@ -435,11 +446,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				background-color: ${theme.backgroundColor} !important;
 			}
 			
-			.tox .tox-tbtn:focus {
+			.tox .tox-tbtn:focus,
+			.tox .tox-split-button:focus {
 				background-color: ${theme.backgroundColor3}
 			}
 			
-			.tox .tox-tbtn:hover {
+			.tox .tox-tbtn:hover,
+			.tox .tox-menu button:hover > svg {
 				color: ${theme.colorHover3} !important;
 				fill: ${theme.colorHover3} !important;
 				background-color: ${theme.backgroundColorHover3}
@@ -468,6 +481,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			.tox .tox-toolbar__overflow {
 				background: none;
 				background-color: ${theme.backgroundColor3} !important;
+			}
+
+			.tox .tox-split-button:hover {
+				box-shadow: none;
 			}
 
 			.tox-tinymce,
@@ -613,6 +630,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					joplinSub: { inline: 'sub', remove: 'all' },
 					joplinSup: { inline: 'sup', remove: 'all' },
 					code: { inline: 'code', remove: 'all', attributes: { spellcheck: false } },
+					forecolor: { inline: 'span', styles: { color: '%value' } },
 				},
 				setup: (editor: Editor) => {
 					editor.addCommand('joplinAttach', () => {
@@ -1036,7 +1054,15 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			//
 			// Any maybe others, so to catch them all we only check the prefix
 
-			const changeCommands = ['mceBlockQuote', 'ToggleJoplinChecklistItem', 'Bold', 'Italic', 'Underline', 'Paragraph'];
+			const changeCommands = [
+				'mceBlockQuote',
+				'ToggleJoplinChecklistItem',
+				'Bold',
+				'Italic',
+				'Underline',
+				'Paragraph',
+				'mceApplyTextcolor',
+			];
 
 			if (
 				changeCommands.includes(c) ||
