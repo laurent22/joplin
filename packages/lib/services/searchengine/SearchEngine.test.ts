@@ -1,64 +1,61 @@
-/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars, prefer-const */
+import { setupDatabaseAndSynchronizer, db, sleep, switchClient, msleep } from '../../testing/test-utils';
+import SearchEngine from '../../services/searchengine/SearchEngine';
+import Note from '../../models/Note';
+import Folder from '../../models/Folder';
+import ItemChange from '../../models/ItemChange';
+import Setting from '../../models/Setting';
 
-const { setupDatabaseAndSynchronizer, db, sleep, switchClient, msleep } = require('../../testing/test-utils.js');
-const SearchEngine = require('../../services/searchengine/SearchEngine').default;
-const Note = require('../../models/Note').default;
-const Folder = require('../../models/Folder').default;
-const ItemChange = require('../../models/ItemChange').default;
-const Setting = require('../../models/Setting').default;
+let engine: SearchEngine = null;
 
-let engine = null;
+// const IDF = (N:number, n:number) => Math.max(Math.log((N - n + 0.5) / (n + 0.5)), 0);
 
+// const frequency = (word:string, string:string) => {
+// 	const re = new RegExp(`\\b(${word})\\b`, 'g');
+// 	return (string.match(re) || []).length;
+// };
 
-const IDF = (N, n) => Math.max(Math.log((N - n + 0.5) / (n + 0.5)), 0);
+// const calculateScore = (searchString, notes) => {
+// 	const K1 = 1.2;
+// 	const B = 0.75;
 
-const frequency = (word, string) => {
-	const re = new RegExp(`\\b(${word})\\b`, 'g');
-	return (string.match(re) || []).length;
-};
+// 	const freqTitle = notes.map(note => frequency(searchString, note.title));
+// 	const notesWithWord = freqTitle.filter(count => count !== 0).length;
+// 	const numTokens = notes.map(note => note.title.split(' ').length);
+// 	const avgTokens = Math.round(numTokens.reduce((a, b) => a + b, 0) / notes.length);
 
-const calculateScore = (searchString, notes) => {
-	const K1 = 1.2;
-	const B = 0.75;
+// 	const msSinceEpoch = Math.round(new Date().getTime());
+// 	const msPerDay = 86400000;
+// 	const weightForDaysSinceLastUpdate = (row) => {
+// 		// BM25 weights typically range 0-10, and last updated date should weight similarly, though prioritizing recency logarithmically.
+// 		// An alpha of 200 ensures matches in the last week will show up front (11.59) and often so for matches within 2 weeks (5.99),
+// 		// but is much less of a factor at 30 days (2.84) or very little after 90 days (0.95), focusing mostly on content at that point.
+// 		if (!row.user_updated_time) {
+// 			return 0;
+// 		}
 
-	const freqTitle = notes.map(note => frequency(searchString, note.title));
-	const notesWithWord = freqTitle.filter(count => count !== 0).length;
-	const numTokens = notes.map(note => note.title.split(' ').length);
-	const avgTokens = Math.round(numTokens.reduce((a, b) => a + b, 0) / notes.length);
+// 		const alpha = 200;
+// 		const daysSinceLastUpdate = (msSinceEpoch - row.user_updated_time) / msPerDay;
+// 		return alpha * Math.log(1 + 1 / Math.max(daysSinceLastUpdate, 0.5));
+// 	};
 
-	const msSinceEpoch = Math.round(new Date().getTime());
-	const msPerDay = 86400000;
-	const weightForDaysSinceLastUpdate = (row) => {
-		// BM25 weights typically range 0-10, and last updated date should weight similarly, though prioritizing recency logarithmically.
-		// An alpha of 200 ensures matches in the last week will show up front (11.59) and often so for matches within 2 weeks (5.99),
-		// but is much less of a factor at 30 days (2.84) or very little after 90 days (0.95), focusing mostly on content at that point.
-		if (!row.user_updated_time) {
-			return 0;
-		}
+// 	let titleBM25WeightedByLastUpdate = new Array(notes.length).fill(-1);
+// 	if (avgTokens !== 0) {
+// 		for (let i = 0; i < notes.length; i++) {
+// 			titleBM25WeightedByLastUpdate[i] = IDF(notes.length, notesWithWord) * ((freqTitle[i] * (K1 + 1)) / (freqTitle[i] + K1 * (1 - B + B * (numTokens[i] / avgTokens))));
+// 			titleBM25WeightedByLastUpdate[i] += weightForDaysSinceLastUpdate(notes[i]);
+// 		}
+// 	}
 
-		const alpha = 200;
-		const daysSinceLastUpdate = (msSinceEpoch - row.user_updated_time) / msPerDay;
-		return alpha * Math.log(1 + 1 / Math.max(daysSinceLastUpdate, 0.5));
-	};
+// 	const scores = [];
+// 	for (let i = 0; i < notes.length; i++) {
+// 		if (freqTitle[i]) scores.push(titleBM25WeightedByLastUpdate[i]);
+// 	}
 
-	let titleBM25WeightedByLastUpdate = new Array(notes.length).fill(-1);
-	if (avgTokens !== 0) {
-		for (let i = 0; i < notes.length; i++) {
-			titleBM25WeightedByLastUpdate[i] = IDF(notes.length, notesWithWord) * ((freqTitle[i] * (K1 + 1)) / (freqTitle[i] + K1 * (1 - B + B * (numTokens[i] / avgTokens))));
-			titleBM25WeightedByLastUpdate[i] += weightForDaysSinceLastUpdate(notes[i]);
-		}
-	}
+// 	scores.sort().reverse();
+// 	return scores;
+// };
 
-	const scores = [];
-	for (let i = 0; i < notes.length; i++) {
-		if (freqTitle[i]) scores.push(titleBM25WeightedByLastUpdate[i]);
-	}
-
-	scores.sort().reverse();
-	return scores;
-};
-
-describe('services_SearchEngine', () => {
+describe('services/SearchEngine', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -69,10 +66,10 @@ describe('services_SearchEngine', () => {
 	});
 
 	it('should keep the content and FTS table in sync', (async () => {
-		let rows, n1, n2, n3;
+		let rows;
 
-		n1 = await Note.save({ title: 'a' });
-		n2 = await Note.save({ title: 'b' });
+		const n1 = await Note.save({ title: 'a' });
+		const n2 = await Note.save({ title: 'b' });
 		await engine.syncTables();
 		rows = await engine.search('a');
 		expect(rows.length).toBe(1);
@@ -104,8 +101,8 @@ describe('services_SearchEngine', () => {
 	}));
 
 	it('should, after initial indexing, save the last change ID', (async () => {
-		const n1 = await Note.save({ title: 'abcd efgh' }); // 3
-		const n2 = await Note.save({ title: 'abcd aaaaa abcd abcd' }); // 1
+		await Note.save({ title: 'abcd efgh' }); // 3
+		await Note.save({ title: 'abcd aaaaa abcd abcd' }); // 1
 
 		expect(Setting.value('searchEngine.initialIndexingDone')).toBe(false);
 
@@ -131,11 +128,11 @@ describe('services_SearchEngine', () => {
 		const n1 = await Note.save({ title: 'abcd efgh' }); // 3
 		const n2 = await Note.save({ title: 'abcd efgh abcd abcd' }); // 1
 		const n3 = await Note.save({ title: 'abcd aaaaa bbbb eeee abcd' }); // 2
-		const n4 = await Note.save({ title: 'xyz xyz' });
-		const n5 = await Note.save({ title: 'xyz xyz xyz xyz' });
-		const n6 = await Note.save({ title: 'xyz xyz xyz xyz xyz xyz' });
-		const n7 = await Note.save({ title: 'xyz xyz xyz xyz xyz xyz' });
-		const n8 = await Note.save({ title: 'xyz xyz xyz xyz xyz xyz xyz xyz' });
+		await Note.save({ title: 'xyz xyz' });
+		await Note.save({ title: 'xyz xyz xyz xyz' });
+		await Note.save({ title: 'xyz xyz xyz xyz xyz xyz' });
+		await Note.save({ title: 'xyz xyz xyz xyz xyz xyz' });
+		await Note.save({ title: 'xyz xyz xyz xyz xyz xyz xyz xyz' });
 
 		await engine.syncTables();
 		let rows = await engine.search('abcd');
@@ -256,7 +253,7 @@ describe('services_SearchEngine', () => {
 
 		await engine.syncTables();
 
-		const testCases = [
+		const testCases: [string, string[], string[], string[]][] = [
 			['abcd', ['title', 'body'], ['title'], ['body']],
 			['efgh', ['title'], [], ['title']],
 		];
@@ -267,7 +264,7 @@ describe('services_SearchEngine', () => {
 			for (let i = 0; i < notes.length; i++) {
 				const row = rows.find(row => row.id === notes[i].id);
 				const actual = row ? row.fields.sort().join(',') : '';
-				const expected = testCase[i + 1].sort().join(',');
+				const expected = (testCase[i + 1] as string[]).sort().join(',');
 				expect(expected).toBe(actual);
 			}
 		}
@@ -328,11 +325,11 @@ describe('services_SearchEngine', () => {
 	it('should supports various query types', (async () => {
 		let rows;
 
-		const n1 = await Note.save({ title: 'abcd efgh ijkl', body: 'aaaa bbbb' });
-		const n2 = await Note.save({ title: 'iiii efgh bbbb', body: 'aaaa bbbb' });
-		const n3 = await Note.save({ title: 'Агентство Рейтер' });
-		const n4 = await Note.save({ title: 'Dog' });
-		const n5 = await Note.save({ title: 'СООБЩИЛО' });
+		await Note.save({ title: 'abcd efgh ijkl', body: 'aaaa bbbb' });
+		await Note.save({ title: 'iiii efgh bbbb', body: 'aaaa bbbb' });
+		await Note.save({ title: 'Агентство Рейтер' });
+		await Note.save({ title: 'Dog' });
+		await Note.save({ title: 'СООБЩИЛО' });
 
 		await engine.syncTables();
 
@@ -377,8 +374,7 @@ describe('services_SearchEngine', () => {
 	}));
 
 	it('should support queries with or without accents', (async () => {
-		let rows;
-		const n1 = await Note.save({ title: 'père noël' });
+		await Note.save({ title: 'père noël' });
 
 		await engine.syncTables();
 
@@ -389,8 +385,7 @@ describe('services_SearchEngine', () => {
 	}));
 
 	it('should support queries with Chinese characters', (async () => {
-		let rows;
-		const n1 = await Note.save({ title: '我是法国人', body: '中文测试' });
+		await Note.save({ title: '我是法国人', body: '中文测试' });
 
 		await engine.syncTables();
 
@@ -404,8 +399,7 @@ describe('services_SearchEngine', () => {
 	}));
 
 	it('should support queries with Japanese characters', (async () => {
-		let rows;
-		const n1 = await Note.save({ title: '私は日本語を話すことができません', body: 'テスト' });
+		await Note.save({ title: '私は日本語を話すことができません', body: 'テスト' });
 
 		await engine.syncTables();
 
@@ -417,8 +411,7 @@ describe('services_SearchEngine', () => {
 	}));
 
 	it('should support queries with Korean characters', (async () => {
-		let rows;
-		const n1 = await Note.save({ title: '이것은 한국말이다' });
+		await Note.save({ title: '이것은 한국말이다' });
 
 		await engine.syncTables();
 
@@ -428,8 +421,7 @@ describe('services_SearchEngine', () => {
 	}));
 
 	it('should support queries with Thai characters', (async () => {
-		let rows;
-		const n1 = await Note.save({ title: 'นี่คือคนไทย' });
+		await Note.save({ title: 'นี่คือคนไทย' });
 
 		await engine.syncTables();
 
@@ -439,9 +431,7 @@ describe('services_SearchEngine', () => {
 	}));
 
 	it('should parse normal query strings', (async () => {
-		let rows;
-
-		const testCases = [
+		const testCases: [string, any][] = [
 			['abcd efgh', { _: ['abcd', 'efgh'] }],
 			['abcd   efgh', { _: ['abcd', 'efgh'] }],
 			['title:abcd efgh', { _: ['efgh'], title: ['abcd'] }],
@@ -457,13 +447,13 @@ describe('services_SearchEngine', () => {
 			const expected = t[1];
 			const actual = await engine.parseQuery(input);
 
-			const _Values = actual.terms._ ? actual.terms._.map(v => v.value) : undefined;
-			const titleValues = actual.terms.title ? actual.terms.title.map(v => v.value) : undefined;
-			const bodyValues = actual.terms.body ? actual.terms.body.map(v => v.value) : undefined;
+			const _Values = actual.terms._ ? actual.terms._.map((v: any) => v.value) : undefined;
+			const titleValues = actual.terms.title ? actual.terms.title.map((v: any) => v.value) : undefined;
+			const bodyValues = actual.terms.body ? actual.terms.body.map((v: any) => v.value) : undefined;
 
-			expect(JSON.stringify(_Values)).toBe(JSON.stringify(expected._), `Test case (_) ${i}`);
-			expect(JSON.stringify(titleValues)).toBe(JSON.stringify(expected.title), `Test case (title) ${i}`);
-			expect(JSON.stringify(bodyValues)).toBe(JSON.stringify(expected.body), `Test case (body) ${i}`);
+			expect(JSON.stringify(_Values)).toBe(JSON.stringify(expected._));
+			expect(JSON.stringify(titleValues)).toBe(JSON.stringify(expected.title));
+			expect(JSON.stringify(bodyValues)).toBe(JSON.stringify(expected.body));
 		}
 	}));
 
@@ -495,8 +485,8 @@ describe('services_SearchEngine', () => {
 	}));
 
 	it('should allow using basic search', (async () => {
-		const n1 = await Note.save({ title: '- [ ] abcd' });
-		const n2 = await Note.save({ title: '[ ] abcd' });
+		await Note.save({ title: '- [ ] abcd' });
+		await Note.save({ title: '[ ] abcd' });
 
 		await engine.syncTables();
 
@@ -519,8 +509,8 @@ describe('services_SearchEngine', () => {
 	}));
 
 	it('should automatically add wildcards', (async () => {
-		const n1 = await Note.save({ title: 'hello1' });
-		const n2 = await Note.save({ title: 'hello2' });
+		await Note.save({ title: 'hello1' });
+		await Note.save({ title: 'hello2' });
 
 		await engine.syncTables();
 
