@@ -8,14 +8,14 @@ import { reg } from '../registry';
 type Events = 'LINK_USED' | 'COMPLETED';
 
 type IntitialValues = {
-	style: 'textStyle' | 'h2Style';
+	className: 'text' | 'bold';
 	message: string;
 	next: Events;
 	active: Events | 'INITIAL';
 };
 
 export const intitialValues: IntitialValues = {
-	style: 'textStyle',
+	className: 'text',
 	message: _('Waiting for authorisation...'),
 	next: 'LINK_USED',
 	active: 'INITIAL',
@@ -25,7 +25,7 @@ export const reducer: Reducer<IntitialValues, Events> = (state: IntitialValues, 
 	switch (action) {
 	case 'LINK_USED': {
 		return {
-			style: 'textStyle',
+			className: 'text',
 			message: _('If you have already authorised, please wait for the application to sync to Joplin Cloud.'),
 			next: 'COMPLETED',
 			active: 'LINK_USED',
@@ -33,7 +33,7 @@ export const reducer: Reducer<IntitialValues, Events> = (state: IntitialValues, 
 	}
 	case 'COMPLETED': {
 		return {
-			style: 'h2Style',
+			className: 'bold',
 			message: _('You are logged in into Joplin Cloud, you can leave this screen now.'),
 			active: 'COMPLETED',
 			next: 'COMPLETED',

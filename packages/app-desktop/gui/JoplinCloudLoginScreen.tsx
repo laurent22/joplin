@@ -1,7 +1,6 @@
-import { CSSProperties, useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
-import { AppState } from '../app.reducer';
 import { clipboard } from 'electron';
 import Button, { ButtonLevel } from './Button/Button';
 const bridge = require('@electron/remote').require('./bridge').default;
@@ -11,33 +10,19 @@ import { reducer, intitialValues, generateLoginWithUniqueLoginCode, checkIfLogin
 import Setting from '@joplin/lib/models/Setting';
 
 const { connect } = require('react-redux');
-const { themeStyle } = require('@joplin/lib/theme');
 
 const loginUrl = `${Setting.value('sync.10.website')}/login`;
 const applicationsUrl = `${Setting.value('sync.10.path')}/api/applications`;
 
 interface Props {
-	themeId: string;
-	style: any;
 	dispatch: Dispatch;
 }
 
-const styles: Record<string, CSSProperties> = {
-	page: { display: 'flex', flexDirection: 'column', height: '100%' },
-	buttonsContainer: { marginBottom: '2em', display: 'flex' },
-};
-
 const JoplinCloudScreenComponent = (props: Props) => {
 
-	const style = props.style;
-	const theme = themeStyle(props.themeId);
 	const [uniqueLoginCode, setUniqueLoginCode] = useState(undefined);
 	const [intervalIdentifier, setIntervalIdentifier] = useState(undefined);
 	const [state, dispatch] = useReducer(reducer, intitialValues);
-
-	const containerStyle = { ...theme.containerStyle, padding: theme.configScreenPadding,
-		height: style.height - theme.margin * 2,
-		flex: 1 };
 
 	const periodicallyCheckForCredentials = () => {
 		if (intervalIdentifier) return;
@@ -84,16 +69,15 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	}, [intervalIdentifier]);
 
 	return (
-		<div style={styles.page}>
-			<div style={containerStyle}>
-				<p style={theme.textStyle}>{_('To allow Joplin to synchronise with Joplin Cloud, open this URL in your browser to authorise the application:')}</p>
-				<div style={styles.buttonsContainer}>
+		<div className="login-page">
+			<div className="page-container">
+				<p className="text">{_('To allow Joplin to synchronise with Joplin Cloud, open this URL in your browser to authorise the application:')}</p>
+				<div className="buttons-container">
 					<Button
 						onClick={onAuthoriseClicked}
 						title={_('Authorise')}
 						iconName='fa fa-external-link-alt'
-						level={ButtonLevel.Recommended}
-						style={{ marginRight: '2em' }}
+						level={ButtonLevel.Primary}
 					/>
 					<Button
 						onClick={onCopyToClipboardClicked}
@@ -103,7 +87,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 					/>
 
 				</div>
-				<p style={theme[state.style]}>{state.message}</p>
+				<p className={state.className}>{state.message}</p>
 				{state.active === 'LINK_USED' ? <div id="loading-animation" /> : null}
 			</div>
 			<ButtonBar onCancelClick={() => props.dispatch({ type: 'NAV_BACK' })} />
@@ -111,11 +95,4 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	);
 };
 
-const mapStateToProps = (state: AppState) => {
-	return {
-		themeId: state.settings.theme,
-		style: state,
-	};
-};
-
-export default connect(mapStateToProps)(JoplinCloudScreenComponent);
+export default connect()(JoplinCloudScreenComponent);
