@@ -38,7 +38,6 @@ interface Props {
 	initialText: string;
 	initialSelection?: SelectionRange;
 	style: ViewStyle;
-	contentStyle?: ViewStyle;
 	toolbarEnabled: boolean;
 	readOnly: boolean;
 	plugins: PluginStates;
@@ -491,7 +490,6 @@ function NoteEditor(props: Props, ref: any) {
 				flexGrow: 1,
 				flexShrink: 0,
 				minHeight: '30%',
-				...props.contentStyle,
 			}}>
 				<ExtendedWebView
 					webviewInstanceId='NoteEditor'

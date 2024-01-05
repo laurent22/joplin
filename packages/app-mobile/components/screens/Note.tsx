@@ -1542,13 +1542,10 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 					plugins={this.props.plugins}
 					style={{
 						...editorStyle,
+
+						// Allow the editor to set its own padding
 						paddingLeft: 0,
 						paddingRight: 0,
-					}}
-					contentStyle={{
-						// Apply padding to the editor's content, but not the toolbar.
-						paddingLeft: editorStyle.paddingLeft,
-						paddingRight: editorStyle.paddingRight,
 					}}
 				/>;
 			}

@@ -115,6 +115,8 @@ export interface EditorTheme extends Theme {
 	isDesktop?: boolean;
 	monospaceFont?: string;
 	contentMaxWidth?: number;
+	marginLeft?: number;
+	marginRight?: number;
 }
 
 export interface EditorSettings {

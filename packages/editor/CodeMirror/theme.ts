@@ -84,6 +84,15 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 		fontFamily: theme.fontFamily,
 	};
 
+	// Apply maximum width styles to individual lines.
+	const lineCenteringStyles = theme.contentMaxWidth ? {
+		maxWidth: theme.contentMaxWidth,
+
+		// Center
+		marginLeft: 'auto',
+		marginRight: 'auto',
+	} : undefined;
+
 	const codeMirrorTheme = EditorView.theme({
 		'&': baseGlobalStyle,
 
@@ -167,14 +176,12 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 		'& .cm-tableHeader, & .cm-tableRow, & .cm-tableDelimiter': monospaceStyle,
 		'& .cm-taskMarker': monospaceStyle,
 
-		// Applies maximum width styles to individual lines.
-		'& .cm-line': theme.contentMaxWidth ? {
-			maxWidth: theme.contentMaxWidth,
+		'& .cm-line': {
+			...lineCenteringStyles,
 
-			// Center
-			marginLeft: 'auto',
-			marginRight: 'auto',
-		} : undefined,
+			paddingLeft: theme.marginLeft,
+			paddingRight: theme.marginRight,
+		},
 
 		// Override the default URL style when the URL is within a link
 		'& .tok-url.tok-link, & .tok-link.tok-meta, & .tok-link.tok-string': {
