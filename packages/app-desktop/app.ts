@@ -22,7 +22,6 @@ import stateToWhenClauseContext from './services/commands/stateToWhenClauseConte
 import ResourceService from '@joplin/lib/services/ResourceService';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 import appReducer, { createAppDefaultState } from './app.reducer';
-const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
 import Folder from '@joplin/lib/models/Folder';
 import Tag from '@joplin/lib/models/Tag';
 import { reg } from '@joplin/lib/registry';
@@ -72,6 +71,7 @@ import OcrService from '@joplin/lib/services/ocr/OcrService';
 import OcrDriverTesseract from '@joplin/lib/services/ocr/drivers/OcrDriverTesseract';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { PackageInfo } from '@joplin/lib/versionInfo';
+import { refreshFolders } from '@joplin/lib/folders-screen-utils';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -482,7 +482,7 @@ class Application extends BaseApplication {
 		// manually call dispatchUpdateAll() to force an update.
 		Setting.dispatchUpdateAll();
 
-		await FoldersScreenUtils.refreshFolders();
+		await refreshFolders((action: any) => this.dispatch(action));
 
 		const tags = await Tag.allWithNotes();
 

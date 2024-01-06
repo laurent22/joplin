@@ -296,7 +296,7 @@ export default class ReportService {
 		section = { title: _('Folders'), body: [] };
 
 		const folders = await Folder.all({
-			order: { by: 'title', dir: 'ASC' },
+			order: [{ by: 'title', dir: 'ASC' }],
 			caseInsensitive: true,
 		});
 

@@ -654,6 +654,7 @@ packages/lib/file-api-driver-memory.js
 packages/lib/file-api-driver.test.js
 packages/lib/file-api.test.js
 packages/lib/file-api.js
+packages/lib/folders-screen-utils.js
 packages/lib/fs-driver-base.js
 packages/lib/fs-driver-node.js
 packages/lib/fsDriver.test.js
