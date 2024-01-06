@@ -1,5 +1,12 @@
 # Joplin iOS Changelog
 
+## [ios-v12.14.2](https://github.com/laurent22/joplin/releases/tag/ios-v12.14.2) - 2024-01-06T12:46:08Z
+
+- Improved: Fix table-of-contents links to headings with duplicate content (#9610) (#9594 by Henry Heino)
+- Improved: Improve sync by reducing how often note list is sorted (f95ee68)
+- Improved: Render mermaid diagrams in dark mode when Joplin is in dark mode (#9631) (#3201 by Henry Heino)
+- Improved: Updated packages deprecated-react-native-prop-types (v5), react-native-get-random-values (v1.10.0), react-native-paper (v5.11.4)
+
 ## [ios-v12.14.1](https://github.com/laurent22/joplin/releases/tag/ios-v12.14.1) - 2023-12-29T22:23:50Z
 
 - Improved: CodeMirror 6 markdown editor: Support highlighting more languages (#9563) (#9562 by Henry Heino)
