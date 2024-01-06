@@ -178,7 +178,7 @@ msgstr "%s = %s (%s)"
 msgid ""
 "%s is not optimised for synchronising many small files so your initial "
 "synchronisation will be slow."
-msgstr ""
+msgstr "%s 沒有針對同步許多小文件進行優化，因此初始同步速度會比較慢。"
 
 #: packages/lib/services/ReportService.ts:247
 #: packages/lib/services/ReportService.ts:248
@@ -841,7 +841,7 @@ msgstr "與其他人在記事本協作"
 
 #: packages/app-mobile/components/side-menu-content.tsx:357
 msgid "Collapse"
-msgstr ""
+msgstr "收合"
 
 #: packages/lib/services/ReportService.ts:312
 msgid "Coming alarms"
@@ -1763,7 +1763,7 @@ msgstr "啟用記事歷史紀錄"
 
 #: packages/lib/models/Setting.ts:845
 msgid "Enable optical character recognition (OCR)"
-msgstr ""
+msgstr "啟用光學字符識別（OCR）"
 
 #: packages/lib/models/Setting.ts:1195
 msgid "Enable PDF viewer"
@@ -5260,6 +5260,8 @@ msgid ""
 "When enabled, the application will scan your attachments and extract the "
 "text from it. This will allow you to search for text in these attachments."
 msgstr ""
+"啟用後，應用程式將掃描您的附件並提取其中的文字。這將使您能夠在這些附件中搜索"
+"文本。"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:176
 msgid "Window unresponsive."

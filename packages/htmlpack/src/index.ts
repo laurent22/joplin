@@ -2,8 +2,7 @@ import * as fs from 'fs-extra';
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlparser2 = require('@joplin/fork-htmlparser2');
 const Datauri = require('datauri/sync');
-const cssParse = require('css/lib/parse');
-const cssStringify = require('css/lib/stringify');
+import { CssTypes, parse as cssParse, stringify as cssStringify } from '@adobe/css-tools';
 
 const selfClosingElements = [
 	'area',
@@ -72,6 +71,10 @@ const processCssContent = (cssBaseDir: string, content: string): string => {
 	for (const rule of o.stylesheet.rules) {
 		if (rule.type === 'font-face') {
 			for (const declaration of rule.declarations) {
+				if (declaration.type === CssTypes.comment) {
+					continue;
+				}
+
 				if (declaration.property === 'src') {
 					declaration.value = declaration.value.replace(/url\((.*?)\)/g, (_v: any, url: string) => {
 						const cssFilePath = `${cssBaseDir}/${url}`;

@@ -149,6 +149,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			mixedContentMode={props.mixedContentMode}
 			allowFileAccess={true}
 			allowFileAccessFromFileURLs={props.allowFileAccessFromJs}
+			webviewDebuggingEnabled={Setting.value('env') === 'dev'}
 			injectedJavaScript={props.injectedJavaScript}
 			onMessage={props.onMessage}
 			onError={props.onError}
