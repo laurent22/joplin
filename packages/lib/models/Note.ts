@@ -33,7 +33,6 @@ interface PreviewsOptions {
 	anywherePattern?: string;
 	itemTypes?: string[];
 	limit?: number;
-	includeDeleted?: boolean;
 }
 
 export default class Note extends BaseItem {
@@ -369,18 +368,22 @@ export default class Note extends BaseItem {
 		if (!options.fields) options.fields = this.previewFields();
 		if (!options.uncompletedTodosOnTop) options.uncompletedTodosOnTop = false;
 		if (!('showCompletedTodos' in options)) options.showCompletedTodos = true;
-		if (!('includeDeleted' in options)) options.includeDeleted = false;
 
 		const Folder = BaseItem.getClass('Folder');
 
 		// Conflicts are always displayed regardless of options, since otherwise
 		// it's confusing to have conflicts but with an empty conflict folder.
-		if (parentId === Folder.conflictFolderId()) options.showCompletedTodos = true;
+		// For a similar reason we want to show all notes that have been deleted
+		// in the trash.
+		if (parentId === Folder.conflictFolderId() || parentId === Folder.trashId()) options.showCompletedTodos = true;
 
 		if (parentId === Folder.conflictFolderId()) {
 			options.conditions.push('is_conflict = 1');
+		} else if (parentId === Folder.trashId()) {
+			options.conditions.push('deleted_time > 0');
 		} else {
 			options.conditions.push('is_conflict = 0');
+			options.conditions.push('deleted_time = 0');
 			if (parentId && parentId !== ALL_NOTES_FILTER_ID) {
 				options.conditions.push('parent_id = ?');
 				options.conditionsParams.push(parentId);
@@ -392,10 +395,6 @@ export default class Note extends BaseItem {
 			options.conditions.push('(title LIKE ? OR body LIKE ?)');
 			options.conditionsParams.push(pattern);
 			options.conditionsParams.push(pattern);
-		}
-
-		if (!options.includeDeleted) {
-			options.conditions.push('deleted_time = 0');
 		}
 
 		let hasNotes = true;

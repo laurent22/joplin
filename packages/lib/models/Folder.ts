@@ -131,18 +131,43 @@ export default class Folder extends BaseItem {
 		return _('Conflicts');
 	}
 
+	public static trashTitle() {
+		return _('Trash');
+	}
+
 	public static conflictFolderId() {
 		return 'c04f1c7c04f1c7c04f1c7c04f1c7c04f';
 	}
 
+	public static trashId() {
+		return 'de1e7ede1e7ede1e7ede1e7ede1e7ede';
+	}
+
 	public static conflictFolder(): FolderEntity {
+		const now = Date.now();
+
 		return {
 			type_: this.TYPE_FOLDER,
 			id: this.conflictFolderId(),
 			parent_id: '',
 			title: this.conflictFolderTitle(),
-			updated_time: time.unixMs(),
-			user_updated_time: time.unixMs(),
+			updated_time: now,
+			user_updated_time: now,
+			share_id: '',
+			is_shared: 0,
+		};
+	}
+
+	public static trash(): FolderEntity {
+		const now = Date.now();
+
+		return {
+			type_: this.TYPE_FOLDER,
+			id: this.trashId(),
+			parent_id: '',
+			title: this.trashTitle(),
+			updated_time: now,
+			user_updated_time: now,
 			share_id: '',
 			is_shared: 0,
 		};
@@ -252,10 +277,16 @@ export default class Folder extends BaseItem {
 
 	public static async all(options: FolderLoadOptions = null) {
 		const output = await super.all(options);
+
+		if (options && options.includeTrash) {
+			output.push(this.trash());
+		}
+
 		if (options && options.includeConflictFolder) {
 			const conflictCount = await Note.conflictedCount();
 			if (conflictCount) output.push(this.conflictFolder());
 		}
+
 		return output;
 	}
 

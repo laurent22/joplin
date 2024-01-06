@@ -498,7 +498,7 @@ describe('models/Note', () => {
 		cleanup();
 	}));
 
-	it('should delete a note to trash', (async () => {
+	it('should delete a note to trash', async () => {
 		const folder = await Folder.save({});
 		const note1 = await Note.save({ title: 'note1', parent_id: folder.id });
 		const note2 = await Note.save({ title: 'note2', parent_id: folder.id });
@@ -534,6 +534,22 @@ describe('models/Note', () => {
 			expect(results.length).toBe(1);
 			expect(results[0].id).toBe(note2.id);
 		}
-	}));
+	});
+
+	it('should return the notes from the trash', async () => {
+		const folder = await Folder.save({});
+		const note1 = await Note.save({ title: 'note1', parent_id: folder.id });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder.id });
+		const note3 = await Note.save({ title: 'note3', parent_id: folder.id });
+
+		await Note.delete(note1.id, { toTrash: true });
+		await Note.delete(note2.id, { toTrash: true });
+
+		const folderNotes = await Note.previews(folder.id);
+		const trashNotes = await Note.previews(Folder.trashId());
+
+		expect(folderNotes.map(f => f.id).sort()).toEqual([note3.id]);
+		expect(trashNotes.map(f => f.id).sort()).toEqual([note1.id, note2.id].sort());
+	});
 
 });

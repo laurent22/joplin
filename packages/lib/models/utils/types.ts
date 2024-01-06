@@ -33,6 +33,7 @@ export interface LoadOptions {
 
 export interface FolderLoadOptions extends LoadOptions {
 	includeConflictFolder?: boolean;
+	includeTrash?: boolean;
 }
 
 export interface SaveOptions {
