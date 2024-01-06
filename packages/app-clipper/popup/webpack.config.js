@@ -1,7 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
+module.exports = (env, argv) => ({
 	entry: './src/index.js',
 	output: {
 		filename: 'index.js',
@@ -12,6 +12,7 @@ module.exports = {
 			template: './public/index.html',
 		}),
 	],
+	devtool: argv.mode === 'development' ? 'cheap-source-map' : undefined,
 	module: {
 		rules: [
 			{
@@ -19,6 +20,11 @@ module.exports = {
 				exclude: /node_modules/,
 				use: {
 					loader: 'babel-loader',
+					options: {
+						presets: [
+							['@babel/preset-react'],
+						],
+					},
 				},
 			},
 			{
@@ -31,4 +37,4 @@ module.exports = {
 			},
 		],
 	},
-};
+});
