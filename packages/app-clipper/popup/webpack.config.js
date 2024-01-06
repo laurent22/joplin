@@ -12,6 +12,8 @@ module.exports = (env, argv) => ({
 			template: './public/index.html',
 		}),
 	],
+	// Avoid the default 'eval-source-map' -- Chrome seems to prevent usage of eval
+	// in popups.
 	devtool: argv.mode === 'development' ? 'cheap-source-map' : undefined,
 	module: {
 		rules: [
