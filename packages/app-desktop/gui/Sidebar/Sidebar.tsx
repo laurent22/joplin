@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { useEffect, useRef, useCallback, useMemo } from 'react';
-import styled, { css } from 'styled-components';
-import shim from '@joplin/lib/shim';
-import { StyledRoot, StyledAddButton, StyledShareIcon, StyledHeader, StyledHeaderIcon, StyledAllNotesIcon, StyledHeaderLabel, StyledListItem, StyledListItemAnchor, StyledExpandLink, StyledNoteCount, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton } from './styles';
+import { StyledRoot, StyledAddButton, StyledShareIcon, StyledHeader, StyledHeaderIcon, StyledAllNotesIcon, StyledHeaderLabel, StyledListItem, StyledListItemAnchor, StyledExpandLink, StyledNoteCount, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton, StyledSpanFix } from './styles';
 import { ButtonLevel } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
 import InteropService from '@joplin/lib/services/interop/InteropService';
@@ -39,15 +37,6 @@ const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 const { clipboard } = require('electron');
 
 const logger = Logger.create('Sidebar');
-
-// Workaround sidebar rendering bug on Linux Intel GPU.
-// https://github.com/laurent22/joplin/issues/7506
-const StyledSpanFix = styled.span`
-	${shim.isLinux() && css`
-		position: relative;
-	`}
-`;
-
 
 interface Props {
 	themeId: number;
