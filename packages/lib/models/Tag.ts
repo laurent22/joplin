@@ -1,4 +1,4 @@
-import { TagEntity } from '../services/database/types';
+import { TagEntity, TagsWithNoteCountEntity } from '../services/database/types';
 
 import BaseModel from '../BaseModel';
 import BaseItem from './BaseItem';
@@ -109,7 +109,7 @@ export default class Tag extends BaseItem {
 		return !!r;
 	}
 
-	public static async allWithNotes() {
+	public static async allWithNotes(): Promise<TagsWithNoteCountEntity[]> {
 		return await Tag.modelSelectAll('SELECT * FROM tags_with_note_count');
 	}
 
