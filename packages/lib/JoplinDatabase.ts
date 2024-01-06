@@ -1,13 +1,10 @@
 import Resource from './models/Resource';
 import shim from './shim';
 import Database from './database';
-import migration42 from './services/database/migrations/42';
-import migration43 from './services/database/migrations/43';
-import migration44 from './services/database/migrations/44';
-import migration45 from './services/database/migrations/45';
-import { SqlQuery, Migration } from './services/database/types';
+import { SqlQuery } from './services/database/types';
 import addMigrationFile from './services/database/addMigrationFile';
 import sqlStringToLines from './services/database/sqlStringToLines';
+import migrations from './services/database/migrations';
 
 const { sprintf } = require('sprintf-js');
 
@@ -124,13 +121,6 @@ CREATE TABLE version (
 
 INSERT INTO version (version) VALUES (1);
 `;
-
-const migrations: Migration[] = [
-	migration42,
-	migration43,
-	migration44,
-	migration45,
-];
 
 export interface TableField {
 	name: string;

@@ -32,6 +32,7 @@ export default class Plugin {
 	private dispatch_: Function;
 	private eventEmitter_: any;
 	private devMode_ = false;
+	private builtIn_ = false;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private messageListener_: Function = null;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -59,6 +60,14 @@ export default class Plugin {
 
 	public set devMode(v: boolean) {
 		this.devMode_ = v;
+	}
+
+	public get builtIn(): boolean {
+		return this.builtIn_;
+	}
+
+	public set builtIn(builtIn: boolean) {
+		this.builtIn_ = builtIn;
 	}
 
 	public get manifest(): PluginManifest {

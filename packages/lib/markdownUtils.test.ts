@@ -90,5 +90,4 @@ describe('Should detect list items', () => {
 	test('should NOT detect `+ [x]` as empty list item ', () => {
 		expect(markdownUtils.isEmptyListItem('+ [x]')).toBe(false);
 	});
-
 });

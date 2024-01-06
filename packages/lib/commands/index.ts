@@ -1,10 +1,10 @@
-// AUTO-GENERATED using `gulp buildCommandIndex`
+// AUTO-GENERATED using `gulp buildScriptIndexes`
 import * as historyBackward from './historyBackward';
 import * as historyForward from './historyForward';
 import * as openMasterPasswordDialog from './openMasterPasswordDialog';
 import * as synchronize from './synchronize';
 
-const index:any[] = [
+const index: any[] = [
 	historyBackward,
 	historyForward,
 	openMasterPasswordDialog,
@@ -12,4 +12,4 @@ const index:any[] = [
 ];
 
 export default index;
-// AUTO-GENERATED using `gulp buildCommandIndex`
+// AUTO-GENERATED using `gulp buildScriptIndexes`

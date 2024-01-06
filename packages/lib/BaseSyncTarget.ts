@@ -5,6 +5,11 @@ import shim from './shim';
 import ResourceService from './services/ResourceService';
 import ShareService from './services/share/ShareService';
 
+interface CheckConfigResult {
+	ok: boolean;
+	errorMessage: string;
+}
+
 export default class BaseSyncTarget {
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -73,17 +78,17 @@ export default class BaseSyncTarget {
 		return null;
 	}
 
-	public static id() {
+	public static id(): number {
 		throw new Error('id() not implemented');
 	}
 
 	// Note: it cannot be called just "name()" because that's a reserved keyword and
 	// it would throw an obscure error in React Native.
-	public static targetName() {
+	public static targetName(): string {
 		throw new Error('targetName() not implemented');
 	}
 
-	public static label() {
+	public static label(): string {
 		throw new Error('label() not implemented');
 	}
 
@@ -142,6 +147,10 @@ export default class BaseSyncTarget {
 				throw error;
 			}
 		}
+	}
+
+	public static async checkConfig(_options: any): Promise<CheckConfigResult> {
+		throw new Error('Not implemented');
 	}
 
 	public async syncStarted() {

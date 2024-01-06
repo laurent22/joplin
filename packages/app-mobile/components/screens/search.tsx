@@ -10,8 +10,8 @@ const { NoteItem } = require('../note-item.js');
 const { BaseScreenComponent } = require('../base-screen');
 const { themeStyle } = require('../global-style.js');
 const DialogBox = require('react-native-dialogbox').default;
-import SearchEngineUtils from '@joplin/lib/services/searchengine/SearchEngineUtils';
-import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
+import SearchEngineUtils from '@joplin/lib/services/search/SearchEngineUtils';
+import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { AppState } from '../../utils/types';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 

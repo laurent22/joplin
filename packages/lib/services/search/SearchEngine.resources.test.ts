@@ -1,5 +1,8 @@
+import { ModelType } from '../../BaseModel';
+import Note from '../../models/Note';
 import Resource from '../../models/Resource';
-import { db, msleep, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import shim from '../../shim';
+import { db, msleep, newOcrService, ocrSampleDir, resourceService, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import { ResourceOcrStatus } from '../database/types';
 import SearchEngine from './SearchEngine';
 
@@ -34,6 +37,29 @@ describe('SearchEngine.resources', () => {
 		expect(normalized[0].title).toBe('bonjour ca va ?');
 		expect(normalized[0].body).toBe('hello, how are you ?');
 	});
+
+	it('should return notes associated with indexed resources', (async () => {
+		const note1 = await Note.save({});
+		await Note.save({});
+		await shim.attachFileToNote(note1, `${ocrSampleDir}/testocr.png`);
+		const resource = (await Resource.all())[0];
+
+		await resourceService().indexNoteResources();
+
+		const ocrService = newOcrService();
+		await ocrService.processResources();
+
+		const searchEngine = newSearchEngine();
+		await searchEngine.syncTables();
+
+		const results = await searchEngine.search('lazy fox');
+		expect(results.length).toBe(1);
+		expect(results[0].id).toBe(note1.id);
+		expect(results[0].item_id).toBe(resource.id);
+		expect(results[0].item_type).toBe(ModelType.Resource);
+
+		await ocrService.dispose();
+	}));
 
 	it('should delete normalized data when a resource is deleted', async () => {
 		const engine = newSearchEngine();

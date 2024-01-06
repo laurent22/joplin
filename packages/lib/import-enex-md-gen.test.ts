@@ -142,22 +142,28 @@ describe('import-enex-md-gen', () => {
 		expect(all[0].mime).toBe('application/zip');
 	});
 
-	it('should keep importing notes when one of them is corrupted', async () => {
-		const filePath = `${enexSampleBaseDir}/ImportTestCorrupt.enex`;
-		const errors: any[] = [];
-		const consoleSpy = jest.spyOn(console, 'warn').mockImplementation(jest.fn());
-		await importEnex('', filePath, {
-			onError: (error: any) => errors.push(error),
-		});
-		consoleSpy.mockRestore();
-		const notes = await Note.all();
-		expect(notes.length).toBe(2);
+	// Disabled for now because the ENEX parser has become so error-tolerant
+	// that it's no longer possible to generate a note that would generate a
+	// failure.
 
-		// Check that an error was recorded and that it includes the title
-		// of the note, so that it can be found back by the user
-		expect(errors.length).toBe(1);
-		expect(errors[0].message.includes('Note 2')).toBe(true);
-	});
+	// it('should keep importing notes when one of them is corrupted', async () => {
+	// 	const filePath = `${enexSampleBaseDir}/ImportTestCorrupt.enex`;
+	// 	const errors: any[] = [];
+	// 	const consoleSpy = jest.spyOn(console, 'warn').mockImplementation(jest.fn());
+	// 	await importEnex('', filePath, {
+	// 		onError: (error: any) => errors.push(error),
+	// 	});
+	// 	consoleSpy.mockRestore();
+	// 	const notes:NoteEntity[] = await Note.all();
+	// 	expect(notes.length).toBe(2);
+	// 	expect(notes.find(n => n.title === 'Note 1')).toBeTruthy();
+	// 	expect(notes.find(n => n.title === 'Note 3')).toBeTruthy();
+
+	// 	// Check that an error was recorded and that it includes the title
+	// 	// of the note, so that it can be found back by the user
+	// 	expect(errors.length).toBe(1);
+	// 	expect(errors[0].message.includes('Note 2')).toBe(true);
+	// });
 
 	it('should throw an error and stop if the outer XML is invalid', async () => {
 		await expectThrow(async () => importEnexFile('invalid_html.enex'));
@@ -204,6 +210,27 @@ describe('import-enex-md-gen', () => {
 
 		// However we keep the title as it is
 		expect(resource.title).toBe('app_images/resizable/961b875f-24ac-402f-9b76-37e2d4f03a6c/house_500.jpg.png');
+	});
+
+	it('should sanitize resource filenames with colons', async () => {
+		await importEnexFile('resource_filename_with_colons.enex');
+		const resource: ResourceEntity = (await Resource.all())[0];
+		expect(resource.filename).toBe('08.06.2014165855');
+		expect(resource.file_extension).toBe('2014165855');
+		expect(resource.title).toBe('08.06.2014 16:58:55');
+	});
+
+	it('should resolve note links', async () => {
+		await importEnexFile('linked_notes.enex');
+		const notes: NoteEntity[] = await Note.all();
+
+		const note1 = notes.find(n => n.title === 'Note 1');
+		const note2 = notes.find(n => n.title === 'Note 2');
+		const note3 = notes.find(n => n.title === 'Note 3');
+
+		expect(notes.length).toBe(5);
+		expect(note1.body).toBe(`[Note 2](:/${note2.id})[Note 3](:/${note3.id})`);
+		expect(note3.body).toBe('[Ambiguous note](evernote:///view/5223870/s49/9cd5e810-fa03-429a-8194-ab847f2f1ab2/c99d9e01-ca35-4c75-ba63-f0c0ef97787d/)');
 	});
 
 });

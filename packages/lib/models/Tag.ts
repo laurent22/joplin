@@ -157,7 +157,7 @@ export default class Tag extends BaseItem {
 		return this.modelSelectAll(`SELECT * FROM tags WHERE id IN ("${commonTagIds.join('","')}")`);
 	}
 
-	public static async loadByTitle(title: string) {
+	public static async loadByTitle(title: string): Promise<TagEntity> {
 		return this.loadByField('title', title, { caseInsensitive: true });
 	}
 

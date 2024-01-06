@@ -1,4 +1,4 @@
-const css = require('css');
+const css = require('@adobe/css-tools');
 
 export function extend (destination) {
   for (var i = 1; i < arguments.length; i++) {

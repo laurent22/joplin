@@ -13,7 +13,7 @@
   },
   "scripts": {
     "buildApiDoc": "yarn workspace joplin start apidoc ../../readme/api/references/rest_api.md",
-    "buildCommandIndex": "node packages/tools/gulp/tasks/buildCommandIndexRun.js",
+    "buildScriptIndexes": "node packages/tools/gulp/tasks/buildScriptIndexesRun.js",
     "buildParallel": "yarn workspaces foreach --verbose --interlaced --parallel --jobs 2 --topological run build && yarn run tsc",
     "buildPluginDoc": "cd packages/generate-plugin-doc && yarn run buildPluginDoc_",
     "buildSequential": "yarn workspaces foreach --verbose --interlaced --topological run build && yarn run tsc",
@@ -97,7 +97,7 @@
     "eslint-plugin-github": "4.10.1",
     "http-server": "14.1.1",
     "node-gyp": "9.4.1",
-    "nodemon": "3.0.1"
+    "nodemon": "3.0.2"
   },
   "packageManager": "yarn@3.6.4",
   "resolutions": {

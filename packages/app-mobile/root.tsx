@@ -40,7 +40,7 @@ import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-na
 const { BackButtonService } = require('./services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
 import { createStore, applyMiddleware } from 'redux';
-const reduxSharedMiddleware = require('@joplin/lib/components/shared/reduxSharedMiddleware');
+import reduxSharedMiddleware from '@joplin/lib/components/shared/reduxSharedMiddleware';
 const { shimInit } = require('./utils/shim-init-react.js');
 const { AppNav } = require('./components/app-nav.js');
 import Note from '@joplin/lib/models/Note';
@@ -75,7 +75,7 @@ import { reg } from '@joplin/lib/registry';
 const { defaultState } = require('@joplin/lib/reducer');
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local');
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
-import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
+import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 const { themeStyle } = require('./components/global-style.js');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
@@ -149,7 +149,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	const result = next(action);
 	const newState = store.getState();
 
-	await reduxSharedMiddleware(store, next, action);
+	await reduxSharedMiddleware(store, next, action, storeDispatch as any);
 
 	if (action.type === 'NAV_GO') Keyboard.dismiss();
 

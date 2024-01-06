@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "2.14.0",
+  "version": "2.14.6",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "private": true,
@@ -90,6 +90,7 @@
         ]
       },
       "hardenedRuntime": true,
+      "notarize": false,
       "entitlements": "./build-mac/entitlements.mac.inherit.plist",
       "extendInfo": {
         "CFBundleURLTypes": [
@@ -122,12 +123,12 @@
     "@electron/rebuild": "3.3.0",
     "@joplin/default-plugins": "~2.14",
     "@joplin/tools": "~2.14",
-    "@playwright/test": "1.39.0",
+    "@playwright/test": "1.40.1",
     "@testing-library/react-hooks": "8.0.1",
     "@types/jest": "29.5.8",
     "@types/node": "18.18.14",
-    "@types/react": "18.2.39",
-    "@types/react-redux": "7.1.31",
+    "@types/react": "18.2.43",
+    "@types/react-redux": "7.1.32",
     "@types/styled-components": "5.1.32",
     "@types/tesseract.js": "2.0.0",
     "electron": "26.5.0",
@@ -139,7 +140,7 @@
     "js-sha512": "0.8.0",
     "nan": "2.18.0",
     "react-test-renderer": "18.2.0",
-    "ts-node": "10.9.1",
+    "ts-node": "10.9.2",
     "typescript": "5.2.2"
   },
   "dependencies": {
@@ -189,7 +190,7 @@
     "styled-components": "5.3.11",
     "styled-system": "5.1.5",
     "taboverride": "4.0.3",
-    "tesseract.js": "4.1.4",
+    "tesseract.js": "5.0.4",
     "tinymce": "5.10.6"
   }
 }

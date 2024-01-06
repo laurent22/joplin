@@ -179,6 +179,7 @@ class AppComponent extends Component {
 	}
 
 	async loadContentScripts() {
+		await bridge().tabsExecuteScript({ file: '/content_scripts/setUpEnvironment.js' });
 		await bridge().tabsExecuteScript({ file: '/content_scripts/JSDOMParser.js' });
 		await bridge().tabsExecuteScript({ file: '/content_scripts/Readability.js' });
 		await bridge().tabsExecuteScript({ file: '/content_scripts/Readability-readerable.js' });

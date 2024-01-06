@@ -40,6 +40,10 @@ describe('HtmlToMd', () => {
 				htmlToMdOptions.preserveNestedTables = true;
 			}
 
+			if (htmlFilename.indexOf('text_color') === 0) {
+				htmlToMdOptions.preserveColorStyles = true;
+			}
+
 			const html = await readFile(htmlPath, 'utf8');
 			let expectedMd = await readFile(mdPath, 'utf8');
 

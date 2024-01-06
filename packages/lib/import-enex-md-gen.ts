@@ -4,7 +4,7 @@ import { htmlentities } from '@joplin/utils/html';
 const stringPadding = require('string-padding');
 const stringToStream = require('string-to-stream');
 const resourceUtils = require('./resourceUtils.js');
-const cssParser = require('css');
+const cssParser = require('@adobe/css-tools');
 
 const BLOCK_OPEN = '[[BLOCK_OPEN]]';
 const BLOCK_CLOSE = '[[BLOCK_CLOSE]]';
@@ -58,6 +58,7 @@ interface ParserState {
 	spanAttributes: string[];
 	tags: ParserStateTag[];
 	currentCode?: string;
+	evernoteLinkTitles: Record<string, string>;
 }
 
 
@@ -607,6 +608,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 			anchorAttributes: [],
 			spanAttributes: [],
 			tags: [],
+			evernoteLinkTitles: {},
 		};
 
 		const options = {};
@@ -1239,6 +1241,14 @@ function drawTable(table: Section) {
 			continue;
 		}
 
+		if (typeof tr === 'string') {
+			// A <TABLE> tag should only have <TR> tags as direct children.
+			// However certain Evernote notes can contain other random tags
+			// such as empty DIVs. In that case we just skip the content.
+			// See test "table_with_invalid_content.html".
+			continue;
+		}
+
 		const isHeader = tr.isHeader;
 		const line = [];
 		const headerLine = [];
@@ -1247,10 +1257,7 @@ function drawTable(table: Section) {
 			const td = tr.lines[tdIndex];
 
 			if (typeof td === 'string') {
-				// A <TR> tag should only have <TD> tags as direct children.
-				// However certain Evernote notes can contain other random tags
-				// such as empty DIVs. In that case we just skip the content.
-				// See test "table_with_invalid_content.html".
+				// Same comment as above the <TR> tags.
 				continue;
 			}
 

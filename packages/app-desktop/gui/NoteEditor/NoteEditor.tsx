@@ -50,6 +50,7 @@ import CodeMirror6 from './NoteBody/CodeMirror/v6/CodeMirror';
 import CodeMirror5 from './NoteBody/CodeMirror/v5/CodeMirror';
 import { openItemById } from './utils/contextMenu';
 import { namespacedKey } from '@joplin/lib/services/plugins/api/JoplinSettings';
+import { MarkupLanguage } from '@joplin/renderer';
 
 const commands = [
 	require('./commands/showRevisions'),
@@ -165,8 +166,11 @@ function NoteEditor(props: NoteEditorProps) {
 		return Setting.value(namespacedKey(pluginId, key));
 	}, []);
 
+	const whiteBackgroundNoteRendering = formNote.markup_language === MarkupLanguage.Html;
+
 	const markupToHtml = useMarkupToHtml({
 		themeId: props.themeId,
+		whiteBackgroundNoteRendering,
 		customCss: props.customCss,
 		plugins: props.plugins,
 		settingValue,
@@ -178,7 +182,7 @@ function NoteEditor(props: NoteEditorProps) {
 			...options,
 		};
 
-		const theme = themeStyle(props.themeId);
+		const theme = themeStyle(options.themeId ? options.themeId : props.themeId);
 
 		const markupToHtml = markupLanguageUtils.newMarkupToHtml({}, {
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
@@ -188,6 +192,7 @@ function NoteEditor(props: NoteEditorProps) {
 		return markupToHtml.allAssets(markupLanguage, theme, {
 			contentMaxWidth: props.contentMaxWidth,
 			contentMaxWidthTarget: options.contentMaxWidthTarget,
+			whiteBackgroundNoteRendering: options.whiteBackgroundNoteRendering,
 		});
 	}, [props.themeId, props.customCss, props.contentMaxWidth]);
 
@@ -433,6 +438,7 @@ function NoteEditor(props: NoteEditorProps) {
 		ref: editorRef,
 		contentKey: formNote.id,
 		style: styles.tinyMCE,
+		whiteBackgroundNoteRendering,
 		onChange: onBodyChange,
 		onWillChange: onBodyWillChange,
 		onMessage: onMessage,

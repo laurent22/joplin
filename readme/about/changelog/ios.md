@@ -1,5 +1,34 @@
 # Joplin iOS Changelog
 
+## [ios-v12.14.2](https://github.com/laurent22/joplin/releases/tag/ios-v12.14.2) - 2024-01-06T12:46:08Z
+
+- Improved: Fix table-of-contents links to headings with duplicate content (#9610) (#9594 by Henry Heino)
+- Improved: Improve sync by reducing how often note list is sorted (f95ee68)
+- Improved: Render mermaid diagrams in dark mode when Joplin is in dark mode (#9631) (#3201 by Henry Heino)
+- Improved: Updated packages deprecated-react-native-prop-types (v5), react-native-get-random-values (v1.10.0), react-native-paper (v5.11.4)
+
+## [ios-v12.14.1](https://github.com/laurent22/joplin/releases/tag/ios-v12.14.1) - 2023-12-29T22:23:50Z
+
+- Improved: CodeMirror 6 markdown editor: Support highlighting more languages (#9563) (#9562 by Henry Heino)
+- Improved: Don't attach empty drawings when a user exits without saving (#9386) (#9377 by Henry Heino)
+- Improved: Handle Dropbox payload_too_large error (f267d88)
+- Improved: Make backspace delete auto-matching brackets (#9527) (#9526 by Henry Heino)
+- Improved: Optimise synchronisation by making delta call return whole items (5341501)
+- Improved: Updated packages @react-native-community/datetimepicker (v7.6.2), @react-native-community/netinfo (v9.5.0), @react-native-community/slider (v4.4.4), @rmp135/sql-ts (v1.18.1), @testing-library/react-native (v12.3.3), highlight.js (v11.9.0), mermaid (v10.6.1), nanoid (v3.3.7), nodemon (v3.0.2), punycode (v2.3.1), react, react-native-image-picker (v7.0.3), react-native-localize (v3.0.4), react-native-paper (v5.11.3), react-native-vector-icons (v10.0.2), react-native-webview (v13.6.3), style-to-js (v1.1.9), tesseract.js (v5.0.3), ts-loader (v9.5.1)
+- Fixed: #9361: Fix to-dos options toggle don't toggle a rerender in  (#9364) (#9361 by [@pedr](https://github.com/pedr))
+- Fixed: Fix Beta Editor diff highlighting (#9525) (#9524 by Henry Heino)
+- Fixed: Fix KaTeX rendering (#9456) (#9455 by Henry Heino)
+- Fixed: Fix code block borders in headers of Beta Markdown editor (#9523) (#9522 by Henry Heino)
+- Fixed: Fix cursor location on opening the editor and attachments inserted in wrong location (#9536) (#9532 by Henry Heino)
+- Fixed: Fix editor scrollbar on iOS (#9531) (#9322 by Henry Heino)
+- Fixed: Fix font for the inbox email address not using the theme color (#9503) (#9500 by [@pedr](https://github.com/pedr))
+- Fixed: Fix inline code at beginning of line in table breaks formatting (#9478) (#9477 by Henry Heino)
+- Fixed: Fix list renumbering and enable multiple selections (#9506) (#9200 by Henry Heino)
+- Fixed: Fix new note/to-do buttons not visible on app startup in some cases (#9329) (#9328 by Henry Heino)
+- Fixed: Fix note editor crash when trying to edit text quickly after opening a note (#9581) (#9502 by Henry Heino)
+- Fixed: Fix tooltips don't disappear on some devices (upgrade to js-draw 1.13.2) (#9401) (#9374 by Henry Heino)
+- Fixed: Sidebar is not dismissed when creating a note (#9376)
+
 ## [ios-v12.13.10](https://github.com/laurent22/joplin/releases/tag/ios-v12.13.10) - 2023-12-01T12:07:57Z
 
 - Improved: Drawing: Revert recent changes to input system (#9426) (#9427 by Henry Heino)

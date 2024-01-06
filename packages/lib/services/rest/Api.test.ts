@@ -9,7 +9,7 @@ import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 import NoteTag from '../../models/NoteTag';
 import ResourceService from '../../services/ResourceService';
-import SearchEngine from '../../services/searchengine/SearchEngine';
+import SearchEngine from '../search/SearchEngine';
 const { MarkupToHtml } = require('@joplin/renderer');
 import { ResourceEntity } from '../database/types';
 

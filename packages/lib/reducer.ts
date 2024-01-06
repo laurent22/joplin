@@ -9,7 +9,7 @@ import { ProfileConfig } from './services/profileConfig/types';
 import * as ArrayUtils from './ArrayUtils';
 import { FolderEntity } from './services/database/types';
 import { getListRendererIds } from './services/noteList/renderers';
-import { ProcessResultsRow } from './services/searchengine/SearchEngine';
+import { ProcessResultsRow } from './services/search/SearchEngine';
 const fastDeepEqual = require('fast-deep-equal');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
@@ -102,6 +102,7 @@ export interface State {
 	needApiAuth: boolean;
 	profileConfig: ProfileConfig;
 	noteListRendererIds: string[];
+	noteListLastSortTime: number;
 
 	// Extra reducer keys go here:
 	pluginService: PluginServiceState;
@@ -176,6 +177,7 @@ export const defaultState: State = {
 	needApiAuth: false,
 	profileConfig: null,
 	noteListRendererIds: getListRendererIds(),
+	noteListLastSortTime: 0,
 
 	pluginService: pluginServiceDefaultState,
 	shareService: shareServiceDefaultState,
@@ -850,6 +852,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 		case 'NOTE_UPDATE_ALL':
 			draft.notes = action.notes;
 			draft.notesSource = action.notesSource;
+			draft.noteListLastSortTime = Date.now(); // Notes are already sorted when they are set this way.
 			updateSelectedNotesFromExistingNotes(draft);
 			break;
 
@@ -869,7 +872,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 				let movedNotePreviousIndex = 0;
 				let noteFolderHasChanged = false;
-				let newNotes = draft.notes.slice();
+				const newNotes = draft.notes.slice();
 				let found = false;
 				for (let i = 0; i < newNotes.length; i++) {
 					const n = newNotes[i];
@@ -909,8 +912,6 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					}
 				}
 
-				// newNotes = Note.sortNotes(newNotes, draft.notesOrder, draft.settings.uncompletedTodosOnTop);
-				newNotes = Note.sortNotes(newNotes, stateUtils.notesOrder(draft.settings), draft.settings.uncompletedTodosOnTop);
 				draft.notes = newNotes;
 
 				if (noteFolderHasChanged) {
@@ -950,6 +951,14 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					t.splice(idx, 1);
 					draft.provisionalNoteIds = t;
 				}
+			}
+			break;
+
+		case 'NOTE_SORT':
+
+			{
+				draft.notes = Note.sortNotes(draft.notes, stateUtils.notesOrder(draft.settings), draft.settings.uncompletedTodosOnTop);
+				draft.noteListLastSortTime = Date.now();
 			}
 			break;
 

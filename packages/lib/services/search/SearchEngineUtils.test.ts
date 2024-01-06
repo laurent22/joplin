@@ -1,7 +1,7 @@
 import { setupDatabaseAndSynchronizer, db, switchClient } from '../../testing/test-utils.js';
-import SearchEngine from '../../services/searchengine/SearchEngine';
-import SearchEngineUtils from '../../services/searchengine/SearchEngineUtils';
-import Setting from '../../models/Setting';
+import SearchEngine from './SearchEngine.js';
+import SearchEngineUtils from './SearchEngineUtils.js';
+import Setting from '../../models/Setting.js';
 const Note = require('../../models/Note').default;
 
 

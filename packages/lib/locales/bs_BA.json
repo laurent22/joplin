@@ -50,6 +50,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d notes": [
 		"%s: %d bilješki"
 	],
@@ -274,6 +277,9 @@
 	],
 	"Browse...": [
 		"Pregledaj..."
+	],
+	"Built in": [
+		""
 	],
 	"Bulleted List": [
 		"Nabrajanje"
@@ -766,6 +772,9 @@
 	],
 	"Enable note history": [
 		"Aktiviraj historiju bilješki"
+	],
+	"Enable optical character recognition (OCR)": [
+		""
 	],
 	"Enable PDF viewer": [
 		"Omogući PDF"
@@ -2048,6 +2057,11 @@
 	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
 		"Faktor određuje kako će se stavka povećavati ili smanjivati da bi stala u raspoloživi prostor skupa sa drugim stavkama. Tako će stavka čiji je faktor 2 zauzimati dvostruko više prostora od stavke s faktorom 1. Ponovo pokrenite aplikaciju da primijenite izmjene."
 	],
+	"The following attachment matches your search query:": [
+		"",
+		"",
+		""
+	],
 	"The following attachments are being watched for changes:": [
 		""
 	],
@@ -2398,6 +2412,9 @@
 	],
 	"When creating a new to-do:": [
 		"Prilikom kreiranja novog zadatka:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""
