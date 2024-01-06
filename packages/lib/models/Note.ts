@@ -394,6 +394,10 @@ export default class Note extends BaseItem {
 			options.conditionsParams.push(pattern);
 		}
 
+		if (!options.includeDeleted) {
+			options.conditions.push('deleted_time = 0');
+		}
+
 		let hasNotes = true;
 		let hasTodos = true;
 		if (options.itemTypes && options.itemTypes.length) {
@@ -440,10 +444,6 @@ export default class Note extends BaseItem {
 			options.conditions.push('is_todo = 0');
 		} else if (hasTodos) {
 			options.conditions.push('is_todo = 1');
-		}
-
-		if (!options.includeDeleted) {
-			options.conditions.push('deleted_time = 0');
 		}
 
 		const results = await this.search(options);

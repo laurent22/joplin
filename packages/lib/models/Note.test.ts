@@ -534,11 +534,6 @@ describe('models/Note', () => {
 			expect(results.length).toBe(1);
 			expect(results[0].id).toBe(note2.id);
 		}
-
-		// TODO: Check GotoAnything
-		// TODO: Check resource search (ocr_text);
-		// TODO: Check tags
-		// TODO: Search for "is_conflict" and "encryption_applied" - similar rules are applied
 	}));
 
 });
