@@ -139,7 +139,7 @@ describe('interop/InteropService_Exporter_Md_frontmatter', () => {
 		const tag = await Tag.save({ title: 'tag' });
 		await Tag.setNoteTagsByIds(note.id, [tag.id]);
 
-		await Tag.delete(tag.id, { source: 'tests' });
+		await Tag.delete(tag.id);
 		const content = await exportAndLoad(`${exportDir()}/folder1/NoTag.md`);
 		expect(content).not.toContain('tag');
 	}));

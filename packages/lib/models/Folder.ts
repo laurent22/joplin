@@ -96,7 +96,7 @@ export default class Folder extends BaseItem {
 		}
 	}
 
-	public static async delete(folderId: string, options: DeleteOptions) {
+	public static async delete(folderId: string, options?: DeleteOptions) {
 		options = {
 			deleteChildren: true,
 			...options,

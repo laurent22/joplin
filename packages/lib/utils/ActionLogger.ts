@@ -32,9 +32,9 @@ export default class ActionLogger {
 		}));
 	}
 
-	public static from(source: ActionLogger|string) {
+	public static from(source: ActionLogger|string|undefined) {
 		if (!source) {
-			throw new Error('ActionLogger: Missing source');
+			source = 'Unknown source';
 		}
 
 		if (typeof source === 'string') {

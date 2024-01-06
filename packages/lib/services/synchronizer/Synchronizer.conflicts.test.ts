@@ -7,7 +7,6 @@ import BaseItem from '../../models/BaseItem';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 
 describe('Synchronizer.conflicts', () => {
-	const deleteOptions = { source: 'Synchronizer tests' };
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -97,7 +96,7 @@ describe('Synchronizer.conflicts', () => {
 		await switchClient(2);
 
 		await synchronizerStart();
-		await Folder.delete(folder1.id, deleteOptions);
+		await Folder.delete(folder1.id);
 		await synchronizerStart();
 
 		await switchClient(1);
@@ -118,12 +117,12 @@ describe('Synchronizer.conflicts', () => {
 		await switchClient(2);
 
 		await synchronizerStart();
-		await Note.delete(note.id, deleteOptions);
+		await Note.delete(note.id);
 		await synchronizerStart();
 
 		await switchClient(1);
 
-		await Note.delete(note.id, deleteOptions);
+		await Note.delete(note.id);
 		await synchronizerStart();
 
 		const items = await allNotesFolders();
@@ -144,7 +143,7 @@ describe('Synchronizer.conflicts', () => {
 
 		await sleep(0.1);
 
-		await Note.delete(note1.id, deleteOptions);
+		await Note.delete(note1.id);
 
 		await synchronizerStart();
 
@@ -177,7 +176,7 @@ describe('Synchronizer.conflicts', () => {
 
 		await sleep(0.1);
 
-		await Folder.delete(folder1.id, deleteOptions);
+		await Folder.delete(folder1.id);
 
 		await synchronizerStart();
 
@@ -218,7 +217,7 @@ describe('Synchronizer.conflicts', () => {
 
 		await synchronizerStart();
 		await Note.save({ id: n1.id, is_conflict: 1 });
-		await Note.delete(n1.id, deleteOptions);
+		await Note.delete(n1.id);
 		const deletedItems = await BaseItem.deletedItems(syncTargetId());
 
 		expect(deletedItems.length).toBe(0);

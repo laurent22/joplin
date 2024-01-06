@@ -85,8 +85,6 @@ function memoryExportModule() {
 
 describe('services_InteropService', () => {
 
-	const defaultDeleteOptions = { source: 'InteropServiceTest' };
-
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
@@ -101,7 +99,7 @@ describe('services_InteropService', () => {
 
 		await service.export({ path: filePath });
 
-		await Folder.delete(folder1.id, defaultDeleteOptions);
+		await Folder.delete(folder1.id);
 
 		await service.import({ path: filePath });
 
@@ -116,7 +114,7 @@ describe('services_InteropService', () => {
 
 		// As there was already a folder with the same title, check that the new one has been renamed
 
-		await Folder.delete(folder2.id, defaultDeleteOptions);
+		await Folder.delete(folder2.id);
 		const folder3 = (await Folder.all())[0];
 		expect(await Folder.count()).toBe(1);
 		expect(folder3.title).not.toBe(folder2.title);
@@ -135,8 +133,8 @@ describe('services_InteropService', () => {
 		const filePath = `${exportDir()}/test.jex`;
 		await service.export({ path: filePath });
 
-		await Folder.delete(folder1.id, defaultDeleteOptions);
-		await Folder.delete(folder2.id, defaultDeleteOptions);
+		await Folder.delete(folder1.id);
+		await Folder.delete(folder2.id);
 
 		await service.import({ path: filePath });
 
@@ -153,8 +151,8 @@ describe('services_InteropService', () => {
 		const filePath = `${exportDir()}/test.jex`;
 		await service.export({ path: filePath });
 
-		await Folder.delete(folder1.id, defaultDeleteOptions);
-		await Folder.delete(folder2.id, defaultDeleteOptions);
+		await Folder.delete(folder1.id);
+		await Folder.delete(folder2.id);
 
 		await service.import({ path: filePath });
 
@@ -176,8 +174,8 @@ describe('services_InteropService', () => {
 
 		await service.export({ path: filePath });
 
-		await Folder.delete(folder1.id, defaultDeleteOptions);
-		await Note.delete(note1.id, defaultDeleteOptions);
+		await Folder.delete(folder1.id);
+		await Note.delete(note1.id);
 
 		await service.import({ path: filePath });
 
@@ -215,7 +213,7 @@ describe('services_InteropService', () => {
 
 		await service.export({ path: filePath });
 
-		await Note.delete(note1.id, defaultDeleteOptions);
+		await Note.delete(note1.id);
 
 		await service.import({ path: filePath, destinationFolderId: folder1.id });
 
@@ -236,9 +234,9 @@ describe('services_InteropService', () => {
 
 		await service.export({ path: filePath });
 
-		await Folder.delete(folder1.id, defaultDeleteOptions);
-		await Note.delete(note1.id, defaultDeleteOptions);
-		await Tag.delete(tag1.id, defaultDeleteOptions);
+		await Folder.delete(folder1.id);
+		await Note.delete(note1.id);
+		await Tag.delete(tag1.id);
 
 		await service.import({ path: filePath });
 
@@ -277,7 +275,7 @@ describe('services_InteropService', () => {
 
 		await service.export({ path: filePath });
 
-		await Note.delete(note1.id, defaultDeleteOptions);
+		await Note.delete(note1.id);
 
 		await service.import({ path: filePath });
 
@@ -309,8 +307,8 @@ describe('services_InteropService', () => {
 
 		await service.export({ path: filePath, sourceNoteIds: [note1.id] });
 
-		await Note.delete(note1.id, defaultDeleteOptions);
-		await Folder.delete(folder1.id, defaultDeleteOptions);
+		await Note.delete(note1.id);
+		await Folder.delete(folder1.id);
 
 		await service.import({ path: filePath });
 
@@ -329,8 +327,8 @@ describe('services_InteropService', () => {
 
 		await service.export({ path: filePath, sourceFolderIds: [folder1.id] });
 
-		await Note.delete(note1.id, defaultDeleteOptions);
-		await Folder.delete(folder1.id, defaultDeleteOptions);
+		await Note.delete(note1.id);
+		await Folder.delete(folder1.id);
 
 		await service.import({ path: filePath });
 
@@ -353,11 +351,11 @@ describe('services_InteropService', () => {
 
 		await service.export({ path: filePath, sourceFolderIds: [folder1.id] });
 
-		await Note.delete(note1.id, defaultDeleteOptions);
-		await Folder.delete(folder1.id, defaultDeleteOptions);
-		await Folder.delete(folder2.id, defaultDeleteOptions);
-		await Folder.delete(folder3.id, defaultDeleteOptions);
-		await Folder.delete(folder4.id, defaultDeleteOptions);
+		await Note.delete(note1.id);
+		await Folder.delete(folder1.id);
+		await Folder.delete(folder2.id);
+		await Folder.delete(folder3.id);
+		await Folder.delete(folder4.id);
 
 		await service.import({ path: filePath });
 
@@ -385,9 +383,9 @@ describe('services_InteropService', () => {
 
 		await service.export({ path: filePath, sourceFolderIds: [folder1.id] });
 
-		await Note.delete(note1.id, defaultDeleteOptions);
-		await Note.delete(note2.id, defaultDeleteOptions);
-		await Folder.delete(folder1.id, defaultDeleteOptions);
+		await Note.delete(note1.id);
+		await Note.delete(note2.id);
+		await Folder.delete(folder1.id);
 
 		await service.import({ path: filePath });
 

@@ -274,13 +274,14 @@ export default class BaseItem extends BaseModel {
 		return ItemClass.delete(id, options);
 	}
 
-	public static async delete(id: string, options: DeleteOptions) {
+	public static async delete(id: string, options?: DeleteOptions) {
 		return this.batchDelete([id], options);
 	}
 
-	public static async batchDelete(ids: string[], options: DeleteOptions) {
+	public static async batchDelete(ids: string[], options?: DeleteOptions) {
+		if (!options) options = {};
 		let trackDeleted = true;
-		if (options.trackDeleted !== null && options.trackDeleted !== undefined) trackDeleted = options.trackDeleted;
+		if (options && options.trackDeleted !== null && options.trackDeleted !== undefined) trackDeleted = options.trackDeleted;
 
 		// Don't create a deleted_items entry when conflicted notes are deleted
 		// since no other client have (or should have) them.

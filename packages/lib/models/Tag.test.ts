@@ -77,7 +77,7 @@ describe('models/Tag', () => {
 		let tags = await Tag.allWithNotes();
 		expect(tags.length).toBe(1);
 
-		await Note.delete(note1.id, { source: 'tests' });
+		await Note.delete(note1.id);
 
 		tags = await Tag.allWithNotes();
 		expect(tags.length).toBe(0);
@@ -97,19 +97,19 @@ describe('models/Tag', () => {
 		expect(tags[0].note_count).toBe(3);
 		expect(tags[0].todo_completed_count).toBe(1);
 
-		await Note.delete(todo1.id, { source: 'tests' });
+		await Note.delete(todo1.id);
 
 		tags = await Tag.allWithNotes();
 		expect(tags.length).toBe(1);
 		expect(tags[0].note_count).toBe(2);
 
-		await Note.delete(note1.id, { source: 'tests' });
+		await Note.delete(note1.id);
 
 		tags = await Tag.allWithNotes();
 		expect(tags.length).toBe(1);
 		expect(tags[0].note_count).toBe(1);
 
-		await Note.delete(note2.id, { source: 'tests' });
+		await Note.delete(note2.id);
 
 		tags = await Tag.allWithNotes();
 		expect(tags.length).toBe(0);

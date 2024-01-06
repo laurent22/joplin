@@ -128,7 +128,7 @@ describe('Synchronizer.resources', () => {
 		let allResources = await Resource.all();
 		expect(allResources.length).toBe(1);
 		expect((await remoteNotesFoldersResources()).length).toBe(3);
-		await Resource.delete(resource1.id, { source: 'Synchronizer tests' });
+		await Resource.delete(resource1.id);
 		await synchronizerStart();
 		expect((await remoteNotesFoldersResources()).length).toBe(2);
 
@@ -294,7 +294,7 @@ describe('Synchronizer.resources', () => {
 
 		{
 			const resource = (await Resource.all())[0];
-			await Resource.delete(resource.id, { source: 'Synchronizer tests' });
+			await Resource.delete(resource.id);
 			await synchronizerStart();
 
 		}

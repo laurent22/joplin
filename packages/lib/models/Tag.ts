@@ -47,7 +47,7 @@ export default class Tag extends BaseItem {
 		await Tag.delete(tagId, { source: 'untagAll/delete tag' });
 	}
 
-	public static async delete(id: string, options: DeleteOptions) {
+	public static async delete(id: string, options: DeleteOptions = {}) {
 		const actionLogger = ActionLogger.from(options.source);
 		const tagTitle = (await Tag.load(id)).title;
 		actionLogger.addDescription('Tag.delete', `title: ${tagTitle}`);

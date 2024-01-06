@@ -9,8 +9,6 @@ import { MarkupLanguage } from '../../renderer';
 
 describe('services/RevisionService', () => {
 
-	const defaultDeleteOptions = { source: 'RevisionService tests' };
-
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
@@ -263,7 +261,7 @@ describe('services/RevisionService', () => {
 		const n1 = await Note.save({ title: 'hello' });
 		const noteId = n1.id;
 
-		await Note.delete(noteId, defaultDeleteOptions);
+		await Note.delete(noteId);
 
 		await revisionService().collectRevisions();
 
@@ -282,7 +280,7 @@ describe('services/RevisionService', () => {
 
 		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1.id)).length).toBe(1);
 
-		await Note.delete(noteId, defaultDeleteOptions);
+		await Note.delete(noteId);
 
 		// At this point there is no need to create a new revision for the deleted note
 		// because we already have the latest version as REV 1

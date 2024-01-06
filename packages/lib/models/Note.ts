@@ -745,7 +745,7 @@ export default class Note extends BaseItem {
 		return note;
 	}
 
-	public static async batchDelete(ids: string[], options: DeleteOptions) {
+	public static async batchDelete(ids: string[], options: DeleteOptions = {}) {
 		ids = ids.slice();
 
 		const actionLogger = ActionLogger.from(options.source);
@@ -762,7 +762,7 @@ export default class Note extends BaseItem {
 			actionLogger.addDescription('Note/batchDelete', notes.map(note => note.title).join(', '));
 
 			await super.batchDelete(processIds, { ...options, source: actionLogger });
-			const changeSource = options && options.changeSource ? options.changeSource : null;
+			const changeSource = options.changeSource ? options.changeSource : null;
 			for (let i = 0; i < processIds.length; i++) {
 				const id = processIds[i];
 				void ItemChange.add(BaseModel.TYPE_NOTE, id, ItemChange.TYPE_DELETE, changeSource, beforeChangeItems[id]);
