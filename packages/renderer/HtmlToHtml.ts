@@ -38,6 +38,7 @@ interface RenderOptions {
 	postMessageSyntax: string;
 	enableLongPress: boolean;
 	itemIdToUrl?: ItemIdToUrlHandler;
+	allowedFilePrefixes?: string[];
 
 	// For compatibility with MdToHtml options:
 	plugins?: {
@@ -104,7 +105,9 @@ export default class HtmlToHtml {
 		let html = this.cache_.value(cacheKey);
 
 		if (!html) {
-			html = htmlUtils.sanitizeHtml(markup);
+			html = htmlUtils.sanitizeHtml(markup, {
+				allowedFilePrefixes: options.allowedFilePrefixes,
+			});
 
 			html = htmlUtils.processImageTags(html, (data: any) => {
 				if (!data.src) return null;

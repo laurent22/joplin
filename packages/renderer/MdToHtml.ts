@@ -192,6 +192,10 @@ export interface RuleOptions {
 	vendorDir?: string;
 	itemIdToUrl?: ItemIdToUrlHandler;
 
+	// Passed to the HTML sanitizer: Allows file:// URLs with
+	// paths with the included prefixes.
+	allowedFilePrefixes?: string[];
+
 	platformName?: string;
 }
 

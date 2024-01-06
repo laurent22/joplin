@@ -189,9 +189,11 @@ class HtmlUtils {
 			// If true, adds a "jop-noMdConv" class to all the tags.
 			// It can be used afterwards to restore HTML tags in Markdown.
 			addNoMdConvClass: false,
-			allowedFilePrefixes: [],
 			...options,
 		};
+
+		// If options.allowedFilePrefixes is `undefined`, default to [].
+		options.allowedFilePrefixes ??= [];
 
 		const output: string[] = [];
 
