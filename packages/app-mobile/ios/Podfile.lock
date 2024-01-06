@@ -349,7 +349,7 @@ PODS:
     - React
   - react-native-geolocation (3.1.0):
     - React-Core
-  - react-native-get-random-values (1.9.0):
+  - react-native-get-random-values (1.10.0):
     - React-Core
   - react-native-image-picker (7.0.3):
     - React-Core
@@ -783,7 +783,7 @@ SPEC CHECKSUMS:
   react-native-document-picker: 2b8f18667caee73a96708a82b284a4f40b30a156
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
   react-native-geolocation: ef66fb798d96284c6043f0b16c15d9d1d4955db4
-  react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb
+  react-native-get-random-values: 384787fd76976f5aec9465aff6fa9e9129af1e74
   react-native-image-picker: 2381c008bbb09e72395a2d043c147b11bd1523d9
   react-native-image-resizer: 681f7607418b97c084ba2d0999b153b103040d8a
   react-native-netinfo: 48c5f79a84fbc3ba1d28a8b0d04adeda72885fa8
