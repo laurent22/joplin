@@ -174,7 +174,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		if (!ok) {
 			return;
 		}
-		Resource.delete(resource.id, { source: 'ResourceScreen' })
+		Resource.delete(resource.id, { sourceDescription: 'ResourceScreen' })
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.catch((error: Error) => {
 				console.error(error);

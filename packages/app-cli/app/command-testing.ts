@@ -85,7 +85,7 @@ class Command extends BaseCommand {
 
 			for (let i = 0; i < noteCount; i++) {
 				const noteId = randomElement(noteIds);
-				promises.push(Note.delete(noteId, { source: 'command-testing' }));
+				promises.push(Note.delete(noteId, { sourceDescription: 'command-testing' }));
 			}
 		}
 

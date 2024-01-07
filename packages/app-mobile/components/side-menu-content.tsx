@@ -145,7 +145,7 @@ const SideMenuContentComponent = (props: Props) => {
 					{
 						text: _('OK'),
 						onPress: () => {
-							void Folder.delete(folder.id, { source: 'side-menu-content (long-press)' });
+							void Folder.delete(folder.id, { sourceDescription: 'side-menu-content (long-press)' });
 						},
 					},
 					{
