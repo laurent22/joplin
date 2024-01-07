@@ -5,6 +5,8 @@
 // the editor to not work properly.
 //
 import { EditorView, highlightActiveLineGutter, lineNumbers } from '@codemirror/view';
+import { foldGutter } from '@codemirror/language';
+
 //
 // For the above import to work, you may also need to add @codemirror/view as a dev dependency
 // to package.json. (For the type information only).
@@ -22,6 +24,7 @@ export default (context: { contentScriptId: string, postMessage: (message: any)=
 			// We add the extension to CodeMirror using a helper method:
 			codeMirrorWrapper.addExtension([
 				lineNumbers(),
+				foldGutter(),
 			]);
 
 			// See https://codemirror.net/ for more built-in extensions and configuration
