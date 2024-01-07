@@ -330,7 +330,7 @@ export default class Resource extends BaseItem {
 
 			// Log just for the current item.
 			const logger = actionLogger.clone();
-			logger.addDescription('Resource.batchDelete', resource.title);
+			logger.addDescription('Resource.batchDelete', `title: ${resource.title}`);
 
 			const path = Resource.fullPath(resource);
 			await super.batchDelete([id], {

@@ -106,7 +106,7 @@ export default class Folder extends BaseItem {
 		if (!folder) return; // noop
 
 		const actionLogger = ActionLogger.from(options.sourceDescription);
-		actionLogger.addDescription('Folder', folder.title);
+		actionLogger.addDescription('Folder', `title: ${folder.title}`);
 		options.sourceDescription = actionLogger;
 
 		if (options.deleteChildren) {

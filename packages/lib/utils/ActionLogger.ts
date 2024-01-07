@@ -1,16 +1,23 @@
 import Logger from '@joplin/utils/Logger';
 
 type DescriptionRecord = {
-	readonly source: string;
-	readonly description: string;
+	readonly label: string;
+
+	// Where the label was added
+	readonly from: string;
 };
 
-const logger = Logger.create('NoteActions');
+const logger = Logger.create('UserItemAction');
+
+export enum ItemActionType {
+	Delete = 'delete',
+	BatchDelete = 'batchDelete',
+}
 
 export default class ActionLogger {
 	private descriptions: DescriptionRecord[] = [];
 
-	public constructor(private source: string) { }
+	private constructor(private source: string) { }
 
 	public clone() {
 		const clone = new ActionLogger(this.source);
@@ -18,17 +25,15 @@ export default class ActionLogger {
 		return clone;
 	}
 
+	// addDescription is used to add labels with information that may not be available
+	// when .log is called. For example, to include the title of a deleted note.
 	public addDescription(source: string, description: string) {
-		this.descriptions.push({ source, description });
+		this.descriptions.push({ label: description, from: source });
 	}
 
-	public log(action: string, itemIds: string|string[]) {
-		const description = this.descriptions.map(description => {
-			return `${description.description} (${description.source})`;
-		}).join('; ');
-
+	public log(action: ItemActionType, itemIds: string|string[]) {
 		logger.info(JSON.stringify({
-			action, description, ids: itemIds, from: this.source,
+			action, description: this.descriptions, ids: itemIds, from: this.source,
 		}));
 	}
 

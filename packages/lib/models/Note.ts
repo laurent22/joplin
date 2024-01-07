@@ -759,7 +759,8 @@ export default class Note extends BaseItem {
 				beforeChangeItems[note.id] = JSON.stringify(note);
 			}
 
-			actionLogger.addDescription('Note/batchDelete', notes.map(note => note.title).join(', '));
+			const noteTitles = notes.map(note => note.title);
+			actionLogger.addDescription('Note/batchDelete', `titles: ${JSON.stringify(noteTitles)}`);
 
 			await super.batchDelete(processIds, { ...options, sourceDescription: actionLogger });
 			const changeSource = options.changeSource ? options.changeSource : null;
