@@ -189,38 +189,56 @@ async function tryToGuessExtFromMimeType(response: any, mediaPath: string) {
 	return newMediaPath;
 }
 
-export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions, allowedProtocolsParameter?: string[]) {
-	logger.info('Downloading media file', url);
 
+const getFileExtension = (url: string, isDataUrl: boolean) => {
+	let fileExt = isDataUrl ? mimeUtils.toFileExtension(mimeUtils.fromDataUrl(url)) : safeFileExtension(fileExtension(url).toLowerCase());
+	if (!mimeUtils.fromFileExtension(fileExt)) fileExt = ''; // If the file extension is unknown - clear it.
+	if (fileExt) fileExt = `.${fileExt}`;
+
+	return fileExt;
+};
+
+const generateMediaPath = (url: string, isDataUrl: boolean, fileExt: string) => {
 	const tempDir = Setting.value('tempDir');
-	const allowedProtocols = allowedProtocolsParameter || ['http:', 'https:', 'data:', 'file:'];
+	const name = isDataUrl ? md5(`${Math.random()}_${Date.now()}`) : filename(url);
+	// Append a UUID because simply checking if the file exists is not enough since
+	// multiple resources can be downloaded at the same time (race condition).
+	const mediaPath = `${tempDir}/${safeFilename(name)}_${uuid.create()}${fileExt}`;
+	return mediaPath;
+};
+
+const isValidUrl = (url: string, isDataUrl: boolean, urlProtocol?: string, allowedProtocols?: string[]) => {
+	if (!urlProtocol) return false;
+
+	// PDFs and other heavy resoucres are often served as seperate files insted of data urls, its very unlikely to encounter a pdf as a data url
+	if (isDataUrl && !url.toLowerCase().startsWith('data:image/')) {
+		logger.warn(`Resources in data URL format is only supported for images ${url}`);
+		return false;
+	}
+
+	const defaultAllowedProtocols = ['http:', 'https:', 'data:', 'file:'];
+	const allowed = allowedProtocols || defaultAllowedProtocols;
+	const isAllowedProtocol = allowed.includes(urlProtocol);
+
+	return isAllowedProtocol;
+};
+
+export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
+	logger.info('Downloading media file', url);
 
 	// The URL we get to download have been extracted from the Markdown document
 	url = markdownUtils.unescapeLinkUrl(url);
 
 	const isDataUrl = url && url.toLowerCase().indexOf('data:') === 0;
-
-	// PDFs and other heavy resoucres are often served as seperate files insted of data urls, its very unlikely to encounter a pdf as a data url
-	if (isDataUrl && !url.toLowerCase().startsWith('data:image/')) {
-		logger.warn(`Resources in data URL format is only supported for images ${url}`);
-		return '';
-	}
-
 	const urlProtocol = urlUtils.urlProtocol(url)?.toLowerCase();
-	const isAllowed = allowedProtocols.includes(urlProtocol);
 
-	if (!urlProtocol || !isAllowed) {
+	if (!isValidUrl(url, isDataUrl, urlProtocol, allowedProtocols)) {
 		return '';
 	}
 
-	const name = isDataUrl ? md5(`${Math.random()}_${Date.now()}`) : filename(url);
-	let fileExt = isDataUrl ? mimeUtils.toFileExtension(mimeUtils.fromDataUrl(url)) : safeFileExtension(fileExtension(url).toLowerCase());
-	if (!mimeUtils.fromFileExtension(fileExt)) fileExt = ''; // If the file extension is unknown - clear it.
-	if (fileExt) fileExt = `.${fileExt}`;
-
-	// Append a UUID because simply checking if the file exists is not enough since
-	// multiple resources can be downloaded at the same time (race condition).
-	let mediaPath = `${tempDir}/${safeFilename(name)}_${uuid.create()}${fileExt}`;
+	const fileExt = getFileExtension(url, isDataUrl);
+	const mediaPath = generateMediaPath(url, isDataUrl, fileExt);
+	let newMediaPath = undefined;
 
 	try {
 		if (isDataUrl) {
@@ -233,11 +251,13 @@ export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions
 		} else {
 			const response = await shim.fetchBlob(url, { path: mediaPath, maxRetry: 1, ...fetchOptions });
 
-			// If we could not find the file extension from the URL, try to get it
-			// now based on the Content-Type header.
-			if (!fileExt) mediaPath = await tryToGuessExtFromMimeType(response, mediaPath);
+			if (!fileExt) {
+				// If we could not find the file extension from the URL, try to get it
+				// now based on the Content-Type header.
+				newMediaPath = await tryToGuessExtFromMimeType(response, mediaPath);
+			}
 		}
-		return mediaPath;
+		return newMediaPath || mediaPath;
 	} catch (error) {
 		logger.warn(`Cannot download image at ${url}`, error);
 		return '';
