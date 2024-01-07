@@ -217,7 +217,7 @@ const isValidUrl = (url: string, isDataUrl: boolean, urlProtocol?: string, allow
 	}
 
 	const defaultAllowedProtocols = ['http:', 'https:', 'data:', 'file:'];
-	const allowed = allowedProtocols || defaultAllowedProtocols;
+	const allowed = allowedProtocols ?? defaultAllowedProtocols;
 	const isAllowedProtocol = allowed.includes(urlProtocol);
 
 	return isAllowedProtocol;
@@ -257,7 +257,7 @@ export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions
 				newMediaPath = await tryToGuessExtFromMimeType(response, mediaPath);
 			}
 		}
-		return newMediaPath || mediaPath;
+		return newMediaPath ?? mediaPath;
 	} catch (error) {
 		logger.warn(`Cannot download image at ${url}`, error);
 		return '';
