@@ -63,6 +63,9 @@ const { Dirnames } = require('../services/synchronizer/utils/types');
 import RSA from '../services/e2ee/RSA.node';
 import { State as ShareState } from '../services/share/reducer';
 import initLib from '../initLib';
+import OcrDriverTesseract from '../services/ocr/drivers/OcrDriverTesseract';
+import OcrService from '../services/ocr/OcrService';
+import { createWorker } from 'tesseract.js';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -306,20 +309,21 @@ async function clearDatabase(id: number = null) {
 	await ItemChange.waitForAllSaved();
 
 	const tableNames = [
-		'notes',
-		'folders',
-		'resources',
-		'tags',
-		'note_tags',
-		'master_keys',
-		'item_changes',
-		'note_resources',
-		'settings',
 		'deleted_items',
-		'sync_items',
-		'notes_normalized',
-		'revisions',
+		'folders',
+		'item_changes',
+		'items_normalized',
 		'key_values',
+		'master_keys',
+		'note_resources',
+		'note_tags',
+		'notes_normalized',
+		'notes',
+		'resources',
+		'revisions',
+		'settings',
+		'sync_items',
+		'tags',
 	];
 
 	const queries = [];
@@ -1029,6 +1033,11 @@ const simulateReadOnlyShareEnv = (shareId: string) => {
 		BaseItem.syncShareCache = null;
 		Setting.setValue('sync.userId', '');
 	};
+};
+
+export const newOcrService = () => {
+	const driver = new OcrDriverTesseract({ createWorker });
+	return new OcrService(driver);
 };
 
 export { supportDir, createNoteAndResource, createTempFile, createTestShareData, simulateReadOnlyShareEnv, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

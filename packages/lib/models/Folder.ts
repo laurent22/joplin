@@ -1,5 +1,6 @@
 import { defaultFolderIcon, FolderEntity, FolderIcon, NoteEntity, ResourceEntity } from '../services/database/types';
 import BaseModel, { DeleteOptions } from '../BaseModel';
+import { FolderLoadOptions } from './utils/types';
 import time from '../time';
 import { _ } from '../locale';
 import Note from './Note';
@@ -249,7 +250,7 @@ export default class Folder extends BaseItem {
 		return output;
 	}
 
-	public static async all(options: any = null) {
+	public static async all(options: FolderLoadOptions = null) {
 		const output = await super.all(options);
 		if (options && options.includeConflictFolder) {
 			const conflictCount = await Note.conflictedCount();

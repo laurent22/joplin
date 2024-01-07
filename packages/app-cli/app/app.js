@@ -1,5 +1,5 @@
 const BaseApplication = require('@joplin/lib/BaseApplication').default;
-const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
+const { refreshFolders } = require('@joplin/lib/folders-screen-utils.js');
 const ResourceService = require('@joplin/lib/services/ResourceService').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const Folder = require('@joplin/lib/models/Folder').default;
@@ -435,7 +435,7 @@ class Application extends BaseApplication {
 			// initialised. So we manually call dispatchUpdateAll() to force an update.
 			Setting.dispatchUpdateAll();
 
-			await FoldersScreenUtils.refreshFolders();
+			await refreshFolders((action) => { this.store().dispatch(action); });
 
 			const tags = await Tag.allWithNotes();
 

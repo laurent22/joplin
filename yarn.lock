@@ -7884,7 +7884,7 @@ __metadata:
     "@types/mustache": 4.2.5
     "@types/node": 18.18.14
     "@types/react": 18.2.43
-    "@types/react-redux": 7.1.32
+    "@types/react-redux": 7.1.33
     "@types/styled-components": 5.1.32
     "@types/tesseract.js": 2.0.0
     async-mutex: 0.4.0
@@ -7970,7 +7970,7 @@ __metadata:
     "@types/jest": 29.5.8
     "@types/react": 18.2.43
     "@types/react-native": 0.70.6
-    "@types/react-redux": 7.1.32
+    "@types/react-redux": 7.1.33
     "@types/tar-stream": 3.1.3
     assert-browserify: 2.0.0
     babel-jest: 29.7.0
@@ -7978,7 +7978,7 @@ __metadata:
     buffer: 6.0.3
     constants-browserify: 1.0.0
     crypto-browserify: 3.12.0
-    deprecated-react-native-prop-types: 4.2.3
+    deprecated-react-native-prop-types: 5.0.0
     events: 3.3.0
     expo: 49.0.18
     expo-asset: 8.10.1
@@ -8022,7 +8022,7 @@ __metadata:
     react-native-side-menu-updated: 1.3.2
     react-native-sqlite-storage: 6.0.1
     react-native-url-polyfill: 2.0.0
-    react-native-vector-icons: 10.0.2
+    react-native-vector-icons: 10.0.3
     react-native-version-info: 1.1.1
     react-native-vosk: 0.1.12
     react-native-webview: 13.6.3
@@ -8105,7 +8105,7 @@ __metadata:
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.8
     "@types/react": 18.2.43
-    "@types/react-redux": 7.1.32
+    "@types/react-redux": 7.1.33
     "@types/styled-components": 5.1.32
     jest: 29.7.0
     jest-environment-jsdom: 29.7.0
@@ -10732,10 +10732,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/normalize-colors@npm:<0.73.0":
-  version: 0.72.0
-  resolution: "@react-native/normalize-colors@npm:0.72.0"
-  checksum: c8ec577663394a3390eb34c3cd531350521172bcfad7de309ab111e5f9e3d27c966d4a4387f00972302107be3d8cad584c5794ccfa30939aecc56162e4ddbe25
+"@react-native/normalize-colors@npm:^0.73.0":
+  version: 0.73.2
+  resolution: "@react-native/normalize-colors@npm:0.73.2"
+  checksum: ddf9384ad41adc4f3c8eb61ddd27113130c8060bd2f4255bee284a52aa7ddcff8a5e751f569dd416c45f8b9d4062392fa7219b221f2f7f0b229d02b8d2a5b974
   languageName: node
   linkType: hard
 
@@ -12312,15 +12312,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-redux@npm:7.1.32":
-  version: 7.1.32
-  resolution: "@types/react-redux@npm:7.1.32"
+"@types/react-redux@npm:7.1.33":
+  version: 7.1.33
+  resolution: "@types/react-redux@npm:7.1.33"
   dependencies:
     "@types/hoist-non-react-statics": ^3.3.0
     "@types/react": "*"
     hoist-non-react-statics: ^3.3.0
     redux: ^4.0.0
-  checksum: f09eeb27956914ce40451c2581db3dc18cabe50bebbe111230b45635894e93c6547dead5589319bf66e7e99cc1687497020bddc5c9fd336041e0eac3f9a966dd
+  checksum: 063e98c0d8cdc7cc2da1663716260ffb8d504b2f8be2d92cabb630cae31eb05aa0e389175265caa9a160bb7c4b66646d4a4171d4aa2dc292722088dcf593cdc3
   languageName: node
   linkType: hard
 
@@ -20018,14 +20018,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"deprecated-react-native-prop-types@npm:4.2.3":
-  version: 4.2.3
-  resolution: "deprecated-react-native-prop-types@npm:4.2.3"
+"deprecated-react-native-prop-types@npm:5.0.0":
+  version: 5.0.0
+  resolution: "deprecated-react-native-prop-types@npm:5.0.0"
   dependencies:
-    "@react-native/normalize-colors": <0.73.0
+    "@react-native/normalize-colors": ^0.73.0
     invariant: ^2.2.4
     prop-types: ^15.8.1
-  checksum: 294752f9f15733b66473022d8258a14aac850e4a3db7e802ef189a09871236f5a110f8fe588468ae1df92f24641ae29de05943074dc54da02a5e4262935f913d
+  checksum: ccbd4214733a178ef51934c4e0149f5c3ab60aa318d68500b6d6b4b59be9d6c25b844f808ed7095d82e1bbef6fc4bc49e0dea14d55d3ebd1ff383011ac2a1576
   languageName: node
   linkType: hard
 
@@ -37693,9 +37693,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-vector-icons@npm:10.0.2":
-  version: 10.0.2
-  resolution: "react-native-vector-icons@npm:10.0.2"
+"react-native-vector-icons@npm:10.0.3":
+  version: 10.0.3
+  resolution: "react-native-vector-icons@npm:10.0.3"
   dependencies:
     prop-types: ^15.7.2
     yargs: ^16.1.1
@@ -37704,7 +37704,7 @@ __metadata:
     fa5-upgrade: bin/fa5-upgrade.sh
     fa6-upgrade: bin/fa6-upgrade.sh
     generate-icon: bin/generate-icon.js
-  checksum: 4ea424fa98c25cdf3e33c590f6e370e0ce0762051a139beb425410eba6e87627e2a68963a025db27130a94d28fbe44299c30471d62555af1654c8c6e4918afb6
+  checksum: 77f22804b0217b4b21e8f4baaee6d33d09429bf55a31e07347fb5ab0af395b0d9adc0cbc3abd46f689ccaf07b953dc909eba95213bce7e03b562801fe4fd0768
   languageName: node
   linkType: hard
 
