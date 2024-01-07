@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Wisnu Adi Santoso <waditos@gmail.com>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Liffindra Angga Zaaldian <findrakecil@icloud.com>\n"
 "Language-Team: \n"
 "Language: id_ID\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:493
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -32,12 +34,12 @@ msgid ""
 "synchronisation."
 msgstr ""
 "- Penyimpanan: untuk mengizinkan melampirkan berkas ke catatan dan "
-"mengaktifkan sinkronisasi sistem berkas."
+"menyalakan penyelarasan berkas sistem."
 
 #: packages/lib/services/KeymapService.ts:317
 #: packages/lib/services/KeymapService.ts:323
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr "\"%s\" tidak menemukan properti \"%s\"."
+msgstr "\"%s\" tidak dapat menemukan properti wajib \"%s\"."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:271
 msgid "(%s)"
@@ -45,7 +47,7 @@ msgstr "(%s)"
 
 #: packages/lib/services/plugins/api/JoplinViewsDialogs.ts:74
 msgid "(In plugin: %s)"
-msgstr ""
+msgstr "(Pada plugin: %s)"
 
 #: packages/lib/SyncTargetNone.ts:16
 msgid "(None)"
@@ -58,7 +60,7 @@ msgstr "(wysiwyg: %s)"
 #: packages/app-mobile/components/screens/Note.tsx:760
 #: packages/lib/shim-init-node.ts:224
 msgid "(You may disable this prompt in the options)"
-msgstr ""
+msgstr "(Anda bisa mematikan masukan ini di pengaturan)"
 
 #: packages/app-desktop/gui/MenuBar.tsx:692
 #: packages/app-desktop/gui/MenuBar.tsx:968
@@ -98,12 +100,12 @@ msgstr "%d hari"
 #: packages/lib/utils/joplinCloud.ts:148 packages/lib/utils/joplinCloud.ts:149
 #: packages/lib/utils/joplinCloud.ts:150
 msgid "%d GB"
-msgstr ""
+msgstr "%d GB"
 
 #: packages/lib/utils/joplinCloud.ts:145 packages/lib/utils/joplinCloud.ts:146
 #: packages/lib/utils/joplinCloud.ts:147
 msgid "%d GB storage space"
-msgstr ""
+msgstr "%d GB ruang penyimpanan"
 
 #: packages/lib/models/Setting.ts:1400
 msgid "%d hour"
@@ -116,13 +118,12 @@ msgstr "%d jam"
 #: packages/lib/utils/joplinCloud.ts:136 packages/lib/utils/joplinCloud.ts:137
 #: packages/lib/utils/joplinCloud.ts:138
 msgid "%d MB"
-msgstr ""
+msgstr "%d MB"
 
 #: packages/lib/utils/joplinCloud.ts:133 packages/lib/utils/joplinCloud.ts:134
 #: packages/lib/utils/joplinCloud.ts:135
-#, fuzzy
 msgid "%d MB per note or attachment"
-msgstr "Lampiran catatan"
+msgstr "%d MB tiap catatan atau lampiran"
 
 #: packages/lib/models/Setting.ts:1397 packages/lib/models/Setting.ts:1398
 #: packages/lib/models/Setting.ts:1399
@@ -131,13 +132,12 @@ msgstr "%d menit"
 
 #: packages/app-cli/app/command-rmnote.ts:27
 msgid "%d notes match this pattern. Delete them?"
-msgstr "%d catatan cocok dengan pola ini. Hapus?"
+msgstr "%d catatan cocok dengan pola ini. Hapus semuanya?"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:253
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:263
-#, fuzzy
 msgid "%s"
-msgstr "(%s)"
+msgstr "%s"
 
 #: packages/app-desktop/gui/MainScreen/commands/duplicateNote.ts:18
 msgid "%s - Copy"
@@ -185,6 +185,8 @@ msgid ""
 "%s is not optimised for synchronising many small files so your initial "
 "synchronisation will be slow."
 msgstr ""
+"%s tidak dioptimalkan untuk menyelaraskan banyak berkas kecil sehingga "
+"penyelarasan awal akan menjadi lambat."
 
 #: packages/lib/services/ReportService.ts:247
 #: packages/lib/services/ReportService.ts:248
@@ -208,9 +210,8 @@ msgstr "%s: %s"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:191
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:263
-#, fuzzy
 msgid "%s: Missing password."
-msgstr "Kata sandi master"
+msgstr "%s: membutuhkan kata sandi."
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
@@ -279,25 +280,25 @@ msgstr "Terima"
 
 #: packages/lib/WebDavApi.js:451
 msgid "Access denied: Please check your username and password"
-msgstr ""
+msgstr "Akses ditolak: Periksa nama pengguna dan kata sandi Anda"
 
 #: packages/lib/WebDavApi.js:449
 msgid "Access denied: Please re-enter your password and/or username"
-msgstr ""
+msgstr "Akses ditolak: Masukkan kembali kata sandi dan/atau nama pengguna Anda"
 
 #: packages/server/src/routes/admin/users.ts:141
 msgid "Account"
-msgstr ""
+msgstr "Akun"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:96
 msgid "Action"
-msgstr "Aksi"
+msgstr "Tindakan"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:299
 #: packages/app-mobile/components/ScreenHeader.tsx:609
 msgid "Actions"
-msgstr "Aksi"
+msgstr "Tindakan"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:165
 msgid "Active"
@@ -313,9 +314,8 @@ msgid "Add body"
 msgstr "Tambahkan isi"
 
 #: packages/app-mobile/components/ActionButton.tsx:64
-#, fuzzy
 msgid "Add new"
-msgstr "Tambahkan judul"
+msgstr "Tambah baru"
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:38
 msgid "Add or remove tags:"
@@ -345,7 +345,7 @@ msgstr "Admin dasbor"
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:135
 msgid "Advanced options"
-msgstr "Opsi lanjutan"
+msgstr "Pilihan lanjutan"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:182
 msgid "Advanced tools"
@@ -355,6 +355,8 @@ msgstr "Perkakas lanjutan"
 msgid ""
 "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
+"Semua data, termasuk catatan, buku catatan dan label akan dihapus secara "
+"permanen."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:497
 #: packages/app-mobile/components/screens/Notes.tsx:180
@@ -369,32 +371,32 @@ msgstr "Semua porta potensial sedang digunakan - silakan laporkan isu di %s"
 #: packages/app-cli/app/command-config.ts:19
 msgid "Also displays unset and hidden config variables."
 msgstr ""
-"Juga menampilkan variabel konfigurasi yang belum disetel dan yang "
-"tersembunyi."
+"Tampilkan juga variabel pengaturan yang belum disetel dan yang tersembunyi."
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:202
 msgid "Also publish linked notes"
-msgstr "Juga terbitkan catatan terkait"
+msgstr "Terbitkan juga catatan terkait"
 
 #: packages/lib/models/Setting.ts:750
 msgid "Always"
 msgstr "Selalu"
 
 #: packages/lib/models/Setting.ts:1140
-#, fuzzy
 msgid "Always ask"
-msgstr "Selalu"
+msgstr "Selalu minta"
 
 #: packages/lib/models/Setting.ts:1141
-#, fuzzy
 msgid "Always resize"
-msgstr "Selalu"
+msgstr "Selalu sesuaikan"
 
 #: packages/app-cli/app/command-mv.ts:36
 msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
+"Buku catatan “%s” ambigu. Gunakan id buku catatan - tekan “ti” untuk melihat "
+"id ringkas dari buku catatan atau gunakan $b untuk buku catatan yang "
+"sekarang dipilih"
 
 #: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.ts:29
@@ -402,14 +404,18 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use short notebook id instead - press "
 "\"ti\" to see the short notebook id"
 msgstr ""
+"Buku catatan “%s” ambigu. Gunakan id ringkas dari buku catatan - tekan “ti” "
+"untuk melihat id ringkas dari buku catatan"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:13
 msgid "An autosaved drawing was found. Attach a copy of it to the note?"
 msgstr ""
+"Telah ditemukan gambar yang disimpan otomatis. Lampirkan salinan gambar ke "
+"catatan?"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:89
 msgid "An error occurred: %s"
-msgstr ""
+msgstr "Sebuah galat telah terjadi: %s"
 
 #: packages/app-desktop/checkForUpdates.ts:106
 msgid "An update is available, do you want to download it now?"
@@ -421,6 +427,9 @@ msgid ""
 "Any email sent to this address will be converted into a note and added to "
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
+"Setiap email yang dikirim ke alamat ini akan diubah menjadi sebuah catatan "
+"dan ditambahkan ke dalam koleksi Anda. Catatan akan disimpan ke dalam buku "
+"catatan Kotak Masuk"
 
 #: packages/lib/models/Setting.ts:2619
 msgid "Appearance"
@@ -437,13 +446,15 @@ msgstr "Terapkan"
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:36
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr "Yakin ingin memperpanjang token otorisasi?"
+msgstr "Anda yakin ingin memperbarui token otorisasi?"
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:14
 msgid ""
 "Are you sure you want to return to the default layout? The current layout "
 "configuration will be lost."
 msgstr ""
+"Anda yakin ingin kembali ke tata letak bawaan? Pengaturan tata letak "
+"sekarang akan hilang."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:514
 msgid "Arguments:"
@@ -455,9 +466,8 @@ msgstr "Aritim Dark"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:25
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:215
-#, fuzzy
 msgid "Attach"
-msgstr "Lampirkan..."
+msgstr "Lampirkan"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:74
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:623
@@ -484,7 +494,7 @@ msgstr "lampiran"
 
 #: packages/lib/models/Resource.ts:484
 msgid "Attachment conflict: \"%s\""
-msgstr "Konflik lampiran: \"%s\""
+msgstr "Lampiran bertentangan: \"%s\""
 
 #: packages/lib/models/Setting.ts:746
 msgid "Attachment download behaviour"
@@ -504,9 +514,9 @@ msgid ""
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
 msgstr ""
-"Perhatian: Jika mengubah lokasi ini, pastikan Anda menyalin semua konten "
-"Anda ke sana sebelum menyinkronkan, jika tidak semua berkas akan terhapus! "
-"Lihat Tanya Jawab Umum (FAQ) untuk detail lebih lanjut: %s"
+"Perhatian: Jika Anda mengubah lokasi ini, pastikan Anda menyalin semua "
+"konten Anda ke lokasi baru sebelum melakukan penyelarasan, jika tidak, semua "
+"berkas akan dihapus! Lihat FAQ untuk rincian lebih lanjut: %s"
 
 #: packages/app-cli/app/command-sync.ts:65
 #: packages/app-cli/app/command-sync.ts:79
@@ -530,7 +540,7 @@ msgstr "Tambahkan otomatis akun non-aktif untuk dihapus"
 
 #: packages/lib/models/Setting.ts:961
 msgid "Auto-pair braces, parenthesis, quotations, etc."
-msgstr "Pasangkan secara otomatis kurung kurawal, tanda kurung, kutipan, dll."
+msgstr "Pasangkan otomatis kurung kurawal, tanda kurung, tanda petik, dll."
 
 #: packages/lib/models/Setting.ts:1384
 msgid "Automatically check for updates"
@@ -538,7 +548,7 @@ msgstr "Periksa pembaruan secara otomatis"
 
 #: packages/lib/models/Setting.ts:873
 msgid "Automatically switch theme to match system theme"
-msgstr "Alihkan tema secara otomatis agar sesuai dengan tema sistem"
+msgstr "Alihkan tema agar sesuai dengan tema sistem secara otomatis"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:45
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:733
@@ -551,7 +561,7 @@ msgstr "Kembali"
 
 #: packages/lib/utils/joplinCloud.ts:342
 msgid "Basic"
-msgstr ""
+msgstr "Dasar"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:17
 msgid ""
@@ -559,6 +569,10 @@ msgid ""
 "unlock Joplin. If the device is on lockout, consider switching it off and on "
 "to reset biometrics scanning."
 msgstr ""
+"Membuka dengan biometrik tidak diatur pada perangkat ini. Atur buka dengan "
+"biometrik untuk dapat membuka Joplin. Jika perangkat terkunci, pertimbangkan "
+"untuk mematikan dan menyalakannya kembali untuk mengatur ulang pemindaian "
+"biometrik."
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:54
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:135
@@ -576,24 +590,23 @@ msgstr "Telusuri..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:231
 msgid "Built in"
-msgstr ""
+msgstr "Bawaan"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:84
 msgid "Bulleted List"
 msgstr "Daftar berpoin"
 
 #: packages/server/src/routes/admin/users.ts:157
-#, fuzzy
 msgid "Can Share"
-msgstr "Bagikan"
+msgstr "Dapat membagikan"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:114
 msgid "Can view"
-msgstr ""
+msgstr "Dapat melihat"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:115
 msgid "Can view and edit"
-msgstr ""
+msgstr "Dapat melihat dan menyunting"
 
 #: packages/app-desktop/bridge.ts:202 packages/app-desktop/bridge.ts:220
 #: packages/app-desktop/checkForUpdates.ts:108
@@ -627,7 +640,7 @@ msgstr "Batal"
 
 #: packages/app-cli/app/app.js:139
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "Membatalkan proses sinkronisasi latar belakang... Mohon tunggu."
+msgstr "Membatalkan penyelarasan di latar belakang... Mohon tunggu."
 
 #: packages/lib/Synchronizer.ts:196
 msgid "Cancelling..."
@@ -650,9 +663,8 @@ msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Tidak dapat menyalin catatan ke buku catatan \"%s\""
 
 #: packages/app-mobile/components/screens/Notes.tsx:167
-#, fuzzy
 msgid "Cannot create a new note: %s"
-msgstr "Membuat catatan baru."
+msgstr "Tidak dapat membuat catatan baru: %s"
 
 #: packages/app-cli/app/command-attach.ts:21
 #: packages/app-cli/app/command-cat.ts:25 packages/app-cli/app/command-cp.ts:24
@@ -683,25 +695,25 @@ msgid "Cannot find \"%s\"."
 msgstr "Tidak dapat menemukan \"%s\"."
 
 #: packages/app-cli/app/command-mkbook.ts:28
-#, fuzzy
 msgid "Cannot find: \"%s\""
-msgstr "Tidak dapat menemukan \"%s\"."
+msgstr "Tidak dapat menemukan \"%s\""
 
 #: packages/app-cli/app/command-sync.ts:165
 msgid "Cannot initialise synchroniser."
-msgstr "Tidak dapat menginisiasi penyinkron."
+msgstr "Tidak dapat menginisiasi penyelaras."
 
 #: packages/lib/services/interop/InteropService.ts:219
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "Tidak dapat memuat modul \"%s\" untuk format \"%s\" dan output \"%s\""
+msgstr ""
+"Tidak dapat memuat modul \"%s\" untuk format \"%s\" dan keluaran \"%s\""
 
 #: packages/lib/services/interop/InteropService.ts:232
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
-msgstr "Tidak dapat memuat modul \"%s\" untuk format \"%s\" dan target \"%s\""
+msgstr "Tidak dapat memuat modul \"%s\" untuk format \"%s\" dan sasaran \"%s\""
 
 #: packages/lib/models/Note.ts:539
 msgid "Cannot move note to \"%s\" notebook"
-msgstr "TIdak dapat memindah catatan ke buku catatan \"%s\""
+msgstr "Tidak dapat memindah catatan ke buku catatan \"%s\""
 
 #: packages/app-mobile/components/screens/folder.js:73
 #: packages/lib/models/Folder.ts:741
@@ -713,8 +725,8 @@ msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
-"Tidak dapat menyegarkan token: data otentikasi hilang. Memulai sinkronisasi "
-"lagi mungkin dapat memperbaiki masalah."
+"Tidak dapat menyegarkan token: data otentikasi hilang. Memulai penyelarasan "
+"kembali mungkin dapat memperbaiki masalah."
 
 #: packages/server/src/models/UserModel.ts:244
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
@@ -736,13 +748,13 @@ msgid ""
 "enabled end-to-end encryption. They may do so from the screen Configuration "
 "> Encryption."
 msgstr ""
-"Tidak dapat berbagi buku catatan terenkripsi %s karena mereka tidak "
-"mengaktifkan enkripsi end-to-end. Hal ini bisa diaktifkan melalui "
-"Konfigurasi > Enkripsi."
+"Tidak dapat berbagi buku catatan terenkripsi dengan penerima %s karena "
+"mereka belum menyalakan enkripsi ujung ke ujung. Mereka dapat melakukannya "
+"dari layar Pengaturan > Enkripsi."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:328
 msgid "Case sensitive"
-msgstr ""
+msgstr "Ikut mempertimbangkan huruf kapital"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -768,7 +780,7 @@ msgstr "Periksa pembaruan..."
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:213
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:418
 msgid "Check synchronisation configuration"
-msgstr "Periksa konfigurasi sinkronisasi"
+msgstr "Periksa pengaturan penyelarasan"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:89
 msgid "Checkbox"
@@ -784,7 +796,7 @@ msgstr "Sedang memeriksa… Mohon tunggu."
 
 #: packages/app-mobile/components/screens/Note.tsx:1150
 msgid "Choose an option"
-msgstr "Pilih satu opsi"
+msgstr "Pilih salah satu"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:17
 #: packages/app-desktop/gui/ExtensionBadge.tsx:70
@@ -808,17 +820,17 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
-"Klik \"%s\" untuk memulihkan catatan. Catatan akan disalin dalam buku "
-"catatan bernama \"%s\". Versi catatan saat ini tidak akan diganti atau "
-"dimodifikasi."
+"Tekan \"%s\" untuk memulihkan catatan. Catatan akan disalin dalam buku "
+"catatan bernama \"%s\". Versi saat ini dari catatan tidak akan diganti atau "
+"diubah."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:427
 msgid "Click to add tags..."
-msgstr "Klik untuk menambahkan label..."
+msgstr "Tekan untuk menambahkan label..."
 
 #: packages/lib/versionInfo.ts:75
 msgid "Client ID: %s"
-msgstr "ID klien: %s"
+msgstr "ID pelanggan: %s"
 
 #: packages/app-desktop/gui/MenuBar.tsx:325
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:173
@@ -835,9 +847,8 @@ msgid "Close"
 msgstr "Tutup"
 
 #: packages/app-mobile/components/Dropdown.tsx:155
-#, fuzzy
 msgid "Close dropdown"
-msgstr "Tutup jendela"
+msgstr "Tutup tarik-turun"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 #: packages/app-desktop/gui/MenuBar.tsx:655
@@ -858,17 +869,16 @@ msgid "Code View"
 msgstr "Tampilan Kode"
 
 #: packages/lib/utils/joplinCloud.ts:172
-#, fuzzy
 msgid "Collaborate on a notebook with others"
-msgstr "Kolaborasi buku catatan dengan orang lain"
+msgstr "Bekerja sama pada sebuah buku catatan dengan orang lain"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:189
 msgid "Collaborate on notebooks with others"
-msgstr "Kolaborasi buku catatan dengan orang lain"
+msgstr "Bekerja sama pada buku-buku catatan dengan orang lain"
 
 #: packages/app-mobile/components/side-menu-content.tsx:357
 msgid "Collapse"
-msgstr ""
+msgstr "Lipat"
 
 #: packages/lib/services/ReportService.ts:312
 msgid "Coming alarms"
@@ -881,11 +891,11 @@ msgid ""
 "pem. Note that if you make changes to the TLS settings, you must save your "
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
-"Daftar \"jalur ke direktori tempat asal sertifikat dimuat\" atau \"jalur ke "
-"berkas sertifikat\" yang dipisahkan koma. Contoh: /jalur/ke/dir_sert, /"
-"lainnya/kustom.pem. Perhatikan bahwa jika membuat perubahan pada pengaturan "
-"TLS, Anda harus menyimpan perubahan Anda sebelum mengeklik \"Periksa "
-"konfigurasi sinkronisasi\"."
+"Daftar jalur yang dipisahkan tanda koma menuju direktori untuk memuat "
+"sertifikat dari, atau jalur menuju berkas cert satuan. Contoh: /my/"
+"cert_dir, /other/custom.pem. Perhatikan bahwa jika Anda membuat perubahan "
+"pada pengaturan TLS, Anda harus menyimpan perubahan sebelum menekan tombol "
+"“Periksa pengaturan penyelarasan”."
 
 #: packages/lib/services/KeymapService.ts:317
 msgid "command"
@@ -904,9 +914,8 @@ msgid "Command palette..."
 msgstr "Palet perintah..."
 
 #: packages/lib/services/noteList/defaultListRenderer.ts:22
-#, fuzzy
 msgid "Compact"
-msgstr "Selesai"
+msgstr "Rapat"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:53
@@ -919,17 +928,17 @@ msgstr "Proses dekripsi selesai."
 
 #: packages/lib/Synchronizer.ts:197
 msgid "Completed: %s (%s)"
-msgstr "Telah Selesai: %s (%s)"
+msgstr "Selesai: %s (%s)"
 
 #: packages/server/src/services/TaskService.ts:28
 msgid "Compress old changes"
-msgstr "Mampatkan perubahan yang telah usang"
+msgstr "Mampatkan perubahan lama"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:129
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:699
 #: packages/app-mobile/components/side-menu-content.tsx:433
 msgid "Configuration"
-msgstr "Konfigurasi"
+msgstr "Pengaturan"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:137
 msgid "Confirm password cannot be empty"
@@ -943,7 +952,7 @@ msgstr "Konfirmasi kata sandi:"
 #: packages/app-desktop/gui/Root.tsx:155
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:61
 msgid "Confirmation"
-msgstr "Konfirmasi"
+msgstr "Persetujuan"
 
 #: packages/lib/services/ReportService.ts:291
 msgid "Conflicted: %d"
@@ -951,15 +960,15 @@ msgstr "Bertentangan: %d"
 
 #: packages/lib/models/Folder.ts:130
 msgid "Conflicts"
-msgstr "Konflik"
+msgstr "Hal-hal yang bertentangan"
 
 #: packages/lib/models/Resource.ts:453
 msgid "Conflicts (attachments)"
-msgstr "Konflik catatan"
+msgstr "Hal-hal yang bertentangan (lampiran)"
 
 #: packages/lib/utils/joplinCloud.ts:206
 msgid "Consolidated billing"
-msgstr ""
+msgstr "Penagihan gabungan"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:111
 msgid "Content provided by %s"
@@ -967,7 +976,7 @@ msgstr "Konten disediakan oleh %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:65
 msgid "Continue"
-msgstr ""
+msgstr "Lanjutkan"
 
 #: packages/app-mobile/components/screens/Note.tsx:1295
 msgid "Convert to note"
@@ -978,9 +987,8 @@ msgid "Convert to todo"
 msgstr "Ubah ke tugas"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:89
-#, fuzzy
 msgid "Converting speech to text..."
-msgstr "Ubah ke catatan"
+msgstr "Mengubah percakapan menjadi teks…"
 
 #: packages/app-desktop/gui/MenuBar.tsx:554
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:34
@@ -1023,9 +1031,8 @@ msgstr[0] "Salin tautan yang dapat dibagikan"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:21
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:446
-#, fuzzy
 msgid "Copy to clipboard"
-msgstr "Salin jalur ke papan klip"
+msgstr "Salin ke papan klip"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:208
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:140
@@ -1053,8 +1060,8 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Tidak dapat terhubung ke server Joplin. Silakan periksa konfigurasinya di "
-"layar konfigurasi sinkronisasi. Galat lengkapnya:\n"
+"Tidak dapat terhubung ke server Joplin. Silakan periksa pilihan Penyelarasan "
+"di layar pengaturan. Galat lengkapnya:\n"
 "\n"
 "%s"
 
@@ -1077,15 +1084,14 @@ msgid ""
 "\n"
 "The error was: \"%s\""
 msgstr ""
-"Tidak dapat menanggapi undangan. Silakan coba lagi atau periksa pemilik buku "
-"catatan, masihkan berbagi catatan.\n"
+"Tidak dapat menanggapi undangan. Silakan coba lagi atau tanyakan ke pemilik "
+"buku catatan apakah mereka masih membagikannya.\n"
 "\n"
-"Galat lengkapnya: \"%s\""
+"Galat: \"%s\""
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:56
-#, fuzzy
 msgid "Could not switch profile: %s"
-msgstr "Tidak dapat memasang plugin: %s"
+msgstr "Tidak dapat beralih profil: %s"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:219
 msgid "Could not upgrade master key: %s"
@@ -1096,13 +1102,12 @@ msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
 msgstr ""
-"Tidak dapat memeriksa status berbagi catatan - membatalkan. Silakan coba "
-"kembali ketika terhubung ke internet."
+"Tidak dapat membuktikan status berbagi dari catatan ini - membatalkan. "
+"Silakan coba kembali ketika Anda terhubung ke internet."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-#, fuzzy
 msgid "Could not verify your identify: %s"
-msgstr "Tidak dapat mengekspor catatan: %s"
+msgstr "Tidak dapat membuktikan identitas Anda: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:277
@@ -1110,9 +1115,8 @@ msgid "Create"
 msgstr "Buat"
 
 #: packages/app-cli/app/command-mkbook.ts:19
-#, fuzzy
 msgid "Create a new notebook under a parent notebook."
-msgstr "Membuat buku catatan baru."
+msgstr "Buat buku catatan baru di bawah buku catatan induk."
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "Create a notebook"
@@ -1146,7 +1150,7 @@ msgstr "Item lokal yang dibuat: %d."
 
 #: packages/lib/services/ReportService.ts:249
 msgid "Created locally"
-msgstr "Dibuat dengan lokal"
+msgstr "Dibuat di lokal"
 
 #: packages/lib/Synchronizer.ts:191
 msgid "Created remote items: %d."
@@ -1180,14 +1184,12 @@ msgid "Creates a new to-do."
 msgstr "Membuat tugas baru."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:112
-#, fuzzy
 msgid "Creating new note..."
-msgstr "Membuat %s baru..."
+msgstr "Membuat catatan baru..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:112
-#, fuzzy
 msgid "Creating new to-do..."
-msgstr "Membuat %s baru..."
+msgstr "Membuat tugas baru..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:29
 msgid "Creating report..."
@@ -1208,19 +1210,19 @@ msgstr "Urutan khusus"
 
 #: packages/lib/models/Setting.ts:1353
 msgid "Custom stylesheet for Joplin-wide app styles"
-msgstr "CSS untuk seluruh bagian aplikasi Joplin"
+msgstr "Gaya khusus untuk semua bagian aplikasi Joplin"
 
 #: packages/lib/models/Setting.ts:1336
 msgid "Custom stylesheet for rendered Markdown"
-msgstr "CSS untuk Markdown yang dirender"
+msgstr "Gaya khusus untuk Markdown yang ditampilkan"
 
 #: packages/lib/models/Setting.ts:1528
 msgid "Custom TLS certificates"
-msgstr "Sertifikat TLS kustom"
+msgstr "Sertifikat TLS khusus"
 
 #: packages/lib/utils/joplinCloud.ts:193
 msgid "Customise the note publishing banner"
-msgstr ""
+msgstr "Ubahsuai spanduk penerbitan catatan"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:39
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:84
@@ -1254,7 +1256,7 @@ msgstr "hari"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:110
 msgid "Decrease indent level"
-msgstr ""
+msgstr "Kurangi indentasi"
 
 #: packages/app-cli/app/command-e2ee.ts:64
 msgid "Decrypted items: %d"
@@ -1262,7 +1264,7 @@ msgstr "Item terdekripsi: %d"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:45
 msgid "Decrypted items: %s / %s"
-msgstr "Item yang didekripsi: %s / %s"
+msgstr "Item terdekripsi: %s / %s"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:752
 #: packages/app-mobile/components/side-menu-content.tsx:442
@@ -1308,12 +1310,11 @@ msgstr "Hapus baris"
 
 #: packages/lib/models/Setting.ts:1377
 msgid "Delete local data and re-download from sync target"
-msgstr "Hapus data lokal dan unduh ulang dari target sinkronisasi"
+msgstr "Hapus data lokal dan unduh ulang dari target penyelarasan"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:8
-#, fuzzy
 msgid "Delete note"
-msgstr "Hapus catatan?"
+msgstr "Hapus catatan"
 
 #: packages/lib/models/Note.ts:778
 msgid "Delete note \"%s\"?"
@@ -1325,9 +1326,8 @@ msgid "Delete note?"
 msgstr "Hapus catatan?"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:9
-#, fuzzy
 msgid "Delete notebook"
-msgstr "Hapus catatan?"
+msgstr "Hapus buku catatan"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:164
@@ -1353,14 +1353,12 @@ msgid "Delete plugin \"%s\"?"
 msgstr "Hapus plugin \"%s\"?"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:102
-#, fuzzy
 msgid "Delete profile \"%s\""
-msgstr "Hapus catatan \"%s\"?"
+msgstr "Hapus profil \"%s\"?"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:443
-#, fuzzy
 msgid "Delete selected notes"
-msgstr "Hapus catatan ini?"
+msgstr "Hapus catatan terpilih"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:22
 #: packages/app-mobile/components/side-menu-content.tsx:161
@@ -1370,6 +1368,10 @@ msgid ""
 "If you delete the inbox notebook, any email that's recently been sent to it "
 "may be lost."
 msgstr ""
+"Hapus buku catatan Kotak Masuk?\n"
+"\n"
+"Jika Anda menghapus buku catatan Kotak Masuk, sebarang email yang baru saja "
+"terkirim mungkin akan hilang."
 
 #: packages/lib/models/Note.ts:780
 msgid "Delete these %d notes?"
@@ -1384,9 +1386,8 @@ msgstr ""
 "bersama ini."
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:98
-#, fuzzy
 msgid "Delete this profile?"
-msgstr "Hapus %d catatan ini?"
+msgstr "Hapus profil ini?"
 
 #: packages/lib/Synchronizer.ts:193
 msgid "Deleted local items: %d."
@@ -1402,15 +1403,15 @@ msgstr "Menghapus buku catatan yang diberikan."
 
 #: packages/app-cli/app/command-rmbook.ts:17
 msgid "Deletes the notebook without asking for confirmation."
-msgstr "Menghapus buku catatan tanpa meminta konfirmasi."
+msgstr "Menghapus buku catatan tanpa meminta persetujuan."
 
 #: packages/app-cli/app/command-rmnote.ts:13
 msgid "Deletes the notes matching <note-pattern>."
-msgstr "Menghapus catatan yang cocok dengan <note-pattern> (pola-catatan)."
+msgstr "Menghapus catatan yang cocok dengan <note-pattern>."
 
 #: packages/app-cli/app/command-rmnote.ts:17
 msgid "Deletes the notes without asking for confirmation."
-msgstr "Menghapus catatan tanpa meminta konfirmasi."
+msgstr "Menghapus catatan-catatan tanpa meminta persetujuan."
 
 #: packages/app-cli/app/command-export.ts:24
 msgid "Destination format: %s"
@@ -1418,33 +1419,33 @@ msgstr "Format tujuan: %s"
 
 #: packages/lib/services/noteList/defaultLeftToRightListRenderer.ts:25
 msgid "Detailed"
-msgstr ""
+msgstr "Rincian"
 
 #: packages/lib/services/interop/Module.ts:62
 msgid "Directory"
-msgstr "Folder"
+msgstr "Direktori"
 
 #: packages/lib/models/Setting.ts:493
 msgid "Directory to synchronise with (absolute path)"
-msgstr "Folder untuk disinkronkan"
+msgstr "Direktori untuk diselaraskan (jalur pasti)"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:143
 msgid "Disable"
-msgstr "Nonaktifkan"
+msgstr "Matikan"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:224
 #: packages/app-mobile/components/screens/encryption-config.tsx:281
 msgid "Disable encryption"
-msgstr "Nonaktifkan enkripsi"
+msgstr "Matikan enkripsi"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:612
 msgid "Disable safe mode and restart"
-msgstr "Nonaktifkan mode aman dan mulai ulang"
+msgstr "Matikan mode aman dan mulai ulang"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:103
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:91
 msgid "Disable Web Clipper Service"
-msgstr "Nonaktifkan Layanan Web Clipper"
+msgstr "Matikan Layanan Pemotong Web"
 
 #: packages/app-cli/app/command-e2ee.ts:127
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:235
@@ -1452,7 +1453,7 @@ msgstr "Nonaktifkan Layanan Web Clipper"
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
 #: packages/lib/models/Setting.ts:1396
 msgid "Disabled"
-msgstr "Dinonaktifkan"
+msgstr "Dimatikan"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:198
 #: packages/app-mobile/components/screens/encryption-config.tsx:240
@@ -1461,14 +1462,13 @@ msgid ""
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
-"Menonaktifkan enkripsi berarti *semua* catatan dan lampiran Anda akan "
-"disinkronkan ulang dan dikirim dalam keadaan tidak terenkripsi ke target "
-"sinkronisasi. Apa Anda mau lanjut?"
+"Mematikan enkripsi berarti *semua* catatan dan lampiran Anda akan "
+"diselaraskan ulang dan dikirim dalam keadaan tidak terenkripsi ke sasaran "
+"penyelarasan. Apakah Anda ingin melanjutkan?"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:19
-#, fuzzy
 msgid "Discard"
-msgstr "Buang perubahan"
+msgstr "Buang"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:102
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:249
@@ -1486,7 +1486,7 @@ msgstr "Menampilkan URL geolokasi untuk catatan."
 
 #: packages/app-cli/app/command-ls.ts:27
 msgid "Displays only the first top <num> notes."
-msgstr "Menampilkan hanya <num> (bilangan) catatan teratas."
+msgstr "Menampilkan hanya <num> catatan teratas."
 
 #: packages/app-cli/app/command-ls.ts:30
 msgid ""
@@ -1494,9 +1494,9 @@ msgid ""
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
-"Menampilkan hanya item dengan tipe-tipe tertentu. Dapat berupa `n` untuk "
+"Menampilkan hanya item dengan jenis tertentu. Dapat berupa `n` untuk "
 "catatan, `t` untuk tugas, atau `nt` untuk catatan dan tugas (contoh: `-tt` "
-"hanya akan menampilkan tugas, sedangkan `-tnt` akan menampilkan catatan dan "
+"akan menampilkan hanya tugas, sedangkan `-tnt` akan menampilkan catatan dan "
 "tugas)."
 
 #: packages/app-cli/app/command-status.js:13
@@ -1535,7 +1535,7 @@ msgstr "Lakukan sekarang"
 
 #: packages/app-cli/app/command-import.ts:27
 msgid "Do not ask for confirmation."
-msgstr "Jangan meminta konfirmasi."
+msgstr "Jangan meminta persetujuan."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:55
 msgid ""
@@ -1543,19 +1543,18 @@ msgid ""
 "way to decrypt the data! To enable encryption, please enter your password "
 "below."
 msgstr ""
-"Jangan sampai kehilangan kata sandinya karena, untuk alasan keamanan, ini "
-"*hanya* satu-satunya cara untuk mendekripsi data! Untuk mengaktifkan "
-"enkripsi, silakan masukkan kata sandi Anda di bawah ini."
+"Jangan sampai kehilangan kata sandi sebagai alasan keamanan, ini akan "
+"menjadi *satu-satunya* cara untuk mendekripsi data! Untuk menyalakan "
+"enkripsi, masukkan kata sandi Anda di bawah."
 
 #: packages/lib/models/Setting.ts:2660
-#, fuzzy
 msgid "Donate, website"
-msgstr "Situs web Joplin"
+msgstr "Menyumbang, situs web"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:115
 msgid "Done"
-msgstr ""
+msgstr "Selesai"
 
 #: packages/app-desktop/checkForUpdates.ts:108
 msgid "Download"
@@ -1564,28 +1563,27 @@ msgstr "Unduh"
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:174
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:127
 msgid "Download and install the relevant extension for your browser:"
-msgstr "Unduh dan pasang ekstensi yang relevan dengan peramban web Anda:"
+msgstr "Unduh dan pasang ekstensi yang berkaitan dengan peramban web Anda:"
 
 #: packages/lib/models/Resource.ts:385
 msgid "Downloaded"
-msgstr "Terunduh"
+msgstr "Telah diunduh"
 
 #: packages/lib/services/ReportService.ts:247
 msgid "Downloaded and decrypted"
-msgstr "Terunduh dan terdekripsi"
+msgstr "Telah diunduh dan terdekripsi"
 
 #: packages/lib/services/ReportService.ts:248
 msgid "Downloaded and encrypted"
-msgstr "Terunduh dan terenkripsi"
+msgstr "Telah diunduh dan terenkripsi"
 
 #: packages/lib/models/Resource.ts:384
 msgid "Downloading"
 msgstr "Sedang mengunduh"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:90
-#, fuzzy
 msgid "Downloading %s language files..."
-msgstr "Sedang mengunduh sumber daya..."
+msgstr "Sedang mengunduh berkas bahasa %s..."
 
 #: packages/app-cli/app/command-sync.ts:219
 msgid "Downloading resources..."
@@ -1597,15 +1595,15 @@ msgstr "Dracula"
 
 #: packages/app-mobile/components/screens/Note.tsx:1251
 msgid "Draw picture"
-msgstr ""
+msgstr "Membuat gambar"
 
 #: packages/app-mobile/components/screens/Note.tsx:933
 msgid "Drawing"
-msgstr ""
+msgstr "Menggambar"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1274
 msgid "Drop notes or files here"
-msgstr "Taruh catatan atau file di sini"
+msgstr "Letakkan catatan atau berkas di sini"
 
 #: packages/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -1619,25 +1617,24 @@ msgstr "Masuk Dropbox"
 #: packages/app-mobile/components/ScreenHeader.tsx:459
 #: packages/app-mobile/components/ScreenHeader.tsx:514
 msgid "Duplicate"
-msgstr "Buat duplikat"
+msgstr "Gandakan"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:113
 msgid "Duplicate line"
-msgstr "Duplikat baris"
+msgstr "Gandakan baris"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:461
-#, fuzzy
 msgid "Duplicate selected notes"
-msgstr "Duplikat baris"
+msgstr "Gandakan catatan terpilih"
 
 #: packages/app-cli/app/command-cp.ts:13
 msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"Duplikasi catatan yang sesuai dengan <note> (catatan) ke [notebook] (buku "
-"catatan). Jika tidak ada buku catatan yang ditentukan maka catatan akan "
-"diduplikasi ke buku catatan saat ini."
+"Gandakan catatan yang sesuai dengan <note> ke [notebook]. Jika tidak ada "
+"buku catatan yang ditentukan maka catatan akan digandakan ke buku catatan "
+"saat ini."
 
 #: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:85
