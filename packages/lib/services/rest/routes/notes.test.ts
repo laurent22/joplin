@@ -32,7 +32,7 @@ describe('routes/notes', () => {
 	});
 
 	test('should get file from local drive if protocol allows it', async () => {
-		const url = 'file://valid/image.png';
+		const url = 'file:///valid/image.png';
 
 		const fsDriverCopySpy = jest.fn();
 		jest.spyOn(shim, 'fsDriver').mockImplementation(() => {
@@ -80,7 +80,7 @@ describe('routes/notes', () => {
 	});
 
 	test('should not copy content from invalid protocls', async () => {
-		const url = 'file://home/user/file.db';
+		const url = 'file:///home/user/file.db';
 		const shimFsDriverCopySpy = jest.fn();
 		jest.spyOn(shim, 'fsDriver').mockImplementation(() => {
 			return {
