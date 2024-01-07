@@ -41,20 +41,20 @@ export default class Tag extends BaseItem {
 	public static async untagAll(tagId: string) {
 		const noteTags = await NoteTag.modelSelectAll('SELECT id FROM note_tags WHERE tag_id = ?', [tagId]);
 		for (let i = 0; i < noteTags.length; i++) {
-			await NoteTag.delete(noteTags[i].id, { source: 'untagAll/disassociate note' });
+			await NoteTag.delete(noteTags[i].id, { sourceDescription: 'untagAll/disassociate note' });
 		}
 
-		await Tag.delete(tagId, { source: 'untagAll/delete tag' });
+		await Tag.delete(tagId, { sourceDescription: 'untagAll/delete tag' });
 	}
 
 	public static async delete(id: string, options: DeleteOptions = {}) {
-		const actionLogger = ActionLogger.from(options.source);
+		const actionLogger = ActionLogger.from(options.sourceDescription);
 		const tagTitle = (await Tag.load(id)).title;
 		actionLogger.addDescription('Tag.delete', `title: ${tagTitle}`);
 
 		options = {
 			...options,
-			source: actionLogger,
+			sourceDescription: actionLogger,
 		};
 
 		await super.delete(id, options);
@@ -102,7 +102,7 @@ export default class Tag extends BaseItem {
 
 		const noteTags = await NoteTag.modelSelectAll('SELECT id FROM note_tags WHERE tag_id = ? and note_id = ?', [tagId, noteId]);
 		for (let i = 0; i < noteTags.length; i++) {
-			await NoteTag.delete(noteTags[i].id, { source: actionLogger.clone() });
+			await NoteTag.delete(noteTags[i].id, { sourceDescription: actionLogger.clone() });
 		}
 
 		this.dispatch({

@@ -30,7 +30,7 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 		} else {
 			await ItemClass.delete(local.id, {
 				changeSource: ItemChange.SOURCE_SYNC,
-				source: 'sync: handleConflictAction: non-note conflict',
+				sourceDescription: 'sync: handleConflictAction: non-note conflict',
 				trackDeleted: false,
 			});
 		}
@@ -90,7 +90,7 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 				{
 					changeSource: ItemChange.SOURCE_SYNC,
 					trackDeleted: false,
-					source: 'sync: handleConflictAction: note/resource conflict',
+					sourceDescription: 'sync: handleConflictAction: note/resource conflict',
 				},
 			);
 		}

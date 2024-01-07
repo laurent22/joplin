@@ -1006,7 +1006,7 @@ export default class Synchronizer {
 								{
 									trackDeleted: false,
 									changeSource: ItemChange.SOURCE_SYNC,
-									source: 'sync: deleteLocal',
+									sourceDescription: 'sync: deleteLocal',
 								},
 							);
 						}

@@ -317,7 +317,7 @@ export default class Resource extends BaseItem {
 	}
 
 	public static async batchDelete(ids: string[], options: DeleteOptions = {}) {
-		const actionLogger = ActionLogger.from(options.source);
+		const actionLogger = ActionLogger.from(options.sourceDescription);
 
 		// For resources, there's not really batch deletion since there's the
 		// file data to delete too, so each is processed one by one with the
@@ -335,14 +335,14 @@ export default class Resource extends BaseItem {
 			const path = Resource.fullPath(resource);
 			await super.batchDelete([id], {
 				...options,
-				source: logger,
+				sourceDescription: logger,
 			});
 			await this.fsDriver().remove(path);
 			await NoteResource.deleteByResource(id); // Clean up note/resource relationships
 			await this.db().exec('DELETE FROM items_normalized WHERE item_id = ?', [id]);
 		}
 
-		await ResourceLocalState.batchDelete(ids, { source: actionLogger });
+		await ResourceLocalState.batchDelete(ids, { sourceDescription: actionLogger });
 	}
 
 	public static async markForDownload(resourceId: string) {

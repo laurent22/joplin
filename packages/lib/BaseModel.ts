@@ -44,7 +44,7 @@ export interface DeleteOptions {
 	disableReadOnlyCheck?: boolean;
 
 	// Used for logging
-	source?: string|ActionLogger;
+	sourceDescription?: string|ActionLogger;
 }
 
 class BaseModel {
@@ -681,13 +681,13 @@ class BaseModel {
 
 	public static delete(id: string, options?: DeleteOptions) {
 		if (!id) throw new Error('Cannot delete object without an ID');
-		ActionLogger.from(options?.source).log('delete', id);
+		ActionLogger.from(options?.sourceDescription).log('delete', id);
 		return this.db().exec(`DELETE FROM ${this.tableName()} WHERE id = ?`, [id]);
 	}
 
 	public static async batchDelete(ids: string[], options?: DeleteOptions) {
 		if (!ids.length) return;
-		ActionLogger.from(options?.source).log('batchDelete', ids);
+		ActionLogger.from(options?.sourceDescription).log('batchDelete', ids);
 		options = this.modOptions(options);
 		const idFieldName = options.idFieldName ? options.idFieldName : 'id';
 		const sql = `DELETE FROM ${this.tableName()} WHERE ${idFieldName} IN ("${ids.join('","')}")`;

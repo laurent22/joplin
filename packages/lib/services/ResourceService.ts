@@ -129,7 +129,7 @@ export default class ResourceService extends BaseService {
 					await this.setAssociatedResources(note.id, note.body);
 				}
 			} else {
-				await Resource.delete(resourceId, { source: 'deleteOrphanResources' });
+				await Resource.delete(resourceId, { sourceDescription: 'deleteOrphanResources' });
 			}
 		}
 	}

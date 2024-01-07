@@ -105,14 +105,14 @@ export default class Folder extends BaseItem {
 		const folder = await Folder.load(folderId);
 		if (!folder) return; // noop
 
-		const actionLogger = ActionLogger.from(options.source);
+		const actionLogger = ActionLogger.from(options.sourceDescription);
 		actionLogger.addDescription('Folder', folder.title);
-		options.source = actionLogger;
+		options.sourceDescription = actionLogger;
 
 		if (options.deleteChildren) {
 			const childrenDeleteOptions: DeleteOptions = {
 				disableReadOnlyCheck: options.disableReadOnlyCheck,
-				source: actionLogger,
+				sourceDescription: actionLogger,
 			};
 
 			const noteIds = await Folder.noteIds(folderId);

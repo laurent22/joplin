@@ -38,8 +38,8 @@ export default class ResourceLocalState extends BaseModel {
 	public static batchDelete(ids: string[], options: DeleteOptions = {}) {
 		options = { ...options };
 		options.idFieldName = 'resource_id';
-		options.source = ActionLogger.from(options.source);
-		options.source.addDescription('ResourceLocalState.batchDelete', 'Delete local state');
+		options.sourceDescription = ActionLogger.from(options.sourceDescription);
+		options.sourceDescription.addDescription('ResourceLocalState.batchDelete', 'Delete local state');
 		return super.batchDelete(ids, options);
 	}
 }
