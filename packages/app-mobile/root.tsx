@@ -46,7 +46,6 @@ const { AppNav } = require('./components/app-nav.js');
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 import BaseSyncTarget from '@joplin/lib/BaseSyncTarget';
-const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
 import Resource from '@joplin/lib/models/Resource';
 import Tag from '@joplin/lib/models/Tag';
 import NoteTag from '@joplin/lib/models/NoteTag';
@@ -519,7 +518,6 @@ async function initialize(dispatch: Function) {
 
 	// reg.dispatch = dispatch;
 	BaseModel.dispatch = dispatch;
-	FoldersScreenUtils.dispatch = dispatch;
 	BaseSyncTarget.dispatch = dispatch;
 	NavService.dispatch = dispatch;
 	BaseModel.setDb(db);
