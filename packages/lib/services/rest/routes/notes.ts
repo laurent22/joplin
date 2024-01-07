@@ -189,10 +189,11 @@ async function tryToGuessExtFromMimeType(response: any, mediaPath: string) {
 	return newMediaPath;
 }
 
-export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions) {
+export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions, allowedProtocolsParameter?: string[]) {
 	logger.info('Downloading media file', url);
 
 	const tempDir = Setting.value('tempDir');
+	const allowedProtocols = allowedProtocolsParameter || ['http:', 'https:', 'data:', 'file:'];
 
 	// The URL we get to download have been extracted from the Markdown document
 	url = markdownUtils.unescapeLinkUrl(url);
@@ -205,10 +206,10 @@ export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions
 		return '';
 	}
 
-	const invalidProtocols = ['cid:'];
 	const urlProtocol = urlUtils.urlProtocol(url)?.toLowerCase();
+	const isAllowed = allowedProtocols.includes(urlProtocol);
 
-	if (!urlProtocol || invalidProtocols.includes(urlProtocol)) {
+	if (!urlProtocol || !isAllowed) {
 		return '';
 	}
 
