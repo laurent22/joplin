@@ -78,4 +78,44 @@ describe('routes/notes', () => {
 
 		expect(response).toBe('');
 	});
+
+	test('should not copy content from invalid protocls', async () => {
+		const url = 'file://home/user/file.db';
+		const shimFsDriverCopySpy = jest.fn();
+		jest.spyOn(shim, 'fsDriver').mockImplementation(() => {
+			return {
+				copy: shimFsDriverCopySpy,
+			} as any;
+		});
+
+		const allowedProtocols: string[] = [];
+		await downloadMediaFile(url, null, allowedProtocols);
+
+		expect(shimFsDriverCopySpy).toBeCalledTimes(0);
+	});
+
+	test.each([
+		'https://joplinapp.org/valid/image_url',
+		'https://joplinapp.org/valid/image_url.invalid_url',
+	])('should find and move file with invalid or without filename', async (url) => {
+		jest.spyOn(shim, 'fetchBlob').mockImplementation(() => {
+			return {
+				headers: {
+					'content-type': 'image/jpg',
+				},
+			};
+		});
+		jest.spyOn(uuid, 'create').mockReturnValue('mocked_uuid_value');
+		const shimFsDriverMoveSpy = jest.fn();
+		jest.spyOn(shim, 'fsDriver').mockImplementation(() => {
+			return {
+				move: shimFsDriverMoveSpy,
+			} as any;
+		});
+
+		const response = await downloadMediaFile(url);
+
+		expect(shimFsDriverMoveSpy).toBeCalledTimes(1);
+		expect(response.endsWith('mocked_uuid_value.jpg')).toBe(true);
+	});
 });
