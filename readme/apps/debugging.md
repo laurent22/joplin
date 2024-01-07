@@ -2,6 +2,16 @@
 
 It is possible to get the apps to display or log more information that might help debug various issues.
 
+:::note
+
+Before posting a full log to GitHub or the forum, be aware that it may contain (but isn't limited to):
+- Note/notebook/tag titles
+- Timestamps
+- Sync target information 
+- Encrypted copies of master keys
+
+:::
+
 ## Desktop application
 
 If the application starts with a white screen, open **Help &gt; Toggle Development Tools** or **View &gt; Toggle Development Tools** in the menu. Then check in the console if there is any error or warning and please let us know about it.
