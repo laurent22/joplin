@@ -216,7 +216,7 @@ const isValidUrl = (url: string, isDataUrl: boolean, urlProtocol?: string, allow
 		return false;
 	}
 
-	const defaultAllowedProtocols = ['http:', 'https:', 'data:', 'file:'];
+	const defaultAllowedProtocols = ['http:', 'https:', 'data:'];
 	const allowed = allowedProtocols ?? defaultAllowedProtocols;
 	const isAllowedProtocol = allowed.includes(urlProtocol);
 
@@ -244,8 +244,6 @@ export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions
 		if (isDataUrl) {
 			await shim.imageFromDataUrl(url, mediaPath);
 		} else if (urlProtocol === 'file:') {
-			// Can't think of any reason to disallow this at this point
-			// if (!allowFileProtocolImages) throw new Error('For security reasons, this URL with file:// protocol cannot be downloaded');
 			const localPath = fileUriToPath(url);
 			await shim.fsDriver().copy(localPath, mediaPath);
 		} else {

@@ -42,7 +42,7 @@ describe('routes/notes', () => {
 		});
 		jest.spyOn(uuid, 'create').mockReturnValue('mocked_uuid_value');
 
-		const response = await downloadMediaFile(url);
+		const response = await downloadMediaFile(url, null, ['file:']);
 
 		expect(response.endsWith('mocked_uuid_value.png')).toBe(true);
 		expect(fsDriverCopySpy).toBeCalledTimes(1);
