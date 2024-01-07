@@ -262,13 +262,13 @@ export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions
 	}
 }
 
-async function downloadMediaFiles(urls: string[], fetchOptions?: FetchOptions) {
+async function downloadMediaFiles(urls: string[], fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
 	const PromisePool = require('es6-promise-pool');
 
 	const output: any = {};
 
 	const downloadOne = async (url: string) => {
-		const mediaPath = await downloadMediaFile(url, fetchOptions); // , allowFileProtocolImages);
+		const mediaPath = await downloadMediaFile(url, fetchOptions, allowedProtocols);
 		if (mediaPath) output[url] = { path: mediaPath, originalUrl: url };
 	};
 
@@ -393,14 +393,20 @@ async function attachImageFromDataUrl(note: any, imageDataUrl: string, cropRect:
 	return await shim.attachFileToNote(note, tempFilePath);
 }
 
-export const extractNoteFromHTML = async (requestNote: RequestNote, requestId: number, imageSizes: any, fetchOptions?: FetchOptions) => {
+export const extractNoteFromHTML = async (
+	requestNote: RequestNote,
+	requestId: number,
+	imageSizes: any,
+	fetchOptions?: FetchOptions,
+	allowedProtocols?: string[],
+) => {
 	const note = await requestNoteToNote(requestNote);
 
 	const mediaUrls = extractMediaUrls(note.markup_language, note.body);
 
 	logger.info(`Request (${requestId}): Downloading media files: ${mediaUrls.length}`);
 
-	const mediaFiles = await downloadMediaFiles(mediaUrls, fetchOptions); // , allowFileProtocolImages);
+	const mediaFiles = await downloadMediaFiles(mediaUrls, fetchOptions, allowedProtocols);
 
 	logger.info(`Request (${requestId}): Creating resources from paths: ${Object.getOwnPropertyNames(mediaFiles).length}`);
 
@@ -452,7 +458,8 @@ export default async function(request: Request, id: string = null, link: string 
 
 		logger.info('Images:', imageSizes);
 
-		const extracted = await extractNoteFromHTML(requestNote, requestId, imageSizes);
+		const allowedProtocolsForDownloadMediaFiles = ['http:', 'https:', 'file:', 'data:'];
+		const extracted = await extractNoteFromHTML(requestNote, requestId, imageSizes, undefined, allowedProtocolsForDownloadMediaFiles);
 
 		let note = await Note.save(extracted.note, extracted.saveOptions);
 
