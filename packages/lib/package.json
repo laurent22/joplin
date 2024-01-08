@@ -22,7 +22,7 @@
     "@types/markdown-it": "13.0.7",
     "@types/node": "18.18.14",
     "@types/node-rsa": "1.1.4",
-    "@types/react": "18.2.43",
+    "@types/react": "18.2.45",
     "@types/uuid": "9.0.7",
     "canvas": "2.11.2",
     "clean-html": "1.5.0",
