@@ -32,9 +32,10 @@ export default class ActionLogger {
 	}
 
 	public log(action: ItemActionType, itemIds: string|string[]) {
-		logger.info(JSON.stringify({
-			action, description: this.descriptions, ids: itemIds, from: this.source,
-		}));
+		const description = this.descriptions.map(description => {
+			return `${JSON.stringify(description.label)} from ${description.from}`;
+		});
+		logger.info(`${JSON.stringify(action)} from ${this.source}: Item description: ${description.join(',')}; Item IDs: ${JSON.stringify(itemIds)}`);
 	}
 
 	public static from(source: ActionLogger|string|undefined) {
