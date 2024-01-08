@@ -21,6 +21,22 @@ const { isImageMimeType } = require('../resourceUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
 const { ALL_NOTES_FILTER_ID } = require('../reserved-ids');
 
+interface PreviewsOptions {
+	order?: {
+		by: string;
+		dir: string;
+	}[];
+	conditions?: string[];
+	conditionsParams?: any[];
+	fields?: string[] | string;
+	uncompletedTodosOnTop?: boolean;
+	showCompletedTodos?: boolean;
+	anywherePattern?: string;
+	itemTypes?: string[];
+	limit?: number;
+	includeDeleted?: boolean;
+}
+
 export default class Note extends BaseItem {
 
 	public static updateGeolocationEnabled_ = true;
@@ -333,7 +349,7 @@ export default class Note extends BaseItem {
 	public static async loadFolderNoteByField(folderId: string, field: string, value: any) {
 		if (!folderId) throw new Error('folderId is undefined');
 
-		const options = {
+		const options: PreviewsOptions = {
 			conditions: [`\`${field}\` = ?`],
 			conditionsParams: [value],
 			fields: '*',

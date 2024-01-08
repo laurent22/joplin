@@ -1,5 +1,4 @@
 import paginationToSql from './models/utils/paginationToSql';
-
 import Database from './database';
 import uuid from './uuid';
 import time from './time';
@@ -275,11 +274,15 @@ class BaseModel {
 		return this.modelSelectAll(`SELECT * FROM \`${this.tableName()}\` WHERE \`id\` LIKE ?`, [`${partialId}%`]);
 	}
 
-	public static applySqlOptions(options: any, sql: string, params: any[] = null) {
+	public static applySqlOptions(options: LoadOptions, sql: string, params: any[] = null) {
 		if (!options) options = {};
 
 		if (options.order && options.order.length) {
-			sql += ` ORDER BY ${paginationToSql(options)}`;
+			sql += ` ORDER BY ${paginationToSql({
+				limit: options.limit,
+				order: options.order as any,
+				page: 1,
+			})}`;
 		}
 
 		if (options.limit) sql += ` LIMIT ${options.limit}`;
@@ -293,7 +296,7 @@ class BaseModel {
 		return rows.map((r: any) => r.id);
 	}
 
-	public static async all(options: any = null) {
+	public static async all(options: LoadOptions = null) {
 		if (!options) options = {};
 		if (!options.fields) options.fields = '*';
 

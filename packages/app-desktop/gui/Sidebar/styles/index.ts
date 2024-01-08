@@ -1,4 +1,6 @@
+import shim from '@joplin/lib/shim';
 import Button from '../../Button/Button';
+import { css } from 'styled-components';
 const styled = require('styled-components').default;
 
 export const StyledRoot = styled.div`
@@ -131,4 +133,12 @@ export const StyledSyncReportText = styled.div`
 	color: ${(props: any) => props.theme.color2};
 	word-wrap: break-word;
 	width: 100%;
+`;
+
+// Workaround sidebar rendering bug on Linux Intel GPU.
+// https://github.com/laurent22/joplin/issues/7506
+export const StyledSpanFix = styled.span`
+	${shim.isLinux() && css`
+		position: relative;
+	`}
 `;
