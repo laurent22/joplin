@@ -28,7 +28,7 @@
     "clean-html": "1.5.0",
     "jest": "29.7.0",
     "pdfjs-dist": "3.11.174",
-    "sharp": "0.33.0",
+    "sharp": "0.33.1",
     "tesseract.js": "5.0.4",
     "typescript": "5.2.2"
   },
