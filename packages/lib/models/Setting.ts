@@ -1887,22 +1887,17 @@ class Setting extends BaseModel {
 			this.metadata_ = null;
 			this.keys_ = null;
 
-			// Don't load if the setting was already registered (may happen, for example,
-			// if a plugin reloads).
-			if (this.isSet(key)) {
-				// Reload the value from the database, if it was already present
-				const valueRow = await this.loadOne(key);
-				if (valueRow) {
-					this.cache_.push({
-						key: key,
-						value: this.formatValue(key, valueRow.value),
-					});
-				}
-			} else {
-				// TODO: Can this be handled in a betteer way? Currently, we just
-				// warn so that mobile plugins can reload (e.g. when React Native does
-				// a partial app reload).
-				this.logger().warn(`Setting with key ${key} was reloaded`);
+			// Reload the value from the database, if it was already present
+			const valueRow = await this.loadOne(key);
+			if (valueRow) {
+				// Remove any duplicate copies of the setting -- if multiple items in cache_
+				// have the same key, we may encounter unique key errors while saving.
+				this.cache_ = this.cache_.filter(setting => setting.key !== key);
+
+				this.cache_.push({
+					key: key,
+					value: this.formatValue(key, valueRow.value),
+				});
 			}
 
 			this.dispatch({
