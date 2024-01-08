@@ -5,7 +5,7 @@ import Setting from './Setting';
 import shim from '../shim';
 import time from '../time';
 import markdownUtils from '../markdownUtils';
-import { NoteEntity } from '../services/database/types';
+import { FolderEntity, NoteEntity } from '../services/database/types';
 import Tag from './Tag';
 const { sprintf } = require('sprintf-js');
 import Resource from './Resource';
@@ -371,6 +371,9 @@ export default class Note extends BaseItem {
 
 		const Folder = BaseItem.getClass('Folder');
 
+		const parentFolder: FolderEntity = await Folder.load(parentId, { fields: ['id', 'deleted_time'] });
+		const parentInTrash = parentFolder && !!parentFolder.deleted_time;
+
 		// Conflicts are always displayed regardless of options, since otherwise
 		// it's confusing to have conflicts but with an empty conflict folder.
 		// For a similar reason we want to show all notes that have been deleted
@@ -379,7 +382,7 @@ export default class Note extends BaseItem {
 
 		if (parentId === Folder.conflictFolderId()) {
 			options.conditions.push('is_conflict = 1');
-		} else if (parentId === Folder.trashFolderId()) {
+		} else if (parentId === Folder.trashFolderId() || parentInTrash) {
 			options.conditions.push('deleted_time > 0');
 		} else {
 			options.conditions.push('is_conflict = 0');
@@ -445,8 +448,35 @@ export default class Note extends BaseItem {
 			options.conditions.push('is_todo = 1');
 		}
 
-		const results = await this.search(options);
+		let results = await this.search(options);
 		this.handleTitleNaturalSorting(results, options);
+
+		if (parentId === Folder.trashFolderId() || parentInTrash) {
+			const folderIds = results.map(n => n.parent_id).filter(id => !!id);
+			const allFolders: FolderEntity[] = await Folder.byIds(folderIds, { fields: ['id', 'parent_id', 'deleted_time', 'title'] });
+
+			// In the results, we only include notes that were originally at the
+			// root (no parent), or that are inside a folder that has also been
+			// deleted.
+			results = results.filter(note => {
+				if (!note.parent_id) return true;
+				const folder = allFolders.find(f => f.id === note.parent_id);
+				if (!folder) return true;
+
+				// If we are listing the trash root, we only keep the notes that
+				// are associated with a folder that has not already been
+				// deleted. If the associated folder has been deleted too, it's
+				// going to appear within the trash, and the user needs to click
+				// on it to view the content.
+				if (parentId === Folder.trashFolderId()) {
+					return !folder.deleted_time;
+				} else {
+					// Otherwise we are listing a folder that's in the trash, so
+					// we display its content.
+					return parentId === folder.id;
+				}
+			});
+		}
 
 		return results;
 	}

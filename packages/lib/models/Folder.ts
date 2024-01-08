@@ -102,12 +102,15 @@ export default class Folder extends BaseItem {
 			...options,
 		};
 
+		const toTrash = !!options.toTrash;
+
 		const folder = await Folder.load(folderId);
 		if (!folder) return; // noop
 
 		if (options.deleteChildren) {
 			const childrenDeleteOptions: DeleteOptions = {
 				disableReadOnlyCheck: options.disableReadOnlyCheck,
+				toTrash,
 			};
 
 			const noteIds = await Folder.noteIds(folderId);
@@ -119,7 +122,11 @@ export default class Folder extends BaseItem {
 			}
 		}
 
-		await super.delete(folderId, options);
+		if (toTrash) {
+			await this.save({ id: folderId, deleted_time: Date.now() });
+		} else {
+			await super.delete(folderId, options);
+		}
 
 		this.dispatch({
 			type: 'FOLDER_DELETE',

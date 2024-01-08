@@ -552,4 +552,32 @@ describe('models/Note', () => {
 		expect(trashNotes.map(f => f.id).sort()).toEqual([note1.id, note2.id].sort());
 	});
 
+	it('should handle folders within the trash', async () => {
+		const folder1 = await Folder.save({ title: 'folder1 ' });
+		const folder2 = await Folder.save({ title: 'folder2 ' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder1.id });
+		await Note.save({ title: 'note3', parent_id: folder2.id });
+		const note4 = await Note.save({ title: 'note4', parent_id: folder2.id });
+
+		await Folder.delete(folder1.id, { toTrash: true, deleteChildren: true });
+		await Note.delete(note4.id, { toTrash: true });
+
+		// Note 4 should be at the root of the trash since its associated folder
+		// has not been deleted.
+		{
+			const trashNotes = await Note.previews(Folder.trashFolderId());
+			expect(trashNotes.length).toBe(1);
+			expect(trashNotes[0].id).toBe(note4.id);
+		}
+
+		// Note 1 and 2 should be within a "folder1" sub-folder within the trash
+		// since that folder has been deleted too.
+		{
+			const trashNotes = await Note.previews(folder1.id);
+			expect(trashNotes.length).toBe(2);
+			expect(trashNotes.map(n => n.id).sort()).toEqual([note1.id, note2.id].sort());
+		}
+	});
+
 });
