@@ -6,16 +6,16 @@ const os = require('os');
 const { filename } = require('./path-utils');
 import { setupDatabaseAndSynchronizer, switchClient, expectNotThrow, supportDir, expectThrow } from './testing/test-utils';
 const { enexXmlToMd } = require('./import-enex-md-gen.js');
-import importEnex from './import-enex';
+import importEnex, { ImportOptions } from './import-enex';
 import Note from './models/Note';
 import Tag from './models/Tag';
 import Resource from './models/Resource';
 
 const enexSampleBaseDir = `${supportDir}/../enex_to_md`;
 
-const importEnexFile = async (filename: string) => {
+const importEnexFile = async (filename: string, options: ImportOptions = null) => {
 	const filePath = `${enexSampleBaseDir}/${filename}`;
-	await importEnex('', filePath);
+	await importEnex('', filePath, options);
 };
 
 const readExpectedFile = async (filename: string) => {
@@ -221,7 +221,7 @@ describe('import-enex-md-gen', () => {
 	});
 
 	it('should resolve note links', async () => {
-		await importEnexFile('linked_notes.enex');
+		await importEnexFile('linked_notes.enex', { batchSize: 1 });
 		const notes: NoteEntity[] = await Note.all();
 
 		const note1 = notes.find(n => n.title === 'Note 1');
