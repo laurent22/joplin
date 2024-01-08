@@ -125,6 +125,7 @@ import PluginRunnerWebView from './plugins/PluginRunner/PluginRunnerWebView';
 import { refreshFolders } from '@joplin/lib/folders-screen-utils';
 import CommandService from '@joplin/lib/services/CommandService';
 import stateToWhenClauseContext from '@joplin/lib/services/commands/stateToWhenClauseContext';
+import KeymapService from '@joplin/lib/services/KeymapService';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -544,6 +545,8 @@ async function initialize(dispatch: Function) {
 
 	// Currently CommandService is just used for plugins.
 	CommandService.instance().initialize(store, Setting.value('env') === 'dev', stateToWhenClauseContext);
+	// KeymapService is also present for plugin compatibility
+	KeymapService.instance().initialize();
 
 	setRSA(RSA);
 
