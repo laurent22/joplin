@@ -467,6 +467,7 @@ function NoteEditor(props: Props, ref: any) {
 		editorControl={editorControl}
 		selectionState={selectionState}
 		searchState={searchState}
+		pluginStates={props.plugins}
 		onAttach={props.onAttach}
 		readOnly={props.readOnly}
 	/>;

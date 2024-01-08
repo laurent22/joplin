@@ -1,11 +1,16 @@
 
-import { ReactElement } from 'react';
+import { TextStyle, ViewStyle } from 'react-native';
+import { EditorControl, EditorSettings } from '../types';
+import SelectionFormatting from '@joplin/editor/SelectionFormatting';
+import { SearchState } from '@joplin/editor/types';
+import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+
 
 export type OnPressListener = ()=> void;
 
 export interface ButtonSpec {
-	// Either text that will be shown in place of an icon or a component.
-	icon: string | ReactElement;
+	// Name of an icon, as accepted by components/Icon.tsx
+	icon: string;
 
 	// Tooltip/accessibility label
 	description: string;
@@ -32,4 +37,20 @@ export interface ButtonGroup {
 export interface StyleSheetData {
 	themeId: number;
 	styles: any;
+}
+
+type OnAttachCallback = ()=> void;
+export interface MarkdownToolbarProps {
+	editorControl: EditorControl;
+	selectionState: SelectionFormatting;
+	searchState: SearchState;
+	editorSettings: EditorSettings;
+	pluginStates: PluginStates;
+	onAttach: OnAttachCallback;
+	style?: ViewStyle;
+	readOnly: boolean;
+}
+
+export interface ButtonRowProps extends MarkdownToolbarProps {
+	iconStyle: TextStyle;
 }

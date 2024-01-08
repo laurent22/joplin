@@ -123,6 +123,8 @@ import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTh
 import runOnDeviceFsDriverTests from './utils/fs-driver/runOnDeviceTests';
 import PluginRunnerWebView from './plugins/PluginRunner/PluginRunnerWebView';
 import { refreshFolders } from '@joplin/lib/folders-screen-utils';
+import CommandService from '@joplin/lib/services/CommandService';
+import stateToWhenClauseContext from '@joplin/lib/services/commands/stateToWhenClauseContext';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -539,6 +541,9 @@ async function initialize(dispatch: Function) {
 
 	AlarmService.setDriver(new AlarmServiceDriver(mainLogger));
 	AlarmService.setLogger(mainLogger);
+
+	// Currently CommandService is just used for plugins.
+	CommandService.instance().initialize(store, Setting.value('env') === 'dev', stateToWhenClauseContext);
 
 	setRSA(RSA);
 
