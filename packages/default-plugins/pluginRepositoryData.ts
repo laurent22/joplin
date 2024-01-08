@@ -4,7 +4,7 @@ const pluginRepositoryData: AllRepositoryData = {
 	'io.github.jackgruber.backup': {
 		'cloneUrl': 'https://github.com/JackGruber/joplin-plugin-backup.git',
 		'branch': 'master',
-		'commit': '021085cc37ed83a91a7950744e462782e27c04a6',
+		'commit': 'bd49c665bf60c1e0dd9b9862b2ba69cad3d4c9ae',
 		'appTypes': [AppType.Desktop],
 	},
 	'com.example.codemirror6-line-numbers': {

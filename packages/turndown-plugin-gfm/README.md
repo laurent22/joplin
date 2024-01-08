@@ -43,7 +43,7 @@ turndown-plugin-gfm is a suite of plugins which can be applied individually. The
 So for example, if you only wish to convert tables:
 
 ```js
-var tables = require('turndown-plugin-gfm').tables
+var tables = require('@joplin/turndown-plugin-gfm').tables
 var turndownService = new TurndownService()
 turndownService.use(tables)
 ```
