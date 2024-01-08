@@ -16,7 +16,11 @@ const defaultPlugins: Record<string, string|number> = {
 
 const logger = Logger.create('loadPlugins');
 
-const loadPlugins = async (pluginRunner: BasePluginRunner, pluginSettings: PluginSettings, store: Store<any>) => {
+type CancelEvent = { cancelled: boolean };
+
+const loadPlugins = async (
+	pluginRunner: BasePluginRunner, pluginSettings: PluginSettings, store: Store<any>, cancel: CancelEvent,
+) => {
 	try {
 		const pluginService = PluginService.instance();
 		const platformImplementation = PlatformImplementation.instance();
@@ -28,7 +32,7 @@ const loadPlugins = async (pluginRunner: BasePluginRunner, pluginSettings: Plugi
 		const pluginPaths: string[] = [];
 
 		for (const pluginId in defaultPlugins) {
-			// TODO: Don't copy all plugins on startup (just changed)
+			// TODO: Don't copy all plugins on startup (just the changed plugins)
 			logger.info(`Copying plugin with ID ${pluginId}`);
 
 			const pluginAsset = Asset.fromModule(defaultPlugins[pluginId]);
@@ -36,13 +40,23 @@ const loadPlugins = async (pluginRunner: BasePluginRunner, pluginSettings: Plugi
 
 			const assetFilePath = pluginAsset.localUri.replace(/^file:[/][/]/, '');
 			pluginPaths.push(assetFilePath);
+
+			if (cancel.cancelled) {
+				return;
+			}
 		}
 
 		// Unload any existing plugins (important for React Native's fast refresh)
-		for (const pluginId in pluginSettings) {
+		logger.debug('Unloading plugins...');
+		for (const pluginId of pluginService.pluginIds) {
 			await pluginService.unloadPlugin(pluginId);
+
+			if (cancel.cancelled) {
+				return;
+			}
 		}
 
+		logger.debug('Running plugins...');
 		await pluginService.loadAndRunPlugins(pluginPaths, pluginSettings);
 	} catch (error) {
 		console.error(error);

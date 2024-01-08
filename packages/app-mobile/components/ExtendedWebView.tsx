@@ -19,7 +19,9 @@ export interface WebViewControl {
 	// Evaluate the given [script] in the context of the page.
 	// Unlike react-native-webview/WebView, this does not need to return true.
 	injectJS(script: string): void;
-	postMessage(message: string): void;
+
+	// message must be JSON-ifyable
+	postMessage(message: any): void;
 }
 
 interface SourceFileUpdateEvent {
@@ -86,8 +88,8 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 
 				true;`);
 			},
-			postMessage(message: string) {
-				webviewRef.current.postMessage(message);
+			postMessage(message: any) {
+				webviewRef.current.postMessage(JSON.stringify(message));
 			},
 		};
 	});

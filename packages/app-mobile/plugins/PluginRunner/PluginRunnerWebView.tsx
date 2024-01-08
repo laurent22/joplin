@@ -2,7 +2,7 @@
 import * as React from 'react';
 import ExtendedWebView, { WebViewControl } from '../../components/ExtendedWebView';
 import Setting from '@joplin/lib/models/Setting';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import shim from '@joplin/lib/shim';
 import { WebViewMessageEvent } from 'react-native-webview';
 import PluginRunner from './PluginRunner';
@@ -12,6 +12,7 @@ import Logger from '@joplin/utils/Logger';
 import { View } from 'react-native';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { AppState } from '../../utils/types';
+import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 
 interface Props {
 	serializedPluginSettings: string;
@@ -40,7 +41,7 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 	const [webviewLoaded, setLoaded] = useState(false);
 	const store = useStore();
 
-	useEffect(() => {
+	useAsyncEffect(async (event) => {
 		if (!webviewLoaded) {
 			return;
 		}
@@ -48,7 +49,7 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 		const pluginService = PluginService.instance();
 		const pluginSettings = pluginService.unserializePluginSettings(props.serializedPluginSettings);
 
-		void loadPlugins(pluginRunner, pluginSettings, store);
+		void loadPlugins(pluginRunner, pluginSettings, store, event);
 	}, [pluginRunner, store, webviewLoaded, props.serializedPluginSettings]);
 
 	const injectedJs = useMemo(() => {

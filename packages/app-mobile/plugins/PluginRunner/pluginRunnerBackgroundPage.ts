@@ -1,3 +1,4 @@
+import RemoteMessenger from '@joplin/lib/utils/ipc/RemoteMessenger';
 import WebViewToRNMessenger from '../../utils/ipc/WebViewToRNMessenger';
 import { PluginApi, PluginWebViewApi } from './types';
 import WindowMessenger from '@joplin/lib/utils/ipc/WindowMessenger';
@@ -12,16 +13,51 @@ export const requireModule = (moduleName: string) => {
 	throw new Error(`Unable to require module ${moduleName} on mobile.`);
 };
 
-const pluginIdToIframe: Record<string, HTMLIFrameElement> = Object.create(null);
+type PluginRecord = {
+	iframe: HTMLIFrameElement;
+	connectionToParent: RemoteMessenger<PluginWebViewApi, PluginApi>|null;
+	connectionToIframe: RemoteMessenger<PluginApi, PluginWebViewApi>|null;
+};
+
+const loadedPlugins: Record<string, PluginRecord> = Object.create(null);
+
+export const stopPlugin = async (pluginId: string) => {
+	// Plugin not running?
+	if (!loadedPlugins[pluginId]) {
+		return;
+	}
+
+	loadedPlugins[pluginId].connectionToIframe?.closeConnection?.();
+	loadedPlugins[pluginId].connectionToParent?.closeConnection?.();
+
+	const iframe = loadedPlugins[pluginId].iframe;
+	iframe.srcdoc = '';
+	iframe.remove();
+	delete loadedPlugins[pluginId];
+};
 
 export const runPlugin = (
 	pluginBackgroundScript: string, pluginScript: string, messageChannelId: string, pluginId: string,
 ) => {
+	if (loadedPlugins[pluginId]) {
+		console.warn(`Plugin already running ${pluginId}`);
+		return;
+	}
+
 	const backgroundIframe = document.createElement('iframe');
-	pluginIdToIframe[pluginId] = backgroundIframe;
+	loadedPlugins[pluginId] = {
+		iframe: backgroundIframe,
+		connectionToParent: null,
+		connectionToIframe: null,
+	};
 	backgroundIframe.setAttribute('sandbox', 'allow-scripts allow-modals');
 
 	backgroundIframe.addEventListener('load', async () => {
+		if (!loadedPlugins[pluginId]) {
+			// Unloaded?
+			return;
+		}
+
 		backgroundIframe.contentWindow.postMessage({
 			kind: 'add-script',
 			script: `"use strict";
@@ -37,7 +73,7 @@ export const runPlugin = (
 
 		// Chain connectionToParent with connectionToIframe
 		const connectionToParent = new WebViewToRNMessenger<PluginWebViewApi, PluginApi>(messageChannelId, null);
-		const connectionToIframe = new WindowMessenger<PluginWebViewApi, PluginApi>(
+		const connectionToIframe = new WindowMessenger<PluginApi, PluginWebViewApi>(
 			messageChannelId, backgroundIframe.contentWindow, connectionToParent.remoteApi,
 		);
 
@@ -47,6 +83,9 @@ export const runPlugin = (
 		connectionToIframe.setIsChainedMessenger(true);
 
 		connectionToParent.setLocalInterface(connectionToIframe.remoteApi);
+
+		loadedPlugins[pluginId].connectionToIframe = connectionToIframe;
+		loadedPlugins[pluginId].connectionToParent = connectionToParent;
 	}, { once: true });
 
 	backgroundIframe.srcdoc = `
@@ -78,17 +117,6 @@ export const runPlugin = (
 	`;
 
 	document.body.appendChild(backgroundIframe);
-};
-
-export const stopPlugin = async (pluginId: string) => {
-	// Plugin not running?
-	if (!pluginIdToIframe[pluginId]) {
-		return;
-	}
-
-	pluginIdToIframe[pluginId].srcdoc = '';
-	pluginIdToIframe[pluginId].remove();
-	delete pluginIdToIframe[pluginId];
 };
 
 export const createPluginApiProxy = async (messageChannelId: string) => {

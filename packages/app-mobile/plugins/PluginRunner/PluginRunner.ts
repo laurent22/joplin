@@ -1,7 +1,7 @@
 import BasePluginRunner from '@joplin/lib/services/plugins/BasePluginRunner';
 import PluginApiGlobal from '@joplin/lib/services/plugins/api/Global';
 import Plugin from '@joplin/lib/services/plugins/Plugin';
-import { OnMessageCallback, WebViewControl } from '../../components/ExtendedWebView';
+import { WebViewControl } from '../../components/ExtendedWebView';
 import { RefObject } from 'react';
 import { WebViewMessageEvent } from 'react-native-webview';
 import RNToWebViewMessenger from '../../utils/ipc/RNToWebViewMessenger';
@@ -11,8 +11,10 @@ import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('PluginRunner');
 
+type MessageEventListener = (event: WebViewMessageEvent)=> boolean;
+
 export default class PluginRunner extends BasePluginRunner {
-	private messageEventListeners: OnMessageCallback[] = [];
+	private messageEventListeners: MessageEventListener[] = [];
 
 	public constructor(private webviewRef: RefObject<WebViewControl>) {
 		super();
@@ -22,12 +24,18 @@ export default class PluginRunner extends BasePluginRunner {
 		const pluginId = plugin.id;
 		logger.info('Running plugin with id', pluginId);
 
-		const messageChannelId = `plugin-message-channel-${pluginId}`;
+		const messageChannelId = `plugin-message-channel-${pluginId}-${Date.now()}`;
 		const messenger = new RNToWebViewMessenger<PluginApi, PluginWebViewApi>(
 			messageChannelId, this.webviewRef.current, { api: pluginApi },
 		);
 
-		this.messageEventListeners.push(messenger.onWebViewMessage);
+		this.messageEventListeners.push((event) => {
+			if (!messenger.hasBeenClosed()) {
+				messenger.onWebViewMessage(event);
+				return true;
+			}
+			return false;
+		});
 
 		this.webviewRef.current.injectJS(`
 			const pluginScript = ${JSON.stringify(plugin.scriptText)};
@@ -53,8 +61,9 @@ export default class PluginRunner extends BasePluginRunner {
 	}
 
 	public onWebviewMessage(event: WebViewMessageEvent) {
-		for (const eventListener of this.messageEventListeners) {
-			eventListener(event);
-		}
+		this.messageEventListeners = this.messageEventListeners.filter(
+			// Remove all listeners that return false
+			listener => listener(event),
+		);
 	}
 }

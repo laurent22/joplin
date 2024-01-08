@@ -7,6 +7,7 @@ enum MessageType {
 	InvokeMethod = 'InvokeMethod',
 	ErrorResponse = 'ErrorResponse',
 	ReturnValueResponse = 'ReturnValueResponse',
+	CloseChannel = 'CloseChannel',
 }
 
 type RemoteReadyMessage = Readonly<{
@@ -42,11 +43,16 @@ type ReturnValueResponse = Readonly<{
 	returnValue: SerializableData;
 }>;
 
+// Disconnect
+type CloseChannelMessage = Readonly<{
+	kind: MessageType.CloseChannel;
+}>;
+
 type BaseMessage = Readonly<{
 	channelId: string;
 }>;
 
-type InternalMessage = (RemoteReadyMessage|InvokeMethodMessage|ErrorResponse|ReturnValueResponse) & BaseMessage;
+type InternalMessage = (RemoteReadyMessage|CloseChannelMessage|InvokeMethodMessage|ErrorResponse|ReturnValueResponse) & BaseMessage;
 
 // Listeners for a remote method to resolve or reject.
 type OnMethodResolveListener = (returnValue: SerializableData)=> void;
@@ -70,6 +76,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 	private isRemoteReady = false;
 	private isLocalReady = false;
 	private nextResponseId = 0;
+	private closed = false;
 
 	// If true, we'll be ready to receive data after .setLocalInterface is next called.
 	private waitingForLocalInterface = false;
@@ -175,6 +182,11 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 						throw new Error(`Cannot access property ${propertyName}`);
 					}
 
+					if (!currentObject[propertyName]) {
+						const accessPath = path.map(part => `[${JSON.stringify(part)}]`).join('');
+						throw new Error(`No such property ${JSON.stringify(propertyName)} on ${this.localInterface}. Accessing properties remoteApi${accessPath}.`);
+					}
+
 					parentObject = currentObject;
 					currentObject = currentObject[propertyName];
 				}
@@ -234,7 +246,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 
 	private async onRemoteResolve(message: ReturnValueResponse) {
 		if (!this.resolveMethodCallbacks[message.responseId]) {
-			throw new Error(`RemoteMessenger: Missing method callback with ID ${message.responseId}`);
+			throw new Error(`RemoteMessenger(${this.channelId}): Missing method callback with ID ${message.responseId}`);
 		}
 
 		this.resolveMethodCallbacks[message.responseId](message.returnValue);
@@ -291,8 +303,12 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 
 	// Should be called by subclasses when a message is received.
 	protected async onMessage(message: SerializableData): Promise<void> {
+		if (this.closed) {
+			return;
+		}
+
 		if (!(typeof message === 'object')) {
-			throw new Error('Invalid message. Messages passed to onMessage must have type "object".');
+			throw new Error(`Invalid message. Messages passed to onMessage must have type "object". Was type ${typeof message}.`);
 		}
 
 		if (Array.isArray(message)) {
@@ -301,10 +317,6 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 
 		if (typeof message.kind !== 'string') {
 			throw new Error(`message.kind must be a string, was ${typeof message.kind}`);
-		}
-
-		if (!(message.kind in MessageType)) {
-			throw new Error(`Invalid message type, ${message.kind}`);
 		}
 
 		// We just verified that message.kind is a MessageType,
@@ -318,6 +330,8 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 
 		if (asInternalMessage.kind === MessageType.InvokeMethod) {
 			await this.invokeLocalMethod(asInternalMessage);
+		} else if (asInternalMessage.kind === MessageType.CloseChannel) {
+			void this.onClose();
 		} else if (asInternalMessage.kind === MessageType.ReturnValueResponse) {
 			await this.onRemoteResolve(asInternalMessage);
 		} else if (asInternalMessage.kind === MessageType.ErrorResponse) {
@@ -327,7 +341,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 		} else {
 			// Have TypeScipt verify that the above cases are exhaustive
 			const exhaustivenessCheck: never = asInternalMessage;
-			return exhaustivenessCheck;
+			throw new Error(`Invalid message type, ${message.kind}. Message: ${exhaustivenessCheck}`);
 		}
 	}
 
@@ -366,5 +380,17 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 		this.preserveThis = !isChained;
 	}
 
+	// Disconnects both this and the remote.
+	public closeConnection() {
+		this.closed = true;
+		this.postMessage({ channelId: this.channelId, kind: MessageType.CloseChannel });
+		this.onClose();
+	}
+
+	public hasBeenClosed() {
+		return this.closed;
+	}
+
 	protected abstract postMessage(message: InternalMessage): void;
+	protected abstract onClose(): void;
 }

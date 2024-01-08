@@ -29,4 +29,8 @@ export default class TestMessenger<LocalInterface, RemoteInterface> extends Remo
 
 		void this.remoteMessenger.onMessage(message);
 	}
+
+	protected override onClose(): void {
+		this.remoteMessenger = null;
+	}
 }

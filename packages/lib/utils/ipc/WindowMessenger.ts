@@ -21,4 +21,8 @@ export default class WindowMessenger<LocalInterface, RemoteInterface> extends Re
 	protected override postMessage(message: SerializableData): void {
 		this.remoteWindow.postMessage(message, '*');
 	}
+
+	protected override onClose(): void {
+		window.removeEventListener('message', this.handleMessageEvent);
+	}
 }

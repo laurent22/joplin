@@ -6,9 +6,7 @@ export default class WebViewToRNMessenger<LocalInterface, RemoteInterface> exten
 	public constructor(channelId: string, localApi: LocalInterface) {
 		super(channelId, localApi);
 
-		(window as any).handleReactNativeMessage = (message: any) => {
-			void this.onMessage(message);
-		};
+		window.addEventListener('message', this.handleMessage);
 
 		// Allow the event loop to run -- without this, calling
 		//   injectJS('window.handleReactNativeMessage("message")')
@@ -19,7 +17,17 @@ export default class WebViewToRNMessenger<LocalInterface, RemoteInterface> exten
 		}, 0);
 	}
 
+	private handleMessage = (message: MessageEvent) => {
+		if (typeof message.data === 'object' && message.origin === 'react-native') {
+			void this.onMessage(message.data);
+		}
+	};
+
 	protected override postMessage(message: SerializableData): void {
 		(window as any).ReactNativeWebView.postMessage(JSON.stringify(message));
+	}
+
+	protected override onClose(): void {
+		window.removeEventListener('message', this.handleMessage);
 	}
 }
