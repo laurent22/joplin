@@ -28,7 +28,10 @@ const separateCallbacksFromArgs = (args: SerializableDataAndCallbacks[]): Separa
 	};
 
 	const processObject = (object: SerializableDataAndCallbacks, path: string[]): ProcessObjectResult => {
-		if (typeof object === 'object') {
+		// typeof null === 'object', so we handle it separately
+		if (object === null) {
+			return { argsWithoutCallbacks: null, callbackArgs: undefined };
+		} else if (typeof object === 'object') {
 			if (Array.isArray(object)) {
 				return processArray(object, path);
 			} else {

@@ -66,4 +66,25 @@ describe('RemoteMessenger', () => {
 		await api1Messenger.remoteApi.registerCallback({ callback: resgisterCallbackTest });
 		expect(callbacks).toHaveLength(1);
 	});
+
+	it('should preserve structure of transferred objects', async () => {
+		const transferObjectApi = {
+			transfer: async (o: any) => o,
+		};
+		type ApiType = typeof transferObjectApi;
+
+		const messenger1 = new TestMessenger<ApiType, ApiType>('test', transferObjectApi);
+		const messenger2 = new TestMessenger<ApiType, ApiType>('test', transferObjectApi);
+		messenger1.connectTo(messenger2);
+
+		const testObjects: any[] = [
+			{ foo: { bar: undefined, baz: null } },
+			{ foo: { bar: [1, 2, 3], baz: 'test' } },
+			{ _a: 4.5, __b: '', __callbacks: 'foo', __proto__: { a: 6 } },
+		];
+
+		for (const testObject of testObjects) {
+			expect(await messenger1.remoteApi.transfer(testObject)).toMatchObject(testObject);
+		}
+	});
 });

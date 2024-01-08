@@ -26,7 +26,7 @@ const mergeCallbacksAndArgs = (
 			return (...args: SerializableData[]) => {
 				return callMethodWithId(callbackId, args);
 			};
-		} else if (typeof serializableObj === 'object') {
+		} else if (typeof serializableObj === 'object' && serializableObj !== null) { // typeof(null) is object
 			if (typeof callbackObj !== 'object') {
 				throw new Error('Callback arguments should be an object (and thus match the type of serializableArgs)');
 			}
