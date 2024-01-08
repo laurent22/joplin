@@ -38,7 +38,7 @@ const Icon: React.FC<Props> = props => {
 		style: props.style,
 	};
 
-	if (namePrefix.match(/^fa[bsr]?$/) || namePrefix === '') {
+	if (namePrefix.match(/^fa[bsr]?$/)) {
 		return (
 			<FontAwesomeIcon
 				brand={namePrefix.startsWith('fab')}
