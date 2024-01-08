@@ -546,7 +546,7 @@ describe('models/Note', () => {
 		await Note.delete(note2.id, { toTrash: true });
 
 		const folderNotes = await Note.previews(folder.id);
-		const trashNotes = await Note.previews(Folder.trashId());
+		const trashNotes = await Note.previews(Folder.trashFolderId());
 
 		expect(folderNotes.map(f => f.id).sort()).toEqual([note3.id]);
 		expect(trashNotes.map(f => f.id).sort()).toEqual([note1.id, note2.id].sort());

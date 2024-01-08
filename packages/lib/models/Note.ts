@@ -375,11 +375,11 @@ export default class Note extends BaseItem {
 		// it's confusing to have conflicts but with an empty conflict folder.
 		// For a similar reason we want to show all notes that have been deleted
 		// in the trash.
-		if (parentId === Folder.conflictFolderId() || parentId === Folder.trashId()) options.showCompletedTodos = true;
+		if (parentId === Folder.conflictFolderId() || parentId === Folder.trashFolderId()) options.showCompletedTodos = true;
 
 		if (parentId === Folder.conflictFolderId()) {
 			options.conditions.push('is_conflict = 1');
-		} else if (parentId === Folder.trashId()) {
+		} else if (parentId === Folder.trashFolderId()) {
 			options.conditions.push('deleted_time > 0');
 		} else {
 			options.conditions.push('is_conflict = 0');

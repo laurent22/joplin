@@ -100,6 +100,20 @@ function FolderItem(props: any) {
 
 	const shareIcon = shareId && !parentId ? <StyledShareIcon className="fas fa-share-alt"></StyledShareIcon> : null;
 
+	const doRenderFolderIcon = () => {
+		if (folderId === Folder.trashFolderId()) {
+			return renderFolderIcon({
+				dataUrl: '',
+				emoji: '',
+				name: 'fas fa-trash',
+				type: FolderIconType.FontAwesome,
+			});
+		}
+
+		if (!showFolderIcon) return null;
+		return renderFolderIcon(folderIcon);
+	};
+
 	return (
 		<StyledListItem depth={depth} selected={selected} className={`list-item-container list-item-depth-${depth} ${selected ? 'selected' : ''}`} onDragStart={onFolderDragStart_} onDragOver={onFolderDragOver_} onDrop={onFolderDrop_} draggable={true} data-folder-id={folderId}>
 			<ExpandLink themeId={props.themeId} hasChildren={hasChildren} folderId={folderId} onClick={onFolderToggleClick_} isExpanded={isExpanded}/>
@@ -119,7 +133,7 @@ function FolderItem(props: any) {
 				}}
 				onDoubleClick={onFolderToggleClick_}
 			>
-				{showFolderIcon ? renderFolderIcon(folderIcon) : null}<StyledSpanFix className="title" style={{ lineHeight: 0 }}>{folderTitle}</StyledSpanFix>
+				{doRenderFolderIcon()}<StyledSpanFix className="title" style={{ lineHeight: 0 }}>{folderTitle}</StyledSpanFix>
 				{shareIcon} {noteCountComp}
 			</StyledListItemAnchor>
 		</StyledListItem>
@@ -277,7 +291,7 @@ const SidebarComponent = (props: Props) => {
 
 	const itemContextMenu = useCallback(async (event: any) => {
 		const itemId = event.currentTarget.getAttribute('data-id');
-		if (itemId === Folder.conflictFolderId()) return;
+		if (itemId === Folder.conflictFolderId() || itemId === Folder.trashFolderId()) return;
 
 		const itemType = Number(event.currentTarget.getAttribute('data-type'));
 		if (!itemId || !itemType) throw new Error('No data on element');

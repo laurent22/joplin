@@ -131,7 +131,7 @@ export default class Folder extends BaseItem {
 		return _('Conflicts');
 	}
 
-	public static trashTitle() {
+	public static trashFolderTitle() {
 		return _('Trash');
 	}
 
@@ -139,7 +139,7 @@ export default class Folder extends BaseItem {
 		return 'c04f1c7c04f1c7c04f1c7c04f1c7c04f';
 	}
 
-	public static trashId() {
+	public static trashFolderId() {
 		return 'de1e7ede1e7ede1e7ede1e7ede1e7ede';
 	}
 
@@ -158,14 +158,14 @@ export default class Folder extends BaseItem {
 		};
 	}
 
-	public static trash(): FolderEntity {
+	public static trashFolder(): FolderEntity {
 		const now = Date.now();
 
 		return {
 			type_: this.TYPE_FOLDER,
-			id: this.trashId(),
+			id: this.trashFolderId(),
 			parent_id: '',
-			title: this.trashTitle(),
+			title: this.trashFolderTitle(),
 			updated_time: now,
 			user_updated_time: now,
 			share_id: '',
@@ -279,7 +279,7 @@ export default class Folder extends BaseItem {
 		const output = await super.all(options);
 
 		if (options && options.includeTrash) {
-			output.push(this.trash());
+			output.push(this.trashFolder());
 		}
 
 		if (options && options.includeConflictFolder) {
