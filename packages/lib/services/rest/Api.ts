@@ -48,6 +48,9 @@ interface RequestQuery {
 
 	// Event cursor
 	cursor?: string;
+
+	// For note deletion
+	to_trash?: string;
 }
 
 export interface Request {

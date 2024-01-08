@@ -400,6 +400,11 @@ async function fetchAllNotes() {
 				lines.push('Remove the tag from the note.');
 				lines.push('');
 			}
+
+			if (model.type === BaseModel.TYPE_NOTE) {
+				lines.push('By default, this will **permanently delete the note**. To delete it to the trash instead, add the query parameter `to_trash=1`');
+				lines.push('');
+			}
 		}
 
 		{
