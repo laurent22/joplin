@@ -111,6 +111,9 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 			metadata['user_created_time'] = time.anythingToMs(md['created'], Date.now());
 		} else if ('date' in md) {
 			metadata['user_created_time'] = time.anythingToMs(md['date'], Date.now());
+		} else if ('created_at' in md) {
+			// Add support for Notesnook
+			metadata['user_created_time'] = time.anythingToMs(md['created_at'], Date.now());
 		}
 
 		if ('updated' in md) {
@@ -120,6 +123,9 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 			metadata['user_updated_time'] = time.anythingToMs(md['lastmod'], Date.now());
 		} else if ('date' in md) {
 			metadata['user_updated_time'] = time.anythingToMs(md['date'], Date.now());
+		} else if ('updated_at' in md) {
+			// Notesnook
+			metadata['user_updated_time'] = time.anythingToMs(md['updated_at'], Date.now());
 		}
 
 		if ('latitude' in md) { metadata['latitude'] = md['latitude']; }
