@@ -1,5 +1,6 @@
 import BaseModel, { DeleteOptions, ModelType } from '../BaseModel';
 import BaseItem from './BaseItem';
+import type FolderClass from './Folder';
 import ItemChange from './ItemChange';
 import Setting from './Setting';
 import shim from '../shim';
@@ -369,20 +370,21 @@ export default class Note extends BaseItem {
 		if (!options.uncompletedTodosOnTop) options.uncompletedTodosOnTop = false;
 		if (!('showCompletedTodos' in options)) options.showCompletedTodos = true;
 
-		const Folder = BaseItem.getClass('Folder');
+		const Folder: typeof FolderClass = BaseItem.getClass('Folder');
 
 		const parentFolder: FolderEntity = await Folder.load(parentId, { fields: ['id', 'deleted_time'] });
-		const parentInTrash = parentFolder && !!parentFolder.deleted_time;
+		const parentInTrash = parentFolder ? !!parentFolder.deleted_time : false;
+		const withinTrash = parentId === Folder.trashFolderId() || parentInTrash;
 
 		// Conflicts are always displayed regardless of options, since otherwise
 		// it's confusing to have conflicts but with an empty conflict folder.
 		// For a similar reason we want to show all notes that have been deleted
 		// in the trash.
-		if (parentId === Folder.conflictFolderId() || parentId === Folder.trashFolderId()) options.showCompletedTodos = true;
+		if (parentId === Folder.conflictFolderId() || withinTrash) options.showCompletedTodos = true;
 
 		if (parentId === Folder.conflictFolderId()) {
 			options.conditions.push('is_conflict = 1');
-		} else if (parentId === Folder.trashFolderId() || parentInTrash) {
+		} else if (withinTrash) {
 			options.conditions.push('deleted_time > 0');
 		} else {
 			options.conditions.push('is_conflict = 0');
@@ -414,7 +416,7 @@ export default class Note extends BaseItem {
 			options.conditions.push('todo_completed <= 0');
 		}
 
-		if (options.uncompletedTodosOnTop && hasTodos) {
+		if (!withinTrash && options.uncompletedTodosOnTop && hasTodos) {
 			let cond = options.conditions.slice();
 			cond.push('is_todo = 1');
 			cond.push('(todo_completed <= 0 OR todo_completed IS NULL)');
@@ -451,7 +453,7 @@ export default class Note extends BaseItem {
 		let results = await this.search(options);
 		this.handleTitleNaturalSorting(results, options);
 
-		if (parentId === Folder.trashFolderId() || parentInTrash) {
+		if (withinTrash) {
 			const folderIds = results.map(n => n.parent_id).filter(id => !!id);
 			const allFolders: FolderEntity[] = await Folder.byIds(folderIds, { fields: ['id', 'parent_id', 'deleted_time', 'title'] });
 
@@ -459,22 +461,8 @@ export default class Note extends BaseItem {
 			// root (no parent), or that are inside a folder that has also been
 			// deleted.
 			results = results.filter(note => {
-				if (!note.parent_id) return true;
-				const folder = allFolders.find(f => f.id === note.parent_id);
-				if (!folder) return true;
-
-				// If we are listing the trash root, we only keep the notes that
-				// are associated with a folder that has not already been
-				// deleted. If the associated folder has been deleted too, it's
-				// going to appear within the trash, and the user needs to click
-				// on it to view the content.
-				if (parentId === Folder.trashFolderId()) {
-					return !folder.deleted_time;
-				} else {
-					// Otherwise we are listing a folder that's in the trash, so
-					// we display its content.
-					return parentId === folder.id;
-				}
+				const noteFolder = allFolders.find(f => f.id === note.parent_id);
+				return Folder.deletedItemIsDirectChild(noteFolder, parentId);
 			});
 		}
 

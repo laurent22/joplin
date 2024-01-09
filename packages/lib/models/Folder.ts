@@ -180,6 +180,27 @@ export default class Folder extends BaseItem {
 		};
 	}
 
+	// Check whether an item that had `originalItemParent` has a parent is a
+	// direct chid of the provided `parent_id`. Simply checking that
+	// `originalItemParent.id === parent_id` is not sufficient because different
+	// visibility rules applies within the trash folder.
+	public static deletedItemIsDirectChild(originalItemParent: FolderEntity, parentId: string) {
+		// If we are listing the trash root, we only keep the notes that are
+		// associated with a folder that has not already been deleted. If the
+		// associated folder has been deleted too, it's going to appear within
+		// the trash, and the user needs to click on it to view the content.
+		//
+		// We also list the items that did not have a parent since those too
+		// should be at the root. Should only applies to folders.
+		if (parentId === Folder.trashFolderId()) {
+			return !originalItemParent || !originalItemParent.deleted_time;
+		} else {
+			// Otherwise we are listing a folder that's in the trash, so
+			// we display its content.
+			return parentId === originalItemParent.id;
+		}
+	}
+
 	// Calculates note counts for all folders and adds the note_count attribute to each folder
 	// Note: this only calculates the overall number of nodes for this folder and all its descendants
 	public static async addNoteCounts(folders: any[], includeCompletedTodos = true) {
