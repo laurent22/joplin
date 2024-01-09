@@ -21,7 +21,7 @@ export interface DialogRemoteApi {
 
 export interface DialogLocalApi {
 	getFormData: ()=> Promise<SerializableData>;
-	addCss: (css: string)=> void;
+	setCss: (css: string)=> void;
 	closeDialog: ()=> void;
 	setButtons: (buttons: ButtonSpec[])=> void;
 }

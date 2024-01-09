@@ -1,4 +1,30 @@
 
+:root {
+	color: var(--joplin-color);
+}
+
+button {
+	background-color: var(--joplin-background-color4);
+	color: var(--joplin-color4);
+
+	border-color: var(--joplin-border-color4);
+	border-radius: 3px;
+	border-style: solid;
+	border-width: 1px;
+
+	padding: 14px;
+}
+
+button:hover {
+	background-color: var(--joplin-background-color-hover4);
+}
+
+dialog {
+	border: 1px solid gray;
+	background-color: var(--joplin-background-color);
+	border-radius: 4px;
+	box-shadow: 0 6px 10px #00000077;
+}
 
 iframe {
 	border: none;

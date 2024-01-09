@@ -26,7 +26,7 @@ const initializeMessengers = (
 
 	rnConnection.setLocalInterface({
 		getFormData: iframeConnection.remoteApi.getFormData,
-		addCss: iframeConnection.remoteApi.addCss,
+		setCss: iframeConnection.remoteApi.setCss,
 		setButtons,
 		closeDialog,
 	});

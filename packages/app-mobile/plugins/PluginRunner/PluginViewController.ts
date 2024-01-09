@@ -24,6 +24,7 @@ type SetWebViewVisibleCallback = (visible: boolean)=> void;
 export default class PluginViewController {
 	private visibleDialogs: Map<string, DialogRecord> = new Map();
 	private pluginHtmlContents: PluginHtmlContents;
+	private themeCss = '';
 
 	public constructor(
 		private webviewRef: RefObject<WebViewControl>,
@@ -145,12 +146,21 @@ export default class PluginViewController {
 			{ id: 'ok', title: _('OK') }, { id: 'cancel', title: _('Cancel') },
 		];
 		messenger.remoteApi.setButtons(view.buttons ?? defaultButtons);
+		messenger.remoteApi.setCss(this.themeCss);
 
 		this.visibleDialogs.set(view.id, { messenger, viewInfo });
 
 		// Dialogs are shown by scripts that originally run in the webview. Thus,
 		// the webview has already loaded.
 		messenger.onWebViewLoaded();
+	}
+
+	public onThemeChange(themeCss: string) {
+		this.themeCss = themeCss;
+
+		for (const dialog of this.visibleDialogs.values()) {
+			dialog.messenger.remoteApi.setCss(this.themeCss);
+		}
 	}
 
 	public onWebViewMessage(message: WebViewMessageEvent) {

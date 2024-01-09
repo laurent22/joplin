@@ -1,6 +1,8 @@
 import WindowMessenger from '@joplin/lib/utils/ipc/WindowMessenger';
 import { DialogLocalApi, DialogRemoteApi } from '../types';
 
+let iframeCssElement: HTMLStyleElement|null = null;
+
 const initializeDialogIframe = (messageChannelId: string) => {
 	const localApi = {
 		getFormData: async () => {
@@ -15,10 +17,12 @@ const initializeDialogIframe = (messageChannelId: string) => {
 			}
 			return result;
 		},
-		addCss: (css: string) => {
+		setCss: (css: string) => {
+			iframeCssElement?.remove?.();
 			const styleElement = document.createElement('style');
 			styleElement.appendChild(document.createTextNode(css));
 			document.body.appendChild(styleElement);
+			iframeCssElement = styleElement;
 		},
 		// No-op -- handled by parent window
 		setButtons: () => {},

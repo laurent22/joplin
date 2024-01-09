@@ -1,7 +1,7 @@
 
 import * as React from 'react';
 import ExtendedWebView, { WebViewControl } from '../../components/ExtendedWebView';
-import { useCallback, useMemo, useRef, useState, useEffect } from 'react';
+import { useCallback, useMemo, useRef, useState, useEffect, RefObject } from 'react';
 import shim from '@joplin/lib/shim';
 import { WebViewMessageEvent } from 'react-native-webview';
 import PluginRunner from './PluginRunner';
@@ -14,6 +14,8 @@ import { AppState } from '../../utils/types';
 import { PluginHtmlContents, PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import PluginViewController from './PluginViewController';
+import { themeStyle } from '@joplin/lib/theme';
+import themeToCss from '@joplin/lib/services/style/themeToCss';
 
 interface Props {
 	serializedPluginSettings: string;
@@ -59,6 +61,46 @@ const useStyles = (webViewVisible: boolean) => {
 	}, [webViewVisible, windowSize]);
 };
 
+const useWebViewTheme = (
+	webViewVisible: boolean,
+	themeId: number,
+	webviewRef: RefObject<WebViewControl>,
+	pluginViewController: PluginViewController,
+) => {
+	useEffect(() => {
+		if (!webViewVisible) return;
+
+		const theme = themeStyle(themeId);
+		const themeVariableCss = themeToCss(theme);
+
+		pluginViewController.onThemeChange(themeVariableCss);
+		webviewRef.current.injectJS(`
+			const style = window.joplinThemeStyleSheet ?? document.createElement('style');
+			if (style.parent) {
+				style.remove();
+			}
+			style.textContent = ${JSON.stringify(themeVariableCss)};
+			document.head.appendChild(style);
+			window.joplinThemeStyleSheet = style;
+		`);
+	}, [themeId, pluginViewController, webViewVisible, webviewRef]);
+};
+
+const usePlugins = (pluginRunner: PluginRunner, webviewLoaded: boolean, serializedPluginSettings: string) => {
+	const store = useStore();
+
+	useAsyncEffect(async (event) => {
+		if (!webviewLoaded) {
+			return;
+		}
+
+		const pluginService = PluginService.instance();
+		const pluginSettings = pluginService.unserializePluginSettings(serializedPluginSettings);
+
+		void loadPlugins(pluginRunner, pluginSettings, store, event);
+	}, [pluginRunner, store, webviewLoaded, serializedPluginSettings]);
+};
+
 const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 	const webviewRef = useRef<WebViewControl>();
 
@@ -66,7 +108,7 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 		return new PluginRunner(webviewRef);
 	}, []);
 
-	const [webViewVisible, setWebviewVisible] = useState(true);
+	const [webViewVisible, setWebviewVisible] = useState(false);
 
 	const pluginViewController = useMemo(() => {
 		return new PluginViewController(webviewRef, setWebviewVisible);
@@ -77,26 +119,15 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 	}, [props.pluginHtmlContents, pluginViewController]);
 
 	const [webviewLoaded, setLoaded] = useState(false);
-	const store = useStore();
 
-	useAsyncEffect(async (event) => {
-		if (!webviewLoaded) {
-			return;
-		}
-
-		const pluginService = PluginService.instance();
-		const pluginSettings = pluginService.unserializePluginSettings(props.serializedPluginSettings);
-
-		void loadPlugins(pluginRunner, pluginSettings, store, event);
-	}, [pluginRunner, store, webviewLoaded, props.serializedPluginSettings]);
-
-	const pluginViews = useMemo(() => {
-		return pluginUtils.viewInfosByType(props.pluginStates, 'webview');
-	}, [props.pluginStates]);
+	usePlugins(pluginRunner, webviewLoaded, props.serializedPluginSettings);
 
 	useEffect(() => {
+		const pluginViews = pluginUtils.viewInfosByType(props.pluginStates, 'webview');
 		pluginViewController.onViewInfosUpdated(pluginViews);
-	}, [pluginViews, pluginViewController]);
+	}, [props.pluginStates, pluginViewController]);
+
+	useWebViewTheme(webViewVisible, props.themeId, webviewRef, pluginViewController);
 
 	const injectedJs = useMemo(() => {
 		return `
@@ -110,7 +141,6 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 		pluginRunner.onWebviewMessage(event);
 		pluginViewController.onWebViewMessage(event);
 	}, [pluginViewController, pluginRunner]);
-
 
 	const styles = useStyles(webViewVisible);
 	const webView = (
