@@ -1,7 +1,6 @@
 
 import * as React from 'react';
 import ExtendedWebView, { WebViewControl } from '../../components/ExtendedWebView';
-import Setting from '@joplin/lib/models/Setting';
 import { useCallback, useMemo, useRef, useState, useEffect } from 'react';
 import shim from '@joplin/lib/shim';
 import { WebViewMessageEvent } from 'react-native-webview';
@@ -9,7 +8,7 @@ import PluginRunner from './PluginRunner';
 import loadPlugins from '../loadPlugins';
 import { connect, useStore } from 'react-redux';
 import Logger from '@joplin/utils/Logger';
-import { View, ViewStyle, useWindowDimensions } from 'react-native';
+import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { AppState } from '../../utils/types';
 import { PluginHtmlContents, PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
@@ -20,6 +19,7 @@ interface Props {
 	serializedPluginSettings: string;
 	pluginStates: PluginStates;
 	pluginHtmlContents: PluginHtmlContents;
+	themeId: number;
 }
 
 const html = `
@@ -34,6 +34,30 @@ const html = `
 `;
 
 const logger = Logger.create('PluginRunnerWebView');
+
+const useStyles = (webViewVisible: boolean) => {
+	const windowSize = useWindowDimensions();
+
+	return useMemo(() => {
+		return StyleSheet.create({
+			containerStyle: {
+				backgroundColor: 'transparent',
+				display: webViewVisible ? 'flex' : 'none',
+				zIndex: webViewVisible ? 10 : -1,
+				width: windowSize.width,
+				height: windowSize.height,
+				position: 'absolute',
+			},
+			webview: {
+				backgroundColor: 'transparent',
+				flex: webViewVisible ? 1 : 0,
+				flexGrow: webViewVisible ? 1 : 0,
+				width: webViewVisible ? undefined : 0,
+				height: webViewVisible ? undefined : 0,
+			},
+		});
+	}, [webViewVisible, windowSize]);
+};
 
 const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 	const webviewRef = useRef<WebViewControl>();
@@ -87,10 +111,12 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 		pluginViewController.onWebViewMessage(event);
 	}, [pluginViewController, pluginRunner]);
 
+
+	const styles = useStyles(webViewVisible);
 	const webView = (
 		<ExtendedWebView
-			style={webViewVisible ? { flex: 1, flexGrow: 1 } : { width: 0, height: 0 }}
-			themeId={Setting.THEME_LIGHT}
+			style={styles.webview}
+			themeId={props.themeId}
 			webviewInstanceId='PluginRunner'
 			html={html}
 			injectedJavaScript={injectedJs}
@@ -101,21 +127,8 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 		/>
 	);
 
-	const windowSize = useWindowDimensions();
-
-	const style = useMemo(() => {
-		const viewStyle: ViewStyle = {
-			display: webViewVisible ? 'flex' : 'none',
-			zIndex: webViewVisible ? 10 : -1,
-			width: windowSize.width,
-			height: windowSize.height,
-			position: 'absolute',
-		};
-		return viewStyle;
-	}, [webViewVisible, windowSize]);
-
 	return (
-		<View style={style}>
+		<View style={styles.containerStyle}>
 			{webView}
 		</View>
 	);
@@ -126,6 +139,7 @@ export default connect((state: AppState) => {
 		serializedPluginSettings: state.settings['plugins.states'],
 		pluginStates: state.pluginService.plugins,
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
+		themeId: state.settings.theme,
 	};
 	return result;
 })(PluginRunnerWebViewComponent);

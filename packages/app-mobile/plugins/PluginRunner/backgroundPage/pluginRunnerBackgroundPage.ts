@@ -1,5 +1,6 @@
 import { PluginApi, PluginWebViewApi } from '../types';
 import WindowMessenger from '@joplin/lib/utils/ipc/WindowMessenger';
+import './style.css';
 
 export { runPlugin, stopPlugin } from './startStopPlugin';
 

@@ -7978,6 +7978,7 @@ __metadata:
     buffer: 6.0.3
     constants-browserify: 1.0.0
     crypto-browserify: 3.12.0
+    css-loader: 6.8.1
     deprecated-react-native-prop-types: 5.0.0
     events: 3.3.0
     expo: 49.0.18
@@ -8035,6 +8036,7 @@ __metadata:
     stream: 0.0.2
     stream-browserify: 3.0.0
     string-natural-compare: 3.0.1
+    style-loader: 3.3.3
     tar-stream: 3.1.6
     timers: 0.1.1
     ts-jest: 29.1.1

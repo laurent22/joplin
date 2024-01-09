@@ -46,6 +46,10 @@ export default class BundledFile {
 						use: 'ts-loader',
 						exclude: /node_modules/,
 					},
+					{
+						test: /\.css$/,
+						use: ['style-loader', 'css-loader'],
+					},
 				],
 			},
 			// Increase the minimum size required
