@@ -12,6 +12,10 @@ import { closeSearchPanel, findNext, findPrevious, openSearchPanel, replaceAll, 
 
 type EditorCommandFunction = (editor: EditorView, ...args: any[])=> void|any;
 
+const replaceSelectionCommand = (editor: EditorView, toInsert: string) => {
+	editor.dispatch(editor.state.replaceSelection(toInsert));
+};
+
 const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	[EditorCommandType.Undo]: undo,
 	[EditorCommandType.Redo]: redo,
@@ -72,6 +76,8 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 		const selection = editor.state.selection;
 		return editor.state.sliceDoc(selection.main.from, selection.main.to);
 	},
+	[EditorCommandType.InsertText]: replaceSelectionCommand,
+	[EditorCommandType.ReplaceSelection]: replaceSelectionCommand,
 };
 export default editorCommands;
 

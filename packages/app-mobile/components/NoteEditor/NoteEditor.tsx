@@ -162,7 +162,9 @@ const useEditorControl = (
 			supportsCommand(command: EditorCommandType) {
 				return supportsCommand(command);
 			},
-			execCommand,
+			execCommand(command, ...args: any[]) {
+				return bodyControl.execCommand(command, ...args);
+			},
 
 			undo() {
 				bodyControl.undo();

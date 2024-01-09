@@ -164,11 +164,14 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 	private async invokeLocalMethod(message: InvokeMethodMessage) {
 		try {
 			const methodFromPath = (path: string[]) => {
+				const parentObjectStack: any[] = [];
+
 				// We also use invokeLocalMethod to call callbacks that were previously
 				// passed as arguments. In this case, path should be [ '__callbacks', callbackIdHere ].
 				if (path.length === 2 && path[0] === '__callbacks' && this.argumentCallbacks.has(path[1])) {
 					return {
 						parentObject: undefined,
+						parentObjectStack,
 						method: this.argumentCallbacks.get(path[1]),
 					};
 				}
@@ -188,13 +191,14 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 					}
 
 					parentObject = currentObject;
+					parentObjectStack.push(parentObject);
 					currentObject = currentObject[propertyName];
 				}
 
-				return { parentObject, method: currentObject };
+				return { parentObject, parentObjectStack, method: currentObject };
 			};
 
-			const { method, parentObject } = methodFromPath(message.methodPath);
+			const { method, parentObject, parentObjectStack } = methodFromPath(message.methodPath);
 
 			if (typeof method !== 'function') {
 				throw new Error(`Property ${message.methodPath.join('.')} is not a function.`);
@@ -208,7 +212,44 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 				},
 			);
 
-			const result = this.preserveThis ? await method.apply(parentObject, args) : await method(...args);
+			let result;
+			if (this.preserveThis) {
+				const lastMethodCallName = message.methodPath[message.methodPath.length - 1];
+				const parentHasParent = parentObjectStack.length >= 2;
+
+				// We need extra logic if the user is trying to .apply or .call a function.
+				//
+				// Specifically, if the user calls
+				//     foo.apply(newThis, [some, args, here])
+				// we want to remove the `.apply` to ensure that `foo` has the correct `this`
+				// variable (and not some proxy object).
+				//
+				// We support this priarially because TypeScript can generate .call or .apply
+				// when converting to ES5.
+				if (
+					parentHasParent
+					&& ['call', 'apply'].includes(lastMethodCallName)
+					&& typeof parentObject === 'function'
+				) {
+					let adjustedArgs = args;
+
+					// Select [argsHere] from `.apply(newThis, [argsHere])`
+					if (lastMethodCallName === 'apply' && Array.isArray(args[1])) {
+						adjustedArgs = args[1];
+					} else if (lastMethodCallName === 'call') {
+						// Otherwise, we remove the `this` variable from `.call(newThis, args, go, here, ...)`.
+						adjustedArgs = args.slice(1);
+					}
+
+					const newMethod = parentObject;
+					const newParent = parentObjectStack[parentObjectStack.length - 2];
+					result = await newMethod.apply(newParent, adjustedArgs);
+				} else {
+					result = await method.apply(parentObject, args);
+				}
+			} else {
+				result = await method(...args);
+			}
 
 			this.postMessage({
 				kind: MessageType.ReturnValueResponse,

@@ -87,4 +87,44 @@ describe('RemoteMessenger', () => {
 			expect(await messenger1.remoteApi.transfer(testObject)).toMatchObject(testObject);
 		}
 	});
+
+	it('should preserve the value of `this`', async () => {
+		// We construct an API that intentionally relies on `this`
+		const testApi = {
+			async add(arg1: number, arg2: number) {
+				return this._printSum(arg1 + arg2);
+			},
+
+			_printSum(sum: number) {
+				return `sum: ${sum}`;
+			},
+
+			subObject: {
+				async multiplyRounded(arg1: number, arg2: number) {
+					return this._round(arg1) * this._round(arg2);
+				},
+				_round(x: number) {
+					return Math.round(x);
+				},
+			},
+		};
+		type ApiType = typeof testApi;
+
+		const messenger1 = new TestMessenger<ApiType, ApiType>('test', testApi);
+		const messenger2 = new TestMessenger<ApiType, ApiType>('test', testApi);
+		messenger1.connectTo(messenger2);
+
+		const remoteApi = messenger1.remoteApi;
+
+		// Should preserve this by default
+		expect(await remoteApi.add(1, 2)).toBe('sum: 3');
+
+		// .call and .apply should still call the function
+		expect(await remoteApi.add.apply(remoteApi, [3, 2])).toBe('sum: 5');
+		expect(await remoteApi.add.call(remoteApi, 3, 2)).toBe('sum: 5');
+
+		// The same should be true for sub-objects
+		expect(await remoteApi.subObject.multiplyRounded(1.1, 2)).toBe(2);
+		expect(await remoteApi.subObject.multiplyRounded.call(remoteApi.subObject, 3.1, 4.2)).toBe(12);
+	});
 });

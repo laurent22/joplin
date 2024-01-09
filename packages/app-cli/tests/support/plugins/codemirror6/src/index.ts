@@ -34,7 +34,7 @@ joplin.plugins.register({
 		await joplin.commands.register({
 			name: 'show-selection',
 			label: 'Show selection',
-			iconName: 'fas fa-drum',
+			iconName: 'fas fa-object-group',
 			execute: async () => {
 				// We don't necessarily need content scripts to interact with the editor. For
 				// example, to get selected text, we can execute the `selectedText` command:
@@ -56,5 +56,18 @@ joplin.plugins.register({
 			},
 		});
 		await joplin.views.toolbarButtons.create('show-selection-btn', 'show-selection', ToolbarButtonLocation.EditorToolbar);
+
+		await joplin.commands.register({
+			name: 'underline',
+			label: 'Underline selection',
+			iconName: 'fas fa-underline',
+			execute: async () => {
+				// We don't necessarily need content scripts to interact with the editor. For
+				// example, to get selected text, we can execute the `selectedText` command:
+				const selectedText = await joplin.commands.execute('selectedText') ?? '';
+				await joplin.commands.execute('replaceSelection', `<u>${selectedText}</u>`);
+			},
+		});
+		await joplin.views.toolbarButtons.create('underline-btn', 'underline', ToolbarButtonLocation.EditorToolbar);
 	},
 });

@@ -21,7 +21,7 @@ const commandRuntime = (declaration: CommandDeclaration, editor: EditorControl) 
 				return;
 			}
 
-			return await editor.execCommand(commandName, args);
+			return await editor.execCommand(commandName, ...args);
 		},
 		enabledCondition: enabledCondition(declaration.name),
 	};
