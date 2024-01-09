@@ -21,6 +21,10 @@ interface DialogRecord {
 
 type SetWebViewVisibleCallback = (visible: boolean)=> void;
 
+const getDialogHandle = (viewInfo: ViewInfo) => {
+	return `${viewInfo.plugin.id}--${viewInfo.view.id}`;
+};
+
 export default class PluginViewController {
 	private visibleDialogs: Map<string, DialogRecord> = new Map();
 	private pluginHtmlContents: PluginHtmlContents;
@@ -40,18 +44,18 @@ export default class PluginViewController {
 	public onViewInfosUpdated(pluginViews: ViewInfo[]) {
 		for (const viewInfo of pluginViews) {
 			const view = viewInfo.view;
+			const dialogHandle = getDialogHandle(viewInfo);
 			if (!view.opened) {
-				if (this.visibleDialogs.has(view.id)) {
+				if (this.visibleDialogs.has(dialogHandle)) {
 					this.closeDialog(viewInfo);
 				}
 				continue;
 			}
-			if (this.visibleDialogs.has(view.id)) {
-				const currentDialog = this.visibleDialogs.get(view.id);
+			if (this.visibleDialogs.has(dialogHandle)) {
+				const currentDialog = this.visibleDialogs.get(dialogHandle);
 				if (currentDialog.viewInfo.view.buttons !== viewInfo.view.buttons) {
-					currentDialog.messenger.remoteApi.setButtons(viewInfo.view.buttons);
+					this.updateDialogButtons(dialogHandle, viewInfo.view.buttons);
 				}
-				// TODO: Support updating buttons.
 				continue;
 			}
 
@@ -62,13 +66,13 @@ export default class PluginViewController {
 	}
 
 	private closeDialog(viewInfo: ViewInfo) {
-		const viewId = viewInfo.view.id;
+		const dialogHandle = getDialogHandle(viewInfo);
 
-		if (this.visibleDialogs.has(viewId)) {
-			const messenger = this.visibleDialogs.get(viewId).messenger;
+		if (this.visibleDialogs.has(dialogHandle)) {
+			const messenger = this.visibleDialogs.get(dialogHandle).messenger;
 			messenger.remoteApi.closeDialog();
 
-			this.visibleDialogs.delete(viewId);
+			this.visibleDialogs.delete(dialogHandle);
 		}
 
 		if ([...this.visibleDialogs.values()].length === 0) {
@@ -141,18 +145,38 @@ export default class PluginViewController {
 				${JSON.stringify(dialogInfo)},
 			);
 		`);
+		const dialogHandle = getDialogHandle(viewInfo);
+		this.visibleDialogs.set(dialogHandle, { messenger, viewInfo });
 
 		const defaultButtons: ButtonSpec[] = [
-			{ id: 'ok', title: _('OK') }, { id: 'cancel', title: _('Cancel') },
+			{ id: 'ok' }, { id: 'cancel' },
 		];
-		messenger.remoteApi.setButtons(view.buttons ?? defaultButtons);
+		this.updateDialogButtons(dialogHandle, view.buttons ?? defaultButtons);
 		messenger.remoteApi.setCss(this.themeCss);
-
-		this.visibleDialogs.set(view.id, { messenger, viewInfo });
 
 		// Dialogs are shown by scripts that originally run in the webview. Thus,
 		// the webview has already loaded.
 		messenger.onWebViewLoaded();
+	}
+
+	private updateDialogButtons(dialogHandle: string, buttons: ButtonSpec[]) {
+		const dialog = this.visibleDialogs.get(dialogHandle);
+
+		buttons = buttons.map(button => {
+			let title = button.title;
+
+			if (button.id === 'ok' && !title) {
+				title = _('OK');
+			} else if (button.id === 'cancel' && !title) {
+				title = _('Cancel');
+			}
+
+			return {
+				title,
+				...button,
+			};
+		});
+		dialog.messenger.remoteApi.setButtons(buttons);
 	}
 
 	public onThemeChange(themeCss: string) {
