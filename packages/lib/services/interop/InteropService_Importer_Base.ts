@@ -1,15 +1,16 @@
 /* eslint @typescript-eslint/no-unused-vars: 0, no-unused-vars: 0 */
 
-import { ImportExportResult } from './types';
+import { ImportExportResult, ImportOptions } from './types';
 
 import Setting from '../../models/Setting';
 import shim from '../../shim';
+import { type ImportMetadata } from './Module';
 
 export default class InteropService_Importer_Base {
 
-	private metadata_: any = null;
+	private metadata_: ImportMetadata = null;
 	protected sourcePath_ = '';
-	protected options_: any = {};
+	protected options_: ImportOptions = {};
 
 	public setMetadata(md: any) {
 		this.metadata_ = md;

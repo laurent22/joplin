@@ -2,18 +2,20 @@
 
 import Setting from '../../models/Setting';
 import shim from '../../shim';
+import { type ExportMetadata } from './Module';
+import { ExportOptions } from './types';
 
 export default class InteropService_Exporter_Base {
 	private context_: any = {};
-	private metadata_: any = {};
+	private metadata_: ExportMetadata = null;
 
-	public async init(_destDir: string, _options: any = {}) {}
+	public async init(_destDir: string, _options: ExportOptions = {}) {}
 	public async prepareForProcessingItemType(_itemType: number, _itemsToExport: any[]) {}
 	public async processItem(_itemType: number, _item: any) {}
 	public async processResource(_resource: any, _filePath: string) {}
 	public async close() {}
 
-	public setMetadata(md: any) {
+	public setMetadata(md: ExportMetadata) {
 		this.metadata_ = md;
 	}
 
