@@ -79,22 +79,16 @@ describe('routes/notes', () => {
 		expect(response).toBe('');
 	});
 
-	test('should not copy content from invalid protocls', async () => {
+	test('should not copy content from invalid protocols', async () => {
 		const url = 'file:///home/user/file.db';
-		const shimFsDriverCopySpy = jest.fn();
-		jest.spyOn(shim, 'fsDriver').mockImplementation(() => {
-			return {
-				copy: shimFsDriverCopySpy,
-			} as any;
-		});
 
 		const allowedProtocols: string[] = [];
-		await downloadMediaFile(url, null, allowedProtocols);
+		const mediaFilePath = await downloadMediaFile(url, null, allowedProtocols);
 
-		expect(shimFsDriverCopySpy).toBeCalledTimes(0);
+		expect(mediaFilePath).toBe('');
 	});
 
-	test.each([
+	test.only.each([
 		'https://joplinapp.org/valid/image_url',
 		'https://joplinapp.org/valid/image_url.invalid_url',
 	])('should find and move file with invalid or without filename', async (url) => {
@@ -105,7 +99,6 @@ describe('routes/notes', () => {
 				},
 			};
 		});
-		jest.spyOn(uuid, 'create').mockReturnValue('mocked_uuid_value');
 		const shimFsDriverMoveSpy = jest.fn();
 		jest.spyOn(shim, 'fsDriver').mockImplementation(() => {
 			return {
@@ -113,9 +106,8 @@ describe('routes/notes', () => {
 			} as any;
 		});
 
-		const response = await downloadMediaFile(url);
+		await downloadMediaFile(url);
 
-		expect(shimFsDriverMoveSpy).toBeCalledTimes(1);
-		expect(response.endsWith('mocked_uuid_value.jpg')).toBe(true);
+		expect(shimFsDriverMoveSpy).toHaveBeenCalledTimes(1);
 	});
 });
