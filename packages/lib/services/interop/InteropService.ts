@@ -85,6 +85,23 @@ export default class InteropService {
 				}, dynamicRequireModuleFactory('./InteropService_Importer_EnexToMd')),
 
 				makeImportModule({
+					format: 'enex',
+					fileExtensions: ['enex'],
+					sources: [FileSystemItem.Directory],
+					description: _('Evernote Export Files (Directory, as HTML)'),
+					supportsMobile: false,
+					outputFormat: ImportModuleOutputFormat.Html,
+				}, dynamicRequireModuleFactory('./InteropService_Importer_EnexToHtml')),
+
+				makeImportModule({
+					format: 'enex',
+					fileExtensions: ['enex'],
+					sources: [FileSystemItem.Directory],
+					description: _('Evernote Export Files (Directory, as Markdown)'),
+					supportsMobile: false,
+				}, dynamicRequireModuleFactory('./InteropService_Importer_EnexToMd')),
+
+				makeImportModule({
 					format: 'html',
 					fileExtensions: ['html'],
 					sources: [FileSystemItem.File, FileSystemItem.Directory],

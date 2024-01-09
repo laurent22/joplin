@@ -5,6 +5,7 @@ const { cliUtils } = require('./cli-utils.js');
 const { app } = require('./app.js');
 import { _ } from '@joplin/lib/locale';
 import { ImportOptions } from '@joplin/lib/services/interop/types';
+import { unique } from '@joplin/lib/array';
 
 class Command extends BaseCommand {
 	public override usage() {
@@ -23,7 +24,7 @@ class Command extends BaseCommand {
 			.map(m => m.format);
 
 		return [
-			['--format <format>', _('Source format: %s', ['auto'].concat(formats).join(', '))],
+			['--format <format>', _('Source format: %s', ['auto'].concat(unique(formats)).join(', '))],
 			['-f, --force', _('Do not ask for confirmation.')],
 			['--output-format <output-format>', _('Output format: %s', 'md, html')],
 		];

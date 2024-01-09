@@ -23,7 +23,7 @@ interface BaseMetadata {
 	isNoteArchive: boolean;
 }
 
-interface ImportMetadata extends BaseMetadata {
+export interface ImportMetadata extends BaseMetadata {
 	type: ModuleType.Importer;
 	format: string;
 
@@ -35,7 +35,7 @@ export interface ImportModule extends ImportMetadata {
 	factory(options?: ImportOptions): InteropService_Importer_Base;
 }
 
-interface ExportMetadata extends BaseMetadata {
+export interface ExportMetadata extends BaseMetadata {
 	type: ModuleType.Exporter;
 	format: ExportModuleOutputFormat;
 
