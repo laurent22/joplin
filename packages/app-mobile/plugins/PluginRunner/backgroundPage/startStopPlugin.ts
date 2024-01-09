@@ -1,17 +1,8 @@
 import RemoteMessenger from '@joplin/lib/utils/ipc/RemoteMessenger';
-import WebViewToRNMessenger from '../../utils/ipc/WebViewToRNMessenger';
-import { PluginApi, PluginWebViewApi } from './types';
+import { PluginApi, PluginWebViewApi } from '../types';
+import WebViewToRNMessenger from '../../../utils/ipc/WebViewToRNMessenger';
 import WindowMessenger from '@joplin/lib/utils/ipc/WindowMessenger';
-
-export const pathLibrary = require('path');
-
-export const requireModule = (moduleName: string) => {
-	if (moduleName === 'path') {
-		return pathLibrary;
-	}
-
-	throw new Error(`Unable to require module ${moduleName} on mobile.`);
-};
+import makeSandboxedIframe from './utils/makeSandboxedIframe';
 
 type PluginRecord = {
 	iframe: HTMLIFrameElement;
@@ -44,32 +35,30 @@ export const runPlugin = (
 		return;
 	}
 
-	const backgroundIframe = document.createElement('iframe');
+	const bodyHtml = '';
+	const initialJavaScript = `
+		"use strict";
+		${pluginBackgroundScript}
+
+		(async () => {
+			window.require = pluginBackgroundPage.requireModule;
+			await pluginBackgroundPage.createPluginApiProxy(${JSON.stringify(messageChannelId)});
+			${pluginScript}
+		})();
+	`;
+	const backgroundIframe = makeSandboxedIframe(bodyHtml, [initialJavaScript]).iframe;
+
 	loadedPlugins[pluginId] = {
 		iframe: backgroundIframe,
 		connectionToParent: null,
 		connectionToIframe: null,
 	};
-	backgroundIframe.setAttribute('sandbox', 'allow-scripts allow-modals');
 
 	backgroundIframe.addEventListener('load', async () => {
+		// Unloaded?
 		if (!loadedPlugins[pluginId]) {
-			// Unloaded?
 			return;
 		}
-
-		backgroundIframe.contentWindow.postMessage({
-			kind: 'add-script',
-			script: `"use strict";
-				${pluginBackgroundScript}
-
-				(async () => {
-					window.require = pluginBackgroundPage.requireModule;
-					await pluginBackgroundPage.createPluginApiProxy(${JSON.stringify(messageChannelId)});
-					${pluginScript}
-				})();
-			`,
-		}, '*');
 
 		// Chain connectionToParent with connectionToIframe
 		const connectionToParent = new WebViewToRNMessenger<PluginWebViewApi, PluginApi>(messageChannelId, null);
@@ -88,41 +77,5 @@ export const runPlugin = (
 		loadedPlugins[pluginId].connectionToParent = connectionToParent;
 	}, { once: true });
 
-	backgroundIframe.srcdoc = `
-		<!DOCTYPE html>
-		<html>
-		<head></head>
-		<body>
-			<script>
-				window.onmessage = (event) => {
-					console.log('got message', event);
-					if (event.source !== parent) {
-						console.log('Ignoring message: wrong source');
-						return;
-					}
-					if (event.data.kind !== 'add-script') {
-						console.log('Ignoring message: wrong type', event.data.kind);
-						return;
-					}
-
-					console.log('Adding plugin script...');
-					window.onmessage = undefined;
-					const scriptElem = document.createElement('script');
-					scriptElem.appendChild(document.createTextNode(event.data.script));
-					document.head.appendChild(scriptElem);
-				};
-			</script>
-		</body>
-		</html>
-	`;
-
 	document.body.appendChild(backgroundIframe);
-};
-
-export const createPluginApiProxy = async (messageChannelId: string) => {
-	const localApi = { };
-	const messenger = new WindowMessenger<PluginWebViewApi, PluginApi>(messageChannelId, parent, localApi);
-	await messenger.awaitRemoteReady();
-
-	(window as any).joplin = messenger.remoteApi.api.joplin;
 };

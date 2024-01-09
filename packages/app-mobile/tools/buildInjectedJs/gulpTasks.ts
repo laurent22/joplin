@@ -16,7 +16,7 @@ const jsDrawBundle = new BundledFile(
 
 const pluginBackgroundPageBundle = new BundledFile(
 	'pluginBackgroundPage',
-	`${mobileDir}/plugins/PluginRunner/pluginRunnerBackgroundPage.ts`,
+	`${mobileDir}/plugins/PluginRunner/backgroundPage/pluginRunnerBackgroundPage.ts`,
 );
 
 const gulpTasks = {
