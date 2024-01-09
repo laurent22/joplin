@@ -125,7 +125,7 @@ const useEditorCommands = (props: Props) => {
 				}
 			},
 			search: () => {
-				editorRef.current.execCommand(EditorCommandType.ShowSearch);
+				return editorRef.current.execCommand(EditorCommandType.ShowSearch);
 			},
 		};
 	}, [

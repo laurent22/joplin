@@ -392,7 +392,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 			return;
 		}
 
-		this.execCommand(commandName);
+		return this.execCommand(commandName);
 	}
 
 	public commandExists(commandName: string) {

@@ -1,5 +1,5 @@
 import joplin from 'api';
-import { ContentScriptType } from 'api/types';
+import { ContentScriptType, ToolbarButtonLocation } from 'api/types';
 import registerSettings from './utils/registerSettings';
 
 joplin.plugins.register({
@@ -26,5 +26,35 @@ joplin.plugins.register({
 				throw new Error(`Unknown message ${message}`);
 			}
 		});
+
+		// TODO: Remove the following when done testing mobile plugins
+		// -----------------------------------------------------------
+
+		const dialogHandle = await joplin.views.dialogs.create('myDialog1');
+		await joplin.commands.register({
+			name: 'show-selection',
+			label: 'Show selection',
+			iconName: 'fas fa-drum',
+			execute: async () => {
+				// We don't necessarily need content scripts to interact with the editor. For
+				// example, to get selected text, we can execute the `selectedText` command:
+				const selectedText = (await joplin.commands.execute('selectedText') || 'None')
+						.replace(/[<]/g, '&lt;')
+						.replace(/[>]/g, '&gt;')
+						.replace(/[&]/g, '&amp;');
+				await joplin.views.dialogs.setHtml(dialogHandle, `
+					<p><b>Selected text:</b></p>
+					<pre>${selectedText}</pre>
+				`);
+				await joplin.views.dialogs.setButtons(dialogHandle, [
+					{
+						id: 'ok',
+					},
+				]);
+
+				await joplin.views.dialogs.open(dialogHandle);
+			},
+		});
+		await joplin.views.toolbarButtons.create('show-selection-btn', 'show-selection', ToolbarButtonLocation.EditorToolbar);
 	},
 });

@@ -31,7 +31,7 @@ export default (context: { contentScriptId: string, postMessage: (message: any)=
 			// options.
 
 			// We can also send/receive messages. We define a message handler in index.ts.
-			(async () => {
+			void (async () => {
 				const config = await context.postMessage('get-config');
 
 				if (config.highlightGutter) {

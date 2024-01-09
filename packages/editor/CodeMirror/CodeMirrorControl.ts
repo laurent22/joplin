@@ -31,11 +31,11 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		return name in editorCommands || super.commandExists(name);
 	}
 
-	public override execCommand(name: string) {
+	public override execCommand(name: string, ...args: any[]) {
 		if (name in editorCommands) {
-			editorCommands[name as EditorCommandType](this.editor);
+			return editorCommands[name as EditorCommandType](this.editor, ...args);
 		} else if (super.commandExists(name)) {
-			super.execCommand(name);
+			return super.execCommand(name);
 		}
 
 		if (name === EditorCommandType.Undo || name === EditorCommandType.Redo) {

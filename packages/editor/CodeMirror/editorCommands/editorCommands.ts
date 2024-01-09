@@ -10,7 +10,7 @@ import {
 import swapLine, { SwapLineDirection } from './swapLine';
 import { closeSearchPanel, findNext, findPrevious, openSearchPanel, replaceAll, replaceNext } from '@codemirror/search';
 
-type EditorCommandFunction = (editor: EditorView)=> void;
+type EditorCommandFunction = (editor: EditorView, ...args: any[])=> void|any;
 
 const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	[EditorCommandType.Undo]: undo,
@@ -64,6 +64,14 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	[EditorCommandType.FindPrevious]: findPrevious,
 	[EditorCommandType.ReplaceNext]: replaceNext,
 	[EditorCommandType.ReplaceAll]: replaceAll,
+
+	// Getter commands
+	// Note that these commands aren't strictly CodeMirror 6 commands as they produce
+	// output.
+	[EditorCommandType.SelectedText]: editor => {
+		const selection = editor.state.selection;
+		return editor.state.sliceDoc(selection.main.from, selection.main.to);
+	},
 };
 export default editorCommands;
 

@@ -25,6 +25,7 @@ import RNToWebViewMessenger from '../../utils/ipc/RNToWebViewMessenger';
 import { WebViewMessageEvent } from 'react-native-webview';
 import Logger from '@joplin/utils/Logger';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+import useEditorCommandHandler from './hooks/useEditorCommandHandler';
 
 const logger = Logger.create('NoteEditor');
 
@@ -149,7 +150,7 @@ const useEditorControl = (
 ): EditorControl => {
 	return useMemo(() => {
 		const execCommand = (command: EditorCommandType) => {
-			bodyControl.execCommand(command);
+			void bodyControl.execCommand(command);
 		};
 
 		const setSearchStateCallback = (state: SearchState) => {
@@ -376,6 +377,8 @@ function NoteEditor(props: Props, ref: any) {
 	const editorControl = useEditorControl(
 		editorMessenger.remoteApi, injectJS, setLinkDialogVisible, setSearchState,
 	);
+
+	useEditorCommandHandler(editorControl);
 
 	useImperativeHandle(ref, () => {
 		return editorControl;

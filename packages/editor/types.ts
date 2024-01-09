@@ -60,6 +60,9 @@ export enum EditorCommandType {
 
 	UndoSelection = 'undoSelection',
 	RedoSelection = 'redoSelection',
+
+	// Getters
+	SelectedText = 'selectedText',
 }
 
 // Because the editor package can run in a WebView, plugin content scripts
@@ -73,7 +76,7 @@ export interface PluginData {
 
 export interface EditorControl {
 	supportsCommand(name: EditorCommandType|string): boolean;
-	execCommand(name: EditorCommandType|string): void;
+	execCommand(name: EditorCommandType|string, ...args: any[]): void|Promise<any>;
 
 	undo(): void;
 	redo(): void;
