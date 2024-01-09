@@ -22,6 +22,7 @@ export interface DialogRemoteApi {
 export interface DialogLocalApi {
 	getFormData: ()=> Promise<SerializableData>;
 	setCss: (css: string)=> void;
+	getContentSize: ()=> Promise<{ width: number; height: number }>;
 	closeDialog: ()=> void;
 	setButtons: (buttons: ButtonSpec[])=> void;
 }

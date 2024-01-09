@@ -24,6 +24,12 @@ const initializeDialogIframe = (messageChannelId: string) => {
 			document.body.appendChild(styleElement);
 			iframeCssElement = styleElement;
 		},
+		getContentSize: async () => {
+			return {
+				width: document.scrollingElement.scrollWidth,
+				height: document.scrollingElement.scrollHeight,
+			};
+		},
 		// No-op -- handled by parent window
 		setButtons: () => {},
 		closeDialog: () => {},

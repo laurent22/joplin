@@ -26,6 +26,11 @@ dialog {
 	box-shadow: 0 6px 10px #00000077;
 }
 
+dialog > iframe {
+	min-width: min(100vw, var(--initial-content-width));
+	min-height: min(85vh, var(--initial-content-height));
+}
+
 iframe {
 	border: none;
 }

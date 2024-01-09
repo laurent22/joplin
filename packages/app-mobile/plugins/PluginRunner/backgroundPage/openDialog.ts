@@ -27,6 +27,7 @@ const initializeMessengers = (
 	rnConnection.setLocalInterface({
 		getFormData: iframeConnection.remoteApi.getFormData,
 		setCss: iframeConnection.remoteApi.setCss,
+		getContentSize: iframeConnection.remoteApi.getContentSize,
 		setButtons,
 		closeDialog,
 	});
@@ -81,6 +82,10 @@ const openDialog = async (messageChannelId: string, pluginBackgroundScript: stri
 	const messengers = initializeMessengers(messageChannelId, iframe, setButtons, closeDialog);
 	iframeConnection = messengers.iframeConnection;
 	rnConnection = messengers.rnConnection;
+
+	const initialContentSize = await iframeConnection.remoteApi.getContentSize();
+	dialogContainer.style.setProperty('--initial-content-width', `${initialContentSize.width}px`);
+	dialogContainer.style.setProperty('--initial-content-height', `${initialContentSize.height}px`);
 };
 
 export default openDialog;
