@@ -1,5 +1,10 @@
 # Joplin Desktop Changelog
 
+## [v2.14.7](https://github.com/laurent22/joplin/releases/tag/v2.14.7) (Pre-release) - 2024-01-08T11:51:49Z
+
+- Improved: Updated packages sharp (v0.33.1)
+- Fixed: Fix ENEX import issue ([20b1c2e](https://github.com/laurent22/joplin/commit/20b1c2e))
+
 ## [v2.14.6](https://github.com/laurent22/joplin/releases/tag/v2.14.6) (Pre-release) - 2024-01-06T16:38:32Z
 
 - New: Add support for [OCR](https://joplinapp.org/help/apps/ocr/) ([#8975](https://github.com/laurent22/joplin/issues/8975))
