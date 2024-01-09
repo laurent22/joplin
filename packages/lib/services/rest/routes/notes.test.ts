@@ -22,13 +22,15 @@ describe('routes/notes', () => {
 		'http://joplinapp.org/valid/image_url.png',
 	])('should try to download and return a local path to a valid URL', async (url) => {
 		const fetchBlobSpy = jest.fn();
-		jest.spyOn(shim, 'fetchBlob').mockImplementation(fetchBlobSpy);
-		jest.spyOn(uuid, 'create').mockReturnValue('mocked_uuid_value');
+		const spy1 = jest.spyOn(shim, 'fetchBlob').mockImplementation(fetchBlobSpy);
+		const spy2 = jest.spyOn(uuid, 'create').mockReturnValue('mocked_uuid_value');
 
 		const response = await downloadMediaFile(url);
 
 		expect(response.endsWith('mocked_uuid_value.png')).toBe(true);
-		expect(fetchBlobSpy).toBeCalledTimes(1);
+		expect(fetchBlobSpy).toHaveBeenCalledTimes(1);
+		spy1.mockRestore();
+		spy2.mockRestore();
 	});
 
 	test('should get file from local drive if protocol allows it', async () => {
@@ -88,11 +90,11 @@ describe('routes/notes', () => {
 		expect(mediaFilePath).toBe('');
 	});
 
-	test.only.each([
+	test.each([
 		'https://joplinapp.org/valid/image_url',
 		'https://joplinapp.org/valid/image_url.invalid_url',
 	])('should find and move file with invalid or without filename', async (url) => {
-		jest.spyOn(shim, 'fetchBlob').mockImplementation(() => {
+		const spy1 = jest.spyOn(shim, 'fetchBlob').mockImplementation(() => {
 			return {
 				headers: {
 					'content-type': 'image/jpg',
@@ -100,7 +102,7 @@ describe('routes/notes', () => {
 			};
 		});
 		const shimFsDriverMoveSpy = jest.fn();
-		jest.spyOn(shim, 'fsDriver').mockImplementation(() => {
+		const spy2 = jest.spyOn(shim, 'fsDriver').mockImplementation(() => {
 			return {
 				move: shimFsDriverMoveSpy,
 			} as any;
@@ -109,5 +111,7 @@ describe('routes/notes', () => {
 		await downloadMediaFile(url);
 
 		expect(shimFsDriverMoveSpy).toHaveBeenCalledTimes(1);
+		spy1.mockRestore();
+		spy2.mockRestore();
 	});
 });
