@@ -83,9 +83,15 @@ const openDialog = async (messageChannelId: string, pluginBackgroundScript: stri
 	iframeConnection = messengers.iframeConnection;
 	rnConnection = messengers.rnConnection;
 
-	const initialContentSize = await iframeConnection.remoteApi.getContentSize();
-	dialogContainer.style.setProperty('--initial-content-width', `${initialContentSize.width}px`);
-	dialogContainer.style.setProperty('--initial-content-height', `${initialContentSize.height}px`);
+	if (dialogInfo.fitToContent) {
+		const initialContentSize = await iframeConnection.remoteApi.getContentSize();
+		dialogContainer.style.setProperty('--content-width', `${initialContentSize.width}px`);
+		dialogContainer.style.setProperty('--content-height', `${initialContentSize.height}px`);
+	} else {
+		dialogContainer.style.setProperty('--content-width', '95vw');
+		dialogContainer.style.setProperty('--content-height', '90vh');
+	}
+
 };
 
 export default openDialog;

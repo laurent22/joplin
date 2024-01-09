@@ -15,8 +15,9 @@ button {
 	padding: 14px;
 }
 
-button:hover {
+button:hover, button:focus-visible, button:active {
 	background-color: var(--joplin-background-color-hover4);
+	border-width: 1px;
 }
 
 dialog {
@@ -24,11 +25,15 @@ dialog {
 	background-color: var(--joplin-background-color);
 	border-radius: 4px;
 	box-shadow: 0 6px 10px #00000077;
+	max-height: 100vh;
+	max-width: 100vw;
 }
 
 dialog > iframe {
-	min-width: min(100vw, var(--initial-content-width));
-	min-height: min(85vh, var(--initial-content-height));
+	min-width: min(100vw, var(--content-width));
+	min-height: min(85vh, var(--content-height));
+	max-width: 100vw;
+	max-height: calc(100vh - 32px);
 }
 
 iframe {
