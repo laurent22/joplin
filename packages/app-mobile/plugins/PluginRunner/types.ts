@@ -14,8 +14,8 @@ export interface PluginApi {
 
 export interface DialogRemoteApi {
 	postMessage: (message: SerializableData)=> Promise<SerializableData>;
-	onMessage: (message: SerializableData)=> Promise<SerializableData>;
-	onSubmit: (formData: SerializableData)=> void;
+	onMessage: (callback: (arg: SerializableData)=> void)=> void;
+	onSubmit: (buttonId: string, formData: SerializableData)=> void;
 	onDismiss: ()=> void;
 }
 

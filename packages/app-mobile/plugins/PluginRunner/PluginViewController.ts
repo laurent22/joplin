@@ -2,7 +2,7 @@ import { RefObject } from 'react';
 import { WebViewControl } from '../../components/ExtendedWebView';
 import { WebViewMessageEvent } from 'react-native-webview';
 import { PluginHtmlContents, PluginViewState, ViewInfo } from '@joplin/lib/services/plugins/reducer';
-import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
+import WebviewController, { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import RNToWebViewMessenger from '../../utils/ipc/RNToWebViewMessenger';
 import { DialogLocalApi, DialogRemoteApi } from './types';
 import shim from '@joplin/lib/shim';
@@ -10,6 +10,7 @@ import PluginService from '@joplin/lib/services/plugins/PluginService';
 import Logger from '@joplin/utils/Logger';
 import { ButtonSpec } from '@joplin/lib/services/plugins/api/types';
 import { _ } from '@joplin/lib/locale';
+import { SerializableData } from '@joplin/lib/utils/ipc/types';
 
 const logger = Logger.create('PluginViewController');
 
@@ -45,6 +46,10 @@ export default class PluginViewController {
 				continue;
 			}
 			if (this.visibleDialogs.has(view.id)) {
+				const currentDialog = this.visibleDialogs.get(view.id);
+				if (currentDialog.viewInfo.view.buttons !== viewInfo.view.buttons) {
+					currentDialog.messenger.remoteApi.setButtons(viewInfo.view.buttons);
+				}
 				// TODO: Support updating buttons.
 				continue;
 			}
@@ -78,12 +83,32 @@ export default class PluginViewController {
 
 		const pluginState = viewInfo.plugin;
 		const plugin = PluginService.instance().pluginById(pluginState.id);
+		const viewController = plugin.viewController(viewInfo.view.id) as WebviewController;
+
+		let submitted = false;
 		const dialogApi: DialogRemoteApi = {
+			postMessage: async (message: SerializableData) => {
+				return await viewController.emitMessage({ message });
+			},
+
 			// TODO:
-			postMessage: async () => null,
-			onMessage: async () => null,
-			onSubmit: async () => null,
-			onDismiss: async () => this.closeDialog(viewInfo),
+			onMessage: async (callback) => {
+				viewController.onMessage(callback);
+			},
+			onSubmit: async (buttonId: string, formData: any) => {
+				if (buttonId === 'cancel') {
+					formData = undefined;
+				}
+				viewController.closeWithResponse({ id: buttonId, formData });
+				submitted = true;
+			},
+			onDismiss: async () => {
+				if (!submitted) {
+					viewController.closeWithResponse(null);
+					submitted = true;
+				}
+				this.closeDialog(viewInfo);
+			},
 		};
 
 		const messenger = new RNToWebViewMessenger<DialogRemoteApi, DialogLocalApi>(
@@ -123,7 +148,8 @@ export default class PluginViewController {
 
 		this.visibleDialogs.set(view.id, { messenger, viewInfo });
 
-		// TODO:
+		// Dialogs are shown by scripts that originally run in the webview. Thus,
+		// the webview has already loaded.
 		messenger.onWebViewLoaded();
 	}
 

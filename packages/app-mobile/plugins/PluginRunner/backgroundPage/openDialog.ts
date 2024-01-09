@@ -52,8 +52,6 @@ const openDialog = async (messageChannelId: string, pluginBackgroundScript: stri
 
 	await loadPromise;
 
-
-
 	let iframeConnection: RemoteMessenger<DialogRemoteApi, DialogLocalApi>|null = null;
 	let rnConnection: RemoteMessenger<DialogLocalApi, DialogRemoteApi>|null = null;
 
@@ -69,11 +67,9 @@ const openDialog = async (messageChannelId: string, pluginBackgroundScript: stri
 
 		for (const buttonInfo of buttonInfos) {
 			const button = document.createElement('button');
-			button.innerText = buttonInfo.title ?? '❓';
+			button.innerText = buttonInfo.title ?? buttonInfo.id;
 			button.onclick = async () => {
-				if (buttonInfo.id === 'ok') {
-					rnConnection.remoteApi.onSubmit(await iframeConnection.remoteApi.getFormData());
-				}
+				rnConnection.remoteApi.onSubmit(buttonInfo.id, await iframeConnection.remoteApi.getFormData());
 
 				buttonInfo.onClick?.();
 				closeDialog();
