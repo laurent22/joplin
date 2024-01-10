@@ -3,7 +3,9 @@ import Setting from '../models/Setting';
 import { ApplicationPlatform, ApplicationType } from '../types';
 import shim from '../shim';
 import { _ } from '../locale';
-import { reg } from '../registry';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('joplinCloudUtils');
 
 type ActionType = 'LINK_USED' | 'COMPLETED' | 'ERROR';
 type Action = {
@@ -105,6 +107,6 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string, ulc: st
 
 	isWaitingResponse = false;
 	const jsonBody = await response.json();
-	reg.logger().warn('Server could not retrieve application credential', jsonBody);
+	logger.warn('Server could not retrieve application credential', jsonBody);
 	return undefined;
 };

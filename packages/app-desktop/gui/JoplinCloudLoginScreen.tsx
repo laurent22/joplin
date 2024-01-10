@@ -8,7 +8,9 @@ import { uuidgen } from '@joplin/lib/uuid';
 import { Dispatch } from 'redux';
 import { reducer, defaultState, generateLoginWithUniqueLoginCode, checkIfLoginWasSuccessful } from '@joplin/lib/services/joplinCloudUtils';
 import { AppState } from '../app.reducer';
+import Logger from '@joplin/utils/Logger';
 
+const logger = Logger.create('JoplinCloudLoginScreen');
 const { connect } = require('react-redux');
 
 interface Props {
@@ -38,6 +40,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 					clearInterval(interval);
 				}
 			} catch (error) {
+				logger.error(error);
 				dispatch({ type: 'ERROR', payload: error.message });
 				clearInterval(interval);
 			}
