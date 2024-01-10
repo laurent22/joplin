@@ -88,7 +88,12 @@ export const generateLoginWithUniqueLoginCode = async (loginUrl: string, uniquel
 	return `${loginUrl}?${searchParams.toString()}`;
 };
 
+let isWaitingResponse = false;
+
 export const checkIfLoginWasSuccessful = async (applicationsUrl: string, ulc: string) => {
+	if (isWaitingResponse) return undefined;
+	isWaitingResponse = true;
+
 	const response = await fetch(`${applicationsUrl}?unique_login_code=${ulc}`);
 
 	if (response.ok) {
@@ -98,6 +103,7 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string, ulc: st
 		return { success: true };
 	}
 
+	isWaitingResponse = false;
 	const jsonBody = await response.json();
 	reg.logger().warn('Server could not retrieve application credential', jsonBody);
 	return undefined;
