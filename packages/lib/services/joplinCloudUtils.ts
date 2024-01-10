@@ -5,23 +5,23 @@ import shim from '../shim';
 import { _ } from '../locale';
 import { reg } from '../registry';
 
-type Events = 'LINK_USED' | 'COMPLETED';
+type Action = 'LINK_USED' | 'COMPLETED';
 
-type IntitialValues = {
+type DefaultState = {
 	className: 'text' | 'bold';
 	message: string;
-	next: Events;
-	active: Events | 'INITIAL';
+	next: Action;
+	active: Action | 'INITIAL';
 };
 
-export const intitialValues: IntitialValues = {
+export const defaultState: DefaultState = {
 	className: 'text',
 	message: _('Waiting for authorisation...'),
 	next: 'LINK_USED',
 	active: 'INITIAL',
 };
 
-export const reducer: Reducer<IntitialValues, Events> = (state: IntitialValues, action: Events) => {
+export const reducer: Reducer<DefaultState, Action> = (state: DefaultState, action: Action) => {
 	switch (action) {
 	case 'LINK_USED': {
 		return {
