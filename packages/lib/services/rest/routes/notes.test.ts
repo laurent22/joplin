@@ -6,6 +6,7 @@ import { readFile, readdir, remove, writeFile } from 'fs-extra';
 const md5 = require('md5');
 
 const imagePath = `${__dirname}/../../../images/SideMenuHeader.png`;
+const jpgBase64Content = '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/wAALCAAFAAUBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EAB8QAAEEAQUBAAAAAAAAAAAAAAQBAgUGAwAREiExM//aAAgBAQAAPwBJarVpGHm7KWbapCSwyZ6FDjkLyYE1W/LHyV2zfOk2TrzX/9k=';
 
 describe('routes/notes', () => {
 
@@ -26,7 +27,7 @@ describe('routes/notes', () => {
 		'http://joplinapp.org/valid/image_url.png',
 	])('should try to download and return a local path to a valid URL', async (url) => {
 		const fetchBlobSpy = jest.fn(async (_url, options) => {
-			await writeFile(options.path, Buffer.from('/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/wAALCAAFAAUBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EAB8QAAEEAQUBAAAAAAAAAAAAAAQBAgUGAwAREiExM//aAAgBAQAAPwBJarVpGHm7KWbapCSwyZ6FDjkLyYE1W/LHyV2zfOk2TrzX/9k=', 'base64'));
+			await writeFile(options.path, Buffer.from(jpgBase64Content, 'base64'));
 		});
 		const spy = jest.spyOn(shim, 'fetchBlob').mockImplementation(fetchBlobSpy);
 
@@ -109,7 +110,7 @@ describe('routes/notes', () => {
 		'https://joplinapp.org/valid/image_url.invalid_url',
 	])('should correct the file extension in filename from files without or invalid ones', async (url) => {
 		const spy = jest.spyOn(shim, 'fetchBlob').mockImplementation(async (_url, options) => {
-			await writeFile(options.path, Buffer.from('/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/wAALCAAFAAUBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EAB8QAAEEAQUBAAAAAAAAAAAAAAQBAgUGAwAREiExM//aAAgBAQAAPwBJarVpGHm7KWbapCSwyZ6FDjkLyYE1W/LHyV2zfOk2TrzX/9k=', 'base64'));
+			await writeFile(options.path, Buffer.from(jpgBase64Content, 'base64'));
 			return {
 				headers: {
 					'content-type': 'image/jpg',
