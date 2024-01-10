@@ -1,6 +1,7 @@
 import Folder from '../../models/Folder';
 import BaseModel from '../../BaseModel';
 import { FolderEntity, TagEntity } from '../../services/database/types';
+import { getTrashFolderId } from '../../services/trash/utils';
 
 interface Props {
 	folders: FolderEntity[];
@@ -15,7 +16,7 @@ export type RenderFolderItem = (folder: FolderEntity, selected: boolean, hasChil
 export type RenderTagItem = (tag: TagEntity, selected: boolean)=> any;
 
 function folderHasChildren_(folders: FolderEntity[], folderId: string) {
-	if (folderId === Folder.trashFolderId()) {
+	if (folderId === getTrashFolderId()) {
 		return !!folders.find(f => !!f.deleted_time);
 	}
 

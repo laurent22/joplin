@@ -28,6 +28,7 @@ import { Theme } from '@joplin/lib/themes/type';
 import { RuntimeProps } from './commands/focusElementSideBar';
 const { connect } = require('react-redux');
 import { renderFolders, renderTags } from '@joplin/lib/components/shared/side-menu-shared';
+import { getTrashFolderId } from '@joplin/lib/services/trash/utils';
 const { themeStyle } = require('@joplin/lib/theme');
 const bridge = require('@electron/remote').require('./bridge').default;
 const Menu = bridge().Menu;
@@ -101,7 +102,7 @@ function FolderItem(props: any) {
 	const shareIcon = shareId && !parentId ? <StyledShareIcon className="fas fa-share-alt"></StyledShareIcon> : null;
 
 	const doRenderFolderIcon = () => {
-		if (folderId === Folder.trashFolderId()) {
+		if (folderId === getTrashFolderId()) {
 			return renderFolderIcon({
 				dataUrl: '',
 				emoji: '',
@@ -291,7 +292,7 @@ const SidebarComponent = (props: Props) => {
 
 	const itemContextMenu = useCallback(async (event: any) => {
 		const itemId = event.currentTarget.getAttribute('data-id');
-		if (itemId === Folder.conflictFolderId() || itemId === Folder.trashFolderId()) return;
+		if (itemId === Folder.conflictFolderId() || itemId === getTrashFolderId()) return;
 
 		const itemType = Number(event.currentTarget.getAttribute('data-type'));
 		if (!itemId || !itemType) throw new Error('No data on element');

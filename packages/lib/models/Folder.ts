@@ -12,6 +12,7 @@ import Logger from '@joplin/utils/Logger';
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import ResourceService from '../services/ResourceService';
 import { LoadOptions } from './utils/types';
+import { getTrashFolder } from '../services/trash/utils';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 const logger = Logger.create('models/Folder');
@@ -138,16 +139,8 @@ export default class Folder extends BaseItem {
 		return _('Conflicts');
 	}
 
-	public static trashFolderTitle() {
-		return _('Trash');
-	}
-
 	public static conflictFolderId() {
 		return 'c04f1c7c04f1c7c04f1c7c04f1c7c04f';
-	}
-
-	public static trashFolderId() {
-		return 'de1e7ede1e7ede1e7ede1e7ede1e7ede';
 	}
 
 	public static conflictFolder(): FolderEntity {
@@ -163,42 +156,6 @@ export default class Folder extends BaseItem {
 			share_id: '',
 			is_shared: 0,
 		};
-	}
-
-	public static trashFolder(): FolderEntity {
-		const now = Date.now();
-
-		return {
-			type_: this.TYPE_FOLDER,
-			id: this.trashFolderId(),
-			parent_id: '',
-			title: this.trashFolderTitle(),
-			updated_time: now,
-			user_updated_time: now,
-			share_id: '',
-			is_shared: 0,
-		};
-	}
-
-	// Check whether an item that had `originalItemParent` has a parent is a
-	// direct chid of the provided `parent_id`. Simply checking that
-	// `originalItemParent.id === parent_id` is not sufficient because different
-	// visibility rules applies within the trash folder.
-	public static deletedItemIsDirectChild(originalItemParent: FolderEntity, parentId: string) {
-		// If we are listing the trash root, we only keep the notes that are
-		// associated with a folder that has not already been deleted. If the
-		// associated folder has been deleted too, it's going to appear within
-		// the trash, and the user needs to click on it to view the content.
-		//
-		// We also list the items that did not have a parent since those too
-		// should be at the root. Should only applies to folders.
-		if (parentId === Folder.trashFolderId()) {
-			return !originalItemParent || !originalItemParent.deleted_time;
-		} else {
-			// Otherwise we are listing a folder that's in the trash, so
-			// we display its content.
-			return parentId === originalItemParent.id;
-		}
 	}
 
 	// Calculates note counts for all folders and adds the note_count attribute to each folder
@@ -307,7 +264,7 @@ export default class Folder extends BaseItem {
 		const output = await super.all(options);
 
 		if (options && options.includeTrash) {
-			output.push(this.trashFolder());
+			output.push(getTrashFolder());
 		}
 
 		if (options && options.includeConflictFolder) {

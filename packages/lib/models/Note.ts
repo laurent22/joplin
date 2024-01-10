@@ -16,6 +16,7 @@ const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
 const { _ } = require('../locale');
 import { pull, unique } from '../ArrayUtils';
 import { LoadOptions, SaveOptions } from './utils/types';
+import { getDisplayParentId, getTrashFolderId } from '../services/trash/utils';
 const urlUtils = require('../urlUtils.js');
 const { isImageMimeType } = require('../resourceUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
@@ -328,7 +329,7 @@ export default class Note extends BaseItem {
 	public static previewFields(options: any = null) {
 		options = { includeTimestamps: true, ...options };
 
-		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'order', 'markup_language', 'is_conflict', 'is_shared', 'share_id'];
+		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'order', 'markup_language', 'is_conflict', 'is_shared', 'share_id', 'deleted_time'];
 
 		if (options.includeTimestamps) {
 			output.push('updated_time');
@@ -370,11 +371,29 @@ export default class Note extends BaseItem {
 		if (!options.uncompletedTodosOnTop) options.uncompletedTodosOnTop = false;
 		if (!('showCompletedTodos' in options)) options.showCompletedTodos = true;
 
+		const autoAddedFields: string[] = [];
+		if (Array.isArray(options.fields)) {
+			options.fields = options.fields.slice();
+			// These fields are required for the rest of the function to work
+			if (!options.fields.includes('deleted_time')) {
+				autoAddedFields.push('deleted_time');
+				options.fields.push('deleted_time');
+			}
+			if (!options.fields.includes('parent_id')) {
+				autoAddedFields.push('parent_id');
+				options.fields.push('parent_id');
+			}
+			if (!options.fields.includes('id')) {
+				autoAddedFields.push('id');
+				options.fields.push('id');
+			}
+		}
+
 		const Folder: typeof FolderClass = BaseItem.getClass('Folder');
 
 		const parentFolder: FolderEntity = await Folder.load(parentId, { fields: ['id', 'deleted_time'] });
 		const parentInTrash = parentFolder ? !!parentFolder.deleted_time : false;
-		const withinTrash = parentId === Folder.trashFolderId() || parentInTrash;
+		const withinTrash = parentId === getTrashFolderId() || parentInTrash;
 
 		// Conflicts are always displayed regardless of options, since otherwise
 		// it's confusing to have conflicts but with an empty conflict folder.
@@ -462,7 +481,17 @@ export default class Note extends BaseItem {
 			// deleted.
 			results = results.filter(note => {
 				const noteFolder = allFolders.find(f => f.id === note.parent_id);
-				return Folder.deletedItemIsDirectChild(noteFolder, parentId);
+				return getDisplayParentId(note, noteFolder) === parentId;
+			});
+		}
+
+		if (autoAddedFields.length) {
+			results = results.map(n => {
+				n = { ...n };
+				for (const field of autoAddedFields) {
+					delete (n as any)[field];
+				}
+				return n;
 			});
 		}
 

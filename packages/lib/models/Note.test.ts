@@ -13,6 +13,7 @@ import { toForwardSlashes } from '../path-utils';
 import * as ArrayUtils from '../ArrayUtils';
 import { ErrorCode } from '../errors';
 import SearchEngine from '../services/search/SearchEngine';
+import { getTrashFolderId } from '../services/trash/utils';
 
 async function allItems() {
 	const folders = await Folder.all();
@@ -546,7 +547,7 @@ describe('models/Note', () => {
 		await Note.delete(note2.id, { toTrash: true });
 
 		const folderNotes = await Note.previews(folder.id);
-		const trashNotes = await Note.previews(Folder.trashFolderId());
+		const trashNotes = await Note.previews(getTrashFolderId());
 
 		expect(folderNotes.map(f => f.id).sort()).toEqual([note3.id]);
 		expect(trashNotes.map(f => f.id).sort()).toEqual([note1.id, note2.id].sort());
@@ -566,7 +567,7 @@ describe('models/Note', () => {
 		// Note 4 should be at the root of the trash since its associated folder
 		// has not been deleted.
 		{
-			const trashNotes = await Note.previews(Folder.trashFolderId());
+			const trashNotes = await Note.previews(getTrashFolderId());
 			expect(trashNotes.length).toBe(1);
 			expect(trashNotes[0].id).toBe(note4.id);
 		}
