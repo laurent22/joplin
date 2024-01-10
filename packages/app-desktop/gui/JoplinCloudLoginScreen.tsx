@@ -31,9 +31,14 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		if (intervalIdentifier) return;
 
 		const interval = setInterval(async () => {
-			const response = await checkIfLoginWasSuccessful(applicationsUrl, uniqueLoginCode);
-			if (response && response.success) {
-				dispatch('COMPLETED');
+			try {
+				const response = await checkIfLoginWasSuccessful(applicationsUrl, uniqueLoginCode);
+				if (response && response.success) {
+					dispatch({ type: 'COMPLETED' });
+					clearInterval(interval);
+				}
+			} catch (error) {
+				dispatch({ type: 'ERROR', payload: error.message });
 				clearInterval(interval);
 			}
 		}, 2 * 1000);
@@ -43,7 +48,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 
 	const onButtonUsed = () => {
 		if (state.next === 'LINK_USED') {
-			dispatch('LINK_USED');
+			dispatch({ type: 'LINK_USED' });
 		}
 		periodicallyCheckForCredentials();
 	};
@@ -85,7 +90,11 @@ const JoplinCloudScreenComponent = (props: Props) => {
 					/>
 
 				</div>
-				<p className={state.className}>{state.message}</p>
+				<p className={state.className}>{state.message}
+					{state.active === 'ERROR' ? (
+						<span className={state.className}>{state.errorMessage}</span>
+					) : null}
+				</p>
 				{state.active === 'LINK_USED' ? <div id="loading-animation" /> : null}
 			</div>
 			<ButtonBar onCancelClick={() => props.dispatch({ type: 'NAV_BACK' })} />

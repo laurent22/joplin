@@ -5,13 +5,18 @@ import shim from '../shim';
 import { _ } from '../locale';
 import { reg } from '../registry';
 
-type Action = 'LINK_USED' | 'COMPLETED';
+type ActionType = 'LINK_USED' | 'COMPLETED' | 'ERROR';
+type Action = {
+	type: ActionType;
+	payload?: any;
+};
 
 type DefaultState = {
 	className: 'text' | 'bold';
 	message: string;
-	next: Action;
-	active: Action | 'INITIAL';
+	next: ActionType;
+	active: ActionType | 'INITIAL';
+	errorMessage?: string;
 };
 
 export const defaultState: DefaultState = {
@@ -22,7 +27,7 @@ export const defaultState: DefaultState = {
 };
 
 export const reducer: Reducer<DefaultState, Action> = (state: DefaultState, action: Action) => {
-	switch (action) {
+	switch (action.type) {
 	case 'LINK_USED': {
 		return {
 			className: 'text',
@@ -37,6 +42,15 @@ export const reducer: Reducer<DefaultState, Action> = (state: DefaultState, acti
 			message: _('You are logged in into Joplin Cloud, you can leave this screen now.'),
 			active: 'COMPLETED',
 			next: 'COMPLETED',
+		};
+	}
+	case 'ERROR': {
+		return {
+			className: 'text',
+			message: _('You were unable to connect to Joplin Cloud, verify your connection. Error: '),
+			active: 'ERROR',
+			next: 'COMPLETED',
+			errorMessage: action.payload,
 		};
 	}
 	default: {
@@ -75,26 +89,16 @@ export const generateLoginWithUniqueLoginCode = async (loginUrl: string, uniquel
 };
 
 export const checkIfLoginWasSuccessful = async (applicationsUrl: string, ulc: string) => {
-	try {
-		const response = await fetch(`${applicationsUrl}?unique_login_code=${ulc}`);
+	const response = await fetch(`${applicationsUrl}?unique_login_code=${ulc}`);
 
-		if (response.ok) {
-			const jsonResponse = await response.json();
-			Setting.setValue('sync.10.username', jsonResponse.id);
-			Setting.setValue('sync.10.password', jsonResponse.password);
-			return { success: true };
-		}
-
-		const jsonBody = await response.json();
-
-		if (jsonBody && response.status >= 400 && response.status <= 500) {
-			reg.logger().warn('Server could not retrieve application credential', jsonBody);
-			return undefined;
-		}
-
-		reg.logger().error('Server error when trying to get the application credential', jsonBody);
-	} catch (error) {
-		reg.logger().error('Not able to complete request to api/applications', error);
+	if (response.ok) {
+		const jsonResponse = await response.json();
+		Setting.setValue('sync.10.username', jsonResponse.id);
+		Setting.setValue('sync.10.password', jsonResponse.password);
+		return { success: true };
 	}
+
+	const jsonBody = await response.json();
+	reg.logger().warn('Server could not retrieve application credential', jsonBody);
 	return undefined;
 };
