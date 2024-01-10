@@ -13,7 +13,7 @@ import { toForwardSlashes } from '../path-utils';
 import * as ArrayUtils from '../ArrayUtils';
 import { ErrorCode } from '../errors';
 import SearchEngine from '../services/search/SearchEngine';
-import { getTrashFolderId } from '../services/trash/utils';
+import { getTrashFolderId } from '../services/trash';
 
 async function allItems() {
 	const folders = await Folder.all();

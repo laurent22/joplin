@@ -1,7 +1,7 @@
 import Folder from '../../models/Folder';
 import BaseModel from '../../BaseModel';
 import { FolderEntity, TagEntity } from '../../services/database/types';
-import { getTrashFolderId } from '../../services/trash/utils';
+import { getTrashFolderId } from '../../services/trash';
 
 interface Props {
 	folders: FolderEntity[];

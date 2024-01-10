@@ -16,7 +16,7 @@ const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
 const { _ } = require('../locale');
 import { pull, unique } from '../ArrayUtils';
 import { LoadOptions, SaveOptions } from './utils/types';
-import { getDisplayParentId, getTrashFolderId } from '../services/trash/utils';
+import { getDisplayParentId, getTrashFolderId } from '../services/trash';
 const urlUtils = require('../urlUtils.js');
 const { isImageMimeType } = require('../resourceUtils');
 const { MarkupToHtml } = require('@joplin/renderer');

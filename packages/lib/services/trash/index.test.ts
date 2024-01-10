@@ -1,4 +1,4 @@
-import { getDisplayParentId, getTrashFolderId } from './utils';
+import { getDisplayParentId, getTrashFolderId } from '.';
 
 describe('folders-screen-utils', () => {
 
