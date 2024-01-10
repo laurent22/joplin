@@ -1,12 +1,11 @@
+import * as React from 'react';
 
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { _ } from '@joplin/lib/locale';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
-import Logger from '@joplin/utils/Logger';
-import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import { FlatList, View } from 'react-native';
-import { Searchbar, Text } from 'react-native-paper';
+import { Searchbar } from 'react-native-paper';
 import PluginBox, { InstallState } from './PluginBox';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import repoApi from './utils/repoApi';
@@ -17,10 +16,9 @@ import { OnPluginSettingChangeEvent, PluginItem } from '@joplin/lib/components/s
 interface Props {
 	themeId: number;
 	pluginSettings: string;
+	repoApiInitialized: boolean;
 	updatePluginStates: (states: PluginSettings)=> void;
 }
-
-const logger = Logger.create('SearchPlugins');
 
 interface SearchResultRecord {
 	id: string;
@@ -33,7 +31,7 @@ const PluginSearch: React.FC<Props> = props => {
 	const [searchResultManifests, setSearchResultManifests] = useState<PluginManifest[]>([]);
 
 	useAsyncEffect(async event => {
-		if (!searchQuery) {
+		if (!searchQuery || !props.repoApiInitialized) {
 			setSearchResultManifests([]);
 		} else {
 			const results = await repoApi().search(searchQuery);
@@ -41,23 +39,7 @@ const PluginSearch: React.FC<Props> = props => {
 
 			setSearchResultManifests(results);
 		}
-	}, [searchQuery, setSearchResultManifests]);
-
-	const [repoApiError, setRepoApiError] = useState(null);
-	const [repoApiLoaded, setRepoApiLoaded] = useState(false);
-
-	useAsyncEffect(async event => {
-		setRepoApiError(null);
-		try {
-			await repoApi().initialize();
-		} catch (error) {
-			logger.error(error);
-			setRepoApiError(error);
-		}
-		if (!event.cancelled) {
-			setRepoApiLoaded(true);
-		}
-	}, [setRepoApiError]);
+	}, [searchQuery, setSearchResultManifests, props.repoApiInitialized]);
 
 	const [installingPluginsIds, setInstallingPluginIds] = useState<Record<string, boolean>>({});
 
@@ -122,9 +104,8 @@ const PluginSearch: React.FC<Props> = props => {
 				placeholder={_('Search')}
 				onChangeText={setSearchQuery}
 				value={searchQuery}
-				editable={repoApiLoaded}
+				editable={props.repoApiInitialized}
 			/>
-			<View>{repoApiError ? <Text>{repoApiError}</Text> : null}</View>
 			<FlatList
 				data={searchResults}
 				renderItem={renderResult}

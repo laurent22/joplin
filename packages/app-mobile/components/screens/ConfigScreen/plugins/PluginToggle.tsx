@@ -13,6 +13,7 @@ interface Props {
 	pluginId: string;
 	styles: ConfigScreenStyles;
 	pluginSettings: string;
+	updateablePluginIds: Record<string, boolean>;
 
 	updatePluginStates: (settingValue: PluginSettings)=> void;
 }
@@ -44,10 +45,11 @@ const PluginToggle: React.FC<Props> = props => {
 		props.updatePluginStates(newSettings);
 	}, [pluginSettings, props.pluginId, props.updatePluginStates]);
 
+	const pluginId = plugin.manifest.id;
 	const onToggle = useCallback(() => {
-		const settings = pluginSettings[plugin.manifest.id];
+		const settings = pluginSettings[pluginId];
 		updatePluginEnabled(!settings.enabled);
-	}, [pluginSettings, updatePluginEnabled, plugin]);
+	}, [pluginSettings, updatePluginEnabled, pluginId]);
 
 	const onDelete = useOnDeleteHandler(pluginSettings, onPluginSettingsChange, true);
 
@@ -55,20 +57,22 @@ const PluginToggle: React.FC<Props> = props => {
 	const onUpdate = useOnInstallHandler(setUpdatingPluginIds, pluginSettings, repoApi, onPluginSettingsChange, true);
 
 	const updateState = useMemo(() => {
-		const settings = pluginSettings[plugin.manifest.id];
+		const settings = pluginSettings[pluginId];
 
 		if (settings.hasBeenUpdated) {
 			return UpdateState.HasBeenUpdated;
 		}
-		if (updatingPluginIds[plugin.manifest.id]) {
+		if (updatingPluginIds[pluginId]) {
 			return UpdateState.Updating;
 		}
-		// TODO:
+		if (props.updateablePluginIds[pluginId]) {
+			return UpdateState.CanUpdate;
+		}
 		return UpdateState.Idle;
-	}, [pluginSettings, updatingPluginIds, plugin]);
+	}, [pluginSettings, updatingPluginIds, pluginId, props.updateablePluginIds]);
 
 	const pluginItem = useMemo(() => {
-		const settings = pluginSettings[plugin.manifest.id];
+		const settings = pluginSettings[pluginId];
 		return {
 			manifest: plugin.manifest,
 			enabled: settings.enabled,
@@ -77,7 +81,7 @@ const PluginToggle: React.FC<Props> = props => {
 			builtIn: plugin.builtIn,
 			hasBeenUpdated: settings.hasBeenUpdated,
 		};
-	}, [plugin, pluginSettings]);
+	}, [plugin, pluginId, pluginSettings]);
 
 	const isCompatible = useMemo(() => {
 		return PluginService.instance().isCompatible(plugin.manifest.app_min_version);

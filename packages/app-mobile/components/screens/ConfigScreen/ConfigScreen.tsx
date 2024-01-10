@@ -30,8 +30,7 @@ import ExportDebugReportButton, { exportDebugReportTitle } from './NoteExportSec
 import SectionSelector from './SectionSelector';
 import { TextInput } from 'react-native-paper';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
-import PluginToggle from './plugins/PluginToggle';
-import PluginSearch from './plugins/SearchPlugins';
+import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
 
 interface ConfigScreenState {
 	settings: any;
@@ -435,35 +434,24 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 		if (section.name === 'plugins') {
 			const pluginStatesKey = 'plugins.states';
+			const pluginService = PluginService.instance();
+
 			const updatePluginStates = (newSettingValue: PluginSettings) => {
 				const value = pluginService.serializePluginSettings(newSettingValue);
 				shared.updateSettingValue(this, pluginStatesKey, value);
 			};
 
-			const pluginService = PluginService.instance();
-			for (const key in pluginService.plugins) {
-				const plugin = pluginService.plugins[key];
-
-				addSettingComponent(
-					<PluginToggle
-						key={`plugin-${key}`}
-						pluginId={plugin.id}
-						styles={this.styles()}
-						pluginSettings={settings[pluginStatesKey]}
-						updatePluginStates={updatePluginStates}
-					/>,
-					[plugin.manifest.name],
-				);
-			}
-
 			addSettingComponent(
-				<PluginSearch
-					key={'search-plugins'}
+				<PluginStates
+					key={'plugin-states'}
+					styles={this.styles()}
 					themeId={this.props.themeId}
 					pluginSettings={settings[pluginStatesKey]}
+
 					updatePluginStates={updatePluginStates}
+					shouldShowBasedOnSearchQuery={this.state.searching ? matchesSearchQuery : null}
 				/>,
-				[_('Search'), 'Search plugins'],
+				getPluginStatesSearchText(),
 			);
 		}
 
