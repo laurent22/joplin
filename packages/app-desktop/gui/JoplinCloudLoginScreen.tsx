@@ -6,7 +6,7 @@ import Button, { ButtonLevel } from './Button/Button';
 const bridge = require('@electron/remote').require('./bridge').default;
 import { uuidgen } from '@joplin/lib/uuid';
 import { Dispatch } from 'redux';
-import { reducer, intitialValues, generateLoginWithUniqueLoginCode, checkIfLoginWasSuccessful } from '@joplin/lib/services/joplinCloudUtils';
+import { reducer, defaultState, generateLoginWithUniqueLoginCode, checkIfLoginWasSuccessful } from '@joplin/lib/services/joplinCloudUtils';
 import { AppState } from '../app.reducer';
 
 const { connect } = require('react-redux');
@@ -23,7 +23,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	const applicationsUrl = `${props.joplinCloudApi}/api/applications`;
 
 	const [intervalIdentifier, setIntervalIdentifier] = useState(undefined);
-	const [state, dispatch] = useReducer(reducer, intitialValues);
+	const [state, dispatch] = useReducer(reducer, defaultState);
 
 	const uniqueLoginCode = useMemo(() => uuidgen(), []);
 
