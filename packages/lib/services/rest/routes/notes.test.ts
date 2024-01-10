@@ -58,12 +58,16 @@ describe('routes/notes', () => {
 
 	test('should be able to handle URLs with data', async () => {
 		const url = 'data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7';
+		const originalFileContent = Buffer.from(url.split('data:image/gif;base64,')[1], 'base64');
 
 		const response = await downloadMediaFile(url);
 
 		const files = await readdir(Setting.value('tempDir'));
 		expect(files.length).toBe(1);
 		expect(response).toBe(`${Setting.value('tempDir')}/${files[0]}`);
+
+		const responseFileContent = await readFile(response);
+		expect(md5(responseFileContent)).toBe(md5(originalFileContent));
 		await remove(response);
 	});
 
