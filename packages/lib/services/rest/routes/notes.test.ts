@@ -1,9 +1,9 @@
 import Logger from '@joplin/utils/Logger';
 import shim from '../../../shim';
-import uuid from '../../../uuid';
 import { downloadMediaFile } from './notes';
 import Setting from '../../../models/Setting';
-import { readdir, remove } from 'fs-extra';
+import { readFile, readdir, remove, writeFile } from 'fs-extra';
+const md5 = require('md5');
 
 const imagePath = `${__dirname}/../../../images/SideMenuHeader.png`;
 
@@ -25,26 +25,34 @@ describe('routes/notes', () => {
 		'https://joplinapp.org/valid/image_url.png',
 		'http://joplinapp.org/valid/image_url.png',
 	])('should try to download and return a local path to a valid URL', async (url) => {
-		const fetchBlobSpy = jest.fn();
-		const spy1 = jest.spyOn(shim, 'fetchBlob').mockImplementation(fetchBlobSpy);
-		const spy2 = jest.spyOn(uuid, 'create').mockReturnValue('mocked_uuid_value');
+		const fetchBlobSpy = jest.fn(async (_url, options) => {
+			await writeFile(options.path, Buffer.from('/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/wAALCAAFAAUBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EAB8QAAEEAQUBAAAAAAAAAAAAAAQBAgUGAwAREiExM//aAAgBAQAAPwBJarVpGHm7KWbapCSwyZ6FDjkLyYE1W/LHyV2zfOk2TrzX/9k=', 'base64'));
+		});
+		const spy = jest.spyOn(shim, 'fetchBlob').mockImplementation(fetchBlobSpy);
 
 		const response = await downloadMediaFile(url);
 
-		expect(response.endsWith('mocked_uuid_value.png')).toBe(true);
+		const files = await readdir(Setting.value('tempDir'));
+
+		expect(files.length).toBe(1);
 		expect(fetchBlobSpy).toHaveBeenCalledTimes(1);
-		spy1.mockRestore();
-		spy2.mockRestore();
+		expect(response).toBe(`${Setting.value('tempDir')}/${files[0]}`);
+		await remove(response);
+		spy.mockRestore();
 	});
 
 	test('should get file from local drive if protocol allows it', async () => {
 		const url = `file:///${imagePath}`;
+		const originalFileContent = await readFile(imagePath);
 
 		const response = await downloadMediaFile(url, null, ['file:']);
 
 		const files = await readdir(Setting.value('tempDir'));
 		expect(files.length).toBe(1);
 		expect(response).toBe(`${Setting.value('tempDir')}/${files[0]}`);
+
+		const responseFileContent = await readFile(response);
+		expect(md5(responseFileContent)).toBe(md5(originalFileContent));
 		await remove(response);
 	});
 
@@ -95,25 +103,23 @@ describe('routes/notes', () => {
 	test.each([
 		'https://joplinapp.org/valid/image_url',
 		'https://joplinapp.org/valid/image_url.invalid_url',
-	])('should find and move file with invalid or without filename', async (url) => {
-		const spy1 = jest.spyOn(shim, 'fetchBlob').mockImplementation(() => {
+	])('should correct the file extension in filename from files without or invalid ones', async (url) => {
+		const spy = jest.spyOn(shim, 'fetchBlob').mockImplementation(async (_url, options) => {
+			await writeFile(options.path, Buffer.from('/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/wAALCAAFAAUBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EAB8QAAEEAQUBAAAAAAAAAAAAAAQBAgUGAwAREiExM//aAAgBAQAAPwBJarVpGHm7KWbapCSwyZ6FDjkLyYE1W/LHyV2zfOk2TrzX/9k=', 'base64'));
 			return {
 				headers: {
 					'content-type': 'image/jpg',
 				},
 			};
 		});
-		const shimFsDriverMoveSpy = jest.fn();
-		const spy2 = jest.spyOn(shim, 'fsDriver').mockImplementation(() => {
-			return {
-				move: shimFsDriverMoveSpy,
-			} as any;
-		});
 
-		await downloadMediaFile(url);
+		const response = await downloadMediaFile(url);
 
-		expect(shimFsDriverMoveSpy).toHaveBeenCalledTimes(1);
-		spy1.mockRestore();
-		spy2.mockRestore();
+		const files = await readdir(Setting.value('tempDir'));
+		expect(files.length).toBe(1);
+		expect(response).toBe(`${Setting.value('tempDir')}/${files[0]}`);
+
+		await remove(response);
+		spy.mockRestore();
 	});
 });
