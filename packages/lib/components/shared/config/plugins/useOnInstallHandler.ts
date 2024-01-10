@@ -1,21 +1,26 @@
-import { useCallback } from 'react';
-import PluginService, { defaultPluginSetting, PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import produce from 'immer';
-import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
-import { ItemEvent } from './PluginBox';
+import { ItemEvent, OnPluginSettingChangeHandler } from './types';
+import type * as React from 'react';
+import shim from '../../../../shim';
+import RepositoryApi from '../../../../services/plugins/RepositoryApi';
+import PluginService, { PluginSettings, defaultPluginSetting } from '../../../../services/plugins/PluginService';
+import { _ } from '../../../../locale';
 
 const logger = Logger.create('useOnInstallHandler');
 
-export interface OnPluginSettingChangeEvent {
-	value: PluginSettings;
-}
-
-type OnPluginSettingChangeHandler = (event: OnPluginSettingChangeEvent)=> void;
+type GetRepoApiCallback = ()=> RepositoryApi;
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export default function(setInstallingPluginIds: Function, pluginSettings: PluginSettings, repoApi: Function, onPluginSettingsChange: OnPluginSettingChangeHandler, isUpdate: boolean) {
-	return useCallback(async (event: ItemEvent) => {
+const useOnInstallHandler = (
+	setInstallingPluginIds: React.Dispatch<React.SetStateAction<Record<string, boolean>>>,
+	pluginSettings: PluginSettings,
+	repoApi: GetRepoApiCallback,
+	onPluginSettingsChange: OnPluginSettingChangeHandler,
+	isUpdate: boolean,
+) => {
+	const React = shim.react();
+	return React.useCallback(async (event: ItemEvent) => {
 		const pluginId = event.item.manifest.id;
 
 		setInstallingPluginIds((prev: any) => {
@@ -57,7 +62,13 @@ export default function(setInstallingPluginIds: Function, pluginSettings: Plugin
 			};
 		});
 
-		if (installError) alert(_('Could not install plugin: %s', installError.message));
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [pluginSettings, onPluginSettingsChange]);
-}
+		if (installError) {
+			await shim.showMessageBox(
+				_('Could not install plugin: %s', installError.message),
+				{ buttons: [_('OK')] },
+			);
+		}
+	}, [repoApi, isUpdate, pluginSettings, onPluginSettingsChange, setInstallingPluginIds]);
+};
+
+export default useOnInstallHandler;

@@ -7,17 +7,26 @@ import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import { Searchbar, Text } from 'react-native-paper';
-import PluginBox, { InstallState, PluginItem } from './PluginBox';
+import PluginBox, { InstallState } from './PluginBox';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import repoApi from './utils/repoApi';
+import useInstallHandler from '@joplin/lib/components/shared/config/plugins/useOnInstallHandler';
+import { OnPluginSettingChangeEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
+
 
 interface Props {
 	themeId: number;
 	pluginSettings: string;
-	updatePluginStates: (states: PluginSettings)=>void;
+	updatePluginStates: (states: PluginSettings)=> void;
 }
 
 const logger = Logger.create('SearchPlugins');
+
+interface SearchResultRecord {
+	id: string;
+	item: PluginItem;
+	installState: InstallState;
+}
 
 const PluginSearch: React.FC<Props> = props => {
 	const [searchQuery, setSearchQuery] = useState('');
@@ -34,8 +43,8 @@ const PluginSearch: React.FC<Props> = props => {
 		}
 	}, [searchQuery, setSearchResultManifests]);
 
-	const [ repoApiError, setRepoApiError ] = useState(null);
-	const [ repoApiLoaded, setRepoApiLoaded ] = useState(false);
+	const [repoApiError, setRepoApiError] = useState(null);
+	const [repoApiLoaded, setRepoApiLoaded] = useState(false);
 
 	useAsyncEffect(async event => {
 		setRepoApiError(null);
@@ -50,13 +59,13 @@ const PluginSearch: React.FC<Props> = props => {
 		}
 	}, [setRepoApiError]);
 
-	const [ installingPluginsIds, setInstallingPluginIds ] = useState<Record<string, boolean>>({});
+	const [installingPluginsIds, setInstallingPluginIds] = useState<Record<string, boolean>>({});
 
 	const pluginSettings = useMemo(() => {
 		return { ...PluginService.instance().unserializePluginSettings(props.pluginSettings) };
 	}, [props.pluginSettings]);
 
-	const searchResults = useMemo(() => {
+	const searchResults: SearchResultRecord[] = useMemo(() => {
 		return searchResultManifests.map(manifest => {
 			const settings = pluginSettings[manifest.id];
 
@@ -68,29 +77,39 @@ const PluginSearch: React.FC<Props> = props => {
 				installState = InstallState.Installing;
 			}
 
-			return {
+			const item: PluginItem = {
 				manifest,
 				enabled: settings && settings.enabled,
 				deleted: settings && !settings.deleted,
+				devMode: false,
+				builtIn: false,
+				hasBeenUpdated: false,
+			};
+
+			return {
+				id: manifest.id,
+				item,
 				installState,
 			};
 		});
-	}, [searchResultManifests, installingPluginsIds]);
+	}, [searchResultManifests, installingPluginsIds, pluginSettings]);
 
+	const onPluginSettingsChange = useCallback((event: OnPluginSettingChangeEvent) => {
+		props.updatePluginStates(event.value);
+	}, [props.updatePluginStates]);
 
-	const installPlugin = useCallback((item: PluginItem) => {
-		setInstallingPluginIds({...installingPluginsIds, [item.manifest.id]: true});
-	}, [installingPluginsIds, setInstallingPluginIds]);
+	const installPlugin = useInstallHandler(
+		setInstallingPluginIds, pluginSettings, repoApi, onPluginSettingsChange, false,
+	);
 
-	const renderResult = useCallback(({item}: {item: PluginItem}) => {
-		const manifest = item.manifest;
+	const renderResult = useCallback(({ item }: { item: SearchResultRecord }) => {
+		const manifest = item.item.manifest;
 
 		return (
 			<PluginBox
 				key={manifest.id}
-				item={item}
-				devMode={false}
-				builtIn={false}
+				item={item.item}
+				installState={item.installState}
 				isCompatible={PluginService.instance().isCompatible(manifest.app_min_version)}
 				onInstall={installPlugin}
 			/>
@@ -109,7 +128,7 @@ const PluginSearch: React.FC<Props> = props => {
 			<FlatList
 				data={searchResults}
 				renderItem={renderResult}
-				keyExtractor={item => item.manifest.id}
+				keyExtractor={item => item.id}
 				scrollEnabled={false}
 			/>
 		</View>

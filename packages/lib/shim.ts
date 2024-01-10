@@ -317,8 +317,15 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
-	showMessageBox: (_message: string, _options: any = null): any => {
+	// Returns the index of the button that was clicked. By default,
+	// 0 -> OK
+	// 1 -> Cancel
+	showMessageBox: (_message: string, _options: any = null): Promise<number> => {
 		throw new Error('Not implemented');
+	},
+
+	showConfirmationDialog: async (message: string): Promise<boolean> => {
+		return await shim.showMessageBox(message) === 0;
 	},
 
 	writeImageToFile: (_image: any, _format: any, _filePath: string): void => {

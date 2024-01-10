@@ -178,7 +178,7 @@ export default class PluginService extends BaseService {
 		return output;
 	}
 
-	public serializePluginSettings(settings: PluginSettings): any {
+	public serializePluginSettings(settings: PluginSettings): string {
 		return JSON.stringify(settings);
 	}
 
@@ -354,7 +354,7 @@ export default class PluginService extends BaseService {
 
 	private pluginEnabled(settings: PluginSettings, pluginId: string): boolean {
 		if (!settings[pluginId]) return true;
-		return settings[pluginId].enabled !== false;
+		return settings[pluginId].enabled !== false && settings[pluginId].deleted !== true;
 	}
 
 	public callStatsSummary(pluginId: string, duration: number) {
@@ -475,6 +475,7 @@ export default class PluginService extends BaseService {
 	public async installPluginFromRepo(repoApi: RepositoryApi, pluginId: string): Promise<Plugin> {
 		const pluginPath = await repoApi.downloadPlugin(pluginId);
 		const plugin = await this.installPlugin(pluginPath);
+
 		await shim.fsDriver().remove(pluginPath);
 		return plugin;
 	}
@@ -491,6 +492,13 @@ export default class PluginService extends BaseService {
 		// the plugin ID.
 		const preloadedPlugin = await this.loadPluginFromPath(jplPath);
 		await this.deletePluginFiles(preloadedPlugin);
+
+		// On mobile, it's necessary to create the plugin directory before we can copy
+		// into it.
+		if (!(await shim.fsDriver().exists(Setting.value('pluginDir')))) {
+			logger.info(`Creating plugin directory: ${Setting.value('pluginDir')}`);
+			await shim.fsDriver().mkdir(Setting.value('pluginDir'));
+		}
 
 		const destPath = `${Setting.value('pluginDir')}/${preloadedPlugin.id}.jpl`;
 		await shim.fsDriver().copy(jplPath, destPath);

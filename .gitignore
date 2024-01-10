@@ -147,8 +147,6 @@ packages/app-desktop/gui/ConfigScreen/controls/ToggleAdvancedSettingsButton.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js
-packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.test.js
-packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js
 packages/app-desktop/gui/Dialog.js
 packages/app-desktop/gui/DialogButtonRow.js
 packages/app-desktop/gui/DialogButtonRow/useKeyboardHandler.js
@@ -566,6 +564,7 @@ packages/app-mobile/utils/polyfills/bufferPolyfill.js
 packages/app-mobile/utils/polyfills/index.js
 packages/app-mobile/utils/setupNotifications.js
 packages/app-mobile/utils/shareHandler.js
+packages/app-mobile/utils/showMessageBox.js
 packages/app-mobile/utils/types.js
 packages/default-plugins/build.js
 packages/default-plugins/buildDefaultPlugins.js
@@ -670,6 +669,10 @@ packages/lib/commands/openMasterPasswordDialog.js
 packages/lib/commands/synchronize.js
 packages/lib/components/EncryptionConfigScreen/utils.js
 packages/lib/components/shared/config/config-shared.js
+packages/lib/components/shared/config/plugins/types.js
+packages/lib/components/shared/config/plugins/useOnDeleteHandler.js
+packages/lib/components/shared/config/plugins/useOnInstallHandler.test.js
+packages/lib/components/shared/config/plugins/useOnInstallHandler.js
 packages/lib/components/shared/config/shouldShowMissingPasswordWarning.test.js
 packages/lib/components/shared/config/shouldShowMissingPasswordWarning.js
 packages/lib/components/shared/note-screen-shared.js

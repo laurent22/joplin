@@ -458,12 +458,12 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 			addSettingComponent(
 				<PluginSearch
-					key={`search-plugins`}
+					key={'search-plugins'}
 					themeId={this.props.themeId}
 					pluginSettings={settings[pluginStatesKey]}
 					updatePluginStates={updatePluginStates}
 				/>,
-				[ _('Search'), 'Search plugins' ],
+				[_('Search'), 'Search plugins'],
 			);
 		}
 

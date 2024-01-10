@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { PluginManifest } from "@joplin/lib/services/plugins/utils/types";
 import { Icon, Button, Card, Chip } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import { View } from 'react-native';
+import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 
 export enum InstallState {
 	NotInstalled,
@@ -17,21 +17,14 @@ export enum UpdateState {
 	HasBeenUpdated = 4,
 }
 
-export interface PluginItem {
-	manifest: PluginManifest;
-	enabled: boolean;
-	deleted: boolean;
-	installState?: InstallState;
-	updateState?: UpdateState;
-}
-
-type PluginCallback = (plugin: PluginItem)=>void;
+type PluginCallback = (event: ItemEvent)=> void;
 
 interface Props {
 	item: PluginItem;
-	devMode: boolean;
-	builtIn: boolean;
 	isCompatible: boolean;
+
+	installState?: InstallState;
+	updateState?: UpdateState;
 
 	onInstall?: PluginCallback;
 	onUpdate?: PluginCallback;
@@ -42,75 +35,77 @@ interface Props {
 const PluginIcon = (props: any) => <Icon {...props} source='puzzle'/>;
 
 const PluginBox: React.FC<Props> = props => {
-	//const styles = useStyles(props.themeId);
 	const manifest = props.item.manifest;
+	const item = props.item;
 
 	const installButtonTitle = () => {
-		if (props.item.installState === InstallState.Installing) return _('Installing...');
-		if (props.item.installState === InstallState.NotInstalled) return _('Install');
-		if (props.item.installState === InstallState.Installed) return _('Installed');
-		return `Invalid install state: ${props.item.installState}`;
+		if (props.installState === InstallState.Installing) return _('Installing...');
+		if (props.installState === InstallState.NotInstalled) return _('Install');
+		if (props.installState === InstallState.Installed) return _('Installed');
+		return `Invalid install state: ${props.installState}`;
 	};
 
 	const installButton = (
 		<Button
-			onPress={() => props.onInstall?.(props.item)}
-			disabled={props.item.installState !== InstallState.NotInstalled}
-			loading={props.item.installState === InstallState.Installing}
+			onPress={() => props.onInstall?.({ item })}
+			disabled={props.installState !== InstallState.NotInstalled}
+			loading={props.installState === InstallState.Installing}
 		>
 			{installButtonTitle()}
 		</Button>
 	);
 	const updateButton = (
 		<Button
-			onPress={() => props.onUpdate?.(props.item)}
-			disabled={props.item.updateState !== UpdateState.CanUpdate}
+			onPress={() => props.onUpdate?.({ item })}
+			disabled={props.updateState !== UpdateState.CanUpdate}
 		>
 			{_('Update')}
 		</Button>
 	);
 	const deleteButton = (
 		<Button
-			onPress={() => props.onDelete?.(props.item)}
+			onPress={() => props.onDelete?.({ item })}
 			disabled={props.item.deleted}
 		>
 			{props.item.deleted ? _('Deleted') : _('Delete')}
 		</Button>
 	);
-	const disableButton = <Button onPress={() => props.onToggle?.(props.item)}>{_('Disable')}</Button>;
-	const enableButton = <Button onPress={() => props.onToggle?.(props.item)}>{_('Enable')}</Button>;
+	const disableButton = <Button onPress={() => props.onToggle?.({ item })}>{_('Disable')}</Button>;
+	const enableButton = <Button onPress={() => props.onToggle?.({ item })}>{_('Enable')}</Button>;
 
 	const renderRecommendedChip = () => {
 		if (!props.item.manifest._recommended) {
 			return null;
 		}
-		return <Chip icon='crown'>{_('Recommended')}</Chip>;
+		return <Chip icon='crown' mode='outlined'>{_('Recommended')}</Chip>;
 	};
 
 	const renderBuiltInChip = () => {
-		if (!props.builtIn) {
+		if (!props.item.builtIn) {
 			return null;
 		}
-		return <Chip icon='code-tags-check'>{_('Built-in')}</Chip>;
-	}
+		return <Chip icon='code-tags-check' mode='outlined'>{_('Built-in')}</Chip>;
+	};
+
+	const updateStateIsIdle = props.updateState !== UpdateState.Idle;
 
 	return (
-		<Card style={{margin: 8}}>
+		<Card style={{ margin: 8 }}>
 			<Card.Title
 				title={manifest.name}
 				subtitle={manifest.description}
 				left={PluginIcon}
 			/>
 			<Card.Content>
-				<View style={{flexDirection: 'row'}}>
+				<View style={{ flexDirection: 'row' }}>
 					{renderRecommendedChip()}
 					{renderBuiltInChip()}
 				</View>
 			</Card.Content>
 			<Card.Actions>
 				{props.onInstall ? installButton : null}
-				{props.onDelete ? deleteButton : null}
-				{props.onUpdate ? updateButton : null}
+				{props.onDelete && !props.item.builtIn ? deleteButton : null}
+				{props.onUpdate && updateStateIsIdle ? updateButton : null}
 				{props.onToggle && props.item.enabled ? disableButton : null}
 				{props.onToggle && !props.item.enabled ? enableButton : null}
 			</Card.Actions>

@@ -8184,6 +8184,7 @@ __metadata:
     "@joplin/turndown": ^4.0.72
     "@joplin/turndown-plugin-gfm": ^1.0.54
     "@joplin/utils": ~2.14
+    "@testing-library/react-hooks": 8.0.1
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
     "@types/js-yaml": 4.0.9
@@ -8232,6 +8233,8 @@ __metadata:
     promise: 8.3.0
     query-string: 7.1.3
     re-reselect: 4.0.1
+    react: 18.2.0
+    react-test-renderer: 18.2.0
     read-chunk: 2.1.0
     redux: 4.2.1
     relative: 3.0.2

@@ -5,8 +5,8 @@ import { reg } from '@joplin/lib/registry';
 import BasePlatformImplementation, { Joplin } from '@joplin/lib/services/plugins/BasePlatformImplementation';
 import { Implementation as ImagingImplementation } from '@joplin/lib/services/plugins/api/JoplinImaging';
 import RNVersionInfo from 'react-native-version-info';
-import { Alert } from 'react-native';
 import { _ } from '@joplin/lib/locale';
+import shim from '@joplin/lib/shim';
 
 
 interface Components {
@@ -44,23 +44,10 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 			views: {
 				dialogs: {
 					showMessageBox: async (message: string) => {
-						return new Promise<number>(resolve => {
-							Alert.alert(
-								_('Plugin message'),
-								message,
-								[
-									{
-										text: _('OK'),
-										onPress: () => resolve(0),
-									},
-									{
-										text: _('Cancel'),
-										onPress: () => resolve(1),
-										style: 'cancel',
-									},
-								],
-							);
-						});
+						return await shim.showMessageBox(
+							message,
+							{ title: _('Plugin message') },
+						);
 					},
 					showOpenDialog: async (_options) => {
 						throw new Error('Not implemented: showOpenDialog');
