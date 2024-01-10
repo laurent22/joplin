@@ -12,7 +12,7 @@ import Logger from '@joplin/utils/Logger';
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import ResourceService from '../services/ResourceService';
 import { LoadOptions } from './utils/types';
-import { getTrashFolder } from '../services/trash';
+import { getTrashFolder, getTrashFolderId } from '../services/trash';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 const logger = Logger.create('models/Folder');
@@ -103,6 +103,8 @@ export default class Folder extends BaseItem {
 			...options,
 		};
 
+		if (folderId === getTrashFolderId()) throw new Error('The trash folder cannot be deleted');
+
 		const toTrash = !!options.toTrash;
 
 		const folder = await Folder.load(folderId);
@@ -172,7 +174,10 @@ export default class Folder extends BaseItem {
 			}
 		}
 
-		const where = ['is_conflict = 0'];
+		const where = [
+			'is_conflict = 0',
+			'notes.deleted_time = 0',
+		];
 		if (!includeCompletedTodos) where.push('(notes.is_todo = 0 OR notes.todo_completed = 0)');
 
 		const sql = `

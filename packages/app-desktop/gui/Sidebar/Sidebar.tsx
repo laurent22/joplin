@@ -18,7 +18,7 @@ import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 import Tag from '@joplin/lib/models/Tag';
 import Logger from '@joplin/utils/Logger';
-import { FolderEntity, FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
+import { FolderEntity, FolderIcon, FolderIconType, TagEntity } from '@joplin/lib/services/database/types';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import { store } from '@joplin/lib/reducer';
 import PerFolderSortOrderService from '../../services/sortOrder/PerFolderSortOrderService';
@@ -43,7 +43,7 @@ interface Props {
 	themeId: number;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
-	folders: any[];
+	folders: FolderEntity[];
 	collapsedFolderIds: string[];
 	notesParentType: string;
 	selectedFolderId: string;
@@ -52,7 +52,7 @@ interface Props {
 	decryptionWorker: any;
 	resourceFetcher: any;
 	syncReport: any;
-	tags: any[];
+	tags: TagEntity[];
 	syncStarted: boolean;
 	plugins: PluginStates;
 	folderHeaderIsExpanded: boolean;
@@ -513,7 +513,7 @@ const SidebarComponent = (props: Props) => {
 		if (isExpanded) {
 			for (let i = 0; i < props.folders.length; i++) {
 				if (props.folders[i].parent_id === folder.id) {
-					noteCount -= props.folders[i].note_count;
+					noteCount -= (props.folders[i] as any).note_count;
 				}
 			}
 		}
