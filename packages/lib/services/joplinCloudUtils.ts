@@ -77,19 +77,15 @@ export const generateLoginWithUniqueLoginCode = async (loginUrl: string, uniquel
 export const checkIfLoginWasSuccessful = async (applicationsUrl: string, ulc: string) => {
 	try {
 		const response = await fetch(`${applicationsUrl}?unique_login_code=${ulc}`);
-		if (!response) return undefined;
 
-		if (response.status === 200) {
-			const jsonResponse = await response?.json();
-			if (jsonResponse && (jsonResponse.id && jsonResponse.password)) {
-				Setting.setValue('sync.10.username', jsonResponse.id);
-				Setting.setValue('sync.10.password', jsonResponse.password);
-				await Setting.saveAll();
-				return { success: true };
-			}
+		if (response.ok) {
+			const jsonResponse = await response.json();
+			Setting.setValue('sync.10.username', jsonResponse.id);
+			Setting.setValue('sync.10.password', jsonResponse.password);
+			return { success: true };
 		}
 
-		const jsonBody = await response?.json();
+		const jsonBody = await response.json();
 
 		if (jsonBody && response.status >= 400 && response.status <= 500) {
 			reg.logger().warn('Server could not retrieve application credential', jsonBody);
