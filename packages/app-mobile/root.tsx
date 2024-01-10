@@ -1134,9 +1134,38 @@ class AppComponent extends React.Component {
 					...paperTheme.colors,
 					onPrimaryContainer: theme.color5,
 					primaryContainer: theme.backgroundColor5,
-					surfaceVariant: theme.backgroundColor,
-					onSurfaceVariant: theme.color,
 					primary: theme.color,
+					onPrimary: theme.backgroundColor,
+
+					surface: theme.color,
+					onSurface: theme.backgroundColor,
+					background: theme.backgroundColor,
+					onBackground: theme.color,
+
+					surfaceVariant: theme.backgroundColor2,
+					onSurfaceVariant: theme.color2,
+
+					secondary: theme.color3,
+					onSecondary: theme.backgroundColor3,
+					secondaryContainer: theme.backgroundColor3,
+					onSecondaryContainer: theme.color3,
+
+					tertiary: theme.color2,
+					onTertiary: theme.backgroundColor3,
+					tertiaryContainer: theme.backgroundColor3,
+					onTertiaryContainer: theme.color3,
+
+					surfaceDisabled: theme.backgroundColor,
+					onSurfaceDisabled: theme.colorFaded,
+
+					elevation: {
+						level0: "transparent",
+						level1: theme.raisedBackgroundColor,
+						level2: theme.raisedBackgroundColor,
+						level3: theme.raisedBackgroundColor,
+						level4: theme.raisedBackgroundColor,
+						level5: theme.raisedBackgroundColor
+					},
 				},
 			}}>
 				{mainContent}

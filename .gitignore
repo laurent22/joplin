@@ -510,7 +510,10 @@ packages/app-mobile/components/screens/ConfigScreen/SettingItem.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsButton.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsToggle.js
 packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginToggle.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/utils/repoApi.js
 packages/app-mobile/components/screens/ConfigScreen/types.js
 packages/app-mobile/components/screens/LogScreen.js
 packages/app-mobile/components/screens/Note.js

@@ -59,7 +59,7 @@ let repoApi_: RepositoryApi = null;
 
 function repoApi(): RepositoryApi {
 	if (repoApi_) return repoApi_;
-	repoApi_ = new RepositoryApi('https://github.com/joplin/plugins', Setting.value('tempDir'));
+	repoApi_ = RepositoryApi.ofDefaultJoplinRepo(Setting.value('tempDir'));
 	// repoApi_ = new RepositoryApi('/Users/laurent/src/joplin-plugins-test', Setting.value('tempDir'));
 	return repoApi_;
 }

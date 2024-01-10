@@ -8,6 +8,7 @@ import { Asset } from 'expo-asset';
 import PlatformImplementation from './PlatformImplementation';
 import { Store } from 'redux';
 import Logger from '@joplin/utils/Logger';
+import shim from '@joplin/lib/shim';
 
 const defaultPlugins: Record<string, string|number> = {
 	'com.example.codemirror6-line-numbers': require('./sources/com.example.codemirror6-line-numbers/plugin.jpl'),
@@ -33,10 +34,12 @@ const loadPlugins = async (
 		const pluginPaths: string[] = [];
 
 		for (const pluginId in defaultPlugins) {
-			// TODO: Don't copy all plugins on startup (just the changed plugins)
 			logger.info(`Copying plugin with ID ${pluginId}`);
 
 			const pluginAsset = Asset.fromModule(defaultPlugins[pluginId]);
+
+			// Note: downloadAsync is documented to only download the file if an up-to-date
+			// local copy is not already present.
 			await pluginAsset.downloadAsync();
 
 			const assetFilePath = pluginAsset.localUri.replace(/^file:[/][/]/, '');
@@ -57,8 +60,29 @@ const loadPlugins = async (
 			}
 		}
 
-		logger.debug('Running plugins...');
-		await pluginService.loadAndRunPlugins(pluginPaths, pluginSettings);
+		if (Setting.value('env') === 'dev') {
+			logger.info('Running dev plugins (if any)...');
+			await pluginService.loadAndRunDevPlugins(pluginSettings);
+		}
+
+		if (cancel.cancelled) {
+			return;
+		}
+
+		if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
+			logger.info('Running user-installed plugins...');
+			await pluginService.loadAndRunPlugins(Setting.value('pluginDir'), pluginSettings);
+		}
+
+		if (cancel.cancelled) {
+			return;
+		}
+
+		if (pluginPaths.length > 0) {
+			logger.info('Running built-in plugins...');
+			const options = { devMode: false, builtIn: true };
+			await pluginService.loadAndRunPlugins(pluginPaths, pluginSettings, options);
+		}
 	} catch (error) {
 		console.error(error);
 		throw error;

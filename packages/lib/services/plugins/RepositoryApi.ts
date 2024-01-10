@@ -68,6 +68,10 @@ export default class RepositoryApi {
 		this.tempDir_ = tempDir;
 	}
 
+	public static ofDefaultJoplinRepo(tempDirPath: string) {
+		return new RepositoryApi('https://github.com/joplin/plugins', tempDirPath);
+	}
+
 	public async initialize() {
 		// https://github.com/joplin/plugins
 		// https://api.github.com/repos/joplin/plugins/releases
@@ -182,6 +186,12 @@ export default class RepositoryApi {
 				}
 			}
 		}
+
+		output.sort((m1, m2) => {
+			if (m1._recommended && !m2._recommended) return -1;
+			if (!m1._recommended && m2._recommended) return +1;
+			return m1.name.toLowerCase() < m2.name.toLowerCase() ? -1 : +1;
+		});
 
 		return output;
 	}

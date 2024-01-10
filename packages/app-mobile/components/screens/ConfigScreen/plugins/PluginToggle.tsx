@@ -1,16 +1,16 @@
 
 import * as React from 'react';
-import { View, Text, Switch } from 'react-native';
 import { ConfigScreenStyles } from '../configScreenStyles';
-import PluginService, { defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings, defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
 import { useCallback, useMemo } from 'react';
+import PluginBox from './PluginBox';
 
 interface Props {
 	pluginId: string;
 	styles: ConfigScreenStyles;
 	pluginSettings: string;
 
-	updatePluginStates: (settingValue: any)=> void;
+	updatePluginStates: (settingValue: PluginSettings)=> void;
 }
 
 const PluginToggle: React.FC<Props> = props => {
@@ -33,23 +33,35 @@ const PluginToggle: React.FC<Props> = props => {
 		const newSettings = { ...pluginSettings };
 		newSettings[props.pluginId].enabled = enabled;
 
-		props.updatePluginStates(
-			pluginService.serializePluginSettings(newSettings),
-		);
+		props.updatePluginStates(newSettings);
 	}, [pluginService, pluginSettings, props.pluginId, props.updatePluginStates]);
 
+	const onToggle = useCallback(() => {
+		const settings = pluginSettings[plugin.manifest.id];
+		updatePluginEnabled(!settings.enabled);
+	}, [pluginSettings, updatePluginEnabled]);
+
+	const pluginItem = useMemo(() => {
+		const settings = pluginSettings[plugin.manifest.id];
+		return {
+			manifest: plugin.manifest,
+			enabled: settings.enabled,
+			deleted: settings.deleted,
+		};
+	}, [plugin, pluginSettings]);
+
+	const isCompatible = useMemo(() => {
+		return PluginService.instance().isCompatible(plugin.manifest.app_min_version);
+	}, [plugin]);
+
 	return (
-		<View style={props.styles.getContainerStyle(false)}>
-			<Text style={props.styles.styleSheet.switchSettingText}>
-				{plugin.manifest.name}
-			</Text>
-			<Switch
-				key="control"
-				style={props.styles.styleSheet.switchSettingControl}
-				value={pluginSettings[plugin.manifest.id].enabled}
-				onValueChange={updatePluginEnabled}
-			/>
-		</View>
+		<PluginBox
+			item={pluginItem}
+			devMode={plugin.devMode}
+			builtIn={plugin.builtIn}
+			isCompatible={isCompatible}
+			onToggle={onToggle}
+		/>
 	);
 };
 

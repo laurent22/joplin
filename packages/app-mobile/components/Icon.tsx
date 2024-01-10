@@ -13,6 +13,8 @@ interface Props {
 
 	// If `null` is given, the content must be labeled elsewhere.
 	accessibilityLabel: string|null;
+
+	allowFontScaling?: boolean;
 }
 
 const Icon: React.FC<Props> = props => {
@@ -36,6 +38,7 @@ const Icon: React.FC<Props> = props => {
 		'aria-hidden': accessibilityHidden,
 		accessibilityLabel: props.accessibilityLabel,
 		style: props.style,
+		allowFontScaling: props.allowFontScaling,
 	};
 
 	if (namePrefix.match(/^fa[bsr]?$/)) {

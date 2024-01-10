@@ -418,6 +418,20 @@ export default class PluginService extends BaseService {
 		}
 	}
 
+	public async loadAndRunDevPlugins(settings: PluginSettings) {
+		const devPluginOptions = { devMode: true, builtIn: false };
+
+		if (Setting.value('plugins.devPluginPaths')) {
+			const paths = Setting.value('plugins.devPluginPaths').split(',').map((p: string) => p.trim());
+			await this.loadAndRunPlugins(paths, settings, devPluginOptions);
+		}
+
+		// Also load dev plugins that have passed via command line arguments
+		if (Setting.value('startupDevPlugins')) {
+			await this.loadAndRunPlugins(Setting.value('startupDevPlugins'), settings, devPluginOptions);
+		}
+	}
+
 	public isCompatible(pluginVersion: string): boolean {
 		return compareVersions(this.appVersion_, pluginVersion) >= 0;
 	}
