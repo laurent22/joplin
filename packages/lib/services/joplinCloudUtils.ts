@@ -13,7 +13,7 @@ type Action = {
 
 type DefaultState = {
 	className: 'text' | 'bold';
-	message: string;
+	message: ()=> string;
 	next: ActionType;
 	active: ActionType | 'INITIAL';
 	errorMessage?: string;
@@ -21,7 +21,7 @@ type DefaultState = {
 
 export const defaultState: DefaultState = {
 	className: 'text',
-	message: _('Waiting for authorisation...'),
+	message: ()=> _('Waiting for authorisation...'),
 	next: 'LINK_USED',
 	active: 'INITIAL',
 };
@@ -31,7 +31,7 @@ export const reducer: Reducer<DefaultState, Action> = (state: DefaultState, acti
 	case 'LINK_USED': {
 		return {
 			className: 'text',
-			message: _('If you have already authorised, please wait for the application to sync to Joplin Cloud.'),
+			message: () => _('If you have already authorised, please wait for the application to sync to Joplin Cloud.'),
 			next: 'COMPLETED',
 			active: 'LINK_USED',
 		};
@@ -39,7 +39,7 @@ export const reducer: Reducer<DefaultState, Action> = (state: DefaultState, acti
 	case 'COMPLETED': {
 		return {
 			className: 'bold',
-			message: _('You are logged in into Joplin Cloud, you can leave this screen now.'),
+			message: () => _('You are logged in into Joplin Cloud, you can leave this screen now.'),
 			active: 'COMPLETED',
 			next: 'COMPLETED',
 		};
@@ -47,7 +47,7 @@ export const reducer: Reducer<DefaultState, Action> = (state: DefaultState, acti
 	case 'ERROR': {
 		return {
 			className: 'text',
-			message: _('You were unable to connect to Joplin Cloud, verify your connection. Error: '),
+			message: () => _('You were unable to connect to Joplin Cloud, verify your connection. Error: '),
 			active: 'ERROR',
 			next: 'COMPLETED',
 			errorMessage: action.payload,

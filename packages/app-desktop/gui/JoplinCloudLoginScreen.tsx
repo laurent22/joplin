@@ -90,7 +90,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 					/>
 
 				</div>
-				<p className={state.className}>{state.message}
+				<p className={state.className}>{state.message()}
 					{state.active === 'ERROR' ? (
 						<span className={state.className}>{state.errorMessage}</span>
 					) : null}
