@@ -1,7 +1,7 @@
 import Folder from '../../models/Folder';
 import BaseModel from '../../BaseModel';
 import { FolderEntity, TagEntity } from '../../services/database/types';
-import { getTrashFolderId } from '../../services/trash';
+import { getDisplayParentId, getTrashFolderId } from '../../services/trash';
 
 interface Props {
 	folders: FolderEntity[];
@@ -22,7 +22,8 @@ function folderHasChildren_(folders: FolderEntity[], folderId: string) {
 
 	for (let i = 0; i < folders.length; i++) {
 		const folder = folders[i];
-		if (folder.parent_id === folderId) return true;
+		const folderParentId = getDisplayParentId(folder, folders.find(f => f.id === folder.parent_id));
+		if (folderParentId === folderId) return true;
 	}
 
 	return false;
@@ -34,9 +35,10 @@ function folderIsCollapsed(folders: FolderEntity[], folderId: string, collapsedF
 	while (true) {
 		const folder: FolderEntity = BaseModel.byId(folders, folderId);
 		if (!folder) throw new Error(`No folder with id ${folder.id}`);
-		if (!folder.parent_id) return false;
-		if (collapsedFolderIds.indexOf(folder.parent_id) >= 0) return true;
-		folderId = folder.parent_id;
+		const folderParentId = getDisplayParentId(folder, folders.find(f => f.id === folder.parent_id));
+		if (!folderParentId) return false;
+		if (collapsedFolderIds.indexOf(folderParentId) >= 0) return true;
+		folderId = folderParentId;
 	}
 }
 
@@ -44,7 +46,10 @@ function renderFoldersRecursive_(props: Props, renderItem: RenderFolderItem, ite
 	const folders = props.folders;
 	for (let i = 0; i < folders.length; i++) {
 		const folder = folders[i];
-		if (!Folder.idsEqual(folder.parent_id, parentId)) continue;
+
+		const folderParentId = getDisplayParentId(folder, props.folders.find(f => f.id === folder.parent_id));
+
+		if (!Folder.idsEqual(folderParentId, parentId)) continue;
 		if (folderIsCollapsed(props.folders, folder.id, props.collapsedFolderIds)) continue;
 		const hasChildren = folderHasChildren_(folders, folder.id);
 		order.push(folder.id);

@@ -11,13 +11,16 @@ import { FolderEntity, NoteEntity } from '../database/types';
 // trash too).
 //
 // This function simplifies this logic wherever it is needed.
-export const getDisplayParentId = (item: FolderEntity | NoteEntity, itemParent: FolderEntity) => {
+//
+// `originalItemParent` is the parent before the item was deleted, which is the
+// folder with ID = item.parent_id
+export const getDisplayParentId = (item: FolderEntity | NoteEntity, originalItemParent: FolderEntity) => {
 	if (!('deleted_time' in item) || !('parent_id' in item)) throw new Error(`Missing "deleted_time" or "parent_id" property: ${JSON.stringify(item)}`);
-	if (!('deleted_time' in itemParent)) throw new Error(`Missing "deleted_time" property: ${JSON.stringify(itemParent)}`);
+	if (originalItemParent && !('deleted_time' in originalItemParent)) throw new Error(`Missing "deleted_time" property: ${JSON.stringify(originalItemParent)}`);
 
 	if (!item.deleted_time) return item.parent_id;
 
-	if (!itemParent || !itemParent.deleted_time) return getTrashFolderId();
+	if (!originalItemParent || !originalItemParent.deleted_time) return getTrashFolderId();
 
 	return item.parent_id;
 };
@@ -42,5 +45,6 @@ export const getTrashFolder = (): FolderEntity => {
 		user_updated_time: now,
 		share_id: '',
 		is_shared: 0,
+		deleted_time: 0,
 	};
 };

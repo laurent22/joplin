@@ -1,6 +1,6 @@
 import { getDisplayParentId, getTrashFolderId } from '.';
 
-describe('folders-screen-utils', () => {
+describe('services/trash', () => {
 
 	test.each([
 		[
