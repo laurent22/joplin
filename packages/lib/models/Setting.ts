@@ -2235,7 +2235,7 @@ class Setting extends BaseModel {
 		}
 
 		for (const k in enumOptions) {
-			if (!enumOptions.hasOwnProperty(k)) continue;
+			if (!Object.prototype.hasOwnProperty.call(enumOptions, k)) continue;
 			if (order.includes(k)) continue;
 
 			output.push({
