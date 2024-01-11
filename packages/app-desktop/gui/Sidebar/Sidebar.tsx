@@ -98,8 +98,8 @@ function FolderItem(props: any) {
 	const { hasChildren, showFolderIcon, isExpanded, parentId, depth, selected, folderId, folderTitle, folderIcon, anchorRef, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_, shareId } = props;
 
 	const noteCountComp = noteCount ? <StyledNoteCount className="note-count-label">{noteCount}</StyledNoteCount> : null;
-
 	const shareIcon = shareId && !parentId ? <StyledShareIcon className="fas fa-share-alt"></StyledShareIcon> : null;
+	const draggable = ![getTrashFolderId(), Folder.conflictFolderId()].includes(folderId);
 
 	const doRenderFolderIcon = () => {
 		if (folderId === getTrashFolderId()) {
@@ -116,7 +116,7 @@ function FolderItem(props: any) {
 	};
 
 	return (
-		<StyledListItem depth={depth} selected={selected} className={`list-item-container list-item-depth-${depth} ${selected ? 'selected' : ''}`} onDragStart={onFolderDragStart_} onDragOver={onFolderDragOver_} onDrop={onFolderDrop_} draggable={true} data-folder-id={folderId}>
+		<StyledListItem depth={depth} selected={selected} className={`list-item-container list-item-depth-${depth} ${selected ? 'selected' : ''}`} onDragStart={onFolderDragStart_} onDragOver={onFolderDragOver_} onDrop={onFolderDrop_} draggable={draggable} data-folder-id={folderId}>
 			<ExpandLink themeId={props.themeId} hasChildren={hasChildren} folderId={folderId} onClick={onFolderToggleClick_} isExpanded={isExpanded}/>
 			<StyledListItemAnchor
 				ref={anchorRef}
