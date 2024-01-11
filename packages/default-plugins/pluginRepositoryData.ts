@@ -11,6 +11,10 @@ const pluginRepositoryData: AllRepositoryData = {
 		'path': 'packages/app-cli/tests/support/plugins/codemirror6',
 		'appTypes': [AppType.Mobile],
 	},
+	'org.joplinapp.plugins.ContentScriptDemo': {
+		'path': 'packages/app-cli/tests/support/plugins/content_script',
+		'appTypes': [AppType.Mobile],
+	},
 	// 'org.joplinapp.plugins.RegisterCommandDemo': {
 	// 	'path': 'packages/app-cli/tests/support/plugins/register_command',
 	// 	'appTypes': [AppType.Mobile],

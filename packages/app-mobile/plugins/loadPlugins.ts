@@ -12,6 +12,7 @@ import shim from '@joplin/lib/shim';
 
 const defaultPlugins: Record<string, string|number> = {
 	'com.example.codemirror6-line-numbers': require('./sources/com.example.codemirror6-line-numbers/plugin.jpl'),
+	'org.joplinapp.plugins.ContentScriptDemo': require('./sources/org.joplinapp.plugins.ContentScriptDemo/plugin.jpl'),
 //	'org.joplinapp.plugins.RegisterCommandDemo': require('./sources/org.joplinapp.plugins.RegisterCommandDemo/plugin.jpl'),
 //	'org.joplinapp.plugins.DialogDemo': require('./sources/org.joplinapp.plugins.DialogDemo/plugin.jpl'),
 };

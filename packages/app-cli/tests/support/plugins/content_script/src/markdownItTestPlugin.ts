@@ -1,4 +1,3 @@
-const leftPad = require('left-pad');
 
 export default function(context) { 
 	return {
@@ -20,9 +19,10 @@ export default function(context) {
 					return false;
 				`;
 
+				const testText: string = token.content.trim();
 				return `
 					<div class="just-testing">
-						<p>JUST TESTING: <pre>${leftPad(token.content.trim(), 10, 'x')}</pre></p>
+						<p>JUST TESTING: <pre>${testText.padStart(10, 'x')}</pre></p>
 						<p><a href="#" onclick="${postMessageWithResponseTest.replace(/\n/g, ' ')}">Click to post a message "justtesting" to plugin and check the response in the console</a></p>
 					</div>
 				`;
