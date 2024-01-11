@@ -15,14 +15,6 @@ const pluginRepositoryData: AllRepositoryData = {
 		'path': 'packages/app-cli/tests/support/plugins/content_script',
 		'appTypes': [AppType.Mobile],
 	},
-	// 'org.joplinapp.plugins.RegisterCommandDemo': {
-	// 	'path': 'packages/app-cli/tests/support/plugins/register_command',
-	// 	'appTypes': [AppType.Mobile],
-	// },
-	// 'org.joplinapp.plugins.DialogDemo': {
-	// 	'path': 'packages/app-cli/tests/support/plugins/dialog',
-	// 	'appTypes': [AppType.Mobile],
-	// },
 };
 
 export default pluginRepositoryData;
