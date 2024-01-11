@@ -15,6 +15,11 @@ export interface ReadDirStatsOptions {
 	recursive: boolean;
 }
 
+export interface CachedCssResult {
+	path: string;
+	mime: 'text/css';
+}
+
 export default class FsDriverBase {
 
 	public async stat(_path: string): Promise<Stat> {
@@ -173,7 +178,7 @@ export default class FsDriverBase {
 
 	// TODO: move out of here and make it part of joplin-renderer
 	// or assign to option using .bind(fsDriver())
-	public async cacheCssToFile(cssStrings: string[]) {
+	public async cacheCssToFile(cssStrings: string[]): Promise<CachedCssResult> {
 		const cssString = Array.isArray(cssStrings) ? cssStrings.join('\n') : cssStrings;
 		const cssFilePath = `${Setting.value('tempDir')}/${md5(escape(cssString))}.css`;
 		if (!(await this.exists(cssFilePath))) {

@@ -3,35 +3,14 @@ import HtmlToHtml from './HtmlToHtml';
 import htmlUtils from './htmlUtils';
 import { Options as NoteStyleOptions } from './noteStyle';
 import { AllHtmlEntities } from 'html-entities';
+import { MarkupRenderer, MarkupToHtmlConverter, OptionsResourceModel, RenderResult } from './types';
+import defaultResourceModel from './defaultResourceModel';
 const MarkdownIt = require('markdown-it');
 
 export enum MarkupLanguage {
 	Markdown = 1,
 	Html = 2,
 	Any = 3,
-}
-
-export interface RenderResultPluginAsset {
-	name: string;
-	mime: string;
-	path: string;
-
-	// For built-in Mardown-it plugins, the asset path is relative (and can be
-	// found inside the @joplin/renderer package), while for external plugins
-	// (content scripts), the path is absolute. We use this property to tell if
-	// it's relative or absolute, as that will inform how it's loaded in various
-	// places.
-	pathIsAbsolute: boolean;
-}
-
-export interface RenderResult {
-	html: string;
-	pluginAssets: RenderResultPluginAsset[];
-	cssStrings: string[];
-}
-
-export interface OptionsResourceModel {
-	isResourceUrl: (url: string)=> boolean;
 }
 
 export interface Options {
@@ -45,20 +24,18 @@ export interface Options {
 	fsDriver?: any; // Not sure if needed
 }
 
-export default class MarkupToHtml {
+export default class MarkupToHtml implements MarkupToHtmlConverter {
 
 	public static MARKUP_LANGUAGE_MARKDOWN: number = MarkupLanguage.Markdown;
 	public static MARKUP_LANGUAGE_HTML: number = MarkupLanguage.Html;
 
-	private renderers_: any = {};
+	private renderers_: Record<string, MarkupRenderer> = {};
 	private options_: Options;
 	private rawMarkdownIt_: any;
 
 	public constructor(options: Options = null) {
 		this.options_ = {
-			ResourceModel: {
-				isResourceUrl: () => false,
-			},
+			ResourceModel: defaultResourceModel,
 			isSafeMode: false,
 			...options,
 		};

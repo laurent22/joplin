@@ -1,10 +1,10 @@
 import htmlUtils from './htmlUtils';
 import linkReplacement from './MdToHtml/linkReplacement';
-import utils, { ItemIdToUrlHandler } from './utils';
+import * as utils from './utils';
 import InMemoryCache from './InMemoryCache';
-import { RenderResult } from './MarkupToHtml';
 import noteStyle, { whiteBackgroundNoteStyle } from './noteStyle';
 import { Options as NoteStyleOptions } from './noteStyle';
+import { MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult } from './types';
 const md5 = require('md5');
 
 // Renderered notes can potentially be quite large (for example
@@ -27,21 +27,9 @@ interface FsDriver {
 }
 
 interface Options {
-	ResourceModel: any;
+	ResourceModel: OptionsResourceModel;
 	resourceBaseUrl?: string;
 	fsDriver?: FsDriver;
-}
-
-interface RenderOptions {
-	splitted: boolean;
-	bodyOnly: boolean;
-	externalAssetsOnly: boolean;
-	resources: any;
-	postMessageSyntax: string;
-	enableLongPress: boolean;
-	itemIdToUrl?: ItemIdToUrlHandler;
-	allowedFilePrefixes?: string[];
-	whiteBackgroundNoteRendering?: boolean;
 }
 
 // https://github.com/es-shims/String.prototype.trimStart/blob/main/implementation.js
@@ -51,7 +39,7 @@ function trimStart(s: string): string {
 	return s.replace(startWhitespace, '');
 }
 
-export default class HtmlToHtml {
+export default class HtmlToHtml implements MarkupRenderer {
 
 	private resourceBaseUrl_;
 	private ResourceModel_;
@@ -94,6 +82,10 @@ export default class HtmlToHtml {
 		}
 
 		return [await this.fsDriver().cacheCssToFile(cssStrings)];
+	}
+
+	public clearCache(): void {
+		// TODO: Clear the in-memory cache
 	}
 
 	// Note: the "theme" variable is ignored and instead the light theme is

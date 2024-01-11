@@ -1,6 +1,6 @@
 import { RuleOptions } from '../../MdToHtml';
 import { attributesHtml } from '../../htmlUtils';
-import utils from '../../utils';
+import * as utils from '../../utils';
 import createEventHandlingAttrs from '../createEventHandlingAttrs';
 
 function plugin(markdownIt: any, ruleOptions: RuleOptions) {
