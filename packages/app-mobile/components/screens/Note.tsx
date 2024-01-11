@@ -1485,6 +1485,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 						onLoadEnd={this.onBodyViewerLoadEnd}
 						onScroll={this.onBodyViewerScroll}
 						initialScroll={this.lastBodyScroll}
+						pluginStates={this.props.plugins}
 					/>
 				);
 		} else {

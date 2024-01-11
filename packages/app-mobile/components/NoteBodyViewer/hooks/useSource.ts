@@ -2,9 +2,10 @@ import { useEffect, useState, useMemo, useRef } from 'react';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 const { themeStyle } = require('../../global-style.js');
-import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 import useEditPopup from './useEditPopup';
 import Logger from '@joplin/utils/Logger';
+import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+import useMarkupToHtml from './useMarkupToHtml';
 const { assetsToHeaders } = require('@joplin/renderer');
 
 const logger = Logger.create('NoteBodyViewer/useSource');
@@ -49,6 +50,7 @@ export default function useSource(
 	paddingBottom: number,
 	noteHash: string,
 	initialScroll: number|null,
+	pluginStates: PluginStates,
 ): UseSourceResult {
 	const [html, setHtml] = useState<string>('');
 	const [injectedJs, setInjectedJs] = useState<string[]>([]);
@@ -65,10 +67,7 @@ export default function useSource(
 		};
 	}, [themeId, paddingBottom]);
 
-	const markupToHtml = useMemo(() => {
-		return markupLanguageUtils.newMarkupToHtml();
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [isFirstRender]);
+	const markupToHtml = useMarkupToHtml(pluginStates);
 
 	// To address https://github.com/laurent22/joplin/issues/433
 	//

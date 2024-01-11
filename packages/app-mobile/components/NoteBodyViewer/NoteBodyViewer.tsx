@@ -9,6 +9,7 @@ import { View } from 'react-native';
 import BackButtonDialogBox from '../BackButtonDialogBox';
 import { reg } from '@joplin/lib/registry';
 import ExtendedWebView, { WebViewControl } from '../ExtendedWebView';
+import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 
 interface Props {
 	themeId: number;
@@ -26,6 +27,7 @@ interface Props {
 	onMarkForDownload?: OnMarkForDownloadCallback;
 	onScroll: HandleScrollCallback;
 	onLoadEnd?: ()=> void;
+	pluginStates: PluginStates;
 }
 
 const webViewStyle = {
@@ -45,6 +47,7 @@ export default function NoteBodyViewer(props: Props) {
 		props.paddingBottom,
 		props.noteHash,
 		props.initialScroll,
+		props.pluginStates,
 	);
 
 	const onResourceLongPress = useOnResourceLongPress(
