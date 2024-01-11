@@ -131,7 +131,9 @@ export default class Folder extends BaseItem {
 		}
 
 		if (toTrash) {
-			await this.save({ id: folderId, deleted_time: Date.now() });
+			const newFolder: FolderEntity = { id: folderId, deleted_time: Date.now() };
+			if ('toTrashParentId' in options) newFolder.parent_id = options.toTrashParentId;
+			await this.save(newFolder);
 		} else {
 			await super.delete(folderId, options);
 		}
@@ -744,6 +746,7 @@ export default class Folder extends BaseItem {
 
 	public static load(id: string, options: LoadOptions = null): Promise<FolderEntity> {
 		if (id === this.conflictFolderId()) return Promise.resolve(this.conflictFolder());
+		if (id === getTrashFolderId()) return Promise.resolve(getTrashFolder());
 		return super.load(id, options);
 	}
 

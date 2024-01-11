@@ -15,7 +15,6 @@ import { AppState } from '../../app.reducer';
 import { ModelType } from '@joplin/lib/BaseModel';
 import BaseModel from '@joplin/lib/BaseModel';
 import Folder from '@joplin/lib/models/Folder';
-import Note from '@joplin/lib/models/Note';
 import Tag from '@joplin/lib/models/Tag';
 import Logger from '@joplin/utils/Logger';
 import { FolderEntity, FolderIcon, FolderIconType, TagEntity } from '@joplin/lib/services/database/types';
@@ -24,6 +23,7 @@ import { store } from '@joplin/lib/reducer';
 import PerFolderSortOrderService from '../../services/sortOrder/PerFolderSortOrderService';
 import { getFolderCallbackUrl, getTagCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import FolderIconBox from '../FolderIconBox';
+import onFolderDrop from '@joplin/lib/models/utils/onFolderDrop';
 import { Theme } from '@joplin/lib/themes/type';
 import { RuntimeProps } from './commands/focusElementSideBar';
 const { connect } = require('react-redux');
@@ -235,20 +235,13 @@ const SidebarComponent = (props: Props) => {
 		try {
 			if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
 				event.preventDefault();
-
 				if (!folderId) return;
-
 				const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
-				for (let i = 0; i < noteIds.length; i++) {
-					await Note.moveToFolder(noteIds[i], folderId);
-				}
+				await onFolderDrop(noteIds, [], folderId);
 			} else if (dt.types.indexOf('text/x-jop-folder-ids') >= 0) {
 				event.preventDefault();
-
 				const folderIds = JSON.parse(dt.getData('text/x-jop-folder-ids'));
-				for (let i = 0; i < folderIds.length; i++) {
-					await Folder.moveToFolder(folderIds[i], folderId);
-				}
+				await onFolderDrop([], folderIds, folderId);
 			}
 		} catch (error) {
 			logger.error(error);

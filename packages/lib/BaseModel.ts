@@ -41,7 +41,14 @@ export interface DeleteOptions {
 
 	disableReadOnlyCheck?: boolean;
 
+	// Tells whether the deleted item should be moved to the trash. By default
+	// it is permanently deleted.
 	toTrash?: boolean;
+
+	// If the item is to be moved to the trash, tell what should be the new
+	// parent. By default the item will be moved at the root of the trash. Note
+	// that caller must ensure that this parent ID is a deleted folder.
+	toTrashParentId?: string;
 }
 
 class BaseModel {

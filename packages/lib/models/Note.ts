@@ -605,14 +605,19 @@ export default class Note extends BaseItem {
 	public static async moveToFolder(noteId: string, folderId: string) {
 		if (folderId === this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
 
-		// When moving a note to a different folder, the user timestamp is not updated.
-		// However updated_time is updated so that the note can be synced later on.
+		// When moving a note to a different folder, the user timestamp is not
+		// updated. However updated_time is updated so that the note can be
+		// synced later on.
+		//
+		// We also reset deleted_time, so that if a deleted note is moved to
+		// that folder it is restored. If it wasn't deleted, it does nothing.
 
-		const modifiedNote = {
+		const modifiedNote: NoteEntity = {
 			id: noteId,
 			parent_id: folderId,
 			is_conflict: 0,
 			conflict_original_id: '',
+			deleted_time: 0,
 			updated_time: time.unixMs(),
 		};
 
@@ -830,16 +835,29 @@ export default class Note extends BaseItem {
 			}
 
 			if (toTrash) {
+				const now = Date.now();
+
+				const updateSqls = [
+					'deleted_time = ?',
+					'updated_time = ?',
+				];
+
+				const params: any[] = [
+					now,
+					now,
+				];
+
+				if ('toTrashParentId' in options) {
+					updateSqls.push('parent_id = ?');
+					params.push(options.toTrashParentId);
+				}
+
 				const sql = `
 					UPDATE notes
-					SET	
-						deleted_time = ?,
-						updated_time = ?
+					SET	${updateSqls.join(', ')}						
 					WHERE id IN ("${processIds.join('","')}")
 				`;
 
-				const now = Date.now();
-				const params = [now, now];
 				await this.db().exec({ sql, params });
 			} else {
 				await super.batchDelete(processIds, options);
