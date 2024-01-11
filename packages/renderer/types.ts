@@ -81,13 +81,9 @@ export interface MarkupToHtmlConverter {
 }
 
 export interface OptionsResourceModel {
-	isResourceUrl: (url: string)=> boolean;
-	filename?: (resource: ResourceEntity, encryptedBlob?: boolean)=> string;
-	// resourceFriendlySafeFilename: (resource: ResourceEntity)=>string;
-	// resourceRelativePath: (resource: ResourceEntity, relativeResourceDirPath: string, encryptedBlob?: boolean)=>string;
-	fullPath?: (resource: ResourceEntity, encryptedBlob?: boolean)=> string;
-	// internalUrl: (resource: ResourceEntity)=>string;
-	// pathToId: (path: string)=>string;
-	urlToId: (url: string)=> string;
-	isSupportedImageMimeType: (type: string)=> boolean;
+	readonly isResourceUrl: (url: string)=> boolean;
+	readonly urlToId: (url: string)=> string;
+	readonly filename: (resource: ResourceEntity, encryptedBlob?: boolean)=> string;
+	readonly isSupportedImageMimeType: (type: string)=> boolean;
+	readonly fullPath?: (resource: ResourceEntity, encryptedBlob?: boolean)=> string;
 }

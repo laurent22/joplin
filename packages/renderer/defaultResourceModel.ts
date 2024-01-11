@@ -7,6 +7,9 @@ const defaultResourceModel: OptionsResourceModel = {
 	urlToId: _url => {
 		throw new Error('Not implemented: urlToId');
 	},
+	filename: _url => {
+		throw new Error('Not implemented: filename');
+	},
 	isSupportedImageMimeType: _type => false,
 };
 

@@ -656,19 +656,15 @@ function defaultLocale() {
 
 function localeStats() {
 	if (!localeStats_) localeStats_ = require('./locales/index.js').stats;
-	return localeStats_ ?? {};
+	return localeStats_;
 }
 
 function supportedLocales(): string[] {
 	if (!supportedLocales_) supportedLocales_ = require('./locales/index.js').locales;
 
-	// In some cases, require('./locales/index.js').locales/stats can return
-	// null (e.g. when we're in a bundled file and locales aren't loaded yet).
-	const supportedLocales = supportedLocales_ ?? {};
-
 	const output = [];
-	for (const n in supportedLocales) {
-		if (!supportedLocales.hasOwnProperty(n)) continue;
+	for (const n in supportedLocales_) {
+		if (!supportedLocales_.hasOwnProperty(n)) continue;
 		output.push(n);
 	}
 	return output;
