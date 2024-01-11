@@ -2,7 +2,6 @@ import { ModelType } from '../../BaseModel';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
-import getRestoreFolder from './getRestoreFolder';
 import restoreItems from './restoreItems';
 
 describe('restoreItems', () => {
@@ -65,9 +64,7 @@ describe('restoreItems', () => {
 		await restoreItems(ModelType.Note, [await Note.load(note.id)]);
 
 		const noteReloaded = await Note.load(note.id);
-		const restoreFolder = await getRestoreFolder();
-		expect(noteReloaded.parent_id).not.toBe(folder.id);
-		expect(noteReloaded.parent_id).toBe(restoreFolder.id);
+		expect(noteReloaded.parent_id).toBe('');
 	});
 
 	it('should restore a folder, even if the parent folder no longer exists', async () => {

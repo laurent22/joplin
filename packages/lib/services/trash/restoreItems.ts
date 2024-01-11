@@ -3,12 +3,9 @@ import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import { FolderEntity, NoteEntity } from '../database/types';
 import { checkObjectHasProperties } from '@joplin/utils/object';
-import getRestoreFolder from './getRestoreFolder';
 
 const restoreItems = async (itemType: ModelType, items: NoteEntity[] | FolderEntity[]) => {
 	if (!items.length) return;
-
-	let restoreFolder: FolderEntity = null;
 
 	for (const item of items) {
 		checkObjectHasProperties(item, ['id', 'parent_id']);
@@ -19,12 +16,7 @@ const restoreItems = async (itemType: ModelType, items: NoteEntity[] | FolderEnt
 
 		const parentItem = await Folder.load(item.parent_id, { fields: ['id', 'deleted_time'] });
 		if (!parentItem || parentItem.deleted_time) {
-			if (itemType === ModelType.Note) {
-				if (!restoreFolder) restoreFolder = await getRestoreFolder();
-				itemParentId = restoreFolder.id;
-			} else {
-				itemParentId = '';
-			}
+			itemParentId = '';
 		}
 
 		await ModelClass.save({
