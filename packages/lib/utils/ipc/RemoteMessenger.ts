@@ -102,7 +102,11 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 				// Map all properties to functions that invoke remote
 				// methods.
 				get: (_target, property: string): any => {
-					return makeApiFor([...methodPath, property]);
+					if (property === '___is_joplin_wrapper___') {
+						return true;
+					} else {
+						return makeApiFor([...methodPath, property]);
+					}
 				},
 				apply: (_target, _thisArg, argumentsList: SerializableDataAndCallbacks[]) => {
 					return this.invokeRemoteMethod(methodPath, argumentsList);
@@ -152,12 +156,22 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 		});
 	}
 
-	private canRemoteAccessProperty(_parentObject: any, methodName: string) {
+	private canRemoteAccessProperty(parentObject: any, methodName: string) {
 		// TODO: There may be a better way to do this -- this currently assumes that
 		//       **only** the following property names should be avoided.
 		// The goal here is primarially to prevent remote from accessing the Function
 		// constructor (which can lead to XSS).
-		return !['constructor', 'prototype', '__proto__'].includes(methodName);
+		const isSafeMethodName = !['constructor', 'prototype', '__proto__'].includes(methodName);
+		if (!isSafeMethodName) {
+			return false;
+		}
+
+		// Function.contructor can be used to eval code. Avoid it.
+		if (parentObject[methodName] === Function.constructor) {
+			return false;
+		}
+
+		return true;
 	}
 
 	// Calls a local method and sends the result to the remote connection.
