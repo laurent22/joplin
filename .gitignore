@@ -226,7 +226,6 @@ packages/app-desktop/gui/Navigator.js
 packages/app-desktop/gui/NoteContentPropertiesDialog.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/index.js
-packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/setupVim.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/types.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useCursorUtils.test.js
@@ -553,6 +552,8 @@ packages/editor/CodeMirror/configFromSettings.js
 packages/editor/CodeMirror/createEditor.test.js
 packages/editor/CodeMirror/createEditor.js
 packages/editor/CodeMirror/editorCommands/editorCommands.js
+packages/editor/CodeMirror/editorCommands/insertLineAfter.test.js
+packages/editor/CodeMirror/editorCommands/insertLineAfter.js
 packages/editor/CodeMirror/editorCommands/supportsCommand.js
 packages/editor/CodeMirror/editorCommands/swapLine.js
 packages/editor/CodeMirror/getScrollFraction.js
@@ -577,6 +578,7 @@ packages/editor/CodeMirror/testUtil/forceFullParse.js
 packages/editor/CodeMirror/testUtil/loadLanguages.js
 packages/editor/CodeMirror/theme.js
 packages/editor/CodeMirror/util/isInSyntaxNode.js
+packages/editor/CodeMirror/util/setupVim.js
 packages/editor/SelectionFormatting.js
 packages/editor/events.js
 packages/editor/types.js
