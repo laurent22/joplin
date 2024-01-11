@@ -177,6 +177,8 @@ class FileApiDriverAmazonS3 {
 	metadataToStats_(mds) {
 		// aws-sdk-js-v3 can rerturn undefined instead of an empty array when there is
 		// no metadata in some cases.
+		//
+		// Thus, we handle the !mds case.
 		if (!mds) return [];
 
 		const output = [];
@@ -216,7 +218,6 @@ class FileApiDriverAmazonS3 {
 
 		let response = await this.s3ListObjects(prefixPath);
 
-		// In aws-sdk-js-v3 if there are no contents, response.Contents is undefined.
 		let output = this.metadataToStats_(response.Contents, prefixPath);
 
 		while (response.IsTruncated) {
