@@ -90,23 +90,30 @@ export const generateLoginWithUniqueLoginCode = async (loginUrl: string, uniquel
 	return `${loginUrl}?${searchParams.toString()}`;
 };
 
-let isWaitingResponse = false;
 
+// We have isWaitingResponse inside the function to avoid any state from lingering
+// after an error occurs. E.g.: if the function would throw an error while isWaitingResponse
+// was set to true the next time we call the function the value would still be true.
+// The closure function prevents that.
 export const checkIfLoginWasSuccessful = async (applicationsUrl: string, ulc: string) => {
-	if (isWaitingResponse) return undefined;
-	isWaitingResponse = true;
+	let isWaitingResponse = false;
+	const performLoginRequest = async () => {
+		if (isWaitingResponse) return undefined;
+		isWaitingResponse = true;
 
-	const response = await fetch(`${applicationsUrl}?unique_login_code=${ulc}`);
+		const response = await fetch(`${applicationsUrl}?unique_login_code=${ulc}`);
+		const jsonBody = await response.json();
 
-	if (response.ok) {
-		const jsonResponse = await response.json();
-		Setting.setValue('sync.10.username', jsonResponse.id);
-		Setting.setValue('sync.10.password', jsonResponse.password);
+		if (!response.ok || jsonBody.status !== 'finished') {
+			isWaitingResponse = false;
+			logger.warn('Server could not retrieve application credential', jsonBody);
+			return undefined;
+		}
+
+		Setting.setValue('sync.10.username', jsonBody.id);
+		Setting.setValue('sync.10.password', jsonBody.password);
 		return { success: true };
-	}
+	};
 
-	isWaitingResponse = false;
-	const jsonBody = await response.json();
-	logger.warn('Server could not retrieve application credential', jsonBody);
-	return undefined;
+	return performLoginRequest();
 };
