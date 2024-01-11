@@ -46,25 +46,26 @@ export default class Folder extends BaseItem {
 		return field in fieldsToLabels ? fieldsToLabels[field] : field;
 	}
 
-	public static noteIds(parentId: string, options: any = null) {
-		options = { includeConflicts: false, ...options };
+	public static async notes(parentId: string, options: LoadOptions = null) {
+		options = {
+			includeConflicts: false,
+			...options,
+		};
 
 		const where = ['parent_id = ?'];
 		if (!options.includeConflicts) {
 			where.push('is_conflict = 0');
 		}
 
-		return this.db()
-			.selectAll(`SELECT id FROM notes WHERE ${where.join(' AND ')}`, [parentId])
-		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-			.then((rows: any[]) => {
-				const output = [];
-				for (let i = 0; i < rows.length; i++) {
-					const row = rows[i];
-					output.push(row.id);
-				}
-				return output;
-			});
+		return this.modelSelectAll(`SELECT ${this.selectFields(options)} FROM notes WHERE ${where.join(' AND ')}`, [parentId]);
+	}
+
+	public static async noteIds(parentId: string, options: LoadOptions = null) {
+		const notes = await this.notes(parentId, {
+			fields: ['id'],
+			...options,
+		});
+		return notes.map(n => n.id);
 	}
 
 	public static async subFolderIds(parentId: string) {

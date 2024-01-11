@@ -1,13 +1,16 @@
+import { ModelType } from '../../BaseModel';
+import Folder from '../../models/Folder';
+import Note from '../../models/Note';
 import { FolderEntity, NoteEntity } from '../database/types';
 import { checkObjectHasProperties } from '@joplin/utils/object';
 
-export default async (items: NoteEntity[] | FolderEntity[], ModelClass: any) => {
+const restoreItems = async (itemType: ModelType, items: NoteEntity[] | FolderEntity[]) => {
 	if (!items.length) return;
 
 	for (const item of items) {
 		checkObjectHasProperties(item, ['id', 'parent_id']);
 
-		// Note updated when deleting item, then restoring from trash
+		const ModelClass = itemType === ModelType.Note ? Note : Folder;
 
 		await ModelClass.save({
 			id: item.id,
@@ -17,5 +20,17 @@ export default async (items: NoteEntity[] | FolderEntity[], ModelClass: any) => 
 		}, {
 			autoTimestamp: false,
 		});
+
+		if (itemType === ModelType.Folder) {
+			const childrenFolderIds = await Folder.childrenIds(item.id);
+			const childrenFolders: FolderEntity[] = await Folder.byIds(childrenFolderIds, { fields: ['id', 'parent_id', 'deleted_time'] });
+			const deletedChildrenFolders = childrenFolders.filter(f => !!f.deleted_time);
+			await restoreItems(ModelType.Folder, deletedChildrenFolders);
+
+			const notes = await Folder.notes(item.id, { fields: ['id', 'parent_id'] });
+			await restoreItems(ModelType.Note, notes);
+		}
 	}
 };
+
+export default restoreItems;

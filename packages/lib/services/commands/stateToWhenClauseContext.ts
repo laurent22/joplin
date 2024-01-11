@@ -31,6 +31,7 @@ export interface WhenClauseContext {
 	folderIsShareRootAndOwnedByUser: boolean;
 	folderIsShared: boolean;
 	folderIsShareRoot: boolean;
+	folderIsDeleted: boolean;
 	joplinServerConnected: boolean;
 	joplinCloudAccountType: number;
 	hasMultiProfiles: boolean;
@@ -91,6 +92,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		folderIsShareRootAndNotOwnedByUser: commandFolder ? isRootSharedFolder(commandFolder) && !isSharedFolderOwner(state, commandFolder.id) : false,
 		folderIsShareRootAndOwnedByUser: commandFolder ? isRootSharedFolder(commandFolder) && isSharedFolderOwner(state, commandFolder.id) : false,
 		folderIsShared: commandFolder ? !!commandFolder.share_id : false,
+		folderIsDeleted: commandFolder ? !!commandFolder.deleted_time : false,
 
 		joplinServerConnected: [9, 10].includes(settings['sync.target']),
 		joplinCloudAccountType: settings['sync.target'] === 10 ? settings['sync.10.accountType'] : 0,

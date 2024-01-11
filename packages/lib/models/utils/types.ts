@@ -29,6 +29,7 @@ export interface LoadOptions {
 		caseInsensitive?: boolean;
 	}[];
 	limit?: number;
+	includeConflicts?: boolean;
 }
 
 export interface FolderLoadOptions extends LoadOptions {
