@@ -10,7 +10,7 @@ import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigSc
 import { reg } from '@joplin/lib/registry';
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
-const pathUtils = require('@joplin/lib/path-utils');
+import * as pathUtils from '@joplin/lib/path-utils';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import * as shared from '@joplin/lib/components/shared/config/config-shared.js';
 import ClipperConfigScreen from '../ClipperConfigScreen';

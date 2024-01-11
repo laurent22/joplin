@@ -1,6 +1,6 @@
 import InMemoryCache from './InMemoryCache';
 import noteStyle from './noteStyle';
-import { fileExtension } from './pathUtils';
+import { fileExtension } from '@joplin/utils/path';
 import setupLinkify from './MdToHtml/setupLinkify';
 import validateLinks from './MdToHtml/validateLinks';
 import { Options as NoteStyleOptions } from './noteStyle';
