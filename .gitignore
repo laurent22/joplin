@@ -949,6 +949,7 @@ packages/lib/services/synchronizer/utils/handleSyncStartupOperation.js
 packages/lib/services/synchronizer/utils/resourceRemotePath.js
 packages/lib/services/synchronizer/utils/syncDeleteStep.js
 packages/lib/services/synchronizer/utils/types.js
+packages/lib/services/trash/getRestoreFolder.js
 packages/lib/services/trash/index.test.js
 packages/lib/services/trash/index.js
 packages/lib/services/trash/restoreItems.test.js
