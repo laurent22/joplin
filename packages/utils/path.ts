@@ -104,7 +104,7 @@ export function quotePath(path: string) {
 export function unquotePath(path: string) {
 	if (!path.length) return '';
 	if (path.length && path[0] === '"') {
-		path = path.substring(1, path.length - 2);
+		path = path.substring(1, path.length - 1);
 	}
 	path = path.replace(/\\"/, '"');
 	return path;
