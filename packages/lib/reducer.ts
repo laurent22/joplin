@@ -7,9 +7,10 @@ import BaseModel from './BaseModel';
 import { Store } from 'redux';
 import { ProfileConfig } from './services/profileConfig/types';
 import * as ArrayUtils from './ArrayUtils';
-import { FolderEntity } from './services/database/types';
+import { FolderEntity, NoteEntity } from './services/database/types';
 import { getListRendererIds } from './services/noteList/renderers';
 import { ProcessResultsRow } from './services/search/SearchEngine';
+import { getDisplayParentId } from './services/trash';
 const fastDeepEqual = require('fast-deep-equal');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
@@ -54,7 +55,7 @@ interface StateResourceFetcher {
 }
 
 export interface State {
-	notes: any[];
+	notes: NoteEntity[];
 	noteSelectionEnabled?: boolean;
 	notesSource: string;
 	notesParentType: string;
@@ -860,11 +861,18 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			// update it within the note array if it already exists.
 		case 'NOTE_UPDATE_ONE':
 			{
-				const modNote = action.note;
+				const modNote: NoteEntity = action.note;
 				const isViewingAllNotes = (draft.notesParentType === 'SmartFilter' && draft.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
 				const isViewingConflictFolder = draft.notesParentType === 'Folder' && draft.selectedFolderId === Folder.conflictFolderId();
+				const parentFolder = draft.folders.find(f => f.id === modNote.parent_id);
+				const displayParentFolderId = getDisplayParentId(modNote, parentFolder);
 
 				const noteIsInFolder = function(note: any, folderId: string) {
+					// Note was restored, and moved back to its original folder,
+					// so the note is not in the currently selected folder
+					if (action.changedFields) {
+						if (action.changedFields.includes('deleted_time') && !modNote.deleted_time) return false;
+					}
 					if (note.is_conflict && isViewingConflictFolder) return true;
 					if (!('parent_id' in modNote) || note.parent_id === folderId) return true;
 					return false;
@@ -883,7 +891,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 							newNotes.splice(i, 1);
 							noteFolderHasChanged = true;
 							movedNotePreviousIndex = i;
-						} else if (isViewingAllNotes || noteIsInFolder(modNote, n.parent_id)) {
+						} else if (isViewingAllNotes || noteIsInFolder(modNote, displayParentFolderId)) {
 							// Note is still in the same folder
 							// Merge the properties that have changed (in modNote) into
 							// the object we already have.
@@ -891,7 +899,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 							for (const n in modNote) {
 								if (!modNote.hasOwnProperty(n)) continue;
-								newNotes[i][n] = modNote[n];
+								(newNotes[i] as any)[n] = (modNote as any)[n];
 							}
 						} else {
 							// Note has moved to a different folder

@@ -200,6 +200,7 @@ packages/app-desktop/gui/MainScreen/commands/print.js
 packages/app-desktop/gui/MainScreen/commands/renameFolder.js
 packages/app-desktop/gui/MainScreen/commands/renameTag.js
 packages/app-desktop/gui/MainScreen/commands/resetLayout.js
+packages/app-desktop/gui/MainScreen/commands/restoreNote.js
 packages/app-desktop/gui/MainScreen/commands/revealResourceFile.js
 packages/app-desktop/gui/MainScreen/commands/search.js
 packages/app-desktop/gui/MainScreen/commands/setTags.js
@@ -949,6 +950,7 @@ packages/lib/services/synchronizer/utils/syncDeleteStep.js
 packages/lib/services/synchronizer/utils/types.js
 packages/lib/services/trash/index.test.js
 packages/lib/services/trash/index.js
+packages/lib/services/trash/restoreItems.js
 packages/lib/shim-init-node.js
 packages/lib/shim.js
 packages/lib/testing/syncTargetUtils.js

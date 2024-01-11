@@ -24,6 +24,7 @@ import * as print from './print';
 import * as renameFolder from './renameFolder';
 import * as renameTag from './renameTag';
 import * as resetLayout from './resetLayout';
+import * as restoreNote from './restoreNote';
 import * as revealResourceFile from './revealResourceFile';
 import * as search from './search';
 import * as setTags from './setTags';
@@ -70,6 +71,7 @@ const index: any[] = [
 	renameFolder,
 	renameTag,
 	resetLayout,
+	restoreNote,
 	revealResourceFile,
 	search,
 	setTags,

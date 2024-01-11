@@ -35,6 +35,7 @@ export interface WhenClauseContext {
 	joplinCloudAccountType: number;
 	hasMultiProfiles: boolean;
 	noteIsReadOnly: boolean;
+	allSelectedNotesAreDeleted: boolean;
 	folderIsReadOnly: boolean;
 }
 
@@ -48,6 +49,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 	const selectedNoteIds = state.selectedNoteIds || [];
 	const selectedNoteId = selectedNoteIds.length === 1 ? selectedNoteIds[0] : null;
 	const selectedNote: NoteEntity = selectedNoteId ? BaseModel.byId(state.notes, selectedNoteId) : null;
+	const selectedNotes = selectedNoteIds.map(id => state.notes.find(n => n.id === id));
 
 	const commandFolderId = options.commandFolderId || state.selectedFolderId;
 	const commandFolder: FolderEntity = commandFolderId ? BaseModel.byId(state.folders, commandFolderId) : null;
@@ -80,6 +82,9 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		noteTodoCompleted: selectedNote ? !!selectedNote.todo_completed : false,
 		noteIsMarkdown: selectedNote ? selectedNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN : false,
 		noteIsHtml: selectedNote ? selectedNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML : false,
+
+		// Selected notes properties
+		allSelectedNotesAreDeleted: !selectedNotes.find(n => !n.deleted_time),
 
 		// Current context folder
 		folderIsShareRoot: commandFolder ? isRootSharedFolder(commandFolder) : false,

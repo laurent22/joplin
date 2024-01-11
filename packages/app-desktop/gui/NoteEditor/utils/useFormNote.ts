@@ -13,6 +13,7 @@ import Note from '@joplin/lib/models/Note';
 import { reg } from '@joplin/lib/registry';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 
 export interface OnLoadEvent {
 	formNote: FormNote;
@@ -77,7 +78,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 	// a new refresh.
 	const [formNoteRefeshScheduled, setFormNoteRefreshScheduled] = useState<number>(0);
 
-	async function initNoteState(n: any) {
+	async function initNoteState(n: NoteEntity) {
 		let originalCss = '';
 
 		if (n.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
@@ -91,6 +92,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 			body: n.body,
 			is_todo: n.is_todo,
 			parent_id: n.parent_id,
+			deleted_time: n.deleted_time,
 			bodyWillChangeId: 0,
 			bodyChangeId: 0,
 			markup_language: n.markup_language,
