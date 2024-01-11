@@ -81,9 +81,9 @@ export interface MarkupToHtmlConverter {
 }
 
 export interface OptionsResourceModel {
-	readonly isResourceUrl: (url: string)=> boolean;
-	readonly urlToId: (url: string)=> string;
-	readonly filename: (resource: ResourceEntity, encryptedBlob?: boolean)=> string;
-	readonly isSupportedImageMimeType: (type: string)=> boolean;
-	readonly fullPath?: (resource: ResourceEntity, encryptedBlob?: boolean)=> string;
+	isResourceUrl: (url: string)=> boolean;
+	urlToId: (url: string)=> string;
+	filename: (resource: ResourceEntity, encryptedBlob?: boolean)=> string;
+	isSupportedImageMimeType: (type: string)=> boolean;
+	fullPath?: (resource: ResourceEntity, encryptedBlob?: boolean)=> string;
 }
