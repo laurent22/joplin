@@ -1,6 +1,7 @@
-import { DeleteOptions } from '../../BaseModel';
+import { DeleteOptions, ModelType } from '../../BaseModel';
 import { FolderEntity, NoteEntity } from '../../services/database/types';
 import { getTrashFolderId } from '../../services/trash';
+import restoreItems from '../../services/trash/restoreItems';
 import Folder from '../Folder';
 import Note from '../Note';
 
@@ -15,31 +16,25 @@ export default async (noteIds: string[], folderIds: string[], targetFolderId: st
 		defaultDeleteOptions.toTrashParentId = targetFolder.id;
 	}
 
-	const notes: NoteEntity[] = await Note.byIds(noteIds, { fields: ['id', 'deleted_time'] });
+	async function processList<T extends NoteEntity | FolderEntity>(itemType: ModelType, itemIds: string[]) {
+		const ModelClass = itemType === ModelType.Note ? Note : Folder;
+		const items: T[] = await ModelClass.byIds(itemIds, { fields: ['id', 'deleted_time', 'parent_id'] });
 
-	for (const note of notes) {
-		if (targetFolder.deleted_time || targetFolder.id === getTrashFolderId()) {
-			if (note.deleted_time && targetFolder.id === getTrashFolderId()) {
-				await Note.delete(note.id, { ...defaultDeleteOptions, toTrashParentId: '' });
+		for (const item of items) {
+			if (targetFolder.deleted_time || targetFolder.id === getTrashFolderId()) {
+				if (item.deleted_time && targetFolder.id === getTrashFolderId()) {
+					await ModelClass.delete(item.id, { ...defaultDeleteOptions, toTrashParentId: '' });
+				} else {
+					await ModelClass.delete(item.id, defaultDeleteOptions);
+				}
+			} else if (item.deleted_time && !targetFolder.deleted_time) {
+				await restoreItems(itemType, [item], targetFolder.id);
 			} else {
-				await Note.delete(note.id, defaultDeleteOptions);
+				await ModelClass.moveToFolder(item.id, targetFolderId);
 			}
-		} else {
-			await Note.moveToFolder(note.id, targetFolderId);
 		}
 	}
 
-	const folders: FolderEntity[] = await Folder.byIds(folderIds, { fields: ['id', 'deleted_time'] });
-
-	for (const folder of folders) {
-		if (targetFolder.deleted_time || targetFolder.id === getTrashFolderId()) {
-			if (folder.deleted_time && targetFolder.id === getTrashFolderId()) {
-				await Folder.delete(folder.id, { ...defaultDeleteOptions, toTrashParentId: '' });
-			} else {
-				await Folder.delete(folder.id, defaultDeleteOptions);
-			}
-		} else {
-			await Folder.moveToFolder(folder.id, targetFolderId);
-		}
-	}
+	await processList(ModelType.Note, noteIds);
+	await processList(ModelType.Folder, folderIds);
 };
