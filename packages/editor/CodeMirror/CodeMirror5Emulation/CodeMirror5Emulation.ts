@@ -356,13 +356,16 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		const commands: Record<string, CodeMirror5Command> = {
 			...BaseCodeMirror5Emulation.commands,
 
-			vimInsertListElement: (codeMirror: CodeMirror5Emulation) => insertLineAfter(codeMirror.cm6),
+			vimInsertListElement: (codeMirror: BaseCodeMirror5Emulation) => {
+				insertLineAfter(codeMirror.cm6);
+				Vim.handleKey(codeMirror, 'i', 'macro');
+			},
 		};
 
 		for (const commandName in editorCommands) {
 			const command = editorCommands[commandName as keyof typeof editorCommands];
 
-			commands[commandName] = (codeMirror: CodeMirror5Emulation) => command(codeMirror.cm6);
+			commands[commandName] = (codeMirror: BaseCodeMirror5Emulation) => command(codeMirror.cm6);
 		}
 
 		// as any: Required to properly extend the base class -- without this,
