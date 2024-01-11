@@ -54,12 +54,19 @@ const PluginBox: React.FC<Props> = props => {
 			{installButtonTitle()}
 		</Button>
 	);
+
+	const updateButtonTitle = () => {
+		if (props.updateState === UpdateState.Updating) return _('Updating...');
+		if (props.updateState === UpdateState.HasBeenUpdated) return _('Updated');
+		return _('Update');
+	};
+
 	const updateButton = (
 		<Button
 			onPress={() => props.onUpdate?.({ item })}
 			disabled={props.updateState !== UpdateState.CanUpdate}
 		>
-			{_('Update')}
+			{updateButtonTitle()}
 		</Button>
 	);
 	const deleteButton = (

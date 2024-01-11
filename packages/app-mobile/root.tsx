@@ -127,6 +127,7 @@ import { refreshFolders } from '@joplin/lib/folders-screen-utils';
 import CommandService from '@joplin/lib/services/CommandService';
 import stateToWhenClauseContext from '@joplin/lib/services/commands/stateToWhenClauseContext';
 import KeymapService from '@joplin/lib/services/KeymapService';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -738,6 +739,18 @@ async function initialize(dispatch: Function) {
 	// Collect revisions more frequently on mobile because it doesn't auto-save
 	// and it cannot collect anything when the app is not active.
 	RevisionService.instance().runInBackground(1000 * 30);
+
+	// ----------------------------------------------------------------------------
+	// Plugin service setup
+	// ----------------------------------------------------------------------------
+
+	// On startup, we can clear plugin update state -- plugins that were updated when the
+	// user last ran the app have been updated and will be reloaded.
+	const pluginService = PluginService.instance();
+	const pluginSettings = pluginService.unserializePluginSettings(Setting.value('plugins.states'));
+
+	const updatedSettings = pluginService.clearUpdateState(pluginSettings);
+	Setting.setValue('plugins.states', pluginService.serializePluginSettings(updatedSettings));
 
 	// ----------------------------------------------------------------------------
 	// Keep this below to test react-native-rsa-native
