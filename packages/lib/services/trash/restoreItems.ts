@@ -22,12 +22,16 @@ const restoreItems = async (itemType: ModelType, items: NoteEntity[] | FolderEnt
 		});
 
 		if (itemType === ModelType.Folder) {
-			const childrenFolderIds = await Folder.childrenIds(item.id);
+			const childrenFolderIds = await Folder.childrenIds(item.id, { includeDeleted: true });
 			const childrenFolders: FolderEntity[] = await Folder.byIds(childrenFolderIds, { fields: ['id', 'parent_id', 'deleted_time'] });
 			const deletedChildrenFolders = childrenFolders.filter(f => !!f.deleted_time);
 			await restoreItems(ModelType.Folder, deletedChildrenFolders);
 
-			const notes = await Folder.notes(item.id, { fields: ['id', 'parent_id'] });
+			const notes = await Folder.notes(item.id, {
+				fields: ['id', 'parent_id'],
+				includeDeleted: true,
+			});
+
 			await restoreItems(ModelType.Note, notes);
 		}
 	}

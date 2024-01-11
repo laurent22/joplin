@@ -57,6 +57,10 @@ export default class Folder extends BaseItem {
 			where.push('is_conflict = 0');
 		}
 
+		if (!options.includeDeleted) {
+			where.push('deleted_time = 0');
+		}
+
 		return this.modelSelectAll(`SELECT ${this.selectFields(options)} FROM notes WHERE ${where.join(' AND ')}`, [parentId]);
 	}
 
@@ -281,15 +285,23 @@ export default class Folder extends BaseItem {
 		return output;
 	}
 
-	public static async childrenIds(folderId: string) {
-		const folders = await this.db().selectAll('SELECT id FROM folders WHERE parent_id = ?', [folderId]);
+	public static async childrenIds(folderId: string, options: LoadOptions = null) {
+		options = { ...options };
+
+		const where = ['parent_id = ?'];
+
+		if (options.includeDeleted) {
+			where.push('deleted_time = 0');
+		}
+
+		const folders = await this.db().selectAll(`SELECT id FROM folders WHERE ${where.join(' AND ')}`, [folderId]);
 
 		let output: string[] = [];
 
 		for (let i = 0; i < folders.length; i++) {
 			const f = folders[i];
 			output.push(f.id);
-			const subChildrenIds = await this.childrenIds(f.id);
+			const subChildrenIds = await this.childrenIds(f.id, options);
 			output = output.concat(subChildrenIds);
 		}
 

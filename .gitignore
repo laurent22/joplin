@@ -951,6 +951,7 @@ packages/lib/services/synchronizer/utils/syncDeleteStep.js
 packages/lib/services/synchronizer/utils/types.js
 packages/lib/services/trash/index.test.js
 packages/lib/services/trash/index.js
+packages/lib/services/trash/restoreItems.test.js
 packages/lib/services/trash/restoreItems.js
 packages/lib/shim-init-node.js
 packages/lib/shim.js

@@ -30,6 +30,7 @@ export interface LoadOptions {
 	}[];
 	limit?: number;
 	includeConflicts?: boolean;
+	includeDeleted?: boolean;
 }
 
 export interface FolderLoadOptions extends LoadOptions {
