@@ -99,7 +99,7 @@ export default class HtmlToHtml implements MarkupRenderer {
 			...options,
 		};
 
-		const cacheKey = md5(escape(markup));
+		const cacheKey = md5(escape(JSON.stringify({ markup, options })));
 		let html = this.cache_.value(cacheKey);
 
 		if (!html) {
@@ -134,6 +134,7 @@ export default class HtmlToHtml implements MarkupRenderer {
 					ResourceModel: this.ResourceModel_,
 					postMessageSyntax: options.postMessageSyntax,
 					enableLongPress: options.enableLongPress,
+					...options.plugins?.link_open,
 				});
 
 				if (!r.html) return null;
