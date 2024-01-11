@@ -1173,7 +1173,7 @@ class Setting extends BaseModel {
 				section: 'plugins',
 				public: true,
 				advanced: true,
-				appTypes: [AppType.Desktop, AppType.Mobile],
+				appTypes: [AppType.Desktop], // Disabled on mobile for now
 				show: (_settings: any) => {
 					return (shim.isNode() || shim.mobilePlatform() !== 'ios');
 				},
