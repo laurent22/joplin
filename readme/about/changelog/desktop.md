@@ -1,5 +1,9 @@
 # Joplin Desktop Changelog
 
+## [v2.14.9](https://github.com/laurent22/joplin/releases/tag/v2.14.9) (Pre-release) - 2024-01-11T22:17:59Z
+
+- Fixed: Fix AWS S3 sync error ([#9696](https://github.com/laurent22/joplin/issues/9696)) ([#8891](https://github.com/laurent22/joplin/issues/8891) by Henry Heino)
+
 ## [v2.14.8](https://github.com/laurent22/joplin/releases/tag/v2.14.8) (Pre-release) - 2024-01-09T22:57:07Z
 
 - Improved: Allow importing a directory of ENEX files ([#9693](https://github.com/laurent22/joplin/issues/9693))
