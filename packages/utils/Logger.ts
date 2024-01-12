@@ -156,27 +156,13 @@ class Logger {
 	public objectToString(object: any) {
 		let output = '';
 
-		const stripAuthInfo = (text: string) => {
-			// Try to remove auth tokens if they haven't been removed already.
-			// This is a very rough check and thus tokens **should not** be removed here.
-			//
-			// See https://github.com/laurent22/joplin/issues/9705
-			const redactionMessage = 'REDACTED in Logger.ts -- redaction should not happen here. This is likely a bug.';
-			return text.replace(/(auth|password)(ori[zs]ation)?(["']?:\s?['"])[^"]+/ig, `$1$2$3[[${redactionMessage}]]`);
-		};
-
 		if (typeof object === 'object') {
 			if (object instanceof Error) {
 				object = object as any;
 				output = object.toString();
 				if (object.code) output += `\nCode: ${object.code}`;
-				if (object.headers) {
-					output += `\nHeader: ${stripAuthInfo(JSON.stringify(object.headers))}`;
-				}
-				if (object.request) {
-					const requestString = object.request.substring ? object.request.substring(0, 1024) : '';
-					output += `\nRequest: ${stripAuthInfo(requestString)}`;
-				}
+				if (object.headers) output += `\nHeader: ${JSON.stringify(object.headers)}`;
+				if (object.request) output += `\nRequest: ${object.request.substr ? object.request.substr(0, 1024) : ''}`;
 				if (object.stack) output += `\n${object.stack}`;
 			} else {
 				output = JSON.stringify(object);
