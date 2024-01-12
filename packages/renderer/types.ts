@@ -12,7 +12,7 @@ interface ResourceEntity {
 
 export interface FsDriver {
 	writeFile: (path: string, content: string, encoding: string)=> Promise<void>;
-	exists: (path: string)=> Promise<void>;
+	exists: (path: string)=> Promise<boolean>;
 	cacheCssToFile: (cssStrings: string[])=> Promise<any>;
 }
 

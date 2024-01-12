@@ -3,7 +3,7 @@ import HtmlToHtml from './HtmlToHtml';
 import htmlUtils from './htmlUtils';
 import { Options as NoteStyleOptions } from './noteStyle';
 import { AllHtmlEntities } from 'html-entities';
-import { MarkupRenderer, MarkupToHtmlConverter, OptionsResourceModel, RenderResult } from './types';
+import { FsDriver, MarkupRenderer, MarkupToHtmlConverter, OptionsResourceModel, RenderResult } from './types';
 import defaultResourceModel from './defaultResourceModel';
 const MarkdownIt = require('markdown-it');
 
@@ -21,7 +21,7 @@ export interface Options {
 	resourceBaseUrl?: string;
 	pluginOptions?: any; // Not sure if needed
 	tempDir?: string; // Not sure if needed
-	fsDriver?: any; // Not sure if needed
+	fsDriver?: FsDriver; // Not sure if needed
 }
 
 export default class MarkupToHtml implements MarkupToHtmlConverter {
