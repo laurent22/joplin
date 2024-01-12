@@ -99,7 +99,7 @@ class Time {
 
 	public formatMsToLocal(ms: number, format: string = null) {
 		if (format === null) format = this.dateTimeFormat();
-		return moment(ms).format(format);
+		return moment(ms).format(format) as string;
 	}
 
 	public formatLocalToMs(localDateTime: any, format: string = null) {

@@ -5,18 +5,20 @@ import JoplinError from '../../JoplinError';
 import { State as ShareState } from '../../services/share/reducer';
 import ItemChange from '../ItemChange';
 import Setting from '../Setting';
+import { checkObjectHasProperties } from '@joplin/utils/object';
 
 const logger = Logger.create('models/utils/readOnly');
 
 export interface ItemSlice {
 	id?: string;
 	share_id: string;
+	deleted_time: number;
 }
 
 // This function can be called to wrap any read-only-related code. It should be
 // fast and allows an early exit for cases that don't apply, for example if not
 // synchronising with Joplin Cloud or if not sharing any notebook.
-export const needsReadOnlyChecks = (itemType: ModelType, changeSource: number, shareState: ShareState, disableReadOnlyCheck = false) => {
+export const needsShareReadOnlyChecks = (itemType: ModelType, changeSource: number, shareState: ShareState, disableReadOnlyCheck = false) => {
 	if (disableReadOnlyCheck) return false;
 	if (Setting.value('sync.target') !== 10) return false;
 	if (changeSource === ItemChange.SOURCE_SYNC) return false;
@@ -35,7 +37,7 @@ export const checkIfItemsCanBeChanged = (itemType: ModelType, changeSource: numb
 };
 
 export const checkIfItemCanBeChanged = (itemType: ModelType, changeSource: number, item: ItemSlice, shareState: ShareState) => {
-	if (!needsReadOnlyChecks(itemType, changeSource, shareState)) return;
+	if (!needsShareReadOnlyChecks(itemType, changeSource, shareState)) return;
 	if (!item) return;
 
 	if (itemIsReadOnlySync(itemType, changeSource, item, Setting.value('sync.userId'), shareState)) {
@@ -44,7 +46,7 @@ export const checkIfItemCanBeChanged = (itemType: ModelType, changeSource: numbe
 };
 
 export const checkIfItemCanBeAddedToFolder = async (itemType: ModelType, Folder: any, changeSource: number, shareState: ShareState, parentId: string) => {
-	if (needsReadOnlyChecks(itemType, changeSource, shareState) && parentId) {
+	if (needsShareReadOnlyChecks(itemType, changeSource, shareState) && parentId) {
 		const parentFolder = await Folder.load(parentId, { fields: ['id', 'share_id'] });
 
 		if (!parentFolder) {
@@ -65,9 +67,12 @@ export const checkIfItemCanBeAddedToFolder = async (itemType: ModelType, Folder:
 };
 
 export const itemIsReadOnlySync = (itemType: ModelType, changeSource: number, item: ItemSlice, userId: string, shareState: ShareState): boolean => {
-	if (!needsReadOnlyChecks(itemType, changeSource, shareState)) return false;
+	checkObjectHasProperties(item, ['share_id', 'deleted_time']);
 
-	if (!('share_id' in item)) throw new Error('share_id property is missing');
+	// Item is in trash
+	if (item.deleted_time) return true;
+
+	if (!needsShareReadOnlyChecks(itemType, changeSource, shareState)) return false;
 
 	// Item is not shared
 	if (!item.share_id) return false;
@@ -84,8 +89,8 @@ export const itemIsReadOnlySync = (itemType: ModelType, changeSource: number, it
 };
 
 export const itemIsReadOnly = async (BaseItem: any, itemType: ModelType, changeSource: number, itemId: string, userId: string, shareState: ShareState): Promise<boolean> => {
-	if (!needsReadOnlyChecks(itemType, changeSource, shareState)) return false;
-	const item: ItemSlice = await BaseItem.loadItem(itemType, itemId, { fields: ['id', 'share_id'] });
+	// if (!needsShareReadOnlyChecks(itemType, changeSource, shareState)) return false;
+	const item: ItemSlice = await BaseItem.loadItem(itemType, itemId, { fields: ['id', 'share_id', 'deleted_time'] });
 	if (!item) throw new JoplinError(`No such item: ${itemType}: ${itemId}`, ErrorCode.NotFound);
 	return itemIsReadOnlySync(itemType, changeSource, item, userId, shareState);
 };

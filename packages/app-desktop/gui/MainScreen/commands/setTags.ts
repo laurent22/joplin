@@ -66,6 +66,6 @@ export const runtime = (comp: any): CommandRuntime => {
 				},
 			});
 		},
-		enabledCondition: 'someNotesSelected',
+		enabledCondition: 'someNotesSelected && !inTrash',
 	};
 };

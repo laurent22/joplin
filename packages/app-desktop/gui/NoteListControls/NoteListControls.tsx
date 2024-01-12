@@ -11,6 +11,7 @@ import { _ } from '@joplin/lib/locale';
 const { connect } = require('react-redux');
 import styled from 'styled-components';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
+import { getTrashFolderId } from '@joplin/lib/services/trash';
 
 enum BaseBreakpoint {
 	Sm = 75,
@@ -116,6 +117,8 @@ function NoteListControls(props: Props) {
 
 	// Initialize language-specific breakpoints
 	useEffect(() => {
+		if (!props.showNewNoteButtons) return;
+
 		// Use the longest string to calculate the amount of extra width needed
 		const smAdditional = getTextWidth(_('note')) > getTextWidth(_('to-do')) ? getTextWidth(_('note')) : getTextWidth(_('to-do'));
 		const mdAdditional = getTextWidth(_('New note')) > getTextWidth(_('New to-do')) ? getTextWidth(_('New note')) : getTextWidth(_('New to-do'));
@@ -126,7 +129,7 @@ function NoteListControls(props: Props) {
 		const Xl = BaseBreakpoint.Xl;
 
 		setDynamicBreakpoints({ Sm, Md, Lg, Xl });
-	}, []);
+	}, [props.showNewNoteButtons]);
 
 	const breakpoint = useMemo(() => {
 		// Find largest breakpoint that width is less than
@@ -304,8 +307,7 @@ const mapStateToProps = (state: AppState) => {
 	const whenClauseContext = stateToWhenClauseContext(state);
 
 	return {
-		// TODO: showNewNoteButtons and the logic associated is not needed anymore.
-		showNewNoteButtons: true,
+		showNewNoteButtons: state.selectedFolderId !== getTrashFolderId(),
 		newNoteButtonEnabled: CommandService.instance().isEnabled('newNote', whenClauseContext),
 		newTodoButtonEnabled: CommandService.instance().isEnabled('newTodo', whenClauseContext),
 		sortOrderButtonsVisible: state.settings['notes.sortOrder.buttonsVisible'],

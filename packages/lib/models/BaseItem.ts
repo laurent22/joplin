@@ -13,7 +13,7 @@ import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 import JoplinError from '../JoplinError';
 import { LoadOptions, SaveOptions } from './utils/types';
 import { State as ShareState } from '../services/share/reducer';
-import { checkIfItemCanBeAddedToFolder, checkIfItemCanBeChanged, checkIfItemsCanBeChanged, needsReadOnlyChecks } from './utils/readOnly';
+import { checkIfItemCanBeAddedToFolder, checkIfItemCanBeChanged, checkIfItemsCanBeChanged, needsShareReadOnlyChecks } from './utils/readOnly';
 
 const { sprintf } = require('sprintf-js');
 const moment = require('moment');
@@ -293,7 +293,7 @@ export default class BaseItem extends BaseModel {
 			});
 		}
 
-		if (needsReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache, options.disableReadOnlyCheck)) {
+		if (needsShareReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache, options.disableReadOnlyCheck)) {
 			const previousItems = await this.loadItemsByTypeAndIds(this.modelType(), ids, { fields: ['share_id', 'id'] });
 			checkIfItemsCanBeChanged(this.modelType(), options.changeSource, previousItems, this.syncShareCache);
 		}
@@ -921,7 +921,7 @@ export default class BaseItem extends BaseModel {
 
 		const isNew = this.isNew(o, options);
 
-		if (needsReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache)) {
+		if (needsShareReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache)) {
 			if (!isNew) {
 				const previousItem = await this.loadItemByTypeAndId(this.modelType(), o.id, { fields: ['id', 'share_id'] });
 				checkIfItemCanBeChanged(this.modelType(), options.changeSource, previousItem, this.syncShareCache);

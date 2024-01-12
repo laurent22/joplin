@@ -755,6 +755,7 @@ export default class Note extends BaseItem {
 		if (isNew && !o.source) o.source = Setting.value('appName');
 		if (isNew && !o.source_application) o.source_application = Setting.value('appId');
 		if (isNew && !('order' in o)) o.order = Date.now();
+		if (isNew && !('deleted_time' in o)) o.deleted_time = 0;
 
 		const changeSource = options && options.changeSource ? options.changeSource : null;
 
