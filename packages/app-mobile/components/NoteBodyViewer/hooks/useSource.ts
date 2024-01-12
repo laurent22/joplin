@@ -5,7 +5,7 @@ const { themeStyle } = require('../../global-style.js');
 import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 import useEditPopup from './useEditPopup';
 import Logger from '@joplin/utils/Logger';
-const { assetsToHeaders } = require('@joplin/renderer');
+import { assetsToHeaders } from '@joplin/renderer';
 
 const logger = Logger.create('NoteBodyViewer/useSource');
 
