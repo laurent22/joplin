@@ -228,6 +228,34 @@ export default class OneDriveApi {
 		}
 	}
 
+	// Takes an object in the form
+	//   { headers: { Authorization: "token here" } }
+	// or
+	//   { Authorization: "token here" }
+	// Intended to be used for before logging objects that could potentially have an
+	// Authorization token.
+	public authorizationTokenRemoved(data: any, depth = 0) {
+		const newData: any = {};
+
+		if (!data || typeof data !== 'object') {
+			return data;
+		}
+
+		if (depth > 5) {
+			return '[[depth-exceeded]]';
+		}
+
+		for (const key in data) {
+			if (key === 'Authorization') {
+				newData[key] = '[[DELETED]]';
+			} else {
+				newData[key] = this.authorizationTokenRemoved(data[key], depth + 1);
+			}
+		}
+
+		return newData;
+	}
+
 	public async exec(method: string, path: string, query: any = null, data: any = null, options: any = null) {
 		if (!path) throw new Error('Path is required');
 
@@ -363,18 +391,13 @@ export default class OneDriveApi {
 					// Deleting a non-existing item is ok - noop
 					return;
 				} else {
-					const authInformationRemoved = (data: any) => {
-						if (data.headers) {
-							data = { ...data, headers: authInformationRemoved(data.headers) };
-						}
-
-						if (data.Authorization) {
-							return { ...data, Authorization: '[[DELETED]]' };
-						}
-						return data;
-					};
-
-					error.request = `${method} ${url} ${JSON.stringify(query)} ${JSON.stringify(authInformationRemoved(data))} ${JSON.stringify(options)}`;
+					error.request = [
+						method,
+						url,
+						JSON.stringify(query),
+						JSON.stringify(this.authorizationTokenRemoved(data)),
+						JSON.stringify(this.authorizationTokenRemoved(options)),
+					].join(' ');
 					error.headers = await response.headers;
 					throw error;
 				}
