@@ -1,4 +1,3 @@
-import { resolve as nodeResolve } from 'path';
 import FsDriverBase, { Stat } from './fs-driver-base';
 import time from './time';
 const md5File = require('md5-file');
@@ -186,18 +185,8 @@ export default class FsDriverNode extends FsDriverBase {
 		throw new Error(`Unsupported encoding: ${encoding}`);
 	}
 
-	public resolve(path: string) {
-		return require('path').resolve(path);
-	}
-
-	// Resolves the provided relative path to an absolute path within baseDir. The function
-	// also checks that the absolute path is within baseDir, to avoid security issues.
-	// It is expected that baseDir is a safe path (not user-provided).
-	public resolveRelativePathWithinDir(baseDir: string, relativePath: string) {
-		const resolvedBaseDir = nodeResolve(baseDir);
-		const resolvedPath = nodeResolve(baseDir, relativePath);
-		if (resolvedPath.indexOf(resolvedBaseDir) !== 0) throw new Error(`Resolved path for relative path "${relativePath}" is not within base directory "${baseDir}" (Was resolved to ${resolvedPath})`);
-		return resolvedPath;
+	public resolve(...paths: string[]) {
+		return require('path').resolve(...paths);
 	}
 
 	public async md5File(path: string): Promise<string> {

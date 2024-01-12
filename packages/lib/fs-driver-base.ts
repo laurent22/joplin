@@ -94,8 +94,14 @@ export default class FsDriverBase {
 		throw new Error('Not implemented: resolve');
 	}
 
-	public resolveRelativePathWithinDir(_baseDir: string, relativePath: string): string {
-		throw new Error(`Not implemented: resolveRelativePathWithinDir(): ${relativePath}`);
+	// Resolves the provided relative path to an absolute path within baseDir. The function
+	// also checks that the absolute path is within baseDir, to avoid security issues.
+	// It is expected that baseDir is a safe path (not user-provided).
+	public resolveRelativePathWithinDir(baseDir: string, relativePath: string) {
+		const resolvedBaseDir = this.resolve(baseDir);
+		const resolvedPath = this.resolve(baseDir, relativePath);
+		if (resolvedPath.indexOf(resolvedBaseDir) !== 0) throw new Error(`Resolved path for relative path "${relativePath}" is not within base directory "${baseDir}" (Was resolved to ${resolvedPath})`);
+		return resolvedPath;
 	}
 
 	public getExternalDirectoryPath(): Promise<string | undefined> {

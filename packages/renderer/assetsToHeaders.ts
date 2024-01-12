@@ -6,7 +6,7 @@ interface Options {
 
 // Utility function to convert the plugin assets to a list of LINK or SCRIPT tags
 // that can be included in the HEAD tag.
-const assetsToHeaders = (pluginAssets: RenderResultPluginAsset[], options: Options|null = null) => {
+const assetsToHeaders = (pluginAssets: RenderResultPluginAsset[], options: Options|null = null): any => {
 	options = { asHtml: false, ...options };
 
 	const headers: Record<string, string> = {};

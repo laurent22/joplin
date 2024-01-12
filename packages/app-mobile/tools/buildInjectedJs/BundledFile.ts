@@ -57,6 +57,9 @@ export default class BundledFile {
 			},
 			resolve: {
 				extensions: ['.tsx', '.ts', '.js'],
+				fallback: {
+					events: require.resolve('events/'),
+				},
 			},
 			cache: {
 				type: 'filesystem',

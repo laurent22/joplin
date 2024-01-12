@@ -17,6 +17,7 @@ const injectedJs = {
 	webviewLib: require('@joplin/lib/rnInjectedJs/webviewLib'),
 	codeMirrorBundle: require('../lib/rnInjectedJs/CodeMirror.bundle'),
 	svgEditorBundle: require('../lib/rnInjectedJs/createJsDrawEditor.bundle'),
+	noteBodyViewerBundle: require('../lib/rnInjectedJs/noteBodyViewerBundle.bundle'),
 };
 
 function shimInit() {

@@ -302,7 +302,7 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	public resolve(...paths: string[]): string {
-		throw new Error(`Not implemented: resolve(): ${JSON.stringify(paths)}`);
+		return resolve(...paths);
 	}
 
 	public async md5File(path: string): Promise<string> {
