@@ -10,6 +10,12 @@ interface ResourceEntity {
 	file_extension?: string;
 }
 
+export interface FsDriver {
+	writeFile: (path: string, content: string, encoding: string)=> Promise<void>;
+	exists: (path: string)=> Promise<void>;
+	cacheCssToFile: (cssStrings: string[])=> Promise<any>;
+}
+
 export interface RenderOptions {
 	contentMaxWidth?: number;
 	bodyOnly?: boolean;

@@ -4,7 +4,7 @@ import * as utils from './utils';
 import InMemoryCache from './InMemoryCache';
 import noteStyle, { whiteBackgroundNoteStyle } from './noteStyle';
 import { Options as NoteStyleOptions } from './noteStyle';
-import { MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult } from './types';
+import { FsDriver, MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult } from './types';
 const md5 = require('md5');
 
 // Renderered notes can potentially be quite large (for example
@@ -15,15 +15,6 @@ const inMemoryCache = new InMemoryCache(10);
 export interface SplittedHtml {
 	html: string;
 	css: string;
-}
-
-interface FsDriver {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	writeFile: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	exists: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	cacheCssToFile: Function;
 }
 
 interface Options {
@@ -44,7 +35,7 @@ export default class HtmlToHtml implements MarkupRenderer {
 	private resourceBaseUrl_;
 	private ResourceModel_;
 	private cache_;
-	private fsDriver_: any;
+	private fsDriver_: FsDriver;
 
 	public constructor(options: Options = null) {
 		options = {

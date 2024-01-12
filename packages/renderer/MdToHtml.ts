@@ -4,7 +4,7 @@ import { fileExtension } from '@joplin/utils/path';
 import setupLinkify from './MdToHtml/setupLinkify';
 import validateLinks from './MdToHtml/validateLinks';
 import { Options as NoteStyleOptions } from './noteStyle';
-import { ItemIdToUrlHandler, MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult, RenderResultPluginAsset } from './types';
+import { FsDriver, ItemIdToUrlHandler, MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult, RenderResultPluginAsset } from './types';
 import hljs from './highlight';
 import * as MarkdownIt from 'markdown-it';
 
@@ -89,7 +89,7 @@ export interface Options {
 	ResourceModel?: OptionsResourceModel;
 	pluginOptions?: any;
 	tempDir?: string;
-	fsDriver?: any;
+	fsDriver?: FsDriver;
 	extraRendererRules?: ExtraRendererRule[];
 	customCss?: string;
 }
@@ -181,7 +181,7 @@ export default class MdToHtml implements MarkupRenderer {
 	private resourceBaseUrl_: string;
 	private ResourceModel_: OptionsResourceModel;
 	private contextCache_: any;
-	private fsDriver_: any;
+	private fsDriver_: FsDriver;
 
 	private cachedOutputs_: any = {};
 	private lastCodeHighlightCacheKey_: string = null;
