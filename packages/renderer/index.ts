@@ -5,7 +5,7 @@ import * as utils from './utils';
 import setupLinkify from './MdToHtml/setupLinkify';
 import validateLinks from './MdToHtml/validateLinks';
 import headerAnchor from './headerAnchor';
-const assetsToHeaders = require('./assetsToHeaders');
+import assetsToHeaders from './assetsToHeaders';
 
 export {
 	MarkupToHtml,
