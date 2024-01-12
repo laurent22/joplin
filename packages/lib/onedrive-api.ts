@@ -363,7 +363,18 @@ export default class OneDriveApi {
 					// Deleting a non-existing item is ok - noop
 					return;
 				} else {
-					error.request = `${method} ${url} ${JSON.stringify(query)} ${JSON.stringify(data)} ${JSON.stringify(options)}`;
+					const authInformationRemoved = (data: any) => {
+						if (data.headers) {
+							data = { ...data, headers: authInformationRemoved(data.headers) };
+						}
+
+						if (data.Authorization) {
+							return { ...data, Authorization: '[[DELETED]]' };
+						}
+						return data;
+					};
+
+					error.request = `${method} ${url} ${JSON.stringify(query)} ${JSON.stringify(authInformationRemoved(data))} ${JSON.stringify(options)}`;
 					error.headers = await response.headers;
 					throw error;
 				}
