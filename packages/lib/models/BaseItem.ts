@@ -338,6 +338,15 @@ export default class BaseItem extends BaseModel {
 		return r['total'];
 	}
 
+	public static async allItemsInTrash() {
+		const noteRows = await this.db().selectAll('SELECT id FROM notes WHERE deleted_time != 0');
+		const folderRows = await this.db().selectAll('SELECT id FROM folders WHERE deleted_time != 0');
+		return {
+			noteIds: noteRows.map(r => r.id),
+			folderIds: folderRows.map(r => r.id),
+		};
+	}
+
 	public static remoteDeletedItem(syncTarget: number, itemId: string) {
 		return this.db().exec('DELETE FROM deleted_items WHERE item_id = ? AND sync_target = ?', [itemId, syncTarget]);
 	}

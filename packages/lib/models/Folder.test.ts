@@ -340,4 +340,17 @@ describe('models/Folder', () => {
 		expect((await Note.load(note3.id)).deleted_time).toBe(0);
 	});
 
+	it('should delete and set the parent ID', async () => {
+		const folder1 = await Folder.save({});
+		const folder2 = await Folder.save({});
+
+		await Folder.delete(folder1.id, { toTrash: true });
+		await Folder.delete(folder2.id, { toTrash: true, toTrashParentId: folder1.id });
+
+		expect((await Folder.load(folder2.id)).parent_id).toBe(folder1.id);
+
+		// But it should not allow moving a folder to itself
+		await expectThrow(async () => Folder.delete(folder2.id, { toTrash: true, toTrashParentId: folder2.id }));
+	});
+
 });

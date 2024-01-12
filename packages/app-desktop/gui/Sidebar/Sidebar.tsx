@@ -285,7 +285,7 @@ const SidebarComponent = (props: Props) => {
 
 	const itemContextMenu = useCallback(async (event: any) => {
 		const itemId = event.currentTarget.getAttribute('data-id');
-		if (itemId === Folder.conflictFolderId() || itemId === getTrashFolderId()) return;
+		if (itemId === Folder.conflictFolderId()) return;
 
 		const itemType = Number(event.currentTarget.getAttribute('data-type'));
 		if (!itemId || !itemType) throw new Error('No data on element');
@@ -303,6 +303,14 @@ const SidebarComponent = (props: Props) => {
 		}
 
 		const menu = new Menu();
+
+		if (itemId === getTrashFolderId()) {
+			menu.append(
+				new MenuItem(menuUtils.commandToStatefulMenuItem('emptyTrash')),
+			);
+			menu.popup({ window: bridge().window() });
+			return;
+		}
 
 		let item = null;
 		if (itemType === BaseModel.TYPE_FOLDER) {

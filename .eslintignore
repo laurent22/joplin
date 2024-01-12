@@ -142,6 +142,7 @@ packages/app-desktop/bridge.js
 packages/app-desktop/checkForUpdates.js
 packages/app-desktop/commands/copyDevCommand.js
 packages/app-desktop/commands/editProfileConfig.js
+packages/app-desktop/commands/emptyTrash.js
 packages/app-desktop/commands/exportFolders.js
 packages/app-desktop/commands/exportNotes.js
 packages/app-desktop/commands/focusElement.js
@@ -971,6 +972,8 @@ packages/lib/services/synchronizer/utils/handleSyncStartupOperation.js
 packages/lib/services/synchronizer/utils/resourceRemotePath.js
 packages/lib/services/synchronizer/utils/syncDeleteStep.js
 packages/lib/services/synchronizer/utils/types.js
+packages/lib/services/trash/emptyTrash.test.js
+packages/lib/services/trash/emptyTrash.js
 packages/lib/services/trash/index.test.js
 packages/lib/services/trash/index.js
 packages/lib/services/trash/restoreItems.test.js

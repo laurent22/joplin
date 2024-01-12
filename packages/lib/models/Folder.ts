@@ -133,6 +133,7 @@ export default class Folder extends BaseItem {
 		if (toTrash) {
 			const newFolder: FolderEntity = { id: folderId, deleted_time: Date.now() };
 			if ('toTrashParentId' in options) newFolder.parent_id = options.toTrashParentId;
+			if (options.toTrashParentId === newFolder.id) throw new Error('Parent ID cannot be the same as ID');
 			await this.save(newFolder);
 		} else {
 			await super.delete(folderId, options);

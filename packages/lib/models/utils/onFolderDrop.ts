@@ -21,6 +21,8 @@ export default async (noteIds: string[], folderIds: string[], targetFolderId: st
 		const items: T[] = await ModelClass.byIds(itemIds, { fields: ['id', 'deleted_time', 'parent_id'] });
 
 		for (const item of items) {
+			if (item.id === targetFolder.id) continue;
+
 			if (targetFolder.deleted_time || targetFolder.id === getTrashFolderId()) {
 				if (item.deleted_time && targetFolder.id === getTrashFolderId()) {
 					await ModelClass.delete(item.id, { ...defaultDeleteOptions, toTrashParentId: '' });
