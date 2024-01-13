@@ -21,8 +21,8 @@ interface Props {
 
 const JoplinCloudScreenComponent = (props: Props) => {
 
-	const loginUrl = `${props.joplinCloudWebsite}/login`;
-	const applicationsUrl = `${props.joplinCloudApi}/api/applications`;
+	const loginUrl = (uniqueLoginCode: string) => `${props.joplinCloudWebsite}/applications/${uniqueLoginCode}/confirm`;
+	const applicationsUrl = (uniqueLoginCode: string) => `${props.joplinCloudApi}/api/applications/${uniqueLoginCode}`;
 
 	const [intervalIdentifier, setIntervalIdentifier] = useState(undefined);
 	const [state, dispatch] = useReducer(reducer, defaultState);
@@ -34,7 +34,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 
 		const interval = setInterval(async () => {
 			try {
-				const response = await checkIfLoginWasSuccessful(applicationsUrl, uniqueLoginCode);
+				const response = await checkIfLoginWasSuccessful(applicationsUrl(uniqueLoginCode));
 				if (response && response.success) {
 					dispatch({ type: 'COMPLETED' });
 					clearInterval(interval);
@@ -57,13 +57,13 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	};
 
 	const onAuthorizeClicked = async () => {
-		const url = await generateLoginWithUniqueLoginCode(loginUrl, uniqueLoginCode);
+		const url = await generateLoginWithUniqueLoginCode(loginUrl(uniqueLoginCode));
 		bridge().openExternal(url);
 		onButtonUsed();
 	};
 
 	const onCopyToClipboardClicked = async () => {
-		const url = await generateLoginWithUniqueLoginCode(loginUrl, uniqueLoginCode);
+		const url = await generateLoginWithUniqueLoginCode(loginUrl(uniqueLoginCode));
 		clipboard.writeText(url);
 		onButtonUsed();
 	};

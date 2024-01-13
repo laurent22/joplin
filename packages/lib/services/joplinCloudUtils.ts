@@ -76,10 +76,9 @@ export const getApplicationInformation = async () => {
 	}
 };
 
-export const generateLoginWithUniqueLoginCode = async (loginUrl: string, uniqueloginCode: string) => {
+export const generateLoginWithUniqueLoginCode = async (loginUrl: string) => {
 	const applicationInfo = await getApplicationInformation();
 	const searchParams = new URLSearchParams();
-	searchParams.append('unique_login_code', uniqueloginCode);
 	searchParams.append('platform', applicationInfo.platform.toString());
 	searchParams.append('type', applicationInfo.type.toString());
 	searchParams.append('version', shim.appVersion());
@@ -92,13 +91,13 @@ export const generateLoginWithUniqueLoginCode = async (loginUrl: string, uniquel
 // after an error occurs. E.g.: if the function would throw an error while isWaitingResponse
 // was set to true the next time we call the function the value would still be true.
 // The closure function prevents that.
-export const checkIfLoginWasSuccessful = async (applicationsUrl: string, ulc: string) => {
+export const checkIfLoginWasSuccessful = async (applicationsUrl: string) => {
 	let isWaitingResponse = false;
 	const performLoginRequest = async () => {
 		if (isWaitingResponse) return undefined;
 		isWaitingResponse = true;
 
-		const response = await fetch(`${applicationsUrl}?unique_login_code=${ulc}`);
+		const response = await fetch(applicationsUrl);
 		const jsonBody = await response.json();
 
 		if (!response.ok || jsonBody.status !== 'finished') {
