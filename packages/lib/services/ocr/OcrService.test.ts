@@ -75,7 +75,12 @@ describe('OcrService', () => {
 		expect(processedResource2.updated_time).toBeGreaterThan(resource2.updated_time);
 
 		await service.dispose();
-	});
+
+		// On CI these tests can randomly throw the error "Exceeded timeout of
+		// 90000 ms for a test.". So for now increase the timeout and if that's
+		// not sufficient it means the test is simply stuck, and we should use
+		// `jest.retryTimes(2)`
+	}, 60000 * 5);
 
 	it('should process PDF resources', async () => {
 		const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/dummy.pdf` });
