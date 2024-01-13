@@ -63,8 +63,6 @@ export default function(props: Props) {
 			const folder: FolderEntity = {
 				title: folderTitle,
 				icon: Folder.serializeIcon(folderIcon),
-				is_shared: 0,
-				share_id: '',
 			};
 
 			if (!isNew) folder.id = props.folderId;
