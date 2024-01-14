@@ -576,6 +576,7 @@ async function initialize(dispatch: Function) {
 			// Setting.setValue('sync.10.userContentPath', 'https://joplinusercontent.com');
 			Setting.setValue('sync.10.path', 'http://api.joplincloud.local:22300');
 			Setting.setValue('sync.10.userContentPath', 'http://joplinusercontent.local:22300');
+			Setting.setValue('sync.10.website', 'http://joplincloud.local:22300');
 
 			// Setting.setValue('sync.target', 10);
 			// Setting.setValue('sync.10.username', 'user1@example.com');

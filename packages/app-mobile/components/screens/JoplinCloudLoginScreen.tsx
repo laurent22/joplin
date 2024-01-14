@@ -5,17 +5,21 @@ const { connect } = require('react-redux');
 const { _ } = require('@joplin/lib/locale');
 const { themeStyle } = require('../global-style.js');
 import { AppState } from '../../utils/types';
-import { generateLoginWithUniqueLoginCode, reducer, intitialValues, checkIfLoginWasSuccessful } from '@joplin/lib/services/JoplinCloudLogin';
+import { generateLoginWithUniqueLoginCode, reducer, checkIfLoginWasSuccessful, defaultState } from '@joplin/lib/services/joplinCloudUtils';
 import { uuidgen } from '@joplin/lib/uuid';
 import { Button } from 'react-native-paper';
 import createRootStyle from '../../utils/createRootStyle';
 import ScreenHeader from '../ScreenHeader';
 import Clipboard from '@react-native-community/clipboard';
 const Icon = require('react-native-vector-icons/Ionicons').default;
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('JoplinCloudLoginScreen');
 
 interface Props {
 	themeId: number;
-	style: any;
+	joplinCloudWebsite: string;
+	joplinCloudApi: string;
 }
 const syncIconRotationValue = new Animated.Value(0);
 
@@ -41,7 +45,7 @@ const useStyle = (themeId: number) => {
 				backgroundColor: theme.backgroundColor,
 				flex: 1,
 			},
-			textStyle: {
+			text: {
 				color: theme.color,
 				fontSize: theme.fontSize,
 			},
@@ -51,7 +55,7 @@ const useStyle = (themeId: number) => {
 				paddingBottom: theme.fontSize * 1.2,
 				textAlign: 'center',
 			},
-			h2Style: {
+			bold: {
 				...theme.normalText,
 				fontSize: 18,
 				fontWeight: 'bold',
@@ -67,9 +71,13 @@ const useStyle = (themeId: number) => {
 
 const JoplinCloudScreenComponent = (props: Props) => {
 
-	const [uniqueLoginCode, setUniqueLoginCode] = React.useState(undefined);
+	const loginUrl = (uniqueLoginCode: string) => `${props.joplinCloudWebsite}/applications/${uniqueLoginCode}/confirm`;
+	const applicationsUrl = (uniqueLoginCode: string) => `${props.joplinCloudApi}/api/applications/${uniqueLoginCode}`;
+
 	const [intervalIdentifier, setIntervalIdentifier] = React.useState(undefined);
-	const [state, dispatch] = React.useReducer(reducer, intitialValues);
+	const [state, dispatch] = React.useReducer(reducer, defaultState);
+
+	const uniqueLoginCode = React.useMemo(() => uuidgen(), []);
 
 	const styles = useStyle(props.themeId);
 
@@ -77,39 +85,40 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		if (intervalIdentifier) return;
 
 		const interval = setInterval(async () => {
-			const response = await checkIfLoginWasSuccessful(uniqueLoginCode);
-			if (response && response.success) {
-				dispatch('COMPLETED');
+			try {
+				const response = await checkIfLoginWasSuccessful(applicationsUrl(uniqueLoginCode));
+				if (response && response.success) {
+					dispatch({ type: 'COMPLETED' });
+					clearInterval(interval);
+				}
+			} catch (error) {
+				logger.error(error);
+				dispatch({ type: 'ERROR', payload: error.message });
 				clearInterval(interval);
 			}
-		}, 5 * 1000);
+		}, 2 * 1000);
 
 		setIntervalIdentifier(interval);
 	};
 
 	const onButtonUsed = () => {
 		if (state.next === 'LINK_USED') {
-			dispatch('LINK_USED');
+			dispatch({ type: 'LINK_USED' });
 		}
 		periodicallyCheckForCredentials();
 	};
 
 	const onAuthoriseClicked = async () => {
-		const url = await generateLoginWithUniqueLoginCode(uniqueLoginCode);
+		const url = await generateLoginWithUniqueLoginCode(loginUrl(uniqueLoginCode));
 		await Linking.openURL(url);
 		onButtonUsed();
 	};
 
 	const onCopyToClipboardClicked = async () => {
-		const url = await generateLoginWithUniqueLoginCode(uniqueLoginCode);
+		const url = await generateLoginWithUniqueLoginCode(loginUrl(uniqueLoginCode));
 		Clipboard.setString(url);
 		onButtonUsed();
 	};
-
-	React.useEffect(() => {
-		const ulc = uuidgen();
-		setUniqueLoginCode(ulc);
-	}, []);
 
 	React.useEffect(() => {
 		return () => {
@@ -136,7 +145,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		<View style={styles.root}>
 			<ScreenHeader title={_('Login with Joplin Cloud')} />
 			<View style={styles.containerStyle}>
-				<Text style={styles.textStyle}>
+				<Text style={styles.text}>
 					{_('To allow Joplin to synchronise with Joplin Cloud, open this URL in your browser to authorise the application:')}
 				</Text>
 				<View style={styles.buttonsContainer}>
@@ -158,7 +167,11 @@ const JoplinCloudScreenComponent = (props: Props) => {
 					</Button>
 
 				</View>
-				<Text style={styles[state.style]}>{state.message}</Text>
+				<Text style={styles[state.className]}>{state.message()}
+					{state.active === 'ERROR' ? (
+						<Text style={styles[state.className]}>{state.errorMessage}</Text>
+					) : null}
+				</Text>
 				{state.active === 'LINK_USED' ? (
 					<Animated.View style={{ transform: [{ rotate: syncIconRotation }] }}>
 						<Icon name='sync' style={styles.loadingIcon}/>
@@ -172,6 +185,8 @@ const JoplinCloudScreenComponent = (props: Props) => {
 const JoplinCloudLoginScreen = connect((state: AppState) => {
 	return {
 		themeId: state.settings.theme,
+		joplinCloudWebsite: state.settings['sync.10.website'],
+		joplinCloudApi: state.settings['sync.10.path'],
 	};
 })(JoplinCloudScreenComponent);
 
