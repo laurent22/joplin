@@ -144,34 +144,24 @@ describe('markdownReformatter', () => {
 		expect(tabsToSpaces(state, '  \t  ')).toBe('      ');
 	});
 
-	it('should correctly renumber a list with multiple selections', async () => {
-		const firstListText = [
+	it('should correctly renumber a list with multiple selections in that list', async () => {
+		const listText = [
 			'1. This',
 			'\t2. is',
 			'\t3. a',
 			'4. test',
-			'',
-			'',
-		].join('\n');
-
-		const secondListText = [
-			'## List 2',
-			'',
-			'1. Test',
-			'\t2. 2',
 		].join('\n');
 
 		const editor = await createTestEditor(
-			`${firstListText}${secondListText}\n\n# End`,
-			EditorSelection.cursor(firstListText.length + secondListText.length),
+			`${listText}\n\n# End`,
+			EditorSelection.cursor(listText.length),
 			['OrderedList', 'ATXHeading1', 'ATXHeading2'],
 		);
 
-		// Include a selection twice in the same list -- previously,
+		// Include a selection twice in the same list
 		const initialSelection = EditorSelection.create([
 			EditorSelection.cursor('1. This\n2.'.length), // Middle of second line
 			EditorSelection.cursor('1. This\n2. is\n3'.length), // Beginning of third line
-			EditorSelection.cursor(firstListText.length + secondListText.length - 1), // End
 		]);
 
 		editor.dispatch({
@@ -185,11 +175,6 @@ describe('markdownReformatter', () => {
 			'\t1. is',
 			'\t2. a',
 			'2. test',
-			'',
-			'## List 2',
-			'',
-			'1. Test',
-			'\t1. 2',
 			'',
 			'# End',
 		].join('\n'));

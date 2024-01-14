@@ -72,7 +72,7 @@ const SyncTargetBox = styled.div`
 	background-color: ${props => props.theme.backgroundColor};
 	border: 1px solid ${props => props.theme.dividerColor};
 	border-radius: 8px;
-	padding: 0.8em 2.2em 2em 2.2em;
+	padding: 2em 2.2em 2em 2.2em;
 	margin-right: 1em;
 	max-width: 400px;
 	opacity: 1;
@@ -108,6 +108,14 @@ const SelectButton = styled(Button)`
     min-height: auto;
     max-height: fit-content;
     font-size: 1em;
+`;
+
+const SlowSyncWarning = styled.div`
+	margin-top: 1em;
+	opacity: 0.8;
+	font-family: ${props => props.theme.fontFamily};
+	color: ${props => props.theme.color};
+	font-size: 14px;
 `;
 
 const syncTargetNames: string[] = [
@@ -204,12 +212,18 @@ export default function(props: Props) {
 		const descriptionComp = <SyncTargetDescription height={height} ref={info.name === 'joplinCloud' ? joplinCloudDescriptionRef : null}>{info.description}</SyncTargetDescription>;
 		const featuresComp = renderFeatures(info.name);
 
+		const renderSlowSyncWarning = () => {
+			if (info.name === 'joplinCloud') return null;
+			return <SlowSyncWarning>{`⚠️ ${_('%s is not optimised for synchronising many small files so your initial synchronisation will be slow.', info.label)}`}</SlowSyncWarning>;
+		};
+
 		return (
 			<SyncTargetBox id={key} key={key}>
 				<SyncTargetTitle>{logo}{info.label}</SyncTargetTitle>
 				{descriptionComp}
 				{featuresComp}
 				{renderSelectArea(info)}
+				{renderSlowSyncWarning()}
 			</SyncTargetBox>
 		);
 	}

@@ -106,9 +106,19 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 
 				item.title = await Folder.findUniqueItemTitle(item.title, item.parent_id);
 			} else if (itemType === BaseModel.TYPE_RESOURCE) {
+				const sourceId = item.id;
 				if (!itemIdMap[item.id]) itemIdMap[item.id] = uuid.create();
 				item.id = itemIdMap[item.id];
 				createdResources[item.id] = item;
+
+				const sourceResourcePath = `${this.sourcePath_}/resources/${Resource.filename({ ...item, id: sourceId })}`;
+				const destPath = Resource.fullPath(item);
+
+				if (await shim.fsDriver().exists(sourceResourcePath)) {
+					await shim.fsDriver().copy(sourceResourcePath, destPath);
+				} else {
+					result.warnings.push(sprintf('Could not find resource file: %s', sourceResourcePath));
+				}
 			} else if (itemType === BaseModel.TYPE_TAG) {
 				const tag = await Tag.loadByTitle(item.title);
 				if (tag) {
@@ -147,24 +157,6 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 			noteTag.tag_id = newTagId;
 
 			await NoteTag.save(noteTag, { isNew: true });
-		}
-
-		if (await shim.fsDriver().isDirectory(`${this.sourcePath_}/resources`)) {
-			const resourceStats = await shim.fsDriver().readDirStats(`${this.sourcePath_}/resources`);
-
-			for (let i = 0; i < resourceStats.length; i++) {
-				const resourceFilePath = `${this.sourcePath_}/resources/${resourceStats[i].path}`;
-				const oldId = Resource.pathToId(resourceFilePath);
-				const newId = itemIdMap[oldId];
-				if (!newId) {
-					result.warnings.push(sprintf('Resource file is not referenced in any note and so was not imported: %s', oldId));
-					continue;
-				}
-
-				const resource = createdResources[newId];
-				const destPath = Resource.fullPath(resource);
-				await shim.fsDriver().copy(resourceFilePath, destPath);
-			}
 		}
 
 		return result;

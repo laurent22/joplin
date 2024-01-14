@@ -24,7 +24,7 @@ import { splitCommandString } from '@joplin/utils';
 import { reg } from './registry';
 import time from './time';
 import BaseSyncTarget from './BaseSyncTarget';
-const reduxSharedMiddleware = require('./components/shared/reduxSharedMiddleware');
+import reduxSharedMiddleware from './components/shared/reduxSharedMiddleware';
 const os = require('os');
 import dns = require('dns');
 import fs = require('fs-extra');
@@ -423,7 +423,7 @@ export default class BaseApplication {
 		let refreshNotesUseSelectedNoteId = false;
 		let refreshNotesHash = '';
 
-		await reduxSharedMiddleware(store, next, action);
+		await reduxSharedMiddleware(store, next, action, ((action: any) => { this.dispatch(action); }) as any);
 		const newState = store.getState() as State;
 
 		if (this.hasGui() && ['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {

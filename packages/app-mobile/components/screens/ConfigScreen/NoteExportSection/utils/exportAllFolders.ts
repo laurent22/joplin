@@ -1,6 +1,6 @@
 import Folder from '@joplin/lib/models/Folder';
 import InteropService from '@joplin/lib/services/interop/InteropService';
-import { ExportOptions, FileSystemItem, OnExportProgressCallback } from '@joplin/lib/services/interop/types';
+import { ExportModuleOutputFormat, ExportOptions, FileSystemItem, OnExportProgressCallback } from '@joplin/lib/services/interop/types';
 import shim from '@joplin/lib/shim';
 
 import { CachesDirectoryPath } from 'react-native-fs';
@@ -18,7 +18,7 @@ const exportFolders = async (path: string, onProgress: OnExportProgressCallback)
 	const exportOptions: ExportOptions = {
 		sourceFolderIds,
 		path,
-		format: 'jex',
+		format: ExportModuleOutputFormat.Jex,
 		target: FileSystemItem.File,
 		onProgress,
 	};

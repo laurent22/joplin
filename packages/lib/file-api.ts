@@ -33,6 +33,8 @@ export interface RemoteItem {
 	// value will always be ahead. However for synchronising we need to know the
 	// exact Joplin item updated_time value.
 	jop_updated_time?: number;
+
+	jopItem?: any;
 }
 
 export interface PaginatedList {
@@ -40,6 +42,14 @@ export interface PaginatedList {
 	hasMore: boolean;
 	context: any;
 }
+
+// Tells whether the delta call is going to include the items themselves or
+// just the metadata (which is the default). If the items are included it
+// means less http request and faster processing.
+export const getSupportsDeltaWithItems = (deltaResponse: PaginatedList) => {
+	if (!deltaResponse.items.length) return false;
+	return 'jopItem' in deltaResponse.items[0];
+};
 
 function requestCanBeRepeated(error: any) {
 	const errorCode = typeof error === 'object' && error.code ? error.code : null;
@@ -352,7 +362,7 @@ class FileApi {
 		return tryAndRepeat(() => this.driver_.clearRoot(this.baseDir()), this.requestRepeatCount());
 	}
 
-	public delta(path: string, options: any = null) {
+	public delta(path: string, options: any = null): Promise<PaginatedList> {
 		logger.debug(`delta ${this.fullPath(path)}`);
 		return tryAndRepeat(() => this.driver_.delta(this.fullPath(path), options), this.requestRepeatCount());
 	}

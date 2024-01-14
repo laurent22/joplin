@@ -62,6 +62,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -328,6 +331,9 @@
 	],
 	"Browse...": [
 		"Selaa..."
+	],
+	"Built in": [
+		""
 	],
 	"Bulleted List": [
 		"Luettelomerkitty luettelo"
@@ -1010,6 +1016,9 @@
 	],
 	"Enable note history": [
 		"Muistiinpanohistorian ottaminen käyttöön"
+	],
+	"Enable optical character recognition (OCR)": [
+		""
 	],
 	"Enable PDF viewer": [
 		"Ota käyttöön PDF katseluohjelma"
@@ -3118,6 +3127,9 @@
 	],
 	"When creating a new to-do:": [
 		"Kun luot uuden tehtävän:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""

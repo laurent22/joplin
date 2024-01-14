@@ -62,6 +62,9 @@
 	"%s = %s (%s)": [
 		""
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		""
 	],
@@ -336,6 +339,9 @@
 		""
 	],
 	"Browse...": [
+		""
+	],
+	"Built in": [
 		""
 	],
 	"Bulleted List": [
@@ -1063,6 +1069,9 @@
 		""
 	],
 	"Enable note history": [
+		""
+	],
+	"Enable optical character recognition (OCR)": [
 		""
 	],
 	"Enable PDF viewer": [
@@ -2384,10 +2393,16 @@
 	"Search for...": [
 		""
 	],
+	"Search hidden": [
+		""
+	],
 	"Search in all the notes": [
 		""
 	],
 	"Search in current note": [
+		""
+	],
+	"Search shown": [
 		""
 	],
 	"Search...": [
@@ -2796,6 +2811,10 @@
 		""
 	],
 	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
+		""
+	],
+	"The following attachment matches your search query:": [
+		"",
 		""
 	],
 	"The following attachments are being watched for changes:": [
@@ -3252,6 +3271,9 @@
 		""
 	],
 	"When creating a new to-do:": [
+		""
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
 	],
 	"Window unresponsive.": [

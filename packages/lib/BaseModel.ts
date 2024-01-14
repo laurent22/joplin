@@ -5,6 +5,7 @@ import uuid from './uuid';
 import time from './time';
 import JoplinDatabase, { TableField } from './JoplinDatabase';
 import { LoadOptions, SaveOptions } from './models/utils/types';
+import { SqlQuery } from './services/database/types';
 const Mutex = require('async-mutex').Mutex;
 
 // New code should make use of this enum
@@ -336,24 +337,44 @@ class BaseModel {
 		return this.modelSelectAll(query.sql, query.params);
 	}
 
-	public static modelSelectOne(sql: string, params: any[] = null) {
+	public static async modelSelectOne(sqlOrSqlQuery: string | SqlQuery, params: any[] = null) {
 		if (params === null) params = [];
-		return this.db()
-			.selectOne(sql, params)
-		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-			.then((model: any) => {
-				return this.filter(this.addModelMd(model));
-			});
+		let sql = '';
+
+		if (typeof sqlOrSqlQuery !== 'string') {
+			sql = sqlOrSqlQuery.sql;
+			params = sqlOrSqlQuery.params ? sqlOrSqlQuery.params : [];
+		} else {
+			sql = sqlOrSqlQuery;
+		}
+
+		try {
+			const model = await this.db().selectOne(sql, params);
+			return this.filter(this.addModelMd(model));
+		} catch (error) {
+			error.message = `On query ${JSON.stringify({ sql, params })}: ${error.message}`;
+			throw error;
+		}
 	}
 
-	public static modelSelectAll<T = any>(sql: string, params: any[] = null): Promise<T[]> {
+	public static async modelSelectAll<T = any>(sqlOrSqlQuery: string | SqlQuery, params: any[] = null): Promise<T[]> {
 		if (params === null) params = [];
-		return this.db()
-			.selectAll(sql, params)
-		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-			.then((models: any[]) => {
-				return this.filterArray(this.addModelMd(models)) as T[];
-			});
+		let sql = '';
+
+		if (typeof sqlOrSqlQuery !== 'string') {
+			sql = sqlOrSqlQuery.sql;
+			params = sqlOrSqlQuery.params ? sqlOrSqlQuery.params : [];
+		} else {
+			sql = sqlOrSqlQuery;
+		}
+
+		try {
+			const models = await this.db().selectAll(sql, params);
+			return this.filterArray(this.addModelMd(models)) as T[];
+		} catch (error) {
+			error.message = `On query ${JSON.stringify({ sql, params })}: ${error.message}`;
+			throw error;
+		}
 	}
 
 	protected static selectFields(options: LoadOptions): string {

@@ -62,6 +62,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -328,6 +331,9 @@
 	],
 	"Browse...": [
 		"Procházet..."
+	],
+	"Built in": [
+		""
 	],
 	"Bulleted List": [
 		"Seznam s odrážkami"
@@ -1011,6 +1017,9 @@
 	],
 	"Enable note history": [
 		"Povolit historii poznámky"
+	],
+	"Enable optical character recognition (OCR)": [
+		""
 	],
 	"Enable PDF viewer": [
 		"Povolit zobrazení PDF"
@@ -3121,6 +3130,9 @@
 	],
 	"When creating a new to-do:": [
 		"Při vytváření nového úkolu:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""

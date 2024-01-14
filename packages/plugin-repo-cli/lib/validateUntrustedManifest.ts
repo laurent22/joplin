@@ -13,14 +13,9 @@ const validateUntrustedManifest = (manifest: any, existingManifests: any) => {
 	validatePluginId(manifest.id);
 	validatePluginVersion(manifest.version);
 
-	// This prevents a plugin author from marking their own plugin as _recommended
-	// or _built_in.
+	// This prevents a plugin author from marking their own plugin as _recommended.
 	if (typeof manifest._recommended !== 'undefined') {
 		throw new Error(`Plugin ${manifest.id} cannot mark itself as recommended.`);
-	}
-
-	if (typeof manifest._built_in !== 'undefined') {
-		throw new Error(`Plugin ${manifest.id} cannot mark itself as built-in.`);
 	}
 
 	checkIfPluginCanBeAdded(existingManifests, manifest);

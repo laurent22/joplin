@@ -39,6 +39,55 @@ test.describe('main', () => {
 		await expect(viewerFrame.locator('h1')).toHaveText('Test note!');
 	});
 
+	test('mermaid and KaTeX should render', async ({ mainWindow }) => {
+		const mainScreen = new MainScreen(mainWindow);
+		const editor = await mainScreen.createNewNote('🚧 Test 🚧');
+
+		const testCommitId = 'bf59b2';
+		await editor.codeMirrorEditor.click();
+		const noteText = [
+			'```mermaid',
+			'gitGraph',
+			'    commit id: "973193"',
+			`    commit id: "${testCommitId}"`,
+			'    branch dev',
+			'    checkout dev',
+			'    commit id: "ceea77"',
+			'```',
+			'',
+			'',
+			'KaTeX:',
+			'$$ \\int_0^1 \\cos(2x + 3) $$',
+			'',
+			'Sum: $\\sum_{x=0}^{100} \\tan x$',
+		];
+		for (const line of noteText) {
+			if (line) {
+				await mainWindow.keyboard.press('Shift+Tab');
+				await mainWindow.keyboard.type(line);
+			}
+			await mainWindow.keyboard.press('Enter');
+		}
+
+		// Should render mermaid
+		const viewerFrame = editor.getNoteViewerIframe();
+		await expect(
+			viewerFrame.locator('pre.mermaid text', { hasText: testCommitId }),
+		).toBeVisible();
+
+		// Should render KaTeX (block)
+		// toBeAttached: To be added to the DOM.
+		await expect(viewerFrame.locator('.joplin-editable > .katex-display').first()).toBeAttached();
+		await expect(
+			viewerFrame.locator(
+				'.katex-display *', { hasText: 'cos' },
+			).last(),
+		).toBeVisible();
+
+		// Should render KaTeX (inline)
+		await expect(viewerFrame.locator('.joplin-editable > .katex').first()).toBeAttached();
+	});
+
 	test('HTML links should be preserved when editing a note in the WYSIWYG editor', async ({ electronApp, mainWindow }) => {
 		const mainScreen = new MainScreen(mainWindow);
 		await mainScreen.createNewNote('Testing!');

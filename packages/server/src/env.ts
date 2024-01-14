@@ -39,6 +39,8 @@ const defaultEnvValues: EnvVariables = {
 	MAX_TIME_DRIFT: 2000,
 	NTP_SERVER: 'pool.ntp.org:123',
 
+	DELTA_INCLUDES_ITEMS: true,
+
 	// ==================================================
 	// URL config
 	// ==================================================
@@ -141,6 +143,7 @@ export interface EnvVariables {
 	RUNNING_IN_DOCKER: boolean;
 	MAX_TIME_DRIFT: number;
 	NTP_SERVER: string;
+	DELTA_INCLUDES_ITEMS: boolean;
 	IS_ADMIN_INSTANCE: boolean;
 	INSTANCE_NAME: string;
 

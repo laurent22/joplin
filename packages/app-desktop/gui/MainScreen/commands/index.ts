@@ -1,4 +1,4 @@
-// AUTO-GENERATED using `gulp buildCommandIndex`
+// AUTO-GENERATED using `gulp buildScriptIndexes`
 import * as addProfile from './addProfile';
 import * as commandPalette from './commandPalette';
 import * as deleteFolder from './deleteFolder';
@@ -92,4 +92,4 @@ const index:any[] = [
 ];
 
 export default index;
-// AUTO-GENERATED using `gulp buildCommandIndex`
+// AUTO-GENERATED using `gulp buildScriptIndexes`

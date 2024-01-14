@@ -7,7 +7,9 @@ import { useMemo } from 'react';
 
 const useStyles = (props: NoteBodyEditorProps) => {
 	return useMemo(() => {
-		return buildStyle(['CodeMirror', props.fontSize], props.themeId, (theme: Theme) => {
+		return buildStyle([
+			'CodeMirror', props.fontSize, props.contentMaxWidth,
+		], props.themeId, (theme: Theme) => {
 			return {
 				root: {
 					position: 'relative',
@@ -70,6 +72,7 @@ const useStyles = (props: NoteBodyEditorProps) => {
 				// CM6 only
 				globalTheme: {
 					...theme,
+					contentMaxWidth: props.contentMaxWidth ? `${props.contentMaxWidth}px` : undefined,
 					fontFamily: 'inherit',
 					fontSize: props.fontSize,
 					fontSizeUnits: 'px',
@@ -77,6 +80,6 @@ const useStyles = (props: NoteBodyEditorProps) => {
 				},
 			};
 		});
-	}, [props.style, props.themeId, props.fontSize]);
+	}, [props.style, props.themeId, props.fontSize, props.contentMaxWidth]);
 };
 export default useStyles;

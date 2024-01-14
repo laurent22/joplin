@@ -268,19 +268,46 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 	public async loadWithContent(id: Uuid, options: ItemLoadOptions = {}): Promise<Item> {
-		const item: Item = await this
+		const output = await this.loadWithContentMulti([id], options);
+		return output.length ? output[0] : null;
+	}
+
+	public async loadWithContentMulti(ids: Uuid[], options: ItemLoadOptions = {}): Promise<Item[]> {
+		const fields = this.selectFields(options, ['*'], 'items', ['items.content_size']);
+		const contentIndex = fields.findIndex(f => f === 'items.content');
+		if (contentIndex >= 0) {
+			fields.splice(contentIndex, 1);
+		}
+
+		const items: Item[] = await this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
-			.select(this.selectFields(options, ['*'], 'items', ['items.content_size']))
-			.where('items.id', '=', id)
-			.first();
+			.select(fields)
+			.whereIn('items.id', ids);
 
-		const content = await this.storageDriverRead(id, item.content_size, { models: this.models() });
+		const promises: Promise<Buffer>[] = [];
+		const itemIndexToId: Record<number, string> = {};
 
-		return {
-			...item,
-			content,
-		};
+		for (let i = 0; i < items.length; i++) {
+			const item = items[i];
+			itemIndexToId[i] = item.id;
+			promises.push(this.storageDriverRead(item.id, item.content_size, { models: this.models() }));
+		}
+
+		await Promise.all(promises);
+
+		const output: Item[] = [];
+
+		for (let i = 0; i < promises.length; i++) {
+			const promise = promises[i];
+			const item = items.find(it => it.id === itemIndexToId[i]);
+			output.push({
+				...item,
+				content: await promise,
+			});
+		}
+
+		return output;
 	}
 
 	public async loadAsSerializedJoplinItem(id: Uuid): Promise<string> {

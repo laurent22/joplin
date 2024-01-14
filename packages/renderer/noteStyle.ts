@@ -10,7 +10,43 @@ function formatCssSize(v: any): string {
 export interface Options {
 	contentMaxWidth?: number;
 	contentMaxWidthTarget?: string;
+	themeId?: number;
+	whiteBackgroundNoteRendering?: boolean;
 }
+
+// If we are viewing an HTML note, it means it comes from the web clipper or
+// emil-to-note, in which case we don't apply any specific theme. We just need
+// to ensure the background is white so that we don't end up with a dark theme
+// and dark font for example. https://github.com/laurent22/joplin/issues/9511
+export const whiteBackgroundNoteStyle = () => {
+	return `
+		body {
+			background-color: #ffffff;
+		}
+
+		/* TinyMCE adds a dashed border for tables that have no borders
+		to make it easier to view where the cells are and edit them.
+		However HTML notes may contain many nested tables used for
+		layout and we also consider that these notes are more or less
+		read-only. Because of this, we remove the dashed lines in this
+		case as it makes the note more readable. */
+
+		.mce-item-table:not([border]),
+		.mce-item-table:not([border]) caption,
+		.mce-item-table:not([border]) td,
+		.mce-item-table:not([border]) th,
+		.mce-item-table[border="0"],
+		.mce-item-table[border="0"] caption,
+		.mce-item-table[border="0"] td,
+		.mce-item-table[border="0"] th,
+		table[style*="border-width: 0px"],
+		table[style*="border-width: 0px"] caption,
+		table[style*="border-width: 0px"] td,
+		table[style*="border-width: 0px"] th {
+			border: none !important;
+		}
+	`;
+};
 
 export default function(theme: any, options: Options = null) {
 	options = {

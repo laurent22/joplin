@@ -62,6 +62,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -328,6 +331,9 @@
 	],
 	"Browse...": [
 		"Navega..."
+	],
+	"Built in": [
+		""
 	],
 	"Bulleted List": [
 		"Llista de pics"
@@ -1034,6 +1040,9 @@
 	],
 	"Enable note history": [
 		"Activa l'historial de notes"
+	],
+	"Enable optical character recognition (OCR)": [
+		""
 	],
 	"Enable PDF viewer": [
 		"Habilita el visor de PDF"
@@ -3178,6 +3187,9 @@
 	],
 	"When creating a new to-do:": [
 		"En crear un llistat de tasques pendents:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""

@@ -9,6 +9,7 @@ import * as lezerHighlight from '@lezer/highlight';
 import * as lezerCommon from '@lezer/common';
 import * as lezerMarkdown from '@lezer/markdown';
 import * as codeMirrorLangHtml from '@codemirror/lang-html';
+import * as codeMirrorLanguageData from '@codemirror/language-data';
 
 // Exposes CodeMirror libraries to plugins.
 //
@@ -23,6 +24,7 @@ const libraryNameToPackage: Record<string, any> = {
 	'@codemirror/highlight': lezerHighlight,
 	'@codemirror/lint': codeMirrorLint,
 	'@codemirror/lang-html': codeMirrorLangHtml,
+	'@codemirror/language-data': codeMirrorLanguageData,
 	'@lezer/common': lezerCommon,
 	'@lezer/markdown': lezerMarkdown,
 };

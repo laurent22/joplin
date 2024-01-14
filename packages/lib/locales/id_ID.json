@@ -56,6 +56,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -316,6 +319,9 @@
 	],
 	"Browse...": [
 		"Telusuri..."
+	],
+	"Built in": [
+		""
 	],
 	"Bulleted List": [
 		"Daftar berpoin"
@@ -964,6 +970,9 @@
 	],
 	"Enable note history": [
 		"Aktifkan riwayat catatan"
+	],
+	"Enable optical character recognition (OCR)": [
+		""
 	],
 	"Enable PDF viewer": [
 		"Aktifkan penampil PDF"
@@ -2977,6 +2986,9 @@
 	],
 	"When creating a new to-do:": [
 		"Ketika membuat tugas baru:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""

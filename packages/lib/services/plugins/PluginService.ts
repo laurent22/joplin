@@ -63,6 +63,11 @@ export interface PluginSettings {
 	[pluginId: string]: PluginSetting;
 }
 
+interface PluginLoadOptions {
+	devMode: boolean;
+	builtIn: boolean;
+}
+
 function makePluginId(source: string): string {
 	// https://www.npmjs.com/package/slug#options
 	return uslug(source).substr(0, 32);
@@ -340,7 +345,14 @@ export default class PluginService extends BaseService {
 		return this.runner_.callStatsSummary(pluginId, duration);
 	}
 
-	public async loadAndRunPlugins(pluginDirOrPaths: string | string[], settings: PluginSettings, devMode = false) {
+	public async loadAndRunPlugins(
+		pluginDirOrPaths: string | string[], settings: PluginSettings, options?: PluginLoadOptions,
+	) {
+		options ??= {
+			builtIn: false,
+			devMode: false,
+		};
+
 		let pluginPaths = [];
 
 		if (Array.isArray(pluginDirOrPaths)) {
@@ -370,6 +382,10 @@ export default class PluginService extends BaseService {
 				// such folders but to keep things sane we disallow it.
 				if (this.plugins_[plugin.id]) throw new Error(`There is already a plugin with this ID: ${plugin.id}`);
 
+				// We mark the plugin as built-in even if not enabled (being built-in affects
+				// update UI).
+				plugin.builtIn = options.builtIn;
+
 				this.setPluginAt(plugin.id, plugin);
 
 				if (!this.pluginEnabled(settings, plugin.id)) {
@@ -377,7 +393,7 @@ export default class PluginService extends BaseService {
 					continue;
 				}
 
-				plugin.devMode = devMode;
+				plugin.devMode = options.devMode;
 
 				await this.runPlugin(plugin);
 			} catch (error) {

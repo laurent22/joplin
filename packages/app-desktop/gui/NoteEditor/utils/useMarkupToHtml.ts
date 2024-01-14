@@ -13,6 +13,7 @@ interface HookDependencies {
 	customCss: string;
 	plugins: PluginStates;
 	settingValue: (pluginId: string, key: string)=> any;
+	whiteBackgroundNoteRendering: boolean;
 }
 
 export interface MarkupToHtmlOptions {
@@ -27,13 +28,14 @@ export interface MarkupToHtmlOptions {
 	vendorDir?: string;
 	platformName?: string;
 	allowedFilePrefixes?: string[];
+	whiteBackgroundNoteRendering?: boolean;
 }
 
 export default function useMarkupToHtml(deps: HookDependencies) {
-	const { themeId, customCss, plugins } = deps;
+	const { themeId, customCss, plugins, whiteBackgroundNoteRendering } = deps;
 
 	const markupToHtml = useMemo(() => {
-		return markupLanguageUtils.newMarkupToHtml(deps.plugins, {
+		return markupLanguageUtils.newMarkupToHtml(plugins, {
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
 			customCss: customCss || '',
 		});
@@ -69,10 +71,11 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 			externalAssetsOnly: true,
 			codeHighlightCacheKey: 'useMarkupToHtml',
 			settingValue: deps.settingValue,
+			whiteBackgroundNoteRendering,
 			...options,
 		});
 
 		return result;
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [themeId, customCss, markupToHtml]);
+	}, [themeId, customCss, markupToHtml, whiteBackgroundNoteRendering]);
 }

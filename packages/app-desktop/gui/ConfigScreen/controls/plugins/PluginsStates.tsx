@@ -81,6 +81,7 @@ function usePluginItems(plugins: Plugins, settings: PluginSettings): PluginItem[
 				enabled: setting.enabled,
 				deleted: setting.deleted,
 				devMode: plugin.devMode,
+				builtIn: plugin.builtIn,
 				hasBeenUpdated: setting.hasBeenUpdated,
 			});
 		}
@@ -149,8 +150,8 @@ export default function(props: Props) {
 		async function fetchPluginIds() {
 			// Built-in plugins can't be updated from the main repoApi
 			const nonDefaultPlugins = pluginItems
-				.map(p => p.manifest)
-				.filter(manifest => !manifest._built_in);
+				.filter(plugin => !plugin.builtIn)
+				.map(p => p.manifest);
 
 			const pluginIds = await repoApi().canBeUpdatedPlugins(nonDefaultPlugins, pluginService.appVersion);
 			if (cancelled) return;
@@ -288,8 +289,8 @@ export default function(props: Props) {
 				</UserPluginsRoot>
 			);
 		} else {
-			const nonDefaultPlugins = pluginItems.filter(item => !item.manifest._built_in);
-			const defaultPlugins = pluginItems.filter(item => item.manifest._built_in);
+			const nonDefaultPlugins = pluginItems.filter(item => !item.builtIn);
+			const defaultPlugins = pluginItems.filter(item => item.builtIn);
 			return (
 				<>
 					<UserPluginsRoot>
