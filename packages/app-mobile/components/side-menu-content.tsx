@@ -53,6 +53,8 @@ let syncIconAnimation: any;
 const SideMenuContentComponent = (props: Props) => {
 	const alwaysShowFolderIcons = useMemo(() => Folder.shouldShowFolderIcons(props.folders), [props.folders]);
 
+	const [isPerformingSync, setIsPerformingSync] = React.useState(false);
+
 	const styles_ = useMemo(() => {
 		const theme = themeStyle(props.themeId);
 
@@ -301,9 +303,12 @@ const SideMenuContentComponent = (props: Props) => {
 	}, [props.syncStarted, props.dispatch]);
 
 	const synchronize_press = useCallback(async () => {
+		if (isPerformingSync) return;
+		setIsPerformingSync(true);
 		const actionDone = await performSync();
+		setIsPerformingSync(false);
 		if (actionDone === 'auth') props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-	}, [performSync, props.dispatch]);
+	}, [performSync, props.dispatch, isPerformingSync]);
 
 	const renderFolderIcon = (theme: any, folderIcon: FolderIcon) => {
 		if (!folderIcon) {
