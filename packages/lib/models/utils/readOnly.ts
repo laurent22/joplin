@@ -15,8 +15,8 @@ export interface ItemSlice {
 	deleted_time: number;
 }
 
-// This function can be called to wrap any read-only-related code. It should be
-// fast and allows an early exit for cases that don't apply, for example if not
+// This function can be called to wrap code that related to share permission read-only checks. It
+// should be fast and allows an early exit for cases that don't apply, for example if not
 // synchronising with Joplin Cloud or if not sharing any notebook.
 export const needsShareReadOnlyChecks = (itemType: ModelType, changeSource: number, shareState: ShareState, disableReadOnlyCheck = false) => {
 	if (disableReadOnlyCheck) return false;
@@ -40,7 +40,7 @@ export const checkIfItemCanBeChanged = (itemType: ModelType, changeSource: numbe
 	if (!needsShareReadOnlyChecks(itemType, changeSource, shareState)) return;
 	if (!item) return;
 
-	if (itemIsReadOnlySync(itemType, changeSource, item, Setting.value('sync.userId'), shareState)) {
+	if (itemIsReadOnlySync(itemType, changeSource, item, Setting.value('sync.userId'), shareState, true)) {
 		throw new JoplinError(`Cannot change or delete a read-only item: ${item.id}`, ErrorCode.IsReadOnly);
 	}
 };
@@ -60,17 +60,25 @@ export const checkIfItemCanBeAddedToFolder = async (itemType: ModelType, Folder:
 			return;
 		}
 
-		if (itemIsReadOnlySync(itemType, changeSource, parentFolder, Setting.value('sync.userId'), shareState)) {
+		if (itemIsReadOnlySync(itemType, changeSource, parentFolder, Setting.value('sync.userId'), shareState, true)) {
 			throw new JoplinError('Cannot add an item as a child of a read-only item', ErrorCode.IsReadOnly);
 		}
 	}
 };
 
-export const itemIsReadOnlySync = (itemType: ModelType, changeSource: number, item: ItemSlice, userId: string, shareState: ShareState): boolean => {
-	checkObjectHasProperties(item, ['share_id', 'deleted_time']);
+// Originally all these functions were there to handle share permissions - a note, folder or
+// resource that is not editable would be read-only. However this particular function now is also
+// used to tell if a note is read-only because it is in the trash.
+//
+// But this requires access to more properties, `deleted_time` in particular, which are not needed
+// for share-related checks (and does not exist on Resource objects). So this is why there's this
+// extra `sharePermissionCheckOnly` boolean to do the check for one case or the other. A bit of a
+// hack but good enough for now.
+export const itemIsReadOnlySync = (itemType: ModelType, changeSource: number, item: ItemSlice, userId: string, shareState: ShareState, sharePermissionCheckOnly = false): boolean => {
+	checkObjectHasProperties(item, sharePermissionCheckOnly ? ['share_id'] : ['share_id', 'deleted_time']);
 
 	// Item is in trash
-	if (item.deleted_time) return true;
+	if (!sharePermissionCheckOnly && item.deleted_time) return true;
 
 	if (!needsShareReadOnlyChecks(itemType, changeSource, shareState)) return false;
 
