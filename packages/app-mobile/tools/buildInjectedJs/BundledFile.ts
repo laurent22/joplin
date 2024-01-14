@@ -64,7 +64,8 @@ export default class BundledFile {
 
 				// Some of these are used by the plugin background script
 				fallback: {
-					'path': require.resolve('path-browserify'),
+					path: require.resolve('path-browserify'),
+					events: require.resolve('events/'),
 				},
 			},
 			cache: {

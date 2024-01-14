@@ -1,9 +1,20 @@
-const Folder = require('../../models/Folder').default;
-const BaseModel = require('../../BaseModel').default;
+import Folder from '../../models/Folder';
+import BaseModel from '../../BaseModel';
+import { FolderEntity, TagEntity } from '../../services/database/types';
 
-const shared = {};
+interface Props {
+	folders: FolderEntity[];
+	selectedFolderId: string;
+	notesParentType: string;
+	collapsedFolderIds: string[];
+	selectedTagId: string;
+	tags?: TagEntity[];
+}
 
-function folderHasChildren_(folders, folderId) {
+type RenderFolderItem = (folder: FolderEntity, selected: boolean, hasChildren: boolean, depth: number)=> any;
+type RenderTagItem = (tag: TagEntity, selected: boolean)=> any;
+
+function folderHasChildren_(folders: FolderEntity[], folderId: string) {
 	for (let i = 0; i < folders.length; i++) {
 		const folder = folders[i];
 		if (folder.parent_id === folderId) return true;
@@ -11,7 +22,7 @@ function folderHasChildren_(folders, folderId) {
 	return false;
 }
 
-function folderIsVisible(folders, folderId, collapsedFolderIds) {
+function folderIsVisible(folders: FolderEntity[], folderId: string, collapsedFolderIds: string[]) {
 	if (!collapsedFolderIds || !collapsedFolderIds.length) return true;
 
 	while (true) {
@@ -23,7 +34,7 @@ function folderIsVisible(folders, folderId, collapsedFolderIds) {
 	}
 }
 
-function renderFoldersRecursive_(props, renderItem, items, parentId, depth, order) {
+function renderFoldersRecursive_(props: Props, renderItem: RenderFolderItem, items: any[], parentId: string, depth: number, order: string[]) {
 	const folders = props.folders;
 	for (let i = 0; i < folders.length; i++) {
 		const folder = folders[i];
@@ -44,11 +55,11 @@ function renderFoldersRecursive_(props, renderItem, items, parentId, depth, orde
 	};
 }
 
-shared.renderFolders = function(props, renderItem) {
+export const renderFolders = (props: Props, renderItem: RenderFolderItem) => {
 	return renderFoldersRecursive_(props, renderItem, [], '', 0, []);
 };
 
-shared.renderTags = function(props, renderItem) {
+export const renderTags = (props: Props, renderItem: RenderTagItem) => {
 	const tags = props.tags.slice();
 	tags.sort((a, b) => {
 		// It seems title can sometimes be undefined (perhaps when syncing
@@ -75,5 +86,3 @@ shared.renderTags = function(props, renderItem) {
 		order: order,
 	};
 };
-
-module.exports = shared;

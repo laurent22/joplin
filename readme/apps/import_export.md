@@ -4,7 +4,7 @@
 
 ### Importing from Evernote
 
-Joplin was designed as a replacement for Evernote and so can import complete Evernote notebooks, as well as notes, tags, resources (attached files) and note metadata (such as author, geo-location, etc.) via ENEX files. In terms of data, the only two things that might slightly differ are:
+Joplin can import complete Evernote notebooks, as well as notes, tags, resources (attached files) and note metadata (such as author, geo-location, etc.) via ENEX files. In terms of data, the only two things that might slightly differ are:
 
 - Recognition data - Evernote images, in particular scanned (or photographed) documents have [recognition data](https://en.wikipedia.org/wiki/Optical_character_recognition) associated with them. It is the text that Evernote has been able to recognise in the document. This data is not preserved when the note are imported into Joplin. However, if you have enabled OCR in Joplin, that recognition data will be recreated in a format compatible with Joplin.
 
@@ -17,6 +17,12 @@ To import Evernote data, first export your Evernote notebooks to ENEX files as d
 In the **desktop application**, open File > Import > ENEX and select your file. The notes will be imported into a new separate notebook. If needed they can then be moved to a different notebook, or the notebook can be renamed, etc.
 
 In the **terminal application**, in [command-line mode](https://github.com/laurent22/joplin/blob/dev/readme/apps/terminal.md#command-line-mode), type `import /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
+
+In both cases you can either import a single file or a directory that contains multiple ENEX files.
+
+- If you import a single file, a notebook with the same name will be created, and all notes will be imported in this notebook.
+
+- If you import a directory, Joplin will create a notebook per file and import the notes into them.
 
 ### Importing from Markdown files
 

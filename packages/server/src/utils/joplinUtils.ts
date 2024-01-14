@@ -16,7 +16,7 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import { formatDateTime } from './time';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
 import { MarkupToHtml } from '@joplin/renderer';
-import { OptionsResourceModel } from '@joplin/renderer/MarkupToHtml';
+import { OptionsResourceModel } from '@joplin/renderer/types';
 import { isValidHeaderIdentifier } from '@joplin/lib/services/e2ee/EncryptionService';
 const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 import { themeStyle } from '@joplin/lib/theme';

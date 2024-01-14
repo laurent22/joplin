@@ -19,6 +19,7 @@ const injectedJs = {
 	codeMirrorBundle: require('../lib/rnInjectedJs/CodeMirror.bundle'),
 	svgEditorBundle: require('../lib/rnInjectedJs/createJsDrawEditor.bundle'),
 	pluginBackgroundPage: require('../lib/rnInjectedJs/pluginRunnerBackgroundPage.bundle'),
+	noteBodyViewerBundle: require('../lib/rnInjectedJs/noteBodyViewerBundle.bundle'),
 };
 
 function shimInit() {

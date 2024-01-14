@@ -27,7 +27,7 @@ import FolderIconBox from '../FolderIconBox';
 import { Theme } from '@joplin/lib/themes/type';
 import { RuntimeProps } from './commands/focusElementSideBar';
 const { connect } = require('react-redux');
-const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
+import { renderFolders, renderTags } from '@joplin/lib/components/shared/side-menu-shared';
 const { themeStyle } = require('@joplin/lib/theme');
 const bridge = require('@electron/remote').require('./bridge').default;
 const Menu = bridge().Menu;
@@ -704,7 +704,7 @@ const SidebarComponent = (props: Props) => {
 
 	if (props.folders.length) {
 		const allNotesSelected = props.notesParentType === 'SmartFilter' && props.selectedSmartFilterId === ALL_NOTES_FILTER_ID;
-		const result = shared.renderFolders(props, renderFolderItem);
+		const result = renderFolders(props, renderFolderItem);
 		const folderItems = [renderAllNotesItem(theme, allNotesSelected)].concat(result.items);
 		folderItemsOrder_.current = result.order;
 		items.push(
@@ -725,7 +725,7 @@ const SidebarComponent = (props: Props) => {
 	);
 
 	if (props.tags.length) {
-		const result = shared.renderTags(props, renderTag);
+		const result = renderTags(props, renderTag);
 		const tagItems = result.items;
 		tagItemsOrder_.current = result.order;
 

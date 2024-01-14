@@ -1,5 +1,12 @@
 # Joplin Desktop Changelog
 
+## [v2.14.8](https://github.com/laurent22/joplin/releases/tag/v2.14.8) (Pre-release) - 2024-01-09T22:57:07Z
+
+- Improved: Allow importing a directory of ENEX files ([#9693](https://github.com/laurent22/joplin/issues/9693))
+- Improved: Frontmatter importer: Support Notesnook-style timestamps ([#9684](https://github.com/laurent22/joplin/issues/9684)) ([#9683](https://github.com/laurent22/joplin/issues/9683) by Henry Heino)
+- Improved: Update Simple Backup to v1.3.5 to fix some notebooks exported twice while creating a backup ([#9677](https://github.com/laurent22/joplin/issues/9677) by Henry Heino)
+- Improved: Updated packages fs-extra (v11.2.0)
+
 ## [v2.14.7](https://github.com/laurent22/joplin/releases/tag/v2.14.7) (Pre-release) - 2024-01-08T11:51:49Z
 
 - Improved: Updated packages sharp (v0.33.1)

@@ -13,7 +13,8 @@
     "./net": "./dist/net.js",
     "./time": "./dist/time.js",
     "./types": "./dist/types.js",
-    "./url": "./dist/url.js"
+    "./url": "./dist/url.js",
+    "./path": "./dist/path.js"
   },
   "publishConfig": {
     "access": "public"

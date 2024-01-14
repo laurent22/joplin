@@ -1,9 +1,15 @@
+import { RenderResultPluginAsset } from './types';
+
+interface Options {
+	asHtml: boolean;
+}
+
 // Utility function to convert the plugin assets to a list of LINK or SCRIPT tags
 // that can be included in the HEAD tag.
-function assetsToHeaders(pluginAssets, options = null) {
+const assetsToHeaders = (pluginAssets: RenderResultPluginAsset[], options: Options|null = null): any => {
 	options = { asHtml: false, ...options };
 
-	const headers = {};
+	const headers: Record<string, string> = {};
 	for (let i = 0; i < pluginAssets.length; i++) {
 		const asset = pluginAssets[i];
 		if (asset.mime === 'text/css') {
@@ -23,6 +29,6 @@ function assetsToHeaders(pluginAssets, options = null) {
 	}
 
 	return headers;
-}
+};
 
-module.exports = assetsToHeaders;
+export default assetsToHeaders;
