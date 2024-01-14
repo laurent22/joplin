@@ -199,7 +199,16 @@
 		{
 			"matchUpdateTypes": ["minor", "patch"],
 			"automerge": true,
-			"groupName": "electron",
+			"labels": ["automerge"],
+			"matchPackagePatterns": [
+				"@types/*",
+			],
+		},
+
+		{
+			"matchUpdateTypes": ["minor", "patch"],
+			"automerge": true,
+			"groupName": "types",
 			"extends": ["schedule:monthly"],
 			"labels": ["automerge"],
 			"matchPackagePatterns": [
@@ -226,9 +235,6 @@
 				"yarn",
 				"typescript",
 				"prettier",
-				
-				// If it builds, it should be safe to merge @types/* packages
-				// "@types/*",
 			],
 		},
 
