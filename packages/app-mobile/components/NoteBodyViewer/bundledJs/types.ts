@@ -1,20 +1,14 @@
-import { ResourceEntity } from '@joplin/lib/services/database/types';
-import { Theme } from '@joplin/lib/themes/type';
 import type { FsDriver as RendererFsDriver } from '@joplin/renderer/types';
 import Renderer from './Renderer';
 
-export interface WebViewConfig {
-	theme: Theme;
-	codeTheme: any;
-	highlightedKeywords: string[];
-	resources: Record<string, ResourceEntity>;
-	resourceDownloadMode: 'always'|'manual'|'auto';
-	initialScroll: number;
-	noteHash: string;
-
-	editPopupFiletypes: string[];
-	createEditPopupSyntax: string;
-	destroyEditPopupSyntax: string;
+export interface RendererWebViewOptions {
+	settings: {
+		safeMode: boolean;
+		tempDir: string;
+		resourceDir: string;
+		resourceDownloadMode: string;
+	};
+	pluginOptions: Record<string, any>;
 }
 
 export interface NoteViewerLocalApi {

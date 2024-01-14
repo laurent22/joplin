@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
+import { RendererWebViewOptions } from '../bundledJs/types';
 
 const useSource = (tempDirPath: string) => {
 	const injectedJs = useMemo(() => {
@@ -10,16 +11,18 @@ const useSource = (tempDirPath: string) => {
 			pluginOptions[n] = { enabled: subValues[n] };
 		}
 
+		const rendererWebViewOptions: RendererWebViewOptions = {
+			settings: {
+				safeMode: Setting.value('isSafeMode'),
+				tempDir: tempDirPath,
+				resourceDir: Setting.value('resourceDir'),
+				resourceDownloadMode: Setting.value('sync.resourceDownloadMode'),
+			},
+			pluginOptions,
+		};
+
 		return `
-			window.rendererSetupOptions = ${JSON.stringify({
-		settings: {
-			safeMode: Setting.value('isSafeMode'),
-			tempDir: tempDirPath,
-			resourceDir: Setting.value('resourceDir'),
-			resourceDownloadMode: Setting.value('sync.resourceDownloadMode'),
-		},
-		pluginOptions,
-	})};
+			window.rendererWebViewOptions = ${JSON.stringify(rendererWebViewOptions)};
 
 			${shim.injectedJs('webviewLib')}
 			${shim.injectedJs('noteBodyViewerBundle')}

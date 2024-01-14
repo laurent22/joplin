@@ -1,19 +1,11 @@
 
 import WebViewToRNMessenger from '../../../utils/ipc/WebViewToRNMessenger';
-import { NoteViewerLocalApi, NoteViewerRemoteApi } from './types';
+import { NoteViewerLocalApi, NoteViewerRemoteApi, RendererWebViewOptions } from './types';
 import Renderer from './Renderer';
 
 declare global {
 	interface Window {
-		rendererSetupOptions: {
-			settings: {
-				safeMode: boolean;
-				tempDir: string;
-				resourceDir: string;
-				resourceDownloadMode: string;
-			};
-			pluginOptions: Record<string, any>;
-		};
+		rendererWebViewOptions: RendererWebViewOptions;
 	}
 }
 
@@ -35,7 +27,7 @@ webviewLib.initialize({
 });
 
 const renderer = new Renderer({
-	...window.rendererSetupOptions,
+	...window.rendererWebViewOptions,
 	fsDriver: messenger.remoteApi.fsDriver,
 });
 
