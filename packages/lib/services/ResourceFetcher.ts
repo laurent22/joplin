@@ -182,20 +182,18 @@ export default class ResourceFetcher extends BaseService {
 
 		this.eventEmitter_.emit('downloadStarted', { id: resource.id });
 
-		fileApi
-			.get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' })
-		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-			.then(async () => {
-				await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_DONE });
-				this.logger().debug(`ResourceFetcher: Resource downloaded: ${resource.id}`);
-				await completeDownload(true, localResourceContentPath);
-			})
-		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-			.catch(async (error: any) => {
-				this.logger().error(`ResourceFetcher: Could not download resource: ${resource.id}`, error);
-				await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_ERROR, fetch_error: error.message });
-				await completeDownload();
-			});
+		try {
+			const response = await fileApi.get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' });
+			if (!response) throw new Error(`Resource not found: ${resource.id}`);
+
+			await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_DONE });
+			this.logger().debug(`ResourceFetcher: Resource downloaded: ${resource.id}`);
+			await completeDownload(true, localResourceContentPath);
+		} catch (error) {
+			this.logger().error(`ResourceFetcher: Could not download resource: ${resource.id}`, error);
+			await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_ERROR, fetch_error: error.message });
+			await completeDownload();
+		}
 	}
 
 	private processQueue_() {
