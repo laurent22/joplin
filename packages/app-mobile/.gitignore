@@ -67,6 +67,7 @@ lib/csstojs/
 lib/rnInjectedJs/
 dist/
 components/NoteBodyViewer/**/*.bundle.js
+components/NoteBodyViewer/**/*.bundle.js.LICENSE.txt
 components/NoteEditor/**/*.bundle.js
 components/NoteEditor/**/*.bundle.js.md5
 components/NoteEditor/**/*.bundle.min.js
