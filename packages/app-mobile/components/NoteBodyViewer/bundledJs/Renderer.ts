@@ -2,6 +2,8 @@ import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
 import type { MarkupToHtmlConverter, FsDriver as RendererFsDriver } from '@joplin/renderer/types';
 import makeResourceModel from './utils/makeResourceModel';
 import addPluginAssets from './utils/addPluginAssets';
+import { ExtraContentScriptSource } from './types';
+import { ExtraContentScript } from '@joplin/lib/services/plugins/utils/loadContentScripts';
 
 export interface RendererSetupOptions {
 	settings: {
@@ -35,15 +37,50 @@ export interface MarkupRecord {
 export default class Renderer {
 	private markupToHtml: MarkupToHtmlConverter;
 	private settings: RendererSettings|null = null;
+	private extraContentScripts: ExtraContentScript[] = [];
+	private lastRenderMarkup: MarkupRecord|null = null;
 
 	public constructor(private setupOptions: RendererSetupOptions) {
+		this.recreateMarkupToHtml();
+	}
+
+	private recreateMarkupToHtml() {
 		this.markupToHtml = new MarkupToHtml({
-			fsDriver: setupOptions.fsDriver,
-			isSafeMode: setupOptions.settings.safeMode,
-			tempDir: setupOptions.settings.tempDir,
-			ResourceModel: makeResourceModel(setupOptions.settings.resourceDir),
-			pluginOptions: setupOptions.pluginOptions,
+			extraRendererRules: this.extraContentScripts,
+			fsDriver: this.setupOptions.fsDriver,
+			isSafeMode: this.setupOptions.settings.safeMode,
+			tempDir: this.setupOptions.settings.tempDir,
+			ResourceModel: makeResourceModel(this.setupOptions.settings.resourceDir),
+			pluginOptions: this.setupOptions.pluginOptions,
 		});
+	}
+
+	public async setExtraContentScripts(
+		extraContentScripts: ExtraContentScriptSource[],
+	) {
+		this.extraContentScripts = extraContentScripts.map(script => {
+			const scriptModule = (eval(script.js))({
+				pluginId: script.pluginId,
+				contentScriptId: script.id,
+			});
+
+			if (!scriptModule.plugin) {
+				throw new Error(`
+					Expected content script ${script.id} to export a function that returns an object with a "plugin" property.
+					Found: ${scriptModule}, which has keys ${Object.keys(scriptModule)}.
+				`);
+			}
+
+			return {
+				...script,
+				module: scriptModule,
+			};
+		});
+		this.recreateMarkupToHtml();
+
+		if (this.lastRenderMarkup) {
+			await this.rerender(this.lastRenderMarkup);
+		}
 	}
 
 	public async configure(settings: RendererSettings) {
@@ -51,6 +88,7 @@ export default class Renderer {
 	}
 
 	public async rerender(markup: MarkupRecord) {
+		this.lastRenderMarkup = markup;
 		if (!this.settings) {
 			throw new Error('Renderer wrapper not yet initialized!');
 		}

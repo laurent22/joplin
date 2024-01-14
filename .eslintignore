@@ -467,9 +467,9 @@ packages/app-mobile/components/NoteBodyViewer/bundledJs/noteBodyViewerBundle.js
 packages/app-mobile/components/NoteBodyViewer/bundledJs/types.js
 packages/app-mobile/components/NoteBodyViewer/bundledJs/utils/addPluginAssets.js
 packages/app-mobile/components/NoteBodyViewer/bundledJs/utils/makeResourceModel.js
+packages/app-mobile/components/NoteBodyViewer/hooks/useContentScripts.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.test.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.js
-packages/app-mobile/components/NoteBodyViewer/hooks/useMarkupToHtml.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useOnMessage.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useRenderer.js
@@ -594,8 +594,6 @@ packages/app-mobile/utils/ipc/RNToWebViewMessenger.js
 packages/app-mobile/utils/ipc/WebViewToRNMessenger.js
 packages/app-mobile/utils/polyfills/bufferPolyfill.js
 packages/app-mobile/utils/polyfills/index.js
-packages/app-mobile/utils/ipc/RNToWebViewMessenger.js
-packages/app-mobile/utils/ipc/WebViewToRNMessenger.js
 packages/app-mobile/utils/setupNotifications.js
 packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/showMessageBox.js

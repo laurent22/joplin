@@ -14,6 +14,7 @@ import useSource from './hooks/useSource';
 import Setting from '@joplin/lib/models/Setting';
 import uuid from '@joplin/lib/uuid';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+import useContentScripts from './hooks/useContentScripts';
 
 interface Props {
 	themeId: number;
@@ -81,6 +82,8 @@ export default function NoteBodyViewer(props: Props) {
 		tempDir,
 	});
 
+	const contentScripts = useContentScripts(props.pluginStates);
+
 	useRerenderHandler({
 		renderer,
 		noteBody: props.noteBody,
@@ -92,6 +95,8 @@ export default function NoteBodyViewer(props: Props) {
 		initialScroll: props.initialScroll,
 
 		paddingBottom: props.paddingBottom,
+
+		contentScripts,
 	});
 
 	const onLoadEnd = useCallback(() => {

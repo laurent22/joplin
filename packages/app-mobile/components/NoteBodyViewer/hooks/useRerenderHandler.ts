@@ -6,6 +6,7 @@ import useEditPopup from './useEditPopup';
 import Renderer from '../bundledJs/Renderer';
 import { useEffect, useState } from 'react';
 import Logger from '@joplin/utils/Logger';
+import { ExtraContentScriptSource } from '../bundledJs/types';
 
 interface Props {
 	renderer: Renderer;
@@ -20,6 +21,8 @@ interface Props {
 	initialScroll: number;
 
 	paddingBottom: number;
+
+	contentScripts: ExtraContentScriptSource[];
 }
 
 const onlyCheckboxHasChangedHack = (previousBody: string, newBody: string) => {
@@ -131,6 +134,10 @@ const useRerenderHandler = (props: Props) => {
 	useEffect(() => {
 		props.renderer.setExtraCss('edit-popup', editPopupCss);
 	}, [editPopupCss, props.renderer]);
+
+	useEffect(() => {
+		void props.renderer.setExtraContentScripts(props.contentScripts);
+	}, [props.contentScripts, props.renderer]);
 };
 
 export default useRerenderHandler;

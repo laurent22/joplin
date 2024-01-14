@@ -20,6 +20,10 @@ const messenger = new WebViewToRNMessenger<NoteViewerLocalApi, NoteViewerRemoteA
 	return messenger.remoteApi.onPostMessage(message);
 };
 
+(window as any).webviewApi = {
+	postMessage: messenger.remoteApi.onPostPluginMessage,
+};
+
 webviewLib.initialize({
 	postMessage: (message: string) => {
 		messenger.remoteApi.onPostMessage(message);
