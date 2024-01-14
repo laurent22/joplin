@@ -1,5 +1,5 @@
 import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
-import type { MarkupToHtmlConverter, FsDriver as RendererFsDriver } from '@joplin/renderer/types';
+import type { MarkupToHtmlConverter, RenderResultPluginAsset, FsDriver as RendererFsDriver } from '@joplin/renderer/types';
 import makeResourceModel from './utils/makeResourceModel';
 import addPluginAssets from './utils/addPluginAssets';
 import { ExtraContentScriptSource } from './types';
@@ -109,14 +109,32 @@ export default class Renderer {
 
 		this.markupToHtml.clearCache(markup.language);
 
-		const { html, pluginAssets } = await this.markupToHtml.render(
-			markup.language,
-			markup.markup,
-			JSON.parse(this.settings.theme),
-			options,
-		);
-
 		const contentContainer = document.getElementById('joplin-container-content');
+
+		let html = '';
+		let pluginAssets: RenderResultPluginAsset[] = [];
+		try {
+			const result = await this.markupToHtml.render(
+				markup.language,
+				markup.markup,
+				JSON.parse(this.settings.theme),
+				options,
+			);
+			html = result.html;
+			pluginAssets = result.pluginAssets;
+		} catch (error) {
+			if (!contentContainer) {
+				alert(`Renderer error: ${error}`);
+			} else {
+				contentContainer.innerText = `
+					Error: ${error}
+					
+					${error.stack ?? ''}
+				`;
+			}
+			throw error;
+		}
+
 		contentContainer.innerHTML = html;
 		addPluginAssets(pluginAssets);
 
