@@ -4,13 +4,21 @@ import Note from '../../models/Note';
 import { FolderEntity, NoteEntity } from '../database/types';
 import { checkObjectHasProperties } from '@joplin/utils/object';
 
-const restoreItems = async (itemType: ModelType, items: NoteEntity[] | FolderEntity[], targetFolderId: string = null) => {
-	if (!items.length) return;
+const restoreItems = async (itemType: ModelType, itemsOrIds: NoteEntity[] | FolderEntity[] | string[], targetFolderId: string = null) => {
+	if (!itemsOrIds.length) return;
+
+	const ModelClass = itemType === ModelType.Note ? Note : Folder;
+
+	let items: NoteEntity[] | FolderEntity[] = [];
+
+	if (typeof itemsOrIds[0] === 'string') {
+		items = await ModelClass.byIds(itemsOrIds as string[], { fields: ['id', 'parent_id', 'deleted_time'] });
+	} else {
+		items = itemsOrIds as (NoteEntity[] | FolderEntity[]);
+	}
 
 	for (const item of items) {
 		checkObjectHasProperties(item, ['id', 'parent_id']);
-
-		const ModelClass = itemType === ModelType.Note ? Note : Folder;
 
 		let itemParentId = item.parent_id;
 
@@ -21,12 +29,22 @@ const restoreItems = async (itemType: ModelType, items: NoteEntity[] | FolderEnt
 
 		if (targetFolderId !== null) itemParentId = targetFolderId;
 
-		await ModelClass.save({
-			id: item.id,
+		let toSave: FolderEntity | NoteEntity = null;
+
+		if (itemType === ModelType.Note) {
+			toSave = await Note.preview(item.id);
+		} else {
+			toSave = await Folder.load(item.id);
+		}
+
+		toSave = {
+			...toSave,
 			deleted_time: 0,
 			updated_time: Date.now(),
 			parent_id: itemParentId,
-		}, {
+		};
+
+		await ModelClass.save(toSave, {
 			autoTimestamp: false,
 		});
 

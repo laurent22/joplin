@@ -13,7 +13,7 @@ import Sidebar from '../Sidebar/Sidebar';
 import UserWebview from '../../services/plugins/UserWebview';
 import UserWebviewDialog from '../../services/plugins/UserWebviewDialog';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
-import { stateUtils } from '@joplin/lib/reducer';
+import { StateLastDeletion, stateUtils } from '@joplin/lib/reducer';
 import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import NoteListWrapper from '../NoteListWrapper/NoteListWrapper';
@@ -45,6 +45,8 @@ import restart from '../../services/restart';
 const { connect } = require('react-redux');
 import PromptDialog from '../PromptDialog';
 import NotePropertiesDialog from '../NotePropertiesDialog';
+import TrashNotification from '../TrashNotification';
+
 const PluginManager = require('@joplin/lib/services/PluginManager');
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -84,6 +86,7 @@ interface Props {
 	processingShareInvitationResponse: boolean;
 	isResettingLayout: boolean;
 	listRendererId: string;
+	lastDeletion: StateLastDeletion;
 }
 
 interface ShareFolderDialogOptions {
@@ -882,6 +885,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} themeId={this.props.themeId} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />
 
+				<TrashNotification lastDeletion={this.props.lastDeletion}/>
 				{messageComp}
 				{layoutComp}
 				{pluginDialog}
@@ -921,6 +925,7 @@ const mapStateToProps = (state: AppState) => {
 		showInstallTemplatesPlugin: state.hasLegacyTemplates && !state.pluginService.plugins['joplin.plugin.templates'],
 		isResettingLayout: state.isResettingLayout,
 		listRendererId: state.settings['notes.listRendererId'],
+		lastDeletion: state.lastDeletion,
 	};
 };
 

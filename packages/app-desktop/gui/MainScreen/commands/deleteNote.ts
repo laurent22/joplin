@@ -14,6 +14,14 @@ export const runtime = (): CommandRuntime => {
 			if (noteIds === null) noteIds = context.state.selectedNoteIds;
 			if (!noteIds.length) return;
 			await Note.batchDelete(noteIds, { toTrash: true });
+
+			context.dispatch({
+				type: 'ITEMS_TRASHED',
+				value: {
+					noteIds,
+					folderIds: [],
+				},
+			});
 		},
 		enabledCondition: '!noteIsReadOnly',
 	};
