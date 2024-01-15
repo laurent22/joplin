@@ -126,6 +126,11 @@ export const updateSettingValue = (comp: ConfigScreenComponent, key: string, val
 			changedSettingKeys: changedSettingKeys,
 		};
 	}, callback);
+
+	const metadata = Setting.settingMetadata(key);
+	if (metadata.autoSave) {
+		scheduleSaveSettings(comp);
+	}
 };
 
 let scheduleSaveSettingsIID: ReturnType<typeof setTimeout>|null = null;

@@ -334,10 +334,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				this.setState({ needRestart: true });
 			}
 			shared.updateSettingValue(this, key, value);
-
-			if (md.autoSave) {
-				shared.scheduleSaveSettings(this);
-			}
 		};
 
 		const md = Setting.settingMetadata(key);
