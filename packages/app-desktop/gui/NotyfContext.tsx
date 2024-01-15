@@ -6,6 +6,6 @@ import { Notyf } from 'notyf';
 export default React.createContext(
 	new Notyf({
 		// Set your global Notyf configuration here
-		duration: 10000,
+		duration: 6000,
 	}),
 );

@@ -57,6 +57,7 @@ interface StateResourceFetcher {
 export interface StateLastDeletion {
 	noteIds: string[];
 	folderIds: string[];
+	timestamp: number;
 }
 
 export interface State {
@@ -110,6 +111,7 @@ export interface State {
 	noteListRendererIds: string[];
 	noteListLastSortTime: number;
 	lastDeletion: StateLastDeletion;
+	lastDeletionNotificationTime: number;
 
 	// Extra reducer keys go here:
 	pluginService: PluginServiceState;
@@ -188,7 +190,9 @@ export const defaultState: State = {
 	lastDeletion: {
 		noteIds: [],
 		folderIds: [],
+		timestamp: 0,
 	},
+	lastDeletionNotificationTime: 0,
 
 	pluginService: pluginServiceDefaultState,
 	shareService: shareServiceDefaultState,
@@ -852,7 +856,15 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'ITEMS_TRASHED':
 
-			draft.lastDeletion = action.value;
+			draft.lastDeletion = {
+				...action.value,
+				timestamp: Date.now(),
+			};
+			break;
+
+		case 'DELETION_NOTIFICATION_DONE':
+
+			draft.lastDeletionNotificationTime = Date.now();
 			break;
 
 		case 'NOTE_PROVISIONAL_FLAG_CLEAR':
