@@ -105,7 +105,7 @@
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
     "jetifier": "2.0.0",
-    "js-draw": "1.14.0",
+    "js-draw": "1.15.0",
     "jsdom": "22.1.0",
     "metro-react-native-babel-preset": "0.73.9",
     "nodemon": "3.0.2",
