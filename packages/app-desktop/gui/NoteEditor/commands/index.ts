@@ -5,7 +5,7 @@ import * as pasteAsText from './pasteAsText';
 import * as showLocalSearch from './showLocalSearch';
 import * as showRevisions from './showRevisions';
 
-const index:any[] = [
+const index: any[] = [
 	focusElementNoteBody,
 	focusElementNoteTitle,
 	pasteAsText,

@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Türkçe\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Arda Kılıçdağı <arda@kilicdagi.com>\n"
 "Language-Team: Turkish (Turkey)\n"
 "Language: tr_TR\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:493
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -182,6 +184,8 @@ msgid ""
 "%s is not optimised for synchronising many small files so your initial "
 "synchronisation will be slow."
 msgstr ""
+"%s pek çok dosyanın senkronu için optimize bir değil, bu sebeple ilk "
+"senkronizasyon zaman alabilir."
 
 #: packages/lib/services/ReportService.ts:247
 #: packages/lib/services/ReportService.ts:248
@@ -583,7 +587,7 @@ msgstr "Gözat..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:231
 msgid "Built in"
-msgstr ""
+msgstr "Dahili"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:84
 msgid "Bulleted List"
@@ -1802,7 +1806,7 @@ msgstr "Not tarihçesini etkinleştir"
 
 #: packages/lib/models/Setting.ts:845
 msgid "Enable optical character recognition (OCR)"
-msgstr ""
+msgstr "Optik karakter tanıma (OCR)'ı etkinleştir"
 
 #: packages/lib/models/Setting.ts:1195
 msgid "Enable PDF viewer"
@@ -3880,9 +3884,8 @@ msgid "Search for..."
 msgstr "Şunu ara..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:140
-#, fuzzy
 msgid "Search hidden"
-msgstr "Arama"
+msgstr "Gizli öğeler içerisinde arama"
 
 #: packages/app-desktop/gui/NoteListControls/commands/focusSearch.ts:6
 msgid "Search in all the notes"
@@ -3893,9 +3896,8 @@ msgid "Search in current note"
 msgstr "Mevcut notta ara"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:140
-#, fuzzy
 msgid "Search shown"
-msgstr "Arama"
+msgstr "Görünür öğeler içerisinde arama"
 
 #: packages/app-cli/app/gui/FolderListWidget.js:51
 msgid "Search:"
@@ -5441,6 +5443,9 @@ msgid ""
 "When enabled, the application will scan your attachments and extract the "
 "text from it. This will allow you to search for text in these attachments."
 msgstr ""
+"Eğer bu özellik aktifleştirilirse, uygulama iliştirilen ek dosyaları "
+"tarayarak içindeki metinleri ayıklayacak. Bu sayede bu metinler üzerinden de "
+"arama yapabileceksiniz."
 
 #: packages/app-desktop/ElectronAppWrapper.ts:176
 msgid "Window unresponsive."

@@ -1,5 +1,69 @@
 # Joplin Desktop Changelog
 
+## [v2.13.14](https://github.com/laurent22/joplin/releases/tag/v2.13.14) - 2024-01-13T19:11:04Z
+
+- Fixed: Shared notebook can get corrupted if contributor changes its title ([#9709](https://github.com/laurent22/joplin/issues/9709))
+
+## [v2.14.9](https://github.com/laurent22/joplin/releases/tag/v2.14.9) (Pre-release) - 2024-01-11T22:17:59Z
+
+- Fixed: Fix AWS S3 sync error ([#9696](https://github.com/laurent22/joplin/issues/9696)) ([#8891](https://github.com/laurent22/joplin/issues/8891) by Henry Heino)
+
+## [v2.14.8](https://github.com/laurent22/joplin/releases/tag/v2.14.8) (Pre-release) - 2024-01-09T22:57:07Z
+
+- Improved: Allow importing a directory of ENEX files ([#9693](https://github.com/laurent22/joplin/issues/9693))
+- Improved: Frontmatter importer: Support Notesnook-style timestamps ([#9684](https://github.com/laurent22/joplin/issues/9684)) ([#9683](https://github.com/laurent22/joplin/issues/9683) by Henry Heino)
+- Improved: Update Simple Backup to v1.3.5 to fix some notebooks exported twice while creating a backup ([#9677](https://github.com/laurent22/joplin/issues/9677) by Henry Heino)
+- Improved: Updated packages fs-extra (v11.2.0)
+
+## [v2.14.7](https://github.com/laurent22/joplin/releases/tag/v2.14.7) (Pre-release) - 2024-01-08T11:51:49Z
+
+- Improved: Updated packages sharp (v0.33.1)
+- Fixed: Fix ENEX import issue ([20b1c2e](https://github.com/laurent22/joplin/commit/20b1c2e))
+
+## [v2.14.6](https://github.com/laurent22/joplin/releases/tag/v2.14.6) (Pre-release) - 2024-01-06T16:38:32Z
+
+- New: Add support for [OCR](https://joplinapp.org/help/apps/ocr/) ([#8975](https://github.com/laurent22/joplin/issues/8975))
+- Improved: Add Simple Backup as a default plugin ([#9360](https://github.com/laurent22/joplin/issues/9360)) ([#7934](https://github.com/laurent22/joplin/issues/7934) by Henry Heino)
+- Improved: Api: Search for partial matches by default, unless the query is surrounded by quotes ([401d551](https://github.com/laurent22/joplin/commit/401d551))
+- Improved: Cancel showing unresponsive dialog when receiving "responsive" event ([#9487](https://github.com/laurent22/joplin/issues/9487)) ([#9480](https://github.com/laurent22/joplin/issues/9480) by Henry Heino)
+- Improved: CodeMirror 6 markdown editor: Support highlighting more languages ([#9563](https://github.com/laurent22/joplin/issues/9563)) ([#9562](https://github.com/laurent22/joplin/issues/9562) by Henry Heino)
+- Improved: Don't create an extra copy of default plugins (load directly from the app bundle) ([#9508](https://github.com/laurent22/joplin/issues/9508)) ([#7934](https://github.com/laurent22/joplin/issues/7934) by Henry Heino)
+- Improved: Handle Dropbox payload_too_large error ([f267d88](https://github.com/laurent22/joplin/commit/f267d88))
+- Improved: Include more information when auto-generating import error report ([17c25b7](https://github.com/laurent22/joplin/commit/17c25b7))
+- Improved: Make backspace delete auto-matching brackets ([#9527](https://github.com/laurent22/joplin/issues/9527)) ([#9526](https://github.com/laurent22/joplin/issues/9526) by Henry Heino)
+- Improved: Mention in sync wizard that Dropbox and OneDrive are slow on first sync ([#9261](https://github.com/laurent22/joplin/issues/9261))
+- Improved: Optimise synchronisation by making delta call return whole items ([5341501](https://github.com/laurent22/joplin/commit/5341501))
+- Improved: Plugins: Expose common CodeMirror 6 packages to plugins ([#9474](https://github.com/laurent22/joplin/issues/9474)) ([#9473](https://github.com/laurent22/joplin/issues/9473) by Henry Heino)
+- Improved: Remove unnecessary warning when importing ENEX file ([7e50b11](https://github.com/laurent22/joplin/commit/7e50b11))
+- Improved: Restore note links after importing an ENEX file ([#9596](https://github.com/laurent22/joplin/issues/9596))
+- Improved: Search for partial matches by default, unless the query is surrounded by quotes ([#9343](https://github.com/laurent22/joplin/issues/9343))
+- Improved: Add support for changing text colors in rich text editor ([#9578](https://github.com/laurent22/joplin/issues/9578)) ([#9468](https://github.com/laurent22/joplin/issues/9468) by Henry Heino)
+- Improved: Fix table-of-contents links to headings with duplicate content ([#9610](https://github.com/laurent22/joplin/issues/9610)) ([#9594](https://github.com/laurent22/joplin/issues/9594) by Henry Heino)
+- Improved: Render mermaid diagrams in dark mode when Joplin is in dark mode ([#9631](https://github.com/laurent22/joplin/issues/9631)) ([#3201](https://github.com/laurent22/joplin/issues/3201) by Henry Heino)
+- Improved: Updated packages @playwright/test (v1.40.1), @rmp135/sql-ts (v1.18.1), electron-builder (v24.8.0), highlight.js (v11.9.0), mermaid (v10.6.1), nanoid (v3.3.7), react, react-select (v5.8.0), style-to-js (v1.1.9), tesseract.js (v5.0.3), ts-loader (v9.5.1)
+- Fixed: Fix Beta Editor diff highlighting ([#9525](https://github.com/laurent22/joplin/issues/9525)) ([#9524](https://github.com/laurent22/joplin/issues/9524) by Henry Heino)
+- Fixed: Fix HTML resource links lost when editing notes in the rich text editor ([#9435](https://github.com/laurent22/joplin/issues/9435)) ([#9304](https://github.com/laurent22/joplin/issues/9304) by Henry Heino)
+- Fixed: Fix code block borders in headers of Beta Markdown editor ([#9523](https://github.com/laurent22/joplin/issues/9523)) ([#9522](https://github.com/laurent22/joplin/issues/9522) by Henry Heino)
+- Fixed: Fix code blocks with blank lines break tables in the rich text editor ([#9587](https://github.com/laurent22/joplin/issues/9587)) ([#9586](https://github.com/laurent22/joplin/issues/9586) by Henry Heino)
+- Fixed: Fix importing certain ENEX notes that include invalid tables ([00eee19](https://github.com/laurent22/joplin/commit/00eee19))
+- Fixed: Fix list renumbering and enable multiple selections ([#9506](https://github.com/laurent22/joplin/issues/9506)) ([#9200](https://github.com/laurent22/joplin/issues/9200) by Henry Heino)
+- Fixed: Fix maximum width setting not respected by beta editor ([#9529](https://github.com/laurent22/joplin/issues/9529)) ([#9528](https://github.com/laurent22/joplin/issues/9528) by Henry Heino)
+- Fixed: Fixed copying and pasting an image from Chrome in RTE ([2c9bf9f](https://github.com/laurent22/joplin/commit/2c9bf9f))
+- Fixed: Fixed importing invalid tables from ENEX files ([a2ded18](https://github.com/laurent22/joplin/commit/a2ded18))
+- Fixed: Fixes issue with resources having no associated files when the RAW import process is interrupted ([#9484](https://github.com/laurent22/joplin/issues/9484))
+- Fixed: HTML notes are not readable in dark mode ([#9511](https://github.com/laurent22/joplin/issues/9511))
+- Fixed: Import ENEX archives that contain files with invalid names ([#9548](https://github.com/laurent22/joplin/issues/9548))
+- Fixed: Markdown-FrontMatter exporter generates invalid file when note starts with a dash in title ([#9483](https://github.com/laurent22/joplin/issues/9483))
+- Fixed: Ubuntu: Fix window sometimes doesn't appear on startup ([#9561](https://github.com/laurent22/joplin/issues/9561)) ([#9045](https://github.com/laurent22/joplin/issues/9045) by Henry Heino)
+- Fixed: When importing Markdown+FrontMatter files that contain images with a data URL source, the import fails ([#9485](https://github.com/laurent22/joplin/issues/9485))
+- Fixed: When importing a Markdown file that contains a link to an invalid image, import fails ([#9486](https://github.com/laurent22/joplin/issues/9486))
+
+## [v2.13.13](https://github.com/laurent22/joplin/releases/tag/v2.13.13) - 2024-01-06T13:33:11Z
+
+- Fixed: Fix HTML resource links lost when editing notes in the rich text editor (Backport [#9435](https://github.com/laurent22/joplin/issues/9435)) ([#9647](https://github.com/laurent22/joplin/issues/9647)) ([#9304](https://github.com/laurent22/joplin/issues/9304) by Henry Heino)
+- Fixed: Fix rich text editor deletes HTML links to notes ([#9624](https://github.com/laurent22/joplin/issues/9624)) ([#9613](https://github.com/laurent22/joplin/issues/9613) by Henry Heino)
+- Fixed: Ubuntu: Fix window sometimes doesn't appear on startup (Backport [#9561](https://github.com/laurent22/joplin/issues/9561)) ([#9612](https://github.com/laurent22/joplin/issues/9612)) ([#9045](https://github.com/laurent22/joplin/issues/9045) by Henry Heino)
+
 ## [v2.13.12](https://github.com/laurent22/joplin/releases/tag/v2.13.12) - 2023-12-31T16:08:02Z
 
 - Fixed: Fix importing certain ENEX notes that include invalid tables ([229b9a5](https://github.com/laurent22/joplin/commit/229b9a5))

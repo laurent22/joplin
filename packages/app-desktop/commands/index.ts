@@ -16,7 +16,7 @@ import * as switchProfile3 from './switchProfile3';
 import * as toggleExternalEditing from './toggleExternalEditing';
 import * as toggleSafeMode from './toggleSafeMode';
 
-const index:any[] = [
+const index: any[] = [
 	copyDevCommand,
 	editProfileConfig,
 	exportFolders,

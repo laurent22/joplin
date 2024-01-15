@@ -1,5 +1,6 @@
 import { defaultFolderIcon, FolderEntity, FolderIcon, NoteEntity, ResourceEntity } from '../services/database/types';
 import BaseModel, { DeleteOptions } from '../BaseModel';
+import { FolderLoadOptions } from './utils/types';
 import time from '../time';
 import { _ } from '../locale';
 import Note from './Note';
@@ -249,7 +250,7 @@ export default class Folder extends BaseItem {
 		return output;
 	}
 
-	public static async all(options: any = null) {
+	public static async all(options: FolderLoadOptions = null) {
 		const output = await super.all(options);
 		if (options && options.includeConflictFolder) {
 			const conflictCount = await Note.conflictedCount();
@@ -416,6 +417,7 @@ export default class Folder extends BaseItem {
 			share_id: string;
 			is_shared: number;
 			resource_is_shared: number;
+			resource_share_id: string;
 		}
 
 		for (let i = 0; i < 5; i++) {
@@ -425,7 +427,12 @@ export default class Folder extends BaseItem {
 			// same time we also process the is_shared property.
 
 			const rows = (await this.db().selectAll(`
-				SELECT r.id, n.share_id, n.is_shared, r.is_shared as resource_is_shared
+				SELECT
+					r.id,
+					n.share_id,
+					n.is_shared,
+					r.is_shared as resource_is_shared,
+					r.share_id as resource_share_id
 				FROM note_resources nr
 				LEFT JOIN resources r ON nr.resource_id = r.id
 				LEFT JOIN notes n ON nr.note_id = n.id
@@ -512,7 +519,15 @@ export default class Folder extends BaseItem {
 						updated_time: now,
 					};
 
-					if (row.is_shared !== row.resource_is_shared) {
+					// When a resource becomes published or shared, we set
+					// `blob_updated_time` to ensure that the resource content
+					// is uploaded too during the next sync operation.
+					//
+					// This is necessary because Joplin Server needs to
+					// associate `share_id` or `is_shared` with the resource
+					// content for sharing to work. Otherwise the share
+					// recipient will only get the resource metadata.
+					if (row.is_shared !== row.resource_is_shared || row.share_id !== row.resource_share_id) {
 						resource.blob_updated_time = now;
 					}
 

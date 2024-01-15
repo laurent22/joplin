@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { useEffect, useRef, useCallback, useMemo } from 'react';
-import styled, { css } from 'styled-components';
-import shim from '@joplin/lib/shim';
-import { StyledRoot, StyledAddButton, StyledShareIcon, StyledHeader, StyledHeaderIcon, StyledAllNotesIcon, StyledHeaderLabel, StyledListItem, StyledListItemAnchor, StyledExpandLink, StyledNoteCount, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton } from './styles';
+import { StyledRoot, StyledAddButton, StyledShareIcon, StyledHeader, StyledHeaderIcon, StyledAllNotesIcon, StyledHeaderLabel, StyledListItem, StyledListItemAnchor, StyledExpandLink, StyledNoteCount, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton, StyledSpanFix } from './styles';
 import { ButtonLevel } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
 import InteropService from '@joplin/lib/services/interop/InteropService';
@@ -29,7 +27,7 @@ import FolderIconBox from '../FolderIconBox';
 import { Theme } from '@joplin/lib/themes/type';
 import { RuntimeProps } from './commands/focusElementSideBar';
 const { connect } = require('react-redux');
-const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
+import { renderFolders, renderTags } from '@joplin/lib/components/shared/side-menu-shared';
 const { themeStyle } = require('@joplin/lib/theme');
 const bridge = require('@electron/remote').require('./bridge').default;
 const Menu = bridge().Menu;
@@ -39,15 +37,6 @@ const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 const { clipboard } = require('electron');
 
 const logger = Logger.create('Sidebar');
-
-// Workaround sidebar rendering bug on Linux Intel GPU.
-// https://github.com/laurent22/joplin/issues/7506
-const StyledSpanFix = styled.span`
-	${shim.isLinux() && css`
-		position: relative;
-	`}
-`;
-
 
 interface Props {
 	themeId: number;
@@ -715,7 +704,7 @@ const SidebarComponent = (props: Props) => {
 
 	if (props.folders.length) {
 		const allNotesSelected = props.notesParentType === 'SmartFilter' && props.selectedSmartFilterId === ALL_NOTES_FILTER_ID;
-		const result = shared.renderFolders(props, renderFolderItem);
+		const result = renderFolders(props, renderFolderItem);
 		const folderItems = [renderAllNotesItem(theme, allNotesSelected)].concat(result.items);
 		folderItemsOrder_.current = result.order;
 		items.push(
@@ -736,7 +725,7 @@ const SidebarComponent = (props: Props) => {
 	);
 
 	if (props.tags.length) {
-		const result = shared.renderTags(props, renderTag);
+		const result = renderTags(props, renderTag);
 		const tagItems = result.items;
 		tagItemsOrder_.current = result.order;
 

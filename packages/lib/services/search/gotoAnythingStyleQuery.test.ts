@@ -1,6 +1,6 @@
 import gotoAnythingStyleQuery from './gotoAnythingStyleQuery';
 
-describe('searchengine/gotoAnythingStyleQuery', () => {
+describe('search/gotoAnythingStyleQuery', () => {
 
 	it('should prepare queries', () => {
 		const testCases: [string, string][] = [

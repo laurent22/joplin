@@ -46,7 +46,6 @@ const { AppNav } = require('./components/app-nav.js');
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 import BaseSyncTarget from '@joplin/lib/BaseSyncTarget';
-const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
 import Resource from '@joplin/lib/models/Resource';
 import Tag from '@joplin/lib/models/Tag';
 import NoteTag from '@joplin/lib/models/NoteTag';
@@ -75,7 +74,7 @@ import { reg } from '@joplin/lib/registry';
 const { defaultState } = require('@joplin/lib/reducer');
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local');
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
-import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
+import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 const { themeStyle } = require('./components/global-style.js');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
@@ -122,6 +121,7 @@ import { ReactNode } from 'react';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
 import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
 import runOnDeviceFsDriverTests from './utils/fs-driver/runOnDeviceTests';
+import { refreshFolders } from '@joplin/lib/folders-screen-utils';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -515,7 +515,6 @@ async function initialize(dispatch: Function) {
 
 	// reg.dispatch = dispatch;
 	BaseModel.dispatch = dispatch;
-	FoldersScreenUtils.dispatch = dispatch;
 	BaseSyncTarget.dispatch = dispatch;
 	NavService.dispatch = dispatch;
 	BaseModel.setDb(db);
@@ -637,7 +636,7 @@ async function initialize(dispatch: Function) {
 
 		reg.logger().info('Loading folders...');
 
-		await FoldersScreenUtils.refreshFolders();
+		await refreshFolders((action: any) => dispatch(action));
 
 		const tags = await Tag.allWithNotes();
 
@@ -999,7 +998,7 @@ class AppComponent extends React.Component {
 
 	public UNSAFE_componentWillReceiveProps(newProps: any) {
 		if (newProps.syncStarted !== this.lastSyncStarted_) {
-			if (!newProps.syncStarted) FoldersScreenUtils.refreshFolders();
+			if (!newProps.syncStarted) void refreshFolders((action: any) => this.props.dispatch(action));
 			this.lastSyncStarted_ = newProps.syncStarted;
 		}
 	}
