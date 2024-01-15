@@ -1173,10 +1173,7 @@ class Setting extends BaseModel {
 				section: 'plugins',
 				public: true,
 				advanced: true,
-				appTypes: [AppType.Desktop], // Disabled on mobile for now
-				show: (_settings: any) => {
-					return (shim.isNode() || shim.mobilePlatform() !== 'ios');
-				},
+				appTypes: [AppType.Desktop],
 				label: () => 'Development plugins',
 				description: () => 'You may add multiple plugin paths, each separated by a comma. You will need to restart the application for the changes to take effect.',
 				storage: SettingStorage.File,

@@ -31,6 +31,7 @@ interface Props {
 	onUpdate?: PluginCallback;
 	onDelete?: PluginCallback;
 	onToggle?: PluginCallback;
+	onAboutPress?: PluginCallback;
 	onShowPluginLog?: PluginCallback;
 }
 
@@ -81,6 +82,7 @@ const PluginBox: React.FC<Props> = props => {
 	);
 	const disableButton = <Button onPress={() => props.onToggle?.({ item })}>{_('Disable')}</Button>;
 	const enableButton = <Button onPress={() => props.onToggle?.({ item })}>{_('Enable')}</Button>;
+	const aboutButton = <Button icon='web' onPress={() => props.onAboutPress?.({ item })}>{_('About')}</Button>;
 
 	const renderErrorsChip = () => {
 		if (!props.hasErrors) return null;
@@ -127,6 +129,7 @@ const PluginBox: React.FC<Props> = props => {
 				</View>
 			</Card.Content>
 			<Card.Actions>
+				{props.onAboutPress ? aboutButton : null}
 				{props.onInstall ? installButton : null}
 				{props.onDelete && !props.item.builtIn ? deleteButton : null}
 				{props.onUpdate && updateStateIsIdle ? updateButton : null}
