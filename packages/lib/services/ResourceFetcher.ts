@@ -183,8 +183,8 @@ export default class ResourceFetcher extends BaseService {
 		this.eventEmitter_.emit('downloadStarted', { id: resource.id });
 
 		try {
-			const response = await fileApi.get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' });
-			if (!response) throw new Error(`Resource not found: ${resource.id}`);
+			await fileApi.get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' });
+			if (!(await shim.fsDriver().exists(localResourceContentPath))) throw new Error(`Resource not found: ${resource.id}`);
 
 			await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_DONE });
 			this.logger().debug(`ResourceFetcher: Resource downloaded: ${resource.id}`);
