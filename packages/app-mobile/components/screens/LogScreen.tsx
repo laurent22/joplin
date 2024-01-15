@@ -57,9 +57,18 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 		];
 	}
 
+	private refreshLogTimeout: any = null;
 	public override componentDidUpdate(_prevProps: Props, prevState: State) {
-		if (prevState?.filter !== this.state.filter) {
-			void this.resfreshLogEntries();
+		if ((prevState?.filter ?? '') !== (this.state.filter ?? '')) {
+			// We refresh the log only after a brief delay -- this prevents the log from updating
+			// with every keystroke in the filter input.
+			if (this.refreshLogTimeout) {
+				clearTimeout(this.refreshLogTimeout);
+			}
+			setTimeout(() => {
+				this.refreshLogTimeout = null;
+				void this.resfreshLogEntries();
+			}, 600);
 		}
 	}
 
@@ -105,10 +114,10 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 	}
 
 	public styles() {
-		const theme = themeStyle(this.props.themeId);
-
 		if (this.styles_[this.props.themeId]) return this.styles_[this.props.themeId];
 		this.styles_ = {};
+
+		const theme = themeStyle(this.props.themeId);
 
 		const styles: any = {
 			row: {
@@ -149,8 +158,11 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 	private async resfreshLogEntries(showErrorsOnly: boolean = null) {
 		if (showErrorsOnly === null) showErrorsOnly = this.state.showErrorsOnly;
 
+		const limit = 1000;
+		const logEntries = await this.getLogEntries(showErrorsOnly, limit);
+
 		this.setState({
-			logEntries: await this.getLogEntries(showErrorsOnly),
+			logEntries: logEntries,
 			showErrorsOnly: showErrorsOnly,
 		});
 	}
