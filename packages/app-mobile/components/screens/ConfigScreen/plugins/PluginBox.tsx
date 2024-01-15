@@ -23,6 +23,7 @@ interface Props {
 	item: PluginItem;
 	isCompatible: boolean;
 
+	hasErrors?: boolean;
 	installState?: InstallState;
 	updateState?: UpdateState;
 
@@ -30,6 +31,7 @@ interface Props {
 	onUpdate?: PluginCallback;
 	onDelete?: PluginCallback;
 	onToggle?: PluginCallback;
+	onShowPluginLog?: PluginCallback;
 }
 
 const PluginIcon = (props: any) => <Icon {...props} source='puzzle'/>;
@@ -80,6 +82,20 @@ const PluginBox: React.FC<Props> = props => {
 	const disableButton = <Button onPress={() => props.onToggle?.({ item })}>{_('Disable')}</Button>;
 	const enableButton = <Button onPress={() => props.onToggle?.({ item })}>{_('Enable')}</Button>;
 
+	const renderErrorsChip = () => {
+		if (!props.hasErrors) return null;
+
+		return (
+			<Chip
+				icon='alert'
+				mode='outlined'
+				onPress={() => props.onShowPluginLog({ item })}
+			>
+				Error
+			</Chip>
+		);
+	};
+
 	const renderRecommendedChip = () => {
 		if (!props.item.manifest._recommended) {
 			return null;
@@ -105,6 +121,7 @@ const PluginBox: React.FC<Props> = props => {
 			/>
 			<Card.Content>
 				<View style={{ flexDirection: 'row' }}>
+					{renderErrorsChip()}
 					{renderRecommendedChip()}
 					{renderBuiltInChip()}
 				</View>

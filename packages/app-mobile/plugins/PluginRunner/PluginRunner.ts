@@ -26,6 +26,7 @@ export default class PluginRunner extends BasePluginRunner {
 
 		const onError = async (message: string) => {
 			logger.error(`Plugin ${pluginId}: ${message}`);
+			plugin.hasErrors = true;
 		};
 
 		const messageChannelId = `plugin-message-channel-${pluginId}-${Date.now()}`;

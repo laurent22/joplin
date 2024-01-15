@@ -5,7 +5,7 @@ import PluginService, { PluginSettings, defaultPluginSetting } from '@joplin/lib
 import { useCallback, useMemo, useState } from 'react';
 import PluginBox, { UpdateState } from './PluginBox';
 import useOnDeleteHandler from '@joplin/lib/components/shared/config/plugins/useOnDeleteHandler';
-import { OnPluginSettingChangeEvent } from '@joplin/lib/components/shared/config/plugins/types';
+import { ItemEvent, OnPluginSettingChangeEvent } from '@joplin/lib/components/shared/config/plugins/types';
 import useOnInstallHandler from '@joplin/lib/components/shared/config/plugins/useOnInstallHandler';
 import repoApi from './utils/repoApi';
 
@@ -15,6 +15,7 @@ interface Props {
 	pluginSettings: string;
 	updateablePluginIds: Record<string, boolean>;
 
+	onShowPluginLog: (event: ItemEvent)=> void;
 	updatePluginStates: (settingValue: PluginSettings)=> void;
 }
 
@@ -91,6 +92,8 @@ const PluginToggle: React.FC<Props> = props => {
 		<PluginBox
 			item={pluginItem}
 			isCompatible={isCompatible}
+			hasErrors={plugin.hasErrors}
+			onShowPluginLog={props.onShowPluginLog}
 			onToggle={onToggle}
 			onDelete={onDelete}
 			onUpdate={onUpdate}

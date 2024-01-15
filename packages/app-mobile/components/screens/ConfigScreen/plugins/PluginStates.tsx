@@ -12,6 +12,8 @@ import PluginToggle from './PluginToggle';
 import SearchPlugins from './SearchPlugins';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
+import { ItemEvent } from '@joplin/lib/components/shared/config/plugins/types';
+import NavService from '@joplin/lib/services/NavService';
 
 interface Props {
 	themeId: number;
@@ -100,6 +102,11 @@ const PluginStates: React.FC<Props> = props => {
 		}
 	};
 
+	const onShowPluginLog = useCallback((event: ItemEvent) => {
+		const pluginId = event.item.manifest.id;
+		void NavService.go('Log', { defaultFilter: pluginId });
+	}, []);
+
 	const installedPluginCards = [];
 	const pluginService = PluginService.instance();
 	for (const key in pluginService.plugins) {
@@ -114,6 +121,7 @@ const PluginStates: React.FC<Props> = props => {
 					pluginSettings={props.pluginSettings}
 					updateablePluginIds={updateablePluginIds}
 					updatePluginStates={props.updatePluginStates}
+					onShowPluginLog={onShowPluginLog}
 				/>,
 			);
 		}

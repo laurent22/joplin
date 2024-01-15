@@ -39,6 +39,7 @@ export default class Plugin {
 	private contentScriptMessageListeners_: Record<string, Function> = {};
 	private dataDir_: string;
 	private dataDirCreated_ = false;
+	private hasErrors_ = false;
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public constructor(baseDir: string, manifest: PluginManifest, scriptText: string, dispatch: Function, dataDir: string) {
@@ -95,6 +96,14 @@ export default class Plugin {
 
 	public get viewCount(): number {
 		return Object.keys(this.viewControllers_).length;
+	}
+
+	public get hasErrors(): boolean {
+		return this.hasErrors_;
+	}
+
+	public set hasErrors(hasErrors: boolean) {
+		this.hasErrors_ = hasErrors;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied

@@ -115,6 +115,7 @@ export default class PluginViewController {
 			},
 			onError: async (error: string) => {
 				logger.error(`Plugin ${pluginState.id} dialog error: ${error}`);
+				plugin.hasErrors = true;
 			},
 		};
 
