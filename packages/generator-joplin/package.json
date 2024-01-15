@@ -26,7 +26,7 @@
     "chalk": "2.4.2",
     "slugify": "1.6.6",
     "yeoman-generator": "5.10.0",
-    "yosay": "2.0.2"
+    "yosay": "3.0.0"
   },
   "devDependencies": {
     "jest": "29.7.0"
