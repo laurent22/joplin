@@ -1,5 +1,5 @@
 import PluginRunner from '../../../app/services/plugins/PluginRunner';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
 import MdToHtml from '@joplin/renderer/MdToHtml';
 import shim from '@joplin/lib/shim';
@@ -304,4 +304,33 @@ describe('services_PluginService', () => {
 		expect(JSON.parse(folders[0].title)).toBe(expectedPath);
 	}));
 
+	it('should uninstall multiple plugins', async () => {
+		const service = newPluginService();
+		const pluginId1 = 'org.joplinapp.FirstJplPlugin';
+		const pluginId2 = 'org.joplinapp.plugins.TocDemo';
+		const pluginPath1 = `${testPluginDir}/jpl_test/${pluginId1}.jpl`;
+		const pluginPath2 = `${testPluginDir}/toc/${pluginId2}.jpl`;
+
+		await service.installPlugin(pluginPath1);
+		await service.installPlugin(pluginPath2);
+
+		// Both should be installed
+		expect(await fs.pathExists(`${Setting.value('pluginDir')}/${pluginId1}.jpl`)).toBe(true);
+		expect(await fs.pathExists(`${Setting.value('pluginDir')}/${pluginId2}.jpl`)).toBe(true);
+
+		const pluginSettings: PluginSettings = {
+			[pluginId1]: { enabled: true, deleted: true, hasBeenUpdated: false },
+			[pluginId2]: { enabled: true, deleted: true, hasBeenUpdated: false },
+		};
+
+		const newPluginSettings = await service.uninstallPlugins(pluginSettings);
+
+		// Should have deleted plugins
+		expect(await fs.pathExists(`${Setting.value('pluginDir')}/${pluginId1}.jpl`)).toBe(false);
+		expect(await fs.pathExists(`${Setting.value('pluginDir')}${pluginId2}.jpl`)).toBe(false);
+
+		// Should clear deleted plugins from settings
+		expect(newPluginSettings[pluginId1]).toBe(undefined);
+		expect(newPluginSettings[pluginId2]).toBe(undefined);
+	});
 });
