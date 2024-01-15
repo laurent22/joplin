@@ -543,7 +543,7 @@ export default class PluginService extends BaseService {
 		for (const pluginId in settings) {
 			if (settings[pluginId].deleted) {
 				await this.uninstallPlugin(pluginId);
-				newSettings = { ...settings };
+				newSettings = { ...newSettings };
 				delete newSettings[pluginId];
 			}
 		}
