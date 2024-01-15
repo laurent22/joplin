@@ -29,4 +29,5 @@ export interface Props {
 	focusedField: string;
 	parentFolderIsReadOnly: boolean;
 	listRenderer: ListRenderer;
+	selectedFolderInTrash: boolean;
 }

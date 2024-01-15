@@ -22,6 +22,7 @@ import * as focusElementNoteList from './commands/focusElementNoteList';
 import CommandService from '@joplin/lib/services/CommandService';
 import useDragAndDrop from './utils/useDragAndDrop';
 import usePrevious from '../hooks/usePrevious';
+import { getTrashFolderId } from '@joplin/lib/services/trash';
 const { connect } = require('react-redux');
 
 const commands = {
@@ -146,6 +147,7 @@ const NoteList = (props: Props) => {
 		props.showCompletedTodos,
 		listRenderer.flow,
 		itemsPerLine,
+		props.selectedFolderInTrash,
 	);
 
 	const previousSelectedNoteIds = usePrevious(props.selectedNoteIds, []);
@@ -296,6 +298,7 @@ const mapStateToProps = (state: AppState) => {
 		customCss: state.customCss,
 		focusedField: state.focusedField,
 		parentFolderIsReadOnly: state.notesParentType === 'Folder' && selectedFolder ? itemIsReadOnlySync(ModelType.Folder, ItemChange.SOURCE_UNSPECIFIED, selectedFolder as ItemSlice, userId, state.shareService) : false,
+		selectedFolderInTrash: state.selectedFolderId === getTrashFolderId() || !!selectedFolder && !!selectedFolder.deleted_time,
 	};
 };
 
