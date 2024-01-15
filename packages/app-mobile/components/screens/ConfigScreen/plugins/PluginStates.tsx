@@ -1,4 +1,3 @@
-
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import * as React from 'react';
 import repoApi from './utils/repoApi';
@@ -6,12 +5,13 @@ import Logger from '@joplin/utils/Logger';
 import { useCallback, useState } from 'react';
 import { ConfigScreenStyles } from '../configScreenStyles';
 import { View } from 'react-native';
-import { Button, Chip, Text } from 'react-native-paper';
+import { Banner, Button, Text } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginToggle from './PluginToggle';
 import SearchPlugins from './SearchPlugins';
 import shim from '@joplin/lib/shim';
+import Setting from '@joplin/lib/models/Setting';
 
 interface Props {
 	themeId: number;
@@ -82,7 +82,9 @@ const PluginStates: React.FC<Props> = props => {
 		if (repoApiLoaded) {
 			if (!repoApi().isUsingDefaultContentUrl) {
 				const url = new URL(repoApi().contentBaseUrl);
-				return <Chip icon='alert'>{_('Content provided by: %s', url.hostname)}</Chip>;
+				return (
+					<Banner visible={true} icon='alert'>{_('Content provided by: %s', url.hostname)}</Banner>
+				);
 			}
 
 			return null;
@@ -117,25 +119,37 @@ const PluginStates: React.FC<Props> = props => {
 		}
 	}
 
-	const searchComponent = (
-		<SearchPlugins
-			pluginSettings={props.pluginSettings}
-			themeId={props.themeId}
-			updatePluginStates={props.updatePluginStates}
-			repoApiInitialized={repoApiLoaded}
-		/>
-	);
+	const isIos = shim.mobilePlatform() === 'ios';
+	const isDevMode = Setting.value('env') === 'dev';
 
 	const showSearch = (
-		shim.mobilePlatform() !== 'ios'
+		(!isIos || isDevMode)
 		&& (
 			!props.shouldShowBasedOnSearchQuery || props.shouldShowBasedOnSearchQuery(searchInputSearchText())
 		)
 	);
 
+	const renderIosSearchWarning = () => {
+		if (!isIos || !showSearch) return null;
+
+		return <Banner visible={true} icon='information'>{'Note: Plugin search is usually disabled on iOS (and only enabled in dev mode).'}</Banner>;
+	};
+
+	const searchComponent = (
+		<>
+			<SearchPlugins
+				pluginSettings={props.pluginSettings}
+				themeId={props.themeId}
+				updatePluginStates={props.updatePluginStates}
+				repoApiInitialized={repoApiLoaded}
+			/>
+		</>
+	);
+
 	return (
 		<View>
 			{renderRepoApiStatus()}
+			{renderIosSearchWarning()}
 			{installedPluginCards}
 			{showSearch ? searchComponent : null}
 		</View>
