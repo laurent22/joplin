@@ -272,12 +272,12 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 				channelId: this.channelId,
 			});
 		} catch (error) {
-			console.error('Error: ', error, error.stack);
+			console.error(`Error (in RemoteMessenger, calling ${message?.methodPath}): `, error, error.stack);
 
 			this.postMessage({
 				kind: MessageType.ErrorResponse,
 				responseId: message.respondWithId,
-				errorMessage: `${error}`,
+				errorMessage: `${error} (Calling ${message?.methodPath?.join?.('.')})`,
 				channelId: this.channelId,
 			});
 		}

@@ -24,9 +24,13 @@ export default class PluginRunner extends BasePluginRunner {
 		const pluginId = plugin.id;
 		logger.info('Running plugin with id', pluginId);
 
+		const onError = async (message: string) => {
+			logger.error(`Plugin ${pluginId}: ${message}`);
+		};
+
 		const messageChannelId = `plugin-message-channel-${pluginId}-${Date.now()}`;
 		const messenger = new RNToWebViewMessenger<PluginApi, PluginWebViewApi>(
-			messageChannelId, this.webviewRef.current, { api: pluginApi },
+			messageChannelId, this.webviewRef.current, { api: pluginApi, onError },
 		);
 
 		this.messageEventListeners.push((event) => {

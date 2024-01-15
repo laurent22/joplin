@@ -42,7 +42,9 @@ export const runPlugin = (
 
 		(async () => {
 			window.require = pluginBackgroundPage.requireModule;
-			await pluginBackgroundPage.createPluginApiProxy(${JSON.stringify(messageChannelId)});
+
+			await pluginBackgroundPage.initializePluginBackgroundIframe(${JSON.stringify(messageChannelId)});
+
 			${pluginScript}
 		})();
 	`;

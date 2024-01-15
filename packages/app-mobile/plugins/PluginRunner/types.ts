@@ -10,6 +10,7 @@ export interface PluginWebViewApi {
 
 export interface PluginApi {
 	api: ApiGlobal;
+	onError: (message: string)=> Promise<void>;
 }
 
 export interface DialogRemoteApi {
@@ -17,6 +18,7 @@ export interface DialogRemoteApi {
 	onMessage: (callback: (arg: SerializableData)=> void)=> void;
 	onSubmit: (buttonId: string, formData: SerializableData)=> void;
 	onDismiss: ()=> void;
+	onError: (message: string)=> Promise<void>;
 }
 
 export interface DialogLocalApi {

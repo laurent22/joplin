@@ -1,5 +1,6 @@
 import WindowMessenger from '@joplin/lib/utils/ipc/WindowMessenger';
 import { DialogLocalApi, DialogRemoteApi } from '../types';
+import reportUnhandledErrors from './utils/reportUnhandledErrors';
 
 let iframeCssElement: HTMLStyleElement|null = null;
 
@@ -40,6 +41,8 @@ const initializeDialogIframe = (messageChannelId: string) => {
 		postMessage: messenger.remoteApi.postMessage,
 		onMessage: messenger.remoteApi.onMessage,
 	};
+
+	reportUnhandledErrors(messenger.remoteApi.onError);
 };
 
 export default initializeDialogIframe;

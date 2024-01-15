@@ -1,5 +1,3 @@
-import { PluginApi, PluginWebViewApi } from '../types';
-import WindowMessenger from '@joplin/lib/utils/ipc/WindowMessenger';
 import './style.css';
 
 export { runPlugin, stopPlugin } from './startStopPlugin';
@@ -13,13 +11,6 @@ export const requireModule = (moduleName: string) => {
 	throw new Error(`Unable to require module ${moduleName} on mobile.`);
 };
 
-export const createPluginApiProxy = async (messageChannelId: string) => {
-	const localApi = { };
-	const messenger = new WindowMessenger<PluginWebViewApi, PluginApi>(messageChannelId, parent, localApi);
-	await messenger.awaitRemoteReady();
-
-	(window as any).joplin = messenger.remoteApi.api.joplin;
-};
-
+export { default as initializePluginBackgroundIframe } from './initializePluginBackgroundIframe';
 export { default as initializeDialogIframe } from './initializeDialogIframe';
 export { default as openDialog } from './openDialog';

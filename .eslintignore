@@ -559,10 +559,12 @@ packages/app-mobile/plugins/PluginRunner/PluginRunner.js
 packages/app-mobile/plugins/PluginRunner/PluginRunnerWebView.js
 packages/app-mobile/plugins/PluginRunner/PluginViewController.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/initializeDialogIframe.js
+packages/app-mobile/plugins/PluginRunner/backgroundPage/initializePluginBackgroundIframe.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/openDialog.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/pluginRunnerBackgroundPage.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/startStopPlugin.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/makeSandboxedIframe.js
+packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/reportUnhandledErrors.js
 packages/app-mobile/plugins/PluginRunner/types.js
 packages/app-mobile/plugins/loadPlugins.js
 packages/app-mobile/root.js

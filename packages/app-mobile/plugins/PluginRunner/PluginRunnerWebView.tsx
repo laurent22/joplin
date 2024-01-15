@@ -143,6 +143,10 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 		pluginViewController.onWebViewMessage(event);
 	}, [pluginViewController, pluginRunner]);
 
+	const onError = useCallback((event: any) => {
+		logger.error(`Error: (${event.nativeEvent.code}) ${event.nativeEvent.description}`);
+	}, []);
+
 	const styles = useStyles(webViewVisible);
 	const webView = (
 		<ExtendedWebView
@@ -152,7 +156,7 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 			html={html}
 			injectedJavaScript={injectedJs}
 			onMessage={onMessage}
-			onError={()=>{}}
+			onError={onError}
 			onLoadEnd={() => setLoaded(true)}
 			ref={webviewRef}
 		/>

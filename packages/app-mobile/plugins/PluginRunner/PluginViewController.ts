@@ -96,7 +96,6 @@ export default class PluginViewController {
 				return await viewController.emitMessage({ message });
 			},
 
-			// TODO:
 			onMessage: async (callback) => {
 				viewController.onMessage(callback);
 			},
@@ -113,6 +112,9 @@ export default class PluginViewController {
 					submitted = true;
 				}
 				this.closeDialog(viewInfo);
+			},
+			onError: async (error: string) => {
+				logger.error(`Plugin ${pluginState.id} dialog error: ${error}`);
 			},
 		};
 
