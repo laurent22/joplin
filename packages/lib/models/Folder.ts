@@ -118,6 +118,7 @@ export default class Folder extends BaseItem {
 		if (options.deleteChildren) {
 			const childrenDeleteOptions: DeleteOptions = {
 				disableReadOnlyCheck: options.disableReadOnlyCheck,
+				deleteChildren: true,
 				toTrash,
 			};
 
@@ -293,7 +294,7 @@ export default class Folder extends BaseItem {
 
 		const where = ['parent_id = ?'];
 
-		if (options.includeDeleted) {
+		if (!options.includeDeleted) {
 			where.push('deleted_time = 0');
 		}
 

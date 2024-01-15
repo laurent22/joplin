@@ -41,11 +41,17 @@ describe('restoreItems', () => {
 
 	it('should restore folders and sub-folders', async () => {
 		const folder1 = await Folder.save({});
-		const folder2 = await Folder.save({});
+		const folder2 = await Folder.save({ parent_id: folder1.id });
 		const note1 = await Note.save({ parent_id: folder2.id });
 		const note2 = await Note.save({ parent_id: folder2.id });
 
-		await Folder.delete(folder1.id, { toTrash: true });
+		const beforeTime = Date.now();
+		await Folder.delete(folder1.id, { toTrash: true, deleteChildren: true });
+
+		expect((await Folder.load(folder1.id)).deleted_time).toBeGreaterThanOrEqual(beforeTime);
+		expect((await Folder.load(folder2.id)).deleted_time).toBeGreaterThanOrEqual(beforeTime);
+		expect((await Note.load(note1.id)).deleted_time).toBeGreaterThanOrEqual(beforeTime);
+		expect((await Note.load(note2.id)).deleted_time).toBeGreaterThanOrEqual(beforeTime);
 
 		await restoreItems(ModelType.Folder, [await Folder.load(folder1.id)]);
 
