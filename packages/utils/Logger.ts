@@ -36,6 +36,11 @@ interface Target extends TargetOptions {
 	type: TargetType;
 }
 
+interface LastEntriesOptions {
+	levels?: LogLevel[];
+	filter?: string;
+}
+
 export interface LoggerWrapper {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	debug: Function;
@@ -196,7 +201,7 @@ class Logger {
 	}
 
 	// Only for database at the moment
-	public async lastEntries(limit = 100, options: any = null) {
+	public async lastEntries(limit = 100, options: LastEntriesOptions|null = null) {
 		if (options === null) options = {};
 		if (!options.levels) options.levels = [LogLevel.Debug, LogLevel.Info, LogLevel.Warn, LogLevel.Error];
 		if (!options.levels.length) return [];
@@ -204,9 +209,21 @@ class Logger {
 		for (let i = 0; i < this.targets_.length; i++) {
 			const target = this.targets_[i];
 			if (target.type === 'database') {
-				let sql = `SELECT * FROM logs WHERE level IN (${options.levels.join(',')}) ORDER BY timestamp DESC`;
-				if (limit !== null) sql += ` LIMIT ${limit}`;
-				return await target.database.selectAll(sql);
+				const sql = [`SELECT * FROM logs WHERE level IN (${options.levels.join(',')})`];
+				const sqlParams = [];
+
+				if (options.filter) {
+					sql.push('AND message LIKE ?');
+					sqlParams.push(`%${options.filter}%`);
+				}
+
+				sql.push('ORDER BY timestamp DESC');
+				if (limit !== null) {
+					sql.push('LIMIT ?');
+					sqlParams.push(limit);
+				}
+
+				return await target.database.selectAll(sql.join(' '), sqlParams);
 			}
 		}
 		return [];
