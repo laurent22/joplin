@@ -14,6 +14,11 @@ const { cliUtils } = require('./cli-utils.js');
 const md5 = require('md5');
 import * as locker from 'proper-lockfile';
 import { pathExists, writeFile } from 'fs-extra';
+import { checkIfLoginWasSuccessful, generateLoginWithUniqueLoginCode } from '@joplin/lib/services/joplinCloudUtils';
+import Logger from '@joplin/utils/Logger';
+import { uuidgen } from '@joplin/lib/uuid';
+
+const logger = Logger.create('command-sync');
 
 class Command extends BaseCommand {
 
@@ -83,6 +88,33 @@ class Command extends BaseCommand {
 			const response = await api.execAuthToken(authCode);
 			Setting.setValue(`sync.${this.syncTargetId_}.auth`, response.access_token);
 			api.setAuthToken(response.access_token);
+			return true;
+		} else if (syncTargetMd.name === 'joplinCloud') {
+			const uniqueLoginCode = uuidgen();
+			const checkForCredentials = async () => {
+				try {
+					const applicationsUrl = `${Setting.value('sync.10.path')}/api/applications/${uniqueLoginCode}`;
+					const response = await checkIfLoginWasSuccessful(applicationsUrl);
+					if (response && response.success) {
+						return response;
+					}
+					return null;
+				} catch (error) {
+					logger.error(error);
+					throw error;
+				}
+			};
+
+			this.stdout(_('To allow Joplin to synchronise with Joplin Cloud, open this URL in your browser to authorise the application:'));
+
+			const loginUrl = `${Setting.value('sync.10.website')}/applications/${uniqueLoginCode}/confirm`;
+			const urlWithClient = await generateLoginWithUniqueLoginCode(loginUrl);
+			this.stdout(urlWithClient);
+
+			const authorized = await this.prompt(_('Did you already authorized login in Joplin Cloud?'), { booleanAnswerDefault: 'y' });
+			if (!authorized) return false;
+			const result = await checkForCredentials();
+			if (!result) return false;
 			return true;
 		}
 
