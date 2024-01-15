@@ -520,6 +520,10 @@ const SidebarComponent = (props: Props) => {
 		const isExpanded = props.collapsedFolderIds.indexOf(folder.id) < 0;
 		let noteCount = (folder as any).note_count;
 
+		// For now hide the count for folders in the trash because it doesn't work and getting it to
+		// work would be tricky.
+		if (folder.deleted_time || folder.id === getTrashFolderId()) noteCount = 0;
+
 		// Thunderbird count: Subtract children note_count from parent folder if it expanded.
 		if (isExpanded) {
 			for (let i = 0; i < props.folders.length; i++) {

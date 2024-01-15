@@ -436,6 +436,14 @@ export default class BaseApplication {
 			doRefreshFolders = true;
 		}
 
+		// If a note gets deleted to the trash or gets restored we refresh the folders so that the
+		// note count can be updated.
+		if (this.hasGui() && ['NOTE_UPDATE_ONE'].includes(action.type)) {
+			if (action.changedFields && action.changedFields.includes('deleted_time')) {
+				doRefreshFolders = true;
+			}
+		}
+
 		if (action.type === 'HISTORY_BACKWARD' || action.type === 'HISTORY_FORWARD') {
 			refreshNotes = true;
 			refreshNotesUseSelectedNoteId = true;

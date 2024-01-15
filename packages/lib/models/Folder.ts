@@ -171,15 +171,21 @@ export default class Folder extends BaseItem {
 
 	// Calculates note counts for all folders and adds the note_count attribute to each folder
 	// Note: this only calculates the overall number of nodes for this folder and all its descendants
-	public static async addNoteCounts(folders: any[], includeCompletedTodos = true) {
-		const foldersById: any = {};
+	public static async addNoteCounts(folders: FolderEntity[], includeCompletedTodos = true) {
+		// This is old code so we keep it, but we should never ever add properties to objects from
+		// the database. Eventually we should refactor this.
+		interface FolderEntityWithNoteCount extends FolderEntity {
+			note_count?: number;
+		}
+
+		const foldersById: Record<string, FolderEntityWithNoteCount> = {};
 		for (const f of folders) {
 			foldersById[f.id] = f;
 
 			if (this.conflictFolderId() === f.id) {
-				f.note_count = await Note.conflictedCount();
+				foldersById[f.id].note_count = await Note.conflictedCount();
 			} else {
-				f.note_count = 0;
+				foldersById[f.id].note_count = 0;
 			}
 		}
 
@@ -196,9 +202,14 @@ export default class Folder extends BaseItem {
 			GROUP BY folders.id
 		`;
 
-		const noteCounts = await this.db().selectAll(sql);
+		interface NoteCount {
+			folder_id: string;
+			note_count: number;
+		}
+
+		const noteCounts: NoteCount[] = await this.db().selectAll(sql);
 		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
-		noteCounts.forEach((noteCount: any) => {
+		noteCounts.forEach((noteCount) => {
 			let parentId = noteCount.folder_id;
 			do {
 				const folder = foldersById[parentId];
