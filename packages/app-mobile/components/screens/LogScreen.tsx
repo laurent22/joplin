@@ -7,33 +7,47 @@ import { ScreenHeader } from '../ScreenHeader';
 import time from '@joplin/lib/time';
 const { themeStyle } = require('../global-style.js');
 import Logger from '@joplin/utils/Logger';
-const { BaseScreenComponent } = require('../base-screen.js');
+import { BaseScreenComponent } from '../base-screen';
 import { _ } from '@joplin/lib/locale';
 import { MenuOptionType } from '../ScreenHeader';
 import { AppState } from '../../utils/types';
 import Share from 'react-native-share';
 import { writeTextToCacheFile } from '../../utils/ShareUtils';
 import shim from '@joplin/lib/shim';
+import { TextInput } from 'react-native-paper';
 
 const logger = Logger.create('LogScreen');
 
-class LogScreenComponent extends BaseScreenComponent {
-	private readonly menuOptions: MenuOptionType[];
+interface Props {
+	themeId: number;
+	navigation: any;
+}
+
+interface State {
+	logEntries: any[];
+	showErrorsOnly: boolean;
+	filter: string|undefined;
+}
+
+class LogScreenComponent extends BaseScreenComponent<Props, State> {
+	private readonly menuOptions_: MenuOptionType[];
+	private styles_: any;
 
 	public static navigationOptions(): any {
 		return { header: null };
 	}
 
-	public constructor() {
-		super();
+	public constructor(props: Props) {
+		super(props);
 
 		this.state = {
 			logEntries: [],
 			showErrorsOnly: false,
+			filter: undefined,
 		};
 		this.styles_ = {};
 
-		this.menuOptions = [
+		this.menuOptions_ = [
 			{
 				title: _('Share'),
 				onPress: () => {
@@ -43,10 +57,27 @@ class LogScreenComponent extends BaseScreenComponent {
 		];
 	}
 
+	public override componentDidUpdate(_prevProps: Props, prevState: State) {
+		if (prevState?.filter !== this.state.filter) {
+			void this.resfreshLogEntries();
+		}
+	}
+
+	public override componentDidMount() {
+		void this.resfreshLogEntries();
+
+		if (this.props.navigation.state.defaultFilter) {
+			this.setState({ filter: this.props.navigation.state.defaultFilter });
+		}
+	}
+
+	private async getLogEntries(showErrorsOnly: boolean, limit: number|null = null) {
+		const levels = this.getLogLevels(showErrorsOnly);
+		return await reg.logger().lastEntries(limit, { levels, filter: this.state.filter });
+	}
+
 	private async onSharePress() {
-		const limit: number|null = null; // no limit
-		const levels = this.getLogLevels(this.state.showErrorsOnly);
-		const allEntries: any[] = await reg.logger().lastEntries(limit, { levels });
+		const allEntries: any[] = await this.getLogEntries(this.state.showErrorsOnly);
 		const logData = allEntries.map(entry => this.formatLogEntry(entry)).join('\n');
 
 		let fileToShare;
@@ -108,10 +139,6 @@ class LogScreenComponent extends BaseScreenComponent {
 		return this.styles_[this.props.themeId];
 	}
 
-	public UNSAFE_componentWillMount() {
-		void this.resfreshLogEntries();
-	}
-
 	private getLogLevels(showErrorsOnly: boolean) {
 		let levels = [Logger.LEVEL_DEBUG, Logger.LEVEL_INFO, Logger.LEVEL_WARN, Logger.LEVEL_ERROR];
 		if (showErrorsOnly) levels = [Logger.LEVEL_WARN, Logger.LEVEL_ERROR];
@@ -122,10 +149,8 @@ class LogScreenComponent extends BaseScreenComponent {
 	private async resfreshLogEntries(showErrorsOnly: boolean = null) {
 		if (showErrorsOnly === null) showErrorsOnly = this.state.showErrorsOnly;
 
-		const levels = this.getLogLevels(showErrorsOnly);
-
 		this.setState({
-			logEntries: await reg.logger().lastEntries(1000, { levels: levels }),
+			logEntries: await this.getLogEntries(showErrorsOnly),
 			showErrorsOnly: showErrorsOnly,
 		});
 	}
@@ -138,29 +163,48 @@ class LogScreenComponent extends BaseScreenComponent {
 		return `${time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm:ss')}: ${item.message}`;
 	}
 
+	private onRenderLogRow = ({ item }: any) => {
+		let textStyle = this.styles().rowText;
+		if (item.level === Logger.LEVEL_WARN) textStyle = this.styles().rowTextWarn;
+		if (item.level === Logger.LEVEL_ERROR) textStyle = this.styles().rowTextError;
+
+		return (
+			<View style={this.styles().row}>
+				<Text style={textStyle}>{this.formatLogEntry(item)}</Text>
+			</View>
+		);
+	};
+
+	private onFilterUpdated = (newFilter: string) => {
+		this.setState({ filter: newFilter });
+	};
+
+	private onToggleFilterInput = () => {
+		const filter = this.state.filter === undefined ? '' : undefined;
+		this.setState({ filter });
+	};
+
 	public render() {
-		const renderRow = ({ item }: any) => {
-			let textStyle = this.styles().rowText;
-			if (item.level === Logger.LEVEL_WARN) textStyle = this.styles().rowTextWarn;
-			if (item.level === Logger.LEVEL_ERROR) textStyle = this.styles().rowTextError;
-
-			return (
-				<View style={this.styles().row}>
-					<Text style={textStyle}>{this.formatLogEntry(item)}</Text>
-				</View>
-			);
-		};
-
-		// `enableEmptySections` is to fix this warning: https://github.com/FaridSafi/react-native-gifted-listview/issues/39
+		const filterInput = (
+			<TextInput
+				value={this.state.filter}
+				onChangeText={this.onFilterUpdated}
+				label={_('Filter')}
+				placeholder={_('Filter')}
+			/>
+		);
 
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader
 					title={_('Log')}
-					menuOptions={this.menuOptions}/>
+					menuOptions={this.menuOptions_}
+					showSearchButton={true}
+					onSearchButtonPress={this.onToggleFilterInput}/>
+				{this.state.filter !== undefined ? filterInput : null}
 				<FlatList
 					data={this.state.logEntries}
-					renderItem={renderRow}
+					renderItem={this.onRenderLogRow}
 					keyExtractor={item => { return `${item.id}`; }}
 				/>
 				<View style={{ flexDirection: 'row' }}>
@@ -190,6 +234,6 @@ const LogScreen = connect((state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 	};
-})(LogScreenComponent as any);
+})(LogScreenComponent);
 
 export default LogScreen;
