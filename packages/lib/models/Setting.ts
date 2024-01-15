@@ -1788,6 +1788,29 @@ class Setting extends BaseModel {
 				label: () => _('Voice typing language files (URL)'),
 				section: 'note',
 			},
+
+			'trash.autoDeletionEnabled': {
+				value: true,
+				type: SettingItemType.Bool,
+				public: true,
+				label: () => _('Automatically delete notes in the trash after a number of days'),
+				storage: SettingStorage.File,
+			},
+
+			'trash.ttlDays': {
+				value: 90,
+				type: SettingItemType.Int,
+				public: true,
+				minimum: 1,
+				maximum: 300,
+				step: 1,
+				unitLabel: (value: number = null) => {
+					return value === null ? _('days') : _('%d days', value);
+				},
+				show: (settings: any) => settings['trash.autoDeletionEnabled'],
+				label: () => _('Keep notes in the trash for'),
+				storage: SettingStorage.File,
+			},
 		};
 
 		this.metadata_ = { ...this.buildInMetadata_ };

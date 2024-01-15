@@ -978,6 +978,8 @@ packages/lib/services/trash/emptyTrash.test.js
 packages/lib/services/trash/emptyTrash.js
 packages/lib/services/trash/index.test.js
 packages/lib/services/trash/index.js
+packages/lib/services/trash/permanentlyDeleteOldItems.test.js
+packages/lib/services/trash/permanentlyDeleteOldItems.js
 packages/lib/services/trash/restoreItems.test.js
 packages/lib/services/trash/restoreItems.js
 packages/lib/shim-init-node.js

@@ -877,6 +877,20 @@ export default class Folder extends BaseItem {
 		return savedFolder;
 	}
 
+	public static async trashItemsOlderThan(ttl: number) {
+		const cutOffTime = Date.now() - ttl;
+
+		const getItemIds = async (table: string, cutOffTime: number): Promise<string[]> => {
+			const items = await this.db().selectAll(`SELECT id from ${table} WHERE deleted_time > 0 AND deleted_time < ?`, [cutOffTime]);
+			return items.map(i => i.id);
+		};
+
+		return {
+			noteIds: await getItemIds('notes', cutOffTime),
+			folderIds: await getItemIds('folders', cutOffTime),
+		};
+	}
+
 	public static serializeIcon(icon: FolderIcon): string {
 		return icon ? JSON.stringify(icon) : '';
 	}
