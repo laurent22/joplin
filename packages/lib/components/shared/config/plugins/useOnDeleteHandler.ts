@@ -26,6 +26,13 @@ const useOnDeleteHandler = (
 		if (deleteNow) {
 			const pluginService = PluginService.instance();
 
+			// We first unload the plugin. This is done here rather than in pluginService.uninstallPlugins
+			// because unloadPlugin may not work on desktop.
+			const plugin = pluginService.plugins[item.manifest.id];
+			if (plugin) {
+				await pluginService.unloadPlugin(item.manifest.id);
+			}
+
 			const updatedSettings = pluginService.clearUpdateState(
 				await pluginService.uninstallPlugins(newSettings),
 			);
