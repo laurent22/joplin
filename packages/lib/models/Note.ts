@@ -14,7 +14,7 @@ import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import { toFileProtocolPath, toForwardSlashes } from '../path-utils';
 const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
 const { _ } = require('../locale');
-import { pull, unique } from '../ArrayUtils';
+import { pull, removeElement, unique } from '../ArrayUtils';
 import { LoadOptions, SaveOptions } from './utils/types';
 import { getDisplayParentId, getTrashFolderId } from '../services/trash';
 const urlUtils = require('../urlUtils.js');
@@ -793,14 +793,23 @@ export default class Note extends BaseItem {
 
 		syncDebugLog.info('Save Note: N:', o);
 
-		const note = await super.save(o, options);
+		let savedNote = await super.save(o, options);
 
-		void ItemChange.add(BaseModel.TYPE_NOTE, note.id, isNew ? ItemChange.TYPE_CREATE : ItemChange.TYPE_UPDATE, changeSource, beforeNoteJson);
+		void ItemChange.add(BaseModel.TYPE_NOTE, savedNote.id, isNew ? ItemChange.TYPE_CREATE : ItemChange.TYPE_UPDATE, changeSource, beforeNoteJson);
 
 		if (dispatchUpdateAction) {
+			// Ensures that any note added to the state has all the required
+			// properties for the UI to work.
+			if (!('deleted_time' in savedNote)) {
+				const fields = removeElement(unique(this.previewFields().concat(Object.keys(savedNote))), 'type_');
+				savedNote = await this.load(savedNote.id, {
+					fields,
+				});
+			}
+
 			this.dispatch({
 				type: 'NOTE_UPDATE_ONE',
-				note: note,
+				note: savedNote,
 				provisional: isProvisional,
 				ignoreProvisionalFlag: ignoreProvisionalFlag,
 				changedFields: changedFields,
@@ -810,11 +819,11 @@ export default class Note extends BaseItem {
 		if ('todo_due' in o || 'todo_completed' in o || 'is_todo' in o || 'is_conflict' in o) {
 			this.dispatch({
 				type: 'EVENT_NOTE_ALARM_FIELD_CHANGE',
-				id: note.id,
+				id: savedNote.id,
 			});
 		}
 
-		return note;
+		return savedNote;
 	}
 
 	public static async batchDelete(ids: string[], options: DeleteOptions = null) {

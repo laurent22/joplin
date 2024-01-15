@@ -865,7 +865,7 @@ export default class Folder extends BaseItem {
 		// Ensures that any folder added to the state has all the required
 		// properties, in particular "share_id" and "parent_id', which are
 		// required in various parts of the code.
-		if (!('share_id' in savedFolder) || !('parent_id' in savedFolder) || ('deleted_time' in savedFolder)) {
+		if (!('share_id' in savedFolder) || !('parent_id' in savedFolder) || !('deleted_time' in savedFolder)) {
 			savedFolder = await this.load(savedFolder.id);
 		}
 
