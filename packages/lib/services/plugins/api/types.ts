@@ -227,6 +227,8 @@ export interface VersionInfo {
 	version: string;
 	profileVersion: number;
 	syncVersion: number;
+
+	platform: 'desktop'|'mobile';
 }
 
 // =================================================================

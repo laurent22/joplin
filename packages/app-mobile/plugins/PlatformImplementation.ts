@@ -32,6 +32,7 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 			version: RNVersionInfo.appVersion,
 			syncVersion: Setting.value('syncVersion'),
 			profileVersion: reg.db().version(),
+			platform: 'mobile',
 		};
 	}
 
