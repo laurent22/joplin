@@ -3,7 +3,6 @@ import PluginService, { PluginSettings, defaultPluginSetting } from '../../../..
 import shim from '../../../../shim';
 import produce from 'immer';
 import { ItemEvent, OnPluginSettingChangeHandler } from './types';
-import Setting from '../../../../models/Setting';
 
 const useOnDeleteHandler = (
 	pluginSettings: PluginSettings,
@@ -16,12 +15,10 @@ const useOnDeleteHandler = (
 		const confirmed = await shim.showConfirmationDialog(_('Delete plugin "%s"?', item.manifest.name));
 		if (!confirmed) return;
 
-		const newSettings = produce(pluginSettings, (draft: PluginSettings) => {
+		let newSettings = produce(pluginSettings, (draft: PluginSettings) => {
 			if (!draft[item.manifest.id]) draft[item.manifest.id] = defaultPluginSetting();
 			draft[item.manifest.id].deleted = true;
 		});
-
-		onSettingsChange({ value: newSettings });
 
 		if (deleteNow) {
 			const pluginService = PluginService.instance();
@@ -33,14 +30,10 @@ const useOnDeleteHandler = (
 				await pluginService.unloadPlugin(item.manifest.id);
 			}
 
-			const updatedSettings = pluginService.clearUpdateState(
-				await pluginService.uninstallPlugins(newSettings),
-			);
-			Setting.setValue(
-				'plugins.states',
-				pluginService.serializePluginSettings(updatedSettings),
-			);
+			newSettings = await pluginService.uninstallPlugins(newSettings);
 		}
+
+		onSettingsChange({ value: newSettings });
 	}, [pluginSettings, onSettingsChange, deleteNow]);
 };
 
