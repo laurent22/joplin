@@ -23,7 +23,7 @@ const usePluginButtons = (props: PluginButtonsRowProps) => {
 			const command = commandService.commandByName(commandName, { runtimeMustBeRegistered: true });
 
 			pluginButtons.push({
-				description: commandService.title(commandName),
+				description: commandService.description(commandName),
 				icon: command.declaration.iconName ?? 'fas fa-cog',
 				onPress: async () => {
 					void commandService.execute(commandName);
