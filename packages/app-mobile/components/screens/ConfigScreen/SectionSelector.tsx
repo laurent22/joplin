@@ -62,7 +62,7 @@ const SectionSelector: FunctionComponent<Props> = props => {
 						numberOfLines={1}
 						style={titleStyle}
 					>
-						{sourceIcon} {label}
+						{label}
 					</Text>
 					<Text
 						style={styles.sidebarButtonDescriptionText}
@@ -72,6 +72,7 @@ const SectionSelector: FunctionComponent<Props> = props => {
 						{shortDescription ?? ''}
 					</Text>
 				</View>
+				{sourceIcon}
 			</Pressable>
 		);
 	};
