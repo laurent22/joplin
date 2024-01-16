@@ -18,6 +18,9 @@ export default class RNToWebViewMessenger<LocalInterface, RemoteInterface> exten
 		// This can happen just after the WebView unloads.
 		if (!webviewControl) return;
 
+		// This is the case in testing environments where no WebView is available.
+		if (!webviewControl.injectJS) return;
+
 		webviewControl.injectJS(`
 			window.dispatchEvent(
 				new MessageEvent(
