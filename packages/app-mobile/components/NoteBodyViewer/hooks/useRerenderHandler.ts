@@ -7,6 +7,7 @@ import Renderer from '../bundledJs/Renderer';
 import { useEffect, useState } from 'react';
 import Logger from '@joplin/utils/Logger';
 import { ExtraContentScriptSource } from '../bundledJs/types';
+import Setting from '@joplin/lib/models/Setting';
 
 interface Props {
 	renderer: Renderer;
@@ -47,6 +48,7 @@ const logger = Logger.create('useRerenderHandler');
 const useRerenderHandler = (props: Props) => {
 	const { createEditPopupSyntax, destroyEditPopupSyntax, editPopupCss } = useEditPopup(props.themeId);
 	const [lastResourceLoadCounter, setLastResourceLoadCounter] = useState(0);
+	const [pluginSettingKeys, setPluginSettingKeys] = useState<Record<string, boolean>>({});
 
 	// To address https://github.com/laurent22/joplin/issues/433
 	//
@@ -70,7 +72,7 @@ const useRerenderHandler = (props: Props) => {
 	const effectDependencies = [
 		props.noteBody, props.noteMarkupLanguage, props.renderer, props.highlightedKeywords,
 		props.noteHash, props.noteResources, props.themeId, props.paddingBottom, lastResourceLoadCounter,
-		createEditPopupSyntax, destroyEditPopupSyntax,
+		createEditPopupSyntax, destroyEditPopupSyntax, pluginSettingKeys,
 	];
 	const previousDeps = usePrevious(effectDependencies, []);
 	const changedDeps = effectDependencies.reduce((accum: any, dependency: any, index: any) => {
@@ -96,6 +98,12 @@ const useRerenderHandler = (props: Props) => {
 			return;
 		}
 
+		const pluginSettings: Record<string, any> = { };
+		for (const key in pluginSettingKeys) {
+			pluginSettings[key] = Setting.value(`plugin-${key}`);
+		}
+		let newPluginSettingKeys = pluginSettingKeys;
+
 		const theme = themeStyle(props.themeId);
 		const config = {
 			// We .stringify the theme to avoid a JSON serialization error involving
@@ -117,18 +125,36 @@ const useRerenderHandler = (props: Props) => {
 			noteHash: props.noteHash,
 			initialScroll: props.initialScroll,
 
+			pluginSettings,
+			requestPluginSetting: (pluginId: string, settingKey: string) => {
+				// Don't trigger additional renders
+				if (event.cancelled) return;
+
+				const key = `${pluginId}.${settingKey}`;
+				logger.debug(`Request plugin setting: plugin-${key}`);
+
+				if (!(key in newPluginSettingKeys)) {
+					newPluginSettingKeys = { ...newPluginSettingKeys, [`${pluginId}.${settingKey}`]: true };
+					setPluginSettingKeys(newPluginSettingKeys);
+				}
+			},
+
 			createEditPopupSyntax,
 			destroyEditPopupSyntax,
 		};
 
-		await props.renderer.configure(config);
+		try {
+			logger.debug('Starting render...');
 
-		if (event.cancelled) return;
+			await props.renderer.rerender({
+				language: props.noteMarkupLanguage,
+				markup: props.noteBody,
+			}, config);
 
-		await props.renderer.rerender({
-			language: props.noteMarkupLanguage,
-			markup: props.noteBody,
-		});
+			logger.debug('Render complete.');
+		} catch (error) {
+			logger.error('Render failed:', error);
+		}
 	}, effectDependencies);
 
 	useEffect(() => {

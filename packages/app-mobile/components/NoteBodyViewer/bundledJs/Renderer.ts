@@ -27,6 +27,9 @@ export interface RendererSettings {
 
 	createEditPopupSyntax: string;
 	destroyEditPopupSyntax: string;
+
+	pluginSettings: Record<string, any>;
+	requestPluginSetting: (pluginId: string, settingKey: string)=> void;
 }
 
 export interface MarkupRecord {
@@ -36,7 +39,7 @@ export interface MarkupRecord {
 
 export default class Renderer {
 	private markupToHtml: MarkupToHtmlConverter;
-	private settings: RendererSettings|null = null;
+	private lastSettings: RendererSettings|null = null;
 	private extraContentScripts: ExtraContentScript[] = [];
 	private lastRenderMarkup: MarkupRecord|null = null;
 
@@ -79,32 +82,38 @@ export default class Renderer {
 		this.recreateMarkupToHtml();
 
 		if (this.lastRenderMarkup) {
-			await this.rerender(this.lastRenderMarkup);
+			await this.rerender(this.lastRenderMarkup, this.lastSettings);
 		}
 	}
 
-	public async configure(settings: RendererSettings) {
-		this.settings = settings;
-	}
-
-	public async rerender(markup: MarkupRecord) {
+	public async rerender(markup: MarkupRecord, settings: RendererSettings) {
+		this.lastSettings = settings;
 		this.lastRenderMarkup = markup;
-		if (!this.settings) {
-			throw new Error('Renderer wrapper not yet initialized!');
-		}
 
 		const options = {
-			onResourceLoaded: this.settings.onResourceLoaded,
-			highlightedKeywords: this.settings.highlightedKeywords,
-			resources: this.settings.resources,
-			codeTheme: this.settings.codeTheme,
+			onResourceLoaded: settings.onResourceLoaded,
+			highlightedKeywords: settings.highlightedKeywords,
+			resources: settings.resources,
+			codeTheme: settings.codeTheme,
 			postMessageSyntax: 'window.joplinPostMessage_',
 			enableLongPress: true,
 
 			// Show an 'edit' popup over SVG images
 			editPopupFiletypes: ['image/svg+xml'],
-			createEditPopupSyntax: this.settings.createEditPopupSyntax,
-			destroyEditPopupSyntax: this.settings.destroyEditPopupSyntax,
+			createEditPopupSyntax: settings.createEditPopupSyntax,
+			destroyEditPopupSyntax: settings.destroyEditPopupSyntax,
+
+			settingValue: (pluginId: string, settingName: string) => {
+				const settingKey = `${pluginId}.${settingName}`;
+
+				if (!(settingKey in settings.pluginSettings)) {
+					// This should make the setting available on future renders.
+					settings.requestPluginSetting(pluginId, settingName);
+					return undefined;
+				}
+
+				return settings.pluginSettings[settingKey];
+			},
 		};
 
 		this.markupToHtml.clearCache(markup.language);
@@ -117,7 +126,7 @@ export default class Renderer {
 			const result = await this.markupToHtml.render(
 				markup.language,
 				markup.markup,
-				JSON.parse(this.settings.theme),
+				JSON.parse(settings.theme),
 				options,
 			);
 			html = result.html;
@@ -138,10 +147,10 @@ export default class Renderer {
 		contentContainer.innerHTML = html;
 		addPluginAssets(pluginAssets);
 
-		this.afterRender();
+		this.afterRender(settings);
 	}
 
-	private afterRender() {
+	private afterRender(renderSettings: RendererSettings) {
 		const readyStateCheckInterval = setInterval(() => {
 			if (document.readyState === 'complete') {
 				clearInterval(readyStateCheckInterval);
@@ -149,8 +158,8 @@ export default class Renderer {
 					(window as any).webviewLib.setupResourceManualDownload();
 				}
 
-				const hash = this.settings.noteHash;
-				const initialScroll = this.settings.initialScroll;
+				const hash = renderSettings.noteHash;
+				const initialScroll = renderSettings.initialScroll;
 
 				// Don't scroll to a hash if we're given initial scroll (initial scroll
 				// overrides scrolling to a hash).
