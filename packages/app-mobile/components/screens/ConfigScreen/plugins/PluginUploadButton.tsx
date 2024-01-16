@@ -8,6 +8,9 @@ import pickDocument from '../../../../utils/pickDocument';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { Platform } from 'react-native';
+import { join, extname } from 'path';
+import uuid from '@joplin/lib/uuid';
+import Setting from '@joplin/lib/models/Setting';
 
 interface Props {
 	updatePluginStates: (settingValue: PluginSettings)=> void;
@@ -27,21 +30,47 @@ const PluginUploadButton: React.FC<Props> = props => {
 		if (pluginFiles.length === 0) {
 			return;
 		}
+		const selectedFile = pluginFiles[0];
 
 		const localFilePath = Platform.select({
-			android: pluginFiles[0].uri,
-			ios: decodeURI(pluginFiles[0].uri),
+			android: selectedFile.uri,
+			ios: decodeURI(selectedFile.uri),
 		});
-		const pluginSettings = pluginService.unserializePluginSettings(props.pluginSettings);
+		logger.info('Installing plugin from file', localFilePath);
+
+		const fsDriver = shim.fsDriver();
+		const tempDir = join(Setting.value('tempDir'), uuid.createNano());
+		await fsDriver.mkdir(tempDir);
+
+		let extension = extname(localFilePath);
+
+		// On Android, localFilePath has no extension (e.g. content://48) and we need to provide
+		// one for installPlugin to work.
+		if (!extension) {
+			if (selectedFile.mime === 'application/javascript') {
+				extension = '.js';
+			} else {
+				extension = '.jpl';
+			}
+
+			logger.info('No file extension found. Using', extension, `(media type: ${selectedFile.mime})`);
+		}
 
 		try {
-			logger.info('Installing plugin from file', localFilePath);
-			const plugin = await pluginService.installPlugin(localFilePath);
+			const targetFile = join(tempDir, `plugin${extension}`);
+			logger.info('Copying to', targetFile);
+
+			await fsDriver.copy(localFilePath, targetFile);
+			const plugin = await pluginService.installPlugin(targetFile);
+
+			const pluginSettings = pluginService.unserializePluginSettings(props.pluginSettings);
 			const newSettings = { ...pluginSettings, [plugin.id]: defaultPluginSetting() };
 			props.updatePluginStates(newSettings);
 		} catch (error) {
 			logger.error('Error installing plugin:', error);
 			await shim.showMessageBox(_('Error: %s', error));
+		} finally {
+			await fsDriver.remove(tempDir);
 		}
 	}, [props.pluginSettings, props.updatePluginStates]);
 
@@ -51,3 +80,4 @@ const PluginUploadButton: React.FC<Props> = props => {
 };
 
 export default PluginUploadButton;
+
