@@ -7,6 +7,8 @@ import { Implementation as ImagingImplementation } from '@joplin/lib/services/pl
 import RNVersionInfo from 'react-native-version-info';
 import { _ } from '@joplin/lib/locale';
 import shim from '@joplin/lib/shim';
+import Clipboard from '@react-native-community/clipboard';
+
 
 
 interface Components {
@@ -81,7 +83,10 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 	}
 
 	public get clipboard(): any {
-		return null;
+		return {
+			readText: () => Clipboard.getString(),
+			writeText: (text: string) => Clipboard.setString(text),
+		};
 	}
 
 	public get window(): WindowImplementation {
