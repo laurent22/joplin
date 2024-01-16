@@ -19,11 +19,14 @@ const isSubdirectoryOrSame = (parent: string, possibleChild: string) => {
 
 const tarExtract = async (fsDriver: FsDriverBase, options: TarExtractOptions) => {
 	const cwd = options.cwd;
-	const filePath = resolve(cwd, options.file);
 
+	// resolve doesn't correctly handle file:// or content:// URLs. Thus, we don't resolve relative
+	// to cwd if the source is a URL.
+	const isSourceUrl = options.file.match(/$[a-z]+:\/\//);
+	const filePath = isSourceUrl ? options.file : resolve(cwd, options.file);
 
 	if (!(await fsDriver.exists(filePath))) {
-		throw new Error('Source does not exist');
+		throw new Error('tarExtract: Source file does not exist');
 	}
 
 	const extract = tarStreamExtract({ defaultEncoding: 'base64' });
