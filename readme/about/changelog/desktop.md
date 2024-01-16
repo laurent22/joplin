@@ -793,13 +793,6 @@ Important: If you use custom notebook icons and sync with the mobile app, make s
 
 - Improved: Upgrade Electron from v10 to v14 ([4a7746b](https://github.com/laurent22/joplin/commit/4a7746b))
 
-## [v2.4.9](https://github.com/laurent22/joplin/releases/tag/v2.4.9) - 2021-09-29T19:08:58Z
-
-- Improved: Allow importing certain corrupted ENEX files ([f144dae](https://github.com/laurent22/joplin/commit/f144dae))
-- Improved: Improved accepting a folder share ([8ada059](https://github.com/laurent22/joplin/commit/8ada059))
-- Improved: Make exported HTML more readable on mobile ([b1d0c15](https://github.com/laurent22/joplin/commit/b1d0c15))
-- Fixed: Fix default sync target ([4b39d30](https://github.com/laurent22/joplin/commit/4b39d30))
-
 ## [v2.4.8](https://github.com/laurent22/joplin/releases/tag/v2.4.8) (Pre-release) - 2021-09-22T19:01:46Z
 
 - Fixed: Fixed Sync Wizard logo images on Windows ([da88475](https://github.com/laurent22/joplin/commit/da88475))
@@ -1046,6 +1039,13 @@ Attention: The default font size has been changed in the Markdown editor. You ca
 
 - Fixed: Fixed pasting of text and images from Word on Windows ([#4916](https://github.com/laurent22/joplin/issues/4916))
 - Security: Filter out NOSCRIPT tags that could be used to cause an XSS (CVE-2021-33295) (found by [Jubair Rehman Yousafzai](https://twitter.com/newfolderj)) ([9c20d59](https://github.com/laurent22/joplin/commit/9c20d59))
+
+## [v1.8.4](https://github.com/laurent22/joplin/releases/tag/v1.8.4) (Pre-release) - 2021-05-09T18:05:05Z
+
+- Improved: Improve display of release notes for new versions ([f76f99b](https://github.com/laurent22/joplin/commit/f76f99b))
+- Fixed: Ensure that image paths that contain spaces are pasted correctly in the Rich Text editor ([#4916](https://github.com/laurent22/joplin/issues/4916))
+- Fixed: Make sure sync startup operations are cleared after startup ([#4919](https://github.com/laurent22/joplin/issues/4919))
+- Security: Apply npm audit security fixes ([0b67446](https://github.com/laurent22/joplin/commit/0b67446))
 
 ## [v1.8.4](https://github.com/laurent22/joplin/releases/tag/v1.8.4) (Pre-release) - 2021-05-09T18:05:05Z
 
