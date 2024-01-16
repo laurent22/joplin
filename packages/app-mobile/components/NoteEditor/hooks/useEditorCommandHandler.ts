@@ -9,13 +9,14 @@ const logger = Logger.create('useEditorCommandHandler');
 const commandRuntime = (declaration: CommandDeclaration, editor: EditorControl) => {
 	return {
 		execute: async (_context: CommandContext, ...args: any[]) => {
+			// Many editor CodeMirror commands are missing the editor. prefix.
 			let commandName = declaration.name.replace(/^editor\./, '');
+
 			if (declaration.name === 'editor.execCommand') {
 				commandName = args[0];
 				args = args.slice(1);
 			}
 
-			// Many editor CodeMirror commands are missing the editor. prefix.
 			if (!editor.supportsCommand(commandName)) {
 				logger.warn('Command not supported by editor: ', commandName);
 				return;
