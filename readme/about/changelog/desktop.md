@@ -1,5 +1,9 @@
 # Joplin Desktop Changelog
 
+## [v2.13.15](https://github.com/laurent22/joplin/releases/tag/v2.13.15) - 2024-01-15T13:01:19Z
+
+- Fixed: Fixes existing attachments not being shared in some cases with Joplin Server ([c412b1f](https://github.com/laurent22/joplin/commit/c412b1f))
+
 ## [v2.13.14](https://github.com/laurent22/joplin/releases/tag/v2.13.14) - 2024-01-13T19:11:04Z
 
 - Fixed: Shared notebook can get corrupted if contributor changes its title ([#9709](https://github.com/laurent22/joplin/issues/9709))
