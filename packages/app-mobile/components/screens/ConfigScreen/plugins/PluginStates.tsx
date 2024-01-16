@@ -11,9 +11,9 @@ import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/Plug
 import PluginToggle from './PluginToggle';
 import SearchPlugins from './SearchPlugins';
 import shim from '@joplin/lib/shim';
-import Setting from '@joplin/lib/models/Setting';
 import { ItemEvent } from '@joplin/lib/components/shared/config/plugins/types';
 import NavService from '@joplin/lib/services/NavService';
+import isInstallingPluginsAllowed from './utils/isPluginInstallingAllowed';
 
 interface Props {
 	themeId: number;
@@ -127,31 +127,25 @@ const PluginStates: React.FC<Props> = props => {
 		}
 	}
 
-	const isIos = shim.mobilePlatform() === 'ios';
-	const isDevMode = Setting.value('env') === 'dev';
-
 	const showSearch = (
-		(!isIos || isDevMode)
-		&& (
+		isInstallingPluginsAllowed() && (
 			!props.shouldShowBasedOnSearchQuery || props.shouldShowBasedOnSearchQuery(searchInputSearchText())
 		)
 	);
 
 	const renderIosSearchWarning = () => {
-		if (!isIos || !showSearch) return null;
+		if (shim.mobilePlatform() !== 'ios' || !showSearch) return null;
 
 		return <Banner visible={true} icon='information'>{'Note: Plugin search is usually disabled on iOS (and only enabled in dev mode).'}</Banner>;
 	};
 
 	const searchComponent = (
-		<>
-			<SearchPlugins
-				pluginSettings={props.pluginSettings}
-				themeId={props.themeId}
-				updatePluginStates={props.updatePluginStates}
-				repoApiInitialized={repoApiLoaded}
-			/>
-		</>
+		<SearchPlugins
+			pluginSettings={props.pluginSettings}
+			themeId={props.themeId}
+			updatePluginStates={props.updatePluginStates}
+			repoApiInitialized={repoApiLoaded}
+		/>
 	);
 
 	return (

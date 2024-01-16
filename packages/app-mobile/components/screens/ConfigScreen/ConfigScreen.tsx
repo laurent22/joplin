@@ -31,6 +31,8 @@ import SectionSelector from './SectionSelector';
 import { TextInput } from 'react-native-paper';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
+import PluginUploadButton, { buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
+import isInstallingPluginsAllowed from './plugins/utils/isPluginInstallingAllowed';
 
 interface ConfigScreenState {
 	settings: any;
@@ -453,6 +455,17 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				/>,
 				getPluginStatesSearchText(),
 			);
+
+			if (isInstallingPluginsAllowed()) {
+				addSettingComponent(
+					<PluginUploadButton
+						key='plugins-install-from-file'
+						pluginSettings={settings[pluginStatesKey]}
+						updatePluginStates={updatePluginStates}
+					/>,
+					pluginUploadButtonSearchText(),
+				);
+			}
 		}
 
 		if (section.name === 'sync') {

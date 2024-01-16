@@ -542,7 +542,9 @@ packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginToggle.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/PluginUploadButton.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/utils/isPluginInstallingAllowed.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/utils/openWebsiteForPlugin.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/utils/repoApi.js
 packages/app-mobile/components/screens/ConfigScreen/types.js
@@ -595,6 +597,7 @@ packages/app-mobile/utils/fs-driver/tarCreate.js
 packages/app-mobile/utils/fs-driver/tarExtract.js
 packages/app-mobile/utils/ipc/RNToWebViewMessenger.js
 packages/app-mobile/utils/ipc/WebViewToRNMessenger.js
+packages/app-mobile/utils/pickDocument.js
 packages/app-mobile/utils/polyfills/bufferPolyfill.js
 packages/app-mobile/utils/polyfills/index.js
 packages/app-mobile/utils/setupNotifications.js
