@@ -1,5 +1,5 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "Joplin Web Clipper [DEV]",
     "version": "2.14.0",
     "description": "Capture and save web pages and screenshots from your browser to Joplin.",
@@ -13,12 +13,14 @@
     "permissions": [
         "activeTab",
         "tabs",
-        "http://*/",
-        "https://*/",
-        "<all_urls>",
         "storage"
     ],
-    "browser_action": {
+    "host_permissions": [
+        "http://*/",
+        "https://*/",
+        "<all_urls>"
+    ],
+    "action": {
         "default_icon": "icons/32.png",
         "default_title": "Joplin Web Clipper",
         "default_popup": "popup/build/index.html"
@@ -49,10 +51,8 @@
         }
     },
     "background": {
-        "scripts": [
-            "background.js"
-        ],
-        "persistent": false
+        "service_worker": "service_worker.mjs",
+        "type": "module"
     },
     "applications": {
         "gecko": {

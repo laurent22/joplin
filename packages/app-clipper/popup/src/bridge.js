@@ -198,7 +198,7 @@ class Bridge {
 	}
 
 	async backgroundPage(browser) {
-		const bgp = browser.extension.getBackgroundPage();
+		const bgp = browser.extension.getBackgroundPage?.();
 		if (bgp) return bgp;
 
 		return new Promise((resolve) => {

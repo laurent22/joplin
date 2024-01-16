@@ -1,24 +1,11 @@
+import joplinEnv from './util/joplinEnv.mjs';
+
 let browser_ = null;
 if (typeof browser !== 'undefined') {
 	browser_ = browser;
-	browserSupportsPromises_ = true;
 } else if (typeof chrome !== 'undefined') {
 	browser_ = chrome;
-	browserSupportsPromises_ = false;
 }
-
-let env_ = null;
-
-// Make this function global so that it can be accessed
-// from the popup too.
-// https://stackoverflow.com/questions/6323184/communication-between-background-page-and-popup-page-in-a-chrome-extension
-window.joplinEnv = function() {
-	if (env_) return env_;
-
-	const manifest = browser_.runtime.getManifest();
-	env_ = manifest.name.indexOf('[DEV]') >= 0 ? 'dev' : 'prod';
-	return env_;
-};
 
 async function browserCaptureVisibleTabs(windowId) {
 	const options = {
@@ -31,27 +18,15 @@ async function browserCaptureVisibleTabs(windowId) {
 		// https://discourse.joplinapp.org/t/clip-screenshot-image-quality/12302/4
 		quality: 92,
 	};
-	if (browserSupportsPromises_) return browser_.tabs.captureVisibleTab(windowId, options);
-
-	return new Promise((resolve) => {
-		browser_.tabs.captureVisibleTab(windowId, options, (image) => {
-			resolve(image);
-		});
-	});
+	return browser_.tabs.captureVisibleTab(windowId, options);
 }
 
 async function browserGetZoom(tabId) {
-	if (browserSupportsPromises_) return browser_.tabs.getZoom(tabId);
-
-	return new Promise((resolve) => {
-		browser_.tabs.getZoom(tabId, (zoom) => {
-			resolve(zoom);
-		});
-	});
+	return browser_.tabs.getZoom(tabId);
 }
 
 browser_.runtime.onInstalled.addListener(() => {
-	if (window.joplinEnv() === 'dev') {
+	if (joplinEnv() === 'dev') {
 		browser_.browserAction.setIcon({
 			path: 'icons/32-dev.png',
 		});
@@ -119,13 +94,7 @@ browser_.runtime.onMessage.addListener(async (command) => {
 
 async function getActiveTabs() {
 	const options = { active: true, currentWindow: true };
-	if (browserSupportsPromises_) return browser_.tabs.query(options);
-
-	return new Promise((resolve) => {
-		browser_.tabs.query(options, (tabs) => {
-			resolve(tabs);
-		});
-	});
+	return browser_.tabs.query(options);
 }
 
 async function sendClipMessage(clipType) {
