@@ -12,6 +12,10 @@ export default class RNToWebViewMessenger<LocalInterface, RemoteInterface> exten
 
 	protected override postMessage(message: SerializableData): void {
 		const webviewControl = (this.webviewControl as RefObject<WebViewControl>).current ?? (this.webviewControl as WebViewControl);
+
+		// This can happen just after the WebView unloads.
+		if (!webviewControl) return;
+
 		webviewControl.injectJS(`
 			window.dispatchEvent(
 				new MessageEvent(
