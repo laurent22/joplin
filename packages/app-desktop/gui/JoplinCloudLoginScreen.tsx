@@ -6,7 +6,7 @@ import Button, { ButtonLevel } from './Button/Button';
 const bridge = require('@electron/remote').require('./bridge').default;
 import { uuidgen } from '@joplin/lib/uuid';
 import { Dispatch } from 'redux';
-import { reducer, defaultState, generateLoginWithUniqueLoginCode, checkIfLoginWasSuccessful } from '@joplin/lib/services/joplinCloudUtils';
+import { reducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSuccessful } from '@joplin/lib/services/joplinCloudUtils';
 import { AppState } from '../app.reducer';
 import Logger from '@joplin/utils/Logger';
 
@@ -21,20 +21,20 @@ interface Props {
 
 const JoplinCloudScreenComponent = (props: Props) => {
 
-	const loginUrl = (uniqueLoginCode: string) => `${props.joplinCloudWebsite}/applications/${uniqueLoginCode}/confirm`;
-	const applicationsUrl = (uniqueLoginCode: string) => `${props.joplinCloudApi}/api/applications/${uniqueLoginCode}`;
+	const confirmUrl = (applicationAuthId: string) => `${props.joplinCloudWebsite}/applications/${applicationAuthId}/confirm`;
+	const applicationAuthUrl = (applicationAuthId: string) => `${props.joplinCloudApi}/api/application_auth/${applicationAuthId}`;
 
 	const [intervalIdentifier, setIntervalIdentifier] = useState(undefined);
 	const [state, dispatch] = useReducer(reducer, defaultState);
 
-	const uniqueLoginCode = useMemo(() => uuidgen(), []);
+	const applicatioAuthId = useMemo(() => uuidgen(), []);
 
 	const periodicallyCheckForCredentials = () => {
 		if (intervalIdentifier) return;
 
 		const interval = setInterval(async () => {
 			try {
-				const response = await checkIfLoginWasSuccessful(applicationsUrl(uniqueLoginCode));
+				const response = await checkIfLoginWasSuccessful(applicationAuthUrl(applicatioAuthId));
 				if (response && response.success) {
 					dispatch({ type: 'COMPLETED' });
 					clearInterval(interval);
@@ -57,13 +57,13 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	};
 
 	const onAuthorizeClicked = async () => {
-		const url = await generateLoginWithUniqueLoginCode(loginUrl(uniqueLoginCode));
+		const url = await generateApplicationConfirmUrl(confirmUrl(applicatioAuthId));
 		bridge().openExternal(url);
 		onButtonUsed();
 	};
 
 	const onCopyToClipboardClicked = async () => {
-		const url = await generateLoginWithUniqueLoginCode(loginUrl(uniqueLoginCode));
+		const url = await generateApplicationConfirmUrl(confirmUrl(applicatioAuthId));
 		clipboard.writeText(url);
 		onButtonUsed();
 	};

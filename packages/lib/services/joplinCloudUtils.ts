@@ -76,14 +76,14 @@ export const getApplicationInformation = async () => {
 	}
 };
 
-export const generateLoginWithUniqueLoginCode = async (loginUrl: string) => {
+export const generateApplicationConfirmUrl = async (confirmUrl: string) => {
 	const applicationInfo = await getApplicationInformation();
 	const searchParams = new URLSearchParams();
 	searchParams.append('platform', applicationInfo.platform.toString());
 	searchParams.append('type', applicationInfo.type.toString());
 	searchParams.append('version', shim.appVersion());
 
-	return `${loginUrl}?${searchParams.toString()}`;
+	return `${confirmUrl}?${searchParams.toString()}`;
 };
 
 
