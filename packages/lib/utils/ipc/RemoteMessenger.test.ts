@@ -67,6 +67,26 @@ describe('RemoteMessenger', () => {
 		expect(callbacks).toHaveLength(1);
 	});
 
+	it('should support returning an object with callbacks', async () => {
+		const testApi = {
+			getApi: async () => {
+				return {
+					multiply: async (a: number, b: number) => a * b,
+					add: async (a: number, b: number) => a + b,
+				};
+			},
+		};
+		type TestApi = typeof testApi;
+
+		const messenger1 = new TestMessenger<TestApi, TestApi>('test', testApi);
+		const messenger2 = new TestMessenger<TestApi, TestApi>('test', testApi);
+		messenger1.connectTo(messenger2);
+
+		const api = await messenger1.remoteApi.getApi();
+		expect(await api.multiply(2, 3)).toBe(6);
+		expect(await api.add(12, 3)).toBe(15);
+	});
+
 	it('should preserve structure of transferred objects', async () => {
 		const transferObjectApi = {
 			transfer: async (o: any) => o,

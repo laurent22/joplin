@@ -1,6 +1,7 @@
-import { CallbackArguments, SerializableData, SerializableDataAndCallbacks, TransferableCallback } from './types';
-import mergeCallbacksAndArgs from './utils/mergeCallbacksAndArgs';
-import separateCallbacksFromArgs from './utils/separateCallbacksFromArgs';
+import { CallbackIds as CallbackIds, SerializableData, SerializableDataAndCallbacks, TransferableCallback } from './types';
+import mergeCallbacksAndSerializable from './utils/mergeCallbacksAndSerializable';
+import separateCallbacksFromSerializable from './utils/separateCallbacksFromSerializable';
+import separateCallbacksFromSerializableArray from './utils/separateCallbacksFromSerializableArray';
 
 enum MessageType {
 	RemoteReady = 'RemoteReady',
@@ -19,14 +20,26 @@ type InvokeMethodMessage = Readonly<{
 
 	respondWithId: string;
 	methodPath: string[];
-	arguments: SerializableData[];
+	arguments: {
+		serializable: SerializableData[];
 
-	// Stores identifiers for callbacks within the normal `arguments`.
-	// For example,
-	// 	[{ foo: 'some-id-here' }, null, 'some-id-here-2']
-	// means that the first argument has a property named "foo" that is a function
-	// and the third argument is also a function.
-	eventHandlerArguments: CallbackArguments[];
+		// Stores identifiers for callbacks within the normal `arguments`.
+		// For example,
+		// 	[{ foo: 'some-id-here' }, null, 'some-id-here-2']
+		// means that the first argument has a property named "foo" that is a function
+		// and the third argument is also a function.
+		callbacks: CallbackIds[];
+	};
+}>;
+
+type ReturnValueResponse = Readonly<{
+	kind: MessageType.ReturnValueResponse;
+
+	responseId: string;
+	returnValue: {
+		serializable: SerializableData;
+		callbacks: CallbackIds;
+	};
 }>;
 
 type ErrorResponse = Readonly<{
@@ -34,13 +47,6 @@ type ErrorResponse = Readonly<{
 
 	responseId: string;
 	errorMessage: string;
-}>;
-
-type ReturnValueResponse = Readonly<{
-	kind: MessageType.ReturnValueResponse;
-
-	responseId: string;
-	returnValue: SerializableData;
 }>;
 
 // Disconnect
@@ -55,7 +61,7 @@ type BaseMessage = Readonly<{
 type InternalMessage = (RemoteReadyMessage|CloseChannelMessage|InvokeMethodMessage|ErrorResponse|ReturnValueResponse) & BaseMessage;
 
 // Listeners for a remote method to resolve or reject.
-type OnMethodResolveListener = (returnValue: SerializableData)=> void;
+type OnMethodResolveListener = (returnValue: SerializableDataAndCallbacks)=> void;
 type OnMethodRejectListener = (errorMessage: string)=> void;
 type OnRemoteReadyListener = ()=> void;
 
@@ -120,20 +126,24 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 		return `${methodPath.join(',')}-${this.nextResponseId++}`;
 	}
 
+	private registerCallbacks(idToCallbacks: Record<string, TransferableCallback>) {
+		for (const id in idToCallbacks) {
+			this.argumentCallbacks.set(id, idToCallbacks[id]);
+		}
+	}
+
 	private async invokeRemoteMethod(methodPath: string[], args: SerializableDataAndCallbacks[]) {
 		// Function arguments can't be transferred using standard .postMessage calls.
 		// As such, we assign them IDs and transfer the IDs instead:
-		const separatedArgs = separateCallbacksFromArgs(args);
-		for (const id in separatedArgs.idToCallbacks) {
-			this.argumentCallbacks.set(id, separatedArgs.idToCallbacks[id]);
-		}
+		const separatedArgs = separateCallbacksFromSerializableArray(args);
+		this.registerCallbacks(separatedArgs.idToCallbacks);
 
 		// Wait for the remote to be ready to receive before
 		// actually sending a message.
 		this.numberUnrespondedToMethods ++;
 		await this.awaitRemoteReady();
 
-		return new Promise<SerializableData>((resolve, reject) => {
+		return new Promise<SerializableDataAndCallbacks>((resolve, reject) => {
 			const responseId = this.createResponseId(methodPath);
 
 			this.resolveMethodCallbacks[responseId] = returnValue => {
@@ -147,8 +157,10 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 				kind: MessageType.InvokeMethod,
 
 				methodPath,
-				arguments: separatedArgs.argsWithoutCallbacks,
-				eventHandlerArguments: separatedArgs.callbackArgs,
+				arguments: {
+					serializable: separatedArgs.serializableData,
+					callbacks: separatedArgs.callbacks,
+				},
 				respondWithId: responseId,
 
 				channelId: this.channelId,
@@ -173,6 +185,10 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 
 		return true;
 	}
+
+	private onInvokeCallback = (callbackId: string, callbackArgs: SerializableDataAndCallbacks[]) => {
+		return this.invokeRemoteMethod(['__callbacks', callbackId], callbackArgs);
+	};
 
 	// Calls a local method and sends the result to the remote connection.
 	private async invokeLocalMethod(message: InvokeMethodMessage) {
@@ -218,12 +234,10 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 				throw new Error(`Property ${message.methodPath.join('.')} is not a function.`);
 			}
 
-			const args = mergeCallbacksAndArgs(
-				message.arguments,
-				message.eventHandlerArguments,
-				(callbackId: string, callbackArgs: SerializableData[]) => {
-					return this.invokeRemoteMethod(['__callbacks', callbackId], callbackArgs);
-				},
+			const args = mergeCallbacksAndSerializable(
+				message.arguments.serializable,
+				message.arguments.callbacks,
+				this.onInvokeCallback,
 			);
 
 			let result;
@@ -265,10 +279,16 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 				result = await method(...args);
 			}
 
+			const separatedResult = separateCallbacksFromSerializable(result);
+			this.registerCallbacks(separatedResult.idToCallbacks);
+
 			this.postMessage({
 				kind: MessageType.ReturnValueResponse,
 				responseId: message.respondWithId,
-				returnValue: result,
+				returnValue: {
+					serializable: separatedResult.serializableData,
+					callbacks: separatedResult.callbacks,
+				},
 				channelId: this.channelId,
 			});
 		} catch (error) {
@@ -304,7 +324,13 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 			throw new Error(`RemoteMessenger(${this.channelId}): Missing method callback with ID ${message.responseId}`);
 		}
 
-		this.resolveMethodCallbacks[message.responseId](message.returnValue);
+		const returnValue = mergeCallbacksAndSerializable(
+			message.returnValue.serializable,
+			message.returnValue.callbacks,
+			this.onInvokeCallback,
+		);
+
+		this.resolveMethodCallbacks[message.responseId](returnValue);
 		this.onMethodRespondedTo(message.responseId);
 	}
 

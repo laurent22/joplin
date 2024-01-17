@@ -3,13 +3,13 @@
 export type SerializableData =
 	number|boolean|string|undefined|null|SerializableData[]|{ readonly [key: string]: SerializableData };
 
-export type TransferableCallback = (...args: SerializableData[])=> void;
+export type TransferableCallback = (...args: SerializableDataAndCallbacks[])=> Promise<SerializableDataAndCallbacks|void>;
 
 export type SerializableDataAndCallbacks =
 	number|boolean|string|undefined|null|TransferableCallback|SerializableDataAndCallbacks[]|{ readonly [key: string]: SerializableDataAndCallbacks };
 
-export type CallbackArguments = null|string|CallbackArguments[]|Readonly<{
-	[propertyName: string]: CallbackArguments;
+export type CallbackIds = null|string|CallbackIds[]|Readonly<{
+	[propertyName: string]: CallbackIds;
 }>;
 
 // This provides some amount of type checking for messenger APIs.
