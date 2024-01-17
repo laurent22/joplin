@@ -20,7 +20,7 @@ const pluginBackgroundPageBundle = new BundledFile(
 );
 
 const noteViewerBundle = new BundledFile(
-	'noteViewerBundle',
+	'noteBodyViewerBundle',
 	`${mobileDir}/components/NoteBodyViewer/bundledJs/noteBodyViewerBundle.ts`,
 );
 

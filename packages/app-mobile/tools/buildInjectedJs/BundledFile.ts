@@ -79,7 +79,7 @@ export default class BundledFile {
 	// Creates a file that can be imported by React native. This file contains the
 	// bundled JS as a string.
 	private async copyToImportableFile() {
-		await copyJs(`${this.bundleBaseName}.bundle`, this.bundleOutputPath);
+		await copyJs(`${this.bundleName}.bundle`, this.bundleOutputPath);
 	}
 
 	private handleErrors(error: Error | undefined | null, stats: webpack.Stats | undefined): boolean {
