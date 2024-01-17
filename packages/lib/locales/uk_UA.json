@@ -62,6 +62,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -328,6 +331,9 @@
 	],
 	"Browse...": [
 		"Переглянути…"
+	],
+	"Built in": [
+		""
 	],
 	"Bulleted List": [
 		"Маркований список"
@@ -1020,6 +1026,9 @@
 	],
 	"Enable note history": [
 		"Увімкнути історію нотаток"
+	],
+	"Enable optical character recognition (OCR)": [
+		""
 	],
 	"Enable PDF viewer": [
 		"Увімкнути переглядач PDF"
@@ -3145,6 +3154,9 @@
 	],
 	"When creating a new to-do:": [
 		"Коли створюжться новий список справ:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""

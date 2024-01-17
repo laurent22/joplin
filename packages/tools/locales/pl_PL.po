@@ -7,8 +7,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "Last-Translator: X3NO <X3NO@disroot.org>\n"
 "Language-Team: \n"
 "Language: pl_PL\n"
@@ -19,18 +17,18 @@ msgstr ""
 "|| n%100>14) ? 1 : 2);\n"
 "X-Generator: Poedit 3.4.1\n"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:363
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:493
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr ""
 "- Kamera: aby pozwolić na wykonywanie zdjęć i załączanie ich do notatek."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:366
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:496
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
 "- Lokacja: aby pozwolić załączać informację o lokacji geograficznej do "
 "notatki."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:360
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:490
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
@@ -43,7 +41,7 @@ msgstr ""
 msgid "\"%s\" is missing the required \"%s\" property."
 msgstr "\"%s\" nie posiada wymaganej właściwości \"%s\"."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:252
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:271
 msgid "(%s)"
 msgstr "(%s)"
 
@@ -59,43 +57,43 @@ msgstr "(Brak)"
 msgid "(wysiwyg: %s)"
 msgstr "(wysiwyg: %s)"
 
-#: packages/app-mobile/components/screens/Note.tsx:641
-#: packages/lib/shim-init-node.js:211
+#: packages/app-mobile/components/screens/Note.tsx:760
+#: packages/lib/shim-init-node.ts:224
 msgid "(You may disable this prompt in the options)"
 msgstr "(Możesz wyłączyć ten monit w opcjach)"
 
-#: packages/app-desktop/gui/MenuBar.tsx:691
-#: packages/app-desktop/gui/MenuBar.tsx:967
+#: packages/app-desktop/gui/MenuBar.tsx:692
+#: packages/app-desktop/gui/MenuBar.tsx:968
 msgid "&Edit"
 msgstr "&Edytuj"
 
-#: packages/app-desktop/gui/MenuBar.tsx:566
-#: packages/app-desktop/gui/MenuBar.tsx:646
-#: packages/app-desktop/gui/MenuBar.tsx:963
+#: packages/app-desktop/gui/MenuBar.tsx:567
+#: packages/app-desktop/gui/MenuBar.tsx:647
+#: packages/app-desktop/gui/MenuBar.tsx:964
 msgid "&File"
 msgstr "&Plik"
 
-#: packages/app-desktop/gui/MenuBar.tsx:813
+#: packages/app-desktop/gui/MenuBar.tsx:814
 msgid "&Go"
 msgstr "&Idź"
 
-#: packages/app-desktop/gui/MenuBar.tsx:846
+#: packages/app-desktop/gui/MenuBar.tsx:847
 msgid "&Help"
 msgstr "&Pomoc"
 
-#: packages/app-desktop/gui/MenuBar.tsx:831
+#: packages/app-desktop/gui/MenuBar.tsx:832
 msgid "&Note"
 msgstr "&Notatka"
 
-#: packages/app-desktop/gui/MenuBar.tsx:842
+#: packages/app-desktop/gui/MenuBar.tsx:843
 msgid "&Tools"
 msgstr "&Narzędzia"
 
-#: packages/app-desktop/gui/MenuBar.tsx:733
+#: packages/app-desktop/gui/MenuBar.tsx:734
 msgid "&View"
 msgstr "&Wyświetl"
 
-#: packages/lib/models/Setting.ts:1606
+#: packages/lib/models/Setting.ts:1618
 msgid "%d days"
 msgstr "%d dni"
 
@@ -109,11 +107,11 @@ msgstr "%d GB"
 msgid "%d GB storage space"
 msgstr "%d GB przestrzeni dyskowej"
 
-#: packages/lib/models/Setting.ts:1389
+#: packages/lib/models/Setting.ts:1400
 msgid "%d hour"
 msgstr "%d godzina"
 
-#: packages/lib/models/Setting.ts:1390 packages/lib/models/Setting.ts:1391
+#: packages/lib/models/Setting.ts:1401 packages/lib/models/Setting.ts:1402
 msgid "%d hours"
 msgstr "%d godzin"
 
@@ -127,12 +125,12 @@ msgstr "%d MB"
 msgid "%d MB per note or attachment"
 msgstr "%d MB na notatkę lub załącznik"
 
-#: packages/lib/models/Setting.ts:1386 packages/lib/models/Setting.ts:1387
-#: packages/lib/models/Setting.ts:1388
+#: packages/lib/models/Setting.ts:1397 packages/lib/models/Setting.ts:1398
+#: packages/lib/models/Setting.ts:1399
 msgid "%d minutes"
 msgstr "%d minut"
 
-#: packages/app-cli/app/command-rmnote.js:27
+#: packages/app-cli/app/command-rmnote.ts:27
 msgid "%d notes match this pattern. Delete them?"
 msgstr "%d notatki spełniają wzór. Usunąć je?"
 
@@ -161,12 +159,12 @@ msgstr "%s (%s): %s"
 msgid "%s (pre-release)"
 msgstr "%s (przedpremiera)"
 
-#: packages/lib/models/Setting.ts:915 packages/lib/models/Setting.ts:916
-#: packages/lib/models/Setting.ts:917
+#: packages/lib/models/Setting.ts:926 packages/lib/models/Setting.ts:927
+#: packages/lib/models/Setting.ts:928
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: packages/lib/models/Setting.ts:914
+#: packages/lib/models/Setting.ts:925
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
@@ -174,13 +172,19 @@ msgstr "%s / %s / %s"
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
-#: packages/app-cli/app/command-config.js:82
+#: packages/app-cli/app/command-config.ts:85
 msgid "%s = %s"
 msgstr "%s = %s"
 
-#: packages/app-cli/app/command-config.js:80
+#: packages/app-cli/app/command-config.ts:83
 msgid "%s = %s (%s)"
 msgstr "%s = %s (%s)"
+
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:296
+msgid ""
+"%s is not optimised for synchronising many small files so your initial "
+"synchronisation will be slow."
+msgstr ""
 
 #: packages/lib/services/ReportService.ts:247
 #: packages/lib/services/ReportService.ts:248
@@ -202,7 +206,7 @@ msgstr "%s: %d/%d"
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:195
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:191
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:263
 msgid "%s: Missing password."
 msgstr "%s: Brak hasła."
@@ -233,20 +237,20 @@ msgstr ""
 "zadanie.) Użyj \"clear\" aby przekonwertować zadanie z powrotem do "
 "regularnej notatki."
 
-#: packages/lib/models/Setting.ts:1415
+#: packages/lib/models/Setting.ts:1426
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.ts:1413
+#: packages/lib/models/Setting.ts:1424
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.ts:1416
+#: packages/lib/models/Setting.ts:1427
 msgid "A5"
 msgstr "A5"
 
-#: packages/app-desktop/gui/MenuBar.tsx:572
-#: packages/app-desktop/gui/MenuBar.tsx:887
+#: packages/app-desktop/gui/MenuBar.tsx:573
+#: packages/app-desktop/gui/MenuBar.tsx:888
 msgid "About Joplin"
 msgstr "O aplikacji Joplin"
 
@@ -289,7 +293,7 @@ msgstr "Akcja"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:299
-#: packages/app-mobile/components/ScreenHeader.tsx:604
+#: packages/app-mobile/components/ScreenHeader.tsx:609
 msgid "Actions"
 msgstr "Akcje"
 
@@ -298,15 +302,15 @@ msgid "Active"
 msgstr "Aktywne"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:18
-#: packages/app-desktop/gui/MenuBar.tsx:781
+#: packages/app-desktop/gui/MenuBar.tsx:782
 msgid "Actual Size"
 msgstr "Rozmiar rzeczywisty"
 
-#: packages/app-mobile/components/screens/Note.tsx:1366
+#: packages/app-mobile/components/screens/Note.tsx:1517
 msgid "Add body"
 msgstr "Dodaj tekst"
 
-#: packages/app-mobile/components/ActionButton.tsx:59
+#: packages/app-mobile/components/ActionButton.tsx:64
 msgid "Add new"
 msgstr "Dodaj nowy"
 
@@ -318,7 +322,7 @@ msgstr "Dodaj lub usuń znaczniki:"
 msgid "Add recipient:"
 msgstr "Dodaj odbiorcę:"
 
-#: packages/app-mobile/components/screens/Note.tsx:1441
+#: packages/app-mobile/components/screens/Note.tsx:1591
 msgid "Add title"
 msgstr "Dodaj tytuł"
 
@@ -335,6 +339,7 @@ msgstr "Administrator"
 msgid "Admin dashboard"
 msgstr "Panel administracyjny"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:135
 msgid "Advanced options"
 msgstr "Opcje zaawansowane"
@@ -350,8 +355,8 @@ msgstr ""
 "Wszystkie dane, włączając notatki, notatniki i tagi zostaną trwale usunięte."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:497
-#: packages/app-mobile/components/screens/Notes.tsx:178
-#: packages/app-mobile/components/side-menu-content.tsx:483
+#: packages/app-mobile/components/screens/Notes.tsx:180
+#: packages/app-mobile/components/side-menu-content.tsx:484
 msgid "All notes"
 msgstr "Wszystkie notatki"
 
@@ -359,7 +364,7 @@ msgstr "Wszystkie notatki"
 msgid "All potential ports are in use - please report the issue at %s"
 msgstr "Wszystkie możliwe porty są w użyciu - proszę zgłosić błąd na %s"
 
-#: packages/app-cli/app/command-config.js:18
+#: packages/app-cli/app/command-config.ts:19
 msgid "Also displays unset and hidden config variables."
 msgstr "Wyświetla także nieustawione i ukryte zmienne konfiguracyjne."
 
@@ -371,15 +376,15 @@ msgstr "Udostępnij powiązane notatki"
 msgid "Always"
 msgstr "Zawsze"
 
-#: packages/lib/models/Setting.ts:1129
+#: packages/lib/models/Setting.ts:1140
 msgid "Always ask"
 msgstr "Zawsze pytaj"
 
-#: packages/lib/models/Setting.ts:1130
+#: packages/lib/models/Setting.ts:1141
 msgid "Always resize"
 msgstr "Zmień rozmiar"
 
-#: packages/app-cli/app/command-mv.js:36
+#: packages/app-cli/app/command-mv.ts:36
 msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
 "see the short notebook id or use $b for current selected notebook"
@@ -389,7 +394,7 @@ msgstr ""
 "dla aktualnie wybranego notatnika"
 
 #: packages/app-cli/app/command-mkbook.ts:33
-#: packages/app-cli/app/command-mv.js:29
+#: packages/app-cli/app/command-mv.ts:29
 msgid ""
 "Ambiguous notebook \"%s\". Please use short notebook id instead - press "
 "\"ti\" to see the short notebook id"
@@ -402,7 +407,7 @@ msgid "An autosaved drawing was found. Attach a copy of it to the note?"
 msgstr ""
 "Znaleziono automatycznie zapisany rysunek. Dołączyć jego kopię do notatki?"
 
-#: packages/app-desktop/ElectronAppWrapper.ts:88
+#: packages/app-desktop/ElectronAppWrapper.ts:89
 msgid "An error occurred: %s"
 msgstr "Wystąpił błąd: %s"
 
@@ -411,7 +416,7 @@ msgid "An update is available, do you want to download it now?"
 msgstr "Aktualizacja jest dostępna, czy chcesz ją pobrać?"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:19
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:316
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:436
 msgid ""
 "Any email sent to this address will be converted into a note and added to "
 "your collection. The note will be saved into the Inbox notebook"
@@ -420,11 +425,11 @@ msgstr ""
 "notatkę i dodana do kolekcji. Notatka zostanie zapisana w notatniku Skrzynka "
 "odbiorcza"
 
-#: packages/lib/models/Setting.ts:2607
+#: packages/lib/models/Setting.ts:2619
 msgid "Appearance"
 msgstr "Wygląd"
 
-#: packages/lib/models/Setting.ts:2612
+#: packages/lib/models/Setting.ts:2624
 msgid "Application"
 msgstr "Aplikacja"
 
@@ -432,6 +437,7 @@ msgstr "Aplikacja"
 msgid "Apply"
 msgstr "Zastosuj"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:36
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr "Czy na pewno chcesz odnowić token autoryzacyjny?"
@@ -444,7 +450,7 @@ msgstr ""
 "Czy na pewno chcesz powrócić do domyślnego układu? Bieżąca konfiguracja "
 "układu zostanie utracona."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:518
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:514
 msgid "Arguments:"
 msgstr "Argumenty:"
 
@@ -459,19 +465,19 @@ msgstr "Załącz"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:74
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:623
-#: packages/app-mobile/components/screens/Note.tsx:1000
+#: packages/app-mobile/components/screens/Note.tsx:1143
 msgid "Attach file"
 msgstr "Załącz plik"
 
-#: packages/app-mobile/components/screens/Note.tsx:1004
+#: packages/app-mobile/components/screens/Note.tsx:1147
 msgid "Attach photo"
 msgstr "Załącz zdjęcie"
 
-#: packages/app-mobile/components/screens/Note.tsx:1101
+#: packages/app-mobile/components/screens/Note.tsx:1244
 msgid "Attach..."
 msgstr "Załącz..."
 
-#: packages/app-cli/app/command-attach.js:13
+#: packages/app-cli/app/command-attach.ts:13
 msgid "Attaches the given file to the note."
 msgstr "Dołącza wskazany plik do notatki."
 
@@ -480,7 +486,7 @@ msgstr "Dołącza wskazany plik do notatki."
 msgid "attachment"
 msgstr "załączniki"
 
-#: packages/lib/models/Resource.ts:462
+#: packages/lib/models/Resource.ts:484
 msgid "Attachment conflict: \"%s\""
 msgstr "Konflikt załącznika: \"%s\""
 
@@ -516,6 +522,7 @@ msgstr ""
 "Uwierzytelnianie nie zostało ukończone (nie otrzymano tokena "
 "uwierzytelniającego)."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:136
 msgid "Authorisation token:"
 msgstr "Token uwierzytelniający:"
@@ -528,22 +535,23 @@ msgstr "Automatyczny"
 msgid "Auto-add disabled accounts for deletion"
 msgstr "Automatycznie dodaj wyłączone konta do usunięcia"
 
-#: packages/lib/models/Setting.ts:950
+#: packages/lib/models/Setting.ts:961
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Automatycznie zamykaj klamry, nawiasy, cudzysłowy itd."
 
-#: packages/lib/models/Setting.ts:1373
+#: packages/lib/models/Setting.ts:1384
 msgid "Automatically check for updates"
 msgstr "Sprawdź dostępność aktualizacji"
 
-#: packages/lib/models/Setting.ts:862
+#: packages/lib/models/Setting.ts:873
 msgid "Automatically switch theme to match system theme"
 msgstr "Automatycznie dopasuj motyw do motywu systemowego"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:45
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:737
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:733
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:211
-#: packages/app-mobile/components/ScreenHeader.tsx:323
+#: packages/app-mobile/components/ScreenHeader.tsx:328
 #: packages/lib/commands/historyBackward.ts:6
 msgid "Back"
 msgstr "Cofnij"
@@ -567,14 +575,18 @@ msgstr ""
 msgid "Bold"
 msgstr "Pogrubienie"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:223
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:313
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:231
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:328
 msgid "Browse all plugins"
 msgstr "Przeglądaj wszystkie wtyczki"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:555
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:551
 msgid "Browse..."
 msgstr "Przeglądaj..."
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:231
+msgid "Built in"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:84
 msgid "Bulleted List"
@@ -594,12 +606,14 @@ msgstr "Może przeglądać i edytować"
 
 #: packages/app-desktop/bridge.ts:202 packages/app-desktop/bridge.ts:220
 #: packages/app-desktop/checkForUpdates.ts:108
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:737
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:733
+#: packages/app-desktop/gui/DialogButtonRow.min.js:38
 #: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:82
 #: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:23
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:171
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:10
+#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:291
 #: packages/app-desktop/gui/ResourceScreen.tsx:171
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:331
@@ -610,13 +624,13 @@ msgstr "Może przeglądać i edytować"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:107
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:70
 #: packages/app-mobile/components/screens/encryption-config.tsx:190
-#: packages/app-mobile/components/screens/Note.tsx:118
-#: packages/app-mobile/components/screens/Note.tsx:644
+#: packages/app-mobile/components/screens/Note.tsx:242
+#: packages/app-mobile/components/screens/Note.tsx:763
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:152
-#: packages/app-mobile/components/side-menu-content.tsx:151
-#: packages/app-mobile/components/side-menu-content.tsx:188
-#: packages/app-mobile/components/side-menu-content.tsx:454
-#: packages/lib/shim-init-node.js:212
+#: packages/app-mobile/components/side-menu-content.tsx:152
+#: packages/app-mobile/components/side-menu-content.tsx:189
+#: packages/app-mobile/components/side-menu-content.tsx:455
+#: packages/lib/shim-init-node.ts:225
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -624,7 +638,7 @@ msgstr "Anuluj"
 msgid "Cancelling background synchronisation... Please wait."
 msgstr "Anulowanie synchronizacji w tle... Proszę czekać."
 
-#: packages/lib/Synchronizer.ts:195
+#: packages/lib/Synchronizer.ts:196
 msgid "Cancelling..."
 msgstr "Anulowanie..."
 
@@ -632,7 +646,7 @@ msgstr "Anulowanie..."
 msgid "Cancelling... Please wait."
 msgstr "Anulowanie... Proszę czekać."
 
-#: packages/lib/shim-init-node.js:266
+#: packages/lib/shim-init-node.ts:282
 msgid "Cannot access %s"
 msgstr "Brak dostępu %s"
 
@@ -644,25 +658,25 @@ msgstr "Nie można zmienić zaszyfrowanego obiektu"
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Nie można skopiować notatki do notatnika \"%s\""
 
-#: packages/app-mobile/components/screens/Notes.tsx:165
+#: packages/app-mobile/components/screens/Notes.tsx:167
 msgid "Cannot create a new note: %s"
 msgstr "Nie można utworzyć notatki: %s"
 
-#: packages/app-cli/app/command-attach.js:21
-#: packages/app-cli/app/command-cat.js:25 packages/app-cli/app/command-cp.js:24
-#: packages/app-cli/app/command-cp.js:27
-#: packages/app-cli/app/command-done.js:20
-#: packages/app-cli/app/command-export.js:36
-#: packages/app-cli/app/command-export.js:40
-#: packages/app-cli/app/command-geoloc.js:20
-#: packages/app-cli/app/command-help.js:66
-#: packages/app-cli/app/command-import.js:34
-#: packages/app-cli/app/command-mv.js:24 packages/app-cli/app/command-mv.js:45
-#: packages/app-cli/app/command-ren.js:23
-#: packages/app-cli/app/command-rmbook.js:25
-#: packages/app-cli/app/command-rmnote.js:25
+#: packages/app-cli/app/command-attach.ts:21
+#: packages/app-cli/app/command-cat.ts:25 packages/app-cli/app/command-cp.ts:24
+#: packages/app-cli/app/command-cp.ts:27
+#: packages/app-cli/app/command-done.ts:20
+#: packages/app-cli/app/command-export.ts:37
+#: packages/app-cli/app/command-export.ts:41
+#: packages/app-cli/app/command-geoloc.ts:20
+#: packages/app-cli/app/command-help.ts:66
+#: packages/app-cli/app/command-import.ts:35
+#: packages/app-cli/app/command-mv.ts:24 packages/app-cli/app/command-mv.ts:45
+#: packages/app-cli/app/command-ren.ts:23
+#: packages/app-cli/app/command-rmbook.ts:25
+#: packages/app-cli/app/command-rmnote.ts:25
 #: packages/app-cli/app/command-search.js:27
-#: packages/app-cli/app/command-set.js:32
+#: packages/app-cli/app/command-set.ts:32
 #: packages/app-cli/app/command-tag.js:33
 #: packages/app-cli/app/command-tag.js:36
 #: packages/app-cli/app/command-tag.js:42
@@ -670,7 +684,7 @@ msgstr "Nie można utworzyć notatki: %s"
 #: packages/app-cli/app/command-tag.js:81
 #: packages/app-cli/app/command-tag.js:87
 #: packages/app-cli/app/command-todo.js:21
-#: packages/app-cli/app/command-use.js:21
+#: packages/app-cli/app/command-use.ts:21
 #: packages/lib/services/interop/InteropService.ts:252
 #: packages/lib/services/interop/InteropService.ts:269
 msgid "Cannot find \"%s\"."
@@ -697,7 +711,7 @@ msgid "Cannot move note to \"%s\" notebook"
 msgstr "Nie można przenieść notatki do notatnika \"%s\""
 
 #: packages/app-mobile/components/screens/folder.js:73
-#: packages/lib/models/Folder.ts:727
+#: packages/lib/models/Folder.ts:741
 msgid "Cannot move notebook to this location"
 msgstr "Nie można przenieść notatnika do tej lokacji"
 
@@ -732,7 +746,7 @@ msgstr ""
 "włączył on szyfrowania end-to-end. Może on włączyć je w zakładce "
 "Konfiguracja > Szyfrowanie."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:330
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:328
 msgid "Case sensitive"
 msgstr "Z uwzględnieniem wielkości liter"
 
@@ -752,13 +766,13 @@ msgstr "Znaki"
 msgid "Characters excluding spaces"
 msgstr "Znaki bez spacji"
 
-#: packages/app-desktop/gui/MenuBar.tsx:589
-#: packages/app-desktop/gui/MenuBar.tsx:862
+#: packages/app-desktop/gui/MenuBar.tsx:590
+#: packages/app-desktop/gui/MenuBar.tsx:863
 msgid "Check for updates..."
 msgstr "Sprawdź dostępność aktualizacji..."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:217
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:303
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:213
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:418
 msgid "Check synchronisation configuration"
 msgstr "Sprawdź konfigurację synchronizacji"
 
@@ -774,17 +788,19 @@ msgstr "Lista checkboxów"
 msgid "Checking... Please wait."
 msgstr "Sprawdzanie... Proszę czekać."
 
-#: packages/app-mobile/components/screens/Note.tsx:1007
+#: packages/app-mobile/components/screens/Note.tsx:1150
 msgid "Choose an option"
 msgstr "Wybierz opcję"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:17
 #: packages/app-desktop/gui/ExtensionBadge.tsx:70
 msgid "Chrome Web Store"
 msgstr "Chrome Web Store"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:149
+#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:298
-#: packages/app-mobile/components/screens/search.tsx:191
+#: packages/app-mobile/components/screens/search.tsx:193
 msgid "Clear"
 msgstr "Wyczyść"
 
@@ -792,6 +808,7 @@ msgstr "Wyczyść"
 msgid "Clear alarm"
 msgstr "Wyczyść alarm"
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:206
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
@@ -801,7 +818,7 @@ msgstr ""
 "o nazwie \"%s\". Obecna wersja notatki nie zostanie nadpisana lub "
 "zmodyfikowana."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:421
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:427
 msgid "Click to add tags..."
 msgstr "Kliknij aby dodać tagi..."
 
@@ -809,16 +826,16 @@ msgstr "Kliknij aby dodać tagi..."
 msgid "Client ID: %s"
 msgstr "ID klienta: %s"
 
-#: packages/app-desktop/gui/MenuBar.tsx:324
+#: packages/app-desktop/gui/MenuBar.tsx:325
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:173
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:394
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:220
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:338
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:352
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:30
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:163
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:228
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToolbarOverflowRows.tsx:91
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:200
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:198
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:143
 msgid "Close"
 msgstr "Zamknij"
@@ -828,7 +845,7 @@ msgid "Close dropdown"
 msgstr "Zamknij rozwijane menu"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
-#: packages/app-desktop/gui/MenuBar.tsx:654
+#: packages/app-desktop/gui/MenuBar.tsx:655
 msgid "Close Window"
 msgstr "Zamknij okno"
 
@@ -841,7 +858,7 @@ msgstr "Kod"
 msgid "Code Block"
 msgstr "Blok kodu"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1268
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1274
 msgid "Code View"
 msgstr "Widok kodu"
 
@@ -849,11 +866,11 @@ msgstr "Widok kodu"
 msgid "Collaborate on a notebook with others"
 msgstr "Współpracuj z innymi nad notatnikiem"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:181
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:189
 msgid "Collaborate on notebooks with others"
 msgstr "Współpracuj z innymi przy notatnikach"
 
-#: packages/app-mobile/components/side-menu-content.tsx:356
+#: packages/app-mobile/components/side-menu-content.tsx:357
 msgid "Collapse"
 msgstr "Zwiń"
 
@@ -861,7 +878,7 @@ msgstr "Zwiń"
 msgid "Coming alarms"
 msgstr "Przychodzące powiadomienia"
 
-#: packages/lib/models/Setting.ts:1518
+#: packages/lib/models/Setting.ts:1529
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -882,7 +899,7 @@ msgstr "komenda"
 msgid "Command"
 msgstr "Komenda"
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:621
+#: packages/app-desktop/plugins/GotoAnything.tsx:661
 msgid "Command palette"
 msgstr "Paleta komend"
 
@@ -894,6 +911,7 @@ msgstr "Paleta komend..."
 msgid "Compact"
 msgstr "Kompaktowy"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:53
 msgid "Completed"
 msgstr "Ukończono"
@@ -902,7 +920,7 @@ msgstr "Ukończono"
 msgid "Completed decryption."
 msgstr "Deszyfrowywanie zakończone."
 
-#: packages/lib/Synchronizer.ts:196
+#: packages/lib/Synchronizer.ts:197
 msgid "Completed: %s (%s)"
 msgstr "Ukończono: %s (%s)"
 
@@ -911,8 +929,8 @@ msgid "Compress old changes"
 msgstr "Skompresuj stare zmiany"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:129
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:591
-#: packages/app-mobile/components/side-menu-content.tsx:432
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:699
+#: packages/app-mobile/components/side-menu-content.tsx:433
 msgid "Configuration"
 msgstr "Konfiguracja"
 
@@ -939,7 +957,7 @@ msgstr "Skonfliktowane: %d"
 msgid "Conflicts"
 msgstr "Konflikty"
 
-#: packages/lib/models/Resource.ts:446
+#: packages/lib/models/Resource.ts:453
 msgid "Conflicts (attachments)"
 msgstr "Konflikty (załączniki)"
 
@@ -955,11 +973,11 @@ msgstr "Treść dostarczona przez %s"
 msgid "Continue"
 msgstr "Kontynuuj"
 
-#: packages/app-mobile/components/screens/Note.tsx:1152
+#: packages/app-mobile/components/screens/Note.tsx:1295
 msgid "Convert to note"
 msgstr "Przekonwertuj do notatki"
 
-#: packages/app-mobile/components/screens/Note.tsx:1152
+#: packages/app-mobile/components/screens/Note.tsx:1295
 msgid "Convert to todo"
 msgstr "Przekonwertuj do zadania"
 
@@ -967,7 +985,7 @@ msgstr "Przekonwertuj do zadania"
 msgid "Converting speech to text..."
 msgstr "Konwersja mowy na tekst..."
 
-#: packages/app-desktop/gui/MenuBar.tsx:553
+#: packages/app-desktop/gui/MenuBar.tsx:554
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:34
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:94
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:169
@@ -993,7 +1011,7 @@ msgid "Copy Link Address"
 msgstr "Skopiuj adres odnośnika"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:102
-#: packages/app-mobile/components/screens/Note.tsx:1160
+#: packages/app-mobile/components/screens/Note.tsx:1303
 msgid "Copy Markdown link"
 msgstr "Skopiuj odnośnik Markdown"
 
@@ -1009,10 +1027,11 @@ msgstr[1] "Kopiuj udostępnialne linki"
 msgstr[2] "Kopiuj udostępnialne linki"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:21
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:326
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:446
 msgid "Copy to clipboard"
 msgstr "Skopiuj do schowka"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:208
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:140
 msgid "Copy token"
 msgstr "Skopiuj token"
@@ -1043,7 +1062,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:313
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:328
 msgid "Could not connect to plugin repository."
 msgstr "Nie udało się połączyć do repozytorium dodatków."
 
@@ -1087,6 +1106,7 @@ msgstr ""
 msgid "Could not verify your identify: %s"
 msgstr "Nie udało się zweryfikować twojej tożsamości: %s"
 
+#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:277
 msgid "Create"
 msgstr "Utwórz"
@@ -1112,6 +1132,7 @@ msgstr "Utwórz nowy notatnik"
 msgid "Create user"
 msgstr "Utwórz użytkownika"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:51
 msgid "Created"
 msgstr "Utworzono"
@@ -1120,7 +1141,7 @@ msgstr "Utworzono"
 msgid "created date"
 msgstr "data utworzenia"
 
-#: packages/lib/Synchronizer.ts:188
+#: packages/lib/Synchronizer.ts:189
 msgid "Created local items: %d."
 msgstr "Utworzono lokalne obiekty: %d."
 
@@ -1128,7 +1149,7 @@ msgstr "Utworzono lokalne obiekty: %d."
 msgid "Created locally"
 msgstr "Utworzono lokalnie"
 
-#: packages/lib/Synchronizer.ts:190
+#: packages/lib/Synchronizer.ts:191
 msgid "Created remote items: %d."
 msgstr "Utworzono zdalne obiekty: %d."
 
@@ -1136,13 +1157,14 @@ msgstr "Utworzono zdalne obiekty: %d."
 msgid "Created: "
 msgstr "Utworzono: "
 
-#: packages/app-cli/app/command-import.js:48
+#: packages/app-cli/app/command-import.ts:49
+#: packages/app-desktop/gui/ImportScreen.min.js:69
 #: packages/app-desktop/gui/ImportScreen.tsx:89
 msgid "Created: %d."
 msgstr "Utworzono: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:118
-#: packages/app-mobile/components/screens/Note.tsx:967
+#: packages/app-mobile/components/screens/Note.tsx:1110
 msgid "Created: %s"
 msgstr "Utworzono: %s"
 
@@ -1166,7 +1188,7 @@ msgstr "Tworzenie nowej notatki..."
 msgid "Creating new to-do..."
 msgstr "Tworzenie nowego zadania %s..."
 
-#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:27
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:29
 msgid "Creating report..."
 msgstr "Tworzenie raportu..."
 
@@ -1183,15 +1205,15 @@ msgstr "własny kierunek sortowania"
 msgid "Custom order"
 msgstr "Własny kierunek sortowania"
 
-#: packages/lib/models/Setting.ts:1342
+#: packages/lib/models/Setting.ts:1353
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Własny arkusz stylów dla całej aplikacji Joplin"
 
-#: packages/lib/models/Setting.ts:1325
+#: packages/lib/models/Setting.ts:1336
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Własny arkusz stylów dla wyrenderowanego markdownu"
 
-#: packages/lib/models/Setting.ts:1517
+#: packages/lib/models/Setting.ts:1528
 msgid "Custom TLS certificates"
 msgstr "Niestandardowe certyfikaty TLS"
 
@@ -1213,7 +1235,7 @@ msgstr "Ciemny"
 msgid "Dashboard"
 msgstr "Panel"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:423
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:509
 msgid "Database v%s"
 msgstr "Baza danych v%s"
 
@@ -1225,7 +1247,7 @@ msgstr "Data"
 msgid "Date format"
 msgstr "Format daty"
 
-#: packages/lib/models/Setting.ts:1606
+#: packages/lib/models/Setting.ts:1618
 msgid "days"
 msgstr "dni"
 
@@ -1242,12 +1264,12 @@ msgid "Decrypted items: %s / %s"
 msgstr "Deszyfrowane obiekty: %s / %s"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:752
-#: packages/app-mobile/components/side-menu-content.tsx:441
+#: packages/app-mobile/components/side-menu-content.tsx:442
 msgid "Decrypting items: %d/%d"
 msgstr "Deszyfrowanie obiektów %d/%d"
 
-#: packages/lib/models/Setting.ts:1267 packages/lib/models/Setting.ts:1274
-#: packages/lib/models/Setting.ts:1450
+#: packages/lib/models/Setting.ts:1278 packages/lib/models/Setting.ts:1285
+#: packages/lib/models/Setting.ts:1461
 msgid "Default"
 msgstr "Domyślne"
 
@@ -1255,15 +1277,15 @@ msgstr "Domyślne"
 msgid "Default: %s"
 msgstr "Domyślne: %s"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:185
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:193
 #: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:23
 #: packages/app-desktop/gui/ResourceScreen.tsx:112
 #: packages/app-desktop/gui/ResourceScreen.tsx:171
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:138
-#: packages/app-mobile/components/ScreenHeader.tsx:436
-#: packages/app-mobile/components/ScreenHeader.tsx:503
-#: packages/app-mobile/components/screens/Note.tsx:1173
-#: packages/app-mobile/components/side-menu-content.tsx:183
+#: packages/app-mobile/components/ScreenHeader.tsx:441
+#: packages/app-mobile/components/ScreenHeader.tsx:508
+#: packages/app-mobile/components/screens/Note.tsx:1316
+#: packages/app-mobile/components/side-menu-content.tsx:184
 msgid "Delete"
 msgstr "Usuń"
 
@@ -1283,7 +1305,7 @@ msgstr "Usuń wygaśnięte tokeny"
 msgid "Delete line"
 msgstr "Usuń wiersz"
 
-#: packages/lib/models/Setting.ts:1366
+#: packages/lib/models/Setting.ts:1377
 msgid "Delete local data and re-download from sync target"
 msgstr ""
 "Usuń dane lokalne i pobierz je ponownie z miejsca docelowego synchronizacji"
@@ -1296,8 +1318,8 @@ msgstr "Usuń notatkę"
 msgid "Delete note \"%s\"?"
 msgstr "Usunąć notatkę \"%s\"?"
 
-#: packages/app-cli/app/command-rmnote.js:27
-#: packages/app-mobile/components/screens/Note.tsx:559
+#: packages/app-cli/app/command-rmnote.ts:27
+#: packages/app-mobile/components/screens/Note.tsx:682
 msgid "Delete note?"
 msgstr "Usunąć notatkę?"
 
@@ -1306,7 +1328,7 @@ msgid "Delete notebook"
 msgstr "Usuń notatnik"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
-#: packages/app-mobile/components/side-menu-content.tsx:163
+#: packages/app-mobile/components/side-menu-content.tsx:164
 msgid ""
 "Delete notebook \"%s\"?\n"
 "\n"
@@ -1317,7 +1339,7 @@ msgstr ""
 "Wszystkie notatki i notatniki podrzędne zawarte w tym notatniku także "
 "zostaną usunięte."
 
-#: packages/app-cli/app/command-rmbook.js:26
+#: packages/app-cli/app/command-rmbook.ts:26
 msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
@@ -1325,7 +1347,7 @@ msgstr ""
 "Usunąć notatnik? Wszystkie notatki i notatniki podrzędne zawarte w notatniku "
 "zostaną także usunięte."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:167
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:175
 msgid "Delete plugin \"%s\"?"
 msgstr "Usunąć wtyczkę \"%s\"?"
 
@@ -1333,12 +1355,12 @@ msgstr "Usunąć wtyczkę \"%s\"?"
 msgid "Delete profile \"%s\""
 msgstr "Usuń profil “%s”"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:438
+#: packages/app-mobile/components/ScreenHeader.tsx:443
 msgid "Delete selected notes"
 msgstr "Usuń wybrane notatki"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:22
-#: packages/app-mobile/components/side-menu-content.tsx:160
+#: packages/app-mobile/components/side-menu-content.tsx:161
 msgid ""
 "Delete the Inbox notebook?\n"
 "\n"
@@ -1366,31 +1388,31 @@ msgstr ""
 msgid "Delete this profile?"
 msgstr "Usunąć ten profil?"
 
-#: packages/lib/Synchronizer.ts:192
+#: packages/lib/Synchronizer.ts:193
 msgid "Deleted local items: %d."
 msgstr "Usunięto lokalne obiekty: %d."
 
-#: packages/lib/Synchronizer.ts:193
+#: packages/lib/Synchronizer.ts:194
 msgid "Deleted remote items: %d."
 msgstr "Usunięto zdalne obiekty: %d."
 
-#: packages/app-cli/app/command-rmbook.js:13
+#: packages/app-cli/app/command-rmbook.ts:13
 msgid "Deletes the given notebook."
 msgstr "Usuwa wybrany notatnik."
 
-#: packages/app-cli/app/command-rmbook.js:17
+#: packages/app-cli/app/command-rmbook.ts:17
 msgid "Deletes the notebook without asking for confirmation."
 msgstr "Usuwa notatnik bez pytania o potwierdzenie."
 
-#: packages/app-cli/app/command-rmnote.js:13
+#: packages/app-cli/app/command-rmnote.ts:13
 msgid "Deletes the notes matching <note-pattern>."
 msgstr "Usuwa notatki spełniające <note-pattern>."
 
-#: packages/app-cli/app/command-rmnote.js:17
+#: packages/app-cli/app/command-rmnote.ts:17
 msgid "Deletes the notes without asking for confirmation."
 msgstr "Usuwa notatki bez pytania o potwierdzenie."
 
-#: packages/app-cli/app/command-export.js:23
+#: packages/app-cli/app/command-export.ts:24
 msgid "Destination format: %s"
 msgstr "Format docelowy: %s"
 
@@ -1419,6 +1441,7 @@ msgstr "Dezaktywuj szyfrowanie"
 msgid "Disable safe mode and restart"
 msgstr "Dezaktywuj tryb bezpieczny i uruchom ponownie"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:103
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:91
 msgid "Disable Web Clipper Service"
 msgstr "Deaktywuj usługę Web Clipper"
@@ -1427,7 +1450,7 @@ msgstr "Deaktywuj usługę Web Clipper"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:235
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:138
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
-#: packages/lib/models/Setting.ts:1385
+#: packages/lib/models/Setting.ts:1396
 msgid "Disabled"
 msgstr "Deaktywowano"
 
@@ -1447,24 +1470,24 @@ msgid "Discard"
 msgstr "Odrzuć"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:102
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:234
-#: packages/app-mobile/components/screens/Note.tsx:118
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:249
+#: packages/app-mobile/components/screens/Note.tsx:242
 msgid "Discard changes"
 msgstr "Odrzuć zmiany"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:493
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:501
 msgid "Dismiss"
 msgstr "Anuluj"
 
-#: packages/app-cli/app/command-geoloc.js:13
+#: packages/app-cli/app/command-geoloc.ts:13
 msgid "Displays a geolocation URL for the note."
 msgstr "Wyświetla odnośnik z lokacją geograficzną dla notatki."
 
-#: packages/app-cli/app/command-ls.js:27
+#: packages/app-cli/app/command-ls.ts:27
 msgid "Displays only the first top <num> notes."
 msgstr "Wyświetla jedynie pierwsze <num> notatek."
 
-#: packages/app-cli/app/command-ls.js:30
+#: packages/app-cli/app/command-ls.ts:30
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
@@ -1478,15 +1501,15 @@ msgstr ""
 msgid "Displays summary about the notes and notebooks."
 msgstr "Wyświetla podsumowanie o notatkach i notatnikach."
 
-#: packages/app-cli/app/command-cat.js:18
+#: packages/app-cli/app/command-cat.ts:18
 msgid "Displays the complete information about note."
 msgstr "Wyświetla wszystkie informacje o notatce."
 
-#: packages/app-cli/app/command-cat.js:14
+#: packages/app-cli/app/command-cat.ts:14
 msgid "Displays the given note."
 msgstr "Wyświetla wskazaną notatkę."
 
-#: packages/app-cli/app/command-ls.js:18
+#: packages/app-cli/app/command-ls.ts:18
 msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
 "of notebooks."
@@ -1494,21 +1517,21 @@ msgstr ""
 "Wyświetla notatki w obecnym notatniku. Użyj `ls /` aby wyświetlić listę "
 "notatników."
 
-#: packages/app-cli/app/command-help.js:13
+#: packages/app-cli/app/command-help.ts:13
 msgid "Displays usage information."
 msgstr "Wyświetla informacje na temat użytkowania."
 
-#: packages/app-cli/app/command-version.js:11
+#: packages/app-cli/app/command-version.ts:11
 msgid "Displays version information"
 msgstr "Wyświetla informacje o wersji"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:654
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:650
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:171
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:10
 msgid "Do it now"
 msgstr "Zrób to teraz"
 
-#: packages/app-cli/app/command-import.js:26
+#: packages/app-cli/app/command-import.ts:27
 msgid "Do not ask for confirmation."
 msgstr "Nie pytaj o potwierdzenie."
 
@@ -1522,7 +1545,7 @@ msgstr ""
 "sposób na odszyfrowanie twoich danych. Aby włączyć szyfrowanie, wpisz "
 "poniżej spoje hasło."
 
-#: packages/lib/models/Setting.ts:2648
+#: packages/lib/models/Setting.ts:2660
 msgid "Donate, website"
 msgstr "Wesprzyj, strona internetowa"
 
@@ -1535,11 +1558,12 @@ msgstr "Zrobione"
 msgid "Download"
 msgstr "Pobierz"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:174
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:127
 msgid "Download and install the relevant extension for your browser:"
 msgstr "Pobierz i zainstaluj odpowiednie rozszerzenie dla Twojej przeglądarki:"
 
-#: packages/lib/models/Resource.ts:378
+#: packages/lib/models/Resource.ts:385
 msgid "Downloaded"
 msgstr "Pobrano"
 
@@ -1551,7 +1575,7 @@ msgstr "Pobrane i odszyfrowane"
 msgid "Downloaded and encrypted"
 msgstr "Pobrane i zaszyfrowane"
 
-#: packages/lib/models/Resource.ts:377
+#: packages/lib/models/Resource.ts:384
 msgid "Downloading"
 msgstr "Pobieranie"
 
@@ -1567,15 +1591,15 @@ msgstr "Pobieranie zasobów..."
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/app-mobile/components/screens/Note.tsx:1108
+#: packages/app-mobile/components/screens/Note.tsx:1251
 msgid "Draw picture"
 msgstr "Narysuj obraz"
 
-#: packages/app-mobile/components/screens/Note.tsx:810
+#: packages/app-mobile/components/screens/Note.tsx:933
 msgid "Drawing"
 msgstr "Rysowanie"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1268
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1274
 msgid "Drop notes or files here"
 msgstr "Upuść notatki lub pliki tutaj"
 
@@ -1588,8 +1612,8 @@ msgid "Dropbox Login"
 msgstr "Nazwa użytkownika Dropbox"
 
 #: packages/app-desktop/gui/MainScreen/commands/duplicateNote.ts:7
-#: packages/app-mobile/components/ScreenHeader.tsx:454
-#: packages/app-mobile/components/ScreenHeader.tsx:509
+#: packages/app-mobile/components/ScreenHeader.tsx:459
+#: packages/app-mobile/components/ScreenHeader.tsx:514
 msgid "Duplicate"
 msgstr "Duplikuj"
 
@@ -1597,11 +1621,11 @@ msgstr "Duplikuj"
 msgid "Duplicate line"
 msgstr "Duplikuj wiersz"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:456
+#: packages/app-mobile/components/ScreenHeader.tsx:461
 msgid "Duplicate selected notes"
 msgstr "Duplikuj zaznaczone"
 
-#: packages/app-cli/app/command-cp.js:13
+#: packages/app-cli/app/command-cp.ts:13
 msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
@@ -1614,8 +1638,8 @@ msgstr ""
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.ts:119
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:38
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:133
-#: packages/app-mobile/components/screens/Note.tsx:1405
-#: packages/app-mobile/components/side-menu-content.tsx:171
+#: packages/app-mobile/components/screens/Note.tsx:1557
+#: packages/app-mobile/components/side-menu-content.tsx:172
 msgid "Edit"
 msgstr "Edytuj"
 
@@ -1627,7 +1651,7 @@ msgstr "Edytuj w edytorze zewnętrznym"
 msgid "Edit link"
 msgstr "Edytuj link"
 
-#: packages/app-cli/app/command-edit.js:17
+#: packages/app-cli/app/command-edit.ts:17
 msgid "Edit note."
 msgstr "Edytuj notatkę."
 
@@ -1645,28 +1669,28 @@ msgid "Edit profile configuration..."
 msgstr "Edytuj konfigurację profilu..."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:141
-#: packages/lib/models/Setting.ts:914 packages/lib/models/Setting.ts:915
-#: packages/lib/models/Setting.ts:916
+#: packages/lib/models/Setting.ts:925 packages/lib/models/Setting.ts:926
+#: packages/lib/models/Setting.ts:927
 msgid "Editor"
 msgstr "Edytor"
 
-#: packages/lib/models/Setting.ts:1260
+#: packages/lib/models/Setting.ts:1271
 msgid "Editor font"
 msgstr "Rodzaj czcionki edytora"
 
-#: packages/lib/models/Setting.ts:1286
+#: packages/lib/models/Setting.ts:1297
 msgid "Editor font family"
 msgstr "Rodzina czcionek edytora"
 
-#: packages/lib/models/Setting.ts:1248
+#: packages/lib/models/Setting.ts:1259
 msgid "Editor font size"
 msgstr "Wielkość czcionki edytora"
 
-#: packages/lib/models/Setting.ts:1305
+#: packages/lib/models/Setting.ts:1316
 msgid "Editor maximum width"
 msgstr "Maksymalna szerokość edytora"
 
-#: packages/lib/models/Setting.ts:1298
+#: packages/lib/models/Setting.ts:1309
 msgid "Editor monospace font family"
 msgstr "Rodzina jednoszerokościowych czcionek edytora"
 
@@ -1675,22 +1699,22 @@ msgstr "Rodzina jednoszerokościowych czcionek edytora"
 msgid "Editor: %s"
 msgstr "Edytor: %s"
 
-#: packages/app-cli/app/command-ls.js:31
+#: packages/app-cli/app/command-ls.ts:31
 msgid "Either \"text\" or \"json\""
 msgstr "Zarówno \"text\" jak i \"json\""
 
-#: packages/lib/models/Setting.ts:1451
+#: packages/lib/models/Setting.ts:1462
 msgid "Emacs"
 msgstr "Emacs"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:238
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:246
 #: packages/server/src/routes/admin/emails.ts:127
 #: packages/server/src/routes/admin/users.ts:137
 msgid "Email"
 msgstr "Email"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:18
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:320
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:435
 msgid "Email to note"
 msgstr "Zamień Email na notatkę"
 
@@ -1698,7 +1722,7 @@ msgstr "Zamień Email na notatkę"
 msgid "Email to Note"
 msgstr "Zamień Email na Notatkę"
 
-#: packages/lib/models/Setting.ts:2642
+#: packages/lib/models/Setting.ts:2654
 msgid "Email To Note, login information"
 msgstr "Zamień Email na Notatkę, informacje logowania"
 
@@ -1717,27 +1741,27 @@ msgstr "tekst wyróżniony"
 msgid "Enable"
 msgstr "Aktywuj"
 
-#: packages/lib/models/Setting.ts:1189
+#: packages/lib/models/Setting.ts:1200
 msgid "Enable ^sup^ syntax"
 msgstr "Aktywuj składnię ^sup^"
 
-#: packages/lib/models/Setting.ts:1193
+#: packages/lib/models/Setting.ts:1204
 msgid "Enable ++insert++ syntax"
 msgstr "Aktywuj składnię ++instert++"
 
-#: packages/lib/models/Setting.ts:1185
+#: packages/lib/models/Setting.ts:1196
 msgid "Enable ==mark== syntax"
 msgstr "Aktywuj składnię ==mark=="
 
-#: packages/lib/models/Setting.ts:1188
+#: packages/lib/models/Setting.ts:1199
 msgid "Enable ~sub~ syntax"
 msgstr "Aktywuj składnię ~sub~"
 
-#: packages/lib/models/Setting.ts:1191
+#: packages/lib/models/Setting.ts:1202
 msgid "Enable abbreviation syntax"
 msgstr "Aktywuj składnię skrótów"
 
-#: packages/lib/models/Setting.ts:1182
+#: packages/lib/models/Setting.ts:1193
 msgid "Enable audio player"
 msgstr "Aktywuj odtwarzacz muzyki"
 
@@ -1745,7 +1769,7 @@ msgstr "Aktywuj odtwarzacz muzyki"
 msgid "Enable biometrics authentication?"
 msgstr "Włączyć uwierzytelnianie biometryczne?"
 
-#: packages/lib/models/Setting.ts:1190
+#: packages/lib/models/Setting.ts:1201
 msgid "Enable deflist syntax"
 msgstr "Aktywuj składnię składnię deflist"
 
@@ -1754,66 +1778,71 @@ msgstr "Aktywuj składnię składnię deflist"
 msgid "Enable encryption"
 msgstr "Aktywuj szyfrowanie"
 
-#: packages/lib/models/Setting.ts:1186
+#: packages/lib/models/Setting.ts:1197
 msgid "Enable footnotes"
 msgstr "Aktywuj stopki"
 
-#: packages/lib/models/Setting.ts:1179
+#: packages/lib/models/Setting.ts:1190
 msgid "Enable Fountain syntax support"
 msgstr "Aktywuj wsparcie składni Fountain"
 
-#: packages/lib/models/Setting.ts:1176
+#: packages/lib/models/Setting.ts:1187
 msgid "Enable Linkify"
 msgstr "Aktywuj Linkify"
 
-#: packages/lib/models/Setting.ts:1192
+#: packages/lib/models/Setting.ts:1203
 msgid "Enable markdown emoji"
 msgstr "Aktywuj emotikony markdown"
 
-#: packages/lib/models/Setting.ts:1178
+#: packages/lib/models/Setting.ts:1189
 msgid "Enable math expressions"
 msgstr "Aktywuj wyrażenia matematyczne"
 
-#: packages/lib/models/Setting.ts:1180
+#: packages/lib/models/Setting.ts:1191
 msgid "Enable Mermaid diagrams support"
 msgstr "Aktywuj składnię Mermaid"
 
-#: packages/lib/models/Setting.ts:1194
+#: packages/lib/models/Setting.ts:1205
 msgid "Enable multimarkdown table extension"
 msgstr "Aktywuj rozszerzenie dla tabeli multimarkdown"
 
-#: packages/lib/models/Setting.ts:1596
+#: packages/lib/models/Setting.ts:1608
 msgid "Enable note history"
 msgstr "Aktywuj historię notatek"
 
-#: packages/lib/models/Setting.ts:1184
+#: packages/lib/models/Setting.ts:845
+msgid "Enable optical character recognition (OCR)"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:1195
 msgid "Enable PDF viewer"
 msgstr "Aktywuj wyświetlacz PDF"
 
-#: packages/lib/models/Setting.ts:1174
+#: packages/lib/models/Setting.ts:1185
 msgid "Enable soft breaks"
 msgstr "Aktywuj miękkie łamanie linii"
 
-#: packages/lib/models/Setting.ts:1053
+#: packages/lib/models/Setting.ts:1064
 msgid "Enable spellcheck in the text editor"
 msgstr "Włącz sprawdzanie pisowni w edytorze tekstu"
 
-#: packages/lib/models/Setting.ts:1187
+#: packages/lib/models/Setting.ts:1198
 msgid "Enable table of contents extension"
 msgstr "Aktywuj rozszerzenie dla tabeli zawartości"
 
-#: packages/lib/models/Setting.ts:1064
+#: packages/lib/models/Setting.ts:1075
 msgid "Enable the Markdown toolbar"
 msgstr "Włącz pasek narzędzi Markdown"
 
-#: packages/lib/models/Setting.ts:1175
+#: packages/lib/models/Setting.ts:1186
 msgid "Enable typographer support"
 msgstr "Aktywuj składnię typografu"
 
-#: packages/lib/models/Setting.ts:1183
+#: packages/lib/models/Setting.ts:1194
 msgid "Enable video player"
 msgstr "Aktywuj odtwarzacz wideo"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:114
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:102
 msgid "Enable Web Clipper Service"
 msgstr "Aktywuj usługę Web Clipper"
@@ -1840,11 +1869,11 @@ msgstr "Zaszyfrowane"
 msgid "Encrypted items cannot be modified"
 msgstr "Zaszyfrowanie obiekty nie mogą być modyfikowane"
 
-#: packages/lib/models/Setting.ts:2614
+#: packages/lib/models/Setting.ts:2626
 msgid "Encryption"
 msgstr "Szyfrowanie"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:312
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:431
 #: packages/app-mobile/components/screens/encryption-config.tsx:287
 msgid "Encryption Config"
 msgstr "Konfiguracja szyfrowania"
@@ -1888,13 +1917,13 @@ msgstr "Wprowadź hasło"
 msgid "Enum"
 msgstr "Wyliczanie"
 
-#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:69
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:72
 #: packages/app-mobile/components/screens/LogScreen.tsx:68
-#: packages/lib/models/Resource.ts:379
+#: packages/lib/models/Resource.ts:386
 msgid "Error"
 msgstr "Błąd"
 
-#: packages/app-cli/app/command-edit.js:82
+#: packages/app-cli/app/command-edit.ts:82
 #: packages/app-desktop/commands/startExternalEditing.ts:23
 msgid "Error opening note in editor: %s"
 msgstr "Błąd przy otwieraniu notatki w edytorze: %s"
@@ -1926,27 +1955,27 @@ msgstr "Plik eksportu Evernote (jako HTML)"
 msgid "Evernote Export File (as Markdown)"
 msgstr "Plik eksportu Evernote (jako Markdown)"
 
-#: packages/app-cli/app/command-exit.js:11
+#: packages/app-cli/app/command-exit.ts:11
 msgid "Exits the application."
 msgstr "Wychodzi z aplikacji."
 
-#: packages/app-mobile/components/side-menu-content.tsx:356
+#: packages/app-mobile/components/side-menu-content.tsx:357
 msgid "Expand"
 msgstr "Rozwiń"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:387
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:163
-#: packages/lib/models/Setting.ts:2619
+#: packages/lib/models/Setting.ts:2631
 msgid "Export"
 msgstr "Eksportuj"
 
-#: packages/app-desktop/gui/MenuBar.tsx:608
-#: packages/app-desktop/gui/MenuBar.tsx:664
+#: packages/app-desktop/gui/MenuBar.tsx:609
+#: packages/app-desktop/gui/MenuBar.tsx:665
 msgid "Export all"
 msgstr "Eksportuj wszystko"
 
-#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:27
 msgid "Export all notes as JEX"
 msgstr "Eksportuj wszystkie notatki jako plik JEX"
 
@@ -1954,23 +1983,23 @@ msgstr "Eksportuj wszystkie notatki jako plik JEX"
 msgid "Export debug report"
 msgstr "Eksportuj raport debugowania"
 
-#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:27
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:14
 msgid "Export Debug Report"
 msgstr "Eksportuj Raport Debugowania"
 
-#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:34
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:16
 msgid "Export profile"
 msgstr "Eksportuj profil"
 
-#: packages/lib/models/Setting.ts:2647
+#: packages/lib/models/Setting.ts:2659
 msgid "Export your data"
 msgstr "Eksportuj swoje dane"
 
-#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:106
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:108
 msgid "Exported successfully!"
 msgstr "Eksportowanie zakończone pomyślnie!"
 
-#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:34
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:36
 msgid "Exporting profile..."
 msgstr "Eksportowanie profilu..."
 
@@ -1978,11 +2007,11 @@ msgstr "Eksportowanie profilu..."
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Eksportowanie do \"%s\" jako \"%s\". Proszę czekać..."
 
-#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:89
 msgid "Exporting..."
 msgstr "Eksportowanie..."
 
-#: packages/app-cli/app/command-export.js:13
+#: packages/app-cli/app/command-export.ts:14
 msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
@@ -1991,19 +2020,19 @@ msgstr ""
 "zostanie pełna baza danych zawierająca notatniki, notatki, znaczniki i "
 "zasoby."
 
-#: packages/app-cli/app/command-export.js:23
+#: packages/app-cli/app/command-export.ts:24
 msgid "Exports only the given note."
 msgstr "Eksportuje jedynie wybraną notatkę."
 
-#: packages/app-cli/app/command-export.js:23
+#: packages/app-cli/app/command-export.ts:24
 msgid "Exports only the given notebook."
 msgstr "Eksportuje jedynie wybrany notatnik."
 
-#: packages/lib/models/Setting.ts:1582
+#: packages/lib/models/Setting.ts:1593
 msgid "Fail-safe"
 msgstr "Bezpieczny"
 
-#: packages/lib/models/Setting.ts:1583
+#: packages/lib/models/Setting.ts:1594
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -2015,16 +2044,17 @@ msgstr ""
 msgid "Fatal error:"
 msgstr "Błąd krytyczny:"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:445
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:516
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:524
 msgid "Feature flags"
 msgstr "Flagi funkcji"
 
-#: packages/lib/Synchronizer.ts:194
+#: packages/lib/Synchronizer.ts:195
 msgid "Fetched items: %d/%d."
 msgstr "Pobrane obiekty %d/%d."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:757
-#: packages/app-mobile/components/side-menu-content.tsx:446
+#: packages/app-mobile/components/side-menu-content.tsx:447
 msgid "Fetching resources: %d/%d"
 msgstr "Pobieranie zasobów: %d/%d"
 
@@ -2044,23 +2074,24 @@ msgstr "Filtrowanie znaczników"
 msgid "Find and replace"
 msgstr "Znajdź i zamień"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:252
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:250
 msgid "Find: "
 msgstr "Znaleziono: "
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:10
 #: packages/app-desktop/gui/ExtensionBadge.tsx:63
 msgid "Firefox Extension"
 msgstr "Rozszerzenie dla Firefoxa"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:339
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:460
 msgid "Fix search index"
 msgstr "Napraw indeks wyszukiwania"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:339
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:460
 msgid "Fixing search index..."
 msgstr "Naprawa indeksu wyszukiwania..."
 
-#: packages/app-desktop/gui/MenuBar.tsx:819
+#: packages/app-desktop/gui/MenuBar.tsx:820
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.ts:7
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.ts:7
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:9
@@ -2068,11 +2099,11 @@ msgstr "Naprawa indeksu wyszukiwania..."
 msgid "Focus"
 msgstr "Wyszczególnienie"
 
-#: packages/lib/models/Setting.ts:1095 packages/lib/models/Setting.ts:1112
+#: packages/lib/models/Setting.ts:1106 packages/lib/models/Setting.ts:1123
 msgid "Focus body"
 msgstr "Przejdź do zawartości"
 
-#: packages/lib/models/Setting.ts:1094 packages/lib/models/Setting.ts:1111
+#: packages/lib/models/Setting.ts:1105 packages/lib/models/Setting.ts:1122
 msgid "Focus title"
 msgstr "Przejdź do tytułu"
 
@@ -2080,15 +2111,15 @@ msgstr "Przejdź do tytułu"
 msgid "Folders"
 msgstr "Foldery"
 
-#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:36
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:38
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr "Tylko w celu debugowania: eksportuj profil na zewnętrzną kartę SD."
 
-#: packages/lib/models/Setting.ts:1562
+#: packages/lib/models/Setting.ts:1573
 msgid "For example \"%s\""
 msgstr "Na przykład \"%s\""
 
-#: packages/app-cli/app/command-help.js:36
+#: packages/app-cli/app/command-help.ts:36
 msgid "For information on how to customise the shortcuts please visit %s"
 msgstr ""
 "Aby uzyskać informację o dopasowaniu skrótów klawiszowych, proszę odwiedzić "
@@ -2102,7 +2133,7 @@ msgstr ""
 "Aby uzyskać więcej informacje o szyfrowaniu po stronie klienta (E2EE) i "
 "wskazówki ułatwiające jego uruchomienie, proszę sprawdź dokumentację:"
 
-#: packages/app-cli/app/command-help.js:84
+#: packages/app-cli/app/command-help.ts:84
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
@@ -2121,12 +2152,13 @@ msgstr "Formatowanie"
 msgid "Forward"
 msgstr "Przekaż"
 
-#: packages/app-cli/app/command-import.js:47
+#: packages/app-cli/app/command-import.ts:48
+#: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-desktop/gui/ImportScreen.tsx:88
 msgid "Found: %d."
 msgstr "Znaleziono: %d."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:429
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:510
 msgid "FTS enabled: %d"
 msgstr "FTS aktywowano: %d"
 
@@ -2138,7 +2170,7 @@ msgstr "Pełna lista zmian"
 msgid "Full name"
 msgstr "Pełna nazwa"
 
-#: packages/lib/models/Setting.ts:2605
+#: packages/lib/models/Setting.ts:2617
 #: packages/server/src/services/MustacheService.ts:110
 msgid "General"
 msgstr "Ogólne"
@@ -2154,21 +2186,22 @@ msgstr[0] "Generowanie linku..."
 msgstr[1] "Generowanie linków..."
 msgstr[2] "Generowanie linków..."
 
-#: packages/lib/models/Setting.ts:2644
+#: packages/lib/models/Setting.ts:2656
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
 msgstr ""
 "Geolokalizacja, sprawdzanie pisowni, pasek narzędzi edytora, zmiana rozmiaru "
 "obrazu"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:91
 msgid "Get it now:"
 msgstr "Pobierz teraz:"
 
-#: packages/lib/models/Setting.ts:1374
+#: packages/lib/models/Setting.ts:1385
 msgid "Get pre-releases when checking for updates"
 msgstr "Uwzględniaj wersje przedpremierowe podczas sprawdzania aktualizacji"
 
-#: packages/app-cli/app/command-config.js:13
+#: packages/app-cli/app/command-config.ts:14
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
@@ -2179,12 +2212,12 @@ msgstr ""
 "jak i [wartość] nie zostanie podana, wyświetlona zostanie lista z obecną "
 "konfiguracją."
 
-#: packages/app-mobile/components/screens/Note.tsx:979
+#: packages/app-mobile/components/screens/Note.tsx:1122
 msgid "Go to source URL"
 msgstr "Idź do adresu źródłowego odnośnika"
 
 #: packages/app-desktop/gui/MainScreen/commands/gotoAnything.ts:13
-#: packages/app-desktop/plugins/GotoAnything.tsx:613
+#: packages/app-desktop/plugins/GotoAnything.tsx:653
 msgid "Goto Anything..."
 msgstr "Idź do..."
 
@@ -2204,21 +2237,21 @@ msgstr "Nagłówki"
 msgid "Heading"
 msgstr "Nagłówek"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:199
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:195
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:263
 #: packages/server/src/services/MustacheService.ts:276
 msgid "Help"
 msgstr "Pomoc"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:435
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:511
 msgid "Hermes enabled: %d"
 msgstr "Hermes włączony: %d"
 
-#: packages/app-desktop/gui/MenuBar.tsx:625
+#: packages/app-desktop/gui/MenuBar.tsx:626
 msgid "Hide %s"
 msgstr "Schowaj %s"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:220
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:218
 msgid "Hide advanced"
 msgstr "Ukryj zaawansowane"
 
@@ -2278,21 +2311,22 @@ msgstr "Ikona"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:166
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:323
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:78
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:50
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "ID"
 msgstr "ID"
 
-#: packages/lib/Synchronizer.ts:310
+#: packages/lib/Synchronizer.ts:311
 msgid "Idle"
 msgstr "Spoczynek"
 
-#: packages/app-desktop/ElectronAppWrapper.ts:82
+#: packages/app-desktop/ElectronAppWrapper.ts:83
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:358
 msgid "Ignore"
 msgstr "Ignoruj"
 
-#: packages/lib/models/Setting.ts:1541
+#: packages/lib/models/Setting.ts:1552
 msgid "Ignore TLS certificate errors"
 msgstr "Ignoruj błędy certyfikatu TLS"
 
@@ -2301,21 +2335,21 @@ msgid "Images"
 msgstr "Obrazki"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
-#: packages/app-desktop/gui/MenuBar.tsx:604
-#: packages/app-desktop/gui/MenuBar.tsx:661
+#: packages/app-desktop/gui/MenuBar.tsx:605
+#: packages/app-desktop/gui/MenuBar.tsx:662
 #: packages/app-desktop/gui/Root.tsx:227
 msgid "Import"
 msgstr "Zaimportuj"
 
-#: packages/app-desktop/gui/MenuBar.tsx:287
+#: packages/app-desktop/gui/MenuBar.tsx:288
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Importowanie z \"%s\"  jako \"%s\". Proszę czekać..."
 
-#: packages/app-cli/app/command-import.js:65
+#: packages/app-cli/app/command-import.ts:66
 msgid "Importing notes..."
 msgstr "Importowanie notatek..."
 
-#: packages/app-cli/app/command-import.js:14
+#: packages/app-cli/app/command-import.ts:15
 msgid "Imports data into Joplin."
 msgstr "Importuje dane do Joplin."
 
@@ -2330,7 +2364,7 @@ msgstr ""
 "trybie \"Zawsze\", wszystkie załączniki zostaną pobrane bez względu na "
 "otwarcie notatki."
 
-#: packages/app-cli/app/command-help.js:77
+#: packages/app-cli/app/command-help.ts:77
 msgid ""
 "In any command, a note or notebook can be referred to by title or ID, or "
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
@@ -2341,7 +2375,7 @@ msgstr ""
 "obecnie wybranej notatki lub notatnika. `$c` może zostać użyty jako odnośnik "
 "do obecnie wybranego obiektu."
 
-#: packages/app-mobile/components/screens/Note.tsx:420
+#: packages/app-mobile/components/screens/Note.tsx:543
 msgid ""
 "In order to associate a geo-location with the note, the app needs your "
 "permission to access your location.\n"
@@ -2383,8 +2417,8 @@ msgstr ""
 "\n"
 "Ważne: musisz wykonać powyższe kroki tylko RAZ na jednym urządzeniu."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:173
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:95
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:101
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:194
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
@@ -2392,15 +2426,16 @@ msgstr ""
 "Aby użyć synchronizacji z systemem plików, musisz wyrazić zgodę na zapis na "
 "zewnętrznym urządzeniu."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:117
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "Aby używać Web Clipper, należy wykonać następujące czynności:"
 
-#: packages/lib/Synchronizer.ts:311
+#: packages/lib/Synchronizer.ts:312
 msgid "In progress"
 msgstr "W trakcie"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:578
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:610
 msgid "In: %s"
 msgstr "W: %s"
 
@@ -2416,7 +2451,7 @@ msgstr "Usuń akapit"
 msgid "Indent more"
 msgstr "Wstaw akapit"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:172
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:193
 msgid "Information"
 msgstr "Informacja"
 
@@ -2439,19 +2474,19 @@ msgstr "Wstaw Hyperlink"
 msgid "Insert time"
 msgstr "Wstaw czas"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:191
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:199
 msgid "Install"
 msgstr "Zainstaluj"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:227
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:235
 msgid "Install from file"
 msgstr "Zainstaluj z pliku"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:193
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:201
 msgid "Installed"
 msgstr "Zainstalowany"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:192
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:200
 msgid "Installing..."
 msgstr "Instalowanie."
 
@@ -2471,7 +2506,7 @@ msgstr "Nieprawidłowa odpowiedź: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Nieprawidłowa komenda: \"%s\""
 
-#: packages/lib/models/Setting.ts:2109
+#: packages/lib/models/Setting.ts:2121
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Nieznana wartość opcji: \"%s\". Możliwa wartość opcji: %s."
 
@@ -2501,11 +2536,11 @@ msgstr "Elementy nie mogą być odszyfrowane"
 msgid "Items that cannot be synchronised"
 msgstr "Elementy nie mogą być zsynchronizowane"
 
-#: packages/app-desktop/gui/MenuBar.tsx:856
+#: packages/app-desktop/gui/MenuBar.tsx:857
 msgid "Join us on Twitter"
 msgstr "Dołącz do nas na Twitterze"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:332
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:346
 msgid ""
 "Joplin can synchronise your notes using various providers. Select one from "
 "the list below."
@@ -2513,7 +2548,7 @@ msgstr ""
 "Joplin może synchronizować twoje notatki używając różnych dostawców. Wybierz "
 "jednego z listy poniżej."
 
-#: packages/lib/models/Setting.ts:2617 packages/lib/SyncTargetJoplinCloud.ts:30
+#: packages/lib/models/Setting.ts:2629 packages/lib/SyncTargetJoplinCloud.ts:30
 msgid "Joplin Cloud"
 msgstr "ChmuraJoplin"
 
@@ -2545,7 +2580,7 @@ msgstr ""
 "za duże. Pozostaną na urządzeniu ale Joplin nie będzie już próbować ich "
 "odszyfrować."
 
-#: packages/app-desktop/gui/MenuBar.tsx:853
+#: packages/app-desktop/gui/MenuBar.tsx:854
 msgid "Joplin Forum"
 msgstr "Forum Joplin"
 
@@ -2565,6 +2600,7 @@ msgstr "Hasło serwera Joplin"
 msgid "Joplin Server URL"
 msgstr "URL serwera Joplin"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:116
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
@@ -2573,7 +2609,7 @@ msgstr ""
 "Joplin Web Clipper umożliwia zapisywanie stron internetowych i zrzutów "
 "ekranu z Twojej przeglądarki do Joplin."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:395
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:505
 msgid "Joplin website"
 msgstr "Strona internetowa Joplin"
 
@@ -2590,11 +2626,11 @@ msgstr ""
 msgid "KaTeX"
 msgstr "KaTeX"
 
-#: packages/lib/models/Setting.ts:1608
+#: packages/lib/models/Setting.ts:1620
 msgid "Keep note history for"
 msgstr "Zachowuj historię przez"
 
-#: packages/lib/models/Setting.ts:1447
+#: packages/lib/models/Setting.ts:1458
 msgid "Keyboard Mode"
 msgstr "Tryb klawiatury"
 
@@ -2602,7 +2638,7 @@ msgstr "Tryb klawiatury"
 msgid "Keyboard Shortcut"
 msgstr "Skrót klawiszowy"
 
-#: packages/lib/models/Setting.ts:2616
+#: packages/lib/models/Setting.ts:2628
 msgid "Keyboard Shortcuts"
 msgstr "Skróty klawiaturowe"
 
@@ -2614,7 +2650,7 @@ msgstr "Wspierany menadżer kluczy: %s"
 msgid "Keys that need upgrading"
 msgstr "Klucze wymagające aktualizacji"
 
-#: packages/lib/models/Setting.ts:1424
+#: packages/lib/models/Setting.ts:1435
 msgid "Landscape"
 msgstr "Poziomo"
 
@@ -2622,15 +2658,15 @@ msgstr "Poziomo"
 msgid "Language"
 msgstr "Język"
 
-#: packages/lib/models/Setting.ts:2639
+#: packages/lib/models/Setting.ts:2651
 msgid "Language, date format"
 msgstr "Język, format daty"
 
-#: packages/lib/Synchronizer.ts:197
+#: packages/lib/Synchronizer.ts:198
 msgid "Last error: %s"
 msgstr "Ostatni błąd: %s"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:654
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:650
 msgid "Later"
 msgstr "Później"
 
@@ -2639,11 +2675,11 @@ msgstr "Później"
 msgid "Layout"
 msgstr "Układ"
 
-#: packages/app-desktop/gui/MenuBar.tsx:742
+#: packages/app-desktop/gui/MenuBar.tsx:743
 msgid "Layout button sequence"
 msgstr "Układ przycisków"
 
-#: packages/lib/models/Setting.ts:1775
+#: packages/lib/models/Setting.ts:1787
 msgid "Leave it blank to download the language files from the default website"
 msgstr ""
 "Pozostaw puste, aby pobrać pliki językowe z domyślnej strony internetowej"
@@ -2652,11 +2688,11 @@ msgstr ""
 msgid "Leave notebook..."
 msgstr "Opuść notatnik..."
 
-#: packages/lib/models/Setting.ts:1418
+#: packages/lib/models/Setting.ts:1429
 msgid "Legal"
 msgstr "Legal"
 
-#: packages/lib/models/Setting.ts:1414
+#: packages/lib/models/Setting.ts:1425
 msgid "Letter"
 msgstr "List"
 
@@ -2687,7 +2723,7 @@ msgstr[2] "Odnośniki zostały skopiowane do schowka!"
 msgid "Link text"
 msgstr "Tekst odnośnika"
 
-#: packages/app-mobile/components/screens/Note.tsx:213
+#: packages/app-mobile/components/screens/Note.tsx:337
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Odnośniki protokołu \"%s\" nie są wspierane"
 
@@ -2709,6 +2745,7 @@ msgstr "Załadowano"
 msgid "Loading..."
 msgstr "Ładowanie..."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:54
 msgid "Location"
 msgstr "Lokacja"
@@ -2722,17 +2759,17 @@ msgstr ""
 "Plik blokady jest aktualnie w użyciu. Jeżeli wiesz, że synchronizacja nie "
 "odbywa się, możesz usunąć plik blokady w \"%s\" i wznowić operację."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:338
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:459
 #: packages/app-mobile/components/screens/LogScreen.tsx:159
 #: packages/server/src/services/MustacheService.ts:274
 msgid "Log"
 msgstr "Dziennik"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:242
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:250
 msgid "Login"
 msgstr "Zaloguj"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:237
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:245
 msgid "Login below."
 msgstr "Zaloguj poniżej."
 
@@ -2749,12 +2786,12 @@ msgstr "Zaloguj się z OneDrive"
 msgid "Logout"
 msgstr "Wyloguj"
 
-#: packages/lib/models/Setting.ts:2646
+#: packages/lib/models/Setting.ts:2658
 msgid "Logs, profiles, sync status"
 msgstr "Dzienniki, profile, stan synchronizacji"
 
-#: packages/app-desktop/gui/MenuBar.tsx:859
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:381
+#: packages/app-desktop/gui/MenuBar.tsx:860
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:504
 msgid "Make a donation"
 msgstr "Przekaż datek"
 
@@ -2770,11 +2807,11 @@ msgstr "Zarządzaj hasłem głównym..."
 msgid "Manage multiple users"
 msgstr "Zarządzaj wieloma użytkownikami"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:336
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:457
 msgid "Manage profiles"
 msgstr "Zarządzaj profilami"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:325
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:340
 msgid "Manage your plugins"
 msgstr "Zarządzaj wtyczkami"
 
@@ -2792,7 +2829,7 @@ msgstr ""
 msgid "Manual"
 msgstr "Manualny"
 
-#: packages/lib/models/Setting.ts:2610
+#: packages/lib/models/Setting.ts:2622
 #: packages/lib/services/interop/InteropService.ts:100
 #: packages/lib/services/interop/InteropService.ts:137
 msgid "Markdown"
@@ -2803,7 +2840,7 @@ msgstr "Markdown"
 msgid "Markdown + Front Matter"
 msgstr "Markdown + Przedni Formater"
 
-#: packages/app-cli/app/command-done.js:14
+#: packages/app-cli/app/command-done.ts:14
 msgid "Marks a to-do as done."
 msgstr "Oznacz zadanie jako wykonane."
 
@@ -2811,6 +2848,7 @@ msgstr "Oznacz zadanie jako wykonane."
 msgid "Marks a to-do as non-completed."
 msgstr "Oznacza zadanie jako nieukończone."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:57
 msgid "Markup"
 msgstr "Markup"
@@ -2846,7 +2884,7 @@ msgstr "Maksymalny rozmiar notatki lub załącznika"
 msgid "Max Total Size"
 msgstr "Maksymalny Całkowity Rozmiar"
 
-#: packages/lib/models/Setting.ts:2643
+#: packages/lib/models/Setting.ts:2655
 msgid "Media player, math, diagrams, table of contents"
 msgstr "Odtwarzacz multimediów, matematyka, diagramy, spis treści"
 
@@ -2866,7 +2904,7 @@ msgstr "Brakujący wymagany argument: %s"
 msgid "Missing required flag value: %s"
 msgstr "Brakująca wymagana wartość flagi: %s"
 
-#: packages/app-mobile/components/side-menu-content.tsx:467
+#: packages/app-mobile/components/side-menu-content.tsx:468
 msgid "Mobile data - auto-sync disabled"
 msgstr "Dane mobilne - wyłączono automatyczną synchronizację"
 
@@ -2874,7 +2912,7 @@ msgstr "Dane mobilne - wyłączono automatyczną synchronizację"
 msgid "More info"
 msgstr "Więcej informacji"
 
-#: packages/lib/models/Setting.ts:2620
+#: packages/lib/models/Setting.ts:2632
 msgid "More information"
 msgstr "Więcej informacji"
 
@@ -2883,7 +2921,7 @@ msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
 "Więcej niż jeden wynik spełnia zapytanie \"%s\". Proszę zawęzić wyszukiwanie."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:539
+#: packages/app-mobile/components/ScreenHeader.tsx:544
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "Przenieść %d notatek do notatnika \"%s\"?"
 
@@ -2899,7 +2937,7 @@ msgstr "Przenieś do notatnika:"
 msgid "Move to notebook..."
 msgstr "Przenieś do notatnika..."
 
-#: packages/app-cli/app/command-mv.js:14
+#: packages/app-cli/app/command-mv.ts:14
 msgid "Moves the given <item> to [notebook]"
 msgstr "Przenosi podany <item> do [notebook]"
 
@@ -2912,14 +2950,14 @@ msgstr "n"
 msgid "N"
 msgstr "N"
 
-#: packages/lib/models/Setting.ts:1131
+#: packages/lib/models/Setting.ts:1142
 msgid "Never resize"
 msgstr "Nie zmieniaj rozmiaru"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:8
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:121
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:144
-#: packages/app-mobile/components/screens/Notes.tsx:243
+#: packages/app-mobile/components/screens/Notes.tsx:260
 #: packages/app-mobile/setupQuickActions.ts:18
 msgid "New note"
 msgstr "Nowa notatka"
@@ -2928,10 +2966,11 @@ msgstr "Nowa notatka"
 msgid "New notebook"
 msgstr "Nowy notatnik"
 
-#: packages/app-mobile/components/side-menu-content.tsx:424
+#: packages/app-mobile/components/side-menu-content.tsx:425
 msgid "New Notebook"
 msgstr "Nowy Notatnik"
 
+#: packages/app-desktop/gui/ImportScreen.min.js:61
 #: packages/app-desktop/gui/ImportScreen.tsx:81
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -2950,7 +2989,7 @@ msgstr "Nowe znaczniki:"
 #: packages/app-desktop/gui/MainScreen/commands/newTodo.ts:6
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:121
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:154
-#: packages/app-mobile/components/screens/Notes.tsx:233
+#: packages/app-mobile/components/screens/Notes.tsx:249
 #: packages/app-mobile/setupQuickActions.ts:19
 msgid "New to-do"
 msgstr "Nowe zadanie"
@@ -2959,7 +2998,7 @@ msgstr "Nowe zadanie"
 msgid "New version: %s"
 msgstr "Nowa wersja: %s"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:270
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:268
 msgid "Next match"
 msgstr "Kolejne dopasowanie"
 
@@ -2984,16 +3023,16 @@ msgid "no"
 msgstr "nie"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:29
-#: packages/app-mobile/components/screens/Note.tsx:643
-#: packages/lib/shim-init-node.js:212 packages/lib/versionInfo.ts:78
+#: packages/app-mobile/components/screens/Note.tsx:762
+#: packages/lib/shim-init-node.ts:225 packages/lib/versionInfo.ts:78
 msgid "No"
 msgstr "Nie"
 
-#: packages/app-cli/app/command-edit.js:40
+#: packages/app-cli/app/command-edit.ts:40
 msgid "No active notebook."
 msgstr "Brak aktywnego notatnika."
 
-#: packages/app-mobile/components/screens/Note.tsx:184
+#: packages/app-mobile/components/screens/Note.tsx:308
 msgid "No item with ID %s"
 msgstr "Brak przedmiotu z ID %s"
 
@@ -3026,7 +3065,7 @@ msgstr "Nie znaleziono komedy: %s"
 msgid "No suggestions"
 msgstr "Brak sugestii"
 
-#: packages/app-cli/app/command-edit.js:30
+#: packages/app-cli/app/command-edit.ts:30
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
@@ -3041,7 +3080,7 @@ msgstr "Nord"
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr "Nie uwierzytelniono z %s. Proszę uzupełnij brakujące dane."
 
-#: packages/lib/models/Resource.ts:376
+#: packages/lib/models/Resource.ts:383
 msgid "Not downloaded"
 msgstr "Nie pobrano"
 
@@ -3060,11 +3099,11 @@ msgstr "Nie teraz"
 msgid "note"
 msgstr "notatka"
 
-#: packages/lib/models/Setting.ts:2608
+#: packages/lib/models/Setting.ts:2620
 msgid "Note"
 msgstr "Notatka"
 
-#: packages/lib/models/Setting.ts:1672
+#: packages/lib/models/Setting.ts:1684
 msgid "Note area growth factor"
 msgstr "Czynnik rośnięcia pola notatek"
 
@@ -3072,7 +3111,7 @@ msgstr "Czynnik rośnięcia pola notatek"
 msgid "Note attachments"
 msgstr "Załączniki notatki"
 
-#: packages/app-desktop/gui/MenuBar.tsx:528
+#: packages/app-desktop/gui/MenuBar.tsx:529
 msgid "Note attachments..."
 msgstr "Załączniki notatek..."
 
@@ -3080,7 +3119,7 @@ msgstr "Załączniki notatek..."
 msgid "Note body"
 msgstr "Zawartość notatki"
 
-#: packages/app-cli/app/command-edit.js:46
+#: packages/app-cli/app/command-edit.ts:46
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "Notatka nie istnieje: \"%s\". Utworzyć?"
 
@@ -3088,16 +3127,17 @@ msgstr "Notatka nie istnieje: \"%s\". Utworzyć?"
 msgid "Note editor"
 msgstr "Edytor notatek"
 
-#: packages/app-cli/app/command-edit.js:97
+#: packages/app-cli/app/command-edit.ts:97
 msgid "Note has been saved."
 msgstr "Notatka została zapisana."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:56
-#: packages/lib/models/Setting.ts:2613
+#: packages/lib/models/Setting.ts:2625
 msgid "Note History"
 msgstr "Historia notatek"
 
-#: packages/app-cli/app/command-done.js:21
+#: packages/app-cli/app/command-done.ts:21
 msgid "Note is not a to-do: \"%s\""
 msgstr "Notatka nie jest zadaniem: \"%s\""
 
@@ -3105,15 +3145,16 @@ msgstr "Notatka nie jest zadaniem: \"%s\""
 msgid "Note list"
 msgstr "Lista notatek"
 
-#: packages/lib/models/Setting.ts:1657
+#: packages/lib/models/Setting.ts:1669
 msgid "Note list growth factor"
 msgstr "Współczynnik wzrostu listy notatek"
 
-#: packages/app-desktop/gui/MenuBar.tsx:746
+#: packages/app-desktop/gui/MenuBar.tsx:747
 msgid "Note list style"
 msgstr "Styl listy notatek"
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.ts:7
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:407
 msgid "Note properties"
 msgstr "Właściwośći notatki"
@@ -3122,7 +3163,7 @@ msgstr "Właściwośći notatki"
 msgid "Note title"
 msgstr "Tytuł notatki"
 
-#: packages/lib/models/Setting.ts:1208
+#: packages/lib/models/Setting.ts:1219
 msgid "Note: Does not work in all desktop environments."
 msgstr "Informacja: Nie działa na wszystkich środowiskach sprzętowych."
 
@@ -3131,28 +3172,28 @@ msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr "Uwaga: Po udostępnieniu notatka nie będzie już szyfrowana na serwerze."
 
-#: packages/app-desktop/gui/MenuBar.tsx:825
+#: packages/app-desktop/gui/MenuBar.tsx:826
 msgid "Note&book"
 msgstr "Notatnik i książka"
 
-#: packages/lib/models/Setting.ts:2609
+#: packages/lib/models/Setting.ts:2621
 msgid "Notebook"
 msgstr "Notatnik"
 
-#: packages/lib/models/Setting.ts:1642
+#: packages/lib/models/Setting.ts:1654
 msgid "Notebook list growth factor"
 msgstr "Współczynnik wzrostu listy notatników"
 
-#: packages/app-mobile/components/side-menu-content.tsx:168
+#: packages/app-mobile/components/side-menu-content.tsx:169
 msgid "Notebook: %s"
 msgstr "Notatnik: %s"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:704
-#: packages/app-mobile/components/side-menu-content.tsx:487
+#: packages/app-mobile/components/side-menu-content.tsx:488
 msgid "Notebooks"
 msgstr "Notatniki"
 
-#: packages/lib/models/Folder.ts:779
+#: packages/lib/models/Folder.ts:793
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "Notatniki nie mogą być nazwane \"%s\", ponieważ jest to nazwa zastrzeżona."
@@ -3162,7 +3203,7 @@ msgstr ""
 msgid "Notes"
 msgstr "Notatki"
 
-#: packages/lib/models/Setting.ts:2629
+#: packages/lib/models/Setting.ts:2641
 msgid "Notes and settings are stored in: %s"
 msgstr "Notatki i ustawienia są przechowywane w: %s"
 
@@ -3178,15 +3219,17 @@ msgstr "Lista numerowana"
 #: packages/app-desktop/bridge.ts:189 packages/app-desktop/bridge.ts:202
 #: packages/app-desktop/bridge.ts:220 packages/app-desktop/bridge.ts:228
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:31
+#: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/DialogButtonRow.tsx:70
-#: packages/app-desktop/gui/MenuBar.tsx:553
+#: packages/app-desktop/gui/MenuBar.tsx:554
+#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:284
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:194
 #: packages/app-mobile/components/ModalDialog.js:67
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:174
-#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:59
-#: packages/app-mobile/components/side-menu-content.tsx:145
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:195
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:61
+#: packages/app-mobile/components/side-menu-content.tsx:146
 msgid "OK"
 msgstr "OK"
 
@@ -3235,7 +3278,7 @@ msgstr "Tylko jedna notatka może być wydrukowana w tym samym czasie."
 msgid "Open"
 msgstr "Otwórz"
 
-#: packages/app-desktop/app.ts:181
+#: packages/app-desktop/app.ts:189
 msgid "Open %s"
 msgstr "Otwórz %s"
 
@@ -3255,7 +3298,7 @@ msgstr "Otwórz Menedżera Synchronizacji..."
 msgid "Open..."
 msgstr "Otwórz..."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:158
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:176
 msgid "Opening section %s"
 msgstr "Otwieranie sekcji %s"
 
@@ -3266,12 +3309,12 @@ msgid "Operation cancelled"
 msgstr "Operacja anulowana"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
-#: packages/app-desktop/gui/MenuBar.tsx:514
+#: packages/app-desktop/gui/MenuBar.tsx:515
 #: packages/app-desktop/gui/Root.tsx:228
 msgid "Options"
 msgstr "Opcje"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:237
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:245
 msgid "Or create an account."
 msgstr "Lub utwórz nowe konto."
 
@@ -3279,24 +3322,24 @@ msgstr "Lub utwórz nowe konto."
 msgid "Ordered list"
 msgstr "Lista posortowana"
 
-#: packages/app-desktop/gui/MenuBar.tsx:468
+#: packages/app-desktop/gui/MenuBar.tsx:469
 msgid "Other applications..."
 msgstr "Inne aplikacje..."
 
-#: packages/app-cli/app/command-import.js:27
+#: packages/app-cli/app/command-import.ts:28
 msgid "Output format: %s"
 msgstr "Format docelowy: %s"
 
-#: packages/lib/models/Setting.ts:1421
+#: packages/lib/models/Setting.ts:1432
 msgid "Page orientation for PDF export"
 msgstr "Orientacja strony do eksportu PDF"
 
-#: packages/lib/models/Setting.ts:1411
+#: packages/lib/models/Setting.ts:1422
 msgid "Page size for PDF export"
 msgstr "Wielkość strony do eksportu PDF"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:168
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:240
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:248
 msgid "Password"
 msgstr "Hasło"
 
@@ -3325,8 +3368,8 @@ msgstr "Wklej"
 msgid "Paste as text"
 msgstr "Wklej jako tekst"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:542
-#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:52
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:538
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:54
 msgid "Path:"
 msgstr "Ścieżka:"
 
@@ -3339,7 +3382,7 @@ msgstr "Plik PDF"
 msgid "Per user. Minimum of %d users."
 msgstr "Na użytkownika. Minimum %d użytkowników."
 
-#: packages/app-mobile/components/screens/Note.tsx:421
+#: packages/app-mobile/components/screens/Note.tsx:544
 msgid "Permission needed"
 msgstr "Potrzebne uprawnienie"
 
@@ -3394,7 +3437,7 @@ msgstr ""
 msgid "Please record your voice..."
 msgstr "Proszę nagrywać swój głos..."
 
-#: packages/app-cli/app/command-ls.js:63
+#: packages/app-cli/app/command-ls.ts:63
 msgid "Please select a notebook first."
 msgstr "Na początku wybierz notatnik."
 
@@ -3411,15 +3454,15 @@ msgstr "Proszę wybrać gdzie powinen zostać eksportowany status synchronizacji
 msgid "Please specify import format for %s"
 msgstr "Proszę określić format importu dla %s"
 
-#: packages/lib/services/interop/InteropService_Importer_Md.ts:36
+#: packages/lib/services/interop/InteropService_Importer_Md.ts:37
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "Proszę określić notatnik do którego będą zaimportowane notatki."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:227
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:245
 msgid "Please upgrade Joplin to use this plugin"
 msgstr "Zaaktualizuj Joplin, aby używać tej wtyczki"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1268
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1274
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -3432,16 +3475,16 @@ msgstr ""
 msgid "Please wait..."
 msgstr "Proszę czekać..."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:323
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:338
 msgid "Plugin tools"
 msgstr "Narzędzia wtyczek"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:117
-#: packages/lib/models/Setting.ts:2611
+#: packages/lib/models/Setting.ts:2623
 msgid "Plugins"
 msgstr "Wtyczki"
 
-#: packages/lib/models/Setting.ts:1423
+#: packages/lib/models/Setting.ts:1434
 msgid "Portrait"
 msgstr "Pionowo"
 
@@ -3457,15 +3500,15 @@ msgstr "Możliwe wartośći: %s."
 msgid "Preferences"
 msgstr "Preferencje"
 
-#: packages/app-desktop/gui/MenuBar.tsx:579
+#: packages/app-desktop/gui/MenuBar.tsx:580
 msgid "Preferences..."
 msgstr "Preferencje..."
 
-#: packages/lib/models/Setting.ts:892
+#: packages/lib/models/Setting.ts:903
 msgid "Preferred dark theme"
 msgstr "Preferuj ciemny motyw"
 
-#: packages/lib/models/Setting.ts:876
+#: packages/lib/models/Setting.ts:887
 msgid "Preferred light theme"
 msgstr "Preferuj jasny motyw"
 
@@ -3485,14 +3528,15 @@ msgstr ""
 "Naciśnij skrót klawiszowy, a następnie ENTER aby potwierdzić. Naciśnij "
 "BACKSPACE aby wyczyścić skrót."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:564
+#: packages/app-mobile/components/ScreenHeader.tsx:569
 msgid "Press to set the decryption password."
 msgstr "Naciśnij, aby ustawić hasło szyfrowania."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:280
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:278
 msgid "Previous match"
 msgstr "Poprzednie dopasowanie"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:333
 msgid "Previous versions of this note"
 msgstr "Poprzednie wersje notatki"
@@ -3505,7 +3549,7 @@ msgstr "Drukuj"
 msgid "Priority support"
 msgstr "Priorytetowe wsparcie"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:409
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:506
 msgid "Privacy Policy"
 msgstr "Polityka Prywatności"
 
@@ -3545,19 +3589,19 @@ msgstr "Wersja profilu: %s"
 msgid "Profiles"
 msgstr "Profile"
 
-#: packages/app-mobile/components/screens/Note.tsx:1167
+#: packages/app-mobile/components/screens/Note.tsx:1310
 msgid "Properties"
 msgstr "Właściwości"
 
-#: packages/lib/models/Setting.ts:1551
+#: packages/lib/models/Setting.ts:1562
 msgid "Proxy enabled"
 msgstr "Proxy włączone"
 
-#: packages/lib/models/Setting.ts:1573
+#: packages/lib/models/Setting.ts:1584
 msgid "Proxy timeout (seconds)"
 msgstr "Limit czasu proxy (sekundy)"
 
-#: packages/lib/models/Setting.ts:1561
+#: packages/lib/models/Setting.ts:1572
 msgid "Proxy URL"
 msgstr "Adres URL serwera proxy"
 
@@ -3573,15 +3617,15 @@ msgstr "Udostępnij notatkę..."
 msgid "Publish Notes"
 msgstr "Udostępnij Notatkę"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:180
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:188
 #: packages/lib/utils/joplinCloud.ts:153
 msgid "Publish notes to the internet"
 msgstr "Udostępnij notatkę do internetu"
 
-#: packages/app-desktop/app.ts:183
-#: packages/app-desktop/ElectronAppWrapper.ts:78
+#: packages/app-desktop/app.ts:191
+#: packages/app-desktop/ElectronAppWrapper.ts:79
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
-#: packages/app-desktop/gui/MenuBar.tsx:375
+#: packages/app-desktop/gui/MenuBar.tsx:376
 msgid "Quit"
 msgstr "Wyjdź"
 
@@ -3593,11 +3637,11 @@ msgstr "Ponownie zaszyfruj dane"
 msgid "Re-encryption"
 msgstr "Ponowne szyfrowanie"
 
-#: packages/lib/models/Setting.ts:1355
+#: packages/lib/models/Setting.ts:1366
 msgid "Re-upload local data to sync target"
 msgstr "Ponownie wyślij dane lokalne do miejsca docelowego synchronizacji"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:492
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:500
 msgid "Read more about it"
 msgstr "Czytaj więcej"
 
@@ -3621,10 +3665,10 @@ msgstr "Odbiorca odrzucił zaproszenie"
 msgid "Recipients:"
 msgstr "Odbiorcy:"
 
-#: packages/app-desktop/gui/MenuBar.tsx:708
+#: packages/app-desktop/gui/MenuBar.tsx:709
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:121
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:165
-#: packages/app-mobile/components/ScreenHeader.tsx:395
+#: packages/app-mobile/components/ScreenHeader.tsx:400
 msgid "Redo"
 msgstr "Przywróć"
 
@@ -3634,7 +3678,7 @@ msgstr "Przywróć"
 msgid "Refresh"
 msgstr "Odśwież"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:315
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:313
 msgid "Regular expression"
 msgstr "Wyrażenie regularne"
 
@@ -3668,27 +3712,28 @@ msgstr "Zmień nazwę notatnika:"
 msgid "Rename tag:"
 msgstr "Zmień nazwę znacznika:"
 
-#: packages/app-cli/app/command-ren.js:14
+#: packages/app-cli/app/command-ren.ts:14
 msgid "Renames the given <item> (note or notebook) to <name>."
 msgstr "Zmienia nazwę dla wskazanego <item> (notatka lub notatnik) na <name>."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:146
 msgid "Renew token"
 msgstr "Odśwież token"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:290
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:288
 msgid "Replace"
 msgstr "Zamień"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:300
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:298
 msgid "Replace all"
 msgstr "Zamień wszystko"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:238
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Replace with..."
 msgstr "Zamień na..."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:259
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:257
 msgid "Replace: "
 msgstr "Zamień: "
 
@@ -3701,11 +3746,12 @@ msgstr "Zresetuj układ aplikacji"
 msgid "Reset master password"
 msgstr "Zresetuj główne hasło"
 
-#: packages/lib/models/Setting.ts:1125
+#: packages/lib/models/Setting.ts:1136
 msgid "Resize large images:"
 msgstr "Zmień rozmiar dużych obrazów:"
 
-#: packages/app-cli/app/command-import.js:51
+#: packages/app-cli/app/command-import.ts:52
+#: packages/app-desktop/gui/ImportScreen.min.js:72
 #: packages/app-desktop/gui/ImportScreen.tsx:92
 msgid "Resources: %d."
 msgstr "Zasoby: %d."
@@ -3714,15 +3760,16 @@ msgstr "Zasoby: %d."
 msgid "Restart and upgrade"
 msgstr "Uruchom ponownie i aktualizuj"
 
-#: packages/app-desktop/ElectronAppWrapper.ts:85
+#: packages/app-desktop/ElectronAppWrapper.ts:86
 msgid "Restart in safe mode"
 msgstr "Uruchom ponownie w trybie awaryjnym"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:717
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:713
 msgid "Restart now"
 msgstr "Uruchom ponownie teraz"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:79
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:205
 msgid "Restore"
 msgstr "Przywróć"
@@ -3747,11 +3794,11 @@ msgid "Reveal file in folder"
 msgstr "Odkryj plik w folderze"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:8
-#: packages/lib/models/Setting.ts:1031 packages/lib/models/Setting.ts:954
+#: packages/lib/models/Setting.ts:1042 packages/lib/models/Setting.ts:965
 msgid "Reverse sort order"
 msgstr "Odwróć kierunek sortowania"
 
-#: packages/app-cli/app/command-ls.js:29
+#: packages/app-cli/app/command-ls.ts:29
 msgid "Reverses the sorting order."
 msgstr "Odwraca kierunek sortowania."
 
@@ -3822,9 +3869,9 @@ msgid "Save as..."
 msgstr "Zapisz jako..."
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:107
-#: packages/app-mobile/components/ScreenHeader.tsx:348
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:227
-#: packages/app-mobile/components/screens/Note.tsx:118
+#: packages/app-mobile/components/ScreenHeader.tsx:353
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:242
+#: packages/app-mobile/components/screens/Note.tsx:242
 msgid "Save changes"
 msgstr "Zapisz zmiany"
 
@@ -3832,12 +3879,13 @@ msgstr "Zapisz zmiany"
 msgid "Save changes?"
 msgstr "Zapisać zmiany?"
 
-#: packages/lib/models/Setting.ts:1032
+#: packages/lib/models/Setting.ts:1043
 msgid "Save geo-location with notes"
 msgstr "Zapisz lokalizację geograficzną z notatkami"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:420
-#: packages/app-mobile/components/screens/search.tsx:169
+#: packages/app-mobile/components/ScreenHeader.tsx:425
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:664
+#: packages/app-mobile/components/screens/search.tsx:171
 msgid "Search"
 msgstr "Wyszukaj"
 
@@ -3845,9 +3893,14 @@ msgstr "Wyszukaj"
 msgid "Search for plugins..."
 msgstr "Szukaj wtyczek..."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:225
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:223
 msgid "Search for..."
 msgstr "Wyszukaj..."
+
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:140
+#, fuzzy
+msgid "Search hidden"
+msgstr "Wyszukaj"
 
 #: packages/app-desktop/gui/NoteListControls/commands/focusSearch.ts:6
 msgid "Search in all the notes"
@@ -3857,13 +3910,20 @@ msgstr "Wyszukaj we wszystkich notatkach"
 msgid "Search in current note"
 msgstr "Wyszukaj w obecnej notatce"
 
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:140
+#, fuzzy
+msgid "Search shown"
+msgstr "Wyszukaj"
+
 #: packages/app-cli/app/gui/FolderListWidget.js:51
 msgid "Search:"
 msgstr "Wyszukaj:"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:167
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:69
+#: packages/app-desktop/gui/NoteSearchBar.min.js:165
 #: packages/app-desktop/gui/NoteSearchBar.tsx:179
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:665
 msgid "Search..."
 msgstr "Wyszukaj..."
 
@@ -3871,18 +3931,18 @@ msgstr "Wyszukaj..."
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Wyszukuje wskazany <pattern> we wszystkich notatkach."
 
-#: packages/lib/models/Setting.ts:1374
+#: packages/lib/models/Setting.ts:1385
 msgid "See the pre-release page for more details: %s"
 msgstr ""
 "Sprawdź stronę wydań przedpremierowych w celu uzyskania większości "
 "informacji: %s"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:268
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:276
 msgid "Select"
 msgstr "Wybierz"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:49
-#: packages/app-mobile/components/ScreenHeader.tsx:407
+#: packages/app-mobile/components/ScreenHeader.tsx:412
 msgid "Select all"
 msgstr "Wybierz wszystko"
 
@@ -3898,7 +3958,7 @@ msgstr "Wybierz plik..."
 msgid "Select parent notebook"
 msgstr "Wybierz notatnik nadrzędny"
 
-#: packages/app-desktop/gui/MenuBar.tsx:324
+#: packages/app-desktop/gui/MenuBar.tsx:325
 msgid "Send bug report"
 msgstr "Wyślij raport o błędzie"
 
@@ -3916,7 +3976,7 @@ msgid "Server is running on port %d"
 msgstr "Serwer działa na porcie %d"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.ts:10
-#: packages/app-mobile/components/screens/Note.tsx:1115
+#: packages/app-mobile/components/screens/Note.tsx:1258
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:141
 msgid "Set alarm"
 msgstr "Ustaw powiadomienie"
@@ -3925,7 +3985,7 @@ msgstr "Ustaw powiadomienie"
 msgid "Set alarm:"
 msgstr "Ustaw powiadomienie:"
 
-#: packages/lib/models/Setting.ts:1305
+#: packages/lib/models/Setting.ts:1316
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
@@ -3938,7 +3998,7 @@ msgstr ""
 msgid "Set the password"
 msgstr "Ustaw hasło"
 
-#: packages/app-cli/app/command-set.js:22
+#: packages/app-cli/app/command-set.ts:22
 msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
@@ -3953,11 +4013,11 @@ msgstr ""
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:272
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:40
 #: packages/app-mobile/components/screens/LogScreen.tsx:38
-#: packages/app-mobile/components/screens/Note.tsx:1124
+#: packages/app-mobile/components/screens/Note.tsx:1267
 msgid "Share"
 msgstr "Udostępnij"
 
-#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:83
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:28
 msgid ""
 "Share a copy of all notes in a file format that can be imported by Joplin on "
 "a computer."
@@ -3985,11 +4045,11 @@ msgstr "Udostępnianie uprawnień"
 msgid "Sharing notebook..."
 msgstr "Udostępnianie notatnika..."
 
-#: packages/app-cli/app/command-help.js:44
+#: packages/app-cli/app/command-help.ts:44
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Skróty nie dostępne w wierszu poleceń (tryb CLI)."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:210
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:208
 msgid "Show advanced"
 msgstr "Pokaż zaawansowane"
 
@@ -4001,7 +4061,7 @@ msgstr "Pokaż opcje zaawansowane"
 msgid "Show all"
 msgstr "Pokaż wszystko"
 
-#: packages/lib/models/Setting.ts:923
+#: packages/lib/models/Setting.ts:934
 msgid "Show completed to-dos"
 msgstr "Wyświetl ukończone zadania"
 
@@ -4017,36 +4077,36 @@ msgstr "Pokaż wyłączone klawisze"
 msgid "Show more actions"
 msgstr "Pokaż więcej działań"
 
-#: packages/lib/models/Setting.ts:905
+#: packages/lib/models/Setting.ts:916
 msgid "Show note counts"
 msgstr "Pokaż liczbę notatek"
 
-#: packages/lib/models/Setting.ts:964
+#: packages/lib/models/Setting.ts:975
 msgid "Show sort order buttons"
 msgstr "Pokaż sortowanie kolejności przycisków"
 
-#: packages/lib/models/Setting.ts:1206
+#: packages/lib/models/Setting.ts:1217
 msgid "Show tray icon"
 msgstr "Pokaż ikonę w zasobniku systemowym"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:308
+#: packages/app-mobile/components/ScreenHeader.tsx:313
 msgid "Show/hide the sidebar"
 msgstr "Pokaż/ukryj pasek boczny"
 
-#: packages/lib/models/Setting.ts:1126
+#: packages/lib/models/Setting.ts:1137
 msgid "Shrink large images before adding them to notes."
 msgstr "Zmniejszanie dużych obrazów przed dodaniem ich do notatek."
 
-#: packages/app-mobile/root.tsx:1013
+#: packages/app-mobile/root.tsx:1014
 msgid "Side menu closed"
 msgstr "Menu boczne zamknięte"
 
-#: packages/app-mobile/root.tsx:1013
+#: packages/app-mobile/root.tsx:1014
 msgid "Side menu opened"
 msgstr "Menu boczne otwarte"
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:8
-#: packages/app-mobile/components/ScreenHeader.tsx:307
+#: packages/app-mobile/components/ScreenHeader.tsx:312
 msgid "Sidebar"
 msgstr "Pasek boczny"
 
@@ -4064,7 +4124,8 @@ msgstr ""
 "Pominięte obiekty: %d (użyj --retry-failed-items żeby ponownie spróbować je "
 "odszyfrować)"
 
-#: packages/app-cli/app/command-import.js:50
+#: packages/app-cli/app/command-import.ts:51
+#: packages/app-desktop/gui/ImportScreen.min.js:71
 #: packages/app-desktop/gui/ImportScreen.tsx:91
 msgid "Skipped: %d."
 msgstr "Pominięto: %d."
@@ -4078,7 +4139,7 @@ msgid "Solarised Light"
 msgstr "Solarised Light"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:629
-#: packages/app-mobile/components/ScreenHeader.tsx:569
+#: packages/app-mobile/components/ScreenHeader.tsx:574
 msgid "Some items cannot be decrypted."
 msgstr "Niektóre obiekty nie mogą być odszyfrowane."
 
@@ -4086,18 +4147,18 @@ msgstr "Niektóre obiekty nie mogą być odszyfrowane."
 msgid "Some items cannot be synchronised."
 msgstr "Niektóre przedmioty nie mogą być zsynchornizowane."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:565
+#: packages/app-mobile/components/ScreenHeader.tsx:570
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr "Niektóre przedmioty nie mogą zostać zsynchronizowane."
 
-#: packages/lib/models/Setting.ts:1019
+#: packages/lib/models/Setting.ts:1030
 msgid "Sort notebooks by"
 msgstr "Sortuj notatniki po"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:170
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:9
-#: packages/app-mobile/components/ScreenHeader.tsx:470
-#: packages/lib/models/Setting.ts:931
+#: packages/app-mobile/components/ScreenHeader.tsx:475
+#: packages/lib/models/Setting.ts:942
 msgid "Sort notes by"
 msgstr "Sortuj notatki po"
 
@@ -4105,12 +4166,12 @@ msgstr "Sortuj notatki po"
 msgid "Sort selected lines"
 msgstr "Sortuj zaznaczone linie"
 
-#: packages/app-cli/app/command-ls.js:28
+#: packages/app-cli/app/command-ls.ts:28
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
 "Sortuje obiekty po <field> (np. tytuł, data_aktualizacji, data_utworzenia)."
 
-#: packages/app-cli/app/command-import.js:25
+#: packages/app-cli/app/command-import.ts:26
 msgid "Source format: %s"
 msgstr "Format źródłowy: %s"
 
@@ -4118,7 +4179,7 @@ msgstr "Format źródłowy: %s"
 msgid "Source: "
 msgstr "Źródło: "
 
-#: packages/lib/models/Setting.ts:1588
+#: packages/lib/models/Setting.ts:1599
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -4130,12 +4191,12 @@ msgstr ""
 msgid "Spell checker"
 msgstr "Sprawdzanie pisowni"
 
-#: packages/lib/models/Setting.ts:914 packages/lib/models/Setting.ts:916
-#: packages/lib/models/Setting.ts:917
+#: packages/lib/models/Setting.ts:925 packages/lib/models/Setting.ts:927
+#: packages/lib/models/Setting.ts:928
 msgid "Split View"
 msgstr "Podzielony podgląd"
 
-#: packages/lib/models/Setting.ts:1214
+#: packages/lib/models/Setting.ts:1225
 msgid "Start application minimised in the tray icon"
 msgstr "Uruchom aplikację zminimalizowaną w zasobniku systemowym"
 
@@ -4159,7 +4220,7 @@ msgstr ""
 msgid "Starting synchronisation..."
 msgstr "Rozpoczynanie synchronizacji..."
 
-#: packages/app-cli/app/command-edit.js:75
+#: packages/app-cli/app/command-edit.ts:75
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
 "Rozpoczynanie edycji notatki. Zamknij edytor, aby powrócić do wiersza "
@@ -4178,14 +4239,17 @@ msgstr "Statystyki…"
 msgid "Status"
 msgstr "Status"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:97
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:85
 msgid "Status: %s"
 msgstr "Status: %s"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:91
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:79
 msgid "Status: Started on port %d"
 msgstr "Status: Uruchomiono w porcie %d"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:150
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:120
 msgid "Step 1: Enable the clipper service"
 msgstr "Krok 1: Aktywuj usługę Clipper"
@@ -4203,6 +4267,7 @@ msgstr ""
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Krok 2: Wpisz kod podany przez Dropbox:"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:126
 msgid "Step 2: Install the extension"
 msgstr "Krok 2: Zainstaluj rozszerzenie"
@@ -4256,8 +4321,8 @@ msgstr "Zamień z linią powyżej"
 msgid "Switch between note and to-do type"
 msgstr "Przełącz pomiędzy notatką a zadaniem"
 
-#: packages/app-desktop/gui/MenuBar.tsx:505
-#: packages/app-mobile/components/side-menu-content.tsx:429
+#: packages/app-desktop/gui/MenuBar.tsx:506
+#: packages/app-mobile/components/side-menu-content.tsx:430
 msgid "Switch profile"
 msgstr "Zmień profil"
 
@@ -4275,7 +4340,7 @@ msgstr "Przełącz na profil %d"
 msgid "Switch to to-do type"
 msgstr "Przełącz na zadanie"
 
-#: packages/app-cli/app/command-use.js:12
+#: packages/app-cli/app/command-use.ts:12
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
@@ -4287,7 +4352,7 @@ msgstr ""
 msgid "Sync as many devices as you want"
 msgstr "Synchronizacja dowolnej liczby urządzeń"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:337
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:458
 msgid "Sync Status"
 msgstr "Status synchronizacji"
 
@@ -4313,19 +4378,19 @@ msgstr ""
 msgid "Sync Version: %s"
 msgstr "Wersja synchronizacji: %s"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:179
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:187
 msgid "Sync your notes"
 msgstr "Synchronizuj notatki"
 
-#: packages/lib/models/Setting.ts:2641
+#: packages/lib/models/Setting.ts:2653
 msgid "Sync, encryption, proxy"
 msgstr "Synchronizacja, szyfrowanie, proxy"
 
-#: packages/lib/models/Setting.ts:2606
+#: packages/lib/models/Setting.ts:2618
 msgid "Synchronisation"
 msgstr "Synchronizacja"
 
-#: packages/lib/models/Setting.ts:1382
+#: packages/lib/models/Setting.ts:1393
 msgid "Synchronisation interval"
 msgstr "Interwał synchronizacji"
 
@@ -4333,7 +4398,7 @@ msgstr "Interwał synchronizacji"
 msgid "Synchronisation is already in progress."
 msgstr "Synchronizacja w toku."
 
-#: packages/app-desktop/gui/MenuBar.tsx:484
+#: packages/app-desktop/gui/MenuBar.tsx:485
 #: packages/app-desktop/gui/Root.tsx:230
 msgid "Synchronisation Status"
 msgstr "Status synchronizacji"
@@ -4347,12 +4412,12 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "Serwis synchronizacji: %s (%s)"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:678
-#: packages/app-mobile/components/side-menu-content.tsx:454
+#: packages/app-mobile/components/side-menu-content.tsx:455
 #: packages/lib/commands/synchronize.ts:8
 msgid "Synchronise"
 msgstr "Synchronizuj"
 
-#: packages/lib/models/Setting.ts:1402
+#: packages/lib/models/Setting.ts:1413
 msgid "Synchronise only over WiFi connection"
 msgstr "Synchronizuj tylko przez WiFi"
 
@@ -4368,7 +4433,7 @@ msgstr "Synchronizacja..."
 msgid "Synchronizing..."
 msgstr "Synchronizacja..."
 
-#: packages/lib/models/Setting.ts:1417
+#: packages/lib/models/Setting.ts:1428
 msgid "Tabloid"
 msgstr "Tabloid"
 
@@ -4376,20 +4441,21 @@ msgstr "Tabloid"
 msgid "tag1, tag2, ..."
 msgstr "tag1, tag2, ..."
 
-#: packages/app-cli/app/command-import.js:52
+#: packages/app-cli/app/command-import.ts:53
+#: packages/app-desktop/gui/ImportScreen.min.js:73
 #: packages/app-desktop/gui/ImportScreen.tsx:93
 msgid "Tagged: %d."
 msgstr "Oznaczone: %d."
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:7
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:733
-#: packages/app-mobile/components/screens/Note.tsx:1145
+#: packages/app-mobile/components/screens/Note.tsx:1288
 #: packages/app-mobile/components/screens/tags.js:101
-#: packages/app-mobile/components/side-menu-content.tsx:426
+#: packages/app-mobile/components/side-menu-content.tsx:427
 msgid "Tags"
 msgstr "Znaczniki"
 
-#: packages/app-mobile/components/screens/Note.tsx:1005
+#: packages/app-mobile/components/screens/Note.tsx:1148
 msgid "Take photo"
 msgstr "Wykonaj zdjęcie"
 
@@ -4410,11 +4476,11 @@ msgstr "Zespoły"
 msgid "Text document"
 msgstr "Dokument tekstowy"
 
-#: packages/lib/models/Setting.ts:1410
+#: packages/lib/models/Setting.ts:1421
 msgid "Text editor command"
 msgstr "Ścieżka edytora tekstu"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:217
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:225
 msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
 msgstr "Dziękujemy Ci! Twoje konto Chmury Joplin jest teraz gotowe do użycia."
 
@@ -4432,7 +4498,7 @@ msgid ""
 msgstr ""
 "Aplikacja zostanie teraz zamknięta. Uruchom ją ponownie, aby ukończyć proces."
 
-#: packages/app-desktop/app.ts:346
+#: packages/app-desktop/app.ts:367
 msgid ""
 "The application did not close properly. Would you like to start in safe mode?"
 msgstr ""
@@ -4452,11 +4518,11 @@ msgstr "Aplikacja została uwierzytelniona!"
 msgid "The application has been successfully authorised."
 msgstr "Aplikacja została uwierzytelniona pomyślnie."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:643
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:639
 msgid "The application must be restarted for these changes to take effect."
 msgstr "Ta aplikacja musi być zrestartowana, aby zastosować zmiany."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:565
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:579
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -4494,7 +4560,7 @@ msgstr ""
 msgid "The default profile cannot be deleted"
 msgstr "Profilu domyślnego nie można usunąć"
 
-#: packages/lib/models/Setting.ts:1410
+#: packages/lib/models/Setting.ts:1421
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -4503,8 +4569,8 @@ msgstr ""
 "otwierać notatkę. Jeżeli nie zostanie podana, program spróbuje wykryć "
 "domyślny edytor."
 
-#: packages/lib/models/Setting.ts:1644 packages/lib/models/Setting.ts:1659
-#: packages/lib/models/Setting.ts:1674
+#: packages/lib/models/Setting.ts:1656 packages/lib/models/Setting.ts:1671
+#: packages/lib/models/Setting.ts:1686
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -4516,7 +4582,15 @@ msgstr ""
 "czynnikiem 2 będzie zajmował 2 razy więcej, niż ten z czynnikiem 1,. "
 "Zrestartuj aplikację, aby zobaczyć zmiany."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:564
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:594
+#, fuzzy
+msgid "The following attachment matches your search query:"
+msgid_plural "The following attachments match your search query:"
+msgstr[0] "Następujące załączniki są obserwowane pod kątem zmian:"
+msgstr[1] "Następujące załączniki są obserwowane pod kątem zmian:"
+msgstr[2] "Następujące załączniki są obserwowane pod kątem zmian:"
+
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:578
 msgid "The following attachments are being watched for changes:"
 msgstr "Następujące załączniki są obserwowane pod kątem zmian:"
 
@@ -4530,12 +4604,12 @@ msgstr ""
 "zaleca się ich aktualizację. Zaktualizowane klucze główne będą nadal mogły "
 "szyfrować i odszyfrować twoje dane."
 
-#: packages/app-mobile/components/screens/Note.tsx:209
+#: packages/app-mobile/components/screens/Note.tsx:333
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
 "Aplikacja mobilna Joplin nie wspiera aktualnie odnośników tego typu: %s"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:246
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:265
 msgid ""
 "The Joplin team has vetted this plugin and it meets our standards for "
 "security and performance."
@@ -4575,12 +4649,13 @@ msgstr "Notatka \"%s\" została pomyślnie przywrócona do notatnika \"%s\"."
 msgid "The notebook could not be saved: %s"
 msgstr "Notatnik nie może zostać zapisany: %s"
 
-#: packages/app-cli/app/command-import.js:70
+#: packages/app-cli/app/command-import.ts:71
+#: packages/app-desktop/gui/ImportScreen.min.js:88
 #: packages/app-desktop/gui/ImportScreen.tsx:108
 msgid "The notes have been imported: %s"
 msgstr "Notatki zostały zaimportowane: %s"
 
-#: packages/app-cli/app/command-help.js:73
+#: packages/app-cli/app/command-help.ts:73
 msgid "The possible commands are:"
 msgstr "Dostępne komendy:"
 
@@ -4604,7 +4679,7 @@ msgstr ""
 "zsynchronizować. Ta operacja może zająć kilka minut po czym aplikacja będzie "
 "wymagać ponownego uruchomienia. Kliknij w link aby kontynuować."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:566
+#: packages/app-mobile/components/ScreenHeader.tsx:571
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
 "Cel synchronizacji wymaga aktualizacji. Uruchom ten banner by kontynuować."
@@ -4629,10 +4704,12 @@ msgstr ""
 msgid "The Web Clipper needs your authorisation to access your data."
 msgstr "Web Clipper potrzebuje twojej autoryzacji by uzyskać dostęp do danych."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:73
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "Usługa Web Clipper musi być aktywna i ustawiona na autouruchamianie."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:109
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:97
 msgid "The web clipper service is not enabled."
 msgstr "Usługa Web Clipper nie jest aktywowana."
@@ -4645,11 +4722,11 @@ msgstr ""
 "Implementacja %s WebDAV jest niekompatybilna z Joplin i jako taka nie jest "
 "już obsługiwana. Użyj innej metody synchronizacji."
 
-#: packages/lib/models/Setting.ts:849
+#: packages/lib/models/Setting.ts:860
 msgid "Theme"
 msgstr "Motyw"
 
-#: packages/lib/models/Setting.ts:2640
+#: packages/lib/models/Setting.ts:2652
 msgid "Themes, editor font"
 msgstr "Motywy, czcionka edytora"
 
@@ -4657,7 +4734,7 @@ msgstr "Motywy, czcionka edytora"
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Brak notatek. Aby utworzyć, naciśnij przycisk (+)."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:225
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:240
 msgid "There are unsaved changes."
 msgstr "Istnieją niezapisane zmiany."
 
@@ -4671,7 +4748,7 @@ msgstr "Brak notatników. Utwórz nowy, naciskając na \"Nowy notatnik\"."
 msgid "There is no data to export."
 msgstr "Brak danych do eksportu."
 
-#: packages/lib/models/Resource.ts:463
+#: packages/lib/models/Resource.ts:485
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
 "\n"
@@ -4685,7 +4762,7 @@ msgstr ""
 msgid "There was an error downloading this attachment:"
 msgstr "Wystąpił błąd pobierania załącznika:"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:226
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:234
 msgid ""
 "There was an error setting up your Joplin Cloud account. Please verify your "
 "email and password and try again. Error was:\n"
@@ -4707,7 +4784,7 @@ msgstr ""
 "synchronizacji. W celu wyszukania tych obiektów, proszę szukać po tytule lub "
 "po ID (które jest wyświetlane w klamrach poniżej)."
 
-#: packages/lib/models/Setting.ts:2628
+#: packages/lib/models/Setting.ts:2640
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -4740,10 +4817,11 @@ msgstr ""
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Załącznik nie został jeszcze pobrany lub odszyfrowany"
 
-#: packages/app-mobile/components/screens/Note.tsx:203
+#: packages/app-mobile/components/screens/Note.tsx:327
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Załącznik nie został jeszcze pobrany lub odszyfrowany."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:143
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
@@ -4766,21 +4844,21 @@ msgstr ""
 "twoimi notatkami. Bądź ostrożny przy usuwaniu jednego z nich, ponieważ nie "
 "będzie on mógł zostać przywrócony."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:278
+#: packages/app-mobile/components/ScreenHeader.tsx:283
 msgid "This note could not be deleted: %s"
 msgid_plural "These notes could not be deleted: %s"
 msgstr[0] "Ta notatka nie mogła zostać usunięta: %s"
 msgstr[1] "Te notatki nie mogły zostać usunięte: %s"
 msgstr[2] "Te notatke nie mogły zostać usunięte: %s"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:258
+#: packages/app-mobile/components/ScreenHeader.tsx:263
 msgid "This note could not be duplicated: %s"
 msgid_plural "These notes could not be duplicated: %s"
 msgstr[0] "Ta notatka nie mogła zostać zduplikowana: %s"
 msgstr[1] "Te notatki nie mogły zostać zduplikowane: %s"
 msgstr[2] "Te notatki nie mogły zostać zduplikowane: %s"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:549
+#: packages/app-mobile/components/ScreenHeader.tsx:554
 msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
 msgstr[0] "Ta notatka nie mogła zostać przeniesiona: %s"
@@ -4791,7 +4869,7 @@ msgstr[2] "Ta notatki nie mogły zostać przeniesione: %s"
 msgid "This note does not have geolocation information."
 msgstr "Ta notatka nie zawiera informacji o lokalizacji geograficznej."
 
-#: packages/app-mobile/components/screens/Note.tsx:118
+#: packages/app-mobile/components/screens/Note.tsx:242
 msgid "This note has been modified:"
 msgstr "Ta notatka została zmodyfikowana:"
 
@@ -4804,11 +4882,12 @@ msgstr ""
 "Ta notatka nie posiada zawartości. Naciśnik na \"%s\" aby przełączyć edytor "
 "i edytować notatkę."
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:128
 msgid "This note has no history"
 msgstr "Ta notatka nie posiada historii"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:491
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:499
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
@@ -4816,6 +4895,7 @@ msgstr ""
 "Ten edytor tekstu sformatowanego ma wiele ograniczeń i zaleca się, abyś był "
 "ich świadomy przed jego użyciem."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:155
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:121
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
@@ -4826,7 +4906,7 @@ msgstr ""
 "Kiedy zostanie aktywowana, zapora systemowa może zapytać o uprawnienia dla "
 "Joplin w celu nasłuchiwania na określonym porcie."
 
-#: packages/lib/models/Setting.ts:1208
+#: packages/lib/models/Setting.ts:1219
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -4836,7 +4916,7 @@ msgstr ""
 "ustawienie, przez co notatki będę stale synchronizowane, redukując liczbę "
 "błędów."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:126
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:122
 msgid "This will open a new screen. Save your current changes?"
 msgstr "Otworzy się nowy ekran. Zapisać zmiany?"
 
@@ -4882,11 +4962,11 @@ msgstr "Aby usunąć znacznik, należy usunąć powiązane znaczniki z notatek."
 msgid "To delete: %d"
 msgstr "Do usunięcia: %d"
 
-#: packages/app-cli/app/command-help.js:82
+#: packages/app-cli/app/command-help.ts:82
 msgid "To enter command line mode, press \":\""
 msgstr "Aby wejść do wiersza poleceń, naciśnij \":\""
 
-#: packages/app-cli/app/command-help.js:83
+#: packages/app-cli/app/command-help.ts:83
 msgid "To exit command line mode, press ESCAPE"
 msgstr "Aby wyjść z wiersza poleceń, naciśnij ESCAPE"
 
@@ -4899,11 +4979,11 @@ msgstr ""
 "Żeby posortować notatki ręcznie, kierunek sortowania musi zostać zmieniony "
 "na \"%s\" w menu \"%s\" > \"%s\""
 
-#: packages/app-cli/app/command-help.js:81
+#: packages/app-cli/app/command-help.ts:81
 msgid "To maximise/minimise the console, press \"tc\"."
 msgstr "Aby zmaksymalizować/zminimalizować konsolę, naciśnij \"tc\"."
 
-#: packages/app-cli/app/command-help.js:79
+#: packages/app-cli/app/command-help.ts:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
 msgstr "Aby przenieść z jednej zakładki do innej, naciśnij Tab lub Shift+Tab."
 
@@ -4922,7 +5002,7 @@ msgstr ""
 "Aby zmienić profil, aplikacja zostanie zamknięta i konieczne będzie jej "
 "ponowne uruchomienie."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:357
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:487
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -4944,7 +5024,7 @@ msgstr "zadanie: %s"
 msgid "Toggle comment"
 msgstr "Wstaw komentarz"
 
-#: packages/app-desktop/gui/MenuBar.tsx:871
+#: packages/app-desktop/gui/MenuBar.tsx:872
 msgid "Toggle development tools"
 msgstr "Włącz/wyłącz narzędzia programistyczne"
 
@@ -4960,7 +5040,7 @@ msgstr "Włącz edytor"
 msgid "Toggle external editing"
 msgstr "Edytuj w programie zewnętrznym"
 
-#: packages/lib/models/Setting.ts:2645
+#: packages/lib/models/Setting.ts:2657
 msgid "Toggle note history, keep notes for"
 msgstr "Przełącz historię notatek, przechowuj notatki przez"
 
@@ -4984,11 +5064,12 @@ msgstr "Przełącz pasek boczny"
 msgid "Toggle sort order field"
 msgstr "Przełącz pole kolejności sortowania"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:32
 msgid "Token has been copied to the clipboard!"
 msgstr "Token został skopiowany do schowka!"
 
-#: packages/lib/models/Setting.ts:2618
+#: packages/lib/models/Setting.ts:2630
 msgid "Tools"
 msgstr "Narzędzia"
 
@@ -5000,7 +5081,7 @@ msgstr "Łączny rozmiar"
 msgid "Total: %d/%d"
 msgstr "Ogółem: %d/%d"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:313
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:328
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:123
 msgid "Try again"
 msgstr "Spróbuj ponownie"
@@ -5010,7 +5091,7 @@ msgstr "Spróbuj ponownie"
 msgid "Try it now"
 msgstr "Wypróbuj teraz"
 
-#: packages/app-cli/app/command-help.js:71
+#: packages/app-cli/app/command-help.ts:71
 msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
@@ -5022,7 +5103,7 @@ msgstr ""
 msgid "Type `joplin help` for usage information."
 msgstr "Wpisz `joplin help` dla informacji o użytkowaniu."
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:576
+#: packages/app-desktop/plugins/GotoAnything.tsx:616
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
@@ -5040,11 +5121,11 @@ msgstr "Wprowadź nowe znaczniki lub wybierz z listy"
 msgid "Type: %s."
 msgstr "Typ: %s."
 
-#: packages/app-mobile/components/screens/Note.tsx:872
+#: packages/app-mobile/components/screens/Note.tsx:1015
 msgid "Unable to edit resource of type %s"
 msgstr "Nie można edytować zasobu typu %s"
 
-#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:69
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:72
 msgid "Unable to export or share data. Reason: %s"
 msgstr "Nie można eksportować ani udostępniać danych. Powód: %s"
 
@@ -5052,14 +5133,14 @@ msgstr "Nie można eksportować ani udostępniać danych. Powód: %s"
 msgid "Unable to share log data. Reason: %s"
 msgstr "Nie można udostępniać danych dziennika. Powód: %s"
 
-#: packages/lib/models/Setting.ts:922
+#: packages/lib/models/Setting.ts:933
 msgid "Uncompleted to-dos on top"
 msgstr "Nieukończone zadania na górze"
 
-#: packages/app-desktop/gui/MenuBar.tsx:704
+#: packages/app-desktop/gui/MenuBar.tsx:705
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:117
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:164
-#: packages/app-mobile/components/ScreenHeader.tsx:385
+#: packages/app-mobile/components/ScreenHeader.tsx:390
 msgid "Undo"
 msgstr "Cofnij"
 
@@ -5067,7 +5148,7 @@ msgstr "Cofnij"
 msgid "Unknown flag: %s"
 msgstr "Nieznana flaga: %s"
 
-#: packages/lib/Synchronizer.ts:1064
+#: packages/lib/Synchronizer.ts:1070
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
@@ -5094,22 +5175,23 @@ msgstr ""
 "Usunąć udostępnienie tego notatnika? Odbiorcy nie będą mieli dłużej dostępu "
 "do jego zawartości."
 
-#: packages/app-mobile/components/screens/Note.tsx:703
+#: packages/app-mobile/components/screens/Note.tsx:822
 msgid "Unsupported image type: %s"
 msgstr "Niewspierany typ obrazu: %s"
 
 #: packages/app-desktop/gui/MainScreen/commands/openItem.ts:41
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:170
 msgid "Unsupported link or message: %s"
 msgstr "Niewspierany odnośnik lub wiadomość: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:106
-#: packages/lib/models/BaseItem.ts:851 packages/lib/path-utils.ts:125
-#: packages/lib/path-utils.ts:81
+#: packages/lib/models/BaseItem.ts:851 packages/lib/path-utils.ts:128
+#: packages/lib/path-utils.ts:84
 msgid "Untitled"
 msgstr "Bez nazwy"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:206
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:214
 msgid "Update"
 msgstr "Zaktualizuj"
 
@@ -5122,8 +5204,9 @@ msgstr "Eksportuj prodil"
 msgid "Update total sizes"
 msgstr "Zaktualizuj łączne rozmiary"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:216
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:217
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:52
 msgid "Updated"
 msgstr "Zaaktualizowano"
@@ -5132,11 +5215,11 @@ msgstr "Zaaktualizowano"
 msgid "updated date"
 msgstr "data aktualizacji"
 
-#: packages/lib/Synchronizer.ts:189
+#: packages/lib/Synchronizer.ts:190
 msgid "Updated local items: %d."
 msgstr "Zaktualizowano lokalne obiekty: %d."
 
-#: packages/lib/Synchronizer.ts:191
+#: packages/lib/Synchronizer.ts:192
 msgid "Updated remote items: %d."
 msgstr "Zaktualizowano zdalne obiekty: %d."
 
@@ -5144,16 +5227,17 @@ msgstr "Zaktualizowano zdalne obiekty: %d."
 msgid "Updated: "
 msgstr "Zaktualizowano: "
 
-#: packages/app-cli/app/command-import.js:49
+#: packages/app-cli/app/command-import.ts:50
+#: packages/app-desktop/gui/ImportScreen.min.js:70
 #: packages/app-desktop/gui/ImportScreen.tsx:90
 msgid "Updated: %d."
 msgstr "Zaaktualizowano: %d."
 
-#: packages/app-mobile/components/screens/Note.tsx:968
+#: packages/app-mobile/components/screens/Note.tsx:1111
 msgid "Updated: %s"
 msgstr "Zaktualizowano: %s"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:207
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:215
 msgid "Updating..."
 msgstr "Aktualizowanie..."
 
@@ -5165,6 +5249,7 @@ msgstr "Aktualizacja"
 msgid "Upgrade the sync target to the latest version."
 msgstr "Aktualizuj cel synchronizacji do najnowszej wersji."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:55
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:112
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:115
@@ -5177,11 +5262,11 @@ msgstr "Odnośnik"
 msgid "Usage: %s"
 msgstr "Przykłady: %s"
 
-#: packages/lib/models/Setting.ts:1724
+#: packages/lib/models/Setting.ts:1736
 msgid "Use biometrics to secure access to the app"
 msgstr "Użyj biometrii do zabezpieczenia dostępu do aplikacji"
 
-#: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
+#: packages/app-cli/app/command-ls.ts:32 packages/app-cli/app/command-tag.js:18
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
@@ -5193,7 +5278,7 @@ msgstr ""
 msgid "Use spell checker"
 msgstr "Sprawdzaj pisownię"
 
-#: packages/app-cli/app/command-help.js:80
+#: packages/app-cli/app/command-help.ts:80
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
@@ -5206,7 +5291,7 @@ msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 "Używaj strzałek aby poruszać elementami układu. Wciśnij \"Escape\" aby wyjść."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:339
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:460
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
@@ -5222,7 +5307,7 @@ msgstr ""
 "Użyj swojej biometrii do zabezpieczenia dostępu do aplikacji. Zawsze możesz "
 "skonfigurować to później w ustawieniach."
 
-#: packages/lib/models/Setting.ts:1288
+#: packages/lib/models/Setting.ts:1299
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
@@ -5230,7 +5315,7 @@ msgstr ""
 "Używana dla większości tekstów w edytorze markdown. Jeżeli nie znaleziono, "
 "generyczna proporcja zostanie używa."
 
-#: packages/lib/models/Setting.ts:1300
+#: packages/lib/models/Setting.ts:1311
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
@@ -5262,7 +5347,7 @@ msgstr "Zweryfikuj swoją tożsamość"
 msgid "View"
 msgstr "Widok"
 
-#: packages/app-mobile/components/screens/Note.tsx:972
+#: packages/app-mobile/components/screens/Note.tsx:1115
 msgid "View on map"
 msgstr "Pokaż na mapie"
 
@@ -5273,26 +5358,26 @@ msgid "View them now"
 msgstr "Wyświetl je teraz"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:142
-#: packages/lib/models/Setting.ts:914 packages/lib/models/Setting.ts:915
-#: packages/lib/models/Setting.ts:917
+#: packages/lib/models/Setting.ts:925 packages/lib/models/Setting.ts:926
+#: packages/lib/models/Setting.ts:928
 msgid "Viewer"
 msgstr "Wyświetlacz"
 
-#: packages/lib/models/Setting.ts:1452
+#: packages/lib/models/Setting.ts:1463
 msgid "Vim"
 msgstr "Vim"
 
-#: packages/lib/models/Setting.ts:1776
+#: packages/lib/models/Setting.ts:1788
 msgid "Voice typing language files (URL)"
 msgstr "Pliki językowe do wpisywania głosowego (URL)"
 
-#: packages/app-mobile/components/screens/Note.tsx:1134
+#: packages/app-mobile/components/screens/Note.tsx:1277
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:119
 msgid "Voice typing..."
 msgstr "Pisanie głosowe..."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:195
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:95
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:191
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:101
 msgid "Warning"
 msgstr "Uwaga"
 
@@ -5302,7 +5387,7 @@ msgstr ""
 "Uwaga, aby zachować dobrą wydajność, nie wszystkie zasoby zostały "
 "wyświetlone (limit: %s)."
 
-#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:100
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:102
 msgid ""
 "Warnings:\n"
 "%s"
@@ -5310,7 +5395,7 @@ msgstr ""
 "Uwaga:\n"
 "%s"
 
-#: packages/lib/models/Setting.ts:2615 packages/lib/utils/joplinCloud.ts:166
+#: packages/lib/models/Setting.ts:2627 packages/lib/utils/joplinCloud.ts:166
 msgid "Web Clipper"
 msgstr "Web clipper"
 
@@ -5331,7 +5416,7 @@ msgid "WebDAV username"
 msgstr "Nazwa użytkownika WebDAV"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:20
-#: packages/app-desktop/gui/MenuBar.tsx:849
+#: packages/app-desktop/gui/MenuBar.tsx:850
 msgid "Website and documentation"
 msgstr "Strona internetowa i dokumentacja"
 
@@ -5356,15 +5441,21 @@ msgstr ""
 msgid "Welcome!"
 msgstr "Witaj!"
 
-#: packages/lib/models/Setting.ts:1108
+#: packages/lib/models/Setting.ts:1119
 msgid "When creating a new note:"
 msgstr "Podczas tworzenia nowej notatki:"
 
-#: packages/lib/models/Setting.ts:1091
+#: packages/lib/models/Setting.ts:1102
 msgid "When creating a new to-do:"
 msgstr "Podczas tworzenia nowego zadania:"
 
-#: packages/app-desktop/ElectronAppWrapper.ts:164
+#: packages/lib/models/Setting.ts:846
+msgid ""
+"When enabled, the application will scan your attachments and extract the "
+"text from it. This will allow you to search for text in these attachments."
+msgstr ""
+
+#: packages/app-desktop/ElectronAppWrapper.ts:176
 msgid "Window unresponsive."
 msgstr "Okno przestało reagować."
 
@@ -5386,13 +5477,13 @@ msgid "yes"
 msgstr "tak"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:28
-#: packages/app-mobile/components/screens/Note.tsx:642
-#: packages/lib/shim-init-node.js:212 packages/lib/versionInfo.ts:78
+#: packages/app-mobile/components/screens/Note.tsx:761
+#: packages/lib/shim-init-node.ts:225 packages/lib/versionInfo.ts:78
 msgid "Yes"
 msgstr "Tak"
 
-#: packages/app-mobile/components/screens/Note.tsx:641
-#: packages/lib/shim-init-node.js:211
+#: packages/app-mobile/components/screens/Note.tsx:760
+#: packages/lib/shim-init-node.ts:224
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
@@ -5404,7 +5495,7 @@ msgstr ""
 msgid "You currently have no notebooks."
 msgstr "Brak aktywnych notatników."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:280
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:288
 msgid "You do not have any installed plugin."
 msgstr "Nie masz zainstalowanej żadnej wtyczki."
 
@@ -5449,12 +5540,12 @@ msgstr "Wymagane uprawnienie do użytkowania kamery."
 msgid "Your version: %s"
 msgstr "Twoja wersja: %s"
 
-#: packages/app-desktop/gui/MenuBar.tsx:792
-#: packages/app-desktop/gui/MenuBar.tsx:798
+#: packages/app-desktop/gui/MenuBar.tsx:793
+#: packages/app-desktop/gui/MenuBar.tsx:799
 msgid "Zoom In"
 msgstr "Powiększ"
 
-#: packages/app-desktop/gui/MenuBar.tsx:805
+#: packages/app-desktop/gui/MenuBar.tsx:806
 msgid "Zoom Out"
 msgstr "Pomniejsz"
 

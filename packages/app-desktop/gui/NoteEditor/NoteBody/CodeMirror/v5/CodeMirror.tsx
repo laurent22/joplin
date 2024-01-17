@@ -621,7 +621,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				resourceInfos: props.resourceInfos,
 				contentMaxWidth: props.contentMaxWidth,
 				mapsToLine: true,
-				// Always using useCustomPdfViewer for now, we can add a new setting for it in future if we need to.
 				useCustomPdfViewer: props.useCustomPdfViewer,
 				noteId: props.noteId,
 				vendorDir: bridge().vendorDir(),

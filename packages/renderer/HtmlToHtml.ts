@@ -3,6 +3,8 @@ import linkReplacement from './MdToHtml/linkReplacement';
 import utils, { ItemIdToUrlHandler } from './utils';
 import InMemoryCache from './InMemoryCache';
 import { RenderResult } from './MarkupToHtml';
+import noteStyle, { whiteBackgroundNoteStyle } from './noteStyle';
+import { Options as NoteStyleOptions } from './noteStyle';
 const md5 = require('md5');
 
 // Renderered notes can potentially be quite large (for example
@@ -39,6 +41,12 @@ interface RenderOptions {
 	enableLongPress: boolean;
 	itemIdToUrl?: ItemIdToUrlHandler;
 	allowedFilePrefixes?: string[];
+	whiteBackgroundNoteRendering?: boolean;
+
+	// For compatibility with MdToHtml options:
+	plugins?: {
+		link_open?: { linkRenderingType?: number };
+	};
 }
 
 // https://github.com/es-shims/String.prototype.trimStart/blob/main/implementation.js
@@ -81,14 +89,22 @@ export default class HtmlToHtml {
 		return this.fsDriver_;
 	}
 
-	public async allAssets(/* theme*/): Promise<any[]> {
-		return []; // TODO
+	public async allAssets(theme: any, noteStyleOptions: NoteStyleOptions = null) {
+		let cssStrings: string[] = [];
+
+		if (noteStyleOptions.whiteBackgroundNoteRendering) {
+			cssStrings = [whiteBackgroundNoteStyle()];
+		} else {
+			cssStrings = [noteStyle(theme, noteStyleOptions).join('\n')];
+		}
+
+		return [await this.fsDriver().cacheCssToFile(cssStrings)];
 	}
 
 	// Note: the "theme" variable is ignored and instead the light theme is
 	// always used for HTML notes.
 	// See: https://github.com/laurent22/joplin/issues/3698
-	public async render(markup: string, _theme: any, options: RenderOptions): Promise<RenderResult> {
+	public async render(markup: string, theme: any, options: RenderOptions): Promise<RenderResult> {
 		options = {
 			splitted: false,
 			postMessageSyntax: 'postMessage',
@@ -96,7 +112,7 @@ export default class HtmlToHtml {
 			...options,
 		};
 
-		const cacheKey = md5(escape(markup));
+		const cacheKey = md5(escape(JSON.stringify({ markup, options })));
 		let html = this.cache_.value(cacheKey);
 
 		if (!html) {
@@ -131,6 +147,7 @@ export default class HtmlToHtml {
 					ResourceModel: this.ResourceModel_,
 					postMessageSyntax: options.postMessageSyntax,
 					enableLongPress: options.enableLongPress,
+					...options.plugins?.link_open,
 				});
 
 				if (!r.html) return null;
@@ -152,9 +169,7 @@ export default class HtmlToHtml {
 			};
 		}
 
-		// const lightTheme = themeStyle(Setting.THEME_LIGHT);
-		// let cssStrings = noteStyle(lightTheme);
-		let cssStrings: string[] = [];
+		let cssStrings = options.whiteBackgroundNoteRendering ? [whiteBackgroundNoteStyle()] : noteStyle(theme);
 
 		if (options.splitted) {
 			const splitted = splitHtml(html);

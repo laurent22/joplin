@@ -50,6 +50,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -255,6 +258,9 @@
 		"ตัวหนา"
 	],
 	"Browse all plugins": [
+		""
+	],
+	"Built in": [
 		""
 	],
 	"Can view": [
@@ -742,6 +748,9 @@
 	],
 	"Enable note history": [
 		"เปิดใช้ประวัติบันทึกย้อนหลัง"
+	],
+	"Enable optical character recognition (OCR)": [
+		""
 	],
 	"Enable PDF viewer": [
 		""
@@ -1982,6 +1991,9 @@
 	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
 		""
 	],
+	"The following attachment matches your search query:": [
+		""
+	],
 	"The following attachments are being watched for changes:": [
 		""
 	],
@@ -2299,6 +2311,9 @@
 	],
 	"When creating a new to-do:": [
 		"เมื่อสร้าง to-do ใหม่:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""

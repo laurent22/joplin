@@ -56,6 +56,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -301,6 +304,9 @@
 	],
 	"Browse...": [
 		"Bladeren ..."
+	],
+	"Built in": [
+		""
 	],
 	"Bulleted List": [
 		"Opsommingstekens"
@@ -887,6 +893,9 @@
 	],
 	"Enable note history": [
 		"Schakel notitiehistoriek in"
+	],
+	"Enable optical character recognition (OCR)": [
+		""
 	],
 	"Enable PDF viewer": [
 		"Schakel PDF weergave in"
@@ -2695,6 +2704,9 @@
 	],
 	"When creating a new to-do:": [
 		"Wanneer u een nieuwe to-do aanmaakt:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""

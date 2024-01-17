@@ -64,7 +64,6 @@ export default function manifestFromObject(o: any): PluginManifest {
 		icons: getIcons(),
 
 		_recommended: getBoolean('_recommended', false, false),
-		_built_in: getBoolean('_built_in', false, false),
 	};
 
 	validatePluginId(manifest.id);

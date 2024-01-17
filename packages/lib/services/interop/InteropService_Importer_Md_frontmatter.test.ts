@@ -140,6 +140,13 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', () => {
 		expect(note.title).toBe('Distill for R Markdown');
 		expect(note.author).toBe('JJ Allaire');
 	});
+	it('should import Notesnook files with created and update timestamps', async () => {
+		const note = await importTestFile('notesnook_updated_created.md');
+
+		expect(note.title).toBe('Frontmatter test');
+		expect(note.user_created_time).toBe(Date.parse('2024-01-01T01:23:00.000'));
+		expect(note.user_updated_time).toBe(Date.parse('2024-01-02T04:56:00.000'));
+	});
 	it('should handle date formats with timezone information', async () => {
 		const note = await importTestFile('utc.md');
 

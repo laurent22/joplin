@@ -325,4 +325,21 @@ describe('ChangeModel', () => {
 		}
 	});
 
+	test('should not return the whole item if the option is disabled', async () => {
+		const { user } = await createUserAndSession(1, true);
+
+		const changeModel = await models().change();
+		changeModel.deltaIncludesItems_ = false;
+
+		await createItemTree3(user.id, '', '', [
+			{
+				id: '000000000000000000000000000000F1',
+				title: 'Folder 1',
+			},
+		]);
+
+		const result = await changeModel.delta(user.id);
+		expect('jopItem' in result.items[0]).toBe(false);
+	});
+
 });

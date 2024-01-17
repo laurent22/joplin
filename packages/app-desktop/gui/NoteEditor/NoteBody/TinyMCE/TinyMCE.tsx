@@ -14,7 +14,7 @@ import { _, closestSupportedLocale } from '@joplin/lib/locale';
 import useContextMenu from './utils/useContextMenu';
 import { copyHtmlToClipboard } from '../../utils/clipboardUtils';
 import shim from '@joplin/lib/shim';
-import { MarkupToHtml } from '@joplin/renderer';
+import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
 import { reg } from '@joplin/lib/registry';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import setupToolbarButtons from './utils/setupToolbarButtons';
@@ -28,6 +28,9 @@ import { TinyMceEditorEvents } from './utils/types';
 import type { Editor } from 'tinymce';
 import { joplinCommandToTinyMceCommands, TinyMceCommand } from './utils/joplinCommandToTinyMceCommands';
 import shouldPasteResources from './utils/shouldPasteResources';
+import lightTheme from '@joplin/lib/themes/light';
+import { Options as NoteStyleOptions } from '@joplin/renderer/noteStyle';
+const md5 = require('md5');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
@@ -86,8 +89,6 @@ interface LastOnChangeEventInfo {
 	contentKey: string;
 }
 
-let loadedCssFiles_: string[] = [];
-let loadedJsFiles_: string[] = [];
 let dispatchDidUpdateIID_: any = null;
 let changeId_ = 1;
 
@@ -354,6 +355,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 	useEffect(() => {
 		const theme = themeStyle(props.themeId);
+		const backgroundColor = props.whiteBackgroundNoteRendering ? lightTheme.backgroundColor : theme.backgroundColor;
 
 		const element = document.createElement('style');
 		element.setAttribute('id', 'tinyMceStyle');
@@ -375,12 +377,19 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			.tox .tox-dialog,
 			.tox textarea,
 			.tox input,
+			.tox .tox-menu,
 			.tox .tox-dialog__footer {
 				background-color: ${theme.backgroundColor} !important;
 			}
 
 			.tox .tox-dialog__body-content {
 				color: ${theme.color};
+			}
+
+			.tox .tox-menu {
+				/* Ensures that popover menus (the color swatch menu) has a visible border
+				   even in dark mode. */
+				border: 1px solid rgba(140, 140, 140, 0.3);
 			}
 
 			/*
@@ -404,6 +413,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 			.tox .tox-tbtn,
 			.tox .tox-tbtn svg,
+			.tox .tox-menu button > svg,
+			.tox .tox-split-button,
 			.tox .tox-dialog__header,
 			.tox .tox-button--icon .tox-icon svg,
 			.tox .tox-button.tox-button--icon .tox-icon svg,
@@ -425,7 +436,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 
 			.tox .tox-tbtn--enabled,
-			.tox .tox-tbtn--enabled:hover {
+			.tox .tox-tbtn--enabled:hover,
+			.tox .tox-menu button:hover,
+			.tox .tox-split-button {
 				background-color: ${theme.selectedColor};
 			}
 
@@ -433,11 +446,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				background-color: ${theme.backgroundColor} !important;
 			}
 			
-			.tox .tox-tbtn:focus {
+			.tox .tox-tbtn:focus,
+			.tox .tox-split-button:focus {
 				background-color: ${theme.backgroundColor3}
 			}
 			
-			.tox .tox-tbtn:hover {
+			.tox .tox-tbtn:hover,
+			.tox .tox-menu button:hover > svg {
 				color: ${theme.colorHover3} !important;
 				fill: ${theme.colorHover3} !important;
 				background-color: ${theme.backgroundColorHover3}
@@ -466,6 +481,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			.tox .tox-toolbar__overflow {
 				background: none;
 				background-color: ${theme.backgroundColor3} !important;
+			}
+
+			.tox .tox-split-button:hover {
+				box-shadow: none;
 			}
 
 			.tox-tinymce,
@@ -503,7 +522,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 
 			.joplin-tinymce .tox .tox-edit-area__iframe {
-				background-color: ${theme.backgroundColor} !important;
+				background-color: ${backgroundColor} !important;
 			}
 
 			.joplin-tinymce .tox .tox-toolbar__primary {
@@ -524,7 +543,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		//
 		// tl;dr: editorReady is used here because the css needs to be re-applied after TinyMCE init
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [editorReady, props.themeId]);
+	}, [editorReady, props.themeId, lightTheme, props.whiteBackgroundNoteRendering]);
 
 	// -----------------------------------------------------------------------------------------
 	// Enable or disable the editor
@@ -541,9 +560,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 	useEffect(() => {
 		if (!scriptLoaded) return;
-
-		loadedCssFiles_ = [];
-		loadedJsFiles_ = [];
 
 		const loadEditor = async () => {
 			const language = closestSupportedLocale(props.locale, true, supportedLocales);
@@ -614,6 +630,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					joplinSub: { inline: 'sub', remove: 'all' },
 					joplinSup: { inline: 'sup', remove: 'all' },
 					code: { inline: 'code', remove: 'all', attributes: { spellcheck: false } },
+					forecolor: { inline: 'span', styles: { color: '%value' } },
 				},
 				setup: (editor: Editor) => {
 					editor.addCommand('joplinAttach', () => {
@@ -739,13 +756,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	// Set the initial content and load the plugin CSS and JS files
 	// -----------------------------------------------------------------------------------------
 
-	const documentCssElements: Record<string, HTMLLinkElement> = {};
-	const documentScriptElements: Record<string, HTMLScriptElement> = {};
+	const loadDocumentAssets = (themeId: number, editor: any, pluginAssets: any[]) => {
+		const theme = themeStyle(themeId);
 
-	const loadDocumentAssets = (editor: any, pluginAssets: any[]) => {
-		const theme = themeStyle(props.themeId);
-
-		let docHead_: any = null;
+		let docHead_: HTMLHeadElement = null;
 
 		function docHead() {
 			if (docHead_) return docHead_;
@@ -768,58 +782,55 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				.map((a: any) => a.path),
 		);
 
+		const filePathToElementId = (path: string) => {
+			return `jop-tiny-mce-${md5(escape(path))}`;
+		};
+
+		const existingElements = Array.from(docHead().getElementsByClassName('jop-tinymce-css')).concat(Array.from(docHead().getElementsByClassName('jop-tinymce-js')));
+
+		const existingIds: string[] = [];
+		for (const e of existingElements) existingIds.push(e.getAttribute('id'));
+
+		const processedIds: string[] = [];
+
+		for (const cssFile of allCssFiles) {
+			const elementId = filePathToElementId(cssFile);
+			processedIds.push(elementId);
+			if (existingIds.includes(elementId)) continue;
+
+			const style = editor.dom.create('link', {
+				id: elementId,
+				rel: 'stylesheet',
+				type: 'text/css',
+				href: cssFile,
+				class: 'jop-tinymce-css',
+			});
+
+			docHead().appendChild(style);
+		}
+
+		for (const jsFile of allJsFiles) {
+			const elementId = filePathToElementId(jsFile);
+			processedIds.push(elementId);
+			if (existingIds.includes(elementId)) continue;
+
+			const script = editor.dom.create('script', {
+				id: filePathToElementId(jsFile),
+				type: 'text/javascript',
+				class: 'jop-tinymce-js',
+				src: jsFile,
+			});
+
+			docHead().appendChild(script);
+		}
 
 		// Remove all previously loaded files that aren't in the assets this time.
 		// Note: This is important to ensure that we properly change themes.
 		// See https://github.com/laurent22/joplin/issues/8520
-		for (const cssFile of loadedCssFiles_) {
-			if (!allCssFiles.includes(cssFile)) {
-				documentCssElements[cssFile]?.remove();
-				delete documentCssElements[cssFile];
-			}
-		}
-
-		for (const jsFile of loadedJsFiles_) {
-			if (!allJsFiles.includes(jsFile)) {
-				documentScriptElements[jsFile]?.remove();
-				delete documentScriptElements[jsFile];
-			}
-		}
-
-		const newCssFiles = allCssFiles.filter((path: string) => !loadedCssFiles_.includes(path));
-		const newJsFiles = allJsFiles.filter((path: string) => !loadedJsFiles_.includes(path));
-
-		loadedCssFiles_ = allCssFiles;
-		loadedJsFiles_ = allJsFiles;
-
-		// console.info('loadDocumentAssets: files to load', cssFiles, jsFiles);
-
-		if (newCssFiles.length) {
-			for (const cssFile of newCssFiles) {
-				const style = editor.dom.create('link', {
-					rel: 'stylesheet',
-					type: 'text/css',
-					href: cssFile,
-					class: 'jop-tinymce-css',
-				});
-
-				documentCssElements[cssFile] = style;
-				docHead().appendChild(style);
-			}
-		}
-
-		if (newJsFiles.length) {
-			const editorElementId = editor.dom.uniqueId();
-
-			for (const jsFile of newJsFiles) {
-				const script = editor.dom.create('script', {
-					id: editorElementId,
-					type: 'text/javascript',
-					src: jsFile,
-				});
-
-				documentScriptElements[jsFile] = script;
-				docHead().appendChild(script);
+		for (const existingId of existingIds) {
+			if (!processedIds.includes(existingId)) {
+				const element = existingElements.find(e => e.getAttribute('id') === existingId);
+				if (element) docHead().removeChild(element);
 			}
 		}
 	};
@@ -898,7 +909,14 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				};
 			}
 
-			await loadDocumentAssets(editor, await props.allAssets(props.contentMarkupLanguage, { contentMaxWidthTarget: '.mce-content-body' }));
+			const allAssetsOptions: NoteStyleOptions = {
+				contentMaxWidthTarget: '.mce-content-body',
+				themeId: props.contentMarkupLanguage === MarkupLanguage.Html ? 1 : null,
+				whiteBackgroundNoteRendering: props.whiteBackgroundNoteRendering,
+			};
+
+			const allAssets = await props.allAssets(props.contentMarkupLanguage, allAssetsOptions);
+			await loadDocumentAssets(props.themeId, editor, allAssets);
 
 			dispatchDidUpdate(editor);
 		};
@@ -909,7 +927,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			cancelled = true;
 		};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [editor, props.markupToHtml, props.allAssets, props.content, props.resourceInfos, props.contentKey]);
+	}, [editor, props.themeId, props.markupToHtml, props.allAssets, props.content, props.resourceInfos, props.contentKey, props.contentMarkupLanguage, props.whiteBackgroundNoteRendering]);
 
 	useEffect(() => {
 		if (!editor) return () => {};
@@ -1036,7 +1054,15 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			//
 			// Any maybe others, so to catch them all we only check the prefix
 
-			const changeCommands = ['mceBlockQuote', 'ToggleJoplinChecklistItem', 'Bold', 'Italic', 'Underline', 'Paragraph'];
+			const changeCommands = [
+				'mceBlockQuote',
+				'ToggleJoplinChecklistItem',
+				'Bold',
+				'Italic',
+				'Underline',
+				'Paragraph',
+				'mceApplyTextcolor',
+			];
 
 			if (
 				changeCommands.includes(c) ||

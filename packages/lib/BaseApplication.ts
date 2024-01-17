@@ -13,7 +13,7 @@ import SyncTargetOneDrive from './SyncTargetOneDrive';
 import { createStore, applyMiddleware, Store } from 'redux';
 const { defaultState, stateUtils } = require('./reducer');
 import JoplinDatabase from './JoplinDatabase';
-const { FoldersScreenUtils } = require('./folders-screen-utils.js');
+import { cancelTimers as folderScreenUtilsCancelTimers, refreshFolders, scheduleRefreshFolders } from './folders-screen-utils';
 const { DatabaseDriverNode } = require('./database-driver-node.js');
 import BaseModel from './BaseModel';
 import Folder from './models/Folder';
@@ -24,7 +24,7 @@ import { splitCommandString } from '@joplin/utils';
 import { reg } from './registry';
 import time from './time';
 import BaseSyncTarget from './BaseSyncTarget';
-const reduxSharedMiddleware = require('./components/shared/reduxSharedMiddleware');
+import reduxSharedMiddleware from './components/shared/reduxSharedMiddleware';
 const os = require('os');
 import dns = require('dns');
 import fs = require('fs-extra');
@@ -38,8 +38,8 @@ const SyncTargetDropbox = require('./SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('./SyncTargetAmazonS3.js');
 import EncryptionService from './services/e2ee/EncryptionService';
 import ResourceFetcher from './services/ResourceFetcher';
-import SearchEngineUtils from './services/searchengine/SearchEngineUtils';
-import SearchEngine, { ProcessResultsRow } from './services/searchengine/SearchEngine';
+import SearchEngineUtils from './services/search/SearchEngineUtils';
+import SearchEngine, { ProcessResultsRow } from './services/search/SearchEngine';
 import RevisionService from './services/RevisionService';
 import ResourceService from './services/ResourceService';
 import DecryptionWorker from './services/DecryptionWorker';
@@ -107,7 +107,7 @@ export default class BaseApplication {
 		await ResourceFetcher.instance().destroy();
 		await SearchEngine.instance().destroy();
 		await DecryptionWorker.instance().destroy();
-		await FoldersScreenUtils.cancelTimers();
+		await folderScreenUtilsCancelTimers();
 		await BaseItem.revisionService_.cancelTimers();
 		await ResourceService.instance().cancelTimers();
 		await reg.cancelTimers();
@@ -418,12 +418,11 @@ export default class BaseApplication {
 
 		const result = next(action);
 		let refreshNotes = false;
-		let refreshFolders: boolean | string = false;
-		// let refreshTags = false;
+		let doRefreshFolders: boolean | string = false;
 		let refreshNotesUseSelectedNoteId = false;
 		let refreshNotesHash = '';
 
-		await reduxSharedMiddleware(store, next, action);
+		await reduxSharedMiddleware(store, next, action, ((action: any) => { this.dispatch(action); }) as any);
 		const newState = store.getState() as State;
 
 		if (this.hasGui() && ['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
@@ -434,7 +433,7 @@ export default class BaseApplication {
 		// Don't add FOLDER_UPDATE_ALL as refreshFolders() is calling it too, which
 		// would cause the sidebar to refresh all the time.
 		if (this.hasGui() && ['FOLDER_UPDATE_ONE'].indexOf(action.type) >= 0) {
-			refreshFolders = true;
+			doRefreshFolders = true;
 		}
 
 		if (action.type === 'HISTORY_BACKWARD' || action.type === 'HISTORY_FORWARD') {
@@ -510,23 +509,23 @@ export default class BaseApplication {
 				action.changedFields.includes('encryption_applied') ||
 				action.changedFields.includes('is_conflict')
 			) {
-				refreshFolders = true;
+				doRefreshFolders = true;
 			}
 		}
 
 		if (action.type === 'NOTE_DELETE') {
-			refreshFolders = true;
+			doRefreshFolders = true;
 		}
 
 		if (this.hasGui() && action.type === 'SETTING_UPDATE_ALL') {
-			refreshFolders = 'now';
+			doRefreshFolders = 'now';
 		}
 
 		if (this.hasGui() && action.type === 'SETTING_UPDATE_ONE' && (
 			action.key.indexOf('folders.sortOrder') === 0 ||
 			action.key === 'showNoteCounts' ||
 			action.key === 'showCompletedTodos')) {
-			refreshFolders = 'now';
+			doRefreshFolders = 'now';
 		}
 
 		if (this.hasGui() && action.type === 'SYNC_GOT_ENCRYPTED_ITEM') {
@@ -543,11 +542,11 @@ export default class BaseApplication {
 			await this.applySettingsSideEffects();
 		}
 
-		if (refreshFolders) {
-			if (refreshFolders === 'now') {
-				await FoldersScreenUtils.refreshFolders();
+		if (doRefreshFolders) {
+			if (doRefreshFolders === 'now') {
+				await refreshFolders((action: any) => this.dispatch(action));
 			} else {
-				await FoldersScreenUtils.scheduleRefreshFolders();
+				await scheduleRefreshFolders((action: any) => this.dispatch(action));
 			}
 		}
 		return result;
@@ -571,8 +570,6 @@ export default class BaseApplication {
 		});
 
 		BaseModel.dispatch = this.store().dispatch;
-		FoldersScreenUtils.dispatch = this.store().dispatch;
-		// reg.dispatch = this.store().dispatch;
 		BaseSyncTarget.dispatch = this.store().dispatch;
 		DecryptionWorker.instance().dispatch = this.store().dispatch;
 		ResourceFetcher.instance().dispatch = this.store().dispatch;
@@ -582,8 +579,6 @@ export default class BaseApplication {
 	public deinitRedux() {
 		this.store_ = null;
 		BaseModel.dispatch = function() {};
-		FoldersScreenUtils.dispatch = function() {};
-		// reg.dispatch = function() {};
 		BaseSyncTarget.dispatch = function() {};
 		DecryptionWorker.instance().dispatch = function() {};
 		ResourceFetcher.instance().dispatch = function() {};

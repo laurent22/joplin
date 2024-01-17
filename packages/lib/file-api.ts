@@ -43,6 +43,14 @@ export interface PaginatedList {
 	context: any;
 }
 
+// Tells whether the delta call is going to include the items themselves or
+// just the metadata (which is the default). If the items are included it
+// means less http request and faster processing.
+export const getSupportsDeltaWithItems = (deltaResponse: PaginatedList) => {
+	if (!deltaResponse.items.length) return false;
+	return 'jopItem' in deltaResponse.items[0];
+};
+
 function requestCanBeRepeated(error: any) {
 	const errorCode = typeof error === 'object' && error.code ? error.code : null;
 
@@ -137,13 +145,6 @@ class FileApi {
 
 	public get supportsLocks(): boolean {
 		return !!this.driver().supportsLocks;
-	}
-
-	// Tells whether the delta call is going to include the items themselves or
-	// just the metadata (which is the default). If the items are included it
-	// means less http request and faster processing.
-	public get supportsDeltaWithItems(): boolean {
-		return !!this.driver().supportsDeltaWithItems;
 	}
 
 	private async fetchRemoteDateOffset_() {
@@ -361,7 +362,7 @@ class FileApi {
 		return tryAndRepeat(() => this.driver_.clearRoot(this.baseDir()), this.requestRepeatCount());
 	}
 
-	public delta(path: string, options: any = null) {
+	public delta(path: string, options: any = null): Promise<PaginatedList> {
 		logger.debug(`delta ${this.fullPath(path)}`);
 		return tryAndRepeat(() => this.driver_.delta(this.fullPath(path), options), this.requestRepeatCount());
 	}

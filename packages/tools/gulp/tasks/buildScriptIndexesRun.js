@@ -1,6 +1,6 @@
-// Allow running that task "buildCommandIndex" without gulp
+// Allow running that task "buildScriptIndexes" without gulp
 
-const task = require('./buildCommandIndex.js');
+const task = require('./buildScriptIndexes.js');
 
 const main = async () => {
 	await task.fn();

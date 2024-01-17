@@ -21,7 +21,7 @@
     "@joplin/lib": "~2.14",
     "@joplin/tools": "~2.14",
     "@joplin/utils": "~2.14",
-    "fs-extra": "11.1.1",
+    "fs-extra": "11.2.0",
     "gh-release-assets": "2.0.1",
     "node-fetch": "2.6.7",
     "source-map-support": "0.5.21",
@@ -30,7 +30,7 @@
   "devDependencies": {
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.8",
-    "@types/node": "18.18.14",
+    "@types/node": "18.19.3",
     "jest": "29.7.0",
     "source-map-loader": "4.0.1",
     "typescript": "5.2.2",

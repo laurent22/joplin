@@ -21,7 +21,7 @@
   "devDependencies": {
     "@types/jest": "29.5.8",
     "@types/markdown-it": "13.0.7",
-    "@types/node": "18.18.14",
+    "@types/node": "18.19.3",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
     "ts-jest": "29.1.1",
@@ -32,7 +32,7 @@
     "@joplin/fork-uslug": "^1.0.15",
     "@joplin/utils": "~2.14",
     "font-awesome-filetypes": "2.1.0",
-    "fs-extra": "11.1.1",
+    "fs-extra": "11.2.0",
     "highlight.js": "11.9.0",
     "html-entities": "1.4.0",
     "json-stringify-safe": "5.0.1",

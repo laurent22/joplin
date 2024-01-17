@@ -6,7 +6,7 @@ import { resourceService, decryptionWorker, supportDir, encryptionService, loadE
 import Folder from '../models/Folder';
 import Note from '../models/Note';
 import Resource from '../models/Resource';
-import SearchEngine from '../services/searchengine/SearchEngine';
+import SearchEngine from './search/SearchEngine';
 import { loadMasterKeysFromSettings, setupAndEnableEncryption } from './e2ee/utils';
 
 describe('services/ResourceService', () => {

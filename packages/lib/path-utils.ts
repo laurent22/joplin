@@ -39,6 +39,9 @@ export function isHidden(path: string) {
 	return b[0] === '.';
 }
 
+// Note that this function only sanitizes a file extension - it does NOT extract
+// the file extension from a filename. So the way you'd normally call this is
+// `safeFileExtension(fileExtension(filename))`
 export function safeFileExtension(e: string, maxLength: number = null) {
 	// In theory the file extension can have any length but in practice Joplin
 	// expects a fixed length, so we limit it to 20 which should cover most cases.

@@ -56,6 +56,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -316,6 +319,9 @@
 	],
 	"Browse...": [
 		"찾아보기..."
+	],
+	"Built in": [
+		""
 	],
 	"Bulleted List": [
 		"글머리 기호 목록"
@@ -964,6 +970,9 @@
 	],
 	"Enable note history": [
 		"노트 변경 이력 활성화"
+	],
+	"Enable optical character recognition (OCR)": [
+		""
 	],
 	"Enable PDF viewer": [
 		"PDF 보기 활성화"
@@ -2962,6 +2971,9 @@
 	],
 	"When creating a new to-do:": [
 		"새로운 '할 일'을 만들 때:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""
