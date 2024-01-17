@@ -4,7 +4,7 @@ import { WebViewMessageEvent } from 'react-native-webview';
 import { PluginHtmlContents, PluginViewState, ViewInfo } from '@joplin/lib/services/plugins/reducer';
 import WebviewController, { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import RNToWebViewMessenger from '../../utils/ipc/RNToWebViewMessenger';
-import { DialogLocalApi, DialogRemoteApi } from './types';
+import { DialogWebViewApi, DialogMainProcessApi } from './types';
 import shim from '@joplin/lib/shim';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import Logger from '@joplin/utils/Logger';
@@ -16,7 +16,7 @@ const logger = Logger.create('PluginViewController');
 
 interface DialogRecord {
 	viewInfo: ViewInfo;
-	messenger: RNToWebViewMessenger<DialogRemoteApi, DialogLocalApi>;
+	messenger: RNToWebViewMessenger<DialogMainProcessApi, DialogWebViewApi>;
 }
 
 type SetWebViewVisibleCallback = (visible: boolean)=> void;
@@ -91,7 +91,7 @@ export default class PluginViewController {
 		const viewController = plugin.viewController(viewInfo.view.id) as WebviewController;
 
 		let submitted = false;
-		const dialogApi: DialogRemoteApi = {
+		const dialogApi: DialogMainProcessApi = {
 			postMessage: async (message: SerializableData) => {
 				return await viewController.emitMessage({ message });
 			},
@@ -119,7 +119,7 @@ export default class PluginViewController {
 			},
 		};
 
-		const messenger = new RNToWebViewMessenger<DialogRemoteApi, DialogLocalApi>(
+		const messenger = new RNToWebViewMessenger<DialogMainProcessApi, DialogWebViewApi>(
 			messageChannelId, this.webviewRef, dialogApi,
 		);
 		const html = this.pluginHtmlContents[plugin.id]?.[viewInfo.view.id] ?? '';

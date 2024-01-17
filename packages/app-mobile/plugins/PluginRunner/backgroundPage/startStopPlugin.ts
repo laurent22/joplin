@@ -1,13 +1,13 @@
 import RemoteMessenger from '@joplin/lib/utils/ipc/RemoteMessenger';
-import { PluginApi, PluginWebViewApi } from '../types';
+import { PluginMainProcessApi, PluginWebViewApi } from '../types';
 import WebViewToRNMessenger from '../../../utils/ipc/WebViewToRNMessenger';
 import WindowMessenger from '@joplin/lib/utils/ipc/WindowMessenger';
 import makeSandboxedIframe from './utils/makeSandboxedIframe';
 
 type PluginRecord = {
 	iframe: HTMLIFrameElement;
-	connectionToParent: RemoteMessenger<PluginWebViewApi, PluginApi>|null;
-	connectionToIframe: RemoteMessenger<PluginApi, PluginWebViewApi>|null;
+	connectionToParent: RemoteMessenger<PluginWebViewApi, PluginMainProcessApi>|null;
+	connectionToIframe: RemoteMessenger<PluginMainProcessApi, PluginWebViewApi>|null;
 };
 
 const loadedPlugins: Record<string, PluginRecord> = Object.create(null);
@@ -63,8 +63,8 @@ export const runPlugin = (
 		}
 
 		// Chain connectionToParent with connectionToIframe
-		const connectionToParent = new WebViewToRNMessenger<PluginWebViewApi, PluginApi>(messageChannelId, null);
-		const connectionToIframe = new WindowMessenger<PluginApi, PluginWebViewApi>(
+		const connectionToParent = new WebViewToRNMessenger<PluginWebViewApi, PluginMainProcessApi>(messageChannelId, null);
+		const connectionToIframe = new WindowMessenger<PluginMainProcessApi, PluginWebViewApi>(
 			messageChannelId, backgroundIframe.contentWindow, connectionToParent.remoteApi,
 		);
 

@@ -5,7 +5,7 @@ import { WebViewControl } from '../../components/ExtendedWebView';
 import { RefObject } from 'react';
 import { WebViewMessageEvent } from 'react-native-webview';
 import RNToWebViewMessenger from '../../utils/ipc/RNToWebViewMessenger';
-import { PluginApi, PluginWebViewApi } from './types';
+import { PluginMainProcessApi, PluginWebViewApi } from './types';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 
@@ -30,7 +30,7 @@ export default class PluginRunner extends BasePluginRunner {
 		};
 
 		const messageChannelId = `plugin-message-channel-${pluginId}-${Date.now()}`;
-		const messenger = new RNToWebViewMessenger<PluginApi, PluginWebViewApi>(
+		const messenger = new RNToWebViewMessenger<PluginMainProcessApi, PluginWebViewApi>(
 			messageChannelId, this.webviewRef.current, { api: pluginApi, onError },
 		);
 

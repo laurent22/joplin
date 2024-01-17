@@ -1,6 +1,6 @@
 import { ButtonSpec } from '@joplin/lib/services/plugins/api/types';
 import WebViewToRNMessenger from '../../../utils/ipc/WebViewToRNMessenger';
-import { DialogLocalApi, DialogRemoteApi } from '../types';
+import { DialogWebViewApi, DialogMainProcessApi } from '../types';
 import WindowMessenger from '@joplin/lib/utils/ipc/WindowMessenger';
 import RemoteMessenger from '@joplin/lib/utils/ipc/RemoteMessenger';
 import type { PluginViewState } from '@joplin/lib/services/plugins/reducer';
@@ -14,10 +14,10 @@ const initializeMessengers = (
 ) => {
 	// We connect the dialog iframe and ReactNative so that React Native messages
 	// reach the iframe (and the reverse).
-	const rnConnection = new WebViewToRNMessenger<DialogLocalApi, DialogRemoteApi>(
+	const rnConnection = new WebViewToRNMessenger<DialogWebViewApi, DialogMainProcessApi>(
 		messageChannelId, null,
 	);
-	const iframeConnection = new WindowMessenger<DialogRemoteApi, DialogLocalApi>(
+	const iframeConnection = new WindowMessenger<DialogMainProcessApi, DialogWebViewApi>(
 		messageChannelId, iframe.contentWindow, rnConnection.remoteApi,
 	);
 
@@ -53,8 +53,8 @@ const openDialog = async (messageChannelId: string, pluginBackgroundScript: stri
 
 	await loadPromise;
 
-	let iframeConnection: RemoteMessenger<DialogRemoteApi, DialogLocalApi>|null = null;
-	let rnConnection: RemoteMessenger<DialogLocalApi, DialogRemoteApi>|null = null;
+	let iframeConnection: RemoteMessenger<DialogMainProcessApi, DialogWebViewApi>|null = null;
+	let rnConnection: RemoteMessenger<DialogWebViewApi, DialogMainProcessApi>|null = null;
 
 	const closeDialog = () => {
 		dialogContainer.remove();

@@ -1,5 +1,5 @@
 import WindowMessenger from '@joplin/lib/utils/ipc/WindowMessenger';
-import { DialogLocalApi, DialogRemoteApi } from '../types';
+import { DialogWebViewApi, DialogMainProcessApi } from '../types';
 import reportUnhandledErrors from './utils/reportUnhandledErrors';
 
 let iframeCssElement: HTMLStyleElement|null = null;
@@ -35,7 +35,7 @@ const initializeDialogIframe = (messageChannelId: string) => {
 		setButtons: () => {},
 		closeDialog: () => {},
 	};
-	const messenger = new WindowMessenger<DialogLocalApi, DialogRemoteApi>(messageChannelId, parent, localApi);
+	const messenger = new WindowMessenger<DialogWebViewApi, DialogMainProcessApi>(messageChannelId, parent, localApi);
 
 	(window as any).webviewApi = {
 		postMessage: messenger.remoteApi.postMessage,
