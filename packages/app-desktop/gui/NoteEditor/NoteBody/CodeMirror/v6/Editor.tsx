@@ -8,7 +8,7 @@ import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
 import shim from '@joplin/lib/shim';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
-import setupVim from '../utils/setupVim';
+import setupVim from '@joplin/editor/CodeMirror/util/setupVim';
 
 interface Props extends EditorProps {
 	style: React.CSSProperties;

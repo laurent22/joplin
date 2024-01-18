@@ -1,10 +1,10 @@
 import htmlUtils from './htmlUtils';
 import linkReplacement from './MdToHtml/linkReplacement';
-import utils, { ItemIdToUrlHandler } from './utils';
+import * as utils from './utils';
 import InMemoryCache from './InMemoryCache';
-import { RenderResult } from './MarkupToHtml';
 import noteStyle, { whiteBackgroundNoteStyle } from './noteStyle';
 import { Options as NoteStyleOptions } from './noteStyle';
+import { FsDriver, MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult } from './types';
 const md5 = require('md5');
 
 // Renderered notes can potentially be quite large (for example
@@ -17,36 +17,10 @@ export interface SplittedHtml {
 	css: string;
 }
 
-interface FsDriver {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	writeFile: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	exists: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	cacheCssToFile: Function;
-}
-
 interface Options {
-	ResourceModel: any;
+	ResourceModel: OptionsResourceModel;
 	resourceBaseUrl?: string;
 	fsDriver?: FsDriver;
-}
-
-interface RenderOptions {
-	splitted: boolean;
-	bodyOnly: boolean;
-	externalAssetsOnly: boolean;
-	resources: any;
-	postMessageSyntax: string;
-	enableLongPress: boolean;
-	itemIdToUrl?: ItemIdToUrlHandler;
-	allowedFilePrefixes?: string[];
-	whiteBackgroundNoteRendering?: boolean;
-
-	// For compatibility with MdToHtml options:
-	plugins?: {
-		link_open?: { linkRenderingType?: number };
-	};
 }
 
 // https://github.com/es-shims/String.prototype.trimStart/blob/main/implementation.js
@@ -56,12 +30,12 @@ function trimStart(s: string): string {
 	return s.replace(startWhitespace, '');
 }
 
-export default class HtmlToHtml {
+export default class HtmlToHtml implements MarkupRenderer {
 
 	private resourceBaseUrl_;
 	private ResourceModel_;
 	private cache_;
-	private fsDriver_: any;
+	private fsDriver_: FsDriver;
 
 	public constructor(options: Options = null) {
 		options = {
@@ -99,6 +73,10 @@ export default class HtmlToHtml {
 		}
 
 		return [await this.fsDriver().cacheCssToFile(cssStrings)];
+	}
+
+	public clearCache(): void {
+		// TODO: Clear the in-memory cache
 	}
 
 	// Note: the "theme" variable is ignored and instead the light theme is
