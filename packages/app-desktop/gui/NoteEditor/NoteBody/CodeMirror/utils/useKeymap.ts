@@ -4,7 +4,7 @@ import KeymapService, { KeymapItem } from '@joplin/lib/services/KeymapService';
 import { EditorCommand } from '../../../utils/types';
 import shim from '@joplin/lib/shim';
 import { reg } from '@joplin/lib/registry';
-import setupVim from './setupVim';
+import setupVim from '@joplin/editor/CodeMirror/util/setupVim';
 import { EventName } from '@joplin/lib/eventManager';
 
 export default function useKeymap(CodeMirror: any) {
