@@ -622,7 +622,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Nie udało się zweryfikować statusu udostępnienia tego notatnika - przerywanie. Proszę spróbować ponownie, gdy będziesz podłączony do internetu."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"Nie udało się zweryfikować twojej tożsamości: %s"
 	],
 	"Create": [

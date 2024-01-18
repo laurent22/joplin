@@ -1090,7 +1090,7 @@ msgstr ""
 "اینترنت وصل شدید، دوباره امتحان نمایید."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-msgid "Could not verify your identify: %s"
+msgid "Could not verify your identity: %s"
 msgstr "هویت شما تأیید نشد: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235

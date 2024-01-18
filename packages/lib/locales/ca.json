@@ -606,7 +606,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"No s'ha pogut verificar l'estat de compartició d'aquest bloc de notes - s'està avortant. Torneu a provar quan tingueu connexió a Internet."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"No s'ha pogut verificar la identitat: %s"
 	],
 	"Create": [

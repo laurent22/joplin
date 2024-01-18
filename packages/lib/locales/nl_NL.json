@@ -606,7 +606,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Kan de sharestatus van dit notitieblok - aborteren - niet controleren. Probeer het opnieuw wanneer u verbonden bent met internet."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"Identiteit niet gecontroleerd: %s"
 	],
 	"Create": [

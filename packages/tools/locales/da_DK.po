@@ -1100,7 +1100,7 @@ msgstr ""
 "venligst igen, når du har forbindelse til internettet."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-msgid "Could not verify your identify: %s"
+msgid "Could not verify your identity: %s"
 msgstr "Kunne ikke bekræfte din identitet: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235

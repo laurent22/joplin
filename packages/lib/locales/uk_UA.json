@@ -601,7 +601,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Не вдалося перевірити статус спільного використання цього блокнота – перериваю. Спробуйте ще раз, коли Ви підключитесь до Інтернету."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"Не вдалося підтвердити Вашу особу: %is"
 	],
 	"Create": [

@@ -1100,7 +1100,7 @@ msgstr ""
 "ediliyor. Lütfen internet bağlantınız varken bu işlemi yeniden deneyin."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-msgid "Could not verify your identify: %s"
+msgid "Could not verify your identity: %s"
 msgstr "Kimliğiniz doğrulanamadı: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235

@@ -1103,7 +1103,7 @@ msgstr ""
 "przerywanie. Proszę spróbować ponownie, gdy będziesz podłączony do internetu."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-msgid "Could not verify your identify: %s"
+msgid "Could not verify your identity: %s"
 msgstr "Nie udało się zweryfikować twojej tożsamości: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235

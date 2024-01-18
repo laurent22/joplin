@@ -617,7 +617,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"無法驗證此筆記本的共享狀態 - 正在中止。請連接網路後重試。"
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"無法驗證您的身份：%s"
 	],
 	"Create": [

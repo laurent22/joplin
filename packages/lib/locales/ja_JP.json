@@ -611,7 +611,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"このノートブックの共有状態を確認できなかったため処理を中断します。インターネット接続を確認してから再度お試しください。"
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"IDを確認できませんでした: %s"
 	],
 	"Create": [

@@ -615,7 +615,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Impossibile verificare lo stato di condivisione di questo taccuino. Interruzione in corso. Riprova quando sei connesso a Internet."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"Impossibile verificare la tua identità: %s"
 	],
 	"Create": [

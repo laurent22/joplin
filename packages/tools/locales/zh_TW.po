@@ -1064,7 +1064,7 @@ msgid ""
 msgstr "無法驗證此筆記本的共享狀態 - 正在中止。請連接網路後重試。"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-msgid "Could not verify your identify: %s"
+msgid "Could not verify your identity: %s"
 msgstr "無法驗證您的身份：%s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235

@@ -1096,7 +1096,7 @@ msgstr ""
 "ponovo kad uspostaviš vezu s internetom."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-msgid "Could not verify your identify: %s"
+msgid "Could not verify your identity: %s"
 msgstr "Neuspjela provjera tvoje identifikacije: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235

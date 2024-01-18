@@ -1061,7 +1061,7 @@ msgid ""
 msgstr "无法验证此笔记的分享状态 — 正在终止。请在连接到互联网后再次尝试。"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-msgid "Could not verify your identify: %s"
+msgid "Could not verify your identity: %s"
 msgstr "无法验证您的身份: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235
