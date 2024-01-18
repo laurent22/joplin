@@ -30,7 +30,7 @@ locales['nl_NL'] = require('./nl_NL.json');
 locales['pl_PL'] = require('./pl_PL.json');
 locales['pt_BR'] = require('./pt_BR.json');
 locales['pt_PT'] = require('./pt_PT.json');
-locales['ro'] = require('./ro.json');
+locales['ro_RO'] = require('./ro_RO.json');
 locales['ru_RU'] = require('./ru_RU.json');
 locales['sl_SI'] = require('./sl_SI.json');
 locales['sr_RS'] = require('./sr_RS.json');
@@ -68,7 +68,7 @@ stats['fa'] = {"percentDone":98,"pluralForms":"nplurals=2; plural=(n==0 || n==1)
 stats['pl_PL'] = {"percentDone":99,"pluralForms":"nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);"};
 stats['pt_BR'] = {"percentDone":99,"pluralForms":"nplurals=2; plural=(n > 1);"};
 stats['pt_PT'] = {"percentDone":67,"pluralForms":"nplurals=2; plural=(n != 1);"};
-stats['ro'] = {"percentDone":47,"pluralForms":"nplurals=3; plural=(n==1 ? 0 : n==0 || (n!=1 && n%100>=1 && n%100<=19) ? 1 : 2);"};
+stats['ro_RO'] = {"percentDone":99,"pluralForms":"nplurals=3; plural=(n==1 ? 0 : n==0 || (n!=1 && n%100>=1 && n%100<=19) ? 1 : 2);"};
 stats['sl_SI'] = {"percentDone":74,"pluralForms":"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"};
 stats['sv'] = {"percentDone":95,"pluralForms":"nplurals=2; plural=(n != 1);"};
 stats['th_TH'] = {"percentDone":34,"pluralForms":"nplurals=1; plural=0;"};
