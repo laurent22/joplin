@@ -129,6 +129,10 @@ class Application extends BaseApplication {
 			this.setupOcrService();
 		}
 
+		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'autoUploadCrashDumps') {
+			bridge().autoUploadCrashDumps = action.value;
+		}
+
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'style.editor.fontFamily' || action.type === 'SETTING_UPDATE_ALL') {
 			this.updateEditorFont();
 		}
@@ -405,6 +409,8 @@ class Application extends BaseApplication {
 		if (!bridge().electronIsDev()) argv.splice(1, 0, '.');
 
 		argv = await super.start(argv);
+
+		bridge().autoUploadCrashDumps = Setting.value('autoUploadCrashDumps');
 
 		// this.crashDetectionHandler();
 

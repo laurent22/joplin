@@ -31,6 +31,8 @@ const React = require('react');
 const nodeSqlite = require('sqlite3');
 const initLib = require('@joplin/lib/initLib').default;
 const pdfJs = require('pdfjs-dist');
+require('@sentry/electron/renderer');
+
 
 const main = async () => {
 	if (bridge().env() === 'dev') {

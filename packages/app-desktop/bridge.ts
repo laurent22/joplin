@@ -3,6 +3,7 @@ import shim from '@joplin/lib/shim';
 import { _, setLocale } from '@joplin/lib/locale';
 import { BrowserWindow, nativeTheme, nativeImage } from 'electron';
 const { dirname, toSystemSlashes } = require('@joplin/lib/path-utils');
+import * as Sentry from '@sentry/electron/main';
 
 interface LastSelectedPath {
 	file: string;
@@ -20,6 +21,7 @@ export class Bridge {
 
 	private electronWrapper_: ElectronAppWrapper;
 	private lastSelectedPaths_: LastSelectedPath;
+	private autoUploadCrashDumps_ = false;
 
 	public constructor(electronWrapper: ElectronAppWrapper) {
 		this.electronWrapper_ = electronWrapper;
@@ -27,6 +29,11 @@ export class Bridge {
 			file: null,
 			directory: null,
 		};
+
+		Sentry.init({
+			dsn: 'https://cceec550871b1e8a10fee4c7a28d5cf2@o4506576757522432.ingest.sentry.io/4506594281783296',
+			beforeSend: event => this.autoUploadCrashDumps_ ? event : null,
+		});
 	}
 
 	public electronApp() {
@@ -35,6 +42,14 @@ export class Bridge {
 
 	public electronIsDev() {
 		return !this.electronApp().electronApp().isPackaged;
+	}
+
+	public get autoUploadCrashDumps() {
+		return this.autoUploadCrashDumps_;
+	}
+
+	public set autoUploadCrashDumps(v: boolean) {
+		this.autoUploadCrashDumps_ = v;
 	}
 
 	// The build directory contains additional external files that are going to

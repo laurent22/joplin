@@ -152,6 +152,7 @@
     "@joplin/lib": "~2.14",
     "@joplin/renderer": "~2.14",
     "@joplin/utils": "~2.14",
+    "@sentry/electron": "4.17.0",
     "@types/mustache": "4.2.5",
     "async-mutex": "0.4.0",
     "codemirror": "5.65.9",
