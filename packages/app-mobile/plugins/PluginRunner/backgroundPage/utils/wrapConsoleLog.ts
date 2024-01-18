@@ -22,6 +22,13 @@ const wrapConsoleLog = (onLog: OnLogCallback) => {
 			} catch (error) {
 				argsString = `Error converting console arguments to string: ${error}`;
 			}
+
+			// Don't send very long log messages.
+			const maxLength = 4096;
+			if (argsString.length > maxLength) {
+				argsString = `${argsString.substring(0, maxLength)}...`;
+			}
+
 			onLog(logLevel, argsString);
 		} as any;
 	};
