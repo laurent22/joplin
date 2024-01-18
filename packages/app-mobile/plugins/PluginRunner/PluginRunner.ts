@@ -47,8 +47,6 @@ export default class PluginRunner extends BasePluginRunner {
 		});
 
 		this.webviewRef.current.injectJS(`
-			const pluginScript = ${JSON.stringify(plugin.scriptText)};
-
 			pluginBackgroundPage.runPlugin(
 				${JSON.stringify(shim.injectedJs('pluginBackgroundPage'))},
 				${JSON.stringify(plugin.scriptText)},
