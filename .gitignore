@@ -714,6 +714,7 @@ packages/lib/models/utils/itemCanBeEncrypted.js
 packages/lib/models/utils/paginatedFeed.js
 packages/lib/models/utils/paginationToSql.js
 packages/lib/models/utils/readOnly.js
+packages/lib/models/utils/resourceUtils.js
 packages/lib/models/utils/types.js
 packages/lib/models/utils/userData.test.js
 packages/lib/models/utils/userData.js
@@ -1036,13 +1037,15 @@ packages/renderer/MdToHtml/rules/sanitize_html.js
 packages/renderer/MdToHtml/rules/source_map.js
 packages/renderer/MdToHtml/setupLinkify.js
 packages/renderer/MdToHtml/validateLinks.js
+packages/renderer/assetsToHeaders.js
+packages/renderer/defaultResourceModel.js
 packages/renderer/headerAnchor.js
 packages/renderer/highlight.js
 packages/renderer/htmlUtils.test.js
 packages/renderer/htmlUtils.js
 packages/renderer/index.js
 packages/renderer/noteStyle.js
-packages/renderer/pathUtils.js
+packages/renderer/types.js
 packages/renderer/utils.js
 packages/tools/build-release-stats.test.js
 packages/tools/build-release-stats.js

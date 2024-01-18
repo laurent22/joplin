@@ -1,3 +1,4 @@
+import defaultResourceModel from '../defaultResourceModel';
 import linkReplacement from './linkReplacement';
 import { describe, test, expect } from '@jest/globals';
 
@@ -24,7 +25,7 @@ describe('linkReplacement', () => {
 		const resourceId = 'f6afba55bdf74568ac94f8d1e3578d2c';
 
 		const r = linkReplacement(`:/${resourceId}`, {
-			ResourceModel: {},
+			ResourceModel: defaultResourceModel,
 			resources: {
 				[resourceId]: {
 					item: {},
@@ -42,7 +43,7 @@ describe('linkReplacement', () => {
 		const resourceId = 'f6afba55bdf74568ac94f8d1e3578d2c';
 
 		const r = linkReplacement(`:/${resourceId}`, {
-			ResourceModel: {},
+			ResourceModel: defaultResourceModel,
 			resources: {
 				[resourceId]: {
 					item: {},
@@ -62,7 +63,7 @@ describe('linkReplacement', () => {
 		const resourceId = 'e6afba55bdf74568ac94f8d1e3578d2c';
 
 		const linkHtml = linkReplacement(`:/${resourceId}`, {
-			ResourceModel: {},
+			ResourceModel: defaultResourceModel,
 			resources: {
 				[resourceId]: {
 					item: {},
