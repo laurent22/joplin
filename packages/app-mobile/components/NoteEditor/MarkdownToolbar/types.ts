@@ -28,7 +28,6 @@ export interface ButtonSpec {
 	disabled?: boolean;
 	visible?: boolean;
 }
-
 export interface ButtonGroup {
 	title: string;
 	items: ButtonSpec[];

@@ -1,6 +1,6 @@
 // A toolbar for the markdown editor.
 
-const React = require('react');
+import * as React from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import { useMemo } from 'react';
 
@@ -18,7 +18,7 @@ import useKeyboardVisible from '../hooks/useKeyboardVisible';
 import usePluginButtons from './buttons/usePluginButtons';
 
 
-const MarkdownToolbar = (props: MarkdownToolbarProps) => {
+const MarkdownToolbar: React.FC<MarkdownToolbarProps> = (props: MarkdownToolbarProps) => {
 	const themeData = props.editorSettings.themeData;
 	const styles = useStyles(props.style, themeData);
 

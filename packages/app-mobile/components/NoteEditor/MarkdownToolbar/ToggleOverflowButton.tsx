@@ -1,4 +1,4 @@
-const React = require('react');
+import * as React from 'react';
 
 import { _ } from '@joplin/lib/locale';
 import ToolbarButton from './ToolbarButton';
@@ -12,7 +12,7 @@ interface ToggleOverflowButtonProps {
 }
 
 // Button that shows/hides the overflow menu.
-const ToggleOverflowButton = (props: ToggleOverflowButtonProps) => {
+const ToggleOverflowButton: React.FC<ToggleOverflowButtonProps> = (props: ToggleOverflowButtonProps) => {
 	const spec: ButtonSpec = {
 		icon: 'material more-horiz',
 		description:

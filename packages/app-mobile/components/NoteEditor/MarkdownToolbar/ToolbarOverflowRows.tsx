@@ -1,11 +1,11 @@
+import * as React from 'react';
+
 import { _ } from '@joplin/lib/locale';
 import { ReactElement, useCallback, useState } from 'react';
 import { LayoutChangeEvent, ScrollView, View } from 'react-native';
 import ToggleOverflowButton from './ToggleOverflowButton';
 import ToolbarButton, { buttonSize } from './ToolbarButton';
 import { ButtonGroup, ButtonSpec, StyleSheetData } from './types';
-
-const React = require('react');
 
 type OnToggleOverflowCallback = ()=> void;
 interface OverflowPopupProps {
@@ -23,7 +23,7 @@ const paddingButtonSpec = { visible: false, icon: '', onPress: ()=>{}, descripti
 // Contains buttons that overflow the available space.
 // Displays all buttons in [props.buttonGroups] if [props.visible].
 // Otherwise, displays nothing.
-const ToolbarOverflowRows = (props: OverflowPopupProps) => {
+const ToolbarOverflowRows: React.FC<OverflowPopupProps> = (props: OverflowPopupProps) => {
 	const overflowRows: ReactElement[] = [];
 
 	let key = 0;
