@@ -1,6 +1,7 @@
 import WindowMessenger from '@joplin/lib/utils/ipc/WindowMessenger';
 import { PluginMainProcessApi, PluginWebViewApi } from '../types';
 import reportUnhandledErrors from './utils/reportUnhandledErrors';
+import wrapConsoleLog from './utils/wrapConsoleLog';
 
 
 export const initializePluginBackgroundIframe = async (messageChannelId: string) => {
@@ -11,6 +12,7 @@ export const initializePluginBackgroundIframe = async (messageChannelId: string)
 	(window as any).joplin = messenger.remoteApi.api.joplin;
 
 	reportUnhandledErrors(messenger.remoteApi.onError);
+	wrapConsoleLog(messenger.remoteApi.onLog);
 };
 
 export default initializePluginBackgroundIframe;

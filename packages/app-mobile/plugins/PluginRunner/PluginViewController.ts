@@ -11,8 +11,7 @@ import Logger from '@joplin/utils/Logger';
 import { ButtonSpec } from '@joplin/lib/services/plugins/api/types';
 import { _ } from '@joplin/lib/locale';
 import { SerializableData } from '@joplin/lib/utils/ipc/types';
-
-const logger = Logger.create('PluginViewController');
+import createOnLogHander from './utils/createOnLogHandler';
 
 interface DialogRecord {
 	viewInfo: ViewInfo;
@@ -83,6 +82,7 @@ export default class PluginViewController {
 	private async showDialog(viewInfo: ViewInfo) {
 		const messageChannelId = `dialog-${viewInfo.plugin.id}-${viewInfo.view.id}`;
 
+		const logger = Logger.create(`Plugin ${viewInfo.plugin.id} dialog`);
 		logger.info(`Showing dialog ${viewInfo.view.id} from plugin ${viewInfo.plugin.id}...`);
 		this.setWebViewVisible(true);
 
@@ -114,9 +114,10 @@ export default class PluginViewController {
 				this.closeDialog(viewInfo);
 			},
 			onError: async (error: string) => {
-				logger.error(`Plugin ${pluginState.id} dialog error: ${error}`);
+				logger.error(`Unhandled error: ${error}`);
 				plugin.hasErrors = true;
 			},
+			onLog: createOnLogHander(plugin, logger),
 		};
 
 		const messenger = new RNToWebViewMessenger<DialogMainProcessApi, DialogWebViewApi>(
@@ -140,7 +141,7 @@ export default class PluginViewController {
 
 		this.webviewRef.current.injectJS(`
 			const pluginScript = ${JSON.stringify(plugin.scriptText)};
-			console.log('Running plugin with script', pluginScript);
+			console.log('Opening plugin dialog...');
 
 			pluginBackgroundPage.openDialog(
 				${JSON.stringify(messageChannelId)},

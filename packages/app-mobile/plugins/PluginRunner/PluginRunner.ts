@@ -8,6 +8,7 @@ import RNToWebViewMessenger from '../../utils/ipc/RNToWebViewMessenger';
 import { PluginMainProcessApi, PluginWebViewApi } from './types';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
+import createOnLogHander from './utils/createOnLogHandler';
 
 const logger = Logger.create('PluginRunner');
 
@@ -24,14 +25,17 @@ export default class PluginRunner extends BasePluginRunner {
 		const pluginId = plugin.id;
 		logger.info('Running plugin with id', pluginId);
 
+		const pluginLogger = Logger.create(`Plugin ${plugin.id}`);
+
+		const onLog = createOnLogHander(plugin, pluginLogger);
 		const onError = async (message: string) => {
-			logger.error(`Plugin ${pluginId}: ${message}`);
+			pluginLogger.error(message);
 			plugin.hasErrors = true;
 		};
 
 		const messageChannelId = `plugin-message-channel-${pluginId}-${Date.now()}`;
 		const messenger = new RNToWebViewMessenger<PluginMainProcessApi, PluginWebViewApi>(
-			messageChannelId, this.webviewRef.current, { api: pluginApi, onError },
+			messageChannelId, this.webviewRef.current, { api: pluginApi, onError, onLog },
 		);
 
 		this.messageEventListeners.push((event) => {
@@ -44,7 +48,6 @@ export default class PluginRunner extends BasePluginRunner {
 
 		this.webviewRef.current.injectJS(`
 			const pluginScript = ${JSON.stringify(plugin.scriptText)};
-			console.log('Running plugin with script', pluginScript);
 
 			pluginBackgroundPage.runPlugin(
 				${JSON.stringify(shim.injectedJs('pluginBackgroundPage'))},

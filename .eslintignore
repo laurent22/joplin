@@ -568,7 +568,9 @@ packages/app-mobile/plugins/PluginRunner/backgroundPage/pluginRunnerBackgroundPa
 packages/app-mobile/plugins/PluginRunner/backgroundPage/startStopPlugin.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/makeSandboxedIframe.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/reportUnhandledErrors.js
+packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/wrapConsoleLog.js
 packages/app-mobile/plugins/PluginRunner/types.js
+packages/app-mobile/plugins/PluginRunner/utils/createOnLogHandler.js
 packages/app-mobile/plugins/loadPlugins.js
 packages/app-mobile/root.js
 packages/app-mobile/services/AlarmServiceDriver.android.js
