@@ -12,7 +12,7 @@ import { basename, friendlySafeFilename, rtrimSlashes, dirname } from '../../pat
 import htmlpack from '@joplin/htmlpack';
 const { themeStyle } = require('../../theme');
 const { escapeHtml } = require('../../string-utils.js');
-const { assetsToHeaders } = require('@joplin/renderer');
+import { assetsToHeaders } from '@joplin/renderer';
 
 export default class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 

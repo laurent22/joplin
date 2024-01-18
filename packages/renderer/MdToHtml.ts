@@ -1,39 +1,16 @@
 import InMemoryCache from './InMemoryCache';
 import noteStyle from './noteStyle';
-import { fileExtension } from './pathUtils';
+import { fileExtension } from '@joplin/utils/path';
 import setupLinkify from './MdToHtml/setupLinkify';
 import validateLinks from './MdToHtml/validateLinks';
-import { ItemIdToUrlHandler } from './utils';
-import { RenderResult, RenderResultPluginAsset } from './MarkupToHtml';
 import { Options as NoteStyleOptions } from './noteStyle';
+import { FsDriver, ItemIdToUrlHandler, MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult, RenderResultPluginAsset } from './types';
 import hljs from './highlight';
 import * as MarkdownIt from 'markdown-it';
 
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 const md5 = require('md5');
-
-export interface RenderOptions {
-	contentMaxWidth?: number;
-	bodyOnly?: boolean;
-	splitted?: boolean;
-	externalAssetsOnly?: boolean;
-	postMessageSyntax?: string;
-	highlightedKeywords?: string[];
-	codeTheme?: string;
-	theme?: any;
-	plugins?: Record<string, any>;
-	audioPlayerEnabled?: boolean;
-	videoPlayerEnabled?: boolean;
-	pdfViewerEnabled?: boolean;
-	codeHighlightCacheKey?: string;
-	plainResourceRendering?: boolean;
-	mapsToLine?: boolean;
-	useCustomPdfViewer?: boolean;
-	noteId?: string;
-	vendorDir?: string;
-	settingValue?: (pluginId: string, key: string)=> any;
-}
 
 interface RendererRule {
 	install(context: any, ruleOptions: any): any;
@@ -109,10 +86,10 @@ export interface ExtraRendererRule {
 
 export interface Options {
 	resourceBaseUrl?: string;
-	ResourceModel?: any;
+	ResourceModel?: OptionsResourceModel;
 	pluginOptions?: any;
 	tempDir?: string;
-	fsDriver?: any;
+	fsDriver?: FsDriver;
 	extraRendererRules?: ExtraRendererRule[];
 	customCss?: string;
 }
@@ -150,7 +127,7 @@ export interface RuleOptions {
 	context: PluginContext;
 	theme: any;
 	postMessageSyntax: string;
-	ResourceModel: any;
+	ResourceModel: OptionsResourceModel;
 	resourceBaseUrl: string;
 	resources: any; // resourceId: Resource
 
@@ -199,12 +176,12 @@ export interface RuleOptions {
 	platformName?: string;
 }
 
-export default class MdToHtml {
+export default class MdToHtml implements MarkupRenderer {
 
 	private resourceBaseUrl_: string;
-	private ResourceModel_: any;
+	private ResourceModel_: OptionsResourceModel;
 	private contextCache_: any;
-	private fsDriver_: any;
+	private fsDriver_: FsDriver;
 
 	private cachedOutputs_: any = {};
 	private lastCodeHighlightCacheKey_: string = null;
