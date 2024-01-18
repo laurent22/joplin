@@ -161,8 +161,16 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 		/>
 	);
 
+	const accessibilityHidden = !webViewVisible;
+
 	return (
-		<View style={styles.containerStyle}>
+		<View
+			style={styles.containerStyle}
+
+			aria-hidden={accessibilityHidden}
+			importantForAccessibility={accessibilityHidden ? 'no-hide-descendants' : undefined}
+			accessibilityElementsHidden={accessibilityHidden}
+		>
 			{webView}
 		</View>
 	);
