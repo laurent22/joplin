@@ -12,7 +12,7 @@ import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
 
 import * as React from 'react';
-import { ReactNode, useCallback, useState, useEffect, useMemo } from 'react';
+import { ReactNode, useCallback, useState, useEffect } from 'react';
 import { View, ViewStyle } from 'react-native';
 import CustomButton from '../../CustomButton';
 
@@ -46,7 +46,7 @@ const ToggleSpaceButton = (props: Props) => {
 		}
 	}, [onDecreaseSpace]);
 
-	const theme: Theme = useMemo(() => themeStyle(props.themeId), [props.themeId]);
+	const theme: Theme = themeStyle(props.themeId);
 
 	const decreaseSpaceButton = (
 		<>
