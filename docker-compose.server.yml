@@ -45,3 +45,10 @@ services:
             - POSTGRES_USER=${POSTGRES_USER}
             - POSTGRES_PORT=${POSTGRES_PORT}
             - POSTGRES_HOST=db
+        healthcheck:
+            test: curl -q --fail http://localhost:22300/api/ping || exit 1
+            interval: 60s
+            timeout: 10s
+            retries: 2
+            start_period: 30s
+
