@@ -138,7 +138,6 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 	}, []);
 
 	const onMessage = useCallback((event: WebViewMessageEvent) => {
-		logger.debug('Plugin message', event.nativeEvent.data);
 		pluginRunner.onWebviewMessage(event);
 		pluginViewController.onWebViewMessage(event);
 	}, [pluginViewController, pluginRunner]);
