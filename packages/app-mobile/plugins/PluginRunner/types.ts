@@ -20,6 +20,17 @@ export interface PluginWebViewApi {
 
 }
 
+// Similar to PluginViewState, but with loaded scripts (rather than
+// paths to scripts).
+export interface DialogInfo {
+	id: string;
+	opened: boolean;
+	fitToContent: boolean;
+	contentScripts: string[];
+	contentCss: string[];
+	html: string;
+}
+
 export interface DialogMainProcessApi {
 	postMessage: (message: SerializableData)=> Promise<SerializableData>;
 	onMessage: (callback: (arg: SerializableData)=> void)=> void;

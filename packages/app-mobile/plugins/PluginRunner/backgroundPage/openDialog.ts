@@ -1,9 +1,8 @@
 import { ButtonSpec } from '@joplin/lib/services/plugins/api/types';
 import WebViewToRNMessenger from '../../../utils/ipc/WebViewToRNMessenger';
-import { DialogWebViewApi, DialogMainProcessApi } from '../types';
+import { DialogWebViewApi, DialogMainProcessApi, DialogInfo } from '../types';
 import WindowMessenger from '@joplin/lib/utils/ipc/WindowMessenger';
 import RemoteMessenger from '@joplin/lib/utils/ipc/RemoteMessenger';
-import type { PluginViewState } from '@joplin/lib/services/plugins/reducer';
 import makeSandboxedIframe from './utils/makeSandboxedIframe';
 
 const initializeMessengers = (
@@ -35,14 +34,25 @@ const initializeMessengers = (
 	return { rnConnection, iframeConnection };
 };
 
-const openDialog = async (messageChannelId: string, pluginBackgroundScript: string, dialogInfo: PluginViewState) => {
+const openDialog = async (
+	messageChannelId: string,
+	pluginBackgroundScript: string,
+	dialogInfo: DialogInfo,
+) => {
 	const scripts = [
 		`
 			${pluginBackgroundScript}
 			pluginBackgroundPage.initializeDialogIframe(${JSON.stringify(messageChannelId)});
 		`,
-		...dialogInfo.scripts,
+		...dialogInfo.contentScripts,
+		...dialogInfo.contentCss.map(css => `(() => {
+			const style = document.createElement('style');
+			style.appendChild(document.createTextNode(${JSON.stringify(css)}));
+			document.head.appendChild(style);
+		})();
+		`),
 	];
+	(window as any).testScripts = scripts;
 	const dialogContainer: HTMLDialogElement = document.createElement('dialog');
 	const { iframe, loadPromise } = makeSandboxedIframe(dialogInfo.html, scripts);
 	const buttonRow = document.createElement('div');

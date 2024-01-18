@@ -1,10 +1,10 @@
 import { RefObject } from 'react';
 import { WebViewControl } from '../../components/ExtendedWebView';
 import { WebViewMessageEvent } from 'react-native-webview';
-import { PluginHtmlContents, PluginViewState, ViewInfo } from '@joplin/lib/services/plugins/reducer';
+import { PluginHtmlContents, ViewInfo } from '@joplin/lib/services/plugins/reducer';
 import WebviewController, { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import RNToWebViewMessenger from '../../utils/ipc/RNToWebViewMessenger';
-import { DialogWebViewApi, DialogMainProcessApi } from './types';
+import { DialogWebViewApi, DialogMainProcessApi, DialogInfo } from './types';
 import shim from '@joplin/lib/shim';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import Logger from '@joplin/utils/Logger';
@@ -22,6 +22,13 @@ type SetWebViewVisibleCallback = (visible: boolean)=> void;
 
 const getDialogHandle = (viewInfo: ViewInfo) => {
 	return `${viewInfo.plugin.id}--${viewInfo.view.id}`;
+};
+
+const loadContentScriptFiles = (filePaths: string[], pluginBaseDir: string) => {
+	return Promise.all(filePaths.map(path => {
+		path = shim.fsDriver().resolveRelativePathWithinDir(pluginBaseDir, path);
+		return shim.fsDriver().readFile(path, 'utf8');
+	}));
 };
 
 export default class PluginViewController {
@@ -126,21 +133,30 @@ export default class PluginViewController {
 		const html = this.pluginHtmlContents[plugin.id]?.[viewInfo.view.id] ?? '';
 
 		const view = viewInfo.view;
-		const dialogInfo: Partial<PluginViewState> = {
-			// Only copy JSON-ifyable data
+		const scriptPaths = view.scripts ?? [];
+		const jsPaths = [];
+		const cssPaths = [];
+
+		for (const path of scriptPaths) {
+			if (path.endsWith('.css')) {
+				cssPaths.push(path);
+			} else {
+				jsPaths.push(path);
+			}
+		}
+		const loadedJs = await loadContentScriptFiles(jsPaths, plugin.baseDir);
+		const loadedCss = await loadContentScriptFiles(cssPaths, plugin.baseDir);
+
+		const dialogInfo: DialogInfo = {
 			id: view.id,
-			type: view.type,
 			opened: view.opened,
 			fitToContent: view.fitToContent,
-			scripts: view.scripts,
+			contentScripts: loadedJs,
+			contentCss: loadedCss,
 			html,
-			commandName: view.commandName,
-			location: view.location,
-			containerType: view.containerType,
 		};
 
 		this.webviewRef.current.injectJS(`
-			const pluginScript = ${JSON.stringify(plugin.scriptText)};
 			console.log('Opening plugin dialog...');
 
 			pluginBackgroundPage.openDialog(
