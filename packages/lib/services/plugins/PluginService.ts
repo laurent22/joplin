@@ -238,7 +238,9 @@ export default class PluginService extends BaseService {
 		baseDir = rtrimSlashes(baseDir);
 
 		const fname = filename(path);
+		logger.debug('Checking plugin hash', path);
 		const hash = await shim.fsDriver().md5File(path);
+		logger.debug('Done', path);
 
 		const unpackDir = `${Setting.value('cacheDir')}/${fname}`;
 		const manifestFilePath = `${unpackDir}/manifest.json`;
@@ -249,6 +251,8 @@ export default class PluginService extends BaseService {
 			await shim.fsDriver().remove(unpackDir);
 			await shim.fsDriver().mkdir(unpackDir);
 
+			logger.debug('Extracting plugin to', unpackDir);
+
 			await shim.fsDriver().tarExtract({
 				strict: true,
 				portable: true,
@@ -256,12 +260,16 @@ export default class PluginService extends BaseService {
 				cwd: unpackDir,
 			});
 
+			logger.debug('Done extracting to', unpackDir);
+
 			manifest = await this.loadManifestToObject(manifestFilePath);
 			if (!manifest) throw new Error(`Missing manifest file at: ${manifestFilePath}`);
 
 			manifest._package_hash = hash;
 
 			await shim.fsDriver().writeFile(manifestFilePath, JSON.stringify(manifest, null, '\t'), 'utf8');
+		} else {
+			logger.debug('Not re-extracting', manifest.id);
 		}
 
 		return this.loadPluginFromPath(unpackDir);

@@ -305,8 +305,13 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	public async md5File(path: string): Promise<string> {
-		const fileData = Buffer.from(await this.readFile(path, 'base64'), 'base64');
-		return md5(fileData);
+		if (isScopedUri(path)) {
+			// Warning: Slow
+			const fileData = Buffer.from(await this.readFile(path, 'base64'), 'base64');
+			return md5(fileData);
+		} else {
+			return await RNFS.hash(path, 'md5');
+		}
 	}
 
 	public async tarExtract(options: any) {
