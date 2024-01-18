@@ -7070,7 +7070,7 @@ __metadata:
     jest-expect-message: 1.1.3
     jquery: 3.7.1
     jsdom: 22.1.0
-    knex: 3.0.1
+    knex: 3.1.0
     koa: 2.14.2
     ldapts: 7.0.7
     markdown-it: 13.0.2
@@ -27453,9 +27453,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"knex@npm:3.0.1":
-  version: 3.0.1
-  resolution: "knex@npm:3.0.1"
+"knex@npm:3.1.0":
+  version: 3.1.0
+  resolution: "knex@npm:3.1.0"
   dependencies:
     colorette: 2.0.19
     commander: ^10.0.0
@@ -27466,7 +27466,7 @@ __metadata:
     getopts: 2.3.0
     interpret: ^2.2.0
     lodash: ^4.17.21
-    pg-connection-string: 2.6.1
+    pg-connection-string: 2.6.2
     rechoir: ^0.8.0
     resolve-from: ^5.0.0
     tarn: ^3.0.2
@@ -27488,7 +27488,7 @@ __metadata:
       optional: true
   bin:
     knex: bin/cli.js
-  checksum: bcfc3f8da9a7e898a873d2a122856ac9355f5ee1c0ab39534d6cac9ea69388da2fe0fa607b20d65298e191a4377af72f8ff7f4430f8b8c4abc144010b7e9796c
+  checksum: 3905f8d27960975f7f57f3f488d1ef3ccf47784acc8eb627e8a28cbbe1f296c6879c8ef0cbd9e17e867be80117d305cd948545f3fbd4c74b24c90d2413bbc021
   languageName: node
   linkType: hard
 
@@ -33092,14 +33092,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-connection-string@npm:2.6.1":
-  version: 2.6.1
-  resolution: "pg-connection-string@npm:2.6.1"
-  checksum: 882344a47e1ecf3a91383e0809bf2ac48facea97fcec0358d6e060e1cbcb8737acde419b4c86f05da4ce4a16634ee50fff1d2bb787d73b52ccbfde697243ad8a
-  languageName: node
-  linkType: hard
-
-"pg-connection-string@npm:^2.6.2":
+"pg-connection-string@npm:2.6.2, pg-connection-string@npm:^2.6.2":
   version: 2.6.2
   resolution: "pg-connection-string@npm:2.6.2"
   checksum: 22265882c3b6f2320785378d0760b051294a684989163d5a1cde4009e64e84448d7bf67d9a7b9e7f69440c3ee9e2212f9aa10dd17ad6773f6143c6020cebbcb5
