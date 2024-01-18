@@ -2,7 +2,7 @@
 import { _ } from '@joplin/lib/locale';
 import PluginService, { PluginSettings, defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
 import * as React from 'react';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { Button } from 'react-native-paper';
 import pickDocument from '../../../../utils/pickDocument';
 import shim from '@joplin/lib/shim';
@@ -23,6 +23,8 @@ const logger = Logger.create('PluginUploadButton');
 export const buttonLabel = () => _('Install from file');
 
 const PluginUploadButton: React.FC<Props> = props => {
+	const [showLoadingAnimation, setShowLoadingAnimation] = useState(false);
+
 	const onInstallFromFile = useCallback(async () => {
 		const pluginService = PluginService.instance();
 
@@ -57,6 +59,8 @@ const PluginUploadButton: React.FC<Props> = props => {
 		}
 
 		try {
+			setShowLoadingAnimation(true);
+
 			const targetFile = join(tempDir, `plugin${extension}`);
 			logger.info('Copying to', targetFile);
 
@@ -70,12 +74,20 @@ const PluginUploadButton: React.FC<Props> = props => {
 			logger.error('Error installing plugin:', error);
 			await shim.showMessageBox(_('Error: %s', error));
 		} finally {
+			setShowLoadingAnimation(false);
+
 			await fsDriver.remove(tempDir);
 		}
 	}, [props.pluginSettings, props.updatePluginStates]);
 
 	return (
-		<Button onPress={onInstallFromFile}>{buttonLabel()}</Button>
+		<Button
+			onPress={onInstallFromFile}
+			disabled={showLoadingAnimation}
+			loading={showLoadingAnimation}
+		>
+			{buttonLabel()}
+		</Button>
 	);
 };
 
