@@ -465,10 +465,15 @@ packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleSpaceButton.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/Toolbar.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToolbarButton.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToolbarOverflowRows.js
+packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useActionButtons.js
+packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useHeaderButtons.js
+packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useInlineFormattingButtons.js
+packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/types.js
 packages/app-mobile/components/NoteEditor/NoteEditor.test.js
 packages/app-mobile/components/NoteEditor/NoteEditor.js
 packages/app-mobile/components/NoteEditor/SearchPanel.js
+packages/app-mobile/components/NoteEditor/hooks/useKeyboardVisible.js
 packages/app-mobile/components/NoteEditor/types.js
 packages/app-mobile/components/NoteList.js
 packages/app-mobile/components/ProfileSwitcher/ProfileEditor.js
