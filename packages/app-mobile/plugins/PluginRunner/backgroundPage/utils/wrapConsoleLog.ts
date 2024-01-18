@@ -10,8 +10,19 @@ const wrapConsoleLog = (onLog: OnLogCallback) => {
 		const originalLog = (console[key] as any) ?? (()=>{});
 
 		console[key] = function(...args: any[]) {
-			onLog(logLevel, args.join('   '));
 			originalLog.call(this, ...args);
+
+			// Work around
+			//  Uncaught (in promise) TypeError: Cannot convert object to primitive value
+			// when console.log is called with an object that
+			// can't be converted to a string.
+			let argsString;
+			try {
+				argsString = args.join('   ');
+			} catch (error) {
+				argsString = `Error converting console arguments to string: ${error}`;
+			}
+			onLog(logLevel, argsString);
 		} as any;
 	};
 
