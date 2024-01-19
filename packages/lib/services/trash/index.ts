@@ -1,3 +1,4 @@
+import { checkObjectHasProperties } from '@joplin/utils/object';
 import { ModelType } from '../../BaseModel';
 import { _ } from '../../locale';
 import { FolderEntity, FolderIcon, FolderIconType, NoteEntity } from '../database/types';
@@ -23,6 +24,12 @@ export const getDisplayParentId = (item: FolderEntity | NoteEntity, originalItem
 	if (!originalItemParent || !originalItemParent.deleted_time) return getTrashFolderId();
 
 	return item.parent_id;
+};
+
+export const getDisplayParentTitle = (item: FolderEntity | NoteEntity, originalItemParent: FolderEntity) => {
+	const displayParentId = getDisplayParentId(item, originalItemParent);
+	if (displayParentId === getTrashFolderId()) return getTrashFolderTitle();
+	return originalItemParent && originalItemParent.id === displayParentId ? originalItemParent.title : '';
 };
 
 export const getTrashFolderId = () => {
@@ -65,4 +72,12 @@ export const getTrashFolderIcon = (type: FolderIconType): FolderIcon => {
 			type: FolderIconType.Emoji,
 		};
 	}
+};
+
+export const itemIsInTrash = (item: FolderEntity | NoteEntity) => {
+	if (!item) return false;
+
+	checkObjectHasProperties(item, ['id', 'deleted_time']);
+
+	return item.id === getTrashFolderId() || !!item.deleted_time;
 };

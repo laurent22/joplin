@@ -15,6 +15,8 @@ import Setting from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry';
 import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import { getTrashFolderIcon, getTrashFolderId } from '@joplin/lib/services/trash';
+import restoreItems from '@joplin/lib/services/trash/restoreItems';
+import { ModelType } from '@joplin/lib/BaseModel';
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 // We need this to suppress the useless warning
@@ -143,58 +145,96 @@ const SideMenuContentComponent = (props: Props) => {
 
 		const folder = folderOrAll as FolderEntity;
 
-		const generateFolderDeletion = () => {
-			const folderDeletion = (message: string) => {
-				Alert.alert('', message, [
-					{
-						text: _('OK'),
-						onPress: () => {
-							void Folder.delete(folder.id, { toTrash: true });
+		if (folder && folder.id === getTrashFolderId()) return;
+
+		const menuItems: any[] = [];
+
+		if (folder && !!folder.deleted_time) {
+			menuItems.push({
+				text: _('Restore'),
+				onPress: async () => {
+					await restoreItems(ModelType.Folder, [folder.id]);
+				},
+				style: 'destructive',
+			});
+
+			// Alert.alert(
+			// 	'',
+			// 	_('Notebook: %s', folder.title),
+			// 	[
+			// 		{
+			// 			text: _('Restore'),
+			// 			onPress: async () => {
+			// 				await restoreItems(ModelType.Folder, [folder.id]);
+			// 			},
+			// 			style: 'destructive',
+			// 		},
+			// 		{
+			// 			text: _('Cancel'),
+			// 			onPress: () => {},
+			// 			style: 'cancel',
+			// 		},
+			// 	],
+			// 	{
+			// 		cancelable: false,
+			// 	},
+			// );
+		} else {
+			const generateFolderDeletion = () => {
+				const folderDeletion = (message: string) => {
+					Alert.alert('', message, [
+						{
+							text: _('OK'),
+							onPress: () => {
+								void Folder.delete(folder.id, { toTrash: true });
+							},
 						},
-					},
-					{
-						text: _('Cancel'),
-						onPress: () => { },
-						style: 'cancel',
-					},
-				]);
+						{
+							text: _('Cancel'),
+							onPress: () => { },
+							style: 'cancel',
+						},
+					]);
+				};
+
+				if (folder.id === props.inboxJopId) {
+					return folderDeletion(
+						_('Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that\'s recently been sent to it may be lost.'),
+					);
+				}
+				return folderDeletion(_('Move notebook "%s" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.', substrWithEllipsis(folder.title, 0, 32)));
 			};
 
-			if (folder.id === props.inboxJopId) {
-				return folderDeletion(
-					_('Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that\'s recently been sent to it may be lost.'),
-				);
-			}
-			return folderDeletion(_('Move notebook "%s" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.', substrWithEllipsis(folder.title, 0, 32)));
-		};
+			menuItems.push({
+				text: _('Edit'),
+				onPress: () => {
+					props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+
+					props.dispatch({
+						type: 'NAV_GO',
+						routeName: 'Folder',
+						folderId: folder.id,
+					});
+				},
+			});
+
+			menuItems.push({
+				text: _('Delete'),
+				onPress: generateFolderDeletion,
+				style: 'destructive',
+			});
+		}
+
+		menuItems.push({
+			text: _('Cancel'),
+			onPress: () => {},
+			style: 'cancel',
+		});
 
 		Alert.alert(
 			'',
 			_('Notebook: %s', folder.title),
-			[
-				{
-					text: _('Edit'),
-					onPress: () => {
-						props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-
-						props.dispatch({
-							type: 'NAV_GO',
-							routeName: 'Folder',
-							folderId: folder.id,
-						});
-					},
-				},
-				{
-					text: _('Delete'),
-					onPress: generateFolderDeletion,
-					style: 'destructive',
-				},
-				{
-					text: _('Cancel'),
-					onPress: () => {},
-					style: 'cancel',
-				},
-			],
+			menuItems,
 			{
 				cancelable: false,
 			},

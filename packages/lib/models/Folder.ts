@@ -87,6 +87,11 @@ export default class Folder extends BaseItem {
 		return this.db().exec(query);
 	}
 
+	public static byId(items: FolderEntity[], id: string) {
+		if (id === getTrashFolderId()) return getTrashFolder();
+		return super.byId(items, id);
+	}
+
 	public static async deleteAllByShareId(shareId: string, deleteOptions: DeleteOptions = null) {
 		const tableNameToClasses: Record<string, any> = {
 			'folders': Folder,
