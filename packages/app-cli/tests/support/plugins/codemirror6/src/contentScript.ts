@@ -31,9 +31,11 @@ export default (_context: { contentScriptId: string }) => {
 			// options.
 		},
 
-		// CSS styles can be linked with the assets field, though you may want to consider creating
-		// a CodeMirror theme instead:
-		//   https://codemirror.net/examples/styling/#themes
+		// There are two main ways to style the CodeMirror editor:
+		// 1. With a CodeMirror6 theme extension (see https://codemirror.net/examples/styling/#themes)
+		// 2. With CSS assets
+		// 
+		// CSS assets can be added by exporting an `assets` function:
 		assets: () => [
 			// We can include styles by either referencing a file
 			{ name: './assets/style.css' },
@@ -42,7 +44,14 @@ export default (_context: { contentScriptId: string }) => {
 			{
 				inline: true,
 				mime: 'text/css',
-				text: '.cm-activeLineGutter { text-decoration: underline; }',
+				text: `
+					/* This CSS class is added by the highlightActiveLineGutter extension: */
+					.cm-gutter .cm-activeLineGutter {
+						text-decoration: underline;
+						color: var(--joplin-color2);
+						background-color: var(--joplin-background-color2);
+					}
+				`,
 			},
 		],
 	};
