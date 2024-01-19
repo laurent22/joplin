@@ -266,7 +266,7 @@ Sets the properties of the note with ID :id
 
 Deletes the note with ID :id
 
-By default, this will **permanently delete the note**. To delete it to the trash instead, add the query parameter `to_trash=1`
+By default, the note will be moved **to the trash**. To permanently delete it, add the query parameter `permanent=1`
 
 ## Folders
 
@@ -317,6 +317,8 @@ Sets the properties of the folder with ID :id
 ### DELETE /folders/:id
 
 Deletes the folder with ID :id
+
+By default, the folder will be moved **to the trash**. To permanently delete it, add the query parameter `permanent=1`
 
 ## Resources
 

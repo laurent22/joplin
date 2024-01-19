@@ -401,8 +401,8 @@ async function fetchAllNotes() {
 				lines.push('');
 			}
 
-			if (model.type === BaseModel.TYPE_NOTE) {
-				lines.push('By default, this will **permanently delete the note**. To delete it to the trash instead, add the query parameter `to_trash=1`');
+			if (model.type === BaseModel.TYPE_NOTE || model.type === BaseModel.TYPE_FOLDER) {
+				lines.push(`By default, the ${singular} will be moved **to the trash**. To permanently delete it, add the query parameter \`permanent=1\``);
 				lines.push('');
 			}
 		}

@@ -485,7 +485,7 @@ export default async function(request: Request, id: string = null, link: string 
 	}
 
 	if (request.method === RequestMethod.DELETE) {
-		await Note.delete(id, { toTrash: request.query.to_trash === '1' });
+		await Note.delete(id, { toTrash: request.query.permanent !== '1' });
 		return;
 	}
 

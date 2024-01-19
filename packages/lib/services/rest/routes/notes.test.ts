@@ -99,9 +99,9 @@ describe('routes/notes', () => {
 		const note2 = await Note.save({});
 		const beforeTime = Date.now();
 		await api.route(RequestMethod.DELETE, `notes/${note1.id}`);
-		await api.route(RequestMethod.DELETE, `notes/${note2.id}`, { to_trash: '1' });
+		await api.route(RequestMethod.DELETE, `notes/${note2.id}`, { permanent: '1' });
 
-		expect(await Note.load(note1.id)).toBeFalsy();
-		expect((await Note.load(note2.id)).deleted_time).toBeGreaterThanOrEqual(beforeTime);
+		expect((await Note.load(note1.id)).deleted_time).toBeGreaterThanOrEqual(beforeTime);
+		expect(await Note.load(note2.id)).toBeFalsy();
 	});
 });

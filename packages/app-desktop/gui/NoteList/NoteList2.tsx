@@ -75,17 +75,8 @@ const NoteList = (props: Props) => {
 		props.uncompletedTodosOnTop,
 		props.showCompletedTodos,
 		props.notes,
+		props.selectedFolderInTrash,
 	);
-
-	// const renderedNotes = useRenderedNotes(
-	// 	startNoteIndex,
-	// 	endNoteIndex,
-	// 	props.notes,
-	// 	props.selectedNoteIds,
-	// 	listRenderer,
-	// 	props.highlightedWords,
-	// 	props.watchedNoteFiles,
-	// );
 
 	const noteItemStyle = useMemo(() => {
 		return {

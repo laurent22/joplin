@@ -50,7 +50,7 @@ interface RequestQuery {
 	cursor?: string;
 
 	// For note deletion
-	to_trash?: string;
+	permanent?: string;
 }
 
 export interface Request {

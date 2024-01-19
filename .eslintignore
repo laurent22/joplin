@@ -916,6 +916,7 @@ packages/lib/services/rest/actionApi.desktop.js
 packages/lib/services/rest/routes/auth.js
 packages/lib/services/rest/routes/events.test.js
 packages/lib/services/rest/routes/events.js
+packages/lib/services/rest/routes/folders.test.js
 packages/lib/services/rest/routes/folders.js
 packages/lib/services/rest/routes/master_keys.js
 packages/lib/services/rest/routes/notes.test.js
