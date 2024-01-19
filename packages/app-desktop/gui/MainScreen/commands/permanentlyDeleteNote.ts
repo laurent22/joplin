@@ -1,10 +1,11 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
+import bridge from '../../../services/bridge';
 
 export const declaration: CommandDeclaration = {
-	name: 'deleteNote',
-	label: () => _('Delete note'),
+	name: 'permanentlyDeleteNote',
+	label: () => _('Permanently delete note'),
 	iconName: 'fa-times',
 };
 
@@ -13,16 +14,15 @@ export const runtime = (): CommandRuntime => {
 		execute: async (context: CommandContext, noteIds: string[] = null) => {
 			if (noteIds === null) noteIds = context.state.selectedNoteIds;
 			if (!noteIds.length) return;
-			await Note.batchDelete(noteIds, { toTrash: true });
+			const msg = await Note.permanentlyDeleteMessage(noteIds);
 
-			context.dispatch({
-				type: 'ITEMS_TRASHED',
-				value: {
-					noteIds,
-					folderIds: [],
-				},
+			const ok = bridge().showConfirmMessageBox(msg, {
+				buttons: [_('Delete'), _('Cancel')],
+				defaultId: 1,
 			});
+
+			if (ok) await Note.batchDelete(noteIds, { toTrash: false });
 		},
-		enabledCondition: '!noteIsReadOnly && !inTrash && someNotesSelected',
+		enabledCondition: '(!noteIsReadOnly || inTrash) && someNotesSelected',
 	};
 };

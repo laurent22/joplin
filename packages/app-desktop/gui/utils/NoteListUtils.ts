@@ -170,6 +170,12 @@ export default class NoteListUtils {
 					menuUtils.commandToStatefulMenuItem('restoreNote', noteIds) as any,
 				),
 			);
+
+			menu.append(
+				new MenuItem(
+					menuUtils.commandToStatefulMenuItem('permanentlyDeleteNote', noteIds) as any,
+				),
+			);
 		} else {
 			menu.append(
 				new MenuItem(

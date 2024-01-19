@@ -269,7 +269,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		// it won't be visible within the header component.
 		const noteIds = this.props.selectedNoteIds;
 
-		const msg = await Note.deleteMessage(noteIds);
+		const msg = await Note.permanentlyDeleteMessage(noteIds);
 		if (!msg) return;
 
 		const ok = await dialogs.confirm(this.props.parentComponent, msg);

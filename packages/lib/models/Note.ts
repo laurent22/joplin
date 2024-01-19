@@ -885,14 +885,14 @@ export default class Note extends BaseItem {
 		}
 	}
 
-	public static async deleteMessage(noteIds: string[]): Promise<string|null> {
+	public static async permanentlyDeleteMessage(noteIds: string[]): Promise<string|null> {
 		let msg = '';
 		if (noteIds.length === 1) {
 			const note = await Note.load(noteIds[0]);
 			if (!note) return null;
-			msg = _('Delete note "%s"?', substrWithEllipsis(note.title, 0, 32));
+			msg = _('Permanently delete note "%s"?', substrWithEllipsis(note.title, 0, 32));
 		} else {
-			msg = _('Delete these %d notes?', noteIds.length);
+			msg = _('Permanently delete these %d notes?', noteIds.length);
 		}
 		return msg;
 	}
