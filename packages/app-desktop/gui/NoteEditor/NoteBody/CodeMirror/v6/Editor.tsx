@@ -9,6 +9,7 @@ import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
 import shim from '@joplin/lib/shim';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import setupVim from '@joplin/editor/CodeMirror/util/setupVim';
+import { dirname } from 'path';
 
 interface Props extends EditorProps {
 	style: React.CSSProperties;
@@ -66,6 +67,11 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 					pluginId,
 					contentScriptId: contentScript.id,
 					contentScriptJs: () => shim.fsDriver().readFile(contentScript.path),
+					loadCssAsset: (name: string) => {
+						const assetPath = dirname(contentScript.path);
+						const path = shim.fsDriver().resolveRelativePathWithinDir(assetPath, name);
+						return shim.fsDriver().readFile(path, 'utf8');
+					},
 					postMessageHandler: (message: any) => {
 						const plugin = PluginService.instance().pluginById(pluginId);
 						return plugin.emitContentScriptMessage(contentScript.id, message);

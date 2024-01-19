@@ -76,12 +76,14 @@ describe('createEditor', () => {
 		const testPlugin1 = {
 			pluginId: 'a.plugin.id',
 			contentScriptId: 'a.plugin.id.contentScript',
+			loadCssAsset: async (_name: string) => '* { color: red; }',
 			contentScriptJs: getContentScriptJs,
 			postMessageHandler,
 		};
 		const testPlugin2 = {
 			pluginId: 'another.plugin.id',
 			contentScriptId: 'another.plugin.id.contentScript',
+			loadCssAsset: async (_name: string) => '...',
 			contentScriptJs: getContentScriptJs,
 			postMessageHandler,
 		};
