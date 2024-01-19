@@ -1,5 +1,13 @@
 # Joplin Server Changelog
 
+## [server-v2.14.2](https://github.com/laurent22/joplin/releases/tag/server-v2.14.2) - 2024-01-18T17:22:42Z
+
+- Improved: Check Postgres required version before starting the server (#9695)
+- Improved: Display correct date and time on published notes (f38abc5)
+- Improved: Optimise synchronisation by making delta call return whole items (5341501)
+- Improved: Revert to Formidable v2 to avoid random crashes (be94939)
+- Improved: Updated packages fs-extra (v11.2.0), knex (v3.1.0), ldapts (v7.0.7), rate-limiter-flexible (v3.0.6), react, sharp (v0.33.1), style-to-js (v1.1.10), tesseract.js (v5.0.3)
+
 ## [server-v2.14.1](https://github.com/laurent22/joplin/releases/tag/server-v2.14.1) - 2023-12-17T15:07:52Z
 
 - Improved: Support including items with delta call to optimise sync (67a6870)
