@@ -28,7 +28,7 @@ import { Theme } from '@joplin/lib/themes/type';
 import { RuntimeProps } from './commands/focusElementSideBar';
 const { connect } = require('react-redux');
 import { renderFolders, renderTags } from '@joplin/lib/components/shared/side-menu-shared';
-import { getTrashFolderId } from '@joplin/lib/services/trash';
+import { getTrashFolderIcon, getTrashFolderId } from '@joplin/lib/services/trash';
 const { themeStyle } = require('@joplin/lib/theme');
 const bridge = require('@electron/remote').require('./bridge').default;
 const Menu = bridge().Menu;
@@ -103,12 +103,7 @@ function FolderItem(props: any) {
 
 	const doRenderFolderIcon = () => {
 		if (folderId === getTrashFolderId()) {
-			return renderFolderIcon({
-				dataUrl: '',
-				emoji: '',
-				name: 'fas fa-trash',
-				type: FolderIconType.FontAwesome,
-			});
+			return renderFolderIcon(getTrashFolderIcon(FolderIconType.FontAwesome));
 		}
 
 		if (!showFolderIcon) return null;

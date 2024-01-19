@@ -268,17 +268,10 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		// Dialog needs to be displayed as a child of the parent component, otherwise
 		// it won't be visible within the header component.
 		const noteIds = this.props.selectedNoteIds;
-
-		const msg = await Note.permanentlyDeleteMessage(noteIds);
-		if (!msg) return;
-
-		const ok = await dialogs.confirm(this.props.parentComponent, msg);
-		if (!ok) return;
-
 		this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 
 		try {
-			await Note.batchDelete(noteIds);
+			await Note.batchDelete(noteIds, { toTrash: true });
 		} catch (error) {
 			alert(_n('This note could not be deleted: %s', 'These notes could not be deleted: %s', noteIds.length, error.message));
 		}

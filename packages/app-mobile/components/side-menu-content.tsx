@@ -9,11 +9,13 @@ import NavService from '@joplin/lib/services/NavService';
 import { _ } from '@joplin/lib/locale';
 const { themeStyle } = require('./global-style.js');
 import { renderFolders } from '@joplin/lib/components/shared/side-menu-shared';
-import { FolderEntity, FolderIcon } from '@joplin/lib/services/database/types';
+import { FolderEntity, FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
 import Setting from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry';
 import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
+import { getTrashFolderIcon, getTrashFolderId } from '@joplin/lib/services/trash';
+const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 // We need this to suppress the useless warning
 // https://github.com/oblador/react-native-vector-icons/issues/1465
@@ -147,7 +149,7 @@ const SideMenuContentComponent = (props: Props) => {
 					{
 						text: _('OK'),
 						onPress: () => {
-							void Folder.delete(folder.id);
+							void Folder.delete(folder.id, { toTrash: true });
 						},
 					},
 					{
@@ -163,7 +165,7 @@ const SideMenuContentComponent = (props: Props) => {
 					_('Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that\'s recently been sent to it may be lost.'),
 				);
 			}
-			return folderDeletion(_('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', folder.title));
+			return folderDeletion(_('Move notebook "%s" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.', substrWithEllipsis(folder.title, 0, 32)));
 		};
 
 		Alert.alert(
@@ -307,10 +309,12 @@ const SideMenuContentComponent = (props: Props) => {
 		if (actionDone === 'auth') props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 	}, [performSync, props.dispatch]);
 
-	const renderFolderIcon = (theme: any, folderIcon: FolderIcon) => {
+	const renderFolderIcon = (folderId: string, theme: any, folderIcon: FolderIcon) => {
 		if (!folderIcon) {
 			if (alwaysShowFolderIcons) {
 				return <Icon name="folder-outline" style={styles_.emptyFolderIcon} />;
+			} else if (folderId === getTrashFolderId()) {
+				folderIcon = getTrashFolderIcon(FolderIconType.Emoji);
 			} else {
 				return null;
 			}
@@ -377,7 +381,7 @@ const SideMenuContentComponent = (props: Props) => {
 					}}
 				>
 					<View style={folderButtonStyle}>
-						{renderFolderIcon(theme, folderIcon)}
+						{renderFolderIcon(folder.id, theme, folderIcon)}
 						<Text numberOfLines={1} style={styles_.folderButtonText}>
 							{Folder.displayTitle(folder)}
 						</Text>

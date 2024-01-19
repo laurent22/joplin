@@ -1,6 +1,6 @@
 import { ModelType } from '../../BaseModel';
 import { _ } from '../../locale';
-import { FolderEntity, NoteEntity } from '../database/types';
+import { FolderEntity, FolderIcon, FolderIconType, NoteEntity } from '../database/types';
 
 // When an item is deleted, all its properties are kept, including the parent ID
 // so that it can potentially be restored to the right folder. However, when
@@ -47,4 +47,22 @@ export const getTrashFolder = (): FolderEntity => {
 		is_shared: 0,
 		deleted_time: 0,
 	};
+};
+
+export const getTrashFolderIcon = (type: FolderIconType): FolderIcon => {
+	if (type === FolderIconType.FontAwesome) {
+		return {
+			dataUrl: '',
+			emoji: '',
+			name: 'fas fa-trash',
+			type: FolderIconType.FontAwesome,
+		};
+	} else {
+		return {
+			dataUrl: '',
+			emoji: '🗑️',
+			name: '',
+			type: FolderIconType.Emoji,
+		};
+	}
 };
