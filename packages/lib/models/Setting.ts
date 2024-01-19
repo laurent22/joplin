@@ -1806,6 +1806,7 @@ class Setting extends BaseModel {
 				public: true,
 				label: () => _('Automatically delete notes in the trash after a number of days'),
 				storage: SettingStorage.File,
+				isGlobal: false,
 			},
 
 			'trash.ttlDays': {
@@ -1821,6 +1822,7 @@ class Setting extends BaseModel {
 				show: (settings: any) => settings['trash.autoDeletionEnabled'],
 				label: () => _('Keep notes in the trash for'),
 				storage: SettingStorage.File,
+				isGlobal: false,
 			},
 		};
 

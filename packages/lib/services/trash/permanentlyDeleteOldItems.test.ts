@@ -14,7 +14,9 @@ describe('permanentlyDeleteOldItems', () => {
 
 	it('should auto-delete old items', async () => {
 		const folder1 = await Folder.save({});
+		const folder2 = await Folder.save({});
 		const note1 = await Note.save({ parent_id: folder1.id });
+		const note2 = await Note.save({});
 
 		await Folder.delete(folder1.id, { toTrash: true, deleteChildren: true });
 
@@ -22,18 +24,24 @@ describe('permanentlyDeleteOldItems', () => {
 		await permanentlyDeleteOldItems(Day);
 
 		expect((await Folder.load(folder1.id))).toBeTruthy();
+		expect((await Folder.load(folder2.id))).toBeTruthy();
 		expect((await Note.load(note1.id))).toBeTruthy();
+		expect((await Note.load(note2.id))).toBeTruthy();
 
 		await msleep(1);
 		await permanentlyDeleteOldItems(0);
 
 		expect((await Folder.load(folder1.id))).toBeFalsy();
+		expect((await Folder.load(folder2.id))).toBeTruthy();
 		expect((await Note.load(note1.id))).toBeFalsy();
+		expect((await Note.load(note2.id))).toBeTruthy();
 	});
 
 	it('should not auto-delete non-empty folders', async () => {
 		const folder1 = await Folder.save({});
+		const folder2 = await Folder.save({});
 		const note1 = await Note.save({ parent_id: folder1.id });
+		const note2 = await Note.save({});
 
 		await Folder.delete(folder1.id, { toTrash: true, deleteChildren: true });
 
@@ -53,7 +61,9 @@ describe('permanentlyDeleteOldItems', () => {
 		await permanentlyDeleteOldItems(1);
 
 		expect((await Folder.load(folder1.id))).toBeFalsy();
+		expect((await Folder.load(folder2.id))).toBeTruthy();
 		expect((await Note.load(note1.id))).toBeFalsy();
+		expect((await Note.load(note2.id))).toBeTruthy();
 	});
 
 	it('should not do anything if auto-deletion is not enabled', async () => {
