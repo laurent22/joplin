@@ -11,11 +11,14 @@ const { ErrorNotFound } = require('../utils/errors');
 export default async function(request: Request, id: string = null, link: string = null) {
 	if (request.method === RequestMethod.GET && !id) {
 		if (request.query.as_tree) {
-			const folders = await allForDisplay({ fields: requestFields(request, BaseModel.TYPE_FOLDER) });
+			const folders = await allForDisplay({
+				fields: requestFields(request, BaseModel.TYPE_FOLDER),
+				includeDeleted: false,
+			});
 			const output = await Folder.allAsTree(folders);
 			return output;
 		} else {
-			return defaultAction(BaseModel.TYPE_FOLDER, request, id, link);
+			return defaultAction(BaseModel.TYPE_FOLDER, request, id, link, null, { sql: 'deleted_time = 0' });
 		}
 	}
 

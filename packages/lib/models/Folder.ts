@@ -286,7 +286,11 @@ export default class Folder extends BaseItem {
 	}
 
 	public static async all(options: FolderLoadOptions = null) {
-		const output = await super.all(options);
+		let output: FolderEntity[] = await super.all(options);
+
+		if (options && options.includeDeleted === false) {
+			output = output.filter(f => !f.deleted_time);
+		}
 
 		if (options && options.includeTrash) {
 			output.push(getTrashFolder());
@@ -642,7 +646,11 @@ export default class Folder extends BaseItem {
 	}
 
 	public static async allAsTree(folders: FolderEntity[] = null, options: any = null) {
-		const all = folders ? folders : await this.all(options);
+		interface FolderWithNotes extends FolderEntity {
+			notes?: NoteEntity[];
+		}
+
+		const all: FolderWithNotes[] = folders ? folders : await this.all(options);
 
 		if (options && options.includeNotes) {
 			for (const folder of all) {

@@ -10,6 +10,21 @@ describe('routes/folders', () => {
 		await switchClient(1);
 	});
 
+	test('should not include deleted folders in GET call', async () => {
+		const api = new Api();
+		const folder1 = await Folder.save({});
+		const folder2 = await Folder.save({});
+		await api.route(RequestMethod.DELETE, `folders/${folder1.id}`);
+
+		const tree = await api.route(RequestMethod.GET, 'folders', { as_tree: 1 });
+		expect(tree.length).toBe(1);
+		expect(tree[0].id).toBe(folder2.id);
+
+		const page = await api.route(RequestMethod.GET, 'folders');
+		expect(page.items.length).toBe(1);
+		expect(page.items[0].id).toBe(folder2.id);
+	});
+
 	test('should be able to delete to trash', async () => {
 		const api = new Api();
 		const folder1 = await Folder.save({});
