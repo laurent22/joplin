@@ -66,6 +66,7 @@ docs/**/*.mustache
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 packages/app-cli/app/LinkSelector.js
+packages/app-cli/app/app.js
 packages/app-cli/app/base-command.js
 packages/app-cli/app/command-apidoc.js
 packages/app-cli/app/command-attach.js
