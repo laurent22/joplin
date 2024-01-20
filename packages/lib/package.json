@@ -20,7 +20,7 @@
     "@types/jest": "29.5.8",
     "@types/js-yaml": "4.0.9",
     "@types/markdown-it": "13.0.7",
-    "@types/node": "18.19.3",
+    "@types/node": "18.19.4",
     "@types/node-rsa": "1.1.4",
     "@types/react": "18.2.46",
     "@types/uuid": "9.0.7",

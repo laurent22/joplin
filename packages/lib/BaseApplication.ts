@@ -89,7 +89,7 @@ export default class BaseApplication {
 	// Note: this is basically a cache of state.selectedFolderId. It should *only*
 	// be derived from the state and not set directly since that would make the
 	// state and UI out of sync.
-	private currentFolder_: any = null;
+	protected currentFolder_: any = null;
 
 	protected store_: Store<any> = null;
 
