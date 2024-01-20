@@ -1385,10 +1385,10 @@ class Setting extends BaseModel {
 			'autoUpdate.includePreReleases': { value: false, type: SettingItemType.Bool, section: 'application', storage: SettingStorage.File, isGlobal: true, public: true, appTypes: [AppType.Desktop], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/help/about/prereleases') },
 
 			'autoUploadCrashDumps': {
-				value: '',
+				value: false,
+				section: 'application',
 				type: SettingItemType.Bool,
 				public: true,
-				advanced: true,
 				appTypes: [AppType.Desktop],
 				label: () => 'Automatically upload crash reports',
 				description: () => 'If you experience a crash, please enable this option to automatically send a crash report.',
