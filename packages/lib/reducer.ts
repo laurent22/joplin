@@ -9,7 +9,7 @@ import { ProfileConfig } from './services/profileConfig/types';
 import * as ArrayUtils from './ArrayUtils';
 import { FolderEntity } from './services/database/types';
 import { getListRendererIds } from './services/noteList/renderers';
-import { ProcessResultsRow } from './services/searchengine/SearchEngine';
+import { ProcessResultsRow } from './services/search/SearchEngine';
 const fastDeepEqual = require('fast-deep-equal');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');

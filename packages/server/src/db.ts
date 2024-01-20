@@ -4,6 +4,7 @@ import * as pathUtils from 'path';
 import time from '@joplin/lib/time';
 import Logger from '@joplin/utils/Logger';
 import { databaseSchema } from './services/database/types';
+import { compareVersions } from 'compare-versions';
 
 // Make sure bigInteger values are numbers and not strings
 //
@@ -410,6 +411,31 @@ export function isUniqueConstraintError(error: any): boolean {
 
 	return false;
 }
+
+const parsePostgresVersionString = (versionString: string) => {
+	// PostgreSQL 16.1 (Debian 16.1-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
+	const matches = versionString.match('PostgreSQL (.*?) ');
+	if (!matches || matches.length !== 2) throw new Error(`Cannot parse Postgres version string: ${versionString}`);
+	return matches[1];
+};
+
+export const versionCheck = async (db: DbConnection) => {
+	if (isPostgres(db)) {
+		// We only support Postgres v12+
+		// https://github.com/laurent22/joplin/issues/9695
+		// https://www.postgresql.org/docs/current/rules-materializedviews.html
+		const minPostgresVersion = '12.0';
+		const result = await db.select(db.raw('version()')).first();
+		if (result && result.version) {
+			const version = parsePostgresVersionString(result.version);
+			if (compareVersions(version, minPostgresVersion) < 0) throw new Error(`Postgres version not supported: ${result.version}. Min required version is: ${minPostgresVersion}`);
+		} else {
+			throw new Error(`Could not fetch Postgres version info. Got: ${JSON.stringify(result)}`);
+		}
+	} else {
+		// Not implemented
+	}
+};
 
 export async function latestMigration(db: DbConnection): Promise<Migration | null> {
 	try {

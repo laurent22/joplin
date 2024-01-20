@@ -16,7 +16,7 @@ The overall architecture for each application is as such:
 
 - Back end: This is shared by all applications. It is made of:
 
-	- Services: Provide high-level functionalities, such as the [search engine](https://github.com/laurent22/joplin/tree/dev/packages/lib/services/searchengine), [plugin system](https://github.com/laurent22/joplin/tree/dev/packages/lib/services/plugins) or [synchroniser](https://github.com/laurent22/joplin/blob/dev/packages/lib/Synchronizer.ts).
+	- Services: Provide high-level functionalities, such as the [search engine](https://github.com/laurent22/joplin/tree/dev/packages/lib/services/search), [plugin system](https://github.com/laurent22/joplin/tree/dev/packages/lib/services/plugins) or [synchroniser](https://github.com/laurent22/joplin/blob/dev/packages/lib/Synchronizer.ts).
 
 	- Models: The model layer sits between the services and database. They provide a higher level abstraction than SQL and utility functions to easily save data, such as notes, notebooks, etc.
 

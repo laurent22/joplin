@@ -44,7 +44,7 @@ import * as togglePerFolderSortOrder from './togglePerFolderSortOrder';
 import * as toggleSideBar from './toggleSideBar';
 import * as toggleVisiblePanes from './toggleVisiblePanes';
 
-const index:any[] = [
+const index: any[] = [
 	addProfile,
 	commandPalette,
 	deleteFolder,

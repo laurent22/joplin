@@ -21,6 +21,18 @@ export interface Pagination {
 export interface LoadOptions {
 	caseInsensitive?: boolean;
 	fields?: string | string[];
+	where?: string;
+	whereParams?: any[];
+	order?: {
+		by: string;
+		dir: string;
+		caseInsensitive?: boolean;
+	}[];
+	limit?: number;
+}
+
+export interface FolderLoadOptions extends LoadOptions {
+	includeConflictFolder?: boolean;
 }
 
 export interface SaveOptions {
