@@ -1,5 +1,5 @@
 import BaseCommand from './base-command';
-const { app } = require('./app.js');
+import app from './app';
 import { _ } from '@joplin/lib/locale';
 import Folder from '@joplin/lib/models/Folder';
 import BaseModel from '@joplin/lib/BaseModel';

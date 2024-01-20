@@ -7,7 +7,7 @@ import Synchronizer from '@joplin/lib/Synchronizer';
 import { masterKeysWithoutPassword } from '@joplin/lib/services/e2ee/utils';
 import { appTypeToLockType } from '@joplin/lib/services/synchronizer/LockHandler';
 const BaseCommand = require('./base-command').default;
-const { app } = require('./app.js');
+import app from './app';
 const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
 import { reg } from '@joplin/lib/registry';
 const { cliUtils } = require('./cli-utils.js');

@@ -1,6 +1,6 @@
 import BaseCommand from './base-command';
 import { _, setLocale } from '@joplin/lib/locale';
-const { app } = require('./app.js');
+import app from './app';
 import * as fs from 'fs-extra';
 import Setting, { AppType } from '@joplin/lib/models/Setting';
 import { ReadStream } from 'tty';
