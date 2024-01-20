@@ -5,7 +5,7 @@ const { connect } = require('react-redux');
 const { _ } = require('@joplin/lib/locale');
 const { themeStyle } = require('../global-style.js');
 import { AppState } from '../../utils/types';
-import { generateLoginWithUniqueLoginCode, reducer, checkIfLoginWasSuccessful, defaultState } from '@joplin/lib/services/joplinCloudUtils';
+import { generateApplicationConfirmUrl, reducer, checkIfLoginWasSuccessful, defaultState } from '@joplin/lib/services/joplinCloudUtils';
 import { uuidgen } from '@joplin/lib/uuid';
 import { Button } from 'react-native-paper';
 import createRootStyle from '../../utils/createRootStyle';
@@ -71,13 +71,13 @@ const useStyle = (themeId: number) => {
 
 const JoplinCloudScreenComponent = (props: Props) => {
 
-	const loginUrl = (uniqueLoginCode: string) => `${props.joplinCloudWebsite}/applications/${uniqueLoginCode}/confirm`;
-	const applicationsUrl = (uniqueLoginCode: string) => `${props.joplinCloudApi}/api/applications/${uniqueLoginCode}`;
+	const confirmUrl = (applicationAuthId: string) => `${props.joplinCloudWebsite}/applications/${applicationAuthId}/confirm`;
+	const applicationAuthUrl = (applicationAuthId: string) => `${props.joplinCloudApi}/api/applications/${applicationAuthId}`;
 
 	const [intervalIdentifier, setIntervalIdentifier] = React.useState(undefined);
 	const [state, dispatch] = React.useReducer(reducer, defaultState);
 
-	const uniqueLoginCode = React.useMemo(() => uuidgen(), []);
+	const applicationAuthId = React.useMemo(() => uuidgen(), []);
 
 	const styles = useStyle(props.themeId);
 
@@ -86,7 +86,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 
 		const interval = setInterval(async () => {
 			try {
-				const response = await checkIfLoginWasSuccessful(applicationsUrl(uniqueLoginCode));
+				const response = await checkIfLoginWasSuccessful(applicationAuthUrl(applicationAuthId));
 				if (response && response.success) {
 					dispatch({ type: 'COMPLETED' });
 					clearInterval(interval);
@@ -109,13 +109,13 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	};
 
 	const onAuthoriseClicked = async () => {
-		const url = await generateLoginWithUniqueLoginCode(loginUrl(uniqueLoginCode));
+		const url = await generateApplicationConfirmUrl(confirmUrl(applicationAuthId));
 		await Linking.openURL(url);
 		onButtonUsed();
 	};
 
 	const onCopyToClipboardClicked = async () => {
-		const url = await generateLoginWithUniqueLoginCode(loginUrl(uniqueLoginCode));
+		const url = await generateApplicationConfirmUrl(confirmUrl(applicationAuthId));
 		Clipboard.setString(url);
 		onButtonUsed();
 	};
