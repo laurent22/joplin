@@ -35,6 +35,7 @@ const useStyles = (
 		const theme: Theme = themeStyle(themeId);
 
 		const useDialogSize = fitToContent && dialogContentSize;
+		const dialogHasLoaded = !!dialogContentSize;
 
 		return StyleSheet.create({
 			webView: {
@@ -53,6 +54,7 @@ const useStyles = (
 				maxWidth: useDialogSize ? dialogContentSize?.width : undefined,
 				height: windowSize.height * 0.95,
 				width: windowSize.width * 0.95,
+				opacity: dialogHasLoaded ? 1 : 0,
 
 				// Center
 				marginLeft: 'auto',
