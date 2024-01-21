@@ -52,8 +52,8 @@ const useStyles = (
 
 				maxHeight: useDialogSize ? dialogContentSize?.height : undefined,
 				maxWidth: useDialogSize ? dialogContentSize?.width : undefined,
-				height: windowSize.height * 0.95,
-				width: windowSize.width * 0.95,
+				height: windowSize.height * 0.97,
+				width: windowSize.width * 0.97,
 				opacity: dialogHasLoaded ? 1 : 0,
 
 				// Center
