@@ -8,8 +8,6 @@ import { RefObject } from 'react';
 export default class RNToWebViewMessenger<LocalInterface, RemoteInterface> extends RemoteMessenger<LocalInterface, RemoteInterface> {
 	public constructor(channelId: string, private webviewControl: WebViewControl|RefObject<WebViewControl>, localApi: LocalInterface) {
 		super(channelId, localApi);
-
-		this.onReadyToReceive();
 	}
 
 	protected override postMessage(message: SerializableData): void {
@@ -41,9 +39,11 @@ export default class RNToWebViewMessenger<LocalInterface, RemoteInterface> exten
 	};
 
 	public onWebViewLoaded = () => {
-		// TODO: Does this need to be re-enabled?
-		// Being ready to receive as soon as the messenger is created is helpful for speed (e.g. for the renderer).
-		// this.onReadyToReceive();
+		// Send onReadyToReceive again (if needed).
+		//
+		// This is necessary because any events sent before the webview finished loading
+		// may not have been delivered (though they may have).
+		this.onReadyToReceive();
 	};
 
 	protected override onClose(): void {

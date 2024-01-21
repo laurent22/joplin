@@ -3,7 +3,7 @@
 import * as React from 'react';
 
 import {
-	forwardRef, Ref, useEffect, useImperativeHandle, useRef, useState,
+	forwardRef, Ref, useCallback, useEffect, useImperativeHandle, useRef, useState,
 } from 'react';
 import { WebView, WebViewMessageEvent } from 'react-native-webview';
 import { WebViewErrorEvent, WebViewEvent, WebViewSource } from 'react-native-webview/lib/WebViewTypes';
@@ -13,7 +13,9 @@ import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
 import shim from '@joplin/lib/shim';
 import { StyleProp, ViewStyle } from 'react-native';
+import Logger from '@joplin/utils/Logger';
 
+const logger = Logger.create('ExtendedWebView');
 
 export interface WebViewControl {
 	// Evaluate the given [script] in the context of the page.
@@ -33,7 +35,7 @@ interface SourceFileUpdateEvent {
 
 export type OnMessageCallback = (event: WebViewMessageEvent)=> void;
 export type OnErrorCallback = (event: WebViewErrorEvent)=> void;
-export type OnLoadEndCallback = (event: WebViewEvent)=> void;
+export type OnLoadCallback = (event: WebViewEvent)=> void;
 type OnFileUpdateCallback = (event: SourceFileUpdateEvent)=> void;
 
 interface Props {
@@ -62,8 +64,8 @@ interface Props {
 
 	style?: StyleProp<ViewStyle>;
 	onMessage: OnMessageCallback;
-	onError: OnErrorCallback;
-	onLoadEnd?: OnLoadEndCallback;
+	onError?: OnErrorCallback;
+	onLoadEnd?: OnLoadCallback;
 
 	// Triggered when the file containing [html] is overwritten with new content.
 	onFileUpdate?: OnFileUpdateCallback;
@@ -133,6 +135,10 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 		};
 	}, [props.html, props.webviewInstanceId, props.onFileUpdate, baseUrl]);
 
+	const onError = useCallback((event: WebViewErrorEvent) => {
+		logger.error('Error', event.nativeEvent.description);
+	}, []);
+
 	// - `setSupportMultipleWindows` must be `true` for security reasons:
 	//   https://github.com/react-native-webview/react-native-webview/releases/tag/v11.0.0
 
@@ -163,7 +169,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			webviewDebuggingEnabled={Setting.value('env') === 'dev'}
 			injectedJavaScript={props.injectedJavaScript}
 			onMessage={props.onMessage}
-			onError={props.onError}
+			onError={props.onError ?? onError}
 			onLoadEnd={props.onLoadEnd}
 			decelerationRate='normal'
 		/>

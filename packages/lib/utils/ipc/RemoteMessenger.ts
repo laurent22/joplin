@@ -429,6 +429,12 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 	// Subclasses should call this method when ready to receive data
 	protected onReadyToReceive() {
 		if (this.isLocalReady) {
+			if (!this.isRemoteReady) {
+				this.postMessage({
+					kind: MessageType.RemoteReady,
+					channelId: this.channelId,
+				});
+			}
 			return;
 		}
 

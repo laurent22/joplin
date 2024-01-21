@@ -546,6 +546,9 @@ packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/reportUnhandledErr
 packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/wrapConsoleLog.js
 packages/app-mobile/plugins/PluginRunner/dialogs/PluginDialogManager.js
 packages/app-mobile/plugins/PluginRunner/dialogs/PluginDialogWebView.js
+packages/app-mobile/plugins/PluginRunner/dialogs/hooks/useDialogMessenger.js
+packages/app-mobile/plugins/PluginRunner/dialogs/hooks/useDialogSize.js
+packages/app-mobile/plugins/PluginRunner/dialogs/hooks/useWebViewSetup.js
 packages/app-mobile/plugins/PluginRunner/types.js
 packages/app-mobile/plugins/PluginRunner/utils/createOnLogHandler.js
 packages/app-mobile/plugins/hooks/usePlugin.js

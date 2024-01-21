@@ -14,8 +14,6 @@ const useCodeMirrorPlugins = (pluginStates: PluginStates) => {
 
 		const plugins: PluginData[] = [];
 
-		logger.debug('Loading CodeMirror content scripts...', pluginStates);
-
 		for (const pluginState of Object.values(pluginStates)) {
 			const pluginId = pluginState.id;
 			const contentScripts = pluginState.contentScripts[ContentScriptType.CodeMirrorPlugin] ?? [];
@@ -28,7 +26,6 @@ const useCodeMirrorPlugins = (pluginStates: PluginStates) => {
 			}
 
 			const plugin = pluginService.pluginById(pluginId);
-			logger.debug(`Loading content scripts for plugin ${pluginId}...`);
 
 			for (const contentScript of contentScripts) {
 				const contentScriptId = contentScript.id;
