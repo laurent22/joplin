@@ -66,10 +66,10 @@ export default class PluginRunner extends BasePluginRunner {
 		`);
 	}
 
-	public onWebviewMessage(event: WebViewMessageEvent) {
+	public onWebviewMessage = (event: WebViewMessageEvent) => {
 		this.messageEventListeners = this.messageEventListeners.filter(
 			// Remove all listeners that return false
 			listener => listener(event),
 		);
-	}
+	};
 }

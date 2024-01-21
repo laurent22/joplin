@@ -67,6 +67,9 @@ interface Props {
 
 	// Triggered when the file containing [html] is overwritten with new content.
 	onFileUpdate?: OnFileUpdateCallback;
+
+	// Defaults to the resource directory
+	baseUrl?: string;
 }
 
 const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
@@ -94,6 +97,8 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 		};
 	});
 
+	const baseUrl = props.baseUrl ?? `file://${Setting.value('resourceDir')}/`;
+
 	useEffect(() => {
 		let cancelled = false;
 		async function createHtmlFile() {
@@ -107,7 +112,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			// `baseUrl` is where the images will be loaded from. So images must use a path relative to resourceDir.
 			const newSource = {
 				uri: `file://${tempFile}?r=${Math.round(Math.random() * 100000000)}`,
-				baseUrl: `file://${Setting.value('resourceDir')}/`,
+				baseUrl,
 			};
 			setSource(newSource);
 
@@ -126,7 +131,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 		return () => {
 			cancelled = true;
 		};
-	}, [props.html, props.webviewInstanceId, props.onFileUpdate]);
+	}, [props.html, props.webviewInstanceId, props.onFileUpdate, baseUrl]);
 
 	// - `setSupportMultipleWindows` must be `true` for security reasons:
 	//   https://github.com/react-native-webview/react-native-webview/releases/tag/v11.0.0
@@ -150,7 +155,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			source={source ? source : { uri: undefined }}
 			setSupportMultipleWindows={true}
 			hideKeyboardAccessoryView={true}
-			allowingReadAccessToURL={`file://${Setting.value('resourceDir')}`}
+			allowingReadAccessToURL={baseUrl}
 			originWhitelist={['file://*', 'about:srcdoc', './*', 'http://*', 'https://*']}
 			mixedContentMode={props.mixedContentMode}
 			allowFileAccess={true}

@@ -42,6 +42,7 @@ export const runPlugin = (
 
 		(async () => {
 			window.require = pluginBackgroundPage.requireModule;
+			window.exports = window.exports || {};
 
 			await pluginBackgroundPage.initializePluginBackgroundIframe(${JSON.stringify(messageChannelId)});
 

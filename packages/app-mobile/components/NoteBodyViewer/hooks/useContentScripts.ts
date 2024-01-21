@@ -7,7 +7,7 @@ import { useRef, useState } from 'react';
 import { ExtraContentScriptSource } from '../bundledJs/types';
 import Logger from '@joplin/utils/Logger';
 
-const logger = Logger.create('useContentScripts');
+const logger = Logger.create('NoteBodyViewer/hooks/useContentScripts');
 
 // Most of the time, we don't actually need to reload the content scripts from a file,
 // which can be slow.
@@ -46,13 +46,15 @@ const useContentScripts = (pluginStates: PluginStates) => {
 		let differentFromLastContentScripts = false;
 		const newContentScriptsCache: ContentScriptsCache = {};
 
+		logger.debug('Loading content scripts...');
+
 		for (const pluginId in pluginStates) {
 			const markdownItContentScripts = pluginStates[pluginId].contentScripts[ContentScriptType.MarkdownItPlugin];
 			if (!markdownItContentScripts) continue;
 			const loadedPluginContentScripts: ExtraContentScriptSource[] = [];
 
 			for (const contentScript of markdownItContentScripts) {
-				logger.debug('Loading content script from', contentScript.path);
+				logger.info('Loading content script from', contentScript.path);
 				const content = await shim.fsDriver().readFile(contentScript.path, 'utf8');
 				if (event.cancelled) return;
 

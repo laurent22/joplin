@@ -1,21 +1,18 @@
 
 import * as React from 'react';
 import ExtendedWebView, { WebViewControl } from '../../components/ExtendedWebView';
-import { useCallback, useMemo, useRef, useState, useEffect, RefObject } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import shim from '@joplin/lib/shim';
-import { WebViewMessageEvent } from 'react-native-webview';
 import PluginRunner from './PluginRunner';
 import loadPlugins from '../loadPlugins';
 import { connect, useStore } from 'react-redux';
 import Logger from '@joplin/utils/Logger';
-import { StyleSheet, View, useWindowDimensions } from 'react-native';
+import { View, ViewStyle } from 'react-native';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { AppState } from '../../utils/types';
-import { PluginHtmlContents, PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
+import { PluginHtmlContents, PluginStates } from '@joplin/lib/services/plugins/reducer';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
-import PluginViewController from './PluginViewController';
-import { themeStyle } from '@joplin/lib/theme';
-import themeToCss from '@joplin/lib/services/style/themeToCss';
+import PluginDialogManager from './dialogs/PluginDialogManager';
 
 interface Props {
 	serializedPluginSettings: string;
@@ -38,53 +35,19 @@ const html = `
 
 const logger = Logger.create('PluginRunnerWebView');
 
-const useStyles = (webViewVisible: boolean) => {
-	const windowSize = useWindowDimensions();
-
-	return useMemo(() => {
-		return StyleSheet.create({
-			containerStyle: {
-				backgroundColor: 'transparent',
-				display: webViewVisible ? 'flex' : 'none',
-				zIndex: webViewVisible ? 10 : -1,
-				width: windowSize.width,
-				height: windowSize.height,
-				position: 'absolute',
-			},
-			webview: {
-				backgroundColor: 'transparent',
-				flex: webViewVisible ? 1 : 0,
-				flexGrow: webViewVisible ? 1 : 0,
-				width: webViewVisible ? undefined : 0,
-				height: webViewVisible ? undefined : 0,
-			},
-		});
-	}, [webViewVisible, windowSize]);
-};
-
-const useWebViewTheme = (
-	webViewVisible: boolean,
-	themeId: number,
-	webviewRef: RefObject<WebViewControl>,
-	pluginViewController: PluginViewController,
-) => {
-	useEffect(() => {
-		if (!webViewVisible) return;
-
-		const theme = themeStyle(themeId);
-		const themeVariableCss = themeToCss(theme);
-
-		pluginViewController.onThemeChange(themeVariableCss);
-		webviewRef.current.injectJS(`
-			const style = window.joplinThemeStyleSheet ?? document.createElement('style');
-			if (style.parent) {
-				style.remove();
-			}
-			style.textContent = ${JSON.stringify(themeVariableCss)};
-			document.head.appendChild(style);
-			window.joplinThemeStyleSheet = style;
-		`);
-	}, [themeId, pluginViewController, webViewVisible, webviewRef]);
+const styles = {
+	containerStyle: {
+		backgroundColor: 'transparent',
+		display: 'none',
+		zIndex: -1,
+		width: 0,
+		height: 0,
+		position: 'absolute',
+	} as ViewStyle,
+	webview: {
+		width: 0,
+		height: 0,
+	},
 };
 
 const usePlugins = (pluginRunner: PluginRunner, webviewLoaded: boolean, serializedPluginSettings: string) => {
@@ -108,27 +71,9 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 	const pluginRunner = useMemo(() => {
 		return new PluginRunner(webviewRef);
 	}, []);
-
-	const [webViewVisible, setWebviewVisible] = useState(false);
-
-	const pluginViewController = useMemo(() => {
-		return new PluginViewController(webviewRef, setWebviewVisible);
-	}, [setWebviewVisible]);
-
-	useEffect(() => {
-		pluginViewController.onPluginHtmlContentsUpdated(props.pluginHtmlContents);
-	}, [props.pluginHtmlContents, pluginViewController]);
-
 	const [webviewLoaded, setLoaded] = useState(false);
 
 	usePlugins(pluginRunner, webviewLoaded, props.serializedPluginSettings);
-
-	useEffect(() => {
-		const pluginViews = pluginUtils.viewInfosByType(props.pluginStates, 'webview');
-		pluginViewController.onViewInfosUpdated(pluginViews);
-	}, [props.pluginStates, pluginViewController]);
-
-	useWebViewTheme(webViewVisible, props.themeId, webviewRef, pluginViewController);
 
 	const injectedJs = useMemo(() => {
 		return `
@@ -137,16 +82,10 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 		`;
 	}, []);
 
-	const onMessage = useCallback((event: WebViewMessageEvent) => {
-		pluginRunner.onWebviewMessage(event);
-		pluginViewController.onWebViewMessage(event);
-	}, [pluginViewController, pluginRunner]);
-
 	const onError = useCallback((event: any) => {
 		logger.error(`Error: (${event.nativeEvent.code}) ${event.nativeEvent.description}`);
 	}, []);
 
-	const styles = useStyles(webViewVisible);
 	const webView = (
 		<ExtendedWebView
 			style={styles.webview}
@@ -154,25 +93,32 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 			webviewInstanceId='PluginRunner'
 			html={html}
 			injectedJavaScript={injectedJs}
-			onMessage={onMessage}
+			onMessage={pluginRunner.onWebviewMessage}
 			onError={onError}
 			onLoadEnd={() => setLoaded(true)}
 			ref={webviewRef}
 		/>
 	);
 
-	const accessibilityHidden = !webViewVisible;
+	const accessibilityHidden = true;
 
 	return (
-		<View
-			style={styles.containerStyle}
+		<>
+			<View
+				style={styles.containerStyle}
 
-			aria-hidden={accessibilityHidden}
-			importantForAccessibility={accessibilityHidden ? 'no-hide-descendants' : undefined}
-			accessibilityElementsHidden={accessibilityHidden}
-		>
-			{webView}
-		</View>
+				aria-hidden={accessibilityHidden}
+				importantForAccessibility={accessibilityHidden ? 'no-hide-descendants' : undefined}
+				accessibilityElementsHidden={accessibilityHidden}
+			>
+				{webView}
+			</View>
+			<PluginDialogManager
+				themeId={props.themeId}
+				pluginHtmlContents={props.pluginHtmlContents}
+				pluginStates={props.pluginStates}
+			/>
+		</>
 	);
 };
 

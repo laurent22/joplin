@@ -1,6 +1,5 @@
 
 import ApiGlobal from '@joplin/lib/services/plugins/api/Global';
-import { ButtonSpec } from '@joplin/lib/services/plugins/api/types';
 import { SerializableData } from '@joplin/lib/utils/ipc/types';
 
 export enum LogLevel {
@@ -40,10 +39,15 @@ export interface DialogMainProcessApi {
 	onLog: (level: LogLevel, message: string)=> Promise<void>;
 }
 
+export interface DialogContentSize {
+	width: number;
+	height: number;
+}
+
 export interface DialogWebViewApi {
+	includeCssFiles: (paths: string[])=> Promise<void>;
+	includeJsFiles: (paths: string[])=> Promise<void>;
+	setThemeCss: (css: string)=> Promise<void>;
 	getFormData: ()=> Promise<SerializableData>;
-	setCss: (css: string)=> void;
-	getContentSize: ()=> Promise<{ width: number; height: number }>;
-	closeDialog: ()=> void;
-	setButtons: (buttons: ButtonSpec[])=> void;
+	getContentSize: ()=> Promise<DialogContentSize>;
 }
