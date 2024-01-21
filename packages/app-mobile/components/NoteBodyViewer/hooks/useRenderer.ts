@@ -21,7 +21,7 @@ interface Props {
 }
 
 const onPostPluginMessage = async (contentScriptId: string, message: any) => {
-	logger.debug(`Handling message from content script: ${contentScriptId}: ${message}`);
+	logger.debug(`Handling message from content script: ${contentScriptId}:`, message);
 
 	const pluginService = PluginService.instance();
 	const pluginId = pluginService.pluginIdByContentScriptId(contentScriptId);
