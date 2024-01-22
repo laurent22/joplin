@@ -4,7 +4,7 @@
 // This is necessary. Having multiple copies of the CodeMirror libraries loaded can cause
 // the editor to not work properly.
 //
-import { lineNumbers } from '@codemirror/view';
+import { lineNumbers, highlightActiveLineGutter, } from '@codemirror/view';
 //
 // For the above import to work, you may also need to add @codemirror/view as a dev dependency
 // to package.json. (For the type information only).
@@ -22,10 +22,37 @@ export default (_context: { contentScriptId: string }) => {
 			// We add the extension to CodeMirror using a helper method:
 			codeMirrorWrapper.addExtension([
 				lineNumbers(),
+
+				// We can include multiple extensions here:
+				highlightActiveLineGutter(),
 			]);
 
 			// See https://codemirror.net/ for more built-in extensions and configuration
 			// options.
 		},
+
+		// There are two main ways to style the CodeMirror editor:
+		// 1. With a CodeMirror6 theme extension (see https://codemirror.net/examples/styling/#themes)
+		// 2. With CSS assets
+		// 
+		// CSS assets can be added by exporting an `assets` function:
+		assets: () => [
+			// We can include styles by either referencing a file
+			{ name: './assets/style.css' },
+
+			// or including the style sheet inline
+			{
+				inline: true,
+				mime: 'text/css',
+				text: `
+					/* This CSS class is added by the highlightActiveLineGutter extension: */
+					.cm-gutter .cm-activeLineGutter {
+						text-decoration: underline;
+						color: var(--joplin-color2);
+						background-color: var(--joplin-background-color2);
+					}
+				`,
+			},
+		],
 	};
 };
