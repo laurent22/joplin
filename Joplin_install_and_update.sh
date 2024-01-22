@@ -17,6 +17,8 @@ handleError() {
 # Variables
 #-----------------------------------------------------
 # tput command will fail if $TERM is unset (ex : ansible deployment)
+echo "TERM=***${TERM}***"
+exit 1
 if [[ -n ${TERM} ]] ; then
     COLOR_RED=`tput setaf 1`
     COLOR_GREEN=`tput setaf 2`
