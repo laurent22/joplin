@@ -7,12 +7,13 @@ type DescriptionRecord = {
 	readonly from: string;
 };
 
-const logger = Logger.create('UserItemAction');
-
 export enum ItemActionType {
-	Delete = 'delete',
-	BatchDelete = 'batchDelete',
+	Delete = 'DeleteAction',
 }
+
+const actionTypeToLogger = {
+	[ItemActionType.Delete]: Logger.create(ItemActionType.Delete),
+};
 
 export default class ActionLogger {
 	private descriptions: DescriptionRecord[] = [];
@@ -35,7 +36,9 @@ export default class ActionLogger {
 		const description = this.descriptions.map(description => {
 			return `${JSON.stringify(description.label)} from ${description.from}`;
 		});
-		logger.info(`${JSON.stringify(action)} from ${this.source}: Description: ${description.join(',')}; Item IDs: ${JSON.stringify(itemIds)}`);
+
+		const logger = actionTypeToLogger[action];
+		logger.info(`${this.source}: Description: ${description.join(',')}; Item IDs: ${JSON.stringify(itemIds)}`);
 	}
 
 	public static from(source: ActionLogger|string|undefined) {
