@@ -4,6 +4,7 @@ import Resource from '../../models/Resource';
 import { ResourceEntity, ResourceOcrStatus } from '../database/types';
 import { msleep } from '@joplin/utils/time';
 import Logger from '@joplin/utils/Logger';
+import Setting from '../../models/Setting';
 
 describe('OcrService', () => {
 
@@ -82,15 +83,25 @@ describe('OcrService', () => {
 		// `jest.retryTimes(2)`
 	}, 60000 * 5);
 
-	it('should process PDF resources', async () => {
-		const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/dummy.pdf` });
+	test.each([
+		// Use embedded text (skip OCR)
+		['dummy.pdf', true, 'Dummy PDF file'],
+		['multi_page.pdf', true, 'This is a test.\nTesting...\nThis PDF has 3 pages.\nThis is page 3.'],
+
+		// Find text through OCR
+		['dummy.pdf', false, 'Dummy PDF file'],
+		['multi_page.pdf', false, 'This is a test.\nTesting...\nThis PDF has 3 pages.\nThis is page 3.\nThis text will only\nbe found when\nusing OCR'],
+	])('should process PDF resources', async (samplePath: string, useExistingText: boolean, expectedText: string) => {
+		Setting.setValue('ocr.pdf.useExistingText', useExistingText);
+
+		const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/${samplePath}` });
 
 		const service = newOcrService();
 
 		await service.processResources();
 
 		const processedResource: ResourceEntity = await Resource.load(resource.id);
-		expect(processedResource.ocr_text).toBe('Dummy PDF file');
+		expect(processedResource.ocr_text).toBe(expectedText);
 		expect(processedResource.ocr_status).toBe(ResourceOcrStatus.Done);
 		expect(processedResource.ocr_error).toBe('');
 
