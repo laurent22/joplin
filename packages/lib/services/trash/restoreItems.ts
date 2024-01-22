@@ -1,11 +1,26 @@
+import { getRestoreFolder } from '.';
 import { ModelType } from '../../BaseModel';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import { FolderEntity, NoteEntity } from '../database/types';
 import { checkObjectHasProperties } from '@joplin/utils/object';
 
-const restoreItems = async (itemType: ModelType, itemsOrIds: NoteEntity[] | FolderEntity[] | string[], targetFolderId: string = null) => {
+export interface RestoreItemsOptions {
+	targetFolderId?: string;
+
+	// Restore item to a special "Restore" folder if the item doesn't have a non-deleted parent to
+	// be restored to.
+	useRestoreFolder?: boolean;
+}
+
+const restoreItems = async (itemType: ModelType, itemsOrIds: NoteEntity[] | FolderEntity[] | string[], options: RestoreItemsOptions = null) => {
 	if (!itemsOrIds.length) return;
+
+	options = {
+		targetFolderId: null,
+		useRestoreFolder: false,
+		...options,
+	};
 
 	const ModelClass = itemType === ModelType.Note ? Note : Folder;
 
@@ -17,6 +32,8 @@ const restoreItems = async (itemType: ModelType, itemsOrIds: NoteEntity[] | Fold
 		items = itemsOrIds as (NoteEntity[] | FolderEntity[]);
 	}
 
+	let restoreFolder: FolderEntity = null;
+
 	for (const item of items) {
 		checkObjectHasProperties(item, ['id', 'parent_id']);
 
@@ -24,10 +41,15 @@ const restoreItems = async (itemType: ModelType, itemsOrIds: NoteEntity[] | Fold
 
 		const parentItem = await Folder.load(item.parent_id, { fields: ['id', 'deleted_time'] });
 		if (!parentItem || parentItem.deleted_time) {
-			itemParentId = '';
+			if (options.useRestoreFolder) {
+				if (!restoreFolder) restoreFolder = await getRestoreFolder();
+				itemParentId = restoreFolder.id;
+			} else {
+				itemParentId = '';
+			}
 		}
 
-		if (targetFolderId !== null) itemParentId = targetFolderId;
+		if (options.targetFolderId !== null) itemParentId = options.targetFolderId;
 
 		let toSave: FolderEntity | NoteEntity = null;
 

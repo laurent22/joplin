@@ -30,7 +30,7 @@ export default async (noteIds: string[], folderIds: string[], targetFolderId: st
 					await ModelClass.delete(item.id, defaultDeleteOptions);
 				}
 			} else if (item.deleted_time && !targetFolder.deleted_time) {
-				await restoreItems(itemType, [item], targetFolder.id);
+				await restoreItems(itemType, [item], { targetFolderId: targetFolder.id });
 			} else {
 				await ModelClass.moveToFolder(item.id, targetFolderId);
 			}

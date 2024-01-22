@@ -784,6 +784,10 @@ export default class Folder extends BaseItem {
 		return output;
 	}
 
+	public static async loadByTitleAndParent(title: string, parentId: string, options: LoadOptions = null): Promise<FolderEntity> {
+		return await this.modelSelectOne(`SELECT ${this.selectFields(options)} FROM folders WHERE title = ? and parent_id = ?`, [title, parentId]);
+	}
+
 	public static load(id: string, options: LoadOptions = null): Promise<FolderEntity> {
 		if (id === this.conflictFolderId()) return Promise.resolve(this.conflictFolder());
 		if (id === getTrashFolderId()) return Promise.resolve(getTrashFolder());

@@ -35,6 +35,7 @@ interface PreviewsOptions {
 	anywherePattern?: string;
 	itemTypes?: string[];
 	limit?: number;
+	titlePattern?: string;
 }
 
 export default class Note extends BaseItem {
