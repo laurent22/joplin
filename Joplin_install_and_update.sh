@@ -16,8 +16,8 @@ handleError() {
 #-----------------------------------------------------
 # Variables
 #-----------------------------------------------------
-# tput command will fail if $TERM is unset (ex : ansible deployment)
-if [[ "${TERM}" != "unknown" ]] ; then
+# tput command will fail if $TERM is set to dumb (ex : ansible deployment)
+if [[ "${TERM}" != "dumb" ]] ; then
     COLOR_RED=`tput setaf 1`
     COLOR_GREEN=`tput setaf 2`
     COLOR_YELLOW=`tput setaf 3`
