@@ -8,7 +8,7 @@ import Synchronizer from '@joplin/lib/Synchronizer';
 import NavService from '@joplin/lib/services/NavService';
 import { _ } from '@joplin/lib/locale';
 const { themeStyle } = require('./global-style.js');
-const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
+import { renderFolders } from '@joplin/lib/components/shared/side-menu-shared';
 import { FolderEntity, FolderIcon } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
 import Setting from '@joplin/lib/models/Setting';
@@ -37,6 +37,8 @@ interface Props {
 	opacity: number;
 	profileConfig: ProfileConfig;
 	inboxJopId: string;
+	selectedFolderId: string;
+	selectedTagId: string;
 }
 
 const syncIconRotationValue = new Animated.Value(0);
@@ -488,7 +490,7 @@ const SideMenuContentComponent = (props: Props) => {
 	items.push(renderSidebarButton('folder_header', _('Notebooks'), 'folder'));
 
 	if (props.folders.length) {
-		const result = shared.renderFolders(props, renderFolderItem, false);
+		const result = renderFolders(props, renderFolderItem);
 		const folderItems = result.items;
 		items = items.concat(folderItems);
 	}

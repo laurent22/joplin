@@ -5,7 +5,7 @@ import * as Koa from 'koa';
 import * as fs from 'fs-extra';
 import Logger, { LogLevel, LoggerWrapper, TargetType } from '@joplin/utils/Logger';
 import config, { fullVersionString, initConfig, runningInDocker } from './config';
-import { migrateLatest, waitForConnection, sqliteDefaultDir, latestMigration, needsMigration, migrateList } from './db';
+import { migrateLatest, waitForConnection, sqliteDefaultDir, latestMigration, needsMigration, migrateList, versionCheck } from './db';
 import { AppContext, Env, KoaNext } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import { getDeviceTimeDrift } from '@joplin/lib/ntp';
@@ -301,6 +301,8 @@ async function main() {
 
 		appLogger().info('Connection check:', connectionCheckLogInfo);
 		const ctx = app.context as AppContext;
+
+		await versionCheck(connectionCheck.connection);
 
 		if (config().database.autoMigration) {
 			appLogger().info('Auto-migrating database...');

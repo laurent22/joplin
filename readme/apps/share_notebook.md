@@ -20,6 +20,14 @@ Then, finally, once the invitation is accepted, Joplin will download all the sha
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/share_notebook/SidebarShared.png" width="50%"/>
 
+## Share permissions
+
+With the Joplin Cloud Teams plan, you have the ability to customise the read and write permissions for the notebooks you share. You have the option to grant other users permission to edit the notes or share them as read-only. This ensures that you can confidently share a notebook without worrying about unintentional modifications by your friends or colleagues.
+
+To make use of this feature, simply select "Can view" or "Can view and edit" from the permission dropdown list:
+
+![](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230825-share-permissions.png)
+
 ## FAQ
 
 ### What's the availability of the notebook sharing feature?

@@ -1,4 +1,4 @@
-const React = require('react');
+import * as React from 'react';
 
 import { ReactElement, useCallback, useMemo, useState } from 'react';
 import { LayoutChangeEvent, ScrollView, View, ViewStyle } from 'react-native';
@@ -14,7 +14,7 @@ interface ToolbarProps {
 }
 
 // Displays a list of buttons with an overflow menu.
-const Toolbar = (props: ToolbarProps) => {
+const Toolbar: React.FC<ToolbarProps> = (props: ToolbarProps) => {
 	const [overflowButtonsVisible, setOverflowPopupVisible] = useState(false);
 	const [maxButtonsEachSide, setMaxButtonsEachSide] = useState(0);
 

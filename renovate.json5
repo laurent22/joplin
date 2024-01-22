@@ -135,6 +135,11 @@
 		"strip-ansi",
 		"node-emoji",
 
+		// Formidable v3 is broken:
+		// https://github.com/node-formidable/formidable/issues/958
+		"formidable",
+		"@types/formidable",
+
 		// @koa/cors has undocumented breaking changes, and the package is not
 		// well supported so we're stuck with latest v3 for now
 		"@koa/cors",
@@ -199,7 +204,16 @@
 		{
 			"matchUpdateTypes": ["minor", "patch"],
 			"automerge": true,
-			"groupName": "electron",
+			"labels": ["automerge"],
+			"matchPackagePatterns": [
+				"@types/*",
+			],
+		},
+
+		{
+			"matchUpdateTypes": ["minor", "patch"],
+			"automerge": true,
+			"groupName": "types",
 			"extends": ["schedule:monthly"],
 			"labels": ["automerge"],
 			"matchPackagePatterns": [
@@ -226,9 +240,6 @@
 				"yarn",
 				"typescript",
 				"prettier",
-				
-				// If it builds, it should be safe to merge @types/* packages
-				// "@types/*",
 			],
 		},
 

@@ -1,5 +1,35 @@
 # Joplin Desktop Changelog
 
+## [v2.14.10](https://github.com/laurent22/joplin/releases/tag/v2.14.10) (Pre-release) - 2024-01-18T22:45:04Z
+
+- New: Add support for automatically uploading crash reports ([de0ae76](https://github.com/laurent22/joplin/commit/de0ae76))
+- Improved: Display an error if a resource cannot be downloaded ([cbf7e24](https://github.com/laurent22/joplin/commit/cbf7e24))
+- Improved: Don't log OneDrive `Authorization` tokens ([#9707](https://github.com/laurent22/joplin/issues/9707)) ([#9706](https://github.com/laurent22/joplin/issues/9706) by Henry Heino)
+- Improved: Updated packages react
+- Fixed: Beta editor: Fix `o` not working in Vim normal mode ([#9700](https://github.com/laurent22/joplin/issues/9700)) ([#9699](https://github.com/laurent22/joplin/issues/9699) by Henry Heino)
+- Fixed: Fix warning logged when uninstalling multiple plugins ([#9726](https://github.com/laurent22/joplin/issues/9726)) ([#9725](https://github.com/laurent22/joplin/issues/9725) by Henry Heino)
+- Fixed: Fixes existing attachments not being shared in some cases with Joplin Server ([7ebc986](https://github.com/laurent22/joplin/commit/7ebc986))
+- Fixed: Shared notebook can get corrupted if contributor changes its title ([#9709](https://github.com/laurent22/joplin/issues/9709))
+
+## [v2.13.15](https://github.com/laurent22/joplin/releases/tag/v2.13.15) - 2024-01-15T13:01:19Z
+
+- Fixed: Fixes existing attachments not being shared in some cases with Joplin Server ([c412b1f](https://github.com/laurent22/joplin/commit/c412b1f))
+
+## [v2.13.14](https://github.com/laurent22/joplin/releases/tag/v2.13.14) - 2024-01-13T19:11:04Z
+
+- Fixed: Shared notebook can get corrupted if contributor changes its title ([#9709](https://github.com/laurent22/joplin/issues/9709))
+
+## [v2.14.9](https://github.com/laurent22/joplin/releases/tag/v2.14.9) (Pre-release) - 2024-01-11T22:17:59Z
+
+- Fixed: Fix AWS S3 sync error ([#9696](https://github.com/laurent22/joplin/issues/9696)) ([#8891](https://github.com/laurent22/joplin/issues/8891) by Henry Heino)
+
+## [v2.14.8](https://github.com/laurent22/joplin/releases/tag/v2.14.8) (Pre-release) - 2024-01-09T22:57:07Z
+
+- Improved: Allow importing a directory of ENEX files ([#9693](https://github.com/laurent22/joplin/issues/9693))
+- Improved: Frontmatter importer: Support Notesnook-style timestamps ([#9684](https://github.com/laurent22/joplin/issues/9684)) ([#9683](https://github.com/laurent22/joplin/issues/9683) by Henry Heino)
+- Improved: Update Simple Backup to v1.3.5 to fix some notebooks exported twice while creating a backup ([#9677](https://github.com/laurent22/joplin/issues/9677) by Henry Heino)
+- Improved: Updated packages fs-extra (v11.2.0)
+
 ## [v2.14.7](https://github.com/laurent22/joplin/releases/tag/v2.14.7) (Pre-release) - 2024-01-08T11:51:49Z
 
 - Improved: Updated packages sharp (v0.33.1)

@@ -47,7 +47,14 @@ const buildDefaultPlugins = async (outputParentDir: string|null, beforeInstall: 
 			if (currentCommitHash !== expectedCommitHash) {
 				logStatus(`Switching to commit ${expectedCommitHash}`);
 				await execCommand(['git', 'switch', repositoryData.branch]);
-				await execCommand(['git', 'checkout', expectedCommitHash]);
+
+				try {
+					await execCommand(['git', 'checkout', expectedCommitHash]);
+				} catch (error) {
+					logStatus(`git checkout failed with error ${error}. Fetching...`);
+					await execCommand(['git', 'fetch']);
+					await execCommand(['git', 'checkout', expectedCommitHash]);
+				}
 			}
 
 			logStatus('Copying repository files...');

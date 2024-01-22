@@ -1,6 +1,6 @@
 import { RuleOptions } from '../../MdToHtml';
 import linkReplacement from '../linkReplacement';
-import utils from '../../utils';
+import * as utils from '../../utils';
 
 const urlUtils = require('../../urlUtils.js');
 
