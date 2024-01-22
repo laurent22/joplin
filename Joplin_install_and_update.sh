@@ -16,6 +16,8 @@ handleError() {
 #-----------------------------------------------------
 # Variables
 #-----------------------------------------------------
+# tput command will fail if $TERM is unset (ex : ansible deployment)
+[[ -z ${TERM} ]] && TERM="xterm-256color"
 COLOR_RED=`tput setaf 1`
 COLOR_GREEN=`tput setaf 2`
 COLOR_YELLOW=`tput setaf 3`
