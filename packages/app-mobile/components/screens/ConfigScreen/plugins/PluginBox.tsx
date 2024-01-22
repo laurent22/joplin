@@ -68,6 +68,7 @@ const PluginBox: React.FC<Props> = props => {
 		<Button
 			onPress={() => props.onUpdate?.({ item })}
 			disabled={props.updateState !== UpdateState.CanUpdate}
+			loading={props.updateState === UpdateState.Updating}
 		>
 			{updateButtonTitle()}
 		</Button>
