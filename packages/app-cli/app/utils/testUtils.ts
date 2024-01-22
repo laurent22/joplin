@@ -1,4 +1,4 @@
-const { app } = require('../app');
+import app from '../app';
 import Folder from '@joplin/lib/models/Folder';
 import BaseCommand from '../base-command';
 import setupCommand from '../setupCommand';

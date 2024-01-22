@@ -1,4 +1,4 @@
-import { PluginManifest, PluginPermission, Screenshot, Icons } from './types';
+import { PluginManifest, PluginPermission, Image, Icons } from './types';
 import validatePluginId from './validatePluginId';
 
 export default function manifestFromObject(o: any): PluginManifest {
@@ -31,9 +31,13 @@ export default function manifestFromObject(o: any): PluginManifest {
 		return o[name];
 	};
 
-	const getScreenshots = (defaultValue: Screenshot[] = []): Screenshot[] => {
+	const getScreenshots = (defaultValue: Image[] = []): Image[] => {
 		if (!o.screenshots) return defaultValue;
 		return o.screenshots;
+	};
+
+	const getPromoTile = (): Image => {
+		return o.promo_tile || null;
 	};
 
 	const getIcons = (): Icons => {
@@ -62,6 +66,7 @@ export default function manifestFromObject(o: any): PluginManifest {
 		screenshots: getScreenshots(),
 		permissions: permissions,
 		icons: getIcons(),
+		promo_tile: getPromoTile(),
 
 		_recommended: getBoolean('_recommended', false, false),
 	};
