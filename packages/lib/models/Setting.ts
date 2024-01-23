@@ -848,21 +848,6 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 
-			'ocr.pdf.useExistingText': {
-				value: true,
-				type: SettingItemType.Bool,
-				public: true,
-				advanced: true,
-				appTypes: [AppType.Desktop],
-				show: (settings) => {
-					return settings['ocr.enabled'];
-				},
-				label: () => _('Skip OCR for PDFs with embedded text'),
-				description: () => _('When enabled, optical character recognition will be disabled for PDFs with embedded text. Instead the embedded text will be used to provide search results. This only applies to PDFs not yet processed by OCR.'),
-				storage: SettingStorage.File,
-				isGlobal: true,
-			},
-
 			theme: {
 				value: Setting.THEME_LIGHT,
 				type: SettingItemType.Int,

@@ -62,15 +62,15 @@ export default class OcrService {
 		const resourceFilePath = Resource.fullPath(resource);
 
 		if (resource.mime === 'application/pdf') {
-			if (Setting.value('ocr.pdf.useExistingText')) {
-				const pageTexts = await shim.pdfExtractEmbeddedText(resourceFilePath);
-				const pagesWithText = pageTexts.filter(text => !!text.trim().length);
+			// OCR can be slow for large PDFs.
+			// Skip it if the PDF already includes text.
+			const pageTexts = await shim.pdfExtractEmbeddedText(resourceFilePath);
+			const pagesWithText = pageTexts.filter(text => !!text.trim().length);
 
-				if (pagesWithText.length > 0) {
-					return {
-						text: pageTexts.join('\n'),
-					};
-				}
+			if (pagesWithText.length > 0) {
+				return {
+					text: pageTexts.join('\n'),
+				};
 			}
 
 			const imageFilePaths = await shim.pdfToImages(resourceFilePath, await this.pdfExtractDir());
