@@ -72,7 +72,7 @@ const useStyle = (themeId: number) => {
 const JoplinCloudScreenComponent = (props: Props) => {
 
 	const confirmUrl = (applicationAuthId: string) => `${props.joplinCloudWebsite}/applications/${applicationAuthId}/confirm`;
-	const applicationAuthUrl = (applicationAuthId: string) => `${props.joplinCloudApi}/api/applications/${applicationAuthId}`;
+	const applicationAuthUrl = (applicationAuthId: string) => `${props.joplinCloudApi}/api/application_auth/${applicationAuthId}`;
 
 	const [intervalIdentifier, setIntervalIdentifier] = React.useState(undefined);
 	const [state, dispatch] = React.useReducer(reducer, defaultState);
