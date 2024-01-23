@@ -68,7 +68,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 
 		// Current location
 		inConflictFolder: state.selectedFolderId === Folder.conflictFolderId(),
-		inTrash: state.selectedFolderId === getTrashFolderId(),
+		inTrash: state.selectedFolderId === getTrashFolderId() || commandFolder && !!commandFolder.deleted_time,
 
 		// Note selection
 		oneNoteSelected: !!selectedNote,
