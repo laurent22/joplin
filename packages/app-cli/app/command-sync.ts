@@ -111,7 +111,7 @@ class Command extends BaseCommand {
 			const urlWithClient = await generateApplicationConfirmUrl(confirmUrl);
 			this.stdout(urlWithClient);
 
-			const authorized = await this.prompt(_('Did you already authorized login in Joplin Cloud?'), { booleanAnswerDefault: 'y' });
+			const authorized = await this.prompt(_('Have you authorised the application login in the above URL?'), { booleanAnswerDefault: 'y' });
 			if (!authorized) return false;
 			const result = await checkForCredentials();
 			if (!result) return false;
