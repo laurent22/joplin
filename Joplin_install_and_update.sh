@@ -16,11 +16,14 @@ handleError() {
 #-----------------------------------------------------
 # Variables
 #-----------------------------------------------------
-COLOR_RED=`tput setaf 1`
-COLOR_GREEN=`tput setaf 2`
-COLOR_YELLOW=`tput setaf 3`
-COLOR_BLUE=`tput setaf 4`
-COLOR_RESET=`tput sgr0`
+# Only set colors, if tput available and TERM is recognized
+if [[ `command -v tput` && `tput setaf 1 2>/dev/null` ]]; then
+  COLOR_RED=`tput setaf 1`
+  COLOR_GREEN=`tput setaf 2`
+  COLOR_YELLOW=`tput setaf 3`
+  COLOR_BLUE=`tput setaf 4`
+  COLOR_RESET=`tput sgr0`
+fi
 SILENT=false
 ALLOW_ROOT=false
 SHOW_CHANGELOG=false
@@ -53,7 +56,7 @@ showHelp() {
     print "\t" "--changelog" "\t" "Show the changelog after installation"
     print "\t" "--force" "\t" "Always download the latest version"
     print "\t" "--silent" "\t" "Don't print any output"
-    print "\t" "--prerelease" "\t" "Check for new Versions including Pre-Releases" 
+    print "\t" "--prerelease" "\t" "Check for new Versions including Pre-Releases"
 
     if [[ ! -z $1 ]]; then
         print "\n" "${COLOR_RED}ERROR: " "$*" "${COLOR_RESET}" "\n"
@@ -222,7 +225,7 @@ fi
 # `.local/share/desktop` had a desktop file created.
 # However some environments don't return a desktop BUT still support these desktop files
 # the command check was added to support all Desktops that have support for the
-# freedesktop standard 
+# freedesktop standard
 # The old checks are left in place for historical reasons, but
 # NO MORE DESKTOP ENVIRONMENTS SHOULD BE ADDED
 # If a new environment needs to be supported, then the command check section should be re-thought
@@ -235,7 +238,7 @@ then
 
     # On some systems this directory doesn't exist by default
     mkdir -p "$DESKTOP_FILE_LOCATION"
-    
+
     # Tabs specifically, and not spaces, are needed for indentation with Bash heredocs
     cat >> "$DESKTOP_FILE_LOCATION/appimagekit-joplin.desktop" <<-EOF
 	[Desktop Entry]
@@ -251,7 +254,7 @@ then
 	X-GNOME-SingleWindow=true // should be removed eventually as it was upstream to be an XDG specification
 	SingleMainWindow=true
 	EOF
-    
+
     # Update application icons
     [[ `command -v update-desktop-database` ]] && update-desktop-database "$DESKTOP_FILE_LOCATION" && update-desktop-database "$DATA_HOME/icons"
     print "${COLOR_GREEN}OK${COLOR_RESET}"
