@@ -11,11 +11,10 @@ const logger = Logger.create('useOnInstallHandler');
 
 type GetRepoApiCallback = ()=> RepositoryApi;
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 const useOnInstallHandler = (
 	setInstallingPluginIds: React.Dispatch<React.SetStateAction<Record<string, boolean>>>,
 	pluginSettings: PluginSettings,
-	repoApi: GetRepoApiCallback,
+	getRepoApi: GetRepoApiCallback|RepositoryApi,
 	onPluginSettingsChange: OnPluginSettingChangeHandler,
 	isUpdate: boolean,
 ) => {
@@ -32,10 +31,12 @@ const useOnInstallHandler = (
 		let installError = null;
 
 		try {
+			const repoApi = typeof getRepoApi === 'function' ? getRepoApi() : getRepoApi;
+
 			if (isUpdate) {
-				await PluginService.instance().updatePluginFromRepo(repoApi(), pluginId);
+				await PluginService.instance().updatePluginFromRepo(repoApi, pluginId);
 			} else {
-				await PluginService.instance().installPluginFromRepo(repoApi(), pluginId);
+				await PluginService.instance().installPluginFromRepo(repoApi, pluginId);
 			}
 		} catch (error) {
 			installError = error;
@@ -68,7 +69,7 @@ const useOnInstallHandler = (
 				{ buttons: [_('OK')] },
 			);
 		}
-	}, [repoApi, isUpdate, pluginSettings, onPluginSettingsChange, setInstallingPluginIds]);
+	}, [getRepoApi, isUpdate, pluginSettings, onPluginSettingsChange, setInstallingPluginIds]);
 };
 
 export default useOnInstallHandler;

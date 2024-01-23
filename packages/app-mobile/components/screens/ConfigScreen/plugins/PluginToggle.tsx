@@ -7,13 +7,14 @@ import PluginBox, { UpdateState } from './PluginBox';
 import useOnDeleteHandler from '@joplin/lib/components/shared/config/plugins/useOnDeleteHandler';
 import { ItemEvent, OnPluginSettingChangeEvent } from '@joplin/lib/components/shared/config/plugins/types';
 import useOnInstallHandler from '@joplin/lib/components/shared/config/plugins/useOnInstallHandler';
-import repoApi from './utils/repoApi';
+import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 
 interface Props {
 	pluginId: string;
 	styles: ConfigScreenStyles;
 	pluginSettings: string;
 	updateablePluginIds: Record<string, boolean>;
+	repoApi: RepositoryApi;
 
 	onShowPluginLog: (event: ItemEvent)=> void;
 	updatePluginStates: (settingValue: PluginSettings)=> void;
@@ -55,7 +56,7 @@ const PluginToggle: React.FC<Props> = props => {
 	const onDelete = useOnDeleteHandler(pluginSettings, onPluginSettingsChange, true);
 
 	const [updatingPluginIds, setUpdatingPluginIds] = useState<Record<string, boolean>>({});
-	const onUpdate = useOnInstallHandler(setUpdatingPluginIds, pluginSettings, repoApi, onPluginSettingsChange, true);
+	const onUpdate = useOnInstallHandler(setUpdatingPluginIds, pluginSettings, props.repoApi, onPluginSettingsChange, true);
 
 	const updateState = useMemo(() => {
 		const settings = pluginSettings[pluginId];

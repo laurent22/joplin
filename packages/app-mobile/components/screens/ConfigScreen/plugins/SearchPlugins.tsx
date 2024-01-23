@@ -8,17 +8,17 @@ import { FlatList, View } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import PluginBox, { InstallState } from './PluginBox';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
-import repoApi from './utils/repoApi';
 import useInstallHandler from '@joplin/lib/components/shared/config/plugins/useOnInstallHandler';
 import { OnPluginSettingChangeEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import onOpenWebsiteForPluginPress from './utils/openWebsiteForPlugin';
-
+import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 
 interface Props {
 	themeId: number;
 	pluginSettings: string;
 	repoApiInitialized: boolean;
-	updatePluginStates: (states: PluginSettings)=> void;
+	onUpdatePluginStates: (states: PluginSettings)=> void;
+	repoApi: RepositoryApi;
 }
 
 interface SearchResultRecord {
@@ -35,12 +35,12 @@ const PluginSearch: React.FC<Props> = props => {
 		if (!searchQuery || !props.repoApiInitialized) {
 			setSearchResultManifests([]);
 		} else {
-			const results = await repoApi().search(searchQuery);
+			const results = await props.repoApi.search(searchQuery);
 			if (event.cancelled) return;
 
 			setSearchResultManifests(results);
 		}
-	}, [searchQuery, setSearchResultManifests, props.repoApiInitialized]);
+	}, [searchQuery, props.repoApi, setSearchResultManifests, props.repoApiInitialized]);
 
 	const [installingPluginsIds, setInstallingPluginIds] = useState<Record<string, boolean>>({});
 
@@ -78,11 +78,11 @@ const PluginSearch: React.FC<Props> = props => {
 	}, [searchResultManifests, installingPluginsIds, pluginSettings]);
 
 	const onPluginSettingsChange = useCallback((event: OnPluginSettingChangeEvent) => {
-		props.updatePluginStates(event.value);
-	}, [props.updatePluginStates]);
+		props.onUpdatePluginStates(event.value);
+	}, [props.onUpdatePluginStates]);
 
 	const installPlugin = useInstallHandler(
-		setInstallingPluginIds, pluginSettings, repoApi, onPluginSettingsChange, false,
+		setInstallingPluginIds, pluginSettings, props.repoApi, onPluginSettingsChange, false,
 	);
 
 	const renderResult = useCallback(({ item }: { item: SearchResultRecord }) => {
@@ -103,6 +103,7 @@ const PluginSearch: React.FC<Props> = props => {
 	return (
 		<View style={{ flexDirection: 'column' }}>
 			<Searchbar
+				testID='searchbar'
 				placeholder={_('Search')}
 				onChangeText={setSearchQuery}
 				value={searchQuery}

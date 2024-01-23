@@ -1,7 +1,4 @@
-import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import * as React from 'react';
-import repoApi from './utils/repoApi';
-import Logger from '@joplin/utils/Logger';
 import { useCallback, useState } from 'react';
 import { ConfigScreenStyles } from '../configScreenStyles';
 import { View } from 'react-native';
@@ -14,6 +11,8 @@ import shim from '@joplin/lib/shim';
 import { ItemEvent } from '@joplin/lib/components/shared/config/plugins/types';
 import NavService from '@joplin/lib/services/NavService';
 import isInstallingPluginsAllowed from './utils/isPluginInstallingAllowed';
+import useRepoApi from './utils/useRepoApi';
+import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 
 interface Props {
 	themeId: number;
@@ -24,8 +23,6 @@ interface Props {
 	updatePluginStates: (settingValue: PluginSettings)=> void;
 	shouldShowBasedOnSearchQuery: ((relatedText: string|string[])=> boolean)|null;
 }
-
-const logger = Logger.create('PluginStates');
 
 // Text used for determining whether to display the setting or not.
 const searchInputSearchText = () => [_('Search'), _('Plugin search')];
@@ -43,47 +40,34 @@ export const getSearchText = () => {
 const PluginStates: React.FC<Props> = props => {
 	const [repoApiError, setRepoApiError] = useState(null);
 	const [repoApiLoaded, setRepoApiLoaded] = useState(false);
-	const [reloadRepoConter, setRepoReloadCounter] = useState(0);
+	const [reloadRepoCounter, setRepoReloadCounter] = useState(0);
 	const [updateablePluginIds, setUpdatablePluginIds] = useState<Record<string, boolean>>({});
 
-	useAsyncEffect(async event => {
-		if (reloadRepoConter > 0) {
-			logger.info(`Reloading the plugin repository -- try #${reloadRepoConter + 1}`);
-		}
+	const onRepoApiLoaded = useCallback(async (repoApi: RepositoryApi) => {
+		const manifests = Object.values(PluginService.instance().plugins)
+			.filter(plugin => !plugin.builtIn && !plugin.devMode)
+			.map(plugin => {
+				return plugin.manifest;
+			});
+		const updateablePluginIds = await repoApi.canBeUpdatedPlugins(manifests, PluginService.instance().appVersion);
 
-		setRepoApiError(null);
-		try {
-			await repoApi().initialize();
-		} catch (error) {
-			logger.error(error);
-			setRepoApiError(error);
+		const conv: Record<string, boolean> = {};
+		for (const id of updateablePluginIds) {
+			conv[id] = true;
 		}
-		if (!event.cancelled) {
-			setRepoApiLoaded(true);
-
-			const manifests = Object.values(PluginService.instance().plugins)
-				.filter(plugin => !plugin.builtIn && !plugin.devMode)
-				.map(plugin => {
-					return plugin.manifest;
-				});
-			const updateablePluginIds = await repoApi().canBeUpdatedPlugins(manifests, pluginService.appVersion);
-
-			const conv: Record<string, boolean> = {};
-			for (const id of updateablePluginIds) {
-				conv[id] = true;
-			}
-			setUpdatablePluginIds(conv);
-		}
-	}, [setRepoApiError, reloadRepoConter]);
+		setRepoApiLoaded(true);
+		setUpdatablePluginIds(conv);
+	}, []);
+	const repoApi = useRepoApi({ setRepoApiError, onRepoApiLoaded, reloadRepoCounter });
 
 	const reloadPluginRepo = useCallback(() => {
-		setRepoReloadCounter(reloadRepoConter + 1);
-	}, [reloadRepoConter, setRepoReloadCounter]);
+		setRepoReloadCounter(reloadRepoCounter + 1);
+	}, [reloadRepoCounter, setRepoReloadCounter]);
 
 	const renderRepoApiStatus = () => {
 		if (repoApiLoaded) {
-			if (!repoApi().isUsingDefaultContentUrl) {
-				const url = new URL(repoApi().contentBaseUrl);
+			if (!repoApi.isUsingDefaultContentUrl) {
+				const url = new URL(repoApi.contentBaseUrl);
 				return (
 					<Banner visible={true} icon='alert'>{_('Content provided by: %s', url.hostname)}</Banner>
 				);
@@ -122,6 +106,7 @@ const PluginStates: React.FC<Props> = props => {
 					updateablePluginIds={updateablePluginIds}
 					updatePluginStates={props.updatePluginStates}
 					onShowPluginLog={onShowPluginLog}
+					repoApi={repoApi}
 				/>,
 			);
 		}
@@ -143,8 +128,9 @@ const PluginStates: React.FC<Props> = props => {
 		<SearchPlugins
 			pluginSettings={props.pluginSettings}
 			themeId={props.themeId}
-			updatePluginStates={props.updatePluginStates}
+			onUpdatePluginStates={props.updatePluginStates}
 			repoApiInitialized={repoApiLoaded}
+			repoApi={repoApi}
 		/>
 	);
 
