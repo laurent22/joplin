@@ -6,14 +6,19 @@ type OnLogCallback = (level: LogLevel, message: string)=> void;
 
 // Wraps console.info, console.error, console.warn
 const wrapConsoleLog = (onLog: OnLogCallback) => {
+	// inOnLogCallback keeps track of whether onLog is currently being called or not.
+	// This helps prevent StackOverflows if onLog itself calls console.log/console.error.
+	let inOnLogCallback = false;
+
 	const wrapLogFunction = (key: keyof typeof console, logLevel: LogLevel) => {
 		const originalLog = (console[key] as any) ?? (()=>{});
 
 		console[key] = function(...args: any[]) {
 			originalLog.call(this, ...args);
+			if (inOnLogCallback) return;
 
 			// Work around
-			//  Uncaught (in promise) TypeError: Cannot convert object to primitive value
+			//   Uncaught (in promise) TypeError: Cannot convert object to primitive value
 			// when console.log is called with an object that
 			// can't be converted to a string.
 			let argsString;
@@ -29,7 +34,12 @@ const wrapConsoleLog = (onLog: OnLogCallback) => {
 				argsString = `${argsString.substring(0, maxLength)}...`;
 			}
 
-			onLog(logLevel, argsString);
+			try {
+				inOnLogCallback = true;
+				onLog(logLevel, argsString);
+			} finally {
+				inOnLogCallback = false;
+			}
 		} as any;
 	};
 

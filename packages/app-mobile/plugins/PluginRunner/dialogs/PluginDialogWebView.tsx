@@ -1,21 +1,17 @@
 import * as React from 'react';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { PluginHtmlContents, PluginStates, ViewInfo } from '@joplin/lib/services/plugins/reducer';
-import ExtendedWebView, { WebViewControl } from '../../../components/ExtendedWebView';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import usePlugin from '../../hooks/usePlugin';
-import { DialogContentSize } from '../types';
-import Logger from '@joplin/utils/Logger';
-import shim from '@joplin/lib/shim';
+import { DialogContentSize, DialogWebViewApi } from '../types';
 import { Button } from 'react-native-paper';
 import { themeStyle } from '@joplin/lib/theme';
-import { ButtonSpec } from '@joplin/lib/services/plugins/api/types';
+import { ButtonSpec, DialogResult } from '@joplin/lib/services/plugins/api/types';
 import { _ } from '@joplin/lib/locale';
-import WebviewController from '@joplin/lib/services/plugins/WebviewController';
+import WebviewController, { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { Theme } from '@joplin/lib/themes/type';
-import useDialogMessenger, { messageChannelId } from './hooks/useDialogMessenger';
-import useWebViewSetup from './hooks/useWebViewSetup';
 import useDialogSize from './hooks/useDialogSize';
+import PluginUserWebView from './PluginUserWebView';
 
 interface Props {
 	themeId: number;
@@ -54,7 +50,7 @@ const useStyles = (
 				maxWidth: useDialogSize ? dialogContentSize?.width : undefined,
 				height: windowSize.height * 0.97,
 				width: windowSize.width * 0.97,
-				opacity: dialogHasLoaded ? 1 : 0,
+				opacity: dialogHasLoaded ? 1 : 0.1,
 
 				// Center
 				marginLeft: 'auto',
@@ -80,77 +76,36 @@ const PluginDialogWebView: React.FC<Props> = props => {
 	const viewId = view.id;
 	const plugin = usePlugin(pluginId);
 	const [webViewLoadCount, setWebViewLoadCount] = useState(0);
-
-	const viewController = useMemo(() => {
-		return plugin.viewController(viewId) as WebviewController;
-	}, [plugin, viewId]);
-
-	const logger = useMemo(() => Logger.create(`PluginDialogWebView(${pluginId})`), [pluginId]);
-	const webviewRef = useRef<WebViewControl>(null);
-
-	const messenger = useDialogMessenger({
-		plugin,
-		pluginLogger: logger,
-		viewController,
-		webviewRef,
-	});
-
-	useWebViewSetup({
-		themeId: props.themeId,
-		dialogControl: messenger.remoteApi,
-		scriptPaths: view.scripts ?? [],
-		pluginBaseDir: plugin.baseDir,
-		webViewLoadCount,
-	});
-
-	const htmlContent = props.pluginHtmlContents[pluginId]?.[viewId] ?? '';
-	const html = `
-		<!DOCTYPE html>
-		<html>
-			<head>
-				<meta charset="utf-8"/>
-				<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-				<title>Plugin Dialog</title>
-				<style>
-					body {
-						padding: 20px;
-					}
-				</style>
-			</head>
-			<body>
-				${htmlContent}
-			</body>
-		</html>
-	`;
-
-	const injectedJs = useMemo(() => {
-		return `
-			${shim.injectedJs('pluginBackgroundPage')}
-			pluginBackgroundPage.initializeDialogWebView(
-				${JSON.stringify(messageChannelId)}
-			);
-		`;
-	}, []);
+	const [dialogControl, setDialogControl] = useState<DialogWebViewApi|null>(null);
 
 	const dialogSize = useDialogSize({
-		dialogControl: messenger.remoteApi,
+		dialogControl,
 		webViewLoadCount,
 	});
 	const styles = useStyles(props.themeId, dialogSize, view.fitToContent);
 
 	const onButtonPress = useCallback(async (button: ButtonSpec) => {
+		const closeWithResponse = (response?: DialogResult|null) => {
+			const viewController = plugin.viewController(viewId) as WebviewController;
+			if (view.containerType === ContainerType.Dialog) {
+				viewController.closeWithResponse(response);
+			} else {
+				viewController.close();
+			}
+		};
+
 		let formData = undefined;
 		if (button.id !== 'cancel') {
-			formData = await messenger.remoteApi.getFormData();
+			formData = await dialogControl.getFormData();
 		}
 
-		viewController.closeWithResponse({ id: button.id, formData });
-
+		closeWithResponse({ id: button.id, formData });
 		button.onClick?.();
-	}, [viewController, messenger]);
+	}, [dialogControl, plugin, viewId, view.containerType]);
 
 	const buttonComponents: React.ReactElement[] = [];
 	const buttonSpecs = view.buttons ?? defaultButtonSpecs;
+
 	for (const button of buttonSpecs) {
 		let iconName = undefined;
 		let buttonTitle = button.title ?? button.id;
@@ -177,22 +132,18 @@ const PluginDialogWebView: React.FC<Props> = props => {
 
 	const onWebViewLoaded = useCallback(() => {
 		setWebViewLoadCount(webViewLoadCount + 1);
-		messenger.onWebViewLoaded();
-	}, [messenger, setWebViewLoadCount, webViewLoadCount]);
+	}, [setWebViewLoadCount, webViewLoadCount]);
 
 	return (
 		<View style={styles.dialog}>
 			<View style={styles.webViewContainer}>
-				<ExtendedWebView
+				<PluginUserWebView
 					style={styles.webView}
 					themeId={props.themeId}
-					baseUrl={plugin.baseDir}
-					webviewInstanceId='joplin__PluginDialogWebView'
-					html={html}
-					injectedJavaScript={injectedJs}
-					onMessage={messenger.onWebViewMessage}
+					viewInfo={props.viewInfo}
+					pluginHtmlContents={props.pluginHtmlContents}
 					onLoadEnd={onWebViewLoaded}
-					ref={webviewRef}
+					setDialogControl={setDialogControl}
 				/>
 			</View>
 			<View style={styles.buttonRow}>

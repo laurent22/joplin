@@ -33,8 +33,6 @@ export interface DialogInfo {
 export interface DialogMainProcessApi {
 	postMessage: (message: SerializableData)=> Promise<SerializableData>;
 	onMessage: (callback: (arg: SerializableData)=> void)=> void;
-	onSubmit: (buttonId: string, formData: SerializableData)=> void;
-	onDismiss: ()=> void;
 	onError: (message: string)=> Promise<void>;
 	onLog: (level: LogLevel, message: string)=> Promise<void>;
 }

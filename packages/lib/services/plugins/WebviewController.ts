@@ -47,6 +47,9 @@ export default class WebviewController extends ViewController {
 	private messageListener_: Function = null;
 	private closeResponse_: CloseResponse = null;
 
+	// True if a **panel** is shown in a modal window.
+	private panelInModalMode_ = false;
+
 	public constructor(handle: ViewHandle, pluginId: string, store: any, baseDir: string, containerType: ContainerType) {
 		super(handle, pluginId, store);
 		this.baseDir_ = toSystemSlashes(baseDir, 'linux');
@@ -150,8 +153,26 @@ export default class WebviewController extends ViewController {
 		return this.show(false);
 	}
 
+	// This method allows us to determine whether a panel is shown in dialog mode,
+	// which is used on mobile.
+	public setIsShownInModal(shown: boolean) {
+		this.panelInModalMode_ = shown;
+	}
+
 	public get visible(): boolean {
-		const mainLayout = this.store.getState().mainLayout;
+		const appState = this.store.getState();
+
+		if (this.panelInModalMode_) {
+			return true;
+		}
+
+		const mainLayout = appState.mainLayout;
+
+		// Mobile: There is no appState.mainLayout
+		if (!mainLayout) {
+			return false;
+		}
+
 		const item = findItemByKey(mainLayout, this.handle);
 		return item ? item.visible : false;
 	}

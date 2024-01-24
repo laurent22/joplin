@@ -12,6 +12,11 @@ const useDialogSize = (props: Props) => {
 
 	const [dialogSize, setDialogSize] = useState<DialogContentSize|null>(null);
 	useAsyncEffect(async event => {
+		if (!dialogControl) {
+			// May happen if the webview is still loading.
+			return;
+		}
+
 		const contentSize = await dialogControl.getContentSize();
 		if (event.cancelled) return;
 

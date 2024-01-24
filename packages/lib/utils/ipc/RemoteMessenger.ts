@@ -271,6 +271,10 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 
 					const newMethod = parentObject;
 					const newParent = parentObjectStack[parentObjectStack.length - 2];
+					if (typeof newMethod !== 'function') {
+						throw new Error(`RemoteMessenger(${this.channelId}, ${message.methodPath}): Attempting to call a non-function`);
+					}
+
 					result = await newMethod.apply(newParent, adjustedArgs);
 				} else {
 					result = await method.apply(parentObject, args);
@@ -292,7 +296,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 				channelId: this.channelId,
 			});
 		} catch (error) {
-			console.error(`Error (in RemoteMessenger, calling ${message?.methodPath}): `, error, error.stack);
+			console.error(`Error (in RemoteMessenger, calling ${message?.methodPath}): `, error, error.stack, JSON.stringify(message));
 
 			this.postMessage({
 				kind: MessageType.ErrorResponse,

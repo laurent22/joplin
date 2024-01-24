@@ -1,54 +1,50 @@
 import { useMemo, RefObject } from 'react';
 import { DialogMainProcessApi, DialogWebViewApi } from '../../types';
-import PluginWebviewController from '@joplin/lib/services/plugins/WebviewController';
-import { LoggerWrapper } from '@joplin/utils/Logger';
-import Plugin from '@joplin/lib/services/plugins/Plugin';
+import Logger from '@joplin/utils/Logger';
 import { WebViewControl } from '../../../../components/ExtendedWebView';
 import createOnLogHander from '../../utils/createOnLogHandler';
 import RNToWebViewMessenger from '../../../../utils/ipc/RNToWebViewMessenger';
 import { SerializableData } from '@joplin/lib/utils/ipc/types';
+import PostMessageService, { ResponderComponentType } from '@joplin/lib/services/PostMessageService';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
 
 interface Props {
-	plugin: Plugin;
-	viewController: PluginWebviewController;
-	pluginLogger: LoggerWrapper;
+	pluginId: string;
+	viewId: string;
 	webviewRef: RefObject<WebViewControl>;
 }
 
 export const messageChannelId = 'dialog-messenger';
 
 const useDialogMessenger = (props: Props) => {
-	const { viewController, plugin, pluginLogger, webviewRef } = props;
+	const { pluginId, webviewRef, viewId } = props;
 
 	return useMemo(() => {
+		const plugin = PluginService.instance().pluginById(pluginId);
+		const logger = Logger.create(`PluginDialogWebView(${pluginId})`);
+
 		const dialogApi: DialogMainProcessApi = {
 			postMessage: async (message: SerializableData) => {
-				return await viewController.emitMessage({ message });
+				return await plugin.viewController(viewId).emitMessage({ message });
 			},
-
 			onMessage: async (callback) => {
-				viewController.onMessage(callback);
-			},
-			onSubmit: async (buttonId: string, formData: any) => {
-				if (buttonId === 'cancel') {
-					formData = undefined;
-				}
-				viewController.closeWithResponse({ id: buttonId, formData });
-			},
-			onDismiss: async () => {
-				viewController.closeWithResponse(null);
+				PostMessageService.instance().registerViewMessageHandler(
+					ResponderComponentType.UserWebview,
+					viewId,
+					callback,
+				);
 			},
 			onError: async (error: string) => {
-				pluginLogger.error(`Unhandled error: ${error}`);
+				logger.error(`Unhandled error: ${error}`);
 				plugin.hasErrors = true;
 			},
-			onLog: createOnLogHander(plugin, pluginLogger),
+			onLog: createOnLogHander(plugin, logger),
 		};
 
 		return new RNToWebViewMessenger<DialogMainProcessApi, DialogWebViewApi>(
 			messageChannelId, webviewRef, dialogApi,
 		);
-	}, [webviewRef, plugin, viewController, pluginLogger]);
+	}, [webviewRef, pluginId, viewId]);
 };
 
 export default useDialogMessenger;
