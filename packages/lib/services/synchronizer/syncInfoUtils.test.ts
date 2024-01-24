@@ -1,6 +1,6 @@
 import { afterAllCleanUp, setupDatabaseAndSynchronizer, logger, switchClient, encryptionService, msleep } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
-import { localSyncInfo, masterKeyEnabled, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyEnabled, SyncInfo, syncInfoEquals } from './syncInfoUtils';
+import { checkIfCanSync, localSyncInfo, masterKeyEnabled, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyEnabled, SyncInfo, syncInfoEquals } from './syncInfoUtils';
 
 describe('syncInfoUtils', () => {
 
@@ -91,6 +91,22 @@ describe('syncInfoUtils', () => {
 		}
 	});
 
+	it('should merge sync target info and keep the highest appMinVersion', async () => {
+		const syncInfo1 = new SyncInfo();
+		syncInfo1.appMinVersion = '1.0.5';
+		const syncInfo2 = new SyncInfo();
+		syncInfo2.appMinVersion = '1.0.2';
+		expect(mergeSyncInfos(syncInfo1, syncInfo2).appMinVersion).toBe('1.0.5');
+
+		syncInfo1.appMinVersion = '2.1.0';
+		syncInfo2.appMinVersion = '2.2.5';
+		expect(mergeSyncInfos(syncInfo1, syncInfo2).appMinVersion).toBe('2.2.5');
+
+		syncInfo1.appMinVersion = '1.0.0';
+		syncInfo2.appMinVersion = '1.0.0';
+		expect(mergeSyncInfos(syncInfo1, syncInfo2).appMinVersion).toBe('1.0.0');
+	});
+
 	it('should merge sync target info and takes into account usage of master key - 1', async () => {
 		const syncInfo1 = new SyncInfo();
 		syncInfo1.masterKeys = [{
@@ -173,6 +189,23 @@ describe('syncInfoUtils', () => {
 		expect(loaded.masterKeys.length).toBe(1);
 
 		logger.enabled = true;
+	});
+
+	test.each([
+		['1.0.0', '1.0.4', true],
+		['1.0.0', '0.0.5', false],
+		['1.0.0', '1.0.0', true],
+	])('should check if it can sync', async (appMinVersion, appVersion, expected) => {
+		let succeeded = true;
+		try {
+			const s = new SyncInfo();
+			s.appMinVersion = appMinVersion;
+			checkIfCanSync(s, appVersion);
+		} catch (error) {
+			succeeded = false;
+		}
+
+		expect(succeeded).toBe(expected);
 	});
 
 });

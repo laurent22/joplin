@@ -93,7 +93,7 @@ interface ShimInitOptions {
 	sharp: any;
 	keytar: any;
 	React: any;
-	appVersion: any;
+	appVersion: ()=> string;
 	electronBridge: any;
 	nodeSqlite: any;
 	pdfJs: typeof pdfJsNamespace;
@@ -673,7 +673,7 @@ function shimInit(options: ShimInitOptions = null) {
 		if (appVersion) return appVersion();
 		// Should not happen but don't throw an error because version number is
 		// used in error messages.
-		return 'unknown-version!';
+		return 'unknown';
 	};
 
 	shim.pathRelativeToCwd = (path) => {
