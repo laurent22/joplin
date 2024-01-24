@@ -1,7 +1,7 @@
 
 import { PluginHtmlContents, PluginStates, ViewInfo } from '@joplin/lib/services/plugins/reducer';
 import * as React from 'react';
-import { IconButton, Modal, Portal, SegmentedButtons, Text } from 'react-native-paper';
+import { Button, IconButton, Modal, Portal, SegmentedButtons, Text } from 'react-native-paper';
 import useViewInfos from './hooks/useViewInfos';
 import WebviewController, { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { useEffect, useMemo, useState } from 'react';
@@ -100,14 +100,6 @@ const PluginPanelViewer: React.FC<Props> = props => {
 
 	const styles = useStyles(props.themeId);
 
-	const tabSelector = (
-		<SegmentedButtons
-			value={selectedTabId}
-			onValueChange={setSelectedTabId}
-			buttons={buttonInfos}
-		/>
-	);
-
 	const viewInfo = viewInfoById[selectedTabId];
 
 	const renderTabContent = () => {
@@ -118,6 +110,7 @@ const PluginPanelViewer: React.FC<Props> = props => {
 		return (
 			<View style={styles.webViewContainer}>
 				<PluginUserWebView
+					key={selectedTabId}
 					themeId={props.themeId}
 					style={styles.webView}
 					viewInfo={viewInfo}
@@ -126,6 +119,23 @@ const PluginPanelViewer: React.FC<Props> = props => {
 					setDialogControl={()=>{}}
 				/>
 			</View>
+		);
+	};
+
+	const renderTabSelector = () => {
+		// SegmentedButtons doesn't display correctly when there's only one button.
+		// As such, we include a special case:
+		if (buttonInfos.length === 1) {
+			const buttonInfo = buttonInfos[0];
+			return <Button icon={buttonInfo.icon}>{buttonInfo.label}</Button>;
+		}
+
+		return (
+			<SegmentedButtons
+				value={selectedTabId}
+				onValueChange={setSelectedTabId}
+				buttons={buttonInfos}
+			/>
 		);
 	};
 
@@ -148,7 +158,7 @@ const PluginPanelViewer: React.FC<Props> = props => {
 			>
 				{closeButton}
 				{renderTabContent()}
-				{tabSelector}
+				{renderTabSelector()}
 			</Modal>
 		</Portal>
 	);

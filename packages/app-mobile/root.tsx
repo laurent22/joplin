@@ -1149,6 +1149,9 @@ class AppComponent extends React.Component {
 					primaryContainer: theme.backgroundColor5,
 					primary: theme.color,
 
+					secondaryContainer: theme.raisedBackgroundColor,
+					onSecondaryContainer: theme.raisedColor,
+
 					surfaceVariant: theme.backgroundColor3,
 					onSurfaceVariant: theme.color3,
 
