@@ -82,6 +82,10 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	useImperativeHandle(ref, (): WebViewControl => {
 		return {
 			injectJS(js: string) {
+				if (!webviewRef.current) {
+					throw new Error(`ExtendedWebView(${props.webviewInstanceId}): Trying to call injectJavaScript on a WebView that isn't loaded.`);
+				}
+
 				webviewRef.current.injectJavaScript(`
 				try {
 					${js}
@@ -97,7 +101,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 				webviewRef.current.postMessage(JSON.stringify(message));
 			},
 		};
-	});
+	}, [props.webviewInstanceId]);
 
 	const baseUrl = props.baseUrl ?? `file://${Setting.value('resourceDir')}/`;
 
