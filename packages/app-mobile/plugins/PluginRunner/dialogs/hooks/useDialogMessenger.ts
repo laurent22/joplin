@@ -12,12 +12,11 @@ interface Props {
 	pluginId: string;
 	viewId: string;
 	webviewRef: RefObject<WebViewControl>;
+	messageChannelId: string;
 }
 
-export const messageChannelId = 'dialog-messenger';
-
 const useDialogMessenger = (props: Props) => {
-	const { pluginId, webviewRef, viewId } = props;
+	const { pluginId, webviewRef, viewId, messageChannelId } = props;
 
 	return useMemo(() => {
 		const plugin = PluginService.instance().pluginById(pluginId);
@@ -44,7 +43,7 @@ const useDialogMessenger = (props: Props) => {
 		return new RNToWebViewMessenger<DialogMainProcessApi, DialogWebViewApi>(
 			messageChannelId, webviewRef, dialogApi,
 		);
-	}, [webviewRef, pluginId, viewId]);
+	}, [webviewRef, pluginId, viewId, messageChannelId]);
 };
 
 export default useDialogMessenger;

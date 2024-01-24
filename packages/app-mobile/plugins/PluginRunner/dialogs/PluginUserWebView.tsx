@@ -5,7 +5,7 @@ import ExtendedWebView, { WebViewControl } from '../../../components/ExtendedWeb
 import { ViewStyle } from 'react-native';
 import usePlugin from '../../hooks/usePlugin';
 import shim from '@joplin/lib/shim';
-import useDialogMessenger, { messageChannelId } from './hooks/useDialogMessenger';
+import useDialogMessenger from './hooks/useDialogMessenger';
 import useWebViewSetup from './hooks/useWebViewSetup';
 import { DialogWebViewApi } from '../types';
 
@@ -28,10 +28,12 @@ const PluginUserWebView = (props: Props) => {
 
 	const webviewRef = useRef<WebViewControl>(null);
 
+	const messageChannelId = `dialog-messenger-${pluginId}-${viewId}`;
 	const messenger = useDialogMessenger({
 		pluginId,
 		viewId,
 		webviewRef,
+		messageChannelId,
 	});
 
 	useEffect(() => {
@@ -82,7 +84,7 @@ const PluginUserWebView = (props: Props) => {
 				${JSON.stringify(messageChannelId)}
 			);
 		`;
-	}, []);
+	}, [messageChannelId]);
 
 	const onWebViewLoaded = useCallback(() => {
 		setWebViewLoadCount(webViewLoadCount + 1);
