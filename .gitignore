@@ -429,6 +429,7 @@ packages/app-desktop/utils/restartInSafeModeFromMain.test.js
 packages/app-desktop/utils/restartInSafeModeFromMain.js
 packages/app-mobile/PluginAssetsLoader.js
 packages/app-mobile/commands/index.js
+packages/app-mobile/commands/openItem.js
 packages/app-mobile/commands/scrollToHash.js
 packages/app-mobile/components/ActionButton.js
 packages/app-mobile/components/BackButtonDialogBox.js

@@ -14,7 +14,6 @@ export const runtime = (): CommandRuntime => {
 			}
 
 			await NavService.go('Note', {
-				routeName: 'Note',
 				noteId: selectedNoteIds[0],
 				noteHash: hash,
 			});

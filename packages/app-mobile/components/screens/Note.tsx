@@ -260,21 +260,12 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 					if (!item) throw new Error(_('No item with ID %s', itemId));
 
 					if (item.type_ === BaseModel.TYPE_NOTE) {
-						// Easier to just go back, then go to the note since
-						// the Note screen doesn't handle reloading a different note
-
 						this.props.dispatch({
-							type: 'NAV_BACK',
+							type: 'NAV_GO',
+							routeName: 'Note',
+							noteId: item.id,
+							noteHash: resourceUrlInfo.hash,
 						});
-
-						shim.setTimeout(() => {
-							this.props.dispatch({
-								type: 'NAV_GO',
-								routeName: 'Note',
-								noteId: item.id,
-								noteHash: resourceUrlInfo.hash,
-							});
-						}, 5);
 					} else if (item.type_ === BaseModel.TYPE_RESOURCE) {
 						if (!(await Resource.isReady(item))) throw new Error(_('This attachment is not downloaded or not decrypted yet.'));
 
@@ -559,6 +550,28 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 				type: 'SET_SIDE_MENU_TOUCH_GESTURES_DISABLED',
 				disableSideMenuGestures: this.state.showImageEditor,
 			});
+		}
+
+		if (prevProps.noteId && prevProps.noteId !== this.props.noteId) {
+			// Easier to just go back, then go to the note since
+			// the Note screen doesn't handle reloading a different note
+			const noteId = this.props.noteId;
+			const noteHash = this.props.noteHash;
+
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Notes',
+				folderId: this.state.note.parent_id,
+			});
+
+			shim.setTimeout(() => {
+				this.props.dispatch({
+					type: 'NAV_GO',
+					routeName: 'Note',
+					noteId: noteId,
+					noteHash: noteHash,
+				});
+			}, 5);
 		}
 	}
 
