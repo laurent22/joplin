@@ -1,4 +1,4 @@
-const { app } = require('./app.js');
+const app = require('./app').default;
 const Note = require('@joplin/lib/models/Note').default;
 const Folder = require('@joplin/lib/models/Folder').default;
 const Tag = require('@joplin/lib/models/Tag').default;

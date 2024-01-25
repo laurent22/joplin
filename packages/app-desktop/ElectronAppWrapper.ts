@@ -75,6 +75,8 @@ export default class ElectronAppWrapper {
 	// Assumes that the renderer process may be in an invalid state and so cannot
 	// be accessed.
 	public async handleAppFailure(errorMessage: string, canIgnore: boolean, isTesting?: boolean) {
+		await bridge().captureException(new Error(errorMessage));
+
 		const buttons = [];
 		buttons.push(_('Quit'));
 		const exitIndex = 0;

@@ -2,7 +2,7 @@ import BaseCommand from './base-command';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import BaseModel from '@joplin/lib/BaseModel';
 const { cliUtils } = require('./cli-utils.js');
-const { app } = require('./app.js');
+import app from './app';
 import { _ } from '@joplin/lib/locale';
 import { ImportOptions } from '@joplin/lib/services/interop/types';
 import { unique } from '@joplin/lib/array';

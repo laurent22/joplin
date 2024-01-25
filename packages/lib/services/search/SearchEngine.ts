@@ -602,7 +602,12 @@ export default class SearchEngine {
 	}
 
 	private normalizeText_(text: string) {
-		const normalizedText = text.normalize ? text.normalize() : text;
+		let normalizedText = text.normalize ? text.normalize() : text;
+
+		// Null characters can break FTS. Remove them.
+		// eslint-disable-next-line no-control-regex
+		normalizedText = normalizedText.replace(/\x00/g, ' ');
+
 		return removeDiacritics(normalizedText.toLowerCase());
 	}
 
