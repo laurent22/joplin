@@ -492,7 +492,7 @@ describe('Synchronizer.basics', () => {
 		// Now simulates synchronising with an older client version. In that case, it should not be
 		// allowed and the remote info.json should not change.
 		setAppMinVersion('80.0.0');
-		await expectThrow(async () => synchronizerStart(1, { throwOnError: true }));
+		await expectThrow(async () => synchronizerStart(1, { throwOnError: true }), ErrorCode.MustUpgradeApp);
 
 		expect((await fetchSyncInfo(synchronizer().api())).appMinVersion).toBe('100.0.0');
 	}));
