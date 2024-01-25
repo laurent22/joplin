@@ -444,6 +444,8 @@ packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
 packages/app-desktop/tools/copy7Zip.js
 packages/app-desktop/tools/notarizeMacApp.js
 packages/app-desktop/tools/renameReleaseAssets.js
+packages/app-desktop/utils/7zip/getPathToExecutable7Zip.js
+packages/app-desktop/utils/7zip/pathToBundled7Zip.js
 packages/app-desktop/utils/checkForUpdatesUtils.test.js
 packages/app-desktop/utils/checkForUpdatesUtils.js
 packages/app-desktop/utils/checkForUpdatesUtilsTestData.js
