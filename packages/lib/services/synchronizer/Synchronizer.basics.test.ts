@@ -7,6 +7,7 @@ import BaseItem from '../../models/BaseItem';
 import WelcomeUtils from '../../WelcomeUtils';
 import { NoteEntity } from '../database/types';
 import { fetchSyncInfo, setAppMinVersion, uploadSyncInfo } from './syncInfoUtils';
+import { ErrorCode } from '../../errors';
 
 describe('Synchronizer.basics', () => {
 
@@ -470,7 +471,7 @@ describe('Synchronizer.basics', () => {
 
 		await expectThrow(async () => synchronizerStart(1, {
 			throwOnError: true,
-		}), null, 'In order to synchronise, please upgrade your application to version 100.0.0+');
+		}), ErrorCode.MustUpgradeApp);
 	}));
 
 	it('should update the remote appMinVersion when synchronising', (async () => {

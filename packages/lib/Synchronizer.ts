@@ -1060,6 +1060,13 @@ export default class Synchronizer {
 				}
 			} // DELTA STEP
 		} catch (error) {
+			if (error.code === ErrorCode.MustUpgradeApp) {
+				this.dispatch({
+					type: 'MUST_UPGRADE_APP',
+					message: error.message,
+				});
+			}
+
 			if (throwOnError) {
 				errorToThrow = error;
 			} else if (error && ['cannotEncryptEncrypted', 'noActiveMasterKey', 'processingPathTwice', 'failSafe', 'lockError', 'outdatedSyncTarget'].indexOf(error.code) >= 0) {
