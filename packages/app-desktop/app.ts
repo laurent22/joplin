@@ -130,7 +130,7 @@ class Application extends BaseApplication {
 		}
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'autoUploadCrashDumps') {
-			bridge().autoUploadCrashDumps = action.value;
+			bridge().setAutoUploadCrashDumps(action.value);
 		}
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'style.editor.fontFamily' || action.type === 'SETTING_UPDATE_ALL') {
@@ -410,9 +410,7 @@ class Application extends BaseApplication {
 
 		argv = await super.start(argv);
 
-		bridge().autoUploadCrashDumps = Setting.value('autoUploadCrashDumps');
-
-		// this.crashDetectionHandler();
+		bridge().setAutoUploadCrashDumps(Setting.value('autoUploadCrashDumps'));
 
 		await this.applySettingsSideEffects();
 
