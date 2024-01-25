@@ -13,6 +13,7 @@ import { View, useWindowDimensions, StyleSheet } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import { Theme } from '@joplin/lib/themes/type';
 import { themeStyle } from '@joplin/lib/theme';
+import Setting from '@joplin/lib/models/Setting';
 
 interface Props {
 	themeId: number;
@@ -82,7 +83,14 @@ const PluginPanelViewer: React.FC<Props> = props => {
 			});
 	}, [viewInfoById]);
 
-	const [selectedTabId, setSelectedTabId] = useState(() => buttonInfos[0]?.value);
+	const [selectedTabId, setSelectedTabId] = useState(() => {
+		const lastSelectedId = Setting.value('ui.lastSelectedPluginPanel');
+		if (lastSelectedId && viewInfoById[lastSelectedId]) {
+			return lastSelectedId;
+		} else {
+			return buttonInfos[0]?.value;
+		}
+	});
 
 	useEffect(() => {
 		if (!selectedTabId) return () => {};
@@ -91,6 +99,7 @@ const PluginPanelViewer: React.FC<Props> = props => {
 		const plugin = PluginService.instance().pluginById(info.plugin.id);
 		const controller = plugin.viewController(info.view.id) as WebviewController;
 		controller.setIsShownInModal(true);
+		Setting.setValue('ui.lastSelectedPluginPanel', selectedTabId);
 
 		return () => {
 			controller.setIsShownInModal(false);
