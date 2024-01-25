@@ -96,9 +96,6 @@ const buildDefaultPlugins = async (outputParentDir: string|null, beforeInstall: 
 			if (outputParentDir !== null) {
 				logStatus(`Checking output directory in ${outputParentDir}`);
 				const outputPath = join(outputParentDir, `${pluginId}.jpl`);
-				if (await exists(outputPath)) {
-					await remove(outputPath);
-				}
 
 				const sourceFile = jplFiles[0];
 				logStatus(`Copying built file from ${sourceFile} to ${outputPath}`);
