@@ -65,6 +65,7 @@ interface Props {
 	style?: StyleProp<ViewStyle>;
 	onMessage: OnMessageCallback;
 	onError?: OnErrorCallback;
+	onLoadStart?: OnLoadCallback;
 	onLoadEnd?: OnLoadCallback;
 
 	// Triggered when the file containing [html] is overwritten with new content.

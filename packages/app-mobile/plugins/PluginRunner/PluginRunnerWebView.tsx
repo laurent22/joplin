@@ -53,7 +53,6 @@ const styles = {
 const usePlugins = (
 	pluginRunner: PluginRunner,
 	webviewLoaded: boolean,
-	webviewReloadCounter: number,
 	serializedPluginSettings: string,
 ) => {
 	const store = useStore();
@@ -67,19 +66,24 @@ const usePlugins = (
 		const pluginSettings = pluginService.unserializePluginSettings(serializedPluginSettings);
 
 		void loadPlugins(pluginRunner, pluginSettings, store, event);
-	}, [pluginRunner, store, webviewLoaded, serializedPluginSettings, webviewReloadCounter]);
+	}, [pluginRunner, store, webviewLoaded, serializedPluginSettings]);
 };
 
 const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 	const webviewRef = useRef<WebViewControl>();
 
-	const pluginRunner = useMemo(() => {
-		return new PluginRunner(webviewRef);
-	}, []);
 	const [webviewLoaded, setLoaded] = useState(false);
 	const [webviewReloadCounter, setWebviewReloadCounter] = useState(0);
 
-	usePlugins(pluginRunner, webviewLoaded, webviewReloadCounter, props.serializedPluginSettings);
+	const pluginRunner = useMemo(() => {
+		if (webviewReloadCounter > 1) {
+			logger.debug(`Reloading the plugin runner (load #${webviewReloadCounter})`);
+		}
+
+		return new PluginRunner(webviewRef);
+	}, [webviewReloadCounter]);
+
+	usePlugins(pluginRunner, webviewLoaded, props.serializedPluginSettings);
 
 	const injectedJs = useMemo(() => {
 		return `
@@ -92,10 +96,16 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 		logger.error(`Error: (${event.nativeEvent.code}) ${event.nativeEvent.description}`);
 	}, []);
 
-	const onLoadEnd = useCallback(() => {
-		setLoaded(true);
+	const onLoadStart = useCallback(() => {
+		// Handles the case where the webview reloads (e.g. due to an error or performance
+		// optimization).
+		// Increasing the counter recretes the plugin runner and reloads plugins.
 		setWebviewReloadCounter(webviewReloadCounter + 1);
 	}, [webviewReloadCounter]);
+
+	const onLoadEnd = useCallback(() => {
+		setLoaded(true);
+	}, []);
 
 	const webView = (
 		<ExtendedWebView
@@ -107,6 +117,7 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 			onMessage={pluginRunner.onWebviewMessage}
 			onError={onError}
 			onLoadEnd={onLoadEnd}
+			onLoadStart={onLoadStart}
 			ref={webviewRef}
 		/>
 	);
