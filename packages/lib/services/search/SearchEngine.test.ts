@@ -322,6 +322,14 @@ describe('services/SearchEngine', () => {
 		expect(rows[2].id).toBe(n3.id);
 	}));
 
+	it('should support searching through documents that contain null characters', (async () => {
+		await Note.save({ title: 'Test', body: 'Test\x00testing' });
+
+		await engine.syncTables();
+
+		expect((await engine.search('testing')).length).toBe(1);
+	}));
+
 	it('should supports various query types', (async () => {
 		let rows;
 
