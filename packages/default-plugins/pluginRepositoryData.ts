@@ -11,6 +11,10 @@ const pluginRepositoryData: AllRepositoryData = {
 		'path': 'packages/app-cli/tests/support/plugins/codemirror6',
 		'appTypes': [AppType.Mobile],
 	},
+	'org.joplinapp.plugins.TocDemo': {
+		'path': 'packages/app-cli/tests/support/plugins/toc',
+		'appTypes': [AppType.Mobile],
+	},
 };
 
 export default pluginRepositoryData;

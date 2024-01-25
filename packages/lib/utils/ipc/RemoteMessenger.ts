@@ -325,7 +325,10 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 
 	private async onRemoteResolve(message: ReturnValueResponse) {
 		if (!this.resolveMethodCallbacks[message.responseId]) {
-			throw new Error(`RemoteMessenger(${this.channelId}): Missing method callback with ID ${message.responseId}`);
+			// Debugging:
+			//   throw new Error(`RemoteMessenger(${this.channelId}): Missing method callback with ID ${message.responseId}`);
+			// This can happen if a promise is resolved multiple times.
+			return;
 		}
 
 		const returnValue = mergeCallbacksAndSerializable(

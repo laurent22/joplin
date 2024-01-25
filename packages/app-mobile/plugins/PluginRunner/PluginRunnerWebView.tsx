@@ -50,7 +50,12 @@ const styles = {
 	},
 };
 
-const usePlugins = (pluginRunner: PluginRunner, webviewLoaded: boolean, serializedPluginSettings: string) => {
+const usePlugins = (
+	pluginRunner: PluginRunner,
+	webviewLoaded: boolean,
+	webviewReloadCounter: number,
+	serializedPluginSettings: string,
+) => {
 	const store = useStore();
 
 	useAsyncEffect(async (event) => {
@@ -62,7 +67,7 @@ const usePlugins = (pluginRunner: PluginRunner, webviewLoaded: boolean, serializ
 		const pluginSettings = pluginService.unserializePluginSettings(serializedPluginSettings);
 
 		void loadPlugins(pluginRunner, pluginSettings, store, event);
-	}, [pluginRunner, store, webviewLoaded, serializedPluginSettings]);
+	}, [pluginRunner, store, webviewLoaded, serializedPluginSettings, webviewReloadCounter]);
 };
 
 const PluginRunnerWebViewComponent: React.FC<Props> = props => {
@@ -72,8 +77,9 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 		return new PluginRunner(webviewRef);
 	}, []);
 	const [webviewLoaded, setLoaded] = useState(false);
+	const [webviewReloadCounter, setWebviewReloadCounter] = useState(0);
 
-	usePlugins(pluginRunner, webviewLoaded, props.serializedPluginSettings);
+	usePlugins(pluginRunner, webviewLoaded, webviewReloadCounter, props.serializedPluginSettings);
 
 	const injectedJs = useMemo(() => {
 		return `
@@ -86,6 +92,11 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 		logger.error(`Error: (${event.nativeEvent.code}) ${event.nativeEvent.description}`);
 	}, []);
 
+	const onLoadEnd = useCallback(() => {
+		setLoaded(true);
+		setWebviewReloadCounter(webviewReloadCounter + 1);
+	}, [webviewReloadCounter]);
+
 	const webView = (
 		<ExtendedWebView
 			style={styles.webview}
@@ -95,7 +106,7 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 			injectedJavaScript={injectedJs}
 			onMessage={pluginRunner.onWebviewMessage}
 			onError={onError}
-			onLoadEnd={() => setLoaded(true)}
+			onLoadEnd={onLoadEnd}
 			ref={webviewRef}
 		/>
 	);

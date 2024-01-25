@@ -19,7 +19,7 @@ interface Props {
 	highlightedKeywords: string[];
 	noteResources: string[];
 	noteHash: string;
-	initialScroll: number;
+	initialScroll: number|undefined;
 
 	paddingBottom: number;
 
@@ -83,6 +83,8 @@ const useRerenderHandler = (props: Props) => {
 	}, {});
 	const onlyNoteBodyHasChanged = Object.keys(changedDeps).length === 1 && changedDeps[0];
 	const onlyCheckboxesHaveChanged = previousDeps[0] && changedDeps[0] && onlyCheckboxHasChangedHack(previousDeps[0], props.noteBody);
+	const previousHash = usePrevious(props.noteHash, '');
+	const hashChanged = previousHash !== props.noteHash;
 
 	useEffect(() => {
 		// Whenever a resource state changes, for example when it goes from "not downloaded" to "downloaded", the "noteResources"
@@ -122,8 +124,11 @@ const useRerenderHandler = (props: Props) => {
 			},
 			highlightedKeywords: props.highlightedKeywords,
 			resources: props.noteResources,
+
+			// If the hash changed, we don't set initial scroll -- we want to scroll to the hash
+			// instead.
+			initialScroll: (previousHash && hashChanged) ? undefined : props.initialScroll,
 			noteHash: props.noteHash,
-			initialScroll: props.initialScroll,
 
 			pluginSettings,
 			requestPluginSetting: (pluginId: string, settingKey: string) => {

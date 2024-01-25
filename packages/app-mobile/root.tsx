@@ -19,7 +19,6 @@ import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import reducer, { NotesParent, parseNotesParent, serializeNotesParent } from '@joplin/lib/reducer';
 import ShareExtension from './utils/ShareExtension';
 import handleShared from './utils/shareHandler';
-import editorCommandDeclarations from './components/NoteEditor/commandDeclarations';
 import uuid from '@joplin/lib/uuid';
 import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtils';
 import KeychainServiceDriverMobile from '@joplin/lib/services/keychain/KeychainServiceDriver.mobile';
@@ -124,10 +123,9 @@ import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTh
 import runOnDeviceFsDriverTests from './utils/fs-driver/runOnDeviceTests';
 import PluginRunnerWebView from './plugins/PluginRunner/PluginRunnerWebView';
 import { refreshFolders } from '@joplin/lib/folders-screen-utils';
-import CommandService from '@joplin/lib/services/CommandService';
-import stateToWhenClauseContext from '@joplin/lib/services/commands/stateToWhenClauseContext';
 import KeymapService from '@joplin/lib/services/KeymapService';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
+import initializeCommandService from './utils/initializeCommandService';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -546,10 +544,7 @@ async function initialize(dispatch: Function) {
 	AlarmService.setLogger(mainLogger);
 
 	// Currently CommandService is just used for plugins.
-	CommandService.instance().initialize(store, Setting.value('env') === 'dev', stateToWhenClauseContext);
-	for (const declaration of editorCommandDeclarations) {
-		CommandService.instance().registerDeclaration(declaration);
-	}
+	initializeCommandService(store);
 	// KeymapService is also present for plugin compatibility
 	KeymapService.instance().initialize();
 
