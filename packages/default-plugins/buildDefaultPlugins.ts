@@ -1,7 +1,7 @@
 
 /* eslint-disable no-console */
 
-import { copy, exists, remove, mkdirp, readdir, mkdtemp } from 'fs-extra';
+import { copy, exists, remove, readdir, mkdtemp } from 'fs-extra';
 import { join, resolve, basename } from 'path';
 import { tmpdir } from 'os';
 import { chdir, cwd } from 'process';
@@ -95,17 +95,14 @@ const buildDefaultPlugins = async (outputParentDir: string|null, beforeInstall: 
 
 			if (outputParentDir !== null) {
 				logStatus(`Checking output directory in ${outputParentDir}`);
-				const outputDirectory = join(outputParentDir, pluginId);
-				if (await exists(outputDirectory)) {
-					await remove(outputDirectory);
+				const outputPath = join(outputParentDir, `${pluginId}.jpl`);
+				if (await exists(outputPath)) {
+					await remove(outputPath);
 				}
-				await mkdirp(outputDirectory);
 
 				const sourceFile = jplFiles[0];
-				const destFile = join(outputDirectory, 'plugin.jpl');
-
-				logStatus(`Copying built file from ${sourceFile} to ${destFile}`);
-				await copy(sourceFile, destFile);
+				logStatus(`Copying built file from ${sourceFile} to ${outputPath}`);
+				await copy(sourceFile, outputPath);
 			} else {
 				console.warn('No output directory specified. Not copying built .jpl files.');
 			}
