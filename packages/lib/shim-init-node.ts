@@ -719,23 +719,20 @@ function shimInit(options: ShimInitOptions = null) {
 		const loadingTask = pdfJs.getDocument(pdfPath);
 		const doc = await loadingTask.promise;
 
-		const pageTasks = [];
+		const textByPage = [];
 
 		for (let pageNum = 1; pageNum <= doc.numPages; pageNum++) {
-			pageTasks.push((async () => {
-				const page = await doc.getPage(pageNum);
-				const textContent = await page.getTextContent();
+			const page = await doc.getPage(pageNum);
+			const textContent = await page.getTextContent();
 
-				const strings = textContent.items.map(item => {
-					const text = (item as TextItem).str ?? '';
-					return text;
-				}).join('\n');
-
-				return strings;
-			})());
+			const strings = textContent.items.map(item => {
+				const text = (item as TextItem).str ?? '';
+				return text;
+			}).join('\n');
+			textByPage.push(strings);
 		}
 
-		return Promise.all(pageTasks);
+		return textByPage;
 	};
 
 	shim.pdfToImages = async (pdfPath: string, outputDirectoryPath: string): Promise<string[]> => {
