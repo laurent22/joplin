@@ -5,7 +5,7 @@ CLI_DIR="$SCRIPT_DIR/../app-cli"
 LIB_DIR="$SCRIPT_DIR/../lib"
 
 cd "$LIB_DIR"
-yarn run generatePluginTypes
+yarn generatePluginTypes
 
 cd "$SCRIPT_DIR"
 rsync -a --delete "$LIB_DIR/plugin_types/lib/services/plugins/api/" "$SCRIPT_DIR/generators/app/templates/api/"

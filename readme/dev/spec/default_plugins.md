@@ -37,7 +37,7 @@ Some plugins need patching. To create or update a plugin's patch, run the `patch
 For example,
 ```shell
 $ cd packages/default-plugins
-$ yarn run patch plugin.id.here
+$ yarn patch plugin.id.here
 ```
 
 The script will create a temporary directory in which changes can be made. Do not stage the changes that should appear in the patch.
