@@ -2,8 +2,11 @@ import ElectronAppWrapper from './ElectronAppWrapper';
 import shim from '@joplin/lib/shim';
 import { _, setLocale } from '@joplin/lib/locale';
 import { BrowserWindow, nativeTheme, nativeImage } from 'electron';
-const { dirname, toSystemSlashes } = require('@joplin/lib/path-utils');
 import * as Sentry from '@sentry/electron/main';
+import { writeFileSync } from 'fs';
+import { homedir } from 'os';
+import { msleep } from '@joplin/utils/time';
+const { dirname, toSystemSlashes } = require('@joplin/lib/path-utils');
 
 interface LastSelectedPath {
 	file: string;
@@ -32,7 +35,20 @@ export class Bridge {
 
 		Sentry.init({
 			dsn: 'https://cceec550871b1e8a10fee4c7a28d5cf2@o4506576757522432.ingest.sentry.io/4506594281783296',
-			beforeSend: event => this.autoUploadCrashDumps_ ? event : null,
+			beforeSend: event => {
+				try {
+					const date = (new Date()).toISOString().replace(/[:-]/g, '').split('.')[0];
+					writeFileSync(`${homedir()}/joplin_crash_dump_${date}.json`, JSON.stringify(event, null, '\t'), 'utf-8');
+				} catch (error) {
+					// Ignore the error since we can't handle it here
+				}
+
+				if (!this.autoUploadCrashDumps_) {
+					return null;
+				} else {
+					return event;
+				}
+			},
 		});
 	}
 
@@ -44,11 +60,14 @@ export class Bridge {
 		return !this.electronApp().electronApp().isPackaged;
 	}
 
-	public get autoUploadCrashDumps() {
-		return this.autoUploadCrashDumps_;
+	public async captureException(error: any) {
+		Sentry.captureException(error);
+		// We wait to give the "beforeSend" event handler time to process the crash dump and write
+		// it to file.
+		await msleep(10);
 	}
 
-	public set autoUploadCrashDumps(v: boolean) {
+	public setAutoUploadCrashDumps(v: boolean) {
 		this.autoUploadCrashDumps_ = v;
 	}
 

@@ -36,7 +36,7 @@ describe('defaultPluginsUtils', () => {
 	});
 
 	it('should load default plugins when nor previously installed', (async () => {
-		const testPluginDir = `${supportDir}/pluginRepo/plugins`;
+		const testPluginDir = `${supportDir}/testDefaultPlugins`;
 		Setting.setValue('installedDefaultPlugins', []);
 
 		const service = newPluginService('2.1');
@@ -57,7 +57,7 @@ describe('defaultPluginsUtils', () => {
 	}));
 
 	it('should keep already created default plugins disabled with previous default plugins installed', (async () => {
-		const testPluginDir = `${supportDir}/pluginRepo/plugins`;
+		const testPluginDir = `${supportDir}/testDefaultPlugins`;
 		Setting.setValue('installedDefaultPlugins', ['org.joplinapp.plugins.ToggleSidebars']);
 		Setting.setValue('plugins.states', {
 			'org.joplinapp.plugins.ToggleSidebars': { ...defaultPluginSetting(), enabled: false },
