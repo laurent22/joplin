@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
-import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps, ResourceInfos } from '../../utils/types';
+import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps, ResourceInfos, HtmlToMarkdownHandler } from '../../utils/types';
 import { resourcesStatus, commandAttachFileToBody, getResourcesFromPasteEvent, processPastedHtml, attachedResources } from '../../utils/resourceHandling';
 import useScroll from './utils/useScroll';
 import styles_ from './styles';
@@ -20,7 +20,6 @@ import BaseItem from '@joplin/lib/models/BaseItem';
 import setupToolbarButtons from './utils/setupToolbarButtons';
 import { plainTextToHtml } from '@joplin/lib/htmlUtils';
 import openEditDialog from './utils/openEditDialog';
-import { MarkupToHtmlOptions } from '../../utils/useMarkupToHtml';
 import { themeStyle } from '@joplin/lib/theme';
 import { loadScript } from '../../../utils/loadScript';
 import bridge from '../../../../services/bridge';
@@ -30,24 +29,10 @@ import { joplinCommandToTinyMceCommands, TinyMceCommand } from './utils/joplinCo
 import shouldPasteResources from './utils/shouldPasteResources';
 import lightTheme from '@joplin/lib/themes/light';
 import { Options as NoteStyleOptions } from '@joplin/renderer/noteStyle';
+import markupRenderOptions from '../../utils/markupRenderOptions';
 const md5 = require('md5');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
-
-function markupRenderOptions(override: MarkupToHtmlOptions = null): MarkupToHtmlOptions {
-	return {
-		plugins: {
-			checkbox: {
-				checkboxRenderingType: 2,
-			},
-			link_open: {
-				linkRenderingType: 2,
-			},
-		},
-		replaceResourceInternalToExternalLinks: true,
-		...override,
-	};
-}
 
 // In TinyMCE 5.2, when setting the body to '<div id="rendered-md"></div>',
 // it would end up as '<div id="rendered-md"><br/></div>' once rendered
@@ -123,7 +108,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	const { scrollToPercent } = useScroll({ editor, onScroll: props.onScroll });
 
 	usePluginServiceRegistration(ref);
-	useContextMenu(editor, props.plugins, props.dispatch);
+	useContextMenu(editor, props.plugins, props.dispatch, props.htmlToMarkdown, props.markupToHtml);
 
 	const dispatchDidUpdate = (editor: any) => {
 		if (dispatchDidUpdateIID_) shim.clearTimeout(dispatchDidUpdateIID_);
@@ -978,7 +963,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	props_onChangeRef.current = props.onChange;
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	const prop_htmlToMarkdownRef = useRef<Function>();
+	const prop_htmlToMarkdownRef = useRef<HtmlToMarkdownHandler>();
 	prop_htmlToMarkdownRef.current = props.htmlToMarkdown;
 
 	const nextOnChangeEventInfo = useRef<any>(null);
@@ -1136,7 +1121,11 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					editor.insertContent(result.html);
 				} else { // Paste regular text
 					if (pastedHtml) { // Handles HTML
-						const modifiedHtml = await processPastedHtml(pastedHtml);
+						const modifiedHtml = await processPastedHtml(
+							pastedHtml,
+							prop_htmlToMarkdownRef.current,
+							markupToHtml.current,
+						);
 						editor.insertContent(modifiedHtml);
 					} else { // Handles plain text
 						pasteAsPlainText(pastedText);
