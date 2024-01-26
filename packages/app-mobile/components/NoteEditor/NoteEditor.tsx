@@ -8,7 +8,7 @@ import ExtendedWebView from '../ExtendedWebView';
 import * as React from 'react';
 import { forwardRef, useImperativeHandle } from 'react';
 import { useMemo, useState, useCallback, useRef } from 'react';
-import { LayoutChangeEvent, View, ViewStyle } from 'react-native';
+import { LayoutChangeEvent, NativeSyntheticEvent, View, ViewStyle } from 'react-native';
 const { editorFont } = require('../global-style');
 
 import { EditorControl, EditorSettings, SelectionRange } from './types';
@@ -18,6 +18,11 @@ import { ChangeEvent, EditorEvent, EditorEventType, SelectionRangeChangeEvent, U
 import { EditorCommandType, EditorKeymap, EditorLanguageType, PluginData, SearchState } from '@joplin/editor/types';
 import supportsCommand from '@joplin/editor/CodeMirror/editorCommands/supportsCommand';
 import SelectionFormatting, { defaultSelectionFormatting } from '@joplin/editor/SelectionFormatting';
+import Logger from '@joplin/utils/Logger';
+import { WebViewErrorEvent } from 'react-native-webview/lib/RNCWebViewNativeComponent';
+import ErrorBanner from './ErrorBanner';
+
+const logger = Logger.create('NoteEditor');
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
@@ -71,7 +76,7 @@ function useCss(themeId: number): string {
 	}, [themeId]);
 }
 
-function useHtml(css: string): string {
+function useHtml(css: string, initialJs: string): string {
 	const [html, setHtml] = useState('');
 
 	useMemo(() => {
@@ -95,12 +100,43 @@ function useHtml(css: string): string {
 
 						${css}
 					</style>
+					<script>
+						// These error handlers are included in the HTML file to catch syntax errors
+						// in the initial injected JS. Avoid using modern JavaScript features here,
+						// or else this script may fail to load in outdated Android WebViews.
+						window.onerror = function (message, source, lineno, colno, error) {
+							window.ReactNativeWebView.postMessage(
+								"error: " + message + " in file " + source + ", line " + lineno + " Stack: " + (error || {}).stack
+							);
+						};
+
+						window.onunhandledrejection = function (event) {
+							window.ReactNativeWebView.postMessage(
+								"error: Unhandled promise rejection: " + event
+							);
+						};
+					</script>
 				</head>
 				<body>
 					<div class="CodeMirror" style="height:100%;" autocapitalize="on"></div>
 				</body>
+				<script>
+					// We include initialJs here, rather than using injectedJavaScript so that we get
+					// better error messages.
+					//
+					// Without this, syntax errors have error message "Script error" with no further
+					// details.
+					//
+					// <!--
+					${initialJs}
+					// -->
+				</script>
 			</html>
 		`);
+		// We intentionally don't reload when initialJs changes --- we don't want to reload
+		// whenever editor settings (e.g. cursor location) or initial text change.
+		//
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps
 	}, [css]);
 
 	return html;
@@ -296,7 +332,7 @@ function NoteEditor(props: Props, ref: any) {
 		indentWithTabs: false,
 	};
 
-	const injectedJavaScript = `
+	const initialJs = `
 		function postMessage(name, data) {
 			window.ReactNativeWebView.postMessage(JSON.stringify({
 				data,
@@ -311,18 +347,6 @@ function NoteEditor(props: Props, ref: any) {
 		// Globalize logMessage, postMessage
 		window.logMessage = logMessage;
 		window.postMessage = postMessage;
-
-		window.onerror = (message, source, lineno) => {
-			window.ReactNativeWebView.postMessage(
-				"error: " + message + " in file://" + source + ", line " + lineno
-			);
-		};
-
-		window.onunhandledrejection = (event) => {
-			window.ReactNativeWebView.postMessage(
-				"error: Unhandled promise rejection: " + event
-			);
-		};
 
 		if (!window.cm) {
 			// This variable is not used within this script
@@ -344,15 +368,17 @@ function NoteEditor(props: Props, ref: any) {
 				window.onresize = () => {
 					cm.execCommand('scrollSelectionIntoView');
 				};
+
+				window.ReactNativeWebView.postMessage('started');
 			} catch (e) {
-				window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))
+				window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e) + " stack: " + e.stack);
 			}
 		}
 		true;
 	`;
 
 	const css = useCss(props.themeId);
-	const html = useHtml(css);
+	const html = useHtml(css, initialJs);
 	const [selectionState, setSelectionState] = useState<SelectionFormatting>(defaultSelectionFormatting);
 	const [linkDialogVisible, setLinkDialogVisible] = useState(false);
 	const [searchState, setSearchState] = useState(defaultSearchState);
@@ -370,11 +396,22 @@ function NoteEditor(props: Props, ref: any) {
 		return editorControl;
 	});
 
+	const editorStartedRef = useRef<boolean>(false);
+	const [startupFailed, setStartupFailed] = useState<boolean>(false);
+
 	const onMessage = useCallback((event: any) => {
 		const data = event.nativeEvent.data;
 
 		if (data.indexOf('error:') === 0) {
-			console.error('CodeMirror:', data);
+			logger.error('CodeMirror:', data);
+
+			if (!editorStartedRef.current) {
+				setStartupFailed(true);
+			}
+			return;
+		} else if (data === 'started') {
+			logger.debug('Editor started successfully.');
+			editorStartedRef.current = true;
 			return;
 		}
 
@@ -384,7 +421,7 @@ function NoteEditor(props: Props, ref: any) {
 		const handlers: Record<string, Function> = {
 			onLog: (event: any) => {
 				// eslint-disable-next-line no-console
-				console.info('CodeMirror:', ...event.value);
+				logger.info('CodeMirror:', event.value);
 			},
 
 			onEditorEvent: (event: EditorEvent) => {
@@ -433,8 +470,16 @@ function NoteEditor(props: Props, ref: any) {
 		}
 	}, [props.onSelectionChange, props.onUndoRedoDepthChange, props.onChange, editorControl]);
 
-	const onError = useCallback(() => {
-		console.error('NoteEditor: webview error');
+
+	const onError = useCallback((event: NativeSyntheticEvent<WebViewErrorEvent>) => {
+		const errorDescription = `Load error: Code ${event.nativeEvent.code}: ${event.nativeEvent.description}`;
+
+		logger.error('NoteEditor startup error: ', errorDescription);
+		setStartupFailed(true);
+	}, []);
+
+	const onLoadEnd = useCallback(() => {
+		logger.debug('WebView loaded.');
 	}, []);
 
 	const [hasSpaceForToolbar, setHasSpaceForToolbar] = useState(true);
@@ -473,6 +518,7 @@ function NoteEditor(props: Props, ref: any) {
 				flexDirection: 'column',
 			}}
 		>
+			<ErrorBanner visible={startupFailed} />
 			<EditLinkDialog
 				visible={linkDialogVisible}
 				themeId={props.themeId}
@@ -491,9 +537,10 @@ function NoteEditor(props: Props, ref: any) {
 					scrollEnabled={true}
 					ref={webviewRef}
 					html={html}
-					injectedJavaScript={injectedJavaScript}
+					injectedJavaScript={''}
 					onMessage={onMessage}
 					onError={onError}
+					onLoadEnd={onLoadEnd}
 				/>
 			</View>
 

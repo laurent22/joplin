@@ -472,6 +472,7 @@ packages/app-mobile/components/NoteBodyViewer/hooks/useSource.js
 packages/app-mobile/components/NoteEditor/CodeMirror/CodeMirror.js
 packages/app-mobile/components/NoteEditor/CodeMirror/webviewLogger.js
 packages/app-mobile/components/NoteEditor/EditLinkDialog.js
+packages/app-mobile/components/NoteEditor/ErrorBanner.js
 packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.js
 packages/app-mobile/components/NoteEditor/ImageEditor/autosave.js
 packages/app-mobile/components/NoteEditor/ImageEditor/isEditableResource.js

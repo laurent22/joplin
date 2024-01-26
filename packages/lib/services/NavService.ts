@@ -6,7 +6,7 @@ export default class NavService {
 	public static dispatch: Function = () => {};
 	private static handlers_: OnNavigateCallback[] = [];
 
-	public static async go(routeName: string) {
+	public static async go(routeName: string, additionalProps: Record<string, any>|null = null) {
 		if (this.handlers_.length) {
 			const r = await this.handlers_[this.handlers_.length - 1]();
 			if (r) return r;
@@ -15,6 +15,7 @@ export default class NavService {
 		this.dispatch({
 			type: 'NAV_GO',
 			routeName: routeName,
+			...additionalProps,
 		});
 		return false;
 	}
