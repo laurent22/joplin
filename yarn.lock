@@ -6839,6 +6839,7 @@ __metadata:
     "@joplin/turndown": ^4.0.72
     "@joplin/turndown-plugin-gfm": ^1.0.54
     "@joplin/utils": ~2.14
+    "@supercharge/promise-pool": 3.1.0
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
     "@types/js-yaml": 4.0.9
@@ -6858,7 +6859,6 @@ __metadata:
     color: 3.2.1
     compare-versions: 6.1.0
     diff-match-patch: 1.0.5
-    es6-promise-pool: 2.5.0
     fast-deep-equal: 3.1.3
     fast-xml-parser: 3.21.1
     follow-redirects: 1.15.4
@@ -9938,6 +9938,13 @@ __metadata:
     "@styled-system/core": ^5.1.2
     "@styled-system/css": ^5.1.5
   checksum: becddaa0269004bd788e25d6b5c6f92af1c87009fe31844b4c19bba5233d54e59cfc4c007f8825d812db84c8d1bade5f8a99eb744db41c9124e0c145db64b5b5
+  languageName: node
+  linkType: hard
+
+"@supercharge/promise-pool@npm:3.1.0":
+  version: 3.1.0
+  resolution: "@supercharge/promise-pool@npm:3.1.0"
+  checksum: 15c391bb592f552eb9c7d36467539256a752206bd59834e86171a4c8356e077bc774e0583e14e03fd1613de66dbf623f00777ec674d95242ae7ad7f43d74268c
   languageName: node
   linkType: hard
 
@@ -19946,13 +19953,6 @@ __metadata:
   version: 1.1.0
   resolution: "es6-object-assign@npm:1.1.0"
   checksum: 8d4fdf63484d78b5c64cacc2c2e1165bc7b6a64b739d2a9db6a4dc8641d99cc9efb433cdd4dc3d3d6b00bfa6ce959694e4665e3255190339945c5f33b692b5d8
-  languageName: node
-  linkType: hard
-
-"es6-promise-pool@npm:2.5.0":
-  version: 2.5.0
-  resolution: "es6-promise-pool@npm:2.5.0"
-  checksum: e472ec5959b022b28e678446674c78dd2d198dd50c537ef59916d32d2423fe4518c43f132d81f2e98249b8b8450c95f77b8d9aecc1fb15e8dcd224c5b98f0cce
   languageName: node
   linkType: hard
 
