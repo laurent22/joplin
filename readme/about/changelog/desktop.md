@@ -1,5 +1,19 @@
 # Joplin Desktop Changelog
 
+## [v2.14.11](https://github.com/laurent22/joplin/releases/tag/v2.14.11) (Pre-release) - 2024-01-26T11:53:05Z
+
+- New: Plugins: Add support for promo_tile manifest key ([fd432f9](https://github.com/laurent22/joplin/commit/fd432f9))
+- Improved: Allow setting a minimum app version on the sync target ([#9778](https://github.com/laurent22/joplin/issues/9778))
+- Improved: Api: Increase protection of files downloaded via the REST API ([#9676](https://github.com/laurent22/joplin/issues/9676) by [@pedr](https://github.com/pedr))
+- Improved: CodeMirror 6 plugin API: Support non-inline CSS assets ([#9748](https://github.com/laurent22/joplin/issues/9748)) ([#9747](https://github.com/laurent22/joplin/issues/9747) by Henry Heino)
+- Improved: Moved crash report auto-upload option under pre-release option ([a863f92](https://github.com/laurent22/joplin/commit/a863f92))
+- Improved: Updated packages follow-redirects (v1.15.4)
+- Improved: Write a crash dump to disk when the app crashes ([fe3ad3e](https://github.com/laurent22/joplin/commit/fe3ad3e))
+- Fixed: CodeMirror 6 plugin API: Allow importing `@codemirror/lang-markdown` and `@lezer/highlight` ([#9753](https://github.com/laurent22/joplin/issues/9753)) ([#9752](https://github.com/laurent22/joplin/issues/9752) by Henry Heino)
+- Fixed: Extract default plugins to directories matching their IDs ([#9782](https://github.com/laurent22/joplin/issues/9782)) ([#9781](https://github.com/laurent22/joplin/issues/9781) by Henry Heino)
+- Fixed: Fix search when note or OCR text contains null characters ([#9774](https://github.com/laurent22/joplin/issues/9774)) ([#9775](https://github.com/laurent22/joplin/issues/9775) by Henry Heino)
+- Fixed: Linux: Fix bundled Simple Backup can't create 7zip archives ([#9780](https://github.com/laurent22/joplin/issues/9780)) ([#9779](https://github.com/laurent22/joplin/issues/9779) by Henry Heino)
+
 ## [v2.14.10](https://github.com/laurent22/joplin/releases/tag/v2.14.10) (Pre-release) - 2024-01-18T22:45:04Z
 
 - New: Add support for automatically uploading crash reports ([de0ae76](https://github.com/laurent22/joplin/commit/de0ae76))
