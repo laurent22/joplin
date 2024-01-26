@@ -23,6 +23,7 @@
     "tsc": "tsc --project tsconfig.json",
     "build": "yarn run tsc",
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
+    "build": "yarn run tsc",
     "test": "jest --verbose=false",
     "test-ci": "yarn test"
   },

@@ -1,0 +1,33 @@
+<h1 class="title">Debugging</h1>
+<p>
+	The tools on this page can be used to debug sync issues with Joplin Server.
+</p>
+
+<div class="debug-tools-container">
+	<fieldset class="resource-check-container" id="note-on-server-check">
+		<legend>
+			Check if an item (note, notebook, resource, tag) is present on the server
+		</legend>
+		<label for="note-on-server-input">External link or ID:</label>
+		<input type="text" id="note-on-server-input"/>
+		<noscript>JavaScript required</noscript>
+	</fieldset>
+
+	<fieldset class="resource-check-container" id="note-in-diff-check">
+		<legend>
+			Check if an item is sent to a Joplin client to download during an initial sync
+		</legend>
+		<label for="note-on-server-input">External link or ID:</label>
+		<input type="text" id="note-in-diff-input"/>
+		<noscript>JavaScript required</noscript>
+	</fieldset>
+</div>
+
+<hr/>
+
+<p>
+	The above tools accept either an item ID, an
+	<a href="https://joplinapp.org/help/apps/markdown#links-to-other-notes">internal link</a> to an item,
+	or an <a href="https://joplinapp.org/help/apps/external_links">external link</a>
+	to an item.
+</p>

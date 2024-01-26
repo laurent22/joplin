@@ -1,11 +1,32 @@
 const gulp = require('gulp');
 const utils = require('@joplin/tools/gulp/utils');
 const compilePackageInfo = require('@joplin/tools/compilePackageInfo');
+const { execCommand } = require('@joplin/utils');
 const fs = require('fs-extra');
+const path = require('path');
 
 const distDir = `${__dirname}/dist`;
 
+const tsConfigPaths = [
+	path.join(__dirname, 'tsconfig.json'),
+	path.join(__dirname, 'public', 'js', 'tsconfig.json'),
+];
+
 const tasks = {
+	// We use gulp for watching, but avoid it for compiling.
+	// We avoid this for tsc because historically there were issues with running tsc from gulp.
+	// (Although running commands with a slightly different method).
+	watch: {
+		fn: async () => {
+			const watchTasks = tsConfigPaths.map(tsConfigPath => {
+				return execCommand(
+					['tsc', '--watch', '--preserveWatchOutput', '--project', tsConfigPath],
+				);
+			});
+			await Promise.all(watchTasks);
+		},
+	},
+
 	compilePackageInfo: {
 		fn: async () => {
 			await fs.mkdirp(distDir);

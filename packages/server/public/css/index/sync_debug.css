@@ -1,0 +1,42 @@
+
+.debug-tools-container {
+	--border-color: #444;
+}
+
+
+.resource-check-container {
+	border-left: 1px solid var(--border-color);
+	padding-left: 5px;
+	margin-top: 14px;
+	/* Required for proper overflow. See
+	   https://stackoverflow.com/a/29499408 */
+	min-width: 0;
+}
+
+.resource-check-container > legend {
+	font-weight: bold;
+}
+
+
+.command-output {
+	border: 1px solid var(--border-color);
+	border-radius: 5px;
+	margin: 5px;
+	padding: 5px;
+}
+
+.command-output.-empty {
+	display: none;
+}
+
+.command-output > .output {
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	max-height: 500px;
+	overflow-y: auto;
+	border-radius: 5px;
+}
+
+details > summary {
+	cursor: pointer;
+}

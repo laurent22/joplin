@@ -34,7 +34,8 @@ module.exports = {
 				'packages/default-plugins/plugin-sources/**',
 				'packages/fork-sax/**',
 				'packages/lib/plugin_types/**',
-				'packages/server/**',
+				'packages/server/src/**',
+				'packages/server/dist/**',
 				'packages/utils/**',
 			],
 		}).filter(f => !f.endsWith('.d.ts'));
