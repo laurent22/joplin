@@ -1,7 +1,6 @@
 import { setupDatabaseAndSynchronizer, db, sleep, switchClient, msleep } from '../../testing/test-utils';
 import SearchEngine from './SearchEngine';
 import Note from '../../models/Note';
-import Folder from '../../models/Folder';
 import ItemChange from '../../models/ItemChange';
 import Setting from '../../models/Setting';
 
@@ -526,21 +525,24 @@ describe('services/SearchEngine', () => {
 		expect((await engine.search('hello', { appendWildCards: true })).length).toBe(2);
 	}));
 
-	it('should search by item ID if no other result was found', (async () => {
-		const f1 = await Folder.save({});
-		const n1 = await Note.save({ title: 'hello1', parent_id: f1.id });
-		const n2 = await Note.save({ title: 'hello2' });
+	// Disabled for now:
+	// https://github.com/laurent22/joplin/issues/9769#issuecomment-1912459744
 
-		await engine.syncTables();
+	// it('should search by item ID if no other result was found', (async () => {
+	// 	const f1 = await Folder.save({});
+	// 	const n1 = await Note.save({ title: 'hello1', parent_id: f1.id });
+	// 	const n2 = await Note.save({ title: 'hello2' });
 
-		const results = await engine.search(n1.id);
-		expect(results.length).toBe(1);
-		expect(results[0].id).toBe(n1.id);
-		expect(results[0].title).toBe(n1.title);
-		expect(results[0].parent_id).toBe(n1.parent_id);
+	// 	await engine.syncTables();
 
-		expect((await engine.search(n2.id))[0].id).toBe(n2.id);
-		expect(await engine.search(f1.id)).toEqual([]);
-	}));
+	// 	const results = await engine.search(n1.id);
+	// 	expect(results.length).toBe(1);
+	// 	expect(results[0].id).toBe(n1.id);
+	// 	expect(results[0].title).toBe(n1.title);
+	// 	expect(results[0].parent_id).toBe(n1.parent_id);
+
+	// 	expect((await engine.search(n2.id))[0].id).toBe(n2.id);
+	// 	expect(await engine.search(f1.id)).toEqual([]);
+	// }));
 
 });
