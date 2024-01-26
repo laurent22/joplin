@@ -7078,7 +7078,7 @@ __metadata:
     mustache: 4.2.0
     node-cron: 3.0.3
     node-mocks-http: 1.13.0
-    nodemailer: 6.9.7
+    nodemailer: 6.9.8
     nodemon: 3.0.2
     pg: 8.11.3
     pm2: 5.3.0
@@ -31376,10 +31376,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemailer@npm:6.9.7":
-  version: 6.9.7
-  resolution: "nodemailer@npm:6.9.7"
-  checksum: 0cf66d27aed3bd2cbdff9939402cec3d2119c31b2b9ff4af3bcd59f48287ea75b90c0ce2cd9eb0df838164972cd25581b4b723c91fd673e2608bcb28445ccb1b
+"nodemailer@npm:6.9.8":
+  version: 6.9.8
+  resolution: "nodemailer@npm:6.9.8"
+  checksum: 6499b93b7070a1b789ec00681ccbbf34180f127f1ce455b28201584b0974086a86be858062d41044df72ed7aba5649a40321a8e926367d2a1dfc0e65b7bf8838
   languageName: node
   linkType: hard
 
