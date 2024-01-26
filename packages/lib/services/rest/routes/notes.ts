@@ -469,7 +469,7 @@ export default async function(request: Request, id: string = null, link: string 
 			requestNote,
 			requestId,
 			imageSizes,
-			new DummyDownloadController,
+			new DummyDownloadController(),
 			undefined,
 			allowedProtocolsForDownloadMediaFiles,
 		);

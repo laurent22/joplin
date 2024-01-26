@@ -3,6 +3,7 @@ import shim from '../../../shim';
 import { downloadMediaFile } from './notes';
 import Setting from '../../../models/Setting';
 import { readFile, readdir, remove, writeFile } from 'fs-extra';
+import { DummyDownloadController } from '../../../downloadController';
 const md5 = require('md5');
 
 const imagePath = `${__dirname}/../../../images/SideMenuHeader.png`;
@@ -19,7 +20,7 @@ describe('routes/notes', () => {
 		'htp/asdfasf.com',
 		'https//joplinapp.org',
 	])('should not return a local file for invalid protocols', async (invalidUrl) => {
-		await expect(downloadMediaFile(invalidUrl)).resolves.toBe('');
+		await expect(downloadMediaFile(invalidUrl, new DummyDownloadController())).resolves.toBe('');
 	});
 
 	test.each([
@@ -31,7 +32,7 @@ describe('routes/notes', () => {
 		});
 		const spy = jest.spyOn(shim, 'fetchBlob').mockImplementation(fetchBlobSpy);
 
-		const response = await downloadMediaFile(url);
+		const response = await downloadMediaFile(url, new DummyDownloadController());
 
 		const files = await readdir(Setting.value('tempDir'));
 
@@ -46,7 +47,7 @@ describe('routes/notes', () => {
 		const url = `file:///${imagePath}`;
 		const originalFileContent = await readFile(imagePath);
 
-		const response = await downloadMediaFile(url, null, ['file:']);
+		const response = await downloadMediaFile(url, new DummyDownloadController(), null, ['file:']);
 
 		const files = await readdir(Setting.value('tempDir'));
 		expect(files.length).toBe(1);
@@ -61,7 +62,7 @@ describe('routes/notes', () => {
 		const url = 'data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7';
 		const originalFileContent = Buffer.from(url.split('data:image/gif;base64,')[1], 'base64');
 
-		const response = await downloadMediaFile(url);
+		const response = await downloadMediaFile(url, new DummyDownloadController());
 
 		const files = await readdir(Setting.value('tempDir'));
 		expect(files.length).toBe(1);
@@ -76,7 +77,7 @@ describe('routes/notes', () => {
 		const url = 'data:application/octet-stream;base64,dGhpcyBpcyBhIG1lc3NhZ2UK';
 
 		Logger.globalLogger.enabled = false;
-		const response = await downloadMediaFile(url);
+		const response = await downloadMediaFile(url, new DummyDownloadController());
 		Logger.globalLogger.enabled = true;
 
 		const files = await readdir(Setting.value('tempDir'));
@@ -87,7 +88,7 @@ describe('routes/notes', () => {
 	test('should not process URLs from cid: protocol', async () => {
 		const url = 'cid:ii_loq3d1100';
 
-		const response = await downloadMediaFile(url);
+		const response = await downloadMediaFile(url, new DummyDownloadController());
 
 		const files = await readdir(Setting.value('tempDir'));
 		expect(files.length).toBe(0);
@@ -98,7 +99,7 @@ describe('routes/notes', () => {
 		const url = 'file:///home/user/file.db';
 
 		const allowedProtocols: string[] = [];
-		const mediaFilePath = await downloadMediaFile(url, null, allowedProtocols);
+		const mediaFilePath = await downloadMediaFile(url, new DummyDownloadController(), null, allowedProtocols);
 
 		const files = await readdir(Setting.value('tempDir'));
 		expect(files.length).toBe(0);
@@ -118,7 +119,7 @@ describe('routes/notes', () => {
 			};
 		});
 
-		const response = await downloadMediaFile(url);
+		const response = await downloadMediaFile(url, new DummyDownloadController());
 
 		const files = await readdir(Setting.value('tempDir'));
 		expect(files.length).toBe(1);
