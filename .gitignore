@@ -657,6 +657,7 @@ packages/lib/database-driver-better-sqlite.js
 packages/lib/database.js
 packages/lib/debug/DebugService.js
 packages/lib/dom.js
+packages/lib/downloadController.js
 packages/lib/errorUtils.js
 packages/lib/errors.js
 packages/lib/eventManager.js

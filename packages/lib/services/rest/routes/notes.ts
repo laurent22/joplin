@@ -28,6 +28,9 @@ const { MarkupToHtml } = require('@joplin/renderer');
 const { ErrorNotFound } = require('../utils/errors');
 import { fileUriToPath } from '@joplin/utils/url';
 import { NoteEntity } from '../../database/types';
+import { DownloadController, DummyDownloadController } from '../../../downloadController';
+import { ErrorCode } from '../../../errors';
+import { PromisePool } from '@supercharge/promise-pool';
 
 const logger = Logger.create('routes/notes');
 
@@ -223,7 +226,7 @@ const isValidUrl = (url: string, isDataUrl: boolean, urlProtocol?: string, allow
 	return isAllowedProtocol;
 };
 
-export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
+export async function downloadMediaFile(url: string, downloadController: DownloadController, fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
 	logger.info('Downloading media file', url);
 
 	// The URL we get to download have been extracted from the Markdown document
@@ -247,7 +250,7 @@ export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions
 			const localPath = fileUriToPath(url);
 			await shim.fsDriver().copy(localPath, mediaPath);
 		} else {
-			const response = await shim.fetchBlob(url, { path: mediaPath, maxRetry: 1, ...fetchOptions });
+			const response = await shim.fetchBlob(url, { path: mediaPath, maxRetry: 1, ...fetchOptions }, downloadController);
 
 			if (!fileExt) {
 				// If we could not find the file extension from the URL, try to get it
@@ -262,27 +265,29 @@ export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions
 	}
 }
 
-async function downloadMediaFiles(urls: string[], fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
-	const PromisePool = require('es6-promise-pool');
-
+async function downloadMediaFiles(urls: string[], downloadController: DownloadController, fetchOptions: FetchOptions, allowedProtocols?: string[]) {
 	const output: any = {};
 
 	const downloadOne = async (url: string) => {
-		const mediaPath = await downloadMediaFile(url, fetchOptions, allowedProtocols);
+		downloadController.imagesCount += 1;
+		const mediaPath = await downloadMediaFile(url, downloadController, fetchOptions, allowedProtocols);
 		if (mediaPath) output[url] = { path: mediaPath, originalUrl: url };
 	};
 
-	let urlIndex = 0;
-	const promiseProducer = () => {
-		if (urlIndex >= urls.length) return null;
+	await PromisePool
+		.withConcurrency(10)
+		.for(urls)
+		.handleError(async (error: any, _url, pool) => {
+			if (error.code !== ErrorCode.DownloadLimiter) {
+				throw error;
+			}
+			logger.warn(error);
+			pool.stop();
+		})
+		.process(downloadOne);
 
-		const url = urls[urlIndex++];
-		return downloadOne(url);
-	};
-
-	const concurrency = 10;
-	const pool = new PromisePool(promiseProducer, concurrency);
-	await pool.start();
+	downloadController.imageCountExpected = urls.length;
+	downloadController.printStats(urls.length);
 
 	return output;
 }
@@ -397,6 +402,7 @@ export const extractNoteFromHTML = async (
 	requestNote: RequestNote,
 	requestId: number,
 	imageSizes: any,
+	downloadController: DownloadController,
 	fetchOptions?: FetchOptions,
 	allowedProtocols?: string[],
 ) => {
@@ -406,7 +412,7 @@ export const extractNoteFromHTML = async (
 
 	logger.info(`Request (${requestId}): Downloading media files: ${mediaUrls.length}`);
 
-	const mediaFiles = await downloadMediaFiles(mediaUrls, fetchOptions, allowedProtocols);
+	const mediaFiles = await downloadMediaFiles(mediaUrls, downloadController, fetchOptions, allowedProtocols);
 
 	logger.info(`Request (${requestId}): Creating resources from paths: ${Object.getOwnPropertyNames(mediaFiles).length}`);
 
@@ -459,7 +465,14 @@ export default async function(request: Request, id: string = null, link: string 
 		logger.info('Images:', imageSizes);
 
 		const allowedProtocolsForDownloadMediaFiles = ['http:', 'https:', 'file:', 'data:'];
-		const extracted = await extractNoteFromHTML(requestNote, requestId, imageSizes, undefined, allowedProtocolsForDownloadMediaFiles);
+		const extracted = await extractNoteFromHTML(
+			requestNote,
+			requestId,
+			imageSizes,
+			new DummyDownloadController,
+			undefined,
+			allowedProtocolsForDownloadMediaFiles,
+		);
 
 		let note = await Note.save(extracted.note, extracted.saveOptions);
 

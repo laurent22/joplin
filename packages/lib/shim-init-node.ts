@@ -9,6 +9,7 @@ import * as fs from 'fs-extra';
 import * as pdfJsNamespace from 'pdfjs-dist';
 import { writeFile } from 'fs/promises';
 import { ResourceEntity } from './services/database/types';
+import { DownloadController, DummyDownloadController } from './downloadController';
 
 const { FileApiDriverLocal } = require('./file-api-driver-local');
 const mimeUtils = require('./mime-utils.js').mime;
@@ -471,9 +472,10 @@ function shimInit(options: ShimInitOptions = null) {
 		}, options);
 	};
 
-	shim.fetchBlob = async function(url: any, options) {
+	shim.fetchBlob = async function(url: any, options: any, downloadController?: DownloadController) {
 		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
 		if (!options.method) options.method = 'GET';
+		if (!downloadController) downloadController = new DummyDownloadController();
 		// if (!('maxRetry' in options)) options.maxRetry = 5;
 
 		// 21 maxRedirects is the default amount from follow-redirects library
@@ -549,6 +551,9 @@ function shimInit(options: ShimInitOptions = null) {
 					});
 
 					const request = http.request(requestOptions, (response: any) => {
+
+						response.on('data', downloadController.handleNewChunk(request));
+
 						response.pipe(file);
 
 						const isGzipped = response.headers['content-encoding'] === 'gzip';
