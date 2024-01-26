@@ -29,6 +29,7 @@ export default class FileApiDriverMemory {
 	}
 
 	private decodeContent_(content: any) {
+		if (!content) return '';
 		return Buffer.from(content, 'base64').toString('utf-8');
 	}
 

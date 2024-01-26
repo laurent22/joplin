@@ -103,6 +103,7 @@ export interface State {
 	profileConfig: ProfileConfig;
 	noteListRendererIds: string[];
 	noteListLastSortTime: number;
+	mustUpgradeAppMessage: string;
 
 	// Extra reducer keys go here:
 	pluginService: PluginServiceState;
@@ -178,6 +179,7 @@ export const defaultState: State = {
 	profileConfig: null,
 	noteListRendererIds: getListRendererIds(),
 	noteListLastSortTime: 0,
+	mustUpgradeAppMessage: '',
 
 	pluginService: pluginServiceDefaultState,
 	shareService: shareServiceDefaultState,
@@ -1222,6 +1224,10 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'PROFILE_CONFIG_SET':
 			draft.profileConfig = action.value;
+			break;
+
+		case 'MUST_UPGRADE_APP':
+			draft.mustUpgradeAppMessage = action.message;
 			break;
 
 		case 'NOTE_LIST_RENDERER_ADD':
