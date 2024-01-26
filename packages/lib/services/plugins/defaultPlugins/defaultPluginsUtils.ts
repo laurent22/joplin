@@ -27,15 +27,26 @@ export const getDefaultPluginPathsAndSettings = async (
 
 	for (const pluginStat of defaultPluginsPaths) {
 		// Each plugin should be within a folder with the same ID as the plugin
-		const pluginFolderName = pluginStat.path;
-		const pluginId = pluginFolderName;
+		const pluginFileName = pluginStat.path;
+		const pluginIdMatch = pluginFileName.match(/^(.*)+\.jpl$/);
+
+		// Previously, default plugins were stored as
+		//    default-plugin-id/plugin.jpl
+		// We handle this case by skipping files that don't match the format
+		//    default-plugin-id.jpl
+		if (!pluginIdMatch) {
+			logger.warn(`Default plugin filename ${pluginFileName} is not a .JPL file. Skipping.`);
+			continue;
+		}
+
+		const pluginId = pluginIdMatch[1];
 
 		if (!defaultPluginsInfo.hasOwnProperty(pluginId)) {
 			logger.warn(`Default plugin ${pluginId} is missing in defaultPluginsInfo. Not loading.`);
 			continue;
 		}
 
-		pluginPaths.push(join(defaultPluginsDir, pluginFolderName, 'plugin.jpl'));
+		pluginPaths.push(join(defaultPluginsDir, pluginFileName));
 
 		pluginSettings = produce(pluginSettings, (draft: PluginSettings) => {
 			// Default plugins can be overridden but not uninstalled (as they're part of
