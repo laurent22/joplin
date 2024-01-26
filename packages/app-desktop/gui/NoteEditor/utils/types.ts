@@ -6,6 +6,7 @@ import { RenderResult, RenderResultPluginAsset } from '@joplin/renderer/types';
 import { MarkupToHtmlOptions } from './useMarkupToHtml';
 import { Dispatch } from 'redux';
 import { ProcessResultsRow } from '@joplin/lib/services/search/SearchEngine';
+import { SearchMarkers } from './useSearchMarkers';
 
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
@@ -90,7 +91,7 @@ export interface NoteBodyEditorProps {
 	dispatch: Function;
 	noteToolbar: any;
 	setLocalSearchResultCount(count: number): void;
-	searchMarkers: any;
+	searchMarkers: SearchMarkers;
 	visiblePanes: string[];
 	keyboardMode: string;
 	resourceInfos: ResourceInfos;

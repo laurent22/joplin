@@ -30,6 +30,7 @@ import { joplinCommandToTinyMceCommands, TinyMceCommand } from './utils/joplinCo
 import shouldPasteResources from './utils/shouldPasteResources';
 import lightTheme from '@joplin/lib/themes/light';
 import { Options as NoteStyleOptions } from '@joplin/renderer/noteStyle';
+import useHighlightedSearchTerms from './utils/useHighlightedSearchTerms';
 const md5 = require('md5');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
@@ -937,6 +938,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			editor.getDoc().removeEventListener('click', onEditorContentClick);
 		};
 	}, [editor, onEditorContentClick]);
+
+	useHighlightedSearchTerms(editor, props.searchMarkers.keywords, props.themeId);
 
 	// This is to handle dropping notes on the editor. In this case, we add an
 	// overlay over the editor, which makes it a valid drop target. This in
