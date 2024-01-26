@@ -1,5 +1,15 @@
 # Joplin Android Changelog
 
+## [android-v2.14.4](https://github.com/laurent22/joplin/releases/tag/android-v2.14.4) (Pre-release) - 2024-01-26T10:46:28Z
+
+- New: Add support for showing only lines of log that contain a filter (#9728 by Henry Heino)
+- Improved: Allow setting a minimum app version on the sync target (#9778)
+- Improved: Display an error if a resource cannot be downloaded (cbf7e24)
+- Improved: Don't log OneDrive `Authorization` tokens (#9707) (#9706 by Henry Heino)
+- Improved: Hide advanced settings by default (#9730 by Henry Heino)
+- Improved: Updated packages @js-draw/material-icons (v1.15.0), follow-redirects (v1.15.4), fs-extra (v11.2.0), js-draw (v1.15.0), react, react-native-device-info (v10.12.0), react-native-image-picker (v7.1.0), react-native-paper (v5.11.5), react-native-vector-icons (v10.0.3), sharp (v0.33.1)
+- Fixed: Fix AWS S3 sync error (#9696) (#8891 by Henry Heino)
+
 ## [android-v2.14.3](https://github.com/laurent22/joplin/releases/tag/android-v2.14.3) (Pre-release) - 2024-01-06T12:30:29Z
 
 - Improved: Fix table-of-contents links to headings with duplicate content (#9610) (#9594 by Henry Heino)
