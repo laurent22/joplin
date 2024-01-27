@@ -76,7 +76,7 @@ function useCss(themeId: number): string {
 	}, [themeId]);
 }
 
-function useHtml(css: string, initialJs: string): string {
+function useHtml(css: string): string {
 	const [html, setHtml] = useState('');
 
 	useMemo(() => {
@@ -120,23 +120,8 @@ function useHtml(css: string, initialJs: string): string {
 				<body>
 					<div class="CodeMirror" style="height:100%;" autocapitalize="on"></div>
 				</body>
-				<script>
-					// We include initialJs here, rather than using injectedJavaScript so that we get
-					// better error messages.
-					//
-					// Without this, syntax errors have error message "Script error" with no further
-					// details.
-					//
-					// <!--
-					${initialJs}
-					// -->
-				</script>
 			</html>
 		`);
-		// We intentionally don't reload when initialJs changes --- we don't want to reload
-		// whenever editor settings (e.g. cursor location) or initial text change.
-		//
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps
 	}, [css]);
 
 	return html;
@@ -332,7 +317,7 @@ function NoteEditor(props: Props, ref: any) {
 		indentWithTabs: false,
 	};
 
-	const initialJs = `
+	const injectedJavaScript = `
 		function postMessage(name, data) {
 			window.ReactNativeWebView.postMessage(JSON.stringify({
 				data,
@@ -371,14 +356,14 @@ function NoteEditor(props: Props, ref: any) {
 
 				window.ReactNativeWebView.postMessage('started');
 			} catch (e) {
-				window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e) + " stack: " + e.stack);
+				window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))
 			}
 		}
 		true;
 	`;
 
 	const css = useCss(props.themeId);
-	const html = useHtml(css, initialJs);
+	const html = useHtml(css);
 	const [selectionState, setSelectionState] = useState<SelectionFormatting>(defaultSelectionFormatting);
 	const [linkDialogVisible, setLinkDialogVisible] = useState(false);
 	const [searchState, setSearchState] = useState(defaultSearchState);
@@ -417,10 +402,8 @@ function NoteEditor(props: Props, ref: any) {
 
 		const msg = JSON.parse(data);
 
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-		const handlers: Record<string, Function> = {
+		const handlers: Record<string, (event: any)=> void> = {
 			onLog: (event: any) => {
-				// eslint-disable-next-line no-console
 				logger.info('CodeMirror:', event.value);
 			},
 
@@ -465,8 +448,7 @@ function NoteEditor(props: Props, ref: any) {
 		if (handlers[msg.name]) {
 			handlers[msg.name](msg.data);
 		} else {
-			// eslint-disable-next-line no-console
-			console.info('Unsupported CodeMirror message:', msg);
+			logger.warn('Unsupported CodeMirror message:', msg);
 		}
 	}, [props.onSelectionChange, props.onUndoRedoDepthChange, props.onChange, editorControl]);
 
@@ -537,7 +519,7 @@ function NoteEditor(props: Props, ref: any) {
 					scrollEnabled={true}
 					ref={webviewRef}
 					html={html}
-					injectedJavaScript={''}
+					injectedJavaScript={injectedJavaScript}
 					onMessage={onMessage}
 					onError={onError}
 					onLoadEnd={onLoadEnd}
