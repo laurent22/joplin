@@ -12,12 +12,15 @@ interface Props {
 const ErrorBanner: React.FC<Props> = props => {
 	const [dismissed, setDismissed] = useState(false);
 
-	const getAndroidResolutionMessage = () => {
-		if (shim.mobilePlatform() !== 'android') {
-			return '';
+	const getResolutionMessage = () => {
+		const platform = shim.mobilePlatform();
+		if (platform === 'android') {
+			return _('Checking for and installing updates for "Android System WebView" in the app store may fix this issue.');
+		} else if (platform === 'ios') {
+			return _('Please consider reporting this issue on GitHub. To work around this issue, enable the "Plain Editor" in Configuration > Note > "Use the plain editor".');
+		} else {
+			return 'Unknown mobile platform. This is a bug.';
 		}
-
-		return _('Because the note editor is powered by a WebView, checking for and installing updates for "Android System WebView" in the app store may fix this issue.');
 	};
 
 	return (
@@ -39,8 +42,8 @@ const ErrorBanner: React.FC<Props> = props => {
 			]}
 		>
 			{_('There was an error loading the note editor.')}
-			{'\n'}
-			{getAndroidResolutionMessage()}
+			{'\n\n'}
+			{getResolutionMessage()}
 		</Banner>
 	);
 };
