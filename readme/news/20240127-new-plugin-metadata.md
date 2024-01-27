@@ -1,3 +1,7 @@
+---
+forum_url: https://discourse.joplinapp.org/t/35525
+---
+
 # Support for new plugin metadata
 
 The plugin manifest now supports new properties to better describe and present your plugins on Joplin Plugins website. Those are the `icons`, `categories`, `screenshots` and `promo_tile` properties. 
