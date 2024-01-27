@@ -1155,7 +1155,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			break;
 
 		case 'SYNC_HAS_DISABLED_SYNC_ITEMS':
-			draft.hasDisabledSyncItems = true;
+			draft.hasDisabledSyncItems = 'value' in action ? action.value : true;
 			break;
 
 		case 'ENCRYPTION_HAS_DISABLED_ITEMS':

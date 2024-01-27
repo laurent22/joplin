@@ -31,6 +31,7 @@ import resourceRemotePath from './services/synchronizer/utils/resourceRemotePath
 import syncDeleteStep from './services/synchronizer/utils/syncDeleteStep';
 import { ErrorCode } from './errors';
 import { SyncAction } from './services/synchronizer/utils/types';
+import checkDisabledSyncItemsNotification from './services/synchronizer/utils/checkDisabledSyncItemsNotification';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -405,7 +406,6 @@ export default class Synchronizer {
 
 		const handleCannotSyncItem = async (ItemClass: any, syncTargetId: any, item: any, cannotSyncReason: string, itemLocation: any = null) => {
 			await ItemClass.saveSyncDisabled(syncTargetId, item, cannotSyncReason, itemLocation);
-			this.dispatch({ type: 'SYNC_HAS_DISABLED_SYNC_ITEMS' });
 		};
 
 		// We index resources before sync mostly to flag any potential orphan
@@ -1126,6 +1126,8 @@ export default class Synchronizer {
 		eventManager.emit(EventName.SyncComplete, {
 			withErrors: Synchronizer.reportHasErrors(this.progressReport_),
 		});
+
+		await checkDisabledSyncItemsNotification((action: any) => this.dispatch(action));
 
 		this.onProgress_ = function() {};
 		this.progressReport_ = {};

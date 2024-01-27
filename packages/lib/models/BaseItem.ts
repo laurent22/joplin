@@ -791,6 +791,11 @@ export default class BaseItem extends BaseModel {
 		return output;
 	}
 
+	public static async syncDisabledItemsCount(syncTargetId: number) {
+		const r = await this.db().selectOne('SELECT count(*) as total FROM sync_items WHERE sync_disabled = 1 AND sync_target = ?', [syncTargetId]);
+		return r ? r.total : 0;
+	}
+
 	public static updateSyncTimeQueries(syncTarget: number, item: any, syncTime: number, syncDisabled = false, syncDisabledReason = '', itemLocation: number = null) {
 		const itemType = item.type_;
 		const itemId = item.id;

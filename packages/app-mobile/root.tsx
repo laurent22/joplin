@@ -543,7 +543,7 @@ async function initialize(dispatch: Function) {
 		if (Setting.value('env') === 'prod') {
 			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
 		} else {
-			await db.open({ name: getDatabaseName(currentProfile, isSubProfile, '-3') });
+			await db.open({ name: getDatabaseName(currentProfile, isSubProfile, '-20240127-1') });
 
 			// await db.clearForTesting();
 		}
@@ -754,6 +754,8 @@ async function initialize(dispatch: Function) {
 		await runRsaIntegrationTests();
 		await runOnDeviceFsDriverTests();
 	}
+
+	dispatch({ type: 'SYNC_HAS_DISABLED_SYNC_ITEMS' });
 
 	reg.logger().info('Application initialized');
 }

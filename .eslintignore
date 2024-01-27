@@ -973,6 +973,7 @@ packages/lib/services/synchronizer/syncInfoUtils.js
 packages/lib/services/synchronizer/synchronizer_LockHandler.test.js
 packages/lib/services/synchronizer/synchronizer_MigrationHandler.test.js
 packages/lib/services/synchronizer/tools.js
+packages/lib/services/synchronizer/utils/checkDisabledSyncItemsNotification.js
 packages/lib/services/synchronizer/utils/handleConflictAction.js
 packages/lib/services/synchronizer/utils/handleSyncStartupOperation.js
 packages/lib/services/synchronizer/utils/resourceRemotePath.js
