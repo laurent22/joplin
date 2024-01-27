@@ -72,7 +72,6 @@ interface Props {
 	showMissingMasterKeyMessage: boolean;
 	showNeedUpgradingMasterKeyMessage: boolean;
 	showShouldReencryptMessage: boolean;
-	showInstallTemplatesPlugin: boolean;
 	themeId: number;
 	settingEditorCodeView: boolean;
 	pluginsLegacy: any;
@@ -578,16 +577,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 			});
 		};
 
-		const onViewPluginScreen = () => {
-			this.props.dispatch({
-				type: 'NAV_GO',
-				routeName: 'Config',
-				props: {
-					defaultSection: 'plugins',
-				},
-			});
-		};
-
 		const onRestartAndUpgrade = async () => {
 			Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_MUST_DO);
 			await Setting.saveAll();
@@ -668,12 +657,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 				_('Set the password'),
 				onViewEncryptionConfigScreen,
 			);
-		} else if (this.props.showInstallTemplatesPlugin) {
-			msg = this.renderNotificationMessage(
-				'The template feature has been moved to a plugin called "Templates".',
-				'Install plugin',
-				onViewPluginScreen,
-			);
 		} else if (this.props.mustUpgradeAppMessage) {
 			msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
 		}
@@ -697,7 +680,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 			props.isSafeMode ||
 			this.showShareInvitationNotification(props) ||
 			this.props.needApiAuth ||
-			this.props.showInstallTemplatesPlugin ||
 			!!this.props.mustUpgradeAppMessage;
 	}
 
@@ -934,7 +916,6 @@ const mapStateToProps = (state: AppState) => {
 		isSafeMode: state.settings.isSafeMode,
 		enableBetaMarkdownEditor: state.settings['editor.beta'],
 		needApiAuth: state.needApiAuth,
-		showInstallTemplatesPlugin: state.hasLegacyTemplates && !state.pluginService.plugins['joplin.plugin.templates'],
 		isResettingLayout: state.isResettingLayout,
 		listRendererId: state.settings['notes.listRendererId'],
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
