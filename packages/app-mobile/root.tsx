@@ -755,8 +755,6 @@ async function initialize(dispatch: Function) {
 		await runOnDeviceFsDriverTests();
 	}
 
-	dispatch({ type: 'SYNC_HAS_DISABLED_SYNC_ITEMS' });
-
 	reg.logger().info('Application initialized');
 }
 
