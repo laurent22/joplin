@@ -349,7 +349,6 @@ function NoteEditor(props: Props, ref: any) {
 				cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, settings);
 
 				${setInitialSelectionJS}
-				foo();
 
 				window.onresize = () => {
 					cm.execCommand('scrollSelectionIntoView');
