@@ -15,7 +15,7 @@ const build = () => {
 			await buildAll(args.outputDir);
 			process.exit(0);
 		})
-		.command('patch <plugin>', 'Edit the patch file for the given plugin ID', (yargs: any) => {
+		.command('patch-plugin <plugin>', 'Edit the patch file for the given plugin ID', (yargs: any) => {
 			yargs.positional('plugin', {
 				type: 'string',
 				describe: 'ID of the plugin to patch',
