@@ -76,16 +76,6 @@ const NoteList = (props: Props) => {
 		props.notes,
 	);
 
-	// const renderedNotes = useRenderedNotes(
-	// 	startNoteIndex,
-	// 	endNoteIndex,
-	// 	props.notes,
-	// 	props.selectedNoteIds,
-	// 	listRenderer,
-	// 	props.highlightedWords,
-	// 	props.watchedNoteFiles,
-	// );
-
 	const noteItemStyle = useMemo(() => {
 		return {
 			width: 'auto',
