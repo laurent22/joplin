@@ -608,6 +608,14 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				localization_function: _,
 				contextmenu: false,
 				browser_spellcheck: true,
+
+				// Work around an issue where images with a base64 SVG data URL would be broken.
+				//
+				// See https://github.com/tinymce/tinymce/issues/3864
+				//
+				// This was fixed in TinyMCE 6.1, so remove it when we upgrade.
+				images_dataimg_filter: (img: HTMLImageElement) => !img.src.startsWith('data:'),
+
 				formats: {
 					joplinHighlight: { inline: 'mark', remove: 'all' },
 					joplinStrikethrough: { inline: 's', remove: 'all' },
