@@ -30,9 +30,11 @@ export interface DialogInfo {
 	html: string;
 }
 
+export type WebViewOnMessageCallback = (arg: SerializableData)=> void;
+
 export interface DialogMainProcessApi {
 	postMessage: (message: SerializableData)=> Promise<SerializableData>;
-	onMessage: (callback: (arg: SerializableData)=> void)=> void;
+	onMessage: (callback: WebViewOnMessageCallback)=> void;
 	onError: (message: string)=> Promise<void>;
 	onLog: (level: LogLevel, message: string)=> Promise<void>;
 }
