@@ -795,9 +795,7 @@ class AppComponent extends React.Component {
 			if (event.url === ShareExtension.shareURL && this.props.biometricsDone) {
 				logger.info('Sharing: handleOpenURL_: Processing share data');
 				void this.handleShareData();
-			}
-
-			if (isCallbackUrl(event.url)) {
+			} else if (isCallbackUrl(event.url)) {
 				logger.info('received callback url: ', event.url);
 				this.callbackUrl = event.url;
 				if (this.props.biometricsDone) {
@@ -962,9 +960,7 @@ class AppComponent extends React.Component {
 		if (this.props.biometricsDone !== prevProps.biometricsDone && this.props.biometricsDone) {
 			logger.info('Sharing: componentDidUpdate: biometricsDone');
 			void this.handleShareData();
-			if (this.callbackUrl !== null) {
-				void this.handleCallbackUrl();
-			}
+			void this.handleCallbackUrl();
 		}
 	}
 
@@ -1042,7 +1038,6 @@ class AppComponent extends React.Component {
 
 		}
 	}
-
 
 	private async handleScreenWidthChange_() {
 		this.setState({ sideMenuWidth: this.getSideMenuWidth() });
