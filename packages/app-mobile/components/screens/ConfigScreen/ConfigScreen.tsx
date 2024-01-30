@@ -18,7 +18,7 @@ import * as shared from '@joplin/lib/components/shared/config/config-shared';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import biometricAuthenticate from '../../biometrics/biometricAuthenticate';
 import configScreenStyles, { ConfigScreenStyles } from './configScreenStyles';
-import NoteExportButton, { exportButtonDescription, exportButtonTitle } from './NoteExportSection/NoteExportButton';
+import NoteExportButton, { exportButtonDescription, exportButtonDefaultTitle } from './NoteExportSection/NoteExportButton';
 import SettingsButton from './SettingsButton';
 import Clipboard from '@react-native-community/clipboard';
 import { ReactElement, ReactNode } from 'react';
@@ -32,6 +32,7 @@ import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/Plug
 import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
 import PluginUploadButton, { buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
 import isInstallingPluginsAllowed from './plugins/utils/isPluginInstallingAllowed';
+import NoteImportButton, { importButtonDefaultTitle, importButtonDescription } from './NoteExportSection/NoteImportButton';
 
 interface ConfigScreenState {
 	settings: any;
@@ -519,7 +520,11 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		if (section.name === 'export') {
 			addSettingComponent(
 				<NoteExportButton key='export_as_jex_button' styles={this.styles()} />,
-				[exportButtonTitle(), exportButtonDescription()],
+				[exportButtonDefaultTitle(), exportButtonDescription()],
+			);
+			addSettingComponent(
+				<NoteImportButton key='import_as_jex_button' styles={this.styles()} />,
+				[importButtonDefaultTitle(), importButtonDescription()],
 			);
 			addSettingComponent(
 				<ExportDebugReportButton key='export_report_button' styles={this.styles()}/>,
