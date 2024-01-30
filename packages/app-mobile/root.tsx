@@ -85,6 +85,7 @@ const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import BiometricPopup from './components/biometrics/BiometricPopup';
 import initLib from '@joplin/lib/initLib';
+import { isCallbackUrl, parseCallbackUrl, CallbackUrlCommand } from '@joplin/lib/callbackUrlUtils';
 
 SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -764,6 +765,7 @@ class AppComponent extends React.Component {
 	private appStateChangeListener_: NativeEventSubscription|null = null;
 	private themeChangeListener_: NativeEventSubscription|null = null;
 	private dropdownAlert_ = (_data: any) => new Promise<any>(res => res);
+	private callbackUrl: string|null = null;
 
 	public constructor() {
 		super();
@@ -793,6 +795,14 @@ class AppComponent extends React.Component {
 			if (event.url === ShareExtension.shareURL && this.props.biometricsDone) {
 				logger.info('Sharing: handleOpenURL_: Processing share data');
 				void this.handleShareData();
+			}
+
+			if (isCallbackUrl(event.url)) {
+				logger.info('received callback url: ', event.url);
+				this.callbackUrl = event.url;
+				if (this.props.biometricsDone) {
+					void this.handleCallbackUrl();
+				}
 			}
 		};
 
@@ -952,6 +962,9 @@ class AppComponent extends React.Component {
 		if (this.props.biometricsDone !== prevProps.biometricsDone && this.props.biometricsDone) {
 			logger.info('Sharing: componentDidUpdate: biometricsDone');
 			void this.handleShareData();
+			if (this.callbackUrl !== null) {
+				void this.handleCallbackUrl();
+			}
 		}
 	}
 
@@ -991,6 +1004,45 @@ class AppComponent extends React.Component {
 			logger.info('Sharing: received empty share data.');
 		}
 	}
+
+	private async handleCallbackUrl() {
+		const url = this.callbackUrl;
+		this.callbackUrl = null;
+		if (url === null) {
+			return;
+		}
+
+		const { command, params } = parseCallbackUrl(url);
+
+		switch (command) {
+
+		case CallbackUrlCommand.OpenNote:
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Note',
+				noteId: params.id,
+			});
+			break;
+
+		case CallbackUrlCommand.OpenTag:
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Notes',
+				tagId: params.id,
+			});
+			break;
+
+		case CallbackUrlCommand.OpenFolder:
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Notes',
+				folderId: params.id,
+			});
+			break;
+
+		}
+	}
+
 
 	private async handleScreenWidthChange_() {
 		this.setState({ sideMenuWidth: this.getSideMenuWidth() });

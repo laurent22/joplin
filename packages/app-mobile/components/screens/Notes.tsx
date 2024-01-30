@@ -8,7 +8,7 @@ import Tag from '@joplin/lib/models/Tag';
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
 const { themeStyle } = require('../global-style.js');
-import { ScreenHeader } from '../ScreenHeader';
+import { ScreenHeader, MenuOptionType } from '../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
 import ActionButton from '../ActionButton';
 const { dialogs } = require('../../utils/dialogs.js');
@@ -18,6 +18,8 @@ const { BackButtonService } = require('../../services/back-button.js');
 import { AppState } from '../../utils/types';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids.js');
+const Clipboard = require('@react-native-community/clipboard').default;
+import { getFolderCallbackUrl, getTagCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
 class NotesScreenComponent extends BaseScreenComponent<any> {
 
@@ -197,6 +199,29 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		return this.folderPickerOptions_;
 	}
 
+	public menuOptions() {
+		const output: MenuOptionType[] = [];
+
+		if (this.props.notesParentType === 'Tag') {
+			output.push({
+				title: _('Copy external link'),
+				onPress: () => {
+					Clipboard.setString(getTagCallbackUrl(this.props.selectedTagId));
+				},
+			});
+		}
+		if (this.props.notesParentType === 'Folder') {
+			output.push({
+				title: _('Copy external link'),
+				onPress: () => {
+					Clipboard.setString(getFolderCallbackUrl(this.props.selectedFolderId));
+				},
+			});
+		}
+
+		return output;
+	}
+
 	public render() {
 		const parent = this.parentItem();
 		const theme = themeStyle(this.props.themeId);
@@ -285,7 +310,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 				accessibilityElementsHidden={accessibilityHidden}
 				importantForAccessibility={accessibilityHidden ? 'no-hide-descendants' : undefined}
 			>
-				<ScreenHeader title={iconString + title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
+				<ScreenHeader title={iconString + title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} menuOptions={this.menuOptions()} />
 				<NoteList />
 				{actionButtonComp}
 				<DialogBox
