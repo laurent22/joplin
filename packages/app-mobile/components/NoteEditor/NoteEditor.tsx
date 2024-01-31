@@ -99,21 +99,6 @@ function useHtml(css: string): string {
 
 						${css}
 					</style>
-					<script>
-						// These error handlers are included in the HTML file to catch syntax errors
-						// in the initial injected JS. Avoid using modern JavaScript features here,
-						// or else this script may fail to load in outdated Android WebViews.
-						window.onerror = function (message, source, lineno, colno, error) {
-							window.ReactNativeWebView.postMessage(
-								"error: " + message + " in file " + source + ", line " + lineno + " Stack: " + (error || {}).stack
-							);
-						};
-						window.onunhandledrejection = function (event) {
-							window.ReactNativeWebView.postMessage(
-								"error: Unhandled promise rejection: " + event
-							);
-						};
-					</script>
 				</head>
 				<body>
 					<div class="CodeMirror" style="height:100%;" autocapitalize="on"></div>
@@ -330,6 +315,17 @@ function NoteEditor(props: Props, ref: any) {
 		// Globalize logMessage, postMessage
 		window.logMessage = logMessage;
 		window.postMessage = postMessage;
+
+		window.onerror = (message, source, lineno) => {
+			window.ReactNativeWebView.postMessage(
+				"error: " + message + " in file://" + source + ", line " + lineno
+			);
+		};
+		window.onunhandledrejection = (event) => {
+			window.ReactNativeWebView.postMessage(
+				"error: Unhandled promise rejection: " + event
+			);
+		};
 
 		if (!window.cm) {
 			// This variable is not used within this script
