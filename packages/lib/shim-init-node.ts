@@ -196,7 +196,9 @@ function shimInit(options: ShimInitOptions = null) {
 
 		if (shim.isElectron()) {
 			// For Electron/renderer process
-			// Note that we avoid nativeImage because it loses metadata.
+			// Note that we avoid nativeImage because it loses rotation metadata.
+			// See https://github.com/electron/electron/issues/41189
+
 			const image = new Image();
 			image.src = filePath;
 			await new Promise<void>((resolve, reject) => {
