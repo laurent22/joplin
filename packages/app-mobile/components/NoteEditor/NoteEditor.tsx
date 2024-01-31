@@ -8,7 +8,7 @@ import ExtendedWebView from '../ExtendedWebView';
 import * as React from 'react';
 import { forwardRef, useImperativeHandle } from 'react';
 import { useMemo, useState, useCallback, useRef } from 'react';
-import { LayoutChangeEvent, View, ViewStyle } from 'react-native';
+import { LayoutChangeEvent, NativeSyntheticEvent, View, ViewStyle } from 'react-native';
 const { editorFont } = require('../global-style');
 
 import { EditorControl, EditorSettings, SelectionRange } from './types';
@@ -18,11 +18,15 @@ import { ChangeEvent, EditorEvent, EditorEventType, SelectionRangeChangeEvent, U
 import { EditorCommandType, EditorKeymap, EditorLanguageType, PluginData, SearchState } from '@joplin/editor/types';
 import supportsCommand from '@joplin/editor/CodeMirror/editorCommands/supportsCommand';
 import SelectionFormatting, { defaultSelectionFormatting } from '@joplin/editor/SelectionFormatting';
+import Logger from '@joplin/utils/Logger';
+import { WebViewErrorEvent } from 'react-native-webview/lib/RNCWebViewNativeComponent';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
 type SelectionChangeEventHandler = (event: SelectionRangeChangeEvent)=> void;
 type OnAttachCallback = ()=> void;
+
+const logger = Logger.create('NoteEditor');
 
 interface Props {
 	themeId: number;
@@ -95,6 +99,21 @@ function useHtml(css: string): string {
 
 						${css}
 					</style>
+					<script>
+						// These error handlers are included in the HTML file to catch syntax errors
+						// in the initial injected JS. Avoid using modern JavaScript features here,
+						// or else this script may fail to load in outdated Android WebViews.
+						window.onerror = function (message, source, lineno, colno, error) {
+							window.ReactNativeWebView.postMessage(
+								"error: " + message + " in file " + source + ", line " + lineno + " Stack: " + (error || {}).stack
+							);
+						};
+						window.onunhandledrejection = function (event) {
+							window.ReactNativeWebView.postMessage(
+								"error: Unhandled promise rejection: " + event
+							);
+						};
+					</script>
 				</head>
 				<body>
 					<div class="CodeMirror" style="height:100%;" autocapitalize="on"></div>
@@ -312,18 +331,6 @@ function NoteEditor(props: Props, ref: any) {
 		window.logMessage = logMessage;
 		window.postMessage = postMessage;
 
-		window.onerror = (message, source, lineno) => {
-			window.ReactNativeWebView.postMessage(
-				"error: " + message + " in file://" + source + ", line " + lineno
-			);
-		};
-
-		window.onunhandledrejection = (event) => {
-			window.ReactNativeWebView.postMessage(
-				"error: Unhandled promise rejection: " + event
-			);
-		};
-
 		if (!window.cm) {
 			// This variable is not used within this script
 			// but is called using "injectJavaScript" from
@@ -374,7 +381,7 @@ function NoteEditor(props: Props, ref: any) {
 		const data = event.nativeEvent.data;
 
 		if (data.indexOf('error:') === 0) {
-			console.error('CodeMirror:', data);
+			logger.error('CodeMirror:', data);
 			return;
 		}
 
@@ -383,8 +390,7 @@ function NoteEditor(props: Props, ref: any) {
 		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		const handlers: Record<string, Function> = {
 			onLog: (event: any) => {
-				// eslint-disable-next-line no-console
-				console.info('CodeMirror:', ...event.value);
+				logger.info('CodeMirror:', ...event.value);
 			},
 
 			onEditorEvent: (event: EditorEvent) => {
@@ -428,13 +434,12 @@ function NoteEditor(props: Props, ref: any) {
 		if (handlers[msg.name]) {
 			handlers[msg.name](msg.data);
 		} else {
-			// eslint-disable-next-line no-console
-			console.info('Unsupported CodeMirror message:', msg);
+			logger.warn('Unsupported CodeMirror message:', msg);
 		}
 	}, [props.onSelectionChange, props.onUndoRedoDepthChange, props.onChange, editorControl]);
 
-	const onError = useCallback(() => {
-		console.error('NoteEditor: webview error');
+	const onError = useCallback((event: NativeSyntheticEvent<WebViewErrorEvent>) => {
+		logger.error(`Load error: Code ${event.nativeEvent.code}: ${event.nativeEvent.description}`);
 	}, []);
 
 	const [hasSpaceForToolbar, setHasSpaceForToolbar] = useState(true);
