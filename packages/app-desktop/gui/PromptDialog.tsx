@@ -90,6 +90,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 			left: 0,
 			width: width,
 			height: height,
+			boxSizing: 'border-box',
 			backgroundColor: 'rgba(0,0,0,0.6)',
 			display: visible ? 'flex' : 'none',
 			alignItems: 'flex-start',
