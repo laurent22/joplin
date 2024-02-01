@@ -41,7 +41,7 @@ const buildDefaultPlugins = async (outputParentDir: string|null, beforeInstall: 
 			}
 
 			chdir(pluginDir);
-			const currentCommitHash = (await execCommand(['git', 'rev-parse', 'HEAD~'])).trim();
+			const currentCommitHash = (await execCommand(['git', 'rev-parse', 'HEAD'])).trim();
 			const expectedCommitHash = repositoryData.commit;
 
 			if (currentCommitHash !== expectedCommitHash) {
