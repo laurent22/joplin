@@ -217,8 +217,8 @@ function escapeHtml(s) {
 		.replace(/>/g, '&gt;')
 		.replace(/"/g, '&quot;')
 		.replace(/'/g, '&#039;')
-		.replace(/ /g, '&nbsp;')
-		.replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+		.replace(/^ +/g, match => '&nbsp;'.repeat(match.length))
+		.replace(/^\t+/g, match => '&nbsp;&nbsp;&nbsp;&nbsp;'.repeat(match.length));
 }
 
 // keywords can either be a list of strings, or a list of objects with the format:
