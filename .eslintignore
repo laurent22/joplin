@@ -294,6 +294,7 @@ packages/app-desktop/gui/NoteEditor/utils/clipboardUtils.js
 packages/app-desktop/gui/NoteEditor/utils/contextMenu.js
 packages/app-desktop/gui/NoteEditor/utils/contextMenuUtils.js
 packages/app-desktop/gui/NoteEditor/utils/index.js
+packages/app-desktop/gui/NoteEditor/utils/markupRenderOptions.js
 packages/app-desktop/gui/NoteEditor/utils/resourceHandling.test.js
 packages/app-desktop/gui/NoteEditor/utils/resourceHandling.js
 packages/app-desktop/gui/NoteEditor/utils/types.js
@@ -737,6 +738,7 @@ packages/lib/models/Tag.test.js
 packages/lib/models/Tag.js
 packages/lib/models/dateTimeFormats.test.js
 packages/lib/models/settings/FileHandler.js
+packages/lib/models/settings/settingValidations.js
 packages/lib/models/utils/isItemId.js
 packages/lib/models/utils/itemCanBeEncrypted.js
 packages/lib/models/utils/paginatedFeed.js
@@ -972,6 +974,7 @@ packages/lib/services/synchronizer/syncInfoUtils.js
 packages/lib/services/synchronizer/synchronizer_LockHandler.test.js
 packages/lib/services/synchronizer/synchronizer_MigrationHandler.test.js
 packages/lib/services/synchronizer/tools.js
+packages/lib/services/synchronizer/utils/checkDisabledSyncItemsNotification.js
 packages/lib/services/synchronizer/utils/handleConflictAction.js
 packages/lib/services/synchronizer/utils/handleSyncStartupOperation.js
 packages/lib/services/synchronizer/utils/resourceRemotePath.js

@@ -137,7 +137,7 @@ async function createRelease(projectName: string, name: string, tagName: string,
 	console.info(`Running from: ${process.cwd()}`);
 
 	await execCommand('yarn install', { showStdout: false });
-	await execCommand('yarn run tsc', { showStdout: false });
+	await execCommand('yarn tsc', { showStdout: false });
 
 	console.info(`Building APK file v${suffix}...`);
 

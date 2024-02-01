@@ -138,7 +138,7 @@ export enum TaskId {
 }
 
 // AUTO-GENERATED-TYPES
-// Auto-generated using `yarn run generate-types`
+// Auto-generated using `yarn generate-types`
 export interface Session extends WithDates, WithUuid {
 	user_id?: Uuid;
 	auth_code?: string;

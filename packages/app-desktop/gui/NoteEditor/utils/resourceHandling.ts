@@ -10,6 +10,8 @@ import rendererHtmlUtils, { extractHtmlBody } from '@joplin/renderer/htmlUtils';
 import Logger from '@joplin/utils/Logger';
 import { fileUriToPath } from '@joplin/utils/url';
 import { MarkupLanguage } from '@joplin/renderer';
+import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
+import markupRenderOptions from './markupRenderOptions';
 const joplinRendererUtils = require('@joplin/renderer').utils;
 const { clipboard } = require('electron');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
@@ -135,7 +137,7 @@ export async function getResourcesFromPasteEvent(event: any) {
 	return output;
 }
 
-export async function processPastedHtml(html: string) {
+export async function processPastedHtml(html: string, htmlToMd: HtmlToMarkdownHandler | null, mdToHtml: MarkupToHtmlHandler | null) {
 	const allImageUrls: string[] = [];
 	const mappedResources: Record<string, string> = {};
 
@@ -177,6 +179,15 @@ export async function processPastedHtml(html: string) {
 				mappedResources[imageSrc] = imageSrc;
 			}
 		}
+	}
+
+	// TinyMCE can accept any type of HTML, including HTML that may not be preserved once saved as
+	// Markdown. For example the content may have a dark background which would be supported by
+	// TinyMCE, but lost once the note is saved. So here we convert the HTML to Markdown then back
+	// to HTML to ensure that the content we paste will be handled correctly by the app.
+	if (htmlToMd && mdToHtml) {
+		const md = await htmlToMd(MarkupLanguage.Markdown, html, '');
+		html = (await mdToHtml(MarkupLanguage.Markdown, md, markupRenderOptions({ bodyOnly: true }))).html;
 	}
 
 	return extractHtmlBody(rendererHtmlUtils.sanitizeHtml(

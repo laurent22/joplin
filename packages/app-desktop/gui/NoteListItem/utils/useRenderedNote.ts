@@ -19,7 +19,7 @@ const hashContent = (content: any) => {
 	return createHash('sha1').update(JSON.stringify(content)).digest('hex');
 };
 
-export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listRenderer: ListRenderer, highlightedWords: string[]) => {
+export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listRenderer: ListRenderer, highlightedWords: string[], itemIndex: number) => {
 	const [renderedNote, setRenderedNote] = useState<RenderedNote>(null);
 
 	useAsyncEffect(async (event) => {
@@ -56,6 +56,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 				titleHtml,
 				isWatched,
 				noteTags,
+				itemIndex,
 			);
 
 			if (event.cancelled) return null;

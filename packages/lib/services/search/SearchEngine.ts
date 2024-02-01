@@ -11,7 +11,6 @@ import { ItemChangeEntity, NoteEntity, SqlQuery } from '../database/types';
 import Resource from '../../models/Resource';
 import JoplinDatabase from '../../JoplinDatabase';
 import NoteResource from '../../models/NoteResource';
-import isItemId from '../../models/utils/isItemId';
 import BaseItem from '../../models/BaseItem';
 import { isCallbackUrl, parseCallbackUrl } from '../../callbackUrlUtils';
 const { sprintf } = require('sprintf-js');
@@ -670,9 +669,14 @@ export default class SearchEngine {
 		if (isCallbackUrl(searchString)) {
 			const parsed = parseCallbackUrl(searchString);
 			itemId = parsed.params.id;
-		} else if (isItemId(searchString)) {
-			itemId = searchString;
 		}
+
+		// Disabled for now:
+		// https://github.com/laurent22/joplin/issues/9769#issuecomment-1912459744
+
+		// else if (isItemId(searchString)) {
+		// 	itemId = searchString;
+		// }
 
 		if (itemId) {
 			const item = await BaseItem.loadItemById(itemId);

@@ -1,12 +1,15 @@
 import { themeStyle } from '@joplin/lib/theme';
 import * as React from 'react';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import NoteList2 from '../NoteList/NoteList2';
 import NoteListControls from '../NoteListControls/NoteListControls';
 import { Size } from '../ResizableLayout/utils/types';
 import styled from 'styled-components';
 import { getDefaultListRenderer, getListRendererById } from '@joplin/lib/services/noteList/renderers';
 import Logger from '@joplin/utils/Logger';
+import { _ } from '@joplin/lib/locale';
+import { BaseBreakpoint, Breakpoints } from '../NoteList/utils/types';
+import { ButtonSize, buttonSizePx } from '../Button/Button';
 
 const logger = Logger.create('NoteListWrapper');
 
@@ -26,6 +29,52 @@ const StyledRoot = styled.div`
 	width: 100%;
 `;
 
+// Even though these calculations mostly concern the NoteListControls component, we do them here
+// because we need to know the height of that control to calculate the note list height.
+const useNoteListControlsBreakpoints = (width: number, newNoteRef: React.MutableRefObject<any>) => {
+	const [dynamicBreakpoints, setDynamicBreakpoints] = useState<Breakpoints>({ Sm: BaseBreakpoint.Sm, Md: BaseBreakpoint.Md, Lg: BaseBreakpoint.Lg, Xl: BaseBreakpoint.Xl });
+
+	const getTextWidth = useCallback((text: string): number => {
+		const canvas = document.createElement('canvas');
+		if (!canvas) throw new Error('Failed to create canvas element');
+		const ctx = canvas.getContext('2d');
+		if (!ctx) throw new Error('Failed to get context');
+		const fontWeight = getComputedStyle(newNoteRef.current).getPropertyValue('font-weight');
+		const fontSize = getComputedStyle(newNoteRef.current).getPropertyValue('font-size');
+		const fontFamily = getComputedStyle(newNoteRef.current).getPropertyValue('font-family');
+		ctx.font = `${fontWeight} ${fontSize} ${fontFamily}`;
+
+		return ctx.measureText(text).width;
+	}, [newNoteRef]);
+
+	// Initialize language-specific breakpoints
+	useEffect(() => {
+		if (!newNoteRef.current) return;
+
+		// Use the longest string to calculate the amount of extra width needed
+		const smAdditional = getTextWidth(_('note')) > getTextWidth(_('to-do')) ? getTextWidth(_('note')) : getTextWidth(_('to-do'));
+		const mdAdditional = getTextWidth(_('New note')) > getTextWidth(_('New to-do')) ? getTextWidth(_('New note')) : getTextWidth(_('New to-do'));
+
+		const Sm = BaseBreakpoint.Sm + smAdditional * 2;
+		const Md = BaseBreakpoint.Md + mdAdditional * 2;
+		const Lg = BaseBreakpoint.Lg + Md;
+		const Xl = BaseBreakpoint.Xl;
+
+		setDynamicBreakpoints({ Sm, Md, Lg, Xl });
+	}, [newNoteRef, getTextWidth]);
+
+	const breakpoint: number = useMemo(() => {
+		// Find largest breakpoint that width is less than
+		const index = Object.values(dynamicBreakpoints).findIndex(x => width < x);
+
+		return index === -1 ? dynamicBreakpoints.Xl : Object.values(dynamicBreakpoints)[index];
+	}, [width, dynamicBreakpoints]);
+
+	const lineCount = breakpoint !== dynamicBreakpoints.Xl ? 2 : 1;
+
+	return { breakpoint, dynamicBreakpoints, lineCount };
+};
+
 // If the renderer ID that was saved to settings is already registered, we
 // return it. If not, we need to wait for all plugins to be loaded, because one
 // of them will most likely register the renderer we need. If none of them do,
@@ -44,13 +93,28 @@ export default function NoteListWrapper(props: Props) {
 	const theme = themeStyle(props.themeId);
 	const [controlHeight] = useState(theme.topRowHeight);
 	const listRenderer = useListRenderer(props.listRendererId, props.startupPluginsLoaded);
+	const newNoteButtonRef = useRef(null);
+
+	const { breakpoint, dynamicBreakpoints, lineCount } = useNoteListControlsBreakpoints(props.size.width, newNoteButtonRef);
+
+	const noteListControlsButtonSize = ButtonSize.Small;
+	const noteListControlsPadding = theme.mainPadding;
+	const noteListControlsButtonVerticalGap = 5;
+
+	const noteListControlsHeight = useMemo(() => {
+		if (lineCount === 1) {
+			return buttonSizePx(noteListControlsButtonSize) + noteListControlsPadding * 2;
+		} else {
+			return buttonSizePx(noteListControlsButtonSize) * 2 + noteListControlsPadding * 2 + noteListControlsButtonVerticalGap;
+		}
+	}, [lineCount, noteListControlsButtonSize, noteListControlsPadding, noteListControlsButtonVerticalGap]);
 
 	const noteListSize = useMemo(() => {
 		return {
 			width: props.size.width,
-			height: props.size.height,
+			height: props.size.height - noteListControlsHeight,
 		};
-	}, [props.size]);
+	}, [props.size, noteListControlsHeight]);
 
 	const renderNoteList = () => {
 		if (!listRenderer) return null;
@@ -64,7 +128,17 @@ export default function NoteListWrapper(props: Props) {
 
 	return (
 		<StyledRoot>
-			<NoteListControls height={controlHeight} width={noteListSize.width}/>
+			<NoteListControls
+				height={controlHeight}
+				width={noteListSize.width}
+				newNoteButtonRef={newNoteButtonRef}
+				breakpoint={breakpoint}
+				dynamicBreakpoints={dynamicBreakpoints}
+				lineCount={lineCount}
+				buttonSize={noteListControlsButtonSize}
+				padding={noteListControlsPadding}
+				buttonVerticalGap={noteListControlsButtonVerticalGap}
+			/>
 			{renderNoteList()}
 		</StyledRoot>
 	);

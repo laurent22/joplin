@@ -35,6 +35,9 @@ const useScroll = (itemsPerLine: number, noteCount: number, itemSize: Size, list
 		if (setScrollTopLikeYouMeanItTimer.current) shim.clearInterval(setScrollTopLikeYouMeanItTimer.current);
 		setScrollTopLikeYouMeanItStartTime.current = Date.now();
 
+		listRef.current.scrollTop = newScrollTop;
+		lastScrollSetTime.current = Date.now();
+
 		setScrollTopLikeYouMeanItTimer.current = shim.setInterval(() => {
 			if (!listRef.current) {
 				shim.clearInterval(setScrollTopLikeYouMeanItTimer.current);
@@ -45,7 +48,7 @@ const useScroll = (itemsPerLine: number, noteCount: number, itemSize: Size, list
 			listRef.current.scrollTop = newScrollTop;
 			lastScrollSetTime.current = Date.now();
 
-			if (Date.now() - setScrollTopLikeYouMeanItStartTime.current > 500) {
+			if (Date.now() - setScrollTopLikeYouMeanItStartTime.current > 1000) {
 				shim.clearInterval(setScrollTopLikeYouMeanItTimer.current);
 				setScrollTopLikeYouMeanItTimer.current = null;
 			}
@@ -59,9 +62,9 @@ const useScroll = (itemsPerLine: number, noteCount: number, itemSize: Size, list
 
 	const makeItemIndexVisible = useCallback((itemIndex: number) => {
 		const lineTopFloat = scrollTop / itemSize.height;
-		const topFloat = lineTopFloat * itemsPerLine; // scrollTop / itemSize.height;
+		const topFloat = lineTopFloat * itemsPerLine;
 		const lineBottomFloat = (scrollTop + listSize.height - itemSize.height) / itemSize.height;
-		const bottomFloat = lineBottomFloat * itemsPerLine; // (scrollTop + listSize.height - itemSize.height) / itemSize.height;
+		const bottomFloat = lineBottomFloat * itemsPerLine;
 		const top = Math.min(noteCount - 1, Math.floor(topFloat) + 1);
 		const bottom = Math.max(0, Math.floor(bottomFloat));
 
@@ -85,7 +88,7 @@ const useScroll = (itemsPerLine: number, noteCount: number, itemSize: Size, list
 
 	const onScroll = useCallback((event: any) => {
 		// Ignore the scroll event if it has just been set programmatically.
-		if (Date.now() - lastScrollSetTime.current < 100) return;
+		if (Date.now() - lastScrollSetTime.current < 500) return;
 		setScrollTop(event.target.scrollTop);
 	}, []);
 

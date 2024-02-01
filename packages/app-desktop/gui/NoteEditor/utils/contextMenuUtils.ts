@@ -1,6 +1,9 @@
 import Resource from '@joplin/lib/models/Resource';
 import Logger from '@joplin/utils/Logger';
+import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
+
 const logger = Logger.create('contextMenuUtils');
+
 export enum ContextMenuItemType {
 	None = '',
 	Image = 'image',
@@ -22,6 +25,8 @@ export interface ContextMenuOptions {
 	isReadOnly?: boolean;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	fireEditorEvent: Function;
+	htmlToMd: HtmlToMarkdownHandler;
+	mdToHtml: MarkupToHtmlHandler;
 }
 
 export interface ContextMenuItem {

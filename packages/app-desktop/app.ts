@@ -252,26 +252,6 @@ class Application extends BaseApplication {
 		});
 	}
 
-	private async checkForLegacyTemplates() {
-		const templatesDir = `${Setting.value('profileDir')}/templates`;
-		if (await shim.fsDriver().exists(templatesDir)) {
-			try {
-				const files = await shim.fsDriver().readDirStats(templatesDir);
-				for (const file of files) {
-					if (file.path.endsWith('.md')) {
-						// There is at least one template.
-						this.store().dispatch({
-							type: 'CONTAINS_LEGACY_TEMPLATES',
-						});
-						break;
-					}
-				}
-			} catch (error) {
-				reg.logger().error(`Failed to read templates directory: ${error}`);
-			}
-		}
-	}
-
 	private async initPluginService() {
 		if (this.initPluginServiceDone_) return;
 		this.initPluginServiceDone_ = true;
@@ -548,8 +528,6 @@ class Application extends BaseApplication {
 			type: 'NOTE_DEVTOOLS_SET',
 			value: Setting.value('flagOpenDevTools'),
 		});
-
-		await this.checkForLegacyTemplates();
 
 		// Note: Auto-update is a misnomer in the code.
 		// The code below only checks, if a new version is available.

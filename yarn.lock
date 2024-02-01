@@ -6542,8 +6542,8 @@ __metadata:
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.8
     "@types/mustache": 4.2.5
-    "@types/node": 18.19.4
-    "@types/react": 18.2.46
+    "@types/node": 18.19.6
+    "@types/react": 18.2.47
     "@types/react-redux": 7.1.33
     "@types/styled-components": 5.1.32
     "@types/tesseract.js": 2.0.0
@@ -6627,7 +6627,7 @@ __metadata:
     "@tsconfig/react-native": 2.0.2
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
-    "@types/react": 18.2.46
+    "@types/react": 18.2.47
     "@types/react-native": 0.70.6
     "@types/react-redux": 7.1.33
     "@types/tar-stream": 3.1.3
@@ -6669,7 +6669,7 @@ __metadata:
     react-native-image-picker: 7.1.0
     react-native-localize: 3.0.4
     react-native-modal-datetime-picker: 17.1.0
-    react-native-paper: 5.11.5
+    react-native-paper: 5.11.6
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
     react-native-rsa-native: 2.0.5
@@ -6761,7 +6761,7 @@ __metadata:
     "@replit/codemirror-vim": 6.0.14
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.8
-    "@types/react": 18.2.46
+    "@types/react": 18.2.47
     "@types/react-redux": 7.1.33
     "@types/styled-components": 5.1.32
     jest: 29.7.0
@@ -6776,7 +6776,7 @@ __metadata:
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
     "@types/jest": 29.5.8
-    "@types/node": 18.19.4
+    "@types/node": 18.19.6
     "@typescript-eslint/eslint-plugin": 6.8.0
     "@typescript-eslint/parser": 6.8.0
     coveralls: 3.1.1
@@ -6844,9 +6844,9 @@ __metadata:
     "@types/js-yaml": 4.0.9
     "@types/markdown-it": 13.0.7
     "@types/nanoid": 3.0.0
-    "@types/node": 18.19.4
+    "@types/node": 18.19.6
     "@types/node-rsa": 1.1.4
-    "@types/react": 18.2.46
+    "@types/react": 18.2.47
     "@types/uuid": 9.0.7
     async-mutex: 0.4.0
     base-64: 1.0.0
@@ -6919,7 +6919,7 @@ __metadata:
     "@joplin/lib": ~2.14
     "@types/jest": 29.5.8
     "@types/pdfjs-dist": 2.10.378
-    "@types/react": 18.2.46
+    "@types/react": 18.2.47
     "@types/react-dom": 18.2.18
     "@types/styled-components": 5.1.32
     async-mutex: 0.4.0
@@ -6949,7 +6949,7 @@ __metadata:
     "@joplin/utils": ~2.14
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
-    "@types/node": 18.19.4
+    "@types/node": 18.19.6
     fs-extra: 11.2.0
     gh-release-assets: 2.0.1
     jest: 29.7.0
@@ -7004,7 +7004,7 @@ __metadata:
     "@joplin/utils": ~2.14
     "@types/jest": 29.5.8
     "@types/markdown-it": 13.0.7
-    "@types/node": 18.19.4
+    "@types/node": 18.19.6
     font-awesome-filetypes: 2.1.0
     fs-extra: 11.2.0
     highlight.js: 11.9.0
@@ -7078,7 +7078,7 @@ __metadata:
     mustache: 4.2.0
     node-cron: 3.0.3
     node-mocks-http: 1.13.0
-    nodemailer: 6.9.7
+    nodemailer: 6.9.8
     nodemon: 3.0.2
     pg: 8.11.3
     pm2: 5.3.0
@@ -7112,7 +7112,7 @@ __metadata:
     "@types/js-yaml": 4.0.9
     "@types/markdown-it": 13.0.7
     "@types/mustache": 4.2.5
-    "@types/node": 18.19.4
+    "@types/node": 18.19.6
     "@types/node-fetch": 2.6.10
     "@types/yargs": 17.0.32
     compare-versions: 6.1.0
@@ -10931,12 +10931,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.19.4":
-  version: 18.19.4
-  resolution: "@types/node@npm:18.19.4"
+"@types/node@npm:18.19.6":
+  version: 18.19.6
+  resolution: "@types/node@npm:18.19.6"
   dependencies:
     undici-types: ~5.26.4
-  checksum: 3a32a31b2df85d4bebb5e3c91ec1a0908d587a2a2fd31ab4eeebd609d1c04bbcc9ba97e290e3230f843c9f43f17efb9f5cde56412b4b0f5acbfe5577179b23c8
+  checksum: f0f3739f2d0e5be7b0b41a1fb149f554b1d6cb6c61c68e316c01ec2605559314f5434c170fb8e1a32f6c96a08ac752baa00ffe4451c154e37c77f76b70cf3d5b
   languageName: node
   linkType: hard
 
@@ -11124,14 +11124,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:18.2.46":
-  version: 18.2.46
-  resolution: "@types/react@npm:18.2.46"
+"@types/react@npm:18.2.47":
+  version: 18.2.47
+  resolution: "@types/react@npm:18.2.47"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: cb0e4dc7f41988a059e1246a19ec377101f5b16097ec4bf7000ef3c431ec0c8c873f40e95075821f908db1f4e3352775f0f18cea53dcad14dce67c0f5110f2bd
+  checksum: 49608f07f73374e535b21f99fee28e6cfd5801d887c6ed88c41b4dc701dbcee9f0c4d289d9af7b2b23114f76dbf203ffe2c9191bfb4958cf18dae5a25daedbd0
   languageName: node
   linkType: hard
 
@@ -26902,7 +26902,7 @@ __metadata:
     "@joplin/utils": ~2.14
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
-    "@types/node": 18.19.4
+    "@types/node": 18.19.6
     "@types/proper-lockfile": ^4.1.2
     aws-sdk: 2.1340.0
     chalk: 4.1.2
@@ -31376,10 +31376,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemailer@npm:6.9.7":
-  version: 6.9.7
-  resolution: "nodemailer@npm:6.9.7"
-  checksum: 0cf66d27aed3bd2cbdff9939402cec3d2119c31b2b9ff4af3bcd59f48287ea75b90c0ce2cd9eb0df838164972cd25581b4b723c91fd673e2608bcb28445ccb1b
+"nodemailer@npm:6.9.8":
+  version: 6.9.8
+  resolution: "nodemailer@npm:6.9.8"
+  checksum: 6499b93b7070a1b789ec00681ccbbf34180f127f1ce455b28201584b0974086a86be858062d41044df72ed7aba5649a40321a8e926367d2a1dfc0e65b7bf8838
   languageName: node
   linkType: hard
 
@@ -35425,9 +35425,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-paper@npm:5.11.5":
-  version: 5.11.5
-  resolution: "react-native-paper@npm:5.11.5"
+"react-native-paper@npm:5.11.6":
+  version: 5.11.6
+  resolution: "react-native-paper@npm:5.11.6"
   dependencies:
     "@callstack/react-theme-provider": ^3.0.9
     color: ^3.1.2
@@ -35437,7 +35437,7 @@ __metadata:
     react-native: "*"
     react-native-safe-area-context: "*"
     react-native-vector-icons: "*"
-  checksum: db4fd8c957ce5cf825e88464493efd18dd64e9623270a20da9fd20cdd261f9e98ef8ed8c567734ae2a5fe26774d427bfcee7ac12ae8f69e415c4b41b4654a523
+  checksum: d10754fe183ef91370a294784acee3a93d2e63470cef6f89bbd7b1aa2fe25bd8bb1a357ddf3effbe2120a925f7a8dec2729f18328fdb2119672ab14c358e1410
   languageName: node
   linkType: hard
 
