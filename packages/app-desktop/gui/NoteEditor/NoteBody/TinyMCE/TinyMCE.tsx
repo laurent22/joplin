@@ -30,6 +30,7 @@ import shouldPasteResources from './utils/shouldPasteResources';
 import lightTheme from '@joplin/lib/themes/light';
 import { Options as NoteStyleOptions } from '@joplin/renderer/noteStyle';
 import markupRenderOptions from '../../utils/markupRenderOptions';
+import { DropHandler } from '../../utils/useDropHandler';
 const md5 = require('md5');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
@@ -86,7 +87,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	const props_onMessage = useRef(null);
 	props_onMessage.current = props.onMessage;
 
-	const props_onDrop = useRef(null);
+	const props_onDrop = useRef<DropHandler|null>(null);
 	props_onDrop.current = props.onDrop;
 
 	const markupToHtml = useRef(null);
@@ -617,14 +618,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					code: { inline: 'code', remove: 'all', attributes: { spellcheck: false } },
 					forecolor: { inline: 'span', styles: { color: '%value' } },
 				},
-
-				// Prevent the message "Dropped file type is not
-				// supported" to show up. It was added in a recent
-				// TinyMCE version and doesn't apply since we do support
-				// the file type.
-				// https://stackoverflow.com/a/64808202
-				block_unsupported_drop: false,
-
 				setup: (editor: Editor) => {
 					editor.addCommand('joplinAttach', () => {
 						insertResourcesIntoContentRef.current();
@@ -699,9 +692,21 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						if (editable) openEditDialog(editor, markupToHtml, dispatchDidUpdate, editable);
 					});
 
-					// This is triggered when an external file is dropped on the editor
 					editor.on('drop', (event) => {
-						props_onDrop.current(event);
+						// Prevent the message "Dropped file type is not supported" from showing up.
+						// It was added in TinyMCE 5.4 and doesn't apply since we do support
+						// the file type.
+						//
+						// See https://stackoverflow.com/questions/64782955/tinymce-inline-drag-and-drop-image-upload-not-working
+						//
+						// The other suggested solution, setting block_unsupported_drop to false,
+						// causes all dropped files to be placed at the top of the document.
+						//
+						// Because .preventDefault cancels TinyMCE's own drop handler, we only
+						// call .preventDefault if Joplin handled the event:
+						if (props_onDrop.current(event)) {
+							event.preventDefault();
+						}
 					});
 
 					editor.on('ObjectResized', (event) => {
