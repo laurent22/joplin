@@ -96,7 +96,7 @@
     "@types/fs-extra": "11.0.4",
     "eslint-plugin-github": "4.10.1",
     "http-server": "14.1.1",
-    "node-gyp": "9.4.1",
+    "node-gyp": "10.0.1",
     "nodemon": "3.0.2"
   },
   "packageManager": "yarn@3.6.4",
