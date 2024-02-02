@@ -140,7 +140,7 @@ test.describe('main', () => {
 
 		await editor.focusCodeMirrorEditor();
 
-		const filename = 'large-jpg-image-with-rotation.jpg';
+		const filename = 'large-jpg-image-with-exif-rotation.jpg';
 		await setFilePickerResponse(electronApp, [join(__dirname, 'resources', filename)]);
 
 		// Should be possible to cancel attaching for large images
