@@ -10,6 +10,7 @@ import { glob } from 'glob';
 import readRepositoryJson from './utils/readRepositoryJson';
 import waitForCliInput from './utils/waitForCliInput';
 import getPathToPatchFileFor from './utils/getPathToPatchFileFor';
+import getCurrentCommitHash from './utils/getCurrentCommitHash';
 
 type BeforeEachInstallCallback = (buildDir: string, pluginName: string)=> Promise<void>;
 
@@ -41,20 +42,21 @@ const buildDefaultPlugins = async (outputParentDir: string|null, beforeInstall: 
 			}
 
 			chdir(pluginDir);
-			const currentCommitHash = (await execCommand(['git', 'rev-parse', 'HEAD'])).trim();
 			const expectedCommitHash = repositoryData.commit;
 
-			if (currentCommitHash !== expectedCommitHash) {
-				logStatus(`Switching to commit ${expectedCommitHash}`);
-				await execCommand(['git', 'switch', repositoryData.branch]);
+			logStatus(`Switching to commit ${expectedCommitHash}`);
+			await execCommand(['git', 'switch', repositoryData.branch]);
 
-				try {
-					await execCommand(['git', 'checkout', expectedCommitHash]);
-				} catch (error) {
-					logStatus(`git checkout failed with error ${error}. Fetching...`);
-					await execCommand(['git', 'fetch']);
-					await execCommand(['git', 'checkout', expectedCommitHash]);
-				}
+			try {
+				await execCommand(['git', 'checkout', expectedCommitHash]);
+			} catch (error) {
+				logStatus(`git checkout failed with error ${error}. Fetching...`);
+				await execCommand(['git', 'fetch']);
+				await execCommand(['git', 'checkout', expectedCommitHash]);
+			}
+
+			if (await getCurrentCommitHash() !== expectedCommitHash) {
+				throw new Error(`Unable to checkout commit ${expectedCommitHash}`);
 			}
 
 			logStatus('Copying repository files...');

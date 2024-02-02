@@ -550,6 +550,7 @@ packages/default-plugins/build.js
 packages/default-plugins/buildDefaultPlugins.js
 packages/default-plugins/commands/buildAll.js
 packages/default-plugins/commands/editPatch.js
+packages/default-plugins/utils/getCurrentCommitHash.js
 packages/default-plugins/utils/getPathToPatchFileFor.js
 packages/default-plugins/utils/readRepositoryJson.js
 packages/default-plugins/utils/waitForCliInput.js
