@@ -6589,7 +6589,7 @@ __metadata:
     reselect: 4.1.8
     roboto-fontface: 0.10.0
     smalltalk: 2.5.1
-    sqlite3: 5.1.6
+    sqlite3: 5.1.7
     styled-components: 5.3.11
     styled-system: 5.1.5
     taboverride: 4.0.3
@@ -6688,7 +6688,7 @@ __metadata:
     react-test-renderer: 18.2.0
     redux: 4.2.1
     rn-fetch-blob: 0.12.0
-    sqlite3: 5.1.6
+    sqlite3: 5.1.7
     stream: 0.0.2
     stream-browserify: 3.0.0
     string-natural-compare: 3.0.1
@@ -6894,7 +6894,7 @@ __metadata:
     server-destroy: 1.0.1
     sharp: 0.33.1
     sprintf-js: 1.1.3
-    sqlite3: 5.1.6
+    sqlite3: 5.1.7
     string-padding: 1.0.2
     string-to-stream: 3.0.1
     tar: 6.2.0
@@ -7088,7 +7088,7 @@ __metadata:
     rate-limiter-flexible: 3.0.6
     raw-body: 2.5.2
     source-map-support: 0.5.21
-    sqlite3: 5.1.6
+    sqlite3: 5.1.7
     stripe: 8.222.0
     typescript: 5.2.2
     uuid: 9.0.1
@@ -7137,7 +7137,7 @@ __metadata:
     sass: 1.69.7
     sharp: 0.33.1
     source-map-support: 0.5.21
-    sqlite3: 5.1.6
+    sqlite3: 5.1.7
     style-to-js: 1.1.10
     typescript: 5.2.2
     uri-template: 2.0.0
@@ -26928,7 +26928,7 @@ __metadata:
     server-destroy: 1.0.1
     sharp: 0.33.1
     sprintf-js: 1.1.3
-    sqlite3: 5.1.6
+    sqlite3: 5.1.7
     string-padding: 1.0.2
     strip-ansi: 6.0.1
     tcp-port-used: 1.0.2
@@ -31097,12 +31097,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-addon-api@npm:^4.2.0, node-addon-api@npm:^4.3.0":
+"node-addon-api@npm:^4.3.0":
   version: 4.3.0
   resolution: "node-addon-api@npm:4.3.0"
   dependencies:
     node-gyp: latest
   checksum: 3de396e23cc209f539c704583e8e99c148850226f6e389a641b92e8967953713228109f919765abc1f4355e801e8f41842f96210b8d61c7dcc10a477002dcf00
+  languageName: node
+  linkType: hard
+
+"node-addon-api@npm:^7.0.0":
+  version: 7.1.0
+  resolution: "node-addon-api@npm:7.1.0"
+  dependencies:
+    node-gyp: latest
+  checksum: 26640c8d2ed7e2059e2ed65ee79e2a195306b3f1fc27ad11448943ba91d37767bd717a9a0453cc97e83a1109194dced8336a55f8650000458ef625c0b8b5e3df
   languageName: node
   linkType: hard
 
@@ -34181,7 +34190,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prebuild-install@npm:^7.0.1":
+"prebuild-install@npm:^7.0.1, prebuild-install@npm:^7.1.1":
   version: 7.1.1
   resolution: "prebuild-install@npm:7.1.1"
   dependencies:
@@ -38910,13 +38919,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sqlite3@npm:5.1.6":
-  version: 5.1.6
-  resolution: "sqlite3@npm:5.1.6"
+"sqlite3@npm:5.1.7":
+  version: 5.1.7
+  resolution: "sqlite3@npm:5.1.7"
   dependencies:
-    "@mapbox/node-pre-gyp": ^1.0.0
-    node-addon-api: ^4.2.0
+    bindings: ^1.5.0
+    node-addon-api: ^7.0.0
     node-gyp: 8.x
+    prebuild-install: ^7.1.1
     tar: ^6.1.11
   peerDependencies:
     node-gyp: 8.x
@@ -38926,7 +38936,7 @@ __metadata:
   peerDependenciesMeta:
     node-gyp:
       optional: true
-  checksum: ea640628843e37a63dfb4bd2c8429dbd7aab845c1a8204574dca3aac61486ab65bc0abfd99b48f1cead1f783171c6111c0cc4115335d5b95bb0b4eb44db162d5
+  checksum: 37e387b74e34aea3d0fc5cea76e14de3139e4bdbf6574ff6ca876c3b5e36e859b278e99922c179c14337cb0d487d8da8dbbaaf7d63fbab5928dc134a9d5db262
   languageName: node
   linkType: hard
 

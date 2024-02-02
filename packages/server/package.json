@@ -53,7 +53,7 @@
     "query-string": "7.1.3",
     "rate-limiter-flexible": "3.0.6",
     "raw-body": "2.5.2",
-    "sqlite3": "5.1.6",
+    "sqlite3": "5.1.7",
     "stripe": "8.222.0",
     "uuid": "9.0.1",
     "yargs": "17.7.2",
