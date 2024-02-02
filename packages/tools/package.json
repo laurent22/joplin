@@ -42,7 +42,7 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@docusaurus/plugin-sitemap": "2.4.3",
+    "@docusaurus/plugin-sitemap": "3.0.0",
     "@joplin/fork-htmlparser2": "^4.1.50",
     "@rmp135/sql-ts": "1.18.1",
     "@types/fs-extra": "11.0.4",
