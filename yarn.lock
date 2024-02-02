@@ -7077,7 +7077,7 @@ __metadata:
     markdown-it: 13.0.2
     mustache: 4.2.0
     node-cron: 3.0.3
-    node-mocks-http: 1.13.0
+    node-mocks-http: 1.14.0
     nodemailer: 6.9.8
     nodemon: 3.0.2
     pg: 8.11.3
@@ -31273,9 +31273,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-mocks-http@npm:1.13.0":
-  version: 1.13.0
-  resolution: "node-mocks-http@npm:1.13.0"
+"node-mocks-http@npm:1.14.0":
+  version: 1.14.0
+  resolution: "node-mocks-http@npm:1.14.0"
   dependencies:
     accepts: ^1.3.7
     content-disposition: ^0.5.3
@@ -31287,7 +31287,7 @@ __metadata:
     parseurl: ^1.3.3
     range-parser: ^1.2.0
     type-is: ^1.6.18
-  checksum: ee03dbb81dfa47760731f994a89754976a3379ab29484e3537e8ddb8084f9c013f81337e12e9781176fdec5b10be2f273a1f274f9478527793971453f0ce5a49
+  checksum: 2cbf2d2e0dcbf6935e2f2c7e3b3bbea4b60cf043f8cf846856bf177e6570bf7b5629311b97f673d290cf51ed8e7e7c725f9a7a43ad224df423ed92389ac9ff8f
   languageName: node
   linkType: hard
 
