@@ -6675,7 +6675,7 @@ __metadata:
     react-native-rsa-native: 2.0.5
     react-native-safe-area-context: 4.7.4
     react-native-securerandom: 1.0.1
-    react-native-share: 9.4.1
+    react-native-share: 10.0.1
     react-native-side-menu-updated: 1.3.2
     react-native-sqlite-storage: 6.0.1
     react-native-url-polyfill: 2.0.0
@@ -35490,10 +35490,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-share@npm:9.4.1":
-  version: 9.4.1
-  resolution: "react-native-share@npm:9.4.1"
-  checksum: 22b0f38b79bfa791b105c3c809ed0199d233c0ccddb5060546ade710767cab68812e5c9456ce858141dd0218bbbd946180c97e74132389996e00fdef4fbc355b
+"react-native-share@npm:10.0.1":
+  version: 10.0.1
+  resolution: "react-native-share@npm:10.0.1"
+  checksum: c570cb7ee62e37c99de9cdb3a68813d838955ea7fd016ee9eaf026035803c56edbf6b538349445b7b4b244e0a89eeb34964718632a7db778632c87cb5dce31b0
   languageName: node
   linkType: hard
 
