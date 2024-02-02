@@ -66,6 +66,7 @@ export interface PluginSettings {
 interface PluginLoadOptions {
 	devMode: boolean;
 	builtIn: boolean;
+	onError?: (error: any)=> void;
 }
 
 function makePluginId(source: string): string {
@@ -91,6 +92,9 @@ export default class PluginService extends BaseService {
 	private plugins_: Plugins = {};
 	private runner_: BasePluginRunner = null;
 	private startedPlugins_: Record<string, boolean> = {};
+	private unpackDirectoryToPluginId_: Map<string, string> = new Map();
+	private unpackBaseDirectory_: string = Setting.value('cacheDir');
+
 	private isSafeMode_ = false;
 
 	public initialize(appVersion: string, platformImplementation: any, runner: BasePluginRunner, store: any) {
@@ -98,6 +102,12 @@ export default class PluginService extends BaseService {
 		this.store_ = store;
 		this.runner_ = runner;
 		this.platformImplementation_ = platformImplementation;
+	}
+
+	// For automated testing -- using different unpack directories can help
+	// isolate different test cases.
+	public setUnpackBaseDirectory(baseDirectory: string) {
+		this.unpackBaseDirectory_ = baseDirectory;
 	}
 
 	public get plugins(): Plugins {
@@ -224,12 +234,21 @@ export default class PluginService extends BaseService {
 		const fname = filename(path);
 		const hash = await shim.fsDriver().md5File(path);
 
-		const unpackDir = `${Setting.value('cacheDir')}/${fname}`;
+		const unpackDir = `${this.unpackBaseDirectory_}/${fname}`;
 		const manifestFilePath = `${unpackDir}/manifest.json`;
 
 		let manifest: any = await this.loadManifestToObject(manifestFilePath);
 
 		if (!manifest || manifest._package_hash !== hash) {
+			// Overwriting the unpack directory of a running plugin can cause issues. An attempt
+			// to do so is likely the result of a bug.
+			if (this.unpackDirectoryToPluginId_.has(unpackDir)) {
+				const id = this.unpackDirectoryToPluginId_.get(unpackDir);
+				if (id in this.startedPlugins_ && await shim.fsDriver().exists(manifestFilePath)) {
+					throw new Error(`Refusing to overwrite the unpack directory of a running plugin: A plugin (id ${id}) has already been unpacked to ${unpackDir}.`);
+				}
+			}
+
 			await shim.fsDriver().remove(unpackDir);
 			await shim.fsDriver().mkdir(unpackDir);
 
@@ -246,6 +265,8 @@ export default class PluginService extends BaseService {
 			manifest._package_hash = hash;
 
 			await shim.fsDriver().writeFile(manifestFilePath, JSON.stringify(manifest, null, '\t'), 'utf8');
+
+			this.unpackDirectoryToPluginId_.set(unpackDir, manifest.id);
 		}
 
 		return this.loadPluginFromPath(unpackDir);
@@ -398,6 +419,7 @@ export default class PluginService extends BaseService {
 				await this.runPlugin(plugin);
 			} catch (error) {
 				logger.error(`Could not load plugin: ${pluginPath}`, error);
+				options?.onError?.(error);
 			}
 		}
 	}
