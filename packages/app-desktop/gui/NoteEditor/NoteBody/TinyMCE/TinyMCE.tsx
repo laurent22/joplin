@@ -617,6 +617,14 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					code: { inline: 'code', remove: 'all', attributes: { spellcheck: false } },
 					forecolor: { inline: 'span', styles: { color: '%value' } },
 				},
+
+				// Prevent the message "Dropped file type is not
+				// supported" to show up. It was added in a recent
+				// TinyMCE version and doesn't apply since we do support
+				// the file type.
+				// https://stackoverflow.com/a/64808202
+				block_unsupported_drop: false,
+
 				setup: (editor: Editor) => {
 					editor.addCommand('joplinAttach', () => {
 						insertResourcesIntoContentRef.current();
@@ -693,13 +701,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 					// This is triggered when an external file is dropped on the editor
 					editor.on('drop', (event) => {
-						// Prevent the message "Dropped file type is not
-						// supported" to show up. It was added in a recent
-						// TinyMCE version and doesn't apply since we do support
-						// the file type.
-						// https://stackoverflow.com/questions/64782955/tinymce-inline-drag-and-drop-image-upload-not-working
-						event.preventDefault();
-
 						props_onDrop.current(event);
 					});
 
