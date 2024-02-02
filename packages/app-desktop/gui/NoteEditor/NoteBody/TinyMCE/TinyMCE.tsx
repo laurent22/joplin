@@ -48,10 +48,17 @@ const supportedLocales = require('./supportedLocales');
 // so as a workaround we manually add this <br> for empty documents,
 // which fixes the issue.
 //
+// However,
+//    <div id="rendered-md"><br/></div>
+// breaks newline behaviour in new notes (see https://github.com/laurent22/joplin/issues/9786).
+// Thus, we instead use
+//    <div id="rendered-md"><p></p></div>
+// which also seems to work around the list issue.
+//
 // Perhaps upgrading the list plugin (which is a fork of TinyMCE own list plugin)
 // would help?
-function awfulBrHack(html: string): string {
-	return html === '<div id="rendered-md"></div>' ? '<div id="rendered-md"><br/></div>' : html;
+function awfulInitHack(html: string): string {
+	return html === '<div id="rendered-md"></div>' ? '<div id="rendered-md"><p></p></div>' : html;
 }
 
 function findEditableContainer(node: any): any {
@@ -875,7 +882,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				);
 				if (cancelled) return;
 
-				editor.setContent(awfulBrHack(result.html));
+				editor.setContent(awfulInitHack(result.html));
 
 				if (lastOnChangeEventInfo.current.contentKey !== props.contentKey) {
 					// Need to clear UndoManager to avoid this problem:
