@@ -133,14 +133,15 @@ test.describe('main', () => {
 		expect(finalCodeMirrorContent).toContain(`:/${resourceId}`);
 	});
 
-	test('should ask to resize when attaching large images', async ({ electronApp, mainWindow }) => {
+	test('should correctly resize large images', async ({ electronApp, mainWindow }) => {
 		const mainScreen = new MainScreen(mainWindow);
 		await mainScreen.createNewNote('Image resize test (part 1)');
 		const editor = mainScreen.noteEditor;
 
 		await editor.focusCodeMirrorEditor();
 
-		await setFilePickerResponse(electronApp, [join(__dirname, 'resources', 'large-jpg-image.jpg')]);
+		const filename = 'large-jpg-image-with-rotation.jpg';
+		await setFilePickerResponse(electronApp, [join(__dirname, 'resources', filename)]);
 
 		// Should be possible to cancel attaching for large images
 		await setMessageBoxResponse(electronApp, /^Cancel/i);
@@ -151,25 +152,25 @@ test.describe('main', () => {
 		await setMessageBoxResponse(electronApp, /^No/i);
 		await editor.attachFileButton.click();
 
-		const getImageWidth = async () => {
+		const getImageSize = async () => {
 			// Wait for it to render
 			const viewerFrame = editor.getNoteViewerIframe();
-			const renderedImage = viewerFrame.getByAltText('large-jpg-image.jpg');
+			const renderedImage = viewerFrame.getByAltText(filename);
 			await renderedImage.waitFor();
 
 			// We load a copy of the image to avoid returning an overriden width set with
 			//    .width = some_number
 			return await renderedImage.evaluate((originalImage: HTMLImageElement) => {
-				return new Promise<number>(resolve => {
+				return new Promise<[number, number]>(resolve => {
 					const testImage = new Image();
 					testImage.onload = () => {
-						resolve(testImage.width);
+						resolve([testImage.width, testImage.height]);
 					};
 					testImage.src = originalImage.src;
 				});
 			});
 		};
-		const fullWidth = await getImageWidth();
+		const fullSize = await getImageSize();
 
 		// To make it easier to find the image (one image per note), we switch to a new, empty note.
 		await mainScreen.createNewNote('Image resize test (part 2)');
@@ -178,7 +179,13 @@ test.describe('main', () => {
 		// Clicking "Yes" should resize
 		await setMessageBoxResponse(electronApp, /^Yes/i);
 		await editor.attachFileButton.click();
-		expect(await getImageWidth()).toBeLessThan(fullWidth);
+
+		const resizedSize = await getImageSize();
+		expect(resizedSize[0]).toBeLessThan(fullSize[0]);
+		expect(resizedSize[1]).toBeLessThan(fullSize[1]);
+
+		// Should keep aspect ratio (regression test for #9597)
+		expect(fullSize[0] / resizedSize[0]).toBeCloseTo(fullSize[1] / resizedSize[1]);
 	});
 
 	test('should be possible to remove sort order buttons in settings', async ({ electronApp, mainWindow }) => {
