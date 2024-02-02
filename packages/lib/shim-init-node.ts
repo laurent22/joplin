@@ -198,14 +198,21 @@ function shimInit(options: ShimInitOptions = null) {
 			// For Electron/renderer process
 			// Note that we avoid nativeImage because it loses rotation metadata.
 			// See https://github.com/electron/electron/issues/41189
+			//
+			// After the upstream bug has been fixed, this should be reverted to using
+			// nativeImage (see commit 99e8818ba093a931b1a0cbccbee0b94a4fd37a54 for the
+			// original code).
 
 			const image = new Image();
 			image.src = filePath;
 			await new Promise<void>((resolve, reject) => {
 				image.onload = () => resolve();
 				image.onerror = () => reject(`Image at ${filePath} failed to load.`);
+				image.onabort = () => reject(`Loading stopped for image at ${filePath}.`);
 			});
-			if (!image.complete || image.width * image.height === 0) throw new Error(`Image is invalid or does not exist: ${filePath}`);
+			if (!image.complete || (image.width === 0 && image.height === 0)) {
+				throw new Error(`Image is invalid or does not exist: ${filePath}`);
+			}
 
 			const saveOriginalImage = async () => {
 				await shim.fsDriver().copy(filePath, targetPath);
