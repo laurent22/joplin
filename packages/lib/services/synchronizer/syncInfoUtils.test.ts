@@ -105,6 +105,15 @@ describe('syncInfoUtils', () => {
 		syncInfo1.appMinVersion = '1.0.0';
 		syncInfo2.appMinVersion = '1.0.0';
 		expect(mergeSyncInfos(syncInfo1, syncInfo2).appMinVersion).toBe('1.0.0');
+
+		// Should prefer the version from syncInfo1 if versions are otherwise equal.
+		syncInfo1.appMinVersion = '1.00';
+		syncInfo2.appMinVersion = '1.0.0';
+		expect(mergeSyncInfos(syncInfo1, syncInfo2).appMinVersion).toBe('1.00');
+
+		syncInfo1.appMinVersion = '0.0.0';
+		syncInfo2.appMinVersion = '0.00';
+		expect(mergeSyncInfos(syncInfo1, syncInfo2).appMinVersion).toBe('0.0.0');
 	});
 
 	it('should merge sync target info and takes into account usage of master key - 1', async () => {

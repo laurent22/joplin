@@ -7,6 +7,7 @@ import { join } from 'path';
 import createStartupArgs from './util/createStartupArgs';
 import firstNonDevToolsWindow from './util/firstNonDevToolsWindow';
 import setFilePickerResponse from './util/setFilePickerResponse';
+import setMessageBoxResponse from './util/setMessageBoxResponse';
 
 
 test.describe('main', () => {
@@ -44,7 +45,7 @@ test.describe('main', () => {
 		const editor = await mainScreen.createNewNote('🚧 Test 🚧');
 
 		const testCommitId = 'bf59b2';
-		await editor.codeMirrorEditor.click();
+		await editor.focusCodeMirrorEditor();
 		const noteText = [
 			'```mermaid',
 			'gitGraph',
@@ -94,7 +95,7 @@ test.describe('main', () => {
 		const editor = mainScreen.noteEditor;
 
 		// Set the note's content
-		await editor.codeMirrorEditor.click();
+		await editor.focusCodeMirrorEditor();
 
 		// Attach this file to the note (create a resource ID)
 		await setFilePickerResponse(electronApp, [__filename]);
@@ -130,6 +131,61 @@ test.describe('main', () => {
 		// Note should still contain the resource ID and note title
 		const finalCodeMirrorContent = await editor.codeMirrorEditor.innerText();
 		expect(finalCodeMirrorContent).toContain(`:/${resourceId}`);
+	});
+
+	test('should correctly resize large images', async ({ electronApp, mainWindow }) => {
+		const mainScreen = new MainScreen(mainWindow);
+		await mainScreen.createNewNote('Image resize test (part 1)');
+		const editor = mainScreen.noteEditor;
+
+		await editor.focusCodeMirrorEditor();
+
+		const filename = 'large-jpg-image-with-exif-rotation.jpg';
+		await setFilePickerResponse(electronApp, [join(__dirname, 'resources', filename)]);
+
+		// Should be possible to cancel attaching for large images
+		await setMessageBoxResponse(electronApp, /^Cancel/i);
+		await editor.attachFileButton.click();
+		await expect(editor.codeMirrorEditor).toHaveText('', { useInnerText: true });
+
+		// Clicking "No" should not resize
+		await setMessageBoxResponse(electronApp, /^No/i);
+		await editor.attachFileButton.click();
+
+		const getImageSize = async () => {
+			// Wait for it to render
+			const viewerFrame = editor.getNoteViewerIframe();
+			const renderedImage = viewerFrame.getByAltText(filename);
+			await renderedImage.waitFor();
+
+			// We load a copy of the image to avoid returning an overriden width set with
+			//    .width = some_number
+			return await renderedImage.evaluate((originalImage: HTMLImageElement) => {
+				return new Promise<[number, number]>(resolve => {
+					const testImage = new Image();
+					testImage.onload = () => {
+						resolve([testImage.width, testImage.height]);
+					};
+					testImage.src = originalImage.src;
+				});
+			});
+		};
+		const fullSize = await getImageSize();
+
+		// To make it easier to find the image (one image per note), we switch to a new, empty note.
+		await mainScreen.createNewNote('Image resize test (part 2)');
+		await editor.focusCodeMirrorEditor();
+
+		// Clicking "Yes" should resize
+		await setMessageBoxResponse(electronApp, /^Yes/i);
+		await editor.attachFileButton.click();
+
+		const resizedSize = await getImageSize();
+		expect(resizedSize[0]).toBeLessThan(fullSize[0]);
+		expect(resizedSize[1]).toBeLessThan(fullSize[1]);
+
+		// Should keep aspect ratio (regression test for #9597)
+		expect(fullSize[0] / resizedSize[0]).toBeCloseTo(fullSize[1] / resizedSize[1]);
 	});
 
 	test('should be possible to remove sort order buttons in settings', async ({ electronApp, mainWindow }) => {
