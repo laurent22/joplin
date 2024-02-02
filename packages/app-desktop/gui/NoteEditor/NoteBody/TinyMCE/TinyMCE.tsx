@@ -629,7 +629,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					joplinInsert: { inline: 'ins', remove: 'all' },
 					joplinSub: { inline: 'sub', remove: 'all' },
 					joplinSup: { inline: 'sup', remove: 'all' },
-					code: { inline: 'code', remove: 'all', attributes: { spellcheck: false } },
+					code: { inline: 'code', remove: 'all', attributes: { spellcheck: 'false' } },
 					forecolor: { inline: 'span', styles: { color: '%value' } },
 				},
 				setup: (editor: Editor) => {
