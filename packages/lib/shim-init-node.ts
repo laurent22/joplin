@@ -9,6 +9,7 @@ import * as fs from 'fs-extra';
 import * as pdfJsNamespace from 'pdfjs-dist';
 import { writeFile } from 'fs/promises';
 import { ResourceEntity } from './services/database/types';
+import { TextItem } from 'pdfjs-dist/types/src/display/api';
 
 const { FileApiDriverLocal } = require('./file-api-driver-local');
 const mimeUtils = require('./mime-utils.js').mime;
@@ -732,6 +733,26 @@ function shimInit(options: ShimInitOptions = null) {
 		} else {
 			return require(path);
 		}
+	};
+
+	shim.pdfExtractEmbeddedText = async (pdfPath: string): Promise<string[]> => {
+		const loadingTask = pdfJs.getDocument(pdfPath);
+		const doc = await loadingTask.promise;
+
+		const textByPage = [];
+
+		for (let pageNum = 1; pageNum <= doc.numPages; pageNum++) {
+			const page = await doc.getPage(pageNum);
+			const textContent = await page.getTextContent();
+
+			const strings = textContent.items.map(item => {
+				const text = (item as TextItem).str ?? '';
+				return text;
+			}).join('\n');
+			textByPage.push(strings);
+		}
+
+		return textByPage;
 	};
 
 	shim.pdfToImages = async (pdfPath: string, outputDirectoryPath: string): Promise<string[]> => {
