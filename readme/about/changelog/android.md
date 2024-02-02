@@ -1,5 +1,18 @@
 # Joplin Android Changelog
 
+## [android-v2.14.5](https://github.com/laurent22/joplin/releases/tag/android-v2.14.5) (Pre-release) - 2024-02-02T23:09:50Z
+
+- Improved: Allow note viewer to extend to the edge of the screen while pinch zooming (#9820) (#9819 by Henry Heino)
+- Improved: Do not allow switching the sync target if not all resources are downloaded (#9263)
+- Improved: Removed ability to search by note ID to fix issue with certain plugins (#9769)
+- Improved: Updated packages react-native-paper (v5.11.6)
+- Fixed: Andoid: Fix crash on opening settings on some devices (#9806) (#7974 by Henry Heino)
+- Fixed: Clear "Some items cannot be synchronised" banner after situation is resolved (#9157)
+- Fixed: Detect faster left-right swipes to open the sidemenu (#9802) (#9142 by Henry Heino)
+- Fixed: Fix broken synchronisation link in welcome notes (#9804) (#9799 by Henry Heino)
+- Fixed: Fix note editor errors/logs not sent to Joplin's logs (#9808) (#9807 by Henry Heino)
+- Fixed: Fix synchronization happens every 10 seconds even if nothing has changed (#9814) (#9800 by Henry Heino)
+
 ## [android-v2.14.4](https://github.com/laurent22/joplin/releases/tag/android-v2.14.4) (Pre-release) - 2024-01-26T10:46:28Z
 
 - New: Add support for showing only lines of log that contain a filter (#9728 by Henry Heino)
