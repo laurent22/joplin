@@ -195,33 +195,53 @@ function shimInit(options: ShimInitOptions = null) {
 		const maxDim = Resource.IMAGE_MAX_DIMENSION;
 
 		if (shim.isElectron()) {
-			// For Electron
-			const nativeImage = require('electron').nativeImage;
-			const image = nativeImage.createFromPath(filePath);
-			if (image.isEmpty()) throw new Error(`Image is invalid or does not exist: ${filePath}`);
-			const size = image.getSize();
+			// For Electron/renderer process
+			// Note that we avoid nativeImage because it loses rotation metadata.
+			// See https://github.com/electron/electron/issues/41189
+			//
+			// After the upstream bug has been fixed, this should be reverted to using
+			// nativeImage (see commit 99e8818ba093a931b1a0cbccbee0b94a4fd37a54 for the
+			// original code).
+
+			const image = new Image();
+			image.src = filePath;
+			await new Promise<void>((resolve, reject) => {
+				image.onload = () => resolve();
+				image.onerror = () => reject(`Image at ${filePath} failed to load.`);
+				image.onabort = () => reject(`Loading stopped for image at ${filePath}.`);
+			});
+			if (!image.complete || (image.width === 0 && image.height === 0)) {
+				throw new Error(`Image is invalid or does not exist: ${filePath}`);
+			}
 
 			const saveOriginalImage = async () => {
 				await shim.fsDriver().copy(filePath, targetPath);
 				return true;
 			};
 			const saveResizedImage = async () => {
-				const options: any = {};
-				if (size.width > size.height) {
-					options.width = maxDim;
+				let newWidth, newHeight;
+				if (image.width > image.height) {
+					newWidth = maxDim;
+					newHeight = image.height * maxDim / image.width;
 				} else {
-					options.height = maxDim;
+					newWidth = image.width * maxDim / image.height;
+					newHeight = maxDim;
 				}
-				const resizedImage = image.resize(options);
-				await shim.writeImageToFile(resizedImage, mime, targetPath);
+
+				const canvas = new OffscreenCanvas(newWidth, newHeight);
+				const ctx = canvas.getContext('2d');
+				ctx.drawImage(image, 0, 0, newWidth, newHeight);
+
+				const resizedImage = await canvas.convertToBlob({ type: mime });
+				await fs.writeFile(targetPath, Buffer.from(await resizedImage.arrayBuffer()));
 				return true;
 			};
 
-			const canResize = size.width > maxDim || size.height > maxDim;
+			const canResize = image.width > maxDim || image.height > maxDim;
 			if (canResize) {
 				if (resizeLargeImages === 'alwaysAsk') {
 					const Yes = 0, No = 1, Cancel = 2;
-					const userAnswer = shim.showMessageBox(`${_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', size.width, size.height, maxDim)}\n\n${_('(You may disable this prompt in the options)')}`, {
+					const userAnswer = shim.showMessageBox(`${_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', image.width, image.height, maxDim)}\n\n${_('(You may disable this prompt in the options)')}`, {
 						buttons: [_('Yes'), _('No'), _('Cancel')],
 					});
 					if (userAnswer === Yes) return await saveResizedImage();
