@@ -35,7 +35,7 @@ describe('defaultPluginsUtils', () => {
 		await switchClient(1);
 	});
 
-	it('should load default plugins when nor previously installed', (async () => {
+	it('should load default plugins when not previously installed', (async () => {
 		const testPluginDir = `${supportDir}/testDefaultPlugins`;
 		Setting.setValue('installedDefaultPlugins', []);
 
@@ -47,7 +47,9 @@ describe('defaultPluginsUtils', () => {
 			expect(pluginSettings[pluginId]).toBeFalsy();
 		}
 
-		const pluginPathsAndNewSettings = await getDefaultPluginPathsAndSettings(testPluginDir, defaultPluginsInfo, pluginSettings);
+		const pluginPathsAndNewSettings = await getDefaultPluginPathsAndSettings(
+			testPluginDir, defaultPluginsInfo, pluginSettings, service,
+		);
 
 		for (const pluginId of pluginsId) {
 			expect(
@@ -66,7 +68,7 @@ describe('defaultPluginsUtils', () => {
 		const service = newPluginService('2.1');
 
 		const pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
-		const pluginPathsAndNewSettings = await getDefaultPluginPathsAndSettings(testPluginDir, defaultPluginsInfo, pluginSettings);
+		const pluginPathsAndNewSettings = await getDefaultPluginPathsAndSettings(testPluginDir, defaultPluginsInfo, pluginSettings, service);
 
 		// Should still be disabled
 		expect(
@@ -201,5 +203,4 @@ describe('defaultPluginsUtils', () => {
 		expect(Setting.value('plugin-io.github.jackgruber.backup.path')).toBe(`${Setting.value('profileDir')}`);
 		await service.destroy();
 	});
-
 });

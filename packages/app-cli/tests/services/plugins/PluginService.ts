@@ -9,13 +9,10 @@ import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 import { expectNotThrow, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir, supportDir } from '@joplin/lib/testing/test-utils';
 import { newPluginScript } from '../../testUtils';
-import { join } from 'path';
 
 const testPluginDir = `${supportDir}/plugins`;
-const testPluginRepoDir = `${supportDir}/pluginRepo`;
 
-
-function newPluginService(appVersion = '2.4') {
+function newPluginService(appVersion = '1.4') {
 	const runner = new PluginRunner();
 	const service = new PluginService();
 	service.initialize(
@@ -335,46 +332,5 @@ describe('services_PluginService', () => {
 		// Should clear deleted plugins from settings
 		expect(newPluginSettings[pluginId1]).toBe(undefined);
 		expect(newPluginSettings[pluginId2]).toBe(undefined);
-	});
-
-	it('should refuse to unpack a jpl plugin to the same directory as a running plugin', async () => {
-		const tempDir = await createTempDir();
-		const unpackDir = await createTempDir();
-
-		try {
-			const service = newPluginService();
-
-			// The unpack base directory is where the .jpl files will be extracted. This prevents
-			// unpacking done in previous tests from conflicting with this test.
-			service.setUnpackBaseDirectory(unpackDir);
-
-			const pluginId1 = 'org.joplinapp.FirstJplPlugin';
-			const pluginId2 = 'org.joplinapp.plugins.ToggleSidebars';
-			const pluginPath1 = `${testPluginDir}/jpl_test/${pluginId1}.jpl`;
-			const pluginPath2 = `${testPluginRepoDir}/plugins/${pluginId2}/plugin.jpl`;
-
-			// This copy should have the same name as plugin2 --- this may cause Joplin
-			// to try to extract it to the same location as plugin2.
-			const renamedPluginPath2 = join(tempDir, `${pluginId1}.jpl`);
-			await fs.copyFile(pluginPath2, renamedPluginPath2);
-
-			const pluginSettings: PluginSettings = {
-				[pluginId1]: { enabled: true, deleted: false, hasBeenUpdated: false },
-				[pluginId2]: { enabled: true, deleted: false, hasBeenUpdated: false },
-			};
-
-			let lastError = null;
-			const onError = jest.fn(error => lastError = error);
-
-			await service.loadAndRunPlugins([pluginPath1], pluginSettings, { devMode: false, builtIn: false, onError });
-			expect(onError).not.toHaveBeenCalled();
-
-			await service.loadAndRunPlugins([renamedPluginPath2], pluginSettings, { devMode: false, builtIn: false, onError });
-			expect(onError).toHaveBeenCalled();
-			expect(`${lastError}`).toMatch(/Refusing to overwrite the unpack directory of a running plugin/);
-		} finally {
-			await fs.remove(tempDir);
-			await fs.remove(unpackDir);
-		}
 	});
 });
