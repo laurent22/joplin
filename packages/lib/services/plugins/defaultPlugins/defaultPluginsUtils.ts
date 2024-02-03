@@ -49,6 +49,8 @@ export const getDefaultPluginPathsAndSettings = async (
 			continue;
 		}
 
+		// We skip plugins that are already loaded -- attempting to unpack a different version of a plugin
+		// that has already been loaded causes errors (see #9832).
 		if (pluginService.isPluginLoaded(pluginId)) {
 			logger.info(`Not loading default plugin ${pluginId} -- a plugin with the same ID is already loaded.`);
 			continue;

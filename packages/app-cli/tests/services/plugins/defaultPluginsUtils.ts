@@ -4,8 +4,9 @@ import { checkThrow, setupDatabaseAndSynchronizer, supportDir, switchClient } fr
 import PluginService, { defaultPluginSetting, DefaultPluginsInfo } from '@joplin/lib/services/plugins/PluginService';
 import Setting from '@joplin/lib/models/Setting';
 
+const testDefaultPluginsDir = `${supportDir}/testDefaultPlugins`;
 
-function newPluginService(appVersion = '1.4') {
+function newPluginService(appVersion = '2.4') {
 	const runner = new PluginRunner();
 	const service = new PluginService();
 	service.initialize(
@@ -36,7 +37,6 @@ describe('defaultPluginsUtils', () => {
 	});
 
 	it('should load default plugins when not previously installed', (async () => {
-		const testPluginDir = `${supportDir}/testDefaultPlugins`;
 		Setting.setValue('installedDefaultPlugins', []);
 
 		const service = newPluginService('2.1');
@@ -48,7 +48,7 @@ describe('defaultPluginsUtils', () => {
 		}
 
 		const pluginPathsAndNewSettings = await getDefaultPluginPathsAndSettings(
-			testPluginDir, defaultPluginsInfo, pluginSettings, service,
+			testDefaultPluginsDir, defaultPluginsInfo, pluginSettings, service,
 		);
 
 		for (const pluginId of pluginsId) {
@@ -59,7 +59,6 @@ describe('defaultPluginsUtils', () => {
 	}));
 
 	it('should keep already created default plugins disabled with previous default plugins installed', (async () => {
-		const testPluginDir = `${supportDir}/testDefaultPlugins`;
 		Setting.setValue('installedDefaultPlugins', ['org.joplinapp.plugins.ToggleSidebars']);
 		Setting.setValue('plugins.states', {
 			'org.joplinapp.plugins.ToggleSidebars': { ...defaultPluginSetting(), enabled: false },
@@ -68,7 +67,7 @@ describe('defaultPluginsUtils', () => {
 		const service = newPluginService('2.1');
 
 		const pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
-		const pluginPathsAndNewSettings = await getDefaultPluginPathsAndSettings(testPluginDir, defaultPluginsInfo, pluginSettings, service);
+		const pluginPathsAndNewSettings = await getDefaultPluginPathsAndSettings(testDefaultPluginsDir, defaultPluginsInfo, pluginSettings, service);
 
 		// Should still be disabled
 		expect(
@@ -202,5 +201,36 @@ describe('defaultPluginsUtils', () => {
 		expect(checkThrow(() => afterDefaultPluginsLoaded(runningPlugins, defaultPluginsInfo, pluginSettings))).toBe(false);
 		expect(Setting.value('plugin-io.github.jackgruber.backup.path')).toBe(`${Setting.value('profileDir')}`);
 		await service.destroy();
+	});
+
+	// Only returning not-yet-loaded plugins prevents non-default versions of built-in plugins
+	// from being overwritten by PluginService.
+	it('getDefaultPluginPathsAndSettings should return only plugins that haven\'t been loaded', async () => {
+		const service = newPluginService();
+
+		const testPluginId = 'org.joplinapp.plugins.ToggleSidebars';
+		const testPluginPath = `${supportDir}/pluginRepo/plugins/${testPluginId}/plugin.jpl`;
+
+		const pluginSettings = {
+			[testPluginId]: defaultPluginSetting(),
+		};
+
+		await service.loadAndRunPlugins([testPluginPath], pluginSettings, { devMode: false, builtIn: false });
+
+		// Should be running
+		expect(service.isPluginLoaded(testPluginId)).toBe(true);
+
+		const testDefaultPluginsInfo = {
+			[testPluginId]: {},
+			'joplin.plugin.ambrt.backlinksToNote': {},
+		};
+
+		const { pluginPaths } = await getDefaultPluginPathsAndSettings(
+			testDefaultPluginsDir, testDefaultPluginsInfo, pluginSettings, service,
+		);
+
+		// Should only return plugins that aren't loaded.
+		expect(pluginPaths).toHaveLength(1);
+		expect(pluginPaths[0]).toContain('joplin.plugin.ambrt.backlinksToNote');
 	});
 });

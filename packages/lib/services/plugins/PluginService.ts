@@ -91,7 +91,6 @@ export default class PluginService extends BaseService {
 	private plugins_: Plugins = {};
 	private runner_: BasePluginRunner = null;
 	private startedPlugins_: Record<string, boolean> = {};
-	private unpackBaseDirectory_: string = Setting.value('cacheDir');
 	private isSafeMode_ = false;
 
 	public initialize(appVersion: string, platformImplementation: any, runner: BasePluginRunner, store: any) {
@@ -99,12 +98,6 @@ export default class PluginService extends BaseService {
 		this.store_ = store;
 		this.runner_ = runner;
 		this.platformImplementation_ = platformImplementation;
-	}
-
-	// For automated testing -- using different unpack directories can help
-	// isolate different test cases.
-	public setUnpackBaseDirectory(baseDirectory: string) {
-		this.unpackBaseDirectory_ = baseDirectory;
 	}
 
 	public get plugins(): Plugins {
@@ -235,7 +228,7 @@ export default class PluginService extends BaseService {
 		const fname = filename(path);
 		const hash = await shim.fsDriver().md5File(path);
 
-		const unpackDir = `${this.unpackBaseDirectory_}/${fname}`;
+		const unpackDir = `${Setting.value('cacheDir')}/${fname}`;
 		const manifestFilePath = `${unpackDir}/manifest.json`;
 
 		let manifest: any = await this.loadManifestToObject(manifestFilePath);
