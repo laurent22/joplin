@@ -6615,7 +6615,7 @@ __metadata:
     "@joplin/renderer": ~2.14
     "@joplin/tools": ~2.14
     "@joplin/utils": ~2.14
-    "@js-draw/material-icons": 1.15.0
+    "@js-draw/material-icons": 1.16.1
     "@react-native-community/clipboard": 1.5.1
     "@react-native-community/datetimepicker": 7.6.2
     "@react-native-community/geolocation": 3.1.0
@@ -7329,12 +7329,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@js-draw/material-icons@npm:1.15.0":
-  version: 1.15.0
-  resolution: "@js-draw/material-icons@npm:1.15.0"
+"@js-draw/material-icons@npm:1.16.1":
+  version: 1.16.1
+  resolution: "@js-draw/material-icons@npm:1.16.1"
   peerDependencies:
     js-draw: ^1.0.1
-  checksum: 0fdac8bfdff09479145093b875786addeb77429810e7ff88dee3851bfec0e9ae60a966652d2691a398922662200cbf6cf8675b771bd5be5c9baf22ab53ad62ef
+  checksum: 133dbcd950c4724bfd028ca6ba8b61093c6012016cb5cca6ee6b7f1506d5ff650cec3518ee2a94b7638e32f815cceafc4832ce937d4012b3464ddf070db30c54
   languageName: node
   linkType: hard
 
