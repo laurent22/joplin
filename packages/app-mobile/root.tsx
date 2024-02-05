@@ -1010,6 +1010,13 @@ class AppComponent extends React.Component {
 
 		const { command, params } = parseCallbackUrl(url);
 
+		// adopted from app-mobile/utils/shareHandler.ts
+		// We go back one screen in case there's already a note open -
+		// if we don't do this, the dispatch below will do nothing
+		// (because routeName wouldn't change)
+		this.props.dispatch({ type: 'NAV_BACK' });
+		this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+
 		switch (command) {
 
 		case CallbackUrlCommand.OpenNote:
