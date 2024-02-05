@@ -964,6 +964,7 @@ function useMenu(props: Props) {
 			}
 
 			const template = [
+				shim.isMac() ? rootMenus.macOsApp : null,
 				rootMenus.file,
 				rootMenus.edit,
 				rootMenus.view,
@@ -971,11 +972,9 @@ function useMenu(props: Props) {
 				rootMenus.folder,
 				rootMenus.note,
 				rootMenus.tools,
-				rootMenus.window,
+				shim.isMac() ? rootMenus.window : null,
 				rootMenus.help,
-			];
-
-			if (shim.isMac()) template.splice(0, 0, rootMenus.macOsApp);
+			].filter(item => item !== null);
 
 			if (props.routeName !== 'Main') {
 				setMenu(Menu.buildFromTemplate([
