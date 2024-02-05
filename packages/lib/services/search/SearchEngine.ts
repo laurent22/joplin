@@ -13,6 +13,7 @@ import JoplinDatabase from '../../JoplinDatabase';
 import NoteResource from '../../models/NoteResource';
 import BaseItem from '../../models/BaseItem';
 import { isCallbackUrl, parseCallbackUrl } from '../../callbackUrlUtils';
+import replaceUnsupportedCharacters from '../../utils/replaceUnsupportedCharacters';
 const { sprintf } = require('sprintf-js');
 const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.js');
 
@@ -603,9 +604,8 @@ export default class SearchEngine {
 	private normalizeText_(text: string) {
 		let normalizedText = text.normalize ? text.normalize() : text;
 
-		// Null characters can break FTS. Remove them.
-		// eslint-disable-next-line no-control-regex
-		normalizedText = normalizedText.replace(/\x00/g, ' ');
+		// NULL characters can break FTS. Remove them.
+		normalizedText = replaceUnsupportedCharacters(normalizedText);
 
 		return removeDiacritics(normalizedText.toLowerCase());
 	}
