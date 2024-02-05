@@ -843,6 +843,24 @@ function useMenu(props: Props) {
 					label: _('&Tools'),
 					submenu: toolsItems,
 				},
+				window: {
+					id: 'window',
+
+					// Adds the default MacOS actions (e.g. "tile left") to the menu.
+					//
+					// Note: If the dev tools are shown on startup, this adds additional tab-related
+					// actions to the menu that are not otherwise shown. See https://stackoverflow.com/a/77458809
+					role: 'windowMenu',
+
+					label: _('&Window'),
+					visible: !!shim.isMac(),
+					submenu: [
+						{
+							role: 'minimize',
+							accelerator: shim.isMac() && keymapService.getAccelerator('minimizeWindow'),
+						},
+					],
+				},
 				help: {
 					label: _('&Help'),
 					role: 'help', // Makes it add the "Search" field on macOS
@@ -851,7 +869,7 @@ function useMenu(props: Props) {
 						accelerator: keymapService.getAccelerator('help'),
 						click() { void bridge().openExternal('https://joplinapp.org'); },
 					}, {
-						label: _('Joplin Forum'),
+						label: _('Joplin Forumm'),
 						click() { void bridge().openExternal('https://discourse.joplinapp.org'); },
 					}, {
 						label: _('Join us on Twitter'),
@@ -953,6 +971,7 @@ function useMenu(props: Props) {
 				rootMenus.folder,
 				rootMenus.note,
 				rootMenus.tools,
+				rootMenus.window,
 				rootMenus.help,
 			];
 
