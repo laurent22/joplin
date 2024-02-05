@@ -869,7 +869,7 @@ function useMenu(props: Props) {
 						accelerator: keymapService.getAccelerator('help'),
 						click() { void bridge().openExternal('https://joplinapp.org'); },
 					}, {
-						label: _('Joplin Forumm'),
+						label: _('Joplin Forum'),
 						click() { void bridge().openExternal('https://discourse.joplinapp.org'); },
 					}, {
 						label: _('Join us on Twitter'),
