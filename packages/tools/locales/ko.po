@@ -1091,7 +1091,7 @@ msgstr ""
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
 #, fuzzy
-msgid "Could not verify your identify: %s"
+msgid "Could not verify your identity: %s"
 msgstr "노트를 내보낼 수 없습니다: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235

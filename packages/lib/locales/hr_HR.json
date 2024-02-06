@@ -607,7 +607,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Neuspjela provjera stanja dijeljenja ove bilježnice – prekida se. Pokušaj ponovo kad uspostaviš vezu s internetom."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"Neuspjela provjera tvoje identifikacije: %s"
 	],
 	"Create": [

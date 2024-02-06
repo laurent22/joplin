@@ -982,7 +982,7 @@ msgid "Could not verify the share status of this notebook - aborting. Please try
 msgstr ""
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-msgid "Could not verify your identify: %s"
+msgid "Could not verify your identity: %s"
 msgstr ""
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235

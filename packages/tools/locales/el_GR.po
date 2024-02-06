@@ -1112,7 +1112,7 @@ msgstr ""
 "υπολογιστή - διακοπή. Προσπαθήστε ξανά όταν συνδεθείτε στο διαδίκτυο."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-msgid "Could not verify your identify: %s"
+msgid "Could not verify your identity: %s"
 msgstr "Δεν ήταν δυνατή η επαλήθευση της ταυτότητάς σας: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235

@@ -1101,7 +1101,7 @@ msgstr ""
 "réessayer lorsque vous serez connecté à internet."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-msgid "Could not verify your identify: %s"
+msgid "Could not verify your identity: %s"
 msgstr "Impossible de vérifier votre identité : %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235

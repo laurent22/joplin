@@ -1102,7 +1102,7 @@ msgstr ""
 "перериваю. Спробуйте ще раз, коли Ви підключитесь до Інтернету."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-msgid "Could not verify your identify: %s"
+msgid "Could not verify your identity: %s"
 msgstr "Не вдалося підтвердити Вашу особу: %is"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235

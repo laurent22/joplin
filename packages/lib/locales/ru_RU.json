@@ -600,7 +600,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Не удалось проверить состояние общего доступа к этому блокноту - прерывание. Пожалуйста, повторите попытку при подключении к Интернету."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"Не удалось проверить вашу личность: %s"
 	],
 	"Create": [

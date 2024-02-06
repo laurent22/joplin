@@ -1097,7 +1097,7 @@ msgstr ""
 "Probeer het opnieuw wanneer u verbonden bent met internet."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-msgid "Could not verify your identify: %s"
+msgid "Could not verify your identity: %s"
 msgstr "Identiteit niet gecontroleerd: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235

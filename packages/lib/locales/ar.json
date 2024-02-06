@@ -604,7 +604,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"لم يتمكن التحقق من حالة النشر الخاصة بهذه الملاحظة. المرجو العودة عند توفر الإنترنت."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"تعذر تصدير الملاحظات: %s"
 	],
 	"Create": [

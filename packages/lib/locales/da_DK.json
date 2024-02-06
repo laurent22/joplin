@@ -621,7 +621,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Kunne ikke verificere denne notesbogs status for deling - afbryder. Prøv venligst igen, når du har forbindelse til internettet."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"Kunne ikke bekræfte din identitet: %s"
 	],
 	"Create": [

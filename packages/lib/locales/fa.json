@@ -621,7 +621,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"وضعیت اشتراک‌گذاری این دفترچه تأیید نشد و بی‌نتیحه ماند. لطفاً زمانی که به اینترنت وصل شدید، دوباره امتحان نمایید."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"هویت شما تأیید نشد: %s"
 	],
 	"Create": [

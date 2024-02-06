@@ -1115,7 +1115,7 @@ msgstr ""
 "Interruzione in corso. Riprova quando sei connesso a Internet."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-msgid "Could not verify your identify: %s"
+msgid "Could not verify your identity: %s"
 msgstr "Impossibile verificare la tua identità: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235

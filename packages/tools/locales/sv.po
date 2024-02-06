@@ -1104,7 +1104,7 @@ msgstr ""
 "avbryter. Försök igen när du är ansluten till internet."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-msgid "Could not verify your identify: %s"
+msgid "Could not verify your identity: %s"
 msgstr "Det gick inte att verifiera din identitet: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235

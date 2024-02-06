@@ -1087,7 +1087,7 @@ msgstr ""
 "ネット接続を確認してから再度お試しください。"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-msgid "Could not verify your identify: %s"
+msgid "Could not verify your identity: %s"
 msgstr "IDを確認できませんでした: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235
