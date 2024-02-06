@@ -10,6 +10,7 @@ import * as pdfJsNamespace from 'pdfjs-dist';
 import { writeFile } from 'fs/promises';
 import { ResourceEntity } from './services/database/types';
 import { TextItem } from 'pdfjs-dist/types/src/display/api';
+import replaceUnsupportedCharacters from './utils/replaceUnsupportedCharacters';
 
 const { FileApiDriverLocal } = require('./file-api-driver-local');
 const mimeUtils = require('./mime-utils.js').mime;
@@ -749,7 +750,10 @@ function shimInit(options: ShimInitOptions = null) {
 				const text = (item as TextItem).str ?? '';
 				return text;
 			}).join('\n');
-			textByPage.push(strings);
+
+			// Some PDFs contain unsupported characters that can lead to hard-to-debug issues.
+			// We remove them here.
+			textByPage.push(replaceUnsupportedCharacters(strings));
 		}
 
 		return textByPage;

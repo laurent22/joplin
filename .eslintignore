@@ -1002,6 +1002,8 @@ packages/lib/types.js
 packages/lib/utils/credentialFiles.js
 packages/lib/utils/joplinCloud.js
 packages/lib/utils/processStartFlags.js
+packages/lib/utils/replaceUnsupportedCharacters.test.js
+packages/lib/utils/replaceUnsupportedCharacters.js
 packages/lib/utils/userFetcher.js
 packages/lib/utils/webDAVUtils.test.js
 packages/lib/utils/webDAVUtils.js

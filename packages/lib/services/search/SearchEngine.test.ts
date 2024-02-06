@@ -322,10 +322,21 @@ describe('services/SearchEngine', () => {
 	}));
 
 	it('should support searching through documents that contain null characters', (async () => {
-		await Note.save({ title: 'Test', body: 'Test\x00testing' });
+		await Note.save({
+			title: 'Test',
+			body: `
+				NUL characters, "\x00", have been known to break FTS search.
+				Previously, all characters after a NUL (\x00) character in a note
+				would not show up in search results. NUL characters may have also
+				broken search for other notes.
+
+				In this note, "testing" only appears after the NUL characters.
+			`,
+		});
 
 		await engine.syncTables();
 
+		expect((await engine.search('previously')).length).toBe(1);
 		expect((await engine.search('testing')).length).toBe(1);
 	}));
 
