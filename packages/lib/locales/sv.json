@@ -332,7 +332,7 @@
 	"Browse...": [
 		"Bläddra..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -460,6 +460,9 @@
 	],
 	"Close dropdown": [
 		"Stäng rullgardinsmenyn"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Stäng fönster"
@@ -1398,6 +1401,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"För att göra detta måste all din datauppsättning vara krypterad och synkroniserad, det är bäst köra processen över natten.\n\nFör att starta processen, följ dessa instruktioner:\n\n1. Synkronisera alla dina enheter.\\n\n2. Klicka \\\"%s\\\"\n3. Låt den köra färdigt. Medan den kör, undvik att göra ändringar i några anteckningar på dina andra enheter för att undvika konflikter.\n4. När synkroniseringen är färdig på denna enhet, synkronisera alla dina andra enheter och låt processen köra färdigt.\n\nViktigt: du behöver bara köra denna process EN gång på en enhet."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"För att kunna använda filsystemssynkronisering krävs ditt tillstånd att skriva till extern lagring."
@@ -2483,6 +2489,12 @@
 	"Solarised Light": [
 		"Solariset ljust"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Några objekt kan inte dekrypteras."
 	],
@@ -2780,6 +2792,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Det gick inte att ta bort mottagaren från listan. Försök igen.\n\nFelet var: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Synkroniseringsmålet måste uppgraderas innan Joplin kan synkronisera. Åtgärden kan ta några minuter att slutföra och appen måste startas om. Klicka på länken för att fortsätta."
 	],
@@ -3010,6 +3025,9 @@
 	],
 	"Undo": [
 		"Ångra"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Okänd flagga: %s"

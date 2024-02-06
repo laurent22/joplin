@@ -314,7 +314,7 @@
 	"Browse...": [
 		"Brskaj..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -430,6 +430,9 @@
 	],
 	"Close": [
 		"Zapri"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Zapri okno"
@@ -1237,6 +1240,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Če želite to storiti, vaši celotni podatki bodo morali biti šifrirani in sinhronizirani, zato da je najboljše, da pustite teči čez noč.\n\nZa začetek, prosim sledite naslednjim korakom:\n\n1. Sinhronizirajte vse vaše naprave.\n2. Kliknite \"%s\"\n3. Pustite da teče do konca. Medtem ko teče se izogibajte spreminjanju katerekoli beležke na vaših napravah, da se izognete konfliktom.\n4. Ko se sinhronizacija konča na tej napravi, sinhronizirajte še vse ostale vaše naprave in pustite da teče do konca.\n\nPomembno: to zaženete samo ENKRAT na eni napravi."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Če želite uporabljati sinhronizacijo datotečnega sistema je vaše dovoljenje potrebno za zapisovanje na zunanji prostor."
@@ -2180,6 +2186,12 @@
 	"Solarised Light": [
 		"Solarizirano svetlo"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Nekatere predmete ni možno dešifrirani."
 	],
@@ -2459,6 +2471,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Sinhronizacijski cilj mora biti nadgrajen preden lahko Joplin sinhronizira. Operacija bo trajala nekaj minut da se dokonča in aplikacija bo morala biti ponovno zagnana. Za nadaljevanje pritisnite na povezavo."
 	],
@@ -2662,6 +2677,9 @@
 	],
 	"Undo": [
 		"Razveljavi"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Nepoznana oznaka: %s"

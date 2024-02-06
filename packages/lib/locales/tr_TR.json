@@ -63,7 +63,7 @@
 		"%s = %s (%s)"
 	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
-		""
+		"%s pek çok dosyanın senkronu için optimize bir değil, bu sebeple ilk senkronizasyon zaman alabilir."
 	],
 	"%s: %d": [
 		"%s: %d"
@@ -341,9 +341,6 @@
 	"Browse...": [
 		"Gözat..."
 	],
-	"Built in": [
-		""
-	],
 	"Bulleted List": [
 		"Maddeli liste"
 	],
@@ -469,6 +466,9 @@
 	],
 	"Close dropdown": [
 		"Açılır menüyü kapat"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Pencereyi Kapat"
@@ -1072,7 +1072,7 @@
 		"Not tarihçesini etkinleştir"
 	],
 	"Enable optical character recognition (OCR)": [
-		""
+		"Optik karakter tanıma (OCR)'ı etkinleştir"
 	],
 	"Enable PDF viewer": [
 		"PDF görüntüleyiciyi aktifleştir"
@@ -1434,6 +1434,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Bu işlemi yapmak için tüm veriniz yeniden şifrelenip senkron edilecek. Bu işlemi bu sebeple gece yapmanız önerilir.\n\nBaşlamak için lütfen aşağıdaki aşamaları takip edin:\n\n1. Tüm cihazlarınızla notlarınızı senkron edin.\n2. \"%s\"' imgesine tıklayın.\n3. İşlemin tamamlanmasını bekleyin. İşlem çalışırken notlarınızda çakışmayı önlemek için notlarınızda değişiklik yapmayın.\n4. Senkronizasyon işlemi cihazınızda bitince diğer tüm cihazlarınızla da senkron ederek işlemi tammalayın.\n\nÖnemli: Bu işlemi cihaz başına SADECE BİR KERE yapmanız yeterlidir."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Dosya sistemi senkronizasyonu için, hedef depolamada sizin yazma yetkiniz gereklidir."
@@ -2393,11 +2396,17 @@
 	"Search for...": [
 		"Şunu ara..."
 	],
+	"Search hidden": [
+		"Gizli öğeler içerisinde arama"
+	],
 	"Search in all the notes": [
 		"Tüm notlarda ara"
 	],
 	"Search in current note": [
 		"Mevcut notta ara"
+	],
+	"Search shown": [
+		"Görünür öğeler içerisinde arama"
 	],
 	"Search...": [
 		"Ara..."
@@ -2539,6 +2548,12 @@
 	],
 	"Solarised Light": [
 		"Açık Solarize"
+	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
 	],
 	"Some items cannot be decrypted.": [
 		"Bazı öğelerin şifresi çözülemiyor."
@@ -2843,6 +2858,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Alıcı listeden çıkarılamadı. Lütfen yeniden deneyin.\n\nHata mesajı: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Senkronizasyon hedefi'nin Joplin senkronizasyona yeniden başlamadan once güncellenmesi gerekir. Bu işlem notlarınızıın yoğunluğuna göre birkaç dakika sürebilir, ve de bu işlem ardından uygulama yeniden başlatılacaktır. Bu işlemi başlatmak için lütfen linke tıklayın."
 	],
@@ -3092,6 +3110,9 @@
 	"Undo": [
 		"Geri al"
 	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
+	],
 	"Unknown flag: %s": [
 		"Bilinmeyen etiket: %s"
 	],
@@ -3264,7 +3285,7 @@
 		"Yeni bir yapılacak oluşturulurken:"
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
-		""
+		"Eğer bu özellik aktifleştirilirse, uygulama iliştirilen ek dosyaları tarayarak içindeki metinleri ayıklayacak. Bu sayede bu metinler üzerinden de arama yapabileceksiniz."
 	],
 	"Window unresponsive.": [
 		"Pencere tepkisiz, cevap vermiyor."

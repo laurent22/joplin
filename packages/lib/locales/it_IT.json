@@ -341,7 +341,7 @@
 	"Browse...": [
 		"Naviga..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -466,6 +466,9 @@
 	],
 	"Close dropdown": [
 		"Chiudi Menù a discesa"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Chiudi finestra"
@@ -1413,6 +1416,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Per farlo, il tuo intero data set deve essere criptato e sincronizzato, quindi è consigliabile lasciarlo fare di notte.\n\nPer iniziare, segui queste indicazioni:\n\n1. Sincronizza tutti i tuoi dispositivi.\n2. Clicca \"%s\".\n3. Aspetta che l'operazione venga completata. Per evitare conflitti, evita di modificare le note durante questo lasso di tempo.\n4. Una volta che questo dispositivo è stato sincronizzato, sincronizza tutti i dispositivi rimanenti e aspetta che finisca.\n\nImportante: questa operazione va eseguita SOLO UNA VOLTA in UN dispositivo."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Per usare la sincronizzazione del file system è necessario il tuo permesso di scrittura sulla memoria esterna."
@@ -2474,6 +2480,12 @@
 	"Solarised Light": [
 		"Chiaro solarizzato"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Alcuni elementi non possono essere decodificati."
 	],
@@ -2765,6 +2777,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Impossibile rimuovere il destinatario dall'elenco. Per favore riprova.\n\nl'errore era: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"La destinazione di sincronizzazione deve essere aggiornata prima che Joplin possa eseguire la sincronizzazione. L'operazione può richiedere alcuni minuti ed è necessario riavviare l'app. Per procedere clicca sul link."
 	],
@@ -3007,6 +3022,9 @@
 	],
 	"Undo": [
 		"Annulla"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Etichetta sconosciuta: %s"
