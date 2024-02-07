@@ -984,6 +984,8 @@ packages/lib/services/synchronizer/utils/syncDeleteStep.js
 packages/lib/services/synchronizer/utils/types.js
 packages/lib/shim-init-node.js
 packages/lib/shim.js
+packages/lib/string-utils.test.js
+packages/lib/string-utils.js
 packages/lib/testing/syncTargetUtils.js
 packages/lib/testing/test-utils-synchronizer.js
 packages/lib/testing/test-utils.js
