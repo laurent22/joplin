@@ -981,9 +981,12 @@ class AppComponent extends React.Component {
 
 		if (sharedData) {
 			reg.logger().info('Received shared data');
-			if (this.props.selectedFolderId) {
+
+			// selectedFolderId can be null if "All notes" or a similar screen is open.
+			const targetFolder = this.props.selectedFolderId ?? (await Folder.defaultFolder())?.id;
+			if (targetFolder) {
 				logger.info('Sharing: handleShareData: Processing...');
-				await handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
+				await handleShared(sharedData, targetFolder, this.props.dispatch);
 			} else {
 				reg.logger().info('Cannot handle share - default folder id is not set');
 			}
