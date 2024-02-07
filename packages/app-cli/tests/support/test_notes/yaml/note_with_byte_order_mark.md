@@ -5,4 +5,4 @@ tags:
   - tag2
 ---
 
-Test note
+This note begins with an invisible byte order mark, just before its frontmatter.

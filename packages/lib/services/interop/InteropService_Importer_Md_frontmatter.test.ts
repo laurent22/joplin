@@ -177,7 +177,7 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', () => {
 	it('should recognize frontmatter in a file that starts with a UTF8 byte order mark', async () => {
 		const note = await importTestFile('note_with_byte_order_mark.md');
 		expect(note.title).toBe('Frontmatter test');
-		expect(note.body).toBe('Test note\n');
+		expect(note.body).toBe('This note begins with an invisible byte order mark, just before its frontmatter.\n');
 
 		const tags = (await Tag.tagsByNoteId(note.id)).map(tag => tag.title).sort();
 		expect(tags).toMatchObject(['tag1', 'tag2']);
