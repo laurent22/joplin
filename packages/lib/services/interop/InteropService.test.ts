@@ -1,5 +1,5 @@
 import InteropService from '../../services/interop/InteropService';
-import { CustomExportContext, CustomImportContext, ExportModuleOutputFormat, ModuleType } from '../../services/interop/types';
+import { CustomExportContext, CustomImportContext, ExportModuleOutputFormat, FileSystemItem, ModuleType } from '../../services/interop/types';
 import shim from '../../shim';
 import { fileContentEqual, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, exportDir, supportDir } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
@@ -13,6 +13,7 @@ import * as ArrayUtils from '../../ArrayUtils';
 import InteropService_Importer_Custom from './InteropService_Importer_Custom';
 import InteropService_Exporter_Custom from './InteropService_Exporter_Custom';
 import Module, { makeExportModule, makeImportModule } from './Module';
+import { join } from 'node:path';
 
 async function recreateExportDir() {
 	const dir = exportDir();
@@ -82,6 +83,33 @@ function memoryExportModule() {
 
 	return { result, module };
 }
+
+const getFilesAndFolders = (folderPath: string) => {
+	const traverseFolder = (folderPath: string) => {
+		let files: string[] = [];
+		const items = fs.readdirSync(folderPath);
+		for (const item of items) {
+			const itemPath = join(folderPath, item);
+			const stats = fs.statSync(itemPath);
+			if (stats.isDirectory()) {
+				files.push(`${itemPath}/`);
+				files = files.concat(traverseFolder(itemPath));
+			} else if (stats.isFile()) {
+				files.push(itemPath);
+			}
+		}
+		return files;
+	};
+
+	const files = traverseFolder(folderPath);
+	const relativePathToDirectory = files.map(f => {
+		const relevantDirectory = f.split(join(folderPath))[1];
+		// removes leading slash
+		return relevantDirectory.slice(1, relevantDirectory.length);
+	});
+
+	return relativePathToDirectory;
+};
 
 describe('services_InteropService', () => {
 
@@ -645,5 +673,30 @@ describe('services_InteropService', () => {
 		expect(result.closeCalled).toBe(true);
 	}));
 
+	it('should store content in different folders even if a naming conflict is possible', (async () => {
+		const folder1 = await Folder.save({ title: 'Folder>1' });
+		await Note.save({ title: 'note1', parent_id: folder1.id });
+
+		const folder2 = await Folder.save({ title: 'Folder<1' });
+		await Note.save({ title: 'note2', parent_id: folder2.id });
+
+		const service = InteropService.instance();
+		await service.export({
+			path: join(exportDir()),
+			format: ExportModuleOutputFormat.Html,
+			target: FileSystemItem.Directory,
+			plugins: undefined,
+		});
+
+		const fileAndFolders = getFilesAndFolders(exportDir());
+		const uniqueRootFolders = [... new Set(fileAndFolders.map(f => f.split('/')[0]))];
+		const pathToNote1 = fileAndFolders.find(f => f.includes('note1.html'));
+		const pathToNote2 = fileAndFolders.find(f => f.includes('note2.html'));
+
+		expect(uniqueRootFolders.length).toBe(2);
+		expect(await shim.fsDriver().exists(`${exportDir()}/${pathToNote1}`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/${pathToNote2}`)).toBe(true);
+	}));
 
 });
+

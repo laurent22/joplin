@@ -23,24 +23,34 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		await shim.fsDriver().mkdir(this.resourceDir_);
 	}
 
-	private async makeDirPath_(item: any, pathPart: string = null, findUniqueFilename = true) {
+	private async makeDirPath_(item: any, findUniqueFilename = true) {
 		let output = '';
 		while (true) {
 			if (item.type_ === BaseModel.TYPE_FOLDER) {
-				if (pathPart) {
-					output = `${pathPart}/${output}`;
-				} else {
-					output = `${friendlySafeFilename(item.title, null)}/${output}`;
-					if (findUniqueFilename) output = await shim.fsDriver().findUniqueFilename(output, null, true);
-				}
+				const formattedSafeTitle = friendlySafeFilename(item.title, null);
+				const uniqueFilename = formattedSafeTitle !== item.title ? `${formattedSafeTitle}_${item.id.slice(0, 6)}` : formattedSafeTitle;
+				output = `${uniqueFilename}/${output}`;
+				if (findUniqueFilename) output = await shim.fsDriver().findUniqueFilename(output, null, true);
 			}
 			if (!item.parent_id) return output;
 			item = await Folder.load(item.parent_id);
 		}
 	}
 
+	private async findRelativePathToRoot(item: any) {
+		const parentPath = '..';
+		let relativePath = '';
+		while (true) {
+			if (item.type_ === BaseModel.TYPE_FOLDER) {
+				relativePath = `${parentPath}/${relativePath}`;
+			}
+			if (!item.parent_id) return relativePath;
+			item = await Folder.load(item.parent_id);
+		}
+	}
+
 	private async relaceLinkedItemIdsByRelativePaths_(item: any) {
-		const relativePathToRoot = await this.makeDirPath_(item, '..');
+		const relativePathToRoot = await this.findRelativePathToRoot(item);
 
 		const newBody = await this.replaceResourceIdsByRelativePaths_(item.body, relativePathToRoot);
 		return await this.replaceNoteIdsByRelativePaths_(newBody, relativePathToRoot);
@@ -96,7 +106,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 				if (!note) continue;
 
 				const ext = note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML ? 'html' : 'md';
-				let notePath = `${await this.makeDirPath_(note, null, false)}${friendlySafeFilename(note.title, null)}.${ext}`;
+				let notePath = `${await this.makeDirPath_(note, false)}${friendlySafeFilename(note.title, null)}.${ext}`;
 				notePath = await shim.fsDriver().findUniqueFilename(`${this.destDir_}/${notePath}`, Object.values(context.notePaths), true);
 				context.notePaths[note.id] = notePath;
 			}

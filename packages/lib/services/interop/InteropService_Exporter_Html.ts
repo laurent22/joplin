@@ -48,18 +48,28 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		this.style_ = themeStyle(Setting.THEME_LIGHT);
 	}
 
-	private async makeDirPath_(item: NoteEntity, pathPart: string = null) {
+	private async makeDirPath_(item: NoteEntity) {
 		let output = '';
 		while (true) {
 			if (item.type_ === BaseModel.TYPE_FOLDER) {
-				if (pathPart) {
-					output = `${pathPart}/${output}`;
-				} else {
-					output = `${friendlySafeFilename(item.title)}/${output}`;
-					output = await shim.fsDriver().findUniqueFilename(output);
-				}
+				const formattedSafeTitle = friendlySafeFilename(item.title, null);
+				const uniqueFilename = formattedSafeTitle !== item.title ? `${formattedSafeTitle}_${item.id.slice(0, 6)}` : formattedSafeTitle;
+				output = `${uniqueFilename}/${output}`;
+				output = await shim.fsDriver().findUniqueFilename(output);
 			}
 			if (!item.parent_id) return output;
+			item = await Folder.load(item.parent_id);
+		}
+	}
+
+	private async findRelativePathToRoot(item: any) {
+		const parentPath = '..';
+		let relativePath = '';
+		while (true) {
+			if (item.type_ === BaseModel.TYPE_FOLDER) {
+				relativePath = `${parentPath}/${relativePath}`;
+			}
+			if (!item.parent_id) return relativePath;
 			item = await Folder.load(item.parent_id);
 		}
 	}
@@ -67,7 +77,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 	private async processNoteResources_(item: NoteEntity) {
 		const target = this.metadata().target;
 		const linkedResourceIds = await Note.linkedResourceIds(item.body);
-		const relativePath = target === 'directory' ? rtrimSlashes(await this.makeDirPath_(item, '..')) : '';
+		const relativePath = target === 'directory' ? rtrimSlashes(await this.findRelativePathToRoot(item)) : '';
 		const resourcePaths = this.context() && this.context().resourcePaths ? this.context().resourcePaths : {};
 
 		let newBody = item.body;

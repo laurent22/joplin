@@ -486,4 +486,41 @@ describe('interop/InteropService_Exporter_Md', () => {
 		expect(files).toEqual(['a_b_c_test.jpg']);
 	}));
 
+	it('should store content in different folders even if a naming conflict is possible', (async () => {
+		const exporter = new InteropService_Exporter_Md();
+		await exporter.init(exportDir());
+
+		const itemsToExport: any[] = [];
+		const queueExportItem = (itemType: number, itemOrId: any) => {
+			itemsToExport.push({
+				type: itemType,
+				itemOrId: itemOrId,
+			});
+		};
+
+		const folder1 = await Folder.save({ title: 'Folder>1' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		queueExportItem(BaseModel.TYPE_FOLDER, folder1.id);
+		queueExportItem(BaseModel.TYPE_NOTE, note1);
+
+		const folder2 = await Folder.save({ title: 'Folder<1' });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
+		queueExportItem(BaseModel.TYPE_FOLDER, folder2.id);
+		queueExportItem(BaseModel.TYPE_NOTE, note2);
+
+		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
+		await exporter.processItem(Note.modelType(), note2);
+		await exporter.processItem(Note.modelType(), note1);
+		await exporter.processItem(Folder.modelType(), folder1);
+		await exporter.processItem(Folder.modelType(), folder2);
+
+		const folderTree1 = exporter.context().notePaths[note1.id].split('/');
+		const folderTree2 = exporter.context().notePaths[note2.id].split('/');
+
+		expect(await shim.fsDriver().exists(`${exportDir()}/${folderTree1[0]}`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/${folderTree2[0]}`)).toBe(true);
+		expect(folderTree1[0]).not.toEqual(folderTree2[0]);
+		expect(fs.readdirSync(exportDir()).length).toBe(3);
+	}));
+
 });
