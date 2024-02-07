@@ -612,8 +612,16 @@ export default class SearchEngine {
 
 	private normalizeNote_(note: NoteEntity) {
 		const n = { ...note };
-		n.title = this.normalizeText_(n.title);
-		n.body = this.normalizeText_(n.body);
+		try {
+			n.title = this.normalizeText_(n.title);
+			n.body = this.normalizeText_(n.body);
+		} catch (error) {
+			// Text normalization -- specifically removeDiacritics -- can fail in some cases.
+			// We log additional information to help determine the cause of the issue.
+			//
+			// See https://discourse.joplinapp.org/t/search-not-working-on-ios/35754
+			this.logger().error(`Error while normalizing text for note ${note.id}:`, error);
+		}
 		return n;
 	}
 
