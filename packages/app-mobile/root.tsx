@@ -982,7 +982,8 @@ class AppComponent extends React.Component {
 		if (sharedData) {
 			reg.logger().info('Received shared data');
 
-			// selectedFolderId can be null if "All notes" or a similar screen is open.
+			// selectedFolderId can be null if no screens other than "All notes"
+			// have been opened.
 			const targetFolder = this.props.selectedFolderId ?? (await Folder.defaultFolder())?.id;
 			if (targetFolder) {
 				logger.info('Sharing: handleShareData: Processing...');
