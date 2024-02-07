@@ -621,6 +621,11 @@ export default class SearchEngine {
 			//
 			// See https://discourse.joplinapp.org/t/search-not-working-on-ios/35754
 			this.logger().error(`Error while normalizing text for note ${note.id}:`, error);
+
+			// Unnormalized text can break the search engine, specifically NUL characters.
+			// Thus, we remove the text entirely.
+			n.title = '';
+			n.body = '';
 		}
 		return n;
 	}
