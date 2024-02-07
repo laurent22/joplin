@@ -87,6 +87,7 @@ const SideMenuContentComponent = (props: Props) => {
 			sidebarIcon: {
 				fontSize: 22,
 				color: theme.color,
+				width: 26,
 			},
 		};
 
@@ -103,7 +104,7 @@ const SideMenuContentComponent = (props: Props) => {
 		styles.sideButtonSelected = { ...styles.sideButton, backgroundColor: theme.selectedColor };
 		styles.sideButtonText = { ...styles.buttonText };
 
-		styles.emptyFolderIcon = { ...styles.sidebarIcon, marginRight: folderIconRightMargin, width: 21 };
+		styles.emptyFolderIcon = { ...styles.sidebarIcon, marginRight: folderIconRightMargin, width: 26 };
 
 		return StyleSheet.create(styles);
 	}, [props.themeId]);
@@ -317,9 +318,9 @@ const SideMenuContentComponent = (props: Props) => {
 		}
 
 		if (folderIcon.type === 1) { // FolderIconType.Emoji
-			return <Text style={{ fontSize: theme.fontSize, marginRight: folderIconRightMargin, width: 20 }}>{folderIcon.emoji}</Text>;
+			return <Text style={{ fontSize: theme.fontSize, marginRight: folderIconRightMargin, width: 26 }}>{folderIcon.emoji}</Text>;
 		} else if (folderIcon.type === 2) { // FolderIconType.DataUrl
-			return <Image style={{ width: 20, height: 20, marginRight: folderIconRightMargin, resizeMode: 'contain' }} source={{ uri: folderIcon.dataUrl }}/>;
+			return <Image style={{ width: 26, height: 20, marginRight: folderIconRightMargin, resizeMode: 'contain' }} source={{ uri: folderIcon.dataUrl }}/>;
 		} else {
 			throw new Error(`Unsupported folder icon type: ${folderIcon.type}`);
 		}
