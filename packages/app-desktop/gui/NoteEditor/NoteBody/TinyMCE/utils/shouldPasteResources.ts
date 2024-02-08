@@ -25,7 +25,7 @@ export default (pastedText: string, pastedHtml: string, resourceMds: string[]) =
 	logger.info('Resources:', resourceMds);
 
 	if (pastedText) {
-		logger.info('Not pasting resources because the clipboard contains plain text');
+		logger.info('Not pasting resources only because the clipboard contains plain text');
 		return false;
 	}
 

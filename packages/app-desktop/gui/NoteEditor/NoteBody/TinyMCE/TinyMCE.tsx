@@ -15,7 +15,6 @@ import useContextMenu from './utils/useContextMenu';
 import { copyHtmlToClipboard } from '../../utils/clipboardUtils';
 import shim from '@joplin/lib/shim';
 import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
-import { reg } from '@joplin/lib/registry';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import setupToolbarButtons from './utils/setupToolbarButtons';
 import { plainTextToHtml } from '@joplin/lib/htmlUtils';
@@ -31,9 +30,12 @@ import lightTheme from '@joplin/lib/themes/light';
 import { Options as NoteStyleOptions } from '@joplin/renderer/noteStyle';
 import markupRenderOptions from '../../utils/markupRenderOptions';
 import { DropHandler } from '../../utils/useDropHandler';
+import Logger from '@joplin/utils/Logger';
 const md5 = require('md5');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
+
+const logger = Logger.create('TinyMCE');
 
 // In TinyMCE 5.2, when setting the body to '<div id="rendered-md"></div>',
 // it would end up as '<div id="rendered-md"><br/></div>' once rendered
@@ -153,7 +155,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				if (anchor) {
 					anchor.scrollIntoView();
 				} else {
-					reg.logger().warn('TinyMce: could not find anchor with ID ', anchorName);
+					logger.warn('could not find anchor with ID ', anchorName);
 				}
 			} else {
 				props.onMessage({ channel: href });
@@ -193,7 +195,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			execCommand: async (cmd: EditorCommand) => {
 				if (!editor) return false;
 
-				reg.logger().debug('TinyMce: execCommand', cmd);
+				logger.debug('execCommand', cmd);
 
 				let commandProcessed = true;
 
@@ -215,7 +217,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					} else if (cmd.value.type === 'files') {
 						insertResourcesIntoContentRef.current(cmd.value.paths, { createFileURL: !!cmd.value.createFileURL });
 					} else {
-						reg.logger().warn('TinyMCE: unsupported drop item: ', cmd);
+						logger.warn('unsupported drop item: ', cmd);
 					}
 				} else {
 					commandProcessed = false;
@@ -249,7 +251,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				}
 
 				if (!joplinCommandToTinyMceCommands[cmd.name]) {
-					reg.logger().warn('TinyMCE: unsupported Joplin command: ', cmd);
+					logger.warn('unsupported Joplin command: ', cmd);
 					return false;
 				}
 
@@ -1132,16 +1134,20 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			const resourceMds = await getResourcesFromPasteEvent(event);
 
 			if (shouldPasteResources(pastedText, pastedHtml, resourceMds)) {
+				logger.info(`onPaste: pasting ${resourceMds.length} resources`);
 				if (resourceMds.length) {
 					const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMds.join('\n'), markupRenderOptions({ bodyOnly: true }));
 					editor.insertContent(result.html);
 				}
 			} else {
 				if (BaseItem.isMarkdownTag(pastedText)) { // Paste a link to a note
+					logger.info('onPaste: pasting as a Markdown tag');
 					const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, pastedText, markupRenderOptions({ bodyOnly: true }));
 					editor.insertContent(result.html);
 				} else { // Paste regular text
 					if (pastedHtml) { // Handles HTML
+						logger.info('onPaste: pasting as HTML');
+
 						const modifiedHtml = await processPastedHtml(
 							pastedHtml,
 							prop_htmlToMarkdownRef.current,
@@ -1149,6 +1155,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						);
 						editor.insertContent(modifiedHtml);
 					} else { // Handles plain text
+						logger.info('onPaste: pasting as text');
 						pasteAsPlainText(pastedText);
 					}
 				}
