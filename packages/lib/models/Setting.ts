@@ -1391,7 +1391,9 @@ class Setting extends BaseModel {
 				public: true,
 				appTypes: [AppType.Desktop],
 				label: () => 'Automatically upload crash reports',
-				description: () => 'If you experience a crash, please enable this option to automatically send a crash report.',
+				description: () => 'If you experience a crash, please enable this option to automatically send crash reports. You will need to restart the application for this change to take effect.',
+				isGlobal: true,
+				storage: SettingStorage.File,
 			},
 
 			'clipperServer.autoStart': { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: false },
