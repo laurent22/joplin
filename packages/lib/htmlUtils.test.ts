@@ -41,12 +41,12 @@ describe('htmlUtils', () => {
 				'&lt;img onerror=&quot;http://downloadmalware.com&quot;/&gt;',
 			],
 			[
-				'Some text with indented by a tab:\n\tIndented',
-				'<p>Some text with indented by a tab:<br/>&nbsp;&nbsp;&nbsp;&nbsp;Indented</p>',
+				'Some text indented by a tab:\n\tIndented',
+				'<p>Some text indented by a tab:<br/>&nbsp;&nbsp;&nbsp;&nbsp;Indented</p>',
 			],
 			[
-				'Some text with indented by four spaces:\n  Indented',
-				'<p>Some text with indented by four spaces:<br/>&nbsp;&nbsp;Indented</p>',
+				'Some text indented by two spaces:\n  Indented',
+				'<p>Some text indented by two spaces:<br/>&nbsp;&nbsp;Indented</p>',
 			],
 			[
 				'Some text with      white space between the content\nNewLine',
