@@ -673,27 +673,75 @@ describe('services_InteropService', () => {
 		expect(result.closeCalled).toBe(true);
 	}));
 
-	it('should store content in different folders even if a naming conflict is possible', (async () => {
-		const folder1 = await Folder.save({ title: 'Folder>1' });
+	it.each(
+		[
+			[ExportModuleOutputFormat.Html, 		'Folder>1', 	'Folder<1', 	'note1.html', 	'note2.html'],
+			[ExportModuleOutputFormat.Markdown, 	'..', 			'CON', 			'note1.md', 	'note2.md'],
+			[ExportModuleOutputFormat.Markdown, 	'LPT9', 		'AUX', 			'note1.md', 	'note2.md'],
+		],
+	)('should store content in different folders even if a naming conflict is possible. Test: %s %s %s', (async (
+		exportFormat: ExportModuleOutputFormat, folderTitle1: string, folderTitle2: string, note1FileName: string, note2Filename: string,
+	) => {
+		const folder1 = await Folder.save({ title: folderTitle1 });
 		await Note.save({ title: 'note1', parent_id: folder1.id });
 
-		const folder2 = await Folder.save({ title: 'Folder<1' });
+		const folder2 = await Folder.save({ title: folderTitle2 });
 		await Note.save({ title: 'note2', parent_id: folder2.id });
 
 		const service = InteropService.instance();
 		await service.export({
 			path: join(exportDir()),
-			format: ExportModuleOutputFormat.Html,
+			format: exportFormat,
 			target: FileSystemItem.Directory,
 			plugins: undefined,
 		});
 
 		const fileAndFolders = getFilesAndFolders(exportDir());
 		const uniqueRootFolders = [... new Set(fileAndFolders.map(f => f.split('/')[0]))];
-		const pathToNote1 = fileAndFolders.find(f => f.includes('note1.html'));
-		const pathToNote2 = fileAndFolders.find(f => f.includes('note2.html'));
+		const pathToNote1 = fileAndFolders.find(f => f.includes(note1FileName));
+		const pathToNote2 = fileAndFolders.find(f => f.includes(note2Filename));
 
-		expect(uniqueRootFolders.length).toBe(2);
+		const shouldBeFolder1 = uniqueRootFolders.find(f => f.includes(folder1.id.slice(0, 6)));
+		const shouldBeFolder2 = uniqueRootFolders.find(f => f.includes(folder2.id.slice(0, 6)));
+
+		expect(pathToNote1.includes(shouldBeFolder1)).toBe(true);
+		expect(pathToNote2.includes(shouldBeFolder2)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/${pathToNote1}`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/${pathToNote2}`)).toBe(true);
+	}));
+
+	it.each(
+		[
+			[ExportModuleOutputFormat.Html, 'note1.html', 'note2.html'],
+			[ExportModuleOutputFormat.Markdown, 'note1.md', 'note2.md'],
+		],
+	)('should keep folder title without appending id if it has no blacklisted character or word', (async (
+		exportFormat: ExportModuleOutputFormat, note1FileName: string, note2Filename: string,
+	) => {
+		const folder1 = await Folder.save({ title: 'A normal title' });
+		await Note.save({ title: 'note1', parent_id: folder1.id });
+
+		const folder2 = await Folder.save({ title: 'Other title' });
+		await Note.save({ title: 'note2', parent_id: folder2.id });
+
+		const service = InteropService.instance();
+		await service.export({
+			path: join(exportDir()),
+			format: exportFormat,
+			target: FileSystemItem.Directory,
+			plugins: undefined,
+		});
+
+		const fileAndFolders = getFilesAndFolders(exportDir());
+		const uniqueRootFolders = [... new Set(fileAndFolders.map(f => f.split('/')[0]))];
+		const pathToNote1 = fileAndFolders.find(f => f.includes(note1FileName));
+		const pathToNote2 = fileAndFolders.find(f => f.includes(note2Filename));
+
+		const shouldBeFolder1 = uniqueRootFolders.find(f => f === folder1.title);
+		const shouldBeFolder2 = uniqueRootFolders.find(f => f === folder2.title);
+
+		expect(pathToNote1.includes(shouldBeFolder1)).toBe(true);
+		expect(pathToNote2.includes(shouldBeFolder2)).toBe(true);
 		expect(await shim.fsDriver().exists(`${exportDir()}/${pathToNote1}`)).toBe(true);
 		expect(await shim.fsDriver().exists(`${exportDir()}/${pathToNote2}`)).toBe(true);
 	}));
