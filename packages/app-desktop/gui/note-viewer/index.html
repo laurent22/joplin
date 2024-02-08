@@ -211,7 +211,8 @@
 					} catch (error) {
 						// We don't throw an exception but we log it since
 						// it shouldn't happen
-						console.warn('Tried to remove an asset but got an error', error);
+						console.warn('Tried to remove asset ' + assetId + ' but got an error:', error);
+						console.warn('Assets are:', pluginAssetsAdded_);
 					}
 					pluginAssetsAdded_[assetId] = null;
 				}
