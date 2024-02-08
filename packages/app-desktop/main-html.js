@@ -80,7 +80,7 @@ const main = async () => {
 	BaseItem.loadClass('MasterKey', MasterKey);
 	BaseItem.loadClass('Revision', Revision);
 
-	Setting.setConstant('appId', `net.cozic.joplin${bridge().env() === 'dev' ? 'dev' : ''}-desktop`);
+	Setting.setConstant('appId', bridge().appId());
 	Setting.setConstant('appType', 'desktop');
 
 	// eslint-disable-next-line no-console
