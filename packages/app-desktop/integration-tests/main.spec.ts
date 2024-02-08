@@ -153,10 +153,12 @@ test.describe('main', () => {
 		await editor.attachFileButton.click();
 
 		const getImageSize = async () => {
-			// Wait for it to render
 			const viewerFrame = editor.getNoteViewerIframe();
 			const renderedImage = viewerFrame.getByAltText(filename);
-			await renderedImage.waitFor();
+
+			// Use state: 'attached' -- we don't need the image to be on the screen (just present
+			// in the DOM).
+			await renderedImage.waitFor({ state: 'attached' });
 
 			// We load a copy of the image to avoid returning an overriden width set with
 			//    .width = some_number

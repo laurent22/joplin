@@ -13,6 +13,7 @@ import { unique } from '../../ArrayUtils';
 const { pregQuote } = require('../../string-utils-common');
 import { MarkupToHtml } from '@joplin/renderer';
 import { isDataUrl } from '@joplin/utils/url';
+import { stripBom } from '../../string-utils';
 
 export default class InteropService_Importer_Md extends InteropService_Importer_Base {
 	protected importedNotes: Record<string, NoteEntity> = {};
@@ -167,7 +168,8 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		if (!stat) throw new Error(`Cannot read ${resolvedPath}`);
 		const ext = fileExtension(resolvedPath);
 		const title = filename(resolvedPath);
-		const body = await shim.fsDriver().readFile(resolvedPath);
+		const body = stripBom(await shim.fsDriver().readFile(resolvedPath));
+
 		const note = {
 			parent_id: parentFolderId,
 			title: title,
