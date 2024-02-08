@@ -205,17 +205,18 @@ function tableShouldBeSkipped(tableNode) {
   const cached = tableShouldBeSkippedCache_.get(tableNode);
   if (cached !== undefined) return cached;
 
-  const process = () => {
-    if (!tableNode) return true;
-    if (!tableNode.rows) return true;
-    if (tableNode.rows.length === 1 && tableNode.rows[0].childNodes.length <= 1) return true; // Table with only one cell
-    if (nodeContainsTable(tableNode)) return true;
-    return false;
-  }
+  const result = tableShouldBeSkipped_(tableNode);
 
-  const result = process();
   tableShouldBeSkippedCache_.set(tableNode, result);
   return result;
+}
+
+function tableShouldBeSkipped_ = (tableNode) => {
+  if (!tableNode) return true;
+  if (!tableNode.rows) return true;
+  if (tableNode.rows.length === 1 && tableNode.rows[0].childNodes.length <= 1) return true; // Table with only one cell
+  if (nodeContainsTable(tableNode)) return true;
+  return false;
 }
 
 function nodeParentTable(node) {
