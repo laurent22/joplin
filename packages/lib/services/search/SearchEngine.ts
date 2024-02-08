@@ -14,6 +14,7 @@ import NoteResource from '../../models/NoteResource';
 import BaseItem from '../../models/BaseItem';
 import { isCallbackUrl, parseCallbackUrl } from '../../callbackUrlUtils';
 import replaceUnsupportedCharacters from '../../utils/replaceUnsupportedCharacters';
+import { htmlentitiesDecode } from '@joplin/utils/html';
 const { sprintf } = require('sprintf-js');
 const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.js');
 
@@ -606,6 +607,10 @@ export default class SearchEngine {
 
 		// NULL characters can break FTS. Remove them.
 		normalizedText = replaceUnsupportedCharacters(normalizedText);
+
+		// We need to decode HTML entities too
+		// https://github.com/laurent22/joplin/issues/9694
+		normalizedText = htmlentitiesDecode(normalizedText);
 
 		return removeDiacritics(normalizedText.toLowerCase());
 	}

@@ -394,6 +394,10 @@ export default class ElectronAppWrapper {
 			this.tray_.setContextMenu(contextMenu);
 
 			this.tray_.on('click', () => {
+				if (!this.window()) {
+					console.warn('The window object was not available during the click event from tray icon');
+					return;
+				}
 				this.window().show();
 			});
 		} catch (error) {
