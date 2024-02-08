@@ -1,5 +1,27 @@
 # Joplin Desktop Changelog
 
+## [v2.14.12](https://github.com/laurent22/joplin/releases/tag/v2.14.12) (Pre-release) - 2024-02-03T12:11:47Z
+
+- Improved: Do not allow switching the sync target if not all resources are downloaded ([#9263](https://github.com/laurent22/joplin/issues/9263))
+- Improved: OCR: Use existing PDF text when available ([#9764](https://github.com/laurent22/joplin/issues/9764)) ([#9765](https://github.com/laurent22/joplin/issues/9765) by Henry Heino)
+- Improved: Removed ability to search by note ID to fix issue with certain plugins ([#9769](https://github.com/laurent22/joplin/issues/9769))
+- Improved: Removed double Sentry initialization ([8402c20](https://github.com/laurent22/joplin/commit/8402c20))
+- Improved: Removed obsolete template-related banner ([af59295](https://github.com/laurent22/joplin/commit/af59295))
+- Fixed: Allow dialogs to scroll on small screens ([#9823](https://github.com/laurent22/joplin/issues/9823)) ([#9822](https://github.com/laurent22/joplin/issues/9822) by Henry Heino)
+- Fixed: Clear "Some items cannot be synchronised" banner after situation is resolved ([#9157](https://github.com/laurent22/joplin/issues/9157))
+- Fixed: Fix broken synchronisation link in welcome notes ([#9804](https://github.com/laurent22/joplin/issues/9804)) ([#9799](https://github.com/laurent22/joplin/issues/9799) by Henry Heino)
+- Fixed: Fix drag-and-drop of images and text in the rich text editor ([#9827](https://github.com/laurent22/joplin/issues/9827)) ([#9826](https://github.com/laurent22/joplin/issues/9826) by Henry Heino)
+- Fixed: Fix ghosting when dropping code block over another code block ([#9816](https://github.com/laurent22/joplin/issues/9816)) ([#9737](https://github.com/laurent22/joplin/issues/9737) by [@pedr](https://github.com/pedr))
+- Fixed: Fix horizontal touchpad scrolling of code blocks ([#9815](https://github.com/laurent22/joplin/issues/9815)) ([#9629](https://github.com/laurent22/joplin/issues/9629) by Henry Heino)
+- Fixed: Fix image rotation not preserved when resizing an attached image ([#9824](https://github.com/laurent22/joplin/issues/9824)) ([#9597](https://github.com/laurent22/joplin/issues/9597) by Henry Heino)
+- Fixed: Fix images with SVG data URLs corrupted in the rich text editor ([#9801](https://github.com/laurent22/joplin/issues/9801)) ([#8736](https://github.com/laurent22/joplin/issues/8736) by Henry Heino)
+- Fixed: Fix mermaid save button creates additional space above diagrams ([#9830](https://github.com/laurent22/joplin/issues/9830)) ([#9829](https://github.com/laurent22/joplin/issues/9829) by Henry Heino)
+- Fixed: Fix scrollbars shown unnecessarily when opening the tag dialog ([#9818](https://github.com/laurent22/joplin/issues/9818)) ([#9817](https://github.com/laurent22/joplin/issues/9817) by Henry Heino)
+- Fixed: Fix synchronization happens every 10 seconds even if nothing has changed ([#9814](https://github.com/laurent22/joplin/issues/9814)) ([#9800](https://github.com/laurent22/joplin/issues/9800) by Henry Heino)
+- Fixed: Fixed various scrolling issues when creating new notes or to-dos ([#9433](https://github.com/laurent22/joplin/issues/9433))
+- Fixed: Pasting rich text in the RTE sometimes result in invalid markup ([#9512](https://github.com/laurent22/joplin/issues/9512))
+- Fixed: Rich text editor: Fix newline behavior in new notes ([#9809](https://github.com/laurent22/joplin/issues/9809)) ([#9786](https://github.com/laurent22/joplin/issues/9786) by Henry Heino)
+
 ## [v2.14.11](https://github.com/laurent22/joplin/releases/tag/v2.14.11) (Pre-release) - 2024-01-26T11:53:05Z
 
 - New: Plugins: Add support for promo_tile manifest key ([fd432f9](https://github.com/laurent22/joplin/commit/fd432f9))

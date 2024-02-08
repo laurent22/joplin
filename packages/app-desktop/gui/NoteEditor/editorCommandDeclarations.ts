@@ -11,8 +11,9 @@ export const enabledCondition = (commandName: string) => {
 	const noteMustBeMarkdown = !workWithHtmlNotes.includes(commandName);
 
 	const output = [
-		'!modalDialogVisible',
-		'!gotoAnythingVisible',
+		// gotoAnythingVisible: Enable if the command palette (which is a modal dialog) is visible
+		'(!modalDialogVisible || gotoAnythingVisible)',
+
 		markdownEditorOnly ? 'markdownEditorPaneVisible' : '(markdownEditorPaneVisible || richTextEditorVisible)',
 		'oneNoteSelected',
 		noteMustBeMarkdown ? 'noteIsMarkdown' : '',

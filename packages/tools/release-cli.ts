@@ -16,7 +16,7 @@ async function main() {
 	const newTag = `cli-${newVersion}`;
 
 	await execCommand('touch app/main.js');
-	await execCommand('yarn run build');
+	await execCommand('yarn build');
 	await execCommand('cp ../../README.md build/');
 
 	process.chdir(`${appDir}/build`);

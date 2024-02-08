@@ -341,7 +341,7 @@
 	"Browse...": [
 		"Durchsuchen ..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -469,6 +469,9 @@
 	],
 	"Close dropdown": [
 		"Auswahlliste schließen"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Fenster schließen"
@@ -621,7 +624,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Der Freigabestatus dieses Notizbuchs konnte nicht überprüft werden - Vorgang wird abgebrochen. Bitte versuche es erneut, wenn eine Internetverbindung besteht."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"Konnte deine Identität nicht verifizieren: %s"
 	],
 	"Create": [
@@ -1434,6 +1437,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Dazu muss dein gesamter Datensatz verschlüsselt und erneut synchronisiert werden. Starte diese Prozedur daher am besten nachts.\n\nBeachte dazu folgende Hinweise:\n\n1. Synchronisiere alle deine Geräte.\n2. Klicke auf „%s“.\n3. Lass es komplett durch laufen. Vermeide während der Ausführung das Ändern von Notizen auf anderen Geräten, um Konflikte zu vermeiden.\n4. Sobald die Synchronisierung auf diesem Gerät abgeschlossen ist, synchronisiere alle anderen Geräte und lass es komplett durchlaufen.\n\nWichtig: Du musst diese Prozedur nur EINMAL auf einem Gerät starten."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Deine Erlaubnis, auf externen Speicher zu schreiben, ist notwendig, um Synchronisation mit dem Dateisystem zu verwenden."
@@ -2540,6 +2546,12 @@
 	"Solarised Light": [
 		"Solarisiert hell"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Einige Elemente können nicht entschlüsselt werden."
 	],
@@ -2843,6 +2855,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Der Empfänger konnte nicht von der Liste entfernt werden. Bitte versuche es erneut.\n\nDer Fehler war: „%s“"
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Das Synchronisationsziel muss aktualisiert werden, bevor Joplin synchronisiert werden kann. Der Vorgang kann einige Minuten dauern, und die App muss neu gestartet werden. Um fortzufahren, klicke bitte auf den Link."
 	],
@@ -3091,6 +3106,9 @@
 	],
 	"Undo": [
 		"Rückgängig"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Unbekanntes Argument: %s"

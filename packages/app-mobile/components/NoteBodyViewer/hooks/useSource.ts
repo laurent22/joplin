@@ -231,6 +231,11 @@ export default function useSource(
 					white-space: pre-wrap;
 					overflow-x: hidden;
 				}
+
+				body {
+					padding-left: ${Number(theme.marginLeft)}px;
+					padding-right: ${Number(theme.marginRight)}px;
+				}
 			`;
 
 			html =

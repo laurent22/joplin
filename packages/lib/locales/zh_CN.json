@@ -341,7 +341,7 @@
 	"Browse...": [
 		"浏览..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -469,6 +469,9 @@
 	],
 	"Close dropdown": [
 		"关闭下拉列表"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"关闭窗口"
@@ -620,7 +623,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"无法验证此笔记的分享状态 — 正在终止。请在连接到互联网后再次尝试。"
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"无法验证您的身份: %s"
 	],
 	"Create": [
@@ -1432,6 +1435,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"为此，必须对整个数据集进行加密和同步，因此最好在夜间休息时分运行。\n\n首先，请按照以下说明进行操作：\n\n1. 同步您的所有设备。\n2. 单击 “%s”。\n3. 让其完成运行。在运行时，请不要在其他设备上更改任何笔记，以免发生冲突。\n4. 在此设备上完成同步后，同步其他所有设备，并运行至同步完成。\n\n重要提醒：在一台设备上只需要运行一次。"
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"为使用文件系统同步，需要获取写入外部存储的权限。"
@@ -2537,6 +2543,12 @@
 	"Solarised Light": [
 		"日光亮 (Solarised)"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"某些条目无法被解密。"
 	],
@@ -2840,6 +2852,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"收件人无法从列表中删除。请再试一次。\n\n错误：“%s”"
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"需要更新同步目标以启用 Joplin 同步。该操作可能需要数分钟时间完成，应用也需要重启。单击链接以继续。"
 	],
@@ -3085,6 +3100,9 @@
 	],
 	"Undo": [
 		"撤销"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"未知标记：%s"

@@ -543,7 +543,7 @@ async function initialize(dispatch: Function) {
 		if (Setting.value('env') === 'prod') {
 			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
 		} else {
-			await db.open({ name: getDatabaseName(currentProfile, isSubProfile, '-3') });
+			await db.open({ name: getDatabaseName(currentProfile, isSubProfile, '-20240127-1') });
 
 			// await db.clearForTesting();
 		}
@@ -1071,11 +1071,20 @@ class AppComponent extends React.Component {
 		logger.info('root.biometrics: shouldShowMainContent', shouldShowMainContent);
 		logger.info('root.biometrics: this.state.sensorInfo', this.state.sensorInfo);
 
+		// The right sidemenu can be difficult to close due to a bug in the sidemenu
+		// library (right sidemenus can't be swiped closed).
+		//
+		// Additionally, it can interfere with scrolling in the note viewer, so we use
+		// a smaller edge hit width.
+		const menuEdgeHitWidth = menuPosition === 'right' ? 20 : 30;
+
 		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 				<SideMenu
 					menu={sideMenuContent}
-					edgeHitWidth={20}
+					edgeHitWidth={menuEdgeHitWidth}
+					toleranceX={4}
+					toleranceY={20}
 					openMenuOffset={this.state.sideMenuWidth}
 					menuPosition={menuPosition}
 					onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}

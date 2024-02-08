@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
-import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps, ResourceInfos } from '../../utils/types';
+import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps, ResourceInfos, HtmlToMarkdownHandler } from '../../utils/types';
 import { resourcesStatus, commandAttachFileToBody, getResourcesFromPasteEvent, processPastedHtml, attachedResources } from '../../utils/resourceHandling';
 import useScroll from './utils/useScroll';
 import styles_ from './styles';
@@ -20,7 +20,6 @@ import BaseItem from '@joplin/lib/models/BaseItem';
 import setupToolbarButtons from './utils/setupToolbarButtons';
 import { plainTextToHtml } from '@joplin/lib/htmlUtils';
 import openEditDialog from './utils/openEditDialog';
-import { MarkupToHtmlOptions } from '../../utils/useMarkupToHtml';
 import { themeStyle } from '@joplin/lib/theme';
 import { loadScript } from '../../../utils/loadScript';
 import bridge from '../../../../services/bridge';
@@ -30,24 +29,11 @@ import { joplinCommandToTinyMceCommands, TinyMceCommand } from './utils/joplinCo
 import shouldPasteResources from './utils/shouldPasteResources';
 import lightTheme from '@joplin/lib/themes/light';
 import { Options as NoteStyleOptions } from '@joplin/renderer/noteStyle';
+import markupRenderOptions from '../../utils/markupRenderOptions';
+import { DropHandler } from '../../utils/useDropHandler';
 const md5 = require('md5');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
-
-function markupRenderOptions(override: MarkupToHtmlOptions = null): MarkupToHtmlOptions {
-	return {
-		plugins: {
-			checkbox: {
-				checkboxRenderingType: 2,
-			},
-			link_open: {
-				linkRenderingType: 2,
-			},
-		},
-		replaceResourceInternalToExternalLinks: true,
-		...override,
-	};
-}
 
 // In TinyMCE 5.2, when setting the body to '<div id="rendered-md"></div>',
 // it would end up as '<div id="rendered-md"><br/></div>' once rendered
@@ -63,10 +49,17 @@ function markupRenderOptions(override: MarkupToHtmlOptions = null): MarkupToHtml
 // so as a workaround we manually add this <br> for empty documents,
 // which fixes the issue.
 //
+// However,
+//    <div id="rendered-md"><br/></div>
+// breaks newline behaviour in new notes (see https://github.com/laurent22/joplin/issues/9786).
+// Thus, we instead use
+//    <div id="rendered-md"><p></p></div>
+// which also seems to work around the list issue.
+//
 // Perhaps upgrading the list plugin (which is a fork of TinyMCE own list plugin)
 // would help?
-function awfulBrHack(html: string): string {
-	return html === '<div id="rendered-md"></div>' ? '<div id="rendered-md"><br/></div>' : html;
+function awfulInitHack(html: string): string {
+	return html === '<div id="rendered-md"></div>' ? '<div id="rendered-md"><p></p></div>' : html;
 }
 
 function findEditableContainer(node: any): any {
@@ -101,7 +94,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	const props_onMessage = useRef(null);
 	props_onMessage.current = props.onMessage;
 
-	const props_onDrop = useRef(null);
+	const props_onDrop = useRef<DropHandler|null>(null);
 	props_onDrop.current = props.onDrop;
 
 	const markupToHtml = useRef(null);
@@ -123,7 +116,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	const { scrollToPercent } = useScroll({ editor, onScroll: props.onScroll });
 
 	usePluginServiceRegistration(ref);
-	useContextMenu(editor, props.plugins, props.dispatch);
+	useContextMenu(editor, props.plugins, props.dispatch, props.htmlToMarkdown, props.markupToHtml);
 
 	const dispatchDidUpdate = (editor: any) => {
 		if (dispatchDidUpdateIID_) shim.clearTimeout(dispatchDidUpdateIID_);
@@ -623,13 +616,21 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				localization_function: _,
 				contextmenu: false,
 				browser_spellcheck: true,
+
+				// Work around an issue where images with a base64 SVG data URL would be broken.
+				//
+				// See https://github.com/tinymce/tinymce/issues/3864
+				//
+				// This was fixed in TinyMCE 6.1, so remove it when we upgrade.
+				images_dataimg_filter: (img: HTMLImageElement) => !img.src.startsWith('data:'),
+
 				formats: {
 					joplinHighlight: { inline: 'mark', remove: 'all' },
 					joplinStrikethrough: { inline: 's', remove: 'all' },
 					joplinInsert: { inline: 'ins', remove: 'all' },
 					joplinSub: { inline: 'sub', remove: 'all' },
 					joplinSup: { inline: 'sup', remove: 'all' },
-					code: { inline: 'code', remove: 'all', attributes: { spellcheck: false } },
+					code: { inline: 'code', remove: 'all', attributes: { spellcheck: 'false' } },
 					forecolor: { inline: 'span', styles: { color: '%value' } },
 				},
 				setup: (editor: Editor) => {
@@ -706,16 +707,21 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						if (editable) openEditDialog(editor, markupToHtml, dispatchDidUpdate, editable);
 					});
 
-					// This is triggered when an external file is dropped on the editor
 					editor.on('drop', (event) => {
-						// Prevent the message "Dropped file type is not
-						// supported" to show up. It was added in a recent
-						// TinyMCE version and doesn't apply since we do support
+						// Prevent the message "Dropped file type is not supported" from showing up.
+						// It was added in TinyMCE 5.4 and doesn't apply since we do support
 						// the file type.
-						// https://stackoverflow.com/questions/64782955/tinymce-inline-drag-and-drop-image-upload-not-working
-						event.preventDefault();
-
-						props_onDrop.current(event);
+						//
+						// See https://stackoverflow.com/questions/64782955/tinymce-inline-drag-and-drop-image-upload-not-working
+						//
+						// The other suggested solution, setting block_unsupported_drop to false,
+						// causes all dropped files to be placed at the top of the document.
+						//
+						// Because .preventDefault cancels TinyMCE's own drop handler, we only
+						// call .preventDefault if Joplin handled the event:
+						if (props_onDrop.current(event)) {
+							event.preventDefault();
+						}
 					});
 
 					editor.on('ObjectResized', (event) => {
@@ -882,7 +888,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				);
 				if (cancelled) return;
 
-				editor.setContent(awfulBrHack(result.html));
+				editor.setContent(awfulInitHack(result.html));
 
 				if (lastOnChangeEventInfo.current.contentKey !== props.contentKey) {
 					// Need to clear UndoManager to avoid this problem:
@@ -978,7 +984,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	props_onChangeRef.current = props.onChange;
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	const prop_htmlToMarkdownRef = useRef<Function>();
+	const prop_htmlToMarkdownRef = useRef<HtmlToMarkdownHandler>();
 	prop_htmlToMarkdownRef.current = props.htmlToMarkdown;
 
 	const nextOnChangeEventInfo = useRef<any>(null);
@@ -1136,7 +1142,11 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					editor.insertContent(result.html);
 				} else { // Paste regular text
 					if (pastedHtml) { // Handles HTML
-						const modifiedHtml = await processPastedHtml(pastedHtml);
+						const modifiedHtml = await processPastedHtml(
+							pastedHtml,
+							prop_htmlToMarkdownRef.current,
+							markupToHtml.current,
+						);
 						editor.insertContent(modifiedHtml);
 					} else { // Handles plain text
 						pasteAsPlainText(pastedText);

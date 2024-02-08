@@ -19,9 +19,17 @@ export default {
 				// Export button in mermaid graph should be shown only on hovering the mermaid graph
 				// ref: https://github.com/laurent22/joplin/issues/6101
 				text: `
-				.mermaid-export-graph { visibility: hidden; } 
-				.joplin-editable:hover .mermaid-export-graph { visibility: visible; }
-				.mermaid-export-graph:hover { background-color: ${theme.backgroundColorHover3} !important; }
+				.mermaid-export-graph {
+					opacity: 0;
+					height: 0;
+				} 
+				.joplin-editable:hover .mermaid-export-graph,
+				.joplin-editable .mermaid-export-graph:has(:focus-visible) {
+					opacity: 1;
+				}
+				.mermaid-export-graph > button:hover {
+					background-color: ${theme.backgroundColorHover3} !important;
+				}
 				`.trim(),
 				mime: 'text/css',
 			},
@@ -69,7 +77,7 @@ const exportGraphButton = (ruleOptions: RuleOptions) => {
 	// Clicking on export button manually triggers a right click context menu event
 	const onClickHandler = `
 		const target = arguments[0].target;
-		const button = target.closest("button.mermaid-export-graph");
+		const button = target.closest("div.mermaid-export-graph");
 		if (!button) return false;
 		const $mermaid_elem = button.nextElementSibling;
 		const rightClickEvent = new PointerEvent("contextmenu", {bubbles: true});
@@ -87,7 +95,11 @@ const exportGraphButton = (ruleOptions: RuleOptions) => {
 		border: ${theme.buttonStyle.border};
 	`.trim();
 
-	return `<button class="mermaid-export-graph" onclick='${onClickHandler}' style="${style}" alt="Export mermaid graph">${downloadIcon()}</button>`;
+	return `
+		<div class="mermaid-export-graph">
+			<button onclick='${onClickHandler}' style="${style}" alt="Export mermaid graph">${downloadIcon()}</button>
+		</div>
+	`;
 };
 
 const downloadIcon = () => {

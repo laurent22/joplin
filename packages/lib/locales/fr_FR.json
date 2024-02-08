@@ -63,7 +63,7 @@
 		"%s = %s (%s)"
 	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
-		""
+		"%s n'est pas optimisé pour synchroniser de nombreux petits fichiers, votre synchronisation initiale sera donc lente."
 	],
 	"%s: %d": [
 		"%s : %d"
@@ -341,8 +341,8 @@
 	"Browse...": [
 		"Parcourir…"
 	],
-	"Built in": [
-		""
+	"Built-in": [
+		"Intégré"
 	],
 	"Bulleted List": [
 		"Liste à puces"
@@ -469,6 +469,9 @@
 	],
 	"Close dropdown": [
 		"Fermer la liste déroulante"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		"Fermez l'application, puis supprimez votre profil dans \"%s\", et redémarrez l'application. Assurez-vous d'abord de créer une sauvegarde en exportant toutes vos notes au format JEX."
 	],
 	"Close Window": [
 		"Fermer la fenêtre"
@@ -621,7 +624,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Impossible de vérifier l'état du partage du carnet - annulation. Veuillez réessayer lorsque vous serez connecté à internet."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"Impossible de vérifier votre identité : %s"
 	],
 	"Create": [
@@ -1072,7 +1075,7 @@
 		"Activer l'historique des notes"
 	],
 	"Enable optical character recognition (OCR)": [
-		""
+		"Activer la reconnaissance optique de caractères (OCR)"
 	],
 	"Enable PDF viewer": [
 		"Activer visionneuse PDF"
@@ -1167,6 +1170,12 @@
 	"Evernote Export File (as Markdown)": [
 		"Fichiers d'export Evernote (vers Markdown)"
 	],
+	"Evernote Export Files (Directory, as HTML)": [
+		"Fichiers d'export Evernote (Dossier, vers HTML)"
+	],
+	"Evernote Export Files (Directory, as Markdown)": [
+		"Fichiers d'export Evernote (Dossier, vers Markdown)"
+	],
 	"Exits the application.": [
 		"Quitter le logiciel."
 	],
@@ -1238,6 +1247,9 @@
 	],
 	"File system": [
 		"Système de fichier"
+	],
+	"Filter": [
+		"Filtrer"
 	],
 	"Filter tags": [
 		"Filtrer les étiquettes"
@@ -1357,6 +1369,9 @@
 	"Hide advanced": [
 		"Cacher avancé"
 	],
+	"Hide Advanced Settings": [
+		"Cacher options avancées"
+	],
 	"Hide disabled": [
 		"Cacher les désactivés"
 	],
@@ -1434,6 +1449,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Pour ce faire, toutes vos données seront chiffrées et synchronisées, donc il est préférable de lancer cette opération pendant la nuit.\n\nPour commencer, veuillez suivre ces instructions :\n\n1. Synchronisez tous vos appareils.\n2. Cliquez \"%s\".\n3. Laissez finir la synchronisation. Pendant que ça synchronise, évitez de changer vos notes sur vos autres appareils, pour éviter les conflits.\n4. Lorsque la synchro est terminée sur cet appareil, synchronisez vos autres appareils.\n\nImportant : vous n'avez besoin de cliquer sur le bouton que sur un seul appareil."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		"Afin de synchroniser, veuillez mettre à niveau votre application vers la version %s+"
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Pour utiliser la synchronisation par système de fichiers, votre autorisation pour écrire sur le stockage externe est requise."
@@ -2393,11 +2411,17 @@
 	"Search for...": [
 		"Chercher…"
 	],
+	"Search hidden": [
+		"Recherche cachée"
+	],
 	"Search in all the notes": [
 		"Chercher dans toutes les notes"
 	],
 	"Search in current note": [
 		"Chercher dans la note en cours"
+	],
+	"Search shown": [
+		"Recherche affichée"
 	],
 	"Search...": [
 		"Chercher…"
@@ -2540,6 +2564,12 @@
 	"Solarised Light": [
 		"Solarisé clair"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		"Certaines pièces jointes n'ont pas pu être téléchargées. Veuillez réessayer de les télécharger."
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		"Certaines pièces jointes doivent être téléchargées. Définissez le mode de téléchargement des pièces jointes sur \"toujours\" et réessayez."
+	],
 	"Some items cannot be decrypted.": [
 		"Certains objets ne peuvent être déchiffrés."
 	],
@@ -2548,6 +2578,9 @@
 	],
 	"Some items cannot be synchronised. Press for more info.": [
 		"Certains objets ne peuvent être synchronisés."
+	],
+	"Some items could not be synchronised. Please try to synchronise them first.": [
+		"Certains éléments n'ont pas pu être synchronisés. Veuillez d'abord essayer de les synchroniser."
 	],
 	"Sort notebooks by": [
 		"Trier les carnets par"
@@ -2762,6 +2795,9 @@
 	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
 		"Merci ! Votre compte Joplin Cloud est maintenant configuré et prêt à être utilisé."
 	],
+	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
+		"Le [Web Clipper](%s) est une extension qui vous permet d'enregistrer des pages web et des captures d'écran depuis votre navigateur."
+	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Le profil actif ne peut pas être supprimé. Changez de profil et réessayez."
 	],
@@ -2807,6 +2843,10 @@
 	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
 		"Le facteur de croissance détermine la façon dont la taille des composants se réduit ou augmente par rapport aux autres composants. Ainsi un composant avec un facteur de 2 prendra deux fois plus de place qu'un composant avec un facteur de 1. Veuillez redémarrer l'application pour appliquer les changements."
 	],
+	"The following attachment matches your search query:": [
+		"La pièce jointe suivante correspond à votre requête de recherche :",
+		"Les pièces jointes suivantes correspondent à votre requête de recherche :"
+	],
 	"The following attachments are being watched for changes:": [
 		"Les changements sur les éléments suivants sont monitorés :"
 	],
@@ -2842,6 +2882,9 @@
 	],
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Le destinataire n'a pas pu être supprimé de la liste. Veuillez réessayer.\n\nL'erreur était : \"%s\""
+	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		"La cible de synchronisation ne peut pas être modifiée pour la raison suivante : %s\n\nSi le problème ne peut pas être résolu, vous devrez peut-être d'abord effacer vos données en suivant ces instructions :\n\n%s"
 	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"La cible de synchronisation doit être mise à jour. L'opération peut prendre plusieurs minutes et l'application devra être re‑démarrée. Pour continuer, veuillez cliquer sur le lien."
@@ -3092,6 +3135,9 @@
 	"Undo": [
 		"Annuler"
 	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		"Désinstallez et réinstallez l'application. Assurez-vous d'abord de créer une sauvegarde en exportant toutes vos notes au format JEX à partir de l'application de bureau."
+	],
 	"Unknown flag: %s": [
 		"Paramètre inconnu : %s"
 	],
@@ -3264,7 +3310,7 @@
 		"Lors de la création d'une tâche :"
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
-		""
+		"Lorsqu'elle est activée, l'application analysera vos pièces jointes et en extraira le texte. Cela vous permettra de rechercher du texte dans ces pièces jointes."
 	],
 	"Window unresponsive.": [
 		"La fenêtre ne répond pas."

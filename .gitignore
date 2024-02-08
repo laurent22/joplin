@@ -274,6 +274,7 @@ packages/app-desktop/gui/NoteEditor/utils/clipboardUtils.js
 packages/app-desktop/gui/NoteEditor/utils/contextMenu.js
 packages/app-desktop/gui/NoteEditor/utils/contextMenuUtils.js
 packages/app-desktop/gui/NoteEditor/utils/index.js
+packages/app-desktop/gui/NoteEditor/utils/markupRenderOptions.js
 packages/app-desktop/gui/NoteEditor/utils/resourceHandling.test.js
 packages/app-desktop/gui/NoteEditor/utils/resourceHandling.js
 packages/app-desktop/gui/NoteEditor/utils/types.js
@@ -394,6 +395,7 @@ packages/app-desktop/integration-tests/util/activateMainMenuItem.js
 packages/app-desktop/integration-tests/util/createStartupArgs.js
 packages/app-desktop/integration-tests/util/firstNonDevToolsWindow.js
 packages/app-desktop/integration-tests/util/setFilePickerResponse.js
+packages/app-desktop/integration-tests/util/setMessageBoxResponse.js
 packages/app-desktop/integration-tests/util/test.js
 packages/app-desktop/playwright.config.js
 packages/app-desktop/plugins/GotoAnything.js
@@ -548,6 +550,7 @@ packages/default-plugins/build.js
 packages/default-plugins/buildDefaultPlugins.js
 packages/default-plugins/commands/buildAll.js
 packages/default-plugins/commands/editPatch.js
+packages/default-plugins/utils/getCurrentCommitHash.js
 packages/default-plugins/utils/getPathToPatchFileFor.js
 packages/default-plugins/utils/readRepositoryJson.js
 packages/default-plugins/utils/waitForCliInput.js
@@ -717,6 +720,7 @@ packages/lib/models/Tag.test.js
 packages/lib/models/Tag.js
 packages/lib/models/dateTimeFormats.test.js
 packages/lib/models/settings/FileHandler.js
+packages/lib/models/settings/settingValidations.js
 packages/lib/models/utils/isItemId.js
 packages/lib/models/utils/itemCanBeEncrypted.js
 packages/lib/models/utils/paginatedFeed.js
@@ -952,6 +956,7 @@ packages/lib/services/synchronizer/syncInfoUtils.js
 packages/lib/services/synchronizer/synchronizer_LockHandler.test.js
 packages/lib/services/synchronizer/synchronizer_MigrationHandler.test.js
 packages/lib/services/synchronizer/tools.js
+packages/lib/services/synchronizer/utils/checkDisabledSyncItemsNotification.js
 packages/lib/services/synchronizer/utils/handleConflictAction.js
 packages/lib/services/synchronizer/utils/handleSyncStartupOperation.js
 packages/lib/services/synchronizer/utils/resourceRemotePath.js
@@ -959,6 +964,8 @@ packages/lib/services/synchronizer/utils/syncDeleteStep.js
 packages/lib/services/synchronizer/utils/types.js
 packages/lib/shim-init-node.js
 packages/lib/shim.js
+packages/lib/string-utils.test.js
+packages/lib/string-utils.js
 packages/lib/testing/syncTargetUtils.js
 packages/lib/testing/test-utils-synchronizer.js
 packages/lib/testing/test-utils.js
@@ -977,6 +984,8 @@ packages/lib/types.js
 packages/lib/utils/credentialFiles.js
 packages/lib/utils/joplinCloud.js
 packages/lib/utils/processStartFlags.js
+packages/lib/utils/replaceUnsupportedCharacters.test.js
+packages/lib/utils/replaceUnsupportedCharacters.js
 packages/lib/utils/userFetcher.js
 packages/lib/utils/webDAVUtils.test.js
 packages/lib/utils/webDAVUtils.js

@@ -11,9 +11,9 @@ import { ItemChangeEntity, NoteEntity, SqlQuery } from '../database/types';
 import Resource from '../../models/Resource';
 import JoplinDatabase from '../../JoplinDatabase';
 import NoteResource from '../../models/NoteResource';
-import isItemId from '../../models/utils/isItemId';
 import BaseItem from '../../models/BaseItem';
 import { isCallbackUrl, parseCallbackUrl } from '../../callbackUrlUtils';
+import replaceUnsupportedCharacters from '../../utils/replaceUnsupportedCharacters';
 const { sprintf } = require('sprintf-js');
 const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.js');
 
@@ -604,9 +604,8 @@ export default class SearchEngine {
 	private normalizeText_(text: string) {
 		let normalizedText = text.normalize ? text.normalize() : text;
 
-		// Null characters can break FTS. Remove them.
-		// eslint-disable-next-line no-control-regex
-		normalizedText = normalizedText.replace(/\x00/g, ' ');
+		// NULL characters can break FTS. Remove them.
+		normalizedText = replaceUnsupportedCharacters(normalizedText);
 
 		return removeDiacritics(normalizedText.toLowerCase());
 	}
@@ -670,9 +669,14 @@ export default class SearchEngine {
 		if (isCallbackUrl(searchString)) {
 			const parsed = parseCallbackUrl(searchString);
 			itemId = parsed.params.id;
-		} else if (isItemId(searchString)) {
-			itemId = searchString;
 		}
+
+		// Disabled for now:
+		// https://github.com/laurent22/joplin/issues/9769#issuecomment-1912459744
+
+		// else if (isItemId(searchString)) {
+		// 	itemId = searchString;
+		// }
 
 		if (itemId) {
 			const item = await BaseItem.loadItemById(itemId);

@@ -12,7 +12,7 @@
 	"patch": {
 		"stabilityDays": 20,
 	},
-	"prConcurrentLimit": 5,
+	"prConcurrentLimit": 20,
 	"prHourlyLimit": 0,
 
 	// Tell Renovate to rebase only when there's a conflict, otherwise pull
