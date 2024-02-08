@@ -6547,7 +6547,7 @@ __metadata:
     "@types/react-redux": 7.1.33
     "@types/styled-components": 5.1.32
     "@types/tesseract.js": 2.0.0
-    async-mutex: 0.4.0
+    async-mutex: 0.4.1
     codemirror: 5.65.9
     color: 3.2.1
     compare-versions: 6.1.0
@@ -6848,7 +6848,7 @@ __metadata:
     "@types/node-rsa": 1.1.4
     "@types/react": 18.2.48
     "@types/uuid": 9.0.7
-    async-mutex: 0.4.0
+    async-mutex: 0.4.1
     base-64: 1.0.0
     base64-stream: 1.0.0
     builtin-modules: 3.3.0
@@ -6922,7 +6922,7 @@ __metadata:
     "@types/react": 18.2.48
     "@types/react-dom": 18.2.18
     "@types/styled-components": 5.1.32
-    async-mutex: 0.4.0
+    async-mutex: 0.4.1
     babel-jest: 29.7.0
     css-loader: 6.8.1
     jest: 29.7.0
@@ -7198,7 +7198,7 @@ __metadata:
     "@types/jest": 29.5.8
     "@types/markdown-it": 13.0.7
     "@types/node-fetch": 2.6.11
-    async-mutex: 0.4.0
+    async-mutex: 0.4.1
     execa: 5.1.1
     fs-extra: 11.2.0
     glob: 10.3.10
@@ -13436,6 +13436,15 @@ __metadata:
   dependencies:
     tslib: ^2.4.0
   checksum: 813a71728b35a4fbfd64dba719f04726d9133c67b577fcd951b7028c4a675a13ee34e69beb82d621f87bf81f5d4f135c4c44be0448550c7db728547244ef71fc
+  languageName: node
+  linkType: hard
+
+"async-mutex@npm:0.4.1":
+  version: 0.4.1
+  resolution: "async-mutex@npm:0.4.1"
+  dependencies:
+    tslib: ^2.4.0
+  checksum: cb529c0d257c8ff8e5b26c81b36127a255e545edee2c42c76247d533b89a7664037d95f33130f964de49b111ad3324ead8dcccd419c47acdfeb7413ed93063a1
   languageName: node
   linkType: hard
 

@@ -154,7 +154,7 @@
     "@joplin/utils": "~2.14",
     "@sentry/electron": "4.17.0",
     "@types/mustache": "4.2.5",
-    "async-mutex": "0.4.0",
+    "async-mutex": "0.4.1",
     "codemirror": "5.65.9",
     "color": "3.2.1",
     "compare-versions": "6.1.0",
