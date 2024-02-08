@@ -611,6 +611,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		const timeoutId = shim.setTimeout(async () => {
 			let bodyToRender = props.content;
 
+			if (!props.visiblePanes.includes('viewer')) {
+				return;
+			}
+
 			if (!bodyToRender.trim() && props.visiblePanes.indexOf('viewer') >= 0 && props.visiblePanes.indexOf('editor') < 0) {
 				// Fixes https://github.com/laurent22/joplin/issues/217
 				bodyToRender = `<i>${_('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout'))}</i>`;
