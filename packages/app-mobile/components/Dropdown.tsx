@@ -2,11 +2,16 @@ const React = require('react');
 import { TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, Modal, View, LayoutRectangle, ViewStyle, TextStyle, FlatList } from 'react-native';
 import { Component } from 'react';
 import { _ } from '@joplin/lib/locale';
+import { Tooltip, Portal } from 'react-native-paper';
 
 type ValueType = string;
 export interface DropdownListItem {
 	label: string;
 	value: ValueType;
+
+	// Depth corresponds with indentation and can be used to
+	// create tree structures.
+	depth?: number;
 }
 
 export type OnValueChangedListener = (newValue: ValueType)=> void;
@@ -67,6 +72,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 		const maxListTop = windowHeight - listHeight;
 		const listTop = Math.min(maxListTop, this.state.headerSize.y + this.state.headerSize.height);
 
+		const dropdownWidth = this.state.headerSize.width;
 		const wrapperStyle: ViewStyle = {
 			width: this.state.headerSize.width,
 			height: listHeight + 2, // +2 for the border (otherwise it makes the scrollbar appear)
@@ -86,11 +92,14 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 		const itemListStyle = { ...(this.props.itemListStyle ? this.props.itemListStyle : {}), borderWidth: 1,
 			borderColor: '#ccc' };
 
-		const itemWrapperStyle = { ...(this.props.itemWrapperStyle ? this.props.itemWrapperStyle : {}), flex: 1,
+		const itemWrapperStyle: ViewStyle = {
+			...(this.props.itemWrapperStyle ? this.props.itemWrapperStyle : {}),
+			flex: 1,
 			justifyContent: 'center',
 			height: itemHeight,
 			paddingLeft: 20,
-			paddingRight: 10 };
+			paddingRight: 10,
+		};
 
 		const headerWrapperStyle = { ...(this.props.headerWrapperStyle ? this.props.headerWrapperStyle : {}), height: 35,
 			flex: 1,
@@ -123,20 +132,24 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 
 		const itemRenderer = ({ item }: { item: DropdownListItem }) => {
 			const key = item.value ? item.value.toString() : '__null'; // The top item ("Move item to notebook...") has a null value.
+			const indentWidth = Math.min((item.depth ?? 0) * 32, dropdownWidth * 2 / 3);
+
 			return (
-				<TouchableOpacity
-					style={itemWrapperStyle as any}
-					accessibilityRole="menuitem"
-					key={key}
-					onPress={() => {
-						closeList();
-						if (this.props.onValueChange) this.props.onValueChange(item.value);
-					}}
-				>
-					<Text ellipsizeMode="tail" numberOfLines={1} style={itemStyle} key={key}>
-						{item.label}
-					</Text>
-				</TouchableOpacity>
+				<Tooltip title={item.label}>
+					<TouchableOpacity
+						style={itemWrapperStyle}
+						accessibilityRole="menuitem"
+						key={key}
+						onPress={() => {
+							closeList();
+							if (this.props.onValueChange) this.props.onValueChange(item.value);
+						}}
+					>
+						<Text ellipsizeMode="tail" numberOfLines={1} style={{ ...itemStyle, marginStart: indentWidth }} key={key}>
+							{item.label}
+						</Text>
+					</TouchableOpacity>
+				</Tooltip>
 			);
 		};
 
@@ -194,16 +207,18 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 					<View
 						accessibilityRole='menu'
 						style={wrapperStyle}>
-						<FlatList
-							style={itemListStyle}
-							data={this.props.items}
-							renderItem={itemRenderer}
-							getItemLayout={(_data, index) => ({
-								length: itemHeight,
-								offset: itemHeight * index,
-								index,
-							})}
-						/>
+						<Portal.Host>
+							<FlatList
+								style={itemListStyle}
+								data={this.props.items}
+								renderItem={itemRenderer}
+								getItemLayout={(_data, index) => ({
+									length: itemHeight,
+									offset: itemHeight * index,
+									index,
+								})}
+							/>
+						</Portal.Host>
 					</View>
 
 					{screenReaderCloseMenuButton}
