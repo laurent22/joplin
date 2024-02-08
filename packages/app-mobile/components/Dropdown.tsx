@@ -2,7 +2,6 @@ const React = require('react');
 import { TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, Modal, View, LayoutRectangle, ViewStyle, TextStyle, FlatList } from 'react-native';
 import { Component } from 'react';
 import { _ } from '@joplin/lib/locale';
-import { Tooltip, Portal } from 'react-native-paper';
 
 type ValueType = string;
 export interface DropdownListItem {
@@ -135,21 +134,19 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 			const indentWidth = Math.min((item.depth ?? 0) * 32, dropdownWidth * 2 / 3);
 
 			return (
-				<Tooltip title={item.label}>
-					<TouchableOpacity
-						style={itemWrapperStyle}
-						accessibilityRole="menuitem"
-						key={key}
-						onPress={() => {
-							closeList();
-							if (this.props.onValueChange) this.props.onValueChange(item.value);
-						}}
-					>
-						<Text ellipsizeMode="tail" numberOfLines={1} style={{ ...itemStyle, marginStart: indentWidth }} key={key}>
-							{item.label}
-						</Text>
-					</TouchableOpacity>
-				</Tooltip>
+				<TouchableOpacity
+					style={itemWrapperStyle}
+					accessibilityRole="menuitem"
+					key={key}
+					onPress={() => {
+						closeList();
+						if (this.props.onValueChange) this.props.onValueChange(item.value);
+					}}
+				>
+					<Text ellipsizeMode="tail" numberOfLines={1} style={{ ...itemStyle, marginStart: indentWidth }} key={key}>
+						{item.label}
+					</Text>
+				</TouchableOpacity>
 			);
 		};
 
@@ -207,18 +204,16 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 					<View
 						accessibilityRole='menu'
 						style={wrapperStyle}>
-						<Portal.Host>
-							<FlatList
-								style={itemListStyle}
-								data={this.props.items}
-								renderItem={itemRenderer}
-								getItemLayout={(_data, index) => ({
-									length: itemHeight,
-									offset: itemHeight * index,
-									index,
-								})}
-							/>
-						</Portal.Host>
+						<FlatList
+							style={itemListStyle}
+							data={this.props.items}
+							renderItem={itemRenderer}
+							getItemLayout={(_data, index) => ({
+								length: itemHeight,
+								offset: itemHeight * index,
+								index,
+							})}
+						/>
 					</View>
 
 					{screenReaderCloseMenuButton}
