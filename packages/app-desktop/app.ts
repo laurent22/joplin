@@ -11,7 +11,7 @@ import AlarmServiceDriverNode from '@joplin/lib/services/AlarmServiceDriverNode'
 import Logger, { TargetType } from '@joplin/utils/Logger';
 import Setting from '@joplin/lib/models/Setting';
 import actionApi from '@joplin/lib/services/rest/actionApi.desktop';
-import BaseApplication from '@joplin/lib/BaseApplication';
+import BaseApplication, { StartOptions } from '@joplin/lib/BaseApplication';
 import DebugService from '@joplin/lib/debug/DebugService';
 import { _, setLocale } from '@joplin/lib/locale';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
@@ -127,10 +127,6 @@ class Application extends BaseApplication {
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'ocr.enabled' || action.type === 'SETTING_UPDATE_ALL') {
 			this.setupOcrService();
-		}
-
-		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'autoUploadCrashDumps') {
-			bridge().setAutoUploadCrashDumps(action.value);
 		}
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'style.editor.fontFamily' || action.type === 'SETTING_UPDATE_ALL') {
@@ -383,14 +379,12 @@ class Application extends BaseApplication {
 		eventManager.on(EventName.ResourceChange, handleResourceChange);
 	}
 
-	public async start(argv: string[]): Promise<any> {
+	public async start(argv: string[], startOptions: StartOptions = null): Promise<any> {
 		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
 		// insert an extra argument so that they can be processed in a consistent way everywhere.
 		if (!bridge().electronIsDev()) argv.splice(1, 0, '.');
 
-		argv = await super.start(argv);
-
-		bridge().setAutoUploadCrashDumps(Setting.value('autoUploadCrashDumps'));
+		argv = await super.start(argv, startOptions);
 
 		await this.applySettingsSideEffects();
 
