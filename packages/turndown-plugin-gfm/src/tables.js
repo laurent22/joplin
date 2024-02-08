@@ -211,7 +211,7 @@ function tableShouldBeSkipped(tableNode) {
   return result;
 }
 
-function tableShouldBeSkipped_ = (tableNode) => {
+function tableShouldBeSkipped_(tableNode) {
   if (!tableNode) return true;
   if (!tableNode.rows) return true;
   if (tableNode.rows.length === 1 && tableNode.rows[0].childNodes.length <= 1) return true; // Table with only one cell
