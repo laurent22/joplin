@@ -303,3 +303,11 @@ export function scriptType(s: string) {
 	return 'en';
 }
 
+// A UTF-8/UTF-16 byte order mark can appear at the start of a file and
+// can break logic that relies on a file starting with specific text.
+// See https://github.com/laurent22/joplin/issues/9868
+export const stripBom = (text: string) => {
+	// Remove the UTF-16 BOM --- NodeJS seems to convert UTF-8 BOMs to UTF-16 BOMs
+	// when reading files.
+	return text.replace(/^\ufeff/u, '');
+};
