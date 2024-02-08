@@ -536,6 +536,15 @@ describe('services/SearchEngine', () => {
 		expect((await engine.search('hello', { appendWildCards: true })).length).toBe(2);
 	}));
 
+	it('should search HTML-entity encoded text', (async () => {
+		await Note.save({ title: '&#xE9;&#xE7;&#xE0;' }); // éçà
+
+		await engine.syncTables();
+
+		const rows = await engine.search('éçà');
+		expect(rows.length).toBe(1);
+	}));
+
 	// Disabled for now:
 	// https://github.com/laurent22/joplin/issues/9769#issuecomment-1912459744
 
