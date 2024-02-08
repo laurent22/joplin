@@ -7072,7 +7072,7 @@ __metadata:
     jquery: 3.7.1
     jsdom: 22.1.0
     knex: 3.1.0
-    koa: 2.14.2
+    koa: 2.15.0
     ldapts: 7.0.8
     markdown-it: 13.0.2
     mustache: 4.2.0
@@ -16659,13 +16659,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cookies@npm:~0.8.0":
-  version: 0.8.0
-  resolution: "cookies@npm:0.8.0"
+"cookies@npm:~0.9.0":
+  version: 0.9.1
+  resolution: "cookies@npm:0.9.1"
   dependencies:
     depd: ~2.0.0
     keygrip: ~1.1.0
-  checksum: 806055a44f128705265b1bc6a853058da18bf80dea3654ad99be20985b1fa1b14f86c1eef73644aab8071241f8a78acd57202b54c4c5c70769fc694fbb9c4edc
+  checksum: 213e4d14847b582fbd8a003203d3621a4b9fa792a315c37954e89332d38fac5bcc34ba92ef316ad6d5fe28f0187aaa115927fbbe2080744ad1707a93b4313247
   languageName: node
   linkType: hard
 
@@ -27676,15 +27676,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"koa@npm:2.14.2":
-  version: 2.14.2
-  resolution: "koa@npm:2.14.2"
+"koa@npm:2.15.0":
+  version: 2.15.0
+  resolution: "koa@npm:2.15.0"
   dependencies:
     accepts: ^1.3.5
     cache-content-type: ^1.0.0
     content-disposition: ~0.5.2
     content-type: ^1.0.4
-    cookies: ~0.8.0
+    cookies: ~0.9.0
     debug: ^4.3.2
     delegates: ^1.0.0
     depd: ^2.0.0
@@ -27703,7 +27703,7 @@ __metadata:
     statuses: ^1.5.0
     type-is: ^1.6.16
     vary: ^1.1.2
-  checksum: 17fe3b8f5e0b4759004a942cc6ba2a9507299943a697dff9766b85f41f45caed4077ca2645ac9ad254d3359fffedfc4c9ebdd7a70493e5df8cdfac159a8ee835
+  checksum: a97741f89f328f25ae94d82d0ee608377d89e086c73f2d868023e6050dea682ef93e0a5c80097f3aaad28121853aea50a7fb3c0c12ecc45798da2fd1255f580b
   languageName: node
   linkType: hard
 
