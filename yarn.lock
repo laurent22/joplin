@@ -6552,7 +6552,7 @@ __metadata:
     color: 3.2.1
     compare-versions: 6.1.0
     countable: 3.0.1
-    debounce: 1.2.1
+    debounce: 2.0.0
     electron: 26.5.0
     electron-builder: 24.8.0
     electron-window-state: 5.0.3
@@ -17989,10 +17989,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debounce@npm:1.2.1":
-  version: 1.2.1
-  resolution: "debounce@npm:1.2.1"
-  checksum: 682a89506d9e54fb109526f4da255c5546102fbb8e3ae75eef3b04effaf5d4853756aee97475cd4650641869794e44f410eeb20ace2b18ea592287ab2038519e
+"debounce@npm:2.0.0":
+  version: 2.0.0
+  resolution: "debounce@npm:2.0.0"
+  checksum: 86a8c85528764a15a6492230ac5625a824a6681ee159450d7d4663eb4370da40449da0f8816bbf039dcd1166cc2db813bbd3a9e037fb8377eb905a487ec844be
   languageName: node
   linkType: hard
 
