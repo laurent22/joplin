@@ -481,8 +481,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			},
 			noteBodyViewer: {
 				flex: 1,
-				paddingLeft: theme.marginLeft,
-				paddingRight: theme.marginRight,
 			},
 			checkbox: {
 				color: theme.color,

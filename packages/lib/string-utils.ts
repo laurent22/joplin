@@ -2,6 +2,9 @@ const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 const stringUtilsCommon = require('./string-utils-common.js');
 
+export const pregQuote = stringUtilsCommon.pregQuote;
+export const replaceRegexDiacritics = stringUtilsCommon.replaceRegexDiacritics;
+
 const defaultDiacriticsRemovalMap = [
 	{ base: 'A', letters: /[\u0041\u24B6\uFF21\u00C0\u00C1\u00C2\u1EA6\u1EA4\u1EAA\u1EA8\u00C3\u0100\u0102\u1EB0\u1EAE\u1EB4\u1EB2\u0226\u01E0\u00C4\u01DE\u1EA2\u00C5\u01FA\u01CD\u0200\u0202\u1EA0\u1EAC\u1EB6\u1E00\u0104\u023A\u2C6F]/g },
 	{ base: 'AA', letters: /[\uA732]/g },
@@ -89,7 +92,7 @@ const defaultDiacriticsRemovalMap = [
 	{ base: 'z', letters: /[\u007A\u24E9\uFF5A\u017A\u1E91\u017C\u017E\u1E93\u1E95\u01B6\u0225\u0240\u2C6C\uA763]/g },
 ];
 
-function removeDiacritics(str) {
+export function removeDiacritics(str: string) {
 	for (let i = 0; i < defaultDiacriticsRemovalMap.length; i++) {
 		str = str.replace(defaultDiacriticsRemovalMap[i].letters, defaultDiacriticsRemovalMap[i].base);
 	}
@@ -97,7 +100,7 @@ function removeDiacritics(str) {
 	return str;
 }
 
-function escapeFilename(s, maxLength = 32) {
+export function escapeFilename(s: string, maxLength = 32) {
 	let output = removeDiacritics(s);
 	output = output.replace('\n\r', ' ');
 	output = output.replace('\r\n', ' ');
@@ -116,7 +119,7 @@ function escapeFilename(s, maxLength = 32) {
 	return output.substr(0, maxLength);
 }
 
-function wrap(text, indent, width) {
+export function wrap(text: string, indent: string, width: number) {
 	const wrap_ = require('word-wrap');
 
 	return wrap_(text, {
@@ -125,7 +128,7 @@ function wrap(text, indent, width) {
 	});
 }
 
-function commandArgumentsToString(args) {
+export function commandArgumentsToString(args: string[]) {
 	const output = [];
 	for (let i = 0; i < args.length; i++) {
 		let arg = args[i];
@@ -138,7 +141,7 @@ function commandArgumentsToString(args) {
 	return output.join(' ');
 }
 
-function splitCommandBatch(commandBatch) {
+export function splitCommandBatch(commandBatch: string) {
 	const commandLines = [];
 	const eol = '\n';
 
@@ -191,7 +194,7 @@ function splitCommandBatch(commandBatch) {
 	return commandLines;
 }
 
-function padLeft(string, length, padString) {
+export function padLeft(string: string, length: number, padString: string) {
 	if (!string) return '';
 
 	while (string.length < length) {
@@ -201,16 +204,16 @@ function padLeft(string, length, padString) {
 	return string;
 }
 
-function toTitleCase(string) {
+export function toTitleCase(string: string) {
 	if (!string) return string;
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function urlDecode(string) {
+export function urlDecode(string: string) {
 	return decodeURIComponent((`${string}`).replace(/\+/g, '%20'));
 }
 
-function escapeHtml(s) {
+export function escapeHtml(s: string) {
 	return s
 		.replace(/&/g, '&amp;')
 		.replace(/</g, '&lt;')
@@ -221,8 +224,15 @@ function escapeHtml(s) {
 
 // keywords can either be a list of strings, or a list of objects with the format:
 // { value: 'actualkeyword', type: 'regex/string' }
+export type KeywordObjectType = { value: string; type: 'string' }|{ valueRegex: string; type: 'regex' };
+export type KeywordType = string[]|KeywordObjectType[];
+
+interface SurroundKeywordOptions {
+	escapeHtml: boolean;
+}
+
 // The function surrounds the keywords wherever they are, even within other words.
-function surroundKeywords(keywords, text, prefix, suffix, options = null) {
+export function surroundKeywords(keywords: KeywordType, text: string, prefix: string, suffix: string, options: SurroundKeywordOptions|null = null) {
 	options = { escapeHtml: false, ...options };
 
 	text = options.escapeHtml ? htmlentities(text) : text;
@@ -231,12 +241,13 @@ function surroundKeywords(keywords, text, prefix, suffix, options = null) {
 
 	let regexString = keywords
 		.map(k => {
-			if (k.type === 'regex') {
-				return stringUtilsCommon.replaceRegexDiacritics(k.valueRegex);
+			let regex;
+			if (typeof k === 'string' || k.type === 'string') {
+				regex = stringUtilsCommon.pregQuote(typeof k === 'string' ? k : k.value);
 			} else {
-				const value = typeof k === 'string' ? k : k.value;
-				return stringUtilsCommon.replaceRegexDiacritics(stringUtilsCommon.pregQuote(value));
+				regex = k.valueRegex;
 			}
+			return stringUtilsCommon.replaceRegexDiacritics(regex);
 		})
 		.join('|');
 	regexString = `(${regexString})`;
@@ -244,18 +255,18 @@ function surroundKeywords(keywords, text, prefix, suffix, options = null) {
 	return text.replace(re, `${prefix}$1${suffix}`);
 }
 
-function substrWithEllipsis(s, start, length) {
+export function substrWithEllipsis(s: string, start: number, length: number) {
 	if (s.length <= length) return s;
 	return `${s.substr(start, length - 3)}...`;
 }
 
-function nextWhitespaceIndex(s, begin) {
+export function nextWhitespaceIndex(s: string, begin: number) {
 	// returns index of the next whitespace character
 	const i = s.slice(begin).search(/\s/);
 	return i < 0 ? s.length : begin + i;
 }
 
-function camelCaseToDash(s) {
+export function camelCaseToDash(s: string) {
 	const output = [];
 	for (let i = 0; i < s.length; i++) {
 		const c = s[i];
@@ -270,7 +281,7 @@ function camelCaseToDash(s) {
 	return output.join('');
 }
 
-function formatCssSize(v) {
+export function formatCssSize(v: string) {
 	if (typeof v === 'string') {
 		if (v.includes('px') || v.includes('em') || v.includes('%')) return v;
 	}
@@ -282,7 +293,7 @@ const REGEX_CHINESE = /[\u4e00-\u9fff]|[\u3400-\u4dbf]|[\u{20000}-\u{2a6df}]|[\u
 const REGEX_KOREAN = /[\uac00-\ud7af]|[\u1100-\u11ff]|[\u3130-\u318f]|[\ua960-\ua97f]|[\ud7b0-\ud7ff]/;
 const REGEX_THAI = /[\u0e00-\u0e7f]/;
 
-function scriptType(s) {
+export function scriptType(s: string) {
 	// A string entirely with Chinese character will be detected as Japanese too
 	// so Chinese detection must go first.
 	if (REGEX_CHINESE.test(s)) return 'zh';
@@ -292,4 +303,11 @@ function scriptType(s) {
 	return 'en';
 }
 
-module.exports = { formatCssSize, camelCaseToDash, removeDiacritics, substrWithEllipsis, nextWhitespaceIndex, escapeFilename, wrap, splitCommandBatch, padLeft, toTitleCase, urlDecode, escapeHtml, surroundKeywords, scriptType, commandArgumentsToString, ...stringUtilsCommon };
+// A UTF-8/UTF-16 byte order mark can appear at the start of a file and
+// can break logic that relies on a file starting with specific text.
+// See https://github.com/laurent22/joplin/issues/9868
+export const stripBom = (text: string) => {
+	// Remove the UTF-16 BOM --- NodeJS seems to convert UTF-8 BOMs to UTF-16 BOMs
+	// when reading files.
+	return text.replace(/^\ufeff/u, '');
+};

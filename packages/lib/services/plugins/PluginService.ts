@@ -109,6 +109,10 @@ export default class PluginService extends BaseService {
 		return enabledPlugins;
 	}
 
+	public isPluginLoaded(pluginId: string) {
+		return !!this.plugins_[pluginId];
+	}
+
 	public get pluginIds(): string[] {
 		return Object.keys(this.plugins_);
 	}

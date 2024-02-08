@@ -320,7 +320,7 @@
 	"Browse...": [
 		"찾아보기..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -436,6 +436,9 @@
 	],
 	"Close": [
 		"닫기"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"창 닫기"
@@ -1294,6 +1297,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"전체 데이터가 암호 및 동기화되므로, 충분한 시간을 가지고 실행하는게 좋습니다.\n시작하기 위해 아래 방법으로 할 수 있습니다.\n\n1. 모든 디바이스를 동기화.\n2. Click \"%s\".\n3. 충돌을 방지하기 위해, 암호화가 진행되는 동안 다른 장치에서 노트를 변경하지 말아주세요.\n4. 하나의 디바이스에서 동기화가 완료되면, 다른 모든 디바이스에서 동기화하세요.\n\n중요: 암호화는 하나의 디바이스에서만 실행하면 됩니다."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"파일 시스템 동기화는 외부 저장소 쓰기 권한을 필요로 합니다."
@@ -2297,6 +2303,12 @@
 	"Solarised Light": [
 		"Solarized Light"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"일부 항목들은 암호화할 수 없습니다."
 	],
@@ -2591,6 +2603,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"수신자를 목록에서 제거할 수 없습니다. 다시 시도해주세요.\n\n발생한 오류: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Joplin이 동기화를 하기에 앞서 동기화 대상의 업그레이드가 필요합니다. 작업이 완료되기 위해서 몇 분 정도 걸릴 수 있으며, 앱을 다시 시작해야 합니다. 계속하려면 링크를 눌러주세요."
 	],
@@ -2809,6 +2824,9 @@
 	],
 	"Undo": [
 		"실행 취소"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"알 수 없는 플래그: %s"

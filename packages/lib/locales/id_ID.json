@@ -320,7 +320,7 @@
 	"Browse...": [
 		"Telusuri..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -436,6 +436,9 @@
 	],
 	"Close": [
 		"Tutup"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Tutup jendela"
@@ -1303,6 +1306,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Untuk melakukannya, seluruh data Anda harus dienkripsi and disinkronkan, jadi cara terbaik yang disarankan adalah menjalankannya semalaman.\n\nUntuk memulai, silakan ikuti instruksi berikut ini:\n\n1. Sinkronkan semua perangkat Anda.\n2. Klik \"%s\".\n3. Biarkan proses berjalan sampai selesai. Saat proses berjalan, hindari mengubah catatan apa pun di perangkat Anda yang lain, untuk menghindari konflik.\n4. Ketika sinkronisasi selesai pada perangkat ini, sinkronkan semua perangkat Anda dan biarkan proses berjalan sampai selesai.\n\nPenting: Anda hanya perlu menjalankan ini SEKALI pada satu perangkat."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Agar dapat menggunakan sinkronisasi sistem berkas, dibutuhkan perizinan untuk menulis pada penyimpanan eksternal."
@@ -2309,6 +2315,12 @@
 	"Solarised Light": [
 		"Solarized Terang"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Beberapa item tidak dapat di dekripsi."
 	],
@@ -2603,6 +2615,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Penerima tidak dapat dihapus dari daftar. Silakan coba lagi.\n\nGalatnya adalah: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Target sinkronisasi harus ditingkatkan sebelum Joplin dapat sinkronisasi. Operasinya akan berjalan beberapa menit dan aplikasi perlu dimulai ulang. Untuk melanjutkan, silakan klik tautannya."
 	],
@@ -2821,6 +2836,9 @@
 	],
 	"Undo": [
 		"Urungkan"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Tanda tidak diketahui: %s"

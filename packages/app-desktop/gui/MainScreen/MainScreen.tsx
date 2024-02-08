@@ -74,7 +74,6 @@ interface Props {
 	showMissingMasterKeyMessage: boolean;
 	showNeedUpgradingMasterKeyMessage: boolean;
 	showShouldReencryptMessage: boolean;
-	showInstallTemplatesPlugin: boolean;
 	themeId: number;
 	settingEditorCodeView: boolean;
 	pluginsLegacy: any;
@@ -88,6 +87,8 @@ interface Props {
 	listRendererId: string;
 	lastDeletion: StateLastDeletion;
 	lastDeletionNotificationTime: number;
+	selectedFolderId: string;
+	mustUpgradeAppMessage: string;
 }
 
 interface ShareFolderDialogOptions {
@@ -525,9 +526,11 @@ class MainScreenComponent extends React.Component<Props, State> {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private renderNotificationMessage(message: string, callForAction: string, callForActionHandler: Function, callForAction2: string = null, callForActionHandler2: Function = null) {
+	private renderNotificationMessage(message: string, callForAction: string = null, callForActionHandler: Function = null, callForAction2: string = null, callForActionHandler2: Function = null) {
 		const theme = themeStyle(this.props.themeId);
 		const urlStyle: any = { color: theme.colorWarnUrl, textDecoration: 'underline' };
+
+		if (!callForAction) return <span>{message}</span>;
 
 		const cfa = (
 			<a href="#" style={urlStyle} onClick={() => callForActionHandler()}>
@@ -575,16 +578,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 				routeName: 'Config',
 				props: {
 					defaultSection: 'sync',
-				},
-			});
-		};
-
-		const onViewPluginScreen = () => {
-			this.props.dispatch({
-				type: 'NAV_GO',
-				routeName: 'Config',
-				props: {
-					defaultSection: 'plugins',
 				},
 			});
 		};
@@ -669,12 +662,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 				_('Set the password'),
 				onViewEncryptionConfigScreen,
 			);
-		} else if (this.props.showInstallTemplatesPlugin) {
-			msg = this.renderNotificationMessage(
-				'The template feature has been moved to a plugin called "Templates".',
-				'Install plugin',
-				onViewPluginScreen,
-			);
+		} else if (this.props.mustUpgradeAppMessage) {
+			msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
 		}
 
 		return (
@@ -686,7 +675,17 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	public messageBoxVisible(props: Props = null) {
 		if (!props) props = this.props;
-		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.hasMissingSyncCredentials || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget || props.isSafeMode || this.showShareInvitationNotification(props) || this.props.needApiAuth || this.props.showInstallTemplatesPlugin;
+		return props.hasDisabledSyncItems ||
+			props.showMissingMasterKeyMessage ||
+			props.hasMissingSyncCredentials ||
+			props.showNeedUpgradingMasterKeyMessage ||
+			props.showShouldReencryptMessage ||
+			props.hasDisabledEncryptionItems ||
+			this.props.shouldUpgradeSyncTarget ||
+			props.isSafeMode ||
+			this.showShareInvitationNotification(props) ||
+			this.props.needApiAuth ||
+			!!this.props.mustUpgradeAppMessage;
 	}
 
 	public registerCommands() {
@@ -738,6 +737,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 					themeId={this.props.themeId}
 					listRendererId={this.props.listRendererId}
 					startupPluginsLoaded={this.props.startupPluginsLoaded}
+					selectedFolderId={this.props.selectedFolderId}
 				/>;
 			},
 
@@ -928,11 +928,12 @@ const mapStateToProps = (state: AppState) => {
 		isSafeMode: state.settings.isSafeMode,
 		enableBetaMarkdownEditor: state.settings['editor.beta'],
 		needApiAuth: state.needApiAuth,
-		showInstallTemplatesPlugin: state.hasLegacyTemplates && !state.pluginService.plugins['joplin.plugin.templates'],
 		isResettingLayout: state.isResettingLayout,
 		listRendererId: state.settings['notes.listRendererId'],
 		lastDeletion: state.lastDeletion,
 		lastDeletionNotificationTime: state.lastDeletionNotificationTime,
+		selectedFolderId: state.selectedFolderId,
+		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
 	};
 };
 

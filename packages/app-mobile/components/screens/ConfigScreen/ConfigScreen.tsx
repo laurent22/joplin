@@ -109,7 +109,8 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		// changedSettingKeys is cleared in shared.saveSettings so reading it now
 		const shouldSetIgnoreTlsErrors = this.state.changedSettingKeys.includes('net.ignoreTlsErrors');
 
-		await shared.saveSettings(this);
+		const done = await shared.saveSettings(this);
+		if (!done) return;
 
 		if (shouldSetIgnoreTlsErrors) {
 			await setIgnoreTlsErrors(Setting.value('net.ignoreTlsErrors'));

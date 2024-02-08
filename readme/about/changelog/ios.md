@@ -1,5 +1,24 @@
 # Joplin iOS Changelog
 
+## [ios-v12.14.3](https://github.com/laurent22/joplin/releases/tag/ios-v12.14.3) - 2024-02-02T23:14:00Z
+
+- New: Add support for showing only lines of log that contain a filter (#9728 by Henry Heino)
+- Improved: Allow note viewer to extend to the edge of the screen while pinch zooming (#9820) (#9819 by Henry Heino)
+- Improved: Allow setting a minimum app version on the sync target (#9778)
+- Improved: Display an error if a resource cannot be downloaded (cbf7e24)
+- Improved: Do not allow switching the sync target if not all resources are downloaded (#9263)
+- Improved: Don't log OneDrive `Authorization` tokens (#9707) (#9706 by Henry Heino)
+- Improved: Hide advanced settings by default (#9730 by Henry Heino)
+- Improved: Removed ability to search by note ID to fix issue with certain plugins (#9769)
+- Improved: Updated packages @js-draw/material-icons (v1.15.0), follow-redirects (v1.15.4), fs-extra (v11.2.0), js-draw (v1.15.0), react, react-native-device-info (v10.12.0), react-native-image-picker (v7.1.0), react-native-paper (v5.11.6), react-native-vector-icons (v10.0.3), sharp (v0.33.1)
+- Fixed: Andoid: Fix crash on opening settings on some devices (#9806) (#7974 by Henry Heino)
+- Fixed: Clear "Some items cannot be synchronised" banner after situation is resolved (#9157)
+- Fixed: Detect faster left-right swipes to open the sidemenu (#9802) (#9142 by Henry Heino)
+- Fixed: Fix AWS S3 sync error (#9696) (#8891 by Henry Heino)
+- Fixed: Fix broken synchronisation link in welcome notes (#9804) (#9799 by Henry Heino)
+- Fixed: Fix note editor errors/logs not sent to Joplin's logs (#9808) (#9807 by Henry Heino)
+- Fixed: Fix synchronization happens every 10 seconds even if nothing has changed (#9814) (#9800 by Henry Heino)
+
 ## [ios-v12.14.2](https://github.com/laurent22/joplin/releases/tag/ios-v12.14.2) - 2024-01-06T12:46:08Z
 
 - Improved: Fix table-of-contents links to headings with duplicate content (#9610) (#9594 by Henry Heino)

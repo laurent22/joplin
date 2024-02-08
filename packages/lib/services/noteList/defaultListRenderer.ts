@@ -9,6 +9,7 @@ interface Props {
 		todo_completed: number;
 	};
 	item: {
+		// index: number;
 		size: {
 			height: number;
 		};
@@ -29,6 +30,7 @@ const defaultListRenderer: ListRenderer = {
 	},
 
 	dependencies: [
+		// 'item.index',
 		'item.selected',
 		'item.size.height',
 		'note.id',

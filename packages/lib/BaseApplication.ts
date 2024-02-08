@@ -25,7 +25,6 @@ import { reg } from './registry';
 import time from './time';
 import BaseSyncTarget from './BaseSyncTarget';
 import reduxSharedMiddleware from './components/shared/reduxSharedMiddleware';
-const os = require('os');
 import dns = require('dns');
 import fs = require('fs-extra');
 const EventEmitter = require('events');
@@ -48,7 +47,6 @@ import MigrationService from './services/MigrationService';
 import ShareService from './services/share/ShareService';
 import handleSyncStartupOperation from './services/synchronizer/utils/handleSyncStartupOperation';
 import SyncTargetJoplinCloud from './SyncTargetJoplinCloud';
-const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
 import { getEncryptionEnabled } from './services/synchronizer/syncInfoUtils';
 import { loadMasterKeysFromSettings, migrateMasterPassword } from './services/e2ee/utils';
@@ -62,7 +60,8 @@ import { parseShareCache } from './services/share/reducer';
 import RotatingLogs from './RotatingLogs';
 import { NoteEntity } from './services/database/types';
 import { join } from 'path';
-import processStartFlags, { MatchedStartFlags } from './utils/processStartFlags';
+import processStartFlags from './utils/processStartFlags';
+import determineProfileDir from './determineProfileDir';
 import { setupAutoDeletion } from './services/trash/permanentlyDeleteOldItems';
 
 const appLogger: LoggerWrapper = Logger.create('App');
@@ -70,9 +69,12 @@ const appLogger: LoggerWrapper = Logger.create('App');
 // const ntpClient = require('./vendor/ntp-client');
 // ntpClient.dgram = require('dgram');
 
-interface StartOptions {
+export interface StartOptions {
 	keychainEnabled?: boolean;
 	setupGlobalLogger?: boolean;
+	rootProfileDir?: string;
+	appName?: string;
+	appId?: string;
 }
 export const safeModeFlagFilename = 'force-safe-mode-on-next-start';
 
@@ -609,20 +611,6 @@ export default class BaseApplication {
 		return flags.matched;
 	}
 
-	public static determineProfileDir(initArgs: MatchedStartFlags) {
-		let output = '';
-
-		if (initArgs.profileDir) {
-			output = initArgs.profileDir;
-		} else if (process && process.env && process.env.PORTABLE_EXECUTABLE_DIR) {
-			output = `${process.env.PORTABLE_EXECUTABLE_DIR}/JoplinProfile`;
-		} else {
-			output = `${os.homedir()}/.config/${Setting.value('appName')}`;
-		}
-
-		return toSystemSlashes(output, 'linux');
-	}
-
 	protected startRotatingLogMaintenance(profileDir: string) {
 		this.rotatingLogs = new RotatingLogs(profileDir);
 		const processLogs = async () => {
@@ -650,14 +638,17 @@ export default class BaseApplication {
 		let initArgs = startFlags.matched;
 		if (argv.length) this.showPromptString_ = false;
 
-		let appName = initArgs.env === 'dev' ? 'joplindev' : 'joplin';
-		if (Setting.value('appId').indexOf('-desktop') >= 0) appName += '-desktop';
+		let appName = options.appName;
+		if (!appName) {
+			appName = initArgs.env === 'dev' ? 'joplindev' : 'joplin';
+			if (Setting.value('appId').indexOf('-desktop') >= 0) appName += '-desktop';
+		}
 		Setting.setConstant('appName', appName);
 
 		// https://immerjs.github.io/immer/docs/freezing
 		setAutoFreeze(initArgs.env === 'dev');
 
-		const rootProfileDir = BaseApplication.determineProfileDir(initArgs);
+		const rootProfileDir = options.rootProfileDir ? options.rootProfileDir : determineProfileDir(initArgs.profileDir, appName);
 		const { profileDir, profileConfig, isSubProfile } = await initProfile(rootProfileDir);
 		this.profileConfig_ = profileConfig;
 

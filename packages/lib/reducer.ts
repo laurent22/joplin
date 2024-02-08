@@ -93,7 +93,6 @@ export interface State {
 	hasDisabledSyncItems: boolean;
 	hasDisabledEncryptionItems: boolean;
 	customCss: string;
-	hasLegacyTemplates: boolean;
 	collapsedFolderIds: string[];
 	clipperServer: StateClipperServer;
 	decryptionWorker: StateDecryptionWorker;
@@ -112,6 +111,7 @@ export interface State {
 	noteListLastSortTime: number;
 	lastDeletion: StateLastDeletion;
 	lastDeletionNotificationTime: number;
+	mustUpgradeAppMessage: string;
 
 	// Extra reducer keys go here:
 	pluginService: PluginServiceState;
@@ -154,7 +154,6 @@ export const defaultState: State = {
 	hasDisabledSyncItems: false,
 	hasDisabledEncryptionItems: false,
 	customCss: '',
-	hasLegacyTemplates: false,
 	collapsedFolderIds: [],
 	clipperServer: {
 		startState: 'idle',
@@ -193,6 +192,7 @@ export const defaultState: State = {
 		timestamp: 0,
 	},
 	lastDeletionNotificationTime: 0,
+	mustUpgradeAppMessage: '',
 
 	pluginService: pluginServiceDefaultState,
 	shareService: shareServiceDefaultState,
@@ -1114,10 +1114,6 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			}
 			break;
 
-		case 'CONTAINS_LEGACY_TEMPLATES':
-			draft.hasLegacyTemplates = true;
-			break;
-
 		case 'SYNC_STARTED':
 			draft.syncStarted = true;
 			break;
@@ -1187,7 +1183,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			break;
 
 		case 'SYNC_HAS_DISABLED_SYNC_ITEMS':
-			draft.hasDisabledSyncItems = true;
+			draft.hasDisabledSyncItems = 'value' in action ? action.value : true;
 			break;
 
 		case 'ENCRYPTION_HAS_DISABLED_ITEMS':
@@ -1250,6 +1246,10 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'PROFILE_CONFIG_SET':
 			draft.profileConfig = action.value;
+			break;
+
+		case 'MUST_UPGRADE_APP':
+			draft.mustUpgradeAppMessage = action.message;
 			break;
 
 		case 'NOTE_LIST_RENDERER_ADD':

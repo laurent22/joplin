@@ -4,13 +4,13 @@ Coding style is mostly enforced by a pre-commit hook that runs `eslint`. This ho
 
 ## Enforcing rules using eslint
 
-Whenever possible, coding style should be enforced using an eslint rule. To do so, add the relevant rule or plugin to `eslintrc.js`. To manually run the linter, run `yarn run linter ./` from the root of the project.
+Whenever possible, coding style should be enforced using an eslint rule. To do so, add the relevant rule or plugin to `eslintrc.js`. To manually run the linter, run `yarn linter ./` from the root of the project.
 
 When adding a rule, you will often find that many files will no longer pass the linter. In that case, you have two options:
 
 - Fix the files one by one. If there aren't too many files, and the changes are simple (they are unlikely to introduce regressions), this is the preferred solution.
 
-- Or use `yarn run linter-interactive ./` to disable existing errors. The interactive tool will process all the files and you can then choose to disable any existing error that it finds (by adding a `eslint-disable-next-line` comment above it). This allows keeping the existing, working codebase as it is, and enforcing that new code follows the rule. When using this method, add the comment "Old code before rule was applied" so that we can easily find back all the lines that have been automatically disabled.
+- Or use `yarn linter-interactive ./` to disable existing errors. The interactive tool will process all the files and you can then choose to disable any existing error that it finds (by adding a `eslint-disable-next-line` comment above it). This allows keeping the existing, working codebase as it is, and enforcing that new code follows the rule. When using this method, add the comment "Old code before rule was applied" so that we can easily find back all the lines that have been automatically disabled.
 
 ## TypeScript rules
 
@@ -20,7 +20,7 @@ Because the TypeScript compiler generates `.js` files, be sure to add these new 
 
 To do this,
 1. If the TypeScript compiler has already generated a `.js` file for the new `.ts` file, delete it.
-2. Run `yarn run updateIgnored` in the root directory of the project (or `yarn run postinstall`)
+2. Run `yarn updateIgnored` in the root directory of the project (or `yarn postinstall`)
 
 ### Convert existing `.js` files to TypeScript before modifying
 

@@ -91,6 +91,7 @@ interface ScreenHeaderProps {
 	hasDisabledEncryptionItems?: boolean;
 	shouldUpgradeSyncTarget?: boolean;
 	showShouldUpgradeSyncTargetMessage?: boolean;
+	mustUpgradeAppMessage: string;
 
 	themeId: number;
 }
@@ -601,6 +602,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		if (this.props.showMissingMasterKeyMessage) warningComps.push(this.renderWarningBox('EncryptionConfig', _('Press to set the decryption password.')));
 		if (this.props.hasDisabledSyncItems) warningComps.push(this.renderWarningBox('Status', _('Some items cannot be synchronised. Press for more info.')));
 		if (this.props.shouldUpgradeSyncTarget && this.props.showShouldUpgradeSyncTargetMessage !== false) warningComps.push(this.renderWarningBox('UpgradeSyncTarget', _('The sync target needs to be upgraded. Press this banner to proceed.')));
+		if (this.props.mustUpgradeAppMessage) warningComps.push(this.renderWarningBox('UpgradeApp', this.props.mustUpgradeAppMessage));
 
 		if (this.props.hasDisabledEncryptionItems) {
 			warningComps.push(this.renderWarningBox('Status', _('Some items cannot be decrypted.')));
@@ -704,6 +706,7 @@ const ScreenHeader = connect((state: State) => {
 		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
+		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
 	};
 })(ScreenHeaderComponent);
 

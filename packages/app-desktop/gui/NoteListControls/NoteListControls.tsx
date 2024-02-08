@@ -1,6 +1,6 @@
 import { AppState } from '../../app.reducer';
 import * as React from 'react';
-import { useEffect, useRef, useMemo, useState } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import SearchBar from '../SearchBar/SearchBar';
 import Button, { ButtonLevel, ButtonSize, buttonSizePx } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -12,13 +12,7 @@ const { connect } = require('react-redux');
 import styled from 'styled-components';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import { getTrashFolderId } from '@joplin/lib/services/trash';
-
-enum BaseBreakpoint {
-	Sm = 75,
-	Md = 80,
-	Lg = 120,
-	Xl = 474,
-}
+import { Breakpoints } from '../NoteList/utils/types';
 
 interface Props {
 	showNewNoteButtons: boolean;
@@ -30,23 +24,23 @@ interface Props {
 	width: number;
 	newNoteButtonEnabled: boolean;
 	newTodoButtonEnabled: boolean;
-}
-
-interface Breakpoints {
-	Sm: number;
-	Md: number;
-	Lg: number;
-	Xl: number;
+	newNoteButtonRef: React.MutableRefObject<any>;
+	lineCount: number;
+	breakpoint: number;
+	dynamicBreakpoints: Breakpoints;
+	buttonSize: ButtonSize;
+	padding: number;
+	buttonVerticalGap: number;
 }
 
 const StyledRoot = styled.div`
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
-	padding: ${(props: any) => props.theme.mainPadding}px;
+	padding: ${(props: any) => props.padding}px;
 	background-color: ${(props: any) => props.theme.backgroundColor3};
-	gap: 5px;
-`;
+	gap: ${(props: any) => props.buttonVerticalGap}px;
+` as any;
 
 const StyledButton = styled(Button)`
 	width: auto;
@@ -94,49 +88,14 @@ const SortOrderButtonsContainer = styled.div`
 `;
 
 function NoteListControls(props: Props) {
-	const [dynamicBreakpoints, setDynamicBreakpoints] = useState<Breakpoints>({ Sm: BaseBreakpoint.Sm, Md: BaseBreakpoint.Md, Lg: BaseBreakpoint.Lg, Xl: BaseBreakpoint.Xl });
-
 	const searchBarRef = useRef(null);
-	const newNoteRef = useRef(null);
-	const newTodoRef = useRef(null);
+	const newTodoButtonRef = useRef(null);
 	const noteControlsRef = useRef(null);
 	const searchAndSortRef = useRef(null);
 
-	const getTextWidth = (text: string): number => {
-		const canvas = document.createElement('canvas');
-		if (!canvas) throw new Error('Failed to create canvas element');
-		const ctx = canvas.getContext('2d');
-		if (!ctx) throw new Error('Failed to get context');
-		const fontWeight = getComputedStyle(newNoteRef.current).getPropertyValue('font-weight');
-		const fontSize = getComputedStyle(newNoteRef.current).getPropertyValue('font-size');
-		const fontFamily = getComputedStyle(newNoteRef.current).getPropertyValue('font-family');
-		ctx.font = `${fontWeight} ${fontSize} ${fontFamily}`;
-
-		return ctx.measureText(text).width;
-	};
-
-	// Initialize language-specific breakpoints
-	useEffect(() => {
-		if (!props.showNewNoteButtons) return;
-
-		// Use the longest string to calculate the amount of extra width needed
-		const smAdditional = getTextWidth(_('note')) > getTextWidth(_('to-do')) ? getTextWidth(_('note')) : getTextWidth(_('to-do'));
-		const mdAdditional = getTextWidth(_('New note')) > getTextWidth(_('New to-do')) ? getTextWidth(_('New note')) : getTextWidth(_('New to-do'));
-
-		const Sm = BaseBreakpoint.Sm + smAdditional * 2;
-		const Md = BaseBreakpoint.Md + mdAdditional * 2;
-		const Lg = BaseBreakpoint.Lg + Md;
-		const Xl = BaseBreakpoint.Xl;
-
-		setDynamicBreakpoints({ Sm, Md, Lg, Xl });
-	}, [props.showNewNoteButtons]);
-
-	const breakpoint = useMemo(() => {
-		// Find largest breakpoint that width is less than
-		const index = Object.values(dynamicBreakpoints).findIndex(x => props.width < x);
-
-		return index === -1 ? dynamicBreakpoints.Xl : Object.values(dynamicBreakpoints)[index];
-	}, [props.width, dynamicBreakpoints]);
+	const breakpoint = props.breakpoint;
+	const dynamicBreakpoints = props.dynamicBreakpoints;
+	const lineCount = props.lineCount;
 
 	const noteButtonText = useMemo(() => {
 		if (breakpoint === dynamicBreakpoints.Sm) {
@@ -183,13 +142,13 @@ function NoteListControls(props: Props) {
 	}, [breakpoint, dynamicBreakpoints.Sm]);
 
 	useEffect(() => {
-		if (breakpoint === dynamicBreakpoints.Xl) {
+		if (lineCount === 1) {
 			noteControlsRef.current.style.flexDirection = 'row';
 			searchAndSortRef.current.style.flex = '2 1 50%';
 		} else {
 			noteControlsRef.current.style.flexDirection = 'column';
 		}
-	}, [breakpoint, dynamicBreakpoints]);
+	}, [lineCount]);
 
 	useEffect(() => {
 		CommandService.instance().registerRuntime('focusSearch', focusSearchRuntime(searchBarRef));
@@ -249,23 +208,23 @@ function NoteListControls(props: Props) {
 
 		return (
 			<TopRow className="new-note-todo-buttons">
-				<StyledButton ref={newNoteRef}
+				<StyledButton ref={props.newNoteButtonRef}
 					className="new-note-button"
 					tooltip={ showTooltip ? CommandService.instance().label('newNote') : '' }
 					iconName={noteIcon}
 					title={_('%s', noteButtonText)}
 					level={ButtonLevel.Primary}
-					size={ButtonSize.Small}
+					size={props.buttonSize}
 					onClick={onNewNoteButtonClick}
 					disabled={!props.newNoteButtonEnabled}
 				/>
-				<StyledButton ref={newTodoRef}
+				<StyledButton ref={newTodoButtonRef}
 					className="new-todo-button"
 					tooltip={ showTooltip ? CommandService.instance().label('newTodo') : '' }
 					iconName={todoIcon}
 					title={_('%s', todoButtonText)}
 					level={ButtonLevel.Secondary}
-					size={ButtonSize.Small}
+					size={props.buttonSize}
 					onClick={onNewTodoButtonClick}
 					disabled={!props.newTodoButtonEnabled}
 				/>
@@ -274,7 +233,7 @@ function NoteListControls(props: Props) {
 	}
 
 	return (
-		<StyledRoot ref={noteControlsRef}>
+		<StyledRoot ref={noteControlsRef} padding={props.padding} buttonVerticalGap={props.buttonVerticalGap}>
 			{renderNewNoteButtons()}
 			<BottomRow ref={searchAndSortRef} className="search-and-sort">
 				<SearchBar inputRef={searchBarRef}/>
@@ -285,7 +244,7 @@ function NoteListControls(props: Props) {
 							tooltip={sortOrderFieldTooltip()}
 							iconName={sortOrderFieldIcon()}
 							level={ButtonLevel.Secondary}
-							size={ButtonSize.Small}
+							size={props.buttonSize}
 							onClick={onSortOrderFieldButtonClick}
 						/>
 						<StyledPairButtonR
@@ -293,7 +252,7 @@ function NoteListControls(props: Props) {
 							tooltip={CommandService.instance().label('toggleNotesSortOrderReverse')}
 							iconName={sortOrderReverseIcon()}
 							level={ButtonLevel.Secondary}
-							size={ButtonSize.Small}
+							size={props.buttonSize}
 							onClick={onSortOrderReverseButtonClick}
 						/>
 					</SortOrderButtonsContainer>

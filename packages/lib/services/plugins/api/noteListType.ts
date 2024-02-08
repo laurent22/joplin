@@ -44,6 +44,7 @@ export type OnChangeHandler = (event: OnChangeEvent)=> Promise<void>;
  */
 export type ListRendererDependency =
 	ListRendererDatabaseDependency |
+	'item.index' |
 	'item.size.width' |
 	'item.size.height' |
 	'item.selected' |

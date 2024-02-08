@@ -31,3 +31,17 @@ export interface Props {
 	listRenderer: ListRenderer;
 	selectedFolderInTrash: boolean;
 }
+
+export enum BaseBreakpoint {
+	Sm = 75,
+	Md = 80,
+	Lg = 120,
+	Xl = 474,
+}
+
+export interface Breakpoints {
+	Sm: number;
+	Md: number;
+	Lg: number;
+	Xl: number;
+}
