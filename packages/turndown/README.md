@@ -41,6 +41,35 @@ Browser:
 
 For usage with RequireJS, UMD versions are located in `lib/turndown.umd.js` (for Node.js) and `lib/turndown.browser.umd.js` for browser usage. These files are generated when the npm package is published. To generate them manually, clone this repo and run `npm run build`.
 
+<details>
+<summary>Getting TypeScript typings</summary>
+
+Install typings:
+
+```sh
+npm install @types/turndown
+```
+
+Create a `declarations.d.ts` file:
+```ts
+declare module '@joplin/turndown' {
+  export { default } from 'turndown';
+}
+```
+
+Add the path to the `declarations.d.ts` file in the `"files"` array
+in your `tsconfig.json`:
+
+```json
+{
+  // ...
+  "files": ["declarations.d.ts"]
+  // ...
+}
+```
+
+</details>
+
 ## Usage
 
 ```js
