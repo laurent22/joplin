@@ -110,6 +110,11 @@ rules.tableCaption = {
   replacement: () => '',
 };
 
+rules.tableColgroup = {
+  filter: ['colgroup', 'col'],
+  replacement: () => '',
+};
+
 rules.tableSection = {
   filter: ['thead', 'tbody', 'tfoot'],
   replacement: function (content) {
