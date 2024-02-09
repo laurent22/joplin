@@ -101,7 +101,7 @@ rules.table = {
     var captionContent = node.caption == null ? '' : node.caption.textContent || '';
     var caption = captionContent === '' ? '' : captionContent + '\n\n';
     var tableContent = (emptyHeader + content).trimStart();
-    return '\n\n' + captionContent + tableContent + '\n\n'
+    return '\n\n' + caption + tableContent + '\n\n'
   }
 }
 
