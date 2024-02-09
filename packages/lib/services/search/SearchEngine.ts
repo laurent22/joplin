@@ -781,24 +781,24 @@ export default class SearchEngine {
 
 					try {
 						itemRows = await this.db().selectAll<ProcessResultsRow>(`
-								SELECT
-									id,
-									title,
-									user_updated_time,
-									offsets(items_fts) AS offsets,
-									matchinfo(items_fts, 'pcnalx') AS matchinfo,
-									item_id,
-									item_type
-								FROM items_fts
-								WHERE title MATCH ? OR body MATCH ?
+							SELECT
+								id,
+								title,
+								user_updated_time,
+								offsets(items_fts) AS offsets,
+								matchinfo(items_fts, 'pcnalx') AS matchinfo,
+								item_id,
+								item_type
+							FROM items_fts
+							WHERE title MATCH ? OR body MATCH ?
 						`, [toSearch, toSearch]);
 					} catch (error) {
 						// Android <= 25 doesn't support the following syntax:
 						//    WHERE title MATCH ? OR body MATCH ?
 						// Thus, we skip resource search on these devices.
-						this.logger().warn(
-							'Error searching in resources:', error, 'Only note results will be shown.',
-						);
+						if (!error.message?.includes?.('unable to use function MATCH in the requested context')) {
+							throw error;
+						}
 					}
 
 					const resourcesToNotes = await NoteResource.associatedResourceNotes(itemRows.map(r => r.item_id), { fields: ['note_id', 'parent_id'] });
