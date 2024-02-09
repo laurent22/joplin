@@ -30,7 +30,7 @@ The `src/` folder of this fork is currently based on commit `97e4535ca76bb2e70d9
 npm:
 
 ```
-npm install joplin-turndown
+npm install @joplin/turndown
 ```
 
 Browser:
