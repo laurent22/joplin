@@ -3488,20 +3488,6 @@ This is to test the revision service. It is not yet recommended to upgrade as th
 - Change shortcuts for 'Print' and 'Goto Anything' ([#1420](https://github.com/laurent22/joplin/issues/1420))
 - Add option to use soft breaks for markdown rendering ([#1408](https://github.com/laurent22/joplin/issues/1408))
 
-## [v1.0.142](https://github.com/laurent22/joplin/releases/tag/v1.0.142) - 2019-04-02T16:44:51Z
-
-- New: Allow toggling markdown plugins and added several new plugins ([#1347](https://github.com/laurent22/joplin/issues/1347))
-- New: Added Goto Anything dialog (Ctrl+P or Cmd+P)
-- Improved: macOS: make the menu more like a macOS menu ([#1348](https://github.com/laurent22/joplin/issues/1348))
-- Improved search - when clearing search, stay on current item. When clicking on notebook name, jump to note within notebook. Improved toolbar layout.
-- Fixed: The side bar was being refreshed too frequently.
-- Fixed: Order of notebooks with sub-notebooks was sometimes incorrect when sorting
-- Fixes [#1334](https://github.com/laurent22/joplin/issues/1334) (maybe): Upgraded chokidar which it seems was randomly making Electron 4 crash (maybe due to fsevent package)
-- Fixes [#1329](https://github.com/laurent22/joplin/issues/1329): Could not edit created and updated time anymore
-- Fixes [#1326](https://github.com/laurent22/joplin/issues/1326): Restored inline code styling
-- Fixes [#1325](https://github.com/laurent22/joplin/issues/1325): Fixed nested checkbox indentation
-- fix sub pixel rendering for desktop ([#1378](https://github.com/laurent22/joplin/issues/1378))
-
 ## [v1.0.140](https://github.com/laurent22/joplin/releases/tag/v1.0.140) - 2019-03-10T20:59:58Z
 
 - Resolves [#1105](https://github.com/laurent22/joplin/issues/1105): Added support for macro persistence for Katex
@@ -3848,6 +3834,15 @@ This is a bug-fix release following v100 with the following fixes:
 ## [v1.0.99](https://github.com/laurent22/joplin/releases/tag/v1.0.99) - 2018-06-10T13:18:23Z
 
 Note: This is the same as 1.0.97, but with a fix for the Linux version, which could not start anymore.
+
+If you're using the web clipper, make sure to also update it!
+
+- Updated: Auto-delete resources only after 10 days to handle some edge cases
+- Clipper: Cleaner and more consistent clipper REST API, to facilitate third-party access
+- Clipper: Fixes [#569](https://github.com/laurent22/joplin/issues/569): Make clipper service available on localhost only
+- Clipper: Fixes [#573](https://github.com/laurent22/joplin/issues/573): Better handling of certain code blocks
+
+## [v1.0.97](https://github.com/laurent22/joplin/releases/tag/v1.0.97) - 2018-06-09T19:23:34Z
 
 If you're using the web clipper, make sure to also update it!
 
