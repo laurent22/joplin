@@ -235,9 +235,9 @@ interface SurroundKeywordOptions {
 export function surroundKeywords(keywords: KeywordType, text: string, prefix: string, suffix: string, options: SurroundKeywordOptions|null = null) {
 	options = { escapeHtml: false, ...options };
 
-	text = options.escapeHtml ? htmlentities(text) : text;
-
-	if (!keywords.length) return text;
+	if (!keywords.length) {
+		return options.escapeHtml ? htmlentities(text) : text;
+	}
 
 	let regexString = keywords
 		.map(k => {
@@ -251,8 +251,20 @@ export function surroundKeywords(keywords: KeywordType, text: string, prefix: st
 		})
 		.join('|');
 	regexString = `(${regexString})`;
-	const re = new RegExp(regexString, 'gi');
-	return text.replace(re, `${prefix}$1${suffix}`);
+	const keywordRegex = new RegExp(regexString, 'gi');
+
+	return text
+		.split(keywordRegex)
+		.map((textSegment) => {
+			return {
+				text: textSegment,
+				shouldHighlight: keywordRegex.test(textSegment),
+			};
+		})
+		.reduce((highlightedText, textPart) => {
+			const nextPart = textPart.shouldHighlight ? `${prefix}${htmlentities(textPart.text)}${suffix}` : htmlentities(textPart.text);
+			return highlightedText + nextPart;
+		}, '');
 }
 
 export function substrWithEllipsis(s: string, start: number, length: number) {
