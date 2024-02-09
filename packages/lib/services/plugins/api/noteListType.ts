@@ -25,7 +25,7 @@ export interface OnClickEvent {
 
 export type OnRenderNoteHandler = (props: any)=> Promise<RenderNoteView>;
 export type OnChangeHandler = (event: OnChangeEvent)=> Promise<void>;
-export type OnClickHandler = (event: OnClickEvent) => Promise<void>;
+export type OnClickHandler = (event: OnClickEvent)=> Promise<void>;
 
 /**
  * Most of these are the built-in note properties, such as `note.title`,
@@ -47,8 +47,9 @@ export type OnClickHandler = (event: OnClickEvent) => Promise<void>;
  * `note.isWatched` tells you if the note is currently opened in an external
  * editor. In which case you would generally display some indicator.
  */
-export type ListRendererDepependency =
+export type ListRendererDependency =
 	ListRendererDatabaseDependency |
+	'item.index' |
 	'item.size.width' |
 	'item.size.height' |
 	'item.selected' |
@@ -101,9 +102,9 @@ export interface ListRenderer {
 	 * that you do not add more than what you need since there is a performance
 	 * penalty for each property.
 	 */
-	dependencies: ListRendererDepependency[];
+	dependencies: ListRendererDependency[];
 
-	headerTemplate?:string;
+	headerTemplate?: string;
 	headerHeight?: number;
 	onHeaderClick?: OnClickHandler;
 

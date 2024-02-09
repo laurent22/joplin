@@ -1,5 +1,71 @@
 # Joplin Android Changelog
 
+## [android-v2.14.6](https://github.com/laurent22/joplin/releases/tag/android-v2.14.6) (Pre-release) - 2024-02-09T12:41:18Z
+
+- Improved: Improve search engine error handling when preparing text for search (#9871 by Henry Heino)
+- Improved: Updated packages @js-draw/material-icons (v1.16.1), @react-native-community/netinfo (v11.2.1), @react-native-community/slider (v4.5.0), async-mutex (v0.4.1), follow-redirects (v1.15.5), js-draw (v1.16.1), moment (v2.30.1), react-native-document-picker (v9.1.0), react-native-localize (v3.0.6), react-native-paper (v5.11.7), react-native-safe-area-context (v4.8.2), react-native-share (v10.0.2), react-native-webview (v13.6.4), sass (v1.69.7), sharp (v0.33.2), sqlite3 (v5.1.7)
+- Fixed: Correctly search HTML-entity encoded text (#9694)
+- Fixed: Fix deeply-nested subnotebook titles invisible in the folder dropdown (#9906) (#9858 by Henry Heino)
+- Fixed: Fix regression: Crash when opening appearance/sync settings on some devices (#9864) (#7974 by Henry Heino)
+- Fixed: Fix share to Joplin when only "All notes" has been opened (#9876) (#9863 by Henry Heino)
+- Fixed: Increase space available for Notebook icon (#9877) (#9475 by [@pedr](https://github.com/pedr))
+
+## [android-v2.14.5](https://github.com/laurent22/joplin/releases/tag/android-v2.14.5) (Pre-release) - 2024-02-02T23:09:50Z
+
+- Improved: Allow note viewer to extend to the edge of the screen while pinch zooming (#9820) (#9819 by Henry Heino)
+- Improved: Do not allow switching the sync target if not all resources are downloaded (#9263)
+- Improved: Removed ability to search by note ID to fix issue with certain plugins (#9769)
+- Improved: Updated packages react-native-paper (v5.11.6)
+- Fixed: Andoid: Fix crash on opening settings on some devices (#9806) (#7974 by Henry Heino)
+- Fixed: Clear "Some items cannot be synchronised" banner after situation is resolved (#9157)
+- Fixed: Detect faster left-right swipes to open the sidemenu (#9802) (#9142 by Henry Heino)
+- Fixed: Fix broken synchronisation link in welcome notes (#9804) (#9799 by Henry Heino)
+- Fixed: Fix note editor errors/logs not sent to Joplin's logs (#9808) (#9807 by Henry Heino)
+- Fixed: Fix synchronization happens every 10 seconds even if nothing has changed (#9814) (#9800 by Henry Heino)
+
+## [android-v2.14.4](https://github.com/laurent22/joplin/releases/tag/android-v2.14.4) (Pre-release) - 2024-01-26T10:46:28Z
+
+- New: Add support for showing only lines of log that contain a filter (#9728 by Henry Heino)
+- Improved: Allow setting a minimum app version on the sync target (#9778)
+- Improved: Display an error if a resource cannot be downloaded (cbf7e24)
+- Improved: Don't log OneDrive `Authorization` tokens (#9707) (#9706 by Henry Heino)
+- Improved: Hide advanced settings by default (#9730 by Henry Heino)
+- Improved: Updated packages @js-draw/material-icons (v1.15.0), follow-redirects (v1.15.4), fs-extra (v11.2.0), js-draw (v1.15.0), react, react-native-device-info (v10.12.0), react-native-image-picker (v7.1.0), react-native-paper (v5.11.5), react-native-vector-icons (v10.0.3), sharp (v0.33.1)
+- Fixed: Fix AWS S3 sync error (#9696) (#8891 by Henry Heino)
+
+## [android-v2.14.3](https://github.com/laurent22/joplin/releases/tag/android-v2.14.3) (Pre-release) - 2024-01-06T12:30:29Z
+
+- Improved: Fix table-of-contents links to headings with duplicate content (#9610) (#9594 by Henry Heino)
+- Improved: Improve sync by reducing how often note list is sorted (f95ee68)
+- Improved: Render mermaid diagrams in dark mode when Joplin is in dark mode (#9631) (#3201 by Henry Heino)
+- Improved: Updated packages deprecated-react-native-prop-types (v5), react-native-paper (v5.11.4)
+
+## [android-v2.14.2](https://github.com/laurent22/joplin/releases/tag/android-v2.14.2) (Pre-release) - 2023-12-31T16:14:25Z
+
+- Improved: Updated packages react-native-get-random-values (v1.10.0)
+
+## [android-v2.14.1](https://github.com/laurent22/joplin/releases/tag/android-v2.14.1) (Pre-release) - 2023-12-29T22:12:14Z
+
+- Improved: CodeMirror 6 markdown editor: Support highlighting more languages (#9563) (#9562 by Henry Heino)
+- Improved: Don't attach empty drawings when a user exits without saving (#9386) (#9377 by Henry Heino)
+- Improved: Handle Dropbox payload_too_large error (f267d88)
+- Improved: Make backspace delete auto-matching brackets (#9527) (#9526 by Henry Heino)
+- Improved: Optimise synchronisation by making delta call return whole items (5341501)
+- Improved: Updated packages @react-native-community/datetimepicker (v7.6.2), @react-native-community/netinfo (v9.5.0), @react-native-community/slider (v4.4.4), @rmp135/sql-ts (v1.18.1), @testing-library/react-native (v12.3.3), highlight.js (v11.9.0), mermaid (v10.6.1), nanoid (v3.3.7), nodemon (v3.0.2), punycode (v2.3.1), react, react-native-image-picker (v7.0.3), react-native-localize (v3.0.4), react-native-paper (v5.11.3), react-native-vector-icons (v10.0.2), react-native-webview (v13.6.3), style-to-js (v1.1.9), tesseract.js (v5.0.3), ts-loader (v9.5.1)
+- Fixed: #9361: Fix to-dos options toggle don't toggle a rerender in  (#9364) (#9361 by [@pedr](https://github.com/pedr))
+- Fixed: Fix Beta Editor diff highlighting (#9525) (#9524 by Henry Heino)
+- Fixed: Fix KaTeX rendering (#9456) (#9455 by Henry Heino)
+- Fixed: Fix code block borders in headers of Beta Markdown editor (#9523) (#9522 by Henry Heino)
+- Fixed: Fix cursor location on opening the editor and attachments inserted in wrong location (#9536) (#9532 by Henry Heino)
+- Fixed: Fix editor scrollbar on iOS (#9531) (#9322 by Henry Heino)
+- Fixed: Fix font for the inbox email address not using the theme color (#9503) (#9500 by [@pedr](https://github.com/pedr))
+- Fixed: Fix inline code at beginning of line in table breaks formatting (#9478) (#9477 by Henry Heino)
+- Fixed: Fix list renumbering and enable multiple selections (#9506) (#9200 by Henry Heino)
+- Fixed: Fix new note/to-do buttons not visible on app startup in some cases (#9329) (#9328 by Henry Heino)
+- Fixed: Fix note editor crash when trying to edit text quickly after opening a note (#9581) (#9502 by Henry Heino)
+- Fixed: Fix tooltips don't disappear on some devices (upgrade to js-draw 1.13.2) (#9401) (#9374 by Henry Heino)
+- Fixed: Sidebar is not dismissed when creating a note (#9376)
+
 ## [android-v2.13.10](https://github.com/laurent22/joplin/releases/tag/android-v2.13.10) (Pre-release) - 2023-12-01T11:16:17Z
 
 - Improved: Drawing: Revert recent changes to input system (#9426) (#9427 by Henry Heino)

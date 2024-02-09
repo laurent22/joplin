@@ -62,6 +62,9 @@
 	"%s = %s (%s)": [
 		""
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		""
 	],
@@ -338,6 +341,9 @@
 	"Browse...": [
 		""
 	],
+	"Built-in": [
+		""
+	],
 	"Bulleted List": [
 		""
 	],
@@ -462,6 +468,9 @@
 		""
 	],
 	"Close dropdown": [
+		""
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		""
 	],
 	"Close Window": [
@@ -615,7 +624,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		""
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		""
 	],
 	"Create": [
@@ -1065,6 +1074,9 @@
 	"Enable note history": [
 		""
 	],
+	"Enable optical character recognition (OCR)": [
+		""
+	],
 	"Enable PDF viewer": [
 		""
 	],
@@ -1158,6 +1170,12 @@
 	"Evernote Export File (as Markdown)": [
 		""
 	],
+	"Evernote Export Files (Directory, as HTML)": [
+		""
+	],
+	"Evernote Export Files (Directory, as Markdown)": [
+		""
+	],
 	"Exits the application.": [
 		""
 	],
@@ -1228,6 +1246,9 @@
 		""
 	],
 	"File system": [
+		""
+	],
+	"Filter": [
 		""
 	],
 	"Filter tags": [
@@ -1348,6 +1369,9 @@
 	"Hide advanced": [
 		""
 	],
+	"Hide Advanced Settings": [
+		""
+	],
 	"Hide disabled": [
 		""
 	],
@@ -1424,6 +1448,9 @@
 		""
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
+		""
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
 		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
@@ -2384,10 +2411,16 @@
 	"Search for...": [
 		""
 	],
+	"Search hidden": [
+		""
+	],
 	"Search in all the notes": [
 		""
 	],
 	"Search in current note": [
+		""
+	],
+	"Search shown": [
 		""
 	],
 	"Search...": [
@@ -2531,6 +2564,12 @@
 	"Solarised Light": [
 		""
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		""
 	],
@@ -2538,6 +2577,9 @@
 		""
 	],
 	"Some items cannot be synchronised. Press for more info.": [
+		""
+	],
+	"Some items could not be synchronised. Please try to synchronise them first.": [
 		""
 	],
 	"Sort notebooks by": [
@@ -2753,6 +2795,9 @@
 	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
 		""
 	],
+	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
+		""
+	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
@@ -2798,6 +2843,10 @@
 	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
 		""
 	],
+	"The following attachment matches your search query:": [
+		"",
+		""
+	],
 	"The following attachments are being watched for changes:": [
 		""
 	],
@@ -2832,6 +2881,9 @@
 		""
 	],
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
+		""
+	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
 		""
 	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
@@ -3083,6 +3135,9 @@
 	"Undo": [
 		""
 	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
+	],
 	"Unknown flag: %s": [
 		""
 	],
@@ -3252,6 +3307,9 @@
 		""
 	],
 	"When creating a new to-do:": [
+		""
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
 	],
 	"Window unresponsive.": [

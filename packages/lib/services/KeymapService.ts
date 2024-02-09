@@ -1,4 +1,4 @@
-import eventManager from '../eventManager';
+import eventManager, { EventName } from '../eventManager';
 import shim from '../shim';
 import { _ } from '../locale';
 import keysRegExp from './KeymapService_keysRegExp';
@@ -20,6 +20,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Cmd+Q', command: 'quit' },
 		{ accelerator: 'Cmd+,', command: 'config' },
 		{ accelerator: 'Cmd+W', command: 'closeWindow' },
+		{ accelerator: 'Cmd+M', command: 'minimizeWindow' },
 		{ accelerator: 'Cmd+C', command: 'textCopy' },
 		{ accelerator: 'Cmd+X', command: 'textCut' },
 		{ accelerator: 'Cmd+V', command: 'textPaste' },
@@ -199,7 +200,7 @@ export default class KeymapService extends BaseService {
 			this.lastSaveTime_ = Date.now();
 
 			// Refresh the menu items so that the changes are reflected
-			eventManager.emit('keymapChange');
+			eventManager.emit(EventName.KeymapChange);
 		} catch (error) {
 			const message = error.message || '';
 			throw new Error(_('Error: %s', message));
@@ -411,12 +412,12 @@ export default class KeymapService extends BaseService {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public on(eventName: string, callback: Function) {
+	public on(eventName: EventName, callback: Function) {
 		eventManager.on(eventName, callback);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public off(eventName: string, callback: Function) {
+	public off(eventName: EventName, callback: Function) {
 		eventManager.off(eventName, callback);
 	}
 

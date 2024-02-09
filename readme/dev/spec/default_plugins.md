@@ -9,7 +9,6 @@ To add a new default plugin for desktop:
 ```
 const defaultPlugins = {
     'samplePluginId': {
-        version: '1.0.0',
         settings: {
             'settingName1': 'setting-value1',
             'settingName2': 'setting-value2',
@@ -18,17 +17,42 @@ const defaultPlugins = {
 };
 ```
 
+After this, add the commit, branch, and clone URL to be build from to `pluginRepositories.json`.
+
+For example,
+```json
+{
+	"plugin.id.here": {
+		"cloneUrl": "https://example.com/plugin-repo/plugin-repo-here.git",
+		"branch": "main",
+		"commit": "840d2e84b70adf6de961e167dcd27ddad088b286"
+	}
+}
+```
+
+## Patching the plugin
+
+Some plugins need patching. To create or update a plugin's patch, run the `patch-plugin` command in the `packages/default-plugins/` directory.
+
+For example,
+```shell
+$ cd packages/default-plugins
+$ yarn patch-plugin plugin.id.here
+```
+
+The script will create a temporary directory in which changes can be made. Do not stage the changes that should appear in the patch.
+
 ## Bundling of default plugins
 
-Script for bundling default plugins is present in [bundleDefaultPlugins.ts](https://github.com/laurent22/joplin/blob/eb7083d7888433ff6ef76ccfb7fb87ba951d513f/packages/tools/bundleDefaultPlugins.ts)
+Scripts for bundling default plugins are present in `packages/default-plugins/`.
 
-Every time a new desktop release is being built, we compare the local default plugins version with pinned plugin version mentioned in [desktopDefaultPluginsInfo.ts](https://github.com/laurent22/joplin/blob/eb7083d7888433ff6ef76ccfb7fb87ba951d513f/packages/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo.ts)
+These are run by the `app-desktop` package on a full `build` (e.g. on `postinstall`).
 
-If there is a newer version available, we will pull the `tgz` file of plugin from NPM registry and extract it. We will then move `manifest.json` and `plugin.jpl` to the build folder of desktop.
 
 ## Installing of default plugins
 
 - All the functions related to default plugins are located in [defaultPluginsUtils.ts](https://github.com/laurent22/joplin/blob/eb7083d7888433ff6ef76ccfb7fb87ba951d513f/packages/lib/services/plugins/defaultPlugins/defaultPluginsUtils.ts)
-- On every startup, we check if there are new plugins available in build folder that have not been installed yet. After installing the new plugin, we update the `installedDefaultPlugins` array in `Setting.ts` with respective plugin ID for future reference.
-- After installing is complete, we apply the default settings for each default plugin. Default settings are located in [desktopDefaultPluginsInfo.ts](https://github.com/laurent22/joplin/blob/eb7083d7888433ff6ef76ccfb7fb87ba951d513f/packages/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo.ts)
+- Default plugins are bundled with the app (included in the `build/` directory) and loaded from this directory.
+- To allow loading `dev` and NPM versions of the plugin, default plugins are loaded after non-default plugins. The plugin service refuses to load additional copies of already-loaded plugins. As such, non-default plugins take precedence over default plugins.
+- After loading is complete, we apply the default settings for each default plugin. Default settings are located in [desktopDefaultPluginsInfo.ts](https://github.com/laurent22/joplin/blob/eb7083d7888433ff6ef76ccfb7fb87ba951d513f/packages/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo.ts). The `installedDefaultPlugins` setting is used to ensure that settnigs are only overridden once.
 - If the plugin is already installed by the user, then we don't apply default settings to avoid overriding user's settings.

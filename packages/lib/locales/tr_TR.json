@@ -62,6 +62,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		"%s pek çok dosyanın senkronu için optimize bir değil, bu sebeple ilk senkronizasyon zaman alabilir."
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -111,7 +114,7 @@
 		"(ne görürsen onu alırsın: %s)"
 	],
 	"(You may disable this prompt in the options)": [
-		""
+		"(Ayarlardan bu istemi kapatabilirsiniz)"
 	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"-Kamera: fotoğraf çekimi ve fotoğrafın nota eklenebilmesi için."
@@ -234,10 +237,10 @@
 		"\"%s\" not defteri belirlenemedi. Lütfen kısa not defteri id'sini kullanın. \"ti\" a basarak kısa not defteri id'sini görebilirsiniz"
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
-		""
+		"Otomatik kaydedilmiş bir çizim bulundu. Not'a bunun kopyasını iliştirmek ister misiniz?"
 	],
 	"An error occurred: %s": [
-		""
+		"Bir hata oluştu: %s"
 	],
 	"An update is available, do you want to download it now?": [
 		"Güncelleme mevcut, şimdi indirmek ister misiniz?"
@@ -464,6 +467,9 @@
 	"Close dropdown": [
 		"Açılır menüyü kapat"
 	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
+	],
 	"Close Window": [
 		"Pencereyi Kapat"
 	],
@@ -615,7 +621,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Bu not defterinin paylaşım durumu doğrulanamadı, bu sebeple işlem iptal ediliyor. Lütfen internet bağlantınız varken bu işlemi yeniden deneyin."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"Kimliğiniz doğrulanamadı: %s"
 	],
 	"Create": [
@@ -697,7 +703,7 @@
 		"Özel TLS sertifikaları"
 	],
 	"Customise the note publishing banner": [
-		""
+		"Not yayımlama başlığını özelleştir"
 	],
 	"Cut": [
 		"Kes"
@@ -817,7 +823,7 @@
 		"Hedef biçimi: %s"
 	],
 	"Detailed": [
-		""
+		"Detaylı"
 	],
 	"Directory": [
 		"Dizin"
@@ -888,6 +894,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Şifrenizi kaybetmeyin, verilerinizin şifresini çözmenin \"*tek yolu* bu şifreyi girmek olacaktır. Şifrelemeyi etkinleştirmek için lütfen parolanızı aşağıya girin."
 	],
+	"Donate, website": [
+		"Bağış yap, web sitesi"
+	],
 	"Done": [
 		"Tamam"
 	],
@@ -919,10 +928,10 @@
 		"Dracula"
 	],
 	"Draw picture": [
-		""
+		"Çizim yap"
 	],
 	"Drawing": [
-		""
+		"Çizim"
 	],
 	"Drop notes or files here": [
 		"Not veya dosyaları buraya sürükleyin"
@@ -1002,6 +1011,9 @@
 	"Email to Note": [
 		"E-postadan Nota"
 	],
+	"Email To Note, login information": [
+		"Not'u e-posta'dan gönder, giriş bilgileri"
+	],
 	"Emails": [
 		"E-posta"
 	],
@@ -1058,6 +1070,9 @@
 	],
 	"Enable note history": [
 		"Not tarihçesini etkinleştir"
+	],
+	"Enable optical character recognition (OCR)": [
+		"Optik karakter tanıma (OCR)'ı etkinleştir"
 	],
 	"Enable PDF viewer": [
 		"PDF görüntüleyiciyi aktifleştir"
@@ -1175,6 +1190,9 @@
 	],
 	"Export profile": [
 		"Profili dışarı aktar"
+	],
+	"Export your data": [
+		"Verini dışarı aktar"
 	],
 	"Exported successfully!": [
 		"Başarıyla dışa aktarıldı!"
@@ -1298,7 +1316,7 @@
 		"Bağlantılar oluşturuluyor..."
 	],
 	"Geolocation, spellcheck, editor toolbar, image resize": [
-		""
+		"Yerel konum, dil doğrulaması, düzenleyici araç çubuğu, resim yeniden boyutlandır"
 	],
 	"Get it now:": [
 		"Hemen al:"
@@ -1367,7 +1385,7 @@
 		"HTML Dizini"
 	],
 	"HTML document": [
-		""
+		"HTML dökümanı"
 	],
 	"HTML File": [
 		"HTML Dosyası"
@@ -1416,6 +1434,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Bu işlemi yapmak için tüm veriniz yeniden şifrelenip senkron edilecek. Bu işlemi bu sebeple gece yapmanız önerilir.\n\nBaşlamak için lütfen aşağıdaki aşamaları takip edin:\n\n1. Tüm cihazlarınızla notlarınızı senkron edin.\n2. \"%s\"' imgesine tıklayın.\n3. İşlemin tamamlanmasını bekleyin. İşlem çalışırken notlarınızda çakışmayı önlemek için notlarınızda değişiklik yapmayın.\n4. Senkronizasyon işlemi cihazınızda bitince diğer tüm cihazlarınızla da senkron ederek işlemi tammalayın.\n\nÖnemli: Bu işlemi cihaz başına SADECE BİR KERE yapmanız yeterlidir."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Dosya sistemi senkronizasyonu için, hedef depolamada sizin yazma yetkiniz gereklidir."
@@ -1573,6 +1594,9 @@
 	"Language": [
 		"Dil"
 	],
+	"Language, date format": [
+		"Dil, tarih biçimi"
+	],
 	"Last error: %s": [
 		"Son hata: %s"
 	],
@@ -1656,7 +1680,7 @@
 		"Çıkış Yap"
 	],
 	"Logs, profiles, sync status": [
-		""
+		"Loglar, profiller, senkronizasyon durumu"
 	],
 	"Make a donation": [
 		"Bağış yapın"
@@ -1719,7 +1743,7 @@
 		"Maks. Toplam Boyut"
 	],
 	"Media player, math, diagrams, table of contents": [
-		""
+		"Medya oynatıcı, matematik, diyagramlar, içindekiler"
 	],
 	"Missing keys": [
 		"Eksik anahtarar"
@@ -1767,7 +1791,7 @@
 		"H"
 	],
 	"Never resize": [
-		""
+		"Asla yeniden boyutlandırma"
 	],
 	"New note": [
 		"Yeni not"
@@ -1989,7 +2013,7 @@
 		"Aç..."
 	],
 	"Opening section %s": [
-		""
+		"Şu bölüm açılıyor: %s"
 	],
 	"Operation cancelled": [
 		"İşlem iptal edildi"
@@ -2280,13 +2304,16 @@
 		"Ana parolayı sıfırla"
 	],
 	"Resize large images:": [
-		""
+		"Büyük resimleri yeniden boyutlandır:"
 	],
 	"Resources: %d.": [
 		"Kaynaklar: %d."
 	],
 	"Restart and upgrade": [
 		"Yeniden başlat ve güncelle"
+	],
+	"Restart in safe mode": [
+		"Güvenli modda yeniden başlat"
 	],
 	"Restart now": [
 		"Şimdi yeniden başlat"
@@ -2369,11 +2396,17 @@
 	"Search for...": [
 		"Şunu ara..."
 	],
+	"Search hidden": [
+		"Gizli öğeler içerisinde arama"
+	],
 	"Search in all the notes": [
 		"Tüm notlarda ara"
 	],
 	"Search in current note": [
 		"Mevcut notta ara"
+	],
+	"Search shown": [
+		"Görünür öğeler içerisinde arama"
 	],
 	"Search...": [
 		"Ara..."
@@ -2401,6 +2434,9 @@
 	],
 	"Select parent notebook": [
 		"Ana not defterini seç"
+	],
+	"Send bug report": [
+		"Hata raporu gönder"
 	],
 	"Server is already running on port %d": [
 		"Sunucu zaten %d portunda çalışıyor"
@@ -2442,7 +2478,7 @@
 		"No deferini paylaş..."
 	],
 	"Share permissions": [
-		""
+		"Paylaşım izinleri"
 	],
 	"Sharing notebook...": [
 		"Not paylaşılıyor..."
@@ -2484,13 +2520,13 @@
 		"Kenar çubuğunu göster/gizle"
 	],
 	"Shrink large images before adding them to notes.": [
-		""
+		"Büyük resimleri notlara eklemeden önce yeniden boyutlandırır."
 	],
 	"Side menu closed": [
 		"Yan menü kapalı"
 	],
 	"Side menu opened": [
-		""
+		"Yan menü açık"
 	],
 	"Sidebar": [
 		"Kenar çubuğu"
@@ -2512,6 +2548,12 @@
 	],
 	"Solarised Light": [
 		"Açık Solarize"
+	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
 	],
 	"Some items cannot be decrypted.": [
 		"Bazı öğelerin şifresi çözülemiyor."
@@ -2666,6 +2708,9 @@
 	"Sync your notes": [
 		"Notları senkron et"
 	],
+	"Sync, encryption, proxy": [
+		"Senkronizasyon, şifreleme, proxy"
+	],
 	"Synchronisation": [
 		"Senkronizasyon"
 	],
@@ -2813,6 +2858,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Alıcı listeden çıkarılamadı. Lütfen yeniden deneyin.\n\nHata mesajı: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Senkronizasyon hedefi'nin Joplin senkronizasyona yeniden başlamadan once güncellenmesi gerekir. Bu işlem notlarınızıın yoğunluğuna göre birkaç dakika sürebilir, ve de bu işlem ardından uygulama yeniden başlatılacaktır. Bu işlemi başlatmak için lütfen linke tıklayın."
 	],
@@ -2843,6 +2891,9 @@
 	"Theme": [
 		"Tema"
 	],
+	"Themes, editor font": [
+		"Temalar, editör yazı tipi"
+	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"Şu anda not yok. (+) butonuna tıklayarak bir tane oluşturun."
 	],
@@ -2871,7 +2922,7 @@
 		"Bu eklentiler Markdown tipi gösterimi ek özelliklerle iyileştirir. Bu özellikleri kullanırken unutulmamalıdır ki bu özellikler standart Markdown söz dizimine dahil değildir, ve de bunların çoğu sadece Joplin içerisinde çalışacaktır. Buna ek olarak, bu eklentilerin bazıları zengin metin editörü ile *uyumlu değildir*. Eğer zengin metin editörünüzde bu eklentiyi kullanan bir notu açmaya çalışırsanız eklentinin biçimlendirmesini kaybedersiniz. Zengin metin editörünün hangi eklentileri desteklediği altta belirtilmiştir."
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
-		""
+		"Bu başka bir kullanıcının sizinle not defterini paylaşabilmesini sağlar, ve de ikinizin de notun içeriğini düzenleyip değiştirebilmenizi sağlar. Lakin bu özellik eğer \"%s\" özelliği yoksa bu notları başka biriyle paylaşamazsınız."
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Bu ek henüz indirilmedi veya şifresi çözülmedi"
@@ -2993,6 +3044,9 @@
 	"Toggle external editing": [
 		"Dış düzenlemeyi aç/kapat"
 	],
+	"Toggle note history, keep notes for": [
+		"Not geçmişi özelliğinin durumunu değiştirip, bu not geçmişlerini şu kadar süre tut"
+	],
 	"Toggle note list": [
 		"Not listesini aç/kapat"
 	],
@@ -3055,6 +3109,9 @@
 	],
 	"Undo": [
 		"Geri al"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Bilinmeyen etiket: %s"
@@ -3227,8 +3284,11 @@
 	"When creating a new to-do:": [
 		"Yeni bir yapılacak oluşturulurken:"
 	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		"Eğer bu özellik aktifleştirilirse, uygulama iliştirilen ek dosyaları tarayarak içindeki metinleri ayıklayacak. Bu sayede bu metinler üzerinden de arama yapabileceksiniz."
+	],
 	"Window unresponsive.": [
-		""
+		"Pencere tepkisiz, cevap vermiyor."
 	],
 	"Words": [
 		"Kelime"

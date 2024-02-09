@@ -1,5 +1,19 @@
 # Joplin Server Changelog
 
+## [server-v2.14.2](https://github.com/laurent22/joplin/releases/tag/server-v2.14.2) - 2024-01-18T17:22:42Z
+
+- Improved: Check Postgres required version before starting the server (#9695)
+- Improved: Display correct date and time on published notes (f38abc5)
+- Improved: Optimise synchronisation by making delta call return whole items (5341501)
+- Improved: Revert to Formidable v2 to avoid random crashes (be94939)
+- Improved: Updated packages fs-extra (v11.2.0), knex (v3.1.0), ldapts (v7.0.7), rate-limiter-flexible (v3.0.6), react, sharp (v0.33.1), style-to-js (v1.1.10), tesseract.js (v5.0.3)
+
+## [server-v2.14.1](https://github.com/laurent22/joplin/releases/tag/server-v2.14.1) - 2023-12-17T15:07:52Z
+
+- Improved: Support including items with delta call to optimise sync (67a6870)
+- Improved: Updated packages @rmp135/sql-ts (v1.18.1), mermaid (v10.6.1), nanoid (v3.3.7), node-cron (v3.0.3), rate-limiter-flexible (v3.0.4), react, style-to-js (v1.1.9), tesseract.js (v4.1.4)
+- Fixed: Redirect user from login to home if already logged (#9415) (#9367 by [@pedr](https://github.com/pedr))
+
 ## [server-v2.13.5](https://github.com/laurent22/joplin/releases/tag/server-v2.13.5) - 2023-11-19T09:33:53Z
 
 - Improved: Increase number of items that are returned during sync (767bf9f)

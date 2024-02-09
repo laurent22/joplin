@@ -1,10 +1,10 @@
 import paginationToSql from './models/utils/paginationToSql';
-
 import Database from './database';
 import uuid from './uuid';
 import time from './time';
 import JoplinDatabase, { TableField } from './JoplinDatabase';
 import { LoadOptions, SaveOptions } from './models/utils/types';
+import { SqlQuery } from './services/database/types';
 const Mutex = require('async-mutex').Mutex;
 
 // New code should make use of this enum
@@ -270,11 +270,15 @@ class BaseModel {
 		return this.modelSelectAll(`SELECT * FROM \`${this.tableName()}\` WHERE \`id\` LIKE ?`, [`${partialId}%`]);
 	}
 
-	public static applySqlOptions(options: any, sql: string, params: any[] = null) {
+	public static applySqlOptions(options: LoadOptions, sql: string, params: any[] = null) {
 		if (!options) options = {};
 
 		if (options.order && options.order.length) {
-			sql += ` ORDER BY ${paginationToSql(options)}`;
+			sql += ` ORDER BY ${paginationToSql({
+				limit: options.limit,
+				order: options.order as any,
+				page: 1,
+			})}`;
 		}
 
 		if (options.limit) sql += ` LIMIT ${options.limit}`;
@@ -288,7 +292,7 @@ class BaseModel {
 		return rows.map((r: any) => r.id);
 	}
 
-	public static async all(options: any = null) {
+	public static async all(options: LoadOptions = null) {
 		if (!options) options = {};
 		if (!options.fields) options.fields = '*';
 
@@ -336,24 +340,49 @@ class BaseModel {
 		return this.modelSelectAll(query.sql, query.params);
 	}
 
-	public static modelSelectOne(sql: string, params: any[] = null) {
+	public static async modelSelectOne(sqlOrSqlQuery: string | SqlQuery, params: any[] = null) {
 		if (params === null) params = [];
-		return this.db()
-			.selectOne(sql, params)
-		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-			.then((model: any) => {
-				return this.filter(this.addModelMd(model));
-			});
+		let sql = '';
+
+		if (typeof sqlOrSqlQuery !== 'string') {
+			sql = sqlOrSqlQuery.sql;
+			params = sqlOrSqlQuery.params ? sqlOrSqlQuery.params : [];
+		} else {
+			sql = sqlOrSqlQuery;
+		}
+
+		try {
+			const model = await this.db().selectOne(sql, params);
+			return this.filter(this.addModelMd(model));
+		} catch (error) {
+			error.message = `On query ${JSON.stringify({ sql, params })}: ${error.message}`;
+			throw error;
+		}
 	}
 
-	public static modelSelectAll(sql: string, params: any[] = null) {
+	public static async modelSelectAll<T = any>(sqlOrSqlQuery: string | SqlQuery, params: any[] = null): Promise<T[]> {
 		if (params === null) params = [];
-		return this.db()
-			.selectAll(sql, params)
-		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-			.then((models: any[]) => {
-				return this.filterArray(this.addModelMd(models));
-			});
+		let sql = '';
+
+		if (typeof sqlOrSqlQuery !== 'string') {
+			sql = sqlOrSqlQuery.sql;
+			params = sqlOrSqlQuery.params ? sqlOrSqlQuery.params : [];
+		} else {
+			sql = sqlOrSqlQuery;
+		}
+
+		try {
+			const models = await this.db().selectAll(sql, params);
+			return this.filterArray(this.addModelMd(models)) as T[];
+		} catch (error) {
+			error.message = `On query ${JSON.stringify({ sql, params })}: ${error.message}`;
+			throw error;
+		}
+	}
+
+	protected static selectFields(options: LoadOptions): string {
+		if (!options || !options.fields) return '*';
+		return this.db().escapeFieldsToString(options.fields);
 	}
 
 	public static loadByField(fieldName: string, fieldValue: any, options: LoadOptions = null) {

@@ -19,10 +19,10 @@ import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index'
 import CommandService from '@joplin/lib/services/CommandService';
 import ToolbarButton from '../ToolbarButton/ToolbarButton';
 import Button, { ButtonLevel } from '../Button/Button';
-import eventManager from '@joplin/lib/eventManager';
+import eventManager, { EventName } from '@joplin/lib/eventManager';
 import { AppState } from '../../app.reducer';
 import ToolbarButtonUtils from '@joplin/lib/services/commands/ToolbarButtonUtils';
-import { _ } from '@joplin/lib/locale';
+import { _, _n } from '@joplin/lib/locale';
 import TagList from '../TagList';
 import NoteTitleBar from './NoteTitle/NoteTitleBar';
 import markupLanguageUtils from '../../utils/markupLanguageUtils';
@@ -48,7 +48,9 @@ import ItemChange from '@joplin/lib/models/ItemChange';
 import PlainEditor from './NoteBody/PlainEditor/PlainEditor';
 import CodeMirror6 from './NoteBody/CodeMirror/v6/CodeMirror';
 import CodeMirror5 from './NoteBody/CodeMirror/v5/CodeMirror';
+import { openItemById } from './utils/contextMenu';
 import { namespacedKey } from '@joplin/lib/services/plugins/api/JoplinSettings';
+import { MarkupLanguage } from '@joplin/renderer';
 
 const commands = [
 	require('./commands/showRevisions'),
@@ -135,7 +137,7 @@ function NoteEditor(props: NoteEditorProps) {
 					id: formNote.id,
 				});
 
-				eventManager.emit('noteContentChange', { note: savedNote });
+				eventManager.emit(EventName.NoteContentChange, { note: savedNote });
 			};
 		};
 
@@ -164,8 +166,11 @@ function NoteEditor(props: NoteEditorProps) {
 		return Setting.value(namespacedKey(pluginId, key));
 	}, []);
 
+	const whiteBackgroundNoteRendering = formNote.markup_language === MarkupLanguage.Html;
+
 	const markupToHtml = useMarkupToHtml({
 		themeId: props.themeId,
+		whiteBackgroundNoteRendering,
 		customCss: props.customCss,
 		plugins: props.plugins,
 		settingValue,
@@ -177,7 +182,7 @@ function NoteEditor(props: NoteEditorProps) {
 			...options,
 		};
 
-		const theme = themeStyle(props.themeId);
+		const theme = themeStyle(options.themeId ? options.themeId : props.themeId);
 
 		const markupToHtml = markupLanguageUtils.newMarkupToHtml({}, {
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
@@ -187,6 +192,7 @@ function NoteEditor(props: NoteEditorProps) {
 		return markupToHtml.allAssets(markupLanguage, theme, {
 			contentMaxWidth: props.contentMaxWidth,
 			contentMaxWidthTarget: options.contentMaxWidthTarget,
+			whiteBackgroundNoteRendering: options.whiteBackgroundNoteRendering,
 		});
 	}, [props.themeId, props.customCss, props.contentMaxWidth]);
 
@@ -335,7 +341,7 @@ function NoteEditor(props: NoteEditorProps) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [formNote, handleProvisionalFlag]);
 
-	const onMessage = useMessageHandler(scrollWhenReady, setScrollWhenReady, editorRef, setLocalSearchResultCount, props.dispatch, formNote);
+	const onMessage = useMessageHandler(scrollWhenReady, setScrollWhenReady, editorRef, setLocalSearchResultCount, props.dispatch, formNote, htmlToMarkdown, markupToHtml);
 
 	const externalEditWatcher_noteChange = useCallback((event: any) => {
 		if (event.id === formNote.id) {
@@ -367,11 +373,11 @@ function NoteEditor(props: NoteEditorProps) {
 	}, []);
 
 	useEffect(() => {
-		eventManager.on('alarmChange', onNotePropertyChange);
+		eventManager.on(EventName.AlarmChange, onNotePropertyChange);
 		ExternalEditWatcher.instance().on('noteChange', externalEditWatcher_noteChange);
 
 		return () => {
-			eventManager.off('alarmChange', onNotePropertyChange);
+			eventManager.off(EventName.AlarmChange, onNotePropertyChange);
 			ExternalEditWatcher.instance().off('noteChange', externalEditWatcher_noteChange);
 		};
 	}, [externalEditWatcher_noteChange, onNotePropertyChange]);
@@ -432,6 +438,7 @@ function NoteEditor(props: NoteEditorProps) {
 		ref: editorRef,
 		contentKey: formNote.id,
 		style: styles.tinyMCE,
+		whiteBackgroundNoteRendering,
 		onChange: onBodyChange,
 		onWillChange: onBodyWillChange,
 		onMessage: onMessage,
@@ -439,6 +446,7 @@ function NoteEditor(props: NoteEditorProps) {
 		contentMarkupLanguage: formNote.markup_language,
 		contentOriginalCss: formNote.originalCss,
 		resourceInfos: resourceInfos,
+		resourceDirectory: Setting.value('resourceDir'),
 		htmlToMarkdown: htmlToMarkdown,
 		markupToHtml: markupToHtml,
 		allAssets: allAssets,
@@ -497,6 +505,12 @@ function NoteEditor(props: NoteEditorProps) {
 	const noteRevisionViewer_onBack = useCallback(() => {
 		setShowRevisions(false);
 	}, []);
+
+	const onBannerResourceClick = useCallback(async (event: React.MouseEvent<HTMLAnchorElement>) => {
+		event.preventDefault();
+		const resourceId = event.currentTarget.getAttribute('data-resource-id');
+		await openItemById(resourceId, props.dispatch);
+	}, [props.dispatch]);
 
 	if (showRevisions) {
 		const theme = themeStyle(props.themeId);
@@ -567,6 +581,24 @@ function NoteEditor(props: NoteEditorProps) {
 		);
 	}
 
+	const renderResourceInSearchResultsNotification = () => {
+		const resourceResults = props.searchResults.filter(r => r.id === props.noteId && r.item_type === ModelType.Resource);
+		if (!resourceResults.length) return null;
+
+		const renderResource = (id: string, title: string) => {
+			return <li key={id}><a data-resource-id={id} onClick={onBannerResourceClick} href="#">{title}</a></li>;
+		};
+
+		return (
+			<div style={styles.resourceWatchBanner}>
+				<p style={styles.resourceWatchBannerLine}>{_n('The following attachment matches your search query:', 'The following attachments match your search query:', resourceResults.length)}</p>
+				<ul>
+					{resourceResults.map(r => renderResource(r.item_id, r.title))}
+				</ul>
+			</div>
+		);
+	};
+
 	function renderSearchInfo() {
 		const theme = themeStyle(props.themeId);
 		if (formNoteFolder && ['Search', 'Tag', 'SmartFilter'].includes(props.notesParentType)) {
@@ -602,6 +634,7 @@ function NoteEditor(props: NoteEditorProps) {
 		<div style={styles.root} onDrop={onDrop}>
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
 				{renderResourceWatchingNotification()}
+				{renderResourceInSearchResultsNotification()}
 				<NoteTitleBar
 					titleInputRef={titleInputRef}
 					themeId={props.themeId}
@@ -674,6 +707,7 @@ const mapStateToProps = (state: AppState) => {
 		useCustomPdfViewer: false,
 		syncUserId: state.settings['sync.userId'],
 		shareCacheSetting: state.settings['sync.shareCache'],
+		searchResults: state.searchResults,
 	};
 };
 

@@ -54,6 +54,16 @@ describe('editorCommandDeclarations', () => {
 			},
 			true,
 		],
+		[
+			// In the Markdown editor, and the command palette is visible
+			{
+				markdownEditorPaneVisible: true,
+				richTextEditorVisible: false,
+				gotoAnythingVisible: true,
+				modalDialogVisible: true,
+			},
+			true,
+		],
 	])('should create the enabledCondition', (context: Record<string, any>, expected: boolean) => {
 		const condition = enabledCondition('textBold');
 		const wc = new WhenClause(condition);

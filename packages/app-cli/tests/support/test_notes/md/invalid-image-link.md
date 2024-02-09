@@ -1,0 +1,1 @@
+![sample](./invalid-image.jpg)

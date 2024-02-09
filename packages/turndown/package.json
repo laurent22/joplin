@@ -11,7 +11,7 @@
     "jsdom": false
   },
   "dependencies": {
-    "css": "3.0.0",
+    "@adobe/css-tools": "4.3.2",
     "html-entities": "1.4.0",
     "jsdom": "22.1.0"
   },
@@ -36,7 +36,8 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/laurent22/joplin-turndown.git"
+    "url": "https://github.com/laurent22/joplin.git",
+    "directory": "packages/turndown"
   },
   "scripts": {
     "build-all": "npm run build-cjs && npm run build-es && npm run build-umd && npm run build-iife",

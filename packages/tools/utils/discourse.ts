@@ -1,3 +1,4 @@
+import { msleep } from '@joplin/utils/time';
 import fetch from 'node-fetch';
 
 interface ApiConfig {
@@ -54,23 +55,43 @@ export const execApi = async (method: HttpMethod, path: string, body: Record<str
 
 	if (body) request.body = JSON.stringify(body);
 
-	const response = await fetch(`${config.baseUrl}/${path}`, request);
+	while (true) {
+		const response = await fetch(`${config.baseUrl}/${path}`, request);
 
-	if (!response.ok) {
-		const errorText = await response.text();
-		const error = new Error(`On ${method} ${path}: ${errorText}`);
-		let apiObject = null;
-		try {
-			apiObject = JSON.parse(errorText);
-		} catch (error) {
-			// Ignore - it just means that the error object is a plain string
+		if (!response.ok) {
+			const errorText = await response.text();
+			const error = new Error(`On ${method} ${path}: ${errorText}`);
+			let apiObject = null;
+			try {
+				apiObject = JSON.parse(errorText);
+			} catch (error) {
+				// Ignore - it just means that the error object is a plain string
+			}
+
+			// {
+			//     "errors": [
+			//         "You’ve performed this action too many times. Please wait 39 seconds before trying again."
+			//     ],
+			//     "error_type": "rate_limit",
+			//     "extras": {
+			//         "wait_seconds": 39,
+			//         "time_left": "39 seconds"
+			//     }
+			// }
+
+			(error as any).apiObject = apiObject;
+			(error as any).status = response.status;
+
+			if (apiObject?.extras?.wait_seconds) {
+				await msleep(apiObject.extras.wait_seconds * 1000 + 1000);
+				continue;
+			}
+
+			throw error;
 		}
-		(error as any).apiObject = apiObject;
-		(error as any).status = response.status;
-		throw error;
-	}
 
-	return response.json() as any;
+		return response.json() as any;
+	}
 };
 
 export const getForumTopPostByExternalId = async (externalId: string): Promise<ForumTopPost> => {

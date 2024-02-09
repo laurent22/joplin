@@ -1,4 +1,4 @@
-import { ModuleType, FileSystemItem, ImportModuleOutputFormat, ImportOptions, ExportOptions, ImportExportResult, ExportProgressState } from './types';
+import { ModuleType, FileSystemItem, ImportModuleOutputFormat, ImportOptions, ExportOptions, ImportExportResult, ExportProgressState, ExportModuleOutputFormat } from './types';
 import shim from '../../shim';
 import { _ } from '../../locale';
 import BaseItem from '../../models/BaseItem';
@@ -85,6 +85,23 @@ export default class InteropService {
 				}, dynamicRequireModuleFactory('./InteropService_Importer_EnexToMd')),
 
 				makeImportModule({
+					format: 'enex',
+					fileExtensions: ['enex'],
+					sources: [FileSystemItem.Directory],
+					description: _('Evernote Export Files (Directory, as HTML)'),
+					supportsMobile: false,
+					outputFormat: ImportModuleOutputFormat.Html,
+				}, dynamicRequireModuleFactory('./InteropService_Importer_EnexToHtml')),
+
+				makeImportModule({
+					format: 'enex',
+					fileExtensions: ['enex'],
+					sources: [FileSystemItem.Directory],
+					description: _('Evernote Export Files (Directory, as Markdown)'),
+					supportsMobile: false,
+				}, dynamicRequireModuleFactory('./InteropService_Importer_EnexToMd')),
+
+				makeImportModule({
 					format: 'html',
 					fileExtensions: ['html'],
 					sources: [FileSystemItem.File, FileSystemItem.Directory],
@@ -119,32 +136,32 @@ export default class InteropService {
 
 			const exportModules = [
 				makeExportModule({
-					format: 'jex',
+					format: ExportModuleOutputFormat.Jex,
 					fileExtensions: ['jex'],
 					target: FileSystemItem.File,
 					description: _('Joplin Export File'),
 				}, () => new InteropService_Exporter_Jex()),
 
 				makeExportModule({
-					format: 'raw',
+					format: ExportModuleOutputFormat.Raw,
 					target: FileSystemItem.Directory,
 					description: _('Joplin Export Directory'),
 				}, () => new InteropService_Exporter_Raw()),
 
 				makeExportModule({
-					format: 'md',
+					format: ExportModuleOutputFormat.Markdown,
 					target: FileSystemItem.Directory,
 					description: _('Markdown'),
 				}, () => new InteropService_Exporter_Md()),
 
 				makeExportModule({
-					format: 'md_frontmatter',
+					format: ExportModuleOutputFormat.MarkdownFrontMatter,
 					target: FileSystemItem.Directory,
 					description: _('Markdown + Front Matter'),
 				}, () => new InteropService_Exporter_Md_frontmatter()),
 
 				makeExportModule({
-					format: 'html',
+					format: ExportModuleOutputFormat.Html,
 					fileExtensions: ['html', 'htm'],
 					target: FileSystemItem.File,
 					isNoteArchive: false,
@@ -153,7 +170,7 @@ export default class InteropService {
 				}, dynamicRequireModuleFactory('./InteropService_Exporter_Html')),
 
 				makeExportModule({
-					format: 'html',
+					format: ExportModuleOutputFormat.Html,
 					target: FileSystemItem.Directory,
 					description: _('HTML Directory'),
 					supportsMobile: false,
@@ -301,7 +318,7 @@ export default class InteropService {
 
 	public async export(options: ExportOptions): Promise<ImportExportResult> {
 		options = {
-			format: 'jex',
+			format: ExportModuleOutputFormat.Jex,
 			...options,
 		};
 

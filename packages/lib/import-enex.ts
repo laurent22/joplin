@@ -1,19 +1,18 @@
 import uuid from './uuid';
-import BaseModel from './BaseModel';
 import Note from './models/Note';
 import Tag from './models/Tag';
 import Resource from './models/Resource';
 import Setting from './models/Setting';
-import time from './time';
 import shim from './shim';
 import { NoteEntity, ResourceEntity } from './services/database/types';
 import { enexXmlToMd } from './import-enex-md-gen';
 import { MarkupToHtml } from '@joplin/renderer';
-import { fileExtension, friendlySafeFilename } from './path-utils';
+import { fileExtension, friendlySafeFilename, safeFileExtension } from './path-utils';
+import { extractUrls as extractUrlsFromHtml } from '@joplin/utils/html';
+import { extractUrls as extractUrlsFromMarkdown } from '@joplin/utils/markdown';
 const moment = require('moment');
 const { wrapError } = require('./errorUtils');
 const { enexXmlToHtml } = require('./import-enex-html-gen.js');
-const Levenshtein = require('levenshtein');
 const md5 = require('md5');
 const { Base64Decode } = require('base64-stream');
 const md5File = require('md5-file');
@@ -94,38 +93,6 @@ function removeUndefinedProperties(note: NoteEntity) {
 	return output;
 }
 
-function levenshteinPercent(s1: string, s2: string) {
-	const l = new Levenshtein(s1, s2);
-	if (!s1.length || !s2.length) return 1;
-	return Math.abs(l.distance / s1.length);
-}
-
-async function fuzzyMatch(note: ExtractedNote) {
-	if (note.created_time < time.unixMs() - 1000 * 60 * 60 * 24 * 360) {
-		const notes = await Note.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0 AND created_time = ? AND title = ?', [note.created_time, note.title]);
-		return notes.length !== 1 ? null : notes[0];
-	}
-
-	const notes = await Note.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0 AND created_time = ?', [note.created_time]);
-	if (notes.length === 0) return null;
-	if (notes.length === 1) return notes[0];
-
-	let lowestL = 1;
-	let lowestN = null;
-	for (let i = 0; i < notes.length; i++) {
-		const n = notes[i];
-		const l = levenshteinPercent(note.title, n.title);
-		if (l < lowestL) {
-			lowestL = l;
-			lowestN = n;
-		}
-	}
-
-	if (lowestN && lowestL < 0.2) return lowestN;
-
-	return null;
-}
-
 interface ExtractedResource {
 	hasData?: boolean;
 	id?: string;
@@ -151,18 +118,30 @@ interface ExtractedNote extends NoteEntity {
 	tags?: string[];
 	title?: string;
 	bodyXml?: string;
-	// is_todo?: boolean;
 }
 
-// At this point we have the resource has it's been parsed from the XML, but additional
-// processing needs to be done to get the final resource file, its size, MD5, etc.
+// Those are the notes that have been parsed and saved to Joplin. We don't keep
+// in memory the whole `ExtractedNote` because it contains resource data, etc.
+// We only keep what is needed to restore the note links.
+interface SavedNote {
+	id: string;
+	body: string;
+}
+
+// At this point we have the resource as it's been parsed from the XML, but
+// additional processing needs to be done to get the final resource file, its
+// size, MD5, etc.
 async function processNoteResource(resource: ExtractedResource) {
-	if (!resource.hasData) {
-		// Some resources have no data, go figure, so we need a special case for this.
-		resource.id = md5(Date.now() + Math.random());
+	const handleNoDataResource = async (resource: ExtractedResource, setId: boolean) => {
+		if (setId) resource.id = md5(Date.now() + Math.random());
 		resource.size = 0;
 		resource.dataFilePath = `${Setting.value('tempDir')}/${resource.id}.empty`;
 		await fs.writeFile(resource.dataFilePath, '');
+	};
+
+	if (!resource.hasData) {
+		// Some resources have no data, go figure, so we need a special case for this.
+		await handleNoDataResource(resource, true);
 	} else {
 		if (resource.dataEncoding === 'base64') {
 			const decodedFilePath = `${resource.dataFilePath}.decoded`;
@@ -176,16 +155,19 @@ async function processNoteResource(resource: ExtractedResource) {
 		resource.size = stats.size;
 
 		if (!resource.id) {
-			// If no resource ID is present, the resource ID is actually the MD5 of the data.
-			// This ID will match the "hash" attribute of the corresponding <en-media> tag.
-			// resourceId = md5(decodedData);
+			// If no resource ID is present, the resource ID is actually the MD5
+			// of the data. This ID will match the "hash" attribute of the
+			// corresponding <en-media> tag. resourceId = md5(decodedData);
 			resource.id = await md5File(resource.dataFilePath);
 		}
 
 		if (!resource.id || !resource.size) {
-			const debugTemp = { ...resource };
-			debugTemp.data = debugTemp.data ? `${debugTemp.data.substr(0, 32)}...` : debugTemp.data;
-			throw new Error(`This resource was not added because it has no ID or no content: ${JSON.stringify(debugTemp)}`);
+			// Don't throw an error because it happens semi-frequently,
+			// especially on notes that comes from the Evernote Web Clipper and
+			// we can't do anything about it. Previously we would throw the
+			// error "This resource was not added because it has no ID or no
+			// content".
+			await handleNoDataResource(resource, !resource.id);
 		}
 	}
 
@@ -201,7 +183,7 @@ async function saveNoteResources(note: ExtractedNote) {
 		delete (toSave as any).dataFilePath;
 		delete (toSave as any).dataEncoding;
 		delete (toSave as any).hasData;
-		toSave.file_extension = resource.filename ? fileExtension(resource.filename) : '';
+		toSave.file_extension = resource.filename ? safeFileExtension(fileExtension(resource.filename)) : '';
 
 		// ENEX resource filenames can contain slashes, which may confuse other
 		// parts of the app, which expect this `filename` field to be safe.
@@ -236,26 +218,19 @@ async function saveNoteTags(note: ExtractedNote) {
 	return notesTagged;
 }
 
-interface ImportOptions {
-	fuzzyMatching?: boolean;
+export interface ImportOptions {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onProgress?: Function;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onError?: Function;
 	outputFormat?: string;
+	batchSize?: number;
 }
 
-async function saveNoteToStorage(note: ExtractedNote, importOptions: ImportOptions) {
-	importOptions = { fuzzyMatching: false, ...importOptions };
-
+async function saveNoteToStorage(note: ExtractedNote) {
 	note = Note.filter(note as any);
 
-	const existingNote = importOptions.fuzzyMatching ? await fuzzyMatch(note) : null;
-
 	const result = {
-		noteCreated: false,
-		noteUpdated: false,
-		noteSkipped: false,
 		resourcesCreated: 0,
 		notesTagged: 0,
 	};
@@ -266,28 +241,10 @@ async function saveNoteToStorage(note: ExtractedNote, importOptions: ImportOptio
 	const notesTagged = await saveNoteTags(note);
 	result.notesTagged += notesTagged;
 
-	if (existingNote) {
-		const diff = BaseModel.diffObjects(existingNote, note);
-		delete diff.tags;
-		delete diff.resources;
-		delete diff.id;
-
-		if (!Object.getOwnPropertyNames(diff).length) {
-			result.noteSkipped = true;
-			return result;
-		}
-
-		diff.id = existingNote.id;
-		diff.type_ = existingNote.type_;
-		await Note.save(diff, { autoTimestamp: false });
-		result.noteUpdated = true;
-	} else {
-		await Note.save(note, {
-			isNew: true,
-			autoTimestamp: false,
-		});
-		result.noteCreated = true;
-	}
+	await Note.save(note, {
+		isNew: true,
+		autoTimestamp: false,
+	});
 
 	return result;
 }
@@ -336,12 +293,47 @@ const preProcessFile = async (filePath: string): Promise<string> => {
 	// return newFilePath;
 };
 
-export default async function importEnex(parentFolderId: string, filePath: string, importOptions: ImportOptions = null) {
-	if (!importOptions) importOptions = {};
-	if (!('fuzzyMatching' in importOptions)) importOptions.fuzzyMatching = false;
-	if (!('onProgress' in importOptions)) importOptions.onProgress = function() {};
-	if (!('onError' in importOptions)) importOptions.onError = function() {};
 
+const restoreNoteLinks = async (notes: SavedNote[], noteTitlesToIds: Record<string, string[]>, importOptions: ImportOptions) => {
+	// --------------------------------------------------------
+	// Convert the Evernote note links to Joplin note links. If
+	// we don't find a matching note, or if there are multiple
+	// matching notes, we leave the Evernote links as is.
+	// --------------------------------------------------------
+
+	for (const note of notes) {
+		const links = importOptions.outputFormat === 'html' ?
+			extractUrlsFromHtml(note.body) :
+			extractUrlsFromMarkdown(note.body);
+
+		let noteChanged = false;
+
+		for (const link of links) {
+			const matchingNoteIds = noteTitlesToIds[link.title];
+			if (matchingNoteIds && matchingNoteIds.length === 1) {
+				note.body = note.body.replace(link.url, `:/${matchingNoteIds[0]}`);
+				noteChanged = true;
+			}
+		}
+
+		if (noteChanged) {
+			await Note.save({
+				id: note.id,
+				body: note.body,
+				updated_time: Date.now(),
+			}, {
+				autoTimestamp: false,
+			});
+		}
+	}
+};
+
+interface ParseNotesResult {
+	savedNotes: SavedNote[];
+	noteTitlesToIds: Record<string, string[]>;
+}
+
+const parseNotes = async (parentFolderId: string, filePath: string, importOptions: ImportOptions = null): Promise<ParseNotesResult> => {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	function handleSaxStreamEvent(fn: Function) {
 		return function(...args: any[]) {
@@ -388,6 +380,9 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 		let noteResourceRecognition: NoteResourceRecognition = null;
 		const notes: ExtractedNote[] = [];
 		let processingNotes = false;
+		const savedNotes: SavedNote[] = [];
+		const createdNoteIds: string[] = [];
+		const noteTitlesToIds: Record<string, string[]> = {};
 
 		const createErrorWithNoteTitle = (fnThis: any, error: any) => {
 			const line = [];
@@ -445,20 +440,24 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 						note.resources[i] = resource;
 					}
 
-					const body = importOptions.outputFormat === 'html' ?
+					// --------------------------------------------------------
+					// Convert the ENEX body to either Markdown or HTML
+					// --------------------------------------------------------
+
+					const body: string = importOptions.outputFormat === 'html' ?
 						await enexXmlToHtml(note.bodyXml, note.resources) :
 						await enexXmlToMd(note.bodyXml, note.resources, note.tasks);
 					delete note.bodyXml;
 
+					// --------------------------------------------------------
+					// Finish setting up the note
+					// --------------------------------------------------------
+
+					note.id = uuid.create();
 					note.markup_language = importOptions.outputFormat === 'html' ?
 						MarkupToHtml.MARKUP_LANGUAGE_HTML :
 						MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 
-					// console.info('*************************************************************************');
-					// console.info(body);
-					// console.info('*************************************************************************');
-
-					note.id = uuid.create();
 					note.parent_id = parentFolderId;
 					note.body = body;
 
@@ -473,15 +472,17 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 					// that case
 					if (!note.updated_time) note.updated_time = note.created_time;
 
-					const result = await saveNoteToStorage(note, importOptions);
+					const result = await saveNoteToStorage(note);
 
-					if (result.noteUpdated) {
-						progressState.updated++;
-					} else if (result.noteCreated) {
-						progressState.created++;
-					} else if (result.noteSkipped) {
-						progressState.skipped++;
-					}
+					createdNoteIds.push(note.id);
+					if (!noteTitlesToIds[note.title]) noteTitlesToIds[note.title] = [];
+					noteTitlesToIds[note.title].push(note.id);
+					savedNotes.push({
+						id: note.id,
+						body: note.body,
+					});
+
+					progressState.created++;
 					progressState.resourcesCreated += result.resourcesCreated;
 					progressState.notesTagged += result.notesTagged;
 					importOptions.onProgress(progressState);
@@ -610,7 +611,7 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 
 				notes.push(note);
 
-				if (notes.length >= 10) {
+				if (notes.length >= importOptions.batchSize) {
 					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 					processNotes().catch(error => {
 						importOptions.onError(createErrorWithNoteTitle(this, error));
@@ -680,12 +681,25 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 					if (allDone) {
 						shim.clearTimeout(iid);
 						if (needToDeleteFileToProcess) void shim.fsDriver().remove(fileToProcess);
-						resolve(null);
+						resolve({
+							savedNotes,
+							noteTitlesToIds,
+						});
 					}
 				});
-			}, 500);
+			}, 1000);
 		}));
 
 		stream.pipe(saxStream);
 	});
+};
+
+export default async function importEnex(parentFolderId: string, filePath: string, importOptions: ImportOptions = null) {
+	if (!importOptions) importOptions = {};
+	if (!('onProgress' in importOptions)) importOptions.onProgress = function() {};
+	if (!('onError' in importOptions)) importOptions.onError = function() {};
+	if (!('batchSize' in importOptions)) importOptions.batchSize = 10;
+
+	const result = await parseNotes(parentFolderId, filePath, importOptions);
+	await restoreNoteLinks(result.savedNotes, result.noteTitlesToIds, importOptions);
 }

@@ -127,6 +127,19 @@ rules.subscript = {
   }
 }
 
+// Handles foreground color changes as created by the rich text editor.
+// We intentionally don't handle the general style="color: colorhere" case as
+// this may leave unwanted formatting when saving websites as markdown.
+rules.foregroundColor = {
+  filter: function (node, options) {
+    return options.preserveColorStyles && node.nodeName === 'SPAN' && getStyleProp(node, 'color');
+  },
+
+  replacement: function (content, node, options) {
+    return `<span style="color: ${htmlentities(getStyleProp(node, 'color'))};">${content}</span>`;
+  },
+}
+
 // ==============================
 // END Joplin format support
 // ==============================
@@ -280,6 +293,9 @@ function filterLinkHref (href) {
   // Replace the spaces with %20 because otherwise they can cause problems for some
   // renderer and space is not a valid URL character anyway.
   href = href.replace(/ /g, '%20');
+  // Newlines and tabs also break renderers
+  href = href.replace(/\n/g, '%0A');
+  href = href.replace(/\t/g, '%09');
   // Brackets also should be escaped
   href = href.replace(/\(/g, '%28');
   href = href.replace(/\)/g, '%29');

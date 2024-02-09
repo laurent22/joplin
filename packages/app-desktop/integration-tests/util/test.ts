@@ -10,6 +10,7 @@ import firstNonDevToolsWindow from './firstNonDevToolsWindow';
 type JoplinFixtures = {
 	profileDirectory: string;
 	electronApp: ElectronApplication;
+	startupPluginsLoaded: Promise<void>;
 	mainWindow: Page;
 };
 
@@ -41,6 +42,16 @@ export const test = base.extend<JoplinFixtures>({
 
 		await electronApp.firstWindow();
 		await electronApp.close();
+	},
+
+	startupPluginsLoaded: async ({ electronApp }, use) => {
+		const startupPluginsLoadedPromise = electronApp.evaluate(({ ipcMain }) => {
+			return new Promise<void>(resolve => {
+				ipcMain.once('startup-plugins-loaded', () => resolve());
+			});
+		});
+
+		await use(startupPluginsLoadedPromise);
 	},
 
 	mainWindow: async ({ electronApp }, use) => {

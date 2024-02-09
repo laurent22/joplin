@@ -59,6 +59,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s : %d"
 	],
@@ -326,6 +329,9 @@
 	"Browse...": [
 		"استعراض..."
 	],
+	"Built-in": [
+		""
+	],
 	"Bulleted List": [
 		"قائمة تعداد نقطي"
 	],
@@ -448,6 +454,9 @@
 	],
 	"Close dropdown": [
 		"إغلاق القائمة المنسدلة"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"إغلاق النافذة"
@@ -598,7 +607,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"لم يتمكن التحقق من حالة النشر الخاصة بهذه الملاحظة. المرجو العودة عند توفر الإنترنت."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"تعذر تصدير الملاحظات: %s"
 	],
 	"Create": [
@@ -1027,6 +1036,9 @@
 	"Enable note history": [
 		"تمكين تاريخ الملاحظة"
 	],
+	"Enable optical character recognition (OCR)": [
+		""
+	],
 	"Enable PDF viewer": [
 		"تمكين عارض PDF"
 	],
@@ -1358,6 +1370,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"للقيام بذلك، يجب تشفير مجموعة بياناتك بالكامل ومزامنتها، لذا من الأفضل تشغيلها خلال الليل.\n\nللبدء، يرجى اتباع هذه التعليمات:\n\n1. قم بمزامنة جميع أجهزتك.\n2. انقر فوق \"%s\" \n3. دعها تعمل حتى الاكتمال. أثناء تشغيله، تجنب تغيير أي ملاحظة على أجهزتك الأخرى، لتجنب التعارضات.\n4. بمجرد إتمام المزامنة على هذا الجهاز، قم بمزامنة جميع أجهزتك الأخرى واتركها تعمل حتى الاكتمال.\n\nهام: ما عليك سوى تشغيل هذا مرة واحدة على جهاز واحد."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"لاستخدام مزامنة نظام الملفات، يجب الحصول على إذن الكتابة إلى وحدة التخزين الخارجية."
@@ -2345,6 +2360,12 @@
 	"Solarised Light": [
 		"Solarised Light"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"لا يمكن فك تشفير بعض العناصر."
 	],
@@ -2624,6 +2645,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"يجب ترقية هدف المزامنة قبل أن يتمكن Joplin من المزامنة. قد تستغرق العملية بضع دقائق حتى تكتمل ويحتاج التطبيق إلى إعادة التشغيل. للمتابعة الرجاء الضغط على الرابط."
 	],
@@ -2828,6 +2852,9 @@
 	"Undo": [
 		"الغاء التحميل"
 	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
+	],
 	"Unknown flag: %s": [
 		"علامة غير معروفة: %s"
 	],
@@ -2983,6 +3010,9 @@
 	],
 	"When creating a new to-do:": [
 		"عند إنشاء قائمة جديدة للمهام:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""

@@ -10,6 +10,7 @@ interface Props {
 		todo_completed: number;
 	};
 	item: {
+		// index: number;
 		size: {
 			height: number;
 		};
@@ -30,6 +31,7 @@ const defaultListRenderer: ListRenderer = {
 	},
 
 	dependencies: [
+		// 'item.index',
 		'item.selected',
 		'item.size.height',
 		'note.id',
@@ -121,7 +123,7 @@ const defaultListRenderer: ListRenderer = {
 		<button data-id="title">Title</button><button data-id="updated">Updated</button>
 	`,
 
-	onHeaderClick: async (event:OnClickEvent) => {
+	onHeaderClick: async (event: OnClickEvent) => {
 		const field = event.elementId === 'title' ? 'title' : 'user_updated_time';
 		void CommandService.instance().execute('toggleNotesSortOrderField', field);
 	},

@@ -13,6 +13,7 @@ const fs = require('fs-extra');
 import { dialog, ipcMain } from 'electron';
 import { _ } from '@joplin/lib/locale';
 import restartInSafeModeFromMain from './utils/restartInSafeModeFromMain';
+import { clearTimeout, setTimeout } from 'timers';
 
 interface RendererProcessQuitReply {
 	canClose: boolean;
@@ -74,6 +75,8 @@ export default class ElectronAppWrapper {
 	// Assumes that the renderer process may be in an invalid state and so cannot
 	// be accessed.
 	public async handleAppFailure(errorMessage: string, canIgnore: boolean, isTesting?: boolean) {
+		await bridge().captureException(new Error(errorMessage));
+
 		const buttons = [];
 		buttons.push(_('Quit'));
 		const exitIndex = 0;
@@ -160,8 +163,28 @@ export default class ElectronAppWrapper {
 			this.win_.setPosition(primaryDisplayWidth / 2 - windowWidth, primaryDisplayHeight / 2 - windowHeight);
 		}
 
-		this.win_.webContents.on('unresponsive', async () => {
-			await this.handleAppFailure(_('Window unresponsive.'), true);
+		let unresponsiveTimeout: ReturnType<typeof setTimeout>|null = null;
+
+		this.win_.webContents.on('unresponsive', () => {
+			// Don't show the "unresponsive" dialog immediately -- the "unresponsive" event
+			// can be fired when showing a dialog or modal (e.g. the update dialog).
+			//
+			// This gives us an opportunity to cancel it.
+			if (unresponsiveTimeout === null) {
+				const delayMs = 1000;
+
+				unresponsiveTimeout = setTimeout(() => {
+					unresponsiveTimeout = null;
+					void this.handleAppFailure(_('Window unresponsive.'), true);
+				}, delayMs);
+			}
+		});
+
+		this.win_.webContents.on('responsive', () => {
+			if (unresponsiveTimeout !== null) {
+				clearTimeout(unresponsiveTimeout);
+				unresponsiveTimeout = null;
+			}
 		});
 
 		this.win_.webContents.on('render-process-gone', async _event => {
@@ -371,6 +394,10 @@ export default class ElectronAppWrapper {
 			this.tray_.setContextMenu(contextMenu);
 
 			this.tray_.on('click', () => {
+				if (!this.window()) {
+					console.warn('The window object was not available during the click event from tray icon');
+					return;
+				}
 				this.window().show();
 			});
 		} catch (error) {

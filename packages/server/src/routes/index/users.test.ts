@@ -5,7 +5,7 @@ import { cookieGet } from '../../utils/cookies';
 import { ErrorForbidden } from '../../utils/errors';
 import { execRequest, execRequestC } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, expectHttpError, expectThrow } from '../../utils/testing/testUtils';
-import uuidgen from '../../utils/uuidgen';
+import { uuidgen } from '@joplin/lib/uuid';
 
 async function postUser(sessionId: string, email: string, password: string = null, props: any = null): Promise<User> {
 	password = password === null ? uuidgen() : password;

@@ -56,6 +56,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -302,6 +305,9 @@
 	"Browse...": [
 		"Bladeren ..."
 	],
+	"Built-in": [
+		""
+	],
 	"Bulleted List": [
 		"Opsommingstekens"
 	],
@@ -415,6 +421,9 @@
 	],
 	"Close": [
 		"Sluit"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Venster sluiten"
@@ -888,6 +897,9 @@
 	"Enable note history": [
 		"Schakel notitiehistoriek in"
 	],
+	"Enable optical character recognition (OCR)": [
+		""
+	],
 	"Enable PDF viewer": [
 		"Schakel PDF weergave in"
 	],
@@ -1176,6 +1188,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Om dit te doen, moet uw volledige dataset worden versleuteld en gesynchroniseerd, dus het is het beste om het 's nachts uit te voeren.\n\nOm te beginnen, gelieve deze instructies te volgen:\n\n1. Synchroniseer al uw apparaten.\n2. Klik op \"%s\".\n3. Laat het tot het einde lopen. Terwijl het loopt, vermijd het veranderen van enige notitie op uw andere apparaten, om conflicten te vermijden.\n4. Zodra de synchronisatie op dit apparaat is voltooid, synchroniseert u alle andere apparaten en laat u de synchronisatie tot het einde uitvoeren.\n\nBelangrijk: u hoeft dit maar EEN keer op één apparaat te doen."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Om bestandssysteemsynchronisatie te kunnen gebruiken, is uw toestemming vereist om naar externe opslag te schrijven."
@@ -2078,6 +2093,12 @@
 	"Solarised Light": [
 		"Gesolariseerd Licht"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Sommige items kunnen niet gedecrypteerd worden."
 	],
@@ -2348,6 +2369,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"De ontvanger kon niet verwijderd worden van de lijst. Probeer opnieuw.\n\nDe foutmelding was: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Het synchronisatiedoel moet worden geüpgraded voordat Joplin kan synchroniseren. Het kan een paar minuten duren voordat deze operatie voltooid is en de app moet dan opnieuw worden opgestart. Klik op de koppeling om verder te gaan."
 	],
@@ -2552,6 +2576,9 @@
 	"Undo": [
 		"Ongedaan maken"
 	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
+	],
 	"Unknown flag: %s": [
 		"Onbekende optie: %s"
 	],
@@ -2695,6 +2722,9 @@
 	],
 	"When creating a new to-do:": [
 		"Wanneer u een nieuwe to-do aanmaakt:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""

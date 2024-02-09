@@ -20,7 +20,7 @@ import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/d
 import { ModelType } from '@joplin/lib/BaseModel';
 import { initializeJoplinUtils } from '../joplinUtils';
 import MustacheService from '../../services/MustacheService';
-import uuidgen from '../uuidgen';
+import { uuidgen } from '@joplin/lib/uuid';
 import { createCsrfToken } from '../csrf';
 import { cookieSet } from '../cookies';
 import { parseEnv } from '../../env';
@@ -374,6 +374,11 @@ export async function createNote(sessionId: string, note: NoteEntity): Promise<I
 
 export async function updateNote(sessionId: string, note: NoteEntity): Promise<Item> {
 	return updateItem(sessionId, `root:/${note.id}.md:`, makeNoteSerializedBody(note));
+}
+
+export async function deleteNote(userId: Uuid, noteJopId: string): Promise<void> {
+	const item = await models().item().loadByJopId(userId, noteJopId, { fields: ['id'] });
+	await models().item().delete(item.id);
 }
 
 export async function updateFolder(sessionId: string, folder: FolderEntity): Promise<Item> {

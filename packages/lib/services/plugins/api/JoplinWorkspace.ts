@@ -1,7 +1,7 @@
 /* eslint-disable multiline-comment-style */
 
 import { ModelType } from '../../../BaseModel';
-import eventManager from '../../../eventManager';
+import eventManager, { EventName } from '../../../eventManager';
 import Setting from '../../../models/Setting';
 import { FolderEntity } from '../../database/types';
 import makeListener from '../utils/makeListener';
@@ -87,7 +87,7 @@ export default class JoplinWorkspace {
 	 */
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public async onNoteContentChange(callback: Function) {
-		eventManager.on('noteContentChange', callback);
+		eventManager.on(EventName.NoteContentChange, callback);
 	}
 
 	/**
@@ -104,7 +104,7 @@ export default class JoplinWorkspace {
 			});
 		};
 
-		return makeListener(eventManager, 'itemChange', wrapperHandler);
+		return makeListener(eventManager, EventName.ItemChange, wrapperHandler);
 	}
 
 	/**
@@ -112,7 +112,7 @@ export default class JoplinWorkspace {
 	 * called when a resource is added or deleted.
 	 */
 	public async onResourceChange(handler: ResourceChangeHandler): Promise<void> {
-		makeListener(eventManager, 'resourceChange', handler);
+		makeListener(eventManager, EventName.ResourceChange, handler);
 	}
 
 	/**
@@ -120,14 +120,14 @@ export default class JoplinWorkspace {
 	 */
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public async onNoteAlarmTrigger(handler: Function): Promise<Disposable> {
-		return makeListener(eventManager, 'noteAlarmTrigger', handler);
+		return makeListener(eventManager, EventName.NoteAlarmTrigger, handler);
 	}
 
 	/**
 	 * Called when the synchronisation process is starting.
 	 */
 	public async onSyncStart(handler: SyncStartHandler): Promise<Disposable> {
-		return makeListener(eventManager, 'syncStart', handler);
+		return makeListener(eventManager, EventName.SyncStart, handler);
 	}
 
 	/**
@@ -135,7 +135,7 @@ export default class JoplinWorkspace {
 	 */
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public async onSyncComplete(callback: Function): Promise<Disposable> {
-		return makeListener(eventManager, 'syncComplete', callback);
+		return makeListener(eventManager, EventName.SyncComplete, callback);
 	}
 
 	/**

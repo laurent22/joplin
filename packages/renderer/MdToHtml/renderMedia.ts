@@ -1,5 +1,5 @@
 import { Link } from '../MdToHtml';
-import { toForwardSlashes } from '../pathUtils';
+import { toForwardSlashes } from '@joplin/utils/path';
 import { LinkIndexes } from './rules/link_close';
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;

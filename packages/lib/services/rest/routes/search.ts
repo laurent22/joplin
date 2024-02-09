@@ -5,7 +5,8 @@ import { ErrorBadRequest, ErrorMethodNotAllowed } from '../utils/errors';
 import requestFields from '../utils/requestFields';
 import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
 import BaseItem from '../../../models/BaseItem';
-import SearchEngineUtils, { NotesForQueryOptions } from '../../searchengine/SearchEngineUtils';
+import { NoteEntity } from '../../database/types';
+import SearchEngineUtils, { NotesForQueryOptions } from '../../search/SearchEngineUtils';
 
 export default async function(request: Request) {
 	if (request.method !== 'GET') throw new ErrorMethodNotAllowed();
@@ -15,7 +16,7 @@ export default async function(request: Request) {
 
 	const modelType = request.query.type ? BaseModel.modelNameToType(request.query.type) : BaseModel.TYPE_NOTE;
 
-	let results = [];
+	let results: NoteEntity[] = [];
 
 	if (modelType !== BaseItem.TYPE_NOTE) {
 		const ModelClass = BaseItem.getClassByItemType(modelType);
@@ -32,7 +33,7 @@ export default async function(request: Request) {
 			...defaultLoadOptions(request, ModelType.Note),
 			appendWildCards: true,
 		};
-		results = await SearchEngineUtils.notesForQuery(query, false, options);
+		results = (await SearchEngineUtils.notesForQuery(query, false, options)).notes;
 	}
 
 	return collectionToPaginatedResults(modelType, results, request);

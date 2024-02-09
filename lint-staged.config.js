@@ -11,9 +11,9 @@ module.exports = {
 	//
 	// '**/*.ts?(x)': () => 'npm run tsc',
 	'*.{js,jsx,ts,tsx}': [
-		'yarn run checkIgnoredFiles',
-		// 'yarn run checkLibPaths',
-		'yarn run packageJsonLint',
-		'yarn run linter-precommit',
+		'yarn checkIgnoredFiles',
+		// 'yarn checkLibPaths',
+		'yarn packageJsonLint',
+		'yarn linter-precommit',
 	],
 };

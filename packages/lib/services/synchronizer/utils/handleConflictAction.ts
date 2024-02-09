@@ -5,16 +5,18 @@ import ItemChange from '../../../models/ItemChange';
 import Note from '../../../models/Note';
 import Resource from '../../../models/Resource';
 import time from '../../../time';
+import { SyncAction, conflictActions } from './types';
 
 const logger = Logger.create('handleConflictAction');
 
-export type ConflictAction = 'itemConflict' | 'noteConflict' | 'resourceConflict';
+export default async (action: SyncAction, ItemClass: any, remoteExists: boolean, remoteContent: any, local: any, syncTargetId: number, itemIsReadOnly: boolean, dispatch: Dispatch) => {
+	if (!conflictActions.includes(action)) return;
 
-export default async (action: ConflictAction, ItemClass: any, remoteExists: boolean, remoteContent: any, local: any, syncTargetId: number, itemIsReadOnly: boolean, dispatch: Dispatch) => {
 	logger.debug(`Handling conflict: ${action}`);
+	logger.debug('local:', local, 'remoteContent', remoteContent);
 	logger.debug('remoteExists:', remoteExists);
 
-	if (action === 'itemConflict') {
+	if (action === SyncAction.ItemConflict) {
 		// ------------------------------------------------------------------------------
 		// For non-note conflicts, we take the remote version (i.e. the version that was
 		// synced first) and overwrite the local content.
@@ -31,7 +33,7 @@ export default async (action: ConflictAction, ItemClass: any, remoteExists: bool
 				trackDeleted: false,
 			});
 		}
-	} else if (action === 'noteConflict') {
+	} else if (action === SyncAction.NoteConflict) {
 		// ------------------------------------------------------------------------------
 		// First find out if the conflict matters. For example, if the conflict is on the title or body
 		// we want to preserve all the changes. If it's on todo_completed it doesn't really matter
@@ -51,24 +53,22 @@ export default async (action: ConflictAction, ItemClass: any, remoteExists: bool
 		if (mustHandleConflict) {
 			await Note.createConflictNote(local, ItemChange.SOURCE_SYNC);
 		}
-	} else if (action === 'resourceConflict') {
-		// ------------------------------------------------------------------------------
-		// Unlike notes we always handle the conflict for resources
-		// ------------------------------------------------------------------------------
+	} else if (action === SyncAction.ResourceConflict) {
+		if (!remoteContent || Resource.mustHandleConflict(local, remoteContent)) {
+			await Resource.createConflictResourceNote(local);
 
-		await Resource.createConflictResourceNote(local);
+			if (remoteExists) {
+				// The local content we have is no longer valid and should be re-downloaded
+				await Resource.setLocalState(local.id, {
+					fetch_status: Resource.FETCH_STATUS_IDLE,
+				});
+			}
 
-		if (remoteExists) {
-			// The local content we have is no longer valid and should be re-downloaded
-			await Resource.setLocalState(local.id, {
-				fetch_status: Resource.FETCH_STATUS_IDLE,
-			});
+			dispatch({ type: 'SYNC_CREATED_OR_UPDATED_RESOURCE', id: local.id });
 		}
-
-		dispatch({ type: 'SYNC_CREATED_OR_UPDATED_RESOURCE', id: local.id });
 	}
 
-	if (['noteConflict', 'resourceConflict'].includes(action)) {
+	if ([SyncAction.NoteConflict, SyncAction.ResourceConflict].includes(action)) {
 		// ------------------------------------------------------------------------------
 		// For note and resource conflicts, the creation of the conflict item is done
 		// differently. However the way the local content is handled is the same.

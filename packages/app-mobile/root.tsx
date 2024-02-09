@@ -40,13 +40,12 @@ import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-na
 const { BackButtonService } = require('./services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
 import { createStore, applyMiddleware } from 'redux';
-const reduxSharedMiddleware = require('@joplin/lib/components/shared/reduxSharedMiddleware');
+import reduxSharedMiddleware from '@joplin/lib/components/shared/reduxSharedMiddleware';
 const { shimInit } = require('./utils/shim-init-react.js');
 const { AppNav } = require('./components/app-nav.js');
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 import BaseSyncTarget from '@joplin/lib/BaseSyncTarget';
-const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
 import Resource from '@joplin/lib/models/Resource';
 import Tag from '@joplin/lib/models/Tag';
 import NoteTag from '@joplin/lib/models/NoteTag';
@@ -75,7 +74,7 @@ import { reg } from '@joplin/lib/registry';
 const { defaultState } = require('@joplin/lib/reducer');
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local');
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
-import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
+import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 const { themeStyle } = require('./components/global-style.js');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
@@ -122,6 +121,7 @@ import { ReactNode } from 'react';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
 import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
 import runOnDeviceFsDriverTests from './utils/fs-driver/runOnDeviceTests';
+import { refreshFolders } from '@joplin/lib/folders-screen-utils';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -149,7 +149,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	const result = next(action);
 	const newState = store.getState();
 
-	await reduxSharedMiddleware(store, next, action);
+	await reduxSharedMiddleware(store, next, action, storeDispatch as any);
 
 	if (action.type === 'NAV_GO') Keyboard.dismiss();
 
@@ -515,7 +515,6 @@ async function initialize(dispatch: Function) {
 
 	// reg.dispatch = dispatch;
 	BaseModel.dispatch = dispatch;
-	FoldersScreenUtils.dispatch = dispatch;
 	BaseSyncTarget.dispatch = dispatch;
 	NavService.dispatch = dispatch;
 	BaseModel.setDb(db);
@@ -544,7 +543,7 @@ async function initialize(dispatch: Function) {
 		if (Setting.value('env') === 'prod') {
 			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
 		} else {
-			await db.open({ name: getDatabaseName(currentProfile, isSubProfile, '-3') });
+			await db.open({ name: getDatabaseName(currentProfile, isSubProfile, '-20240127-1') });
 
 			// await db.clearForTesting();
 		}
@@ -637,7 +636,7 @@ async function initialize(dispatch: Function) {
 
 		reg.logger().info('Loading folders...');
 
-		await FoldersScreenUtils.refreshFolders();
+		await refreshFolders((action: any) => dispatch(action));
 
 		const tags = await Tag.allWithNotes();
 
@@ -982,9 +981,13 @@ class AppComponent extends React.Component {
 
 		if (sharedData) {
 			reg.logger().info('Received shared data');
-			if (this.props.selectedFolderId) {
+
+			// selectedFolderId can be null if no screens other than "All notes"
+			// have been opened.
+			const targetFolder = this.props.selectedFolderId ?? (await Folder.defaultFolder())?.id;
+			if (targetFolder) {
 				logger.info('Sharing: handleShareData: Processing...');
-				await handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
+				await handleShared(sharedData, targetFolder, this.props.dispatch);
 			} else {
 				reg.logger().info('Cannot handle share - default folder id is not set');
 			}
@@ -999,7 +1002,7 @@ class AppComponent extends React.Component {
 
 	public UNSAFE_componentWillReceiveProps(newProps: any) {
 		if (newProps.syncStarted !== this.lastSyncStarted_) {
-			if (!newProps.syncStarted) FoldersScreenUtils.refreshFolders();
+			if (!newProps.syncStarted) void refreshFolders((action: any) => this.props.dispatch(action));
 			this.lastSyncStarted_ = newProps.syncStarted;
 		}
 	}
@@ -1072,11 +1075,20 @@ class AppComponent extends React.Component {
 		logger.info('root.biometrics: shouldShowMainContent', shouldShowMainContent);
 		logger.info('root.biometrics: this.state.sensorInfo', this.state.sensorInfo);
 
+		// The right sidemenu can be difficult to close due to a bug in the sidemenu
+		// library (right sidemenus can't be swiped closed).
+		//
+		// Additionally, it can interfere with scrolling in the note viewer, so we use
+		// a smaller edge hit width.
+		const menuEdgeHitWidth = menuPosition === 'right' ? 20 : 30;
+
 		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 				<SideMenu
 					menu={sideMenuContent}
-					edgeHitWidth={20}
+					edgeHitWidth={menuEdgeHitWidth}
+					toleranceX={4}
+					toleranceY={20}
 					openMenuOffset={this.state.sideMenuWidth}
 					menuPosition={menuPosition}
 					onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}

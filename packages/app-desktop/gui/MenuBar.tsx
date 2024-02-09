@@ -25,6 +25,7 @@ import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { getListRendererById, getListRendererIds } from '@joplin/lib/services/noteList/renderers';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
+import { EventName } from '@joplin/lib/eventManager';
 const packageInfo: PackageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;
@@ -842,6 +843,24 @@ function useMenu(props: Props) {
 					label: _('&Tools'),
 					submenu: toolsItems,
 				},
+				window: {
+					id: 'window',
+
+					// Adds the default MacOS actions (e.g. "tile left") to the menu.
+					//
+					// Note: If the dev tools are shown on startup, this adds additional tab-related
+					// actions to the menu that are not otherwise shown. See https://stackoverflow.com/a/77458809
+					role: 'windowMenu',
+
+					label: _('&Window'),
+					visible: !!shim.isMac(),
+					submenu: [
+						{
+							role: 'minimize',
+							accelerator: shim.isMac() && keymapService.getAccelerator('minimizeWindow'),
+						},
+					],
+				},
 				help: {
 					label: _('&Help'),
 					role: 'help', // Makes it add the "Search" field on macOS
@@ -945,6 +964,7 @@ function useMenu(props: Props) {
 			}
 
 			const template = [
+				shim.isMac() ? rootMenus.macOsApp : null,
 				rootMenus.file,
 				rootMenus.edit,
 				rootMenus.view,
@@ -952,10 +972,9 @@ function useMenu(props: Props) {
 				rootMenus.folder,
 				rootMenus.note,
 				rootMenus.tools,
+				shim.isMac() ? rootMenus.window : null,
 				rootMenus.help,
-			];
-
-			if (shim.isMac()) template.splice(0, 0, rootMenus.macOsApp);
+			].filter(item => item !== null);
 
 			if (props.routeName !== 'Main') {
 				setMenu(Menu.buildFromTemplate([
@@ -1011,10 +1030,10 @@ function useMenu(props: Props) {
 			setKeymapLastChangeTime(Date.now());
 		}
 
-		KeymapService.instance().on('keymapChange', onKeymapChange);
+		KeymapService.instance().on(EventName.KeymapChange, onKeymapChange);
 
 		return () => {
-			KeymapService.instance().off('keymapChange', onKeymapChange);
+			KeymapService.instance().off(EventName.KeymapChange, onKeymapChange);
 		};
 	}, []);
 

@@ -50,6 +50,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d notes": [
 		"%s: %d bilješki"
 	],
@@ -275,6 +278,9 @@
 	"Browse...": [
 		"Pregledaj..."
 	],
+	"Built-in": [
+		""
+	],
 	"Bulleted List": [
 		"Nabrajanje"
 	],
@@ -367,6 +373,9 @@
 	],
 	"Close": [
 		"Zatvori"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Zatvori prozor"
@@ -767,6 +776,9 @@
 	"Enable note history": [
 		"Aktiviraj historiju bilješki"
 	],
+	"Enable optical character recognition (OCR)": [
+		""
+	],
 	"Enable PDF viewer": [
 		"Omogući PDF"
 	],
@@ -1036,6 +1048,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Da biste to učinili, svi Vaši podaci moraju biti šifrirani i sinhronizovani, pa je najbolje da to učinite preko noći.\n\nDa započnete, slijedite sljedeće upute:\n\n1. Sinhronizujte sve svoje uređaje.\n2. Pritisnite \"%s\".\n3. Sačekajte dok se proces ne okonča. Tokom rada, nemojte uređivati bilo koju bilješku na nekom od Vaših uređaja kako biste izbjegli konflikte.\n4. Kad je sinhronizacija završena na ovom uređaju, sinhronizujte i ostale uređaje.\n\nVažno: ovaj proces trebate pokrenuti samo JEDNOM i na samo jednom uređaju."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Potrebno je Vaše dopuštenje za pristup eksternim uređajima za pohranu kako bi se mogla izvršiti sinhronizacija."
@@ -1826,6 +1841,12 @@
 	"Solarised Light": [
 		"Solarised svijetla"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be synchronised.": [
 		"Neke stavke nije moguće sinhronizovati."
 	],
@@ -2048,6 +2069,11 @@
 	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
 		"Faktor određuje kako će se stavka povećavati ili smanjivati da bi stala u raspoloživi prostor skupa sa drugim stavkama. Tako će stavka čiji je faktor 2 zauzimati dvostruko više prostora od stavke s faktorom 1. Ponovo pokrenite aplikaciju da primijenite izmjene."
 	],
+	"The following attachment matches your search query:": [
+		"",
+		"",
+		""
+	],
 	"The following attachments are being watched for changes:": [
 		""
 	],
@@ -2076,6 +2102,9 @@
 		"Moguće komande glase:"
 	],
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
+		""
+	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
 		""
 	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
@@ -2264,6 +2293,9 @@
 	"Undo": [
 		""
 	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
+	],
 	"Unknown flag: %s": [
 		"Nepoznata oznaka: %s"
 	],
@@ -2398,6 +2430,9 @@
 	],
 	"When creating a new to-do:": [
 		"Prilikom kreiranja novog zadatka:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""

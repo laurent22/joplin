@@ -1,38 +1,26 @@
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { useCallback, useMemo } from 'react';
-import { ResourceInfos } from './types';
 import markupLanguageUtils from '../../../utils/markupLanguageUtils';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 
 const { themeStyle } = require('@joplin/lib/theme');
 import Note from '@joplin/lib/models/Note';
+import { MarkupToHtmlOptions } from './types';
 
 interface HookDependencies {
 	themeId: number;
 	customCss: string;
 	plugins: PluginStates;
 	settingValue: (pluginId: string, key: string)=> any;
-}
-
-export interface MarkupToHtmlOptions {
-	replaceResourceInternalToExternalLinks?: boolean;
-	resourceInfos?: ResourceInfos;
-	contentMaxWidth?: number;
-	plugins?: Record<string, any>;
-	bodyOnly?: boolean;
-	mapsToLine?: boolean;
-	useCustomPdfViewer?: boolean;
-	noteId?: string;
-	vendorDir?: string;
-	platformName?: string;
+	whiteBackgroundNoteRendering: boolean;
 }
 
 export default function useMarkupToHtml(deps: HookDependencies) {
-	const { themeId, customCss, plugins } = deps;
+	const { themeId, customCss, plugins, whiteBackgroundNoteRendering } = deps;
 
 	const markupToHtml = useMemo(() => {
-		return markupLanguageUtils.newMarkupToHtml(deps.plugins, {
+		return markupLanguageUtils.newMarkupToHtml(plugins, {
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
 			customCss: customCss || '',
 		});
@@ -68,10 +56,11 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 			externalAssetsOnly: true,
 			codeHighlightCacheKey: 'useMarkupToHtml',
 			settingValue: deps.settingValue,
+			whiteBackgroundNoteRendering,
 			...options,
 		});
 
 		return result;
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [themeId, customCss, markupToHtml]);
+	}, [themeId, customCss, markupToHtml, whiteBackgroundNoteRendering]);
 }

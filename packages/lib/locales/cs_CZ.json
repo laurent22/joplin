@@ -62,6 +62,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -329,6 +332,9 @@
 	"Browse...": [
 		"Procházet..."
 	],
+	"Built-in": [
+		""
+	],
 	"Bulleted List": [
 		"Seznam s odrážkami"
 	],
@@ -451,6 +457,9 @@
 	],
 	"Close dropdown": [
 		"Zavřít rozevírací seznam"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Zavřít okno"
@@ -1012,6 +1021,9 @@
 	"Enable note history": [
 		"Povolit historii poznámky"
 	],
+	"Enable optical character recognition (OCR)": [
+		""
+	],
 	"Enable PDF viewer": [
 		"Povolit zobrazení PDF"
 	],
@@ -1355,6 +1367,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Aby to bylo možné, bude nutné zašifrovat a synchronizovat všechna vaše data, takže je nejlepší celou akci spustit přes noc.\n\nPostupujte podle těchto pokynů:\n\n1. Proveďte synchronizaci všech svých zařízení.\n2. Klepněte na \"%s\".\n3. Nechte vše doběhnout do konce. Dokud operace poběži, vyhněte se změnám poznámek na ostatních zařízeních, aby nedocházelo ke konfliktům.\n4. Až bude synchronizace na tomto zařízení dokončena, synchronizujte všechna ostatní zařízení a nechejte na nich synchronizaci doběhnout do konce.\n\nDůležité: toto stačí spustit pouze JEDNOU a na jednom zařízení."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Pro použití synchronizace systému souborů je vyžadováno vaše oprávnění k zápisu do externího úložiště."
@@ -2435,6 +2450,12 @@
 	"Solarised Light": [
 		"Solarised Light"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Některé položky nelze dešifrovat."
 	],
@@ -2732,6 +2753,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Příjemce nebylo možné ze seznamu odstranit. Zkuste to prosím znovu.\n\nChyba byla: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Před synchronizací je třeba upgradovat její cíl. Dokončení operace může trvat několik minut a je třeba aplikaci restartovat. Chcete-li pokračovat, klepněte na odkaz."
 	],
@@ -2957,6 +2981,9 @@
 	"Undo": [
 		"Zpět"
 	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
+	],
 	"Unknown flag: %s": [
 		"Neznámý flag: %s"
 	],
@@ -3121,6 +3148,9 @@
 	],
 	"When creating a new to-do:": [
 		"Při vytváření nového úkolu:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""

@@ -1,5 +1,5 @@
 import { EditorView, keymap } from '@codemirror/view';
-import { closeBrackets } from '@codemirror/autocomplete';
+import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
 import { EditorKeymap, EditorLanguageType, EditorSettings } from '../types';
 import createTheme from './theme';
 import { EditorState } from '@codemirror/state';
@@ -52,6 +52,7 @@ const configFromSettings = (settings: EditorSettings) => {
 
 	if (settings.automatchBraces) {
 		extensions.push(closeBrackets());
+		extensions.push(keymap.of(closeBracketsKeymap));
 	}
 
 	if (settings.keymap === EditorKeymap.Vim) {

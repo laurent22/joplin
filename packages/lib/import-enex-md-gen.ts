@@ -4,7 +4,7 @@ import { htmlentities } from '@joplin/utils/html';
 const stringPadding = require('string-padding');
 const stringToStream = require('string-to-stream');
 const resourceUtils = require('./resourceUtils.js');
-const cssParser = require('css');
+const cssParser = require('@adobe/css-tools');
 
 const BLOCK_OPEN = '[[BLOCK_OPEN]]';
 const BLOCK_CLOSE = '[[BLOCK_CLOSE]]';
@@ -1239,12 +1239,25 @@ function drawTable(table: Section) {
 			continue;
 		}
 
+		if (typeof tr === 'string') {
+			// A <TABLE> tag should only have <TR> tags as direct children.
+			// However certain Evernote notes can contain other random tags
+			// such as empty DIVs. In that case we just skip the content.
+			// See test "table_with_invalid_content.html".
+			continue;
+		}
+
 		const isHeader = tr.isHeader;
 		const line = [];
 		const headerLine = [];
 		let emptyHeader = null;
 		for (let tdIndex = 0; tdIndex < tr.lines.length; tdIndex++) {
 			const td = tr.lines[tdIndex];
+
+			if (typeof td === 'string') {
+				// Same comment as above the <TR> tags.
+				continue;
+			}
 
 			if (flatRender) {
 				line.push(BLOCK_OPEN);

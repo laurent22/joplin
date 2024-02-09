@@ -49,7 +49,7 @@ import ResourceFetcher from '../services/ResourceFetcher';
 const WebDavApi = require('../WebDavApi');
 const DropboxApi = require('../DropboxApi');
 import JoplinServerApi from '../JoplinServerApi';
-import { FolderEntity } from '../services/database/types';
+import { FolderEntity, ResourceEntity } from '../services/database/types';
 import { credentialFile, readCredentialFile } from '../utils/credentialFiles';
 import SyncTargetJoplinCloud from '../SyncTargetJoplinCloud';
 import KeychainService from '../services/keychain/KeychainService';
@@ -63,6 +63,9 @@ const { Dirnames } = require('../services/synchronizer/utils/types');
 import RSA from '../services/e2ee/RSA.node';
 import { State as ShareState } from '../services/share/reducer';
 import initLib from '../initLib';
+import OcrDriverTesseract from '../services/ocr/drivers/OcrDriverTesseract';
+import OcrService from '../services/ocr/OcrService';
+import { createWorker } from 'tesseract.js';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -102,6 +105,7 @@ const oldTestDir = `${__dirname}/../../app-cli/tests`;
 const logDir = `${oldTestDir}/logs`;
 const baseTempDir = `${oldTestDir}/tmp/${suiteName_}`;
 const supportDir = `${oldTestDir}/support`;
+export const ocrSampleDir = `${oldTestDir}/ocr_samples`;
 
 // We add a space in the data directory path as that will help uncover
 // various space-in-path issues.
@@ -305,20 +309,21 @@ async function clearDatabase(id: number = null) {
 	await ItemChange.waitForAllSaved();
 
 	const tableNames = [
-		'notes',
-		'folders',
-		'resources',
-		'tags',
-		'note_tags',
-		'master_keys',
-		'item_changes',
-		'note_resources',
-		'settings',
 		'deleted_items',
-		'sync_items',
-		'notes_normalized',
-		'revisions',
+		'folders',
+		'item_changes',
+		'items_normalized',
 		'key_values',
+		'master_keys',
+		'note_resources',
+		'note_tags',
+		'notes_normalized',
+		'notes',
+		'resources',
+		'revisions',
+		'settings',
+		'sync_items',
+		'tags',
 	];
 
 	const queries = [];
@@ -421,6 +426,23 @@ function pluginDir(id: number = null) {
 	if (id === null) id = currentClient_;
 	return `${dataDir}/plugins-${id}`;
 }
+
+export interface CreateNoteAndResourceOptions {
+	path?: string;
+}
+
+const createNoteAndResource = async (options: CreateNoteAndResourceOptions = null) => {
+	options = {
+		path: `${supportDir}/photo.jpg`,
+		...options,
+	};
+
+	let note = await Note.save({});
+	note = await shim.attachFileToNote(note, options.path);
+	const resourceIds = await Note.linkedItemIds(note.body);
+	const resource: ResourceEntity = await Resource.load(resourceIds[0]);
+	return { note, resource };
+};
 
 async function setupDatabaseAndSynchronizer(id: number, options: any = null) {
 	if (id === null) id = currentClient_;
@@ -701,7 +723,7 @@ async function checkThrowAsync(asyncFn: Function) {
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-async function expectThrow(asyncFn: Function, errorCode: any = undefined) {
+async function expectThrow(asyncFn: Function, errorCode: any = undefined, errorMessage: string = undefined) {
 	let hasThrown = false;
 	let thrownError = null;
 	try {
@@ -713,6 +735,12 @@ async function expectThrow(asyncFn: Function, errorCode: any = undefined) {
 
 	if (!hasThrown) {
 		expect('not throw').toBe('throw');
+	} else if (errorMessage !== undefined) {
+		if (thrownError.message !== errorMessage) {
+			expect(`error message: ${thrownError.message}`).toBe(`error message: ${errorMessage}`);
+		} else {
+			expect(true).toBe(true);
+		}
 	} else if (thrownError.code !== errorCode) {
 		console.error(thrownError);
 		expect(`error code: ${thrownError.code}`).toBe(`error code: ${errorCode}`);
@@ -1009,4 +1037,9 @@ const simulateReadOnlyShareEnv = (shareId: string) => {
 	};
 };
 
-export { supportDir, createTempFile, createTestShareData, simulateReadOnlyShareEnv, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+export const newOcrService = () => {
+	const driver = new OcrDriverTesseract({ createWorker });
+	return new OcrService(driver);
+};
+
+export { supportDir, createNoteAndResource, createTempFile, createTestShareData, simulateReadOnlyShareEnv, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

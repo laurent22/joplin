@@ -13,7 +13,7 @@ import SyncTargetOneDrive from './SyncTargetOneDrive';
 import { createStore, applyMiddleware, Store } from 'redux';
 const { defaultState, stateUtils } = require('./reducer');
 import JoplinDatabase from './JoplinDatabase';
-const { FoldersScreenUtils } = require('./folders-screen-utils.js');
+import { cancelTimers as folderScreenUtilsCancelTimers, refreshFolders, scheduleRefreshFolders } from './folders-screen-utils';
 const { DatabaseDriverNode } = require('./database-driver-node.js');
 import BaseModel from './BaseModel';
 import Folder from './models/Folder';
@@ -24,8 +24,7 @@ import { splitCommandString } from '@joplin/utils';
 import { reg } from './registry';
 import time from './time';
 import BaseSyncTarget from './BaseSyncTarget';
-const reduxSharedMiddleware = require('./components/shared/reduxSharedMiddleware');
-const os = require('os');
+import reduxSharedMiddleware from './components/shared/reduxSharedMiddleware';
 import dns = require('dns');
 import fs = require('fs-extra');
 const EventEmitter = require('events');
@@ -38,8 +37,8 @@ const SyncTargetDropbox = require('./SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('./SyncTargetAmazonS3.js');
 import EncryptionService from './services/e2ee/EncryptionService';
 import ResourceFetcher from './services/ResourceFetcher';
-import SearchEngineUtils from './services/searchengine/SearchEngineUtils';
-import SearchEngine from './services/searchengine/SearchEngine';
+import SearchEngineUtils from './services/search/SearchEngineUtils';
+import SearchEngine, { ProcessResultsRow } from './services/search/SearchEngine';
 import RevisionService from './services/RevisionService';
 import ResourceService from './services/ResourceService';
 import DecryptionWorker from './services/DecryptionWorker';
@@ -48,7 +47,6 @@ import MigrationService from './services/MigrationService';
 import ShareService from './services/share/ShareService';
 import handleSyncStartupOperation from './services/synchronizer/utils/handleSyncStartupOperation';
 import SyncTargetJoplinCloud from './SyncTargetJoplinCloud';
-const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
 import { getEncryptionEnabled } from './services/synchronizer/syncInfoUtils';
 import { loadMasterKeysFromSettings, migrateMasterPassword } from './services/e2ee/utils';
@@ -60,17 +58,22 @@ import { ProfileConfig } from './services/profileConfig/types';
 import initProfile from './services/profileConfig/initProfile';
 import { parseShareCache } from './services/share/reducer';
 import RotatingLogs from './RotatingLogs';
+import { NoteEntity } from './services/database/types';
 import { join } from 'path';
-import processStartFlags, { MatchedStartFlags } from './utils/processStartFlags';
+import processStartFlags from './utils/processStartFlags';
+import determineProfileDir from './determineProfileDir';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
 // const ntpClient = require('./vendor/ntp-client');
 // ntpClient.dgram = require('dgram');
 
-interface StartOptions {
+export interface StartOptions {
 	keychainEnabled?: boolean;
 	setupGlobalLogger?: boolean;
+	rootProfileDir?: string;
+	appName?: string;
+	appId?: string;
 }
 export const safeModeFlagFilename = 'force-safe-mode-on-next-start';
 
@@ -87,7 +90,7 @@ export default class BaseApplication {
 	// Note: this is basically a cache of state.selectedFolderId. It should *only*
 	// be derived from the state and not set directly since that would make the
 	// state and UI out of sync.
-	private currentFolder_: any = null;
+	protected currentFolder_: any = null;
 
 	protected store_: Store<any> = null;
 
@@ -106,7 +109,7 @@ export default class BaseApplication {
 		await ResourceFetcher.instance().destroy();
 		await SearchEngine.instance().destroy();
 		await DecryptionWorker.instance().destroy();
-		await FoldersScreenUtils.cancelTimers();
+		await folderScreenUtilsCancelTimers();
 		await BaseItem.revisionService_.cancelTimers();
 		await ResourceService.instance().cancelTimers();
 		await reg.cancelTimers();
@@ -227,8 +230,9 @@ export default class BaseApplication {
 			parentId: parentId,
 		});
 
-		let notes = [];
-		let highlightedWords = [];
+		let notes: NoteEntity[] = [];
+		let highlightedWords: string[] = [];
+		let searchResults: ProcessResultsRow[] = [];
 
 		if (parentId) {
 			if (parentType === Folder.modelType()) {
@@ -237,7 +241,9 @@ export default class BaseApplication {
 				notes = await Tag.notes(parentId, options);
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				const search = BaseModel.byId(state.searches, parentId);
-				notes = await SearchEngineUtils.notesForQuery(search.query_pattern, true, { appendWildCards: true });
+				const response = await SearchEngineUtils.notesForQuery(search.query_pattern, true, { appendWildCards: true });
+				notes = response.notes;
+				searchResults = response.results;
 				const parsedQuery = await SearchEngine.instance().parseQuery(search.query_pattern);
 				highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 			} else if (parentType === BaseModel.TYPE_SMART_FILTER) {
@@ -248,6 +254,11 @@ export default class BaseApplication {
 		this.store().dispatch({
 			type: 'SET_HIGHLIGHTED',
 			words: highlightedWords,
+		});
+
+		this.store().dispatch({
+			type: 'SEARCH_RESULTS_SET',
+			value: searchResults,
 		});
 
 		this.store().dispatch({
@@ -409,12 +420,11 @@ export default class BaseApplication {
 
 		const result = next(action);
 		let refreshNotes = false;
-		let refreshFolders: boolean | string = false;
-		// let refreshTags = false;
+		let doRefreshFolders: boolean | string = false;
 		let refreshNotesUseSelectedNoteId = false;
 		let refreshNotesHash = '';
 
-		await reduxSharedMiddleware(store, next, action);
+		await reduxSharedMiddleware(store, next, action, ((action: any) => { this.dispatch(action); }) as any);
 		const newState = store.getState() as State;
 
 		if (this.hasGui() && ['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
@@ -425,7 +435,7 @@ export default class BaseApplication {
 		// Don't add FOLDER_UPDATE_ALL as refreshFolders() is calling it too, which
 		// would cause the sidebar to refresh all the time.
 		if (this.hasGui() && ['FOLDER_UPDATE_ONE'].indexOf(action.type) >= 0) {
-			refreshFolders = true;
+			doRefreshFolders = true;
 		}
 
 		if (action.type === 'HISTORY_BACKWARD' || action.type === 'HISTORY_FORWARD') {
@@ -501,23 +511,23 @@ export default class BaseApplication {
 				action.changedFields.includes('encryption_applied') ||
 				action.changedFields.includes('is_conflict')
 			) {
-				refreshFolders = true;
+				doRefreshFolders = true;
 			}
 		}
 
 		if (action.type === 'NOTE_DELETE') {
-			refreshFolders = true;
+			doRefreshFolders = true;
 		}
 
 		if (this.hasGui() && action.type === 'SETTING_UPDATE_ALL') {
-			refreshFolders = 'now';
+			doRefreshFolders = 'now';
 		}
 
 		if (this.hasGui() && action.type === 'SETTING_UPDATE_ONE' && (
 			action.key.indexOf('folders.sortOrder') === 0 ||
 			action.key === 'showNoteCounts' ||
 			action.key === 'showCompletedTodos')) {
-			refreshFolders = 'now';
+			doRefreshFolders = 'now';
 		}
 
 		if (this.hasGui() && action.type === 'SYNC_GOT_ENCRYPTED_ITEM') {
@@ -534,11 +544,11 @@ export default class BaseApplication {
 			await this.applySettingsSideEffects();
 		}
 
-		if (refreshFolders) {
-			if (refreshFolders === 'now') {
-				await FoldersScreenUtils.refreshFolders();
+		if (doRefreshFolders) {
+			if (doRefreshFolders === 'now') {
+				await refreshFolders((action: any) => this.dispatch(action));
 			} else {
-				await FoldersScreenUtils.scheduleRefreshFolders();
+				await scheduleRefreshFolders((action: any) => this.dispatch(action));
 			}
 		}
 		return result;
@@ -562,8 +572,6 @@ export default class BaseApplication {
 		});
 
 		BaseModel.dispatch = this.store().dispatch;
-		FoldersScreenUtils.dispatch = this.store().dispatch;
-		// reg.dispatch = this.store().dispatch;
 		BaseSyncTarget.dispatch = this.store().dispatch;
 		DecryptionWorker.instance().dispatch = this.store().dispatch;
 		ResourceFetcher.instance().dispatch = this.store().dispatch;
@@ -573,8 +581,6 @@ export default class BaseApplication {
 	public deinitRedux() {
 		this.store_ = null;
 		BaseModel.dispatch = function() {};
-		FoldersScreenUtils.dispatch = function() {};
-		// reg.dispatch = function() {};
 		BaseSyncTarget.dispatch = function() {};
 		DecryptionWorker.instance().dispatch = function() {};
 		ResourceFetcher.instance().dispatch = function() {};
@@ -594,20 +600,6 @@ export default class BaseApplication {
 		flags = await this.handleStartFlags_(flags, false);
 
 		return flags.matched;
-	}
-
-	public static determineProfileDir(initArgs: MatchedStartFlags) {
-		let output = '';
-
-		if (initArgs.profileDir) {
-			output = initArgs.profileDir;
-		} else if (process && process.env && process.env.PORTABLE_EXECUTABLE_DIR) {
-			output = `${process.env.PORTABLE_EXECUTABLE_DIR}/JoplinProfile`;
-		} else {
-			output = `${os.homedir()}/.config/${Setting.value('appName')}`;
-		}
-
-		return toSystemSlashes(output, 'linux');
 	}
 
 	protected startRotatingLogMaintenance(profileDir: string) {
@@ -637,14 +629,17 @@ export default class BaseApplication {
 		let initArgs = startFlags.matched;
 		if (argv.length) this.showPromptString_ = false;
 
-		let appName = initArgs.env === 'dev' ? 'joplindev' : 'joplin';
-		if (Setting.value('appId').indexOf('-desktop') >= 0) appName += '-desktop';
+		let appName = options.appName;
+		if (!appName) {
+			appName = initArgs.env === 'dev' ? 'joplindev' : 'joplin';
+			if (Setting.value('appId').indexOf('-desktop') >= 0) appName += '-desktop';
+		}
 		Setting.setConstant('appName', appName);
 
 		// https://immerjs.github.io/immer/docs/freezing
 		setAutoFreeze(initArgs.env === 'dev');
 
-		const rootProfileDir = BaseApplication.determineProfileDir(initArgs);
+		const rootProfileDir = options.rootProfileDir ? options.rootProfileDir : determineProfileDir(initArgs.profileDir, appName);
 		const { profileDir, profileConfig, isSubProfile } = await initProfile(rootProfileDir);
 		this.profileConfig_ = profileConfig;
 

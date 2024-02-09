@@ -59,7 +59,7 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 
 	const rootElement = useRootElement(elementId);
 
-	const renderedNote = useRenderedNote(props.note, props.isSelected, props.isWatched, props.listRenderer, props.highlightedWords);
+	const renderedNote = useRenderedNote(props.note, props.isSelected, props.isWatched, props.listRenderer, props.highlightedWords, props.index);
 
 	const itemElement = useItemElement(
 		rootElement,

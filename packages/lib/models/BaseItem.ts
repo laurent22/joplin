@@ -207,7 +207,7 @@ export default class BaseItem extends BaseModel {
 		return output;
 	}
 
-	public static pathToId(path: string) {
+	public static pathToId(path: string): string {
 		const p = path.split('/');
 		const s = p[p.length - 1].split('.');
 		let name: any = s[0];
@@ -789,6 +789,11 @@ export default class BaseItem extends BaseModel {
 			});
 		}
 		return output;
+	}
+
+	public static async syncDisabledItemsCount(syncTargetId: number) {
+		const r = await this.db().selectOne('SELECT count(*) as total FROM sync_items WHERE sync_disabled = 1 AND sync_target = ?', [syncTargetId]);
+		return r ? r.total : 0;
 	}
 
 	public static updateSyncTimeQueries(syncTarget: number, item: any, syncTime: number, syncDisabled = false, syncDisabledReason = '', itemLocation: number = null) {

@@ -62,6 +62,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -329,6 +332,9 @@
 	"Browse...": [
 		"Bladeren..."
 	],
+	"Built-in": [
+		""
+	],
 	"Bulleted List": [
 		"Opsommingslijst"
 	],
@@ -454,6 +460,9 @@
 	],
 	"Close dropdown": [
 		"Lijst sluiten"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Venster afsluiten"
@@ -600,7 +609,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Kan de sharestatus van dit notitieblok - aborteren - niet controleren. Probeer het opnieuw wanneer u verbonden bent met internet."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"Identiteit niet gecontroleerd: %s"
 	],
 	"Create": [
@@ -1035,6 +1044,9 @@
 	"Enable note history": [
 		"Inschakelen geschiedenis van notities"
 	],
+	"Enable optical character recognition (OCR)": [
+		""
+	],
 	"Enable PDF viewer": [
 		"Ondersteuning voor PDF weergave inschakelen"
 	],
@@ -1389,6 +1401,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Om dit te kunnen doen moet uw volledige dataset opnieuw worden versleuteld en gesynchroniseerd, daarom kan dit het best 's nachts uit te voeren.\n\nVolg deze instructies om te starten:\n\n1. Synchroniseer al uw apparaten\n2. Klik \"%s\".\n3. Laat dit volledig afronden. Zolang dit loopt, vermijdt u het wijzigen van enige notitie op uw andere apparaten om conflicten te voorkomen.\n4. Zodra synchronisatie op dit apparaat is afgerond, synchroniseert u al uw andere apparaten en laat dit volledig afronden."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Om synchronisatie via het bestandssysteem te gebruiken is uw toestemming nodig om naar externe opslag te schrijven."
@@ -2474,6 +2489,12 @@
 	"Solarised Light": [
 		"Solarised Light"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Sommige items kunnen niet worden ontsleuteled."
 	],
@@ -2771,6 +2792,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"De ontvanger kon niet worden verwijderd ui de lijst. Probeer heb opnieuw.\n\nDe fout was: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"De sync target moet worden geüpdatet voordat Joplin kan synchroniseren. Het kan een paar minuten duren en de app moet opnieuw opgestart worden. Om door te gaan, klik op de link."
 	],
@@ -3002,6 +3026,9 @@
 	"Undo": [
 		"Ongedaan maken"
 	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
+	],
 	"Unknown flag: %s": [
 		"Onbekend argument: %s"
 	],
@@ -3172,6 +3199,9 @@
 	],
 	"When creating a new to-do:": [
 		"Bij het creëren van een nieuwe taak:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""

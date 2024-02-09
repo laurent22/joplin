@@ -1,6 +1,6 @@
 {
   "name": "@joplin/renderer",
-  "version": "2.13.4",
+  "version": "2.14.0",
   "description": "The Joplin note renderer, used the mobile and desktop application",
   "repository": "https://github.com/laurent22/joplin/tree/dev/packages/renderer",
   "main": "index.js",
@@ -10,7 +10,7 @@
   },
   "scripts": {
     "buildAssets": "node Tools/buildAssets.js",
-    "build": "yarn run buildAssets",
+    "build": "yarn buildAssets",
     "tsc": "tsc --project tsconfig.json",
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
     "test": "jest",
@@ -20,8 +20,8 @@
   "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "@types/jest": "29.5.8",
-    "@types/markdown-it": "13.0.6",
-    "@types/node": "18.18.9",
+    "@types/markdown-it": "13.0.7",
+    "@types/node": "18.19.8",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
     "ts-jest": "29.1.1",
@@ -30,9 +30,9 @@
   "dependencies": {
     "@joplin/fork-htmlparser2": "^4.1.50",
     "@joplin/fork-uslug": "^1.0.15",
-    "@joplin/utils": "^2.13.4",
+    "@joplin/utils": "~2.14",
     "font-awesome-filetypes": "2.1.0",
-    "fs-extra": "11.1.1",
+    "fs-extra": "11.2.0",
     "highlight.js": "11.9.0",
     "html-entities": "1.4.0",
     "json-stringify-safe": "5.0.1",
@@ -51,7 +51,7 @@
     "markdown-it-sup": "1.0.0",
     "markdown-it-toc-done-right": "4.2.0",
     "md5": "2.3.0",
-    "mermaid": "10.5.1"
+    "mermaid": "10.6.1"
   },
   "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"
 }

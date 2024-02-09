@@ -97,7 +97,7 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 
 		const { header, body } = this.getNoteHeader(note);
 
-		const md: Record<string, any> = this.toLowerCase(yaml.load(header, { schema: yaml.FAILSAFE_SCHEMA }));
+		const md = this.toLowerCase(yaml.load(header, { schema: yaml.FAILSAFE_SCHEMA }));
 		const metadata: NoteEntity = {
 			title: md['title'] || '',
 			source_url: md['source'] || '',
@@ -111,6 +111,9 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 			metadata['user_created_time'] = time.anythingToMs(md['created'], Date.now());
 		} else if ('date' in md) {
 			metadata['user_created_time'] = time.anythingToMs(md['date'], Date.now());
+		} else if ('created_at' in md) {
+			// Add support for Notesnook
+			metadata['user_created_time'] = time.anythingToMs(md['created_at'], Date.now());
 		}
 
 		if ('updated' in md) {
@@ -120,6 +123,9 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 			metadata['user_updated_time'] = time.anythingToMs(md['lastmod'], Date.now());
 		} else if ('date' in md) {
 			metadata['user_updated_time'] = time.anythingToMs(md['date'], Date.now());
+		} else if ('updated_at' in md) {
+			// Notesnook
+			metadata['user_updated_time'] = time.anythingToMs(md['updated_at'], Date.now());
 		}
 
 		if ('latitude' in md) { metadata['latitude'] = md['latitude']; }
@@ -148,7 +154,7 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 		}
 
 		// Only create unique tags
-		tags = [...new Set(tags)] as string[];
+		tags = [...new Set(tags)];
 
 		metadata['body'] = body;
 
@@ -156,18 +162,23 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 	}
 
 	public async importFile(filePath: string, parentFolderId: string) {
-		const note = await super.importFile(filePath, parentFolderId);
-		const { metadata, tags } = this.parseYamlNote(note.body);
+		try {
+			const note = await super.importFile(filePath, parentFolderId);
+			const { metadata, tags } = this.parseYamlNote(note.body);
 
-		const updatedNote = { ...note, ...metadata };
+			const updatedNote = { ...note, ...metadata };
 
-		const noteItem = await Note.save(updatedNote, { isNew: false, autoTimestamp: false });
+			const noteItem = await Note.save(updatedNote, { isNew: false, autoTimestamp: false });
 
-		const resolvedPath = shim.fsDriver().resolve(filePath);
-		this.importedNotes[resolvedPath] = noteItem;
+			const resolvedPath = shim.fsDriver().resolve(filePath);
+			this.importedNotes[resolvedPath] = noteItem;
 
-		for (const tag of tags) { await Tag.addNoteTagByTitle(noteItem.id, tag); }
+			for (const tag of tags) { await Tag.addNoteTagByTitle(noteItem.id, tag); }
 
-		return noteItem;
+			return noteItem;
+		} catch (error) {
+			error.message = `On ${filePath}: ${error.message}`;
+			throw error;
+		}
 	}
 }

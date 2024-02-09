@@ -1,12 +1,14 @@
 import { Knex } from 'knex';
 import Logger from '@joplin/utils/Logger';
-import { SqliteMaxVariableNum, isPostgres } from '../db';
+import { DbConnection, SqliteMaxVariableNum, isPostgres } from '../db';
 import { Change, ChangeType, Item, Uuid } from '../services/database/types';
 import { md5 } from '../utils/crypto';
 import { ErrorResyncRequired } from '../utils/errors';
 import { Day, formatDateTime } from '../utils/time';
 import BaseModel, { SaveOptions } from './BaseModel';
 import { PaginatedResults } from './utils/pagination';
+import { NewModelFactoryHandler } from './factory';
+import { Config } from '../utils/types';
 
 const logger = Logger.create('ChangeModel');
 
@@ -14,6 +16,7 @@ export const defaultChangeTtl = 180 * Day;
 
 export interface DeltaChange extends Change {
 	jop_updated_time?: number;
+	jopItem?: any;
 }
 
 export type PaginatedDeltaChanges = PaginatedResults<DeltaChange>;
@@ -49,6 +52,13 @@ export function requestDeltaPagination(query: any): ChangePagination {
 }
 
 export default class ChangeModel extends BaseModel<Change> {
+
+	public deltaIncludesItems_: boolean;
+
+	public constructor(db: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
+		super(db, modelFactory, config);
+		this.deltaIncludesItems_ = config.DELTA_INCLUDES_ITEMS;
+	}
 
 	public get tableName(): string {
 		return 'changes';
@@ -87,43 +97,6 @@ export default class ChangeModel extends BaseModel<Change> {
 			cursor,
 		};
 	}
-
-	// private changesForUserQuery(userId: Uuid, count: boolean): Knex.QueryBuilder {
-	// 	// When need to get:
-	// 	//
-	// 	// - All the CREATE and DELETE changes associated with the user
-	// 	// - All the UPDATE changes that applies to items associated with the
-	// 	//   user.
-	// 	//
-	// 	// UPDATE changes do not have the user_id set because they are specific
-	// 	// to the item, not to a particular user.
-
-	// 	const query = this
-	// 		.db('changes')
-	// 		.where(function() {
-	// 			void this.whereRaw('((type = ? OR type = ?) AND user_id = ?)', [ChangeType.Create, ChangeType.Delete, userId])
-	// 				// Need to use a RAW query here because Knex has a "not a
-	// 				// bug" bug that makes it go into infinite loop in some
-	// 				// contexts, possibly only when running inside Jest (didn't
-	// 				// test outside).
-	// 				// https://github.com/knex/knex/issues/1851
-	// 				.orWhereRaw('type = ? AND item_id IN (SELECT item_id FROM user_items WHERE user_id = ?)', [ChangeType.Update, userId]);
-	// 		});
-
-	// 	if (count) {
-	// 		void query.countDistinct('id', { as: 'total' });
-	// 	} else {
-	// 		void query.select([
-	// 			'id',
-	// 			'item_id',
-	// 			'item_name',
-	// 			'type',
-	// 			'updated_time',
-	// 		]);
-	// 	}
-
-	// 	return query;
-	// }
 
 	public async changesForUserQuery(userId: Uuid, fromCounter: number, limit: number, doCountQuery: boolean): Promise<Change[]> {
 		// When need to get:
@@ -251,35 +224,6 @@ export default class ChangeModel extends BaseModel<Change> {
 		return output;
 	}
 
-	// public async allByUser(userId: Uuid, pagination: Pagination = null): Promise<PaginatedDeltaChanges> {
-	// 	pagination = {
-	// 		page: 1,
-	// 		limit: 100,
-	// 		order: [{ by: 'counter', dir: PaginationOrderDir.ASC }],
-	// 		...pagination,
-	// 	};
-
-	// 	const query = this.changesForUserQuery(userId, false);
-	// 	const countQuery = this.changesForUserQuery(userId, true);
-	// 	const itemCount = (await countQuery.first()).total;
-
-	// 	void query
-	// 		.orderBy(pagination.order[0].by, pagination.order[0].dir)
-	// 		.offset((pagination.page - 1) * pagination.limit)
-	// 		.limit(pagination.limit) as any[];
-
-	// 	const changes = await query;
-
-	// 	return {
-	// 		items: changes,
-	// 		// If we have changes, we return the ID of the latest changes from which delta sync can resume.
-	// 		// If there's no change, we return the previous cursor.
-	// 		cursor: changes.length ? changes[changes.length - 1].id : pagination.cursor,
-	// 		has_more: changes.length >= pagination.limit,
-	// 		page_count: itemCount !== null ? Math.ceil(itemCount / pagination.limit) : undefined,
-	// 	};
-	// }
-
 	public async delta(userId: Uuid, pagination: ChangePagination = null): Promise<PaginatedDeltaChanges> {
 		pagination = {
 			...defaultDeltaPagination(),
@@ -300,18 +244,37 @@ export default class ChangeModel extends BaseModel<Change> {
 			false,
 		);
 
-		const items: Item[] = await this.db('items').select('id', 'jop_updated_time').whereIn('items.id', changes.map(c => c.item_id));
+		let items: Item[] = await this.db('items').select('id', 'jop_updated_time').whereIn('items.id', changes.map(c => c.item_id));
 
 		let processedChanges = this.compressChanges(changes);
 		processedChanges = await this.removeDeletedItems(processedChanges, items);
 
-		const finalChanges: DeltaChange[] = processedChanges.map(c => {
-			const item = items.find(item => item.id === c.item_id);
-			if (!item) return c;
-			return {
-				...c,
+		if (this.deltaIncludesItems_) {
+			items = await this.models().item().loadWithContentMulti(processedChanges.map(c => c.item_id), {
+				fields: [
+					'content',
+					'id',
+					'jop_encryption_applied',
+					'jop_id',
+					'jop_parent_id',
+					'jop_share_id',
+					'jop_type',
+					'jop_updated_time',
+				],
+			});
+		}
+
+		const finalChanges = processedChanges.map(change => {
+			const item = items.find(item => item.id === change.item_id);
+			if (!item) return this.deltaIncludesItems_ ? { ...change, jopItem: null } : { ...change };
+			const deltaChange: DeltaChange = {
+				...change,
 				jop_updated_time: item.jop_updated_time,
 			};
+			if (this.deltaIncludesItems_) {
+				deltaChange.jopItem = item.jop_type ? this.models().item().itemToJoplinItem(item) : null;
+			}
+			return deltaChange;
 		});
 
 		return {

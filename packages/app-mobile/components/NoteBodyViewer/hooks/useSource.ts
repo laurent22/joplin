@@ -5,7 +5,7 @@ const { themeStyle } = require('../../global-style.js');
 import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 import useEditPopup from './useEditPopup';
 import Logger from '@joplin/utils/Logger';
-const { assetsToHeaders } = require('@joplin/renderer');
+import { assetsToHeaders } from '@joplin/renderer';
 
 const logger = Logger.create('NoteBodyViewer/useSource');
 
@@ -151,12 +151,6 @@ export default function useSource(
 
 			const resourceDownloadMode = Setting.value('sync.resourceDownloadMode');
 
-			// On iOS, the root container has slow inertial scroll, which feels very different from
-			// the native scroll in other apps. This is not the case, however, when a child (e.g. a div)
-			// scrolls the content instead.
-			// Use a div to scroll on iOS instead of the main container:
-			const scrollRenderedMdContainer = shim.mobilePlatform() === 'ios';
-
 			const js = [];
 			js.push('try {');
 			js.push(shim.injectedJs('webviewLib'));
@@ -165,8 +159,7 @@ export default function useSource(
 			js.push('window.joplinPostMessage_ = (msg, args) => { return window.ReactNativeWebView.postMessage(msg); };');
 			js.push('webviewLib.initialize({ postMessage: msg => { return window.ReactNativeWebView.postMessage(msg); } });');
 			js.push(`
-				const scrollingElement =
-					${scrollRenderedMdContainer ? 'document.querySelector("#rendered-md")' : 'document.scrollingElement'};
+				const scrollingElement = document.scrollingElement;
 				let lastScrollTop;
 				const onMainContentScroll = () => {
 					const newScrollTop = scrollingElement.scrollTop;
@@ -232,24 +225,16 @@ export default function useSource(
 						font: -apple-system-body;
 					}
 				}
-
-				:root > body {
-					padding: 0;
-				}
-			`;
-			const scrollRenderedMdContainerCss = `
-				body > #rendered-md {
-					width: 100vw;
-					overflow: auto;
-					height: calc(100vh - ${paddingBottom}px - ${paddingTop});
-					padding-bottom: ${paddingBottom}px;
-					padding-top: ${paddingTop};
-				}
 			`;
 			const defaultCss = `
 				code {
 					white-space: pre-wrap;
 					overflow-x: hidden;
+				}
+
+				body {
+					padding-left: ${Number(theme.marginLeft)}px;
+					padding-right: ${Number(theme.marginRight)}px;
 				}
 			`;
 
@@ -263,7 +248,6 @@ export default function useSource(
 						<style>
 							${defaultCss}
 							${shim.mobilePlatform() === 'ios' ? iOSSpecificCss : ''}
-							${scrollRenderedMdContainer ? scrollRenderedMdContainerCss : ''}
 							${editPopupCss}
 						</style>
 						${assetsToHeaders(result.pluginAssets, { asHtml: true })}

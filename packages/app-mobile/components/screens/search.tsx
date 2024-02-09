@@ -10,9 +10,10 @@ const { NoteItem } = require('../note-item.js');
 const { BaseScreenComponent } = require('../base-screen');
 const { themeStyle } = require('../global-style.js');
 const DialogBox = require('react-native-dialogbox').default;
-import SearchEngineUtils from '@joplin/lib/services/searchengine/SearchEngineUtils';
-import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
+import SearchEngineUtils from '@joplin/lib/services/search/SearchEngineUtils';
+import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { AppState } from '../../utils/types';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 
 // We need this to suppress the useless warning
 // https://github.com/oblador/react-native-vector-icons/issues/1465
@@ -94,11 +95,12 @@ class SearchScreenComponent extends BaseScreenComponent {
 	public async refreshSearch(query: string = null) {
 		if (!this.props.visible) return;
 
-		let notes = [];
+		let notes: NoteEntity[] = [];
 
 		if (query) {
 			if (this.props.settings['db.ftsEnabled']) {
-				notes = await SearchEngineUtils.notesForQuery(query, true, { appendWildCards: true });
+				const r = await SearchEngineUtils.notesForQuery(query, true, { appendWildCards: true });
+				notes = r.notes;
 			} else {
 				const p = query.split(' ');
 				const temp = [];

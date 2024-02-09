@@ -1,5 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Mon, 04 Dec 2023 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 04 Dec 2023 00:00:00 GMT</pubDate><item><title><![CDATA[What's new in Joplin 2.13]]></title><description><![CDATA[<h2>Desktop<a name="desktop" href="#desktop" class="heading-anchor">🔗</a></h2>
-<h3>RTE<a name="rte" href="#rte" class="heading-anchor">🔗</a></h3>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Sat, 27 Jan 2024 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Sat, 27 Jan 2024 00:00:00 GMT</pubDate><item><title><![CDATA[Support for new plugin metadata]]></title><description><![CDATA[<p>The plugin manifest now supports new properties to better describe and present your plugins on Joplin Plugins website. Those are the <code>icons</code>, <code>categories</code>, <code>screenshots</code> and <code>promo_tile</code> properties.</p>
+<h2>Icon<a name="icon" href="#icon" class="heading-anchor">🔗</a></h2>
+<p>This is the icon that will be used in various plugin pages, including in your main plugin page. It will be shown on the main result page too. If not provided, a default icon will be displayed instead.</p>
+<h2>Category<a name="category" href="#category" class="heading-anchor">🔗</a></h2>
+<p>You can supply one or more category for your plugin - it will be used to filter the plugins on the website.</p>
+<h2>Screenshots<a name="screenshots" href="#screenshots" class="heading-anchor">🔗</a></h2>
+<p>Again you can provide one or more screenshots to present your plugin on the website.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20240127-icon-category-screenshot.png" alt=""></p>
+<p><em>An example of plugin with icon, category and screenshot</em></p>
+<h2>Promo tile<a name="promo-tile" href="#promo-tile" class="heading-anchor">🔗</a></h2>
+<p>The promo tile is an optional image that is used to display your plugin on the main website page. If no promo tile is supplied, the icon will be used instead.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20240127-promo-tile.png" alt=""></p>
+<p><em>An example of promo tile</em></p>
+<h2>More information<a name="more-information" href="#more-information" class="heading-anchor">🔗</a></h2>
+<p>For more information on how to set this plugin metadata, please check the <a href="https://joplinapp.org/help/api/references/plugin_manifest">Plugin Manifest documentation</a></p>
+]]></description><link>https://joplinapp.org/news/20240127-new-plugin-metadata</link><guid isPermaLink="false">20240127-new-plugin-metadata</guid><pubDate>Sat, 27 Jan 2024 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Faster synchronisation in upcoming Joplin version!]]></title><description><![CDATA[<p>The next version of Joplin Cloud (and Joplin Server) will include a change that will make synchronisation, in particular when synchronising a new device for the first time, significantly faster. This is achieved by bundling more data with the calls that retrieve notes and other data, thus reducing the number of unnecessary requests.</p>
+<p>This change will be applied soon to Joplin Cloud (and Server), and the Joplin mobile, desktop and CLI applications will be able to use it from version 2.14.</p>
+<p>In my tests with about 26,000 items, synchronisation was more than twice as fast on Joplin Cloud (22.5 minutes vs 9.5 minutes):</p>
+<h2>Before<a name="before" href="#before" class="heading-anchor">🔗</a></h2>
+<p>Created local items: 21814. Fetched items: 26591/26591. Completed: 23/12/2023 10:38 (<strong>1346s</strong>)</p>
+<p><strong>real 22m35.810s</strong><br/><br>
+user 3m19.182s<br/><br>
+sys 1m24.207s</p>
+<h2>Optimised<a name="optimised" href="#optimised" class="heading-anchor">🔗</a></h2>
+<p>Created local items: 21822. Fetched items: 26600/26600. Completed: 23/12/2023 11:48 (<strong>571s</strong>)</p>
+<p><strong>real 9m38.932s</strong><br/><br>
+user 1m10.119s<br/><br>
+sys 0m38.013s</p>
+]]></description><link>https://joplinapp.org/news/20231223-faster-sync</link><guid isPermaLink="false">20231223-faster-sync</guid><pubDate>Sat, 23 Dec 2023 00:00:00 GMT</pubDate><twitter-text>Faster synchronisation in upcoming Joplin version!</twitter-text></item><item><title><![CDATA[What's new in Joplin 2.13]]></title><description><![CDATA[<h2>Desktop<a name="desktop" href="#desktop" class="heading-anchor">🔗</a></h2>
+<h3>Rich Text Editor improvements<a name="rich-text-editor-improvements" href="#rich-text-editor-improvements" class="heading-anchor">🔗</a></h3>
 <p>In this update, significant enhancements have been implemented in the Rich Text Editor to enhance user experience. One notable improvement is the ability to seamlessly embed various content within tables, including lists and other tables, which was a frequently requested feature:</p>
 <p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20231203-rte-table.png" alt=""></p>
 <p>The interoperability with other text editors such as Word and Excel has also been improved, in particular when copying and pasting content between these tools and Joplin.</p>
@@ -71,7 +99,7 @@
 <p>In this release, we've undertaken numerous enhancements and addressed various bugs in the Rich Text editor. Notably, we've introduced support for plugin toolbar icons. Additionally, we've refined the editor's ability to manage text that's copied from applications like Word, Office, and LibreOffice, thereby enhancing cross-application compatibility. Among the minor yet impactful improvements, we've fine-tuned the handling of newlines and paragraphs—a highly requested feature. Another notable update is the improved automatic switching between light and dark modes.</p>
 <p>Altogether, this release encompasses around 12 significant changes for the Rich Text editor, and rest assured, there's more to come in the future!</p>
 <h3>Share permissions<a name="share-permissions" href="#share-permissions" class="heading-anchor">🔗</a></h3>
-<p>Using Joplin Cloud Pro and Teams, you now have the ability to customize the read and write permissions for the notebooks you share. You have the option to grant other users permission to edit the notes or share them as read-only. This ensures that you can confidently share a notebook without worrying about unintentional modifications by your friends or colleagues.</p>
+<p>Using Joplin Cloud Teams, you now have the ability to customize the read and write permissions for the notebooks you share. You have the option to grant other users permission to edit the notes or share them as read-only. This ensures that you can confidently share a notebook without worrying about unintentional modifications by your friends or colleagues.</p>
 <p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230825-share-permissions.png" alt=""></p>
 <h3>Email to Note<a name="email-to-note" href="#email-to-note" class="heading-anchor">🔗</a></h3>
 <p>Joplin Cloud Pro and Teams also now include the Email to Note feature, allowing you to conveniently store your emails within Joplin Cloud. By simply forwarding your emails to your Joplin Cloud address, you can transform them into notes. The email's subject will serve as the note title, while the body of the email will be the note's content. These notes will be organized within a notebook named &quot;Inbox.&quot;</p>
@@ -336,22 +364,4 @@
 <p>In the coming month (<strong>March 7 - April 3</strong>), contributors will start getting involved in the forum and start discussing project ideas with the mentors and community. It's also a good time to start looking at Joplin's source code, perhaps work on fixing bugs or implement small features to get familiar with the source code, and to show us your skills.</p>
 <p>One difference with previous years is that anyone, not just students, are allowed to participate.</p>
 <p>Additionally, last year Google only allowed smaller projects, while this year they allow again small and large projects, so we've indicated this in the idea list - the small ones are <strong>175 hours</strong>, and the large ones <strong>350 hours</strong>.</p>
-]]></description><link>https://joplinapp.org/news/20220308-gsoc2022-start</link><guid isPermaLink="false">20220308-gsoc2022-start</guid><pubDate>Tue, 08 Mar 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Joplin 2.7 is available!]]></title><description><![CDATA[<p>This new release is largely focused on bug fixing and optimising various parts of the apps. There's about 26 improvements and 25 bugs and security fixes included - as always many of these apply to both the mobile and desktop app (see the <a href="https://joplinapp.org/help/about/changelog/desktop">desktop changelog</a> and <a href="https://joplinapp.org/help/about/changelog/android/">mobile changelog</a>).</p>
-<p>Many thanks to all the contributors who helped create this release!</p>
-<p>Below are some of the more noticeable changes:</p>
-<h2>Notebook custom icons<a name="notebook-custom-icons" href="#notebook-custom-icons" class="heading-anchor">🔗</a></h2>
-<p>Since version 2.6 it was possible to assign an emoji icon to a notebook, and with this new version it's now possible to assign any custom icon. The icon may be a PNG or JPG file of any size. The app will then import the file and resize it to the correct size. To use a custom icon, follow these steps:</p>
-<p>Right-click on a notebook, and select &quot;Edit&quot;:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20220224-edit-notebook.png" alt=""></p>
-<p>In the &quot;Edit notebook&quot; dialog, click &quot;Select file...&quot; and browse to your icon image:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20220224-edit-dialog.png" alt=""></p>
-<p>Click &quot;OK&quot; and the icon will now appear next to the notebook:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20220224-notebook-icon.png" alt=""></p>
-<p>The icon can be changed only from the desktop application at the moment, but it will sync and be displayed correctly on the mobile app too.</p>
-<h2>Plugin API improvements<a name="plugin-api-improvements" href="#plugin-api-improvements" class="heading-anchor">🔗</a></h2>
-<p>This version also includes a number of improvements to the plugin API, in particular it is now easier to customise the editor context menu from a plugin and dynamically add items to it depending on the context. For example, with the Rich Markdown plugin it will be possible to right-click on an image and open it, or copy it to the clipboard.</p>
-<p>A few additional functions have also been added to make plugin development simpler - in particular a command to open any item, whether it's a notebook, note, tag or attachement; and functions to work with attachements, in particular to reveal an attachement in the system file explorer, and to track changes to an attachement.</p>
-]]></description><link>https://joplinapp.org/news/20220224-release-2-7</link><guid isPermaLink="false">20220224-release-2-7</guid><pubDate>Thu, 24 Feb 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Automatic deletion of disabled accounts on Joplin Cloud]]></title><description><![CDATA[<p>As of 15 Feb 2022, disabled accounts on Joplin Cloud will be automatically deleted after 90 days. A disabled account is one where the Stripe subscription has been cancelled either by the user or automatically (eg for unpaid invoices).</p>
-<p>Although it is an automated system, I will manually verify each account that's queued for deletion over the next few days for additional safety (for now everything's working as expected).</p>
-<p>When an account is queued for deletion, all notes, notebooks, tags, etc are removed from the system within 2 days, and permanently deleted within 7 days. User information, in particular email and full name will be removed from the system within 2 days, but archived for an additional 90 days for legal reasons, after which they will be deleted too.</p>
-]]></description><link>https://joplinapp.org/news/20220215-142000</link><guid isPermaLink="false">20220215-142000</guid><pubDate>Tue, 15 Feb 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item></channel></rss>
+]]></description><link>https://joplinapp.org/news/20220308-gsoc2022-start</link><guid isPermaLink="false">20220308-gsoc2022-start</guid><pubDate>Tue, 08 Mar 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item></channel></rss>

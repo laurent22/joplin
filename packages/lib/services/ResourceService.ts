@@ -6,9 +6,10 @@ import shim from '../shim';
 import ItemChange from '../models/ItemChange';
 import Note from '../models/Note';
 import Resource from '../models/Resource';
-import SearchEngine from './searchengine/SearchEngine';
+import SearchEngine from './search/SearchEngine';
 import ItemChangeUtils from './ItemChangeUtils';
 import time from '../time';
+import eventManager, { EventName } from '../eventManager';
 const { sprintf } = require('sprintf-js');
 
 export default class ResourceService extends BaseService {
@@ -106,6 +107,8 @@ export default class ResourceService extends BaseService {
 		}
 
 		this.isIndexing_ = false;
+
+		eventManager.emit(EventName.NoteResourceIndexed);
 
 		this.logger().info('ResourceService::indexNoteResources: Completed');
 	}

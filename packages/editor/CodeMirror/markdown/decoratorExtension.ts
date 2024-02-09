@@ -48,8 +48,28 @@ const blockQuoteDecoration = Decoration.line({
 	attributes: { class: 'cm-blockQuote' },
 });
 
-const headerLineDecoration = Decoration.line({
-	attributes: { class: 'cm-headerLine' },
+const header1LineDecoration = Decoration.line({
+	attributes: { class: 'cm-h1 cm-headerLine' },
+});
+
+const header2LineDecoration = Decoration.line({
+	attributes: { class: 'cm-h2 cm-headerLine' },
+});
+
+const header3LineDecoration = Decoration.line({
+	attributes: { class: 'cm-h3 cm-headerLine' },
+});
+
+const header4LineDecoration = Decoration.line({
+	attributes: { class: 'cm-h4 cm-headerLine' },
+});
+
+const header5LineDecoration = Decoration.line({
+	attributes: { class: 'cm-h5 cm-headerLine' },
+});
+
+const header6LineDecoration = Decoration.line({
+	attributes: { class: 'cm-h6 cm-headerLine' },
 });
 
 const tableHeaderDecoration = Decoration.line({
@@ -72,7 +92,38 @@ const taskMarkerDecoration = Decoration.mark({
 	attributes: { class: 'cm-taskMarker' },
 });
 
-type DecorationDescription = { pos: number; length?: number; decoration: Decoration };
+const nodeNameToLineDecoration: Record<string, Decoration> = {
+	'FencedCode': codeBlockDecoration,
+	'CodeBlock': codeBlockDecoration,
+	'BlockMath': mathBlockDecoration,
+	'Blockquote': blockQuoteDecoration,
+
+	'SetextHeading1': header1LineDecoration,
+	'ATXHeading1': header1LineDecoration,
+	'SetextHeading2': header2LineDecoration,
+	'ATXHeading2': header2LineDecoration,
+	'ATXHeading3': header3LineDecoration,
+	'ATXHeading4': header4LineDecoration,
+	'ATXHeading5': header5LineDecoration,
+	'ATXHeading6': header6LineDecoration,
+
+	'TableHeader': tableHeaderDecoration,
+	'TableDelimiter': tableDelimiterDecoration,
+	'TableRow': tableBodyDecoration,
+};
+
+const nodeNameToMarkDecoration: Record<string, Decoration> = {
+	'InlineCode': inlineCodeDecoration,
+	'URL': urlDecoration,
+	'InlineMath': inlineMathDecoration,
+	'HTMLTag': htmlTagNameDecoration,
+	'TagName': htmlTagNameDecoration,
+	'HorizontalRule': horizontalRuleDecoration,
+	'TaskMarker': taskMarkerDecoration,
+};
+
+
+type DecorationDescription = { pos: number; length: number; decoration: Decoration };
 
 // Returns a set of [Decoration]s, associated with block syntax groups that require
 // full-line styling.
@@ -87,6 +138,7 @@ const computeDecorations = (view: EditorView) => {
 			const line = view.state.doc.lineAt(pos);
 			decorations.push({
 				pos: line.from,
+				length: 0,
 				decoration,
 			});
 
@@ -116,58 +168,15 @@ const computeDecorations = (view: EditorView) => {
 				const viewFrom = Math.max(from, node.from);
 				const viewTo = Math.min(to, node.to);
 
-				switch (node.name) {
-				case 'FencedCode':
-				case 'CodeBlock':
-					addDecorationToLines(viewFrom, viewTo, codeBlockDecoration);
+				if (nodeNameToLineDecoration.hasOwnProperty(node.name)) {
+					const decoration = nodeNameToLineDecoration[node.name];
+					addDecorationToLines(viewFrom, viewTo, decoration);
 					blockDecorated = true;
-					break;
-				case 'BlockMath':
-					addDecorationToLines(viewFrom, viewTo, mathBlockDecoration);
-					blockDecorated = true;
-					break;
-				case 'Blockquote':
-					addDecorationToLines(viewFrom, viewTo, blockQuoteDecoration);
-					blockDecorated = true;
-					break;
-				case 'InlineMath':
-					addDecorationToRange(viewFrom, viewTo, inlineMathDecoration);
-					break;
-				case 'InlineCode':
-					addDecorationToRange(viewFrom, viewTo, inlineCodeDecoration);
-					break;
-				case 'URL':
-					addDecorationToRange(viewFrom, viewTo, urlDecoration);
-					break;
-				case 'SetextHeading1':
-				case 'SetextHeading2':
-				case 'ATXHeading1':
-				case 'ATXHeading2':
-				case 'ATXHeading3':
-				case 'ATXHeading4':
-				case 'ATXHeading5':
-				case 'ATXHeading6':
-					addDecorationToLines(viewFrom, viewTo, headerLineDecoration);
-					break;
-				case 'HTMLTag':
-				case 'TagName':
-					addDecorationToRange(viewFrom, viewTo, htmlTagNameDecoration);
-					break;
-				case 'TableHeader':
-					addDecorationToLines(viewFrom, viewTo, tableHeaderDecoration);
-					break;
-				case 'TableDelimiter':
-					addDecorationToLines(viewFrom, viewTo, tableDelimiterDecoration);
-					break;
-				case 'TableRow':
-					addDecorationToLines(viewFrom, viewTo, tableBodyDecoration);
-					break;
-				case 'HorizontalRule':
-					addDecorationToRange(viewFrom, viewTo, horizontalRuleDecoration);
-					break;
-				case 'TaskMarker':
-					addDecorationToRange(viewFrom, viewTo, taskMarkerDecoration);
-					break;
+				}
+
+				if (nodeNameToMarkDecoration.hasOwnProperty(node.name)) {
+					const decoration = nodeNameToMarkDecoration[node.name];
+					addDecorationToRange(viewFrom, viewTo, decoration);
 				}
 
 				// Only block decorations will have differing first and last lines
@@ -185,13 +194,23 @@ const computeDecorations = (view: EditorView) => {
 		});
 	}
 
-	decorations.sort((a, b) => a.pos - b.pos);
+	// Decorations need to be sorted in ascending order first by start position,
+	// then by length. Adding items to the RangeSetBuilder in an incorrect order
+	// causes an exception to be thrown.
+	decorations.sort((a, b) => {
+		const posComparison = a.pos - b.pos;
+		if (posComparison !== 0) {
+			return posComparison;
+		}
 
-	// Items need to be added to a RangeSetBuilder in ascending order
+		const lengthComparison = a.length - b.length;
+		return lengthComparison;
+	});
+
 	const decorationBuilder = new RangeSetBuilder<Decoration>();
 	for (const { pos, length, decoration } of decorations) {
-		// Null length => entire line
-		decorationBuilder.add(pos, pos + (length ?? 0), decoration);
+		// Zero length => entire line
+		decorationBuilder.add(pos, pos + length, decoration);
 	}
 	return decorationBuilder.finish();
 };

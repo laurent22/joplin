@@ -42,15 +42,12 @@ describe('createEditor', () => {
 
 		const headerLine = document.body.querySelector('.cm-headerLine')!;
 		expect(headerLine.textContent).toBe(headerLineText);
+		expect(getComputedStyle(headerLine).fontSize).toBe('1.6em');
 
 		// CodeMirror nests the tag that styles the header within .cm-headerLine:
 		//  <div class='cm-headerLine'><span class='someclass'>Testing...</span></div>
 		const headerLineContent = document.body.querySelectorAll('.cm-headerLine > span');
 		expect(headerLineContent.length).toBeGreaterThanOrEqual(1);
-		for (const part of headerLineContent) {
-			const style = getComputedStyle(part);
-			expect(style.fontSize).toBe('1.6em');
-		}
 
 		// Cleanup
 		editor.remove();
@@ -79,12 +76,14 @@ describe('createEditor', () => {
 		const testPlugin1 = {
 			pluginId: 'a.plugin.id',
 			contentScriptId: 'a.plugin.id.contentScript',
+			loadCssAsset: async (_name: string) => '* { color: red; }',
 			contentScriptJs: getContentScriptJs,
 			postMessageHandler,
 		};
 		const testPlugin2 = {
 			pluginId: 'another.plugin.id',
 			contentScriptId: 'another.plugin.id.contentScript',
+			loadCssAsset: async (_name: string) => '...',
 			contentScriptJs: getContentScriptJs,
 			postMessageHandler,
 		};

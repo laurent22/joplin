@@ -1,0 +1,62 @@
+diff --git a/src/sevenZip.ts b/src/sevenZip.ts
+index ef2a527..d98c777 100644
+--- a/src/sevenZip.ts
++++ b/src/sevenZip.ts
+@@ -1,21 +1,21 @@
+ // https://sevenzip.osdn.jp/chm/cmdline/exit_codes.htm
+ // https://sevenzip.osdn.jp/chm/cmdline/commands/index.htm
+ import * as _7z from "node-7z";
+-import * as sevenBin from "7zip-bin";
+-import * as path from "path";
+ import { exec } from "child_process";
+ import joplin from "api";
+-
+-export let pathTo7zip = sevenBin.path7za;
+-
+-export namespace sevenZip {
+-  export async function updateBinPath() {
+-    pathTo7zip = path.join(
+-      await joplin.plugins.installationDir(),
+-      "7zip-bin",
+-      pathTo7zip
+-    );
+-  }
++const sevenBin = joplin.require("7zip-bin");
++
++ export let pathTo7zip = sevenBin.path7za;
++
++ export namespace sevenZip {
++   export async function updateBinPath() {
++    // Not necessary with 7zip required from Joplin
++    // pathTo7zip = path.join(
++    //   await joplin.plugins.installationDir(),
++    //   "7zip-bin",
++    //   pathTo7zip
++    // );
++   }
+ 
+   export async function setExecutionFlag() {
+     if (process.platform !== "win32") {
+diff --git a/webpack.config.js b/webpack.config.js
+index 34a1797..7b2a480 100644
+--- a/webpack.config.js
++++ b/webpack.config.js
+@@ -200,15 +200,9 @@ const pluginConfig = { ...baseConfig, entry: './src/index.ts',
+ 		path: distDir,
+ 	},
+ 	plugins: [
+-		new CopyPlugin({
+-			patterns: [
+-				{
+-					from: '**/*',
+-					context: path.resolve(__dirname, 'node_modules','7zip-bin'),
+-					to: path.resolve(__dirname, 'dist/7zip-bin/'),
+-				},
+-			]
+-		}),
++		// Removed a CopyPlugin (added by Simple Backup, not necessary when using
++		// Joplin's built-in 7zip)
++
+ 		new CopyPlugin({
+ 			patterns: [
+ 				{

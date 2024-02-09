@@ -9,6 +9,7 @@ import { EditorView } from '@codemirror/view';
 import { Extension } from '@codemirror/state';
 
 import { inlineMathTag, mathTag } from './markdown/markdownMathParser';
+import { EditorTheme } from '../types';
 
 // For an example on how to customize the theme, see:
 //
@@ -24,7 +25,7 @@ import { inlineMathTag, mathTag } from './markdown/markdownMathParser';
 // use '&.cm-focused' in the theme.
 //
 // [theme] should be a joplin theme (see @joplin/lib/theme)
-const createTheme = (theme: any): Extension[] => {
+const createTheme = (theme: EditorTheme): Extension[] => {
 	// If the theme hasn't loaded yet, return nothing.
 	// (createTheme should be called again after the theme has loaded).
 	if (!theme) {
@@ -77,6 +78,11 @@ const createTheme = (theme: any): Extension[] => {
 	// This is equivalent to the default selection style -- our styling must
 	// be at least this specific.
 	const selectionBackgroundSelector = '&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground';
+
+	const baseHeadingStyle = {
+		fontWeight: 'bold',
+		fontFamily: theme.fontFamily,
+	};
 
 	const codeMirrorTheme = EditorView.theme({
 		'&': baseGlobalStyle,
@@ -145,7 +151,7 @@ const createTheme = (theme: any): Extension[] => {
 		// span with a larger font-size, the .cm-inlineCode's bounding box won't
 		// be big enough for its content.
 		// As such, we need to style whichever element directly wraps its content.
-		'& .cm-headerLine > .cm-inlineCode > *, & :not(.cm-headerLine) > .cm-inlineCode': {
+		'& .cm-inlineCode': {
 			borderWidth: '1px',
 			borderStyle: 'solid',
 			borderColor: isDarkTheme ? 'rgba(200, 200, 200, 0.5)' : 'rgba(100, 100, 100, 0.5)',
@@ -161,9 +167,46 @@ const createTheme = (theme: any): Extension[] => {
 		'& .cm-tableHeader, & .cm-tableRow, & .cm-tableDelimiter': monospaceStyle,
 		'& .cm-taskMarker': monospaceStyle,
 
+		// Applies maximum width styles to individual lines.
+		'& .cm-line': theme.contentMaxWidth ? {
+			maxWidth: theme.contentMaxWidth,
+
+			// Center
+			marginLeft: 'auto',
+			marginRight: 'auto',
+		} : undefined,
+
 		// Override the default URL style when the URL is within a link
 		'& .tok-url.tok-link, & .tok-link.tok-meta, & .tok-link.tok-string': {
 			opacity: theme.isDesktop ? 0.6 : 1,
+		},
+
+		// Applying font size changes with CSS rather than the theme below works
+		// around an issue where the border for code blocks in headings was too
+		// small.
+		'& .cm-h1': {
+			...baseHeadingStyle,
+			fontSize: '1.6em',
+		},
+		'& .cm-h2': {
+			...baseHeadingStyle,
+			fontSize: '1.4em',
+		},
+		'& .cm-h3': {
+			...baseHeadingStyle,
+			fontSize: '1.3em',
+		},
+		'& .cm-h4': {
+			...baseHeadingStyle,
+			fontSize: '1.2em',
+		},
+		'& .cm-h5': {
+			...baseHeadingStyle,
+			fontSize: '1.1em',
+		},
+		'& .cm-h6': {
+			...baseHeadingStyle,
+			fontSize: '1.0em',
 		},
 
 		// Style the search widget. Use ':root' to increase the selector's precedence
@@ -176,11 +219,6 @@ const createTheme = (theme: any): Extension[] => {
 		},
 	}, { dark: isDarkTheme });
 
-	const baseHeadingStyle = {
-		fontWeight: 'bold',
-		fontFamily: theme.fontFamily,
-	};
-
 	const highlightingStyle = HighlightStyle.define([
 		{
 			tag: tags.strong,
@@ -189,36 +227,6 @@ const createTheme = (theme: any): Extension[] => {
 		{
 			tag: tags.emphasis,
 			fontStyle: 'italic',
-		},
-		{
-			...baseHeadingStyle,
-			tag: tags.heading1,
-			fontSize: '1.6em',
-		},
-		{
-			...baseHeadingStyle,
-			tag: tags.heading2,
-			fontSize: '1.4em',
-		},
-		{
-			...baseHeadingStyle,
-			tag: tags.heading3,
-			fontSize: '1.3em',
-		},
-		{
-			...baseHeadingStyle,
-			tag: tags.heading4,
-			fontSize: '1.2em',
-		},
-		{
-			...baseHeadingStyle,
-			tag: tags.heading5,
-			fontSize: '1.1em',
-		},
-		{
-			...baseHeadingStyle,
-			tag: tags.heading6,
-			fontSize: '1.0em',
 		},
 		{
 			tag: tags.list,
@@ -259,6 +267,23 @@ const createTheme = (theme: any): Extension[] => {
 		{
 			tag: tags.typeName,
 			color: isDarkTheme ? '#7ff' : '#a00',
+		},
+		{
+			tag: tags.inserted,
+			color: isDarkTheme ? '#7f7' : '#471',
+		},
+		{
+			tag: tags.deleted,
+			color: isDarkTheme ? '#f96' : '#a21',
+		},
+		{
+			tag: tags.propertyName,
+			color: isDarkTheme ? '#d96' : '#940',
+		},
+		{
+			// CSS class names (and class names in other languages)
+			tag: tags.className,
+			color: isDarkTheme ? '#d8a' : '#904',
 		},
 	]);
 

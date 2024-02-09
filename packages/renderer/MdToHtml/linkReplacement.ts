@@ -1,4 +1,5 @@
-import utils, { ItemIdToUrlHandler } from '../utils';
+import { ItemIdToUrlHandler, OptionsResourceModel } from '../types';
+import * as utils from '../utils';
 import createEventHandlingAttrs from './createEventHandlingAttrs';
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
@@ -8,7 +9,7 @@ const { getClassNameForMimeType } = require('font-awesome-filetypes');
 export interface Options {
 	title?: string;
 	resources?: any;
-	ResourceModel?: any;
+	ResourceModel?: OptionsResourceModel;
 	linkRenderingType?: number;
 	plainResourceRendering?: boolean;
 	postMessageSyntax?: string;

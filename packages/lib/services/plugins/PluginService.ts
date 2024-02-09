@@ -33,8 +33,8 @@ export interface SettingAndValue {
 }
 
 export interface DefaultPluginSettings {
-	version: string;
 	settings?: SettingAndValue;
+	enabled?: boolean;
 }
 
 export interface DefaultPluginsInfo {
@@ -62,6 +62,11 @@ export function defaultPluginSetting(): PluginSetting {
 
 export interface PluginSettings {
 	[pluginId: string]: PluginSetting;
+}
+
+interface PluginLoadOptions {
+	devMode: boolean;
+	builtIn: boolean;
 }
 
 function makePluginId(source: string): string {
@@ -103,6 +108,10 @@ export default class PluginService extends BaseService {
 	public enabledPlugins(pluginSettings: PluginSettings): Plugins {
 		const enabledPlugins = Object.fromEntries(Object.entries(this.plugins_).filter((p) => this.pluginEnabled(pluginSettings, p[0])));
 		return enabledPlugins;
+	}
+
+	public isPluginLoaded(pluginId: string) {
+		return !!this.plugins_[pluginId];
 	}
 
 	public get pluginIds(): string[] {
@@ -341,7 +350,14 @@ export default class PluginService extends BaseService {
 		return this.runner_.callStatsSummary(pluginId, duration);
 	}
 
-	public async loadAndRunPlugins(pluginDirOrPaths: string | string[], settings: PluginSettings, devMode = false) {
+	public async loadAndRunPlugins(
+		pluginDirOrPaths: string | string[], settings: PluginSettings, options?: PluginLoadOptions,
+	) {
+		options ??= {
+			builtIn: false,
+			devMode: false,
+		};
+
 		let pluginPaths = [];
 
 		if (Array.isArray(pluginDirOrPaths)) {
@@ -371,6 +387,10 @@ export default class PluginService extends BaseService {
 				// such folders but to keep things sane we disallow it.
 				if (this.plugins_[plugin.id]) throw new Error(`There is already a plugin with this ID: ${plugin.id}`);
 
+				// We mark the plugin as built-in even if not enabled (being built-in affects
+				// update UI).
+				plugin.builtIn = options.builtIn;
+
 				this.setPluginAt(plugin.id, plugin);
 
 				if (!this.pluginEnabled(settings, plugin.id)) {
@@ -378,7 +398,7 @@ export default class PluginService extends BaseService {
 					continue;
 				}
 
-				plugin.devMode = devMode;
+				plugin.devMode = options.devMode;
 
 				await this.runPlugin(plugin);
 			} catch (error) {
@@ -490,7 +510,7 @@ export default class PluginService extends BaseService {
 		for (const pluginId in settings) {
 			if (settings[pluginId].deleted) {
 				await this.uninstallPlugin(pluginId);
-				newSettings = { ...settings };
+				newSettings = { ...newSettings };
 				delete newSettings[pluginId];
 			}
 		}

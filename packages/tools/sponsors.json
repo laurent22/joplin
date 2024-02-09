@@ -71,24 +71,24 @@
 			"imageName": "HostingDe.png"
 		},
 		{
-			"url": "https://residence-greece.com/",
-			"title": "Greece Golden Visa",
-			"imageName": "ResidenceGreece.jpg"
-		},
-		{
 			"url": "https://grundstueckspreise.info/",
 			"title": "SP Software GmbH",
 			"imageName": "Grundstueckspreise.png"
 		},
 		{
-			"url": "https://tranio.com/spain/",
-			"title": "Property for sale in Spain",
-			"imageName": "TranioOverseasProperty.jpg"
-		},
-		{
 			"url": "https://citricsheep.com",
 			"title": "Citric Sheep",
 			"imageName": "CitricSheep.png"
+		},
+		{
+			"url": "https://sorted.travel/?utm_source=joplinapp ",
+			"title": "Sorted Travel",
+			"imageName": "SortedTravel.png"
+		},
+		{
+			"url": "https://celebian.com ",
+			"title": "Celebian",
+			"imageName": "Celebian.png"
 		}
 	],
 	"orgsOld": [
@@ -96,6 +96,16 @@
 			"url": "https://usrigging.com/",
 			"title": "U.S. Ringing Supply",
 			"imageName": "RingingSupply.svg"
+		},
+		{
+			"url": "https://residence-greece.com/",
+			"title": "Greece Golden Visa",
+			"imageName": "ResidenceGreece.jpg"
+		},
+		{
+			"url": "https://tranio.com/spain/",
+			"title": "Property for sale in Spain",
+			"imageName": "TranioOverseasProperty.jpg"
 		}
 	]
 }

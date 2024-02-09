@@ -1,5 +1,5 @@
 import { State } from '../reducer';
-import eventManager from '../eventManager';
+import eventManager, { EventName } from '../eventManager';
 import BaseService from './BaseService';
 import shim from '../shim';
 import WhenClause from './WhenClause';
@@ -110,12 +110,12 @@ export default class CommandService extends BaseService {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public on(eventName: string, callback: Function) {
+	public on(eventName: EventName, callback: Function) {
 		eventManager.on(eventName, callback);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public off(eventName: string, callback: Function) {
+	public off(eventName: EventName, callback: Function) {
 		eventManager.off(eventName, callback);
 	}
 

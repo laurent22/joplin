@@ -43,6 +43,7 @@ function manifestToItem(manifest: PluginManifest): PluginItem {
 		enabled: true,
 		deleted: false,
 		devMode: false,
+		builtIn: false,
 		hasBeenUpdated: false,
 	};
 }
@@ -52,6 +53,7 @@ export interface PluginItem {
 	enabled: boolean;
 	deleted: boolean;
 	devMode: boolean;
+	builtIn: boolean;
 	hasBeenUpdated: boolean;
 }
 
@@ -60,7 +62,7 @@ const CellRoot = styled.div<{ isCompatible: boolean }>`
 	box-sizing: border-box;
 	background-color: ${props => props.theme.backgroundColor};
 	flex-direction: column;
-	align-items: flex-start;
+	align-items: stretch;
 	padding: 15px;
 	border: 1px solid ${props => props.theme.dividerColor};
 	border-radius: 6px;
@@ -96,12 +98,15 @@ const NeedUpgradeMessage = styled.span`
 	font-size: ${props => props.theme.fontSize}px;
 `;
 
-const DevModeLabel = styled.div`
+const BoxedLabel = styled.div`
 	border: 1px solid ${props => props.theme.color};
 	border-radius: 4px;
 	padding: 4px 6px;
 	font-size: ${props => props.theme.fontSize * 0.75}px;
 	color: ${props => props.theme.color};
+	flex-grow: 0;
+	height: min-content;
+	margin-top: auto;
 `;
 
 const StyledNameAndVersion = styled.div<{ mb: any }>`
@@ -170,7 +175,7 @@ export default function(props: Props) {
 		if (!props.onToggle) return null;
 
 		if (item.devMode) {
-			return <DevModeLabel>DEV</DevModeLabel>;
+			return <BoxedLabel>DEV</BoxedLabel>;
 		}
 
 		return <ToggleButton
@@ -181,7 +186,10 @@ export default function(props: Props) {
 	}
 
 	function renderDeleteButton() {
+		// Built-in plugins can only be disabled
+		if (item.builtIn) return null;
 		if (!props.onDelete) return null;
+
 		return <Button level={ButtonLevel.Secondary} onClick={() => props.onDelete({ item })} title={_('Delete')}/>;
 	}
 
@@ -217,6 +225,16 @@ export default function(props: Props) {
 		/>;
 	}
 
+	const renderDefaultPluginLabel = () => {
+		if (item.builtIn) {
+			return (
+				<BoxedLabel>{_('Built-in')}</BoxedLabel>
+			);
+		}
+
+		return null;
+	};
+
 	function renderFooter() {
 		if (item.devMode) return null;
 
@@ -236,6 +254,7 @@ export default function(props: Props) {
 				{renderInstallButton()}
 				{renderUpdateButton()}
 				<div style={{ display: 'flex', flex: 1 }}/>
+				{renderDefaultPluginLabel()}
 			</CellFooter>
 		);
 	}

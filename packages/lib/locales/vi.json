@@ -56,6 +56,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -308,6 +311,9 @@
 	"Browse...": [
 		"Truy xuất…"
 	],
+	"Built-in": [
+		""
+	],
 	"Bulleted List": [
 		"Danh sách"
 	],
@@ -418,6 +424,9 @@
 	],
 	"Close": [
 		"Đóng"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Đóng cửa sổ"
@@ -902,6 +911,9 @@
 	"Enable note history": [
 		"Bật lịch sử note"
 	],
+	"Enable optical character recognition (OCR)": [
+		""
+	],
 	"Enable PDF viewer": [
 		"Bật trình xem PDF"
 	],
@@ -1213,6 +1225,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Để làm được điều đó, toàn bộ dữ liệu sẽ phải được mã hoá và đồng bộ, tốt nhất là để nó chạy quay đêm.\n\nĐể bắt đầu, hãy làm theo hướng dẫn dưới đây:\n\n1. Đồng bộ hoá tất cả thiết bị của bạn.\n2. Ấn vào “%s”.\n3. Đợi đến khi chạy xong. Trong khi chạy, không thay đổi bất kỳ ghi chú nào trên các thiết bị để tránh xung đột.\n4. Khi đồng bộ đã hoàn tất trên thiết bị này, đồng tất cả thiết bị còn lại và đợi đến khi hoàn tất.\n\nQuan trọng: bạn chỉ cần thực hiện quá trình này một lần trên một thiết bị."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Để sử dụng đồng bộ hóa tệp tin hệ thống, bạn cần cho phép ghi vào hệ thống lưu trữ bên ngoài."
@@ -2144,6 +2159,12 @@
 	"Solarised Light": [
 		"Solarised Light"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Một số mục không thể được giải mã."
 	],
@@ -2420,6 +2441,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Mục tiêu đồng bộ cần được nâng cấp trước khi Joplin có thể thực hiện đồng bộ. Quá trình có thể mất vài phút để hoàn tất và ứng dụng cần được khởi động lại. Để tiếp tục, hãy nhấn vào đường dẫn."
 	],
@@ -2624,6 +2648,9 @@
 	"Undo": [
 		"Undo"
 	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
+	],
 	"Unknown flag: %s": [
 		"Không tìm thấy flag này: %s"
 	],
@@ -2776,6 +2803,9 @@
 	],
 	"When creating a new to-do:": [
 		"Khi tạo một to-do mới:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""

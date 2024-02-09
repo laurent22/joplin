@@ -30,6 +30,9 @@ const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local');
 const React = require('react');
 const nodeSqlite = require('sqlite3');
 const initLib = require('@joplin/lib/initLib').default;
+const pdfJs = require('pdfjs-dist');
+require('@sentry/electron/renderer');
+
 
 const main = async () => {
 	if (bridge().env() === 'dev') {
@@ -77,7 +80,7 @@ const main = async () => {
 	BaseItem.loadClass('MasterKey', MasterKey);
 	BaseItem.loadClass('Revision', Revision);
 
-	Setting.setConstant('appId', `net.cozic.joplin${bridge().env() === 'dev' ? 'dev' : ''}-desktop`);
+	Setting.setConstant('appId', bridge().appId());
 	Setting.setConstant('appType', 'desktop');
 
 	// eslint-disable-next-line no-console
@@ -98,12 +101,15 @@ const main = async () => {
 		return p.version;
 	}
 
+	pdfJs.GlobalWorkerOptions.workerSrc = `${bridge().electronApp().buildDir()}/pdf.worker.min.js`;
+
 	shimInit({
 		keytar,
 		React,
 		appVersion,
 		electronBridge: bridge(),
 		nodeSqlite,
+		pdfJs,
 	});
 
 	// Disable drag and drop of links inside application (which would

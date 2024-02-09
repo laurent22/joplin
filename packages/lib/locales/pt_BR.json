@@ -62,6 +62,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -221,6 +224,12 @@
 	"Always": [
 		"Sempre"
 	],
+	"Always ask": [
+		"Sempre perguntar"
+	],
+	"Always resize": [
+		"Sempre redimensionar"
+	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
 		"O título do caderno é ambíguo: \"%s\". Por favor, utilize o identificador do caderno em vez disso - pressione \"ti\" para consultar os identificadores ou utilize $b para o caderno atualmente selecionado"
 	],
@@ -228,10 +237,10 @@
 		"O título do caderno é ambíguo: \"%s\". Por favor, utilize o identificador do caderno em vez disso - pressione \"ti\" para consultar os identificadores"
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
-		""
+		"Um desenho foi salvo automaticamente. Anexar uma cópia dele na Nota?"
 	],
 	"An error occurred: %s": [
-		""
+		"Um erro aconteceu: %s"
 	],
 	"An update is available, do you want to download it now?": [
 		"Uma atualização está disponível, você quer baixar agora?"
@@ -331,6 +340,9 @@
 	],
 	"Browse...": [
 		"Navegar..."
+	],
+	"Built-in": [
+		""
 	],
 	"Bulleted List": [
 		"Lista com bullets"
@@ -458,6 +470,9 @@
 	"Close dropdown": [
 		"Fechar menu"
 	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
+	],
 	"Close Window": [
 		"Fechar Janela"
 	],
@@ -469,6 +484,9 @@
 	],
 	"Code View": [
 		"Visualizar Código"
+	],
+	"Collaborate on a notebook with others": [
+		"Colaborar em um caderno com outras pessoas"
 	],
 	"Collaborate on notebooks with others": [
 		"Edite cadernos de forma colaborativa"
@@ -493,6 +511,9 @@
 	],
 	"Command palette...": [
 		"Guia de comandos..."
+	],
+	"Compact": [
+		"Compactar"
 	],
 	"Completed": [
 		"Completado"
@@ -603,7 +624,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Não foi possível verificar o status de compartilhamento deste caderno - abortando. Por favor, tente de novo quando estiver conectado na internet."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"Não foi possível verificar a sua identidade: %s"
 	],
 	"Create": [
@@ -685,7 +706,7 @@
 		"Certificados TLS personalizados"
 	],
 	"Customise the note publishing banner": [
-		""
+		"Customizar o banner de publicação da nota"
 	],
 	"Cut": [
 		"Cortar"
@@ -805,7 +826,7 @@
 		"Formato do destino: %s"
 	],
 	"Detailed": [
-		""
+		"Detalhado"
 	],
 	"Directory": [
 		"Diretório"
@@ -830,6 +851,9 @@
 	],
 	"Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": [
 		"Desabilitar a criptografia significa que *todas* as suas notas e anexos serão ressincronizados e enviados sem criptografia. Você quer continuar?"
+	],
+	"Discard": [
+		"Descartar"
 	],
 	"Discard changes": [
 		"Descartar alterações"
@@ -873,6 +897,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Não perca a senha já que, por segurança, esse será o *único* modo de descriptografar os dados! Para habilitar a criptografia, por favor entre a senha abaixo."
 	],
+	"Donate, website": [
+		"Doar, website"
+	],
 	"Done": [
 		"Concluído"
 	],
@@ -904,10 +931,10 @@
 		"Drácula"
 	],
 	"Draw picture": [
-		""
+		"Desenhar imagem"
 	],
 	"Drawing": [
-		""
+		"Desenhar"
 	],
 	"Drop notes or files here": [
 		"Solte notas e arquivos aqui"
@@ -987,6 +1014,9 @@
 	"Email to Note": [
 		"Notas por e-mail"
 	],
+	"Email To Note, login information": [
+		"Email Para Nota, informação de login"
+	],
 	"Emails": [
 		"Emails"
 	],
@@ -1043,6 +1073,9 @@
 	],
 	"Enable note history": [
 		"Habilitar histórico de notas"
+	],
+	"Enable optical character recognition (OCR)": [
+		""
 	],
 	"Enable PDF viewer": [
 		"Habilitar visualizador de PDF"
@@ -1110,6 +1143,9 @@
 	"Enter notebook title": [
 		"Digite o título do caderno"
 	],
+	"Enter password": [
+		"Entre a senha"
+	],
 	"Enum": [
 		"Enum"
 	],
@@ -1157,6 +1193,9 @@
 	],
 	"Export profile": [
 		"Exportar perfil"
+	],
+	"Export your data": [
+		"Exportar seus dados"
 	],
 	"Exported successfully!": [
 		"Exportado com sucesso!"
@@ -1280,7 +1319,7 @@
 		"Gerando links..."
 	],
 	"Geolocation, spellcheck, editor toolbar, image resize": [
-		""
+		"Geolocalização, ortografia, barra de edição, redimensionar imagem"
 	],
 	"Get it now:": [
 		"Tenha agora:"
@@ -1349,7 +1388,7 @@
 		"Pasta HTML"
 	],
 	"HTML document": [
-		""
+		"Documento HTML"
 	],
 	"HTML File": [
 		"Arquivo HTML"
@@ -1398,6 +1437,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Para fazer isso, seu conjunto de dados inteiro terá que ser criptografado e sincronizado, então é melhor deixá-lo executando à noite.\n\nPara começar, por favor siga estas instruções:\n\n1. Sincronize todos os seus dispositivos.\n2. Clique \"%s\".\n3. Deixe executar até completar. Enquanto estiver executando, evite mudar qualquer nota em outros dispositivos, para evitar conflitos.\n4. Uma vez que a sincronia tenha sido feita, sincronize todos os outros dispositivos, e deixe-o executar até o fim.\n\nImportante: você só precisa executar isto UMA VEZ, em um dispositivo."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Para usar a sincronização do sistema de arquivos, é necessário sua permissão para gravar no armazenamento externo."
@@ -1555,6 +1597,9 @@
 	"Language": [
 		"Idioma"
 	],
+	"Language, date format": [
+		"Idioma, formato de data"
+	],
 	"Last error: %s": [
 		"Último erro: %s"
 	],
@@ -1638,7 +1683,7 @@
 		"Logout"
 	],
 	"Logs, profiles, sync status": [
-		""
+		"Logo, perfis, status de sincronização"
 	],
 	"Make a donation": [
 		"Fazer uma doação"
@@ -1701,7 +1746,7 @@
 		"Tamanho total máximo"
 	],
 	"Media player, math, diagrams, table of contents": [
-		""
+		"Player de mídia, matemática, diagramas, tabela de conteúdo"
 	],
 	"Missing keys": [
 		"Chaves faltando"
@@ -1749,7 +1794,7 @@
 		"N"
 	],
 	"Never resize": [
-		""
+		"Nunca redimensionar"
 	],
 	"New note": [
 		"Nova nota"
@@ -1880,6 +1925,9 @@
 	"Note list growth factor": [
 		"Fator de crescimento da lista de notas"
 	],
+	"Note list style": [
+		"Estilo de lista da Nota"
+	],
 	"Note properties": [
 		"Propriedades da nota"
 	],
@@ -1968,7 +2016,7 @@
 		"Abrir..."
 	],
 	"Opening section %s": [
-		""
+		"Abrindo seção %s"
 	],
 	"Operation cancelled": [
 		"Operação cancelada"
@@ -2267,6 +2315,9 @@
 	"Restart and upgrade": [
 		"Reiniciar e fazer upgrade"
 	],
+	"Restart in safe mode": [
+		"Reiniciar em modo de segurança"
+	],
 	"Restart now": [
 		"Reiniciar agora"
 	],
@@ -2381,6 +2432,9 @@
 	"Select parent notebook": [
 		"Selecione o caderno pai"
 	],
+	"Send bug report": [
+		"Enviar relatório de bugs"
+	],
 	"Server is already running on port %d": [
 		"O servidor já está rodando na porta %d"
 	],
@@ -2411,6 +2465,9 @@
 	"Share a copy of all notes in a file format that can be imported by Joplin on a computer.": [
 		"Compartilhar uma cópia de todas as suas notas em um formato de arquivo que pode ser importado pelo Joplin em um computador."
 	],
+	"Share a notebook with others": [
+		"Compartilhar um caderno com outros"
+	],
 	"Share Notebook": [
 		"Compartilhar Caderno"
 	],
@@ -2418,7 +2475,7 @@
 		"Compartilhar caderno..."
 	],
 	"Share permissions": [
-		""
+		"Permissões de compartilhamento"
 	],
 	"Sharing notebook...": [
 		"Compartilhar caderno..."
@@ -2460,10 +2517,13 @@
 		"Mostrar/esconder a barra lateral"
 	],
 	"Shrink large images before adding them to notes.": [
-		""
+		"Diminua imagens grandes antes de adicionar nas notas."
+	],
+	"Side menu closed": [
+		"Menu lateral fechado"
 	],
 	"Side menu opened": [
-		""
+		"Menu lateral aberto"
 	],
 	"Sidebar": [
 		"Barra lateral"
@@ -2485,6 +2545,12 @@
 	],
 	"Solarised Light": [
 		"Solarizado Claro"
+	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
 	],
 	"Some items cannot be decrypted.": [
 		"Alguns itens não podem ser descriptografados."
@@ -2639,6 +2705,9 @@
 	"Sync your notes": [
 		"Sincronizar suas notas"
 	],
+	"Sync, encryption, proxy": [
+		"Sincronizar, criptografia, proxy"
+	],
 	"Synchronisation": [
 		"Sincronização"
 	],
@@ -2695,6 +2764,9 @@
 	],
 	"Teams": [
 		"Equipes"
+	],
+	"Text document": [
+		"Documento texto"
 	],
 	"Text editor command": [
 		"Comando do editor de texto"
@@ -2783,11 +2855,17 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"O destinatário não pôde ser removido da lista. Por favor, tente novamente\n\nO erro foi: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"O alvo da sincronização precisa ser atualizado antes que o Joplin possa sincronizar. A operação pode levar alguns minutos para completar e o app terá que ser reiniciado. Para proceder, por favor, clique neste link."
 	],
 	"The sync target needs to be upgraded. Press this banner to proceed.": [
 		"O alvo de sincronização deve passar por upgrade! Clique nesse banner para executar."
+	],
+	"The synchronisation password is missing.": [
+		"A senha de sincronização está faltando."
 	],
 	"The tag \"%s\" already exists. Please choose a different name.": [
 		"A tag \"%s\" já existe. Escolha um nome diferente."
@@ -2809,6 +2887,9 @@
 	],
 	"Theme": [
 		"Tema"
+	],
+	"Themes, editor font": [
+		"Temas, fonte do editor"
 	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"Atualmente, não há notas. Crie uma clicando no botão (+)."
@@ -2848,6 +2929,9 @@
 	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"Esse token de autorização só é necessário para permitir que aplicativos de terceiros acessem o Joplin."
+	],
+	"This drawing may have unsaved changes.": [
+		"Essa figura pode ter alterações não salvas."
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Esta é uma ferramenta avançada para exibir os anexos vinculados à sua nota. Por favor tenha cuidado ao apagá-los pois não poderão ser recuperados depois."
@@ -2957,6 +3041,9 @@
 	"Toggle external editing": [
 		"Alternar edição externa"
 	],
+	"Toggle note history, keep notes for": [
+		"Alternar histórico de nota, manter notas"
+	],
 	"Toggle note list": [
 		"Alternar lista de notas"
 	],
@@ -3005,14 +3092,23 @@
 	"Type: %s.": [
 		"Tipo: %s."
 	],
+	"Unable to edit resource of type %s": [
+		"Impossível editar o recurso do tipo %s"
+	],
 	"Unable to export or share data. Reason: %s": [
 		"Não foi possível exportar ou compartilhar os dados. Motivo: %s"
+	],
+	"Unable to share log data. Reason: %s": [
+		"Impossível compartilhar os dados do log. Motivo: %s"
 	],
 	"Uncompleted to-dos on top": [
 		"Mostrar tarefas incompletas no topo"
 	],
 	"Undo": [
 		"Desfazer"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Flag desconhecida: %s"
@@ -3185,8 +3281,11 @@
 	"When creating a new to-do:": [
 		"Quando criar uma nova tarefa:"
 	],
-	"Window unresponsive.": [
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
+	],
+	"Window unresponsive.": [
+		"Janela não responde."
 	],
 	"Words": [
 		"Palavras"

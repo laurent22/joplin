@@ -62,6 +62,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		"%s er ikke optimeret til at synkronisere mange små filer, så din første synkronisering vil være langsom."
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -237,7 +240,7 @@
 		"Der blev fundet en automatisk gemt tegning. Vedhæfter en kopi af den til noten?"
 	],
 	"An error occurred: %s": [
-		""
+		"Der opstod en fejl: %s"
 	],
 	"An update is available, do you want to download it now?": [
 		"Opdatering er tilgængelig, vil du hente den nu?"
@@ -464,6 +467,9 @@
 	"Close dropdown": [
 		"Luk rullelisten"
 	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
+	],
 	"Close Window": [
 		"Luk vindue"
 	],
@@ -615,7 +621,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Kunne ikke verificere denne notesbogs status for deling - afbryder. Prøv venligst igen, når du har forbindelse til internettet."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"Kunne ikke bekræfte din identitet: %s"
 	],
 	"Create": [
@@ -888,6 +894,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Glem ikke adgangkoden, da den af sikkerhedshensyn er den *eneste* mulighed for dekryptering af data! For at aktivere kryptering til, skal du indtaste din adgangskode herunder."
 	],
+	"Donate, website": [
+		"Donér, hjemmeside"
+	],
 	"Done": [
 		"Færdig"
 	],
@@ -1002,6 +1011,9 @@
 	"Email to Note": [
 		"E-mail til note"
 	],
+	"Email To Note, login information": [
+		"E-mail til note, loginoplysninger"
+	],
 	"Emails": [
 		"E-mails"
 	],
@@ -1058,6 +1070,9 @@
 	],
 	"Enable note history": [
 		"Slå note-historie til"
+	],
+	"Enable optical character recognition (OCR)": [
+		"Aktivér optisk tegngenkendelse (OCR)"
 	],
 	"Enable PDF viewer": [
 		"Aktivér PDF-viser"
@@ -1175,6 +1190,9 @@
 	],
 	"Export profile": [
 		"Eksporter profil"
+	],
+	"Export your data": [
+		"Eksportér dine data"
 	],
 	"Exported successfully!": [
 		"Eksporteret med succes!"
@@ -1298,7 +1316,7 @@
 		"Opretter links..."
 	],
 	"Geolocation, spellcheck, editor toolbar, image resize": [
-		""
+		"Geolokalisering, stavekontrol, redigeringsværktøjslinje, ændring af billedstørrelse"
 	],
 	"Get it now:": [
 		"Få den nu:"
@@ -1416,6 +1434,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"For at gøre dette skal hele dit datasæt krypteres og synkroniseres, så det er bedst at lade det køre hen over natten.\n\nFølg disse instruktioner for at starte:\n\n1. Synkroniser alle dine enheder.\n2. Klik \"%s\".\n3. Lad det køre færdig. Mens synkroniseringen kører, bør du undgå at ændre nogen noter på dine andre enheder for at undgå konflikter.\n4. Når synk er færdig på denne enhed, synk'er du alle dine andre enheder og lader det køre helt færdig.\n\nVigtigt: Du behøver kun at gøre dette EN gang på en enhed."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"For at bruge filsystemsynkronisering skal du give tilladelse til at skrive til eksternt lager."
@@ -1573,6 +1594,9 @@
 	"Language": [
 		"Sprog"
 	],
+	"Language, date format": [
+		"Sprog, datoformat"
+	],
 	"Last error: %s": [
 		"Sidste fejl: %s"
 	],
@@ -1656,7 +1680,7 @@
 		"Log ud"
 	],
 	"Logs, profiles, sync status": [
-		""
+		"Logfiler, profiler, synkroniseringsstatus"
 	],
 	"Make a donation": [
 		"Giv en donation"
@@ -1719,7 +1743,7 @@
 		"Maks samlet størrelse"
 	],
 	"Media player, math, diagrams, table of contents": [
-		""
+		"Medieafspiller, matematik, diagrammer, indholdsfortegnelse"
 	],
 	"Missing keys": [
 		"Manglende nøgler"
@@ -1989,7 +2013,7 @@
 		"Åbn..."
 	],
 	"Opening section %s": [
-		""
+		"Åbner sektion %s"
 	],
 	"Operation cancelled": [
 		"Udførelse annulleret"
@@ -2288,6 +2312,9 @@
 	"Restart and upgrade": [
 		"Genstart og upgradér"
 	],
+	"Restart in safe mode": [
+		"Genstart i fejlsikret tilstand"
+	],
 	"Restart now": [
 		"Genstart nu"
 	],
@@ -2369,11 +2396,17 @@
 	"Search for...": [
 		"Søg efter..."
 	],
+	"Search hidden": [
+		"Søg skjulte"
+	],
 	"Search in all the notes": [
 		"Søg i alle noterne"
 	],
 	"Search in current note": [
 		"Søg i denne note"
+	],
+	"Search shown": [
+		"Søg viste"
 	],
 	"Search...": [
 		"Søg..."
@@ -2401,6 +2434,9 @@
 	],
 	"Select parent notebook": [
 		"Vælg overordnet notesbog"
+	],
+	"Send bug report": [
+		"Send fejlrapport"
 	],
 	"Server is already running on port %d": [
 		"Serveren kører allerede på port %d"
@@ -2512,6 +2548,12 @@
 	],
 	"Solarised Light": [
 		"Solarised Lys"
+	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
 	],
 	"Some items cannot be decrypted.": [
 		"Nogle emner kan ikke dekrypteres."
@@ -2666,6 +2708,9 @@
 	"Sync your notes": [
 		"Synk dine noter"
 	],
+	"Sync, encryption, proxy": [
+		"Synkronisering, kryptering, proxy"
+	],
 	"Synchronisation": [
 		"Synkronisering"
 	],
@@ -2777,6 +2822,10 @@
 	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
 		"Faktoren vil bestemme om elementet vil vokse eller skrumpe for at tilpasse den tilgængelig plads i dens beholder med hensyn til andre elementer. Således vil et element med en faktor 2 optage dobbelt så meget plads som et element med en faktor 1. Genstart app'en for at se ændringer."
 	],
+	"The following attachment matches your search query:": [
+		"Følgende vedhæftede fil matcher din søgeforespørgsel:",
+		"Følgende vedhæftede filer matcher din søgeforespørgsel:"
+	],
 	"The following attachments are being watched for changes:": [
 		"Følgende vedhæftninger overvåges for ændringer:"
 	],
@@ -2813,6 +2862,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Modtageren kunne ikke fjernes fra listen. Prøv venligst igen.\n\nFejlen var: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Synkroniseringsmålet skal opgraderes før Joplin kan synkronisere. Denne operation kan tage nogle minutter at udføre, og appen skal genstartes. Klik på linket for at fortsætte."
 	],
@@ -2842,6 +2894,9 @@
 	],
 	"Theme": [
 		"Tema"
+	],
+	"Themes, editor font": [
+		"Temaer, editorskrifttype"
 	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"Der er ingen noter. Opret note ved at klikke på (+) knappen."
@@ -2993,6 +3048,9 @@
 	"Toggle external editing": [
 		"Slå ekstern redigering til eller fra"
 	],
+	"Toggle note history, keep notes for": [
+		"Skift notehistorik, gem noter til"
+	],
 	"Toggle note list": [
 		"Slå noteliste til eller fra"
 	],
@@ -3055,6 +3113,9 @@
 	],
 	"Undo": [
 		"Fortryd"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Ukendt markering: %s"
@@ -3227,8 +3288,11 @@
 	"When creating a new to-do:": [
 		"Ved oprettelse af ny opgave:"
 	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		"Når det er aktiveret, vil applikationen scanne dine vedhæftede filer og udtrække teksten fra dem. Dette giver dig mulighed for at søge efter tekst i disse vedhæftede filer."
+	],
 	"Window unresponsive.": [
-		""
+		"Vinduet reagerer ikke."
 	],
 	"Words": [
 		"Ord"

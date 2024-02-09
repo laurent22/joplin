@@ -619,20 +619,22 @@ export const toggleSelectedLinesStartWith = (
 };
 
 // Ensures that ordered lists within [sel] are numbered in ascending order.
-export const renumberList = (state: EditorState, sel: SelectionRange): SelectionUpdate => {
+export const renumberSelectedLists = (state: EditorState): TransactionSpec => {
 	const doc = state.doc;
 
 	const listItemRegex = /^(\s*)(\d+)\.\s?/;
-	const changes: ChangeSpec[] = [];
-	const fromLine = doc.lineAt(sel.from);
-	const toLine = doc.lineAt(sel.to);
-	let charsAdded = 0;
 
 	// Re-numbers ordered lists and sublists with numbers on each line in [linesToHandle]
 	const handleLines = (linesToHandle: Line[]) => {
+		const changes: ChangeSpec[] = [];
+
+		type ListItemRecord = {
+			nextListNumber: number;
+			indentationLength: number;
+		};
+		const listNumberStack: ListItemRecord[] = [];
 		let currentGroupIndentation = '';
 		let nextListNumber = 1;
-		const listNumberStack: number[] = [];
 		let prevLineNumber;
 
 		for (const line of linesToHandle) {
@@ -644,15 +646,38 @@ export const renumberList = (state: EditorState, sel: SelectionRange): Selection
 
 			const filteredText = stripBlockquote(line);
 			const match = filteredText.match(listItemRegex);
+
+			// Skip lines that aren't the correct type (e.g. blank lines)
+			if (!match) {
+				continue;
+			}
+
 			const indentation = match[1];
 
 			const indentationLen = tabsToSpaces(state, indentation).length;
-			const targetIndentLen = tabsToSpaces(state, currentGroupIndentation).length;
+			let targetIndentLen = tabsToSpaces(state, currentGroupIndentation).length;
 			if (targetIndentLen < indentationLen) {
-				listNumberStack.push(nextListNumber);
+				listNumberStack.push({ nextListNumber, indentationLength: indentationLen });
 				nextListNumber = 1;
 			} else if (targetIndentLen > indentationLen) {
-				nextListNumber = listNumberStack.pop() ?? parseInt(match[2], 10);
+				nextListNumber = parseInt(match[2], 10);
+
+				// Handle the case where we deindent multiple times. For example,
+				// 1. test
+				//    1. test
+				//      1. test
+				// 2. test
+				while (targetIndentLen > indentationLen) {
+					const listNumberRecord = listNumberStack.pop();
+
+					if (!listNumberRecord) {
+						break;
+					} else {
+						targetIndentLen = listNumberRecord.indentationLength;
+						nextListNumber = listNumberRecord.nextListNumber;
+					}
+				}
+
 			}
 
 			if (targetIndentLen !== indentationLen) {
@@ -669,44 +694,65 @@ export const renumberList = (state: EditorState, sel: SelectionRange): Selection
 				to,
 				insert: inserted,
 			});
-			charsAdded -= to - from;
-			charsAdded += inserted.length;
 		}
+
+		return changes;
 	};
 
-	const linesToHandle: Line[] = [];
-	syntaxTree(state).iterate({
-		from: sel.from,
-		to: sel.to,
-		enter: (nodeRef: SyntaxNodeRef) => {
-			if (nodeRef.name === 'ListItem') {
-				for (const node of nodeRef.node.parent.getChildren('ListItem')) {
-					const line = doc.lineAt(node.from);
-					const filteredText = stripBlockquote(line);
-					const match = filteredText.match(listItemRegex);
-					if (match) {
-						linesToHandle.push(line);
+	// Find all selected lists
+	const selectedListRanges: SelectionRange[] = [];
+	for (const selection of state.selection.ranges) {
+		const listLines: Line[] = [];
+
+		syntaxTree(state).iterate({
+			from: selection.from,
+			to: selection.to,
+			enter: (nodeRef: SyntaxNodeRef) => {
+				if (nodeRef.name === 'ListItem') {
+					for (const node of nodeRef.node.parent.getChildren('ListItem')) {
+						const line = doc.lineAt(node.from);
+						const filteredText = stripBlockquote(line);
+						const match = filteredText.match(listItemRegex);
+						if (match) {
+							listLines.push(line);
+						}
 					}
 				}
+			},
+		});
+
+		listLines.sort((a, b) => a.number - b.number);
+
+		if (listLines.length > 0) {
+			const fromLine = listLines[0];
+			const toLine = listLines[listLines.length - 1];
+
+			selectedListRanges.push(
+				EditorSelection.range(fromLine.from, toLine.to),
+			);
+		}
+	}
+
+	const changes: ChangeSpec[] = [];
+	if (selectedListRanges.length > 0) {
+		// Use EditorSelection.create to merge overlapping lists
+		const listsToHandle = EditorSelection.create(selectedListRanges).ranges;
+
+		for (const listSelection of listsToHandle) {
+			const lines = [];
+
+			const startLine = doc.lineAt(listSelection.from);
+			const endLine = doc.lineAt(listSelection.to);
+
+			for (let i = startLine.number; i <= endLine.number; i++) {
+				lines.push(doc.line(i));
 			}
-		},
-	});
 
-	linesToHandle.sort((a, b) => a.number - b.number);
-	handleLines(linesToHandle);
-
-	// Re-position the selection in a way that makes sense
-	if (sel.empty) {
-		sel = EditorSelection.cursor(toLine.to + charsAdded);
-	} else {
-		sel = EditorSelection.range(
-			fromLine.from,
-			toLine.to + charsAdded,
-		);
+			changes.push(...handleLines(lines));
+		}
 	}
 
 	return {
-		range: sel,
 		changes,
 	};
 };

@@ -2,37 +2,37 @@
 
 Coding style is mostly enforced by a pre-commit hook that runs `eslint`. This hook is installed whenever running `yarn install` on any of the application directory. If for some reason the pre-commit hook didn't get installed, you can manually install it by running `yarn install` at the root of the repository.
 
-### Enforcing rules using eslint
+## Enforcing rules using eslint
 
-Whenever possible, coding style should be enforced using an eslint rule. To do so, add the relevant rule or plugin to `eslintrc.js`. To manually run the linter, run `yarn run linter ./` from the root of the project.
+Whenever possible, coding style should be enforced using an eslint rule. To do so, add the relevant rule or plugin to `eslintrc.js`. To manually run the linter, run `yarn linter ./` from the root of the project.
 
 When adding a rule, you will often find that many files will no longer pass the linter. In that case, you have two options:
 
 - Fix the files one by one. If there aren't too many files, and the changes are simple (they are unlikely to introduce regressions), this is the preferred solution.
 
-- Or use `yarn run linter-interactive ./` to disable existing errors. The interactive tool will process all the files and you can then choose to disable any existing error that it finds (by adding a `eslint-disable-next-line` comment above it). This allows keeping the existing, working codebase as it is, and enforcing that new code follows the rule. When using this method, add the comment "Old code before rule was applied" so that we can easily find back all the lines that have been automatically disabled.
+- Or use `yarn linter-interactive ./` to disable existing errors. The interactive tool will process all the files and you can then choose to disable any existing error that it finds (by adding a `eslint-disable-next-line` comment above it). This allows keeping the existing, working codebase as it is, and enforcing that new code follows the rule. When using this method, add the comment "Old code before rule was applied" so that we can easily find back all the lines that have been automatically disabled.
 
-### Use TypeScript for new files
+## TypeScript rules
 
-#### Creating a new `.ts` file
+### Creating a new `.ts` file
 
 Because the TypeScript compiler generates `.js` files, be sure to add these new `.js` files to `.eslintignore` and `.gitignore`.
 
 To do this,
 1. If the TypeScript compiler has already generated a `.js` file for the new `.ts` file, delete it.
-2. Run `yarn run updateIgnored` in the root directory of the project (or `yarn run postinstall`)
+2. Run `yarn updateIgnored` in the root directory of the project (or `yarn postinstall`)
 
-#### Convert existing `.js` files to TypeScript before modifying
+### Convert existing `.js` files to TypeScript before modifying
 
 Even if you are **modifying** a file that was originally in JavaScript you should ideally convert it first to TypeScript before modifying it.
 
 If this is a large file however please ask first if it needs to be converted. Some very old and large JS files are tricky to convert properly due to poorly defined types, so in some cases it's better to leave that for another day (or another PR).
 
-#### Prefer `import` to `require`
+### Prefer `import` to `require`
 
 In TypeScript files prefer `import` to `require` so that we can benefit from type-checking. If it does not work, you may have to add the type using `yarn add @types/NAME_OF_PACKAGE`. If you are trying to import an old package, it may not have TypeScript types and in this case using `require()` is acceptable.
 
-#### Avoid inline types
+### Avoid inline types
 
 In general please define types separately as it improves readability and it means the type can be re-used.
 
@@ -52,7 +52,7 @@ const config: Config = {
 }	
 ```
 
-#### Don't set the type when it can be inferred
+### Don't set the type when it can be inferred
 
 TypeScript can automatically detect the type so setting it explicitely in many cases is not needed, and makes the code unecessary verbose. We already have enabled the eslint rule `no-inferrable-types`, however it only applies to simple types such as string, number, etc. but not to function calls.
 
@@ -74,6 +74,8 @@ const getSomething() => {
 const timestamp = Date.now();
 ```
 
+## Filenames, import and export
+
 ### Filenames
 
  * `camelCase.ts`: Files that export multiple things.
@@ -81,7 +83,6 @@ const timestamp = Date.now();
  * `PascalCase.ts`: [Only if the file contains a single class, which is the default export.](https://github.com/laurent22/joplin/pull/6607#discussion_r906847156)
  * `types.ts` or `fooTypes.ts`: [Shared type definitions](https://github.com/laurent22/joplin/pull/6607#discussion_r906847156)
    * Example : [`types.ts`](https://github.com/laurent22/joplin/blob/dev/packages/server/src/utils/types.ts)
-
 
 ### Use the same case for imported and exported members
 
@@ -133,6 +134,8 @@ import { writeFile } from 'fs-extra';
 writeFile('example.md', 'example');
 ```
 
+## Variables and functions
+
 ### Use `camelCase` for `const`ants in new code
 
 **BAD:**
@@ -180,9 +183,7 @@ foo += Math.sin(bar + Math.tan(foo));
 
 Don't allow this to lead to duplicate code, however. If constants are used multiple times, it's okay to declare them at the top of a file or in a separate, imported file.
 
-
 ### Prefer `const` to `let` (where possible)
-
 
 ### Prefer `() => {}` to `function() { ... }`
 
@@ -203,16 +204,13 @@ const foo = () => {
 };
 ```
 
-#### See also
- * [Frontend Armory — When should I use arrow functions with React?](https://frontarm.com/james-k-nelson/when-to-use-arrow-functions/)
-
-
+See also: [Frontend Armory — When should I use arrow functions with React?](https://frontarm.com/james-k-nelson/when-to-use-arrow-functions/)
 
 ### Avoid default and optional parameters
 
 As much as possible, avoid default parameters in **function definitions** and optional fields in **interface definitions**. When all parameters are required, it is much easier to refactor the code because the compiler will automatically catch any missing parameters.
 
-### Escape variables
+## Escape variables
 
 [XSS](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html) is one of the most common vulnerabilities in today's code. These vulnerabilities are often difficult to spot because they are not errors, they often won't fail any test units and the program will work just fine with 99% of input. Yet that remaining 1% can be exploited and used to steal user information, crash the app, etc.
 
@@ -224,7 +222,7 @@ Finally, escaping data is often required to prevent markup code from breaking. F
 
 How you escape the data depends on where you are going to insert it so there's no single function that's going to cover all cases.
 
-#### To insert into a JS script
+### To insert into a JS script
 
 Use `JSON.stringify()`. For example:
 
@@ -232,20 +230,19 @@ Use `JSON.stringify()`. For example:
 const jsCode = `const data = ${JSON.stringify(dynamicallyGeneratedData)};`
 ```
 
-#### To insert into an HTML string
+### To insert into an HTML string
 
 You need to convert special characters to HTML entities, which we usually do using the `html-entities` package. For example:
 
 ```ts
-// We generally use this rather verbose pattern, but there
-// are also helper functions that you may be able to use
-// depending on the package.
-const Entities = require('html-entities').AllHtmlEntities;
-const htmlentities = new Entities().encode;
+// Historically we used a conversion of the PHP `htmlentities` function, thus the
+// unusual (non-camelCase) name but since a lot of code use that function we keep
+// it that way.
+import { htmlentities } from '@joplin/utils/html';
 const html = `<a href="${htmlentities(attributes)}">${htmlentities(content)}</a>`;
 ```
 
-#### To insert into a URL
+### To insert into a URL
 
 It depends on what you're trying to do. To insert a query parameter, use `encodeURIComponent`
 
@@ -260,7 +257,7 @@ encodeURI('https://domain.com/path to a document.pdf');
 // 'https://domain.com/path%20to%20a%20document.pdf'
 ```
 
-#### To insert into Markdown code
+### To insert into Markdown code
 
 Use the provided escape functions in `lib/markdownUtils`:
 
@@ -272,7 +269,7 @@ Use the provided escape functions in `lib/markdownUtils`:
 const markdown = `[${markdownUtils.escapeTitleText(linkTitle)}](${markdownUtils.escapeLinkUrl(linkUrl)})`;
 ```
 
-#### Escape as late as possible
+### Escape as late as possible
 
 Ideally the application should only deal with raw, unencoded data, so it means data should be decoded and encoded at the application boundaries. Doing so means we avoid accidentally double-escaping data, or having to encode/decode within the app, which is error prone.
 
@@ -306,7 +303,7 @@ parameters.other = otherParam;
 const url = `https://example.com?${new URLSearchParams(parameters).toString()}`
 ```
 
-#### Make wrong code look wrong
+### Make wrong code look wrong
 
 To name variables that are already escaped we used the technique described in "[Make wrong code look wrong](https://www.joelonsoftware.com/2005/05/11/making-wrong-code-look-wrong/)". We add a suffix to indicate the content of the variable and to make it clear it has already been escaped. It means that the code will look wrong if a variable is inserted in a string and it does not have a suffix. For example:
 
@@ -391,7 +388,7 @@ All columns should be defined as `NOT NULL`, possibly with a default value (but 
 
 ### Use defaults sparingly
 
-Don't automatically give a default valuet to a column - in many cases it's better to require the user to explicitly set the value, otherwise it will be set to a default they might not know about or want. Exceptions can be less important columns, things like timestamp, or columns that are going to be set by the system.
+Don't automatically give a default value to a column - in many cases it's better to require the user to explicitly set the value, otherwise it will be set to a default they might not know about or want. Exceptions can be less important columns, things like timestamp, or columns that are going to be set by the system.
 
 ### Use an integer for enum-like values
 
@@ -416,19 +413,86 @@ Booleans are not a distinct types in many common DBMS, including SQLite (which w
 
 We use `snake_case` for end points and query parameters.
 
+## Test units
+
+### Avoid mock objects
+
+A tested object might rely on dependencies involving other (complex) objects. To focus solely on the behavior of the object being tested, you substitute these dependencies with mocks, which mimic the behavior of the actual objects.
+
+Mocking is useful if the real objects are impractical to incorporate into the unit test.
+
+However we should not overuse this pattern because it means real code is not being tested. Instead, when possible try to test the real input and output of the algorithm. Instead of mocking a file write operation for example, create a temp directory and test that the file was actually written to that directory.
+
+This is not a hard rule as mocking is sometimes useful, but it should only be used when there's no other option.
+
+**Bad:**
+
+```ts
+jest.spyOn(fs, 'readFile').mockImplementation(() => {
+	return '{ "version": 1 }';
+});
+
+const data = await service.readConfig('/path/to/file.json');
+expect(data.version).toBe(1);
+```
+
+**Good:**
+
+```ts
+// Create the actual file
+await fs.writeFile('/path/to/file.json', '{ "version": 1 }');
+
+// Now you can test the real implementation
+const data = await service.readConfig('/path/to/file.json');
+expect(data.version).toBe(1);
+```
+
+### Avoid spying on method
+
+In unit testing, spying means creating a mock function (a spy) for a specific method of an object.
+
+Like mock objects, spies should be avoided whenever possible because they usually test implementation details that may change in the future. And having many spies makes refactoring difficult since we need to update tests that should not have been broken to being with, since the input and output of the algorithm hasn't changed.
+
+This is not a hard rule as spies are sometimes useful, but it should only be used when there's no other option.
+
+**Bad:**
+
+```ts
+jest.spyOn(db, 'executeSql').mockReturnValue([
+	[1, 'row 1'],
+	[2, 'row 2'],
+]);
+
+const rows = await service.fetchAll();
+expect(rows[0][1]).to('row 1');
+expect(rows[1][1]).to('row 2');
+```
+
+**Good:**
+
+```ts
+// Create the actual rows instead of mocking the data. Of course 
+// that requires setting up the database for testing.
+await service.saveObject('row 1');
+await service.saveObject('row 2');
+
+// Now you can test the real implementation
+const rows = await service.fetchAll();
+// ...
+```
+
 ## See also
+
 ### **Other** projects' style guides
 
 We aren't using these guides, but they may still be helpful!
- * [TypeScript Deep Dive — Style Guide](https://basarat.gitbook.io/typescript/styleguide)
- * [Google TypeScript style guide](https://google.github.io/styleguide/tsguide.html)
+
+* [TypeScript Deep Dive — Style Guide](https://basarat.gitbook.io/typescript/styleguide)
+* [Google TypeScript style guide](https://google.github.io/styleguide/tsguide.html)
 	* See also [`ts.dev`'s style guide](https://ts.dev/style/#function-expressions), which is based on the Google style guide.
- * [Javascript standardstyle](https://standardjs.com/rules.html)
-	* Possibly useful for adding to `.eslintrc.js`: lists `eslint` configuration flags for each of their suggestions
+* [Javascript standardstyle](https://standardjs.com/rules.html)
 
 ### Posts/resources related to Joplin's style
 
- * Forum Post: [Troubleshooting FAQ and collecting topic for contributing to Joplin codebase](https://discourse.joplinapp.org/t/troubleshooting-faq-and-collecting-topic-for-contributing-to-joplin-codebase/6501)
- * Forum Post: [How to style your code](https://discourse.joplinapp.org/t/how-to-style-your-code/6502)
- * GSoC: [GSoC 2022 pull request guidelines](https://github.com/laurent22/joplin/blob/dev/readme/dev/gsoc/gsoc2022/pull_request_guidelines.md)
- * GitHub: [`.eslintrc.js`](https://github.com/laurent22/joplin/blob/dev/.eslintrc.js)
+* GSoC: [GSoC 2022 pull request guidelines](https://github.com/laurent22/joplin/blob/dev/readme/dev/gsoc/gsoc2022/pull_request_guidelines.md)
+* GitHub: [`.eslintrc.js`](https://github.com/laurent22/joplin/blob/dev/.eslintrc.js)

@@ -1,9 +1,9 @@
-import { ListRendererDepependency } from '@joplin/lib/services/plugins/api/noteListType';
+import { ListRendererDependency } from '@joplin/lib/services/plugins/api/noteListType';
 import { NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import { Size } from '@joplin/utils/types';
 import Note from '@joplin/lib/models/Note';
 
-const prepareViewProps = async (dependencies: ListRendererDepependency[], note: NoteEntity, itemSize: Size, selected: boolean, noteTitleHtml: string, noteIsWatched: boolean, noteTags: TagEntity[]) => {
+const prepareViewProps = async (dependencies: ListRendererDependency[], note: NoteEntity, itemSize: Size, selected: boolean, noteTitleHtml: string, noteIsWatched: boolean, noteTags: TagEntity[], itemIndex: number) => {
 	const output: any = {};
 
 	for (const dep of dependencies) {
@@ -44,6 +44,11 @@ const prepareViewProps = async (dependencies: ListRendererDepependency[], note: 
 		if (dep === 'item.selected') {
 			if (!output.item) output.item = {};
 			output.item.selected = selected;
+		}
+
+		if (dep === 'item.index') {
+			if (!output.item) output.item = {};
+			output.item.index = itemIndex;
 		}
 	}
 

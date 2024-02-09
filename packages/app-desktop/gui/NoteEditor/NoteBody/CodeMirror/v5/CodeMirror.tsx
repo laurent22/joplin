@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, useMemo, ForwardedRef } from 'react';
 
 // eslint-disable-next-line no-unused-vars
-import { EditorCommand, NoteBodyEditorProps, NoteBodyEditorRef } from '../../../utils/types';
+import { EditorCommand, MarkupToHtmlOptions, NoteBodyEditorProps, NoteBodyEditorRef } from '../../../utils/types';
 import { commandAttachFileToBody, getResourcesFromPasteEvent } from '../../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../../utils/types';
 import { CommandValue } from '../../../utils/types';
@@ -29,7 +29,6 @@ const debounce = require('debounce');
 
 import { reg } from '@joplin/lib/registry';
 import ErrorBoundary from '../../../../ErrorBoundary';
-import { MarkupToHtmlOptions } from '../../../utils/useMarkupToHtml';
 import useStyles from '../utils/useStyles';
 import useContextMenu from '../utils/useContextMenu';
 import useWebviewIpcMessage from '../utils/useWebviewIpcMessage';
@@ -612,6 +611,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		const timeoutId = shim.setTimeout(async () => {
 			let bodyToRender = props.content;
 
+			if (!props.visiblePanes.includes('viewer')) {
+				return;
+			}
+
 			if (!bodyToRender.trim() && props.visiblePanes.indexOf('viewer') >= 0 && props.visiblePanes.indexOf('editor') < 0) {
 				// Fixes https://github.com/laurent22/joplin/issues/217
 				bodyToRender = `<i>${_('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout'))}</i>`;
@@ -621,7 +624,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				resourceInfos: props.resourceInfos,
 				contentMaxWidth: props.contentMaxWidth,
 				mapsToLine: true,
-				// Always using useCustomPdfViewer for now, we can add a new setting for it in future if we need to.
 				useCustomPdfViewer: props.useCustomPdfViewer,
 				noteId: props.noteId,
 				vendorDir: bridge().vendorDir(),

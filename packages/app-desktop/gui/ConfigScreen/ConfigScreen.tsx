@@ -10,14 +10,11 @@ import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigSc
 import { reg } from '@joplin/lib/registry';
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
-const pathUtils = require('@joplin/lib/path-utils');
+import * as pathUtils from '@joplin/lib/path-utils';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import * as shared from '@joplin/lib/components/shared/config/config-shared.js';
 import ClipperConfigScreen from '../ClipperConfigScreen';
 import restart from '../../services/restart';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
-import { getDefaultPluginsInstallState, updateDefaultPluginsInstallState } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
-import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
 import JoplinCloudConfigScreen from '../JoplinCloudConfigScreen';
 import ToggleAdvancedSettingsButton from './controls/ToggleAdvancedSettingsButton';
 import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
@@ -71,10 +68,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	public componentDidMount() {
 		if (this.props.defaultSection) {
 			this.setState({ selectedSectionName: this.props.defaultSection }, () => {
-				this.switchSection(this.props.defaultSection);
+				void this.switchSection(this.props.defaultSection);
 			});
 		}
-		updateDefaultPluginsInstallState(getDefaultPluginsInstallState(PluginService.instance(), Object.keys(getDefaultPluginsInfo())), this);
 	}
 
 	private async handleSettingButton(key: string) {
@@ -116,7 +112,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		throw new Error(`Invalid screen name: ${screenName}`);
 	}
 
-	public switchSection(name: string) {
+	public async switchSection(name: string) {
 		const section = this.sectionByName(name);
 		let screenName = '';
 		if (section.isScreen) {
@@ -124,7 +120,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 			if (this.hasChanges()) {
 				const ok = confirm(_('This will open a new screen. Save your current changes?'));
-				if (ok) shared.saveSettings(this);
+				if (ok) {
+					await shared.saveSettings(this);
+				}
 			}
 		}
 
@@ -132,7 +130,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	}
 
 	private sidebar_selectionChange(event: any) {
-		this.switchSection(event.section.name);
+		void this.switchSection(event.section.name);
 	}
 
 	public renderSectionDescription(section: any) {
@@ -659,12 +657,15 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	}
 
 	public async onApplyClick() {
-		shared.saveSettings(this);
+		const done = await shared.saveSettings(this);
+		if (!done) return;
+
 		await this.checkNeedRestart();
 	}
 
 	public async onSaveClick() {
-		shared.saveSettings(this);
+		const done = await shared.saveSettings(this);
+		if (!done) return;
 		await this.checkNeedRestart();
 		this.props.dispatch({ type: 'NAV_BACK' });
 	}

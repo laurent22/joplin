@@ -6,7 +6,7 @@ import Note from '../../models/Note';
 import * as fs from 'fs-extra';
 import { tempFilePath } from '../../testing/test-utils';
 import { ContentScriptType } from '../../services/plugins/api/types';
-import { FileSystemItem } from './types';
+import { ExportModuleOutputFormat, FileSystemItem } from './types';
 import { readFile } from 'fs/promises';
 
 async function recreateExportDir() {
@@ -31,7 +31,7 @@ describe('interop/InteropService_Exporter_Html', () => {
 
 		await service.export({
 			path: filePath,
-			format: 'html',
+			format: ExportModuleOutputFormat.Html,
 			packIntoSingleFile: false,
 		});
 
@@ -49,7 +49,7 @@ describe('interop/InteropService_Exporter_Html', () => {
 		const dir = exportDir();
 		await service.export({
 			path: dir,
-			format: 'html',
+			format: ExportModuleOutputFormat.Html,
 			target: FileSystemItem.Directory,
 		});
 
@@ -106,7 +106,7 @@ describe('interop/InteropService_Exporter_Html', () => {
 
 		await service.export({
 			path: filePath,
-			format: 'html',
+			format: ExportModuleOutputFormat.Html,
 			packIntoSingleFile: false,
 			plugins,
 		});
@@ -130,7 +130,7 @@ describe('interop/InteropService_Exporter_Html', () => {
 
 		await service.export({
 			path: filePath,
-			format: 'html',
+			format: ExportModuleOutputFormat.Html,
 			packIntoSingleFile: true,
 			target: FileSystemItem.File,
 		});

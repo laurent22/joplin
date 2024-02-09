@@ -62,6 +62,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -218,6 +221,12 @@
 	"Always": [
 		"いつも"
 	],
+	"Always ask": [
+		"常に確認する"
+	],
+	"Always resize": [
+		"常にリサイズする"
+	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
 		"ノートブック \"%s\" を特定できません。名前ではなくノートブックIDをご使用ください。短いノートブックIDは \"ti\" で確認できます。また、現在選択しているノートブックは $b で表せます"
 	],
@@ -228,7 +237,7 @@
 		""
 	],
 	"An error occurred: %s": [
-		""
+		"エラーが発生しました: %s"
 	],
 	"An update is available, do you want to download it now?": [
 		"アップデートがあります。すぐにダウンロードしますか？"
@@ -328,6 +337,9 @@
 	],
 	"Browse...": [
 		"参照..."
+	],
+	"Built-in": [
+		""
 	],
 	"Bulleted List": [
 		"箇条書きリスト"
@@ -454,6 +466,9 @@
 	],
 	"Close dropdown": [
 		"ドロップダウンを閉じる"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"ウィンドウを閉じる"
@@ -599,7 +614,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"このノートブックの共有状態を確認できなかったため処理を中断します。インターネット接続を確認してから再度お試しください。"
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"IDを確認できませんでした: %s"
 	],
 	"Create": [
@@ -652,6 +667,12 @@
 	],
 	"Creates a new to-do.": [
 		"新しいToDoを作成します。"
+	],
+	"Creating new note...": [
+		"新しいノートを作成中..."
+	],
+	"Creating new to-do...": [
+		"新しい ToDoを作成中..."
 	],
 	"Creating report...": [
 		"レポート を作成中..."
@@ -863,6 +884,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"パスワードはなくさないようにしてください。セキュリティ上、このパスワードがデータを復号する*唯一*の方法になるためです！ 暗号化を有効にするには、下にパスワードを入力してください。"
 	],
+	"Donate, website": [
+		"寄付、Webサイト"
+	],
 	"Done": [
 		"完了"
 	],
@@ -1034,6 +1058,9 @@
 	"Enable note history": [
 		"ノートの履歴を有効にする"
 	],
+	"Enable optical character recognition (OCR)": [
+		""
+	],
 	"Enable PDF viewer": [
 		"PDFビューアーを有効にする"
 	],
@@ -1147,6 +1174,9 @@
 	],
 	"Export profile": [
 		"プロファイルをエクスポート"
+	],
+	"Export your data": [
+		"データをエクスポートする"
 	],
 	"Exported successfully!": [
 		"エクスポート成功!"
@@ -1269,7 +1299,7 @@
 		"リンクを生成中..."
 	],
 	"Geolocation, spellcheck, editor toolbar, image resize": [
-		""
+		"位置情報、スペルチェック、エディタツールバー、画像リサイズ"
 	],
 	"Get it now:": [
 		"今すぐ取得:"
@@ -1387,6 +1417,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"この処理では、既存データをすべて再暗号化し、同期しなおす必要がありますので、夜間等の実行をおすすめします。\n\nデータを再暗号化するには以下の手順にしたがってください。\n\n1. すべてのデバイスで同期を取ります。\n2. \"%s\" をクリックします。\n3. 再暗号化処理が完了するまでお待ちください。不整合を避けるため、処理中に他のデバイスでノートを変更しないように気をつけてください。\n4. 本デバイスの同期が完了したら、他のデバイスをすべて同期してください。\n\n重要: 再暗号化はどれか一つのデバイスで一回だけ実行してください。"
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"ファイルシステムの同期を使うには、外部ストレージへの書き込み権限が必要です。"
@@ -1544,6 +1577,9 @@
 	"Language": [
 		"言語"
 	],
+	"Language, date format": [
+		"言語、日付の形式"
+	],
 	"Last error: %s": [
 		"最新のエラー: %s"
 	],
@@ -1626,7 +1662,7 @@
 		"ログアウト"
 	],
 	"Logs, profiles, sync status": [
-		""
+		"ログ、プロファイル、同期の状態"
 	],
 	"Make a donation": [
 		"寄付する"
@@ -1689,7 +1725,7 @@
 		"最大合計サイズ"
 	],
 	"Media player, math, diagrams, table of contents": [
-		""
+		"メディアプレーヤー、数式、作図、目次"
 	],
 	"Missing keys": [
 		"キーがありません"
@@ -1737,7 +1773,7 @@
 		"N"
 	],
 	"Never resize": [
-		""
+		"リサイズしない"
 	],
 	"New note": [
 		"新しいノート"
@@ -2247,13 +2283,16 @@
 		"マスターパスワードをリセット"
 	],
 	"Resize large images:": [
-		""
+		"大きな画像のリサイズ:"
 	],
 	"Resources: %d.": [
 		"リソース: %d."
 	],
 	"Restart and upgrade": [
 		"再起動してアップグレード"
+	],
+	"Restart in safe mode": [
+		"セーフモードで再起動"
 	],
 	"Restart now": [
 		"今すぐ再起動"
@@ -2445,7 +2484,7 @@
 		"サイドバーの表示切り替え"
 	],
 	"Shrink large images before adding them to notes.": [
-		""
+		"大きな画像をノートに添付する前に縮小します。"
 	],
 	"Side menu opened": [
 		""
@@ -2470,6 +2509,12 @@
 	],
 	"Solarised Light": [
 		"Solarised (明)"
+	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
 	],
 	"Some items cannot be decrypted.": [
 		"いくつかのアイテムは復号されませんでした。"
@@ -2624,6 +2669,9 @@
 	"Sync your notes": [
 		"ノートを同期する"
 	],
+	"Sync, encryption, proxy": [
+		"同期、暗号化、プロキシ"
+	],
 	"Synchronisation": [
 		"同期"
 	],
@@ -2768,6 +2816,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"リストから受信者を削除できませんでした。もう一度お試しください。\n\nエラーの内容: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"同期するには同期先をアップグレードする必要があります。アップグレードには数分かかるかもしれません。またアプリケーションの再起動が必要です。アップグレードするにはリンクをクリックしてください。"
 	],
@@ -2794,6 +2845,9 @@
 	],
 	"Theme": [
 		"テーマ"
+	],
+	"Themes, editor font": [
+		"テーマ、エディターのフォント"
 	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"ノートがありません。(+)ボタンを押して新しいノートを作成してください。"
@@ -2939,6 +2993,9 @@
 	"Toggle external editing": [
 		"外部エディターでの編集を開始・終了"
 	],
+	"Toggle note history, keep notes for": [
+		"履歴の有効化/無効化、保存期間"
+	],
 	"Toggle note list": [
 		"ノート一覧の表示切り替え"
 	],
@@ -2990,11 +3047,17 @@
 	"Unable to export or share data. Reason: %s": [
 		"データをエクスポートまたは共有できません。理由: %s"
 	],
+	"Unable to share log data. Reason: %s": [
+		"ログを共有できません。理由: %s"
+	],
 	"Uncompleted to-dos on top": [
 		"未完のToDoをリストの上部に表示"
 	],
 	"Undo": [
 		"元に戻す"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"不明なフラグ: %s"
@@ -3166,6 +3229,9 @@
 	],
 	"When creating a new to-do:": [
 		"新しいToDoを作成した場合:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""

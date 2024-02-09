@@ -1,11 +1,9 @@
 import { cookieGet } from './cookies';
 import { ErrorForbidden } from './errors';
 import { AppContext } from './types';
-import * as formidableFn from 'formidable';
+import * as formidable from 'formidable';
 import { Fields, Files } from 'formidable';
 import { IncomingMessage } from 'http';
-
-const formidable = require('formidable').default as typeof formidableFn;
 
 export type BodyFields = Record<string, any>;
 
@@ -26,16 +24,17 @@ interface FormParseRequest extends IncomingMessage {
 	body: any;
 }
 
-// Previously Formidable would return the files and fields as key/value pairs.
-// With v3, the value however is always an array. This is unclear why they did
-// this but for example a field `email=test@example.com` would come out as
-// `email: ['test@example.com']`. Since all our code expect simple key/value
-// pairs, we use this function to convert back to the old style.
+// Previously Formidable would return the files and fields as key/value pairs. With v3, the value
+// however is always an array. This is unclear why they did this but for example a field
+// `email=test@example.com` would come out as `email: ['test@example.com']`. Since all our code
+// expect simple key/value pairs, we use this function to convert back to the old style.
 //
 // For the extra challenge, they made this change only if the content-type is
-// "application/x-www-form-urlencoded". Other content types such as JSON are not
-// modified.
-const convertFieldsToKeyValue = (fields: Record<string, any[]>) => {
+// "application/x-www-form-urlencoded". Other content types such as JSON are not modified.
+//
+// As of 2024-01-18, this may no longer be necessary since we reverted to Formidable v2, but keeping
+// it anyway just in case.
+const convertFieldsToKeyValue = (fields: Files | Fields) => {
 	const convertedFields: Record<string, any> = {};
 	for (const [k, v] of Object.entries(fields)) {
 		if (Array.isArray(v)) {

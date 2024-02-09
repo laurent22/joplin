@@ -62,6 +62,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -323,6 +326,9 @@
 	"Browse...": [
 		"Обзор..."
 	],
+	"Built-in": [
+		""
+	],
 	"Bulleted List": [
 		"Маркированный список"
 	],
@@ -448,6 +454,9 @@
 	],
 	"Close dropdown": [
 		"Закрыть выпадающий список"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Закрыть окно"
@@ -594,7 +603,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Не удалось проверить состояние общего доступа к этому блокноту - прерывание. Пожалуйста, повторите попытку при подключении к Интернету."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"Не удалось проверить вашу личность: %s"
 	],
 	"Create": [
@@ -1029,6 +1038,9 @@
 	"Enable note history": [
 		"Включить историю заметок"
 	],
+	"Enable optical character recognition (OCR)": [
+		""
+	],
 	"Enable PDF viewer": [
 		"Включить программу для просмотра PDF файлов"
 	],
@@ -1383,6 +1395,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Для этого весь ваш набор данных должен быть зашифрован и синхронизирован, поэтому лучше всего запускать процесс на ночь.\n\nДля начала, пожалуйста, следуйте этим инструкциям:\n\n1. Синхронизируйте все ваши устройства.\n2. Нажмите “%s”.\n3. Ждите завершения. Во время работы не изменяйте заметки на других устройствах, чтобы избежать конфликтов.\n4. После завершения синхронизации на этом устройстве синхронизируйте все остальные устройства и ждите завершения.\n\nВажно: вам нужно запустить процесс ОДИН РАЗ на одном устройстве."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Для использование синхронизации файловой системы необходимо дать разрешение на запись во внешнее хранилище."
@@ -2468,6 +2483,12 @@
 	"Solarised Light": [
 		"Солнечная светлая"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Некоторые элементы не могут быть расшифрованы."
 	],
@@ -2765,6 +2786,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Получателя не удалось удалить из списка. Пожалуйста, попробуйте еще раз.\n\nОшибка была: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Нужно обновить версию базы данных перед синхронизацией. Эта операция может потребовать несколько минут для завершения и приложение нужно будет перезапустить. Чтобы продолжить нажмите на ссылку."
 	],
@@ -2993,6 +3017,9 @@
 	"Undo": [
 		"Отменить"
 	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
+	],
 	"Unknown flag: %s": [
 		"Неизвестный флаг: %s"
 	],
@@ -3163,6 +3190,9 @@
 	],
 	"When creating a new to-do:": [
 		"При создании новой задачи:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""

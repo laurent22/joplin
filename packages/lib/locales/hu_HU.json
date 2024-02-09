@@ -56,6 +56,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -308,6 +311,9 @@
 	"Browse...": [
 		"Tallózás..."
 	],
+	"Built-in": [
+		""
+	],
 	"Bulleted List": [
 		"Felsorolás"
 	],
@@ -421,6 +427,9 @@
 	],
 	"Close": [
 		"Bezár"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Ablak bezárása"
@@ -951,6 +960,9 @@
 	"Enable note history": [
 		"Jegyzet előélet engedélyezése"
 	],
+	"Enable optical character recognition (OCR)": [
+		""
+	],
 	"Enable PDF viewer": [
 		"PDF megjelenítő engedélyezése"
 	],
@@ -1272,6 +1284,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Ahhoz hogy megcsinálja, a teljes adat készletét titkosítani és szinkronizálni kell, emiatt a legjobb ha ez éjszaka történik.\n\nAz indításhoz kövesse a következő utasításokat:\n\n1. Szinkronizálja az összes eszközét.\n2. Kattintson a \"%s\"-ra.\n3. Futtassa befejezésig. Amíg fut, kerülje bármelyik jegyzete módosítását a többi eszközén, a konfliktusok elkerüléséhez.\n4. Amint a szinkronizálás kész ezen az eszközön, szinkronizálja az összes többi eszközét és futtassa befejezésig.\n\nFontos: ezt egy eszközön csak EGYSZER kell futtatnia."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		""
@@ -2255,6 +2270,12 @@
 	"Solarised Light": [
 		"Solarised Light"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Néhány elemet nem lehet visszafejteni."
 	],
@@ -2546,6 +2567,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"A szinkronizációs célt frissíteni kell a Joplin szinkronizációhoz. Ez a művelet, igénybe vehet pár percet és az alkalmazást újra kell indítani. A folytatáshoz kattintson a lenti linkre."
 	],
@@ -2753,6 +2777,9 @@
 	"Undo": [
 		"Visszavonás"
 	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
+	],
 	"Unknown flag: %s": [
 		"Ismeretlen jelző %s"
 	],
@@ -2908,6 +2935,9 @@
 	],
 	"When creating a new to-do:": [
 		"Amikor egy új to-do-t hoz létre:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
 	],
 	"Window unresponsive.": [
 		""
