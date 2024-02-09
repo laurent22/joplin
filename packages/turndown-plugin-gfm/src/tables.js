@@ -98,9 +98,17 @@ rules.table = {
       }
     }
 
-    return '\n\n' + emptyHeader + content + '\n\n'
+    var captionContent = node.caption == null ? '' : node.caption.textContent || '';
+    var caption = captionContent === '' ? '' : captionContent + '\n\n';
+    var tableContent = (emptyHeader + content).trimStart();
+    return '\n\n' + captionContent + tableContent + '\n\n'
   }
 }
+
+rules.tableCaption = {
+  filter: ['caption'],
+  replacement: () => '',
+};
 
 rules.tableSection = {
   filter: ['thead', 'tbody', 'tfoot'],

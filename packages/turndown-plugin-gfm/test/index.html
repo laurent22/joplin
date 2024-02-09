@@ -61,6 +61,32 @@
 | Row 2, Column 1 | Row 2, Column 2 |</pre>
 </div>
 
+<div class="case" data-name="table with caption">
+  <div class="input">
+  <table>
+    <caption>Caption</caption>
+    <tbody>
+      <tr>
+        <th>Row 1, Column 1</th>
+        <th>Row 1, Column 2</th>
+        <th>Row 1, Column 3</th>
+      </tr>
+      <tr>
+        <th>Row 2, Column 1</th>
+        <td>Row 2, Column 2</td>
+        <td>Row 2, Column 3</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <pre class="expected">Caption
+
+|     |     |     |
+| --- | --- | --- |
+| Row 1, Column 1 | Row 1, Column 2 | Row 1, Column 3 |
+| Row 2, Column 1 | Row 2, Column 2 | Row 2, Column 3 |</pre>
+</div>
+
 <div class="case" data-name="cell alignment">
   <div class="input">
     <table>
