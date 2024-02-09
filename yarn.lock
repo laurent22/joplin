@@ -7077,7 +7077,7 @@ __metadata:
     markdown-it: 13.0.2
     mustache: 4.2.0
     node-cron: 3.0.3
-    node-mocks-http: 1.14.0
+    node-mocks-http: 1.14.1
     nodemailer: 6.9.8
     nodemon: 3.0.2
     pg: 8.11.3
@@ -10525,6 +10525,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/express@npm:^4.17.21":
+  version: 4.17.21
+  resolution: "@types/express@npm:4.17.21"
+  dependencies:
+    "@types/body-parser": "*"
+    "@types/express-serve-static-core": ^4.17.33
+    "@types/qs": "*"
+    "@types/serve-static": "*"
+  checksum: fb238298630370a7392c7abdc80f495ae6c716723e114705d7e3fb67e3850b3859bbfd29391463a3fb8c0b32051847935933d99e719c0478710f8098ee7091c5
+  languageName: node
+  linkType: hard
+
 "@types/formidable@npm:2.0.6":
   version: 2.0.6
   resolution: "@types/formidable@npm:2.0.6"
@@ -10958,6 +10970,15 @@ __metadata:
   version: 18.16.19
   resolution: "@types/node@npm:18.16.19"
   checksum: 63c31f09616508aa7135380a4c79470a897b75f9ff3a70eb069e534dfabdec3f32fb0f9df5939127f1086614d980ddea0fa5e8cc29a49103c4f74cd687618aaf
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^20.10.6":
+  version: 20.11.16
+  resolution: "@types/node@npm:20.11.16"
+  dependencies:
+    undici-types: ~5.26.4
+  checksum: 51f0831c1219bf4698e7430aeb9892237bd851deeb25ce23c5bb0ceefcc77c3b114e48f4e98d9fc26def5a87ba9d8079f0281dd37bee691140a93f133812c152
   languageName: node
   linkType: hard
 
@@ -31298,10 +31319,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-mocks-http@npm:1.14.0":
-  version: 1.14.0
-  resolution: "node-mocks-http@npm:1.14.0"
+"node-mocks-http@npm:1.14.1":
+  version: 1.14.1
+  resolution: "node-mocks-http@npm:1.14.1"
   dependencies:
+    "@types/express": ^4.17.21
+    "@types/node": ^20.10.6
     accepts: ^1.3.7
     content-disposition: ^0.5.3
     depd: ^1.1.0
@@ -31312,7 +31335,7 @@ __metadata:
     parseurl: ^1.3.3
     range-parser: ^1.2.0
     type-is: ^1.6.18
-  checksum: 2cbf2d2e0dcbf6935e2f2c7e3b3bbea4b60cf043f8cf846856bf177e6570bf7b5629311b97f673d290cf51ed8e7e7c725f9a7a43ad224df423ed92389ac9ff8f
+  checksum: cc37618fb5f44a6049f8fcfc73373c4b42943e35e4b0f7463939d3f219663fe647e00e6eb9c3b8aedd48e88e10e1542993ac1a7ff8442ee2c3f6b97f23ced0e0
   languageName: node
   linkType: hard
 
