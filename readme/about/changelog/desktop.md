@@ -1,5 +1,24 @@
 # Joplin Desktop Changelog
 
+## [v2.14.13](https://github.com/laurent22/joplin/releases/tag/v2.14.13) (Pre-release) - 2024-02-09T16:31:54Z
+
+- Improved: Disable built-in copy of Simple Backup by default in Joplin Portable ([#9907](https://github.com/laurent22/joplin/issues/9907) by Henry Heino)
+- Improved: Disable initial Sentry request when crash auto-upload is disabled ([07aba91](https://github.com/laurent22/joplin/commit/07aba91))
+- Improved: Improve search engine error handling when preparing text for search ([#9871](https://github.com/laurent22/joplin/issues/9871) by Henry Heino)
+- Improved: MacOS: Resolves [#9488](https://github.com/laurent22/joplin/issues/9488): Add "Window" menu to toolbar on MacOS ([#9859](https://github.com/laurent22/joplin/issues/9859)) ([#9488](https://github.com/laurent22/joplin/issues/9488) by Henry Heino)
+- Improved: Make OCR results available to search immediately after completion ([6f0fd42](https://github.com/laurent22/joplin/commit/6f0fd42))
+- Improved: PDF search text: Remove NULL characters early to avoid possible sync issues ([#9862](https://github.com/laurent22/joplin/issues/9862) by Henry Heino)
+- Improved: Speed up pasting text and images in Rich Text Editor ([b1877fc](https://github.com/laurent22/joplin/commit/b1877fc))
+- Improved: Updated packages async-mutex (v0.4.1), follow-redirects (v1.15.5), moment (v2.30.1), sass (v1.69.7), sharp (v0.33.2), sqlite3 (v5.1.7), style-loader (v3.3.4)
+- Fixed: Allow using editor commands in the command palette ([#9861](https://github.com/laurent22/joplin/issues/9861)) ([#9855](https://github.com/laurent22/joplin/issues/9855) by Henry Heino)
+- Fixed: Copied and pasted text from Firefox to RTE does not include images ([#9607](https://github.com/laurent22/joplin/issues/9607))
+- Fixed: Correctly search HTML-entity encoded text ([#9694](https://github.com/laurent22/joplin/issues/9694))
+- Fixed: Don't rerender markdown notes when the note preview pane is hidden ([#9901](https://github.com/laurent22/joplin/issues/9901)) ([#9891](https://github.com/laurent22/joplin/issues/9891) by Henry Heino)
+- Fixed: Fix markdown (frontmatter) notes that start with a UTF-8 BOM aren't imporetd correctly ([#9875](https://github.com/laurent22/joplin/issues/9875)) ([#9868](https://github.com/laurent22/joplin/issues/9868) by Henry Heino)
+- Fixed: Fix mermaid save button partially hidden behind graph ([#9888](https://github.com/laurent22/joplin/issues/9888) by Henry Heino)
+- Fixed: Fix user-installed versions of built-in plugins can't access resources in some cases ([#9849](https://github.com/laurent22/joplin/issues/9849)) ([#9832](https://github.com/laurent22/joplin/issues/9832) by Henry Heino)
+- Fixed: Suppress random error that happens during desktop shutdown ([#9878](https://github.com/laurent22/joplin/issues/9878)) ([#9763](https://github.com/laurent22/joplin/issues/9763) by [@pedr](https://github.com/pedr))
+
 ## [v2.14.12](https://github.com/laurent22/joplin/releases/tag/v2.14.12) (Pre-release) - 2024-02-03T12:11:47Z
 
 - Improved: Do not allow switching the sync target if not all resources are downloaded ([#9263](https://github.com/laurent22/joplin/issues/9263))
@@ -3488,6 +3507,20 @@ This is to test the revision service. It is not yet recommended to upgrade as th
 - Change shortcuts for 'Print' and 'Goto Anything' ([#1420](https://github.com/laurent22/joplin/issues/1420))
 - Add option to use soft breaks for markdown rendering ([#1408](https://github.com/laurent22/joplin/issues/1408))
 
+## [v1.0.142](https://github.com/laurent22/joplin/releases/tag/v1.0.142) - 2019-04-02T16:44:51Z
+
+- New: Allow toggling markdown plugins and added several new plugins ([#1347](https://github.com/laurent22/joplin/issues/1347))
+- New: Added Goto Anything dialog (Ctrl+P or Cmd+P)
+- Improved: macOS: make the menu more like a macOS menu ([#1348](https://github.com/laurent22/joplin/issues/1348))
+- Improved search - when clearing search, stay on current item. When clicking on notebook name, jump to note within notebook. Improved toolbar layout.
+- Fixed: The side bar was being refreshed too frequently.
+- Fixed: Order of notebooks with sub-notebooks was sometimes incorrect when sorting
+- Fixes [#1334](https://github.com/laurent22/joplin/issues/1334) (maybe): Upgraded chokidar which it seems was randomly making Electron 4 crash (maybe due to fsevent package)
+- Fixes [#1329](https://github.com/laurent22/joplin/issues/1329): Could not edit created and updated time anymore
+- Fixes [#1326](https://github.com/laurent22/joplin/issues/1326): Restored inline code styling
+- Fixes [#1325](https://github.com/laurent22/joplin/issues/1325): Fixed nested checkbox indentation
+- fix sub pixel rendering for desktop ([#1378](https://github.com/laurent22/joplin/issues/1378))
+
 ## [v1.0.140](https://github.com/laurent22/joplin/releases/tag/v1.0.140) - 2019-03-10T20:59:58Z
 
 - Resolves [#1105](https://github.com/laurent22/joplin/issues/1105): Added support for macro persistence for Katex
@@ -3834,15 +3867,6 @@ This is a bug-fix release following v100 with the following fixes:
 ## [v1.0.99](https://github.com/laurent22/joplin/releases/tag/v1.0.99) - 2018-06-10T13:18:23Z
 
 Note: This is the same as 1.0.97, but with a fix for the Linux version, which could not start anymore.
-
-If you're using the web clipper, make sure to also update it!
-
-- Updated: Auto-delete resources only after 10 days to handle some edge cases
-- Clipper: Cleaner and more consistent clipper REST API, to facilitate third-party access
-- Clipper: Fixes [#569](https://github.com/laurent22/joplin/issues/569): Make clipper service available on localhost only
-- Clipper: Fixes [#573](https://github.com/laurent22/joplin/issues/573): Better handling of certain code blocks
-
-## [v1.0.97](https://github.com/laurent22/joplin/releases/tag/v1.0.97) - 2018-06-09T19:23:34Z
 
 If you're using the web clipper, make sure to also update it!
 
