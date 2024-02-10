@@ -98,8 +98,8 @@ rules.table = {
       }
     }
 
-    const captionContent = node.caption == null ? '' : node.caption.textContent || '';
-    const caption = captionContent === '' ? '' : `${captionContent}\n\n`;
+    const captionContent = node.caption ? node.caption.textContent || '' : '';
+    const caption = captionContent ? `${captionContent}\n\n` : '';
     const tableContent = `${emptyHeader}${content}`.trimStart();
     return `\n\n${caption}${tableContent}\n\n`;
   }
