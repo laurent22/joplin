@@ -194,6 +194,10 @@
 		// to rscss.
 		"styled-components",
 		"@types/styled-components",
+
+		// For now we are stuck with v5.1.6 due to this bug:
+		// https://github.com/TryGhost/node-sqlite3/issues/1747
+		"sqlite3",
 	],
 	"packageRules": [
 		{
