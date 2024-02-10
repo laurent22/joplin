@@ -67,6 +67,9 @@ function requestCanBeRepeated(error: any) {
 	// so not repeating means there will be less noise in the log.
 	if (errorCode === 'failSafe') return false;
 
+	// If retrying the request was already attempted and failed elsewhere,
+	if (error.isJoplinFetchRetryFailure) return false;
+
 	return true;
 }
 

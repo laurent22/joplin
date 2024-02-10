@@ -170,8 +170,10 @@ const shim = {
 		// errno: 'EAI_AGAIN',
 		// code: 'EAI_AGAIN' } } reason: { FetchError: request to https://api.ipify.org/?format=json failed, reason: getaddrinfo EAI_AGAIN api.ipify.org:443
 		//
-		// It's a Microsoft error: "A temporary failure in name resolution occurred."
-		if (error.code === 'EAI_AGAIN') return true;
+		// "A temporary failure in name resolution occurred." -- this happens when users are offline
+		// or on a restricted network.
+		// See https://github.com/laurent22/joplin/issues/8907 and https://github.com/node-fetch/node-fetch/issues/1243
+		if (error.code === 'EAI_AGAIN') return false;
 
 		// request to https://public-...8fd8bc6bb68e9c4d17a.md failed, reason: connect ETIMEDOUT 204.79.197.213:443
 		// Code: ETIMEDOUT
@@ -203,6 +205,8 @@ const shim = {
 				const response = await fetchFn();
 				return response;
 			} catch (error) {
+				error.isJoplinFetchRetryFailure = true;
+
 				if (shim.fetchRequestCanBeRetried(error)) {
 					retryCount++;
 					if (retryCount > options.maxRetry) throw error;
