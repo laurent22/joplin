@@ -145,8 +145,8 @@ const shim = {
 	// Node requests can go wrong is so many different ways and with so
 	// many different error messages... This handler inspects the error
 	// and decides whether the request can safely be repeated or not.
-	fetchRequestCanBeRetried: (error: any) => {
-		if (!error) return false;
+	fetchRequestCanBeRetried: (error: any, retryUnknownErrors = false) => {
+		if (!error) return retryUnknownErrors;
 
 		// Unfortunately the error 'Network request failed' doesn't have a type
 		// or error code, so hopefully that message won't change and is not localized
@@ -182,7 +182,7 @@ const shim = {
 		// ECONNREFUSED is generally temporary
 		if (error.code === 'ECONNREFUSED') return true;
 
-		return false;
+		return retryUnknownErrors;
 	},
 
 	fetchMaxRetry_: 5,
