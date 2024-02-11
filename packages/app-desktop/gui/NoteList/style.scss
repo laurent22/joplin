@@ -41,3 +41,34 @@
 .note-list-item-wrapper.-provisional {
 	opacity: 0.5;
 }
+
+.note-list-header {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+
+	> .item {
+		display: flex;
+		position: relative;
+		align-items: center;
+		height: 100%;
+
+		> .inner {
+			padding-left: 8px;
+		}
+	}
+
+	> .item:before {
+		content: '';
+		width: 1px;
+		height: 18px; // TODO: Make dynamic
+		background: gray; // TODO: color
+		position: absolute;
+		top: 4px;
+	}
+
+	> .item.-first:before {
+		background: none;
+	}
+}

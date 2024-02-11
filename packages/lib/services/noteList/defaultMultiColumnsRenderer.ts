@@ -19,11 +19,13 @@ interface Props {
 }
 
 const renderer: ListRenderer = {
-	id: 'compact',
+	id: 'detailed',
 
-	label: async () => _('Compact'),
+	label: async () => _('Detailed'),
 
 	flow: ItemFlow.TopToBottom,
+
+	multiColumns: true,
 
 	itemSize: {
 		width: 0,
@@ -118,30 +120,15 @@ const renderer: ListRenderer = {
 		}
 	`,
 
-	headerTemplate: // html
-		`
-		<button data-id="title">Title</button><button data-id="updated">Updated</button>
-	`,
-
 	onHeaderClick: async (event: OnClickEvent) => {
 		const field = event.elementId === 'title' ? 'title' : 'user_updated_time';
 		void CommandService.instance().execute('toggleNotesSortOrderField', field);
 	},
 
-	itemTemplate: // html
-		`
-		<div class="content {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
-			{{#note.is_todo}}
-				<div class="checkbox">
-					<input data-id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
-				</div>
-			{{/note.is_todo}}	
-			<div class="title" data-id="{{note.id}}">
-				<i class="watchedicon fa fa-share-square"></i>
-				<span>{{{note.titleHtml}}}</span>
-			</div>
-		</div>
-	`,
+	itemTemplate: {
+		'': '{{value}}',
+		'note.todo_completed': '{{#note.todo_completed}}[x]{{/note.todo_completed}}{{^note.todo_completed}}[ ]{{/note.todo_completed}}',
+	},
 
 	onRenderNote: async (props: Props) => {
 		return props;

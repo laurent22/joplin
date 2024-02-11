@@ -9,7 +9,7 @@ import { getDefaultListRenderer, getListRendererById } from '@joplin/lib/service
 import Logger from '@joplin/utils/Logger';
 import NoteListHeader from '../NoteListHeader/NoteListHeader';
 import { _ } from '@joplin/lib/locale';
-import { BaseBreakpoint, Breakpoints } from '../NoteList/utils/types';
+import { BaseBreakpoint, Breakpoints, Column } from '../NoteList/utils/types';
 import { ButtonSize, buttonSizePx } from '../Button/Button';
 
 const logger = Logger.create('NoteListWrapper');
@@ -90,6 +90,24 @@ const useListRenderer = (listRendererId: string, startupPluginsLoaded: boolean) 
 	return null;
 };
 
+const columns: Column[] = [
+	{
+		name: 'note.todo_completed',
+		title: ' ',
+		width: 40,
+	},
+	{
+		name: 'note.updated_time',
+		title: 'Updated',
+		width: 100,
+	},
+	{
+		name: 'note.title',
+		title: 'Title',
+		width: 0,
+	},
+];
+
 export default function NoteListWrapper(props: Props) {
 	const theme = themeStyle(props.themeId);
 	const [controlHeight] = useState(theme.topRowHeight);
@@ -118,12 +136,11 @@ export default function NoteListWrapper(props: Props) {
 	}, [props.size, noteListControlsHeight]);
 
 	const renderHeader = () => {
-		if (!listRenderer || !listRenderer.headerTemplate) return null;
-
 		return <NoteListHeader
 			height={listRenderer.headerHeight}
 			template={listRenderer.headerTemplate}
 			onClick={listRenderer.onHeaderClick}
+			columns={columns}
 		/>;
 	};
 
@@ -134,6 +151,7 @@ export default function NoteListWrapper(props: Props) {
 			resizableLayoutEventEmitter={props.resizableLayoutEventEmitter}
 			size={noteListSize}
 			visible={props.visible}
+			columns={columns}
 		/>;
 	};
 

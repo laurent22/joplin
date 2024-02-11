@@ -9,6 +9,7 @@ import { OnInputChange } from './utils/types';
 import Note from '@joplin/lib/models/Note';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import useRenderedNote from './utils/useRenderedNote';
+import { Column } from '../NoteList/utils/types';
 
 interface NoteItemProps {
 	dragIndex: number;
@@ -28,6 +29,7 @@ interface NoteItemProps {
 	isSelected: boolean;
 	isWatched: boolean;
 	listRenderer: ListRenderer;
+	columns: Column[];
 }
 
 const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
@@ -59,7 +61,7 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 
 	const rootElement = useRootElement(elementId);
 
-	const renderedNote = useRenderedNote(props.note, props.isSelected, props.isWatched, props.listRenderer, props.highlightedWords, props.index);
+	const renderedNote = useRenderedNote(props.note, props.isSelected, props.isWatched, props.listRenderer, props.highlightedWords, props.index, props.columns);
 
 	const itemElement = useItemElement(
 		rootElement,

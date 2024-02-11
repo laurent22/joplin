@@ -849,6 +849,7 @@ packages/lib/services/keychain/KeychainServiceDriver.node.js
 packages/lib/services/keychain/KeychainServiceDriverBase.js
 packages/lib/services/noteList/defaultLeftToRightListRenderer.js
 packages/lib/services/noteList/defaultListRenderer.js
+packages/lib/services/noteList/defaultMultiColumnsRenderer.js
 packages/lib/services/noteList/renderers.js
 packages/lib/services/ocr/OcrDriverBase.js
 packages/lib/services/ocr/OcrService.test.js

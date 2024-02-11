@@ -57,6 +57,8 @@ export type ListRendererDependency =
 	'note.isWatched' |
 	'note.tags';
 
+export type ListRendererItemTemplate = string | Record<string, string>;
+
 export interface ListRenderer {
 	/**
 	 * It must be unique to your plugin.
@@ -69,6 +71,12 @@ export interface ListRenderer {
 	 * height.
 	 */
 	flow: ItemFlow;
+
+	/**
+	 * Whether the renderer supports multiple columns. Applies only when `flow`
+	 * is `topToBottom`. Defaults to `false`.
+	 */
+	multiColumns?: boolean;
 
 	/**
 	 * The size of each item must be specified in advance for performance
@@ -120,8 +128,7 @@ export interface ListRenderer {
 	 * installing an editor extension such as [es6-string-html VSCode
 	 * extension](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html)
 	 */
-	itemTemplate: string;
-
+	itemTemplate: ListRendererItemTemplate;
 	/**
 	 * This user-facing text is used for example in the View menu, so that your
 	 * renderer can be selected.
