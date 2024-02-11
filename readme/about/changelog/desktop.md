@@ -1,5 +1,9 @@
 # Joplin Desktop Changelog
 
+## [v2.14.14](https://github.com/laurent22/joplin/releases/tag/v2.14.14) (Pre-release) - 2024-02-10T16:03:08Z
+
+Trying to fix the Apple silicon version. If you are not on this platform you can skip this update.
+
 ## [v2.14.13](https://github.com/laurent22/joplin/releases/tag/v2.14.13) (Pre-release) - 2024-02-09T16:31:54Z
 
 - Improved: Disable built-in copy of Simple Backup by default in Joplin Portable ([#9907](https://github.com/laurent22/joplin/issues/9907) by Henry Heino)
