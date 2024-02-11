@@ -84,6 +84,8 @@ interface Props {
 	isResettingLayout: boolean;
 	listRendererId: string;
 	mustUpgradeAppMessage: string;
+	notesSortOrderField: string;
+	notesSortOrderReverse: boolean;
 }
 
 interface ShareFolderDialogOptions {
@@ -732,6 +734,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 					themeId={this.props.themeId}
 					listRendererId={this.props.listRendererId}
 					startupPluginsLoaded={this.props.startupPluginsLoaded}
+					notesSortOrderField={this.props.notesSortOrderField}
+					notesSortOrderReverse={this.props.notesSortOrderReverse}
 				/>;
 			},
 
@@ -919,6 +923,8 @@ const mapStateToProps = (state: AppState) => {
 		isResettingLayout: state.isResettingLayout,
 		listRendererId: state.settings['notes.listRendererId'],
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
+		notesSortOrderField: state.settings['notes.sortOrder.field'],
+		notesSortOrderReverse: state.settings['notes.sortOrder.reverse'],
 	};
 };
 

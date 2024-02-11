@@ -7,10 +7,11 @@ import { Size } from '../ResizableLayout/utils/types';
 import styled from 'styled-components';
 import { getDefaultListRenderer, getListRendererById } from '@joplin/lib/services/noteList/renderers';
 import Logger from '@joplin/utils/Logger';
-import NoteListHeader from '../NoteListHeader/NoteListHeader';
+import NoteListHeader, { OnItemClickEventHander } from '../NoteListHeader/NoteListHeader';
 import { _ } from '@joplin/lib/locale';
 import { BaseBreakpoint, Breakpoints, Column } from '../NoteList/utils/types';
 import { ButtonSize, buttonSizePx } from '../Button/Button';
+import Setting from '@joplin/lib/models/Setting';
 
 const logger = Logger.create('NoteListWrapper');
 
@@ -21,6 +22,8 @@ interface Props {
 	themeId: number;
 	listRendererId: string;
 	startupPluginsLoaded: boolean;
+	notesSortOrderField: string;
+	notesSortOrderReverse: boolean;
 }
 
 const StyledRoot = styled.div`
@@ -97,7 +100,7 @@ const columns: Column[] = [
 		width: 40,
 	},
 	{
-		name: 'note.updated_time',
+		name: 'note.user_updated_time',
 		title: 'Updated',
 		width: 100,
 	},
@@ -135,12 +138,25 @@ export default function NoteListWrapper(props: Props) {
 		};
 	}, [props.size, noteListControlsHeight]);
 
+	const onHeaderItemClick: OnItemClickEventHander = useCallback(event => {
+		const field = event.name.split('.')[1];
+
+		if (Setting.value('notes.sortOrder.field') === field) {
+			Setting.toggle('notes.sortOrder.reverse');
+		} else {
+			Setting.setValue('notes.sortOrder.field', field);
+		}
+	}, []);
+
 	const renderHeader = () => {
 		return <NoteListHeader
 			height={listRenderer.headerHeight}
 			template={listRenderer.headerTemplate}
 			onClick={listRenderer.onHeaderClick}
 			columns={columns}
+			notesSortOrderField={props.notesSortOrderField}
+			notesSortOrderReverse={props.notesSortOrderReverse}
+			onItemClick={onHeaderItemClick}
 		/>;
 	};
 

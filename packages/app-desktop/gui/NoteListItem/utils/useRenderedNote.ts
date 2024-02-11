@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ListRenderer, ListRendererDependency, ListRendererItemTemplate } from '@joplin/lib/services/plugins/api/noteListType';
+import { ListRenderer, ListRendererDependency, ListRendererItemValueTemplates } from '@joplin/lib/services/plugins/api/noteListType';
 import Note from '@joplin/lib/models/Note';
 import { NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
@@ -20,25 +20,30 @@ const hashContent = (content: any) => {
 	return createHash('sha1').update(JSON.stringify(content)).digest('hex');
 };
 
-// TODO: Add tests
-const compileTemplate = (template: ListRendererItemTemplate, columns: Column[], dependencies: ListRendererDependency[]) => {
-	if (typeof template === 'string') return template;
-
+const compileTemplate = (template: string, itemValueTemplates: ListRendererItemValueTemplates, columns: Column[], dependencies: ListRendererDependency[]) => {
 	const output: string[] = [];
 	for (const column of columns) {
-		const name = template[column.name] ? column.name : '';
-		let t = template[name];
+		let valueReplacement = itemValueTemplates[column.name] ? itemValueTemplates[column.name] : '';
 
-		if (name === '') {
+		if (!valueReplacement) {
 			if (column.name === 'note.title' && dependencies.includes('note.titleHtml')) {
-				t = t.replace(/{{value}}/g, '{{{note.titleHtml}}}');
+				valueReplacement = '{{{note.titleHtml}}}';
 			} else {
-				t = t.replace(/{{value}}/g, `{{${column.name}}}`);
+				valueReplacement = `{{${column.name}}}`;
 			}
 		}
 
-		output.push(`<div class="item">${t}</div>`);
+		const style: string[] = [];
+
+		if (column.width) {
+			style.push(`width: ${column.width}px`);
+		} else {
+			style.push('flex: 1');
+		}
+
+		output.push(`<div class="item" style="${style.join('; ')}">${template.replace(/{{value}}/g, valueReplacement)}</div>`);
 	}
+
 	return output.join('');
 };
 
@@ -88,7 +93,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 
 			if (event.cancelled) return null;
 
-			const toRender = compileTemplate(listRenderer.itemTemplate, columns, listRenderer.dependencies);
+			const toRender = listRenderer.multiColumns ? compileTemplate(listRenderer.itemTemplate, listRenderer.itemValueTemplates, columns, listRenderer.dependencies) : listRenderer.itemTemplate;
 
 			setRenderedNote({
 				id: note.id,

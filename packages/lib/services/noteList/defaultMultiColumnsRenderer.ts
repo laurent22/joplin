@@ -1,4 +1,5 @@
 import { _ } from '../../locale';
+import time from '../../time';
 import CommandService from '../CommandService';
 import { ItemFlow, ListRenderer, OnClickEvent } from '../plugins/api/noteListType';
 
@@ -8,6 +9,7 @@ interface Props {
 		title: string;
 		is_todo: number;
 		todo_completed: number;
+		user_updated_time: number;
 	};
 	item: {
 		// index: number;
@@ -42,80 +44,20 @@ const renderer: ListRenderer = {
 		'note.isWatched',
 		'note.titleHtml',
 		'note.todo_completed',
+		'note.user_updated_time',
 	],
 
 	itemCss: // css
 		`	
-		&:before {
-			content: '';
-			border-bottom: 1px solid var(--joplin-divider-color);
-			width: 90%;
-			position: absolute;
-			bottom: 0;
-			left: 5%;
-		}
-	
-		> .content.-selected {
-			background-color: var(--joplin-selected-color);
-		}
-
-		&:hover {
-			background-color: var(--joplin-background-color-hover3);
-		}
-	
-		> .content {
+		> .item {
 			display: flex;
+			align-items: center;
 			box-sizing: border-box;
-			position: relative;
-			width: 100%;
-			padding-left: 16px;
-	
-			> .checkbox {
-				display: flex;
-				align-items: center;
+			padding-left: 8px;
 
-				> input {
-					margin: 0px 10px 1px 0px;
-				}
-			}
-	
-			> .title {
-				font-family: var(--joplin-font-family);
-				font-size: var(--joplin-font-size);
-				text-decoration: none;
-				color: var(--joplin-color);
-				cursor: default;
-				white-space: nowrap;
-				flex: 1 1 0%;
-				display: flex;
-				align-items: center;
+			> .content {
+				text-overflow: ellipsis;
 				overflow: hidden;
-
-				> .watchedicon {
-					display: none;
-					padding-right: 4px;
-					color: var(--joplin-color);
-				}
-			}
-		}
-
-		> .content.-shared {
-			> .title {
-				color: var(--joplin-color-warn3);
-			}
-		}
-
-		> .content.-completed {
-			> .title {
-				opacity: 0.5;
-			}
-		}
-
-		> .content.-watched {
-			> .title {
-				> .watchedicon {
-					display: inline;
-				}
 			}
 		}
 	`,
@@ -125,13 +67,23 @@ const renderer: ListRenderer = {
 		void CommandService.instance().execute('toggleNotesSortOrderField', field);
 	},
 
-	itemTemplate: {
-		'': '{{value}}',
+	itemTemplate: // html
+		`<div class="content {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
+			{{value}}
+		</div>
+	`,
+
+	itemValueTemplates: {
 		'note.todo_completed': '{{#note.todo_completed}}[x]{{/note.todo_completed}}{{^note.todo_completed}}[ ]{{/note.todo_completed}}',
+		'note.user_updated_time': '{{formattedUpdatedTime}}',
 	},
 
 	onRenderNote: async (props: Props) => {
-		return props;
+
+		return {
+			...props,
+			formattedUpdatedTime: time.unixMsToLocalDateTime(props.note.user_updated_time),
+		};
 	},
 };
 

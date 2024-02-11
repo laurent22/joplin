@@ -57,7 +57,7 @@ export type ListRendererDependency =
 	'note.isWatched' |
 	'note.tags';
 
-export type ListRendererItemTemplate = string | Record<string, string>;
+export type ListRendererItemValueTemplates = Record<string, string>;
 
 export interface ListRenderer {
 	/**
@@ -117,18 +117,58 @@ export interface ListRenderer {
 	onHeaderClick?: OnClickHandler;
 
 	/**
-	 * This is the HTML template that will be used to render the note list item.
-	 * This is a [Mustache template](https://github.com/janl/mustache.js) and it
-	 * will receive the variable you return from `onRenderNote` as tags. For
-	 * example, if you return a property named `formattedDate` from
-	 * `onRenderNote`, you can insert it in the template using `Created date:
-	 * {{formattedDate}}`.
+	 * This property is set differently depending on the `multiColumns` property.
 	 *
-	 * In order to get syntax highlighting working here, it's recommended
-	 * installing an editor extension such as [es6-string-html VSCode
+	 * ## If `multiColumns` is `false`
+	 *
+	 * There is only one column and the template is used to render the entire row.
+	 *
+	 * This is the HTML template that will be used to render the note list item. This is a [Mustache
+	 * template](https://github.com/janl/mustache.js) and it will receive the variable you return
+	 * from `onRenderNote` as tags. For example, if you return a property named `formattedDate` from
+	 * `onRenderNote`, you can insert it in the template using `Created date: {{formattedDate}}`
+	 *
+	 * ## If `multiColumns` is `true`
+	 *
+	 * Since there is multiple columns, this template will be used to render each note property
+	 * within the row. For example if the current columns are the Updated and Title properties, this
+	 * template will be called once to render the updated time and a second time to render the
+	 * title. To display the current property, the generic `value` property is provided - it will be
+	 * replaced at runtime by the actual note property. To render something different depending on
+	 * the note property, use `itemValueTemplate`. A minimal example would be
+	 * `<span>{{value}}</span>` which will simply render the current property inside a span tag.
+	 *
+	 * In order to get syntax highlighting working here, it's recommended installing an editor
+	 * extension such as [es6-string-html VSCode
 	 * extension](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html)
 	 */
-	itemTemplate: ListRendererItemTemplate;
+	itemTemplate: string;
+
+	/**
+	 * This property applies only when `multiColumns` is `true`. It is used to render something
+	 * different for each note property.
+	 *
+	 * This is a map of actual dependencies to templates - you only need to return something if the
+	 * default, as specified in `template`, is not enough.
+	 *
+	 * Again you need to return a Mustache template and it will be combined with the `template`
+	 * property to create the final template. For example if you return a property named
+	 * `formattedDate` from `onRenderNote`, you can insert it in the template using
+	 * `{{formattedDate}}`. This string will replace `{{value}}` in the `template` property.
+	 *
+	 * So if the template property is set to `<span>{{value}}</span>`, the final template will be
+	 * `<span>{{formattedDate}}</span>`.
+	 *
+	 * The property would be set as so:
+	 *
+	 * ```javascript
+	 * itemValueTemplates: {
+	 *     'note.user_updated_time': '{{formattedDate}}',
+	 * }
+	 * ```
+	 */
+	itemValueTemplates?: ListRendererItemValueTemplates;
+
 	/**
 	 * This user-facing text is used for example in the View menu, so that your
 	 * renderer can be selected.

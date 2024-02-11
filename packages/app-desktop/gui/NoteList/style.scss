@@ -22,6 +22,11 @@
 
 .note-list-item {
 	display: flex;
+
+	> .item {
+		overflow: hidden;
+		white-space: nowrap;
+	}
 }
 
 .note-list-item-wrapper {
@@ -47,15 +52,25 @@
 	flex-direction: row;
 	justify-content: flex-start;
 	align-items: center;
+	user-select: none;
 
 	> .item {
 		display: flex;
 		position: relative;
 		align-items: center;
 		height: 100%;
+		color: var(--joplin-color);
 
 		> .inner {
 			padding-left: 8px;
+
+			> .titlewrapper {
+
+				> .chevron {
+					position: absolute;
+					right: 6px;
+				}
+			}
 		}
 	}
 
@@ -63,7 +78,7 @@
 		content: '';
 		width: 1px;
 		height: 18px; // TODO: Make dynamic
-		background: gray; // TODO: color
+		background: var(--joplin-divider-color);
 		position: absolute;
 		top: 4px;
 	}
@@ -71,4 +86,9 @@
 	> .item.-first:before {
 		background: none;
 	}
+
+	> .item.-current {
+		font-weight: bold;
+	}
+
 }

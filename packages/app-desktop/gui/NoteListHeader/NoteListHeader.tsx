@@ -1,24 +1,36 @@
 import * as React from 'react';
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import { OnClickHandler } from '@joplin/lib/services/plugins/api/noteListType';
 import { CSSProperties } from 'styled-components';
 import { Column } from '../NoteList/utils/types';
+
+interface OnItemClickEvent {
+	name: string;
+}
+
+export type OnItemClickEventHander = (event: OnItemClickEvent)=> void;
 
 interface Props {
 	template: string;
 	height: number;
 	onClick: OnClickHandler;
 	columns: Column[];
+	notesSortOrderField: string;
+	notesSortOrderReverse: boolean;
+	onItemClick: OnItemClickEventHander;
 }
 
 const defaultHeight = 26;
 
-interface HeaderItem {
+interface HeaderItemProps {
 	isFirst: boolean;
 	column: Column;
+	isCurrent: boolean;
+	isReverse: boolean;
+	onClick: OnItemClickEventHander;
 }
 
-const ItemComp = (props: HeaderItem) => {
+const HeaderItem = (props: HeaderItemProps) => {
 	const column = props.column;
 
 	const style = useMemo(() => {
@@ -34,13 +46,32 @@ const ItemComp = (props: HeaderItem) => {
 	const classes = useMemo(() => {
 		const output: string[] = ['item'];
 		if (props.isFirst) output.push('-first');
+		if (props.isCurrent) {
+			output.push('-current');
+			if (props.isReverse) output.push('-reverse');
+		}
 		return output;
-	}, [props.isFirst]);
+	}, [props.isFirst, props.isCurrent, props.isReverse]);
+
+	const onClick: React.MouseEventHandler = useCallback((event) => {
+		const name = event.currentTarget.getAttribute('data-name');
+		props.onClick({ name });
+	}, [props.onClick]);
+
+	const renderTitle = () => {
+		let chevron = null;
+		if (props.isCurrent) {
+			const classes = ['chevron', 'fas'];
+			classes.push(props.isReverse ? 'fa-chevron-down' : 'fa-chevron-up');
+			chevron = <i className={classes.join(' ')}></i>;
+		}
+		return <span className="titlewrapper">{column.title}{chevron}</span>;
+	};
 
 	return (
-		<div className={classes.join(' ')} style={style}>
+		<div data-name={column.name} className={classes.join(' ')} style={style} onClick={onClick}>
 			<div className="inner">
-				{column.title}
+				{renderTitle()}
 			</div>
 		</div>
 	);
@@ -51,10 +82,13 @@ export default (props: Props) => {
 
 	let isFirst = true;
 	for (const column of props.columns) {
-		items.push(<ItemComp
+		items.push(<HeaderItem
 			isFirst={isFirst}
 			key={column.name}
 			column={column}
+			isCurrent={`note.${props.notesSortOrderField}` === column.name}
+			isReverse={props.notesSortOrderReverse}
+			onClick={props.onItemClick}
 		/>);
 		isFirst = false;
 	}
@@ -71,38 +105,3 @@ export default (props: Props) => {
 		</div>
 	);
 };
-
-// const useContentElement = (rootElement:HTMLDivElement, height:number, template:string) => {
-// 	const [contentElement, setContentElement] = useState<HTMLDivElement>(null)
-// 	useEffect(() => {
-// 		if (!rootElement) return () => {};
-// 		const element = document.createElement('div');
-// 		element.className = 'note-list-header-content';
-// 		element.style.height = `${height}px`;
-// 		element.innerHTML = template;
-// 		rootElement.appendChild(element);
-// 		setContentElement(element);
-// 		return () => {
-// 			element.remove();
-// 		};
-// 	}, [rootElement, height, template]);
-// 	return contentElement;
-// }
-
-// export default (props:Props) => {
-// 	const onHeaderClick = useCallback((event:React.MouseEvent<HTMLElement>) => {
-// 		if (!props.onClick) return;
-// 		const elementId = event.currentTarget.getAttribute('data-id');
-// 		props.onClick({ elementId });
-// 	}, []);
-
-// 	const rootElement = useRootElement(rootElementId);
-// 	const height = props.height === undefined ? defaultHeight : props.height;
-// 	const contentElement = useContentElement(rootElement, height, props.template);
-// 	useItemEventHandlers(rootElement, contentElement, null, onHeaderClick);
-
-// 	return <div
-// 		id={rootElementId}
-// 	>
-// 	</div>;
-// }
