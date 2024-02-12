@@ -6543,11 +6543,11 @@ __metadata:
     "@types/jest": 29.5.8
     "@types/mustache": 4.2.5
     "@types/node": 18.19.8
-    "@types/react": 18.2.47
+    "@types/react": 18.2.48
     "@types/react-redux": 7.1.33
     "@types/styled-components": 5.1.32
     "@types/tesseract.js": 2.0.0
-    async-mutex: 0.4.0
+    async-mutex: 0.4.1
     codemirror: 5.65.9
     color: 3.2.1
     compare-versions: 6.1.0
@@ -6568,7 +6568,7 @@ __metadata:
     keytar: 7.9.0
     mark.js: 8.11.1
     md5: 2.3.0
-    moment: 2.29.4
+    moment: 2.30.1
     mustache: 4.2.0
     nan: 2.18.0
     node-fetch: 2.6.7
@@ -6590,7 +6590,7 @@ __metadata:
     reselect: 4.1.8
     roboto-fontface: 0.10.0
     smalltalk: 2.5.1
-    sqlite3: 5.1.7
+    sqlite3: 5.1.6
     styled-components: 5.3.11
     styled-system: 5.1.5
     taboverride: 4.0.3
@@ -6620,7 +6620,7 @@ __metadata:
     "@react-native-community/clipboard": 1.5.1
     "@react-native-community/datetimepicker": 7.6.2
     "@react-native-community/geolocation": 3.1.0
-    "@react-native-community/netinfo": 11.1.0
+    "@react-native-community/netinfo": 11.2.1
     "@react-native-community/push-notification-ios": 1.11.0
     "@react-native-community/slider": 4.5.0
     "@testing-library/jest-native": 5.4.3
@@ -6628,7 +6628,7 @@ __metadata:
     "@tsconfig/react-native": 2.0.2
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
-    "@types/react": 18.2.47
+    "@types/react": 18.2.48
     "@types/react-native": 0.70.6
     "@types/react-redux": 7.1.33
     "@types/tar-stream": 3.1.3
@@ -6651,7 +6651,7 @@ __metadata:
     lodash: 4.17.21
     md5: 2.3.0
     metro-react-native-babel-preset: 0.73.9
-    nodemon: 3.0.2
+    nodemon: 3.0.3
     path-browserify: 1.0.1
     prop-types: 15.8.1
     punycode: 2.3.1
@@ -6668,7 +6668,7 @@ __metadata:
     react-native-fs: 2.20.0
     react-native-get-random-values: 1.10.0
     react-native-image-picker: 7.1.0
-    react-native-localize: 3.0.5
+    react-native-localize: 3.0.6
     react-native-modal-datetime-picker: 17.1.0
     react-native-paper: 5.11.7
     react-native-popup-menu: 0.16.1
@@ -6676,7 +6676,7 @@ __metadata:
     react-native-rsa-native: 2.0.5
     react-native-safe-area-context: 4.8.2
     react-native-securerandom: 1.0.1
-    react-native-share: 10.0.1
+    react-native-share: 10.0.2
     react-native-side-menu-updated: 1.3.2
     react-native-sqlite-storage: 6.0.1
     react-native-url-polyfill: 2.0.0
@@ -6689,7 +6689,7 @@ __metadata:
     react-test-renderer: 18.2.0
     redux: 4.2.1
     rn-fetch-blob: 0.12.0
-    sqlite3: 5.1.7
+    sqlite3: 5.1.6
     stream: 0.0.2
     stream-browserify: 3.0.0
     string-natural-compare: 3.0.1
@@ -6762,7 +6762,7 @@ __metadata:
     "@replit/codemirror-vim": 6.0.14
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.8
-    "@types/react": 18.2.47
+    "@types/react": 18.2.48
     "@types/react-redux": 7.1.33
     "@types/styled-components": 5.1.32
     jest: 29.7.0
@@ -6847,9 +6847,9 @@ __metadata:
     "@types/nanoid": 3.0.0
     "@types/node": 18.19.8
     "@types/node-rsa": 1.1.4
-    "@types/react": 18.2.47
+    "@types/react": 18.2.48
     "@types/uuid": 9.0.7
-    async-mutex: 0.4.0
+    async-mutex: 0.4.1
     base-64: 1.0.0
     base64-stream: 1.0.0
     builtin-modules: 3.3.0
@@ -6876,7 +6876,7 @@ __metadata:
     markdown-it: 13.0.2
     md5: 2.3.0
     md5-file: 5.0.0
-    moment: 2.29.4
+    moment: 2.30.1
     multiparty: 4.2.3
     mustache: 4.2.0
     nanoid: 3.3.7
@@ -6895,7 +6895,7 @@ __metadata:
     server-destroy: 1.0.1
     sharp: 0.33.2
     sprintf-js: 1.1.3
-    sqlite3: 5.1.7
+    sqlite3: 5.1.6
     string-padding: 1.0.2
     string-to-stream: 3.0.1
     tar: 6.2.0
@@ -6920,10 +6920,10 @@ __metadata:
     "@joplin/lib": ~2.14
     "@types/jest": 29.5.8
     "@types/pdfjs-dist": 2.10.378
-    "@types/react": 18.2.47
+    "@types/react": 18.2.48
     "@types/react-dom": 18.2.18
     "@types/styled-components": 5.1.32
-    async-mutex: 0.4.0
+    async-mutex: 0.4.1
     babel-jest: 29.7.0
     css-loader: 6.8.1
     jest: 29.7.0
@@ -7073,14 +7073,14 @@ __metadata:
     jquery: 3.7.1
     jsdom: 22.1.0
     knex: 3.1.0
-    koa: 2.14.2
+    koa: 2.15.0
     ldapts: 7.0.8
     markdown-it: 13.0.2
     mustache: 4.2.0
     node-cron: 3.0.3
-    node-mocks-http: 1.14.0
+    node-mocks-http: 1.14.1
     nodemailer: 6.9.8
-    nodemon: 3.0.2
+    nodemon: 3.0.3
     pg: 8.11.3
     pm2: 5.3.0
     pretty-bytes: 5.6.0
@@ -7089,7 +7089,7 @@ __metadata:
     rate-limiter-flexible: 3.0.6
     raw-body: 2.5.2
     source-map-support: 0.5.21
-    sqlite3: 5.1.7
+    sqlite3: 5.1.6
     stripe: 8.222.0
     typescript: 5.2.2
     uuid: 9.0.1
@@ -7129,7 +7129,7 @@ __metadata:
     js-yaml: 4.1.0
     markdown-it: 13.0.2
     md5-file: 5.0.0
-    moment: 2.29.4
+    moment: 2.30.1
     mustache: 4.2.0
     node-fetch: 2.6.7
     relative: 3.0.2
@@ -7138,7 +7138,7 @@ __metadata:
     sass: 1.69.7
     sharp: 0.33.2
     source-map-support: 0.5.21
-    sqlite3: 5.1.7
+    sqlite3: 5.1.6
     style-to-js: 1.1.10
     typescript: 5.2.2
     uri-template: 2.0.0
@@ -7199,14 +7199,14 @@ __metadata:
     "@types/jest": 29.5.8
     "@types/markdown-it": 13.0.7
     "@types/node-fetch": 2.6.11
-    async-mutex: 0.4.0
+    async-mutex: 0.4.1
     execa: 5.1.1
     fs-extra: 11.2.0
     glob: 10.3.10
     html-entities: 1.4.0
     jest: 29.7.0
     markdown-it: 13.0.2
-    moment: 2.29.4
+    moment: 2.30.1
     node-fetch: 2.6.7
     sprintf-js: 1.1.3
     ts-jest: 29.1.1
@@ -9340,12 +9340,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/netinfo@npm:11.1.0":
-  version: 11.1.0
-  resolution: "@react-native-community/netinfo@npm:11.1.0"
+"@react-native-community/netinfo@npm:11.2.1":
+  version: 11.2.1
+  resolution: "@react-native-community/netinfo@npm:11.2.1"
   peerDependencies:
     react-native: ">=0.59"
-  checksum: bbfa921c7d21f4c1c8bd01789256e096eed054ca6663caaa34446f1429f8394ec630c99f524a35e1a0a5873b3bc7f135e5721a7cc53f6cea68509b8723386db8
+  checksum: d54b75c6dc6d7a8cbb054d84ed9326e1715259137e333f26cd801c6b820996cacceb5a1cf3ee94b91866361c040b7a12eb78db3695b076e8f30c3403985f98d5
   languageName: node
   linkType: hard
 
@@ -10526,6 +10526,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/express@npm:^4.17.21":
+  version: 4.17.21
+  resolution: "@types/express@npm:4.17.21"
+  dependencies:
+    "@types/body-parser": "*"
+    "@types/express-serve-static-core": ^4.17.33
+    "@types/qs": "*"
+    "@types/serve-static": "*"
+  checksum: fb238298630370a7392c7abdc80f495ae6c716723e114705d7e3fb67e3850b3859bbfd29391463a3fb8c0b32051847935933d99e719c0478710f8098ee7091c5
+  languageName: node
+  linkType: hard
+
 "@types/formidable@npm:2.0.6":
   version: 2.0.6
   resolution: "@types/formidable@npm:2.0.6"
@@ -10962,6 +10974,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^20.10.6":
+  version: 20.11.16
+  resolution: "@types/node@npm:20.11.16"
+  dependencies:
+    undici-types: ~5.26.4
+  checksum: 51f0831c1219bf4698e7430aeb9892237bd851deeb25ce23c5bb0ceefcc77c3b114e48f4e98d9fc26def5a87ba9d8079f0281dd37bee691140a93f133812c152
+  languageName: node
+  linkType: hard
+
 "@types/nodemailer@npm:6.4.14":
   version: 6.4.14
   resolution: "@types/nodemailer@npm:6.4.14"
@@ -11132,14 +11153,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:18.2.47":
-  version: 18.2.47
-  resolution: "@types/react@npm:18.2.47"
+"@types/react@npm:18.2.48":
+  version: 18.2.48
+  resolution: "@types/react@npm:18.2.48"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 49608f07f73374e535b21f99fee28e6cfd5801d887c6ed88c41b4dc701dbcee9f0c4d289d9af7b2b23114f76dbf203ffe2c9191bfb4958cf18dae5a25daedbd0
+  checksum: c9ca43ed2995389b7e09492c24e6f911a8439bb8276dd17cc66a2fbebbf0b42daf7b2ad177043256533607c2ca644d7d928fdfce37a67af1f8646d2bac988900
   languageName: node
   linkType: hard
 
@@ -13437,6 +13458,15 @@ __metadata:
   dependencies:
     tslib: ^2.4.0
   checksum: 813a71728b35a4fbfd64dba719f04726d9133c67b577fcd951b7028c4a675a13ee34e69beb82d621f87bf81f5d4f135c4c44be0448550c7db728547244ef71fc
+  languageName: node
+  linkType: hard
+
+"async-mutex@npm:0.4.1":
+  version: 0.4.1
+  resolution: "async-mutex@npm:0.4.1"
+  dependencies:
+    tslib: ^2.4.0
+  checksum: cb529c0d257c8ff8e5b26c81b36127a255e545edee2c42c76247d533b89a7664037d95f33130f964de49b111ad3324ead8dcccd419c47acdfeb7413ed93063a1
   languageName: node
   linkType: hard
 
@@ -16660,13 +16690,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cookies@npm:~0.8.0":
-  version: 0.8.0
-  resolution: "cookies@npm:0.8.0"
+"cookies@npm:~0.9.0":
+  version: 0.9.1
+  resolution: "cookies@npm:0.9.1"
   dependencies:
     depd: ~2.0.0
     keygrip: ~1.1.0
-  checksum: 806055a44f128705265b1bc6a853058da18bf80dea3654ad99be20985b1fa1b14f86c1eef73644aab8071241f8a78acd57202b54c4c5c70769fc694fbb9c4edc
+  checksum: 213e4d14847b582fbd8a003203d3621a4b9fa792a315c37954e89332d38fac5bcc34ba92ef316ad6d5fe28f0187aaa115927fbbe2080744ad1707a93b4313247
   languageName: node
   linkType: hard
 
@@ -26929,7 +26959,7 @@ __metadata:
     server-destroy: 1.0.1
     sharp: 0.33.2
     sprintf-js: 1.1.3
-    sqlite3: 5.1.7
+    sqlite3: 5.1.6
     string-padding: 1.0.2
     strip-ansi: 6.0.1
     tcp-port-used: 1.0.2
@@ -27677,15 +27707,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"koa@npm:2.14.2":
-  version: 2.14.2
-  resolution: "koa@npm:2.14.2"
+"koa@npm:2.15.0":
+  version: 2.15.0
+  resolution: "koa@npm:2.15.0"
   dependencies:
     accepts: ^1.3.5
     cache-content-type: ^1.0.0
     content-disposition: ~0.5.2
     content-type: ^1.0.4
-    cookies: ~0.8.0
+    cookies: ~0.9.0
     debug: ^4.3.2
     delegates: ^1.0.0
     depd: ^2.0.0
@@ -27704,7 +27734,7 @@ __metadata:
     statuses: ^1.5.0
     type-is: ^1.6.16
     vary: ^1.1.2
-  checksum: 17fe3b8f5e0b4759004a942cc6ba2a9507299943a697dff9766b85f41f45caed4077ca2645ac9ad254d3359fffedfc4c9ebdd7a70493e5df8cdfac159a8ee835
+  checksum: a97741f89f328f25ae94d82d0ee608377d89e086c73f2d868023e6050dea682ef93e0a5c80097f3aaad28121853aea50a7fb3c0c12ecc45798da2fd1255f580b
   languageName: node
   linkType: hard
 
@@ -30735,6 +30765,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"moment@npm:2.30.1":
+  version: 2.30.1
+  resolution: "moment@npm:2.30.1"
+  checksum: 859236bab1e88c3e5802afcf797fc801acdbd0ee509d34ea3df6eea21eb6bcc2abd4ae4e4e64aa7c986aa6cba563c6e62806218e6412a765010712e5fa121ba6
+  languageName: node
+  linkType: hard
+
 "moment@npm:^2.8.4":
   version: 2.29.1
   resolution: "moment@npm:2.29.1"
@@ -31098,21 +31135,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-addon-api@npm:^4.3.0":
+"node-addon-api@npm:^4.2.0, node-addon-api@npm:^4.3.0":
   version: 4.3.0
   resolution: "node-addon-api@npm:4.3.0"
   dependencies:
     node-gyp: latest
   checksum: 3de396e23cc209f539c704583e8e99c148850226f6e389a641b92e8967953713228109f919765abc1f4355e801e8f41842f96210b8d61c7dcc10a477002dcf00
-  languageName: node
-  linkType: hard
-
-"node-addon-api@npm:^7.0.0":
-  version: 7.1.0
-  resolution: "node-addon-api@npm:7.1.0"
-  dependencies:
-    node-gyp: latest
-  checksum: 26640c8d2ed7e2059e2ed65ee79e2a195306b3f1fc27ad11448943ba91d37767bd717a9a0453cc97e83a1109194dced8336a55f8650000458ef625c0b8b5e3df
   languageName: node
   linkType: hard
 
@@ -31283,10 +31311,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-mocks-http@npm:1.14.0":
-  version: 1.14.0
-  resolution: "node-mocks-http@npm:1.14.0"
+"node-mocks-http@npm:1.14.1":
+  version: 1.14.1
+  resolution: "node-mocks-http@npm:1.14.1"
   dependencies:
+    "@types/express": ^4.17.21
+    "@types/node": ^20.10.6
     accepts: ^1.3.7
     content-disposition: ^0.5.3
     depd: ^1.1.0
@@ -31297,7 +31327,7 @@ __metadata:
     parseurl: ^1.3.3
     range-parser: ^1.2.0
     type-is: ^1.6.18
-  checksum: 2cbf2d2e0dcbf6935e2f2c7e3b3bbea4b60cf043f8cf846856bf177e6570bf7b5629311b97f673d290cf51ed8e7e7c725f9a7a43ad224df423ed92389ac9ff8f
+  checksum: cc37618fb5f44a6049f8fcfc73373c4b42943e35e4b0f7463939d3f219663fe647e00e6eb9c3b8aedd48e88e10e1542993ac1a7ff8442ee2c3f6b97f23ced0e0
   languageName: node
   linkType: hard
 
@@ -31400,9 +31430,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemon@npm:3.0.2":
-  version: 3.0.2
-  resolution: "nodemon@npm:3.0.2"
+"nodemon@npm:3.0.3":
+  version: 3.0.3
+  resolution: "nodemon@npm:3.0.3"
   dependencies:
     chokidar: ^3.5.2
     debug: ^4
@@ -31416,7 +31446,7 @@ __metadata:
     undefsafe: ^2.0.5
   bin:
     nodemon: bin/nodemon.js
-  checksum: 61f3dd207ad444f4a7a2f1aa44adc886605c96c7bc6286291c2360e5e2cd26c3828c90a1418a60783a9da2463593383149135a5a4c099918c54d34a611745499
+  checksum: 121ebb6349167d87cefd5767ec453ceb49ec5a8d50146134a54b0e25502c29ad01caaa41460e303b35728439012564782d278b3fef3c615f3c278979c2b7d586
   languageName: node
   linkType: hard
 
@@ -34198,7 +34228,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prebuild-install@npm:^7.0.1, prebuild-install@npm:^7.1.1":
+"prebuild-install@npm:^7.0.1":
   version: 7.1.1
   resolution: "prebuild-install@npm:7.1.1"
   dependencies:
@@ -35423,9 +35453,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-localize@npm:3.0.5":
-  version: 3.0.5
-  resolution: "react-native-localize@npm:3.0.5"
+"react-native-localize@npm:3.0.6":
+  version: 3.0.6
+  resolution: "react-native-localize@npm:3.0.6"
   peerDependencies:
     react: ">=18.1.0"
     react-native: ">=0.70.0"
@@ -35433,7 +35463,7 @@ __metadata:
   peerDependenciesMeta:
     react-native-macos:
       optional: true
-  checksum: 4c9f6daac12cdb8821d6e24be0bce7377286a3d9ece2f23d0906de260be344e7f928f80fe4f0dc36cefc715af8cbd46c507f004075d3906cb43b2df6ed1414b6
+  checksum: 83d0c7756f316b97951af2dc70713d922d7aa67130242add08c6851b08a07c719ecd3a02b87b1b3fd2e33f46bec719658ecc745bd3e48fa7e6d12ce3ea821a6b
   languageName: node
   linkType: hard
 
@@ -35507,10 +35537,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-share@npm:10.0.1":
-  version: 10.0.1
-  resolution: "react-native-share@npm:10.0.1"
-  checksum: c570cb7ee62e37c99de9cdb3a68813d838955ea7fd016ee9eaf026035803c56edbf6b538349445b7b4b244e0a89eeb34964718632a7db778632c87cb5dce31b0
+"react-native-share@npm:10.0.2":
+  version: 10.0.2
+  resolution: "react-native-share@npm:10.0.2"
+  checksum: 3d9f747633edadced0b5ac88fb02f6afade9bb91e115b010d6392b60798b169927a08762e3d15c0f7edbfed91a4a175fc334e5c990a590c56bd5a977b953fd82
   languageName: node
   linkType: hard
 
@@ -37303,7 +37333,7 @@ __metadata:
     lint-staged: 15.2.0
     madge: 6.1.0
     node-gyp: 9.4.1
-    nodemon: 3.0.2
+    nodemon: 3.0.3
     npm-package-json-lint: 7.1.0
     typescript: 5.2.2
   languageName: unknown
@@ -38927,14 +38957,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sqlite3@npm:5.1.7":
-  version: 5.1.7
-  resolution: "sqlite3@npm:5.1.7"
+"sqlite3@npm:5.1.6":
+  version: 5.1.6
+  resolution: "sqlite3@npm:5.1.6"
   dependencies:
-    bindings: ^1.5.0
-    node-addon-api: ^7.0.0
+    "@mapbox/node-pre-gyp": ^1.0.0
+    node-addon-api: ^4.2.0
     node-gyp: 8.x
-    prebuild-install: ^7.1.1
     tar: ^6.1.11
   peerDependencies:
     node-gyp: 8.x
@@ -38944,7 +38973,7 @@ __metadata:
   peerDependenciesMeta:
     node-gyp:
       optional: true
-  checksum: 37e387b74e34aea3d0fc5cea76e14de3139e4bdbf6574ff6ca876c3b5e36e859b278e99922c179c14337cb0d487d8da8dbbaaf7d63fbab5928dc134a9d5db262
+  checksum: ea640628843e37a63dfb4bd2c8429dbd7aab845c1a8204574dca3aac61486ab65bc0abfd99b48f1cead1f783171c6111c0cc4115335d5b95bb0b4eb44db162d5
   languageName: node
   linkType: hard
 

@@ -31,7 +31,7 @@
     "glob": "10.3.10",
     "markdown-it": "13.0.2",
     "md5-file": "5.0.0",
-    "moment": "2.29.4",
+    "moment": "2.30.1",
     "mustache": "4.2.0",
     "node-fetch": "2.6.7",
     "relative": "3.0.2",
@@ -60,7 +60,7 @@
     "js-yaml": "4.1.0",
     "rss": "1.2.2",
     "sass": "1.69.7",
-    "sqlite3": "5.1.7",
+    "sqlite3": "5.1.6",
     "style-to-js": "1.1.10",
     "typescript": "5.2.2"
   },

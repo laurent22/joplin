@@ -1,5 +1,14 @@
 # Joplin iOS Changelog
 
+## [ios-v12.14.4](https://github.com/laurent22/joplin/releases/tag/ios-v12.14.4) - 2024-02-09T12:47:39Z
+
+- Improved: Improve search engine error handling when preparing text for search (#9871 by Henry Heino)
+- Improved: Updated packages @js-draw/material-icons (v1.16.1), @react-native-community/netinfo (v11.2.1), @react-native-community/slider (v4.5.0), async-mutex (v0.4.1), follow-redirects (v1.15.5), js-draw (v1.16.1), moment (v2.30.1), react-native-document-picker (v9.1.0), react-native-localize (v3.0.6), react-native-paper (v5.11.7), react-native-safe-area-context (v4.8.2), react-native-share (v10.0.2), react-native-webview (v13.6.4), sass (v1.69.7), sharp (v0.33.2), sqlite3 (v5.1.7)
+- Fixed: Correctly search HTML-entity encoded text (#9694)
+- Fixed: Fix deeply-nested subnotebook titles invisible in the folder dropdown (#9906) (#9858 by Henry Heino)
+- Fixed: Fix share to Joplin when only "All notes" has been opened (#9876) (#9863 by Henry Heino)
+- Fixed: Increase space available for Notebook icon (#9877) (#9475 by [@pedr](https://github.com/pedr))
+
 ## [ios-v12.14.3](https://github.com/laurent22/joplin/releases/tag/ios-v12.14.3) - 2024-02-02T23:14:00Z
 
 - New: Add support for showing only lines of log that contain a filter (#9728 by Henry Heino)

@@ -172,6 +172,34 @@ describe('defaultPluginsUtils', () => {
 		expect(Setting.value('plugin-io.github.jackgruber.backup.path')).toBe('initial-path');
 	});
 
+	it('should support disabled-by-default plugins', async () => {
+		const service = newPluginService();
+
+		const plugin = await service.loadPluginFromJsBundle('', sampleJsBundlePlugin);
+		plugin.builtIn = false;
+		await service.runPlugin(plugin);
+
+		const defaultPluginsInfo: DefaultPluginsInfo = {
+			'joplin.plugin.ambrt.backlinksToNote': {
+				enabled: false,
+			},
+			'org.joplinapp.plugins.ToggleSidebars': {},
+		};
+		Setting.setValue('installedDefaultPlugins', []);
+
+		const { pluginSettings } = await getDefaultPluginPathsAndSettings(
+			testDefaultPluginsDir, defaultPluginsInfo, {}, service,
+		);
+
+		expect(pluginSettings).toMatchObject({
+			'joplin.plugin.ambrt.backlinksToNote': {
+				enabled: false,
+				deleted: false,
+			},
+			'org.joplinapp.plugins.ToggleSidebars': defaultPluginSetting(),
+		});
+	});
+
 	it('should not throw error on missing setting key', async () => {
 
 		const service = newPluginService();

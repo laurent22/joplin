@@ -624,7 +624,11 @@ class Application extends BaseApplication {
 
 		await this.setupOcrService();
 
-		eventManager.on(EventName.OcrServiceResourcesProcessed, () => {
+		eventManager.on(EventName.OcrServiceResourcesProcessed, async () => {
+			await ResourceService.instance().indexNoteResources();
+		});
+
+		eventManager.on(EventName.NoteResourceIndexed, async () => {
 			SearchEngine.instance().scheduleSyncTables();
 		});
 

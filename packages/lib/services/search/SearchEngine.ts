@@ -617,8 +617,21 @@ export default class SearchEngine {
 
 	private normalizeNote_(note: NoteEntity) {
 		const n = { ...note };
-		n.title = this.normalizeText_(n.title);
-		n.body = this.normalizeText_(n.body);
+		try {
+			n.title = this.normalizeText_(n.title);
+			n.body = this.normalizeText_(n.body);
+		} catch (error) {
+			// Text normalization -- specifically removeDiacritics -- can fail in some cases.
+			// We log additional information to help determine the cause of the issue.
+			//
+			// See https://discourse.joplinapp.org/t/search-not-working-on-ios/35754
+			this.logger().error(`Error while normalizing text for note ${note.id}:`, error);
+
+			// Unnormalized text can break the search engine, specifically NUL characters.
+			// Thus, we remove the text entirely.
+			n.title = '';
+			n.body = '';
+		}
 		return n;
 	}
 
@@ -764,18 +777,29 @@ export default class SearchEngine {
 				if (!queryHasFilters) {
 					const toSearch = parsedQuery.allTerms.map(t => t.value).join(' ');
 
-					let itemRows = await this.db().selectAll<ProcessResultsRow>(`
-						SELECT
-							id,
-							title,
-							user_updated_time,
-							offsets(items_fts) AS offsets,
-							matchinfo(items_fts, 'pcnalx') AS matchinfo,
-							item_id,
-							item_type
-						FROM items_fts
-						WHERE title MATCH ? OR body MATCH ?
-					`, [toSearch, toSearch]);
+					let itemRows: ProcessResultsRow[] = [];
+
+					try {
+						itemRows = await this.db().selectAll<ProcessResultsRow>(`
+							SELECT
+								id,
+								title,
+								user_updated_time,
+								offsets(items_fts) AS offsets,
+								matchinfo(items_fts, 'pcnalx') AS matchinfo,
+								item_id,
+								item_type
+							FROM items_fts
+							WHERE title MATCH ? OR body MATCH ?
+						`, [toSearch, toSearch]);
+					} catch (error) {
+						// Android <= 25 doesn't support the following syntax:
+						//    WHERE title MATCH ? OR body MATCH ?
+						// Thus, we skip resource search on these devices.
+						if (!error.message?.includes?.('unable to use function MATCH in the requested context')) {
+							throw error;
+						}
+					}
 
 					const resourcesToNotes = await NoteResource.associatedResourceNotes(
 						itemRows.map(r => r.item_id),

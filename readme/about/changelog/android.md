@@ -1,5 +1,15 @@
 # Joplin Android Changelog
 
+## [android-v2.14.6](https://github.com/laurent22/joplin/releases/tag/android-v2.14.6) (Pre-release) - 2024-02-09T12:41:18Z
+
+- Improved: Improve search engine error handling when preparing text for search (#9871 by Henry Heino)
+- Improved: Updated packages @js-draw/material-icons (v1.16.1), @react-native-community/netinfo (v11.2.1), @react-native-community/slider (v4.5.0), async-mutex (v0.4.1), follow-redirects (v1.15.5), js-draw (v1.16.1), moment (v2.30.1), react-native-document-picker (v9.1.0), react-native-localize (v3.0.6), react-native-paper (v5.11.7), react-native-safe-area-context (v4.8.2), react-native-share (v10.0.2), react-native-webview (v13.6.4), sass (v1.69.7), sharp (v0.33.2), sqlite3 (v5.1.7)
+- Fixed: Correctly search HTML-entity encoded text (#9694)
+- Fixed: Fix deeply-nested subnotebook titles invisible in the folder dropdown (#9906) (#9858 by Henry Heino)
+- Fixed: Fix regression: Crash when opening appearance/sync settings on some devices (#9864) (#7974 by Henry Heino)
+- Fixed: Fix share to Joplin when only "All notes" has been opened (#9876) (#9863 by Henry Heino)
+- Fixed: Increase space available for Notebook icon (#9877) (#9475 by [@pedr](https://github.com/pedr))
+
 ## [android-v2.14.5](https://github.com/laurent22/joplin/releases/tag/android-v2.14.5) (Pre-release) - 2024-02-02T23:09:50Z
 
 - Improved: Allow note viewer to extend to the edge of the screen while pinch zooming (#9820) (#9819 by Henry Heino)

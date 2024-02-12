@@ -44,7 +44,7 @@ const FolderPicker: FunctionComponent<FolderPickerProps> = ({
 			const f = folders[i];
 			const icon = Folder.unserializeIcon(f.icon);
 			const iconString = icon ? `${icon.emoji} ` : '';
-			pickerItems.push({ label: `${'      '.repeat(indent)} ${iconString + Folder.displayTitle(f)}`, value: f.id });
+			pickerItems.push({ label: `${iconString + Folder.displayTitle(f)}`, depth: indent, value: f.id });
 			pickerItems = addFolderChildren(f.children, pickerItems, indent + 1);
 		}
 

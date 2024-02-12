@@ -34,6 +34,7 @@ export interface SettingAndValue {
 
 export interface DefaultPluginSettings {
 	settings?: SettingAndValue;
+	enabled?: boolean;
 }
 
 export interface DefaultPluginsInfo {
