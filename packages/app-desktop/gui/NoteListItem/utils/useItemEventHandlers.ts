@@ -1,7 +1,7 @@
 import { OnClick, OnInputChange } from './types';
 import { useEffect } from 'react';
 
-const useItemEventHandlers = (rootElement: HTMLDivElement, itemElement: HTMLDivElement, onInputChange: OnInputChange, onClick:OnClick) => {
+const useItemEventHandlers = (rootElement: HTMLDivElement, itemElement: HTMLDivElement, onInputChange: OnInputChange, onClick: OnClick) => {
 	useEffect(() => {
 		if (!itemElement) return () => {};
 
@@ -23,7 +23,7 @@ const useItemEventHandlers = (rootElement: HTMLDivElement, itemElement: HTMLDivE
 		}
 
 		const buttons = itemElement.getElementsByTagName('button');
-		const processedButtons :HTMLButtonElement[] = [];
+		const processedButtons: HTMLButtonElement[] = [];
 
 		if (onClick) {
 			for (const button of buttons) {
