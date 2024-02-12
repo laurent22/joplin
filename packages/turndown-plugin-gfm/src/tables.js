@@ -98,9 +98,22 @@ rules.table = {
       }
     }
 
-    return '\n\n' + emptyHeader + content + '\n\n'
+    const captionContent = node.caption ? node.caption.textContent || '' : '';
+    const caption = captionContent ? `${captionContent}\n\n` : '';
+    const tableContent = `${emptyHeader}${content}`.trimStart();
+    return `\n\n${caption}${tableContent}\n\n`;
   }
 }
+
+rules.tableCaption = {
+  filter: ['caption'],
+  replacement: () => '',
+};
+
+rules.tableColgroup = {
+  filter: ['colgroup', 'col'],
+  replacement: () => '',
+};
 
 rules.tableSection = {
   filter: ['thead', 'tbody', 'tfoot'],
