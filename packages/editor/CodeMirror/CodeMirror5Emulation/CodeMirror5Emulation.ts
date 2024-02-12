@@ -226,20 +226,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		if (typeof query === 'string') {
 			query = new RegExp(pregQuote(query));
 		}
-		const result = super.getSearchCursor(query, pos || { line: 0, ch: 0 });
-
-		return {
-			// .pos isn't implemented by CM6 Vim, but is still used by
-			// some Joplin code.
-			get pos() {
-				return {
-					from: result.from(),
-					to: result.to(),
-				};
-			},
-
-			...result,
-		};
+		return super.getSearchCursor(query, pos || { line: 0, ch: 0 });
 	}
 
 	public lineAtHeight(height: number, _mode?: 'local') {
