@@ -6,7 +6,7 @@ import { LogMessageCallback } from '../../types';
 import editorCommands from '../editorCommands/editorCommands';
 import { StateEffect } from '@codemirror/state';
 import { StreamParser } from '@codemirror/language';
-import Decorator, { LineWidgetOptions } from './Decorator';
+import Decorator, { LineWidgetOptions, MarkTextOptions } from './Decorator';
 import insertLineAfter from '../editorCommands/insertLineAfter';
 const { pregQuote } = require('@joplin/lib/string-utils-common');
 
@@ -15,6 +15,8 @@ type CodeMirror5Command = (codeMirror: CodeMirror5Emulation)=> void;
 
 type EditorEventCallback = (editor: CodeMirror5Emulation, ...args: any[])=> void;
 type OptionUpdateCallback = (editor: CodeMirror5Emulation, newVal: any, oldVal: any)=> void;
+
+type OverlayType<State> = StreamParser<State>|{ query: RegExp };
 
 interface CodeMirror5OptionRecord {
 	onUpdate: OptionUpdateCallback;
@@ -26,6 +28,11 @@ interface DocumentPosition {
 	ch: number;
 }
 
+interface DocumentPositionRange {
+	from: DocumentPosition;
+	to: DocumentPosition;
+}
+
 const documentPositionFromPos = (doc: Text, pos: number): DocumentPosition => {
 	const line = doc.lineAt(pos);
 	return {
@@ -33,6 +40,11 @@ const documentPositionFromPos = (doc: Text, pos: number): DocumentPosition => {
 		line: line.number - 1,
 		ch: pos - line.from,
 	};
+};
+
+const posFromDocumentPosition = (doc: Text, pos: DocumentPosition) => {
+	const line = doc.line(pos.line + 1);
+	return line.from + pos.ch;
 };
 
 export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
@@ -214,7 +226,20 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		if (typeof query === 'string') {
 			query = new RegExp(pregQuote(query));
 		}
-		return super.getSearchCursor(query, pos || { line: 0, ch: 0 });
+		const result = super.getSearchCursor(query, pos || { line: 0, ch: 0 });
+
+		return {
+			// .pos isn't implemented by CM6 Vim, but is still used by
+			// some Joplin code.
+			get pos() {
+				return {
+					from: result.from(),
+					to: result.to(),
+				};
+			},
+
+			...result,
+		};
 	}
 
 	public lineAtHeight(height: number, _mode?: 'local') {
@@ -271,8 +296,23 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		return getScrollFraction(this.editor);
 	}
 
+	// CodeMirror-Vim's scrollIntoView only supports pos as a DocumentPosition.
+	public override scrollIntoView(
+		pos: DocumentPosition|DocumentPositionRange, margin?: number,
+	): void {
+		const isPosition = (arg: unknown): arg is DocumentPosition => {
+			return (arg as any).line !== undefined && (arg as any).ch !== undefined;
+		};
+
+		if (isPosition(pos)) {
+			return super.scrollIntoView(pos, margin);
+		} else {
+			return super.scrollIntoView(pos.from, margin);
+		}
+	}
+
 	public defineExtension(name: string, value: any) {
-		(CodeMirror5Emulation.prototype as any)[name] ??= value;
+		(CodeMirror5Emulation.prototype as any)[name] = value;
 	}
 
 	public defineOption(name: string, defaultValue: any, onUpdate: OptionUpdateCallback) {
@@ -304,12 +344,17 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 
 	// codemirror-vim's API doesn't match the API docs here -- it expects addOverlay
 	// to return a SearchQuery. As such, this override returns "any".
-	public override addOverlay<State>(modeObject: StreamParser<State>|{ query: RegExp }): any {
+	public override addOverlay<State>(modeObject: OverlayType<State>): any {
 		if ('query' in modeObject) {
 			return super.addOverlay(modeObject);
 		}
 
-		this._decorator.addOverlay(modeObject);
+		return this._decorator.addOverlay(modeObject);
+	}
+
+	public override removeOverlay(overlay?: OverlayType<any>): void {
+		super.removeOverlay(overlay);
+		this._decorator.removeOverlay(overlay);
 	}
 
 	public addLineClass(lineNumber: number, where: string, className: string) {
@@ -322,6 +367,16 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 
 	public addLineWidget(lineNumber: number, node: HTMLElement, options: LineWidgetOptions) {
 		this._decorator.addLineWidget(lineNumber, node, options);
+	}
+
+	public markText(from: DocumentPosition, to: DocumentPosition, options?: MarkTextOptions) {
+		const doc = this.editor.state.doc;
+
+		return this._decorator.markText(
+			posFromDocumentPosition(doc, from),
+			posFromDocumentPosition(doc, to),
+			options,
+		);
 	}
 
 	// TODO: Currently copied from useCursorUtils.ts.

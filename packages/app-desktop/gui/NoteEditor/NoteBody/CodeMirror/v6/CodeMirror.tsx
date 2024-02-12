@@ -26,6 +26,7 @@ import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import useContextMenu from '../utils/useContextMenu';
 import useWebviewIpcMessage from '../utils/useWebviewIpcMessage';
 import Toolbar from '../Toolbar';
+import useEditorSearchHandler from '../utils/useEditorSearchHandler';
 
 const logger = Logger.create('CodeMirror6');
 const logDebug = (message: string) => logger.debug(message);
@@ -337,6 +338,15 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	// 		editorRef.current.focus();
 	// 	}
 	// }, [editorPaneVisible]);
+
+	useEditorSearchHandler({
+		setLocalSearchResultCount: props.setLocalSearchResultCount,
+		searchMarkers: props.searchMarkers,
+		webviewRef,
+		editorRef,
+		noteContent: props.content,
+		renderedBody,
+	});
 
 	useContextMenu({
 		plugins: props.plugins,

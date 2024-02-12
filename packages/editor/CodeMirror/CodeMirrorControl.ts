@@ -2,7 +2,7 @@ import { EditorView } from '@codemirror/view';
 import { EditorCommandType, EditorControl, EditorSettings, LogMessageCallback, PluginData, SearchState } from '../types';
 import CodeMirror5Emulation from './CodeMirror5Emulation/CodeMirror5Emulation';
 import editorCommands from './editorCommands/editorCommands';
-import { EditorSelection, Extension, StateEffect } from '@codemirror/state';
+import { Compartment, EditorSelection, Extension, StateEffect } from '@codemirror/state';
 import { updateLink } from './markdown/markdownCommands';
 import { SearchQuery, setSearchQuery } from '@codemirror/search';
 import PluginLoader from './pluginApi/PluginLoader';
@@ -121,9 +121,20 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 	}
 
 	public addStyles(...styles: Parameters<typeof EditorView.theme>) {
+		const compartment = new Compartment();
 		this.editor.dispatch({
-			effects: StateEffect.appendConfig.of(EditorView.theme(...styles)),
+			effects: StateEffect.appendConfig.of(
+				compartment.of(EditorView.theme(...styles)),
+			),
 		});
+
+		return {
+			remove: () => {
+				this.editor.dispatch({
+					effects: compartment.reconfigure([]),
+				});
+			},
+		};
 	}
 
 	public setPlugins(plugins: PluginData[]) {
