@@ -108,4 +108,39 @@ describe('CodeMirror5Emulation', () => {
 		// additional times if its option hasn't updated.
 		expect(onOtherOptionUpdate).toHaveBeenCalledTimes(1);
 	});
+
+	it('markText decorations should be removable', () => {
+		const codeMirror = makeCodeMirrorEmulation('Test 1\nTest 2');
+
+		const markDecoration = codeMirror.markText(
+			{ line: 0, ch: 0 },
+			{ line: 0, ch: 6 },
+			{ className: 'test-mark-decoration' },
+		);
+
+		const markDecoration2 = codeMirror.markText(
+			{ line: 1, ch: 0 },
+			{ line: 1, ch: 1 },
+			{ className: 'test-decoration-2' },
+		);
+
+		const editorDom = codeMirror.cm6.dom;
+		expect(editorDom.querySelectorAll('.test-mark-decoration')).toHaveLength(1);
+		expect(editorDom.querySelectorAll('.test-decoration-2')).toHaveLength(1);
+
+		codeMirror.setCursor(0, 2);
+		codeMirror.replaceSelection('Test');
+
+		// Editing the document shouldn't remove the mark
+		expect(codeMirror.editor.state.doc.toString()).toBe('TeTestst 1\nTest 2');
+		expect(editorDom.querySelectorAll('.test-mark-decoration')).toHaveLength(1);
+
+		// Clearing should remove only the decoration that was cleared.
+		markDecoration.clear();
+		expect(editorDom.querySelectorAll('.test-mark-decoration')).toHaveLength(0);
+		expect(editorDom.querySelectorAll('.test-decoration-2')).toHaveLength(1);
+
+		markDecoration2.clear();
+		expect(editorDom.querySelectorAll('.test-decoration-2')).toHaveLength(0);
+	});
 });

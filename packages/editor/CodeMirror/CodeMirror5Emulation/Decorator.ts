@@ -49,7 +49,6 @@ const removeLineWidgetEffect = StateEffect.define<{ element: HTMLElement }>();
 
 export interface MarkTextOptions {
 	className: string;
-	id: number;
 }
 
 class WidgetDecorationWrapper extends WidgetType {
@@ -201,7 +200,7 @@ export default class Decorator {
 						// Returns true only for decorations that should be kept.
 						filter: (from, to, value) => {
 							if (targetId !== undefined) {
-								return value.spec.id === effect.value.id;
+								return value.spec.id !== effect.value.id;
 							}
 
 							const isInRange = from >= targetFrom && to <= targetTo;
