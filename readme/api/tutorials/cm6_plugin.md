@@ -192,12 +192,12 @@ Your editor should now have line numbers!
   
 :::info
 
-You might see an error similar to the following in Joplin's development tools (`Help` > `Toggle development tools`):
+If the plugin fails to load, you might see an error similar to the following in Joplin's development tools (`Help` > `Toggle development tools`):
 ```
 Error: Unrecognized extension value in extension set (function(t={}){return[kn.of(t),gn(),An]}). This sometimes happens because multiple instances of @codemirror/state are loaded, breaking instanceof checks.
 ```
 
-If you do, make sure you followed the [steps in the "Update the Plugin Build Script"](#update-the-plugin-build-script) section. If that section doesn't help, change
+If you do, be sure to follow the [steps in the "Update the Plugin Build Script"](#update-the-plugin-build-script) section. If that section doesn't help, change
 ```typescript
 import { lineNumbers } from '@codemirror/view';
 ```
