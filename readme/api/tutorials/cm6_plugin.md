@@ -551,6 +551,7 @@ joplin.plugins.register({
 ### Update the CodeMirror 5 content script
 
 Replace the CodeMirror 5 content script's content with the following:
+
 ```typescript
 // Don't import CodeMirror 6 packages here -- doing so won't work in the CM5 editor.
 
@@ -571,12 +572,13 @@ export default (context: { contentScriptId: string, postMessage: any }) => {
 			});
 		},
 
-		// Sets CodeMirror 5 default options. Has no efffect in CodeMirror 6.
+		// Sets CodeMirror 5 default options.
 		codeMirrorOptions: {
 			'lineNumbers': true,
 			'enable-highlight-extension': true,
 		},
 
+		// Additional CodeMirror scripts. Has no effect in CodeMirror 6.
 		// See https://codemirror.net/5/doc/manual.html#addon_active-line
 		codeMirrorResources: [ 'addon/selection/active-line.js' ],
 
@@ -589,7 +591,7 @@ export default (context: { contentScriptId: string, postMessage: any }) => {
 
 :::warning
 
-Although Joplin does provide a limited CodeMirror 5 compatibility layer when running the CodeMirror 6 editor, in the future, **new plugins may be unable to use this compatibility layer**.
+Although Joplin does provide a limited CodeMirror 5 compatibility layer in the CodeMirror 6 editor, in the future, **new plugins may be unable to use this compatibility layer**.
 
 :::
 
@@ -623,7 +625,7 @@ To support both CodeMirror 5 and CodeMirror 6, we register two content scripts. 
 
 ## See also
 
-- [The final version of the plugin can be found on GitHub](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/codemirror5-and-codemirror6/).
+- [The final version of the plugin can be found on GitHub](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/codemirror5-and-codemirror6/)
 - [CodeMirror 5 API documentation](https://codemirror.net/5/)
 - [CodeMirror 6 API documentation](https://codemirror.net/)
 - [The CodeMirror 5 example plugin](https://github.com/laurent22/joplin/blob/dev/packages/app-cli/tests/support/plugins/codemirror_content_script/src/)
