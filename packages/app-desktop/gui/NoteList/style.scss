@@ -63,9 +63,9 @@
 
 		> .inner {
 			padding-left: 8px;
+			pointer-events: none;
 
 			> .titlewrapper {
-
 				> .chevron {
 					position: absolute;
 					right: 6px;
@@ -85,6 +85,29 @@
 
 	> .item.-first:before {
 		background: none;
+	}
+
+	> .item.-drop-before:before {
+		content: '';
+		width: 2px;
+		height: 18px; // TODO: Make dynamic
+		background: red;
+		position: absolute;
+		top: 4px;
+	}
+
+	> .item.-drop-after:after {
+		content: '';
+		width: 2px;
+		height: 18px; // TODO: Make dynamic
+		background: red;
+		position: absolute;
+		top: 4px;
+		right: 0;
+	}
+
+	> .item.-drop-before, >.item-.drop-after {
+		background-color: yellow;
 	}
 
 	> .item.-current {

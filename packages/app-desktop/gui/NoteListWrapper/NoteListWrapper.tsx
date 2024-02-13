@@ -7,11 +7,12 @@ import { Size } from '../ResizableLayout/utils/types';
 import styled from 'styled-components';
 import { getDefaultListRenderer, getListRendererById } from '@joplin/lib/services/noteList/renderers';
 import Logger from '@joplin/utils/Logger';
-import NoteListHeader, { OnItemClickEventHander } from '../NoteListHeader/NoteListHeader';
+import NoteListHeader from '../NoteListHeader/NoteListHeader';
 import { _ } from '@joplin/lib/locale';
 import { BaseBreakpoint, Breakpoints, Column } from '../NoteList/utils/types';
 import { ButtonSize, buttonSizePx } from '../Button/Button';
 import Setting from '@joplin/lib/models/Setting';
+import { OnItemClickHander } from '../NoteListHeader/types';
 
 const logger = Logger.create('NoteListWrapper');
 
@@ -138,7 +139,7 @@ export default function NoteListWrapper(props: Props) {
 		};
 	}, [props.size, noteListControlsHeight]);
 
-	const onHeaderItemClick: OnItemClickEventHander = useCallback(event => {
+	const onHeaderItemClick: OnItemClickHander = useCallback(event => {
 		const field = event.name.split('.')[1];
 
 		if (Setting.value('notes.sortOrder.field') === field) {
