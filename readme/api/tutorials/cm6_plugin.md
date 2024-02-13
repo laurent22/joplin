@@ -3,7 +3,9 @@ sidebar_position: 2
 ---
 # Creating a CodeMirror 6 plugin
 
-:::warning
+This guide demonstrates how to create a markdown editor plugin. It expects you to have first read [the table of contents tutorial](./toc_plugin.md) or have basic plugin development experience.
+
+:::note
 
 At the time of this writing,
 - The CodeMirror 6-based markdown editor is still in beta. It must be enabled in settings > general.
@@ -11,7 +13,6 @@ At the time of this writing,
 
 :::
 
-This guide demonstrates how to create a markdown editor plugin. It expects you to have first read [the table of contents tutorial](./toc_plugin.md) or have basic plugin development experience.
 
 ## Setup
 
@@ -189,7 +190,7 @@ To try it,
   
 Your editor should now have line numbers!
   
-:::warning
+:::info
 
 You might see an error similar to the following in Joplin's development tools (`Help` > `Toggle development tools`):
 ```
@@ -281,6 +282,8 @@ We can get and set settings in the plugin's main script (`src/index.ts`), but no
 
 <details><summary><code>index.ts</code> should now look like this.</summary>
 
+`index.ts`:
+
 ```typescript
 import joplin from 'api';
 import { ContentScriptType, SettingItemType } from 'api/types';
@@ -325,7 +328,8 @@ joplin.plugins.register({
 
 Create a new `registerMessageListener` function, just above `joplin.plugins.register({`. In this function, register an `onMessage` listener with [`joplin.contentScripts.onMessage`](https://joplinapp.org/api/references/plugin_api/classes/joplincontentscripts.html#onmessage). We'll listen for the `getSettings` message and return an object with the plugin's current settings:
 ```typescript
-// ...
+// ... in index.ts ...
+// ...hidden...
 
 // Add this:
 const registerMessageListener = async (contentScriptId: string) => {
@@ -389,7 +393,7 @@ export default (context: { contentScriptId: string, postMessage: any }) => {
 };
 ```
 
-Above, we get settings from `index.ts` by sending a message with the text "getSettings". This fires the `onMessage` listener that was registered earlier. Its return value is stored in the `settings` variable.
+Above, we get settings from `index.ts` with `context.postMessage('getSettings')`. This calls the `onMessage` listener that was registered earlier. Its return value is stored in the `settings` variable.
 
 Note that [`highlightActiveLine`](https://codemirror.net/docs/ref/#view.highlightActiveLine) is another built-in CodeMirror extension. It adds the `cm-activeLine` class to all lines that have a cursor on them.
 
@@ -471,12 +475,12 @@ Joplin's legacy markdown editor uses CodeMirror 5. The beta editor uses CodeMirr
 
 Unfortunately, the [CodeMirror 5 API](https://codemirror.net/5/) and [CodeMirror 6 API](https://codemirror.net/)s are very different. As such, you'll likely need two different content scripts — one for CodeMirror 5 and one for CodeMirror 6. [This pull request](https://github.com/roman-r-m/joplin-plugin-quick-links/pull/15/files#diff-a19ae4175adf4e5173549901c8535f2a45278f8a907da485899660c08c1c520b) provides an example of how CodeMirror 6 support might be added to an existing plugin.
 
-Here's a brief summary of how we could add CodeMirror 5 compatibility to our CodeMirror 6 plugin:
+To add CodeMirror 5 compatibility to our CodeMirror 6 plugin, we'll:
 1. Create another content script for CodeMirror 5. Use only [CodeMirror 5 APIs](https://codemirror.net/5/).
 2. Within the `plugin` function, check whether `codeMirrorWrapper` is actually a CodeMirror 5 editor. This can be done by checking whether `codeMirrorWrapper.cm6` is defined. (If it is, it's a reference to a CodeMirror 6 `EditorView`).
 3. If `codeMirrorWrapper.cm6` is defined, only load the CodeMirror 5 content script. Otherwise, only load the CodeMirror 6 content script.
 
-### Create another content script for CodeMirror 5
+### Create a content script for CodeMirror 5
 
 For organisational purposes, make a new folder, `src/contentScripts`. Next, move the existing `contentScript.ts` to `src/contentScripts/codeMirror6.ts` and create a new `contentScripts/codeMirror5.ts` file.
 
@@ -583,6 +587,13 @@ export default (context: { contentScriptId: string, postMessage: any }) => {
 };
 ```
 
+:::warning
+
+Although Joplin does provide a limited CodeMirror 5 compatibility layer when running the CodeMirror 6 editor, in the future, **new plugins may be unable to use this compatibility layer**.
+
+:::
+
+
 ### Make the CodeMirror 6 content script only load in CodeMirror 6
 
 At the beginning of `contentScripts/codeMirror6.ts`'s `plugin` function, add:
@@ -608,7 +619,7 @@ export default (context: { contentScriptId: string, postMessage: any }) => {
 
 ### Summary
 
-To support both CodeMirror 5 and CodeMirror 6, we register two content scripts. One will fail to load in CodeMirror 5 and the other will refuse to load in CodeMirror 6.
+To support both CodeMirror 5 and CodeMirror 6, we register two content scripts. One will fail to load in CodeMirror 5 and the other we disable in CodeMirror 6.
 
 ## See also
 
