@@ -14,6 +14,10 @@ import createEditorSettings from './testUtil/createEditorSettings';
 describe('createEditor', () => {
 	beforeAll(() => {
 		jest.useFakeTimers();
+
+		for (const scriptContainer of document.querySelectorAll('#joplin-plugin-scripts-container')) {
+			scriptContainer.remove();
+		}
 	});
 
 	// This checks for a regression -- occasionally, when updating packages,
@@ -89,7 +93,7 @@ describe('createEditor', () => {
 		};
 
 		// Should be able to load a plugin
-		await editor.setPlugins([
+		await editor.setContentScripts([
 			testPlugin1,
 		]);
 
@@ -99,14 +103,14 @@ describe('createEditor', () => {
 		// Because plugin loading is done by adding script elements to the document,
 		// we test for the presence of these script elements, rather than waiting for
 		// them to run.
-		expect(document.querySelectorAll('#joplin-plugin-scripts-container')).toHaveLength(1);
+		expect(document.querySelectorAll('#joplin-plugin-scripts-container script')).toHaveLength(1);
 
 		// Only one script should be present.
 		const scriptContainer = document.querySelector('#joplin-plugin-scripts-container');
 		expect(scriptContainer.querySelectorAll('script')).toHaveLength(1);
 
 		// Adding another plugin should add another script element
-		await editor.setPlugins([
+		await editor.setContentScripts([
 			testPlugin2, testPlugin1,
 		]);
 		await jest.runAllTimersAsync();
@@ -116,6 +120,53 @@ describe('createEditor', () => {
 
 		// Removing the editor should remove the script container
 		editor.remove();
-		expect(document.querySelectorAll('#joplin-plugin-scripts-container')).toHaveLength(0);
+		expect(document.querySelectorAll('#joplin-plugin-scripts-container script')).toHaveLength(0);
+	});
+
+	it('should support multiple content scripts from the same plugin', async () => {
+		const initialText = '# Test\nThis is a test.';
+		const editorSettings = createEditorSettings(Setting.THEME_LIGHT);
+
+		const editor = createEditor(document.body, {
+			initialText,
+			settings: editorSettings,
+			onEvent: _event => {},
+			onLogMessage: _message => {},
+		});
+
+		const getContentScriptJs = jest.fn(async () => {
+			return `
+				exports.default = context => {
+					context.postMessage(context.pluginId);
+				};
+			`;
+		});
+		const postMessageHandler = jest.fn();
+
+		const pluginId = 'a.plugin.id';
+		const testPlugin1 = {
+			pluginId,
+			contentScriptId: 'a.plugin.id.contentScript',
+			loadCssAsset: async (_name: string) => '',
+			contentScriptJs: getContentScriptJs,
+			postMessageHandler,
+		};
+		const testPlugin2 = {
+			pluginId,
+			contentScriptId: 'another.plugin.id.contentScript',
+			loadCssAsset: async (_name: string) => '',
+			contentScriptJs: getContentScriptJs,
+			postMessageHandler,
+		};
+
+		await editor.setContentScripts([
+			testPlugin1, testPlugin2,
+		]);
+
+		// Allows plugins to load
+		await jest.runAllTimersAsync();
+
+		// Should be one script container for each plugin
+		expect(document.querySelectorAll('#joplin-plugin-scripts-container script')).toHaveLength(2);
 	});
 });
