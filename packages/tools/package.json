@@ -60,7 +60,7 @@
     "js-yaml": "4.1.0",
     "rss": "1.2.2",
     "sass": "1.69.7",
-    "sqlite3": "5.1.7",
+    "sqlite3": "5.1.6",
     "style-to-js": "1.1.10",
     "typescript": "5.2.2"
   },

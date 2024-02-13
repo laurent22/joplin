@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "2.14.13",
+  "version": "2.14.14",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "private": true,
@@ -187,7 +187,7 @@
     "reselect": "4.1.8",
     "roboto-fontface": "0.10.0",
     "smalltalk": "2.5.1",
-    "sqlite3": "5.1.7",
+    "sqlite3": "5.1.6",
     "styled-components": "5.3.11",
     "styled-system": "5.1.5",
     "taboverride": "4.0.3",
