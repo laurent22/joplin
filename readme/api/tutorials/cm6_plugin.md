@@ -1,7 +1,6 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 ---
-[toc]
 # Creating a CodeMirror 6 plugin
 
 :::warning
