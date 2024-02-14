@@ -129,7 +129,7 @@ export default class PluginLoader {
 				pluginId: plugin.pluginId,
 				contentScriptId: plugin.contentScriptId,
 			};
-			const loadedPlugin = exports.default(context);
+			const loadedPlugin = exports.default(context) ?? {};
 
 			loadedPlugin.plugin?.(this.editor);
 
