@@ -256,15 +256,13 @@ export function surroundKeywords(keywords: KeywordType, text: string, prefix: st
 	return text
 		.split(keywordRegex)
 		.map((textSegment) => {
-			return {
-				text: textSegment,
-				shouldHighlight: keywordRegex.test(textSegment),
-			};
-		})
-		.reduce((highlightedText, textPart) => {
-			const nextPart = textPart.shouldHighlight ? `${prefix}${htmlentities(textPart.text)}${suffix}` : htmlentities(textPart.text);
-			return highlightedText + nextPart;
-		}, '');
+			const encodedText = options.escapeHtml ? htmlentities(textSegment) : textSegment;
+			if (keywordRegex.test(textSegment)) {
+				return `${prefix}${encodedText}${suffix}`;
+			} else {
+				return encodedText;
+			}
+		}).join('');
 }
 
 export function substrWithEllipsis(s: string, start: number, length: number) {
