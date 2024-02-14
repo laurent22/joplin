@@ -370,7 +370,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 	}
 
 	public addLineWidget(lineNumber: number, node: HTMLElement, options: LineWidgetOptions) {
-		this._decorator.addLineWidget(lineNumber, node, options);
+		return this._decorator.addLineWidget(lineNumber, node, options);
 	}
 
 	public markText(from: DocumentPosition, to: DocumentPosition, options?: MarkTextOptions) {
