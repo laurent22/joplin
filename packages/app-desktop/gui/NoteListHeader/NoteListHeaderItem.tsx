@@ -1,16 +1,17 @@
 import * as React from 'react';
 import { CSSProperties, useMemo, useCallback } from 'react';
-import { Column } from '../NoteList/utils/types';
 import { OnItemClickHander } from './types';
+import { NoteListColumn } from '@joplin/lib/services/plugins/api/noteListType';
 
 interface Props {
 	isFirst: boolean;
-	column: Column;
+	column: NoteListColumn;
 	isCurrent: boolean;
 	isReverse: boolean;
 	onClick: OnItemClickHander;
 	onDragStart: React.DragEventHandler;
 	onDragOver: React.DragEventHandler;
+	onDrop: React.DragEventHandler;
 	dragCursorLocation: 'before' | 'after' | null;
 }
 
@@ -62,6 +63,7 @@ export default (props: Props) => {
 			onClick={onClick}
 			onDragStart={props.onDragStart}
 			onDragOver={props.onDragOver}
+			onDrop={props.onDrop}
 		>
 			<div className="inner">
 				{renderTitle()}

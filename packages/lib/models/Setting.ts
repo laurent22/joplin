@@ -962,6 +962,30 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
+			'notes.columns': {
+				value: [
+					{
+						name: 'note.todo_completed',
+						title: ' ',
+						width: 40,
+					},
+					{
+						name: 'note.user_updated_time',
+						title: 'Updated',
+						width: 100,
+					},
+					{
+						name: 'note.title',
+						title: 'Title',
+						width: 0,
+					},
+				],
+				public: false,
+				type: SettingItemType.Array,
+				storage: SettingStorage.File,
+				isGlobal: false,
+			},
+
 			'notes.sortOrder.reverse': { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: [AppType.Cli] },
 			// NOTE: A setting whose name starts with 'notes.sortOrder' is special,
 			// which implies changing the setting automatically triggers the refresh of notes.

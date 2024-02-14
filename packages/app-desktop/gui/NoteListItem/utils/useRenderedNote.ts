@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ListRenderer, ListRendererDependency, ListRendererItemValueTemplates } from '@joplin/lib/services/plugins/api/noteListType';
+import { ListRenderer, ListRendererDependency, ListRendererItemValueTemplates, NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import Note from '@joplin/lib/models/Note';
 import { NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
@@ -8,7 +8,6 @@ import getNoteTitleHtml from './getNoteTitleHtml';
 import prepareViewProps from './prepareViewProps';
 import * as Mustache from 'mustache';
 import Tag from '@joplin/lib/models/Tag';
-import { Column } from '../../NoteList/utils/types';
 
 interface RenderedNote {
 	id: string;
@@ -20,7 +19,7 @@ const hashContent = (content: any) => {
 	return createHash('sha1').update(JSON.stringify(content)).digest('hex');
 };
 
-const compileTemplate = (template: string, itemValueTemplates: ListRendererItemValueTemplates, columns: Column[], dependencies: ListRendererDependency[]) => {
+const compileTemplate = (template: string, itemValueTemplates: ListRendererItemValueTemplates, columns: NoteListColumns, dependencies: ListRendererDependency[]) => {
 	const output: string[] = [];
 	for (const column of columns) {
 		let valueReplacement = itemValueTemplates[column.name] ? itemValueTemplates[column.name] : '';
@@ -47,7 +46,7 @@ const compileTemplate = (template: string, itemValueTemplates: ListRendererItemV
 	return output.join('');
 };
 
-export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listRenderer: ListRenderer, highlightedWords: string[], itemIndex: number, columns: Column[]) => {
+export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listRenderer: ListRenderer, highlightedWords: string[], itemIndex: number, columns: NoteListColumns) => {
 	const [renderedNote, setRenderedNote] = useState<RenderedNote>(null);
 
 	useAsyncEffect(async (event) => {
@@ -68,6 +67,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 				isWatched,
 				highlightedWords,
 				note.encryption_applied,
+				JSON.stringify(columns),
 				noteTags.map(t => t.title).sort().join(','),
 			]);
 
@@ -103,7 +103,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 		};
 
 		void renderNote();
-	}, [note, isSelected, isWatched, listRenderer, renderedNote]);
+	}, [note, isSelected, isWatched, listRenderer, renderedNote, columns]);
 
 	return renderedNote;
 };

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useCallback, forwardRef, LegacyRef, ChangeEvent, CSSProperties, MouseEventHandler, DragEventHandler, useMemo, memo } from 'react';
-import { ItemFlow, ListRenderer, OnChangeEvent, OnChangeHandler } from '@joplin/lib/services/plugins/api/noteListType';
+import { ItemFlow, ListRenderer, NoteListColumns, OnChangeEvent, OnChangeHandler } from '@joplin/lib/services/plugins/api/noteListType';
 import { Size } from '@joplin/utils/types';
 import useRootElement from './utils/useRootElement';
 import useItemElement from './utils/useItemElement';
@@ -9,7 +9,6 @@ import { OnInputChange } from './utils/types';
 import Note from '@joplin/lib/models/Note';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import useRenderedNote from './utils/useRenderedNote';
-import { Column } from '../NoteList/utils/types';
 
 interface NoteItemProps {
 	dragIndex: number;
@@ -29,7 +28,7 @@ interface NoteItemProps {
 	isSelected: boolean;
 	isWatched: boolean;
 	listRenderer: ListRenderer;
-	columns: Column[];
+	columns: NoteListColumns;
 }
 
 const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {

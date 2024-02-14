@@ -45,6 +45,7 @@ import restart from '../../services/restart';
 const { connect } = require('react-redux');
 import PromptDialog from '../PromptDialog';
 import NotePropertiesDialog from '../NotePropertiesDialog';
+import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 const PluginManager = require('@joplin/lib/services/PluginManager');
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -86,6 +87,7 @@ interface Props {
 	mustUpgradeAppMessage: string;
 	notesSortOrderField: string;
 	notesSortOrderReverse: boolean;
+	notesColumns: NoteListColumns;
 }
 
 interface ShareFolderDialogOptions {
@@ -736,6 +738,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 					startupPluginsLoaded={this.props.startupPluginsLoaded}
 					notesSortOrderField={this.props.notesSortOrderField}
 					notesSortOrderReverse={this.props.notesSortOrderReverse}
+					columns={this.props.notesColumns}
 				/>;
 			},
 
@@ -925,6 +928,7 @@ const mapStateToProps = (state: AppState) => {
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
 		notesSortOrderField: state.settings['notes.sortOrder.field'],
 		notesSortOrderReverse: state.settings['notes.sortOrder.reverse'],
+		notesColumns: state.settings['notes.columns'],
 	};
 };
 

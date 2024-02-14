@@ -9,10 +9,11 @@ import { getDefaultListRenderer, getListRendererById } from '@joplin/lib/service
 import Logger from '@joplin/utils/Logger';
 import NoteListHeader from '../NoteListHeader/NoteListHeader';
 import { _ } from '@joplin/lib/locale';
-import { BaseBreakpoint, Breakpoints, Column } from '../NoteList/utils/types';
+import { BaseBreakpoint, Breakpoints } from '../NoteList/utils/types';
 import { ButtonSize, buttonSizePx } from '../Button/Button';
 import Setting from '@joplin/lib/models/Setting';
 import { OnItemClickHander } from '../NoteListHeader/types';
+import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 
 const logger = Logger.create('NoteListWrapper');
 
@@ -25,6 +26,7 @@ interface Props {
 	startupPluginsLoaded: boolean;
 	notesSortOrderField: string;
 	notesSortOrderReverse: boolean;
+	columns: NoteListColumns;
 }
 
 const StyledRoot = styled.div`
@@ -94,24 +96,6 @@ const useListRenderer = (listRendererId: string, startupPluginsLoaded: boolean) 
 	return null;
 };
 
-const columns: Column[] = [
-	{
-		name: 'note.todo_completed',
-		title: ' ',
-		width: 40,
-	},
-	{
-		name: 'note.user_updated_time',
-		title: 'Updated',
-		width: 100,
-	},
-	{
-		name: 'note.title',
-		title: 'Title',
-		width: 0,
-	},
-];
-
 export default function NoteListWrapper(props: Props) {
 	const theme = themeStyle(props.themeId);
 	const [controlHeight] = useState(theme.topRowHeight);
@@ -154,7 +138,7 @@ export default function NoteListWrapper(props: Props) {
 			height={listRenderer.headerHeight}
 			template={listRenderer.headerTemplate}
 			onClick={listRenderer.onHeaderClick}
-			columns={columns}
+			columns={props.columns}
 			notesSortOrderField={props.notesSortOrderField}
 			notesSortOrderReverse={props.notesSortOrderReverse}
 			onItemClick={onHeaderItemClick}
@@ -168,7 +152,7 @@ export default function NoteListWrapper(props: Props) {
 			resizableLayoutEventEmitter={props.resizableLayoutEventEmitter}
 			size={noteListSize}
 			visible={props.visible}
-			columns={columns}
+			columns={props.columns}
 		/>;
 	};
 

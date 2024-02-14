@@ -1,5 +1,5 @@
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
-import { ListRenderer, ListRendererDependency } from '@joplin/lib/services/plugins/api/noteListType';
+import { ListRenderer, NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { Size } from '@joplin/utils/types';
 import { Dispatch } from 'redux';
@@ -29,7 +29,7 @@ export interface Props {
 	focusedField: string;
 	parentFolderIsReadOnly: boolean;
 	listRenderer: ListRenderer;
-	columns: Column[];
+	columns: NoteListColumns;
 }
 
 export enum BaseBreakpoint {
@@ -44,10 +44,4 @@ export interface Breakpoints {
 	Md: number;
 	Lg: number;
 	Xl: number;
-}
-
-export interface Column {
-	name: ListRendererDependency;
-	title: string;
-	width: number;
 }

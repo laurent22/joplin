@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { useMemo } from 'react';
-import { OnClickHandler } from '@joplin/lib/services/plugins/api/noteListType';
+import { NoteListColumns, OnClickHandler } from '@joplin/lib/services/plugins/api/noteListType';
 import { CSSProperties } from 'styled-components';
-import { Column } from '../NoteList/utils/types';
 import NoteListHeaderItem from './NoteListHeaderItem';
 import { OnItemClickHander } from './types';
 import useDragAndDrop from './useDragAndDrop';
@@ -11,7 +10,7 @@ interface Props {
 	template: string;
 	height: number;
 	onClick: OnClickHandler;
-	columns: Column[];
+	columns: NoteListColumns;
 	notesSortOrderField: string;
 	notesSortOrderReverse: boolean;
 	onItemClick: OnItemClickHander;
@@ -20,7 +19,7 @@ interface Props {
 const defaultHeight = 26;
 
 export default (props: Props) => {
-	const { onItemDragStart, onItemDragOver, dropAt } = useDragAndDrop();
+	const { onItemDragStart, onItemDragOver, onItemDrop, dropAt } = useDragAndDrop(props.columns);
 
 	const items: React.JSX.Element[] = [];
 
@@ -35,6 +34,7 @@ export default (props: Props) => {
 			onClick={props.onItemClick}
 			onDragStart={onItemDragStart}
 			onDragOver={onItemDragOver}
+			onDrop={onItemDrop}
 			dragCursorLocation={dropAt && dropAt.columnName === column.name ? dropAt.location : null}
 		/>);
 		isFirst = false;

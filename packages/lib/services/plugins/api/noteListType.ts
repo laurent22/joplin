@@ -236,3 +236,11 @@ export interface ListRenderer {
 	 */
 	onChange?: OnChangeHandler;
 }
+
+export interface NoteListColumn {
+	name: ListRendererDependency;
+	title: string;
+	width: number;
+}
+
+export type NoteListColumns = NoteListColumn[];
