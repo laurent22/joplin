@@ -29,6 +29,7 @@ describe('string-utils', () => {
 			'Abrir diret<span>&oacute;</span>ri<span>o</span> de perfis &gt; (<span>o</span>penPr<span>o</span>fileDirect<span>o</span>ry)'],
 		[[], '<>"\'&', 'a', 'b', { escapeHtml: true }, '&lt;&gt;&quot;&apos;&amp;'],
 		[[], '<>"\'&', 'a', 'b', { escapeHtml: false }, '<>"\'&'],
+		[['a'], 'non-latin-chars-éão', '<<<', '>>>', { escapeHtml: false }, 'non-l<<<a>>>tin-ch<<<a>>>rs-é<<<ã>>>o'],
 	])('should surround keywords with strings (case %#)', (async (keywords, input, prefix, suffix, options, expected) => {
 		const actual = StringUtils.surroundKeywords(keywords, input, prefix, suffix, options);
 
