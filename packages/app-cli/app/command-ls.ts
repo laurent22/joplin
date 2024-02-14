@@ -29,6 +29,7 @@ class Command extends BaseCommand {
 			['-r, --reverse', _('Reverses the sorting order.')],
 			['-t, --type <type>', _('Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-tnt` would display notes and to-dos.')],
 			['-f, --format <format>', _('Either "text" or "json"')],
+			['-i, --id', _('Show full ID of items."')],
 			['-l, --long', _('Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE')],
 		];
 	}
@@ -85,7 +86,7 @@ class Command extends BaseCommand {
 				const row = [];
 
 				if (options.long) {
-					row.push(BaseModel.shortId(item.id));
+					options.id ? row.push(item.id) : row.push(BaseModel.shortId(item.id));
 					shortIdShown = true;
 
 					if (modelType === Folder.modelType()) {
@@ -97,9 +98,10 @@ class Command extends BaseCommand {
 
 				let title = item.title;
 				if (!shortIdShown && (seenTitles.indexOf(item.title) >= 0 || !item.title)) {
-					title += ` (${BaseModel.shortId(item.id)})`;
+					options.id ? title += ` (${item.id})` : title += ` (${BaseModel.shortId(item.id)})`;
 				} else {
 					seenTitles.push(item.title);
+					if (options.id && !shortIdShown) title += ` (${item.id})`;
 				}
 
 				if (hasTodos) {
