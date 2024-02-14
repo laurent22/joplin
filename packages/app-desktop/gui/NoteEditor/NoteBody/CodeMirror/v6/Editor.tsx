@@ -98,6 +98,12 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 		const editor = createEditor(editorContainerRef.current, editorProps);
 		editor.addStyles({
 			'.cm-scroller': { overflow: 'auto' },
+			'&.CodeMirror': {
+				height: 'unset',
+				background: 'unset',
+				overflow: 'unset',
+				direction: 'unset',
+			},
 		});
 		setEditor(editor);
 

@@ -10,6 +10,8 @@ import { ViewPlugin, DecorationSet, ViewUpdate } from '@codemirror/view';
 import { ensureSyntaxTree } from '@codemirror/language';
 import { RangeSetBuilder } from '@codemirror/state';
 
+const baseLineDecoration = Decoration.line({ class: 'CodeMirror-line' });
+
 const regionStartDecoration = Decoration.line({
 	attributes: { class: 'cm-regionFirstLine' },
 });
@@ -49,27 +51,27 @@ const blockQuoteDecoration = Decoration.line({
 });
 
 const header1LineDecoration = Decoration.line({
-	attributes: { class: 'cm-h1 cm-headerLine' },
+	attributes: { class: 'cm-h1 cm-headerLine cm-header' },
 });
 
 const header2LineDecoration = Decoration.line({
-	attributes: { class: 'cm-h2 cm-headerLine' },
+	attributes: { class: 'cm-h2 cm-headerLine cm-header' },
 });
 
 const header3LineDecoration = Decoration.line({
-	attributes: { class: 'cm-h3 cm-headerLine' },
+	attributes: { class: 'cm-h3 cm-headerLine cm-header' },
 });
 
 const header4LineDecoration = Decoration.line({
-	attributes: { class: 'cm-h4 cm-headerLine' },
+	attributes: { class: 'cm-h4 cm-headerLine cm-header' },
 });
 
 const header5LineDecoration = Decoration.line({
-	attributes: { class: 'cm-h5 cm-headerLine' },
+	attributes: { class: 'cm-h5 cm-headerLine cm-header' },
 });
 
 const header6LineDecoration = Decoration.line({
-	attributes: { class: 'cm-h6 cm-headerLine' },
+	attributes: { class: 'cm-h6 cm-headerLine cm-header' },
 });
 
 const tableHeaderDecoration = Decoration.line({
@@ -192,6 +194,10 @@ const computeDecorations = (view: EditorView) => {
 				}
 			},
 		});
+
+		// For CodeMirror 5 compatibility, we add a CodeMirror-line decoration to all
+		// visible lines.
+		addDecorationToLines(from, to, baseLineDecoration);
 	}
 
 	// Decorations need to be sorted in ascending order first by start position,

@@ -575,6 +575,7 @@ packages/default-plugins/utils/getCurrentCommitHash.js
 packages/default-plugins/utils/getPathToPatchFileFor.js
 packages/default-plugins/utils/readRepositoryJson.js
 packages/default-plugins/utils/waitForCliInput.js
+packages/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5BuiltInOptions.js
 packages/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation.test.js
 packages/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation.js
 packages/editor/CodeMirror/CodeMirror5Emulation/Decorator.js

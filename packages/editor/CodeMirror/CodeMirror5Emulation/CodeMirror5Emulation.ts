@@ -8,6 +8,7 @@ import { StateEffect } from '@codemirror/state';
 import { StreamParser } from '@codemirror/language';
 import Decorator, { LineWidgetOptions, MarkTextOptions } from './Decorator';
 import insertLineAfter from '../editorCommands/insertLineAfter';
+import CodeMirror5BuiltInOptions from './CodeMirror5BuiltInOptions';
 const { pregQuote } = require('@joplin/lib/string-utils-common');
 
 
@@ -52,6 +53,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 	private _options: Record<string, CodeMirror5OptionRecord> = Object.create(null);
 	private _decorator: Decorator;
 	private _decoratorExtension: Extension;
+	private _builtInOptions: CodeMirror5BuiltInOptions;
 
 	// Used by some plugins to store state.
 	public state: Record<string, any> = Object.create(null);
@@ -70,6 +72,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		const { decorator, extension: decoratorExtension } = Decorator.create(editor);
 		this._decorator = decorator;
 		this._decoratorExtension = decoratorExtension;
+		this._builtInOptions = new CodeMirror5BuiltInOptions(editor);
 
 		editor.dispatch({
 			effects: StateEffect.appendConfig.of(this.makeCM6Extensions()),
@@ -129,10 +132,8 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 				return { dom };
 			}),
 
-			// Note: We can allow legacy CM5 CSS to apply to the editor
-			// with a line similar to the following:
-			//    EditorView.editorAttributes.of({ class: 'CodeMirror' }),
-			// Many of these styles, however, don't work well with CodeMirror 6.
+			// Allows legacy CM5 CSS to apply to the editor:
+			EditorView.editorAttributes.of({ class: 'CodeMirror' }),
 		];
 	}
 
@@ -316,6 +317,8 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 			const oldValue = this._options[name].value;
 			this._options[name].value = value;
 			this._options[name].onUpdate(this, value, oldValue);
+		} else if (this._builtInOptions.supportsOption(name)) {
+			this._builtInOptions.setOption(name, value);
 		} else {
 			super.setOption(name, value);
 		}
@@ -327,6 +330,20 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		} else {
 			return super.getOption(name);
 		}
+	}
+
+	public override coordsChar(coords: { left: number; top: number }, mode?: 'div' | 'local'): DocumentPosition {
+		// codemirror-vim's API only supports "div" mode. Thus, we convert
+		// local to div:
+		if (mode !== 'div') {
+			const bbox = this.editor.contentDOM.getBoundingClientRect();
+			coords = {
+				left: coords.left - bbox.left,
+				top: coords.top - bbox.top,
+			};
+		}
+
+		return super.coordsChar(coords, 'div');
 	}
 
 	// codemirror-vim's API doesn't match the API docs here -- it expects addOverlay
@@ -364,6 +381,25 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 			posFromDocumentPosition(doc, to),
 			options,
 		);
+	}
+
+	public addWidget(pos: DocumentPosition, node: HTMLElement) {
+		if (node.parentElement) {
+			node.remove();
+		}
+
+		const loc = posFromDocumentPosition(this.editor.state.doc, pos);
+		const screenCoords = this.editor.coordsAtPos(loc);
+		const bbox = this.editor.contentDOM.getBoundingClientRect();
+
+		node.style.position = 'absolute';
+
+		const left = screenCoords.left - bbox.left;
+		node.style.left = `${left}px`;
+		node.style.maxWidth = `${bbox.width - left}px`;
+		node.style.top = `${screenCoords.top + this.editor.scrollDOM.scrollTop}px`;
+
+		this.editor.scrollDOM.appendChild(node);
 	}
 
 	// TODO: Currently copied from useCursorUtils.ts.
