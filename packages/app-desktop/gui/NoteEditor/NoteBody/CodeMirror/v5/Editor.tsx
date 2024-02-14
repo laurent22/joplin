@@ -283,7 +283,7 @@ function Editor(props: EditorProps, ref: any) {
 		}
 	}, [pluginOptions, editor]);
 
-	return <div className='codeMirrorEditor' style={props.style} ref={editorParent} />;
+	return <div className='codeMirrorEditor CodeMirror5' style={props.style} ref={editorParent} />;
 }
 
 export default forwardRef(Editor);
