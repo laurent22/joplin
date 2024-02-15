@@ -1,5 +1,5 @@
 diff --git a/src/Backup.ts b/src/Backup.ts
-index 2c0c174..2bd03f3 100644
+index 2c0c174..6d492ca 100644
 --- a/src/Backup.ts
 +++ b/src/Backup.ts
 @@ -4,6 +4,7 @@ import joplin from "api";
@@ -34,7 +34,7 @@ index 2c0c174..2bd03f3 100644
          !fs.existsSync(this.backupBasePath)
        ) {
          try {
-@@ -286,19 +286,56 @@ class Backup {
+@@ -286,19 +286,62 @@ class Backup {
            await this.showError(i18n.__("msg.error.folderCreation", e.message));
          }
        }
@@ -69,6 +69,12 @@ index 2c0c174..2bd03f3 100644
 +        profileName = "default";
 +      }
 +
++      // Appending a -dev to the profile name prevents a devmode default Joplin
++      // profile from overwriting a non-devmode Joplin profile.
++      if ((await joplin.settings.globalValue("env")) === "dev") {
++        profileName += "-dev";
++      }
++
 +      this.backupBasePath = path.join(this.backupBasePath, profileName);
 +      await handleSubfolderCreation();
 +    }
@@ -95,7 +101,7 @@ index 2c0c174..2bd03f3 100644
      await this.loadBackupPath();
      this.backupRetention = await joplin.settings.value("backupRetention");
  
-@@ -477,6 +514,7 @@ class Backup {
+@@ -477,6 +520,7 @@ class Backup {
          await this.backupNotebooks();
  
          const backupDst = await this.makeBackupSet();
@@ -103,7 +109,7 @@ index 2c0c174..2bd03f3 100644
  
          await joplin.settings.setValue(
            "lastBackup",
-@@ -684,6 +722,16 @@ class Backup {
+@@ -684,6 +728,16 @@ class Backup {
      }
    }
  
