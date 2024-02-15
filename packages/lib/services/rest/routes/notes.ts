@@ -27,7 +27,7 @@ const { fileExtension, safeFileExtension, safeFilename, filename } = require('..
 const { MarkupToHtml } = require('@joplin/renderer');
 const { ErrorNotFound } = require('../utils/errors');
 import { fileUriToPath } from '@joplin/utils/url';
-import { NoteEntity } from '../../database/types';
+import { NoteEntity, ResourceEntity } from '../../database/types';
 
 const logger = Logger.create('routes/notes');
 
@@ -67,6 +67,17 @@ type FetchOptions = {
 	timeout?: number;
 	maxRedirects?: number;
 };
+
+
+type DownloadedMediaFile = {
+	originalUrl: string;
+	path: string;
+};
+
+interface ResourceFromPath extends DownloadedMediaFile {
+	resource: ResourceEntity;
+}
+
 
 async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> {
 	const output: any = {
@@ -265,11 +276,11 @@ export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions
 async function downloadMediaFiles(urls: string[], fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
 	const PromisePool = require('es6-promise-pool');
 
-	const output: any = {};
+	const output: DownloadedMediaFile[] = [];
 
 	const downloadOne = async (url: string) => {
 		const mediaPath = await downloadMediaFile(url, fetchOptions, allowedProtocols);
-		if (mediaPath) output[url] = { path: mediaPath, originalUrl: url };
+		if (mediaPath) output.push({ path: mediaPath, originalUrl: url });
 	};
 
 	let urlIndex = 0;
@@ -287,24 +298,36 @@ async function downloadMediaFiles(urls: string[], fetchOptions?: FetchOptions, a
 	return output;
 }
 
-async function createResourcesFromPaths(urls: string[]) {
-	for (const url in urls) {
-		if (!urls.hasOwnProperty(url)) continue;
-		const urlInfo: any = urls[url];
+export async function createResourcesFromPaths(mediaFiles: DownloadedMediaFile[]) {
+	const PromisePool = require('es6-promise-pool');
+	const resources: ResourceFromPath[] = [];
+
+	const createResource = async (mediaFile: DownloadedMediaFile) => {
 		try {
-			const resource = await shim.createResourceFromPath(urlInfo.path);
-			urlInfo.resource = resource;
+			const resource = await shim.createResourceFromPath(mediaFile.path);
+			resources.push({ ...mediaFile, resource });
 		} catch (error) {
-			logger.warn(`Cannot create resource for ${url}`, error);
+			logger.warn(`Cannot create resource for ${mediaFile.originalUrl}`, error);
 		}
-	}
-	return urls;
+	};
+
+	const promiseProducer = () => {
+		if (!mediaFiles.length) return null;
+
+		const mediaFile = mediaFiles.shift();
+		return createResource(mediaFile);
+	};
+
+	const concurrency = 4;
+	const pool = new PromisePool(promiseProducer, concurrency);
+	await pool.start();
+
+	return resources;
 }
 
-async function removeTempFiles(urls: string[]) {
-	for (const url in urls) {
-		if (!urls.hasOwnProperty(url)) continue;
-		const urlInfo: any = urls[url];
+
+async function removeTempFiles(urls: ResourceFromPath[]) {
+	for (const urlInfo of urls) {
 		try {
 			await shim.fsDriver().remove(urlInfo.path);
 		} catch (error) {
@@ -313,12 +336,12 @@ async function removeTempFiles(urls: string[]) {
 	}
 }
 
-function replaceUrlsByResources(markupLanguage: number, md: string, urls: any, imageSizes: any) {
+function replaceUrlsByResources(markupLanguage: number, md: string, urls: ResourceFromPath[], imageSizes: any) {
 	const imageSizesIndexes: any = {};
 
 	if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
 		return htmlUtils.replaceMediaUrls(md, (url: string) => {
-			const urlInfo: any = urls[url];
+			const urlInfo: any = urls.find(u => u.originalUrl === url);
 			if (!urlInfo || !urlInfo.resource) return url;
 			return Resource.internalUrl(urlInfo.resource);
 		});
@@ -342,7 +365,7 @@ function replaceUrlsByResources(markupLanguage: number, md: string, urls: any, i
 				type = 'image';
 			}
 
-			const urlInfo = urls[url];
+			const urlInfo: any = urls.find(u => u.originalUrl === url);
 			if (type === 'link' || !urlInfo || !urlInfo.resource) return before + url + after;
 
 			const resourceUrl = Resource.internalUrl(urlInfo.resource);
