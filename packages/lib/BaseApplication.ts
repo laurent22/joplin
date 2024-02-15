@@ -61,7 +61,7 @@ import RotatingLogs from './RotatingLogs';
 import { NoteEntity } from './services/database/types';
 import { join } from 'path';
 import processStartFlags from './utils/processStartFlags';
-import determineProfileDir from './determineProfileDir';
+import determineProfileAndBaseDir from './determineBaseAppDirs';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -639,7 +639,7 @@ export default class BaseApplication {
 		// https://immerjs.github.io/immer/docs/freezing
 		setAutoFreeze(initArgs.env === 'dev');
 
-		const rootProfileDir = options.rootProfileDir ? options.rootProfileDir : determineProfileDir(initArgs.profileDir, appName);
+		const { rootProfileDir, homeDir } = determineProfileAndBaseDir(options.rootProfileDir ?? initArgs.profileDir, appName);
 		const { profileDir, profileConfig, isSubProfile } = await initProfile(rootProfileDir);
 		this.profileConfig_ = profileConfig;
 
@@ -655,6 +655,7 @@ export default class BaseApplication {
 		Setting.setConstant('pluginDataDir', `${profileDir}/plugin-data`);
 		Setting.setConstant('cacheDir', cacheDir);
 		Setting.setConstant('pluginDir', `${rootProfileDir}/plugins`);
+		Setting.setConstant('homeDir', homeDir);
 
 		SyncTargetRegistry.addClass(SyncTargetNone);
 		SyncTargetRegistry.addClass(SyncTargetFilesystem);

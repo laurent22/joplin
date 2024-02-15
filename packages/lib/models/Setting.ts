@@ -146,6 +146,7 @@ export interface Constants {
 	pluginDataDir: string;
 	cacheDir: string;
 	pluginDir: string;
+	homeDir: string;
 	flagOpenDevTools: boolean;
 	syncVersion: number;
 	startupDevPlugins: string[];
@@ -303,6 +304,7 @@ class Setting extends BaseModel {
 		pluginDataDir: '',
 		cacheDir: '',
 		pluginDir: '',
+		homeDir: '',
 		flagOpenDevTools: false,
 		syncVersion: 3,
 		startupDevPlugins: [],
