@@ -313,7 +313,7 @@ export async function createResourcesFromPaths(mediaFiles: DownloadedMediaFile[]
 		}
 	}
 
-	return await Promise.all(resources);
+	return Promise.all(resources);
 }
 
 
