@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, useState, useRef } from 'react';
+import { useCallback, useState, useRef, useMemo } from 'react';
 import { registerGlobalDragEndEvent, unregisterGlobalDragEndEvent } from '../utils/dragAndDrop';
 import { NoteListColumn, NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import Setting from '@joplin/lib/models/Setting';
@@ -24,10 +24,7 @@ interface DraggedItem {
 	type: DataType;
 	columnName: NoteListColumn['name'];
 	initX: number;
-	initWidth: number;
-	initPreviousWidth: number;
 	initBoundaries: number[];
-	headerWidth: number;
 }
 
 const getHeader = (event: React.DragEvent) => {
@@ -86,8 +83,8 @@ export const dropHeaderAt = (columns: NoteListColumns, header: DraggedHeader, in
 	return newColumns;
 };
 
-const setupDataTransfer = (event: React.DragEvent, dataType: string, data: any) => {
-	event.dataTransfer.setDragImage(new Image(), 1, 1);
+const setupDataTransfer = (event: React.DragEvent, dataType: string, image: HTMLImageElement, data: any) => {
+	event.dataTransfer.setDragImage(image, 1, 1);
 	event.dataTransfer.clearData();
 	event.dataTransfer.setData(dataType, JSON.stringify(data));
 	event.dataTransfer.effectAllowed = 'move';
@@ -143,21 +140,26 @@ export default (columns: NoteListColumns) => {
 	const columnsRef = useRef<NoteListColumns>(null);
 	columnsRef.current = columns;
 
+	// The drag and drop image needs to be created in advance to avoid the globe 🌐 cursor.
+	// https://www.sam.today/blog/html5-dnd-globe-icon
+	const emptyImage = useMemo(() => {
+		const image = new Image(1, 1);
+		image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+		return image;
+	}, []);
+
 	const onItemDragStart: React.DragEventHandler = useCallback(event => {
 		if (event.dataTransfer.items.length) return;
 		const name = event.currentTarget.getAttribute('data-name') as NoteListColumn['name'];
 
-		setupDataTransfer(event, DataType.HeaderItem, { name });
+		setupDataTransfer(event, DataType.HeaderItem, emptyImage, { name });
 		setDraggedItem({
 			type: DataType.HeaderItem,
 			columnName: name,
-			initX: getInsertAt(event).x,
-			initWidth: columns.find(c => c.name === name).width,
-			initPreviousWidth: 0,
+			initX: 0,
 			initBoundaries: [],
-			headerWidth: 0,
 		});
-	}, [columns]);
+	}, [emptyImage]);
 
 	const onItemDragOver: React.DragEventHandler = useCallback((event) => {
 		if (!isDraggedHeaderItem(event)) return;
@@ -186,7 +188,6 @@ export default (columns: NoteListColumns) => {
 
 		const newColumns = dropHeaderAt(columns, header, data);
 
-		// TODO: Check may not be needed as Setting should already check
 		if (JSON.stringify(newColumns) !== JSON.stringify(columns)) {
 			Setting.setValue('notes.columns', newColumns);
 		}
@@ -218,39 +219,35 @@ export default (columns: NoteListColumns) => {
 		if (newColumns !== columns) Setting.setValue('notes.columns', newColumns);
 	}, []);
 
+	const onResizerDragEnd: React.DragEventHandler = useCallback(() => {
+		document.removeEventListener('dragover', onResizerDragOver as any);
+	}, [onResizerDragOver]);
+
 	const onResizerDragStart: React.DragEventHandler = useCallback(event => {
 		const name = event.currentTarget.getAttribute('data-name') as NoteListColumn['name'];
 
-		// TODO: when setting up the transfer, also include all the other properties, and remove use of references
-		// TODO: explicitely set dragend event
-		setupDataTransfer(event, DataType.Resizer, { name });
+		setupDataTransfer(event, DataType.Resizer, emptyImage, { name });
 
-		const index = columns.findIndex(c => c.name === name);
 		const headerElement: Element = findParentElementByClassName(event.currentTarget, 'note-list-header');
 		const headerRect = headerElement.getBoundingClientRect();
-
 		const boundaries = getColumnsToBoundaries(columns, headerRect.width);
-
-		registerGlobalDragEndEvent(() => document.removeEventListener('dragover', onResizerDragOver as any));
 
 		setDraggedItem({
 			type: DataType.Resizer,
 			columnName: name,
 			initX: event.clientX,
-			initWidth: columns[index].width,
-			initPreviousWidth: index > 0 ? columns[index - 1].width : 0,
 			initBoundaries: boundaries,
-			headerWidth: headerRect.width,
 		});
 
 		document.addEventListener('dragover', onResizerDragOver as any);
-	}, [columns, onResizerDragOver]);
+	}, [columns, onResizerDragOver, emptyImage]);
 
 	return {
 		onItemDragStart,
 		onItemDragOver,
 		onItemDrop,
 		onResizerDragStart,
+		onResizerDragEnd,
 		dropAt,
 		draggedItem,
 	};

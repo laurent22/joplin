@@ -63,9 +63,11 @@
 
 		> .resizer {
 			position: absolute;
-			background-color: green;
+			opacity: 0;
 			width: 6px;
 			height: 100%;
+			left: -3px;
+			cursor: ew-resize;
 		}
 
 		> .inner {

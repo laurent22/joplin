@@ -13,6 +13,7 @@ interface Props {
 	onDragOver: React.DragEventHandler;
 	onDrop: React.DragEventHandler;
 	onResizerDragStart: React.DragEventHandler;
+	onResizerDragEnd: React.DragEventHandler;
 	dragCursorLocation: 'before' | 'after' | null;
 }
 
@@ -55,6 +56,20 @@ export default (props: Props) => {
 		return <span className="titlewrapper">{column.title}{chevron}</span>;
 	};
 
+	const renderResizer = () => {
+		if (props.isFirst) return null;
+
+		return (
+			<div
+				className="resizer"
+				data-name={column.name}
+				draggable={true}
+				onDragStart={props.onResizerDragStart}
+				onDragEnd={props.onResizerDragEnd}
+			/>
+		);
+	};
+
 	return (
 		<a
 			data-name={column.name}
@@ -66,12 +81,8 @@ export default (props: Props) => {
 			onDragOver={props.onDragOver}
 			onDrop={props.onDrop}
 		>
-			<div
-				className="resizer"
-				data-name={column.name}
-				draggable={true}
-				onDragStart={props.onResizerDragStart}
-			/>
+
+			{renderResizer()}
 
 			<div className="inner">
 				{renderTitle()}

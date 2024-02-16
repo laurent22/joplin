@@ -19,7 +19,7 @@ interface Props {
 const defaultHeight = 26;
 
 export default (props: Props) => {
-	const { onItemDragStart, onItemDragOver, onItemDrop, onResizerDragStart, dropAt, draggedItem } = useDragAndDrop(props.columns);
+	const { onItemDragStart, onItemDragOver, onItemDrop, onResizerDragStart, onResizerDragEnd, dropAt, draggedItem } = useDragAndDrop(props.columns);
 
 	const items: React.JSX.Element[] = [];
 
@@ -41,6 +41,7 @@ export default (props: Props) => {
 			onDragOver={onItemDragOver}
 			onDrop={onItemDrop}
 			onResizerDragStart={onResizerDragStart}
+			onResizerDragEnd={onResizerDragEnd}
 			dragCursorLocation={dragCursorLocation}
 		/>);
 		isFirst = false;
