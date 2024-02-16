@@ -156,15 +156,13 @@ describe('routes/notes', () => {
 	});
 
 	test('should not create resource from files that does not exist', async () => {
-		Logger.globalLogger.enabled = false;
-		const result = await createResourcesFromPaths([
-			{ originalUrl: 'not-a-real-file', path: '/does/not/exist' },
-		]);
-		Logger.globalLogger.enabled = true;
+		expect(
+			async () => createResourcesFromPaths([
+				{ originalUrl: 'not-a-real-file', path: '/does/not/exist' },
+			]),
+		).rejects.toThrow('Cannot access /does/not/exist');
 
 		const resources = await Resource.all();
-
-		expect(result.length).toBe(0);
 		expect(resources.length).toBe(0);
 	});
 });
