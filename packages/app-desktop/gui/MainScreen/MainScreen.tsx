@@ -46,6 +46,7 @@ const { connect } = require('react-redux');
 import PromptDialog from '../PromptDialog';
 import NotePropertiesDialog from '../NotePropertiesDialog';
 import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
+import validateColumns from '../NoteListHeader/utils/validateColumns';
 const PluginManager = require('@joplin/lib/services/PluginManager');
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -928,7 +929,7 @@ const mapStateToProps = (state: AppState) => {
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
 		notesSortOrderField: state.settings['notes.sortOrder.field'],
 		notesSortOrderReverse: state.settings['notes.sortOrder.reverse'],
-		notesColumns: state.settings['notes.columns'],
+		notesColumns: validateColumns(state.settings['notes.columns']),
 	};
 };
 

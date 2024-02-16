@@ -10,6 +10,7 @@ import Logger from '@joplin/utils/Logger';
 import mergeGlobalAndLocalSettings from '../services/profileConfig/mergeGlobalAndLocalSettings';
 import splitGlobalAndLocalSettings from '../services/profileConfig/splitGlobalAndLocalSettings';
 import JoplinError from '../JoplinError';
+import { defaultListColumns } from '../services/plugins/api/noteListType';
 const { sprintf } = require('sprintf-js');
 const ObjectUtils = require('../ObjectUtils');
 const { toTitleCase } = require('../string-utils.js');
@@ -963,23 +964,7 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 			'notes.columns': {
-				value: [
-					{
-						name: 'note.todo_completed',
-						title: ' ',
-						width: 40,
-					},
-					{
-						name: 'note.user_updated_time',
-						title: 'Updated',
-						width: 100,
-					},
-					{
-						name: 'note.title',
-						title: 'Title',
-						width: 0,
-					},
-				],
+				value: defaultListColumns(),
 				public: false,
 				type: SettingItemType.Array,
 				storage: SettingStorage.File,

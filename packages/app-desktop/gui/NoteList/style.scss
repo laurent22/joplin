@@ -26,6 +26,11 @@
 	> .item {
 		overflow: hidden;
 		white-space: nowrap;
+		opacity: 0.6;
+	}
+
+	> .item.-main {
+		opacity: 1;
 	}
 }
 

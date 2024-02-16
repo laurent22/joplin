@@ -40,7 +40,10 @@ const compileTemplate = (template: string, itemValueTemplates: ListRendererItemV
 			style.push('flex: 1');
 		}
 
-		output.push(`<div class="item" style="${style.join('; ')}">${template.replace(/{{value}}/g, valueReplacement)}</div>`);
+		const classes = ['item'];
+		if (column.name === 'note.title') classes.push('-main');
+
+		output.push(`<div class="${classes.join(' ')}" style="${style.join('; ')}">${template.replace(/{{value}}/g, valueReplacement)}</div>`);
 	}
 
 	return output.join('');

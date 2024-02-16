@@ -47,8 +47,6 @@ export default (props: Props) => {
 		isFirst = false;
 	}
 
-	// console.info('DROP AT', draggedItem, dropAt);
-
 	const itemHeight = props.height ? props.height : defaultHeight;
 
 	const style = useMemo(() => {

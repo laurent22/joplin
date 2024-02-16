@@ -244,3 +244,25 @@ export interface NoteListColumn {
 }
 
 export type NoteListColumns = NoteListColumn[];
+
+export const defaultListColumns = () => {
+	const columns: NoteListColumns = [
+		{
+			name: 'note.todo_completed',
+			title: ' ',
+			width: 40,
+		},
+		{
+			name: 'note.user_updated_time',
+			title: 'Updated',
+			width: 100,
+		},
+		{
+			name: 'note.title',
+			title: 'Title',
+			width: 0,
+		},
+	];
+
+	return columns;
+};
