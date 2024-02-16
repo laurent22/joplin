@@ -12,6 +12,7 @@ interface Props {
 	onDragStart: React.DragEventHandler;
 	onDragOver: React.DragEventHandler;
 	onDrop: React.DragEventHandler;
+	onResizerDragStart: React.DragEventHandler;
 	dragCursorLocation: 'before' | 'after' | null;
 }
 
@@ -65,6 +66,13 @@ export default (props: Props) => {
 			onDragOver={props.onDragOver}
 			onDrop={props.onDrop}
 		>
+			<div
+				className="resizer"
+				data-name={column.name}
+				draggable={true}
+				onDragStart={props.onResizerDragStart}
+			/>
+
 			<div className="inner">
 				{renderTitle()}
 			</div>

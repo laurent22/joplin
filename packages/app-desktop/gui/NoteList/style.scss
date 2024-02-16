@@ -61,6 +61,13 @@
 		height: 100%;
 		color: var(--joplin-color);
 
+		> .resizer {
+			position: absolute;
+			background-color: green;
+			width: 6px;
+			height: 100%;
+		}
+
 		> .inner {
 			padding-left: 8px;
 			pointer-events: none;

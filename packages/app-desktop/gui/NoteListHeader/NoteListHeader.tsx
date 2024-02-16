@@ -4,7 +4,7 @@ import { NoteListColumns, OnClickHandler } from '@joplin/lib/services/plugins/ap
 import { CSSProperties } from 'styled-components';
 import NoteListHeaderItem from './NoteListHeaderItem';
 import { OnItemClickHander } from './types';
-import useDragAndDrop from './useDragAndDrop';
+import useDragAndDrop, { DataType } from './useDragAndDrop';
 
 interface Props {
 	template: string;
@@ -19,12 +19,17 @@ interface Props {
 const defaultHeight = 26;
 
 export default (props: Props) => {
-	const { onItemDragStart, onItemDragOver, onItemDrop, dropAt } = useDragAndDrop(props.columns);
+	const { onItemDragStart, onItemDragOver, onItemDrop, onResizerDragStart, dropAt, draggedItem } = useDragAndDrop(props.columns);
 
 	const items: React.JSX.Element[] = [];
 
 	let isFirst = true;
 	for (const column of props.columns) {
+		let dragCursorLocation = null;
+		if (draggedItem && draggedItem.type === DataType.HeaderItem) {
+			dragCursorLocation = dropAt && dropAt.columnName === column.name ? dropAt.location : null;
+		}
+
 		items.push(<NoteListHeaderItem
 			isFirst={isFirst}
 			key={column.name}
@@ -35,10 +40,13 @@ export default (props: Props) => {
 			onDragStart={onItemDragStart}
 			onDragOver={onItemDragOver}
 			onDrop={onItemDrop}
-			dragCursorLocation={dropAt && dropAt.columnName === column.name ? dropAt.location : null}
+			onResizerDragStart={onResizerDragStart}
+			dragCursorLocation={dragCursorLocation}
 		/>);
 		isFirst = false;
 	}
+
+	// console.info('DROP AT', draggedItem, dropAt);
 
 	const itemHeight = props.height ? props.height : defaultHeight;
 
