@@ -5570,3 +5570,16 @@ msgstr "Zooma in"
 #: packages/app-desktop/gui/MenuBar.tsx:806
 msgid "Zoom Out"
 msgstr "Zooma ut"
+
+#~ msgid "Logs"
+#~ msgstr "Loggar"
+
+#, fuzzy
+#~ msgid "%s: Missing password"
+#~ msgstr "%s: Lösenord saknas"
+
+#~ msgid "Share and collaborate on a notebook"
+#~ msgstr "Dela och samarbeta i en anteckningsbok"
+
+#~ msgid "Sharing access control"
+#~ msgstr "Dela åtkomstkontroll"
