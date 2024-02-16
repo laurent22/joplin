@@ -299,30 +299,21 @@ async function downloadMediaFiles(urls: string[], fetchOptions?: FetchOptions, a
 }
 
 export async function createResourcesFromPaths(mediaFiles: DownloadedMediaFile[]) {
-	const PromisePool = require('es6-promise-pool');
-	const resources: ResourceFromPath[] = [];
+	const resources: Promise<ResourceFromPath>[] = [];
 
-	const createResource = async (mediaFile: DownloadedMediaFile) => {
+	for (const mediaFile of mediaFiles) {
 		try {
-			const resource = await shim.createResourceFromPath(mediaFile.path);
-			resources.push({ ...mediaFile, resource });
+			resources.push(
+				shim.createResourceFromPath(mediaFile.path)
+					// eslint-disable-next-line
+					.then(resource => ({ ...mediaFile, resource }))
+			);
 		} catch (error) {
 			logger.warn(`Cannot create resource for ${mediaFile.originalUrl}`, error);
 		}
-	};
+	}
 
-	const promiseProducer = () => {
-		if (!mediaFiles.length) return null;
-
-		const mediaFile = mediaFiles.shift();
-		return createResource(mediaFile);
-	};
-
-	const concurrency = 4;
-	const pool = new PromisePool(promiseProducer, concurrency);
-	await pool.start();
-
-	return resources;
+	return await Promise.all(resources);
 }
 
 
