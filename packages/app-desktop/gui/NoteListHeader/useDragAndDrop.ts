@@ -188,9 +188,7 @@ export default (columns: NoteListColumns) => {
 
 		const newColumns = dropHeaderAt(columns, header, data);
 
-		if (JSON.stringify(newColumns) !== JSON.stringify(columns)) {
-			Setting.setValue('notes.columns', newColumns);
-		}
+		if (JSON.stringify(newColumns) !== JSON.stringify(columns)) Setting.setValue('notes.columns', newColumns);
 	}, [columns]);
 
 	const onResizerDragOver: React.DragEventHandler = useCallback(event => {
