@@ -356,6 +356,14 @@ class Dialog extends React.PureComponent<Props, State> {
 				} else {
 					const limit = 20;
 					const searchKeywords = await this.keywords(searchQuery);
+
+					// Note: any filtering must be done **before** fetching the notes, because we're
+					// going to apply a limit to the number of fetched notes.
+					// https://github.com/laurent22/joplin/issues/9944
+					if (!this.props.showCompletedTodos) {
+						results = results.filter((row: any) => !row.is_todo || !row.todo_completed);
+					}
+
 					const notes = await Note.byIds(results.map((result: any) => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed'] });
 					// Can't make any sense of this code so...
 					const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id] as any] = { id, body, markup_language }), obj), {});
@@ -406,10 +414,6 @@ class Dialog extends React.PureComponent<Props, State> {
 						} else {
 							results[i] = { ...row, path: path, fragments: '' };
 						}
-					}
-
-					if (!this.props.showCompletedTodos) {
-						results = results.filter((row: any) => !row.is_todo || !row.todo_completed);
 					}
 				}
 			}
