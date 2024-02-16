@@ -5,6 +5,7 @@ import { CSSProperties } from 'styled-components';
 import NoteListHeaderItem from './NoteListHeaderItem';
 import { OnItemClickHander } from './types';
 import useDragAndDrop, { DataType } from './useDragAndDrop';
+import useOnContextMenu from './utils/useOnContextMenu';
 
 interface Props {
 	template: string;
@@ -20,6 +21,7 @@ const defaultHeight = 26;
 
 export default (props: Props) => {
 	const { onItemDragStart, onItemDragOver, onItemDrop, onResizerDragStart, onResizerDragEnd, dropAt, draggedItem } = useDragAndDrop(props.columns);
+	const onContextMenu = useOnContextMenu(props.columns);
 
 	const items: React.JSX.Element[] = [];
 
@@ -54,7 +56,7 @@ export default (props: Props) => {
 	}, [itemHeight]);
 
 	return (
-		<div className="note-list-header" style={style}>
+		<div className="note-list-header" style={style} onContextMenu={onContextMenu} >
 			{items}
 		</div>
 	);
