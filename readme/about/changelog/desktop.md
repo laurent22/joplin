@@ -2250,6 +2250,27 @@ IMPORTANT: If you use the Clipper API, please note that there are a few breaking
 - Fixed: Increased file extension limit to 20 to prevent issue when using external editors ([#3696](https://github.com/laurent22/joplin/issues/3696))
 - Fixed: Use joplin list handling in emacs mode ([#3758](https://github.com/laurent22/joplin/issues/3758)) ([#3749](https://github.com/laurent22/joplin/issues/3749) by Caleb John)
 
+## [v1.1.2](https://github.com/laurent22/joplin/releases/tag/v1.1.2) (Pre-release) - 2020-09-15T12:58:38Z
+
+- Improved: Clarifies labels of certain actions, and added shortcut for note list toggle
+- Security: Upgrade packages to fix vulnerabilities
+
+## [v1.1.1](https://github.com/laurent22/joplin/releases/tag/v1.1.1) (Pre-release) - 2020-09-11T23:32:47Z
+
+- New: Add keyboard shortcut editor ([#3525](https://github.com/laurent22/joplin/issues/3525) by Anjula Karunarathne)
+- Improved: Change CodeMirror default home and end to be visual line based ([#3672](https://github.com/laurent22/joplin/issues/3672) by Caleb John)
+- Improved: Added support for fuzzy search ([#3632](https://github.com/laurent22/joplin/issues/3632) by Naveen M V)
+- Improved: Make CodeMirror the default code editor ([#3703](https://github.com/laurent22/joplin/issues/3703)) ([#3560](https://github.com/laurent22/joplin/issues/3560) by Caleb John)
+- Improved: Rename menu item from "Export" to "Export all" to clarify what it does
+- Improved: Sync immediately on startup
+- Security: Disallow EMBED tags to prevent XSS vulnerability (CVE-2020-15930, vulnerability found by Ademar Nowasky Junior)
+- Fixed: Fix applying tags to multiple notes ([#3710](https://github.com/laurent22/joplin/issues/3710))
+- Fixed: Fix bug with quotes when searching ([#3735](https://github.com/laurent22/joplin/issues/3735) by Naveen M V)
+- Fixed: Fix wildcard search ([#3713](https://github.com/laurent22/joplin/issues/3713) by Naveen M V)
+- Fixed: Fixed copying link in Rich Text editor ([#3697](https://github.com/laurent22/joplin/issues/3697))
+- Fixed: Fixed note export when there are folders with non-existing parents. Also fixed long path issue on Windows. ([#3689](https://github.com/laurent22/joplin/issues/3689))
+- Fixed: Fixed viewer font size, in particular for inline code ([#3553](https://github.com/laurent22/joplin/issues/3553))
+
 ## [v1.0.245](https://github.com/laurent22/joplin/releases/tag/v1.0.245) - 2020-09-09T12:56:10Z
 
 This release is to fix the sync lock issues on devices that have an incorrect clock. Specifically, it should fix this error: "Cannot acquire sync lock: either the lock could be written but not read back. Or it was expired before it was read again".
@@ -2983,39 +3004,6 @@ This is to fix a few regressions in previous release.
 - Fixed: MD importer handle special chars in linked image name ([#2346](https://github.com/laurent22/joplin/issues/2346)) ([#2334](https://github.com/laurent22/joplin/issues/2334) by [@bart](https://github.com/bart))
 - Fixed: Prevent title overflow on small windows ([#2918](https://github.com/laurent22/joplin/issues/2918)) ([#2917](https://github.com/laurent22/joplin/issues/2917) by anirudh murali)
 - Fixed: Fixed top margin of toolbar ([#2828](https://github.com/laurent22/joplin/issues/2828)) ([#2824](https://github.com/laurent22/joplin/issues/2824) by Siddhant Sehgal)
-
-## [v1.0.195](https://github.com/laurent22/joplin/releases/tag/v1.0.195) - 2020-03-22T19:56:12Z
-
-- New: Added experimental WYSIWYG editor ([#2556](https://github.com/laurent22/joplin/issues/2556)) ([#176](https://github.com/laurent22/joplin/issues/176))
-- New: Added way to upgrade master key encryption and sync target encryption
-- New: Add button to About box to copy Joplin's information to the clipboard ([#2711](https://github.com/laurent22/joplin/issues/2711) by Helmut K. C. Tessarek)
-- New: Api: Add support for "tags" property for note PUT request ([#2649](https://github.com/laurent22/joplin/issues/2649)) ([#941](https://github.com/laurent22/joplin/issues/941) by [@jyuvaraj03](https://github.com/jyuvaraj03))
-- New: Add global shortcut to show/hide Joplin ([#2653](https://github.com/laurent22/joplin/issues/2653) by Helmut K. C. Tessarek)
-- Improved: Fast notebook deletion ([#2730](https://github.com/laurent22/joplin/issues/2730)) ([#2703](https://github.com/laurent22/joplin/issues/2703) by [@RedDocMD](https://github.com/RedDocMD))
-- Improved: Enhance notelist focus behaviour ([#2520](https://github.com/laurent22/joplin/issues/2520) by [@mic704b](https://github.com/mic704b))
-- Improved: Indent lists by pressing tab when caret is after bullet ([#2713](https://github.com/laurent22/joplin/issues/2713)) ([#498](https://github.com/laurent22/joplin/issues/498) by Shotaro Yamada)
-- Fixed: Expand notebook tree when clicking on notebook in search results ([#2620](https://github.com/laurent22/joplin/issues/2620)) ([#2616](https://github.com/laurent22/joplin/issues/2616) by Mohammed Rabeeh)
-- Fixed: Remember last selected note ([#2809](https://github.com/laurent22/joplin/issues/2809)) ([#2803](https://github.com/laurent22/joplin/issues/2803) by Naveen M V)
-- Fixed: Fix menu bar shortcut (Alt+E) while editing a note (Win) ([#2776](https://github.com/laurent22/joplin/issues/2776) by [@nullpointer666](https://github.com/nullpointer666))
-- Fixed: Fix integration test harness issues. ([#2723](https://github.com/laurent22/joplin/issues/2723) by [@mic704b](https://github.com/mic704b))
-- Fixed: Fix calls to non-existent function ([#2675](https://github.com/laurent22/joplin/issues/2675) by [@mic704b](https://github.com/mic704b))
-- Fixed: Fix format of note timestamps ([#2672](https://github.com/laurent22/joplin/issues/2672) by [@mic704b](https://github.com/mic704b))
-- Fixed: Fix show-all-notes update bugs. ([#2642](https://github.com/laurent22/joplin/issues/2642) by [@mic704b](https://github.com/mic704b))
-- Fixed: Fix issue with tag not being displayed below note when it is created
-- Fixed: Fix button label wrapping in toolbar ([#2708](https://github.com/laurent22/joplin/issues/2708)) ([#2700](https://github.com/laurent22/joplin/issues/2700) by Anjula Karunarathne)
-- Fixed: Fixed renaming tag issue ([#2618](https://github.com/laurent22/joplin/issues/2618))
-
-## [v1.0.194](https://github.com/laurent22/joplin/releases/tag/v1.0.194) (Pre-release) - 2020-03-14T00:00:32Z
-
-The main purpose of this pre-release is to allow evaluating the WYSIWYG editor.
-
-- New: Added experimental WYSIWYG editor ([#2556](https://github.com/laurent22/joplin/issues/2556)) ([#176](https://github.com/laurent22/joplin/issues/176))
-- New: Added way to upgrade master key encryption and sync target encryption
-- New: Add button to About box to copy Joplin's information to the clipboard ([#2711](https://github.com/laurent22/joplin/issues/2711) by Helmut K. C. Tessarek)
-- New: Api: Add support for "tags" property for note PUT request ([#2649](https://github.com/laurent22/joplin/issues/2649)) ([#941](https://github.com/laurent22/joplin/issues/941) by [@jyuvaraj03](https://github.com/jyuvaraj03))
-- Improved: Enhance notelist focus behaviour ([#2520](https://github.com/laurent22/joplin/issues/2520) by [@mic704b](https://github.com/mic704b))
-- Improved: Indent lists by pressing tab when caret is after bullet ([#2713](https://github.com/laurent22/joplin/issues/2713)) ([#498](https://github.com/laurent22/joplin/issues/498) by Shotaro Yamada)
-- Fixed: Expand notebook tree when clicking on notebook in search results ([#2620](https://github.com/laurent22/joplin/issues/2620)) ([#2616](https://github.com/laurent22/joplin/issues/2616) by Mohammed Rabeeh)
 
 ## [v1.0.195](https://github.com/laurent22/joplin/releases/tag/v1.0.195) - 2020-03-22T19:56:12Z
 
