@@ -1,5 +1,5 @@
 diff --git a/src/Backup.ts b/src/Backup.ts
-index 2c0c174..6d492ca 100644
+index 2c0c174..9cfbbe1 100644
 --- a/src/Backup.ts
 +++ b/src/Backup.ts
 @@ -4,6 +4,7 @@ import joplin from "api";
@@ -101,14 +101,14 @@ index 2c0c174..6d492ca 100644
      await this.loadBackupPath();
      this.backupRetention = await joplin.settings.value("backupRetention");
  
-@@ -477,6 +520,7 @@ class Backup {
-         await this.backupNotebooks();
+@@ -478,6 +521,7 @@ class Backup {
  
          const backupDst = await this.makeBackupSet();
-+        await this.writeReadme(backupDst);
  
++        await this.writeReadme(this.backupBasePath);
          await joplin.settings.setValue(
            "lastBackup",
+           this.backupStartTime.getTime()
 @@ -684,6 +728,16 @@ class Backup {
      }
    }
