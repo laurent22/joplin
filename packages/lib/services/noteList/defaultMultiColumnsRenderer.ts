@@ -1,24 +1,6 @@
 import { _ } from '../../locale';
-import time from '../../time';
 import CommandService from '../CommandService';
 import { ItemFlow, ListRenderer, OnClickEvent } from '../plugins/api/noteListType';
-
-interface Props {
-	note: {
-		id: string;
-		title: string;
-		is_todo: number;
-		todo_completed: number;
-		user_updated_time: number;
-	};
-	item: {
-		// index: number;
-		size: {
-			height: number;
-		};
-		selected: boolean;
-	};
-}
 
 const renderer: ListRenderer = {
 	id: 'detailed',
@@ -33,19 +15,6 @@ const renderer: ListRenderer = {
 		width: 0,
 		height: 34,
 	},
-
-	dependencies: [
-		// 'item.index',
-		'item.selected',
-		'item.size.height',
-		'note.id',
-		'note.is_shared',
-		'note.is_todo',
-		'note.isWatched',
-		'note.titleHtml',
-		'note.todo_completed',
-		'note.user_updated_time',
-	],
 
 	itemCss: // css
 		`	
@@ -75,14 +44,11 @@ const renderer: ListRenderer = {
 
 	itemValueTemplates: {
 		'note.todo_completed': '{{#note.todo_completed}}[x]{{/note.todo_completed}}{{^note.todo_completed}}[ ]{{/note.todo_completed}}',
-		'note.user_updated_time': '{{formattedUpdatedTime}}',
 	},
 
-	onRenderNote: async (props: Props) => {
-
+	onRenderNote: async (props: any) => {
 		return {
 			...props,
-			formattedUpdatedTime: time.unixMsToLocalDateTime(props.note.user_updated_time),
 		};
 	},
 };

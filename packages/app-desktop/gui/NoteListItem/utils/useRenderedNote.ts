@@ -19,13 +19,13 @@ const hashContent = (content: any) => {
 	return createHash('sha1').update(JSON.stringify(content)).digest('hex');
 };
 
-const compileTemplate = (template: string, itemValueTemplates: ListRendererItemValueTemplates, columns: NoteListColumns, dependencies: ListRendererDependency[]) => {
+const compileTemplate = (template: string, itemValueTemplates: ListRendererItemValueTemplates, columns: NoteListColumns) => {
 	const output: string[] = [];
 	for (const column of columns) {
 		let valueReplacement = itemValueTemplates[column.name] ? itemValueTemplates[column.name] : '';
 
 		if (!valueReplacement) {
-			if (column.name === 'note.title' && dependencies.includes('note.titleHtml')) {
+			if (column.name === 'note.titleHtml') {
 				valueReplacement = '{{{note.titleHtml}}}';
 			} else {
 				valueReplacement = `{{${column.name}}}`;
@@ -52,11 +52,13 @@ const compileTemplate = (template: string, itemValueTemplates: ListRendererItemV
 export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listRenderer: ListRenderer, highlightedWords: string[], itemIndex: number, columns: NoteListColumns) => {
 	const [renderedNote, setRenderedNote] = useState<RenderedNote>(null);
 
+	const dependencies = columns && columns.length ? columns.map(c => c.name) as ListRendererDependency[] : listRenderer.dependencies;
+
 	useAsyncEffect(async (event) => {
 		const renderNote = async (): Promise<void> => {
 			let noteTags: TagEntity[] = [];
 
-			if (listRenderer.dependencies.includes('note.tags')) {
+			if (dependencies.includes('note.tags')) {
 				noteTags = await Tag.tagsByNoteId(note.id, { fields: ['id', 'title'] });
 			}
 
@@ -80,7 +82,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 
 			const titleHtml = getNoteTitleHtml(highlightedWords, Note.displayTitle(note));
 			const viewProps = await prepareViewProps(
-				listRenderer.dependencies,
+				dependencies,
 				note,
 				listRenderer.itemSize,
 				isSelected,
