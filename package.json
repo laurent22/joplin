@@ -14,13 +14,13 @@
   "scripts": {
     "buildApiDoc": "yarn workspace joplin start apidoc ../../readme/api/references/rest_api.md",
     "buildScriptIndexes": "node packages/tools/gulp/tasks/buildScriptIndexesRun.js",
-    "buildParallel": "yarn workspaces foreach --verbose --interlaced --parallel --jobs 2 --topological run build && yarn run tsc",
-    "buildPluginDoc": "cd packages/generate-plugin-doc && yarn run buildPluginDoc_",
-    "buildSequential": "yarn workspaces foreach --verbose --interlaced --topological run build && yarn run tsc",
+    "buildParallel": "yarn workspaces foreach --verbose --interlaced --parallel --jobs 2 --topological run build && yarn tsc",
+    "buildPluginDoc": "cd packages/generate-plugin-doc && yarn buildPluginDoc_",
+    "buildSequential": "yarn workspaces foreach --verbose --interlaced --topological run build && yarn tsc",
     "buildServerDocker": "node packages/tools/buildServerDocker.js",
     "buildSettingJsonSchema": "yarn workspace joplin start settingschema ../../../joplin-website/docs/schema/settings.json",
     "buildTranslations": "node packages/tools/build-translation.js",
-    "buildWebsite": "node ./packages/tools/website/processDocs.js --env prod && node ./packages/tools/website/build.js && yarn run buildPluginDoc && yarn run buildSettingJsonSchema",
+    "buildWebsite": "node ./packages/tools/website/processDocs.js --env prod && node ./packages/tools/website/build.js && yarn buildPluginDoc && yarn buildSettingJsonSchema",
     "buildWebsiteTranslations": "node packages/tools/website/buildTranslations.js",
     "checkIgnoredFiles": "node ./packages/tools/checkIgnoredFiles.js",
     "checkLibPaths": "node ./packages/tools/checkLibPaths.js",
@@ -40,7 +40,7 @@
     "packageJsonLint": "node ./packages/tools/packageJsonLint.js",
     "postinstall": "gulp build",
     "postPreReleasesToForum": "node ./packages/tools/postPreReleasesToForum",
-    "publishAll": "git pull && yarn run buildParallel && lerna version --yes --no-private --no-git-tag-version && gulp completePublishAll",
+    "publishAll": "git pull && yarn buildParallel && lerna version --yes --no-private --no-git-tag-version && gulp completePublishAll",
     "releaseAndroid": "PATH=\"/usr/local/opt/openjdk@11/bin:$PATH\" node packages/tools/release-android.js",
     "releaseAndroidClean": "node packages/tools/release-android.js",
     "releaseCli": "node packages/tools/release-cli.js",
@@ -82,12 +82,12 @@
     "eslint-plugin-promise": "6.1.1",
     "eslint-plugin-react": "7.33.2",
     "execa": "5.1.1",
-    "fs-extra": "11.1.1",
+    "fs-extra": "11.2.0",
     "glob": "10.3.10",
     "gulp": "4.0.2",
     "husky": "3.1.0",
     "lerna": "3.22.1",
-    "lint-staged": "14.0.1",
+    "lint-staged": "15.2.0",
     "madge": "6.1.0",
     "npm-package-json-lint": "7.1.0",
     "typescript": "5.2.2"
@@ -97,7 +97,7 @@
     "eslint-plugin-github": "4.10.1",
     "http-server": "14.1.1",
     "node-gyp": "9.4.1",
-    "nodemon": "3.0.2"
+    "nodemon": "3.0.3"
   },
   "packageManager": "yarn@3.6.4",
   "resolutions": {
@@ -107,6 +107,7 @@
     "app-builder-lib@24.4.0": "patch:app-builder-lib@npm%3A24.4.0#./.yarn/patches/app-builder-lib-npm-24.4.0-05322ff057.patch",
     "react-native@0.71.10": "patch:react-native@npm%3A0.71.10#./.yarn/patches/react-native-animation-fix/react-native-npm-0.71.10-f9c32562d8.patch",
     "nanoid": "patch:nanoid@npm%3A3.3.7#./.yarn/patches/nanoid-npm-3.3.7-98824ba130.patch",
-    "pdfjs-dist": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch"
+    "pdfjs-dist": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch",
+    "@react-native-community/slider": "patch:@react-native-community/slider@npm%3A4.4.4#./.yarn/patches/@react-native-community-slider-npm-4.4.4-d78e472f48.patch"
   }
 }

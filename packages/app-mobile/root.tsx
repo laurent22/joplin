@@ -46,7 +46,6 @@ const { AppNav } = require('./components/app-nav.js');
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 import BaseSyncTarget from '@joplin/lib/BaseSyncTarget';
-const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
 import Resource from '@joplin/lib/models/Resource';
 import Tag from '@joplin/lib/models/Tag';
 import NoteTag from '@joplin/lib/models/NoteTag';
@@ -516,7 +515,6 @@ async function initialize(dispatch: Function) {
 
 	// reg.dispatch = dispatch;
 	BaseModel.dispatch = dispatch;
-	FoldersScreenUtils.dispatch = dispatch;
 	BaseSyncTarget.dispatch = dispatch;
 	NavService.dispatch = dispatch;
 	BaseModel.setDb(db);
@@ -545,7 +543,7 @@ async function initialize(dispatch: Function) {
 		if (Setting.value('env') === 'prod') {
 			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
 		} else {
-			await db.open({ name: getDatabaseName(currentProfile, isSubProfile, '-3') });
+			await db.open({ name: getDatabaseName(currentProfile, isSubProfile, '-20240127-1') });
 
 			// await db.clearForTesting();
 		}
@@ -983,9 +981,13 @@ class AppComponent extends React.Component {
 
 		if (sharedData) {
 			reg.logger().info('Received shared data');
-			if (this.props.selectedFolderId) {
+
+			// selectedFolderId can be null if no screens other than "All notes"
+			// have been opened.
+			const targetFolder = this.props.selectedFolderId ?? (await Folder.defaultFolder())?.id;
+			if (targetFolder) {
 				logger.info('Sharing: handleShareData: Processing...');
-				await handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
+				await handleShared(sharedData, targetFolder, this.props.dispatch);
 			} else {
 				reg.logger().info('Cannot handle share - default folder id is not set');
 			}
@@ -1073,11 +1075,20 @@ class AppComponent extends React.Component {
 		logger.info('root.biometrics: shouldShowMainContent', shouldShowMainContent);
 		logger.info('root.biometrics: this.state.sensorInfo', this.state.sensorInfo);
 
+		// The right sidemenu can be difficult to close due to a bug in the sidemenu
+		// library (right sidemenus can't be swiped closed).
+		//
+		// Additionally, it can interfere with scrolling in the note viewer, so we use
+		// a smaller edge hit width.
+		const menuEdgeHitWidth = menuPosition === 'right' ? 20 : 30;
+
 		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 				<SideMenu
 					menu={sideMenuContent}
-					edgeHitWidth={20}
+					edgeHitWidth={menuEdgeHitWidth}
+					toleranceX={4}
+					toleranceY={20}
 					openMenuOffset={this.state.sideMenuWidth}
 					menuPosition={menuPosition}
 					onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}

@@ -119,7 +119,7 @@ export default class PluginLoader {
 			});
 		};
 
-		addScript(exports => {
+		addScript(async exports => {
 			if (!exports?.default || !(typeof exports.default === 'function')) {
 				throw new Error('All plugins must have a function default export');
 			}
@@ -143,16 +143,30 @@ export default class PluginLoader {
 				const cssStrings = [];
 
 				for (const asset of loadedPlugin.assets()) {
+					let assetText: string = asset.text;
+					let assetMime: string = asset.mime;
+
 					if (!asset.inline) {
-						this.logMessage('Warning: The CM6 plugin API currently only supports inline CSS.');
-						continue;
+						if (!asset.name) {
+							throw new Error('Non-inline asset missing required property "name"');
+						}
+						if (assetMime !== 'text/css' && !asset.name.endsWith('.css')) {
+							throw new Error(
+								`Non-css assets are not supported by the CodeMirror 6 editor. (Asset path: ${asset.name})`,
+							);
+						}
+
+						assetText = await plugin.loadCssAsset(asset.name);
+						assetMime = 'text/css';
 					}
 
-					if (asset.mime !== 'text/css') {
-						throw new Error('Inline assets must have property "mime" set to "text/css"');
+					if (assetMime !== 'text/css') {
+						throw new Error(
+							'Plugin assets must have property "mime" set to "text/css" or have a filename ending with ".css"',
+						);
 					}
 
-					cssStrings.push(asset.text);
+					cssStrings.push(assetText);
 				}
 
 				addStyles(cssStrings);

@@ -311,11 +311,14 @@ describe('models/Folder.sharing', () => {
 			expect(resource.share_id).toBe('');
 		}
 
+		const previousBlobUpdatedTime = (await Resource.load(resourceId)).blob_updated_time;
+		await msleep(1);
 		await Folder.updateAllShareIds(resourceService);
 
 		{
 			const resource: ResourceEntity = await Resource.load(resourceId);
 			expect(resource.share_id).toBe(note1.share_id);
+			expect(resource.blob_updated_time).toBeGreaterThan(previousBlobUpdatedTime);
 		}
 
 		await Note.save({ id: note1.id, parent_id: folder2.id });

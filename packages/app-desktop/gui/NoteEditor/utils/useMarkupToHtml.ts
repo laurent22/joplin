@@ -1,12 +1,12 @@
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { useCallback, useMemo } from 'react';
-import { ResourceInfos } from './types';
 import markupLanguageUtils from '../../../utils/markupLanguageUtils';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 
 const { themeStyle } = require('@joplin/lib/theme');
 import Note from '@joplin/lib/models/Note';
+import { MarkupToHtmlOptions } from './types';
 
 interface HookDependencies {
 	themeId: number;
@@ -14,21 +14,6 @@ interface HookDependencies {
 	plugins: PluginStates;
 	settingValue: (pluginId: string, key: string)=> any;
 	whiteBackgroundNoteRendering: boolean;
-}
-
-export interface MarkupToHtmlOptions {
-	replaceResourceInternalToExternalLinks?: boolean;
-	resourceInfos?: ResourceInfos;
-	contentMaxWidth?: number;
-	plugins?: Record<string, any>;
-	bodyOnly?: boolean;
-	mapsToLine?: boolean;
-	useCustomPdfViewer?: boolean;
-	noteId?: string;
-	vendorDir?: string;
-	platformName?: string;
-	allowedFilePrefixes?: string[];
-	whiteBackgroundNoteRendering?: boolean;
 }
 
 export default function useMarkupToHtml(deps: HookDependencies) {

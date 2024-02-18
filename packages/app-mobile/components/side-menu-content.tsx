@@ -8,7 +8,7 @@ import Synchronizer from '@joplin/lib/Synchronizer';
 import NavService from '@joplin/lib/services/NavService';
 import { _ } from '@joplin/lib/locale';
 const { themeStyle } = require('./global-style.js');
-const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
+import { renderFolders } from '@joplin/lib/components/shared/side-menu-shared';
 import { FolderEntity, FolderIcon } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
 import Setting from '@joplin/lib/models/Setting';
@@ -37,6 +37,8 @@ interface Props {
 	opacity: number;
 	profileConfig: ProfileConfig;
 	inboxJopId: string;
+	selectedFolderId: string;
+	selectedTagId: string;
 }
 
 const syncIconRotationValue = new Animated.Value(0);
@@ -85,6 +87,7 @@ const SideMenuContentComponent = (props: Props) => {
 			sidebarIcon: {
 				fontSize: 22,
 				color: theme.color,
+				width: 26,
 			},
 		};
 
@@ -101,7 +104,7 @@ const SideMenuContentComponent = (props: Props) => {
 		styles.sideButtonSelected = { ...styles.sideButton, backgroundColor: theme.selectedColor };
 		styles.sideButtonText = { ...styles.buttonText };
 
-		styles.emptyFolderIcon = { ...styles.sidebarIcon, marginRight: folderIconRightMargin, width: 21 };
+		styles.emptyFolderIcon = { ...styles.sidebarIcon, marginRight: folderIconRightMargin, width: 26 };
 
 		return StyleSheet.create(styles);
 	}, [props.themeId]);
@@ -315,9 +318,9 @@ const SideMenuContentComponent = (props: Props) => {
 		}
 
 		if (folderIcon.type === 1) { // FolderIconType.Emoji
-			return <Text style={{ fontSize: theme.fontSize, marginRight: folderIconRightMargin, width: 20 }}>{folderIcon.emoji}</Text>;
+			return <Text style={{ fontSize: theme.fontSize, marginRight: folderIconRightMargin, width: 27 }}>{folderIcon.emoji}</Text>;
 		} else if (folderIcon.type === 2) { // FolderIconType.DataUrl
-			return <Image style={{ width: 20, height: 20, marginRight: folderIconRightMargin, resizeMode: 'contain' }} source={{ uri: folderIcon.dataUrl }}/>;
+			return <Image style={{ width: 27, height: 20, marginRight: folderIconRightMargin, resizeMode: 'contain' }} source={{ uri: folderIcon.dataUrl }}/>;
 		} else {
 			throw new Error(`Unsupported folder icon type: ${folderIcon.type}`);
 		}
@@ -488,7 +491,7 @@ const SideMenuContentComponent = (props: Props) => {
 	items.push(renderSidebarButton('folder_header', _('Notebooks'), 'folder'));
 
 	if (props.folders.length) {
-		const result = shared.renderFolders(props, renderFolderItem, false);
+		const result = renderFolders(props, renderFolderItem);
 		const folderItems = result.items;
 		items = items.concat(folderItems);
 	}

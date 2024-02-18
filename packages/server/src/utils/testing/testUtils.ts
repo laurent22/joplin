@@ -554,6 +554,7 @@ share_id: ${note.share_id || ''}
 conflict_original_id: 
 master_key_id: 
 user_data: 
+deleted_time: 0
 type_: 1`;
 }
 

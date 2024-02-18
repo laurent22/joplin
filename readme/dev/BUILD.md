@@ -78,9 +78,9 @@ To test the extension please refer to the relevant pages for each browser: [Fire
 
 To make changes to the application, you'll need to rebuild any TypeScript file you've changed. The simplest way to do this is to watch for changes from the root of the project. Simply run this command, and it should take care of the rest:
 
-	yarn run watch
+	yarn watch
 
-Running `yarn run tsc` would have the same effect, but without watching.
+Running `yarn tsc` would have the same effect, but without watching.
 
 ## Running an application with additional parameters
 

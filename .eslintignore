@@ -86,6 +86,7 @@ packages/lib/countable/Countable.js
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 packages/app-cli/app/LinkSelector.js
+packages/app-cli/app/app.js
 packages/app-cli/app/base-command.js
 packages/app-cli/app/command-apidoc.js
 packages/app-cli/app/command-attach.js
@@ -246,7 +247,6 @@ packages/app-desktop/gui/Navigator.js
 packages/app-desktop/gui/NoteContentPropertiesDialog.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/index.js
-packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/setupVim.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/types.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useCursorUtils.test.js
@@ -294,6 +294,7 @@ packages/app-desktop/gui/NoteEditor/utils/clipboardUtils.js
 packages/app-desktop/gui/NoteEditor/utils/contextMenu.js
 packages/app-desktop/gui/NoteEditor/utils/contextMenuUtils.js
 packages/app-desktop/gui/NoteEditor/utils/index.js
+packages/app-desktop/gui/NoteEditor/utils/markupRenderOptions.js
 packages/app-desktop/gui/NoteEditor/utils/resourceHandling.test.js
 packages/app-desktop/gui/NoteEditor/utils/resourceHandling.js
 packages/app-desktop/gui/NoteEditor/utils/types.js
@@ -414,6 +415,7 @@ packages/app-desktop/integration-tests/util/activateMainMenuItem.js
 packages/app-desktop/integration-tests/util/createStartupArgs.js
 packages/app-desktop/integration-tests/util/firstNonDevToolsWindow.js
 packages/app-desktop/integration-tests/util/setFilePickerResponse.js
+packages/app-desktop/integration-tests/util/setMessageBoxResponse.js
 packages/app-desktop/integration-tests/util/test.js
 packages/app-desktop/playwright.config.js
 packages/app-desktop/plugins/GotoAnything.js
@@ -444,6 +446,8 @@ packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
 packages/app-desktop/tools/copy7Zip.js
 packages/app-desktop/tools/notarizeMacApp.js
 packages/app-desktop/tools/renameReleaseAssets.js
+packages/app-desktop/utils/7zip/getPathToExecutable7Zip.js
+packages/app-desktop/utils/7zip/pathToBundled7Zip.js
 packages/app-desktop/utils/checkForUpdatesUtils.test.js
 packages/app-desktop/utils/checkForUpdatesUtils.js
 packages/app-desktop/utils/checkForUpdatesUtilsTestData.js
@@ -486,10 +490,15 @@ packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleSpaceButton.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/Toolbar.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToolbarButton.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToolbarOverflowRows.js
+packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useActionButtons.js
+packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useHeaderButtons.js
+packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useInlineFormattingButtons.js
+packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/types.js
 packages/app-mobile/components/NoteEditor/NoteEditor.test.js
 packages/app-mobile/components/NoteEditor/NoteEditor.js
 packages/app-mobile/components/NoteEditor/SearchPanel.js
+packages/app-mobile/components/NoteEditor/hooks/useKeyboardVisible.js
 packages/app-mobile/components/NoteEditor/types.js
 packages/app-mobile/components/NoteList.js
 packages/app-mobile/components/ProfileSwitcher/ProfileEditor.js
@@ -561,6 +570,7 @@ packages/default-plugins/build.js
 packages/default-plugins/buildDefaultPlugins.js
 packages/default-plugins/commands/buildAll.js
 packages/default-plugins/commands/editPatch.js
+packages/default-plugins/utils/getCurrentCommitHash.js
 packages/default-plugins/utils/getPathToPatchFileFor.js
 packages/default-plugins/utils/readRepositoryJson.js
 packages/default-plugins/utils/waitForCliInput.js
@@ -573,6 +583,8 @@ packages/editor/CodeMirror/configFromSettings.js
 packages/editor/CodeMirror/createEditor.test.js
 packages/editor/CodeMirror/createEditor.js
 packages/editor/CodeMirror/editorCommands/editorCommands.js
+packages/editor/CodeMirror/editorCommands/insertLineAfter.test.js
+packages/editor/CodeMirror/editorCommands/insertLineAfter.js
 packages/editor/CodeMirror/editorCommands/supportsCommand.js
 packages/editor/CodeMirror/editorCommands/swapLine.js
 packages/editor/CodeMirror/getScrollFraction.js
@@ -597,6 +609,7 @@ packages/editor/CodeMirror/testUtil/forceFullParse.js
 packages/editor/CodeMirror/testUtil/loadLanguages.js
 packages/editor/CodeMirror/theme.js
 packages/editor/CodeMirror/util/isInSyntaxNode.js
+packages/editor/CodeMirror/util/setupVim.js
 packages/editor/SelectionFormatting.js
 packages/editor/events.js
 packages/editor/types.js
@@ -662,9 +675,11 @@ packages/lib/components/shared/config/shouldShowMissingPasswordWarning.test.js
 packages/lib/components/shared/config/shouldShowMissingPasswordWarning.js
 packages/lib/components/shared/note-screen-shared.js
 packages/lib/components/shared/reduxSharedMiddleware.js
+packages/lib/components/shared/side-menu-shared.js
 packages/lib/database-driver-better-sqlite.js
 packages/lib/database.js
 packages/lib/debug/DebugService.js
+packages/lib/determineProfileDir.js
 packages/lib/dom.js
 packages/lib/errorUtils.js
 packages/lib/errors.js
@@ -726,16 +741,19 @@ packages/lib/models/Tag.test.js
 packages/lib/models/Tag.js
 packages/lib/models/dateTimeFormats.test.js
 packages/lib/models/settings/FileHandler.js
+packages/lib/models/settings/settingValidations.js
 packages/lib/models/utils/isItemId.js
 packages/lib/models/utils/itemCanBeEncrypted.js
 packages/lib/models/utils/paginatedFeed.js
 packages/lib/models/utils/paginationToSql.js
 packages/lib/models/utils/readOnly.js
+packages/lib/models/utils/resourceUtils.js
 packages/lib/models/utils/types.js
 packages/lib/models/utils/userData.test.js
 packages/lib/models/utils/userData.js
 packages/lib/net-utils.js
 packages/lib/ntp.js
+packages/lib/onedrive-api.test.js
 packages/lib/onedrive-api.js
 packages/lib/path-utils.js
 packages/lib/reducer.js
@@ -783,6 +801,7 @@ packages/lib/services/database/migrations/42.js
 packages/lib/services/database/migrations/43.js
 packages/lib/services/database/migrations/44.js
 packages/lib/services/database/migrations/45.js
+packages/lib/services/database/migrations/46.js
 packages/lib/services/database/migrations/index.js
 packages/lib/services/database/sqlStringToLines.js
 packages/lib/services/database/types.js
@@ -959,6 +978,7 @@ packages/lib/services/synchronizer/syncInfoUtils.js
 packages/lib/services/synchronizer/synchronizer_LockHandler.test.js
 packages/lib/services/synchronizer/synchronizer_MigrationHandler.test.js
 packages/lib/services/synchronizer/tools.js
+packages/lib/services/synchronizer/utils/checkDisabledSyncItemsNotification.js
 packages/lib/services/synchronizer/utils/handleConflictAction.js
 packages/lib/services/synchronizer/utils/handleSyncStartupOperation.js
 packages/lib/services/synchronizer/utils/resourceRemotePath.js
@@ -966,6 +986,8 @@ packages/lib/services/synchronizer/utils/syncDeleteStep.js
 packages/lib/services/synchronizer/utils/types.js
 packages/lib/shim-init-node.js
 packages/lib/shim.js
+packages/lib/string-utils.test.js
+packages/lib/string-utils.js
 packages/lib/testing/syncTargetUtils.js
 packages/lib/testing/test-utils-synchronizer.js
 packages/lib/testing/test-utils.js
@@ -984,6 +1006,8 @@ packages/lib/types.js
 packages/lib/utils/credentialFiles.js
 packages/lib/utils/joplinCloud.js
 packages/lib/utils/processStartFlags.js
+packages/lib/utils/replaceUnsupportedCharacters.test.js
+packages/lib/utils/replaceUnsupportedCharacters.js
 packages/lib/utils/userFetcher.js
 packages/lib/utils/webDAVUtils.test.js
 packages/lib/utils/webDAVUtils.js
@@ -1053,13 +1077,15 @@ packages/renderer/MdToHtml/rules/sanitize_html.js
 packages/renderer/MdToHtml/rules/source_map.js
 packages/renderer/MdToHtml/setupLinkify.js
 packages/renderer/MdToHtml/validateLinks.js
+packages/renderer/assetsToHeaders.js
+packages/renderer/defaultResourceModel.js
 packages/renderer/headerAnchor.js
 packages/renderer/highlight.js
 packages/renderer/htmlUtils.test.js
 packages/renderer/htmlUtils.js
 packages/renderer/index.js
 packages/renderer/noteStyle.js
-packages/renderer/pathUtils.js
+packages/renderer/types.js
 packages/renderer/utils.js
 packages/tools/build-release-stats.test.js
 packages/tools/build-release-stats.js

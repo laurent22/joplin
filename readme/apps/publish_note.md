@@ -19,3 +19,9 @@ You can then share this link with anyone and they will be able to see the note i
 After publishing a note, it can be unpublished by right-clicking on it in the desktop application, and selecting "Publish note..."
 
 From there, clicking on the "Share" icon will unpublish the note.
+
+## Customising the publishing banner
+
+Using Joplin Cloud Pro or Teams, you have the ability to customise the banner that is displayed at the top of the notes. That includes changing the logo, title or colour of the banner. To do so, open your [Profile page](https://joplincloud.com/users/me) and go to the "Published note banner" section:
+
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/publish_note/Banner.png" width="75%"/>

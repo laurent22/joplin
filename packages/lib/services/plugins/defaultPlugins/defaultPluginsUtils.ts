@@ -11,7 +11,10 @@ const logger = Logger.create('defaultPluginsUtils');
 // Use loadAndRunDefaultPlugins
 // Exported for testing.
 export const getDefaultPluginPathsAndSettings = async (
-	defaultPluginsDir: string, defaultPluginsInfo: DefaultPluginsInfo, pluginSettings: PluginSettings,
+	defaultPluginsDir: string,
+	defaultPluginsInfo: DefaultPluginsInfo,
+	pluginSettings: PluginSettings,
+	pluginService: PluginService,
 ) => {
 	const pluginPaths: string[] = [];
 
@@ -27,15 +30,33 @@ export const getDefaultPluginPathsAndSettings = async (
 
 	for (const pluginStat of defaultPluginsPaths) {
 		// Each plugin should be within a folder with the same ID as the plugin
-		const pluginFolderName = pluginStat.path;
-		const pluginId = pluginFolderName;
+		const pluginFileName = pluginStat.path;
+		const pluginIdMatch = pluginFileName.match(/^(.*)+\.jpl$/);
+
+		// Previously, default plugins were stored as
+		//    default-plugin-id/plugin.jpl
+		// We handle this case by skipping files that don't match the format
+		//    default-plugin-id.jpl
+		if (!pluginIdMatch) {
+			logger.warn(`Default plugin filename ${pluginFileName} is not a .JPL file. Skipping.`);
+			continue;
+		}
+
+		const pluginId = pluginIdMatch[1];
 
 		if (!defaultPluginsInfo.hasOwnProperty(pluginId)) {
 			logger.warn(`Default plugin ${pluginId} is missing in defaultPluginsInfo. Not loading.`);
 			continue;
 		}
 
-		pluginPaths.push(join(defaultPluginsDir, pluginFolderName, 'plugin.jpl'));
+		// We skip plugins that are already loaded -- attempting to unpack a different version of a plugin
+		// that has already been loaded causes errors (see #9832).
+		if (pluginService.isPluginLoaded(pluginId)) {
+			logger.info(`Not loading default plugin ${pluginId} -- a plugin with the same ID is already loaded.`);
+			continue;
+		}
+
+		pluginPaths.push(join(defaultPluginsDir, pluginFileName));
 
 		pluginSettings = produce(pluginSettings, (draft: PluginSettings) => {
 			// Default plugins can be overridden but not uninstalled (as they're part of
@@ -44,6 +65,11 @@ export const getDefaultPluginPathsAndSettings = async (
 			// As such, we recreate the plugin state if necessary.
 			if (!draft[pluginId]) {
 				draft[pluginId] = defaultPluginSetting();
+
+				const enabledByDefault = defaultPluginsInfo[pluginId].enabled;
+				if (typeof enabledByDefault === 'boolean') {
+					draft[pluginId].enabled = enabledByDefault;
+				}
 			}
 		});
 	}
@@ -58,7 +84,7 @@ export const loadAndRunDefaultPlugins = async (
 	originalPluginSettings: PluginSettings,
 ): Promise<PluginSettings> => {
 	const { pluginPaths, pluginSettings } = await getDefaultPluginPathsAndSettings(
-		defaultPluginsDir, defaultPluginsInfo, originalPluginSettings,
+		defaultPluginsDir, defaultPluginsInfo, originalPluginSettings, service,
 	) ?? { pluginPaths: [], pluginSettings: originalPluginSettings };
 
 	await service.loadAndRunPlugins(pluginPaths, pluginSettings, { builtIn: true, devMode: false });

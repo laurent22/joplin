@@ -68,6 +68,7 @@ export interface PluginData {
 	pluginId: string;
 	contentScriptId: string;
 	contentScriptJs: ()=> Promise<string>;
+	loadCssAsset: (name: string)=> Promise<string>;
 	postMessageHandler: (message: any)=> any;
 }
 

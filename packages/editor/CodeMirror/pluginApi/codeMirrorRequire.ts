@@ -5,11 +5,14 @@ import * as codeMirrorLanguage from '@codemirror/language';
 import * as codeMirrorAutocomplete from '@codemirror/autocomplete';
 import * as codeMirrorCommands from '@codemirror/commands';
 import * as codeMirrorLint from '@codemirror/lint';
+import * as codeMirrorLangHtml from '@codemirror/lang-html';
+import * as codeMirrorLangMarkdown from '@codemirror/lang-markdown';
+import * as codeMirrorLanguageData from '@codemirror/language-data';
+
 import * as lezerHighlight from '@lezer/highlight';
 import * as lezerCommon from '@lezer/common';
 import * as lezerMarkdown from '@lezer/markdown';
-import * as codeMirrorLangHtml from '@codemirror/lang-html';
-import * as codeMirrorLanguageData from '@codemirror/language-data';
+
 
 // Exposes CodeMirror libraries to plugins.
 //
@@ -21,12 +24,14 @@ const libraryNameToPackage: Record<string, any> = {
 	'@codemirror/language': codeMirrorLanguage,
 	'@codemirror/autocomplete': codeMirrorAutocomplete,
 	'@codemirror/commands': codeMirrorCommands,
-	'@codemirror/highlight': lezerHighlight,
 	'@codemirror/lint': codeMirrorLint,
 	'@codemirror/lang-html': codeMirrorLangHtml,
+	'@codemirror/lang-markdown': codeMirrorLangMarkdown,
 	'@codemirror/language-data': codeMirrorLanguageData,
+
 	'@lezer/common': lezerCommon,
 	'@lezer/markdown': lezerMarkdown,
+	'@lezer/highlight': lezerHighlight,
 };
 
 const codeMirrorRequire = (library: string) => {

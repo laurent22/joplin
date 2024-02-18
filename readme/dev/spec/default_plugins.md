@@ -32,12 +32,12 @@ For example,
 
 ## Patching the plugin
 
-Some plugins need patching. To create or update a plugin's patch, run the `patch` command in the `packages/default-plugins/` directory.
+Some plugins need patching. To create or update a plugin's patch, run the `patch-plugin` command in the `packages/default-plugins/` directory.
 
 For example,
 ```shell
 $ cd packages/default-plugins
-$ yarn run patch plugin.id.here
+$ yarn patch-plugin plugin.id.here
 ```
 
 The script will create a temporary directory in which changes can be made. Do not stage the changes that should appear in the patch.

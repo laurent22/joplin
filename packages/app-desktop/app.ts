@@ -11,7 +11,7 @@ import AlarmServiceDriverNode from '@joplin/lib/services/AlarmServiceDriverNode'
 import Logger, { TargetType } from '@joplin/utils/Logger';
 import Setting from '@joplin/lib/models/Setting';
 import actionApi from '@joplin/lib/services/rest/actionApi.desktop';
-import BaseApplication from '@joplin/lib/BaseApplication';
+import BaseApplication, { StartOptions } from '@joplin/lib/BaseApplication';
 import DebugService from '@joplin/lib/debug/DebugService';
 import { _, setLocale } from '@joplin/lib/locale';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
@@ -248,26 +248,6 @@ class Application extends BaseApplication {
 		});
 	}
 
-	private async checkForLegacyTemplates() {
-		const templatesDir = `${Setting.value('profileDir')}/templates`;
-		if (await shim.fsDriver().exists(templatesDir)) {
-			try {
-				const files = await shim.fsDriver().readDirStats(templatesDir);
-				for (const file of files) {
-					if (file.path.endsWith('.md')) {
-						// There is at least one template.
-						this.store().dispatch({
-							type: 'CONTAINS_LEGACY_TEMPLATES',
-						});
-						break;
-					}
-				}
-			} catch (error) {
-				reg.logger().error(`Failed to read templates directory: ${error}`);
-			}
-		}
-	}
-
 	private async initPluginService() {
 		if (this.initPluginServiceDone_) return;
 		this.initPluginServiceDone_ = true;
@@ -399,14 +379,12 @@ class Application extends BaseApplication {
 		eventManager.on(EventName.ResourceChange, handleResourceChange);
 	}
 
-	public async start(argv: string[]): Promise<any> {
+	public async start(argv: string[], startOptions: StartOptions = null): Promise<any> {
 		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
 		// insert an extra argument so that they can be processed in a consistent way everywhere.
 		if (!bridge().electronIsDev()) argv.splice(1, 0, '.');
 
-		argv = await super.start(argv);
-
-		// this.crashDetectionHandler();
+		argv = await super.start(argv, startOptions);
 
 		await this.applySettingsSideEffects();
 
@@ -545,8 +523,6 @@ class Application extends BaseApplication {
 			value: Setting.value('flagOpenDevTools'),
 		});
 
-		await this.checkForLegacyTemplates();
-
 		// Note: Auto-update is a misnomer in the code.
 		// The code below only checks, if a new version is available.
 		// We only allow Windows and macOS users to automatically check for updates
@@ -648,7 +624,11 @@ class Application extends BaseApplication {
 
 		await this.setupOcrService();
 
-		eventManager.on(EventName.OcrServiceResourcesProcessed, () => {
+		eventManager.on(EventName.OcrServiceResourcesProcessed, async () => {
+			await ResourceService.instance().indexNoteResources();
+		});
+
+		eventManager.on(EventName.NoteResourceIndexed, async () => {
 			SearchEngine.instance().scheduleSyncTables();
 		});
 

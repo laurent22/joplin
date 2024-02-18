@@ -1,5 +1,38 @@
 # Joplin Android Changelog
 
+## [android-v2.14.6](https://github.com/laurent22/joplin/releases/tag/android-v2.14.6) (Pre-release) - 2024-02-09T12:41:18Z
+
+- Improved: Improve search engine error handling when preparing text for search (#9871 by Henry Heino)
+- Improved: Updated packages @js-draw/material-icons (v1.16.1), @react-native-community/netinfo (v11.2.1), @react-native-community/slider (v4.5.0), async-mutex (v0.4.1), follow-redirects (v1.15.5), js-draw (v1.16.1), moment (v2.30.1), react-native-document-picker (v9.1.0), react-native-localize (v3.0.6), react-native-paper (v5.11.7), react-native-safe-area-context (v4.8.2), react-native-share (v10.0.2), react-native-webview (v13.6.4), sass (v1.69.7), sharp (v0.33.2), sqlite3 (v5.1.7)
+- Fixed: Correctly search HTML-entity encoded text (#9694)
+- Fixed: Fix deeply-nested subnotebook titles invisible in the folder dropdown (#9906) (#9858 by Henry Heino)
+- Fixed: Fix regression: Crash when opening appearance/sync settings on some devices (#9864) (#7974 by Henry Heino)
+- Fixed: Fix share to Joplin when only "All notes" has been opened (#9876) (#9863 by Henry Heino)
+- Fixed: Increase space available for Notebook icon (#9877) (#9475 by [@pedr](https://github.com/pedr))
+
+## [android-v2.14.5](https://github.com/laurent22/joplin/releases/tag/android-v2.14.5) (Pre-release) - 2024-02-02T23:09:50Z
+
+- Improved: Allow note viewer to extend to the edge of the screen while pinch zooming (#9820) (#9819 by Henry Heino)
+- Improved: Do not allow switching the sync target if not all resources are downloaded (#9263)
+- Improved: Removed ability to search by note ID to fix issue with certain plugins (#9769)
+- Improved: Updated packages react-native-paper (v5.11.6)
+- Fixed: Andoid: Fix crash on opening settings on some devices (#9806) (#7974 by Henry Heino)
+- Fixed: Clear "Some items cannot be synchronised" banner after situation is resolved (#9157)
+- Fixed: Detect faster left-right swipes to open the sidemenu (#9802) (#9142 by Henry Heino)
+- Fixed: Fix broken synchronisation link in welcome notes (#9804) (#9799 by Henry Heino)
+- Fixed: Fix note editor errors/logs not sent to Joplin's logs (#9808) (#9807 by Henry Heino)
+- Fixed: Fix synchronization happens every 10 seconds even if nothing has changed (#9814) (#9800 by Henry Heino)
+
+## [android-v2.14.4](https://github.com/laurent22/joplin/releases/tag/android-v2.14.4) (Pre-release) - 2024-01-26T10:46:28Z
+
+- New: Add support for showing only lines of log that contain a filter (#9728 by Henry Heino)
+- Improved: Allow setting a minimum app version on the sync target (#9778)
+- Improved: Display an error if a resource cannot be downloaded (cbf7e24)
+- Improved: Don't log OneDrive `Authorization` tokens (#9707) (#9706 by Henry Heino)
+- Improved: Hide advanced settings by default (#9730 by Henry Heino)
+- Improved: Updated packages @js-draw/material-icons (v1.15.0), follow-redirects (v1.15.4), fs-extra (v11.2.0), js-draw (v1.15.0), react, react-native-device-info (v10.12.0), react-native-image-picker (v7.1.0), react-native-paper (v5.11.5), react-native-vector-icons (v10.0.3), sharp (v0.33.1)
+- Fixed: Fix AWS S3 sync error (#9696) (#8891 by Henry Heino)
+
 ## [android-v2.14.3](https://github.com/laurent22/joplin/releases/tag/android-v2.14.3) (Pre-release) - 2024-01-06T12:30:29Z
 
 - Improved: Fix table-of-contents links to headings with duplicate content (#9610) (#9594 by Henry Heino)

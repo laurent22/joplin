@@ -109,6 +109,22 @@ describe('services_rest_Api', () => {
 		expect(response.items.length).toBe(2);
 	}));
 
+	it('should return folders as a tree', async () => {
+		const folder1 = await Folder.save({ title: 'Folder 1' });
+		await Folder.save({ title: 'Folder 2', parent_id: folder1.id });
+		await Folder.save({ title: 'Folder 3', parent_id: folder1.id });
+
+		const response = await api.route(RequestMethod.GET, 'folders', { as_tree: 1 });
+		expect(response).toMatchObject([{
+			title: 'Folder 1',
+			id: folder1.id,
+			children: [
+				{ title: 'Folder 2' },
+				{ title: 'Folder 3' },
+			],
+		}]);
+	});
+
 	it('should fail on invalid paths', (async () => {
 		const hasThrown = await checkThrowAsync(async () => await api.route(RequestMethod.GET, 'schtroumpf'));
 		expect(hasThrown).toBe(true);

@@ -75,17 +75,27 @@ describe('OcrService', () => {
 		expect(processedResource2.updated_time).toBeGreaterThan(resource2.updated_time);
 
 		await service.dispose();
-	});
 
-	it('should process PDF resources', async () => {
-		const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/dummy.pdf` });
+		// On CI these tests can randomly throw the error "Exceeded timeout of
+		// 90000 ms for a test.". So for now increase the timeout and if that's
+		// not sufficient it means the test is simply stuck, and we should use
+		// `jest.retryTimes(2)`
+	}, 60000 * 5);
+
+	test.each([
+		// Use embedded text (skip OCR)
+		['dummy.pdf', 'Dummy PDF file'],
+		['multi_page__embedded_text.pdf', 'This is a test.\nTesting...\nThis PDF has 3 pages.\nThis is page 3.'],
+		['multi_page__no_embedded_text.pdf', 'This is a multi-page PDF\nwith no embedded text.\nPage 2: more text.\nThe third page.'],
+	])('should process PDF resources', async (samplePath: string, expectedText: string) => {
+		const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/${samplePath}` });
 
 		const service = newOcrService();
 
 		await service.processResources();
 
 		const processedResource: ResourceEntity = await Resource.load(resource.id);
-		expect(processedResource.ocr_text).toBe('Dummy PDF file');
+		expect(processedResource.ocr_text).toBe(expectedText);
 		expect(processedResource.ocr_status).toBe(ResourceOcrStatus.Done);
 		expect(processedResource.ocr_error).toBe('');
 

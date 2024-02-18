@@ -41,6 +41,8 @@ const useVisibleRange = (itemsPerLine: number, scrollTop: number, listSize: Size
 	}, [noteCount, itemsPerLine]);
 
 	// console.info('itemsPerLine', itemsPerLine);
+	// console.info('listSize.height', listSize.height);
+	// console.info('itemSize.height', itemSize.height);
 	// console.info('startLineIndexFloat', startLineIndexFloat);
 	// console.info('endLineIndexFloat', endLineIndexFloat);
 	// console.info('visibleLineCount', visibleLineCount);
