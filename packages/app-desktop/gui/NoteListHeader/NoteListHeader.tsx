@@ -5,7 +5,8 @@ import { CSSProperties } from 'styled-components';
 import NoteListHeaderItem from './NoteListHeaderItem';
 import { OnItemClickHander } from './types';
 import useDragAndDrop, { DataType } from './useDragAndDrop';
-import useOnContextMenu from './utils/useOnContextMenu';
+import useContextMenu from './utils/useContextMenu';
+import depNameToNoteProp from '@joplin/lib/services/noteList/depNameToNoteProp';
 
 interface Props {
 	template: string;
@@ -21,7 +22,7 @@ const defaultHeight = 26;
 
 export default (props: Props) => {
 	const { onItemDragStart, onItemDragOver, onItemDrop, onResizerDragStart, onResizerDragEnd, dropAt, draggedItem } = useDragAndDrop(props.columns);
-	const onContextMenu = useOnContextMenu(props.columns);
+	const onContextMenu = useContextMenu(props.columns);
 
 	const items: React.JSX.Element[] = [];
 
@@ -36,7 +37,7 @@ export default (props: Props) => {
 			isFirst={isFirst}
 			key={column.name}
 			column={column}
-			isCurrent={`note.${props.notesSortOrderField}` === column.name}
+			isCurrent={`note.${props.notesSortOrderField}` === depNameToNoteProp(column.name)}
 			isReverse={props.notesSortOrderReverse}
 			onClick={props.onItemClick}
 			onDragStart={onItemDragStart}

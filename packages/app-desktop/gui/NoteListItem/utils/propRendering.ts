@@ -3,7 +3,7 @@ import { ListRendererDependency } from '@joplin/lib/services/plugins/api/noteLis
 import time from '@joplin/lib/time';
 
 export default (name: ListRendererDependency, value: any) => {
-	if (!name.endsWith('.display')) return value;
+	if (!name.endsWith(':display')) return value;
 
 	const getStringValue = () => {
 		const baseName = name.substring(0, name.length - 8) as ListRendererDependency;
@@ -13,6 +13,7 @@ export default (name: ListRendererDependency, value: any) => {
 			'note.user_created_time': () => time.unixMsToLocalDateTime(value),
 			'note.updated_time': () => time.unixMsToLocalDateTime(value),
 			'note.created_time': () => time.unixMsToLocalDateTime(value),
+			'note.todo_completed': () => value ? time.unixMsToLocalDateTime(value) : '-',
 		};
 
 		const renderer = renderers[baseName];
@@ -29,5 +30,6 @@ export default (name: ListRendererDependency, value: any) => {
 		return value.toString();
 	};
 
-	return { display: getStringValue() };
+	return getStringValue();
+	// return { display: getStringValue() };
 };

@@ -30,7 +30,7 @@ const generateListRenderDependencyType = (tables: any[]) => {
 		for (const col of table.columns) {
 			const name = col.propertyName;
 			output.push(`'${stringToSingular(table.name)}.${name}'`);
-			output.push(`'${stringToSingular(table.name)}.${name}.display'`);
+			output.push(`'${stringToSingular(table.name)}.${name}:display'`);
 		}
 	}
 

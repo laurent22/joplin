@@ -8,6 +8,7 @@ import getNoteTitleHtml from './getNoteTitleHtml';
 import prepareViewProps from './prepareViewProps';
 import * as Mustache from 'mustache';
 import Tag from '@joplin/lib/models/Tag';
+import { unique } from '@joplin/lib/array';
 
 interface RenderedNote {
 	id: string;
@@ -41,7 +42,7 @@ const compileTemplate = (template: string, itemValueTemplates: ListRendererItemV
 		}
 
 		const classes = ['item'];
-		if (column.name === 'note.title') classes.push('-main');
+		if (column.name === 'note.titleHtml') classes.push('-main');
 
 		output.push(`<div class="${classes.join(' ')}" style="${style.join('; ')}">${template.replace(/{{value}}/g, valueReplacement)}</div>`);
 	}
@@ -52,7 +53,9 @@ const compileTemplate = (template: string, itemValueTemplates: ListRendererItemV
 export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listRenderer: ListRenderer, highlightedWords: string[], itemIndex: number, columns: NoteListColumns) => {
 	const [renderedNote, setRenderedNote] = useState<RenderedNote>(null);
 
-	const dependencies = columns && columns.length ? columns.map(c => c.name) as ListRendererDependency[] : listRenderer.dependencies;
+	let dependencies = columns && columns.length ? columns.map(c => c.name) as ListRendererDependency[] : [];
+	if (listRenderer.dependencies) dependencies = dependencies.concat(listRenderer.dependencies);
+	dependencies = unique(dependencies);
 
 	useAsyncEffect(async (event) => {
 		const renderNote = async (): Promise<void> => {
@@ -78,8 +81,6 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 
 			if (renderedNote && renderedNote.hash === viewHash) return null;
 
-			// console.info('RENDER', note.id, renderedNote ? renderedNote.hash : 'NULL', viewHash);
-
 			const titleHtml = getNoteTitleHtml(highlightedWords, Note.displayTitle(note));
 			const viewProps = await prepareViewProps(
 				dependencies,
@@ -98,7 +99,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 
 			if (event.cancelled) return null;
 
-			const toRender = listRenderer.multiColumns ? compileTemplate(listRenderer.itemTemplate, listRenderer.itemValueTemplates, columns, listRenderer.dependencies) : listRenderer.itemTemplate;
+			const toRender = listRenderer.multiColumns ? compileTemplate(listRenderer.itemTemplate, listRenderer.itemValueTemplates, columns) : listRenderer.itemTemplate;
 
 			setRenderedNote({
 				id: note.id,

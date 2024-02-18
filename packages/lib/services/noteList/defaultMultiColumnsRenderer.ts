@@ -9,6 +9,10 @@ const renderer: ListRenderer = {
 
 	flow: ItemFlow.TopToBottom,
 
+	dependencies: [
+		'note.todo_completed',
+	],
+
 	multiColumns: true,
 
 	itemSize: {
@@ -43,7 +47,14 @@ const renderer: ListRenderer = {
 	`,
 
 	itemValueTemplates: {
-		'note.todo_completed': '{{#note.todo_completed}}[x]{{/note.todo_completed}}{{^note.todo_completed}}[ ]{{/note.todo_completed}}',
+		'note.is_todo': // html
+			`
+			{{#note.is_todo}}
+				<div class="checkbox">
+					<input data-id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
+				</div>
+			{{/note.is_todo}}
+		`,
 	},
 
 	onRenderNote: async (props: any) => {

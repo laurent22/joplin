@@ -22,19 +22,21 @@ const prepareViewProps = async (
 	}
 
 	for (const dep of dependencies) {
-		const baseName = dep.endsWith('.display') ? dep.substring(0, dep.length - 8) : dep;
+		const baseName = dep.endsWith(':display') ? dep.substring(0, dep.length - 8) : dep;
 
 		if (baseName.startsWith('note.')) {
 			const splitted = baseName.split('.');
 			if (splitted.length !== 2) throw new Error(`Invalid dependency name: ${dep}`);
 			const propName = splitted.pop();
+			const fullPropName = dep.endsWith(':display') ? `${propName}:display` : propName;
+
 			if (!output.note) output.note = {};
 			if (baseName === 'note.titleHtml') {
 				output.note.titleHtml = noteTitleHtml;
 			} else if (baseName === 'note.isWatched') {
-				output.note[propName] = propRendering(dep, noteIsWatched);
+				output.note[fullPropName] = propRendering(dep, noteIsWatched);
 			} else if (baseName === 'note.tags') {
-				output.note[propName] = propRendering(dep, noteTags);
+				output.note[fullPropName] = propRendering(dep, noteTags);
 			} else {
 				// The notes in the state only contain the properties defined in
 				// Note.previewFields(). It means that if a view request a
@@ -43,7 +45,7 @@ const prepareViewProps = async (
 				// load by default.
 				if (!(propName in note)) note = await Note.load(note.id);
 				if (!(propName in note)) throw new Error(`Invalid dependency name: ${dep}`);
-				output.note[propName] = propRendering(dep, (note as any)[propName]);
+				output.note[fullPropName] = propRendering(dep, (note as any)[propName]);
 			}
 		}
 

@@ -3,18 +3,15 @@ import { dropHeaderAt } from './useDragAndDrop';
 
 const defaultColumns: NoteListColumns = [
 	{
-		name: 'note.todo_completed',
-		title: ' ',
+		name: 'note.todo_completed:display',
 		width: 40,
 	},
 	{
-		name: 'note.user_updated_time',
-		title: 'Updated',
+		name: 'note.user_updated_time:display',
 		width: 100,
 	},
 	{
-		name: 'note.title',
-		title: 'Title',
+		name: 'note.titleHtml',
 		width: 0,
 	},
 ];
@@ -25,46 +22,46 @@ describe('useDragAndDrop', () => {
 		[
 			defaultColumns,
 			{
-				name: 'note.title',
+				name: 'note.titleHtml',
 			},
 			{
-				columnName: 'note.todo_completed',
+				columnName: 'note.todo_completed:display',
 				location: 'before',
 			},
 			[
-				'note.title',
-				'note.todo_completed',
-				'note.user_updated_time',
+				'note.titleHtml',
+				'note.todo_completed:display',
+				'note.user_updated_time:display',
 			],
 		],
 		[
 			defaultColumns,
 			{
-				name: 'note.title',
+				name: 'note.titleHtml',
 			},
 			{
-				columnName: 'note.user_updated_time',
+				columnName: 'note.user_updated_time:display',
 				location: 'before',
 			},
 			[
-				'note.todo_completed',
-				'note.title',
-				'note.user_updated_time',
+				'note.todo_completed:display',
+				'note.titleHtml',
+				'note.user_updated_time:display',
 			],
 		],
 		[
 			defaultColumns,
 			{
-				name: 'note.title',
+				name: 'note.titleHtml',
 			},
 			{
-				columnName: 'note.user_updated_time',
+				columnName: 'note.user_updated_time:display',
 				location: 'after',
 			},
 			[
-				'note.todo_completed',
-				'note.user_updated_time',
-				'note.title',
+				'note.todo_completed:display',
+				'note.user_updated_time:display',
+				'note.titleHtml',
 			],
 		],
 	])('should drop columns', (columns, header, insertAt, expected) => {

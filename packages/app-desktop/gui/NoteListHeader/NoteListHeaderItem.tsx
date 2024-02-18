@@ -2,6 +2,7 @@ import * as React from 'react';
 import { CSSProperties, useMemo, useCallback } from 'react';
 import { OnItemClickHander } from './types';
 import { NoteListColumn } from '@joplin/lib/services/plugins/api/noteListType';
+import getColumnTitle from './utils/getColumnTitle';
 
 interface Props {
 	isFirst: boolean;
@@ -53,7 +54,7 @@ export default (props: Props) => {
 			classes.push(props.isReverse ? 'fa-chevron-down' : 'fa-chevron-up');
 			chevron = <i className={classes.join(' ')}></i>;
 		}
-		return <span className="titlewrapper">{column.title}{chevron}</span>;
+		return <span className="titlewrapper">{getColumnTitle(column.name, true)}{chevron}</span>;
 	};
 
 	const renderResizer = () => {

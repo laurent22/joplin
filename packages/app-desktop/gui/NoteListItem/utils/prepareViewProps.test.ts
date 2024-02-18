@@ -101,7 +101,7 @@ describe('prepareViewProps', () => {
 	it('should provide a default prop rendering', async () => {
 		const note = await Note.save({ title: 'test' });
 
-		expect(await prepare(['note.user_updated_time.display'], note)).toEqual({
+		expect(await prepare(['note.user_updated_time:display'], note)).toEqual({
 			note: {
 				user_updated_time: time.unixMsToLocalDateTime(note.updated_time),
 			},

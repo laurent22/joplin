@@ -135,7 +135,7 @@ const renderer: ListRenderer = {
 				<div class="checkbox">
 					<input data-id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
 				</div>
-			{{/note.is_todo}}	
+			{{/note.is_todo}}
 			<div class="title" data-id="{{note.id}}">
 				<i class="watchedicon fa fa-share-square"></i>
 				<span>{{{note.titleHtml}}}</span>

@@ -14,6 +14,7 @@ import { ButtonSize, buttonSizePx } from '../Button/Button';
 import Setting from '@joplin/lib/models/Setting';
 import { OnItemClickHander } from '../NoteListHeader/types';
 import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
+import depNameToNoteProp from '@joplin/lib/services/noteList/depNameToNoteProp';
 
 const logger = Logger.create('NoteListWrapper');
 
@@ -124,7 +125,7 @@ export default function NoteListWrapper(props: Props) {
 	}, [props.size, noteListControlsHeight, theme.noteListHeaderHeight]);
 
 	const onHeaderItemClick: OnItemClickHander = useCallback(event => {
-		const field = event.name.split('.')[1];
+		const field = depNameToNoteProp(event.name as any).split('.')[1];
 
 		if (Setting.value('notes.sortOrder.field') === field) {
 			Setting.toggle('notes.sortOrder.reverse');
