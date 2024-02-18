@@ -148,8 +148,6 @@ export interface ListRenderer {
 	 */
 	itemTemplate: string;
 
-	itemCellTemplate?: string;
-
 	/**
 	 * This property applies only when `multiColumns` is `true`. It is used to render something
 	 * different for each note property.

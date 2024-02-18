@@ -3,11 +3,10 @@ import { ListRenderer, ListRendererDependency, NoteListColumns } from '@joplin/l
 import Note from '@joplin/lib/models/Note';
 import { NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
-import compileTemplate from '@joplin/lib/services/noteList/compileTemplate';
+import renderTemplate from '@joplin/lib/services/noteList/renderTemplate';
 import { createHash } from 'crypto';
 import getNoteTitleHtml from './getNoteTitleHtml';
 import prepareViewProps from './prepareViewProps';
-import * as Mustache from 'mustache';
 import Tag from '@joplin/lib/models/Tag';
 import { unique } from '@joplin/lib/array';
 
@@ -53,6 +52,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 			if (renderedNote && renderedNote.hash === viewHash) return null;
 
 			const titleHtml = getNoteTitleHtml(highlightedWords, Note.displayTitle(note));
+
 			const viewProps = await prepareViewProps(
 				dependencies,
 				note,
@@ -70,12 +70,15 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 
 			if (event.cancelled) return null;
 
-			const toRender = listRenderer.multiColumns ? compileTemplate(listRenderer.itemTemplate, listRenderer.itemCellTemplate, listRenderer.itemValueTemplates, columns) : listRenderer.itemTemplate;
-
 			setRenderedNote({
 				id: note.id,
 				hash: viewHash,
-				html: Mustache.render(toRender, view),
+				html: renderTemplate(
+					columns,
+					listRenderer.itemTemplate,
+					listRenderer.itemValueTemplates,
+					view,
+				),
 			});
 		};
 

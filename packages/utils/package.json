@@ -10,6 +10,7 @@
     "./fs": "./dist/fs.js",
     "./html": "./dist/html.js",
     "./Logger": "./dist/Logger.js",
+    "./object": "./dist/object.js",
     "./markdown": "./dist/markdown.js",
     "./net": "./dist/net.js",
     "./time": "./dist/time.js",

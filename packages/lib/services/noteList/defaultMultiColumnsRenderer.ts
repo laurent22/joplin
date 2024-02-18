@@ -61,15 +61,16 @@ const renderer: ListRenderer = {
 
 	itemTemplate: // html
 		`
-		<div class="row {{#item.selected}}-selected{{/item.selected}}">{{{cells}}}</div>
-	`,
-
-	itemCellTemplate: // html
-		`
-		<div class="content {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
-			{{value}}
-		</div>
-	`,
+			<div class="row {{#item.selected}}-selected{{/item.selected}}">
+				{{#cells}}
+					<div data-name="{{name}}" class="item" style="{{{styleHtml}}}">
+						<div class="content {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
+							{{{contentHtml}}}
+						</div>
+					</div>
+				{{/cells}}
+			</div>
+		`,
 
 	itemValueTemplates: {
 		'note.is_todo': // html
