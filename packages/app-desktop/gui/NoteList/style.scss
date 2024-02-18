@@ -20,19 +20,19 @@
 	}
 }
 
-.note-list-item {
-	display: flex;
+// .note-list-item {
+// 	display: flex;
 
-	> .item {
-		overflow: hidden;
-		white-space: nowrap;
-		opacity: 0.6;
-	}
+// 	> .item {
+// 		overflow: hidden;
+// 		white-space: nowrap;
+// 		opacity: 0.6;
+// 	}
 
-	> .item.-main {
-		opacity: 1;
-	}
-}
+// 	> .item.-main {
+// 		opacity: 1;
+// 	}
+// }
 
 .note-list-item-wrapper {
 	border-color: var(--joplin-color);

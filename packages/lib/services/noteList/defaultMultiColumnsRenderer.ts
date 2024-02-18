@@ -11,6 +11,7 @@ const renderer: ListRenderer = {
 
 	dependencies: [
 		'note.todo_completed',
+		'item.selected',
 	],
 
 	multiColumns: true,
@@ -22,16 +23,34 @@ const renderer: ListRenderer = {
 
 	itemCss: // css
 		`	
-		> .item {
+		> .row {
 			display: flex;
-			align-items: center;
-			box-sizing: border-box;
-			padding-left: 8px;
+			height: 100%;
 
-			> .content {
-				text-overflow: ellipsis;
+			> .item {
+				display: flex;
+				align-items: center;
+				box-sizing: border-box;
+				padding-left: 8px;
 				overflow: hidden;
+				opacity: 0.6;
+
+				> .content {
+					text-overflow: ellipsis;
+					overflow: hidden;
+					white-space: nowrap;
+				}
 			}
+
+			> .item.-main,
+			> .item[data-name="note.is_todo"],
+			> .item[data-name="note.titleHtml"] {
+				opacity: 1;
+			}
+		}
+
+		> .row.-selected {
+			background-color: var(--joplin-selected-color);
 		}
 	`,
 
@@ -41,7 +60,13 @@ const renderer: ListRenderer = {
 	},
 
 	itemTemplate: // html
-		`<div class="content {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
+		`
+		<div class="row {{#item.selected}}-selected{{/item.selected}}">{{{cells}}}</div>
+	`,
+
+	itemCellTemplate: // html
+		`
+		<div class="content {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
 			{{value}}
 		</div>
 	`,

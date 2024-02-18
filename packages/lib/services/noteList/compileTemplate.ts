@@ -1,6 +1,7 @@
+import { escapeHtml } from '../../string-utils';
 import { ListRendererItemValueTemplates, NoteListColumns } from '../plugins/api/noteListType';
 
-export default (template: string, itemValueTemplates: ListRendererItemValueTemplates, columns: NoteListColumns) => {
+export default (itemTemplate: string, itemCellTemplate: string, itemValueTemplates: ListRendererItemValueTemplates, columns: NoteListColumns) => {
 	const output: string[] = [];
 
 	for (const column of columns) {
@@ -23,10 +24,16 @@ export default (template: string, itemValueTemplates: ListRendererItemValueTempl
 		}
 
 		const classes = ['item'];
-		if (column.name === 'note.titleHtml') classes.push('-main');
 
-		output.push(`<div class="${classes.join(' ')}" style="${style.join('; ')}">${template.replace(/{{value}}/g, valueReplacement)}</div>`);
+		output.push(`<div data-name="${escapeHtml(column.name)}" class="${classes.join(' ')}" style="${style.join('; ')}">${itemCellTemplate.replace(/{{value}}/g, valueReplacement)}</div>`);
 	}
 
-	return output.join('');
+	let outputHtml = output.join('');
+
+	if (itemTemplate) {
+		if (!itemTemplate.includes('{{{cells}}}')) throw new Error('`itemTemplate` must contain a {{{cells}}} tag');
+		outputHtml = itemTemplate.replace(/{{{cells}}}/, outputHtml);
+	}
+
+	return outputHtml;
 };

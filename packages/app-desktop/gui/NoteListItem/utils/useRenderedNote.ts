@@ -70,7 +70,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 
 			if (event.cancelled) return null;
 
-			const toRender = listRenderer.multiColumns ? compileTemplate(listRenderer.itemTemplate, listRenderer.itemValueTemplates, columns) : listRenderer.itemTemplate;
+			const toRender = listRenderer.multiColumns ? compileTemplate(listRenderer.itemTemplate, listRenderer.itemCellTemplate, listRenderer.itemValueTemplates, columns) : listRenderer.itemTemplate;
 
 			setRenderedNote({
 				id: note.id,
