@@ -24,10 +24,17 @@ markJsUtils.markKeyword = (mark, keyword, stringUtils, extraOptions = null) => {
 	const isBasicSearch = ['ja', 'zh', 'ko'].indexOf(keyword.scriptType) >= 0;
 
 	let value = keyword.value;
-	let accuracy = keyword.accuracy ? keyword.accuracy : { value: 'exactly', limiters: ':;.,-–—‒_(){}[]!\'"+='.split('') };
-	if (isBasicSearch) accuracy = 'partially';
+
+	const getAccuracy = (keyword) => {
+		if (isBasicSearch) return 'partially';
+		if (keyword.type === 'regex') return 'complementary';
+		if (keyword.accuracy) return keyword.accuracy;
+		return keyword.value.length >= 2 ? 'partially' : { value: 'exactly', limiters: ':;.,-–—‒_(){}[]!\'"+='.split('') };
+	};
+
+	const accuracy = getAccuracy(keyword);
+
 	if (keyword.type === 'regex') {
-		accuracy = 'complementary';
 		// Remove the trailing wildcard and "accuracy = complementary" will take
 		// care of highlighting the relevant keywords.
 

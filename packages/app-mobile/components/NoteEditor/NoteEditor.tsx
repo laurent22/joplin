@@ -15,7 +15,7 @@ import { EditorControl, EditorSettings, SelectionRange } from './types';
 import { _ } from '@joplin/lib/locale';
 import MarkdownToolbar from './MarkdownToolbar/MarkdownToolbar';
 import { ChangeEvent, EditorEvent, EditorEventType, SelectionRangeChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
-import { EditorCommandType, EditorKeymap, EditorLanguageType, PluginData, SearchState } from '@joplin/editor/types';
+import { EditorCommandType, EditorKeymap, EditorLanguageType, ContentScriptData, SearchState } from '@joplin/editor/types';
 import supportsCommand from '@joplin/editor/CodeMirror/editorCommands/supportsCommand';
 import SelectionFormatting, { defaultSelectionFormatting } from '@joplin/editor/SelectionFormatting';
 import Logger from '@joplin/utils/Logger';
@@ -240,8 +240,8 @@ const useEditorControl = (
 				injectJS('document.activeElement?.blur();');
 			},
 
-			setPlugins: async (plugins: PluginData[]) => {
-				injectJS(`cm.setPlugins(${JSON.stringify(plugins)});`);
+			setContentScripts: async (plugins: ContentScriptData[]) => {
+				injectJS(`cm.setContentScripts(${JSON.stringify(plugins)});`);
 			},
 
 			setSearchState: setSearchStateCallback,

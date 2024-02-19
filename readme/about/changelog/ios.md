@@ -1,5 +1,10 @@
 # Joplin iOS Changelog
 
+## [ios-v12.14.5](https://github.com/laurent22/joplin/releases/tag/ios-v12.14.5) - 2024-02-19T10:46:51Z
+
+- Improved: Migrate profile in preparation for trash feature (115eb5d)
+- Improved: Updated packages tar-stream (v3.1.7)
+
 ## [ios-v12.14.4](https://github.com/laurent22/joplin/releases/tag/ios-v12.14.4) - 2024-02-09T12:47:39Z
 
 - Improved: Improve search engine error handling when preparing text for search (#9871 by Henry Heino)
