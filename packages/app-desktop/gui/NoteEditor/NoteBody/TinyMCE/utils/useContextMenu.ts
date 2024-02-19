@@ -7,7 +7,6 @@ import { ContextMenuOptions, ContextMenuItemType } from '../../../utils/contextM
 import { menuItems } from '../../../utils/contextMenu';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
-import convertToScreenCoordinates from '../../../../utils/convertToScreenCoordinates';
 import Setting from '@joplin/lib/models/Setting';
 
 import Resource from '@joplin/lib/models/Resource';
@@ -25,15 +24,21 @@ function contextMenuElement(editor: any, x: number, y: number) {
 	const iframes = document.getElementsByClassName('tox-edit-area__iframe');
 	if (!iframes.length) return null;
 
-	const iframeRect = convertToScreenCoordinates(Setting.value('windowContentZoomFactor'), iframes[0].getBoundingClientRect());
+	const zoom = Setting.value('windowContentZoomFactor') / 100;
+	const xScreen = x / zoom;
+	const yScreen = y / zoom;
 
-	if (iframeRect.x < x && iframeRect.y < y && iframeRect.right > x && iframeRect.bottom > y) {
-		const relativeX = x - iframeRect.x;
-		const relativeY = y - iframeRect.y;
-		return editor.getDoc().elementFromPoint(relativeX, relativeY);
+	// We use .elementFromPoint to handle the case where a dialog is covering
+	// part of the editor.
+	const targetElement = document.elementFromPoint(xScreen, yScreen);
+	if (targetElement !== iframes[0]) {
+		return null;
 	}
 
-	return null;
+	const iframeRect = iframes[0].getBoundingClientRect();
+	const relativeX = xScreen - iframeRect.left;
+	const relativeY = yScreen - iframeRect.top;
+	return editor.getDoc().elementFromPoint(relativeX, relativeY);
 }
 
 interface ContextMenuActionOptions {
