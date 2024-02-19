@@ -1,15 +1,15 @@
 ---
 sidebar_position: 2
 ---
-# Creating a CodeMirror 6 plugin
+# Creating a Markdown editor plugin
 
-This guide demonstrates how to create a markdown editor plugin. It expects you to have first read [the table of contents tutorial](./toc_plugin.md) or have basic plugin development experience.
+This guide demonstrates how to create a Markdown editor plugin. It expects you to have first read [the table of contents tutorial](./toc_plugin.md) or have basic plugin development experience.
 
 :::note
 
-At the time of this writing,
-- The CodeMirror 6-based markdown editor is still in beta. It must be enabled in settings > general.
-- CodeMirror 6 plugins only work with Joplin version 2.14.6 or later.
+This guide describes how to create a plugin for Joplin's [CodeMirror 6](https://codemirror.net/)-based Markdown editor, which is still in beta. It must be enabled in settings > general.
+
+Plugins for this editor may not work in Joplin 2.13 or earlier.
 
 :::
 
@@ -18,7 +18,7 @@ At the time of this writing,
 
 ### Create the plugin
 
-Start by [creating the plugin with `yo joplin`](../get_started/plugins.md). The CodeMirror 6 editor is still new, so make sure the `joplin` generator is up-to-date.
+Start by [creating the plugin with `yo joplin`](../get_started/plugins.md). The beta Markdown editor is still new, so make sure the `joplin` generator is up-to-date.
 
 You should now have a directory structure similar to the following:
 ```text
@@ -49,7 +49,7 @@ At the time of this writing, this section was necessary. If Joplin 2.14 is no lo
 
 :::
 
-To create a plugin that supports CodeMirror 6, you'll want to update `webpack.config.js` to the latest version. Doing this allows importing CodeMirror packages without bundling additional copies of them with the plugin.
+To create a plugin that supports the beta editor, you'll want to update `webpack.config.js` to the latest version. Doing this allows importing CodeMirror packages without bundling additional copies of them with the plugin.
 
 To do this, replace the contents of `webpack.config.js` with [the unreleased version of `webpack.config.js` on Joplin's GitHub repository](https://github.com/laurent22/joplin/blob/dev/packages/generator-joplin/generators/app/templates/webpack.config.js).
 
@@ -471,7 +471,13 @@ The active line should now have a light-yellow background, but only when the "hi
 
 ## CodeMirror 5 compatibility
 
-Joplin's legacy markdown editor uses CodeMirror 5. The beta editor uses CodeMirror 6.
+:::note
+
+As of Joplin v2.14 we recommend that you create C0deMirror 6-based plugins. If you still need to support older versions of Joplin, you can target both CodeMirror 5 and CodeMirror 6. Follow the tutorial below for information on how to do this.
+
+:::
+
+Joplin's legacy markdown editor uses [CodeMirror 5](https://codemirror.net/5/). The beta editor uses CodeMirror 6.
 
 Unfortunately, the [CodeMirror 5 API](https://codemirror.net/5/) and [CodeMirror 6 API](https://codemirror.net/)s are very different. As such, you'll likely need two different content scripts — one for CodeMirror 5 and one for CodeMirror 6. [This pull request](https://github.com/roman-r-m/joplin-plugin-quick-links/pull/15/files#diff-a19ae4175adf4e5173549901c8535f2a45278f8a907da485899660c08c1c520b) provides an example of how CodeMirror 6 support might be added to an existing plugin.
 
@@ -591,7 +597,7 @@ export default (context: { contentScriptId: string, postMessage: any }) => {
 
 :::warning
 
-Although Joplin does provide a limited CodeMirror 5 compatibility layer in the CodeMirror 6 editor, in the future, **new plugins may be unable to use this compatibility layer**.
+Although Joplin does provide a limited CodeMirror 5 compatibility layer in the CodeMirror 6 editor, in the future, **new plugins will be unable to use this compatibility layer**.
 
 :::
 
