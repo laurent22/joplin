@@ -129,6 +129,7 @@ export interface ItemsFtEntity {
   'id'?: any | null;
   'item_id'?: any | null;
   'item_type'?: any | null;
+  'original_title'?: any | null;
   'reserved1'?: any | null;
   'reserved2'?: any | null;
   'reserved3'?: any | null;
@@ -168,6 +169,7 @@ export interface ItemsNormalizedEntity {
   'id'?: number | null;
   'item_id'?: string;
   'item_type'?: number;
+  'original_title'?: string;
   'reserved1'?: number | null;
   'reserved2'?: number | null;
   'reserved3'?: number | null;
@@ -254,6 +256,7 @@ export interface NotesNormalizedEntity {
   'is_todo'?: number;
   'latitude'?: number;
   'longitude'?: number;
+  'original_title'?: string;
   'parent_id'?: string;
   'source_url'?: string;
   'title'?: string;
@@ -589,6 +592,7 @@ export const databaseSchema: DatabaseTables = {
 		is_todo: { type: 'number' },
 		latitude: { type: 'number' },
 		longitude: { type: 'number' },
+		original_title: { type: 'string' },
 		parent_id: { type: 'string' },
 		source_url: { type: 'string' },
 		title: { type: 'string' },
@@ -603,6 +607,7 @@ export const databaseSchema: DatabaseTables = {
 		id: { type: 'number' },
 		item_id: { type: 'string' },
 		item_type: { type: 'number' },
+		original_title: { type: 'string' },
 		reserved1: { type: 'number' },
 		reserved2: { type: 'number' },
 		reserved3: { type: 'number' },
@@ -613,11 +618,21 @@ export const databaseSchema: DatabaseTables = {
 		user_updated_time: { type: 'number' },
 		type_: { type: 'number' },
 	},
+	tags_with_note_count: {
+		created_time: { type: 'number' },
+		id: { type: 'string' },
+		note_count: { type: 'any' },
+		title: { type: 'string' },
+		todo_completed_count: { type: 'any' },
+		updated_time: { type: 'number' },
+		type_: { type: 'number' },
+	},
 	items_fts: {
 		body: { type: 'any' },
 		id: { type: 'any' },
 		item_id: { type: 'any' },
 		item_type: { type: 'any' },
+		original_title: { type: 'any' },
 		reserved1: { type: 'any' },
 		reserved2: { type: 'any' },
 		reserved3: { type: 'any' },
@@ -650,15 +665,6 @@ export const databaseSchema: DatabaseTables = {
 	items_fts_stat: {
 		id: { type: 'number' },
 		value: { type: 'any' },
-		type_: { type: 'number' },
-	},
-	tags_with_note_count: {
-		created_time: { type: 'number' },
-		id: { type: 'string' },
-		note_count: { type: 'any' },
-		title: { type: 'string' },
-		todo_completed_count: { type: 'any' },
-		updated_time: { type: 'number' },
 		type_: { type: 'number' },
 	},
 };
