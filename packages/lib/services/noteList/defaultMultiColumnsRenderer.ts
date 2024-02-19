@@ -42,7 +42,6 @@ const renderer: ListRenderer = {
 				}
 			}
 
-			> .item.-main,
 			> .item[data-name="note.is_todo"],
 			> .item[data-name="note.titleHtml"] {
 				opacity: 1;
