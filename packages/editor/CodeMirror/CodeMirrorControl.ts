@@ -1,5 +1,5 @@
 import { EditorView } from '@codemirror/view';
-import { EditorCommandType, EditorControl, EditorSettings, LogMessageCallback, PluginData, SearchState } from '../types';
+import { EditorCommandType, EditorControl, EditorSettings, LogMessageCallback, ContentScriptData, SearchState } from '../types';
 import CodeMirror5Emulation from './CodeMirror5Emulation/CodeMirror5Emulation';
 import editorCommands, { EditorCommandFunction } from './editorCommands/editorCommands';
 import { EditorSelection, Extension, StateEffect } from '@codemirror/state';
@@ -136,7 +136,7 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		});
 	}
 
-	public setPlugins(plugins: PluginData[]) {
+	public setContentScripts(plugins: ContentScriptData[]) {
 		return this._pluginControl.setPlugins(plugins);
 	}
 
