@@ -440,7 +440,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 			return;
 		}
 
-		this.execCommand(commandName);
+		return this.execCommand(commandName);
 	}
 
 	public commandExists(commandName: string) {
@@ -453,7 +453,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 			return;
 		}
 
-		CodeMirror5Emulation.commands[name as (keyof typeof CodeMirror5Emulation.commands)](this);
+		return CodeMirror5Emulation.commands[name as (keyof typeof CodeMirror5Emulation.commands)](this);
 	}
 }
 

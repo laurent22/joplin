@@ -60,4 +60,14 @@ describe('CodeMirrorControl', () => {
 		control.insertText('Test...');
 		expect(updateFn).toHaveBeenCalled();
 	});
+
+	it('should support adding custom editor commands', () => {
+		const control = createEditorControl('');
+		const command = jest.fn(() => 'test');
+		control.registerCommand('myTestCommand', command);
+
+		expect(control.supportsCommand('myTestCommand')).toBe(true);
+		expect(control.execCommand('myTestCommand')).toBe('test');
+		expect(command).toHaveBeenCalledTimes(1);
+	});
 });

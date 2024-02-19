@@ -1,5 +1,11 @@
 # Joplin Android Changelog
 
+## [android-v2.14.7](https://github.com/laurent22/joplin/releases/tag/android-v2.14.7) (Pre-release) - 2024-02-19T10:40:10Z
+
+- Improved: Migrate profile in preparation for trash feature (115eb5d)
+- Improved: Updated packages tar-stream (v3.1.7)
+- Fixed: Fix full text search broken on Android 7 and earlier (#9914) (#9905 by Henry Heino)
+
 ## [android-v2.14.6](https://github.com/laurent22/joplin/releases/tag/android-v2.14.6) (Pre-release) - 2024-02-09T12:41:18Z
 
 - Improved: Improve search engine error handling when preparing text for search (#9871 by Henry Heino)

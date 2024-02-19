@@ -10,7 +10,7 @@ import {
 import swapLine, { SwapLineDirection } from './swapLine';
 import { closeSearchPanel, findNext, findPrevious, openSearchPanel, replaceAll, replaceNext } from '@codemirror/search';
 
-type EditorCommandFunction = (editor: EditorView)=> void;
+export type EditorCommandFunction = (editor: EditorView)=> void;
 
 const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	[EditorCommandType.Undo]: undo,
