@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Mr-Kanister <viger_gtrc@simplelogin.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -183,6 +185,8 @@ msgid ""
 "%s is not optimised for synchronising many small files so your initial "
 "synchronisation will be slow."
 msgstr ""
+"%s ist nicht für die Synchronisation kleiner Dateien optimiert, wodurch die "
+"erste Synchronisation langsam sein wird."
 
 #: packages/lib/services/ReportService.ts:247
 #: packages/lib/services/ReportService.ts:248
@@ -594,7 +598,7 @@ msgstr "Durchsuchen ..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:231
 msgid "Built-in"
-msgstr ""
+msgstr "Eingebaut"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:84
 msgid "Bulleted List"
@@ -857,6 +861,9 @@ msgid ""
 "application again. Make sure you create a backup first by exporting all your "
 "notes as JEX."
 msgstr ""
+"Schließe die Anwendung, lösche dein Profil in „%s“ und starte die Anwendung "
+"erneut. Stelle sicher, dass du zuerst ein Backup aller Notizen als JEX "
+"exportierst."
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 #: packages/app-desktop/gui/MenuBar.tsx:655
@@ -1361,7 +1368,7 @@ msgstr "Erweiterung „%s“ löschen?"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:102
 msgid "Delete profile \"%s\""
-msgstr "Lösche Profil \"%s\""
+msgstr "Lösche Profil „%s“"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:444
 msgid "Delete selected notes"
@@ -1824,7 +1831,7 @@ msgstr "Notizenverlauf aktivieren"
 
 #: packages/lib/models/Setting.ts:845
 msgid "Enable optical character recognition (OCR)"
-msgstr ""
+msgstr "Aktiviere die optische Zeichenerkennung (OCR)"
 
 #: packages/lib/models/Setting.ts:1195
 msgid "Enable PDF viewer"
@@ -1967,14 +1974,12 @@ msgid "Evernote Export File (as Markdown)"
 msgstr "Evernote Export-Datei (als Markdown)"
 
 #: packages/lib/services/interop/InteropService.ts:91
-#, fuzzy
 msgid "Evernote Export Files (Directory, as HTML)"
-msgstr "Evernote Export-Datei (als HTML)"
+msgstr "Evernote Export-Dateien (Verzeichnis, als HTML)"
 
 #: packages/lib/services/interop/InteropService.ts:100
-#, fuzzy
 msgid "Evernote Export Files (Directory, as Markdown)"
-msgstr "Evernote Export-Datei (als Markdown)"
+msgstr "Evernote Export-Dateien (Verzeichnis, als Markdown)"
 
 #: packages/app-cli/app/command-exit.ts:11
 msgid "Exits the application."
@@ -2089,9 +2094,8 @@ msgstr "Dateisystem"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:204
 #: packages/app-mobile/components/screens/LogScreen.tsx:205
-#, fuzzy
 msgid "Filter"
-msgstr "Tags filtern"
+msgstr "Filter"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:193
 msgid "Filter tags"
@@ -2279,9 +2283,8 @@ msgid "Hide advanced"
 msgstr "Erweitertes verstecken"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:562
-#, fuzzy
 msgid "Hide Advanced Settings"
-msgstr "Erweiterte Einstellungen anzeigen"
+msgstr "Erweiterte Einstellungen verstecken"
 
 #: packages/server/src/routes/admin/users.ts:203
 msgid "Hide disabled"
@@ -2447,6 +2450,7 @@ msgstr ""
 #: packages/lib/services/synchronizer/syncInfoUtils.ts:431
 msgid "In order to synchronise, please upgrade your application to version %s+"
 msgstr ""
+"Um zu synchronisieren, aktualisiere die Anwendung bitte auf Version %s+"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:101
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:195
@@ -3935,9 +3939,8 @@ msgid "Search for..."
 msgstr "Suche nach..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:141
-#, fuzzy
 msgid "Search hidden"
-msgstr "Suchen"
+msgstr "Suche versteckt"
 
 #: packages/app-desktop/gui/NoteListControls/commands/focusSearch.ts:6
 msgid "Search in all the notes"
@@ -3948,9 +3951,8 @@ msgid "Search in current note"
 msgstr "Aktuelle Notiz durchsuchen"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:141
-#, fuzzy
 msgid "Search shown"
-msgstr "Suchen"
+msgstr "Suche angezeigt"
 
 #: packages/app-cli/app/gui/FolderListWidget.js:51
 msgid "Search:"
@@ -4176,12 +4178,16 @@ msgstr "Solarisiert hell"
 msgid ""
 "Some attachments could not be downloaded. Please try to download them again."
 msgstr ""
+"Manche Anhänge konnten nicht heruntergeladen werden. Bitte versuche, sie "
+"erneut herunterzuladen."
 
 #: packages/lib/models/settings/settingValidations.ts:17
 msgid ""
 "Some attachments need to be downloaded. Set the attachment download mode to "
 "\"always\" and try again."
 msgstr ""
+"Manche Anhänge müssen heruntergeladen werden. Setze das Verhalten für das "
+"Herunterladen von Anhängen auf „Immer“ und versuche es erneut."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:621
 #: packages/app-mobile/components/ScreenHeader.tsx:576
@@ -4199,12 +4205,11 @@ msgstr ""
 "Informationen zu erhalten."
 
 #: packages/lib/models/settings/settingValidations.ts:23
-#, fuzzy
 msgid ""
 "Some items could not be synchronised. Please try to synchronise them first."
 msgstr ""
-"Manche Einträge können nicht synchronisiert werden. Drücke um mehr "
-"Informationen zu erhalten."
+"Manche Einträge konnten nicht synchronisiert werden. Bitte versuche zuerst, "
+"diese zu synchronisieren."
 
 #: packages/lib/models/Setting.ts:1030
 msgid "Sort notebooks by"
@@ -4542,13 +4547,12 @@ msgstr ""
 "Vielen Dank! Das Joplin Cloud-Konto ist nun eingerichtet und einsatzbereit."
 
 #: packages/lib/utils/joplinCloud.ts:167
-#, fuzzy
 msgid ""
 "The [Web Clipper](%s) is a browser extension that allows you to save web "
 "pages and screenshots from your browser."
 msgstr ""
-"Joplin Web-Clipper ermöglicht das Speichern von Webseiten und Screenshots "
-"aus deinem Browser in Joplin."
+"Der [Web Clipper](%s) ist eine Browser-Erweiterung, welche dir erlaubt, "
+"Webseiten und Bildschirmfotos aus deinem Browser zu speichern."
 
 #: packages/lib/services/profileConfig/index.ts:105
 msgid ""
@@ -4656,11 +4660,10 @@ msgstr ""
 "sehen."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:594
-#, fuzzy
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
-msgstr[0] "Die folgenden Anhänge werden auf Änderungen überwacht:"
-msgstr[1] "Die folgenden Anhänge werden auf Änderungen überwacht:"
+msgstr[0] "Der folgende Anhang entspricht deiner Suchanfrage:"
+msgstr[1] "Die folgenden Anhänge entsprechen deiner Suchanfrage:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:578
 msgid "The following attachments are being watched for changes:"
@@ -4752,6 +4755,13 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Das Synchronisationsziel konnte aus folgendem Grund nicht geändert werden: "
+"%s\n"
+"\n"
+"Falls der Fehler nicht behoben werden kann, musst du möglicherweise zuerst "
+"deine Daten löschen, indem du die folgenden Anweisungen befolgst:\n"
+"\n"
+"%s"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:615
 msgid ""
@@ -4902,7 +4912,7 @@ msgid ""
 msgstr ""
 "Dadurch können andere Nutzer ein Notizbuch zur gemeinsamen Bearbeitung mit "
 "dir teilen. Allerdings kannst du keine Notizbücher mit anderen teilen, wenn "
-"du die Funktion \"%s\" nicht hast."
+"du die Funktion „%s“ nicht hast."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:51
 #: packages/lib/services/ResourceEditWatcher/index.ts:224
@@ -5241,6 +5251,9 @@ msgid ""
 "Uninstall and reinstall the application. Make sure you create a backup first "
 "by exporting all your notes as JEX from the desktop application."
 msgstr ""
+"Deinstalliere die Anwendung und installieren sie dann neu. Stelle sicher, "
+"dass du zuerst ein Backup erstellst, indem du alle Notizen als JEX aus der "
+"Desktop-Anwendung exportierst."
 
 #: packages/lib/utils/processStartFlags.ts:170
 msgid "Unknown flag: %s"
@@ -5549,6 +5562,9 @@ msgid ""
 "When enabled, the application will scan your attachments and extract the "
 "text from it. This will allow you to search for text in these attachments."
 msgstr ""
+"Wenn aktiviert, wird die Anwendung deine Anhänge einlesen und Text aus ihnen "
+"extrahieren. Dies wird dir ermöglichen, nach Text innerhalb dieser Anhänge "
+"zu suchen."
 
 #: packages/app-desktop/ElectronAppWrapper.ts:178
 msgid "Window unresponsive."

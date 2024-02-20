@@ -75,6 +75,8 @@ class NoteItemComponent extends Component {
 			todo_completed: checked ? time.unixMs() : 0,
 		};
 		await Note.save(newNote);
+
+		this.props.dispatch({ type: 'NOTE_SORT' });
 	}
 
 	onPress() {

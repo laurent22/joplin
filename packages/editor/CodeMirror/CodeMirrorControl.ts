@@ -1,7 +1,7 @@
 import { EditorView } from '@codemirror/view';
-import { EditorCommandType, EditorControl, EditorSettings, LogMessageCallback, PluginData, SearchState } from '../types';
+import { EditorCommandType, EditorControl, EditorSettings, LogMessageCallback, ContentScriptData, SearchState } from '../types';
 import CodeMirror5Emulation from './CodeMirror5Emulation/CodeMirror5Emulation';
-import editorCommands from './editorCommands/editorCommands';
+import editorCommands, { EditorCommandFunction } from './editorCommands/editorCommands';
 import { Compartment, EditorSelection, Extension, StateEffect } from '@codemirror/state';
 import { updateLink } from './markdown/markdownCommands';
 import { SearchQuery, setSearchQuery } from '@codemirror/search';
@@ -17,6 +17,7 @@ interface Callbacks {
 
 export default class CodeMirrorControl extends CodeMirror5Emulation implements EditorControl {
 	private _pluginControl: PluginLoader;
+	private _userCommands: Map<string, EditorCommandFunction> = new Map();
 
 	public constructor(
 		editor: EditorView,
@@ -28,19 +29,28 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 	}
 
 	public supportsCommand(name: string) {
-		return name in editorCommands || super.commandExists(name);
+		return name in editorCommands || this._userCommands.has(name) || super.commandExists(name);
 	}
 
 	public override execCommand(name: string) {
-		if (name in editorCommands) {
-			editorCommands[name as EditorCommandType](this.editor);
+		let commandOutput;
+		if (this._userCommands.has(name)) {
+			commandOutput = this._userCommands.get(name)(this.editor);
+		} else if (name in editorCommands) {
+			commandOutput = editorCommands[name as EditorCommandType](this.editor);
 		} else if (super.commandExists(name)) {
-			super.execCommand(name);
+			commandOutput = super.execCommand(name);
 		}
 
 		if (name === EditorCommandType.Undo || name === EditorCommandType.Redo) {
 			this._callbacks.onUndoRedo();
 		}
+
+		return commandOutput;
+	}
+
+	public registerCommand(name: string, command: EditorCommandFunction) {
+		this._userCommands.set(name, command);
 	}
 
 	public undo() {
@@ -137,7 +147,7 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		};
 	}
 
-	public setPlugins(plugins: PluginData[]) {
+	public setContentScripts(plugins: ContentScriptData[]) {
 		return this._pluginControl.setPlugins(plugins);
 	}
 
