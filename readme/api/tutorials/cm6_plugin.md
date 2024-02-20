@@ -473,7 +473,7 @@ The active line should now have a light-yellow background, but only when the "hi
 
 :::note
 
-As of Joplin v2.14 we recommend that you create C0deMirror 6-based plugins. If you still need to support older versions of Joplin, you can target both CodeMirror 5 and CodeMirror 6. Follow the tutorial below for information on how to do this.
+As of Joplin v2.14 we recommend that you create CodeMirror 6-based plugins. If you still need to support older versions of Joplin, you can target both CodeMirror 5 and CodeMirror 6. Follow the tutorial below for information on how to do this.
 
 :::
 
