@@ -12,6 +12,8 @@ const renderer: ListRenderer = {
 	dependencies: [
 		'note.todo_completed',
 		'item.selected',
+		'note.is_shared',
+		'note.isWatched',
 	],
 
 	multiColumns: true,
@@ -46,10 +48,27 @@ const renderer: ListRenderer = {
 			> .item[data-name="note.titleHtml"] {
 				opacity: 1;
 			}
+
+			> .item > .content > .watchedicon {
+				display: none;
+				margin-right: 8px;
+			}
+		}
+
+		> .row.-watched > .item[data-name="note.titleHtml"] > .content > .watchedicon {
+			display: inline-block;
 		}
 
 		> .row.-selected {
 			background-color: var(--joplin-selected-color);
+		}
+
+		> .row.-shared {
+			color: var(--joplin-color-warn3);
+		}
+
+		> .row.-completed {
+			opacity: 0.5;
 		}
 	`,
 
@@ -60,11 +79,11 @@ const renderer: ListRenderer = {
 
 	itemTemplate: // html
 		`
-			<div class="row {{#item.selected}}-selected{{/item.selected}}">
+			<div class="row {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
 				{{#cells}}
 					<div data-name="{{name}}" class="item" style="{{{styleHtml}}}">
-						<div class="content {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
-							{{{contentHtml}}}
+						<div class="content">
+							<i class="watchedicon fa fa-share-square"></i>{{{contentHtml}}}
 						</div>
 					</div>
 				{{/cells}}

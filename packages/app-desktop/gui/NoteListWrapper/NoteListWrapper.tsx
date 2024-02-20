@@ -127,6 +127,11 @@ export default function NoteListWrapper(props: Props) {
 	const onHeaderItemClick: OnItemClickHander = useCallback(event => {
 		const field = depNameToNoteProp(event.name as any).split('.')[1];
 
+		if (!Setting.isAllowedEnumOption('notes.sortOrder.field', field)) {
+			logger.warn(`Unsupported sorting option: ${field}`);
+			return;
+		}
+
 		if (Setting.value('notes.sortOrder.field') === field) {
 			Setting.toggle('notes.sortOrder.reverse');
 		} else {
