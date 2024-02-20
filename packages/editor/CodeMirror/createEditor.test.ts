@@ -72,6 +72,7 @@ describe('createEditor', () => {
 			return `
 				exports.default = context => {
 					context.postMessage(context.pluginId);
+					return {};
 				};
 			`;
 		});
@@ -138,6 +139,7 @@ describe('createEditor', () => {
 			return `
 				exports.default = context => {
 					context.postMessage(context.pluginId);
+					return {};
 				};
 			`;
 		});
