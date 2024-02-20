@@ -120,9 +120,9 @@ export default function NoteListWrapper(props: Props) {
 	const noteListSize = useMemo(() => {
 		return {
 			width: props.size.width,
-			height: props.size.height - noteListControlsHeight - theme.noteListHeaderHeight,
+			height: props.size.height - noteListControlsHeight - (listRenderer.multiColumns ? theme.noteListHeaderHeight : 0),
 		};
-	}, [props.size, noteListControlsHeight, theme.noteListHeaderHeight]);
+	}, [props.size, noteListControlsHeight, theme.noteListHeaderHeight, listRenderer.multiColumns]);
 
 	const onHeaderItemClick: OnItemClickHander = useCallback(event => {
 		const field = depNameToNoteProp(event.name as any).split('.')[1];
@@ -140,6 +140,8 @@ export default function NoteListWrapper(props: Props) {
 	}, []);
 
 	const renderHeader = () => {
+		if (!listRenderer.multiColumns) return null;
+
 		return <NoteListHeader
 			height={theme.noteListHeaderHeight}
 			template={listRenderer.headerTemplate}

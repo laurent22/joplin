@@ -25,6 +25,10 @@ const renderer: ListRenderer = {
 
 	itemCss: // css
 		`	
+		& {
+			display: block;
+		}
+
 		> .row {
 			display: flex;
 			height: 100%;
