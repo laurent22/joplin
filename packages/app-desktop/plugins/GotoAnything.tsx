@@ -355,7 +355,7 @@ class Dialog extends React.PureComponent<Props, State> {
 						const row = results[i];
 						const path = Folder.folderPathString(this.props.folders, row.parent_id);
 						const originalNote = notes.find(note => note.id === row.id);
-						results[i] = { ...row, path: path, title: originalNote.title ?? row.title };
+						results[i] = { ...row, path: path, title: originalNote.title };
 					}
 				} else {
 					const limit = 20;
