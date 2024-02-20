@@ -6,6 +6,8 @@ import { EditorSelection, Extension, StateEffect } from '@codemirror/state';
 import { updateLink } from './markdown/markdownCommands';
 import { SearchQuery, setSearchQuery } from '@codemirror/search';
 import PluginLoader from './pluginApi/PluginLoader';
+import customEditorCompletion, { editorCompletionSource, enableLanguageDataAutocomplete } from './pluginApi/customEditorCompletion';
+import { CompletionSource } from '@codemirror/autocomplete';
 
 interface Callbacks {
 	onUndoRedo(): void;
@@ -25,6 +27,8 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		super(editor, _callbacks.onLogMessage);
 
 		this._pluginControl = new PluginLoader(this, _callbacks.onLogMessage);
+
+		this.addExtension(customEditorCompletion());
 	}
 
 	public supportsCommand(name: string) {
@@ -138,6 +142,16 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 	//
 	// CodeMirror-specific methods
 	//
+
+	public joplinExtensions = {
+		// Some plugins want to enable autocompletion from *just* that plugin, without also
+		// enabling autocompletion for text within code blocks (and other built-in completion
+		// sources).
+		// To support this, we need to provide extensions that wrap the built-in autocomplete.
+		// See https://discuss.codemirror.net/t/autocompletion-merging-override-in-config/7853
+		completionSource: (completionSource: CompletionSource) => editorCompletionSource.of(completionSource),
+		enableLanguageDataAutocomplete: enableLanguageDataAutocomplete,
+	};
 
 	public addExtension(extension: Extension) {
 		this.editor.dispatch({
