@@ -4,7 +4,8 @@
 // This is necessary. Having multiple copies of the CodeMirror libraries loaded can cause
 // the editor to not work properly.
 //
-import { lineNumbers, highlightActiveLineGutter, } from '@codemirror/view';
+import { lineNumbers, highlightActiveLineGutter, EditorView } from '@codemirror/view';
+import { ContentScriptContext } from 'api/types';
 //
 // For the above import to work, you may also need to add @codemirror/view as a dev dependency
 // to package.json. (For the type information only).
@@ -13,7 +14,7 @@ import { lineNumbers, highlightActiveLineGutter, } from '@codemirror/view';
 //  const { lineNumbers } = joplin.require('@codemirror/view');
 
 
-export default (_context: { contentScriptId: string }) => {
+export default (_context: ContentScriptContext) => {
 	return {
 		// - codeMirrorWrapper: A thin wrapper around CodeMirror 6, designed to be similar to the
 		//     CodeMirror 5 API. If running in CodeMirror 5, a CodeMirror object is provided instead.
@@ -29,6 +30,28 @@ export default (_context: { contentScriptId: string }) => {
 
 			// See https://codemirror.net/ for more built-in extensions and configuration
 			// options.
+
+			// We can also register editor commands. These commands can be later executed with:
+			//   joplin.commands.execute('editor.execCommand', { name: 'name-here', args: [] })
+			codeMirrorWrapper.registerCommand('wrap-selection-with-tag', (tagName: string) => {
+				const editor: EditorView = codeMirrorWrapper.editor;
+
+				// See https://codemirror.net/examples/change/
+				editor.dispatch(editor.state.changeByRange(range => {
+					const insertBefore = `<${tagName}>`;
+					const insertAfter = `</${tagName}>`;
+					return {
+						changes: [
+							{from: range.from, insert: insertBefore},
+							{from: range.to, insert: insertAfter},
+						],
+						range: range.extend(
+							range.from,
+							range.to + insertBefore.length + insertAfter.length,
+						),
+					};
+				}));
+			});
 		},
 
 		// There are two main ways to style the CodeMirror editor:
