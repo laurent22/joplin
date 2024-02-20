@@ -30,7 +30,6 @@ const PLUGIN_NAME = 'gotoAnything';
 interface GotoAnythingSearchResult {
 	id: string;
 	title: string;
-	original_title: string;
 	parent_id: string;
 	fields: string[];
 	fragments?: string;
@@ -319,7 +318,6 @@ class Dialog extends React.PureComponent<Props, State> {
 					return {
 						id: result.commandName,
 						title: result.title,
-						original_title: result.title,
 						parent_id: null,
 						fields: [],
 						type: BaseModel.TYPE_COMMAND,
@@ -533,10 +531,9 @@ class Dialog extends React.PureComponent<Props, State> {
 		const style = this.style();
 		const isSelected = getResultId(item) === this.state.selectedItemId;
 		const rowStyle = isSelected ? style.rowSelected : style.row;
-		const displayTitle = item.original_title ?? item.title;
 		const titleHtml = item.fragments
-			? `<span style="font-weight: bold; color: ${theme.color};">${displayTitle}</span>`
-			: surroundKeywords(this.state.keywords, displayTitle, `<span style="font-weight: bold; color: ${theme.searchMarkerColor}; background-color: ${theme.searchMarkerBackgroundColor}">`, '</span>', { escapeHtml: true });
+			? `<span style="font-weight: bold; color: ${theme.color};">${item.title}</span>`
+			: surroundKeywords(this.state.keywords, item.title, `<span style="font-weight: bold; color: ${theme.searchMarkerColor}; background-color: ${theme.searchMarkerBackgroundColor}">`, '</span>', { escapeHtml: true });
 
 		const fragmentsHtml = !item.fragments ? null : surroundKeywords(this.state.keywords, item.fragments, `<span style="color: ${theme.searchMarkerColor}; background-color: ${theme.searchMarkerBackgroundColor}">`, '</span>', { escapeHtml: true });
 

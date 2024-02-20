@@ -802,7 +802,6 @@ packages/lib/services/database/migrations/43.js
 packages/lib/services/database/migrations/44.js
 packages/lib/services/database/migrations/45.js
 packages/lib/services/database/migrations/46.js
-packages/lib/services/database/migrations/47.js
 packages/lib/services/database/migrations/index.js
 packages/lib/services/database/sqlStringToLines.js
 packages/lib/services/database/types.js

@@ -457,7 +457,6 @@ export default function queryBuilder(terms: Term[], useFts: boolean) {
 	SELECT
 	${tableName}.id,
 	${tableName}.title,
-	${tableName}.original_title,
 	${useFts ? 'offsets(notes_fts) AS offsets, matchinfo(notes_fts, \'pcnalx\') AS matchinfo,' : ''}
 	${tableName}.user_created_time,
 	${tableName}.user_updated_time,

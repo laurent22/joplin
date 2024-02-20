@@ -42,7 +42,6 @@ export interface ProcessResultsRow {
 	id: string;
 	parent_id: string;
 	title: string;
-	original_title: string;
 	offsets: string;
 	item_id: string;
 	user_updated_time: number;
@@ -71,8 +70,7 @@ export interface Terms {
 export default class SearchEngine {
 
 	public static instance_: SearchEngine = null;
-	public static relevantFieldsQuery = 'id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, todo_due, parent_id, latitude, longitude, altitude, source_url';
-	public static relevantFieldsInsert = `${SearchEngine.relevantFieldsQuery}, original_title`;
+	public static relevantFields = 'id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, todo_due, parent_id, latitude, longitude, altitude, source_url';
 	public static SEARCH_TYPE_AUTO = SearchType.Auto;
 	public static SEARCH_TYPE_BASIC = SearchType.Basic;
 	public static SEARCH_TYPE_NONLATIN_SCRIPT = SearchType.Nonlatin;
@@ -132,7 +130,7 @@ export default class SearchEngine {
 		while (noteIds.length) {
 			const currentIds = noteIds.splice(0, 100);
 			const notes = await Note.modelSelectAll(`
-				SELECT ${SearchEngine.relevantFieldsQuery}
+				SELECT ${SearchEngine.relevantFields}
 				FROM notes
 				WHERE id IN ("${currentIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`);
 			const queries = [];
@@ -141,9 +139,9 @@ export default class SearchEngine {
 				const note = notes[i];
 				const n = this.normalizeNote_(note);
 				queries.push({ sql: `
-				INSERT INTO notes_normalized(${SearchEngine.relevantFieldsInsert})
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-				params: [n.id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.todo_due, n.parent_id, n.latitude, n.longitude, n.altitude, n.source_url, note.title] },
+				INSERT INTO notes_normalized(${SearchEngine.relevantFields})
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+				params: [n.id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.todo_due, n.parent_id, n.latitude, n.longitude, n.altitude, n.source_url] },
 				);
 			}
 
@@ -216,7 +214,7 @@ export default class SearchEngine {
 
 				const noteIds = changes.map(a => a.item_id);
 				const notes = await Note.modelSelectAll(`
-					SELECT ${SearchEngine.relevantFieldsQuery}
+					SELECT ${SearchEngine.relevantFields}
 					FROM notes WHERE id IN ("${noteIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`,
 				);
 
@@ -229,9 +227,9 @@ export default class SearchEngine {
 						if (note) {
 							const n = this.normalizeNote_(note);
 							queries.push({ sql: `
-							INSERT INTO notes_normalized(${SearchEngine.relevantFieldsInsert})
-							VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-							params: [change.item_id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.todo_due, n.parent_id, n.latitude, n.longitude, n.altitude, n.source_url, note.title] });
+							INSERT INTO notes_normalized(${SearchEngine.relevantFields})
+							VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+							params: [change.item_id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.todo_due, n.parent_id, n.latitude, n.longitude, n.altitude, n.source_url] });
 							report.inserted++;
 						}
 					} else if (change.type === ItemChange.TYPE_DELETE) {
@@ -711,7 +709,6 @@ export default class SearchEngine {
 						matchinfo: Buffer.from(''),
 						offsets: '',
 						title: item.title || item.id,
-						original_title: item.title || item.id,
 						user_updated_time: item.user_updated_time || item.updated_time,
 						user_created_time: item.user_created_time || item.created_time,
 						fields: ['id'],
@@ -787,7 +784,6 @@ export default class SearchEngine {
 							SELECT
 								id,
 								title,
-								original_title,
 								user_updated_time,
 								offsets(items_fts) AS offsets,
 								matchinfo(items_fts, 'pcnalx') AS matchinfo,
