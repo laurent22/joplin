@@ -10,8 +10,6 @@ import { ViewPlugin, DecorationSet, ViewUpdate } from '@codemirror/view';
 import { ensureSyntaxTree } from '@codemirror/language';
 import { RangeSetBuilder } from '@codemirror/state';
 
-const baseLineDecoration = Decoration.line({ class: 'CodeMirror-line' });
-
 const regionStartDecoration = Decoration.line({
 	attributes: { class: 'cm-regionFirstLine' },
 });
@@ -194,10 +192,6 @@ const computeDecorations = (view: EditorView) => {
 				}
 			},
 		});
-
-		// For CodeMirror 5 compatibility, we add a CodeMirror-line decoration to all
-		// visible lines.
-		addDecorationToLines(from, to, baseLineDecoration);
 	}
 
 	// Decorations need to be sorted in ascending order first by start position,
