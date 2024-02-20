@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ListRenderer, ListRendererDependency, NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import Note from '@joplin/lib/models/Note';
-import { NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
+import { FolderEntity, NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import renderTemplate from '@joplin/lib/services/noteList/renderTemplate';
 import { createHash } from 'crypto';
@@ -9,6 +9,7 @@ import getNoteTitleHtml from './getNoteTitleHtml';
 import prepareViewProps from './prepareViewProps';
 import Tag from '@joplin/lib/models/Tag';
 import { unique } from '@joplin/lib/array';
+import Folder from '@joplin/lib/models/Folder';
 
 interface RenderedNote {
 	id: string;
@@ -18,6 +19,10 @@ interface RenderedNote {
 
 const hashContent = (content: any) => {
 	return createHash('sha1').update(JSON.stringify(content)).digest('hex');
+};
+
+const dependenciesInclude = (dependencies: ListRendererDependency[], baseName: ListRendererDependency) => {
+	return dependencies.includes(baseName) || dependencies.includes((`${baseName}:display`) as any);
 };
 
 export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listRenderer: ListRenderer, highlightedWords: string[], itemIndex: number, columns: NoteListColumns) => {
@@ -30,9 +35,14 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 	useAsyncEffect(async (event) => {
 		const renderNote = async (): Promise<void> => {
 			let noteTags: TagEntity[] = [];
+			let folder: FolderEntity = null;
 
-			if (dependencies.includes('note.tags')) {
+			if (dependenciesInclude(dependencies, 'note.tags')) {
 				noteTags = await Tag.tagsByNoteId(note.id, { fields: ['id', 'title'] });
+			}
+
+			if (dependencies.find(d => d.startsWith('note.folder'))) {
+				folder = await Folder.load(note.parent_id, { fields: ['id', 'title'] });
 			}
 
 			// Note: with this hash we're assuming that the list renderer
@@ -47,6 +57,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 				note.encryption_applied,
 				JSON.stringify(columns),
 				noteTags.map(t => t.title).sort().join(','),
+				folder ? folder.title : '',
 			]);
 
 			if (renderedNote && renderedNote.hash === viewHash) return null;
@@ -61,6 +72,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 				titleHtml,
 				isWatched,
 				noteTags,
+				folder,
 				itemIndex,
 			);
 

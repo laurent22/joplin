@@ -50,16 +50,30 @@ export type OnClickHandler = (event: OnClickEvent)=> Promise<void>;
 export type ListRendererDependency =
 	ListRendererDatabaseDependency |
 	'item.index' |
-	'item.size.width' |
-	'item.size.height' |
 	'item.selected' |
-	'note.titleHtml' |
+	'item.size.height' |
+	'item.size.width' |
+	'note.folder.title' |
 	'note.isWatched' |
-	'note.tags';
+	'note.tags:display' |
+	'note.tags' |
+	'note.titleHtml';
 
 export type ListRendererItemValueTemplates = Record<string, string>;
 
-export const columnNames = ['note.latitude:display', 'note.longitude:display', 'note.source_url:display', 'note.titleHtml', 'note.todo_completed:display', 'note.todo_due:display', 'note.user_created_time:display', 'note.user_updated_time:display', 'note.is_todo'] as const;
+export const columnNames = [
+	'note.folder.title',
+	'note.is_todo',
+	'note.latitude:display',
+	'note.longitude:display',
+	'note.source_url:display',
+	'note.tags:display',
+	'note.titleHtml',
+	'note.todo_completed:display',
+	'note.todo_due:display',
+	'note.user_created_time:display',
+	'note.user_updated_time:display',
+] as const;
 
 export type ColumnName = typeof columnNames[number];
 

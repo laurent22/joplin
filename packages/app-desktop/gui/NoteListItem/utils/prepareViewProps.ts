@@ -3,6 +3,7 @@ import { NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import { Size } from '@joplin/utils/types';
 import Note from '@joplin/lib/models/Note';
 import propRendering from './propRendering';
+import Folder from '@joplin/lib/models/Folder';
 
 const prepareViewProps = async (
 	dependencies: ListRendererDependency[],
@@ -12,6 +13,7 @@ const prepareViewProps = async (
 	noteTitleHtml: string,
 	noteIsWatched: boolean,
 	noteTags: TagEntity[],
+	folder: Folder | null,
 	itemIndex: number,
 ) => {
 	const output: any = {};
@@ -26,7 +28,7 @@ const prepareViewProps = async (
 
 		if (baseName.startsWith('note.')) {
 			const splitted = baseName.split('.');
-			if (splitted.length !== 2) throw new Error(`Invalid dependency name: ${dep}`);
+			if (splitted.length <= 1) throw new Error(`Invalid dependency name: ${dep}`);
 			const propName = splitted.pop();
 			const fullPropName = dep.endsWith(':display') ? `${propName}:display` : propName;
 
@@ -37,6 +39,9 @@ const prepareViewProps = async (
 				output.note[fullPropName] = propRendering(dep, noteIsWatched);
 			} else if (baseName === 'note.tags') {
 				output.note[fullPropName] = propRendering(dep, noteTags);
+			} else if (baseName === 'note.folder.title') {
+				if (!output.note.folder) output.note.folder = {};
+				output.note.folder[fullPropName] = propRendering(dep, folder);
 			} else {
 				// The notes in the state only contain the properties defined in
 				// Note.previewFields(). It means that if a view request a
