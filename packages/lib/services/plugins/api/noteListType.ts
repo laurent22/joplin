@@ -301,11 +301,11 @@ export const defaultListColumns = () => {
 	const columns: NoteListColumns = [
 		{
 			name: 'note.is_todo',
-			width: defaultWidth,
+			width: 30,
 		},
 		{
 			name: 'note.user_updated_time',
-			width: 100,
+			width: defaultWidth,
 		},
 		{
 			name: 'note.title',

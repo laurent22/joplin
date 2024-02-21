@@ -45,6 +45,11 @@ const renderer: ListRenderer = {
 					text-overflow: ellipsis;
 					overflow: hidden;
 					white-space: nowrap;
+
+					> .checkbox > input {
+						padding: 0;
+						margin: 0;
+					}
 				}
 			}
 
