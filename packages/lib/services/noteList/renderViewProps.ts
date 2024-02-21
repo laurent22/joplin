@@ -18,7 +18,7 @@ const renderViewProp = (name: ListRendererDependency, value: any, options: Rende
 		'note.user_created_time': () => time.unixMsToLocalDateTime(value),
 		'note.updated_time': () => time.unixMsToLocalDateTime(value),
 		'note.created_time': () => time.unixMsToLocalDateTime(value),
-		'note.todo_completed': () => value ? time.unixMsToLocalDateTime(value) : '-',
+		'note.todo_completed': () => value ? time.unixMsToLocalDateTime(value) : '',
 		'note.tags': () => value ? value.map((t: TagEntity) => t.title).join(', ') : '',
 		'note.title': () => options.noteTitleHtml,
 	};
