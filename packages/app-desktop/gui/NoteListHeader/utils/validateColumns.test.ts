@@ -6,7 +6,6 @@ const makeColumns = (props: any) => {
 	for (const p of props) {
 		columns.push({
 			name: 'note.title',
-			title: 'test',
 			width: 100,
 			...p,
 		});

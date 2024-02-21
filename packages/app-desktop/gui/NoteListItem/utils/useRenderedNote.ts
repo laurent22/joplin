@@ -4,6 +4,7 @@ import Note from '@joplin/lib/models/Note';
 import { FolderEntity, NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import renderTemplate from '@joplin/lib/services/noteList/renderTemplate';
+import renderViewProps from '@joplin/lib/services/noteList/renderViewProps';
 import { createHash } from 'crypto';
 import getNoteTitleHtml from './getNoteTitleHtml';
 import prepareViewProps from './prepareViewProps';
@@ -21,10 +22,6 @@ const hashContent = (content: any) => {
 	return createHash('sha1').update(JSON.stringify(content)).digest('hex');
 };
 
-const dependenciesInclude = (dependencies: ListRendererDependency[], baseName: ListRendererDependency) => {
-	return dependencies.includes(baseName) || dependencies.includes((`${baseName}:display`) as any);
-};
-
 export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listRenderer: ListRenderer, highlightedWords: string[], itemIndex: number, columns: NoteListColumns) => {
 	const [renderedNote, setRenderedNote] = useState<RenderedNote>(null);
 
@@ -37,7 +34,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 			let noteTags: TagEntity[] = [];
 			let folder: FolderEntity = null;
 
-			if (dependenciesInclude(dependencies, 'note.tags')) {
+			if (dependencies.includes('note.tags')) {
 				noteTags = await Tag.tagsByNoteId(note.id, { fields: ['id', 'title'] });
 			}
 
@@ -62,14 +59,14 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 
 			if (renderedNote && renderedNote.hash === viewHash) return null;
 
-			const titleHtml = getNoteTitleHtml(highlightedWords, Note.displayTitle(note));
+			const noteTitleHtml = getNoteTitleHtml(highlightedWords, Note.displayTitle(note));
 
 			const viewProps = await prepareViewProps(
 				dependencies,
 				note,
 				listRenderer.itemSize,
 				isSelected,
-				titleHtml,
+				noteTitleHtml,
 				isWatched,
 				noteTags,
 				folder,
@@ -81,6 +78,10 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 			const view = await listRenderer.onRenderNote(viewProps);
 
 			if (event.cancelled) return null;
+
+			await renderViewProps(view, [], {
+				noteTitleHtml: noteTitleHtml,
+			});
 
 			setRenderedNote({
 				id: note.id,

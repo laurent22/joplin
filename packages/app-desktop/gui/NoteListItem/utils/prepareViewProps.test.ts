@@ -1,10 +1,9 @@
 import { ListRendererDependency } from '@joplin/lib/services/plugins/api/noteListType';
-import { NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
+import { FolderEntity, NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import { Size } from '@joplin/utils/types';
 import prepareViewProps from './prepareViewProps';
 import Note from '@joplin/lib/models/Note';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
-import time from '@joplin/lib/time';
 
 // Same as `prepareViewProps` but with default arguments to make testing code simpler.
 const prepare = async (
@@ -15,6 +14,7 @@ const prepare = async (
 	noteTitleHtml = '',
 	noteIsWatched = false,
 	noteTags: TagEntity[] = [],
+	folder: FolderEntity = null,
 	itemIndex = 0,
 ) => {
 	return prepareViewProps(
@@ -25,6 +25,7 @@ const prepare = async (
 		noteTitleHtml,
 		noteIsWatched,
 		noteTags,
+		folder,
 		itemIndex,
 	);
 };
@@ -85,7 +86,7 @@ describe('prepareViewProps', () => {
 			},
 		});
 
-		expect(await prepare(['item.index'], note, {}, false, '', false, [], 5)).toEqual({
+		expect(await prepare(['item.index'], note, {}, false, '', false, [], null, 5)).toEqual({
 			item: {
 				index: 5,
 			},
@@ -94,16 +95,6 @@ describe('prepareViewProps', () => {
 		expect(await prepare(['note.tags'], note, {}, false, '', false, [{ id: '1', title: 'one' }])).toEqual({
 			note: {
 				tags: [{ id: '1', title: 'one' }],
-			},
-		});
-	});
-
-	it('should provide a default prop rendering', async () => {
-		const note = await Note.save({ title: 'test' });
-
-		expect(await prepare(['note.user_updated_time:display'], note)).toEqual({
-			note: {
-				user_updated_time: time.unixMsToLocalDateTime(note.updated_time),
 			},
 		});
 	});

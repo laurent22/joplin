@@ -4,15 +4,15 @@ import { ColumnName } from '@joplin/lib/services/plugins/api/noteListType';
 const titles: Record<ColumnName, ()=> string> = {
 	'note.folder.title': () => _('Notebook: %s', _('Title')),
 	'note.is_todo': () => _('To-do'),
-	'note.latitude:display': () => _('Latitude'),
-	'note.longitude:display': () => _('Longitude'),
-	'note.source_url:display': () => _('Source'),
-	'note.tags:display': () => _('Tags'),
-	'note.titleHtml': () => _('Title'),
-	'note.todo_completed:display': () => _('Completed'),
-	'note.todo_due:display': () => _('Due'),
-	'note.user_created_time:display': () => _('Created'),
-	'note.user_updated_time:display': () => _('Updated'),
+	'note.latitude': () => _('Latitude'),
+	'note.longitude': () => _('Longitude'),
+	'note.source_url': () => _('Source'),
+	'note.tags': () => _('Tags'),
+	'note.title': () => _('Title'),
+	'note.todo_completed': () => _('Completed'),
+	'note.todo_due': () => _('Due'),
+	'note.user_created_time': () => _('Created'),
+	'note.user_updated_time': () => _('Updated'),
 };
 
 const titlesForHeader: Partial<Record<ColumnName, ()=> string>> = {

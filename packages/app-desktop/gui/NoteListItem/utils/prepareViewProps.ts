@@ -1,9 +1,7 @@
 import { ListRendererDependency } from '@joplin/lib/services/plugins/api/noteListType';
-import { NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
+import { FolderEntity, NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import { Size } from '@joplin/utils/types';
 import Note from '@joplin/lib/models/Note';
-import propRendering from './propRendering';
-import Folder from '@joplin/lib/models/Folder';
 
 const prepareViewProps = async (
 	dependencies: ListRendererDependency[],
@@ -13,7 +11,7 @@ const prepareViewProps = async (
 	noteTitleHtml: string,
 	noteIsWatched: boolean,
 	noteTags: TagEntity[],
-	folder: Folder | null,
+	folder: FolderEntity | null,
 	itemIndex: number,
 ) => {
 	const output: any = {};
@@ -24,24 +22,21 @@ const prepareViewProps = async (
 	}
 
 	for (const dep of dependencies) {
-		const baseName = dep.endsWith(':display') ? dep.substring(0, dep.length - 8) : dep;
-
-		if (baseName.startsWith('note.')) {
-			const splitted = baseName.split('.');
+		if (dep.startsWith('note.')) {
+			const splitted = dep.split('.');
 			if (splitted.length <= 1) throw new Error(`Invalid dependency name: ${dep}`);
 			const propName = splitted.pop();
-			const fullPropName = dep.endsWith(':display') ? `${propName}:display` : propName;
 
 			if (!output.note) output.note = {};
-			if (baseName === 'note.titleHtml') {
+			if (dep === 'note.titleHtml') {
 				output.note.titleHtml = noteTitleHtml;
-			} else if (baseName === 'note.isWatched') {
-				output.note[fullPropName] = propRendering(dep, noteIsWatched);
-			} else if (baseName === 'note.tags') {
-				output.note[fullPropName] = propRendering(dep, noteTags);
-			} else if (baseName === 'note.folder.title') {
+			} else if (dep === 'note.isWatched') {
+				output.note[propName] = noteIsWatched;
+			} else if (dep === 'note.tags') {
+				output.note[propName] = noteTags;
+			} else if (dep === 'note.folder.title') {
 				if (!output.note.folder) output.note.folder = {};
-				output.note.folder[fullPropName] = propRendering(dep, folder);
+				output.note.folder[propName] = folder.title;
 			} else {
 				// The notes in the state only contain the properties defined in
 				// Note.previewFields(). It means that if a view request a
@@ -50,12 +45,12 @@ const prepareViewProps = async (
 				// load by default.
 				if (!(propName in note)) note = await Note.load(note.id);
 				if (!(propName in note)) throw new Error(`Invalid dependency name: ${dep}`);
-				output.note[fullPropName] = propRendering(dep, (note as any)[propName]);
+				output.note[propName] = (note as any)[propName];
 			}
 		}
 
-		if (baseName.startsWith('item.size.')) {
-			const splitted = baseName.split('.');
+		if (dep.startsWith('item.size.')) {
+			const splitted = dep.split('.');
 			if (splitted.length !== 3) throw new Error(`Invalid dependency name: ${dep}`);
 			const propName = splitted.pop();
 			if (!output.item) output.item = {};
@@ -64,12 +59,12 @@ const prepareViewProps = async (
 			output.item.size[propName] = (itemSize as any)[propName];
 		}
 
-		if (baseName === 'item.selected') {
+		if (dep === 'item.selected') {
 			if (!output.item) output.item = {};
 			output.item.selected = selected;
 		}
 
-		if (baseName === 'item.index') {
+		if (dep === 'item.index') {
 			if (!output.item) output.item = {};
 			output.item.index = itemIndex;
 		}

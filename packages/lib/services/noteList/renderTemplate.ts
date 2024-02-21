@@ -33,7 +33,7 @@ export default (columns: NoteListColumns, itemTemplate: string, itemValueTemplat
 				if (itemValueTemplates[name]) {
 					return Mustache.render(itemValueTemplates[name], view);
 				}
-				return name === 'note.titleHtml' ? this.value : escapeHtml(this.value);
+				return ['note.titleHtml', 'note.title'].includes(name) ? this.value : escapeHtml(this.value);
 			},
 		});
 	}
