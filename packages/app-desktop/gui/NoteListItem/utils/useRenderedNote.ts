@@ -79,9 +79,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 
 			if (event.cancelled) return null;
 
-			await renderViewProps(view, [], {
-				noteTitleHtml: noteTitleHtml,
-			});
+			await renderViewProps(view, [], { noteTitleHtml });
 
 			setRenderedNote({
 				id: note.id,

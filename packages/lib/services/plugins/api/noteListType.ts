@@ -28,24 +28,14 @@ export type OnChangeHandler = (event: OnChangeEvent)=> Promise<void>;
 export type OnClickHandler = (event: OnClickEvent)=> Promise<void>;
 
 /**
- * Most of these are the built-in note properties, such as `note.title`,
- * `note.todo_completed`, etc.
+ * Most of these are the built-in note properties, such as `note.title`, `note.todo_completed`, etc.
+ * complemented with special properties such as `note.isWatched`, to know if a note is currently
+ * opened in the external editor, and `note.tags` to get the list tags associated with the note.
  *
- * Additionally, the `item.*` properties are specific to the rendered item. The
- * most important being `item.selected`, which you can use to display the
- * selected note in a different way.
+ * ## Item properties
  *
- * Finally some special properties are provided to make it easier to render
- * notes. In particular, if possible prefer `note.titleHtml` to `note.title`
- * since some important processing has already been done on the string, such as
- * handling the search highlighter and escaping. Since it's HTML and already
- * escaped you would insert it using `{{{titleHtml}}}` (triple-mustache syntax,
- * which disables escaping).
- *
- * `notes.tag` gives you the list of tags associated with the note.
- *
- * `note.isWatched` tells you if the note is currently opened in an external
- * editor. In which case you would generally display some indicator.
+ * The `item.*` properties are specific to the rendered item. The most important being
+ * `item.selected`, which you can use to display the selected note in a different way.
  */
 export type ListRendererDependency =
 	ListRendererDatabaseDependency |
@@ -158,6 +148,42 @@ export interface ListRenderer {
 	 * In order to get syntax highlighting working here, it's recommended installing an editor
 	 * extension such as [es6-string-html VSCode
 	 * extension](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html)
+	 *
+	 * ## Default property rendering
+	 *
+	 * Certain properties are automatically rendered once inserted in the Mustache template. Those
+	 * are in particular all the date-related fields, such as `note.user_updated_time` or
+	 * `note.todo_completed`. Internally, those are timestamps in milliseconds, however when
+	 * rendered we display them as date/time strings using the user's preferred time format. Another
+	 * notable auto-rendered property is `note.title` which is going to include additional HTML,
+	 * such as the search markers.
+	 *
+	 * If you do not want this default rendering behaviour, for example if you want to display the
+	 * raw timestamps in milliseconds, you can simply return custom properties from
+	 * `onRenderNote()`. For example:
+	 *
+	 * ```typescript
+	 * onRenderNote: async (props: any) => {
+	 *     return {
+	 *         ...props,
+	 *         // Return the property under a different name
+	 *         updatedTimeMs: props.note.user_updated_time,
+	 *     }
+	 * },
+	 *
+	 * itemTemplate: // html
+	 *     `
+	 *     <div>
+	 *         Raw timestamp: {{updatedTimeMs}} <!-- This is **not** auto-rendered ->
+	 *         Formatted time: {{note.user_updated_time}} <!-- This is -->
+	 *     </div>
+	 * `,
+	 *
+	 * ```
+	 *
+	 * See
+	 * `[https://github.com/laurent22/joplin/blob/dev/packages/lib/services/noteList/renderViewProps.ts](renderViewProps.ts)`
+	 * for the list of properties that have a default rendering.
 	 */
 	itemTemplate: string;
 
@@ -228,17 +254,15 @@ export interface ListRenderer {
 	onRenderNote: OnRenderNoteHandler;
 
 	/**
-	 * This handler allows adding some interacivity to the note renderer -
-	 * whenever an input element within the item is changed (for example, when a
-	 * checkbox is clicked, or a text input is changed), this `onChange` handler
-	 * is going to be called.
+	 * This handler allows adding some interacivity to the note renderer - whenever an input element
+	 * within the item is changed (for example, when a checkbox is clicked, or a text input is
+	 * changed), this `onChange` handler is going to be called.
 	 *
-	 * You can inspect `event.elementId` to know which element had some changes,
-	 * and `event.value` to know the new value. `event.noteId` also tells you
-	 * what note is affected, so that you can potentially apply changes to it.
+	 * You can inspect `event.elementId` to know which element had some changes, and `event.value`
+	 * to know the new value. `event.noteId` also tells you what note is affected, so that you can
+	 * potentially apply changes to it.
 	 *
-	 * You specify the element ID, by setting a `data-id` attribute on the
-	 * input.
+	 * You specify the element ID, by setting a `data-id` attribute on the input.
 	 *
 	 * For example, if you have such a template:
 	 *
@@ -248,8 +272,18 @@ export interface ListRenderer {
 	 * </div>
 	 * ```
 	 *
-	 * The event handler will receive an event with `elementId` set to
-	 * `noteTitleInput`.
+	 * The event handler will receive an event with `elementId` set to `noteTitleInput`.
+	 *
+	 * ## Default event handlers
+	 *
+	 * Currently one click event is automatically handled:
+	 *
+	 * If there is a checkbox with a `data-id="todo-checkbox"` attribute is present, it is going to
+	 * automatically toggle the note to-do "completed" status.
+	 *
+	 * For example this is what is used in the default list renderer:
+	 *
+	 * `<input data-id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>`
 	 */
 	onChange?: OnChangeHandler;
 }
@@ -261,7 +295,7 @@ export interface NoteListColumn {
 
 export type NoteListColumns = NoteListColumn[];
 
-export const defaultWidth = 50;
+export const defaultWidth = 100;
 
 export const defaultListColumns = () => {
 	const columns: NoteListColumns = [

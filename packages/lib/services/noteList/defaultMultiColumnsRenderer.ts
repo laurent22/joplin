@@ -49,7 +49,7 @@ const renderer: ListRenderer = {
 			}
 
 			> .item[data-name="note.is_todo"],
-			> .item[data-name="note.titleHtml"] {
+			> .item[data-name="note.title"] {
 				opacity: 1;
 			}
 
@@ -59,7 +59,7 @@ const renderer: ListRenderer = {
 			}
 		}
 
-		> .row.-watched > .item[data-name="note.titleHtml"] > .content > .watchedicon {
+		> .row.-watched > .item[data-name="note.title"] > .content > .watchedicon {
 			display: inline-block;
 		}
 

@@ -11,6 +11,10 @@ interface Cell {
 }
 
 export default (columns: NoteListColumns, itemTemplate: string, itemValueTemplates: ListRendererItemValueTemplates, view: RenderNoteView) => {
+	// `note.title` is special and has already been rendered to HTML at this point, so we need
+	// to ensure the string is not going to be escaped.
+	itemTemplate = itemTemplate.replace(/\{\{note.title\}\}/g, '{{{note.title}}}');
+
 	if (!columns || !columns.length) return Mustache.render(itemTemplate, view);
 
 	const cells: Cell[] = [];

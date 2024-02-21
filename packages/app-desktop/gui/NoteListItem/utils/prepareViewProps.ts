@@ -16,11 +16,6 @@ const prepareViewProps = async (
 ) => {
 	const output: any = {};
 
-	if (dependencies.includes('note.title') && !dependencies.includes('note.titleHtml')) {
-		dependencies = dependencies.slice();
-		dependencies.push('note.titleHtml');
-	}
-
 	for (const dep of dependencies) {
 		if (dep.startsWith('note.')) {
 			const splitted = dep.split('.');
@@ -28,7 +23,7 @@ const prepareViewProps = async (
 			const propName = splitted.pop();
 
 			if (!output.note) output.note = {};
-			if (dep === 'note.titleHtml') {
+			if (dep === 'note.titleHtml') { // For backward compatibility
 				output.note.titleHtml = noteTitleHtml;
 			} else if (dep === 'note.isWatched') {
 				output.note[propName] = noteIsWatched;

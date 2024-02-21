@@ -38,7 +38,7 @@ const renderer: ListRenderer = {
 		'note.is_shared',
 		'note.is_todo',
 		'note.isWatched',
-		'note.titleHtml',
+		'note.title',
 		'note.todo_completed',
 	],
 
@@ -138,7 +138,7 @@ const renderer: ListRenderer = {
 			{{/note.is_todo}}
 			<div class="title" data-id="{{note.id}}">
 				<i class="watchedicon fa fa-share-square"></i>
-				<span>{{{note.titleHtml}}}</span>
+				<span>{{note.title}}</span>
 			</div>
 		</div>
 	`,

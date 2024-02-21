@@ -102,6 +102,8 @@ export default function NoteListWrapper(props: Props) {
 	const [controlHeight] = useState(theme.topRowHeight);
 	const listRenderer = useListRenderer(props.listRendererId, props.startupPluginsLoaded);
 	const newNoteButtonRef = useRef(null);
+	const isMultiColumns = listRenderer ? listRenderer.multiColumns : false;
+	const columns = isMultiColumns ? props.columns : null;
 
 	const { breakpoint, dynamicBreakpoints, lineCount } = useNoteListControlsBreakpoints(props.size.width, newNoteButtonRef);
 
@@ -120,9 +122,9 @@ export default function NoteListWrapper(props: Props) {
 	const noteListSize = useMemo(() => {
 		return {
 			width: props.size.width,
-			height: props.size.height - noteListControlsHeight - (listRenderer.multiColumns ? theme.noteListHeaderHeight : 0),
+			height: props.size.height - noteListControlsHeight - (isMultiColumns ? theme.noteListHeaderHeight : 0),
 		};
-	}, [props.size, noteListControlsHeight, theme.noteListHeaderHeight, listRenderer.multiColumns]);
+	}, [props.size, noteListControlsHeight, theme.noteListHeaderHeight, isMultiColumns]);
 
 	const onHeaderItemClick: OnItemClickHander = useCallback(event => {
 		const field = depNameToNoteProp(event.name as any).split('.')[1];
@@ -140,13 +142,13 @@ export default function NoteListWrapper(props: Props) {
 	}, []);
 
 	const renderHeader = () => {
-		if (!listRenderer.multiColumns) return null;
+		if (!listRenderer || !isMultiColumns) return null;
 
 		return <NoteListHeader
 			height={theme.noteListHeaderHeight}
 			template={listRenderer.headerTemplate}
 			onClick={listRenderer.onHeaderClick}
-			columns={props.columns}
+			columns={columns}
 			notesSortOrderField={props.notesSortOrderField}
 			notesSortOrderReverse={props.notesSortOrderReverse}
 			onItemClick={onHeaderItemClick}
@@ -160,7 +162,7 @@ export default function NoteListWrapper(props: Props) {
 			resizableLayoutEventEmitter={props.resizableLayoutEventEmitter}
 			size={noteListSize}
 			visible={props.visible}
-			columns={props.columns}
+			columns={columns}
 		/>;
 	};
 
