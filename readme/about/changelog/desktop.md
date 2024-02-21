@@ -1,5 +1,15 @@
 # Joplin Desktop Changelog
 
+## [v2.14.15](https://github.com/laurent22/joplin/releases/tag/v2.14.15) (Pre-release) - 2024-02-19T11:24:57Z
+
+- Improved: CodeMirror 6 plugin API: Improve ability to register custom commands ([#9956](https://github.com/laurent22/joplin/issues/9956) by Henry Heino)
+- Improved: Migrate profile in preparation for trash feature ([115eb5d](https://github.com/laurent22/joplin/commit/115eb5d))
+- Fixed: [#9870](https://github.com/laurent22/joplin/issues/9870): Fixed command palette not properly showing non-latin-characters ([#9916](https://github.com/laurent22/joplin/issues/9916)) ([#9870](https://github.com/laurent22/joplin/issues/9870) by [@pedr](https://github.com/pedr))
+- Fixed: Fix only one CodeMirror 6 content script loaded per plugin ([#9934](https://github.com/laurent22/joplin/issues/9934)) ([#9932](https://github.com/laurent22/joplin/issues/9932) by Henry Heino)
+- Fixed: GotoAnything does not return all the results in some cases ([#9944](https://github.com/laurent22/joplin/issues/9944))
+- Fixed: Highlight partial matches in search results ([#9958](https://github.com/laurent22/joplin/issues/9958))
+- Fixed: Rich text editor: Fix context menu not shown in some cases ([#9954](https://github.com/laurent22/joplin/issues/9954)) ([#9953](https://github.com/laurent22/joplin/issues/9953) by Henry Heino)
+
 ## [v2.14.14](https://github.com/laurent22/joplin/releases/tag/v2.14.14) (Pre-release) - 2024-02-10T16:03:08Z
 
 Trying to fix the Apple silicon version. If you are not on this platform you can skip this update.
