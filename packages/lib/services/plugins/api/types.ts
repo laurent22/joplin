@@ -534,6 +534,10 @@ export interface MarkdownItContentScriptModule extends Omit<ContentScriptModule,
 }
 
 export interface CodeMirrorControl {
+	/** Points to a CodeMirror 6 EditorView instance. */
+	editor: any;
+	cm6: any;
+
 	/** `extension` should be a [CodeMirror 6 extension](https://codemirror.net/docs/ref/#state.Extension). */
 	addExtension(extension: any|any[]): void;
 
