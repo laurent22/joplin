@@ -1,7 +1,7 @@
 import { EditorView } from '@codemirror/view';
 import { EditorCommandType, EditorControl, EditorSettings, LogMessageCallback, ContentScriptData, SearchState } from '../types';
 import CodeMirror5Emulation from './CodeMirror5Emulation/CodeMirror5Emulation';
-import editorCommands, { EditorCommandFunction } from './editorCommands/editorCommands';
+import editorCommands from './editorCommands/editorCommands';
 import { EditorSelection, Extension, StateEffect } from '@codemirror/state';
 import { updateLink } from './markdown/markdownCommands';
 import { SearchQuery, setSearchQuery } from '@codemirror/search';
@@ -17,9 +17,11 @@ interface Callbacks {
 	onLogMessage: LogMessageCallback;
 }
 
+type EditorUserCommand = (...args: any[])=> any;
+
 export default class CodeMirrorControl extends CodeMirror5Emulation implements EditorControl {
 	private _pluginControl: PluginLoader;
-	private _userCommands: Map<string, EditorCommandFunction> = new Map();
+	private _userCommands: Map<string, EditorUserCommand> = new Map();
 
 	public constructor(
 		editor: EditorView,
@@ -36,10 +38,10 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		return name in editorCommands || this._userCommands.has(name) || super.commandExists(name);
 	}
 
-	public override execCommand(name: string) {
+	public override execCommand(name: string, ...args: any[]) {
 		let commandOutput;
 		if (this._userCommands.has(name)) {
-			commandOutput = this._userCommands.get(name)(this.editor);
+			commandOutput = this._userCommands.get(name)(...args);
 		} else if (name in editorCommands) {
 			commandOutput = editorCommands[name as EditorCommandType](this.editor);
 		} else if (super.commandExists(name)) {
@@ -53,7 +55,7 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		return commandOutput;
 	}
 
-	public registerCommand(name: string, command: EditorCommandFunction) {
+	public registerCommand(name: string, command: EditorUserCommand) {
 		this._userCommands.set(name, command);
 	}
 
