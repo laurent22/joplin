@@ -1,5 +1,5 @@
 {
-  "name": "joplin-plugin-codemirror6-line-numbers",
+  "name": "joplin-plugin-codemirror-6-plugin",
   "version": "1.0.0",
   "scripts": {
     "dist": "webpack --env joplin-plugin-config=buildMain && webpack --env joplin-plugin-config=buildExtraScripts && webpack --env joplin-plugin-config=createArchive",
@@ -15,6 +15,8 @@
     "publish"
   ],
   "devDependencies": {
+    "@codemirror/view": "^6.24.0",
+    "@joplin/lib": "~2.9",
     "@types/node": "^18.7.13",
     "chalk": "^4.1.0",
     "copy-webpack-plugin": "^11.0.0",
@@ -24,9 +26,6 @@
     "ts-loader": "^9.3.1",
     "typescript": "^4.8.2",
     "webpack": "^5.74.0",
-    "webpack-cli": "^4.10.0",
-    "@joplin/lib": "~2.9",
-    "@codemirror/view": "6.22.2",
-    "@codemirror/autocomplete": "6.12.0"
+    "webpack-cli": "^4.10.0"
   }
 }
