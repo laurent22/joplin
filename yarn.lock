@@ -37327,6 +37327,7 @@ __metadata:
     node-gyp: 9.4.1
     nodemon: 3.0.3
     npm-package-json-lint: 7.1.0
+    sharp: ^0.33.2
     typescript: 5.2.2
   languageName: unknown
   linkType: soft
@@ -38055,7 +38056,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sharp@npm:0.33.2":
+"sharp@npm:0.33.2, sharp@npm:^0.33.2":
   version: 0.33.2
   resolution: "sharp@npm:0.33.2"
   dependencies:

@@ -22,6 +22,18 @@ jest.mock('@electron/remote', () => {
 	};
 });
 
+// Mocking bridge().Menu for showSpellCheckerMenu.test.ts
+jest.mock('./services/bridge', () => ({
+	__esModule: true,
+	default: () => ({
+		Menu: {
+			buildFromTemplate: jest.fn().mockReturnValue({
+				popup: jest.fn(),
+			}),
+		},
+	}),
+}));
+
 // Import after mocking problematic libraries
 const { afterEachCleanUp, afterAllCleanUp } = require('@joplin/lib/testing/test-utils.js');
 

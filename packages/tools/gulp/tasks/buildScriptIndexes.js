@@ -12,7 +12,7 @@ async function processDirectory(dir, indexFilePath = null, typeScriptType = null
 
 	const tsFiles = glob.sync('{**/*.ts,**/*.tsx}', {
 		cwd: dir,
-	}).filter(f => `${dir}/${f}` !== indexFilePath);
+	}).filter(f => `${dir}/${f}` !== indexFilePath && !f.endsWith('.test.ts'));
 
 	tsFiles.sort();
 
