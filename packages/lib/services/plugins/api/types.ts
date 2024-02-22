@@ -533,16 +533,23 @@ export interface MarkdownItContentScriptModule extends Omit<ContentScriptModule,
 	plugin: (markdownIt: any, options: any)=> any;
 }
 
-export interface CodeMirrorControl {
-	/** Points to a CodeMirror 6 EditorView instance. */
-	editor: any;
-	cm6: any;
+type EditorCommandCallback = (...args: any[])=> any;
 
-	/** `extension` should be a [CodeMirror 6 extension](https://codemirror.net/docs/ref/#state.Extension). */
+export interface CodeMirrorControl {
+	/** Points to a CodeMirror 6 EditorView instance. Will be undefined if running in CodeMirror 5. */
+	cm6: any;
+	editor: any;
+
+	/**
+	 * Adds a CodeMirror 6 extension to the editor.
+	 *
+	 * Here, `extension` should be a [CodeMirror 6 extension](https://codemirror.net/docs/ref/#state.Extension).
+	 */
 	addExtension(extension: any|any[]): void;
 
-	execCommand(name: string): any;
 	supportsCommand(name: string): boolean;
+	execCommand(name: string, ...args: any[]): any;
+	registerCommand(name: string, callback: EditorCommandCallback): void;
 
 	joplinExtensions: {
 		/**
