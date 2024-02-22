@@ -43,7 +43,6 @@ describe('prepareViewProps', () => {
 		expect(await prepare(['note.title', 'note.user_updated_time'], note)).toEqual({
 			note: {
 				title: 'test',
-				titleHtml: '',
 				user_updated_time: note.user_updated_time,
 			},
 		});
