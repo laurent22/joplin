@@ -75,7 +75,7 @@ export default class PluginLoader {
 					return;
 				}
 
-				scriptElement.innerText = `
+				scriptElement.appendChild(document.createTextNode(`
 				(async () => {
 					const exports = {};
 					const require = window.__pluginLoaderRequireFunctions[${JSON.stringify(this.pluginLoaderId)}];
@@ -87,7 +87,7 @@ export default class PluginLoader {
 		
 					window.__pluginLoaderScriptLoadCallbacks[${JSON.stringify(scriptId)}](exports);
 				})();
-				`;
+				`));
 
 				(window as any).__pluginLoaderScriptLoadCallbacks[scriptId] = onLoad;
 
