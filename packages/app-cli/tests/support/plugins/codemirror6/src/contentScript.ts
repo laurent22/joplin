@@ -5,7 +5,8 @@
 // the editor to not work properly.
 //
 import { lineNumbers, highlightActiveLineGutter, EditorView } from '@codemirror/view';
-import { ContentScriptContext } from 'api/types';
+import { completeFromList } from '@codemirror/autocomplete';
+import { CodeMirrorContentScriptModule, ContentScriptContext } from 'api/types';
 //
 // For the above import to work, you may also need to add @codemirror/view as a dev dependency
 // to package.json. (For the type information only).
@@ -14,7 +15,7 @@ import { ContentScriptContext } from 'api/types';
 //  const { lineNumbers } = joplin.require('@codemirror/view');
 
 
-export default (_context: ContentScriptContext) => {
+export default (_context: ContentScriptContext): CodeMirrorContentScriptModule => {
 	return {
 		// - codeMirrorWrapper: A thin wrapper around CodeMirror 6, designed to be similar to the
 		//     CodeMirror 5 API. If running in CodeMirror 5, a CodeMirror object is provided instead.
@@ -26,10 +27,23 @@ export default (_context: ContentScriptContext) => {
 
 				// We can include multiple extensions here:
 				highlightActiveLineGutter(),
+
+				// See https://codemirror.net/ for more built-in extensions and configuration
+				// options.
 			]);
 
-			// See https://codemirror.net/ for more built-in extensions and configuration
-			// options.
+			// Joplin also exposes extensions for autocompletion.
+			// CodeMirror's built-in `autocompletion(...)` doesn't work if multiple plugins
+			// try to use its `override` option.
+			codeMirrorWrapper.addExtension([
+				codeMirrorWrapper.joplinExtensions.completionSource(
+					completeFromList(['# Example completion'])
+				),
+
+				// Joplin also exposes a Facet that allows enabling or disabling CodeMirror's
+				// built-in autocompletions. These apply, for example, to HTML tags.
+				codeMirrorWrapper.joplinExtensions.enableLanguageDataAutocomplete.of(true),
+			]);
 
 			// We can also register editor commands. These commands can be later executed with:
 			//   joplin.commands.execute('editor.execCommand', { name: 'name-here', args: [] })
