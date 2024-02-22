@@ -1,18 +1,5 @@
 import { ViewPlugin } from '@codemirror/view';
-import createEditor from './createEditor';
-import createEditorSettings from './testUtil/createEditorSettings';
-import Setting from '@joplin/lib/models/Setting';
-
-const createEditorControl = (initialText: string) => {
-	const editorSettings = createEditorSettings(Setting.THEME_LIGHT);
-
-	return createEditor(document.body, {
-		initialText,
-		settings: editorSettings,
-		onEvent: _event => {},
-		onLogMessage: _message => {},
-	});
-};
+import createEditorControl from './testUtil/createEditorControl';
 
 describe('CodeMirrorControl', () => {
 	it('clearHistory should clear the undo/redo history', () => {
