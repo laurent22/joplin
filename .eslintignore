@@ -588,6 +588,9 @@ packages/editor/CodeMirror/editorCommands/insertLineAfter.js
 packages/editor/CodeMirror/editorCommands/supportsCommand.js
 packages/editor/CodeMirror/editorCommands/swapLine.js
 packages/editor/CodeMirror/getScrollFraction.js
+packages/editor/CodeMirror/markdown/codeBlockLanguages/allLanguages.js
+packages/editor/CodeMirror/markdown/codeBlockLanguages/defaultLanguage.js
+packages/editor/CodeMirror/markdown/codeBlockLanguages/lookUpLanguage.js
 packages/editor/CodeMirror/markdown/computeSelectionFormatting.test.js
 packages/editor/CodeMirror/markdown/computeSelectionFormatting.js
 packages/editor/CodeMirror/markdown/decoratorExtension.test.js
@@ -600,7 +603,6 @@ packages/editor/CodeMirror/markdown/markdownMathParser.test.js
 packages/editor/CodeMirror/markdown/markdownMathParser.js
 packages/editor/CodeMirror/markdown/markdownReformatter.test.js
 packages/editor/CodeMirror/markdown/markdownReformatter.js
-packages/editor/CodeMirror/markdown/syntaxHighlightingLanguages.js
 packages/editor/CodeMirror/pluginApi/PluginLoader.js
 packages/editor/CodeMirror/pluginApi/codeMirrorRequire.js
 packages/editor/CodeMirror/testUtil/createEditorSettings.js
