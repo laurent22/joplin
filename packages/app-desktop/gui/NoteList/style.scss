@@ -36,6 +36,10 @@
 		width: 2px;
 		height: 2px;
 	}
+
+	&:focus {
+		outline: none;
+	}
 }
 
 .note-list-item-wrapper.-provisional {
