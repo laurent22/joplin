@@ -3001,7 +3001,7 @@ msgstr "Versi baru: %s"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:268
 msgid "Next match"
-msgstr "Yang cocok selanjutnya"
+msgstr "Kecocokan selanjutnya"
 
 #: packages/lib/SyncTargetNextcloud.js:25
 msgid "Nextcloud"
@@ -3369,12 +3369,12 @@ msgstr "Tempel"
 #: packages/app-desktop/gui/NoteEditor/commands/pasteAsText.ts:6
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:191
 msgid "Paste as text"
-msgstr ""
+msgstr "Tempel sebagai teks"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:540
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:54
 msgid "Path:"
-msgstr "Lokasi:"
+msgstr "Jalur:"
 
 #: packages/app-desktop/gui/MainScreen/commands/exportPdf.ts:10
 #: packages/app-desktop/gui/MainScreen/commands/exportPdf.ts:24
@@ -3383,37 +3383,36 @@ msgstr "Berkas PDF"
 
 #: packages/lib/utils/joplinCloud.ts:406
 msgid "Per user. Minimum of %d users."
-msgstr ""
+msgstr "Tiap pengguna. Minimal %d pengguna."
 
 #: packages/app-mobile/components/screens/Note.tsx:542
 msgid "Permission needed"
-msgstr "Izin diperlukan"
+msgstr "Perlu izin"
 
 #: packages/app-mobile/components/CameraView.tsx:192
 msgid "Permission to use camera"
-msgstr "Izin penggunaan kamera"
+msgstr "Izin untuk menggunakan kamera"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:259
 msgid ""
 "Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list "
 "below."
 msgstr ""
-"Silakan mengeklik pada \"%s\" untuk memproses atau tentukan kata sandi pada "
+"Silakan tekan pada \"%s\" untuk melanjutkan atau tentukan kata sandi pada "
 "daftar \"%s\" di bawah."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:64
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
 msgstr ""
-"Silakan konfirmasi bahwa Anda ingin mengenkripsi ulang seluruh basis data "
-"Anda."
+"Silakan setujui bahwa Anda ingin mengenkripsi ulang seluruh basis data Anda."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:208
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
 msgstr ""
-"Silakan masukkan kata sandi Anda di daftar kunci master di bawah ini sebelum "
+"Silakan masukkan kata sandi Anda di daftar kunci utama di bawah ini sebelum "
 "meningkatkan kunci."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
@@ -3421,7 +3420,7 @@ msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
 msgstr ""
-"Mohon diperhatikan, jika ini berupa buku catatan yang besar maka butuh "
+"Catat bahwa jika ini berupa buku catatan yang besar mungkin memerlukan "
 "beberapa menit agar semua catatan terlihat di perangkat penerima."
 
 #: packages/lib/onedrive-api-node-utils.js:118
@@ -3433,14 +3432,14 @@ msgid ""
 "will be shared with any third party."
 msgstr ""
 "Silakan buka URL berikut di peramban web Anda untuk mengotentikasi aplikasi. "
-"Aplikasi akan membuat folder di \"Apps/Joplin\" dan hanya akan membaca dan "
-"menulis berkas di folder ini. Ia tidak akan memiliki akses ke berkas apa pun "
-"di luar folder ini atau ke data pribadi lainnya. Tidak ada data yang akan "
-"dibagikan dengan pihak ketiga mana pun."
+"Aplikasi akan membuat direktori di \"Apps/Joplin\" dan hanya akan membaca "
+"dan menulis berkas pada direktori ini. Ia tidak akan memiliki akses ke "
+"berkas apa pun di luar direktori ini atau ke data pribadi lainnya. Tidak ada "
+"data yang akan dibagikan dengan pihak ketiga mana pun."
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:88
 msgid "Please record your voice..."
-msgstr ""
+msgstr "Silakan rekam suara Anda…"
 
 #: packages/app-cli/app/command-ls.ts:63
 msgid "Please select a notebook first."
@@ -3453,7 +3452,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:30
 msgid "Please select where the sync status should be exported to"
-msgstr "Silakan pilih di mana status sinkronisasi seharusnya diekspor"
+msgstr "Silakan pilih di mana status penyelarasan akan diekspor"
 
 #: packages/lib/services/interop/InteropService.ts:280
 msgid "Please specify import format for %s"
@@ -3461,18 +3460,18 @@ msgstr "Silakan tentukan format impor untuk %s"
 
 #: packages/lib/services/interop/InteropService_Importer_Md.ts:37
 msgid "Please specify the notebook where the notes should be imported to."
-msgstr "Silakan tentukan buku catatan tempat catatan harus diimpor."
+msgstr "Silakan tentukan di buku catatan mana catatan akan diimpor."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:245
 msgid "Please upgrade Joplin to use this plugin"
-msgstr "Silakan upgrade Joplin untuk menggunakan plugin ini"
+msgstr "Silakan tingkatkan Joplin untuk menggunakan plugin ini"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1310
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
 msgstr ""
-"Silakan tunggu sampai semua lampiran sudah diunduh dan didekripsi. Anda juga "
+"Silakan tunggu sampai semua lampiran telah diunduh dan didekripsi. Anda juga "
 "bisa beralih ke %s untuk mengedit catatan."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:123
@@ -3491,7 +3490,7 @@ msgstr "Plugin"
 
 #: packages/lib/models/Setting.ts:1445
 msgid "Portrait"
-msgstr "Potret"
+msgstr "Tegak"
 
 #: packages/app-cli/app/help-utils.js:77
 msgid "Possible keys/values:"
@@ -3523,14 +3522,14 @@ msgstr "Tekan Ctrl+D atau ketik \"exit\" untuk keluar dari aplikasi"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:67
 msgid "Press the shortcut"
-msgstr "Klik pintasan"
+msgstr "Tekan pintasan"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:70
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
 msgstr ""
-"Klik pintasan kemudian tekan ENTER atau tekan BACKSPACE untuk menghapus "
+"Tekan pintasan kemudian tekan ENTER. Atau, tekan BACKSPACE untuk menghapus "
 "pintasan."
 
 #: packages/app-mobile/components/ScreenHeader.tsx:570
@@ -3539,7 +3538,7 @@ msgstr "Tekan untuk mengatur kata sandi dekripsi."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:278
 msgid "Previous match"
-msgstr ""
+msgstr "Kecocokan sebelumnya"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:333
 msgid "Previous versions of this note"
@@ -3551,20 +3550,19 @@ msgstr "Cetak"
 
 #: packages/lib/utils/joplinCloud.ts:222
 msgid "Priority support"
-msgstr ""
+msgstr "Dukungan utama"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:517
 msgid "Privacy Policy"
-msgstr "Kebijakan privasi"
+msgstr "Kebijakan Privasi"
 
 #: packages/lib/utils/joplinCloud.ts:367
-#, fuzzy
 msgid "Pro"
-msgstr "Profil"
+msgstr "Pro"
 
 #: packages/server/src/services/TaskService.ts:26
 msgid "Process failed payment subscriptions"
-msgstr "Memproses langganan pembayaran yang gagal"
+msgstr "Memproses pembayaran langganan yang gagal"
 
 #: packages/server/src/services/TaskService.ts:24
 msgid "Process oversized accounts"
@@ -3572,16 +3570,15 @@ msgstr "Memproses akun yang melebihi ukuran"
 
 #: packages/server/src/services/TaskService.ts:29
 msgid "Process user deletions"
-msgstr "Memproses penghapusan nama pengguna"
+msgstr "Memproses penghapusan pengguna"
 
 #: packages/server/src/routes/admin/users.ts:250
 msgid "Profile"
 msgstr "Profil"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:96
-#, fuzzy
 msgid "Profile name"
-msgstr "Nama profil:"
+msgstr "Nama profil"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
 msgid "Profile name:"
@@ -3592,7 +3589,6 @@ msgid "Profile Version: %s"
 msgstr "Versi profil: %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:156
-#, fuzzy
 msgid "Profiles"
 msgstr "Profil"
 
@@ -3601,17 +3597,16 @@ msgid "Properties"
 msgstr "Properti"
 
 #: packages/lib/models/Setting.ts:1573
-#, fuzzy
 msgid "Proxy enabled"
-msgstr "Diaktifkan"
+msgstr "Proxy dinyalakan"
 
 #: packages/lib/models/Setting.ts:1595
 msgid "Proxy timeout (seconds)"
-msgstr ""
+msgstr "Tenggat waktu proxy (detik)"
 
 #: packages/lib/models/Setting.ts:1583
 msgid "Proxy URL"
-msgstr ""
+msgstr "URL proxy"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:238
 msgid "Public-private key pair:"
