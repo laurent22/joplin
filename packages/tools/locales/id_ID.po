@@ -2797,25 +2797,23 @@ msgstr "Log, profil, status penyelarasan"
 #: packages/app-desktop/gui/MenuBar.tsx:860
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:515
 msgid "Make a donation"
-msgstr "Beri donasi"
+msgstr "Berikan sumbangan"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:220
 msgid "Manage master password"
-msgstr "Atur kata sandi master"
+msgstr "Kelola kata sandi utama"
 
 #: packages/lib/commands/openMasterPasswordDialog.ts:6
 msgid "Manage master password..."
-msgstr "Mengatur kata sandi master..."
+msgstr "Kelola kata sandi utama…"
 
 #: packages/lib/utils/joplinCloud.ts:201
-#, fuzzy
 msgid "Manage multiple users"
-msgstr "Atur kata sandi master"
+msgstr "Kelola beberapa pengguna"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:468
-#, fuzzy
 msgid "Manage profiles"
-msgstr "Perbarui profil"
+msgstr "Kelola profil"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:340
 msgid "Manage your plugins"
@@ -2827,7 +2825,7 @@ msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file`, and `target-status`."
 msgstr ""
-"Mengelola konfigurasi E2EE. Terdapat beberapa perintah yaitu `enable`, "
+"Mengelola konfigurasi E2EE. Perintah yang tersedia yaitu `enable`, "
 "`disable`, `decrypt`, `status`, `decrypt-file` dan `target-status`."
 
 #: packages/lib/models/Setting.ts:751
@@ -2851,7 +2849,7 @@ msgstr "Tandai tugas telah selesai."
 
 #: packages/app-cli/app/command-undone.js:12
 msgid "Marks a to-do as non-completed."
-msgstr "Menandai tugas belum selesai."
+msgstr "Tandai tugas belum selesai."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:57
 msgid "Markup"
@@ -2859,82 +2857,79 @@ msgstr "Markup"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:117
 msgid "Master Key %s"
-msgstr "Kunci Master %s"
+msgstr "Kunci Utama %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:113
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
 #: packages/app-mobile/components/screens/encryption-config.tsx:102
 msgid "Master password"
-msgstr "Kata sandi master"
+msgstr "Kata sandi utama"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:272
 #: packages/app-mobile/components/screens/encryption-config.tsx:211
 msgid "Master password:"
-msgstr "Kata sandi master:"
+msgstr "Kata sandi utama:"
 
 #: packages/lib/models/Setting.ts:775
 msgid "Max concurrent connections"
-msgstr "Koneksi bersamaan maksimum"
+msgstr "Jumlah maks. sambungan yang bersamaan"
 
 #: packages/server/src/routes/admin/users.ts:145
 msgid "Max Item Size"
-msgstr ""
+msgstr "Ukuran maks. benda"
 
 #: packages/lib/utils/joplinCloud.ts:129
-#, fuzzy
 msgid "Max note or attachment size"
-msgstr "Lampiran catatan"
+msgstr "Ukuran maks. berkas atau lampiran"
 
 #: packages/server/src/routes/admin/users.ts:153
-#, fuzzy
 msgid "Max Total Size"
-msgstr "Ukuran sebenarnya"
+msgstr "Jumlah ukuran maks."
 
 #: packages/lib/models/Setting.ts:2666
 msgid "Media player, math, diagrams, table of contents"
-msgstr ""
+msgstr "Pemutar media, matematika, diagram, daftar isi"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:318
 msgid "Missing keys"
-msgstr "Kunci yang Hilang"
+msgstr "Kunci yang hilang"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:271
 msgid "Missing Master Keys"
-msgstr "Kunci Master yang hilang"
+msgstr "Kehilangan Kunci Utama"
 
 #: packages/app-cli/app/cli-utils.js:112
 msgid "Missing required argument: %s"
 msgstr "Argumen yang dibutuhkan hilang: %s"
 
 #: packages/app-cli/app/cli-utils.js:135
-#, fuzzy
 msgid "Missing required flag value: %s"
-msgstr "Argumen yang dibutuhkan hilang: %s"
+msgstr "Nilai tanda yang dibutuhkan hilang: %s"
 
 #: packages/app-mobile/components/side-menu-content.tsx:470
 msgid "Mobile data - auto-sync disabled"
-msgstr "Data seluler - sinkronisasi otomatis dinonaktifkan"
+msgstr "Data seluler - penyelarasan otomatis dimatikan"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:634
 msgid "More info"
-msgstr "Info lain"
+msgstr "Info lebih lengkap"
 
 #: packages/lib/models/Setting.ts:2643
 msgid "More information"
-msgstr "Informasi lebih lanjut"
+msgstr "Informasi lebih lengkap"
 
 #: packages/app-cli/app/app.ts:61
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
-"Lebih dari satu item cocok dengan \"%s\". Silakan persempit kueri Anda."
+"Lebih dari satu benda cocok dengan \"%s\". Silakan persempit pencarian Anda."
 
 #: packages/app-mobile/components/ScreenHeader.tsx:545
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr "Pindahkan catatan %d ke buku catatan \"%s\"?"
+msgstr "Pindahkan %d catatan ke buku catatan \"%s\"?"
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.ts:8
 msgid "Move to notebook"
-msgstr "Pindah ke buku catatan"
+msgstr "Pindahkan ke buku catatan"
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.ts:32
 msgid "Move to notebook:"
@@ -2945,11 +2940,8 @@ msgid "Move to notebook..."
 msgstr "Memindahkan ke buku catatan..."
 
 #: packages/app-cli/app/command-mv.ts:14
-#, fuzzy
 msgid "Moves the given <item> to [notebook]"
-msgstr ""
-"Memindahkan catatan yang cocok dengan <note> (catatan) ke [notebook] (buku "
-"catatan)."
+msgstr "Memindahkan benda <item> ke [notebook]."
 
 #: packages/app-cli/app/cli-utils.js:177
 #: packages/app-cli/app/setupCommand.ts:21
@@ -2962,7 +2954,7 @@ msgstr "T"
 
 #: packages/lib/models/Setting.ts:1142
 msgid "Never resize"
-msgstr ""
+msgstr "Jangan pernah ukur ulang"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:8
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:105
