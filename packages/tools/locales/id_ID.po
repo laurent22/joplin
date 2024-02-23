@@ -1637,24 +1637,24 @@ msgstr ""
 #: packages/app-mobile/components/screens/Note.tsx:1555
 #: packages/app-mobile/components/side-menu-content.tsx:174
 msgid "Edit"
-msgstr "Ubah"
+msgstr "Sunting"
 
 #: packages/app-desktop/commands/startExternalEditing.ts:10
 msgid "Edit in external editor"
-msgstr "Ubah di editor eksternal"
+msgstr "Sunting di penyunting eksternal"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:141
 msgid "Edit link"
-msgstr "Ubah buku catatan"
+msgstr "Sunting tautan"
 
 #: packages/app-cli/app/command-edit.ts:17
 msgid "Edit note."
-msgstr "Ubah catatan."
+msgstr "Sunting catatan."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:163
 #: packages/app-mobile/components/screens/folder.js:97
 msgid "Edit notebook"
-msgstr "Ubah buku catatan"
+msgstr "Sunting buku catatan"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
 msgid "Edit profile"
