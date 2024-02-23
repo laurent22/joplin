@@ -135,6 +135,7 @@ export enum TaskId {
 	ProcessOrphanedItems,
 	ProcessShares,
 	ProcessEmails,
+	DeleteOldEvents,
 }
 
 // AUTO-GENERATED-TYPES

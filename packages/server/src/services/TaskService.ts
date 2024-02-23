@@ -31,6 +31,7 @@ export const taskIdToLabel = (taskId: TaskId): string => {
 		[TaskId.ProcessOrphanedItems]: 'Process orphaned items',
 		[TaskId.ProcessShares]: 'Process shared items',
 		[TaskId.ProcessEmails]: 'Process emails',
+		[TaskId.DeleteOldEvents]: 'Delete old events',
 	};
 
 	const s = strings[taskId];

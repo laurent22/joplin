@@ -74,6 +74,13 @@ export default async function(env: Env, models: Models, config: Config, services
 			schedule: '* * * * *',
 			run: (_models: Models, services: Services) => services.email.runMaintenance(),
 		},
+
+		{
+			id: TaskId.DeleteOldEvents,
+			description: taskIdToLabel(TaskId.DeleteOldEvents),
+			schedule: '0 0 * * *',
+			run: (models: Models) => models.event().deleteOldEvents(),
+		},
 	];
 
 	if (config.USER_DATA_AUTO_DELETE_ENABLED) {

@@ -1,5 +1,6 @@
 import { Event, EventType } from '../services/database/types';
 import BaseModel, { UuidType } from './BaseModel';
+import { Week } from '../utils/time';
 
 
 export default class EventModel extends BaseModel<Event> {
@@ -33,4 +34,11 @@ export default class EventModel extends BaseModel<Event> {
 			.first();
 	}
 
+	public async deleteOldEvents(beforeMillis: number = Date.now() - Week) {
+		return this.withTransaction(async () => {
+			await this.db(this.tableName)
+				.where('created_time', '<', beforeMillis)
+				.delete();
+		}, 'EventModel::deleteOldEvents');
+	}
 }
