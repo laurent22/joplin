@@ -117,7 +117,7 @@ export default function NoteBodyViewer(props: Props) {
 
 	const BackButtonDialogBox_ = BackButtonDialogBox as any;
 
-	const { html, injectedJs } = useSource(tempDir);
+	const { html, injectedJs } = useSource(tempDir, props.themeId);
 
 	return (
 		<View style={props.style}>

@@ -2,8 +2,9 @@ import { useMemo } from 'react';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import { RendererWebViewOptions } from '../bundledJs/types';
+const { themeStyle } = require('../../global-style.js');
 
-const useSource = (tempDirPath: string, theme: any) => {
+const useSource = (tempDirPath: string, themeId: number) => {
 	const injectedJs = useMemo(() => {
 		const subValues = Setting.subValues('markdown.plugin', Setting.toPlainObject());
 		const pluginOptions: any = {};
@@ -29,6 +30,11 @@ const useSource = (tempDirPath: string, theme: any) => {
 		`;
 	}, [tempDirPath]);
 
+	const [paddingLeft, paddingRight] = useMemo(() => {
+		const theme = themeStyle(themeId);
+		return [theme.marginLeft, theme.marginRight];
+	}, [themeId]);
+
 	const html = useMemo(() => {
 		// iOS doesn't automatically adjust the WebView's font size to match users'
 		// accessibility settings. To do this, we need to tell it to match the system font.
@@ -47,8 +53,8 @@ const useSource = (tempDirPath: string, theme: any) => {
 			}
 
 			body {
-				padding-left: ${Number(theme.marginLeft)}px;
-				padding-right: ${Number(theme.marginRight)}px;
+				padding-left: ${Number(paddingLeft)}px;
+				padding-right: ${Number(paddingRight)}px;
 			}
 		`;
 
@@ -69,7 +75,7 @@ const useSource = (tempDirPath: string, theme: any) => {
 				</body>
 			</html>
 		`;
-	}, []);
+	}, [paddingLeft, paddingRight]);
 
 	return { html, injectedJs };
 };

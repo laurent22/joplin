@@ -1,9 +1,10 @@
-import { PluginData } from '@joplin/editor/types';
+import { ContentScriptData } from '@joplin/editor/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
+import { dirname } from '@joplin/utils/path';
 import { useMemo } from 'react';
 
 const logger = Logger.create('useCodeMirrorPlugins');
@@ -12,7 +13,7 @@ const useCodeMirrorPlugins = (pluginStates: PluginStates) => {
 	return useMemo(() => {
 		const pluginService = PluginService.instance();
 
-		const plugins: PluginData[] = [];
+		const plugins: ContentScriptData[] = [];
 
 		for (const pluginState of Object.values(pluginStates)) {
 			const pluginId = pluginState.id;
@@ -34,6 +35,12 @@ const useCodeMirrorPlugins = (pluginStates: PluginStates) => {
 					contentScriptId,
 					contentScriptJs: async () => {
 						return await shim.fsDriver().readFile(contentScript.path);
+					},
+					loadCssAsset: (name: string) => {
+						// TODO: This logic is currently shared with app-desktop. Refactor
+						const assetPath = dirname(contentScript.path);
+						const path = shim.fsDriver().resolveRelativePathWithinDir(assetPath, name);
+						return shim.fsDriver().readFile(path, 'utf8');
 					},
 					postMessageHandler: async (message: any): Promise<any> => {
 						logger.debug(`Got message from plugin ${pluginId} content script ${contentScriptId}. Message:`, message);

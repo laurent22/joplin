@@ -1,7 +1,7 @@
 
 /* eslint-disable no-console */
 
-import { copy, exists, remove, mkdirp, readdir, mkdtemp } from 'fs-extra';
+import { copy, exists, remove, readdir, mkdtemp } from 'fs-extra';
 import { join, resolve, basename, dirname } from 'path';
 import { tmpdir } from 'os';
 import { chdir, cwd } from 'process';
@@ -18,6 +18,15 @@ import getCurrentCommitHash from './utils/getCurrentCommitHash';
 const monorepoRootDir = dirname(dirname(__dirname));
 
 type BeforeEachInstallCallback = (buildDir: string, pluginName: string)=> Promise<void>;
+
+// Copies everything except .git folders.
+const copyExcludingGit = (src: string, dst: string) => {
+	return copy(src, dst, {
+		filter: fileName => {
+			return basename(fileName) !== '.git';
+		},
+	});
+};
 
 const buildDefaultPlugins = async (appType: AppType, outputParentDir: string|null, beforeInstall: BeforeEachInstallCallback) => {
 	const pluginSourcesDir = resolve(join(__dirname, 'plugin-sources'));
@@ -53,10 +62,10 @@ const buildDefaultPlugins = async (appType: AppType, outputParentDir: string|nul
 
 				chdir(pluginDir);
 				const expectedCommitHash = repositoryData.commit;
-	
+
 				logStatus(`Switching to commit ${expectedCommitHash}`);
 				await execCommand(['git', 'switch', repositoryData.branch]);
-	
+
 				try {
 					await execCommand(['git', 'checkout', expectedCommitHash]);
 				} catch (error) {
@@ -68,19 +77,15 @@ const buildDefaultPlugins = async (appType: AppType, outputParentDir: string|nul
 				if (await getCurrentCommitHash() !== expectedCommitHash) {
 					throw new Error(`Unable to checkout commit ${expectedCommitHash}`);
 				}
+
+				logStatus('Copying repository files...');
+				await copyExcludingGit(pluginDir, buildDir);
 			} else {
 				const pathToSource = resolve(monorepoRootDir, repositoryData.path);
 
 				logStatus(`Copying from path ${pathToSource}`);
-				await copy(pathToSource, pluginDir);
+				await copyExcludingGit(pathToSource, buildDir);
 			}
-
-			logStatus('Copying repository files...');
-			await copy(pluginDir, buildDir, {
-				filter: fileName => {
-					return basename(fileName) !== '.git';
-				},
-			});
 
 			chdir(buildDir);
 
