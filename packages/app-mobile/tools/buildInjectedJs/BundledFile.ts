@@ -28,8 +28,11 @@ export default class BundledFile {
 		const config: webpack.Configuration = {
 			mode,
 			entry: this.sourceFilePath,
-			devtool: mode === 'development' ? 'inline-nosources-cheap-module-source-map' : undefined,
+
+			// es5: Have Webpack's generated code work with just ES5 (does not apply to
+			//      Joplin's code).
 			target: ['web', 'es5'],
+
 			output: {
 				path: this.rootFileDirectory,
 				filename: `${this.bundleBaseName}.bundle.js`,
@@ -53,6 +56,10 @@ export default class BundledFile {
 						exclude: {
 							and: [/node_modules[/\\]/],
 							not: [
+								// Some libraries don't work with older browsers/WebViews.
+								// Because Babel transpilation can be slow, we only transpile
+								// these libraries.
+								// For now, it's just replit's CodeMirror-vim library
 								/replit/,
 							],
 						},
