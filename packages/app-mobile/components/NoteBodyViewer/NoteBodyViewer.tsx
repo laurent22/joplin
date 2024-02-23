@@ -103,7 +103,6 @@ export default function NoteBodyViewer(props: Props) {
 			<ExtendedWebView
 				ref={webviewRef}
 				webviewInstanceId='NoteBodyViewer'
-				themeId={props.themeId}
 				style={webViewStyle}
 				html={html}
 				injectedJavaScript={injectedJs.join('\n')}
