@@ -29,6 +29,7 @@ export default class BundledFile {
 			mode,
 			entry: this.sourceFilePath,
 			devtool: mode === 'development' ? 'inline-nosources-cheap-module-source-map' : undefined,
+			target: ['web', 'es5'],
 			output: {
 				path: this.rootFileDirectory,
 				filename: `${this.bundleBaseName}.bundle.js`,
@@ -46,6 +47,24 @@ export default class BundledFile {
 						test: /\.tsx?$/,
 						use: 'ts-loader',
 						exclude: /node_modules/,
+					},
+					{
+						test: /\.[mc]?js$/,
+						exclude: {
+							and: [/node_modules[/\\]/],
+							not: [
+								/replit/,
+							],
+						},
+						use: {
+							loader: 'babel-loader',
+							options: {
+								presets: [
+									['@babel/preset-env', { targets: 'defaults' }],
+									['@babel/plugin-transform-private-property-in-object', { 'loose': true }],
+								],
+							},
+						},
 					},
 				],
 			},
