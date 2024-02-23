@@ -52,23 +52,37 @@ export default class BundledFile {
 						exclude: /node_modules/,
 					},
 					{
-						test: /\.[mc]?js$/,
-						exclude: {
-							and: [/node_modules[/\\]/],
-							not: [
-								// Some libraries don't work with older browsers/WebViews.
-								// Because Babel transpilation can be slow, we only transpile
-								// these libraries.
-								// For now, it's just replit's CodeMirror-vim library
-								/replit/,
-							],
+						test: (value) => {
+							const isModuleFile = !!(/node_modules/.exec(value));
+
+							// Some libraries don't work with older browsers/WebViews.
+							// Because Babel transpilation can be slow, we only transpile
+							// these libraries.
+							// For now, it's just Replit's CodeMirror-vim library. This library
+							// uses `a?.b` syntax, which seems to be unsupported in iOS 12 Safari.
+							const moduleNeedsTranspilation = !!(/.*node_modules.*replit.*\.[mc]?js$/.exec(value));
+
+							if (isModuleFile && !moduleNeedsTranspilation) {
+								return false;
+							}
+
+							const isJsFile = !!(/\.[cm]?js$/.exec(value));
+							if (isJsFile) {
+								console.log('Compiling with Babel:', value);
+							}
+							return isJsFile;
 						},
 						use: {
 							loader: 'babel-loader',
 							options: {
+								cacheDirectory: false,
+
+								// Disable using babel.config.js to prevent conflicts with React Native.
+								babelrc: false,
+								configFile: false,
+
 								presets: [
-									['@babel/preset-env', { targets: 'defaults' }],
-									['@babel/plugin-transform-private-property-in-object', { 'loose': true }],
+									['@babel/preset-env', { targets: { ios: 12, chrome: 80 } }],
 								],
 							},
 						},
