@@ -28,6 +28,7 @@ export default class BundledFile {
 		const config: webpack.Configuration = {
 			mode,
 			entry: this.sourceFilePath,
+			devtool: mode === 'development' ? 'inline-nosources-cheap-module-source-map' : undefined,
 			output: {
 				path: this.rootFileDirectory,
 				filename: `${this.bundleBaseName}.bundle.js`,
