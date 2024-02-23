@@ -3247,7 +3247,7 @@ msgstr "Di %s: %s"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:627
 msgid "One of your master keys use an obsolete encryption method."
-msgstr "Salah satu kunci master Anda menggunakan metode enkripsi yang usang."
+msgstr "Salah satu kunci utama Anda menggunakan metode enkripsi yang usang."
 
 #: packages/app-cli/app/gui/NoteWidget.js:48
 msgid ""
@@ -3256,9 +3256,9 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"Satu item atau lebih saat ini terenkripsi dan Anda mungkin perlu memberikan "
-"kata sandi master. Untuk melakukannya, silakan ketik `e2ee decrypt`. Jika "
-"Anda telah memberikan kata sandi, maka item yang terenkripsi sedang "
+"Satu benda atau lebih saat ini terenkripsi dan Anda mungkin perlu memberikan "
+"kata sandi utama. Untuk melakukannya, silakan ketik `e2ee decrypt`. Jika "
+"Anda telah memberikan kata sandi, maka benda-benda yang terenkripsi sedang "
 "didekripsi di latar belakang dan akan segera tersedia."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:656
@@ -3286,9 +3286,8 @@ msgid "Open %s"
 msgstr "Buka %s"
 
 #: packages/app-desktop/gui/MainScreen/commands/openPdfViewer.ts:7
-#, fuzzy
 msgid "Open PDF viewer"
-msgstr "Aktifkan penampil PDF"
+msgstr "Buka penampil PDF"
 
 #: packages/app-desktop/commands/openProfileDirectory.ts:8
 msgid "Open profile directory"
@@ -3296,7 +3295,7 @@ msgstr "Buka folder profil"
 
 #: packages/lib/models/Setting.ts:442
 msgid "Open Sync Wizard..."
-msgstr "Buka Pemandu Sinkronisasi..."
+msgstr "Buka Pemandu Penyelarasan…"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:84
 msgid "Open..."
@@ -3304,13 +3303,13 @@ msgstr "Buka..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:177
 msgid "Opening section %s"
-msgstr ""
+msgstr "Membuka bagian %s"
 
 #: packages/app-cli/app/command-e2ee.ts:40
 #: packages/app-cli/app/command-e2ee.ts:86
 #: packages/app-cli/app/command-e2ee.ts:96
 msgid "Operation cancelled"
-msgstr "Operasi dibatalkan"
+msgstr "Kegiatan dibatalkan"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
 #: packages/app-desktop/gui/MenuBar.tsx:515
@@ -3320,12 +3319,11 @@ msgstr "Pilihan"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:245
 msgid "Or create an account."
-msgstr "Atau buat akun baru."
+msgstr "Atau buat akun."
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:22
-#, fuzzy
 msgid "Ordered list"
-msgstr "Buat pengguna"
+msgstr "Daftar berurutan"
 
 #: packages/app-desktop/gui/MenuBar.tsx:469
 msgid "Other applications..."
@@ -3333,7 +3331,7 @@ msgstr "Aplikasi lain..."
 
 #: packages/app-cli/app/command-import.ts:29
 msgid "Output format: %s"
-msgstr "Format output: %s"
+msgstr "Format keluaran: %s"
 
 #: packages/lib/models/Setting.ts:1443
 msgid "Page orientation for PDF export"
