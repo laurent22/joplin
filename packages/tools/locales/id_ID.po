@@ -1251,7 +1251,7 @@ msgstr "hari"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:43
 msgid "Decrease indent level"
-msgstr "Kurangi indentasi"
+msgstr "Turunkan tingkat indentasi"
 
 #: packages/app-cli/app/command-e2ee.ts:64
 msgid "Decrypted items: %d"
@@ -2041,8 +2041,8 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"Gagal-aman: Jangan menghapus data lokal saat target sinkronisasi kosong "
-"(seringkali akibat kesalahan konfigurasi atau bug)"
+"Gagal-aman: Jangan menghapus data lokal ketika sasaran penyelarasan sedang "
+"kosong (seringkali akibat kesalahan konfigurasi atau bug)"
 
 #: packages/app-cli/app/main.js:100
 msgid "Fatal error:"
@@ -2072,22 +2072,20 @@ msgstr "Sistem berkas"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:204
 #: packages/app-mobile/components/screens/LogScreen.tsx:205
-#, fuzzy
 msgid "Filter"
-msgstr "Label tersaring"
+msgstr "Penyaring"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:193
 msgid "Filter tags"
-msgstr "Label tersaring"
+msgstr "Saring label"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useActionButtons.ts:56
 msgid "Find and replace"
-msgstr ""
+msgstr "Temukan dan ganti"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:250
-#, fuzzy
 msgid "Find: "
-msgstr "Ditemukan: %d."
+msgstr "Cari: "
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:63
 msgid "Firefox Extension"
@@ -2128,36 +2126,35 @@ msgstr ""
 
 #: packages/lib/models/Setting.ts:1584
 msgid "For example \"%s\""
-msgstr ""
+msgstr "Contoh “%s”"
 
 #: packages/app-cli/app/command-help.ts:36
 msgid "For information on how to customise the shortcuts please visit %s"
 msgstr ""
-"Untuk informasi tentang bagaimana cara mengkustom pintasan silakan kunjungi "
-"%s"
+"Untuk informasi tentang bagaimana cara mengubahsuai pintasan silakan "
+"kunjungi %s"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:291
 msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
 "enable it please check the documentation:"
 msgstr ""
-"Untuk informasi lebih lanjut tentang enkripsi End-To-End (E2EE) dan tentang "
-"bagaimana cara mengaktifkannya silakan cek dokumentasi:"
+"Untuk informasi lebih lanjut tentang End-To-End Encryption (E2EE) dan saran "
+"tentang bagaimana cara menyalakannya silakan periksa dokumentasinya:"
 
 #: packages/app-cli/app/command-help.ts:84
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
-"Untuk melihat daftar pintasan kibor dan opsi konfigurasi, ketik `help keymap`"
+"Untuk daftar pintasan papan ketik dan pilihan pengaturan, ketik `help keymap`"
 
 #: packages/lib/models/Setting.ts:645
 msgid "Force path style"
 msgstr "Paksa gaya jalur"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:44
-#, fuzzy
 msgid "Formatting"
-msgstr "Informasi"
+msgstr "Pengaturan gaya"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
@@ -2170,16 +2167,15 @@ msgstr "Ditemukan: %d."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:521
 msgid "FTS enabled: %d"
-msgstr "FTS diaktifkan: %d"
+msgstr "FTS dinyalakan: %d"
 
 #: packages/app-desktop/checkForUpdates.ts:108
 msgid "Full changelog"
 msgstr "Semua catatan perubahan"
 
 #: packages/server/src/routes/admin/users.ts:133
-#, fuzzy
 msgid "Full name"
-msgstr "Semua catatan perubahan"
+msgstr "Nama lengkap"
 
 #: packages/lib/models/Setting.ts:2628
 #: packages/server/src/services/MustacheService.ts:110
@@ -2188,16 +2184,18 @@ msgstr "Umum"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:238
 msgid "Generated"
-msgstr "Berhasil"
+msgstr "Dibuat"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:183
 msgid "Generating link..."
 msgid_plural "Generating links..."
-msgstr[0] "Menghasilkan tautan..."
+msgstr[0] "Membuat tautan…"
 
 #: packages/lib/models/Setting.ts:2667
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
 msgstr ""
+"Geolokasi, pemeriksa ejaan, penyunting bilah alat, pengatur ulang ukuran "
+"gambar"
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:91
 msgid "Get it now:"
@@ -2213,10 +2211,9 @@ msgid ""
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
-"Mendapatkan atau menyetel nilai konfigurasi. Jika [value] (nilai) tidak "
-"tersedia, maka akan menampilkan nilai dari [name] (nama). Jika [name] maupun "
-"[value] tidak tersedia juga, maka akan menampilkan daftar konfigurasi saat "
-"ini."
+"Mengambil atau menyetel sebuah nilai pengaturan. Jika [value] tidak "
+"tersedia, maka akan menampilkan nilai dari [name]. Jika tidak ada [name] "
+"atau [value] yang tersedia, maka akan menampilkan daftar pengaturan saat ini."
 
 #: packages/app-mobile/components/screens/Note.tsx:1120
 msgid "Go to source URL"
@@ -2233,11 +2230,11 @@ msgstr "Berikan otorisasi"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useHeaderButtons.ts:14
 msgid "Header %d"
-msgstr ""
+msgstr "Tajuk %d"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:48
 msgid "Headers"
-msgstr ""
+msgstr "Tajuk"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:94
 msgid "Heading"
@@ -2250,9 +2247,8 @@ msgid "Help"
 msgstr "Bantuan"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:522
-#, fuzzy
 msgid "Hermes enabled: %d"
-msgstr "FTS diaktifkan: %d"
+msgstr "Hermes dinyalakan: %d"
 
 #: packages/app-desktop/gui/MenuBar.tsx:626
 msgid "Hide %s"
@@ -2260,21 +2256,19 @@ msgstr "Sembunyikan %s"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:218
 msgid "Hide advanced"
-msgstr ""
+msgstr "Sembunyikan yang lebih lanjut"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:562
-#, fuzzy
 msgid "Hide Advanced Settings"
-msgstr "Tampilkan pengaturan lanjutan"
+msgstr "Sembunyikan Pengaturan Lanjutan"
 
 #: packages/server/src/routes/admin/users.ts:203
-#, fuzzy
 msgid "Hide disabled"
-msgstr "Sembunyikan kunci nonaktif"
+msgstr "Sembunyikan yang dimatikan"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:159
 msgid "Hide disabled keys"
-msgstr "Sembunyikan kunci nonaktif"
+msgstr "Sembunyikan kunci yang dimatikan"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:22
 msgid "Hide Joplin"
@@ -2282,11 +2276,11 @@ msgstr "Sembunyikan Joplin"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useActionButtons.ts:67
 msgid "Hide keyboard"
-msgstr ""
+msgstr "Sembunyikan papan ketik"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:19
 msgid "Hide more actions"
-msgstr ""
+msgstr "Sembunyikan tindakan yang lebih banyak"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
@@ -2295,7 +2289,7 @@ msgstr "Sorotan"
 #: packages/server/src/services/MustacheService.ts:142
 #: packages/server/src/services/MustacheService.ts:271
 msgid "Home"
-msgstr "Home"
+msgstr "Beranda"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:99
 msgid "Horizontal Rule"
@@ -2307,7 +2301,7 @@ msgstr "Folder HTML"
 
 #: packages/lib/services/interop/InteropService.ts:109
 msgid "HTML document"
-msgstr ""
+msgstr "Dokumen HTML"
 
 #: packages/lib/services/interop/InteropService.ts:168
 msgid "HTML File"
@@ -2331,7 +2325,7 @@ msgstr "ID"
 
 #: packages/lib/Synchronizer.ts:314
 msgid "Idle"
-msgstr "Diam"
+msgstr "Menganggur"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:85
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:358
@@ -2393,10 +2387,10 @@ msgid ""
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
-"Untuk menghubungkan geolokasi dengan catatan, aplikasi perlu izin untuk "
-"mengakses lokasi Anda.\n"
+"Untuk menghubungkan geolokasi dengan catatan, aplikasi perlu izin dari Anda "
+"untuk mengakses lokasi Anda.\n"
 "\n"
-"Anda dapat mematikan fungsi ini kapan saja di layar Konfigurasi."
+"Anda dapat mematikan pilihan ini kapan saja di layar Pengaturan."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:344
 msgid ""
@@ -2414,24 +2408,24 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
-"Untuk melakukannya, seluruh data Anda harus dienkripsi and disinkronkan, "
-"jadi cara terbaik yang disarankan adalah menjalankannya semalaman.\n"
+"Untuk melakukannya, seluruh data Anda harus dienkripsi and diselaraskan, "
+"lebih baik jika menjalankannya semalaman.\n"
 "\n"
-"Untuk memulai, silakan ikuti instruksi berikut ini:\n"
+"Untuk memulai, silakan ikuti langkah-langkah berikut:\n"
 "\n"
-"1. Sinkronkan semua perangkat Anda.\n"
+"1. Selaraskan semua perangkat Anda.\n"
 "2. Klik \"%s\".\n"
 "3. Biarkan proses berjalan sampai selesai. Saat proses berjalan, hindari "
 "mengubah catatan apa pun di perangkat Anda yang lain, untuk menghindari "
-"konflik.\n"
-"4. Ketika sinkronisasi selesai pada perangkat ini, sinkronkan semua "
+"perbedaan.\n"
+"4. Ketika penyelarasan telah selesai pada perangkat ini, selaraskan semua "
 "perangkat Anda dan biarkan proses berjalan sampai selesai.\n"
 "\n"
 "Penting: Anda hanya perlu menjalankan ini SEKALI pada satu perangkat."
 
 #: packages/lib/services/synchronizer/syncInfoUtils.ts:431
 msgid "In order to synchronise, please upgrade your application to version %s+"
-msgstr ""
+msgstr "Untuk dapat menyelaraskan, tingkatkan aplikasi ke versi %s+"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:101
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:195
@@ -2439,8 +2433,8 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-"Agar dapat menggunakan sinkronisasi sistem berkas, dibutuhkan perizinan "
-"untuk menulis pada penyimpanan eksternal."
+"Untuk dapat menggunakan penyelarasan berkas sistem, dibutuhkan izin dari "
+"Anda untuk menulis ke penyimpanan eksternal."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:117
 msgid "In order to use the web clipper, you need to do the following:"
@@ -2456,7 +2450,7 @@ msgstr "Di: %s"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:52
 msgid "Increase indent level"
-msgstr ""
+msgstr "Naikkan tingkat indentasi"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:125
 msgid "Indent less"
@@ -2486,9 +2480,8 @@ msgstr "Sisipkan Tautan"
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:104
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:676
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useActionButtons.ts:39
-#, fuzzy
 msgid "Insert time"
-msgstr "Sisipkan Waktu dan Tanggal"
+msgstr "Sisipkan waktu"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:199
 msgid "Install"
@@ -2524,11 +2517,11 @@ msgstr "Perintah tidak berlaku: \"%s\""
 
 #: packages/lib/models/Setting.ts:2132
 msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "Nilai opsi tidak berlaku: \"%s\". Nilai yang mungkin adalah: %s."
+msgstr "Nilai pilihan tidak berlaku: \"%s\". Nilai yang mungkin adalah: %s."
 
 #: packages/app-cli/app/command-e2ee.ts:46
 msgid "Invalid password"
-msgstr "Jawaban tidak berlaku"
+msgstr "Kata sandi tidak berlaku"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:59
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useInlineFormattingButtons.ts:24
@@ -2537,32 +2530,32 @@ msgstr "Miring"
 
 #: packages/lib/services/ReportService.ts:190
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Item \"%s\" tidak dapat diunduh: %s"
+msgstr "Benda \"%s\" tidak dapat diunduh: %s"
 
 #: packages/server/src/services/MustacheService.ts:150
 #: packages/server/src/services/MustacheService.ts:273
 msgid "Items"
-msgstr "Item"
+msgstr "Benda"
 
 #: packages/lib/services/ReportService.ts:213
 msgid "Items that cannot be decrypted"
-msgstr "Item yang tidak dapat didekripsi"
+msgstr "Benda-benda yang tidak dapat didekripsi"
 
 #: packages/lib/services/ReportService.ts:178
 msgid "Items that cannot be synchronised"
-msgstr "Item yang tidak dapat disinkronkan"
+msgstr "Benda-benda yang tidak dapat diselaraskan"
 
 #: packages/app-desktop/gui/MenuBar.tsx:857
 msgid "Join us on Twitter"
-msgstr ""
+msgstr "Bergabung dengan kami di Twitter"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:346
 msgid ""
 "Joplin can synchronise your notes using various providers. Select one from "
 "the list below."
 msgstr ""
-"Joplin dapat mensinkronkan catatan Anda melalui berbagai penyedia. Pilih "
-"salah satu dari daftar di bawah ini."
+"Joplin dapat menyelaraskan catatan-catatan Anda dengan menggunakan berbagai "
+"penyedia. Pilih salah satu dari daftar di bawah ini."
 
 #: packages/lib/models/Setting.ts:2640 packages/lib/SyncTargetJoplinCloud.ts:30
 msgid "Joplin Cloud"
@@ -2570,7 +2563,7 @@ msgstr "Joplin Cloud"
 
 #: packages/lib/models/Setting.ts:713
 msgid "Joplin Cloud email"
-msgstr "Email Joplin Cloud"
+msgstr "Surel Joplin Cloud"
 
 #: packages/lib/models/Setting.ts:724
 msgid "Joplin Cloud password"
@@ -2579,7 +2572,7 @@ msgstr "Kata sandi Joplin Cloud"
 #: packages/lib/services/interop/InteropService.ts:148
 #: packages/lib/services/interop/InteropService.ts:65
 msgid "Joplin Export Directory"
-msgstr "Folder Ekspor Joplin"
+msgstr "Direktori Ekspor Joplin"
 
 #: packages/lib/services/interop/InteropService.ts:142
 #: packages/lib/services/interop/InteropService.ts:59
@@ -2592,9 +2585,9 @@ msgid ""
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
 msgstr ""
-"Joplin berkali-kali gagal mendekripsi item ini, mungkin karena item rusak "
-"atau terlalu besar. Item ini akan tetap berada di perangkat tetapi Joplin "
-"tidak akan mencoba mendekripsinya lagi."
+"Joplin berkali-kali gagal mendekripsi benda-benda ini, mungkin karena rusak "
+"atau terlalu besar. Benda-benda ini akan tetap berada di perangkat tetapi "
+"Joplin tidak akan mencoba untuk mendekripsinya lagi."
 
 #: packages/app-desktop/gui/MenuBar.tsx:854
 msgid "Joplin Forum"
@@ -2606,11 +2599,11 @@ msgstr "Server Joplin"
 
 #: packages/lib/models/Setting.ts:674
 msgid "Joplin Server email"
-msgstr "Email Server Joplin"
+msgstr "Surel Joplin Server"
 
 #: packages/lib/models/Setting.ts:685
 msgid "Joplin Server password"
-msgstr "Kata sandi Server Joplin"
+msgstr "Kata sandi Joplin Server"
 
 #: packages/lib/models/Setting.ts:656
 msgid "Joplin Server URL"
@@ -2621,8 +2614,8 @@ msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
 msgstr ""
-"Web Clipper Joplin mengizinkan penyimpanan halaman web dan tangkapan layar "
-"dari peramban web Anda ke Joplin."
+"Web Clipper Joplin membolehkan untuk menyimpan halaman web dan tangkapan "
+"layar dari peramban web Anda ke Joplin."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:516
 msgid "Joplin website"
@@ -2633,9 +2626,9 @@ msgid ""
 "Joplin's own sync service. Also gives access to Joplin-specific features "
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
-"Layanan sinkronisasi Joplin. Juga memberikan akses kepada fitur spesifik "
-"Joplin seperti publikasi catatan atau kolaborasi buku catatan dengan orang "
-"lain."
+"Layanan penyelarasan milik Joplin. Juga memberikan akses kepada fitur khusus "
+"Joplin seperti menerbitkan catatan atau bekerja bersama pada buku catatan "
+"dengan orang lain."
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useInlineFormattingButtons.ts:45
 msgid "KaTeX"
