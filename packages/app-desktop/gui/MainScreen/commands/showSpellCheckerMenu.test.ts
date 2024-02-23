@@ -45,7 +45,7 @@ describe('mapStateTotitle', () => {
 			},
 		};
 		const result = runtime().mapStateToTitle(mockState);
-		expect(result).toBe('en-GB, en-US, en-CA, es-ES, es-MX');
+		expect(result).toBe('en, es');
 
 	});
 });

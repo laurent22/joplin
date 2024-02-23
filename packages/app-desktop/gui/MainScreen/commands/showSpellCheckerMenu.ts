@@ -30,7 +30,8 @@ export const runtime = (): CommandRuntime => {
 			const s: string[] = [];
 			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			languages.forEach((language: string) => {
-				s.push(language);
+				const onlyLanguage = language.split('-')[0];
+				if (!s.includes(onlyLanguage)) { s.push(onlyLanguage); }
 			});
 
 			return s.join(', ');
