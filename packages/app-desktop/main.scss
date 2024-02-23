@@ -69,7 +69,7 @@ a {
 	border: 1px solid rgba(0,160,255,0);
 }
 
-.icon-button:hover, .icon-button:focus-visible {
+.icon-button:hover {
 	background-color: rgba(0,0,0,0.05) !important;
 	border: 1px solid rgba(0,0,0,0.10);
 	border-radius: 5px;
@@ -141,6 +141,14 @@ a {
 	to {transform: rotate(360deg);}
 }
 
+// The browser-default focus-visible indicator was originally removed for asthetic
+// reasons. However, this causes accessibility issues.
+//
+// As a comprimise, we disable the focus-visible indicator in cases where the user is
+// probably not navigating with the keyboard. Note that :focus-visible alone is not
+// sufficient because it matches any focused input (https://stackoverflow.com/a/66109577).
+//
+// See https://github.com/laurent22/joplin/issues/9982.
 input:not([type=button]):not([type=checkbox]), select {
 	&:focus-visible {
 		outline: none;

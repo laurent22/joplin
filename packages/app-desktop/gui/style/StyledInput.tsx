@@ -19,7 +19,6 @@ const StyledInput = styled.input`
 	&:focus {
 		background-color: ${(props: any) => props.theme.backgroundColor4};
 		border: 1px solid ${(props: any) => props.theme.color3};
-		outline: none;
 	}
 `;
 
