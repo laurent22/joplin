@@ -6,8 +6,7 @@ import {
 	forwardRef, Ref, useCallback, useEffect, useImperativeHandle, useRef, useState,
 } from 'react';
 import { WebView, WebViewMessageEvent } from 'react-native-webview';
-import { WebViewErrorEvent, WebViewEvent, WebViewSource } from 'react-native-webview/lib/WebViewTypes';
-
+import { WebViewErrorEvent, WebViewNavigationEvent, WebViewEvent, WebViewSource } from 'react-native-webview/lib/WebViewTypes';
 import Setting from '@joplin/lib/models/Setting';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
@@ -144,6 +143,26 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 		logger.error('Error', event.nativeEvent.description);
 	}, []);
 
+	const isHashChange = useRef(false);
+	const lastUrl = useRef('');
+	const onLoadStart = useCallback((event: WebViewNavigationEvent) => {
+		const removeHash = (url: string) => url.replace(/#[^/]*$/, '');
+		const newBaseUrl = removeHash(event.nativeEvent.url);
+		const lastBaseUrl = removeHash(lastUrl.current);
+
+		isHashChange.current = (
+			newBaseUrl === lastBaseUrl && !event.nativeEvent.loading
+		);
+		console.log({ isHashChange: isHashChange.current, newBaseUrl, lastBaseUrl, lastUrl: lastUrl.current, newUrl: event.nativeEvent.url })
+		lastUrl.current = event.nativeEvent.url;
+	}, []);
+
+	const onLoadEnd = useCallback((event: WebViewErrorEvent|WebViewNavigationEvent) => {
+		if (!isHashChange.current && props.onLoadEnd) {
+			props.onLoadEnd(event);
+		}
+	}, [props.onLoadEnd]);
+
 	// - `setSupportMultipleWindows` must be `true` for security reasons:
 	//   https://github.com/react-native-webview/react-native-webview/releases/tag/v11.0.0
 
@@ -175,7 +194,8 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			injectedJavaScript={props.injectedJavaScript}
 			onMessage={props.onMessage}
 			onError={props.onError ?? onError}
-			onLoadEnd={props.onLoadEnd}
+			onLoadStart={onLoadStart}
+			onLoadEnd={onLoadEnd}
 			decelerationRate='normal'
 		/>
 	);
