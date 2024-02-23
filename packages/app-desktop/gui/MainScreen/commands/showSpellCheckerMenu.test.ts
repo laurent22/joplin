@@ -1,6 +1,17 @@
 import { runtime } from './showSpellCheckerMenu';
 import { AppState } from '../../../app.reducer';
 
+jest.mock('../../../services/bridge', () => ({
+	__esModule: true,
+	default: () => ({
+		Menu: {
+			buildFromTemplate: jest.fn().mockReturnValue({
+				popup: jest.fn(),
+			}),
+		},
+	}),
+}));
+
 describe('mapStateTotitle', () => {
 
 	test('should return null if spellchecker.enabled is false', () => {
