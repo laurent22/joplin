@@ -341,7 +341,7 @@
 	"Browse...": [
 		"Przeglądaj..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -469,6 +469,9 @@
 	],
 	"Close dropdown": [
 		"Zamknij rozwijane menu"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Zamknij okno"
@@ -622,7 +625,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Nie udało się zweryfikować statusu udostępnienia tego notatnika - przerywanie. Proszę spróbować ponownie, gdy będziesz podłączony do internetu."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"Nie udało się zweryfikować twojej tożsamości: %s"
 	],
 	"Create": [
@@ -1436,6 +1439,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Aby to zrobić należy zaszyfrować i zsynchronizować wszystkie twoje dane, więc najlepiej będzie zrobić to przez noc.\n\nAby rozpocząć postępuj zgodnie z instrukcją:\n\n1. Zsynchronizuj wszystkie swoje urządzenia.\n2. Naciśnij \"%s\".\n3. Poczekaj na zakończenie. W trakcie tego procesu postaraj się nie zmieniać żadnych notatek na swoich urządzeniach, aby uniknąć błędów.\n4. Kiedy synchronizacja się zakończy na tym urządzeniu, zsynchronizuj inne urządzenia.\n\nWażne: musisz wykonać powyższe kroki tylko RAZ na jednym urządzeniu."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Aby użyć synchronizacji z systemem plików, musisz wyrazić zgodę na zapis na zewnętrznym urządzeniu."
@@ -2543,6 +2549,12 @@
 	"Solarised Light": [
 		"Solarised Light"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Niektóre obiekty nie mogą być odszyfrowane."
 	],
@@ -2846,6 +2858,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Odbiorca nie mógł być usunięty z listy. Proszę spróbować ponownie.\n\nBłąd: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Cel synchronizacji wymaga aktualizacji zanim Joplin może się zsynchronizować. Ta operacja może zająć kilka minut po czym aplikacja będzie wymagać ponownego uruchomienia. Kliknij w link aby kontynuować."
 	],
@@ -3097,6 +3112,9 @@
 	],
 	"Undo": [
 		"Cofnij"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Nieznana flaga: %s"

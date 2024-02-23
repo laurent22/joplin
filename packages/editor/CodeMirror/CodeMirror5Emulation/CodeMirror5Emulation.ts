@@ -411,7 +411,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 			return;
 		}
 
-		CodeMirror5Emulation.commands[name as (keyof typeof CodeMirror5Emulation.commands)](this);
+		return CodeMirror5Emulation.commands[name as (keyof typeof CodeMirror5Emulation.commands)](this);
 	}
 }
 

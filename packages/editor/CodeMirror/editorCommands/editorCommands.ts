@@ -10,7 +10,7 @@ import {
 import swapLine, { SwapLineDirection } from './swapLine';
 import { closeSearchPanel, findNext, findPrevious, openSearchPanel, replaceAll, replaceNext } from '@codemirror/search';
 
-type EditorCommandFunction = (editor: EditorView, ...args: any[])=> void|any;
+export type EditorCommandFunction = (editor: EditorView, ...args: any[])=> void|any;
 
 const replaceSelectionCommand = (editor: EditorView, toInsert: string) => {
 	editor.dispatch(editor.state.replaceSelection(toInsert));

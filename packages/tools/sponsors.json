@@ -62,7 +62,8 @@
 		{
 			"url": "https://seirei.ne.jp",
 			"title": "Serei Network",
-			"imageName": "SeireiNetwork.png"
+			"imageName": "SeireiNetwork.png",
+			"githubUser": "konishi-t"
 		},
 		{
 			"url": "https://www.hosting.de/nextcloud/?mtm_campaign=managed-nextcloud&mtm_kwd=joplinapp&mtm_source=joplinapp-github&mtm_medium=banner",
@@ -73,22 +74,32 @@
 		{
 			"url": "https://grundstueckspreise.info/",
 			"title": "SP Software GmbH",
-			"imageName": "Grundstueckspreise.png"
+			"imageName": "Grundstueckspreise.png",
+			"githubUser": "PeterSchumacher22"
 		},
 		{
 			"url": "https://citricsheep.com",
 			"title": "Citric Sheep",
-			"imageName": "CitricSheep.png"
+			"imageName": "CitricSheep.png",
+			"githubUser": "dchecks"
 		},
 		{
-			"url": "https://sorted.travel/?utm_source=joplinapp ",
+			"url": "https://sorted.travel/?utm_source=joplinapp",
 			"title": "Sorted Travel",
-			"imageName": "SortedTravel.png"
+			"imageName": "SortedTravel.png",
+			"githubUser": "a-l-e-x-k"
 		},
 		{
-			"url": "https://celebian.com ",
+			"url": "https://celebian.com",
 			"title": "Celebian",
-			"imageName": "Celebian.png"
+			"imageName": "Celebian.png",
+			"githubUser": "celebiancom"
+		},
+		{
+			"url": "https://bestkru.com",
+			"title": "BestKru",
+			"imageName": "BestKru.png",
+			"githubUser": "BestKru"
 		}
 	],
 	"orgsOld": [

@@ -12,6 +12,8 @@ import getPathToPatchFileFor from './utils/getPathToPatchFileFor';
 import isGitRepository from './utils/isGitRepository';
 import { AppType } from './types';
 import pluginRepositoryData from './pluginRepositoryData';
+import getCurrentCommitHash from './utils/getCurrentCommitHash';
+
 
 const monorepoRootDir = dirname(dirname(__dirname));
 
@@ -50,20 +52,21 @@ const buildDefaultPlugins = async (appType: AppType, outputParentDir: string|nul
 				}
 
 				chdir(pluginDir);
-				const currentCommitHash = (await execCommand(['git', 'rev-parse', 'HEAD~'])).trim();
 				const expectedCommitHash = repositoryData.commit;
+	
+				logStatus(`Switching to commit ${expectedCommitHash}`);
+				await execCommand(['git', 'switch', repositoryData.branch]);
+	
+				try {
+					await execCommand(['git', 'checkout', expectedCommitHash]);
+				} catch (error) {
+					logStatus(`git checkout failed with error ${error}. Fetching...`);
+					await execCommand(['git', 'fetch']);
+					await execCommand(['git', 'checkout', expectedCommitHash]);
+				}
 
-				if (currentCommitHash !== expectedCommitHash) {
-					logStatus(`Switching to commit ${expectedCommitHash}`);
-					await execCommand(['git', 'switch', repositoryData.branch]);
-
-					try {
-						await execCommand(['git', 'checkout', expectedCommitHash]);
-					} catch (error) {
-						logStatus(`git checkout failed with error ${error}. Fetching...`);
-						await execCommand(['git', 'fetch']);
-						await execCommand(['git', 'checkout', expectedCommitHash]);
-					}
+				if (await getCurrentCommitHash() !== expectedCommitHash) {
+					throw new Error(`Unable to checkout commit ${expectedCommitHash}`);
 				}
 			} else {
 				const pathToSource = resolve(monorepoRootDir, repositoryData.path);
@@ -110,17 +113,11 @@ const buildDefaultPlugins = async (appType: AppType, outputParentDir: string|nul
 
 			if (outputParentDir !== null) {
 				logStatus(`Checking output directory in ${outputParentDir}`);
-				const outputDirectory = join(outputParentDir, pluginId);
-				if (await exists(outputDirectory)) {
-					await remove(outputDirectory);
-				}
-				await mkdirp(outputDirectory);
+				const outputPath = join(outputParentDir, `${pluginId}.jpl`);
 
 				const sourceFile = jplFiles[0];
-				const destFile = join(outputDirectory, 'plugin.jpl');
-
-				logStatus(`Copying built file from ${sourceFile} to ${destFile}`);
-				await copy(sourceFile, destFile);
+				logStatus(`Copying built file from ${sourceFile} to ${outputPath}`);
+				await copy(sourceFile, outputPath);
 			} else {
 				console.warn('No output directory specified. Not copying built .jpl files.');
 			}

@@ -25,7 +25,10 @@ const selfClosingElements = [
 	'wbr',
 ];
 
-export const htmlentities = new Entities().encode;
+const entitiesInstance = new Entities();
+
+export const htmlentities = entitiesInstance.encode;
+export const htmlentitiesDecode = entitiesInstance.decode;
 
 export const attributesHtml = (attr: Record<string, any>) => {
 	const output = [];

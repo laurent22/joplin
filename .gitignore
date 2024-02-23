@@ -66,6 +66,7 @@ docs/**/*.mustache
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 packages/app-cli/app/LinkSelector.js
+packages/app-cli/app/app.js
 packages/app-cli/app/base-command.js
 packages/app-cli/app/command-apidoc.js
 packages/app-cli/app/command-attach.js
@@ -271,6 +272,7 @@ packages/app-desktop/gui/NoteEditor/utils/clipboardUtils.js
 packages/app-desktop/gui/NoteEditor/utils/contextMenu.js
 packages/app-desktop/gui/NoteEditor/utils/contextMenuUtils.js
 packages/app-desktop/gui/NoteEditor/utils/index.js
+packages/app-desktop/gui/NoteEditor/utils/markupRenderOptions.js
 packages/app-desktop/gui/NoteEditor/utils/resourceHandling.test.js
 packages/app-desktop/gui/NoteEditor/utils/resourceHandling.js
 packages/app-desktop/gui/NoteEditor/utils/types.js
@@ -391,6 +393,7 @@ packages/app-desktop/integration-tests/util/activateMainMenuItem.js
 packages/app-desktop/integration-tests/util/createStartupArgs.js
 packages/app-desktop/integration-tests/util/firstNonDevToolsWindow.js
 packages/app-desktop/integration-tests/util/setFilePickerResponse.js
+packages/app-desktop/integration-tests/util/setMessageBoxResponse.js
 packages/app-desktop/integration-tests/util/test.js
 packages/app-desktop/playwright.config.js
 packages/app-desktop/plugins/GotoAnything.js
@@ -421,6 +424,8 @@ packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
 packages/app-desktop/tools/copy7Zip.js
 packages/app-desktop/tools/notarizeMacApp.js
 packages/app-desktop/tools/renameReleaseAssets.js
+packages/app-desktop/utils/7zip/getPathToExecutable7Zip.js
+packages/app-desktop/utils/7zip/pathToBundled7Zip.js
 packages/app-desktop/utils/checkForUpdatesUtils.test.js
 packages/app-desktop/utils/checkForUpdatesUtils.js
 packages/app-desktop/utils/checkForUpdatesUtilsTestData.js
@@ -603,6 +608,7 @@ packages/default-plugins/commands/buildAll.js
 packages/default-plugins/commands/editPatch.js
 packages/default-plugins/pluginRepositoryData.js
 packages/default-plugins/types.js
+packages/default-plugins/utils/getCurrentCommitHash.js
 packages/default-plugins/utils/getPathToPatchFileFor.js
 packages/default-plugins/utils/isGitRepository.js
 packages/default-plugins/utils/waitForCliInput.js
@@ -620,6 +626,9 @@ packages/editor/CodeMirror/editorCommands/insertLineAfter.js
 packages/editor/CodeMirror/editorCommands/supportsCommand.js
 packages/editor/CodeMirror/editorCommands/swapLine.js
 packages/editor/CodeMirror/getScrollFraction.js
+packages/editor/CodeMirror/markdown/codeBlockLanguages/allLanguages.js
+packages/editor/CodeMirror/markdown/codeBlockLanguages/defaultLanguage.js
+packages/editor/CodeMirror/markdown/codeBlockLanguages/lookUpLanguage.js
 packages/editor/CodeMirror/markdown/computeSelectionFormatting.test.js
 packages/editor/CodeMirror/markdown/computeSelectionFormatting.js
 packages/editor/CodeMirror/markdown/decoratorExtension.test.js
@@ -632,13 +641,16 @@ packages/editor/CodeMirror/markdown/markdownMathParser.test.js
 packages/editor/CodeMirror/markdown/markdownMathParser.js
 packages/editor/CodeMirror/markdown/markdownReformatter.test.js
 packages/editor/CodeMirror/markdown/markdownReformatter.js
-packages/editor/CodeMirror/markdown/syntaxHighlightingLanguages.js
 packages/editor/CodeMirror/pluginApi/PluginLoader.js
 packages/editor/CodeMirror/pluginApi/codeMirrorRequire.js
+packages/editor/CodeMirror/pluginApi/customEditorCompletion.test.js
+packages/editor/CodeMirror/pluginApi/customEditorCompletion.js
+packages/editor/CodeMirror/testUtil/createEditorControl.js
 packages/editor/CodeMirror/testUtil/createEditorSettings.js
 packages/editor/CodeMirror/testUtil/createTestEditor.js
 packages/editor/CodeMirror/testUtil/forceFullParse.js
 packages/editor/CodeMirror/testUtil/loadLanguages.js
+packages/editor/CodeMirror/testUtil/typeText.js
 packages/editor/CodeMirror/theme.js
 packages/editor/CodeMirror/util/isInSyntaxNode.js
 packages/editor/CodeMirror/util/setupVim.js
@@ -715,6 +727,7 @@ packages/lib/components/shared/side-menu-shared.js
 packages/lib/database-driver-better-sqlite.js
 packages/lib/database.js
 packages/lib/debug/DebugService.js
+packages/lib/determineBaseAppDirs.js
 packages/lib/dom.js
 packages/lib/errorUtils.js
 packages/lib/errors.js
@@ -777,6 +790,7 @@ packages/lib/models/Tag.test.js
 packages/lib/models/Tag.js
 packages/lib/models/dateTimeFormats.test.js
 packages/lib/models/settings/FileHandler.js
+packages/lib/models/settings/settingValidations.js
 packages/lib/models/utils/isItemId.js
 packages/lib/models/utils/itemCanBeEncrypted.js
 packages/lib/models/utils/paginatedFeed.js
@@ -836,6 +850,7 @@ packages/lib/services/database/migrations/42.js
 packages/lib/services/database/migrations/43.js
 packages/lib/services/database/migrations/44.js
 packages/lib/services/database/migrations/45.js
+packages/lib/services/database/migrations/46.js
 packages/lib/services/database/migrations/index.js
 packages/lib/services/database/sqlStringToLines.js
 packages/lib/services/database/types.js
@@ -1012,6 +1027,7 @@ packages/lib/services/synchronizer/syncInfoUtils.js
 packages/lib/services/synchronizer/synchronizer_LockHandler.test.js
 packages/lib/services/synchronizer/synchronizer_MigrationHandler.test.js
 packages/lib/services/synchronizer/tools.js
+packages/lib/services/synchronizer/utils/checkDisabledSyncItemsNotification.js
 packages/lib/services/synchronizer/utils/handleConflictAction.js
 packages/lib/services/synchronizer/utils/handleSyncStartupOperation.js
 packages/lib/services/synchronizer/utils/resourceRemotePath.js
@@ -1019,6 +1035,8 @@ packages/lib/services/synchronizer/utils/syncDeleteStep.js
 packages/lib/services/synchronizer/utils/types.js
 packages/lib/shim-init-node.js
 packages/lib/shim.js
+packages/lib/string-utils.test.js
+packages/lib/string-utils.js
 packages/lib/testing/syncTargetUtils.js
 packages/lib/testing/test-utils-synchronizer.js
 packages/lib/testing/test-utils.js
@@ -1047,6 +1065,8 @@ packages/lib/utils/ipc/utils/separateCallbacksFromSerializable.js
 packages/lib/utils/ipc/utils/separateCallbacksFromSerializableArray.js
 packages/lib/utils/joplinCloud.js
 packages/lib/utils/processStartFlags.js
+packages/lib/utils/replaceUnsupportedCharacters.test.js
+packages/lib/utils/replaceUnsupportedCharacters.js
 packages/lib/utils/userFetcher.js
 packages/lib/utils/webDAVUtils.test.js
 packages/lib/utils/webDAVUtils.js

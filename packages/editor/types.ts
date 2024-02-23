@@ -70,10 +70,11 @@ export enum EditorCommandType {
 
 // Because the editor package can run in a WebView, plugin content scripts
 // need to be provided as text, rather than as file paths.
-export interface PluginData {
+export interface ContentScriptData {
 	pluginId: string;
 	contentScriptId: string;
 	contentScriptJs: ()=> Promise<string>;
+	loadCssAsset: (name: string)=> Promise<string>;
 	postMessageHandler: (message: any)=> any;
 }
 
@@ -100,7 +101,7 @@ export interface EditorControl {
 
 	setSearchState(state: SearchState): void;
 
-	setPlugins(plugins: PluginData[]): Promise<void>;
+	setContentScripts(plugins: ContentScriptData[]): Promise<void>;
 }
 
 export enum EditorLanguageType {

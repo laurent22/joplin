@@ -14,6 +14,7 @@ import { TinyMceEditorEvents } from '../NoteBody/TinyMCE/utils/types';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
 import Setting from '@joplin/lib/models/Setting';
 import ItemChange from '@joplin/lib/models/ItemChange';
+import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
 const fs = require('fs-extra');
 const { writeFile } = require('fs-extra');
 const { clipboard } = require('electron');
@@ -77,7 +78,7 @@ export async function openItemById(itemId: string, dispatch: Function, hash = ''
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export function menuItems(dispatch: Function): ContextMenuItems {
+export function menuItems(dispatch: Function, htmlToMd: HtmlToMarkdownHandler, mdToHtml: MarkupToHtmlHandler): ContextMenuItems {
 	return {
 		open: {
 			label: _('Open...'),
@@ -179,7 +180,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				let content = pastedHtml ? pastedHtml : clipboard.readText();
 
 				if (pastedHtml) {
-					content = await processPastedHtml(pastedHtml);
+					content = await processPastedHtml(pastedHtml, htmlToMd, mdToHtml);
 				}
 
 				options.insertContent(content);
@@ -207,7 +208,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 export default async function contextMenu(options: ContextMenuOptions, dispatch: Function) {
 	const menu = new Menu();
 
-	const items = menuItems(dispatch);
+	const items = menuItems(dispatch, options.htmlToMd, options.mdToHtml);
 
 	if (!('readyOnly' in options)) options.isReadOnly = true;
 	for (const itemKey in items) {

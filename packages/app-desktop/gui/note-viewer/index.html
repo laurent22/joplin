@@ -211,7 +211,8 @@
 					} catch (error) {
 						// We don't throw an exception but we log it since
 						// it shouldn't happen
-						console.warn('Tried to remove an asset but got an error', error);
+						console.warn('Tried to remove asset ' + assetId + ' but got an error:', error);
+						console.warn('Assets are:', pluginAssetsAdded_);
 					}
 					pluginAssetsAdded_[assetId] = null;
 				}
@@ -594,12 +595,20 @@
 			// calculate by yourself by accumulating wheel events.
 			// https://github.com/laurent22/joplin/pull/5496
 			// When the Electron/Chromium bug is fixed, remove this listener.
+			//
+			// 2024-02-01: The bug seems to be fixed, remove the above when we're not in
+			//             feature-freeze.
 
 			// If scrollTop ever has a fraction part, zoomFactor is not 1.
 			if (zoomFactorIsNotOne || !Number.isInteger(contentElement.scrollTop)) {
 				zoomFactorIsNotOne = true;
-				customScroll(e, true);
-				e.preventDefault();
+
+				// The custom scroll logic breaks horizontal scroll in child DOM nodes
+				// (e.g. scrollable code blocks). Disable it:
+				if (e.deltaY !== 0) {
+					customScroll(e, true);
+					e.preventDefault();
+				}
 			}
 		}));
 

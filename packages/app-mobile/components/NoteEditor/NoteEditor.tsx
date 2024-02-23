@@ -9,10 +9,10 @@ import ExtendedWebView from '../ExtendedWebView';
 import * as React from 'react';
 import { forwardRef, useEffect, useImperativeHandle } from 'react';
 import { useMemo, useState, useCallback, useRef } from 'react';
-import { LayoutChangeEvent, View, ViewStyle } from 'react-native';
+import { LayoutChangeEvent, NativeSyntheticEvent, View, ViewStyle } from 'react-native';
 const { editorFont } = require('../global-style');
 
-import { EditorControl as EditorBodyControl, PluginData } from '@joplin/editor/types';
+import { EditorControl as EditorBodyControl, ContentScriptData } from '@joplin/editor/types';
 import { EditorControl, EditorSettings, SelectionRange, WebViewToEditorApi } from './types';
 import { _ } from '@joplin/lib/locale';
 import MarkdownToolbar from './MarkdownToolbar/MarkdownToolbar';
@@ -23,16 +23,17 @@ import SelectionFormatting, { defaultSelectionFormatting } from '@joplin/editor/
 import useCodeMirrorPlugins from './hooks/useCodeMirrorPlugins';
 import RNToWebViewMessenger from '../../utils/ipc/RNToWebViewMessenger';
 import { WebViewMessageEvent } from 'react-native-webview';
+import { WebViewErrorEvent } from 'react-native-webview/lib/RNCWebViewNativeComponent';
 import Logger from '@joplin/utils/Logger';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import useEditorCommandHandler from './hooks/useEditorCommandHandler';
-
-const logger = Logger.create('NoteEditor');
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
 type SelectionChangeEventHandler = (event: SelectionRangeChangeEvent)=> void;
 type OnAttachCallback = ()=> void;
+
+const logger = Logger.create('NoteEditor');
 
 interface Props {
 	themeId: number;
@@ -248,8 +249,8 @@ const useEditorControl = (
 				injectJS('document.activeElement?.blur();');
 			},
 
-			setPlugins: async (plugins: PluginData[]) => {
-				return bodyControl.setPlugins(plugins);
+			setContentScripts: async (plugins: ContentScriptData[]) => {
+				return bodyControl.setContentScripts(plugins);
 			},
 
 			setSearchState: setSearchStateCallback,
@@ -314,7 +315,6 @@ function NoteEditor(props: Props, ref: any) {
 				"error: " + message + " in file://" + source + ", line " + lineno
 			);
 		};
-
 		window.onunhandledrejection = (event) => {
 			window.ReactNativeWebView.postMessage(
 				"error: Unhandled promise rejection: " + event
@@ -427,7 +427,7 @@ function NoteEditor(props: Props, ref: any) {
 
 	const codeMirrorPlugins = useCodeMirrorPlugins(props.plugins);
 	useEffect(() => {
-		void editorControl.setPlugins(codeMirrorPlugins);
+		void editorControl.setContentScripts(codeMirrorPlugins);
 	}, [codeMirrorPlugins, editorControl]);
 
 	const onLoadEnd = useCallback(() => {
@@ -445,8 +445,8 @@ function NoteEditor(props: Props, ref: any) {
 		editorMessenger.onWebViewMessage(event);
 	}, [editorMessenger]);
 
-	const onError = useCallback(() => {
-		console.error('NoteEditor: webview error');
+	const onError = useCallback((event: NativeSyntheticEvent<WebViewErrorEvent>) => {
+		logger.error(`Load error: Code ${event.nativeEvent.code}: ${event.nativeEvent.description}`);
 	}, []);
 
 	const [hasSpaceForToolbar, setHasSpaceForToolbar] = useState(true);

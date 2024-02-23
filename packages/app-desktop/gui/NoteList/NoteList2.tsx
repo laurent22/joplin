@@ -76,16 +76,6 @@ const NoteList = (props: Props) => {
 		props.notes,
 	);
 
-	// const renderedNotes = useRenderedNotes(
-	// 	startNoteIndex,
-	// 	endNoteIndex,
-	// 	props.notes,
-	// 	props.selectedNoteIds,
-	// 	listRenderer,
-	// 	props.highlightedWords,
-	// 	props.watchedNoteFiles,
-	// );
-
 	const noteItemStyle = useMemo(() => {
 		return {
 			width: 'auto',
@@ -218,6 +208,7 @@ const NoteList = (props: Props) => {
 					isSelected={props.selectedNoteIds.includes(note.id)}
 					isWatched={props.watchedNoteFiles.includes(note.id)}
 					listRenderer={listRenderer}
+					dispatch={props.dispatch}
 				/>,
 			);
 		}

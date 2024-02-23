@@ -723,7 +723,7 @@ async function checkThrowAsync(asyncFn: Function) {
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-async function expectThrow(asyncFn: Function, errorCode: any = undefined) {
+async function expectThrow(asyncFn: Function, errorCode: any = undefined, errorMessage: string = undefined) {
 	let hasThrown = false;
 	let thrownError = null;
 	try {
@@ -735,6 +735,12 @@ async function expectThrow(asyncFn: Function, errorCode: any = undefined) {
 
 	if (!hasThrown) {
 		expect('not throw').toBe('throw');
+	} else if (errorMessage !== undefined) {
+		if (thrownError.message !== errorMessage) {
+			expect(`error message: ${thrownError.message}`).toBe(`error message: ${errorMessage}`);
+		} else {
+			expect(true).toBe(true);
+		}
 	} else if (thrownError.code !== errorCode) {
 		console.error(thrownError);
 		expect(`error code: ${thrownError.code}`).toBe(`error code: ${errorCode}`);

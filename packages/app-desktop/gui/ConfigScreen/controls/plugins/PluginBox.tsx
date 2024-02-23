@@ -216,7 +216,7 @@ export default function(props: Props) {
 	const renderDefaultPluginLabel = () => {
 		if (item.builtIn) {
 			return (
-				<BoxedLabel>{_('Built in')}</BoxedLabel>
+				<BoxedLabel>{_('Built-in')}</BoxedLabel>
 			);
 		}
 

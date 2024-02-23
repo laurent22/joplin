@@ -3,7 +3,7 @@ import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import { RendererWebViewOptions } from '../bundledJs/types';
 
-const useSource = (tempDirPath: string) => {
+const useSource = (tempDirPath: string, theme: any) => {
 	const injectedJs = useMemo(() => {
 		const subValues = Setting.subValues('markdown.plugin', Setting.toPlainObject());
 		const pluginOptions: any = {};
@@ -44,6 +44,11 @@ const useSource = (tempDirPath: string) => {
 			code {
 				white-space: pre-wrap;
 				overflow-x: hidden;
+			}
+
+			body {
+				padding-left: ${Number(theme.marginLeft)}px;
+				padding-right: ${Number(theme.marginRight)}px;
 			}
 		`;
 

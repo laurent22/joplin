@@ -307,7 +307,7 @@
 			cleanUpElement(convertToMarkup, cleanDocument, imageSizes, imageIndexes);
 
 			// eslint-disable-next-line no-undef
-			const stylesheets = convertToMarkup === 'html' ? getStyleSheets(document) : null;
+			const stylesheets = convertToMarkup === 'html' ? getStyleSheets(document) : [];
 
 			// The <BODY> tag may have a style in the CSS stylesheets. This
 			// style can be overriden by setting the `style` attribute on the
