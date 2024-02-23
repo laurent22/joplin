@@ -575,6 +575,7 @@ packages/app-mobile/plugins/PluginRunner/backgroundPage/initializeDialogWebView.
 packages/app-mobile/plugins/PluginRunner/backgroundPage/initializePluginBackgroundIframe.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/pluginRunnerBackgroundPage.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/startStopPlugin.js
+packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/fixEmptyLinks.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/makeSandboxedIframe.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/reportUnhandledErrors.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/wrapConsoleLog.js

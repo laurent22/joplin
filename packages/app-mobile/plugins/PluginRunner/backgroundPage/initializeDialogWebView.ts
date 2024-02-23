@@ -2,6 +2,7 @@ import { DialogWebViewApi, DialogMainProcessApi } from '../types';
 import reportUnhandledErrors from './utils/reportUnhandledErrors';
 import wrapConsoleLog from './utils/wrapConsoleLog';
 import WebViewToRNMessenger from '../../../utils/ipc/WebViewToRNMessenger';
+import fixEmptyLinks from './utils/fixEmptyLinks';
 
 let themeCssElement: HTMLStyleElement|null = null;
 
@@ -61,6 +62,7 @@ const initializeDialogWebView = (messageChannelId: string) => {
 
 	reportUnhandledErrors(messenger.remoteApi.onError);
 	wrapConsoleLog(messenger.remoteApi.onLog);
+	fixEmptyLinks();
 
 	// If dialog content scripts were bundled with Webpack for NodeJS,
 	// they may expect a global "exports" to be present.
