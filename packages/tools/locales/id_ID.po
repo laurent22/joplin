@@ -4478,9 +4478,8 @@ msgid "Take photo"
 msgstr "Ambil foto"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:32
-#, fuzzy
 msgid "Task list"
-msgstr "Tugas"
+msgstr "Daftar tugas"
 
 #: packages/server/src/services/MustacheService.ts:125
 #: packages/server/src/services/MustacheService.ts:275
@@ -4489,35 +4488,35 @@ msgstr "Tugas"
 
 #: packages/lib/utils/joplinCloud.ts:389
 msgid "Teams"
-msgstr ""
+msgstr "Regu"
 
 #: packages/lib/services/interop/InteropService.ts:133
-#, fuzzy
 msgid "Text document"
-msgstr "Perintah editor teks"
+msgstr "Dokumen teks"
 
 #: packages/lib/models/Setting.ts:1432
 msgid "Text editor command"
-msgstr "Perintah editor teks"
+msgstr "Perintah penyunting teks"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:225
 msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
 msgstr "Terima kasih! Akun Joplin Cloud Anda sekarang siap digunakan."
 
 #: packages/lib/utils/joplinCloud.ts:167
-#, fuzzy
 msgid ""
 "The [Web Clipper](%s) is a browser extension that allows you to save web "
 "pages and screenshots from your browser."
 msgstr ""
-"Web Clipper Joplin mengizinkan penyimpanan halaman web dan tangkapan layar "
-"dari peramban web Anda ke Joplin."
+"[Web Clipper](%s) adalah sebuah ekstensi peramban yang membolehkan Anda "
+"untuk menyimpan halaman web dan tangkapan layar dari peramban Anda."
 
 #: packages/lib/services/profileConfig/index.ts:105
 msgid ""
 "The active profile cannot be deleted. Switch to a different profile and try "
 "again."
 msgstr ""
+"Profil yang aktif tidak dapat dihapus. Pindah ke profil yang berbeda dan "
+"coba kembali."
 
 #: packages/app-desktop/bridge.ts:315
 msgid ""
@@ -4529,7 +4528,7 @@ msgstr ""
 msgid ""
 "The application did not close properly. Would you like to start in safe mode?"
 msgstr ""
-"Aplikasi tidak ditutup dengan tepat. Apakah Anda ingin memulai dalam mode "
+"Aplikasi tidak ditutup dengan layak. Apakah Anda ingin memulai dalam mode "
 "aman?"
 
 #: packages/lib/onedrive-api-node-utils.js:87
@@ -4541,7 +4540,7 @@ msgstr ""
 
 #: packages/lib/components/shared/dropbox-login-shared.js:39
 msgid "The application has been authorised!"
-msgstr "Aplikasi sudah terotorisasi!"
+msgstr "Aplikasi telah diotorisasi!"
 
 #: packages/lib/onedrive-api-node-utils.js:89
 msgid "The application has been successfully authorised."
@@ -4585,16 +4584,16 @@ msgstr ""
 
 #: packages/lib/services/profileConfig/index.ts:104
 msgid "The default profile cannot be deleted"
-msgstr ""
+msgstr "Profil bawaan tidak dapat dihapus"
 
 #: packages/lib/models/Setting.ts:1432
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"Perintah editor (dapat mengandung argumen) yang akan digunakan untuk membuka "
-"catatan. Jika tidak ada yang disediakan, ia akan mencoba mendeteksi editor "
-"bawaan secara otomatis."
+"Perintah penyunting (dapat mengandung argumen) yang akan digunakan untuk "
+"membuka catatan. Jika tidak ada yang disediakan, ia akan mencoba cari "
+"otomatis penyunting bawaan."
 
 #: packages/lib/models/Setting.ts:1667 packages/lib/models/Setting.ts:1682
 #: packages/lib/models/Setting.ts:1697
@@ -4604,20 +4603,20 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
-"Properti faktor menentukan bagaimana item akan tumbuh atau menyusut agar "
-"sesuai dengan ruang yang tersedia dalam wadahnya sehubungan dengan item "
-"lainnya. Jadi item dengan faktor 2 akan memakan ruang dua kali lebih banyak "
-"dari item dengan faktor 1. Mulai ulang aplikasi untuk melihat perubahan."
+"Properti faktor menentukan bagaimana item akan tumbuh atau menyusut untuk "
+"menyesuaikan dengan ruang yang tersedia dalam wadahnya dengan "
+"memperhitungkan benda lainnya. Jadi benda dengan faktor 2 akan mengambil "
+"ruang dua kali lebih banyak dari benda dengan faktor 1. Mulai ulang aplikasi "
+"untuk melihat perubahan."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:594
-#, fuzzy
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
-msgstr[0] "Lampiran ini sedang diawasi untuk perubahan:"
+msgstr[0] "Lampiran berikut cocok dengan ciri-ciri pencarian Anda:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:578
 msgid "The following attachments are being watched for changes:"
-msgstr "Lampiran ini sedang diawasi untuk perubahan:"
+msgstr "Lampiran berikut sedang diawasi untuk perubahan:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:74
 msgid ""
@@ -4631,7 +4630,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/Note.tsx:333
 msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr "Aplikasi mobile Joplin saat ini belum mendukung tipe tautan ini: %s"
+msgstr "Aplikasi mobile Joplin saat ini belum mendukung jenis tautan ini: %s"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:265
 msgid ""
@@ -4639,7 +4638,7 @@ msgid ""
 "security and performance."
 msgstr ""
 "Tim Joplin telah memeriksa plugin ini dan ia memenuhi standar kami untuk "
-"keamanan dan performa."
+"keamanan dan kinerja."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:319
 msgid ""
@@ -4647,13 +4646,13 @@ msgid ""
 "application does not currently have access to them. It is likely they will "
 "eventually be downloaded via synchronisation."
 msgstr ""
-"Kunci dengan ID ini digunakan mengenkripsi beberapa item Anda, namun saat "
-"ini aplikasi tidak dapat mengakses mereka. Sepertinya, mereka pada akhirnya "
-"akan diunduh via sinkronisasi."
+"Kunci dengan ID berikut digunakan mengenkripsi beberapa benda Anda, namun "
+"saat ini aplikasi tidak memiliki akses ke benda-benda tersebut. Sepertinya "
+"mereka pada akhirnya akan diunduh melalui penyelarasan."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:217
 msgid "The master key has been upgraded successfully!"
-msgstr "Kunci master telah berhasil ditingkatkan!"
+msgstr "Kunci utama telah berhasil ditingkatkan!"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:272
 msgid ""
@@ -4661,9 +4660,9 @@ msgid ""
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"Kunci master dengan ID ini digunakan mengenkripsi beberapa item Anda, namun "
-"saat ini aplikasi tidak dapat mengakses mereka. Sepertinya, mereka pada "
-"akhirnya akan diunduh via sinkronisasi."
+"Kunci utama dengan ID berikut digunakan mengenkripsi beberapa benda Anda, "
+"namun saat ini aplikasi tidak memiliki akses ke benda-benda tersebut. "
+"Sepertinya mereka pada akhirnya akan diunduh melalui."
 
 #: packages/lib/services/RevisionService.ts:265
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
@@ -4671,12 +4670,12 @@ msgstr "Catatan \"%s\" telah berhasil dipulihkan ke buku catatan \"%s\"."
 
 #: packages/app-mobile/components/screens/folder.js:76
 msgid "The notebook could not be saved: %s"
-msgstr "Buku catatan tidak bisa disimpan: %s"
+msgstr "Buku catatan tidak dapat disimpan: %s"
 
 #: packages/app-cli/app/command-import.ts:72
 #: packages/app-desktop/gui/ImportScreen.tsx:108
 msgid "The notes have been imported: %s"
-msgstr "Catatan telah berhasil diimpor: %s"
+msgstr "Catatan telah diimpor: %s"
 
 #: packages/app-cli/app/command-help.ts:73
 msgid "The possible commands are:"
@@ -4701,6 +4700,12 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Sasaran penyelarasan tidak dapat diganti karena alasan berikut: %s\n"
+"\n"
+"Jika masalah tidak dapat diselesaikan, Anda mungkin perlu membersihkan data "
+"terlebih dahulu dengan mengikuti langkah-langkah berikut:\n"
+"\n"
+"%s"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:615
 msgid ""
@@ -4708,19 +4713,18 @@ msgid ""
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
-"Target sinkronisasi harus ditingkatkan sebelum Joplin dapat sinkronisasi. "
-"Operasinya akan berjalan beberapa menit dan aplikasi perlu dimulai ulang. "
-"Untuk melanjutkan, silakan klik tautannya."
+"Sasaran penyelarasan perlu ditingkatkan sebelum Joplin dapat menyelaraskan. "
+"Kegiatan mungkin memerlukan beberapa menit untuk selesai dan aplikasi perlu "
+"dimulai ulang. Untuk melanjutkan silakan tekan pada tautan."
 
 #: packages/app-mobile/components/ScreenHeader.tsx:572
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
-"Target sinkronisasi harus ditingkatkan. Tekan tanda ini untuk memproses."
+"Sasaran penyelarasan perlu ditingkatkan. Tekan tanda ini untuk melanjutkan."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:609
-#, fuzzy
 msgid "The synchronisation password is missing."
-msgstr "Periksa konfigurasi sinkronisasi"
+msgstr "Kata sandi penyelarasan hilang."
 
 #: packages/lib/models/Tag.ts:204
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -4731,9 +4735,9 @@ msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"Target untuk disinkronkan. Setiap target sinkronisasi dapat memiliki "
-"parameter tambahan yang dinamai `sync.NUM.NAME` (semua didokumentasikan di "
-"bawah)."
+"Sasaran untuk diselaraskan. Setiap sasaran penyelarasan dapat memiliki "
+"parameter tambahan yang dinamai sebagai `sync.NUM.NAME` (semua "
+"didokumentasikan di bawah)."
 
 #: packages/app-desktop/gui/Root.tsx:179
 msgid "The Web Clipper needs your authorisation to access your data."
@@ -4741,41 +4745,42 @@ msgstr "Web Clipper membutuhkan otorisasi Anda untuk mengakses data Anda."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:73
 msgid "The web clipper service is enabled and set to auto-start."
-msgstr "Layanan Web Clipper diaktifkan dan disetel menjadi mulai otomatis."
+msgstr "Layanan Web Clipper dinyalakan dan diatur menjadi mulai otomatis."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:97
 msgid "The web clipper service is not enabled."
-msgstr "Layanan web clipper tidak diaktifkan."
+msgstr "Layanan web clipper tidak menyala."
 
 #: packages/lib/utils/webDAVUtils.ts:28
 msgid ""
 "The WebDAV implementation of %s is incompatible with Joplin, and as such is "
 "no longer supported. Please use a different sync method."
 msgstr ""
+"Penerapan WebDAV dari %s tidak cocok dengan Joplin, dan yang seperti itu "
+"tidak lagi didukung. Silakan gunakan metode penyelarasan lainnya."
 
 #: packages/lib/models/Setting.ts:860
 msgid "Theme"
 msgstr "Tema"
 
 #: packages/lib/models/Setting.ts:2663
-#, fuzzy
 msgid "Themes, editor font"
-msgstr "Font pada editor"
+msgstr "Tema, font penyunting"
 
 #: packages/app-mobile/components/NoteList.tsx:102
 msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr "Saat ini belum ada catatan. Buat catatan dengan mengeklik tombol (+)."
+msgstr "Saat ini belum ada catatan. Buat satu dengan menekan tombol (+)."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:241
 msgid "There are unsaved changes."
-msgstr ""
+msgstr "Ada perubahan yang belum tersimpan."
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:524
 #: packages/app-desktop/gui/NoteList/NoteList2.tsx:173
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
-"Tidak ada buku catatan saat ini. Buat buku catatan dengan mengeklik \"Buku "
+"Saat ini belum ada buku catatan. Buat satu dengan menekan  pada \"Buku "
 "catatan baru\"."
 
 #: packages/lib/services/interop/InteropService_Exporter_Jex.ts:33
@@ -4788,7 +4793,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Terjadi konflik (%s) saat mengunduh lampiran di bawah:\n"
+"Terdapat [conflict](%s) pada lampiran di bawah:\n"
 "\n"
 "%s"
 
@@ -4803,8 +4808,8 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Terjadi galat saat menyiapkan akun Joplin Cloud Anda. Silakan verifikasi "
-"email dan kata sandi Anda dan coba lagi. Galat tersebut:\n"
+"Terjadi galat saat mengatur akun Joplin Cloud Anda. Silakan verifikasi surel "
+"dan kata sandi Anda dan coba lagi. Galat tersebut:\n"
 "\n"
 "%s"
 
@@ -4814,9 +4819,9 @@ msgid ""
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
-"Item ini akan tetap berada di perangkat tetapi tidak akan diunggah ke target "
-"sinkronisasi. Untuk menemukan item ini, lakukan pencarian dengan judul atau "
-"ID (yang ditampilkan dalam tanda kurung di atas)."
+"Benda berikut akan tetap berada di perangkat tetapi tidak akan diunggah ke "
+"sasaran penyelarasan. Untuk menemukan benda berikut, cari judulnya atau ID "
+"(yang ditampilkan dalam tanda kurung di atas)."
 
 #: packages/lib/models/Setting.ts:2651
 msgid ""
@@ -4828,13 +4833,14 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
-"Plugin ini meningkatkan penyaji Markdown dengan fitur tambahan. Harap "
-"dicatat bahwa, sementara fitur-fitur ini mungkin berguna, mereka bukan "
-"Markdown standar, dengan demikian sebagian besar dari mereka hanya akan "
-"berfungsi di Joplin. Selain itu, beberapa *tidak kompatibel* dengan editor "
-"WYSIWYG. Jika Anda membuka catatan yang menggunakan salah satu plugin ini di "
-"editor itu, Anda akan kehilangan format plugin. Di bawah ini ditunjukkan "
-"plugin mana yang kompatibel atau tidak dengan editor WYSIWYG."
+"Plugin berikut meningkatkan penampil Markdown dengan kemampuan tambahan. "
+"Harap dicatat bahwa, walaupun kemampuan tersebut mungkin berguna, mereka "
+"bukan Markdown standar, dengan demikian sebagian besar dari mereka hanya "
+"akan berfungsi di Joplin. Selain itu, beberapa dari mereka *tidak "
+"kompatibel* dengan penyunting WYSIWYG. Jika Anda membuka catatan yang "
+"menggunakan salah satu plugin berikut pada penyunting tersebut, Anda akan "
+"kehilangan pemformatan plugin. Ditunjukkan di bawah plugin mana yang "
+"kompatibel atau tidak dengan penyunting WYSIWYG."
 
 #: packages/lib/utils/joplinCloud.ts:174
 msgid ""
@@ -4842,6 +4848,10 @@ msgid ""
 "collaborate on it. It does not however allow you to share a notebook with "
 "someone else, unless you have the feature \"%s\"."
 msgstr ""
+"Ini memungkinkan pengguna lain untuk berbagi sebuah buku catatan dengan "
+"Anda, dan kemudian Anda berdua dapat bekerja bersama padanya. Namun itu "
+"tidak membolehkan Anda untuk berbagi sebuah buku catatan dengan orang lain, "
+"kecuali Anda memiliki kemampuan “%s”."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:51
 #: packages/lib/services/ResourceEditWatcher/index.ts:224
@@ -4862,7 +4872,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:100
 msgid "This drawing may have unsaved changes."
-msgstr ""
+msgstr "Gambaran ini mungkin memiliki perubahan yang belum disimpan."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:232
 msgid ""
@@ -4875,22 +4885,19 @@ msgstr ""
 "mereka tidak dapat dipulihkan setelahnya."
 
 #: packages/app-mobile/components/ScreenHeader.tsx:284
-#, fuzzy
 msgid "This note could not be deleted: %s"
 msgid_plural "These notes could not be deleted: %s"
-msgstr[0] "Berkas ini tidak dapat dibuka: %s"
+msgstr[0] "Catatan berikut tidak dapat dihapus: %s"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:264
-#, fuzzy
 msgid "This note could not be duplicated: %s"
 msgid_plural "These notes could not be duplicated: %s"
-msgstr[0] "Buku catatan tidak bisa disimpan: %s"
+msgstr[0] "Catatan berikut tidak dapat digandakan: %s"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:555
-#, fuzzy
 msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
-msgstr[0] "Buku catatan tidak bisa disimpan: %s"
+msgstr[0] "Catatan berikut tidak dapat dipindahkan: %s"
 
 #: packages/lib/models/Note.ts:119
 msgid "This note does not have geolocation information."
@@ -4906,8 +4913,8 @@ msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
 msgstr ""
-"Catatan ini tidak memiliki konten. Klik \"%s\" untuk beralih ke editor dan "
-"mengubah catatan."
+"Catatan ini tidak memiliki isi. Tekan pada \"%s\" untuk beralih ke "
+"penyunting dan menyunting catatan."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:128
 msgid "This note has no history"
@@ -4918,8 +4925,8 @@ msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
 msgstr ""
-"Editor Rich Text ini punya beberapa keterbatasan dan Anda disarankan untuk "
-"tahu keterbatasannya sebelum menggunakan editor ini."
+"Penyunting Rich Text ini memiliki beberapa batasan dan disarankan untuk "
+"menyadarinya sebelum menggunakannya."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:121
 msgid ""
@@ -4927,9 +4934,9 @@ msgid ""
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
-"Layanan ini mengizinkan ekstensi peramban web untuk berkomunikasi dengan "
-"Joplin. Saat mengaktifkannya, mungkin firewall Anda akan meminta Anda untuk "
-"memberi izin kepada Joplin untuk mendengarkan port tertentu."
+"Layanan ini mengizinkan ekstensi peramban untuk berkomunikasi dengan Joplin. "
+"Ketika menyalakannya firewall Anda mungkin akan meminta Anda untuk memberi "
+"izin kepada Joplin untuk mendengarkan port tertentu."
 
 #: packages/lib/models/Setting.ts:1219
 msgid ""
@@ -4938,8 +4945,8 @@ msgid ""
 "reducing the number of conflicts."
 msgstr ""
 "Ini akan mengizinkan Joplin berjalan di latar belakang. Disarankan untuk "
-"mengaktifkan pengaturan ini agar catatan Anda terus disinkronkan, sehingga "
-"mengurangi jumlah konflik."
+"menyalakan pengaturan ini agar catatan Anda terus diselaraskan, sehingga "
+"mengurangi jumlah perbedaan."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:122
 msgid "This will open a new screen. Save your current changes?"
@@ -4950,8 +4957,8 @@ msgid ""
 "This will remove the notebook from your collection and you will no longer "
 "have access to its content. Do you wish to continue?"
 msgstr ""
-"Ini akan menghapus buku catatan tersebut dari koleksi Anda dan Anda tidak "
-"akan memiliki akses lagi ke kontennya. Lanjutkan?"
+"Ini akan menghapus buku catatan dari koleksi Anda dan Anda tidak akan "
+"memiliki akses lagi ke isinya. Apakah Anda ingin melanjutkan?"
 
 #: packages/lib/models/Setting.ts:827
 msgid "Time format"
@@ -4972,12 +4979,12 @@ msgstr "Judul"
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
-"Untuk mengizinkan Joplin menyinkronkan dengan Dropbox, silakan ikuti langkah-"
+"Untuk mengizinkan Joplin menyelaraskan dengan Dropbox, silakan ikuti langkah-"
 "langkah berikut:"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:53
 msgid "To continue, please enter your master password below."
-msgstr "Untuk melanjutkan, silakan masukkan kata sandi master."
+msgstr "Untuk melanjutkan, silakan masukkan kata sandi utama di bawah."
 
 #: packages/app-cli/app/app-gui.js:457
 msgid "To delete a tag, untag the associated notes."
@@ -4989,11 +4996,11 @@ msgstr "Untuk dihapus: %d"
 
 #: packages/app-cli/app/command-help.ts:82
 msgid "To enter command line mode, press \":\""
-msgstr "Untuk masuk mode CLI, tekan \":\""
+msgstr "Untuk masuk mode baris perintah, tekan \":\""
 
 #: packages/app-cli/app/command-help.ts:83
 msgid "To exit command line mode, press ESCAPE"
-msgstr "Untuk keluar dari mode CLI, tekan ESCAPE"
+msgstr "Untuk keluar dari mode baris perintah, tekan ESCAPE"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:170
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:9
@@ -5002,11 +5009,11 @@ msgid ""
 "menu \"%s\" > \"%s\""
 msgstr ""
 "Untuk mengurutkan catatan secara manual, tata pengurutan harus diganti "
-"menjadi \"%s\" dalam menu \"%s\" > \"%s\""
+"menjadi \"%s\" pada menu \"%s\" > \"%s\""
 
 #: packages/app-cli/app/command-help.ts:81
 msgid "To maximise/minimise the console, press \"tc\"."
-msgstr "Untuk memperbesar/memperkecil layar konsol, tekan \"tc\"."
+msgstr "Untuk memaksimalkan/meminikan konsol, tekan \"tc\"."
 
 #: packages/app-cli/app/command-help.ts:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
@@ -5017,14 +5024,16 @@ msgstr ""
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
-"Untuk mencoba kembali dekripsi item ini, jalankan perintah `e2ee decrypt --"
-"retry-failed-items`"
+"Untuk mencoba ulang dekripsi dari benda-benda berikut. Ralankan `e2ee "
+"decrypt --retry-failed-items`"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:62
 msgid ""
 "To switch the profile, the app is going to close and you will need to "
 "restart it."
 msgstr ""
+"Untuk beralih profil, aplikasi akan menutup dan Anda perlu memulai ulang "
+"aplikasi."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:498
 msgid ""
@@ -5032,7 +5041,7 @@ msgid ""
 "them in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
 "Agar dapat bekerja dengan benar, aplikasi membutuhkan perizinan berikut. "
-"Silakan aktifkan mereka di pengaturan ponsel Anda, di Aplikasi > Joplin > "
+"Silakan nyalakan mereka di pengaturan ponsel Anda, di Aplikasi > Joplin > "
 "Perizinan"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:113
@@ -5041,54 +5050,52 @@ msgid "to-do"
 msgstr "tugas"
 
 #: packages/app-mobile/components/note-item.js:143
-#, fuzzy
 msgid "to-do: %s"
-msgstr "tugas"
+msgstr "tugas: %s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:133
 msgid "Toggle comment"
-msgstr "Lihat/sembunyikan komentar"
+msgstr "Saklar komentar"
 
 #: packages/app-desktop/gui/MenuBar.tsx:872
 msgid "Toggle development tools"
-msgstr "Lihat/sembunyikan perkakas pengembang"
+msgstr "Saklar perkakas pengembang"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.ts:6
 msgid "Toggle editor layout"
-msgstr "Lihat/sembunyikan tata letak editor"
+msgstr "Saklar tata letak penyunting"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleEditors.ts:8
 msgid "Toggle editors"
-msgstr "Lihat/sembunyikan editor"
+msgstr "Saklar penyunting"
 
 #: packages/app-desktop/commands/toggleExternalEditing.ts:8
 msgid "Toggle external editing"
-msgstr "Lihat/sembunyikan eksternal"
+msgstr "Saklar penyuntingan eksternal"
 
 #: packages/lib/models/Setting.ts:2668
-#, fuzzy
 msgid "Toggle note history, keep notes for"
-msgstr "Simpan riwayat catatan untuk"
+msgstr "Saklar riwayat catatan, pertahankan untuk"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNoteList.ts:9
 msgid "Toggle note list"
-msgstr "Lihat/sembunyikan daftar catatan"
+msgstr "Saklar daftar catatan"
 
 #: packages/app-desktop/gui/MainScreen/commands/togglePerFolderSortOrder.ts:7
 msgid "Toggle own sort order"
-msgstr "Lihat/sembunyikan urutan sortir pribadi"
+msgstr "Saklar tata urutan sendiri"
 
 #: packages/app-desktop/commands/toggleSafeMode.ts:8
 msgid "Toggle safe mode"
-msgstr "Lihat/sembunyikan ke mode aman"
+msgstr "Saklar mode aman"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleSideBar.ts:9
 msgid "Toggle sidebar"
-msgstr "Lihat/sembunyikan bilah samping"
+msgstr "Saklar bilah samping"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:7
 msgid "Toggle sort order field"
-msgstr "Lihat/sembunyikan bidang urutan sortir"
+msgstr "Saklar bidang tata urutan"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:32
 msgid "Token has been copied to the clipboard!"
@@ -5099,13 +5106,12 @@ msgid "Tools"
 msgstr "Perkakas"
 
 #: packages/server/src/routes/admin/users.ts:149
-#, fuzzy
 msgid "Total Size"
-msgstr "Ukuran sebenarnya"
+msgstr "Jumlah ukuran"
 
 #: packages/lib/services/ReportService.ts:289
 msgid "Total: %d/%d"
-msgstr "Total: %d/%d"
+msgstr "Jumlah: %d/%d"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:328
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:123
@@ -5114,17 +5120,16 @@ msgstr "Coba lagi"
 
 #: packages/lib/utils/joplinCloud.ts:360 packages/lib/utils/joplinCloud.ts:382
 #: packages/lib/utils/joplinCloud.ts:404
-#, fuzzy
 msgid "Try it now"
-msgstr "Lakukan sekarang"
+msgstr "Coba sekarang"
 
 #: packages/app-cli/app/command-help.ts:71
 msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
-"Ketik `help [command]` untuk informasi lanjutan tentang sebuah perintah "
-"(command); atau ketik `help all` untuk informasi penggunaan secara lengkap."
+"Ketik `help [command]` untuk informasi lebih banyak tentang sebuah perintah; "
+"atau ketik `help all` untuk informasi penggunaan secara lengkap."
 
 #: packages/app-cli/app/main.js:98
 msgid "Type `joplin help` for usage information."
@@ -5136,9 +5141,9 @@ msgid ""
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
 "commands."
 msgstr ""
-"Ketik judul catatan atau bagian di isinya untuk temukan catatan yang dicari. "
-"Atau ketik # diikuti dengan nama label, atau @ diikuti dengan nama buku "
-"catatan. Atau ketik : untuk mencari perintah."
+"Ketik judul catatan atau bagian dari isinya untuk menuju ke situ. Atau ketik "
+"# diikuti dengan nama label, atau @ diikuti dengan nama buku catatan. Atau "
+"ketik : untuk mencari perintah."
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:201
 msgid "Type new tags or select from list"
@@ -5146,7 +5151,7 @@ msgstr "Ketik label baru atau pilih dari daftar"
 
 #: packages/app-cli/app/help-utils.js:56
 msgid "Type: %s."
-msgstr "Tipe: %s."
+msgstr "Ketik: %s."
 
 #: packages/app-mobile/components/screens/Note.tsx:1013
 msgid "Unable to edit resource of type %s"
