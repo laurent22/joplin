@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import ScreenHeader from '../../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
 import BaseScreenComponent from '../../base-screen';
-const { themeStyle } = require('../../global-style.js');
+import { themeStyle } from '../../global-style';
 import * as shared from '@joplin/lib/components/shared/config/config-shared';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import biometricAuthenticate from '../../biometrics/biometricAuthenticate';

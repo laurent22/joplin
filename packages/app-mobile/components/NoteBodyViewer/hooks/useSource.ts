@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import { RendererWebViewOptions } from '../bundledJs/types';
-const { themeStyle } = require('../../global-style.js');
+import { themeStyle } from '../../global-style';
 
 const useSource = (tempDirPath: string, themeId: number) => {
 	const injectedJs = useMemo(() => {
