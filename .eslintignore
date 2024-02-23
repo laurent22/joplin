@@ -686,7 +686,7 @@ packages/lib/components/shared/side-menu-shared.js
 packages/lib/database-driver-better-sqlite.js
 packages/lib/database.js
 packages/lib/debug/DebugService.js
-packages/lib/determineProfileDir.js
+packages/lib/determineBaseAppDirs.js
 packages/lib/dom.js
 packages/lib/errorUtils.js
 packages/lib/errors.js

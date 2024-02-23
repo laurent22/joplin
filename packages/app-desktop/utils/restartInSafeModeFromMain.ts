@@ -5,7 +5,7 @@ import { safeModeFlagFilename } from '@joplin/lib/BaseApplication';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 import { writeFile } from 'fs-extra';
 import { join } from 'path';
-import determineProfileDir from '@joplin/lib/determineProfileDir';
+import determineBaseAppDirs from '@joplin/lib/determineBaseAppDirs';
 
 
 const restartInSafeModeFromMain = async () => {
@@ -21,7 +21,7 @@ const restartInSafeModeFromMain = async () => {
 	shimInit({});
 
 	const startFlags = await processStartFlags(bridge().processArgv());
-	const rootProfileDir = determineProfileDir(startFlags.matched.profileDir, appName);
+	const { rootProfileDir } = determineBaseAppDirs(startFlags.matched.profileDir, appName);
 	const { profileDir } = await initProfile(rootProfileDir);
 
 	// We can't access the database, so write to a file instead.
