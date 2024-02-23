@@ -69,7 +69,7 @@ a {
 	border: 1px solid rgba(0,160,255,0);
 }
 
-.icon-button:hover {
+.icon-button:hover, .icon-button:focus-visible {
 	background-color: rgba(0,0,0,0.05) !important;
 	border: 1px solid rgba(0,0,0,0.10);
 	border-radius: 5px;
@@ -141,8 +141,10 @@ a {
 	to {transform: rotate(360deg);}
 }
 
-*:focus {
-    outline: none;
+input:not([type=button]):not([type=checkbox]), select {
+	&:focus-visible {
+		outline: none;
+	}
 }
 
 /* =========================================================================================
