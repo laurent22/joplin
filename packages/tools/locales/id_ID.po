@@ -2632,7 +2632,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useInlineFormattingButtons.ts:45
 msgid "KaTeX"
-msgstr ""
+msgstr "KaTex"
 
 #: packages/lib/models/Setting.ts:1631
 msgid "Keep note history for"
@@ -2648,28 +2648,27 @@ msgstr "Pintasan Papan Ketik"
 
 #: packages/lib/models/Setting.ts:2639
 msgid "Keyboard Shortcuts"
-msgstr "Pintasan Papan Ketik"
+msgstr "Pintasan-pintasan Papan Ketik"
 
 #: packages/lib/versionInfo.ts:78
 msgid "Keychain Supported: %s"
-msgstr "Keychain Didukung: %s"
+msgstr "Rantai kunci yang Didukung: %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:73
 msgid "Keys that need upgrading"
-msgstr "Kunci yang perlu ditingkatkan"
+msgstr "Kunci-kunci yang perlu ditingkatkan"
 
 #: packages/lib/models/Setting.ts:1446
 msgid "Landscape"
-msgstr "Lanskap"
+msgstr "Mendatar"
 
 #: packages/lib/models/Setting.ts:792
 msgid "Language"
 msgstr "Bahasa"
 
 #: packages/lib/models/Setting.ts:2662
-#, fuzzy
 msgid "Language, date format"
-msgstr "Format tanggal"
+msgstr "Bahasa, format tanggal"
 
 #: packages/lib/Synchronizer.ts:201
 msgid "Last error: %s"
@@ -2686,11 +2685,11 @@ msgstr "Tata letak"
 
 #: packages/app-desktop/gui/MenuBar.tsx:743
 msgid "Layout button sequence"
-msgstr "Urutan tombol tata letak"
+msgstr "Urutan tata letak tombol"
 
 #: packages/lib/models/Setting.ts:1798
 msgid "Leave it blank to download the language files from the default website"
-msgstr ""
+msgstr "Kosongkan untuk mengunduh berkas-berkas bahasa dari situs web bawaan"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -2713,24 +2712,21 @@ msgid "Lines"
 msgstr "Garis"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useInlineFormattingButtons.ts:56
-#, fuzzy
 msgid "Link"
 msgstr "Tautan"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:95
-#, fuzzy
 msgid "Link description"
-msgstr "Enkripsi"
+msgstr "Keterangan tautan"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:184
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
-msgstr[0] "Tautan telah tersalin ke papan klip!"
+msgstr[0] "Tautan telah disalin ke papan klip!"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:92
-#, fuzzy
 msgid "Link text"
-msgstr "Tautan"
+msgstr "Teks tautan"
 
 #: packages/app-mobile/components/screens/Note.tsx:337
 msgid "Links with protocol \"%s\" are not supported"
@@ -2740,20 +2736,19 @@ msgstr "Tautan dengan protokol \"%s\" tidak didukung"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:229
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:230
 msgid "List item"
-msgstr "Item daftar"
+msgstr "Daftar benda"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:52
 msgid "Lists"
-msgstr ""
+msgstr "Daftar"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
 msgid "Loaded"
 msgstr "Termuat"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:87
-#, fuzzy
 msgid "Loading..."
-msgstr "Memperbarui..."
+msgstr "Memuat…"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:54
 msgid "Location"
@@ -2765,9 +2760,9 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
-"Berkas kunci (lock file) sedang ditahan. Jika Anda tahu bahwa tidak ada "
-"proses sinkronisasi yang terjadi, Anda dapat menghapus berkas kunci di "
-"\"%s\" dan melanjutkan operasi."
+"Berkas kunci sedang ditahan. Jika Anda tahu bahwa tidak ada penyelarasan "
+"yang sedang berjalan, Anda dapat menghapus berkas kunci di \"%s\" dan "
+"melanjutkan kegiatan."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:470
 #: packages/app-mobile/components/screens/LogScreen.tsx:212
@@ -2785,7 +2780,7 @@ msgstr "Masuk di bawah."
 
 #: packages/app-mobile/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
-msgstr "Masuk dengan Dropboox"
+msgstr "Masuk dengan Dropbox"
 
 #: packages/app-mobile/components/screens/onedrive-login.js:110
 msgid "Login with OneDrive"
@@ -2797,7 +2792,7 @@ msgstr "Keluar"
 
 #: packages/lib/models/Setting.ts:2669
 msgid "Logs, profiles, sync status"
-msgstr ""
+msgstr "Log, profil, status penyelarasan"
 
 #: packages/app-desktop/gui/MenuBar.tsx:860
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:515
