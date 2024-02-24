@@ -141,6 +141,11 @@ a {
 	to {transform: rotate(360deg);}
 }
 
+
+*:focus-visible {
+	outline: 1px solid #0097ea;
+}
+
 // The browser-default focus-visible indicator was originally removed for aesthetic
 // reasons. However, this causes accessibility issues.
 //
