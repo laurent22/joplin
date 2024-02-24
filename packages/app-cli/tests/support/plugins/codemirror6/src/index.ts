@@ -21,6 +21,8 @@ joplin.plugins.register({
 					// For now, we hardcode the "highlightGutter" setting. See the "settings"
 					// example plugin for how we might make the highlightGutter setting configurable.
 					highlightGutter: await joplin.settings.value('highlight-active-line'),
+
+					addCompletions: false,
 				};
 			} else {
 				throw new Error(`Unknown message ${message}`);

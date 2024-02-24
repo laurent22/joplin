@@ -62,24 +62,26 @@ export default (context: ContentScriptContext): CodeMirrorContentScriptModule =>
 						}),
 					]);
 				}
+
+				if (config.addCompletions) {
+					//
+					// 3. Using Joplin's CodeMirror extensions
+					// =======================================
+
+					// Joplin also exposes extensions for autocompletion.
+					// CodeMirror's built-in `autocompletion(...)` doesn't work if multiple plugins
+					// try to use its `override` option.
+					codeMirrorWrapper.addExtension([
+						codeMirrorWrapper.joplinExtensions.completionSource(
+							completeFromList(['# Example completion'])
+						),
+
+						// Joplin also exposes a Facet that allows enabling or disabling CodeMirror's
+						// built-in autocompletions. These apply, for example, to HTML tags.
+						codeMirrorWrapper.joplinExtensions.enableLanguageDataAutocomplete.of(true),
+					]);
+				}
 			})();
-
-
-			// 3. Using Joplin's CodeMirror extensions
-			// =======================================
-
-			// Joplin also exposes extensions for autocompletion.
-			// CodeMirror's built-in `autocompletion(...)` doesn't work if multiple plugins
-			// try to use its `override` option.
-			codeMirrorWrapper.addExtension([
-				codeMirrorWrapper.joplinExtensions.completionSource(
-					completeFromList(['# Example completion'])
-				),
-
-				// Joplin also exposes a Facet that allows enabling or disabling CodeMirror's
-				// built-in autocompletions. These apply, for example, to HTML tags.
-				codeMirrorWrapper.joplinExtensions.enableLanguageDataAutocomplete.of(true),
-			]);
 
 
 			// 4. Registering editor commands
