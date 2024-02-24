@@ -1,6 +1,6 @@
 import { EventType } from '../services/database/types';
-import { beforeAllDb, afterAllTests, beforeEachDb, models } from '../utils/testing/testUtils';
-import { msleep } from '../utils/time';
+import { afterAllTests, beforeAllDb, beforeEachDb, models } from '../utils/testing/testUtils';
+import { msleep, Week } from '../utils/time';
 
 describe('EventModel', () => {
 
@@ -37,4 +37,21 @@ describe('EventModel', () => {
 		expect(latest.id).toBe(allEvents[1].id);
 	});
 
+	test('should delete events older than a week', async () => {
+		const now = Date.now();
+		const aWeekAgo = now - Week;
+		for (const difference of [-10, 5, 0, 5, 10]) {
+			await models().event().create(EventType.TaskStarted, 'deleteExpiredTokens', aWeekAgo + difference);
+		}
+
+		const allEvents = (await models().event().all());
+		expect(allEvents.length).toBe(5);
+
+		await models().event().deleteOldEvents(aWeekAgo);
+		const remainingEvents = (await models().event().all());
+		expect(allEvents.length).toBe(3);
+		for (const event of remainingEvents) {
+			expect(event.created_time).toBeGreaterThanOrEqual(aWeekAgo);
+		}
+	});
 });

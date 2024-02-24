@@ -15,11 +15,11 @@ export default class EventModel extends BaseModel<Event> {
 		return UuidType.Native;
 	}
 
-	public async create(type: EventType, name = '') {
+	public async create(type: EventType, name = '', created_time = Date.now()) {
 		await this.save({
 			name,
 			type,
-			created_time: Date.now(),
+			created_time,
 		});
 	}
 
