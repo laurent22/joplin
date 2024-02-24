@@ -6,6 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Mr.X <1725338233@qq.com>\n"
 "Language-Team: zh_CN <737445366KG@Gmail.com>\n"
 "Language: zh_CN\n"
@@ -177,7 +179,7 @@ msgstr "%s = %s (%s)"
 msgid ""
 "%s is not optimised for synchronising many small files so your initial "
 "synchronisation will be slow."
-msgstr ""
+msgstr "%s 未针对同步许多小文件进行优化，因此您的首次同步将会很慢。"
 
 #: packages/lib/services/ReportService.ts:247
 #: packages/lib/services/ReportService.ts:248
@@ -556,7 +558,7 @@ msgstr "浏览..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:231
 msgid "Built-in"
-msgstr ""
+msgstr "内建"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:84
 msgid "Bulleted List"
@@ -808,6 +810,8 @@ msgid ""
 "application again. Make sure you create a backup first by exporting all your "
 "notes as JEX."
 msgstr ""
+"关闭应用程序，然后删除“%s”中的个人资料，然后再次启动应用程序。 请确保您已事先"
+"将所有笔记以 JEX 格式导出来创建备份。"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 #: packages/app-desktop/gui/MenuBar.tsx:655
@@ -1750,7 +1754,7 @@ msgstr "启用笔记历史"
 
 #: packages/lib/models/Setting.ts:845
 msgid "Enable optical character recognition (OCR)"
-msgstr ""
+msgstr "启用光学字符识别 (OCR)"
 
 #: packages/lib/models/Setting.ts:1195
 msgid "Enable PDF viewer"
@@ -1892,14 +1896,12 @@ msgid "Evernote Export File (as Markdown)"
 msgstr "Evernote 导出文件 (Markdown)"
 
 #: packages/lib/services/interop/InteropService.ts:91
-#, fuzzy
 msgid "Evernote Export Files (Directory, as HTML)"
-msgstr "Evernote 导出文件 (HTML)"
+msgstr "Evernote 导出文件 (目录, HTML)"
 
 #: packages/lib/services/interop/InteropService.ts:100
-#, fuzzy
 msgid "Evernote Export Files (Directory, as Markdown)"
-msgstr "Evernote 导出文件 (Markdown)"
+msgstr "Evernote 导出文件 (目录, Markdown)"
 
 #: packages/app-cli/app/command-exit.ts:11
 msgid "Exits the application."
@@ -2013,9 +2015,8 @@ msgstr "文件系统"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:204
 #: packages/app-mobile/components/screens/LogScreen.tsx:205
-#, fuzzy
 msgid "Filter"
-msgstr "筛选标签"
+msgstr "筛选"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:193
 msgid "Filter tags"
@@ -2193,9 +2194,8 @@ msgid "Hide advanced"
 msgstr "隐藏高级的"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:562
-#, fuzzy
 msgid "Hide Advanced Settings"
-msgstr "显示高级选项"
+msgstr "隐藏高级选项"
 
 #: packages/server/src/routes/admin/users.ts:203
 msgid "Hide disabled"
@@ -2352,7 +2352,7 @@ msgstr ""
 
 #: packages/lib/services/synchronizer/syncInfoUtils.ts:431
 msgid "In order to synchronise, please upgrade your application to version %s+"
-msgstr ""
+msgstr "为了同步，请将您的应用程序升级到版本 %s+"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:101
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:195
@@ -3786,9 +3786,8 @@ msgid "Search for..."
 msgstr "搜索..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:141
-#, fuzzy
 msgid "Search hidden"
-msgstr "搜索"
+msgstr "隐藏搜索"
 
 #: packages/app-desktop/gui/NoteListControls/commands/focusSearch.ts:6
 msgid "Search in all the notes"
@@ -3799,9 +3798,8 @@ msgid "Search in current note"
 msgstr "在当前笔记内搜索"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:141
-#, fuzzy
 msgid "Search shown"
-msgstr "搜索"
+msgstr "显示搜索"
 
 #: packages/app-cli/app/gui/FolderListWidget.js:51
 msgid "Search:"
@@ -4019,13 +4017,13 @@ msgstr "日光亮 (Solarised)"
 #: packages/lib/models/settings/settingValidations.ts:20
 msgid ""
 "Some attachments could not be downloaded. Please try to download them again."
-msgstr ""
+msgstr "部分附件无法下载。 请尝试再次下载它们。"
 
 #: packages/lib/models/settings/settingValidations.ts:17
 msgid ""
 "Some attachments need to be downloaded. Set the attachment download mode to "
 "\"always\" and try again."
-msgstr ""
+msgstr "部分附件需要下载。 将附件下载模式设置为“总是”并重试。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:621
 #: packages/app-mobile/components/ScreenHeader.tsx:576
@@ -4041,10 +4039,9 @@ msgid "Some items cannot be synchronised. Press for more info."
 msgstr "某些条目无法被同步。点按以获取更多信息。"
 
 #: packages/lib/models/settings/settingValidations.ts:23
-#, fuzzy
 msgid ""
 "Some items could not be synchronised. Please try to synchronise them first."
-msgstr "某些条目无法被同步。点按以获取更多信息。"
+msgstr "某些条目无法被同步。请先尝试同步它们。"
 
 #: packages/lib/models/Setting.ts:1030
 msgid "Sort notebooks by"
@@ -4364,11 +4361,11 @@ msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
 msgstr "感谢！您的 Joplin Cloud 帐号已经设置完毕。"
 
 #: packages/lib/utils/joplinCloud.ts:167
-#, fuzzy
 msgid ""
 "The [Web Clipper](%s) is a browser extension that allows you to save web "
 "pages and screenshots from your browser."
-msgstr "Joplin 网页剪藏器可以让您将浏览器中的网页和屏幕截图保存到 Joplin。"
+msgstr ""
+"[Web Clipper](%s) 是一个浏览器扩展程序，可让您保存浏览器中的网页和屏幕截图。"
 
 #: packages/lib/services/profileConfig/index.ts:105
 msgid ""
@@ -4455,10 +4452,9 @@ msgstr ""
 "1 的条目的两倍。该更改在软件重启后生效。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:594
-#, fuzzy
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
-msgstr[0] "下列附件发生的改动正在被监控："
+msgstr[0] "以下附件与您的搜索匹配："
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:578
 msgid "The following attachments are being watched for changes:"
@@ -4541,6 +4537,11 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"由于以下原因，无法更改同步目标：%s\n"
+"\n"
+"如果问题无法解决，您可能需要先按照以下说明清除数据：\n"
+"\n"
+"%s"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:615
 msgid ""
@@ -4979,6 +4980,8 @@ msgid ""
 "Uninstall and reinstall the application. Make sure you create a backup first "
 "by exporting all your notes as JEX from the desktop application."
 msgstr ""
+"卸载然后重新安装本程序。 请确保您已事先从桌面应用程序将所有笔记以 JEX 格式导"
+"出来创建备份。"
 
 #: packages/lib/utils/processStartFlags.ts:170
 msgid "Unknown flag: %s"
@@ -5272,6 +5275,8 @@ msgid ""
 "When enabled, the application will scan your attachments and extract the "
 "text from it. This will allow you to search for text in these attachments."
 msgstr ""
+"启用后，应用程序将扫描您的附件并从中提取文本。 这将允许您搜索这些附件中的文"
+"本。"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:178
 msgid "Window unresponsive."
