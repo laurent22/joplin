@@ -79,10 +79,14 @@ const PluginUserWebView = (props: Props) => {
 
 	const injectedJs = useMemo(() => {
 		return `
-			${shim.injectedJs('pluginBackgroundPage')}
-			pluginBackgroundPage.initializeDialogWebView(
-				${JSON.stringify(messageChannelId)}
-			);
+			if (!window.backgroundPageLoaded) {
+				${shim.injectedJs('pluginBackgroundPage')}
+				pluginBackgroundPage.initializeDialogWebView(
+					${JSON.stringify(messageChannelId)}
+				);
+
+				window.backgroundPageLoaded = true;
+			}
 		`;
 	}, [messageChannelId]);
 

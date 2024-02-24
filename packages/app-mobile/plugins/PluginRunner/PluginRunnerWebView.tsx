@@ -87,8 +87,14 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 
 	const injectedJs = useMemo(() => {
 		return `
-			${shim.injectedJs('pluginBackgroundPage')}
-			console.log('Loaded PluginRunnerWebView.');
+			if (!window.loadedBackgroundPage) {
+				${shim.injectedJs('pluginBackgroundPage')}
+				console.log('Loaded PluginRunnerWebView.');
+
+				// Necessary, because React Native WebView can re-run injectedJs
+				// without reloading the page.
+				window.loadedBackgroundPage = true;
+			}
 		`;
 	}, []);
 

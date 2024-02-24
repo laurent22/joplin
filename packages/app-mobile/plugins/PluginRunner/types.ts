@@ -45,8 +45,11 @@ export interface DialogContentSize {
 }
 
 export interface DialogWebViewApi {
+	// Note: Includes any path at most once (calling again with the same paths
+	//       does not reload styles/scripts).
 	includeCssFiles: (paths: string[])=> Promise<void>;
 	includeJsFiles: (paths: string[])=> Promise<void>;
+
 	setThemeCss: (css: string)=> Promise<void>;
 	getFormData: ()=> Promise<SerializableData>;
 	getContentSize: ()=> Promise<DialogContentSize>;

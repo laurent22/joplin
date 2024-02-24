@@ -25,8 +25,12 @@ const useSource = (tempDirPath: string, themeId: number) => {
 		return `
 			window.rendererWebViewOptions = ${JSON.stringify(rendererWebViewOptions)};
 
-			${shim.injectedJs('webviewLib')}
-			${shim.injectedJs('noteBodyViewerBundle')}
+			if (!window.injectedJsLoaded) {
+				window.injectedJsLoaded = true;
+
+				${shim.injectedJs('webviewLib')}
+				${shim.injectedJs('noteBodyViewerBundle')}
+			}
 		`;
 	}, [tempDirPath]);
 
