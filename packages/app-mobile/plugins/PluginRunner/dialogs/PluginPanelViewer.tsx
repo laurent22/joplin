@@ -60,6 +60,8 @@ const useStyles = (themeId: number) => {
 	}, [themeId, windowSize.width, windowSize.height]);
 };
 
+const emptyCallback = () => {};
+
 const PluginPanelViewer: React.FC<Props> = props => {
 	const viewInfos = useViewInfos(props.pluginStates);
 	const viewInfoById = useMemo(() => {
@@ -124,8 +126,8 @@ const PluginPanelViewer: React.FC<Props> = props => {
 					style={styles.webView}
 					viewInfo={viewInfo}
 					pluginHtmlContents={props.pluginHtmlContents}
-					onLoadEnd={()=>{}}
-					setDialogControl={()=>{}}
+					onLoadEnd={emptyCallback}
+					setDialogControl={emptyCallback}
 				/>
 			</View>
 		);
