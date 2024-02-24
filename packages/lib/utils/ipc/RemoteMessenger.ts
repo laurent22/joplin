@@ -13,6 +13,7 @@ enum MessageType {
 
 type RemoteReadyMessage = Readonly<{
 	kind: MessageType.RemoteReady;
+	requiresResponse: boolean;
 }>;
 
 type InvokeMethodMessage = Readonly<{
@@ -346,8 +347,8 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 		this.onMethodRespondedTo(message.responseId);
 	}
 
-	private async onRemoteReadyToReceive() {
-		if (this.isRemoteReady) {
+	private async onRemoteReadyToReceive(message: RemoteReadyMessage) {
+		if (this.isRemoteReady && !message.requiresResponse) {
 			return;
 		}
 
@@ -362,6 +363,10 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 			this.postMessage({
 				kind: MessageType.RemoteReady,
 				channelId: this.channelId,
+
+				// We already know that the remote is ready, so
+				// another response isn't necessary.
+				requiresResponse: false,
 			});
 		}
 	}
@@ -425,7 +430,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 		} else if (asInternalMessage.kind === MessageType.ErrorResponse) {
 			await this.onRemoteReject(asInternalMessage);
 		} else if (asInternalMessage.kind === MessageType.RemoteReady) {
-			await this.onRemoteReadyToReceive();
+			await this.onRemoteReadyToReceive(asInternalMessage);
 		} else {
 			// Have TypeScipt verify that the above cases are exhaustive
 			const exhaustivenessCheck: never = asInternalMessage;
@@ -440,6 +445,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 				this.postMessage({
 					kind: MessageType.RemoteReady,
 					channelId: this.channelId,
+					requiresResponse: true,
 				});
 			}
 			return;
@@ -454,6 +460,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 		this.postMessage({
 			kind: MessageType.RemoteReady,
 			channelId: this.channelId,
+			requiresResponse: !this.isRemoteReady,
 		});
 	}
 
