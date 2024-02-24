@@ -1897,11 +1897,11 @@ msgstr "Evernote 导出文件 (Markdown)"
 
 #: packages/lib/services/interop/InteropService.ts:91
 msgid "Evernote Export Files (Directory, as HTML)"
-msgstr "Evernote 导出文件 (目录, HTML)"
+msgstr "Evernote 导出文件 (目录， HTML)"
 
 #: packages/lib/services/interop/InteropService.ts:100
 msgid "Evernote Export Files (Directory, as Markdown)"
-msgstr "Evernote 导出文件 (目录, Markdown)"
+msgstr "Evernote 导出文件 (目录，Markdown)"
 
 #: packages/app-cli/app/command-exit.ts:11
 msgid "Exits the application."
@@ -2131,7 +2131,7 @@ msgstr[0] "生成链接中..."
 
 #: packages/lib/models/Setting.ts:2667
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
-msgstr "地理位置, 拼写检查, 编辑器工具栏等设置"
+msgstr "地理位置，拼写检查，编辑器工具栏等设置"
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:91
 msgid "Get it now:"
@@ -2710,7 +2710,7 @@ msgstr "登出"
 
 #: packages/lib/models/Setting.ts:2669
 msgid "Logs, profiles, sync status"
-msgstr "日志, 配置文件与同步状态"
+msgstr "日志，配置文件与同步状态"
 
 #: packages/app-desktop/gui/MenuBar.tsx:860
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:515
@@ -2806,7 +2806,7 @@ msgstr "最大总大小"
 
 #: packages/lib/models/Setting.ts:2666
 msgid "Media player, math, diagrams, table of contents"
-msgstr "媒体播放器, 数学公式, 图表等设置"
+msgstr "媒体播放器，数学公式，图表等设置"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:318
 msgid "Missing keys"
@@ -4261,7 +4261,7 @@ msgstr "同步笔记"
 
 #: packages/lib/models/Setting.ts:2664
 msgid "Sync, encryption, proxy"
-msgstr "同步与加密, 代理设置"
+msgstr "同步与加密，代理设置"
 
 #: packages/lib/models/Setting.ts:2629
 msgid "Synchronisation"
