@@ -3,6 +3,7 @@ import { TaskId } from '../services/database/types';
 import TaskService, { Task, taskIdToLabel } from '../services/TaskService';
 import { Services } from '../services/types';
 import { Config, Env } from './types';
+import { Week } from './time';
 
 export default async function(env: Env, models: Models, config: Config, services: Services): Promise<TaskService> {
 	const taskService = new TaskService(env, models, config, services);
@@ -79,7 +80,7 @@ export default async function(env: Env, models: Models, config: Config, services
 			id: TaskId.DeleteOldEvents,
 			description: taskIdToLabel(TaskId.DeleteOldEvents),
 			schedule: '0 0 * * *',
-			run: (models: Models) => models.event().deleteOldEvents(),
+			run: (models: Models) => models.event().deleteOldEvents(Date.now() - Week),
 		},
 	];
 
