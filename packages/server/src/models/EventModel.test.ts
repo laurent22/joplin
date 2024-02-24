@@ -40,7 +40,7 @@ describe('EventModel', () => {
 	test('should delete events older than a week', async () => {
 		const now = Date.now();
 		const aWeekAgo = now - Week;
-		for (const difference of [-10, 5, 0, 5, 10]) {
+		for (const difference of [-10, -5, 0, 5, 10]) {
 			await models().event().create(EventType.TaskStarted, 'deleteExpiredTokens', aWeekAgo + difference);
 		}
 
@@ -49,7 +49,7 @@ describe('EventModel', () => {
 
 		await models().event().deleteOldEvents(aWeekAgo);
 		const remainingEvents = (await models().event().all());
-		expect(allEvents.length).toBe(3);
+		expect(remainingEvents.length).toBe(3);
 		for (const event of remainingEvents) {
 			expect(event.created_time).toBeGreaterThanOrEqual(aWeekAgo);
 		}
