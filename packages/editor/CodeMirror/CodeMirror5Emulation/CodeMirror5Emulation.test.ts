@@ -108,4 +108,14 @@ describe('CodeMirror5Emulation', () => {
 		// additional times if its option hasn't updated.
 		expect(onOtherOptionUpdate).toHaveBeenCalledTimes(1);
 	});
+
+	it('should support running commands registered with defineExtension', () => {
+		const codeMirror = makeCodeMirrorEmulation('Test 1\nTest 2');
+
+		const testExtension = jest.fn((a: number) => `testing${a}`);
+		codeMirror.defineExtension('testExtension', testExtension);
+
+		expect(codeMirror.commandExists('testExtension')).toBe(true);
+		expect(codeMirror.execCommand('testExtension', 1)).toBe('testing1');
+	});
 });

@@ -40,6 +40,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 	private _options: Record<string, CodeMirror5OptionRecord> = Object.create(null);
 	private _decorator: Decorator;
 	private _decoratorExtension: Extension;
+	private _userExtensions: Record<string, any> = Object.create(null);
 
 	// Used by some plugins to store state.
 	public state: Record<string, any> = Object.create(null);
@@ -114,6 +115,13 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 			showPanel.of(() => {
 				const dom = document.createElement('div');
 				dom.classList.add('CodeMirror-measure');
+
+				// Make invisible, but still measurable
+				dom.style.visibility = 'hidden';
+				dom.style.pointerEvents = 'none';
+				dom.style.height = '0';
+				dom.style.overflow = 'auto';
+
 				return { dom };
 			}),
 
@@ -272,7 +280,8 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 	}
 
 	public defineExtension(name: string, value: any) {
-		(CodeMirror5Emulation.prototype as any)[name] ??= value;
+		(CodeMirror5Emulation.prototype as any)[name] = value;
+		this._userExtensions[name] = value;
 	}
 
 	public defineOption(name: string, defaultValue: any, onUpdate: OptionUpdateCallback) {
@@ -398,20 +407,26 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 			return;
 		}
 
-		return this.execCommand(commandName);
+		if (this.commandExists(commandName)) {
+			return this.execCommand(commandName);
+		}
 	}
 
 	public commandExists(commandName: string) {
-		return commandName in CodeMirror5Emulation.commands;
+		return commandName in CodeMirror5Emulation.commands || typeof this._userExtensions[commandName] === 'function';
 	}
 
-	public execCommand(name: string) {
+	public execCommand(name: string, ...args: any[]) {
 		if (!this.commandExists(name)) {
 			this.logMessage(`Unsupported CodeMirror command, ${name}`);
 			return;
 		}
 
-		return CodeMirror5Emulation.commands[name as (keyof typeof CodeMirror5Emulation.commands)](this);
+		if (name in CodeMirror5Emulation.commands) {
+			return CodeMirror5Emulation.commands[name as (keyof typeof CodeMirror5Emulation.commands)](this);
+		} else if (typeof this._userExtensions[name] === 'function') {
+			return this._userExtensions[name](...args);
+		}
 	}
 }
 
