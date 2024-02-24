@@ -435,7 +435,9 @@ packages/app-desktop/utils/restartInSafeModeFromMain.js
 packages/app-mobile/PluginAssetsLoader.js
 packages/app-mobile/commands/index.js
 packages/app-mobile/commands/openItem.js
+packages/app-mobile/commands/openNote.js
 packages/app-mobile/commands/scrollToHash.js
+packages/app-mobile/commands/util/goToNote.js
 packages/app-mobile/components/ActionButton.js
 packages/app-mobile/components/BackButtonDialogBox.js
 packages/app-mobile/components/CameraView.js

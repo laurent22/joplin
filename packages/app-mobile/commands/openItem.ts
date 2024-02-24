@@ -2,8 +2,8 @@ import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/
 import shim from '@joplin/lib/shim';
 import { _ } from '@joplin/lib/locale';
 const { parseResourceUrl, urlProtocol } = require('@joplin/lib/urlUtils');
-import NavService from '@joplin/lib/services/NavService';
 import Logger from '@joplin/utils/Logger';
+import goToNote from './util/goToNote';
 
 const logger = Logger.create('openItemCommand');
 
@@ -22,10 +22,7 @@ export const runtime = (): CommandRuntime => {
 					const { itemId, hash } = parsedUrl;
 
 					logger.info(`Navigating to item ${itemId}`);
-					await NavService.go('Note', {
-						noteId: itemId,
-						noteHash: hash,
-					});
+					await goToNote(itemId, hash);
 				} else {
 					logger.error(`Invalid Joplin link: ${link}`);
 				}
