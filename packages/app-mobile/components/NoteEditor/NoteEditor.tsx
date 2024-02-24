@@ -4,7 +4,7 @@ import { themeStyle } from '@joplin/lib/theme';
 import themeToCss from '@joplin/lib/services/style/themeToCss';
 import EditLinkDialog from './EditLinkDialog';
 import { defaultSearchState, SearchPanel } from './SearchPanel';
-import ExtendedWebView from '../ExtendedWebView';
+import ExtendedWebView, { WebViewControl } from '../ExtendedWebView';
 
 import * as React from 'react';
 import { forwardRef, useEffect, useImperativeHandle } from 'react';
@@ -85,39 +85,38 @@ function useCss(themeId: number): string {
 	}, [themeId]);
 }
 
-function useHtml(css: string): string {
-	const [html, setHtml] = useState('');
+const themeStyleSheetClassName = 'note-editor-styles';
+function useHtml(initialCss: string): string {
+	const cssRef = useRef(initialCss);
+	cssRef.current = initialCss;
 
-	useMemo(() => {
-		setHtml(`
-			<!DOCTYPE html>
-			<html>
-				<head>
-					<meta charset="UTF-8">
-					<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-					<title>${_('Note editor')}</title>
-					<style>
-						/* For better scrolling on iOS (working scrollbar) we use external, rather than internal,
-						   scrolling. */
-						.cm-scroller {
-							overflow: none;
+	return useMemo(() => `
+		<!DOCTYPE html>
+		<html>
+			<head>
+				<meta charset="UTF-8">
+				<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+				<title>${_('Note editor')}</title>
+				<style>
+					/* For better scrolling on iOS (working scrollbar) we use external, rather than internal,
+						scrolling. */
+					.cm-scroller {
+						overflow: none;
 
-							/* Ensure that the editor can be foused by clicking on the lower half of the screen.
-							   Don't use 100vh to prevent a scrollbar being present for empty notes. */
-							min-height: 80vh;
-						}
-
-						${css}
-					</style>
-				</head>
-				<body>
-					<div class="CodeMirror" style="height:100%;" autocapitalize="on"></div>
-				</body>
-			</html>
-		`);
-	}, [css]);
-
-	return html;
+						/* Ensure that the editor can be foused by clicking on the lower half of the screen.
+							Don't use 100vh to prevent a scrollbar being present for empty notes. */
+						min-height: 80vh;
+					}
+				</style>
+				<style class=${JSON.stringify(themeStyleSheetClassName)}>
+					${cssRef.current}
+				</style>
+			</head>
+			<body>
+				<div class="CodeMirror" style="height:100%;" autocapitalize="on"></div>
+			</body>
+		</html>
+	`, []);
 }
 
 function editorTheme(themeId: number) {
@@ -285,14 +284,14 @@ const useEditorControl = (
 };
 
 function NoteEditor(props: Props, ref: any) {
-	const webviewRef = useRef(null);
+	const webviewRef = useRef<WebViewControl>(null);
 
 	const setInitialSelectionJS = props.initialSelection ? `
 		cm.select(${props.initialSelection.start}, ${props.initialSelection.end});
 		cm.execCommand('scrollSelectionIntoView');
 	` : '';
 
-	const editorSettings: EditorSettings = {
+	const editorSettings: EditorSettings = useMemo(() => ({
 		themeId: props.themeId,
 		themeData: editorTheme(props.themeId),
 		katexEnabled: Setting.value('markdown.plugin.katex'),
@@ -307,7 +306,7 @@ function NoteEditor(props: Props, ref: any) {
 		ignoreModifiers: false,
 
 		indentWithTabs: false,
-	};
+	}), [props.themeId, props.readOnly]);
 
 	const injectedJavaScript = `
 		window.onerror = (message, source, lineno) => {
@@ -334,7 +333,7 @@ function NoteEditor(props: Props, ref: any) {
 				const initialText = ${JSON.stringify(props.initialText)};
 				const settings = ${JSON.stringify(editorSettings)};
 
-				cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, settings);
+				window.cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, settings);
 
 				${setInitialSelectionJS}
 
@@ -349,6 +348,24 @@ function NoteEditor(props: Props, ref: any) {
 	`;
 
 	const css = useCss(props.themeId);
+
+	useEffect(() => {
+		if (webviewRef.current) {
+			webviewRef.current.injectJS(`
+				const styleClass = ${JSON.stringify(themeStyleSheetClassName)};
+				for (const oldStyle of [...document.getElementsByClassName(styleClass)]) {
+					oldStyle.remove();
+				}
+
+				const style = document.createElement('style');
+				style.classList.add(styleClass);
+
+				style.appendChild(document.createTextNode(${JSON.stringify(css)}));
+				document.head.appendChild(style);
+			`);
+		}
+	}, [css]);
+
 	const html = useHtml(css);
 	const [selectionState, setSelectionState] = useState<SelectionFormatting>(defaultSelectionFormatting);
 	const [linkDialogVisible, setLinkDialogVisible] = useState(false);
@@ -379,6 +396,10 @@ function NoteEditor(props: Props, ref: any) {
 	const editorControl = useEditorControl(
 		editorMessenger.remoteApi, injectJS, setLinkDialogVisible, setSearchState,
 	);
+
+	useEffect(() => {
+		editorControl.updateSettings(editorSettings);
+	}, [editorSettings, editorControl]);
 
 	useEditorCommandHandler(editorControl);
 
