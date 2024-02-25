@@ -5155,15 +5155,15 @@ msgstr "Ketik: %s."
 
 #: packages/app-mobile/components/screens/Note.tsx:1013
 msgid "Unable to edit resource of type %s"
-msgstr ""
+msgstr "Tidak dapat menyunting sumber daya dari jenis %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:72
 msgid "Unable to export or share data. Reason: %s"
-msgstr ""
+msgstr "Tidak dapat mengekspor atau membagikan data. Alasan: %s"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:108
 msgid "Unable to share log data. Reason: %s"
-msgstr ""
+msgstr "Tidak dapat membagikan data log. Alasan: %s"
 
 #: packages/lib/models/Setting.ts:933
 msgid "Uncompleted to-dos on top"
@@ -5181,6 +5181,9 @@ msgid ""
 "Uninstall and reinstall the application. Make sure you create a backup first "
 "by exporting all your notes as JEX from the desktop application."
 msgstr ""
+"Lepas pemasangan dan pasang ulang aplikasi. Pastikan Anda membuat cadangan "
+"terlebih dahulu dengan mengekspor semua catatan Anda sebagai JEX dari "
+"aplikasi desktop."
 
 #: packages/lib/utils/processStartFlags.ts:170
 msgid "Unknown flag: %s"
@@ -5190,12 +5193,12 @@ msgstr "Tanda tidak diketahui: %s"
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
-"Tipe item tidak dikenal diunduh - silakan tingkatkan Joplin ke versi terbaru"
+"Telah mengunduh jenis benda yang tidak dikenali - silakan tingkatkan Joplin "
+"ke versi terbaru"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:12
-#, fuzzy
 msgid "Unordered list"
-msgstr "Buat pengguna"
+msgstr "Daftar tidak berurutan"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:163
 msgid "Unpublish note"
@@ -5210,12 +5213,12 @@ msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
 msgstr ""
-"Batalkan berbagi buku catatan ini? Penerima tidak akan lagi memiliki akses "
-"ke kontennya."
+"Berhenti membagikan buku catatan ini? Penerima tidak akan lagi memiliki "
+"akses ke kontennya."
 
 #: packages/app-mobile/components/screens/Note.tsx:820
 msgid "Unsupported image type: %s"
-msgstr "Tipe gambar tidak didukung: %s"
+msgstr "Jenis gambar tidak didukung: %s"
 
 #: packages/app-desktop/gui/MainScreen/commands/openItem.ts:41
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:170
@@ -5239,7 +5242,7 @@ msgstr "Perbarui profil"
 
 #: packages/server/src/services/TaskService.ts:23
 msgid "Update total sizes"
-msgstr "Perbarui ukuran total"
+msgstr "Perbarui jumlah ukuran"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:216
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:217
@@ -5253,11 +5256,11 @@ msgstr "tanggal diperbarui"
 
 #: packages/lib/Synchronizer.ts:193
 msgid "Updated local items: %d."
-msgstr "Item lokal yang diperbarui: %d."
+msgstr "Benda lokal yang diperbarui: %d."
 
 #: packages/lib/Synchronizer.ts:195
 msgid "Updated remote items: %d."
-msgstr "Item jarak jauh yang diperbarui: %d."
+msgstr "Benda jarak jauh yang diperbarui: %d."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:139
 msgid "Updated: "
@@ -5282,7 +5285,7 @@ msgstr "Tingkatkan"
 
 #: packages/app-cli/app/command-sync.ts:36
 msgid "Upgrade the sync target to the latest version."
-msgstr "Tingkatkan target sinkronisasi ke versi terakhir."
+msgstr "Tingkatkan sasaran penyelarasan ke versi terakhir."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:55
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:112
@@ -5298,16 +5301,15 @@ msgstr "Penggunaan: %s"
 
 #: packages/lib/models/Setting.ts:1747
 msgid "Use biometrics to secure access to the app"
-msgstr ""
+msgstr "Gunakan biometrik untuk mengamankan akses ke aplikasi"
 
 #: packages/app-cli/app/command-ls.ts:32 packages/app-cli/app/command-tag.js:18
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
-"Gunakan format daftar yang panjang. Formatnya adalah ID, NOTE_COUNT (jumlah "
-"catatan, untuk buku catatan), DATE (tanggal), TODO_CHECKED (tugas selesai, "
-"untuk tugas), TITLE (judul)"
+"Gunakan format daftar yang panjang. Formatnya adalah ID, NOTE_COUNT (untuk "
+"buku catatan), DATE, TODO_CHECKED (untuk tugas), TITLE"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.ts:181
 msgid "Use spell checker"
@@ -5318,13 +5320,13 @@ msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
 msgstr ""
-"Gunakan tombol tanda panah dan tombol page up/down pada keyboard untuk "
-"menggulir daftar dan area teks (termasuk konsol ini)."
+"Gunakan tombol tanda panah dan tombol page up/down untuk menggulir daftar "
+"dan wilayah teks (termasuk konsol ini)."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:868
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
-"Gunakan tanda panah untuk memindahkan item tata letak. Tekan \"Escape\" "
+"Gunakan tanda panah untuk memindahkan benda tata letak. Tekan \"Escape\" "
 "untuk keluar."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:471
@@ -5340,14 +5342,16 @@ msgid ""
 "Use your biometrics to secure access to your application. You can always set "
 "it up later in Settings."
 msgstr ""
+"Gunakan biometrik Anda untuk mengamankan akses ke aplikasi Anda. Anda selalu "
+"dapat mengaturnya nanti di Pengaturan."
 
 #: packages/lib/models/Setting.ts:1299
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
-"Digunakan pada sebagian besar teks di editor markdown. Jika tidak ditemukan, "
-"fonta generik proporsional (dengan lebar variabel) digunakan."
+"Digunakan pada sebagian besar teks di penyunting markdown. Jika tidak "
+"ditemukan, fonta generik proporsional (dengan lebar variabel) digunakan."
 
 #: packages/lib/models/Setting.ts:1311
 msgid ""
@@ -5361,7 +5365,7 @@ msgstr ""
 
 #: packages/server/src/services/MustacheService.ts:121
 msgid "User deletions"
-msgstr "Hapusan pengguna"
+msgstr "Dihapus oleh pengguna"
 
 #: packages/server/src/routes/admin/users.ts:194
 #: packages/server/src/services/MustacheService.ts:117
@@ -5375,12 +5379,12 @@ msgstr "Berlaku"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:10
 msgid "Verify your identity"
-msgstr ""
+msgstr "Buktikan identitas Anda"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:170
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:9
 msgid "View"
-msgstr "Lihat"
+msgstr "Tampilan"
 
 #: packages/app-mobile/components/screens/Note.tsx:1113
 msgid "View on map"
@@ -5404,12 +5408,12 @@ msgstr "Vim"
 
 #: packages/lib/models/Setting.ts:1799
 msgid "Voice typing language files (URL)"
-msgstr ""
+msgstr "Berkas bahasa pengetikan suara (URL)"
 
 #: packages/app-mobile/components/screens/Note.tsx:1275
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:119
 msgid "Voice typing..."
-msgstr ""
+msgstr "Pengetikan suara…"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:193
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:101
@@ -5419,15 +5423,16 @@ msgstr "Peringatan"
 #: packages/app-desktop/gui/ResourceScreen.tsx:241
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
-"Peringatan: tidak semua sumber daya ditampilkan karena alasan performa "
+"Peringatan: tidak semua sumber daya ditampilkan karena alasan kinerja "
 "(batas: %s)."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:102
-#, fuzzy
 msgid ""
 "Warnings:\n"
 "%s"
-msgstr "Peringatan"
+msgstr ""
+"Peringatan:\n"
+"%s"
 
 #: packages/lib/models/Setting.ts:2638 packages/lib/utils/joplinCloud.ts:166
 msgid "Web Clipper"
@@ -5465,15 +5470,15 @@ msgid ""
 msgstr ""
 "Selamat datang di Joplin!\n"
 "\n"
-"Ketik `:help shortcuts` untuk menampilkan daftar pintasan kibor, atau hanya "
-"`:help` untuk menampilkan informasi penggunaan.\n"
+"Ketik `:help shortcuts` untuk menampilkan daftar pintasan papan ketik, atau "
+"hanya `:help` untuk informasi penggunaan.\n"
 "\n"
 "Sebagai contoh, untuk membuat buku catatan tekan `mb`; untuk membuat catatan "
 "tekan `mn`."
 
 #: packages/lib/WelcomeUtils.ts:63
 msgid "Welcome!"
-msgstr ""
+msgstr "Selamat datang!"
 
 #: packages/lib/models/Setting.ts:1119
 msgid "When creating a new note:"
@@ -5488,14 +5493,16 @@ msgid ""
 "When enabled, the application will scan your attachments and extract the "
 "text from it. This will allow you to search for text in these attachments."
 msgstr ""
+"Ketika dinyalakan, aplikasi akan memindai lampiran Anda dan mengambil teks "
+"darinya. Ini akan membuat Anda mampu mencari teks pada lampiran tersebut."
 
 #: packages/app-desktop/ElectronAppWrapper.ts:178
 msgid "Window unresponsive."
-msgstr ""
+msgstr "Jendela tetap."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:102
 msgid "Words"
-msgstr "Kata"
+msgstr "Kata-kata"
 
 #: packages/app-cli/app/setupCommand.ts:21
 msgid "y"
@@ -5535,7 +5542,7 @@ msgstr "Anda tidak punya plugin yang terpasang."
 
 #: packages/app-cli/app/gui/NoteWidget.js:50
 msgid "You may also type `status` for more information."
-msgstr "Anda juga dapat mengetik `status` untuk informasi lebih lanjut."
+msgstr "Anda juga dapat mengetik `status` untuk informasi lebih banyak."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:342
 msgid ""
@@ -5552,7 +5559,7 @@ msgstr "Pilihan Anda: "
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:70
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr "Data Anda akan dienkripsi ulang dan disinkronkan lagi."
+msgstr "Data Anda akan dienkripsi ulang dan diselaraskan lagi."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:257
 msgid "Your password is needed to decrypt some of your data."
