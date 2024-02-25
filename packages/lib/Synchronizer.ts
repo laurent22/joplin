@@ -451,7 +451,26 @@ export default class Synchronizer {
 
 			try {
 				let remoteInfo = await fetchSyncInfo(this.api());
-				logger.info('Sync target remote info:', remoteInfo);
+				const filteredInfo = remoteInfo.toObject();
+
+				if (filteredInfo.masterKeys) {
+					const masterKeys = filteredInfo.masterKeys;
+					for (let i = 0; i < masterKeys.length; i++) {
+						const key = masterKeys[i];
+						delete key.content;
+						delete key.checksum;
+					}
+				}
+
+				if (filteredInfo.ppk && filteredInfo.ppk.value && filteredInfo.ppk.value.privateKey && filteredInfo.ppk.value.publicKey) {
+					const privateKey = filteredInfo.ppk.value.privateKey;
+					privateKey.ciphertext = `${privateKey.ciphertext.slice(0, 20)}...${privateKey.ciphertext.slice(-20)}`;
+
+					const publicKey = filteredInfo.ppk.value.publicKey;
+					filteredInfo.ppk.value.publicKey = publicKey.slice(0, 40);
+				}
+
+				logger.info('Sync target remote info:', filteredInfo);
 				eventManager.emit(EventName.SessionEstablished);
 
 				let syncTargetIsNew = false;
