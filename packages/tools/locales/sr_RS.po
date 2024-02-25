@@ -3178,7 +3178,7 @@ msgid "Nord"
 msgstr "Норд"
 
 #: packages/app-cli/app/command-sync.ts:89
-msgid "Not authentified with %s. Please provide any missing credentials."
+msgid "Not authenticated with %s. Please provide any missing credentials."
 msgstr ""
 "Нисте потрвдили идентитет са %s. Молимо вас да унесете податке који "
 "недостају."

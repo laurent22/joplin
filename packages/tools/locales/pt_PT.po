@@ -3147,7 +3147,7 @@ msgid "Nord"
 msgstr "Nórdico"
 
 #: packages/app-cli/app/command-sync.ts:89
-msgid "Not authentified with %s. Please provide any missing credentials."
+msgid "Not authenticated with %s. Please provide any missing credentials."
 msgstr "Não autenticado com %s. Por favor, introduza os dados em falta."
 
 #: packages/lib/models/Resource.ts:379

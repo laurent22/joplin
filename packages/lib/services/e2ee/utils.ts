@@ -113,7 +113,7 @@ export async function migrateMasterPassword() {
 	}
 }
 
-// All master keys normally should be decryped with the master password, however
+// All master keys normally should be decrypted with the master password, however
 // previously any master key could be encrypted with any password, so to support
 // this legacy case, we first check if the MK decrypts with the master password.
 // If not, try with the master key specific password, if any is defined.

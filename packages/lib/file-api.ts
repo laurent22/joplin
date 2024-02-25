@@ -297,7 +297,7 @@ class FileApi {
 		return result;
 	}
 
-	// Deprectated
+	// Deprecated
 	public setTimestamp(path: string, timestampMs: number) {
 		logger.debug(`setTimestamp ${this.fullPath(path)}`);
 		return tryAndRepeat(() => this.driver_.setTimestamp(this.fullPath(path), timestampMs), this.requestRepeatCount());
@@ -347,13 +347,13 @@ class FileApi {
 		return tryAndRepeat(() => this.driver_.delete(this.fullPath(path)), this.requestRepeatCount());
 	}
 
-	// Deprectated
+	// Deprecated
 	public move(oldPath: string, newPath: string) {
 		logger.debug(`move ${this.fullPath(oldPath)} => ${this.fullPath(newPath)}`);
 		return tryAndRepeat(() => this.driver_.move(this.fullPath(oldPath), this.fullPath(newPath)), this.requestRepeatCount());
 	}
 
-	// Deprectated
+	// Deprecated
 	public format() {
 		return tryAndRepeat(() => this.driver_.format(), this.requestRepeatCount());
 	}

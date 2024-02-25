@@ -224,7 +224,7 @@ export default class Database {
 		if (type === 'fieldType') {
 			if (s) s = s.toUpperCase();
 			if (s === 'INTEGER') s = 'INT';
-			if (!(`TYPE_${s}` in this)) throw new Error(`Unkonwn fieldType: ${s}`);
+			if (!(`TYPE_${s}` in this)) throw new Error(`Unknown fieldType: ${s}`);
 			return (this as any)[`TYPE_${s}`];
 		}
 		if (type === 'syncTarget') {
