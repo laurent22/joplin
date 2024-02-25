@@ -1080,7 +1080,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 					// it's interactive bits) and it's not user-generated content such as a URL that would appear in a comment.
 					// So in this case, we still want to preserve the information but display it in a discreet way as a simple [L].
 
-					// Need to pop everything inside the current [] because it can only be special chars that we don't want (they would create uncessary newlines)
+					// Need to pop everything inside the current [] because it can only be special chars that we don't want (they would create unnecessary newlines)
 					for (let i = section.lines.length - 1; i >= 0; i--) {
 						if (section.lines[i] !== '[') {
 							section.lines.pop();

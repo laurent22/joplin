@@ -9,6 +9,7 @@
 		"/.git",
 		"/.yarn",
 		"/Assets",
+		"cspell.json",
 		"/packages/app-cli/app/fuzzing.js",
 		"/packages/app-cli/build",
 		"/packages/app-cli/tests/enex_to_md/",
@@ -108,6 +109,9 @@
 		"autocompletions",
 		"AUTOEXEC",
 		"autohide",
+		"Persistable",
+		"centered",
+		"invlaid",
 		"automatch",
 		"autoresize",
 		"Autoresize",
@@ -1132,6 +1136,8 @@
 		"ประเทศไทย",
 		"ປະຊາຊົນລາວ",
 		"မြန်မာ",
-		"កម្ពុជា"
-	]
+		"កម្ពុជា",
+		"clike"
+	],
+	"enabled": true
 }

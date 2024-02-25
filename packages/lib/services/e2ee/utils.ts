@@ -36,7 +36,7 @@ export async function setupAndEnableEncryption(service: EncryptionService, maste
 
 export async function setupAndDisableEncryption(service: EncryptionService) {
 	// Allow disabling encryption even if some items are still encrypted, because whether E2EE is enabled or disabled
-	// should not affect whether items will enventually be decrypted or not (DecryptionWorker will still work as
+	// should not affect whether items will eventually be decrypted or not (DecryptionWorker will still work as
 	// long as there are encrypted items). Also even if decryption is disabled, it's possible that encrypted items
 	// will still be received via synchronisation.
 

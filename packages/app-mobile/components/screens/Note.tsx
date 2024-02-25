@@ -938,7 +938,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		if (!resource) {
 			resource = await this.attachNewDrawing(svgData);
 
-			// Set resouce and file path to allow
+			// Set resource and file path to allow
 			// 1. subsequent saves to update the resource
 			// 2. the editor to load from the resource's filepath (can happen
 			//    if the webview is reloaded).

@@ -33,7 +33,7 @@ describe('Synchronizer.tools', () => {
 		expect((await Folder.all()).length).toBe(1);
 	}));
 
-	it('should clear local data, and re-downlaod everything from sync target', (async () => {
+	it('should clear local data, and re-download everything from sync target', (async () => {
 		const folder = await Folder.save({ title: 'test' });
 		await Note.save({ title: 'test note', parent_id: folder.id });
 

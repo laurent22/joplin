@@ -7,7 +7,7 @@ interface TestData {
 	ciphertext: string;
 }
 
-// This is conveninent to quickly generate some data to verify for example that
+// This is convenient to quickly generate some data to verify for example that
 // react-native-rsa can decrypt data from node-rsa and vice-versa.
 export async function createTestData() {
 	const plaintext = 'just testing';

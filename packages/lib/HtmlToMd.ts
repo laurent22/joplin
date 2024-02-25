@@ -36,7 +36,7 @@ export default class HtmlToMd {
 			disableEscapeContent: 'disableEscapeContent' in options ? options.disableEscapeContent : false,
 		};
 		if (options.convertEmbeddedPdfsToLinks) {
-			// Turndown ignores empty <object> tags, so we need to handle this case seperately
+			// Turndown ignores empty <object> tags, so we need to handle this case separately
 			// https://github.com/mixmark-io/turndown/issues/293#issuecomment-588984202
 			turndownOpts.blankReplacement = (content: string, node: any) => {
 				if (node.matches('object')) {

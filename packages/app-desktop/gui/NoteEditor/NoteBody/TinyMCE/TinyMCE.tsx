@@ -258,7 +258,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				if (joplinCommandToTinyMceCommands[cmd.name] === true) {
 					// Already handled in useWindowCommandHandlers.ts
 				} else if (joplinCommandToTinyMceCommands[cmd.name] === false) {
-					// Explicitely not supported
+					// explicitly not supported
 				} else {
 					const tinyMceCmd: TinyMceCommand = { ...(joplinCommandToTinyMceCommands[cmd.name] as TinyMceCommand) };
 					if (!('ui' in tinyMceCmd)) tinyMceCmd.ui = false;
