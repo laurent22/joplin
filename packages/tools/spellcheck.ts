@@ -11,7 +11,7 @@ const main = async () => {
 	chdir(rootDir);
 
 	try {
-		await execCommand(['yarn', 'run', 'cspell'].concat(filePaths), { showStderr: false, showStdout: false });
+		await execCommand(['yarn', 'cspell'].concat(filePaths), { showStderr: false, showStdout: false });
 	} catch (error) {
 		if (!error.stdout.trim()) return;
 
