@@ -65,7 +65,7 @@ msgstr "(Anda dapat mematikan masukan ini di pengaturan)"
 #: packages/app-desktop/gui/MenuBar.tsx:692
 #: packages/app-desktop/gui/MenuBar.tsx:968
 msgid "&Edit"
-msgstr "&Ubah"
+msgstr "&Sunting"
 
 #: packages/app-desktop/gui/MenuBar.tsx:567
 #: packages/app-desktop/gui/MenuBar.tsx:647
@@ -91,7 +91,7 @@ msgstr "&Perkakas"
 
 #: packages/app-desktop/gui/MenuBar.tsx:734
 msgid "&View"
-msgstr "&Lihat"
+msgstr "&Tampilan"
 
 #: packages/lib/models/Setting.ts:1629
 msgid "%d days"
@@ -3472,7 +3472,7 @@ msgid ""
 "switch to %s to edit the note."
 msgstr ""
 "Silakan tunggu sampai semua lampiran telah diunduh dan didekripsi. Anda juga "
-"bisa beralih ke %s untuk mengedit catatan."
+"bisa beralih ke %s untuk menyunting catatan."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:123
 #: packages/app-desktop/gui/ResourceScreen.tsx:234
