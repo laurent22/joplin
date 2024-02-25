@@ -801,6 +801,8 @@ packages/lib/services/e2ee/ppkTestUtils.js
 packages/lib/services/e2ee/types.js
 packages/lib/services/e2ee/utils.test.js
 packages/lib/services/e2ee/utils.js
+packages/lib/services/filesync/FileMirroringService.test.js
+packages/lib/services/filesync/FileMirroringService.js
 packages/lib/services/interop/InteropService.test.js
 packages/lib/services/interop/InteropService.js
 packages/lib/services/interop/InteropService_Exporter_Base.js
@@ -990,6 +992,7 @@ packages/lib/themes/type.js
 packages/lib/time.js
 packages/lib/types.js
 packages/lib/utils/credentialFiles.js
+packages/lib/utils/frontMatter.js
 packages/lib/utils/joplinCloud.js
 packages/lib/utils/processStartFlags.js
 packages/lib/utils/replaceUnsupportedCharacters.test.js
