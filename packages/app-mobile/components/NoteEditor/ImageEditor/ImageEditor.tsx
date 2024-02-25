@@ -314,7 +314,6 @@ const ImageEditor = (props: Props) => {
 
 	return (
 		<ExtendedWebView
-			themeId={props.themeId}
 			html={html}
 			injectedJavaScript={injectedJavaScript}
 			allowFileAccessFromJs={true}

@@ -421,10 +421,12 @@ class Dialog extends React.PureComponent<Props, State> {
 			// make list scroll to top in every search
 			this.makeItemIndexVisible(0);
 
+			const keywordsWithoutEmptyString = keywords?.filter(v => !!v);
+
 			this.setState({
 				listType: listType,
 				results: results,
-				keywords: keywords ? keywords : await this.keywords(searchQuery),
+				keywords: keywordsWithoutEmptyString ? keywordsWithoutEmptyString : await this.keywords(searchQuery),
 				selectedItemId: results.length === 0 ? null : getResultId(results[0]),
 				resultsInBody: resultsInBody,
 				commandArgs: commandArgs,

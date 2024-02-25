@@ -9,6 +9,7 @@ import { OnInputChange } from './utils/types';
 import Note from '@joplin/lib/models/Note';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import useRenderedNote from './utils/useRenderedNote';
+import { Dispatch } from 'redux';
 
 interface NoteItemProps {
 	dragIndex: number;
@@ -28,6 +29,7 @@ interface NoteItemProps {
 	isSelected: boolean;
 	isWatched: boolean;
 	listRenderer: ListRenderer;
+	dispatch: Dispatch;
 }
 
 const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
@@ -52,10 +54,12 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 				id: changeEvent.noteId,
 				todo_completed: changeEvent.value ? Date.now() : 0,
 			}, { userSideValidation: true });
+
+			props.dispatch({ type: 'NOTE_SORT' });
 		} else {
 			if (props.onChange) await props.onChange(changeEvent);
 		}
-	}, [props.onChange, noteId]);
+	}, [props.onChange, noteId, props.dispatch]);
 
 	const rootElement = useRootElement(elementId);
 

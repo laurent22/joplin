@@ -22,7 +22,7 @@ export const runtime = (): CommandRuntime => {
 					const { itemId, hash } = parsedUrl;
 					await openItemById(itemId, context.dispatch, hash);
 				} else {
-					void require('electron').shell.openExternal(link);
+					void bridge().openExternal(link);
 				}
 			} else if (urlProtocol(link)) {
 				if (link.indexOf('file://') === 0) {
@@ -33,9 +33,9 @@ export const runtime = (): CommandRuntime => {
 					// but doesn't on macOS, so we need to convert it to a path
 					// before passing it to openPath.
 					const decodedPath = fileUriToPath(urlDecode(link), shim.platformName());
-					void require('electron').shell.openPath(decodedPath);
+					void bridge().openItem(decodedPath);
 				} else {
-					void require('electron').shell.openExternal(link);
+					void bridge().openExternal(link);
 				}
 			} else {
 				bridge().showErrorMessageBox(_('Unsupported link or message: %s', link));

@@ -208,6 +208,7 @@ const NoteList = (props: Props) => {
 					isSelected={props.selectedNoteIds.includes(note.id)}
 					isWatched={props.watchedNoteFiles.includes(note.id)}
 					listRenderer={listRenderer}
+					dispatch={props.dispatch}
 				/>,
 			);
 		}
