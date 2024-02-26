@@ -143,7 +143,7 @@ a {
 
 
 *:focus-visible {
-	outline: 1px solid #0097ea;
+	outline: 1px solid var(--joplin-color-warn);
 }
 
 // The browser-default focus-visible indicator was originally removed for aesthetic
