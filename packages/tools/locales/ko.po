@@ -1,20 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# FIRST Translator Ji-Hyeon Gim <potatogim@potatogim.net>, YEAR.
+# SENCOND Translator Hye-Rim Kim <kissofsea@gmail.com>, 2024.
 msgid ""
 msgstr ""
-"Project-Id-Version: Joplin-CLI 1.0.0\n"
+"Project-Id-Version: Joplin 2.14.16\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Ji-Hyeon Gim <potatogim@potatogim.net>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Hye-Rim Kim <kissofsea@gmail.com>\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Poedit-Basepath: ../../..\n"
 "X-Poedit-SearchPath-0: .\n"
 
@@ -45,7 +47,7 @@ msgstr "(%s)"
 
 #: packages/lib/services/plugins/api/JoplinViewsDialogs.ts:74
 msgid "(In plugin: %s)"
-msgstr ""
+msgstr "(플러그: %s)"
 
 #: packages/lib/SyncTargetNone.ts:16
 msgid "(None)"
@@ -58,7 +60,7 @@ msgstr "(위지윅: %s)"
 #: packages/app-mobile/components/screens/Note.tsx:758
 #: packages/lib/shim-init-node.ts:245
 msgid "(You may disable this prompt in the options)"
-msgstr ""
+msgstr "(옵션에서 이 프롬프트를 비활성화할 수 있습니다)"
 
 #: packages/app-desktop/gui/MenuBar.tsx:692
 #: packages/app-desktop/gui/MenuBar.tsx:968
@@ -98,12 +100,12 @@ msgstr "%d 일"
 #: packages/lib/utils/joplinCloud.ts:148 packages/lib/utils/joplinCloud.ts:149
 #: packages/lib/utils/joplinCloud.ts:150
 msgid "%d GB"
-msgstr ""
+msgstr "%d GB"
 
 #: packages/lib/utils/joplinCloud.ts:145 packages/lib/utils/joplinCloud.ts:146
 #: packages/lib/utils/joplinCloud.ts:147
 msgid "%d GB storage space"
-msgstr ""
+msgstr "%d GB 저장 공간"
 
 #: packages/lib/models/Setting.ts:1411
 msgid "%d hour"
@@ -116,13 +118,12 @@ msgstr "%d 시간"
 #: packages/lib/utils/joplinCloud.ts:136 packages/lib/utils/joplinCloud.ts:137
 #: packages/lib/utils/joplinCloud.ts:138
 msgid "%d MB"
-msgstr ""
+msgstr "%d MB"
 
 #: packages/lib/utils/joplinCloud.ts:133 packages/lib/utils/joplinCloud.ts:134
 #: packages/lib/utils/joplinCloud.ts:135
-#, fuzzy
 msgid "%d MB per note or attachment"
-msgstr "첨부 파일"
+msgstr "노트 또는 첨부 파일당 %d MB"
 
 #: packages/lib/models/Setting.ts:1408 packages/lib/models/Setting.ts:1409
 #: packages/lib/models/Setting.ts:1410
@@ -135,9 +136,8 @@ msgstr "%d개의 노트가 이 패턴과 일치합니다. 이를 삭제할까요
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:214
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:224
-#, fuzzy
 msgid "%s"
-msgstr "(%s)"
+msgstr "%s"
 
 #: packages/app-desktop/gui/MainScreen/commands/duplicateNote.ts:18
 msgid "%s - Copy"
@@ -185,6 +185,8 @@ msgid ""
 "%s is not optimised for synchronising many small files so your initial "
 "synchronisation will be slow."
 msgstr ""
+"%s 는 많은 작은 파일을 동기화하는 데 최적화되어 있지 않으므로 초기 동기화 속"
+"도가 느려집니다."
 
 #: packages/lib/services/ReportService.ts:247
 #: packages/lib/services/ReportService.ts:248
@@ -208,9 +210,8 @@ msgstr "%s: %s"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:193
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:263
-#, fuzzy
 msgid "%s: Missing password."
-msgstr "마스터 비밀번호"
+msgstr "%s: 비밀번호가 없습니다."
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
@@ -276,15 +277,15 @@ msgstr "허용"
 
 #: packages/lib/WebDavApi.js:451
 msgid "Access denied: Please check your username and password"
-msgstr ""
+msgstr "접근 거부: 아이디와 비밀번호를 확인해주세요"
 
 #: packages/lib/WebDavApi.js:449
 msgid "Access denied: Please re-enter your password and/or username"
-msgstr ""
+msgstr "접근 거부: 아이디 또는 비밀번호를 다시 입력해주세요"
 
 #: packages/server/src/routes/admin/users.ts:141
 msgid "Account"
-msgstr ""
+msgstr "계정"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:96
 msgid "Action"
@@ -310,9 +311,8 @@ msgid "Add body"
 msgstr "내용 추가"
 
 #: packages/app-mobile/components/ActionButton.tsx:64
-#, fuzzy
 msgid "Add new"
-msgstr "제목 추가"
+msgstr "새로 추가"
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:38
 msgid "Add or remove tags:"
@@ -350,7 +350,7 @@ msgstr "고급 도구"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:99
 msgid ""
 "All data, including notes, notebooks and tags will be permanently deleted."
-msgstr ""
+msgstr "노트, 노트북, 태그를 포함한 모든 데이터는 영구적으로 삭제됩니다."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:486
 #: packages/app-mobile/components/screens/Notes.tsx:180
@@ -375,20 +375,20 @@ msgid "Always"
 msgstr "항상"
 
 #: packages/lib/models/Setting.ts:1140
-#, fuzzy
 msgid "Always ask"
-msgstr "항상"
+msgstr "항상 묻기"
 
 #: packages/lib/models/Setting.ts:1141
-#, fuzzy
 msgid "Always resize"
-msgstr "항상"
+msgstr "항상 크기 조정"
 
 #: packages/app-cli/app/command-mv.ts:36
 msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
+"모호한 노트북 \"%s\". 대신 노트북 ID를 사용하세요. 짧은 노트북 ID를 보려면 "
+"\"ti\"를 누르거나 현재 선택한 노트북에 $b 를 사용하세요"
 
 #: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.ts:29
@@ -396,18 +396,20 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use short notebook id instead - press "
 "\"ti\" to see the short notebook id"
 msgstr ""
+"모호한 노트북 \"%s\". 대신 짧은 노트북 ID를 사용하세요. 짧은 노트북 ID를 보려"
+"면 \"ti\"를 누르세요"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:13
 msgid "An autosaved drawing was found. Attach a copy of it to the note?"
-msgstr ""
+msgstr "자동 저장된 그림을 찾았습니다. 노트에 사본을 첨부하시겠습니까?"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:91
 msgid "An error occurred: %s"
-msgstr ""
+msgstr "오류가 발생했습니다: %s"
 
 #: packages/app-desktop/checkForUpdates.ts:106
 msgid "An update is available, do you want to download it now?"
-msgstr "업데이트가 있습니다. 지금 내려 받을까요?"
+msgstr "업데이트가 있습니다. 지금 다운로드까요?"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:19
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:447
@@ -415,6 +417,8 @@ msgid ""
 "Any email sent to this address will be converted into a note and added to "
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
+"이 주소로 전송된 모든 이메일은 노트로 변환되어 당신의 컬렉션에 추가됩니다. 메"
+"모는 Inbox 노트북에 저장됩니다"
 
 #: packages/lib/models/Setting.ts:2630
 msgid "Appearance"
@@ -436,7 +440,7 @@ msgstr "정말로 인증 토큰을 새로 고치시겠습니까?"
 msgid ""
 "Are you sure you want to return to the default layout? The current layout "
 "configuration will be lost."
-msgstr ""
+msgstr "기본 레이아웃으로 돌아가시겠습니까? 현재 레이아웃 구성이 손실됩니다."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:516
 msgid "Arguments:"
@@ -448,9 +452,8 @@ msgstr "Aritim Dark"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:25
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useActionButtons.ts:48
-#, fuzzy
 msgid "Attach"
-msgstr "첨부..."
+msgstr "첨부"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:74
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:642
@@ -541,7 +544,7 @@ msgstr "뒤로 가기"
 
 #: packages/lib/utils/joplinCloud.ts:345
 msgid "Basic"
-msgstr ""
+msgstr "기초"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:17
 msgid ""
@@ -549,6 +552,9 @@ msgid ""
 "unlock Joplin. If the device is on lockout, consider switching it off and on "
 "to reset biometrics scanning."
 msgstr ""
+"장치에 생체 인식 잠금 해제가 설정되어 있지 않습니다. Joplin 잠금해제를 위해 "
+"설정해주세요. 장치가 잠겨 있는 경우 장치를 껐다가 켜서 생체 인식 스캔을 재설"
+"정하는 것이 좋습니다."
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:54
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useInlineFormattingButtons.ts:14
@@ -566,24 +572,23 @@ msgstr "찾아보기..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:231
 msgid "Built-in"
-msgstr ""
+msgstr "내장된"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:84
 msgid "Bulleted List"
 msgstr "글머리 기호 목록"
 
 #: packages/server/src/routes/admin/users.ts:157
-#, fuzzy
 msgid "Can Share"
-msgstr "공유"
+msgstr "공유 가능"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:114
 msgid "Can view"
-msgstr ""
+msgstr "조회 가능"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:115
 msgid "Can view and edit"
-msgstr ""
+msgstr "조회&편집 가능"
 
 #: packages/app-desktop/bridge.ts:236 packages/app-desktop/bridge.ts:254
 #: packages/app-desktop/checkForUpdates.ts:108
@@ -638,9 +643,8 @@ msgid "Cannot copy note to \"%s\" notebook"
 msgstr "노트를 \"%s\" 노트북으로 복사할 수 없습니다"
 
 #: packages/app-mobile/components/screens/Notes.tsx:167
-#, fuzzy
 msgid "Cannot create a new note: %s"
-msgstr "새 노트를 만듭니다."
+msgstr "새 노트를 생성할 수 없습니다: %s"
 
 #: packages/app-cli/app/command-attach.ts:21
 #: packages/app-cli/app/command-cat.ts:25 packages/app-cli/app/command-cp.ts:24
@@ -671,9 +675,8 @@ msgid "Cannot find \"%s\"."
 msgstr "\"%s\"를 찾을 수 없습니다."
 
 #: packages/app-cli/app/command-mkbook.ts:28
-#, fuzzy
 msgid "Cannot find: \"%s\""
-msgstr "\"%s\"를 찾을 수 없습니다."
+msgstr "찾을 수 없습니다: \"%s\""
 
 #: packages/app-cli/app/command-sync.ts:165
 msgid "Cannot initialise synchroniser."
@@ -728,7 +731,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:328
 msgid "Case sensitive"
-msgstr ""
+msgstr "대소문자 구분"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -800,7 +803,7 @@ msgstr "태그를 추가하려면 클릭하세요..."
 
 #: packages/lib/versionInfo.ts:75
 msgid "Client ID: %s"
-msgstr "클라이언트 식별자: %s"
+msgstr "클라이언트 ID: %s"
 
 #: packages/app-desktop/gui/MenuBar.tsx:325
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:173
@@ -817,9 +820,8 @@ msgid "Close"
 msgstr "닫기"
 
 #: packages/app-mobile/components/Dropdown.tsx:155
-#, fuzzy
 msgid "Close dropdown"
-msgstr "창 닫기"
+msgstr "드롭다운 닫기"
 
 #: packages/lib/models/settings/settingValidations.ts:32
 msgid ""
@@ -827,6 +829,8 @@ msgid ""
 "application again. Make sure you create a backup first by exporting all your "
 "notes as JEX."
 msgstr ""
+"프로그램을 닫은 다음 \"%s\"에서 프로필을 삭제하고 프로그램을 다시 시작하십시"
+"오. 먼저 모든 메모를 JEX로 내보내 백업을 생성하세요."
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 #: packages/app-desktop/gui/MenuBar.tsx:655
@@ -847,17 +851,16 @@ msgid "Code View"
 msgstr "코드 보기"
 
 #: packages/lib/utils/joplinCloud.ts:173
-#, fuzzy
 msgid "Collaborate on a notebook with others"
-msgstr "노트북으로 협업하기"
+msgstr "다른 사람과 노트북에서 협업하기"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:189
 msgid "Collaborate on notebooks with others"
-msgstr "노트북으로 협업하기"
+msgstr "다른 사람과 노트북들에서 협업하기"
 
 #: packages/app-mobile/components/side-menu-content.tsx:359
 msgid "Collapse"
-msgstr ""
+msgstr "무너지다"
 
 #: packages/lib/services/ReportService.ts:312
 msgid "Coming alarms"
@@ -892,9 +895,8 @@ msgid "Command palette..."
 msgstr "명령 팔레트..."
 
 #: packages/lib/services/noteList/defaultListRenderer.ts:23
-#, fuzzy
 msgid "Compact"
-msgstr "완료됨"
+msgstr "컴팩트"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:53
 msgid "Completed"
@@ -942,11 +944,11 @@ msgstr "충돌"
 
 #: packages/lib/models/Resource.ts:449
 msgid "Conflicts (attachments)"
-msgstr "충돌 (첨부)"
+msgstr "충돌 (첨부파일)"
 
 #: packages/lib/utils/joplinCloud.ts:208
 msgid "Consolidated billing"
-msgstr ""
+msgstr "통합결제"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:111
 msgid "Content provided by %s"
@@ -954,7 +956,7 @@ msgstr "%s에서 제공"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:65
 msgid "Continue"
-msgstr ""
+msgstr "계속"
 
 #: packages/app-mobile/components/screens/Note.tsx:1293
 msgid "Convert to note"
@@ -965,9 +967,8 @@ msgid "Convert to todo"
 msgstr "'할 일'로 변환"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:89
-#, fuzzy
 msgid "Converting speech to text..."
-msgstr "노트로 변환"
+msgstr "음성을 텍스트로 변환하는 중..."
 
 #: packages/app-desktop/gui/MenuBar.tsx:554
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:34
@@ -1010,9 +1011,8 @@ msgstr[0] "공유 링크 복사"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:21
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:457
-#, fuzzy
 msgid "Copy to clipboard"
-msgstr "경로를 클립보드에 복사"
+msgstr "클립보드에 복사"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:140
 msgid "Copy token"
@@ -1069,9 +1069,8 @@ msgstr ""
 "발생한 오류: \"%s\""
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:56
-#, fuzzy
 msgid "Could not switch profile: %s"
-msgstr "플러그인을 설치할 수 없습니다: %s"
+msgstr "프로필을 전환할 수 없습니다: %s"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:219
 msgid "Could not upgrade master key: %s"
@@ -1086,18 +1085,16 @@ msgstr ""
 "시도해보세요."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-#, fuzzy
 msgid "Could not verify your identity: %s"
-msgstr "노트를 내보낼 수 없습니다: %s"
+msgstr "신원을 확인할 수 없습니다: %s"
 
 #: packages/app-desktop/gui/PromptDialog.tsx:278
 msgid "Create"
 msgstr "생성됨"
 
 #: packages/app-cli/app/command-mkbook.ts:19
-#, fuzzy
 msgid "Create a new notebook under a parent notebook."
-msgstr "새 노트북을 만듭니다."
+msgstr "상위 노트북 아래에 새 노트북을 만듭니다."
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "Create a notebook"
@@ -1163,14 +1160,12 @@ msgid "Creates a new to-do."
 msgstr "새 '할 일'을 만듭니다."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:112
-#, fuzzy
 msgid "Creating new note..."
-msgstr "%s 새로 만들기..."
+msgstr "새 노트 만들기..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:112
-#, fuzzy
 msgid "Creating new to-do..."
-msgstr "%s 새로 만들기..."
+msgstr "새 '할 일' 만들기..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:29
 msgid "Creating report..."
@@ -1203,7 +1198,7 @@ msgstr "사용자 TLS 인증서"
 
 #: packages/lib/utils/joplinCloud.ts:194
 msgid "Customise the note publishing banner"
-msgstr ""
+msgstr "노트 게시 배너 사용자 정의"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:39
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:84
@@ -1237,7 +1232,7 @@ msgstr "일"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:43
 msgid "Decrease indent level"
-msgstr ""
+msgstr "들여쓰기 수준 낮추기"
 
 #: packages/app-cli/app/command-e2ee.ts:64
 msgid "Decrypted items: %d"
@@ -1294,9 +1289,8 @@ msgid "Delete local data and re-download from sync target"
 msgstr "로컬 데이터를 지우고 동기화 대상의 데이터를 다시 내려받기"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:8
-#, fuzzy
 msgid "Delete note"
-msgstr "이 노트를 삭제할까요?"
+msgstr "메모 삭제"
 
 #: packages/lib/models/Note.ts:794
 msgid "Delete note \"%s\"?"
@@ -1308,9 +1302,8 @@ msgid "Delete note?"
 msgstr "이 노트를 삭제할까요?"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:9
-#, fuzzy
 msgid "Delete notebook"
-msgstr "이 노트를 삭제할까요?"
+msgstr "노트북 삭제"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:166
@@ -1336,14 +1329,12 @@ msgid "Delete plugin \"%s\"?"
 msgstr "\"%s\" 플러그인을 삭제할까요?"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:102
-#, fuzzy
 msgid "Delete profile \"%s\""
-msgstr "\"%s\" 노트를 삭제할까요?"
+msgstr "프로필 \"%s\" 삭제"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:444
-#, fuzzy
 msgid "Delete selected notes"
-msgstr "이 노트를 삭제할까요?"
+msgstr "선택된 노트 삭제"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:22
 #: packages/app-mobile/components/side-menu-content.tsx:163
@@ -1353,6 +1344,10 @@ msgid ""
 "If you delete the inbox notebook, any email that's recently been sent to it "
 "may be lost."
 msgstr ""
+"인박스 노트북을 삭제하시겠습니까?\n"
+"\n"
+"인박스 노트북을 삭제하면 최근에 해당 노트북으로 전송된 모든 이메일이 손실될 "
+"수 있습니다."
 
 #: packages/lib/models/Note.ts:796
 msgid "Delete these %d notes?"
@@ -1367,9 +1362,8 @@ msgstr ""
 "에 접근할 수 없게 됩니다."
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:98
-#, fuzzy
 msgid "Delete this profile?"
-msgstr "%d 개의 노트들을 삭제할까요?"
+msgstr "이 프로필을 삭제할까요?"
 
 #: packages/lib/Synchronizer.ts:196
 msgid "Deleted local items: %d."
@@ -1401,7 +1395,7 @@ msgstr "목표 포맷: %s"
 
 #: packages/lib/services/noteList/defaultLeftToRightListRenderer.ts:25
 msgid "Detailed"
-msgstr ""
+msgstr "상세한"
 
 #: packages/lib/services/interop/Module.ts:62
 msgid "Directory"
@@ -1447,9 +1441,8 @@ msgstr ""
 "은 상태로 동기화 대상에게 전달됩니다. 계속 진행할까요?"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:19
-#, fuzzy
 msgid "Discard"
-msgstr "변경 사항 버리기"
+msgstr "버리기"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:102
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:250
@@ -1526,18 +1519,17 @@ msgstr ""
 "어버리지 마세요.암호화를 사용하려면 아래에 비밀번호를 넣어주세요."
 
 #: packages/lib/models/Setting.ts:2671
-#, fuzzy
 msgid "Donate, website"
-msgstr "Joplin 웹사이트"
+msgstr "Joplin 웹사이트에 기부하기"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:115
 msgid "Done"
-msgstr ""
+msgstr "완료"
 
 #: packages/app-desktop/checkForUpdates.ts:108
 msgid "Download"
-msgstr "내려받기"
+msgstr "다운로드"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:127
 msgid "Download and install the relevant extension for your browser:"
@@ -1545,24 +1537,23 @@ msgstr "브라우저에 맞는 확장 기능을 내려받아 설치하세요:"
 
 #: packages/lib/models/Resource.ts:381
 msgid "Downloaded"
-msgstr "내려받음"
+msgstr "다운로드 완료"
 
 #: packages/lib/services/ReportService.ts:247
 msgid "Downloaded and decrypted"
-msgstr "내려받기 및 복호화됨"
+msgstr "다운로드 및 복호화 완료"
 
 #: packages/lib/services/ReportService.ts:248
 msgid "Downloaded and encrypted"
-msgstr "내려받기 및 암호화됨"
+msgstr "다운로드 및 암호화 완료"
 
 #: packages/lib/models/Resource.ts:380
 msgid "Downloading"
-msgstr "내려받는 중"
+msgstr "다운로드 중"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:90
-#, fuzzy
 msgid "Downloading %s language files..."
-msgstr "리소스 내려받는 중..."
+msgstr "%s 언어 파일을 다운로드 중..."
 
 #: packages/app-cli/app/command-sync.ts:219
 msgid "Downloading resources..."
@@ -1574,11 +1565,11 @@ msgstr "Dracula"
 
 #: packages/app-mobile/components/screens/Note.tsx:1249
 msgid "Draw picture"
-msgstr ""
+msgstr "그림 그리기"
 
 #: packages/app-mobile/components/screens/Note.tsx:931
 msgid "Drawing"
-msgstr ""
+msgstr "그리는 중"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1310
 msgid "Drop notes or files here"
@@ -1603,9 +1594,8 @@ msgid "Duplicate line"
 msgstr "줄 복제"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:462
-#, fuzzy
 msgid "Duplicate selected notes"
-msgstr "줄 복제"
+msgstr "선택한 노트 복제"
 
 #: packages/app-cli/app/command-cp.ts:13
 msgid ""
@@ -1630,9 +1620,8 @@ msgid "Edit in external editor"
 msgstr "외부 편집기에서 편집하기"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:141
-#, fuzzy
 msgid "Edit link"
-msgstr "노트북 편집"
+msgstr "링크 편집"
 
 #: packages/app-cli/app/command-edit.ts:17
 msgid "Edit note."
@@ -1644,9 +1633,8 @@ msgid "Edit notebook"
 msgstr "노트북 편집"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
-#, fuzzy
 msgid "Edit profile"
-msgstr "프로파일 내보내기"
+msgstr "프로필 편집"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
@@ -1699,18 +1687,16 @@ msgstr "전자우편"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:18
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:446
-#, fuzzy
 msgid "Email to note"
-msgstr "노트를 편집합니다."
+msgstr "이메일로 노트 보내기"
 
 #: packages/lib/utils/joplinCloud.ts:187
 msgid "Email to Note"
-msgstr ""
+msgstr "이메일로 노트 보내기"
 
 #: packages/lib/models/Setting.ts:2665
-#, fuzzy
 msgid "Email To Note, login information"
-msgstr "버전 정보 표시"
+msgstr "이메일로 노트, 로그인 정보 보내기"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:129
@@ -1753,7 +1739,7 @@ msgstr "음성 재생 활성화"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:82
 msgid "Enable biometrics authentication?"
-msgstr ""
+msgstr "생체 인식 인증을 사용하시겠습니까?"
 
 #: packages/lib/models/Setting.ts:1201
 msgid "Enable deflist syntax"
@@ -1798,7 +1784,7 @@ msgstr "노트 변경 이력 활성화"
 
 #: packages/lib/models/Setting.ts:845
 msgid "Enable optical character recognition (OCR)"
-msgstr ""
+msgstr "문자 인식(OCR) 활성화"
 
 #: packages/lib/models/Setting.ts:1195
 msgid "Enable PDF viewer"
@@ -1810,16 +1796,15 @@ msgstr "소프트 브레이크 활성화"
 
 #: packages/lib/models/Setting.ts:1064
 msgid "Enable spellcheck in the text editor"
-msgstr ""
+msgstr "텍스트 편집기에서 맞춤법 검사 활성화하기"
 
 #: packages/lib/models/Setting.ts:1198
 msgid "Enable table of contents extension"
 msgstr "목차 확장 활성화"
 
 #: packages/lib/models/Setting.ts:1075
-#, fuzzy
 msgid "Enable the Markdown toolbar"
-msgstr "마크다운 이모지 활성화"
+msgstr "마크다운 툴바 활성화"
 
 #: packages/lib/models/Setting.ts:1186
 msgid "Enable typographer support"
@@ -1896,9 +1881,8 @@ msgid "Enter notebook title"
 msgstr "노트북 제목을 입력해주세요"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:121
-#, fuzzy
 msgid "Enter password"
-msgstr "마스터 비밀번호"
+msgstr "비밀번호 입력"
 
 #: packages/app-cli/app/help-utils.js:56
 msgid "Enum"
@@ -1943,14 +1927,12 @@ msgid "Evernote Export File (as Markdown)"
 msgstr "Evernote 내보내기 파일 (마크다운으로)"
 
 #: packages/lib/services/interop/InteropService.ts:91
-#, fuzzy
 msgid "Evernote Export Files (Directory, as HTML)"
-msgstr "Evernote 내보내기 파일 (HTML로)"
+msgstr "Evernote 파일 내보내기 (디렉토리, HTML로)"
 
 #: packages/lib/services/interop/InteropService.ts:100
-#, fuzzy
 msgid "Evernote Export Files (Directory, as Markdown)"
-msgstr "Evernote 내보내기 파일 (마크다운으로)"
+msgstr "Evernote 파일 내보내기 (디렉토리, 마크다운으로)"
 
 #: packages/app-cli/app/command-exit.ts:11
 msgid "Exits the application."
@@ -1958,7 +1940,7 @@ msgstr "애플리케이션을 종료합니다."
 
 #: packages/app-mobile/components/side-menu-content.tsx:359
 msgid "Expand"
-msgstr ""
+msgstr "확장"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:376
@@ -1973,9 +1955,8 @@ msgid "Export all"
 msgstr "모두 내보내기"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:27
-#, fuzzy
 msgid "Export all notes as JEX"
-msgstr "모두 내보내기"
+msgstr "모든 노트를 JEX로 내보내기"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:185
 msgid "Export debug report"
@@ -1990,13 +1971,12 @@ msgid "Export profile"
 msgstr "프로파일 내보내기"
 
 #: packages/lib/models/Setting.ts:2670
-#, fuzzy
 msgid "Export your data"
-msgstr "모두 내보내기"
+msgstr "나의 데이터 내보내기"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:108
 msgid "Exported successfully!"
-msgstr ""
+msgstr "성공적으로 내보냈습니다!"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:36
 msgid "Exporting profile..."
@@ -2007,9 +1987,8 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "\"%s\"에 \"%s\" 포맷으로 내보내는 중입니다. 잠시만 기다려주세요..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:89
-#, fuzzy
 msgid "Exporting..."
-msgstr "프로파일을 내보내는 중..."
+msgstr "내보내는 중..."
 
 #: packages/app-cli/app/command-export.ts:14
 msgid ""
@@ -2067,9 +2046,8 @@ msgstr "파일 시스템"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:204
 #: packages/app-mobile/components/screens/LogScreen.tsx:205
-#, fuzzy
 msgid "Filter"
-msgstr "태그 필터"
+msgstr "필터"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:193
 msgid "Filter tags"
@@ -2077,12 +2055,11 @@ msgstr "태그 필터"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useActionButtons.ts:56
 msgid "Find and replace"
-msgstr ""
+msgstr "찾기 및 바꾸기"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:250
-#, fuzzy
 msgid "Find: "
-msgstr "발견됨: %d."
+msgstr "찾기: "
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:63
 msgid "Firefox Extension"
@@ -2122,7 +2099,7 @@ msgstr "디버깅 목적으로만 사용: 프로파일을 외장 SD 카드에 �
 
 #: packages/lib/models/Setting.ts:1584
 msgid "For example \"%s\""
-msgstr ""
+msgstr "예: \"%s\""
 
 #: packages/app-cli/app/command-help.ts:36
 msgid "For information on how to customise the shortcuts please visit %s"
@@ -2145,9 +2122,8 @@ msgid "Force path style"
 msgstr "경로 스타일을 강제"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:44
-#, fuzzy
 msgid "Formatting"
-msgstr "정보"
+msgstr "포맷"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
@@ -2167,9 +2143,8 @@ msgid "Full changelog"
 msgstr "바뀐 내용을 모두 보기"
 
 #: packages/server/src/routes/admin/users.ts:133
-#, fuzzy
 msgid "Full name"
-msgstr "바뀐 내용을 모두 보기"
+msgstr "전체 이름"
 
 #: packages/lib/models/Setting.ts:2628
 #: packages/server/src/services/MustacheService.ts:110
@@ -2187,7 +2162,7 @@ msgstr[0] "링크를 만드는 중..."
 
 #: packages/lib/models/Setting.ts:2667
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
-msgstr ""
+msgstr "지리적 위치, 맞춤법 검사, 편집기 도구 모음, 이미지 크기 조정"
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:91
 msgid "Get it now:"
@@ -2222,11 +2197,11 @@ msgstr "허가된 권한"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useHeaderButtons.ts:14
 msgid "Header %d"
-msgstr ""
+msgstr "헤더 %d"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:48
 msgid "Headers"
-msgstr ""
+msgstr "헤더"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:94
 msgid "Heading"
@@ -2239,28 +2214,24 @@ msgid "Help"
 msgstr "도움말"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:522
-#, fuzzy
 msgid "Hermes enabled: %d"
-msgstr "FTS 활성됨: %d"
+msgstr "Hermes 사용: %d"
 
 #: packages/app-desktop/gui/MenuBar.tsx:626
 msgid "Hide %s"
 msgstr "%s 숨기기"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:218
-#, fuzzy
 msgid "Hide advanced"
-msgstr "메타데이터 숨김"
+msgstr "고급 숨기기"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:562
-#, fuzzy
 msgid "Hide Advanced Settings"
-msgstr "고급 옵션"
+msgstr "고급 설정 숨기기"
 
 #: packages/server/src/routes/admin/users.ts:203
-#, fuzzy
 msgid "Hide disabled"
-msgstr "비활성화된 키들을 숨기기"
+msgstr "비활성화 숨기기"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:159
 msgid "Hide disabled keys"
@@ -2271,14 +2242,12 @@ msgid "Hide Joplin"
 msgstr "Joplin 숨기기"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useActionButtons.ts:67
-#, fuzzy
 msgid "Hide keyboard"
-msgstr "메타데이터 숨김"
+msgstr "키보드 숨기기"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:19
-#, fuzzy
 msgid "Hide more actions"
-msgstr "메타데이터 숨김"
+msgstr "더 많은 작업 숨기기"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
@@ -2299,7 +2268,7 @@ msgstr "HTML 디렉터리"
 
 #: packages/lib/services/interop/InteropService.ts:109
 msgid "HTML document"
-msgstr ""
+msgstr "HTML 문서"
 
 #: packages/lib/services/interop/InteropService.ts:168
 msgid "HTML File"
@@ -2420,7 +2389,7 @@ msgstr ""
 
 #: packages/lib/services/synchronizer/syncInfoUtils.ts:431
 msgid "In order to synchronise, please upgrade your application to version %s+"
-msgstr ""
+msgstr "동기화하려면 애플리케이션을 %s+ 버전으로 업그레이드하세요"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:101
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:195
@@ -2443,7 +2412,7 @@ msgstr "내부: %s"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:52
 msgid "Increase indent level"
-msgstr ""
+msgstr "들여쓰기 수준 높이기"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:125
 msgid "Indent less"
@@ -2473,9 +2442,8 @@ msgstr "하이퍼링크 삽입"
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:104
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:676
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useActionButtons.ts:39
-#, fuzzy
 msgid "Insert time"
-msgstr "날짜와 시간 입력"
+msgstr "시간 삽입하기"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:199
 msgid "Install"
@@ -2541,7 +2509,7 @@ msgstr "동기화 할 수 없는 항목"
 
 #: packages/app-desktop/gui/MenuBar.tsx:857
 msgid "Join us on Twitter"
-msgstr ""
+msgstr "트위터에 참여하기"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:346
 msgid ""
@@ -2625,7 +2593,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useInlineFormattingButtons.ts:45
 msgid "KaTeX"
-msgstr ""
+msgstr "KaTeX"
 
 #: packages/lib/models/Setting.ts:1631
 msgid "Keep note history for"
@@ -2660,9 +2628,8 @@ msgid "Language"
 msgstr "언어"
 
 #: packages/lib/models/Setting.ts:2662
-#, fuzzy
 msgid "Language, date format"
-msgstr "날짜 형식"
+msgstr "언어, 날짜 형식"
 
 #: packages/lib/Synchronizer.ts:201
 msgid "Last error: %s"
@@ -2683,7 +2650,7 @@ msgstr "레이아웃 버튼 순서"
 
 #: packages/lib/models/Setting.ts:1798
 msgid "Leave it blank to download the language files from the default website"
-msgstr ""
+msgstr "기본 웹사이트에서 언어 파일을 다운로드하려면 비워 두세요"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -2699,21 +2666,19 @@ msgstr "Letter"
 
 #: packages/lib/models/Setting.ts:411
 msgid "Light"
-msgstr "Light"
+msgstr "라이트"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:105
 msgid "Lines"
 msgstr "줄"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useInlineFormattingButtons.ts:56
-#, fuzzy
 msgid "Link"
 msgstr "링크"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:95
-#, fuzzy
 msgid "Link description"
-msgstr "암호화"
+msgstr "링크 설명"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:184
 msgid "Link has been copied to clipboard!"
@@ -2721,9 +2686,8 @@ msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "링크가 클립보드로 복사되었습니다!"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:92
-#, fuzzy
 msgid "Link text"
-msgstr "링크"
+msgstr "텍스트 링크"
 
 #: packages/app-mobile/components/screens/Note.tsx:337
 msgid "Links with protocol \"%s\" are not supported"
@@ -2733,20 +2697,19 @@ msgstr "링크를 위한 프로토콜 “%s”는 지원하지 않습니다"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:229
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:230
 msgid "List item"
-msgstr "목록 추가"
+msgstr "아이템 리스트"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:52
 msgid "Lists"
-msgstr ""
+msgstr "목록"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
 msgid "Loaded"
 msgstr "로딩됨"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:87
-#, fuzzy
 msgid "Loading..."
-msgstr "업데이트 중..."
+msgstr "로딩 중..."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:54
 msgid "Location"
@@ -2789,7 +2752,7 @@ msgstr "로그아웃"
 
 #: packages/lib/models/Setting.ts:2669
 msgid "Logs, profiles, sync status"
-msgstr ""
+msgstr "로그, 프로필, 동기화 상태"
 
 #: packages/app-desktop/gui/MenuBar.tsx:860
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:515
@@ -2805,14 +2768,12 @@ msgid "Manage master password..."
 msgstr "마스터 비밀번호 관리..."
 
 #: packages/lib/utils/joplinCloud.ts:201
-#, fuzzy
 msgid "Manage multiple users"
-msgstr "마스터 비밀번호 관리"
+msgstr "여러 사용자 관리"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:468
-#, fuzzy
 msgid "Manage profiles"
-msgstr "프로파일 업데이트"
+msgstr "프로필 관리"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:340
 msgid "Manage your plugins"
@@ -2875,21 +2836,19 @@ msgstr "최대 동시 연결수"
 
 #: packages/server/src/routes/admin/users.ts:145
 msgid "Max Item Size"
-msgstr ""
+msgstr "최대 아이템 크기"
 
 #: packages/lib/utils/joplinCloud.ts:129
-#, fuzzy
 msgid "Max note or attachment size"
-msgstr "첨부 파일"
+msgstr "최대 노트 또는 첨부파일 크기"
 
 #: packages/server/src/routes/admin/users.ts:153
-#, fuzzy
 msgid "Max Total Size"
-msgstr "실제 크기"
+msgstr "최대 총 크기"
 
 #: packages/lib/models/Setting.ts:2666
 msgid "Media player, math, diagrams, table of contents"
-msgstr ""
+msgstr "미디어 플레이어, 수학, 도표, 목차"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:318
 msgid "Missing keys"
@@ -2904,9 +2863,8 @@ msgid "Missing required argument: %s"
 msgstr "필요한 인자가 없습니다: %s"
 
 #: packages/app-cli/app/cli-utils.js:135
-#, fuzzy
 msgid "Missing required flag value: %s"
-msgstr "필요한 인자가 없습니다: %s"
+msgstr "필요하 플래그 값이 없습니다: %s"
 
 #: packages/app-mobile/components/side-menu-content.tsx:470
 msgid "Mobile data - auto-sync disabled"
@@ -2942,9 +2900,8 @@ msgid "Move to notebook..."
 msgstr "노트북으로 옮기기..."
 
 #: packages/app-cli/app/command-mv.ts:14
-#, fuzzy
 msgid "Moves the given <item> to [notebook]"
-msgstr "<note>와 일치하는 노트를 [notebook]으로 옮깁니다."
+msgstr "주어진 <item>을 [notebook]으로 이동합니다."
 
 #: packages/app-cli/app/cli-utils.js:177
 #: packages/app-cli/app/setupCommand.ts:21
@@ -2957,7 +2914,7 @@ msgstr "아니오"
 
 #: packages/lib/models/Setting.ts:1142
 msgid "Never resize"
-msgstr ""
+msgstr "크기 조정 안 함"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:8
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:105
@@ -3002,7 +2959,7 @@ msgstr "새 버전: %s"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:268
 msgid "Next match"
-msgstr ""
+msgstr "다음 매치"
 
 #: packages/lib/SyncTargetNextcloud.js:25
 msgid "Nextcloud"
@@ -3076,7 +3033,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.ts:416
 msgid "Nord"
-msgstr "Nord"
+msgstr "노드"
 
 #: packages/app-cli/app/command-sync.ts:89
 msgid "Not authentified with %s. Please provide any missing credentials."
@@ -3084,16 +3041,15 @@ msgstr "%s과 인증되지 않았습니다. 증명서를 제공해주세요."
 
 #: packages/lib/models/Resource.ts:379
 msgid "Not downloaded"
-msgstr "내려받지 않았음"
+msgstr "다운로드되지 않았습니다"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:238
 msgid "Not generated"
-msgstr "생성 안됨"
+msgstr "생성되지 않았습니다"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:91
-#, fuzzy
 msgid "Not now"
-msgstr "지금하기"
+msgstr "지금은 아닙니다"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:103
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:55
@@ -3127,9 +3083,8 @@ msgid "Note does not exist: \"%s\". Create it?"
 msgstr "\"%s\" 노트가 존재하지 않습니다. 새로 만들까요?"
 
 #: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:88
-#, fuzzy
 msgid "Note editor"
-msgstr "노트 역사"
+msgstr "노트 편집기"
 
 #: packages/app-cli/app/command-edit.ts:97
 msgid "Note has been saved."
@@ -3153,9 +3108,8 @@ msgid "Note list growth factor"
 msgstr "노트 목록 증가 인수"
 
 #: packages/app-desktop/gui/MenuBar.tsx:747
-#, fuzzy
 msgid "Note list style"
-msgstr "노트 목록"
+msgstr "노트 목록 스타일"
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.ts:7
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:407
@@ -3281,9 +3235,8 @@ msgid "Open %s"
 msgstr "%s 열기"
 
 #: packages/app-desktop/gui/MainScreen/commands/openPdfViewer.ts:7
-#, fuzzy
 msgid "Open PDF viewer"
-msgstr "PDF 보기 활성화"
+msgstr "PDF 뷰어 열기"
 
 #: packages/app-desktop/commands/openProfileDirectory.ts:8
 msgid "Open profile directory"
@@ -3299,7 +3252,7 @@ msgstr "열기..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:177
 msgid "Opening section %s"
-msgstr ""
+msgstr "섹션 %s 열기"
 
 #: packages/app-cli/app/command-e2ee.ts:40
 #: packages/app-cli/app/command-e2ee.ts:86
@@ -3318,9 +3271,8 @@ msgid "Or create an account."
 msgstr "또는 새 계정을 만듭니다."
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:22
-#, fuzzy
 msgid "Ordered list"
-msgstr "사용자 생성"
+msgstr "정렬 목록"
 
 #: packages/app-desktop/gui/MenuBar.tsx:469
 msgid "Other applications..."
@@ -3366,7 +3318,7 @@ msgstr "붙여넣기"
 #: packages/app-desktop/gui/NoteEditor/commands/pasteAsText.ts:6
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:191
 msgid "Paste as text"
-msgstr ""
+msgstr "텍스트로 붙여넣기"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:540
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:54
@@ -3380,7 +3332,7 @@ msgstr "PDF 파일"
 
 #: packages/lib/utils/joplinCloud.ts:406
 msgid "Per user. Minimum of %d users."
-msgstr ""
+msgstr "사용자당 최소 %d명의 사용자 수입니다."
 
 #: packages/app-mobile/components/screens/Note.tsx:542
 msgid "Permission needed"
@@ -3431,7 +3383,7 @@ msgstr ""
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:88
 msgid "Please record your voice..."
-msgstr ""
+msgstr "목소리를 녹음하세요..."
 
 #: packages/app-cli/app/command-ls.ts:63
 msgid "Please select a notebook first."
@@ -3529,7 +3481,7 @@ msgstr "복호화 암호를 설정하려면 누르세요."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:278
 msgid "Previous match"
-msgstr ""
+msgstr "이전 매치"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:333
 msgid "Previous versions of this note"
@@ -3541,16 +3493,15 @@ msgstr "인쇄"
 
 #: packages/lib/utils/joplinCloud.ts:222
 msgid "Priority support"
-msgstr ""
+msgstr "우선 지원 사항"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:517
 msgid "Privacy Policy"
 msgstr "개인 정보 보호 정책"
 
 #: packages/lib/utils/joplinCloud.ts:367
-#, fuzzy
 msgid "Pro"
-msgstr "프로파일"
+msgstr "프로"
 
 #: packages/server/src/services/TaskService.ts:26
 msgid "Process failed payment subscriptions"
@@ -3569,9 +3520,8 @@ msgid "Profile"
 msgstr "프로파일"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:96
-#, fuzzy
 msgid "Profile name"
-msgstr "프로파일 이름:"
+msgstr "프로파일 이름"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
 msgid "Profile name:"
@@ -3582,7 +3532,6 @@ msgid "Profile Version: %s"
 msgstr "프로파일 버전: %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:156
-#, fuzzy
 msgid "Profiles"
 msgstr "프로파일"
 
@@ -3591,17 +3540,16 @@ msgid "Properties"
 msgstr "속성"
 
 #: packages/lib/models/Setting.ts:1573
-#, fuzzy
 msgid "Proxy enabled"
-msgstr "활성화됨"
+msgstr "프록시 사용"
 
 #: packages/lib/models/Setting.ts:1595
 msgid "Proxy timeout (seconds)"
-msgstr ""
+msgstr "프록시 시간 초과(초)"
 
 #: packages/lib/models/Setting.ts:1583
 msgid "Proxy URL"
-msgstr ""
+msgstr "프록시 URL"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:238
 msgid "Public-private key pair:"
@@ -3677,9 +3625,8 @@ msgid "Refresh"
 msgstr "새로고침"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:313
-#, fuzzy
 msgid "Regular expression"
-msgstr "수식 표현 활성화"
+msgstr "정규식"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:645
 #: packages/app-desktop/gui/Root.tsx:181
@@ -3721,25 +3668,23 @@ msgstr "인증 토큰 새로 고침"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:288
 msgid "Replace"
-msgstr ""
+msgstr "바꾸기"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:298
-#, fuzzy
 msgid "Replace all"
-msgstr "모두 선택"
+msgstr "모두 바꾸기"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Replace with..."
-msgstr ""
+msgstr "다음으로 바꾸기..."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:257
 msgid "Replace: "
-msgstr ""
+msgstr "바꾸기: "
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
-#, fuzzy
 msgid "Reset application layout"
-msgstr "애플리케이션 레이아웃 변경"
+msgstr "애플리케이션 레이아웃 재설정"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:220
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:221
@@ -3748,7 +3693,7 @@ msgstr "마스터 비밀번호 재설정"
 
 #: packages/lib/models/Setting.ts:1136
 msgid "Resize large images:"
-msgstr ""
+msgstr "큰 이미지 크기 조정하기:"
 
 #: packages/app-cli/app/command-import.ts:53
 #: packages/app-desktop/gui/ImportScreen.tsx:92
@@ -3760,9 +3705,8 @@ msgid "Restart and upgrade"
 msgstr "재시작 및 업그레이드"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:88
-#, fuzzy
 msgid "Restart in safe mode"
-msgstr "재시작 및 업그레이드"
+msgstr "안전 모드에서 다시 시작"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:718
 msgid "Restart now"
@@ -3874,9 +3818,8 @@ msgid "Save changes"
 msgstr "변경 사항 저장"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:100
-#, fuzzy
 msgid "Save changes?"
-msgstr "변경 사항 저장"
+msgstr "변경 사항을 저장하시겠습니까?"
 
 #: packages/lib/models/Setting.ts:1043
 msgid "Save geo-location with notes"
@@ -3893,14 +3836,12 @@ msgid "Search for plugins..."
 msgstr "플러그인 찾기..."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:223
-#, fuzzy
 msgid "Search for..."
-msgstr "찾기..."
+msgstr "검색하기..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:141
-#, fuzzy
 msgid "Search hidden"
-msgstr "검색"
+msgstr "숨김 검색"
 
 #: packages/app-desktop/gui/NoteListControls/commands/focusSearch.ts:6
 msgid "Search in all the notes"
@@ -3911,9 +3852,8 @@ msgid "Search in current note"
 msgstr "현재 노트에서 검색"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:141
-#, fuzzy
 msgid "Search shown"
-msgstr "검색"
+msgstr "검색 결과"
 
 #: packages/app-cli/app/gui/FolderListWidget.js:51
 msgid "Search:"
@@ -3952,14 +3892,12 @@ msgid "Select file..."
 msgstr "파일 선택..."
 
 #: packages/app-mobile/components/screens/folder.js:109
-#, fuzzy
 msgid "Select parent notebook"
-msgstr "노트북 삭제"
+msgstr "상위 노트북 선택"
 
 #: packages/app-desktop/gui/MenuBar.tsx:325
-#, fuzzy
 msgid "Send bug report"
-msgstr "디버그 보고서 내보내기"
+msgstr "버그 리포트 보내기"
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -4019,11 +3957,11 @@ msgid ""
 "Share a copy of all notes in a file format that can be imported by Joplin on "
 "a computer."
 msgstr ""
+"Joplin이 컴퓨터로 가져올 수 있는 파일 형식으로 모든 노트의 사본을 공유하세요."
 
 #: packages/lib/utils/joplinCloud.ts:125
-#, fuzzy
 msgid "Share a notebook with others"
-msgstr "노트북으로 협업하기"
+msgstr "다른 사람과 노트북을 공유하기"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:383
 msgid "Share Notebook"
@@ -4035,7 +3973,7 @@ msgstr "노트북 공유..."
 
 #: packages/lib/utils/joplinCloud.ts:215
 msgid "Share permissions"
-msgstr ""
+msgstr "공유 권한"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:349
 msgid "Sharing notebook..."
@@ -4046,9 +3984,8 @@ msgid "Shortcuts are not available in CLI mode."
 msgstr "바로가기는 명령줄 인터페이스 모드에서는 사용할 수 없습니다."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:208
-#, fuzzy
 msgid "Show advanced"
-msgstr "고급 옵션"
+msgstr "고급 보이기"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/ToggleAdvancedSettingsButton.tsx:19
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:562
@@ -4064,18 +4001,16 @@ msgid "Show completed to-dos"
 msgstr "완료된 '할 일'을 표시"
 
 #: packages/server/src/routes/admin/users.ts:203
-#, fuzzy
 msgid "Show disabled"
-msgstr "비활성화된 키 보기"
+msgstr "비활성화 보기"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:159
 msgid "Show disabled keys"
 msgstr "비활성화된 키 보기"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:19
-#, fuzzy
 msgid "Show more actions"
-msgstr "노트 수 보이기"
+msgstr "더 많은 작업 표시"
 
 #: packages/lib/models/Setting.ts:916
 msgid "Show note counts"
@@ -4091,20 +4026,19 @@ msgstr "트레이 아이콘 표시"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:314
 msgid "Show/hide the sidebar"
-msgstr ""
+msgstr "사이드바 보이기/숨기기"
 
 #: packages/lib/models/Setting.ts:1137
 msgid "Shrink large images before adding them to notes."
-msgstr ""
+msgstr "큰 이미지를 노트에 추가하기 전에 축소하세요."
 
 #: packages/app-mobile/root.tsx:1013
-#, fuzzy
 msgid "Side menu closed"
-msgstr "메타데이터 숨김"
+msgstr "사이드 메뉴 닫힘"
 
 #: packages/app-mobile/root.tsx:1013
 msgid "Side menu opened"
-msgstr ""
+msgstr "사이드 메뉴 열림"
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:8
 #: packages/app-mobile/components/ScreenHeader.tsx:313
@@ -4130,22 +4064,24 @@ msgstr "넘겨짐: %d."
 
 #: packages/lib/models/Setting.ts:415
 msgid "Solarised Dark"
-msgstr "Solarized Dark"
+msgstr "부드러운 다크"
 
 #: packages/lib/models/Setting.ts:414
 msgid "Solarised Light"
-msgstr "Solarized Light"
+msgstr "부드러운 라이트"
 
 #: packages/lib/models/settings/settingValidations.ts:20
 msgid ""
 "Some attachments could not be downloaded. Please try to download them again."
-msgstr ""
+msgstr "일부 첨부파일을 다운로드할 수 없습니다. 다시 다운로드해 보세요."
 
 #: packages/lib/models/settings/settingValidations.ts:17
 msgid ""
 "Some attachments need to be downloaded. Set the attachment download mode to "
 "\"always\" and try again."
 msgstr ""
+"일부 첨부 파일을 다운로드해야 합니다. 첨부파일 다운로드 모드를 '항상'으로 설"
+"정하고 다시 시도해 보세요."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:621
 #: packages/app-mobile/components/ScreenHeader.tsx:576
@@ -4161,10 +4097,9 @@ msgid "Some items cannot be synchronised. Press for more info."
 msgstr "일부 항목들을 동기화할 수 없습니다. 자세한 정보를 보려면 누르세요."
 
 #: packages/lib/models/settings/settingValidations.ts:23
-#, fuzzy
 msgid ""
 "Some items could not be synchronised. Please try to synchronise them first."
-msgstr "일부 항목들을 동기화할 수 없습니다. 자세한 정보를 보려면 누르세요."
+msgstr "일부 항목들을 동기화할 수 없습니다. 먼저 동기화를 시도해 보세요."
 
 #: packages/lib/models/Setting.ts:1030
 msgid "Sort notebooks by"
@@ -4291,7 +4226,7 @@ msgstr "외부 편집을 그만 두시려면 클릭하세요"
 
 #: packages/lib/utils/joplinCloud.ts:141
 msgid "Storage space"
-msgstr ""
+msgstr "저장 공간"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
@@ -4358,7 +4293,7 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud.ts:160
 msgid "Sync as many devices as you want"
-msgstr ""
+msgstr "원하는 만큼 많은 장치를 동기화하세요"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:469
 msgid "Sync Status"
@@ -4389,9 +4324,8 @@ msgid "Sync your notes"
 msgstr "노트 동기화"
 
 #: packages/lib/models/Setting.ts:2664
-#, fuzzy
 msgid "Sync, encryption, proxy"
-msgstr "암호화 사용"
+msgstr "동기화, 암호화, 프록시"
 
 #: packages/lib/models/Setting.ts:2629
 msgid "Synchronisation"
@@ -4466,9 +4400,8 @@ msgid "Take photo"
 msgstr "사진 찍기"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:32
-#, fuzzy
 msgid "Task list"
-msgstr "작업"
+msgstr "작업 목록"
 
 #: packages/server/src/services/MustacheService.ts:125
 #: packages/server/src/services/MustacheService.ts:275
@@ -4477,12 +4410,11 @@ msgstr "작업"
 
 #: packages/lib/utils/joplinCloud.ts:389
 msgid "Teams"
-msgstr ""
+msgstr "팀"
 
 #: packages/lib/services/interop/InteropService.ts:133
-#, fuzzy
 msgid "Text document"
-msgstr "텍스트 편집기 명령어"
+msgstr "텍스트 문서"
 
 #: packages/lib/models/Setting.ts:1432
 msgid "Text editor command"
@@ -4493,19 +4425,19 @@ msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
 msgstr "감사합니다! 이제 Joplin 클라우드 계정을 사용할 준비가 되었습니다."
 
 #: packages/lib/utils/joplinCloud.ts:167
-#, fuzzy
 msgid ""
 "The [Web Clipper](%s) is a browser extension that allows you to save web "
 "pages and screenshots from your browser."
 msgstr ""
-"Joplin 웹 수집기는 브라우저에서 웹 페이지 및 스크린샷을 Joplin에 저장할 수 있"
-"게 해줍니다."
+"[Web Clipper](%s)는 브라우저에서 웹페이지와 스크린샷을 저장할 수 있는 브라우"
+"저 확장 프로그램입니다."
 
 #: packages/lib/services/profileConfig/index.ts:105
 msgid ""
 "The active profile cannot be deleted. Switch to a different profile and try "
 "again."
 msgstr ""
+"활성 프로필은 삭제할 수 없습니다. 다른 프로필로 전환하고 다시 시도하세요."
 
 #: packages/app-desktop/bridge.ts:315
 msgid ""
@@ -4566,7 +4498,7 @@ msgstr "기본 암호 방법이 변경되었습니다. 데이터를 다시 암�
 
 #: packages/lib/services/profileConfig/index.ts:104
 msgid "The default profile cannot be deleted"
-msgstr ""
+msgstr "기본 프로필은 삭제할 수 없습니다"
 
 #: packages/lib/models/Setting.ts:1432
 msgid ""
@@ -4590,10 +4522,9 @@ msgstr ""
 "니다."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:594
-#, fuzzy
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
-msgstr[0] "다음 첨부 파일들이 변경되었는지 감시하고 있습니다:"
+msgstr[0] "다음 첨부 파일은 검색어와 일치합니다:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:578
 msgid "The following attachments are being watched for changes:"
@@ -4680,6 +4611,12 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"다음 이유로 인해 동기화 대상을 변경할 수 없습니다: %s\n"
+"\n"
+"문제를 해결할 수 없는 경우 먼저 다음 지침에 따라 데이터를 지워야 할 수도 있습"
+"니다:\n"
+"\n"
+"%s"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:615
 msgid ""
@@ -4696,9 +4633,8 @@ msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr "동기화 대상의 업그레이드가 필요합니다! 처리를 위해 이 배너를 누르세요."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:609
-#, fuzzy
 msgid "The synchronisation password is missing."
-msgstr "동기화 설정 확인"
+msgstr "동기화 비밀번호가 누락되었습니다."
 
 #: packages/lib/models/Tag.ts:204
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -4729,15 +4665,16 @@ msgid ""
 "The WebDAV implementation of %s is incompatible with Joplin, and as such is "
 "no longer supported. Please use a different sync method."
 msgstr ""
+"%s의 WebDAV 구현은 Joplin과 호환되지 않으므로 더 이상 지원되지 않습니다. 다"
+"른 동기화 방법을 사용해 보세요."
 
 #: packages/lib/models/Setting.ts:860
 msgid "Theme"
 msgstr "테마"
 
 #: packages/lib/models/Setting.ts:2663
-#, fuzzy
 msgid "Themes, editor font"
-msgstr "편집기 글꼴"
+msgstr "테마, 편집기 글꼴"
 
 #: packages/app-mobile/components/NoteList.tsx:102
 msgid "There are currently no notes. Create one by clicking on the (+) button."
@@ -4745,7 +4682,7 @@ msgstr "노트가 없습니다. (+) 버튼을 클릭하여 새로 만드세요."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:241
 msgid "There are unsaved changes."
-msgstr ""
+msgstr "저장되지 않은 변경사항이 있습니다."
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:524
 #: packages/app-desktop/gui/NoteList/NoteList2.tsx:173
@@ -4816,6 +4753,9 @@ msgid ""
 "collaborate on it. It does not however allow you to share a notebook with "
 "someone else, unless you have the feature \"%s\"."
 msgstr ""
+"다른 사용자가 귀하와 노트북을 공유할 수 있으며, 귀하와 귀하 모두 노트북에서 "
+"공동 작업을 할 수 있습니다. 그러나 \"%s\" 기능이 없으면 다른 사람과 노트북을 "
+"공유할 수 없습니다."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:51
 #: packages/lib/services/ResourceEditWatcher/index.ts:224
@@ -4835,7 +4775,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:100
 msgid "This drawing may have unsaved changes."
-msgstr ""
+msgstr "이 그림에는 저장되지 않은 변경사항이 있을 수 있습니다."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:232
 msgid ""
@@ -4847,22 +4787,19 @@ msgstr ""
 "삭제할 경우, 나중에 복원할 수 없으므로 주의하시기 바랍니다."
 
 #: packages/app-mobile/components/ScreenHeader.tsx:284
-#, fuzzy
 msgid "This note could not be deleted: %s"
 msgid_plural "These notes could not be deleted: %s"
-msgstr[0] "다음 파일을 열 수 없습니다: %s"
+msgstr[0] "다음 노트를 삭제할 수 없습니다: %s"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:264
-#, fuzzy
 msgid "This note could not be duplicated: %s"
 msgid_plural "These notes could not be duplicated: %s"
-msgstr[0] "노트북을 저장할 수 없습니다: %s"
+msgstr[0] "다음 노트를 복사할 수 없습니다: %s"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:555
-#, fuzzy
 msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
-msgstr[0] "노트북을 저장할 수 없습니다: %s"
+msgstr[0] "다음 노트를 이동할 수 없습니다: %s"
 
 #: packages/lib/models/Note.ts:119
 msgid "This note does not have geolocation information."
@@ -4990,7 +4927,7 @@ msgstr ""
 msgid ""
 "To switch the profile, the app is going to close and you will need to "
 "restart it."
-msgstr ""
+msgstr "프로필을 전환하려면 앱이 닫히고 앱을 다시 시작해야 합니다."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:498
 msgid ""
@@ -5006,9 +4943,8 @@ msgid "to-do"
 msgstr "할 일"
 
 #: packages/app-mobile/components/note-item.js:143
-#, fuzzy
 msgid "to-do: %s"
-msgstr "할 일"
+msgstr "할 일: %s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:133
 msgid "Toggle comment"
@@ -5031,9 +4967,8 @@ msgid "Toggle external editing"
 msgstr "외부 편집 전환"
 
 #: packages/lib/models/Setting.ts:2668
-#, fuzzy
 msgid "Toggle note history, keep notes for"
-msgstr "다음과 같이 노트 변경 이력을 유지"
+msgstr "노트 히스토리 전환, 다음과 같이 노트 변경 이력을 유지"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNoteList.ts:9
 msgid "Toggle note list"
@@ -5064,9 +4999,8 @@ msgid "Tools"
 msgstr "도구"
 
 #: packages/server/src/routes/admin/users.ts:149
-#, fuzzy
 msgid "Total Size"
-msgstr "실제 크기"
+msgstr "총 크기"
 
 #: packages/lib/services/ReportService.ts:289
 msgid "Total: %d/%d"
@@ -5079,9 +5013,8 @@ msgstr "다시 시도"
 
 #: packages/lib/utils/joplinCloud.ts:360 packages/lib/utils/joplinCloud.ts:382
 #: packages/lib/utils/joplinCloud.ts:404
-#, fuzzy
 msgid "Try it now"
-msgstr "지금하기"
+msgstr "지금 시도하기"
 
 #: packages/app-cli/app/command-help.ts:71
 msgid ""
@@ -5115,15 +5048,15 @@ msgstr "형태: %s."
 
 #: packages/app-mobile/components/screens/Note.tsx:1013
 msgid "Unable to edit resource of type %s"
-msgstr ""
+msgstr "유형 %s 의 리소스를 편집할 수 없습니다"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:72
 msgid "Unable to export or share data. Reason: %s"
-msgstr ""
+msgstr "데이터를 내보내거나 공유할 수 없습니다. 이유: %s"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:108
 msgid "Unable to share log data. Reason: %s"
-msgstr ""
+msgstr "로그 데이터를 공유할 수 없습니다. 이유: %s"
 
 #: packages/lib/models/Setting.ts:933
 msgid "Uncompleted to-dos on top"
@@ -5141,6 +5074,8 @@ msgid ""
 "Uninstall and reinstall the application. Make sure you create a backup first "
 "by exporting all your notes as JEX from the desktop application."
 msgstr ""
+"애플리케이션을 삭제했다가 다시 설치합니다. 데스크톱 애플리케이션에서 모든 노"
+"트를 JEX로 내보내 백업을 먼저 만드세요."
 
 #: packages/lib/utils/processStartFlags.ts:170
 msgid "Unknown flag: %s"
@@ -5154,9 +5089,8 @@ msgstr ""
 "주세요"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:12
-#, fuzzy
 msgid "Unordered list"
-msgstr "사용자 생성"
+msgstr "정렬되지 않은 목록"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:163
 msgid "Unpublish note"
@@ -5259,7 +5193,7 @@ msgstr "사용량: %s"
 
 #: packages/lib/models/Setting.ts:1747
 msgid "Use biometrics to secure access to the app"
-msgstr ""
+msgstr "생체 인식을 사용하여 앱에 대한 액세스 보호"
 
 #: packages/app-cli/app/command-ls.ts:32 packages/app-cli/app/command-tag.js:18
 msgid ""
@@ -5299,6 +5233,8 @@ msgid ""
 "Use your biometrics to secure access to your application. You can always set "
 "it up later in Settings."
 msgstr ""
+"생체 인식을 사용하여 애플리케이션에 대한 액세스를 보호하세요. 나중에 설정에"
+"서 언제든지 설정할 수 있습니다."
 
 #: packages/lib/models/Setting.ts:1299
 msgid ""
@@ -5333,7 +5269,7 @@ msgstr "유효함"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:10
 msgid "Verify your identity"
-msgstr ""
+msgstr "본인 확인"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:170
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:9
@@ -5362,12 +5298,12 @@ msgstr "Vim"
 
 #: packages/lib/models/Setting.ts:1799
 msgid "Voice typing language files (URL)"
-msgstr ""
+msgstr "음성 입력 언어 파일(URL)"
 
 #: packages/app-mobile/components/screens/Note.tsx:1275
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:119
 msgid "Voice typing..."
-msgstr ""
+msgstr "음성 입력 중..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:193
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:101
@@ -5379,15 +5315,16 @@ msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "경고: 성능상의 문제로 모든 리소스를 표시하지 않습니다 (제한: %s)."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:102
-#, fuzzy
 msgid ""
 "Warnings:\n"
 "%s"
-msgstr "경고"
+msgstr ""
+"경고:\n"
+"%s"
 
 #: packages/lib/models/Setting.ts:2638 packages/lib/utils/joplinCloud.ts:166
 msgid "Web Clipper"
-msgstr "웹 수집기"
+msgstr "웹 클리퍼"
 
 #: packages/lib/SyncTargetWebDAV.js:24
 msgid "WebDAV"
@@ -5428,9 +5365,8 @@ msgstr ""
 "요."
 
 #: packages/lib/WelcomeUtils.ts:63
-#, fuzzy
 msgid "Welcome!"
-msgstr "환영합니다"
+msgstr "환영합니다!"
 
 #: packages/lib/models/Setting.ts:1119
 msgid "When creating a new note:"
@@ -5438,17 +5374,19 @@ msgstr "새 노트를 만들 때:"
 
 #: packages/lib/models/Setting.ts:1102
 msgid "When creating a new to-do:"
-msgstr "새로운 '할 일'을 만들 때:"
+msgstr "새 '할 일'을 만들 때:"
 
 #: packages/lib/models/Setting.ts:846
 msgid ""
 "When enabled, the application will scan your attachments and extract the "
 "text from it. This will allow you to search for text in these attachments."
 msgstr ""
+"이 기능을 활성화하면 애플리케이션이 첨부파일을 스캔하고 첨부파일에서 텍스트"
+"를 추출합니다. 이렇게 하면 첨부 파일에 있는 텍스트를 검색할 수 있습니다."
 
 #: packages/app-desktop/ElectronAppWrapper.ts:178
 msgid "Window unresponsive."
-msgstr ""
+msgstr "창이 응답하지 않습니다."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:102
 msgid "Words"
