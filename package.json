@@ -51,7 +51,6 @@
     "releaseServer": "node packages/tools/release-server.js",
     "setupNewRelease": "node ./packages/tools/setupNewRelease",
     "spellcheck": "node packages/tools/spellcheck.js",
-    "spellcheck-base": "cspell --no-progress --no-summary --config cspell.json",
     "tagServerLatest": "node packages/tools/tagServerLatest.js",
     "test-ci": "yarn workspaces foreach --parallel --verbose --interlaced --jobs 2 run test-ci",
     "test": "yarn workspaces foreach --parallel --verbose --interlaced --jobs 2 run test",
