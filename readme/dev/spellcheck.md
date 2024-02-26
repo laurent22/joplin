@@ -28,6 +28,10 @@ Only do this when there's a large block of code that contains many words to be i
 
 Also do this when the words to be ignored are not actually words. One example is encrypted data because we don't want to add random meaningless strings to the word list.
 
+### By ignoring paths or regexes
+
+In `cspell.json`, use the `ignore` properties to skip certain files or folders, or to ignore text that matches a particular regex. For example, `"\[.*?\]\(https:\/\/github.com\/.*?\)"` is used to ignore all usernames in the changelogs.
+
 ## Visual Studio Code Extension
 
 The [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker) extension can be installed to automatically underline spelling mistakes. It will use the project `cspell.json` file.
