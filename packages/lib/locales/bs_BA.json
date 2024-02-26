@@ -1262,6 +1262,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Minimise": [
+		""
+	],
 	"Missing Master Keys": [
 		"Nedostaju glavni ključevi"
 	],
@@ -1361,7 +1364,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Nije ovjereno sa %s. Molimo unesite podatke koji nedostaju."
 	],
 	"Not downloaded": [

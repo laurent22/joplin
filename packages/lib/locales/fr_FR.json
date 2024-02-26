@@ -101,6 +101,9 @@
 	"&View": [
 		"&Affichage"
 	],
+	"&Window": [
+		"&Fenêtre"
+	],
 	"(%s)": [
 		"(%s)"
 	],
@@ -1760,6 +1763,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"Lecteur média, math, diagrammes, sommaire"
 	],
+	"Minimise": [
+		"Réduire"
+	],
 	"Missing keys": [
 		"Clefs manquantes"
 	],
@@ -1886,7 +1892,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Non‑connecté à %s. Veuillez fournir les identifiants et mots de passe manquants."
 	],
 	"Not downloaded": [

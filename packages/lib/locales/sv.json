@@ -63,7 +63,7 @@
 		"%s = %s (%s)"
 	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
-		""
+		"%s är inte optimerad för att synkronisera många små filer så din första synkronisering kommer att gå långsamt."
 	],
 	"%s: %d": [
 		"%s: %d"
@@ -76,6 +76,9 @@
 	],
 	"%s: %s": [
 		"%s: %s"
+	],
+	"%s: Missing password.": [
+		"%s: Lösenord saknas."
 	],
 	"&Edit": [
 		"&Redigera"
@@ -111,7 +114,7 @@
 		"(wysiwyg: %s)"
 	],
 	"(You may disable this prompt in the options)": [
-		""
+		"(Du kan inaktivera denna prompt i alternativen)"
 	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"- Kamera: gör det möjligt att ta en bild och bifoga den till en anteckning."
@@ -221,6 +224,12 @@
 	"Always": [
 		"Alltid"
 	],
+	"Always ask": [
+		"Fråga alltid"
+	],
+	"Always resize": [
+		"Ändra alltid storlek"
+	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
 		"Tvetydig anteckningsbok \"%s\". Använd anteckningsbok-id istället - tryck på \"ti\" för att se det korta anteckningsbok-id:t eller använd $b för aktuellt vald anteckningsbok"
 	],
@@ -228,10 +237,10 @@
 		"Tvetydig anteckningsbok \"%s\". Använd kort anteckningsbok-id istället - tryck på \"ti\" för att se det korta anteckningsbok-id:t"
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
-		""
+		"En automatiskt sparad teckning hittades. Bifoga en kopia av den till anteckningen?"
 	],
 	"An error occurred: %s": [
-		""
+		"Ett fel uppstod: %s"
 	],
 	"An update is available, do you want to download it now?": [
 		"En uppdatering är tillgänglig, vill du hämta den nu?"
@@ -333,7 +342,7 @@
 		"Bläddra..."
 	],
 	"Built-in": [
-		""
+		"Inbyggt"
 	],
 	"Bulleted List": [
 		"Punktlista"
@@ -462,7 +471,7 @@
 		"Stäng rullgardinsmenyn"
 	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
-		""
+		"Stäng programmet, radera sedan din profil i \"%s\" och starta programmet igen. Se till att du skapar en säkerhetskopia först genom att exportera alla dina anteckningar som JEX."
 	],
 	"Close Window": [
 		"Stäng fönster"
@@ -475,6 +484,9 @@
 	],
 	"Code View": [
 		"Kodvy"
+	],
+	"Collaborate on a notebook with others": [
+		"Samarbeta på en anteckningsbok med andra"
 	],
 	"Collaborate on notebooks with others": [
 		"Samarbeta på anteckningsböcker tillsammans med andra"
@@ -499,6 +511,9 @@
 	],
 	"Command palette...": [
 		"Kommandopalett..."
+	],
+	"Compact": [
+		"Kompakt"
 	],
 	"Completed": [
 		"Slutförd"
@@ -663,6 +678,12 @@
 	"Creates a new to-do.": [
 		"Skapar en ny att-göra."
 	],
+	"Creating new note...": [
+		"Skapar ny anteckning..."
+	],
+	"Creating new to-do...": [
+		"Skapar ny att-göra..."
+	],
 	"Creating report...": [
 		"Skapar rapport..."
 	],
@@ -685,7 +706,7 @@
 		"Anpassade TLS-certifikat"
 	],
 	"Customise the note publishing banner": [
-		""
+		"Anpassa anteckningspubliceringsbannern"
 	],
 	"Cut": [
 		"Klipp ut"
@@ -805,7 +826,7 @@
 		"Destinationsformat: %s"
 	],
 	"Detailed": [
-		""
+		"Detaljerad"
 	],
 	"Directory": [
 		"Katalog"
@@ -830,6 +851,9 @@
 	],
 	"Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": [
 		"Inaktivera kryptering innebär att *alla* dina anteckningar och bilagor kommer att synkroniseras och skickas okrypterade till synkroniseringsmålet. Vill du fortsätta?"
+	],
+	"Discard": [
+		"Kassera"
 	],
 	"Discard changes": [
 		"Kassera ändringar"
@@ -873,6 +897,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Förlora inte lösenordet som för säkerhetsändamål kommer det att vara det *enda* sättet att dekryptera data! För att aktivera kryptering, ange ditt lösenord nedan."
 	],
+	"Donate, website": [
+		"Donera, webbplats"
+	],
 	"Done": [
 		"Klar"
 	],
@@ -904,10 +931,10 @@
 		"Dracula"
 	],
 	"Draw picture": [
-		""
+		"Rita bild"
 	],
 	"Drawing": [
-		""
+		"Teckning"
 	],
 	"Drop notes or files here": [
 		"Släpp anteckningar eller filer här"
@@ -987,6 +1014,9 @@
 	"Email to Note": [
 		"E-posta för att notera"
 	],
+	"Email To Note, login information": [
+		"E-posta till anteckning, inloggningsinformation"
+	],
 	"Emails": [
 		"E-postmeddelanden"
 	],
@@ -1045,7 +1075,7 @@
 		"Aktivera anteckningshistorik"
 	],
 	"Enable optical character recognition (OCR)": [
-		""
+		"Aktivera optisk teckenigenkänning (OCR)"
 	],
 	"Enable PDF viewer": [
 		"Aktivera PDF-visare"
@@ -1113,6 +1143,9 @@
 	"Enter notebook title": [
 		"Ange anteckningsbokens titel"
 	],
+	"Enter password": [
+		"Ange lösenord"
+	],
 	"Enum": [
 		"Enum"
 	],
@@ -1137,6 +1170,12 @@
 	"Evernote Export File (as Markdown)": [
 		"Evernote-exporteringsfil (som Markdown)"
 	],
+	"Evernote Export Files (Directory, as HTML)": [
+		"Evernote-exporteringsfiler (katalog, som HTML)"
+	],
+	"Evernote Export Files (Directory, as Markdown)": [
+		"Evernote-exporteringsfiler (katalog, som Markdown)"
+	],
 	"Exits the application.": [
 		"Avslutar programmet."
 	],
@@ -1160,6 +1199,9 @@
 	],
 	"Export profile": [
 		"Exportera profil"
+	],
+	"Export your data": [
+		"Exportera dina data"
 	],
 	"Exported successfully!": [
 		"Exporten lyckades!"
@@ -1205,6 +1247,9 @@
 	],
 	"File system": [
 		"Filsystem"
+	],
+	"Filter": [
+		"Filtrera"
 	],
 	"Filter tags": [
 		"Filtrera taggar"
@@ -1283,7 +1328,7 @@
 		"Skapar länkar..."
 	],
 	"Geolocation, spellcheck, editor toolbar, image resize": [
-		""
+		"Geolokalisering, stavningskontroll, redigeringsverktygsfält, bildstorleksändring"
 	],
 	"Get it now:": [
 		"Hämta det nu:"
@@ -1324,6 +1369,9 @@
 	"Hide advanced": [
 		"Dölj avancerade"
 	],
+	"Hide Advanced Settings": [
+		"Dölj avancerade inställningar"
+	],
 	"Hide disabled": [
 		"Dölj inaktiverade"
 	],
@@ -1352,7 +1400,7 @@
 		"HTML-mapp"
 	],
 	"HTML document": [
-		""
+		"HTML-dokument"
 	],
 	"HTML File": [
 		"HTML-fil"
@@ -1403,7 +1451,7 @@
 		"För att göra detta måste all din datauppsättning vara krypterad och synkroniserad, det är bäst köra processen över natten.\n\nFör att starta processen, följ dessa instruktioner:\n\n1. Synkronisera alla dina enheter.\\n\n2. Klicka \\\"%s\\\"\n3. Låt den köra färdigt. Medan den kör, undvik att göra ändringar i några anteckningar på dina andra enheter för att undvika konflikter.\n4. När synkroniseringen är färdig på denna enhet, synkronisera alla dina andra enheter och låt processen köra färdigt.\n\nViktigt: du behöver bara köra denna process EN gång på en enhet."
 	],
 	"In order to synchronise, please upgrade your application to version %s+": [
-		""
+		"För att synkronisera, uppgradera din applikation till version %s+"
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"För att kunna använda filsystemssynkronisering krävs ditt tillstånd att skriva till extern lagring."
@@ -1561,6 +1609,9 @@
 	"Language": [
 		"Språk"
 	],
+	"Language, date format": [
+		"Språk, datumformat"
+	],
 	"Last error: %s": [
 		"Senaste fel: %s"
 	],
@@ -1644,7 +1695,7 @@
 		"Logga ut"
 	],
 	"Logs, profiles, sync status": [
-		""
+		"Loggar, profiler, synkroniseringsstatus"
 	],
 	"Make a donation": [
 		"Gör en donation"
@@ -1707,6 +1758,9 @@
 		"Max total storlek"
 	],
 	"Media player, math, diagrams, table of contents": [
+		"Mediaspelare, matematik, diagram, innehållsförteckning"
+	],
+	"Minimise": [
 		""
 	],
 	"Missing keys": [
@@ -1755,7 +1809,7 @@
 		"N"
 	],
 	"Never resize": [
-		""
+		"Ändra aldrig storlek"
 	],
 	"New note": [
 		"Ny anteckning"
@@ -1835,7 +1889,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Inte autentiserad med %s. Ange eventuella saknade uppgifter."
 	],
 	"Not downloaded": [
@@ -1885,6 +1939,9 @@
 	],
 	"Note list growth factor": [
 		"Anteckningslistans tillväxtfaktor"
+	],
+	"Note list style": [
+		"Anteckningsliststil"
 	],
 	"Note properties": [
 		"Anteckningens egenskaper"
@@ -1974,7 +2031,7 @@
 		"Öppna..."
 	],
 	"Opening section %s": [
-		""
+		"Öppnar avsnitt %s"
 	],
 	"Operation cancelled": [
 		"Operation avbruten"
@@ -2265,13 +2322,16 @@
 		"Återställ huvudlösenord"
 	],
 	"Resize large images:": [
-		""
+		"Ändra storlek på stora bilder:"
 	],
 	"Resources: %d.": [
 		"Resurser: %d."
 	],
 	"Restart and upgrade": [
 		"Starta om och uppgradera"
+	],
+	"Restart in safe mode": [
+		"Starta om i säkert läge"
 	],
 	"Restart now": [
 		"Starta om nu"
@@ -2339,6 +2399,9 @@
 	"Save changes": [
 		"Spara ändringar"
 	],
+	"Save changes?": [
+		"Spara ändringar?"
+	],
 	"Save geo-location with notes": [
 		"Spara geolokalisering med anteckningar"
 	],
@@ -2351,11 +2414,17 @@
 	"Search for...": [
 		"Sök efter..."
 	],
+	"Search hidden": [
+		"Sök dold"
+	],
 	"Search in all the notes": [
 		"Sök i alla anteckningarna"
 	],
 	"Search in current note": [
 		"Sök i aktuell anteckning"
+	],
+	"Search shown": [
+		"Sökning visas"
 	],
 	"Search...": [
 		"Sök..."
@@ -2383,6 +2452,9 @@
 	],
 	"Select parent notebook": [
 		"Välj överordnad anteckningsbok"
+	],
+	"Send bug report": [
+		"Skicka felrapport"
 	],
 	"Server is already running on port %d": [
 		"Servern körs redan på port %d"
@@ -2414,6 +2486,9 @@
 	"Share a copy of all notes in a file format that can be imported by Joplin on a computer.": [
 		"Dela en kopia av alla anteckningar i ett filformat som kan importeras av Joplin på en dator."
 	],
+	"Share a notebook with others": [
+		"Dela en anteckningsbok med andra"
+	],
 	"Share Notebook": [
 		"Dela anteckningsbok"
 	],
@@ -2421,7 +2496,7 @@
 		"Dela anteckningsbok..."
 	],
 	"Share permissions": [
-		""
+		"Dela behörigheter"
 	],
 	"Sharing notebook...": [
 		"Delar anteckningsboken..."
@@ -2463,10 +2538,13 @@
 		"Visa/dölj sidofältet"
 	],
 	"Shrink large images before adding them to notes.": [
-		""
+		"Förminska stora bilder innan du lägger till dem i anteckningar."
+	],
+	"Side menu closed": [
+		"Sidomenyn stängd"
 	],
 	"Side menu opened": [
-		""
+		"Sidomenyn öppnad"
 	],
 	"Sidebar": [
 		"Sidofält"
@@ -2490,10 +2568,10 @@
 		"Solariset ljust"
 	],
 	"Some attachments could not be downloaded. Please try to download them again.": [
-		""
+		"Vissa bilagor kunde inte hämtas. Försök att hämta dem igen."
 	],
 	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
-		""
+		"Vissa bilagor måste hämtas. Ställ in hämtningsläget för bilagor till \"alltid\" och försök igen."
 	],
 	"Some items cannot be decrypted.": [
 		"Några objekt kan inte dekrypteras."
@@ -2503,6 +2581,9 @@
 	],
 	"Some items cannot be synchronised. Press for more info.": [
 		"Några objekt kan inte synkroniseras. Tryck för mer info."
+	],
+	"Some items could not be synchronised. Please try to synchronise them first.": [
+		"Det gick inte att synkronisera vissa objekt. Försök att synkronisera dem först."
 	],
 	"Sort notebooks by": [
 		"Sortera anteckningsböcker efter"
@@ -2648,6 +2729,9 @@
 	"Sync your notes": [
 		"Synkronisera dina anteckningar"
 	],
+	"Sync, encryption, proxy": [
+		"Synkronisering, kryptering, proxy"
+	],
 	"Synchronisation": [
 		"Synkronisering"
 	],
@@ -2705,11 +2789,17 @@
 	"Teams": [
 		"Team"
 	],
+	"Text document": [
+		"Textdokument"
+	],
 	"Text editor command": [
 		"Textredigeringskommando"
 	],
 	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
 		"Tack! Ditt Joplin Cloud-konto är nu konfigurerat och klart att använda."
+	],
+	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
+		"[Web Clipper](%s) är ett webbläsartillägg som låter dig spara webbsidor och skärmdumpar från din webbläsare."
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Den aktiva profilen kan inte raderas. Byt till en annan profil och försök igen."
@@ -2756,6 +2846,10 @@
 	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
 		"Faktoregenskapen anger hur objektet kommer att växa eller krympa för att passa det tillgängliga utrymmet i sin behållare i förhållande till de andra artiklarna. Således tar ett objekt med faktorn 2 dubbelt så mycket utrymme som ett objekt med faktorn 1. Starta om appen för att se förändringar."
 	],
+	"The following attachment matches your search query:": [
+		"Följande bilaga matchar din sökfråga:",
+		"Följande bilagor matchar din sökfråga:"
+	],
 	"The following attachments are being watched for changes:": [
 		"Följande bilagor övervakas för ändringar:"
 	],
@@ -2793,13 +2887,16 @@
 		"Det gick inte att ta bort mottagaren från listan. Försök igen.\n\nFelet var: \"%s\""
 	],
 	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
-		""
+		"Synkroniseringsmålet kan inte ändras av följande anledning: %s\n\nOm problemet inte kan lösas kan du behöva rensa dina data först genom att följa dessa instruktioner:\n\n%s"
 	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Synkroniseringsmålet måste uppgraderas innan Joplin kan synkronisera. Åtgärden kan ta några minuter att slutföra och appen måste startas om. Klicka på länken för att fortsätta."
 	],
 	"The sync target needs to be upgraded. Press this banner to proceed.": [
 		"Synkroniseringsmålet måste uppgraderas. Tryck på den här bannern för att fortsätta."
+	],
+	"The synchronisation password is missing.": [
+		"Synkroniseringslösenordet saknas."
 	],
 	"The tag \"%s\" already exists. Please choose a different name.": [
 		"Taggen \"%s\" finns redan. Välj ett annat namn."
@@ -2821,6 +2918,9 @@
 	],
 	"Theme": [
 		"Tema"
+	],
+	"Themes, editor font": [
+		"Teman, redigerarens teckensnitt"
 	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"Det finns för närvarande inga anteckningar. Skapa en genom att klicka på (+)-knappen."
@@ -2850,7 +2950,7 @@
 		"Dessa insticksmoduler förbättrar Markdown-renderaren med ytterligare funktioner. Observera att även om dessa funktioner kan vara användbara är de inte standard Markdown och de flesta av dem fungerar därför bara i Joplin. Dessutom är några av dem *inkompatibla* med WYSIWYG-redigeraren. Om du öppnar en anteckning som använder en av dessa insticksmoduler i den redigeraren förlorar du insticksmodulsformateringen. Det anges nedan vilka insticksmoduler som är kompatibla eller inte med WYSIWYG-redigeraren."
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
-		""
+		"Detta gör att en annan användare kan dela en anteckningsbok med dig, och du kan sedan båda samarbeta om den. Det tillåter dig dock inte att dela en anteckningsbok med någon annan, såvida du inte har funktionen \"%s\"."
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Denna bilaga är inte hämtad eller inte dekrypterad ännu"
@@ -2860,6 +2960,9 @@
 	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"Denna auktorisering behövs endast för att tillåta tredjepartsprogram att integrera med Joplin."
+	],
+	"This drawing may have unsaved changes.": [
+		"Den här ritningen kan ha osparade ändringar."
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Detta är ett avancerat verktyg för att visa bilagorna som är länkade till dina anteckningar. Var försiktig när du tar bort en av dem eftersom de inte kan återställas efteråt."
@@ -2969,6 +3072,9 @@
 	"Toggle external editing": [
 		"Växla extern redigering"
 	],
+	"Toggle note history, keep notes for": [
+		"Växla anteckningshistorik, behåll anteckningar för"
+	],
 	"Toggle note list": [
 		"Växla anteckningslista"
 	],
@@ -3017,8 +3123,14 @@
 	"Type: %s.": [
 		"Typ: %s."
 	],
+	"Unable to edit resource of type %s": [
+		"Det går inte att redigera resurs av typen %s"
+	],
 	"Unable to export or share data. Reason: %s": [
 		"Det går inte att exportera eller dela data. Orsak: %s"
+	],
+	"Unable to share log data. Reason: %s": [
+		"Det går inte att dela loggdata. Orsak: %s"
 	],
 	"Uncompleted to-dos on top": [
 		"Inte slutförda att-göra högst upp"
@@ -3027,7 +3139,7 @@
 		"Ångra"
 	],
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
-		""
+		"Avinstallera och installera om applikationen. Se till att du skapar en säkerhetskopia först genom att exportera alla dina anteckningar som JEX från skrivbordsapplikationen."
 	],
 	"Unknown flag: %s": [
 		"Okänd flagga: %s"
@@ -3201,10 +3313,10 @@
 		"När du skapar en ny att-göra:"
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
-		""
+		"När det är aktiverat kommer programmet att skanna dina bilagor och extrahera texten från den. Detta gör att du kan söka efter text i dessa bilagor."
 	],
 	"Window unresponsive.": [
-		""
+		"Fönstret svarar inte."
 	],
 	"Words": [
 		"Ord"
