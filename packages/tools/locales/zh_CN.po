@@ -2991,7 +2991,7 @@ msgid "Nord"
 msgstr "北欧 (Nord)"
 
 #: packages/app-cli/app/command-sync.ts:89
-msgid "Not authentified with %s. Please provide any missing credentials."
+msgid "Not authenticated with %s. Please provide any missing credentials."
 msgstr "未授予 %s 的权限。请提供缺少的凭据。"
 
 #: packages/lib/models/Resource.ts:379

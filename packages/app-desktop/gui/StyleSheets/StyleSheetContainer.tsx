@@ -5,7 +5,7 @@
 // same effect.
 //
 // It's still reliable because the lifecyle of adding the CSS and removing on
-// unmout is handled properly. There should only be one such component on the
+// unmount is handled properly. There should only be one such component on the
 // page.
 
 import { useEffect, useState } from 'react';

@@ -39,7 +39,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		}
 	}
 
-	private async relaceLinkedItemIdsByRelativePaths_(item: any) {
+	private async replaceLinkedItemIdsByRelativePaths_(item: any) {
 		const relativePathToRoot = await this.makeDirPath_(item, '..');
 
 		const newBody = await this.replaceResourceIdsByRelativePaths_(item.body, relativePathToRoot);
@@ -130,7 +130,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 			const notePaths = this.context() && this.context().notePaths ? this.context().notePaths : {};
 			const noteFilePath = `${this.destDir_}/${notePaths[item.id]}`;
 
-			const noteBody = await this.relaceLinkedItemIdsByRelativePaths_(item);
+			const noteBody = await this.replaceLinkedItemIdsByRelativePaths_(item);
 			const modNote = { ...item, body: noteBody };
 			const noteContent = await this.getNoteExportContent_(modNote);
 			await shim.fsDriver().mkdir(dirname(noteFilePath));

@@ -51,11 +51,11 @@ export async function readManifestOverrides(repoDir: string): Promise<ManifestOv
 	return readJsonFile(pluginManifestOverridesPath(repoDir), {});
 }
 
-export const getSupersededPackages = (manifsetOverrides: ManifestOverrides): string[] => {
+export const getSupersededPackages = (manifestOverrides: ManifestOverrides): string[] => {
 	const supersededPackages = [];
 
-	for (const id in manifsetOverrides) {
-		const supersededPackage = manifsetOverrides[id]._superseded_package;
+	for (const id in manifestOverrides) {
+		const supersededPackage = manifestOverrides[id]._superseded_package;
 		if (supersededPackage) {
 			supersededPackages.push(supersededPackage);
 		}

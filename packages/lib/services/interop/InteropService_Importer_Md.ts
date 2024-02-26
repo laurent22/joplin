@@ -140,7 +140,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 					}
 
 					// The first is a normal link, the second is supports the <link> and [](<link with spaces>) syntax
-					// Only opening patterns are consider in order to cover all occurances
+					// Only opening patterns are consider in order to cover all occurrences
 					// We need to use the encoded link as well because some links (link's with spaces)
 					// will appear encoded in the source. Other links (unicode chars) will not
 					const linksToReplace = [this.trimAnchorLink(link), this.trimAnchorLink(encodedLink)];

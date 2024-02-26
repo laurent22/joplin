@@ -99,7 +99,7 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 
 	private extractMetadata(note: NoteEntity) {
 		const md: MdFrontMatterExport = {};
-		// Every variable needs to be converted seperately, so they will be handles in groups
+		// Every variable needs to be converted separately, so they will be handles in groups
 		//
 		// title
 		if (note.title) { md['title'] = note.title; }

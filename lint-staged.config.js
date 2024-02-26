@@ -12,7 +12,7 @@ module.exports = {
 	// '**/*.ts?(x)': () => 'npm run tsc',
 	'*.{js,jsx,ts,tsx}': [
 		'yarn checkIgnoredFiles',
-		// 'yarn checkLibPaths',
+		'yarn spellcheck',
 		'yarn packageJsonLint',
 		'yarn linter-precommit',
 	],

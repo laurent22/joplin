@@ -3036,7 +3036,7 @@ msgid "Nord"
 msgstr "노드"
 
 #: packages/app-cli/app/command-sync.ts:89
-msgid "Not authentified with %s. Please provide any missing credentials."
+msgid "Not authenticated with %s. Please provide any missing credentials."
 msgstr "%s과 인증되지 않았습니다. 증명서를 제공해주세요."
 
 #: packages/lib/models/Resource.ts:379

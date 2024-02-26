@@ -236,11 +236,11 @@ describe('services/ResourceService', () => {
 	}));
 
 	// it('should auto-delete resource even if the associated note was deleted immediately', (async () => {
-	// 	// Previoulsy, when a resource was be attached to a note, then the
+	// 	// Previously, when a resource was be attached to a note, then the
 	// 	// note was immediately deleted, the ResourceService would not have
 	// 	// time to quick in an index the resource/note relation. It means
 	// 	// that when doing the orphan resource deletion job, those
-	// 	// resources would permanently stay behing.
+	// 	// resources would permanently stay behind.
 	// 	// https://github.com/laurent22/joplin/issues/932
 
 	// 	const service = new ResourceService();

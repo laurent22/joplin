@@ -2994,7 +2994,7 @@ msgid "Nord"
 msgstr "北歐藍"
 
 #: packages/app-cli/app/command-sync.ts:89
-msgid "Not authentified with %s. Please provide any missing credentials."
+msgid "Not authenticated with %s. Please provide any missing credentials."
 msgstr "與 %s 認證失敗，請提供完整的身份驗證資訊。"
 
 #: packages/lib/models/Resource.ts:379
