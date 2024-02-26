@@ -1,5 +1,10 @@
 # Joplin Android Changelog
 
+## [android-v2.14.9](https://github.com/laurent22/joplin/releases/tag/android-v2.14.9) (Pre-release) - 2024-02-26T19:56:11Z
+
+- Fixed: Note editor: Support older WebView versions (#9986) (#9521 by Henry Heino)
+- Fixed: Sort notebooks in a case-insensitive way (#9996)
+
 ## [android-v2.14.8](https://github.com/laurent22/joplin/releases/tag/android-v2.14.8) (Pre-release) - 2024-02-22T22:29:24Z
 
 - Improved: Immediately sort notes after toggling a checkbox (5820f63)
