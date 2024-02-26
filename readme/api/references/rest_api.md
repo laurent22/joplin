@@ -146,7 +146,7 @@ To retrieve all the tags that start with `project-`: **GET /search?query=project
 
 ## Item type IDs
 
-Item type IDs might be referred to in certain object you will retrieve from the API. This is the correspondence between name and ID:
+Item type IDs might be referred to in certain objects you will retrieve from the API. This is the correspondence between name and ID:
 
 Name | Value
 ---- | -----
