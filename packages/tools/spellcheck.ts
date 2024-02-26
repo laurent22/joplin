@@ -14,7 +14,7 @@ const main = async () => {
 	let cmd = ['yarn', 'spellcheck-base'];
 
 	if (processAll) {
-		cmd.push('**/*.{ts,tsx}');
+		cmd.push('**/*.{ts,tsx,md,mdx}');
 	} else {
 		cmd = cmd.concat(filePaths);
 	}
