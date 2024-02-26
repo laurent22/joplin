@@ -23,6 +23,7 @@ export const StyledRoot = styled.a<RootProps>`
 	font-size: ${(props: RootProps) => props.theme.toolbarIconSize * 0.8}px;
 	padding-left: 5px;
 	padding-right: 5px;
+	text-wrap: nowrap;
 
 	&:hover {
 		background-color: ${(props: RootProps) => props.disabled ? 'none' : props.theme.backgroundColorHover3};
