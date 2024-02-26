@@ -8,7 +8,7 @@
 // - It always returns paths with forward slashes "/". This is normally handled
 //   properly everywhere.
 //
-// - Adds the "platform" parameter to optional return paths with "\" for win32
+// - Adds the "platform" parameter to optionally return paths with "\" for win32
 function fileUriToPath_(uri: string, platform: string) {
 	const sep = '/';
 
