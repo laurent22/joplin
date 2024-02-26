@@ -16,4 +16,7 @@ module.exports = {
 		'yarn packageJsonLint',
 		'yarn linter-precommit',
 	],
+	'*.{md,mdx}': [
+		'yarn spellcheck',
+	],
 };

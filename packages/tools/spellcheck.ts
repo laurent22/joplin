@@ -7,14 +7,21 @@ const main = async () => {
 	const argv = await yargs.argv;
 	const filePaths = argv._ as string[];
 	const processAll = !!argv.all;
-	if (!filePaths || !filePaths.length) return;
+	if (!processAll) {
+		if (!filePaths || !filePaths.length) return;
+	}
 
 	chdir(rootDir);
 
-	let cmd = ['yarn', 'spellcheck-base'];
+	let cmd = [
+		'yarn', 'cspell',
+		'--no-progress',
+		'--no-summary',
+		'--config', 'cspell.json',
+	];
 
 	if (processAll) {
-		cmd.push('**/*.{ts,tsx}');
+		cmd.push('**/*.{ts,tsx,md,mdx}');
 	} else {
 		cmd = cmd.concat(filePaths);
 	}

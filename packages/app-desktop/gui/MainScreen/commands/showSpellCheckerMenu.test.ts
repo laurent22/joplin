@@ -12,7 +12,7 @@ jest.mock('../../../services/bridge', () => ({
 	}),
 }));
 
-describe('mapStateTotitle', () => {
+describe('mapStateToTitle', () => {
 
 	test('should return null if spellchecker.enabled is false', () => {
 
