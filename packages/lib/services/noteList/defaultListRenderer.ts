@@ -56,7 +56,7 @@ const defaultListRenderer: ListRenderer = {
 			background-color: var(--joplin-selected-color);
 		}
 
-		&:hover {
+		&:hover, :focus-visible > & > .content {
 			background-color: var(--joplin-background-color-hover3);
 		}
 	
