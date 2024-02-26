@@ -208,6 +208,22 @@ if [ "$RUN_TESTS" == "1" ]; then
 fi
 
 # =============================================================================
+# Spellchecking
+# =============================================================================
+
+if [ "$IS_PULL_REQUEST" == "1" ]; then
+	if [ "$IS_LINUX" == "1" ]; then
+		echo "Step: Spellchecking..."
+
+		yarn spellcheck --all
+		testResult=$?
+		if [ $testResult -ne 0 ]; then
+			exit $testResult
+		fi
+	fi
+fi
+
+# =============================================================================
 # Find out if we should run the build or not. Electron-builder gets stuck when
 # building PRs so we disable it in this case. The Linux build should provide
 # enough info if the app builds or not.
