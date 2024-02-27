@@ -533,6 +533,43 @@ export interface MarkdownItContentScriptModule extends Omit<ContentScriptModule,
 	plugin: (markdownIt: any, options: any)=> any;
 }
 
+type EditorCommandCallback = (...args: any[])=> any;
+
+export interface MarkdownEditorControl {
+	/** Points to a CodeMirror 6 EditorView instance. */
+	editor: any;
+	cm6: any;
+
+	/** `extension` should be a [CodeMirror 6 extension](https://codemirror.net/docs/ref/#state.Extension). */
+	addExtension(extension: any|any[]): void;
+
+	supportsCommand(name: string): boolean;
+	execCommand(name: string, ...args: any[]): any;
+	registerCommand(name: string, callback: EditorCommandCallback): void;
+
+	joplinExtensions: {
+		/**
+		 * Returns a [CodeMirror 6 extension](https://codemirror.net/docs/ref/#state.Extension) that
+		 * registers the given [CompletionSource](https://codemirror.net/docs/ref/#autocomplete.CompletionSource).
+		 *
+		 * Use this extension rather than the built-in CodeMirror [`autocompletion`](https://codemirror.net/docs/ref/#autocomplete.autocompletion)
+		 * if you don't want to use [languageData-based autocompletion](https://codemirror.net/docs/ref/#autocomplete.autocompletion^config.override).
+		 *
+		 * Using `autocompletion({ override: [ ... ]})` causes errors when done by multiple plugins.
+		 */
+		completionSource(completionSource: any): any;
+
+		/**
+		 * Creates an extension that enables or disables [`languageData`-based autocompletion](https://codemirror.net/docs/ref/#autocomplete.autocompletion^config.override).
+		 */
+		enableLanguageDataAutocomplete: { of: (enabled: boolean)=> any };
+	};
+}
+
+export interface MarkdownEditorContentScriptModule extends Omit<ContentScriptModule, 'plugin'> {
+	plugin: (editorControl: MarkdownEditorControl)=> void;
+}
+
 export enum ContentScriptType {
 	/**
 	 * Registers a new Markdown-It plugin, which should follow the template

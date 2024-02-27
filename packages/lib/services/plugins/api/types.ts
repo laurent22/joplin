@@ -535,7 +535,7 @@ export interface MarkdownItContentScriptModule extends Omit<ContentScriptModule,
 
 type EditorCommandCallback = (...args: any[])=> any;
 
-export interface CodeMirrorControl {
+export interface MarkdownEditorControl {
 	/** Points to a CodeMirror 6 EditorView instance. */
 	editor: any;
 	cm6: any;
@@ -566,8 +566,8 @@ export interface CodeMirrorControl {
 	};
 }
 
-export interface CodeMirrorContentScriptModule extends Omit<ContentScriptModule, 'plugin'> {
-	plugin: (codeMirrorControl: CodeMirrorControl)=> void;
+export interface MarkdownEditorContentScriptModule extends Omit<ContentScriptModule, 'plugin'> {
+	plugin: (editorControl: MarkdownEditorControl)=> void;
 }
 
 export enum ContentScriptType {
