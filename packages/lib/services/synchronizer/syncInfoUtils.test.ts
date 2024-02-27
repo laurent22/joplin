@@ -219,12 +219,33 @@ describe('syncInfoUtils', () => {
 			keySize: 0,
 		};
 		const filteredSyncInfo = syncInfo.filterSyncInfo();
+		const originalSyncInfo = syncInfo.toObject();
 
-		expect(filteredSyncInfo.masterKeys_[0].content).toBeUndefined();
-		expect(filteredSyncInfo.masterKeys_[0].checksum).toBeUndefined();
-
-		expect(filteredSyncInfo.ppk_.value.publicKey).toBe('longstringverylongstringlongstringverylo');
-		expect(filteredSyncInfo.ppk_.value.privateKey.ciphertext).toBe('longstringverylongst...stringverylongstring');
+		expect(filteredSyncInfo).toEqual({
+			activeMasterKeyId_: originalSyncInfo.activeMasterKeyId,
+			appMinVersion_: originalSyncInfo.appMinVersion,
+			e2ee_: originalSyncInfo.e2ee,
+			version_: originalSyncInfo.version,
+			masterKeys_: [
+				// Content & Checksum are removed
+				{ id: '1' },
+			],
+			ppk_: {
+				value: {
+					// Public Key is truncated to 40 characters
+					publicKey: 'longstringverylongstringlongstringverylo',
+					privateKey: {
+						// Private Key is truncated to first and last 20 characters
+						ciphertext: 'longstringverylongst...stringverylongstring',
+						encryptionMethod: 1,
+					},
+					id: '1',
+					createdTime: 0,
+					keySize: 0,
+				},
+				updatedTime: originalSyncInfo.ppk.updatedTime,
+			},
+		});
 	});
 	// cSpell:enable
 
