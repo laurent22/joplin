@@ -9,7 +9,7 @@ import * as fs from 'fs-extra';
 import * as pdfJsNamespace from 'pdfjs-dist';
 import { writeFile } from 'fs/promises';
 import { ResourceEntity } from './services/database/types';
-import { DownloadController, DummyDownloadController } from './downloadController';
+import { DownloadController } from './downloadController';
 
 const { FileApiDriverLocal } = require('./file-api-driver-local');
 const mimeUtils = require('./mime-utils.js').mime;
@@ -484,7 +484,7 @@ function shimInit(options: ShimInitOptions = null) {
 	shim.fetchBlob = async function(url: any, options: FetchBlobOptions) {
 		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
 		if (!options.method) options.method = 'GET';
-		if (!options.downloadController) options.downloadController = new DummyDownloadController();
+		if (!options.downloadController) options.downloadController = null;
 		// if (!('maxRetry' in options)) options.maxRetry = 5;
 
 		// 21 maxRedirects is the default amount from follow-redirects library
@@ -562,7 +562,9 @@ function shimInit(options: ShimInitOptions = null) {
 
 					const request = http.request(requestOptions, (response: any) => {
 
-						response.on('data', downloadController.handleChunk(request));
+						if (downloadController !== null) {
+							response.on('data', downloadController.handleChunk(request));
+						}
 
 						response.pipe(file);
 

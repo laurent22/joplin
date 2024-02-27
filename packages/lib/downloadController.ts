@@ -14,15 +14,6 @@ export interface DownloadController {
 	limitMessage(): string;
 }
 
-export class DummyDownloadController implements DownloadController {
-	public totalBytes = 0;
-	public imagesCount = 0;
-	public imageCountExpected = 0;
-	public printStats(): void {}
-	public handleChunk() { return () => {}; }
-	public limitMessage() { return ''; }
-}
-
 export class LimitedDownloadController implements DownloadController {
 	private totalBytes_ = 0;
 	// counts before the downloaded has finished, so at the end if the totalBytes > maxTotalBytesAllowed

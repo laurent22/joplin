@@ -28,7 +28,7 @@ const { MarkupToHtml } = require('@joplin/renderer');
 const { ErrorNotFound } = require('../utils/errors');
 import { fileUriToPath } from '@joplin/utils/url';
 import { NoteEntity } from '../../database/types';
-import { DownloadController, DummyDownloadController } from '../../../downloadController';
+import { DownloadController } from '../../../downloadController';
 import { ErrorCode } from '../../../errors';
 import { PromisePool } from '@supercharge/promise-pool';
 
@@ -69,6 +69,7 @@ type RequestNote = {
 type FetchOptions = {
 	timeout?: number;
 	maxRedirects?: number;
+	downloadController?: DownloadController;
 };
 
 async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> {
@@ -226,7 +227,7 @@ const isValidUrl = (url: string, isDataUrl: boolean, urlProtocol?: string, allow
 	return isAllowedProtocol;
 };
 
-export async function downloadMediaFile(url: string, downloadController: DownloadController, fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
+export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
 	logger.info('Downloading media file', url);
 
 	// The URL we get to download have been extracted from the Markdown document
@@ -250,7 +251,7 @@ export async function downloadMediaFile(url: string, downloadController: Downloa
 			const localPath = fileUriToPath(url);
 			await shim.fsDriver().copy(localPath, mediaPath);
 		} else {
-			const response = await shim.fetchBlob(url, { path: mediaPath, maxRetry: 1, ...fetchOptions, downloadController });
+			const response = await shim.fetchBlob(url, { path: mediaPath, maxRetry: 1, ...fetchOptions });
 
 			if (!fileExt) {
 				// If we could not find the file extension from the URL, try to get it
@@ -265,12 +266,14 @@ export async function downloadMediaFile(url: string, downloadController: Downloa
 	}
 }
 
-async function downloadMediaFiles(urls: string[], downloadController: DownloadController, fetchOptions: FetchOptions, allowedProtocols?: string[]) {
+async function downloadMediaFiles(urls: string[], fetchOptions: FetchOptions, allowedProtocols?: string[]) {
 	const output: any = {};
 
+	const downloadController = fetchOptions?.downloadController ?? null;
+
 	const downloadOne = async (url: string) => {
-		downloadController.imagesCount += 1;
-		const mediaPath = await downloadMediaFile(url, downloadController, fetchOptions, allowedProtocols);
+		if (downloadController) downloadController.imagesCount += 1;
+		const mediaPath = await downloadMediaFile(url, fetchOptions, allowedProtocols);
 		if (mediaPath) output[url] = { path: mediaPath, originalUrl: url };
 	};
 
@@ -286,8 +289,10 @@ async function downloadMediaFiles(urls: string[], downloadController: DownloadCo
 		})
 		.process(downloadOne);
 
-	downloadController.imageCountExpected = urls.length;
-	downloadController.printStats(urls.length);
+	if (downloadController) {
+		downloadController.imageCountExpected = urls.length;
+		downloadController.printStats(urls.length);
+	}
 
 	return output;
 }
@@ -402,7 +407,6 @@ export const extractNoteFromHTML = async (
 	requestNote: RequestNote,
 	requestId: number,
 	imageSizes: any,
-	downloadController: DownloadController,
 	fetchOptions?: FetchOptions,
 	allowedProtocols?: string[],
 ) => {
@@ -412,7 +416,7 @@ export const extractNoteFromHTML = async (
 
 	logger.info(`Request (${requestId}): Downloading media files: ${mediaUrls.length}`);
 
-	const mediaFiles = await downloadMediaFiles(mediaUrls, downloadController, fetchOptions, allowedProtocols);
+	const mediaFiles = await downloadMediaFiles(mediaUrls, fetchOptions, allowedProtocols);
 
 	logger.info(`Request (${requestId}): Creating resources from paths: ${Object.getOwnPropertyNames(mediaFiles).length}`);
 
@@ -469,7 +473,6 @@ export default async function(request: Request, id: string = null, link: string 
 			requestNote,
 			requestId,
 			imageSizes,
-			new DummyDownloadController(),
 			undefined,
 			allowedProtocolsForDownloadMediaFiles,
 		);
