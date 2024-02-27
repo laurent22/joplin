@@ -26,9 +26,9 @@ export class DummyDownloadController implements DownloadController {
 export class LimitedDownloadController implements DownloadController {
 	private totalBytes_ = 0;
 	// counts before the downloaded has finished, so at the end if the totalBytes > maxTotalBytesAllowed
-	// it means that imageCount will be higher than the total download during the process
+	// it means that imageCount will be higher than the total downloaded during the process
 	private imagesCount_ = 0;
-	// how many images links the email has
+	// how many images links the content has
 	private imageCountExpected_ = 0;
 	private isLimitExceeded_ = false;
 
@@ -93,10 +93,10 @@ export class LimitedDownloadController implements DownloadController {
 
 	public limitMessage() {
 		if (this.imagesCount_ > this.maxImagesCount) {
-			return `Your email has ${this.imageCountExpected} images, exceeding the limit of ${this.maxImagesCount}.`;
+			return `The maximum image count of ${this.maxImagesCount} has been exceeded. Image count in your content: ${this.imageCountExpected}`;
 		}
 		if (this.totalBytes >= this.maxTotalBytes) {
-			return `The size of your email (${bytesToHuman(this.totalBytes)}) was larger than the allowed limit (${bytesToHuman(this.maxTotalBytes)}).`;
+			return `The maximum content size ${bytesToHuman(this.maxTotalBytes)} has been exceeded. Content size: (${bytesToHuman(this.totalBytes)})`;
 		}
 		return '';
 	}
