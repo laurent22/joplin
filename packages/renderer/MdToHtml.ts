@@ -102,7 +102,7 @@ interface PluginAsset {
 }
 
 // Types are a bit of a mess when it comes to plugin assets. Something
-// called "pluginAsset" in this class might refer to sublty different
+// called "pluginAsset" in this class might refer to subtly different
 // types. The logic should be cleaned up before types are added.
 interface PluginAssets {
 	[pluginName: string]: PluginAsset[];
@@ -156,7 +156,7 @@ export interface RuleOptions {
 	// Used by the image editor in the mobile app.
 	editPopupFiletypes?: string[];
 
-	// Shoould be the string representation a function that accepts two arguments:
+	// Should be the string representation a function that accepts two arguments:
 	// the target element to have the popup shown for and the id of the resource to edit.
 	createEditPopupSyntax?: string;
 	destroyEditPopupSyntax?: string;

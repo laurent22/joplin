@@ -6634,6 +6634,7 @@ __metadata:
     "@types/tar-stream": 3.1.3
     assert-browserify: 2.0.0
     babel-jest: 29.7.0
+    babel-loader: 9.1.3
     babel-plugin-module-resolver: 4.1.0
     buffer: 6.0.3
     constants-browserify: 1.0.0
@@ -13676,6 +13677,19 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.8.0
   checksum: ee6f8e0495afee07cac5e4ee167be705c711a8cc8a737e05a587a131fdae2b3c8f9aa55dfd4d9c03009ac2d27f2de63d8ba96d3e8460da4d00e8af19ef9a83f7
+  languageName: node
+  linkType: hard
+
+"babel-loader@npm:9.1.3":
+  version: 9.1.3
+  resolution: "babel-loader@npm:9.1.3"
+  dependencies:
+    find-cache-dir: ^4.0.0
+    schema-utils: ^4.0.0
+  peerDependencies:
+    "@babel/core": ^7.12.0
+    webpack: ">=5"
+  checksum: b168dde5b8cf11206513371a79f86bb3faa7c714e6ec9fffd420876b61f3d7f5f4b976431095ef6a14bc4d324505126deb91045fd41e312ba49f4deaa166fe28
   languageName: node
   linkType: hard
 
@@ -24333,6 +24347,28 @@ __metadata:
     husky-run: ./run.js
     husky-upgrade: ./lib/upgrader/bin.js
   checksum: 15a8eeb5ca8286f4e1f64cbc55ffb2295c407ba9da84a88128471a886e6fb6cf7a2b5ea0db5f0715e185d7251fc09700baf3bc95f63cb80accc5d253d69c141f
+  languageName: node
+  linkType: hard
+
+"husky@patch:husky@npm%3A3.1.0#./.yarn/patches/husky-npm-3.1.0-5cc13e4e34.patch::locator=root%40workspace%3A.":
+  version: 3.1.0
+  resolution: "husky@patch:husky@npm%3A3.1.0#./.yarn/patches/husky-npm-3.1.0-5cc13e4e34.patch::version=3.1.0&hash=d9603f&locator=root%40workspace%3A."
+  dependencies:
+    chalk: ^2.4.2
+    ci-info: ^2.0.0
+    cosmiconfig: ^5.2.1
+    execa: ^1.0.0
+    get-stdin: ^7.0.0
+    opencollective-postinstall: ^2.0.2
+    pkg-dir: ^4.2.0
+    please-upgrade-node: ^3.2.0
+    read-pkg: ^5.2.0
+    run-node: ^1.0.0
+    slash: ^3.0.0
+  bin:
+    husky-run: ./run.js
+    husky-upgrade: ./lib/upgrader/bin.js
+  checksum: b29b08a1e9be6037d0eb3dd875c22ffba1f375532a89e4320d31cb5ea37ffca4b487ef903a8b867ccfb2ece6a1ca87c65bc202d932f92cfb7d6f017c76bb1294
   languageName: node
   linkType: hard
 

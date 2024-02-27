@@ -82,7 +82,7 @@ class Command extends BaseCommand {
 
 		lines.push('## Authorisation');
 		lines.push('');
-		lines.push('To prevent unauthorised applications from accessing the API, the calls must be authentified. To do so, you must provide a token as a query parameter for each API call. You can get this token from the Joplin desktop application, on the Web Clipper Options screen.');
+		lines.push('To prevent unauthorised applications from accessing the API, the calls must be authenticated. To do so, you must provide a token as a query parameter for each API call. You can get this token from the Joplin desktop application, on the Web Clipper Options screen.');
 		lines.push('');
 		lines.push('This would be an example of valid cURL call using a token:');
 		lines.push('');
@@ -149,7 +149,7 @@ class Command extends BaseCommand {
 		lines.push('');
 		lines.push('```shell\ncurl http://localhost:41184/notes?order_by=updated_time&order_dir=ASC&limit=10&page=2\n```');
 		lines.push('');
-		lines.push('Eventually you will get some results that do not contain an "has_more" paramater, at which point you will have retrieved all the results');
+		lines.push('Eventually you will get some results that do not contain an "has_more" parameter, at which point you will have retrieved all the results');
 		lines.push('');
 		lines.push('As an example the pseudo-code below could be used to fetch all the notes:');
 		lines.push('');
@@ -199,7 +199,7 @@ async function fetchAllNotes() {
 
 		lines.push('## Item type IDs');
 		lines.push('');
-		lines.push('Item type IDs might be refered to in certain object you will retrieve from the API. This is the correspondance between name and ID:');
+		lines.push('Item type IDs might be referred to in certain objects you will retrieve from the API. This is the correspondence between name and ID:');
 		lines.push('');
 		lines.push('Name | Value');
 		lines.push('---- | -----');

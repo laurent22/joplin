@@ -1430,6 +1430,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Minimise": [
+		""
+	],
 	"Missing Master Keys": [
 		"Ontbrekende Hoofdsleutels"
 	],
@@ -1547,7 +1550,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Niet geverifieerd voor %s. Gelieve ontbrekende referenties in te vullen."
 	],
 	"Not downloaded": [

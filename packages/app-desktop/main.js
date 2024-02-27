@@ -10,7 +10,7 @@ const FsDriverNode = require('@joplin/lib/fs-driver-node').default;
 const envFromArgs = require('@joplin/lib/envFromArgs');
 const packageInfo = require('./packageInfo.js');
 const { isCallbackUrl } = require('@joplin/lib/callbackUrlUtils');
-const determineProfileDir = require('@joplin/lib/determineProfileDir').default;
+const determineBaseAppDirs = require('@joplin/lib/determineBaseAppDirs').default;
 
 // Electron takes the application name from package.json `name` and
 // displays this in the tray icon toolip and message box titles, however in
@@ -45,7 +45,7 @@ const isDebugMode = !!process.argv && process.argv.indexOf('--debug') >= 0;
 const appId = `net.cozic.joplin${env === 'dev' ? 'dev' : ''}-desktop`;
 let appName = env === 'dev' ? 'joplindev' : 'joplin';
 if (appId.indexOf('-desktop') >= 0) appName += '-desktop';
-const rootProfileDir = determineProfileDir(profileFromArgs, appName);
+const { rootProfileDir } = determineBaseAppDirs(profileFromArgs, appName);
 const settingsPath = `${rootProfileDir}/settings.json`;
 let autoUploadCrashDumps = false;
 

@@ -99,8 +99,8 @@ export interface EditorControl {
 }
 
 export enum EditorLanguageType {
-	Markdown,
-	Html,
+	Markdown = 'markdown',
+	Html = 'html',
 }
 
 export enum EditorKeymap {

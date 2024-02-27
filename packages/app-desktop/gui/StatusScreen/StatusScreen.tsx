@@ -41,14 +41,14 @@ async function exportDebugReportClick() {
 function StatusScreen(props: Props) {
 	const [report, setReport] = useState<ReportSection[]>([]);
 
-	async function resfreshScreen() {
+	async function refreshScreen() {
 		const service = new ReportService();
 		const r = await service.status(Setting.value('sync.target'));
 		setReport(r);
 	}
 
 	useEffect(() => {
-		void resfreshScreen();
+		void refreshScreen();
 	}, []);
 
 	const theme = themeStyle(props.themeId);
@@ -86,7 +86,7 @@ function StatusScreen(props: Props) {
 		if (section.canRetryAll) {
 			items.push(renderSectionRetryAll(`${key}_${section.title}`, async () => {
 				await section.retryAllHandler();
-				void resfreshScreen();
+				void refreshScreen();
 			}));
 		}
 		return items;
@@ -112,7 +112,7 @@ function StatusScreen(props: Props) {
 				if (item.canRetry) {
 					const onClick = async () => {
 						await item.retryHandler();
-						void resfreshScreen();
+						void refreshScreen();
 					};
 
 					retryLink = (

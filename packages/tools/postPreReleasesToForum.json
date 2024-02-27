@@ -41,6 +41,9 @@
 		"ios-v12.14.1": true,
 		"ios-v12.13.10": true,
 		"ios-v12.13.9": true,
-		"ios-v12.13.8": true
+		"ios-v12.13.8": true,
+		"v2.14.16": true,
+		"android-v2.14.8": true,
+		"android-v2.14.9": true
 	}
 }

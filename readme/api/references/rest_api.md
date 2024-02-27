@@ -21,7 +21,7 @@ for (let portToTest = 41184; portToTest <= 41194; portToTest++) {
 
 ## Authorisation
 
-To prevent unauthorised applications from accessing the API, the calls must be authentified. To do so, you must provide a token as a query parameter for each API call. You can get this token from the Joplin desktop application, on the Web Clipper Options screen.
+To prevent unauthorised applications from accessing the API, the calls must be authenticated. To do so, you must provide a token as a query parameter for each API call. You can get this token from the Joplin desktop application, on the Web Clipper Options screen.
 
 This would be an example of valid cURL call using a token:
 
@@ -101,7 +101,7 @@ Then you will resume fetching the results using this query:
 curl http://localhost:41184/notes?order_by=updated_time&order_dir=ASC&limit=10&page=2
 ```
 
-Eventually you will get some results that do not contain an "has_more" paramater, at which point you will have retrieved all the results
+Eventually you will get some results that do not contain an "has_more" parameter, at which point you will have retrieved all the results
 
 As an example the pseudo-code below could be used to fetch all the notes:
 
@@ -146,7 +146,7 @@ To retrieve all the tags that start with `project-`: **GET /search?query=project
 
 ## Item type IDs
 
-Item type IDs might be refered to in certain object you will retrieve from the API. This is the correspondance between name and ID:
+Item type IDs might be referred to in certain objects you will retrieve from the API. This is the correspondence between name and ID:
 
 Name | Value
 ---- | -----

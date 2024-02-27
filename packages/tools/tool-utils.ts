@@ -331,7 +331,7 @@ export function githubOauthToken() {
 // Note that the GitHub API releases/latest is broken on the joplin-android repo
 // as of Nov 2021 (last working on 3 November 2021, first broken on 19
 // November). It used to return the latest **published** release but now it
-// retuns... some release, always the same one, but not the latest one. GitHub
+// returns... some release, always the same one, but not the latest one. GitHub
 // says that nothing has changed on the API, although it used to work. So since
 // we can't use /latest anymore, we need to fetch all the releases to find the
 // latest published one.

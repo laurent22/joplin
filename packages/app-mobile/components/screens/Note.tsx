@@ -641,7 +641,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		this.scheduleSave();
 	}
 
-	private onPlainEdtiorSelectionChange = (event: NativeSyntheticEvent<any>) => {
+	private onPlainEditorSelectionChange = (event: NativeSyntheticEvent<any>) => {
 		this.selection = event.nativeEvent.selection;
 	};
 
@@ -883,7 +883,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	}
 
 	private async attachPhoto_onPress() {
-		// the selection Limit should be specfied. I think 200 is enough?
+		// the selection Limit should be specified. I think 200 is enough?
 		const response: ImagePickerResponse = await launchImageLibrary({ mediaType: 'photo', includeBase64: false, selectionLimit: 200 });
 
 		if (response.errorCode) {
@@ -938,7 +938,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		if (!resource) {
 			resource = await this.attachNewDrawing(svgData);
 
-			// Set resouce and file path to allow
+			// Set resource and file path to allow
 			// 1. subsequent saves to update the resource
 			// 2. the editor to load from the resource's filepath (can happen
 			//    if the webview is reloaded).
@@ -974,7 +974,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		if (this.state.mode === 'edit') {
 			// Create a new empty drawing and attach it now, before the image editor is opened.
 			// With the present structure of Note.tsx, the we can't use this.editorRef while
-			// the image editor is open, and thus can't attach drawings at the cursor locaiton.
+			// the image editor is open, and thus can't attach drawings at the cursor location.
 			const resource = await this.attachNewDrawing('');
 			await this.editDrawing(resource);
 		} else {
@@ -1137,7 +1137,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		// On iOS, it will show "local files", which means certain files saved from the browser
 		// and the iCloud files, but it doesn't include photos and images from the CameraRoll
 		//
-		// On Android, it will depend on the phone, but usually it will allow browing all files and photos.
+		// On Android, it will depend on the phone, but usually it will allow browsing all files and photos.
 		buttons.push({ text: _('Attach file'), id: 'attachFile' });
 
 		// Disabled on Android because it doesn't work due to permission issues, but enabled on iOS
@@ -1229,7 +1229,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		const output: MenuOptionType[] = [];
 
-		// The file attachement modules only work in Android >= 5 (Version 21)
+		// The file attachment modules only work in Android >= 5 (Version 21)
 		// https://github.com/react-community/react-native-image-picker/issues/606
 
 		// As of 2020-10-13, support for attaching images from the gallery is removed
@@ -1508,7 +1508,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			// See https://github.com/laurent22/joplin/issues/3041
 
 			// IMPORTANT: The TextInput selection is unreliable and cannot be used in a controlled component
-			// context. In other words, the selection should be considered read-only. For example, if the seleciton
+			// context. In other words, the selection should be considered read-only. For example, if the selection
 			// is saved to the state in onSelectionChange and the current text in onChangeText, then set
 			// back in `selection` and `value` props, it will mostly work. But when typing fast, sooner or
 			// later the real selection will be different from what is stored in the state, thus making
@@ -1526,7 +1526,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 						multiline={true}
 						value={note.body}
 						onChangeText={(text: string) => this.body_changeText(text)}
-						onSelectionChange={this.onPlainEdtiorSelectionChange}
+						onSelectionChange={this.onPlainEditorSelectionChange}
 						blurOnSubmit={false}
 						selectionColor={theme.textSelectionColor}
 						keyboardAppearance={theme.keyboardAppearance}

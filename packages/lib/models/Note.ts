@@ -848,7 +848,7 @@ export default class Note extends BaseItem {
 			if (toTrash) {
 				const now = Date.now();
 
-				const updateSqls = [
+				const updateSql = [
 					'deleted_time = ?',
 					'updated_time = ?',
 				];
@@ -859,13 +859,13 @@ export default class Note extends BaseItem {
 				];
 
 				if ('toTrashParentId' in options) {
-					updateSqls.push('parent_id = ?');
+					updateSql.push('parent_id = ?');
 					params.push(options.toTrashParentId);
 				}
 
 				const sql = `
 					UPDATE notes
-					SET	${updateSqls.join(', ')}						
+					SET	${updateSql.join(', ')}						
 					WHERE id IN ("${processIds.join('","')}")
 				`;
 
@@ -954,7 +954,7 @@ export default class Note extends BaseItem {
 	}
 
 	// This method will disable the NOTE_UPDATE_ONE action to prevent a lot
-	// of unecessary updates, so it's the caller's responsability to update
+	// of unnecessary updates, so it's the caller's responsibility to update
 	// the UI once the call is finished. This is done by listening to the
 	// NOTE_IS_INSERTING_NOTES action in the application middleware.
 	public static async insertNotesAt(folderId: string, noteIds: string[], index: number, uncompletedTodosOnTop: boolean, showCompletedTodos: boolean) {
@@ -1050,19 +1050,19 @@ export default class Note extends BaseItem {
 			// and the increment between the order values of each inserted notes.
 			let newOrder = 0;
 			let intervalBetweenNotes = 0;
-			const defaultIntevalBetweeNotes = 60 * 60 * 1000;
+			const defaultIntevalBetweenNotes = 60 * 60 * 1000;
 
 			if (!relevantExistingNoteCount) { // If there's no (relevant) notes in the target notebook
 				newOrder = Date.now();
-				intervalBetweenNotes = defaultIntevalBetweeNotes;
+				intervalBetweenNotes = defaultIntevalBetweenNotes;
 			} else if (index > lastRelevantNoteIndex) { // Insert at the end (of relevant group)
 				intervalBetweenNotes = notes[lastRelevantNoteIndex].order / (noteIds.length + 1);
 				newOrder = notes[lastRelevantNoteIndex].order - intervalBetweenNotes;
 			} else if (index <= firstRelevantNoteIndex) { // Insert at the beginning (of relevant group)
 				const firstNoteOrder = notes[firstRelevantNoteIndex].order;
 				if (firstNoteOrder >= Date.now()) {
-					intervalBetweenNotes = defaultIntevalBetweeNotes;
-					newOrder = firstNoteOrder + defaultIntevalBetweeNotes;
+					intervalBetweenNotes = defaultIntevalBetweenNotes;
+					newOrder = firstNoteOrder + defaultIntevalBetweenNotes;
 				} else {
 					intervalBetweenNotes = (Date.now() - firstNoteOrder) / (noteIds.length + 1);
 					newOrder = firstNoteOrder + intervalBetweenNotes * noteIds.length;
@@ -1076,7 +1076,7 @@ export default class Note extends BaseItem {
 					for (let i = index; i >= 0; i--) {
 						const n = notes[i];
 						if (n.order <= previousOrder) {
-							const o = previousOrder + defaultIntevalBetweeNotes;
+							const o = previousOrder + defaultIntevalBetweenNotes;
 							const updatedNote = await this.updateNoteOrder_(n, o);
 							notes[i] = { ...n, ...updatedNote };
 							previousOrder = o;

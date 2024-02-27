@@ -1670,6 +1670,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"Puuttuvat avaimet"
 	],
@@ -1796,7 +1799,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Ei todennettu %s. Anna puuttuvat tunnistetiedot."
 	],
 	"Not downloaded": [

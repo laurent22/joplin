@@ -6,7 +6,8 @@ const getDefaultPluginsInfo = (): DefaultPluginsInfo => {
 	const defaultPlugins = {
 		'io.github.jackgruber.backup': {
 			settings: {
-				'path': `${Setting.value('profileDir')}`,
+				'path': `${Setting.value('homeDir')}`,
+				'createSubfolderPerProfile': true,
 			},
 
 			// Joplin Portable is more likely to run on a device with low write speeds

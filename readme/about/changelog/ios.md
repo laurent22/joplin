@@ -25,7 +25,7 @@
 - Improved: Hide advanced settings by default (#9730 by Henry Heino)
 - Improved: Removed ability to search by note ID to fix issue with certain plugins (#9769)
 - Improved: Updated packages @js-draw/material-icons (v1.15.0), follow-redirects (v1.15.4), fs-extra (v11.2.0), js-draw (v1.15.0), react, react-native-device-info (v10.12.0), react-native-image-picker (v7.1.0), react-native-paper (v5.11.6), react-native-vector-icons (v10.0.3), sharp (v0.33.1)
-- Fixed: Andoid: Fix crash on opening settings on some devices (#9806) (#7974 by Henry Heino)
+- Fixed: Fix crash on opening settings on some devices (#9806) (#7974 by Henry Heino)
 - Fixed: Clear "Some items cannot be synchronised" banner after situation is resolved (#9157)
 - Fixed: Detect faster left-right swipes to open the sidemenu (#9802) (#9142 by Henry Heino)
 - Fixed: Fix AWS S3 sync error (#9696) (#8891 by Henry Heino)

@@ -145,7 +145,7 @@ export default class BaseItem extends BaseModel {
 		const ItemClass = this.itemClass(this.modelType());
 		const itemType = ItemClass.modelType();
 		// The fact that we don't check if the item_id still exist in the corresponding item table, means
-		// that the returned number might be innaccurate (for example if a sync operation was cancelled)
+		// that the returned number might be inaccurate (for example if a sync operation was cancelled)
 		const sql = 'SELECT count(*) as total FROM sync_items WHERE sync_target = ? AND item_type = ?';
 		const r = await this.db().selectOne(sql, [syncTarget, itemType]);
 		return r.total;

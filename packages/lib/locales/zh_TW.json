@@ -1739,6 +1739,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"媒體播放器、數學、圖表、目錄"
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"遺失的密鑰"
 	],
@@ -1865,7 +1868,7 @@
 	"Nord": [
 		"北歐藍"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"與 %s 認證失敗，請提供完整的身份驗證資訊。"
 	],
 	"Not downloaded": [

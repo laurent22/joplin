@@ -1,4 +1,4 @@
-import { extractExecutablePath, quotePath, toFileProtocolPath, unquotePath } from './path';
+import { extractExecutablePath, isUncPath, quotePath, toFileProtocolPath, unquotePath } from './path';
 
 describe('path', () => {
 	it('should quote and unquote paths', (async () => {
@@ -55,4 +55,22 @@ describe('path', () => {
 			expect(toFileProtocolPath(t[0], 'linux')).toBe(t[1]);
 		}
 	}));
+
+	test.each([
+		['./a.txt', 'win32', false],
+		['./b.txt', 'win32', false],
+		['/home/foo/bar/baz', 'win32', false],
+		['./a.txt', 'posix', false],
+		['./b.txt', 'posix', false],
+		['/home/foo/bar/baz', 'posix', false],
+
+		['//LOCALHOST/', 'win32', true],
+		[' //LOCALHOST/', 'win32', true],
+		['  //example.com/a/b/c', 'win32', true],
+		['//LOCALHOST/', 'posix', false],
+		['  //example.com/a/b/c', 'posix', false],
+		['\\\\LOCALHOST/', 'win32', true],
+	])('should correctly detect UNC paths', (path, os, expected) => {
+		expect(isUncPath(path, os)).toBe(expected);
+	});
 });

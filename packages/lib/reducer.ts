@@ -217,7 +217,7 @@ export const MAX_HISTORY = 200;
 const derivedStateCache_: any = {};
 
 // Allows, for a given state, to return the same derived
-// objects, to prevent unecessary updates on calling components.
+// objects, to prevent unnecessary updates on calling components.
 const cacheEnabledOutput = (key: string, output: any) => {
 	key = `${key}_${JSON.stringify(output)}`;
 	if (derivedStateCache_[key]) return derivedStateCache_[key];
