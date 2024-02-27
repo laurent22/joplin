@@ -147,6 +147,7 @@ export interface Constants {
 	pluginDataDir: string;
 	cacheDir: string;
 	pluginDir: string;
+	homeDir: string;
 	flagOpenDevTools: boolean;
 	syncVersion: number;
 	startupDevPlugins: string[];
@@ -304,6 +305,7 @@ class Setting extends BaseModel {
 		pluginDataDir: '',
 		cacheDir: '',
 		pluginDir: '',
+		homeDir: '',
 		flagOpenDevTools: false,
 		syncVersion: 3,
 		startupDevPlugins: [],
@@ -2317,7 +2319,7 @@ class Setting extends BaseModel {
 	public static value(key: string) {
 		// Need to copy arrays and objects since in setValue(), the old value and new one is compared
 		// with strict equality and the value is updated only if changed. However if the caller acquire
-		// and object and change a key, the objects will be detected as equal. By returning a copy
+		// an object and change a key, the objects will be detected as equal. By returning a copy
 		// we avoid this problem.
 		function copyIfNeeded(value: any) {
 			if (value === null || value === undefined) return value;

@@ -165,7 +165,7 @@ export default class ChangeModel extends BaseModel<Change> {
 		const finalParams = subParams1.concat(subParams2);
 
 		// For Postgres, we need to use materialized tables because, even
-		// though each independant query is fast, the query planner end up going
+		// though each independent query is fast, the query planner end up going
 		// for a very slow plan when they are combined with UNION ALL.
 		// https://dba.stackexchange.com/a/333147/37012
 		//

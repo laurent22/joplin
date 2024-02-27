@@ -25,7 +25,6 @@ ont-size: 0.7rem;
     background: var(--bg);
     border: solid 2px transparent;
     border-radius: 3.5rem;
-    color: var(--tertialry);
     text-align: center;
     margin: auto 0.6rem;
 	&:focus {

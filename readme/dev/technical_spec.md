@@ -48,7 +48,7 @@ All these details are very important because they give a clear picture of what y
 
 It's also an easy way for everybody, even non-technical people, to get involved and help you refine your spec.
 
-Also, if you can, provide UI mockups.
+Also, if you can, provide a UI mockup.
 
 #### Technical solution
 

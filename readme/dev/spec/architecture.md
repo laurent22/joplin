@@ -52,7 +52,7 @@ A typical Joplin Server installation will use the following elements:
 
 - [Nginx](https://www.nginx.com/): It is used as a reverse proxy and for TLS termination.
 
-- A configuration file: A `.env` file, which contains environement variables used to configure the server.
+- A configuration file: A `.env` file, which contains environment variables used to configure the server.
 
 This is a typical Joplin Server installation, but many of its components can be configured - for example it is possible to use a different database engine, or to use the filesystem instead of AWS S3. Any reverse proxy would also work - using Nginx is not required.
 

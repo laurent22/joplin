@@ -93,7 +93,7 @@ export default class TransactionHandler {
 	// sub-function throws an error, it will propagate to the parent function,
 	// which will rollback the connection.
 	//
-	// If a sub-function throws an error, but it's catched by the parent, we
+	// If a sub-function throws an error, but it's caught by the parent, we
 	// also don't want the transaction to be rollbacked, because the errors are
 	// essentially managed by the parent function. This is for example how
 	// ItemModel::saveFromRawContent works because it catches any error and

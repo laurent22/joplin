@@ -631,7 +631,7 @@ export const parsePluralForm = (form: string): ParsePluralFormFunction => {
 		'return (plural === true ? 1 : plural ? plural : 0);',
 	].join('\n');
 
-	// eslint-disable-next-line no-new-func -- There's a regex to check the form but it's still slighlty unsafe, eventually we should automatically generate all the functions in advance in build-translations.ts
+	// eslint-disable-next-line no-new-func -- There's a regex to check the form but it's still slightly unsafe, eventually we should automatically generate all the functions in advance in build-translations.ts
 	return (new Function('n', code)) as ParsePluralFormFunction;
 };
 

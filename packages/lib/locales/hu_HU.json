@@ -1550,6 +1550,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"Hiányzó kulcsok"
 	],
@@ -1670,7 +1673,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Nincs hitelesítve a %s-val. Kérem adja meg a hiányzó hitelesítő adatokat."
 	],
 	"Not downloaded": [

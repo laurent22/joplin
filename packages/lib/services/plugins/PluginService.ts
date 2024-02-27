@@ -29,7 +29,7 @@ export interface Plugins {
 }
 
 export interface SettingAndValue {
-	[settingName: string]: string;
+	[settingName: string]: string|number|boolean;
 }
 
 export interface DefaultPluginSettings {
