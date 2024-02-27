@@ -255,7 +255,7 @@ export class SyncInfo {
 		// Truncate the private key and public key
 		if (filtered.ppk_.value) {
 			filtered.ppk_.value.privateKey.ciphertext = `${filtered.ppk_.value.privateKey.ciphertext.substr(0, 20)}...${filtered.ppk_.value.privateKey.ciphertext.substr(-20)}`;
-			filtered.ppk_.value.publicKey = filtered.ppk_.value.publicKey.substr(0, 40);
+			filtered.ppk_.value.publicKey = `${filtered.ppk_.value.publicKey.substr(0, 20)}...${filtered.ppk_.value.publicKey.substr(-20)}`;
 		}
 		return filtered;
 	}

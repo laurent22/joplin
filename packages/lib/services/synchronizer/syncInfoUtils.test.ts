@@ -202,49 +202,83 @@ describe('syncInfoUtils', () => {
 
 	// cSpell:disable
 	it('should filter unnecessary sync info', async () => {
-		const syncInfo = new SyncInfo();
-		syncInfo.masterKeys = [{
-			id: '1',
-			content: 'longstringverylongstringlongstringverylongstringlongstringverylongstring',
-			checksum: 'longstringverylongstringlongstringverylongstringlongstringverylongstring',
-		}];
-		syncInfo.ppk = {
-			id: '1',
-			publicKey: 'longstringverylongstringlongstringverylongstringlongstringverylongstring',
-			privateKey: {
-				encryptionMethod: 1,
-				ciphertext: 'longstringverylongstringlongstringverylongstringlongstringverylongstring',
+		const initialData = {
+			'version': 3,
+			'e2ee': {
+				'value': true,
+				'updatedTime': 0,
 			},
-			createdTime: 0,
-			keySize: 0,
+			'activeMasterKeyId': {
+				'value': '400227d2222c4d3bb7346514861c643b',
+				'updatedTime': 0,
+			},
+			'masterKeys': [
+				{
+					'id': '400227d8a77c4d3bb7346514861c643b',
+					'created_time': 1515008161362,
+					'updated_time': 1708103706234,
+					'source_application': 'net.cozic.joplin-desktop',
+					'encryption_method': 4,
+					'checksum': '',
+					'content': '{"iv":"M1uezlW1Pu1g3dwrCTqcHg==","v":1,"iter":10000,"ks":256,"ts":64,"mode":"ccm","adata":"","cipher":"aes","salt":"0dqWvU/PUVQ=","ct":"wHXN5pk1s7qKX+2Y9puEGZGkojI1Pvc+TvZUKC6QCfwxtMK6C1Hmgvm53vAaeCMcCXPvGVLo9JwqINFhEgb0ux+KUFcCqgT1pNO2Sf/hJsH8PjaUvl0kwpC511zdnvY7Hk3WIpgXVKUevsQt9TkMK5e8y1JMsuuTD3fW7bEiv/ehe4CBSQ9eH1tWjr1qQ=="}',
+					'hasBeenUsed': true,
+				},
+			],
+			'ppk': {
+				'value': {
+					'id': 'SNQ5ZCs61KDVUW2qqqqHd3',
+					'keySize': 2048,
+					'privateKey': {
+						'encryptionMethod': 4,
+						'ciphertext': '{"iv":"Z2y11b4nCYvpmQ9gvxELug==","v":1,"iter":10000,"ks":256,"ts":64,"mode":"ccm","adata":"","cipher":"aes","salt":"0dqWvU/PUVQ=","ct":"8CvjYayXMpLsrAMwtu18liRfewKfZVpRlC0D0I2FYziyFhRf4Cjqi2+Uy8kIC8au7oBSBUnNU6jd04ooNozneKv2MzkhbGlXo3izxqCMVHboqa2vkPWbBAxGlvUYQUg213xG61FjZ19ZJdpti+AQy7qpQU7/h5kyC0iJ2aXG5TIGcBuDq3lbGAVfG/RlL/abMKLYb8KouFYAJe+0bUajUXa1KJsey+eD+2hFVc+nAxKOLe1UoZysB77Lq43DRTBFGH2gTSC1zOXxuZeSbFPPN0Cj+FvV7D5pF9LhUSLPDsIiRwF/q+E506YgDjirSZAvW1Y2EEM22F2Mh0I0pbVPFXhhBafqPLRwXmUGULCnA64gkGwctK5mEs985VVSrpQ0nMvf/drg2vUQrJ3exgl43ddVSOCjeJuF7F06IBL5FQ34iAujsOheRNvlWtG9xm008Vc19NxvhtzIl1RO7XLXrrTBzbFHDrcHjda/xNWNEKwU/LZrH0xPgwEcwBmLItvy/NojI/JKNeck8R431QWooFb7cTplO4qsgCQNL9MJ9avpmNSXJAUQx8VnifKVbzcY4T7X7TmJWSrpvBWV8MLfi3TOF4kahR75vg47kCrMbthFMw5bvrjvMmGOtyKxheqbS5IlSnSSz5x7wIVz0g3vzMbcbb5rF5MuzNhU97wNiz3L1Aonjmnu8r3vCyXTB/4GSiwYH7KfixwYM68T4crqJ0VneNy+owznCdJQXnG4cmjxek1wmJMEmurQ1JtANNv/m43gzoqd62V6Dq05vLJF+n7CS9HgJ3FTqYVCZLGGYrSilIYnEjhdaBpkcnFrCitbfYj+IpNC6eN6qg2hpGAbmKId7RLOGwJyda0jkuNP9mTqWOF+6eYn8Q+Y3YIY"}',
+					},
+					'publicKey': '-----BEGIN RSA PUBLIC KEY-----\nMIIBCgKCAQEAiSTY5wBscae/WmU3PfVP5FYQiuTi5V7BjPcge/6pXvgF3zwe43uy\nTWdzO2YgK/a8f3H507clcGlZN4e0e1jZ/rh4lMfaN\nugfNo0RAvuwn8Yniqfb69reygJywbFBIauxbBpVKbc21MLuCbPkVFjKG7qGNYdF4\nc17mQ8nQsbFPZcuvxsZvgvvbza1q0rqVETdDUClyIrY8plAjMgTKCRwq2gafP6eX\nWpkENAyIbOFxSKXjWy0yFidvZfYLz4mIRwIDAQAB\n-----END RSA PUBLIC KEY-----',
+					'createdTime': 1633274368892,
+				},
+				'updatedTime': 1633274368892,
+			},
+			'appMinVersion': '0.0.0',
 		};
+
+		const syncInfo = new SyncInfo();
+		syncInfo.load(JSON.stringify(initialData));
+
 		const filteredSyncInfo = syncInfo.filterSyncInfo();
-		const originalSyncInfo = syncInfo.toObject();
 
 		expect(filteredSyncInfo).toEqual({
-			activeMasterKeyId_: originalSyncInfo.activeMasterKeyId,
-			appMinVersion_: originalSyncInfo.appMinVersion,
-			e2ee_: originalSyncInfo.e2ee,
-			version_: originalSyncInfo.version,
-			masterKeys_: [
-				// Content & Checksum are removed
-				{ id: '1' },
-			],
-			ppk_: {
-				value: {
-					// Public Key is truncated to 40 characters
-					publicKey: 'longstringverylongstringlongstringverylo',
-					privateKey: {
-						// Private Key is truncated to first and last 20 characters
-						ciphertext: 'longstringverylongst...stringverylongstring',
-						encryptionMethod: 1,
-					},
-					id: '1',
-					createdTime: 0,
-					keySize: 0,
-				},
-				updatedTime: originalSyncInfo.ppk.updatedTime,
+			'activeMasterKeyId_': {
+				'updatedTime': 0,
+				'value': '400227d2222c4d3bb7346514861c643b',
 			},
+			'appMinVersion_': '0.0.0',
+			'e2ee_': {
+				'updatedTime': 0,
+				'value': true,
+			},
+			'masterKeys_': [
+				{
+					'created_time': 1515008161362,
+					'encryption_method': 4,
+					'hasBeenUsed': true,
+					'id': '400227d8a77c4d3bb7346514861c643b',
+					'source_application': 'net.cozic.joplin-desktop',
+					'updated_time': 1708103706234,
+				},
+			],
+			'ppk_': {
+				'updatedTime': 1633274368892,
+				'value': {
+					'createdTime': 1633274368892,
+					'id': 'SNQ5ZCs61KDVUW2qqqqHd3',
+					'keySize': 2048,
+					'privateKey': {
+						'ciphertext': '{"iv":"Z2y11b4nCYvpm...TqWOF+6eYn8Q+Y3YIY"}',
+						'encryptionMethod': 4,
+					},
+					'publicKey': '-----BEGIN RSA PUBLI... RSA PUBLIC KEY-----',
+				},
+			},
+			'version_': 3,
 		});
 	});
 	// cSpell:enable
