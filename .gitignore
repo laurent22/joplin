@@ -975,6 +975,7 @@ packages/lib/themes/solarizedLight.js
 packages/lib/themes/type.js
 packages/lib/time.js
 packages/lib/types.js
+packages/lib/utils/bytes.js
 packages/lib/utils/credentialFiles.js
 packages/lib/utils/joplinCloud.js
 packages/lib/utils/processStartFlags.js

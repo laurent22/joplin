@@ -1,6 +1,7 @@
 import Logger from '@joplin/utils/Logger';
 import JoplinError from './JoplinError';
 import { ErrorCode } from './errors';
+import { bytesToHuman } from './utils/bytes';
 
 const logger = Logger.create('downloadController');
 
@@ -90,24 +91,12 @@ export class LimitedDownloadController implements DownloadController {
 		logger.info(`${owner} - ${totalBytes} - ${totalImages}`);
 	}
 
-	private bytesToHuman(bytes: number) {
-		const units = ['Bytes', 'KB', 'MB', 'GB'];
-		let unitIndex = 0;
-
-		while (bytes >= 1024 && unitIndex < units.length - 1) {
-			bytes /= 1024;
-			unitIndex++;
-		}
-
-		return `${bytes.toFixed(1)} ${units[unitIndex]}`;
-	}
-
 	public limitMessage() {
 		if (this.imagesCount_ > this.maxImagesCount) {
 			return `Your email has ${this.imageCountExpected} images, exceeding the limit of ${this.maxImagesCount}.`;
 		}
 		if (this.totalBytes >= this.maxTotalBytes) {
-			return `The size of your email (${this.bytesToHuman(this.totalBytes)}) was larger than the allowed limit (${this.bytesToHuman(this.maxTotalBytes)}).`;
+			return `The size of your email (${bytesToHuman(this.totalBytes)}) was larger than the allowed limit (${bytesToHuman(this.maxTotalBytes)}).`;
 		}
 		return '';
 	}
