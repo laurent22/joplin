@@ -119,24 +119,21 @@ function SearchBar(props: Props) {
 		if (event.key === 'Escape') {
 			if (document.activeElement) (document.activeElement as any).blur();
 			void onExitSearch();
-		}
-
-		else if (event.key === 'Enter'){
-			if(props.selectedNoteId){
+		} else if (event.key === 'Enter') {
+			if (props.selectedNoteId) {
 				const note = props.selectedNoteId ? await Note.load(props.selectedNoteId) : null;
 
-			if (note) {
-				props.dispatch({
-					type: 'FOCUS_CLEAR',
-					field: 'globalSearch',
-				});
-			} 
-			}
-			else {
+				if (note) {
+					props.dispatch({
+						type: 'FOCUS_CLEAR',
+						field: 'globalSearch',
+					});
+				}
+			} else {
 				void onExitSearch();
 			}
 		}
-	}, [onExitSearch]);
+	}, [onExitSearch, props.dispatch, props.selectedNoteId]);
 
 	const onSearchButtonClick = useCallback(() => {
 		if (props.isFocused || searchStarted) {
