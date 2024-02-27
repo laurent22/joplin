@@ -246,8 +246,8 @@ export class SyncInfo {
 		// Filter content and checksum properties from master keys
 		if (filtered.masterKeys_) {
 			filtered.masterKeys_ = filtered.masterKeys_.map((mk: MasterKeyEntity) => {
-				if (mk.content) delete mk.content;
-				if (mk.checksum) delete mk.checksum;
+				delete mk.content;
+				delete mk.checksum;
 				return mk;
 			});
 		}
