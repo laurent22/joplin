@@ -15,6 +15,7 @@ export enum EditorCommandType {
 	ToggleItalicized = 'textItalic',
 	ToggleCode = 'textCode',
 	ToggleMath = 'textMath',
+	ToggleComment = 'toggleComment',
 
 	ToggleNumberedList = 'textNumberedList',
 	ToggleBulletedList = 'textBulletedList',
@@ -37,6 +38,7 @@ export enum EditorCommandType {
 
 	// Editing and navigation commands
 	ScrollSelectionIntoView = 'scrollSelectionIntoView',
+	DeleteLine = 'deleteLine',
 	DeleteToLineEnd = 'killLine',
 	DeleteToLineStart = 'delLineLeft',
 	IndentMore = 'indentMore',
