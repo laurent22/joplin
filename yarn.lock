@@ -24349,6 +24349,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"husky@patch:husky@npm%3A3.1.0#./.yarn/patches/husky-npm-3.1.0-5cc13e4e34.patch::locator=root%40workspace%3A.":
+  version: 3.1.0
+  resolution: "husky@patch:husky@npm%3A3.1.0#./.yarn/patches/husky-npm-3.1.0-5cc13e4e34.patch::version=3.1.0&hash=d9603f&locator=root%40workspace%3A."
+  dependencies:
+    chalk: ^2.4.2
+    ci-info: ^2.0.0
+    cosmiconfig: ^5.2.1
+    execa: ^1.0.0
+    get-stdin: ^7.0.0
+    opencollective-postinstall: ^2.0.2
+    pkg-dir: ^4.2.0
+    please-upgrade-node: ^3.2.0
+    read-pkg: ^5.2.0
+    run-node: ^1.0.0
+    slash: ^3.0.0
+  bin:
+    husky-run: ./run.js
+    husky-upgrade: ./lib/upgrader/bin.js
+  checksum: b29b08a1e9be6037d0eb3dd875c22ffba1f375532a89e4320d31cb5ea37ffca4b487ef903a8b867ccfb2ece6a1ca87c65bc202d932f92cfb7d6f017c76bb1294
+  languageName: node
+  linkType: hard
+
 "iconv-corefoundation@npm:^1.1.7":
   version: 1.1.7
   resolution: "iconv-corefoundation@npm:1.1.7"

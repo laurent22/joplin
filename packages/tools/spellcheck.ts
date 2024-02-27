@@ -30,8 +30,7 @@ const main = async () => {
 		await execCommand(cmd, { showStderr: false, showStdout: false });
 	} catch (error) {
 		if (!error.stdout.trim()) return;
-
-		console.error(`Some spelling mistakes were found:\n${error.stdout}`);
+		console.error(`The following spelling mistakes were found. Please check https://joplinapp.org/help/dev/spellcheck for\ninformation on how to deal with spelling mistakes.\n\n${error.stdout}`);
 		process.exit(1);
 	}
 };
