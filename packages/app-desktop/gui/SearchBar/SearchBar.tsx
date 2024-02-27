@@ -126,7 +126,6 @@ function SearchBar(props: Props) {
 				const note = props.selectedNoteId ? await Note.load(props.selectedNoteId) : null;
 
 			if (note) {
-				console.log('note is found')
 				props.dispatch({
 					type: 'FOCUS_CLEAR',
 					field: 'globalSearch',
