@@ -244,15 +244,19 @@ export class SyncInfo {
 		const filtered = JSON.parse(JSON.stringify(this));
 
 		// Filter content and checksum properties from master keys
-		filtered.masterKeys_ = filtered.masterKeys_.map((mk: MasterKeyEntity) => {
-			delete mk.content;
-			delete mk.checksum;
-			return mk;
-		});
+		if (filtered.masterKeys_) {
+			filtered.masterKeys_ = filtered.masterKeys_.map((mk: MasterKeyEntity) => {
+				if (mk.content) delete mk.content;
+				if (mk.checksum) delete mk.checksum;
+				return mk;
+			});
+		}
 
 		// Truncate the private key and public key
-		filtered.ppk_.value.privateKey.ciphertext = `${filtered.ppk_.value.privateKey.ciphertext.substr(0, 20)}...${filtered.ppk_.value.privateKey.ciphertext.substr(-20)}`;
-		filtered.ppk_.value.publicKey = filtered.ppk_.value.publicKey.substr(0, 40);
+		if (filtered.ppk_.value) {
+			filtered.ppk_.value.privateKey.ciphertext = `${filtered.ppk_.value.privateKey.ciphertext.substr(0, 20)}...${filtered.ppk_.value.privateKey.ciphertext.substr(-20)}`;
+			filtered.ppk_.value.publicKey = filtered.ppk_.value.publicKey.substr(0, 40);
+		}
 		return filtered;
 	}
 
