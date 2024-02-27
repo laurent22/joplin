@@ -75,7 +75,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 
 	// Increasing the value of this counter cancels any ongoing note refreshes and starts
 	// a new refresh.
-	const [formNoteRefeshScheduled, setFormNoteRefreshScheduled] = useState<number>(0);
+	const [formNoteRefreshScheduled, setFormNoteRefreshScheduled] = useState<number>(0);
 
 	async function initNoteState(n: any) {
 		let originalCss = '';
@@ -114,7 +114,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 	}
 
 	useEffect(() => {
-		if (formNoteRefeshScheduled <= 0) return () => {};
+		if (formNoteRefreshScheduled <= 0) return () => {};
 
 		reg.logger().info('Sync has finished and note has never been changed - reloading it');
 
@@ -141,13 +141,13 @@ export default function useFormNote(dependencies: HookDependencies) {
 		return () => {
 			cancelled = true;
 		};
-	}, [formNoteRefeshScheduled, noteId]);
+	}, [formNoteRefreshScheduled, noteId]);
 
 	const refreshFormNote = useCallback(() => {
 		// Increase the counter to cancel any ongoing refresh attempts
 		// and start a new one.
-		setFormNoteRefreshScheduled(formNoteRefeshScheduled + 1);
-	}, [formNoteRefeshScheduled]);
+		setFormNoteRefreshScheduled(formNoteRefreshScheduled + 1);
+	}, [formNoteRefreshScheduled]);
 
 	useEffect(() => {
 		// Check that synchronisation has just finished - and

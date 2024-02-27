@@ -58,7 +58,7 @@ class WelcomeUtils {
 		const folderAssets = welcomeAssets.folders;
 		const tempDir = Setting.value('resourceDir');
 
-		// Actually we don't really support mutiple folders at this point, because not needed
+		// Actually we don't really support multiple folders at this point, because not needed
 		for (let i = 0; i < folderAssets.length; i++) {
 			const folder = await Folder.save({ title: _('Welcome!') });
 			if (!output.defaultFolderId) output.defaultFolderId = folder.id;

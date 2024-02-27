@@ -36,7 +36,7 @@ All of the below fields are supported by both the exporter and the importer.
 
 ### Exporter
 
-The exporter will export all the above fields that hold values in the database. So `due` and `completed?` will only be included for "todo" notesm `tags` will only exist for notes that include tags, etc.
+The exporter will export all the above fields that hold values in the database. So `due` and `completed?` will only be included for "todo" notes `tags` will only exist for notes that include tags, etc.
 
 ### Importer
 

@@ -1565,6 +1565,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"Mangler nøkler"
 	],
@@ -1685,7 +1688,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Ikke autentisert med %s. Fyll inn manglende detaljer."
 	],
 	"Not downloaded": [
