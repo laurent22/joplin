@@ -246,16 +246,16 @@ describe('syncInfoUtils', () => {
 		const filteredSyncInfo = syncInfo.filterSyncInfo();
 
 		expect(filteredSyncInfo).toEqual({
-			'activeMasterKeyId_': {
+			'activeMasterKeyId': {
 				'updatedTime': 0,
 				'value': '400227d2222c4d3bb7346514861c643b',
 			},
-			'appMinVersion_': '0.0.0',
-			'e2ee_': {
+			'appMinVersion': '0.0.0',
+			'e2ee': {
 				'updatedTime': 0,
 				'value': true,
 			},
-			'masterKeys_': [
+			'masterKeys': [
 				{
 					'created_time': 1515008161362,
 					'encryption_method': 4,
@@ -265,7 +265,7 @@ describe('syncInfoUtils', () => {
 					'updated_time': 1708103706234,
 				},
 			],
-			'ppk_': {
+			'ppk': {
 				'updatedTime': 1633274368892,
 				'value': {
 					'createdTime': 1633274368892,
@@ -275,10 +275,10 @@ describe('syncInfoUtils', () => {
 						'ciphertext': '{"iv":"Z2y11b4nCYvpm...TqWOF+6eYn8Q+Y3YIY"}',
 						'encryptionMethod': 4,
 					},
-					'publicKey': '-----BEGIN RSA PUBLI... RSA PUBLIC KEY-----',
+					'publicKey': '-----BEGIN RSA PUBLIC KEY-----\nMIIBCgKCA...',
 				},
 			},
-			'version_': 3,
+			'version': 3,
 		});
 	});
 	// cSpell:enable
