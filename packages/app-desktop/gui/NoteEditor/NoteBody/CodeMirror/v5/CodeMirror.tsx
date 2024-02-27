@@ -507,7 +507,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				color: ${theme.codeColor};
 			}
 
-			/* Negative margins are needed to componsate for the border */
+			/* Negative margins are needed to compensate for the border */
 			div.CodeMirror span.cm-comment.cm-jn-inline-code:not(.cm-search-marker):not(.cm-fat-cursor-mark):not(.cm-search-marker-selected):not(.CodeMirror-selectedtext) {
 				border: 1px solid ${theme.codeBorderColor};
 				background-color: ${codeBackgroundColor};

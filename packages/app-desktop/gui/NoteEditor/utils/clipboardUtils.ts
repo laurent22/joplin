@@ -18,7 +18,7 @@ function htmlToMd(): HtmlToMd {
 
 function removeImageUrlAttributes(htmlContent: string): string {
 	// We need to remove extra url params from the image URLs while copying
-	// because some offline edtors do not show the image if there is
+	// because some offline editors do not show the image if there is
 	// an extra parameter in it's path.
 	// Related to - https://github.com/laurent22/joplin/issues/4602
 	const removeParametersFromUrl = (url: string) => {

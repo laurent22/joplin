@@ -1667,6 +1667,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Minimise": [
+		""
+	],
 	"Missing Master Keys": [
 		"المفاتيح الرئيسة مفقودة"
 	],
@@ -1784,7 +1787,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"لا يمكن المصادقة باستخدام %s. يرجى التزويد بأي من بيانات اعتماد الدخول المفقودة."
 	],
 	"Not downloaded": [

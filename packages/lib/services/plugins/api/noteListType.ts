@@ -68,7 +68,7 @@ export interface ListRenderer {
 	/**
 	 * The size of each item must be specified in advance for performance
 	 * reasons, and cannot be changed afterwards. If the item flow is top to
-	 * bottom, you only need to specificy the item height (the width will be
+	 * bottom, you only need to specify the item height (the width will be
 	 * ignored).
 	 */
 	itemSize: Size;
@@ -155,7 +155,7 @@ export interface ListRenderer {
 	onRenderNote: OnRenderNoteHandler;
 
 	/**
-	 * This handler allows adding some interacivity to the note renderer -
+	 * This handler allows adding some interactivity to the note renderer -
 	 * whenever an input element within the item is changed (for example, when a
 	 * checkbox is clicked, or a text input is changed), this `onChange` handler
 	 * is going to be called.

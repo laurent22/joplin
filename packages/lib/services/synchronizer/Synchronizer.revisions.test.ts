@@ -75,7 +75,7 @@ describe('Synchronizer.revisions', () => {
 		// such revision has already been created on another client (whatever client initially
 		// modified the note), and that rev is going to be synced.
 		//
-		// So in the end we need to make sure that we don't create these unecessary additional revisions.
+		// So in the end we need to make sure that we don't create these unnecessary additional revisions.
 
 		const n1 = await Note.save({ title: 'testing' });
 		await synchronizerStart();
@@ -115,7 +115,7 @@ describe('Synchronizer.revisions', () => {
 		//
 		// In that case, we need to make sure that REV1 and REV2 are both valid and can be retrieved.
 		// Even though REV1 was created before REV2, REV2 is *not* based on REV1. This is not ideal
-		// due to unecessary data being saved, but a possible edge case and we simply need to check
+		// due to unnecessary data being saved, but a possible edge case and we simply need to check
 		// all the data is valid.
 
 		// Note: this test seems to be a bit shaky because it doesn't work if the synchronizer

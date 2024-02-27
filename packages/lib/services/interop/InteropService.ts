@@ -189,7 +189,7 @@ export default class InteropService {
 	}
 
 	// Find the module that matches the given type ("importer" or "exporter")
-	// and the given format. Some formats can have multiple assocated importers
+	// and the given format. Some formats can have multiple associated importers
 	// or exporters, such as ENEX. In this case, the one marked as "isDefault"
 	// is returned. This is useful to auto-detect the module based on the format.
 	// For more precise matching, newModuleFromPath_ should be used.

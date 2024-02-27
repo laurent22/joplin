@@ -161,7 +161,7 @@ describe('OcrService', () => {
 
 		const service = newOcrService();
 
-		// The service will print a warnign so we disable it in tests
+		// The service will print a warning so we disable it in tests
 		Logger.globalLogger.enabled = false;
 		await service.processResources();
 		Logger.globalLogger.enabled = true;
@@ -210,7 +210,7 @@ describe('OcrService', () => {
 		const service2 = newOcrService();
 		await service2.processResources();
 		await synchronizerStart();
-		const expectedResouceUpatedTime = (await Resource.all())[0].updated_time;
+		const expectedResourceUpdatedTime = (await Resource.all())[0].updated_time;
 
 		await switchClient(1);
 
@@ -226,7 +226,7 @@ describe('OcrService', () => {
 			expect(resource.ocr_text).toBe('Dummy PDF file');
 			expect(resource.ocr_error).toBe('');
 			expect(resource.ocr_status).toBe(ResourceOcrStatus.Done);
-			expect(resource.updated_time).toBe(expectedResouceUpatedTime);
+			expect(resource.updated_time).toBe(expectedResourceUpdatedTime);
 		}
 
 		await service1.dispose();

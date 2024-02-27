@@ -1718,6 +1718,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"Tasti mancanti"
 	],
@@ -1838,7 +1841,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Non autenticato con %s. Si prega di fornire le credenziali mancanti."
 	],
 	"Not downloaded": [

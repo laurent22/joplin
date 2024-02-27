@@ -11,7 +11,7 @@ describe('updateReadme', () => {
 				'app_min_version': '1.6.2',
 				'version': '1.0.1',
 				'name': 'Tagging',
-				'description': 'Plugin to extend the Joplin tagging menu with a coppy all tags and a tagging dialog with more control. (Formerly Copy Tags).',
+				'description': 'Plugin to extend the Joplin tagging menu with a copy all tags and a tagging dialog with more control. (Formerly Copy Tags).',
 				'author': 'JackGruber',
 				'homepage_url': 'https://github.com/JackGruber/joplin-plugin-tagging/blob/master/README.md',
 				'repository_url': 'https://github.com/JackGruber/joplin-plugin-tagging',
