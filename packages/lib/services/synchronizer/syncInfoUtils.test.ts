@@ -200,6 +200,7 @@ describe('syncInfoUtils', () => {
 		logger.enabled = true;
 	});
 
+	// cSpell:disable
 	it('should filter unnecessary sync info', async () => {
 		const syncInfo = new SyncInfo();
 		syncInfo.masterKeys = [{
@@ -225,6 +226,7 @@ describe('syncInfoUtils', () => {
 		expect(filteredSyncInfo.ppk_.value.publicKey).toBe('longstringverylongstringlongstringverylo');
 		expect(filteredSyncInfo.ppk_.value.privateKey.ciphertext).toBe('longstringverylongst...stringverylongstring');
 	});
+	// cSpell:enable
 
 	test.each([
 		['1.0.0', '1.0.4', true],
