@@ -28,6 +28,7 @@ class ToolbarBaseComponent extends React.Component<Props, any> {
 			display: 'flex',
 			flexDirection: 'row',
 			boxSizing: 'border-box',
+			minWidth: 0,
 		};
 
 		const leftItemComps: any[] = [];
