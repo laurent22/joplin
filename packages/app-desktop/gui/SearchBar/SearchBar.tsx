@@ -115,10 +115,27 @@ function SearchBar(props: Props) {
 		}, 300);
 	}
 
-	const onKeyDown = useCallback((event: any) => {
+	const onKeyDown = useCallback(async (event: any) => {
 		if (event.key === 'Escape') {
 			if (document.activeElement) (document.activeElement as any).blur();
 			void onExitSearch();
+		}
+
+		else if (event.key === 'Enter'){
+			if(props.selectedNoteId){
+				const note = props.selectedNoteId ? await Note.load(props.selectedNoteId) : null;
+
+			if (note) {
+				console.log('note is found')
+				props.dispatch({
+					type: 'FOCUS_CLEAR',
+					field: 'globalSearch',
+				});
+			} 
+			}
+			else {
+				void onExitSearch();
+			}
 		}
 	}, [onExitSearch]);
 
