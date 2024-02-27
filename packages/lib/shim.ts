@@ -273,7 +273,7 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
-	fetchBlob: function(_url: string, _options: any = null, _downloadLimiter: any = null): any {
+	fetchBlob: function(_url: string, _options: any = null): any {
 		throw new Error('Not implemented');
 	},
 

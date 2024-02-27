@@ -250,7 +250,7 @@ export async function downloadMediaFile(url: string, downloadController: Downloa
 			const localPath = fileUriToPath(url);
 			await shim.fsDriver().copy(localPath, mediaPath);
 		} else {
-			const response = await shim.fetchBlob(url, { path: mediaPath, maxRetry: 1, ...fetchOptions }, downloadController);
+			const response = await shim.fetchBlob(url, { path: mediaPath, maxRetry: 1, ...fetchOptions, downloadController });
 
 			if (!fileExt) {
 				// If we could not find the file extension from the URL, try to get it

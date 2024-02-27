@@ -24,6 +24,15 @@ const dgram = require('dgram');
 
 const proxySettings: any = {};
 
+type FetchBlobOptions = {
+	path?: string;
+	method?: string;
+	maxRedirects?: number;
+	timeout?: number;
+	headers?: any;
+	downloadController?: DownloadController;
+};
+
 function fileExists(filePath: string) {
 	try {
 		return fs.statSync(filePath).isFile();
@@ -472,10 +481,10 @@ function shimInit(options: ShimInitOptions = null) {
 		}, options);
 	};
 
-	shim.fetchBlob = async function(url: any, options: any, downloadController?: DownloadController) {
+	shim.fetchBlob = async function(url: any, options: FetchBlobOptions) {
 		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
 		if (!options.method) options.method = 'GET';
-		if (!downloadController) downloadController = new DummyDownloadController();
+		if (!options.downloadController) options.downloadController = new DummyDownloadController();
 		// if (!('maxRetry' in options)) options.maxRetry = 5;
 
 		// 21 maxRedirects is the default amount from follow-redirects library
@@ -490,6 +499,7 @@ function shimInit(options: ShimInitOptions = null) {
 		const http = url.protocol.toLowerCase() === 'http:' ? require('follow-redirects').http : require('follow-redirects').https;
 		const headers = options.headers ? options.headers : {};
 		const filePath = options.path;
+		const downloadController = options.downloadController;
 
 		function makeResponse(response: any) {
 			return {
