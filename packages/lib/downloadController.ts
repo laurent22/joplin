@@ -10,7 +10,7 @@ export interface DownloadController {
 	imagesCount: number;
 	imageCountExpected: number;
 	printStats(imagesCountExpected: number): void;
-	handleNewChunk(request: any): (chunk: any)=> void;
+	handleChunk(request: any): (chunk: any)=> void;
 	limitMessage(): string;
 }
 
@@ -19,7 +19,7 @@ export class DummyDownloadController implements DownloadController {
 	public imagesCount = 0;
 	public imageCountExpected = 0;
 	public printStats(): void {}
-	public handleNewChunk() { return () => {}; }
+	public handleChunk() { return () => {}; }
 	public limitMessage() { return ''; }
 }
 
@@ -72,7 +72,7 @@ export class LimitedDownloadController implements DownloadController {
 		return this.imageCountExpected_;
 	}
 
-	public handleNewChunk(request: any) {
+	public handleChunk(request: any) {
 		return (chunk: any) => {
 			try {
 				this.totalBytes += chunk.length;
