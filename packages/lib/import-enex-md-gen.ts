@@ -303,8 +303,8 @@ function isWhiteSpace(c: string): boolean {
 	return c === '\n' || c === '\r' || c === '\v' || c === '\f' || c === '\t' || c === ' ';
 }
 
-// Like QString::simpified(), except that it preserves non-breaking spaces (which
-// Evernote uses for identation, etc.)
+// Like QString::simplified(), except that it preserves non-breaking spaces (which
+// Evernote uses for indentation, etc.)
 function simplifyString(s: string): string {
 	let output = '';
 	let previousWhite = false;
@@ -905,7 +905,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 					//	<!DOCTYPE en-export SYSTEM "http://xml.evernote.com/pub/evernote-export2.dtd">
 					//	<en-export export-date="20161221T203133Z" application="Evernote/Windows" version="6.x">
 					//		<note>
-					//			<title>Commande</title>
+					//			<title>Command</title>
 					//			<content>
 					//				<![CDATA[
 					//					<?xml version="1.0" encoding="UTF-8"?>
@@ -951,7 +951,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 				}
 
 				// If the resource does not appear among the note's resources, it
-				// means it's an attachement. It will be appended along with the
+				// means it's an attachment. It will be appended along with the
 				// other remaining resources at the bottom of the markdown text.
 				if (resource && !!resource.id) {
 					section.lines = addResourceTag(section.lines, `:/${resource.id}`, resource.mime, {
@@ -1080,7 +1080,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 					// it's interactive bits) and it's not user-generated content such as a URL that would appear in a comment.
 					// So in this case, we still want to preserve the information but display it in a discreet way as a simple [L].
 
-					// Need to pop everything inside the current [] because it can only be special chars that we don't want (they would create uncessary newlines)
+					// Need to pop everything inside the current [] because it can only be special chars that we don't want (they would create unnecessary newlines)
 					for (let i = section.lines.length - 1; i >= 0; i--) {
 						if (section.lines[i] !== '[') {
 							section.lines.pop();

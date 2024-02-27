@@ -1745,6 +1745,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"Medieafspiller, matematik, diagrammer, indholdsfortegnelse"
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"Manglende nøgler"
 	],
@@ -1871,7 +1874,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Ikke godkendt med %s. Angiv venligst eventuelle manglende legitimationsoplysninger."
 	],
 	"Not downloaded": [

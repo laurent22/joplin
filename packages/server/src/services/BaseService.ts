@@ -64,7 +64,7 @@ export default class BaseService {
 		// Every time a maintenance is scheduled we push a task to this array.
 		// Whenever the maintenance actually runs, that array is cleared. So it
 		// means, that if new tasks are pushed to the array while the
-		// maintenance is runing, it will run again once it's finished, so as to
+		// maintenance is running, it will run again once it's finished, so as to
 		// process any item that might have been added.
 
 		this.scheduledMaintenances_.push(true);

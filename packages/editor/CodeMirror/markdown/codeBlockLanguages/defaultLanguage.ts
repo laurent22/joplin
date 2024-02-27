@@ -3,7 +3,7 @@ import { LanguageDescription, LanguageSupport, StreamLanguage } from '@codemirro
 // To allow auto-indent to work in an unrecognised language, we define an
 // empty language. Doing so seems to enable auto-indent in code blocks with
 // that language.
-const defaultLangauge = StreamLanguage.define({
+const defaultLanguage = StreamLanguage.define({
 	token: (stream) => {
 		stream.next();
 		return null;
@@ -12,7 +12,7 @@ const defaultLangauge = StreamLanguage.define({
 
 const defaultLanguageDescription = LanguageDescription.of({
 	name: 'default',
-	support: new LanguageSupport(defaultLangauge),
+	support: new LanguageSupport(defaultLanguage),
 });
 
 export default defaultLanguageDescription;

@@ -52,7 +52,7 @@ describeIfCompatible('services_KeychainService', () => {
 	}));
 
 	it('should delete db settings if they have been saved in keychain', (async () => {
-		// First save some secure settings and make sure it ends up in the databse
+		// First save some secure settings and make sure it ends up in the database
 		KeychainService.instance().enabled = false;
 
 		Setting.setValue('sync.5.password', 'password');

@@ -1478,6 +1478,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Minimise": [
+		""
+	],
 	"Missing Master Keys": [
 		"Không tìm thấy Master Keys"
 	],
@@ -1595,7 +1598,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Chưa được ủy quyền với %s. Vui lòng cung cấp thông tin chưa được cung cấp."
 	],
 	"Not downloaded": [

@@ -115,7 +115,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 			if (!isNaN(editorPercent)) {
 				// when switching to another note, the percent can sometimes be NaN
 				// this is coming from `gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollUtils.ts`
-				// when CodeMirror returns scroll info with heigth == clientHeigth
+				// when CodeMirror returns scroll info with height == clientHeight
 				// https://github.com/laurent22/joplin/issues/4797
 				if (!ignored) {
 					// calculates GUI-independent line-based percent

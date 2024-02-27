@@ -78,7 +78,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 				// KeymapService is already synchronized with the in-state keymap
 				await keymapService.saveCustomKeymap(filePath);
 			} catch (error) {
-				bridge().showerrororMessageBox(error.message);
+				bridge().showErrorMessageBox(error.message);
 			}
 		}
 	};

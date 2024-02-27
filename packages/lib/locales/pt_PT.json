@@ -1451,6 +1451,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Minimise": [
+		""
+	],
 	"Missing Master Keys": [
 		"Chaves Mestra em falta"
 	],
@@ -1568,7 +1571,7 @@
 	"Nord": [
 		"Nórdico"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Não autenticado com %s. Por favor, introduza os dados em falta."
 	],
 	"Not downloaded": [

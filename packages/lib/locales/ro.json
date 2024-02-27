@@ -1748,6 +1748,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"Media player, matematică, diagrame, cuprins"
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"Lipsesc cheile"
 	],
@@ -1874,7 +1877,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Nu este autentificat cu% s. Vă rugăm să furnizați toate credențialele omise."
 	],
 	"Not downloaded": [

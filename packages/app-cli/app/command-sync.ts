@@ -86,7 +86,7 @@ class Command extends BaseCommand {
 			return true;
 		}
 
-		this.stdout(_('Not authentified with %s. Please provide any missing credentials.', syncTargetMd.label));
+		this.stdout(_('Not authenticated with %s. Please provide any missing credentials.', syncTargetMd.label));
 		return false;
 	}
 

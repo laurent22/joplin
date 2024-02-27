@@ -29,7 +29,6 @@
     "crowdin": "crowdin",
     "crowdinDownload": "crowdin download",
     "crowdinUpload": "crowdin upload",
-    "cspell": "cspell",
     "dependencyTree": "madge",
     "generateTypes": "node packages/tools/generate-database-types",
     "linkChecker": "linkchecker https://joplinapp.org/ && linkchecker --check-extern https://joplinapp.org/api/references/plugin_api/classes/joplin.html",
@@ -65,7 +64,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "yarn lint-staged"
     }
   },
   "devDependencies": {

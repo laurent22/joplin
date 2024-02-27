@@ -271,6 +271,7 @@ const main = async (_options?: Options) => {
 	{
 		const promises = [];
 
+		// cSpell:disable
 		for (let i = 0; i < 20; i++) {
 			promises.push((async () => {
 				const user = await models().user().save({
@@ -284,6 +285,7 @@ const main = async (_options?: Options) => {
 				logger().info(`Created user ${i}`);
 			})());
 		}
+		// cSpell:enable
 
 		await Promise.all(promises);
 	}
