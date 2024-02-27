@@ -200,6 +200,32 @@ describe('syncInfoUtils', () => {
 		logger.enabled = true;
 	});
 
+	it('should filter unnecessary sync info', async () => {
+		const syncInfo = new SyncInfo();
+		syncInfo.masterKeys = [{
+			id: '1',
+			content: 'longstringverylongstringlongstringverylongstringlongstringverylongstring',
+			checksum: 'longstringverylongstringlongstringverylongstringlongstringverylongstring',
+		}];
+		syncInfo.ppk = {
+			id: '1',
+			publicKey: 'longstringverylongstringlongstringverylongstringlongstringverylongstring',
+			privateKey: {
+				encryptionMethod: 1,
+				ciphertext: 'longstringverylongstringlongstringverylongstringlongstringverylongstring',
+			},
+			createdTime: 0,
+			keySize: 0,
+		};
+		const filteredSyncInfo = syncInfo.filterSyncInfo();
+
+		expect(filteredSyncInfo.masterKeys_[0].content).toBeUndefined();
+		expect(filteredSyncInfo.masterKeys_[0].checksum).toBeUndefined();
+
+		expect(filteredSyncInfo.ppk_.value.publicKey).toBe('longstringverylongstringlongstringverylo');
+		expect(filteredSyncInfo.ppk_.value.privateKey.ciphertext).toBe('longstringverylongst...stringverylongstring');
+	});
+
 	test.each([
 		['1.0.0', '1.0.4', true],
 		['1.0.0', '0.0.5', false],
