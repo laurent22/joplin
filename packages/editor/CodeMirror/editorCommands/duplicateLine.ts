@@ -8,16 +8,18 @@ const duplicateLine: Command = (editor: EditorView) => {
 	const transaction = state.changeByRange(range => {
 		const currentLine = doc.lineAt(range.anchor);
 
-		let text, insertPos;
+		let text, insertPos, selectionRange;
 		if (range.empty) {
 			text = `\n${currentLine.text}`;
 			insertPos = currentLine.to;
+			selectionRange = EditorSelection.cursor(currentLine.to + text.length);
 		} else {
 			text = doc.slice(range.from, range.to);
 			insertPos = range.to;
+			selectionRange = EditorSelection.range(range.to, range.to + text.length);
 		}
 		return {
-			range: EditorSelection.range(range.to, range.to + text.length),
+			range: selectionRange,
 			changes: [{
 				from: insertPos,
 				to: insertPos,
