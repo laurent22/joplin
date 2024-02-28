@@ -19,8 +19,8 @@ import useLineSorting from './utils/useLineSorting';
 import useEditorSearch from '../utils/useEditorSearch';
 import useJoplinMode from './utils/useJoplinMode';
 import useKeymap from './utils/useKeymap';
-import useExternalPlugins from '../utils/useExternalPlugins';
-import useJoplinCommands from '../utils/useJoplinCommands';
+import useExternalPlugins from './utils/useExternalPlugins';
+import useJoplinCommands from './utils/useJoplinCommands';
 
 import 'codemirror/keymap/emacs';
 import 'codemirror/keymap/vim';

@@ -1,4 +1,4 @@
-import { Compartment, EditorState } from '@codemirror/state';
+import { Compartment, EditorState, Prec } from '@codemirror/state';
 import { indentOnInput, syntaxHighlighting } from '@codemirror/language';
 import {
 	openSearchPanel, closeSearchPanel, getSearchQuery, search,
@@ -237,7 +237,10 @@ const createEditor = (
 					notifySelectionChange(viewUpdate);
 					notifySelectionFormattingChange(viewUpdate);
 				}),
-				keymap.of([
+
+				// Give the default keymap low precedence so that it is overridden
+				// by extensions with default precedence.
+				Prec.low(keymap.of([
 					// Custom mod-f binding: Toggle the external dialog implementation
 					// (don't show/hide the Panel dialog).
 					keyCommand('Mod-f', (_: EditorView) => {
@@ -263,7 +266,7 @@ const createEditor = (
 					keyCommand('Shift-Tab', decreaseIndent, true),
 
 					...standardKeymap, ...historyKeymap, ...searchKeymap,
-				]),
+				])),
 			],
 			doc: initialText,
 		}),
