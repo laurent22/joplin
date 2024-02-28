@@ -9,6 +9,7 @@ import {
 } from '../markdown/markdownCommands';
 import swapLine, { SwapLineDirection } from './swapLine';
 import duplicateLine from './duplicateLine';
+import sortSelectedLines from './sortSelectedLines';
 import { closeSearchPanel, findNext, findPrevious, openSearchPanel, replaceAll, replaceNext } from '@codemirror/search';
 
 export type EditorCommandFunction = (editor: EditorView)=> void;
@@ -25,6 +26,7 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	[EditorCommandType.ToggleMath]: toggleMath,
 	[EditorCommandType.ToggleComment]: toggleComment,
 	[EditorCommandType.DuplicateLine]: duplicateLine,
+	[EditorCommandType.SortSelectedLines]: sortSelectedLines,
 	[EditorCommandType.ToggleNumberedList]: toggleList(ListType.OrderedList),
 	[EditorCommandType.ToggleBulletedList]: toggleList(ListType.UnorderedList),
 	[EditorCommandType.ToggleCheckList]: toggleList(ListType.CheckList),

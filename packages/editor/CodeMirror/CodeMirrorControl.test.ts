@@ -92,4 +92,12 @@ describe('CodeMirrorControl', () => {
 		control.execCommand('duplicateLine');
 		expect(control.getValue()).toBe('Hello\nWoHello\nWorld\n');
 	});
+
+	it('should sort selected lines', () => {
+		const control = createEditorControl('World\nHello\n');
+		control.select(0, 8);
+
+		control.execCommand('sortSelectedLines');
+		expect(control.getValue()).toBe('Hello\nWorld\n');
+	});
 });

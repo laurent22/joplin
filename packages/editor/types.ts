@@ -17,6 +17,7 @@ export enum EditorCommandType {
 	ToggleMath = 'textMath',
 	ToggleComment = 'toggleComment',
 	DuplicateLine = 'duplicateLine',
+	SortSelectedLines = 'sortSelectedLines',
 
 	ToggleNumberedList = 'textNumberedList',
 	ToggleBulletedList = 'textBulletedList',

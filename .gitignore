@@ -567,6 +567,7 @@ packages/editor/CodeMirror/editorCommands/duplicateLine.js
 packages/editor/CodeMirror/editorCommands/editorCommands.js
 packages/editor/CodeMirror/editorCommands/insertLineAfter.test.js
 packages/editor/CodeMirror/editorCommands/insertLineAfter.js
+packages/editor/CodeMirror/editorCommands/sortSelectedLines.js
 packages/editor/CodeMirror/editorCommands/supportsCommand.js
 packages/editor/CodeMirror/editorCommands/swapLine.js
 packages/editor/CodeMirror/getScrollFraction.js
