@@ -2,14 +2,18 @@ import yargs = require('yargs');
 import { chdir } from 'process';
 import { rootDir } from './tool-utils';
 import { execCommand } from '@joplin/utils';
+import { fileExtension } from '@joplin/utils/path';
+
+const supportedExtensions = ['ts', 'tsx', 'md', 'mdx'];
 
 const main = async () => {
 	const argv = await yargs.argv;
-	const filePaths = argv._ as string[];
+	let filePaths = (argv._ as string[]) || [];
 	const processAll = !!argv.all;
-	if (!processAll) {
-		if (!filePaths || !filePaths.length) return;
-	}
+
+	filePaths = filePaths.filter(f => supportedExtensions.includes(fileExtension(f).toLowerCase()));
+
+	if (!processAll && !filePaths.length) return;
 
 	chdir(rootDir);
 
@@ -21,7 +25,7 @@ const main = async () => {
 	];
 
 	if (processAll) {
-		cmd.push('**/*.{ts,tsx,md,mdx}');
+		cmd.push(`**/*.{${supportedExtensions.join(',')}}`);
 	} else {
 		cmd = cmd.concat(filePaths);
 	}
