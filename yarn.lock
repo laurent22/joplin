@@ -6840,7 +6840,6 @@ __metadata:
     "@joplin/turndown": ^4.0.72
     "@joplin/turndown-plugin-gfm": ^1.0.54
     "@joplin/utils": ~2.14
-    "@supercharge/promise-pool": 3.1.0
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
     "@types/js-yaml": 4.0.9
@@ -9946,13 +9945,6 @@ __metadata:
     "@styled-system/core": ^5.1.2
     "@styled-system/css": ^5.1.5
   checksum: becddaa0269004bd788e25d6b5c6f92af1c87009fe31844b4c19bba5233d54e59cfc4c007f8825d812db84c8d1bade5f8a99eb744db41c9124e0c145db64b5b5
-  languageName: node
-  linkType: hard
-
-"@supercharge/promise-pool@npm:3.1.0":
-  version: 3.1.0
-  resolution: "@supercharge/promise-pool@npm:3.1.0"
-  checksum: 15c391bb592f552eb9c7d36467539256a752206bd59834e86171a4c8356e077bc774e0583e14e03fd1613de66dbf623f00777ec674d95242ae7ad7f43d74268c
   languageName: node
   linkType: hard
 
