@@ -1,5 +1,6 @@
 import { ViewPlugin } from '@codemirror/view';
 import createEditorControl from './testUtil/createEditorControl';
+import { EditorCommandType } from '../types';
 
 describe('CodeMirrorControl', () => {
 	it('clearHistory should clear the undo/redo history', () => {
@@ -56,5 +57,26 @@ describe('CodeMirrorControl', () => {
 		expect(control.supportsCommand('myTestCommand')).toBe(true);
 		expect(control.execCommand('myTestCommand')).toBe('test');
 		expect(command).toHaveBeenCalledTimes(1);
+	});
+
+	it('should support overriding default keybindings', () => {
+		const control = createEditorControl('test');
+		control.execCommand(EditorCommandType.SelectAll);
+
+		const testCommand = jest.fn(() => true);
+		control.prependKeymap([
+			// Override the default binding for ctrl-d (search)
+			{ key: 'Ctrl-d', run: testCommand },
+		]);
+
+		control.editor.contentDOM.dispatchEvent(
+			new KeyboardEvent('keydown', {
+				code: 'KeyD',
+				key: 'd',
+				ctrlKey: true,
+			}),
+		);
+
+		expect(testCommand).toHaveBeenCalledTimes(1);
 	});
 });
