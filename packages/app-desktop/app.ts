@@ -72,6 +72,7 @@ import OcrDriverTesseract from '@joplin/lib/services/ocr/drivers/OcrDriverTesser
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { PackageInfo } from '@joplin/lib/versionInfo';
 import { refreshFolders } from '@joplin/lib/folders-screen-utils';
+import { FolderEntity } from '@joplin/lib/services/database/types';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -427,6 +428,21 @@ class Application extends BaseApplication {
 		this.initRedux();
 
 		PerFolderSortOrderService.initialize();
+
+		async function createAllNoteFolder() {
+			const newFolder: FolderEntity = {
+				title: 'All Notes',
+			};
+			await Folder.save(newFolder, { userSideValidation: true });
+		}
+
+		async function checkAndCreateAllNoteFolder() {
+			const folderExists = await Folder.folderExists('All Notes');
+			if (!folderExists) {
+				await createAllNoteFolder();
+			}
+		}
+		await checkAndCreateAllNoteFolder();
 
 		CommandService.instance().initialize(this.store(), Setting.value('env') === 'dev', stateToWhenClauseContext);
 

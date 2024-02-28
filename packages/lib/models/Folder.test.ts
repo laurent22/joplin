@@ -323,4 +323,10 @@ describe('models/Folder', () => {
 		cleanup();
 	});
 
+	it('should not create a new same folder if that already exists in the database', async () => {
+		const f1 = await Folder.save({ title: 'folder1' });
+		const checkExists = await Folder.folderExists(f1.title);
+
+		expect(checkExists).toBe(true);
+	});
 });

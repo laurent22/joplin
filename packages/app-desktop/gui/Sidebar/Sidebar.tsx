@@ -428,6 +428,33 @@ const SidebarComponent = (props: Props) => {
 		menu.popup({ window: bridge().window() });
 	}, [props.folders, props.dispatch, pluginsRef]);
 
+	const itemAllContextMenu = useCallback(async (event: any) => {
+		const itemId = event.currentTarget.getAttribute('data-id');
+		if (itemId === Folder.conflictFolderId()) return;
+
+		const itemType = Number(event.currentTarget.getAttribute('data-type'));
+		if (!itemId || !itemType) throw new Error('No data on element');
+
+		const menu = new Menu();
+
+		let item = null;
+		if (itemType === BaseModel.TYPE_FOLDER) {
+			item = BaseModel.byId(props.folders, itemId);
+		}
+
+		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
+			if (Setting.value('notes.perFolderSortOrderEnabled')) {
+				menu.append(new MenuItem({
+					...menuUtils.commandToStatefulMenuItem('togglePerFolderSortOrder', itemId),
+					type: 'checkbox',
+					checked: PerFolderSortOrderService.isSet(itemId),
+				}));
+			}
+		}
+
+		menu.popup({ window: bridge().window() });
+	}, [props.folders]);
+
 	const folderItem_click = useCallback((folderId: string) => {
 		props.dispatch({
 			type: 'FOLDER_SELECT',
@@ -471,17 +498,27 @@ const SidebarComponent = (props: Props) => {
 		return <i className={isExpanded ? 'fas fa-caret-down' : 'fas fa-caret-right'} style={style}></i>;
 	};
 
-	const renderAllNotesItem = (theme: Theme, selected: boolean) => {
+	const renderAllNotesItem = (theme: Theme, folder: FolderEntity, selected: boolean) => {
+		const anchorRef = anchorItemRef('folder', folder.id);
 		return (
 			<StyledListItem key="allNotesHeader" selected={selected} className={'list-item-container list-item-depth-0 all-notes'} isSpecialItem={true}>
 				<StyledExpandLink>{renderExpandIcon(theme, false, false)}</StyledExpandLink>
 				<StyledAllNotesIcon className="icon-notes"/>
 				<StyledListItemAnchor
+					key={folder.id}
 					className="list-item"
 					isSpecialItem={true}
 					href="#"
 					selected={selected}
 					onClick={onAllNotesClick_}
+
+					ref={anchorRef}
+					shareId={folder.share_id}
+					data-id={folder.id}
+					data-type={BaseModel.TYPE_FOLDER}
+					data-folder-id={folder.id}
+					onContextMenu={itemAllContextMenu}
+					isConflictFolder={folder.id === Folder.conflictFolderId()}
 				>
 					{_('All notes')}
 				</StyledListItemAnchor>
@@ -697,6 +734,7 @@ const SidebarComponent = (props: Props) => {
 		}),
 	);
 
+
 	const foldersStyle = useMemo(() => {
 		return { display: props.folderHeaderIsExpanded ? 'block' : 'none', paddingBottom: 10 };
 	}, [props.folderHeaderIsExpanded]);
@@ -704,8 +742,9 @@ const SidebarComponent = (props: Props) => {
 
 	if (props.folders.length) {
 		const allNotesSelected = props.notesParentType === 'SmartFilter' && props.selectedSmartFilterId === ALL_NOTES_FILTER_ID;
-		const result = renderFolders(props, renderFolderItem);
-		const folderItems = [renderAllNotesItem(theme, allNotesSelected)].concat(result.items);
+		const result = renderFolders(props, renderFolderItem, renderAllNotesItem, allNotesSelected, theme);
+
+		const folderItems = result.items;
 		folderItemsOrder_.current = result.order;
 		items.push(
 			<div

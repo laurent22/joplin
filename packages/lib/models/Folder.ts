@@ -148,6 +148,11 @@ export default class Folder extends BaseItem {
 		};
 	}
 
+	public static async folderExists(title: string) {
+		const folders = await this.db().selectAll(`SELECT id FROM ${this.tableName()} WHERE title = ? LIMIT 1`, [title]);
+		return folders.length > 0;
+	}
+
 	// Calculates note counts for all folders and adds the note_count attribute to each folder
 	// Note: this only calculates the overall number of nodes for this folder and all its descendants
 	public static async addNoteCounts(folders: any[], includeCompletedTodos = true) {
