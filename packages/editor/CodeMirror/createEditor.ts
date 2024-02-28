@@ -9,7 +9,7 @@ import { classHighlighter } from '@lezer/highlight';
 import {
 	EditorView, drawSelection, highlightSpecialChars, ViewUpdate, Command, rectangularSelection,
 } from '@codemirror/view';
-import { history, undoDepth, redoDepth, standardKeymap, insertBlankLine } from '@codemirror/commands';
+import { history, undoDepth, redoDepth, standardKeymap } from '@codemirror/commands';
 
 import { keymap, KeyBinding } from '@codemirror/view';
 import { searchKeymap } from '@codemirror/search';
@@ -29,6 +29,7 @@ import { selectionFormattingEqual } from '../SelectionFormatting';
 import configFromSettings from './configFromSettings';
 import getScrollFraction from './getScrollFraction';
 import CodeMirrorControl from './CodeMirrorControl';
+import insertLineAfter from './editorCommands/insertLineAfter';
 
 const createEditor = (
 	parentElement: HTMLElement, props: EditorProps,
@@ -261,7 +262,10 @@ const createEditor = (
 					}),
 					keyCommand('Tab', insertOrIncreaseIndent, true),
 					keyCommand('Shift-Tab', decreaseIndent, true),
-					keyCommand('Mod-Enter', insertBlankLine, true),
+					keyCommand('Mod-Enter', (_: EditorView) => {
+						insertLineAfter(_);
+						return true;
+					}, true),
 
 					...standardKeymap, ...historyKeymap, ...searchKeymap,
 				]),
