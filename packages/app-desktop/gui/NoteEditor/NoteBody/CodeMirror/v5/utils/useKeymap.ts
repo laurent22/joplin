@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import CommandService from '@joplin/lib/services/CommandService';
 import KeymapService, { KeymapItem } from '@joplin/lib/services/KeymapService';
-import { EditorCommand } from '../../../utils/types';
+import { EditorCommand } from '../../../../utils/types';
 import shim from '@joplin/lib/shim';
 import { reg } from '@joplin/lib/registry';
 import setupVim from '@joplin/editor/CodeMirror/util/setupVim';
