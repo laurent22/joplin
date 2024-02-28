@@ -6,8 +6,9 @@ describe('normalizeAccelerator', () => {
 		['Z', { v6: 'z', v5: 'Z' }],
 		['Alt+A', { v6: 'Alt-a', v5: 'Alt-A' }],
 		['Shift+A', { v6: 'Shift-a', v5: 'Shift-A' }],
+		['Shift+Up', { v6: 'Shift-Up', v5: 'Shift-Up' }],
 	])(
-		'should convert key names to lowercase for CM6, keep case unchanged for CM5 (%j)',
+		'should convert single-letter key names to lowercase for CM6, keep case unchanged for CM5 (%j)',
 		(original, expected) => {
 			expect(normalizeAccelerator(
 				original, CodeMirrorVersion.CodeMirror6,

@@ -12,8 +12,10 @@ const normalizeAccelerator = (accelerator: string, editorVersion: CodeMirrorVers
 	const parts = command.split(/-(?!$)/);
 	let name = parts[parts.length - 1];
 
-	// .toLowerCase: In CodeMirror 6, an uppercase key name requires shift.
-	if (editorVersion === CodeMirrorVersion.CodeMirror6) {
+	// In CodeMirror 6, an uppercase single-letter key name makes the editor
+	// require the shift key to activate the shortcut. If a key name like `Up`,
+	// however, `.toLowerCase` breaks the shortcut.
+	if (editorVersion === CodeMirrorVersion.CodeMirror6 && name.length === 1) {
 		name = name.toLowerCase();
 	}
 
