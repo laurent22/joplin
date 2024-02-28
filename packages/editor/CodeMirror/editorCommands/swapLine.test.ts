@@ -1,6 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
-import swapLine from './swapLine';
+import swapLine, { SwapLineDirection } from './swapLine';
 
 
 describe('swapLine', () => {
@@ -11,7 +11,7 @@ describe('swapLine', () => {
 			selection: EditorSelection.cursor(0),
 		});
 
-		swapLine(1)(editorView);
+		swapLine(SwapLineDirection.Down)(editorView);
 
 		const result = editorView.state.doc.toString();
 		expect(result).toBe('World\nHello\nJoplin\n');
@@ -24,7 +24,7 @@ describe('swapLine', () => {
 			selection: EditorSelection.cursor(6),
 		});
 
-		swapLine(-1)(editorView);
+		swapLine(SwapLineDirection.Up)(editorView);
 
 		const result = editorView.state.doc.toString();
 		expect(result).toBe('World\nHello\nJoplin\n');

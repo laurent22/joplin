@@ -4,8 +4,9 @@ import sortSelectedLines from './sortSelectedLines';
 
 describe('sortSelectedLines', () => {
 	it('should sort selected lines', () => {
+		const initialText = 'World\nHello\n';
 		const editorView = new EditorView({
-			doc: 'World\nHello\n',
+			doc: initialText,
 			selection: EditorSelection.range(0, 8),
 		});
 
