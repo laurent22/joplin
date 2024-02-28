@@ -44,7 +44,6 @@
     "@joplin/turndown": "^4.0.72",
     "@joplin/turndown-plugin-gfm": "^1.0.54",
     "@joplin/utils": "~2.14",
-    "@supercharge/promise-pool": "3.1.0",
     "@types/nanoid": "3.0.0",
     "async-mutex": "0.4.0",
     "base-64": "1.0.0",

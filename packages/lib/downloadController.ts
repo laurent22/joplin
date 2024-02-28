@@ -8,6 +8,7 @@ const logger = Logger.create('downloadController');
 export interface DownloadController {
 	totalBytes: number;
 	imagesCount: number;
+	maxImagesCount: number;
 	imageCountExpected: number;
 	printStats(imagesCountExpected: number): void;
 	handleChunk(request: any): (chunk: any)=> void;
@@ -24,7 +25,7 @@ export class LimitedDownloadController implements DownloadController {
 	private isLimitExceeded_ = false;
 
 	private maxTotalBytes = 0;
-	private maxImagesCount = 0;
+	public readonly maxImagesCount: number;
 	private ownerId = '';
 
 	public constructor(ownerId: string, maxTotalBytes: number, maxImagesCount: number) {

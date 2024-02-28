@@ -29,8 +29,6 @@ const { ErrorNotFound } = require('../utils/errors');
 import { fileUriToPath } from '@joplin/utils/url';
 import { NoteEntity } from '../../database/types';
 import { DownloadController } from '../../../downloadController';
-import { ErrorCode } from '../../../errors';
-import { PromisePool } from '@supercharge/promise-pool';
 
 const logger = Logger.create('routes/notes');
 
@@ -277,17 +275,16 @@ async function downloadMediaFiles(urls: string[], fetchOptions: FetchOptions, al
 		if (mediaPath) output[url] = { path: mediaPath, originalUrl: url };
 	};
 
-	await PromisePool
-		.withConcurrency(10)
-		.for(urls)
-		.handleError(async (error: any, _url, pool) => {
-			if (error.code !== ErrorCode.DownloadLimiter) {
-				throw error;
-			}
-			logger.warn(error);
-			pool.stop();
-		})
-		.process(downloadOne);
+	const maximumImageDownloadsAllowed = downloadController ? downloadController.maxImagesCount : urls.length;
+	const urlsAllowedByController = urls.slice(0, maximumImageDownloadsAllowed);
+	logger.info(`Media files allowed to be downloaded: ${maximumImageDownloadsAllowed}`);
+
+	const promises = [];
+	for (const url of urlsAllowedByController) {
+		promises.push(downloadOne(url));
+	}
+
+	await Promise.all(promises);
 
 	if (downloadController) {
 		downloadController.imageCountExpected = urls.length;
