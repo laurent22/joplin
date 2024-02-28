@@ -1,6 +1,7 @@
 import { ViewPlugin } from '@codemirror/view';
 import createEditorControl from './testUtil/createEditorControl';
 import { EditorCommandType } from '../types';
+import pressReleaseKey from './testUtil/pressReleaseKey';
 
 describe('CodeMirrorControl', () => {
 	it('clearHistory should clear the undo/redo history', () => {
@@ -64,19 +65,23 @@ describe('CodeMirrorControl', () => {
 		control.execCommand(EditorCommandType.SelectAll);
 
 		const testCommand = jest.fn(() => true);
-		control.prependKeymap([
+		const keybindings = control.prependKeymap([
 			// Override the default binding for ctrl-d (search)
 			{ key: 'Ctrl-d', run: testCommand },
 		]);
 
-		control.editor.contentDOM.dispatchEvent(
-			new KeyboardEvent('keydown', {
-				code: 'KeyD',
-				key: 'd',
-				ctrlKey: true,
-			}),
-		);
+		// Should call the override command rather than the default handler
+		const keyData = {
+			key: 'd',
+			code: 'KeyD',
+			ctrlKey: true,
+		};
+		pressReleaseKey(control.editor, keyData);
+		expect(testCommand).toHaveBeenCalledTimes(1);
 
+		// Calling keybindings.remove should deregister the override.
+		keybindings.remove();
+		pressReleaseKey(control.editor, keyData);
 		expect(testCommand).toHaveBeenCalledTimes(1);
 	});
 });
