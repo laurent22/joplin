@@ -9,7 +9,7 @@ import { classHighlighter } from '@lezer/highlight';
 import {
 	EditorView, drawSelection, highlightSpecialChars, ViewUpdate, Command, rectangularSelection,
 } from '@codemirror/view';
-import { history, undoDepth, redoDepth, standardKeymap } from '@codemirror/commands';
+import { history, undoDepth, redoDepth, standardKeymap, insertBlankLine } from '@codemirror/commands';
 
 import { keymap, KeyBinding } from '@codemirror/view';
 import { searchKeymap } from '@codemirror/search';
@@ -261,6 +261,7 @@ const createEditor = (
 					}),
 					keyCommand('Tab', insertOrIncreaseIndent, true),
 					keyCommand('Shift-Tab', decreaseIndent, true),
+					keyCommand('Mod-Enter', insertBlankLine, true),
 
 					...standardKeymap, ...historyKeymap, ...searchKeymap,
 				]),
