@@ -82,15 +82,20 @@ describe('OcrService', () => {
 		// `jest.retryTimes(2)`
 	}, 60000 * 5);
 
-	it('should process PDF resources', async () => {
-		const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/dummy.pdf` });
+	test.each([
+		// Use embedded text (skip OCR)
+		['dummy.pdf', 'Dummy PDF file'],
+		['multi_page__embedded_text.pdf', 'This is a test.\nTesting...\nThis PDF has 3 pages.\nThis is page 3.'],
+		['multi_page__no_embedded_text.pdf', 'This is a multi-page PDF\nwith no embedded text.\nPage 2: more text.\nThe third page.'],
+	])('should process PDF resources', async (samplePath: string, expectedText: string) => {
+		const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/${samplePath}` });
 
 		const service = newOcrService();
 
 		await service.processResources();
 
 		const processedResource: ResourceEntity = await Resource.load(resource.id);
-		expect(processedResource.ocr_text).toBe('Dummy PDF file');
+		expect(processedResource.ocr_text).toBe(expectedText);
 		expect(processedResource.ocr_status).toBe(ResourceOcrStatus.Done);
 		expect(processedResource.ocr_error).toBe('');
 
@@ -156,7 +161,7 @@ describe('OcrService', () => {
 
 		const service = newOcrService();
 
-		// The service will print a warnign so we disable it in tests
+		// The service will print a warning so we disable it in tests
 		Logger.globalLogger.enabled = false;
 		await service.processResources();
 		Logger.globalLogger.enabled = true;
@@ -205,7 +210,7 @@ describe('OcrService', () => {
 		const service2 = newOcrService();
 		await service2.processResources();
 		await synchronizerStart();
-		const expectedResouceUpatedTime = (await Resource.all())[0].updated_time;
+		const expectedResourceUpdatedTime = (await Resource.all())[0].updated_time;
 
 		await switchClient(1);
 
@@ -221,7 +226,7 @@ describe('OcrService', () => {
 			expect(resource.ocr_text).toBe('Dummy PDF file');
 			expect(resource.ocr_error).toBe('');
 			expect(resource.ocr_status).toBe(ResourceOcrStatus.Done);
-			expect(resource.updated_time).toBe(expectedResouceUpatedTime);
+			expect(resource.updated_time).toBe(expectedResourceUpdatedTime);
 		}
 
 		await service1.dispose();

@@ -20,6 +20,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Cmd+Q', command: 'quit' },
 		{ accelerator: 'Cmd+,', command: 'config' },
 		{ accelerator: 'Cmd+W', command: 'closeWindow' },
+		{ accelerator: 'Cmd+M', command: 'minimizeWindow' },
 		{ accelerator: 'Cmd+C', command: 'textCopy' },
 		{ accelerator: 'Cmd+X', command: 'textCut' },
 		{ accelerator: 'Cmd+V', command: 'textPaste' },
@@ -266,7 +267,7 @@ export default class KeymapService extends BaseService {
 		this.defaultKeymapItems.forEach(({ command, accelerator }) => {
 			const currentAccelerator = this.getAccelerator(command);
 
-			// Only the customized/changed keymap items are neccessary for the custom keymap
+			// Only the customized/changed keymap items are necessary for the custom keymap
 			// Customizations can be merged with the original keymap at the runtime
 			if (this.getAccelerator(command) !== accelerator) {
 				customkeymapItems.push({ command, accelerator: currentAccelerator });

@@ -101,9 +101,9 @@ export default class JoplinImaging {
 		return this.cacheImage(resizedImage);
 	}
 
-	public async crop(handle: Handle, rectange: Rectangle) {
+	public async crop(handle: Handle, rectangle: Rectangle) {
 		const image = this.imageByHandle(handle);
-		const croppedImage = image.data.crop(rectange);
+		const croppedImage = image.data.crop(rectangle);
 		return this.cacheImage(croppedImage);
 	}
 

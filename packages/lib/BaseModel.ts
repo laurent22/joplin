@@ -278,6 +278,7 @@ class BaseModel {
 				limit: options.limit,
 				order: options.order as any,
 				page: 1,
+				caseInsensitive: options.caseInsensitive,
 			})}`;
 		}
 

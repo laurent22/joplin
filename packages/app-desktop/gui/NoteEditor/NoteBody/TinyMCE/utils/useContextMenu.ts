@@ -7,11 +7,11 @@ import { ContextMenuOptions, ContextMenuItemType } from '../../../utils/contextM
 import { menuItems } from '../../../utils/contextMenu';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
-import convertToScreenCoordinates from '../../../../utils/convertToScreenCoordinates';
 import Setting from '@joplin/lib/models/Setting';
 
 import Resource from '@joplin/lib/models/Resource';
 import { TinyMceEditorEvents } from './types';
+import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from '../../../utils/types';
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
@@ -24,15 +24,21 @@ function contextMenuElement(editor: any, x: number, y: number) {
 	const iframes = document.getElementsByClassName('tox-edit-area__iframe');
 	if (!iframes.length) return null;
 
-	const iframeRect = convertToScreenCoordinates(Setting.value('windowContentZoomFactor'), iframes[0].getBoundingClientRect());
+	const zoom = Setting.value('windowContentZoomFactor') / 100;
+	const xScreen = x / zoom;
+	const yScreen = y / zoom;
 
-	if (iframeRect.x < x && iframeRect.y < y && iframeRect.right > x && iframeRect.bottom > y) {
-		const relativeX = x - iframeRect.x;
-		const relativeY = y - iframeRect.y;
-		return editor.getDoc().elementFromPoint(relativeX, relativeY);
+	// We use .elementFromPoint to handle the case where a dialog is covering
+	// part of the editor.
+	const targetElement = document.elementFromPoint(xScreen, yScreen);
+	if (targetElement !== iframes[0]) {
+		return null;
 	}
 
-	return null;
+	const iframeRect = iframes[0].getBoundingClientRect();
+	const relativeX = xScreen - iframeRect.left;
+	const relativeY = yScreen - iframeRect.top;
+	return editor.getDoc().elementFromPoint(relativeX, relativeY);
 }
 
 interface ContextMenuActionOptions {
@@ -42,11 +48,11 @@ interface ContextMenuActionOptions {
 const contextMenuActionOptions: ContextMenuActionOptions = { current: null };
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export default function(editor: any, plugins: PluginStates, dispatch: Function) {
+export default function(editor: any, plugins: PluginStates, dispatch: Function, htmlToMd: HtmlToMarkdownHandler, mdToHtml: MarkupToHtmlHandler) {
 	useEffect(() => {
 		if (!editor) return () => {};
 
-		const contextMenuItems = menuItems(dispatch);
+		const contextMenuItems = menuItems(dispatch, htmlToMd, mdToHtml);
 
 		function onContextMenu(_event: any, params: any) {
 			const element = contextMenuElement(editor, params.x, params.y);
@@ -82,6 +88,8 @@ export default function(editor: any, plugins: PluginStates, dispatch: Function) 
 				fireEditorEvent: (event: TinyMceEditorEvents) => {
 					editor.fire(event);
 				},
+				htmlToMd,
+				mdToHtml,
 			};
 
 			let template = [];
@@ -118,5 +126,5 @@ export default function(editor: any, plugins: PluginStates, dispatch: Function) 
 				bridge().window().webContents.off('context-menu', onContextMenu);
 			}
 		};
-	}, [editor, plugins, dispatch]);
+	}, [editor, plugins, dispatch, htmlToMd, mdToHtml]);
 }

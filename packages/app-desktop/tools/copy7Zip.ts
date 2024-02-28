@@ -3,7 +3,7 @@ import { copy } from 'fs-extra';
 import { dirname, join } from 'path';
 
 const copy7Zip = async () => {
-	// We allow buildin for a different architecture/platform with
+	// We allow building for a different architecture/platform with
 	// the npm_config_target_arch and npm_config_target_platform environment variables.
 	//
 	// These are the same environment variables used by yarn when downloading dependencies.

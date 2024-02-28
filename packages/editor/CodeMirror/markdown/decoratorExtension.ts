@@ -131,7 +131,7 @@ const computeDecorations = (view: EditorView) => {
 	const decorations: DecorationDescription[] = [];
 
 	// Add a decoration to all lines between the document position [from] up to
-	// and includeing the position [to].
+	// and including the position [to].
 	const addDecorationToLines = (from: number, to: number, decoration: Decoration) => {
 		let pos = from;
 		while (pos <= to) {

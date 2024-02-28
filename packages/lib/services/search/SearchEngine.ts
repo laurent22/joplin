@@ -11,9 +11,10 @@ import { ItemChangeEntity, NoteEntity, SqlQuery } from '../database/types';
 import Resource from '../../models/Resource';
 import JoplinDatabase from '../../JoplinDatabase';
 import NoteResource from '../../models/NoteResource';
-import isItemId from '../../models/utils/isItemId';
 import BaseItem from '../../models/BaseItem';
 import { isCallbackUrl, parseCallbackUrl } from '../../callbackUrlUtils';
+import replaceUnsupportedCharacters from '../../utils/replaceUnsupportedCharacters';
+import { htmlentitiesDecode } from '@joplin/utils/html';
 const { sprintf } = require('sprintf-js');
 const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.js');
 
@@ -333,9 +334,9 @@ export default class SearchEngine {
 
 	private fieldNamesFromOffsets_(offsets: any[]) {
 		const notesNormalizedFieldNames = this.db().tableFieldNames('notes_normalized');
-		const occurenceCount = Math.floor(offsets.length / 4);
+		const occurrenceCount = Math.floor(offsets.length / 4);
 		const output: string[] = [];
-		for (let i = 0; i < occurenceCount; i++) {
+		for (let i = 0; i < occurrenceCount; i++) {
 			const colIndex = offsets[i * 4];
 			const fieldName = notesNormalizedFieldNames[colIndex];
 			if (!output.includes(fieldName)) output.push(fieldName);
@@ -604,17 +605,33 @@ export default class SearchEngine {
 	private normalizeText_(text: string) {
 		let normalizedText = text.normalize ? text.normalize() : text;
 
-		// Null characters can break FTS. Remove them.
-		// eslint-disable-next-line no-control-regex
-		normalizedText = normalizedText.replace(/\x00/g, ' ');
+		// NULL characters can break FTS. Remove them.
+		normalizedText = replaceUnsupportedCharacters(normalizedText);
+
+		// We need to decode HTML entities too
+		// https://github.com/laurent22/joplin/issues/9694
+		normalizedText = htmlentitiesDecode(normalizedText);
 
 		return removeDiacritics(normalizedText.toLowerCase());
 	}
 
 	private normalizeNote_(note: NoteEntity) {
 		const n = { ...note };
-		n.title = this.normalizeText_(n.title);
-		n.body = this.normalizeText_(n.body);
+		try {
+			n.title = this.normalizeText_(n.title);
+			n.body = this.normalizeText_(n.body);
+		} catch (error) {
+			// Text normalization -- specifically removeDiacritics -- can fail in some cases.
+			// We log additional information to help determine the cause of the issue.
+			//
+			// See https://discourse.joplinapp.org/t/search-not-working-on-ios/35754
+			this.logger().error(`Error while normalizing text for note ${note.id}:`, error);
+
+			// Unnormalized text can break the search engine, specifically NUL characters.
+			// Thus, we remove the text entirely.
+			n.title = '';
+			n.body = '';
+		}
 		return n;
 	}
 
@@ -670,9 +687,14 @@ export default class SearchEngine {
 		if (isCallbackUrl(searchString)) {
 			const parsed = parseCallbackUrl(searchString);
 			itemId = parsed.params.id;
-		} else if (isItemId(searchString)) {
-			itemId = searchString;
 		}
+
+		// Disabled for now:
+		// https://github.com/laurent22/joplin/issues/9769#issuecomment-1912459744
+
+		// else if (isItemId(searchString)) {
+		// 	itemId = searchString;
+		// }
 
 		if (itemId) {
 			const item = await BaseItem.loadItemById(itemId);
@@ -755,18 +777,29 @@ export default class SearchEngine {
 				if (!queryHasFilters) {
 					const toSearch = parsedQuery.allTerms.map(t => t.value).join(' ');
 
-					let itemRows = await this.db().selectAll<ProcessResultsRow>(`
-						SELECT
-							id,
-							title,
-							user_updated_time,
-							offsets(items_fts) AS offsets,
-							matchinfo(items_fts, 'pcnalx') AS matchinfo,
-							item_id,
-							item_type
-						FROM items_fts
-						WHERE title MATCH ? OR body MATCH ?
-					`, [toSearch, toSearch]);
+					let itemRows: ProcessResultsRow[] = [];
+
+					try {
+						itemRows = await this.db().selectAll<ProcessResultsRow>(`
+							SELECT
+								id,
+								title,
+								user_updated_time,
+								offsets(items_fts) AS offsets,
+								matchinfo(items_fts, 'pcnalx') AS matchinfo,
+								item_id,
+								item_type
+							FROM items_fts
+							WHERE title MATCH ? OR body MATCH ?
+						`, [toSearch, toSearch]);
+					} catch (error) {
+						// Android <= 25 doesn't support the following syntax:
+						//    WHERE title MATCH ? OR body MATCH ?
+						// Thus, we skip resource search on these devices.
+						if (!error.message?.includes?.('unable to use function MATCH in the requested context')) {
+							throw error;
+						}
+					}
 
 					const resourcesToNotes = await NoteResource.associatedResourceNotes(itemRows.map(r => r.item_id), { fields: ['note_id', 'parent_id'] });
 

@@ -1,5 +1,5 @@
 // This script reads through the Markdown files in readme/news and post each of
-// them as Dicourse forum posts. It then also update the news file with a link
+// them as Discourse forum posts. It then also update the news file with a link
 // to that forum post.
 
 import { readdir, readFile, writeFile } from 'fs-extra';

@@ -89,22 +89,22 @@ describe('services_SearchFilter', () => {
 				await engine.syncTables();
 
 				const testCases = [
-					{ searchString: 'tag:tag2', expectedResults: 2, expectedtNoteIds: [note1.id, note2.id] },
-					{ searchString: 'tAg:tag2', expectedResults: 2, expectedtNoteIds: [note1.id, note2.id] },
-					{ searchString: 'Tag:tag2', expectedResults: 2, expectedtNoteIds: [note1.id, note2.id] },
-					{ searchString: '-tag:tag2', expectedResults: 1, expectedtNoteIds: [note3.id] },
-					{ searchString: '-Tag:tag2', expectedResults: 1, expectedtNoteIds: [note3.id] },
-					{ searchString: 'title:Note1', expectedResults: 1, expectedtNoteIds: [note1.id] },
-					{ searchString: 'Title:Note1', expectedResults: 1, expectedtNoteIds: [note1.id] },
-					{ searchString: 'Any:1 -tag:tag1 -notebook:folderB', expectedResults: 1, expectedtNoteIds: [note3.id] },
-					{ searchString: 'notebook:folderA', expectedResults: 2, expectedtNoteIds: [note1.id, note3.id] },
-					{ searchString: 'notebooK:folderA', expectedResults: 2, expectedtNoteIds: [note1.id, note3.id] },
+					{ searchString: 'tag:tag2', expectedResults: 2, expectedNoteIds: [note1.id, note2.id] },
+					{ searchString: 'tAg:tag2', expectedResults: 2, expectedNoteIds: [note1.id, note2.id] },
+					{ searchString: 'Tag:tag2', expectedResults: 2, expectedNoteIds: [note1.id, note2.id] },
+					{ searchString: '-tag:tag2', expectedResults: 1, expectedNoteIds: [note3.id] },
+					{ searchString: '-Tag:tag2', expectedResults: 1, expectedNoteIds: [note3.id] },
+					{ searchString: 'title:Note1', expectedResults: 1, expectedNoteIds: [note1.id] },
+					{ searchString: 'Title:Note1', expectedResults: 1, expectedNoteIds: [note1.id] },
+					{ searchString: 'Any:1 -tag:tag1 -notebook:folderB', expectedResults: 1, expectedNoteIds: [note3.id] },
+					{ searchString: 'notebook:folderA', expectedResults: 2, expectedNoteIds: [note1.id, note3.id] },
+					{ searchString: 'notebooK:folderA', expectedResults: 2, expectedNoteIds: [note1.id, note3.id] },
 				];
 
 				for (const testCase of testCases) {
 					rows = await engine.search(testCase.searchString, { searchType });
 					expect(rows.length).toBe(testCase.expectedResults);
-					for (const expectedNoteId of testCase.expectedtNoteIds) {
+					for (const expectedNoteId of testCase.expectedNoteIds) {
 						expect(ids(rows)).toContain(expectedNoteId);
 					}
 				}

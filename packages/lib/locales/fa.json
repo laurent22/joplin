@@ -341,7 +341,7 @@
 	"Browse...": [
 		"مرور..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -469,6 +469,9 @@
 	],
 	"Close dropdown": [
 		"بستن حالت کشویی"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"بستن صفحه"
@@ -621,7 +624,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"وضعیت اشتراک‌گذاری این دفترچه تأیید نشد و بی‌نتیحه ماند. لطفاً زمانی که به اینترنت وصل شدید، دوباره امتحان نمایید."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"هویت شما تأیید نشد: %s"
 	],
 	"Create": [
@@ -1426,6 +1429,9 @@
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"برای انجام این کار، کل مجموعه داده شما باید رمزنگاری و همگام شود، بنابراین بهتر است آن را به یکباره اجرا نماید.\n\nبرای شروع، لطفا این دستورالعمل‌ها را دنبال کنید:\n1. همه دستگاه های خود را همگام سازی کنید.\n2. بر روی «%s» کلیک نمایید.\n3. اجازه دهید تا کامل شود. در حین اجرا، از تغییر هر یادداشتی در دستگاه‌های دیگر خود اجتناب نمایید  تا از بروز تداخل جلوگیری شود.\n4.پس از انجام همگام‌سازی در این دستگاه، همه دستگاه‌های دیگر خود را همگام‌سازی کنید و اجازه دهید تا کامل شود.\n\nنکته‌ی مهم: شما فقط باید این عملیات را یک مرتبه و تنها روی یک دستگاه اجرا کنید."
 	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
+	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"برای استفاده از همگام‌سازی سیستم فایل، اجازه نوشتن روی حافظه خارجی مورد نیاز است."
 	],
@@ -1730,6 +1736,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"کلیدها‌ یافت نشدند"
 	],
@@ -1856,7 +1865,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"با %s تایید نشد. لطفا هر گواهی‌نامه‌ی ناموجود را ارائه نمایید."
 	],
 	"Not downloaded": [
@@ -2522,6 +2531,12 @@
 	"Solarised Light": [
 		"Solarised Light"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"بعضی از موارد نمی‌توانند رمزگشایی شوند."
 	],
@@ -2822,6 +2837,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"گیرنده را نمی توان از لیست حذف کرد. لطفا دوباره تلاش کنید.\n\nجزئیات خطا: «%s»"
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"قبل از اینکه joplin بتواند همگام‌سازی کند، هدف همگام‌سازی باید ارتقا یابد. ممکن است عملیات چند دقیقه طول بکشد و برنامه باید دوباره راه‌اندازی شود. برای ادامه لطفا روی لینک کلیک کنید."
 	],
@@ -3064,6 +3082,9 @@
 	],
 	"Undo": [
 		"بازگرد"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"پرچم ناشناخته: %s"

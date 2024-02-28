@@ -1,0 +1,3 @@
+SVG image: ![](data:image/svg+xml;utf8,<svg%20width="1700"%20height="1536"%20xmlns="http://www.w3.org/2000/svg">%20<path%20d="m0,0%20l100,1000%20l200,0%20z"/>%20</svg>)
+
+PNG image: ![](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAR0lEQVQIW4XLMQoAIQwF0flpBEHwtOlUsPW6gZTushfYqd8IuHtvxhhI4pyD1lq3905EYGa01tB9m3N+IjNxd/S711oppfAAOjQiFPMurHkAAAAASUVORK5CYII=)

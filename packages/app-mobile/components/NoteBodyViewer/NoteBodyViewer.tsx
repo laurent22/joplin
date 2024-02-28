@@ -28,10 +28,6 @@ interface Props {
 	onLoadEnd?: ()=> void;
 }
 
-const webViewStyle = {
-	backgroundColor: 'transparent',
-};
-
 export default function NoteBodyViewer(props: Props) {
 	const dialogBoxRef = useRef(null);
 	const webviewRef = useRef<WebViewControl>(null);
@@ -103,8 +99,6 @@ export default function NoteBodyViewer(props: Props) {
 			<ExtendedWebView
 				ref={webviewRef}
 				webviewInstanceId='NoteBodyViewer'
-				themeId={props.themeId}
-				style={webViewStyle}
 				html={html}
 				injectedJavaScript={injectedJs.join('\n')}
 				mixedContentMode="always"

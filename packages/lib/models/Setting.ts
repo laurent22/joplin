@@ -146,6 +146,7 @@ export interface Constants {
 	pluginDataDir: string;
 	cacheDir: string;
 	pluginDir: string;
+	homeDir: string;
 	flagOpenDevTools: boolean;
 	syncVersion: number;
 	startupDevPlugins: string[];
@@ -303,6 +304,7 @@ class Setting extends BaseModel {
 		pluginDataDir: '',
 		cacheDir: '',
 		pluginDir: '',
+		homeDir: '',
 		flagOpenDevTools: false,
 		syncVersion: 3,
 		startupDevPlugins: [],
@@ -1391,7 +1393,9 @@ class Setting extends BaseModel {
 				public: true,
 				appTypes: [AppType.Desktop],
 				label: () => 'Automatically upload crash reports',
-				description: () => 'If you experience a crash, please enable this option to automatically send a crash report.',
+				description: () => 'If you experience a crash, please enable this option to automatically send crash reports. You will need to restart the application for this change to take effect.',
+				isGlobal: true,
+				storage: SettingStorage.File,
 			},
 
 			'clipperServer.autoStart': { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: false },
@@ -2306,7 +2310,7 @@ class Setting extends BaseModel {
 	public static value(key: string) {
 		// Need to copy arrays and objects since in setValue(), the old value and new one is compared
 		// with strict equality and the value is updated only if changed. However if the caller acquire
-		// and object and change a key, the objects will be detected as equal. By returning a copy
+		// an object and change a key, the objects will be detected as equal. By returning a copy
 		// we avoid this problem.
 		function copyIfNeeded(value: any) {
 			if (value === null || value === undefined) return value;

@@ -329,7 +329,7 @@
 	"Browse...": [
 		"Explorar..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -451,6 +451,9 @@
 	],
 	"Close dropdown": [
 		"Cerrar menú"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Cerrar Ventana"
@@ -1354,6 +1357,9 @@
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Para hacerlo, todos sus datos deberán ser cifrados y sincronizados, por lo que es mejor realizarlo durante la noche.\n\nPara empezar, siga estas instrucciones:\n\n1. Sincronice todos sus dispositivos.\n2. Haga clic en \"%s\".\n3. Deje que se ejecute hasta su finalización. Mientras se ejecuta, evite modificar cualquier nota en sus otros dispositivos para evitar conflictos.\n4. Una vez que la sincronización finalice en este dispositivo, sincronice todos sus otros dispositivos y permítale ejecutarse hasta su finalización.\n\nImportante: solo necesita realizar este procedimiento UNA ÚNICA VEZ en un dispositivo."
 	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
+	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Para utilizar la sincronización con el sistema de archivos se requiere su permiso para escribir en el almacenamiento externo."
 	],
@@ -1655,6 +1661,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"Claves faltantes"
 	],
@@ -1778,7 +1787,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"No autenticado con %s. Por favor provea las credenciales faltantes."
 	],
 	"Not downloaded": [
@@ -2426,6 +2435,12 @@
 	"Solarised Light": [
 		"Claro Solarizado"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"No se han podido descifrar algunos elementos."
 	],
@@ -2723,6 +2738,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"El destinatario no ha podido ser eliminado de la lista. Por favor, inténtelo de nuevo\n\nEl error fue: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"El objetivo de sincronización necesita ser actualizado antes de que Joplin pueda sincronizarse. La operación puede tardar unos minutos en completarse y la aplicación necesita ser reiniciada. Para proceder, por favor, haga clic en el enlace."
 	],
@@ -2947,6 +2965,9 @@
 	],
 	"Undo": [
 		"Deshacer"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Flag desconocida: %s"

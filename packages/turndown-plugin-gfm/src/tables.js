@@ -7,8 +7,8 @@ let isCodeBlock_ = null;
 
 // We need to cache the result of tableShouldBeSkipped() as it is expensive.
 // Caching it means we went from about 9000 ms for rendering down to 90 ms.
-// Fixes https://github.com/laurent22/joplin/issues/6736 
-const tableShouldBeSkippedCache_ = new Map();
+// Fixes https://github.com/laurent22/joplin/issues/6736
+const tableShouldBeSkippedCache_ = new WeakMap();
 
 function getAlignment(node) {
   return node ? (node.getAttribute('align') || node.style.textAlign || '').toLowerCase() : '';
@@ -88,7 +88,7 @@ rules.table = {
     var secondLine = content.trim().split('\n');
     if (secondLine.length >= 2) secondLine = secondLine[1]
     var secondLineIsDivider = /\| :?---/.test(secondLine);
-    
+
     var columnCount = tableColCount(node);
     var emptyHeader = ''
     if (columnCount && !secondLineIsDivider) {
@@ -98,9 +98,22 @@ rules.table = {
       }
     }
 
-    return '\n\n' + emptyHeader + content + '\n\n'
+    const captionContent = node.caption ? node.caption.textContent || '' : '';
+    const caption = captionContent ? `${captionContent}\n\n` : '';
+    const tableContent = `${emptyHeader}${content}`.trimStart();
+    return `\n\n${caption}${tableContent}\n\n`;
   }
 }
+
+rules.tableCaption = {
+  filter: ['caption'],
+  replacement: () => '',
+};
+
+rules.tableColgroup = {
+  filter: ['colgroup', 'col'],
+  replacement: () => '',
+};
 
 rules.tableSection = {
   filter: ['thead', 'tbody', 'tfoot'],
@@ -205,17 +218,18 @@ function tableShouldBeSkipped(tableNode) {
   const cached = tableShouldBeSkippedCache_.get(tableNode);
   if (cached !== undefined) return cached;
 
-  const process = () => {
-    if (!tableNode) return true;
-    if (!tableNode.rows) return true;
-    if (tableNode.rows.length === 1 && tableNode.rows[0].childNodes.length <= 1) return true; // Table with only one cell
-    if (nodeContainsTable(tableNode)) return true;
-    return false;
-  }
+  const result = tableShouldBeSkipped_(tableNode);
 
-  const result = process();
   tableShouldBeSkippedCache_.set(tableNode, result);
   return result;
+}
+
+function tableShouldBeSkipped_(tableNode) {
+  if (!tableNode) return true;
+  if (!tableNode.rows) return true;
+  if (tableNode.rows.length === 1 && tableNode.rows[0].childNodes.length <= 1) return true; // Table with only one cell
+  if (nodeContainsTable(tableNode)) return true;
+  return false;
 }
 
 function nodeParentTable(node) {

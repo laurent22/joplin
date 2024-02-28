@@ -5,7 +5,7 @@ import { LoadOptions } from './utils/types';
 
 // - If is_associated = 1, note_resources indicates which note_id is currently associated with the given resource_id
 // - If is_associated = 0, note_resources indicates which note_id *was* associated with the given resource_id
-// - last_seen_time tells the last time that reosurce was associated with this note.
+// - last_seen_time tells the last time that resource was associated with this note.
 // - If last_seen_time is 0, it means the resource has never been associated with any note.
 
 export default class NoteResource extends BaseModel {
@@ -134,7 +134,7 @@ export default class NoteResource extends BaseModel {
 			// If the resource is not associated with any note, and has never
 			// been synced, it means it's a local resource that was removed from
 			// a note (or the note was deleted). In which case, we set a
-			// "last_seen_time", so that it can be considered an orphan reosurce
+			// "last_seen_time", so that it can be considered an orphan resource
 			// that can be auto-deleted.
 			//
 			// https://github.com/laurent22/joplin/issues/932#issuecomment-933736405
