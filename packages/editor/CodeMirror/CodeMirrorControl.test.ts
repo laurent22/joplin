@@ -57,4 +57,23 @@ describe('CodeMirrorControl', () => {
 		expect(control.execCommand('myTestCommand')).toBe('test');
 		expect(command).toHaveBeenCalledTimes(1);
 	});
+
+	it('toggleComment should work', () => {
+		const control = createEditorControl('Hello\nWorld\n');
+		control.select(1, 5);
+
+		control.execCommand('toggleComment');
+		expect(control.getValue()).toBe('<!-- Hello -->\nWorld\n');
+
+		control.execCommand('toggleComment');
+		expect(control.getValue()).toBe('Hello\nWorld\n');
+	});
+
+	it('deleteLine should work', () => {
+		const control = createEditorControl('Hello\nWorld\n');
+		control.setCursor(1, 0);
+
+		control.execCommand('deleteLine');
+		expect(control.getValue()).toBe('Hello\n');
+	});
 });
