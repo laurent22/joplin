@@ -25,7 +25,7 @@ const getNoteTitleHtml = (highlightedWords: string[], displayTitle: string) => {
 			if (error.name !== 'SyntaxError') {
 				throw error;
 			}
-			// An error of 'Regular expression too large' might occour in the markJs library
+			// An error of 'Regular expression too large' might occur in the markJs library
 			// when the input is really big, this catch is here to avoid the application crashing
 			// https://github.com/laurent22/joplin/issues/7634
 			// console.error('Error while trying to highlight words from search: ', error);

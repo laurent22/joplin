@@ -39,7 +39,7 @@ const useScaledSize = ({ pdfDocument, pdfId, containerWidth, rememberScroll, anc
 		currentScaleSize.current = scaledSize_;
 		setScaledSize(scaledSize_);
 
-		// If loading after note rerender, try to retirive the old scroll position
+		// If loading after note rerender, try to retrieve the old scroll position
 		if (rememberScroll && pdfId && !oldScaleSize && !anchorPage) {
 			const scrollOffset = parseInt(sessionStorage.getItem(`pdf.${pdfId}.scrollTop`), 10) || null;
 			if (scrollOffset) {

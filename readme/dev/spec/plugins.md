@@ -22,7 +22,7 @@ It is used to load and run plugins. Running plugins is platform-specific, thus t
 
 ### Plugin runner
 
-This is the platform-specfic way to load and run a plugin. For example, on desktop, it creates a new BrowserWindow (which is a new process), then load the script inside. On Cli, for now the "vm" package is used, so the plugin actually runs within the same process.
+This is the platform-specific way to load and run a plugin. For example, on desktop, it creates a new BrowserWindow (which is a new process), then load the script inside. On Cli, for now the "vm" package is used, so the plugin actually runs within the same process.
 
 The plugin runner also initialises the sandbox proxy and injects it into the plugin code.
 

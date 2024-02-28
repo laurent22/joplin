@@ -68,6 +68,9 @@
 	"&View": [
 		""
 	],
+	"&Window": [
+		""
+	],
 	"(%s)": [
 		""
 	],
@@ -1237,6 +1240,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Minimise": [
+		""
+	],
 	"Missing required argument: %s": [
 		"Beharrezko argumentua faltan: %s"
 	],
@@ -1321,7 +1327,7 @@
 	"Nord": [
 		""
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Ez da autentifikatu %s -rekin. Eman galdutako kredentzialak."
 	],
 	"Not downloaded": [

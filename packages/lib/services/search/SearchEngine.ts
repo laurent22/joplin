@@ -334,9 +334,9 @@ export default class SearchEngine {
 
 	private fieldNamesFromOffsets_(offsets: any[]) {
 		const notesNormalizedFieldNames = this.db().tableFieldNames('notes_normalized');
-		const occurenceCount = Math.floor(offsets.length / 4);
+		const occurrenceCount = Math.floor(offsets.length / 4);
 		const output: string[] = [];
-		for (let i = 0; i < occurenceCount; i++) {
+		for (let i = 0; i < occurrenceCount; i++) {
 			const colIndex = offsets[i * 4];
 			const fieldName = notesNormalizedFieldNames[colIndex];
 			if (!output.includes(fieldName)) output.push(fieldName);

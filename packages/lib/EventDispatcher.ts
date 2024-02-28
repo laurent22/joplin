@@ -25,7 +25,7 @@ export default class EventDispatcher<EventKeyType extends string|symbol|number, 
 		this.listeners[eventName].push(callback);
 
 		return {
-			// Retuns false if the listener has already been removed, true otherwise.
+			// Returns false if the listener has already been removed, true otherwise.
 			remove: (): boolean => {
 				const originalListeners = this.listeners[eventName];
 				this.off(eventName, callback);

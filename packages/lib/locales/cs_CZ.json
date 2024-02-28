@@ -1673,6 +1673,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"Chybějící klíče"
 	],
@@ -1799,7 +1802,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Nepřihlášeno k %s. Prosím vyplňte chybějící přihlašovací údaje."
 	],
 	"Not downloaded": [

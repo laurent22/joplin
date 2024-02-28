@@ -670,7 +670,7 @@ export default class Synchronizer {
 								//   up in this place either, because the action
 								//   cannot be createRemote (because the
 								//   resource has not been created locally) or
-								//   updateRemote (because a resouce cannot be
+								//   updateRemote (because a resource cannot be
 								//   modified locally unless the blob is present
 								//   too).
 								//
@@ -1076,7 +1076,7 @@ export default class Synchronizer {
 				logger.info(error.message);
 
 				if (error.code === 'failSafe' || error.code === 'lockError') {
-					// Get the message to display on UI, but not in testing to avoid poluting stdout
+					// Get the message to display on UI, but not in testing to avoid polluting stdout
 					if (!shim.isTestingEnv()) this.progressReport_.errors.push(error.message);
 					this.logLastRequests();
 				}

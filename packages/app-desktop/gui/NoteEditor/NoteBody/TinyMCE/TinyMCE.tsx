@@ -258,7 +258,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				if (joplinCommandToTinyMceCommands[cmd.name] === true) {
 					// Already handled in useWindowCommandHandlers.ts
 				} else if (joplinCommandToTinyMceCommands[cmd.name] === false) {
-					// Explicitely not supported
+					// explicitly not supported
 				} else {
 					const tinyMceCmd: TinyMceCommand = { ...(joplinCommandToTinyMceCommands[cmd.name] as TinyMceCommand) };
 					if (!('ui' in tinyMceCmd)) tinyMceCmd.ui = false;
@@ -1126,7 +1126,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			//
 			// when pasting text with Ctrl+Shift+V, the format should be
 			// ignored. In this case,
-			// event.clopboardData.getData('text/html') returns an empty
+			// event.clipboardData.getData('text/html') returns an empty
 			// string, but the clipboard.readHTML() still returns the
 			// formatted text.
 			const pastedHtml = event.clipboardData.getData('text/html') ? clipboard.readHTML() : '';

@@ -86,7 +86,7 @@ describe('Should detect list items', () => {
 	test('should NOT detect `1)` as empty list item ', () => {
 		expect(markdownUtils.isEmptyListItem('1)')).toBe(false);
 	});
-	// checbox list
+	// checkbox list
 	test('should NOT detect `+ [x]` as empty list item ', () => {
 		expect(markdownUtils.isEmptyListItem('+ [x]')).toBe(false);
 	});

@@ -50,7 +50,7 @@ describe('customEditorCompletion', () => {
 		expect(completionStatus(editor.state)).toBe(null);
 	});
 
-	test('should show langaugeData completions when languageData-based autocomplete is enabled', async () => {
+	test('should show languageData completions when languageData-based autocomplete is enabled', async () => {
 		const editorControl = createEditorControl('');
 
 		const completion = completeFromList(['function']);

@@ -687,7 +687,7 @@ export default class Folder extends BaseItem {
 				rootFolders.push(folder);
 			} else {
 				if (!idToFolders[folder.parent_id]) {
-					// It means the notebook is refering a folder that doesn't exist. In theory it shouldn't happen
+					// It means the notebook is referring a folder that doesn't exist. In theory it shouldn't happen
 					// but sometimes does - https://github.com/laurent22/joplin/issues/1068#issuecomment-450594708
 					rootFolders.push(folder);
 				} else {

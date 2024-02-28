@@ -12,7 +12,7 @@ const watchEditorForTemplateChanges = (
 		if (!editor.image.getAutoresizeEnabled()) {
 			backgroundSize = editor.getImportExportRect().size;
 
-			// Constrain the size: Don't allow an extremely small or extremely large tempalte.
+			// Constrain the size: Don't allow an extremely small or extremely large template.
 			// Map components to constrained components.
 			backgroundSize = backgroundSize.map(component => {
 				const minDimen = 45;

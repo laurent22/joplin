@@ -1727,6 +1727,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"メディアプレーヤー、数式、作図、目次"
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"キーがありません"
 	],
@@ -1853,7 +1856,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"%s では認証できません。他の資格証明書を使用してください。"
 	],
 	"Not downloaded": [

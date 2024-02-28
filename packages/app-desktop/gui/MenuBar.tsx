@@ -563,10 +563,10 @@ function useMenu(props: Props) {
 
 			const rootMenuFile = {
 				// Using a dummy entry for macOS here, because first menu
-				// becomes 'Joplin' and we need a nenu called 'File' later.
+				// becomes 'Joplin' and we need a menu called 'File' later.
 				label: shim.isMac() ? '&JoplinMainMenu' : _('&File'),
 				// `&` before one of the char in the label name mean, that
-				// <Alt + F> will open this menu. It's needed becase electron
+				// <Alt + F> will open this menu. It's needed because electron
 				// opens the first menu on Alt press if no hotkey assigned.
 				// Issue: https://github.com/laurent22/joplin/issues/934
 				submenu: [{

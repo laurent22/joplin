@@ -1691,6 +1691,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"Відсутні ключі"
 	],
@@ -1817,7 +1820,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Не аутентифіковано за допомогою %s. Надайте будь-які відсутні облікові дані."
 	],
 	"Not downloaded": [
