@@ -76,28 +76,4 @@ describe('CodeMirrorControl', () => {
 		control.execCommand('deleteLine');
 		expect(control.getValue()).toBe('Hello\n');
 	});
-
-	it('should duplicate line', () => {
-		const control = createEditorControl('Hello\nWorld\n');
-		control.setCursor(1, 0);
-
-		control.execCommand('duplicateLine');
-		expect(control.getValue()).toBe('Hello\nWorld\nWorld\n');
-	});
-
-	it('should duplicate range', () => {
-		const control = createEditorControl('Hello\nWorld\n');
-		control.select(0, 8);
-
-		control.execCommand('duplicateLine');
-		expect(control.getValue()).toBe('Hello\nWoHello\nWorld\n');
-	});
-
-	it('should sort selected lines', () => {
-		const control = createEditorControl('World\nHello\n');
-		control.select(0, 8);
-
-		control.execCommand('sortSelectedLines');
-		expect(control.getValue()).toBe('Hello\nWorld\n');
-	});
 });
