@@ -58,7 +58,7 @@ describe('CodeMirrorControl', () => {
 		expect(command).toHaveBeenCalledTimes(1);
 	});
 
-	it('toggleComment should work', () => {
+	it('should toggle comments', () => {
 		const control = createEditorControl('Hello\nWorld\n');
 		control.select(1, 5);
 
@@ -69,11 +69,27 @@ describe('CodeMirrorControl', () => {
 		expect(control.getValue()).toBe('Hello\nWorld\n');
 	});
 
-	it('deleteLine should work', () => {
+	it('should delete line', () => {
 		const control = createEditorControl('Hello\nWorld\n');
 		control.setCursor(1, 0);
 
 		control.execCommand('deleteLine');
 		expect(control.getValue()).toBe('Hello\n');
+	});
+
+	it('should duplicate line', () => {
+		const control = createEditorControl('Hello\nWorld\n');
+		control.setCursor(1, 0);
+
+		control.execCommand('duplicateLine');
+		expect(control.getValue()).toBe('Hello\nWorld\nWorld\n');
+	});
+
+	it('should duplicate range', () => {
+		const control = createEditorControl('Hello\nWorld\n');
+		control.select(0, 8);
+
+		control.execCommand('duplicateLine');
+		expect(control.getValue()).toBe('Hello\nWoHello\nWorld\n');
 	});
 });

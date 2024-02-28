@@ -8,6 +8,7 @@ import {
 	toggleList, toggleMath,
 } from '../markdown/markdownCommands';
 import swapLine, { SwapLineDirection } from './swapLine';
+import duplicateLine from './duplicateLine';
 import { closeSearchPanel, findNext, findPrevious, openSearchPanel, replaceAll, replaceNext } from '@codemirror/search';
 
 export type EditorCommandFunction = (editor: EditorView)=> void;
@@ -23,6 +24,7 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	[EditorCommandType.ToggleCode]: toggleCode,
 	[EditorCommandType.ToggleMath]: toggleMath,
 	[EditorCommandType.ToggleComment]: toggleComment,
+	[EditorCommandType.DuplicateLine]: duplicateLine,
 	[EditorCommandType.ToggleNumberedList]: toggleList(ListType.OrderedList),
 	[EditorCommandType.ToggleBulletedList]: toggleList(ListType.UnorderedList),
 	[EditorCommandType.ToggleCheckList]: toggleList(ListType.CheckList),

@@ -16,6 +16,7 @@ export enum EditorCommandType {
 	ToggleCode = 'textCode',
 	ToggleMath = 'textMath',
 	ToggleComment = 'toggleComment',
+	DuplicateLine = 'duplicateLine',
 
 	ToggleNumberedList = 'textNumberedList',
 	ToggleBulletedList = 'textBulletedList',
