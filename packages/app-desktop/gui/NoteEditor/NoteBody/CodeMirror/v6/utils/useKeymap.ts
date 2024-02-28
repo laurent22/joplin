@@ -3,6 +3,7 @@ import CommandService from '@joplin/lib/services/CommandService';
 import KeymapService, { KeymapItem } from '@joplin/lib/services/KeymapService';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import normalizeAccelerator from '../../utils/normalizeAccelerator';
+import { CodeMirrorVersion } from '../../utils/types';
 
 const useKeymap = (editorControl: CodeMirrorControl) => {
 	useEffect(() => {
@@ -21,10 +22,10 @@ const useKeymap = (editorControl: CodeMirrorControl) => {
 				return null;
 			}
 
-			const codeMirrorAccelerator = normalizeAccelerator(binding.accelerator);
-
 			return {
-				key: codeMirrorAccelerator,
+				key: normalizeAccelerator(
+					binding.accelerator, CodeMirrorVersion.CodeMirror6,
+				),
 				run: () => {
 					void CommandService.instance().execute(binding.command);
 					return true;
