@@ -1,7 +1,6 @@
 import Folder from '../../models/Folder';
 import BaseModel from '../../BaseModel';
 import { FolderEntity, TagEntity } from '../../services/database/types';
-import { Theme } from '../../themes/type';
 
 interface Props {
 	folders: FolderEntity[];
@@ -35,7 +34,7 @@ function folderIsVisible(folders: FolderEntity[], folderId: string, collapsedFol
 	}
 }
 
-function renderFoldersRecursive_(props: Props, renderItem: RenderFolderItem, renderAllNotesItem: any, allNotesSelected: boolean, theme: Theme, items: any[], parentId: string, depth: number, order: string[]) {
+function renderFoldersRecursive_(props: Props, renderItem: RenderFolderItem, items: any[], parentId: string, depth: number, order: string[]) {
 	const folders = props.folders;
 	for (let i = 0; i < folders.length; i++) {
 		const folder = folders[i];
@@ -43,14 +42,9 @@ function renderFoldersRecursive_(props: Props, renderItem: RenderFolderItem, ren
 		if (!folderIsVisible(props.folders, folder.id, props.collapsedFolderIds)) continue;
 		const hasChildren = folderHasChildren_(folders, folder.id);
 		order.push(folder.id);
-		if (folder.title === 'All Notes') {
-			items.push(renderAllNotesItem(theme, folder, allNotesSelected));
-		} else {
-			items.push(renderItem(folder, props.selectedFolderId === folder.id && props.notesParentType === 'Folder', hasChildren, depth));
-
-		}
+		items.push(renderItem(folder, props.selectedFolderId === folder.id && props.notesParentType === 'Folder', hasChildren, depth));
 		if (hasChildren) {
-			const result = renderFoldersRecursive_(props, renderItem, renderAllNotesItem, allNotesSelected, theme, items, folder.id, depth + 1, order);
+			const result = renderFoldersRecursive_(props, renderItem, items, folder.id, depth + 1, order);
 			items = result.items;
 			order = result.order;
 		}
@@ -61,8 +55,8 @@ function renderFoldersRecursive_(props: Props, renderItem: RenderFolderItem, ren
 	};
 }
 
-export const renderFolders = (props: Props, renderItem: RenderFolderItem, renderAllNotesItem: any, allNotesSelected: boolean, theme: Theme) => {
-	return renderFoldersRecursive_(props, renderItem, renderAllNotesItem, allNotesSelected, theme, [], '', 0, []);
+export const renderFolders = (props: Props, renderItem: RenderFolderItem) => {
+	return renderFoldersRecursive_(props, renderItem, [], '', 0, []);
 };
 
 export const renderTags = (props: Props, renderItem: RenderTagItem) => {

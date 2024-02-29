@@ -128,6 +128,17 @@ function FolderItem(props: any) {
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
+const allNotesFolder: FolderEntity = {
+	title: 'All Notes',
+	id: `${ALL_NOTES_FILTER_ID}`,
+	is_shared: 0,
+	encryption_applied: 0,
+	parent_id: '',
+	share_id: '',
+	type_: 2,
+	user_data: '',
+};
+
 const SidebarComponent = (props: Props) => {
 
 	const folderItemsOrder_ = useRef<any[]>();
@@ -437,11 +448,7 @@ const SidebarComponent = (props: Props) => {
 
 		const menu = new Menu();
 
-		let item = null;
-		if (itemType === BaseModel.TYPE_FOLDER) {
-			item = BaseModel.byId(props.folders, itemId);
-		}
-
+		const item = allNotesFolder;
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
 			if (Setting.value('notes.perFolderSortOrderEnabled')) {
 				menu.append(new MenuItem({
@@ -453,7 +460,7 @@ const SidebarComponent = (props: Props) => {
 		}
 
 		menu.popup({ window: bridge().window() });
-	}, [props.folders]);
+	}, []);
 
 	const folderItem_click = useCallback((folderId: string) => {
 		props.dispatch({
@@ -742,10 +749,9 @@ const SidebarComponent = (props: Props) => {
 
 	if (props.folders.length) {
 		const allNotesSelected = props.notesParentType === 'SmartFilter' && props.selectedSmartFilterId === ALL_NOTES_FILTER_ID;
-		const result = renderFolders(props, renderFolderItem, renderAllNotesItem, allNotesSelected, theme);
-
-		const folderItems = result.items;
-		folderItemsOrder_.current = result.order;
+		const result = renderFolders(props, renderFolderItem);
+		const folderItems = [renderAllNotesItem(theme, allNotesFolder, allNotesSelected)].concat(result.items);
+		folderItemsOrder_.current = [allNotesFolder.id].concat(result.order);
 		items.push(
 			<div
 				className={`folders ${props.folderHeaderIsExpanded ? 'expanded' : ''}`}
