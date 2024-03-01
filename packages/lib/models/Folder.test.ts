@@ -322,4 +322,5 @@ describe('models/Folder', () => {
 
 		cleanup();
 	});
+
 });

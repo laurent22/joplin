@@ -148,7 +148,6 @@ export default class Folder extends BaseItem {
 		};
 	}
 
-
 	// Calculates note counts for all folders and adds the note_count attribute to each folder
 	// Note: this only calculates the overall number of nodes for this folder and all its descendants
 	public static async addNoteCounts(folders: any[], includeCompletedTodos = true) {
