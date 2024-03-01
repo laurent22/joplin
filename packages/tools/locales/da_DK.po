@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: ERYpTION\n"
 "Language-Team: \n"
 "Language: da_DK\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:504
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -92,9 +94,8 @@ msgid "&View"
 msgstr "&Vis"
 
 #: packages/app-desktop/gui/MenuBar.tsx:855
-#, fuzzy
 msgid "&Window"
-msgstr "Luk vindue"
+msgstr "&Vindue"
 
 #: packages/lib/models/Setting.ts:1633
 msgid "%d days"
@@ -583,7 +584,6 @@ msgid "Browse..."
 msgstr "Gennemse..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:231
-#, fuzzy
 msgid "Built-in"
 msgstr "Indbygget"
 
@@ -843,6 +843,9 @@ msgid ""
 "application again. Make sure you create a backup first by exporting all your "
 "notes as JEX."
 msgstr ""
+"Luk applikationen, slet derefter din profil i \"%s\", og start applikationen "
+"igen. Sørg for at lave en sikkerhedskopi først ved at eksportere alle dine "
+"noter som JEX."
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
 #: packages/app-desktop/gui/MenuBar.tsx:655
@@ -1944,14 +1947,12 @@ msgid "Evernote Export File (as Markdown)"
 msgstr "Evernote eksport fil (i Markdown)"
 
 #: packages/lib/services/interop/InteropService.ts:91
-#, fuzzy
 msgid "Evernote Export Files (Directory, as HTML)"
-msgstr "Evernote eksport fil (i HTML)"
+msgstr "Evernote eksportfiler (mappe, som HTML)"
 
 #: packages/lib/services/interop/InteropService.ts:100
-#, fuzzy
 msgid "Evernote Export Files (Directory, as Markdown)"
-msgstr "Evernote eksport fil (i Markdown)"
+msgstr "Evernote eksportfiler (mappe, som Markdown)"
 
 #: packages/app-cli/app/command-exit.ts:11
 msgid "Exits the application."
@@ -2065,9 +2066,8 @@ msgstr "Filsystem"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:204
 #: packages/app-mobile/components/screens/LogScreen.tsx:205
-#, fuzzy
 msgid "Filter"
-msgstr "Filtrer etiketter"
+msgstr "Filtrér"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:193
 msgid "Filter tags"
@@ -2253,9 +2253,8 @@ msgid "Hide advanced"
 msgstr "Skjul avancerede"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:562
-#, fuzzy
 msgid "Hide Advanced Settings"
-msgstr "Vis avancerede indstillinger"
+msgstr "Skjul avancerede indstillinger"
 
 #: packages/server/src/routes/admin/users.ts:203
 msgid "Hide disabled"
@@ -2418,7 +2417,7 @@ msgstr ""
 
 #: packages/lib/services/synchronizer/syncInfoUtils.ts:431
 msgid "In order to synchronise, please upgrade your application to version %s+"
-msgstr ""
+msgstr "For at synkronisere skal du opgradere din applikation til version %s+"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:101
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:195
@@ -2885,7 +2884,7 @@ msgstr "Medieafspiller, matematik, diagrammer, indholdsfortegnelse"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 msgid "Minimise"
-msgstr ""
+msgstr "Minimér"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:318
 msgid "Missing keys"
@@ -4123,12 +4122,15 @@ msgstr "Solarised Lys"
 msgid ""
 "Some attachments could not be downloaded. Please try to download them again."
 msgstr ""
+"Nogle vedhæftede filer kunne ikke downloades. Prøv at downloade dem igen."
 
 #: packages/lib/models/settings/settingValidations.ts:17
 msgid ""
 "Some attachments need to be downloaded. Set the attachment download mode to "
 "\"always\" and try again."
 msgstr ""
+"Nogle vedhæftede filer skal downloades. Indstil download-tilstanden for "
+"vedhæftede filer til \"altid\", og prøv igen."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:621
 #: packages/app-mobile/components/ScreenHeader.tsx:576
@@ -4144,10 +4146,10 @@ msgid "Some items cannot be synchronised. Press for more info."
 msgstr "Nogle emner kan ikke synkroniseres. Tryk for mere info."
 
 #: packages/lib/models/settings/settingValidations.ts:23
-#, fuzzy
 msgid ""
 "Some items could not be synchronised. Please try to synchronise them first."
-msgstr "Nogle emner kan ikke synkroniseres. Tryk for mere info."
+msgstr ""
+"Nogle elementer kunne ikke synkroniseres. Prøv at synkronisere dem først."
 
 #: packages/lib/models/Setting.ts:1032
 msgid "Sort notebooks by"
@@ -4474,13 +4476,12 @@ msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
 msgstr "Mange tak! Din Joplin Cloud-konto er nu indstillet og klar til brug."
 
 #: packages/lib/utils/joplinCloud.ts:167
-#, fuzzy
 msgid ""
 "The [Web Clipper](%s) is a browser extension that allows you to save web "
 "pages and screenshots from your browser."
 msgstr ""
-"Joplin Web-Clipper gør at du kan gemme hjemmesider og screenshots fra din "
-"browser i Joplin."
+"[Web Clipper](%s) er en browser-udvidelser, som gør at du kan gemme "
+"hjemmesider og screenshots fra din browser."
 
 #: packages/lib/services/profileConfig/index.ts:105
 msgid ""
@@ -4673,6 +4674,12 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Synkroniseringsmålet kan ikke ændres af følgende grund: %s\n"
+"\n"
+"Hvis problemet ikke kan løses, kan det være nødvendigt at rydde dine data "
+"først ved at følge disse instruktioner:\n"
+"\n"
+"%s"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:615
 msgid ""
@@ -5142,6 +5149,9 @@ msgid ""
 "Uninstall and reinstall the application. Make sure you create a backup first "
 "by exporting all your notes as JEX from the desktop application."
 msgstr ""
+"Afinstaller og geninstaller applikationen. Sørg for at lave en "
+"sikkerhedskopi først ved at eksportere alle dine noter som JEX fra desktop-"
+"applikationen."
 
 #: packages/lib/utils/processStartFlags.ts:170
 msgid "Unknown flag: %s"
