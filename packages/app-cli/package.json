@@ -35,7 +35,7 @@
     ],
     "owner": "Laurent Cozic"
   },
-  "version": "2.14.0",
+  "version": "2.14.1",
   "bin": "./main.js",
   "engines": {
     "node": ">=10.0.0"
