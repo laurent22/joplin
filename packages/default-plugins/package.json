@@ -6,7 +6,7 @@
   "scripts": {
     "tsc": "tsc --project tsconfig.json",
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
-    "patch": "ts-node build.ts patch"
+    "patch-plugin": "ts-node build.ts patch-plugin"
   },
   "repository": {
     "type": "git",

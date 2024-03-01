@@ -1,11 +1,11 @@
+import * as React from 'react';
+
 import { _ } from '@joplin/lib/locale';
 import { ReactElement, useCallback, useState } from 'react';
 import { LayoutChangeEvent, ScrollView, View } from 'react-native';
 import ToggleOverflowButton from './ToggleOverflowButton';
 import ToolbarButton, { buttonSize } from './ToolbarButton';
 import { ButtonGroup, ButtonSpec, StyleSheetData } from './types';
-
-const React = require('react');
 
 type OnToggleOverflowCallback = ()=> void;
 interface OverflowPopupProps {
@@ -17,10 +17,13 @@ interface OverflowPopupProps {
 	onToggleOverflow: OnToggleOverflowCallback;
 }
 
+// Specification for a button that acts as padding.
+const paddingButtonSpec = { visible: false, icon: '', onPress: ()=>{}, description: '' };
+
 // Contains buttons that overflow the available space.
 // Displays all buttons in [props.buttonGroups] if [props.visible].
 // Otherwise, displays nothing.
-const ToolbarOverflowRows = (props: OverflowPopupProps) => {
+const ToolbarOverflowRows: React.FC<OverflowPopupProps> = (props: OverflowPopupProps) => {
 	const overflowRows: ReactElement[] = [];
 
 	let key = 0;
@@ -47,7 +50,7 @@ const ToolbarOverflowRows = (props: OverflowPopupProps) => {
 			// Show the "hide overflow" button if in the center of the last row
 			const isLastRow = i === props.buttonGroups.length - 1;
 			const isCenterOfRow = j + 1 === Math.floor(group.items.length / 2);
-			if (isLastRow && isCenterOfRow) {
+			if (isLastRow && (isCenterOfRow || group.items.length === 1)) {
 				row.push(
 					<ToggleOverflowButton
 						key={(++key).toString()}
@@ -57,6 +60,17 @@ const ToolbarOverflowRows = (props: OverflowPopupProps) => {
 					/>,
 				);
 			}
+		}
+
+		// Pad to an odd number of items to ensure that buttons are centered properly
+		if (row.length % 2 === 0) {
+			row.push(
+				<ToolbarButton
+					key={`padding-${i}`}
+					styleSheet={props.styleSheet}
+					spec={paddingButtonSpec}
+				/>,
+			);
 		}
 
 		overflowRows.push(
@@ -87,7 +101,7 @@ const ToolbarOverflowRows = (props: OverflowPopupProps) => {
 	}, [setHasSpaceForCloseBtn, props.buttonGroups]);
 
 	const closeButtonSpec: ButtonSpec = {
-		icon: '⨉',
+		icon: 'text ⨉',
 		description: _('Close'),
 		onPress: props.onToggleOverflow,
 	};
@@ -112,6 +126,7 @@ const ToolbarOverflowRows = (props: OverflowPopupProps) => {
 				height: props.buttonGroups.length * buttonSize,
 				flexDirection: 'column',
 				flexGrow: 1,
+				display: !props.visible ? 'none' : 'flex',
 			}}
 			onLayout={onContainerLayout}
 		>

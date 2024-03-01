@@ -454,7 +454,7 @@ export const toggleRegionFormatGlobally = (
 		const startMatch = blockSpec.matcher.start.exec(fromLineText);
 		const stopMatch = blockSpec.matcher.end.exec(toLineText);
 		if (startMatch && stopMatch) {
-			// Get start and stop indicies for the starting and ending matches
+			// Get start and stop indices for the starting and ending matches
 			const [fromMatchFrom, fromMatchTo] = getMatchEndPoints(startMatch, fromLine, inBlockQuote);
 			const [toMatchFrom, toMatchTo] = getMatchEndPoints(stopMatch, toLine, inBlockQuote);
 

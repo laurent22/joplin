@@ -5,6 +5,10 @@ import Setting from '../../models/Setting';
 import { State } from '../../reducer';
 import { PublicPrivateKeyPair } from '../e2ee/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
+import { compareVersions } from 'compare-versions';
+import { _ } from '../../locale';
+import JoplinError from '../../JoplinError';
+import { ErrorCode } from '../../errors';
 const fastDeepEqual = require('fast-deep-equal');
 
 const logger = Logger.create('syncInfoUtils');
@@ -23,6 +27,21 @@ export interface SyncInfoValuePublicPrivateKeyPair {
 	value: PublicPrivateKeyPair;
 	updatedTime: number;
 }
+
+// This should be set to the client version whenever we require all the clients to be at the same
+// version in order to synchronise. One example is when adding support for the trash feature - if an
+// old client that doesn't know about this feature synchronises data with a new client, the notes
+// will no longer be deleted on the old client.
+//
+// Usually this variable should be bumped whenever we add properties to a sync item.
+//
+// `appMinVersion_` should really just be a constant but for testing purposes it can be changed
+// using `setAppMinVersion()`
+let appMinVersion_ = '0.0.0';
+
+export const setAppMinVersion = (v: string) => {
+	appMinVersion_ = v;
+};
 
 export async function migrateLocalSyncInfo(db: JoplinDatabase) {
 	if (Setting.value('syncInfoCache')) return; // Already initialized
@@ -96,7 +115,9 @@ const fixSyncInfo = (syncInfo: SyncInfo) => {
 };
 
 export function localSyncInfo(): SyncInfo {
-	return fixSyncInfo(new SyncInfo(Setting.value('syncInfoCache')));
+	const output = new SyncInfo(Setting.value('syncInfoCache'));
+	output.appMinVersion = appMinVersion_;
+	return fixSyncInfo(output);
 }
 
 export function localSyncInfoFromState(state: State): SyncInfo {
@@ -157,6 +178,7 @@ const mergeActiveMasterKeys = (s1: SyncInfo, s2: SyncInfo, output: SyncInfo) => 
 	}
 };
 
+// If there is a distinction, s1 should be local sync info and s2 remote.
 export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
 	const output: SyncInfo = new SyncInfo();
 
@@ -178,6 +200,11 @@ export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
 		}
 	}
 
+	// We use >= so that the version from s1 (local) is preferred to the version in s2 (remote).
+	// For example, if s2 has appMinVersion 0.00 and s1 has appMinVersion 0.0.0, we choose the
+	// local version, 0.0.0.
+	output.appMinVersion = compareVersions(s1.appMinVersion, s2.appMinVersion) >= 0 ? s1.appMinVersion : s2.appMinVersion;
+
 	return output;
 }
 
@@ -192,6 +219,7 @@ export class SyncInfo {
 	private activeMasterKeyId_: SyncInfoValueString;
 	private masterKeys_: MasterKeyEntity[] = [];
 	private ppk_: SyncInfoValuePublicPrivateKeyPair;
+	private appMinVersion_: string = appMinVersion_;
 
 	public constructor(serialized: string = null) {
 		this.e2ee_ = { value: false, updatedTime: 0 };
@@ -208,6 +236,7 @@ export class SyncInfo {
 			activeMasterKeyId: this.activeMasterKeyId_,
 			masterKeys: this.masterKeys,
 			ppk: this.ppk_,
+			appMinVersion: this.appMinVersion,
 		};
 	}
 
@@ -222,6 +251,7 @@ export class SyncInfo {
 		this.activeMasterKeyId_ = 'activeMasterKeyId' in s ? s.activeMasterKeyId : { value: '', updatedTime: 0 };
 		this.masterKeys_ = 'masterKeys' in s ? s.masterKeys : [];
 		this.ppk_ = 'ppk' in s ? s.ppk : { value: null, updatedTime: 0 };
+		this.appMinVersion_ = s.appMinVersion ? s.appMinVersion : '0.0.0';
 
 		// Migration for master keys that didn't have "hasBeenUsed" property -
 		// in that case we assume they've been used at least once.
@@ -267,6 +297,14 @@ export class SyncInfo {
 		if (v === this.e2ee) return;
 
 		this.e2ee_ = { value: v, updatedTime: Date.now() };
+	}
+
+	public get appMinVersion(): string {
+		return this.appMinVersion_;
+	}
+
+	public set appMinVersion(v: string) {
+		this.appMinVersion_ = v;
 	}
 
 	public get activeMasterKeyId(): string {
@@ -388,3 +426,7 @@ export function setPpk(ppk: PublicPrivateKeyPair) {
 export function masterKeyById(id: string) {
 	return localSyncInfo().masterKeys.find(mk => mk.id === id);
 }
+
+export const checkIfCanSync = (s: SyncInfo, appVersion: string) => {
+	if (compareVersions(appVersion, s.appMinVersion) < 0) throw new JoplinError(_('In order to synchronise, please upgrade your application to version %s+', s.appMinVersion), ErrorCode.MustUpgradeApp);
+};

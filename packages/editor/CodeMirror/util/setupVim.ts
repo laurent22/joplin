@@ -1,4 +1,4 @@
-import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
+import CodeMirrorControl from '../CodeMirrorControl';
 
 const setupVim = (CodeMirror: CodeMirrorControl) => {
 	CodeMirror.Vim.defineAction('swapLineDown', CodeMirror.commands.swapLineDown);

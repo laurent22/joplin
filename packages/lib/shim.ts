@@ -277,6 +277,11 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
+	// Does not do OCR -- just extracts existing text from a PDF.
+	pdfExtractEmbeddedText: async (_pdfPath: string): Promise<string[]> => {
+		throw new Error('Not implemented: textFromPdf');
+	},
+
 	pdfToImages: async (_pdfPath: string, _outputDirectoryPath: string): Promise<string[]> => {
 		throw new Error('Not implemented');
 	},

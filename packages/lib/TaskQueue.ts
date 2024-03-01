@@ -187,7 +187,7 @@ export default class TaskQueue {
 
 		// In general it's not a big issue if some tasks are still running because
 		// it won't call anything unexpected in caller code, since the caller has
-		// to explicitely retrieve the results
+		// to explicitly retrieve the results
 		const startTime = Date.now();
 		while (Object.keys(this.processingTasks_).length) {
 			await time.sleep(0.1);

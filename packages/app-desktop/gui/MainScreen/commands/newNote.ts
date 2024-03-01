@@ -29,6 +29,12 @@ export const runtime = (): CommandRuntime => {
 				type: 'NOTE_SELECT',
 				id: newNote.id,
 			});
+
+			// Immediately sort the note list so that the new note is positioned correctly before
+			// scrolling to it.
+			utils.store.dispatch({
+				type: 'NOTE_SORT',
+			});
 		},
 		enabledCondition: 'oneFolderSelected && !inConflictFolder && !folderIsReadOnly',
 	};

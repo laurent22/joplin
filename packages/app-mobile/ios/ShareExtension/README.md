@@ -10,12 +10,12 @@
 ## Configuring the Share Extension
 1. Delete *ShareViewController.h* and *ShareViewController.m* from the project. (Select files and right click, then Delete)
 2. On the confirmation popup, select Move to Trash
-3. Now add *ShareViewController.h* and *ShareViewController.m* from *ShareExtension/Source/ShareExtenstion*. This can be done by right clicking on the *ShareExtension* folder in Xcode and selecting Add Files to "Joplin". Double check that the ShareExtension is checked for Add to targets and click Add.
+3. Now add *ShareViewController.h* and *ShareViewController.m* from *ShareExtension/Source/ShareExtension*. This can be done by right clicking on the *ShareExtension* folder in Xcode and selecting Add Files to "Joplin". Double check that the ShareExtension is checked for Add to targets and click Add.
 4. Switch over to git and reset the changes done to *ShareExtension/Base.lproj/Maininterface.storyboard* and *ShareExtension/Info.plist*, as Xcode generated new versions of these files and overwrote ours.
 5. Now select the ShareExtension Target and go to Signing & Capabilities
 6. Click the + Capability and search for App Groups and add it
 7. Back in git reset *ShareExtension/ShareExtension.entitlements* as Xcode just overwrote it. Back in Xcode you should see the app group set
-8. Now switch to General, just left of Signing & Capabilites
+8. Now switch to General, just left of Signing & Capabilities
 9. Under Deployment Info, change the iOS version to match the Joplin target version, which is 9.0
 
 ## Configuring Joplin

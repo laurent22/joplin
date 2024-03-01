@@ -13,7 +13,7 @@ async function browserCaptureVisibleTabs(windowId) {
 
 		// This is supposed to be the default quality, but in fact Firefox 82+
 		// clearly uses a much lower quality, closer to 20 or 30, so we have to
-		// set it here explicitely.
+		// set it here explicitly.
 		// https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/extensionTypes/ImageDetails
 		// https://discourse.joplinapp.org/t/clip-screenshot-image-quality/12302/4
 		quality: 92,

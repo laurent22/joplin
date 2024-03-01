@@ -257,7 +257,7 @@ describe('services/RevisionService', () => {
 		}
 	}));
 
-	it('should create a revision for notes that get deleted (recyle bin)', (async () => {
+	it('should create a revision for notes that get deleted (recycle bin)', (async () => {
 		const n1 = await Note.save({ title: 'hello' });
 		const noteId = n1.id;
 

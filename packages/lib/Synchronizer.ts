@@ -22,7 +22,7 @@ import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
 import { FileApi, getSupportsDeltaWithItems, PaginatedList, RemoteItem } from './file-api';
 import JoplinDatabase from './JoplinDatabase';
-import { fetchSyncInfo, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
+import { checkIfCanSync, fetchSyncInfo, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
 import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
 import { generateKeyPair } from './services/e2ee/ppk';
 import syncDebugLog from './services/synchronizer/syncDebugLog';
@@ -31,6 +31,7 @@ import resourceRemotePath from './services/synchronizer/utils/resourceRemotePath
 import syncDeleteStep from './services/synchronizer/utils/syncDeleteStep';
 import { ErrorCode } from './errors';
 import { SyncAction } from './services/synchronizer/utils/types';
+import checkDisabledSyncItemsNotification from './services/synchronizer/utils/checkDisabledSyncItemsNotification';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -115,7 +116,9 @@ export default class Synchronizer {
 	}
 
 	public setLogger(l: Logger) {
+		const previous = this.logger_;
 		this.logger_ = l;
+		return previous;
 	}
 
 	public logger() {
@@ -403,7 +406,6 @@ export default class Synchronizer {
 
 		const handleCannotSyncItem = async (ItemClass: any, syncTargetId: any, item: any, cannotSyncReason: string, itemLocation: any = null) => {
 			await ItemClass.saveSyncDisabled(syncTargetId, item, cannotSyncReason, itemLocation);
-			this.dispatch({ type: 'SYNC_HAS_DISABLED_SYNC_ITEMS' });
 		};
 
 		// We index resources before sync mostly to flag any potential orphan
@@ -464,6 +466,9 @@ export default class Synchronizer {
 				logger.info('Sync target is already setup - checking it...');
 
 				await this.migrationHandler().checkCanSync(remoteInfo);
+
+				const appVersion = shim.appVersion();
+				if (appVersion !== 'unknown') checkIfCanSync(remoteInfo, appVersion);
 
 				let localInfo = await localSyncInfo();
 
@@ -665,7 +670,7 @@ export default class Synchronizer {
 								//   up in this place either, because the action
 								//   cannot be createRemote (because the
 								//   resource has not been created locally) or
-								//   updateRemote (because a resouce cannot be
+								//   updateRemote (because a resource cannot be
 								//   modified locally unless the blob is present
 								//   too).
 								//
@@ -1055,6 +1060,13 @@ export default class Synchronizer {
 				}
 			} // DELTA STEP
 		} catch (error) {
+			if (error.code === ErrorCode.MustUpgradeApp) {
+				this.dispatch({
+					type: 'MUST_UPGRADE_APP',
+					message: error.message,
+				});
+			}
+
 			if (throwOnError) {
 				errorToThrow = error;
 			} else if (error && ['cannotEncryptEncrypted', 'noActiveMasterKey', 'processingPathTwice', 'failSafe', 'lockError', 'outdatedSyncTarget'].indexOf(error.code) >= 0) {
@@ -1064,7 +1076,7 @@ export default class Synchronizer {
 				logger.info(error.message);
 
 				if (error.code === 'failSafe' || error.code === 'lockError') {
-					// Get the message to display on UI, but not in testing to avoid poluting stdout
+					// Get the message to display on UI, but not in testing to avoid polluting stdout
 					if (!shim.isTestingEnv()) this.progressReport_.errors.push(error.message);
 					this.logLastRequests();
 				}
@@ -1114,6 +1126,8 @@ export default class Synchronizer {
 		eventManager.emit(EventName.SyncComplete, {
 			withErrors: Synchronizer.reportHasErrors(this.progressReport_),
 		});
+
+		await checkDisabledSyncItemsNotification((action: any) => this.dispatch(action));
 
 		this.onProgress_ = function() {};
 		this.progressReport_ = {};

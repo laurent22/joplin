@@ -6,7 +6,7 @@ Various scripts are provided to deploy the Joplin applications, scripts and tool
 
 Before new releases are created, all version numbers must be updated. This is done using the `setupNewRelease` script and passing it the new major.minor version number. For example:
 
-	yarn run setupNewRelease 1.8
+	yarn setupNewRelease 1.8
 
 Patch numbers are going to be incremented automatically when releasing each individual package.
 
@@ -14,13 +14,13 @@ Patch numbers are going to be incremented automatically when releasing each indi
 
 The desktop application is built for Windows, macOS and Linux via continuous integration, by pushing a version tag to GitHub. The process is automated using:
 
-	yarn run releaseDesktop
+	yarn releaseDesktop
 
 ## Android application
 
 The app is built and upload to GitHub using:
 
-	yarn run releaseAndroid --type=prerelease
+	yarn releaseAndroid --type=prerelease
 
 The "type" parameter can be either "release" or "prerelease"
 
@@ -32,7 +32,7 @@ It must be built and released manually using XCode.
 
 Unlike the mobile or desktop application, the CLI app doesn't bundle its dependencies and is always installed from source. For that reason, all its `@joplin` dependencies must be deployed publicly first. This is done using:
 
-	yarn run publishAll
+	yarn publishAll
 
 This is going to publish all the Joplin libraries, such as `@joplin/lib`, `@joplin/tools`, etc.
 
@@ -52,28 +52,28 @@ Then in `app-cli/package.json`, all `@joplin` dependencies and devdependencies m
 
 Finally, to release the actual app, run:
 
-	yarn run releaseCli
+	yarn releaseCli
 
 ## Joplin Server
 
 Run:
 
-	yarn run releaseServer
+	yarn releaseServer
 
 ## Web clipper
 
 Run:
 
-	yarn run releaseClipper
+	yarn releaseClipper
 
 ## Plugin generator
 
 First the types should generally be updated, using `./updateTypes.sh`. Then run:
 
-	yarn run releasePluginGenerator
+	yarn releasePluginGenerator
 
 ## Plugin Repo Cli
 
 This tool is packaged using Webpack so it can be released with a single command:
 
-	yarn run releasePluginRepoCli
+	yarn releasePluginRepoCli

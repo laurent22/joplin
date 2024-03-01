@@ -112,7 +112,7 @@
 - Fixed: Fix default sync target (4b39d30)
 - Fixed: Fixed potential infinite loop when Joplin Server session is invalid (c5569ef)
 - Fixed: Fixed running out of memory when importing large ENEX files (#5543)
-- Fixed: Ignore newline between quotes while spliting batch (#5540) (#5341 by Kingsley Yung)
+- Fixed: Ignore newline between quotes while splitting batch (#5540) (#5341 by Kingsley Yung)
 
 ## [cli-v2.4.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.4.1) - 2021-09-29T15:28:01Z
 
@@ -128,7 +128,7 @@
 ## [cli-v2.3.2](https://github.com/laurent22/joplin/releases/tag/cli-v2.3.2) - 2021-08-16T09:38:40Z
 
 - Improved: Improved E2EE usability by making its state a property of the sync target (#5276)
-- Fixed: Bump hightlight.js to v11.2 (#5278) (#5245 by Roman Musin)
+- Fixed: Bump highlight.js to v11.2 (#5278) (#5245 by Roman Musin)
 - Fixed: Fixed version command so that it does not require the keychain (ca6d8ec)
 
 ## [cli-v2.2.2](https://github.com/laurent22/joplin/releases/tag/cli-v2.2.2) - 2021-08-11T15:34:56Z
@@ -196,7 +196,7 @@
 
 ## [cli-v1.6.3](https://github.com/laurent22/joplin/releases/tag/cli-v1.6.3) - 2021-01-11T11:52:11Z
 
-- New: Add more log info when a revision cannot be deleted due to still-encrypted itel
+- New: Add more log info when a revision cannot be deleted due to still-encrypted item
 - Improved: Do not display error message when fixing ENEX resource mime type (#4310)
 - Improved: Improve support for SVG images when importing ENEX files
 - Improved: Improved support for bold and italic format when importing ENEX file (#4316)
@@ -378,7 +378,7 @@ IMPORTANT: If you use the web API, please note that there are a few breaking cha
 - Improved: Allow exporting a note as HTML
 - Improved: Improved logging during sync to allow finding bugs more easily
 - Fixed: Handle WebDAV servers that do not return a last modified date (fixes mail.ru) (#2091)
-- Fixed: Restaured translations that had been accidentally deleted (#2126)
+- Fixed: Restored translations that had been accidentally deleted (#2126)
 - Fixed: Prevent synch from happening if target dir could not be created, in local sync (#2117)
 - Fixed: Handle rare case when notebook has a parent that no longer exists, which causes a crash when sorting (#2088)
 

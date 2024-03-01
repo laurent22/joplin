@@ -10,7 +10,7 @@ Joplin has two types of editors, two-pane Markdown Editor and WYSIWYG Editor. Tw
 
 Since the height of a Markdown text line is not always proportional to the height of the corresponding HTML element, displayed contents in Editor and Viewer are often inconsistent.
 
-To keep the consistency of their displayed contents, both scroll bars needed to be controlled separatedly and synchronously.
+To keep the consistency of their displayed contents, both scroll bars needed to be controlled separately and synchronously.
 
 ## Feature Specifications
 
