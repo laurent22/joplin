@@ -5,7 +5,9 @@
   "repository": "https://github.com/laurent22/joplin/tree/dev/packages/utils",
   "exports": {
     ".": "./dist/index.js",
+    "./dom": "./dist/dom.js",
     "./env": "./dist/env.js",
+    "./object": "./dist/object.js",
     "./fs": "./dist/fs.js",
     "./html": "./dist/html.js",
     "./Logger": "./dist/Logger.js",

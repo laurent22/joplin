@@ -151,6 +151,9 @@ export function addExtraStyles(style: any) {
 
 	style.configScreenPadding = style.mainPadding * 2;
 
+	style.noteListHeaderHeight = 26;
+	style.noteListHeaderBorderPadding = 4;
+
 	style.icon = {
 		...style.icon,
 		color: style.color,

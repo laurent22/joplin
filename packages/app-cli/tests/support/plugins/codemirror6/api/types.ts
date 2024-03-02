@@ -566,8 +566,8 @@ export interface CodeMirrorControl {
 	};
 }
 
-export interface CodeMirrorContentScriptModule extends Omit<ContentScriptModule, 'plugin'> {
-	plugin: (codeMirrorControl: CodeMirrorControl)=> void;
+export interface MarkdownEditorContentScriptModule extends Omit<ContentScriptModule, 'plugin'> {
+	plugin: (editorControl: CodeMirrorControl)=> void;
 }
 
 export enum ContentScriptType {

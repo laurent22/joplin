@@ -61,6 +61,7 @@ import RotatingLogs from './RotatingLogs';
 import { NoteEntity } from './services/database/types';
 import { join } from 'path';
 import processStartFlags from './utils/processStartFlags';
+import { setupAutoDeletion } from './services/trash/permanentlyDeleteOldItems';
 import determineProfileAndBaseDir from './determineBaseAppDirs';
 
 const appLogger: LoggerWrapper = Logger.create('App');
@@ -436,6 +437,14 @@ export default class BaseApplication {
 		// would cause the sidebar to refresh all the time.
 		if (this.hasGui() && ['FOLDER_UPDATE_ONE'].indexOf(action.type) >= 0) {
 			doRefreshFolders = true;
+		}
+
+		// If a note gets deleted to the trash or gets restored we refresh the folders so that the
+		// note count can be updated.
+		if (this.hasGui() && ['NOTE_UPDATE_ONE'].includes(action.type)) {
+			if (action.changedFields && action.changedFields.includes('deleted_time')) {
+				doRefreshFolders = true;
+			}
 		}
 
 		if (action.type === 'HISTORY_BACKWARD' || action.type === 'HISTORY_FORWARD') {
@@ -823,6 +832,8 @@ export default class BaseApplication {
 		if (currentFolderId) currentFolder = await Folder.load(currentFolderId);
 		if (!currentFolder) currentFolder = await Folder.defaultFolder();
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
+
+		await setupAutoDeletion();
 
 		await MigrationService.instance().run();
 
