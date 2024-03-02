@@ -738,7 +738,7 @@ export default class BaseApplication {
 		}
 
 		if (Setting.value('firstStart')) {
-			if (!Setting.value("isSubProfile")) {
+			if (!Setting.value('isSubProfile')) {
 				const locale = shim.detectAndSetLocale(Setting);
 				reg.logger().info(`First start: detected locale as ${locale}`);
 			}
