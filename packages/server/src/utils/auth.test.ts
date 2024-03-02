@@ -2,6 +2,7 @@ import { hashPassword } from './auth';
 
 describe('hashPassword', () => {
 
+	// cSpell:disable
 	it.each(
 		[
 			'password',
@@ -14,5 +15,6 @@ describe('hashPassword', () => {
 	)('should return a string that starts with $2a$10 for the password: %', async (plainText) => {
 		expect((await hashPassword(plainText)).startsWith('$2a$10')).toBe(true);
 	});
+	// cSpell:enable
 
 });

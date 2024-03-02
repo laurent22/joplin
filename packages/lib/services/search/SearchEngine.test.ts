@@ -1,7 +1,6 @@
 import { setupDatabaseAndSynchronizer, db, sleep, switchClient, msleep } from '../../testing/test-utils';
 import SearchEngine from './SearchEngine';
 import Note from '../../models/Note';
-import Folder from '../../models/Folder';
 import ItemChange from '../../models/ItemChange';
 import Setting from '../../models/Setting';
 
@@ -322,6 +321,25 @@ describe('services/SearchEngine', () => {
 		expect(rows[2].id).toBe(n3.id);
 	}));
 
+	it('should support searching through documents that contain null characters', (async () => {
+		await Note.save({
+			title: 'Test',
+			body: `
+				NUL characters, "\x00", have been known to break FTS search.
+				Previously, all characters after a NUL (\x00) character in a note
+				would not show up in search results. NUL characters may have also
+				broken search for other notes.
+
+				In this note, "testing" only appears after the NUL characters.
+			`,
+		});
+
+		await engine.syncTables();
+
+		expect((await engine.search('previously')).length).toBe(1);
+		expect((await engine.search('testing')).length).toBe(1);
+	}));
+
 	it('should supports various query types', (async () => {
 		let rows;
 
@@ -518,21 +536,33 @@ describe('services/SearchEngine', () => {
 		expect((await engine.search('hello', { appendWildCards: true })).length).toBe(2);
 	}));
 
-	it('should search by item ID if no other result was found', (async () => {
-		const f1 = await Folder.save({});
-		const n1 = await Note.save({ title: 'hello1', parent_id: f1.id });
-		const n2 = await Note.save({ title: 'hello2' });
+	it('should search HTML-entity encoded text', (async () => {
+		await Note.save({ title: '&#xE9;&#xE7;&#xE0;' }); // éçà
 
 		await engine.syncTables();
 
-		const results = await engine.search(n1.id);
-		expect(results.length).toBe(1);
-		expect(results[0].id).toBe(n1.id);
-		expect(results[0].title).toBe(n1.title);
-		expect(results[0].parent_id).toBe(n1.parent_id);
-
-		expect((await engine.search(n2.id))[0].id).toBe(n2.id);
-		expect(await engine.search(f1.id)).toEqual([]);
+		const rows = await engine.search('éçà');
+		expect(rows.length).toBe(1);
 	}));
+
+	// Disabled for now:
+	// https://github.com/laurent22/joplin/issues/9769#issuecomment-1912459744
+
+	// it('should search by item ID if no other result was found', (async () => {
+	// 	const f1 = await Folder.save({});
+	// 	const n1 = await Note.save({ title: 'hello1', parent_id: f1.id });
+	// 	const n2 = await Note.save({ title: 'hello2' });
+
+	// 	await engine.syncTables();
+
+	// 	const results = await engine.search(n1.id);
+	// 	expect(results.length).toBe(1);
+	// 	expect(results[0].id).toBe(n1.id);
+	// 	expect(results[0].title).toBe(n1.title);
+	// 	expect(results[0].parent_id).toBe(n1.parent_id);
+
+	// 	expect((await engine.search(n2.id))[0].id).toBe(n2.id);
+	// 	expect(await engine.search(f1.id)).toEqual([]);
+	// }));
 
 });

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, useMemo, ForwardedRef } from 'react';
 
-import { EditorCommand, NoteBodyEditorProps, NoteBodyEditorRef, OnChangeEvent } from '../../../utils/types';
+import { EditorCommand, MarkupToHtmlOptions, NoteBodyEditorProps, NoteBodyEditorRef, OnChangeEvent } from '../../../utils/types';
 import { getResourcesFromPasteEvent } from '../../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../../utils/types';
 import NoteTextViewer from '../../../../NoteTextViewer';
@@ -16,7 +16,6 @@ import { MarkupToHtml } from '@joplin/renderer';
 const { clipboard } = require('electron');
 import { reg } from '@joplin/lib/registry';
 import ErrorBoundary from '../../../../ErrorBoundary';
-import { MarkupToHtmlOptions } from '../../../utils/useMarkupToHtml';
 import { EditorKeymap, EditorLanguageType, EditorSettings } from '@joplin/editor/types';
 import useStyles from '../utils/useStyles';
 import { EditorEvent, EditorEventType } from '@joplin/editor/events';
@@ -220,6 +219,10 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		const timeoutId = shim.setTimeout(async () => {
 			let bodyToRender = props.content;
 
+			if (!props.visiblePanes.includes('viewer')) {
+				return;
+			}
+
 			if (!bodyToRender.trim() && props.visiblePanes.indexOf('viewer') >= 0 && props.visiblePanes.indexOf('editor') < 0) {
 				// Fixes https://github.com/laurent22/joplin/issues/217
 				bodyToRender = `<i>${_('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout'))}</i>`;
@@ -300,11 +303,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	const cellViewerStyle = useMemo(() => {
 		const output = { ...styles.cellViewer };
 		if (!props.visiblePanes.includes('viewer')) {
-			// Note: setting webview.display to "none" is currently not supported due
-			// to this bug: https://github.com/electron/electron/issues/8277
-			// So instead setting the width 0.
-			output.width = 1;
-			output.maxWidth = 1;
+			output.display = 'none';
 		} else if (!props.visiblePanes.includes('editor')) {
 			output.borderLeftStyle = 'none';
 		}

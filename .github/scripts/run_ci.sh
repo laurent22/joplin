@@ -19,6 +19,12 @@ if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
 	IS_PULL_REQUEST=1
 fi
 
+# In some case it might not be possible to detect if we're on a pull request, for example when
+# pushing new code to an existing code (or maybe when pressing "Update branch" from GitHub). In that
+# case "GITHUB_EVENT_NAME" is "push" it's not clear what else could be checked. It seems safe to
+# always run the checks anyway so we do this for now.
+IS_PULL_REQUEST=1
+
 if [[ $GIT_TAG_NAME = $SERVER_TAG_PREFIX-* ]]; then
 	IS_SERVER_RELEASE=1
 fi
@@ -107,7 +113,7 @@ if [ "$RUN_TESTS" == "1" ]; then
 	#
 	# https://stackoverflow.com/questions/38558989
 	export NODE_OPTIONS="--max-old-space-size=32768"
-	yarn run test-ci
+	yarn test-ci
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
 		exit $testResult
@@ -122,13 +128,13 @@ fi
 if [ "$RUN_TESTS" == "1" ]; then
 	echo "Step: Running linter..."
 
-	yarn run linter-ci ./
+	yarn linter-ci ./
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
 		exit $testResult
 	fi
 
-	yarn run packageJsonLint
+	yarn packageJsonLint
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
 		exit $testResult
@@ -175,7 +181,7 @@ fi
 
 # =============================================================================
 # Check .gitignore and .eslintignore files - they should be updated when
-# new TypeScript files are added by running `yarn run updateIgnored`.
+# new TypeScript files are added by running `yarn updateIgnored`.
 # See coding_style.md
 # =============================================================================
 
@@ -200,10 +206,26 @@ if [ "$RUN_TESTS" == "1" ]; then
 
 	mkdir -p ../joplin-website/docs
 	ll ../joplin-website/docs/api/references/plugin_api
-	SKIP_SPONSOR_PROCESSING=1 yarn run buildWebsite
+	SKIP_SPONSOR_PROCESSING=1 yarn buildWebsite
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
 		exit $testResult
+	fi
+fi
+
+# =============================================================================
+# Spellchecking
+# =============================================================================
+
+if [ "$IS_PULL_REQUEST" == "1" ]; then
+	if [ "$IS_LINUX" == "1" ]; then
+		echo "Step: Spellchecking..."
+
+		yarn spellcheck --all
+		testResult=$?
+		if [ $testResult -ne 0 ]; then
+			exit $testResult
+		fi
 	fi
 fi
 
@@ -253,14 +275,14 @@ if [ "$IS_DESKTOP_RELEASE" == "1" ]; then
 		# "python" and seems to no longer respect the PYTHON_PATH environment variable.
 		# We work around this by aliasing python.
 		alias python=$(which python3)
-		USE_HARD_LINKS=false yarn run dist
+		USE_HARD_LINKS=false yarn dist
 	else
-		USE_HARD_LINKS=false yarn run dist
+		USE_HARD_LINKS=false yarn dist
 	fi	
 elif [[ $IS_LINUX = 1 ]] && [ "$IS_SERVER_RELEASE" == "1" ]; then
 	echo "Step: Building Docker Image..."
 	cd "$ROOT_DIR"
-	yarn run buildServerDocker --tag-name $GIT_TAG_NAME --push-images --repository $SERVER_REPOSITORY
+	yarn buildServerDocker --tag-name $GIT_TAG_NAME --push-images --repository $SERVER_REPOSITORY
 else
 	echo "Step: Building but *not* publishing desktop application..."
 	
@@ -274,8 +296,8 @@ else
 		export CSC_IDENTITY_AUTO_DISCOVERY=false
 		npm pkg set 'build.mac.identity'=null --json
 		
-		USE_HARD_LINKS=false yarn run dist --publish=never
+		USE_HARD_LINKS=false yarn dist --publish=never
 	else
-		USE_HARD_LINKS=false yarn run dist --publish=never
+		USE_HARD_LINKS=false yarn dist --publish=never
 	fi
 fi

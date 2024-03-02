@@ -25,6 +25,10 @@ Otherwise, follow these instructions:
 
 Make sure you disable debugging once you've finished. Leaving it enabled can cause your log.txt to grow very quickly. To disable debugging, simply delete the "flags.txt" file created.
 
+### Crash reports
+
+When the application crashes, a report is created in your [home directory](https://github.com/laurent22/joplin/blob/dev/readme/apps/home_directory.md) under the name `joplin_crash_dump_<DATE_TIME>.json`. If you experience a crash please share this log with the team by posting it to the [forum](https://discourse.joplinapp.org/), [GitHub](https://github.com/laurent22/joplin/issues) or [by email](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/AdresseSupport.png). You may also enable crash report auto-upload in the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md) in the "Application" section.
+
 ### Safe mode
 
 Safe mode is a special mode that disables all plugins and renders the notes as plain text. You can use this if, for example, the app is crashing or freezing on startup, or is very slow to run. By starting in safe mode you can verify if it's an issue with the app itself or with one of the plugins. In some rare cases, certain notes can also freeze the app, and safe mode would allow you to either change the note or delete it if it causing problems.

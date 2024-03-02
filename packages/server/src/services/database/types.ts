@@ -72,7 +72,7 @@ export function changeTypeToString(t: ChangeType): string {
 	if (t === ChangeType.Create) return 'create';
 	if (t === ChangeType.Update) return 'update';
 	if (t === ChangeType.Delete) return 'delete';
-	throw new Error(`Unkown type: ${t}`);
+	throw new Error(`Unknown type: ${t}`);
 }
 
 export const getDefaultValue = (tableName: string, colName: string): string|number|null => {
@@ -138,7 +138,7 @@ export enum TaskId {
 }
 
 // AUTO-GENERATED-TYPES
-// Auto-generated using `yarn run generate-types`
+// Auto-generated using `yarn generate-types`
 export interface Session extends WithDates, WithUuid {
 	user_id?: Uuid;
 	auth_code?: string;

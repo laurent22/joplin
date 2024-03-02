@@ -3,9 +3,9 @@ import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUt
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { MarkupLanguage } from '@joplin/renderer';
 import { RenderResult, RenderResultPluginAsset } from '@joplin/renderer/types';
-import { MarkupToHtmlOptions } from './useMarkupToHtml';
 import { Dispatch } from 'redux';
 import { ProcessResultsRow } from '@joplin/lib/services/search/SearchEngine';
+import { DropHandler } from './useDropHandler';
 
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
@@ -61,6 +61,24 @@ export interface NoteBodyEditorRef {
 	execCommand(command: CommandValue): Promise<void>;
 }
 
+export interface MarkupToHtmlOptions {
+	replaceResourceInternalToExternalLinks?: boolean;
+	resourceInfos?: ResourceInfos;
+	contentMaxWidth?: number;
+	plugins?: Record<string, any>;
+	bodyOnly?: boolean;
+	mapsToLine?: boolean;
+	useCustomPdfViewer?: boolean;
+	noteId?: string;
+	vendorDir?: string;
+	platformName?: string;
+	allowedFilePrefixes?: string[];
+	whiteBackgroundNoteRendering?: boolean;
+}
+
+export type MarkupToHtmlHandler = (markupLanguage: MarkupLanguage, markup: string, options: MarkupToHtmlOptions)=> Promise<RenderResult>;
+export type HtmlToMarkdownHandler = (markupLanguage: number, html: string, originalCss: string)=> Promise<string>;
+
 export interface NoteBodyEditorProps {
 	style: any;
 	ref: any;
@@ -81,9 +99,8 @@ export interface NoteBodyEditorProps {
 	onWillChange(event: any): void;
 	onMessage(event: any): void;
 	onScroll(event: { percent: number }): void;
-	markupToHtml: (markupLanguage: MarkupLanguage, markup: string, options: MarkupToHtmlOptions)=> Promise<RenderResult>;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	htmlToMarkdown: Function;
+	markupToHtml: MarkupToHtmlHandler;
+	htmlToMarkdown: HtmlToMarkdownHandler;
 	allAssets: (markupLanguage: MarkupLanguage, options: AllAssetsOptions)=> Promise<RenderResultPluginAsset[]>;
 	disabled: boolean;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -97,7 +114,7 @@ export interface NoteBodyEditorProps {
 	resourceDirectory: string;
 	locale: string;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onDrop: Function;
+	onDrop: DropHandler;
 	noteToolbarButtonInfos: ToolbarButtonInfo[];
 	plugins: PluginStates;
 	fontSize: number;
@@ -117,6 +134,7 @@ export interface FormNote {
 	markup_language: number;
 	user_updated_time: number;
 	encryption_applied: number;
+	deleted_time: number;
 
 	hasChanged: boolean;
 
@@ -156,6 +174,7 @@ export function defaultFormNote(): FormNote {
 	return {
 		id: '',
 		parent_id: '',
+		deleted_time: 0,
 		title: '',
 		body: '',
 		is_todo: 0,

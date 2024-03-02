@@ -44,6 +44,15 @@ export interface DeleteOptions {
 
 	// Used for logging
 	sourceDescription?: string|ActionLogger;
+
+	// Tells whether the deleted item should be moved to the trash. By default
+	// it is permanently deleted.
+	toTrash?: boolean;
+
+	// If the item is to be moved to the trash, tell what should be the new
+	// parent. By default the item will be moved at the root of the trash. Note
+	// that caller must ensure that this parent ID is a deleted folder.
+	toTrashParentId?: string;
 }
 
 class BaseModel {
@@ -282,6 +291,7 @@ class BaseModel {
 				limit: options.limit,
 				order: options.order as any,
 				page: 1,
+				caseInsensitive: options.caseInsensitive,
 			})}`;
 		}
 
@@ -311,7 +321,7 @@ class BaseModel {
 		return this.modelSelectAll(q.sql, q.params);
 	}
 
-	public static async byIds(ids: string[], options: any = null) {
+	public static async byIds(ids: string[], options: LoadOptions = null) {
 		if (!ids.length) return [];
 		if (!options) options = {};
 		if (!options.fields) options.fields = '*';

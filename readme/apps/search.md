@@ -46,7 +46,7 @@ The filters are implicitly connected by and/or connectives depending on the foll
 - To override this default behaviour, use the `any` filter, in which case the search terms will be connected by "OR" instead.
 - There's an exception for the `notebook` filters which are connected by "OR". The reason being that no note can be in multiple notebooks at once.
 
-Incorrect search filters are interpreted as a phrase search, e.g. misspelled `nootebook:Example` or non-existing `https://joplinapp.org`.
+Incorrect search filters are interpreted as a phrase search, e.g. a misspelled filter or non-existing `https://joplinapp.org`.
 
 ## Search order
 

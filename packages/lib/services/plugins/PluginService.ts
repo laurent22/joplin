@@ -29,11 +29,12 @@ export interface Plugins {
 }
 
 export interface SettingAndValue {
-	[settingName: string]: string;
+	[settingName: string]: string|number|boolean;
 }
 
 export interface DefaultPluginSettings {
 	settings?: SettingAndValue;
+	enabled?: boolean;
 }
 
 export interface DefaultPluginsInfo {
@@ -107,6 +108,10 @@ export default class PluginService extends BaseService {
 	public enabledPlugins(pluginSettings: PluginSettings): Plugins {
 		const enabledPlugins = Object.fromEntries(Object.entries(this.plugins_).filter((p) => this.pluginEnabled(pluginSettings, p[0])));
 		return enabledPlugins;
+	}
+
+	public isPluginLoaded(pluginId: string) {
+		return !!this.plugins_[pluginId];
 	}
 
 	public get pluginIds(): string[] {

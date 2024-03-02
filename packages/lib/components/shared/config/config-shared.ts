@@ -7,6 +7,7 @@ import Logger from '@joplin/utils/Logger';
 
 import { type ReactNode } from 'react';
 import { type Registry } from '../../../registry';
+import settingValidations from '../../../models/settings/settingValidations';
 
 const logger = Logger.create('config-shared');
 
@@ -78,7 +79,7 @@ export const checkSyncConfig = async (comp: ConfigScreenComponent, settings: any
 
 	if (result.ok) {
 		// Users often expect config to be auto-saved at this point, if the config check was successful
-		saveSettings(comp);
+		await saveSettings(comp);
 	}
 	return result;
 };
@@ -132,14 +133,20 @@ let scheduleSaveSettingsIID: ReturnType<typeof setTimeout>|null = null;
 export const scheduleSaveSettings = (comp: ConfigScreenComponent) => {
 	if (scheduleSaveSettingsIID) clearTimeout(scheduleSaveSettingsIID);
 
-	scheduleSaveSettingsIID = setTimeout(() => {
+	scheduleSaveSettingsIID = setTimeout(async () => {
 		scheduleSaveSettingsIID = null;
-		saveSettings(comp);
+		await saveSettings(comp);
 	}, 100);
 };
 
-export const saveSettings = (comp: ConfigScreenComponent) => {
+export const saveSettings = async (comp: ConfigScreenComponent) => {
 	const savedSettingKeys = comp.state.changedSettingKeys.slice();
+
+	const validationMessage = await settingValidations(savedSettingKeys, comp.state.settings);
+	if (validationMessage) {
+		alert(validationMessage);
+		return false;
+	}
 
 	for (const key in comp.state.settings) {
 		if (!comp.state.settings.hasOwnProperty(key)) continue;
@@ -150,6 +157,8 @@ export const saveSettings = (comp: ConfigScreenComponent) => {
 	comp.setState({ changedSettingKeys: [] });
 
 	onSettingsSaved({ savedSettingKeys });
+
+	return true;
 };
 
 export const settingsToComponents = (comp: ConfigScreenComponent, device: AppType, settings: any) => {
@@ -223,7 +232,7 @@ export const settingsSections = createSelector(
 			})));
 		}
 
-		// Ideallly we would also check if the user was able to synchronize
+		// Ideally we would also check if the user was able to synchronize
 		// but we don't have a way of doing that besides making a request to Joplin Cloud
 		const syncTargetIsJoplinCloud = settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud');
 		if (syncTargetIsJoplinCloud) {

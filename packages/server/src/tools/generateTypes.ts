@@ -212,7 +212,7 @@ async function main() {
 		tableStrings.push(createRuntimeObject(table));
 	}
 
-	let content = `// Auto-generated using \`yarn run generate-types\`\n${typeStrings.join('\n\n')}`;
+	let content = `// Auto-generated using \`yarn generate-types\`\n${typeStrings.join('\n\n')}`;
 	content += '\n\n';
 	content += `export const databaseSchema: DatabaseTables = {\n${tableStrings.join('\n')}\n};`;
 

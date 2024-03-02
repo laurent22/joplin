@@ -51,7 +51,7 @@ First you need to setup React Native to build projects with native code. For thi
 
 ### Android
 
-Run this to build and install the app on the emmulator:
+Run this to build and install the app on the emulator:
 
 	cd packages/app-mobile/android
 	./gradlew installDebug # or gradlew.bat installDebug on Windows
@@ -78,9 +78,9 @@ To test the extension please refer to the relevant pages for each browser: [Fire
 
 To make changes to the application, you'll need to rebuild any TypeScript file you've changed. The simplest way to do this is to watch for changes from the root of the project. Simply run this command, and it should take care of the rest:
 
-	yarn run watch
+	yarn watch
 
-Running `yarn run tsc` would have the same effect, but without watching.
+Running `yarn tsc` would have the same effect, but without watching.
 
 ## Running an application with additional parameters
 

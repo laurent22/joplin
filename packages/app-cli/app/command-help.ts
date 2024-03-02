@@ -1,5 +1,5 @@
 import BaseCommand from './base-command';
-const { app } = require('./app.js');
+import app from './app';
 const { renderCommandHelp } = require('./help-utils.js');
 import { _ } from '@joplin/lib/locale';
 const { cliUtils } = require('./cli-utils.js');

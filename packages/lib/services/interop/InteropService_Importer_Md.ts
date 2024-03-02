@@ -13,6 +13,7 @@ import { unique } from '../../ArrayUtils';
 const { pregQuote } = require('../../string-utils-common');
 import { MarkupToHtml } from '@joplin/renderer';
 import { isDataUrl } from '@joplin/utils/url';
+import { stripBom } from '../../string-utils';
 
 export default class InteropService_Importer_Md extends InteropService_Importer_Base {
 	protected importedNotes: Record<string, NoteEntity> = {};
@@ -139,7 +140,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 					}
 
 					// The first is a normal link, the second is supports the <link> and [](<link with spaces>) syntax
-					// Only opening patterns are consider in order to cover all occurances
+					// Only opening patterns are consider in order to cover all occurrences
 					// We need to use the encoded link as well because some links (link's with spaces)
 					// will appear encoded in the source. Other links (unicode chars) will not
 					const linksToReplace = [this.trimAnchorLink(link), this.trimAnchorLink(encodedLink)];
@@ -167,7 +168,8 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		if (!stat) throw new Error(`Cannot read ${resolvedPath}`);
 		const ext = fileExtension(resolvedPath);
 		const title = filename(resolvedPath);
-		const body = await shim.fsDriver().readFile(resolvedPath);
+		const body = stripBom(await shim.fsDriver().readFile(resolvedPath));
+
 		const note = {
 			parent_id: parentFolderId,
 			title: title,

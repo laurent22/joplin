@@ -17,7 +17,7 @@ export const runtime = (): CommandRuntime => {
 			const folder = await Folder.load(folderId);
 			if (!folder) throw new Error(`No such folder: ${folderId}`);
 
-			let deleteMessage = _('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', substrWithEllipsis(folder.title, 0, 32));
+			let deleteMessage = _('Move notebook "%s" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.', substrWithEllipsis(folder.title, 0, 32));
 			if (folderId === context.state.settings['sync.10.inboxId']) {
 				deleteMessage = _('Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that\'s recently been sent to it may be lost.');
 			}
@@ -25,7 +25,7 @@ export const runtime = (): CommandRuntime => {
 			const ok = bridge().showConfirmMessageBox(deleteMessage);
 			if (!ok) return;
 
-			await Folder.delete(folderId, { sourceDescription: 'deleteFolder command' });
+			await Folder.delete(folderId, { toTrash: true, sourceDescription: 'deleteFolder command' });
 		},
 		enabledCondition: '!folderIsReadOnly',
 	};

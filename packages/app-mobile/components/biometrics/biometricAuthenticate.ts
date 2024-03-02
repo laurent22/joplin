@@ -17,7 +17,7 @@ export default async () => {
 			errorMessage = _('Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.');
 		}
 
-		error.message = _('Could not verify your identify: %s', errorMessage);
+		error.message = _('Could not verify your identity: %s', errorMessage);
 
 		logger.warn(error);
 

@@ -4,7 +4,7 @@ import { _ } from '@joplin/lib/locale';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
-const bridge = require('@electron/remote').require('./bridge').default;
+import bridge from '../services/bridge';
 const prettyBytes = require('pretty-bytes');
 import Resource from '@joplin/lib/models/Resource';
 
@@ -188,7 +188,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 
 	public openResource(resource: InnerResource) {
 		const resourcePath = Resource.fullPath(resource);
-		const ok = bridge().openExternal(`file://${resourcePath}`);
+		const ok = bridge().openItem(resourcePath);
 		if (!ok) {
 			bridge().showErrorMessageBox(`This file could not be opened: ${resourcePath}`);
 		}

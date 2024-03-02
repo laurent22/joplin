@@ -174,7 +174,7 @@ class HtmlUtils {
 		if (url.startsWith('file://')) {
 			// We need to do a case insensitive comparison because the URL we
 			// get appears to be converted to lowercase somewhere. To be
-			// completely sure, we make it lowercase explicitely.
+			// completely sure, we make it lowercase explicitly.
 			const filePath = fileUriToPath(url).toLowerCase();
 			for (const filePrefix of allowedFilePrefixes) {
 				if (filePath.startsWith(filePrefix.toLowerCase())) return true;
@@ -255,7 +255,7 @@ class HtmlUtils {
 				// normally should be JavaScript events. A better solution
 				// would be to blacklist known events only but it seems the
 				// list is not well defined [0] and we don't want any to slip
-				// throught the cracks. A side effect of this change is a
+				// through the cracks. A side effect of this change is a
 				// regular harmless attribute that starts with "on" will also
 				// be removed.
 				// 0: https://developer.mozilla.org/en-US/docs/Web/Events

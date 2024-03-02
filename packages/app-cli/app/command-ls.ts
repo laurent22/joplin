@@ -1,5 +1,5 @@
 import BaseCommand from './base-command';
-const { app } = require('./app.js');
+import app from './app';
 import { _ } from '@joplin/lib/locale';
 import BaseModel from '@joplin/lib/BaseModel';
 import Folder from '@joplin/lib/models/Folder';
@@ -7,6 +7,7 @@ import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 const { sprintf } = require('sprintf-js');
 import time from '@joplin/lib/time';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 const { cliUtils } = require('./cli-utils.js');
 
 class Command extends BaseCommand {
@@ -71,7 +72,7 @@ class Command extends BaseCommand {
 			let hasTodos = false;
 			for (let i = 0; i < items.length; i++) {
 				const item = items[i];
-				if (item.is_todo) {
+				if ((item as NoteEntity).is_todo) {
 					hasTodos = true;
 					break;
 				}
@@ -103,8 +104,8 @@ class Command extends BaseCommand {
 				}
 
 				if (hasTodos) {
-					if (item.is_todo) {
-						row.push(sprintf('[%s]', item.todo_completed ? 'X' : ' '));
+					if ((item as NoteEntity).is_todo) {
+						row.push(sprintf('[%s]', (item as NoteEntity).todo_completed ? 'X' : ' '));
 					} else {
 						row.push('   ');
 					}

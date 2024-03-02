@@ -141,7 +141,7 @@ While it works relatively well, there is still room for improvement. In particul
 
 - Improve relevance algorithm (give a weight to certain criteria, and allow adding new criteria more easily). In particular give more weight to recently modified notes, and less weight to completed to-dos.
 
-- Allow fuzzy search (for example return results that contain "saerch" for the query "search")
+- Allow fuzzy search (for example return results that contain "search" for the query "search")
 
 Expected Outcome: To be defined with the student. Depending on what features they would like to implement.
 

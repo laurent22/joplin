@@ -109,7 +109,7 @@ async function main() {
 		const listRendererDependency = `type ListRendererDatabaseDependency = ${generateListRenderDependencyType(definitions.tables)};`;
 		const noteListTypeFilePath = `${rootDir}/packages/lib/services/plugins/api/noteListType.ts`;
 
-		await fs.writeFile(targetFile, `${staticContent}\n\n${header}\n\n${tsString}\n\n${runtimeContent}`, 'utf8');
+		await fs.writeFile(targetFile, `${staticContent.trim()}\n\n${header}\n\n${tsString}\n\n${runtimeContent}`, 'utf8');
 
 		console.info(`Writing ListRendererDatabaseDependency type to ${noteListTypeFilePath}...`);
 

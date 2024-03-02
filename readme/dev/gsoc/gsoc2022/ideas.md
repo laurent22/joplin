@@ -176,7 +176,7 @@ Expected size of project: 175 hours
 
 ### 10. Tablet layout
 
-On wide screens devices like tables Joplin could use a different layout, e.g. with note list always showing, or have both editor and viewer visible at the same time. What component is visible shoud be optional - for example, the user may want to see the note list, but hide the sidebar. This change will have to be implemented in such a way that it doesn't break the regular, mobile-only layout.
+On wide screens devices like tables Joplin could use a different layout, e.g. with note list always showing, or have both editor and viewer visible at the same time. What component is visible should be optional - for example, the user may want to see the note list, but hide the sidebar. This change will have to be implemented in such a way that it doesn't break the regular, mobile-only layout.
 
 Expected Outcome: A new tablet-specific layout, with sidebar, note list and editor always visible.
 
@@ -214,7 +214,7 @@ Expected size of project: 350 hours
 
 ### 12. Email plugin
 
-Create a plugin to fetch mail via IMAP and convert messages to notes (including attachments). The plugin should be able to filter what messages it donwloads, e.g. based on the folder.
+Create a plugin to fetch mail via IMAP and convert messages to notes (including attachments). The plugin should be able to filter what messages it downloads, e.g. based on the folder.
 
 Additional features to consider:
 

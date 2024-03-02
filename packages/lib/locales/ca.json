@@ -332,7 +332,7 @@
 	"Browse...": [
 		"Navega..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -460,6 +460,9 @@
 	],
 	"Close dropdown": [
 		"Tanca el desplegable"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Tanca la finestra"
@@ -606,7 +609,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"No s'ha pogut verificar l'estat de compartició d'aquest bloc de notes - s'està avortant. Torneu a provar quan tingueu connexió a Internet."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"No s'ha pogut verificar la identitat: %s"
 	],
 	"Create": [
@@ -1399,6 +1402,9 @@
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Per a fer-ho, totes les vostres dades hauran de ser encriptades i sincronitzades, per tant és millor executar-ho durant la nit.\n\nPer a començar, seguiu aquestes instruccions:\n\n1. Sincronitzeu tots els vostres dispositius.\n2. Feu click en \"%s\".\n3. Deixeu-lo executant-se fins que acabi. Mentre s'executa, eviteu fer canvis en cap nota des dels altres dispositius per a evitar els conflictes.\n4. Un cop la sincronització està acabada en aquest dispositiu, sincronitzeu tots els altres dispositius, i deixeu-los executant-se fins que acabin.\n\nImportant: només cal executar això UNA SOLA VEGADA en un dispositiu."
 	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
+	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Per a utilitzar la sincronització del sistema de fitxers, cal el vostre permís per a escriure a l'emmagatzematge extern."
 	],
@@ -1703,6 +1709,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"Claus que falten"
 	],
@@ -1829,7 +1838,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"No esteu autenticats amb %s. Proporcioneu les credencials que falten."
 	],
 	"Not downloaded": [
@@ -2480,6 +2489,12 @@
 	"Solarised Light": [
 		"Solaritzat clar"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Alguns elements no s'han pogut desxifrar."
 	],
@@ -2777,6 +2792,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"El destinatari no s'ha pogut eliminar de la llista. Torneu-ho a provar.\n\nL'error era \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Cal actualitzar l'objectiu de sincronització abans que Joplin pugui sincronitzar. L'operació pot trigar uns minuts a completar-se i cal reiniciar l'aplicació. Per a continuar, feu clic a l'enllaç."
 	],
@@ -3016,6 +3034,9 @@
 	],
 	"Undo": [
 		"Desfés"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Bandera desconeguda: %s"

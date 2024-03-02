@@ -41,14 +41,14 @@ async function exportDebugReportClick() {
 function StatusScreen(props: Props) {
 	const [report, setReport] = useState<ReportSection[]>([]);
 
-	async function resfreshScreen() {
+	async function refreshScreen() {
 		const service = new ReportService();
 		const r = await service.status(Setting.value('sync.target'));
 		setReport(r);
 	}
 
 	useEffect(() => {
-		void resfreshScreen();
+		void refreshScreen();
 	}, []);
 
 	const theme = themeStyle(props.themeId);
@@ -81,12 +81,12 @@ function StatusScreen(props: Props) {
 		);
 	}
 
-	const renderRetryAll = (section: ReportSection) => {
+	const renderRetryAll = (key: string, section: ReportSection) => {
 		const items: React.JSX.Element[] = [];
 		if (section.canRetryAll) {
-			items.push(renderSectionRetryAll(section.title, async () => {
+			items.push(renderSectionRetryAll(`${key}_${section.title}`, async () => {
 				await section.retryAllHandler();
-				void resfreshScreen();
+				void refreshScreen();
 			}));
 		}
 		return items;
@@ -97,7 +97,7 @@ function StatusScreen(props: Props) {
 
 		items.push(renderSectionTitle(section.title, section.title));
 
-		items = items.concat(renderRetryAll(section));
+		items = items.concat(renderRetryAll('top', section));
 
 		let currentListKey = '';
 		let listItems: React.JSX.Element[] = [];
@@ -112,7 +112,7 @@ function StatusScreen(props: Props) {
 				if (item.canRetry) {
 					const onClick = async () => {
 						await item.retryHandler();
-						void resfreshScreen();
+						void refreshScreen();
 					};
 
 					retryLink = (
@@ -158,7 +158,7 @@ function StatusScreen(props: Props) {
 			}
 		}
 
-		items = items.concat(renderRetryAll(section));
+		items = items.concat(renderRetryAll('bottom', section));
 
 		return <div key={key}>{items}</div>;
 	};

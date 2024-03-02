@@ -80,7 +80,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	}
 
 	private checkSyncConfig_ = async () => {
-		// to ignore TLS erros we need to chage the global state of the app, if the check fails we need to restore the original state
+		// to ignore TLS errors we need to change the global state of the app, if the check fails we need to restore the original state
 		// this call sets the new value and returns the previous one which we can use later to revert the change
 		const prevIgnoreTlsErrors = await setIgnoreTlsErrors(this.state.settings['net.ignoreTlsErrors']);
 		const result = await shared.checkSyncConfig(this, this.state.settings);
@@ -109,7 +109,8 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		// changedSettingKeys is cleared in shared.saveSettings so reading it now
 		const shouldSetIgnoreTlsErrors = this.state.changedSettingKeys.includes('net.ignoreTlsErrors');
 
-		await shared.saveSettings(this);
+		const done = await shared.saveSettings(this);
+		if (!done) return;
 
 		if (shouldSetIgnoreTlsErrors) {
 			await setIgnoreTlsErrors(Setting.value('net.ignoreTlsErrors'));
@@ -256,7 +257,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		});
 	}
 
-	private handleNavigateToNewScren = async (): Promise<boolean> => {
+	private handleNavigateToNewScreen = async (): Promise<boolean> => {
 		await this.promptSaveChanges();
 
 		// Continue navigation
@@ -305,14 +306,14 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		BackButtonService.addHandler(this.handleBackButtonPress);
-		NavService.addHandler(this.handleNavigateToNewScren);
+		NavService.addHandler(this.handleNavigateToNewScreen);
 		Dimensions.addEventListener('change', this.updateSidebarWidth);
 		this.updateSidebarWidth();
 	}
 
 	public componentWillUnmount() {
 		BackButtonService.removeHandler(this.handleBackButtonPress);
-		NavService.removeHandler(this.handleNavigateToNewScren);
+		NavService.removeHandler(this.handleNavigateToNewScreen);
 	}
 
 	private renderButton(key: string, title: string, clickHandler: ()=> void, options: any = null) {

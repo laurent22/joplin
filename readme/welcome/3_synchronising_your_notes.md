@@ -18,7 +18,7 @@ Nextcloud is a self-hosted, private cloud solution. To set it up, go to the conf
 
 ## Setting up OneDrive or WebDAV synchronisation
 
-OneDrive and WebDAV are also supported as synchronisation services. Please see [the synchronisation documentation](https://github.com/laurent22/joplin#synchronisation) for more information.
+OneDrive and WebDAV are also supported as synchronisation services. Please see [the synchronisation documentation](https://joplinapp.org/help/apps/sync/) for more information.
 
 ## Using End-To-End Encryption
 
