@@ -43,7 +43,7 @@ export default function ToolbarButton(props: Props) {
 	if (!isEnabled) classes.push('disabled');
 
 	const onClick = getProp(props, 'onClick');
-	const style: any = {
+	const style: React.CSSProperties = {
 		whiteSpace: 'nowrap',
 		overflow: 'hidden',
 		textOverflow: 'ellipsis' };
