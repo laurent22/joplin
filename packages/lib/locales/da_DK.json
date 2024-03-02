@@ -101,6 +101,9 @@
 	"&View": [
 		"&Vis"
 	],
+	"&Window": [
+		"&Vindue"
+	],
 	"(%s)": [
 		"(%s)"
 	],
@@ -341,6 +344,9 @@
 	"Browse...": [
 		"Gennemse..."
 	],
+	"Built-in": [
+		"Indbygget"
+	],
 	"Bulleted List": [
 		"Punktliste"
 	],
@@ -468,7 +474,7 @@
 		"Luk rullelisten"
 	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
-		""
+		"Luk applikationen, slet derefter din profil i \"%s\", og start applikationen igen. Sørg for at lave en sikkerhedskopi først ved at eksportere alle dine noter som JEX."
 	],
 	"Close Window": [
 		"Luk vindue"
@@ -1167,6 +1173,12 @@
 	"Evernote Export File (as Markdown)": [
 		"Evernote eksport fil (i Markdown)"
 	],
+	"Evernote Export Files (Directory, as HTML)": [
+		"Evernote eksportfiler (mappe, som HTML)"
+	],
+	"Evernote Export Files (Directory, as Markdown)": [
+		"Evernote eksportfiler (mappe, som Markdown)"
+	],
 	"Exits the application.": [
 		"Lukker programmet."
 	],
@@ -1238,6 +1250,9 @@
 	],
 	"File system": [
 		"Filsystem"
+	],
+	"Filter": [
+		"Filtrér"
 	],
 	"Filter tags": [
 		"Filtrer etiketter"
@@ -1357,6 +1372,9 @@
 	"Hide advanced": [
 		"Skjul avancerede"
 	],
+	"Hide Advanced Settings": [
+		"Skjul avancerede indstillinger"
+	],
 	"Hide disabled": [
 		"Skjul deaktiverede"
 	],
@@ -1436,7 +1454,7 @@
 		"For at gøre dette skal hele dit datasæt krypteres og synkroniseres, så det er bedst at lade det køre hen over natten.\n\nFølg disse instruktioner for at starte:\n\n1. Synkroniser alle dine enheder.\n2. Klik \"%s\".\n3. Lad det køre færdig. Mens synkroniseringen kører, bør du undgå at ændre nogen noter på dine andre enheder for at undgå konflikter.\n4. Når synk er færdig på denne enhed, synk'er du alle dine andre enheder og lader det køre helt færdig.\n\nVigtigt: Du behøver kun at gøre dette EN gang på en enhed."
 	],
 	"In order to synchronise, please upgrade your application to version %s+": [
-		""
+		"For at synkronisere skal du opgradere din applikation til version %s+"
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"For at bruge filsystemsynkronisering skal du give tilladelse til at skrive til eksternt lager."
@@ -1746,7 +1764,7 @@
 		"Medieafspiller, matematik, diagrammer, indholdsfortegnelse"
 	],
 	"Minimise": [
-		""
+		"Minimér"
 	],
 	"Missing keys": [
 		"Manglende nøgler"
@@ -2553,10 +2571,10 @@
 		"Solarised Lys"
 	],
 	"Some attachments could not be downloaded. Please try to download them again.": [
-		""
+		"Nogle vedhæftede filer kunne ikke downloades. Prøv at downloade dem igen."
 	],
 	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
-		""
+		"Nogle vedhæftede filer skal downloades. Indstil download-tilstanden for vedhæftede filer til \"altid\", og prøv igen."
 	],
 	"Some items cannot be decrypted.": [
 		"Nogle emner kan ikke dekrypteres."
@@ -2566,6 +2584,9 @@
 	],
 	"Some items cannot be synchronised. Press for more info.": [
 		"Nogle emner kan ikke synkroniseres. Tryk for mere info."
+	],
+	"Some items could not be synchronised. Please try to synchronise them first.": [
+		"Nogle elementer kunne ikke synkroniseres. Prøv at synkronisere dem først."
 	],
 	"Sort notebooks by": [
 		"Sorter notesbøger efter"
@@ -2780,6 +2801,9 @@
 	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
 		"Mange tak! Din Joplin Cloud-konto er nu indstillet og klar til brug."
 	],
+	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
+		"[Web Clipper](%s) er en browser-udvidelser, som gør at du kan gemme hjemmesider og screenshots fra din browser."
+	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Den aktive profil kan ikke slettes. Skift til en anden profil, og prøv igen."
 	],
@@ -2866,7 +2890,7 @@
 		"Modtageren kunne ikke fjernes fra listen. Prøv venligst igen.\n\nFejlen var: \"%s\""
 	],
 	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
-		""
+		"Synkroniseringsmålet kan ikke ændres af følgende grund: %s\n\nHvis problemet ikke kan løses, kan det være nødvendigt at rydde dine data først ved at følge disse instruktioner:\n\n%s"
 	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Synkroniseringsmålet skal opgraderes før Joplin kan synkronisere. Denne operation kan tage nogle minutter at udføre, og appen skal genstartes. Klik på linket for at fortsætte."
@@ -3118,7 +3142,7 @@
 		"Fortryd"
 	],
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
-		""
+		"Afinstaller og geninstaller applikationen. Sørg for at lave en sikkerhedskopi først ved at eksportere alle dine noter som JEX fra desktop-applikationen."
 	],
 	"Unknown flag: %s": [
 		"Ukendt markering: %s"

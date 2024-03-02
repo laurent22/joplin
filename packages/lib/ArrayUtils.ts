@@ -1,10 +1,10 @@
-export const unique = function(array: any[]) {
+export const unique = function<T extends any>(array: T[]): T[] {
 	return array.filter((elem, index, self) => {
 		return index === self.indexOf(elem);
 	});
 };
 
-export const removeElement = function(array: any[], element: any) {
+export const removeElement = function<T extends any>(array: T[], element: T): T[] {
 	const index = array.indexOf(element);
 	if (index < 0) return array;
 	const newArray = array.slice();

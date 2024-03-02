@@ -48,7 +48,7 @@ stats['bg_BG'] = {"percentDone":41,"pluralForms":"nplurals=2; plural=(n != 1);"}
 stats['ca'] = {"percentDone":89,"pluralForms":"nplurals=2; plural=(n != 1);"};
 stats['hr_HR'] = {"percentDone":94,"pluralForms":"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"};
 stats['cs_CZ'] = {"percentDone":91,"pluralForms":"nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;"};
-stats['da_DK'] = {"percentDone":98,"pluralForms":"nplurals=2; plural=(n != 1);"};
+stats['da_DK'] = {"percentDone":100,"pluralForms":"nplurals=2; plural=(n != 1);"};
 stats['de_DE'] = {"percentDone":99,"pluralForms":"nplurals=2; plural=(n != 1);"};
 stats['et_EE'] = {"percentDone":40,"pluralForms":"nplurals=2; plural=(n != 1);"};
 stats['en_GB'] = {"percentDone":100};

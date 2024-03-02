@@ -6536,12 +6536,12 @@ __metadata:
     "@electron/remote": 2.0.12
     "@fortawesome/fontawesome-free": 5.15.4
     "@joeattardi/emoji-button": 4.6.4
-    "@joplin/default-plugins": ~2.14
-    "@joplin/editor": ~2.14
-    "@joplin/lib": ~2.14
-    "@joplin/renderer": ~2.14
-    "@joplin/tools": ~2.14
-    "@joplin/utils": ~2.14
+    "@joplin/default-plugins": ~3.0
+    "@joplin/editor": ~3.0
+    "@joplin/lib": ~3.0
+    "@joplin/renderer": ~3.0
+    "@joplin/tools": ~3.0
+    "@joplin/utils": ~3.0
     "@playwright/test": 1.40.1
     "@sentry/electron": 4.17.0
     "@testing-library/react-hooks": 8.0.1
@@ -6579,6 +6579,7 @@ __metadata:
     node-fetch: 2.6.7
     node-notifier: 10.0.1
     node-rsa: 1.1.1
+    notyf: 3.10.0
     pdfjs-dist: 3.11.174
     pretty-bytes: 5.6.0
     re-resizable: 6.9.11
@@ -6613,13 +6614,13 @@ __metadata:
     "@babel/preset-env": 7.20.2
     "@babel/runtime": 7.20.0
     "@bam.tech/react-native-image-resizer": 3.0.7
-    "@joplin/editor": ~2.14
-    "@joplin/lib": ~2.14
-    "@joplin/react-native-alarm-notification": ~2.14
-    "@joplin/react-native-saf-x": ~2.14
-    "@joplin/renderer": ~2.14
-    "@joplin/tools": ~2.14
-    "@joplin/utils": ~2.14
+    "@joplin/editor": ~3.0
+    "@joplin/lib": ~3.0
+    "@joplin/react-native-alarm-notification": ~3.0
+    "@joplin/react-native-saf-x": ~3.0
+    "@joplin/renderer": ~3.0
+    "@joplin/tools": ~3.0
+    "@joplin/utils": ~3.0
     "@js-draw/material-icons": 1.16.1
     "@react-native-community/clipboard": 1.5.1
     "@react-native-community/datetimepicker": 7.6.2
@@ -6710,11 +6711,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/default-plugins@workspace:packages/default-plugins, @joplin/default-plugins@~2.14":
+"@joplin/default-plugins@workspace:packages/default-plugins, @joplin/default-plugins@~3.0":
   version: 0.0.0-use.local
   resolution: "@joplin/default-plugins@workspace:packages/default-plugins"
   dependencies:
-    "@joplin/utils": ~2.14
+    "@joplin/utils": ~3.0
     "@types/yargs": 17.0.32
     fs-extra: 11.2.0
     ts-node: 10.9.2
@@ -6745,7 +6746,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/editor@workspace:packages/editor, @joplin/editor@~2.14":
+"@joplin/editor@workspace:packages/editor, @joplin/editor@~3.0":
   version: 0.0.0-use.local
   resolution: "@joplin/editor@workspace:packages/editor"
   dependencies:
@@ -6760,7 +6761,7 @@ __metadata:
     "@codemirror/search": 6.5.6
     "@codemirror/state": 6.4.1
     "@codemirror/view": 6.24.1
-    "@joplin/lib": ~2.14
+    "@joplin/lib": ~3.0
     "@lezer/common": 1.2.1
     "@lezer/highlight": 1.2.0
     "@lezer/markdown": 1.2.0
@@ -6777,7 +6778,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-htmlparser2@^4.1.50, @joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2":
+"@joplin/fork-htmlparser2@^4.1.51, @joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
@@ -6798,7 +6799,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-sax@^1.2.54, @joplin/fork-sax@workspace:packages/fork-sax":
+"@joplin/fork-sax@^1.2.55, @joplin/fork-sax@workspace:packages/fork-sax":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-sax@workspace:packages/fork-sax"
   dependencies:
@@ -6807,7 +6808,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-uslug@^1.0.15, @joplin/fork-uslug@workspace:packages/fork-uslug":
+"@joplin/fork-uslug@^1.0.16, @joplin/fork-uslug@workspace:packages/fork-uslug":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-uslug@workspace:packages/fork-uslug"
   dependencies:
@@ -6817,12 +6818,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/htmlpack@workspace:packages/htmlpack, @joplin/htmlpack@~2.14":
+"@joplin/htmlpack@workspace:packages/htmlpack, @joplin/htmlpack@~3.0":
   version: 0.0.0-use.local
   resolution: "@joplin/htmlpack@workspace:packages/htmlpack"
   dependencies:
     "@adobe/css-tools": 4.3.2
-    "@joplin/fork-htmlparser2": ^4.1.50
+    "@joplin/fork-htmlparser2": ^4.1.51
     "@types/fs-extra": 11.0.4
     datauri: 4.1.0
     fs-extra: 11.2.0
@@ -6830,25 +6831,26 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/lib@workspace:packages/lib, @joplin/lib@~2.14":
+"@joplin/lib@workspace:packages/lib, @joplin/lib@~3.0":
   version: 0.0.0-use.local
   resolution: "@joplin/lib@workspace:packages/lib"
   dependencies:
     "@adobe/css-tools": 4.3.2
     "@aws-sdk/client-s3": 3.296.0
     "@aws-sdk/s3-request-presigner": 3.296.0
-    "@joplin/fork-htmlparser2": ^4.1.50
-    "@joplin/fork-sax": ^1.2.54
-    "@joplin/fork-uslug": ^1.0.15
-    "@joplin/htmlpack": ~2.14
-    "@joplin/renderer": ~2.14
-    "@joplin/turndown": ^4.0.72
-    "@joplin/turndown-plugin-gfm": ^1.0.54
-    "@joplin/utils": ~2.14
+    "@joplin/fork-htmlparser2": ^4.1.51
+    "@joplin/fork-sax": ^1.2.55
+    "@joplin/fork-uslug": ^1.0.16
+    "@joplin/htmlpack": ~3.0
+    "@joplin/renderer": ~3.0
+    "@joplin/turndown": ^4.0.73
+    "@joplin/turndown-plugin-gfm": ^1.0.55
+    "@joplin/utils": ~3.0
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
     "@types/js-yaml": 4.0.9
     "@types/markdown-it": 13.0.7
+    "@types/mustache": 4.2.5
     "@types/nanoid": 3.0.0
     "@types/node": 18.19.8
     "@types/node-rsa": 1.1.4
@@ -6922,7 +6924,7 @@ __metadata:
     "@fortawesome/fontawesome-svg-core": 6.1.2
     "@fortawesome/free-solid-svg-icons": 6.1.2
     "@fortawesome/react-fontawesome": 0.2.0
-    "@joplin/lib": ~2.14
+    "@joplin/lib": ~3.0
     "@types/jest": 29.5.8
     "@types/pdfjs-dist": 2.10.378
     "@types/react": 18.2.48
@@ -6950,9 +6952,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/plugin-repo-cli@workspace:packages/plugin-repo-cli"
   dependencies:
-    "@joplin/lib": ~2.14
-    "@joplin/tools": ~2.14
-    "@joplin/utils": ~2.14
+    "@joplin/lib": ~3.0
+    "@joplin/tools": ~3.0
+    "@joplin/utils": ~3.0
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
     "@types/node": 18.19.8
@@ -6977,7 +6979,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/react-native-alarm-notification@workspace:packages/react-native-alarm-notification, @joplin/react-native-alarm-notification@~2.14":
+"@joplin/react-native-alarm-notification@workspace:packages/react-native-alarm-notification, @joplin/react-native-alarm-notification@~3.0":
   version: 0.0.0-use.local
   resolution: "@joplin/react-native-alarm-notification@workspace:packages/react-native-alarm-notification"
   dependencies:
@@ -6986,7 +6988,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/react-native-saf-x@workspace:packages/react-native-saf-x, @joplin/react-native-saf-x@~2.14":
+"@joplin/react-native-saf-x@workspace:packages/react-native-saf-x, @joplin/react-native-saf-x@~3.0":
   version: 0.0.0-use.local
   resolution: "@joplin/react-native-saf-x@workspace:packages/react-native-saf-x"
   dependencies:
@@ -7001,13 +7003,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/renderer@workspace:packages/renderer, @joplin/renderer@~2.14":
+"@joplin/renderer@workspace:packages/renderer, @joplin/renderer@~3.0":
   version: 0.0.0-use.local
   resolution: "@joplin/renderer@workspace:packages/renderer"
   dependencies:
-    "@joplin/fork-htmlparser2": ^4.1.50
-    "@joplin/fork-uslug": ^1.0.15
-    "@joplin/utils": ~2.14
+    "@joplin/fork-htmlparser2": ^4.1.51
+    "@joplin/fork-uslug": ^1.0.16
+    "@joplin/utils": ~3.0
     "@types/jest": 29.5.8
     "@types/markdown-it": 13.0.7
     "@types/node": 18.19.8
@@ -7045,10 +7047,10 @@ __metadata:
   dependencies:
     "@aws-sdk/client-s3": 3.296.0
     "@fortawesome/fontawesome-free": 5.15.4
-    "@joplin/lib": ~2.14
-    "@joplin/renderer": ~2.14
-    "@joplin/tools": ~2.14
-    "@joplin/utils": ~2.14
+    "@joplin/lib": ~3.0
+    "@joplin/renderer": ~3.0
+    "@joplin/tools": ~3.0
+    "@joplin/utils": ~3.0
     "@koa/cors": 3.4.3
     "@rmp135/sql-ts": 1.18.1
     "@types/bcryptjs": 2.4.6
@@ -7103,15 +7105,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/tools@workspace:packages/tools, @joplin/tools@~2.14":
+"@joplin/tools@workspace:packages/tools, @joplin/tools@~3.0":
   version: 0.0.0-use.local
   resolution: "@joplin/tools@workspace:packages/tools"
   dependencies:
     "@docusaurus/plugin-sitemap": 2.4.3
-    "@joplin/fork-htmlparser2": ^4.1.50
-    "@joplin/lib": ~2.14
-    "@joplin/renderer": ~2.14
-    "@joplin/utils": ~2.14
+    "@joplin/fork-htmlparser2": ^4.1.51
+    "@joplin/lib": ~3.0
+    "@joplin/renderer": ~3.0
+    "@joplin/utils": ~3.0
     "@rmp135/sql-ts": 1.18.1
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
@@ -7151,7 +7153,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/turndown-plugin-gfm@^1.0.54, @joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm":
+"@joplin/turndown-plugin-gfm@^1.0.55, @joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm":
   version: 0.0.0-use.local
   resolution: "@joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm"
   dependencies:
@@ -7163,7 +7165,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/turndown@^4.0.72, @joplin/turndown@workspace:packages/turndown":
+"@joplin/turndown@^4.0.73, @joplin/turndown@workspace:packages/turndown":
   version: 0.0.0-use.local
   resolution: "@joplin/turndown@workspace:packages/turndown"
   dependencies:
@@ -7195,11 +7197,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@joplin/utils@workspace:packages/utils, @joplin/utils@~2.14":
+"@joplin/utils@workspace:packages/utils, @joplin/utils@~3.0":
   version: 0.0.0-use.local
   resolution: "@joplin/utils@workspace:packages/utils"
   dependencies:
-    "@joplin/fork-htmlparser2": ^4.1.50
+    "@joplin/fork-htmlparser2": ^4.1.51
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
     "@types/markdown-it": 13.0.7
@@ -26984,10 +26986,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "joplin@workspace:packages/app-cli"
   dependencies:
-    "@joplin/lib": ~2.14
-    "@joplin/renderer": ~2.14
-    "@joplin/tools": ~2.14
-    "@joplin/utils": ~2.14
+    "@joplin/lib": ~3.0
+    "@joplin/renderer": ~3.0
+    "@joplin/tools": ~3.0
+    "@joplin/utils": ~3.0
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
     "@types/node": 18.19.8
@@ -31617,6 +31619,13 @@ __metadata:
   version: 0.1.0
   resolution: "not@npm:0.1.0"
   checksum: 8043bb53bc1c465a4a4f751394f11aad1d8ccae08dd2123310c6a5d160a5ad4138706d50af905cf114b72507a328585d4f2a73cd3d6730981dd2675aa9c8436f
+  languageName: node
+  linkType: hard
+
+"notyf@npm:3.10.0":
+  version: 3.10.0
+  resolution: "notyf@npm:3.10.0"
+  checksum: 6cc533fccb0d74e544edf10e82d2942975adc4c993a68c966694bbb451dc06056d02e8dced4ecfce2c4586682223759cb1f9f3e3f609c83458e99c2bf5494b00
   languageName: node
   linkType: hard
 
