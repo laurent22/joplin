@@ -16,7 +16,7 @@ import { MarkdownEditorContentScriptModule, ContentScriptContext } from 'api/typ
 //  const { lineNumbers } = joplin.require('@codemirror/view');
 
 
-export default (_context: ContentScriptContext): MarkdownEditorContentScriptModule => {
+export default (context: ContentScriptContext): MarkdownEditorContentScriptModule => {
 	return {
 		// - codeMirrorWrapper: A thin wrapper around CodeMirror 6, designed to be similar to the
 		//     CodeMirror 5 API. If running in CodeMirror 5, a CodeMirror object is provided instead.
