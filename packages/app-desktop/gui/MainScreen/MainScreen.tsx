@@ -45,6 +45,8 @@ import restart from '../../services/restart';
 const { connect } = require('react-redux');
 import PromptDialog from '../PromptDialog';
 import NotePropertiesDialog from '../NotePropertiesDialog';
+import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
+import validateColumns from '../NoteListHeader/utils/validateColumns';
 import TrashNotification from '../TrashNotification/TrashNotification';
 
 const PluginManager = require('@joplin/lib/services/PluginManager');
@@ -89,6 +91,9 @@ interface Props {
 	lastDeletionNotificationTime: number;
 	selectedFolderId: string;
 	mustUpgradeAppMessage: string;
+	notesSortOrderField: string;
+	notesSortOrderReverse: boolean;
+	notesColumns: NoteListColumns;
 }
 
 interface ShareFolderDialogOptions {
@@ -737,6 +742,9 @@ class MainScreenComponent extends React.Component<Props, State> {
 					themeId={this.props.themeId}
 					listRendererId={this.props.listRendererId}
 					startupPluginsLoaded={this.props.startupPluginsLoaded}
+					notesSortOrderField={this.props.notesSortOrderField}
+					notesSortOrderReverse={this.props.notesSortOrderReverse}
+					columns={this.props.notesColumns}
 					selectedFolderId={this.props.selectedFolderId}
 				/>;
 			},
@@ -934,6 +942,9 @@ const mapStateToProps = (state: AppState) => {
 		lastDeletionNotificationTime: state.lastDeletionNotificationTime,
 		selectedFolderId: state.selectedFolderId,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
+		notesSortOrderField: state.settings['notes.sortOrder.field'],
+		notesSortOrderReverse: state.settings['notes.sortOrder.reverse'],
+		notesColumns: validateColumns(state.settings['notes.columns']),
 	};
 };
 

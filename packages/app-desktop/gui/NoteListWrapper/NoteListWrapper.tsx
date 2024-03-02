@@ -7,9 +7,14 @@ import { Size } from '../ResizableLayout/utils/types';
 import styled from 'styled-components';
 import { getDefaultListRenderer, getListRendererById } from '@joplin/lib/services/noteList/renderers';
 import Logger from '@joplin/utils/Logger';
+import NoteListHeader from '../NoteListHeader/NoteListHeader';
 import { _ } from '@joplin/lib/locale';
 import { BaseBreakpoint, Breakpoints } from '../NoteList/utils/types';
 import { ButtonSize, buttonSizePx } from '../Button/Button';
+import Setting from '@joplin/lib/models/Setting';
+import { OnItemClickHander } from '../NoteListHeader/types';
+import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
+import depNameToNoteProp from '@joplin/lib/services/noteList/depNameToNoteProp';
 import { getTrashFolderId } from '@joplin/lib/services/trash';
 
 const logger = Logger.create('NoteListWrapper');
@@ -21,6 +26,9 @@ interface Props {
 	themeId: number;
 	listRendererId: string;
 	startupPluginsLoaded: boolean;
+	notesSortOrderField: string;
+	notesSortOrderReverse: boolean;
+	columns: NoteListColumns;
 	selectedFolderId: string;
 }
 
@@ -99,6 +107,8 @@ export default function NoteListWrapper(props: Props) {
 	const [controlHeight] = useState(theme.topRowHeight);
 	const listRenderer = useListRenderer(props.listRendererId, props.startupPluginsLoaded);
 	const newNoteButtonRef = useRef(null);
+	const isMultiColumns = listRenderer ? listRenderer.multiColumns : false;
+	const columns = isMultiColumns ? props.columns : null;
 
 	const { breakpoint, dynamicBreakpoints, lineCount } = useNoteListControlsBreakpoints(props.size.width, newNoteButtonRef, props.selectedFolderId);
 
@@ -117,9 +127,38 @@ export default function NoteListWrapper(props: Props) {
 	const noteListSize = useMemo(() => {
 		return {
 			width: props.size.width,
-			height: props.size.height - noteListControlsHeight,
+			height: props.size.height - noteListControlsHeight - (isMultiColumns ? theme.noteListHeaderHeight : 0),
 		};
-	}, [props.size, noteListControlsHeight]);
+	}, [props.size, noteListControlsHeight, theme.noteListHeaderHeight, isMultiColumns]);
+
+	const onHeaderItemClick: OnItemClickHander = useCallback(event => {
+		const field = depNameToNoteProp(event.name as any).split('.')[1];
+
+		if (!Setting.isAllowedEnumOption('notes.sortOrder.field', field)) {
+			logger.warn(`Unsupported sorting option: ${field}`);
+			return;
+		}
+
+		if (Setting.value('notes.sortOrder.field') === field) {
+			Setting.toggle('notes.sortOrder.reverse');
+		} else {
+			Setting.setValue('notes.sortOrder.field', field);
+		}
+	}, []);
+
+	const renderHeader = () => {
+		if (!listRenderer || !isMultiColumns) return null;
+
+		return <NoteListHeader
+			height={theme.noteListHeaderHeight}
+			template={listRenderer.headerTemplate}
+			onClick={listRenderer.onHeaderClick}
+			columns={columns}
+			notesSortOrderField={props.notesSortOrderField}
+			notesSortOrderReverse={props.notesSortOrderReverse}
+			onItemClick={onHeaderItemClick}
+		/>;
+	};
 
 	const renderNoteList = () => {
 		if (!listRenderer) return null;
@@ -128,6 +167,7 @@ export default function NoteListWrapper(props: Props) {
 			resizableLayoutEventEmitter={props.resizableLayoutEventEmitter}
 			size={noteListSize}
 			visible={props.visible}
+			columns={columns}
 		/>;
 	};
 
@@ -144,6 +184,7 @@ export default function NoteListWrapper(props: Props) {
 				padding={noteListControlsPadding}
 				buttonVerticalGap={noteListControlsButtonVerticalGap}
 			/>
+			{renderHeader()}
 			{renderNoteList()}
 		</StyledRoot>
 	);

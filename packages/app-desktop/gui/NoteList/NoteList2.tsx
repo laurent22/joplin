@@ -213,6 +213,7 @@ const NoteList = (props: Props) => {
 					isWatched={props.watchedNoteFiles.includes(note.id)}
 					listRenderer={listRenderer}
 					dispatch={props.dispatch}
+					columns={props.columns}
 				/>,
 			);
 		}

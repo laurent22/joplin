@@ -1,5 +1,6 @@
 import { _ } from '../../locale';
-import { ItemFlow, ListRenderer } from '../plugins/api/noteListType';
+import CommandService from '../CommandService';
+import { ItemFlow, ListRenderer, OnClickEvent } from '../plugins/api/noteListType';
 
 interface Props {
 	note: {
@@ -17,7 +18,7 @@ interface Props {
 	};
 }
 
-const defaultListRenderer: ListRenderer = {
+const renderer: ListRenderer = {
 	id: 'compact',
 
 	label: async () => _('Compact'),
@@ -37,7 +38,7 @@ const defaultListRenderer: ListRenderer = {
 		'note.is_shared',
 		'note.is_todo',
 		'note.isWatched',
-		'note.titleHtml',
+		'note.title',
 		'note.todo_completed',
 	],
 
@@ -117,6 +118,16 @@ const defaultListRenderer: ListRenderer = {
 		}
 	`,
 
+	headerTemplate: // html
+		`
+		<button data-id="title">Title</button><button data-id="updated">Updated</button>
+	`,
+
+	onHeaderClick: async (event: OnClickEvent) => {
+		const field = event.elementId === 'title' ? 'title' : 'user_updated_time';
+		void CommandService.instance().execute('toggleNotesSortOrderField', field);
+	},
+
 	itemTemplate: // html
 		`
 		<div class="content {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
@@ -124,10 +135,10 @@ const defaultListRenderer: ListRenderer = {
 				<div class="checkbox">
 					<input data-id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
 				</div>
-			{{/note.is_todo}}	
+			{{/note.is_todo}}
 			<div class="title" data-id="{{note.id}}">
 				<i class="watchedicon fa fa-share-square"></i>
-				<span>{{{note.titleHtml}}}</span>
+				<span>{{note.title}}</span>
 			</div>
 		</div>
 	`,
@@ -137,4 +148,4 @@ const defaultListRenderer: ListRenderer = {
 	},
 };
 
-export default defaultListRenderer;
+export default renderer;

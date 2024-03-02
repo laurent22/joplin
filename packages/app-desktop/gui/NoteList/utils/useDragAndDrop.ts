@@ -85,11 +85,13 @@ const useDragAndDrop = (
 		}
 	}, [notesParentType, dragTargetNoteIndex, dragOverTargetNoteIndex, selectedFolderInTrash]);
 
-	const onDrop: DragEventHandler = useCallback(async (event: any) => {
+	const onDrop: DragEventHandler = useCallback(async (event) => {
+		const dt = event.dataTransfer;
+		if (!dt.types.includes('text/x-jop-note-ids')) return;
+
 		// TODO: check that parent type is folder
 		if (!canManuallySortNotes(notesParentType, noteSortOrder, selectedFolderInTrash)) return;
 
-		const dt = event.dataTransfer;
 		setDragOverTargetNoteIndex(null);
 
 		const targetNoteIndex = dragTargetNoteIndex(event);

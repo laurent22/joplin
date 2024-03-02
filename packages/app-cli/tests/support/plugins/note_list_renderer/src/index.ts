@@ -22,7 +22,7 @@ const registerSimpleTopToBottomRenderer = async () => {
 	
 		dependencies: [
 			'item.selected',
-			'note.titleHtml',
+			'note.title',
 			'note.body',
 			'note.user_updated_time',
 		],
@@ -55,8 +55,8 @@ const registerSimpleTopToBottomRenderer = async () => {
 		itemTemplate: // html
 			`
 			<div class="content {{#item.selected}}-selected{{/item.selected}}">
-				<p class="title">{{{note.titleHtml}}}</p>
-				<p class="date">{{{updatedTime}}}</p>
+				<p class="title">{{note.title}}</p>
+				<p class="date">{{updatedTime}}</p>
 				<p class="body">{{noteBody}}</p>
 			</div>
 		`,
@@ -90,7 +90,7 @@ const registerSimpleLeftToRightRenderer = async() => {
 		dependencies: [
 			'note.id',
 			'item.selected',
-			'note.titleHtml',
+			'note.title',
 			'note.body',
 		],
 
@@ -124,7 +124,7 @@ const registerSimpleLeftToRightRenderer = async() => {
 					<img class="thumbnail" src="file://{{thumbnailFilePath}}"/>
 				{{/thumbnailFilePath}}
 				{{^thumbnailFilePath}}
-					{{{note.titleHtml}}}
+					{{{note.title}}}
 				{{/thumbnailFilePath}}
 			</div>
 		`,
