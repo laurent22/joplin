@@ -26,6 +26,7 @@
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0",
     "@joplin/lib": "~2.9",
-    "@codemirror/view": "6.22.2"
+    "@codemirror/view": "6.22.2",
+    "@codemirror/autocomplete": "6.12.0"
   }
 }

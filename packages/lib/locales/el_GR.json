@@ -1748,6 +1748,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"Πολυμέσα, μαθηματικές παραστάσεις, διαγράμματα, πίνακας περιεχομένων"
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"Απουσία κλειδιών"
 	],
@@ -1874,7 +1877,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Δεν έγινε επαλήθευση με το %s. Παρακαλώ καταχωρίστε τα διαπιστευτήρια που λείπουν."
 	],
 	"Not downloaded": [

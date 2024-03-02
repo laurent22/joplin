@@ -51,7 +51,7 @@ export default function FullViewer(props: FullViewerProps) {
 	const [startPage, setStartPage] = useState<number>(props.startPage || 1);
 	const [selectedPage, setSelectedPage] = useState<number>(startPage);
 	const mainViewerRef = useRef<HTMLDivElement>(null);
-	const thubmnailRef = useRef<HTMLDivElement>(null);
+	const thumbnailRef = useRef<HTMLDivElement>(null);
 
 	const onActivePageChange = useCallback((pageNo: number) => {
 		setSelectedPage(pageNo);
@@ -91,12 +91,12 @@ export default function FullViewer(props: FullViewerProps) {
 				</div>
 			</div>
 			<div className="viewers dark-bg">
-				<div className="pane thumbnail-pane" ref={thubmnailRef}>
+				<div className="pane thumbnail-pane" ref={thumbnailRef}>
 					<VerticalPages
 						pdfDocument={pdfDocument}
 						isDarkTheme={true}
 						rememberScroll={false}
-						container={thubmnailRef}
+						container={thumbnailRef}
 						pageGap={16}
 						widthPercent={86}
 						showPageNumbers={true}

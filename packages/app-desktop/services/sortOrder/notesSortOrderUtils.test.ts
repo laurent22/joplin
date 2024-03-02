@@ -15,7 +15,7 @@ describe('notesSortOrderUtils', () => {
 		expect(notesSortOrderFieldArray()).toStrictEqual(expected);
 	});
 
-	it('should provide the next field cyclicly', async () => {
+	it('should provide the next field cyclically', async () => {
 		expect(notesSortOrderNextField('user_updated_time')).toBe('user_created_time');
 		expect(notesSortOrderNextField('order')).toBe('user_updated_time');
 	});

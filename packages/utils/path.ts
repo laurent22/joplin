@@ -94,6 +94,13 @@ export function trimSlashes(path: string): string {
 	return ltrimSlashes(rtrimSlashes(path));
 }
 
+// UNC paths can point to network drives and thus can be dangerous to open
+// on some Windows devices.
+// See https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/62e862f4-2a51-452e-8eeb-dc4ff5ee33cc
+export const isUncPath = (path: string, os: string|null = null) => {
+	return toSystemSlashes(path.trim(), os).startsWith('\\\\');
+};
+
 export function quotePath(path: string) {
 	if (!path) return '';
 	if (path.indexOf('"') < 0 && path.indexOf(' ') < 0) return path;

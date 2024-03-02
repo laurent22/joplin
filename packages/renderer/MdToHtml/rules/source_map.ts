@@ -6,7 +6,7 @@ export default {
 		const allowedLevels = {
 			paragraph_open: 0,
 			heading_open: 0,
-			// fence: 0, // fence uses custom rendering that doesn't propogate attr so it can't be used for now
+			// fence: 0, // fence uses custom rendering that doesn't propagate attr so it can't be used for now
 			blockquote_open: 0,
 			table_open: 0,
 			code_block: 0,

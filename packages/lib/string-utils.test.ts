@@ -3,6 +3,7 @@ import * as StringUtils from './string-utils';
 
 describe('string-utils', () => {
 
+	// cSpell:disable
 	test.each([
 		[[], 'test', 'a', 'b', null, 'test'],
 		[['test'], 'test', 'a', 'b', null, 'atestb'],
@@ -35,6 +36,7 @@ describe('string-utils', () => {
 
 		expect(actual).toBe(expected);
 	}));
+	// cSpell:enable
 
 	test.each([
 		['', [[0, 0]]],

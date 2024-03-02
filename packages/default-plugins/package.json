@@ -1,6 +1,6 @@
 {
   "name": "@joplin/default-plugins",
-  "version": "2.14.0",
+  "version": "3.0.0",
   "description": "Default plugins bundler",
   "private": true,
   "scripts": {
@@ -18,7 +18,7 @@
     "typescript": "5.2.2"
   },
   "dependencies": {
-    "@joplin/utils": "~2.14",
+    "@joplin/utils": "~3.0",
     "fs-extra": "11.2.0",
     "yargs": "17.7.2"
   }

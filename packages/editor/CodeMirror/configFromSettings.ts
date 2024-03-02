@@ -6,7 +6,7 @@ import { EditorState } from '@codemirror/state';
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
 import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
 import { MarkdownMathExtension } from './markdown/markdownMathParser';
-import syntaxHighlightingLanguages from './markdown/syntaxHighlightingLanguages';
+import lookUpLanguage from './markdown/codeBlockLanguages/lookUpLanguage';
 import { html } from '@codemirror/lang-html';
 import { defaultKeymap, emacsStyleKeymap } from '@codemirror/commands';
 import { vim } from '@replit/codemirror-vim';
@@ -26,7 +26,7 @@ const configFromSettings = (settings: EditorSettings) => {
 						// Don't highlight KaTeX if the user disabled it
 						settings.katexEnabled ? MarkdownMathExtension : [],
 					],
-					codeLanguages: syntaxHighlightingLanguages,
+					codeLanguages: lookUpLanguage,
 				}),
 				markdownLanguage.data.of({ closeBrackets: openingBrackets }),
 			];

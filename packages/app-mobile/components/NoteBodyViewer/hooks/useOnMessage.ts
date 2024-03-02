@@ -18,7 +18,7 @@ export default function useOnMessage(
 	noteBody: string,
 	callbacks: MessageCallbacks,
 ) {
-	// Dectructure callbacks. Because we have that ({ a: 1 }) !== ({ a: 1 }),
+	// Destructure callbacks. Because we have that ({ a: 1 }) !== ({ a: 1 }),
 	// we can expect the `callbacks` variable from the last time useOnMessage was called to
 	// not equal the current` callbacks` variable, even if the callbacks themselves are the
 	// same.
