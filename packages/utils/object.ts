@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
 export const objectValueFromPath = (o: any, path: string) => {
 	const elements = path.split('.');
 	let result = { ...o };
@@ -9,3 +7,9 @@ export const objectValueFromPath = (o: any, path: string) => {
 	}
 	return result;
 };
+
+export function checkObjectHasProperties(object: any, properties: string[]) {
+	for (const prop of properties) {
+		if (!(prop in object)) throw new Error(`Missing property "${prop}": ${JSON.stringify(object)}`);
+	}
+}

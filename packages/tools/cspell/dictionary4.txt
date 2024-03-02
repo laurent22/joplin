@@ -89,3 +89,5 @@ lastname
 signup
 activatable
 titlewrapper
+notyf
+Notyf

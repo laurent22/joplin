@@ -1,4 +1,48 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Sat, 27 Jan 2024 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Sat, 27 Jan 2024 00:00:00 GMT</pubDate><item><title><![CDATA[Support for new plugin metadata]]></title><description><![CDATA[<p>The plugin manifest now supports new properties to better describe and present your plugins on Joplin Plugins website. Those are the <code>icons</code>, <code>categories</code>, <code>screenshots</code> and <code>promo_tile</code> properties.</p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Fri, 01 Mar 2024 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 01 Mar 2024 00:00:00 GMT</pubDate><item><title><![CDATA[What's new in Joplin 2.14]]></title><description><![CDATA[<h2>OCR<a name="ocr" href="#ocr" class="heading-anchor">🔗</a></h2>
+<p>Optical Character Recognition (OCR) in Joplin enables the transformation of text-containing images into machine-readable text formats. From this version you can enable OCR in the Configuration screen under the &quot;General&quot; section. Once activated, Joplin scans images and PDFs, extracting text data for searchability.</p>
+<p>While OCR search is available on both desktop and mobile apps, document scanning is limited to the desktop due to resource demands. For more information head to the <a href="https://joplinapp.org/help/apps/ocr">OCR official documentation</a>!</p>
+<h2>Bundled plugins<a name="bundled-plugins" href="#bundled-plugins" class="heading-anchor">🔗</a></h2>
+<p>Joplin will now bundle high quality plugins that we feel will benefit most users. With this version we include the great <a href="https://github.com/JackGruber/joplin-plugin-backup">Backup plugin</a> by JackGruber. This will provide another layer of safety when using Joplin as by default it will automatically backup your notes in a &quot;JoplinBackup&quot; folder in your home directory.</p>
+<p>Note that, just like any other plugin, you can change the plugin configuration or even disable it from the settings.</p>
+<h2>ENEX importer<a name="enex-importer" href="#enex-importer" class="heading-anchor">🔗</a></h2>
+<p>As usual in recent version, there are plenty of improvements to the <a href="https://joplinapp.org/help/apps/import_export#importing-from-evernote">Joplin ENEX importer</a>. Besides the various fixes and enhancement to support this format, we've added a few useful features:</p>
+<h3>Restore note links after importing an ENEX file<a name="restore-note-links-after-importing-an-enex-file" href="#restore-note-links-after-importing-an-enex-file" class="heading-anchor">🔗</a></h3>
+<p>Evernote Export files do not include the necessary information to reliably restore the links between notes, so for a long time this feature was not supported by the importer.</p>
+<p>Now however Joplin will try to guess what note is linked to what other note based on the note title, which in many cases will give the expected result. But not always - when that happens, and Joplin cannot detect the link target, the application leaves the original Evernote link. That way you can manually restore it yourself or at least find back what the note was linked to.</p>
+<h3>Import a directory of ENEX files<a name="import-a-directory-of-enex-files" href="#import-a-directory-of-enex-files" class="heading-anchor">🔗</a></h3>
+<p>It is notoriously difficult to export data from Evernote because, among other issues, you can only export one notebook at a time, which is an obvious problems when you have dozens of notebooks. Unfortunately we cannot improve this part of the process since this up to Evernote, however we now make it easier to import all these notebook files by adding support for importing a folder of ENEX files. To use this feature, go to File &gt; Import, and select one of the &quot;ENEX (Directory)&quot; options.</p>
+<p>This will process all the ENEX files in that directory and create a notebook in Joplin for each of them.</p>
+<h2>Beta Markdown editor<a name="beta-markdown-editor" href="#beta-markdown-editor" class="heading-anchor">🔗</a></h2>
+<p>This version features further improvements to the new Markdown editor based on <a href="https://codemirror.net/">CodeMirror 6</a>. The goal eventually is to be able to use the same editor on both the desktop and mobile application (which already uses CodeMirror 6), which will allow a more consistent user experience across devices.</p>
+<p>Plugin support has also been improved in this version - plugin authors can now write native CodeMirror 6 extensions using the plugin API. For more information check the documentation on <a href="https://joplinapp.org/help/api/tutorials/cm6_plugin/">how to create a Markdown plugin</a>!</p>
+<p>Another benefit of this new editor is that, in a future version, it will allow us to support plugins on the mobile application since a plugin written for the desktop app will work on mobile too. There are several other advantages that Henry <a href="https://discourse.joplinapp.org/t/pre-release-v2-13-is-now-available-updated-18-11-2023/32697/12?u=laurent">listed in this forum post</a>.</p>
+<h2>Rich text editor improvements<a name="rich-text-editor-improvements" href="#rich-text-editor-improvements" class="heading-anchor">🔗</a></h2>
+<p>We continue making improvements to the Rich Text Editor (RTE) in particular to improve interoperability with other applications, such as LibreOffice, Office or web browsers, as well as better handling of copy and paste.</p>
+<p>Another notable addition is support for setting colours, which was a frequently asked feature. To use the feature, select it from the &quot;...&quot; button in the toolbar. Note that once applied the colours will work in the Markdown editor too!</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20240301-rte-colors.png" alt=""></p>
+<p>See below for the full list of RTE changes:</p>
+<ul>
+<li>Fixed: Rich text editor: Fix context menu not shown in some cases</li>
+<li>Improved: Speed up pasting text and images in Rich Text Editor</li>
+<li>Fixed: Fix drag-and-drop of images and text in the rich text editor</li>
+<li>Fixed: Fix images with SVG data URLs corrupted in the rich text editor</li>
+<li>Fixed: Pasting rich text in the RTE sometimes result in invalid markup</li>
+<li>Fixed: Rich text editor: Fix newline behavior in new notes</li>
+<li>Improved: Add support for changing text colors in rich text editor</li>
+<li>Fixed: Fix HTML resource links lost when editing notes in the rich text editor</li>
+<li>Fixed: Fix code blocks with blank lines break tables in the rich text editor</li>
+<li>Fixed: Copied and pasted text from Firefox to RTE does not include images</li>
+<li>Fixed: Pasting rich text in the RTE sometimes result in invalid markup</li>
+<li>Fixed: Fixed copying and pasting an image from Chrome in RTE</li>
+</ul>
+<h1>Full changelog<a name="full-changelog" href="#full-changelog" class="heading-anchor">🔗</a></h1>
+<p>This is just an overview of the main features. The full changelog is available there:</p>
+<ul>
+<li>Desktop: <a href="https://joplinapp.org/help/about/changelog/desktop">https://joplinapp.org/help/about/changelog/desktop</a></li>
+<li>Android: <a href="https://joplinapp.org/help/about/changelog/android/">https://joplinapp.org/help/about/changelog/android/</a></li>
+<li>iOS: <a href="https://joplinapp.org/help/about/changelog/ios/">https://joplinapp.org/help/about/changelog/ios/</a></li>
+</ul>
+]]></description><link>https://joplinapp.org/news/20240301-release-2-14</link><guid isPermaLink="false">20240301-release-2-14</guid><pubDate>Fri, 01 Mar 2024 00:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 2.14</twitter-text></item><item><title><![CDATA[Support for new plugin metadata]]></title><description><![CDATA[<p>The plugin manifest now supports new properties to better describe and present your plugins on Joplin Plugins website. Those are the <code>icons</code>, <code>categories</code>, <code>screenshots</code> and <code>promo_tile</code> properties.</p>
 <h2>Icon<a name="icon" href="#icon" class="heading-anchor">🔗</a></h2>
 <p>This is the icon that will be used in various plugin pages, including in your main plugin page. It will be shown on the main result page too. If not provided, a default icon will be displayed instead.</p>
 <h2>Category<a name="category" href="#category" class="heading-anchor">🔗</a></h2>
@@ -353,15 +397,4 @@ sys 0m38.013s</p>
 ]]></description><link>https://joplinapp.org/news/20220522-gsoc-contributors</link><guid isPermaLink="false">20220522-gsoc-contributors</guid><pubDate>Sun, 22 May 2022 00:00:00 GMT</pubDate><twitter-text>Joplin received 6 Contributor Projects for GSoC 2022! Welcome to our new contributors who will be working on these projects over summer!</twitter-text></item><item><title><![CDATA[GSoC "Contributor Proposals" phase is starting now!]]></title><description><![CDATA[<p>The &quot;Contributor Proposals&quot; phase of GSoC 2022 is starting today! If you would like to be a contributor, now is the time to choose your project idea, write your proposal, and upload it to <a href="https://summerofcode.withgoogle.com/">https://summerofcode.withgoogle.com/</a></p>
 <p>When it's done, please also let us know by posting an update on your forum introduction post.</p>
 <p>If you haven't created a pull request yet, it's still time to create one. Doing so will greatly increase your chances of being selected!</p>
-]]></description><link>https://joplinapp.org/news/20220405-gsoc-contributor-proposals</link><guid isPermaLink="false">20220405-gsoc-contributor-proposals</guid><pubDate>Tue, 05 Apr 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Joplin participates in Google Summer of Code 2022!]]></title><description><![CDATA[<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20220308-gsoc-banner.png" alt=""></p>
-<p>For the third year, Joplin has been selected as a <strong>Google Summer of Code</strong> mentor organisation! We look forward to start working with the contributors on some great new projects. This year's main themes are:</p>
-<ul>
-<li><strong>Mobile and tablet development</strong> - we want to improve the mobile/tablet application on iOS and Android.</li>
-<li><strong>Plugin and external apps</strong> - leverage the Joplin API to create plugins and external apps.</li>
-<li>And of course contributors are welcome to suggest their own ideas.</li>
-</ul>
-<p>Our full idea list is available here: <a href="https://joplinapp.org/help/dev/gsoc/gsoc2022/ideas">GSoC 2022 idea list</a></p>
-<p>In the coming month (<strong>March 7 - April 3</strong>), contributors will start getting involved in the forum and start discussing project ideas with the mentors and community. It's also a good time to start looking at Joplin's source code, perhaps work on fixing bugs or implement small features to get familiar with the source code, and to show us your skills.</p>
-<p>One difference with previous years is that anyone, not just students, are allowed to participate.</p>
-<p>Additionally, last year Google only allowed smaller projects, while this year they allow again small and large projects, so we've indicated this in the idea list - the small ones are <strong>175 hours</strong>, and the large ones <strong>350 hours</strong>.</p>
-]]></description><link>https://joplinapp.org/news/20220308-gsoc2022-start</link><guid isPermaLink="false">20220308-gsoc2022-start</guid><pubDate>Tue, 08 Mar 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item></channel></rss>
+]]></description><link>https://joplinapp.org/news/20220405-gsoc-contributor-proposals</link><guid isPermaLink="false">20220405-gsoc-contributor-proposals</guid><pubDate>Tue, 05 Apr 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item></channel></rss>

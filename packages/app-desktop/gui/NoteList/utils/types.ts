@@ -30,6 +30,7 @@ export interface Props {
 	parentFolderIsReadOnly: boolean;
 	listRenderer: ListRenderer;
 	columns: NoteListColumns;
+	selectedFolderInTrash: boolean;
 }
 
 export enum BaseBreakpoint {

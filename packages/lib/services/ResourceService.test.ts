@@ -235,30 +235,20 @@ describe('services/ResourceService', () => {
 		expect(await Resource.load(resource.id)).toBeTruthy();
 	}));
 
-	// it('should auto-delete resource even if the associated note was deleted immediately', (async () => {
-	// 	// Previously, when a resource was be attached to a note, then the
-	// 	// note was immediately deleted, the ResourceService would not have
-	// 	// time to quick in an index the resource/note relation. It means
-	// 	// that when doing the orphan resource deletion job, those
-	// 	// resources would permanently stay behind.
-	// 	// https://github.com/laurent22/joplin/issues/932
+	it('should still create associations for notes in the trash', async () => {
+		const note = await Note.save({});
+		await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
+		await Note.delete(note.id, { toTrash: true });
+		await resourceService().indexNoteResources();
 
-	// 	const service = new ResourceService();
+		// Check that the association is made despite the note being deleted
+		const noteResources = await NoteResource.all();
+		expect(noteResources.length).toBe(1);
+		expect(noteResources[0].note_id).toBe(note.id);
 
-	// 	let note = await Note.save({});
-	// 	note = await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
-	// 	const resource = (await Resource.all())[0];
-
-	// 	const noteIds = await NoteResource.associatedNoteIds(resource.id);
-
-	// 	expect(noteIds[0]).toBe(note.id);
-
-	// 	await Note.save({ id: note.id, body: '' });
-
-	// 	await resourceService().indexNoteResources();
-	// 	await service.deleteOrphanResources(0);
-
-	// 	expect((await Resource.all()).length).toBe(0);
-	// }));
+		// Also check that the resources are not deleted as orphan
+		await resourceService().deleteOrphanResources(0);
+		expect((await NoteResource.all()).length).toBe(1);
+	});
 
 });
