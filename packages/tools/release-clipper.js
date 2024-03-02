@@ -132,6 +132,11 @@ async function checkSourceZip(sourceZip, compiledZip) {
 	}
 }
 
+async function setReleaseMode(isReleaseMode) {
+	const joplinEnvPath = `${clipperDir}/utils/joplinEnv.mjs`;
+	await fs.writeFile(joplinEnvPath, `// Auto-generated file!\n\nexport default () => '${isReleaseMode ? 'prod' : 'dev'}';`);
+}
+
 async function main() {
 	console.info(await execCommand('git pull'));
 
@@ -139,6 +144,7 @@ async function main() {
 
 	console.info('Building extension...');
 	process.chdir(`${clipperDir}/popup`);
+	setReleaseMode(true);
 	// SKIP_PREFLIGHT_CHECK avoids the error "There might be a problem with the project dependency tree." due to eslint 5.12.0 being
 	// installed by CRA and 6.1.0 by us. It doesn't affect anything though, and the behaviour of the preflight
 	// check is buggy so we can ignore it.
@@ -150,13 +156,21 @@ async function main() {
 			removeManifestKeys: (manifest) => {
 				manifest = { ...manifest };
 				delete manifest.applications;
+
+				manifest.background = { ...manifest.background };
+				delete manifest.background.scripts;
+				delete manifest.background.persistent;
+
 				return manifest;
 			},
 		},
 		firefox: {
 			removeManifestKeys: (manifest) => {
 				manifest = { ...manifest };
-				delete manifest.background.persistent;
+
+				manifest.background = { ...manifest.background };
+				delete manifest.background.service_worker;
+
 				return manifest;
 			},
 		},
@@ -185,6 +199,8 @@ async function main() {
 
 	const sourceZip = await createSourceZip();
 	await checkSourceZip(sourceZip, dists.firefox.outputPath);
+
+	setReleaseMode(false);
 
 	process.chdir(clipperDir);
 	console.info(await execCommand('git add -A'));

@@ -1,4 +1,5 @@
 import joplinEnv from './util/joplinEnv.mjs';
+import getActiveTabs from './util/getActiveTabs.mjs';
 
 let browser_ = null;
 if (typeof browser !== 'undefined') {
@@ -27,7 +28,7 @@ async function browserGetZoom(tabId) {
 
 browser_.runtime.onInstalled.addListener(() => {
 	if (joplinEnv() === 'dev') {
-		browser_.browserAction.setIcon({
+		browser_.action.setIcon({
 			path: 'icons/32-dev.png',
 		});
 	}
@@ -92,13 +93,8 @@ browser_.runtime.onMessage.addListener(async (command) => {
 	}
 });
 
-async function getActiveTabs() {
-	const options = { active: true, currentWindow: true };
-	return browser_.tabs.query(options);
-}
-
 async function sendClipMessage(clipType) {
-	const tabs = await getActiveTabs();
+	const tabs = await getActiveTabs(browser_);
 	if (!tabs || !tabs.length) {
 		console.error('No active tabs');
 		return;

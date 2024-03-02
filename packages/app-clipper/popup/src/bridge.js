@@ -1,5 +1,7 @@
 /* eslint-disable no-console */
 
+import getActiveTabs from '../../util/getActiveTabs.mjs';
+import joplinEnv from '../../util/joplinEnv.mjs';
 const { randomClipperPort } = require('./randomClipperPort');
 
 function msleep(ms) {
@@ -74,12 +76,7 @@ class Bridge {
 			}
 		};
 		this.browser_.runtime.onMessage.addListener(this.browser_notify);
-		const backgroundPage = await this.backgroundPage(this.browser_);
-
-		// Not sure why the getBackgroundPage() sometimes returns null, so
-		// in that case default to "prod" environment, which means the live
-		// extension won't be affected by this bug.
-		this.env_ = backgroundPage ? backgroundPage.joplinEnv() : 'prod';
+		this.env_ = joplinEnv();
 
 		console.info('Popup: Env:', this.env());
 
@@ -305,19 +302,13 @@ class Bridge {
 		return `http://127.0.0.1:${port}`;
 	}
 
-	async tabsExecuteScript(options) {
-		if (this.browserSupportsPromises_) return this.browser().tabs.executeScript(options);
-
-		return new Promise((resolve, reject) => {
-			this.browser().tabs.executeScript(options, () => {
-				const e = this.browser().runtime.lastError;
-				if (e) {
-					const msg = [`tabsExecuteScript: Cannot load ${JSON.stringify(options)}`];
-					if (e.message) msg.push(e.message);
-					reject(new Error(msg.join(': ')));
-				}
-				resolve();
-			});
+	async tabsExecuteScript(files) {
+		const activeTabs = await getActiveTabs(this.browser());
+		await this.browser().scripting.executeScript({
+			target: {
+				tabId: activeTabs[0].id,
+			},
+			files,
 		});
 	}
 
@@ -332,6 +323,7 @@ class Bridge {
 	}
 
 	async tabsSendMessage(tabId, command) {
+		console.log('message to', tabId);
 		if (this.browserSupportsPromises_) return this.browser().tabs.sendMessage(tabId, command);
 
 		return new Promise((resolve) => {

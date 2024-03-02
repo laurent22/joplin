@@ -179,12 +179,14 @@ class AppComponent extends Component {
 	}
 
 	async loadContentScripts() {
-		await bridge().tabsExecuteScript({ file: '/content_scripts/setUpEnvironment.js' });
-		await bridge().tabsExecuteScript({ file: '/content_scripts/JSDOMParser.js' });
-		await bridge().tabsExecuteScript({ file: '/content_scripts/Readability.js' });
-		await bridge().tabsExecuteScript({ file: '/content_scripts/Readability-readerable.js' });
-		await bridge().tabsExecuteScript({ file: '/content_scripts/clipperUtils.js' });
-		await bridge().tabsExecuteScript({ file: '/content_scripts/index.js' });
+		await bridge().tabsExecuteScript([
+			'/content_scripts/setUpEnvironment.js',
+			'/content_scripts/JSDOMParser.js',
+			'/content_scripts/Readability.js',
+			'/content_scripts/Readability-readerable.js',
+			'/content_scripts/clipperUtils.js',
+			'/content_scripts/index.js',
+		]);
 	}
 
 	async componentDidMount() {
