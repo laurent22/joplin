@@ -602,10 +602,15 @@ packages/editor/CodeMirror/CodeMirrorControl.js
 packages/editor/CodeMirror/configFromSettings.js
 packages/editor/CodeMirror/createEditor.test.js
 packages/editor/CodeMirror/createEditor.js
+packages/editor/CodeMirror/editorCommands/duplicateLine.test.js
+packages/editor/CodeMirror/editorCommands/duplicateLine.js
 packages/editor/CodeMirror/editorCommands/editorCommands.js
 packages/editor/CodeMirror/editorCommands/insertLineAfter.test.js
 packages/editor/CodeMirror/editorCommands/insertLineAfter.js
+packages/editor/CodeMirror/editorCommands/sortSelectedLines.test.js
+packages/editor/CodeMirror/editorCommands/sortSelectedLines.js
 packages/editor/CodeMirror/editorCommands/supportsCommand.js
+packages/editor/CodeMirror/editorCommands/swapLine.test.js
 packages/editor/CodeMirror/editorCommands/swapLine.js
 packages/editor/CodeMirror/getScrollFraction.js
 packages/editor/CodeMirror/markdown/codeBlockLanguages/allLanguages.js
