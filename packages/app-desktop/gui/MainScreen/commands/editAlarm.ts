@@ -4,6 +4,7 @@ import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
 import Note from '@joplin/lib/models/Note';
 import time from '@joplin/lib/time';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 
 export const declaration: CommandDeclaration = {
 	name: 'editAlarm',
@@ -29,7 +30,7 @@ export const runtime = (comp: any): CommandRuntime => {
 					buttons: ['ok', 'cancel', 'clear'],
 					value: note.todo_due ? new Date(note.todo_due) : defaultDate,
 					onClose: async (answer: any, buttonType: string) => {
-						let newNote = null;
+						let newNote: NoteEntity = null;
 
 						if (buttonType === 'clear') {
 							newNote = {

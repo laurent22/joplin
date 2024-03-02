@@ -12,6 +12,17 @@ const newSearchEngine = () => {
 	return engine;
 };
 
+const createNoteAndResource = async () => {
+	const note = await Note.save({});
+	await Note.save({});
+	await shim.attachFileToNote(note, `${ocrSampleDir}/testocr.png`);
+	const resource = (await Resource.all())[0];
+
+	await resourceService().indexNoteResources();
+
+	return { note, resource };
+};
+
 describe('SearchEngine.resources', () => {
 
 	beforeEach(async () => {
@@ -39,12 +50,7 @@ describe('SearchEngine.resources', () => {
 	});
 
 	it('should return notes associated with indexed resources', (async () => {
-		const note1 = await Note.save({});
-		await Note.save({});
-		await shim.attachFileToNote(note1, `${ocrSampleDir}/testocr.png`);
-		const resource = (await Resource.all())[0];
-
-		await resourceService().indexNoteResources();
+		const { note, resource } = await createNoteAndResource();
 
 		const ocrService = newOcrService();
 		await ocrService.processResources();
@@ -54,11 +60,27 @@ describe('SearchEngine.resources', () => {
 
 		const results = await searchEngine.search('lazy fox');
 		expect(results.length).toBe(1);
-		expect(results[0].id).toBe(note1.id);
+		expect(results[0].id).toBe(note.id);
 		expect(results[0].item_id).toBe(resource.id);
 		expect(results[0].item_type).toBe(ModelType.Resource);
 
 		await ocrService.dispose();
+	}));
+
+	it('should not return resources associated with deleted notes', (async () => {
+		const { note } = await createNoteAndResource();
+		const note2 = await Note.save({ body: 'lazy fox' });
+		await Note.delete(note.id, { toTrash: true });
+
+		const ocrService = newOcrService();
+		await ocrService.processResources();
+
+		const searchEngine = newSearchEngine();
+		await searchEngine.syncTables();
+
+		const results = await searchEngine.search('lazy fox');
+		expect(results.length).toBe(1);
+		expect(results[0].id).toBe(note2.id);
 	}));
 
 	it('should delete normalized data when a resource is deleted', async () => {

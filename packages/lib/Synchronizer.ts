@@ -451,7 +451,7 @@ export default class Synchronizer {
 
 			try {
 				let remoteInfo = await fetchSyncInfo(this.api());
-				logger.info('Sync target remote info:', remoteInfo);
+				logger.info('Sync target remote info:', remoteInfo.filterSyncInfo());
 				eventManager.emit(EventName.SessionEstablished);
 
 				let syncTargetIsNew = false;
@@ -471,8 +471,7 @@ export default class Synchronizer {
 				if (appVersion !== 'unknown') checkIfCanSync(remoteInfo, appVersion);
 
 				let localInfo = await localSyncInfo();
-
-				logger.info('Sync target local info:', localInfo);
+				logger.info('Sync target local info:', localInfo.filterSyncInfo());
 
 				localInfo = await this.setPpkIfNotExist(localInfo, remoteInfo);
 

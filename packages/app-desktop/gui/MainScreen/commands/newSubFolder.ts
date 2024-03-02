@@ -13,6 +13,6 @@ export const runtime = (): CommandRuntime => {
 			parentId = parentId || context.state.selectedFolderId;
 			return CommandService.instance().execute('newFolder', parentId);
 		},
-		enabledCondition: '!folderIsReadOnly',
+		enabledCondition: '!folderIsReadOnly && !folderIsTrash',
 	};
 };

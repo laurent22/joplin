@@ -400,6 +400,11 @@ async function fetchAllNotes() {
 				lines.push('Remove the tag from the note.');
 				lines.push('');
 			}
+
+			if (model.type === BaseModel.TYPE_NOTE || model.type === BaseModel.TYPE_FOLDER) {
+				lines.push(`By default, the ${singular} will be moved **to the trash**. To permanently delete it, add the query parameter \`permanent=1\``);
+				lines.push('');
+			}
 		}
 
 		{

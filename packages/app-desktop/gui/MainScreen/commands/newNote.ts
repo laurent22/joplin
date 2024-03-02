@@ -3,6 +3,8 @@ import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 
+export const newNoteEnabledConditions = 'oneFolderSelected && !inConflictFolder && !folderIsReadOnly && !folderIsTrash';
+
 export const declaration: CommandDeclaration = {
 	name: 'newNote',
 	label: () => _('New note'),
@@ -36,6 +38,6 @@ export const runtime = (): CommandRuntime => {
 				type: 'NOTE_SORT',
 			});
 		},
-		enabledCondition: 'oneFolderSelected && !inConflictFolder && !folderIsReadOnly',
+		enabledCondition: newNoteEnabledConditions,
 	};
 };
