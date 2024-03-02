@@ -10,6 +10,7 @@ import Logger from '@joplin/utils/Logger';
 import { _ } from '@joplin/lib/locale';
 import { BaseBreakpoint, Breakpoints } from '../NoteList/utils/types';
 import { ButtonSize, buttonSizePx } from '../Button/Button';
+import { getTrashFolderId } from '@joplin/lib/services/trash';
 
 const logger = Logger.create('NoteListWrapper');
 
@@ -20,6 +21,7 @@ interface Props {
 	themeId: number;
 	listRendererId: string;
 	startupPluginsLoaded: boolean;
+	selectedFolderId: string;
 }
 
 const StyledRoot = styled.div`
@@ -31,7 +33,7 @@ const StyledRoot = styled.div`
 
 // Even though these calculations mostly concern the NoteListControls component, we do them here
 // because we need to know the height of that control to calculate the note list height.
-const useNoteListControlsBreakpoints = (width: number, newNoteRef: React.MutableRefObject<any>) => {
+const useNoteListControlsBreakpoints = (width: number, newNoteRef: React.MutableRefObject<any>, selectedFolderId: string) => {
 	const [dynamicBreakpoints, setDynamicBreakpoints] = useState<Breakpoints>({ Sm: BaseBreakpoint.Sm, Md: BaseBreakpoint.Md, Lg: BaseBreakpoint.Lg, Xl: BaseBreakpoint.Xl });
 
 	const getTextWidth = useCallback((text: string): number => {
@@ -47,9 +49,12 @@ const useNoteListControlsBreakpoints = (width: number, newNoteRef: React.Mutable
 		return ctx.measureText(text).width;
 	}, [newNoteRef]);
 
+	const showNewNoteButton = selectedFolderId !== getTrashFolderId();
+
 	// Initialize language-specific breakpoints
 	useEffect(() => {
 		if (!newNoteRef.current) return;
+		if (showNewNoteButton) return;
 
 		// Use the longest string to calculate the amount of extra width needed
 		const smAdditional = getTextWidth(_('note')) > getTextWidth(_('to-do')) ? getTextWidth(_('note')) : getTextWidth(_('to-do'));
@@ -61,7 +66,7 @@ const useNoteListControlsBreakpoints = (width: number, newNoteRef: React.Mutable
 		const Xl = BaseBreakpoint.Xl;
 
 		setDynamicBreakpoints({ Sm, Md, Lg, Xl });
-	}, [newNoteRef, getTextWidth]);
+	}, [newNoteRef, getTextWidth, showNewNoteButton]);
 
 	const breakpoint: number = useMemo(() => {
 		// Find largest breakpoint that width is less than
@@ -95,7 +100,7 @@ export default function NoteListWrapper(props: Props) {
 	const listRenderer = useListRenderer(props.listRendererId, props.startupPluginsLoaded);
 	const newNoteButtonRef = useRef(null);
 
-	const { breakpoint, dynamicBreakpoints, lineCount } = useNoteListControlsBreakpoints(props.size.width, newNoteButtonRef);
+	const { breakpoint, dynamicBreakpoints, lineCount } = useNoteListControlsBreakpoints(props.size.width, newNoteButtonRef, props.selectedFolderId);
 
 	const noteListControlsButtonSize = ButtonSize.Small;
 	const noteListControlsPadding = theme.mainPadding;

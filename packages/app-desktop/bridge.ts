@@ -1,7 +1,7 @@
 import ElectronAppWrapper from './ElectronAppWrapper';
 import shim from '@joplin/lib/shim';
 import { _, setLocale } from '@joplin/lib/locale';
-import { BrowserWindow, nativeTheme, nativeImage, shell } from 'electron';
+import { BrowserWindow, nativeTheme, nativeImage, dialog, shell, MessageBoxSyncOptions } from 'electron';
 import { dirname, isUncPath, toSystemSlashes } from '@joplin/lib/path-utils';
 import { fileUriToPath } from '@joplin/utils/url';
 import { urlDecode } from '@joplin/lib/string-utils';
@@ -21,6 +21,10 @@ interface OpenDialogOptions {
 	defaultPath?: string;
 	createDirectory?: boolean;
 	filters?: any[];
+}
+
+interface MessageDialogOptions extends Omit<MessageBoxSyncOptions, 'message'> {
+	message?: string;
 }
 
 export class Bridge {
@@ -228,7 +232,6 @@ export class Bridge {
 	}
 
 	public async showSaveDialog(options: any) {
-		const { dialog } = require('electron');
 		if (!options) options = {};
 		if (!('defaultPath' in options) && this.lastSelectedPaths_.file) options.defaultPath = this.lastSelectedPaths_.file;
 		const { filePath } = await dialog.showSaveDialog(this.window(), options);
@@ -239,7 +242,6 @@ export class Bridge {
 	}
 
 	public async showOpenDialog(options: OpenDialogOptions = null) {
-		const { dialog } = require('electron');
 		if (!options) options = {};
 		let fileType = 'file';
 		if (options.properties && options.properties.includes('openDirectory')) fileType = 'directory';
@@ -253,13 +255,12 @@ export class Bridge {
 	}
 
 	// Don't use this directly - call one of the showXxxxxxxMessageBox() instead
-	private showMessageBox_(window: any, options: any): number {
-		const { dialog } = require('electron');
+	private showMessageBox_(window: any, options: MessageDialogOptions): number {
 		if (!window) window = this.window();
-		return dialog.showMessageBoxSync(window, options);
+		return dialog.showMessageBoxSync(window, { message: '', ...options });
 	}
 
-	public showErrorMessageBox(message: string, options: any = null) {
+	public showErrorMessageBox(message: string, options: MessageDialogOptions = null) {
 		options = {
 			buttons: [_('OK')],
 			...options,
@@ -272,7 +273,7 @@ export class Bridge {
 		});
 	}
 
-	public showConfirmMessageBox(message: string, options: any = null) {
+	public showConfirmMessageBox(message: string, options: MessageDialogOptions = null) {
 		options = {
 			buttons: [_('OK'), _('Cancel')],
 			...options,
@@ -287,8 +288,8 @@ export class Bridge {
 	}
 
 	/* returns the index of the clicked button */
-	public showMessageBox(message: string, options: any = null) {
-		if (options === null) options = {};
+	public showMessageBox(message: string, options: MessageDialogOptions = null) {
+		if (options === null) options = { message: '' };
 
 		const result = this.showMessageBox_(this.window(), { type: 'question',
 			message: message,

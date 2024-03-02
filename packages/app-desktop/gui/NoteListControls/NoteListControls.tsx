@@ -11,6 +11,7 @@ import { _ } from '@joplin/lib/locale';
 const { connect } = require('react-redux');
 import styled from 'styled-components';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
+import { getTrashFolderId } from '@joplin/lib/services/trash';
 import { Breakpoints } from '../NoteList/utils/types';
 
 interface Props {
@@ -265,7 +266,7 @@ const mapStateToProps = (state: AppState) => {
 	const whenClauseContext = stateToWhenClauseContext(state);
 
 	return {
-		showNewNoteButtons: true,
+		showNewNoteButtons: state.selectedFolderId !== getTrashFolderId(),
 		newNoteButtonEnabled: CommandService.instance().isEnabled('newNote', whenClauseContext),
 		newTodoButtonEnabled: CommandService.instance().isEnabled('newTodo', whenClauseContext),
 		sortOrderButtonsVisible: state.settings['notes.sortOrder.buttonsVisible'],

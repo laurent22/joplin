@@ -6,6 +6,7 @@
   "exports": {
     ".": "./dist/index.js",
     "./env": "./dist/env.js",
+    "./object": "./dist/object.js",
     "./fs": "./dist/fs.js",
     "./html": "./dist/html.js",
     "./Logger": "./dist/Logger.js",

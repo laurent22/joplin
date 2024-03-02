@@ -9,7 +9,7 @@ export interface ModelFeedPage {
 
 export interface WhereQuery {
 	sql: string;
-	params: any[];
+	params?: any[];
 }
 
 // Note: this method might return more fields than was requested as it will
@@ -47,8 +47,6 @@ export default async function(db: any, tableName: string, pagination: Pagination
 		LIMIT ${pagination.limit}
 		OFFSET ${offset}
 	`;
-
-	// console.info('SQL', sql, sqlParams);
 
 	const rows = await db.selectAll(sql, sqlParams);
 

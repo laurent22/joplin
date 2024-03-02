@@ -106,7 +106,9 @@ const useOnKeyDown = (
 
 		if (noteIds.length && (key === 'Delete' || (key === 'Backspace' && event.metaKey))) {
 			event.preventDefault();
-			void CommandService.instance().execute('deleteNote', noteIds);
+			if (CommandService.instance().isEnabled('deleteNote')) {
+				void CommandService.instance().execute('deleteNote', noteIds);
+			}
 		}
 
 		if (noteIds.length && key === ' ') {
