@@ -81,7 +81,13 @@ export default class SpellCheckerService {
 		} else {
 			enabledLanguages.push(language);
 		}
-		Setting.setValue('spellChecker.languages', enabledLanguages);
+
+		if (Setting.value('firstStart')) {
+			Setting.setValue('spellChecker.languages', [this.defaultLanguage]);
+			Setting.setValue('firstStart', 0);
+		} else {
+			Setting.setValue('spellChecker.languages', enabledLanguages);
+		}
 		this.applyStateToDriver();
 		void this.addLatestSelectedLanguage(language);
 	}

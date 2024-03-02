@@ -1646,7 +1646,7 @@ class Setting extends BaseModel {
 
 			'spellChecker.enabled': { value: true, type: SettingItemType.Bool, isGlobal: true, storage: SettingStorage.File, public: false },
 			'spellChecker.language': { value: '', type: SettingItemType.String, isGlobal: true, storage: SettingStorage.File, public: false }, // Depreciated in favour of spellChecker.languages.
-			'spellChecker.languages': { value: [], type: SettingItemType.Array, isGlobal: true, storage: SettingStorage.File, public: false },
+			'spellChecker.languages': { value: [], type: SettingItemType.Array, isGlobal: false, storage: SettingStorage.File, public: false },
 
 			windowContentZoomFactor: {
 				value: 100,

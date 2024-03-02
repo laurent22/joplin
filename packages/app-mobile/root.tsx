@@ -564,7 +564,6 @@ async function initialize(dispatch: Function) {
 			reg.logger().info(`First start: detected locale as ${detectedLocale}`);
 
 			Setting.skipDefaultMigrations();
-			Setting.setValue('firstStart', 0);
 		} else {
 			Setting.applyDefaultMigrations();
 		}
