@@ -88,3 +88,4 @@ firstname
 lastname
 signup
 activatable
+titlewrapper
