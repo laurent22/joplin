@@ -155,7 +155,7 @@ class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 	}
 
 	private async webview_ipcMessage(event: any) {
-		// For the revision view, we only suppport a minimal subset of the IPC messages.
+		// For the revision view, we only support a minimal subset of the IPC messages.
 		// For example, we don't need interactive checkboxes or sync between viewer and editor view.
 		// We try to get most links work though, except for internal (joplin://) links.
 

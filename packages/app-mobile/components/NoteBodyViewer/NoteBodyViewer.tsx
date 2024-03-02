@@ -35,10 +35,6 @@ interface Props {
 	pluginStates: PluginStates;
 }
 
-const webViewStyle = {
-	backgroundColor: 'transparent',
-};
-
 const logger = Logger.create('NoteBodyViewer');
 
 export default function NoteBodyViewer(props: Props) {
@@ -124,8 +120,6 @@ export default function NoteBodyViewer(props: Props) {
 			<ExtendedWebView
 				ref={webviewRef}
 				webviewInstanceId='NoteBodyViewer'
-				themeId={props.themeId}
-				style={webViewStyle}
 				html={html}
 				allowFileAccessFromJs={true}
 				injectedJavaScript={injectedJs}

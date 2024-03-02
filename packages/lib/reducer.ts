@@ -7,9 +7,10 @@ import BaseModel from './BaseModel';
 import { Store } from 'redux';
 import { ProfileConfig } from './services/profileConfig/types';
 import * as ArrayUtils from './ArrayUtils';
-import { FolderEntity } from './services/database/types';
+import { FolderEntity, NoteEntity } from './services/database/types';
 import { getListRendererIds } from './services/noteList/renderers';
 import { ProcessResultsRow } from './services/search/SearchEngine';
+import { getDisplayParentId } from './services/trash';
 const fastDeepEqual = require('fast-deep-equal');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
@@ -53,8 +54,14 @@ interface StateResourceFetcher {
 	toFetchCount: number;
 }
 
+export interface StateLastDeletion {
+	noteIds: string[];
+	folderIds: string[];
+	timestamp: number;
+}
+
 export interface State {
-	notes: any[];
+	notes: NoteEntity[];
 	noteSelectionEnabled?: boolean;
 	notesSource: string;
 	notesParentType: string;
@@ -102,6 +109,8 @@ export interface State {
 	profileConfig: ProfileConfig;
 	noteListRendererIds: string[];
 	noteListLastSortTime: number;
+	lastDeletion: StateLastDeletion;
+	lastDeletionNotificationTime: number;
 	mustUpgradeAppMessage: string;
 
 	// Extra reducer keys go here:
@@ -177,6 +186,12 @@ export const defaultState: State = {
 	profileConfig: null,
 	noteListRendererIds: getListRendererIds(),
 	noteListLastSortTime: 0,
+	lastDeletion: {
+		noteIds: [],
+		folderIds: [],
+		timestamp: 0,
+	},
+	lastDeletionNotificationTime: 0,
 	mustUpgradeAppMessage: '',
 
 	pluginService: pluginServiceDefaultState,
@@ -202,7 +217,7 @@ export const MAX_HISTORY = 200;
 const derivedStateCache_: any = {};
 
 // Allows, for a given state, to return the same derived
-// objects, to prevent unecessary updates on calling components.
+// objects, to prevent unnecessary updates on calling components.
 const cacheEnabledOutput = (key: string, output: any) => {
 	key = `${key}_${JSON.stringify(output)}`;
 	if (derivedStateCache_[key]) return derivedStateCache_[key];
@@ -839,6 +854,19 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			}
 			break;
 
+		case 'ITEMS_TRASHED':
+
+			draft.lastDeletion = {
+				...action.value,
+				timestamp: Date.now(),
+			};
+			break;
+
+		case 'DELETION_NOTIFICATION_DONE':
+
+			draft.lastDeletionNotificationTime = Date.now();
+			break;
+
 		case 'NOTE_PROVISIONAL_FLAG_CLEAR':
 			{
 				const newIds = ArrayUtils.removeElement(draft.provisionalNoteIds, action.id);
@@ -860,14 +888,14 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			// update it within the note array if it already exists.
 		case 'NOTE_UPDATE_ONE':
 			{
-				const modNote = action.note;
+				const modNote: NoteEntity = action.note;
 				const isViewingAllNotes = (draft.notesParentType === 'SmartFilter' && draft.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
 				const isViewingConflictFolder = draft.notesParentType === 'Folder' && draft.selectedFolderId === Folder.conflictFolderId();
 
-				const noteIsInFolder = function(note: any, folderId: string) {
+				const noteIsInFolder = function(note: NoteEntity, folderId: string) {
 					if (note.is_conflict && isViewingConflictFolder) return true;
-					if (!('parent_id' in modNote) || note.parent_id === folderId) return true;
-					return false;
+					const noteDisplayParentId = getDisplayParentId(note, draft.folders.find(f => f.id === note.parent_id));
+					return folderId === noteDisplayParentId;
 				};
 
 				let movedNotePreviousIndex = 0;
@@ -883,7 +911,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 							newNotes.splice(i, 1);
 							noteFolderHasChanged = true;
 							movedNotePreviousIndex = i;
-						} else if (isViewingAllNotes || noteIsInFolder(modNote, n.parent_id)) {
+						} else if (isViewingAllNotes || noteIsInFolder(modNote, draft.selectedFolderId)) {
 							// Note is still in the same folder
 							// Merge the properties that have changed (in modNote) into
 							// the object we already have.
@@ -891,7 +919,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 							for (const n in modNote) {
 								if (!modNote.hasOwnProperty(n)) continue;
-								newNotes[i][n] = modNote[n];
+								(newNotes[i] as any)[n] = (modNote as any)[n];
 							}
 						} else {
 							// Note has moved to a different folder

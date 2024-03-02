@@ -12,7 +12,12 @@ async function processDirectory(dir, indexFilePath = null, typeScriptType = null
 
 	const tsFiles = glob.sync('{**/*.ts,**/*.tsx}', {
 		cwd: dir,
-	}).filter(f => `${dir}/${f}` !== indexFilePath);
+	}).filter(f => `${dir}/${f}` !== indexFilePath)
+	//
+	// Exclude Jest test files to
+	// not include them in index.ts
+	//
+		.filter(f => !f.endsWith('.test.ts'));
 
 	tsFiles.sort();
 

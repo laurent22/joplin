@@ -21,13 +21,13 @@ enum ReportItemType {
 	CloseList = 'closeList',
 }
 
-type RerportItemOrString = ReportItem | string;
+type ReportItemOrString = ReportItem | string;
 
 export type RetryAllHandler = ()=> void;
 
 export interface ReportSection {
 	title: string;
-	body: RerportItemOrString[];
+	body: ReportItemOrString[];
 	name?: string;
 	canRetryAll?: boolean;
 	retryAllHandler?: RetryAllHandler;
@@ -149,7 +149,7 @@ export default class ReportService {
 		const retryHandlers: Function[] = [];
 
 		for (let i = 0; i < section.body.length; i++) {
-			const item: RerportItemOrString = section.body[i];
+			const item: ReportItemOrString = section.body[i];
 			if (typeof item !== 'string' && item.canRetry) {
 				retryHandlers.push(item.retryHandler);
 			}

@@ -1,0 +1,79 @@
+.note-list-header {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	user-select: none;
+
+	> .item {
+		display: flex;
+		position: relative;
+		align-items: center;
+		height: 100%;
+		color: var(--joplin-color);
+		overflow: hidden;
+
+		> .resizer {
+			position: absolute;
+			opacity: 0;
+			width: 6px;
+			height: 100%;
+			left: -3px;
+			cursor: ew-resize;
+		}
+
+		> .inner {
+			padding-left: 8px;
+			pointer-events: none;
+
+			> .titlewrapper {
+				> .chevron {
+					position: absolute;
+					right: 8px;
+					top: 8px;
+					font-size: 10px;
+					opacity: .6;
+				}
+			}
+		}
+	}
+
+	$itemBorderHeight: calc(var(--joplin-note-list-header-height) - var(--joplin-note-list-header-border-padding) * 2);
+
+	> .item:before {
+		content: '';
+		width: 1px;
+		height: $itemBorderHeight;
+		background: var(--joplin-divider-color);
+		position: absolute;
+		top: var(--joplin-note-list-header-border-padding);
+	}
+
+	> .item.-first:before {
+		background: none;
+	}
+
+	> .item.-drop-before:before {
+		content: '';
+		width: 2px;
+		height: $itemBorderHeight;
+		background: var(--joplin-color);
+		position: absolute;
+		top: var(--joplin-note-list-header-border-padding);
+	}
+
+	> .item.-drop-after:after {
+		content: '';
+		width: 2px;
+		height: $itemBorderHeight;
+		background: var(--joplin-color);
+		position: absolute;
+		top: var(--joplin-note-list-header-border-padding);
+		right: 0;
+	}
+
+	> .item.-current {
+		font-weight: bold;
+	}
+
+}

@@ -31,10 +31,10 @@ export default class NavService {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public static removeHandler(hanlder: OnNavigateCallback) {
+	public static removeHandler(handler: OnNavigateCallback) {
 		for (let i = this.handlers_.length - 1; i >= 0; i--) {
 			const h = this.handlers_[i];
-			if (h === hanlder) this.handlers_.splice(i, 1);
+			if (h === handler) this.handlers_.splice(i, 1);
 		}
 	}
 }

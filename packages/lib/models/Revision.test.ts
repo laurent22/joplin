@@ -204,6 +204,7 @@ describe('models/Revision', () => {
 		expect(newRevs[2].id).toBe('789');
 	}));
 
+	// cSpell:disable
 	it('should create patch stats', (async () => {
 		const tests = [
 			{
@@ -240,5 +241,6 @@ describe('models/Revision', () => {
 			expect(stats.added).toBe(test.expected[1]);
 		}
 	}));
+	// cSpell:enable
 
 });

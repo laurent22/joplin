@@ -22,6 +22,8 @@ import * as focusElementNoteList from './commands/focusElementNoteList';
 import CommandService from '@joplin/lib/services/CommandService';
 import useDragAndDrop from './utils/useDragAndDrop';
 import usePrevious from '../hooks/usePrevious';
+import { itemIsInTrash } from '@joplin/lib/services/trash';
+import Folder from '@joplin/lib/models/Folder';
 const { connect } = require('react-redux');
 
 const commands = {
@@ -74,6 +76,7 @@ const NoteList = (props: Props) => {
 		props.uncompletedTodosOnTop,
 		props.showCompletedTodos,
 		props.notes,
+		props.selectedFolderInTrash,
 	);
 
 	const noteItemStyle = useMemo(() => {
@@ -136,6 +139,7 @@ const NoteList = (props: Props) => {
 		props.showCompletedTodos,
 		listRenderer.flow,
 		itemsPerLine,
+		props.selectedFolderInTrash,
 	);
 
 	const previousSelectedNoteIds = usePrevious(props.selectedNoteIds, []);
@@ -209,6 +213,7 @@ const NoteList = (props: Props) => {
 					isWatched={props.watchedNoteFiles.includes(note.id)}
 					listRenderer={listRenderer}
 					dispatch={props.dispatch}
+					columns={props.columns}
 				/>,
 			);
 		}
@@ -264,7 +269,7 @@ const NoteList = (props: Props) => {
 };
 
 const mapStateToProps = (state: AppState) => {
-	const selectedFolder: FolderEntity = state.notesParentType === 'Folder' ? BaseModel.byId(state.folders, state.selectedFolderId) : null;
+	const selectedFolder: FolderEntity = state.notesParentType === 'Folder' ? Folder.byId(state.folders, state.selectedFolderId) : null;
 	const userId = state.settings['sync.userId'];
 
 	return {
@@ -287,6 +292,7 @@ const mapStateToProps = (state: AppState) => {
 		customCss: state.customCss,
 		focusedField: state.focusedField,
 		parentFolderIsReadOnly: state.notesParentType === 'Folder' && selectedFolder ? itemIsReadOnlySync(ModelType.Folder, ItemChange.SOURCE_UNSPECIFIED, selectedFolder as ItemSlice, userId, state.shareService) : false,
+		selectedFolderInTrash: itemIsInTrash(selectedFolder),
 	};
 };
 

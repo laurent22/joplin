@@ -188,7 +188,7 @@ export function plainTextToHtml(plainText: string): string {
 	let currentLine = '';
 
 	for (let line of lines) {
-		line = line.trim();
+		line = line.trimEnd();
 		if (!line) {
 			if (currentLine) {
 				step1.push(`<p>${currentLine}</p>`);

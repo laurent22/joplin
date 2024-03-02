@@ -67,13 +67,13 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 			}
 			setTimeout(() => {
 				this.refreshLogTimeout = null;
-				void this.resfreshLogEntries();
+				void this.refreshLogEntries();
 			}, 600);
 		}
 	}
 
 	public override componentDidMount() {
-		void this.resfreshLogEntries();
+		void this.refreshLogEntries();
 
 		if (this.props.navigation.state.defaultFilter) {
 			this.setState({ filter: this.props.navigation.state.defaultFilter });
@@ -155,7 +155,7 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 		return levels;
 	}
 
-	private async resfreshLogEntries(showErrorsOnly: boolean = null) {
+	private async refreshLogEntries(showErrorsOnly: boolean = null) {
 		if (showErrorsOnly === null) showErrorsOnly = this.state.showErrorsOnly;
 
 		const limit = 1000;
@@ -168,7 +168,7 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 	}
 
 	private toggleErrorsOnly() {
-		void this.resfreshLogEntries(!this.state.showErrorsOnly);
+		void this.refreshLogEntries(!this.state.showErrorsOnly);
 	}
 
 	private formatLogEntry(item: any) {
@@ -224,7 +224,7 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 						<Button
 							title={_('Refresh')}
 							onPress={() => {
-								void this.resfreshLogEntries();
+								void this.refreshLogEntries();
 							}}
 						/>
 					</View>

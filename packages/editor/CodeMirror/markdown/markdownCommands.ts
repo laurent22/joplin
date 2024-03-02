@@ -278,10 +278,10 @@ export const toggleList = (listType: ListType): Command => {
 				const inBlockQuote = (lineContent !== line.text);
 				const indentation = lineContent.match(startingSpaceRegex)[0];
 
-				const wrongIndentaton = !isIndentationEquivalent(state, indentation, firstLineIndentation);
+				const wrongIndentation = !isIndentationEquivalent(state, indentation, firstLineIndentation);
 
 				// If not the right list level,
-				if (inBlockQuote !== firstLineInBlockQuote || wrongIndentaton) {
+				if (inBlockQuote !== firstLineInBlockQuote || wrongIndentation) {
 					// We'll be starting a new list
 					listItemCounter = 1;
 					continue;

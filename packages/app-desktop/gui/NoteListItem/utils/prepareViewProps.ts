@@ -1,24 +1,37 @@
 import { ListRendererDependency } from '@joplin/lib/services/plugins/api/noteListType';
-import { NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
+import { FolderEntity, NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import { Size } from '@joplin/utils/types';
 import Note from '@joplin/lib/models/Note';
 
-const prepareViewProps = async (dependencies: ListRendererDependency[], note: NoteEntity, itemSize: Size, selected: boolean, noteTitleHtml: string, noteIsWatched: boolean, noteTags: TagEntity[], itemIndex: number) => {
+const prepareViewProps = async (
+	dependencies: ListRendererDependency[],
+	note: NoteEntity,
+	itemSize: Size,
+	selected: boolean,
+	noteTitleHtml: string,
+	noteIsWatched: boolean,
+	noteTags: TagEntity[],
+	folder: FolderEntity | null,
+	itemIndex: number,
+) => {
 	const output: any = {};
 
 	for (const dep of dependencies) {
-
 		if (dep.startsWith('note.')) {
 			const splitted = dep.split('.');
-			if (splitted.length !== 2) throw new Error(`Invalid dependency name: ${dep}`);
+			if (splitted.length <= 1) throw new Error(`Invalid dependency name: ${dep}`);
 			const propName = splitted.pop();
+
 			if (!output.note) output.note = {};
-			if (dep === 'note.titleHtml') {
+			if (dep === 'note.titleHtml') { // For backward compatibility
 				output.note.titleHtml = noteTitleHtml;
 			} else if (dep === 'note.isWatched') {
-				output.note.isWatched = noteIsWatched;
+				output.note[propName] = noteIsWatched;
 			} else if (dep === 'note.tags') {
-				output.note.tags = noteTags;
+				output.note[propName] = noteTags;
+			} else if (dep === 'note.folder.title') {
+				if (!output.note.folder) output.note.folder = {};
+				output.note.folder[propName] = folder.title;
 			} else {
 				// The notes in the state only contain the properties defined in
 				// Note.previewFields(). It means that if a view request a

@@ -168,7 +168,7 @@ const later = require('later');
 		const last_val = `${numbers.pop()}`;
 		const output_text = '';
 
-		// No idea what is this nonsense so comenting it out for now.
+		// No idea what is this nonsense so commenting it out for now.
 
 		// for (let i = 0, value; value = numbers[i]; i++) {
 		// 	if (output_text.length > 0) {

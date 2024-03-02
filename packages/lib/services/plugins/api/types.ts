@@ -181,7 +181,7 @@ export interface ExportContext {
 	options: ExportOptions;
 
 	/**
-	 * You can attach your own custom data using this propery - it will then be passed to each event handler, allowing you to keep state from one event to the next.
+	 * You can attach your own custom data using this property - it will then be passed to each event handler, allowing you to keep state from one event to the next.
 	 */
 	userData?: any;
 }
@@ -555,7 +555,7 @@ export interface CodeMirrorControl {
 		 * registers the given [CompletionSource](https://codemirror.net/docs/ref/#autocomplete.CompletionSource).
 		 *
 		 * Use this extension rather than the built-in CodeMirror [`autocompletion`](https://codemirror.net/docs/ref/#autocomplete.autocompletion)
-		 * if you don't want to use [langaugeData-based autocompletion](https://codemirror.net/docs/ref/#autocomplete.autocompletion^config.override).
+		 * if you don't want to use [languageData-based autocompletion](https://codemirror.net/docs/ref/#autocomplete.autocompletion^config.override).
 		 *
 		 * Using `autocompletion({ override: [ ... ]})` causes errors when done by multiple plugins.
 		 */
@@ -568,8 +568,8 @@ export interface CodeMirrorControl {
 	};
 }
 
-export interface CodeMirrorContentScriptModule extends Omit<ContentScriptModule, 'plugin'> {
-	plugin: (codeMirrorControl: CodeMirrorControl)=> void;
+export interface MarkdownEditorContentScriptModule extends Omit<ContentScriptModule, 'plugin'> {
+	plugin: (editorControl: CodeMirrorControl)=> void;
 }
 
 export enum ContentScriptType {

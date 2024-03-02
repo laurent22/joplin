@@ -5,7 +5,7 @@
 import createEditor from './createEditor';
 import Setting from '@joplin/lib/models/Setting';
 import { forceParsing } from '@codemirror/language';
-import loadLangauges from './testUtil/loadLanguages';
+import loadLanguages from './testUtil/loadLanguages';
 
 import { expect, describe, it } from '@jest/globals';
 import createEditorSettings from './testUtil/createEditorSettings';
@@ -33,7 +33,7 @@ describe('createEditor', () => {
 		const initialText = `${headerLineText}\nThis is a test.`;
 		const editorSettings = createEditorSettings(Setting.THEME_LIGHT);
 
-		await loadLangauges();
+		await loadLanguages();
 		const editor = createEditor(document.body, {
 			initialText,
 			settings: editorSettings,

@@ -103,7 +103,7 @@ function useHtml(initialCss: string): string {
 					.cm-scroller {
 						overflow: none;
 
-						/* Ensure that the editor can be foused by clicking on the lower half of the screen.
+						/* Ensure that the editor can be focused by clicking on the lower half of the screen.
 							Don't use 100vh to prevent a scrollbar being present for empty notes. */
 						min-height: 80vh;
 					}
@@ -520,7 +520,6 @@ function NoteEditor(props: Props, ref: any) {
 			}}>
 				<ExtendedWebView
 					webviewInstanceId='NoteEditor'
-					themeId={props.themeId}
 					scrollEnabled={true}
 					ref={webviewRef}
 					html={html}

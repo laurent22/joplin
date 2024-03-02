@@ -7,7 +7,7 @@
 import { lineNumbers, highlightActiveLineGutter, EditorView } from '@codemirror/view';
 import { foldGutter } from '@codemirror/language';
 import { completeFromList } from '@codemirror/autocomplete';
-import { CodeMirrorContentScriptModule, ContentScriptContext } from 'api/types';
+import { MarkdownEditorContentScriptModule, ContentScriptContext } from 'api/types';
 //
 // For the above import to work, you may also need to add @codemirror/view as a dev dependency
 // to package.json. (For the type information only).
@@ -16,7 +16,7 @@ import { CodeMirrorContentScriptModule, ContentScriptContext } from 'api/types';
 //  const { lineNumbers } = joplin.require('@codemirror/view');
 
 
-export default (context: ContentScriptContext): CodeMirrorContentScriptModule => {
+export default (_context: ContentScriptContext): MarkdownEditorContentScriptModule => {
 	return {
 		// - codeMirrorWrapper: A thin wrapper around CodeMirror 6, designed to be similar to the
 		//     CodeMirror 5 API. If running in CodeMirror 5, a CodeMirror object is provided instead.

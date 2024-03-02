@@ -1,16 +1,20 @@
-const Folder = require('@joplin/lib/models/Folder').default;
-const Tag = require('@joplin/lib/models/Tag').default;
-const BaseModel = require('@joplin/lib/BaseModel').default;
+import Folder from '@joplin/lib/models/Folder';
+import Tag from '@joplin/lib/models/Tag';
+import BaseModel from '@joplin/lib/BaseModel';
+import Setting from '@joplin/lib/models/Setting';
+import { _ } from '@joplin/lib/locale';
+import { FolderEntity } from '@joplin/lib/services/database/types';
+import { getDisplayParentId, getTrashFolderId } from '@joplin/lib/services/trash';
 const ListWidget = require('tkwidgets/ListWidget.js');
-const Setting = require('@joplin/lib/models/Setting').default;
-const _ = require('@joplin/lib/locale')._;
 
-class FolderListWidget extends ListWidget {
-	constructor() {
+export default class FolderListWidget extends ListWidget {
+
+	private folders_: FolderEntity[] = [];
+
+	public constructor() {
 		super();
 
 		this.tags_ = [];
-		this.folders_ = [];
 		this.searches_ = [];
 		this.selectedFolderId_ = null;
 		this.selectedTagId_ = null;
@@ -21,7 +25,7 @@ class FolderListWidget extends ListWidget {
 		this.trimItemTitle = false;
 		this.showIds = false;
 
-		this.itemRenderer = item => {
+		this.itemRenderer = (item: any) => {
 			const output = [];
 			if (item === '-') {
 				output.push('-'.repeat(this.innerWidth));
@@ -33,13 +37,12 @@ class FolderListWidget extends ListWidget {
 				}
 				output.push(Folder.displayTitle(item));
 
-				if (Setting.value('showNoteCounts')) {
+				if (Setting.value('showNoteCounts') && !item.deleted_time && item.id !== getTrashFolderId()) {
 					let noteCount = item.note_count;
-					// Subtract children note_count from parent folder.
 					if (this.folderHasChildren_(this.folders, item.id)) {
 						for (let i = 0; i < this.folders.length; i++) {
 							if (this.folders[i].parent_id === item.id) {
-								noteCount -= this.folders[i].note_count;
+								noteCount -= (this.folders[i] as any).note_count;
 							}
 						}
 					}
@@ -56,113 +59,121 @@ class FolderListWidget extends ListWidget {
 		};
 	}
 
-	folderDepth(folders, folderId) {
+	public folderDepth(folders: FolderEntity[], folderId: string) {
 		let output = 0;
 		while (true) {
 			const folder = BaseModel.byId(folders, folderId);
-			if (!folder || !folder.parent_id) return output;
+			const folderParentId = getDisplayParentId(folder, folders.find(f => f.id === folder.parent_id));
+			if (!folder || !folderParentId) return output;
 			output++;
-			folderId = folder.parent_id;
+			folderId = folderParentId;
 		}
 	}
 
-	get selectedFolderId() {
+	public get selectedFolderId() {
 		return this.selectedFolderId_;
 	}
 
-	set selectedFolderId(v) {
+	public set selectedFolderId(v) {
 		this.selectedFolderId_ = v;
 		this.updateIndexFromSelectedItemId();
 		this.invalidate();
 	}
 
-	get selectedSearchId() {
+	public get selectedSearchId() {
 		return this.selectedSearchId_;
 	}
 
-	set selectedSearchId(v) {
+	public set selectedSearchId(v) {
 		this.selectedSearchId_ = v;
 		this.updateIndexFromSelectedItemId();
 		this.invalidate();
 	}
 
-	get selectedTagId() {
+	public get selectedTagId() {
 		return this.selectedTagId_;
 	}
 
-	set selectedTagId(v) {
+	public set selectedTagId(v) {
 		this.selectedTagId_ = v;
 		this.updateIndexFromSelectedItemId();
 		this.invalidate();
 	}
 
-	get notesParentType() {
+	public get notesParentType() {
 		return this.notesParentType_;
 	}
 
-	set notesParentType(v) {
+	public set notesParentType(v) {
 		this.notesParentType_ = v;
 		this.updateIndexFromSelectedItemId();
 		this.invalidate();
 	}
 
-	get searches() {
+	public get searches() {
 		return this.searches_;
 	}
 
-	set searches(v) {
+	public set searches(v) {
 		this.searches_ = v;
 		this.updateItems_ = true;
 		this.updateIndexFromSelectedItemId();
 		this.invalidate();
 	}
 
-	get tags() {
+	public get tags() {
 		return this.tags_;
 	}
 
-	set tags(v) {
+	public set tags(v) {
 		this.tags_ = v;
 		this.updateItems_ = true;
 		this.updateIndexFromSelectedItemId();
 		this.invalidate();
 	}
 
-	get folders() {
+	public get folders() {
 		return this.folders_;
 	}
 
-	set folders(v) {
+	public set folders(v) {
 		this.folders_ = v;
 		this.updateItems_ = true;
 		this.updateIndexFromSelectedItemId();
 		this.invalidate();
 	}
 
-	toggleShowIds() {
+	public toggleShowIds() {
 		this.showIds = !this.showIds;
 		this.invalidate();
 	}
 
-	folderHasChildren_(folders, folderId) {
+	public folderHasChildren_(folders: FolderEntity[], folderId: string) {
 		for (let i = 0; i < folders.length; i++) {
 			const folder = folders[i];
-			if (folder.parent_id === folderId) return true;
+			const folderParentId = getDisplayParentId(folder, folders.find(f => f.id === folder.parent_id));
+			if (folderParentId === folderId) return true;
 		}
 		return false;
 	}
 
-	render() {
+	public render() {
 		if (this.updateItems_) {
 			this.logger().debug('Rebuilding items...', this.notesParentType, this.selectedJoplinItemId, this.selectedSearchId);
 			const wasSelectedItemId = this.selectedJoplinItemId;
 			const previousParentType = this.notesParentType;
 
-			let newItems = [];
-			const orderFolders = parentId => {
+			this.logger().info('FFFFFFFFFFFFF', JSON.stringify(this.folders, null, 4));
+
+			let newItems: any[] = [];
+			const orderFolders = (parentId: string) => {
+				this.logger().info('PARENT', parentId);
 				for (let i = 0; i < this.folders.length; i++) {
 					const f = this.folders[i];
-					const folderParentId = f.parent_id ? f.parent_id : '';
+					const originalParent = this.folders_.find(f => f.id === f.parent_id);
+
+					const folderParentId = getDisplayParentId(f, originalParent); // f.parent_id ? f.parent_id : '';
+					this.logger().info('FFF', f.title, folderParentId);
 					if (folderParentId === parentId) {
 						newItems.push(f);
 						if (this.folderHasChildren_(this.folders, f.id)) orderFolders(f.id);
@@ -192,7 +203,7 @@ class FolderListWidget extends ListWidget {
 		super.render();
 	}
 
-	get selectedJoplinItemId() {
+	public get selectedJoplinItemId() {
 		if (!this.notesParentType) return '';
 		if (this.notesParentType === 'Folder') return this.selectedFolderId;
 		if (this.notesParentType === 'Tag') return this.selectedTagId;
@@ -200,17 +211,15 @@ class FolderListWidget extends ListWidget {
 		throw new Error(`Unknown parent type: ${this.notesParentType}`);
 	}
 
-	get selectedJoplinItem() {
+	public get selectedJoplinItem() {
 		const id = this.selectedJoplinItemId;
 		const index = this.itemIndexByKey('id', id);
 		return this.itemAt(index);
 	}
 
-	updateIndexFromSelectedItemId(itemId = null) {
+	public updateIndexFromSelectedItemId(itemId: string = null) {
 		if (itemId === null) itemId = this.selectedJoplinItemId;
 		const index = this.itemIndexByKey('id', itemId);
 		this.currentIndex = index >= 0 ? index : 0;
 	}
 }
-
-module.exports = FolderListWidget;

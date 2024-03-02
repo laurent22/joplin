@@ -21,7 +21,7 @@ const Clipboard = require('@react-native-community/clipboard').default;
 const md5 = require('md5');
 const { BackButtonService } = require('../../services/back-button.js');
 import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';
-import BaseModel from '@joplin/lib/BaseModel';
+import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import ActionButton from '../ActionButton';
 const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
@@ -56,10 +56,12 @@ import { Dispatch } from 'redux';
 import { RefObject } from 'react';
 import { SelectionRange } from '../NoteEditor/types';
 import { AppState } from '../../utils/types';
+import restoreItems from '@joplin/lib/services/trash/restoreItems';
+import { getDisplayParentTitle } from '@joplin/lib/services/trash';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import pickDocument from '../../utils/pickDocument';
-import PluginPanelViewer from '../../plugins/PluginRunner/dialogs/PluginPanelViewer';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
+import PluginPanelViewer from '../../plugins/PluginRunner/dialogs/PluginPanelViewer';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -84,7 +86,7 @@ interface Props {
 }
 
 interface State {
-	note: any;
+	note: NoteEntity;
 	mode: 'view'|'edit';
 	readOnly: boolean;
 	folder: FolderEntity|null;
@@ -603,7 +605,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		this.scheduleSave();
 	}
 
-	private onPlainEdtiorSelectionChange = (event: NativeSyntheticEvent<any>) => {
+	private onPlainEditorSelectionChange = (event: NativeSyntheticEvent<any>) => {
 		this.selection = event.nativeEvent.selection;
 	};
 
@@ -642,12 +644,9 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		const note = this.state.note;
 		if (!note.id) return;
 
-		const ok = await dialogs.confirm(this, _('Delete note?'));
-		if (!ok) return;
-
 		const folderId = note.parent_id;
 
-		await Note.delete(note.id);
+		await Note.delete(note.id, { toTrash: true });
 
 		this.props.dispatch({
 			type: 'NAV_GO',
@@ -848,7 +847,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	}
 
 	private async attachPhoto_onPress() {
-		// the selection Limit should be specfied. I think 200 is enough?
+		// the selection Limit should be specified. I think 200 is enough?
 		const response: ImagePickerResponse = await launchImageLibrary({ mediaType: 'photo', includeBase64: false, selectionLimit: 200 });
 
 		if (response.errorCode) {
@@ -903,7 +902,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		if (!resource) {
 			resource = await this.attachNewDrawing(svgData);
 
-			// Set resouce and file path to allow
+			// Set resource and file path to allow
 			// 1. subsequent saves to update the resource
 			// 2. the editor to load from the resource's filepath (can happen
 			//    if the webview is reloaded).
@@ -939,7 +938,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		if (this.state.mode === 'edit') {
 			// Create a new empty drawing and attach it now, before the image editor is opened.
 			// With the present structure of Note.tsx, the we can't use this.editorRef while
-			// the image editor is open, and thus can't attach drawings at the cursor locaiton.
+			// the image editor is open, and thus can't attach drawings at the cursor location.
 			const resource = await this.attachNewDrawing('');
 			await this.editDrawing(resource);
 		} else {
@@ -1102,7 +1101,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		// On iOS, it will show "local files", which means certain files saved from the browser
 		// and the iCloud files, but it doesn't include photos and images from the CameraRoll
 		//
-		// On Android, it will depend on the phone, but usually it will allow browing all files and photos.
+		// On Android, it will depend on the phone, but usually it will allow browsing all files and photos.
 		buttons.push({ text: _('Attach file'), id: 'attachFile' });
 
 		// Disabled on Android because it doesn't work due to permission issues, but enabled on iOS
@@ -1185,6 +1184,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		const isTodo = note && !!note.is_todo;
 		const isSaved = note && note.id;
 		const readOnly = this.state.readOnly;
+		const isDeleted = !!this.state.note.deleted_time;
 
 		const cacheKey = md5([isTodo, isSaved].join('_'));
 		if (!this.menuOptionsCache_) this.menuOptionsCache_ = {};
@@ -1193,7 +1193,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		const output: MenuOptionType[] = [];
 
-		// The file attachement modules only work in Android >= 5 (Version 21)
+		// The file attachment modules only work in Android >= 5 (Version 21)
 		// https://github.com/react-community/react-native-image-picker/issues/606
 
 		// As of 2020-10-13, support for attaching images from the gallery is removed
@@ -1246,7 +1246,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			});
 		}
 
-		if (isSaved) {
+		if (isSaved && !isDeleted) {
 			output.push({
 				title: _('Tags'),
 				onPress: () => {
@@ -1254,6 +1254,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 				},
 			});
 		}
+
 		output.push({
 			title: isTodo ? _('Convert to note') : _('Convert to todo'),
 			onPress: () => {
@@ -1261,7 +1262,8 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			},
 			disabled: readOnly,
 		});
-		if (isSaved) {
+
+		if (isSaved && !isDeleted) {
 			output.push({
 				title: _('Copy Markdown link'),
 				onPress: () => {
@@ -1269,12 +1271,27 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 				},
 			});
 		}
+
 		output.push({
 			title: _('Properties'),
 			onPress: () => {
 				this.properties_onPress();
 			},
 		});
+
+		if (isDeleted) {
+			output.push({
+				title: _('Restore'),
+				onPress: async () => {
+					await restoreItems(ModelType.Note, [this.state.note.id]);
+					this.props.dispatch({
+						type: 'NAV_GO',
+						routeName: 'Notes',
+					});
+				},
+			});
+		}
+
 		output.push({
 			title: _('Delete'),
 			onPress: () => {
@@ -1468,7 +1485,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			// See https://github.com/laurent22/joplin/issues/3041
 
 			// IMPORTANT: The TextInput selection is unreliable and cannot be used in a controlled component
-			// context. In other words, the selection should be considered read-only. For example, if the seleciton
+			// context. In other words, the selection should be considered read-only. For example, if the selection
 			// is saved to the state in onSelectionChange and the current text in onChangeText, then set
 			// back in `selection` and `value` props, it will mostly work. But when typing fast, sooner or
 			// later the real selection will be different from what is stored in the state, thus making
@@ -1486,7 +1503,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 						multiline={true}
 						value={note.body}
 						onChangeText={(text: string) => this.body_changeText(text)}
-						onSelectionChange={this.onPlainEdtiorSelectionChange}
+						onSelectionChange={this.onPlainEditorSelectionChange}
 						blurOnSubmit={false}
 						selectionColor={theme.textSelectionColor}
 						keyboardAppearance={theme.keyboardAppearance}
@@ -1526,6 +1543,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		const renderActionButton = () => {
 			if (this.state.voiceTypingDialogShown) return null;
+			if (!this.state.note || !!this.state.note.deleted_time) return null;
 
 			const editButton = {
 				label: _('Edit'),
@@ -1591,7 +1609,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 					undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
 					onUndoButtonPress={this.screenHeader_undoButtonPress}
 					onRedoButtonPress={this.screenHeader_redoButtonPress}
-					title={this.state.folder ? this.state.folder.title : ''}
+					title={getDisplayParentTitle(this.state.note, this.state.folder)}
 				/>
 				{titleComp}
 				{bodyComponent}
