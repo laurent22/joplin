@@ -88,3 +88,5 @@ firstname
 lastname
 signup
 activatable
+notyf
+Notyf

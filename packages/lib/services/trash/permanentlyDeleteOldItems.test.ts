@@ -45,7 +45,7 @@ describe('permanentlyDeleteOldItems', () => {
 
 		await Folder.delete(folder1.id, { toTrash: true, deleteChildren: true });
 
-		// Similates a folder having been deleted a long time ago - so it should be deleted. But
+		// Simulates a folder having been deleted a long time ago - so it should be deleted. But
 		// since it contains a note it should not.
 		await Folder.save({ id: folder1.id, deleted_time: 1000 });
 
