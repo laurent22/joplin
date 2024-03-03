@@ -1,5 +1,5 @@
 const React = require('react');
-import { AppState as RNAppState, View, StyleSheet, NativeEventSubscription } from 'react-native';
+import { AppState as RNAppState, View, StyleSheet, NativeEventSubscription, Alert } from 'react-native';
 import { stateUtils } from '@joplin/lib/reducer';
 import { connect } from 'react-redux';
 import NoteList from '../NoteList';
@@ -217,6 +217,44 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 					Clipboard.setString(getFolderCallbackUrl(this.props.selectedFolderId));
 				},
 			});
+			// menu items originally in long-pressing Notebook items in side menu
+			// app-mobile/components/side-menu-content.tsx
+			output.push({
+				title: _('Edit notebook'),
+				onPress: () => {
+					this.props.dispatch({
+						type: 'NAV_GO',
+						routeName: 'Folder',
+						folderId: this.props.selectedFolderId,
+					});
+				},
+			});
+			output.push({
+				title: _('Delete notebook'),
+				onPress: () => {
+					const folderDeletion = (message: string) => {
+						Alert.alert('', message, [
+							{
+								text: _('OK'),
+								onPress: () => {
+									void Folder.delete(this.props.selectedFolderId);
+								},
+							},
+							{
+								text: _('Cancel'),
+								onPress: () => { },
+								style: 'cancel',
+							},
+						]);
+					};
+					if (this.props.selectedFolderId === this.props.inboxJopId) {
+						return folderDeletion(
+							_('Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that\'s recently been sent to it may be lost.'),
+						);
+					}
+					return folderDeletion(_('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', this.parentItem().title));
+				},
+			});
 		}
 
 		return output;
@@ -340,6 +378,7 @@ const NotesScreen = connect((state: AppState) => {
 		themeId: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		notesOrder: stateUtils.notesOrder(state.settings),
+		inboxJopId: state.settings['sync.10.inboxId'],
 	};
 })(NotesScreenComponent as any);
 
