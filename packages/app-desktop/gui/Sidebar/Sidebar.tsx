@@ -131,12 +131,7 @@ const menuUtils = new MenuUtils(CommandService.instance());
 const allNotesFolder: FolderEntity = {
 	title: 'All Notes',
 	id: `${ALL_NOTES_FILTER_ID}`,
-	is_shared: 0,
-	encryption_applied: 0,
-	parent_id: '',
-	share_id: '',
 	type_: 2,
-	user_data: '',
 };
 
 const SidebarComponent = (props: Props) => {
@@ -448,8 +443,7 @@ const SidebarComponent = (props: Props) => {
 
 		const menu = new Menu();
 
-		const item = allNotesFolder;
-		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
+		if (itemType === BaseModel.TYPE_FOLDER) {
 			if (Setting.value('notes.perFolderSortOrderEnabled')) {
 				menu.append(new MenuItem({
 					...menuUtils.commandToStatefulMenuItem('togglePerFolderSortOrder', itemId),
@@ -506,24 +500,19 @@ const SidebarComponent = (props: Props) => {
 	};
 
 	const renderAllNotesItem = (theme: Theme, folder: FolderEntity, selected: boolean) => {
-		const anchorRef = anchorItemRef('folder', folder.id);
 		return (
 			<StyledListItem key="allNotesHeader" selected={selected} className={'list-item-container list-item-depth-0 all-notes'} isSpecialItem={true}>
 				<StyledExpandLink>{renderExpandIcon(theme, false, false)}</StyledExpandLink>
 				<StyledAllNotesIcon className="icon-notes"/>
 				<StyledListItemAnchor
-					key={folder.id}
 					className="list-item"
 					isSpecialItem={true}
 					href="#"
 					selected={selected}
-					onClick={onAllNotesClick_}
+					onClick={() => { onAllNotesClick_; folderItem_click(folder.id); }}
 
-					ref={anchorRef}
-					shareId={folder.share_id}
 					data-id={folder.id}
 					data-type={BaseModel.TYPE_FOLDER}
-					data-folder-id={folder.id}
 					onContextMenu={itemAllContextMenu}
 					isConflictFolder={folder.id === Folder.conflictFolderId()}
 				>
@@ -740,7 +729,6 @@ const SidebarComponent = (props: Props) => {
 			toggleblock: 1,
 		}),
 	);
-
 
 	const foldersStyle = useMemo(() => {
 		return { display: props.folderHeaderIsExpanded ? 'block' : 'none', paddingBottom: 10 };

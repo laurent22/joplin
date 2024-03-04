@@ -1,7 +1,6 @@
 import Setting from '@joplin/lib/models/Setting';
 import eventManager from '@joplin/lib/eventManager';
 import { notesSortOrderFieldArray, setNotesSortOrder } from './notesSortOrderUtils';
-const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
 const SUFFIX_FIELD = '$field';
 const SUFFIX_REVERSE = '$reverse';
@@ -128,7 +127,7 @@ export default class PerFolderSortOrderService {
 		if (this.folderState.notesParentType === 'Folder') {
 			return this.folderState.selectedFolderId;
 		} else {
-			return `${ALL_NOTES_FILTER_ID}`;
+			return '';
 		}
 	}
 

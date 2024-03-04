@@ -2,7 +2,6 @@ import PerFolderSortOrderService from './PerFolderSortOrderService';
 import { setNotesSortOrder } from './notesSortOrderUtils';
 import Setting from '@joplin/lib/models/Setting';
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
-const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
 const folderId1 = 'aa012345678901234567890123456789';
 const folderId2 = 'bb012345678901234567890123456789';
@@ -41,10 +40,4 @@ describe('PerFolderSortOrderService', () => {
 		expect(PerFolderSortOrderService.get(folderId2)).toBeUndefined();
 	});
 
-	test('should not cause errors when using ALL_NOTES_FILTER_ID', async () => {
-		expect(PerFolderSortOrderService.isSet(ALL_NOTES_FILTER_ID)).toBe(false);
-		PerFolderSortOrderService.set(ALL_NOTES_FILTER_ID, true);
-		expect(PerFolderSortOrderService.isSet(ALL_NOTES_FILTER_ID)).toBe(true);
-		expect(PerFolderSortOrderService.get(folderId1)).toBeDefined();
-	});
 });
