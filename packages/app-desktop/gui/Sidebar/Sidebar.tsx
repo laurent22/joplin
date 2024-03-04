@@ -128,12 +128,6 @@ function FolderItem(props: any) {
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
-const allNotesFolder: FolderEntity = {
-	title: 'All Notes',
-	id: `${ALL_NOTES_FILTER_ID}`,
-	type_: 2,
-};
-
 const SidebarComponent = (props: Props) => {
 
 	const folderItemsOrder_ = useRef<any[]>();
@@ -499,7 +493,7 @@ const SidebarComponent = (props: Props) => {
 		return <i className={isExpanded ? 'fas fa-caret-down' : 'fas fa-caret-right'} style={style}></i>;
 	};
 
-	const renderAllNotesItem = (theme: Theme, folder: FolderEntity, selected: boolean) => {
+	const renderAllNotesItem = (theme: Theme, selected: boolean) => {
 		return (
 			<StyledListItem key="allNotesHeader" selected={selected} className={'list-item-container list-item-depth-0 all-notes'} isSpecialItem={true}>
 				<StyledExpandLink>{renderExpandIcon(theme, false, false)}</StyledExpandLink>
@@ -509,12 +503,12 @@ const SidebarComponent = (props: Props) => {
 					isSpecialItem={true}
 					href="#"
 					selected={selected}
-					onClick={() => { onAllNotesClick_; folderItem_click(folder.id); }}
+					onClick={() => { onAllNotesClick_; folderItem_click(ALL_NOTES_FILTER_ID); }}
 
-					data-id={folder.id}
+					data-id={ALL_NOTES_FILTER_ID}
 					data-type={BaseModel.TYPE_FOLDER}
 					onContextMenu={itemAllContextMenu}
-					isConflictFolder={folder.id === Folder.conflictFolderId()}
+					isConflictFolder={ALL_NOTES_FILTER_ID === Folder.conflictFolderId()}
 				>
 					{_('All notes')}
 				</StyledListItemAnchor>
@@ -738,8 +732,8 @@ const SidebarComponent = (props: Props) => {
 	if (props.folders.length) {
 		const allNotesSelected = props.notesParentType === 'SmartFilter' && props.selectedSmartFilterId === ALL_NOTES_FILTER_ID;
 		const result = renderFolders(props, renderFolderItem);
-		const folderItems = [renderAllNotesItem(theme, allNotesFolder, allNotesSelected)].concat(result.items);
-		folderItemsOrder_.current = [allNotesFolder.id].concat(result.order);
+		const folderItems = [renderAllNotesItem(theme, allNotesSelected)].concat(result.items);
+		folderItemsOrder_.current = result.order;
 		items.push(
 			<div
 				className={`folders ${props.folderHeaderIsExpanded ? 'expanded' : ''}`}
