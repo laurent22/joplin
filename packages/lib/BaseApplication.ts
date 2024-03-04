@@ -748,10 +748,10 @@ export default class BaseApplication {
 
 		if (Setting.value('firstStart')) {
 			
-			// detectAndSetLocale sets the locale to the system default locale.  
-			// Not calling it when a new profile is created ensures that the 
-			// the language set by the user is not overridden by the system 
-			// default language. 
+			// detectAndSetLocale sets the locale to the system default locale.
+			// Not calling it when a new profile is created ensures that the
+			// the language set by the user is not overridden by the system
+			// default language.
 			if (!Setting.value('isSubProfile')) {
 				const locale = shim.detectAndSetLocale(Setting);
 				reg.logger().info(`First start: detected locale as ${locale}`);
