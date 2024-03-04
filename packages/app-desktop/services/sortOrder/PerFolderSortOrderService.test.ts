@@ -39,5 +39,4 @@ describe('PerFolderSortOrderService', () => {
 		// Folder without per-folder sort order has no per-folder sort order
 		expect(PerFolderSortOrderService.get(folderId2)).toBeUndefined();
 	});
-
 });
