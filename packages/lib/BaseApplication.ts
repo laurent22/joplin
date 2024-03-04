@@ -747,7 +747,7 @@ export default class BaseApplication {
 		}
 
 		if (Setting.value('firstStart')) {
-			
+
 			// detectAndSetLocale sets the locale to the system default locale.
 			// Not calling it when a new profile is created ensures that the
 			// the language set by the user is not overridden by the system
