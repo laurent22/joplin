@@ -264,7 +264,7 @@ export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions
 	}
 }
 
-async function downloadMediaFiles(urls: string[], fetchOptions: FetchOptions, allowedProtocols?: string[]) {
+async function downloadMediaFiles(urls: string[], fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
 	const output: any = {};
 
 	const downloadController = fetchOptions?.downloadController ?? null;
