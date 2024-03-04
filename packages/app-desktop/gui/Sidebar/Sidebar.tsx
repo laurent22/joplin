@@ -428,7 +428,7 @@ const SidebarComponent = (props: Props) => {
 		menu.popup({ window: bridge().window() });
 	}, [props.folders, props.dispatch, pluginsRef]);
 
-	const itemAllContextMenu = useCallback(async (event: any) => {
+	const toggleAllNotesContextMenu = useCallback(async (event: any) => {
 		const itemId = event.currentTarget.getAttribute('data-id');
 		if (itemId === Folder.conflictFolderId()) return;
 
@@ -507,7 +507,7 @@ const SidebarComponent = (props: Props) => {
 
 					data-id={ALL_NOTES_FILTER_ID}
 					data-type={BaseModel.TYPE_FOLDER}
-					onContextMenu={itemAllContextMenu}
+					onContextMenu={toggleAllNotesContextMenu}
 					isConflictFolder={ALL_NOTES_FILTER_ID === Folder.conflictFolderId()}
 				>
 					{_('All notes')}
