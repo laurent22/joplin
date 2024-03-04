@@ -272,7 +272,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 	}
 
 	public defineExtension(name: string, value: any) {
-		(CodeMirror5Emulation.prototype as any)[name] ??= value;
+		(CodeMirror5Emulation.prototype as any)[name] = value;
 	}
 
 	public defineOption(name: string, defaultValue: any, onUpdate: OptionUpdateCallback) {
