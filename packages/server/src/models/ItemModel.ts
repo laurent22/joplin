@@ -375,7 +375,7 @@ export default class ItemModel extends BaseModel<Item> {
 		throw new Error(`Could not atomically update content for item: ${JSON.stringify(item)}`);
 	}
 
-	// Loop throught the items in the database and import their content to the
+	// Loop through the items in the database and import their content to the
 	// target storage. Only items not already in that storage will be processed.
 	public async importContentToStorage(toStorageConfig: StorageDriverConfig | StorageDriverBase, options: ImportContentToStorageOptions = null) {
 		options = {

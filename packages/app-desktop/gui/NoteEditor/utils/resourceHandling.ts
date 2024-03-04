@@ -12,6 +12,7 @@ import { fileUriToPath } from '@joplin/utils/url';
 import { MarkupLanguage } from '@joplin/renderer';
 import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
 import markupRenderOptions from './markupRenderOptions';
+import { fileExtension, filename, safeFileExtension, safeFilename } from '@joplin/utils/path';
 const joplinRendererUtils = require('@joplin/renderer').utils;
 const { clipboard } = require('electron');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
@@ -152,8 +153,28 @@ export async function processPastedHtml(html: string, htmlToMd: HtmlToMarkdownHa
 		allImageUrls.push(src);
 	});
 
+	const downloadImage = async (imageSrc: string) => {
+		try {
+			const fileExt = safeFileExtension(fileExtension(imageSrc));
+			const name = safeFilename(filename(imageSrc));
+			const pieces = [name ? name : md5(Date.now() + Math.random())];
+			if (fileExt) pieces.push(fileExt);
+			const filePath = `${Setting.value('tempDir')}/${pieces.join('.')}`;
+			await shim.fetchBlob(imageSrc, { path: filePath });
+			const createdResource = await shim.createResourceFromPath(filePath);
+			await shim.fsDriver().remove(filePath);
+			mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
+		} catch (error) {
+			logger.warn(`Error creating a resource for ${imageSrc}.`, error);
+			mappedResources[imageSrc] = imageSrc;
+		}
+	};
+
+	const downloadImages: Promise<void>[] = [];
+
 	for (const imageSrc of allImageUrls) {
 		if (!mappedResources[imageSrc]) {
+			logger.info(`processPastedHtml: Processing image ${imageSrc}`);
 			try {
 				if (imageSrc.startsWith('file')) {
 					const imageFilePath = path.normalize(fileUriToPath(imageSrc));
@@ -165,21 +186,19 @@ export async function processPastedHtml(html: string, htmlToMd: HtmlToMarkdownHa
 						const createdResource = await shim.createResourceFromPath(imageFilePath);
 						mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
 					}
-				} else if (imageSrc.startsWith('data:')) { // Data URIs
+				} else if (imageSrc.startsWith('data:')) {
 					mappedResources[imageSrc] = imageSrc;
 				} else {
-					const filePath = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}`;
-					await shim.fetchBlob(imageSrc, { path: filePath });
-					const createdResource = await shim.createResourceFromPath(filePath);
-					await shim.fsDriver().remove(filePath);
-					mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
+					downloadImages.push(downloadImage(imageSrc));
 				}
 			} catch (error) {
-				logger.warn(`Error creating a resource for ${imageSrc}.`, error);
+				logger.warn(`processPastedHtml: Error creating a resource for ${imageSrc}.`, error);
 				mappedResources[imageSrc] = imageSrc;
 			}
 		}
 	}
+
+	await Promise.all(downloadImages);
 
 	// TinyMCE can accept any type of HTML, including HTML that may not be preserved once saved as
 	// Markdown. For example the content may have a dark background which would be supported by

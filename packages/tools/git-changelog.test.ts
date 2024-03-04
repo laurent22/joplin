@@ -9,8 +9,8 @@ describe('git-changelog', () => {
 		const testCases: TestCase[] = [
 			[['packages/app-mobile/package.json'], 'ios', true],
 			[['packages/app-mobile/package.json'], 'android', true],
-			[['packages/app-mobile/package.json'], 'destop', false],
-			[[], 'destop', false],
+			[['packages/app-mobile/package.json'], 'desktop', false],
+			[[], 'desktop', false],
 			[['packages/server/package.json'], 'server', true],
 			[['packages/app-mobile/package.json', 'packages/server/package.json'], 'server', true],
 			[['packages/app-mobile/package.json', 'packages/server/package.json'], 'android', true],

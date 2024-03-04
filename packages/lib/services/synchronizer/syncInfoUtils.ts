@@ -178,6 +178,7 @@ const mergeActiveMasterKeys = (s1: SyncInfo, s2: SyncInfo, output: SyncInfo) => 
 	}
 };
 
+// If there is a distinction, s1 should be local sync info and s2 remote.
 export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
 	const output: SyncInfo = new SyncInfo();
 
@@ -199,7 +200,10 @@ export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
 		}
 	}
 
-	output.appMinVersion = compareVersions(s1.appMinVersion, s2.appMinVersion) > 0 ? s1.appMinVersion : s2.appMinVersion;
+	// We use >= so that the version from s1 (local) is preferred to the version in s2 (remote).
+	// For example, if s2 has appMinVersion 0.00 and s1 has appMinVersion 0.0.0, we choose the
+	// local version, 0.0.0.
+	output.appMinVersion = compareVersions(s1.appMinVersion, s2.appMinVersion) >= 0 ? s1.appMinVersion : s2.appMinVersion;
 
 	return output;
 }
@@ -236,6 +240,26 @@ export class SyncInfo {
 		};
 	}
 
+	public filterSyncInfo() {
+		const filtered = JSON.parse(JSON.stringify(this.toObject()));
+
+		// Filter content and checksum properties from master keys
+		if (filtered.masterKeys) {
+			filtered.masterKeys = filtered.masterKeys.map((mk: MasterKeyEntity) => {
+				delete mk.content;
+				delete mk.checksum;
+				return mk;
+			});
+		}
+
+		// Truncate the private key and public key
+		if (filtered.ppk.value) {
+			filtered.ppk.value.privateKey.ciphertext = `${filtered.ppk.value.privateKey.ciphertext.substr(0, 20)}...${filtered.ppk.value.privateKey.ciphertext.substr(-20)}`;
+			filtered.ppk.value.publicKey = `${filtered.ppk.value.publicKey.substr(0, 40)}...`;
+		}
+		return filtered;
+	}
+
 	public serialize(): string {
 		return JSON.stringify(this.toObject(), null, '\t');
 	}
@@ -247,7 +271,7 @@ export class SyncInfo {
 		this.activeMasterKeyId_ = 'activeMasterKeyId' in s ? s.activeMasterKeyId : { value: '', updatedTime: 0 };
 		this.masterKeys_ = 'masterKeys' in s ? s.masterKeys : [];
 		this.ppk_ = 'ppk' in s ? s.ppk : { value: null, updatedTime: 0 };
-		this.appMinVersion_ = s.appMinVersion ? s.appMinVersion : '0.00';
+		this.appMinVersion_ = s.appMinVersion ? s.appMinVersion : '0.0.0';
 
 		// Migration for master keys that didn't have "hasBeenUsed" property -
 		// in that case we assume they've been used at least once.

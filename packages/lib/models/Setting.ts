@@ -10,6 +10,7 @@ import Logger from '@joplin/utils/Logger';
 import mergeGlobalAndLocalSettings from '../services/profileConfig/mergeGlobalAndLocalSettings';
 import splitGlobalAndLocalSettings from '../services/profileConfig/splitGlobalAndLocalSettings';
 import JoplinError from '../JoplinError';
+import { defaultListColumns } from '../services/plugins/api/noteListType';
 const { sprintf } = require('sprintf-js');
 const ObjectUtils = require('../ObjectUtils');
 const { toTitleCase } = require('../string-utils.js');
@@ -146,6 +147,7 @@ export interface Constants {
 	pluginDataDir: string;
 	cacheDir: string;
 	pluginDir: string;
+	homeDir: string;
 	flagOpenDevTools: boolean;
 	syncVersion: number;
 	startupDevPlugins: string[];
@@ -303,6 +305,7 @@ class Setting extends BaseModel {
 		pluginDataDir: '',
 		cacheDir: '',
 		pluginDir: '',
+		homeDir: '',
 		flagOpenDevTools: false,
 		syncVersion: 3,
 		startupDevPlugins: [],
@@ -962,6 +965,14 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
+			'notes.columns': {
+				value: defaultListColumns(),
+				public: false,
+				type: SettingItemType.Array,
+				storage: SettingStorage.File,
+				isGlobal: false,
+			},
+
 			'notes.sortOrder.reverse': { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: [AppType.Cli] },
 			// NOTE: A setting whose name starts with 'notes.sortOrder' is special,
 			// which implies changing the setting automatically triggers the refresh of notes.
@@ -1391,7 +1402,9 @@ class Setting extends BaseModel {
 				public: true,
 				appTypes: [AppType.Desktop],
 				label: () => 'Automatically upload crash reports',
-				description: () => 'If you experience a crash, please enable this option to automatically send a crash report.',
+				description: () => 'If you experience a crash, please enable this option to automatically send crash reports. You will need to restart the application for this change to take effect.',
+				isGlobal: true,
+				storage: SettingStorage.File,
 			},
 
 			'clipperServer.autoStart': { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: false },
@@ -1798,6 +1811,31 @@ class Setting extends BaseModel {
 				description: () => _('Leave it blank to download the language files from the default website'),
 				label: () => _('Voice typing language files (URL)'),
 				section: 'note',
+			},
+
+			'trash.autoDeletionEnabled': {
+				value: true,
+				type: SettingItemType.Bool,
+				public: true,
+				label: () => _('Automatically delete notes in the trash after a number of days'),
+				storage: SettingStorage.File,
+				isGlobal: false,
+			},
+
+			'trash.ttlDays': {
+				value: 90,
+				type: SettingItemType.Int,
+				public: true,
+				minimum: 1,
+				maximum: 300,
+				step: 1,
+				unitLabel: (value: number = null) => {
+					return value === null ? _('days') : _('%d days', value);
+				},
+				show: (settings: any) => settings['trash.autoDeletionEnabled'],
+				label: () => _('Keep notes in the trash for'),
+				storage: SettingStorage.File,
+				isGlobal: false,
 			},
 		};
 
@@ -2306,7 +2344,7 @@ class Setting extends BaseModel {
 	public static value(key: string) {
 		// Need to copy arrays and objects since in setValue(), the old value and new one is compared
 		// with strict equality and the value is updated only if changed. However if the caller acquire
-		// and object and change a key, the objects will be detected as equal. By returning a copy
+		// an object and change a key, the objects will be detected as equal. By returning a copy
 		// we avoid this problem.
 		function copyIfNeeded(value: any) {
 			if (value === null || value === undefined) return value;

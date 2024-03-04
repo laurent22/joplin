@@ -210,7 +210,7 @@ const generateMediaPath = (url: string, isDataUrl: boolean, fileExt: string) => 
 const isValidUrl = (url: string, isDataUrl: boolean, urlProtocol?: string, allowedProtocols?: string[]) => {
 	if (!urlProtocol) return false;
 
-	// PDFs and other heavy resoucres are often served as seperate files insted of data urls, its very unlikely to encounter a pdf as a data url
+	// PDFs and other heavy resources are often served as separate files instead of data urls, its very unlikely to encounter a pdf as a data url
 	if (isDataUrl && !url.toLowerCase().startsWith('data:image/')) {
 		logger.warn(`Resources in data URL format is only supported for images ${url}`);
 		return false;
@@ -508,6 +508,11 @@ export default async function(request: Request, id: string = null, link: string 
 		}
 
 		return newNote;
+	}
+
+	if (request.method === RequestMethod.DELETE) {
+		await Note.delete(id, { toTrash: request.query.permanent !== '1' });
+		return;
 	}
 
 	return defaultAction(BaseModel.TYPE_NOTE, request, id, link);

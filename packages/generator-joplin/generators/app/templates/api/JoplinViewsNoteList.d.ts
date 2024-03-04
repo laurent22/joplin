@@ -7,14 +7,29 @@ import { ListRenderer } from './noteListType';
  *
  * The app provides the required dependencies whenever a note is updated - you
  * process these dependencies, and return some props, which are then passed to
- * your template and rendered. See [[[ListRenderer]]] for a detailed description
+ * your template and rendered. See [[ListRenderer]] for a detailed description
  * of each property of the renderer.
  *
- * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/note_list_renderer)
+ * ## Reference
  *
- * The default list renderer is implemented using the same API, so it worth checking it too:
+ * * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/note_list_renderer)
  *
- * [Default list renderer](https://github.com/laurent22/joplin/tree/dev/packages/lib/services/noteList/defaultListRenderer.ts)
+ * * [Default list renderer](https://github.com/laurent22/joplin/tree/dev/packages/lib/services/noteList/defaultListRenderer.ts)
+ *
+ * ## Screenshots:
+ *
+ * ### Top to bottom with title, date and body
+ *
+ * <img width="250px" src="https://global.discourse-cdn.com/standard14/uploads/cozic/optimized/3X/0/9/09a40a011a805bc39736716d23b08033af420222_2_670x750.png"/>
+ *
+ * ### Left to right with thumbnails
+ *
+ * <img width="250px" src="https://global.discourse-cdn.com/standard14/uploads/cozic/optimized/3X/d/f/dff6f14f9ca3ec6a772314719622723feaedcd09_2_588x750.png"/>
+ *
+ * ### Top to bottom with editable title
+ *
+ * <img width="250px" src="https://global.discourse-cdn.com/standard14/uploads/cozic/optimized/3X/7/2/72acb1bab67d32482cb3da7bb053e54d44ad87b8_2_580x500.png"/>
+ *
  */
 export default class JoplinViewsNoteList {
     private plugin_;

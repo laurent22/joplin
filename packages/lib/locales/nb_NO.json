@@ -317,7 +317,7 @@
 	"Browse...": [
 		"Utforsk..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -433,6 +433,9 @@
 	],
 	"Close": [
 		"Lukk"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Lukk vindu"
@@ -1282,6 +1285,9 @@
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"For å gjøre dette, må hele ditt datasett krypteres og synkroniseres, derfor er det best å gjøre dette over natten.\n\nFølg instruksjonene for å starte :\n\n1. Synkroniser alle dine enheter.\n2. Klikk \"%s\".\n3. La prosessen fullføre. Mens den kjører, unngå endringer på notatene dine på andre enheter, for å unngå konflikt.\n4. Når synkroniseringen er fullført på denne enheten så synkroniserer du dine andre enheter og lar dem fullføre prosessen.\n\nViktig: Du trenger kun å gjøre dette ÉN gang per enhet."
 	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
+	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"For å kunne bruke filsystemsynkronisering behøves din tillatelse til å kunne skrive til ekstern lagring."
 	],
@@ -1559,6 +1565,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"Mangler nøkler"
 	],
@@ -1679,7 +1688,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Ikke autentisert med %s. Fyll inn manglende detaljer."
 	],
 	"Not downloaded": [
@@ -2279,6 +2288,12 @@
 	"Solarised Light": [
 		"Solarisert lys"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Noen elementer kan ikke dekrypteres."
 	],
@@ -2567,6 +2582,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Mottakeren kunne ikke fjernes fra listen. Prøv på nytt.\n\nFeilen var: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Synkroniseringsmålet må være oppgradert før Joplin kan synkronisere. Det kan ta noen minutter å fullføre operasjonen og applikasjonen trenger å startes på nytt. Trykk på lenken for å fortsette."
 	],
@@ -2785,6 +2803,9 @@
 	],
 	"Undo": [
 		"Angre"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Ukjent flagg: %s"

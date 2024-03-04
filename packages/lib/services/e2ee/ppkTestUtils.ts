@@ -7,7 +7,7 @@ interface TestData {
 	ciphertext: string;
 }
 
-// This is conveninent to quickly generate some data to verify for example that
+// This is convenient to quickly generate some data to verify for example that
 // react-native-rsa can decrypt data from node-rsa and vice-versa.
 export async function createTestData() {
 	const plaintext = 'just testing';
@@ -84,6 +84,8 @@ export async function checkTestData(data: TestData, options: CheckTestDataOption
 	}
 }
 
+// cSpell:disable
+
 // Data generated on mobile using react-native-rsa-native
 const mobileData = {
 	'publicKey': '-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlEVSnwMpmGC+YaRw3B37BP1IBth02OFCrlZjlkn14OijnmQaOKGxhJtthvlVVEOEc50D+MMKZ1mJleER4FnD3CoGHaVZmZRa3wnuTblctF/in0mgywFJ6HlEXngUrWt2TkCnkwg4nP0IKlQ4URBxWGllVbWUgqUs5uAtV4mkrx+Ke68j+suoN8w5BF9WnYJCclDCplUOFx77llw1Z/7O8UjkgbfYKOnwMEpxlO1SVutNQNgD4BOtGn73ai0qjHKq5as8SKJb/ch+uAX95bJHlOOvBrHw718gcbnxkn6PEN3vl4/HbmHFj/V4zxG8ZF82+oTOh6m/HGdPPLpF8e98dQIDAQAB\n-----END PUBLIC KEY-----',
@@ -99,6 +101,8 @@ const desktopData = {
 	'plaintext': 'just testing',
 	'ciphertext': 'PRqiQjxnQMukoYPA9XtlGcgAjwuDJd24GtJ3iO2qhh0HnbPnx3c8ZaGWJyV1ejZCwIWv509js7sCTHtXqeGkZr//Db6oOIyi77VzRwvzPxReHPefF0rX62uMh+zTmQW7KSrFeAvtnpWiDcyynUtwycgrZcQCHZoEmSSyc3cyj09HgqEoSQb0BOc8daR0aXwOpgXsB8ypf3+m23U1gZmIyl0glymTN9h1jopV9dRtw5ufcc4ve/hHKp0gbaT2OaRKOLr6AXmbDGwkF5bsvjV+v4tTkj96OUjoG9qUMQh/JYRMl7mxJriUB3Jc6WHEKRVPQYAIZODfEOy3rkHwWAcYjA==',
 };
+
+// cSpell:enable
 
 // This can be used to run integration tests directly on device. It will throw
 // an error if something cannot be decrypted, or else print info messages.

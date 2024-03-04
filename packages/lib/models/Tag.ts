@@ -16,7 +16,12 @@ export default class Tag extends BaseItem {
 	}
 
 	public static async noteIds(tagId: string) {
-		const rows = await this.db().selectAll('SELECT note_id FROM note_tags WHERE tag_id = ?', [tagId]);
+		const rows = await this.db().selectAll(`
+			SELECT note_id
+			FROM note_tags
+			LEFT JOIN notes ON notes.id = note_tags.note_id
+			WHERE tag_id = ? AND notes.deleted_time = 0
+		`, [tagId]);
 		const output = [];
 		for (let i = 0; i < rows.length; i++) {
 			output.push(rows[i].note_id);
@@ -105,7 +110,13 @@ export default class Tag extends BaseItem {
 	}
 
 	public static async hasNote(tagId: string, noteId: string) {
-		const r = await this.db().selectOne('SELECT note_id FROM note_tags WHERE tag_id = ? AND note_id = ? LIMIT 1', [tagId, noteId]);
+		const r = await this.db().selectOne(`
+			SELECT note_id
+			FROM note_tags
+			LEFT JOIN notes ON notes.id = note_tags.note_id
+			WHERE tag_id = ? AND note_id = ? AND deleted_time = 0
+			LIMIT 1
+		`, [tagId, noteId]);
 		return !!r;
 	}
 

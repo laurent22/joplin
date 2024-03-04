@@ -139,7 +139,7 @@ Potential Mentor(s):
 
 ### 9. Template insertion tool
 
-Joplinc can store general templates as notes that can be used in various context. For example, it could have email templates that could be inserted into a Thunderbird email. Or code snippets that could be inserted into a text editor. The workflow will be as follow
+Joplin can store general templates as notes that can be used in various context. For example, it could have email templates that could be inserted into a Thunderbird email. Or code snippets that could be inserted into a text editor. The workflow will be as follow
 
 - User presses a global shortcut, for example Ctrl+Alt+T, from any text editor (email client, code editor, etc.)
 - A floating window is opened, from which the user can pick a note

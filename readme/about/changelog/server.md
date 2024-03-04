@@ -28,7 +28,7 @@
 
 ## [server-v2.13.3](https://github.com/laurent22/joplin/releases/tag/server-v2.13.3) - 2023-11-01T16:29:32Z
 
-- Improved: Automatically restarts the server when it crashes, with exponentiel back-off (0c8b475)
+- Improved: Automatically restarts the server when it crashes, with exponential back-off (0c8b475)
 - Improved: Improve parsing of uploaded content and error handling (db88dfc)
 - Improved: Updated packages katex (v0.16.9), nodemailer (v6.9.6), react, sass (v1.68.0)
 
@@ -153,7 +153,7 @@
 - Improved: Make page wider only when displaying admin pages (df9c460)
 - Improved: Move admin pages under /admin (#6006)
 - Improved: Put admin pages under /admin (09cbe3c)
-- Improved: Remove uneeded CSS file (9dbf5e0)
+- Improved: Remove unneeded CSS file (9dbf5e0)
 - Improved: Set NODE_ENV to "production" in Docker image (ed0f0fa)
 - Improved: Set a timestamp when disabling a user (2f7ab7e)
 - Improved: Simplify Docker image (#6010)
@@ -279,7 +279,7 @@
 ## [server-v2.4.10-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.4.10-beta) (Pre-release) - 2021-09-25T19:07:05Z
 
 - Improved: Improved share service reliability and optimised performance (0175348)
-- Security: Implement clickjacking defense (e3fd34e)
+- Security: Implement clickjacking defence (e3fd34e)
 
 ## [server-v2.4.9](https://github.com/laurent22/joplin/releases/tag/server-v2.4.9-beta) - 2021-09-22T16:31:23Z
 
@@ -321,7 +321,7 @@
 
 ## [server-v2.4.2](https://github.com/laurent22/joplin/releases/tag/server-v2.4.2) - 2021-08-28T17:45:41Z
 
-- New: Add request rate limter on session and login end points (543413d)
+- New: Add request rate limiter on session and login end points (543413d)
 - New: Add support for user flags (82b157b)
 - New: Added commands to control db migrations - list, down, up (2c79ce2)
 - Improved: Display user flags in profile when logged in as admin (4394329)

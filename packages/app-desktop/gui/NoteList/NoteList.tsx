@@ -22,6 +22,7 @@ import usePrevious from '../hooks/usePrevious';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import ItemChange from '@joplin/lib/models/ItemChange';
+import { registerGlobalDragEndEvent, unregisterGlobalDragEndEvent } from '../utils/dragAndDrop';
 
 const commands = [
 	require('./commands/focusElementNoteList'),
@@ -63,8 +64,6 @@ const NoteListComponent = (props: Props) => {
 	const focusItemIID_ = useRef<any>(null);
 	const noteListRef = useRef(null);
 	const itemListRef = useRef(null);
-
-	let globalDragEndEventRegistered_ = false;
 
 	const style = useMemo(() => {
 		const theme = themeStyle(props.themeId);
@@ -129,22 +128,6 @@ const NoteListComponent = (props: Props) => {
 		menu.popup({ window: bridge().window() });
 	}, [props.selectedNoteIds, props.notes, props.dispatch, props.watchedNoteFiles, props.plugins, props.selectedFolderId, props.customCss]);
 
-	const onGlobalDrop_ = () => {
-		unregisterGlobalDragEndEvent_();
-		setDragOverTargetNoteIndex(null);
-	};
-
-	const registerGlobalDragEndEvent_ = () => {
-		if (globalDragEndEventRegistered_) return;
-		globalDragEndEventRegistered_ = true;
-		document.addEventListener('dragend', onGlobalDrop_);
-	};
-
-	const unregisterGlobalDragEndEvent_ = () => {
-		globalDragEndEventRegistered_ = false;
-		document.removeEventListener('dragend', onGlobalDrop_);
-	};
-
 	const dragTargetNoteIndex_ = (event: any) => {
 		return Math.abs(Math.round((event.clientY - itemListRef.current.offsetTop() + itemListRef.current.offsetScroll()) / itemHeight));
 	};
@@ -158,7 +141,7 @@ const NoteListComponent = (props: Props) => {
 			event.preventDefault();
 			const newIndex = dragTargetNoteIndex_(event);
 			if (dragOverTargetNoteIndex === newIndex) return;
-			registerGlobalDragEndEvent_();
+			registerGlobalDragEndEvent(() => setDragOverTargetNoteIndex(null));
 			setDragOverTargetNoteIndex(newIndex);
 		}
 	};
@@ -185,7 +168,7 @@ const NoteListComponent = (props: Props) => {
 			return;
 		}
 		const dt = event.dataTransfer;
-		unregisterGlobalDragEndEvent_();
+		unregisterGlobalDragEndEvent();
 		setDragOverTargetNoteIndex(null);
 
 		const targetNoteIndex = dragTargetNoteIndex_(event);

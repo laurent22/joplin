@@ -5,7 +5,7 @@ describe('cssToTheme', () => {
 	it('should convert a CSS string to a theme', async () => {
 		const input = `
 			:root {
-				--joplin-appearence: light;
+				--joplin-appearance: light;
 				--joplin-color: #333333;
 				--joplin-background-color: #778899;
 
@@ -15,7 +15,7 @@ describe('cssToTheme', () => {
 			}`;
 
 		const expected = {
-			appearence: 'light',
+			appearance: 'light',
 			color: '#333333',
 			backgroundColor: '#778899',
 			backgroundColorTransparent: 'rgba(255,255,255,0.9)',

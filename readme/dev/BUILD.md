@@ -51,7 +51,7 @@ First you need to setup React Native to build projects with native code. For thi
 
 ### Android
 
-Run this to build and install the app on the emmulator:
+Run this to build and install the app on the emulator:
 
 	cd packages/app-mobile/android
 	./gradlew installDebug # or gradlew.bat installDebug on Windows

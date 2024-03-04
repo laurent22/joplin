@@ -58,7 +58,7 @@ function requestCanBeRepeated(error: any) {
 	// permission issue, which won't be fixed by repeating the request.
 	if (errorCode === 403 || errorCode === 401) return false;
 
-	// The target is explicitely rejecting the item so repeating wouldn't make a difference.
+	// The target is explicitly rejecting the item so repeating wouldn't make a difference.
 	if (errorCode === 'rejectedByTarget' || errorCode === 'isReadOnly') return false;
 
 	// We don't repeat failSafe errors because it's an indication of an issue at the
@@ -131,7 +131,7 @@ class FileApi {
 
 	// This can be true when the sync target timestamps (updated_time) provided
 	// in the delta call are guaranteed to be accurate. That requires
-	// explicitely setting the timestamp, which is not done anymore on any sync
+	// explicitly setting the timestamp, which is not done anymore on any sync
 	// target as it wasn't accurate (for example, the file system can't be
 	// relied on, and even OneDrive for some reason doesn't guarantee that the
 	// timestamp you set is what you get back).
@@ -297,7 +297,7 @@ class FileApi {
 		return result;
 	}
 
-	// Deprectated
+	// Deprecated
 	public setTimestamp(path: string, timestampMs: number) {
 		logger.debug(`setTimestamp ${this.fullPath(path)}`);
 		return tryAndRepeat(() => this.driver_.setTimestamp(this.fullPath(path), timestampMs), this.requestRepeatCount());
@@ -347,13 +347,13 @@ class FileApi {
 		return tryAndRepeat(() => this.driver_.delete(this.fullPath(path)), this.requestRepeatCount());
 	}
 
-	// Deprectated
+	// Deprecated
 	public move(oldPath: string, newPath: string) {
 		logger.debug(`move ${this.fullPath(oldPath)} => ${this.fullPath(newPath)}`);
 		return tryAndRepeat(() => this.driver_.move(this.fullPath(oldPath), this.fullPath(newPath)), this.requestRepeatCount());
 	}
 
-	// Deprectated
+	// Deprecated
 	public format() {
 		return tryAndRepeat(() => this.driver_.format(), this.requestRepeatCount());
 	}

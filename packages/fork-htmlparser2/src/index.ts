@@ -40,6 +40,8 @@ export { default as Tokenizer } from "./Tokenizer";
 import * as ElementType from "domelementtype";
 export { ElementType };
 
+// cSpell:disable
+
 /**
  * List of all events that the parser emits.
  *
@@ -59,6 +61,8 @@ export const EVENTS = {
     error: 1,
     end: 0
 };
+
+// cSpell:enable
 
 /*
     All of the following exports exist for backwards-compatibility.

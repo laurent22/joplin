@@ -5,6 +5,7 @@ import { MarkupLanguage } from '@joplin/renderer';
 import { RenderResult, RenderResultPluginAsset } from '@joplin/renderer/types';
 import { Dispatch } from 'redux';
 import { ProcessResultsRow } from '@joplin/lib/services/search/SearchEngine';
+import { DropHandler } from './useDropHandler';
 
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
@@ -113,7 +114,7 @@ export interface NoteBodyEditorProps {
 	resourceDirectory: string;
 	locale: string;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onDrop: Function;
+	onDrop: DropHandler;
 	noteToolbarButtonInfos: ToolbarButtonInfo[];
 	plugins: PluginStates;
 	fontSize: number;
@@ -133,6 +134,7 @@ export interface FormNote {
 	markup_language: number;
 	user_updated_time: number;
 	encryption_applied: number;
+	deleted_time: number;
 
 	hasChanged: boolean;
 
@@ -172,6 +174,7 @@ export function defaultFormNote(): FormNote {
 	return {
 		id: '',
 		parent_id: '',
+		deleted_time: 0,
 		title: '',
 		body: '',
 		is_todo: 0,

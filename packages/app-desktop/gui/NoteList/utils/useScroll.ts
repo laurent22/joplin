@@ -22,7 +22,7 @@ const useScroll = (itemsPerLine: number, noteCount: number, itemSize: Size, list
 	// check if it's correct), we forcefully set it multiple times over the next
 	// few milliseconds, hoping that maybe one of these attempts will stick.
 	//
-	// This is most likely a race condition in either Chromimum or Electron
+	// This is most likely a race condition in either Chromium or Electron
 	// although I couldn't find an upstream issue.
 	//
 	// Setting the value only once after a short time, for example 10ms, helps

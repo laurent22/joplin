@@ -17,6 +17,7 @@ const { BaseScreenComponent } = require('../base-screen');
 const { BackButtonService } = require('../../services/back-button.js');
 import { AppState } from '../../utils/types';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import { itemIsInTrash } from '@joplin/lib/services/trash';
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids.js');
 const Clipboard = require('@react-native-community/clipboard').default;
 import { getFolderCallbackUrl, getTagCallbackUrl } from '@joplin/lib/callbackUrlUtils';
@@ -300,6 +301,8 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		const thisComp = this;
 
 		const makeActionButtonComp = () => {
+			if (this.props.notesParentType === 'Folder' && itemIsInTrash(parent)) return null;
+
 			const getTargetFolderId = async () => {
 				if (!buttonFolderId && isAllNotes) {
 					return (await Folder.defaultFolder()).id;

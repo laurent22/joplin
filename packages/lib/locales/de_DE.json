@@ -63,7 +63,7 @@
 		"%s = %s (%s)"
 	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
-		""
+		"%s ist nicht für die Synchronisation kleiner Dateien optimiert, wodurch die erste Synchronisation langsam sein wird."
 	],
 	"%s: %d": [
 		"%s: %d"
@@ -341,8 +341,8 @@
 	"Browse...": [
 		"Durchsuchen ..."
 	],
-	"Built in": [
-		""
+	"Built-in": [
+		"Eingebaut"
 	],
 	"Bulleted List": [
 		"Aufzählung"
@@ -469,6 +469,9 @@
 	],
 	"Close dropdown": [
 		"Auswahlliste schließen"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		"Schließe die Anwendung, lösche dein Profil in „%s“ und starte die Anwendung erneut. Stelle sicher, dass du zuerst ein Backup aller Notizen als JEX exportierst."
 	],
 	"Close Window": [
 		"Fenster schließen"
@@ -621,7 +624,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Der Freigabestatus dieses Notizbuchs konnte nicht überprüft werden - Vorgang wird abgebrochen. Bitte versuche es erneut, wenn eine Internetverbindung besteht."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"Konnte deine Identität nicht verifizieren: %s"
 	],
 	"Create": [
@@ -784,7 +787,7 @@
 		"Erweiterung „%s“ löschen?"
 	],
 	"Delete profile \"%s\"": [
-		"Lösche Profil \"%s\""
+		"Lösche Profil „%s“"
 	],
 	"Delete selected notes": [
 		"Ausgewählte Notizen löschen"
@@ -1072,7 +1075,7 @@
 		"Notizenverlauf aktivieren"
 	],
 	"Enable optical character recognition (OCR)": [
-		""
+		"Aktiviere die optische Zeichenerkennung (OCR)"
 	],
 	"Enable PDF viewer": [
 		"PDF-Betrachter aktivieren"
@@ -1167,6 +1170,12 @@
 	"Evernote Export File (as Markdown)": [
 		"Evernote Export-Datei (als Markdown)"
 	],
+	"Evernote Export Files (Directory, as HTML)": [
+		"Evernote Export-Dateien (Verzeichnis, als HTML)"
+	],
+	"Evernote Export Files (Directory, as Markdown)": [
+		"Evernote Export-Dateien (Verzeichnis, als Markdown)"
+	],
 	"Exits the application.": [
 		"Beendet die Anwendung."
 	],
@@ -1238,6 +1247,9 @@
 	],
 	"File system": [
 		"Dateisystem"
+	],
+	"Filter": [
+		"Filter"
 	],
 	"Filter tags": [
 		"Tags filtern"
@@ -1357,6 +1369,9 @@
 	"Hide advanced": [
 		"Erweitertes verstecken"
 	],
+	"Hide Advanced Settings": [
+		"Erweiterte Einstellungen verstecken"
+	],
 	"Hide disabled": [
 		"Deaktiviertes verstecken"
 	],
@@ -1434,6 +1449,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Dazu muss dein gesamter Datensatz verschlüsselt und erneut synchronisiert werden. Starte diese Prozedur daher am besten nachts.\n\nBeachte dazu folgende Hinweise:\n\n1. Synchronisiere alle deine Geräte.\n2. Klicke auf „%s“.\n3. Lass es komplett durch laufen. Vermeide während der Ausführung das Ändern von Notizen auf anderen Geräten, um Konflikte zu vermeiden.\n4. Sobald die Synchronisierung auf diesem Gerät abgeschlossen ist, synchronisiere alle anderen Geräte und lass es komplett durchlaufen.\n\nWichtig: Du musst diese Prozedur nur EINMAL auf einem Gerät starten."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		"Um zu synchronisieren, aktualisiere die Anwendung bitte auf Version %s+"
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Deine Erlaubnis, auf externen Speicher zu schreiben, ist notwendig, um Synchronisation mit dem Dateisystem zu verwenden."
@@ -1742,6 +1760,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"Medienspieler, Mathematik, Diagramme, Inhaltsverzeichnis"
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"Fehlende Schlüssel"
 	],
@@ -1868,7 +1889,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Keine Authentifizierung mit %s. Gib bitte alle fehlenden Zugangsdaten an."
 	],
 	"Not downloaded": [
@@ -2393,11 +2414,17 @@
 	"Search for...": [
 		"Suche nach..."
 	],
+	"Search hidden": [
+		"Suche versteckt"
+	],
 	"Search in all the notes": [
 		"Alle Notizen durchsuchen"
 	],
 	"Search in current note": [
 		"Aktuelle Notiz durchsuchen"
+	],
+	"Search shown": [
+		"Suche angezeigt"
 	],
 	"Search...": [
 		"Suchen ..."
@@ -2540,6 +2567,12 @@
 	"Solarised Light": [
 		"Solarisiert hell"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		"Manche Anhänge konnten nicht heruntergeladen werden. Bitte versuche, sie erneut herunterzuladen."
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		"Manche Anhänge müssen heruntergeladen werden. Setze das Verhalten für das Herunterladen von Anhängen auf „Immer“ und versuche es erneut."
+	],
 	"Some items cannot be decrypted.": [
 		"Einige Elemente können nicht entschlüsselt werden."
 	],
@@ -2548,6 +2581,9 @@
 	],
 	"Some items cannot be synchronised. Press for more info.": [
 		"Manche Einträge können nicht synchronisiert werden. Drücke um mehr Informationen zu erhalten."
+	],
+	"Some items could not be synchronised. Please try to synchronise them first.": [
+		"Manche Einträge konnten nicht synchronisiert werden. Bitte versuche zuerst, diese zu synchronisieren."
 	],
 	"Sort notebooks by": [
 		"Notizbücher sortieren nach"
@@ -2762,6 +2798,9 @@
 	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
 		"Vielen Dank! Das Joplin Cloud-Konto ist nun eingerichtet und einsatzbereit."
 	],
+	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
+		"Der [Web Clipper](%s) ist eine Browser-Erweiterung, welche dir erlaubt, Webseiten und Bildschirmfotos aus deinem Browser zu speichern."
+	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Das aktive Profil kann nicht gelöscht werden. Bitte wechsle in ein anderes Profil und versuche es erneut."
 	],
@@ -2807,6 +2846,10 @@
 	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
 		"Die Faktor-Eigenschaft legt fest, wie der Artikel wächst oder schrumpft, um dem verfügbaren Platz in seinem Container in Bezug auf die anderen Artikel zu entsprechen. Ein Element mit dem Faktor 2 benötigt also doppelt so viel Platz wie ein Element mit dem Faktor 1. Starte die App neu, um Änderungen zu sehen."
 	],
+	"The following attachment matches your search query:": [
+		"Der folgende Anhang entspricht deiner Suchanfrage:",
+		"Die folgenden Anhänge entsprechen deiner Suchanfrage:"
+	],
 	"The following attachments are being watched for changes:": [
 		"Die folgenden Anhänge werden auf Änderungen überwacht:"
 	],
@@ -2842,6 +2885,9 @@
 	],
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Der Empfänger konnte nicht von der Liste entfernt werden. Bitte versuche es erneut.\n\nDer Fehler war: „%s“"
+	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		"Das Synchronisationsziel konnte aus folgendem Grund nicht geändert werden: %s\n\nFalls der Fehler nicht behoben werden kann, musst du möglicherweise zuerst deine Daten löschen, indem du die folgenden Anweisungen befolgst:\n\n%s"
 	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Das Synchronisationsziel muss aktualisiert werden, bevor Joplin synchronisiert werden kann. Der Vorgang kann einige Minuten dauern, und die App muss neu gestartet werden. Um fortzufahren, klicke bitte auf den Link."
@@ -2904,7 +2950,7 @@
 		"Diese Erweiterungen erweitern den Markdown-Renderer um zusätzliche Funktionen. Bitte beachte, dass diese Funktionen zwar nützlich sein können, es sich dabei jedoch nicht um Standard-Markdown handelt und die meisten von ihnen daher nur in Joplin funktionieren. Außerdem sind einige von ihnen *inkompatibel* mit dem WYSIWYG-Editor. Wenn du eine Notiz, die eine dieser Erweiterungen verwendet, in diesem Editor öffnest, verlierst du die Formatierung der Erweiterung. Es ist unten angegeben, welche Erweiterungen mit dem WYSIWYG-Editor kompatibel sind oder nicht."
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
-		"Dadurch können andere Nutzer ein Notizbuch zur gemeinsamen Bearbeitung mit dir teilen. Allerdings kannst du keine Notizbücher mit anderen teilen, wenn du die Funktion \"%s\" nicht hast."
+		"Dadurch können andere Nutzer ein Notizbuch zur gemeinsamen Bearbeitung mit dir teilen. Allerdings kannst du keine Notizbücher mit anderen teilen, wenn du die Funktion „%s“ nicht hast."
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Dieser Anhang wurde noch nicht heruntergeladen oder entschlüsselt"
@@ -3092,6 +3138,9 @@
 	"Undo": [
 		"Rückgängig"
 	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		"Deinstalliere die Anwendung und installieren sie dann neu. Stelle sicher, dass du zuerst ein Backup erstellst, indem du alle Notizen als JEX aus der Desktop-Anwendung exportierst."
+	],
 	"Unknown flag: %s": [
 		"Unbekanntes Argument: %s"
 	],
@@ -3264,7 +3313,7 @@
 		"Wenn eine neue Aufgabe erstellt wird:"
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
-		""
+		"Wenn aktiviert, wird die Anwendung deine Anhänge einlesen und Text aus ihnen extrahieren. Dies wird dir ermöglichen, nach Text innerhalb dieser Anhänge zu suchen."
 	],
 	"Window unresponsive.": [
 		"Fenster antwortet nicht."

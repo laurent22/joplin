@@ -332,7 +332,7 @@
 	"Browse...": [
 		"Selaa..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -457,6 +457,9 @@
 	],
 	"Close dropdown": [
 		"Sulje pudotusvalikko"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Sulje ikkuna"
@@ -1363,6 +1366,9 @@
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Tätä varten koko tietojoukko on salattava ja synkronoitava, joten se on parasta suorittaa yön yli.\n\nAloita noudattamalla seuraavia ohjeita:\n\n1. Synkronoi kaikki laitteesi.\n2. Napsauta \"%s\".\n3. Anna sen ajaa loppuun. Kun se suoritetaan, vältä muiden laitteiden muistiinpanojen vaihtamista ristiriitojen välttämiseksi.\n4. Kun synkronointi on tehty tällä laitteella, synkronoi kaikki muut laitteesi ja anna sen suorittaa loppuun.\n\nTärkeää: sinun tarvitsee suorittaa tämä kerran vain yhdellä laitteella."
 	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
+	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Tiedostojärjestelmän synkronoinnin käyttäminen edellyttää oikeutta kirjoittaa ulkoiseen tallennustilaan."
 	],
@@ -1664,6 +1670,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"Puuttuvat avaimet"
 	],
@@ -1790,7 +1799,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Ei todennettu %s. Anna puuttuvat tunnistetiedot."
 	],
 	"Not downloaded": [
@@ -2438,6 +2447,12 @@
 	"Solarised Light": [
 		"Solarised Light"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Joidenkin kohteiden salausta ei voida purkaa."
 	],
@@ -2735,6 +2750,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Vastaanottajaa ei voitu poistaa luettelosta. Yritä uudelleen.\n\nVirhe oli: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Synkronointikohde on päivitettävä, ennen kuin Joplin voidaan synkronoida. Toiminnon suorittamiseen voi mennä muutama minuutti, ja sovellus on käynnistettävä uudelleen. Jatka napsauttamalla linkkiä."
 	],
@@ -2959,6 +2977,9 @@
 	],
 	"Undo": [
 		"Kumoa"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Tuntematon merkintä: %s"
