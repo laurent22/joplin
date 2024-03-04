@@ -494,6 +494,7 @@ const SidebarComponent = (props: Props) => {
 	};
 
 	const renderAllNotesItem = (theme: Theme, selected: boolean) => {
+		const all_notes_id = 'all_notes_folder_id';
 		return (
 			<StyledListItem key="allNotesHeader" selected={selected} className={'list-item-container list-item-depth-0 all-notes'} isSpecialItem={true}>
 				<StyledExpandLink>{renderExpandIcon(theme, false, false)}</StyledExpandLink>
@@ -503,12 +504,12 @@ const SidebarComponent = (props: Props) => {
 					isSpecialItem={true}
 					href="#"
 					selected={selected}
-					onClick={() => { onAllNotesClick_; folderItem_click(ALL_NOTES_FILTER_ID); }}
+					onClick={() => { onAllNotesClick_; folderItem_click(all_notes_id); }}
 
-					data-id={ALL_NOTES_FILTER_ID}
+					data-id={all_notes_id}
 					data-type={BaseModel.TYPE_FOLDER}
 					onContextMenu={toggleAllNotesContextMenu}
-					isConflictFolder={ALL_NOTES_FILTER_ID === Folder.conflictFolderId()}
+					isConflictFolder={all_notes_id === Folder.conflictFolderId()}
 				>
 					{_('All notes')}
 				</StyledListItemAnchor>
