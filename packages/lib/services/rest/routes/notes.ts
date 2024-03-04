@@ -275,7 +275,7 @@ async function downloadMediaFiles(urls: string[], fetchOptions?: FetchOptions, a
 		if (mediaPath) output[url] = { path: mediaPath, originalUrl: url };
 	};
 
-	const maximumImageDownloadsAllowed = downloadController ? downloadController.maxImagesCount : urls.length;
+	const maximumImageDownloadsAllowed = downloadController ? downloadController.maxImagesCount : Number.POSITIVE_INFINITY;
 	const urlsAllowedByController = urls.slice(0, maximumImageDownloadsAllowed);
 	logger.info(`Media files allowed to be downloaded: ${maximumImageDownloadsAllowed}`);
 
