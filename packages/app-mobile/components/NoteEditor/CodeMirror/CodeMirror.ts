@@ -17,7 +17,7 @@ import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 export function initCodeMirror(
 	parentElement: HTMLElement, initialText: string, settings: EditorSettings,
 ): CodeMirrorControl {
-	return createEditor(parentElement, {
+	const editor = createEditor(parentElement, {
 		initialText,
 		settings,
 
@@ -28,5 +28,20 @@ export function initCodeMirror(
 			postMessage('onEditorEvent', event);
 		},
 	});
+
+	// Works around https://github.com/laurent22/joplin/issues/10047 by handling
+	// the text/uri-list MIME type when pasting, rather than sending the paste event
+	// to CodeMirror.
+	//
+	// TODO: Remove this workaround when the issue has been fixed upstream.
+	editor.on('paste', (_editor, event: ClipboardEvent) => {
+		const clipboardData = event.clipboardData;
+		if (clipboardData.types.length === 1 && clipboardData.types[0] === 'text/uri-list') {
+			event.preventDefault();
+			editor.insertText(clipboardData.getData('text/uri-list'));
+		}
+	});
+
+	return editor;
 }
 
