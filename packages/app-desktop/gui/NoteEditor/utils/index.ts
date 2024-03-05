@@ -26,9 +26,11 @@ export async function htmlToMarkdown(markupLanguage: number, html: string, origi
 export async function formNoteToNote(formNote: FormNote): Promise<any> {
 	return {
 		id: formNote.id,
-		// Should also include parent_id so that the reducer can know in which folder the note should go when saving
+		// Should also include parent_id and deleted_time so that the reducer
+		// can know in which folder the note should go when saving.
 		// https://discourse.joplinapp.org/t/experimental-wysiwyg-editor-in-joplin/6915/57?u=laurent
 		parent_id: formNote.parent_id,
+		deleted_time: formNote.deleted_time,
 		title: formNote.title,
 		body: formNote.body,
 	};

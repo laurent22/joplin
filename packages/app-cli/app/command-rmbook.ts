@@ -3,6 +3,7 @@ import app from './app';
 import { _ } from '@joplin/lib/locale';
 import Folder from '@joplin/lib/models/Folder';
 import BaseModel from '@joplin/lib/BaseModel';
+const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 class Command extends BaseCommand {
 	public override usage() {
@@ -23,10 +24,11 @@ class Command extends BaseCommand {
 
 		const folder = await app().loadItem(BaseModel.TYPE_FOLDER, pattern);
 		if (!folder) throw new Error(_('Cannot find "%s".', pattern));
-		const ok = force ? true : await this.prompt(_('Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.'), { booleanAnswerDefault: 'n' });
+		const msg = _('Move notebook "%s" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.', substrWithEllipsis(folder.title, 0, 32));
+		const ok = force ? true : await this.prompt(msg, { booleanAnswerDefault: 'n' });
 		if (!ok) return;
 
-		await Folder.delete(folder.id);
+		await Folder.delete(folder.id, { toTrash: true });
 	}
 }
 

@@ -72,7 +72,7 @@ export function changeTypeToString(t: ChangeType): string {
 	if (t === ChangeType.Create) return 'create';
 	if (t === ChangeType.Update) return 'update';
 	if (t === ChangeType.Delete) return 'delete';
-	throw new Error(`Unkown type: ${t}`);
+	throw new Error(`Unknown type: ${t}`);
 }
 
 export const getDefaultValue = (tableName: string, colName: string): string|number|null => {

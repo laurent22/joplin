@@ -38,7 +38,7 @@ describe('clipboardUtils', () => {
 		expect(copyableContent.html).toEqual(`<div><img src="${localImage}"></div>`);
 	});
 
-	test('should be able to process mutiple images', () => {
+	test('should be able to process multiple images', () => {
 		const localImage1 = 'file:///home/some/path/test1.jpg';
 		const localImage2 = 'file:///home/some/path/test2.jpg';
 		const localImage3 = 'file:///home/some/path/test3.jpg';

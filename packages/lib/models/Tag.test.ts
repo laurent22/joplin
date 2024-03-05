@@ -57,6 +57,26 @@ describe('models/Tag', () => {
 		expect(notesTag3.map(n => n.id).sort()).toEqual([].sort());
 	});
 
+	it('should not retrieve deleted notes', async () => {
+		const note1 = await Note.save({});
+		const note2 = await Note.save({});
+
+		await Tag.setNoteTagsByTitles(note1.id, ['un']);
+		await Tag.setNoteTagsByTitles(note2.id, ['un']);
+
+		const tag1 = await Tag.loadByTitle('un');
+
+		await Note.delete(note1.id, { toTrash: true });
+
+		expect(await Tag.noteIds(tag1.id)).toEqual([note2.id]);
+		expect((await Tag.notes(tag1.id)).map(n => n.id).sort()).toEqual([note2.id]);
+		expect(await Tag.hasNote(tag1.id, note1.id)).toBe(false);
+		expect(await Tag.hasNote(tag1.id, note2.id)).toBe(true);
+
+		const allWithNotes = await Tag.allWithNotes();
+		expect(allWithNotes[0].note_count).toBe(1);
+	});
+
 	it('should not allow renaming tag to existing tag names', async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });

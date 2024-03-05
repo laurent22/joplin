@@ -74,7 +74,7 @@ const textEditorCommand = () => {
 export const openFileWithExternalEditor = async (filePath: string, bridge: any) => {
 	const cmd = textEditorCommand();
 	if (!cmd) {
-		bridge.openExternal(`file://${filePath}`);
+		bridge.openItem(filePath);
 	} else {
 		cmd.args.push(filePath);
 		await spawnCommand(cmd.path, cmd.args, { detached: true });

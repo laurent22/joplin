@@ -63,11 +63,11 @@ export default (html: string, _languageCode: string, translations: Translations)
 		// The opening tag is "div".
 		currentTranslationTag: string[];
 
-		// Once we finished processing the translable block, this will contain
+		// Once we finished processing the translatable block, this will contain
 		// the string to be translated. It may contain HTML.
 		currentTranslationContent: string[];
 
-		// Tells if we're at the beginning of a translable block.
+		// Tells if we're at the beginning of a translatable block.
 		translateIsOpening: boolean;
 
 		inScript: boolean;

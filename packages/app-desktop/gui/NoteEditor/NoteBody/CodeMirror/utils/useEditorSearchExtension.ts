@@ -66,7 +66,7 @@ export default function useEditorSearchExtension(CodeMirror: CodeMirror5Emulatio
 	}
 
 	// Highlights the currently active found work
-	// It's possible to get tricky with this fucntions and just use findNext/findPrev
+	// It's possible to get tricky with this functions and just use findNext/findPrev
 	// but this is fast enough and works more naturally with the current search logic
 	function highlightSearch(cm: any, searchTerm: RegExp, index: number, scrollTo: boolean, withSelection: boolean) {
 		const cursor = cm.getSearchCursor(searchTerm);
@@ -139,7 +139,7 @@ export default function useEditorSearchExtension(CodeMirror: CodeMirror5Emulatio
 				if (error.name !== 'SyntaxError') {
 					throw error;
 				}
-				// An error of 'Regular expression too large' might occour in the markJs library
+				// An error of 'Regular expression too large' might occur in the markJs library
 				// when the input is really big, this catch is here to avoid the application crashing
 				// https://github.com/laurent22/joplin/issues/7634
 				console.error('Error while trying to highlight words from search: ', error);

@@ -107,8 +107,8 @@ const useEditorCommands = (props: Props) => {
 				if ((editorRef.current as any)[value.name]) {
 					const result = (editorRef.current as any)[value.name](...value.args);
 					return result;
-				} else if (editorRef.current.commandExists(value.name)) {
-					const result = editorRef.current.execCommand(value.name);
+				} else if (editorRef.current.supportsCommand(value.name)) {
+					const result = editorRef.current.execCommand(value.name, ...value.args);
 					return result;
 				} else {
 					logger.warn('CodeMirror execCommand: unsupported command: ', value.name);

@@ -588,7 +588,11 @@ class Application extends BaseApplication {
 		ExternalEditWatcher.instance().setLogger(reg.logger());
 		ExternalEditWatcher.instance().initialize(bridge, this.store().dispatch);
 
-		ResourceEditWatcher.instance().initialize(reg.logger(), (action: any) => { this.store().dispatch(action); }, (path: string) => bridge().openItem(path));
+		ResourceEditWatcher.instance().initialize(
+			reg.logger(),
+			(action: any) => { this.store().dispatch(action); },
+			(path: string) => bridge().openItem(path),
+		);
 
 		// Forwards the local event to the global event manager, so that it can
 		// be picked up by the plugin manager.

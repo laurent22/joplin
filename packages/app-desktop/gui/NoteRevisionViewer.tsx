@@ -15,7 +15,6 @@ import { NoteEntity, RevisionEntity } from '@joplin/lib/services/database/types'
 import { AppState } from '../app.reducer';
 const urlUtils = require('@joplin/lib/urlUtils');
 const ReactTooltip = require('react-tooltip');
-const { urlDecode } = require('@joplin/lib/string-utils');
 const { connect } = require('react-redux');
 import shared from '@joplin/lib/components/shared/note-screen-shared';
 
@@ -156,7 +155,7 @@ class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 	}
 
 	private async webview_ipcMessage(event: any) {
-		// For the revision view, we only suppport a minimal subset of the IPC messages.
+		// For the revision view, we only support a minimal subset of the IPC messages.
 		// For example, we don't need interactive checkboxes or sync between viewer and editor view.
 		// We try to get most links work though, except for internal (joplin://) links.
 
@@ -169,11 +168,7 @@ class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 			if (msg.indexOf('joplin://') === 0) {
 				throw new Error(_('Unsupported link or message: %s', msg));
 			} else if (urlUtils.urlProtocol(msg)) {
-				if (msg.indexOf('file://') === 0) {
-					void require('electron').shell.openExternal(urlDecode(msg));
-				} else {
-					void require('electron').shell.openExternal(msg);
-				}
+				await bridge().openExternal(msg);
 			} else if (msg.indexOf('#') === 0) {
 				// This is an internal anchor, which is handled by the WebView so skip this case
 			} else {

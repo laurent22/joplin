@@ -95,6 +95,8 @@ const getReleasesFromMarkdown = async (filePath: string) => {
 		}
 	}
 
+	releases.sort((a, b) => compareVersions(getPatchVersion(a.tag_name), getPatchVersion(b.tag_name)));
+
 	return releases;
 };
 
@@ -161,9 +163,7 @@ const main = async () => {
 
 	{
 		const releases = await gitHubLatestReleases(1, 50);
-		releases.sort((a, b) => {
-			return compareVersions(a.tag_name, b.tag_name) <= 0 ? -1 : +1;
-		});
+		releases.sort((a, b) => compareVersions(a.tag_name, b.tag_name));
 		state = await processReleases(releases, Platform.Desktop, '2.13', state);
 	}
 

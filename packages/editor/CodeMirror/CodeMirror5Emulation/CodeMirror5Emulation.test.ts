@@ -129,10 +129,10 @@ describe('CodeMirror5Emulation', () => {
 		expect(editorDom.querySelectorAll('.test-decoration-2')).toHaveLength(1);
 
 		codeMirror.setCursor(0, 2);
-		codeMirror.replaceSelection('Test');
+		codeMirror.replaceSelection('!Test!');
 
 		// Editing the document shouldn't remove the mark
-		expect(codeMirror.editor.state.doc.toString()).toBe('TeTestst 1\nTest 2');
+		expect(codeMirror.editor.state.doc.toString()).toBe('Te!Test!st 1\nTest 2');
 		expect(editorDom.querySelectorAll('.test-mark-decoration')).toHaveLength(1);
 
 		// Clearing should remove only the decoration that was cleared.
@@ -142,5 +142,23 @@ describe('CodeMirror5Emulation', () => {
 
 		markDecoration2.clear();
 		expect(editorDom.querySelectorAll('.test-decoration-2')).toHaveLength(0);
+	});
+
+	it('defineExtension should override previous extensions with the same name', () => {
+		const codeMirror = makeCodeMirrorEmulation('Test...');
+		const testExtensionFn1 = jest.fn();
+		const testExtensionFn2 = jest.fn();
+
+		codeMirror.defineExtension('defineExtensionShouldOverride', testExtensionFn1);
+
+		(codeMirror as any).defineExtensionShouldOverride();
+		expect(testExtensionFn1).toHaveBeenCalledTimes(1);
+		expect(testExtensionFn2).toHaveBeenCalledTimes(0);
+
+		codeMirror.defineExtension('defineExtensionShouldOverride', testExtensionFn2);
+
+		(codeMirror as any).defineExtensionShouldOverride();
+		expect(testExtensionFn1).toHaveBeenCalledTimes(1);
+		expect(testExtensionFn2).toHaveBeenCalledTimes(1);
 	});
 });

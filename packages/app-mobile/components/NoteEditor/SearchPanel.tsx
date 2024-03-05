@@ -152,7 +152,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 		control.setSearchState(newState);
 	};
 
-	// Creates a TextInut with the given parameters
+	// Creates a TextInput with the given parameters
 	const createInput = (
 		placeholder: string, value: string, onChange: OnChangeCallback, autoFocus: boolean,
 	) => {
