@@ -7955,6 +7955,7 @@ __metadata:
     "@babel/preset-env": 7.20.2
     "@babel/runtime": 7.20.0
     "@bam.tech/react-native-image-resizer": 3.0.7
+    "@joplin/default-plugins": ~3.0
     "@joplin/editor": ~3.0
     "@joplin/lib": ~3.0
     "@joplin/react-native-alarm-notification": ~3.0
@@ -8191,6 +8192,7 @@ __metadata:
     "@joplin/turndown": ^4.0.73
     "@joplin/turndown-plugin-gfm": ^1.0.55
     "@joplin/utils": ~3.0
+    "@testing-library/react-hooks": 8.0.1
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
     "@types/js-yaml": 4.0.9
