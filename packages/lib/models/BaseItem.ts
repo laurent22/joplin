@@ -168,7 +168,7 @@ export default class BaseItem extends BaseModel {
 		return p[0].length === 32 && p[1] === 'md';
 	}
 
-	public static itemClass(item: ModelType|BaseItem): any {
+	public static itemClass(item: ModelType|BaseItem): typeof BaseItem {
 		if (!item) throw new Error('Item cannot be null');
 
 		if (typeof item === 'object') {
@@ -278,8 +278,8 @@ export default class BaseItem extends BaseModel {
 		return this.batchDelete([id], options);
 	}
 
-	public static async batchDelete(ids: string[], options?: DeleteOptions) {
-		if (!options) options = {};
+	public static async batchDelete(ids: string[], options: DeleteOptions) {
+		if (!options) options = { sourceDescription: '' };
 		let trackDeleted = true;
 		if (options && options.trackDeleted !== null && options.trackDeleted !== undefined) trackDeleted = options.trackDeleted;
 

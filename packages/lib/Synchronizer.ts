@@ -12,7 +12,7 @@ import Resource from './models/Resource';
 import ItemChange from './models/ItemChange';
 import ResourceLocalState from './models/ResourceLocalState';
 import MasterKey from './models/MasterKey';
-import BaseModel, { ModelType } from './BaseModel';
+import BaseModel, { DeleteOptions, ModelType } from './BaseModel';
 import time from './time';
 import ResourceService from './services/ResourceService';
 import EncryptionService from './services/e2ee/EncryptionService';
@@ -1058,11 +1058,11 @@ export default class Synchronizer {
 							await Folder.markNotesAsConflict(item.id);
 						}
 
-						const deletionOptions = {
+						const deletionOptions: DeleteOptions = {
 							deleteChildren: false,
 							trackDeleted: false,
 							changeSource: ItemChange.SOURCE_SYNC,
-							source: 'Sync',
+							sourceDescription: 'Sync',
 						};
 						await Folder.delete(item.id, deletionOptions);
 					}

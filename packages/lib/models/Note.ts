@@ -833,8 +833,6 @@ export default class Note extends BaseItem {
 
 		ids = ids.slice();
 
-		const actionLogger = ActionLogger.from(options.sourceDescription);
-
 		const changeSource = options && options.changeSource ? options.changeSource : null;
 		const changeType = options && options.toTrash ? ItemChange.TYPE_UPDATE : ItemChange.TYPE_DELETE;
 		const toTrash = options && !!options.toTrash;
@@ -874,10 +872,12 @@ export default class Note extends BaseItem {
 
 				await this.db().exec({ sql, params });
 			} else {
+				// For now, only log permanent batchDeletions.
+				const actionLogger = ActionLogger.from(options.sourceDescription);
 				const noteTitles = notes.map(note => note.title);
 				actionLogger.addDescription('Note/batchDelete', `titles: ${JSON.stringify(noteTitles)}`);
 
-				await super.batchDelete(processIds, options);
+				await super.batchDelete(processIds, { ...options, sourceDescription: actionLogger });
 			}
 
 			for (let i = 0; i < processIds.length; i++) {

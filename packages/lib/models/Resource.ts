@@ -312,7 +312,7 @@ export default class Resource extends BaseItem {
 		return this.db().exec('UPDATE resources set `size` = ? WHERE id = ?', [fileSize, resourceId]);
 	}
 
-	public static async batchDelete(ids: string[], options: DeleteOptions = {}) {
+	public static async batchDelete(ids: string[], options: DeleteOptions) {
 		const actionLogger = ActionLogger.from(options.sourceDescription);
 
 		// For resources, there's not really batch deletion since there's the
