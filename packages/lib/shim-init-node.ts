@@ -739,21 +739,24 @@ function shimInit(options: ShimInitOptions = null) {
 	shim.pdfExtractEmbeddedText = async (pdfPath: string): Promise<string[]> => {
 		const loadingTask = pdfJs.getDocument(pdfPath);
 		const doc = await loadingTask.promise;
-
 		const textByPage = [];
 
-		for (let pageNum = 1; pageNum <= doc.numPages; pageNum++) {
-			const page = await doc.getPage(pageNum);
-			const textContent = await page.getTextContent();
+		try {
+			for (let pageNum = 1; pageNum <= doc.numPages; pageNum++) {
+				const page = await doc.getPage(pageNum);
+				const textContent = await page.getTextContent();
 
-			const strings = textContent.items.map(item => {
-				const text = (item as TextItem).str ?? '';
-				return text;
-			}).join('\n');
+				const strings = textContent.items.map(item => {
+					const text = (item as TextItem).str ?? '';
+					return text;
+				}).join('\n');
 
-			// Some PDFs contain unsupported characters that can lead to hard-to-debug issues.
-			// We remove them here.
-			textByPage.push(replaceUnsupportedCharacters(strings));
+				// Some PDFs contain unsupported characters that can lead to hard-to-debug issues.
+				// We remove them here.
+				textByPage.push(replaceUnsupportedCharacters(strings));
+			}
+		} finally {
+			await doc.destroy();
 		}
 
 		return textByPage;
@@ -791,23 +794,27 @@ function shimInit(options: ShimInitOptions = null) {
 		const loadingTask = pdfJs.getDocument(pdfPath);
 		const doc = await loadingTask.promise;
 
-		for (let pageNum = 1; pageNum <= doc.numPages; pageNum++) {
-			const page = await doc.getPage(pageNum);
-			const viewport = page.getViewport({ scale: 2 });
-			const canvas = createCanvas();
-			const ctx = canvas.getContext('2d');
+		try {
+			for (let pageNum = 1; pageNum <= doc.numPages; pageNum++) {
+				const page = await doc.getPage(pageNum);
+				const viewport = page.getViewport({ scale: 2 });
+				const canvas = createCanvas();
+				const ctx = canvas.getContext('2d');
 
-			canvas.height = viewport.height;
-			canvas.width = viewport.width;
+				canvas.height = viewport.height;
+				canvas.width = viewport.width;
 
-			const renderTask = page.render({ canvasContext: ctx, viewport: viewport });
-			await renderTask.promise;
+				const renderTask = page.render({ canvasContext: ctx, viewport: viewport });
+				await renderTask.promise;
 
-			const buffer = await canvasToBuffer(canvas);
-			const filePath = `${outputDirectoryPath}/${filePrefix}_${pageNum.toString().padStart(4, '0')}.jpg`;
-			output.push(filePath);
-			await writeFile(filePath, buffer, 'binary');
-			if (!(await shim.fsDriver().exists(filePath))) throw new Error(`Could not write to file: ${filePath}`);
+				const buffer = await canvasToBuffer(canvas);
+				const filePath = `${outputDirectoryPath}/${filePrefix}_${pageNum.toString().padStart(4, '0')}.jpg`;
+				output.push(filePath);
+				await writeFile(filePath, buffer, 'binary');
+				if (!(await shim.fsDriver().exists(filePath))) throw new Error(`Could not write to file: ${filePath}`);
+			}
+		} finally {
+			await doc.destroy();
 		}
 
 		return output;
