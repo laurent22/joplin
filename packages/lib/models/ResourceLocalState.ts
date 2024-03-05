@@ -35,7 +35,7 @@ export default class ResourceLocalState extends BaseModel {
 		return this.db().transactionExecBatch(this.saveQueries(o));
 	}
 
-	public static batchDelete(ids: string[], options: DeleteOptions) {
+	public static batchDelete(ids: string[], options: DeleteOptions = {}) {
 		options = { ...options };
 		options.idFieldName = 'resource_id';
 		options.sourceDescription = ActionLogger.from(options.sourceDescription);
