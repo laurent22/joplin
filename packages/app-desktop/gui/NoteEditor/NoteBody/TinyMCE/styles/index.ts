@@ -38,7 +38,7 @@ export default function styles(props: NoteBodyEditorProps) {
 			},
 			leftExtraToolbarContainer: {
 				...extraToolbarContainer,
-				width: 80,
+				width: 120,
 				left: 0,
 			},
 			rightExtraToolbarContainer: {
