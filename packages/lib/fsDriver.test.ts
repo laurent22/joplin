@@ -1,12 +1,17 @@
 import FsDriverNode from './fs-driver-node';
 import shim from './shim';
 import { expectThrow } from './testing/test-utils';
+import { parse } from 'path';
+
+const filePath = __filename;
+const parsedPath = parse(filePath);
+const partitionLetter = parsedPath.root[0].toLowerCase();
 
 // On Windows, path.resolve is going to convert a path such as
-// /tmp/file.txt to c:\tmp\file.txt
+// /tmp/file.txt to {partition}:\tmp\file.txt
 function platformPath(path: string) {
 	if (shim.isWindows()) {
-		return `c:${path.replace(/\//g, '\\')}`;
+		return `${partitionLetter}:${path.replace(/\//g, '\\')}`;
 	} else {
 		return path;
 	}
