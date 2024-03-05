@@ -168,7 +168,7 @@ export default class BaseItem extends BaseModel {
 		return p[0].length === 32 && p[1] === 'md';
 	}
 
-	public static itemClass(item: ModelType|BaseItem): typeof BaseItem {
+	public static itemClass(item: any): typeof BaseItem {
 		if (!item) throw new Error('Item cannot be null');
 
 		if (typeof item === 'object') {
