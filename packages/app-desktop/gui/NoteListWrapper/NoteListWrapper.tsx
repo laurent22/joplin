@@ -16,6 +16,7 @@ import { OnItemClickHander } from '../NoteListHeader/types';
 import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import depNameToNoteProp from '@joplin/lib/services/noteList/depNameToNoteProp';
 import { getTrashFolderId } from '@joplin/lib/services/trash';
+import usePrevious from '../hooks/usePrevious';
 
 const logger = Logger.create('NoteListWrapper');
 
@@ -39,34 +40,35 @@ const StyledRoot = styled.div`
 	width: 100%;
 `;
 
+const getTextWidth = (newNoteRef: React.MutableRefObject<any>, text: string): number => {
+	const canvas = document.createElement('canvas');
+	if (!canvas) throw new Error('Failed to create canvas element');
+	const ctx = canvas.getContext('2d');
+	if (!ctx) throw new Error('Failed to get context');
+	const fontWeight = getComputedStyle(newNoteRef.current).getPropertyValue('font-weight');
+	const fontSize = getComputedStyle(newNoteRef.current).getPropertyValue('font-size');
+	const fontFamily = getComputedStyle(newNoteRef.current).getPropertyValue('font-family');
+	ctx.font = `${fontWeight} ${fontSize} ${fontFamily}`;
+	return ctx.measureText(text).width;
+};
+
 // Even though these calculations mostly concern the NoteListControls component, we do them here
 // because we need to know the height of that control to calculate the note list height.
 const useNoteListControlsBreakpoints = (width: number, newNoteRef: React.MutableRefObject<any>, selectedFolderId: string) => {
 	const [dynamicBreakpoints, setDynamicBreakpoints] = useState<Breakpoints>({ Sm: BaseBreakpoint.Sm, Md: BaseBreakpoint.Md, Lg: BaseBreakpoint.Lg, Xl: BaseBreakpoint.Xl });
-
-	const getTextWidth = useCallback((text: string): number => {
-		const canvas = document.createElement('canvas');
-		if (!canvas) throw new Error('Failed to create canvas element');
-		const ctx = canvas.getContext('2d');
-		if (!ctx) throw new Error('Failed to get context');
-		const fontWeight = getComputedStyle(newNoteRef.current).getPropertyValue('font-weight');
-		const fontSize = getComputedStyle(newNoteRef.current).getPropertyValue('font-size');
-		const fontFamily = getComputedStyle(newNoteRef.current).getPropertyValue('font-family');
-		ctx.font = `${fontWeight} ${fontSize} ${fontFamily}`;
-
-		return ctx.measureText(text).width;
-	}, [newNoteRef]);
-
+	const previousWidth = usePrevious(width);
+	const widthHasChanged = width !== previousWidth;
 	const showNewNoteButton = selectedFolderId !== getTrashFolderId();
 
 	// Initialize language-specific breakpoints
 	useEffect(() => {
+		if (!widthHasChanged) return;
 		if (!newNoteRef.current) return;
-		if (showNewNoteButton) return;
+		if (!showNewNoteButton) return;
 
 		// Use the longest string to calculate the amount of extra width needed
-		const smAdditional = getTextWidth(_('note')) > getTextWidth(_('to-do')) ? getTextWidth(_('note')) : getTextWidth(_('to-do'));
-		const mdAdditional = getTextWidth(_('New note')) > getTextWidth(_('New to-do')) ? getTextWidth(_('New note')) : getTextWidth(_('New to-do'));
+		const smAdditional = getTextWidth(newNoteRef, _('note')) > getTextWidth(newNoteRef, _('to-do')) ? getTextWidth(newNoteRef, _('note')) : getTextWidth(newNoteRef, _('to-do'));
+		const mdAdditional = getTextWidth(newNoteRef, _('New note')) > getTextWidth(newNoteRef, _('New to-do')) ? getTextWidth(newNoteRef, _('New note')) : getTextWidth(newNoteRef, _('New to-do'));
 
 		const Sm = BaseBreakpoint.Sm + smAdditional * 2;
 		const Md = BaseBreakpoint.Md + mdAdditional * 2;
@@ -74,7 +76,7 @@ const useNoteListControlsBreakpoints = (width: number, newNoteRef: React.Mutable
 		const Xl = BaseBreakpoint.Xl;
 
 		setDynamicBreakpoints({ Sm, Md, Lg, Xl });
-	}, [newNoteRef, getTextWidth, showNewNoteButton]);
+	}, [newNoteRef, showNewNoteButton, widthHasChanged]);
 
 	const breakpoint: number = useMemo(() => {
 		// Find largest breakpoint that width is less than
