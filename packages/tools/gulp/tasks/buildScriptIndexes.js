@@ -10,7 +10,7 @@ async function processDirectory(dir, indexFilePath = null, typeScriptType = null
 	if (!importNameTemplate) importNameTemplate = '* as FILE_NAME';
 	if (!exportNameTemplate) exportNameTemplate = 'FILE_NAME';
 
-	const tsFiles = glob.sync('{**/*.ts,**/*.tsx}', {
+	const tsFiles = glob.sync('{*.ts,*.tsx}', {
 		cwd: dir,
 	}).filter(f => `${dir}/${f}` !== indexFilePath)
 	//
