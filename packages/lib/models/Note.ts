@@ -872,10 +872,10 @@ export default class Note extends BaseItem {
 
 				await this.db().exec({ sql, params });
 			} else {
-				// For now, only log permanent batchDeletions.
+				// For now, we intentionally log only permanent batchDeletions.
 				const actionLogger = ActionLogger.from(options.sourceDescription);
 				const noteTitles = notes.map(note => note.title);
-				actionLogger.addDescription('Note/batchDelete', `titles: ${JSON.stringify(noteTitles)}`);
+				actionLogger.addDescription(`titles: ${JSON.stringify(noteTitles)}`);
 
 				await super.batchDelete(processIds, { ...options, sourceDescription: actionLogger });
 			}
