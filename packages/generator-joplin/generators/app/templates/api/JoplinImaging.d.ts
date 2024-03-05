@@ -36,7 +36,7 @@ export default class JoplinImaging {
     createFromResource(resourceId: string): Promise<Handle>;
     getSize(handle: Handle): Promise<any>;
     resize(handle: Handle, options?: ResizeOptions): Promise<string>;
-    crop(handle: Handle, rectange: Rectangle): Promise<string>;
+    crop(handle: Handle, rectangle: Rectangle): Promise<string>;
     toPngFile(handle: Handle, filePath: string): Promise<void>;
     /**
      * Quality is between 0 and 100

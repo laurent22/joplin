@@ -719,11 +719,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	const cellViewerStyle = useMemo(() => {
 		const output = { ...styles.cellViewer };
 		if (!props.visiblePanes.includes('viewer')) {
-			// Note: setting webview.display to "none" is currently not supported due
-			// to this bug: https://github.com/electron/electron/issues/8277
-			// So instead setting the width 0.
-			output.width = 1;
-			output.maxWidth = 1;
+			output.display = 'none';
 		} else if (!props.visiblePanes.includes('editor')) {
 			output.borderLeftStyle = 'none';
 		}

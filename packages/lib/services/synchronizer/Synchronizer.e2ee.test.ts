@@ -11,6 +11,7 @@ import BaseItem from '../../models/BaseItem';
 import Synchronizer from '../../Synchronizer';
 import { fetchSyncInfo, getEncryptionEnabled, localSyncInfo, setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 import { loadMasterKeysFromSettings, setupAndDisableEncryption, setupAndEnableEncryption } from '../e2ee/utils';
+import { remoteNotesAndFolders } from '../../testing/test-utils-synchronizer';
 
 let insideBeforeEach = false;
 
@@ -70,6 +71,25 @@ describe('Synchronizer.e2ee', () => {
 		expect(folder1_2.title).toBe(folder1.title);
 		expect(folder1_2.updated_time).toBe(folder1.updated_time);
 		expect(!folder1_2.encryption_cipher_text).toBe(true);
+	}));
+
+	it('should not encrypt structural properties', (async () => {
+		setEncryptionEnabled(true);
+		await loadEncryptionMasterKey();
+		const folder1 = await Folder.save({});
+		const folder2 = await Folder.save({});
+		const note1 = await Note.save({ parent_id: folder1.id });
+		const note2 = await Note.save({ parent_id: folder2.id });
+
+		await Folder.delete(folder2.id, { toTrash: true, deleteChildren: true });
+
+		await synchronizerStart();
+
+		const remoteItems = await remoteNotesAndFolders();
+		expect(remoteItems.find(i => i.id === folder1.id).deleted_time).toBe(0);
+		expect(remoteItems.find(i => i.id === folder2.id).deleted_time).toBeGreaterThan(0);
+		expect(remoteItems.find(i => i.id === note1.id).deleted_time).toBe(0);
+		expect(remoteItems.find(i => i.id === note2.id).deleted_time).toBeGreaterThan(0);
 	}));
 
 	it('should mark the key has having been used when synchronising the first time', (async () => {

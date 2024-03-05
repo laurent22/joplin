@@ -35,15 +35,15 @@
     ],
     "owner": "Laurent Cozic"
   },
-  "version": "2.14.1",
+  "version": "3.0.0",
   "bin": "./main.js",
   "engines": {
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "@joplin/lib": "~2.14",
-    "@joplin/renderer": "~2.14",
-    "@joplin/utils": "~2.14",
+    "@joplin/lib": "~3.0",
+    "@joplin/renderer": "~3.0",
+    "@joplin/utils": "~3.0",
     "aws-sdk": "2.1340.0",
     "chalk": "4.1.2",
     "compare-version": "0.1.2",
@@ -70,7 +70,7 @@
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
-    "@joplin/tools": "~2.14",
+    "@joplin/tools": "~3.0",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.8",
     "@types/node": "18.19.8",

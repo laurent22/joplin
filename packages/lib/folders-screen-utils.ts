@@ -38,7 +38,10 @@ export const allForDisplay = async (options: FolderLoadOptions = {}) => {
 export const refreshFolders = async (dispatch: Dispatch) => {
 	refreshCalls_.push(true);
 	try {
-		const folders = await allForDisplay({ includeConflictFolder: true });
+		const folders = await allForDisplay({
+			includeConflictFolder: true,
+			includeTrash: true,
+		});
 
 		dispatch({
 			type: 'FOLDER_UPDATE_ALL',

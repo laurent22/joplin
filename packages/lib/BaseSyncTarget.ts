@@ -5,7 +5,7 @@ import shim from './shim';
 import ResourceService from './services/ResourceService';
 import ShareService from './services/share/ShareService';
 
-interface CheckConfigResult {
+export interface CheckConfigResult {
 	ok: boolean;
 	errorMessage: string;
 }
