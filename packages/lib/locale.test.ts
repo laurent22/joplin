@@ -1,4 +1,4 @@
-import { closestSupportedLocale, parsePluralForm, setLocale, _n } from './locale';
+import { closestSupportedLocale, parsePluralForm, setLocale, _n, toIso639 } from './locale';
 
 describe('locale', () => {
 
@@ -89,6 +89,16 @@ describe('locale', () => {
 				expect(pluralValues[index][i]).toBe(pluralFn(i));
 			}
 		}
+	});
+
+	test.each([
+		['en_GB', 'eng'],
+		['en', 'eng'],
+		['de', 'deu'],
+		['fr_FR', 'fra'],
+	])('should convert to ISO-639', (input, expected) => {
+		const actual = toIso639(input);
+		expect(actual).toBe(expected);
 	});
 
 });
