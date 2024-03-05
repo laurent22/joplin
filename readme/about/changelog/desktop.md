@@ -1,5 +1,10 @@
 # Joplin Desktop Changelog
 
+## [v2.14.17](https://github.com/laurent22/joplin/releases/tag/v2.14.17) - 2024-03-01T18:10:26Z
+
+- Fixed: Merged shorthand variants of spellcheck languages ([#9983](https://github.com/laurent22/joplin/issues/9983)) ([#7834](https://github.com/laurent22/joplin/issues/7834) by Ton Hoang Nguyen (Bill))
+- Fixed: Sort notebooks in a case-insensitive way ([#9996](https://github.com/laurent22/joplin/issues/9996))
+
 ## [v2.14.16](https://github.com/laurent22/joplin/releases/tag/v2.14.16) (Pre-release) - 2024-02-22T22:49:10Z
 
 - Improved: Back up to a subdirectory of the home directory by default ([#9942](https://github.com/laurent22/joplin/issues/9942)) ([#9857](https://github.com/laurent22/joplin/issues/9857) by Henry Heino)

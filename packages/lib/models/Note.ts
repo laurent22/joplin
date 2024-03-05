@@ -1,11 +1,12 @@
 import BaseModel, { DeleteOptions, ModelType } from '../BaseModel';
 import BaseItem from './BaseItem';
+import type FolderClass from './Folder';
 import ItemChange from './ItemChange';
 import Setting from './Setting';
 import shim from '../shim';
 import time from '../time';
 import markdownUtils from '../markdownUtils';
-import { NoteEntity } from '../services/database/types';
+import { FolderEntity, NoteEntity } from '../services/database/types';
 import Tag from './Tag';
 const { sprintf } = require('sprintf-js');
 import Resource from './Resource';
@@ -13,8 +14,9 @@ import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import { toFileProtocolPath, toForwardSlashes } from '../path-utils';
 const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
 const { _ } = require('../locale');
-import { pull, unique } from '../ArrayUtils';
+import { pull, removeElement, unique } from '../ArrayUtils';
 import { LoadOptions, SaveOptions } from './utils/types';
+import { getDisplayParentId, getTrashFolderId } from '../services/trash';
 const urlUtils = require('../urlUtils.js');
 const { isImageMimeType } = require('../resourceUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
@@ -33,7 +35,7 @@ interface PreviewsOptions {
 	anywherePattern?: string;
 	itemTypes?: string[];
 	limit?: number;
-	includeDeleted?: boolean;
+	titlePattern?: string;
 }
 
 export default class Note extends BaseItem {
@@ -328,7 +330,7 @@ export default class Note extends BaseItem {
 	public static previewFields(options: any = null) {
 		options = { includeTimestamps: true, ...options };
 
-		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'order', 'markup_language', 'is_conflict', 'is_shared', 'share_id'];
+		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'order', 'markup_language', 'is_conflict', 'is_shared', 'share_id', 'deleted_time'];
 
 		if (options.includeTimestamps) {
 			output.push('updated_time');
@@ -358,7 +360,7 @@ export default class Note extends BaseItem {
 		return results.length ? results[0] : null;
 	}
 
-	public static async previews(parentId: string, options: any = null) {
+	public static async previews(parentId: string, options: PreviewsOptions = null) {
 		// Note: ordering logic must be duplicated in sortNotes(), which is used
 		// to sort already loaded notes.
 
@@ -370,16 +372,43 @@ export default class Note extends BaseItem {
 		if (!options.uncompletedTodosOnTop) options.uncompletedTodosOnTop = false;
 		if (!('showCompletedTodos' in options)) options.showCompletedTodos = true;
 
-		const Folder = BaseItem.getClass('Folder');
+		const autoAddedFields: string[] = [];
+		if (Array.isArray(options.fields)) {
+			options.fields = options.fields.slice();
+			// These fields are required for the rest of the function to work
+			if (!options.fields.includes('deleted_time')) {
+				autoAddedFields.push('deleted_time');
+				options.fields.push('deleted_time');
+			}
+			if (!options.fields.includes('parent_id')) {
+				autoAddedFields.push('parent_id');
+				options.fields.push('parent_id');
+			}
+			if (!options.fields.includes('id')) {
+				autoAddedFields.push('id');
+				options.fields.push('id');
+			}
+		}
+
+		const Folder: typeof FolderClass = BaseItem.getClass('Folder');
+
+		const parentFolder: FolderEntity = await Folder.load(parentId, { fields: ['id', 'deleted_time'] });
+		const parentInTrash = parentFolder ? !!parentFolder.deleted_time : false;
+		const withinTrash = parentId === getTrashFolderId() || parentInTrash;
 
 		// Conflicts are always displayed regardless of options, since otherwise
 		// it's confusing to have conflicts but with an empty conflict folder.
-		if (parentId === Folder.conflictFolderId()) options.showCompletedTodos = true;
+		// For a similar reason we want to show all notes that have been deleted
+		// in the trash.
+		if (parentId === Folder.conflictFolderId() || withinTrash) options.showCompletedTodos = true;
 
 		if (parentId === Folder.conflictFolderId()) {
 			options.conditions.push('is_conflict = 1');
+		} else if (withinTrash) {
+			options.conditions.push('deleted_time > 0');
 		} else {
 			options.conditions.push('is_conflict = 0');
+			options.conditions.push('deleted_time = 0');
 			if (parentId && parentId !== ALL_NOTES_FILTER_ID) {
 				options.conditions.push('parent_id = ?');
 				options.conditionsParams.push(parentId);
@@ -407,11 +436,11 @@ export default class Note extends BaseItem {
 			options.conditions.push('todo_completed <= 0');
 		}
 
-		if (options.uncompletedTodosOnTop && hasTodos) {
+		if (!withinTrash && options.uncompletedTodosOnTop && hasTodos) {
 			let cond = options.conditions.slice();
 			cond.push('is_todo = 1');
 			cond.push('(todo_completed <= 0 OR todo_completed IS NULL)');
-			let tempOptions = { ...options };
+			let tempOptions: PreviewsOptions = { ...options };
 			tempOptions.conditions = cond;
 
 			const uncompletedTodos = await this.search(tempOptions);
@@ -441,8 +470,31 @@ export default class Note extends BaseItem {
 			options.conditions.push('is_todo = 1');
 		}
 
-		const results = await this.search(options);
+		let results = await this.search(options);
 		this.handleTitleNaturalSorting(results, options);
+
+		if (withinTrash) {
+			const folderIds = results.map(n => n.parent_id).filter(id => !!id);
+			const allFolders: FolderEntity[] = await Folder.byIds(folderIds, { fields: ['id', 'parent_id', 'deleted_time', 'title'] });
+
+			// In the results, we only include notes that were originally at the
+			// root (no parent), or that are inside a folder that has also been
+			// deleted.
+			results = results.filter(note => {
+				const noteFolder = allFolders.find(f => f.id === note.parent_id);
+				return getDisplayParentId(note, noteFolder) === parentId;
+			});
+		}
+
+		if (autoAddedFields.length) {
+			results = results.map(n => {
+				n = { ...n };
+				for (const field of autoAddedFields) {
+					delete (n as any)[field];
+				}
+				return n;
+			});
+		}
 
 		return results;
 	}
@@ -554,14 +606,19 @@ export default class Note extends BaseItem {
 	public static async moveToFolder(noteId: string, folderId: string) {
 		if (folderId === this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
 
-		// When moving a note to a different folder, the user timestamp is not updated.
-		// However updated_time is updated so that the note can be synced later on.
+		// When moving a note to a different folder, the user timestamp is not
+		// updated. However updated_time is updated so that the note can be
+		// synced later on.
+		//
+		// We also reset deleted_time, so that if a deleted note is moved to
+		// that folder it is restored. If it wasn't deleted, it does nothing.
 
-		const modifiedNote = {
+		const modifiedNote: NoteEntity = {
 			id: noteId,
 			parent_id: folderId,
 			is_conflict: 0,
 			conflict_original_id: '',
+			deleted_time: 0,
 			updated_time: time.unixMs(),
 		};
 
@@ -699,6 +756,7 @@ export default class Note extends BaseItem {
 		if (isNew && !o.source) o.source = Setting.value('appName');
 		if (isNew && !o.source_application) o.source_application = Setting.value('appId');
 		if (isNew && !('order' in o)) o.order = Date.now();
+		if (isNew && !('deleted_time' in o)) o.deleted_time = 0;
 
 		const changeSource = options && options.changeSource ? options.changeSource : null;
 
@@ -736,14 +794,23 @@ export default class Note extends BaseItem {
 
 		syncDebugLog.info('Save Note: N:', o);
 
-		const note = await super.save(o, options);
+		let savedNote = await super.save(o, options);
 
-		void ItemChange.add(BaseModel.TYPE_NOTE, note.id, isNew ? ItemChange.TYPE_CREATE : ItemChange.TYPE_UPDATE, changeSource, beforeNoteJson);
+		void ItemChange.add(BaseModel.TYPE_NOTE, savedNote.id, isNew ? ItemChange.TYPE_CREATE : ItemChange.TYPE_UPDATE, changeSource, beforeNoteJson);
 
 		if (dispatchUpdateAction) {
+			// Ensures that any note added to the state has all the required
+			// properties for the UI to work.
+			if (!('deleted_time' in savedNote)) {
+				const fields = removeElement(unique(this.previewFields().concat(Object.keys(savedNote))), 'type_');
+				savedNote = await this.load(savedNote.id, {
+					fields,
+				});
+			}
+
 			this.dispatch({
 				type: 'NOTE_UPDATE_ONE',
-				note: note,
+				note: savedNote,
 				provisional: isProvisional,
 				ignoreProvisionalFlag: ignoreProvisionalFlag,
 				changedFields: changedFields,
@@ -753,15 +820,21 @@ export default class Note extends BaseItem {
 		if ('todo_due' in o || 'todo_completed' in o || 'is_todo' in o || 'is_conflict' in o) {
 			this.dispatch({
 				type: 'EVENT_NOTE_ALARM_FIELD_CHANGE',
-				id: note.id,
+				id: savedNote.id,
 			});
 		}
 
-		return note;
+		return savedNote;
 	}
 
 	public static async batchDelete(ids: string[], options: DeleteOptions = null) {
+		if (!ids.length) return;
+
 		ids = ids.slice();
+
+		const changeSource = options && options.changeSource ? options.changeSource : null;
+		const changeType = options && options.toTrash ? ItemChange.TYPE_UPDATE : ItemChange.TYPE_DELETE;
+		const toTrash = options && !!options.toTrash;
 
 		while (ids.length) {
 			const processIds = ids.splice(0, 50);
@@ -769,14 +842,41 @@ export default class Note extends BaseItem {
 			const notes = await Note.byIds(processIds);
 			const beforeChangeItems: any = {};
 			for (const note of notes) {
-				beforeChangeItems[note.id] = JSON.stringify(note);
+				beforeChangeItems[note.id] = toTrash ? null : JSON.stringify(note);
 			}
 
-			await super.batchDelete(processIds, options);
-			const changeSource = options && options.changeSource ? options.changeSource : null;
+			if (toTrash) {
+				const now = Date.now();
+
+				const updateSql = [
+					'deleted_time = ?',
+					'updated_time = ?',
+				];
+
+				const params: any[] = [
+					now,
+					now,
+				];
+
+				if ('toTrashParentId' in options) {
+					updateSql.push('parent_id = ?');
+					params.push(options.toTrashParentId);
+				}
+
+				const sql = `
+					UPDATE notes
+					SET	${updateSql.join(', ')}						
+					WHERE id IN ("${processIds.join('","')}")
+				`;
+
+				await this.db().exec({ sql, params });
+			} else {
+				await super.batchDelete(processIds, options);
+			}
+
 			for (let i = 0; i < processIds.length; i++) {
 				const id = processIds[i];
-				void ItemChange.add(BaseModel.TYPE_NOTE, id, ItemChange.TYPE_DELETE, changeSource, beforeChangeItems[id]);
+				void ItemChange.add(BaseModel.TYPE_NOTE, id, changeType, changeSource, beforeChangeItems[id]);
 
 				this.dispatch({
 					type: 'NOTE_DELETE',
@@ -786,14 +886,14 @@ export default class Note extends BaseItem {
 		}
 	}
 
-	public static async deleteMessage(noteIds: string[]): Promise<string|null> {
+	public static async permanentlyDeleteMessage(noteIds: string[]): Promise<string|null> {
 		let msg = '';
 		if (noteIds.length === 1) {
 			const note = await Note.load(noteIds[0]);
 			if (!note) return null;
-			msg = _('Delete note "%s"?', substrWithEllipsis(note.title, 0, 32));
+			msg = _('Permanently delete note "%s"?', substrWithEllipsis(note.title, 0, 32));
 		} else {
-			msg = _('Delete these %d notes?', noteIds.length);
+			msg = _('Permanently delete these %d notes?', noteIds.length);
 		}
 		return msg;
 	}

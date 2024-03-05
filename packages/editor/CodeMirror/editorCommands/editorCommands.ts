@@ -1,6 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { EditorCommandType, ListType } from '../../types';
-import { undo, redo, selectAll, indentSelection, cursorDocStart, cursorDocEnd, cursorLineStart, cursorLineEnd, deleteToLineStart, deleteToLineEnd, undoSelection, redoSelection, cursorPageDown, cursorPageUp, cursorCharRight, cursorCharLeft, insertNewlineAndIndent, cursorLineDown, cursorLineUp } from '@codemirror/commands';
+import { undo, redo, selectAll, indentSelection, cursorDocStart, cursorDocEnd, cursorLineStart, cursorLineEnd, deleteToLineStart, deleteToLineEnd, undoSelection, redoSelection, cursorPageDown, cursorPageUp, cursorCharRight, cursorCharLeft, insertNewlineAndIndent, cursorLineDown, cursorLineUp, toggleComment, deleteLine } from '@codemirror/commands';
 import {
 	decreaseIndent, increaseIndent,
 	toggleBolded, toggleCode,
@@ -8,6 +8,8 @@ import {
 	toggleList, toggleMath,
 } from '../markdown/markdownCommands';
 import swapLine, { SwapLineDirection } from './swapLine';
+import duplicateLine from './duplicateLine';
+import sortSelectedLines from './sortSelectedLines';
 import { closeSearchPanel, findNext, findPrevious, openSearchPanel, replaceAll, replaceNext } from '@codemirror/search';
 
 export type EditorCommandFunction = (editor: EditorView)=> void;
@@ -22,6 +24,9 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	[EditorCommandType.ToggleItalicized]: toggleItalicized,
 	[EditorCommandType.ToggleCode]: toggleCode,
 	[EditorCommandType.ToggleMath]: toggleMath,
+	[EditorCommandType.ToggleComment]: toggleComment,
+	[EditorCommandType.DuplicateLine]: duplicateLine,
+	[EditorCommandType.SortSelectedLines]: sortSelectedLines,
 	[EditorCommandType.ToggleNumberedList]: toggleList(ListType.OrderedList),
 	[EditorCommandType.ToggleBulletedList]: toggleList(ListType.UnorderedList),
 	[EditorCommandType.ToggleCheckList]: toggleList(ListType.CheckList),
@@ -39,6 +44,7 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	},
 	[EditorCommandType.DeleteToLineEnd]: deleteToLineEnd,
 	[EditorCommandType.DeleteToLineStart]: deleteToLineStart,
+	[EditorCommandType.DeleteLine]: deleteLine,
 	[EditorCommandType.IndentMore]: increaseIndent,
 	[EditorCommandType.IndentLess]: decreaseIndent,
 	[EditorCommandType.IndentAuto]: indentSelection,

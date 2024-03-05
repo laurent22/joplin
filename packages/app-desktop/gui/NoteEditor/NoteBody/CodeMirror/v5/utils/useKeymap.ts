@@ -124,6 +124,7 @@ export default function useKeymap(CodeMirror: any) {
 			'Alt-Right': 'goLineEnd',
 			'Ctrl-Backspace': 'delGroupBefore',
 			'Ctrl-Delete': 'delGroupAfter',
+			'Ctrl-Enter': 'insertLineAfter',
 
 			'fallthrough': 'basic',
 		};
@@ -146,6 +147,7 @@ export default function useKeymap(CodeMirror: any) {
 				'Alt-Backspace': 'delGroupBefore',
 				'Alt-Delete': 'delGroupAfter',
 				'Cmd-Backspace': 'delWrappedLineLeft',
+				'Cmd-Enter': 'insertLineAfter',
 
 				'fallthrough': 'basic',
 			};

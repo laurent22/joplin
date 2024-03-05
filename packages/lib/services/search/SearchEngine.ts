@@ -119,7 +119,7 @@ export default class SearchEngine {
 	}
 
 	private async doInitialNoteIndexing_() {
-		const notes = await this.db().selectAll<NoteEntity>('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
+		const notes = await this.db().selectAll<NoteEntity>('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND deleted_time = 0');
 		const noteIds = notes.map(n => n.id);
 
 		const lastChangeId = await ItemChange.lastChangeId();
@@ -132,7 +132,7 @@ export default class SearchEngine {
 			const notes = await Note.modelSelectAll(`
 				SELECT ${SearchEngine.relevantFields}
 				FROM notes
-				WHERE id IN ("${currentIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`);
+				WHERE id IN ("${currentIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0 AND deleted_time = 0`);
 			const queries = [];
 
 			for (let i = 0; i < notes.length; i++) {
@@ -215,7 +215,7 @@ export default class SearchEngine {
 				const noteIds = changes.map(a => a.item_id);
 				const notes = await Note.modelSelectAll(`
 					SELECT ${SearchEngine.relevantFields}
-					FROM notes WHERE id IN ("${noteIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`,
+					FROM notes WHERE id IN ("${noteIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0 AND deleted_time = 0`,
 				);
 
 				for (let i = 0; i < changes.length; i++) {
@@ -801,16 +801,25 @@ export default class SearchEngine {
 						}
 					}
 
-					const resourcesToNotes = await NoteResource.associatedResourceNotes(itemRows.map(r => r.item_id), { fields: ['note_id', 'parent_id'] });
+					const resourcesToNotes = await NoteResource.associatedResourceNotes(
+						itemRows.map(r => r.item_id),
+						{
+							fields: ['note_id', 'parent_id', 'deleted_time'],
+						},
+					);
+
+					const deletedNoteIds: string[] = [];
 
 					for (const itemRow of itemRows) {
 						const notes = resourcesToNotes[itemRow.item_id];
 						const note = notes && notes.length ? notes[0] : null;
+						if (note && note.deleted_time) deletedNoteIds.push(note.note_id);
 						itemRow.id = note ? note.note_id : null;
 						itemRow.parent_id = note ? note.parent_id : null;
 					}
 
 					if (!options.includeOrphanedResources) itemRows = itemRows.filter(r => !!r.id);
+					itemRows = itemRows.filter(r => !deletedNoteIds.includes(r.id));
 
 					rows = rows.concat(itemRows);
 				}

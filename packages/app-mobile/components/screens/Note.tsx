@@ -23,7 +23,7 @@ const Clipboard = require('@react-native-community/clipboard').default;
 const md5 = require('md5');
 const { BackButtonService } = require('../../services/back-button.js');
 import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';
-import BaseModel from '@joplin/lib/BaseModel';
+import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import ActionButton from '../ActionButton';
 const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
@@ -57,6 +57,9 @@ import { join } from 'path';
 import { Dispatch } from 'redux';
 import { RefObject } from 'react';
 import { SelectionRange } from '../NoteEditor/types';
+import { AppState } from '../../utils/types';
+import restoreItems from '@joplin/lib/services/trash/restoreItems';
+import { getDisplayParentTitle } from '@joplin/lib/services/trash';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -134,7 +137,7 @@ interface Props {
 }
 
 interface State {
-	note: any;
+	note: NoteEntity;
 	mode: 'view'|'edit';
 	readOnly: boolean;
 	folder: FolderEntity|null;
@@ -677,12 +680,9 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		const note = this.state.note;
 		if (!note.id) return;
 
-		const ok = await dialogs.confirm(this, _('Delete note?'));
-		if (!ok) return;
-
 		const folderId = note.parent_id;
 
-		await Note.delete(note.id);
+		await Note.delete(note.id, { toTrash: true });
 
 		this.props.dispatch({
 			type: 'NAV_GO',
@@ -1220,6 +1220,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		const isTodo = note && !!note.is_todo;
 		const isSaved = note && note.id;
 		const readOnly = this.state.readOnly;
+		const isDeleted = !!this.state.note.deleted_time;
 
 		const cacheKey = md5([isTodo, isSaved].join('_'));
 		if (!this.menuOptionsCache_) this.menuOptionsCache_ = {};
@@ -1281,7 +1282,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			});
 		}
 
-		if (isSaved) {
+		if (isSaved && !isDeleted) {
 			output.push({
 				title: _('Tags'),
 				onPress: () => {
@@ -1289,6 +1290,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 				},
 			});
 		}
+
 		output.push({
 			title: isTodo ? _('Convert to note') : _('Convert to todo'),
 			onPress: () => {
@@ -1296,7 +1298,8 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			},
 			disabled: readOnly,
 		});
-		if (isSaved) {
+
+		if (isSaved && !isDeleted) {
 			output.push({
 				title: _('Copy Markdown link'),
 				onPress: () => {
@@ -1304,12 +1307,27 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 				},
 			});
 		}
+
 		output.push({
 			title: _('Properties'),
 			onPress: () => {
 				this.properties_onPress();
 			},
 		});
+
+		if (isDeleted) {
+			output.push({
+				title: _('Restore'),
+				onPress: async () => {
+					await restoreItems(ModelType.Note, [this.state.note.id]);
+					this.props.dispatch({
+						type: 'NAV_GO',
+						routeName: 'Notes',
+					});
+				},
+			});
+		}
+
 		output.push({
 			title: _('Delete'),
 			onPress: () => {
@@ -1550,6 +1568,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		const renderActionButton = () => {
 			if (this.state.voiceTypingDialogShown) return null;
+			if (!this.state.note || !!this.state.note.deleted_time) return null;
 
 			const editButton = {
 				label: _('Edit'),
@@ -1615,7 +1634,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 					undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
 					onUndoButtonPress={this.screenHeader_undoButtonPress}
 					onRedoButtonPress={this.screenHeader_redoButtonPress}
-					title={this.state.folder ? this.state.folder.title : ''}
+					title={getDisplayParentTitle(this.state.note, this.state.folder)}
 				/>
 				{titleComp}
 				{bodyComponent}
@@ -1635,7 +1654,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	}
 }
 
-const NoteScreen = connect((state: any) => {
+const NoteScreen = connect((state: AppState) => {
 	return {
 		noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 		noteHash: state.selectedNoteHash,

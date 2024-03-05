@@ -89,3 +89,6 @@ lastname
 signup
 activatable
 Prec
+titlewrapper
+notyf
+Notyf

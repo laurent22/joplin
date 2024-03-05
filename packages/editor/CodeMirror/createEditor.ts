@@ -29,6 +29,7 @@ import { selectionFormattingEqual } from '../SelectionFormatting';
 import configFromSettings from './configFromSettings';
 import getScrollFraction from './getScrollFraction';
 import CodeMirrorControl from './CodeMirrorControl';
+import insertLineAfter from './editorCommands/insertLineAfter';
 
 const createEditor = (
 	parentElement: HTMLElement, props: EditorProps,
@@ -264,6 +265,10 @@ const createEditor = (
 					}),
 					keyCommand('Tab', insertOrIncreaseIndent, true),
 					keyCommand('Shift-Tab', decreaseIndent, true),
+					keyCommand('Mod-Enter', (_: EditorView) => {
+						insertLineAfter(_);
+						return true;
+					}, true),
 
 					...standardKeymap, ...historyKeymap, ...searchKeymap,
 				])),

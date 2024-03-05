@@ -4,7 +4,7 @@
 	"ignoreRegExpList": [
 		"\\[.*?\\]\\(https:\\/\\/github.com\\/.*?\\)",
 		"by .*?\\)",
-		"\\|  (.*?)  \\|  \\d\\d%"
+		"\\|  (.*?)  \\|  \\d+%"
 	],
 	"ignorePaths": [
 		"**/*.d.ts",

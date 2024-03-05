@@ -69,6 +69,7 @@ function styles_(props: Props) {
 			},
 			toolbarStyle: {
 				marginBottom: 0,
+				minWidth: 0,
 			},
 		};
 	});

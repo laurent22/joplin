@@ -108,4 +108,22 @@ describe('CodeMirror5Emulation', () => {
 		// additional times if its option hasn't updated.
 		expect(onOtherOptionUpdate).toHaveBeenCalledTimes(1);
 	});
+
+	it('defineExtension should override previous extensions with the same name', () => {
+		const codeMirror = makeCodeMirrorEmulation('Test...');
+		const testExtensionFn1 = jest.fn();
+		const testExtensionFn2 = jest.fn();
+
+		codeMirror.defineExtension('defineExtensionShouldOverride', testExtensionFn1);
+
+		(codeMirror as any).defineExtensionShouldOverride();
+		expect(testExtensionFn1).toHaveBeenCalledTimes(1);
+		expect(testExtensionFn2).toHaveBeenCalledTimes(0);
+
+		codeMirror.defineExtension('defineExtensionShouldOverride', testExtensionFn2);
+
+		(codeMirror as any).defineExtensionShouldOverride();
+		expect(testExtensionFn1).toHaveBeenCalledTimes(1);
+		expect(testExtensionFn2).toHaveBeenCalledTimes(1);
+	});
 });

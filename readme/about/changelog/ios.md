@@ -1,5 +1,13 @@
 # Joplin iOS Changelog
 
+## [ios-v12.14.6](https://github.com/laurent22/joplin/releases/tag/ios-v12.14.6) - 2024-03-01T18:04:47Z
+
+- Improved: Immediately sort notes after toggling a checkbox (5820f63)
+- Fixed: Fix auto-indentation in some types of code blocks (#9972) (#9971 by Henry Heino)
+- Fixed: Fix white flash when editing notes in dark mode (#9987) (#8557 by Henry Heino)
+- Fixed: Note editor: Support older WebView versions (#9986) (#9521 by Henry Heino)
+- Fixed: Sort notebooks in a case-insensitive way (#9996)
+
 ## [ios-v12.14.5](https://github.com/laurent22/joplin/releases/tag/ios-v12.14.5) - 2024-02-19T10:46:51Z
 
 - Improved: Migrate profile in preparation for trash feature (115eb5d)

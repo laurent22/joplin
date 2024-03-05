@@ -84,4 +84,23 @@ describe('CodeMirrorControl', () => {
 		pressReleaseKey(control.editor, keyData);
 		expect(testCommand).toHaveBeenCalledTimes(1);
 	});
+
+	it('should toggle comments', () => {
+		const control = createEditorControl('Hello\nWorld\n');
+		control.select(1, 5);
+
+		control.execCommand('toggleComment');
+		expect(control.getValue()).toBe('<!-- Hello -->\nWorld\n');
+
+		control.execCommand('toggleComment');
+		expect(control.getValue()).toBe('Hello\nWorld\n');
+	});
+
+	it('should delete line', () => {
+		const control = createEditorControl('Hello\nWorld\n');
+		control.setCursor(1, 0);
+
+		control.execCommand('deleteLine');
+		expect(control.getValue()).toBe('Hello\n');
+	});
 });
