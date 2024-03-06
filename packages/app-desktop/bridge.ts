@@ -2,7 +2,7 @@ import ElectronAppWrapper from './ElectronAppWrapper';
 import shim from '@joplin/lib/shim';
 import { _, setLocale } from '@joplin/lib/locale';
 import { BrowserWindow, nativeTheme, nativeImage, shell } from 'electron';
-import { dirname, toSystemSlashes } from '@joplin/lib/path-utils';
+import { dirname, isUncPath, toSystemSlashes } from '@joplin/lib/path-utils';
 import { fileUriToPath } from '@joplin/utils/url';
 import { urlDecode } from '@joplin/lib/string-utils';
 import * as Sentry from '@sentry/electron/main';
@@ -327,12 +327,16 @@ export class Bridge {
 		}
 		fullPath = normalize(fullPath);
 
-		// Note: pathExists is intended to mitigate a security issue related to network drives
-		//       on Windows.
-		if (await pathExists(fullPath)) {
-			return shell.openPath(fullPath);
-		} else {
+		if (!await pathExists(fullPath)) {
 			return 'Path does not exist.';
+		}
+
+		if (isUncPath(fullPath)) {
+			// Note: On Windows, we avoid RCE by showing items on remote drives
+			//       in file explorer, rather than opening them directly.
+			return shell.showItemInFolder(fullPath);
+		} else {
+			return shell.openPath(fullPath);
 		}
 	}
 
