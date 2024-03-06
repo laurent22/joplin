@@ -258,7 +258,8 @@ packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/normalizeAccelerat
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/normalizeAccelerator.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/types.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.js
-packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useEditorSearch.js
+packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useEditorSearchExtension.js
+packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useEditorSearchHandler.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollHandler.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useStyles.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useWebviewIpcMessage.js
