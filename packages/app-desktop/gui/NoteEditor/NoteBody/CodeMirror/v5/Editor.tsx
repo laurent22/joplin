@@ -16,7 +16,7 @@ import useListIdent from './utils/useListIdent';
 import useScrollUtils from './utils/useScrollUtils';
 import useCursorUtils from './utils/useCursorUtils';
 import useLineSorting from './utils/useLineSorting';
-import useEditorSearch from '../utils/useEditorSearch';
+import useEditorSearch from '../utils/useEditorSearchExtension';
 import useJoplinMode from './utils/useJoplinMode';
 import useKeymap from './utils/useKeymap';
 import useExternalPlugins from './utils/useExternalPlugins';

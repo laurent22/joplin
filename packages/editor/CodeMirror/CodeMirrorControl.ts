@@ -137,9 +137,20 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 	}
 
 	public addStyles(...styles: Parameters<typeof EditorView.theme>) {
+		const compartment = new Compartment();
 		this.editor.dispatch({
-			effects: StateEffect.appendConfig.of(EditorView.theme(...styles)),
+			effects: StateEffect.appendConfig.of(
+				compartment.of(EditorView.theme(...styles)),
+			),
 		});
+
+		return {
+			remove: () => {
+				this.editor.dispatch({
+					effects: compartment.reconfigure([]),
+				});
+			},
+		};
 	}
 
 	public setContentScripts(plugins: ContentScriptData[]) {

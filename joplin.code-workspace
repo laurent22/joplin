@@ -186,6 +186,8 @@
 			"packages/doc-builder/help": true,
 			"packages/doc-builder/news": true,
 			"packages/doc-builder/i18n": true,
+			"packages/doc-builder/.docusaurus": true,
+			"packages/doc-builder/static/images": true,
 			"readme/i18n": true,
 			"packages/app-cli/**/*.*~": true,
 			"packages/app-cli/**/*.mo": true,

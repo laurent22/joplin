@@ -564,8 +564,16 @@ packages/app-mobile/utils/autodetectTheme.js
 packages/app-mobile/utils/checkPermissions.js
 packages/app-mobile/utils/createRootStyle.js
 packages/app-mobile/utils/debounce.js
+packages/app-mobile/utils/fs-driver/constants.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.js
 packages/app-mobile/utils/fs-driver/runOnDeviceTests.js
+packages/app-mobile/utils/fs-driver/tarCreate.js
+packages/app-mobile/utils/fs-driver/tarExtract.test.js
+packages/app-mobile/utils/fs-driver/tarExtract.js
+packages/app-mobile/utils/fs-driver/testUtil/createFilesFromPathRecord.js
+packages/app-mobile/utils/fs-driver/testUtil/verifyDirectoryMatches.js
+packages/app-mobile/utils/polyfills/bufferPolyfill.js
+packages/app-mobile/utils/polyfills/index.js
 packages/app-mobile/utils/setupNotifications.js
 packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/types.js

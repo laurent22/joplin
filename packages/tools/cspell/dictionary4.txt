@@ -92,3 +92,4 @@ Prec
 titlewrapper
 notyf
 Notyf
+Prec
