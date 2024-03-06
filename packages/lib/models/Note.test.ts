@@ -2,7 +2,7 @@ import Setting from './Setting';
 import BaseModel from '../BaseModel';
 import shim from '../shim';
 import markdownUtils from '../markdownUtils';
-import { sortedIds, createNTestNotes, expectThrow, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, supportDir, expectNotThrow, simulateReadOnlyShareEnv } from '../testing/test-utils';
+import { sortedIds, createNTestNotes, expectThrow, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, supportDir, expectNotThrow, simulateReadOnlyShareEnv, msleep, db } from '../testing/test-utils';
 import Folder from './Folder';
 import Note from './Note';
 import Tag from './Tag';
@@ -12,6 +12,8 @@ import { ResourceEntity } from '../services/database/types';
 import { toForwardSlashes } from '../path-utils';
 import * as ArrayUtils from '../ArrayUtils';
 import { ErrorCode } from '../errors';
+import SearchEngine from '../services/search/SearchEngine';
+import { getTrashFolderId } from '../services/trash';
 
 async function allItems() {
 	const folders = await Folder.all();
@@ -496,5 +498,87 @@ describe('models/Note', () => {
 
 		cleanup();
 	}));
+
+	it('should delete a note to trash', async () => {
+		const folder = await Folder.save({});
+		const note1 = await Note.save({ title: 'note1', parent_id: folder.id });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder.id });
+
+		const previousUpdatedTime = note1.updated_time;
+
+		await msleep(1);
+
+		await Note.delete(note1.id, { toTrash: true });
+
+		{
+			const n1 = await Note.load(note1.id);
+			expect(n1.deleted_time).toBeGreaterThan(0);
+			expect(n1.updated_time).toBeGreaterThan(previousUpdatedTime);
+			expect(n1.deleted_time).toBe(n1.updated_time);
+
+			const n2 = await Note.load(note2.id);
+			expect(n2.deleted_time).toBe(0);
+		}
+
+		{
+			const previews = await Note.previews(folder.id);
+			expect(previews.length).toBe(1);
+			expect(previews.find(n => n.id === note2.id)).toBeTruthy();
+		}
+
+		{
+			const engine = new SearchEngine();
+			engine.setDb(db());
+			await engine.syncTables();
+
+			const results = await engine.search('note*');
+			expect(results.length).toBe(1);
+			expect(results[0].id).toBe(note2.id);
+		}
+	});
+
+	it('should return the notes from the trash', async () => {
+		const folder = await Folder.save({});
+		const note1 = await Note.save({ title: 'note1', parent_id: folder.id });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder.id });
+		const note3 = await Note.save({ title: 'note3', parent_id: folder.id });
+
+		await Note.delete(note1.id, { toTrash: true });
+		await Note.delete(note2.id, { toTrash: true });
+
+		const folderNotes = await Note.previews(folder.id);
+		const trashNotes = await Note.previews(getTrashFolderId());
+
+		expect(folderNotes.map(f => f.id).sort()).toEqual([note3.id]);
+		expect(trashNotes.map(f => f.id).sort()).toEqual([note1.id, note2.id].sort());
+	});
+
+	it('should handle folders within the trash', async () => {
+		const folder1 = await Folder.save({ title: 'folder1 ' });
+		const folder2 = await Folder.save({ title: 'folder2 ' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder1.id });
+		await Note.save({ title: 'note3', parent_id: folder2.id });
+		const note4 = await Note.save({ title: 'note4', parent_id: folder2.id });
+
+		await Folder.delete(folder1.id, { toTrash: true, deleteChildren: true });
+		await Note.delete(note4.id, { toTrash: true });
+
+		// Note 4 should be at the root of the trash since its associated folder
+		// has not been deleted.
+		{
+			const trashNotes = await Note.previews(getTrashFolderId());
+			expect(trashNotes.length).toBe(1);
+			expect(trashNotes[0].id).toBe(note4.id);
+		}
+
+		// Note 1 and 2 should be within a "folder1" sub-folder within the trash
+		// since that folder has been deleted too.
+		{
+			const trashNotes = await Note.previews(folder1.id);
+			expect(trashNotes.length).toBe(2);
+			expect(trashNotes.map(n => n.id).sort()).toEqual([note1.id, note2.id].sort());
+		}
+	});
 
 });

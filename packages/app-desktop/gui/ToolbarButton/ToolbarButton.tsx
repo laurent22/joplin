@@ -43,7 +43,10 @@ export default function ToolbarButton(props: Props) {
 	if (!isEnabled) classes.push('disabled');
 
 	const onClick = getProp(props, 'onClick');
-
+	const style: React.CSSProperties = {
+		whiteSpace: 'nowrap',
+		overflow: 'hidden',
+		textOverflow: 'ellipsis' };
 	return (
 		<StyledRoot
 			className={classes.join(' ')}
@@ -56,7 +59,7 @@ export default function ToolbarButton(props: Props) {
 			}}
 		>
 			{icon}
-			{title}
+			<span style={style}>{title}</span>
 		</StyledRoot>
 	);
 }

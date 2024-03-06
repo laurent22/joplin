@@ -510,5 +510,10 @@ export default async function(request: Request, id: string = null, link: string 
 		return newNote;
 	}
 
+	if (request.method === RequestMethod.DELETE) {
+		await Note.delete(id, { toTrash: request.query.permanent !== '1' });
+		return;
+	}
+
 	return defaultAction(BaseModel.TYPE_NOTE, request, id, link);
 }

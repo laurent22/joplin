@@ -15,19 +15,20 @@ import { AppState } from '../../app.reducer';
 import { ModelType } from '@joplin/lib/BaseModel';
 import BaseModel from '@joplin/lib/BaseModel';
 import Folder from '@joplin/lib/models/Folder';
-import Note from '@joplin/lib/models/Note';
 import Tag from '@joplin/lib/models/Tag';
 import Logger from '@joplin/utils/Logger';
-import { FolderEntity, FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
+import { FolderEntity, FolderIcon, FolderIconType, TagEntity } from '@joplin/lib/services/database/types';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import { store } from '@joplin/lib/reducer';
 import PerFolderSortOrderService from '../../services/sortOrder/PerFolderSortOrderService';
 import { getFolderCallbackUrl, getTagCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import FolderIconBox from '../FolderIconBox';
+import onFolderDrop from '@joplin/lib/models/utils/onFolderDrop';
 import { Theme } from '@joplin/lib/themes/type';
 import { RuntimeProps } from './commands/focusElementSideBar';
 const { connect } = require('react-redux');
 import { renderFolders, renderTags } from '@joplin/lib/components/shared/side-menu-shared';
+import { getTrashFolderIcon, getTrashFolderId } from '@joplin/lib/services/trash';
 const { themeStyle } = require('@joplin/lib/theme');
 const bridge = require('@electron/remote').require('./bridge').default;
 const Menu = bridge().Menu;
@@ -42,7 +43,7 @@ interface Props {
 	themeId: number;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
-	folders: any[];
+	folders: FolderEntity[];
 	collapsedFolderIds: string[];
 	notesParentType: string;
 	selectedFolderId: string;
@@ -51,7 +52,7 @@ interface Props {
 	decryptionWorker: any;
 	resourceFetcher: any;
 	syncReport: any;
-	tags: any[];
+	tags: TagEntity[];
 	syncStarted: boolean;
 	plugins: PluginStates;
 	folderHeaderIsExpanded: boolean;
@@ -97,11 +98,20 @@ function FolderItem(props: any) {
 	const { hasChildren, showFolderIcon, isExpanded, parentId, depth, selected, folderId, folderTitle, folderIcon, anchorRef, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_, shareId } = props;
 
 	const noteCountComp = noteCount ? <StyledNoteCount className="note-count-label">{noteCount}</StyledNoteCount> : null;
-
 	const shareIcon = shareId && !parentId ? <StyledShareIcon className="fas fa-share-alt"></StyledShareIcon> : null;
+	const draggable = ![getTrashFolderId(), Folder.conflictFolderId()].includes(folderId);
+
+	const doRenderFolderIcon = () => {
+		if (folderId === getTrashFolderId()) {
+			return renderFolderIcon(getTrashFolderIcon(FolderIconType.FontAwesome));
+		}
+
+		if (!showFolderIcon) return null;
+		return renderFolderIcon(folderIcon);
+	};
 
 	return (
-		<StyledListItem depth={depth} selected={selected} className={`list-item-container list-item-depth-${depth} ${selected ? 'selected' : ''}`} onDragStart={onFolderDragStart_} onDragOver={onFolderDragOver_} onDrop={onFolderDrop_} draggable={true} data-folder-id={folderId}>
+		<StyledListItem depth={depth} selected={selected} className={`list-item-container list-item-depth-${depth} ${selected ? 'selected' : ''}`} onDragStart={onFolderDragStart_} onDragOver={onFolderDragOver_} onDrop={onFolderDrop_} draggable={draggable} data-folder-id={folderId}>
 			<ExpandLink themeId={props.themeId} hasChildren={hasChildren} folderId={folderId} onClick={onFolderToggleClick_} isExpanded={isExpanded}/>
 			<StyledListItemAnchor
 				ref={anchorRef}
@@ -119,7 +129,7 @@ function FolderItem(props: any) {
 				}}
 				onDoubleClick={onFolderToggleClick_}
 			>
-				{showFolderIcon ? renderFolderIcon(folderIcon) : null}<StyledSpanFix className="title" style={{ lineHeight: 0 }}>{folderTitle}</StyledSpanFix>
+				{doRenderFolderIcon()}<StyledSpanFix className="title" style={{ lineHeight: 0 }}>{folderTitle}</StyledSpanFix>
 				{shareIcon} {noteCountComp}
 			</StyledListItemAnchor>
 		</StyledListItem>
@@ -220,20 +230,13 @@ const SidebarComponent = (props: Props) => {
 		try {
 			if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
 				event.preventDefault();
-
 				if (!folderId) return;
-
 				const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
-				for (let i = 0; i < noteIds.length; i++) {
-					await Note.moveToFolder(noteIds[i], folderId);
-				}
+				await onFolderDrop(noteIds, [], folderId);
 			} else if (dt.types.indexOf('text/x-jop-folder-ids') >= 0) {
 				event.preventDefault();
-
 				const folderIds = JSON.parse(dt.getData('text/x-jop-folder-ids'));
-				for (let i = 0; i < folderIds.length; i++) {
-					await Folder.moveToFolder(folderIds[i], folderId);
-				}
+				await onFolderDrop([], folderIds, folderId);
 			}
 		} catch (error) {
 			logger.error(error);
@@ -303,6 +306,23 @@ const SidebarComponent = (props: Props) => {
 				item = BaseModel.byId(props.folders, itemId);
 			}
 
+      if (itemId === getTrashFolderId()) {
+        menu.append(
+          new MenuItem(menuUtils.commandToStatefulMenuItem('emptyTrash')),
+        );
+        menu.popup({ window: bridge().window() });
+        return;
+      }
+
+      let item = null;
+      if (itemType === BaseModel.TYPE_FOLDER) {
+        item = BaseModel.byId(props.folders, itemId);
+      }
+
+      const isDeleted = item ? !!item.deleted_time : false;
+    }
+
+		if (!isDeleted) {
 			if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
 				menu.append(
 					new MenuItem(menuUtils.commandToStatefulMenuItem('newFolder', itemId)),
@@ -336,99 +356,105 @@ const SidebarComponent = (props: Props) => {
 					}),
 				);
 			}
-		}
+		
+      if (itemType === BaseModel.TYPE_FOLDER) {
+        if (!isAllNotesFolder && item && !item.encryption_applied) {
+          
+          menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('openFolderDialog', { folderId: itemId })));
 
-		if (itemType === BaseModel.TYPE_FOLDER) {
-			if (!isAllNotesFolder && item && !item.encryption_applied) {
-				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('openFolderDialog', { folderId: itemId })));
+          menu.append(new MenuItem({ type: 'separator' }));
 
-				menu.append(new MenuItem({ type: 'separator' }));
+          const exportMenu = new Menu();
+          const ioService = InteropService.instance();
+          const ioModules = ioService.modules();
+          for (let i = 0; i < ioModules.length; i++) {
+            const module = ioModules[i];
+            if (module.type !== 'exporter') continue;
 
-				const exportMenu = new Menu();
-				const ioService = InteropService.instance();
-				const ioModules = ioService.modules();
-				for (let i = 0; i < ioModules.length; i++) {
-					const module = ioModules[i];
-					if (module.type !== 'exporter') continue;
+            exportMenu.append(
+              new MenuItem({
+                label: module.fullLabel(),
+                click: async () => {
+                  await InteropServiceHelper.export(props.dispatch, module, { sourceFolderIds: [itemId], plugins: pluginsRef.current });
+                },
+              }),
+            );
+          }
 
-					exportMenu.append(
-						new MenuItem({
-							label: module.fullLabel(),
-							click: async () => {
-								await InteropServiceHelper.export(props.dispatch, module, { sourceFolderIds: [itemId], plugins: pluginsRef.current });
-							},
-						}),
-					);
+          // We don't display the "Share notebook" menu item for sub-notebooks
+          // that are within a shared notebook. If user wants to do this,
+          // they'd have to move the notebook out of the shared notebook
+          // first.
+          const whenClause = stateToWhenClauseContext(state, { commandFolderId: itemId });
+
+          if (CommandService.instance().isEnabled('showShareFolderDialog', whenClause)) {
+            menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('showShareFolderDialog', itemId)));
+          }
+
+          if (CommandService.instance().isEnabled('leaveSharedFolder', whenClause)) {
+            menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('leaveSharedFolder', itemId)));
+          }
+
+          menu.append(
+            new MenuItem({
+              label: _('Export'),
+              submenu: exportMenu,
+            }),
+          );
+        }
+				if (Setting.value('notes.perFolderSortOrderEnabled')) {
+					menu.append(new MenuItem({
+						...menuUtils.commandToStatefulMenuItem('togglePerFolderSortOrder', itemId),
+						type: 'checkbox',
+						checked: PerFolderSortOrderService.isSet(itemId),
+					}));
 				}
+			}
+      if (!isAllNotesFolder) {
+        if (itemType === BaseModel.TYPE_FOLDER) {
+          menu.append(
+            new MenuItem({
+              label: _('Copy external link'),
+              click: () => {
+                clipboard.writeText(getFolderCallbackUrl(itemId));
+              },
+            }),
+          );
+        }
 
-				// We don't display the "Share notebook" menu item for sub-notebooks
-				// that are within a shared notebook. If user wants to do this,
-				// they'd have to move the notebook out of the shared notebook
-				// first.
-				const whenClause = stateToWhenClauseContext(state, { commandFolderId: itemId });
+        if (itemType === BaseModel.TYPE_TAG) {
+          menu.append(new MenuItem(
+            menuUtils.commandToStatefulMenuItem('renameTag', itemId),
+          ));
+          menu.append(
+            new MenuItem({
+              label: _('Copy external link'),
+              click: () => {
+                clipboard.writeText(getTagCallbackUrl(itemId));
+              },
+            }),
+          );
+        }
 
-				if (CommandService.instance().isEnabled('showShareFolderDialog', whenClause)) {
-					menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('showShareFolderDialog', itemId)));
-				}
+        const pluginViews = pluginUtils.viewsByType(pluginsRef.current, 'menuItem');
 
-				if (CommandService.instance().isEnabled('leaveSharedFolder', whenClause)) {
-					menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('leaveSharedFolder', itemId)));
-				}
+        for (const view of pluginViews) {
+          const location = view.location;
 
+          if (itemType === ModelType.Tag && location === MenuItemLocation.TagContextMenu ||
+            itemType === ModelType.Folder && location === MenuItemLocation.FolderContextMenu
+          ) {
+            menu.append(
+              new MenuItem(menuUtils.commandToStatefulMenuItem(view.commandName, itemId)),
+            );
+          }
+        }
+			}
+		} else {
+			if (itemType === BaseModel.TYPE_FOLDER && !isAllNotesFolder) {
 				menu.append(
-					new MenuItem({
-						label: _('Export'),
-						submenu: exportMenu,
-					}),
+					new MenuItem(menuUtils.commandToStatefulMenuItem('restoreFolder', itemId)),
 				);
-			}
-			if (Setting.value('notes.perFolderSortOrderEnabled')) {
-				menu.append(new MenuItem({
-					...menuUtils.commandToStatefulMenuItem('togglePerFolderSortOrder', itemId),
-					type: 'checkbox',
-					checked: PerFolderSortOrderService.isSet(itemId),
-				}));
-			}
-		}
-
-		if (!isAllNotesFolder) {
-			if (itemType === BaseModel.TYPE_FOLDER) {
-				menu.append(
-					new MenuItem({
-						label: _('Copy external link'),
-						click: () => {
-							clipboard.writeText(getFolderCallbackUrl(itemId));
-						},
-					}),
-				);
-			}
-
-			if (itemType === BaseModel.TYPE_TAG) {
-				menu.append(new MenuItem(
-					menuUtils.commandToStatefulMenuItem('renameTag', itemId),
-				));
-				menu.append(
-					new MenuItem({
-						label: _('Copy external link'),
-						click: () => {
-							clipboard.writeText(getTagCallbackUrl(itemId));
-						},
-					}),
-				);
-			}
-
-			const pluginViews = pluginUtils.viewsByType(pluginsRef.current, 'menuItem');
-
-			for (const view of pluginViews) {
-				const location = view.location;
-
-				if (itemType === ModelType.Tag && location === MenuItemLocation.TagContextMenu ||
-					itemType === ModelType.Folder && location === MenuItemLocation.FolderContextMenu
-				) {
-					menu.append(
-						new MenuItem(menuUtils.commandToStatefulMenuItem(view.commandName, itemId)),
-					);
-				}
 			}
 		}
 
@@ -507,11 +533,15 @@ const SidebarComponent = (props: Props) => {
 		const isExpanded = props.collapsedFolderIds.indexOf(folder.id) < 0;
 		let noteCount = (folder as any).note_count;
 
+		// For now hide the count for folders in the trash because it doesn't work and getting it to
+		// work would be tricky.
+		if (folder.deleted_time || folder.id === getTrashFolderId()) noteCount = 0;
+
 		// Thunderbird count: Subtract children note_count from parent folder if it expanded.
 		if (isExpanded) {
 			for (let i = 0; i < props.folders.length; i++) {
 				if (props.folders[i].parent_id === folder.id) {
-					noteCount -= props.folders[i].note_count;
+					noteCount -= (props.folders[i] as any).note_count;
 				}
 			}
 		}

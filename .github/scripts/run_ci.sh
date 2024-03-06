@@ -19,6 +19,12 @@ if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
 	IS_PULL_REQUEST=1
 fi
 
+# In some case it might not be possible to detect if we're on a pull request, for example when
+# pushing new code to an existing code (or maybe when pressing "Update branch" from GitHub). In that
+# case "GITHUB_EVENT_NAME" is "push" it's not clear what else could be checked. It seems safe to
+# always run the checks anyway so we do this for now.
+IS_PULL_REQUEST=1
+
 if [[ $GIT_TAG_NAME = $SERVER_TAG_PREFIX-* ]]; then
 	IS_SERVER_RELEASE=1
 fi

@@ -2,6 +2,7 @@ import time from './time';
 import Setting from './models/Setting';
 import { filename, fileExtension } from './path-utils';
 const md5 = require('md5');
+import { Buffer } from 'buffer';
 
 export interface Stat {
 	birthtime: Date;
@@ -18,35 +19,36 @@ export interface ReadDirStatsOptions {
 export default class FsDriverBase {
 
 	public async stat(_path: string): Promise<Stat> {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: stat()');
 	}
 
 	public async readFile(_path: string, _encoding = 'utf8'): Promise<any> {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: readFile');
 	}
 
 	public async appendFile(_path: string, _content: string, _encoding = 'base64'): Promise<any> {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: appendFile');
 	}
 
 	public async copy(_source: string, _dest: string) {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: copy');
 	}
 
 	public async chmod(_source: string, _mode: string | number) {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: chmod');
 	}
 
+	// Must also create parent directories
 	public async mkdir(_path: string) {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: mkdir');
 	}
 
 	public async unlink(_path: string) {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: unlink');
 	}
 
 	public async move(_source: string, _dest: string) {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: move');
 	}
 
 	public async rename(source: string, dest: string) {
@@ -54,27 +56,27 @@ export default class FsDriverBase {
 	}
 
 	public async readFileChunk(_handle: any, _length: number, _encoding = 'base64'): Promise<string> {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: readFileChunk');
 	}
 
 	public async open(_path: string, _mode: any): Promise<any> {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: open');
 	}
 
 	public async close(_handle: any): Promise<any> {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: close');
 	}
 
 	public async readDirStats(_path: string, _options: ReadDirStatsOptions = null): Promise<Stat[]> {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: readDirStats');
 	}
 
 	public async exists(_path: string): Promise<boolean> {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: exists');
 	}
 
 	public async remove(_path: string): Promise<void> {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: remove');
 	}
 
 	public async isDirectory(path: string) {
@@ -94,8 +96,14 @@ export default class FsDriverBase {
 		throw new Error('Not implemented: resolve');
 	}
 
-	public resolveRelativePathWithinDir(_baseDir: string, relativePath: string): string {
-		throw new Error(`Not implemented: resolveRelativePathWithinDir(): ${relativePath}`);
+	// Resolves the provided relative path to an absolute path within baseDir. The function
+	// also checks that the absolute path is within baseDir, to avoid security issues.
+	// It is expected that baseDir is a safe path (not user-provided).
+	public resolveRelativePathWithinDir(baseDir: string, relativePath: string) {
+		const resolvedBaseDir = this.resolve(baseDir);
+		const resolvedPath = this.resolve(baseDir, relativePath);
+		if (resolvedPath.indexOf(resolvedBaseDir) !== 0) throw new Error(`Resolved path for relative path "${relativePath}" is not within base directory "${baseDir}" (Was resolved to ${resolvedPath})`);
+		return resolvedPath;
 	}
 
 	public getExternalDirectoryPath(): Promise<string | undefined> {
@@ -104,6 +112,15 @@ export default class FsDriverBase {
 
 	public isUsingAndroidSAF() {
 		return false;
+	}
+
+	public async appendBinaryReadableToFile(path: string, readable: { read(): number[]|null }) {
+		let data: number[]|null = null;
+		while ((data = readable.read()) !== null) {
+			const buff = Buffer.from(data);
+			const base64Data = buff.toString('base64');
+			await this.appendFile(path, base64Data, 'base64');
+		}
 	}
 
 	protected async readDirStatsHandleRecursion_(basePath: string, stat: Stat, output: Stat[], options: ReadDirStatsOptions): Promise<Stat[]> {
@@ -187,11 +204,11 @@ export default class FsDriverBase {
 	}
 
 	public async tarExtract(_options: any) {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: tarExtract');
 	}
 
 	public async tarCreate(_options: any, _filePaths: string[]) {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: tarCreate');
 	}
 
 }

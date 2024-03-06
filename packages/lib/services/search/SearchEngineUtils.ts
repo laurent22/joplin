@@ -32,7 +32,7 @@ export default class SearchEngineUtils {
 		const noteIds = results.map(n => n.id);
 
 		// We need at least the note ID to be able to sort them below so if not
-		// present in field list, add it.L Also remember it was auto-added so that
+		// present in field list, add it. Also remember it was auto-added so that
 		// it can be removed afterwards.
 		let idWasAutoAdded = false;
 		const fields = options.fields ? options.fields : Note.previewFields().slice();
