@@ -1,7 +1,6 @@
 import { extract as tarStreamExtract } from 'tar-stream';
-import { resolve, join, normalize, dirname } from 'path';
-import FsDriverBase from '@joplin/lib/fs-driver-base';
-
+import { resolve, dirname } from 'path';
+import shim from '@joplin/lib/shim';
 import { chunkSize } from './constants';
 
 interface TarExtractOptions {
@@ -9,15 +8,7 @@ interface TarExtractOptions {
 	file: string;
 }
 
-// TODO: Might not work (and `relative` is broken in path-browserify)
-const isSubdirectoryOrSame = (parent: string, possibleChild: string) => {
-	possibleChild = normalize(possibleChild);
-	parent = normalize(parent);
-
-	return possibleChild.startsWith(parent);
-};
-
-const tarExtract = async (fsDriver: FsDriverBase, options: TarExtractOptions) => {
+const tarExtract = async (options: TarExtractOptions) => {
 	const cwd = options.cwd;
 
 	// resolve doesn't correctly handle file:// or content:// URLs. Thus, we don't resolve relative
@@ -25,6 +16,7 @@ const tarExtract = async (fsDriver: FsDriverBase, options: TarExtractOptions) =>
 	const isSourceUrl = options.file.match(/$[a-z]+:\/\//);
 	const filePath = isSourceUrl ? options.file : resolve(cwd, options.file);
 
+	const fsDriver = shim.fsDriver();
 	if (!(await fsDriver.exists(filePath))) {
 		throw new Error('tarExtract: Source file does not exist');
 	}
@@ -32,13 +24,7 @@ const tarExtract = async (fsDriver: FsDriverBase, options: TarExtractOptions) =>
 	const extract = tarStreamExtract({ defaultEncoding: 'base64' });
 
 	extract.on('entry', async (header, stream, next) => {
-		const outPath = join(cwd, normalize(header.name));
-
-		// Double-check that outPath is contained within cwd
-		// (normalize _should_ expand ..s, so this should be the case).
-		if (!isSubdirectoryOrSame(cwd, outPath)) {
-			throw new Error(`Extracting the archive would write to ${outPath} which is outside the cwd`);
-		}
+		const outPath = fsDriver.resolveRelativePathWithinDir(cwd, header.name);
 
 		if (await fsDriver.exists(outPath)) {
 			throw new Error(`Extracting ${outPath} would overwrite`);
@@ -51,11 +37,7 @@ const tarExtract = async (fsDriver: FsDriverBase, options: TarExtractOptions) =>
 			await fsDriver.mkdir(outPath);
 		} else if (header.type === 'file') {
 			const parentDir = dirname(outPath);
-
-			// Create the parent directory if necessary
-			if (isSubdirectoryOrSame(cwd, parentDir)) {
-				await fsDriver.mkdir(parentDir);
-			}
+			await fsDriver.mkdir(parentDir);
 
 			await fsDriver.appendBinaryReadableToFile(outPath, stream);
 		} else {

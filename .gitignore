@@ -236,7 +236,8 @@ packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/types.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useCursorUtils.test.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useCursorUtils.js
-packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useEditorSearch.js
+packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useEditorSearchExtension.js
+packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useEditorSearchHandler.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useExternalPlugins.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useJoplinCommands.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useJoplinMode.js
@@ -614,11 +615,10 @@ packages/app-mobile/utils/fs-driver/constants.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.js
 packages/app-mobile/utils/fs-driver/runOnDeviceTests.js
 packages/app-mobile/utils/fs-driver/tarCreate.js
+packages/app-mobile/utils/fs-driver/tarExtract.test.js
 packages/app-mobile/utils/fs-driver/tarExtract.js
-packages/app-mobile/utils/initializeCommandService.js
-packages/app-mobile/utils/ipc/RNToWebViewMessenger.js
-packages/app-mobile/utils/ipc/WebViewToRNMessenger.js
-packages/app-mobile/utils/pickDocument.js
+packages/app-mobile/utils/fs-driver/testUtil/createFilesFromPathRecord.js
+packages/app-mobile/utils/fs-driver/testUtil/verifyDirectoryMatches.js
 packages/app-mobile/utils/polyfills/bufferPolyfill.js
 packages/app-mobile/utils/polyfills/index.js
 packages/app-mobile/utils/setupNotifications.js

@@ -1,10 +1,10 @@
 import { pack as tarStreamPack } from 'tar-stream';
 import { resolve } from 'path';
-import FsDriverBase from '@joplin/lib/fs-driver-base';
 import * as RNFS from 'react-native-fs';
 
 import Logger from '@joplin/utils/Logger';
 import { chunkSize } from './constants';
+import shim from '@joplin/lib/shim';
 
 const logger = Logger.create('fs-driver-rn');
 
@@ -13,14 +13,15 @@ interface TarCreateOptions {
 	file: string;
 }
 
-// TODO: Support globbing directories contained in filePaths
-//       like node-tar. (The fs-driver-node implementation of tarCreate).
+// TODO: Support glob patterns, which are currently supported by the
+//       node fsDriver.
 
-const tarCreate = async (fsDriver: FsDriverBase, options: TarCreateOptions, filePaths: string[]) => {
+const tarCreate = async (options: TarCreateOptions, filePaths: string[]) => {
 	// Choose a default cwd if not given
 	const cwd = options.cwd ?? RNFS.DocumentDirectoryPath;
 	const file = resolve(cwd, options.file);
 
+	const fsDriver = shim.fsDriver();
 	if (await fsDriver.exists(file)) {
 		throw new Error('Error! Destination already exists');
 	}

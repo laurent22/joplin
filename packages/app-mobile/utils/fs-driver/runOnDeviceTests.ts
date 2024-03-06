@@ -5,6 +5,8 @@ import { join } from 'path';
 import FsDriverBase from '@joplin/lib/fs-driver-base';
 import Logger from '@joplin/utils/Logger';
 import { Buffer } from 'buffer';
+import createFilesFromPathRecord from './testUtil/createFilesFromPathRecord';
+import verifyDirectoryMatches from './testUtil/verifyDirectoryMatches';
 
 const logger = Logger.create('fs-driver-tests');
 
@@ -194,10 +196,7 @@ const testTarCreateAndExtract = async (tempDir: string) => {
 	// small utf-8 encoded files
 	for (let i = 0; i < 10; i ++) {
 		const testFileName = uuid.createNano();
-		const testFilePath = join(directoryToPack, testFileName);
-
 		const fileContent = `✅ Testing... ä ✅ File #${i}`;
-		await fsDriver.writeFile(testFilePath, fileContent, 'utf-8');
 
 		fileContents[testFileName] = fileContent;
 	}
@@ -205,18 +204,16 @@ const testTarCreateAndExtract = async (tempDir: string) => {
 	// larger utf-8 encoded files
 	for (let i = 0; i < 3; i ++) {
 		const testFileName = uuid.createNano();
-		const testFilePath = join(directoryToPack, testFileName);
 
 		let fileContent = `✅ Testing... ä ✅ File #${i}`;
-
 		for (let j = 0; j < 8; j ++) {
 			fileContent += fileContent;
 		}
 
-		await fsDriver.writeFile(testFilePath, fileContent, 'utf-8');
-
 		fileContents[testFileName] = fileContent;
 	}
+
+	await createFilesFromPathRecord(directoryToPack, fileContents);
 
 	// Pack the files
 	const pathsToTar = Object.keys(fileContents);
@@ -234,7 +231,6 @@ const testTarCreateAndExtract = async (tempDir: string) => {
 		await expectToBe(rawTarData.includes(fileContent), true);
 	}
 
-
 	logger.info('Testing fsDriver.tarExtract...');
 
 	const outputDirectory = join(tempDir, uuid.createNano());
@@ -244,10 +240,7 @@ const testTarCreateAndExtract = async (tempDir: string) => {
 		file: tarOutputPath,
 	});
 
-	for (const fileName in fileContents) {
-		const fileContent = await fsDriver.readFile(join(outputDirectory, fileName), 'utf8');
-		await expectToBe(fileContent, fileContents[fileName]);
-	}
+	await verifyDirectoryMatches(outputDirectory, fileContents);
 };
 
 const testMd5File = async (tempDir: string) => {

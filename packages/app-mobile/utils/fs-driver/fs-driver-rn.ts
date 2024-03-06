@@ -315,14 +315,14 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	public async tarExtract(options: any) {
-		await tarExtract(this, {
+		await tarExtract({
 			cwd: RNFS.DocumentDirectoryPath,
 			...options,
 		});
 	}
 
 	public async tarCreate(options: any, filePaths: string[]) {
-		await tarCreate(this, {
+		await tarCreate({
 			cwd: RNFS.DocumentDirectoryPath,
 			...options,
 		}, filePaths);

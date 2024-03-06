@@ -10,6 +10,7 @@ import shim from '@joplin/lib/shim';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import setupVim from '@joplin/editor/CodeMirror/util/setupVim';
 import { dirname } from 'path';
+import useEditorSearch from '../utils/useEditorSearchExtension';
 
 interface Props extends EditorProps {
 	style: React.CSSProperties;
@@ -31,6 +32,8 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 		onEventRef.current = props.onEvent;
 		onLogMessageRef.current = props.onLogMessage;
 	}, [props.onEvent, props.onLogMessage]);
+
+	useEditorSearch(editor);
 
 	useEffect(() => {
 		if (!editor) {
@@ -103,6 +106,26 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 		};
 	// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Should run just once
 	}, []);
+
+	const theme = props.settings.themeData;
+	useEffect(() => {
+		if (!editor) return () => {};
+
+		const styles = editor.addStyles({
+			'& .cm-search-marker *, & .cm-search-marker': {
+				color: theme.searchMarkerColor,
+				backgroundColor: theme.searchMarkerBackgroundColor,
+			},
+			'& .cm-search-marker-selected *, & .cm-search-marker-selected': {
+				background: `${theme.selectedColor2} !important`,
+				color: `${theme.color2} !important`,
+			},
+		});
+
+		return () => {
+			styles.remove();
+		};
+	}, [editor, theme]);
 
 	useEffect(() => {
 		editor?.updateSettings(props.settings);
