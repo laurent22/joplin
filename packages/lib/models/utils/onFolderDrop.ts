@@ -6,7 +6,15 @@ import Folder from '../Folder';
 import Note from '../Note';
 
 export default async (noteIds: string[], folderIds: string[], targetFolderId: string) => {
-	const targetFolder = await Folder.load(targetFolderId, { fields: ['id', 'deleted_time'] });
+	let targetFolder = await Folder.load(targetFolderId, { fields: ['id', 'deleted_time'] });
+	if (targetFolderId === '') {
+		// When dropping to root folder, targetFolderId === ''
+		targetFolder = {
+			id: '',
+			deleted_time: 0,
+			type_: 2,
+		};
+	}
 
 	if (!targetFolder) throw new Error(`No such folder: ${targetFolderId}`);
 
