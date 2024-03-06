@@ -619,6 +619,10 @@ packages/app-mobile/utils/fs-driver/tarExtract.test.js
 packages/app-mobile/utils/fs-driver/tarExtract.js
 packages/app-mobile/utils/fs-driver/testUtil/createFilesFromPathRecord.js
 packages/app-mobile/utils/fs-driver/testUtil/verifyDirectoryMatches.js
+packages/app-mobile/utils/initializeCommandService.js
+packages/app-mobile/utils/ipc/RNToWebViewMessenger.js
+packages/app-mobile/utils/ipc/WebViewToRNMessenger.js
+packages/app-mobile/utils/pickDocument.js
 packages/app-mobile/utils/polyfills/bufferPolyfill.js
 packages/app-mobile/utils/polyfills/index.js
 packages/app-mobile/utils/setupNotifications.js
