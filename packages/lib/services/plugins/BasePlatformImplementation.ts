@@ -22,35 +22,35 @@ export interface Joplin {
 export default class BasePlatformImplementation {
 
 	public get versionInfo(): VersionInfo {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: versionInfo');
 	}
 
 	public get clipboard(): any {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: clipboard');
 	}
 
 	public get nativeImage(): any {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: nativeImage');
 	}
 
 	public get window(): WindowImplementation {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: window');
 	}
 
 	public registerComponent(_name: string, _component: any) {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: registerComponent');
 	}
 
 	public unregisterComponent(_name: string) {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: unregisterComponent');
 	}
 
 	public get joplin(): Joplin {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: joplin');
 	}
 
 	public get imaging(): ImagingImplementation {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: imaging');
 	}
 
 }

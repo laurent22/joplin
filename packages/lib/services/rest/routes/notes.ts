@@ -81,7 +81,6 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 	if (requestNote.body_html) {
 		if (requestNote.convert_to === 'html') {
 			const style = await buildNoteStyleSheet(requestNote.stylesheets);
-			const minify = require('html-minifier').minify;
 
 			const minifyOptions = {
 				// Remove all spaces and, especially, newlines from tag attributes, as that would
@@ -104,6 +103,9 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 			const styleTag = style.length ? `<style>${styleString}</style>` + '\n' : '';
 			let minifiedHtml = '';
 			try {
+				// We use requireDynamic here -- html-minifier seems to not work in environments
+				// that lack `fs`.
+				const minify = shim.requireDynamic('html-minifier').minify;
 				minifiedHtml = minify(requestNote.body_html, minifyOptions);
 			} catch (error) {
 				console.warn('Could not minify HTML - using non-minified HTML instead', error);
