@@ -258,7 +258,8 @@ packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/types.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useCursorUtils.test.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useCursorUtils.js
-packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useEditorSearch.js
+packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useEditorSearchExtension.js
+packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useEditorSearchHandler.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useExternalPlugins.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useJoplinCommands.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useJoplinMode.js
