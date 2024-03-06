@@ -62,8 +62,8 @@ describe('RemoteMessenger', () => {
 
 
 		// Test accessing the registerCallback method
-		const resgisterCallbackTest = jest.fn();
-		await api1Messenger.remoteApi.registerCallback({ callback: resgisterCallbackTest });
+		const registerCallbackTest = jest.fn();
+		await api1Messenger.remoteApi.registerCallback({ callback: registerCallbackTest });
 		expect(callbacks).toHaveLength(1);
 	});
 

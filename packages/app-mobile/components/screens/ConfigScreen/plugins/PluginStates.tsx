@@ -41,7 +41,7 @@ const PluginStates: React.FC<Props> = props => {
 	const [repoApiError, setRepoApiError] = useState(null);
 	const [repoApiLoaded, setRepoApiLoaded] = useState(false);
 	const [reloadRepoCounter, setRepoReloadCounter] = useState(0);
-	const [updateablePluginIds, setUpdatablePluginIds] = useState<Record<string, boolean>>({});
+	const [updatablePluginIds, setUpdatablePluginIds] = useState<Record<string, boolean>>({});
 
 	const onRepoApiLoaded = useCallback(async (repoApi: RepositoryApi) => {
 		const manifests = Object.values(PluginService.instance().plugins)
@@ -49,10 +49,10 @@ const PluginStates: React.FC<Props> = props => {
 			.map(plugin => {
 				return plugin.manifest;
 			});
-		const updateablePluginIds = await repoApi.canBeUpdatedPlugins(manifests, PluginService.instance().appVersion);
+		const updatablePluginIds = await repoApi.canBeUpdatedPlugins(manifests, PluginService.instance().appVersion);
 
 		const conv: Record<string, boolean> = {};
-		for (const id of updateablePluginIds) {
+		for (const id of updatablePluginIds) {
 			conv[id] = true;
 		}
 		setRepoApiLoaded(true);
@@ -103,7 +103,7 @@ const PluginStates: React.FC<Props> = props => {
 					pluginId={plugin.id}
 					styles={props.styles}
 					pluginSettings={props.pluginSettings}
-					updateablePluginIds={updateablePluginIds}
+					updatablePluginIds={updatablePluginIds}
 					updatePluginStates={props.updatePluginStates}
 					onShowPluginLog={onShowPluginLog}
 					repoApi={repoApi}

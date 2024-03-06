@@ -13,7 +13,7 @@ interface Props {
 	pluginId: string;
 	styles: ConfigScreenStyles;
 	pluginSettings: string;
-	updateablePluginIds: Record<string, boolean>;
+	updatablePluginIds: Record<string, boolean>;
 	repoApi: RepositoryApi;
 
 	onShowPluginLog: (event: ItemEvent)=> void;
@@ -67,11 +67,11 @@ const PluginToggle: React.FC<Props> = props => {
 		if (updatingPluginIds[pluginId]) {
 			return UpdateState.Updating;
 		}
-		if (props.updateablePluginIds[pluginId]) {
+		if (props.updatablePluginIds[pluginId]) {
 			return UpdateState.CanUpdate;
 		}
 		return UpdateState.Idle;
-	}, [pluginSettings, updatingPluginIds, pluginId, props.updateablePluginIds]);
+	}, [pluginSettings, updatingPluginIds, pluginId, props.updatablePluginIds]);
 
 	const pluginItem = useMemo(() => {
 		const settings = pluginSettings[pluginId];

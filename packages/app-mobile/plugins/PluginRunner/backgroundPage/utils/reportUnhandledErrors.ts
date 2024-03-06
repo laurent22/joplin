@@ -3,7 +3,7 @@ type OnErrorCallback = (errorMessage: string)=> void;
 
 const reportUnhandledErrors = (onError: OnErrorCallback) => {
 	window.addEventListener('unhandledrejection', (event) => {
-		onError(`Unandled promise rejection: ${event.reason}. Promise: ${event.promise}.`);
+		onError(`Unhandled promise rejection: ${event.reason}. Promise: ${event.promise}.`);
 	});
 
 	window.addEventListener('error', (event) => {

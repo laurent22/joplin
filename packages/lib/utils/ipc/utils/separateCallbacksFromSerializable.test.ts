@@ -5,7 +5,7 @@ describe('separateCallbacksFromSerializable', () => {
 		const testCallback = async () => {};
 		const separated = separateCallbacksFromSerializable(testCallback);
 
-		// A callback is not serializable (JSONifyable)
+		// A callback is not serializable (convertible to JSON)
 		expect(separated.serializableData).toBe(null);
 
 		// callbacks should point to the ID of testCallback

@@ -21,7 +21,7 @@ const useCodeMirrorPlugins = (pluginStates: PluginStates) => {
 
 			if (!pluginService.plugins[pluginId]) {
 				// This can happen just after uninstalling a plugin -- the pluginState still exists but the plugin
-				// isn't regisered with the PluginService.
+				// isn't registered with the PluginService.
 				logger.warn(`Plugin ${pluginId} not loaded but is present in contentScripts.`);
 				continue;
 			}

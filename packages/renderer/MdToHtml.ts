@@ -550,7 +550,7 @@ export default class MdToHtml implements MarkupRenderer {
 
 		const loadPlugin = (plugin: any, options: any) => {
 			// Handle the case where we're bundling with webpack --
-			// some modules that are commmonjs imports in nodejs
+			// some modules that are commonjs imports in nodejs
 			// act like ES6 imports.
 			if (typeof plugin !== 'function' && plugin.default) {
 				plugin = plugin.default;

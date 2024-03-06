@@ -172,14 +172,14 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 	private canRemoteAccessProperty(parentObject: any, methodName: string) {
 		// TODO: There may be a better way to do this -- this currently assumes that
 		//       **only** the following property names should be avoided.
-		// The goal here is primarially to prevent remote from accessing the Function
+		// The goal here is primarily to prevent remote from accessing the Function
 		// constructor (which can lead to XSS).
 		const isSafeMethodName = !['constructor', 'prototype', '__proto__'].includes(methodName);
 		if (!isSafeMethodName) {
 			return false;
 		}
 
-		// Function.contructor can be used to eval code. Avoid it.
+		// Function.constructor can be used to eval code. Avoid it.
 		if (parentObject[methodName] === Function.constructor) {
 			return false;
 		}
@@ -253,7 +253,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 				// we want to remove the `.apply` to ensure that `foo` has the correct `this`
 				// variable (and not some proxy object).
 				//
-				// We support this priarially because TypeScript can generate .call or .apply
+				// We support this partially because TypeScript can generate .call or .apply
 				// when converting to ES5.
 				if (
 					parentHasParent
@@ -432,7 +432,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 		} else if (asInternalMessage.kind === MessageType.RemoteReady) {
 			await this.onRemoteReadyToReceive(asInternalMessage);
 		} else {
-			// Have TypeScipt verify that the above cases are exhaustive
+			// Have TypeScript verify that the above cases are exhaustive
 			const exhaustivenessCheck: never = asInternalMessage;
 			throw new Error(`Invalid message type, ${message.kind}. Message: ${exhaustivenessCheck}`);
 		}

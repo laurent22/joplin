@@ -20,7 +20,7 @@ export interface WebViewControl {
 	// Unlike react-native-webview/WebView, this does not need to return true.
 	injectJS(script: string): void;
 
-	// message must be JSON-ifyable
+	// message must be convertible to JSON
 	postMessage(message: any): void;
 }
 

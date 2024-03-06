@@ -105,7 +105,7 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 	const onLoadStart = useCallback(() => {
 		// Handles the case where the webview reloads (e.g. due to an error or performance
 		// optimization).
-		// Increasing the counter recretes the plugin runner and reloads plugins.
+		// Increasing the counter recreates the plugin runner and reloads plugins.
 		setWebviewReloadCounter(webviewReloadCounter + 1);
 	}, [webviewReloadCounter]);
 
