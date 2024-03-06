@@ -122,6 +122,7 @@ export interface NoteBodyEditorProps {
 	isSafeMode: boolean;
 	noteId: string;
 	useCustomPdfViewer: boolean;
+	watchedNoteFiles: string[];
 }
 
 export interface FormNote {
