@@ -3,7 +3,7 @@ import { LayoutItem, Size } from './types';
 
 const dragBarThickness = 5;
 
-export const itemMinWidth = 110;
+export const itemMinWidth = 105;
 export const itemMinHeight = 40;
 
 export interface LayoutItemSizes {
