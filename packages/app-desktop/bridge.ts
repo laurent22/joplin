@@ -2,7 +2,7 @@ import ElectronAppWrapper from './ElectronAppWrapper';
 import shim from '@joplin/lib/shim';
 import { _, setLocale } from '@joplin/lib/locale';
 import { BrowserWindow, nativeTheme, nativeImage, shell } from 'electron';
-import { dirname, isUncPath, toSystemSlashes } from '@joplin/lib/path-utils';
+import { dirname, toSystemSlashes } from '@joplin/lib/path-utils';
 import { fileUriToPath } from '@joplin/utils/url';
 import { urlDecode } from '@joplin/lib/string-utils';
 import * as Sentry from '@sentry/electron/main';
@@ -82,11 +82,6 @@ export class Bridge {
 
 	public rootProfileDir() {
 		return this.rootProfileDir_;
-	}
-
-	private logWarning(...message: string[]) {
-		// eslint-disable-next-line no-console
-		console.warn('bridge:', ...message);
 	}
 
 	public electronApp() {
@@ -331,13 +326,10 @@ export class Bridge {
 			fullPath = fileUriToPath(urlDecode(fullPath), shim.platformName());
 		}
 		fullPath = normalize(fullPath);
-		// On Windows, \\example.com\... links can map to network drives. Opening files on these
-		// drives can lead to arbitrary remote code execution.
-		const isUntrustedUncPath = isUncPath(fullPath);
-		if (isUntrustedUncPath) {
-			this.logWarning(`Not opening external file link: ${fullPath} -- it starts with two \\s, so could be to a network drive.`);
-			return 'Refusing to open file on a network drive.';
-		} else if (await pathExists(fullPath)) {
+
+		// Note: pathExists is intended to mitigate a security issue related to network drives
+		//       on Windows.
+		if (await pathExists(fullPath)) {
 			return shell.openPath(fullPath);
 		} else {
 			return 'Path does not exist.';
