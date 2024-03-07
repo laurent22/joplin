@@ -16,7 +16,10 @@ const CopyPlugin = require('copy-webpack-plugin');
 const tar = require('tar');
 const glob = require('glob');
 const execSync = require('child_process').execSync;
-const allPossibleCategories = require('@joplin/lib/pluginCategories.json');
+
+// Begin auto-generated
+const allPossibleCategories = [{ 'name': 'appearance' }, { 'name': 'developer tools' }, { 'name': 'productivity' }, { 'name': 'themes' }, { 'name': 'integrations' }, { 'name': 'viewer' }, { 'name': 'search' }, { 'name': 'tags' }, { 'name': 'editor' }, { 'name': 'files' }, { 'name': 'personal knowledge management' }];
+// End auto-generated
 
 const rootDir = path.resolve(__dirname);
 const userConfigFilename = './plugin.config.json';

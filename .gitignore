@@ -652,6 +652,7 @@ packages/generator-joplin/generators/app/templates/api/noteListType.js
 packages/generator-joplin/generators/app/templates/api/types.js
 packages/generator-joplin/generators/app/templates/api_index.js
 packages/generator-joplin/generators/app/templates/src/index.js
+packages/generator-joplin/tools/updateCategories.js
 packages/htmlpack/src/index.js
 packages/lib/ArrayUtils.js
 packages/lib/AsyncActionQueue.js
