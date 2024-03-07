@@ -73,7 +73,10 @@ const PluginRunnerWebView: React.FC<Props> = props => {
 
 
 	const renderWebView = () => {
-		const hasPlugins = Object.values(pluginSettings).some(setting => setting.enabled);
+		// To avoid increasing startup time/memory usage on devices with no plugins, don't
+		// load the webview if unnecessary.
+		// Note that we intentionally load the webview even if all plugins are disabled.
+		const hasPlugins = Object.values(pluginSettings).length > 0;
 		if (!hasPlugins) {
 			return null;
 		}
@@ -99,7 +102,7 @@ const PluginRunnerWebView: React.FC<Props> = props => {
 				window.loadedBackgroundPage = true;
 			}
 		`;
-		
+
 
 		return (
 			<ExtendedWebView
