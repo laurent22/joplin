@@ -1173,7 +1173,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.Object,
 				section: 'plugins',
 				public: true,
-				appTypes: [AppType.Desktop],
+				appTypes: [AppType.Desktop, AppType.Mobile],
 				needRestart: true,
 				autoSave: true,
 			},
@@ -1329,6 +1329,15 @@ class Setting extends BaseModel {
 			'style.editor.contentMaxWidth': { value: 0, type: SettingItemType.Int, public: true, storage: SettingStorage.File, isGlobal: true, appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor maximum width'), description: () => _('Set it to 0 to make it take the complete available space. Recommended width is 600.') },
 
 			'ui.layout': { value: {}, type: SettingItemType.Object, storage: SettingStorage.File, isGlobal: true, public: false, appTypes: [AppType.Desktop] },
+
+			'ui.lastSelectedPluginPanel': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+				description: () => 'The last selected plugin panel ID in pop-up mode (mobile).',
+				storage: SettingStorage.Database,
+				appTypes: [AppType.Mobile],
+			},
 
 			// TODO: Is there a better way to do this? The goal here is to simply have
 			// a way to display a link to the customizable stylesheets, not for it to
@@ -1940,8 +1949,7 @@ class Setting extends BaseModel {
 			const valueRow = await this.loadOne(key);
 			if (valueRow) {
 				// Remove any duplicate copies of the setting -- if multiple items in cache_
-				// have the same key, we may encounter unique key errors while saving to the
-				// database.
+				// have the same key, we may encounter unique key errors while saving.
 				this.cache_ = this.cache_.filter(setting => setting.key !== key);
 
 				this.cache_.push({

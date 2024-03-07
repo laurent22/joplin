@@ -7,6 +7,7 @@ const path = require('path');
 const { tmpdir } = require('os');
 const uuid = require('@joplin/lib/uuid').default;
 const sqlite3 = require('sqlite3');
+const React = require('react');
 require('../../jest.base-setup.js')();
 
 import { setImmediate } from 'timers';
@@ -15,8 +16,10 @@ import { setImmediate } from 'timers';
 // so is removed by jsdom).
 window.setImmediate = setImmediate;
 
-
-shimInit({ nodeSqlite: sqlite3 });
+shimInit({
+	nodeSqlite: sqlite3,
+	React,
+});
 
 // This library has the following error when running within Jest:
 //   Invariant Violation: `new NativeEventEmitter()` requires a non-null argument.

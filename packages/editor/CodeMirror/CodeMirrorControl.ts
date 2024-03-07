@@ -43,9 +43,11 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		if (this._userCommands.has(name)) {
 			commandOutput = this._userCommands.get(name)(...args);
 		} else if (name in editorCommands) {
-			commandOutput = editorCommands[name as EditorCommandType](this.editor);
+			commandOutput = editorCommands[name as EditorCommandType](this.editor, ...args);
 		} else if (super.commandExists(name)) {
-			commandOutput = super.execCommand(name);
+			commandOutput = super.execCommand(name, ...args);
+		} else if (super.supportsJoplinCommand(name)) {
+			commandOutput = super.execJoplinCommand(name);
 		}
 
 		if (name === EditorCommandType.Undo || name === EditorCommandType.Redo) {

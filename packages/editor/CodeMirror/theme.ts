@@ -88,10 +88,12 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 		'&': baseGlobalStyle,
 
 		// These must be !important or more specific than CodeMirror's built-ins
-		'.cm-content': {
+		'& .cm-content': {
 			fontFamily: theme.fontFamily,
 			...baseContentStyle,
 			paddingBottom: theme.isDesktop ? '400px' : undefined,
+			marginLeft: `${theme.marginLeft}px`,
+			marginRight: `${theme.marginRight}px`,
 		},
 		'&.cm-focused .cm-cursor': baseCursorStyle,
 
@@ -167,7 +169,7 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 		'& .cm-tableHeader, & .cm-tableRow, & .cm-tableDelimiter': monospaceStyle,
 		'& .cm-taskMarker': monospaceStyle,
 
-		// Applies maximum width styles to individual lines.
+		// Apply maximum width styles to individual lines.
 		'& .cm-line': theme.contentMaxWidth ? {
 			maxWidth: theme.contentMaxWidth,
 

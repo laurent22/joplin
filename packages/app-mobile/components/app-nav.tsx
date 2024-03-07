@@ -5,7 +5,7 @@ const { SearchScreen } = require('./screens/search.js');
 import { Component } from 'react';
 import { KeyboardAvoidingView, Keyboard, Platform, View, KeyboardEvent, Dimensions, EmitterSubscription } from 'react-native';
 import { AppState } from '../utils/types';
-const { themeStyle } = require('./global-style.js');
+const { themeStyle } = require('./global-style');
 
 interface State {
 	autoCompletionBarExtraHeight: number;
