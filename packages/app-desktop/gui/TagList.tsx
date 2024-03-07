@@ -31,7 +31,7 @@ function TagList(props: Props) {
 		const output = props.items.slice();
 
 		output.sort((a: any, b: any) => {
-			return a.title < b.title ? -1 : +1;
+			return a.title.localeCompare(b.title, undefined, { sensitivity: 'accent' });
 		});
 
 		return output;

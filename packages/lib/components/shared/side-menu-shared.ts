@@ -83,7 +83,7 @@ export const renderTags = (props: Props, renderItem: RenderTagItem) => {
 		// Note: while newly created tags are normalized and lowercase
 		// imported tags might be any case, so we need to do case-insensitive
 		// sort.
-		return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : +1;
+		return a.title.localeCompare(b.title, undefined, { sensitivity: 'accent' });
 	});
 	const tagItems = [];
 	const order: string[] = [];
