@@ -29,9 +29,9 @@ function TagList(props: Props) {
 
 	const tags = useMemo(() => {
 		const output = props.items.slice();
-
+		const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
 		output.sort((a: any, b: any) => {
-			return a.title < b.title ? -1 : +1;
+			return collator.compare(a.title, b.title);
 		});
 
 		return output;

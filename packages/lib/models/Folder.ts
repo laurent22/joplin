@@ -290,9 +290,20 @@ export default class Folder extends BaseItem {
 		return output;
 	}
 
+	public static handleTitleNaturalSorting(items: FolderEntity[], options: any) {
+		if (options.order.length > 0 && options.order[0].by === 'title') {
+			const collator = this.getNaturalSortingCollator();
+			items.sort((a, b) => ((options.order[0].dir === 'ASC') ? 1 : -1) * collator.compare(a.title, b.title));
+		}
+	}
+
+	public static getNaturalSortingCollator() {
+		return new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+	}
+
 	public static async all(options: FolderLoadOptions = null) {
 		let output: FolderEntity[] = await super.all(options);
-
+		this.handleTitleNaturalSorting(output, options);
 		if (options && options.includeDeleted === false) {
 			output = output.filter(f => !f.deleted_time);
 		}
