@@ -299,12 +299,6 @@ const SidebarComponent = (props: Props) => {
 
 		const menu = new Menu();
 
-		let item = null;
-
-		if (itemType === BaseModel.TYPE_FOLDER) {
-			item = BaseModel.byId(props.folders, itemId);
-		}
-
 		if (itemId === getTrashFolderId()) {
 			menu.append(
 				new MenuItem(menuUtils.commandToStatefulMenuItem('emptyTrash')),
@@ -313,12 +307,15 @@ const SidebarComponent = (props: Props) => {
 			return;
 		}
 
+		let item = null;
 		if (itemType === BaseModel.TYPE_FOLDER) {
 			item = BaseModel.byId(props.folders, itemId);
 		}
+
 		const isDeleted = item ? !!item.deleted_time : false;
+
 		if (!isDeleted) {
-			if (itemType === BaseModel.TYPE_FOLDER && item && !item.encryption_applied) {
+			if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
 				menu.append(
 					new MenuItem(menuUtils.commandToStatefulMenuItem('newFolder', itemId)),
 				);
@@ -351,6 +348,7 @@ const SidebarComponent = (props: Props) => {
 					}),
 				);
 			}
+
 			if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
 				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('openFolderDialog', { folderId: itemId })));
 
@@ -401,6 +399,7 @@ const SidebarComponent = (props: Props) => {
 					}));
 				}
 			}
+
 			if (itemType === BaseModel.TYPE_FOLDER) {
 				menu.append(
 					new MenuItem({
@@ -517,7 +516,7 @@ const SidebarComponent = (props: Props) => {
 					isSpecialItem={true}
 					href="#"
 					selected={selected}
-					onClick={() => { onAllNotesClick_; folderItem_click(all_notes_id); }}
+					onClick={() => { onAllNotesClick_(); folderItem_click(all_notes_id); }}
 
 					data-id={all_notes_id}
 					data-type={BaseModel.TYPE_FOLDER}
