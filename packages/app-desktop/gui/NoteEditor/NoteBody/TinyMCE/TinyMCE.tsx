@@ -351,14 +351,15 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	useEffect(() => {
 		const theme = themeStyle(props.themeId);
 		const backgroundColor = props.whiteBackgroundNoteRendering ? lightTheme.backgroundColor : theme.backgroundColor;
+		const leftExtraToolbarContainerWidth = props.watchedNoteFiles.length > 0 ? 120 : 80;
 
 		const element = document.createElement('style');
 		element.setAttribute('id', 'tinyMceStyle');
 		document.head.appendChild(element);
 		element.appendChild(document.createTextNode(`
 			.joplin-tinymce .tox-editor-header {
-				padding-left: ${120 + styles.leftExtraToolbarContainer.padding * 2}px;
-				padding-right: ${120 + styles.rightExtraToolbarContainer.padding * 2}px;
+				padding-left: ${leftExtraToolbarContainerWidth + styles.leftExtraToolbarContainer.padding * 2}px;
+				padding-right: ${styles.rightExtraToolbarContainerWidth + styles.rightExtraToolbarContainer.padding * 2}px;
 			}
 			
 			.tox .tox-toolbar,
@@ -547,7 +548,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		//
 		// tl;dr: editorReady is used here because the css needs to be re-applied after TinyMCE init
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [editorReady, props.themeId, lightTheme, props.whiteBackgroundNoteRendering]);
+	}, [editorReady, props.themeId, lightTheme, props.whiteBackgroundNoteRendering, props.watchedNoteFiles]);
 
 	// -----------------------------------------------------------------------------------------
 	// Enable or disable the editor
