@@ -208,10 +208,10 @@ function NoteListControls(props: Props) {
 
 		return (
 			<TopRow className="new-note-todo-buttons">
-				<StyledButton 
-          ref={(el:Element) => {
-            props.setNewNoteButtonRef(el);
-          }}
+				<StyledButton
+					ref={(el: Element) => {
+						props.setNewNoteButtonRef(el);
+					}}
 					className="new-note-button"
 					tooltip={ showTooltip ? CommandService.instance().label('newNote') : '' }
 					iconName={noteIcon}
