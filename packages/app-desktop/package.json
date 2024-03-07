@@ -132,7 +132,7 @@
     "@types/styled-components": "5.1.32",
     "@types/tesseract.js": "2.0.0",
     "electron": "29.1.0",
-    "electron-builder": "24.8.0",
+    "electron-builder": "24.13.3",
     "glob": "10.3.10",
     "gulp": "4.0.2",
     "jest": "29.7.0",
