@@ -493,20 +493,21 @@ const SidebarComponent = (props: Props) => {
 	};
 
 	const renderAllNotesItem = (theme: Theme, selected: boolean) => {
-		const all_notes_id = 'all_notes_folder_id';
+		const all_notes_folder_id = 'all_notes_folder_id';
 		const toggleAllNotesContextMenu = () => {
 			const menu = new Menu();
 
 			if (Setting.value('notes.perFolderSortOrderEnabled')) {
 				menu.append(new MenuItem({
-					...menuUtils.commandToStatefulMenuItem('togglePerFolderSortOrder', all_notes_id),
+					...menuUtils.commandToStatefulMenuItem('togglePerFolderSortOrder', all_notes_folder_id),
 					type: 'checkbox',
-					checked: PerFolderSortOrderService.isSet(all_notes_id),
+					checked: PerFolderSortOrderService.isSet(all_notes_folder_id),
 				}));
 			}
 
 			menu.popup({ window: bridge().window() });
 		};
+
 		return (
 			<StyledListItem key="allNotesHeader" selected={selected} className={'list-item-container list-item-depth-0 all-notes'} isSpecialItem={true}>
 				<StyledExpandLink>{renderExpandIcon(theme, false, false)}</StyledExpandLink>
@@ -516,10 +517,7 @@ const SidebarComponent = (props: Props) => {
 					isSpecialItem={true}
 					href="#"
 					selected={selected}
-					onClick={() => { onAllNotesClick_(); folderItem_click(all_notes_id); }}
-
-					data-id={all_notes_id}
-					data-type={BaseModel.TYPE_FOLDER}
+					onClick={onAllNotesClick_}
 					onContextMenu={toggleAllNotesContextMenu}
 				>
 					{_('All notes')}

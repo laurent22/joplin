@@ -126,6 +126,8 @@ export default class PerFolderSortOrderService {
 	private static getSelectedFolderId(): string {
 		if (this.folderState.notesParentType === 'Folder') {
 			return this.folderState.selectedFolderId;
+		} else if (this.folderState.notesParentType === 'SmartFilter') {
+			return 'all_notes_folder_id';
 		} else {
 			return '';
 		}
