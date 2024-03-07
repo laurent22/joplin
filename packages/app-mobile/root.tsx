@@ -126,6 +126,7 @@ import { refreshFolders, scheduleRefreshFolders } from '@joplin/lib/folders-scre
 import KeymapService from '@joplin/lib/services/KeymapService';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import initializeCommandService from './utils/initializeCommandService';
+import PlatformImplementation from './plugins/PlatformImplementation';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -554,8 +555,16 @@ async function initialize(dispatch: Function) {
 
 	// Currently CommandService is just used for plugins.
 	initializeCommandService(store);
+
 	// KeymapService is also present for plugin compatibility
 	KeymapService.instance().initialize();
+
+	// Even if there are no plugins, we need to initialize the PluginService so that
+	// plugin search can work.
+	const platformImplementation = PlatformImplementation.instance();
+	PluginService.instance().initialize(
+		platformImplementation.versionInfo.version, platformImplementation, null, store,
+	);
 
 	setRSA(RSA);
 

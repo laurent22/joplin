@@ -8,7 +8,7 @@ import loadPlugins from '../loadPlugins';
 import { connect, useStore } from 'react-redux';
 import Logger from '@joplin/utils/Logger';
 import { View, ViewStyle } from 'react-native';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { AppState } from '../../utils/types';
 import { PluginHtmlContents, PluginStates } from '@joplin/lib/services/plugins/reducer';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
@@ -49,10 +49,17 @@ const styles = {
 	},
 };
 
+const usePluginSettings = (serializedPluginSettings: string) => {
+	return useMemo(() => {
+		const pluginService = PluginService.instance();
+		return pluginService.unserializePluginSettings(serializedPluginSettings);
+	}, [serializedPluginSettings]);
+};
+
 const usePlugins = (
 	pluginRunner: PluginRunner,
 	webviewLoaded: boolean,
-	serializedPluginSettings: string,
+	pluginSettings: PluginSettings,
 ) => {
 	const store = useStore();
 
@@ -61,11 +68,8 @@ const usePlugins = (
 			return;
 		}
 
-		const pluginService = PluginService.instance();
-		const pluginSettings = pluginService.unserializePluginSettings(serializedPluginSettings);
-
 		void loadPlugins(pluginRunner, pluginSettings, store, event);
-	}, [pluginRunner, store, webviewLoaded, serializedPluginSettings]);
+	}, [pluginRunner, store, webviewLoaded, pluginSettings]);
 };
 
 const PluginRunnerWebViewComponent: React.FC<Props> = props => {
@@ -82,7 +86,8 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 		return new PluginRunner(webviewRef);
 	}, [webviewReloadCounter]);
 
-	usePlugins(pluginRunner, webviewLoaded, props.serializedPluginSettings);
+	const pluginSettings = usePluginSettings(props.serializedPluginSettings);
+	usePlugins(pluginRunner, webviewLoaded, pluginSettings);
 
 	const injectedJs = useMemo(() => {
 		return `
@@ -112,21 +117,27 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 		setLoaded(true);
 	}, []);
 
-	const hasPlugins = Object.keys(props.pluginStates).length > 0;
-	const webView = hasPlugins ? (
-		<ExtendedWebView
-			style={styles.webview}
-			webviewInstanceId='PluginRunner'
-			html={html}
-			injectedJavaScript={injectedJs}
-			onMessage={pluginRunner.onWebviewMessage}
-			onError={onError}
-			onLoadEnd={onLoadEnd}
-			onLoadStart={onLoadStart}
-			ref={webviewRef}
-		/>
-	) : null;
 
+	const renderWebView = () => {
+		const hasPlugins = Object.values(pluginSettings).some(setting => setting.enabled);
+		if (!hasPlugins) {
+			return null;
+		}
+
+		return (
+			<ExtendedWebView
+				style={styles.webview}
+				webviewInstanceId='PluginRunner'
+				html={html}
+				injectedJavaScript={injectedJs}
+				onMessage={pluginRunner.onWebviewMessage}
+				onError={onError}
+				onLoadEnd={onLoadEnd}
+				onLoadStart={onLoadStart}
+				ref={webviewRef}
+			/>
+		);
+	};
 	const accessibilityHidden = true;
 
 	return (
@@ -138,7 +149,7 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 				importantForAccessibility={accessibilityHidden ? 'no-hide-descendants' : undefined}
 				accessibilityElementsHidden={accessibilityHidden}
 			>
-				{webView}
+				{renderWebView()}
 			</View>
 		</>
 	);
