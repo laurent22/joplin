@@ -1157,7 +1157,10 @@ class AppComponent extends React.Component {
 						</SafeAreaView>
 					</MenuProvider>
 				</SideMenu>
-				<PluginRunnerWebView/>
+				<PluginRunnerWebView
+					serializedPluginSettings={this.props.serializedPluginSettings}
+					pluginStates={this.props.pluginStates}
+				/>
 			</View>
 		);
 
@@ -1211,6 +1214,8 @@ const mapStateToProps = (state: any) => {
 		disableSideMenuGestures: state.disableSideMenuGestures,
 		biometricsDone: state.biometricsDone,
 		biometricsEnabled: state.settings['security.biometricsEnabled'],
+		serializedPluginSettings: state.settings['plugins.states'],
+		pluginStates: state.pluginService.plugins,
 	};
 };
 
