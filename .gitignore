@@ -516,6 +516,7 @@ packages/app-mobile/components/biometrics/biometricAuthenticate.js
 packages/app-mobile/components/biometrics/sensorInfo.js
 packages/app-mobile/components/getResponsiveValue.test.js
 packages/app-mobile/components/getResponsiveValue.js
+packages/app-mobile/components/global-style.js
 packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.js
 packages/app-mobile/components/screens/ConfigScreen/FileSystemPathSelector.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.js
