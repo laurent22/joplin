@@ -402,6 +402,16 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		this.editor.scrollDOM.appendChild(node);
 	}
 
+	public markText(from: DocumentPosition, to: DocumentPosition, options?: MarkTextOptions) {
+		const doc = this.editor.state.doc;
+
+		return this._decorator.markText(
+			posFromDocumentPosition(doc, from),
+			posFromDocumentPosition(doc, to),
+			options,
+		);
+	}
+
 	// TODO: Currently copied from useCursorUtils.ts.
 	// TODO: Remove the duplicate code when CodeMirror 5 is eventually removed.
 	public wrapSelections(string1: string, string2: string) {

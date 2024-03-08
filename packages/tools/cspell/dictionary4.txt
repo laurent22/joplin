@@ -92,3 +92,4 @@ titlewrapper
 notyf
 Notyf
 activeline
+Prec
