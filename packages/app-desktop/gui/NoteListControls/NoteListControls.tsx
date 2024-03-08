@@ -24,7 +24,7 @@ interface Props {
 	width: number;
 	newNoteButtonEnabled: boolean;
 	newTodoButtonEnabled: boolean;
-	newNoteButtonRef: React.MutableRefObject<any>;
+	newNoteButtonRef: (eltRef: React.MutableRefObject<any>) => void;
 	lineCount: number;
 	breakpoint: number;
 	dynamicBreakpoints: Breakpoints;
@@ -204,11 +204,13 @@ function NoteListControls(props: Props) {
 	}
 
 	function renderNewNoteButtons() {
-		if (!props.showNewNoteButtons) return null;
-
+		// TODO: when Ref.current is initilised then calculate breakpoints
+		const Ref = React.useRef(null); 
+		React.useEffect(() => { props.newNoteButtonRef(Ref); }, [Ref, Ref?.current]);
 		return (
+			!props.showNewNoteButtons ? <></> :
 			<TopRow className="new-note-todo-buttons">
-				<StyledButton ref={props.newNoteButtonRef}
+				<StyledButton ref={Ref}
 					className="new-note-button"
 					tooltip={ showTooltip ? CommandService.instance().label('newNote') : '' }
 					iconName={noteIcon}

@@ -1,6 +1,6 @@
 import { themeStyle } from '@joplin/lib/theme';
 import * as React from 'react';
-import { useMemo, useState, useEffect, useRef, useCallback } from 'react';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 import NoteList2 from '../NoteList/NoteList2';
 import NoteListControls from '../NoteListControls/NoteListControls';
 import { Size } from '../ResizableLayout/utils/types';
@@ -62,9 +62,9 @@ const useNoteListControlsBreakpoints = (width: number, newNoteRef: React.Mutable
 
 	// Initialize language-specific breakpoints
 	useEffect(() => {
-		if (!widthHasChanged) return;
-		if (!newNoteRef.current) return;
+		// if (!widthHasChanged) return;
 		if (!showNewNoteButton) return;
+		if (!newNoteRef.current) return;
 
 		// Use the longest string to calculate the amount of extra width needed
 		const smAdditional = getTextWidth(newNoteRef, _('note')) > getTextWidth(newNoteRef, _('to-do')) ? getTextWidth(newNoteRef, _('note')) : getTextWidth(newNoteRef, _('to-do'));
@@ -76,7 +76,7 @@ const useNoteListControlsBreakpoints = (width: number, newNoteRef: React.Mutable
 		const Xl = BaseBreakpoint.Xl;
 
 		setDynamicBreakpoints({ Sm, Md, Lg, Xl });
-	}, [newNoteRef, showNewNoteButton, widthHasChanged]);
+	}, [newNoteRef, showNewNoteButton, widthHasChanged, newNoteRef?.current]);
 
 	const breakpoint: number = useMemo(() => {
 		// Find largest breakpoint that width is less than
@@ -108,7 +108,7 @@ export default function NoteListWrapper(props: Props) {
 	const theme = themeStyle(props.themeId);
 	const [controlHeight] = useState(theme.topRowHeight);
 	const listRenderer = useListRenderer(props.listRendererId, props.startupPluginsLoaded);
-	const newNoteButtonRef = useRef(null);
+	const [newNoteButtonRef, setNewNoteButtonRef] = useState<React.MutableRefObject<any>>(null);
 	const isMultiColumns = listRenderer ? listRenderer.multiColumns : false;
 	const columns = isMultiColumns ? props.columns : null;
 
@@ -178,8 +178,8 @@ export default function NoteListWrapper(props: Props) {
 			<NoteListControls
 				height={controlHeight}
 				width={noteListSize.width}
-				newNoteButtonRef={newNoteButtonRef}
 				breakpoint={breakpoint}
+				newNoteButtonRef={(eltRef: React.MutableRefObject<any>) => setNewNoteButtonRef(eltRef)}
 				dynamicBreakpoints={dynamicBreakpoints}
 				lineCount={lineCount}
 				buttonSize={noteListControlsButtonSize}
