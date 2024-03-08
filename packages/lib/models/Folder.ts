@@ -297,6 +297,15 @@ export default class Folder extends BaseItem {
 			output = output.filter(f => !f.deleted_time);
 		}
 
+		// Output should come sorted from the sqlite query already.
+		// However, special characters are appended at the end.
+		// Do another sorting to get the correct order.
+		if (options && options.order && options.order.length && options.order.some((o => o.by === 'title'))) {
+			output.sort((a: FolderEntity, b: FolderEntity) => {
+				return a.title.localeCompare(b.title, undefined, { sensitivity: 'accent' });
+			});
+		}
+
 		if (options && options.includeTrash) {
 			output.push(getTrashFolder());
 		}
