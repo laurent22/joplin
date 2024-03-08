@@ -1173,6 +1173,10 @@ class Setting extends BaseModel {
 				type: SettingItemType.Object,
 				section: 'plugins',
 				public: true,
+				show: (_settings) => {
+					// Hide on iOS due to App Store guidelines.
+					return shim.isNode() || shim.mobilePlatform() !== 'ios';
+				},
 				appTypes: [AppType.Desktop, AppType.Mobile],
 				needRestart: true,
 				autoSave: true,
