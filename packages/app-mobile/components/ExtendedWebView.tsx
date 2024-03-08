@@ -82,6 +82,9 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 					throw new Error(`ExtendedWebView(${props.webviewInstanceId}): Trying to call injectJavaScript on a WebView that isn't loaded.`);
 				}
 
+				// .injectJavaScript can be undefined when testing.
+				if (!webviewRef.current.injectJavaScript) return;
+
 				webviewRef.current.injectJavaScript(`
 				try {
 					${js}
