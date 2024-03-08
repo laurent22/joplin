@@ -1119,7 +1119,8 @@ export default class Note extends BaseItem {
 	}
 
 	public static getNaturalSortingCollator() {
-		return new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+		const collatorLocale = Setting.value('locale').slice(0, 2);
+		return new Intl.Collator(collatorLocale, { numeric: true, sensitivity: 'base' });
 	}
 
 	public static async createConflictNote(sourceNote: NoteEntity, changeSource: number): Promise<NoteEntity> {

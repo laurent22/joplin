@@ -483,6 +483,11 @@ export default class BaseApplication {
 			refreshNotes = true;
 		}
 
+		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'locale') {
+			refreshNotes = true;
+			doRefreshFolders = 'now';
+		}
+
 		if (action.type === 'SMART_FILTER_SELECT') {
 			refreshNotes = true;
 			refreshNotesUseSelectedNoteId = true;

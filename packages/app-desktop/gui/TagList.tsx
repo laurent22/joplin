@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useMemo } from 'react';
 import { AppState } from '../app.reducer';
 import TagItem from './TagItem';
+import Setting from '@joplin/lib/models/Setting';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
@@ -13,6 +14,7 @@ interface Props {
 }
 
 function TagList(props: Props) {
+	const collatorLocale = Setting.value('locale').slice(0, 2);
 	const style = useMemo(() => {
 		const theme = themeStyle(props.themeId);
 
@@ -29,13 +31,13 @@ function TagList(props: Props) {
 
 	const tags = useMemo(() => {
 		const output = props.items.slice();
-		const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+		const collator = new Intl.Collator(collatorLocale, { numeric: true, sensitivity: 'base' });
 		output.sort((a: any, b: any) => {
 			return collator.compare(a.title, b.title);
 		});
 
 		return output;
-	}, [props.items]);
+	}, [props.items, collatorLocale]);
 
 	const tagItems = useMemo(() => {
 		const output = [];

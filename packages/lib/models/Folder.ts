@@ -13,6 +13,7 @@ import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import ResourceService from '../services/ResourceService';
 import { LoadOptions } from './utils/types';
 import { getTrashFolder, getTrashFolderId } from '../services/trash';
+import Setting from './Setting';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 const logger = Logger.create('models/Folder');
@@ -20,6 +21,8 @@ const logger = Logger.create('models/Folder');
 export interface FolderEntityWithChildren extends FolderEntity {
 	children?: FolderEntity[];
 }
+
+
 
 export default class Folder extends BaseItem {
 	public static tableName() {
@@ -298,7 +301,8 @@ export default class Folder extends BaseItem {
 	}
 
 	public static getNaturalSortingCollator() {
-		return new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+		const collatorLocale = Setting.value('locale').slice(0, 2);
+		return new Intl.Collator(collatorLocale, { numeric: true, sensitivity: 'base' });
 	}
 
 	public static async all(options: FolderLoadOptions = null) {
