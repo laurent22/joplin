@@ -90,7 +90,11 @@ class NoteListComponent extends Component<NoteListProps> {
 				keyExtractor={item => item.id}
 			/>;
 		} else {
-			if (!this.props.folders.length) {
+			// calculate number of folders except deleted and trash folder
+			// trash folder id: de1e7ede1e7ede1e7ede1e7ede1e7ede
+			const atleastOneNotebookExists = this.props.folders.filter((folder: FolderEntity) => folder.id !== 'de1e7ede1e7ede1e7ede1e7ede1e7ede' && folder.deleted_time === 0).length > 0;
+
+			if (!atleastOneNotebookExists) {
 				const noItemMessage = _('You currently have no notebooks.');
 				return (
 					<View style={this.styles().noNotebookView}>
