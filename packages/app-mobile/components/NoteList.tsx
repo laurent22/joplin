@@ -5,6 +5,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { FlatList, Text, StyleSheet, Button, View } from 'react-native';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
+import { getTrashFolderId } from '@joplin/lib/services/trash';
 import { AppState } from '../utils/types';
 
 const { _ } = require('@joplin/lib/locale');
@@ -90,9 +91,10 @@ class NoteListComponent extends Component<NoteListProps> {
 				keyExtractor={item => item.id}
 			/>;
 		} else {
+			const trashFolderId = getTrashFolderId();
+
 			// calculate number of folders except deleted and trash folder
-			// trash folder id: de1e7ede1e7ede1e7ede1e7ede1e7ede
-			const atleastOneNotebookExists = this.props.folders.filter((folder: FolderEntity) => folder.id !== 'de1e7ede1e7ede1e7ede1e7ede1e7ede' && folder.deleted_time === 0).length > 0;
+			const atleastOneNotebookExists = this.props.folders.filter((folder: FolderEntity) => folder.id !== trashFolderId && folder.deleted_time === 0).length > 0;
 
 			if (!atleastOneNotebookExists) {
 				const noItemMessage = _('You currently have no notebooks.');
@@ -109,6 +111,7 @@ class NoteListComponent extends Component<NoteListProps> {
 		}
 	}
 }
+
 
 const NoteList = connect((state: AppState) => {
 	return {
