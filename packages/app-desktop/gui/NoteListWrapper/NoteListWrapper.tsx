@@ -54,7 +54,7 @@ const getTextWidth = (newNoteRef: React.MutableRefObject<any>, text: string): nu
 
 // Even though these calculations mostly concern the NoteListControls component, we do them here
 // because we need to know the height of that control to calculate the note list height.
-const useNoteListControlsBreakpoints = (width: number, newNoteRef: React.MutableRefObject<any>, selectedFolderId: string) => {
+const useNoteListControlsBreakpoints = (width: number, newNoteRef: React.MutableRefObject<any> | null, selectedFolderId: string) => {
 	const [dynamicBreakpoints, setDynamicBreakpoints] = useState<Breakpoints>({ Sm: BaseBreakpoint.Sm, Md: BaseBreakpoint.Md, Lg: BaseBreakpoint.Lg, Xl: BaseBreakpoint.Xl });
 	const previousWidth = usePrevious(width);
 	const widthHasChanged = width !== previousWidth;
@@ -63,7 +63,7 @@ const useNoteListControlsBreakpoints = (width: number, newNoteRef: React.Mutable
 	// Initialize language-specific breakpoints
 	useEffect(() => {
 		// if (!widthHasChanged) return;
-		if (!newNoteRef.current) return;
+		if (!newNoteRef?.current) return;
 		if (!showNewNoteButton) return;
 
 		// Use the longest string to calculate the amount of extra width needed
@@ -76,7 +76,7 @@ const useNoteListControlsBreakpoints = (width: number, newNoteRef: React.Mutable
 		const Xl = BaseBreakpoint.Xl;
 
 		setDynamicBreakpoints({ Sm, Md, Lg, Xl });
-	}, [newNoteRef?.current, showNewNoteButton, widthHasChanged]);
+	}, [newNoteRef, showNewNoteButton, widthHasChanged, newNoteRef?.current]);
 
 	const breakpoint: number = useMemo(() => {
 		// Find largest breakpoint that width is less than

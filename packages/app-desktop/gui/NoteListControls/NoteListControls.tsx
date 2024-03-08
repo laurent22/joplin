@@ -204,11 +204,11 @@ function NoteListControls(props: Props) {
 	}
 
 	function renderNewNoteButtons() {
-		if (!props.showNewNoteButtons) return null;
-
+		const Ref = React.useRef(null); React.useEffect(()=>{props.newNoteButtonRef(Ref)}, [Ref, Ref?.current])	
 		return (
+			!props.showNewNoteButtons ?  <></> :
 			<TopRow className="new-note-todo-buttons">
-				<StyledButton ref={(Ref: React.MutableRefObject<any>)=>props.newNoteButtonRef(Ref)}
+				<StyledButton ref={Ref}
 					className="new-note-button"
 					tooltip={ showTooltip ? CommandService.instance().label('newNote') : '' }
 					iconName={noteIcon}
