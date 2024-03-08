@@ -1174,7 +1174,8 @@ class Setting extends BaseModel {
 				section: 'plugins',
 				public: true,
 				show: (_settings) => {
-					// Hide on iOS due to App Store guidelines.
+					// Hide on iOS due to App Store guidelines. See
+					// https://github.com/laurent22/joplin/pull/10086 for details.
 					return shim.isNode() || shim.mobilePlatform() !== 'ios';
 				},
 				appTypes: [AppType.Desktop, AppType.Mobile],
