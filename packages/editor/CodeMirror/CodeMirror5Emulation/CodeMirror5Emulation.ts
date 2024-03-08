@@ -373,16 +373,6 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		return this._decorator.addLineWidget(lineNumber, node, options);
 	}
 
-	public markText(from: DocumentPosition, to: DocumentPosition, options?: MarkTextOptions) {
-		const doc = this.editor.state.doc;
-
-		return this._decorator.markText(
-			posFromDocumentPosition(doc, from),
-			posFromDocumentPosition(doc, to),
-			options,
-		);
-	}
-
 	public addWidget(pos: DocumentPosition, node: HTMLElement) {
 		if (node.parentElement) {
 			node.remove();
