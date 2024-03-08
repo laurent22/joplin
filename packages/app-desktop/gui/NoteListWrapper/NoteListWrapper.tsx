@@ -63,8 +63,8 @@ const useNoteListControlsBreakpoints = (width: number, newNoteRef: React.Mutable
 	// Initialize language-specific breakpoints
 	useEffect(() => {
 		// if (!widthHasChanged) return;
-		if (!showNewNoteButton) return;
 		if (!newNoteRef.current) return;
+		if (!showNewNoteButton) return;
 
 		// Use the longest string to calculate the amount of extra width needed
 		const smAdditional = getTextWidth(newNoteRef, _('note')) > getTextWidth(newNoteRef, _('to-do')) ? getTextWidth(newNoteRef, _('note')) : getTextWidth(newNoteRef, _('to-do'));
@@ -76,7 +76,7 @@ const useNoteListControlsBreakpoints = (width: number, newNoteRef: React.Mutable
 		const Xl = BaseBreakpoint.Xl;
 
 		setDynamicBreakpoints({ Sm, Md, Lg, Xl });
-	}, [newNoteRef, showNewNoteButton, widthHasChanged, newNoteRef?.current]);
+	}, [newNoteRef?.current, showNewNoteButton, widthHasChanged]);
 
 	const breakpoint: number = useMemo(() => {
 		// Find largest breakpoint that width is less than
@@ -178,8 +178,8 @@ export default function NoteListWrapper(props: Props) {
 			<NoteListControls
 				height={controlHeight}
 				width={noteListSize.width}
-				breakpoint={breakpoint}
 				newNoteButtonRef={(eltRef: React.MutableRefObject<any>) => setNewNoteButtonRef(eltRef)}
+				breakpoint={breakpoint}
 				dynamicBreakpoints={dynamicBreakpoints}
 				lineCount={lineCount}
 				buttonSize={noteListControlsButtonSize}

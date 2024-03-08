@@ -204,13 +204,11 @@ function NoteListControls(props: Props) {
 	}
 
 	function renderNewNoteButtons() {
-		// TODO: when Ref.current is initilised then calculate breakpoints
-		const Ref = React.useRef(null); 
-		React.useEffect(() => { props.newNoteButtonRef(Ref); }, [Ref, Ref?.current]);
+		if (!props.showNewNoteButtons) return null;
+
 		return (
-			!props.showNewNoteButtons ? <></> :
 			<TopRow className="new-note-todo-buttons">
-				<StyledButton ref={Ref}
+				<StyledButton ref={(Ref: React.MutableRefObject<any>)=>props.newNoteButtonRef(Ref)}
 					className="new-note-button"
 					tooltip={ showTooltip ? CommandService.instance().label('newNote') : '' }
 					iconName={noteIcon}
