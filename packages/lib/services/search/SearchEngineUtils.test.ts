@@ -7,7 +7,7 @@ const Note = require('../../models/Note').default;
 
 let searchEngine: any = null;
 
-describe('services_SearchEngineUtils', () => {
+describe('SearchEngineUtils', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);

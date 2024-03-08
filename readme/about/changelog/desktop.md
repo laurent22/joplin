@@ -1,5 +1,18 @@
 # Joplin Desktop Changelog
 
+## [v2.14.19](https://github.com/laurent22/joplin/releases/tag/v2.14.19) - 2024-03-08T10:45:16Z
+
+- Fixed: Re-enable UNC links ([#10071](https://github.com/laurent22/joplin/issues/10071) by Henry Heino)
+- Fixed: Certain RTE menu items are not visible in dark mode ([#10044](https://github.com/laurent22/joplin/issues/10044))
+- Fixed: Fix pasting images from the rich text editor into the rich text editor ([#10064](https://github.com/laurent22/joplin/issues/10064)) ([#10062](https://github.com/laurent22/joplin/issues/10062) by Henry Heino)
+- Fixed: Fixed OCR memory leak when processing PDF documents ([#10050](https://github.com/laurent22/joplin/issues/10050))
+- Fixed: OCR does not start when German language is selected ([#10058](https://github.com/laurent22/joplin/issues/10058))
+
+## [v2.14.17](https://github.com/laurent22/joplin/releases/tag/v2.14.17) - 2024-03-01T18:10:26Z
+
+- Fixed: Merged shorthand variants of spellcheck languages ([#9983](https://github.com/laurent22/joplin/issues/9983)) ([#7834](https://github.com/laurent22/joplin/issues/7834) by Ton Hoang Nguyen (Bill))
+- Fixed: Sort notebooks in a case-insensitive way ([#9996](https://github.com/laurent22/joplin/issues/9996))
+
 ## [v2.14.16](https://github.com/laurent22/joplin/releases/tag/v2.14.16) (Pre-release) - 2024-02-22T22:49:10Z
 
 - Improved: Back up to a subdirectory of the home directory by default ([#9942](https://github.com/laurent22/joplin/issues/9942)) ([#9857](https://github.com/laurent22/joplin/issues/9857) by Henry Heino)

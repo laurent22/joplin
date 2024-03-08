@@ -4,9 +4,9 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import { useCallback } from 'react';
 import canManuallySortNotes from './canManuallySortNotes';
 
-const useMoveNote = (notesParentType: string, noteSortOrder: string, selectedNoteIds: string[], selectedFolderId: string, uncompletedTodosOnTop: boolean, showCompletedTodos: boolean, notes: NoteEntity[]) => {
+const useMoveNote = (notesParentType: string, noteSortOrder: string, selectedNoteIds: string[], selectedFolderId: string, uncompletedTodosOnTop: boolean, showCompletedTodos: boolean, notes: NoteEntity[], selectedFolderInTrash: boolean) => {
 	const moveNote = useCallback((direction: number, inc: number) => {
-		if (!canManuallySortNotes(notesParentType, noteSortOrder)) return;
+		if (!canManuallySortNotes(notesParentType, noteSortOrder, selectedFolderInTrash)) return;
 
 		const noteId = selectedNoteIds[0];
 		let targetNoteIndex = BaseModel.modelIndexById(notes, noteId);
@@ -17,7 +17,7 @@ const useMoveNote = (notesParentType: string, noteSortOrder: string, selectedNot
 			targetNoteIndex -= inc;
 		}
 		void Note.insertNotesAt(selectedFolderId, selectedNoteIds, targetNoteIndex, uncompletedTodosOnTop, showCompletedTodos);
-	}, [selectedFolderId, noteSortOrder, notes, notesParentType, selectedNoteIds, uncompletedTodosOnTop, showCompletedTodos]);
+	}, [selectedFolderId, noteSortOrder, notes, notesParentType, selectedNoteIds, uncompletedTodosOnTop, showCompletedTodos, selectedFolderInTrash]);
 
 	return moveNote;
 };

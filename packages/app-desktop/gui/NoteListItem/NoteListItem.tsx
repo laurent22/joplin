@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useCallback, forwardRef, LegacyRef, ChangeEvent, CSSProperties, MouseEventHandler, DragEventHandler, useMemo, memo } from 'react';
-import { ItemFlow, ListRenderer, OnChangeEvent, OnChangeHandler } from '@joplin/lib/services/plugins/api/noteListType';
+import { ItemFlow, ListRenderer, NoteListColumns, OnChangeEvent, OnChangeHandler } from '@joplin/lib/services/plugins/api/noteListType';
 import { Size } from '@joplin/utils/types';
 import useRootElement from './utils/useRootElement';
 import useItemElement from './utils/useItemElement';
@@ -29,6 +29,7 @@ interface NoteItemProps {
 	isSelected: boolean;
 	isWatched: boolean;
 	listRenderer: ListRenderer;
+	columns: NoteListColumns;
 	dispatch: Dispatch;
 }
 
@@ -63,7 +64,7 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 
 	const rootElement = useRootElement(elementId);
 
-	const renderedNote = useRenderedNote(props.note, props.isSelected, props.isWatched, props.listRenderer, props.highlightedWords, props.index);
+	const renderedNote = useRenderedNote(props.note, props.isSelected, props.isWatched, props.listRenderer, props.highlightedWords, props.index, props.columns);
 
 	const itemElement = useItemElement(
 		rootElement,
@@ -75,7 +76,7 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		props.flow,
 	);
 
-	useItemEventHandlers(rootElement, itemElement, onInputChange);
+	useItemEventHandlers(rootElement, itemElement, onInputChange, null);
 
 	const className = useMemo(() => {
 		return [
