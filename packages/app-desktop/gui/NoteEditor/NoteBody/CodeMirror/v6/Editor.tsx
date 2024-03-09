@@ -10,6 +10,7 @@ import shim from '@joplin/lib/shim';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import setupVim from '@joplin/editor/CodeMirror/util/setupVim';
 import { dirname } from 'path';
+import useKeymap from './utils/useKeymap';
 import useEditorSearch from '../utils/useEditorSearchExtension';
 
 interface Props extends EditorProps {
@@ -144,6 +145,8 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 
 		setupVim(editor);
 	}, [editor]);
+
+	useKeymap(editor);
 
 	return (
 		<div
