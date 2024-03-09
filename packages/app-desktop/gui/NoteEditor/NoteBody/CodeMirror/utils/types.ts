@@ -9,3 +9,8 @@ export function defaultRenderedBody(): RenderedBody {
 		pluginAssets: [],
 	};
 }
+
+export enum CodeMirrorVersion {
+	CodeMirror5,
+	CodeMirror6,
+}

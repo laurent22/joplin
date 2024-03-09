@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import CommandService from '@joplin/lib/services/CommandService';
 import KeymapService, { KeymapItem } from '@joplin/lib/services/KeymapService';
-import { EditorCommand } from '../../../utils/types';
+import { EditorCommand } from '../../../../utils/types';
 import shim from '@joplin/lib/shim';
 import { reg } from '@joplin/lib/registry';
 import setupVim from '@joplin/editor/CodeMirror/util/setupVim';
 import { EventName } from '@joplin/lib/eventManager';
+import normalizeAccelerator from '../../utils/normalizeAccelerator';
+import { CodeMirrorVersion } from '../../utils/types';
 
 export default function useKeymap(CodeMirror: any) {
 
@@ -26,29 +28,6 @@ export default function useKeymap(CodeMirror: any) {
 	// Converts a command of the form editor.command to just command
 	function editorCommandToCodeMirror(command: string) {
 		return command.slice(7); // 7 is the length of editor.
-	}
-
-	// CodeMirror and Electron register accelerators slightly different
-	// CodeMirror requires a - between keys while Electron want's a +
-	// CodeMirror doesn't recognize Option (it uses Alt instead)
-	// CodeMirror requires Shift to be first
-	function normalizeAccelerator(accelerator: string) {
-		const command = accelerator.replace(/\+/g, '-').replace('Option', 'Alt');
-		// From here is taken out of codemirror/lib/codemirror.js
-		const parts = command.split(/-(?!$)/);
-
-		let name = parts[parts.length - 1];
-		let alt, ctrl, shift, cmd;
-		for (let i = 0; i < parts.length - 1; i++) {
-			const mod = parts[i];
-			if (/^(cmd|meta|m)$/i.test(mod)) { cmd = true; } else if (/^a(lt)?$/i.test(mod)) { alt = true; } else if (/^(c|ctrl|control)$/i.test(mod)) { ctrl = true; } else if (/^s(hift)?$/i.test(mod)) { shift = true; } else { throw new Error(`Unrecognized modifier name: ${mod}`); }
-		}
-		if (alt) { name = `Alt-${name}`; }
-		if (ctrl) { name = `Ctrl-${name}`; }
-		if (cmd) { name = `Cmd-${name}`; }
-		if (shift) { name = `Shift-${name}`; }
-		return name;
-		// End of code taken from codemirror/lib/codemirror.js
 	}
 
 	// Because there is sometimes a clash between these keybindings and the Joplin window ones
@@ -74,7 +53,7 @@ export default function useKeymap(CodeMirror: any) {
 		}
 
 		// CodeMirror and Electron have slightly different formats for defining accelerators
-		const acc = normalizeAccelerator(key.accelerator);
+		const acc = normalizeAccelerator(key.accelerator, CodeMirrorVersion.CodeMirror5);
 
 		CodeMirror.keyMap.default[acc] = command;
 	}

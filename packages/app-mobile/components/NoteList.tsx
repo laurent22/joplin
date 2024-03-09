@@ -9,10 +9,10 @@ import { AppState } from '../utils/types';
 
 const { _ } = require('@joplin/lib/locale');
 const { NoteItem } = require('./note-item.js');
-const { themeStyle } = require('./global-style.js');
+import { themeStyle } from './global-style';
 
 interface NoteListProps {
-	themeId: string;
+	themeId: number;
 	dispatch: (action: any)=> void;
 	notesSource: string;
 	items: NoteEntity[];
