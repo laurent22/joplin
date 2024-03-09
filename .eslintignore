@@ -191,6 +191,7 @@ packages/app-desktop/gui/IconButton.js
 packages/app-desktop/gui/ImportScreen.js
 packages/app-desktop/gui/ItemList.js
 packages/app-desktop/gui/JoplinCloudConfigScreen.js
+packages/app-desktop/gui/JoplinCloudLoginScreen.js
 packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js
 packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js
 packages/app-desktop/gui/KeymapConfig/styles/index.js
@@ -884,6 +885,7 @@ packages/lib/services/interop/InteropService_Importer_Raw.js
 packages/lib/services/interop/Module.test.js
 packages/lib/services/interop/Module.js
 packages/lib/services/interop/types.js
+packages/lib/services/joplinCloudUtils.js
 packages/lib/services/joplinServer/personalizedUserContentBaseUrl.js
 packages/lib/services/keychain/KeychainService.js
 packages/lib/services/keychain/KeychainServiceDriver.dummy.js
