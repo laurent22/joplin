@@ -27,14 +27,14 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	const [intervalIdentifier, setIntervalIdentifier] = useState(undefined);
 	const [state, dispatch] = useReducer(reducer, defaultState);
 
-	const applicatioAuthId = useMemo(() => uuidgen(), []);
+	const applicationAuthId = useMemo(() => uuidgen(), []);
 
 	const periodicallyCheckForCredentials = () => {
 		if (intervalIdentifier) return;
 
 		const interval = setInterval(async () => {
 			try {
-				const response = await checkIfLoginWasSuccessful(applicationAuthUrl(applicatioAuthId));
+				const response = await checkIfLoginWasSuccessful(applicationAuthUrl(applicationAuthId));
 				if (response && response.success) {
 					dispatch({ type: 'COMPLETED' });
 					clearInterval(interval);
@@ -57,13 +57,13 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	};
 
 	const onAuthorizeClicked = async () => {
-		const url = await generateApplicationConfirmUrl(confirmUrl(applicatioAuthId));
+		const url = await generateApplicationConfirmUrl(confirmUrl(applicationAuthId));
 		bridge().openExternal(url);
 		onButtonUsed();
 	};
 
 	const onCopyToClipboardClicked = async () => {
-		const url = await generateApplicationConfirmUrl(confirmUrl(applicatioAuthId));
+		const url = await generateApplicationConfirmUrl(confirmUrl(applicationAuthId));
 		clipboard.writeText(url);
 		onButtonUsed();
 	};
