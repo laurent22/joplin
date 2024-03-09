@@ -33,7 +33,7 @@ class Command extends BaseCommand {
 		if (!ok) return;
 
 		const ids = notes.map(n => n.id);
-		await Note.batchDelete(ids, { toTrash: true });
+		await Note.batchDelete(ids, { toTrash: true, sourceDescription: 'rmnote command' });
 	}
 }
 

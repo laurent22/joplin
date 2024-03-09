@@ -629,7 +629,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		const folderId = note.parent_id;
 
-		await Note.delete(note.id, { toTrash: true });
+		await Note.delete(note.id, { toTrash: true, sourceDescription: 'Delete note button' });
 
 		this.props.dispatch({
 			type: 'NAV_GO',
