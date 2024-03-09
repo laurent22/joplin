@@ -1,10 +1,11 @@
 import { TagEntity, TagsWithNoteCountEntity } from '../services/database/types';
 
-import BaseModel from '../BaseModel';
+import BaseModel, { DeleteOptions } from '../BaseModel';
 import BaseItem from './BaseItem';
 import NoteTag from './NoteTag';
 import Note from './Note';
 import { _ } from '../locale';
+import ActionLogger from '../utils/ActionLogger';
 
 export default class Tag extends BaseItem {
 	public static tableName() {
@@ -45,14 +46,21 @@ export default class Tag extends BaseItem {
 	public static async untagAll(tagId: string) {
 		const noteTags = await NoteTag.modelSelectAll('SELECT id FROM note_tags WHERE tag_id = ?', [tagId]);
 		for (let i = 0; i < noteTags.length; i++) {
-			await NoteTag.delete(noteTags[i].id);
+			await NoteTag.delete(noteTags[i].id, { sourceDescription: 'untagAll/disassociate note' });
 		}
 
-		await Tag.delete(tagId);
+		await Tag.delete(tagId, { sourceDescription: 'untagAll/delete tag' });
 	}
 
-	public static async delete(id: string, options: any = null) {
-		if (!options) options = {};
+	public static async delete(id: string, options: DeleteOptions = {}) {
+		const actionLogger = ActionLogger.from(options.sourceDescription);
+		const tagTitle = (await Tag.load(id)).title;
+		actionLogger.addDescription(`tag title: ${JSON.stringify(tagTitle)}`);
+
+		options = {
+			...options,
+			sourceDescription: actionLogger,
+		};
 
 		await super.delete(id, options);
 
@@ -93,14 +101,18 @@ export default class Tag extends BaseItem {
 	}
 
 	public static async removeNote(tagId: string, noteId: string) {
+		const tag = await Tag.load(tagId);
+
+		const actionLogger = ActionLogger.from(`Tag/removeNote - tag: ${tag.title}`);
+
 		const noteTags = await NoteTag.modelSelectAll('SELECT id FROM note_tags WHERE tag_id = ? and note_id = ?', [tagId, noteId]);
 		for (let i = 0; i < noteTags.length; i++) {
-			await NoteTag.delete(noteTags[i].id);
+			await NoteTag.delete(noteTags[i].id, { sourceDescription: actionLogger.clone() });
 		}
 
 		this.dispatch({
 			type: 'NOTE_TAG_REMOVE',
-			item: await Tag.load(tagId),
+			item: tag,
 		});
 	}
 

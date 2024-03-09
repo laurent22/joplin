@@ -5,7 +5,7 @@ const { Text, TouchableOpacity, View, StyleSheet } = require('react-native');
 const { Checkbox } = require('./checkbox.js');
 const Note = require('@joplin/lib/models/Note').default;
 const time = require('@joplin/lib/time').default;
-const { themeStyle } = require('./global-style.js');
+const { themeStyle } = require('./global-style');
 const { _ } = require('@joplin/lib/locale');
 
 class NoteItemComponent extends Component {

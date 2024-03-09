@@ -10,7 +10,7 @@ import { Alert } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import { deleteProfileById } from '@joplin/lib/services/profileConfig';
 import { saveProfileConfig, switchProfile } from '../../services/profiles';
-const { themeStyle } = require('../global-style');
+import { themeStyle } from '../global-style';
 
 interface Props {
 	themeId: number;

@@ -35,7 +35,7 @@ import { _, currentLocale } from '@joplin/lib/locale';
 import { reg } from '@joplin/lib/registry';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import { BaseScreenComponent } from '../base-screen';
-const { themeStyle, editorFont } = require('../global-style.js');
+import { themeStyle, editorFont } from '../global-style';
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 import ImageResizer from '@bam.tech/react-native-image-resizer';
@@ -683,7 +683,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		const folderId = note.parent_id;
 
-		await Note.delete(note.id, { toTrash: true });
+		await Note.delete(note.id, { toTrash: true, sourceDescription: 'Delete note button' });
 
 		this.props.dispatch({
 			type: 'NAV_GO',

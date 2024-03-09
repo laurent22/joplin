@@ -4,7 +4,7 @@ import { _ } from '@joplin/lib/locale';
 const { View, Text, ScrollView } = require('react-native');
 
 const { connect } = require('react-redux');
-const { themeStyle } = require('../global-style.js');
+import { themeStyle } from '../global-style';
 import ScreenHeader from '../ScreenHeader';
 
 function UpgradeSyncTargetScreen(props: any) {

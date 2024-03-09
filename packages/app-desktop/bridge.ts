@@ -288,9 +288,7 @@ export class Bridge {
 	}
 
 	/* returns the index of the clicked button */
-	public showMessageBox(message: string, options: MessageDialogOptions = null) {
-		if (options === null) options = { message: '' };
-
+	public showMessageBox(message: string, options: MessageDialogOptions = {}) {
 		const result = this.showMessageBox_(this.window(), { type: 'question',
 			message: message,
 			buttons: [_('OK'), _('Cancel')], ...options });

@@ -32,7 +32,7 @@ export default async function(request: Request, id: string = null, link: string 
 	}
 
 	if (request.method === RequestMethod.DELETE) {
-		await Folder.delete(id, { toTrash: request.query.permanent !== '1' });
+		await Folder.delete(id, { toTrash: request.query.permanent !== '1', sourceDescription: 'api/folders DELETE' });
 		return;
 	}
 

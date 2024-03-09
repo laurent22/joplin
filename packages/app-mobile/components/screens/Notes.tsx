@@ -7,7 +7,7 @@ import Folder from '@joplin/lib/models/Folder';
 import Tag from '@joplin/lib/models/Tag';
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
-const { themeStyle } = require('../global-style.js');
+import { themeStyle } from '../global-style';
 import { ScreenHeader, MenuOptionType } from '../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
 import ActionButton from '../ActionButton';

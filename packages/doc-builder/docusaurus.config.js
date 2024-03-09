@@ -164,6 +164,7 @@ const config = {
 					},
 				},
 				blog: {
+					blogTitle: 'News',
 					showReadingTime: true,
 					blogSidebarCount: 'ALL',
 					path: 'news',
