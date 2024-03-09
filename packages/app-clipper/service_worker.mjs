@@ -22,10 +22,6 @@ async function browserCaptureVisibleTabs(windowId) {
 	return browser_.tabs.captureVisibleTab(windowId, options);
 }
 
-async function browserGetZoom(tabId) {
-	return browser_.tabs.getZoom(tabId);
-}
-
 browser_.runtime.onInstalled.addListener(() => {
 	if (joplinEnv() === 'dev') {
 		browser_.action.setIcon({
@@ -34,26 +30,8 @@ browser_.runtime.onInstalled.addListener(() => {
 	}
 });
 
-async function getImageSize(dataUrl) {
-	return new Promise((resolve, reject) => {
-		const image = new Image();
-
-		image.onload = function() {
-			resolve({ width: image.width, height: image.height });
-		};
-
-		image.onerror = function(event) {
-			reject(event);
-		};
-
-		image.src = dataUrl;
-	});
-}
-
 browser_.runtime.onMessage.addListener(async (command) => {
 	if (command.name === 'screenshotArea') {
-		const browserZoom = await browserGetZoom();
-
 		// The dimensions of the image returned by Firefox are the regular ones,
 		// while the one returned by Chrome depend on the screen pixel ratio. So
 		// it would return a 600*400 image if the window dimensions are 300x200
@@ -66,15 +44,18 @@ browser_.runtime.onMessage.addListener(async (command) => {
 		//
 		// The crop rectangle is always in real pixels, so we need to multiply
 		// it by the ratio we've calculated.
+		//
+		// 8/3/2024: With manifest v3, we don't have access to DOM APIs in Chrome.
+		// As a result, we can't easily calculate the size of the captured image.
+		// We instead base the crop region exclusively on window.devicePixelRatio,
+		// which seems to work in modern Firefox and Chrome.
 		const imageDataUrl = await browserCaptureVisibleTabs(null);
-		const imageSize = await getImageSize(imageDataUrl);
-		const imagePixelRatio = imageSize.width / command.content.windowInnerWidth;
 
 		const content = { ...command.content };
 		content.image_data_url = imageDataUrl;
 		if ('url' in content) content.source_url = content.url;
 
-		const ratio = browserZoom * imagePixelRatio;
+		const ratio = content.devicePixelRatio;
 		const newArea = { ...command.content.crop_rect };
 		newArea.x *= ratio;
 		newArea.y *= ratio;

@@ -461,6 +461,7 @@
 						tags: command.tags,
 						windowInnerWidth: window.innerWidth,
 						windowInnerHeight: window.innerHeight,
+						devicePixelRatio: window.devicePixelRatio,
 					};
 
 					browser_.runtime.sendMessage({

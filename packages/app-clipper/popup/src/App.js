@@ -115,6 +115,13 @@ class AppComponent extends Component {
 
 		this.clipScreenshot_click = async () => {
 			try {
+				// Firefox requires the <all_urls> host permission to take a
+				// screenshot of the current page, however, this may change
+				// in the future. Note that Firefox also forces this permission
+				// to be optional.
+				// See https://discourse.mozilla.org/t/browser-tabs-capturevisibletab-not-working-in-firefox-for-mv3/122965/3
+				await bridge().browser().permissions.request({ origins: ['<all_urls>'] });
+
 				const baseUrl = await bridge().clipperServerBaseUrl();
 
 				await bridge().sendCommandToActiveTab({
