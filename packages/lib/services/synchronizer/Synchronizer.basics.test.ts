@@ -1,11 +1,13 @@
 import Setting from '../../models/Setting';
 import { allNotesFolders, remoteNotesAndFolders, localNotesFoldersSameAsRemote } from '../../testing/test-utils-synchronizer';
-import { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi } from '../../testing/test-utils';
+import { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi, expectThrow } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
 import WelcomeUtils from '../../WelcomeUtils';
 import { NoteEntity } from '../database/types';
+import { fetchSyncInfo, setAppMinVersion, uploadSyncInfo } from './syncInfoUtils';
+import { ErrorCode } from '../../errors';
 
 describe('Synchronizer.basics', () => {
 
@@ -457,6 +459,42 @@ describe('Synchronizer.basics', () => {
 		// Check that the client didn't delete the note
 		const remotes = (await fileApi().list()).items;
 		expect(remotes.find(r => r.path === `${note.id}.md`)).toBeTruthy();
+	}));
+
+	it('should throw an error if the app version is not compatible with the sync target info', (async () => {
+		await synchronizerStart();
+
+		const remoteInfo = await fetchSyncInfo(synchronizer().api());
+
+		remoteInfo.appMinVersion = '100.0.0';
+		await uploadSyncInfo(synchronizer().api(), remoteInfo);
+
+		await expectThrow(async () => synchronizerStart(1, {
+			throwOnError: true,
+		}), ErrorCode.MustUpgradeApp);
+	}));
+
+	it('should update the remote appMinVersion when synchronising', (async () => {
+		await synchronizerStart();
+
+		const remoteInfoBefore = await fetchSyncInfo(synchronizer().api());
+
+		// Simulates upgrading the client
+		setAppMinVersion('100.0.0');
+		await synchronizerStart();
+
+		// Then after sync, appMinVersion should be the same as that client version
+		const remoteInfoAfter = await fetchSyncInfo(synchronizer().api());
+
+		expect(remoteInfoBefore.appMinVersion).toBe('0.0.0');
+		expect(remoteInfoAfter.appMinVersion).toBe('100.0.0');
+
+		// Now simulates synchronising with an older client version. In that case, it should not be
+		// allowed and the remote info.json should not change.
+		setAppMinVersion('80.0.0');
+		await expectThrow(async () => synchronizerStart(1, { throwOnError: true }), ErrorCode.MustUpgradeApp);
+
+		expect((await fetchSyncInfo(synchronizer().api())).appMinVersion).toBe('100.0.0');
 	}));
 
 });

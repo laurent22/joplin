@@ -4,6 +4,7 @@ import BaseService from './BaseService';
 import ResourceService from './ResourceService';
 import Logger from '@joplin/utils/Logger';
 import shim from '../shim';
+import notifyDisabledSyncItems from './synchronizer/utils/checkDisabledSyncItemsNotification';
 const { Dirnames } = require('./synchronizer/utils/types');
 const EventEmitter = require('events');
 
@@ -243,9 +244,7 @@ export default class ResourceFetcher extends BaseService {
 
 			this.logger().info(`ResourceFetcher: Auto-added resources: ${count}`);
 
-			const errorCount = await Resource.downloadStatusCounts(Resource.FETCH_STATUS_ERROR);
-			if (errorCount) this.dispatch({ type: 'SYNC_HAS_DISABLED_SYNC_ITEMS' });
-
+			await notifyDisabledSyncItems((action: any) => this.dispatch(action));
 		} finally {
 			this.addingResources_ = false;
 			this.autoAddResourcesCalls_.pop();

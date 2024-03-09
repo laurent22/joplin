@@ -8,10 +8,10 @@ async function main() {
 	await gitPullTry();
 
 	chdir(rootDir);
-	await execCommand('yarn run tsc');
+	await execCommand('yarn tsc');
 
 	chdir(workDir);
-	await execCommand('yarn run dist');
+	await execCommand('yarn dist');
 
 	const newVersion = (await execCommand('npm version patch')).trim();
 

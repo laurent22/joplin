@@ -32,12 +32,12 @@ For example,
 
 ## Patching the plugin
 
-Some plugins need patching. To create or update a plugin's patch, run the `patch` command in the `packages/default-plugins/` directory.
+Some plugins need patching. To create or update a plugin's patch, run the `patch-plugin` command in the `packages/default-plugins/` directory.
 
 For example,
 ```shell
 $ cd packages/default-plugins
-$ yarn run patch plugin.id.here
+$ yarn patch-plugin plugin.id.here
 ```
 
 The script will create a temporary directory in which changes can be made. Do not stage the changes that should appear in the patch.
@@ -54,5 +54,5 @@ These are run by the `app-desktop` package on a full `build` (e.g. on `postinsta
 - All the functions related to default plugins are located in [defaultPluginsUtils.ts](https://github.com/laurent22/joplin/blob/eb7083d7888433ff6ef76ccfb7fb87ba951d513f/packages/lib/services/plugins/defaultPlugins/defaultPluginsUtils.ts)
 - Default plugins are bundled with the app (included in the `build/` directory) and loaded from this directory.
 - To allow loading `dev` and NPM versions of the plugin, default plugins are loaded after non-default plugins. The plugin service refuses to load additional copies of already-loaded plugins. As such, non-default plugins take precedence over default plugins.
-- After loading is complete, we apply the default settings for each default plugin. Default settings are located in [desktopDefaultPluginsInfo.ts](https://github.com/laurent22/joplin/blob/eb7083d7888433ff6ef76ccfb7fb87ba951d513f/packages/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo.ts). The `installedDefaultPlugins` setting is used to ensure that settnigs are only overridden once.
+- After loading is complete, we apply the default settings for each default plugin. Default settings are located in [desktopDefaultPluginsInfo.ts](https://github.com/laurent22/joplin/blob/eb7083d7888433ff6ef76ccfb7fb87ba951d513f/packages/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo.ts). The `installedDefaultPlugins` setting is used to ensure that settings are only overridden once.
 - If the plugin is already installed by the user, then we don't apply default settings to avoid overriding user's settings.

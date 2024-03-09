@@ -1,6 +1,6 @@
 import { RuleOptions } from '../../MdToHtml';
 import { attributesHtml } from '../../htmlUtils';
-import utils from '../../utils';
+import * as utils from '../../utils';
 
 function renderImageHtml(before: string, src: string, after: string, ruleOptions: RuleOptions) {
 	const r = utils.imageReplacement(ruleOptions.ResourceModel, src, ruleOptions.resources, ruleOptions.resourceBaseUrl, ruleOptions.itemIdToUrl);

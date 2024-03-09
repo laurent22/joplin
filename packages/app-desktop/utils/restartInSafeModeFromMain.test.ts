@@ -15,6 +15,7 @@ jest.doMock('../bridge', () => ({
 			'--profile', currentProfileDirectory,
 		],
 		env: () => 'dev',
+		appName: () => 'joplin-desktop',
 	}),
 }));
 

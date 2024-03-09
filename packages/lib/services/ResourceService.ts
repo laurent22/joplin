@@ -9,6 +9,7 @@ import Resource from '../models/Resource';
 import SearchEngine from './search/SearchEngine';
 import ItemChangeUtils from './ItemChangeUtils';
 import time from '../time';
+import eventManager, { EventName } from '../eventManager';
 const { sprintf } = require('sprintf-js');
 
 export default class ResourceService extends BaseService {
@@ -107,6 +108,8 @@ export default class ResourceService extends BaseService {
 
 		this.isIndexing_ = false;
 
+		eventManager.emit(EventName.NoteResourceIndexed);
+
 		this.logger().info('ResourceService::indexNoteResources: Completed');
 	}
 
@@ -129,7 +132,7 @@ export default class ResourceService extends BaseService {
 					await this.setAssociatedResources(note.id, note.body);
 				}
 			} else {
-				await Resource.delete(resourceId);
+				await Resource.delete(resourceId, { sourceDescription: 'deleteOrphanResources' });
 			}
 		}
 	}

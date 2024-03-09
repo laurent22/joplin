@@ -102,7 +102,7 @@ export const createJsDrawEditor = (
 
 	saveButton = toolbar.addSaveButton(saveNow);
 
-	// Load and save toolbar-realated state (e.g. pen sizes/colors).
+	// Load and save toolbar-related state (e.g. pen sizes/colors).
 	restoreToolbarState(toolbar, initialToolbarState);
 	listenToolbarState(editor, toolbar);
 

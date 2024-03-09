@@ -341,7 +341,7 @@
 	"Browse...": [
 		"Αναζήτηση..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -469,6 +469,9 @@
 	],
 	"Close dropdown": [
 		"Κλείσιμο πτυσσόμενου μενού"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Κλείσιμο παραθύρου"
@@ -621,7 +624,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Δεν ήταν δυνατή η επαλήθευση της κατάστασης κοινής χρήσης αυτού του φορητού υπολογιστή - διακοπή. Προσπαθήστε ξανά όταν συνδεθείτε στο διαδίκτυο."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"Δεν ήταν δυνατή η επαλήθευση της ταυτότητάς σας: %s"
 	],
 	"Create": [
@@ -1435,6 +1438,9 @@
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Για να το κάνετε αυτό, ολόκληρο το σύνολο δεδομένων σας θα πρέπει να κρυπτογραφηθεί και να συγχρονιστεί, επομένως είναι καλύτερο να το εκτελέσετε κατά τη διάρκεια της νύχτας.\n\nΓια να ξεκινήσετε, ακολουθήστε τις παρακάτω οδηγίες:\n\n1. Συγχρονίστε όλες τις συσκευές σας.\n2. Κάντε κλικ στο κουμπί \"%s\".\n3. Αφήστε το να τρέξει μέχρι να ολοκληρωθεί. Κατά την εκτέλεσή του, αποφύγετε να αλλάξετε οποιαδήποτε σημείωση στις άλλες συσκευές σας, για να αποφύγετε διενέξεις.\n4. Μόλις ολοκληρωθεί ο συγχρονισμός σε αυτήν τη συσκευή, συγχρονίστε όλες τις άλλες συσκευές σας και αφήστε τον συγχρονισμό να ολοκληρωθεί.\n\nΣημαντικό: χρειάζεται να τρέξει ΜΟΝΟ μία φορά σε μια συσκευή."
 	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
+	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Για να χρησιμοποιήσετε το συγχρονισμό του συστήματος αρχείων απαιτείται η άδειά σας για εγγραφή στον εξωτερικό χώρο αποθήκευσης."
 	],
@@ -1742,6 +1748,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"Πολυμέσα, μαθηματικές παραστάσεις, διαγράμματα, πίνακας περιεχομένων"
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"Απουσία κλειδιών"
 	],
@@ -1868,7 +1877,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Δεν έγινε επαλήθευση με το %s. Παρακαλώ καταχωρίστε τα διαπιστευτήρια που λείπουν."
 	],
 	"Not downloaded": [
@@ -2540,6 +2549,12 @@
 	"Solarised Light": [
 		"Solarised Light"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Δεν είναι δυνατή η αποκρυπτογράφηση ορισμένων στοιχείων."
 	],
@@ -2843,6 +2858,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Ο παραλήπτης δεν μπόρεσε να διαγραφεί από τη λίστα. Προσπαθήστε ξανά.\n\nΤο σφάλμα ήταν: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Ο στόχος συγχρονισμού πρέπει να αναβαθμιστεί πριν από το συγχρονισμό του Joplin. Η λειτουργία μπορεί να διαρκέσει λίγα λεπτά για να ολοκληρωθεί και η εφαρμογή πρέπει να επανεκκινηθεί. Για να προχωρήσετε κάντε κλικ στο σύνδεσμο."
 	],
@@ -3091,6 +3109,9 @@
 	],
 	"Undo": [
 		"Αναίρεση"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Άγνωστο flag: %s"

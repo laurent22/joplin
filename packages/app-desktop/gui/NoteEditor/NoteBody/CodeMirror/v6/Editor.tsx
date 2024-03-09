@@ -1,14 +1,16 @@
 import * as React from 'react';
 import { ForwardedRef } from 'react';
 import { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
-import { EditorProps, LogMessageCallback, OnEventCallback, PluginData } from '@joplin/editor/types';
+import { EditorProps, LogMessageCallback, OnEventCallback, ContentScriptData } from '@joplin/editor/types';
 import createEditor from '@joplin/editor/CodeMirror/createEditor';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
 import shim from '@joplin/lib/shim';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
-import setupVim from '../utils/setupVim';
+import setupVim from '@joplin/editor/CodeMirror/util/setupVim';
+import { dirname } from 'path';
+import useEditorSearch from '../utils/useEditorSearchExtension';
 
 interface Props extends EditorProps {
 	style: React.CSSProperties;
@@ -30,6 +32,8 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 		onEventRef.current = props.onEvent;
 		onLogMessageRef.current = props.onLogMessage;
 	}, [props.onEvent, props.onLogMessage]);
+
+	useEditorSearch(editor);
 
 	useEffect(() => {
 		if (!editor) {
@@ -56,16 +60,21 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 			return;
 		}
 
-		const plugins: PluginData[] = [];
+		const contentScripts: ContentScriptData[] = [];
 		for (const pluginId in props.pluginStates) {
 			const pluginState = props.pluginStates[pluginId];
 			const codeMirrorContentScripts = pluginState.contentScripts[ContentScriptType.CodeMirrorPlugin] ?? [];
 
 			for (const contentScript of codeMirrorContentScripts) {
-				plugins.push({
+				contentScripts.push({
 					pluginId,
 					contentScriptId: contentScript.id,
 					contentScriptJs: () => shim.fsDriver().readFile(contentScript.path),
+					loadCssAsset: (name: string) => {
+						const assetPath = dirname(contentScript.path);
+						const path = shim.fsDriver().resolveRelativePathWithinDir(assetPath, name);
+						return shim.fsDriver().readFile(path, 'utf8');
+					},
 					postMessageHandler: (message: any) => {
 						const plugin = PluginService.instance().pluginById(pluginId);
 						return plugin.emitContentScriptMessage(contentScript.id, message);
@@ -74,7 +83,7 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 			}
 		}
 
-		void editor.setPlugins(plugins);
+		void editor.setContentScripts(contentScripts);
 	}, [editor, props.pluginStates]);
 
 	useEffect(() => {
@@ -97,6 +106,26 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 		};
 	// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Should run just once
 	}, []);
+
+	const theme = props.settings.themeData;
+	useEffect(() => {
+		if (!editor) return () => {};
+
+		const styles = editor.addStyles({
+			'& .cm-search-marker *, & .cm-search-marker': {
+				color: theme.searchMarkerColor,
+				backgroundColor: theme.searchMarkerBackgroundColor,
+			},
+			'& .cm-search-marker-selected *, & .cm-search-marker-selected': {
+				background: `${theme.selectedColor2} !important`,
+				color: `${theme.color2} !important`,
+			},
+		});
+
+		return () => {
+			styles.remove();
+		};
+	}, [editor, theme]);
 
 	useEffect(() => {
 		editor?.updateSettings(props.settings);

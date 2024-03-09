@@ -1,8 +1,9 @@
 import BaseCommand from './base-command';
-const { app } = require('./app.js');
+import app from './app';
 import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 import BaseModel from '@joplin/lib/BaseModel';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 
 class Command extends BaseCommand {
 	public override usage() {
@@ -21,13 +22,18 @@ class Command extends BaseCommand {
 		const pattern = args['note-pattern'];
 		const force = args.options && args.options.force === true;
 
-		const notes = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
+		const notes: NoteEntity[] = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
 		if (!notes.length) throw new Error(_('Cannot find "%s".', pattern));
 
-		const ok = force ? true : await this.prompt(notes.length > 1 ? _('%d notes match this pattern. Delete them?', notes.length) : _('Delete note?'), { booleanAnswerDefault: 'n' });
+		let ok = true;
+		if (!force && notes.length > 1) {
+			ok = await this.prompt(_('%d notes match this pattern. Delete them?', notes.length), { booleanAnswerDefault: 'n' });
+		}
+
 		if (!ok) return;
-		const ids = notes.map((n: any) => n.id);
-		await Note.batchDelete(ids);
+
+		const ids = notes.map(n => n.id);
+		await Note.batchDelete(ids, { toTrash: true, sourceDescription: 'rmnote command' });
 	}
 }
 

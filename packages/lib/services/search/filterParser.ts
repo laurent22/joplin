@@ -99,7 +99,7 @@ const parseQuery = (query: string): Term[] => {
 			}
 		} else {
 			// Every word is quoted if not already.
-			// By quoting the word, FTS match query will take care of removing dashes and other word seperators.
+			// By quoting the word, FTS match query will take care of removing dashes and other word separators.
 			if (value.startsWith('-')) {
 				result.push({
 					name: 'text',

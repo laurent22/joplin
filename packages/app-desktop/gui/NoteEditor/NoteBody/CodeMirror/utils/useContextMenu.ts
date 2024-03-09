@@ -117,7 +117,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 
 			// CodeMirror 5 only:
 			// Typically CodeMirror handles all interactions itself (highlighting etc.)
-			// But in the case of clicking a mispelled word, we need electron to handle the click
+			// But in the case of clicking a misspelled word, we need electron to handle the click
 			// The result is that CodeMirror doesn't know what's been selected and doesn't
 			// move the cursor into the correct location.
 			// and when the user selects a new spelling it will be inserted in the wrong location

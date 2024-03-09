@@ -1,5 +1,5 @@
 import { Size } from './types';
-type ListRendererDatabaseDependency = 'folder.created_time' | 'folder.encryption_applied' | 'folder.encryption_cipher_text' | 'folder.icon' | 'folder.id' | 'folder.is_shared' | 'folder.master_key_id' | 'folder.parent_id' | 'folder.share_id' | 'folder.title' | 'folder.updated_time' | 'folder.user_created_time' | 'folder.user_data' | 'folder.user_updated_time' | 'folder.type_' | 'note.altitude' | 'note.application_data' | 'note.author' | 'note.body' | 'note.conflict_original_id' | 'note.created_time' | 'note.encryption_applied' | 'note.encryption_cipher_text' | 'note.id' | 'note.is_conflict' | 'note.is_shared' | 'note.is_todo' | 'note.latitude' | 'note.longitude' | 'note.markup_language' | 'note.master_key_id' | 'note.order' | 'note.parent_id' | 'note.share_id' | 'note.source' | 'note.source_application' | 'note.source_url' | 'note.title' | 'note.todo_completed' | 'note.todo_due' | 'note.updated_time' | 'note.user_created_time' | 'note.user_data' | 'note.user_updated_time' | 'note.type_';
+type ListRendererDatabaseDependency = 'folder.created_time' | 'folder.deleted_time' | 'folder.encryption_applied' | 'folder.encryption_cipher_text' | 'folder.icon' | 'folder.id' | 'folder.is_shared' | 'folder.master_key_id' | 'folder.parent_id' | 'folder.share_id' | 'folder.title' | 'folder.updated_time' | 'folder.user_created_time' | 'folder.user_data' | 'folder.user_updated_time' | 'folder.type_' | 'note.altitude' | 'note.application_data' | 'note.author' | 'note.body' | 'note.conflict_original_id' | 'note.created_time' | 'note.deleted_time' | 'note.encryption_applied' | 'note.encryption_cipher_text' | 'note.id' | 'note.is_conflict' | 'note.is_shared' | 'note.is_todo' | 'note.latitude' | 'note.longitude' | 'note.markup_language' | 'note.master_key_id' | 'note.order' | 'note.parent_id' | 'note.share_id' | 'note.source' | 'note.source_application' | 'note.source_url' | 'note.title' | 'note.todo_completed' | 'note.todo_due' | 'note.updated_time' | 'note.user_created_time' | 'note.user_data' | 'note.user_updated_time' | 'note.type_';
 export declare enum ItemFlow {
     TopToBottom = "topToBottom",
     LeftToRight = "leftToRight"
@@ -32,7 +32,7 @@ export type OnChangeHandler = (event: OnChangeEvent) => Promise<void>;
  * `note.isWatched` tells you if the note is currently opened in an external
  * editor. In which case you would generally display some indicator.
  */
-export type ListRendererDepependency = ListRendererDatabaseDependency | 'item.size.width' | 'item.size.height' | 'item.selected' | 'note.titleHtml' | 'note.isWatched' | 'note.tags';
+export type ListRendererDependency = ListRendererDatabaseDependency | 'item.index' | 'item.size.width' | 'item.size.height' | 'item.selected' | 'note.titleHtml' | 'note.isWatched' | 'note.tags';
 export interface ListRenderer {
     /**
      * It must be unique to your plugin.
@@ -47,7 +47,7 @@ export interface ListRenderer {
     /**
      * The size of each item must be specified in advance for performance
      * reasons, and cannot be changed afterwards. If the item flow is top to
-     * bottom, you only need to specificy the item height (the width will be
+     * bottom, you only need to specify the item height (the width will be
      * ignored).
      */
     itemSize: Size;
@@ -74,7 +74,7 @@ export interface ListRenderer {
      * that you do not add more than what you need since there is a performance
      * penalty for each property.
      */
-    dependencies: ListRendererDepependency[];
+    dependencies: ListRendererDependency[];
     /**
      * This is the HTML template that will be used to render the note list item.
      * This is a [Mustache template](https://github.com/janl/mustache.js) and it
@@ -128,7 +128,7 @@ export interface ListRenderer {
      */
     onRenderNote: OnRenderNoteHandler;
     /**
-     * This handler allows adding some interacivity to the note renderer -
+     * This handler allows adding some interactivity to the note renderer -
      * whenever an input element within the item is changed (for example, when a
      * checkbox is clicked, or a text input is changed), this `onChange` handler
      * is going to be called.

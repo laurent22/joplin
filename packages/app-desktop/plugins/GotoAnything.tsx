@@ -340,6 +340,8 @@ class Dialog extends React.PureComponent<Props, State> {
 			} else { // Note TITLE or BODY
 				listType = BaseModel.TYPE_NOTE;
 				searchQuery = gotoAnythingStyleQuery(this.state.query);
+				// SearchEngine returns the title normalized, that is why we need to
+				// override this field below with the original title
 				results = (await SearchEngine.instance().search(searchQuery)) as any[];
 
 				resultsInBody = !!results.find((row: any) => row.fields.includes('body'));
@@ -348,21 +350,32 @@ class Dialog extends React.PureComponent<Props, State> {
 				const resources = await Resource.resourceOcrTextsByIds(resourceIds);
 
 				if (!resultsInBody || this.state.query.length <= 1) {
+					const notes = await Note.byIds(results.map((result: any) => result.id), { fields: ['id', 'title'] });
 					for (let i = 0; i < results.length; i++) {
 						const row = results[i];
 						const path = Folder.folderPathString(this.props.folders, row.parent_id);
-						results[i] = { ...row, path: path };
+						const originalNote = notes.find(note => note.id === row.id);
+						results[i] = { ...row, path: path, title: originalNote.title };
 					}
 				} else {
 					const limit = 20;
 					const searchKeywords = await this.keywords(searchQuery);
-					const notes = await Note.byIds(results.map((result: any) => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed'] });
+
+					// Note: any filtering must be done **before** fetching the notes, because we're
+					// going to apply a limit to the number of fetched notes.
+					// https://github.com/laurent22/joplin/issues/9944
+					if (!this.props.showCompletedTodos) {
+						results = results.filter((row: any) => !row.is_todo || !row.todo_completed);
+					}
+
+					const notes = await Note.byIds(results.map((result: any) => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed', 'title'] });
 					// Can't make any sense of this code so...
-					const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id] as any] = { id, body, markup_language }), obj), {});
+					const notesById = notes.reduce((obj, { id, body, markup_language, title }) => ((obj[[id] as any] = { id, body, markup_language, title }), obj), {});
 
 					// Filter out search results that are associated with non-existing notes.
 					// https://github.com/laurent22/joplin/issues/5417
-					results = results.filter(r => !!notesById[r.id]);
+					results = results.filter(r => !!notesById[r.id])
+						.map(r => ({ ...r, title: notesById[r.id].title }));
 
 					for (let i = 0; i < results.length; i++) {
 						const row = results[i];
@@ -407,20 +420,18 @@ class Dialog extends React.PureComponent<Props, State> {
 							results[i] = { ...row, path: path, fragments: '' };
 						}
 					}
-
-					if (!this.props.showCompletedTodos) {
-						results = results.filter((row: any) => !row.is_todo || !row.todo_completed);
-					}
 				}
 			}
 
 			// make list scroll to top in every search
 			this.makeItemIndexVisible(0);
 
+			const keywordsWithoutEmptyString = keywords?.filter(v => !!v);
+
 			this.setState({
 				listType: listType,
 				results: results,
-				keywords: keywords ? keywords : await this.keywords(searchQuery),
+				keywords: keywordsWithoutEmptyString ? keywordsWithoutEmptyString : await this.keywords(searchQuery),
 				selectedItemId: results.length === 0 ? null : getResultId(results[0]),
 				resultsInBody: resultsInBody,
 				commandArgs: commandArgs,
