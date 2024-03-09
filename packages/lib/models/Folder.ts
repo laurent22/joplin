@@ -2,7 +2,7 @@ import { defaultFolderIcon, FolderEntity, FolderIcon, NoteEntity, ResourceEntity
 import BaseModel, { DeleteOptions } from '../BaseModel';
 import { FolderLoadOptions } from './utils/types';
 import time from '../time';
-import { _ } from '../locale';
+import { _, currentLocale } from '../locale';
 import Note from './Note';
 import Database from '../database';
 import BaseItem from './BaseItem';
@@ -13,7 +13,6 @@ import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import ResourceService from '../services/ResourceService';
 import { LoadOptions } from './utils/types';
 import { getTrashFolder, getTrashFolderId } from '../services/trash';
-import Setting from './Setting';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 const logger = Logger.create('models/Folder');
@@ -301,7 +300,7 @@ export default class Folder extends BaseItem {
 	}
 
 	public static getNaturalSortingCollator() {
-		const collatorLocale = Setting.value('locale').slice(0, 2);
+		const collatorLocale = currentLocale().slice(0, 2);
 		return new Intl.Collator(collatorLocale, { numeric: true, sensitivity: 'base' });
 	}
 

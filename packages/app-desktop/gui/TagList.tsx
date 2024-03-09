@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useMemo } from 'react';
 import { AppState } from '../app.reducer';
 import TagItem from './TagItem';
-import Setting from '@joplin/lib/models/Setting';
+import { currentLocale } from '@joplin/lib/locale';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
@@ -14,7 +14,7 @@ interface Props {
 }
 
 function TagList(props: Props) {
-	const collatorLocale = Setting.value('locale').slice(0, 2);
+	const collatorLocale = currentLocale().slice(0, 2);
 	const style = useMemo(() => {
 		const theme = themeStyle(props.themeId);
 

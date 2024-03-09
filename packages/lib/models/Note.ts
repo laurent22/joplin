@@ -17,6 +17,7 @@ const { _ } = require('../locale');
 import { pull, removeElement, unique } from '../ArrayUtils';
 import { LoadOptions, SaveOptions } from './utils/types';
 import { getDisplayParentId, getTrashFolderId } from '../services/trash';
+import { currentLocale } from '../locale';
 const urlUtils = require('../urlUtils.js');
 const { isImageMimeType } = require('../resourceUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
@@ -1119,7 +1120,7 @@ export default class Note extends BaseItem {
 	}
 
 	public static getNaturalSortingCollator() {
-		const collatorLocale = Setting.value('locale').slice(0, 2);
+		const collatorLocale = currentLocale().slice(0, 2);
 		return new Intl.Collator(collatorLocale, { numeric: true, sensitivity: 'base' });
 	}
 
