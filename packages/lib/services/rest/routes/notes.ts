@@ -28,6 +28,7 @@ const { MarkupToHtml } = require('@joplin/renderer');
 const { ErrorNotFound } = require('../utils/errors');
 import { fileUriToPath } from '@joplin/utils/url';
 import { NoteEntity } from '../../database/types';
+import { DownloadController } from '../../../downloadController';
 
 const logger = Logger.create('routes/notes');
 
@@ -66,6 +67,7 @@ type RequestNote = {
 type FetchOptions = {
 	timeout?: number;
 	maxRedirects?: number;
+	downloadController?: DownloadController;
 };
 
 async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> {
@@ -263,26 +265,31 @@ export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions
 }
 
 async function downloadMediaFiles(urls: string[], fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
-	const PromisePool = require('es6-promise-pool');
-
 	const output: any = {};
 
+	const downloadController = fetchOptions?.downloadController ?? null;
+
 	const downloadOne = async (url: string) => {
+		if (downloadController) downloadController.imagesCount += 1;
 		const mediaPath = await downloadMediaFile(url, fetchOptions, allowedProtocols);
 		if (mediaPath) output[url] = { path: mediaPath, originalUrl: url };
 	};
 
-	let urlIndex = 0;
-	const promiseProducer = () => {
-		if (urlIndex >= urls.length) return null;
+	const maximumImageDownloadsAllowed = downloadController ? downloadController.maxImagesCount : Number.POSITIVE_INFINITY;
+	const urlsAllowedByController = urls.slice(0, maximumImageDownloadsAllowed);
+	logger.info(`Media files allowed to be downloaded: ${maximumImageDownloadsAllowed}`);
 
-		const url = urls[urlIndex++];
-		return downloadOne(url);
-	};
+	const promises = [];
+	for (const url of urlsAllowedByController) {
+		promises.push(downloadOne(url));
+	}
 
-	const concurrency = 10;
-	const pool = new PromisePool(promiseProducer, concurrency);
-	await pool.start();
+	await Promise.all(promises);
+
+	if (downloadController) {
+		downloadController.imageCountExpected = urls.length;
+		downloadController.printStats(urls.length);
+	}
 
 	return output;
 }
@@ -459,7 +466,13 @@ export default async function(request: Request, id: string = null, link: string 
 		logger.info('Images:', imageSizes);
 
 		const allowedProtocolsForDownloadMediaFiles = ['http:', 'https:', 'file:', 'data:'];
-		const extracted = await extractNoteFromHTML(requestNote, requestId, imageSizes, undefined, allowedProtocolsForDownloadMediaFiles);
+		const extracted = await extractNoteFromHTML(
+			requestNote,
+			requestId,
+			imageSizes,
+			undefined,
+			allowedProtocolsForDownloadMediaFiles,
+		);
 
 		let note = await Note.save(extracted.note, extracted.saveOptions);
 
