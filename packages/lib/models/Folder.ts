@@ -301,7 +301,7 @@ export default class Folder extends BaseItem {
 
 	public static getNaturalSortingCollator() {
 		const collatorLocale = currentLocale().slice(0, 2);
-		return new Intl.Collator(collatorLocale, { numeric: true, sensitivity: 'base' });
+		return new Intl.Collator(collatorLocale, { numeric: true, sensitivity: 'accent' });
 	}
 
 	public static async all(options: FolderLoadOptions = null) {
@@ -777,9 +777,10 @@ export default class Folder extends BaseItem {
 		const output = folders ? folders : await this.allAsTree();
 
 		const sortFoldersAlphabetically = (folders: FolderEntityWithChildren[]) => {
+			const collator = this.getNaturalSortingCollator();
 			folders.sort((a: FolderEntityWithChildren, b: FolderEntityWithChildren) => {
 				if (a.parent_id === b.parent_id) {
-					return a.title.localeCompare(b.title, undefined, { sensitivity: 'accent' });
+					return collator.compare(a.title, b.title);
 				}
 				return 0;
 			});
