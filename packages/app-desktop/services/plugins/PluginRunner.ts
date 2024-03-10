@@ -7,6 +7,7 @@ import Setting from '@joplin/lib/models/Setting';
 import { EventHandlers } from '@joplin/lib/services/plugins/utils/mapEventHandlersToIds';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
+import getPathToExecutable7Zip from '../../utils/7zip/getPathToExecutable7Zip';
 // import BackOffHandler from './BackOffHandler';
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -120,11 +121,15 @@ export default class PluginRunner extends BasePluginRunner {
 
 		bridge().electronApp().registerPluginWindow(plugin.id, pluginWindow);
 
+		const libraryData = {
+			pathTo7za: await getPathToExecutable7Zip(),
+		};
+
 		void pluginWindow.loadURL(`${require('url').format({
 			pathname: require('path').join(__dirname, 'plugin_index.html'),
 			protocol: 'file:',
 			slashes: true,
-		})}?pluginId=${encodeURIComponent(plugin.id)}&pluginScript=${encodeURIComponent(`file://${scriptPath}`)}`);
+		})}?pluginId=${encodeURIComponent(plugin.id)}&pluginScript=${encodeURIComponent(`file://${scriptPath}`)}&libraryData=${encodeURIComponent(JSON.stringify(libraryData))}`);
 
 		if (plugin.devMode) {
 			pluginWindow.webContents.once('dom-ready', () => {

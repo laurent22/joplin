@@ -15,6 +15,9 @@ export enum EditorCommandType {
 	ToggleItalicized = 'textItalic',
 	ToggleCode = 'textCode',
 	ToggleMath = 'textMath',
+	ToggleComment = 'toggleComment',
+	DuplicateLine = 'duplicateLine',
+	SortSelectedLines = 'sortSelectedLines',
 
 	ToggleNumberedList = 'textNumberedList',
 	ToggleBulletedList = 'textBulletedList',
@@ -37,6 +40,7 @@ export enum EditorCommandType {
 
 	// Editing and navigation commands
 	ScrollSelectionIntoView = 'scrollSelectionIntoView',
+	DeleteLine = 'deleteLine',
 	DeleteToLineEnd = 'killLine',
 	DeleteToLineStart = 'delLineLeft',
 	IndentMore = 'indentMore',
@@ -64,10 +68,11 @@ export enum EditorCommandType {
 
 // Because the editor package can run in a WebView, plugin content scripts
 // need to be provided as text, rather than as file paths.
-export interface PluginData {
+export interface ContentScriptData {
 	pluginId: string;
 	contentScriptId: string;
 	contentScriptJs: ()=> Promise<string>;
+	loadCssAsset: (name: string)=> Promise<string>;
 	postMessageHandler: (message: any)=> any;
 }
 
@@ -94,12 +99,12 @@ export interface EditorControl {
 
 	setSearchState(state: SearchState): void;
 
-	setPlugins(plugins: PluginData[]): Promise<void>;
+	setContentScripts(plugins: ContentScriptData[]): Promise<void>;
 }
 
 export enum EditorLanguageType {
-	Markdown,
-	Html,
+	Markdown = 'markdown',
+	Html = 'html',
 }
 
 export enum EditorKeymap {

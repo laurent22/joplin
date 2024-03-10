@@ -21,7 +21,7 @@
 }
 
 .note-list-item {
-	display: flex;
+ 	display: flex;
 }
 
 .note-list-item-wrapper {
@@ -35,6 +35,10 @@
 		z-index: 1000;
 		width: 2px;
 		height: 2px;
+	}
+
+	&:focus-visible {
+		outline: none;
 	}
 }
 

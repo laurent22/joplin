@@ -1,9 +1,10 @@
 import BaseCommand from './base-command';
-const { app } = require('./app.js');
+import app from './app';
 import { _ } from '@joplin/lib/locale';
 import BaseModel from '@joplin/lib/BaseModel';
 import Note from '@joplin/lib/models/Note';
 import time from '@joplin/lib/time';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 
 class Command extends BaseCommand {
 	public override usage() {
@@ -15,7 +16,7 @@ class Command extends BaseCommand {
 	}
 
 	public static async handleAction(commandInstance: BaseCommand, args: any, isCompleted: boolean) {
-		const note = await app().loadItem(BaseModel.TYPE_NOTE, args.note);
+		const note: NoteEntity = await app().loadItem(BaseModel.TYPE_NOTE, args.note);
 		commandInstance.encryptionCheck(note);
 		if (!note) throw new Error(_('Cannot find "%s".', args.note));
 		if (!note.is_todo) throw new Error(_('Note is not a to-do: "%s"', args.note));

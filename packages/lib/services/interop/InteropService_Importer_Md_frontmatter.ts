@@ -28,7 +28,7 @@ function normalizeYamlWhitespace(yaml: string[]): string[] {
 	});
 }
 
-// This is a helper functon to convert an arbitrary author variable into a string
+// This is a helper function to convert an arbitrary author variable into a string
 // the use case is for loading from r-markdown/pandoc style notes
 // references:
 // https://pandoc.org/MANUAL.html#extension-yaml_metadata_block
@@ -143,7 +143,7 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 			}
 		}
 
-		// Tags are handled seperately from typical metadata
+		// Tags are handled separately from typical metadata
 		let tags: string[] = [];
 		if ('tags' in md) {
 			// Only create unique tags

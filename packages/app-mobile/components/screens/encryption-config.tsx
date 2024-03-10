@@ -2,7 +2,7 @@ const React = require('react');
 const { TextInput, TouchableOpacity, Linking, View, StyleSheet, Text, Button, ScrollView } = require('react-native');
 const { connect } = require('react-redux');
 import ScreenHeader from '../ScreenHeader';
-const { themeStyle } = require('../global-style.js');
+import { themeStyle } from '../global-style';
 const DialogBox = require('react-native-dialogbox').default;
 const { dialogs } = require('../../utils/dialogs.js');
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';

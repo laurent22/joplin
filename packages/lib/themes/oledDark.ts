@@ -7,7 +7,6 @@ const theme: Theme = {
 	color: '#dddddd',
 	colorFaded: '#777777',
 	dividerColor: '#3D444E',
-	selectedColor: '#333333',
 	urlColor: 'rgb(166,166,255)',
 	codeColor: '#ffffff',
 	raisedBackgroundColor: '#0F2051',

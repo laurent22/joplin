@@ -1,3 +1,6 @@
+---
+sidebar_position: 1
+---
 # Creating a table of content plugin
 
 This tutorial will guide you through the steps to create a table of content plugin for Joplin. It will display a view next to the current note that will contain links to the sections of a note. It will be possible to click on one of the header to jump to the relevant section.

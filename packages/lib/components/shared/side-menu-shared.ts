@@ -1,6 +1,7 @@
 import Folder from '../../models/Folder';
 import BaseModel from '../../BaseModel';
 import { FolderEntity, TagEntity } from '../../services/database/types';
+import { getDisplayParentId, getTrashFolderId } from '../../services/trash';
 
 interface Props {
 	folders: FolderEntity[];
@@ -11,26 +12,33 @@ interface Props {
 	tags?: TagEntity[];
 }
 
-type RenderFolderItem = (folder: FolderEntity, selected: boolean, hasChildren: boolean, depth: number)=> any;
-type RenderTagItem = (tag: TagEntity, selected: boolean)=> any;
+export type RenderFolderItem = (folder: FolderEntity, selected: boolean, hasChildren: boolean, depth: number)=> any;
+export type RenderTagItem = (tag: TagEntity, selected: boolean)=> any;
 
 function folderHasChildren_(folders: FolderEntity[], folderId: string) {
+	if (folderId === getTrashFolderId()) {
+		return !!folders.find(f => !!f.deleted_time);
+	}
+
 	for (let i = 0; i < folders.length; i++) {
 		const folder = folders[i];
-		if (folder.parent_id === folderId) return true;
+		const folderParentId = getDisplayParentId(folder, folders.find(f => f.id === folder.parent_id));
+		if (folderParentId === folderId) return true;
 	}
+
 	return false;
 }
 
-function folderIsVisible(folders: FolderEntity[], folderId: string, collapsedFolderIds: string[]) {
-	if (!collapsedFolderIds || !collapsedFolderIds.length) return true;
+function folderIsCollapsed(folders: FolderEntity[], folderId: string, collapsedFolderIds: string[]) {
+	if (!collapsedFolderIds || !collapsedFolderIds.length) return false;
 
 	while (true) {
-		const folder = BaseModel.byId(folders, folderId);
+		const folder: FolderEntity = BaseModel.byId(folders, folderId);
 		if (!folder) throw new Error(`No folder with id ${folder.id}`);
-		if (!folder.parent_id) return true;
-		if (collapsedFolderIds.indexOf(folder.parent_id) >= 0) return false;
-		folderId = folder.parent_id;
+		const folderParentId = getDisplayParentId(folder, folders.find(f => f.id === folder.parent_id));
+		if (!folderParentId) return false;
+		if (collapsedFolderIds.indexOf(folderParentId) >= 0) return true;
+		folderId = folderParentId;
 	}
 }
 
@@ -38,8 +46,11 @@ function renderFoldersRecursive_(props: Props, renderItem: RenderFolderItem, ite
 	const folders = props.folders;
 	for (let i = 0; i < folders.length; i++) {
 		const folder = folders[i];
-		if (!Folder.idsEqual(folder.parent_id, parentId)) continue;
-		if (!folderIsVisible(props.folders, folder.id, props.collapsedFolderIds)) continue;
+
+		const folderParentId = getDisplayParentId(folder, props.folders.find(f => f.id === folder.parent_id));
+
+		if (!Folder.idsEqual(folderParentId, parentId)) continue;
+		if (folderIsCollapsed(props.folders, folder.id, props.collapsedFolderIds)) continue;
 		const hasChildren = folderHasChildren_(folders, folder.id);
 		order.push(folder.id);
 		items.push(renderItem(folder, props.selectedFolderId === folder.id && props.notesParentType === 'Folder', hasChildren, depth));
@@ -75,7 +86,7 @@ export const renderTags = (props: Props, renderItem: RenderTagItem) => {
 		return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : +1;
 	});
 	const tagItems = [];
-	const order = [];
+	const order: string[] = [];
 	for (let i = 0; i < tags.length; i++) {
 		const tag = tags[i];
 		order.push(tag.id);

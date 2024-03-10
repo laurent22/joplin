@@ -3,6 +3,7 @@ import { fileApi } from '../testing/../testing/test-utils';
 import Folder from '../models/Folder';
 import Note from '../models/Note';
 import BaseItem from '../models/BaseItem';
+import { FolderEntity, NoteEntity } from '../services/database/types';
 
 export async function allNotesFolders() {
 	const folders = await Folder.all();
@@ -25,7 +26,7 @@ async function remoteItemsByTypes(types: number[]) {
 	return output;
 }
 
-export async function remoteNotesAndFolders() {
+export async function remoteNotesAndFolders(): Promise<(NoteEntity | FolderEntity)[]> {
 	return remoteItemsByTypes([BaseModel.TYPE_NOTE, BaseModel.TYPE_FOLDER]);
 }
 

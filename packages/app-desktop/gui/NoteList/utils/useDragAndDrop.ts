@@ -18,6 +18,7 @@ const useDragAndDrop = (
 	showCompletedTodos: boolean,
 	flow: ItemFlow,
 	itemsPerLine: number,
+	selectedFolderInTrash: boolean,
 ) => {
 	const [dragOverTargetNoteIndex, setDragOverTargetNoteIndex] = useState(null);
 
@@ -72,6 +73,7 @@ const useDragAndDrop = (
 
 	const onDragOver: DragEventHandler = useCallback(event => {
 		if (notesParentType !== 'Folder') return;
+		if (selectedFolderInTrash) return;
 
 		const dt = event.dataTransfer;
 
@@ -81,20 +83,22 @@ const useDragAndDrop = (
 			if (dragOverTargetNoteIndex === newIndex) return;
 			setDragOverTargetNoteIndex(newIndex);
 		}
-	}, [notesParentType, dragTargetNoteIndex, dragOverTargetNoteIndex]);
+	}, [notesParentType, dragTargetNoteIndex, dragOverTargetNoteIndex, selectedFolderInTrash]);
 
-	const onDrop: DragEventHandler = useCallback(async (event: any) => {
-		// TODO: check that parent type is folder
-		if (!canManuallySortNotes(notesParentType, noteSortOrder)) return;
-
+	const onDrop: DragEventHandler = useCallback(async (event) => {
 		const dt = event.dataTransfer;
+		if (!dt.types.includes('text/x-jop-note-ids')) return;
+
+		// TODO: check that parent type is folder
+		if (!canManuallySortNotes(notesParentType, noteSortOrder, selectedFolderInTrash)) return;
+
 		setDragOverTargetNoteIndex(null);
 
 		const targetNoteIndex = dragTargetNoteIndex(event);
 		const noteIds: string[] = JSON.parse(dt.getData('text/x-jop-note-ids'));
 
 		await Note.insertNotesAt(selectedFolderId, noteIds, targetNoteIndex, uncompletedTodosOnTop, showCompletedTodos);
-	}, [notesParentType, dragTargetNoteIndex, noteSortOrder, selectedFolderId, uncompletedTodosOnTop, showCompletedTodos]);
+	}, [notesParentType, dragTargetNoteIndex, noteSortOrder, selectedFolderId, uncompletedTodosOnTop, showCompletedTodos, selectedFolderInTrash]);
 
 	return { onDragStart, onDragOver, onDrop, dragOverTargetNoteIndex };
 };

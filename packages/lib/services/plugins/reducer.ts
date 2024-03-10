@@ -1,13 +1,18 @@
 import { Draft } from 'immer';
+import { ContainerType } from './WebviewController';
+import { ButtonSpec } from './api/types';
 
-export interface ViewInfo {
-	view: any;
-	plugin: any;
-}
-
-interface PluginViewState {
+export interface PluginViewState {
 	id: string;
 	type: string;
+	opened: boolean;
+	buttons: ButtonSpec[];
+	fitToContent?: boolean;
+	scripts?: string[];
+	html?: string;
+	commandName?: string;
+	location?: string;
+	containerType: ContainerType;
 }
 
 interface PluginViewStates {
@@ -27,6 +32,11 @@ interface PluginState {
 	id: string;
 	contentScripts: PluginContentScriptStates;
 	views: PluginViewStates;
+}
+
+export interface ViewInfo {
+	view: PluginViewState;
+	plugin: PluginState;
 }
 
 export interface PluginStates {
@@ -58,7 +68,7 @@ export const defaultState: State = {
 export const utils = {
 
 	// It is best to use viewsByType instead as this method creates new objects
-	// which might trigger unecessary renders even when plugin and views haven't changed.
+	// which might trigger unnecessary renders even when plugin and views haven't changed.
 	viewInfosByType: function(plugins: PluginStates, type: string): ViewInfo[] {
 		const output: ViewInfo[] = [];
 
@@ -180,6 +190,10 @@ const reducer = (draftRoot: Draft<any>, action: any) => {
 			});
 			break;
 		}
+
+		case 'PLUGIN_UNLOAD':
+			delete draft.plugins[action.pluginId];
+			break;
 
 		}
 	} catch (error) {

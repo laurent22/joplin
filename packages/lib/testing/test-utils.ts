@@ -723,7 +723,7 @@ async function checkThrowAsync(asyncFn: Function) {
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-async function expectThrow(asyncFn: Function, errorCode: any = undefined) {
+async function expectThrow(asyncFn: Function, errorCode: any = undefined, errorMessage: string = undefined) {
 	let hasThrown = false;
 	let thrownError = null;
 	try {
@@ -735,6 +735,12 @@ async function expectThrow(asyncFn: Function, errorCode: any = undefined) {
 
 	if (!hasThrown) {
 		expect('not throw').toBe('throw');
+	} else if (errorMessage !== undefined) {
+		if (thrownError.message !== errorMessage) {
+			expect(`error message: ${thrownError.message}`).toBe(`error message: ${errorMessage}`);
+		} else {
+			expect(true).toBe(true);
+		}
 	} else if (thrownError.code !== errorCode) {
 		console.error(thrownError);
 		expect(`error code: ${thrownError.code}`).toBe(`error code: ${errorCode}`);
@@ -844,7 +850,7 @@ async function createNTestNotes(n: number, folder: any, tagIds: string[] = null,
 	const notes = [];
 	for (let i = 0; i < n; i++) {
 		const title_ = n > 1 ? `${title}${i}` : title;
-		const note = await Note.save({ title: title_, parent_id: folder.id, is_conflict: 0 });
+		const note = await Note.save({ title: title_, parent_id: folder.id, is_conflict: 0, deleted_time: 0 });
 		notes.push(note);
 		await time.msleep(10);
 	}

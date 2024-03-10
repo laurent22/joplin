@@ -5,7 +5,7 @@ const { SearchScreen } = require('./screens/search.js');
 import { Component } from 'react';
 import { KeyboardAvoidingView, Keyboard, Platform, View, KeyboardEvent, Dimensions, EmitterSubscription } from 'react-native';
 import { AppState } from '../utils/types';
-const { themeStyle } = require('./global-style.js');
+import { themeStyle } from './global-style';
 
 interface State {
 	autoCompletionBarExtraHeight: number;
@@ -64,7 +64,7 @@ class AppNavComponent extends Component<Props, State> {
 	private keyboardWillChangeFrame = (evt: KeyboardEvent) => {
 		const windowWidth = Dimensions.get('window').width;
 
-		// If the keyboard isn't as wide as the window, the floating keyboard is diabled.
+		// If the keyboard isn't as wide as the window, the floating keyboard is disabled.
 		// See https://github.com/facebook/react-native/issues/29473#issuecomment-696658937
 		this.setState({
 			floatingKeyboardEnabled: evt.endCoordinates.width < windowWidth,
@@ -101,7 +101,7 @@ class AppNavComponent extends Component<Props, State> {
 
 		const style = { flex: 1, backgroundColor: theme.backgroundColor };
 
-		// When the floating keybaord is enabled, the KeyboardAvoidingView can have a very small
+		// When the floating keyboard is enabled, the KeyboardAvoidingView can have a very small
 		// height. Don't use the KeyboardAvoidingView when the floating keyboard is enabled.
 		// See https://github.com/facebook/react-native/issues/29473
 		const keyboardAvoidingViewEnabled = !this.state.floatingKeyboardEnabled;

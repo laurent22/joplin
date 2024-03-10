@@ -3,7 +3,7 @@ import BaseItem from '../../../models/BaseItem';
 
 function defaultFieldsByModelType(modelType: number): string[] {
 	const ModelClass = BaseItem.getClassByItemType(modelType);
-	const possibleFields = ['id', 'parent_id', 'title'];
+	const possibleFields = ['id', 'parent_id', 'title', 'deleted_time'];
 	const output = [];
 	for (const f of possibleFields) {
 		if (ModelClass.hasField(f)) output.push(f);

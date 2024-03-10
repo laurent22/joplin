@@ -29,11 +29,12 @@ export interface Plugins {
 }
 
 export interface SettingAndValue {
-	[settingName: string]: string;
+	[settingName: string]: string|number|boolean;
 }
 
 export interface DefaultPluginSettings {
 	settings?: SettingAndValue;
+	enabled?: boolean;
 }
 
 export interface DefaultPluginsInfo {
@@ -109,6 +110,10 @@ export default class PluginService extends BaseService {
 		return enabledPlugins;
 	}
 
+	public isPluginLoaded(pluginId: string) {
+		return !!this.plugins_[pluginId];
+	}
+
 	public get pluginIds(): string[] {
 		return Object.keys(this.plugins_);
 	}
@@ -139,6 +144,22 @@ export default class PluginService extends BaseService {
 		delete this.plugins_[pluginId];
 	}
 
+	public async unloadPlugin(pluginId: string) {
+		const plugin = this.plugins_[pluginId];
+		if (plugin) {
+			this.logger().info(`Unloading plugin ${pluginId}`);
+
+			plugin.onUnload();
+			await this.runner_.stop(plugin);
+
+			this.deletePluginAt(pluginId);
+			this.startedPlugins_ = { ...this.startedPlugins_ };
+			delete this.startedPlugins_[pluginId];
+		} else {
+			this.logger().info(`Unable to unload plugin ${pluginId} -- already unloaded`);
+		}
+	}
+
 	private async deletePluginFiles(plugin: Plugin) {
 		await shim.fsDriver().remove(plugin.baseDir);
 	}
@@ -162,7 +183,7 @@ export default class PluginService extends BaseService {
 		return output;
 	}
 
-	public serializePluginSettings(settings: PluginSettings): any {
+	public serializePluginSettings(settings: PluginSettings): string {
 		return JSON.stringify(settings);
 	}
 
@@ -338,7 +359,7 @@ export default class PluginService extends BaseService {
 
 	private pluginEnabled(settings: PluginSettings, pluginId: string): boolean {
 		if (!settings[pluginId]) return true;
-		return settings[pluginId].enabled !== false;
+		return settings[pluginId].enabled !== false && settings[pluginId].deleted !== true;
 	}
 
 	public callStatsSummary(pluginId: string, duration: number) {
@@ -402,6 +423,20 @@ export default class PluginService extends BaseService {
 		}
 	}
 
+	public async loadAndRunDevPlugins(settings: PluginSettings) {
+		const devPluginOptions = { devMode: true, builtIn: false };
+
+		if (Setting.value('plugins.devPluginPaths')) {
+			const paths = Setting.value('plugins.devPluginPaths').split(',').map((p: string) => p.trim());
+			await this.loadAndRunPlugins(paths, settings, devPluginOptions);
+		}
+
+		// Also load dev plugins that have passed via command line arguments
+		if (Setting.value('startupDevPlugins')) {
+			await this.loadAndRunPlugins(Setting.value('startupDevPlugins'), settings, devPluginOptions);
+		}
+	}
+
 	public isCompatible(pluginVersion: string): boolean {
 		return compareVersions(this.appVersion_, pluginVersion) >= 0;
 	}
@@ -445,6 +480,7 @@ export default class PluginService extends BaseService {
 	public async installPluginFromRepo(repoApi: RepositoryApi, pluginId: string): Promise<Plugin> {
 		const pluginPath = await repoApi.downloadPlugin(pluginId);
 		const plugin = await this.installPlugin(pluginPath);
+
 		await shim.fsDriver().remove(pluginPath);
 		return plugin;
 	}
@@ -461,6 +497,13 @@ export default class PluginService extends BaseService {
 		// the plugin ID.
 		const preloadedPlugin = await this.loadPluginFromPath(jplPath);
 		await this.deletePluginFiles(preloadedPlugin);
+
+		// On mobile, it's necessary to create the plugin directory before we can copy
+		// into it.
+		if (!(await shim.fsDriver().exists(Setting.value('pluginDir')))) {
+			logger.info(`Creating plugin directory: ${Setting.value('pluginDir')}`);
+			await shim.fsDriver().mkdir(Setting.value('pluginDir'));
+		}
 
 		const destPath = `${Setting.value('pluginDir')}/${preloadedPlugin.id}.jpl`;
 		await shim.fsDriver().copy(jplPath, destPath);
@@ -505,7 +548,7 @@ export default class PluginService extends BaseService {
 		for (const pluginId in settings) {
 			if (settings[pluginId].deleted) {
 				await this.uninstallPlugin(pluginId);
-				newSettings = { ...settings };
+				newSettings = { ...newSettings };
 				delete newSettings[pluginId];
 			}
 		}

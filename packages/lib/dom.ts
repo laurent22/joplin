@@ -27,6 +27,7 @@ export const waitForElement = async (parent: any, id: string): Promise<any> => {
 // Imported from https://github.com/Moh-Snoussi/keyboard-event-key-type
 // -----------------------------------------------------------------------
 
+// cSpell:disable
 type NumericKeypadKeys = 'Decimal' | 'Key11' | 'Key12' | 'Multiply' | 'Add' | 'Clear' | 'Divide' | 'Subtract' | 'Separator' | '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
 type UpperAlpha = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z';
 type LowerAlpha = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z';
@@ -51,3 +52,4 @@ type KoreanKeyboardsOnly = 'HangulMode' | 'HanjaMode' | 'JunjaMode';
 type SpecialValueKey = 'Unidentified';
 
 export declare type KeyboardEventKey = SpecialValueKey | ModifierKeys | WhitespaceKeys | NavigationKeys | EditingKeys | UIKeys | DeviceKeys | IMECompositionKeys | LinuxDeadKeys | FunctionKeys | PhoneKeys | MultimediaKeys | TVControlKeys | MediaControllerKeys | SpeechRecognitionKeys | DocumentKeys | ApplicationSelectorKeys | BrowserControlKeys | NumericKeypadKeys | UpperAlpha | LowerAlpha | KoreanKeyboardsOnly;
+// cSpell:enable

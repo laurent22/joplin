@@ -40,6 +40,52 @@ Additionally, every few minutes, the client is going to poll the server and down
 
 By default, the test units synchronise with an in-memory sync target, which is fast and is usually enough to verify most behaviours. The test units however can be configured to sync with a specific sync target, such as the file system, Nextcloud, Joplin Server, etc. To do so, modify `packages/lib/testing/test-utils.ts` and change `setSyncTargetName()` to the relevant sync target. You may also need to add or modify the relevant files in `~/joplin-credentials/*`. See the `initFileApi()` method in `test-utils.ts` for more details.
 
+## Sync target properties
+
+The properties specific to the sync target are saved in a file called `info.json` - it is used to ensure all clients work with the same sync settings.
+
+Several properties have an associated `updatedTime` property. This is used to resolve conflicts when two clients perform the same action on the same property. In this case heuristics decide which value should be kept. See `packages/lib/services/synchronizer/syncInfoUtils.ts` for all logic related to this `info.json` file.
+
+Each client keeps a local version of this sync target info, which is synchronised whenever it is modified.
+
+The list of properties is:
+
+```typescript
+interface SyncTargetInfo {
+	// The sync target version number.
+	version: number; 
+
+	// Whether E2EE is enabled on the sync target or not
+	e2ee: {
+		value: boolean;
+		updatedTime: number;
+	}
+
+	// The active encryption key
+	activeMasterKeyId: {
+		value: string;
+		updatedTime: number;
+	}
+
+	// The known encryption/decryption keys
+	masterKeys: Key[];
+
+	// The public/private keys
+	ppk: {
+		value: {
+			id: string;
+			keySize: number;
+			privateKey: Key; // Encrypted using user password
+			publicKey: string; // Plaintext
+			createdTime: number;
+		}
+	}
+
+	// The minimum app version required to sync with this sync target
+	appMinVersion: string;
+}
+```
+
 ## See also
 
 - [Synchronisation lock](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/sync_lock.md)

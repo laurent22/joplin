@@ -32,6 +32,10 @@ export default class NoteEditorPage {
 		return this.richTextEditor.frameLocator(':scope');
 	}
 
+	public focusCodeMirrorEditor() {
+		return this.codeMirrorEditor.click();
+	}
+
 	public async waitFor() {
 		await this.noteTitleInput.waitFor();
 		await this.toggleEditorsButton.waitFor();

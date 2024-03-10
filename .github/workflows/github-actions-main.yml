@@ -141,7 +141,7 @@ jobs:
         # To ensure that the operations stop on failure, all commands
         # should be on one line with "&&" in between.
         run: |
-          yarn install && cd packages/app-desktop && yarn run dist
+          yarn install && cd packages/app-desktop && yarn dist
 
       # Build and package the Windows app, without publishing it, just to
       # verify that the build process hasn't been broken.
@@ -153,7 +153,7 @@ jobs:
           SERVER_REPOSITORY: joplin/server
           SERVER_TAG_PREFIX: server
         run: |
-          yarn install && cd packages/app-desktop && yarn run dist --publish=never
+          yarn install && cd packages/app-desktop && yarn dist --publish=never
 
   ServerDockerImage:
     needs: pre_job
@@ -197,7 +197,7 @@ jobs:
           BUILD_SEQUENCIAL: 1
         run: |
           yarn install
-          yarn run buildServerDocker --tag-name server-v0.0.0 --repository joplin/server
+          yarn buildServerDocker --tag-name server-v0.0.0 --repository joplin/server
 
           # Basic test to ensure that the created build is valid. It should exit with
           # code 0  if it works.

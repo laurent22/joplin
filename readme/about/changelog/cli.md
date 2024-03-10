@@ -1,5 +1,27 @@
 # Joplin Terminal App Changelog
 
+## [cli-v2.14.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.14.1) - 2024-03-01T19:08:28Z
+
+- Improved: Allow setting a minimum app version on the sync target (#9778)
+- Improved: Display an error if a resource cannot be downloaded (cbf7e24)
+- Improved: Don't log OneDrive `Authorization` tokens (#9707) (#9706 by Henry Heino)
+- Improved: Handle Dropbox payload_too_large error (f267d88)
+- Improved: Improve search engine error handling when preparing text for search (#9871 by Henry Heino)
+- Improved: Migrate profile in preparation for trash feature (115eb5d)
+- Improved: Remove unnecessary warning when importing ENEX file (495f088)
+- Improved: Restore note links after importing an ENEX file (#9596)
+- Improved: Updated packages @rmp135/sql-ts (v1.18.1), async-mutex (v0.4.1), follow-redirects (v1.15.5), fs-extra (v11.2.0), highlight.js (v11.9.0), mermaid (v10.6.1), moment (v2.30.1), nanoid (v3.3.7), react, sass (v1.69.7), sharp (v0.33.2), style-to-js (v1.1.9), tesseract.js (v5.0.3)
+- Fixed: Fix AWS S3 sync error (#9696) (#8891 by Henry Heino)
+- Fixed: Fix ENEX import issue (20b1c2e)
+- Fixed: Fix broken synchronisation link in welcome notes (#9804) (#9799 by Henry Heino)
+- Fixed: Fix importing certain ENEX notes that include invalid tables (00eee19)
+- Fixed: Fixed importing invalid tables from ENEX files (d264bdd)
+- Fixed: Fixes issue with resources having no associated files when the RAW import process is interrupted (#9484)
+- Fixed: Import ENEX archives that contain files with invalid names (#9548)
+- Fixed: Markdown-FrontMatter exporter generates invalid file when note starts with a dash in title (#9483)
+- Fixed: When importing MarkdownD+FrontMatter files that contain images with a data URL source, the import fails (#9485)
+- Fixed: When importing a Markdown file that contains a link to an invalid image, import fails (#9486)
+
 ## [cli-v2.13.2](https://github.com/laurent22/joplin/releases/tag/cli-v2.13.2) - 2023-11-30T18:11:38Z
 
 - Improved: Updated packages mermaid (v10.5.1), sass (v1.69.5)
@@ -112,7 +134,7 @@
 - Fixed: Fix default sync target (4b39d30)
 - Fixed: Fixed potential infinite loop when Joplin Server session is invalid (c5569ef)
 - Fixed: Fixed running out of memory when importing large ENEX files (#5543)
-- Fixed: Ignore newline between quotes while spliting batch (#5540) (#5341 by Kingsley Yung)
+- Fixed: Ignore newline between quotes while splitting batch (#5540) (#5341 by Kingsley Yung)
 
 ## [cli-v2.4.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.4.1) - 2021-09-29T15:28:01Z
 
@@ -128,7 +150,7 @@
 ## [cli-v2.3.2](https://github.com/laurent22/joplin/releases/tag/cli-v2.3.2) - 2021-08-16T09:38:40Z
 
 - Improved: Improved E2EE usability by making its state a property of the sync target (#5276)
-- Fixed: Bump hightlight.js to v11.2 (#5278) (#5245 by Roman Musin)
+- Fixed: Bump highlight.js to v11.2 (#5278) (#5245 by Roman Musin)
 - Fixed: Fixed version command so that it does not require the keychain (ca6d8ec)
 
 ## [cli-v2.2.2](https://github.com/laurent22/joplin/releases/tag/cli-v2.2.2) - 2021-08-11T15:34:56Z
@@ -196,7 +218,7 @@
 
 ## [cli-v1.6.3](https://github.com/laurent22/joplin/releases/tag/cli-v1.6.3) - 2021-01-11T11:52:11Z
 
-- New: Add more log info when a revision cannot be deleted due to still-encrypted itel
+- New: Add more log info when a revision cannot be deleted due to still-encrypted item
 - Improved: Do not display error message when fixing ENEX resource mime type (#4310)
 - Improved: Improve support for SVG images when importing ENEX files
 - Improved: Improved support for bold and italic format when importing ENEX file (#4316)
@@ -378,7 +400,7 @@ IMPORTANT: If you use the web API, please note that there are a few breaking cha
 - Improved: Allow exporting a note as HTML
 - Improved: Improved logging during sync to allow finding bugs more easily
 - Fixed: Handle WebDAV servers that do not return a last modified date (fixes mail.ru) (#2091)
-- Fixed: Restaured translations that had been accidentally deleted (#2126)
+- Fixed: Restored translations that had been accidentally deleted (#2126)
 - Fixed: Prevent synch from happening if target dir could not be created, in local sync (#2117)
 - Fixed: Handle rare case when notebook has a parent that no longer exists, which causes a crash when sorting (#2088)
 
