@@ -94,3 +94,6 @@ notyf
 Notyf
 activeline
 Prec
+Smalltalkfocus
+tabindex
+tmpl

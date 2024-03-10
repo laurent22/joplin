@@ -138,6 +138,7 @@ packages/app-cli/tests/testUtils.js
 packages/app-cli/tools/populateDatabase.js
 packages/app-desktop/ElectronAppWrapper.js
 packages/app-desktop/InteropServiceHelper.js
+packages/app-desktop/SmalltalkfocusWrapper.js
 packages/app-desktop/app.reducer.test.js
 packages/app-desktop/app.reducer.js
 packages/app-desktop/app.js

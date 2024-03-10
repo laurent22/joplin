@@ -3,6 +3,7 @@ import Logger from '@joplin/utils/Logger';
 // Can't upgrade beyond 2.x because it doesn't work with Electron. If trying to
 // upgrade again, check that adding a link from the CodeMirror editor works/
 const smalltalk = require('smalltalk');
+import * as SmalltalkfocusWrapper from '../SmalltalkfocusWrapper';
 
 const logger = Logger.create('dialogs');
 
@@ -25,7 +26,7 @@ class Dialogs {
 		if (options === null) options = {};
 
 		try {
-			const answer = await smalltalk.prompt(title, message, defaultValue, options);
+			const answer = await SmalltalkfocusWrapper.prompt(title, message, defaultValue, options);
 			return answer;
 		} catch (error) {
 			logger.error(error);
