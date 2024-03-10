@@ -1,7 +1,7 @@
 /* eslint-disable multiline-comment-style */
 
+import shim from '../../../shim';
 import Plugin from '../Plugin';
-import * as fs from 'fs-extra';
 
 export interface Implementation {
 	injectCustomStyles(elementId: string, cssFilePath: string): Promise<void>;
@@ -36,7 +36,7 @@ export default class JoplinWindow {
 	 * for an example.
 	 */
 	public async loadNoteCssFile(filePath: string) {
-		const cssString = await fs.readFile(filePath, 'utf8');
+		const cssString = await shim.fsDriver().readFile(filePath, 'utf8');
 
 		this.store_.dispatch({
 			type: 'CUSTOM_CSS_APPEND',

@@ -26,9 +26,8 @@
 			const initialText = 'Testing...';
 
 			const settings = {
-				katexEnabled: true,
 				themeData: {
-					fontSize: 1, // em
+					fontSize: 12, // px
 					fontFamily: 'serif',
 					backgroundColor: 'black',
 					color: 'white',
@@ -40,6 +39,19 @@
 					color4: '#0ff',
 					appearance: 'dark',
 				},
+				themeId: 0,
+				spellcheckEnabled: true,
+				language: 'markdown',
+				katexEnabled: true,
+				useExternalSearch: false,
+				readOnly: false,
+
+				keymap: 'default',
+
+				automatchBraces: false,
+				ignoreModifiers: false,
+
+				indentWithTabs: false,
 			};
 
 			window.cm = codeMirrorBundle.initCodeMirror(parent, initialText, settings);

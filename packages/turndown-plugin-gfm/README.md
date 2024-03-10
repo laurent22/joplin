@@ -17,7 +17,7 @@ This is a fork of the original [turndown-plugin-gfm](https://github.com/domchris
 npm:
 
 ```
-npm install joplin-turndown-plugin-gfm
+npm install @joplin/turndown-plugin-gfm
 ```
 
 ## Usage

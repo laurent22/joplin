@@ -37,12 +37,11 @@ const StyledTitle = styled.span`
 
 `;
 
-// const buttonSizePx = 32;
-
-export const buttonSizePx = (props: Props) => {
-	if (!props.size || props.size === ButtonSize.Normal) return 32;
-	if (props.size === ButtonSize.Small) return 26;
-	throw new Error(`Unknown size: ${props.size}`);
+export const buttonSizePx = (props: Props | ButtonSize) => {
+	const buttonSize = typeof props === 'number' ? props : props.size;
+	if (!buttonSize || buttonSize === ButtonSize.Normal) return 32;
+	if (buttonSize === ButtonSize.Small) return 26;
+	throw new Error(`Unknown size: ${buttonSize}`);
 };
 
 const isSquare = (props: Props) => {

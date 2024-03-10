@@ -341,7 +341,7 @@
 	"Browse...": [
 		"Navegar..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -469,6 +469,9 @@
 	],
 	"Close dropdown": [
 		"Fechar menu"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Fechar Janela"
@@ -621,7 +624,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Não foi possível verificar o status de compartilhamento deste caderno - abortando. Por favor, tente de novo quando estiver conectado na internet."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"Não foi possível verificar a sua identidade: %s"
 	],
 	"Create": [
@@ -1435,6 +1438,9 @@
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Para fazer isso, seu conjunto de dados inteiro terá que ser criptografado e sincronizado, então é melhor deixá-lo executando à noite.\n\nPara começar, por favor siga estas instruções:\n\n1. Sincronize todos os seus dispositivos.\n2. Clique \"%s\".\n3. Deixe executar até completar. Enquanto estiver executando, evite mudar qualquer nota em outros dispositivos, para evitar conflitos.\n4. Uma vez que a sincronia tenha sido feita, sincronize todos os outros dispositivos, e deixe-o executar até o fim.\n\nImportante: você só precisa executar isto UMA VEZ, em um dispositivo."
 	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
+	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Para usar a sincronização do sistema de arquivos, é necessário sua permissão para gravar no armazenamento externo."
 	],
@@ -1742,6 +1748,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"Player de mídia, matemática, diagramas, tabela de conteúdo"
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"Chaves faltando"
 	],
@@ -1868,7 +1877,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Não autenticado com %s. Por favor, complete as credenciais que estiverem faltando."
 	],
 	"Not downloaded": [
@@ -2540,6 +2549,12 @@
 	"Solarised Light": [
 		"Solarizado Claro"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Alguns itens não podem ser descriptografados."
 	],
@@ -2843,6 +2858,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"O destinatário não pôde ser removido da lista. Por favor, tente novamente\n\nO erro foi: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"O alvo da sincronização precisa ser atualizado antes que o Joplin possa sincronizar. A operação pode levar alguns minutos para completar e o app terá que ser reiniciado. Para proceder, por favor, clique neste link."
 	],
@@ -3091,6 +3109,9 @@
 	],
 	"Undo": [
 		"Desfazer"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Flag desconhecida: %s"

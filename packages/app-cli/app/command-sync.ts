@@ -7,7 +7,7 @@ import Synchronizer from '@joplin/lib/Synchronizer';
 import { masterKeysWithoutPassword } from '@joplin/lib/services/e2ee/utils';
 import { appTypeToLockType } from '@joplin/lib/services/synchronizer/LockHandler';
 const BaseCommand = require('./base-command').default;
-const { app } = require('./app.js');
+import app from './app';
 const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
 import { reg } from '@joplin/lib/registry';
 const { cliUtils } = require('./cli-utils.js');
@@ -86,7 +86,7 @@ class Command extends BaseCommand {
 			return true;
 		}
 
-		this.stdout(_('Not authentified with %s. Please provide any missing credentials.', syncTargetMd.label));
+		this.stdout(_('Not authenticated with %s. Please provide any missing credentials.', syncTargetMd.label));
 		return false;
 	}
 

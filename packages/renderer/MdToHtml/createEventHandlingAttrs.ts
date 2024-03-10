@@ -1,6 +1,6 @@
 
 
-import utils from '../utils';
+import * as utils from '../utils';
 
 
 export interface Options {

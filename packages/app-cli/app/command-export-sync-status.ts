@@ -1,5 +1,5 @@
 import BaseCommand from './base-command';
-const { app } = require('./app.js');
+import app from './app';
 import Setting from '@joplin/lib/models/Setting';
 import ReportService from '@joplin/lib/services/ReportService';
 import * as fs from 'fs-extra';

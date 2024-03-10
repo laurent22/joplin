@@ -40,7 +40,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 		'note.is_shared',
 		'note.is_todo',
 		'note.isWatched',
-		'note.titleHtml',
+		'note.title',
 		'note.todo_completed',
 	],
 
@@ -149,7 +149,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 					<input class="checkbox" data-id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
 				{{/note.is_todo}}
 				<i class="watchedicon fa fa-share-square"></i>
-				<div class="titlecontent">{{{note.titleHtml}}}</div>
+				<div class="titlecontent">{{note.title}}</div>
 			</div>
 			<div class="preview">{{notePreview}}</div>
 		</div>

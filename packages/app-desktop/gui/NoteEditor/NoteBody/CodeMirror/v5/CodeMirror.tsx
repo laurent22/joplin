@@ -2,11 +2,11 @@ import * as React from 'react';
 import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, useMemo, ForwardedRef } from 'react';
 
 // eslint-disable-next-line no-unused-vars
-import { EditorCommand, NoteBodyEditorProps, NoteBodyEditorRef } from '../../../utils/types';
+import { EditorCommand, MarkupToHtmlOptions, NoteBodyEditorProps, NoteBodyEditorRef } from '../../../utils/types';
 import { commandAttachFileToBody, getResourcesFromPasteEvent } from '../../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../../utils/types';
 import { CommandValue } from '../../../utils/types';
-import { usePrevious, cursorPositionToTextOffset } from '../utils';
+import { cursorPositionToTextOffset } from '../utils';
 import useScrollHandler from '../utils/useScrollHandler';
 import useElementSize from '@joplin/lib/hooks/useElementSize';
 import Toolbar from '../Toolbar';
@@ -25,14 +25,13 @@ import { ThemeAppearance } from '@joplin/lib/themes/type';
 import dialogs from '../../../../dialogs';
 import { MarkupToHtml } from '@joplin/renderer';
 const { clipboard } = require('electron');
-const debounce = require('debounce');
 
 import { reg } from '@joplin/lib/registry';
 import ErrorBoundary from '../../../../ErrorBoundary';
-import { MarkupToHtmlOptions } from '../../../utils/useMarkupToHtml';
 import useStyles from '../utils/useStyles';
 import useContextMenu from '../utils/useContextMenu';
 import useWebviewIpcMessage from '../utils/useWebviewIpcMessage';
+import useEditorSearchHandler from '../utils/useEditorSearchHandler';
 
 function markupRenderOptions(override: MarkupToHtmlOptions = null): MarkupToHtmlOptions {
 	return { ...override };
@@ -45,10 +44,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	const [renderedBodyContentKey, setRenderedBodyContentKey] = useState<string>(null);
 
 	const [webviewReady, setWebviewReady] = useState(false);
-
-	const previousContent = usePrevious(props.content);
-	const previousRenderedBody = usePrevious(renderedBody);
-	const previousSearchMarkers = usePrevious(props.searchMarkers);
 
 	const editorRef = useRef(null);
 	const rootRef = useRef(null);
@@ -508,7 +503,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				color: ${theme.codeColor};
 			}
 
-			/* Negative margins are needed to componsate for the border */
+			/* Negative margins are needed to compensate for the border */
 			div.CodeMirror span.cm-comment.cm-jn-inline-code:not(.cm-search-marker):not(.cm-fat-cursor-mark):not(.cm-search-marker-selected):not(.CodeMirror-selectedtext) {
 				border: 1px solid ${theme.codeBorderColor};
 				background-color: ${codeBackgroundColor};
@@ -612,6 +607,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		const timeoutId = shim.setTimeout(async () => {
 			let bodyToRender = props.content;
 
+			if (!props.visiblePanes.includes('viewer')) {
+				return;
+			}
+
 			if (!bodyToRender.trim() && props.visiblePanes.indexOf('viewer') >= 0 && props.visiblePanes.indexOf('editor') < 0) {
 				// Fixes https://github.com/laurent22/joplin/issues/217
 				bodyToRender = `<i>${_('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout'))}</i>`;
@@ -672,37 +671,14 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [renderedBody, webviewReady]);
 
-	useEffect(() => {
-		if (!props.searchMarkers) return () => {};
-
-		// If there is a currently active search, it's important to re-search the text as the user
-		// types. However this is slow for performance so we ONLY want it to happen when there is
-		// a search
-
-		// Note that since the CodeMirror component also needs to handle the viewer pane, we need
-		// to check if the rendered body has changed too (it will be changed with a delay after
-		// props.content has been updated).
-		const textChanged = props.searchMarkers.keywords.length > 0 && (props.content !== previousContent || renderedBody !== previousRenderedBody);
-
-		if (webviewRef.current && (props.searchMarkers !== previousSearchMarkers || textChanged)) {
-			webviewRef.current.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
-
-			if (editorRef.current) {
-				// Fixes https://github.com/laurent22/joplin/issues/7565
-				const debouncedMarkers = debounce(() => {
-					const matches = editorRef.current.setMarkers(props.searchMarkers.keywords, props.searchMarkers.options);
-
-					props.setLocalSearchResultCount(matches);
-				}, 50);
-				debouncedMarkers();
-				return () => {
-					debouncedMarkers.clear();
-				};
-			}
-		}
-		return () => {};
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [props.searchMarkers, previousSearchMarkers, props.setLocalSearchResultCount, props.content, previousContent, renderedBody, previousRenderedBody, renderedBody]);
+	useEditorSearchHandler({
+		setLocalSearchResultCount: props.setLocalSearchResultCount,
+		searchMarkers: props.searchMarkers,
+		webviewRef,
+		editorRef,
+		noteContent: props.content,
+		renderedBody,
+	});
 
 	const cellEditorStyle = useMemo(() => {
 		const output = { ...styles.cellEditor };
@@ -716,11 +692,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	const cellViewerStyle = useMemo(() => {
 		const output = { ...styles.cellViewer };
 		if (!props.visiblePanes.includes('viewer')) {
-			// Note: setting webview.display to "none" is currently not supported due
-			// to this bug: https://github.com/electron/electron/issues/8277
-			// So instead setting the width 0.
-			output.width = 1;
-			output.maxWidth = 1;
+			output.display = 'none';
 		} else if (!props.visiblePanes.includes('editor')) {
 			output.borderLeftStyle = 'none';
 		}

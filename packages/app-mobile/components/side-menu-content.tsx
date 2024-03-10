@@ -7,13 +7,17 @@ import Folder from '@joplin/lib/models/Folder';
 import Synchronizer from '@joplin/lib/Synchronizer';
 import NavService from '@joplin/lib/services/NavService';
 import { _ } from '@joplin/lib/locale';
-const { themeStyle } = require('./global-style.js');
+import { themeStyle } from './global-style';
 import { renderFolders } from '@joplin/lib/components/shared/side-menu-shared';
-import { FolderEntity, FolderIcon } from '@joplin/lib/services/database/types';
+import { FolderEntity, FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
 import Setting from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry';
 import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
+import { getTrashFolderIcon, getTrashFolderId } from '@joplin/lib/services/trash';
+import restoreItems from '@joplin/lib/services/trash/restoreItems';
+import { ModelType } from '@joplin/lib/BaseModel';
+const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 // We need this to suppress the useless warning
 // https://github.com/oblador/react-native-vector-icons/issues/1465
@@ -87,6 +91,7 @@ const SideMenuContentComponent = (props: Props) => {
 			sidebarIcon: {
 				fontSize: 22,
 				color: theme.color,
+				width: 26,
 			},
 		};
 
@@ -103,7 +108,7 @@ const SideMenuContentComponent = (props: Props) => {
 		styles.sideButtonSelected = { ...styles.sideButton, backgroundColor: theme.selectedColor };
 		styles.sideButtonText = { ...styles.buttonText };
 
-		styles.emptyFolderIcon = { ...styles.sidebarIcon, marginRight: folderIconRightMargin, width: 21 };
+		styles.emptyFolderIcon = { ...styles.sidebarIcon, marginRight: folderIconRightMargin, width: 26 };
 
 		return StyleSheet.create(styles);
 	}, [props.themeId]);
@@ -141,58 +146,96 @@ const SideMenuContentComponent = (props: Props) => {
 
 		const folder = folderOrAll as FolderEntity;
 
-		const generateFolderDeletion = () => {
-			const folderDeletion = (message: string) => {
-				Alert.alert('', message, [
-					{
-						text: _('OK'),
-						onPress: () => {
-							void Folder.delete(folder.id);
+		if (folder && folder.id === getTrashFolderId()) return;
+
+		const menuItems: any[] = [];
+
+		if (folder && !!folder.deleted_time) {
+			menuItems.push({
+				text: _('Restore'),
+				onPress: async () => {
+					await restoreItems(ModelType.Folder, [folder.id]);
+				},
+				style: 'destructive',
+			});
+
+			// Alert.alert(
+			// 	'',
+			// 	_('Notebook: %s', folder.title),
+			// 	[
+			// 		{
+			// 			text: _('Restore'),
+			// 			onPress: async () => {
+			// 				await restoreItems(ModelType.Folder, [folder.id]);
+			// 			},
+			// 			style: 'destructive',
+			// 		},
+			// 		{
+			// 			text: _('Cancel'),
+			// 			onPress: () => {},
+			// 			style: 'cancel',
+			// 		},
+			// 	],
+			// 	{
+			// 		cancelable: false,
+			// 	},
+			// );
+		} else {
+			const generateFolderDeletion = () => {
+				const folderDeletion = (message: string) => {
+					Alert.alert('', message, [
+						{
+							text: _('OK'),
+							onPress: () => {
+								void Folder.delete(folder.id, { toTrash: true, sourceDescription: 'side-menu-content (long-press)' });
+							},
 						},
-					},
-					{
-						text: _('Cancel'),
-						onPress: () => { },
-						style: 'cancel',
-					},
-				]);
+						{
+							text: _('Cancel'),
+							onPress: () => { },
+							style: 'cancel',
+						},
+					]);
+				};
+
+				if (folder.id === props.inboxJopId) {
+					return folderDeletion(
+						_('Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that\'s recently been sent to it may be lost.'),
+					);
+				}
+				return folderDeletion(_('Move notebook "%s" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.', substrWithEllipsis(folder.title, 0, 32)));
 			};
 
-			if (folder.id === props.inboxJopId) {
-				return folderDeletion(
-					_('Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that\'s recently been sent to it may be lost.'),
-				);
-			}
-			return folderDeletion(_('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', folder.title));
-		};
+			menuItems.push({
+				text: _('Edit'),
+				onPress: () => {
+					props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+
+					props.dispatch({
+						type: 'NAV_GO',
+						routeName: 'Folder',
+						folderId: folder.id,
+					});
+				},
+			});
+
+			menuItems.push({
+				text: _('Delete'),
+				onPress: generateFolderDeletion,
+				style: 'destructive',
+			});
+		}
+
+		menuItems.push({
+			text: _('Cancel'),
+			onPress: () => {},
+			style: 'cancel',
+		});
 
 		Alert.alert(
 			'',
 			_('Notebook: %s', folder.title),
-			[
-				{
-					text: _('Edit'),
-					onPress: () => {
-						props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-
-						props.dispatch({
-							type: 'NAV_GO',
-							routeName: 'Folder',
-							folderId: folder.id,
-						});
-					},
-				},
-				{
-					text: _('Delete'),
-					onPress: generateFolderDeletion,
-					style: 'destructive',
-				},
-				{
-					text: _('Cancel'),
-					onPress: () => {},
-					style: 'cancel',
-				},
-			],
+			menuItems,
 			{
 				cancelable: false,
 			},
@@ -307,19 +350,21 @@ const SideMenuContentComponent = (props: Props) => {
 		if (actionDone === 'auth') props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 	}, [performSync, props.dispatch]);
 
-	const renderFolderIcon = (theme: any, folderIcon: FolderIcon) => {
+	const renderFolderIcon = (folderId: string, theme: any, folderIcon: FolderIcon) => {
 		if (!folderIcon) {
 			if (alwaysShowFolderIcons) {
 				return <Icon name="folder-outline" style={styles_.emptyFolderIcon} />;
+			} else if (folderId === getTrashFolderId()) {
+				folderIcon = getTrashFolderIcon(FolderIconType.Emoji);
 			} else {
 				return null;
 			}
 		}
 
 		if (folderIcon.type === 1) { // FolderIconType.Emoji
-			return <Text style={{ fontSize: theme.fontSize, marginRight: folderIconRightMargin, width: 20 }}>{folderIcon.emoji}</Text>;
+			return <Text style={{ fontSize: theme.fontSize, marginRight: folderIconRightMargin, width: 27 }}>{folderIcon.emoji}</Text>;
 		} else if (folderIcon.type === 2) { // FolderIconType.DataUrl
-			return <Image style={{ width: 20, height: 20, marginRight: folderIconRightMargin, resizeMode: 'contain' }} source={{ uri: folderIcon.dataUrl }}/>;
+			return <Image style={{ width: 27, height: 20, marginRight: folderIconRightMargin, resizeMode: 'contain' }} source={{ uri: folderIcon.dataUrl }}/>;
 		} else {
 			throw new Error(`Unsupported folder icon type: ${folderIcon.type}`);
 		}
@@ -377,7 +422,7 @@ const SideMenuContentComponent = (props: Props) => {
 					}}
 				>
 					<View style={folderButtonStyle}>
-						{renderFolderIcon(theme, folderIcon)}
+						{renderFolderIcon(folder.id, theme, folderIcon)}
 						<Text numberOfLines={1} style={styles_.folderButtonText}>
 							{Folder.displayTitle(folder)}
 						</Text>

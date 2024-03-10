@@ -11,7 +11,7 @@ import AlarmServiceDriverNode from '@joplin/lib/services/AlarmServiceDriverNode'
 import Logger, { TargetType } from '@joplin/utils/Logger';
 import Setting from '@joplin/lib/models/Setting';
 import actionApi from '@joplin/lib/services/rest/actionApi.desktop';
-import BaseApplication from '@joplin/lib/BaseApplication';
+import BaseApplication, { StartOptions } from '@joplin/lib/BaseApplication';
 import DebugService from '@joplin/lib/debug/DebugService';
 import { _, setLocale } from '@joplin/lib/locale';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
@@ -201,8 +201,10 @@ class Application extends BaseApplication {
 
 		// The '*' and '!important' parts are necessary to make sure Russian text is displayed properly
 		// https://github.com/laurent22/joplin/issues/155
+		//
+		// Note: Be careful about the specificity here. Incorrect specificity can break monospaced fonts in tables.
 
-		const css = `.CodeMirror *, .cm-editor .cm-content { font-family: ${fontFamilies.join(', ')} !important; }`;
+		const css = `.CodeMirror5 *, .cm-editor .cm-content { font-family: ${fontFamilies.join(', ')} !important; }`;
 		const styleTag = document.createElement('style');
 		styleTag.type = 'text/css';
 		styleTag.appendChild(document.createTextNode(css));
@@ -248,26 +250,6 @@ class Application extends BaseApplication {
 		});
 	}
 
-	private async checkForLegacyTemplates() {
-		const templatesDir = `${Setting.value('profileDir')}/templates`;
-		if (await shim.fsDriver().exists(templatesDir)) {
-			try {
-				const files = await shim.fsDriver().readDirStats(templatesDir);
-				for (const file of files) {
-					if (file.path.endsWith('.md')) {
-						// There is at least one template.
-						this.store().dispatch({
-							type: 'CONTAINS_LEGACY_TEMPLATES',
-						});
-						break;
-					}
-				}
-			} catch (error) {
-				reg.logger().error(`Failed to read templates directory: ${error}`);
-			}
-		}
-	}
-
 	private async initPluginService() {
 		if (this.initPluginServiceDone_) return;
 		this.initPluginServiceDone_ = true;
@@ -297,17 +279,7 @@ class Application extends BaseApplication {
 		}
 
 		try {
-			const devPluginOptions = { devMode: true, builtIn: false };
-
-			if (Setting.value('plugins.devPluginPaths')) {
-				const paths = Setting.value('plugins.devPluginPaths').split(',').map((p: string) => p.trim());
-				await service.loadAndRunPlugins(paths, pluginSettings, devPluginOptions);
-			}
-
-			// Also load dev plugins that have passed via command line arguments
-			if (Setting.value('startupDevPlugins')) {
-				await service.loadAndRunPlugins(Setting.value('startupDevPlugins'), pluginSettings, devPluginOptions);
-			}
+			await service.loadAndRunDevPlugins(pluginSettings);
 		} catch (error) {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
 		}
@@ -399,14 +371,12 @@ class Application extends BaseApplication {
 		eventManager.on(EventName.ResourceChange, handleResourceChange);
 	}
 
-	public async start(argv: string[]): Promise<any> {
+	public async start(argv: string[], startOptions: StartOptions = null): Promise<any> {
 		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
 		// insert an extra argument so that they can be processed in a consistent way everywhere.
 		if (!bridge().electronIsDev()) argv.splice(1, 0, '.');
 
-		argv = await super.start(argv);
-
-		// this.crashDetectionHandler();
+		argv = await super.start(argv, startOptions);
 
 		await this.applySettingsSideEffects();
 
@@ -545,8 +515,6 @@ class Application extends BaseApplication {
 			value: Setting.value('flagOpenDevTools'),
 		});
 
-		await this.checkForLegacyTemplates();
-
 		// Note: Auto-update is a misnomer in the code.
 		// The code below only checks, if a new version is available.
 		// We only allow Windows and macOS users to automatically check for updates
@@ -610,7 +578,11 @@ class Application extends BaseApplication {
 		ExternalEditWatcher.instance().setLogger(reg.logger());
 		ExternalEditWatcher.instance().initialize(bridge, this.store().dispatch);
 
-		ResourceEditWatcher.instance().initialize(reg.logger(), (action: any) => { this.store().dispatch(action); }, (path: string) => bridge().openItem(path));
+		ResourceEditWatcher.instance().initialize(
+			reg.logger(),
+			(action: any) => { this.store().dispatch(action); },
+			(path: string) => bridge().openItem(path),
+		);
 
 		// Forwards the local event to the global event manager, so that it can
 		// be picked up by the plugin manager.
@@ -648,7 +620,11 @@ class Application extends BaseApplication {
 
 		await this.setupOcrService();
 
-		eventManager.on(EventName.OcrServiceResourcesProcessed, () => {
+		eventManager.on(EventName.OcrServiceResourcesProcessed, async () => {
+			await ResourceService.instance().indexNoteResources();
+		});
+
+		eventManager.on(EventName.NoteResourceIndexed, async () => {
 			SearchEngine.instance().scheduleSyncTables();
 		});
 

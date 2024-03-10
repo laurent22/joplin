@@ -20,6 +20,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Cmd+Q', command: 'quit' },
 		{ accelerator: 'Cmd+,', command: 'config' },
 		{ accelerator: 'Cmd+W', command: 'closeWindow' },
+		{ accelerator: 'Cmd+M', command: 'minimizeWindow' },
 		{ accelerator: 'Cmd+C', command: 'textCopy' },
 		{ accelerator: 'Cmd+X', command: 'textCut' },
 		{ accelerator: 'Cmd+V', command: 'textPaste' },
@@ -59,6 +60,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Option+Cmd+1', command: 'switchProfile1' },
 		{ accelerator: 'Option+Cmd+2', command: 'switchProfile2' },
 		{ accelerator: 'Option+Cmd+3', command: 'switchProfile3' },
+		{ accelerator: 'Option+Cmd+Backspace', command: 'permanentlyDeleteNote' },
 	],
 	default: [
 		{ accelerator: 'Ctrl+N', command: 'newNote' },
@@ -105,6 +107,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Ctrl+Alt+1', command: 'switchProfile1' },
 		{ accelerator: 'Ctrl+Alt+2', command: 'switchProfile2' },
 		{ accelerator: 'Ctrl+Alt+3', command: 'switchProfile3' },
+		{ accelerator: 'Shift+Delete', command: 'permanentlyDeleteNote' },
 	],
 };
 
@@ -266,7 +269,7 @@ export default class KeymapService extends BaseService {
 		this.defaultKeymapItems.forEach(({ command, accelerator }) => {
 			const currentAccelerator = this.getAccelerator(command);
 
-			// Only the customized/changed keymap items are neccessary for the custom keymap
+			// Only the customized/changed keymap items are necessary for the custom keymap
 			// Customizations can be merged with the original keymap at the runtime
 			if (this.getAccelerator(command) !== accelerator) {
 				customkeymapItems.push({ command, accelerator: currentAccelerator });

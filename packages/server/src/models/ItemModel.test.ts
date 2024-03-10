@@ -528,7 +528,7 @@ describe('ItemModel', () => {
 		expect(item[0].name).toBe('000000000000000000000000000000F2.md');
 	});
 
-	// Case where an item is orphaned and the associated user is still prsent.
+	// Case where an item is orphaned and the associated user is still present.
 	test('should process orphaned items - 2', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);

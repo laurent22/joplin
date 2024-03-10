@@ -3,16 +3,21 @@
 	"extends": [
 		"config:base"
 	],
+
+	// We don't update too frequently so that if something is broken in a new package
+	// release it will have time to be fixed by the time we update. The npm ecosystem
+	// being what it is even patch releases can have serious breaking changes.
 	"major": {
-		"stabilityDays": 80,
+		"stabilityDays": 200,
 	},
 	"minor": {
-		"stabilityDays": 40,
+		"stabilityDays": 120,
 	},
 	"patch": {
-		"stabilityDays": 20,
+		"stabilityDays": 90,
 	},
-	"prConcurrentLimit": 5,
+
+	"prConcurrentLimit": 20,
 	"prHourlyLimit": 0,
 
 	// Tell Renovate to rebase only when there's a conflict, otherwise pull
@@ -134,6 +139,12 @@
 		"pretty-bytes",
 		"strip-ansi",
 		"node-emoji",
+		"debounce",
+
+		// Formidable v3 is broken:
+		// https://github.com/node-formidable/formidable/issues/958
+		"formidable",
+		"@types/formidable",
 
 		// @koa/cors has undocumented breaking changes, and the package is not
 		// well supported so we're stuck with latest v3 for now
@@ -188,6 +199,10 @@
 		// to rscss.
 		"styled-components",
 		"@types/styled-components",
+
+		// For now we are stuck with v5.1.6 due to this bug:
+		// https://github.com/TryGhost/node-sqlite3/issues/1747
+		"sqlite3",
 	],
 	"packageRules": [
 		{

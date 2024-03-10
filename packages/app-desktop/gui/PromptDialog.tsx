@@ -90,6 +90,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 			left: 0,
 			width: width,
 			height: height,
+			boxSizing: 'border-box',
 			backgroundColor: 'rgba(0,0,0,0.6)',
 			display: visible ? 'flex' : 'none',
 			alignItems: 'flex-start',
@@ -244,7 +245,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 		const onKeyDown = (event: any) => {
 			if (event.key === 'Enter') {
 				// If the dropdown is open, we don't close the dialog - instead
-				// the currently item will be selcted. If it is closed however
+				// the currently item will be selected. If it is closed however
 				// we confirm the dialog.
 				if ((this.props.inputType === 'tags' || this.props.inputType === 'dropdown') && this.menuIsOpened_) {
 					// Do nothing

@@ -2,7 +2,7 @@
 
 # Start the server with:
 #
-# JOPLIN_IS_TESTING=1 yarn run start-dev
+# JOPLIN_IS_TESTING=1 yarn start-dev
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 

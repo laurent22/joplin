@@ -35,7 +35,7 @@ const createNoteForPagination = async (numOrTitle: number | string, time: number
 
 let api: Api = null;
 
-describe('services_rest_Api', () => {
+describe('services/rest/Api', () => {
 
 	beforeEach(async () => {
 		api = new Api();
@@ -71,7 +71,7 @@ describe('services_rest_Api', () => {
 
 	it('should delete folders', (async () => {
 		const f1 = await Folder.save({ title: 'mon carnet' });
-		await api.route(RequestMethod.DELETE, `folders/${f1.id}`);
+		await api.route(RequestMethod.DELETE, `folders/${f1.id}`, { permanent: '1' });
 
 		const f1b = await Folder.load(f1.id);
 		expect(!f1b).toBe(true);

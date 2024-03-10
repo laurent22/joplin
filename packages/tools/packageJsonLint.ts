@@ -8,7 +8,7 @@ const main = async () => {
 
 	const rootDir = await getRootDir();
 	chdir(rootDir);
-	await execCommand('yarn run npmPkgJsonLint --configFile .npmpackagejsonlintrc.json --quiet .');
+	await execCommand('yarn npmPkgJsonLint --configFile .npmpackagejsonlintrc.json --quiet .');
 };
 
 main().catch((error) => {

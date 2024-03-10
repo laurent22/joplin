@@ -303,12 +303,12 @@ const completedFilter = (terms: Term[], conditions: string[], params: string[], 
 };
 
 
-const locationFilter = (terms: Term[], conditons: string[], params: string[], relation: Relation, useFts: boolean) => {
+const locationFilter = (terms: Term[], conditions: string[], params: string[], relation: Relation, useFts: boolean) => {
 	const locationTerms = terms.filter(x => x.name === 'latitude' || x.name === 'longitude' || x.name === 'altitude');
-	genericFilter(locationTerms, conditons, params, relation, 'location', useFts);
+	genericFilter(locationTerms, conditions, params, relation, 'location', useFts);
 };
 
-const dateFilter = (terms: Term[], conditons: string[], params: string[], relation: Relation, useFts: boolean) => {
+const dateFilter = (terms: Term[], conditions: string[], params: string[], relation: Relation, useFts: boolean) => {
 	const getUnixMs = (date: string): string => {
 		const yyyymmdd = /^[0-9]{8}$/;
 		const yyyymm = /^[0-9]{6}$/;
@@ -335,12 +335,12 @@ const dateFilter = (terms: Term[], conditons: string[], params: string[], relati
 
 	const dateTerms = terms.filter(x => x.name === 'created' || x.name === 'updated' || x.name === 'due');
 	const unixDateTerms = dateTerms.map(term => { return { ...term, value: getUnixMs(term.value) }; });
-	genericFilter(unixDateTerms, conditons, params, relation, 'date', useFts);
+	genericFilter(unixDateTerms, conditions, params, relation, 'date', useFts);
 };
 
-const sourceUrlFilter = (terms: Term[], conditons: string[], params: string[], relation: Relation, useFts: boolean) => {
+const sourceUrlFilter = (terms: Term[], conditions: string[], params: string[], relation: Relation, useFts: boolean) => {
 	const urlTerms = terms.filter(x => x.name === 'sourceurl');
-	genericFilter(urlTerms, conditons, params, relation, 'sourceurl', useFts);
+	genericFilter(urlTerms, conditions, params, relation, 'sourceurl', useFts);
 };
 
 const trimQuotes = (str: string) => str.startsWith('"') && str.endsWith('"') ? str.substr(1, str.length - 2) : str;

@@ -28,6 +28,7 @@ const { MarkupToHtml } = require('@joplin/renderer');
 const { ErrorNotFound } = require('../utils/errors');
 import { fileUriToPath } from '@joplin/utils/url';
 import { NoteEntity } from '../../database/types';
+import { DownloadController } from '../../../downloadController';
 
 const logger = Logger.create('routes/notes');
 
@@ -66,6 +67,7 @@ type RequestNote = {
 type FetchOptions = {
 	timeout?: number;
 	maxRedirects?: number;
+	downloadController?: DownloadController;
 };
 
 async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> {
@@ -81,7 +83,6 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 	if (requestNote.body_html) {
 		if (requestNote.convert_to === 'html') {
 			const style = await buildNoteStyleSheet(requestNote.stylesheets);
-			const minify = require('html-minifier').minify;
 
 			const minifyOptions = {
 				// Remove all spaces and, especially, newlines from tag attributes, as that would
@@ -104,6 +105,9 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 			const styleTag = style.length ? `<style>${styleString}</style>` + '\n' : '';
 			let minifiedHtml = '';
 			try {
+				// We use requireDynamic here -- html-minifier seems to not work in environments
+				// that lack `fs`.
+				const minify = shim.requireDynamic('html-minifier').minify;
 				minifiedHtml = minify(requestNote.body_html, minifyOptions);
 			} catch (error) {
 				console.warn('Could not minify HTML - using non-minified HTML instead', error);
@@ -189,81 +193,105 @@ async function tryToGuessExtFromMimeType(response: any, mediaPath: string) {
 	return newMediaPath;
 }
 
-export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions) {
-	logger.info('Downloading media file', url);
 
+const getFileExtension = (url: string, isDataUrl: boolean) => {
+	let fileExt = isDataUrl ? mimeUtils.toFileExtension(mimeUtils.fromDataUrl(url)) : safeFileExtension(fileExtension(url).toLowerCase());
+	if (!mimeUtils.fromFileExtension(fileExt)) fileExt = ''; // If the file extension is unknown - clear it.
+	if (fileExt) fileExt = `.${fileExt}`;
+
+	return fileExt;
+};
+
+const generateMediaPath = (url: string, isDataUrl: boolean, fileExt: string) => {
 	const tempDir = Setting.value('tempDir');
+	const name = isDataUrl ? md5(`${Math.random()}_${Date.now()}`) : filename(url);
+	// Append a UUID because simply checking if the file exists is not enough since
+	// multiple resources can be downloaded at the same time (race condition).
+	const mediaPath = `${tempDir}/${safeFilename(name)}_${uuid.create()}${fileExt}`;
+	return mediaPath;
+};
+
+const isValidUrl = (url: string, isDataUrl: boolean, urlProtocol?: string, allowedProtocols?: string[]) => {
+	if (!urlProtocol) return false;
+
+	// PDFs and other heavy resources are often served as separate files instead of data urls, its very unlikely to encounter a pdf as a data url
+	if (isDataUrl && !url.toLowerCase().startsWith('data:image/')) {
+		logger.warn(`Resources in data URL format is only supported for images ${url}`);
+		return false;
+	}
+
+	const defaultAllowedProtocols = ['http:', 'https:', 'data:'];
+	const allowed = allowedProtocols ?? defaultAllowedProtocols;
+	const isAllowedProtocol = allowed.includes(urlProtocol);
+
+	return isAllowedProtocol;
+};
+
+export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
+	logger.info('Downloading media file', url);
 
 	// The URL we get to download have been extracted from the Markdown document
 	url = markdownUtils.unescapeLinkUrl(url);
 
 	const isDataUrl = url && url.toLowerCase().indexOf('data:') === 0;
-
-	// PDFs and other heavy resoucres are often served as seperate files insted of data urls, its very unlikely to encounter a pdf as a data url
-	if (isDataUrl && !url.toLowerCase().startsWith('data:image/')) {
-		logger.warn(`Resources in data URL format is only supported for images ${url}`);
-		return '';
-	}
-
-	const invalidProtocols = ['cid:'];
 	const urlProtocol = urlUtils.urlProtocol(url)?.toLowerCase();
 
-	if (!urlProtocol || invalidProtocols.includes(urlProtocol)) {
+	if (!isValidUrl(url, isDataUrl, urlProtocol, allowedProtocols)) {
 		return '';
 	}
 
-	const name = isDataUrl ? md5(`${Math.random()}_${Date.now()}`) : filename(url);
-	let fileExt = isDataUrl ? mimeUtils.toFileExtension(mimeUtils.fromDataUrl(url)) : safeFileExtension(fileExtension(url).toLowerCase());
-	if (!mimeUtils.fromFileExtension(fileExt)) fileExt = ''; // If the file extension is unknown - clear it.
-	if (fileExt) fileExt = `.${fileExt}`;
-
-	// Append a UUID because simply checking if the file exists is not enough since
-	// multiple resources can be downloaded at the same time (race condition).
-	let mediaPath = `${tempDir}/${safeFilename(name)}_${uuid.create()}${fileExt}`;
+	const fileExt = getFileExtension(url, isDataUrl);
+	const mediaPath = generateMediaPath(url, isDataUrl, fileExt);
+	let newMediaPath = undefined;
 
 	try {
 		if (isDataUrl) {
 			await shim.imageFromDataUrl(url, mediaPath);
 		} else if (urlProtocol === 'file:') {
-			// Can't think of any reason to disallow this at this point
-			// if (!allowFileProtocolImages) throw new Error('For security reasons, this URL with file:// protocol cannot be downloaded');
 			const localPath = fileUriToPath(url);
 			await shim.fsDriver().copy(localPath, mediaPath);
 		} else {
 			const response = await shim.fetchBlob(url, { path: mediaPath, maxRetry: 1, ...fetchOptions });
 
-			// If we could not find the file extension from the URL, try to get it
-			// now based on the Content-Type header.
-			if (!fileExt) mediaPath = await tryToGuessExtFromMimeType(response, mediaPath);
+			if (!fileExt) {
+				// If we could not find the file extension from the URL, try to get it
+				// now based on the Content-Type header.
+				newMediaPath = await tryToGuessExtFromMimeType(response, mediaPath);
+			}
 		}
-		return mediaPath;
+		return newMediaPath ?? mediaPath;
 	} catch (error) {
 		logger.warn(`Cannot download image at ${url}`, error);
 		return '';
 	}
 }
 
-async function downloadMediaFiles(urls: string[], fetchOptions?: FetchOptions) {
-	const PromisePool = require('es6-promise-pool');
-
+async function downloadMediaFiles(urls: string[], fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
 	const output: any = {};
 
+	const downloadController = fetchOptions?.downloadController ?? null;
+
 	const downloadOne = async (url: string) => {
-		const mediaPath = await downloadMediaFile(url, fetchOptions); // , allowFileProtocolImages);
+		if (downloadController) downloadController.imagesCount += 1;
+		const mediaPath = await downloadMediaFile(url, fetchOptions, allowedProtocols);
 		if (mediaPath) output[url] = { path: mediaPath, originalUrl: url };
 	};
 
-	let urlIndex = 0;
-	const promiseProducer = () => {
-		if (urlIndex >= urls.length) return null;
+	const maximumImageDownloadsAllowed = downloadController ? downloadController.maxImagesCount : Number.POSITIVE_INFINITY;
+	const urlsAllowedByController = urls.slice(0, maximumImageDownloadsAllowed);
+	logger.info(`Media files allowed to be downloaded: ${maximumImageDownloadsAllowed}`);
 
-		const url = urls[urlIndex++];
-		return downloadOne(url);
-	};
+	const promises = [];
+	for (const url of urlsAllowedByController) {
+		promises.push(downloadOne(url));
+	}
 
-	const concurrency = 10;
-	const pool = new PromisePool(promiseProducer, concurrency);
-	await pool.start();
+	await Promise.all(promises);
+
+	if (downloadController) {
+		downloadController.imageCountExpected = urls.length;
+		downloadController.printStats(urls.length);
+	}
 
 	return output;
 }
@@ -374,14 +402,20 @@ async function attachImageFromDataUrl(note: any, imageDataUrl: string, cropRect:
 	return await shim.attachFileToNote(note, tempFilePath);
 }
 
-export const extractNoteFromHTML = async (requestNote: RequestNote, requestId: number, imageSizes: any, fetchOptions?: FetchOptions) => {
+export const extractNoteFromHTML = async (
+	requestNote: RequestNote,
+	requestId: number,
+	imageSizes: any,
+	fetchOptions?: FetchOptions,
+	allowedProtocols?: string[],
+) => {
 	const note = await requestNoteToNote(requestNote);
 
 	const mediaUrls = extractMediaUrls(note.markup_language, note.body);
 
 	logger.info(`Request (${requestId}): Downloading media files: ${mediaUrls.length}`);
 
-	const mediaFiles = await downloadMediaFiles(mediaUrls, fetchOptions); // , allowFileProtocolImages);
+	const mediaFiles = await downloadMediaFiles(mediaUrls, fetchOptions, allowedProtocols);
 
 	logger.info(`Request (${requestId}): Creating resources from paths: ${Object.getOwnPropertyNames(mediaFiles).length}`);
 
@@ -433,7 +467,14 @@ export default async function(request: Request, id: string = null, link: string 
 
 		logger.info('Images:', imageSizes);
 
-		const extracted = await extractNoteFromHTML(requestNote, requestId, imageSizes);
+		const allowedProtocolsForDownloadMediaFiles = ['http:', 'https:', 'file:', 'data:'];
+		const extracted = await extractNoteFromHTML(
+			requestNote,
+			requestId,
+			imageSizes,
+			undefined,
+			allowedProtocolsForDownloadMediaFiles,
+		);
 
 		let note = await Note.save(extracted.note, extracted.saveOptions);
 
@@ -482,6 +523,11 @@ export default async function(request: Request, id: string = null, link: string 
 		}
 
 		return newNote;
+	}
+
+	if (request.method === RequestMethod.DELETE) {
+		await Note.delete(id, { toTrash: request.query.permanent !== '1', sourceDescription: 'api/notes DELETE' });
+		return;
 	}
 
 	return defaultAction(BaseModel.TYPE_NOTE, request, id, link);

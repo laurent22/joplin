@@ -1,11 +1,11 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
-const { themeStyle } = require('../../global-style.js');
+import { themeStyle } from '../../global-style';
 import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 import useEditPopup from './useEditPopup';
 import Logger from '@joplin/utils/Logger';
-const { assetsToHeaders } = require('@joplin/renderer');
+import { assetsToHeaders } from '@joplin/renderer';
 
 const logger = Logger.create('NoteBodyViewer/useSource');
 
@@ -75,7 +75,7 @@ export default function useSource(
 	// If a checkbox in a note is ticked, the body changes, which normally would
 	// trigger a re-render of this component, which has the unfortunate side
 	// effect of making the view scroll back to the top. This re-rendering
-	// however is uncessary since the component is already visually updated via
+	// however is unnecessary since the component is already visually updated via
 	// JS. So here, if the note has not changed, we prevent the component from
 	// updating. This fixes the above issue. A drawback of this is if the note
 	// is updated via sync, this change will not be displayed immediately.
@@ -230,6 +230,11 @@ export default function useSource(
 				code {
 					white-space: pre-wrap;
 					overflow-x: hidden;
+				}
+
+				body {
+					padding-left: ${Number(theme.marginLeft)}px;
+					padding-right: ${Number(theme.marginRight)}px;
 				}
 			`;
 

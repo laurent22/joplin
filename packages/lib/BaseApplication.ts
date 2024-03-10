@@ -25,7 +25,6 @@ import { reg } from './registry';
 import time from './time';
 import BaseSyncTarget from './BaseSyncTarget';
 import reduxSharedMiddleware from './components/shared/reduxSharedMiddleware';
-const os = require('os');
 import dns = require('dns');
 import fs = require('fs-extra');
 const EventEmitter = require('events');
@@ -48,7 +47,6 @@ import MigrationService from './services/MigrationService';
 import ShareService from './services/share/ShareService';
 import handleSyncStartupOperation from './services/synchronizer/utils/handleSyncStartupOperation';
 import SyncTargetJoplinCloud from './SyncTargetJoplinCloud';
-const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
 import { getEncryptionEnabled } from './services/synchronizer/syncInfoUtils';
 import { loadMasterKeysFromSettings, migrateMasterPassword } from './services/e2ee/utils';
@@ -62,16 +60,21 @@ import { parseShareCache } from './services/share/reducer';
 import RotatingLogs from './RotatingLogs';
 import { NoteEntity } from './services/database/types';
 import { join } from 'path';
-import processStartFlags, { MatchedStartFlags } from './utils/processStartFlags';
+import processStartFlags from './utils/processStartFlags';
+import { setupAutoDeletion } from './services/trash/permanentlyDeleteOldItems';
+import determineProfileAndBaseDir from './determineBaseAppDirs';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
 // const ntpClient = require('./vendor/ntp-client');
 // ntpClient.dgram = require('dgram');
 
-interface StartOptions {
+export interface StartOptions {
 	keychainEnabled?: boolean;
 	setupGlobalLogger?: boolean;
+	rootProfileDir?: string;
+	appName?: string;
+	appId?: string;
 }
 export const safeModeFlagFilename = 'force-safe-mode-on-next-start';
 
@@ -88,7 +91,7 @@ export default class BaseApplication {
 	// Note: this is basically a cache of state.selectedFolderId. It should *only*
 	// be derived from the state and not set directly since that would make the
 	// state and UI out of sync.
-	private currentFolder_: any = null;
+	protected currentFolder_: any = null;
 
 	protected store_: Store<any> = null;
 
@@ -436,6 +439,14 @@ export default class BaseApplication {
 			doRefreshFolders = true;
 		}
 
+		// If a note gets deleted to the trash or gets restored we refresh the folders so that the
+		// note count can be updated.
+		if (this.hasGui() && ['NOTE_UPDATE_ONE'].includes(action.type)) {
+			if (action.changedFields && action.changedFields.includes('deleted_time')) {
+				doRefreshFolders = true;
+			}
+		}
+
 		if (action.type === 'HISTORY_BACKWARD' || action.type === 'HISTORY_FORWARD') {
 			refreshNotes = true;
 			refreshNotesUseSelectedNoteId = true;
@@ -600,20 +611,6 @@ export default class BaseApplication {
 		return flags.matched;
 	}
 
-	public static determineProfileDir(initArgs: MatchedStartFlags) {
-		let output = '';
-
-		if (initArgs.profileDir) {
-			output = initArgs.profileDir;
-		} else if (process && process.env && process.env.PORTABLE_EXECUTABLE_DIR) {
-			output = `${process.env.PORTABLE_EXECUTABLE_DIR}/JoplinProfile`;
-		} else {
-			output = `${os.homedir()}/.config/${Setting.value('appName')}`;
-		}
-
-		return toSystemSlashes(output, 'linux');
-	}
-
 	protected startRotatingLogMaintenance(profileDir: string) {
 		this.rotatingLogs = new RotatingLogs(profileDir);
 		const processLogs = async () => {
@@ -641,14 +638,17 @@ export default class BaseApplication {
 		let initArgs = startFlags.matched;
 		if (argv.length) this.showPromptString_ = false;
 
-		let appName = initArgs.env === 'dev' ? 'joplindev' : 'joplin';
-		if (Setting.value('appId').indexOf('-desktop') >= 0) appName += '-desktop';
+		let appName = options.appName;
+		if (!appName) {
+			appName = initArgs.env === 'dev' ? 'joplindev' : 'joplin';
+			if (Setting.value('appId').indexOf('-desktop') >= 0) appName += '-desktop';
+		}
 		Setting.setConstant('appName', appName);
 
 		// https://immerjs.github.io/immer/docs/freezing
 		setAutoFreeze(initArgs.env === 'dev');
 
-		const rootProfileDir = BaseApplication.determineProfileDir(initArgs);
+		const { rootProfileDir, homeDir } = determineProfileAndBaseDir(options.rootProfileDir ?? initArgs.profileDir, appName);
 		const { profileDir, profileConfig, isSubProfile } = await initProfile(rootProfileDir);
 		this.profileConfig_ = profileConfig;
 
@@ -664,6 +664,7 @@ export default class BaseApplication {
 		Setting.setConstant('pluginDataDir', `${profileDir}/plugin-data`);
 		Setting.setConstant('cacheDir', cacheDir);
 		Setting.setConstant('pluginDir', `${rootProfileDir}/plugins`);
+		Setting.setConstant('homeDir', homeDir);
 
 		SyncTargetRegistry.addClass(SyncTargetNone);
 		SyncTargetRegistry.addClass(SyncTargetFilesystem);
@@ -746,8 +747,15 @@ export default class BaseApplication {
 		}
 
 		if (Setting.value('firstStart')) {
-			const locale = shim.detectAndSetLocale(Setting);
-			reg.logger().info(`First start: detected locale as ${locale}`);
+
+			// detectAndSetLocale sets the locale to the system default locale.
+			// Not calling it when a new profile is created ensures that the
+			// the language set by the user is not overridden by the system
+			// default language.
+			if (!Setting.value('isSubProfile')) {
+				const locale = shim.detectAndSetLocale(Setting);
+				reg.logger().info(`First start: detected locale as ${locale}`);
+			}
 			Setting.skipDefaultMigrations();
 
 			if (Setting.value('env') === 'dev') {
@@ -830,6 +838,8 @@ export default class BaseApplication {
 		if (currentFolderId) currentFolder = await Folder.load(currentFolderId);
 		if (!currentFolder) currentFolder = await Folder.defaultFolder();
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
+
+		await setupAutoDeletion();
 
 		await MigrationService.instance().run();
 

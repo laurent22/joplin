@@ -20,6 +20,8 @@ const getLabel = (commandName: string): string => {
 		return _('Website and documentation');
 	case 'hideApp':
 		return _('Hide Joplin');
+	case 'minimizeWindow':
+		return _('Minimise');
 	case 'closeWindow':
 		return _('Close Window');
 	case 'config':

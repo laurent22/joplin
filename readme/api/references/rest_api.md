@@ -21,7 +21,7 @@ for (let portToTest = 41184; portToTest <= 41194; portToTest++) {
 
 ## Authorisation
 
-To prevent unauthorised applications from accessing the API, the calls must be authentified. To do so, you must provide a token as a query parameter for each API call. You can get this token from the Joplin desktop application, on the Web Clipper Options screen.
+To prevent unauthorised applications from accessing the API, the calls must be authenticated. To do so, you must provide a token as a query parameter for each API call. You can get this token from the Joplin desktop application, on the Web Clipper Options screen.
 
 This would be an example of valid cURL call using a token:
 
@@ -101,7 +101,7 @@ Then you will resume fetching the results using this query:
 curl http://localhost:41184/notes?order_by=updated_time&order_dir=ASC&limit=10&page=2
 ```
 
-Eventually you will get some results that do not contain an "has_more" paramater, at which point you will have retrieved all the results
+Eventually you will get some results that do not contain an "has_more" parameter, at which point you will have retrieved all the results
 
 As an example the pseudo-code below could be used to fetch all the notes:
 
@@ -146,7 +146,7 @@ To retrieve all the tags that start with `project-`: **GET /search?query=project
 
 ## Item type IDs
 
-Item type IDs might be refered to in certain object you will retrieve from the API. This is the correspondance between name and ID:
+Item type IDs might be referred to in certain objects you will retrieve from the API. This is the correspondence between name and ID:
 
 Name | Value
 ---- | -----
@@ -202,6 +202,7 @@ command | 16
 | conflict_original_id | text  |       |
 | master_key_id | text  |       |
 | user_data | text  |       |
+| deleted_time | int   |       |
 | body_html | text  | Note body, in HTML format |
 | base_url | text  | If `body_html` is provided and contains relative URLs, provide the `base_url` parameter too so that all the URLs can be converted to absolute ones. The base URL is basically where the HTML was fetched from, minus the query (everything after the '?'). For example if the original page was `https://stackoverflow.com/search?q=%5Bjava%5D+test`, the base URL is `https://stackoverflow.com/search`. |
 | image_data_url | text  | An image to attach to the note, in [Data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) format. |
@@ -265,6 +266,8 @@ Sets the properties of the note with ID :id
 
 Deletes the note with ID :id
 
+By default, the note will be moved **to the trash**. To permanently delete it, add the query parameter `permanent=1`
+
 ## Folders
 
 This is actually a notebook. Internally notebooks are called "folders".
@@ -287,6 +290,7 @@ This is actually a notebook. Internally notebooks are called "folders".
 | master_key_id | text  |       |
 | icon  | text  |       |
 | user_data | text  |       |
+| deleted_time | int   |       |
 
 ### GET /folders
 
@@ -313,6 +317,8 @@ Sets the properties of the folder with ID :id
 ### DELETE /folders/:id
 
 Deletes the folder with ID :id
+
+By default, the folder will be moved **to the trash**. To permanently delete it, add the query parameter `permanent=1`
 
 ## Resources
 

@@ -63,7 +63,7 @@
 		"%s = %s (%s)"
 	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
-		""
+		"%s 沒有針對同步許多小文件進行優化，因此初始同步速度會比較慢。"
 	],
 	"%s: %d": [
 		"%s: %d"
@@ -341,7 +341,7 @@
 	"Browse...": [
 		"瀏覽..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -470,6 +470,9 @@
 	"Close dropdown": [
 		"關閉下拉式選單"
 	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
+	],
 	"Close Window": [
 		"關閉視窗"
 	],
@@ -489,7 +492,7 @@
 		"與其他人在記事本協作"
 	],
 	"Collapse": [
-		""
+		"收合"
 	],
 	"Coming alarms": [
 		"未來提醒"
@@ -617,7 +620,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"無法驗證此筆記本的共享狀態 - 正在中止。請連接網路後重試。"
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"無法驗證您的身份：%s"
 	],
 	"Create": [
@@ -1065,7 +1068,7 @@
 		"啟用記事歷史紀錄"
 	],
 	"Enable optical character recognition (OCR)": [
-		""
+		"啟用光學字符識別（OCR）"
 	],
 	"Enable PDF viewer": [
 		"啟用 PDF 查看器"
@@ -1427,6 +1430,9 @@
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"由於必須對整個資料集進行加密和同步，所以最好在夜間睡覺的時候進行。\n\n首先，請依照以下說明進行操作：\n\n1. 同步您的所有設備。\n2. 點選「%s」。\n3. 等待執行完成。在執行過程中，請避免在其他設備上更改任何記事，以免發生衝突。\n4. 待此設備完成重新加密與同步後，同步所有其他設備，並等待其執行完成。\n\n重要提示：您只需要在一台設備上執行此操作一次。"
 	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
+	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"為了使用檔案系統同步，您需要具有寫入外部儲存裝置的權限。"
 	],
@@ -1733,6 +1739,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"媒體播放器、數學、圖表、目錄"
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"遺失的密鑰"
 	],
@@ -1859,7 +1868,7 @@
 	"Nord": [
 		"北歐藍"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"與 %s 認證失敗，請提供完整的身份驗證資訊。"
 	],
 	"Not downloaded": [
@@ -2531,6 +2540,12 @@
 	"Solarised Light": [
 		"日光白"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"有些項目無法解密。"
 	],
@@ -2834,6 +2849,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"此共享對象無法從列表中移除。請重試。\n\n錯誤訊息：「%s」"
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"在 Joplin 同步前需先升級同步目標。更新時間大約耗時數分鐘，且程式也需要重新啟動。如願繼續，請點擊連結。"
 	],
@@ -3068,6 +3086,9 @@
 	"Undo": [
 		"復原"
 	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
+	],
 	"Unknown flag: %s": [
 		"未知的標誌：%s"
 	],
@@ -3240,7 +3261,7 @@
 		"當新增待辦事項時："
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
-		""
+		"啟用後，應用程式將掃描您的附件並提取其中的文字。這將使您能夠在這些附件中搜索文本。"
 	],
 	"Window unresponsive.": [
 		"視窗無回應。"

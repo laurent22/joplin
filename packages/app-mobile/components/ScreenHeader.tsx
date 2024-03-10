@@ -11,7 +11,7 @@ import { _, _n } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-const { themeStyle } = require('./global-style.js');
+import { themeStyle } from './global-style';
 import { OnValueChangedListener } from './Dropdown';
 const { dialogs } = require('../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
@@ -21,6 +21,9 @@ import { FolderEntity } from '@joplin/lib/services/database/types';
 import { State } from '@joplin/lib/reducer';
 import CustomButton from './CustomButton';
 import FolderPicker from './FolderPicker';
+import { getTrashFolderId, itemIsInTrash } from '@joplin/lib/services/trash';
+import restoreItems from '@joplin/lib/services/trash/restoreItems';
+import { ModelType } from '@joplin/lib/BaseModel';
 
 // We need this to suppress the useless warning
 // https://github.com/oblador/react-native-vector-icons/issues/1465
@@ -50,6 +53,8 @@ export interface MenuOptionType {
 type DispatchCommandType=(event: { type: string })=> void;
 interface ScreenHeaderProps {
 	selectedNoteIds: string[];
+	selectedFolderId: string;
+	notesParentType: string;
 	noteSelectionEnabled: boolean;
 	parentComponent: any;
 	showUndoButton: boolean;
@@ -86,6 +91,7 @@ interface ScreenHeaderProps {
 	hasDisabledEncryptionItems?: boolean;
 	shouldUpgradeSyncTarget?: boolean;
 	showShouldUpgradeSyncTargetMessage?: boolean;
+	mustUpgradeAppMessage: string;
 
 	themeId: number;
 }
@@ -268,19 +274,25 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		// Dialog needs to be displayed as a child of the parent component, otherwise
 		// it won't be visible within the header component.
 		const noteIds = this.props.selectedNoteIds;
-
-		const msg = await Note.deleteMessage(noteIds);
-		if (!msg) return;
-
-		const ok = await dialogs.confirm(this.props.parentComponent, msg);
-		if (!ok) return;
-
 		this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 
 		try {
-			await Note.batchDelete(noteIds);
+			await Note.batchDelete(noteIds, { toTrash: true, sourceDescription: 'Delete selected notes button' });
 		} catch (error) {
 			alert(_n('This note could not be deleted: %s', 'These notes could not be deleted: %s', noteIds.length, error.message));
+		}
+	}
+
+	private async restoreButton_press() {
+		// Dialog needs to be displayed as a child of the parent component, otherwise
+		// it won't be visible within the header component.
+		const noteIds = this.props.selectedNoteIds;
+		this.props.dispatch({ type: 'NOTE_SELECTION_END' });
+
+		try {
+			await restoreItems(ModelType.Note, noteIds);
+		} catch (error) {
+			alert(`Could not restore note(s): ${error.message}`);
 		}
 	}
 
@@ -449,6 +461,24 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		function restoreButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
+			return (
+				<CustomButton
+					onPress={onPress}
+					disabled={disabled}
+
+					themeId={themeId}
+					description={_('Restore')}
+					accessibilityHint={
+						disabled ? null : _('Restore')
+					}
+					contentStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
+				>
+					<Icon name="reload-circle" style={styles.topIcon} />
+				</CustomButton>
+			);
+		}
+
 		function duplicateButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<CustomButton
@@ -483,6 +513,9 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		let key = 0;
 		const menuOptionComponents = [];
+
+		const selectedFolder = this.props.notesParentType === 'Folder' ? Folder.byId(this.props.folders, this.props.selectedFolderId) : null;
+		const selectedFolderInTrash = itemIsInTrash(selectedFolder);
 
 		if (!this.props.noteSelectionEnabled) {
 			for (let i = 0; i < this.props.menuOptions.length; i++) {
@@ -555,7 +588,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 							}
 						}}
 						mustSelect={!!folderPickerOptions.mustSelect}
-						folders={this.props.folders}
+						folders={this.props.folders.filter(f => f.id !== getTrashFolderId())}
 					/>
 				);
 			} else {
@@ -569,6 +602,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		if (this.props.showMissingMasterKeyMessage) warningComps.push(this.renderWarningBox('EncryptionConfig', _('Press to set the decryption password.')));
 		if (this.props.hasDisabledSyncItems) warningComps.push(this.renderWarningBox('Status', _('Some items cannot be synchronised. Press for more info.')));
 		if (this.props.shouldUpgradeSyncTarget && this.props.showShouldUpgradeSyncTargetMessage !== false) warningComps.push(this.renderWarningBox('UpgradeSyncTarget', _('The sync target needs to be upgraded. Press this banner to proceed.')));
+		if (this.props.mustUpgradeAppMessage) warningComps.push(this.renderWarningBox('UpgradeApp', this.props.mustUpgradeAppMessage));
 
 		if (this.props.hasDisabledEncryptionItems) {
 			warningComps.push(this.renderWarningBox('Status', _('Some items cannot be decrypted.')));
@@ -589,8 +623,9 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), backButtonDisabled);
 		const selectAllButtonComp = !showSelectAllButton ? null : selectAllButton(this.styles(), () => this.selectAllButton_press());
 		const searchButtonComp = !showSearchButton ? null : searchButton(this.styles(), () => this.searchButton_press());
-		const deleteButtonComp = this.props.noteSelectionEnabled ? deleteButton(this.styles(), () => this.deleteButton_press(), headerItemDisabled) : null;
-		const duplicateButtonComp = this.props.noteSelectionEnabled ? duplicateButton(this.styles(), () => this.duplicateButton_press(), headerItemDisabled) : null;
+		const deleteButtonComp = !selectedFolderInTrash && this.props.noteSelectionEnabled ? deleteButton(this.styles(), () => this.deleteButton_press(), headerItemDisabled) : null;
+		const restoreButtonComp = selectedFolderInTrash && this.props.noteSelectionEnabled ? restoreButton(this.styles(), () => this.restoreButton_press(), headerItemDisabled) : null;
+		const duplicateButtonComp = !selectedFolderInTrash && this.props.noteSelectionEnabled ? duplicateButton(this.styles(), () => this.duplicateButton_press(), headerItemDisabled) : null;
 		const sortButtonComp = !this.props.noteSelectionEnabled && this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
 		const windowHeight = Dimensions.get('window').height - 50;
 
@@ -635,6 +670,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					{selectAllButtonComp}
 					{searchButtonComp}
 					{deleteButtonComp}
+					{restoreButtonComp}
 					{duplicateButtonComp}
 					{sortButtonComp}
 					{menuComp}
@@ -665,9 +701,12 @@ const ScreenHeader = connect((state: State) => {
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		selectedNoteIds: state.selectedNoteIds,
+		selectedFolderId: state.selectedFolderId,
+		notesParentType: state.notesParentType,
 		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
+		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
 	};
 })(ScreenHeaderComponent);
 

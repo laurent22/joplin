@@ -2,6 +2,7 @@ import { isHashedPassword } from '../../utils/auth';
 
 describe('isHashedPassword', () => {
 
+	// cSpell:disable
 	it('should be true if password starts with $2a$10', () => {
 		expect(isHashedPassword('$2a$10$LMKVPiNOWDZhtw9NizNIEuNGLsjOxQAcrwQJ0lnKuiaOtyFgZEnwO')).toBe(true);
 	});
@@ -16,4 +17,6 @@ describe('isHashedPassword', () => {
 	)('should be false if password starts with $2a$10: %', (password) => {
 		expect(isHashedPassword(password)).toBe(false);
 	});
+	// cSpell:enable
+
 });
