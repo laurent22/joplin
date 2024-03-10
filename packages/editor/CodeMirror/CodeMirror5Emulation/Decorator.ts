@@ -68,6 +68,9 @@ class WidgetDecorationWrapper extends WidgetType {
 			container.classList.add(this.options.className);
 		}
 
+		// Applies margins and related CSS:
+		container.classList.add('cm-line');
+
 		return container;
 	}
 }

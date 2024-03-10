@@ -12,6 +12,7 @@ import Logger from '@joplin/utils/Logger';
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import ResourceService from '../services/ResourceService';
 import { LoadOptions } from './utils/types';
+import ActionLogger from '../utils/ActionLogger';
 import { getTrashFolder, getTrashFolderId } from '../services/trash';
 const { substrWithEllipsis } = require('../string-utils.js');
 
@@ -109,7 +110,7 @@ export default class Folder extends BaseItem {
 		}
 	}
 
-	public static async delete(folderId: string, options: DeleteOptions = null) {
+	public static async delete(folderId: string, options?: DeleteOptions) {
 		options = {
 			deleteChildren: true,
 			...options,
@@ -122,9 +123,14 @@ export default class Folder extends BaseItem {
 		const folder = await Folder.load(folderId);
 		if (!folder) return; // noop
 
+		const actionLogger = ActionLogger.from(options.sourceDescription);
+		actionLogger.addDescription(`folder title: ${JSON.stringify(folder.title)}`);
+		options.sourceDescription = actionLogger;
+
 		if (options.deleteChildren) {
 			const childrenDeleteOptions: DeleteOptions = {
 				disableReadOnlyCheck: options.disableReadOnlyCheck,
+				sourceDescription: actionLogger,
 				deleteChildren: true,
 				toTrash,
 			};

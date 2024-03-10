@@ -1,5 +1,5 @@
 import { TextStyle, ViewStyle, StyleSheet } from 'react-native';
-const { themeStyle } = require('../../global-style.js');
+import { themeStyle } from '../../global-style';
 
 type SidebarButtonStyle = ViewStyle & { height: number };
 

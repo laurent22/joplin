@@ -1,0 +1,32 @@
+.login-page {
+
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	background-color: var(--joplin-background-color);
+	color: var(--joplin-color);
+
+	> .page-container {
+		height: calc(100% - (var(--joplin-margin) * 2));
+		flex: 1;
+		padding: var(--joplin-config-screen-padding);
+
+		> .text {
+			font-size: var(--joplin-font-size);
+		}
+
+		> .buttons-container {
+			margin-bottom: calc(var(--joplin-font-size) * 2);
+			display: flex;
+
+			> button:first-child {
+				margin-right: calc(var(--joplin-font-size) * 2);
+			}
+		}
+
+		> .bold {
+			font-weight: bold;
+			font-size: calc(var(--joplin-font-size) * 1.3);
+		}
+	}
+}

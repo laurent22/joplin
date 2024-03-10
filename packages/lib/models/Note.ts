@@ -16,6 +16,7 @@ const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
 const { _ } = require('../locale');
 import { pull, removeElement, unique } from '../ArrayUtils';
 import { LoadOptions, SaveOptions } from './utils/types';
+import ActionLogger from '../utils/ActionLogger';
 import { getDisplayParentId, getTrashFolderId } from '../services/trash';
 import { currentLocale } from '../locale';
 const urlUtils = require('../urlUtils.js');
@@ -828,7 +829,7 @@ export default class Note extends BaseItem {
 		return savedNote;
 	}
 
-	public static async batchDelete(ids: string[], options: DeleteOptions = null) {
+	public static async batchDelete(ids: string[], options: DeleteOptions = {}) {
 		if (!ids.length) return;
 
 		ids = ids.slice();
@@ -872,7 +873,12 @@ export default class Note extends BaseItem {
 
 				await this.db().exec({ sql, params });
 			} else {
-				await super.batchDelete(processIds, options);
+				// For now, we intentionally log only permanent batchDeletions.
+				const actionLogger = ActionLogger.from(options.sourceDescription);
+				const noteTitles = notes.map(note => note.title);
+				actionLogger.addDescription(`titles: ${JSON.stringify(noteTitles)}`);
+
+				await super.batchDelete(processIds, { ...options, sourceDescription: actionLogger });
 			}
 
 			for (let i = 0; i < processIds.length; i++) {

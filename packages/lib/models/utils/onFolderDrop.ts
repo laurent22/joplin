@@ -10,7 +10,7 @@ export default async (noteIds: string[], folderIds: string[], targetFolderId: st
 
 	if (!targetFolder) throw new Error(`No such folder: ${targetFolderId}`);
 
-	const defaultDeleteOptions: DeleteOptions = { toTrash: true };
+	const defaultDeleteOptions: DeleteOptions = { toTrash: true, sourceDescription: 'onFolderDrop' };
 
 	if (targetFolder.id !== getTrashFolderId()) {
 		defaultDeleteOptions.toTrashParentId = targetFolder.id;

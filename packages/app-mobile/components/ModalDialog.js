@@ -1,6 +1,6 @@
 const React = require('react');
 const { Text, View, StyleSheet, Button } = require('react-native');
-const { themeStyle } = require('./global-style.js');
+const { themeStyle } = require('./global-style');
 const { _ } = require('@joplin/lib/locale');
 
 import Modal from './Modal';
