@@ -207,23 +207,8 @@ if [ "$RUN_TESTS" == "1" ]; then
 
 		mkdir -p ../joplin-website/docs
 		ll ../joplin-website/docs/api/references/plugin_api
+		CROWDIN_PERSONAL_TOKEN="$CROWDIN_PERSONAL_TOKEN" yarn crowdinDownload
 		SKIP_SPONSOR_PROCESSING=1 yarn buildWebsite
-		testResult=$?
-		if [ $testResult -ne 0 ]; then
-			exit $testResult
-		fi
-	fi
-fi
-
-# =============================================================================
-# Check that the Docusaurus documentation still builds
-# =============================================================================
-
-if [ "$RUN_TESTS" == "1" ]; then
-	if [ "$IS_LINUX" == "1" ]; then
-		echo "Step: Check that the Docusaurus documentation still builds..."
-
-		node ./packages/tools/website/processDocs.js --env prod
 		testResult=$?
 		if [ $testResult -ne 0 ]; then
 			exit $testResult
