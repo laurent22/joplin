@@ -202,14 +202,32 @@ fi
 # =============================================================================
 
 if [ "$RUN_TESTS" == "1" ]; then
-	echo "Step: Check that the website still builds..."
+	if [ "$IS_LINUX" == "1" ]; then
+		echo "Step: Check that the website still builds..."
 
-	mkdir -p ../joplin-website/docs
-	ll ../joplin-website/docs/api/references/plugin_api
-	SKIP_SPONSOR_PROCESSING=1 yarn buildWebsite
-	testResult=$?
-	if [ $testResult -ne 0 ]; then
-		exit $testResult
+		mkdir -p ../joplin-website/docs
+		ll ../joplin-website/docs/api/references/plugin_api
+		SKIP_SPONSOR_PROCESSING=1 yarn buildWebsite
+		testResult=$?
+		if [ $testResult -ne 0 ]; then
+			exit $testResult
+		fi
+	fi
+fi
+
+# =============================================================================
+# Check that the Docusaurus documentation still builds
+# =============================================================================
+
+if [ "$RUN_TESTS" == "1" ]; then
+	if [ "$IS_LINUX" == "1" ]; then
+		echo "Step: Check that the Docusaurus documentation still builds..."
+
+		node ./packages/tools/website/processDocs.js --env prod
+		testResult=$?
+		if [ $testResult -ne 0 ]; then
+			exit $testResult
+		fi
 	fi
 fi
 
