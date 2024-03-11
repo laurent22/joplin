@@ -473,6 +473,7 @@ const SidebarComponent = (props: Props) => {
 			type: 'SMART_FILTER_SELECT',
 			id: ALL_NOTES_FILTER_ID,
 		});
+		folderItem_click(ALL_NOTES_FILTER_ID);
 	};
 
 	const anchorItemRef = (type: string, id: string) => {
@@ -492,21 +493,21 @@ const SidebarComponent = (props: Props) => {
 		return <i className={isExpanded ? 'fas fa-caret-down' : 'fas fa-caret-right'} style={style}></i>;
 	};
 
+	const toggleAllNotesContextMenu = useCallback(() => {
+		const menu = new Menu();
+
+		if (Setting.value('notes.perFolderSortOrderEnabled')) {
+			menu.append(new MenuItem({
+				...menuUtils.commandToStatefulMenuItem('togglePerFolderSortOrder', ALL_NOTES_FILTER_ID),
+				type: 'checkbox',
+				checked: PerFolderSortOrderService.isSet(ALL_NOTES_FILTER_ID),
+			}));
+		}
+
+		menu.popup({ window: bridge().window() });
+	}, []);
+
 	const renderAllNotesItem = (theme: Theme, selected: boolean) => {
-		const toggleAllNotesContextMenu = () => {
-			const menu = new Menu();
-
-			if (Setting.value('notes.perFolderSortOrderEnabled')) {
-				menu.append(new MenuItem({
-					...menuUtils.commandToStatefulMenuItem('togglePerFolderSortOrder', ALL_NOTES_FILTER_ID),
-					type: 'checkbox',
-					checked: PerFolderSortOrderService.isSet(ALL_NOTES_FILTER_ID),
-				}));
-			}
-
-			menu.popup({ window: bridge().window() });
-		};
-
 		return (
 			<StyledListItem key="allNotesHeader" selected={selected} className={'list-item-container list-item-depth-0 all-notes'} isSpecialItem={true}>
 				<StyledExpandLink>{renderExpandIcon(theme, false, false)}</StyledExpandLink>
@@ -516,7 +517,7 @@ const SidebarComponent = (props: Props) => {
 					isSpecialItem={true}
 					href="#"
 					selected={selected}
-					onClick={() => { onAllNotesClick_(); folderItem_click(ALL_NOTES_FILTER_ID); }}
+					onClick={onAllNotesClick_}
 					onContextMenu={toggleAllNotesContextMenu}
 				>
 					{_('All notes')}
