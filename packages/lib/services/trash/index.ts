@@ -4,7 +4,7 @@ import { _ } from '../../locale';
 import { FolderEntity, FolderIcon, FolderIconType, NoteEntity } from '../database/types';
 import Folder from '../../models/Folder';
 import getTrashFolderId from './getTrashFolderId';
-import isTrashableItem from './isTrashableItem';
+import isTrashableNoteOrFolder from './isTrashableNoteOrFolder';
 
 // When an item is deleted, all its properties are kept, including the parent ID
 // so that it can potentially be restored to the right folder. However, when
@@ -20,14 +20,14 @@ import isTrashableItem from './isTrashableItem';
 // folder with ID = item.parent_id
 export const getDisplayParentId = (item: FolderEntity | NoteEntity, originalItemParent: FolderEntity) => {
 	if (!('parent_id' in item)) throw new Error(`Missing "parent_id" property: ${JSON.stringify(item)}`);
-	if (!isTrashableItem(item)) {
+	if (!isTrashableNoteOrFolder(item)) {
 		return item.parent_id;
 	}
 
 	if (!('deleted_time' in item)) {
 		throw new Error(`Missing "deleted_time" property: ${JSON.stringify(item)}`);
 	}
-	if (originalItemParent && isTrashableItem(originalItemParent) && !('deleted_time' in originalItemParent)) {
+	if (originalItemParent && isTrashableNoteOrFolder(originalItemParent) && !('deleted_time' in originalItemParent)) {
 		throw new Error(`Missing "deleted_time" property: ${JSON.stringify(originalItemParent)}`);
 	}
 
@@ -84,7 +84,7 @@ export const getTrashFolderIcon = (type: FolderIconType): FolderIcon => {
 
 export const itemIsInTrash = (item: FolderEntity | NoteEntity) => {
 	if (!item) return false;
-	if (!isTrashableItem(item)) return false;
+	if (!isTrashableNoteOrFolder(item)) return false;
 
 	checkObjectHasProperties(item, ['id', 'deleted_time']);
 

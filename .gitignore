@@ -1068,6 +1068,7 @@ packages/lib/services/trash/getTrashFolderId.js
 packages/lib/services/trash/index.test.js
 packages/lib/services/trash/index.js
 packages/lib/services/trash/isTrashableItem.js
+packages/lib/services/trash/isTrashableNoteOrFolder.js
 packages/lib/services/trash/permanentlyDeleteOldItems.test.js
 packages/lib/services/trash/permanentlyDeleteOldItems.js
 packages/lib/services/trash/restoreItems.test.js
