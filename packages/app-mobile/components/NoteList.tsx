@@ -5,7 +5,6 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { FlatList, Text, StyleSheet, Button, View } from 'react-native';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
-import { getTrashFolderId } from '@joplin/lib/services/trash';
 import { AppState } from '../utils/types';
 import Folder from '@joplin/lib/models/Folder';
 
