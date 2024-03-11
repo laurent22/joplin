@@ -36,7 +36,7 @@ export default async function(modelType: number, request: Request, id: string = 
 
 	if (request.method === 'DELETE' && id) {
 		const model = await getOneModel();
-		await ModelClass.delete(model.id);
+		await ModelClass.delete(model.id, { source: 'API: DELETE method' });
 		return;
 	}
 

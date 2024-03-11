@@ -28,7 +28,7 @@ class Command extends BaseCommand {
 		const ok = force ? true : await this.prompt(msg, { booleanAnswerDefault: 'n' });
 		if (!ok) return;
 
-		await Folder.delete(folder.id, { toTrash: true });
+		await Folder.delete(folder.id, { toTrash: true, sourceDescription: 'rmbook command' });
 	}
 }
 

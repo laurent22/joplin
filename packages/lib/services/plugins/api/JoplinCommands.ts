@@ -55,8 +55,7 @@ import { Command } from './types';
 export default class JoplinCommands {
 
 	/**
-	 * <span class="platform-desktop">desktop</span> Executes the given
-	 * command.
+	 * Executes the given command.
 	 *
 	 * The command can take any number of arguments, and the supported
 	 * arguments will vary based on the command. For custom commands, this
@@ -78,7 +77,7 @@ export default class JoplinCommands {
 	}
 
 	/**
-	 * <span class="platform-desktop">desktop</span> Registers a new command.
+	 * Registers a new command.
 	 *
 	 * ```typescript
 	 * // Register a new commmand called "testCommand1"

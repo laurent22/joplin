@@ -8,7 +8,7 @@ const { BaseScreenComponent } = require('../base-screen');
 const DialogBox = require('react-native-dialogbox').default;
 const { dialogs } = require('../../utils/dialogs.js');
 const Shared = require('@joplin/lib/components/shared/dropbox-login-shared');
-const { themeStyle } = require('../global-style.js');
+const { themeStyle } = require('../global-style');
 
 class DropboxLoginScreenComponent extends BaseScreenComponent {
 	constructor() {

@@ -1,6 +1,5 @@
 import { AppType, SettingSectionSource } from '@joplin/lib/models/Setting';
 import * as React from 'react';
-import { useMemo } from 'react';
 import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
 const styled = require('styled-components').default;
@@ -72,23 +71,6 @@ export const StyledListItemIcon = styled.i`
 export default function Sidebar(props: Props) {
 	const buttons: any[] = [];
 
-	const sortedSections = useMemo(() => {
-		const output = props.sections.slice();
-		output.sort((a: any, b: any) => {
-			const s1 = a.source || SettingSectionSource.Default;
-			const s2 = b.source || SettingSectionSource.Default;
-			if (s1 === SettingSectionSource.Default && s2 === SettingSectionSource.Default) return props.sections.indexOf(s1) - props.sections.indexOf(s2);
-			if (s1 === SettingSectionSource.Default && s2 === SettingSectionSource.Plugin) return -1;
-			if (s1 === SettingSectionSource.Plugin && s2 === SettingSectionSource.Default) return +1;
-
-			const l1 = Setting.sectionNameToLabel(a.name);
-			const l2 = Setting.sectionNameToLabel(b.name);
-			if (s1 === SettingSectionSource.Plugin && s2 === SettingSectionSource.Plugin) return l1.toLowerCase() < l2.toLowerCase() ? -1 : +1;
-			return 0;
-		});
-		return output;
-	}, [props.sections]);
-
 	function renderButton(section: any) {
 		const selected = props.selection === section.name;
 		return (
@@ -121,7 +103,7 @@ export default function Sidebar(props: Props) {
 
 	let pluginDividerAdded = false;
 
-	for (const section of sortedSections) {
+	for (const section of props.sections) {
 		if (section.source === SettingSectionSource.Plugin && !pluginDividerAdded) {
 			buttons.push(renderDivider('divider-plugins'));
 			pluginDividerAdded = true;

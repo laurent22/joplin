@@ -3,7 +3,7 @@ const React = require('react');
 import { FunctionComponent } from 'react';
 import { _ } from '@joplin/lib/locale';
 import Folder, { FolderEntityWithChildren } from '@joplin/lib/models/Folder';
-const { themeStyle } = require('./global-style.js');
+import { themeStyle } from './global-style';
 import Dropdown, { DropdownListItem, OnValueChangedListener } from './Dropdown';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 

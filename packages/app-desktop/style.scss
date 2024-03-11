@@ -6,6 +6,7 @@
 @use 'gui/Dropdown/style.scss' as dropdown-control;
 @use 'gui/ShareFolderDialog/style.scss' as share-folder-dialog;
 @use 'gui/NoteList/style.scss' as note-list;
+@use 'gui/JoplinCloudLoginScreen.scss' as joplin-cloud-login-screen;
 @use 'gui/NoteListHeader/style.scss' as note-list-header;
 @use 'gui/TrashNotification/style.scss' as trash-notification;
 @use 'main.scss' as main;
