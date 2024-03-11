@@ -828,12 +828,14 @@ packages/lib/models/Tag.js
 packages/lib/models/dateTimeFormats.test.js
 packages/lib/models/settings/FileHandler.js
 packages/lib/models/settings/settingValidations.js
+packages/lib/models/utils/getConflictFolderId.js
 packages/lib/models/utils/isItemId.js
 packages/lib/models/utils/itemCanBeEncrypted.js
 packages/lib/models/utils/onFolderDrop.test.js
 packages/lib/models/utils/onFolderDrop.js
 packages/lib/models/utils/paginatedFeed.js
 packages/lib/models/utils/paginationToSql.js
+packages/lib/models/utils/readOnly.test.js
 packages/lib/models/utils/readOnly.js
 packages/lib/models/utils/resourceUtils.js
 packages/lib/models/utils/types.js
@@ -1082,8 +1084,10 @@ packages/lib/services/synchronizer/utils/syncDeleteStep.js
 packages/lib/services/synchronizer/utils/types.js
 packages/lib/services/trash/emptyTrash.test.js
 packages/lib/services/trash/emptyTrash.js
+packages/lib/services/trash/getTrashFolderId.js
 packages/lib/services/trash/index.test.js
 packages/lib/services/trash/index.js
+packages/lib/services/trash/isTrashableItem.js
 packages/lib/services/trash/permanentlyDeleteOldItems.test.js
 packages/lib/services/trash/permanentlyDeleteOldItems.js
 packages/lib/services/trash/restoreItems.test.js

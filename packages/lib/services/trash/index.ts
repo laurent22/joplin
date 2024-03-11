@@ -3,6 +3,8 @@ import { ModelType } from '../../BaseModel';
 import { _ } from '../../locale';
 import { FolderEntity, FolderIcon, FolderIconType, NoteEntity } from '../database/types';
 import Folder from '../../models/Folder';
+import getTrashFolderId from './getTrashFolderId';
+import isTrashableItem from './isTrashableItem';
 
 // When an item is deleted, all its properties are kept, including the parent ID
 // so that it can potentially be restored to the right folder. However, when
@@ -17,8 +19,17 @@ import Folder from '../../models/Folder';
 // `originalItemParent` is the parent before the item was deleted, which is the
 // folder with ID = item.parent_id
 export const getDisplayParentId = (item: FolderEntity | NoteEntity, originalItemParent: FolderEntity) => {
-	if (!('deleted_time' in item) || !('parent_id' in item)) throw new Error(`Missing "deleted_time" or "parent_id" property: ${JSON.stringify(item)}`);
-	if (originalItemParent && !('deleted_time' in originalItemParent)) throw new Error(`Missing "deleted_time" property: ${JSON.stringify(originalItemParent)}`);
+	if (!('parent_id' in item)) throw new Error(`Missing "parent_id" property: ${JSON.stringify(item)}`);
+	if (!isTrashableItem(item)) {
+		return item.parent_id;
+	}
+
+	if (!('deleted_time' in item)) {
+		throw new Error(`Missing "deleted_time" property: ${JSON.stringify(item)}`);
+	}
+	if (originalItemParent && isTrashableItem(originalItemParent) && !('deleted_time' in originalItemParent)) {
+		throw new Error(`Missing "deleted_time" property: ${JSON.stringify(originalItemParent)}`);
+	}
 
 	if (!item.deleted_time) return item.parent_id;
 
@@ -31,10 +42,6 @@ export const getDisplayParentTitle = (item: FolderEntity | NoteEntity, originalI
 	const displayParentId = getDisplayParentId(item, originalItemParent);
 	if (displayParentId === getTrashFolderId()) return getTrashFolderTitle();
 	return originalItemParent && originalItemParent.id === displayParentId ? originalItemParent.title : '';
-};
-
-export const getTrashFolderId = () => {
-	return 'de1e7ede1e7ede1e7ede1e7ede1e7ede';
 };
 
 export const getTrashFolderTitle = () => {
@@ -77,6 +84,7 @@ export const getTrashFolderIcon = (type: FolderIconType): FolderIcon => {
 
 export const itemIsInTrash = (item: FolderEntity | NoteEntity) => {
 	if (!item) return false;
+	if (!isTrashableItem(item)) return false;
 
 	checkObjectHasProperties(item, ['id', 'deleted_time']);
 
@@ -89,3 +97,5 @@ export const getRestoreFolder = async () => {
 	if (output) return output;
 	return Folder.save({ title });
 };
+
+export { getTrashFolderId };

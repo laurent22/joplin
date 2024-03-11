@@ -6,6 +6,7 @@ import { State as ShareState } from '../../services/share/reducer';
 import ItemChange from '../ItemChange';
 import Setting from '../Setting';
 import { checkObjectHasProperties } from '@joplin/utils/object';
+import isTrashableItem from '../../services/trash/isTrashableItem';
 
 const logger = Logger.create('models/utils/readOnly');
 
@@ -75,12 +76,16 @@ export const checkIfItemCanBeAddedToFolder = async (itemType: ModelType, Folder:
 // extra `sharePermissionCheckOnly` boolean to do the check for one case or the other. A bit of a
 // hack but good enough for now.
 export const itemIsReadOnlySync = (itemType: ModelType, changeSource: number, item: ItemSlice, userId: string, shareState: ShareState, sharePermissionCheckOnly = false): boolean => {
-	checkObjectHasProperties(item, sharePermissionCheckOnly ? ['share_id'] : ['share_id', 'deleted_time']);
+	if (!sharePermissionCheckOnly && isTrashableItem({ id: item.id, type_: itemType })) {
+		checkObjectHasProperties(item, ['deleted_time']);
+	}
 
 	// Item is in trash
 	if (!sharePermissionCheckOnly && item.deleted_time) return true;
 
 	if (!needsShareReadOnlyChecks(itemType, changeSource, shareState)) return false;
+
+	checkObjectHasProperties(item, ['share_id']);
 
 	// Item is not shared
 	if (!item.share_id) return false;
