@@ -16,8 +16,8 @@ const DialogBox = require('react-native-dialogbox').default;
 const { BaseScreenComponent } = require('../base-screen');
 const { BackButtonService } = require('../../services/back-button.js');
 import { AppState } from '../../utils/types';
-import { NoteEntity, FolderEntity } from '@joplin/lib/services/database/types';
-import { itemIsInTrash, getTrashFolderId } from '@joplin/lib/services/trash';
+import { NoteEntity } from '@joplin/lib/services/database/types';
+import { itemIsInTrash } from '@joplin/lib/services/trash';
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids.js');
 
 class NotesScreenComponent extends BaseScreenComponent<any> {
@@ -238,12 +238,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		const thisComp = this;
 
 		const makeActionButtonComp = () => {
-			const trashFolderId = getTrashFolderId();
-
-			// calculate number of folders except deleted and trash folder
-			const atleastOneNotebookExists = this.props.folders.filter((folder: FolderEntity) => folder.id !== trashFolderId && folder.deleted_time === 0).length > 0;
-
-			if ((this.props.notesParentType === 'Folder' && itemIsInTrash(parent)) || !atleastOneNotebookExists) return null;
+			if ((this.props.notesParentType === 'Folder' && itemIsInTrash(parent)) || !Folder.atLeastOneRealFolderExists(this.props.folders)) return null;
 
 			const getTargetFolderId = async () => {
 				if (!buttonFolderId && isAllNotes) {

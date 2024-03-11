@@ -928,4 +928,10 @@ export default class Folder extends BaseItem {
 		return !!folders.find(f => !!f.icon);
 	}
 
+	public static atLeastOneRealFolderExists(folders: FolderEntity[]) {
+		// returns true if at least one folder exists other than trash folder and deleted folders
+		const trashFolderId = getTrashFolderId();
+		return folders.filter((folder) => folder.id !== trashFolderId && folder.deleted_time === 0).length > 0;
+	}
+
 }
