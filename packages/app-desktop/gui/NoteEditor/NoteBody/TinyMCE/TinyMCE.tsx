@@ -598,6 +598,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			];
 
 			const editors = await (window as any).tinymce.init({
+				content_style: `* {font-size: ${props.fontSize}px; font-family: "${props.fontFamily}"; line-height: 1.5;}`,
 				selector: `#${rootIdRef.current}`,
 				width: '100%',
 				body_class: 'jop-tinymce',
