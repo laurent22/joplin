@@ -4,6 +4,7 @@ export enum ApplicationPlatform {
 	Linux = 2,
 	MacOs = 3,
 	Android = 4,
+	Ios = 5,
 }
 
 export enum ApplicationType {

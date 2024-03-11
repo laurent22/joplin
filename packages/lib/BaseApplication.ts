@@ -747,8 +747,15 @@ export default class BaseApplication {
 		}
 
 		if (Setting.value('firstStart')) {
-			const locale = shim.detectAndSetLocale(Setting);
-			reg.logger().info(`First start: detected locale as ${locale}`);
+
+			// detectAndSetLocale sets the locale to the system default locale.
+			// Not calling it when a new profile is created ensures that the
+			// the language set by the user is not overridden by the system
+			// default language.
+			if (!Setting.value('isSubProfile')) {
+				const locale = shim.detectAndSetLocale(Setting);
+				reg.logger().info(`First start: detected locale as ${locale}`);
+			}
 			Setting.skipDefaultMigrations();
 
 			if (Setting.value('env') === 'dev') {
@@ -770,6 +777,7 @@ export default class BaseApplication {
 			// Setting.setValue('sync.10.userContentPath', 'https://joplinusercontent.com');
 			Setting.setValue('sync.10.path', 'http://api.joplincloud.local:22300');
 			Setting.setValue('sync.10.userContentPath', 'http://joplinusercontent.local:22300');
+			Setting.setValue('sync.10.website', 'http://joplincloud.local:22300');
 		}
 
 		// For now always disable fuzzy search due to performance issues:

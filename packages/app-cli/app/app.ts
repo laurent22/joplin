@@ -95,7 +95,7 @@ class Application extends BaseApplication {
 			let item = null;
 			if (type === BaseModel.TYPE_NOTE) {
 				if (!parent) throw new Error(_('No notebook has been specified.'));
-				item = await ItemClass.loadFolderNoteByField(parent.id, 'title', pattern);
+				item = await (ItemClass as typeof Note).loadFolderNoteByField(parent.id, 'title', pattern);
 			} else {
 				item = await ItemClass.loadByTitle(pattern);
 			}

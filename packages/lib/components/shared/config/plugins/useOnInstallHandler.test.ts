@@ -1,10 +1,10 @@
 import useOnInstallHandler from './useOnInstallHandler';
 import { renderHook } from '@testing-library/react-hooks';
 
-import PluginService, { defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
-import { ItemEvent } from './PluginBox';
+import PluginService, { defaultPluginSetting } from '../../../../services/plugins/PluginService';
+import { ItemEvent } from './types';
 
-jest.mock('@joplin/lib/services/plugins/PluginService');
+jest.mock('../../../../services/plugins/PluginService');
 
 const pluginServiceInstance = {
 	updatePluginFromRepo: jest.fn(),
@@ -37,7 +37,7 @@ describe('useOnInstallHandler', () => {
 	beforeAll(() => {
 		(PluginService.instance as jest.Mock).mockReturnValue(pluginServiceInstance);
 		(defaultPluginSetting as jest.Mock).mockImplementation(
-			jest.requireActual('@joplin/lib/services/plugins/PluginService').defaultPluginSetting,
+			jest.requireActual('../../../../services/plugins/PluginService').defaultPluginSetting,
 		);
 	});
 

@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
+import CodeMirror5Emulation from '@joplin/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation';
 
 const logger = Logger.create('useEditorSearch');
 
-export default function useEditorSearch(CodeMirror: any) {
+// Registers a helper CodeMirror extension to be used with
+// useEditorSearchHandler.
+
+export default function useEditorSearchExtension(CodeMirror: CodeMirror5Emulation) {
 
 	const [markers, setMarkers] = useState([]);
 	const [overlay, setOverlay] = useState(null);
@@ -73,7 +77,7 @@ export default function useEditorSearch(CodeMirror: any) {
 				// If we run out of matches then just highlight the final match
 				break;
 			}
-			match = cursor.pos;
+			match = { from: cursor.from(), to: cursor.to() };
 		}
 
 		if (match) {
@@ -81,7 +85,7 @@ export default function useEditorSearch(CodeMirror: any) {
 				if (withSelection) {
 					cm.setSelection(match.from, match.to);
 				} else {
-					cm.scrollTo(match);
+					cm.scrollIntoView(match);
 				}
 			}
 			return cm.markText(match.from, match.to, { className: 'cm-search-marker-selected' });
@@ -107,7 +111,7 @@ export default function useEditorSearch(CodeMirror: any) {
 		};
 	}, []);
 
-	CodeMirror.defineExtension('setMarkers', function(keywords: any, options: any) {
+	CodeMirror?.defineExtension('setMarkers', function(keywords: any, options: any) {
 		if (!options) {
 			options = { selectedIndex: 0, searchTimestamp: 0 };
 		}
@@ -172,7 +176,7 @@ export default function useEditorSearch(CodeMirror: any) {
 		// These operations are pretty slow, so we won't add use them until the user
 		// has finished typing, 500ms is probably enough time
 		const timeout = shim.setTimeout(() => {
-			const scrollMarks = this.showMatchesOnScrollbar(searchTerm, true, 'cm-search-marker-scrollbar');
+			const scrollMarks = this.showMatchesOnScrollbar?.(searchTerm, true, 'cm-search-marker-scrollbar');
 			const overlay = searchOverlay(searchTerm);
 			this.addOverlay(overlay);
 			setOverlay(overlay);
