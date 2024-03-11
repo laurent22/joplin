@@ -4,6 +4,7 @@ import uuid from './uuid';
 import time from './time';
 import JoplinDatabase, { TableField } from './JoplinDatabase';
 import { LoadOptions, SaveOptions } from './models/utils/types';
+import ActionLogger, { ItemActionType as ItemActionType } from './utils/ActionLogger';
 import { SqlQuery } from './services/database/types';
 const Mutex = require('async-mutex').Mutex;
 
@@ -40,6 +41,18 @@ export interface DeleteOptions {
 	trackDeleted?: boolean;
 
 	disableReadOnlyCheck?: boolean;
+
+	// Used for logging
+	sourceDescription?: string|ActionLogger;
+
+	// Tells whether the deleted item should be moved to the trash. By default
+	// it is permanently deleted.
+	toTrash?: boolean;
+
+	// If the item is to be moved to the trash, tell what should be the new
+	// parent. By default the item will be moved at the root of the trash. Note
+	// that caller must ensure that this parent ID is a deleted folder.
+	toTrashParentId?: string;
 }
 
 class BaseModel {
@@ -278,6 +291,7 @@ class BaseModel {
 				limit: options.limit,
 				order: options.order as any,
 				page: 1,
+				caseInsensitive: options.caseInsensitive,
 			})}`;
 		}
 
@@ -307,7 +321,7 @@ class BaseModel {
 		return this.modelSelectAll(q.sql, q.params);
 	}
 
-	public static async byIds(ids: string[], options: any = null) {
+	public static async byIds(ids: string[], options: LoadOptions = null) {
 		if (!ids.length) return [];
 		if (!options) options = {};
 		if (!options.fields) options.fields = '*';
@@ -678,13 +692,17 @@ class BaseModel {
 		return output;
 	}
 
-	public static delete(id: string) {
+	public static delete(id: string, options?: DeleteOptions) {
 		if (!id) throw new Error('Cannot delete object without an ID');
+		ActionLogger.from(options?.sourceDescription).log(ItemActionType.Delete, id);
+
 		return this.db().exec(`DELETE FROM ${this.tableName()} WHERE id = ?`, [id]);
 	}
 
-	public static async batchDelete(ids: string[], options: DeleteOptions = null) {
+	public static async batchDelete(ids: string[], options?: DeleteOptions) {
 		if (!ids.length) return;
+		ActionLogger.from(options?.sourceDescription).log(ItemActionType.Delete, ids);
+
 		options = this.modOptions(options);
 		const idFieldName = options.idFieldName ? options.idFieldName : 'id';
 		const sql = `DELETE FROM ${this.tableName()} WHERE ${idFieldName} IN ("${ids.join('","')}")`;

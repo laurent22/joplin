@@ -1,5 +1,21 @@
 # Joplin Android Changelog
 
+## [android-v2.14.9](https://github.com/laurent22/joplin/releases/tag/android-v2.14.9) (Pre-release) - 2024-02-26T19:56:11Z
+
+- Fixed: Note editor: Support older WebView versions (#9986) (#9521 by Henry Heino)
+- Fixed: Sort notebooks in a case-insensitive way (#9996)
+
+## [android-v2.14.8](https://github.com/laurent22/joplin/releases/tag/android-v2.14.8) (Pre-release) - 2024-02-22T22:29:24Z
+
+- Improved: Immediately sort notes after toggling a checkbox (5820f63)
+- Fixed: Fix auto-indentation in some types of code blocks (#9972) (#9971 by Henry Heino)
+
+## [android-v2.14.7](https://github.com/laurent22/joplin/releases/tag/android-v2.14.7) (Pre-release) - 2024-02-19T10:40:10Z
+
+- Improved: Migrate profile in preparation for trash feature (115eb5d)
+- Improved: Updated packages tar-stream (v3.1.7)
+- Fixed: Fix full text search broken on Android 7 and earlier (#9914) (#9905 by Henry Heino)
+
 ## [android-v2.14.6](https://github.com/laurent22/joplin/releases/tag/android-v2.14.6) (Pre-release) - 2024-02-09T12:41:18Z
 
 - Improved: Improve search engine error handling when preparing text for search (#9871 by Henry Heino)
@@ -16,7 +32,7 @@
 - Improved: Do not allow switching the sync target if not all resources are downloaded (#9263)
 - Improved: Removed ability to search by note ID to fix issue with certain plugins (#9769)
 - Improved: Updated packages react-native-paper (v5.11.6)
-- Fixed: Andoid: Fix crash on opening settings on some devices (#9806) (#7974 by Henry Heino)
+- Fixed: Fix crash on opening settings on some devices (#9806) (#7974 by Henry Heino)
 - Fixed: Clear "Some items cannot be synchronised" banner after situation is resolved (#9157)
 - Fixed: Detect faster left-right swipes to open the sidemenu (#9802) (#9142 by Henry Heino)
 - Fixed: Fix broken synchronisation link in welcome notes (#9804) (#9799 by Henry Heino)
@@ -320,7 +336,7 @@
 - Improved: Confirm closing settings with unsaved changes (#7566 by Henry Heino)
 - Improved: Upgrade to React Native 0.69 (7e29804)
 - Improved: Upgrade to React Native 0.70 (4bdb3d0)
-- Fixed: Fixed biometics prompt on new devices (9eff7e6)
+- Fixed: Fixed biometrics prompt on new devices (9eff7e6)
 - Fixed: Fixed issue when floating keyboard is visible (#7593) (#6682 by Henry Heino)
 - Fixed: Remove gray line around text editor (#7595) (#7594 by Henry Heino)
 
@@ -513,7 +529,7 @@
 
 ## [android-v2.3.4](https://github.com/laurent22/joplin/releases/tag/android-v2.3.4) (Pre-release) - 2021-08-15T13:27:57Z
 
-- Fixed: Bump hightlight.js to v11.2 (#5278) (#5245 by Roman Musin)
+- Fixed: Bump highlight.js to v11.2 (#5278) (#5245 by Roman Musin)
 
 ## [android-v2.3.3](https://github.com/laurent22/joplin/releases/tag/android-v2.3.3) (Pre-release) - 2021-08-12T20:46:15Z
 

@@ -1,12 +1,19 @@
 import { pathExists } from 'fs-extra';
 import { readFile, writeFile } from 'fs/promises';
-import { gitHubLatestReleases, gitHubLinkify } from './tool-utils';
+import { GitHubRelease, gitHubLatestReleases, gitHubLinkify } from './tool-utils';
 import { config, createPost, createTopic, getForumTopPostByExternalId, getTopicByExternalId, updatePost } from './utils/discourse';
 import { compareVersions } from 'compare-versions';
 import dayjs = require('dayjs');
+import { getRootDir } from '@joplin/utils';
 
 interface State {
 	processedReleases: Record<string, any>;
+}
+
+enum Platform {
+	Desktop = 'Desktop',
+	Android = 'Android',
+	iOS = 'iOS',
 }
 
 const stateFilePath = `${__dirname}/postPreReleasesToForum.json`;
@@ -23,50 +30,100 @@ const loadState = async (): Promise<State> => {
 };
 
 const saveState = async (state: State) => {
-	await writeFile(stateFilePath, JSON.stringify(state), 'utf-8');
+	await writeFile(stateFilePath, JSON.stringify(state, null, '\t'), 'utf-8');
 };
 
-const getMinorVersion = (fullVersion: string) => {
-	const s = fullVersion.substring(1).split('.');
+const getPatchVersion = (tagName: string) => {
+	if (tagName.includes('-')) tagName = tagName.split('-')[1];
+	return tagName.substring(1);
+};
+
+const getMinorVersion = (tagName: string) => {
+	const s = getPatchVersion(tagName).split('.');
 	return `${s[0]}.${s[1]}`;
 };
 
-const main = async () => {
-	const argv = require('yargs').argv;
-	config.key = argv._[0];
-	config.username = argv._[1];
+const getExternalId = (platform: string, minorVersion: string) => {
+	let prefix = '';
+	if (platform !== Platform.Desktop) {
+		prefix = `${platform.toLowerCase()}-`;
+	}
+	return `prerelease-${prefix}${minorVersion.replace(/\./g, '-')}`;
+};
 
-	const state = await loadState();
-	const releases = await gitHubLatestReleases(1, 50);
+const getDownloadInfo = (platform: Platform) => {
+	const infos: Record<Platform, string> = {
+		[Platform.Desktop]: 'Download the latest pre-releases from here: <https://github.com/laurent22/joplin/releases>',
+		[Platform.Android]: 'Download the latest pre-releases from here: <https://github.com/laurent22/joplin-android/tags>',
+		[Platform.iOS]: 'In order to try the iOS pre-release, you will need to join the Joplin iOS beta program from here: <https://testflight.apple.com/join/p5iLVzrG>',
+	};
 
-	releases.sort((a, b) => {
-		return compareVersions(a.tag_name, b.tag_name) <= 0 ? -1 : +1;
-	});
+	return infos[platform];
+};
 
-	const startFromVersion = '2.13';
+const getReleasesFromMarkdown = async (filePath: string) => {
+	const content = await readFile(filePath, 'utf-8');
+	const lines = content.split('\n');
 
+	const releases: GitHubRelease[] = [];
+	let currentRelease: GitHubRelease = null;
+
+	for (let line of lines) {
+		line = line.trim();
+		if (!line) continue;
+
+		if (line.startsWith('##')) {
+			const matches = line.match(/## \[(.*?)\]/);
+			if (!matches) throw new Error(`Could not parse version: ${line}`);
+			const tag = matches[1];
+			currentRelease = {
+				tag_name: tag,
+				body: '',
+				assets: [],
+				draft: false,
+				html_url: `https://github.com/laurent22/joplin-android/releases/tag/${tag}`,
+				prerelease: false,
+				upload_url: '',
+			};
+			releases.push(currentRelease);
+			continue;
+		}
+
+		if (currentRelease) {
+			if (currentRelease.body) currentRelease.body += '\n';
+			currentRelease.body += line;
+		}
+	}
+
+	releases.sort((a, b) => compareVersions(getPatchVersion(a.tag_name), getPatchVersion(b.tag_name)));
+
+	return releases;
+};
+
+const processReleases = async (releases: GitHubRelease[], platform: Platform, startFromVersion: string, state: State) => {
 	for (const release of releases) {
 		const minorVersion = getMinorVersion(release.tag_name);
+		const patchVersion = getPatchVersion(release.tag_name);
 
 		if (compareVersions(startFromVersion, minorVersion) > 0) continue;
 
 		if (!state.processedReleases[release.tag_name]) {
 			console.info(`Processing release ${release.tag_name}`);
 
-			const externalId = `prerelease-${minorVersion.replace(/\./g, '-')}`;
+			const externalId = getExternalId(platform, minorVersion);
 
-			const postBody = `## [${release.tag_name}](${release.html_url})\n\n${gitHubLinkify(release.body)}`;
+			const postBody = `## [v${patchVersion}](${release.html_url})\n\n${gitHubLinkify(release.body)}`;
 
 			let topic = await getTopicByExternalId(externalId);
 
-			const topicTitle = `Pre-release v${minorVersion} is now available (Updated ${dayjs(new Date()).format('DD/MM/YYYY')})`;
+			const topicTitle = `${platform} pre-release v${minorVersion} is now available (Updated ${dayjs(new Date()).format('DD/MM/YYYY')})`;
 
 			if (!topic) {
 				console.info('No topic exists - creating one...');
 
 				topic = await createTopic({
 					title: topicTitle,
-					raw: `Download the latest pre-release from here: <https://github.com/laurent22/joplin/releases>\n\n* * *\n\n${postBody}`,
+					raw: `${getDownloadInfo(platform)}\n\n* * *\n\n${postBody}`,
 					category: betaCategoryId,
 					external_id: externalId,
 				});
@@ -90,6 +147,34 @@ const main = async () => {
 
 			await saveState(state);
 		}
+	}
+
+	return state;
+};
+
+const main = async () => {
+	const rootDir = await getRootDir();
+
+	const argv = require('yargs').argv;
+	config.key = argv._[0];
+	config.username = argv._[1];
+
+	let state = await loadState();
+
+	{
+		const releases = await gitHubLatestReleases(1, 50);
+		releases.sort((a, b) => compareVersions(a.tag_name, b.tag_name));
+		state = await processReleases(releases, Platform.Desktop, '2.13', state);
+	}
+
+	{
+		const releases = await getReleasesFromMarkdown(`${rootDir}/readme/about/changelog/android.md`);
+		state = await processReleases(releases, Platform.Android, '2.14', state);
+	}
+
+	{
+		const releases = await getReleasesFromMarkdown(`${rootDir}/readme/about/changelog/ios.md`);
+		await processReleases(releases, Platform.iOS, '12.14', state);
 	}
 };
 

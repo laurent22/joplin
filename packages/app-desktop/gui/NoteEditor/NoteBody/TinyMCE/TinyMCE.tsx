@@ -258,7 +258,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				if (joplinCommandToTinyMceCommands[cmd.name] === true) {
 					// Already handled in useWindowCommandHandlers.ts
 				} else if (joplinCommandToTinyMceCommands[cmd.name] === false) {
-					// Explicitely not supported
+					// explicitly not supported
 				} else {
 					const tinyMceCmd: TinyMceCommand = { ...(joplinCommandToTinyMceCommands[cmd.name] as TinyMceCommand) };
 					if (!('ui' in tinyMceCmd)) tinyMceCmd.ui = false;
@@ -377,8 +377,17 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				background-color: ${theme.backgroundColor} !important;
 			}
 
-			.tox .tox-dialog__body-content {
+			.tox .tox-dialog__body-content,
+			.tox .tox-collection__item {
 				color: ${theme.color};
+			}
+
+			.tox .tox-collection--list .tox-collection__item--active {
+				color: ${theme.backgroundColor};
+			}
+
+			.tox .tox-collection__item--state-disabled {
+				opacity: 0.7;
 			}
 
 			.tox .tox-menu {
@@ -584,7 +593,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				'h1', 'h2', 'h3', '|',
 				'hr', '|',
 				'blockquote', '|',
-				'table', '|',
+				'tableWithHeader', '|',
 				`joplinInsertDateTime${toolbarPluginButtons}`,
 			];
 
@@ -671,6 +680,22 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 							return function() {
 								if (unbind) unbind();
 							};
+						},
+					});
+
+					editor.ui.registry.addMenuButton('tableWithHeader', {
+						icon: 'table',
+						tooltip: 'Table',
+						fetch: (callback) => {
+							callback([
+								{
+									type: 'fancymenuitem',
+									fancytype: 'inserttable',
+									onAction: (data) => {
+										editor.execCommand('mceInsertTable', false, { rows: data.numRows, columns: data.numColumns, options: { headerRows: 1 } });
+									},
+								},
+							]);
 						},
 					});
 
@@ -1126,7 +1151,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			//
 			// when pasting text with Ctrl+Shift+V, the format should be
 			// ignored. In this case,
-			// event.clopboardData.getData('text/html') returns an empty
+			// event.clipboardData.getData('text/html') returns an empty
 			// string, but the clipboard.readHTML() still returns the
 			// formatted text.
 			const pastedHtml = event.clipboardData.getData('text/html') ? clipboard.readHTML() : '';

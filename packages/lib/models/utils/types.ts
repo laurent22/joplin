@@ -29,10 +29,13 @@ export interface LoadOptions {
 		caseInsensitive?: boolean;
 	}[];
 	limit?: number;
+	includeConflicts?: boolean;
+	includeDeleted?: boolean;
 }
 
 export interface FolderLoadOptions extends LoadOptions {
 	includeConflictFolder?: boolean;
+	includeTrash?: boolean;
 }
 
 export interface SaveOptions {

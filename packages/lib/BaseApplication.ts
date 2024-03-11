@@ -61,7 +61,8 @@ import RotatingLogs from './RotatingLogs';
 import { NoteEntity } from './services/database/types';
 import { join } from 'path';
 import processStartFlags from './utils/processStartFlags';
-import determineProfileDir from './determineProfileDir';
+import { setupAutoDeletion } from './services/trash/permanentlyDeleteOldItems';
+import determineProfileAndBaseDir from './determineBaseAppDirs';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -438,6 +439,14 @@ export default class BaseApplication {
 			doRefreshFolders = true;
 		}
 
+		// If a note gets deleted to the trash or gets restored we refresh the folders so that the
+		// note count can be updated.
+		if (this.hasGui() && ['NOTE_UPDATE_ONE'].includes(action.type)) {
+			if (action.changedFields && action.changedFields.includes('deleted_time')) {
+				doRefreshFolders = true;
+			}
+		}
+
 		if (action.type === 'HISTORY_BACKWARD' || action.type === 'HISTORY_FORWARD') {
 			refreshNotes = true;
 			refreshNotesUseSelectedNoteId = true;
@@ -639,7 +648,7 @@ export default class BaseApplication {
 		// https://immerjs.github.io/immer/docs/freezing
 		setAutoFreeze(initArgs.env === 'dev');
 
-		const rootProfileDir = options.rootProfileDir ? options.rootProfileDir : determineProfileDir(initArgs.profileDir, appName);
+		const { rootProfileDir, homeDir } = determineProfileAndBaseDir(options.rootProfileDir ?? initArgs.profileDir, appName);
 		const { profileDir, profileConfig, isSubProfile } = await initProfile(rootProfileDir);
 		this.profileConfig_ = profileConfig;
 
@@ -655,6 +664,7 @@ export default class BaseApplication {
 		Setting.setConstant('pluginDataDir', `${profileDir}/plugin-data`);
 		Setting.setConstant('cacheDir', cacheDir);
 		Setting.setConstant('pluginDir', `${rootProfileDir}/plugins`);
+		Setting.setConstant('homeDir', homeDir);
 
 		SyncTargetRegistry.addClass(SyncTargetNone);
 		SyncTargetRegistry.addClass(SyncTargetFilesystem);
@@ -737,8 +747,15 @@ export default class BaseApplication {
 		}
 
 		if (Setting.value('firstStart')) {
-			const locale = shim.detectAndSetLocale(Setting);
-			reg.logger().info(`First start: detected locale as ${locale}`);
+
+			// detectAndSetLocale sets the locale to the system default locale.
+			// Not calling it when a new profile is created ensures that the
+			// the language set by the user is not overridden by the system
+			// default language.
+			if (!Setting.value('isSubProfile')) {
+				const locale = shim.detectAndSetLocale(Setting);
+				reg.logger().info(`First start: detected locale as ${locale}`);
+			}
 			Setting.skipDefaultMigrations();
 
 			if (Setting.value('env') === 'dev') {
@@ -760,6 +777,7 @@ export default class BaseApplication {
 			// Setting.setValue('sync.10.userContentPath', 'https://joplinusercontent.com');
 			Setting.setValue('sync.10.path', 'http://api.joplincloud.local:22300');
 			Setting.setValue('sync.10.userContentPath', 'http://joplinusercontent.local:22300');
+			Setting.setValue('sync.10.website', 'http://joplincloud.local:22300');
 		}
 
 		// For now always disable fuzzy search due to performance issues:
@@ -820,6 +838,8 @@ export default class BaseApplication {
 		if (currentFolderId) currentFolder = await Folder.load(currentFolderId);
 		if (!currentFolder) currentFolder = await Folder.defaultFolder();
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
+
+		await setupAutoDeletion();
 
 		await MigrationService.instance().run();
 

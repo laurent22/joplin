@@ -1,5 +1,18 @@
 # Joplin iOS Changelog
 
+## [ios-v12.14.6](https://github.com/laurent22/joplin/releases/tag/ios-v12.14.6) - 2024-03-01T18:04:47Z
+
+- Improved: Immediately sort notes after toggling a checkbox (5820f63)
+- Fixed: Fix auto-indentation in some types of code blocks (#9972) (#9971 by Henry Heino)
+- Fixed: Fix white flash when editing notes in dark mode (#9987) (#8557 by Henry Heino)
+- Fixed: Note editor: Support older WebView versions (#9986) (#9521 by Henry Heino)
+- Fixed: Sort notebooks in a case-insensitive way (#9996)
+
+## [ios-v12.14.5](https://github.com/laurent22/joplin/releases/tag/ios-v12.14.5) - 2024-02-19T10:46:51Z
+
+- Improved: Migrate profile in preparation for trash feature (115eb5d)
+- Improved: Updated packages tar-stream (v3.1.7)
+
 ## [ios-v12.14.4](https://github.com/laurent22/joplin/releases/tag/ios-v12.14.4) - 2024-02-09T12:47:39Z
 
 - Improved: Improve search engine error handling when preparing text for search (#9871 by Henry Heino)
@@ -20,7 +33,7 @@
 - Improved: Hide advanced settings by default (#9730 by Henry Heino)
 - Improved: Removed ability to search by note ID to fix issue with certain plugins (#9769)
 - Improved: Updated packages @js-draw/material-icons (v1.15.0), follow-redirects (v1.15.4), fs-extra (v11.2.0), js-draw (v1.15.0), react, react-native-device-info (v10.12.0), react-native-image-picker (v7.1.0), react-native-paper (v5.11.6), react-native-vector-icons (v10.0.3), sharp (v0.33.1)
-- Fixed: Andoid: Fix crash on opening settings on some devices (#9806) (#7974 by Henry Heino)
+- Fixed: Fix crash on opening settings on some devices (#9806) (#7974 by Henry Heino)
 - Fixed: Clear "Some items cannot be synchronised" banner after situation is resolved (#9157)
 - Fixed: Detect faster left-right swipes to open the sidemenu (#9802) (#9142 by Henry Heino)
 - Fixed: Fix AWS S3 sync error (#9696) (#8891 by Henry Heino)

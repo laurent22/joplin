@@ -1751,6 +1751,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"Odtwarzacz multimediów, matematyka, diagramy, spis treści"
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"Brakujące Klucze"
 	],
@@ -1877,7 +1880,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Nie uwierzytelniono z %s. Proszę uzupełnij brakujące dane."
 	],
 	"Not downloaded": [

@@ -170,7 +170,7 @@ export default class DecryptionWorker {
 		this.dispatchReport({ state: 'started' });
 
 		try {
-			const notLoadedMasterKeyDisptaches = [];
+			const notLoadedMasterKeyDispatches = [];
 
 			while (true) {
 				const result: ItemsThatNeedDecryptionResult = await BaseItem.itemsThatNeedDecryption(excludedIds);
@@ -230,12 +230,12 @@ export default class DecryptionWorker {
 						excludedIds.push(item.id);
 
 						if (error.code === 'masterKeyNotLoaded' && options.masterKeyNotLoadedHandler === 'dispatch') {
-							if (notLoadedMasterKeyDisptaches.indexOf(error.masterKeyId) < 0) {
+							if (notLoadedMasterKeyDispatches.indexOf(error.masterKeyId) < 0) {
 								this.dispatch({
 									type: 'MASTERKEY_ADD_NOT_LOADED',
 									id: error.masterKeyId,
 								});
-								notLoadedMasterKeyDisptaches.push(error.masterKeyId);
+								notLoadedMasterKeyDispatches.push(error.masterKeyId);
 							}
 							await clearDecryptionCounter();
 							continue;

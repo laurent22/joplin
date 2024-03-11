@@ -1745,6 +1745,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"Medya oynatıcı, matematik, diyagramlar, içindekiler"
 	],
+	"Minimise": [
+		""
+	],
 	"Missing keys": [
 		"Eksik anahtarar"
 	],
@@ -1871,7 +1874,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"%s ile doğrulama sağlanamadı. Lütfen eksik olan tüm bilgileri girin."
 	],
 	"Not downloaded": [

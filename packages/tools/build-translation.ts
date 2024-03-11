@@ -79,7 +79,7 @@ async function createPotFile(potFilePath: string) {
 
 	// Further filter files - in particular remove some specific files and
 	// extensions we don't need. Also, when there's two file with the same
-	// basename, such as "exmaple.js", and "example.ts", we only keep the file
+	// basename, such as "example.js", and "example.ts", we only keep the file
 	// with ".ts" extension (since the .js should be the compiled file).
 
 	const toProcess: Record<string, string> = {};

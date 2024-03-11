@@ -42,6 +42,12 @@ const codeMirrorRequire = (library: string) => {
 		return libraryNameToPackage[library];
 	}
 
+	// Although window.require doesn't work on mobile, some desktop-only plugins
+	// originally developed for CodeMirror 5 rely on it.
+	if (typeof window.require === 'function') {
+		return window.require(library);
+	}
+
 	throw new Error(`Cannot find library ${library}`);
 };
 

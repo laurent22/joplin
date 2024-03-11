@@ -13,12 +13,13 @@ import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
 const { clipboard } = require('electron');
 import { Dispatch } from 'redux';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 
 interface ContextMenuProps {
-	notes: any[];
+	notes: NoteEntity[];
 	dispatch: Dispatch;
 	watchedNoteFiles: string[];
 	plugins: PluginStates;
@@ -32,18 +33,16 @@ export default class NoteListUtils {
 
 		const menuUtils = new MenuUtils(cmdService);
 
-		const notes = noteIds.map(id => BaseModel.byId(props.notes, id));
+		const notes: NoteEntity[] = noteIds.map(id => BaseModel.byId(props.notes, id));
 
 		const singleNoteId = noteIds.length === 1 ? noteIds[0] : null;
 
-		let hasEncrypted = false;
-		for (let i = 0; i < notes.length; i++) {
-			if (notes[i].encryption_applied) hasEncrypted = true;
-		}
+		const includeDeletedNotes = notes.find(n => !!n.deleted_time);
+		const includeEncryptedNotes = notes.find(n => !!n.encryption_applied);
 
 		const menu = new Menu();
 
-		if (!hasEncrypted) {
+		if (!includeEncryptedNotes && !includeDeletedNotes) {
 			menu.append(
 				new MenuItem(menuUtils.commandToStatefulMenuItem('setTags', noteIds) as any),
 			);
@@ -165,11 +164,25 @@ export default class NoteListUtils {
 			menu.append(exportMenuItem);
 		}
 
-		menu.append(
-			new MenuItem(
-				menuUtils.commandToStatefulMenuItem('deleteNote', noteIds) as any,
-			),
-		);
+		if (includeDeletedNotes) {
+			menu.append(
+				new MenuItem(
+					menuUtils.commandToStatefulMenuItem('restoreNote', noteIds) as any,
+				),
+			);
+
+			menu.append(
+				new MenuItem(
+					menuUtils.commandToStatefulMenuItem('permanentlyDeleteNote', noteIds) as any,
+				),
+			);
+		} else {
+			menu.append(
+				new MenuItem(
+					menuUtils.commandToStatefulMenuItem('deleteNote', noteIds) as any,
+				),
+			);
+		}
 
 		const pluginViewInfos = pluginUtils.viewInfosByType(props.plugins, 'menuItem');
 

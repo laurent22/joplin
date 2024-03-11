@@ -201,8 +201,10 @@ class Application extends BaseApplication {
 
 		// The '*' and '!important' parts are necessary to make sure Russian text is displayed properly
 		// https://github.com/laurent22/joplin/issues/155
+		//
+		// Note: Be careful about the specificity here. Incorrect specificity can break monospaced fonts in tables.
 
-		const css = `.CodeMirror *, .cm-editor .cm-content { font-family: ${fontFamilies.join(', ')} !important; }`;
+		const css = `.CodeMirror5 *, .cm-editor .cm-content { font-family: ${fontFamilies.join(', ')} !important; }`;
 		const styleTag = document.createElement('style');
 		styleTag.type = 'text/css';
 		styleTag.appendChild(document.createTextNode(css));
@@ -277,17 +279,7 @@ class Application extends BaseApplication {
 		}
 
 		try {
-			const devPluginOptions = { devMode: true, builtIn: false };
-
-			if (Setting.value('plugins.devPluginPaths')) {
-				const paths = Setting.value('plugins.devPluginPaths').split(',').map((p: string) => p.trim());
-				await service.loadAndRunPlugins(paths, pluginSettings, devPluginOptions);
-			}
-
-			// Also load dev plugins that have passed via command line arguments
-			if (Setting.value('startupDevPlugins')) {
-				await service.loadAndRunPlugins(Setting.value('startupDevPlugins'), pluginSettings, devPluginOptions);
-			}
+			await service.loadAndRunDevPlugins(pluginSettings);
 		} catch (error) {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
 		}
@@ -586,7 +578,11 @@ class Application extends BaseApplication {
 		ExternalEditWatcher.instance().setLogger(reg.logger());
 		ExternalEditWatcher.instance().initialize(bridge, this.store().dispatch);
 
-		ResourceEditWatcher.instance().initialize(reg.logger(), (action: any) => { this.store().dispatch(action); }, (path: string) => bridge().openItem(path));
+		ResourceEditWatcher.instance().initialize(
+			reg.logger(),
+			(action: any) => { this.store().dispatch(action); },
+			(path: string) => bridge().openItem(path),
+		);
 
 		// Forwards the local event to the global event manager, so that it can
 		// be picked up by the plugin manager.

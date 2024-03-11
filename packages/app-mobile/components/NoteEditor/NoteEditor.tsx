@@ -9,13 +9,13 @@ import * as React from 'react';
 import { forwardRef, useImperativeHandle } from 'react';
 import { useMemo, useState, useCallback, useRef } from 'react';
 import { LayoutChangeEvent, NativeSyntheticEvent, View, ViewStyle } from 'react-native';
-const { editorFont } = require('../global-style');
+import { editorFont } from '../global-style';
 
 import { EditorControl, EditorSettings, SelectionRange } from './types';
 import { _ } from '@joplin/lib/locale';
 import MarkdownToolbar from './MarkdownToolbar/MarkdownToolbar';
 import { ChangeEvent, EditorEvent, EditorEventType, SelectionRangeChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
-import { EditorCommandType, EditorKeymap, EditorLanguageType, PluginData, SearchState } from '@joplin/editor/types';
+import { EditorCommandType, EditorKeymap, EditorLanguageType, ContentScriptData, SearchState } from '@joplin/editor/types';
 import supportsCommand from '@joplin/editor/CodeMirror/editorCommands/supportsCommand';
 import SelectionFormatting, { defaultSelectionFormatting } from '@joplin/editor/SelectionFormatting';
 import Logger from '@joplin/utils/Logger';
@@ -92,7 +92,7 @@ function useHtml(css: string): string {
 						.cm-scroller {
 							overflow: none;
 
-							/* Ensure that the editor can be foused by clicking on the lower half of the screen.
+							/* Ensure that the editor can be focused by clicking on the lower half of the screen.
 							   Don't use 100vh to prevent a scrollbar being present for empty notes. */
 							min-height: 80vh;
 						}
@@ -240,8 +240,8 @@ const useEditorControl = (
 				injectJS('document.activeElement?.blur();');
 			},
 
-			setPlugins: async (plugins: PluginData[]) => {
-				injectJS(`cm.setPlugins(${JSON.stringify(plugins)});`);
+			setContentScripts: async (plugins: ContentScriptData[]) => {
+				injectJS(`cm.setContentScripts(${JSON.stringify(plugins)});`);
 			},
 
 			setSearchState: setSearchStateCallback,
@@ -488,7 +488,6 @@ function NoteEditor(props: Props, ref: any) {
 			}}>
 				<ExtendedWebView
 					webviewInstanceId='NoteEditor'
-					themeId={props.themeId}
 					scrollEnabled={true}
 					ref={webviewRef}
 					html={html}

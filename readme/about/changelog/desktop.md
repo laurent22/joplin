@@ -1,5 +1,39 @@
 # Joplin Desktop Changelog
 
+## [v2.14.19](https://github.com/laurent22/joplin/releases/tag/v2.14.19) - 2024-03-08T10:45:16Z
+
+- Fixed: Re-enable UNC links ([#10071](https://github.com/laurent22/joplin/issues/10071) by Henry Heino)
+- Fixed: Certain RTE menu items are not visible in dark mode ([#10044](https://github.com/laurent22/joplin/issues/10044))
+- Fixed: Fix pasting images from the rich text editor into the rich text editor ([#10064](https://github.com/laurent22/joplin/issues/10064)) ([#10062](https://github.com/laurent22/joplin/issues/10062) by Henry Heino)
+- Fixed: Fixed OCR memory leak when processing PDF documents ([#10050](https://github.com/laurent22/joplin/issues/10050))
+- Fixed: OCR does not start when German language is selected ([#10058](https://github.com/laurent22/joplin/issues/10058))
+
+## [v2.14.17](https://github.com/laurent22/joplin/releases/tag/v2.14.17) - 2024-03-01T18:10:26Z
+
+- Fixed: Merged shorthand variants of spellcheck languages ([#9983](https://github.com/laurent22/joplin/issues/9983)) ([#7834](https://github.com/laurent22/joplin/issues/7834) by Ton Hoang Nguyen (Bill))
+- Fixed: Sort notebooks in a case-insensitive way ([#9996](https://github.com/laurent22/joplin/issues/9996))
+
+## [v2.14.16](https://github.com/laurent22/joplin/releases/tag/v2.14.16) (Pre-release) - 2024-02-22T22:49:10Z
+
+- Improved: Back up to a subdirectory of the home directory by default ([#9942](https://github.com/laurent22/joplin/issues/9942)) ([#9857](https://github.com/laurent22/joplin/issues/9857) by Henry Heino)
+- Improved: Beta editor plugins: Allow fixing conflicts between plugins that add autocompletions  ([#9965](https://github.com/laurent22/joplin/issues/9965)) ([#9964](https://github.com/laurent22/joplin/issues/9964) by Henry Heino)
+- Improved: Immediately sort notes after toggling a checkbox ([5820f63](https://github.com/laurent22/joplin/commit/5820f63))
+- Improved: Plugins: Allow commands registered within the beta markdown editor to take arguments ([#9963](https://github.com/laurent22/joplin/issues/9963) by Henry Heino)
+- Fixed: Beta editor plugin API: Fix plugins unable to require nodeJS modules ([#9968](https://github.com/laurent22/joplin/issues/9968) by Henry Heino)
+- Fixed: Beta editor plugins: Fix newlines break content scripts ([#9967](https://github.com/laurent22/joplin/issues/9967)) ([#9966](https://github.com/laurent22/joplin/issues/9966) by Henry Heino)
+- Fixed: Fix auto-indentation in some types of code blocks ([#9972](https://github.com/laurent22/joplin/issues/9972)) ([#9971](https://github.com/laurent22/joplin/issues/9971) by Henry Heino)
+- Security: Disallow UNC file links ([#9979](https://github.com/laurent22/joplin/issues/9979) by Henry Heino) (Vulnerability discovered by Lucas "Luska" Botelho from Hakai Offsec)
+
+## [v2.14.15](https://github.com/laurent22/joplin/releases/tag/v2.14.15) (Pre-release) - 2024-02-19T11:24:57Z
+
+- Improved: CodeMirror 6 plugin API: Improve ability to register custom commands ([#9956](https://github.com/laurent22/joplin/issues/9956) by Henry Heino)
+- Improved: Migrate profile in preparation for trash feature ([115eb5d](https://github.com/laurent22/joplin/commit/115eb5d))
+- Fixed: [#9870](https://github.com/laurent22/joplin/issues/9870): Fixed command palette not properly showing non-latin-characters ([#9916](https://github.com/laurent22/joplin/issues/9916)) ([#9870](https://github.com/laurent22/joplin/issues/9870) by [@pedr](https://github.com/pedr))
+- Fixed: Fix only one CodeMirror 6 content script loaded per plugin ([#9934](https://github.com/laurent22/joplin/issues/9934)) ([#9932](https://github.com/laurent22/joplin/issues/9932) by Henry Heino)
+- Fixed: GotoAnything does not return all the results in some cases ([#9944](https://github.com/laurent22/joplin/issues/9944))
+- Fixed: Highlight partial matches in search results ([#9958](https://github.com/laurent22/joplin/issues/9958))
+- Fixed: Rich text editor: Fix context menu not shown in some cases ([#9954](https://github.com/laurent22/joplin/issues/9954)) ([#9953](https://github.com/laurent22/joplin/issues/9953) by Henry Heino)
+
 ## [v2.14.14](https://github.com/laurent22/joplin/releases/tag/v2.14.14) (Pre-release) - 2024-02-10T16:03:08Z
 
 Trying to fix the Apple silicon version. If you are not on this platform you can skip this update.

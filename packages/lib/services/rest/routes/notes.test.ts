@@ -3,8 +3,10 @@ import shim from '../../../shim';
 import { downloadMediaFile, createResourcesFromPaths } from './notes';
 import Setting from '../../../models/Setting';
 import { readFile, readdir, remove, writeFile } from 'fs-extra';
-import { cleanUpClientDb, setupDatabaseAndSynchronizer } from '../../../testing/test-utils';
 import Resource from '../../../models/Resource';
+import Api, { RequestMethod } from '../Api';
+import Note from '../../../models/Note';
+import { setupDatabase, switchClient } from '../../../testing/test-utils';
 const md5 = require('md5');
 
 const imagePath = `${__dirname}/../../../images/SideMenuHeader.png`;
@@ -12,25 +14,18 @@ const jpgBase64Content = '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBA
 
 describe('routes/notes', () => {
 
-	beforeAll(async () => {
-		await setupDatabaseAndSynchronizer(1);
-	});
-
 	beforeEach(async () => {
 		jest.resetAllMocks();
+		await setupDatabase(1);
+		await switchClient(1);
 	});
-
-	afterEach(async () => {
-		await cleanUpClientDb();
-	});
-
 
 	test.each([
 		'/invalid/url',
 		'htp/asdfasf.com',
 		'https//joplinapp.org',
 	])('should not return a local file for invalid protocols', async (invalidUrl) => {
-		await expect(downloadMediaFile(invalidUrl)).resolves.toBe('');
+		expect(await downloadMediaFile(invalidUrl)).toBe('');
 	});
 
 	test.each([
@@ -165,4 +160,17 @@ describe('routes/notes', () => {
 		const resources = await Resource.all();
 		expect(resources.length).toBe(0);
 	});
+
+	test('should be able to delete to trash', async () => {
+		const api = new Api();
+		const note1 = await Note.save({});
+		const note2 = await Note.save({});
+		const beforeTime = Date.now();
+		await api.route(RequestMethod.DELETE, `notes/${note1.id}`);
+		await api.route(RequestMethod.DELETE, `notes/${note2.id}`, { permanent: '1' });
+
+		expect((await Note.load(note1.id)).deleted_time).toBeGreaterThanOrEqual(beforeTime);
+		expect(await Note.load(note2.id)).toBeFalsy();
+	});
+
 });

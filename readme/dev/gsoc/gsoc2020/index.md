@@ -5,8 +5,8 @@ Joplin has a young but well proven history. It all started by single idea but is
 Joplin is about to make another big step to answers these demands by applying at Google Summer of Code. All students and Joplin users and developers are welcome to participate in the hopefully first year Summer of Code program with Joplin. Here's how.
 
 Mentors, administrators and students: read [Summer of Code](https://developers.google.com/open-source/gsoc) occasionally. Also read the [Summer of Code FAQ](https://developers.google.com/open-source/gsoc/faq).   
-**Most IMPORTANT, read this page carefully, line by line. We don't want to quote pharagraphs from this page answering question in the forum.   
-Moreover, watch/subscribe the topic [GSoC 2020 live blog](https://discourse.joplinapp.org/t/gsoc-2020-live-blog/6219) as this page here contains rather static content whereas the mentioned topic is updated much more freuqently.**
+**Most IMPORTANT, read this page carefully, line by line. We don't want to quote paragraphs from this page answering question in the forum.   
+Moreover, watch/subscribe the topic [GSoC 2020 live blog](https://discourse.joplinapp.org/t/gsoc-2020-live-blog/6219) as this page here contains rather static content whereas the mentioned topic is updated much more frequently.**
 
 All participants will need a Google account in order to join the program. So, save time and create one now. In addition, all participants need to join the  [Joplin Forum](https://discourse.joplinapp.org).
 
@@ -63,7 +63,7 @@ First of all, please read the above referenced resources and the [GSoC FAQ](http
 3. Take a look at the [list of ideas](https://github.com/laurent22/joplin/blob/dev/readme/dev/gsoc/gsoc2020/ideas.md). You can have you own idea added by posting it in the [Features category](https://discourse.joplinapp.org/c/features)
 4. Come up with project that you're interested in and discuss it in [Features category](https://discourse.joplinapp.org/c/features)
 5. Write a first draft and get someone to review it
-6. Remember: you must link to work such as commits in your proposal. A private place will be created wihtinn the forum for that purposes.
+6. Remember: you must link to work such as commits in your proposal. A private place will be created within the forum for that purposes.
 7. Read [How to write a kickass proposal for GSoC](http://teom.org/blog/kde/how-to-write-a-kick-ass-proposal-for-google-summer-of-code/)
 8. Submit proposal using [Google's web interface](https://summerofcode.withgoogle.com/) ahead of the deadline
 9. Submit proof of enrolment well ahead of the deadline

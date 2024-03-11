@@ -1,11 +1,13 @@
-import { EditorView } from '@codemirror/view';
-import { EditorCommandType, EditorControl, EditorSettings, LogMessageCallback, PluginData, SearchState } from '../types';
+import { EditorView, KeyBinding, keymap } from '@codemirror/view';
+import { EditorCommandType, EditorControl, EditorSettings, LogMessageCallback, ContentScriptData, SearchState } from '../types';
 import CodeMirror5Emulation from './CodeMirror5Emulation/CodeMirror5Emulation';
 import editorCommands from './editorCommands/editorCommands';
-import { EditorSelection, Extension, StateEffect } from '@codemirror/state';
+import { Compartment, EditorSelection, Extension, StateEffect } from '@codemirror/state';
 import { updateLink } from './markdown/markdownCommands';
 import { SearchQuery, setSearchQuery } from '@codemirror/search';
 import PluginLoader from './pluginApi/PluginLoader';
+import customEditorCompletion, { editorCompletionSource, enableLanguageDataAutocomplete } from './pluginApi/customEditorCompletion';
+import { CompletionSource } from '@codemirror/autocomplete';
 
 interface Callbacks {
 	onUndoRedo(): void;
@@ -15,8 +17,11 @@ interface Callbacks {
 	onLogMessage: LogMessageCallback;
 }
 
+type EditorUserCommand = (...args: any[])=> any;
+
 export default class CodeMirrorControl extends CodeMirror5Emulation implements EditorControl {
 	private _pluginControl: PluginLoader;
+	private _userCommands: Map<string, EditorUserCommand> = new Map();
 
 	public constructor(
 		editor: EditorView,
@@ -25,22 +30,33 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		super(editor, _callbacks.onLogMessage);
 
 		this._pluginControl = new PluginLoader(this, _callbacks.onLogMessage);
+
+		this.addExtension(customEditorCompletion());
 	}
 
 	public supportsCommand(name: string) {
-		return name in editorCommands || super.commandExists(name);
+		return name in editorCommands || this._userCommands.has(name) || super.commandExists(name);
 	}
 
-	public override execCommand(name: string) {
-		if (name in editorCommands) {
-			editorCommands[name as EditorCommandType](this.editor);
+	public override execCommand(name: string, ...args: any[]) {
+		let commandOutput;
+		if (this._userCommands.has(name)) {
+			commandOutput = this._userCommands.get(name)(...args);
+		} else if (name in editorCommands) {
+			commandOutput = editorCommands[name as EditorCommandType](this.editor);
 		} else if (super.commandExists(name)) {
-			super.execCommand(name);
+			commandOutput = super.execCommand(name);
 		}
 
 		if (name === EditorCommandType.Undo || name === EditorCommandType.Redo) {
 			this._callbacks.onUndoRedo();
 		}
+
+		return commandOutput;
+	}
+
+	public registerCommand(name: string, command: EditorUserCommand) {
+		this._userCommands.set(name, command);
 	}
 
 	public undo() {
@@ -121,12 +137,23 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 	}
 
 	public addStyles(...styles: Parameters<typeof EditorView.theme>) {
+		const compartment = new Compartment();
 		this.editor.dispatch({
-			effects: StateEffect.appendConfig.of(EditorView.theme(...styles)),
+			effects: StateEffect.appendConfig.of(
+				compartment.of(EditorView.theme(...styles)),
+			),
 		});
+
+		return {
+			remove: () => {
+				this.editor.dispatch({
+					effects: compartment.reconfigure([]),
+				});
+			},
+		};
 	}
 
-	public setPlugins(plugins: PluginData[]) {
+	public setContentScripts(plugins: ContentScriptData[]) {
 		return this._pluginControl.setPlugins(plugins);
 	}
 
@@ -138,6 +165,33 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 	//
 	// CodeMirror-specific methods
 	//
+
+	public prependKeymap(bindings: readonly KeyBinding[]) {
+		const compartment = new Compartment();
+		this.editor.dispatch({
+			effects: StateEffect.appendConfig.of([
+				compartment.of(keymap.of(bindings)),
+			]),
+		});
+
+		return {
+			remove: () => {
+				this.editor.dispatch({
+					effects: compartment.reconfigure([]),
+				});
+			},
+		};
+	}
+
+	public joplinExtensions = {
+		// Some plugins want to enable autocompletion from *just* that plugin, without also
+		// enabling autocompletion for text within code blocks (and other built-in completion
+		// sources).
+		// To support this, we need to provide extensions that wrap the built-in autocomplete.
+		// See https://discuss.codemirror.net/t/autocompletion-merging-override-in-config/7853
+		completionSource: (completionSource: CompletionSource) => editorCompletionSource.of(completionSource),
+		enableLanguageDataAutocomplete: enableLanguageDataAutocomplete,
+	};
 
 	public addExtension(extension: Extension) {
 		this.editor.dispatch({
