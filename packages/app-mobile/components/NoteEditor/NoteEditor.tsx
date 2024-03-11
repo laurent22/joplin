@@ -9,7 +9,7 @@ import * as React from 'react';
 import { forwardRef, useImperativeHandle } from 'react';
 import { useMemo, useState, useCallback, useRef } from 'react';
 import { LayoutChangeEvent, NativeSyntheticEvent, View, ViewStyle } from 'react-native';
-const { editorFont } = require('../global-style');
+import { editorFont } from '../global-style';
 
 import { EditorControl, EditorSettings, SelectionRange } from './types';
 import { _ } from '@joplin/lib/locale';

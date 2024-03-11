@@ -21,7 +21,9 @@ export const runtime = (): CommandRuntime => {
 				defaultId: 1,
 			});
 
-			if (ok) await Note.batchDelete(noteIds, { toTrash: false });
+			if (ok) {
+				await Note.batchDelete(noteIds, { toTrash: false, sourceDescription: 'permanentlyDeleteNote command' });
+			}
 		},
 		enabledCondition: '(!noteIsReadOnly || inTrash) && someNotesSelected',
 	};

@@ -33,7 +33,7 @@ export default class ItemUploader {
 		this.maxBatchSize_ = v;
 	}
 
-	public async serializeAndUploadItem(ItemClass: any, path: string, local: BaseItemEntity) {
+	public async serializeAndUploadItem(ItemClass: typeof BaseItem, path: string, local: BaseItemEntity) {
 		const preUploadItem = this.preUploadedItems_[path];
 		if (preUploadItem) {
 			if (this.preUploadedItemUpdatedTimes_[path] !== local.updated_time) {

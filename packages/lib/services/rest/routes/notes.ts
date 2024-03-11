@@ -27,7 +27,8 @@ const { fileExtension, safeFileExtension, safeFilename, filename } = require('..
 const { MarkupToHtml } = require('@joplin/renderer');
 const { ErrorNotFound } = require('../utils/errors');
 import { fileUriToPath } from '@joplin/utils/url';
-import { NoteEntity } from '../../database/types';
+import { NoteEntity, ResourceEntity } from '../../database/types';
+import { DownloadController } from '../../../downloadController';
 
 const logger = Logger.create('routes/notes');
 
@@ -66,7 +67,19 @@ type RequestNote = {
 type FetchOptions = {
 	timeout?: number;
 	maxRedirects?: number;
+	downloadController?: DownloadController;
 };
+
+
+type DownloadedMediaFile = {
+	originalUrl: string;
+	path: string;
+};
+
+interface ResourceFromPath extends DownloadedMediaFile {
+	resource: ResourceEntity;
+}
+
 
 async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> {
 	const output: any = {
@@ -81,7 +94,6 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 	if (requestNote.body_html) {
 		if (requestNote.convert_to === 'html') {
 			const style = await buildNoteStyleSheet(requestNote.stylesheets);
-			const minify = require('html-minifier').minify;
 
 			const minifyOptions = {
 				// Remove all spaces and, especially, newlines from tag attributes, as that would
@@ -104,6 +116,9 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 			const styleTag = style.length ? `<style>${styleString}</style>` + '\n' : '';
 			let minifiedHtml = '';
 			try {
+				// We use requireDynamic here -- html-minifier seems to not work in environments
+				// that lack `fs`.
+				const minify = shim.requireDynamic('html-minifier').minify;
 				minifiedHtml = minify(requestNote.body_html, minifyOptions);
 			} catch (error) {
 				console.warn('Could not minify HTML - using non-minified HTML instead', error);
@@ -263,48 +278,56 @@ export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions
 }
 
 async function downloadMediaFiles(urls: string[], fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
-	const PromisePool = require('es6-promise-pool');
+	const output: DownloadedMediaFile[] = [];
 
-	const output: any = {};
+	const downloadController = fetchOptions?.downloadController ?? null;
 
 	const downloadOne = async (url: string) => {
+		if (downloadController) downloadController.imagesCount += 1;
 		const mediaPath = await downloadMediaFile(url, fetchOptions, allowedProtocols);
-		if (mediaPath) output[url] = { path: mediaPath, originalUrl: url };
+		if (mediaPath) output.push({ path: mediaPath, originalUrl: url });
 	};
 
-	let urlIndex = 0;
-	const promiseProducer = () => {
-		if (urlIndex >= urls.length) return null;
+	const maximumImageDownloadsAllowed = downloadController ? downloadController.maxImagesCount : Number.POSITIVE_INFINITY;
+	const urlsAllowedByController = urls.slice(0, maximumImageDownloadsAllowed);
+	logger.info(`Media files allowed to be downloaded: ${maximumImageDownloadsAllowed}`);
 
-		const url = urls[urlIndex++];
-		return downloadOne(url);
-	};
+	const promises = [];
+	for (const url of urlsAllowedByController) {
+		promises.push(downloadOne(url));
+	}
 
-	const concurrency = 10;
-	const pool = new PromisePool(promiseProducer, concurrency);
-	await pool.start();
+	await Promise.all(promises);
+
+	if (downloadController) {
+		downloadController.imageCountExpected = urls.length;
+		downloadController.printStats(urls.length);
+	}
 
 	return output;
 }
 
-async function createResourcesFromPaths(urls: string[]) {
-	for (const url in urls) {
-		if (!urls.hasOwnProperty(url)) continue;
-		const urlInfo: any = urls[url];
+export async function createResourcesFromPaths(mediaFiles: DownloadedMediaFile[]) {
+	const resources: Promise<ResourceFromPath>[] = [];
+
+	for (const mediaFile of mediaFiles) {
 		try {
-			const resource = await shim.createResourceFromPath(urlInfo.path);
-			urlInfo.resource = resource;
+			resources.push(
+				shim.createResourceFromPath(mediaFile.path)
+					// eslint-disable-next-line
+					.then(resource => ({ ...mediaFile, resource }))
+			);
 		} catch (error) {
-			logger.warn(`Cannot create resource for ${url}`, error);
+			logger.warn(`Cannot create resource for ${mediaFile.originalUrl}`, error);
 		}
 	}
-	return urls;
+
+	return Promise.all(resources);
 }
 
-async function removeTempFiles(urls: string[]) {
-	for (const url in urls) {
-		if (!urls.hasOwnProperty(url)) continue;
-		const urlInfo: any = urls[url];
+
+async function removeTempFiles(urls: ResourceFromPath[]) {
+	for (const urlInfo of urls) {
 		try {
 			await shim.fsDriver().remove(urlInfo.path);
 		} catch (error) {
@@ -313,12 +336,12 @@ async function removeTempFiles(urls: string[]) {
 	}
 }
 
-function replaceUrlsByResources(markupLanguage: number, md: string, urls: any, imageSizes: any) {
+function replaceUrlsByResources(markupLanguage: number, md: string, urls: ResourceFromPath[], imageSizes: any) {
 	const imageSizesIndexes: any = {};
 
 	if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
 		return htmlUtils.replaceMediaUrls(md, (url: string) => {
-			const urlInfo: any = urls[url];
+			const urlInfo = urls.find(u => u.originalUrl === url);
 			if (!urlInfo || !urlInfo.resource) return url;
 			return Resource.internalUrl(urlInfo.resource);
 		});
@@ -342,7 +365,7 @@ function replaceUrlsByResources(markupLanguage: number, md: string, urls: any, i
 				type = 'image';
 			}
 
-			const urlInfo = urls[url];
+			const urlInfo = urls.find(u => u.originalUrl === url);
 			if (type === 'link' || !urlInfo || !urlInfo.resource) return before + url + after;
 
 			const resourceUrl = Resource.internalUrl(urlInfo.resource);
@@ -408,7 +431,7 @@ export const extractNoteFromHTML = async (
 
 	const mediaFiles = await downloadMediaFiles(mediaUrls, fetchOptions, allowedProtocols);
 
-	logger.info(`Request (${requestId}): Creating resources from paths: ${Object.getOwnPropertyNames(mediaFiles).length}`);
+	logger.info(`Request (${requestId}): Creating resources from paths: ${mediaFiles.length}`);
 
 	const resources = await createResourcesFromPaths(mediaFiles);
 	await removeTempFiles(resources);
@@ -459,7 +482,13 @@ export default async function(request: Request, id: string = null, link: string 
 		logger.info('Images:', imageSizes);
 
 		const allowedProtocolsForDownloadMediaFiles = ['http:', 'https:', 'file:', 'data:'];
-		const extracted = await extractNoteFromHTML(requestNote, requestId, imageSizes, undefined, allowedProtocolsForDownloadMediaFiles);
+		const extracted = await extractNoteFromHTML(
+			requestNote,
+			requestId,
+			imageSizes,
+			undefined,
+			allowedProtocolsForDownloadMediaFiles,
+		);
 
 		let note = await Note.save(extracted.note, extracted.saveOptions);
 
@@ -511,7 +540,7 @@ export default async function(request: Request, id: string = null, link: string 
 	}
 
 	if (request.method === RequestMethod.DELETE) {
-		await Note.delete(id, { toTrash: request.query.permanent !== '1' });
+		await Note.delete(id, { toTrash: request.query.permanent !== '1', sourceDescription: 'api/notes DELETE' });
 		return;
 	}
 

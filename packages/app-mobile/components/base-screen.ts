@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-const { themeStyle } = require('./global-style.js');
+import { themeStyle } from './global-style';
 
 const rootStyles_: Record<number, any> = {};
 
