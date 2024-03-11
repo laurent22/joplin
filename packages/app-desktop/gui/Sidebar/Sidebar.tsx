@@ -493,15 +493,14 @@ const SidebarComponent = (props: Props) => {
 	};
 
 	const renderAllNotesItem = (theme: Theme, selected: boolean) => {
-		const all_notes_folder_id = 'all_notes_folder_id';
 		const toggleAllNotesContextMenu = () => {
 			const menu = new Menu();
 
 			if (Setting.value('notes.perFolderSortOrderEnabled')) {
 				menu.append(new MenuItem({
-					...menuUtils.commandToStatefulMenuItem('togglePerFolderSortOrder', all_notes_folder_id),
+					...menuUtils.commandToStatefulMenuItem('togglePerFolderSortOrder', ALL_NOTES_FILTER_ID),
 					type: 'checkbox',
-					checked: PerFolderSortOrderService.isSet(all_notes_folder_id),
+					checked: PerFolderSortOrderService.isSet(ALL_NOTES_FILTER_ID),
 				}));
 			}
 
@@ -517,7 +516,7 @@ const SidebarComponent = (props: Props) => {
 					isSpecialItem={true}
 					href="#"
 					selected={selected}
-					onClick={onAllNotesClick_}
+					onClick={() => { onAllNotesClick_(); folderItem_click(ALL_NOTES_FILTER_ID); }}
 					onContextMenu={toggleAllNotesContextMenu}
 				>
 					{_('All notes')}
@@ -744,7 +743,7 @@ const SidebarComponent = (props: Props) => {
 
 
 	if (props.folders.length) {
-		const allNotesSelected = props.notesParentType === 'SmartFilter' && props.selectedSmartFilterId === ALL_NOTES_FILTER_ID;
+		const allNotesSelected = props.selectedFolderId === ALL_NOTES_FILTER_ID;
 		const result = renderFolders(props, renderFolderItem);
 		const folderItems = [renderAllNotesItem(theme, allNotesSelected)].concat(result.items);
 		folderItemsOrder_.current = result.order;
