@@ -9,7 +9,7 @@ import Slider from '@react-native-community/slider';
 import SettingsToggle from './SettingsToggle';
 import FileSystemPathSelector from './FileSystemPathSelector';
 import shim from '@joplin/lib/shim';
-const { themeStyle } = require('../../global-style.js');
+import { themeStyle } from '../../global-style';
 
 interface Props {
 	settingId: string;

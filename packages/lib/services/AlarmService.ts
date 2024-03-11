@@ -45,7 +45,7 @@ export default class AlarmService {
 			this.logger().info(`Clearing notification for non-existing note. Alarm ${alarmIds[i]}`);
 			await this.driver().clearNotification(alarmIds[i]);
 		}
-		await Alarm.batchDelete(alarmIds);
+		await Alarm.batchDelete(alarmIds, { sourceDescription: 'AlarmService/garbageCollect' });
 	}
 
 	// When passing a note, make sure it has all the required properties
@@ -93,7 +93,7 @@ export default class AlarmService {
 			if (clearAlarm) {
 				this.logger().info(`Clearing notification for note ${noteId}`);
 				await driver.clearNotification(alarm.id);
-				await Alarm.delete(alarm.id);
+				await Alarm.delete(alarm.id, { sourceDescription: 'AlarmService/clearAlarm' });
 			}
 
 			if (isDeleted || !Note.needAlarm(note)) return;
