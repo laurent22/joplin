@@ -353,8 +353,11 @@ describe('models/Folder', () => {
 		await expectThrow(async () => Folder.delete(folder2.id, { toTrash: true, toTrashParentId: folder2.id }));
 	});
 
-	it('should tell if atleast one folder other than trash and deleted exists', async () => {
-		let folders = await Folder.all({ includeTrash: true });
+	it('should tell if at least one folder other than trash and deleted exists', async () => {
+		let folders: FolderEntity[] = [];
+		expect(Folder.atLeastOneRealFolderExists(folders)).toBe(false);
+
+		folders = await Folder.all({ includeTrash: true });
 		expect(Folder.atLeastOneRealFolderExists(folders)).toBe(false);
 
 		const f1 = await Folder.save({ title: 'folder1' });
