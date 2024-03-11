@@ -207,7 +207,7 @@ class Logger {
 	}
 
 	// Only for database at the moment
-	public async lastEntries(limit = 100, options: LastEntriesOptions|null = null) {
+	public async lastEntries(limit = 100, options: LastEntriesOptions|null = null): Promise<string[]> {
 		if (options === null) options = {};
 		if (!options.levels) options.levels = [LogLevel.Debug, LogLevel.Info, LogLevel.Warn, LogLevel.Error];
 		if (!options.levels.length) return [];
@@ -326,6 +326,13 @@ class Logger {
 				target.database.transactionExecBatch(queries);
 			}
 		}
+	}
+
+	// For tests
+	public async waitForFileWritesToComplete_() {
+		const release = await writeToFileMutex_.acquire();
+		release();
+		return;
 	}
 
 	public error(...object: any[]) {

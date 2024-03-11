@@ -26,6 +26,10 @@ export default class ActionLogger {
 	}
 
 	public log(action: ItemActionType, itemIds: string|string[]) {
+		if (ActionLogger.disabled) {
+			return;
+		}
+
 		const logger = actionTypeToLogger[action];
 		logger.info(`${this.source}: ${this.descriptions.join(',')}; Item IDs: ${JSON.stringify(itemIds)}`);
 	}
@@ -40,5 +44,13 @@ export default class ActionLogger {
 		}
 
 		return source;
+	}
+
+
+	// Disabling the action logger globally can be useful on Joplin Server/Cloud
+	// when many deletions are expected (e.g. for email-to-note).
+	private static disabled = false;
+	public static setDisabled(disabled: boolean) {
+		this.disabled = disabled;
 	}
 }

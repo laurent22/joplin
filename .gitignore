@@ -1087,6 +1087,7 @@ packages/lib/themes/solarizedLight.js
 packages/lib/themes/type.js
 packages/lib/time.js
 packages/lib/types.js
+packages/lib/utils/ActionLogger.test.js
 packages/lib/utils/ActionLogger.js
 packages/lib/utils/credentialFiles.js
 packages/lib/utils/ipc/RemoteMessenger.test.js
