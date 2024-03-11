@@ -29,6 +29,10 @@ import SettingComponent from './SettingComponent';
 import ExportDebugReportButton, { exportDebugReportTitle } from './NoteExportSection/ExportDebugReportButton';
 import SectionSelector from './SectionSelector';
 import { Button, TextInput } from 'react-native-paper';
+import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
+import PluginUploadButton, { buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
+import isInstallingPluginsAllowed from './plugins/utils/isPluginInstallingAllowed';
 
 interface ConfigScreenState {
 	settings: any;
@@ -409,6 +413,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		for (let i = 0; i < section.metadatas.length; i++) {
 			const md = section.metadatas[i];
 
+			// Handled below
+			if (md.key === 'plugins.states') continue;
+
 			if (section.name === 'sync' && md.key === 'sync.resourceDownloadMode') {
 				const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
 
@@ -436,6 +443,40 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				relatedText,
 				md,
 			);
+		}
+
+		if (section.name === 'plugins') {
+			const pluginStatesKey = 'plugins.states';
+			const pluginService = PluginService.instance();
+
+			const updatePluginStates = (newSettingValue: PluginSettings) => {
+				const value = pluginService.serializePluginSettings(newSettingValue);
+				shared.updateSettingValue(this, pluginStatesKey, value);
+			};
+
+			addSettingComponent(
+				<PluginStates
+					key={'plugin-states'}
+					styles={this.styles()}
+					themeId={this.props.themeId}
+					pluginSettings={settings[pluginStatesKey]}
+
+					updatePluginStates={updatePluginStates}
+					shouldShowBasedOnSearchQuery={this.state.searching ? matchesSearchQuery : null}
+				/>,
+				getPluginStatesSearchText(),
+			);
+
+			if (isInstallingPluginsAllowed()) {
+				addSettingComponent(
+					<PluginUploadButton
+						key='plugins-install-from-file'
+						pluginSettings={settings[pluginStatesKey]}
+						updatePluginStates={updatePluginStates}
+					/>,
+					pluginUploadButtonSearchText(),
+				);
+			}
 		}
 
 		if (section.name === 'sync') {

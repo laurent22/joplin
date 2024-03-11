@@ -64,6 +64,12 @@ export enum EditorCommandType {
 
 	UndoSelection = 'undoSelection',
 	RedoSelection = 'redoSelection',
+
+	// Getters and multi-argument commands. These correspond to global Joplin
+	// commands.
+	SelectedText = 'selectedText',
+	InsertText = 'insertText',
+	ReplaceSelection = 'replaceSelection',
 }
 
 // Because the editor package can run in a WebView, plugin content scripts
@@ -78,7 +84,7 @@ export interface ContentScriptData {
 
 export interface EditorControl {
 	supportsCommand(name: EditorCommandType|string): boolean;
-	execCommand(name: EditorCommandType|string): void;
+	execCommand(name: EditorCommandType|string, ...args: any[]): void|Promise<any>;
 
 	undo(): void;
 	redo(): void;
@@ -120,6 +126,8 @@ export interface EditorTheme extends Theme {
 	isDesktop?: boolean;
 	monospaceFont?: string;
 	contentMaxWidth?: number;
+	marginLeft?: number;
+	marginRight?: number;
 }
 
 export interface EditorSettings {
