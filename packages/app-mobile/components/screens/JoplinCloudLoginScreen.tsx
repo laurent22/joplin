@@ -28,7 +28,7 @@ const syncIconRotation = syncIconRotationValue.interpolate({
 	outputRange: ['0deg', '360deg'],
 });
 
-let syncIconAnimation: any;
+let syncIconAnimation: Animated.CompositeAnimation;
 
 const useStyle = (themeId: number) => {
 	return React.useMemo(() => {
