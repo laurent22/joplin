@@ -90,6 +90,7 @@ packages/app-cli/app/command-mkbook.js
 packages/app-cli/app/command-mv.js
 packages/app-cli/app/command-ren.js
 packages/app-cli/app/command-restore.js
+packages/app-cli/app/command-rmbook.test.js
 packages/app-cli/app/command-rmbook.js
 packages/app-cli/app/command-rmnote.js
 packages/app-cli/app/command-set.js
