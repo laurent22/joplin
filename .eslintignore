@@ -570,6 +570,7 @@ packages/app-mobile/components/screens/ConfigScreen/plugins/utils/isPluginInstal
 packages/app-mobile/components/screens/ConfigScreen/plugins/utils/openWebsiteForPlugin.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/utils/useRepoApi.js
 packages/app-mobile/components/screens/ConfigScreen/types.js
+packages/app-mobile/components/screens/JoplinCloudLoginScreen.js
 packages/app-mobile/components/screens/LogScreen.js
 packages/app-mobile/components/screens/Note.js
 packages/app-mobile/components/screens/Notes.js
