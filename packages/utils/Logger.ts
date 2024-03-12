@@ -207,7 +207,7 @@ class Logger {
 	}
 
 	// Only for database at the moment
-	public async lastEntries(limit = 100, options: LastEntriesOptions|null = null): Promise<string[]> {
+	public async lastEntries(limit = 100, options: LastEntriesOptions|null = null) {
 		if (options === null) options = {};
 		if (!options.levels) options.levels = [LogLevel.Debug, LogLevel.Info, LogLevel.Warn, LogLevel.Error];
 		if (!options.levels.length) return [];
