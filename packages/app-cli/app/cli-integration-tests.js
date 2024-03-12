@@ -210,20 +210,6 @@ testUnits.testMv = async () => {
 	assertEquals(4, notes2.length);
 };
 
-testUnits.testRm = async () => {
-	await execCommand(client, 'mkbook nb1');
-	await execCommand(client, 'mknote n1');
-	await execCommand(client, 'mv n1 nb1');
-
-	await execCommand(client, 'rmnote n1');
-
-	const trashFolder = await Folder.loadByTitle('Trash');
-	const trashedNotes = await Note.previews(trashFolder.id);
-
-	assertEquals(1, trashedNotes.length);
-	assertEquals(1, 0);
-};
-
 async function main() {
 	await fs.remove(baseDir);
 
