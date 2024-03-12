@@ -1201,6 +1201,7 @@ packages/tools/packageJsonLint.js
 packages/tools/postPreReleasesToForum.js
 packages/tools/release-android.js
 packages/tools/release-cli.js
+packages/tools/release-clipper.js
 packages/tools/release-electron.js
 packages/tools/release-ios.js
 packages/tools/release-plugin-repo-cli.js
