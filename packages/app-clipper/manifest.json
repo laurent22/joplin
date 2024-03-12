@@ -29,7 +29,7 @@
         "default_popup": "popup/build/index.html"
     },
     "commands": {
-        "_execute_browser_action": {
+        "_execute_action": {
             "suggested_key": {
                 "default": "Alt+Shift+J"
             }
