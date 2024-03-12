@@ -19,13 +19,12 @@ class Bridge {
 		this.token_ = null;
 	}
 
-	async init(browser, browserSupportsPromises, store) {
+	async init(browser, store) {
 		console.info('Popup: Init bridge');
 
 		this.browser_ = browser;
 		this.dispatch_ = store.dispatch;
 		this.store_ = store;
-		this.browserSupportsPromises_ = browserSupportsPromises;
 		this.clipperServerPort_ = null;
 		this.clipperServerPortStatus_ = 'searching';
 
@@ -194,17 +193,6 @@ class Bridge {
 		}
 	}
 
-	async backgroundPage(browser) {
-		const bgp = browser.extension.getBackgroundPage?.();
-		if (bgp) return bgp;
-
-		return new Promise((resolve) => {
-			browser.runtime.getBackgroundPage((bgp) => {
-				resolve(bgp);
-			});
-		});
-	}
-
 	env() {
 		return this.env_;
 	}
@@ -313,34 +301,15 @@ class Bridge {
 	}
 
 	async tabsQuery(options) {
-		if (this.browserSupportsPromises_) return this.browser().tabs.query(options);
-
-		return new Promise((resolve) => {
-			this.browser().tabs.query(options, (tabs) => {
-				resolve(tabs);
-			});
-		});
+		return this.browser().tabs.query(options);
 	}
 
 	async tabsSendMessage(tabId, command) {
-		console.log('message to', tabId);
-		if (this.browserSupportsPromises_) return this.browser().tabs.sendMessage(tabId, command);
-
-		return new Promise((resolve) => {
-			this.browser().tabs.sendMessage(tabId, command, (result) => {
-				resolve(result);
-			});
-		});
+		return this.browser().tabs.sendMessage(tabId, command);
 	}
 
 	async tabsCreate(options) {
-		if (this.browserSupportsPromises_) return this.browser().tabs.create(options);
-
-		return new Promise((resolve) => {
-			this.browser().tabs.create(options, () => {
-				resolve();
-			});
-		});
+		return this.browser().tabs.create(options);
 	}
 
 	async folderTree() {
@@ -348,29 +317,15 @@ class Bridge {
 	}
 
 	async storageSet(keys) {
-		if (this.browserSupportsPromises_) return this.browser().storage.local.set(keys);
-
-		return new Promise((resolve) => {
-			this.browser().storage.local.set(keys, () => {
-				resolve();
-			});
-		});
+		return this.browser().storage.local.set(keys);
 	}
 
 	async storageGet(keys, defaultValue = null) {
-		if (this.browserSupportsPromises_) {
-			try {
-				const r = await this.browser().storage.local.get(keys);
-				return r;
-			} catch (error) {
-				return defaultValue;
-			}
-		} else {
-			return new Promise((resolve) => {
-				this.browser().storage.local.get(keys, (result) => {
-					resolve(result);
-				});
-			});
+		try {
+			const r = await this.browser().storage.local.get(keys);
+			return r;
+		} catch (error) {
+			return defaultValue;
 		}
 	}
 

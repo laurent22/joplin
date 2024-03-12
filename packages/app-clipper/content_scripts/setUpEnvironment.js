@@ -4,5 +4,3 @@
 // While this is (somehow) fine in Chrome, it breaks the extension in Firefox.
 // We thus define window.exports:
 window.exports ??= {};
-
-console.warn('Set up environment.');

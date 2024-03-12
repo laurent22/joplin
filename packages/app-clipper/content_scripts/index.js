@@ -11,13 +11,9 @@
 	if (typeof browser !== 'undefined') {
 		// eslint-disable-next-line no-undef
 		browser_ = browser;
-		// eslint-disable-next-line no-undef
-		browserSupportsPromises_ = true;
 	} else if (typeof chrome !== 'undefined') {
 		// eslint-disable-next-line no-undef
 		browser_ = chrome;
-		// eslint-disable-next-line no-undef
-		browserSupportsPromises_ = false;
 	}
 
 	function escapeHtml(s) {
