@@ -3,7 +3,7 @@ import { setupDatabaseAndSynchronizer, switchClient } from '../testing/test-util
 import Note from '../models/Note';
 import ActionLogger from './ActionLogger';
 import Setting from '../models/Setting';
-import { pathExists, readFile, remove } from 'fs-extra';
+import { pathExists, readFile, remove, writeFile } from 'fs-extra';
 
 const getLogPath = () => `${Setting.value('profileDir')}/log.txt`;
 
@@ -27,6 +27,7 @@ describe('ActionLogger', () => {
 		if (await pathExists(logPath)) {
 			await remove(logPath);
 		}
+		await writeFile(logPath, '', 'utf8');
 
 		const logger = new Logger();
 		logger.addTarget(TargetType.File, { path: logPath });
@@ -49,11 +50,11 @@ describe('ActionLogger', () => {
 		const note1 = await Note.save({ title: 'testNote1' });
 		const note2 = await Note.save({ title: 'testNote2' });
 
-		ActionLogger.setDisabled(false);
+		ActionLogger.enabled = true;
 		await Note.delete(note1.id, { toTrash: false });
-		ActionLogger.setDisabled(true);
+		ActionLogger.enabled = false;
 		await Note.delete(note2.id, { toTrash: false });
-		ActionLogger.setDisabled(false);
+		ActionLogger.enabled = true;
 		await Logger.globalLogger.waitForFileWritesToComplete_();
 
 		expect(await logContainsEntryWith('DeleteAction', note1.id)).toBe(true);
