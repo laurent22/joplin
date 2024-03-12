@@ -22,13 +22,16 @@ import NoteExportButton, { exportButtonDescription, exportButtonTitle } from './
 import SettingsButton from './SettingsButton';
 import Clipboard from '@react-native-community/clipboard';
 import { ReactElement, ReactNode } from 'react';
-import { Dispatch } from 'redux';
 import SectionHeader from './SectionHeader';
 import ExportProfileButton, { exportProfileButtonTitle } from './NoteExportSection/ExportProfileButton';
 import SettingComponent from './SettingComponent';
 import ExportDebugReportButton, { exportDebugReportTitle } from './NoteExportSection/ExportDebugReportButton';
 import SectionSelector from './SectionSelector';
 import { Button, TextInput } from 'react-native-paper';
+import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
+import PluginUploadButton, { buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
+import isInstallingPluginsAllowed from './plugins/utils/isPluginInstallingAllowed';
 
 interface ConfigScreenState {
 	settings: any;
@@ -49,8 +52,6 @@ interface ConfigScreenProps {
 	settings: any;
 	themeId: number;
 	navigation: any;
-
-	dispatch: Dispatch;
 }
 
 class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, ConfigScreenState> {
@@ -80,6 +81,13 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	}
 
 	private checkSyncConfig_ = async () => {
+		if (this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
+			const isAuthenticated = await reg.syncTarget().isAuthenticated();
+			if (!isAuthenticated) {
+				void NavService.go('JoplinCloudLogin');
+				return;
+			}
+		}
 		// to ignore TLS errors we need to change the global state of the app, if the check fails we need to restore the original state
 		// this call sets the new value and returns the previous one which we can use later to revert the change
 		const prevIgnoreTlsErrors = await setIgnoreTlsErrors(this.state.settings['net.ignoreTlsErrors']);
@@ -409,6 +417,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		for (let i = 0; i < section.metadatas.length; i++) {
 			const md = section.metadatas[i];
 
+			// Handled below
+			if (md.key === 'plugins.states') continue;
+
 			if (section.name === 'sync' && md.key === 'sync.resourceDownloadMode') {
 				const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
 
@@ -436,6 +447,40 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				relatedText,
 				md,
 			);
+		}
+
+		if (section.name === 'plugins') {
+			const pluginStatesKey = 'plugins.states';
+			const pluginService = PluginService.instance();
+
+			const updatePluginStates = (newSettingValue: PluginSettings) => {
+				const value = pluginService.serializePluginSettings(newSettingValue);
+				shared.updateSettingValue(this, pluginStatesKey, value);
+			};
+
+			addSettingComponent(
+				<PluginStates
+					key={'plugin-states'}
+					styles={this.styles()}
+					themeId={this.props.themeId}
+					pluginSettings={settings[pluginStatesKey]}
+
+					updatePluginStates={updatePluginStates}
+					shouldShowBasedOnSearchQuery={this.state.searching ? matchesSearchQuery : null}
+				/>,
+				getPluginStatesSearchText(),
+			);
+
+			if (isInstallingPluginsAllowed()) {
+				addSettingComponent(
+					<PluginUploadButton
+						key='plugins-install-from-file'
+						pluginSettings={settings[pluginStatesKey]}
+						updatePluginStates={updatePluginStates}
+					/>,
+					pluginUploadButtonSearchText(),
+				);
+			}
 		}
 
 		if (section.name === 'sync') {

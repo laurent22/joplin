@@ -13,8 +13,6 @@ import { Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, NativeSyn
 import { Platform, PermissionsAndroid } from 'react-native';
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
-import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
-import { openDocument } from '@joplin/react-native-saf-x';
 import Note from '@joplin/lib/models/Note';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Resource from '@joplin/lib/models/Resource';
@@ -60,71 +58,20 @@ import { SelectionRange } from '../NoteEditor/types';
 import { AppState } from '../../utils/types';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { getDisplayParentTitle } from '@joplin/lib/services/trash';
+import pickDocument from '../../utils/pickDocument';
+import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
 
 const logger = Logger.create('screens/Note');
 
-interface SelectedDocument {
-	type: string;
-	mime: string;
-	uri: string;
-	fileName: string;
-}
-
-const pickDocument = async (multiple: boolean): Promise<SelectedDocument[]> => {
-	let result: SelectedDocument[] = [];
-	try {
-		if (shim.fsDriver().isUsingAndroidSAF()) {
-			const openDocResult = await openDocument({ multiple });
-			if (!openDocResult) {
-				throw new Error('User canceled document picker');
-			}
-			result = openDocResult.map(r => {
-				const converted: SelectedDocument = {
-					type: r.mime,
-					fileName: r.name,
-					mime: r.mime,
-					uri: r.uri,
-				};
-
-				return converted;
-			});
-		} else {
-			let docPickerResult: DocumentPickerResponse[] = [];
-			if (multiple) {
-				docPickerResult = await DocumentPicker.pick({ allowMultiSelection: true });
-			} else {
-				docPickerResult = [await DocumentPicker.pickSingle()];
-			}
-
-			result = docPickerResult.map(r => {
-				return {
-					mime: '',
-					type: r.type,
-					uri: r.uri,
-					fileName: r.name,
-				};
-			});
-		}
-	} catch (error) {
-		if (DocumentPicker.isCancel(error) || error?.message?.includes('cancel')) {
-			logger.info('pickDocuments: user has cancelled');
-			return [];
-		} else {
-			throw error;
-		}
-	}
-
-	return result;
-};
-
 interface Props {
 	provisionalNoteIds: string[];
 	dispatch: Dispatch;
 	noteId: string;
 	useEditorBeta: boolean;
+	plugins: PluginStates;
 	themeId: number;
 	editorFontSize: number;
 	editorFont: number; // e.g. Setting.FONT_MENLO
@@ -1552,15 +1499,13 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
 					onAttach={() => this.showAttachMenu()}
 					readOnly={this.state.readOnly}
+					plugins={this.props.plugins}
 					style={{
 						...editorStyle,
+
+						// Allow the editor to set its own padding
 						paddingLeft: 0,
 						paddingRight: 0,
-					}}
-					contentStyle={{
-						// Apply padding to the editor's content, but not the toolbar.
-						paddingLeft: editorStyle.paddingLeft,
-						paddingRight: editorStyle.paddingRight,
 					}}
 				/>;
 			}
@@ -1671,6 +1616,7 @@ const NoteScreen = connect((state: AppState) => {
 		showSideMenu: state.showSideMenu,
 		provisionalNoteIds: state.provisionalNoteIds,
 		highlightedWords: state.highlightedWords,
+		plugins: state.pluginService.plugins,
 
 		// What we call "beta editor" in this component is actually the (now
 		// default) CodeMirror editor. That should be refactored to make it less
