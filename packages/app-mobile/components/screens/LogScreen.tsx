@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { reg } from '@joplin/lib/registry.js';
 import { ScreenHeader } from '../ScreenHeader';
 import time from '@joplin/lib/time';
-const { themeStyle } = require('../global-style.js');
+import { themeStyle } from '../global-style';
 import Logger from '@joplin/utils/Logger';
 import { BaseScreenComponent } from '../base-screen';
 import { _ } from '@joplin/lib/locale';

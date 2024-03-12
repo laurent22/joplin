@@ -7,7 +7,7 @@ const { ScreenHeader } = require('../ScreenHeader');
 const ReportService = require('@joplin/lib/services/ReportService').default;
 const { _ } = require('@joplin/lib/locale');
 const { BaseScreenComponent } = require('../base-screen');
-const { themeStyle } = require('../global-style.js');
+const { themeStyle } = require('../global-style');
 
 class StatusScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {

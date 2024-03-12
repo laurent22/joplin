@@ -11,7 +11,7 @@ import { _, _n } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-const { themeStyle } = require('./global-style.js');
+import { themeStyle } from './global-style';
 import { OnValueChangedListener } from './Dropdown';
 const { dialogs } = require('../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
@@ -277,7 +277,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 
 		try {
-			await Note.batchDelete(noteIds, { toTrash: true });
+			await Note.batchDelete(noteIds, { toTrash: true, sourceDescription: 'Delete selected notes button' });
 		} catch (error) {
 			alert(_n('This note could not be deleted: %s', 'These notes could not be deleted: %s', noteIds.length, error.message));
 		}

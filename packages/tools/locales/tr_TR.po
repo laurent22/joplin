@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Türkçe\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Arda Kılıçdağı <arda@kilicdagi.com>\n"
 "Language-Team: Turkish (Turkey)\n"
 "Language: tr_TR\n"
@@ -91,9 +93,8 @@ msgid "&View"
 msgstr "&Görüntüle"
 
 #: packages/app-desktop/gui/MenuBar.tsx:855
-#, fuzzy
 msgid "&Window"
-msgstr "Pencereyi Kapat"
+msgstr "&Pencere"
 
 #: packages/lib/models/Setting.ts:1633
 msgid "%d days"
@@ -585,7 +586,6 @@ msgid "Browse..."
 msgstr "Gözat..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:231
-#, fuzzy
 msgid "Built-in"
 msgstr "Dahili"
 
@@ -844,6 +844,9 @@ msgid ""
 "application again. Make sure you create a backup first by exporting all your "
 "notes as JEX."
 msgstr ""
+"Uygulamayı kapatın, ardından \"%s\" klasöründeki profilinizi silin, ve de "
+"uygulamayı yeniden başlatın. Bunları yapmadan once tüm notlarınızı JEX "
+"biçiminde dışları aktarmayı unutmayın."
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
 #: packages/app-desktop/gui/MenuBar.tsx:655
@@ -1945,14 +1948,12 @@ msgid "Evernote Export File (as Markdown)"
 msgstr "Evernote Dosya Dışa Aktarım (Markdown olarak)"
 
 #: packages/lib/services/interop/InteropService.ts:91
-#, fuzzy
 msgid "Evernote Export Files (Directory, as HTML)"
-msgstr "Evernote Dosya Dışa Aktarım (HTML olarak)"
+msgstr "Evernote Dosya Dışa Aktarım (Klasör, HTML biçiminde)"
 
 #: packages/lib/services/interop/InteropService.ts:100
-#, fuzzy
 msgid "Evernote Export Files (Directory, as Markdown)"
-msgstr "Evernote Dosya Dışa Aktarım (Markdown olarak)"
+msgstr "Evernote Dosya Dışa Aktarım (Klasör, Markdown biçiminde)"
 
 #: packages/app-cli/app/command-exit.ts:11
 msgid "Exits the application."
@@ -2067,9 +2068,8 @@ msgstr "Dosya sistemi"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:204
 #: packages/app-mobile/components/screens/LogScreen.tsx:205
-#, fuzzy
 msgid "Filter"
-msgstr "Etikerleri filtrele"
+msgstr "Filtrele"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:193
 msgid "Filter tags"
@@ -2257,9 +2257,8 @@ msgid "Hide advanced"
 msgstr "Gelişmiş'leri gizle"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:562
-#, fuzzy
 msgid "Hide Advanced Settings"
-msgstr "Gelişmiş Seçenekleri Göster"
+msgstr "Gelişmiş Seçenekleri Gizle"
 
 #: packages/server/src/routes/admin/users.ts:203
 msgid "Hide disabled"
@@ -2425,6 +2424,8 @@ msgstr ""
 #: packages/lib/services/synchronizer/syncInfoUtils.ts:431
 msgid "In order to synchronise, please upgrade your application to version %s+"
 msgstr ""
+"Senkron etmek için uygulamayı en az %s sürümüne veya daha yeni bir sürüme "
+"güncelleyin"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:101
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:195
@@ -2891,7 +2892,7 @@ msgstr "Medya oynatıcı, matematik, diyagramlar, içindekiler"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 msgid "Minimise"
-msgstr ""
+msgstr "Küçült"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:318
 msgid "Missing keys"
@@ -4128,13 +4129,15 @@ msgstr "Açık Solarize"
 #: packages/lib/models/settings/settingValidations.ts:20
 msgid ""
 "Some attachments could not be downloaded. Please try to download them again."
-msgstr ""
+msgstr "Bazı ek dosyalar indirilemedi. Lütfen yeniden indirmeyi deneyin."
 
 #: packages/lib/models/settings/settingValidations.ts:17
 msgid ""
 "Some attachments need to be downloaded. Set the attachment download mode to "
 "\"always\" and try again."
 msgstr ""
+"Bazı ek dosyaların indirilmesi gerekmekte. Ek dosya indirme biçimini \"her "
+"zaman\" olarak seçip yeniden deneyin."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:621
 #: packages/app-mobile/components/ScreenHeader.tsx:576
@@ -4150,10 +4153,11 @@ msgid "Some items cannot be synchronised. Press for more info."
 msgstr "Bazı öğeler senkronize edilemiyor. Detayları için tıklayın."
 
 #: packages/lib/models/settings/settingValidations.ts:23
-#, fuzzy
 msgid ""
 "Some items could not be synchronised. Please try to synchronise them first."
-msgstr "Bazı öğeler senkronize edilemiyor. Detayları için tıklayın."
+msgstr ""
+"Bazı öğeler senkronize edilemiyor. Lütfen ilk olarak bunları senkronize "
+"etmeyi deneyin."
 
 #: packages/lib/models/Setting.ts:1032
 msgid "Sort notebooks by"
@@ -4489,13 +4493,12 @@ msgstr ""
 "hazır."
 
 #: packages/lib/utils/joplinCloud.ts:167
-#, fuzzy
 msgid ""
 "The [Web Clipper](%s) is a browser extension that allows you to save web "
 "pages and screenshots from your browser."
 msgstr ""
-"Joplin Web Alıntılama, tarayıcınızdaki web sayfalarını ve ekran "
-"görüntülerini Joplin'e kaydetmenizi sağlar."
+"[Web Alıntılama](%s), tarayıcınızdaki web sayfalarını ve ekran görüntülerini "
+"Joplin'e kaydetmenizi sağlar."
 
 #: packages/lib/services/profileConfig/index.ts:105
 msgid ""
@@ -4593,11 +4596,10 @@ msgstr ""
 "Değişiklikleri görmek için uygulamayı yeniden başlatın."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:594
-#, fuzzy
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
-msgstr[0] "Şu ek dosyaları değişiklikler için izlenmekte:"
-msgstr[1] "Şu ek dosyaları değişiklikler için izlenmekte:"
+msgstr[0] "Şu ek dosyası sorgunuzla eşleşmekte:"
+msgstr[1] "Şu ek dosyaları sorgunuzla eşleşmekte:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:578
 msgid "The following attachments are being watched for changes:"
@@ -4686,6 +4688,12 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Senkronizasyon hedef yolu şu sebepten değiştirilemiyor: %s\n"
+"\n"
+"Eğer bu sorun çözülemezse, verinizi temizleyip aşağıdaki adımları "
+"uygulamanız gerekebilir:\n"
+"\n"
+"%s"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:615
 msgid ""
@@ -5167,6 +5175,8 @@ msgid ""
 "Uninstall and reinstall the application. Make sure you create a backup first "
 "by exporting all your notes as JEX from the desktop application."
 msgstr ""
+"Programı kaldırıp yeniden kurun. Bunu yapmadan önce tüm notlarınızı masaüstü "
+"uygulamasından JEX biçiminde dışarı aktardığınızdan emin olun."
 
 #: packages/lib/utils/processStartFlags.ts:170
 msgid "Unknown flag: %s"

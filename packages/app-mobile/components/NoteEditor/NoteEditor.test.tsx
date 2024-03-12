@@ -9,8 +9,17 @@ import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
 import { MenuProvider } from 'react-native-popup-menu';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+import commandDeclarations from './commandDeclarations';
+import CommandService from '@joplin/lib/services/CommandService';
 
 describe('NoteEditor', () => {
+	beforeAll(() => {
+		// This allows the NoteEditor test to register editor commands without errors.
+		for (const declaration of commandDeclarations) {
+			CommandService.instance().registerDeclaration(declaration);
+		}
+	});
+
 	beforeEach(async () => {
 		// Required to use ExtendedWebView
 		await setupDatabaseAndSynchronizer(0);
@@ -30,6 +39,7 @@ describe('NoteEditor', () => {
 					onSelectionChange={()=>{}}
 					onUndoRedoDepthChange={()=>{}}
 					onAttach={()=>{}}
+					plugins={{}}
 				/>
 			</MenuProvider>,
 		);

@@ -13,7 +13,7 @@ export const runtime = (): CommandRuntime => {
 		execute: async (context: CommandContext, noteIds: string[] = null) => {
 			if (noteIds === null) noteIds = context.state.selectedNoteIds;
 			if (!noteIds.length) return;
-			await Note.batchDelete(noteIds, { toTrash: true });
+			await Note.batchDelete(noteIds, { toTrash: true, sourceDescription: 'deleteNote command' });
 
 			context.dispatch({
 				type: 'ITEMS_TRASHED',
