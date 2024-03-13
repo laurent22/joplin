@@ -76,7 +76,7 @@ const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local');
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
-const { themeStyle } = require('./components/global-style');
+import { themeStyle } from './components/global-style';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const SyncTargetFilesystem = require('@joplin/lib/SyncTargetFilesystem.js');
 const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
@@ -85,6 +85,7 @@ const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import BiometricPopup from './components/biometrics/BiometricPopup';
 import initLib from '@joplin/lib/initLib';
+import JoplinCloudLoginScreen from './components/screens/JoplinCloudLoginScreen';
 
 SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -126,6 +127,7 @@ import { refreshFolders, scheduleRefreshFolders } from '@joplin/lib/folders-scre
 import KeymapService from '@joplin/lib/services/KeymapService';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import initializeCommandService from './utils/initializeCommandService';
+import PlatformImplementation from './plugins/PlatformImplementation';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -554,8 +556,16 @@ async function initialize(dispatch: Function) {
 
 	// Currently CommandService is just used for plugins.
 	initializeCommandService(store);
+
 	// KeymapService is also present for plugin compatibility
 	KeymapService.instance().initialize();
+
+	// Even if there are no plugins, we need to initialize the PluginService so that
+	// plugin search can work.
+	const platformImplementation = PlatformImplementation.instance();
+	PluginService.instance().initialize(
+		platformImplementation.versionInfo.version, platformImplementation, null, store,
+	);
 
 	setRSA(RSA);
 
@@ -594,6 +604,7 @@ async function initialize(dispatch: Function) {
 			// Setting.setValue('sync.10.userContentPath', 'https://joplinusercontent.com');
 			Setting.setValue('sync.10.path', 'http://api.joplincloud.local:22300');
 			Setting.setValue('sync.10.userContentPath', 'http://joplinusercontent.local:22300');
+			Setting.setValue('sync.10.website', 'http://joplincloud.local:22300');
 
 			// Setting.setValue('sync.target', 10);
 			// Setting.setValue('sync.10.username', 'user1@example.com');
@@ -1086,6 +1097,7 @@ class AppComponent extends React.Component {
 			Folder: { screen: FolderScreen },
 			OneDriveLogin: { screen: OneDriveLoginScreen },
 			DropboxLogin: { screen: DropboxLoginScreen },
+			JoplinCloudLogin: { screen: JoplinCloudLoginScreen },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },
 			ProfileSwitcher: { screen: ProfileSwitcher },
@@ -1148,7 +1160,10 @@ class AppComponent extends React.Component {
 						</SafeAreaView>
 					</MenuProvider>
 				</SideMenu>
-				<PluginRunnerWebView/>
+				<PluginRunnerWebView
+					serializedPluginSettings={this.props.serializedPluginSettings}
+					pluginStates={this.props.pluginStates}
+				/>
 			</View>
 		);
 
@@ -1202,6 +1217,8 @@ const mapStateToProps = (state: any) => {
 		disableSideMenuGestures: state.disableSideMenuGestures,
 		biometricsDone: state.biometricsDone,
 		biometricsEnabled: state.settings['security.biometricsEnabled'],
+		serializedPluginSettings: state.settings['plugins.states'],
+		pluginStates: state.pluginService.plugins,
 	};
 };
 

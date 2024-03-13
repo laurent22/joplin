@@ -13,7 +13,6 @@ type PluginRecord = {
 const loadedPlugins: Record<string, PluginRecord> = Object.create(null);
 
 export const stopPlugin = async (pluginId: string) => {
-	// Plugin not running?
 	if (!loadedPlugins[pluginId]) {
 		return;
 	}
@@ -58,12 +57,10 @@ export const runPlugin = (
 	};
 
 	backgroundIframe.addEventListener('load', async () => {
-		// Unloaded?
 		if (!loadedPlugins[pluginId]) {
 			return;
 		}
 
-		// Chain connectionToParent with connectionToIframe
 		const connectionToParent = new WebViewToRNMessenger<PluginWebViewApi, PluginMainProcessApi>(messageChannelId, null);
 		const connectionToIframe = new WindowMessenger<PluginMainProcessApi, PluginWebViewApi>(
 			messageChannelId, backgroundIframe.contentWindow, connectionToParent.remoteApi,

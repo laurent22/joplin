@@ -1,4 +1,4 @@
-import { EditorView } from '@codemirror/view';
+import { EditorView, KeyBinding, keymap } from '@codemirror/view';
 import { EditorCommandType, EditorControl, EditorSettings, LogMessageCallback, ContentScriptData, SearchState } from '../types';
 import CodeMirror5Emulation from './CodeMirror5Emulation/CodeMirror5Emulation';
 import editorCommands from './editorCommands/editorCommands';
@@ -167,6 +167,23 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 	//
 	// CodeMirror-specific methods
 	//
+
+	public prependKeymap(bindings: readonly KeyBinding[]) {
+		const compartment = new Compartment();
+		this.editor.dispatch({
+			effects: StateEffect.appendConfig.of([
+				compartment.of(keymap.of(bindings)),
+			]),
+		});
+
+		return {
+			remove: () => {
+				this.editor.dispatch({
+					effects: compartment.reconfigure([]),
+				});
+			},
+		};
+	}
 
 	public joplinExtensions = {
 		// Some plugins want to enable autocompletion from *just* that plugin, without also

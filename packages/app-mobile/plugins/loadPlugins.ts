@@ -1,6 +1,4 @@
 
-// import PluginService from '@joplin/lib/services/plugins/PluginService';
-// import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import BasePluginRunner from '@joplin/lib/services/plugins/BasePluginRunner';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';

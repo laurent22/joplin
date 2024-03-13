@@ -85,7 +85,9 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 	};
 
 	const codeMirrorTheme = EditorView.theme({
-		'&': baseGlobalStyle,
+		// Include &.CodeMirror to handle the case where additional CodeMirror 5 styles
+		// need to be overridden.
+		'&, &.CodeMirror': baseGlobalStyle,
 
 		// These must be !important or more specific than CodeMirror's built-ins
 		'& .cm-content': {

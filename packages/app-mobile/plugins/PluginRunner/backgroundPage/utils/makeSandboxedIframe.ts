@@ -4,6 +4,8 @@ const makeSandboxedIframe = (
 	scripts: string[],
 ) => {
 	const iframe = document.createElement('iframe');
+
+	// allow-modals: Allows confirm/alert dialogs.
 	iframe.setAttribute('sandbox', 'allow-scripts allow-modals');
 
 	iframe.addEventListener('load', async () => {

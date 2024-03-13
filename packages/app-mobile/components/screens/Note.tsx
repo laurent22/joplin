@@ -73,6 +73,7 @@ interface Props {
 	dispatch: Dispatch;
 	noteId: string;
 	useEditorBeta: boolean;
+	plugins: PluginStates;
 	themeId: number;
 	editorFontSize: number;
 	editorFont: number; // e.g. Setting.FONT_MENLO
@@ -82,7 +83,6 @@ interface Props {
 	highlightedWords: string[];
 	noteHash: string;
 	toolbarEnabled: boolean;
-	plugins: PluginStates;
 }
 
 interface State {
@@ -646,7 +646,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		const folderId = note.parent_id;
 
-		await Note.delete(note.id, { toTrash: true });
+		await Note.delete(note.id, { toTrash: true, sourceDescription: 'Delete note button' });
 
 		this.props.dispatch({
 			type: 'NAV_GO',

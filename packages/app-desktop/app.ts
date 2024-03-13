@@ -201,8 +201,10 @@ class Application extends BaseApplication {
 
 		// The '*' and '!important' parts are necessary to make sure Russian text is displayed properly
 		// https://github.com/laurent22/joplin/issues/155
+		//
+		// Note: Be careful about the specificity here. Incorrect specificity can break monospaced fonts in tables.
 
-		const css = `.CodeMirror *, .cm-editor .cm-content { font-family: ${fontFamilies.join(', ')} !important; }`;
+		const css = `.CodeMirror5 *, .cm-editor .cm-content { font-family: ${fontFamilies.join(', ')} !important; }`;
 		const styleTag = document.createElement('style');
 		styleTag.type = 'text/css';
 		styleTag.appendChild(document.createTextNode(css));

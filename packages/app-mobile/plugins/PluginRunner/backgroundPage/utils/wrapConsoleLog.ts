@@ -4,7 +4,6 @@ import { LogLevel } from '../../types';
 
 type OnLogCallback = (level: LogLevel, message: string)=> void;
 
-// Wraps console.info, console.error, console.warn
 const wrapConsoleLog = (onLog: OnLogCallback) => {
 	// inOnLogCallback keeps track of whether onLog is currently being called or not.
 	// This helps prevent StackOverflows if onLog itself calls console.log/console.error.
@@ -28,7 +27,8 @@ const wrapConsoleLog = (onLog: OnLogCallback) => {
 				argsString = `Error converting console arguments to string: ${error}`;
 			}
 
-			// Don't send very long log messages.
+			// Long messages can be slow to transfer over IPC and make other messages difficult
+			// to find/read in React Native's output.
 			const maxLength = 4096;
 			if (argsString.length > maxLength) {
 				argsString = `${argsString.substring(0, maxLength)}...`;
@@ -49,6 +49,5 @@ const wrapConsoleLog = (onLog: OnLogCallback) => {
 	wrapLogFunction('info', LogLevel.Info);
 	wrapLogFunction('error', LogLevel.Error);
 };
-
 
 export default wrapConsoleLog;

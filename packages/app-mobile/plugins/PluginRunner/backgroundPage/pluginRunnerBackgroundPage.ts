@@ -1,5 +1,3 @@
-import './style.css';
-
 export { runPlugin, stopPlugin } from './startStopPlugin';
 
 const pathLibrary = require('path');

@@ -707,26 +707,22 @@ class Setting extends BaseModel {
 				public: false,
 				storage: SettingStorage.Database,
 			},
+			'sync.10.website': {
+				value: 'https://joplincloud.com',
+				type: SettingItemType.String,
+				public: false,
+				storage: SettingStorage.Database,
+			},
 			'sync.10.username': {
 				value: '',
 				type: SettingItemType.String,
-				section: 'sync',
-				show: (settings: any) => {
-					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud');
-				},
-				public: true,
-				label: () => _('Joplin Cloud email'),
+				public: false,
 				storage: SettingStorage.File,
 			},
 			'sync.10.password': {
 				value: '',
 				type: SettingItemType.String,
-				section: 'sync',
-				show: (settings: any) => {
-					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud');
-				},
-				public: true,
-				label: () => _('Joplin Cloud password'),
+				public: false,
 				secure: true,
 			},
 
@@ -1173,6 +1169,11 @@ class Setting extends BaseModel {
 				type: SettingItemType.Object,
 				section: 'plugins',
 				public: true,
+				show: (_settings) => {
+					// Hide on iOS due to App Store guidelines. See
+					// https://github.com/laurent22/joplin/pull/10086 for details.
+					return shim.isNode() || shim.mobilePlatform() !== 'ios';
+				},
 				appTypes: [AppType.Desktop, AppType.Mobile],
 				needRestart: true,
 				autoSave: true,
@@ -1949,7 +1950,8 @@ class Setting extends BaseModel {
 			const valueRow = await this.loadOne(key);
 			if (valueRow) {
 				// Remove any duplicate copies of the setting -- if multiple items in cache_
-				// have the same key, we may encounter unique key errors while saving.
+				// have the same key, we may encounter unique key errors while saving to the
+				// database.
 				this.cache_ = this.cache_.filter(setting => setting.key !== key);
 
 				this.cache_.push({

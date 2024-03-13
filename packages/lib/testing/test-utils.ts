@@ -192,6 +192,7 @@ Setting.setConstant('appId', 'net.cozic.joplintest-cli');
 Setting.setConstant('appType', 'cli');
 Setting.setConstant('tempDir', baseTempDir);
 Setting.setConstant('cacheDir', baseTempDir);
+Setting.setConstant('resourceDir', baseTempDir);
 Setting.setConstant('pluginDataDir', `${profileDir}/profile/plugin-data`);
 Setting.setConstant('profileDir', profileDir);
 Setting.setConstant('rootProfileDir', rootProfileDir);

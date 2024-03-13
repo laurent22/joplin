@@ -10,7 +10,7 @@ import * as React from 'react';
 import { forwardRef, useEffect, useImperativeHandle } from 'react';
 import { useMemo, useState, useCallback, useRef } from 'react';
 import { LayoutChangeEvent, NativeSyntheticEvent, View, ViewStyle } from 'react-native';
-const { editorFont } = require('../global-style');
+import { editorFont } from '../global-style';
 
 import { EditorControl as EditorBodyControl, ContentScriptData } from '@joplin/editor/types';
 import { EditorControl, EditorSettings, SelectionRange, WebViewToEditorApi } from './types';
