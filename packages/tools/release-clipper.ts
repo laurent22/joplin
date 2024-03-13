@@ -158,7 +158,7 @@ async function main() {
 		chrome: {
 			removeManifestKeys: (manifest) => {
 				manifest = { ...manifest };
-				delete manifest.applications;
+				delete manifest.browser_specific_settings;
 
 				manifest.background = { ...manifest.background };
 				delete manifest.background.scripts;
