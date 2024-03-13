@@ -11,6 +11,7 @@
 // https://github.com/facebook/metro/issues/1#issuecomment-511228599
 
 const path = require('path');
+const { getDefaultConfig } = require('metro-config');
 
 const localPackages = {
 	'@joplin/lib': path.resolve(__dirname, '../lib/'),
@@ -45,6 +46,8 @@ for (const [, v] of Object.entries(localPackages)) {
 	watchedFolders.push(v);
 }
 
+const defaultConfig = getDefaultConfig.getDefaultValues(__dirname);
+
 module.exports = {
 	transformer: {
 		getTransformOptions: async () => ({
@@ -55,6 +58,13 @@ module.exports = {
 		}),
 	},
 	resolver: {
+		assetExts: [
+			...defaultConfig.resolver.assetExts,
+
+			// Allow loading .jpl plugin files
+			'jpl',
+		],
+
 		// This configuration allows you to build React-Native modules and test
 		// them without having to publish the module. Any exports provided by
 		// your source should be added to the "target" parameter. Any import not

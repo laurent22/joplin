@@ -10,3 +10,4 @@ export const requireModule = (moduleName: string) => {
 };
 
 export { default as initializePluginBackgroundIframe } from './initializePluginBackgroundIframe';
+export { default as initializeDialogWebView } from './initializeDialogWebView';

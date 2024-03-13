@@ -58,8 +58,10 @@ import { SelectionRange } from '../NoteEditor/types';
 import { AppState } from '../../utils/types';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { getDisplayParentTitle } from '@joplin/lib/services/trash';
-import pickDocument from '../../utils/pickDocument';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+import pickDocument from '../../utils/pickDocument';
+import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
+import PluginPanelViewer from '../../plugins/PluginRunner/dialogs/PluginPanelViewer';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -101,6 +103,7 @@ interface State {
 	imageEditorResourceFilepath: string;
 	noteResources: Record<string, ResourceEntity>;
 	newAndNoTitleChangeNoteId: boolean|null;
+	pluginPanelsVisible: boolean;
 
 	HACK_webviewLoadingState: number;
 
@@ -159,6 +162,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			noteResources: {},
 			imageEditorResourceFilepath: null,
 			newAndNoTitleChangeNoteId: null,
+			pluginPanelsVisible: false,
 
 			// HACK: For reasons I can't explain, when the WebView is present, the TextInput initially does not display (It's just a white rectangle with
 			// no visible text). It will only appear when tapping it or doing certain action like selecting text on the webview. The bug started to
@@ -258,21 +262,12 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 					if (!item) throw new Error(_('No item with ID %s', itemId));
 
 					if (item.type_ === BaseModel.TYPE_NOTE) {
-						// Easier to just go back, then go to the note since
-						// the Note screen doesn't handle reloading a different note
-
 						this.props.dispatch({
-							type: 'NAV_BACK',
+							type: 'NAV_GO',
+							routeName: 'Note',
+							noteId: item.id,
+							noteHash: resourceUrlInfo.hash,
 						});
-
-						shim.setTimeout(() => {
-							this.props.dispatch({
-								type: 'NAV_GO',
-								routeName: 'Note',
-								noteId: item.id,
-								noteHash: resourceUrlInfo.hash,
-							});
-						}, 5);
 					} else if (item.type_ === BaseModel.TYPE_RESOURCE) {
 						if (!(await Resource.isReady(item))) throw new Error(_('This attachment is not downloaded or not decrypted yet.'));
 
@@ -555,6 +550,28 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 				type: 'SET_SIDE_MENU_TOUCH_GESTURES_DISABLED',
 				disableSideMenuGestures: this.state.showImageEditor,
 			});
+		}
+
+		if (prevProps.noteId && prevProps.noteId !== this.props.noteId) {
+			// Easier to just go back, then go to the note since
+			// the Note screen doesn't handle reloading a different note
+			const noteId = this.props.noteId;
+			const noteHash = this.props.noteHash;
+
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Notes',
+				folderId: this.state.note.parent_id,
+			});
+
+			shim.setTimeout(() => {
+				this.props.dispatch({
+					type: 'NAV_GO',
+					routeName: 'Note',
+					noteId: noteId,
+					noteHash: noteHash,
+				});
+			}, 5);
 		}
 	}
 
@@ -1283,6 +1300,18 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			disabled: readOnly,
 		});
 
+		// Only show the plugin panel toggle if any plugins have panels
+		const allPluginViews = Object.values(this.props.plugins).map(plugin => Object.values(plugin.views)).flat();
+		const allPanels = allPluginViews.filter(view => view.containerType === ContainerType.Panel);
+		if (allPanels.length > 0) {
+			output.push({
+				title: _('Show plugin panels'),
+				onPress: () => {
+					this.setState({ pluginPanelsVisible: true });
+				},
+			});
+		}
+
 		this.menuOptionsCache_ = {};
 		this.menuOptionsCache_[cacheKey] = output;
 
@@ -1594,6 +1623,10 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 					}}
 				/>
 				{noteTagDialog}
+				<PluginPanelViewer
+					visible={this.state.pluginPanelsVisible}
+					onClose={() => this.setState({ pluginPanelsVisible: false })}
+				/>
 			</View>
 		);
 	}

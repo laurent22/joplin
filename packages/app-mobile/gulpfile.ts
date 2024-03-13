@@ -30,6 +30,7 @@ gulp.task('watchInjectedJs', gulp.series(
 		'watchCodeMirrorEditor',
 		'watchJsDrawEditor',
 		'watchPluginBackgroundScript',
+		'watchNoteViewerBundle',
 	),
 ));
 

@@ -4,6 +4,7 @@ import stateToWhenClauseContext from '@joplin/lib/services/commands/stateToWhenC
 import { AppState } from './types';
 import { Store } from 'redux';
 import editorCommandDeclarations from '../components/NoteEditor/commandDeclarations';
+import globalCommands from '../commands';
 import libCommands from '@joplin/lib/commands';
 
 interface CommandSpecification {
@@ -23,6 +24,7 @@ const initializeCommandService = (store: Store<AppState, any>) => {
 	for (const declaration of editorCommandDeclarations) {
 		CommandService.instance().registerDeclaration(declaration);
 	}
+	registerCommands(globalCommands);
 	registerCommands(libCommands);
 };
 
