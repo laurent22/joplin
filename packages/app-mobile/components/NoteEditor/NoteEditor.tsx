@@ -147,16 +147,13 @@ const useEditorControl = (
 	setLinkDialogVisible: OnSetVisibleCallback,
 	setSearchState: OnSearchStateChangeCallback,
 ): EditorControl => {
-	const bodyControlRef = useRef(bodyControl);
-	bodyControlRef.current = bodyControl;
-
 	return useMemo(() => {
 		const execCommand = (command: EditorCommandType) => {
-			void bodyControlRef.current.execCommand(command);
+			void bodyControl.execCommand(command);
 		};
 
 		const setSearchStateCallback = (state: SearchState) => {
-			bodyControlRef.current.setSearchState(state);
+			bodyControl.setSearchState(state);
 			setSearchState(state);
 		};
 
@@ -165,29 +162,29 @@ const useEditorControl = (
 				return supportsCommand(command);
 			},
 			execCommand(command, ...args: any[]) {
-				return bodyControlRef.current.execCommand(command, ...args);
+				return bodyControl.execCommand(command, ...args);
 			},
 
 			undo() {
-				bodyControlRef.current.undo();
+				bodyControl.undo();
 			},
 			redo() {
-				bodyControlRef.current.redo();
+				bodyControl.redo();
 			},
 			select(anchor: number, head: number) {
-				bodyControlRef.current.select(anchor, head);
+				bodyControl.select(anchor, head);
 			},
 			setScrollPercent(fraction: number) {
-				bodyControlRef.current.setScrollPercent(fraction);
+				bodyControl.setScrollPercent(fraction);
 			},
 			insertText(text: string) {
-				bodyControlRef.current.insertText(text);
+				bodyControl.insertText(text);
 			},
 			updateBody(newBody: string) {
-				bodyControlRef.current.updateBody(newBody);
+				bodyControl.updateBody(newBody);
 			},
 			updateSettings(newSettings: EditorSettings) {
-				bodyControlRef.current.updateSettings(newSettings);
+				bodyControl.updateSettings(newSettings);
 			},
 
 			toggleBolded() {
@@ -235,7 +232,7 @@ const useEditorControl = (
 				execCommand(EditorCommandType.IndentLess);
 			},
 			updateLink(label: string, url: string) {
-				bodyControlRef.current.updateLink(label, url);
+				bodyControl.updateLink(label, url);
 			},
 			scrollSelectionIntoView() {
 				execCommand(EditorCommandType.ScrollSelectionIntoView);
@@ -251,7 +248,7 @@ const useEditorControl = (
 			},
 
 			setContentScripts: async (plugins: ContentScriptData[]) => {
-				return bodyControlRef.current.setContentScripts(plugins);
+				return bodyControl.setContentScripts(plugins);
 			},
 
 			setSearchState: setSearchStateCallback,
@@ -282,7 +279,7 @@ const useEditorControl = (
 		};
 
 		return control;
-	}, [webviewRef, setLinkDialogVisible, setSearchState]);
+	}, [webviewRef, bodyControl, setLinkDialogVisible, setSearchState]);
 };
 
 function NoteEditor(props: Props, ref: any) {
