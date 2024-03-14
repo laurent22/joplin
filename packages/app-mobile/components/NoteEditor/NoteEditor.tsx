@@ -7,7 +7,7 @@ import { defaultSearchState, SearchPanel } from './SearchPanel';
 import ExtendedWebView, { WebViewControl } from '../ExtendedWebView';
 
 import * as React from 'react';
-import { forwardRef, useEffect, useImperativeHandle } from 'react';
+import { forwardRef, RefObject, useEffect, useImperativeHandle } from 'react';
 import { useMemo, useState, useCallback, useRef } from 'react';
 import { LayoutChangeEvent, NativeSyntheticEvent, View, ViewStyle } from 'react-native';
 import { editorFont } from '../global-style';
@@ -139,22 +139,24 @@ function editorTheme(themeId: number) {
 	};
 }
 
-type OnInjectJSCallback = (js: string)=> void;
 type OnSetVisibleCallback = (visible: boolean)=> void;
 type OnSearchStateChangeCallback = (state: SearchState)=> void;
 const useEditorControl = (
 	bodyControl: EditorBodyControl,
-	injectJS: OnInjectJSCallback,
+	webviewRef: RefObject<WebViewControl>,
 	setLinkDialogVisible: OnSetVisibleCallback,
 	setSearchState: OnSearchStateChangeCallback,
 ): EditorControl => {
+	const bodyControlRef = useRef(bodyControl);
+	bodyControlRef.current = bodyControl;
+
 	return useMemo(() => {
 		const execCommand = (command: EditorCommandType) => {
-			void bodyControl.execCommand(command);
+			void bodyControlRef.current.execCommand(command);
 		};
 
 		const setSearchStateCallback = (state: SearchState) => {
-			bodyControl.setSearchState(state);
+			bodyControlRef.current.setSearchState(state);
 			setSearchState(state);
 		};
 
@@ -163,29 +165,29 @@ const useEditorControl = (
 				return supportsCommand(command);
 			},
 			execCommand(command, ...args: any[]) {
-				return bodyControl.execCommand(command, ...args);
+				return bodyControlRef.current.execCommand(command, ...args);
 			},
 
 			undo() {
-				bodyControl.undo();
+				bodyControlRef.current.undo();
 			},
 			redo() {
-				bodyControl.redo();
+				bodyControlRef.current.redo();
 			},
 			select(anchor: number, head: number) {
-				bodyControl.select(anchor, head);
+				bodyControlRef.current.select(anchor, head);
 			},
 			setScrollPercent(fraction: number) {
-				bodyControl.setScrollPercent(fraction);
+				bodyControlRef.current.setScrollPercent(fraction);
 			},
 			insertText(text: string) {
-				bodyControl.insertText(text);
+				bodyControlRef.current.insertText(text);
 			},
 			updateBody(newBody: string) {
-				bodyControl.updateBody(newBody);
+				bodyControlRef.current.updateBody(newBody);
 			},
 			updateSettings(newSettings: EditorSettings) {
-				bodyControl.updateSettings(newSettings);
+				bodyControlRef.current.updateSettings(newSettings);
 			},
 
 			toggleBolded() {
@@ -233,7 +235,7 @@ const useEditorControl = (
 				execCommand(EditorCommandType.IndentLess);
 			},
 			updateLink(label: string, url: string) {
-				bodyControl.updateLink(label, url);
+				bodyControlRef.current.updateLink(label, url);
 			},
 			scrollSelectionIntoView() {
 				execCommand(EditorCommandType.ScrollSelectionIntoView);
@@ -245,11 +247,11 @@ const useEditorControl = (
 				setLinkDialogVisible(false);
 			},
 			hideKeyboard() {
-				injectJS('document.activeElement?.blur();');
+				webviewRef.current.injectJS('document.activeElement?.blur();');
 			},
 
 			setContentScripts: async (plugins: ContentScriptData[]) => {
-				return bodyControl.setContentScripts(plugins);
+				return bodyControlRef.current.setContentScripts(plugins);
 			},
 
 			setSearchState: setSearchStateCallback,
@@ -280,7 +282,7 @@ const useEditorControl = (
 		};
 
 		return control;
-	}, [injectJS, setLinkDialogVisible, setSearchState, bodyControl]);
+	}, [webviewRef, setLinkDialogVisible, setSearchState]);
 };
 
 function NoteEditor(props: Props, ref: any) {
@@ -371,11 +373,6 @@ function NoteEditor(props: Props, ref: any) {
 	const [linkDialogVisible, setLinkDialogVisible] = useState(false);
 	const [searchState, setSearchState] = useState(defaultSearchState);
 
-	// Runs [js] in the context of the CodeMirror frame.
-	const injectJS = (js: string) => {
-		webviewRef.current.injectJS(js);
-	};
-
 	const onEditorEvent = useRef((_event: EditorEvent) => {});
 
 	const editorMessenger = useMemo(() => {
@@ -394,7 +391,7 @@ function NoteEditor(props: Props, ref: any) {
 	}, []);
 
 	const editorControl = useEditorControl(
-		editorMessenger.remoteApi, injectJS, setLinkDialogVisible, setSearchState,
+		editorMessenger.remoteApi, webviewRef, setLinkDialogVisible, setSearchState,
 	);
 
 	useEffect(() => {
