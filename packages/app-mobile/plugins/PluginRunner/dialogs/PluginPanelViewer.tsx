@@ -9,7 +9,7 @@ import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { connect } from 'react-redux';
 import { AppState } from '../../../utils/types';
 import PluginUserWebView from './PluginUserWebView';
-import { View, useWindowDimensions, StyleSheet } from 'react-native';
+import { View, useWindowDimensions, StyleSheet, AccessibilityInfo } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import { Theme } from '@joplin/lib/themes/type';
 import { themeStyle } from '@joplin/lib/theme';
@@ -62,6 +62,9 @@ const useStyles = (themeId: number) => {
 
 const emptyCallback = () => {};
 
+const getTabLabel = (info: ViewInfo) => {
+	return PluginService.instance().pluginById(info.plugin.id).manifest.name;
+};
 const PluginPanelViewer: React.FC<Props> = props => {
 	const viewInfos = useViewInfos(props.pluginStates);
 	const viewInfoById = useMemo(() => {
@@ -76,10 +79,9 @@ const PluginPanelViewer: React.FC<Props> = props => {
 		return Object.entries(viewInfoById)
 			.filter(([_id, info]) => info.view.containerType === ContainerType.Panel)
 			.map(([id, info]) => {
-				const pluginName = PluginService.instance().pluginById(info.plugin.id).manifest.name;
 				return {
 					value: id,
-					label: pluginName,
+					label: getTabLabel(info),
 					icon: 'puzzle',
 				};
 			});
@@ -102,6 +104,8 @@ const PluginPanelViewer: React.FC<Props> = props => {
 		const controller = plugin.viewController(info.view.id) as WebviewController;
 		controller.setIsShownInModal(true);
 		Setting.setValue('ui.lastSelectedPluginPanel', selectedTabId);
+
+		AccessibilityInfo.announceForAccessibility(_('%s tab opened', getTabLabel(info)));
 
 		return () => {
 			controller.setIsShownInModal(false);
