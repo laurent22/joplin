@@ -83,7 +83,7 @@ export interface ContentScriptData {
 }
 
 export interface EditorControl {
-	supportsCommand(name: EditorCommandType|string): boolean;
+	supportsCommand(name: EditorCommandType|string): boolean|Promise<boolean>;
 	execCommand(name: EditorCommandType|string, ...args: any[]): void|Promise<any>;
 
 	undo(): void;

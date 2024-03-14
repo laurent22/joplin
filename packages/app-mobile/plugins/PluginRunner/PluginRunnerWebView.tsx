@@ -5,12 +5,14 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import shim from '@joplin/lib/shim';
 import PluginRunner from './PluginRunner';
 import loadPlugins from '../loadPlugins';
-import { useStore } from 'react-redux';
+import { connect, useStore } from 'react-redux';
 import Logger from '@joplin/utils/Logger';
 import { View } from 'react-native';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
-import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+import { PluginHtmlContents, PluginStates } from '@joplin/lib/services/plugins/reducer';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
+import PluginDialogManager from './dialogs/PluginDialogManager';
+import { AppState } from '../../utils/types';
 
 const logger = Logger.create('PluginRunnerWebView');
 
@@ -41,9 +43,11 @@ const usePlugins = (
 interface Props {
 	serializedPluginSettings: string;
 	pluginStates: PluginStates;
+	pluginHtmlContents: PluginHtmlContents;
+	themeId: number;
 }
 
-const PluginRunnerWebView: React.FC<Props> = props => {
+const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 	const webviewRef = useRef<WebViewControl>();
 
 	const [webviewLoaded, setLoaded] = useState(false);
@@ -105,15 +109,22 @@ const PluginRunnerWebView: React.FC<Props> = props => {
 
 
 		return (
-			<ExtendedWebView
-				webviewInstanceId='PluginRunner'
-				html={html}
-				injectedJavaScript={injectedJs}
-				onMessage={pluginRunner.onWebviewMessage}
-				onLoadEnd={onLoadEnd}
-				onLoadStart={onLoadStart}
-				ref={webviewRef}
-			/>
+			<>
+				<ExtendedWebView
+					webviewInstanceId='PluginRunner'
+					html={html}
+					injectedJavaScript={injectedJs}
+					onMessage={pluginRunner.onWebviewMessage}
+					onLoadEnd={onLoadEnd}
+					onLoadStart={onLoadStart}
+					ref={webviewRef}
+				/>
+				<PluginDialogManager
+					themeId={props.themeId}
+					pluginHtmlContents={props.pluginHtmlContents}
+					pluginStates={props.pluginStates}
+				/>
+			</>
 		);
 	};
 
@@ -124,4 +135,12 @@ const PluginRunnerWebView: React.FC<Props> = props => {
 	);
 };
 
-export default PluginRunnerWebView;
+export default connect((state: AppState) => {
+	const result: Props = {
+		serializedPluginSettings: state.settings['plugins.states'],
+		pluginStates: state.pluginService.plugins,
+		pluginHtmlContents: state.pluginService.pluginHtmlContents,
+		themeId: state.settings.theme,
+	};
+	return result;
+})(PluginRunnerWebViewComponent);

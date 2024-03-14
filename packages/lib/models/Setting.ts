@@ -1331,6 +1331,15 @@ class Setting extends BaseModel {
 
 			'ui.layout': { value: {}, type: SettingItemType.Object, storage: SettingStorage.File, isGlobal: true, public: false, appTypes: [AppType.Desktop] },
 
+			'ui.lastSelectedPluginPanel': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+				description: () => 'The last selected plugin panel ID in pop-up mode (mobile).',
+				storage: SettingStorage.Database,
+				appTypes: [AppType.Mobile],
+			},
+
 			// TODO: Is there a better way to do this? The goal here is to simply have
 			// a way to display a link to the customizable stylesheets, not for it to
 			// serve as a customizable Setting. But because the Setting page is auto-

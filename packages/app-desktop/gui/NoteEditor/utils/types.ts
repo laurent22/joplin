@@ -57,7 +57,7 @@ export interface NoteBodyEditorRef {
 	resetScroll(): void;
 	scrollTo(options: ScrollOptions): void;
 
-	supportsCommand(name: string): boolean;
+	supportsCommand(name: string): boolean|Promise<boolean>;
 	execCommand(command: CommandValue): Promise<void>;
 }
 
