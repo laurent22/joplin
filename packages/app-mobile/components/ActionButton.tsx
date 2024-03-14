@@ -5,8 +5,6 @@ import { _ } from '@joplin/lib/locale';
 import { Dispatch } from 'redux';
 import { useWindowDimensions } from 'react-native';
 import shim from '@joplin/lib/shim';
-// import { useWindowDimensions } from 'react-native';
-// import shim from '@joplin/lib/shim';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 
 // eslint-disable-next-line no-undef -- Don't know why it says React is undefined when it's defined above
