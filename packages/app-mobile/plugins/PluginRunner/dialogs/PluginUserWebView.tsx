@@ -68,6 +68,7 @@ const PluginUserWebView = (props: Props) => {
 				<style>
 					body {
 						padding: 20px;
+						color: var(--joplin-color);
 					}
 				</style>
 			</head>
