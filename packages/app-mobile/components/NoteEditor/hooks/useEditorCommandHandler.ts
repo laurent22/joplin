@@ -17,7 +17,7 @@ const commandRuntime = (declaration: CommandDeclaration, editor: EditorControl) 
 				args = args.slice(1);
 			}
 
-			if (!editor.supportsCommand(commandName)) {
+			if (!(await editor.supportsCommand(commandName))) {
 				logger.warn('Command not supported by editor: ', commandName);
 				return;
 			}

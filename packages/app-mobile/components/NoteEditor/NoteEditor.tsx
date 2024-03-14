@@ -18,7 +18,6 @@ import { _ } from '@joplin/lib/locale';
 import MarkdownToolbar from './MarkdownToolbar/MarkdownToolbar';
 import { ChangeEvent, EditorEvent, EditorEventType, SelectionRangeChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
 import { EditorCommandType, EditorKeymap, EditorLanguageType, SearchState } from '@joplin/editor/types';
-import supportsCommand from '@joplin/editor/CodeMirror/editorCommands/supportsCommand';
 import SelectionFormatting, { defaultSelectionFormatting } from '@joplin/editor/SelectionFormatting';
 import useCodeMirrorPlugins from './hooks/useCodeMirrorPlugins';
 import RNToWebViewMessenger from '../../utils/ipc/RNToWebViewMessenger';
@@ -160,7 +159,7 @@ const useEditorControl = (
 
 		const control: EditorControl = {
 			supportsCommand(command: EditorCommandType) {
-				return supportsCommand(command);
+				return bodyControl.supportsCommand(command);
 			},
 			execCommand(command, ...args: any[]) {
 				return bodyControl.execCommand(command, ...args);
