@@ -137,6 +137,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Over Joplin"
 	],
@@ -310,6 +313,9 @@
 	],
 	"Automatically check for updates": [
 		"Automatisch controleren op updates"
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
 	],
 	"Automatically switch theme to match system theme": [
 		"Automatisch omschakelen thema op basis van systeemthema"
@@ -747,20 +753,8 @@
 	"Delete note": [
 		"Verwijder notitie"
 	],
-	"Delete note \"%s\"?": [
-		"Notitie “%s” verwijderen?"
-	],
-	"Delete note?": [
-		"Notitie verwijderen?"
-	],
 	"Delete notebook": [
 		"Verwijder notitieboek"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Notitieboek “%s” verwijderen?\n\nAlle notities en sub-notitieboeken in dit notitieboek worden eveneens verwijderd."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Notitieboek verwijderen? Alle notities en sub-notitieboeken worden eveneens verwijderd."
 	],
 	"Delete plugin \"%s\"?": [
 		"Plugin “%s” verwijderen?"
@@ -773,9 +767,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Wil je het notitieboek inbox verwijderen?\n\nAls je het inbox-notitieboek weggooit, kunnen recent ontvangen emails kwijt raken.."
-	],
-	"Delete these %d notes?": [
-		"Deze %d notities verwijderen?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Deze uitnodiging verwijderen? De ontvanger heeft geen toegang meer tot dit gedeelde notitieblok."
@@ -918,6 +909,9 @@
 	"Dropbox Login": [
 		"Inloggen op Dropbox"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Dupliceren"
 	],
@@ -992,6 +986,9 @@
 	],
 	"emphasised text": [
 		"benadrukte tekst"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"Inschakelen"
@@ -1303,6 +1300,9 @@
 	"Grant authorisation": [
 		"Authorisatie verlenen"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"Kop %d"
 	],
@@ -1368,6 +1368,9 @@
 	],
 	"Idle": [
 		"Inactief"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		"Negeren"
@@ -1495,12 +1498,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"Joplin Cloud email"
-	],
-	"Joplin Cloud password": [
-		"Joplin Cloud wachtwoord"
-	],
 	"Joplin Export Directory": [
 		"Joplin-exportmap"
 	],
@@ -1567,6 +1564,9 @@
 	"Later": [
 		"Later"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Indeling"
 	],
@@ -1628,12 +1628,6 @@
 	"Log": [
 		"Log"
 	],
-	"Login": [
-		"Login"
-	],
-	"Login below.": [
-		"Log hieronder in."
-	],
 	"Login with Dropbox": [
 		"Inloggen met Dropbox"
 	],
@@ -1644,6 +1638,9 @@
 		"Log uit"
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1985,9 +1982,6 @@
 	"Options": [
 		"Opties"
 	],
-	"Or create an account.": [
-		"Of maak een account."
-	],
 	"Ordered list": [
 		"Geordende lijst"
 	],
@@ -2077,6 +2071,9 @@
 	],
 	"Please wait...": [
 		"Even geduld..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"Plugin tools"
@@ -2519,6 +2516,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Sorteert de items op <field> (bijv. title, updated_time, created_time)."
 	],
+	"Source": [
+		"Bron"
+	],
 	"Source format: %s": [
 		"Bronformaat: %s"
 	],
@@ -2711,9 +2711,6 @@
 	"Text editor command": [
 		"Tekst editor commando"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"Bedankt! Uw Joplin Cloud-account is nu ingesteld en klaar voor gebruik."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Het huiduge profiel kan niet worden verwijderd. Schakel naar een ander profiel en probeer het opnieuw."
 	],
@@ -2843,9 +2840,6 @@
 	"There was an error downloading this attachment:": [
 		"Er is iets misgegaan tijdens het downloaden van deze bijlage:"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"Er is een fout opgetreden bij het instellen van uw Joplin Cloud-account. Verifieer uw e-mailadres en wachtwoord en probeer het opnieuw. Fout was: \n\n%s"
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Deze items blijven op het apparaat, maar worden niet geüpload naar het synchronisatiedoel. Als u deze items wilt vinden, moet u zoeken naar de titel of ID ervan (welke hierboven tussen haakjes wordt getoond)."
 	],
@@ -2902,6 +2896,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"Dit opent een nieuw scherm. Wijzigingen opslaan?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Hiermee wordt het notitieblok uit uw verzameling verwijderd en hebt u geen toegang meer tot de inhoud ervan. Wilt u doorgaan?"
@@ -2998,6 +2995,9 @@
 	],
 	"Total: %d/%d": [
 		"Totaal: %d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		"Probeer opnieuw"
@@ -3226,6 +3226,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"U staat op het punt een grote afbeelding (%dx%d pixels) bij te voegen. Wilt u dit verkleinen tot %d pixels voordat het wordt toegevoegd?"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"U heeft nog geen notitieboeken."

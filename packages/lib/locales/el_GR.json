@@ -140,6 +140,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Σχετικά με το Joplin"
 	],
@@ -319,6 +322,9 @@
 	],
 	"Automatically check for updates": [
 		"Αυτόματος έλεγχος για ενημερώσεις"
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
 	],
 	"Automatically switch theme to match system theme": [
 		"Αυτόματη εναλλαγή θέματος ώστε να ταιριάζει με το θέμα συστήματος"
@@ -768,20 +774,8 @@
 	"Delete note": [
 		"Διαγραφή σημείωσης"
 	],
-	"Delete note \"%s\"?": [
-		"Να διαγραφεί η σημείωση \"%s\";"
-	],
-	"Delete note?": [
-		"Διαγραφή σημείωσης;"
-	],
 	"Delete notebook": [
 		"Διαγραφή σημειωματάριου"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Διαγραφή σημειωματάριου \"%s\";\n\nΌλες οι σημειώσεις και τα υπο-σημειωματάρια που περιέχει θα διαγραφούν επίσης."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Διαγραφή σημειωματάριου; Όλες οι σημειώσεις και τα υπο-σημειωματάρια θα διαγραφούν επίσης."
 	],
 	"Delete plugin \"%s\"?": [
 		"Διαγραφή πρόσθετου \"%s\";"
@@ -794,9 +788,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Να διαγραφεί το σημειωματάριο εισερχομένων;\n\nΑν διαγράψετε το σημειωματάριο εισερχομένων, κάθε e-mail που εστάλη σε αυτό πρόσφατα ίσως χαθεί."
-	],
-	"Delete these %d notes?": [
-		"Να διαγραφούν οι %d σημειώσεις;"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Να διαγραφεί αυτή η πρόσκληση; Ο παραλήπτης δεν θα έχει πλέον πρόσβαση σε αυτό το κοινόχρηστο σημειωματάριο."
@@ -945,6 +936,9 @@
 	"Dropbox Login": [
 		"Σύνδεση Dropbox"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Δημιουργία αντιγράφου"
 	],
@@ -1022,6 +1016,9 @@
 	],
 	"emphasised text": [
 		"κείμενο με έμφαση"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"Ενεργοποίηση"
@@ -1339,6 +1336,9 @@
 	"Grant authorisation": [
 		"Έγκριση εξουσιοδότησης"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"Επικεφαλίδα %d"
 	],
@@ -1404,6 +1404,9 @@
 	],
 	"Idle": [
 		"Αδρανής"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		"Παράβλεψη"
@@ -1531,12 +1534,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"Joplin Cloud email"
-	],
-	"Joplin Cloud password": [
-		"Joplin Cloud password"
-	],
 	"Joplin Export Directory": [
 		"Φάκελος εξαγωγής Joplin"
 	],
@@ -1606,6 +1603,9 @@
 	"Later": [
 		"Αργότερα"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Διάταξη"
 	],
@@ -1667,12 +1667,6 @@
 	"Log": [
 		"Log"
 	],
-	"Login": [
-		"Σύνδεση"
-	],
-	"Login below.": [
-		"Συνδέσου παρακάτω."
-	],
 	"Login with Dropbox": [
 		"Είσοδος με Dropbox"
 	],
@@ -1684,6 +1678,9 @@
 	],
 	"Logs, profiles, sync status": [
 		"Αρχεία καταγραφής, προφίλ, κατάσταση συγχρονισμού"
+	],
+	"Longitude": [
+		""
 	],
 	"Make a donation": [
 		"Κάντε μια δωρεά"
@@ -2027,9 +2024,6 @@
 	"Options": [
 		"Επιλογές"
 	],
-	"Or create an account.": [
-		"Ή δημιουργείστε ένα λογαριασμό."
-	],
 	"Ordered list": [
 		"Ταξινομημένη λίστα"
 	],
@@ -2119,6 +2113,9 @@
 	],
 	"Please wait...": [
 		"Παρακαλώ περιμένετε..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"Εργαλεία πρόσθετων"
@@ -2576,6 +2573,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Ταξινόμηση του στοιχείου με <field> (π.χ. τίτλος, ώρα_ενημέρωσης, ώρα_δημιουργίας)."
 	],
+	"Source": [
+		"Πηγή"
+	],
 	"Source format: %s": [
 		"Μορφή προέλευσης: %s"
 	],
@@ -2774,9 +2774,6 @@
 	"Text editor command": [
 		"Εντολή \"Επεξεργαστή κειμένου\""
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"Ευχαριστώ! Ο λογαριασμός σας στο Joplin Cloud είναι τώρα ρυθμισμένος και έτοιμος για χρήση."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Το ενεργό προφίλ δεν μπορεί να διαγραφεί. Μεταβείτε σε ένα άλλο προφίλ και δοκιμάστε ξανά."
 	],
@@ -2912,9 +2909,6 @@
 	"There was an error downloading this attachment:": [
 		"Παρουσιάστηκε σφάλμα κατά τη λήψη αυτού του συνημμένου:"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"Υπήρξε σφάλμα στη ρύθμιση του λογαριασμού σας στο Joplin Cloud. Παρακαλούμε επαληθεύστε το email και τον κωδικό πρόσβασής σας και δοκιμάστε ξανά. Το σφάλμα ήταν:\n\n%s"
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Αυτά τα στοιχεία θα παραμείνουν στη συσκευή, αλλά δεν θα μεταφορτωθούν στο στόχο συγχρονισμού. Για να βρείτε αυτά τα στοιχεία, αναζητήστε είτε τον τίτλο είτε το αναγνωριστικό (το οποίο εμφανίζεται στις παραπάνω παρενθέσεις)."
 	],
@@ -2974,6 +2968,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"Αυτό θα ανοίξει μια νέα οθόνη. Να αποθηκευθούν οι τρέχουσες αλλαγές;"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Αυτό θα αφαιρέσει το σημειωματάριο από τη συλλογή σας και δεν θα έχετε πλέον πρόσβαση στο περιεχόμενό του. Θέλετε να συνεχίσετε;"
@@ -3073,6 +3070,9 @@
 	],
 	"Total: %d/%d": [
 		"Σύνολο: %d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		"Δοκιμάστε ξανά"
@@ -3307,6 +3307,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"Πρόκειται να επισυνάψετε μια μεγάλη εικόνα (%dx%d pixels). Θα θέλατε να αλλάξετε το μέγεθός της σε %d pixel πριν την επισυνάψετε;"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"Αυτή τη στιγμή δεν έχετε σημειωματάρια."
