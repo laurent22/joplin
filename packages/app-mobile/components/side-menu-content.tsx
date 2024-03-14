@@ -153,9 +153,9 @@ const SideMenuContentComponent = (props: Props) => {
 			menuItems.push({
 				text: _('Empty trash'),
 				onPress: async () => {
-					Alert.alert('', _('This will permanently delete all items in the trash. Continue?'), [
+					Alert.alert('', _('Are you sure you want to empty the trash?\n\nAll notes and sub-notebooks within trash will be lost forever'), [
 						{
-							text: _('Empty trash'),
+							text: _('OK'),
 							onPress: async () => {
 								await emptyTrash();
 							},
