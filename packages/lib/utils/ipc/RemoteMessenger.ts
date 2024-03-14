@@ -153,8 +153,6 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 		for (const id in idToCallbacks) {
 			this.argumentCallbacks.set(id, idToCallbacks[id]);
 		}
-		// TODO(1): Add logic to remove idToCallbacks from argumentCallbacks
-		//          when the remote drops all references to it.
 	}
 
 	private lastCallbackDropTime_ = 0;
