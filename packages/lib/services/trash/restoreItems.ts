@@ -54,7 +54,8 @@ const restoreItems = async (itemType: ModelType, itemsOrIds: NoteEntity[] | Fold
 		let toSave: FolderEntity | NoteEntity = null;
 
 		if (itemType === ModelType.Note) {
-			toSave = await Note.preview(item.id);
+			// We need to preview conflicts -- they can be trashed.
+			toSave = await Note.preview(item.id, { excludeConflicts: false });
 		} else {
 			toSave = await Folder.load(item.id);
 		}
