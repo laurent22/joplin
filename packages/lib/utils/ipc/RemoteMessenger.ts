@@ -9,6 +9,7 @@ enum MessageType {
 	ErrorResponse = 'ErrorResponse',
 	ReturnValueResponse = 'ReturnValueResponse',
 	CloseChannel = 'CloseChannel',
+	OnCallbackDropped = 'OnCallbackDropped',
 }
 
 type RemoteReadyMessage = Readonly<{
@@ -55,11 +56,16 @@ type CloseChannelMessage = Readonly<{
 	kind: MessageType.CloseChannel;
 }>;
 
+type CallbackDroppedMessage = Readonly<{
+	kind: MessageType.OnCallbackDropped;
+	callbackIds: string[];
+}>;
+
 type BaseMessage = Readonly<{
 	channelId: string;
 }>;
 
-type InternalMessage = (RemoteReadyMessage|CloseChannelMessage|InvokeMethodMessage|ErrorResponse|ReturnValueResponse) & BaseMessage;
+type InternalMessage = (RemoteReadyMessage|CloseChannelMessage|InvokeMethodMessage|ErrorResponse|ReturnValueResponse|CallbackDroppedMessage) & BaseMessage;
 
 // Listeners for a remote method to resolve or reject.
 type OnMethodResolveListener = (returnValue: SerializableDataAndCallbacks)=> void;
@@ -68,6 +74,13 @@ type OnRemoteReadyListener = ()=> void;
 
 type OnAllMethodsRespondedToListener = ()=> void;
 
+// TODO: Remove after upgrading nodejs/browser types sufficiently
+//       (FinalizationRegistry is supported in modern browsers).
+declare class FinalizationRegistry {
+	public constructor(onDrop: any);
+	public register(v: any, id: string): void;
+}
+
 // A thin wrapper around postMessage. A script within `targetWindow` should
 // also construct a RemoteMessenger (with IncomingMessageType and
 // OutgoingMessageType reversed).
@@ -75,6 +88,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 	private resolveMethodCallbacks: Record<string, OnMethodResolveListener> = Object.create(null);
 	private rejectMethodCallbacks: Record<string, OnMethodRejectListener> = Object.create(null);
 	private argumentCallbacks: Map<string, TransferableCallback> = new Map();
+	private callbackTracker: FinalizationRegistry|undefined = undefined;
 
 	private numberUnrespondedToMethods = 0;
 	private noWaitingMethodsListeners: OnAllMethodsRespondedToListener[] = [];
@@ -121,6 +135,14 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 			});
 		};
 		this.remoteApi = makeApiFor([]) as RemoteInterface;
+
+		if (typeof FinalizationRegistry !== 'undefined') {
+			// Creating a FinalizationRegistry allows us to track **local** deletions of callbacks.
+			// We can then inform the remote so that it can free the corresponding remote callback.
+			this.callbackTracker = new FinalizationRegistry((callbackId: string) => {
+				this.dropRemoteCallback_(callbackId);
+			});
+		}
 	}
 
 	private createResponseId(methodPath: string[]) {
@@ -131,6 +153,28 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 		for (const id in idToCallbacks) {
 			this.argumentCallbacks.set(id, idToCallbacks[id]);
 		}
+		// TODO(1): Add logic to remove idToCallbacks from argumentCallbacks
+		//          when the remote drops all references to it.
+	}
+
+	private lastCallbackDropTime_ = 0;
+	private bufferedDroppedCallbackIds_: string[] = [];
+	// protected: For testing
+	protected dropRemoteCallback_(callbackId: string) {
+		this.bufferedDroppedCallbackIds_.push(callbackId);
+		if (!this.isRemoteReady) return;
+		// Don't send too many messages. On mobile platforms, each
+		// message has overhead and .dropRemoteCallback is called
+		// frequently.
+		if (Date.now() - this.lastCallbackDropTime_ < 10000) return;
+
+		this.postMessage({
+			kind: MessageType.OnCallbackDropped,
+			callbackIds: this.bufferedDroppedCallbackIds_,
+			channelId: this.channelId,
+		});
+		this.bufferedDroppedCallbackIds_ = [];
+		this.lastCallbackDropTime_ = Date.now();
 	}
 
 	private async invokeRemoteMethod(methodPath: string[], args: SerializableDataAndCallbacks[]) {
@@ -191,6 +235,10 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 		return this.invokeRemoteMethod(['__callbacks', callbackId], callbackArgs);
 	};
 
+	private trackCallbackFinalization = (callbackId: string, callback: any) => {
+		this.callbackTracker?.register(callback, callbackId);
+	};
+
 	// Calls a local method and sends the result to the remote connection.
 	private async invokeLocalMethod(message: InvokeMethodMessage) {
 		try {
@@ -239,6 +287,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 				message.arguments.serializable,
 				message.arguments.callbacks,
 				this.onInvokeCallback,
+				this.trackCallbackFinalization,
 			);
 
 			let result;
@@ -336,6 +385,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 			message.returnValue.serializable,
 			message.returnValue.callbacks,
 			this.onInvokeCallback,
+			this.trackCallbackFinalization,
 		);
 
 		this.resolveMethodCallbacks[message.responseId](returnValue);
@@ -345,6 +395,12 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 	private async onRemoteReject(message: ErrorResponse) {
 		this.rejectMethodCallbacks[message.responseId](message.errorMessage);
 		this.onMethodRespondedTo(message.responseId);
+	}
+
+	private async onRemoteCallbackDropped(message: CallbackDroppedMessage) {
+		for (const id of message.callbackIds) {
+			this.argumentCallbacks.delete(id);
+		}
 	}
 
 	private async onRemoteReadyToReceive(message: RemoteReadyMessage) {
@@ -431,6 +487,8 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 			await this.onRemoteReject(asInternalMessage);
 		} else if (asInternalMessage.kind === MessageType.RemoteReady) {
 			await this.onRemoteReadyToReceive(asInternalMessage);
+		} else if (asInternalMessage.kind === MessageType.OnCallbackDropped) {
+			await this.onRemoteCallbackDropped(asInternalMessage);
 		} else {
 			// Have TypeScript verify that the above cases are exhaustive
 			const exhaustivenessCheck: never = asInternalMessage;
@@ -494,4 +552,15 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 
 	protected abstract postMessage(message: InternalMessage): void;
 	protected abstract onClose(): void;
+
+
+	// For testing
+	public getIdForCallback_(callback: TransferableCallback) {
+		for (const [id, otherCallback] of this.argumentCallbacks) {
+			if (otherCallback === callback) {
+				return id;
+			}
+		}
+		return undefined;
+	}
 }

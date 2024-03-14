@@ -27,7 +27,7 @@ describe('mergeCallbacksAndSerializable', () => {
 		};
 
 		const callMethodWithId = jest.fn();
-		const merged: any = mergeCallbacksAndSerializable(data, callbacks, callMethodWithId);
+		const merged: any = mergeCallbacksAndSerializable(data, callbacks, callMethodWithId, ()=>{});
 
 		// Should have created functions
 		merged.foo.fn1(3, 4);

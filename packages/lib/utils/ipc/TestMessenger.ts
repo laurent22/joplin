@@ -33,4 +33,11 @@ export default class TestMessenger<LocalInterface, RemoteInterface> extends Remo
 	protected override onClose(): void {
 		this.remoteMessenger = null;
 	}
+
+
+	// Test utility methods
+	//
+	public mockCallbackDropped(callbackId: string) {
+		this.dropRemoteCallback_(callbackId);
+	}
 }

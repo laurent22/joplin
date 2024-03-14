@@ -147,4 +147,34 @@ describe('RemoteMessenger', () => {
 		expect(await remoteApi.subObject.multiplyRounded(1.1, 2)).toBe(2);
 		expect(await remoteApi.subObject.multiplyRounded.call(remoteApi.subObject, 3.1, 4.2)).toBe(12);
 	});
+
+	it('should delete callbacks when dropped remotely', async () => {
+		const testApi = {
+			test: jest.fn(),
+		};
+
+		type ApiType = typeof testApi;
+		const messenger1 = new TestMessenger<ApiType, ApiType>('testid', testApi);
+		const messenger2 = new TestMessenger<ApiType, ApiType>('testid', testApi);
+
+		messenger1.connectTo(messenger2);
+
+		const callback = async () => {};
+		messenger1.remoteApi.test(callback);
+
+		// Callbacks should be stored with the source messenger
+		const callbackId = messenger1.getIdForCallback_(callback);
+		expect(callbackId).toBeTruthy();
+		expect(messenger2.getIdForCallback_(callback)).toBe(undefined);
+
+		// Dropping a callback at the remote messenger should clear the
+		// callback on the original messenger
+		messenger2.mockCallbackDropped(callbackId);
+
+		// To avoid random test failure, wait for a round-tip before checking
+		// whether the callback is still registered.
+		await messenger1.remoteApi.test(async ()=>{});
+
+		expect(messenger1.getIdForCallback_(callback)).toBe(undefined);
+	});
 });
