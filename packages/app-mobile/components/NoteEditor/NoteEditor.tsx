@@ -7,7 +7,7 @@ import { defaultSearchState, SearchPanel } from './SearchPanel';
 import ExtendedWebView, { WebViewControl } from '../ExtendedWebView';
 
 import * as React from 'react';
-import { forwardRef, useEffect, useImperativeHandle } from 'react';
+import { forwardRef, RefObject, useEffect, useImperativeHandle } from 'react';
 import { useMemo, useState, useCallback, useRef } from 'react';
 import { LayoutChangeEvent, NativeSyntheticEvent, View, ViewStyle } from 'react-native';
 import { editorFont } from '../global-style';
@@ -139,12 +139,11 @@ function editorTheme(themeId: number) {
 	};
 }
 
-type OnInjectJSCallback = (js: string)=> void;
 type OnSetVisibleCallback = (visible: boolean)=> void;
 type OnSearchStateChangeCallback = (state: SearchState)=> void;
 const useEditorControl = (
 	bodyControl: EditorBodyControl,
-	injectJS: OnInjectJSCallback,
+	webviewRef: RefObject<WebViewControl>,
 	setLinkDialogVisible: OnSetVisibleCallback,
 	setSearchState: OnSearchStateChangeCallback,
 ): EditorControl => {
@@ -245,7 +244,7 @@ const useEditorControl = (
 				setLinkDialogVisible(false);
 			},
 			hideKeyboard() {
-				injectJS('document.activeElement?.blur();');
+				webviewRef.current.injectJS('document.activeElement?.blur();');
 			},
 
 			setContentScripts: async (plugins: ContentScriptData[]) => {
@@ -280,7 +279,7 @@ const useEditorControl = (
 		};
 
 		return control;
-	}, [injectJS, setLinkDialogVisible, setSearchState, bodyControl]);
+	}, [webviewRef, bodyControl, setLinkDialogVisible, setSearchState]);
 };
 
 function NoteEditor(props: Props, ref: any) {
@@ -371,11 +370,6 @@ function NoteEditor(props: Props, ref: any) {
 	const [linkDialogVisible, setLinkDialogVisible] = useState(false);
 	const [searchState, setSearchState] = useState(defaultSearchState);
 
-	// Runs [js] in the context of the CodeMirror frame.
-	const injectJS = (js: string) => {
-		webviewRef.current.injectJS(js);
-	};
-
 	const onEditorEvent = useRef((_event: EditorEvent) => {});
 
 	const editorMessenger = useMemo(() => {
@@ -394,7 +388,7 @@ function NoteEditor(props: Props, ref: any) {
 	}, []);
 
 	const editorControl = useEditorControl(
-		editorMessenger.remoteApi, injectJS, setLinkDialogVisible, setSearchState,
+		editorMessenger.remoteApi, webviewRef, setLinkDialogVisible, setSearchState,
 	);
 
 	useEffect(() => {
