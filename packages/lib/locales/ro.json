@@ -140,6 +140,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Despre Joplin"
 	],
@@ -319,6 +322,9 @@
 	],
 	"Automatically check for updates": [
 		"Verificarea automată a actualizărilor"
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
 	],
 	"Automatically switch theme to match system theme": [
 		"Comutați automat tema pentru a se potrivi cu tema sistemului"
@@ -766,20 +772,8 @@
 	"Delete note": [
 		"Ștergeți notița"
 	],
-	"Delete note \"%s\"?": [
-		"Ștergeți notițele \"%s\"?"
-	],
-	"Delete note?": [
-		"Ștergeți notița?"
-	],
 	"Delete notebook": [
 		"Ștergeți notebook-ul"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Ștergeți agenda \"%s\"?\n\nToate notițele și sub-notițele în această agendă vor fi șterse."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Ștergeți agenda? Toate notițele și sub-notițele din această agendă vor fi șterse."
 	],
 	"Delete plugin \"%s\"?": [
 		"Ștergeți plugin \"%s\"?"
@@ -792,9 +786,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Ștergeți caietul Inbox?\n\nDacă ștergeți caietul de notițe din Inbox, orice e-mail trimis recent în acesta poate fi pierdut."
-	],
-	"Delete these %d notes?": [
-		"Ștergeți aceste %d notițe?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Ștergeți această invitație? Destinatarul nu va mai avea acces la acest notebook partajat."
@@ -943,6 +934,9 @@
 	"Dropbox Login": [
 		"Autentificare Dropbox"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Duplicați"
 	],
@@ -1020,6 +1014,9 @@
 	],
 	"emphasised text": [
 		"text accentuat"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"Activați"
@@ -1338,6 +1335,9 @@
 	"Grant authorisation": [
 		"Acordarea autorizării"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"Header %d"
 	],
@@ -1403,6 +1403,9 @@
 	],
 	"Idle": [
 		"Idee"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		"Ignore"
@@ -1530,12 +1533,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"Joplin Cloud email"
-	],
-	"Joplin Cloud password": [
-		"Joplin Cloud parolă"
-	],
 	"Joplin Export Directory": [
 		"Joplin Export Directory"
 	],
@@ -1605,6 +1602,9 @@
 	"Later": [
 		"Mai târziu"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Layout"
 	],
@@ -1667,12 +1667,6 @@
 	"Log": [
 		"Log"
 	],
-	"Login": [
-		"Login"
-	],
-	"Login below.": [
-		"Autentificați-vă mai jos."
-	],
 	"Login with Dropbox": [
 		"Autentificați-vă cu Dropbox"
 	],
@@ -1684,6 +1678,9 @@
 	],
 	"Logs, profiles, sync status": [
 		"Locuri, profiluri, stare de sincronizare"
+	],
+	"Longitude": [
+		""
 	],
 	"Make a donation": [
 		"Faceți o donație"
@@ -2027,9 +2024,6 @@
 	"Options": [
 		"Opțiuni"
 	],
-	"Or create an account.": [
-		"Sau creați-vă un cont."
-	],
 	"Ordered list": [
 		"Listă ordonată"
 	],
@@ -2119,6 +2113,9 @@
 	],
 	"Please wait...": [
 		"Vă rugăm să așteptați..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"Instrumente Plugin"
@@ -2582,6 +2579,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Sortează elementul după <field> (de exemplu, titlu, data_actualizării, data_creării)."
 	],
+	"Source": [
+		"Sursă"
+	],
 	"Source format: %s": [
 		"Formatul sursei: %s"
 	],
@@ -2780,9 +2780,6 @@
 	"Text editor command": [
 		"Comandă editor de text"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"Vă mulțumesc! Contul dumneavoastră Joplin Cloud este acum configurat și gata de utilizare."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Profilul activ nu poate fi șters. Treceți la un alt profil și încercați din nou."
 	],
@@ -2923,9 +2920,6 @@
 	"There was an error downloading this attachment:": [
 		"A apărut o eroare la descărcarea acestui atașament:"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"S-a produs o eroare la configurarea contului tău Joplin Cloud. Vă rugăm să vă verificați e-mailul și parola și să încercați din nou. Eroarea a fost:\n\n%s"
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Aceste elemente vor rămâne pe dispozitiv, dar nu vor fi încărcate pe obiectivul de sincronizare. Pentru a găsi aceste elemente, căutați fie titlul, fie ID-ul (care este afișat în paranteze mai sus)."
 	],
@@ -2988,6 +2982,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"Se va deschide un nou ecran. Doriți să salvați modificările dumnevoastră actuale?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Astfel, notebook-ul va fi eliminat din colecția dvs. și nu veți mai avea acces la conținutul său. Doriți să continuați?"
@@ -3087,6 +3084,9 @@
 	],
 	"Total: %d/%d": [
 		"Total: %d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		"Încercați din nou"
@@ -3321,6 +3321,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"Ești pe cale să atașezi o imagine mare (%dx%d pixeli). Doriți să îl redimensionați până la %d pixeli înainte de a-l atașa?"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"Nu aveți niciun caiet de notițe activ."
