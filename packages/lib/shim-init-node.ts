@@ -599,6 +599,7 @@ function shimInit(options: ShimInitOptions = null) {
 
 									try {
 										await gunzipFile(gzipFilePath, filePath);
+										if (request.destroyed) return;
 										resolve(makeResponse(response));
 									} catch (error) {
 										cleanUpOnError(error);
@@ -606,6 +607,7 @@ function shimInit(options: ShimInitOptions = null) {
 
 									await shim.fsDriver().remove(gzipFilePath);
 								} else {
+									if (request.destroyed) return;
 									resolve(makeResponse(response));
 								}
 							});
