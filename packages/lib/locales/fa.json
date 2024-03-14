@@ -140,6 +140,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"درباره joplin"
 	],
@@ -319,6 +322,9 @@
 	],
 	"Automatically check for updates": [
 		"بررسی خودکار برای بروزرسانی"
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
 	],
 	"Automatically switch theme to match system theme": [
 		"پوسته برنامه خودکار با پوسته سیستم تغییر کند"
@@ -768,20 +774,8 @@
 	"Delete note": [
 		"حذف یادداشت"
 	],
-	"Delete note \"%s\"?": [
-		"یادداشت «%s» حذف شود؟"
-	],
-	"Delete note?": [
-		"یادداشت حذف شود؟"
-	],
 	"Delete notebook": [
 		"حذف دفترچه"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"دفترچه «%s» حذف شود؟\n\nتمامی یادداشت‌ها و دفترچه‌های فرزند این دفترچه نیز حذف خواهند شد."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"دفترچه حذف شود؟ تمامی یادداشت‌ها و دفترچه‌های فرزند این دفترچه نیز حذف خواهند شد."
 	],
 	"Delete plugin \"%s\"?": [
 		"افزونه «%s» حذف شود؟"
@@ -794,9 +788,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"دفترچه‌ی صندوق ورودی حذف شود؟\n\nاگر دفترچه صندوق ورودی را حذف کنید، ممکن است هر ایمیلی که اخیراً به آن ارسال شده است نیز از بین برود."
-	],
-	"Delete these %d notes?": [
-		"این %d یادداشت حذف شود؟"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"این دعوتنامه حذف شود؟ گیرنده دیگر به این دفترچه‌ی مشترک دسترسی نخواهد داشت."
@@ -942,6 +933,9 @@
 	"Dropbox Login": [
 		"ورود به Dropbox"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"تکراری"
 	],
@@ -1016,6 +1010,9 @@
 	],
 	"emphasised text": [
 		"متن تأکید شده"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"فعال سازی"
@@ -1330,6 +1327,9 @@
 	"Grant authorisation": [
 		"اعطای مجوز"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"سرصفحه %d"
 	],
@@ -1395,6 +1395,9 @@
 	],
 	"Idle": [
 		"بیکار"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		"نادیده‌گرفتن"
@@ -1522,12 +1525,6 @@
 	"Joplin Cloud": [
 		"سرویس ابری joplin"
 	],
-	"Joplin Cloud email": [
-		"ایمیل ابری joplin"
-	],
-	"Joplin Cloud password": [
-		"گذرواژه سرور ابری joplin"
-	],
 	"Joplin Export Directory": [
 		"پوشه صادرات joplin"
 	],
@@ -1594,6 +1591,9 @@
 	"Later": [
 		"بعداً"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"چیدمان"
 	],
@@ -1655,12 +1655,6 @@
 	"Log": [
 		"لاگ"
 	],
-	"Login": [
-		"ورود"
-	],
-	"Login below.": [
-		"از طریق زیر وارد شوید."
-	],
 	"Login with Dropbox": [
 		"ورود با Dropbox"
 	],
@@ -1671,6 +1665,9 @@
 		"خروج"
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -2015,9 +2012,6 @@
 	"Options": [
 		"گزینه ها"
 	],
-	"Or create an account.": [
-		"یا ایحاد یک حساب‌کاربری."
-	],
 	"Ordered list": [
 		"لیست مرتب شده"
 	],
@@ -2107,6 +2101,9 @@
 	],
 	"Please wait...": [
 		"لطفاً صبور باشید..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"ابزارهای افزونه"
@@ -2558,6 +2555,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"مورد را بر‌ اساس <field> مرتب می‌کند (به عنوان مثال: عنوان، زمان به‌روزرسانی، زمان ایجاد)."
 	],
+	"Source": [
+		"منبع"
+	],
 	"Source format: %s": [
 		"فرمت مبدا: %s"
 	],
@@ -2753,9 +2753,6 @@
 	"Text editor command": [
 		"دستور ویرایشگر متن"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"از شما سپاسگزاریم! حساب ابری joplin شما هم اکنون راه‌اندازی شده و آماده استفاده است."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"حساب‌کاربری فعال را نمی توان حذف کرد. به حساب‌کاربری دیگری بروید و دوباره امتحان کنید."
 	],
@@ -2888,9 +2885,6 @@
 	"There was an error downloading this attachment:": [
 		"یک خطا در دانلود این پیوست بود:"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"هنگام تنظیم حساب Joplin Cloud شما خطایی روی داد. لطفا ایمیل و رمز عبور خود را تأیید کنید و دوباره امتحان کنید. :\n\nجزئیات خطا: %s"
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"این موارد در دستگاه باقی می‌مانند اما در هدف همگام‌سازی آپلود نمی‌شوند. برای یافتن این موارد، عنوان یا شناسه (که در پرانتز بالا نمایش داده شده است) را جستجو نمایید."
 	],
@@ -2950,6 +2944,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"این یک صفحه جدید باز می‌کند. تغییرات فعلی ذخیره شوند؟"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"با این کار، دفترچه از مجموعه شما حذف می شود و دیگر به محتوای آن دسترسی نخواهید داشت. آیا مایل هستید ادامه دهید؟"
@@ -3046,6 +3043,9 @@
 	],
 	"Total: %d/%d": [
 		"مجموع: %d از %d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		"تلاش دوباره"
@@ -3280,6 +3280,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"شما در شرف پیوست کردن یک تصویر بزرگ هستید (%dx%d پیکسل). آیا می خواهید اندازه آن را قبل از پیوست کردن به %d پیکسل تغییر دهید؟"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"شما در حال حاضر دفترچه‌ای ندارید."

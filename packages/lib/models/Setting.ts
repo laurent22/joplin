@@ -1169,7 +1169,12 @@ class Setting extends BaseModel {
 				type: SettingItemType.Object,
 				section: 'plugins',
 				public: true,
-				appTypes: [AppType.Desktop],
+				show: (_settings) => {
+					// Hide on iOS due to App Store guidelines. See
+					// https://github.com/laurent22/joplin/pull/10086 for details.
+					return shim.isNode() || shim.mobilePlatform() !== 'ios';
+				},
+				appTypes: [AppType.Desktop, AppType.Mobile],
 				needRestart: true,
 				autoSave: true,
 			},
@@ -1325,6 +1330,15 @@ class Setting extends BaseModel {
 			'style.editor.contentMaxWidth': { value: 0, type: SettingItemType.Int, public: true, storage: SettingStorage.File, isGlobal: true, appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor maximum width'), description: () => _('Set it to 0 to make it take the complete available space. Recommended width is 600.') },
 
 			'ui.layout': { value: {}, type: SettingItemType.Object, storage: SettingStorage.File, isGlobal: true, public: false, appTypes: [AppType.Desktop] },
+
+			'ui.lastSelectedPluginPanel': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+				description: () => 'The last selected plugin panel ID in pop-up mode (mobile).',
+				storage: SettingStorage.Database,
+				appTypes: [AppType.Mobile],
+			},
 
 			// TODO: Is there a better way to do this? The goal here is to simply have
 			// a way to display a link to the customizable stylesheets, not for it to

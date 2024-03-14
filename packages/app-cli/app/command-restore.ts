@@ -9,7 +9,7 @@ class Command extends BaseCommand {
 	}
 
 	public override description() {
-		return _('Restore the items matching <pattern>.');
+		return _('Restore the items matching <pattern> from the trash.');
 	}
 
 	public override async action(args: any) {

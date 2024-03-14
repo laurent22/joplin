@@ -120,7 +120,7 @@ const filterByTableName = (
 		}
 		const requiredNotesQuery = requiredNotes.join(' UNION ');
 
-		// We need notes without atleast one excluded (tag/resource)
+		// We need notes without at least one excluded (tag/resource)
 		withCondition = `
 		notes_with_${requirement}_${tableName}
 		AS (

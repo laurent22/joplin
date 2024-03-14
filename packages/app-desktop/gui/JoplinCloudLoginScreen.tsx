@@ -77,7 +77,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	return (
 		<div className="login-page">
 			<div className="page-container">
-				<p className="text">{_('To allow Joplin to synchronise with Joplin Cloud, open this URL in your browser to authorise the application:')}</p>
+				<p className="text">{_('To allow Joplin to synchronise with Joplin Cloud, please login using this URL:')}</p>
 				<div className="buttons-container">
 					<Button
 						onClick={onAuthorizeClicked}

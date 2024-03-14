@@ -108,6 +108,7 @@
     "nanoid": "patch:nanoid@npm%3A3.3.7#./.yarn/patches/nanoid-npm-3.3.7-98824ba130.patch",
     "pdfjs-dist": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch",
     "@react-native-community/slider": "patch:@react-native-community/slider@npm%3A4.4.4#./.yarn/patches/@react-native-community-slider-npm-4.4.4-d78e472f48.patch",
-    "husky": "patch:husky@npm%3A3.1.0#./.yarn/patches/husky-npm-3.1.0-5cc13e4e34.patch"
+    "husky": "patch:husky@npm%3A3.1.0#./.yarn/patches/husky-npm-3.1.0-5cc13e4e34.patch",
+    "chokidar@^2.0.0": "3.5.3"
   }
 }

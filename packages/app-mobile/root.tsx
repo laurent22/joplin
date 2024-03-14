@@ -86,6 +86,7 @@ const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import BiometricPopup from './components/biometrics/BiometricPopup';
 import initLib from '@joplin/lib/initLib';
 import { isCallbackUrl, parseCallbackUrl, CallbackUrlCommand } from '@joplin/lib/callbackUrlUtils';
+import JoplinCloudLoginScreen from './components/screens/JoplinCloudLoginScreen';
 
 SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -122,7 +123,12 @@ import { ReactNode } from 'react';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
 import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
 import runOnDeviceFsDriverTests from './utils/fs-driver/runOnDeviceTests';
+import PluginRunnerWebView from './plugins/PluginRunner/PluginRunnerWebView';
 import { refreshFolders, scheduleRefreshFolders } from '@joplin/lib/folders-screen-utils';
+import KeymapService from '@joplin/lib/services/KeymapService';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
+import initializeCommandService from './utils/initializeCommandService';
+import PlatformImplementation from './plugins/PlatformImplementation';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -480,8 +486,10 @@ async function initialize(dispatch: Function) {
 	Setting.setConstant('appId', 'net.cozic.joplin-mobile');
 	Setting.setConstant('appType', 'mobile');
 	Setting.setConstant('tempDir', await initializeTempDir());
+	Setting.setConstant('cacheDir', `${getProfilesRootDir()}/cache`);
 	const resourceDir = getResourceDir(currentProfile, isSubProfile);
 	Setting.setConstant('resourceDir', resourceDir);
+	Setting.setConstant('pluginDir', `${getProfilesRootDir()}/plugins`);
 
 	await shim.fsDriver().mkdir(resourceDir);
 
@@ -547,6 +555,19 @@ async function initialize(dispatch: Function) {
 	AlarmService.setDriver(new AlarmServiceDriver(mainLogger));
 	AlarmService.setLogger(mainLogger);
 
+	// Currently CommandService is just used for plugins.
+	initializeCommandService(store);
+
+	// KeymapService is also present for plugin compatibility
+	KeymapService.instance().initialize();
+
+	// Even if there are no plugins, we need to initialize the PluginService so that
+	// plugin search can work.
+	const platformImplementation = PlatformImplementation.instance();
+	PluginService.instance().initialize(
+		platformImplementation.versionInfo.version, platformImplementation, null, store,
+	);
+
 	setRSA(RSA);
 
 	try {
@@ -584,6 +605,7 @@ async function initialize(dispatch: Function) {
 			// Setting.setValue('sync.10.userContentPath', 'https://joplinusercontent.com');
 			Setting.setValue('sync.10.path', 'http://api.joplincloud.local:22300');
 			Setting.setValue('sync.10.userContentPath', 'http://joplinusercontent.local:22300');
+			Setting.setValue('sync.10.website', 'http://joplincloud.local:22300');
 
 			// Setting.setValue('sync.target', 10);
 			// Setting.setValue('sync.10.username', 'user1@example.com');
@@ -733,6 +755,18 @@ async function initialize(dispatch: Function) {
 	// Collect revisions more frequently on mobile because it doesn't auto-save
 	// and it cannot collect anything when the app is not active.
 	RevisionService.instance().runInBackground(1000 * 30);
+
+	// ----------------------------------------------------------------------------
+	// Plugin service setup
+	// ----------------------------------------------------------------------------
+
+	// On startup, we can clear plugin update state -- plugins that were updated when the
+	// user last ran the app have been updated and will be reloaded.
+	const pluginService = PluginService.instance();
+	const pluginSettings = pluginService.unserializePluginSettings(Setting.value('plugins.states'));
+
+	const updatedSettings = pluginService.clearUpdateState(pluginSettings);
+	Setting.setValue('plugins.states', pluginService.serializePluginSettings(updatedSettings));
 
 	// ----------------------------------------------------------------------------
 	// Keep this below to test react-native-rsa-native
@@ -1117,6 +1151,7 @@ class AppComponent extends React.Component {
 			Folder: { screen: FolderScreen },
 			OneDriveLogin: { screen: OneDriveLoginScreen },
 			DropboxLogin: { screen: DropboxLoginScreen },
+			JoplinCloudLogin: { screen: JoplinCloudLoginScreen },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },
 			ProfileSwitcher: { screen: ProfileSwitcher },
@@ -1179,6 +1214,7 @@ class AppComponent extends React.Component {
 						</SafeAreaView>
 					</MenuProvider>
 				</SideMenu>
+				<PluginRunnerWebView />
 			</View>
 		);
 
@@ -1194,9 +1230,22 @@ class AppComponent extends React.Component {
 					...paperTheme.colors,
 					onPrimaryContainer: theme.color5,
 					primaryContainer: theme.backgroundColor5,
-					surfaceVariant: theme.backgroundColor,
-					onSurfaceVariant: theme.color,
 					primary: theme.color,
+
+					secondaryContainer: theme.raisedBackgroundColor,
+					onSecondaryContainer: theme.raisedColor,
+
+					surfaceVariant: theme.backgroundColor3,
+					onSurfaceVariant: theme.color3,
+
+					elevation: {
+						level0: 'transparent',
+						level1: theme.oddBackgroundColor,
+						level2: theme.raisedBackgroundColor,
+						level3: theme.raisedBackgroundColor,
+						level4: theme.raisedBackgroundColor,
+						level5: theme.raisedBackgroundColor,
+					},
 				},
 			}}>
 				{mainContent}

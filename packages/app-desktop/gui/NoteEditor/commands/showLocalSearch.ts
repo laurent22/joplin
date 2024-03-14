@@ -9,7 +9,7 @@ export const declaration: CommandDeclaration = {
 export const runtime = (comp: any): CommandRuntime => {
 	return {
 		execute: async () => {
-			if (comp.editorRef.current && comp.editorRef.current.supportsCommand('search')) {
+			if (comp.editorRef.current && await comp.editorRef.current.supportsCommand('search')) {
 				comp.editorRef.current.execCommand({ name: 'search' });
 			} else {
 				if (comp.noteSearchBarRef.current) {
