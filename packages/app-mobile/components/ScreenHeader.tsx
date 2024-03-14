@@ -24,6 +24,8 @@ import FolderPicker from './FolderPicker';
 import { getTrashFolderId, itemIsInTrash } from '@joplin/lib/services/trash';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { ModelType } from '@joplin/lib/BaseModel';
+import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 
 // We need this to suppress the useless warning
 // https://github.com/oblador/react-native-vector-icons/issues/1465
@@ -69,6 +71,7 @@ interface ScreenHeaderProps {
 		onValueChange?: OnValueChangedListener;
 		mustSelect?: boolean;
 	};
+	plugins: PluginStates;
 
 	dispatch: DispatchCommandType;
 	onUndoButtonPress: OnPressCallback;
@@ -221,6 +224,16 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		styleObject.topIcon.textAlignVertical = 'center';
 		styleObject.topIcon.color = theme.colorBright2;
 
+		styleObject.iconButtonSmall = {
+			...styleObject.iconButton,
+			flexGrow: 0.5,
+			flexShrink: 1,
+		};
+		styleObject.topIconSmall = {
+			...styleObject.topIcon,
+			fontSize: 17,
+		};
+
 		styleObject.backButton = { ...styleObject.iconButton };
 		styleObject.backButton.marginRight = 1;
 
@@ -254,6 +267,10 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		} else {
 			void NavService.go('Search');
 		}
+	}
+
+	private pluginPanelToggleButton_press() {
+		this.props.dispatch({ type: 'TOGGLE_PLUGIN_PANELS_DIALOG' });
 	}
 
 	private async duplicateButton_press() {
@@ -443,6 +460,23 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		const pluginPanelToggleButton = (styles: any, onPress: OnPressCallback) => {
+			const allPluginViews = Object.values(this.props.plugins).map(plugin => Object.values(plugin.views)).flat();
+			const allPanels = allPluginViews.filter(view => view.containerType === ContainerType.Panel);
+			if (allPanels.length === 0) return null;
+
+			return (
+				<CustomButton
+					onPress={onPress}
+					description={_('Plugin panels')}
+					themeId={themeId}
+					contentStyle={styles.iconButtonSmall}
+				>
+					<Icon name="extension-puzzle" style={styles.topIconSmall} />
+				</CustomButton>
+			);
+		};
+
 		function deleteButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<CustomButton
@@ -623,6 +657,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), backButtonDisabled);
 		const selectAllButtonComp = !showSelectAllButton ? null : selectAllButton(this.styles(), () => this.selectAllButton_press());
 		const searchButtonComp = !showSearchButton ? null : searchButton(this.styles(), () => this.searchButton_press());
+		const pluginPanelsComp = pluginPanelToggleButton(this.styles(), () => this.pluginPanelToggleButton_press());
 		const deleteButtonComp = !selectedFolderInTrash && this.props.noteSelectionEnabled ? deleteButton(this.styles(), () => this.deleteButton_press(), headerItemDisabled) : null;
 		const restoreButtonComp = selectedFolderInTrash && this.props.noteSelectionEnabled ? restoreButton(this.styles(), () => this.restoreButton_press(), headerItemDisabled) : null;
 		const duplicateButtonComp = !selectedFolderInTrash && this.props.noteSelectionEnabled ? duplicateButton(this.styles(), () => this.duplicateButton_press(), headerItemDisabled) : null;
@@ -667,6 +702,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 						this.props.showSaveButton === true,
 					)}
 					{titleComp}
+					{pluginPanelsComp}
 					{selectAllButtonComp}
 					{searchButtonComp}
 					{deleteButtonComp}
@@ -707,6 +743,7 @@ const ScreenHeader = connect((state: State) => {
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
+		plugins: state.pluginService.plugins,
 	};
 })(ScreenHeaderComponent);
 

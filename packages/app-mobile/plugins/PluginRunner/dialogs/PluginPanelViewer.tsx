@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Button, IconButton, Modal, Portal, SegmentedButtons, Text } from 'react-native-paper';
 import useViewInfos from './hooks/useViewInfos';
 import WebviewController, { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { connect } from 'react-redux';
 import { AppState } from '../../../utils/types';
@@ -14,6 +14,7 @@ import { _ } from '@joplin/lib/locale';
 import { Theme } from '@joplin/lib/themes/type';
 import { themeStyle } from '@joplin/lib/theme';
 import Setting from '@joplin/lib/models/Setting';
+import { Dispatch } from 'redux';
 
 interface Props {
 	themeId: number;
@@ -21,7 +22,7 @@ interface Props {
 	pluginHtmlContents: PluginHtmlContents;
 	pluginStates: PluginStates;
 	visible: boolean;
-	onClose: ()=> void;
+	dispatch: Dispatch;
 }
 
 
@@ -154,12 +155,18 @@ const PluginPanelViewer: React.FC<Props> = props => {
 		);
 	};
 
+	const onClose = useCallback(() => {
+		props.dispatch({
+			type: 'TOGGLE_PLUGIN_PANELS_DIALOG',
+		});
+	}, [props.dispatch]);
+
 	const closeButton = (
 		<View style={styles.closeButtonContainer}>
 			<IconButton
 				icon='close'
 				accessibilityLabel={_('Close')}
-				onPress={props.onClose}
+				onPress={onClose}
 			/>
 		</View>
 	);
@@ -168,7 +175,7 @@ const PluginPanelViewer: React.FC<Props> = props => {
 		<Portal>
 			<Modal
 				visible={props.visible}
-				onDismiss={props.onClose}
+				onDismiss={onClose}
 				contentContainerStyle={styles.dialog}
 			>
 				{closeButton}
@@ -183,6 +190,7 @@ export default connect((state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
+		visible: state.showPanelsDialog,
 		pluginStates: state.pluginService.plugins,
 	};
 })(PluginPanelViewer);
