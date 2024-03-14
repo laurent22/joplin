@@ -46,7 +46,7 @@ export const reducer: Reducer<DefaultState, Action> = (state: DefaultState, acti
 	case 'ERROR': {
 		return {
 			className: 'text',
-			message: () => _('You were unable to connect to Joplin Cloud, verify your connection. Error: '),
+			message: () => _('You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:'),
 			active: 'ERROR',
 			next: 'COMPLETED',
 			errorMessage: action.payload,

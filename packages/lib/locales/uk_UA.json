@@ -137,6 +137,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Про Joplin"
 	],
@@ -310,6 +313,9 @@
 	],
 	"Automatically check for updates": [
 		"Автоматично перевіряти наявність оновлень"
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
 	],
 	"Automatically switch theme to match system theme": [
 		"Автоматично перемикати тему на відповідну системній темі"
@@ -739,18 +745,6 @@
 	"Delete local data and re-download from sync target": [
 		"Видаліть локальні дані та повторно завантажте з цілі синхронізації"
 	],
-	"Delete note \"%s\"?": [
-		"Видалити нотатку “%s”?"
-	],
-	"Delete note?": [
-		"Видалити нотатку?"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Видалити блокнот “%s”?\n\nУсі нотатки та блокноти в цьому блокноті також будуть видалені."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Видалити блокнот? Усі нотатки та блокноти в цьому блокноті також будуть видалені."
-	],
 	"Delete plugin \"%s\"?": [
 		"Видалити розширення “%s”?"
 	],
@@ -762,9 +756,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
-	],
-	"Delete these %d notes?": [
-		"Видалити ці %d нотаток?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Видалити це запрошення? Одержувач більше не матиме доступу до цього спільного блокнота."
@@ -907,6 +898,9 @@
 	"Dropbox Login": [
 		"Dropbox логін"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Дублікат"
 	],
@@ -978,6 +972,9 @@
 	],
 	"emphasised text": [
 		"підкреслення"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"Ввімкнути"
@@ -1284,6 +1281,9 @@
 	"Grant authorisation": [
 		"Надати дозвіл"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"Заголовок %d"
 	],
@@ -1349,6 +1349,9 @@
 	],
 	"Idle": [
 		"Бездіяльність"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		"Ігнорувати"
@@ -1476,12 +1479,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"Електронна пошта Joplin Cloud"
-	],
-	"Joplin Cloud password": [
-		"Пароль Joplin Cloud"
-	],
 	"Joplin Export Directory": [
 		"Joplin Export Directory"
 	],
@@ -1548,6 +1545,9 @@
 	"Later": [
 		"Пізніше"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Макет"
 	],
@@ -1610,12 +1610,6 @@
 	"Log": [
 		"Логи"
 	],
-	"Login": [
-		"Увійти"
-	],
-	"Login below.": [
-		"Увійдіть нижче."
-	],
 	"Login with Dropbox": [
 		"Ввійти з Dropbox"
 	],
@@ -1626,6 +1620,9 @@
 		"Вийти"
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1967,9 +1964,6 @@
 	"Options": [
 		"Властивості"
 	],
-	"Or create an account.": [
-		"Або створіть обліковий запис."
-	],
 	"Ordered list": [
 		"Упорядкований список"
 	],
@@ -2059,6 +2053,9 @@
 	],
 	"Please wait...": [
 		"Будь ласка, зачекайте…"
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"Інструменти розширень"
@@ -2501,6 +2498,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Сортувати елементи за <field> (заголовок, час оновлення, час створення, тощо)."
 	],
+	"Source": [
+		"Джерело"
+	],
 	"Source format: %s": [
 		"Формат джерела: %s"
 	],
@@ -2693,9 +2693,6 @@
 	"Text editor command": [
 		"Команда текстового редактора"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"Дякую тобі! Ваш обліковий запис Joplin Cloud налаштовано та готовий до використання."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Активний профіль не можна видалити. Перейдіть на інший профіль та повторіть спробу."
 	],
@@ -2825,9 +2822,6 @@
 	"There was an error downloading this attachment:": [
 		"Під час завантаження цього вкладення сталася помилка:"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"Під час налаштування облікового запису Joplin Cloud сталася помилка. Перевірте свою електронну адресу та пароль і повторіть спробу. Деталі помилки:\n\n%s"
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Ці елементи залишаться на пристрої, але не будуть завантажені до цілі синхронізації. Для того, щоб знайти ці елементи, знайдіть заголовок або ідентифікатор (який відображається в дужках вище)."
 	],
@@ -2872,6 +2866,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"Це відкриє новий екран. Зберегти поточні зміни?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Блокнот буде видалено з вашої колекції, і Ви більше не матимете доступу до його вмісту. Ви бажаєте продовжити?"
@@ -2968,6 +2965,9 @@
 	],
 	"Total: %d/%d": [
 		"Всього: %d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		"Спробувати знову"
@@ -3199,6 +3199,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"Ви збираєтеся вкласти велике зображення (%dx%d пікселів). Хочете зменшити розмір до %d пікселів, перш ніж приєднувати?"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"У вас зараз немає блокнотів."

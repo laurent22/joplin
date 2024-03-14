@@ -105,7 +105,7 @@ class Command extends BaseCommand {
 				}
 			};
 
-			this.stdout(_('To allow Joplin to synchronise with Joplin Cloud, open this URL in your browser to authorise the application:'));
+			this.stdout(_('To allow Joplin to synchronise with Joplin Cloud, please login using this URL:'));
 
 			const confirmUrl = `${Setting.value('sync.10.website')}/applications/${applicationAuthId}/confirm`;
 			const urlWithClient = await generateApplicationConfirmUrl(confirmUrl);
