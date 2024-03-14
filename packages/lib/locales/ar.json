@@ -134,6 +134,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"حول Joplin"
 	],
@@ -307,6 +310,9 @@
 	],
 	"Automatically check for updates": [
 		"البحت عن التحديثات بشكل تلقائي"
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
 	],
 	"Automatically switch theme to match system theme": [
 		"التبديل تلقائيا للتنسيق لمطابقة تنسيق النضام"
@@ -742,20 +748,8 @@
 	"Delete note": [
 		"حذف الملاحظة"
 	],
-	"Delete note \"%s\"?": [
-		"حذف الملاحظة \"%s\" ؟"
-	],
-	"Delete note?": [
-		"حذف الملاحظة؟"
-	],
 	"Delete notebook": [
 		"حذف الملاحظة"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"حذف دفتر الملاحظات \"%s\" ؟\n\nسيتم حذف كل الملاحظات و دفاتر الملاحظات الفرعية ضمن هذا الدفتر أيضاً."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"حذف دفتر الملاحظات؟ سيتم حذف كل الملاحظات و دفاتر الملاحظات الفرعية ضمن هذا الدفتر أيضاً."
 	],
 	"Delete plugin \"%s\"?": [
 		"حذف المكون الإضافي \"%s\"؟"
@@ -768,9 +762,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
-	],
-	"Delete these %d notes?": [
-		"حذف ملاحظات %d هذه ؟"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"أحذف هذه الدعوة؟ لن يتمكن المستلم من الوصول إلى دفتر الملاحظات المشترك هذا بعد الآن."
@@ -910,6 +901,9 @@
 	"Dropbox Login": [
 		"تسجيل الدخول إلى Dropbox"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"تكرار"
 	],
@@ -984,6 +978,9 @@
 	],
 	"emphasised text": [
 		"نص مشدَّد علية"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"تمكين"
@@ -1290,6 +1287,9 @@
 	"Grant authorisation": [
 		"منح ال"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"الرأس %d"
 	],
@@ -1337,6 +1337,9 @@
 	],
 	"Idle": [
 		"خامل"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		"تجاهل"
@@ -1464,12 +1467,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"بريد Joplin Cloud"
-	],
-	"Joplin Cloud password": [
-		"كلمة مرور Joplin Cloud"
-	],
 	"Joplin Export Directory": [
 		"دليل تصدير بيانات Joplin"
 	],
@@ -1536,6 +1533,9 @@
 	"Later": [
 		"لاحقا"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"تخطيط"
 	],
@@ -1595,12 +1595,6 @@
 	"Log": [
 		"السجل"
 	],
-	"Login": [
-		"تسجيل الدخول"
-	],
-	"Login below.": [
-		"تسجيل الدخول أدناه."
-	],
 	"Login with Dropbox": [
 		"تسجيل الدخول عبر Dropbox"
 	],
@@ -1611,6 +1605,9 @@
 		"تسجيل الخروج"
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1931,9 +1928,6 @@
 	"Options": [
 		"خيارات"
 	],
-	"Or create an account.": [
-		"أو أنشئ حساباً."
-	],
 	"Other applications...": [
 		"تطبيقات أخزى..."
 	],
@@ -2020,6 +2014,9 @@
 	],
 	"Please wait...": [
 		"الرجاء الإنتظار..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"أدوات الإضافات"
@@ -2387,6 +2384,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"يرتب العناصر حسب <حقل> (على سبيل المثال، العنوان ، تاريخ التحديث ، تاريخ الإنشاء)."
 	],
+	"Source": [
+		"المصدر"
+	],
 	"Source format: %s": [
 		"تنسيق المصدر: %s"
 	],
@@ -2570,9 +2570,6 @@
 	"Text editor command": [
 		"أمر محرر النصوص"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"شكراً لك! تم إعداد حساب Joplin Cloud الخاص بك وهو جاهز للاستخدام."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
@@ -2693,9 +2690,6 @@
 	"There was an error downloading this attachment:": [
 		"حدث خطأ أثناء تنزيل هذا المرفق:"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"حدث خطأ أثناء إعداد حساب Joplin Cloud الخاص بك. يرجى التأكد من البريد الإلكتروني وكلمة المرور والمحاولة ثانية. الخطأ كان\n\n%s"
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"ستبقى هذه العناصر على الجهاز إلا أنها لن يجري رفعها إلى وجهة المزامنة. لكي تجد هذه العناصر ، عليك إما البحث عن العنوان أو المعرِّف (وهو معروض أعلاه بين قوسين)."
 	],
@@ -2743,6 +2737,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"هذا سيفتح شاشة جديدة. حفظ التغييرات الحالية الخاصة بك؟"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"Time format": [
 		"تنسيق الوقت"
@@ -2821,6 +2818,9 @@
 	],
 	"Total: %d/%d": [
 		"الإجمالي: %d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		"حاول ثانية"
@@ -3037,6 +3037,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"أنت على وشك إرفاق صورة كبيرة (%dx%d بكسل). هل ترغب في تغيّير حجمة إلى %d بكسل قبل إرفاقه؟"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"ليس لديك حاليا دفاتر ملاحظات."

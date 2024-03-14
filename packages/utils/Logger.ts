@@ -328,6 +328,13 @@ class Logger {
 		}
 	}
 
+	// For tests
+	public async waitForFileWritesToComplete_() {
+		const release = await writeToFileMutex_.acquire();
+		release();
+		return;
+	}
+
 	public error(...object: any[]) {
 		return this.log(LogLevel.Error, null, ...object);
 	}

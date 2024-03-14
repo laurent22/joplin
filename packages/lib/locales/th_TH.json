@@ -122,6 +122,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"เกี่ยวกับ Joplin"
 	],
@@ -243,6 +246,9 @@
 		"อัตโนมัติ"
 	],
 	"Auto-add disabled accounts for deletion": [
+		""
+	],
+	"Automatically delete notes in the trash after a number of days": [
 		""
 	],
 	"Automatically switch theme to match system theme": [
@@ -536,12 +542,6 @@
 	"Delete local data and re-download from sync target": [
 		""
 	],
-	"Delete note?": [
-		"ลบบันทึก?"
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"ลบสมุดบันทึกหรือไม่ บันทึกและสมุดบันทึกย่อยทั้งหมดในสมุดบันทึกนี้จะถูกลบ"
-	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -662,6 +662,9 @@
 	"Dropbox Login": [
 		"เข้าสู่ระบบ Dropbox"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		""
 	],
@@ -710,6 +713,9 @@
 	"emphasised text": [
 		""
 	],
+	"Empty trash": [
+		""
+	],
 	"Enable": [
 		"เปิด"
 	],
@@ -753,6 +759,9 @@
 		"เปิดใช้ประวัติบันทึกย้อนหลัง"
 	],
 	"Enable optical character recognition (OCR)": [
+		""
+	],
+	"Enable or disable plugins": [
 		""
 	],
 	"Enable PDF viewer": [
@@ -905,6 +914,9 @@
 	"Found: %d.": [
 		"พบ: %d"
 	],
+	"From a plugin": [
+		""
+	],
 	"Full changelog": [
 		""
 	],
@@ -933,6 +945,9 @@
 		"ไปที่ URL แหล่งที่มา"
 	],
 	"Goto Anything...": [
+		""
+	],
+	"Have you authorised the application login in the above URL?": [
 		""
 	],
 	"Header %d": [
@@ -982,6 +997,9 @@
 	],
 	"Icon": [
 		"ไอคอน"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		""
@@ -1133,6 +1151,9 @@
 	"Later": [
 		"ภายหลัง"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		""
 	],
@@ -1163,16 +1184,13 @@
 	"Lists": [
 		""
 	],
+	"Loading plugin repository...": [
+		""
+	],
 	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
 		""
 	],
 	"Log": [
-		""
-	],
-	"Login": [
-		"ลงชื่อเข้าใช้"
-	],
-	"Login below.": [
 		""
 	],
 	"Login with Dropbox": [
@@ -1185,6 +1203,9 @@
 		""
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Manage your plugins": [
@@ -1490,6 +1511,9 @@
 	"Please wait...": [
 		"โปรดรอสักครู่..."
 	],
+	"Plugin repository failed to load": [
+		""
+	],
 	"Plugins": [
 		"ปลั๊กอิน"
 	],
@@ -1601,6 +1625,9 @@
 	"Recipients:": [
 		""
 	],
+	"Recommended": [
+		""
+	],
 	"Redo": [
 		""
 	],
@@ -1654,6 +1681,9 @@
 	],
 	"Restore": [
 		"กู้คืน"
+	],
+	"Restore the items matching <pattern> from the trash.": [
+		""
 	],
 	"Retry": [
 		"ลองอีกครั้ง"
@@ -1808,6 +1838,9 @@
 	"Sort selected lines": [
 		""
 	],
+	"Source": [
+		"ต้นฉบับ"
+	],
 	"Source format: %s": [
 		"ฟอร์แมตต้นฉบับ: %s"
 	],
@@ -1958,9 +1991,6 @@
 	"Text editor command": [
 		""
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"ขอบคุณ Joplin Cloud account ของคุณพร้อมใช้งานแล้ว"
-	],
 	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
 		""
 	],
@@ -2036,6 +2066,12 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		""
 	],
+	"The note was successfully moved to the trash.": [
+		""
+	],
+	"The notebook and its content was successfully moved to the trash.": [
+		""
+	],
 	"The notebook could not be saved: %s": [
 		"ไม่สามารถบันทึกสมุดบันทึก: %s"
 	],
@@ -2093,9 +2129,6 @@
 	"There was an error downloading this attachment:": [
 		""
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		""
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		""
 	],
@@ -2136,6 +2169,9 @@
 		""
 	],
 	"This will open a new screen. Save your current changes?": [
+		""
+	],
+	"This will permanently delete all items in the trash. Continue?": [
 		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
@@ -2191,6 +2227,9 @@
 	],
 	"Total: %d/%d": [
 		"ทั้งหมด: %d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		"ลองอีกครั้ง"
@@ -2357,10 +2396,16 @@
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		""
 	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
 	"You do not have any installed plugin.": [
 		""
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
+		""
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
 		""
 	],
 	"Your data is going to be re-encrypted and synced again.": [

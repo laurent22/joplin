@@ -104,6 +104,9 @@
 	"A5": [
 		""
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Sobre o Joplin"
 	],
@@ -227,6 +230,9 @@
 	"Authorisation token:": [
 		""
 	],
+	"Authorise": [
+		""
+	],
 	"Auto": [
 		""
 	],
@@ -234,6 +240,9 @@
 		""
 	],
 	"Auto-pair braces, parenthesis, quotations, etc.": [
+		""
+	],
+	"Automatically delete notes in the trash after a number of days": [
 		""
 	],
 	"Automatically switch theme to match system theme": [
@@ -534,9 +543,6 @@
 	"Delete local data and re-download from sync target": [
 		""
 	],
-	"Delete note?": [
-		"Eliminar nota?"
-	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -672,6 +678,9 @@
 	"Dropbox Login": [
 		""
 	],
+	"Due": [
+		""
+	],
 	"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": [
 		"Duplica as notas que corresponden a <note> ao [notebook]. Se non se especifica un, a nota será duplicada no caderno atual."
 	],
@@ -712,6 +721,9 @@
 		""
 	],
 	"emphasised text": [
+		""
+	],
+	"Empty trash": [
 		""
 	],
 	"Enable": [
@@ -757,6 +769,9 @@
 		""
 	],
 	"Enable optical character recognition (OCR)": [
+		""
+	],
+	"Enable or disable plugins": [
 		""
 	],
 	"Enable PDF viewer": [
@@ -912,6 +927,9 @@
 	"Found: %d.": [
 		"Atopado: %d."
 	],
+	"From a plugin": [
+		""
+	],
 	"Full changelog": [
 		""
 	],
@@ -937,6 +955,9 @@
 		""
 	],
 	"Grant authorisation": [
+		""
+	],
+	"Have you authorised the application login in the above URL?": [
 		""
 	],
 	"Header %d": [
@@ -977,6 +998,9 @@
 	],
 	"Idle": [
 		"Inactivo"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		""
@@ -1104,6 +1128,9 @@
 	"Keep note history for": [
 		""
 	],
+	"Keep notes in the trash for": [
+		""
+	],
 	"Keyboard Mode": [
 		""
 	],
@@ -1129,6 +1156,9 @@
 		"Último erro: %s"
 	],
 	"Later": [
+		""
+	],
+	"Latitude": [
 		""
 	],
 	"Layout": [
@@ -1171,6 +1201,9 @@
 	"Loaded": [
 		""
 	],
+	"Loading plugin repository...": [
+		""
+	],
 	"Location": [
 		""
 	],
@@ -1180,12 +1213,6 @@
 	"Log": [
 		"Rexistro"
 	],
-	"Login": [
-		""
-	],
-	"Login below.": [
-		""
-	],
 	"Login with OneDrive": [
 		"Acceder con OneDrive"
 	],
@@ -1193,6 +1220,9 @@
 		""
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1495,6 +1525,15 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		""
 	],
+	"Plugin message": [
+		""
+	],
+	"Plugin repository failed to load": [
+		""
+	],
+	"Plugin search": [
+		""
+	],
 	"Plugin tools": [
 		""
 	],
@@ -1607,6 +1646,9 @@
 		""
 	],
 	"Recipients:": [
+		""
+	],
+	"Recommended": [
 		""
 	],
 	"Redo": [
@@ -1825,6 +1867,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Ordena os elementos por <field> (p.e.: title, updated_time, created_time)."
 	],
+	"Source": [
+		"Orixe"
+	],
 	"Source format: %s": [
 		"Formato da orixe: %s"
 	],
@@ -1966,9 +2011,6 @@
 	"Teams": [
 		""
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		""
-	],
 	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
 		""
 	],
@@ -2036,6 +2078,13 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		""
 	],
+	"The note was successfully moved to the trash.": [
+		"",
+		""
+	],
+	"The notebook and its content was successfully moved to the trash.": [
+		""
+	],
 	"The notebook could not be saved: %s": [
 		"Non foi posíbel gardar o caderno: %s"
 	],
@@ -2096,9 +2145,6 @@
 	"There was an error downloading this attachment:": [
 		""
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		""
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Estes elementos permanecerán no dispositivo pero non se enviarán ao destino de sincronización. Co fin de atopar estes elementos pode buscalos polo título ou polo ID (mostrados entre corchetes arriba)."
 	],
@@ -2144,6 +2190,9 @@
 	"This will open a new screen. Save your current changes?": [
 		""
 	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
+	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		""
 	],
@@ -2151,6 +2200,9 @@
 		"Formato de hora"
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
+		""
+	],
+	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
 		""
 	],
 	"To delete a tag, untag the associated notes.": [
@@ -2200,6 +2252,9 @@
 	],
 	"Total: %d/%d": [
 		"Total: %d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		""
@@ -2393,10 +2448,16 @@
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		""
 	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
 	"You do not have any installed plugin.": [
 		""
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
+		""
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
 		""
 	],
 	"Your choice: ": [

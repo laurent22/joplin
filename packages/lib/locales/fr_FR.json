@@ -143,6 +143,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		"À propos"
+	],
 	"About Joplin": [
 		"À propos de Joplin"
 	],
@@ -311,6 +314,9 @@
 	"Authorisation token:": [
 		"Code d'authentification :"
 	],
+	"Authorise": [
+		"Autoriser"
+	],
 	"Auto": [
 		"Auto"
 	],
@@ -322,6 +328,9 @@
 	],
 	"Automatically check for updates": [
 		"Vérifier automatiquement les mises à jour"
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		"Supprimer automatiquement les notes de la corbeille après plusieurs jours"
 	],
 	"Automatically switch theme to match system theme": [
 		"Changer le thème automatiquement pour correspondre au thème système"
@@ -557,6 +566,9 @@
 	"Content provided by %s": [
 		"Contenu fourni par %s"
 	],
+	"Content provided by: %s": [
+		"Contenu fourni par : %s"
+	],
 	"Continue": [
 		"Continuer"
 	],
@@ -583,6 +595,9 @@
 	],
 	"Copy Link Address": [
 		"Copier l'adresse du lien"
+	],
+	"Copy link to website": [
+		"Copier le lien vers le site Web"
 	],
 	"Copy Markdown link": [
 		"Copier lien Markdown"
@@ -771,20 +786,8 @@
 	"Delete note": [
 		"Supprimer la note"
 	],
-	"Delete note \"%s\"?": [
-		"Supprimer note \"%s\" ?"
-	],
-	"Delete note?": [
-		"Supprimer la note ?"
-	],
 	"Delete notebook": [
 		"Supprimer le carnet"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Effacer le carnet \"%s\" ?\n\nToutes les notes et sous‑carnets dans ce carnet seront également effacés."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Effacer le carnet ? Toutes les notes et sous‑carnets dans ce carnet seront également effacés."
 	],
 	"Delete plugin \"%s\"?": [
 		"Supprimer plugin \"%s\" ?"
@@ -798,14 +801,14 @@
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Supprimer le carnet \"Inbox\" ?\n\nSi vous le supprimez, tout email qui lui a été récemment envoyé peut être perdu."
 	],
-	"Delete these %d notes?": [
-		"Supprimer ces %d notes ?"
-	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Supprimer cette invitation ? Le destinataire n'aura plus accès au carnet partagé."
 	],
 	"Delete this profile?": [
 		"Supprimer ce profil ?"
+	],
+	"Deleted": [
+		"Supprimé"
 	],
 	"Deleted local items: %d.": [
 		"Objets suppr. localement : %d."
@@ -948,6 +951,9 @@
 	"Dropbox Login": [
 		"Connection à Dropbox"
 	],
+	"Due": [
+		"Date limite"
+	],
 	"Duplicate": [
 		"Dupliquer"
 	],
@@ -1026,6 +1032,9 @@
 	"emphasised text": [
 		"texte en italique"
 	],
+	"Empty trash": [
+		"Vider corbeille"
+	],
 	"Enable": [
 		"Activer"
 	],
@@ -1079,6 +1088,9 @@
 	],
 	"Enable optical character recognition (OCR)": [
 		"Activer la reconnaissance optique de caractères (OCR)"
+	],
+	"Enable or disable plugins": [
+		"Activer ou désactiver les modules"
 	],
 	"Enable PDF viewer": [
 		"Activer visionneuse PDF"
@@ -1311,6 +1323,9 @@
 	"Found: %d.": [
 		"Trouvés : %d."
 	],
+	"From a plugin": [
+		"Depuis un module"
+	],
 	"FTS enabled: %d": [
 		"FTS activé : %d"
 	],
@@ -1350,6 +1365,9 @@
 	],
 	"Grant authorisation": [
 		"Autoriser"
+	],
+	"Have you authorised the application login in the above URL?": [
+		"Avez-vous autorisé la connexion à l'application depuis l'URL ci-dessus ?"
 	],
 	"Header %d": [
 		"Entête %d"
@@ -1419,6 +1437,9 @@
 	],
 	"Idle": [
 		"Arrêté"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		"Si vous avez déjà autorisé, veuillez attendre que l'application se synchronise avec Joplin Cloud."
 	],
 	"Ignore": [
 		"Ignorer"
@@ -1546,11 +1567,8 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"Joplin Cloud : Email"
-	],
-	"Joplin Cloud password": [
-		"Joplin Cloud : Mot de passe"
+	"Joplin Cloud Login": [
+		"Connexion à Joplin Cloud"
 	],
 	"Joplin Export Directory": [
 		"Dossier d'export Joplin"
@@ -1591,6 +1609,9 @@
 	"Keep note history for": [
 		"Garder l'historique des notes pour"
 	],
+	"Keep notes in the trash for": [
+		"Conservez les notes dans la corbeille pendant"
+	],
 	"Keyboard Mode": [
 		"Mode de clavier"
 	],
@@ -1620,6 +1641,9 @@
 	],
 	"Later": [
 		"Plus tard"
+	],
+	"Latitude": [
+		"Latitude"
 	],
 	"Layout": [
 		"Disposition"
@@ -1670,6 +1694,9 @@
 	"Loaded": [
 		"Chargé"
 	],
+	"Loading plugin repository...": [
+		"Chargement du dépôt de modules..."
+	],
 	"Loading...": [
 		"Chargement…"
 	],
@@ -1682,12 +1709,6 @@
 	"Log": [
 		"Journal"
 	],
-	"Login": [
-		"Se connecter"
-	],
-	"Login below.": [
-		"Connexion ci‑dessous."
-	],
 	"Login with Dropbox": [
 		"Se connecter à Dropbox"
 	],
@@ -1699,6 +1720,9 @@
 	],
 	"Logs, profiles, sync status": [
 		"Logs, profils, info synchronisation"
+	],
+	"Longitude": [
+		"Longitude"
 	],
 	"Make a donation": [
 		"Faire un don"
@@ -1792,6 +1816,9 @@
 	],
 	"Move %d notes to notebook \"%s\"?": [
 		"Déplacer %d notes vers carnet \"%s\" ?"
+	],
+	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
+		"Déplacer le carnet \"%s\" vers la corbeille ?\n\nToutes les notes et sous‑carnets dans ce carnet seront également déplacés vers la corbeille."
 	],
 	"Move to notebook": [
 		"Déplacer vers le carnet"
@@ -2042,9 +2069,6 @@
 	"Options": [
 		"Options"
 	],
-	"Or create an account.": [
-		"Ou créer un compte."
-	],
 	"Ordered list": [
 		"Liste ordonnée"
 	],
@@ -2086,6 +2110,15 @@
 	],
 	"Per user. Minimum of %d users.": [
 		"Par utilisateur. Minimum %d utilisateurs."
+	],
+	"Permanently delete note": [
+		"Supprimer définitivement la note"
+	],
+	"Permanently delete note \"%s\"?": [
+		"Supprimer définitivement la note \"%s\" ?"
+	],
+	"Permanently delete these %d notes?": [
+		"Supprimer définitivement ces %d notes ?"
 	],
 	"Permission needed": [
 		"Permission requise"
@@ -2134,6 +2167,15 @@
 	],
 	"Please wait...": [
 		"Veuillez patienter…"
+	],
+	"Plugin message": [
+		"Message du module"
+	],
+	"Plugin repository failed to load": [
+		"Le dépôt des modules n'a pas pu être chargé"
+	],
+	"Plugin search": [
+		"Recherche de module"
 	],
 	"Plugin tools": [
 		"Outils pour modules"
@@ -2270,6 +2312,9 @@
 	"Recipients:": [
 		"Destinataires :"
 	],
+	"Recommended": [
+		"Recommandé"
+	],
 	"Redo": [
 		"Rétablir"
 	],
@@ -2341,6 +2386,18 @@
 	],
 	"Restore": [
 		"Restaurer"
+	],
+	"Restore note": [
+		"Restaurer note"
+	],
+	"Restore notebook": [
+		"Restaurer carnet"
+	],
+	"Restore the items matching <pattern> from the trash.": [
+		"Restaurer les objets correspondant au motif <pattern> depuis la corbeille."
+	],
+	"Restored items": [
+		"Objets restaurés"
 	],
 	"Restored Notes": [
 		"Notes restaurées"
@@ -2600,6 +2657,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Trier les notes par <field> (par exemple, title, updated_time, created_time)."
 	],
+	"Source": [
+		"Source"
+	],
 	"Source format: %s": [
 		"Format de la source : %s"
 	],
@@ -2798,9 +2858,6 @@
 	"Text editor command": [
 		"Commande de l'éditeur de texte"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"Merci ! Votre compte Joplin Cloud est maintenant configuré et prêt à être utilisé."
-	],
 	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
 		"Le [Web Clipper](%s) est une extension qui vous permet d'enregistrer des pages web et des captures d'écran depuis votre navigateur."
 	],
@@ -2877,6 +2934,13 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"La note \"%s\" a été restaurée dans le carnet \"%s\"."
 	],
+	"The note was successfully moved to the trash.": [
+		"La note a été déplacée avec succès vers la corbeille.",
+		"Les notes ont été déplacées avec succès vers la corbeille."
+	],
+	"The notebook and its content was successfully moved to the trash.": [
+		"Le bloc-notes et son contenu ont été déplacés avec succès vers la corbeille."
+	],
 	"The notebook could not be saved: %s": [
 		"Ce carnet n'a pas pu être sauvegardé : %s"
 	],
@@ -2943,9 +3007,6 @@
 	"There was an error downloading this attachment:": [
 		"Il y a eu une erreur lors du téléchargement de ce fichier :"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"Il y a eu une erreur lors de la configuration votre compte Joplin Cloud. Veuillez vérifier votre courriel et votre mot de passe puis réessayez. Erreur :\n\n%s"
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Ces objets resteront sur l'appareil mais ne seront pas envoyé sur la cible de la synchronisation. Pour trouver ces objets, faite une recherche sur le titre ou l'identifiant de l'objet (affiché ci‑dessus entre parenthèses)."
 	],
@@ -3006,6 +3067,9 @@
 	"This will open a new screen. Save your current changes?": [
 		"Sauvegarder vos changements avant de continuer ?"
 	],
+	"This will permanently delete all items in the trash. Continue?": [
+		"Cela supprimera définitivement tous les éléments de la corbeille. Continuer?"
+	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Cela enlèvera le carnet de votre collection et vous n'aurez plus accès à son contenu. Souhaitez vous continuer ?"
 	],
@@ -3020,6 +3084,9 @@
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"Pour permettre à Joplin de synchroniser avec Dropbox, veuillez suivre les étapes ci‑dessous :"
+	],
+	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
+		"Pour permettre à Joplin de se synchroniser avec Joplin Cloud, veuillez vous connecter en utilisant cette URL :"
 	],
 	"To continue, please enter your master password below.": [
 		"Pour continuer, entrez le mot de passe maître ci-dessous."
@@ -3056,6 +3123,9 @@
 	],
 	"to-do": [
 		"tâche"
+	],
+	"To-do": [
+		"Tâche"
 	],
 	"to-do: %s": [
 		"tâche : %s"
@@ -3104,6 +3174,9 @@
 	],
 	"Total: %d/%d": [
 		"Total : %d/%d"
+	],
+	"Trash": [
+		"Corbeille"
 	],
 	"Try again": [
 		"Réessayer"
@@ -3276,6 +3349,9 @@
 	"Voice typing...": [
 		"Saisie vocale..."
 	],
+	"Waiting for authorisation...": [
+		"En attente d'autorisation..."
+	],
 	"Warning": [
 		"Avertissement"
 	],
@@ -3338,6 +3414,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"Vous allez joindre une image de grande taille (%dx%d pixels). Souhaitez‑vous en réduire la taille à %d pixels avant de la joindre ?"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		"Vous êtes connecté à Joplin Cloud, vous pouvez quitter cet écran maintenant."
 	],
 	"You currently have no notebooks.": [
 		"Vous n'avez pour l'instant pas de carnets."

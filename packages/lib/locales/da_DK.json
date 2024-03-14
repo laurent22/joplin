@@ -143,6 +143,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Om Joplin"
 	],
@@ -322,6 +325,9 @@
 	],
 	"Automatically check for updates": [
 		"Tjek automatisk efter opdateringer"
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
 	],
 	"Automatically switch theme to match system theme": [
 		"Skifter automatisk tema så det matcher systemets tema"
@@ -771,20 +777,8 @@
 	"Delete note": [
 		"Slet note"
 	],
-	"Delete note \"%s\"?": [
-		"Slet noten \"%s\"?"
-	],
-	"Delete note?": [
-		"Slet note?"
-	],
 	"Delete notebook": [
 		"Slet notesbog"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Slet notesbogen \"%s\"?\n\nAlle noter og undernotesbøger i denne notesbog bliver også slettet."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Slet notesbog? Alle noter og undernotesbøger i denne notesbog bliver også slettet."
 	],
 	"Delete plugin \"%s\"?": [
 		"Slet udvidelse \"%s\"?"
@@ -797,9 +791,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Slet indbakke notesbogen?\n\nHvis du sletter indbakke-notesbogen, kan e-mails, der for nylig er blevet sendt til den, gå tabt."
-	],
-	"Delete these %d notes?": [
-		"Slet disse %d noter?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Vil du slette denne invitation? Modtageren vil ikke længere have adgang til denne delte notesbog."
@@ -948,6 +939,9 @@
 	"Dropbox Login": [
 		"Dropbox login"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Dupliker"
 	],
@@ -1025,6 +1019,9 @@
 	],
 	"emphasised text": [
 		"fremhævet tekst"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"Aktivér"
@@ -1351,6 +1348,9 @@
 	"Grant authorisation": [
 		"Giv tilladelse"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"Overskrift %d"
 	],
@@ -1419,6 +1419,9 @@
 	],
 	"Idle": [
 		"Ledig"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		"Ignorér"
@@ -1546,12 +1549,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"Joplin Cloud e-mail"
-	],
-	"Joplin Cloud password": [
-		"Joplin Cloud-adgangskode"
-	],
 	"Joplin Export Directory": [
 		"Joplin eksport mappe"
 	],
@@ -1621,6 +1618,9 @@
 	"Later": [
 		"Senere"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Layout"
 	],
@@ -1682,12 +1682,6 @@
 	"Log": [
 		"Log"
 	],
-	"Login": [
-		"Login"
-	],
-	"Login below.": [
-		"Log ind nedenfor."
-	],
 	"Login with Dropbox": [
 		"Log på med Dropbox"
 	],
@@ -1699,6 +1693,9 @@
 	],
 	"Logs, profiles, sync status": [
 		"Logfiler, profiler, synkroniseringsstatus"
+	],
+	"Longitude": [
+		""
 	],
 	"Make a donation": [
 		"Giv en donation"
@@ -2042,9 +2039,6 @@
 	"Options": [
 		"Indstillinger"
 	],
-	"Or create an account.": [
-		"Eller opret en konto."
-	],
 	"Ordered list": [
 		"Sorteret liste"
 	],
@@ -2134,6 +2128,9 @@
 	],
 	"Please wait...": [
 		"Vent venligst..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"Udvidelsesværtøjer"
@@ -2600,6 +2597,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Sorterer emner ud fra <field> (fx titel, opdateret_tid, oprettelses_tid)."
 	],
+	"Source": [
+		"Kilde"
+	],
 	"Source format: %s": [
 		"Kildeformat: %s"
 	],
@@ -2798,9 +2798,6 @@
 	"Text editor command": [
 		"Tekstredigeringskomando"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"Mange tak! Din Joplin Cloud-konto er nu indstillet og klar til brug."
-	],
 	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
 		"[Web Clipper](%s) er en browser-udvidelser, som gør at du kan gemme hjemmesider og screenshots fra din browser."
 	],
@@ -2943,9 +2940,6 @@
 	"There was an error downloading this attachment:": [
 		"Der opstod en fejl ved download af denne vedhæftning:"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"Der opstod en fejl ved opsætning af din Joplin Cloud-konto. Tjek venligst din e-mail og adgangskode og prøv igen. Fejl var:\n\n%s"
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Disse emner bliver på enheden, og bliver ikke overført til synk-modtager. For at finde disse emner; enten søg efter titel eller ID (som er vist i klammer herover)"
 	],
@@ -3005,6 +2999,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"Dette åbner i et nyt vindue. Vil du gemme dine ændringer?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Dette vil fjerne notesbogen fra din samling, og du vil ikke længere have adgang til dens indhold. Ønsker du at fortsætte?"
@@ -3104,6 +3101,9 @@
 	],
 	"Total: %d/%d": [
 		"I alt: %d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		"Prøv igen"
@@ -3338,6 +3338,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"Du er ved at vedhæfte et stort billede (%dx%d pixels). Ønsker du at nedskalere det til %d pixels før vedhæftning?"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"Du har ingen notesbøger."

@@ -7,7 +7,7 @@ import Folder from '@joplin/lib/models/Folder';
 import Synchronizer from '@joplin/lib/Synchronizer';
 import NavService from '@joplin/lib/services/NavService';
 import { _ } from '@joplin/lib/locale';
-const { themeStyle } = require('./global-style.js');
+import { themeStyle } from './global-style';
 import { renderFolders } from '@joplin/lib/components/shared/side-menu-shared';
 import { FolderEntity, FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';

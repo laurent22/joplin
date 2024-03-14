@@ -137,6 +137,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Joplinについて"
 	],
@@ -316,6 +319,9 @@
 	],
 	"Automatically check for updates": [
 		"アップデートを自動的に確認する"
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
 	],
 	"Automatically switch theme to match system theme": [
 		"システムのテーマにあわせて自動設定"
@@ -758,20 +764,8 @@
 	"Delete note": [
 		"ノートを削除"
 	],
-	"Delete note \"%s\"?": [
-		"ノート \"%s\" を削除しますか？"
-	],
-	"Delete note?": [
-		"ノートを削除しますか？"
-	],
 	"Delete notebook": [
 		"ノートブックを削除"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"ノートブック \"%s\" を削除しますか？\n\nこのノートブックにあるノートとサブノートはすべて消えてしまいます。"
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"ノートブックを削除しますか？　このノートブックにあるノートとサブノートはすべて消えてしまいます。"
 	],
 	"Delete plugin \"%s\"?": [
 		"プラグイン \"%s\" を削除しますか？"
@@ -784,9 +778,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Inboxノートブックを削除しますか?\n\nInboxノートブックを削除すると、最近メール送信によって作成したノートが失われる可能性があります。"
-	],
-	"Delete these %d notes?": [
-		"これら %d のノートを削除しますか？"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"この招待を削除しますか? 削除後は招待の受信者がこの共有ノートブックにアクセスできなくなります。"
@@ -932,6 +923,9 @@
 	"Dropbox Login": [
 		"Dropboxログイン"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"複製"
 	],
@@ -1006,6 +1000,9 @@
 	],
 	"emphasised text": [
 		"強調したいテキスト"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"有効"
@@ -1319,6 +1316,9 @@
 	"Grant authorisation": [
 		"許可する"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"見出し %d"
 	],
@@ -1384,6 +1384,9 @@
 	],
 	"Idle": [
 		"待機中"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		"無視"
@@ -1511,12 +1514,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"Joplin Cloudメールアドレス"
-	],
-	"Joplin Cloud password": [
-		"Joplin Cloudパスワード"
-	],
 	"Joplin Export Directory": [
 		"Joplin エクスポートディレクトリ"
 	],
@@ -1586,6 +1583,9 @@
 	"Later": [
 		"あとで"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"レイアウト"
 	],
@@ -1646,12 +1646,6 @@
 	"Log": [
 		"ログ"
 	],
-	"Login": [
-		"ログイン"
-	],
-	"Login below.": [
-		"以下からログイン。"
-	],
 	"Login with Dropbox": [
 		"Dropboxでログイン"
 	],
@@ -1663,6 +1657,9 @@
 	],
 	"Logs, profiles, sync status": [
 		"ログ、プロファイル、同期の状態"
+	],
+	"Longitude": [
+		""
 	],
 	"Make a donation": [
 		"寄付する"
@@ -2003,9 +2000,6 @@
 	"Options": [
 		"オプション"
 	],
-	"Or create an account.": [
-		"またはアカウントを作成。"
-	],
 	"Ordered list": [
 		"番号付きリスト"
 	],
@@ -2095,6 +2089,9 @@
 	],
 	"Please wait...": [
 		"お待ちください..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"プラグインツール"
@@ -2540,6 +2537,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"アイテムを<field>で並び替え (例： title, updated_time, created_time)."
 	],
+	"Source": [
+		"ソース"
+	],
 	"Source format: %s": [
 		"ソースフォーマット: %s"
 	],
@@ -2735,9 +2735,6 @@
 	"Text editor command": [
 		"テキストエディターのコマンド"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"ありがとうございます! Joplin Cloudアカウントのセットアップが完了し、利用できる状態になりました。"
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"使用中のプロファイルは削除できません。他のプロファイルに切り替えてから削除してください。"
 	],
@@ -2870,9 +2867,6 @@
 	"There was an error downloading this attachment:": [
 		"この添付ファイルをダウンロードするときにエラーが発生しました:"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"Joplin Cloudアカウントのセットアップ中にエラーが発生しました。メールアドレスとパスワードを確認してもう一度お試しください。エラーの内容は次のとおりです:\n\n%s"
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"これらのアイテムはデバイスに残りましたが、同期先にアップロードされません。そのようなアイテムを探すには、題名またはID(上記の括弧内に表示されている)で検索してください。"
 	],
@@ -2926,6 +2920,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"新しい画面を開きます。変更を保存しますか?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"ノートブックをあなたのコレクションから削除しようとしています。今後そのコンテンツにアクセスできなくなりますが、続行しますか?"
@@ -3025,6 +3022,9 @@
 	],
 	"Total: %d/%d": [
 		"総数: %d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		"再試行"
@@ -3256,6 +3256,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"大きな画像を添付しようとしています (%dx%d ピクセル)。長辺を %d ピクセルに縮小してから添付しますか？"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"ノートブックがありません。"

@@ -406,4 +406,18 @@ describe('models/Setting', () => {
 		expect(Setting.value('myCustom')).toBe('');
 	});
 
+	test('should not fail Sqlite UNIQUE constraint when re-registering saved settings', async () => {
+		// Re-registering a saved database setting previously caused issues with saving.
+		for (let i = 0; i < 2; i++) {
+			await Setting.registerSetting('myCustom', {
+				public: true,
+				value: `${i}`,
+				type: Setting.TYPE_STRING,
+				storage: SettingStorage.Database,
+			});
+			Setting.setValue('myCustom', 'test');
+			await Setting.saveAll();
+		}
+	});
+
 });

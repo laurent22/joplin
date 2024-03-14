@@ -14,9 +14,9 @@ const baseStyle = {
 	lineHeight: '1.6em',
 };
 
-const themeCache_ = {};
+const themeCache_: any = {};
 
-function addExtraStyles(style) {
+function addExtraStyles(style: any) {
 	style.marginRight = style.margin;
 	style.marginLeft = style.margin;
 	style.marginTop = style.margin;
@@ -75,9 +75,9 @@ function addExtraStyles(style) {
 	return style;
 }
 
-function editorFont(fontId) {
+function editorFont(fontId: any) {
 	// IMPORTANT: The font mapping must match the one in Setting.js
-	const fonts = {
+	const fonts: any = {
 		[Setting.FONT_DEFAULT]: null,
 		[Setting.FONT_MENLO]: 'Menlo',
 		[Setting.FONT_COURIER_NEW]: 'Courier New',
@@ -91,7 +91,7 @@ function editorFont(fontId) {
 	return fonts[fontId];
 }
 
-function themeStyle(theme) {
+function themeStyle(theme: number) {
 	if (!theme) {
 		console.warn('Theme not set! Defaulting to Light theme.');
 		theme = Setting.THEME_LIGHT;
@@ -105,4 +105,4 @@ function themeStyle(theme) {
 	return themeCache_[cacheKey];
 }
 
-module.exports = { themeStyle, editorFont };
+export { themeStyle, editorFont };
