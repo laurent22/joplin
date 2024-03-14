@@ -73,8 +73,8 @@ const ActionButton = (props: ActionButtonProps) => {
 	// See https://github.com/callstack/react-native-paper/issues/4064
 	const windowSize = useWindowDimensions();
 	const adjustMargins = !open && shim.mobilePlatform() === 'android';
-	const marginTop = adjustMargins ? Math.max(0, windowSize.height - 120) : 0;
-	const marginStart = adjustMargins ? Math.max(0, windowSize.width - 200) : 0;
+	const marginTop = adjustMargins ? Math.max(0, windowSize.height - 140) : undefined;
+	const marginStart = adjustMargins ? Math.max(0, windowSize.width - 200) : undefined;
 
 	return (
 		<Portal>
