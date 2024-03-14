@@ -2,6 +2,9 @@ import { CallbackIds, SerializableData, SerializableDataAndCallbacks } from '../
 
 type CallMethodWithIdCallback = (id: string, args: SerializableDataAndCallbacks[])=> Promise<SerializableDataAndCallbacks>;
 
+// Intended to be used to track callbacks for garbage collection
+type OnAfterCallbackCreated = (callbackId: string, callbackRef: ()=> any)=> void;
+
 // Below, we use TypeScript syntax to specify the return type of mergeCallbacksAndSerializable
 // based on the type of its arguments.
 //
@@ -10,25 +13,37 @@ type CallMethodWithIdCallback = (id: string, args: SerializableDataAndCallbacks[
 //
 // eslint-disable-next-line no-redeclare
 function mergeCallbacksAndSerializable(
-	serializable: SerializableData[], callbacks: CallbackIds[], callMethodWithId: CallMethodWithIdCallback,
+	serializable: SerializableData[],
+	callbacks: CallbackIds[],
+	callMethodWithId: CallMethodWithIdCallback,
+	afterCallbackCreated: OnAfterCallbackCreated,
 ): SerializableDataAndCallbacks[];
 
 // eslint-disable-next-line no-redeclare
 function mergeCallbacksAndSerializable(
-	serializable: SerializableData, callbacks: CallbackIds, callMethodWithId: CallMethodWithIdCallback,
+	serializable: SerializableData,
+	callbacks: CallbackIds,
+	callMethodWithId: CallMethodWithIdCallback,
+	afterCallbackCreated: OnAfterCallbackCreated,
 ): SerializableDataAndCallbacks;
 
 // eslint-disable-next-line no-redeclare
 function mergeCallbacksAndSerializable(
-	serializable: SerializableData|SerializableData[], callbacks: CallbackIds|CallbackIds[], callMethodWithId: CallMethodWithIdCallback,
+	serializable: SerializableData|SerializableData[],
+	callbacks: CallbackIds|CallbackIds[],
+	callMethodWithId: CallMethodWithIdCallback,
+	afterCallbackCreated: OnAfterCallbackCreated,
 ): SerializableDataAndCallbacks|SerializableDataAndCallbacks[] {
 	const mergeCallbackAndSerializable = (serializableObj: SerializableData, callbackObj: CallbackIds): SerializableDataAndCallbacks => {
 		if (typeof callbackObj === 'string') {
 			const callbackId = callbackObj;
 
-			return (...args: SerializableDataAndCallbacks[]) => {
+			const callback = (...args: SerializableDataAndCallbacks[]) => {
 				return callMethodWithId(callbackId, args);
 			};
+			afterCallbackCreated(callbackId, callback);
+
+			return callback;
 		} else if (typeof serializableObj === 'object' && serializableObj !== null) { // typeof(null) is object
 			if (typeof callbackObj !== 'object') {
 				throw new Error('Callback arguments should be an object (and thus match the type of serializableArgs)');
