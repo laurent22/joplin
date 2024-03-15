@@ -266,6 +266,9 @@ rules.fencedCodeBlock = {
 
     var fence = repeat(fenceChar, fenceSize)
 
+    // delete code number lines
+    code = code.replace(/(^-\s+\d+\s*$\r?\n)+/gm, '');
+
     return (
       '\n\n' + fence + language + '\n' +
       code.replace(/\n$/, '') +
@@ -465,9 +468,29 @@ rules.code = {
     return node.nodeName === 'CODE' && !isCodeBlock
   },
 
-  replacement: function (content) {
-    if (!content) return ''
-    content = content.replace(/\r?\n|\r/g, ' ')
+  replacement: function (content, node, options) {
+    if (!content) {
+      return ''
+    }
+
+    content = content.replace(/\r?\n|\r/g, '\n')
+    // if code is multiline and in isCodeBlock, just return it, isCodeBlock well add fence(default is ```)
+    // if code is multiline but not in isCodeBlock, add fence(default is ```)
+    if (content.indexOf('\n') != -1){
+      if (node.parentNode && isCodeBlock(node.parentNode)) {
+        return content
+      }else {
+        var className = node.className || ''
+        var language = (className.match(/language-(\S+)/) || [null, ''])[1]
+        return (
+          '\n\n' + options.fence + language + '\n' +
+          code.replace(/\n$/, '') +
+          '\n' + options.fence + '\n\n'
+        )
+      }
+    }
+
+    content = content.replace(/\r?\n|\r/g, '')
 
     var extraSpace = /^`|^ .*?[^ ].* $|`$/.test(content) ? ' ' : ''
     var delimiter = '`'
