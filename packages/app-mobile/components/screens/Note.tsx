@@ -62,6 +62,7 @@ import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import pickDocument from '../../utils/pickDocument';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import PluginPanelViewer from '../../plugins/PluginRunner/dialogs/PluginPanelViewer';
+import debounce from '../../utils/debounce';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -329,10 +330,14 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		return this.props.useEditorBeta;
 	}
 
-	private onBodyChange(event: EditorChangeEvent) {
+	// Avoid saving immediately -- the NoteEditor's content isn't controlled by its props
+	// and updating this.state.note immediately causes slow rerenders.
+	//
+	// See https://github.com/laurent22/joplin/issues/10130
+	private onBodyChange = debounce((event: EditorChangeEvent) => {
 		shared.noteComponent_change(this, 'body', event.value);
 		this.scheduleSave();
-	}
+	}, 100);
 
 	private onUndoRedoDepthChange(event: UndoRedoDepthChangeEvent) {
 		if (this.useEditorBeta()) {
@@ -594,7 +599,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		this.scheduleSave();
 	}
 
-	private body_changeText(text: string) {
+	private legacyEditorBody_changeText(text: string) {
 		if (!this.undoRedoService_.canUndo) {
 			this.undoRedoService_.push(this.undoState());
 		} else {
@@ -1501,7 +1506,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 						ref="noteBodyTextField"
 						multiline={true}
 						value={note.body}
-						onChangeText={(text: string) => this.body_changeText(text)}
+						onChangeText={(text: string) => this.legacyEditorBody_changeText(text)}
 						onSelectionChange={this.onPlainEditorSelectionChange}
 						blurOnSubmit={false}
 						selectionColor={theme.textSelectionColor}
