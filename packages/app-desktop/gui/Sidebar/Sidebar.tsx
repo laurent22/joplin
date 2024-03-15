@@ -468,13 +468,13 @@ const SidebarComponent = (props: Props) => {
 		Setting.setValue(key === 'tagHeader' ? 'tagHeaderIsExpanded' : 'folderHeaderIsExpanded', !isExpanded);
 	}, [props.folderHeaderIsExpanded, props.tagHeaderIsExpanded]);
 
-	const onAllNotesClick_ = () => {
+	const onAllNotesClick_ = useCallback(() => {
 		props.dispatch({
 			type: 'SMART_FILTER_SELECT',
 			id: ALL_NOTES_FILTER_ID,
 		});
 		folderItem_click(ALL_NOTES_FILTER_ID);
-	};
+	}, [props.dispatch, folderItem_click]);
 
 	const anchorItemRef = (type: string, id: string) => {
 		if (!anchorItemRefs.current[type]) anchorItemRefs.current[type] = {};
