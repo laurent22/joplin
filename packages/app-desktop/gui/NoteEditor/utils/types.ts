@@ -57,7 +57,7 @@ export interface NoteBodyEditorRef {
 	resetScroll(): void;
 	scrollTo(options: ScrollOptions): void;
 
-	supportsCommand(name: string): boolean;
+	supportsCommand(name: string): boolean|Promise<boolean>;
 	execCommand(command: CommandValue): Promise<void>;
 }
 
@@ -118,6 +118,7 @@ export interface NoteBodyEditorProps {
 	noteToolbarButtonInfos: ToolbarButtonInfo[];
 	plugins: PluginStates;
 	fontSize: number;
+	fontFamily: string;
 	contentMaxWidth: number;
 	isSafeMode: boolean;
 	noteId: string;

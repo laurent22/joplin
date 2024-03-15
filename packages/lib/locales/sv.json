@@ -140,6 +140,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Om Joplin"
 	],
@@ -319,6 +322,9 @@
 	],
 	"Automatically check for updates": [
 		"Sök automatiskt efter uppdateringar"
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
 	],
 	"Automatically switch theme to match system theme": [
 		"Växla automatiskt tema för att matcha systemtema"
@@ -768,20 +774,8 @@
 	"Delete note": [
 		"Ta bort anteckning"
 	],
-	"Delete note \"%s\"?": [
-		"Ta bort anteckningen \"%s\"?"
-	],
-	"Delete note?": [
-		"Ta bort anteckning?"
-	],
 	"Delete notebook": [
 		"Ta bort anteckningsbok"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Ta bort anteckningsboken\"%s\"?\n\nAlla anteckningar och delanteckningsböcker i den här anteckningsboken tas också bort."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Ta bort anteckningsboken? Alla anteckningar och delanteckningsböcker i den här anteckningsboken tas bort också."
 	],
 	"Delete plugin \"%s\"?": [
 		"Ta bort insticksmodulen \"%s\"?"
@@ -794,9 +788,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Ta bort Inbox-anteckningsboken?\n\nOm du tar bort inkorgens anteckningsbok kan alla e-postmeddelanden som nyligen har skickats till den gå förlorade."
-	],
-	"Delete these %d notes?": [
-		"Ta bort dessa %d anteckningar?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Ta bort denna inbjudan? Mottagaren har inte längre tillgång till den delade anteckningsboken."
@@ -945,6 +936,9 @@
 	"Dropbox Login": [
 		"Dropbox-inloggning"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Duplicera"
 	],
@@ -1022,6 +1016,9 @@
 	],
 	"emphasised text": [
 		"betonad text"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"Aktivera"
@@ -1348,6 +1345,9 @@
 	"Grant authorisation": [
 		"Bevilja auktorisation"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"Rubrik %d"
 	],
@@ -1416,6 +1416,9 @@
 	],
 	"Idle": [
 		"Inaktiv"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		"Ignorera"
@@ -1543,12 +1546,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"Joplin Cloud-e-post"
-	],
-	"Joplin Cloud password": [
-		"Ange Cloud-lösenord"
-	],
 	"Joplin Export Directory": [
 		"Joplin-exporteringskatalog"
 	],
@@ -1618,6 +1615,9 @@
 	"Later": [
 		"Senare"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Layout"
 	],
@@ -1679,12 +1679,6 @@
 	"Log": [
 		"Logg"
 	],
-	"Login": [
-		"Logga in"
-	],
-	"Login below.": [
-		"Logga in nedan."
-	],
 	"Login with Dropbox": [
 		"Logga in med Dropbox"
 	],
@@ -1696,6 +1690,9 @@
 	],
 	"Logs, profiles, sync status": [
 		"Loggar, profiler, synkroniseringsstatus"
+	],
+	"Longitude": [
+		""
 	],
 	"Make a donation": [
 		"Gör en donation"
@@ -2039,9 +2036,6 @@
 	"Options": [
 		"Inställningar"
 	],
-	"Or create an account.": [
-		"Eller skapa ett konto."
-	],
 	"Ordered list": [
 		"Ordnad lista"
 	],
@@ -2131,6 +2125,9 @@
 	],
 	"Please wait...": [
 		"Vänta..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"Insticksmodulsverktyg"
@@ -2795,9 +2792,6 @@
 	"Text editor command": [
 		"Textredigeringskommando"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"Tack! Ditt Joplin Cloud-konto är nu konfigurerat och klart att använda."
-	],
 	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
 		"[Web Clipper](%s) är ett webbläsartillägg som låter dig spara webbsidor och skärmdumpar från din webbläsare."
 	],
@@ -2940,9 +2934,6 @@
 	"There was an error downloading this attachment:": [
 		"Ett fel uppstod vid hämtningen av denna bilaga:"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"Det uppstod ett fel när du konfigurerade ditt Joplin Cloud-konto. Verifiera din e-postadress och ditt lösenord och försök igen. Fel var:\n\n%s"
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Dessa objekt kommer att vara kvar på enheten men kommer inte att skickas till synkroniseringsmålet. För att hitta dessa objekt, sök antingen efter titel eller ID (som visas i parentes ovan)."
 	],
@@ -3002,6 +2993,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"Det här kommer öppna ett nytt fönster. Vill du spara nurvarande förändringar?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Detta tar bort anteckningsboken från din samling och du kommer inte längre ha tillgång till innehållet. Vill du fortsätta?"
@@ -3101,6 +3095,9 @@
 	],
 	"Total: %d/%d": [
 		"Totalt: %d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		"Försök igen"
@@ -3335,6 +3332,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"Du håller på att bifoga en stor bild (%dx%d pixlar). Vill du ändra storleken till %d pixlar innan du bifogar den?"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"Du har för närvarande inga anteckningsböcker."

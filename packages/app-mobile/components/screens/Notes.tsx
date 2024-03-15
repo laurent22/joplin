@@ -7,7 +7,7 @@ import Folder from '@joplin/lib/models/Folder';
 import Tag from '@joplin/lib/models/Tag';
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
-const { themeStyle } = require('../global-style.js');
+import { themeStyle } from '../global-style';
 import { ScreenHeader } from '../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
 import ActionButton from '../ActionButton';
@@ -238,7 +238,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		const thisComp = this;
 
 		const makeActionButtonComp = () => {
-			if (this.props.notesParentType === 'Folder' && itemIsInTrash(parent)) return null;
+			if ((this.props.notesParentType === 'Folder' && itemIsInTrash(parent)) || !Folder.atLeastOneRealFolderExists(this.props.folders)) return null;
 
 			const getTargetFolderId = async () => {
 				if (!buttonFolderId && isAllNotes) {

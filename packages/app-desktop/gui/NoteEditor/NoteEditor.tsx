@@ -464,6 +464,7 @@ function NoteEditor(props: NoteEditorProps) {
 		noteToolbarButtonInfos: props.toolbarButtonInfos,
 		plugins: props.plugins,
 		fontSize: Setting.value('style.editor.fontSize'),
+		fontFamily: Setting.value('style.editor.fontFamily'),
 		contentMaxWidth: props.contentMaxWidth,
 		isSafeMode: props.isSafeMode,
 		useCustomPdfViewer: props.useCustomPdfViewer,

@@ -227,6 +227,8 @@ export type SettingMetadataSection = {
 	name: string;
 	isScreen?: boolean;
 	metadatas: SettingItem[];
+
+	source?: SettingSectionSource;
 };
 export type MetadataBySection = SettingMetadataSection[];
 
@@ -705,26 +707,22 @@ class Setting extends BaseModel {
 				public: false,
 				storage: SettingStorage.Database,
 			},
+			'sync.10.website': {
+				value: 'https://joplincloud.com',
+				type: SettingItemType.String,
+				public: false,
+				storage: SettingStorage.Database,
+			},
 			'sync.10.username': {
 				value: '',
 				type: SettingItemType.String,
-				section: 'sync',
-				show: (settings: any) => {
-					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud');
-				},
-				public: true,
-				label: () => _('Joplin Cloud email'),
+				public: false,
 				storage: SettingStorage.File,
 			},
 			'sync.10.password': {
 				value: '',
 				type: SettingItemType.String,
-				section: 'sync',
-				show: (settings: any) => {
-					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud');
-				},
-				public: true,
-				label: () => _('Joplin Cloud password'),
+				public: false,
 				secure: true,
 			},
 
@@ -1171,7 +1169,12 @@ class Setting extends BaseModel {
 				type: SettingItemType.Object,
 				section: 'plugins',
 				public: true,
-				appTypes: [AppType.Desktop],
+				show: (_settings) => {
+					// Hide on iOS due to App Store guidelines. See
+					// https://github.com/laurent22/joplin/pull/10086 for details.
+					return shim.isNode() || shim.mobilePlatform() !== 'ios';
+				},
+				appTypes: [AppType.Desktop, AppType.Mobile],
 				needRestart: true,
 				autoSave: true,
 			},
@@ -1327,6 +1330,15 @@ class Setting extends BaseModel {
 			'style.editor.contentMaxWidth': { value: 0, type: SettingItemType.Int, public: true, storage: SettingStorage.File, isGlobal: true, appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor maximum width'), description: () => _('Set it to 0 to make it take the complete available space. Recommended width is 600.') },
 
 			'ui.layout': { value: {}, type: SettingItemType.Object, storage: SettingStorage.File, isGlobal: true, public: false, appTypes: [AppType.Desktop] },
+
+			'ui.lastSelectedPluginPanel': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+				description: () => 'The last selected plugin panel ID in pop-up mode (mobile).',
+				storage: SettingStorage.Database,
+				appTypes: [AppType.Mobile],
+			},
 
 			// TODO: Is there a better way to do this? The goal here is to simply have
 			// a way to display a link to the customizable stylesheets, not for it to
@@ -1937,6 +1949,11 @@ class Setting extends BaseModel {
 			// Reload the value from the database, if it was already present
 			const valueRow = await this.loadOne(key);
 			if (valueRow) {
+				// Remove any duplicate copies of the setting -- if multiple items in cache_
+				// have the same key, we may encounter unique key errors while saving to the
+				// database.
+				this.cache_ = this.cache_.filter(setting => setting.key !== key);
+
 				this.cache_.push({
 					key: key,
 					value: this.formatValue(key, valueRow.value),
@@ -2275,7 +2292,7 @@ class Setting extends BaseModel {
 		}
 
 		for (const k in enumOptions) {
-			if (!enumOptions.hasOwnProperty(k)) continue;
+			if (!Object.prototype.hasOwnProperty.call(enumOptions, k)) continue;
 			if (order.includes(k)) continue;
 
 			output.push({
@@ -2706,10 +2723,29 @@ class Setting extends BaseModel {
 			'revisionService': _('Toggle note history, keep notes for'),
 			'tools': _('Logs, profiles, sync status'),
 			'export': _('Export your data'),
+			'plugins': _('Enable or disable plugins'),
 			'moreInfo': _('Donate, website'),
 		};
 
-		return sectionNameToSummary[metadata.name] ?? '';
+		// In some cases (e.g. plugin settings pages) there is no preset summary.
+		// In those cases, we generate the summary:
+		const generateSummary = () => {
+			const summary = [];
+			for (const item of metadata.metadatas) {
+				if (!item.public || item.advanced) {
+					continue;
+				}
+
+				if (item.label) {
+					const label = item.label?.();
+					summary.push(label);
+				}
+			}
+
+			return summary.join(', ');
+		};
+
+		return sectionNameToSummary[metadata.name] ?? generateSummary();
 	}
 
 	public static sectionNameToIcon(name: string, appType: AppType) {

@@ -20,7 +20,7 @@ const permanentlyDeleteOldItems = async (ttl: number = null) => {
 	const result = await Folder.trashItemsOlderThan(ttl);
 	logger.info('Items to permanently delete:', result);
 
-	await Note.batchDelete(result.noteIds);
+	await Note.batchDelete(result.noteIds, { sourceDescription: 'permanentlyDeleteOldItems' });
 
 	// We only auto-delete folders if they are empty.
 	for (const folderId of result.folderIds) {

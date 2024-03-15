@@ -4,6 +4,7 @@ import OcrDriverBase from '../OcrDriverBase';
 import { Minute } from '@joplin/utils/time';
 import shim from '../../../shim';
 import Logger from '@joplin/utils/Logger';
+import Setting from '../../../models/Setting';
 
 const logger = Logger.create('OcrDriverTesseract');
 
@@ -58,6 +59,10 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 
 		if (this.workerPath_) createWorkerOptions.workerPath = this.workerPath_;
 		if (this.corePath_) createWorkerOptions.corePath = this.corePath_;
+
+		// Getting the language files seems to be broken but maybe only on dev, and this is fixed by
+		// disabling the cache: https://github.com/naptha/tesseract.js/issues/901
+		if (Setting.value('env') === 'dev') createWorkerOptions.cacheMethod = 'none';
 
 		const worker = await this.tesseract_.createWorker(language, OEM.LSTM_ONLY, createWorkerOptions);
 

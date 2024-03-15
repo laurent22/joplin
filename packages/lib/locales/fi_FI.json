@@ -137,6 +137,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Joplinista"
 	],
@@ -310,6 +313,9 @@
 	],
 	"Automatically check for updates": [
 		"Tarkista päivitykset automaattisesti"
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
 	],
 	"Automatically switch theme to match system theme": [
 		"Vaihda teema automaattisesti vastaamaan järjestelmän teemaa"
@@ -732,18 +738,6 @@
 	"Delete local data and re-download from sync target": [
 		"Poista paikalliset tiedot ja lataa uudelleen synkronointikohteesta"
 	],
-	"Delete note \"%s\"?": [
-		"Poista muistiinpano \"%s\"?"
-	],
-	"Delete note?": [
-		"Poistetaanko merkintä?"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Poista muistikirja \"%s\"?\n\nMyös kaikki tämän muistikirjan muistiinpanot ja alimuistikirjat poistetaan."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Poistetaanko muistikirja? Kaikki tämän muistikirjan muistiinpanot ja alimuistikirjat poistetaan myös."
-	],
 	"Delete plugin \"%s\"?": [
 		"Poista laajennus \"%s\"?"
 	],
@@ -755,9 +749,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
-	],
-	"Delete these %d notes?": [
-		"Poistetaanko nämä %d muistiinpanot?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Poistetaanko tämä kutsu? Vastaanottaja ei voi enää käyttää tätä jaettua muistikirjaa."
@@ -897,6 +888,9 @@
 	"Dropbox Login": [
 		"Dropbox kirjautuminen"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Duplikaatti, toinen samanlainen"
 	],
@@ -968,6 +962,9 @@
 	],
 	"emphasised text": [
 		"korostettu teksti"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"Ota käyttöön"
@@ -1270,6 +1267,9 @@
 	"Grant authorisation": [
 		"Myönnä lupa"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"Otsikko %d"
 	],
@@ -1332,6 +1332,9 @@
 	],
 	"Idle": [
 		"Käyttämättömänä"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		"Ohita"
@@ -1459,12 +1462,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"Joplin Cloud sähköposti"
-	],
-	"Joplin Cloud password": [
-		"Joplin Cloud salasana"
-	],
 	"Joplin Export Directory": [
 		"Joplin vie hakemisto"
 	],
@@ -1531,6 +1528,9 @@
 	"Later": [
 		"Myöhemmin"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Ulkoasu"
 	],
@@ -1589,12 +1589,6 @@
 	"Log": [
 		"Loki"
 	],
-	"Login": [
-		"Kirjaudu"
-	],
-	"Login below.": [
-		"Kirjaudu sisään alla."
-	],
 	"Login with Dropbox": [
 		"Kirjaudu sisään Dropbox"
 	],
@@ -1605,6 +1599,9 @@
 		"Uloskirjaus"
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1946,9 +1943,6 @@
 	"Options": [
 		"Asetukset"
 	],
-	"Or create an account.": [
-		"Tai luo tili."
-	],
 	"Ordered list": [
 		"Järjestetty luettelo"
 	],
@@ -2038,6 +2032,9 @@
 	],
 	"Please wait...": [
 		"Odota..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"Laajennustyökalut"
@@ -2474,6 +2471,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Lajittelee kohteen <field> mukaan (esim. Otsikko, päivitetty aika, luotu aika)."
 	],
+	"Source": [
+		"Lähde"
+	],
 	"Source format: %s": [
 		"Lähdemuoto: %s"
 	],
@@ -2666,9 +2666,6 @@
 	"Text editor command": [
 		"Tekstieditorin komento"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"Kiitos! Your Joplin Cloud tilisi on nyt määritetty ja käyttövalmis."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Aktiivista profiilia ei voi poistaa. Vaihda toiseen profiiliin ja yritä uudelleen."
 	],
@@ -2798,9 +2795,6 @@
 	"There was an error downloading this attachment:": [
 		"Tämän liitteen lataamisessa tapahtui virhe:"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"Joplin Cloud tilisi määrittämisessä tapahtui virhe. Vahvista sähköpostiosoitteesi ja salasanasi sekä yritä uudelleen. Virhe oli:\n\n%s"
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Nämä kohteet pysyvät laitteessa, mutta niitä ei ladata synkronointikohteeseen. Löytääksesi nämä kohteet, etsi joko otsikko tai tunnus (joka näkyy edellä olevissa hakasulkeissa)."
 	],
@@ -2845,6 +2839,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"Tämä avaa uuden ikkunan. Tallennetaanko nykyiset muutokset?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Tämä poistaa muistikirjan kokoelmasta, etkä voi enää käyttää sen sisältöä. Haluatko jatkaa?"
@@ -2941,6 +2938,9 @@
 	],
 	"Total: %d/%d": [
 		"Yhteensä: %d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		"Yritä uudestaan"
@@ -3172,6 +3172,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"Olet liittämässä suurta kuvaa (%dx%d pikseliä). Haluatko muuttaa sen koon %d pikseliä ennen sen liittämistä?"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"Sinulla ei ole muistikirjoja."

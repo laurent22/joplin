@@ -116,6 +116,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Teave kasutaja Joplin kohta"
 	],
@@ -256,6 +259,9 @@
 	],
 	"Auto-pair braces, parenthesis, quotations, etc.": [
 		"Automaatne sidumine traksid, sulg, noteeringud jne."
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
 	],
 	"Automatically switch theme to match system theme": [
 		""
@@ -549,20 +555,8 @@
 	"Delete local data and re-download from sync target": [
 		""
 	],
-	"Delete note \"%s\"?": [
-		"Kas kustutada märge \"%s\"?"
-	],
-	"Delete note?": [
-		"Kas soovite märkme kustutada?"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Kas soovite märkmiku \"%s\"?\n\nKustutatakse ka kõik selle märkmiku märkmed ja alammärkmikud."
-	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
-	],
-	"Delete these %d notes?": [
-		"Kas kustutada %d märkmed?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		""
@@ -675,6 +669,9 @@
 	"Dropbox Login": [
 		"Dropbox-i sisselogimine"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Paljunda"
 	],
@@ -726,6 +723,9 @@
 	"Emails": [
 		""
 	],
+	"Empty trash": [
+		""
+	],
 	"Enable": [
 		"Luba"
 	],
@@ -736,6 +736,9 @@
 		"Luba krüptimine"
 	],
 	"Enable optical character recognition (OCR)": [
+		""
+	],
+	"Enable or disable plugins": [
 		""
 	],
 	"Enable PDF viewer": [
@@ -867,6 +870,9 @@
 	"Found: %d.": [
 		"Leitud: %d."
 	],
+	"From a plugin": [
+		""
+	],
 	"FTS enabled: %d": [
 		"FTS lubatud: %d"
 	],
@@ -894,6 +900,9 @@
 	],
 	"Go to source URL": [
 		"Mine Allika URL-ile"
+	],
+	"Have you authorised the application login in the above URL?": [
+		""
 	],
 	"Header %d": [
 		""
@@ -948,6 +957,9 @@
 	],
 	"Idle": [
 		"Jõude"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		""
@@ -1096,6 +1108,9 @@
 	"Later": [
 		""
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Paigutus"
 	],
@@ -1124,17 +1139,14 @@
 	"Lists": [
 		""
 	],
+	"Loading plugin repository...": [
+		""
+	],
 	"Location": [
 		"Asukoht"
 	],
 	"Log": [
 		"Logi"
-	],
-	"Login": [
-		""
-	],
-	"Login below.": [
-		""
 	],
 	"Login with Dropbox": [
 		"Logi sisse Dropbox"
@@ -1146,6 +1158,9 @@
 		""
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1436,6 +1451,9 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		""
 	],
+	"Plugin repository failed to load": [
+		""
+	],
 	"Plugins": [
 		"Pluginad"
 	],
@@ -1539,6 +1557,9 @@
 		""
 	],
 	"Recipients:": [
+		""
+	],
+	"Recommended": [
 		""
 	],
 	"Redo": [
@@ -1772,6 +1793,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Sordib üksuse järgi <field> (nt pealkiri, uuendatud_aeg, loodud_aeg)."
 	],
+	"Source": [
+		"Allikas"
+	],
 	"Source format: %s": [
 		"Allika Formaat: %s"
 	],
@@ -1892,9 +1916,6 @@
 	"Teams": [
 		""
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		""
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
@@ -2004,9 +2025,6 @@
 	"There was an error downloading this attachment:": [
 		"Selle manuse allalaadimisel ilmnes tõrge:"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		""
-	],
 	"These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.": [
 		""
 	],
@@ -2045,6 +2063,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"See avab uue ekraani. Kas salvestada praegused muudatused?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		""
@@ -2108,6 +2129,9 @@
 	],
 	"Total: %d/%d": [
 		"Kokku: %d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		""
@@ -2286,6 +2310,9 @@
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		""
 	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
 	"You currently have no notebooks.": [
 		"Teil pole praegu märkmikke."
 	],
@@ -2293,6 +2320,9 @@
 		""
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
+		""
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
 		""
 	],
 	"Your choice: ": [

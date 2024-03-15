@@ -32,6 +32,7 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 			version: packageInfo.version,
 			syncVersion: Setting.value('syncVersion'),
 			profileVersion: reg.db().version(),
+			platform: 'desktop',
 		};
 	}
 

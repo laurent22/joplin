@@ -3,6 +3,8 @@ import { TextStyle, ViewStyle } from 'react-native';
 import { EditorControl, EditorSettings } from '../types';
 import SelectionFormatting from '@joplin/editor/SelectionFormatting';
 import { SearchState } from '@joplin/editor/types';
+import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+
 
 export type OnPressListener = ()=> void;
 
@@ -42,6 +44,7 @@ export interface MarkdownToolbarProps {
 	selectionState: SelectionFormatting;
 	searchState: SearchState;
 	editorSettings: EditorSettings;
+	pluginStates: PluginStates;
 	onAttach: OnAttachCallback;
 	style?: ViewStyle;
 	readOnly: boolean;
