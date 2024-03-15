@@ -3,6 +3,8 @@ import { useState, useCallback, useMemo } from 'react';
 import { FAB, Portal } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import { Dispatch } from 'redux';
+import { useWindowDimensions } from 'react-native';
+import shim from '@joplin/lib/shim';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 
 // eslint-disable-next-line no-undef -- Don't know why it says React is undefined when it's defined above
@@ -57,11 +59,27 @@ const ActionButton = (props: ActionButtonProps) => {
 	const closedIcon = useIcon(props.mainButton?.icon ?? 'add');
 	const openIcon = useIcon('close');
 
+	// To work around an Android accessibility bug, we decrease the
+	// size of the container for the FAB. According to the documentation for
+	// RN Paper, a large action button has size 96x96. As such, we allocate
+	// a larger than this space for the button.
+	//
+	// To prevent the accessibility issue from regressing (which makes it
+	// very hard to access some UI features), we also enable this when Talkback
+	// is disabled.
+	//
+	// See https://github.com/callstack/react-native-paper/issues/4064
+	const windowSize = useWindowDimensions();
+	const adjustMargins = !open && shim.mobilePlatform() === 'android';
+	const marginTop = adjustMargins ? Math.max(0, windowSize.height - 140) : undefined;
+	const marginStart = adjustMargins ? Math.max(0, windowSize.width - 200) : undefined;
+
 	return (
 		<Portal>
 			<FAB.Group
 				open={open}
 				accessibilityLabel={props.mainButton?.label ?? _('Add new')}
+				style={{ marginStart, marginTop }}
 				icon={ open ? openIcon : closedIcon }
 				fabStyle={{
 					backgroundColor: props.mainButton?.color ?? 'rgba(231,76,60,1)',
