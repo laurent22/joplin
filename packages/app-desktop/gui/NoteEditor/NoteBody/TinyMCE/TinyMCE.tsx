@@ -351,15 +351,14 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	useEffect(() => {
 		const theme = themeStyle(props.themeId);
 		const backgroundColor = props.whiteBackgroundNoteRendering ? lightTheme.backgroundColor : theme.backgroundColor;
-		const leftExtraToolbarContainerWidth = props.watchedNoteFiles.length > 0 ? 120 : 80;
 
 		const element = document.createElement('style');
 		element.setAttribute('id', 'tinyMceStyle');
 		document.head.appendChild(element);
 		element.appendChild(document.createTextNode(`
 			.joplin-tinymce .tox-editor-header {
-				padding-left: ${leftExtraToolbarContainerWidth + styles.leftExtraToolbarContainer.padding * 2}px;
-				padding-right: ${styles.rightExtraToolbarContainerWidth + styles.rightExtraToolbarContainer.padding * 2}px;
+				padding-left: ${styles.leftExtraToolbarContainer.width + styles.leftExtraToolbarContainer.padding * 2}px;
+				padding-right: ${styles.rightExtraToolbarContainer.width + styles.rightExtraToolbarContainer.padding * 2}px;
 			}
 			
 			.tox .tox-toolbar,
