@@ -24,7 +24,7 @@ interface Props {
 	width: number;
 	newNoteButtonEnabled: boolean;
 	newTodoButtonEnabled: boolean;
-	setNewNoteButtonRef: React.Dispatch<React.SetStateAction<Element>>;
+	setNewNoteButtonElement: React.Dispatch<React.SetStateAction<Element>>;
 	lineCount: number;
 	breakpoint: number;
 	dynamicBreakpoints: Breakpoints;
@@ -210,7 +210,7 @@ function NoteListControls(props: Props) {
 			<TopRow className="new-note-todo-buttons">
 				<StyledButton
 					ref={(el: Element) => {
-						props.setNewNoteButtonRef(el);
+						props.setNewNoteButtonElement(el);
 					}}
 					className="new-note-button"
 					tooltip={ showTooltip ? CommandService.instance().label('newNote') : '' }
