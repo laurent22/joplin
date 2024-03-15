@@ -510,6 +510,10 @@ export default class BaseApplication {
 			}
 		}
 
+		if (action.type === 'NOTE_UPDATE_ONE') {
+			refreshNotes = true;
+		}
+
 		if (refreshNotes) {
 			await this.refreshNotes(newState, refreshNotesUseSelectedNoteId, refreshNotesHash);
 		}
