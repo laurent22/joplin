@@ -85,6 +85,11 @@ export default class InteropServiceHelper {
 								// pdfs.
 								// https://github.com/laurent22/joplin/issues/6254.
 								await win.webContents.executeJavaScript('document.querySelectorAll(\'details\').forEach(el=>el.setAttribute(\'open\',\'\'))');
+								// The below line removes the href attribute
+								// if it contains data-urls, since embedding
+								// data-urls in pdfs is not supported.
+								// https://github.com/laurent22/joplin/issues/5943
+								await win.webContents.executeJavaScript('document.querySelectorAll(\'a[href^="data:"]\').forEach(el => el.removeAttribute(\'href\'))');
 								const data = await win.webContents.printToPDF(options as any);
 								resolve(data);
 							} catch (error) {
