@@ -625,6 +625,7 @@ export default class Note extends BaseItem {
 			updated_time: time.unixMs(),
 		};
 
+		this.dispatch({ type: 'NOTE_PARENT_UPDATE' });
 		return Note.save(modifiedNote, { autoTimestamp: false });
 	}
 

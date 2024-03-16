@@ -510,7 +510,7 @@ export default class BaseApplication {
 			}
 		}
 
-		if (action.type === 'NOTE_UPDATE_ONE') {
+		if (action.type === 'NOTE_PARENT_UPDATE') {
 			refreshNotes = true;
 		}
 
