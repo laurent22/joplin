@@ -118,7 +118,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 	}
 
 	public async addMulti(userId: Uuid, itemsQuery: Knex.QueryBuilder | Item[], options: SaveOptions = {}): Promise<void> {
-		const items: Item[] = Array.isArray(itemsQuery) ? itemsQuery : await itemsQuery.whereNotIn('id', this.db('user_items').select('item_id').where('user_id', '=', userId));
+		const items: Item[] = Array.isArray(itemsQuery) ? itemsQuery : await itemsQuery?.whereNotIn('id', this.db('user_items').select('item_id').where('user_id', '=', userId));
 		if (!items.length) return;
 
 		await this.withTransaction(async () => {
