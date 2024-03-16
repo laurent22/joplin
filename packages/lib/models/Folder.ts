@@ -305,11 +305,6 @@ export default class Folder extends BaseItem {
 		}
 	}
 
-	// public static getNaturalSortingCollator() {
-	// 	const collatorLocale = currentLocale().slice(0, 2);
-	// 	return new Intl.Collator(collatorLocale, { numeric: true, sensitivity: 'accent' });
-	// }
-
 	public static async all(options: FolderLoadOptions = null) {
 		let output: FolderEntity[] = await super.all(options);
 		if (options) {
