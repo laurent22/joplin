@@ -15,6 +15,7 @@ import useInlineFormattingButtons from './buttons/useInlineFormattingButtons';
 import useActionButtons from './buttons/useActionButtons';
 import useListButtons from './buttons/useListButtons';
 import useKeyboardVisible from '../hooks/useKeyboardVisible';
+import usePluginButtons from './buttons/usePluginButtons';
 
 
 const MarkdownToolbar: React.FC<MarkdownToolbarProps> = (props: MarkdownToolbarProps) => {
@@ -32,6 +33,7 @@ const MarkdownToolbar: React.FC<MarkdownToolbarProps> = (props: MarkdownToolbarP
 	const inlineFormattingBtns = useInlineFormattingButtons(buttonProps);
 	const actionButtons = useActionButtons(buttonProps);
 	const listButtons = useListButtons(buttonProps);
+	const pluginButtons = usePluginButtons(buttonProps);
 
 	const styleData: StyleSheetData = useMemo(() => ({
 		styles: styles,
@@ -58,8 +60,15 @@ const MarkdownToolbar: React.FC<MarkdownToolbarProps> = (props: MarkdownToolbarP
 			},
 		];
 
+		if (pluginButtons.length > 0) {
+			buttons.push({
+				title: _('Plugins'),
+				items: pluginButtons,
+			});
+		}
+
 		return buttons;
-	}, [headerButtons, inlineFormattingBtns, listButtons, actionButtons]);
+	}, [headerButtons, inlineFormattingBtns, listButtons, actionButtons, pluginButtons]);
 
 	return (
 		<ToggleSpaceButton

@@ -181,8 +181,14 @@ class Logger {
 
 	public objectsToString(...object: any[]) {
 		const output = [];
-		for (let i = 0; i < object.length; i++) {
-			output.push(`"${this.objectToString(object[i])}"`);
+		if (object.length === 1) {
+			// Quoting when there is only one argument can make the log more difficult to read,
+			// particularly when formatting is handled elsewhere.
+			output.push(this.objectToString(object[0]));
+		} else {
+			for (let i = 0; i < object.length; i++) {
+				output.push(`"${this.objectToString(object[i])}"`);
+			}
 		}
 		return output.join(', ');
 	}
@@ -320,6 +326,13 @@ class Logger {
 				target.database.transactionExecBatch(queries);
 			}
 		}
+	}
+
+	// For tests
+	public async waitForFileWritesToComplete_() {
+		const release = await writeToFileMutex_.acquire();
+		release();
+		return;
 	}
 
 	public error(...object: any[]) {

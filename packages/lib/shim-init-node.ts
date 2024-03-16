@@ -9,6 +9,7 @@ import * as fs from 'fs-extra';
 import * as pdfJsNamespace from 'pdfjs-dist';
 import { writeFile } from 'fs/promises';
 import { ResourceEntity } from './services/database/types';
+import { DownloadController } from './downloadController';
 import { TextItem } from 'pdfjs-dist/types/src/display/api';
 import replaceUnsupportedCharacters from './utils/replaceUnsupportedCharacters';
 
@@ -24,6 +25,15 @@ const zlib = require('zlib');
 const dgram = require('dgram');
 
 const proxySettings: any = {};
+
+type FetchBlobOptions = {
+	path?: string;
+	method?: string;
+	maxRedirects?: number;
+	timeout?: number;
+	headers?: any;
+	downloadController?: DownloadController;
+};
 
 function fileExists(filePath: string) {
 	try {
@@ -185,7 +195,7 @@ function shimInit(options: ShimInitOptions = null) {
 		}
 	};
 
-	shim.showMessageBox = (message, options = null) => {
+	shim.showMessageBox = async (message, options = null) => {
 		if (shim.isElectron()) {
 			return shim.electronBridge().showMessageBox(message, options);
 		} else {
@@ -243,7 +253,7 @@ function shimInit(options: ShimInitOptions = null) {
 			if (canResize) {
 				if (resizeLargeImages === 'alwaysAsk') {
 					const Yes = 0, No = 1, Cancel = 2;
-					const userAnswer = shim.showMessageBox(`${_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', image.width, image.height, maxDim)}\n\n${_('(You may disable this prompt in the options)')}`, {
+					const userAnswer = await shim.showMessageBox(`${_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', image.width, image.height, maxDim)}\n\n${_('(You may disable this prompt in the options)')}`, {
 						buttons: [_('Yes'), _('No'), _('Cancel')],
 					});
 					if (userAnswer === Yes) return await saveResizedImage();
@@ -493,7 +503,7 @@ function shimInit(options: ShimInitOptions = null) {
 		}, options);
 	};
 
-	shim.fetchBlob = async function(url: any, options) {
+	shim.fetchBlob = async function(url: any, options: FetchBlobOptions) {
 		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
 		if (!options.method) options.method = 'GET';
 		// if (!('maxRetry' in options)) options.maxRetry = 5;
@@ -510,6 +520,7 @@ function shimInit(options: ShimInitOptions = null) {
 		const http = url.protocol.toLowerCase() === 'http:' ? require('follow-redirects').http : require('follow-redirects').https;
 		const headers = options.headers ? options.headers : {};
 		const filePath = options.path;
+		const downloadController = options.downloadController;
 
 		function makeResponse(response: any) {
 			return {
@@ -571,6 +582,11 @@ function shimInit(options: ShimInitOptions = null) {
 					});
 
 					const request = http.request(requestOptions, (response: any) => {
+
+						if (downloadController) {
+							response.on('data', downloadController.handleChunk(request));
+						}
+
 						response.pipe(file);
 
 						const isGzipped = response.headers['content-encoding'] === 'gzip';

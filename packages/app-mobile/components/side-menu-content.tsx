@@ -7,7 +7,7 @@ import Folder from '@joplin/lib/models/Folder';
 import Synchronizer from '@joplin/lib/Synchronizer';
 import NavService from '@joplin/lib/services/NavService';
 import { _ } from '@joplin/lib/locale';
-const { themeStyle } = require('./global-style.js');
+import { themeStyle } from './global-style';
 import { renderFolders } from '@joplin/lib/components/shared/side-menu-shared';
 import { FolderEntity, FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
@@ -16,6 +16,7 @@ import { reg } from '@joplin/lib/registry';
 import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import { getTrashFolderIcon, getTrashFolderId } from '@joplin/lib/services/trash';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
+import emptyTrash from '@joplin/lib/services/trash/emptyTrash';
 import { ModelType } from '@joplin/lib/BaseModel';
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
@@ -146,11 +147,30 @@ const SideMenuContentComponent = (props: Props) => {
 
 		const folder = folderOrAll as FolderEntity;
 
-		if (folder && folder.id === getTrashFolderId()) return;
-
 		const menuItems: any[] = [];
 
-		if (folder && !!folder.deleted_time) {
+		if (folder && folder.id === getTrashFolderId()) {
+			menuItems.push({
+				text: _('Empty trash'),
+				onPress: async () => {
+					Alert.alert('', _('This will permanently delete all items in the trash. Continue?'), [
+						{
+							text: _('Empty trash'),
+							onPress: async () => {
+								await emptyTrash();
+							},
+						},
+						{
+							text: _('Cancel'),
+							onPress: () => { },
+							style: 'cancel',
+						},
+					]);
+				},
+				style: 'destructive',
+			});
+
+		} else if (folder && !!folder.deleted_time) {
 			menuItems.push({
 				text: _('Restore'),
 				onPress: async () => {
@@ -187,7 +207,7 @@ const SideMenuContentComponent = (props: Props) => {
 						{
 							text: _('OK'),
 							onPress: () => {
-								void Folder.delete(folder.id, { toTrash: true });
+								void Folder.delete(folder.id, { toTrash: true, sourceDescription: 'side-menu-content (long-press)' });
 							},
 						},
 						{

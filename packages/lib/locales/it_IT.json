@@ -140,6 +140,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Informazione su Joplin"
 	],
@@ -319,6 +322,9 @@
 	],
 	"Automatically check for updates": [
 		"Controlla aggiornamenti automaticamente"
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
 	],
 	"Automatically switch theme to match system theme": [
 		"Usa il tema di sistema"
@@ -762,20 +768,8 @@
 	"Delete note": [
 		"Eliminare la nota"
 	],
-	"Delete note \"%s\"?": [
-		"Eliminare la nota \"%s\"?"
-	],
-	"Delete note?": [
-		"Eliminare la nota?"
-	],
 	"Delete notebook": [
 		"Eliminare il taccuino"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Eliminare taccuino \"%s\"?\n\nAnche tutte le note e cartelle di questo taccuino saranno eliminati."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Eliminare taccuino? Anche tutte le note e cartelle di questo taccuino saranno eliminate."
 	],
 	"Delete plugin \"%s\"?": [
 		"Eliminare il plugin \"%s\"?"
@@ -788,9 +782,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Eliminare il taccuino della Posta in arrivo?\n\nSe elimini il taccuino della posta in arrivo, tutti i messaggi di posta elettronica recentemente inviati ad esso potrebbero andare perduti."
-	],
-	"Delete these %d notes?": [
-		"Eliminare queste %d note?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Cancellare questo invito? Il destinatario non avrà più accesso a questo taccuino condiviso."
@@ -936,6 +927,9 @@
 	"Dropbox Login": [
 		"Login Dropbox"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Duplicare"
 	],
@@ -1010,6 +1004,9 @@
 	],
 	"emphasised text": [
 		"testo sottolineato"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"Abilitato"
@@ -1324,6 +1321,9 @@
 	"Grant authorisation": [
 		"Concedi autorizzazione"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"Intestazione %d"
 	],
@@ -1383,6 +1383,9 @@
 	],
 	"Idle": [
 		"Inattivo"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		"Ignora"
@@ -1510,12 +1513,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"E-mail Joplin Cloud"
-	],
-	"Joplin Cloud password": [
-		"Password Joplin Cloud"
-	],
 	"Joplin Export Directory": [
 		"Cartella di esportazione di Joplin"
 	],
@@ -1582,6 +1579,9 @@
 	"Later": [
 		"Dopo"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Disposizione"
 	],
@@ -1643,12 +1643,6 @@
 	"Log": [
 		"Log"
 	],
-	"Login": [
-		"Login"
-	],
-	"Login below.": [
-		"Accedi qui sotto."
-	],
 	"Login with Dropbox": [
 		"Login Dropbox"
 	],
@@ -1659,6 +1653,9 @@
 		"Logout"
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1988,9 +1985,6 @@
 	"Options": [
 		"Opzioni"
 	],
-	"Or create an account.": [
-		"Oppure crea un account."
-	],
 	"Ordered list": [
 		"Lista ordinata"
 	],
@@ -2080,6 +2074,9 @@
 	],
 	"Please wait...": [
 		"Attendere per favore...."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"Strumenti plugin"
@@ -2510,6 +2507,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Ordina per <field> (es. titolo, ultimo aggiornamento, creazione)."
 	],
+	"Source": [
+		"Sorgente"
+	],
 	"Source format: %s": [
 		"Formato sorgente: %s"
 	],
@@ -2702,9 +2702,6 @@
 	"Text editor command": [
 		"Comando editor di testo"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"Grazie! Il tuo account Joplin Cloud è ora configurato e pronto per l'uso."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Il profilo attivo non può essere eliminato. Passa a un profilo diverso e riprova."
 	],
@@ -2831,9 +2828,6 @@
 	"There was an error downloading this attachment:": [
 		"Errore nello scaricamento di questo allegato:"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"Si è verificato un errore durante la configurazione del tuo account Joplin Cloud. Verifica la tua email e la tua password e riprova. L'errore era:\n\n%s"
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Questi elementi rimarranno sul dispositivo ma non verranno caricati nella destinazione di sincronizzazione. Per trovare questi elementi, cercare il titolo o l'ID (che viene visualizzato tra parentesi qui sopra)."
 	],
@@ -2893,6 +2887,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"Questo aprirà una nuova schermata. Salvare le tue modifiche correnti?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Ciò rimuoverà il taccuino dalla tua raccolta e non avrai più accesso al suo contenuto. Vuoi continuare?"
@@ -2989,6 +2986,9 @@
 	],
 	"Total: %d/%d": [
 		"Totale: %d %d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		"Riprova"
@@ -3223,6 +3223,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"Stai per allegare un'immagine di grandi dimensioni (%dx%d pixel). Vuoi scalare l'immagine a %d pixel prima di allegarla?"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"Al momento non hai taccuini."

@@ -243,7 +243,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 					if (commands[cmd.name]) {
 						commandOutput = commands[cmd.name](cmd.value);
-					} else if (editorRef.current.supportsCommand(cmd)) {
+					} else if (await editorRef.current.supportsCommand(cmd)) {
 						commandOutput = editorRef.current.execCommandFromJoplin(cmd);
 					} else {
 						reg.logger().warn('CodeMirror: unsupported Joplin command: ', cmd);

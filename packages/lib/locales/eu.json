@@ -107,6 +107,9 @@
 	"A5": [
 		""
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Joplin-i buruz"
 	],
@@ -230,6 +233,9 @@
 	"Authorisation token:": [
 		""
 	],
+	"Authorise": [
+		""
+	],
 	"Auto": [
 		""
 	],
@@ -240,6 +246,9 @@
 		""
 	],
 	"Automatically check for updates": [
+		""
+	],
+	"Automatically delete notes in the trash after a number of days": [
 		""
 	],
 	"Automatically switch theme to match system theme": [
@@ -434,6 +443,9 @@
 	"Copy Link Address": [
 		""
 	],
+	"Copy link to website": [
+		""
+	],
 	"Copy Markdown link": [
 		""
 	],
@@ -551,9 +563,6 @@
 	],
 	"Delete local data and re-download from sync target": [
 		""
-	],
-	"Delete note?": [
-		"Oharra ezabatu?"
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
@@ -690,6 +699,9 @@
 	"Dropbox Login": [
 		""
 	],
+	"Due": [
+		""
+	],
 	"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": [
 		"<oharra>rekin bat datozen oharrak [koaderno]ra kopiatzen ditu. Koadernorik ez bada zehazten, oharra oraingo koadernoan bikoiztuko da"
 	],
@@ -730,6 +742,9 @@
 		""
 	],
 	"emphasised text": [
+		""
+	],
+	"Empty trash": [
 		""
 	],
 	"Enable": [
@@ -775,6 +790,9 @@
 		""
 	],
 	"Enable optical character recognition (OCR)": [
+		""
+	],
+	"Enable or disable plugins": [
 		""
 	],
 	"Enable PDF viewer": [
@@ -927,6 +945,9 @@
 	"Found: %d.": [
 		"Aurkitua: %d"
 	],
+	"From a plugin": [
+		""
+	],
 	"Full changelog": [
 		""
 	],
@@ -952,6 +973,9 @@
 		""
 	],
 	"Grant authorisation": [
+		""
+	],
+	"Have you authorised the application login in the above URL?": [
 		""
 	],
 	"Header %d": [
@@ -994,6 +1018,9 @@
 		"ID"
 	],
 	"Idle": [
+		""
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		""
 	],
 	"Ignore": [
@@ -1119,6 +1146,9 @@
 	"Keep note history for": [
 		""
 	],
+	"Keep notes in the trash for": [
+		""
+	],
 	"Keyboard Mode": [
 		""
 	],
@@ -1141,6 +1171,9 @@
 		"Hizkuntza"
 	],
 	"Later": [
+		""
+	],
+	"Latitude": [
 		""
 	],
 	"Layout": [
@@ -1183,6 +1216,9 @@
 	"Loaded": [
 		""
 	],
+	"Loading plugin repository...": [
+		""
+	],
 	"Location": [
 		""
 	],
@@ -1192,12 +1228,6 @@
 	"Log": [
 		"Egunkaria"
 	],
-	"Login": [
-		""
-	],
-	"Login below.": [
-		""
-	],
 	"Login with OneDrive": [
 		"Login with OneDrive"
 	],
@@ -1205,6 +1235,9 @@
 		""
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Manage your plugins": [
@@ -1474,6 +1507,15 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		""
 	],
+	"Plugin message": [
+		""
+	],
+	"Plugin repository failed to load": [
+		""
+	],
+	"Plugin search": [
+		""
+	],
 	"Plugin tools": [
 		""
 	],
@@ -1586,6 +1628,9 @@
 		""
 	],
 	"Recipients:": [
+		""
+	],
+	"Recommended": [
 		""
 	],
 	"Redo": [
@@ -1792,6 +1837,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Itemak antolatzen ditu <field> arabera (esate baterako, izenburua, eguneratze_unea, sortze_unea)."
 	],
+	"Source": [
+		"Iturburua"
+	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		""
 	],
@@ -1930,9 +1978,6 @@
 	"Teams": [
 		""
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		""
-	],
 	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
 		""
 	],
@@ -2003,6 +2048,13 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		""
 	],
+	"The note was successfully moved to the trash.": [
+		"",
+		""
+	],
+	"The notebook and its content was successfully moved to the trash.": [
+		""
+	],
 	"The notebook could not be saved: %s": [
 		"Koadernoa ezin gorde daiteke: %s"
 	],
@@ -2063,9 +2115,6 @@
 	"There was an error downloading this attachment:": [
 		""
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		""
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Itemok gailuan geratuko dira baina ez dira sinkronizatuko. Horiek aurkitzeko bilaketak egin titulu edo goiko parentesien arteko IDaren arabera."
 	],
@@ -2111,6 +2160,9 @@
 	"This will open a new screen. Save your current changes?": [
 		""
 	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
+	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		""
 	],
@@ -2118,6 +2170,9 @@
 		"Ordu formatua"
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
+		""
+	],
+	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
 		""
 	],
 	"To delete a tag, untag the associated notes.": [
@@ -2161,6 +2216,9 @@
 	],
 	"Total: %d/%d": [
 		"Denera: %d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		""
@@ -2339,10 +2397,16 @@
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		""
 	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
 	"You do not have any installed plugin.": [
 		""
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
+		""
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
 		""
 	],
 	"Your choice: ": [
