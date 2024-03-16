@@ -351,6 +351,13 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	};
 
 	useEffect(() => {
+		if (editorRef.current) {
+			editorRef.current.focus();
+		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
+	}, [editorRef.current]);
+
+	useEffect(() => {
 		let cancelled = false;
 
 		async function loadScripts() {
