@@ -140,6 +140,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Joplin에 대해서"
 	],
@@ -319,6 +322,9 @@
 	],
 	"Automatically check for updates": [
 		"자동으로 업데이트를 확인"
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
 	],
 	"Automatically switch theme to match system theme": [
 		"시스템 테마에 적합한 테마로 자동으로 변경"
@@ -767,20 +773,8 @@
 	"Delete note": [
 		"메모 삭제"
 	],
-	"Delete note \"%s\"?": [
-		"\"%s\" 노트를 삭제할까요?"
-	],
-	"Delete note?": [
-		"이 노트를 삭제할까요?"
-	],
 	"Delete notebook": [
 		"노트북 삭제"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"\"%s\" 노트북을 삭제할까요?\n\n이 노트북 안에 있는 모든 노트와 더불어 하위 노트북들도 함께 삭제됩니다."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"이 노트북을 삭제할까요? 이 노트북 안에 있는 모든 노트와 더불어 하위 노트북들도 함께 삭제됩니다."
 	],
 	"Delete plugin \"%s\"?": [
 		"\"%s\" 플러그인을 삭제할까요?"
@@ -793,9 +787,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"인박스 노트북을 삭제하시겠습니까?\n\n인박스 노트북을 삭제하면 최근에 해당 노트북으로 전송된 모든 이메일이 손실될 수 있습니다."
-	],
-	"Delete these %d notes?": [
-		"%d 개의 노트들을 삭제할까요?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"이 초대를 제거하시겠어요? 이 초대를 받았던 공유 수신자는 더 이상 공유 노트북에 접근할 수 없게 됩니다."
@@ -944,6 +935,9 @@
 	"Dropbox Login": [
 		"Dropbox 로그인"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"복제"
 	],
@@ -1021,6 +1015,9 @@
 	],
 	"emphasised text": [
 		"강조"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"활성화"
@@ -1346,6 +1343,9 @@
 	"Grant authorisation": [
 		"허가된 권한"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"헤더 %d"
 	],
@@ -1414,6 +1414,9 @@
 	],
 	"Idle": [
 		"대기"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		"무시하기"
@@ -1541,12 +1544,6 @@
 	"Joplin Cloud": [
 		"Joplin 클라우드"
 	],
-	"Joplin Cloud email": [
-		"Joplin 클라우드 전자우편"
-	],
-	"Joplin Cloud password": [
-		"Joplin 클라우드 암호"
-	],
 	"Joplin Export Directory": [
 		"Joplin 내보내기 폴더"
 	],
@@ -1616,6 +1613,9 @@
 	"Later": [
 		"나중에"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"배치"
 	],
@@ -1676,12 +1676,6 @@
 	"Log": [
 		"로그"
 	],
-	"Login": [
-		"로그인"
-	],
-	"Login below.": [
-		"아래 정보를 입력하여 로그인하세요."
-	],
 	"Login with Dropbox": [
 		"Dropbox로 로그인"
 	],
@@ -1693,6 +1687,9 @@
 	],
 	"Logs, profiles, sync status": [
 		"로그, 프로필, 동기화 상태"
+	],
+	"Longitude": [
+		""
 	],
 	"Make a donation": [
 		"기부하기"
@@ -2036,9 +2033,6 @@
 	"Options": [
 		"옵션"
 	],
-	"Or create an account.": [
-		"또는 새 계정을 만듭니다."
-	],
 	"Ordered list": [
 		"정렬 목록"
 	],
@@ -2128,6 +2122,9 @@
 	],
 	"Please wait...": [
 		"잠시만 기다려주세요..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"플러그인 도구"
@@ -2594,6 +2591,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"항목을 <field>별로 정렬합니다 (예시: title, updated_time, created_time)."
 	],
+	"Source": [
+		"원본"
+	],
 	"Source format: %s": [
 		"원본 포맷: %s"
 	],
@@ -2792,9 +2792,6 @@
 	"Text editor command": [
 		"텍스트 편집기 명령어"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"감사합니다! 이제 Joplin 클라우드 계정을 사용할 준비가 되었습니다."
-	],
 	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
 		"[Web Clipper](%s)는 브라우저에서 웹페이지와 스크린샷을 저장할 수 있는 브라우저 확장 프로그램입니다."
 	],
@@ -2936,9 +2933,6 @@
 	"There was an error downloading this attachment:": [
 		"첨부 파일을 내려받는 중에 오류가 발생했습니다:"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"Joplin 클라우드 계정을 설정하는 동안 오류가 발생했습니다. 전자우편과 비밀번호를 확인한 후에 다시 시도해주세요. 발생한 오류:\n\n%s"
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"해당 항목들은 기기에 남아 있지만 동기화 대상에 업로드되지는 않을 것입니다. 이런 항목을 찾길 원하신다면 제목 또는 ID로 검색하세요. (상단 괄호 안에 표시되어 있습니다)"
 	],
@@ -2995,6 +2989,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"새로운 화면으로 전환됩니다. 현재 화면의 변경 사항들을 저장하시겠습니까?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"컬렉션에서 노트북이 제거되고 더 이상 접근할 수 없습니다. 계속하시겠어요?"
@@ -3094,6 +3091,9 @@
 	],
 	"Total: %d/%d": [
 		"합계: %d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		"다시 시도"
@@ -3328,6 +3328,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"크기가 큰 이미지(%dx%d 픽셀)를 첨부하려고 합니다. 첨부하기 전에 크기를 %d 픽셀로 줄이시겠습니까?"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"현재 노트북이 없습니다."

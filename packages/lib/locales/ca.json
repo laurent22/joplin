@@ -137,6 +137,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Quant al Joplin"
 	],
@@ -310,6 +313,9 @@
 	],
 	"Automatically check for updates": [
 		"Comprova les actualitzacions automàticament"
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
 	],
 	"Automatically switch theme to match system theme": [
 		"Canvia de tema automàticament per a coincidir amb el tema del sistema"
@@ -747,20 +753,8 @@
 	"Delete note": [
 		"Suprimeix la nota"
 	],
-	"Delete note \"%s\"?": [
-		"Voleu suprimir la nota \"%s\"?"
-	],
-	"Delete note?": [
-		"Voleu suprimir la nota?"
-	],
 	"Delete notebook": [
 		"Suprimeix el bloc de notes"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Voleu suprimir el bloc de notes \"%s\"? \n\nTambé se suprimiran totes les notes i els subblocs d'aquest bloc de notes."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Voleu suprimir el bloc de notes? També se suprimiran totes les notes i els subblocs d'aquest bloc de notes."
 	],
 	"Delete plugin \"%s\"?": [
 		"Voleu suprimir l'extensió \"%s\"?"
@@ -773,9 +767,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
-	],
-	"Delete these %d notes?": [
-		"Voleu suprimir aquestes %d notes?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Voleu suprimir aquesta invitació? El destinatari ja no tindrà accés a aquest quadern compartit."
@@ -918,6 +909,9 @@
 	"Dropbox Login": [
 		"Inicia sessió al Dropbox"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Duplica"
 	],
@@ -992,6 +986,9 @@
 	],
 	"emphasised text": [
 		"text ressaltat"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"Activa"
@@ -1303,6 +1300,9 @@
 	"Grant authorisation": [
 		"Autoritza"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		""
 	],
@@ -1368,6 +1368,9 @@
 	],
 	"Idle": [
 		"Ociós"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		"Ignora"
@@ -1495,12 +1498,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"Correu electrònic del Joplin Cloud"
-	],
-	"Joplin Cloud password": [
-		"Contrasenya del Joplin Cloud"
-	],
 	"Joplin Export Directory": [
 		"Directori d'exportació del Joplin"
 	],
@@ -1567,6 +1564,9 @@
 	"Later": [
 		"Més tard"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Disposició"
 	],
@@ -1628,12 +1628,6 @@
 	"Log": [
 		"Registre"
 	],
-	"Login": [
-		"Identifiqueu-vos"
-	],
-	"Login below.": [
-		"Identifiqueu-vos baix."
-	],
 	"Login with Dropbox": [
 		"Inicia sessió amb Dropbox"
 	],
@@ -1644,6 +1638,9 @@
 		"Desconnecta"
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1985,9 +1982,6 @@
 	"Options": [
 		"Opcions"
 	],
-	"Or create an account.": [
-		"O creeu un compte."
-	],
 	"Ordered list": [
 		"Llista ordenada"
 	],
@@ -2077,6 +2071,9 @@
 	],
 	"Please wait...": [
 		"Espereu..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"Eines de les extensions"
@@ -2516,6 +2513,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Ordena l'element per <field> (p. ex. títol, actualització o creació)."
 	],
+	"Source": [
+		"Font"
+	],
 	"Source format: %s": [
 		"Format d'origen: %s"
 	],
@@ -2708,9 +2708,6 @@
 	"Text editor command": [
 		"Ordre de l'editor de text"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"Gràcies! El vostre compte de Joplin Cloud està preparat per a utilitzar-se."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
@@ -2840,9 +2837,6 @@
 	"There was an error downloading this attachment:": [
 		"Hi ha hagut un error en baixar aquest adjunt:"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"S'ha produït un error configurant el vostre compte de Joplin Cloud. Verifiqueu el vostre correu electrònic i la contrasenya, i proveu de nou. L'error ha sigut:\n\n%s"
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Aquests elements es mantindran al dispositiu, però no es pujaran a la destinació de sincronització. Per a poder trobar aquests elements, podeu cercar pel títol o la ID (que es mostra entre claudàtors a sobre)."
 	],
@@ -2902,6 +2896,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"Això obrirà una nova pantalla. Voleu desar els canvis actuals?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Això eliminarà el bloc de notes de la vostra col·lecció i no hi tindreu accés al contingut. Voleu continuar?"
@@ -2998,6 +2995,9 @@
 	],
 	"Total: %d/%d": [
 		"Total: %d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		"Intenta-ho de nou"
@@ -3232,6 +3232,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"Esteu a punt d'adjuntar una imatge gran (%dx%d pixels). Voleu reduir-la a %d pixels abans d'adjuntar-la?"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"Ara mateix no teniu cap bloc de notes."

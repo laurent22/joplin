@@ -128,6 +128,9 @@
 	"A5": [
 		"А5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"О Џоплину"
 	],
@@ -271,6 +274,9 @@
 	],
 	"Auto-pair braces, parenthesis, quotations, etc.": [
 		"Ауто-упари заграде, цитате, итд."
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
 	],
 	"Automatically switch theme to match system theme": [
 		"Аутоматски пребаци тему на подударање са системском темом"
@@ -584,23 +590,8 @@
 	"Delete local data and re-download from sync target": [
 		"Избришите локалне податке и поново их скините са одредишта за синхронизацију"
 	],
-	"Delete note \"%s\"?": [
-		"Обриши белешку \"%s\"?"
-	],
-	"Delete note?": [
-		"Обриши белешку?"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Обриши бележницу \"%s\"\n\nСве белешке и под-белешке унутар ове бележнице ће такође бити обрисане."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Обриши бележницу? Све белешке и под-бележнице унутар ове бележнице ће такође бити обрисане."
-	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
-	],
-	"Delete these %d notes?": [
-		"Обриши ове %d белешке?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		""
@@ -722,6 +713,9 @@
 	"Dropbox Login": [
 		"Пријава у \"Dropbox\""
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Дуплирај"
 	],
@@ -768,6 +762,9 @@
 		""
 	],
 	"Emails": [
+		""
+	],
+	"Empty trash": [
 		""
 	],
 	"Enable": [
@@ -1004,6 +1001,9 @@
 	"Grant authorisation": [
 		"Токен за ауторизацију"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		""
 	],
@@ -1048,6 +1048,9 @@
 	],
 	"Idle": [
 		"Неактивно"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		"Занемари"
@@ -1163,12 +1166,6 @@
 	"Joplin Cloud": [
 		"Џоплин у облаку"
 	],
-	"Joplin Cloud email": [
-		"Џоплин у облаку емаил"
-	],
-	"Joplin Cloud password": [
-		"Џоплин з облаку лозинка"
-	],
 	"Joplin Export Directory": [
 		"Џоплин директоријум за извоз"
 	],
@@ -1229,6 +1226,9 @@
 	"Later": [
 		"Касније"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Распоред"
 	],
@@ -1268,12 +1268,6 @@
 	"Log": [
 		"Извештај"
 	],
-	"Login": [
-		""
-	],
-	"Login below.": [
-		""
-	],
 	"Login with Dropbox": [
 		"Пријави се са \"Dropbox\""
 	],
@@ -1284,6 +1278,9 @@
 		""
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1607,6 +1604,9 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Молимо сачекајте док сви прилози буду скинути и дешифровани. За уређивање белешке можете прећи на %s."
 	],
+	"Plugin repository failed to load": [
+		""
+	],
 	"Plugins": [
 		"Додаци"
 	],
@@ -1928,6 +1928,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Сортира ставке по  <field> (нпр. назив, време_ажурирања, време_креирања)."
 	],
+	"Source": [
+		"Извор"
+	],
 	"Source format: %s": [
 		"Избворни формат: %s"
 	],
@@ -2087,9 +2090,6 @@
 	"Text editor command": [
 		"Команда уређивачa текста"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		""
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
@@ -2213,9 +2213,6 @@
 	"There was an error downloading this attachment:": [
 		"Дошло је до грешке приликом преузимања овог прилога:"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		""
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Ове ставке ће остати на уређају али неће бити синхронизоване на задато одредиште. Да би сте пронашли ове ставке, или их потражите по називи или ИД-у (који је приказан у загради изнад)."
 	],
@@ -2263,6 +2260,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"Ово ће отворити нови екран. Сачувај своје промене?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"Time format": [
 		"Формат датума"
@@ -2320,6 +2320,9 @@
 	],
 	"Total: %d/%d": [
 		"Укупно: %d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		"Покушајте поново"
@@ -2507,6 +2510,9 @@
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"Приложићете слику величине (%dx%d пиксела). Да ли желите да је смањите на %d пиксела пре него што је приложите?"
 	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
 	"You do not have any installed plugin.": [
 		"Немате ниједан инсталиран додатак."
 	],
@@ -2515,6 +2521,9 @@
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Можете користити доле наведену алатку за поновно шифровање података, на пример кад знате да су ваши подаци шифровани застарелом методом шифровања."
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
+		""
 	],
 	"Your choice: ": [
 		"Ваш избор "

@@ -238,7 +238,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		const thisComp = this;
 
 		const makeActionButtonComp = () => {
-			if (this.props.notesParentType === 'Folder' && itemIsInTrash(parent)) return null;
+			if ((this.props.notesParentType === 'Folder' && itemIsInTrash(parent)) || !Folder.atLeastOneRealFolderExists(this.props.folders)) return null;
 
 			const getTargetFolderId = async () => {
 				if (!buttonFolderId && isAllNotes) {

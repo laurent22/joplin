@@ -109,6 +109,16 @@ describe('CodeMirror5Emulation', () => {
 		expect(onOtherOptionUpdate).toHaveBeenCalledTimes(1);
 	});
 
+	it('should support running commands registered with defineExtension', () => {
+		const codeMirror = makeCodeMirrorEmulation('Test 1\nTest 2');
+
+		const testExtension = jest.fn((a: number) => `testing${a}`);
+		codeMirror.defineExtension('testExtension', testExtension);
+
+		expect(codeMirror.commandExists('testExtension')).toBe(true);
+		expect(codeMirror.execCommand('testExtension', 1)).toBe('testing1');
+	});
+
 	it('markText decorations should be removable', () => {
 		const codeMirror = makeCodeMirrorEmulation('Test 1\nTest 2');
 

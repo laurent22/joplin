@@ -406,6 +406,7 @@ export default class Note extends BaseItem {
 
 		if (parentId === Folder.conflictFolderId()) {
 			options.conditions.push('is_conflict = 1');
+			options.conditions.push('deleted_time = 0');
 		} else if (withinTrash) {
 			options.conditions.push('deleted_time > 0');
 		} else {
@@ -503,7 +504,8 @@ export default class Note extends BaseItem {
 
 	public static preview(noteId: string, options: any = null) {
 		if (!options) options = { fields: null };
-		return this.modelSelectOne(`SELECT ${this.previewFieldsSql(options.fields)} FROM notes WHERE is_conflict = 0 AND id = ?`, [noteId]);
+		const excludeConflictsSql = options.excludeConflicts ? 'is_conflict = 0 AND' : '';
+		return this.modelSelectOne(`SELECT ${this.previewFieldsSql(options.fields)} FROM notes WHERE ${excludeConflictsSql} id = ?`, [noteId]);
 	}
 
 	public static async search(options: any = null): Promise<NoteEntity[]> {
@@ -521,11 +523,11 @@ export default class Note extends BaseItem {
 	}
 
 	public static conflictedNotes() {
-		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 1');
+		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 1 AND deleted_time = 0');
 	}
 
 	public static async conflictedCount() {
-		const r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 1');
+		const r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 1 AND deleted_time = 0');
 		return r && r.total ? r.total : 0;
 	}
 

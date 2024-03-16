@@ -27,7 +27,7 @@ const { fileExtension, safeFileExtension, safeFilename, filename } = require('..
 const { MarkupToHtml } = require('@joplin/renderer');
 const { ErrorNotFound } = require('../utils/errors');
 import { fileUriToPath } from '@joplin/utils/url';
-import { NoteEntity } from '../../database/types';
+import { NoteEntity, ResourceEntity } from '../../database/types';
 import { DownloadController } from '../../../downloadController';
 
 const logger = Logger.create('routes/notes');
@@ -69,6 +69,17 @@ type FetchOptions = {
 	maxRedirects?: number;
 	downloadController?: DownloadController;
 };
+
+
+type DownloadedMediaFile = {
+	originalUrl: string;
+	path: string;
+};
+
+interface ResourceFromPath extends DownloadedMediaFile {
+	resource: ResourceEntity;
+}
+
 
 async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> {
 	const output: any = {
@@ -267,14 +278,14 @@ export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions
 }
 
 async function downloadMediaFiles(urls: string[], fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
-	const output: any = {};
+	const output: DownloadedMediaFile[] = [];
 
 	const downloadController = fetchOptions?.downloadController ?? null;
 
 	const downloadOne = async (url: string) => {
 		if (downloadController) downloadController.imagesCount += 1;
 		const mediaPath = await downloadMediaFile(url, fetchOptions, allowedProtocols);
-		if (mediaPath) output[url] = { path: mediaPath, originalUrl: url };
+		if (mediaPath) output.push({ path: mediaPath, originalUrl: url });
 	};
 
 	const maximumImageDownloadsAllowed = downloadController ? downloadController.maxImagesCount : Number.POSITIVE_INFINITY;
@@ -296,24 +307,27 @@ async function downloadMediaFiles(urls: string[], fetchOptions?: FetchOptions, a
 	return output;
 }
 
-async function createResourcesFromPaths(urls: string[]) {
-	for (const url in urls) {
-		if (!urls.hasOwnProperty(url)) continue;
-		const urlInfo: any = urls[url];
+export async function createResourcesFromPaths(mediaFiles: DownloadedMediaFile[]) {
+	const resources: Promise<ResourceFromPath>[] = [];
+
+	for (const mediaFile of mediaFiles) {
 		try {
-			const resource = await shim.createResourceFromPath(urlInfo.path);
-			urlInfo.resource = resource;
+			resources.push(
+				shim.createResourceFromPath(mediaFile.path)
+					// eslint-disable-next-line
+					.then(resource => ({ ...mediaFile, resource }))
+			);
 		} catch (error) {
-			logger.warn(`Cannot create resource for ${url}`, error);
+			logger.warn(`Cannot create resource for ${mediaFile.originalUrl}`, error);
 		}
 	}
-	return urls;
+
+	return Promise.all(resources);
 }
 
-async function removeTempFiles(urls: string[]) {
-	for (const url in urls) {
-		if (!urls.hasOwnProperty(url)) continue;
-		const urlInfo: any = urls[url];
+
+async function removeTempFiles(urls: ResourceFromPath[]) {
+	for (const urlInfo of urls) {
 		try {
 			await shim.fsDriver().remove(urlInfo.path);
 		} catch (error) {
@@ -322,12 +336,12 @@ async function removeTempFiles(urls: string[]) {
 	}
 }
 
-function replaceUrlsByResources(markupLanguage: number, md: string, urls: any, imageSizes: any) {
+function replaceUrlsByResources(markupLanguage: number, md: string, urls: ResourceFromPath[], imageSizes: any) {
 	const imageSizesIndexes: any = {};
 
 	if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
 		return htmlUtils.replaceMediaUrls(md, (url: string) => {
-			const urlInfo: any = urls[url];
+			const urlInfo = urls.find(u => u.originalUrl === url);
 			if (!urlInfo || !urlInfo.resource) return url;
 			return Resource.internalUrl(urlInfo.resource);
 		});
@@ -351,7 +365,7 @@ function replaceUrlsByResources(markupLanguage: number, md: string, urls: any, i
 				type = 'image';
 			}
 
-			const urlInfo = urls[url];
+			const urlInfo = urls.find(u => u.originalUrl === url);
 			if (type === 'link' || !urlInfo || !urlInfo.resource) return before + url + after;
 
 			const resourceUrl = Resource.internalUrl(urlInfo.resource);
@@ -417,7 +431,7 @@ export const extractNoteFromHTML = async (
 
 	const mediaFiles = await downloadMediaFiles(mediaUrls, fetchOptions, allowedProtocols);
 
-	logger.info(`Request (${requestId}): Creating resources from paths: ${Object.getOwnPropertyNames(mediaFiles).length}`);
+	logger.info(`Request (${requestId}): Creating resources from paths: ${mediaFiles.length}`);
 
 	const resources = await createResourcesFromPaths(mediaFiles);
 	await removeTempFiles(resources);
