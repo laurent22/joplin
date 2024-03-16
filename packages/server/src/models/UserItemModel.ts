@@ -123,7 +123,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 
 		await this.withTransaction(async () => {
 			for (const item of items) {
-				if (!('name' in item) || !('id' in item)) throw new Error('item.id and item.name must be set');
+				if (!item ||!('name' in item) || !('id' in item)) throw new Error('item.id and item.name must be set');
 
 				await super.save({
 					user_id: userId,
