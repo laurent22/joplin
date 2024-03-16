@@ -545,6 +545,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		// our styling is overwritten which causes some elements to have the wrong styling. Removing the
 		// style and re-applying it on editorReady gives our styles precedence and prevents any flashing
 		//
+		// watchedNoteFiles is here , as it triggers a re-render of styles whenever it changes,
+		// this keeps the toolbar header styles in sync with toggle external editing button
+		//
 		// tl;dr: editorReady is used here because the css needs to be re-applied after TinyMCE init
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [editorReady, props.themeId, lightTheme, props.whiteBackgroundNoteRendering, props.watchedNoteFiles]);
