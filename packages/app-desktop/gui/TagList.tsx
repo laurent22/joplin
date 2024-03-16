@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useMemo } from 'react';
 import { AppState } from '../app.reducer';
 import TagItem from './TagItem';
-import { currentLocale } from '@joplin/lib/locale';
+import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getCollator';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
@@ -14,7 +14,7 @@ interface Props {
 }
 
 function TagList(props: Props) {
-	const collatorLocale = currentLocale().slice(0, 2);
+	const collatorLocale = getCollatorLocale();
 	const style = useMemo(() => {
 		const theme = themeStyle(props.themeId);
 
@@ -31,7 +31,7 @@ function TagList(props: Props) {
 
 	const tags = useMemo(() => {
 		const output = props.items.slice();
-		const collator = new Intl.Collator(collatorLocale, { numeric: true, sensitivity: 'base' });
+		const collator = getCollator(collatorLocale);
 		output.sort((a: any, b: any) => {
 			return collator.compare(a.title, b.title);
 		});

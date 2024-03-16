@@ -2,7 +2,7 @@ import { defaultFolderIcon, FolderEntity, FolderIcon, NoteEntity, ResourceEntity
 import BaseModel, { DeleteOptions } from '../BaseModel';
 import { FolderLoadOptions } from './utils/types';
 import time from '../time';
-import { _, currentLocale } from '../locale';
+import { _ } from '../locale';
 import Note from './Note';
 import Database from '../database';
 import BaseItem from './BaseItem';
@@ -14,6 +14,7 @@ import ResourceService from '../services/ResourceService';
 import { LoadOptions } from './utils/types';
 import ActionLogger from '../utils/ActionLogger';
 import { getTrashFolder, getTrashFolderId } from '../services/trash';
+import { getCollator, getCollatorLocale } from './utils/getCollator';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 const logger = Logger.create('models/Folder');
@@ -21,8 +22,6 @@ const logger = Logger.create('models/Folder');
 export interface FolderEntityWithChildren extends FolderEntity {
 	children?: FolderEntity[];
 }
-
-
 
 export default class Folder extends BaseItem {
 	public static tableName() {
@@ -300,15 +299,16 @@ export default class Folder extends BaseItem {
 
 	public static handleTitleNaturalSorting(items: FolderEntity[], options: any) {
 		if (options.order?.length > 0 && options.order[0].by === 'title') {
-			const collator = this.getNaturalSortingCollator();
+			const collatorLocale = getCollatorLocale();
+			const collator = getCollator(collatorLocale);
 			items.sort((a, b) => ((options.order[0].dir === 'ASC') ? 1 : -1) * collator.compare(a.title, b.title));
 		}
 	}
 
-	public static getNaturalSortingCollator() {
-		const collatorLocale = currentLocale().slice(0, 2);
-		return new Intl.Collator(collatorLocale, { numeric: true, sensitivity: 'accent' });
-	}
+	// public static getNaturalSortingCollator() {
+	// 	const collatorLocale = currentLocale().slice(0, 2);
+	// 	return new Intl.Collator(collatorLocale, { numeric: true, sensitivity: 'accent' });
+	// }
 
 	public static async all(options: FolderLoadOptions = null) {
 		let output: FolderEntity[] = await super.all(options);
@@ -783,7 +783,8 @@ export default class Folder extends BaseItem {
 		const output = folders ? folders : await this.allAsTree();
 
 		const sortFoldersAlphabetically = (folders: FolderEntityWithChildren[]) => {
-			const collator = this.getNaturalSortingCollator();
+			const collatorLocale = getCollatorLocale();
+			const collator = getCollator(collatorLocale);
 			folders.sort((a: FolderEntityWithChildren, b: FolderEntityWithChildren) => {
 				if (a.parent_id === b.parent_id) {
 					return collator.compare(a.title, b.title);

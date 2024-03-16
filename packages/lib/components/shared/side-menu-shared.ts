@@ -2,7 +2,7 @@ import Folder from '../../models/Folder';
 import BaseModel from '../../BaseModel';
 import { FolderEntity, TagEntity } from '../../services/database/types';
 import { getDisplayParentId, getTrashFolderId } from '../../services/trash';
-import { currentLocale } from '../../locale';
+import { getCollator, getCollatorLocale } from '../../models/utils/getCollator';
 
 interface Props {
 	folders: FolderEntity[];
@@ -73,8 +73,8 @@ export const renderFolders = (props: Props, renderItem: RenderFolderItem) => {
 
 export const renderTags = (props: Props, renderItem: RenderTagItem) => {
 	const tags = props.tags.slice();
-	const collatorLocale = currentLocale().slice(0, 2);
-	const collator = new Intl.Collator(collatorLocale, { numeric: true, sensitivity: 'base' });
+	const collatorLocale = getCollatorLocale();
+	const collator = getCollator(collatorLocale);
 	tags.sort((a, b) => {
 		// It seems title can sometimes be undefined (perhaps when syncing
 		// and before tag has been decrypted?). It would be best to find

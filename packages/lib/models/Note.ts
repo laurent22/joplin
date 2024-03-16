@@ -18,7 +18,7 @@ import { pull, removeElement, unique } from '../ArrayUtils';
 import { LoadOptions, SaveOptions } from './utils/types';
 import ActionLogger from '../utils/ActionLogger';
 import { getDisplayParentId, getTrashFolderId } from '../services/trash';
-import { currentLocale } from '../locale';
+import { getCollator, getCollatorLocale } from './utils/getCollator';
 const urlUtils = require('../urlUtils.js');
 const { isImageMimeType } = require('../resourceUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
@@ -295,8 +295,8 @@ export default class Note extends BaseItem {
 
 			return noteFieldComp(a.id, b.id);
 		};
-
-		const collator = this.getNaturalSortingCollator();
+		const collatorLocale = getCollatorLocale();
+		const collator = getCollator(collatorLocale);
 
 		return notes.sort((a: NoteEntity, b: NoteEntity) => {
 			if (noteOnTop(a) && !noteOnTop(b)) return -1;
@@ -1120,14 +1120,10 @@ export default class Note extends BaseItem {
 
 	public static handleTitleNaturalSorting(items: NoteEntity[], options: any) {
 		if (options.order.length > 0 && options.order[0].by === 'title') {
-			const collator = this.getNaturalSortingCollator();
+			const collatorLocale = getCollatorLocale();
+			const collator = getCollator(collatorLocale);
 			items.sort((a, b) => ((options.order[0].dir === 'ASC') ? 1 : -1) * collator.compare(a.title, b.title));
 		}
-	}
-
-	public static getNaturalSortingCollator() {
-		const collatorLocale = currentLocale().slice(0, 2);
-		return new Intl.Collator(collatorLocale, { numeric: true, sensitivity: 'base' });
 	}
 
 	public static async createConflictNote(sourceNote: NoteEntity, changeSource: number): Promise<NoteEntity> {
