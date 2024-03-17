@@ -93,11 +93,14 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 
 		const itemWrapperStyle: ViewStyle = {
 			...(this.props.itemWrapperStyle ? this.props.itemWrapperStyle : {}),
-			flex: 1,
-			justifyContent: 'center',
-			height: itemHeight,
-			paddingLeft: 20,
-			paddingRight: 10,
+			
+			 flex: 1, 
+  flexDirection: 'row',
+  alignItems: 'center', // Align children vertically in the center
+  paddingHorizontal: 20, // Horizontal padding
+  paddingVertical: 10, // Vertical padding
+  borderBottomWidth: 1, // Add a bottom border for visual separation
+  borderBottomColor: '#ccc', // Border color
 		};
 
 		const headerWrapperStyle = { ...(this.props.headerWrapperStyle ? this.props.headerWrapperStyle : {}), height: 35,
