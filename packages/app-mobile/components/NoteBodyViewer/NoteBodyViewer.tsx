@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import useOnMessage, { HandleMessageCallback, OnMarkForDownloadCallback } from './hooks/useOnMessage';
-import { useRef, useCallback, useState, useMemo, useEffect } from 'react';
+import { useRef, useCallback, useState, useMemo } from 'react';
 import { View } from 'react-native';
 import BackButtonDialogBox from '../BackButtonDialogBox';
 import ExtendedWebView, { WebViewControl } from '../ExtendedWebView';
@@ -14,7 +14,6 @@ import Setting from '@joplin/lib/models/Setting';
 import uuid from '@joplin/lib/uuid';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import useContentScripts from './hooks/useContentScripts';
-import Logger from '@joplin/utils/Logger';
 
 interface Props {
 	themeId: number;
@@ -35,15 +34,9 @@ interface Props {
 	pluginStates: PluginStates;
 }
 
-const logger = Logger.create('NoteBodyViewer');
-
 export default function NoteBodyViewer(props: Props) {
 	const dialogBoxRef = useRef(null);
 	const webviewRef = useRef<WebViewControl>(null);
-
-	useEffect(() => {
-		logger.debug('WebView load started');
-	}, []);
 
 	const onScroll = useCallback(async (scrollTop: number) => {
 		props.onScroll(scrollTop);
@@ -102,14 +95,9 @@ export default function NoteBodyViewer(props: Props) {
 	});
 
 	const onLoadEnd = useCallback(() => {
-		logger.debug('WebView loaded');
 		setWebViewLoaded(true);
 		if (props.onLoadEnd) props.onLoadEnd();
 	}, [props.onLoadEnd]);
-
-	const onError = (errorEvent: any) => {
-		logger.error('WebView error', errorEvent?.nativeEvent?.description);
-	};
 
 	const BackButtonDialogBox_ = BackButtonDialogBox as any;
 
@@ -125,7 +113,6 @@ export default function NoteBodyViewer(props: Props) {
 				injectedJavaScript={injectedJs}
 				mixedContentMode="always"
 				onLoadEnd={onLoadEnd}
-				onError={onError}
 				onMessage={onWebViewMessage}
 			/>
 			<BackButtonDialogBox_ ref={dialogBoxRef}/>
