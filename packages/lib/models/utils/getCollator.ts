@@ -1,12 +1,12 @@
 import { currentLocale, languageCodeOnly } from '../../locale';
 
-function getCollator(locale: string) {
+function getCollator(locale: string = getCollatorLocale()) {
 	return new Intl.Collator(locale, { numeric: true, sensitivity: 'accent' });
 }
 
 function getCollatorLocale() {
-	const collatorLocale_ = languageCodeOnly(currentLocale());
-	return collatorLocale_;
+	const collatorLocale = languageCodeOnly(currentLocale());
+	return collatorLocale;
 }
 
 export { getCollator, getCollatorLocale };

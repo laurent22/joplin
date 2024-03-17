@@ -18,7 +18,7 @@ import { pull, removeElement, unique } from '../ArrayUtils';
 import { LoadOptions, SaveOptions } from './utils/types';
 import ActionLogger from '../utils/ActionLogger';
 import { getDisplayParentId, getTrashFolderId } from '../services/trash';
-import { getCollator, getCollatorLocale } from './utils/getCollator';
+import { getCollator } from './utils/getCollator';
 const urlUtils = require('../urlUtils.js');
 const { isImageMimeType } = require('../resourceUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
@@ -295,8 +295,7 @@ export default class Note extends BaseItem {
 
 			return noteFieldComp(a.id, b.id);
 		};
-		const collatorLocale = getCollatorLocale();
-		const collator = getCollator(collatorLocale);
+		const collator = getCollator();
 
 		return notes.sort((a: NoteEntity, b: NoteEntity) => {
 			if (noteOnTop(a) && !noteOnTop(b)) return -1;
@@ -1120,8 +1119,7 @@ export default class Note extends BaseItem {
 
 	public static handleTitleNaturalSorting(items: NoteEntity[], options: any) {
 		if (options.order.length > 0 && options.order[0].by === 'title') {
-			const collatorLocale = getCollatorLocale();
-			const collator = getCollator(collatorLocale);
+			const collator = getCollator();
 			items.sort((a, b) => ((options.order[0].dir === 'ASC') ? 1 : -1) * collator.compare(a.title, b.title));
 		}
 	}

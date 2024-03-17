@@ -14,7 +14,7 @@ import ResourceService from '../services/ResourceService';
 import { LoadOptions } from './utils/types';
 import ActionLogger from '../utils/ActionLogger';
 import { getTrashFolder, getTrashFolderId } from '../services/trash';
-import { getCollator, getCollatorLocale } from './utils/getCollator';
+import { getCollator } from './utils/getCollator';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 const logger = Logger.create('models/Folder');
@@ -299,8 +299,7 @@ export default class Folder extends BaseItem {
 
 	public static handleTitleNaturalSorting(items: FolderEntity[], options: any) {
 		if (options.order?.length > 0 && options.order[0].by === 'title') {
-			const collatorLocale = getCollatorLocale();
-			const collator = getCollator(collatorLocale);
+			const collator = getCollator();
 			items.sort((a, b) => ((options.order[0].dir === 'ASC') ? 1 : -1) * collator.compare(a.title, b.title));
 		}
 	}
@@ -778,8 +777,7 @@ export default class Folder extends BaseItem {
 		const output = folders ? folders : await this.allAsTree();
 
 		const sortFoldersAlphabetically = (folders: FolderEntityWithChildren[]) => {
-			const collatorLocale = getCollatorLocale();
-			const collator = getCollator(collatorLocale);
+			const collator = getCollator();
 			folders.sort((a: FolderEntityWithChildren, b: FolderEntityWithChildren) => {
 				if (a.parent_id === b.parent_id) {
 					return collator.compare(a.title, b.title);
