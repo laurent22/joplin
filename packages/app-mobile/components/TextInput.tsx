@@ -27,6 +27,7 @@ export default (props: Props) => {
 				paddingRight: 14,
 				paddingTop: 12,
 				paddingBottom: 12,
+				borderRadius: 4,
 			},
 		});
 	}, [finalProps.themeId]);
