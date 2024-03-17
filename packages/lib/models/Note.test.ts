@@ -14,6 +14,7 @@ import * as ArrayUtils from '../ArrayUtils';
 import { ErrorCode } from '../errors';
 import SearchEngine from '../services/search/SearchEngine';
 import { getTrashFolderId } from '../services/trash';
+import getConflictFolderId from './utils/getConflictFolderId';
 
 async function allItems() {
 	const folders = await Folder.all();
@@ -581,4 +582,26 @@ describe('models/Note', () => {
 		}
 	});
 
+	it('should allow deleting conflicts to the trash', async () => {
+		const folder = await Folder.save({});
+
+		const notes = [];
+		for (let i = 0; i < 3; i++) {
+			notes.push(await Note.save({ title: `note${i}`, parent_id: folder.id, is_conflict: 1 }));
+		}
+
+		// Should be in the conflicts folder
+		expect(await Note.previews(getTrashFolderId())).toHaveLength(0);
+		expect(await Note.previews(getConflictFolderId())).toHaveLength(3);
+		expect(await Note.conflictedCount()).toBe(3);
+
+		// Should be moved to the trash folder on delete
+		for (const note of notes) {
+			await Note.delete(note.id, { toTrash: true });
+		}
+
+		expect(await Note.previews(getTrashFolderId())).toHaveLength(3);
+		expect(await Note.previews(getConflictFolderId())).toHaveLength(0);
+		expect(await Note.conflictedCount()).toBe(0);
+	});
 });

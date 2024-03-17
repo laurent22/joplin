@@ -13,7 +13,10 @@ import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import ResourceService from '../services/ResourceService';
 import { LoadOptions } from './utils/types';
 import ActionLogger from '../utils/ActionLogger';
-import { getTrashFolder, getTrashFolderId } from '../services/trash';
+
+import { getTrashFolder } from '../services/trash';
+import getConflictFolderId from './utils/getConflictFolderId';
+import getTrashFolderId from '../services/trash/getTrashFolderId';
 import { getCollator } from './utils/getCollator';
 const { substrWithEllipsis } = require('../string-utils.js');
 
@@ -163,7 +166,7 @@ export default class Folder extends BaseItem {
 	}
 
 	public static conflictFolderId() {
-		return 'c04f1c7c04f1c7c04f1c7c04f1c7c04f';
+		return getConflictFolderId();
 	}
 
 	public static conflictFolder(): FolderEntity {
@@ -944,6 +947,12 @@ export default class Folder extends BaseItem {
 		// visual alignment is correct for all folders, otherwise the folder tree
 		// looks messy.
 		return !!folders.find(f => !!f.icon);
+	}
+
+	public static atLeastOneRealFolderExists(folders: FolderEntity[]) {
+		// returns true if at least one folder exists other than trash folder and deleted folders
+		const trashFolderId = getTrashFolderId();
+		return folders.filter((folder) => folder.id !== trashFolderId && folder.deleted_time === 0).length > 0;
 	}
 
 }

@@ -131,6 +131,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Về Joplin"
 	],
@@ -289,6 +292,9 @@
 	],
 	"Auto-pair braces, parenthesis, quotations, etc.": [
 		"Tự động đóng ngoặc nhọn, ngoặc đơn, ngoặc kép, v.v..."
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
 	],
 	"Automatically switch theme to match system theme": [
 		"Tự động đổi giao diện khớp với giao diện hệ thống"
@@ -650,26 +656,11 @@
 	"Delete local data and re-download from sync target": [
 		"Xóa dữ liệu cục bộ và tải xuống lại từ mục tiêu đồng bộ hóa"
 	],
-	"Delete note \"%s\"?": [
-		"Xóa note \"%s\"?"
-	],
-	"Delete note?": [
-		"Xóa note?"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Có xóa notebook \"%s\" không?\n\nTất cả notes và sub-notebooks trong notebook này sẽ bị xóa."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Xóa notebook? Tất cả notes và sub-notebooks bên trong notebook này sẽ bị xóa."
-	],
 	"Delete plugin \"%s\"?": [
 		"Xoá phần mở rộng “%s”?"
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
-	],
-	"Delete these %d notes?": [
-		"Xóa số note này %d?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Bạn muốn xoá lời mời này? Người nhận liên quan sẽ không thể truy cập sổ ghi chú này nữa."
@@ -800,6 +791,9 @@
 	"Dropbox Login": [
 		"Đăng nhập Dropbox"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Sao chép"
 	],
@@ -859,6 +853,9 @@
 	],
 	"emphasised text": [
 		"chữ nhấn mạnh"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"Bật"
@@ -1133,6 +1130,9 @@
 	"Grant authorisation": [
 		"Cung cấp uỷ quyền"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		""
 	],
@@ -1192,6 +1192,9 @@
 	],
 	"Idle": [
 		"Không hoạt động"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		"Bỏ qua"
@@ -1313,12 +1316,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"Email Joplin Cloud"
-	],
-	"Joplin Cloud password": [
-		"Mật khẩu Joplin Cloud"
-	],
 	"Joplin Export Directory": [
 		"Joplin Export Directory"
 	],
@@ -1382,6 +1379,9 @@
 	"Later": [
 		"Sau đó"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Dàn trang"
 	],
@@ -1424,12 +1424,6 @@
 	"Log": [
 		"Nhật ký"
 	],
-	"Login": [
-		""
-	],
-	"Login below.": [
-		""
-	],
 	"Login with Dropbox": [
 		"Đăng nhập với Dropbox"
 	],
@@ -1440,6 +1434,9 @@
 		""
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1813,6 +1810,9 @@
 	],
 	"Please wait...": [
 		"Vui lòng chờ..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"Công cụ mở rộng"
@@ -2189,6 +2189,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Sắp xếp những mục theo <trường> (ví dụ, tiêu đề, thời điểm cập nhật, thời điểm tạo)."
 	],
+	"Source": [
+		"Nguồn"
+	],
 	"Source format: %s": [
 		"Định dạng từ nguồn: %s"
 	],
@@ -2366,9 +2369,6 @@
 	"Text editor command": [
 		"Câu lệnh trình duyệt chỉnh sửa văn bản"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		""
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
@@ -2489,9 +2489,6 @@
 	"There was an error downloading this attachment:": [
 		"Có lỗi xảy ra khi tải tệp đính kèm này:"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		""
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Những mục này sẽ được duy trì trên thiết bị những sẽ không được tải lên điểm đồng bộ. Để tìm những mục này, tìm tiêu đề hoặc ID (được hiển thị trong ngoặc kép ở trên)."
 	],
@@ -2539,6 +2536,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"Cửa sổ mới sẽ được mở. Lưu lại những thay đổi gần nhất?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"Time format": [
 		"Định dạng thời gian"
@@ -2617,6 +2617,9 @@
 	],
 	"Total: %d/%d": [
 		"Tổng cộng: %d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		"Thử lại"
@@ -2831,6 +2834,9 @@
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"Bạn sắp đính kèm một hình ảnh lớn (%dx%d pixel). Bạn có muốn giảm kích cỡ xuống %d pixel trước khi đính kèm nó?"
 	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
 	"You currently have no notebooks.": [
 		"Bạn hiện tai không có notebook nào."
 	],
@@ -2842,6 +2848,9 @@
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Bạn có thể sử dụng công cụ dưới đây để tái mã hoá dữ liệu, ví dụ như trong trường hợp bạn thấy một số ghi chú được mã hoá bằng một phương thức đã lỗi thời."
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
+		""
 	],
 	"Your choice: ": [
 		"Lựa chọn của bạn "

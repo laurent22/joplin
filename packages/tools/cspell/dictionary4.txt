@@ -92,5 +92,8 @@ Prec
 titlewrapper
 notyf
 Notyf
+unresponded
 activeline
 Prec
+ellipsized
+Trashable
