@@ -2694,7 +2694,7 @@ class Setting extends BaseModel {
 		if (name === 'keymap') return _('Keyboard Shortcuts');
 		if (name === 'joplinCloud') return _('Joplin Cloud');
 		if (name === 'tools') return _('Tools');
-		if (name === 'importOrExport') return _('Import or export');
+		if (name === 'importOrExport') return _('Import and Export');
 		if (name === 'moreInfo') return _('More information');
 
 		if (this.customSections_[name] && this.customSections_[name].label) return this.customSections_[name].label;
