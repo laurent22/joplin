@@ -1,7 +1,3 @@
-### 4、Spring 入门程序
-
-#### 4-1.实体类
-
 ```
 public class User {
 		private String name;
