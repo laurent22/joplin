@@ -213,6 +213,7 @@ const iso639Map_ = [
 	['cos', 'co'],
 	['cre', 'cr'],
 	['dan', 'da'],
+	['deu', 'de'],
 	['div', 'dv'],
 	['dzo', 'dz'],
 	['eng', 'en'],
