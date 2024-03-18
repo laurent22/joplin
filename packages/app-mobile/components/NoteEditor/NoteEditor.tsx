@@ -517,6 +517,7 @@ function NoteEditor(props: Props, ref: any) {
 					ref={webviewRef}
 					html={html}
 					injectedJavaScript={injectedJavaScript}
+					hasPluginScripts={codeMirrorPlugins.length > 0}
 					onMessage={onMessage}
 					onLoadEnd={onLoadEnd}
 					onError={onError}
