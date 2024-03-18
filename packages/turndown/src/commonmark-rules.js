@@ -474,20 +474,9 @@ rules.code = {
     }
 
     content = content.replace(/\r?\n|\r/g, '\n')
-    // if code is multiline and in isCodeBlock, just return it, isCodeBlock well add fence(default is ```)
-    // if code is multiline but not in isCodeBlock, add fence(default is ```)
-    if (content.indexOf('\n') != -1){
-      if (node.parentNode && isCodeBlock(node.parentNode)) {
-        return content
-      }else {
-        var className = node.className || ''
-        var language = (className.match(/language-(\S+)/) || [null, ''])[1]
-        return (
-          '\n\n' + options.fence + language + '\n' +
-          code.replace(/\n$/, '') +
-          '\n' + options.fence + '\n\n'
-        )
-      }
+    // if code is multiline and in codeBlock, just return it, codeBlock well add fence(default is ```)
+    if (content.indexOf('\n') != -1 && node.parentNode && isCodeBlock(node.parentNode)){
+      return content
     }
 
     content = content.replace(/\r?\n|\r/g, '')
