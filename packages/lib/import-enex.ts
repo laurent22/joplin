@@ -126,6 +126,7 @@ interface ExtractedNote extends NoteEntity {
 interface SavedNote {
 	id: string;
 	body: string;
+	resourceIds: string[];
 }
 
 // At this point we have the resource as it's been parsed from the XML, but
@@ -309,8 +310,9 @@ const restoreNoteLinks = async (notes: SavedNote[], noteTitlesToIds: Record<stri
 		let noteChanged = false;
 
 		for (const link of links) {
+			const isResourceLink = note.resourceIds.includes(link.url.slice(2));
 			const matchingNoteIds = noteTitlesToIds[link.title];
-			if (matchingNoteIds && matchingNoteIds.length === 1) {
+			if (!isResourceLink && matchingNoteIds && matchingNoteIds.length === 1) {
 				note.body = note.body.replace(link.url, `:/${matchingNoteIds[0]}`);
 				noteChanged = true;
 			}
@@ -480,6 +482,7 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 					savedNotes.push({
 						id: note.id,
 						body: note.body,
+						resourceIds: note.resources.map((r: ExtractedResource) => r.id),
 					});
 
 					progressState.created++;
