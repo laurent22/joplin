@@ -9,347 +9,206 @@ interface CodeToCountryMap {
 }
 type ParsePluralFormFunction = (n: number)=> number;
 
-const codeToLanguageE_: StringToStringMap = {};
-codeToLanguageE_['aa'] = 'Afar';
-codeToLanguageE_['ab'] = 'Abkhazian';
-codeToLanguageE_['af'] = 'Afrikaans';
-codeToLanguageE_['am'] = 'Amharic';
-codeToLanguageE_['an'] = 'Aragonese';
-codeToLanguageE_['ar'] = 'Arabic';
-codeToLanguageE_['as'] = 'Assamese';
-codeToLanguageE_['ay'] = 'Aymara';
-codeToLanguageE_['az'] = 'Azerbaijani';
-codeToLanguageE_['ba'] = 'Bashkir';
-codeToLanguageE_['be'] = 'Byelorussian';
-codeToLanguageE_['bg'] = 'Bulgarian';
-codeToLanguageE_['bh'] = 'Bihari';
-codeToLanguageE_['bi'] = 'Bislama';
-codeToLanguageE_['bn'] = 'Bangla';
-codeToLanguageE_['bo'] = 'Tibetan';
-codeToLanguageE_['br'] = 'Breton';
-codeToLanguageE_['bs'] = 'Bosnian';
-codeToLanguageE_['ca'] = 'Catalan';
-codeToLanguageE_['co'] = 'Corsican';
-codeToLanguageE_['cs'] = 'Czech';
-codeToLanguageE_['cy'] = 'Welsh';
-codeToLanguageE_['da'] = 'Danish';
-codeToLanguageE_['de'] = 'German';
-codeToLanguageE_['dz'] = 'Bhutani';
-codeToLanguageE_['el'] = 'Greek';
-codeToLanguageE_['en'] = 'English';
-codeToLanguageE_['eo'] = 'Esperanto';
-codeToLanguageE_['es'] = 'Spanish';
-codeToLanguageE_['et'] = 'Estonian';
-codeToLanguageE_['eu'] = 'Basque';
-codeToLanguageE_['fa'] = 'Persian';
-codeToLanguageE_['fi'] = 'Finnish';
-codeToLanguageE_['fj'] = 'Fiji';
-codeToLanguageE_['fo'] = 'Faroese';
-codeToLanguageE_['fr'] = 'French';
-codeToLanguageE_['fy'] = 'Frisian';
-codeToLanguageE_['ga'] = 'Irish';
-codeToLanguageE_['gd'] = 'Gaelic';
-codeToLanguageE_['gl'] = 'Galician';
-codeToLanguageE_['gn'] = 'Guarani';
-codeToLanguageE_['gu'] = 'Gujarati';
-codeToLanguageE_['ha'] = 'Hausa';
-codeToLanguageE_['he'] = 'Hebrew';
-codeToLanguageE_['hi'] = 'Hindi';
-codeToLanguageE_['hr'] = 'Croatian';
-codeToLanguageE_['hu'] = 'Hungarian';
-codeToLanguageE_['hy'] = 'Armenian';
-codeToLanguageE_['ia'] = 'Interlingua';
-codeToLanguageE_['id'] = 'Indonesian';
-codeToLanguageE_['ie'] = 'Interlingue';
-codeToLanguageE_['ik'] = 'Inupiak';
-codeToLanguageE_['is'] = 'Icelandic';
-codeToLanguageE_['it'] = 'Italian';
-codeToLanguageE_['iu'] = 'Inuktitut';
-codeToLanguageE_['ja'] = 'Japanese';
-codeToLanguageE_['jw'] = 'Javanese';
-codeToLanguageE_['ka'] = 'Georgian';
-codeToLanguageE_['kk'] = 'Kazakh';
-codeToLanguageE_['kl'] = 'Greenlandic';
-codeToLanguageE_['km'] = 'Cambodian';
-codeToLanguageE_['kn'] = 'Kannada';
-codeToLanguageE_['ko'] = 'Korean';
-codeToLanguageE_['ks'] = 'Kashmiri';
-codeToLanguageE_['ku'] = 'Kurdish';
-codeToLanguageE_['ky'] = 'Kirghiz';
-codeToLanguageE_['la'] = 'Latin';
-codeToLanguageE_['ln'] = 'Lingala';
-codeToLanguageE_['lo'] = 'Laothian';
-codeToLanguageE_['lt'] = 'Lithuanian';
-codeToLanguageE_['lv'] = 'Latvian';
-codeToLanguageE_['mg'] = 'Malagasy';
-codeToLanguageE_['mi'] = 'Maori';
-codeToLanguageE_['mk'] = 'Macedonian';
-codeToLanguageE_['ml'] = 'Malayalam';
-codeToLanguageE_['mn'] = 'Mongolian';
-codeToLanguageE_['mo'] = 'Moldavian';
-codeToLanguageE_['mr'] = 'Marathi';
-codeToLanguageE_['ms'] = 'Malay';
-codeToLanguageE_['mt'] = 'Maltese';
-codeToLanguageE_['my'] = 'Burmese';
-codeToLanguageE_['na'] = 'Nauru';
-codeToLanguageE_['nb'] = 'Norwegian';
-codeToLanguageE_['ne'] = 'Nepali';
-codeToLanguageE_['nl'] = 'Dutch';
-codeToLanguageE_['no'] = 'Norwegian';
-codeToLanguageE_['oc'] = 'Occitan';
-codeToLanguageE_['om'] = 'Oromo';
-codeToLanguageE_['or'] = 'Oriya';
-codeToLanguageE_['pa'] = 'Punjabi';
-codeToLanguageE_['pl'] = 'Polish';
-codeToLanguageE_['ps'] = 'Pushto';
-codeToLanguageE_['pt'] = 'Portuguese';
-codeToLanguageE_['qu'] = 'Quechua';
-codeToLanguageE_['rm'] = 'Rhaeto-Romance';
-codeToLanguageE_['rn'] = 'Kirundi';
-codeToLanguageE_['ro'] = 'Romanian';
-codeToLanguageE_['ru'] = 'Russian';
-codeToLanguageE_['rw'] = 'Kinyarwanda';
-codeToLanguageE_['sa'] = 'Sanskrit';
-codeToLanguageE_['sd'] = 'Sindhi';
-codeToLanguageE_['sg'] = 'Sangho';
-codeToLanguageE_['sh'] = 'Serbo-Croatian';
-codeToLanguageE_['si'] = 'Sinhalese';
-codeToLanguageE_['sk'] = 'Slovak';
-codeToLanguageE_['sl'] = 'Slovenian';
-codeToLanguageE_['sm'] = 'Samoan';
-codeToLanguageE_['sn'] = 'Shona';
-codeToLanguageE_['so'] = 'Somali';
-codeToLanguageE_['sq'] = 'Albanian';
-codeToLanguageE_['sr'] = 'Serbian';
-codeToLanguageE_['ss'] = 'Siswati';
-codeToLanguageE_['st'] = 'Sesotho';
-codeToLanguageE_['su'] = 'Sundanese';
-codeToLanguageE_['sv'] = 'Swedish';
-codeToLanguageE_['sw'] = 'Swahili';
-codeToLanguageE_['ta'] = 'Tamil';
-codeToLanguageE_['te'] = 'Telugu';
-codeToLanguageE_['tg'] = 'Tajik';
-codeToLanguageE_['th'] = 'Thai';
-codeToLanguageE_['ti'] = 'Tigrinya';
-codeToLanguageE_['tk'] = 'Turkmen';
-codeToLanguageE_['tl'] = 'Tagalog';
-codeToLanguageE_['tn'] = 'Setswana';
-codeToLanguageE_['to'] = 'Tonga';
-codeToLanguageE_['tr'] = 'Turkish';
-codeToLanguageE_['ts'] = 'Tsonga';
-codeToLanguageE_['tt'] = 'Tatar';
-codeToLanguageE_['tw'] = 'Twi';
-codeToLanguageE_['ug'] = 'Uighur';
-codeToLanguageE_['uk'] = 'Ukrainian';
-codeToLanguageE_['ur'] = 'Urdu';
-codeToLanguageE_['uz'] = 'Uzbek';
-codeToLanguageE_['vi'] = 'Vietnamese';
-codeToLanguageE_['vo'] = 'Volapuk';
-codeToLanguageE_['wo'] = 'Wolof';
-codeToLanguageE_['xh'] = 'Xhosa';
-codeToLanguageE_['yi'] = 'Yiddish';
-codeToLanguageE_['yo'] = 'Yoruba';
-codeToLanguageE_['za'] = 'Zhuang';
-codeToLanguageE_['zh'] = 'Chinese';
-codeToLanguageE_['zu'] = 'Zulu';
+interface Iso639Item {
+	alpha3: string;
+	alpha2: string;
+	nameEnglish: string;
+	nameNative: string;
+}
 
-const codeToLanguage_: StringToStringMap = {};
-codeToLanguage_['an'] = 'Aragonés';
-codeToLanguage_['da'] = 'Dansk';
-codeToLanguage_['de'] = 'Deutsch';
-codeToLanguage_['en'] = 'English';
-codeToLanguage_['es'] = 'Español';
-codeToLanguage_['fr'] = 'Français';
-codeToLanguage_['he'] = 'עיברית';
-codeToLanguage_['it'] = 'Italiano';
-codeToLanguage_['lt'] = 'Lietuvių kalba';
-codeToLanguage_['lv'] = 'Latviešu';
-codeToLanguage_['nl'] = 'Nederlands';
-codeToLanguage_['pl'] = 'Polski';
-codeToLanguage_['pt'] = 'Português';
-codeToLanguage_['ru'] = 'Русский';
-codeToLanguage_['sk'] = 'Slovenčina';
-codeToLanguage_['sq'] = 'Shqip';
-codeToLanguage_['sr'] = 'српски језик';
-codeToLanguage_['tr'] = 'Türkçe';
-codeToLanguage_['ja'] = '日本語';
-codeToLanguage_['ko'] = '한국어';
-codeToLanguage_['sv'] = 'Svenska';
-codeToLanguage_['el'] = 'Ελληνικά';
-codeToLanguage_['zh'] = '中文';
-codeToLanguage_['ro'] = 'Română';
-codeToLanguage_['et'] = 'Eesti Keel';
-codeToLanguage_['vi'] = 'Tiếng Việt';
-codeToLanguage_['hu'] = 'Magyar';
+type Iso639Line = [string, string, string, string?];
 
-const iso639Map_ = [
-	['aar', 'aa'],
-	['abk', 'ab'],
-	['afr', 'af'],
-	['aka', 'ak'],
-	['amh', 'am'],
-	['ara', 'ar'],
-	['arg', 'an'],
-	['asm', 'as'],
-	['ava', 'av'],
-	['ave', 'ae'],
-	['aym', 'ay'],
-	['aze', 'az'],
-	['bak', 'ba'],
-	['bam', 'bm'],
-	['bel', 'be'],
-	['ben', 'bn'],
-	['bih', 'bh'],
-	['bis', 'bi'],
-	['bos', 'bs'],
-	['bre', 'br'],
-	['bul', 'bg'],
-	['cat', 'ca'],
-	['cha', 'ch'],
-	['che', 'ce'],
-	['chu', 'cu'],
-	['chv', 'cv'],
-	['cor', 'kw'],
-	['cos', 'co'],
-	['cre', 'cr'],
-	['dan', 'da'],
-	['deu', 'de'],
-	['div', 'dv'],
-	['dzo', 'dz'],
-	['eng', 'en'],
-	['epo', 'eo'],
-	['est', 'et'],
-	['ewe', 'ee'],
-	['fao', 'fo'],
-	['fij', 'fj'],
-	['fin', 'fi'],
-	['fra', 'fr'],
-	['fry', 'fy'],
-	['ful', 'ff'],
-	['gla', 'gd'],
-	['gle', 'ga'],
-	['glg', 'gl'],
-	['glv', 'gv'],
-	['grn', 'gn'],
-	['guj', 'gu'],
-	['hat', 'ht'],
-	['hau', 'ha'],
-	['heb', 'he'],
-	['her', 'hz'],
-	['hin', 'hi'],
-	['hmo', 'ho'],
-	['hrv', 'hr'],
-	['hun', 'hu'],
-	['ibo', 'ig'],
-	['ido', 'io'],
-	['iii', 'ii'],
-	['iku', 'iu'],
-	['ile', 'ie'],
-	['ina', 'ia'],
-	['ind', 'id'],
-	['ipk', 'ik'],
-	['ita', 'it'],
-	['jav', 'jv'],
-	['jpn', 'ja'],
-	['kal', 'kl'],
-	['kan', 'kn'],
-	['kas', 'ks'],
-	['kau', 'kr'],
-	['kaz', 'kk'],
-	['khm', 'km'],
-	['kik', 'ki'],
-	['kin', 'rw'],
-	['kir', 'ky'],
-	['kom', 'kv'],
-	['kon', 'kg'],
-	['kor', 'ko'],
-	['kua', 'kj'],
-	['kur', 'ku'],
-	['lao', 'lo'],
-	['lat', 'la'],
-	['lav', 'lv'],
-	['lim', 'li'],
-	['lin', 'ln'],
-	['lit', 'lt'],
-	['ltz', 'lb'],
-	['lub', 'lu'],
-	['lug', 'lg'],
-	['mah', 'mh'],
-	['mal', 'ml'],
-	['mar', 'mr'],
-	['mlg', 'mg'],
-	['mlt', 'mt'],
-	['mon', 'mn'],
-	['nau', 'na'],
-	['nav', 'nv'],
-	['nbl', 'nr'],
-	['nde', 'nd'],
-	['ndo', 'ng'],
-	['nep', 'ne'],
-	['nno', 'nn'],
-	['nob', 'nb'],
-	['nor', 'no'],
-	['nya', 'ny'],
-	['oci', 'oc'],
-	['oji', 'oj'],
-	['ori', 'or'],
-	['orm', 'om'],
-	['oss', 'os'],
-	['pan', 'pa'],
-	['pli', 'pi'],
-	['pol', 'pl'],
-	['por', 'pt'],
-	['pus', 'ps'],
-	['que', 'qu'],
-	['roh', 'rm'],
-	['run', 'rn'],
-	['rus', 'ru'],
-	['sag', 'sg'],
-	['san', 'sa'],
-	['sin', 'si'],
-	['slv', 'sl'],
-	['sme', 'se'],
-	['smo', 'sm'],
-	['sna', 'sn'],
-	['snd', 'sd'],
-	['som', 'so'],
-	['sot', 'st'],
-	['spa', 'es'],
-	['srd', 'sc'],
-	['srp', 'sr'],
-	['ssw', 'ss'],
-	['sun', 'su'],
-	['swa', 'sw'],
-	['swe', 'sv'],
-	['tah', 'ty'],
-	['tam', 'ta'],
-	['tat', 'tt'],
-	['tel', 'te'],
-	['tgk', 'tg'],
-	['tgl', 'tl'],
-	['tha', 'th'],
-	['tir', 'ti'],
-	['ton', 'to'],
-	['tsn', 'tn'],
-	['tso', 'ts'],
-	['tuk', 'tk'],
-	['tur', 'tr'],
-	['twi', 'tw'],
-	['uig', 'ug'],
-	['ukr', 'uk'],
-	['urd', 'ur'],
-	['uzb', 'uz'],
-	['ven', 've'],
-	['vie', 'vi'],
-	['vol', 'vo'],
-	['wln', 'wa'],
-	['wol', 'wo'],
-	['xho', 'xh'],
-	['yid', 'yi'],
-	['yor', 'yo'],
-	['zha', 'za'],
-	['zul', 'zu'],
+// cSpell:disable
+
+// Source: https://www.loc.gov/standards/iso639-2/php/code_list.php
+// ISO 639-2 Code, ISO 639-1 Code, English name of Language
+const iso639_: Iso639Line[] = [
+	['aar', 'aa', 'Afar'],
+	['abk', 'ab', 'Abkhazian'],
+	['ave', 'ae', 'Avestan'],
+	['afr', 'af', 'Afrikaans'],
+	['aka', 'ak', 'Akan'],
+	['amh', 'am', 'Amharic'],
+	['arg', 'an', 'Aragonese', 'Aragonés'],
+	['ara', 'ar', 'Arabic'],
+	['asm', 'as', 'Assamese'],
+	['ava', 'av', 'Avaric'],
+	['aym', 'ay', 'Aymara'],
+	['aze', 'az', 'Azerbaijani'],
+	['bak', 'ba', 'Bashkir'],
+	['bel', 'be', 'Belarusian'],
+	['bul', 'bg', 'Bulgarian'],
+	['bih', 'bh', 'Bihari languages'],
+	['bis', 'bi', 'Bislama'],
+	['bam', 'bm', 'Bambara'],
+	['ben', 'bn', 'Bengali'],
+	['bod', 'bo', 'Tibetan'],
+	['bre', 'br', 'Breton'],
+	['bos', 'bs', 'Bosnian'],
+	['cat', 'ca', 'Catalan; Valencian'],
+	['che', 'ce', 'Chechen'],
+	['cha', 'ch', 'Chamorro'],
+	['cos', 'co', 'Corsican'],
+	['cre', 'cr', 'Cree'],
+	['ces', 'cs', 'Czech'],
+	['chu', 'cu', 'Church Slavic; Old Slavonic; Church Slavonic; Old Bulgarian; Old Church Slavonic'],
+	['chv', 'cv', 'Chuvash'],
+	['cym', 'cy', 'Welsh'],
+	['dan', 'da', 'Danish', 'Dansk'],
+	['deu', 'de', 'German', 'Deutsch'],
+	['div', 'dv', 'Divehi; Dhivehi; Maldivian'],
+	['dzo', 'dz', 'Dzongkha'],
+	['ewe', 'ee', 'Ewe'],
+	['ell', 'el', 'Greek, Modern (1453-)', 'Ελληνικά'],
+	['eng', 'en', 'English', 'English'],
+	['epo', 'eo', 'Esperanto'],
+	['spa', 'es', 'Spanish; Castilian', 'Español'],
+	['est', 'et', 'Estonian', 'Eesti Keel'],
+	['eus', 'eu', 'Basque'],
+	['fas', 'fa', 'Persian'],
+	['ful', 'ff', 'Fulah'],
+	['fin', 'fi', 'Finnish'],
+	['fij', 'fj', 'Fijian'],
+	['fao', 'fo', 'Faroese'],
+	['fra', 'fr', 'French', 'Français'],
+	['fry', 'fy', 'Western Frisian'],
+	['gle', 'ga', 'Irish'],
+	['gla', 'gd', 'Gaelic; Scottish Gaelic'],
+	['glg', 'gl', 'Galician'],
+	['grn', 'gn', 'Guarani'],
+	['guj', 'gu', 'Gujarati'],
+	['glv', 'gv', 'Manx'],
+	['hau', 'ha', 'Hausa'],
+	['heb', 'he', 'Hebrew', 'עיברית'],
+	['hin', 'hi', 'Hindi'],
+	['hmo', 'ho', 'Hiri Motu'],
+	['hrv', 'hr', 'Croatian'],
+	['hat', 'ht', 'Haitian; Haitian Creole'],
+	['hun', 'hu', 'Hungarian', 'Magyar'],
+	['hye', 'hy', 'Armenian'],
+	['her', 'hz', 'Herero'],
+	['ina', 'ia', 'Interlingua (International Auxiliary Language Association)'],
+	['ind', 'id', 'Indonesian'],
+	['ile', 'ie', 'Interlingue; Occidental'],
+	['ibo', 'ig', 'Igbo'],
+	['iii', 'ii', 'Sichuan Yi; Nuosu'],
+	['ipk', 'ik', 'Inupiaq'],
+	['ido', 'io', 'Ido'],
+	['isl', 'is', 'Icelandic'],
+	['ita', 'it', 'Italian', 'Italiano'],
+	['iku', 'iu', 'Inuktitut'],
+	['jpn', 'ja', 'Japanese', '日本語'],
+	['jav', 'jv', 'Javanese'],
+	['kat', 'ka', 'Georgian'],
+	['kon', 'kg', 'Kongo'],
+	['kik', 'ki', 'Kikuyu; Gikuyu'],
+	['kua', 'kj', 'Kuanyama; Kwanyama'],
+	['kaz', 'kk', 'Kazakh'],
+	['kal', 'kl', 'Kalaallisut; Greenlandic'],
+	['khm', 'km', 'Central Khmer'],
+	['kan', 'kn', 'Kannada'],
+	['kor', 'ko', 'Korean', '한국어'],
+	['kau', 'kr', 'Kanuri'],
+	['kas', 'ks', 'Kashmiri'],
+	['kur', 'ku', 'Kurdish'],
+	['kom', 'kv', 'Komi'],
+	['cor', 'kw', 'Cornish'],
+	['kir', 'ky', 'Kirghiz; Kyrgyz'],
+	['lat', 'la', 'Latin'],
+	['ltz', 'lb', 'Luxembourgish; Letzeburgesch'],
+	['lug', 'lg', 'Ganda'],
+	['lim', 'li', 'Limburgan; Limburger; Limburgish'],
+	['lin', 'ln', 'Lingala'],
+	['lao', 'lo', 'Lao'],
+	['lit', 'lt', 'Lithuanian', 'Lietuvių kalba'],
+	['lub', 'lu', 'Luba-Katanga'],
+	['lav', 'lv', 'Latvian', 'Latviešu'],
+	['mlg', 'mg', 'Malagasy'],
+	['mah', 'mh', 'Marshallese'],
+	['mri', 'mi', 'Maori'],
+	['mkd', 'mk', 'Macedonian'],
+	['mal', 'ml', 'Malayalam'],
+	['mon', 'mn', 'Mongolian'],
+	['mar', 'mr', 'Marathi'],
+	['msa', 'ms', 'Malay'],
+	['mlt', 'mt', 'Maltese'],
+	['mya', 'my', 'Burmese'],
+	['nau', 'na', 'Nauru'],
+	['nob', 'nb', 'Bokmål, Norwegian; Norwegian Bokmål'],
+	['nde', 'nd', 'Ndebele, North; North Ndebele'],
+	['nep', 'ne', 'Nepali'],
+	['ndo', 'ng', 'Ndonga'],
+	['nld', 'nl', 'Dutch; Flemish', 'Nederlands'],
+	['nno', 'nn', 'Norwegian Nynorsk; Nynorsk, Norwegian'],
+	['nor', 'no', 'Norwegian'],
+	['nbl', 'nr', 'Ndebele, South; South Ndebele'],
+	['nav', 'nv', 'Navajo; Navaho'],
+	['nya', 'ny', 'Chichewa; Chewa; Nyanja'],
+	['oci', 'oc', 'Occitan (post 1500)'],
+	['oji', 'oj', 'Ojibwa'],
+	['orm', 'om', 'Oromo'],
+	['ori', 'or', 'Oriya'],
+	['oss', 'os', 'Ossetian; Ossetic'],
+	['pan', 'pa', 'Panjabi; Punjabi'],
+	['pli', 'pi', 'Pali'],
+	['pol', 'pl', 'Polish', 'Polski'],
+	['pus', 'ps', 'Pushto; Pashto'],
+	['por', 'pt', 'Portuguese', 'Português'],
+	['que', 'qu', 'Quechua'],
+	['roh', 'rm', 'Romansh'],
+	['run', 'rn', 'Rundi'],
+	['ron', 'ro', 'Romanian; Moldavian; Moldovan', 'Română'],
+	['rus', 'ru', 'Russian', 'Русский'],
+	['kin', 'rw', 'Kinyarwanda'],
+	['san', 'sa', 'Sanskrit'],
+	['srd', 'sc', 'Sardinian'],
+	['snd', 'sd', 'Sindhi'],
+	['sme', 'se', 'Northern Sami'],
+	['sag', 'sg', 'Sango'],
+	['sin', 'si', 'Sinhala; Sinhalese'],
+	['slk', 'sk', 'Slovak', 'Slovenčina'],
+	['slv', 'sl', 'Slovenian'],
+	['smo', 'sm', 'Samoan'],
+	['sna', 'sn', 'Shona'],
+	['som', 'so', 'Somali'],
+	['sqi', 'sq', 'Albanian', 'Shqip'],
+	['srp', 'sr', 'Serbian', 'српски језик'],
+	['ssw', 'ss', 'Swati'],
+	['sot', 'st', 'Sotho, Southern'],
+	['sun', 'su', 'Sundanese'],
+	['swe', 'sv', 'Swedish', 'Svenska'],
+	['swa', 'sw', 'Swahili'],
+	['tam', 'ta', 'Tamil'],
+	['tel', 'te', 'Telugu'],
+	['tgk', 'tg', 'Tajik'],
+	['tha', 'th', 'Thai'],
+	['tir', 'ti', 'Tigrinya'],
+	['tuk', 'tk', 'Turkmen'],
+	['tgl', 'tl', 'Tagalog'],
+	['tsn', 'tn', 'Tswana'],
+	['ton', 'to', 'Tonga (Tonga Islands)'],
+	['tur', 'tr', 'Turkish', 'Türkçe'],
+	['tso', 'ts', 'Tsonga'],
+	['tat', 'tt', 'Tatar'],
+	['twi', 'tw', 'Twi'],
+	['tah', 'ty', 'Tahitian'],
+	['uig', 'ug', 'Uighur; Uyghur'],
+	['ukr', 'uk', 'Ukrainian'],
+	['urd', 'ur', 'Urdu'],
+	['uzb', 'uz', 'Uzbek'],
+	['ven', 've', 'Venda'],
+	['vie', 'vi', 'Vietnamese', 'Tiếng Việt'],
+	['vol', 'vo', 'Volapük'],
+	['wln', 'wa', 'Walloon'],
+	['wol', 'wo', 'Wolof'],
+	['xho', 'xh', 'Xhosa'],
+	['yid', 'yi', 'Yiddish'],
+	['yor', 'yo', 'Yoruba'],
+	['zha', 'za', 'Zhuang; Chuang'],
+	['zho', 'zh', 'Chinese', '中文'],
+	['zul', 'zu', 'Zulu'],
 ];
+// cSpell:enable
 
 const codeToCountry_: CodeToCountryMap = {
 	AD: ['Andorra', 'Andorra'],
@@ -636,6 +495,26 @@ export const parsePluralForm = (form: string): ParsePluralFormFunction => {
 	return (new Function('n', code)) as ParsePluralFormFunction;
 };
 
+const iso639LineToObject = (line: Iso639Line) => {
+	// TODO: filter name in English (remove brackets, commas,)
+
+	const output: Iso639Item = {
+		alpha3: line[0],
+		alpha2: line[1],
+		nameEnglish: line[2],
+		nameNative: line[3] ? line[3] : '',
+	};
+
+	return output;
+};
+
+const iso639InfoFromAlpha2 = (alpha2: string) => {
+	alpha2 = alpha2.toLowerCase();
+	const line = iso639_.find(e => e[1] === alpha2);
+	if (!line) return null;
+	return iso639LineToObject(line);
+};
+
 const getPluralFunction = (lang: string) => {
 	if (!(lang in pluralFunctions_)) {
 		const locale = closestSupportedLocale(lang);
@@ -713,14 +592,12 @@ function countryName(countryCode: string) {
 	return r.length > 1 && !!r[1] ? r[1] : r[0];
 }
 
-function languageNameInEnglish(languageCode: string) {
-	return codeToLanguageE_[languageCode] ? codeToLanguageE_[languageCode] : '';
-}
-
 function languageName(canonicalName: string, defaultToEnglish = true) {
 	const languageCode = languageCodeOnly(canonicalName);
-	if (codeToLanguage_[languageCode]) return codeToLanguage_[languageCode];
-	if (defaultToEnglish) return languageNameInEnglish(languageCode);
+	const info = iso639InfoFromAlpha2(languageCode);
+	if (!info) return '';
+	if (info.nameNative) return info.nameNative;
+	if (defaultToEnglish) return info.nameEnglish;
 	return '';
 }
 
@@ -793,14 +670,15 @@ function localesFromLanguageCode(languageCode: string, locales: string[]): strin
 	});
 }
 
-export const toIso639 = (code: string) => {
+export const toIso639Alpha3 = (code: string) => {
 	if (code.includes('_')) {
 		const s = code.split('_');
 		code = s[0];
 	}
-	const line = iso639Map_.find(l => l[1] === code);
-	if (!line) throw new Error(`Cannot convert to ISO-639 code: ${code}`);
-	return line[0];
+
+	const info = iso639InfoFromAlpha2(code);
+	if (!info) throw new Error(`Cannot convert to ISO-639 code: ${code}`);
+	return info.alpha3;
 };
 
 function _(s: string, ...args: any[]): string {
