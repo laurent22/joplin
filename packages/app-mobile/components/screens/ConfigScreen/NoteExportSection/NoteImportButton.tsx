@@ -17,7 +17,7 @@ interface Props {
 }
 
 export const importButtonDefaultTitle = () => _('Import from JEX');
-export const importButtonDescription = () => _('Loads a notebook from a JEX file.');
+export const importButtonDescription = () => _('Import notes from a JEX (Joplin EXport) file.');
 
 const getTitle = (taskStatus: TaskStatus) => {
 	if (taskStatus === TaskStatus.NotStarted) {
@@ -42,12 +42,12 @@ const runImportTask = async (
 
 	const importFiles = await pickDocument(false);
 	if (importFiles.length === 0) {
+		logger.info('Canceled.');
 		return { success: false, warnings: [] };
 	}
 
 	const sourceFilePath = importFiles[0].uri;
 	await shim.fsDriver().copy(sourceFilePath, importTargetPath);
-
 
 	const status = await InteropService.instance().import({
 		path: importTargetPath,
@@ -63,6 +63,7 @@ const NoteImportButton: FunctionComponent<Props> = props => {
 	return (
 		<TaskButton
 			taskName={importButtonDefaultTitle()}
+			description={importButtonDescription()}
 			title={getTitle}
 			styles={props.styles}
 			onRunTask={runImportTask}

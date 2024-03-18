@@ -7,7 +7,7 @@ import { ConfigScreenStyles } from '../configScreenStyles';
 import SettingsButton from '../SettingsButton';
 import Logger from '@joplin/utils/Logger';
 
-// Undefined = indeterminant progress
+// Undefined = indeterminate progress
 export type OnProgressCallback = (progressFraction: number|undefined)=> void;
 export type AfterCompleteListener = (success: boolean)=> Promise<void>;
 export type SetAfterCompleteListenerCallback = (listener: AfterCompleteListener)=> void;
@@ -67,7 +67,7 @@ const TaskButton: FunctionComponent<Props> = props => {
 				completedSuccessfully = true;
 			}
 		} catch (error) {
-			logger.error(`Task ${props.taskName} failed`);
+			logger.error(`Task ${props.taskName} failed`, error);
 			Alert.alert(_('Error'), _('Task "%s" failed with error: %s', props.taskName, error.toString()));
 		} finally {
 			if (!completedSuccessfully) {

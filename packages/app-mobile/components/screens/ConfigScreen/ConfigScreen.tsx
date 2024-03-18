@@ -517,7 +517,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			addSettingButton('fix_search_engine_index', this.state.fixingSearchIndex ? _('Fixing search index...') : _('Fix search index'), this.fixSearchEngineIndexButtonPress_, { disabled: this.state.fixingSearchIndex, description: _('Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.') });
 		}
 
-		if (section.name === 'export') {
+		if (section.name === 'importOrExport') {
 			addSettingComponent(
 				<NoteExportButton key='export_as_jex_button' styles={this.styles()} />,
 				[exportButtonDefaultTitle(), exportButtonDescription()],

@@ -228,7 +228,7 @@ export const settingsSections = createSelector(
 			});
 		} else {
 			output.push(...([
-				'tools', 'export', 'moreInfo',
+				'tools', 'importOrExport', 'moreInfo',
 			].map(name => {
 				return {
 					name,
