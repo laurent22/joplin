@@ -293,6 +293,9 @@ const preProcessFile = async (filePath: string): Promise<string> => {
 	// return newFilePath;
 };
 
+const isEvernoteUrl = (url: string) => {
+	return url.toLowerCase().startsWith('evernote://');
+};
 
 const restoreNoteLinks = async (notes: SavedNote[], noteTitlesToIds: Record<string, string[]>, importOptions: ImportOptions) => {
 	// --------------------------------------------------------
@@ -309,6 +312,8 @@ const restoreNoteLinks = async (notes: SavedNote[], noteTitlesToIds: Record<stri
 		let noteChanged = false;
 
 		for (const link of links) {
+			if (!isEvernoteUrl(link.url)) continue;
+
 			const matchingNoteIds = noteTitlesToIds[link.title];
 			if (matchingNoteIds && matchingNoteIds.length === 1) {
 				note.body = note.body.replace(link.url, `:/${matchingNoteIds[0]}`);
