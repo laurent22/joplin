@@ -171,4 +171,16 @@ describe('CodeMirror5Emulation', () => {
 		expect(testExtensionFn1).toHaveBeenCalledTimes(1);
 		expect(testExtensionFn2).toHaveBeenCalledTimes(1);
 	});
+
+	it('defineExtension should register an extension where this points to the editor', () => {
+		const codeMirror = makeCodeMirrorEmulation('Test...');
+		let lastThis = null;
+
+		codeMirror.defineExtension('testExtension', function() {
+			lastThis = this;
+		});
+		codeMirror.execCommand('testExtension');
+
+		expect(lastThis).toBe(codeMirror);
+	});
 });

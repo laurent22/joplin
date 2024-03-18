@@ -1,5 +1,5 @@
 import CommandService, { CommandContext, CommandDeclaration } from '@joplin/lib/services/CommandService';
-import { EditorControl } from '../types';
+import { EditorControl } from '@joplin/editor/types';
 import { useEffect } from 'react';
 import commandDeclarations, { enabledCondition } from '../commandDeclarations';
 import Logger from '@joplin/utils/Logger';
@@ -12,9 +12,13 @@ const commandRuntime = (declaration: CommandDeclaration, editor: EditorControl) 
 			// Many editor CodeMirror commands are missing the editor. prefix.
 			let commandName = declaration.name.replace(/^editor\./, '');
 
-			if (declaration.name === 'editor.execCommand') {
-				commandName = args[0];
-				args = args.slice(1);
+			if (commandName === 'execCommand') {
+				commandName = args[0]?.name;
+				args = args[0]?.args ?? [];
+
+				if (!commandName) {
+					throw new Error('editor.execCommand is missing the name of the command to execute');
+				}
 			}
 
 			if (!(await editor.supportsCommand(commandName))) {
