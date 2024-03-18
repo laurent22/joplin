@@ -143,10 +143,10 @@ const JoplinCloudScreenComponent = (props: Props) => {
 
 	return (
 		<View style={styles.root}>
-			<ScreenHeader title={_('Login with Joplin Cloud')} />
+			<ScreenHeader title={_('Joplin Cloud Login')} />
 			<View style={styles.containerStyle}>
 				<Text style={styles.text}>
-					{_('To allow Joplin to synchronise with Joplin Cloud, open this URL in your browser to authorise the application:')}
+					{_('To allow Joplin to synchronise with Joplin Cloud, please login using this URL:')}
 				</Text>
 				<View style={styles.buttonsContainer}>
 					<View style={{ marginBottom: 20 }}>

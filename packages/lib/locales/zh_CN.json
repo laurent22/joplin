@@ -140,6 +140,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"关于 Joplin"
 	],
@@ -319,6 +322,9 @@
 	],
 	"Automatically check for updates": [
 		"自动检查更新"
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
 	],
 	"Automatically switch theme to match system theme": [
 		"根据系统主题自动切换"
@@ -767,20 +773,8 @@
 	"Delete note": [
 		"删除笔记"
 	],
-	"Delete note \"%s\"?": [
-		"是否删除笔记 “%s”？"
-	],
-	"Delete note?": [
-		"是否删除笔记？"
-	],
 	"Delete notebook": [
 		"删除笔记本"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"是否删除笔记本 “%s”？\n\n所有在该笔记本内的笔记和子笔记本也将同时被删除。"
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"是否删除笔记本？所有在该笔记本内的笔记和子笔记本也将同时被删除。"
 	],
 	"Delete plugin \"%s\"?": [
 		"是否删除插件 “%s”？"
@@ -793,9 +787,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"是否删除收件箱笔记本？\n\n如果删除收件箱笔记本，最近发送到其中的所有电子邮件都可能会丢失。"
-	],
-	"Delete these %d notes?": [
-		"是否删除这 %d 条笔记？"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"是否删除该邀请？收件人将无法再次访问此共享笔记本。"
@@ -944,6 +935,9 @@
 	"Dropbox Login": [
 		"登录 Dropbox"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"复制"
 	],
@@ -1021,6 +1015,9 @@
 	],
 	"emphasised text": [
 		"强调文本"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"启用"
@@ -1346,6 +1343,9 @@
 	"Grant authorisation": [
 		"批准授权"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"Header %d"
 	],
@@ -1414,6 +1414,9 @@
 	],
 	"Idle": [
 		"空闲"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		"忽略"
@@ -1541,12 +1544,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"Joplin Cloud 邮箱"
-	],
-	"Joplin Cloud password": [
-		"Joplin Cloud 密码"
-	],
 	"Joplin Export Directory": [
 		"Joplin 导出目录"
 	],
@@ -1616,6 +1613,9 @@
 	"Later": [
 		"稍后"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"布局"
 	],
@@ -1676,12 +1676,6 @@
 	"Log": [
 		"日志"
 	],
-	"Login": [
-		"登录"
-	],
-	"Login below.": [
-		"在下方登录。"
-	],
 	"Login with Dropbox": [
 		"通过 Dropbox 登录"
 	],
@@ -1693,6 +1687,9 @@
 	],
 	"Logs, profiles, sync status": [
 		"日志，配置文件与同步状态"
+	],
+	"Longitude": [
+		""
 	],
 	"Make a donation": [
 		"捐助"
@@ -2036,9 +2033,6 @@
 	"Options": [
 		"选项"
 	],
-	"Or create an account.": [
-		"创建帐号。"
-	],
 	"Ordered list": [
 		"有序列表"
 	],
@@ -2128,6 +2122,9 @@
 	],
 	"Please wait...": [
 		"请稍候..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"插件工具"
@@ -2792,9 +2789,6 @@
 	"Text editor command": [
 		"文本编辑器命令"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"感谢！您的 Joplin Cloud 帐号已经设置完毕。"
-	],
 	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
 		"[Web Clipper](%s) 是一个浏览器扩展程序，可让您保存浏览器中的网页和屏幕截图。"
 	],
@@ -2936,9 +2930,6 @@
 	"There was an error downloading this attachment:": [
 		"下载此附件时出错："
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"设置您的 Joplin Cloud 帐号时发生了一个错误。请确认您的邮箱和密码是否正确，然后再试一次。错误是：\n\n%s"
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"这些条目将只保留在本设备上，不会上传到同步目标。若需查找这些项，请搜索标题或 ID（显示在上方括号中）。"
 	],
@@ -2995,6 +2986,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"这将打开一个新页面。是否保存当前更改？"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"这将从您的收藏中删除该笔记本，您将不再有机会访问其内容。您希望继续吗？"
@@ -3094,6 +3088,9 @@
 	],
 	"Total: %d/%d": [
 		"总数：%d/%d 条"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		"重试"
@@ -3328,6 +3325,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"正在尝试将大图片 (%dx%d 像素) 添加到笔记中，是否要需要将其缩放为 %d 像素后再添加？"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"您当前没有笔记本。"

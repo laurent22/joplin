@@ -140,6 +140,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"關於 Joplin"
 	],
@@ -319,6 +322,9 @@
 	],
 	"Automatically check for updates": [
 		"自動檢查更新"
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
 	],
 	"Automatically switch theme to match system theme": [
 		"自動切換以配合系統主題"
@@ -764,20 +770,8 @@
 	"Delete note": [
 		"刪除記事"
 	],
-	"Delete note \"%s\"?": [
-		"刪除此記事「%s」？"
-	],
-	"Delete note?": [
-		"刪除記事？"
-	],
 	"Delete notebook": [
 		"刪除筆記本"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"確定刪除「%s」？\n\n此記事本中的所有記事和子記事本也將刪除。"
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"確定要刪除記事本？此舉亦會刪除其中的所有記事和子記事本。"
 	],
 	"Delete plugin \"%s\"?": [
 		"刪除延伸模組「%s」？"
@@ -790,9 +784,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"刪除收件匣筆記本？\n\n如果您刪除收件匣筆記本，最近發送到該筆記本的任何電子郵件可能會遺失。"
-	],
-	"Delete these %d notes?": [
-		"刪除這些記事 %d ？"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"確定刪除這份邀請嗎？此舉將會使共享對象無法再存取這份共享記事本。"
@@ -941,6 +932,9 @@
 	"Dropbox Login": [
 		"Dropbox 登入"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"新增複本"
 	],
@@ -1015,6 +1009,9 @@
 	],
 	"emphasised text": [
 		"強調文字"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"啟用"
@@ -1331,6 +1328,9 @@
 	"Grant authorisation": [
 		"授權"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"標題 %d"
 	],
@@ -1396,6 +1396,9 @@
 	],
 	"Idle": [
 		"閒置"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		"忽略"
@@ -1523,12 +1526,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"Joplin Cloud 信箱"
-	],
-	"Joplin Cloud password": [
-		"Joplin Cloud 密碼"
-	],
 	"Joplin Export Directory": [
 		"Joplin 匯出目錄"
 	],
@@ -1598,6 +1595,9 @@
 	"Later": [
 		"稍後"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"頁面佈局"
 	],
@@ -1658,12 +1658,6 @@
 	"Log": [
 		"日誌"
 	],
-	"Login": [
-		"登入"
-	],
-	"Login below.": [
-		"於下方登入。"
-	],
 	"Login with Dropbox": [
 		"以 Dropbox 登入"
 	],
@@ -1675,6 +1669,9 @@
 	],
 	"Logs, profiles, sync status": [
 		"日誌、設定檔、同步狀態"
+	],
+	"Longitude": [
+		""
 	],
 	"Make a donation": [
 		"捐助"
@@ -2018,9 +2015,6 @@
 	"Options": [
 		"選項"
 	],
-	"Or create an account.": [
-		"或是建立帳號。"
-	],
 	"Ordered list": [
 		"有序清單"
 	],
@@ -2110,6 +2104,9 @@
 	],
 	"Please wait...": [
 		"請稍候..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"延伸模組"
@@ -2567,6 +2564,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"按 <field> 對項目進行排序 (例如: 標題、更新時間、建立時間等等)。"
 	],
+	"Source": [
+		"來源"
+	],
 	"Source format: %s": [
 		"來源格式：%s"
 	],
@@ -2765,9 +2765,6 @@
 	"Text editor command": [
 		"文字編輯器命令"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"謝謝您！您的 Joplin Cloud 帳戶已經完成設定，現在即可開始使用。"
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"無法刪除目前的設定檔。切換至不同的設定檔並重試。"
 	],
@@ -2903,9 +2900,6 @@
 	"There was an error downloading this attachment:": [
 		"下載此附件時出現錯誤："
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"設定你的 Joplin Cloud 帳戶時發生錯誤。請確認你的電子信箱與密碼並重試。錯誤訊息：\n\n%s"
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"這些頊目將保留在設備上，但不會上傳到同步目標。要尋找這些項目，請以標題或 ID （在上面的括弧中顯示）搜尋。"
 	],
@@ -2953,6 +2947,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"這將會開啟新視窗。儲存您目前的變更嗎？"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"此動作將會從你的收藏庫中移除記事本，並且未來將無法再存取其內容。確定要繼續嗎？"
@@ -3049,6 +3046,9 @@
 	],
 	"Total: %d/%d": [
 		"總數：%d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		"再試一次"
@@ -3283,6 +3283,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"您將附加大型圖片 (%dx%d pixels)，附加之前是否要把尺寸縮小為 %d pixels？"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"您目前尚未擁有記事本。"

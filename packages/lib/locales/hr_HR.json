@@ -137,6 +137,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"O Joplinu"
 	],
@@ -310,6 +313,9 @@
 	],
 	"Automatically check for updates": [
 		"Automatski traži nove verzije"
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
 	],
 	"Automatically switch theme to match system theme": [
 		"Automatski promijeni temu na temu sustava"
@@ -748,20 +754,8 @@
 	"Delete note": [
 		"Izbriši bilješku"
 	],
-	"Delete note \"%s\"?": [
-		"Izbrisati bilješku „%s”?"
-	],
-	"Delete note?": [
-		"Izbrisati bilješku?"
-	],
 	"Delete notebook": [
 		"Izbriši bilježnicu"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Izbrisati bilježnicu „%s”?\n\nSve bilješke i podbilježnice u ovoj bilježnici će se također izbrisati."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Izbrisati bilježnicu? Sve bilješke i podbilježnice u ovoj bilježnici će se također izbrisati."
 	],
 	"Delete plugin \"%s\"?": [
 		"Izbrisati dodatak „%s”?"
@@ -774,9 +768,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Izbrisati bilježnicu „Dolazna pošta”?\n\nAko izbrišeš bilježnicu dolazne pošte, sva e-pošta koja je nedavno poslana na nju će se možda izgubiti."
-	],
-	"Delete these %d notes?": [
-		"Izbrisati ove %d bilješke?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Izbrisati ovu pozivnicu? Primalac više neće imati pristup ovoj dijeljenoj bilježnici."
@@ -919,6 +910,9 @@
 	"Dropbox Login": [
 		"Dropbox prijava"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Dupliciraj"
 	],
@@ -993,6 +987,9 @@
 	],
 	"emphasised text": [
 		"istaknuti tekst"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"Aktiviraj"
@@ -1305,6 +1302,9 @@
 	"Grant authorisation": [
 		"Odobri autorizaciju"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"Zaglavlje %d"
 	],
@@ -1370,6 +1370,9 @@
 	],
 	"Idle": [
 		"Bez aktivnosti"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		"Zanemari"
@@ -1497,12 +1500,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"Joplin Cloud email"
-	],
-	"Joplin Cloud password": [
-		"Joplin Cloud lozinka"
-	],
 	"Joplin Export Directory": [
 		"Joplin mapa izvoza"
 	],
@@ -1569,6 +1566,9 @@
 	"Later": [
 		"Kasnije"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Raspored"
 	],
@@ -1631,12 +1631,6 @@
 	"Log": [
 		"Dnevnik"
 	],
-	"Login": [
-		"Prijava"
-	],
-	"Login below.": [
-		"Prijavi se ispod."
-	],
 	"Login with Dropbox": [
 		"Prijavi se s Dropbox"
 	],
@@ -1647,6 +1641,9 @@
 		"Odjava"
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1988,9 +1985,6 @@
 	"Options": [
 		"Opcije"
 	],
-	"Or create an account.": [
-		"Ili stvori novi račun."
-	],
 	"Ordered list": [
 		"Poredan popis"
 	],
@@ -2080,6 +2074,9 @@
 	],
 	"Please wait...": [
 		"Pričekaj …"
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"Dodaci"
@@ -2522,6 +2519,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Razrstava element na osnovi polja <field>, npr. naslov (title), vrijeme aktualiziranja (updated_time), vrijeme stvaranja (created_time)."
 	],
+	"Source": [
+		"Izvor"
+	],
 	"Source format: %s": [
 		"Format izvora: %s"
 	],
@@ -2714,9 +2714,6 @@
 	"Text editor command": [
 		"Naredba za uređivača teksta"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"Hvala! Tvoj Joplin Cloud račun je sada postavljen i spreman za korištenje."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Aktivni profil se ne može izbrisati. Prebaci se na jedan drugi profil i pokušaj ponovo."
 	],
@@ -2846,9 +2843,6 @@
 	"There was an error downloading this attachment:": [
 		"Došlo je do greške prilikom preuzimanja ovog privitka:"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"Dogodila se greška prilikom postavljanja tvog Joplin Cloud računa. Potvrdi svoju e-mail adresu i lozinku te pokušaj ponovo. Greška je bila:\n\n%s"
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Ovi će elementi ostati na uređaju, ali se neće prenijeti na cilj sinkronizacije. Za pronalaženje ovih elemenata, traži naslov ili ID (gore prikazan u zagradama)."
 	],
@@ -2908,6 +2902,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"Ovo će otvoriti novi prozor. Želiš li spremiti tvoje trenutačne promjene?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Ovime će se ukloniti bilježnica iz tvoje zbirke i više nećeš imati pristup sadržaju bilježnice. Želiš li nastaviti?"
@@ -3004,6 +3001,9 @@
 	],
 	"Total: %d/%d": [
 		"Ukupno: %d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		"Pokušaj ponovo"
@@ -3232,6 +3232,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"Priložit ćeš veliku sliku (%d × %d piksela). Želiš li je smanjiti na %d piksela prije prilaganja slike?"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"Trenutačno nemaš bilježnica."

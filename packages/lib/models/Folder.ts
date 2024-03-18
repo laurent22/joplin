@@ -13,7 +13,9 @@ import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import ResourceService from '../services/ResourceService';
 import { LoadOptions } from './utils/types';
 import ActionLogger from '../utils/ActionLogger';
-import { getTrashFolder, getTrashFolderId } from '../services/trash';
+import { getTrashFolder } from '../services/trash';
+import getConflictFolderId from './utils/getConflictFolderId';
+import getTrashFolderId from '../services/trash/getTrashFolderId';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 const logger = Logger.create('models/Folder');
@@ -162,7 +164,7 @@ export default class Folder extends BaseItem {
 	}
 
 	public static conflictFolderId() {
-		return 'c04f1c7c04f1c7c04f1c7c04f1c7c04f';
+		return getConflictFolderId();
 	}
 
 	public static conflictFolder(): FolderEntity {
