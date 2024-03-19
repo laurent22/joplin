@@ -64,7 +64,7 @@ function resourceInfosChanged(a: ResourceInfos, b: ResourceInfos): boolean {
 
 export default function useFormNote(dependencies: HookDependencies) {
 	const {
-		syncStarted, decryptionStarted, noteId, isProvisional, titleInputRef, onBeforeLoad, onAfterLoad,
+		syncStarted, decryptionStarted, noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad,
 	} = dependencies;
 
 	const [formNote, setFormNote] = useState<FormNote>(defaultFormNote());
@@ -189,11 +189,23 @@ export default function useFormNote(dependencies: HookDependencies) {
 
 			const focusSettingName = noteIsTodo ? 'newTodoFocus' : 'newNoteFocus';
 
-			requestAnimationFrame(() => {
-				if (Setting.value(focusSettingName) === 'title') {
-					if (titleInputRef.current) titleInputRef.current.focus();
+			function autoFocusLoop() {
+				if (!editorRef.current) { // Wait for editorRef to load
+					setTimeout(autoFocusLoop, 100);
+					return;
 				}
-			});
+
+				requestAnimationFrame(() => {
+					if (Setting.value(focusSettingName) === 'title') {
+						if (titleInputRef.current) titleInputRef.current.focus();
+					} else {
+						if (editorRef.current) {
+							editorRef.current.execCommand({ name: 'editor.focus' });
+						}
+					}
+				});
+			}
+			autoFocusLoop();
 		}
 
 		async function loadNote() {

@@ -32,7 +32,6 @@ import useStyles from '../utils/useStyles';
 import useContextMenu from '../utils/useContextMenu';
 import useWebviewIpcMessage from '../utils/useWebviewIpcMessage';
 import useEditorSearchHandler from '../utils/useEditorSearchHandler';
-import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 
 function markupRenderOptions(override: MarkupToHtmlOptions = null): MarkupToHtmlOptions {
 	return { ...override };
@@ -350,17 +349,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			document.getElementsByTagName('head')[0].appendChild(element);
 		});
 	};
-
-	// Since the editor is not yet rendered when no notes are opened, this is necessary
-	useAsyncEffect(async event => {
-		const n = await Note.load(props.noteId);
-		if (event.cancelled) return;
-		const focusSettingName = n.is_todo ? 'newTodoFocus' : 'newNoteFocus';
-
-		if (Setting.value(focusSettingName) === 'body') {
-			if (editorRef.current) editorRef.current.focus();
-		}
-	}, [editorRef.current, props.noteId]);
 
 	useEffect(() => {
 		let cancelled = false;
