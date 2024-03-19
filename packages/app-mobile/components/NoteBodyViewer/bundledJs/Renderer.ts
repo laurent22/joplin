@@ -164,7 +164,8 @@ export default class Renderer {
 				// Don't scroll to a hash if we're given initial scroll (initial scroll
 				// overrides scrolling to a hash).
 				if ((initialScroll ?? null) !== null) {
-					document.scrollingElement.scrollTop = initialScroll;
+					const scrollingElement = document.scrollingElement ?? document.documentElement;
+					scrollingElement.scrollTop = initialScroll;
 				} else if (hash) {
 					// Gives it a bit of time before scrolling to the anchor
 					// so that images are loaded.

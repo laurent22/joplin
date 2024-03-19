@@ -496,6 +496,7 @@ packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/Icon.js
 packages/app-mobile/components/Modal.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
+packages/app-mobile/components/NoteBodyViewer/bundledJs/Renderer.test.js
 packages/app-mobile/components/NoteBodyViewer/bundledJs/Renderer.js
 packages/app-mobile/components/NoteBodyViewer/bundledJs/noteBodyViewerBundle.js
 packages/app-mobile/components/NoteBodyViewer/bundledJs/types.js
