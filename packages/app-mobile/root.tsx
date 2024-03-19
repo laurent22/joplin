@@ -259,7 +259,7 @@ const appDefaultState: AppState = { ...defaultState, sideMenuOpenPercent: 0,
 	noteSideMenuOptions: null,
 	isOnMobileData: false,
 	disableSideMenuGestures: false,
-	showPluginPanelsDialog: false,
+	showPanelsDialog: false,
 };
 
 const appReducer = (state = appDefaultState, action: any) => {

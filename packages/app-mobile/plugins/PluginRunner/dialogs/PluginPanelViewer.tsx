@@ -1,7 +1,7 @@
 
 import { PluginHtmlContents, PluginStates, ViewInfo } from '@joplin/lib/services/plugins/reducer';
 import * as React from 'react';
-import { Button, IconButton, Modal, Portal, SegmentedButtons, Text } from 'react-native-paper';
+import { Button, IconButton, Portal, SegmentedButtons, Text } from 'react-native-paper';
 import useViewInfos from './hooks/useViewInfos';
 import WebviewController, { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -15,6 +15,7 @@ import { Theme } from '@joplin/lib/themes/type';
 import { themeStyle } from '@joplin/lib/theme';
 import Setting from '@joplin/lib/models/Setting';
 import { Dispatch } from 'redux';
+import Modal from '../../../components/Modal';
 
 interface Props {
 	themeId: number;
@@ -61,9 +62,61 @@ const useStyles = (themeId: number) => {
 	}, [themeId, windowSize.width, windowSize.height]);
 };
 
+type ButtonInfo = {
+	value: string;
+	label: string;
+	icon: string;
+};
+
+const useSelectedTabId = (buttonInfos: ButtonInfo[], viewInfoById: Record<string, ViewInfo>) => {
+	const getDefaultSelectedTabId = useCallback((): string|undefined => {
+		const lastSelectedId = Setting.value('ui.lastSelectedPluginPanel');
+		if (lastSelectedId && viewInfoById[lastSelectedId]) {
+			return lastSelectedId;
+		} else {
+			return buttonInfos[0]?.value;
+		}
+	}, [buttonInfos, viewInfoById]);
+
+	const [selectedTabId, setSelectedTabId] = useState<string|undefined>(getDefaultSelectedTabId);
+
+	useEffect(() => {
+		if (!selectedTabId) {
+			setSelectedTabId(getDefaultSelectedTabId());
+		}
+	}, [selectedTabId, getDefaultSelectedTabId]);
+
+	useEffect(() => {
+		if (!selectedTabId) return () => {};
+
+		const info = viewInfoById[selectedTabId];
+
+		let controller: WebviewController|null = null;
+		if (info && info.view.opened) {
+			const plugin = PluginService.instance().pluginById(info.plugin.id);
+			controller = plugin.viewController(info.view.id) as WebviewController;
+			controller.setIsShownInModal(true);
+		}
+
+		Setting.setValue('ui.lastSelectedPluginPanel', selectedTabId);
+		AccessibilityInfo.announceForAccessibility(_('%s tab opened', getTabLabel(info)));
+
+		return () => {
+			controller?.setIsShownInModal(false);
+		};
+	}, [viewInfoById, selectedTabId]);
+
+	return { setSelectedTabId, selectedTabId };
+};
+
 const emptyCallback = () => {};
 
 const getTabLabel = (info: ViewInfo) => {
+	// Handles the case where a plugin just unloaded or hasn't loaded yet.
+	if (!info) {
+		return '...';
+	}
+
 	return PluginService.instance().pluginById(info.plugin.id).manifest.name;
 };
 const PluginPanelViewer: React.FC<Props> = props => {
@@ -88,33 +141,8 @@ const PluginPanelViewer: React.FC<Props> = props => {
 			});
 	}, [viewInfoById]);
 
-	const [selectedTabId, setSelectedTabId] = useState(() => {
-		const lastSelectedId = Setting.value('ui.lastSelectedPluginPanel');
-		if (lastSelectedId && viewInfoById[lastSelectedId]) {
-			return lastSelectedId;
-		} else {
-			return buttonInfos[0]?.value;
-		}
-	});
-
-	useEffect(() => {
-		if (!selectedTabId) return () => {};
-
-		const info = viewInfoById[selectedTabId];
-		const plugin = PluginService.instance().pluginById(info.plugin.id);
-		const controller = plugin.viewController(info.view.id) as WebviewController;
-		controller.setIsShownInModal(true);
-		Setting.setValue('ui.lastSelectedPluginPanel', selectedTabId);
-
-		AccessibilityInfo.announceForAccessibility(_('%s tab opened', getTabLabel(info)));
-
-		return () => {
-			controller.setIsShownInModal(false);
-		};
-	}, [viewInfoById, selectedTabId]);
-
-
 	const styles = useStyles(props.themeId);
+	const { selectedTabId, setSelectedTabId } = useSelectedTabId(buttonInfos, viewInfoById);
 
 	const viewInfo = viewInfoById[selectedTabId];
 
@@ -176,7 +204,10 @@ const PluginPanelViewer: React.FC<Props> = props => {
 			<Modal
 				visible={props.visible}
 				onDismiss={onClose}
-				contentContainerStyle={styles.dialog}
+				onRequestClose={onClose}
+				animationType='fade'
+				transparent={true}
+				containerStyle={styles.dialog}
 			>
 				{closeButton}
 				{renderTabContent()}
