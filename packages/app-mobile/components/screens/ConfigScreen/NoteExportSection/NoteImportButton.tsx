@@ -9,6 +9,7 @@ import pickDocument from '../../../../utils/pickDocument';
 import makeImportExportCacheDirectory from './utils/makeImportExportCacheDirectory';
 import shim from '@joplin/lib/shim';
 import TaskButton, { OnProgressCallback, SetAfterCompleteListenerCallback, TaskStatus } from './TaskButton';
+import { Platform } from 'react-native';
 
 const logger = Logger.create('NoteImportButton');
 
@@ -46,17 +47,25 @@ const runImportTask = async (
 		return { success: false, warnings: [] };
 	}
 
-	const sourceFilePath = importFiles[0].uri;
+	const sourceFileUri = importFiles[0].uri;
+	const sourceFilePath = Platform.select({
+		android: sourceFileUri,
+		ios: decodeURI(sourceFileUri),
+	});
 	await shim.fsDriver().copy(sourceFilePath, importTargetPath);
 
-	const status = await InteropService.instance().import({
-		path: importTargetPath,
-		format: 'jex',
-	});
+	try {
+		const status = await InteropService.instance().import({
+			path: importTargetPath,
+			format: 'jex',
+		});
 
-	logger.info('Imported successfully');
-
-	return { success: true, warnings: status.warnings };
+		logger.info('Imported successfully');
+		return { success: true, warnings: status.warnings };
+	} catch (error) {
+		logger.error('Import failed with error', error);
+		throw new Error(_('Import failed. Make sure a JEX file was selected.\nDetails: %s', error.toString()));
+	}
 };
 
 const NoteImportButton: FunctionComponent<Props> = props => {
