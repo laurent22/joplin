@@ -167,7 +167,7 @@ const useRerenderHandler = (props: Props) => {
 	}, [editPopupCss, props.renderer]);
 
 	useEffect(() => {
-		void props.renderer.setExtraContentScripts(props.contentScripts);
+		void props.renderer.setExtraContentScriptsAndRerender(props.contentScripts);
 	}, [props.contentScripts, props.renderer]);
 };
 

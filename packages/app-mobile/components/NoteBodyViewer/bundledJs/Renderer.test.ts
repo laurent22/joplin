@@ -71,7 +71,7 @@ describe('Renderer', () => {
 
 	test('should support adding and removing plugin scripts', async () => {
 		const renderer = makeRenderer({});
-		await renderer.setExtraContentScripts([
+		await renderer.setExtraContentScriptsAndRerender([
 			{
 				id: 'test',
 				js: `
@@ -83,7 +83,7 @@ describe('Renderer', () => {
 								};
 							},
 						};
-					});
+					})
 				`,
 				assetPath: Setting.value('tempDir'),
 				pluginId: 'com.example.test-plugin',
@@ -96,12 +96,66 @@ describe('Renderer', () => {
 		expect(getRenderedContent().innerHTML.trim()).toBe('<div id="test">Test from com.example.test-plugin</div>');
 
 		// Should support removing plugin scripts
-		await renderer.setExtraContentScripts([]);
+		await renderer.setExtraContentScriptsAndRerender([]);
 		await renderer.rerender(
 			{ language: MarkupLanguage.Markdown, markup: '```\ntest\n```' },
 			defaultRendererSettings,
 		);
 		expect(getRenderedContent().innerHTML.trim()).not.toContain('com.example.test-plugin');
 		expect(getRenderedContent().querySelectorAll('pre.joplin-source')).toHaveLength(1);
+	});
+
+	test('should call .requestPluginSetting when a setting is missing', async () => {
+		const renderer = makeRenderer({});
+
+		const requestPluginSetting = jest.fn();
+		const rerender = (pluginSettings: Record<string, any>) => {
+			return renderer.rerender(
+				{ language: MarkupLanguage.Markdown, markup: '```\ntest\n```' },
+				{ ...defaultRendererSettings, pluginSettings, requestPluginSetting },
+			);
+		};
+
+		await rerender({});
+		expect(requestPluginSetting).toHaveBeenCalledTimes(0);
+
+		const pluginId = 'com.example.test-plugin';
+		await renderer.setExtraContentScriptsAndRerender([
+			{
+				id: 'test-content-script',
+				js: `
+					(() => {
+						return {
+							plugin: (markdownIt, options) => {
+								const settingValue = options.settingValue('setting');
+								markdownIt.renderer.rules.fence = (tokens, idx) => {
+									return '<div id="setting-value">Setting value: ' + settingValue + '</div>';
+								};
+							},
+						};
+					})
+				`,
+				assetPath: Setting.value('tempDir'),
+				pluginId,
+			},
+		]);
+
+		// Should call .requestPluginSetting for missing settings
+		expect(requestPluginSetting).toHaveBeenCalledTimes(1);
+		await rerender({});
+		expect(requestPluginSetting).toHaveBeenCalledTimes(2);
+		expect(requestPluginSetting).toHaveBeenLastCalledWith('com.example.test-plugin', 'setting');
+
+		// Should still render
+		expect(getRenderedContent().querySelector('#setting-value').innerHTML).toBe('Setting value: undefined');
+
+		// Should expect only namespaced plugin settings
+		await rerender({ 'setting': 'test' });
+		expect(requestPluginSetting).toHaveBeenCalledTimes(3);
+
+		// Should not request plugin settings when all settings are present.
+		await rerender({ [`${pluginId}.setting`]: 'test' });
+		expect(requestPluginSetting).toHaveBeenCalledTimes(3);
+		expect(getRenderedContent().querySelector('#setting-value').innerHTML).toBe('Setting value: test');
 	});
 });

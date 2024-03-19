@@ -58,7 +58,7 @@ export default class Renderer {
 		});
 	}
 
-	public async setExtraContentScripts(
+	public async setExtraContentScriptsAndRerender(
 		extraContentScripts: ExtraContentScriptSource[],
 	) {
 		this.extraContentScripts = extraContentScripts.map(script => {
@@ -81,6 +81,9 @@ export default class Renderer {
 		});
 		this.recreateMarkupToHtml();
 
+		// If possible, rerenders with the last rendering settings. The goal
+		// of this is to reduce the number of IPC calls between the viewer and
+		// React Native. We want the first render to be as fast as possible.
 		if (this.lastRenderMarkup) {
 			await this.rerender(this.lastRenderMarkup, this.lastSettings);
 		}
