@@ -94,6 +94,10 @@ const useRerenderHandler = (props: Props) => {
 		props.renderer.clearCache(props.noteMarkupLanguage);
 	}, [lastResourceLoadCounter, props.renderer, props.noteMarkupLanguage]);
 
+	useEffect(() => {
+		void props.renderer.setExtraContentScriptsAndRerender(props.contentScripts);
+	}, [props.contentScripts, props.renderer]);
+
 	useAsyncEffect(async event => {
 		if (onlyNoteBodyHasChanged && onlyCheckboxesHaveChanged) {
 			logger.info('Only a checkbox has changed - not updating HTML');
@@ -165,10 +169,6 @@ const useRerenderHandler = (props: Props) => {
 	useEffect(() => {
 		props.renderer.setExtraCss('edit-popup', editPopupCss);
 	}, [editPopupCss, props.renderer]);
-
-	useEffect(() => {
-		void props.renderer.setExtraContentScriptsAndRerender(props.contentScripts);
-	}, [props.contentScripts, props.renderer]);
 };
 
 export default useRerenderHandler;
