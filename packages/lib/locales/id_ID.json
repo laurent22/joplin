@@ -140,6 +140,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Tentang Joplin"
 	],
@@ -319,6 +322,9 @@
 	],
 	"Automatically check for updates": [
 		"Periksa pembaruan secara otomatis"
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
 	],
 	"Automatically switch theme to match system theme": [
 		"Alihkan tema agar sesuai dengan tema sistem secara otomatis"
@@ -767,20 +773,8 @@
 	"Delete note": [
 		"Hapus catatan"
 	],
-	"Delete note \"%s\"?": [
-		"Hapus catatan \"%s\"?"
-	],
-	"Delete note?": [
-		"Hapus catatan?"
-	],
 	"Delete notebook": [
 		"Hapus buku catatan"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Hapus buku catatan \"%s\"?\n\nSemua catatan dan sub-buku catatan dalam buku catatan ini juga akan dihapus."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Hapus buku catatan? Semua catatan dan sub-buku catatan dalam buku catatan ini juga akan dihapus."
 	],
 	"Delete plugin \"%s\"?": [
 		"Hapus plugin \"%s\"?"
@@ -793,9 +787,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Hapus buku catatan Kotak Masuk?\n\nJika Anda menghapus buku catatan Kotak Masuk, sebarang email yang baru saja terkirim mungkin akan hilang."
-	],
-	"Delete these %d notes?": [
-		"Hapus %d catatan ini?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Hapus undangan ini? Penerima tidak akan lagi memiliki akses ke buku catatan bersama ini."
@@ -944,6 +935,9 @@
 	"Dropbox Login": [
 		"Masuk dengan Dropbox"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Gandakan"
 	],
@@ -1021,6 +1015,9 @@
 	],
 	"emphasised text": [
 		"teks yang ditekankan"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"Nyalakan"
@@ -1346,6 +1343,9 @@
 	"Grant authorisation": [
 		"Berikan otorisasi"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"Tajuk %d"
 	],
@@ -1414,6 +1414,9 @@
 	],
 	"Idle": [
 		"Menganggur"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		"Abaikan"
@@ -1541,12 +1544,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"Surel Joplin Cloud"
-	],
-	"Joplin Cloud password": [
-		"Kata sandi Joplin Cloud"
-	],
 	"Joplin Export Directory": [
 		"Direktori Ekspor Joplin"
 	],
@@ -1616,6 +1613,9 @@
 	"Later": [
 		"Nanti"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Tata letak"
 	],
@@ -1676,12 +1676,6 @@
 	"Log": [
 		"Log"
 	],
-	"Login": [
-		"Masuk"
-	],
-	"Login below.": [
-		"Masuk di bawah."
-	],
 	"Login with Dropbox": [
 		"Masuk dengan Dropbox"
 	],
@@ -1693,6 +1687,9 @@
 	],
 	"Logs, profiles, sync status": [
 		"Log, profil, status penyelarasan"
+	],
+	"Longitude": [
+		""
 	],
 	"Make a donation": [
 		"Berikan sumbangan"
@@ -2036,9 +2033,6 @@
 	"Options": [
 		"Pilihan"
 	],
-	"Or create an account.": [
-		"Atau buat akun."
-	],
 	"Ordered list": [
 		"Daftar berurutan"
 	],
@@ -2128,6 +2122,9 @@
 	],
 	"Please wait...": [
 		"Mohon tunggu..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"Perkakas plugin"
@@ -2594,6 +2591,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Mengurutkan benda berdasarkan <field> (contoh: title, updated_time, created_time)."
 	],
+	"Source": [
+		"Sumber"
+	],
 	"Source format: %s": [
 		"Format sumber: %s"
 	],
@@ -2792,9 +2792,6 @@
 	"Text editor command": [
 		"Perintah penyunting teks"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"Terima kasih! Akun Joplin Cloud Anda sekarang siap digunakan."
-	],
 	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
 		"[Web Clipper](%s) adalah sebuah ekstensi peramban yang membolehkan Anda untuk menyimpan halaman web dan tangkapan layar dari peramban Anda."
 	],
@@ -2936,9 +2933,6 @@
 	"There was an error downloading this attachment:": [
 		"Terjadi galat saat mengunduh lampiran ini:"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"Terjadi galat saat mengatur akun Joplin Cloud Anda. Silakan verifikasi surel dan kata sandi Anda dan coba lagi. Galat tersebut:\n\n%s"
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Benda berikut akan tetap berada di perangkat tetapi tidak akan diunggah ke sasaran penyelarasan. Untuk menemukan benda berikut, cari judulnya atau ID (yang ditampilkan dalam tanda kurung di atas)."
 	],
@@ -2995,6 +2989,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"Ini akan membuka layar baru. Simpan perubahan Anda saat ini?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Ini akan menghapus buku catatan dari koleksi Anda dan Anda tidak akan memiliki akses lagi ke isinya. Apakah Anda ingin melanjutkan?"
@@ -3094,6 +3091,9 @@
 	],
 	"Total: %d/%d": [
 		"Jumlah: %d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		"Coba lagi"
@@ -3328,6 +3328,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"Anda akan melampirkan gambar besar (%dx%d piksel). Apakah Anda ingin mengubah ukurannya hingga %d piksel sebelum melampirkannya?"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"Saat ini tidak ada buku catatan."

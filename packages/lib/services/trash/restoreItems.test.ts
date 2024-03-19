@@ -88,4 +88,15 @@ describe('restoreItems', () => {
 		expect(noteReloaded.parent_id).toBe(folderReloaded2.id);
 	});
 
+	it('should restore a conflict', async () => {
+		const note = await Note.save({ is_conflict: 1, title: 'Test' });
+		await Note.delete(note.id, { toTrash: true });
+
+		await restoreItems(ModelType.Note, [await Note.load(note.id)]);
+
+		const noteReloaded = await Note.load(note.id);
+		expect(noteReloaded.title).toBe('Test');
+		expect(noteReloaded.is_conflict).toBe(1);
+		expect(noteReloaded.deleted_time).toBe(0);
+	});
 });

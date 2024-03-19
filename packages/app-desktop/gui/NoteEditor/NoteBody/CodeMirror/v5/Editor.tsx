@@ -12,15 +12,15 @@ import 'codemirror/addon/scroll/annotatescrollbar';
 import 'codemirror/addon/search/matchesonscrollbar';
 import 'codemirror/addon/search/searchcursor';
 
-import useListIdent from '../utils/useListIdent';
-import useScrollUtils from '../utils/useScrollUtils';
-import useCursorUtils from '../utils/useCursorUtils';
-import useLineSorting from '../utils/useLineSorting';
+import useListIdent from './utils/useListIdent';
+import useScrollUtils from './utils/useScrollUtils';
+import useCursorUtils from './utils/useCursorUtils';
+import useLineSorting from './utils/useLineSorting';
 import useEditorSearch from '../utils/useEditorSearchExtension';
-import useJoplinMode from '../utils/useJoplinMode';
-import useKeymap from '../utils/useKeymap';
-import useExternalPlugins from '../utils/useExternalPlugins';
-import useJoplinCommands from '../utils/useJoplinCommands';
+import useJoplinMode from './utils/useJoplinMode';
+import useKeymap from './utils/useKeymap';
+import useExternalPlugins from './utils/useExternalPlugins';
+import useJoplinCommands from './utils/useJoplinCommands';
 
 import 'codemirror/keymap/emacs';
 import 'codemirror/keymap/vim';
@@ -283,7 +283,7 @@ function Editor(props: EditorProps, ref: any) {
 		}
 	}, [pluginOptions, editor]);
 
-	return <div className='codeMirrorEditor' style={props.style} ref={editorParent} />;
+	return <div className='codeMirrorEditor CodeMirror5' style={props.style} ref={editorParent} />;
 }
 
 export default forwardRef(Editor);

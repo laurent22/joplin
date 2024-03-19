@@ -1,24 +1,12 @@
+import joplinEnv from './util/joplinEnv.mjs';
+import getActiveTabs from './util/getActiveTabs.mjs';
+
 let browser_ = null;
 if (typeof browser !== 'undefined') {
 	browser_ = browser;
-	browserSupportsPromises_ = true;
 } else if (typeof chrome !== 'undefined') {
 	browser_ = chrome;
-	browserSupportsPromises_ = false;
 }
-
-let env_ = null;
-
-// Make this function global so that it can be accessed
-// from the popup too.
-// https://stackoverflow.com/questions/6323184/communication-between-background-page-and-popup-page-in-a-chrome-extension
-window.joplinEnv = function() {
-	if (env_) return env_;
-
-	const manifest = browser_.runtime.getManifest();
-	env_ = manifest.name.indexOf('[DEV]') >= 0 ? 'dev' : 'prod';
-	return env_;
-};
 
 async function browserCaptureVisibleTabs(windowId) {
 	const options = {
@@ -31,53 +19,19 @@ async function browserCaptureVisibleTabs(windowId) {
 		// https://discourse.joplinapp.org/t/clip-screenshot-image-quality/12302/4
 		quality: 92,
 	};
-	if (browserSupportsPromises_) return browser_.tabs.captureVisibleTab(windowId, options);
-
-	return new Promise((resolve) => {
-		browser_.tabs.captureVisibleTab(windowId, options, (image) => {
-			resolve(image);
-		});
-	});
-}
-
-async function browserGetZoom(tabId) {
-	if (browserSupportsPromises_) return browser_.tabs.getZoom(tabId);
-
-	return new Promise((resolve) => {
-		browser_.tabs.getZoom(tabId, (zoom) => {
-			resolve(zoom);
-		});
-	});
+	return browser_.tabs.captureVisibleTab(windowId, options);
 }
 
 browser_.runtime.onInstalled.addListener(() => {
-	if (window.joplinEnv() === 'dev') {
-		browser_.browserAction.setIcon({
+	if (joplinEnv() === 'dev') {
+		browser_.action.setIcon({
 			path: 'icons/32-dev.png',
 		});
 	}
 });
 
-async function getImageSize(dataUrl) {
-	return new Promise((resolve, reject) => {
-		const image = new Image();
-
-		image.onload = function() {
-			resolve({ width: image.width, height: image.height });
-		};
-
-		image.onerror = function(event) {
-			reject(event);
-		};
-
-		image.src = dataUrl;
-	});
-}
-
 browser_.runtime.onMessage.addListener(async (command) => {
 	if (command.name === 'screenshotArea') {
-		const browserZoom = await browserGetZoom();
-
 		// The dimensions of the image returned by Firefox are the regular ones,
 		// while the one returned by Chrome depend on the screen pixel ratio. So
 		// it would return a 600*400 image if the window dimensions are 300x200
@@ -90,15 +44,18 @@ browser_.runtime.onMessage.addListener(async (command) => {
 		//
 		// The crop rectangle is always in real pixels, so we need to multiply
 		// it by the ratio we've calculated.
+		//
+		// 8/3/2024: With manifest v3, we don't have access to DOM APIs in Chrome.
+		// As a result, we can't easily calculate the size of the captured image.
+		// We instead base the crop region exclusively on window.devicePixelRatio,
+		// which seems to work in modern Firefox and Chrome.
 		const imageDataUrl = await browserCaptureVisibleTabs(null);
-		const imageSize = await getImageSize(imageDataUrl);
-		const imagePixelRatio = imageSize.width / command.content.windowInnerWidth;
 
 		const content = { ...command.content };
 		content.image_data_url = imageDataUrl;
 		if ('url' in content) content.source_url = content.url;
 
-		const ratio = browserZoom * imagePixelRatio;
+		const ratio = content.devicePixelRatio;
 		const newArea = { ...command.content.crop_rect };
 		newArea.x *= ratio;
 		newArea.y *= ratio;
@@ -117,19 +74,8 @@ browser_.runtime.onMessage.addListener(async (command) => {
 	}
 });
 
-async function getActiveTabs() {
-	const options = { active: true, currentWindow: true };
-	if (browserSupportsPromises_) return browser_.tabs.query(options);
-
-	return new Promise((resolve) => {
-		browser_.tabs.query(options, (tabs) => {
-			resolve(tabs);
-		});
-	});
-}
-
 async function sendClipMessage(clipType) {
-	const tabs = await getActiveTabs();
+	const tabs = await getActiveTabs(browser_);
 	if (!tabs || !tabs.length) {
 		console.error('No active tabs');
 		return;

@@ -1,4 +1,4 @@
-import { toIso639 } from '../../locale';
+import { toIso639Alpha3 } from '../../locale';
 import Resource from '../../models/Resource';
 import Setting from '../../models/Setting';
 import shim from '../../shim';
@@ -150,7 +150,7 @@ export default class OcrService {
 		};
 
 		try {
-			const language = toIso639(Setting.value('locale'));
+			const language = toIso639Alpha3(Setting.value('locale'));
 
 			let totalProcessed = 0;
 

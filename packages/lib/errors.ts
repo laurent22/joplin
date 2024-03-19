@@ -5,4 +5,5 @@ export enum ErrorCode {
 	NotFound = 'notFound',
 	UnsupportedMimeType = 'unsupportedMimeType',
 	MustUpgradeApp = 'mustUpgradeApp',
+	DownloadLimiter = 'downloadLimiter',
 }

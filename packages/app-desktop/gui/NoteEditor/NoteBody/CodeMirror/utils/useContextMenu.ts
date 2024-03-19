@@ -1,5 +1,5 @@
 
-import { ContextMenuEvent, ContextMenuParams } from 'electron';
+import { ContextMenuParams, Event } from 'electron';
 import { useEffect, RefObject } from 'react';
 import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
@@ -69,7 +69,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 			return intersectingElement && isAncestorOfCodeMirrorEditor(intersectingElement);
 		}
 
-		async function onContextMenu(event: ContextMenuEvent, params: ContextMenuParams) {
+		async function onContextMenu(event: Event, params: ContextMenuParams) {
 			if (!pointerInsideEditor(params)) return;
 
 			// Don't show the default menu.

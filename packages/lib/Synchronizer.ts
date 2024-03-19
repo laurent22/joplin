@@ -12,7 +12,7 @@ import Resource from './models/Resource';
 import ItemChange from './models/ItemChange';
 import ResourceLocalState from './models/ResourceLocalState';
 import MasterKey from './models/MasterKey';
-import BaseModel, { ModelType } from './BaseModel';
+import BaseModel, { DeleteOptions, ModelType } from './BaseModel';
 import time from './time';
 import ResourceService from './services/ResourceService';
 import EncryptionService from './services/e2ee/EncryptionService';
@@ -404,7 +404,7 @@ export default class Synchronizer {
 
 		this.logSyncOperation('starting', null, null, `Starting synchronisation to target ${syncTargetId}... supportsAccurateTimestamp = ${this.api().supportsAccurateTimestamp}; supportsMultiPut = ${this.api().supportsMultiPut}} [${synchronizationId}]`);
 
-		const handleCannotSyncItem = async (ItemClass: any, syncTargetId: any, item: any, cannotSyncReason: string, itemLocation: any = null) => {
+		const handleCannotSyncItem = async (ItemClass: typeof BaseItem, syncTargetId: any, item: any, cannotSyncReason: string, itemLocation: any = null) => {
 			await ItemClass.saveSyncDisabled(syncTargetId, item, cannotSyncReason, itemLocation);
 		};
 
@@ -1005,7 +1005,14 @@ export default class Synchronizer {
 							}
 
 							const ItemClass = BaseItem.itemClass(local.type_);
-							await ItemClass.delete(local.id, { trackDeleted: false, changeSource: ItemChange.SOURCE_SYNC });
+							await ItemClass.delete(
+								local.id,
+								{
+									trackDeleted: false,
+									changeSource: ItemChange.SOURCE_SYNC,
+									sourceDescription: 'sync: deleteLocal',
+								},
+							);
 						}
 					}
 
@@ -1050,7 +1057,14 @@ export default class Synchronizer {
 							// CONFLICT
 							await Folder.markNotesAsConflict(item.id);
 						}
-						await Folder.delete(item.id, { deleteChildren: false, changeSource: ItemChange.SOURCE_SYNC, trackDeleted: false });
+
+						const deletionOptions: DeleteOptions = {
+							deleteChildren: false,
+							trackDeleted: false,
+							changeSource: ItemChange.SOURCE_SYNC,
+							sourceDescription: 'Sync',
+						};
+						await Folder.delete(item.id, deletionOptions);
 					}
 				}
 

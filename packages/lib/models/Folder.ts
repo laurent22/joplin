@@ -12,7 +12,10 @@ import Logger from '@joplin/utils/Logger';
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import ResourceService from '../services/ResourceService';
 import { LoadOptions } from './utils/types';
-import { getTrashFolder, getTrashFolderId } from '../services/trash';
+import ActionLogger from '../utils/ActionLogger';
+import { getTrashFolder } from '../services/trash';
+import getConflictFolderId from './utils/getConflictFolderId';
+import getTrashFolderId from '../services/trash/getTrashFolderId';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 const logger = Logger.create('models/Folder');
@@ -107,7 +110,7 @@ export default class Folder extends BaseItem {
 		}
 	}
 
-	public static async delete(folderId: string, options: DeleteOptions = null) {
+	public static async delete(folderId: string, options?: DeleteOptions) {
 		options = {
 			deleteChildren: true,
 			...options,
@@ -120,9 +123,14 @@ export default class Folder extends BaseItem {
 		const folder = await Folder.load(folderId);
 		if (!folder) return; // noop
 
+		const actionLogger = ActionLogger.from(options.sourceDescription);
+		actionLogger.addDescription(`folder title: ${JSON.stringify(folder.title)}`);
+		options.sourceDescription = actionLogger;
+
 		if (options.deleteChildren) {
 			const childrenDeleteOptions: DeleteOptions = {
 				disableReadOnlyCheck: options.disableReadOnlyCheck,
+				sourceDescription: actionLogger,
 				deleteChildren: true,
 				toTrash,
 			};
@@ -156,7 +164,7 @@ export default class Folder extends BaseItem {
 	}
 
 	public static conflictFolderId() {
-		return 'c04f1c7c04f1c7c04f1c7c04f1c7c04f';
+		return getConflictFolderId();
 	}
 
 	public static conflictFolder(): FolderEntity {
@@ -926,6 +934,12 @@ export default class Folder extends BaseItem {
 		// visual alignment is correct for all folders, otherwise the folder tree
 		// looks messy.
 		return !!folders.find(f => !!f.icon);
+	}
+
+	public static atLeastOneRealFolderExists(folders: FolderEntity[]) {
+		// returns true if at least one folder exists other than trash folder and deleted folders
+		const trashFolderId = getTrashFolderId();
+		return folders.filter((folder) => folder.id !== trashFolderId && folder.deleted_time === 0).length > 0;
 	}
 
 }

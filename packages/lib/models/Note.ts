@@ -16,6 +16,7 @@ const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
 const { _ } = require('../locale');
 import { pull, removeElement, unique } from '../ArrayUtils';
 import { LoadOptions, SaveOptions } from './utils/types';
+import ActionLogger from '../utils/ActionLogger';
 import { getDisplayParentId, getTrashFolderId } from '../services/trash';
 const urlUtils = require('../urlUtils.js');
 const { isImageMimeType } = require('../resourceUtils');
@@ -404,6 +405,7 @@ export default class Note extends BaseItem {
 
 		if (parentId === Folder.conflictFolderId()) {
 			options.conditions.push('is_conflict = 1');
+			options.conditions.push('deleted_time = 0');
 		} else if (withinTrash) {
 			options.conditions.push('deleted_time > 0');
 		} else {
@@ -501,7 +503,8 @@ export default class Note extends BaseItem {
 
 	public static preview(noteId: string, options: any = null) {
 		if (!options) options = { fields: null };
-		return this.modelSelectOne(`SELECT ${this.previewFieldsSql(options.fields)} FROM notes WHERE is_conflict = 0 AND id = ?`, [noteId]);
+		const excludeConflictsSql = options.excludeConflicts ? 'is_conflict = 0 AND' : '';
+		return this.modelSelectOne(`SELECT ${this.previewFieldsSql(options.fields)} FROM notes WHERE ${excludeConflictsSql} id = ?`, [noteId]);
 	}
 
 	public static async search(options: any = null): Promise<NoteEntity[]> {
@@ -519,11 +522,11 @@ export default class Note extends BaseItem {
 	}
 
 	public static conflictedNotes() {
-		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 1');
+		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 1 AND deleted_time = 0');
 	}
 
 	public static async conflictedCount() {
-		const r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 1');
+		const r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 1 AND deleted_time = 0');
 		return r && r.total ? r.total : 0;
 	}
 
@@ -827,7 +830,7 @@ export default class Note extends BaseItem {
 		return savedNote;
 	}
 
-	public static async batchDelete(ids: string[], options: DeleteOptions = null) {
+	public static async batchDelete(ids: string[], options: DeleteOptions = {}) {
 		if (!ids.length) return;
 
 		ids = ids.slice();
@@ -871,7 +874,12 @@ export default class Note extends BaseItem {
 
 				await this.db().exec({ sql, params });
 			} else {
-				await super.batchDelete(processIds, options);
+				// For now, we intentionally log only permanent batchDeletions.
+				const actionLogger = ActionLogger.from(options.sourceDescription);
+				const noteTitles = notes.map(note => note.title);
+				actionLogger.addDescription(`titles: ${JSON.stringify(noteTitles)}`);
+
+				await super.batchDelete(processIds, { ...options, sourceDescription: actionLogger });
 			}
 
 			for (let i = 0; i < processIds.length; i++) {

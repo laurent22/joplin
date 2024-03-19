@@ -468,12 +468,13 @@ const SidebarComponent = (props: Props) => {
 		Setting.setValue(key === 'tagHeader' ? 'tagHeaderIsExpanded' : 'folderHeaderIsExpanded', !isExpanded);
 	}, [props.folderHeaderIsExpanded, props.tagHeaderIsExpanded]);
 
-	const onAllNotesClick_ = () => {
+	const onAllNotesClick_ = useCallback(() => {
 		props.dispatch({
 			type: 'SMART_FILTER_SELECT',
 			id: ALL_NOTES_FILTER_ID,
 		});
-	};
+		folderItem_click(ALL_NOTES_FILTER_ID);
+	}, [props.dispatch, folderItem_click]);
 
 	const anchorItemRef = (type: string, id: string) => {
 		if (!anchorItemRefs.current[type]) anchorItemRefs.current[type] = {};
@@ -492,6 +493,20 @@ const SidebarComponent = (props: Props) => {
 		return <i className={isExpanded ? 'fas fa-caret-down' : 'fas fa-caret-right'} style={style}></i>;
 	};
 
+	const toggleAllNotesContextMenu = useCallback(() => {
+		const menu = new Menu();
+
+		if (Setting.value('notes.perFolderSortOrderEnabled')) {
+			menu.append(new MenuItem({
+				...menuUtils.commandToStatefulMenuItem('togglePerFolderSortOrder', ALL_NOTES_FILTER_ID),
+				type: 'checkbox',
+				checked: PerFolderSortOrderService.isSet(ALL_NOTES_FILTER_ID),
+			}));
+		}
+
+		menu.popup({ window: bridge().window() });
+	}, []);
+
 	const renderAllNotesItem = (theme: Theme, selected: boolean) => {
 		return (
 			<StyledListItem key="allNotesHeader" selected={selected} className={'list-item-container list-item-depth-0 all-notes'} isSpecialItem={true}>
@@ -503,6 +518,7 @@ const SidebarComponent = (props: Props) => {
 					href="#"
 					selected={selected}
 					onClick={onAllNotesClick_}
+					onContextMenu={toggleAllNotesContextMenu}
 				>
 					{_('All notes')}
 				</StyledListItemAnchor>
@@ -728,7 +744,7 @@ const SidebarComponent = (props: Props) => {
 
 
 	if (props.folders.length) {
-		const allNotesSelected = props.notesParentType === 'SmartFilter' && props.selectedSmartFilterId === ALL_NOTES_FILTER_ID;
+		const allNotesSelected = props.selectedFolderId === ALL_NOTES_FILTER_ID;
 		const result = renderFolders(props, renderFolderItem);
 		const folderItems = [renderAllNotesItem(theme, allNotesSelected)].concat(result.items);
 		folderItemsOrder_.current = result.order;

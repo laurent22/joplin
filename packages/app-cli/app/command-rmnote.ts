@@ -2,7 +2,7 @@ import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
-import BaseModel from '@joplin/lib/BaseModel';
+import BaseModel, { DeleteOptions } from '@joplin/lib/BaseModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 
 class Command extends BaseCommand {
@@ -15,7 +15,10 @@ class Command extends BaseCommand {
 	}
 
 	public override options() {
-		return [['-f, --force', _('Deletes the notes without asking for confirmation.')]];
+		return [
+			['-f, --force', _('Deletes the notes without asking for confirmation.')],
+			['-p, --permanent', _('Deletes notes permanently, skipping the trash.')],
+		];
 	}
 
 	public override async action(args: any) {
@@ -30,10 +33,22 @@ class Command extends BaseCommand {
 			ok = await this.prompt(_('%d notes match this pattern. Delete them?', notes.length), { booleanAnswerDefault: 'n' });
 		}
 
+		const permanent = (args.options?.permanent === true) || notes.every(n => !!n.deleted_time);
+		if (!force && permanent) {
+			const message = (
+				notes.length === 1 ? _('This will permanently delete the note "%s". Continue?', notes[0].title) : _('%d notes will be permanently deleted. Continue?', notes.length)
+			);
+			ok = await this.prompt(message, { booleanAnswerDefault: 'n' });
+		}
+
 		if (!ok) return;
 
 		const ids = notes.map(n => n.id);
-		await Note.batchDelete(ids, { toTrash: true });
+		const options: DeleteOptions = {
+			toTrash: !permanent,
+			sourceDescription: 'rmnote',
+		};
+		await Note.batchDelete(ids, options);
 	}
 }
 

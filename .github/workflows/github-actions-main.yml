@@ -127,6 +127,7 @@ jobs:
           BUILD_SEQUENCIAL: 1
           SERVER_REPOSITORY: joplin/server
           SERVER_TAG_PREFIX: server
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
         run: |
           "${GITHUB_WORKSPACE}/.github/scripts/run_ci.sh"
 
