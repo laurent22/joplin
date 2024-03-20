@@ -2,6 +2,7 @@ import Folder from '../../models/Folder';
 import BaseModel from '../../BaseModel';
 import { FolderEntity, TagEntity } from '../../services/database/types';
 import { getDisplayParentId, getTrashFolderId } from '../../services/trash';
+import { getCollator } from '../../models/utils/getCollator';
 
 interface Props {
 	folders: FolderEntity[];
@@ -72,6 +73,7 @@ export const renderFolders = (props: Props, renderItem: RenderFolderItem) => {
 
 export const renderTags = (props: Props, renderItem: RenderTagItem) => {
 	const tags = props.tags.slice();
+	const collator = getCollator();
 	tags.sort((a, b) => {
 		// It seems title can sometimes be undefined (perhaps when syncing
 		// and before tag has been decrypted?). It would be best to find
@@ -83,7 +85,7 @@ export const renderTags = (props: Props, renderItem: RenderTagItem) => {
 		// Note: while newly created tags are normalized and lowercase
 		// imported tags might be any case, so we need to do case-insensitive
 		// sort.
-		return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : +1;
+		return collator.compare(a.title, b.title);
 	});
 	const tagItems = [];
 	const order: string[] = [];

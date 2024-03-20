@@ -21,7 +21,7 @@ import { FolderEntity } from '@joplin/lib/services/database/types';
 import { State } from '@joplin/lib/reducer';
 import CustomButton from './CustomButton';
 import FolderPicker from './FolderPicker';
-import { getTrashFolderId, itemIsInTrash } from '@joplin/lib/services/trash';
+import { itemIsInTrash } from '@joplin/lib/services/trash';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
@@ -622,7 +622,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 							}
 						}}
 						mustSelect={!!folderPickerOptions.mustSelect}
-						folders={this.props.folders.filter(f => f.id !== getTrashFolderId())}
+						folders={Folder.getRealFolders(this.props.folders)}
 					/>
 				);
 			} else {
