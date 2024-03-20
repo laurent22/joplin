@@ -511,6 +511,7 @@ packages/app-mobile/components/NoteEditor/NoteEditor.js
 packages/app-mobile/components/NoteEditor/SearchPanel.js
 packages/app-mobile/components/NoteEditor/commandDeclarations.js
 packages/app-mobile/components/NoteEditor/hooks/useCodeMirrorPlugins.js
+packages/app-mobile/components/NoteEditor/hooks/useEditorCommandHandler.test.js
 packages/app-mobile/components/NoteEditor/hooks/useEditorCommandHandler.js
 packages/app-mobile/components/NoteEditor/hooks/useKeyboardVisible.js
 packages/app-mobile/components/NoteEditor/types.js
