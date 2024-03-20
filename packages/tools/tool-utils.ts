@@ -273,6 +273,11 @@ export const gitCurrentBranch = async (): Promise<string> => {
 };
 
 export async function githubUsername(email: string, name: string) {
+	if (email.endsWith('@users.noreply.github.com')) {
+		const splitted = email.split('@')[0].split('+');
+		return splitted.length === 1 ? splitted[0] : splitted[1];
+	}
+
 	const cache = await loadGitHubUsernameCache();
 	const cacheKey = `${email}:${name}`;
 	if (cacheKey in cache) return cache[cacheKey];
