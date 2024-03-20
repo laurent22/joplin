@@ -14,7 +14,8 @@
     "./time": "./dist/time.js",
     "./types": "./dist/types.js",
     "./url": "./dist/url.js",
-    "./path": "./dist/path.js"
+    "./path": "./dist/path.js",
+    "./platformUtil": "./dist/platformUtil.js"
   },
   "publishConfig": {
     "access": "public"

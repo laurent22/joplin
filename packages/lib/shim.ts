@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { NoteEntity, ResourceEntity } from './services/database/types';
 import type FsDriverBase from './fs-driver-base';
+import platformUtil from '@joplin/utils/platformUtil';
 
 export interface CreateResourceFromPathOptions {
 	resizeLargeImages?: 'always' | 'never' | 'ask';
@@ -38,7 +39,7 @@ const shim = {
 	proxyAgent: null as any,
 
 	electronBridge: (): any => {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: electronBridge');
 	},
 
 	msleep_: (ms: number) => {
@@ -51,9 +52,7 @@ const shim = {
 	},
 
 	isNode: () => {
-		if (typeof process === 'undefined') return false;
-		if (shim.isElectron()) return true;
-		return !shim.mobilePlatform();
+		return platformUtil.isNode();
 	},
 
 	isReactNative: () => {
@@ -65,52 +64,28 @@ const shim = {
 	},
 
 	isLinux: () => {
-		return process && process.platform === 'linux';
+		return platformUtil.isLinux();
 	},
 
 	isGNOME: () => {
-		if ((!shim.isLinux() && !shim.isFreeBSD()) || !process) {
-			return false;
-		}
-
-		const currentDesktop = process.env['XDG_CURRENT_DESKTOP'] ?? '';
-
-		// XDG_CURRENT_DESKTOP may be something like "ubuntu:GNOME" and not just "GNOME".
-		// Thus, we use .includes and not ===.
-		if (currentDesktop.includes('GNOME')) {
-			return true;
-		}
-
-		// On Ubuntu, "XDG_CURRENT_DESKTOP=ubuntu:GNOME" is replaced with "Unity" and
-		// ORIGINAL_XDG_CURRENT_DESKTOP stores the original desktop.
-		const originalCurrentDesktop = process.env['ORIGINAL_XDG_CURRENT_DESKTOP'] ?? '';
-		if (originalCurrentDesktop.includes('GNOME')) {
-			return true;
-		}
-
-		return false;
+		return platformUtil.isGNOME();
 	},
 
 	isFreeBSD: () => {
-		return process && process.platform === 'freebsd';
+		return platformUtil.isFreeBSD();
 	},
 
 	isWindows: () => {
-		return process && process.platform === 'win32';
+		return platformUtil.isWindows();
 	},
 
 	isMac: () => {
-		return process && process.platform === 'darwin';
+		return platformUtil.isMac();
 	},
 
 	platformName: () => {
 		if (shim.isReactNative()) return shim.mobilePlatform();
-		if (shim.isMac()) return 'darwin';
-		if (shim.isWindows()) return 'win32';
-		if (shim.isLinux()) return 'linux';
-		if (shim.isFreeBSD()) return 'freebsd';
-		if (process && process.platform) return process.platform;
-		throw new Error('Cannot determine platform');
+		return platformUtil.platformName();
 	},
 
 	// "ios" or "android", or "" if not on mobile
@@ -120,26 +95,11 @@ const shim = {
 
 	// https://github.com/cheton/is-electron
 	isElectron: () => {
-		// Renderer process
-		if (typeof window !== 'undefined' && typeof window.process === 'object' && (window.process as any).type === 'renderer') {
-			return true;
-		}
-
-		// Main process
-		if (typeof process !== 'undefined' && typeof process.versions === 'object' && !!(process.versions as any).electron) {
-			return true;
-		}
-
-		// Detect the user agent when the `nodeIntegration` option is set to true
-		if (typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('Electron') >= 0) {
-			return true;
-		}
-
-		return false;
+		return platformUtil.isElectron();
 	},
 
 	isPortable: (): boolean => {
-		return typeof process !== 'undefined' && typeof process.env === 'object' && !!process.env.PORTABLE_EXECUTABLE_DIR;
+		return platformUtil.isPortable();
 	},
 
 	// Node requests can go wrong is so many different ways and with so

@@ -1,3 +1,4 @@
+import platformUtil from '@joplin/utils/platformUtil';
 
 // TODO: copied from string-utils
 function formatCssSize(v: any): string {
@@ -57,6 +58,9 @@ export default function(theme: any, options: Options = null) {
 	theme = theme ? theme : {};
 
 	const fontFamily = '\'Avenir\', \'Arial\', sans-serif';
+
+	const isMobile = platformUtil.isMobile();
+	const overflowHidden = isMobile ? 'overflow: hidden;' : '';
 
 	const maxWidthTarget = options.contentMaxWidthTarget ? options.contentMaxWidthTarget : '#rendered-md';
 	const maxWidthCss = options.contentMaxWidth ? `
@@ -394,6 +398,7 @@ export default function(theme: any, options: Options = null) {
 
 		.mce-content-body .joplin-editable {
 			cursor: pointer !important;
+			${overflowHidden}
 		}
 
 		.mce-content-body.mce-content-readonly {
@@ -426,12 +431,22 @@ export default function(theme: any, options: Options = null) {
 			padding: 0;
 			color: inherit;
 			font-size: inherit;
+			${overflowHidden}
 		}
 
 		/* To make code blocks horizontally scrollable */
 		/* https://github.com/laurent22/joplin/issues/5740 */
 		pre.hljs {
 			overflow-x: auto;
+		}
+
+		#rendered-md {
+			${overflowHidden}
+		}
+
+		.joplin-table-div{
+			overflow-x: overlay;
+			overflow-y: hidden;
 		}
 
 		/* =============================================== */
