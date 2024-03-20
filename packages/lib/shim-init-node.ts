@@ -599,6 +599,11 @@ function shimInit(options: ShimInitOptions = null) {
 
 									try {
 										await gunzipFile(gzipFilePath, filePath);
+										// Calling request.destroy() within the downloadController can cause problems.
+										// The response.pipe(file) will continue even after request.destroy() is called,
+										// potentially causing the same promise to resolve while the cleanUpOnError
+										// is removing the file that have been downloaded by this function.
+										if (request.destroyed) return;
 										resolve(makeResponse(response));
 									} catch (error) {
 										cleanUpOnError(error);
@@ -606,6 +611,7 @@ function shimInit(options: ShimInitOptions = null) {
 
 									await shim.fsDriver().remove(gzipFilePath);
 								} else {
+									if (request.destroyed) return;
 									resolve(makeResponse(response));
 								}
 							});
