@@ -1,6 +1,7 @@
 const time = require('./time').default;
 const shim = require('./shim').default;
 const JoplinError = require('./JoplinError').default;
+const fs = require('fs-extra');
 
 class FileApiDriverDropbox {
 	constructor(api) {
@@ -171,19 +172,64 @@ class FileApiDriverDropbox {
 		if (typeof content === 'string') content = shim.Buffer.from(content, 'utf8');
 
 		try {
-			await this.api().exec(
-				'POST',
-				'files/upload',
-				content,
-				{
-					'Dropbox-API-Arg': JSON.stringify({
-						path: this.makePath_(path),
-						mode: 'overwrite',
-						mute: true, // Don't send a notification to user since there can be many of these updates
-					}),
-				},
-				options,
-			);
+			if (options && options.source === 'file') {
+
+				options = { ...options, chunked: true };
+
+				const content = await fs.readFile(options.path);
+				const chunkSize = 145 * 1024 * 1024; // 145MB
+				const chunks = [];
+				for (let i = 0; i < content.length; i += chunkSize) {
+					chunks.push(content.slice(i, i + chunkSize));
+				}
+
+				let sessionId;
+				for (let i = 0; i < chunks.length; i++) {
+					let endpoint;
+					const args = {};
+
+					if (i === 0) {
+						endpoint = 'files/upload_session/start';
+						if (chunks.length === 1) args.close = true;
+					} else if (i === chunks.length - 1) {
+						endpoint = 'files/upload_session/finish';
+						args.cursor = {
+							session_id: sessionId,
+							offset: i * chunkSize,
+						};
+						args.commit = {
+							path: this.makePath_(path),
+							mode: 'overwrite',
+							mute: true,
+						};
+					} else {
+						endpoint = 'files/upload_session/append_v2';
+						args.close = false;
+						args.cursor = {
+							session_id: sessionId,
+							offset: i * chunkSize,
+						};
+					}
+
+					const response = await this.api().exec('POST', endpoint, chunks[i], { 'Dropbox-API-Arg': JSON.stringify(args) }, options);
+
+					if (i === 0) sessionId = response.session_id;
+				}
+			} else {
+				await this.api().exec(
+					'POST',
+					'files/upload',
+					content,
+					{
+						'Dropbox-API-Arg': JSON.stringify({
+							path: this.makePath_(path),
+							mode: 'overwrite',
+							mute: true, // Don't send a notification to user since there can be many of these updates
+						}),
+					},
+					options,
+				);
+			}
 		} catch (error) {
 			if (this.hasErrorCode_(error, 'restricted_content')) {
 				throw new JoplinError('Cannot upload because content is restricted by Dropbox (restricted_content)', 'rejectedByTarget');
