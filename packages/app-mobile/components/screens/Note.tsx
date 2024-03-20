@@ -120,6 +120,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	// This isn't in this.state because we don't want changing scroll to trigger
 	// a re-render.
 	private lastBodyScroll: number|undefined = undefined;
+	private selection: SelectionRange|undefined = undefined;
 
 	private saveActionQueues_: any;
 	private doFocusUpdate_: boolean;
@@ -132,7 +133,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	private noteTagDialog_closeRequested: any;
 	private onJoplinLinkClick_: any;
 	private refreshResource: (resource: any, noteBody?: string)=> Promise<void>;
-	private selection: SelectionRange;
 	private menuOptionsCache_: Record<string, any>;
 	private focusUpdateIID_: any;
 	private folderPickerOptions_: any;
@@ -549,25 +549,15 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		}
 
 		if (prevProps.noteId && prevProps.noteId !== this.props.noteId) {
-			// Easier to just go back, then go to the note since
-			// the Note screen doesn't handle reloading a different note
-			const noteId = this.props.noteId;
-			const noteHash = this.props.noteHash;
-
-			this.props.dispatch({
-				type: 'NAV_GO',
-				routeName: 'Notes',
-				folderId: this.state.note.parent_id,
-			});
-
-			shim.setTimeout(() => {
-				this.props.dispatch({
-					type: 'NAV_GO',
-					routeName: 'Note',
-					noteId: noteId,
-					noteHash: noteHash,
-				});
-			}, 5);
+			void (async () => {
+				if (this.isModified()) {
+					await this.saveNoteButton_press();
+				}
+				this.setState({ isLoading: true });
+				await shared.initState(this);
+				this.selection = undefined;
+				this.lastBodyScroll = undefined;
+			})();
 		}
 	}
 
@@ -587,7 +577,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	private title_changeText(text: string) {
 		shared.noteComponent_change(this, 'title', text);
 		this.setState({ newAndNoTitleChangeNoteId: null });
-		this.scheduleSave();
 	}
 
 	private onPlainEditorTextChange = (text: string) => {
@@ -598,7 +587,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		}
 
 		shared.noteComponent_change(this, 'body', text);
-		this.scheduleSave();
 	};
 
 	// Avoid saving immediately -- the NoteEditor's content isn't controlled by its props
@@ -607,7 +595,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	// See https://github.com/laurent22/joplin/issues/10130
 	private onMarkdownEditorTextChange = debounce((event: EditorChangeEvent) => {
 		shared.noteComponent_change(this, 'body', event.value);
-		this.scheduleSave();
 	}, 100);
 
 	private onPlainEditorSelectionChange = (event: NativeSyntheticEvent<any>) => {
@@ -1191,7 +1178,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		const readOnly = this.state.readOnly;
 		const isDeleted = !!this.state.note.deleted_time;
 
-		const cacheKey = md5([isTodo, isSaved].join('_'));
+		const cacheKey = md5([isTodo, isSaved, isDeleted].join('_'));
 		if (!this.menuOptionsCache_) this.menuOptionsCache_ = {};
 
 		if (this.menuOptionsCache_[cacheKey]) return this.menuOptionsCache_[cacheKey];
@@ -1524,6 +1511,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 				const editorStyle = this.styles().bodyTextInput;
 
 				bodyComponent = <NoteEditor
+					key={this.props.noteId}
 					ref={this.editorRef}
 					toolbarEnabled={this.props.toolbarEnabled}
 					themeId={this.props.themeId}

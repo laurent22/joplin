@@ -16,6 +16,7 @@ export interface BaseNoteScreenComponent {
 	props: any;
 	state: any;
 	setState: (newState: any)=> void;
+	scheduleSave(): void;
 
 	scheduleFocusUpdate(): void;
 	attachFile(asset: any, fileType: any): void;
@@ -185,6 +186,7 @@ shared.noteComponent_change = function(comp: BaseNoteScreenComponent, propName: 
 	newState.note = note;
 
 	comp.setState(newState);
+	comp.scheduleSave();
 };
 
 let resourceCache_: any = {};
