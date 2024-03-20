@@ -13,9 +13,11 @@ import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import ResourceService from '../services/ResourceService';
 import { LoadOptions } from './utils/types';
 import ActionLogger from '../utils/ActionLogger';
+
 import { getTrashFolder } from '../services/trash';
 import getConflictFolderId from './utils/getConflictFolderId';
 import getTrashFolderId from '../services/trash/getTrashFolderId';
+import { getCollator } from './utils/getCollator';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 const logger = Logger.create('models/Folder');
@@ -298,8 +300,18 @@ export default class Folder extends BaseItem {
 		return output;
 	}
 
+	public static handleTitleNaturalSorting(items: FolderEntity[], options: any) {
+		if (options.order?.length > 0 && options.order[0].by === 'title') {
+			const collator = getCollator();
+			items.sort((a, b) => ((options.order[0].dir === 'ASC') ? 1 : -1) * collator.compare(a.title, b.title));
+		}
+	}
+
 	public static async all(options: FolderLoadOptions = null) {
 		let output: FolderEntity[] = await super.all(options);
+		if (options) {
+			this.handleTitleNaturalSorting(output, options);
+		}
 
 		if (options && options.includeDeleted === false) {
 			output = output.filter(f => !f.deleted_time);
@@ -768,9 +780,10 @@ export default class Folder extends BaseItem {
 		const output = folders ? folders : await this.allAsTree();
 
 		const sortFoldersAlphabetically = (folders: FolderEntityWithChildren[]) => {
+			const collator = getCollator();
 			folders.sort((a: FolderEntityWithChildren, b: FolderEntityWithChildren) => {
 				if (a.parent_id === b.parent_id) {
-					return a.title.localeCompare(b.title, undefined, { sensitivity: 'accent' });
+					return collator.compare(a.title, b.title);
 				}
 				return 0;
 			});
