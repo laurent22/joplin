@@ -171,7 +171,11 @@ const PluginPanelViewer: React.FC<Props> = props => {
 		// As such, we include a special case:
 		if (buttonInfos.length === 1) {
 			const buttonInfo = buttonInfos[0];
-			return <Button icon={buttonInfo.icon}>{buttonInfo.label}</Button>;
+			return (
+				<Button icon={buttonInfo.icon} onPress={()=>setSelectedTabId(buttonInfo.value)}>
+					{buttonInfo.label}
+				</Button>
+			);
 		}
 
 		return (
