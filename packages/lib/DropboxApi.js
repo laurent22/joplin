@@ -112,7 +112,13 @@ class DropboxApi {
 
 		if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
 
-		const endPointFormat = ['files/upload', 'files/download'].indexOf(path) >= 0 ? 'content' : 'api';
+		const endPointFormat = [
+			'files/upload',
+			'files/download',
+			'files/upload_session/start',
+			'files/upload_session/append_v2',
+			'files/upload_session/finish',
+		].indexOf(path) >= 0 ? 'content' : 'api';
 
 		if (endPointFormat === 'api') {
 			headers['Content-Type'] = 'application/json';
@@ -125,6 +131,7 @@ class DropboxApi {
 		fetchOptions.headers = headers;
 		fetchOptions.method = method;
 		if (options.path) fetchOptions.path = options.path;
+		if (options.chunked) fetchOptions.chunked = options.chunked;
 		if (body) fetchOptions.body = body;
 
 		const url = path.indexOf('https://') === 0 ? path : `${this.baseUrl(endPointFormat)}/${path}`;
