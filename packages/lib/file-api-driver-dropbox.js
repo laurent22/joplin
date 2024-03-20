@@ -174,7 +174,7 @@ class FileApiDriverDropbox {
 		try {
 			if (options && options.source === 'file') {
 
-				options = { ...options, chunked: true };
+				options = { ...options, loaded: true };
 
 				const content = await fs.readFile(options.path);
 				const chunkSize = 145 * 1024 * 1024; // 145MB
@@ -235,6 +235,12 @@ class FileApiDriverDropbox {
 				throw new JoplinError('Cannot upload because content is restricted by Dropbox (restricted_content)', 'rejectedByTarget');
 			} else if (this.hasErrorCode_(error, 'payload_too_large')) {
 				throw new JoplinError('Cannot upload because payload size is rejected by Dropbox (payload_too_large)', 'rejectedByTarget');
+			} else if (this.hasErrorCode_(error, 'not_found')) {
+				throw new JoplinError('Cannot upload because session ID is not found', 'rejectedByTarget');
+			} else if (this.hasErrorCode_(error, 'closed')) {
+				throw new JoplinError('Cannot upload because upload session is closed', 'rejectedByTarget');
+			} else if (this.hasErrorCode_(error, 'incorrect_offset')) {
+				throw new JoplinError('Cannot upload because incorrect offset', 'rejectedByTarget');
 			} else {
 				throw error;
 			}
