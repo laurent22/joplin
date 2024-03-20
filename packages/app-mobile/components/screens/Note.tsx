@@ -548,7 +548,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			});
 		}
 
-		if (prevProps.noteId && prevProps.noteId !== this.props.noteId) {
+		if (prevProps.noteId && this.props.noteId && prevProps.noteId !== this.props.noteId) {
 			void (async () => {
 				if (this.isModified()) {
 					await this.saveNoteButton_press();
