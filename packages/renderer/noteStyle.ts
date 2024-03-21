@@ -445,7 +445,7 @@ export default function(theme: any, options: Options = null) {
 		}
 
 		.joplin-table-div{
-			overflow-x: overlay;
+			overflow-x: auto;
 			overflow-y: hidden;
 		}
 
