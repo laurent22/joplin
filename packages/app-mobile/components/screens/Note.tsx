@@ -587,7 +587,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	private title_changeText(text: string) {
 		shared.noteComponent_change(this, 'title', text);
 		this.setState({ newAndNoTitleChangeNoteId: null });
-		this.scheduleSave();
 	}
 
 	private onPlainEditorTextChange = (text: string) => {
@@ -598,7 +597,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		}
 
 		shared.noteComponent_change(this, 'body', text);
-		this.scheduleSave();
 	};
 
 	// Avoid saving immediately -- the NoteEditor's content isn't controlled by its props
@@ -607,7 +605,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	// See https://github.com/laurent22/joplin/issues/10130
 	private onMarkdownEditorTextChange = debounce((event: EditorChangeEvent) => {
 		shared.noteComponent_change(this, 'body', event.value);
-		this.scheduleSave();
 	}, 100);
 
 	private onPlainEditorSelectionChange = (event: NativeSyntheticEvent<any>) => {
