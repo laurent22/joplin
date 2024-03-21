@@ -13,13 +13,17 @@ export interface CreateFromBufferOptions {
 
 export interface CreateFromPdfOptions {
 	/**
-	 * The minimum page number to export. If not given, starts from the first page (page 1).
-	 * Indices are 1-based.
+	 * The first page to export. Defaults to `1`, the first page in
+	 * the document.
 	 */
 	minPage?: number;
 
 	/**
-	 * If not given, pages from `minPage` (or the first) until the last are converted into images.
+	 * The number of the last page to convert. Defaults to the last page
+	 * if not given.
+	 *
+	 * If `maxPage` is greater than the number of pages in the PDF, all pages
+	 * in the PDF will be converted to images.
 	 */
 	maxPage?: number;
 
