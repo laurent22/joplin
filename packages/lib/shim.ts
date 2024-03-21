@@ -8,6 +8,12 @@ export interface CreateResourceFromPathOptions {
 	destinationResourceId?: string;
 }
 
+export interface CreatePdfFromImagesOptions {
+	minPage?: number;
+	maxPage?: number;
+	scaleFactor?: number;
+}
+
 let isTestingEnv_ = false;
 
 // We need to ensure that there's only one instance of React being used by all
@@ -282,7 +288,7 @@ const shim = {
 		throw new Error('Not implemented: textFromPdf');
 	},
 
-	pdfToImages: async (_pdfPath: string, _outputDirectoryPath: string): Promise<string[]> => {
+	pdfToImages: async (_pdfPath: string, _outputDirectoryPath: string, _options?: CreatePdfFromImagesOptions): Promise<string[]> => {
 		throw new Error('Not implemented: pdfToImages');
 	},
 

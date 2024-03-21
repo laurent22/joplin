@@ -1,11 +1,26 @@
 import { Rectangle } from './types';
-export interface Implementation {
-    nativeImage: any;
-}
 export interface CreateFromBufferOptions {
     width?: number;
     height?: number;
     scaleFactor?: number;
+}
+export interface CreateFromPdfOptions {
+    /**
+     * The minimum page number to export. If not given, starts from the first page (page 1).
+     * Indices are 1-based.
+     */
+    minPage?: number;
+    /**
+     * If not given, pages from `minPage` (or the first) until the last are converted into images.
+     */
+    maxPage?: number;
+    scaleFactor?: number;
+}
+export interface Implementation {
+    nativeImage: {
+        createFromPath: (path: string) => Promise<any>;
+        createFromPdf: (path: string, options: CreateFromPdfOptions) => Promise<any[]>;
+    };
 }
 export interface ResizeOptions {
     width?: number;
@@ -34,6 +49,8 @@ export default class JoplinImaging {
     private cacheImage;
     createFromPath(filePath: string): Promise<Handle>;
     createFromResource(resourceId: string): Promise<Handle>;
+    createFromPdfPath(path: string, options?: CreateFromPdfOptions): Promise<Handle[]>;
+    createFromPdfResource(resourceId: string, options?: CreateFromPdfOptions): Promise<Handle[]>;
     getSize(handle: Handle): Promise<any>;
     resize(handle: Handle, options?: ResizeOptions): Promise<string>;
     crop(handle: Handle, rectangle: Rectangle): Promise<string>;
@@ -57,5 +74,5 @@ export default class JoplinImaging {
      * Image data is not automatically deleted by Joplin so make sure you call
      * this method on the handle once you are done.
      */
-    free(handle: Handle): Promise<void>;
+    free(handles: Handle[] | Handle): Promise<void>;
 }
