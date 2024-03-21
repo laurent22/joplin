@@ -3,7 +3,7 @@
 import * as React from 'react';
 
 import {
-	forwardRef, Ref, useCallback, useEffect, useImperativeHandle, useRef, useState,
+	forwardRef, Ref, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState,
 } from 'react';
 import { WebView, WebViewMessageEvent } from 'react-native-webview';
 import { WebViewErrorEvent, WebViewEvent, WebViewSource } from 'react-native-webview/lib/WebViewTypes';
@@ -50,6 +50,7 @@ interface Props {
 	mixedContentMode?: 'never' | 'always';
 
 	allowFileAccessFromJs?: boolean;
+	hasPluginScripts?: boolean;
 
 	// Initial javascript. Must evaluate to true.
 	injectedJavaScript: string;
@@ -142,6 +143,10 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 		logger.error('Error', event.nativeEvent.description);
 	}, []);
 
+	const allowWebviewDebugging = useMemo(() => {
+		return Setting.value('env') === 'dev' || (!!props.hasPluginScripts && Setting.value('plugins.enableWebviewDebugging'));
+	}, [props.hasPluginScripts]);
+
 	// - `setSupportMultipleWindows` must be `true` for security reasons:
 	//   https://github.com/react-native-webview/react-native-webview/releases/tag/v11.0.0
 
@@ -172,7 +177,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			mixedContentMode={props.mixedContentMode}
 			allowFileAccess={true}
 			allowFileAccessFromFileURLs={props.allowFileAccessFromJs}
-			webviewDebuggingEnabled={Setting.value('env') === 'dev'}
+			webviewDebuggingEnabled={allowWebviewDebugging}
 			injectedJavaScript={props.injectedJavaScript}
 			onMessage={props.onMessage}
 			onError={props.onError ?? onError}

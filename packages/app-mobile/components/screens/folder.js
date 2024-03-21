@@ -10,7 +10,6 @@ const { dialogs } = require('../../utils/dialogs.js');
 const { _ } = require('@joplin/lib/locale');
 const { default: FolderPicker } = require('../FolderPicker');
 const TextInput = require('../TextInput').default;
-const { getTrashFolderId } = require('@joplin/lib/services/trash');
 
 class FolderScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
@@ -108,7 +107,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 					<FolderPicker
 						themeId={this.props.themeId}
 						placeholder={_('Select parent notebook')}
-						folders={this.props.folders.filter(f => f.id !== getTrashFolderId())}
+						folders={Folder.getRealFolders(this.props.folders)}
 						selectedFolderId={this.state.folder.parent_id}
 						onValueChange={newValue => this.parent_changeValue(newValue)}
 						mustSelect

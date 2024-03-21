@@ -62,6 +62,7 @@ import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import pickDocument from '../../utils/pickDocument';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import PluginPanelViewer from '../../plugins/PluginRunner/dialogs/PluginPanelViewer';
+import debounce from '../../utils/debounce';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -319,7 +320,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		this.screenHeader_redoButtonPress = this.screenHeader_redoButtonPress.bind(this);
 		this.onBodyViewerLoadEnd = this.onBodyViewerLoadEnd.bind(this);
 		this.onBodyViewerCheckboxChange = this.onBodyViewerCheckboxChange.bind(this);
-		this.onBodyChange = this.onBodyChange.bind(this);
 		this.onUndoRedoDepthChange = this.onUndoRedoDepthChange.bind(this);
 		this.voiceTypingDialog_onText = this.voiceTypingDialog_onText.bind(this);
 		this.voiceTypingDialog_onDismiss = this.voiceTypingDialog_onDismiss.bind(this);
@@ -329,10 +329,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		return this.props.useEditorBeta;
 	}
 
-	private onBodyChange(event: EditorChangeEvent) {
-		shared.noteComponent_change(this, 'body', event.value);
-		this.scheduleSave();
-	}
 
 	private onUndoRedoDepthChange(event: UndoRedoDepthChangeEvent) {
 		if (this.useEditorBeta()) {
@@ -552,7 +548,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			});
 		}
 
-		if (prevProps.noteId && prevProps.noteId !== this.props.noteId) {
+		if (prevProps.noteId && this.props.noteId && prevProps.noteId !== this.props.noteId) {
 			// Easier to just go back, then go to the note since
 			// the Note screen doesn't handle reloading a different note
 			const noteId = this.props.noteId;
@@ -591,10 +587,9 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	private title_changeText(text: string) {
 		shared.noteComponent_change(this, 'title', text);
 		this.setState({ newAndNoTitleChangeNoteId: null });
-		this.scheduleSave();
 	}
 
-	private body_changeText(text: string) {
+	private onPlainEditorTextChange = (text: string) => {
 		if (!this.undoRedoService_.canUndo) {
 			this.undoRedoService_.push(this.undoState());
 		} else {
@@ -602,8 +597,15 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		}
 
 		shared.noteComponent_change(this, 'body', text);
-		this.scheduleSave();
-	}
+	};
+
+	// Avoid saving immediately -- the NoteEditor's content isn't controlled by its props
+	// and updating this.state.note immediately causes slow rerenders.
+	//
+	// See https://github.com/laurent22/joplin/issues/10130
+	private onMarkdownEditorTextChange = debounce((event: EditorChangeEvent) => {
+		shared.noteComponent_change(this, 'body', event.value);
+	}, 100);
 
 	private onPlainEditorSelectionChange = (event: NativeSyntheticEvent<any>) => {
 		this.selection = event.nativeEvent.selection;
@@ -1474,6 +1476,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 						onLoadEnd={this.onBodyViewerLoadEnd}
 						onScroll={this.onBodyViewerScroll}
 						initialScroll={this.lastBodyScroll}
+						pluginStates={this.props.plugins}
 					/>
 				);
 		} else {
@@ -1501,7 +1504,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 						ref="noteBodyTextField"
 						multiline={true}
 						value={note.body}
-						onChangeText={(text: string) => this.body_changeText(text)}
+						onChangeText={this.onPlainEditorTextChange}
 						onSelectionChange={this.onPlainEditorSelectionChange}
 						blurOnSubmit={false}
 						selectionColor={theme.textSelectionColor}
@@ -1523,7 +1526,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 					themeId={this.props.themeId}
 					initialText={note.body}
 					initialSelection={this.selection}
-					onChange={this.onBodyChange}
+					onChange={this.onMarkdownEditorTextChange}
 					onSelectionChange={this.onMarkdownEditorSelectionChange}
 					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
 					onAttach={() => this.showAttachMenu()}

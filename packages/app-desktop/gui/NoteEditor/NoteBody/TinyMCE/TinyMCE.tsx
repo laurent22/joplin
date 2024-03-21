@@ -31,6 +31,7 @@ import { Options as NoteStyleOptions } from '@joplin/renderer/noteStyle';
 import markupRenderOptions from '../../utils/markupRenderOptions';
 import { DropHandler } from '../../utils/useDropHandler';
 import Logger from '@joplin/utils/Logger';
+import useWebViewApi from './utils/useWebViewApi';
 const md5 = require('md5');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
@@ -348,6 +349,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		};
 	}, []);
 
+	useWebViewApi(editor);
+
 	useEffect(() => {
 		const theme = themeStyle(props.themeId);
 		const backgroundColor = props.whiteBackgroundNoteRendering ? lightTheme.backgroundColor : theme.backgroundColor;
@@ -568,8 +571,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	useEffect(() => {
 		if (!scriptLoaded) return;
 
-		const theme = themeStyle(props.themeId);
-
 		const loadEditor = async () => {
 			const language = closestSupportedLocale(props.locale, true, supportedLocales);
 
@@ -603,7 +604,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			];
 
 			const editors = await (window as any).tinymce.init({
-				content_style: `* {font-size: ${props.fontSize}px; font-family: "${props.fontFamily}"; line-height: ${theme.lineHeight};}`,
 				selector: `#${rootIdRef.current}`,
 				width: '100%',
 				body_class: 'jop-tinymce',

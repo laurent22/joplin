@@ -1,5 +1,10 @@
 # Joplin Desktop Changelog
 
+## [v2.14.20](https://github.com/laurent22/joplin/releases/tag/v2.14.20) - 2024-03-18T17:05:17Z
+
+- Fixed: Fix OCR not working for certain languages ([#10097](https://github.com/laurent22/joplin/issues/10097))
+- Fixed: ENEX does not import correctly when title of note matches the name of the attachment ([#10125](https://github.com/laurent22/joplin/issues/10125))
+
 ## [v2.14.19](https://github.com/laurent22/joplin/releases/tag/v2.14.19) - 2024-03-08T10:45:16Z
 
 - Fixed: Re-enable UNC links ([#10071](https://github.com/laurent22/joplin/issues/10071) by Henry Heino)
