@@ -1,7 +1,7 @@
 const time = require('./time').default;
 const shim = require('./shim').default;
 const JoplinError = require('./JoplinError').default;
-const fs = require('fs-extra');
+const chunkGenerator = require('./utils/chunkGenerator').default;
 
 class FileApiDriverDropbox {
 	constructor(api) {
@@ -176,26 +176,23 @@ class FileApiDriverDropbox {
 
 				options = { ...options, loaded: true };
 
-				const content = await fs.readFile(options.path);
+				// chunk size can be set dynamically
+				// depending on the platform.
 				const chunkSize = 145 * 1024 * 1024; // 145MB
-				const chunks = [];
-				for (let i = 0; i < content.length; i += chunkSize) {
-					chunks.push(content.slice(i, i + chunkSize));
-				}
 
 				let sessionId;
-				for (let i = 0; i < chunks.length; i++) {
+				for await (const { index, chunksNo, chunk } of chunkGenerator(options.path, chunkSize)) {
 					let endpoint;
 					const args = {};
 
-					if (i === 0) {
+					if (index === 0) {
 						endpoint = 'files/upload_session/start';
-						if (chunks.length === 1) args.close = true;
-					} else if (i === chunks.length - 1) {
+						if (chunksNo === 1) args.close = true;
+					} else if (index === chunksNo - 1) {
 						endpoint = 'files/upload_session/finish';
 						args.cursor = {
 							session_id: sessionId,
-							offset: i * chunkSize,
+							offset: index * chunkSize,
 						};
 						args.commit = {
 							path: this.makePath_(path),
@@ -207,13 +204,13 @@ class FileApiDriverDropbox {
 						args.close = false;
 						args.cursor = {
 							session_id: sessionId,
-							offset: i * chunkSize,
+							offset: index * chunkSize,
 						};
 					}
 
-					const response = await this.api().exec('POST', endpoint, chunks[i], { 'Dropbox-API-Arg': JSON.stringify(args) }, options);
+					const response = await this.api().exec('POST', endpoint, chunk, { 'Dropbox-API-Arg': JSON.stringify(args) }, options);
 
-					if (i === 0) sessionId = response.session_id;
+					if (index === 0) sessionId = response.session_id;
 				}
 			} else {
 				await this.api().exec(
