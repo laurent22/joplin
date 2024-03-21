@@ -15,7 +15,7 @@ function tableOpenPlugin(markdownIt: any) {
 		}
 		const cur = String(self.renderToken(tokens, idx, options));
 		logger.info(`cur:${cur}`);
-		return platformUtil.isMobile() ? `<div class="joplin-table-div"  data-handy-scroll>\n${cur}` : cur;
+		return platformUtil.isMobile() ? `<div class="joplin-table-div" >\n${cur}` : cur;
 	};
 }
 
