@@ -4291,18 +4291,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:6.24.1":
-  version: 6.24.1
-  resolution: "@codemirror/view@npm:6.24.1"
-  dependencies:
-    "@codemirror/state": ^6.4.0
-    style-mod: ^4.1.0
-    w3c-keyname: ^2.2.4
-  checksum: 376a9dd6ba3d626373f06a241defa7b61dfa80dda021e8dac8aa05261873b5e8bdf2f7d378f844c8bea2b644659020729bbf43330a272a76143e9995d77a452c
-  languageName: node
-  linkType: hard
-
-"@codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0":
+"@codemirror/view@npm:6.26.0, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0":
   version: 6.26.0
   resolution: "@codemirror/view@npm:6.26.0"
   dependencies:
@@ -6795,7 +6784,7 @@ __metadata:
     "@codemirror/lint": 6.5.0
     "@codemirror/search": 6.5.6
     "@codemirror/state": 6.4.1
-    "@codemirror/view": 6.24.1
+    "@codemirror/view": 6.26.0
     "@joplin/lib": ~3.0
     "@lezer/common": 1.2.1
     "@lezer/highlight": 1.2.0
