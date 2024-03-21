@@ -48,9 +48,8 @@ const rules: RendererRules = {
 	code_inline: require('./MdToHtml/rules/code_inline').default,
 	fountain: require('./MdToHtml/rules/fountain').default,
 	mermaid: require('./MdToHtml/rules/mermaid').default,
-	table_open: require('./MdToHtml/rules/table_open').default,
-	table_close: require('./MdToHtml/rules/table_close').default,
 	source_map: require('./MdToHtml/rules/source_map').default,
+	tableHorizontallyScrollable: require('./MdToHtml/rules/tableHorizontallyScrollable').default,
 };
 
 const uslug = require('@joplin/fork-uslug');
@@ -176,9 +175,6 @@ export interface RuleOptions {
 	allowedFilePrefixes?: string[];
 
 	platformName?: string;
-
-	// Use in mobile app to enable table limited in screen width. Used in `table_open.ts` and `table_close.ts`
-	tableLimitedInScreenWidth?: boolean;
 }
 
 export default class MdToHtml implements MarkupRenderer {
@@ -463,7 +459,6 @@ export default class MdToHtml implements MarkupRenderer {
 			...options,
 			resourceBaseUrl: this.resourceBaseUrl_,
 			ResourceModel: this.ResourceModel_,
-			tableLimitedInScreenWidth: this.pluginEnabled('tableLimitedInScreenWidth'),
 		};
 
 		const context: PluginContext = {
