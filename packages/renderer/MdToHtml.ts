@@ -176,6 +176,9 @@ export interface RuleOptions {
 	allowedFilePrefixes?: string[];
 
 	platformName?: string;
+
+	// Use in mobile app to enable table limited in screen width. Used in `table_open.ts` and `table_close.ts`
+	tableLimitedInScreenWidth?: boolean;
 }
 
 export default class MdToHtml implements MarkupRenderer {
@@ -460,6 +463,7 @@ export default class MdToHtml implements MarkupRenderer {
 			...options,
 			resourceBaseUrl: this.resourceBaseUrl_,
 			ResourceModel: this.ResourceModel_,
+			tableLimitedInScreenWidth: this.pluginEnabled('tableLimitedInScreenWidth'),
 		};
 
 		const context: PluginContext = {
