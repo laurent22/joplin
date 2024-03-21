@@ -548,7 +548,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			});
 		}
 
-		if (prevProps.noteId && prevProps.noteId !== this.props.noteId) {
+		if (prevProps.noteId && this.props.noteId && prevProps.noteId !== this.props.noteId) {
 			// Easier to just go back, then go to the note since
 			// the Note screen doesn't handle reloading a different note
 			const noteId = this.props.noteId;
