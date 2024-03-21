@@ -100,6 +100,7 @@ interface ScreenHeaderProps {
 }
 
 interface ScreenHeaderState {
+	folderListVisible: boolean;
 }
 
 class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeaderState> {
@@ -108,6 +109,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 	public constructor(props: ScreenHeaderProps) {
 		super(props);
 		this.cachedStyles = {};
+		this.state = { folderListVisible: false };
 	}
 
 	private styles() {
@@ -303,6 +305,10 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		}
 	}
 
+	private folderPicker_toggled = (open: boolean) => {
+		this.setState({ folderListVisible: open });
+	};
+
 	private menu_select(value: OnSelectCallbackType) {
 		if (typeof value === 'function') {
 			value();
@@ -453,12 +459,12 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const pluginPanelToggleButton = (styles: any, onPress: OnPressCallback) => {
 			const allPluginViews = Object.values(this.props.plugins).map(plugin => Object.values(plugin.views)).flat();
 			const allPanels = allPluginViews.filter(view => view.containerType === ContainerType.Panel);
-			if (allPanels.length === 0) return null;
+			if (allPanels.length === 0 || this.state.folderListVisible) return null;
 
 			return (
 				<CustomButton
 					onPress={onPress}
-					description={_('Plugin panels')}
+					description={_('Show plugin panels')}
 					themeId={themeId}
 					contentStyle={styles.iconButton}
 				>
@@ -582,6 +588,8 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 						themeId={themeId}
 						disabled={disabled}
 						selectedFolderId={'selectedFolderId' in folderPickerOptions ? folderPickerOptions.selectedFolderId : null}
+						onListVisibleChanged={this.folderPicker_toggled}
+						listVisible={this.state.folderListVisible}
 						onValueChange={async (folderId) => {
 							// If onValueChange is specified, use this as a callback, otherwise do the default
 							// which is to take the selectedNoteIds from the state and move them to the

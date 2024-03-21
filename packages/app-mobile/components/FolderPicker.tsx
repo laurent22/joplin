@@ -4,13 +4,15 @@ import { FunctionComponent } from 'react';
 import { _ } from '@joplin/lib/locale';
 import Folder, { FolderEntityWithChildren } from '@joplin/lib/models/Folder';
 import { themeStyle } from './global-style';
-import Dropdown, { DropdownListItem, OnValueChangedListener } from './Dropdown';
+import Dropdown, { DropdownListItem, OnListVisibleChangedListener, OnValueChangedListener } from './Dropdown';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 
 interface FolderPickerProps {
 	disabled?: boolean;
 	selectedFolderId?: string;
 	onValueChange?: OnValueChangedListener;
+	onListVisibleChanged: OnListVisibleChangedListener;
+	listVisible?: boolean;
 	mustSelect?: boolean;
 	folders: FolderEntity[];
 	placeholder?: string;
@@ -23,6 +25,8 @@ const FolderPicker: FunctionComponent<FolderPickerProps> = ({
 	disabled,
 	selectedFolderId,
 	onValueChange,
+	onListVisibleChanged,
+	listVisible,
 	mustSelect,
 	folders,
 	placeholder,
@@ -66,6 +70,8 @@ const FolderPicker: FunctionComponent<FolderPickerProps> = ({
 			disabled={disabled}
 			labelTransform="trim"
 			selectedValue={selectedFolderId || ''}
+			onListVisibleChanged={onListVisibleChanged}
+			listVisible={listVisible}
 			itemListStyle={{
 				backgroundColor: theme.backgroundColor,
 			}}

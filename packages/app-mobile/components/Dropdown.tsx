@@ -1,5 +1,5 @@
 const React = require('react');
-import { TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, Modal, View, LayoutRectangle, ViewStyle, TextStyle, FlatList } from 'react-native';
+import { TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, Modal, View, LayoutRectangle, ViewStyle, TextStyle, FlatList, LayoutChangeEvent } from 'react-native';
 import { Component } from 'react';
 import { _ } from '@joplin/lib/locale';
 
@@ -14,6 +14,7 @@ export interface DropdownListItem {
 }
 
 export type OnValueChangedListener = (newValue: ValueType)=> void;
+export type OnListVisibleChangedListener = (open: boolean)=> void;
 
 interface DropdownProps {
 	listItemStyle?: ViewStyle;
@@ -29,6 +30,9 @@ interface DropdownProps {
 
 	selectedValue: ValueType|null;
 	onValueChange?: OnValueChangedListener;
+
+	listVisible?: boolean;
+	onListVisibleChanged?: OnListVisibleChangedListener;
 }
 
 interface DropdownState {
@@ -49,14 +53,37 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 		};
 	}
 
-	private updateHeaderCoordinates() {
+	private updateHeaderCoordinates = (event: LayoutChangeEvent) => {
+		if (!this.headerRef) return;
+
+		const { width, height } = event.nativeEvent.layout;
+
+		const lastLayout = this.state.headerSize;
+		if (width !== lastLayout.width || height !== lastLayout.height) {
+			this.setState({
+				headerSize: { x: lastLayout.x, y: lastLayout.y, width, height },
+			});
+		}
+
 		// https://stackoverflow.com/questions/30096038/react-native-getting-the-position-of-an-element
 		this.headerRef.measure((_fx, _fy, width, height, px, py) => {
-			this.setState({
-				headerSize: { x: px, y: py, width: width, height: height },
-			});
+			const lastLayout = this.state.headerSize;
+			if (px !== lastLayout.x || py !== lastLayout.y || width !== lastLayout.width || height !== lastLayout.height) {
+				this.setState({
+					headerSize: { x: px, y: py, width: width, height: height },
+				});
+			}
 		});
-	}
+	};
+
+	private onOpenList = () => {
+		this.props.onListVisibleChanged?.(true);
+		if (this.props.listVisible === undefined) this.setState({ listVisible: true });
+	};
+	private onCloseList = () => {
+		this.props.onListVisibleChanged?.(false);
+		if (this.props.listVisible === undefined) this.setState({ listVisible: false });
+	};
 
 	public render() {
 		const items = this.props.items;
@@ -125,10 +152,6 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 			headerLabel = headerLabel.trim();
 		}
 
-		const closeList = () => {
-			this.setState({ listVisible: false });
-		};
-
 		const itemRenderer = ({ item }: { item: DropdownListItem }) => {
 			const key = item.value ? item.value.toString() : '__null'; // The top item ("Move item to notebook...") has a null value.
 			const indentWidth = Math.min((item.depth ?? 0) * 32, dropdownWidth * 2 / 3);
@@ -139,7 +162,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 					accessibilityRole="menuitem"
 					key={key}
 					onPress={() => {
-						closeList();
+						this.onCloseList();
 						if (this.props.onValueChange) this.props.onValueChange(item.value);
 					}}
 				>
@@ -157,7 +180,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 		const screenReaderCloseMenuButton = (
 			<TouchableWithoutFeedback
 				accessibilityRole='button'
-				onPress={()=> closeList()}
+				onPress={this.onCloseList}
 			>
 				<Text style={{
 					opacity: 0,
@@ -172,10 +195,8 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 					style={headerWrapperStyle as any}
 					ref={ref => (this.headerRef = ref)}
 					disabled={this.props.disabled}
-					onPress={() => {
-						this.updateHeaderCoordinates();
-						this.setState({ listVisible: true });
-					}}
+					onLayout={this.updateHeaderCoordinates}
+					onPress={this.onOpenList}
 				>
 					<Text ellipsizeMode="tail" numberOfLines={1} style={headerStyle}>
 						{headerLabel}
@@ -184,18 +205,15 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 				</TouchableOpacity>
 				<Modal
 					transparent={true}
-					visible={this.state.listVisible}
-					onRequestClose={() => {
-						closeList();
-					}}
+					animationType='fade'
+					visible={this.props.listVisible ?? this.state.listVisible}
+					onRequestClose={this.onCloseList}
 					supportedOrientations={['landscape', 'portrait']}
 				>
 					<TouchableWithoutFeedback
 						accessibilityElementsHidden={true}
 						importantForAccessibility='no-hide-descendants'
-						onPress={() => {
-							closeList();
-						}}
+						onPress={this.onCloseList}
 						style={backgroundCloseButtonStyle}
 					>
 						<View style={{ flex: 1 }}/>
