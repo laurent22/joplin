@@ -1,4 +1,3 @@
-import platformUtil from '@joplin/utils/platformUtil';
 const shim = require('@joplin/lib/shim').default;
 const { GeolocationReact } = require('./geolocation-react.js');
 const PoorManIntervals = require('@joplin/lib/PoorManIntervals').default;
@@ -248,10 +247,6 @@ function shimInit() {
 				resolve();
 			});
 		});
-	};
-
-	platformUtil.mobilePlatform = () => {
-		return Platform.OS;
 	};
 
 	shim.mobilePlatform = () => {
