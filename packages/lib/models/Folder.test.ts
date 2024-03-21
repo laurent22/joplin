@@ -223,6 +223,34 @@ describe('models/Folder', () => {
 		expect(sortedFolderTree[2].id).toBe(f6.id);
 	}));
 
+	it('should sort folders with special chars alphabetically', (async () => {
+		const unsortedFolderTitles = ['ç', 'd', 'c', 'Ä', 'b', 'a'].map(firstChar => `${firstChar} folder`);
+		for (const folderTitle of unsortedFolderTitles) {
+			await Folder.save({ title: folderTitle });
+		}
+
+		const folders = await Folder.allAsTree();
+		const sortedFolderTree = await Folder.sortFolderTree(folders);
+
+		// same set of titles, but in alphabetical order
+		const sortedFolderTitles = ['a', 'Ä', 'b', 'c', 'ç', 'd'].map(firstChar => `${firstChar} folder`);
+		expect(sortedFolderTree.map(f => f.title)).toEqual(sortedFolderTitles);
+	}));
+
+	it('should sort numbers ascending', (async () => {
+		const unsortedFolderTitles = ['10', '1', '2'].map(firstChar => `${firstChar} folder`);
+		for (const folderTitle of unsortedFolderTitles) {
+			await Folder.save({ title: folderTitle });
+		}
+
+		const folders = await Folder.allAsTree();
+		const sortedFolderTree = await Folder.sortFolderTree(folders);
+
+		// same set of titles, but in ascending order
+		const sortedFolderTitles = ['1', '2', '10'].map(firstChar => `${firstChar} folder`);
+		expect(sortedFolderTree.map(f => f.title)).toEqual(sortedFolderTitles);
+	}));
+
 	it('should not allow setting a folder parent as itself', (async () => {
 		const f1 = await Folder.save({ title: 'folder1' });
 		const hasThrown = await checkThrowAsync(() => Folder.save({ id: f1.id, parent_id: f1.id }, { userSideValidation: true }));

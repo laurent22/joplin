@@ -103,6 +103,7 @@ const PluginUserWebView = (props: Props) => {
 			baseUrl={plugin.baseDir}
 			webviewInstanceId='joplin__PluginDialogWebView'
 			html={html}
+			hasPluginScripts={true}
 			injectedJavaScript={injectedJs}
 			onMessage={messenger.onWebViewMessage}
 			onLoadEnd={onWebViewLoaded}
