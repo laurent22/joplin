@@ -11,13 +11,15 @@ function readBytes(fd: number, sharedBuffer: Buffer) {
 	});
 }
 
-async function* generateChunks(filePath: string, size: number) {
+async function* generateChunks(
+	filePath: string,
+	size: number
+): AsyncGenerator<{ index: number, chunksNo: number, chunk: Buffer }> {
 	const sharedBuffer = Buffer.alloc(size);
 	let stats;
 	let fd;
 	let bytesRead = 0;
 	let end = size;
-
 
 	try {
 		stats = fs.statSync(filePath);
