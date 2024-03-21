@@ -13,8 +13,8 @@ function readBytes(fd: number, sharedBuffer: Buffer) {
 
 async function* generateChunks(
 	filePath: string,
-	size: number
-): AsyncGenerator<{ index: number, chunksNo: number, chunk: Buffer }> {
+	size: number,
+): AsyncGenerator<{ index: number; chunksNo: number; chunk: Buffer }> {
 	const sharedBuffer = Buffer.alloc(size);
 	let stats;
 	let fd;
