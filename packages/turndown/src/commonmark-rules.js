@@ -159,7 +159,11 @@ rules.list = {
 
   replacement: function (content, node) {
     var parent = node.parentNode
-    if (parent.nodeName === 'LI' && parent.lastElementChild === node) {
+    if (parent && isCodeBlock(parent) && node.classList && node.classList.contains('pre-numbering')){
+      // ignore code-block children of type ul with class pre-numbering
+      // https://github.com/laurent22/joplin/pull/10126#discussion_r1532204251
+      return '';
+    }else if (parent.nodeName === 'LI' && parent.lastElementChild === node) {
       return '\n' + content
     } else {
       return '\n\n' + content + '\n\n'
@@ -265,9 +269,6 @@ rules.fencedCodeBlock = {
     }
 
     var fence = repeat(fenceChar, fenceSize)
-
-    // delete code number lines
-    code = code.replace(/(^-\s+\d+\s*$\r?\n)+/gm, '');
 
     return (
       '\n\n' + fence + language + '\n' +
