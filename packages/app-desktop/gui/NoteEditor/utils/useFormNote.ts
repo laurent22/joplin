@@ -181,7 +181,6 @@ export default function useFormNote(dependencies: HookDependencies) {
 		if (formNote.id === noteId) return () => {};
 
 		let cancelled = false;
-		let autoFocusCancelled = false;
 
 		reg.logger().debug('Loading existing note', noteId);
 
@@ -195,7 +194,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 					// Wait for editorRef to load properly, try again if not loaded yet.
 					// This is necessary to avoid a race condition where auto focus
 					// function is called before the editor is rendered
-					if (!autoFocusCancelled) setTimeout(autoFocusLoop, 100);
+					if (!cancelled) setTimeout(autoFocusLoop, 100);
 					return;
 				}
 
@@ -231,7 +230,6 @@ export default function useFormNote(dependencies: HookDependencies) {
 
 		return () => {
 			cancelled = true;
-			autoFocusCancelled = true;
 		};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [noteId, isProvisional, formNote]);
