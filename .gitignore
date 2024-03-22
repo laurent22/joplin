@@ -836,6 +836,7 @@ packages/lib/models/Tag.js
 packages/lib/models/dateTimeFormats.test.js
 packages/lib/models/settings/FileHandler.js
 packages/lib/models/settings/settingValidations.js
+packages/lib/models/utils/getCollator.js
 packages/lib/models/utils/getConflictFolderId.js
 packages/lib/models/utils/isItemId.js
 packages/lib/models/utils/itemCanBeEncrypted.js
