@@ -568,8 +568,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	useEffect(() => {
 		if (!scriptLoaded) return;
 
-		const theme = themeStyle(props.themeId);
-
 		const loadEditor = async () => {
 			const language = closestSupportedLocale(props.locale, true, supportedLocales);
 
@@ -603,9 +601,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			];
 
 			const editors = await (window as any).tinymce.init({
-				content_style: `* {font-size: ${props.fontSize}px; font-family: ${props.fontFamily}; line-height: ${theme.lineHeight};}
-					code, code * {font-family: monospace}
-					.katex * {font-family: KaTeX_Main, Times New Roman, serif;}`,
 				selector: `#${rootIdRef.current}`,
 				width: '100%',
 				body_class: 'jop-tinymce',
@@ -954,6 +949,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				contentMaxWidthTarget: '.mce-content-body',
 				themeId: props.contentMarkupLanguage === MarkupLanguage.Html ? 1 : null,
 				whiteBackgroundNoteRendering: props.whiteBackgroundNoteRendering,
+				fontStyle: `${props.fontSize}px ${props.fontFamily};`,
 			};
 
 			const allAssets = await props.allAssets(props.contentMarkupLanguage, allAssetsOptions);

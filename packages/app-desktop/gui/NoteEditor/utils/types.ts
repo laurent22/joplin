@@ -11,6 +11,7 @@ export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
 	themeId?: number;
 	whiteBackgroundNoteRendering?: boolean;
+	fontStyle?: string;
 }
 
 export interface ToolbarButtonInfos {

@@ -193,6 +193,7 @@ function NoteEditor(props: NoteEditorProps) {
 			contentMaxWidth: props.contentMaxWidth,
 			contentMaxWidthTarget: options.contentMaxWidthTarget,
 			whiteBackgroundNoteRendering: options.whiteBackgroundNoteRendering,
+			fontStyle: options.fontStyle,
 		});
 	}, [props.themeId, props.customCss, props.contentMaxWidth]);
 
