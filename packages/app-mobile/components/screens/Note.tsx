@@ -26,7 +26,7 @@ import ActionButton from '../ActionButton';
 const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 import ScreenHeader, { MenuOptionType } from '../ScreenHeader';
-const NoteTagsDialog = require('./NoteTagsDialog');
+import NoteTagsDialog from './NoteTagsDialog';
 import time from '@joplin/lib/time';
 const { Checkbox } = require('../checkbox.js');
 import { _, currentLocale } from '@joplin/lib/locale';

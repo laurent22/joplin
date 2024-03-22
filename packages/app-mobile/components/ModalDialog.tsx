@@ -12,8 +12,8 @@ interface Props {
 
 	buttonBarEnabled: boolean;
 	title: string;
-	onOkPress: ()=>void;
-	onCancelPress: ()=>void;
+	onOkPress: ()=> void;
+	onCancelPress: ()=> void;
 }
 
 interface State {
