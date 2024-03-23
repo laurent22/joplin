@@ -98,7 +98,7 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 		return {
 			nativeImage: {
 				async createFromPath(path: string) {
-					if (path.endsWith('.pdf') || path.endsWith('.PDF')) {
+					if (path.toLowerCase().endsWith('.pdf')) {
 						const images = await createFromPdf(path, { minPage: 1, maxPage: 1 });
 
 						if (images.length === 0) {
