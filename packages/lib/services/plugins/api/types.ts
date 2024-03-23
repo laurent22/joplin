@@ -686,21 +686,21 @@ export enum ContentScriptType {
 	 * }
 	 * ```
 	 *
-	 * - The `context` argument is currently unused but could be used later on
-	 *   to provide access to your own plugin so that the content script and
-	 *   plugin can communicate.
+	 * - The `context` argument allows communicating with other parts of
+	 *   your plugin (see below).
 	 *
 	 * - The `plugin` key is your CodeMirror plugin. This is where you can
 	 *   register new commands with CodeMirror or interact with the CodeMirror
 	 *   instance as needed.
 	 *
-	 * - The `codeMirrorResources` key is an array of CodeMirror resources that
+	 * - **CodeMirror 5 only**: The `codeMirrorResources` key is an array of CodeMirror resources that
 	 *   will be loaded and attached to the CodeMirror module. These are made up
 	 *   of addons, keymaps, and modes. For example, for a plugin that want's to
 	 *   enable clojure highlighting in code blocks. `codeMirrorResources` would
 	 *   be set to `['mode/clojure/clojure']`.
+	 *   This field is ignored on mobile and when the desktop beta editor is enabled.
 	 *
-	 * - The `codeMirrorOptions` key contains all the
+	 * - **CodeMirror 5 only**: The `codeMirrorOptions` key contains all the
 	 *   [CodeMirror](https://codemirror.net/doc/manual.html#config) options
 	 *   that will be set or changed by this plugin. New options can alse be
 	 *   declared via
@@ -718,9 +718,11 @@ export enum ContentScriptType {
 	 * must be provided for the plugin to be valid. Having multiple or all
 	 * provided is also okay.
 	 *
-	 * See also the [demo
-	 * plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/codemirror_content_script)
-	 * for an example of all these keys being used in one plugin.
+	 * See also:
+	 * - The [demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/codemirror_content_script)
+	 *   for an example of all these keys being used in one plugin.
+	 * - See [the editor plugin tutorial](https://joplinapp.org/help/api/tutorials/cm6_plugin)
+	 *   for how to develop a plugin for the mobile editor and the desktop beta markdown editor.
 	 *
 	 * ## Posting messages from the content script to your plugin
 	 *
