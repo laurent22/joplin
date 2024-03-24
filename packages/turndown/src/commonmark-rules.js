@@ -476,7 +476,7 @@ rules.code = {
 
     content = content.replace(/\r?\n|\r/g, '\n')
     // if code is multiline and in codeBlock, just return it, codeBlock well add fence(default is ```)
-    if (content.indexOf('\n') != -1 && node.parentNode && isCodeBlock(node.parentNode)){
+    if (content.indexOf('\n') !== -1 && node.parentNode && isCodeBlock(node.parentNode)){
       return content
     }
 
