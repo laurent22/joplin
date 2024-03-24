@@ -11,6 +11,7 @@ import Folder from '@joplin/lib/models/Folder';
 const { _ } = require('@joplin/lib/locale');
 const { NoteItem } = require('./note-item.js');
 import { themeStyle } from './global-style';
+import { getTrashFolderId } from '@joplin/lib/services/trash';
 
 interface NoteListProps {
 	themeId: number;
@@ -91,7 +92,11 @@ class NoteListComponent extends Component<NoteListProps> {
 				keyExtractor={item => item.id}
 			/>;
 		} else {
-			if (!Folder.atLeastOneRealFolderExists(this.props.folders)) {
+			const NoteSourceParentId = JSON.parse(this.props.notesSource).parentId;
+			if (NoteSourceParentId === getTrashFolderId()) {
+				const noItemMessage = _('The trash folder is empty.');
+				return <Text style={this.styles().noItemMessage}>{noItemMessage}</Text>;
+			} else if (!Folder.atLeastOneRealFolderExists(this.props.folders)) {
 				const noItemMessage = _('You currently have no notebooks.');
 				return (
 					<View style={this.styles().noNotebookView}>
