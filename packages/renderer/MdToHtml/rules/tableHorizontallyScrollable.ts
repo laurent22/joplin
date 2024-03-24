@@ -1,19 +1,17 @@
+import * as MarkdownIt from 'markdown-it';
+
 export default {
-	plugin: (markdownIt: any) => {
-		markdownIt.renderer.rules.table_open = function(tokens: any[], idx: number, options: any, _env: any, self: any) {
-			if (tokens[idx].map) {
-				const line = tokens[idx].map[0];
-				const lineEnd = tokens[idx].map[1];
-				tokens[idx].attrJoin('class', 'maps-to-line');
-				tokens[idx].attrSet('source-line', `${line}`);
-				tokens[idx].attrSet('source-line-end', `${lineEnd}`);
-			}
-			const cur = String(self.renderToken(tokens, idx, options));
-			return `<div class="joplin-table-div">\n${cur}`;
+	// Make table horizontally scrollable by give table a div parent, so the width of the table is limited to the screen width.
+	// see https://github.com/laurent22/joplin/pull/10161
+	plugin: (markdownIt: MarkdownIt) => {
+		markdownIt.renderer.rules.table_open = function(tokens: MarkdownIt.Token[], idx: number, options: MarkdownIt.Options, _env: any, renderer: any) {
+			const current = renderer.renderToken(tokens, idx, options);
+			// joplin-table-wrapper css is set in packages/renderer/noteStyle.ts
+			return `<div class="joplin-table-wrapper">\n${current}`;
 		};
-		markdownIt.renderer.rules.table_close = function(tokens: any[], idx: number, options: any, _env: any, self: any) {
-			const cur = String(self.renderToken(tokens, idx, options));
-			return `${cur}</div>\n`;
+		markdownIt.renderer.rules.table_close = function(tokens: MarkdownIt.Token[], idx: number, options: MarkdownIt.Options, _env: any, renderer: any) {
+			const current = renderer.renderToken(tokens, idx, options);
+			return `${current}</div>\n`;
 		};
 	},
 };
