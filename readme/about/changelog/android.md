@@ -1,5 +1,29 @@
 # Joplin Android Changelog
 
+## [android-v3.0.1](https://github.com/laurent22/joplin/releases/tag/android-v3.0.1) (Pre-release) - 2024-03-21T18:27:47Z
+
+- New: Add support for Markdown editor plugins (#10086 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- New: Add support for plugin panels and dialogs (#10121 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- New: Add support for renderer plugins (#10135 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- New: Add trash folder (#9671) (#483)
+- Improved: Added empty trash option on long pressing the trash folder (#10120) (#10092 by [@Sidd-R](https://github.com/Sidd-R))
+- Improved: Allow debugging plugins (#10156 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Change Joplin Cloud login process to allow MFA via browser (#9776 by [@pedr](https://github.com/pedr))
+- Improved: Fix conflicts notebook doesn't work with the trash feature (#10104) (#10073 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Log user actions (deletions) (#9585) (#9465 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Upgrade CodeMirror 6 packages (#10032) (#10031 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix broken plugin API: editor.execCommand (#10153) (#10152 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix clicking on a link results in a blank screen (#10168) (#10166 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix note editor's settings and plugins updated on every keystroke (#10116 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix plugin API memory leak (#10115 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix screen reader touch-to-focus broken on note list and note viewer pages (#10123) (#10122 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix shared data lost if Joplin is closed immediately after receiving a share (#10171) (#10170 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix trash folder sometimes has wrong icon (#10173) (#10172 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Improve note editor performance when quickly entering text (#10134) (#10130 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: New note button crashes app when there are no notebooks (#10087) (#10065 by [@Sidd-R](https://github.com/Sidd-R))
+- Fixed: Plugins: Fix warning after reloading plugins (#10165 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Shows only the real folders in the dropdown of parent folders. (#10147) (#10143 by [@Sidd-R](https://github.com/Sidd-R))
+
 ## [android-v2.14.9](https://github.com/laurent22/joplin/releases/tag/android-v2.14.9) (Pre-release) - 2024-02-26T19:56:11Z
 
 - Fixed: Note editor: Support older WebView versions (#9986) (#9521 by Henry Heino)

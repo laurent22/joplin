@@ -1,24 +1,41 @@
-const React = require('react');
-const { Text, View, StyleSheet, Button } = require('react-native');
-const { themeStyle } = require('./global-style');
-const { _ } = require('@joplin/lib/locale');
+import * as React from 'react';
+import { ReactNode } from 'react';
+import { Text, View, StyleSheet, Button, TextStyle, ViewStyle } from 'react-native';
+import { themeStyle } from './global-style';
+import { _ } from '@joplin/lib/locale';
 
 import Modal from './Modal';
 
-class ModalDialog extends React.Component {
-	constructor() {
-		super();
+interface Props {
+	themeId: number;
+	ContentComponent: ReactNode;
+
+	buttonBarEnabled: boolean;
+	title: string;
+	onOkPress: ()=> void;
+	onCancelPress: ()=> void;
+}
+
+interface State {
+
+}
+
+class ModalDialog extends React.Component<Props, State> {
+	private styles_: any;
+
+	public constructor(props: Props) {
+		super(props);
 		this.styles_ = {};
 	}
 
-	styles() {
+	private styles() {
 		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 
 		if (this.styles_[themeId]) return this.styles_[themeId];
 		this.styles_ = {};
 
-		const styles = {
+		const styles: Record<string, ViewStyle|TextStyle> = {
 			modalWrapper: {
 				flex: 1,
 				justifyContent: 'center',
@@ -53,7 +70,7 @@ class ModalDialog extends React.Component {
 		return this.styles_[themeId];
 	}
 
-	render() {
+	public override render() {
 		const ContentComponent = this.props.ContentComponent;
 		const buttonBarEnabled = this.props.buttonBarEnabled !== false;
 
@@ -76,4 +93,4 @@ class ModalDialog extends React.Component {
 	}
 }
 
-module.exports = ModalDialog;
+export default ModalDialog;
