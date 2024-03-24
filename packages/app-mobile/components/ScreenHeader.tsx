@@ -224,16 +224,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		styleObject.topIcon.textAlignVertical = 'center';
 		styleObject.topIcon.color = theme.colorBright2;
 
-		styleObject.iconButtonSmall = {
-			...styleObject.iconButton,
-			flexGrow: 0.5,
-			flexShrink: 1,
-		};
-		styleObject.topIconSmall = {
-			...styleObject.topIcon,
-			fontSize: 17,
-		};
-
 		styleObject.backButton = { ...styleObject.iconButton };
 		styleObject.backButton.marginRight = 1;
 
@@ -470,9 +460,9 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					onPress={onPress}
 					description={_('Plugin panels')}
 					themeId={themeId}
-					contentStyle={styles.iconButtonSmall}
+					contentStyle={styles.iconButton}
 				>
-					<Icon name="extension-puzzle" style={styles.topIconSmall} />
+					<Icon name="extension-puzzle" style={styles.topIcon} />
 				</CustomButton>
 			);
 		};
