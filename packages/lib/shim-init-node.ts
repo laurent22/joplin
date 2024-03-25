@@ -1,4 +1,4 @@
-import shim, { CreatePdfFromImagesOptions, CreateResourceFromPathOptions } from './shim';
+import shim, { CreatePdfFromImagesOptions, CreateResourceFromPathOptions, PdfInfo } from './shim';
 import GeolocationNode from './geolocation-node';
 import { setLocale, defaultLocale, closestSupportedLocale } from './locale';
 import FsDriverNode from './fs-driver-node';
@@ -758,9 +758,13 @@ function shimInit(options: ShimInitOptions = null) {
 		}
 	};
 
+	const loadPdf = async (path: string) => {
+		const loadingTask = pdfJs.getDocument(path);
+		return await loadingTask.promise;
+	};
+
 	shim.pdfExtractEmbeddedText = async (pdfPath: string): Promise<string[]> => {
-		const loadingTask = pdfJs.getDocument(pdfPath);
-		const doc = await loadingTask.promise;
+		const doc = await loadPdf(pdfPath);
 		const textByPage = [];
 
 		try {
@@ -814,8 +818,7 @@ function shimInit(options: ShimInitOptions = null) {
 
 		const filePrefix = `page_${Date.now()}`;
 		const output: string[] = [];
-		const loadingTask = pdfJs.getDocument(pdfPath);
-		const doc = await loadingTask.promise;
+		const doc = await loadPdf(pdfPath);
 
 		try {
 			const startPage = options?.minPage ?? 1;
@@ -843,6 +846,11 @@ function shimInit(options: ShimInitOptions = null) {
 		}
 
 		return output;
+	};
+
+	shim.pdfInfo = async (pdfPath: string): Promise<PdfInfo> => {
+		const doc = await loadPdf(pdfPath);
+		return { numPages: doc.numPages };
 	};
 }
 

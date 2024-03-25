@@ -79,6 +79,7 @@ const registerInlinePdfCommand = async () => {
 			// Convert the PDF to images
 			// ---------------------------------------------------------------
 
+			const pdfInfo = await joplin.imaging.getPdfInfoFromResource(resourceId);
 			const images = await joplin.imaging.createFromPdfResource(
 				resourceId,
 				// Convert at most 10 pages
@@ -89,7 +90,7 @@ const registerInlinePdfCommand = async () => {
 			for (const image of images) {
 				pageNumber++;
 				const pageResource = await joplin.imaging.toJpgResource(
-					image, { title: `Page ${pageNumber}` }
+					image, { title: `Page ${pageNumber} of ${pdfInfo.numPages}` }
 				);
 				await joplin.commands.execute('insertText', `\n- ![${pageResource.title}](:/${pageResource.id})`);
 			}

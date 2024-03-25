@@ -30,11 +30,16 @@ export interface CreateFromPdfOptions {
 	scaleFactor?: number;
 }
 
+export interface PdfInfo {
+	numPages: number;
+}
+
 export interface Implementation {
 	nativeImage: {
 		createFromPath: (path: string)=> Promise<any>;
 		createFromPdf: (path: string, options: CreateFromPdfOptions)=> Promise<any[]>;
 	};
+	getPdfInfo: (path: string)=> Promise<PdfInfo>;
 }
 
 export interface ResizeOptions {
@@ -123,6 +128,14 @@ export default class JoplinImaging {
 
 	public async createFromPdfResource(resourceId: string, options?: CreateFromPdfOptions): Promise<Handle[]> {
 		return this.createFromPdfPath(await getResourcePath(resourceId), options);
+	}
+
+	public async getPdfInfoFromPath(path: string): Promise<PdfInfo> {
+		return await this.implementation_.getPdfInfo(path);
+	}
+
+	public async getPdfInfoFromResource(resourceId: string): Promise<PdfInfo> {
+		return this.getPdfInfoFromPath(await getResourcePath(resourceId));
 	}
 
 	public async getSize(handle: Handle) {

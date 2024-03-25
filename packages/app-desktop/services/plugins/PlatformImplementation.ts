@@ -113,6 +113,9 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 				},
 				createFromPdf,
 			},
+			getPdfInfo(path: string) {
+				return shim.pdfInfo(path);
+			},
 		};
 	}
 

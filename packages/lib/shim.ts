@@ -14,6 +14,10 @@ export interface CreatePdfFromImagesOptions {
 	scaleFactor?: number;
 }
 
+export interface PdfInfo {
+	numPages: number;
+}
+
 let isTestingEnv_ = false;
 
 // We need to ensure that there's only one instance of React being used by all
@@ -290,6 +294,10 @@ const shim = {
 
 	pdfToImages: async (_pdfPath: string, _outputDirectoryPath: string, _options?: CreatePdfFromImagesOptions): Promise<string[]> => {
 		throw new Error('Not implemented: pdfToImages');
+	},
+
+	pdfInfo: async (_pdfPath: string): Promise<PdfInfo> => {
+		throw new Error('Not implemented: pdfInfo');
 	},
 
 	Buffer: null as any,

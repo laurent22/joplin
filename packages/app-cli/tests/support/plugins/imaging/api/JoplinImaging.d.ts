@@ -6,21 +6,29 @@ export interface CreateFromBufferOptions {
 }
 export interface CreateFromPdfOptions {
     /**
-     * The minimum page number to export. If not given, starts from the first page (page 1).
-     * Indices are 1-based.
+     * The first page to export. Defaults to `1`, the first page in
+     * the document.
      */
     minPage?: number;
     /**
-     * If not given, pages from `minPage` (or the first) until the last are converted into images.
+     * The number of the last page to convert. Defaults to the last page
+     * if not given.
+     *
+     * If `maxPage` is greater than the number of pages in the PDF, all pages
+     * in the PDF will be converted to images.
      */
     maxPage?: number;
     scaleFactor?: number;
+}
+export interface PdfInfo {
+    numPages: number;
 }
 export interface Implementation {
     nativeImage: {
         createFromPath: (path: string) => Promise<any>;
         createFromPdf: (path: string, options: CreateFromPdfOptions) => Promise<any[]>;
     };
+    getPdfInfo: (path: string) => Promise<PdfInfo>;
 }
 export interface ResizeOptions {
     width?: number;
@@ -51,6 +59,8 @@ export default class JoplinImaging {
     createFromResource(resourceId: string): Promise<Handle>;
     createFromPdfPath(path: string, options?: CreateFromPdfOptions): Promise<Handle[]>;
     createFromPdfResource(resourceId: string, options?: CreateFromPdfOptions): Promise<Handle[]>;
+    getPdfInfoFromPath(path: string): Promise<PdfInfo>;
+    getPdfInfoFromResource(resourceId: string): Promise<PdfInfo>;
     getSize(handle: Handle): Promise<any>;
     resize(handle: Handle, options?: ResizeOptions): Promise<string>;
     crop(handle: Handle, rectangle: Rectangle): Promise<string>;
