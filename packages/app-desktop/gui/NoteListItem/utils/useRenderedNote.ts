@@ -11,6 +11,7 @@ import prepareViewProps from './prepareViewProps';
 import Tag from '@joplin/lib/models/Tag';
 import { unique } from '@joplin/lib/array';
 import Folder from '@joplin/lib/models/Folder';
+import Setting from '@joplin/lib/models/Setting';
 
 interface RenderedNote {
 	id: string;
@@ -60,6 +61,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 			if (renderedNote && renderedNote.hash === viewHash) return null;
 
 			const noteTitleHtml = getNoteTitleHtml(highlightedWords, Note.displayTitle(note));
+			const dateTimeFormat = `${Setting.value('dateFormat')} ${Setting.value('timeFormat')}`;
 
 			const viewProps = await prepareViewProps(
 				dependencies,
@@ -79,7 +81,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 
 			if (event.cancelled) return null;
 
-			await renderViewProps(view, [], { noteTitleHtml });
+			await renderViewProps(view, [], { noteTitleHtml, dateTimeFormat });
 
 			if (event.cancelled) return null;
 
