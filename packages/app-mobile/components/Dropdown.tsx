@@ -1,6 +1,6 @@
-const React = require('react');
+import * as React from 'react';
 import { TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, Modal, View, LayoutRectangle, ViewStyle, TextStyle, FlatList, LayoutChangeEvent } from 'react-native';
-import { Component } from 'react';
+import { Component, ReactElement } from 'react';
 import { _ } from '@joplin/lib/locale';
 
 type ValueType = string;
@@ -14,7 +14,6 @@ export interface DropdownListItem {
 }
 
 export type OnValueChangedListener = (newValue: ValueType)=> void;
-export type OnListVisibleChangedListener = (open: boolean)=> void;
 
 interface DropdownProps {
 	listItemStyle?: ViewStyle;
@@ -31,8 +30,10 @@ interface DropdownProps {
 	selectedValue: ValueType|null;
 	onValueChange?: OnValueChangedListener;
 
-	listVisible?: boolean;
-	onListVisibleChanged?: OnListVisibleChangedListener;
+	// Shown to the right of the dropdown when closed, hidden when opened.
+	// Avoids abrupt size transitions that would be caused by externally resizing the space
+	// available for the dropdown on open/close.
+	coverableChildrenRight?: ReactElement[]|ReactElement;
 }
 
 interface DropdownState {
@@ -41,7 +42,7 @@ interface DropdownState {
 }
 
 class Dropdown extends Component<DropdownProps, DropdownState> {
-	private headerRef: TouchableOpacity;
+	private headerRef: View;
 
 	public constructor(props: DropdownProps) {
 		super(props);
@@ -77,12 +78,10 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 	};
 
 	private onOpenList = () => {
-		this.props.onListVisibleChanged?.(true);
-		if (this.props.listVisible === undefined) this.setState({ listVisible: true });
+		this.setState({ listVisible: true });
 	};
 	private onCloseList = () => {
-		this.props.onListVisibleChanged?.(false);
-		if (this.props.listVisible === undefined) this.setState({ listVisible: false });
+		this.setState({ listVisible: false });
 	};
 
 	public render() {
@@ -127,10 +126,13 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 			paddingRight: 10,
 		};
 
-		const headerWrapperStyle = { ...(this.props.headerWrapperStyle ? this.props.headerWrapperStyle : {}), height: 35,
+		const headerWrapperStyle: ViewStyle = {
+			...(this.props.headerWrapperStyle ? this.props.headerWrapperStyle : {}),
+			height: 35,
 			flex: 1,
 			flexDirection: 'row',
-			alignItems: 'center' };
+			alignItems: 'center',
+		};
 
 		const headerStyle = { ...(this.props.headerStyle ? this.props.headerStyle : {}), flex: 1 };
 
@@ -191,22 +193,27 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 
 		return (
 			<View style={{ flex: 1, flexDirection: 'column' }}>
-				<TouchableOpacity
-					style={headerWrapperStyle as any}
-					ref={ref => (this.headerRef = ref)}
-					disabled={this.props.disabled}
+				<View
+					style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}
 					onLayout={this.updateHeaderCoordinates}
-					onPress={this.onOpenList}
+					ref={ref => (this.headerRef = ref)}
 				>
-					<Text ellipsizeMode="tail" numberOfLines={1} style={headerStyle}>
-						{headerLabel}
-					</Text>
-					<Text style={headerArrowStyle}>{'▼'}</Text>
-				</TouchableOpacity>
+					<TouchableOpacity
+						style={headerWrapperStyle}
+						disabled={this.props.disabled}
+						onPress={this.onOpenList}
+					>
+						<Text ellipsizeMode="tail" numberOfLines={1} style={headerStyle}>
+							{headerLabel}
+						</Text>
+						<Text style={headerArrowStyle}>{'▼'}</Text>
+					</TouchableOpacity>
+					{this.state.listVisible ? null : this.props.coverableChildrenRight}
+				</View>
 				<Modal
 					transparent={true}
 					animationType='fade'
-					visible={this.props.listVisible ?? this.state.listVisible}
+					visible={this.state.listVisible}
 					onRequestClose={this.onCloseList}
 					supportedOrientations={['landscape', 'portrait']}
 				>

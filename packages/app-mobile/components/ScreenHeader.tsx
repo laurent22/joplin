@@ -1,7 +1,7 @@
 const React = require('react');
 
 import { connect } from 'react-redux';
-import { PureComponent } from 'react';
+import { PureComponent, ReactElement } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, ViewStyle } from 'react-native';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { BackButtonService } = require('../services/back-button.js');
@@ -100,7 +100,6 @@ interface ScreenHeaderProps {
 }
 
 interface ScreenHeaderState {
-	folderListVisible: boolean;
 }
 
 class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeaderState> {
@@ -305,10 +304,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		}
 	}
 
-	private folderPicker_toggled = (open: boolean) => {
-		this.setState({ folderListVisible: open });
-	};
-
 	private menu_select(value: OnSelectCallbackType) {
 		if (typeof value === 'function') {
 			value();
@@ -459,7 +454,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const pluginPanelToggleButton = (styles: any, onPress: OnPressCallback) => {
 			const allPluginViews = Object.values(this.props.plugins).map(plugin => Object.values(plugin.views)).flat();
 			const allPanels = allPluginViews.filter(view => view.containerType === ContainerType.Panel);
-			if (allPanels.length === 0 || this.state.folderListVisible) return null;
+			if (allPanels.length === 0) return null;
 
 			return (
 				<CustomButton
@@ -579,7 +574,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
-		const createTitleComponent = (disabled: boolean) => {
+		const createTitleComponent = (disabled: boolean, afterTitleComponents: ReactElement) => {
 			const folderPickerOptions = this.props.folderPickerOptions;
 
 			if (folderPickerOptions && folderPickerOptions.enabled) {
@@ -588,8 +583,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 						themeId={themeId}
 						disabled={disabled}
 						selectedFolderId={'selectedFolderId' in folderPickerOptions ? folderPickerOptions.selectedFolderId : null}
-						onListVisibleChanged={this.folderPicker_toggled}
-						listVisible={this.state.folderListVisible}
 						onValueChange={async (folderId) => {
 							// If onValueChange is specified, use this as a callback, otherwise do the default
 							// which is to take the selectedNoteIds from the state and move them to the
@@ -621,11 +614,15 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 						}}
 						mustSelect={!!folderPickerOptions.mustSelect}
 						folders={Folder.getRealFolders(this.props.folders)}
+						coverableChildrenRight={afterTitleComponents}
 					/>
 				);
 			} else {
 				const title = 'title' in this.props && this.props.title !== null ? this.props.title : '';
-				return <Text ellipsizeMode={'tail'} numberOfLines={1} style={this.styles().titleText}>{title}</Text>;
+				return <>
+					<Text ellipsizeMode={'tail'} numberOfLines={1} style={this.styles().titleText}>{title}</Text>
+					{afterTitleComponents}
+				</>;
 			}
 		};
 
@@ -650,16 +647,16 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		if (this.props.noteSelectionEnabled) backButtonDisabled = false;
 		const headerItemDisabled = !(this.props.selectedNoteIds.length > 0);
 
-		const titleComp = createTitleComponent(headerItemDisabled);
 		const sideMenuComp = !showSideMenuButton ? null : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
 		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), backButtonDisabled);
+		const pluginPanelsComp = pluginPanelToggleButton(this.styles(), () => this.pluginPanelToggleButton_press());
 		const selectAllButtonComp = !showSelectAllButton ? null : selectAllButton(this.styles(), () => this.selectAllButton_press());
 		const searchButtonComp = !showSearchButton ? null : searchButton(this.styles(), () => this.searchButton_press());
-		const pluginPanelsComp = pluginPanelToggleButton(this.styles(), () => this.pluginPanelToggleButton_press());
 		const deleteButtonComp = !selectedFolderInTrash && this.props.noteSelectionEnabled ? deleteButton(this.styles(), () => this.deleteButton_press(), headerItemDisabled) : null;
 		const restoreButtonComp = selectedFolderInTrash && this.props.noteSelectionEnabled ? restoreButton(this.styles(), () => this.restoreButton_press(), headerItemDisabled) : null;
 		const duplicateButtonComp = !selectedFolderInTrash && this.props.noteSelectionEnabled ? duplicateButton(this.styles(), () => this.duplicateButton_press(), headerItemDisabled) : null;
 		const sortButtonComp = !this.props.noteSelectionEnabled && this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
+		const titleComp = createTitleComponent(headerItemDisabled, pluginPanelsComp);
 		const windowHeight = Dimensions.get('window').height - 50;
 
 		const contextMenuStyle: ViewStyle = {
@@ -700,7 +697,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 						this.props.showSaveButton === true,
 					)}
 					{titleComp}
-					{pluginPanelsComp}
 					{selectAllButtonComp}
 					{searchButtonComp}
 					{deleteButtonComp}
