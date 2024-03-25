@@ -491,6 +491,23 @@ rules.code = {
   }
 }
 
+// Fix: Web clipper has trouble with code blocks on Joplin's website.
+// See https://github.com/laurent22/joplin/pull/10126#issuecomment-2016523281 .
+// Web clipper clippering result is all in oneline. The format features are: <pre ...><code ...><span class="token-line". Span with class of "token-line" represent one line. 
+// Test case: packages/app-cli/tests/html_to_md/code_multiline_3.html
+rules.joplinOrgTokenLineSpan = {
+  filter: function (node) {
+    const grandfather = node.parentNode.parentNode?? null;
+    return node.nodeName === 'SPAN' && node.getAttribute('class') === 'token-line' && grandfather && isCodeBlock(grandfather); 
+  },
+
+  replacement: function (content, node, options) {
+    content = content.replace(/\r?\n|\r/g, '');
+    // If content replaced '\r\n' is empty, it indicates that the line is empty line; if not, keep the leading before and after content.
+    return content === '' ? '\n\n' :  node.flankingWhitespace.leading + content + node.flankingWhitespace.trailing + '\n';
+  }
+}
+
 function imageMarkdownFromNode(node, options = null) {
   options = Object.assign({}, {
     preserveImageTagsWithSize: false,
