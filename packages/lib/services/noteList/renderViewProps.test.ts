@@ -77,8 +77,8 @@ describe('renderViewProps', () => {
 
 		expect(view).toEqual({
 			note: {
-				user_updated_time: time.unixMsToLocalDateTime(timeValue, 'YYYY-MM-DD HH:mm'),
-				user_created_time: time.unixMsToLocalDateTime(timeValue, 'YYYY-MM-DD HH:mm'),
+				user_updated_time: time.formatMsToLocal(timeValue, 'YYYY-MM-DD HH:mm'),
+				user_created_time: time.formatMsToLocal(timeValue, 'YYYY-MM-DD HH:mm'),
 				tags: 123,
 			},
 		});

@@ -89,8 +89,8 @@ class Time {
 		);
 	}
 
-	public unixMsToLocalDateTime(ms: number, format?: string): string {
-		return moment.unix(ms / 1000).format(format ? format : 'DD/MM/YYYY HH:mm');
+	public unixMsToLocalDateTime(ms: number): string {
+		return moment.unix(ms / 1000).format('DD/MM/YYYY HH:mm');
 	}
 
 	public unixMsToLocalHms(ms: number) {
