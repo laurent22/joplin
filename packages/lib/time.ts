@@ -1,3 +1,4 @@
+import Setting from './models/Setting';
 import shim from './shim';
 const moment = require('moment');
 
@@ -90,7 +91,8 @@ class Time {
 	}
 
 	public unixMsToLocalDateTime(ms: number): string {
-		return moment.unix(ms / 1000).format('DD/MM/YYYY HH:mm');
+		const format = `${Setting.value("dateFormat")} ${Setting.value("timeFormat")}`;
+		return moment.unix(ms / 1000).format(format);
 	}
 
 	public unixMsToLocalHms(ms: number) {
