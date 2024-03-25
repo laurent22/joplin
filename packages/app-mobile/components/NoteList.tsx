@@ -92,9 +92,11 @@ class NoteListComponent extends Component<NoteListProps> {
 				keyExtractor={item => item.id}
 			/>;
 		} else {
-			const NoteSourceParentId = JSON.parse(this.props.notesSource).parentId;
-			if (NoteSourceParentId === getTrashFolderId()) {
-				const noItemMessage = _('The trash folder is empty.');
+			const noteSourceParentId = this.props.notesSource ? JSON.parse(this.props.notesSource).parentId : null;
+			const noteSourceFolder = this.props.folders.find(folder => folder.id === noteSourceParentId);
+
+			if (noteSourceParentId === getTrashFolderId() || (noteSourceFolder?.deleted_time !== 0)) {
+				const noItemMessage = _('There is no notes here.');
 				return <Text style={this.styles().noItemMessage}>{noItemMessage}</Text>;
 			} else if (!Folder.atLeastOneRealFolderExists(this.props.folders)) {
 				const noItemMessage = _('You currently have no notebooks.');
