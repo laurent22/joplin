@@ -6,7 +6,7 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 TEMP_PATH=~/src/plugin-tests
 NEED_COMPILING=1
-PLUGIN_PATH=~/src/joplin/packages/app-cli/tests/support/plugins/note_list_renderer
+PLUGIN_PATH=~/src/plugin-abc
 
 if [[ $NEED_COMPILING == 1 ]]; then
 	mkdir -p "$TEMP_PATH"
