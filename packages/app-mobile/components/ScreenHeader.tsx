@@ -459,7 +459,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			return (
 				<CustomButton
 					onPress={onPress}
-					description={_('Show plugin panels')}
+					description={_('Plugin panels')}
 					themeId={themeId}
 					contentStyle={styles.iconButton}
 				>
@@ -574,7 +574,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
-		const createTitleComponent = (disabled: boolean, afterTitleComponents: ReactElement) => {
+		const createTitleComponent = (disabled: boolean, hideableAfterTitleComponents: ReactElement) => {
 			const folderPickerOptions = this.props.folderPickerOptions;
 
 			if (folderPickerOptions && folderPickerOptions.enabled) {
@@ -614,15 +614,17 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 						}}
 						mustSelect={!!folderPickerOptions.mustSelect}
 						folders={Folder.getRealFolders(this.props.folders)}
-						coverableChildrenRight={afterTitleComponents}
+						coverableChildrenRight={hideableAfterTitleComponents}
 					/>
 				);
 			} else {
 				const title = 'title' in this.props && this.props.title !== null ? this.props.title : '';
-				return <>
-					<Text ellipsizeMode={'tail'} numberOfLines={1} style={this.styles().titleText}>{title}</Text>
-					{afterTitleComponents}
-				</>;
+				return (
+					<>
+						<Text ellipsizeMode={'tail'} numberOfLines={1} style={this.styles().titleText}>{title}</Text>
+						{hideableAfterTitleComponents}
+					</>
+				);
 			}
 		};
 
@@ -656,7 +658,12 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const restoreButtonComp = selectedFolderInTrash && this.props.noteSelectionEnabled ? restoreButton(this.styles(), () => this.restoreButton_press(), headerItemDisabled) : null;
 		const duplicateButtonComp = !selectedFolderInTrash && this.props.noteSelectionEnabled ? duplicateButton(this.styles(), () => this.duplicateButton_press(), headerItemDisabled) : null;
 		const sortButtonComp = !this.props.noteSelectionEnabled && this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
-		const titleComp = createTitleComponent(headerItemDisabled, pluginPanelsComp);
+
+		// To allow the notebook dropdown (and perhaps other components) to have sufficient
+		// space while in use, we allow certain buttons to be hidden.
+		const hideableRightComponents = pluginPanelsComp;
+
+		const titleComp = createTitleComponent(headerItemDisabled, hideableRightComponents);
 		const windowHeight = Dimensions.get('window').height - 50;
 
 		const contextMenuStyle: ViewStyle = {
