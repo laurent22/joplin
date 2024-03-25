@@ -108,7 +108,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 	public constructor(props: ScreenHeaderProps) {
 		super(props);
 		this.cachedStyles = {};
-		this.state = { folderListVisible: false };
 	}
 
 	private styles() {

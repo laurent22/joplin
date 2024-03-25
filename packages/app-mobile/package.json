@@ -118,7 +118,6 @@
     "ts-node": "10.9.2",
     "typescript": "5.2.2",
     "uglify-js": "3.17.4",
-    "punycode": "2.3.1",
     "webpack": "5.74.0"
   }
 }
