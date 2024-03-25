@@ -181,6 +181,8 @@ export default function useFormNote(dependencies: HookDependencies) {
 		if (formNote.id === noteId) return () => {};
 
 		let cancelled = false;
+		let autoFocusTimeout: any = null;
+		let focused = false;
 
 		reg.logger().debug('Loading existing note', noteId);
 
@@ -189,24 +191,19 @@ export default function useFormNote(dependencies: HookDependencies) {
 
 			const focusSettingName = noteIsTodo ? 'newTodoFocus' : 'newNoteFocus';
 
-			function autoFocusLoop() {
-				if (!editorRef.current) {
-					// Wait for editorRef to load properly, try again if not loaded yet.
-					// This is necessary to avoid a race condition where auto focus
-					// function is called before the editor is rendered
-					if (!cancelled) setTimeout(autoFocusLoop, 100);
-					return;
-				}
-
-				requestAnimationFrame(() => {
-					if (Setting.value(focusSettingName) === 'title') {
-						if (titleInputRef.current) titleInputRef.current.focus();
-					} else {
-						if (editorRef.current) editorRef.current.execCommand({ name: 'editor.focus' });
+			autoFocusTimeout = setTimeout(() => requestAnimationFrame(() => {
+				if (Setting.value(focusSettingName) === 'title') {
+					if (titleInputRef.current) {
+						titleInputRef.current.focus();
+						focused = true;
 					}
-				});
-			}
-			autoFocusLoop();
+				} else {
+					if (editorRef.current) {
+						editorRef.current.execCommand({ name: 'editor.focus' });
+						focused = true;
+					}
+				}
+			}), 50);
 		}
 
 		async function loadNote() {
@@ -230,6 +227,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 
 		return () => {
 			cancelled = true;
+			if (focused) clearTimeout(autoFocusTimeout);
 		};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [noteId, isProvisional, formNote]);
