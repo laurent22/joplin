@@ -86,6 +86,7 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 		return {
 			readText: () => Clipboard.getString(),
 			writeText: (text: string) => Clipboard.setString(text),
+			availableFormats: () => ['text/plain'],
 		};
 	}
 
