@@ -96,7 +96,7 @@ class NoteListComponent extends Component<NoteListProps> {
 			const noteSourceFolder = this.props.folders.find(folder => folder.id === noteSourceParentId);
 
 			if (noteSourceParentId === getTrashFolderId() || (noteSourceFolder?.deleted_time !== 0)) {
-				const noItemMessage = _('There is no notes here.');
+				const noItemMessage = _('There are no notes here.');
 				return <Text style={this.styles().noItemMessage}>{noItemMessage}</Text>;
 			} else if (!Folder.atLeastOneRealFolderExists(this.props.folders)) {
 				const noItemMessage = _('You currently have no notebooks.');
