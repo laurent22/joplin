@@ -610,6 +610,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				icons_url: 'gui/NoteEditor/NoteBody/TinyMCE/icons.js',
 				plugins: 'noneditable link joplinLists hr searchreplace codesample table',
 				noneditable_noneditable_class: 'joplin-editable', // Can be a regex too
+				link_context_toolbar: true,
 
 				// #p: Pad empty paragraphs with &nbsp; to prevent them from being removed.
 				// *[*]: Allow all elements and attributes -- we already filter in sanitize_html
