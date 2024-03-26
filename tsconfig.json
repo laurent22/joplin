@@ -27,4 +27,8 @@
 		"Modules/**/*",
 		"packages/server/dist",
 	],
+
+	"ts-node": {
+		"preferTsExts": true
+	}
 }
