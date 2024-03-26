@@ -109,7 +109,6 @@ export default function(href: string, options: Options = null): LinkReplacementR
 	const attrHtml = [];
 	attrHtml.push('data-from-md');
 	if (resourceIdAttr) attrHtml.push(resourceIdAttr);
-	if (title) attrHtml.push(`title='${htmlentities(title)}'`);
 	if (mime) attrHtml.push(`type='${htmlentities(mime)}'`);
 
 	let resourceFullPath = resource && options?.ResourceModel?.fullPath ? options.ResourceModel.fullPath(resource) : null;
@@ -120,9 +119,11 @@ export default function(href: string, options: Options = null): LinkReplacementR
 		resourceFullPath = url;
 	} else if (options.plainResourceRendering || options.linkRenderingType === 2) {
 		icon = '';
+		if (title) attrHtml.push(`title='Ctrl + Click to open ${htmlentities(title)}'`);
 		attrHtml.push(`href='${htmlentities(href)}'`);
 	} else {
 		attrHtml.push(`href='${htmlentities(hrefAttr)}'`);
+		if (title) attrHtml.push(`title='${htmlentities(title)}'`);
 		if (js) attrHtml.push(js);
 	}
 
