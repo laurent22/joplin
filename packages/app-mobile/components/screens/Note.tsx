@@ -60,8 +60,6 @@ import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { getDisplayParentTitle } from '@joplin/lib/services/trash';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import pickDocument from '../../utils/pickDocument';
-import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
-import PluginPanelViewer from '../../plugins/PluginRunner/dialogs/PluginPanelViewer';
 import debounce from '../../utils/debounce';
 const urlUtils = require('@joplin/lib/urlUtils');
 
@@ -104,7 +102,6 @@ interface State {
 	imageEditorResourceFilepath: string;
 	noteResources: Record<string, ResourceEntity>;
 	newAndNoTitleChangeNoteId: boolean|null;
-	pluginPanelsVisible: boolean;
 
 	HACK_webviewLoadingState: number;
 
@@ -163,7 +160,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			noteResources: {},
 			imageEditorResourceFilepath: null,
 			newAndNoTitleChangeNoteId: null,
-			pluginPanelsVisible: false,
 
 			// HACK: For reasons I can't explain, when the WebView is present, the TextInput initially does not display (It's just a white rectangle with
 			// no visible text). It will only appear when tapping it or doing certain action like selecting text on the webview. The bug started to
@@ -1302,18 +1298,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			disabled: readOnly,
 		});
 
-		// Only show the plugin panel toggle if any plugins have panels
-		const allPluginViews = Object.values(this.props.plugins).map(plugin => Object.values(plugin.views)).flat();
-		const allPanels = allPluginViews.filter(view => view.containerType === ContainerType.Panel);
-		if (allPanels.length > 0) {
-			output.push({
-				title: _('Show plugin panels'),
-				onPress: () => {
-					this.setState({ pluginPanelsVisible: true });
-				},
-			});
-		}
-
 		this.menuOptionsCache_ = {};
 		this.menuOptionsCache_[cacheKey] = output;
 
@@ -1626,10 +1610,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 					}}
 				/>
 				{noteTagDialog}
-				<PluginPanelViewer
-					visible={this.state.pluginPanelsVisible}
-					onClose={() => this.setState({ pluginPanelsVisible: false })}
-				/>
 			</View>
 		);
 	}

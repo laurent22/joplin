@@ -36,6 +36,7 @@ import { ListRenderer } from './noteListType';
  *
  * <img width="250px" src="https://global.discourse-cdn.com/standard14/uploads/cozic/optimized/3X/7/2/72acb1bab67d32482cb3da7bb053e54d44ad87b8_2_580x500.png"/>
  *
+ * <span class="platform-desktop">desktop</span>
  */
 export default class JoplinViewsNoteList {
 

@@ -33,6 +33,10 @@ const renderer: ListRenderer = {
 			display: flex;
 			height: 100%;
 
+			&:hover, :focus-visible {
+				background-color: var(--joplin-background-color-hover3);
+			}
+
 			> .item {
 				display: flex;
 				align-items: center;
