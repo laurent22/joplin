@@ -17,7 +17,7 @@ const { BaseScreenComponent } = require('../base-screen');
 const { BackButtonService } = require('../../services/back-button.js');
 import { AppState } from '../../utils/types';
 import { NoteEntity } from '@joplin/lib/services/database/types';
-import { itemIsInTrash } from '@joplin/lib/services/trash';
+import { getTrashFolderId, itemIsInTrash } from '@joplin/lib/services/trash';
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids.js');
 
 class NotesScreenComponent extends BaseScreenComponent<any> {
@@ -246,7 +246,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 				}
 				return buttonFolderId;
 			};
-			if (addFolderNoteButtons && this.props.folders.length > 0) {
+			if (addFolderNoteButtons && this.props.folders.length > 0 && this.props.activeFolderId !== getTrashFolderId()) {
 				const buttons = [];
 				buttons.push({
 					label: _('New to-do'),
