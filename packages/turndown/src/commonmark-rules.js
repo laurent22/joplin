@@ -160,8 +160,8 @@ rules.list = {
   replacement: function (content, node) {
     var parent = node.parentNode
     if (parent && isCodeBlock(parent) && node.classList && node.classList.contains('pre-numbering')){
-      // ignore code-block children of type ul with class pre-numbering
-      // https://github.com/laurent22/joplin/pull/10126#discussion_r1532204251
+      // Ignore code-block children of type ul with class pre-numbering.
+      // See https://github.com/laurent22/joplin/pull/10126#discussion_r1532204251 .
       return '';
     } else if (parent.nodeName === 'LI' && parent.lastElementChild === node) {
       return '\n' + content
@@ -475,7 +475,8 @@ rules.code = {
     }
 
     content = content.replace(/\r?\n|\r/g, '\n')
-    // if code is multiline and in codeBlock, just return it, codeBlock well add fence(default is ```)
+    // If code is multiline and in codeBlock, just return it, codeBlock well add fence(default is ```).
+    // See https://github.com/laurent22/joplin/pull/10126 .
     if (content.indexOf('\n') !== -1 && node.parentNode && isCodeBlock(node.parentNode)){
       return content
     }
@@ -493,8 +494,8 @@ rules.code = {
 
 // Fix: Web clipper has trouble with code blocks on Joplin's website.
 // See https://github.com/laurent22/joplin/pull/10126#issuecomment-2016523281 .
-// Web clipper clippering result is all in oneline. The format features are: <pre ...><code ...><span class="token-line". Span with class of "token-line" represent one line. 
-// Test case: packages/app-cli/tests/html_to_md/code_multiline_3.html
+// Web clipper clippering contents is all in oneline. The format features are: <pre ...><code ...><span class="token-line">. Span with class of "token-line" represent one line. 
+// Test case: packages/app-cli/tests/html_to_md/code_multiline_3.html .
 rules.joplinOrgTokenLineSpan = {
   filter: function (node) {
     const grandfather = node.parentNode.parentNode?? null;
