@@ -69,20 +69,21 @@ describe('renderViewProps', () => {
 		};
 
 		Logger.globalLogger.enabled = false;
+
+		time.setDateFormat('YYYY-MM-DD');
+		time.setTimeFormat('HH:mm');
+
 		await renderViewProps(view, [], {
 			noteTitleHtml: '',
-			dateTimeFormat: 'YYYY-MM-DD HH:mm',
 		});
 		Logger.globalLogger.enabled = true;
 
 		expect(view).toEqual({
 			note: {
-				user_updated_time: time.formatMsToLocal(timeValue, 'YYYY-MM-DD HH:mm'),
-				user_created_time: time.formatMsToLocal(timeValue, 'YYYY-MM-DD HH:mm'),
+				user_updated_time: time.formatMsToLocal(timeValue),
+				user_created_time: time.formatMsToLocal(timeValue),
 				tags: 123,
 			},
 		});
 	});
-
-
 });

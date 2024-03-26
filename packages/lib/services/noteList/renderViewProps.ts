@@ -10,16 +10,15 @@ export interface RenderViewPropsOptions {
 	// only available on the `app-desktop` package. So the caller needs to pre-render the title and
 	// pass it as an option.
 	noteTitleHtml: string;
-	dateTimeFormat?: string;
 }
 
 const renderViewProp = (name: ListRendererDependency, value: any, options: RenderViewPropsOptions) => {
 	const renderers: Partial<Record<ListRendererDependency, ()=> string>> = {
-		'note.user_updated_time': () => time.formatMsToLocal(value, options.dateTimeFormat),
-		'note.user_created_time': () => time.formatMsToLocal(value, options.dateTimeFormat),
-		'note.updated_time': () => time.formatMsToLocal(value, options.dateTimeFormat),
-		'note.created_time': () => time.formatMsToLocal(value, options.dateTimeFormat),
-		'note.todo_completed': () => value ? time.formatMsToLocal(value, options.dateTimeFormat) : '',
+		'note.user_updated_time': () => time.formatMsToLocal(value),
+		'note.user_created_time': () => time.formatMsToLocal(value),
+		'note.updated_time': () => time.formatMsToLocal(value),
+		'note.created_time': () => time.formatMsToLocal(value),
+		'note.todo_completed': () => value ? time.formatMsToLocal(value) : '',
 		'note.tags': () => value ? value.map((t: TagEntity) => t.title).join(', ') : '',
 		'note.title': () => options.noteTitleHtml,
 	};
