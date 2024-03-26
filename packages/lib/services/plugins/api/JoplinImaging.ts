@@ -39,6 +39,7 @@ interface Image {
  * [View the
  * example](https://github.com/laurent22/joplin/blob/dev/packages/app-cli/tests/support/plugins/imaging/src/index.ts)
  *
+ * <span class="platform-desktop">desktop</span>
  */
 export default class JoplinImaging {
 
