@@ -469,11 +469,11 @@ const SidebarComponent = (props: Props) => {
 	}, [props.folderHeaderIsExpanded, props.tagHeaderIsExpanded]);
 
 	const onAllNotesClick_ = useCallback(() => {
+		folderItem_click(ALL_NOTES_FILTER_ID);
 		props.dispatch({
 			type: 'SMART_FILTER_SELECT',
 			id: ALL_NOTES_FILTER_ID,
 		});
-		folderItem_click(ALL_NOTES_FILTER_ID);
 	}, [props.dispatch, folderItem_click]);
 
 	const anchorItemRef = (type: string, id: string) => {
@@ -744,7 +744,7 @@ const SidebarComponent = (props: Props) => {
 
 
 	if (props.folders.length) {
-		const allNotesSelected = props.selectedFolderId === ALL_NOTES_FILTER_ID;
+		const allNotesSelected = props.selectedFolderId === null ? true : props.selectedFolderId === ALL_NOTES_FILTER_ID;
 		const result = renderFolders(props, renderFolderItem);
 		const folderItems = [renderAllNotesItem(theme, allNotesSelected)].concat(result.items);
 		folderItemsOrder_.current = result.order;
