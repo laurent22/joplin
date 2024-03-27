@@ -75,6 +75,9 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 	public get imaging(): ImagingImplementation {
 		return {
 			nativeImage: null,
+			getPdfInfo: async () => {
+				throw new Error('Not implemented: getPdfInfo');
+			},
 		};
 	}
 
