@@ -7,7 +7,6 @@ import { _ } from '@joplin/lib/locale';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginToggle from './PluginToggle';
 import SearchPlugins from './SearchPlugins';
-import shim from '@joplin/lib/shim';
 import { ItemEvent } from '@joplin/lib/components/shared/config/plugins/types';
 import NavService from '@joplin/lib/services/NavService';
 import useRepoApi from './utils/useRepoApi';
@@ -115,12 +114,6 @@ const PluginStates: React.FC<Props> = props => {
 		!props.shouldShowBasedOnSearchQuery || props.shouldShowBasedOnSearchQuery(searchInputSearchText())
 	);
 
-	const renderIosSearchWarning = () => {
-		if (shim.mobilePlatform() !== 'ios' || !showSearch) return null;
-
-		return <Banner visible={true} icon='information'>{'Note: Plugin search is usually disabled on iOS (and only enabled in dev mode).'}</Banner>;
-	};
-
 	const searchComponent = (
 		<SearchPlugins
 			pluginSettings={props.pluginSettings}
@@ -134,7 +127,6 @@ const PluginStates: React.FC<Props> = props => {
 	return (
 		<View>
 			{renderRepoApiStatus()}
-			{renderIosSearchWarning()}
 			{installedPluginCards}
 			{showSearch ? searchComponent : null}
 		</View>
