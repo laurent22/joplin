@@ -340,6 +340,8 @@ export type ButtonId = string;
 export enum ToolbarButtonLocation {
 	/**
 	 * This toolbar in the top right corner of the application. It applies to the note as a whole, including its metadata.
+	 *
+	 * <span class="platform-desktop">desktop</span>
 	 */
 	NoteToolbar = 'noteToolbar',
 

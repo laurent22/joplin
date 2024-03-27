@@ -224,6 +224,7 @@ const pluginConfig = { ...baseConfig, entry: './src/index.ts',
 const externalContentScriptLibraries = [
 	'@codemirror/view',
 	'@codemirror/state',
+	'@codemirror/search',
 	'@codemirror/language',
 	'@codemirror/autocomplete',
 	'@codemirror/commands',

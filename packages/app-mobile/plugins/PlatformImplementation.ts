@@ -75,6 +75,9 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 	public get imaging(): ImagingImplementation {
 		return {
 			nativeImage: null,
+			getPdfInfo: async () => {
+				throw new Error('Not implemented: getPdfInfo');
+			},
 		};
 	}
 
@@ -86,6 +89,7 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 		return {
 			readText: () => Clipboard.getString(),
 			writeText: (text: string) => Clipboard.setString(text),
+			availableFormats: () => ['text/plain'],
 		};
 	}
 

@@ -77,6 +77,9 @@ const NoteList = (props: Props) => {
 		props.showCompletedTodos,
 		props.notes,
 		props.selectedFolderInTrash,
+		makeItemIndexVisible,
+		focusNote,
+		props.dispatch,
 	);
 
 	const noteItemStyle = useMemo(() => {
