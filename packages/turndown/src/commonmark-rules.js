@@ -159,7 +159,11 @@ rules.list = {
 
   replacement: function (content, node) {
     var parent = node.parentNode
-    if (parent.nodeName === 'LI' && parent.lastElementChild === node) {
+    if (parent && isCodeBlock(parent) && node.classList && node.classList.contains('pre-numbering')){
+      // Ignore code-block children of type ul with class pre-numbering.
+      // See https://github.com/laurent22/joplin/pull/10126#discussion_r1532204251 .
+      return '';
+    } else if (parent.nodeName === 'LI' && parent.lastElementChild === node) {
       return '\n' + content
     } else {
       return '\n\n' + content + '\n\n'
@@ -465,9 +469,19 @@ rules.code = {
     return node.nodeName === 'CODE' && !isCodeBlock
   },
 
-  replacement: function (content) {
-    if (!content) return ''
-    content = content.replace(/\r?\n|\r/g, ' ')
+  replacement: function (content, node, options) {
+    if (!content) {
+      return ''
+    }
+
+    content = content.replace(/\r?\n|\r/g, '\n')
+    // If code is multiline and in codeBlock, just return it, codeBlock well add fence(default is ```).
+    // See https://github.com/laurent22/joplin/pull/10126 .
+    if (content.indexOf('\n') !== -1 && node.parentNode && isCodeBlock(node.parentNode)){
+      return content
+    }
+
+    content = content.replace(/\r?\n|\r/g, '')
 
     var extraSpace = /^`|^ .*?[^ ].* $|`$/.test(content) ? ' ' : ''
     var delimiter = '`'
@@ -475,6 +489,23 @@ rules.code = {
     while (matches.indexOf(delimiter) !== -1) delimiter = delimiter + '`'
 
     return delimiter + extraSpace + content + extraSpace + delimiter
+  }
+}
+
+// Fix: Web clipper has trouble with code blocks on Joplin's website.
+// See https://github.com/laurent22/joplin/pull/10126#issuecomment-2016523281 .
+// Web clipper clippering contents is all in oneline. The format features are: <pre ...><code ...><span class="token-line">. Span with class of "token-line" represent one line. 
+// Test case: packages/app-cli/tests/html_to_md/code_multiline_3.html .
+rules.joplinOrgTokenLineSpan = {
+  filter: function (node) {
+    const grandfather = node.parentNode.parentNode?? null;
+    return node.nodeName === 'SPAN' && node.getAttribute('class') === 'token-line' && grandfather && isCodeBlock(grandfather); 
+  },
+
+  replacement: function (content, node, options) {
+    content = content.replace(/\r?\n|\r/g, '');
+    // If content replaced '\r\n' is empty, it indicates that the line is empty line; if not, keep the leading before and after content.
+    return content === '' ? '\n\n' :  node.flankingWhitespace.leading + content + node.flankingWhitespace.trailing + '\n';
   }
 }
 
