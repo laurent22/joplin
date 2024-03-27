@@ -850,7 +850,7 @@ function shimInit(options: ShimInitOptions = null) {
 
 	shim.pdfInfo = async (pdfPath: string): Promise<PdfInfo> => {
 		const doc = await loadPdf(pdfPath);
-		return { numPages: doc.numPages };
+		return { pageCount: doc.numPages };
 	};
 }
 

@@ -21,7 +21,7 @@ export interface CreateFromPdfOptions {
     scaleFactor?: number;
 }
 export interface PdfInfo {
-    numPages: number;
+    pageCount: number;
 }
 export interface Implementation {
     nativeImage: {

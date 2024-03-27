@@ -15,7 +15,7 @@ export interface CreatePdfFromImagesOptions {
 }
 
 export interface PdfInfo {
-	numPages: number;
+	pageCount: number;
 }
 
 let isTestingEnv_ = false;

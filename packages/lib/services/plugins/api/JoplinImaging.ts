@@ -31,7 +31,7 @@ export interface CreateFromPdfOptions {
 }
 
 export interface PdfInfo {
-	numPages: number;
+	pageCount: number;
 }
 
 export interface Implementation {

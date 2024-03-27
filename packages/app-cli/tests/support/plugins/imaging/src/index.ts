@@ -90,7 +90,7 @@ const registerInlinePdfCommand = async () => {
 			for (const image of images) {
 				pageNumber++;
 				const pageResource = await joplin.imaging.toJpgResource(
-					image, { title: `Page ${pageNumber} of ${pdfInfo.numPages}` }
+					image, { title: `Page ${pageNumber} of ${pdfInfo.pageCount}` }
 				);
 				await joplin.commands.execute('insertText', `\n- ![${pageResource.title}](:/${pageResource.id})`);
 			}
