@@ -1,6 +1,7 @@
 const time = require('./time').default;
 const shim = require('./shim').default;
 const JoplinError = require('./JoplinError').default;
+const chunkGenerator = require('./utils/chunkGenerator').default;
 
 class FileApiDriverDropbox {
 	constructor(api) {
@@ -171,24 +172,72 @@ class FileApiDriverDropbox {
 		if (typeof content === 'string') content = shim.Buffer.from(content, 'utf8');
 
 		try {
-			await this.api().exec(
-				'POST',
-				'files/upload',
-				content,
-				{
-					'Dropbox-API-Arg': JSON.stringify({
-						path: this.makePath_(path),
-						mode: 'overwrite',
-						mute: true, // Don't send a notification to user since there can be many of these updates
-					}),
-				},
-				options,
-			);
+			if (options && options.source === 'file') {
+
+				options = { ...options, loaded: true };
+
+				// chunk size can be set dynamically
+				// depending on the platform.
+				const chunkSize = 145 * 1024 * 1024; // 145MB
+
+				let sessionId;
+				for await (const { index, chunksNo, chunk } of chunkGenerator(options.path, chunkSize)) {
+					let endpoint;
+					const args = {};
+
+					if (index === 0) {
+						endpoint = 'files/upload_session/start';
+						if (chunksNo === 1) args.close = true;
+					} else if (index === chunksNo - 1) {
+						endpoint = 'files/upload_session/finish';
+						args.cursor = {
+							session_id: sessionId,
+							offset: index * chunkSize,
+						};
+						args.commit = {
+							path: this.makePath_(path),
+							mode: 'overwrite',
+							mute: true,
+						};
+					} else {
+						endpoint = 'files/upload_session/append_v2';
+						args.close = false;
+						args.cursor = {
+							session_id: sessionId,
+							offset: index * chunkSize,
+						};
+					}
+
+					const response = await this.api().exec('POST', endpoint, chunk, { 'Dropbox-API-Arg': JSON.stringify(args) }, options);
+
+					if (index === 0) sessionId = response.session_id;
+				}
+			} else {
+				await this.api().exec(
+					'POST',
+					'files/upload',
+					content,
+					{
+						'Dropbox-API-Arg': JSON.stringify({
+							path: this.makePath_(path),
+							mode: 'overwrite',
+							mute: true, // Don't send a notification to user since there can be many of these updates
+						}),
+					},
+					options,
+				);
+			}
 		} catch (error) {
 			if (this.hasErrorCode_(error, 'restricted_content')) {
 				throw new JoplinError('Cannot upload because content is restricted by Dropbox (restricted_content)', 'rejectedByTarget');
 			} else if (this.hasErrorCode_(error, 'payload_too_large')) {
 				throw new JoplinError('Cannot upload because payload size is rejected by Dropbox (payload_too_large)', 'rejectedByTarget');
+			} else if (this.hasErrorCode_(error, 'not_found')) {
+				throw new JoplinError('Cannot upload because session ID is not found', 'rejectedByTarget');
+			} else if (this.hasErrorCode_(error, 'closed')) {
+				throw new JoplinError('Cannot upload because upload session is closed', 'rejectedByTarget');
+			} else if (this.hasErrorCode_(error, 'incorrect_offset')) {
+				throw new JoplinError('Cannot upload because incorrect offset', 'rejectedByTarget');
 			} else {
 				throw error;
 			}
