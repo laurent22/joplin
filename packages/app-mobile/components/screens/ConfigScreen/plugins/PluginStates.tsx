@@ -10,7 +10,6 @@ import SearchPlugins from './SearchPlugins';
 import shim from '@joplin/lib/shim';
 import { ItemEvent } from '@joplin/lib/components/shared/config/plugins/types';
 import NavService from '@joplin/lib/services/NavService';
-import isInstallingPluginsAllowed from './utils/isPluginInstallingAllowed';
 import useRepoApi from './utils/useRepoApi';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 
@@ -113,9 +112,7 @@ const PluginStates: React.FC<Props> = props => {
 	}
 
 	const showSearch = (
-		isInstallingPluginsAllowed() && (
-			!props.shouldShowBasedOnSearchQuery || props.shouldShowBasedOnSearchQuery(searchInputSearchText())
-		)
+		!props.shouldShowBasedOnSearchQuery || props.shouldShowBasedOnSearchQuery(searchInputSearchText())
 	);
 
 	const renderIosSearchWarning = () => {
