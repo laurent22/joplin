@@ -11,6 +11,7 @@ export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
 	themeId?: number;
 	whiteBackgroundNoteRendering?: boolean;
+	fontStyle?: string;
 }
 
 export interface ToolbarButtonInfos {
@@ -118,6 +119,7 @@ export interface NoteBodyEditorProps {
 	noteToolbarButtonInfos: ToolbarButtonInfo[];
 	plugins: PluginStates;
 	fontSize: number;
+	fontFamily: string;
 	contentMaxWidth: number;
 	isSafeMode: boolean;
 	noteId: string;

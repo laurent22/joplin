@@ -949,6 +949,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				contentMaxWidthTarget: '.mce-content-body',
 				themeId: props.contentMarkupLanguage === MarkupLanguage.Html ? 1 : null,
 				whiteBackgroundNoteRendering: props.whiteBackgroundNoteRendering,
+				fontStyle: `${props.fontSize}px ${props.fontFamily};`,
 			};
 
 			const allAssets = await props.allAssets(props.contentMarkupLanguage, allAssetsOptions);

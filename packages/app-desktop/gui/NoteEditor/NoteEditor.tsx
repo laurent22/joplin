@@ -189,6 +189,7 @@ function NoteEditor(props: NoteEditorProps) {
 			contentMaxWidth: props.contentMaxWidth,
 			contentMaxWidthTarget: options.contentMaxWidthTarget,
 			whiteBackgroundNoteRendering: options.whiteBackgroundNoteRendering,
+			fontStyle: options.fontStyle,
 		});
 	}, [props.themeId, props.customCss, props.contentMaxWidth]);
 
@@ -460,6 +461,7 @@ function NoteEditor(props: NoteEditorProps) {
 		noteToolbarButtonInfos: props.toolbarButtonInfos,
 		plugins: props.plugins,
 		fontSize: Setting.value('style.editor.fontSize'),
+		fontFamily: `${JSON.stringify(Setting.value('style.editor.fontFamily'))}, Avenir, Arial, sans-serif`,
 		contentMaxWidth: props.contentMaxWidth,
 		isSafeMode: props.isSafeMode,
 		useCustomPdfViewer: props.useCustomPdfViewer,

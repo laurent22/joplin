@@ -12,6 +12,7 @@ export interface Options {
 	contentMaxWidthTarget?: string;
 	themeId?: number;
 	whiteBackgroundNoteRendering?: boolean;
+	fontStyle?: string;
 }
 
 // If we are viewing an HTML note, it means it comes from the web clipper or
@@ -79,9 +80,10 @@ export default function(theme: any, options: Options = null) {
 			font-size: ${formatCssSize(theme.noteViewerFontSize)};
 			color: ${theme.color};
 			word-wrap: break-word;
-			line-height: ${theme.lineHeight};
 			background-color: ${theme.backgroundColor};
 			font-family: ${fontFamily};
+			font: ${options.fontStyle};
+			line-height: ${theme.lineHeight};
 			padding-bottom: ${formatCssSize(theme.bodyPaddingBottom)};
 			padding-top: ${formatCssSize(theme.bodyPaddingTop)};
 		}
@@ -283,6 +285,7 @@ export default function(theme: any, options: Options = null) {
 			font-size: ${theme.noteViewerFontSize};
 			color: ${theme.color};
 			font-family: ${fontFamily};
+			font: ${options.fontStyle};
 		}
 
 		.jop-tinymce table td,
