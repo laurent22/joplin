@@ -55,6 +55,7 @@ import { join } from 'path';
 import { Dispatch } from 'redux';
 import { RefObject } from 'react';
 import { SelectionRange } from '../NoteEditor/types';
+import { getNoteCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { AppState } from '../../utils/types';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { getDisplayParentTitle } from '@joplin/lib/services/trash';
@@ -1058,6 +1059,11 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		Clipboard.setString(Note.markdownTag(note));
 	}
 
+	private copyExternalLink_onPress() {
+		const note = this.state.note;
+		Clipboard.setString(getNoteCallbackUrl(note.id));
+	}
+
 	public sideMenuOptions() {
 		const note = this.state.note;
 		if (!note) return [];
@@ -1266,6 +1272,12 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 				title: _('Copy Markdown link'),
 				onPress: () => {
 					this.copyMarkdownLink_onPress();
+				},
+			});
+			output.push({
+				title: _('Copy external link'),
+				onPress: () => {
+					this.copyExternalLink_onPress();
 				},
 			});
 		}
