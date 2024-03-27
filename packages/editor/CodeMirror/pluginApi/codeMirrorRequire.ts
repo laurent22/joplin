@@ -1,6 +1,7 @@
 
 import * as codeMirrorView from '@codemirror/view';
 import * as codeMirrorState from '@codemirror/state';
+import * as codeMirrorSearch from '@codemirror/search';
 import * as codeMirrorLanguage from '@codemirror/language';
 import * as codeMirrorAutocomplete from '@codemirror/autocomplete';
 import * as codeMirrorCommands from '@codemirror/commands';
@@ -21,6 +22,7 @@ import * as lezerMarkdown from '@lezer/markdown';
 const libraryNameToPackage: Record<string, any> = {
 	'@codemirror/view': codeMirrorView,
 	'@codemirror/state': codeMirrorState,
+	'@codemirror/search': codeMirrorSearch,
 	'@codemirror/language': codeMirrorLanguage,
 	'@codemirror/autocomplete': codeMirrorAutocomplete,
 	'@codemirror/commands': codeMirrorCommands,

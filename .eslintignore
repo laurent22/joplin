@@ -496,6 +496,7 @@ packages/app-mobile/components/ExtendedWebView.js
 packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/Icon.js
 packages/app-mobile/components/Modal.js
+packages/app-mobile/components/ModalDialog.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
 packages/app-mobile/components/NoteBodyViewer/bundledJs/Renderer.test.js
 packages/app-mobile/components/NoteBodyViewer/bundledJs/Renderer.js
@@ -592,6 +593,7 @@ packages/app-mobile/components/screens/ConfigScreen/types.js
 packages/app-mobile/components/screens/JoplinCloudLoginScreen.js
 packages/app-mobile/components/screens/LogScreen.js
 packages/app-mobile/components/screens/Note.js
+packages/app-mobile/components/screens/NoteTagsDialog.js
 packages/app-mobile/components/screens/Notes.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/encryption-config.js
@@ -1020,6 +1022,9 @@ packages/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo.js
 packages/lib/services/plugins/reducer.js
 packages/lib/services/plugins/utils/createViewHandle.js
 packages/lib/services/plugins/utils/executeSandboxCall.js
+packages/lib/services/plugins/utils/getPluginNamespacedSettingKey.js
+packages/lib/services/plugins/utils/getPluginSettingKeyPrefix.js
+packages/lib/services/plugins/utils/getPluginSettingValue.js
 packages/lib/services/plugins/utils/loadContentScripts.js
 packages/lib/services/plugins/utils/makeListener.js
 packages/lib/services/plugins/utils/manifestFromObject.js
@@ -1225,6 +1230,7 @@ packages/renderer/MdToHtml/rules/link_open.js
 packages/renderer/MdToHtml/rules/mermaid.js
 packages/renderer/MdToHtml/rules/sanitize_html.js
 packages/renderer/MdToHtml/rules/source_map.js
+packages/renderer/MdToHtml/rules/tableHorizontallyScrollable.js
 packages/renderer/MdToHtml/setupLinkify.js
 packages/renderer/MdToHtml/validateLinks.js
 packages/renderer/assetsToHeaders.js
