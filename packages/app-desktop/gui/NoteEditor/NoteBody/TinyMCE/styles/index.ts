@@ -3,7 +3,8 @@ import { NoteBodyEditorProps } from '../../../utils/types';
 const { buildStyle } = require('@joplin/lib/theme');
 
 export default function styles(props: NoteBodyEditorProps) {
-	return buildStyle(['TinyMCE', props.style.width, props.style.height], props.themeId, (theme: any) => {
+	const leftExtraToolbarContainerWidth = props.watchedNoteFiles.length > 0 ? 120 : 80;
+	return buildStyle(['TinyMCE', props.style.width, props.style.height, leftExtraToolbarContainerWidth], props.themeId, (theme: any) => {
 		const extraToolbarContainer = {
 			boxSizing: 'content-box',
 			backgroundColor: theme.backgroundColor3,
@@ -38,7 +39,7 @@ export default function styles(props: NoteBodyEditorProps) {
 			},
 			leftExtraToolbarContainer: {
 				...extraToolbarContainer,
-				width: 80,
+				width: leftExtraToolbarContainerWidth,
 				left: 0,
 			},
 			rightExtraToolbarContainer: {
