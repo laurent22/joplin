@@ -889,7 +889,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 		case 'NOTE_UPDATE_ONE':
 			{
 				const modNote: NoteEntity = action.note;
-				const isViewingAllNotes = (draft.notesParentType === 'SmartFilter' && draft.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
+				const isViewingAllNotes = (draft.selectedFolderId === ALL_NOTES_FILTER_ID);
 				const isViewingConflictFolder = draft.notesParentType === 'Folder' && draft.selectedFolderId === Folder.conflictFolderId();
 
 				const noteIsInFolder = function(note: NoteEntity, folderId: string) {
