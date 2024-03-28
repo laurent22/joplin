@@ -181,8 +181,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 		if (formNote.id === noteId) return () => {};
 
 		let cancelled = false;
-		let autoFocusTimeout: any = null;
-		let focused = false;
+		let autoFocusInterval: any = null;
 
 		reg.logger().debug('Loading existing note', noteId);
 
@@ -191,19 +190,17 @@ export default function useFormNote(dependencies: HookDependencies) {
 
 			const focusSettingName = noteIsTodo ? 'newTodoFocus' : 'newNoteFocus';
 
-			autoFocusTimeout = setTimeout(() => requestAnimationFrame(() => {
-				if (Setting.value(focusSettingName) === 'title') {
-					if (titleInputRef.current) {
+			autoFocusInterval = setInterval(() => {
+				if (editorRef.current && titleInputRef.current) {
+					if (Setting.value(focusSettingName) === 'title') {
 						titleInputRef.current.focus();
-						focused = true;
-					}
-				} else {
-					if (editorRef.current) {
+						clearInterval(autoFocusInterval);
+					} else {
 						editorRef.current.execCommand({ name: 'editor.focus' });
-						focused = true;
+						clearInterval(autoFocusInterval);
 					}
 				}
-			}), 50);
+			}, 2);
 		}
 
 		async function loadNote() {
@@ -227,7 +224,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 
 		return () => {
 			cancelled = true;
-			if (focused) clearTimeout(autoFocusTimeout);
+			clearInterval(autoFocusInterval);
 		};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [noteId, isProvisional, formNote]);
