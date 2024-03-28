@@ -101,7 +101,7 @@ const PluginUserWebView = (props: Props) => {
 	return (
 		<ExtendedWebView
 			style={props.style}
-			baseUrl={plugin.baseDir}
+			baseDirectory={plugin.baseDir}
 			webviewInstanceId='joplin__PluginDialogWebView'
 			html={html}
 			hasPluginScripts={true}
