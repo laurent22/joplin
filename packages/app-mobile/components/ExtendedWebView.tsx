@@ -108,7 +108,8 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	useEffect(() => {
 		let cancelled = false;
 		async function createHtmlFile() {
-			const tempFile = `${Setting.value('resourceDir')}/${props.webviewInstanceId}.html`;
+			const baseDir = baseUrl.replace(/^file:\/\//, '');
+			const tempFile = `${baseDir}/${props.webviewInstanceId}.html`;
 			await shim.fsDriver().writeFile(tempFile, props.html, 'utf8');
 			if (cancelled) return;
 

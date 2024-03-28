@@ -85,7 +85,20 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 		return null;
 	}
 
-	public get clipboard(): any {
+	public get clipboard() {
+		// Deny access to the clipboard on iOS, as per AppStore guidelines
+		// (as of March 2024).
+		if (shim.mobilePlatform() === 'ios') {
+			return {
+				readText: () => {
+					throw new Error('Not available on iOS');
+				},
+				writeText: () => {
+					throw new Error('Not available on iOS');
+				},
+				availableFormats: (): string[] => [],
+			};
+		}
 		return {
 			readText: () => Clipboard.getString(),
 			writeText: (text: string) => Clipboard.setString(text),
