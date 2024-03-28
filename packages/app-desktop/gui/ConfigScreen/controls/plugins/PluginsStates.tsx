@@ -10,7 +10,7 @@ import bridge from '../../../../services/bridge';
 import produce from 'immer';
 import { OnChangeEvent } from '../../../lib/SearchInput/SearchInput';
 import { PluginItem, ItemEvent, OnPluginSettingChangeEvent } from '@joplin/lib/components/shared/config/plugins/types';
-import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
+import RepositoryApi, { InstallMode } from '@joplin/lib/services/plugins/RepositoryApi';
 import Setting from '@joplin/lib/models/Setting';
 import useOnInstallHandler from '@joplin/lib/components/shared/config/plugins/useOnInstallHandler';
 import useOnDeleteHandler from '@joplin/lib/components/shared/config/plugins/useOnDeleteHandler';
@@ -60,7 +60,7 @@ let repoApi_: RepositoryApi = null;
 
 function repoApi(): RepositoryApi {
 	if (repoApi_) return repoApi_;
-	repoApi_ = RepositoryApi.ofDefaultJoplinRepo(Setting.value('tempDir'));
+	repoApi_ = RepositoryApi.ofDefaultJoplinRepo(Setting.value('tempDir'), InstallMode.Default);
 	// repoApi_ = new RepositoryApi('/Users/laurent/src/joplin-plugins-test', Setting.value('tempDir'));
 	return repoApi_;
 }

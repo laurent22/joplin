@@ -380,9 +380,9 @@ const appReducer = (state = appDefaultState, action: any) => {
 			newState.sideMenuOpenPercent = action.value;
 			break;
 
-		case 'TOGGLE_PLUGIN_PANELS_DIALOG':
+		case 'SET_PLUGIN_PANELS_DIALOG_VISIBLE':
 			newState = { ...state };
-			newState.showPanelsDialog = !newState.showPanelsDialog;
+			newState.showPanelsDialog = action.visible;
 			break;
 
 		case 'NOTE_SELECTION_TOGGLE':

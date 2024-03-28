@@ -69,7 +69,7 @@ interface Props {
 	onFileUpdate?: OnFileUpdateCallback;
 
 	// Defaults to the resource directory
-	baseUrl?: string;
+	baseDirectory?: string;
 }
 
 const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
@@ -103,12 +103,13 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 		};
 	}, [props.webviewInstanceId]);
 
-	const baseUrl = props.baseUrl ?? `file://${Setting.value('resourceDir')}/`;
+	const baseDirectory = props.baseDirectory ?? Setting.value('resourceDir');
+	const baseUrl = `file://${baseDirectory}`;
 
 	useEffect(() => {
 		let cancelled = false;
 		async function createHtmlFile() {
-			const tempFile = `${Setting.value('resourceDir')}/${props.webviewInstanceId}.html`;
+			const tempFile = `${baseDirectory}/${props.webviewInstanceId}.html`;
 			await shim.fsDriver().writeFile(tempFile, props.html, 'utf8');
 			if (cancelled) return;
 
@@ -137,7 +138,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 		return () => {
 			cancelled = true;
 		};
-	}, [props.html, props.webviewInstanceId, props.onFileUpdate, baseUrl]);
+	}, [props.html, props.webviewInstanceId, props.onFileUpdate, baseDirectory, baseUrl]);
 
 	const onError = useCallback((event: WebViewErrorEvent) => {
 		logger.error('Error', event.nativeEvent.description);

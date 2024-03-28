@@ -51,7 +51,7 @@ const PluginBox: React.FC<Props> = props => {
 	const installButton = (
 		<Button
 			onPress={() => props.onInstall?.({ item })}
-			disabled={props.installState !== InstallState.NotInstalled}
+			disabled={props.installState !== InstallState.NotInstalled || !props.isCompatible}
 			loading={props.installState === InstallState.Installing}
 		>
 			{installButtonTitle()}
@@ -67,7 +67,7 @@ const PluginBox: React.FC<Props> = props => {
 	const updateButton = (
 		<Button
 			onPress={() => props.onUpdate?.({ item })}
-			disabled={props.updateState !== UpdateState.CanUpdate}
+			disabled={props.updateState !== UpdateState.CanUpdate || !props.isCompatible}
 			loading={props.updateState === UpdateState.Updating}
 		>
 			{updateButtonTitle()}

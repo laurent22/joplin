@@ -1,8 +1,9 @@
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import Logger from '@joplin/utils/Logger';
-import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
+import RepositoryApi, { InstallMode } from '@joplin/lib/services/plugins/RepositoryApi';
 import Setting from '@joplin/lib/models/Setting';
 import { useMemo } from 'react';
+import shim from '@joplin/lib/shim';
 
 const logger = Logger.create('useRepoApi');
 
@@ -14,9 +15,14 @@ interface Props {
 
 let repoApi_: RepositoryApi|null = null;
 
+export const resetRepoApi = () => {
+	repoApi_ = null;
+};
+
 const useRepoApi = ({ reloadRepoCounter, setRepoApiError, onRepoApiLoaded }: Props) => {
 	const repoApi = useMemo(() => {
-		repoApi_ ??= RepositoryApi.ofDefaultJoplinRepo(Setting.value('tempDir'));
+		const installMode = shim.mobilePlatform() === 'ios' ? InstallMode.Restricted : InstallMode.Default;
+		repoApi_ ??= RepositoryApi.ofDefaultJoplinRepo(Setting.value('tempDir'), installMode);
 		return repoApi_;
 	}, []);
 

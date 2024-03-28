@@ -22,6 +22,10 @@ const logger = Logger.create('PluginUploadButton');
 // Used for search
 export const buttonLabel = () => _('Install from file');
 
+export const canInstallPluginsFromFile = () => {
+	return shim.mobilePlatform() !== 'ios' || Setting.value('env') === 'dev';
+};
+
 const PluginUploadButton: React.FC<Props> = props => {
 	const [showLoadingAnimation, setShowLoadingAnimation] = useState(false);
 
@@ -83,7 +87,7 @@ const PluginUploadButton: React.FC<Props> = props => {
 	return (
 		<Button
 			onPress={onInstallFromFile}
-			disabled={showLoadingAnimation}
+			disabled={showLoadingAnimation || !canInstallPluginsFromFile()}
 			loading={showLoadingAnimation}
 		>
 			{buttonLabel()}
