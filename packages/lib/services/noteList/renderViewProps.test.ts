@@ -1,6 +1,7 @@
 import Logger from '@joplin/utils/Logger';
 import { RenderNoteView } from '../plugins/api/noteListType';
 import renderViewProps from './renderViewProps';
+import time from '../../time';
 
 describe('renderViewProps', () => {
 
@@ -57,4 +58,32 @@ describe('renderViewProps', () => {
 		});
 	});
 
+	it('should show correct datetime', async () => {
+		const timeValue = time.unixMs();
+		const view: RenderNoteView = {
+			note: {
+				user_updated_time: timeValue,
+				user_created_time: timeValue,
+				tags: 123,
+			},
+		};
+
+		Logger.globalLogger.enabled = false;
+
+		time.setDateFormat('YYYY-MM-DD');
+		time.setTimeFormat('HH:mm');
+
+		await renderViewProps(view, [], {
+			noteTitleHtml: '',
+		});
+		Logger.globalLogger.enabled = true;
+
+		expect(view).toEqual({
+			note: {
+				user_updated_time: time.formatMsToLocal(timeValue),
+				user_created_time: time.formatMsToLocal(timeValue),
+				tags: 123,
+			},
+		});
+	});
 });

@@ -14,11 +14,11 @@ export interface RenderViewPropsOptions {
 
 const renderViewProp = (name: ListRendererDependency, value: any, options: RenderViewPropsOptions) => {
 	const renderers: Partial<Record<ListRendererDependency, ()=> string>> = {
-		'note.user_updated_time': () => time.unixMsToLocalDateTime(value),
-		'note.user_created_time': () => time.unixMsToLocalDateTime(value),
-		'note.updated_time': () => time.unixMsToLocalDateTime(value),
-		'note.created_time': () => time.unixMsToLocalDateTime(value),
-		'note.todo_completed': () => value ? time.unixMsToLocalDateTime(value) : '',
+		'note.user_updated_time': () => time.formatMsToLocal(value),
+		'note.user_created_time': () => time.formatMsToLocal(value),
+		'note.updated_time': () => time.formatMsToLocal(value),
+		'note.created_time': () => time.formatMsToLocal(value),
+		'note.todo_completed': () => value ? time.formatMsToLocal(value) : '',
 		'note.tags': () => value ? value.map((t: TagEntity) => t.title).join(', ') : '',
 		'note.title': () => options.noteTitleHtml,
 	};
