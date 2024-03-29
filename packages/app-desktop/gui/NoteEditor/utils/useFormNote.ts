@@ -216,8 +216,10 @@ export default function useFormNote(dependencies: HookDependencies) {
 				if (editorRef.current && titleInputRef.current) {
 					if (Setting.value(focusSettingName) === 'title') {
 						titleInputRef.current.focus();
+						clearInterval(autoFocusInterval);
 					} else {
 						editorRef.current.execCommand({ name: 'editor.focus' });
+						clearInterval(autoFocusInterval);
 					}
 				}
 			}, 2);
