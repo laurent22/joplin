@@ -134,7 +134,7 @@ const PluginBox: React.FC<Props> = props => {
 	const updateStateIsIdle = props.updateState !== UpdateState.Idle;
 
 	return (
-		<Card style={{ margin: 8, opacity: props.isCompatible ? undefined : 0.5 }} testID='plugin-card'>
+		<Card style={{ margin: 8, opacity: props.isCompatible ? undefined : 0.75 }} testID='plugin-card'>
 			<Card.Title
 				title={manifest.name}
 				subtitle={manifest.description}
