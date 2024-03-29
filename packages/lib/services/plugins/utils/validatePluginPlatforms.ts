@@ -5,7 +5,7 @@ const validatePluginPlatforms = (platforms: string[]) => {
 	}
 
 	// {1,10}: Limit the size of the version to a reasonable value.
-	const platformPattern = '^(mobile|desktop)(>=[0-9.]{1,10})?$';
+	const platformPattern = '^([a-zA-Z-]+)(>=[0-9.]{1,10})?$';
 	const platformRegex = new RegExp(platformPattern);
 	for (const platform of platforms) {
 		if (!platform.match(platformRegex)) {

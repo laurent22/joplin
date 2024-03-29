@@ -10,9 +10,7 @@ describe('validatePluginPlatforms', () => {
 
 		[['mobile>=3.14.x'], false],
 		[['mobile>=3.....14'], false],
-		[['notReal>=3.14.15'], false],
-		[['mobile', 'noApp>=3.14.15'], false],
-		[['mobile', 'mobile-test'], false],
+		[['mobile', 'some-other-platform>=3.14.15'], true],
 		[['desktop', 'desktop>=3.2mobile-test'], false],
 	])('should throw when given an invalid list of supported plugin platforms', (platforms, shouldSupport) => {
 		const callback = () => validatePluginPlatforms(platforms);
