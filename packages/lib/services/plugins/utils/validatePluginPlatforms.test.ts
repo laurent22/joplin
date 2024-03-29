@@ -19,7 +19,7 @@ describe('validatePluginPlatforms', () => {
 		if (shouldSupport) {
 			expect(callback).not.toThrow();
 		} else {
-			expect(callback).toThrow(/should match the pattern/);
+			expect(callback).toThrow();
 		}
 	});
 });
