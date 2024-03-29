@@ -208,10 +208,11 @@ export default function useFormNote(dependencies: HookDependencies) {
 	}, [noteId, isProvisional, formNote]);
 
 	useEffect(() => {
-		if (formNote.id && formNote.id !== previousNoteId && isProvisional) {
+		let autoFocusInterval: any = null;
+		if (isProvisional) {
 			const focusSettingName = formNote.is_todo ? 'newTodoFocus' : 'newNoteFocus';
 
-			const autoFocusInterval = setInterval(() => {
+			autoFocusInterval = setInterval(() => {
 				if (editorRef.current && titleInputRef.current) {
 					if (Setting.value(focusSettingName) === 'title') {
 						titleInputRef.current.focus();
@@ -223,8 +224,11 @@ export default function useFormNote(dependencies: HookDependencies) {
 				}
 			}, 2);
 		}
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [formNote.id, previousNoteId, isProvisional]);
+
+		return () => {
+			clearInterval(autoFocusInterval);
+		};
+	}, [isProvisional, formNote.is_todo, editorRef, titleInputRef]);
 
 	const onResourceChange = useCallback(async (event: any = null) => {
 		const resourceIds = await Note.linkedResourceIds(formNote.body);
