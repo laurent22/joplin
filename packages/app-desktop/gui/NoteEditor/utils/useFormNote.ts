@@ -181,27 +181,8 @@ export default function useFormNote(dependencies: HookDependencies) {
 		if (formNote.id === noteId) return () => {};
 
 		let cancelled = false;
-		let autoFocusInterval: any = null;
 
 		reg.logger().debug('Loading existing note', noteId);
-
-		function handleAutoFocus(noteIsTodo: boolean) {
-			if (!isProvisional) return;
-
-			const focusSettingName = noteIsTodo ? 'newTodoFocus' : 'newNoteFocus';
-
-			autoFocusInterval = setInterval(() => {
-				if (editorRef.current && titleInputRef.current) {
-					if (Setting.value(focusSettingName) === 'title') {
-						titleInputRef.current.focus();
-						clearInterval(autoFocusInterval);
-					} else {
-						editorRef.current.execCommand({ name: 'editor.focus' });
-						clearInterval(autoFocusInterval);
-					}
-				}
-			}, 2);
-		}
 
 		async function loadNote() {
 			const n = await Note.load(noteId);
@@ -216,18 +197,34 @@ export default function useFormNote(dependencies: HookDependencies) {
 			setIsNewNote(isProvisional);
 
 			await onAfterLoad({ formNote: newFormNote });
-
-			handleAutoFocus(!!n.is_todo);
 		}
 
 		void loadNote();
 
 		return () => {
 			cancelled = true;
-			clearInterval(autoFocusInterval);
 		};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [noteId, isProvisional, formNote]);
+
+	useEffect(() => {
+		if (formNote.id && formNote.id !== previousNoteId && isProvisional) {
+			const focusSettingName = formNote.is_todo ? 'newTodoFocus' : 'newNoteFocus';
+
+			const autoFocusInterval = setInterval(() => {
+				if (editorRef.current && titleInputRef.current) {
+					if (Setting.value(focusSettingName) === 'title') {
+						titleInputRef.current.focus();
+						clearInterval(autoFocusInterval);
+					} else {
+						editorRef.current.execCommand({ name: 'editor.focus' });
+						clearInterval(autoFocusInterval);
+					}
+				}
+			}, 2);
+		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
+	}, [formNote.id, previousNoteId, isProvisional]);
 
 	const onResourceChange = useCallback(async (event: any = null) => {
 		const resourceIds = await Note.linkedResourceIds(formNote.body);
