@@ -453,11 +453,16 @@ export default class PluginService extends BaseService {
 		if (this.isCompatible(manifest)) return null;
 
 		const minVersion = minVersionForPlatform(this.appType_, manifest);
-		if (!minVersion) {
-			return _('This plugin doesn\'t support the current platform (%s).', this.appType_);
+		if (minVersion) {
+			return _('Please upgrade joplin to version %s or later to use this plugin.', minVersion);
 		} else {
-			const minVersionDescription = minVersion === manifest.app_min_version ? minVersion : `${minVersion}/${this.appType_}`;
-			return _('This plugin requires Joplin version %s and the current version is %s.', minVersionDescription, this.appVersion);
+			let platformDescription = 'Unknown';
+			if (this.appType_ === AppType.Mobile) {
+				platformDescription = _('Joplin Mobile');
+			} else if (this.appType_ === AppType.Desktop) {
+				platformDescription = _('Joplin Desktop');
+			}
+			return _('This plugin doesn\'t support %s.', platformDescription);
 		}
 	}
 
