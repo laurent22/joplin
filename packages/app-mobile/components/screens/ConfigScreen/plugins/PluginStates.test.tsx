@@ -51,8 +51,8 @@ const mockRepositoryApiConstructor = async () => {
 	}
 	repoTempDir = await createTempDir();
 
-	RepositoryApi.ofDefaultJoplinRepo = jest.fn((_tempDirPath: string, installMode) => {
-		return new RepositoryApi(`${supportDir}/pluginRepo`, repoTempDir, installMode);
+	RepositoryApi.ofDefaultJoplinRepo = jest.fn((_tempDirPath: string, appType, installMode) => {
+		return new RepositoryApi(`${supportDir}/pluginRepo`, repoTempDir, appType, installMode);
 	});
 };
 

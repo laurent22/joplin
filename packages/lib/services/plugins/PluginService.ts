@@ -13,6 +13,7 @@ import { PluginManifest } from './utils/types';
 import isCompatible from './utils/isCompatible';
 import { AppType } from './api/types';
 import minVersionForPlatform from './utils/isCompatible/minVersionForPlatform';
+import { _ } from '../../locale';
 const uslug = require('@joplin/fork-uslug');
 
 const logger = Logger.create('PluginService');
@@ -448,6 +449,18 @@ export default class PluginService extends BaseService {
 		return isCompatible(this.appVersion_, this.appType_, manifest);
 	}
 
+	public describeIncompatibility(manifest: PluginManifest) {
+		if (this.isCompatible(manifest)) return null;
+
+		const minVersion = minVersionForPlatform(this.appType_, manifest);
+		if (!minVersion) {
+			return _('This plugin doesn\'t support the current platform (%s).', this.appType_);
+		} else {
+			const minVersionDescription = minVersion === manifest.app_min_version ? minVersion : `${minVersion}/${this.appType_}`;
+			return _('This plugin requires Joplin version %s and the current version is %s.', minVersionDescription, this.appVersion);
+		}
+	}
+
 	public get allPluginsStarted(): boolean {
 		for (const pluginId of Object.keys(this.startedPlugins_)) {
 			if (!this.startedPlugins_[pluginId]) return false;
@@ -459,13 +472,7 @@ export default class PluginService extends BaseService {
 		if (this.isSafeMode) throw new Error(`Plugin was not started due to safe mode: ${plugin.manifest.id}`);
 
 		if (!this.isCompatible(plugin.manifest)) {
-			const minVersion = minVersionForPlatform(this.appType_, plugin.manifest);
-			if (!minVersion) {
-				throw new Error(`Plugin "${plugin.id}" was disabled because it doesn't support the platform "${this.appType_}".`);
-			} else {
-				const platformInfo = minVersion === plugin.manifest.app_min_version ? '' : `on ${this.appType_}`;
-				throw new Error(`Plugin "${plugin.id}" was disabled because it requires Joplin version ${minVersion} ${platformInfo} and current version is ${this.appVersion_}.`);
-			}
+			throw new Error(`Plugin "${plugin.id}" was disabled: ${this.describeIncompatibility(plugin.manifest)}`);
 		} else {
 			this.store_.dispatch({
 				type: 'PLUGIN_ADD',
