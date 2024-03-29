@@ -2,7 +2,8 @@ import * as React from 'react';
 import { ReactElement } from 'react';
 import { PluginHtmlContents, PluginStates, ViewInfo } from '@joplin/lib/services/plugins/reducer';
 import PluginDialogWebView from './PluginDialogWebView';
-import { Modal, Portal } from 'react-native-paper';
+import { Portal } from 'react-native-paper';
+import Modal from '../../../components/Modal';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import WebviewController, { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import useViewInfos from './hooks/useViewInfos';
@@ -32,13 +33,18 @@ const PluginDialogManager: React.FC<Props> = props => {
 			continue;
 		}
 
+		const onDismiss = () => dismissDialog(viewInfo);
+
 		dialogs.push(
 			<Portal
 				key={`${viewInfo.plugin.id}-${viewInfo.view.id}`}
 			>
 				<Modal
 					visible={true}
-					onDismiss={() => dismissDialog(viewInfo)}
+					onDismiss={onDismiss}
+					onRequestClose={onDismiss}
+					transparent={true}
+					animationType='fade'
 				>
 					<PluginDialogWebView
 						viewInfo={viewInfo}

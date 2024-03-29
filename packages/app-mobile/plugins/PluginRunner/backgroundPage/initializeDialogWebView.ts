@@ -37,15 +37,25 @@ const initializeDialogWebView = (messageChannelId: string) => {
 			return includeScriptsOrStyles('js', paths);
 		},
 		getFormData: async () => {
-			const firstForm = document.querySelector('form');
-			if (!firstForm) return null;
+			const forms = document.querySelectorAll('form');
+			if (forms.length === 0) return null;
 
-			const formData = new FormData(firstForm);
+			const serializeForm = (form: HTMLFormElement) => {
+				const formData = new FormData(form);
+				const serializedData: Record<string, any> = {};
+				for (const key of formData.keys()) {
+					serializedData[key] = formData.get(key);
+				}
+				return serializedData;
+			};
 
 			const result = Object.create(null);
-			for (const key of formData.keys()) {
-				result[key] = formData.get(key);
+			let untitledFormId = 0;
+			for (const form of forms) {
+				const formId = form.getAttribute('name') || `form-${untitledFormId++}`;
+				result[formId] = serializeForm(form);
 			}
+
 			return result;
 		},
 		setThemeCss: async (css: string) => {
@@ -60,9 +70,10 @@ const initializeDialogWebView = (messageChannelId: string) => {
 			// we need to multiply by the devicePixelRatio:
 			const dpr = window.devicePixelRatio ?? 1;
 
+			const element = document.getElementById('joplin-plugin-content') ?? document.body;
 			return {
-				width: document.body.clientWidth * dpr,
-				height: document.body.clientHeight * dpr,
+				width: element.clientWidth * dpr,
+				height: element.clientHeight * dpr,
 			};
 		},
 	};

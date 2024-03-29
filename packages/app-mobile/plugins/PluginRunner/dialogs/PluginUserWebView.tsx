@@ -67,13 +67,28 @@ const PluginUserWebView = (props: Props) => {
 				<title>Plugin Dialog</title>
 				<style>
 					body {
-						padding: 20px;
+						box-sizing: border-box;
+						padding: 0;
+						margin: 0;
 						color: var(--joplin-color);
+						font-size: var(--joplin-font-size);
+						font-family: var(--joplin-font-family);
+					}
+
+					/* We need "display: flex" in order to accurately get the content size */
+					/* including margin and padding of children */
+					#joplin-plugin-content {
+						display: flex;
+						flex-direction: column;
+						padding: 10px;
+						box-sizing: border-box;
 					}
 				</style>
 			</head>
 			<body>
+				<div id="joplin-plugin-content">
 				${htmlContent}
+				</div>
 			</body>
 		</html>
 	`;
