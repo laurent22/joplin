@@ -559,6 +559,7 @@ packages/app-mobile/components/screens/ConfigScreen/SettingsButton.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsToggle.js
 packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.test.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginToggle.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginUploadButton.js
@@ -566,7 +567,6 @@ packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.test.j
 packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/testUtils/newRepoApi.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/testUtils/pluginServiceSetup.js
-packages/app-mobile/components/screens/ConfigScreen/plugins/utils/isPluginInstallingAllowed.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/utils/openWebsiteForPlugin.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/utils/useRepoApi.js
 packages/app-mobile/components/screens/ConfigScreen/types.js
@@ -1102,7 +1102,6 @@ packages/lib/services/trash/getTrashFolderId.js
 packages/lib/services/trash/index.test.js
 packages/lib/services/trash/index.js
 packages/lib/services/trash/isTrashableItem.js
-packages/lib/services/trash/isTrashableNoteOrFolder.js
 packages/lib/services/trash/permanentlyDeleteOldItems.test.js
 packages/lib/services/trash/permanentlyDeleteOldItems.js
 packages/lib/services/trash/restoreItems.test.js

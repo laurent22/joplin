@@ -181,6 +181,7 @@ export default class Folder extends BaseItem {
 			user_updated_time: now,
 			share_id: '',
 			is_shared: 0,
+			deleted_time: 0,
 		};
 	}
 

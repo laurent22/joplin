@@ -72,7 +72,7 @@ const PluginUserWebView = (props: Props) => {
 						margin: 0;
 						color: var(--joplin-color);
 						font-size: var(--joplin-font-size);
-						font-family: var(--joplin-font-family);
+						font-family: -apple-system-body, var(--joplin-font-family);
 					}
 
 					/* We need "display: flex" in order to accurately get the content size */
@@ -115,7 +115,7 @@ const PluginUserWebView = (props: Props) => {
 	return (
 		<ExtendedWebView
 			style={props.style}
-			baseUrl={plugin.baseDir}
+			baseDirectory={plugin.baseDir}
 			webviewInstanceId='joplin__PluginDialogWebView'
 			html={html}
 			hasPluginScripts={true}

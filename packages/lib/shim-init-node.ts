@@ -1,4 +1,4 @@
-import shim, { CreateResourceFromPathOptions } from './shim';
+import shim, { CreatePdfFromImagesOptions, CreateResourceFromPathOptions, PdfInfo } from './shim';
 import GeolocationNode from './geolocation-node';
 import { setLocale, defaultLocale, closestSupportedLocale } from './locale';
 import FsDriverNode from './fs-driver-node';
@@ -758,9 +758,13 @@ function shimInit(options: ShimInitOptions = null) {
 		}
 	};
 
+	const loadPdf = async (path: string) => {
+		const loadingTask = pdfJs.getDocument(path);
+		return await loadingTask.promise;
+	};
+
 	shim.pdfExtractEmbeddedText = async (pdfPath: string): Promise<string[]> => {
-		const loadingTask = pdfJs.getDocument(pdfPath);
-		const doc = await loadingTask.promise;
+		const doc = await loadPdf(pdfPath);
 		const textByPage = [];
 
 		try {
@@ -784,7 +788,7 @@ function shimInit(options: ShimInitOptions = null) {
 		return textByPage;
 	};
 
-	shim.pdfToImages = async (pdfPath: string, outputDirectoryPath: string): Promise<string[]> => {
+	shim.pdfToImages = async (pdfPath: string, outputDirectoryPath: string, options?: CreatePdfFromImagesOptions): Promise<string[]> => {
 		// We handle both the Electron app and testing framework. Potentially
 		// the same code could be use to support the CLI app.
 		const isTesting = !shim.isElectron();
@@ -797,12 +801,13 @@ function shimInit(options: ShimInitOptions = null) {
 		};
 
 		const canvasToBuffer = async (canvas: any): Promise<Buffer> => {
+			const quality = 0.8;
 			if (isTesting) {
-				return canvas.toBuffer('image/jpeg', { quality: 0.8 });
+				return canvas.toBuffer('image/jpeg', { quality });
 			} else {
 				const canvasToBlob = async (canvas: HTMLCanvasElement): Promise<Blob> => {
 					return new Promise(resolve => {
-						canvas.toBlob(blob => resolve(blob), 'image/jpg', 0.8);
+						canvas.toBlob(blob => resolve(blob), 'image/jpg', quality);
 					});
 				};
 
@@ -813,13 +818,14 @@ function shimInit(options: ShimInitOptions = null) {
 
 		const filePrefix = `page_${Date.now()}`;
 		const output: string[] = [];
-		const loadingTask = pdfJs.getDocument(pdfPath);
-		const doc = await loadingTask.promise;
+		const doc = await loadPdf(pdfPath);
 
 		try {
-			for (let pageNum = 1; pageNum <= doc.numPages; pageNum++) {
+			const startPage = options?.minPage ?? 1;
+			const endPage = Math.min(doc.numPages, options?.maxPage ?? doc.numPages);
+			for (let pageNum = startPage; pageNum <= endPage; pageNum++) {
 				const page = await doc.getPage(pageNum);
-				const viewport = page.getViewport({ scale: 2 });
+				const viewport = page.getViewport({ scale: options?.scaleFactor ?? 2 });
 				const canvas = createCanvas();
 				const ctx = canvas.getContext('2d');
 
@@ -840,6 +846,11 @@ function shimInit(options: ShimInitOptions = null) {
 		}
 
 		return output;
+	};
+
+	shim.pdfInfo = async (pdfPath: string): Promise<PdfInfo> => {
+		const doc = await loadPdf(pdfPath);
+		return { pageCount: doc.numPages };
 	};
 }
 

@@ -24,6 +24,12 @@ import { Command } from './types';
  * To view what arguments are supported, you can open any of these files
  * and look at the `execute()` command.
  *
+ * Note that many of these commands only work on desktop. The more limited list of mobile
+ * commands can be found in these places:
+ *
+ * * [Global commands](https://github.com/laurent22/joplin/tree/dev/packages/app-mobile/commands)
+ * * [Editor commands](https://github.com/laurent22/joplin/blob/dev/packages/app-mobile/components/NoteEditor/commandDeclarations.ts)
+ *
  * ## Executing editor commands
  *
  * There might be a situation where you want to invoke editor commands

@@ -189,7 +189,8 @@ const PluginPanelViewer: React.FC<Props> = props => {
 
 	const onClose = useCallback(() => {
 		props.dispatch({
-			type: 'TOGGLE_PLUGIN_PANELS_DIALOG',
+			type: 'SET_PLUGIN_PANELS_DIALOG_VISIBLE',
+			visible: false,
 		});
 	}, [props.dispatch]);
 
