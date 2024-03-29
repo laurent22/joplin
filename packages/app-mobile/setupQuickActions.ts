@@ -17,6 +17,7 @@ export default (dispatch: Function, folderId: string) => {
 	QuickActions.setShortcutItems([
 		{ type: 'New note', title: _('New note'), icon: 'Compose', userInfo },
 		{ type: 'New to-do', title: _('New to-do'), icon: 'Add', userInfo },
+		{ type: 'New Photo Note', title: _('New Photo Note'), icon: 'Camera', userInfo },
 	]);
 
 	const handleQuickAction = (data: TData) => {
@@ -47,6 +48,7 @@ export default (dispatch: Function, folderId: string) => {
 				noteId: newNote.id,
 				folderId,
 				routeName: 'Note',
+				isNewPhotoNote: data.type === 'New Photo Note',
 			});
 		});
 	};

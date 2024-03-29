@@ -82,6 +82,15 @@ interface Props {
 	highlightedWords: string[];
 	noteHash: string;
 	toolbarEnabled: boolean;
+	navigation: {
+		state: {
+			folderId?: string;
+			isNewPhotoNote?: boolean;
+			type: string;
+			noteId: string;
+			routeName: string;
+		};
+	};
 }
 
 interface State {
@@ -154,7 +163,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			heightBumpView: 0,
 			noteTagDialogShown: false,
 			fromShare: false,
-			showCamera: false,
+			showCamera: !!props.navigation.state.isNewPhotoNote,
 			showImageEditor: false,
 			imageEditorResource: null,
 			noteResources: {},
@@ -835,7 +844,11 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			newNote.body += `\n${resourceTag}`;
 		}
 
-		this.setState({ note: newNote });
+		if (this.props.navigation.state.isNewPhotoNote) {
+			this.setState({ note: { ...newNote, title: 'Untitled' } });
+		} else {
+			this.setState({ note: newNote });
+		}
 
 		void this.refreshResource(resource, newNote.body);
 
