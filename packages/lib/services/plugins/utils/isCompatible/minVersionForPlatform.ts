@@ -1,4 +1,4 @@
-import { AppType } from '../../api/types';
+import { AppType } from '../../../../models/Setting';
 import { ManifestSlice } from './types';
 
 // Returns false if the platform isn't supported at all,

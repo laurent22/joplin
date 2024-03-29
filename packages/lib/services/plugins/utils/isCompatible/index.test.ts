@@ -1,4 +1,4 @@
-import { AppType } from '../../api/types';
+import { AppType } from '../../../../models/Setting';
 import isCompatible from '../isCompatible';
 
 describe('isCompatible', () => {
