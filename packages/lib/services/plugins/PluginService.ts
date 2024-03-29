@@ -454,7 +454,7 @@ export default class PluginService extends BaseService {
 
 		const minVersion = minVersionForPlatform(this.appType_, manifest);
 		if (minVersion) {
-			return _('Please upgrade joplin to version %s or later to use this plugin.', minVersion);
+			return _('Please upgrade Joplin to version %s or later to use this plugin.', minVersion);
 		} else {
 			let platformDescription = 'Unknown';
 			if (this.appType_ === AppType.Mobile) {
