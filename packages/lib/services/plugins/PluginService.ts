@@ -9,7 +9,10 @@ import Setting from '../../models/Setting';
 import Logger from '@joplin/utils/Logger';
 import RepositoryApi from './RepositoryApi';
 import produce from 'immer';
-import { compareVersions } from 'compare-versions';
+import { PluginManifest } from './utils/types';
+import isCompatible from './utils/isCompatible';
+import { AppType } from './api/types';
+import minVersionForPlatform from './utils/isCompatible/minVersionForPlatform';
 const uslug = require('@joplin/fork-uslug');
 
 const logger = Logger.create('PluginService');
@@ -437,8 +440,12 @@ export default class PluginService extends BaseService {
 		}
 	}
 
-	public isCompatible(pluginVersion: string): boolean {
-		return compareVersions(this.appVersion_, pluginVersion) >= 0;
+	private get appType_() {
+		return shim.mobilePlatform() ? AppType.Mobile : AppType.Desktop;
+	}
+
+	public isCompatible(manifest: PluginManifest): boolean {
+		return isCompatible(this.appVersion_, this.appType_, manifest);
 	}
 
 	public get allPluginsStarted(): boolean {
@@ -451,8 +458,14 @@ export default class PluginService extends BaseService {
 	public async runPlugin(plugin: Plugin) {
 		if (this.isSafeMode) throw new Error(`Plugin was not started due to safe mode: ${plugin.manifest.id}`);
 
-		if (!this.isCompatible(plugin.manifest.app_min_version)) {
-			throw new Error(`Plugin "${plugin.id}" was disabled because it requires Joplin version ${plugin.manifest.app_min_version} and current version is ${this.appVersion_}.`);
+		if (!this.isCompatible(plugin.manifest)) {
+			const minVersion = minVersionForPlatform(this.appType_, plugin.manifest);
+			if (!minVersion) {
+				throw new Error(`Plugin "${plugin.id}" was disabled because it doesn't support the platform "${this.appType_}".`);
+			} else {
+				const platformInfo = minVersion === plugin.manifest.app_min_version ? '' : `on ${this.appType_}`;
+				throw new Error(`Plugin "${plugin.id}" was disabled because it requires Joplin version ${minVersion} ${platformInfo} and current version is ${this.appVersion_}.`);
+			}
 		} else {
 			this.store_.dispatch({
 				type: 'PLUGIN_ADD',

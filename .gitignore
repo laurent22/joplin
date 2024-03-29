@@ -1005,6 +1005,10 @@ packages/lib/services/plugins/utils/executeSandboxCall.js
 packages/lib/services/plugins/utils/getPluginNamespacedSettingKey.js
 packages/lib/services/plugins/utils/getPluginSettingKeyPrefix.js
 packages/lib/services/plugins/utils/getPluginSettingValue.js
+packages/lib/services/plugins/utils/isCompatible/index.test.js
+packages/lib/services/plugins/utils/isCompatible/index.js
+packages/lib/services/plugins/utils/isCompatible/minVersionForPlatform.js
+packages/lib/services/plugins/utils/isCompatible/types.js
 packages/lib/services/plugins/utils/loadContentScripts.js
 packages/lib/services/plugins/utils/makeListener.js
 packages/lib/services/plugins/utils/manifestFromObject.js
@@ -1012,6 +1016,8 @@ packages/lib/services/plugins/utils/mapEventHandlersToIds.js
 packages/lib/services/plugins/utils/types.js
 packages/lib/services/plugins/utils/validatePluginId.test.js
 packages/lib/services/plugins/utils/validatePluginId.js
+packages/lib/services/plugins/utils/validatePluginPlatforms.test.js
+packages/lib/services/plugins/utils/validatePluginPlatforms.js
 packages/lib/services/plugins/utils/validatePluginVersion.test.js
 packages/lib/services/plugins/utils/validatePluginVersion.js
 packages/lib/services/profileConfig/index.test.js

@@ -20,6 +20,7 @@ export interface PluginManifest {
 	name: string;
 	version: string;
 	app_min_version: string;
+	platforms?: string[];
 	author?: string;
 	description?: string;
 	homepage_url?: string;

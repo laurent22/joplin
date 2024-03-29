@@ -256,7 +256,7 @@ export default function(props: Props) {
 				item={item}
 				themeId={props.themeId}
 				updateState={updateState}
-				isCompatible={PluginService.instance().isCompatible(item.manifest.app_min_version)}
+				isCompatible={PluginService.instance().isCompatible(item.manifest)}
 				onDelete={onDelete}
 				onToggle={onToggle}
 				onUpdate={onUpdateHandler}

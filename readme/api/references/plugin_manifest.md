@@ -8,6 +8,7 @@ Name | Type | Required? | Description
 `name` | string | **Yes** | Name of the plugin. Should be a user-friendly string, as it will be displayed in the UI.
 `version` | string | **Yes** | Version number such as "1.0.0".
 `app_min_version` | string | **Yes** | Minimum version of Joplin that the plugin is compatible with. In general it should be whatever version you are using to develop the plugin.
+`platforms` | string[] | No | List of platforms supported by the plugin. For example, `["desktop", "mobile"]`.
 `description` | string | No | Detailed description of the plugin.
 `author` | string | No | Plugin author name.
 `keywords` | string[] | No | Keywords associated with the plugins. They are used in search in particular.
@@ -17,6 +18,12 @@ Name | Type | Required? | Description
 `screenshots` | Image[] | No  | [Screenshots](#Screenshot) are used for listing on Joplin Plugin website.
 `icons` | Icons | No | If [Icons](#Icons) is not supplied, a standard plugin icon will be used by default. You should supply at least a main icon, ideally 48x48 px in size. This is the icon that will be used in various plugin pages. You may, however, supply icons of any size and Joplin will attempt to find the best icon to display in different components. Only PNG icons are allowed.
 `promo_tile` | Image | No | [Promo tile](#promo-tile) is an optional image that is used to promote your plugin on the Joplin Plugins website.
+
+## Platforms
+
+A list that can contain `"desktop"` and/or `"mobile"`.
+
+It's possible to specify a higher `app_min_version` for a particular platform by adding a `>=x.y.z` suffix. For example, `["mobile>=3.2.1", "desktop"]`, would mark the plugin as supporting Joplin versions 3.2.1 and later on mobile, and supporting `app_min_version` or later on desktop. Any version specified with such a suffix **must be greater than or equal to `app_min_version`**.
 
 ## Categories
 
@@ -75,6 +82,7 @@ If no promo tile is provided, your plugin icon will be displayed instead.
     "version": "1.0.0",
     "author": "John Smith",
     "app_min_version": "1.4",
+    "platforms": ["mobile>=3.0.3", "desktop"],
     "homepage_url": "https://joplinapp.org",
     "screenshots": [
       {
