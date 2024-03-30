@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Icon, Button, Card, Chip } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 
 export enum InstallState {
@@ -100,10 +100,20 @@ const PluginBox: React.FC<Props> = props => {
 	};
 
 	const renderRecommendedChip = () => {
+		const onRecommendedPress = () => {
+			Alert.alert('Recommended Plugin', 'The Joplin team has vetted this plugin and it meets our standards for security and performance.');
+		};
+
 		if (!props.item.manifest._recommended) {
 			return null;
 		}
-		return <Chip icon='crown' mode='outlined'>{_('Recommended')}</Chip>;
+		return <Chip
+			icon='crown'
+			mode='outlined'
+			onPress={() => onRecommendedPress()}
+		>
+			{_('Recommended')}
+		</Chip>;
 	};
 
 	const renderBuiltInChip = () => {
