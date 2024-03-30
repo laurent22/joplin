@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Icon, Button, Card, Chip } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
-import { Alert, View } from 'react-native';
+import { Alert, Linking, View } from 'react-native';
 import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 
 export enum InstallState {
@@ -101,7 +101,22 @@ const PluginBox: React.FC<Props> = props => {
 
 	const renderRecommendedChip = () => {
 		const onRecommendedPress = () => {
-			Alert.alert('Recommended Plugin', 'The Joplin team has vetted this plugin and it meets our standards for security and performance.');
+			Alert.alert(
+				'Recommended Plugin',
+				'The Joplin team has vetted this plugin and it meets our standards for security and performance.',
+				[
+					{
+						text: 'Learn More',
+						onPress: async () => {
+							await Linking.openURL('https://github.com/joplin/plugins/blob/master/readme/recommended.md');
+						},
+					},
+					{
+						text: 'OK',
+					},
+				],
+				{ cancelable: true },
+			);
 		};
 
 		if (!props.item.manifest._recommended) {
