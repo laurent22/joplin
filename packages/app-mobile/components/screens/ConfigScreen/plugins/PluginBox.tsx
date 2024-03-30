@@ -102,17 +102,17 @@ const PluginBox: React.FC<Props> = props => {
 	const renderRecommendedChip = () => {
 		const onRecommendedPress = () => {
 			Alert.alert(
-				'Recommended Plugin',
-				'The Joplin team has vetted this plugin and it meets our standards for security and performance.',
+				_('Recommended Plugin'),
+				_('The Joplin team has vetted this plugin and it meets our standards for security and performance.'),
 				[
 					{
-						text: 'Learn More',
+						text: _('Learn More'),
 						onPress: async () => {
 							await Linking.openURL('https://github.com/joplin/plugins/blob/master/readme/recommended.md');
 						},
 					},
 					{
-						text: 'OK',
+						text: _('OK'),
 					},
 				],
 				{ cancelable: true },
