@@ -12,7 +12,7 @@ describe('validatePluginPlatforms', () => {
 		[['mobile>=3.....14'], false],
 		[['mobile', 'some-other-platform>=3.14.15'], true],
 		[['desktop', 'desktop>=3.2mobile-test'], false],
-	])('should throw when given an invalid list of supported plugin platforms', (platforms, shouldSupport) => {
+	])('should throw when given an invalid list of supported plugin platforms (case %#)', (platforms, shouldSupport) => {
 		const callback = () => validatePluginPlatforms(platforms);
 		if (shouldSupport) {
 			expect(callback).not.toThrow();

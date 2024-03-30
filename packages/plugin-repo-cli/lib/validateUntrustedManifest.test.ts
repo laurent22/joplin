@@ -60,9 +60,9 @@ describe('validateUntrustedManifest', () => {
 	test('should only allow valid plugin platforms', () => {
 		const badManifest = {
 			id: 'com.example.a-plugin-for-a-fake-platform',
-			_npm_package_name: 'joplin-plugin-plugin-for-a-fake-platform',
+			_npm_package_name: 'joplin-plugin-plugin-for-an-invalid-version',
 			version: '1.2.3',
-			platforms: ['platform'],
+			platforms: ['platform>=bad-version'],
 		};
 
 		expect(
