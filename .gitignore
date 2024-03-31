@@ -270,6 +270,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/shouldPasteResources.
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/types.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.js
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useWebViewApi.js
 packages/app-desktop/gui/NoteEditor/NoteEditor.js
 packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js
 packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js
@@ -475,12 +476,23 @@ packages/app-mobile/components/ExtendedWebView.js
 packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/Icon.js
 packages/app-mobile/components/Modal.js
+packages/app-mobile/components/ModalDialog.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
+packages/app-mobile/components/NoteBodyViewer/bundledJs/Renderer.test.js
+packages/app-mobile/components/NoteBodyViewer/bundledJs/Renderer.js
+packages/app-mobile/components/NoteBodyViewer/bundledJs/noteBodyViewerBundle.js
+packages/app-mobile/components/NoteBodyViewer/bundledJs/types.js
+packages/app-mobile/components/NoteBodyViewer/bundledJs/utils/addPluginAssets.js
+packages/app-mobile/components/NoteBodyViewer/bundledJs/utils/makeResourceModel.js
+packages/app-mobile/components/NoteBodyViewer/hooks/useContentScripts.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.test.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useOnMessage.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js
+packages/app-mobile/components/NoteBodyViewer/hooks/useRenderer.js
+packages/app-mobile/components/NoteBodyViewer/hooks/useRerenderHandler.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useSource.js
+packages/app-mobile/components/NoteBodyViewer/types.js
 packages/app-mobile/components/NoteEditor/CodeMirror/CodeMirror.js
 packages/app-mobile/components/NoteEditor/EditLinkDialog.js
 packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.js
@@ -510,6 +522,7 @@ packages/app-mobile/components/NoteEditor/NoteEditor.js
 packages/app-mobile/components/NoteEditor/SearchPanel.js
 packages/app-mobile/components/NoteEditor/commandDeclarations.js
 packages/app-mobile/components/NoteEditor/hooks/useCodeMirrorPlugins.js
+packages/app-mobile/components/NoteEditor/hooks/useEditorCommandHandler.test.js
 packages/app-mobile/components/NoteEditor/hooks/useEditorCommandHandler.js
 packages/app-mobile/components/NoteEditor/hooks/useKeyboardVisible.js
 packages/app-mobile/components/NoteEditor/types.js
@@ -546,6 +559,7 @@ packages/app-mobile/components/screens/ConfigScreen/SettingsButton.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsToggle.js
 packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.test.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginToggle.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginUploadButton.js
@@ -553,13 +567,13 @@ packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.test.j
 packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/testUtils/newRepoApi.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/testUtils/pluginServiceSetup.js
-packages/app-mobile/components/screens/ConfigScreen/plugins/utils/isPluginInstallingAllowed.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/utils/openWebsiteForPlugin.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/utils/useRepoApi.js
 packages/app-mobile/components/screens/ConfigScreen/types.js
 packages/app-mobile/components/screens/JoplinCloudLoginScreen.js
 packages/app-mobile/components/screens/LogScreen.js
 packages/app-mobile/components/screens/Note.js
+packages/app-mobile/components/screens/NoteTagsDialog.js
 packages/app-mobile/components/screens/Notes.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/encryption-config.js
@@ -824,6 +838,7 @@ packages/lib/models/Tag.js
 packages/lib/models/dateTimeFormats.test.js
 packages/lib/models/settings/FileHandler.js
 packages/lib/models/settings/settingValidations.js
+packages/lib/models/utils/getCollator.js
 packages/lib/models/utils/getConflictFolderId.js
 packages/lib/models/utils/isItemId.js
 packages/lib/models/utils/itemCanBeEncrypted.js
@@ -987,6 +1002,9 @@ packages/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo.js
 packages/lib/services/plugins/reducer.js
 packages/lib/services/plugins/utils/createViewHandle.js
 packages/lib/services/plugins/utils/executeSandboxCall.js
+packages/lib/services/plugins/utils/getPluginNamespacedSettingKey.js
+packages/lib/services/plugins/utils/getPluginSettingKeyPrefix.js
+packages/lib/services/plugins/utils/getPluginSettingValue.js
 packages/lib/services/plugins/utils/loadContentScripts.js
 packages/lib/services/plugins/utils/makeListener.js
 packages/lib/services/plugins/utils/manifestFromObject.js
@@ -1084,7 +1102,6 @@ packages/lib/services/trash/getTrashFolderId.js
 packages/lib/services/trash/index.test.js
 packages/lib/services/trash/index.js
 packages/lib/services/trash/isTrashableItem.js
-packages/lib/services/trash/isTrashableNoteOrFolder.js
 packages/lib/services/trash/permanentlyDeleteOldItems.test.js
 packages/lib/services/trash/permanentlyDeleteOldItems.js
 packages/lib/services/trash/restoreItems.test.js
@@ -1192,6 +1209,7 @@ packages/renderer/MdToHtml/rules/link_open.js
 packages/renderer/MdToHtml/rules/mermaid.js
 packages/renderer/MdToHtml/rules/sanitize_html.js
 packages/renderer/MdToHtml/rules/source_map.js
+packages/renderer/MdToHtml/rules/tableHorizontallyScrollable.js
 packages/renderer/MdToHtml/setupLinkify.js
 packages/renderer/MdToHtml/validateLinks.js
 packages/renderer/assetsToHeaders.js

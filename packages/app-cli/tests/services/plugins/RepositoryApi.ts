@@ -1,9 +1,9 @@
-import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
+import RepositoryApi, { InstallMode } from '@joplin/lib/services/plugins/RepositoryApi';
 import shim from '@joplin/lib/shim';
 import { setupDatabaseAndSynchronizer, switchClient, supportDir, createTempDir } from '@joplin/lib/testing/test-utils';
 
 async function newRepoApi(): Promise<RepositoryApi> {
-	const repo = new RepositoryApi(`${supportDir}/pluginRepo`, await createTempDir());
+	const repo = new RepositoryApi(`${supportDir}/pluginRepo`, await createTempDir(), InstallMode.Default);
 	await repo.initialize();
 	return repo;
 }
@@ -27,9 +27,10 @@ describe('services_plugins_RepositoryApi', () => {
 
 		{
 			const results = await api.search('to');
-			expect(results.length).toBe(2);
+			expect(results.length).toBe(3);
 			expect(!!results.find(m => m.id === 'joplin.plugin.ambrt.backlinksToNote')).toBe(true);
 			expect(!!results.find(m => m.id === 'org.joplinapp.plugins.ToggleSidebars')).toBe(true);
+			expect(!!results.find(m => m.id === 'org.joplinapp.plugins.AbcSheetMusic')).toBe(true);
 		}
 
 		{

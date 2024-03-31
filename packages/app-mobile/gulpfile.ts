@@ -20,6 +20,7 @@ gulp.task('buildInjectedJs', gulp.series(
 	'buildCodeMirrorEditor',
 	'buildJsDrawEditor',
 	'buildPluginBackgroundScript',
+	'buildNoteViewerBundle',
 	'copyWebviewLib',
 ));
 
@@ -30,6 +31,7 @@ gulp.task('watchInjectedJs', gulp.series(
 		'watchCodeMirrorEditor',
 		'watchJsDrawEditor',
 		'watchPluginBackgroundScript',
+		'watchNoteViewerBundle',
 	),
 ));
 

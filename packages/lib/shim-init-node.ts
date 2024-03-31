@@ -1,4 +1,4 @@
-import shim, { CreateResourceFromPathOptions } from './shim';
+import shim, { CreatePdfFromImagesOptions, CreateResourceFromPathOptions, PdfInfo } from './shim';
 import GeolocationNode from './geolocation-node';
 import { setLocale, defaultLocale, closestSupportedLocale } from './locale';
 import FsDriverNode from './fs-driver-node';
@@ -599,6 +599,11 @@ function shimInit(options: ShimInitOptions = null) {
 
 									try {
 										await gunzipFile(gzipFilePath, filePath);
+										// Calling request.destroy() within the downloadController can cause problems.
+										// The response.pipe(file) will continue even after request.destroy() is called,
+										// potentially causing the same promise to resolve while the cleanUpOnError
+										// is removing the file that have been downloaded by this function.
+										if (request.destroyed) return;
 										resolve(makeResponse(response));
 									} catch (error) {
 										cleanUpOnError(error);
@@ -606,6 +611,7 @@ function shimInit(options: ShimInitOptions = null) {
 
 									await shim.fsDriver().remove(gzipFilePath);
 								} else {
+									if (request.destroyed) return;
 									resolve(makeResponse(response));
 								}
 							});
@@ -752,30 +758,37 @@ function shimInit(options: ShimInitOptions = null) {
 		}
 	};
 
-	shim.pdfExtractEmbeddedText = async (pdfPath: string): Promise<string[]> => {
-		const loadingTask = pdfJs.getDocument(pdfPath);
-		const doc = await loadingTask.promise;
+	const loadPdf = async (path: string) => {
+		const loadingTask = pdfJs.getDocument(path);
+		return await loadingTask.promise;
+	};
 
+	shim.pdfExtractEmbeddedText = async (pdfPath: string): Promise<string[]> => {
+		const doc = await loadPdf(pdfPath);
 		const textByPage = [];
 
-		for (let pageNum = 1; pageNum <= doc.numPages; pageNum++) {
-			const page = await doc.getPage(pageNum);
-			const textContent = await page.getTextContent();
+		try {
+			for (let pageNum = 1; pageNum <= doc.numPages; pageNum++) {
+				const page = await doc.getPage(pageNum);
+				const textContent = await page.getTextContent();
 
-			const strings = textContent.items.map(item => {
-				const text = (item as TextItem).str ?? '';
-				return text;
-			}).join('\n');
+				const strings = textContent.items.map(item => {
+					const text = (item as TextItem).str ?? '';
+					return text;
+				}).join('\n');
 
-			// Some PDFs contain unsupported characters that can lead to hard-to-debug issues.
-			// We remove them here.
-			textByPage.push(replaceUnsupportedCharacters(strings));
+				// Some PDFs contain unsupported characters that can lead to hard-to-debug issues.
+				// We remove them here.
+				textByPage.push(replaceUnsupportedCharacters(strings));
+			}
+		} finally {
+			await doc.destroy();
 		}
 
 		return textByPage;
 	};
 
-	shim.pdfToImages = async (pdfPath: string, outputDirectoryPath: string): Promise<string[]> => {
+	shim.pdfToImages = async (pdfPath: string, outputDirectoryPath: string, options?: CreatePdfFromImagesOptions): Promise<string[]> => {
 		// We handle both the Electron app and testing framework. Potentially
 		// the same code could be use to support the CLI app.
 		const isTesting = !shim.isElectron();
@@ -788,12 +801,13 @@ function shimInit(options: ShimInitOptions = null) {
 		};
 
 		const canvasToBuffer = async (canvas: any): Promise<Buffer> => {
+			const quality = 0.8;
 			if (isTesting) {
-				return canvas.toBuffer('image/jpeg', { quality: 0.8 });
+				return canvas.toBuffer('image/jpeg', { quality });
 			} else {
 				const canvasToBlob = async (canvas: HTMLCanvasElement): Promise<Blob> => {
 					return new Promise(resolve => {
-						canvas.toBlob(blob => resolve(blob), 'image/jpg', 0.8);
+						canvas.toBlob(blob => resolve(blob), 'image/jpg', quality);
 					});
 				};
 
@@ -804,29 +818,39 @@ function shimInit(options: ShimInitOptions = null) {
 
 		const filePrefix = `page_${Date.now()}`;
 		const output: string[] = [];
-		const loadingTask = pdfJs.getDocument(pdfPath);
-		const doc = await loadingTask.promise;
+		const doc = await loadPdf(pdfPath);
 
-		for (let pageNum = 1; pageNum <= doc.numPages; pageNum++) {
-			const page = await doc.getPage(pageNum);
-			const viewport = page.getViewport({ scale: 2 });
-			const canvas = createCanvas();
-			const ctx = canvas.getContext('2d');
+		try {
+			const startPage = options?.minPage ?? 1;
+			const endPage = Math.min(doc.numPages, options?.maxPage ?? doc.numPages);
+			for (let pageNum = startPage; pageNum <= endPage; pageNum++) {
+				const page = await doc.getPage(pageNum);
+				const viewport = page.getViewport({ scale: options?.scaleFactor ?? 2 });
+				const canvas = createCanvas();
+				const ctx = canvas.getContext('2d');
 
-			canvas.height = viewport.height;
-			canvas.width = viewport.width;
+				canvas.height = viewport.height;
+				canvas.width = viewport.width;
 
-			const renderTask = page.render({ canvasContext: ctx, viewport: viewport });
-			await renderTask.promise;
+				const renderTask = page.render({ canvasContext: ctx, viewport: viewport });
+				await renderTask.promise;
 
-			const buffer = await canvasToBuffer(canvas);
-			const filePath = `${outputDirectoryPath}/${filePrefix}_${pageNum.toString().padStart(4, '0')}.jpg`;
-			output.push(filePath);
-			await writeFile(filePath, buffer, 'binary');
-			if (!(await shim.fsDriver().exists(filePath))) throw new Error(`Could not write to file: ${filePath}`);
+				const buffer = await canvasToBuffer(canvas);
+				const filePath = `${outputDirectoryPath}/${filePrefix}_${pageNum.toString().padStart(4, '0')}.jpg`;
+				output.push(filePath);
+				await writeFile(filePath, buffer, 'binary');
+				if (!(await shim.fsDriver().exists(filePath))) throw new Error(`Could not write to file: ${filePath}`);
+			}
+		} finally {
+			await doc.destroy();
 		}
 
 		return output;
+	};
+
+	shim.pdfInfo = async (pdfPath: string): Promise<PdfInfo> => {
+		const doc = await loadPdf(pdfPath);
+		return { pageCount: doc.numPages };
 	};
 }
 

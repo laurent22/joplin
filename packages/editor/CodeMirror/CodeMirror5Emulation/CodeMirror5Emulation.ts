@@ -503,7 +503,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		if (name in CodeMirror5Emulation.commands) {
 			return CodeMirror5Emulation.commands[name as (keyof typeof CodeMirror5Emulation.commands)](this);
 		} else if (typeof this._userExtensions[name] === 'function') {
-			return this._userExtensions[name](...args);
+			return this._userExtensions[name].call(this, ...args);
 		}
 	}
 }

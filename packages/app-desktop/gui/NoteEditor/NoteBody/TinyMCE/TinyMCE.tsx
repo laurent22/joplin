@@ -31,6 +31,7 @@ import { Options as NoteStyleOptions } from '@joplin/renderer/noteStyle';
 import markupRenderOptions from '../../utils/markupRenderOptions';
 import { DropHandler } from '../../utils/useDropHandler';
 import Logger from '@joplin/utils/Logger';
+import useWebViewApi from './utils/useWebViewApi';
 const md5 = require('md5');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
@@ -347,6 +348,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			cancelled = true;
 		};
 	}, []);
+
+	useWebViewApi(editor);
 
 	useEffect(() => {
 		const theme = themeStyle(props.themeId);

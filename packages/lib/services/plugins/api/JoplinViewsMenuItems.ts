@@ -10,6 +10,8 @@ import createViewHandle from '../utils/createViewHandle';
  * Allows creating and managing menu items.
  *
  * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/register_command)
+ *
+ * <span class="platform-desktop">desktop</span>
  */
 export default class JoplinViewsMenuItems {
 

@@ -107,13 +107,13 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 			}
 		`;
 
-
 		return (
 			<>
 				<ExtendedWebView
 					webviewInstanceId='PluginRunner'
 					html={html}
 					injectedJavaScript={injectedJs}
+					hasPluginScripts={true}
 					onMessage={pluginRunner.onWebviewMessage}
 					onLoadEnd={onLoadEnd}
 					onLoadStart={onLoadStart}

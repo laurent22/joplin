@@ -34,6 +34,19 @@ export const initCodeMirror = (
 		},
 	});
 
+	// Works around https://github.com/laurent22/joplin/issues/10047 by handling
+	// the text/uri-list MIME type when pasting, rather than sending the paste event
+	// to CodeMirror.
+	//
+	// TODO: Remove this workaround when the issue has been fixed upstream.
+	control.on('paste', (_editor, event: ClipboardEvent) => {
+		const clipboardData = event.clipboardData;
+		if (clipboardData.types.length === 1 && clipboardData.types[0] === 'text/uri-list') {
+			event.preventDefault();
+			control.insertText(clipboardData.getData('text/uri-list'));
+		}
+	});
+
 	messenger.setLocalInterface(control);
 	return control;
 };

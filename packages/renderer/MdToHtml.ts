@@ -49,6 +49,7 @@ const rules: RendererRules = {
 	fountain: require('./MdToHtml/rules/fountain').default,
 	mermaid: require('./MdToHtml/rules/mermaid').default,
 	source_map: require('./MdToHtml/rules/source_map').default,
+	tableHorizontallyScrollable: require('./MdToHtml/rules/tableHorizontallyScrollable').default,
 };
 
 const uslug = require('@joplin/fork-uslug');
@@ -548,12 +549,23 @@ export default class MdToHtml implements MarkupRenderer {
 
 		const allRules = { ...rules, ...this.extraRendererRules_ };
 
+		const loadPlugin = (plugin: any, options: any) => {
+			// Handle the case where we're bundling with webpack --
+			// some modules that are commonjs imports in nodejs
+			// act like ES6 imports.
+			if (typeof plugin !== 'function' && plugin.default) {
+				plugin = plugin.default;
+			}
+
+			markdownIt.use(plugin, options);
+		};
+
 		for (const key in allRules) {
 			if (!this.pluginEnabled(key)) continue;
 
 			const rule = allRules[key];
 
-			markdownIt.use(rule.plugin, {
+			loadPlugin(rule.plugin, {
 				context: context,
 				...ruleOptions,
 				...(ruleOptions.plugins[key] ? ruleOptions.plugins[key] : {}),
@@ -563,11 +575,11 @@ export default class MdToHtml implements MarkupRenderer {
 			});
 		}
 
-		markdownIt.use(markdownItAnchor, { slugify: slugify });
+		loadPlugin(markdownItAnchor, { slugify: slugify });
 
 		for (const key in plugins) {
 			if (this.pluginEnabled(key)) {
-				markdownIt.use(plugins[key].module, plugins[key].options);
+				loadPlugin(plugins[key].module, plugins[key].options);
 			}
 		}
 

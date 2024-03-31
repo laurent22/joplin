@@ -1,6 +1,7 @@
 import { checkObjectHasProperties } from '@joplin/utils/object';
 import { ModelType } from '../../BaseModel';
-import isTrashableNoteOrFolder from './isTrashableNoteOrFolder';
+import conflictFolderId from '../../models/utils/getConflictFolderId';
+import getTrashFolderId from './getTrashFolderId';
 
 type ItemSlice = { id?: string };
 const isTrashableItem = (itemType: ModelType, item: ItemSlice) => {
@@ -10,7 +11,7 @@ const isTrashableItem = (itemType: ModelType, item: ItemSlice) => {
 		return false;
 	}
 
-	return isTrashableNoteOrFolder(item);
+	return item.id !== conflictFolderId() && item.id !== getTrashFolderId();
 };
 
 export default isTrashableItem;

@@ -69,6 +69,7 @@ const PluginUserWebView = (props: Props) => {
 					body {
 						padding: 20px;
 						color: var(--joplin-color);
+						font: -apple-system-body;
 					}
 				</style>
 			</head>
@@ -100,9 +101,10 @@ const PluginUserWebView = (props: Props) => {
 	return (
 		<ExtendedWebView
 			style={props.style}
-			baseUrl={plugin.baseDir}
+			baseDirectory={plugin.baseDir}
 			webviewInstanceId='joplin__PluginDialogWebView'
 			html={html}
+			hasPluginScripts={true}
 			injectedJavaScript={injectedJs}
 			onMessage={messenger.onWebViewMessage}
 			onLoadEnd={onWebViewLoaded}

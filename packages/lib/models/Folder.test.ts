@@ -223,6 +223,34 @@ describe('models/Folder', () => {
 		expect(sortedFolderTree[2].id).toBe(f6.id);
 	}));
 
+	it('should sort folders with special chars alphabetically', (async () => {
+		const unsortedFolderTitles = ['ç', 'd', 'c', 'Ä', 'b', 'a'].map(firstChar => `${firstChar} folder`);
+		for (const folderTitle of unsortedFolderTitles) {
+			await Folder.save({ title: folderTitle });
+		}
+
+		const folders = await Folder.allAsTree();
+		const sortedFolderTree = await Folder.sortFolderTree(folders);
+
+		// same set of titles, but in alphabetical order
+		const sortedFolderTitles = ['a', 'Ä', 'b', 'c', 'ç', 'd'].map(firstChar => `${firstChar} folder`);
+		expect(sortedFolderTree.map(f => f.title)).toEqual(sortedFolderTitles);
+	}));
+
+	it('should sort numbers ascending', (async () => {
+		const unsortedFolderTitles = ['10', '1', '2'].map(firstChar => `${firstChar} folder`);
+		for (const folderTitle of unsortedFolderTitles) {
+			await Folder.save({ title: folderTitle });
+		}
+
+		const folders = await Folder.allAsTree();
+		const sortedFolderTree = await Folder.sortFolderTree(folders);
+
+		// same set of titles, but in ascending order
+		const sortedFolderTitles = ['1', '2', '10'].map(firstChar => `${firstChar} folder`);
+		expect(sortedFolderTree.map(f => f.title)).toEqual(sortedFolderTitles);
+	}));
+
 	it('should not allow setting a folder parent as itself', (async () => {
 		const f1 = await Folder.save({ title: 'folder1' });
 		const hasThrown = await checkThrowAsync(() => Folder.save({ id: f1.id, parent_id: f1.id }, { userSideValidation: true }));
@@ -351,6 +379,27 @@ describe('models/Folder', () => {
 
 		// But it should not allow moving a folder to itself
 		await expectThrow(async () => Folder.delete(folder2.id, { toTrash: true, toTrashParentId: folder2.id }));
+	});
+
+	it('should filter out the trash folder and the deleted folders', async () => {
+		let folders: FolderEntity[] = [];
+
+		expect(Folder.getRealFolders(folders).length).toBe(0);
+
+		const folder1 = await Folder.save({});
+		const folder2 = await Folder.save({ parent_id: folder1.id });
+		const folder3 = await Folder.save({ parent_id: folder2.id });
+
+		folders = await Folder.all();
+		expect(Folder.getRealFolders(folders).sort((a, b) => a.created_time - b.created_time)).toEqual([folder1, folder2, folder3]);
+
+		await Folder.delete(folder2.id, { toTrash: true });
+		folders = await Folder.all();
+		expect(Folder.getRealFolders(folders)).toEqual([folder1]);
+
+		await Folder.delete(folder1.id, { toTrash: true });
+		folders = await Folder.all();
+		expect(Folder.getRealFolders(folders).length).toBe(0);
 	});
 
 	it('should tell if at least one folder other than trash and deleted exists', async () => {

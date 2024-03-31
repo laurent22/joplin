@@ -1169,14 +1169,27 @@ class Setting extends BaseModel {
 				type: SettingItemType.Object,
 				section: 'plugins',
 				public: true,
-				show: (_settings) => {
-					// Hide on iOS due to App Store guidelines. See
-					// https://github.com/laurent22/joplin/pull/10086 for details.
-					return shim.isNode() || shim.mobilePlatform() !== 'ios';
-				},
 				appTypes: [AppType.Desktop, AppType.Mobile],
 				needRestart: true,
 				autoSave: true,
+			},
+
+			'plugins.enableWebviewDebugging': {
+				value: false,
+				type: SettingItemType.Bool,
+				section: 'plugins',
+				public: true,
+				appTypes: [AppType.Mobile],
+				show: (_settings) => {
+					// Hide on iOS due to App Store guidelines. See
+					// https://github.com/laurent22/joplin/pull/10086 for details.
+					return shim.mobilePlatform() !== 'ios';
+				},
+				needRestart: true,
+				advanced: true,
+
+				label: () => _('Plugin WebView debugging'),
+				description: () => _('Allows debugging mobile plugins. See %s for details.', 'https://https://joplinapp.org/help/api/references/mobile_plugin_debugging/'),
 			},
 
 			'plugins.devPluginPaths': {

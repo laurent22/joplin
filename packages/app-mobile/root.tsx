@@ -260,6 +260,7 @@ const appDefaultState: AppState = { ...defaultState, sideMenuOpenPercent: 0,
 	noteSideMenuOptions: null,
 	isOnMobileData: false,
 	disableSideMenuGestures: false,
+	showPanelsDialog: false,
 };
 
 const appReducer = (state = appDefaultState, action: any) => {
@@ -378,6 +379,11 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 			newState = { ...state };
 			newState.sideMenuOpenPercent = action.value;
+			break;
+
+		case 'SET_PLUGIN_PANELS_DIALOG_VISIBLE':
+			newState = { ...state };
+			newState.showPanelsDialog = action.visible;
 			break;
 
 		case 'NOTE_SELECTION_TOGGLE':

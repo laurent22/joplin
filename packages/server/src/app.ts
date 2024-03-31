@@ -27,6 +27,7 @@ import storageConnectionCheck from './utils/storageConnectionCheck';
 import { setLocale } from '@joplin/lib/locale';
 import initLib from '@joplin/lib/initLib';
 import checkAdminHandler from './middleware/checkAdminHandler';
+import ActionLogger from '@joplin/lib/utils/ActionLogger';
 
 interface Argv {
 	env?: Env;
@@ -231,6 +232,11 @@ async function main() {
 	});
 	Logger.initializeGlobalLogger(globalLogger);
 	initLib(globalLogger);
+
+	// Don't log deletions made by the @joplin/lib API -- ActionLogger is
+	// designed for Joplin client use.
+	ActionLogger.enabled = false;
+
 
 	if (envFilePath) appLogger().info(`Env variables were loaded from: ${envFilePath}`);
 
