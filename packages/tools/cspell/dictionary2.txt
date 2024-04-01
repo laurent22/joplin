@@ -334,6 +334,7 @@ onopentagname
 onparserinit
 onprocessinginstruction
 onselfclosingtag
+onenote
 ontext
 ontouch
 oòóôõöøō

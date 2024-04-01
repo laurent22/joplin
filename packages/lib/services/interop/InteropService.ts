@@ -19,6 +19,7 @@ import InteropService_Exporter_Md_frontmatter from './InteropService_Exporter_Md
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
 import Module, { dynamicRequireModuleFactory, makeExportModule, makeImportModule } from './Module';
+import InteropService_Importer_OneNote from './InteropService_Importer_OneNote';
 const { sprintf } = require('sprintf-js');
 const { fileExtension } = require('../../path-utils');
 const EventEmitter = require('events');
@@ -132,6 +133,14 @@ export default class InteropService {
 					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
 					description: _('Text document'),
 				}, () => new InteropService_Importer_Md()),
+
+				makeImportModule({
+					format: 'one',
+					fileExtensions: ['one'],
+					sources: [FileSystemItem.File, FileSystemItem.Directory],
+					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
+					description: _('OneNote'),
+				}, () => new InteropService_Importer_OneNote()),
 			];
 
 			const exportModules = [

@@ -1,6 +1,6 @@
 [package]
 name = "onenote-converter"
-version = "2.0.0"
+version = "0.0.1"
 authors = ["Pedro Luiz <pedrlz.frn@gmail.com>"]
 edition = "2018"
 description = "Convert Microsoft OneNote® notebooks to HTML"

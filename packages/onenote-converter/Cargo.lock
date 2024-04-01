@@ -428,7 +428,7 @@ checksum = "3fdb12b2476b595f9358c5161aa467c2438859caa136dec86c26fdd2efe17b92"
 
 [[package]]
 name = "onenote-converter"
-version = "2.0.0"
+version = "0.0.1"
 dependencies = [
  "askama",
  "bytes",

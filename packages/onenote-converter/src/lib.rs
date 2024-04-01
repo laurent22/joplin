@@ -23,7 +23,7 @@ extern crate web_sys;
 
 #[cfg(not(feature = "backtrace"))]
 #[wasm_bindgen]
-pub fn main(input: &str, output: &str) {
+pub fn oneNoteConverter(input: &str, output: &str) {
     panic::set_hook(Box::new(console_error_panic_hook::hook));
 
     let input_paths = PathBuf::from(input);
