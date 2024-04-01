@@ -71,8 +71,10 @@ const PluginUserWebView = (props: Props) => {
 						padding: 0;
 						margin: 0;
 						color: var(--joplin-color);
-						font-size: var(--joplin-font-size);
-						font-family: -apple-system-body, var(--joplin-font-family);
+
+						/* -apple-system-body allows for correct font scaling on iOS devices */
+						font: -apple-system-body;
+						font-family: var(--joplin-font-family, sans-serif);
 					}
 
 					/* We need "display: flex" in order to accurately get the content size */
