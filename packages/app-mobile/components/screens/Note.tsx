@@ -61,6 +61,7 @@ import { getDisplayParentTitle } from '@joplin/lib/services/trash';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import pickDocument from '../../utils/pickDocument';
 import debounce from '../../utils/debounce';
+import { focus } from '@joplin/lib/utils/focusHandler';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -1328,13 +1329,8 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		// Avoid writing `this.titleTextFieldRef.current` -- titleTextFieldRef may
 		// be undefined.
 		if (fieldToFocus === 'title' && this.titleTextFieldRef?.current) {
-			this.titleTextFieldRef.current.focus();
+			focus('Note::focusUpdate', this.titleTextFieldRef.current);
 		}
-		// if (fieldToFocus === 'body' && this.markdownEditorRef.current) {
-		// 	if (this.markdownEditorRef.current) {
-		// 		this.markdownEditorRef.current.focus();
-		// 	}
-		// }
 	}
 
 	private async folderPickerOptions_valueChanged(itemValue: any) {

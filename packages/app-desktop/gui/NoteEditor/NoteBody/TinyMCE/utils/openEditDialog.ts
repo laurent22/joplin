@@ -1,6 +1,7 @@
 import { _ } from '@joplin/lib/locale';
 import { MarkupToHtml } from '@joplin/renderer';
 import { TinyMceEditorEvents } from './types';
+import { focus } from '@joplin/lib/utils/focusHandler';
 const taboverride = require('taboverride');
 
 interface SourceInfo {
@@ -13,7 +14,7 @@ interface SourceInfo {
 
 function dialogTextArea_keyDown(event: any) {
 	if (event.key === 'Tab') {
-		window.requestAnimationFrame(() => event.target.focus());
+		window.requestAnimationFrame(() => focus('openEditDialog::dialogTextArea_keyDown', event.target));
 	}
 }
 

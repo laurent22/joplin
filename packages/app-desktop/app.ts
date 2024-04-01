@@ -628,12 +628,17 @@ class Application extends BaseApplication {
 			SearchEngine.instance().scheduleSyncTables();
 		});
 
-		// await populateDatabase(reg.db(), {
-		// 	clearDatabase: true,
-		// 	folderCount: 1000,
-		// 	rootFolderCount: 1,
-		// 	subFolderDepth: 1,
-		// });
+		// setTimeout(() => {
+		// 	void populateDatabase(reg.db(), {
+		// 		clearDatabase: true,
+		// 		folderCount: 200,
+		// 		noteCount: 3000,
+		// 		tagCount: 2000,
+		// 		tagsPerNote: 10,
+		// 		rootFolderCount: 20,
+		// 		subFolderDepth: 3,
+		// 	});
+		// }, 5000);
 
 		// setTimeout(() => {
 		// 	console.info(CommandService.instance().commandsToMarkdownTable(this.store().getState()));

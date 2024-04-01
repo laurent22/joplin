@@ -6,6 +6,7 @@ const Datetime = require('react-datetime').default;
 import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+import { focus } from '@joplin/lib/utils/focusHandler';
 interface Props {
 	themeId: number;
 	defaultValue: any;
@@ -67,7 +68,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 	}
 
 	public componentDidUpdate() {
-		if (this.focusInput_ && this.answerInput_.current) this.answerInput_.current.focus();
+		if (this.focusInput_ && this.answerInput_.current) focus('PromptDialog::componentDidUpdate', this.answerInput_.current);
 		this.focusInput_ = false;
 	}
 

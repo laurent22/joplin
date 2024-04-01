@@ -14,6 +14,7 @@ import { reg } from '@joplin/lib/registry';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 export interface OnLoadEvent {
 	formNote: FormNote;
@@ -191,7 +192,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 
 			requestAnimationFrame(() => {
 				if (Setting.value(focusSettingName) === 'title') {
-					if (titleInputRef.current) titleInputRef.current.focus();
+					if (titleInputRef.current) focus('useFormNote::handleAutoFocus', titleInputRef.current);
 				} else {
 					if (editorRef.current) editorRef.current.execCommand({ name: 'editor.focus' });
 				}
