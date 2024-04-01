@@ -4,7 +4,7 @@ import { PluginHtmlContents, PluginStates, ViewInfo } from '@joplin/lib/services
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import usePlugin from '../../hooks/usePlugin';
 import { DialogContentSize, DialogWebViewApi } from '../types';
-import { Button, Surface } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import { themeStyle } from '@joplin/lib/theme';
 import { ButtonSpec, DialogResult } from '@joplin/lib/services/plugins/api/types';
 import { _ } from '@joplin/lib/locale';
@@ -145,7 +145,7 @@ const PluginDialogWebView: React.FC<Props> = props => {
 	}, [setWebViewLoadCount, webViewLoadCount]);
 
 	return (
-		<Surface elevation={1} style={styles.dialog}>
+		<View style={styles.dialog}>
 			<View style={styles.webViewContainer}>
 				<PluginUserWebView
 					style={styles.webView}
@@ -159,7 +159,7 @@ const PluginDialogWebView: React.FC<Props> = props => {
 			<View style={styles.buttonRow}>
 				{buttonComponents}
 			</View>
-		</Surface>
+		</View>
 	);
 };
 

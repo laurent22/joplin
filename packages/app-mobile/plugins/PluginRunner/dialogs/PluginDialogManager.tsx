@@ -32,15 +32,13 @@ const PluginDialogManager: React.FC<Props> = props => {
 			continue;
 		}
 
-		const onDismiss = () => dismissDialog(viewInfo);
-
 		dialogs.push(
 			<Portal
 				key={`${viewInfo.plugin.id}-${viewInfo.view.id}`}
 			>
 				<Modal
 					visible={true}
-					onDismiss={onDismiss}
+					onDismiss={() => dismissDialog(viewInfo)}
 				>
 					<PluginDialogWebView
 						viewInfo={viewInfo}
