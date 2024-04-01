@@ -1,5 +1,3 @@
-#![cfg_attr(feature = "backtrace", feature(backtrace))]
-
 use color_eyre::eyre::Result;
 use color_eyre::eyre::{eyre, ContextCompat};
 use crate::parser::Parser;
@@ -21,7 +19,6 @@ mod parser;
 extern crate console_error_panic_hook;
 extern crate web_sys;
 
-#[cfg(not(feature = "backtrace"))]
 #[wasm_bindgen]
 pub fn oneNoteConverter(input: &str, output: &str) {
     panic::set_hook(Box::new(console_error_panic_hook::hook));
@@ -40,7 +37,6 @@ pub fn oneNoteConverter(input: &str, output: &str) {
 }
 
 fn _main(input_paths: PathBuf, output_dir: PathBuf) -> Result<()> {
-    color_eyre::install()?;
 
     assert!(!output_dir.is_file());
 

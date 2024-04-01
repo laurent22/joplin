@@ -1,7 +1,5 @@
 //! OneNote parsing error handling.
 
-#[cfg(feature = "backtrace")]
-use std::backtrace::Backtrace;
 use std::borrow::Cow;
 use std::{io, string};
 use thiserror::Error;
@@ -19,21 +17,9 @@ pub type Result<T> = std::result::Result<T, Error>;
 #[error("{kind}")]
 pub struct Error {
     kind: ErrorKind,
-
-    #[cfg(feature = "backtrace")]
-    backtrace: Backtrace,
 }
 
 impl From<ErrorKind> for Error {
-    #[cfg(feature = "backtrace")]
-    fn from(kind: ErrorKind) -> Self {
-        Error {
-            kind,
-            backtrace: Backtrace::capture(),
-        }
-    }
-
-    #[cfg(not(feature = "backtrace"))]
     fn from(kind: ErrorKind) -> Self {
         Error { kind }
     }

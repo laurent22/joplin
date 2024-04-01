@@ -325,6 +325,8 @@ ondoctype
 onedrive
 onelink
 onend
+onetoc2
+onenote
 onfoo
 onformat
 onmatch
@@ -334,7 +336,6 @@ onopentagname
 onparserinit
 onprocessinginstruction
 onselfclosingtag
-onenote
 ontext
 ontouch
 oòóôõöøō

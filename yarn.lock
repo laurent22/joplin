@@ -32229,8 +32229,8 @@ __metadata:
 
 "onenote-converter@file:../onenote-converter/pkg::locator=%40joplin%2Flib%40workspace%3Apackages%2Flib":
   version: 0.0.1
-  resolution: "onenote-converter@file:../onenote-converter/pkg#../onenote-converter/pkg::hash=606df9&locator=%40joplin%2Flib%40workspace%3Apackages%2Flib"
-  checksum: da408a26600cea85621a6919d5cf29071d6716af592fd9b034fefd38aa1a853de483a333e13b574a3f0615baf6894dcc49282e08327bc2f7e38a5f92ee17e603
+  resolution: "onenote-converter@file:../onenote-converter/pkg#../onenote-converter/pkg::hash=07e458&locator=%40joplin%2Flib%40workspace%3Apackages%2Flib"
+  checksum: b0a0350f8713b31243ae114001e0374bf77b994d667f0b7e2dedd0da7f2d90da2b96895481b32d9a39ba07303ce892014c70fa31f5cc82b8c2df06dc8d0aecd6
   languageName: node
   linkType: hard
 
