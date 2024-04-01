@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 interface Props {
 	themeId: number;
@@ -32,6 +33,8 @@ class NoteSearchBar extends React.Component<Props> {
 		this.previousButton_click = this.previousButton_click.bind(this);
 		this.nextButton_click = this.nextButton_click.bind(this);
 		this.closeButton_click = this.closeButton_click.bind(this);
+
+		// eslint-disable-next-line no-restricted-properties
 		this.focus = this.focus.bind(this);
 
 		this.backgroundColor = undefined;
@@ -125,7 +128,7 @@ class NoteSearchBar extends React.Component<Props> {
 	}
 
 	public focus() {
-		(this.refs.searchInput as any).focus();
+		focus('NoteSearchBar::focus', this.refs.searchInput as any);
 		(this.refs.searchInput as any).select();
 	}
 

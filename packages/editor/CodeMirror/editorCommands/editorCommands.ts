@@ -11,6 +11,7 @@ import swapLine, { SwapLineDirection } from './swapLine';
 import duplicateLine from './duplicateLine';
 import sortSelectedLines from './sortSelectedLines';
 import { closeSearchPanel, findNext, findPrevious, openSearchPanel, replaceAll, replaceNext } from '@codemirror/search';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 export type EditorCommandFunction = (editor: EditorView, ...args: any[])=> void|any;
 
@@ -22,7 +23,7 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	[EditorCommandType.Undo]: undo,
 	[EditorCommandType.Redo]: redo,
 	[EditorCommandType.SelectAll]: selectAll,
-	[EditorCommandType.Focus]: editor => editor.focus(),
+	[EditorCommandType.Focus]: editor => focus('editorCommands::focus', editor),
 
 	[EditorCommandType.ToggleBolded]: toggleBolded,
 	[EditorCommandType.ToggleItalicized]: toggleItalicized,

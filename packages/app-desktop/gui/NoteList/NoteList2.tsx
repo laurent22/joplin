@@ -24,6 +24,7 @@ import useDragAndDrop from './utils/useDragAndDrop';
 import usePrevious from '../hooks/usePrevious';
 import { itemIsInTrash } from '@joplin/lib/services/trash';
 import Folder from '@joplin/lib/models/Folder';
+import { focus } from '@joplin/lib/utils/focusHandler';
 const { connect } = require('react-redux');
 
 const commands = {
@@ -159,7 +160,9 @@ const NoteList = (props: Props) => {
 					makeItemIndexVisible(i);
 					if (doRefocus) {
 						const ref = itemRefs.current[id];
-						if (ref) ref.focus();
+						if (ref) {
+							focus('NoteList::doRefocus', ref);
+						}
 					}
 					break;
 				}

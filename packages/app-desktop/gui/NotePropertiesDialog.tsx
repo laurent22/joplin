@@ -7,6 +7,7 @@ import Note from '@joplin/lib/models/Note';
 import bridge from '../services/bridge';
 import shim from '@joplin/lib/shim';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import { focus } from '@joplin/lib/utils/focusHandler';
 const Datetime = require('react-datetime').default;
 const { clipboard } = require('electron');
 const formatcoords = require('formatcoords');
@@ -77,7 +78,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 
 	public componentDidUpdate() {
 		if (this.state.editedKey === null) {
-			if (this.okButton.current) this.okButton.current.focus();
+			if (this.okButton.current) focus('NotePropertiesDialog::componentDidUpdate', this.okButton.current);
 		}
 	}
 
@@ -220,7 +221,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 			if ((this.refs.editField as any).openCalendar) {
 				(this.refs.editField as any).openCalendar();
 			} else {
-				(this.refs.editField as any).focus();
+				focus('NotePropertiesDialog::editPropertyButtonClick', (this.refs.editField as any));
 			}
 		}, 100);
 	}
@@ -255,7 +256,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	public async cancelProperty() {
 		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		return new Promise((resolve: Function) => {
-			if (this.okButton.current) this.okButton.current.focus();
+			if (this.okButton.current) focus('NotePropertiesDialog::focus', this.okButton.current);
 			this.setState({
 				editedKey: null,
 				editedValue: null,

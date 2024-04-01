@@ -1,6 +1,7 @@
 import PostMessageService, { MessageResponse, ResponderComponentType } from '@joplin/lib/services/PostMessageService';
 import * as React from 'react';
 import { reg } from '@joplin/lib/registry';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -119,7 +120,7 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 
 	public focus() {
 		if (this.webviewRef_.current) {
-			this.webviewRef_.current.focus();
+			focus('NoteTextViewer::focus', this.webviewRef_.current);
 		}
 	}
 
