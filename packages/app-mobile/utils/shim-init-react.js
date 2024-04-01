@@ -206,11 +206,12 @@ function shimInit() {
 
 		const headers = options.headers ? options.headers : {};
 		const method = options.method ? options.method : 'POST';
+		const body = (options.skip) ? null : (!options.loaded) ? RNFetchBlob.wrap(options.path) : options.body;
 
 		try {
 			const response = await RNFetchBlob.config({
 				trusty: options.ignoreTlsErrors,
-			}).fetch(method, url, headers, RNFetchBlob.wrap(options.path));
+			}).fetch(method, url, headers, body);
 
 			// Returns an object that's roughtly compatible with a standard Response object
 			return {

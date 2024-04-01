@@ -174,21 +174,33 @@ class FileApiDriverDropbox {
 		try {
 			if (options && options.source === 'file') {
 
-				options = { ...options, loaded: true };
-
 				// chunk size can be set dynamically
 				// depending on the platform.
-				const chunkSize = 145 * 1024 * 1024; // 145MB
+				const chunkSize = 5 * 1024 * 1024; // 5MB
 
-				let sessionId;
-				for await (const { index, chunksNo, chunk } of chunkGenerator(options.path, chunkSize)) {
-					let endpoint;
+				const generator = new chunkGenerator(options.path, chunkSize);
+				await generator.init();
+
+				let endpoint = 'files/upload_session/start';
+				options.skip = true;
+				options.loaded = false;
+
+				const response = await this.api().exec('POST', endpoint,
+					null, { 'Dropbox-API-Arg': JSON.stringify({}) }, options);
+				const sessionId = response.session_id;
+
+				while (true) {
+					const { value, done } = await generator.next();
+					if (done) break;
+
+					const { chunk, index, chunksNo } = value;
+
+					options.loaded = true;
+					options.skip = false;
 					const args = {};
 
-					if (index === 0) {
-						endpoint = 'files/upload_session/start';
-						if (chunksNo === 1) args.close = true;
-					} else if (index === chunksNo - 1) {
+
+					if (index === chunksNo - 1) {
 						endpoint = 'files/upload_session/finish';
 						args.cursor = {
 							session_id: sessionId,
@@ -208,9 +220,8 @@ class FileApiDriverDropbox {
 						};
 					}
 
-					const response = await this.api().exec('POST', endpoint, chunk, { 'Dropbox-API-Arg': JSON.stringify(args) }, options);
-
-					if (index === 0) sessionId = response.session_id;
+					await this.api().exec('POST', endpoint, chunk,
+						{ 'Dropbox-API-Arg': JSON.stringify(args) }, options);
 				}
 			} else {
 				await this.api().exec(
@@ -233,11 +244,11 @@ class FileApiDriverDropbox {
 			} else if (this.hasErrorCode_(error, 'payload_too_large')) {
 				throw new JoplinError('Cannot upload because payload size is rejected by Dropbox (payload_too_large)', 'rejectedByTarget');
 			} else if (this.hasErrorCode_(error, 'not_found')) {
-				throw new JoplinError('Cannot upload because session ID is not found', 'rejectedByTarget');
+				throw new JoplinError('Cannot upload because session ID is not found');
 			} else if (this.hasErrorCode_(error, 'closed')) {
-				throw new JoplinError('Cannot upload because upload session is closed', 'rejectedByTarget');
+				throw new JoplinError('Cannot upload because upload session is closed');
 			} else if (this.hasErrorCode_(error, 'incorrect_offset')) {
-				throw new JoplinError('Cannot upload because incorrect offset', 'rejectedByTarget');
+				throw new JoplinError('Cannot upload because incorrect offset');
 			} else {
 				throw error;
 			}

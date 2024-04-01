@@ -132,6 +132,7 @@ class DropboxApi {
 		fetchOptions.method = method;
 		if (options.path) fetchOptions.path = options.path;
 		if (options.loaded) fetchOptions.loaded = options.loaded;
+		if (options.skip) fetchOptions.skip = options.skip;
 		if (body) fetchOptions.body = body;
 
 		const url = path.indexOf('https://') === 0 ? path : `${this.baseUrl(endPointFormat)}/${path}`;

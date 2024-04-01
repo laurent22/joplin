@@ -638,7 +638,7 @@ function shimInit(options: ShimInitOptions = null) {
 
 	shim.uploadBlob = async function(url, options) {
 		if (!options || !options.path) throw new Error('uploadBlob: source file path is missing');
-		if (!options.loaded) {
+		if (!options.skip && !options.loaded) {
 			const content = await fs.readFile(options.path);
 			options = { ...options, body: content };
 		}
