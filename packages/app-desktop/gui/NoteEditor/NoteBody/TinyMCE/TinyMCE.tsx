@@ -1225,6 +1225,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			if ((event.metaKey || event.ctrlKey) && event.shiftKey && event.code === 'KeyV') {
 				event.preventDefault();
 				pasteAsPlainText(null);
+			} else if ((event.metaKey || event.ctrlKey) && event.altKey && event.key === '-') {
+				editor.execCommand('InsertUnorderedList');
 			}
 		}
 
