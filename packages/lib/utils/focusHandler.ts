@@ -5,7 +5,7 @@
 
 import Logger from '@joplin/utils/Logger';
 
-const logger = Logger.create('setFocus');
+const logger = Logger.create('focusHandler');
 
 enum ToggleFocusAction {
 	Focus = 'focus',
