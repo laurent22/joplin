@@ -102,7 +102,7 @@ const PluginBox: React.FC<Props> = props => {
 	};
 
 	const renderRecommendedChip = () => {
-		if (!props.item.manifest._recommended) {
+		if (!props.item.manifest._recommended || !props.isCompatible) {
 			return null;
 		}
 		return <Chip icon='crown' mode='outlined'>{_('Recommended')}</Chip>;
