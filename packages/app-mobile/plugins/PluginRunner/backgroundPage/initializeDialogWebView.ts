@@ -2,6 +2,7 @@ import { DialogWebViewApi, DialogMainProcessApi } from '../types';
 import reportUnhandledErrors from './utils/reportUnhandledErrors';
 import wrapConsoleLog from './utils/wrapConsoleLog';
 import WebViewToRNMessenger from '../../../utils/ipc/WebViewToRNMessenger';
+import getFormData from './utils/getFormData';
 
 let themeCssElement: HTMLStyleElement|null = null;
 
@@ -37,26 +38,7 @@ const initializeDialogWebView = (messageChannelId: string) => {
 			return includeScriptsOrStyles('js', paths);
 		},
 		getFormData: async () => {
-			const forms = document.querySelectorAll('form');
-			if (forms.length === 0) return null;
-
-			const serializeForm = (form: HTMLFormElement) => {
-				const formData = new FormData(form);
-				const serializedData: Record<string, any> = {};
-				for (const key of formData.keys()) {
-					serializedData[key] = formData.get(key);
-				}
-				return serializedData;
-			};
-
-			const result = Object.create(null);
-			let untitledFormId = 0;
-			for (const form of forms) {
-				const formId = form.getAttribute('name') || `form-${untitledFormId++}`;
-				result[formId] = serializeForm(form);
-			}
-
-			return result;
+			return getFormData();
 		},
 		setThemeCss: async (css: string) => {
 			themeCssElement?.remove?.();
