@@ -42,6 +42,14 @@ export default class HtmlToMd {
 				if (node.matches('object')) {
 					return pdfRule.replacement(content, node, {});
 				}
+
+				if (node.isCode) {
+					// Fix: Web clipper has trouble with code blocks on Joplin's website.
+					// See https://github.com/laurent22/joplin/pull/10126#issuecomment-2016523281 .
+					// If isCode, keep empty
+					return '';
+				}
+
 				return '\n\n';
 			};
 		}
