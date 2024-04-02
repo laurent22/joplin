@@ -13,6 +13,7 @@ import Button from '../Button/Button';
 import bridge from '../../services/bridge';
 import shim from '@joplin/lib/shim';
 import FolderIconBox from '../FolderIconBox';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 interface Props {
 	themeId: number;
@@ -46,7 +47,7 @@ export default function(props: Props) {
 	}, [props.dispatch]);
 
 	useEffect(() => {
-		titleInputRef.current.focus();
+		focus('Dialog::titleInputRef', titleInputRef.current);
 
 		setTimeout(() => {
 			titleInputRef.current.select();

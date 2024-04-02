@@ -57,7 +57,7 @@ export interface NoteBodyEditorRef {
 	resetScroll(): void;
 	scrollTo(options: ScrollOptions): void;
 
-	supportsCommand(name: string): boolean;
+	supportsCommand(name: string): boolean|Promise<boolean>;
 	execCommand(command: CommandValue): Promise<void>;
 }
 
@@ -134,6 +134,7 @@ export interface FormNote {
 	markup_language: number;
 	user_updated_time: number;
 	encryption_applied: number;
+	deleted_time: number;
 
 	hasChanged: boolean;
 
@@ -173,6 +174,7 @@ export function defaultFormNote(): FormNote {
 	return {
 		id: '',
 		parent_id: '',
+		deleted_time: 0,
 		title: '',
 		body: '',
 		is_todo: 0,

@@ -2,7 +2,7 @@
 	"extends": "../../tsconfig.json",
     "include": [
         "**/*.ts",
-        "**/*.tsx",
+        "**/*.tsx", "../lib/utils/focusHandler.ts",
 	],
 	"exclude": [
 		"**/node_modules",

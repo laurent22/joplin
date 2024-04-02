@@ -5,14 +5,41 @@ import Setting from '../../../models/Setting';
 import shim from '../../../shim';
 import { Rectangle } from './types';
 
-export interface Implementation {
-	nativeImage: any;
-}
-
 export interface CreateFromBufferOptions {
 	width?: number;
 	height?: number;
 	scaleFactor?: number;
+}
+
+export interface CreateFromPdfOptions {
+	/**
+	 * The first page to export. Defaults to `1`, the first page in
+	 * the document.
+	 */
+	minPage?: number;
+
+	/**
+	 * The number of the last page to convert. Defaults to the last page
+	 * if not given.
+	 *
+	 * If `maxPage` is greater than the number of pages in the PDF, all pages
+	 * in the PDF will be converted to images.
+	 */
+	maxPage?: number;
+
+	scaleFactor?: number;
+}
+
+export interface PdfInfo {
+	pageCount: number;
+}
+
+export interface Implementation {
+	nativeImage: {
+		createFromPath: (path: string)=> Promise<any>;
+		createFromPdf: (path: string, options: CreateFromPdfOptions)=> Promise<any[]>;
+	};
+	getPdfInfo: (path: string)=> Promise<PdfInfo>;
 }
 
 export interface ResizeOptions {
@@ -28,6 +55,14 @@ interface Image {
 	data: any;
 }
 
+const getResourcePath = async (resourceId: string): Promise<string> => {
+	const resource = await Resource.load(resourceId);
+	if (!resource) throw new Error(`No such resource: ${resourceId}`);
+	const resourcePath = await Resource.fullPath(resource);
+	if (!(await shim.fsDriver().exists(resourcePath))) throw new Error(`Could not load resource path: ${resourcePath}`);
+	return resourcePath;
+};
+
 /**
  * Provides imaging functions to resize or process images. You create an image
  * using one of the `createFrom` functions, then use the other functions to
@@ -39,6 +74,7 @@ interface Image {
  * [View the
  * example](https://github.com/laurent22/joplin/blob/dev/packages/app-cli/tests/support/plugins/imaging/src/index.ts)
  *
+ * <span class="platform-desktop">desktop</span>
  */
 export default class JoplinImaging {
 
@@ -79,15 +115,28 @@ export default class JoplinImaging {
 	// }
 
 	public async createFromPath(filePath: string): Promise<Handle> {
-		return this.cacheImage(this.implementation_.nativeImage.createFromPath(filePath));
+		return this.cacheImage(await this.implementation_.nativeImage.createFromPath(filePath));
 	}
 
 	public async createFromResource(resourceId: string): Promise<Handle> {
-		const resource = await Resource.load(resourceId);
-		if (!resource) throw new Error(`No such resource: ${resourceId}`);
-		const resourcePath = await Resource.fullPath(resource);
-		if (!(await shim.fsDriver().exists(resourcePath))) throw new Error(`Could not load resource path: ${resourcePath}`);
-		return this.createFromPath(resourcePath);
+		return this.createFromPath(await getResourcePath(resourceId));
+	}
+
+	public async createFromPdfPath(path: string, options?: CreateFromPdfOptions): Promise<Handle[]> {
+		const images = await this.implementation_.nativeImage.createFromPdf(path, options);
+		return images.map(image => this.cacheImage(image));
+	}
+
+	public async createFromPdfResource(resourceId: string, options?: CreateFromPdfOptions): Promise<Handle[]> {
+		return this.createFromPdfPath(await getResourcePath(resourceId), options);
+	}
+
+	public async getPdfInfoFromPath(path: string): Promise<PdfInfo> {
+		return await this.implementation_.getPdfInfo(path);
+	}
+
+	public async getPdfInfoFromResource(resourceId: string): Promise<PdfInfo> {
+		return this.getPdfInfoFromPath(await getResourcePath(resourceId));
 	}
 
 	public async getSize(handle: Handle) {
@@ -101,9 +150,9 @@ export default class JoplinImaging {
 		return this.cacheImage(resizedImage);
 	}
 
-	public async crop(handle: Handle, rectange: Rectangle) {
+	public async crop(handle: Handle, rectangle: Rectangle) {
 		const image = this.imageByHandle(handle);
-		const croppedImage = image.data.crop(rectange);
+		const croppedImage = image.data.crop(rectangle);
 		return this.cacheImage(croppedImage);
 	}
 
@@ -174,9 +223,15 @@ export default class JoplinImaging {
 	 * Image data is not automatically deleted by Joplin so make sure you call
 	 * this method on the handle once you are done.
 	 */
-	public async free(handle: Handle) {
-		const index = this.images_.findIndex(i => i.handle === handle);
-		if (index >= 0) this.images_.splice(index, 1);
+	public async free(handles: Handle[]|Handle) {
+		if (!Array.isArray(handles)) {
+			handles = [handles];
+		}
+
+		for (const handle of handles) {
+			const index = this.images_.findIndex(i => i.handle === handle);
+			if (index >= 0) this.images_.splice(index, 1);
+		}
 	}
 
 }

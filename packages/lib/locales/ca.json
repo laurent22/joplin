@@ -137,6 +137,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Quant al Joplin"
 	],
@@ -311,6 +314,9 @@
 	"Automatically check for updates": [
 		"Comprova les actualitzacions automàticament"
 	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
+	],
 	"Automatically switch theme to match system theme": [
 		"Canvia de tema automàticament per a coincidir amb el tema del sistema"
 	],
@@ -332,7 +338,7 @@
 	"Browse...": [
 		"Navega..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -460,6 +466,9 @@
 	],
 	"Close dropdown": [
 		"Tanca el desplegable"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Tanca la finestra"
@@ -606,7 +615,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"No s'ha pogut verificar l'estat de compartició d'aquest bloc de notes - s'està avortant. Torneu a provar quan tingueu connexió a Internet."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"No s'ha pogut verificar la identitat: %s"
 	],
 	"Create": [
@@ -744,20 +753,8 @@
 	"Delete note": [
 		"Suprimeix la nota"
 	],
-	"Delete note \"%s\"?": [
-		"Voleu suprimir la nota \"%s\"?"
-	],
-	"Delete note?": [
-		"Voleu suprimir la nota?"
-	],
 	"Delete notebook": [
 		"Suprimeix el bloc de notes"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Voleu suprimir el bloc de notes \"%s\"? \n\nTambé se suprimiran totes les notes i els subblocs d'aquest bloc de notes."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Voleu suprimir el bloc de notes? També se suprimiran totes les notes i els subblocs d'aquest bloc de notes."
 	],
 	"Delete plugin \"%s\"?": [
 		"Voleu suprimir l'extensió \"%s\"?"
@@ -770,9 +767,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
-	],
-	"Delete these %d notes?": [
-		"Voleu suprimir aquestes %d notes?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Voleu suprimir aquesta invitació? El destinatari ja no tindrà accés a aquest quadern compartit."
@@ -915,6 +909,9 @@
 	"Dropbox Login": [
 		"Inicia sessió al Dropbox"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Duplica"
 	],
@@ -989,6 +986,9 @@
 	],
 	"emphasised text": [
 		"text ressaltat"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"Activa"
@@ -1300,6 +1300,9 @@
 	"Grant authorisation": [
 		"Autoritza"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		""
 	],
@@ -1366,6 +1369,9 @@
 	"Idle": [
 		"Ociós"
 	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
+	],
 	"Ignore": [
 		"Ignora"
 	],
@@ -1398,6 +1404,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Per a fer-ho, totes les vostres dades hauran de ser encriptades i sincronitzades, per tant és millor executar-ho durant la nit.\n\nPer a començar, seguiu aquestes instruccions:\n\n1. Sincronitzeu tots els vostres dispositius.\n2. Feu click en \"%s\".\n3. Deixeu-lo executant-se fins que acabi. Mentre s'executa, eviteu fer canvis en cap nota des dels altres dispositius per a evitar els conflictes.\n4. Un cop la sincronització està acabada en aquest dispositiu, sincronitzeu tots els altres dispositius, i deixeu-los executant-se fins que acabin.\n\nImportant: només cal executar això UNA SOLA VEGADA en un dispositiu."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Per a utilitzar la sincronització del sistema de fitxers, cal el vostre permís per a escriure a l'emmagatzematge extern."
@@ -1489,12 +1498,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"Correu electrònic del Joplin Cloud"
-	],
-	"Joplin Cloud password": [
-		"Contrasenya del Joplin Cloud"
-	],
 	"Joplin Export Directory": [
 		"Directori d'exportació del Joplin"
 	],
@@ -1561,6 +1564,9 @@
 	"Later": [
 		"Més tard"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Disposició"
 	],
@@ -1622,12 +1628,6 @@
 	"Log": [
 		"Registre"
 	],
-	"Login": [
-		"Identifiqueu-vos"
-	],
-	"Login below.": [
-		"Identifiqueu-vos baix."
-	],
 	"Login with Dropbox": [
 		"Inicia sessió amb Dropbox"
 	],
@@ -1638,6 +1638,9 @@
 		"Desconnecta"
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1701,6 +1704,9 @@
 		"Mida màxima total"
 	],
 	"Media player, math, diagrams, table of contents": [
+		""
+	],
+	"Minimise": [
 		""
 	],
 	"Missing keys": [
@@ -1829,7 +1835,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"No esteu autenticats amb %s. Proporcioneu les credencials que falten."
 	],
 	"Not downloaded": [
@@ -1976,9 +1982,6 @@
 	"Options": [
 		"Opcions"
 	],
-	"Or create an account.": [
-		"O creeu un compte."
-	],
 	"Ordered list": [
 		"Llista ordenada"
 	],
@@ -2068,6 +2071,9 @@
 	],
 	"Please wait...": [
 		"Espereu..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"Eines de les extensions"
@@ -2480,6 +2486,12 @@
 	"Solarised Light": [
 		"Solaritzat clar"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Alguns elements no s'han pogut desxifrar."
 	],
@@ -2500,6 +2512,9 @@
 	],
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Ordena l'element per <field> (p. ex. títol, actualització o creació)."
+	],
+	"Source": [
+		"Font"
 	],
 	"Source format: %s": [
 		"Format d'origen: %s"
@@ -2693,9 +2708,6 @@
 	"Text editor command": [
 		"Ordre de l'editor de text"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"Gràcies! El vostre compte de Joplin Cloud està preparat per a utilitzar-se."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
@@ -2777,6 +2789,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"El destinatari no s'ha pogut eliminar de la llista. Torneu-ho a provar.\n\nL'error era \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Cal actualitzar l'objectiu de sincronització abans que Joplin pugui sincronitzar. L'operació pot trigar uns minuts a completar-se i cal reiniciar l'aplicació. Per a continuar, feu clic a l'enllaç."
 	],
@@ -2821,9 +2836,6 @@
 	],
 	"There was an error downloading this attachment:": [
 		"Hi ha hagut un error en baixar aquest adjunt:"
-	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"S'ha produït un error configurant el vostre compte de Joplin Cloud. Verifiqueu el vostre correu electrònic i la contrasenya, i proveu de nou. L'error ha sigut:\n\n%s"
 	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Aquests elements es mantindran al dispositiu, però no es pujaran a la destinació de sincronització. Per a poder trobar aquests elements, podeu cercar pel títol o la ID (que es mostra entre claudàtors a sobre)."
@@ -2884,6 +2896,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"Això obrirà una nova pantalla. Voleu desar els canvis actuals?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Això eliminarà el bloc de notes de la vostra col·lecció i no hi tindreu accés al contingut. Voleu continuar?"
@@ -2981,6 +2996,9 @@
 	"Total: %d/%d": [
 		"Total: %d/%d"
 	],
+	"Trash": [
+		""
+	],
 	"Try again": [
 		"Intenta-ho de nou"
 	],
@@ -3016,6 +3034,9 @@
 	],
 	"Undo": [
 		"Desfés"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Bandera desconeguda: %s"
@@ -3211,6 +3232,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"Esteu a punt d'adjuntar una imatge gran (%dx%d pixels). Voleu reduir-la a %d pixels abans d'adjuntar-la?"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"Ara mateix no teniu cap bloc de notes."

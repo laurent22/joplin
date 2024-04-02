@@ -69,7 +69,7 @@ const useCss = (editorTheme: Theme) => {
 			}
 
 			/* Hide the save/close icons on small screens. This isn't done in the upstream
-			   js-draw repository partially beause it isn't as well localized as Joplin
+			   js-draw repository partially because it isn't as well localized as Joplin
 			   (icons can be used to suggest the meaning of a button when a translation is
 			   unavailable). */
 			.toolbar-edge-toolbar:not(.one-row) .toolwidget-tag--save .toolbar-icon,
@@ -314,7 +314,6 @@ const ImageEditor = (props: Props) => {
 
 	return (
 		<ExtendedWebView
-			themeId={props.themeId}
 			html={html}
 			injectedJavaScript={injectedJavaScript}
 			allowFileAccessFromJs={true}

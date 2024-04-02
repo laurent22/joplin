@@ -131,6 +131,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Sobre o Joplin"
 	],
@@ -284,6 +287,9 @@
 	"Auto-pair braces, parenthesis, quotations, etc.": [
 		"Emparelhar automaticamente parênteses curvos, parênteses, citações, etc."
 	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
+	],
 	"Automatically switch theme to match system theme": [
 		"Mudar automaticamente o tema para combinar com o tema do sistema"
 	],
@@ -305,7 +311,7 @@
 	"Browse...": [
 		"Explorar..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -421,6 +427,9 @@
 	],
 	"Close": [
 		"Fechar"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Fechar Janela"
@@ -639,26 +648,11 @@
 	"Delete local data and re-download from sync target": [
 		""
 	],
-	"Delete note \"%s\"?": [
-		"Eliminar nota \"%s\"?"
-	],
-	"Delete note?": [
-		"Eliminar nota?"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Remover caderno \"%s\"?\n\nTodas as notas e sub-cadernos no interior deste caderno também serão eliminados."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Eliminar caderno? Todas as notas e sub-cadernos dentro deste caderno serão também eliminados."
-	],
 	"Delete plugin \"%s\"?": [
 		"Eliminar plugin \"%s\"?"
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
-	],
-	"Delete these %d notes?": [
-		"Eliminar estas %d notas?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		""
@@ -789,6 +783,9 @@
 	"Dropbox Login": [
 		"Acesso Dropbox"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Duplicar"
 	],
@@ -842,6 +839,9 @@
 	],
 	"emphasised text": [
 		"texto realçado"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"Ativar"
@@ -1114,6 +1114,9 @@
 	"Goto Anything...": [
 		"Saltar para..."
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		""
 	],
@@ -1174,6 +1177,9 @@
 	"Idle": [
 		"Ocioso"
 	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
+	],
 	"Ignore": [
 		"Ignorar"
 	],
@@ -1206,6 +1212,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Para o efeito, todo o seu conjunto de dados terá de ser encriptado e sincronizado, pelo que o melhor será executá-lo de um dia para o outro.\n\nPara começar, por favor siga as seguintes instruções:\n\n1. Sincronize todos os seus dispositivos.\n2. Clique em \"%s\".\n3. Deixe executar até completar. Enquanto está a executar, evite alterar qualquer nota nos seus outros dispositivos, de modo a evitar conflitos.\n4. Uma vez terminada a sincronização neste dispositivo, sincronize todos os seus outros dispositivos e deixe-o executar até à sua conclusão.\n\nImportante: só precisa de executar isto UMA VEZ num único dispositivo."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Para utilizar a sincronização do sistema de ficheiros, é necessária a sua permissão para escrita no armazenamento externo."
@@ -1348,6 +1357,9 @@
 	"Later": [
 		"Mais tarde"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Estrutura"
 	],
@@ -1391,12 +1403,6 @@
 	"Log": [
 		"Registo"
 	],
-	"Login": [
-		""
-	],
-	"Login below.": [
-		""
-	],
 	"Login with Dropbox": [
 		"Entrar com o Dropbox"
 	],
@@ -1407,6 +1413,9 @@
 		""
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1443,6 +1452,9 @@
 		""
 	],
 	"Media player, math, diagrams, table of contents": [
+		""
+	],
+	"Minimise": [
 		""
 	],
 	"Missing Master Keys": [
@@ -1562,7 +1574,7 @@
 	"Nord": [
 		"Nórdico"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Não autenticado com %s. Por favor, introduza os dados em falta."
 	],
 	"Not downloaded": [
@@ -1774,6 +1786,9 @@
 	],
 	"Please wait...": [
 		"Por favor, aguarde..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"Ferramentas de plugins"
@@ -2111,6 +2126,12 @@
 	"Solarised Light": [
 		"Claro Solarizado"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Alguns itens não podem ser desencriptados."
 	],
@@ -2131,6 +2152,9 @@
 	],
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Ordena o item por <field> (ex.: title, update_time, created_time)"
+	],
+	"Source": [
+		"Origem"
 	],
 	"Source format: %s": [
 		"Formato da origem: %s"
@@ -2306,9 +2330,6 @@
 	"Text editor command": [
 		"Comando de editor de texto"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		""
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
@@ -2384,6 +2405,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"O alvo de sincronização deve ser atualizado antes que o Joplin possa sincronizar. A operação pode demorar alguns minutos a ser completa e a aplicação precisará de ser reiniciada. Para proceder, por favor clique na ligação."
 	],
@@ -2425,9 +2449,6 @@
 	],
 	"There was an error downloading this attachment:": [
 		"Ocorreu um erro ao transferir este anexo:"
-	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		""
 	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Esses itens permanecerão no dispositivo, mas não serão enviados para o alvo de sincronização. Para encontrar estes itens, procure o título ou o ID (que é apresentado entre parênteses acima)."
@@ -2476,6 +2497,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"Isto abrirá uma nova janela. Guardar as alterações atuais?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		""
@@ -2555,6 +2579,9 @@
 	"Total: %d/%d": [
 		"Total: %d/%d"
 	],
+	"Trash": [
+		""
+	],
 	"Try again": [
 		""
 	],
@@ -2587,6 +2614,9 @@
 	],
 	"Undo": [
 		"Anular"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Etiqueta desconhecida: %s"
@@ -2759,6 +2789,9 @@
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"Está prestes a anexar uma imagem grande (%dx%d pixels). Gostaria de redimensioná-la para %d pixels antes de a anexar?"
 	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
 	"You currently have no notebooks.": [
 		"Atualmente não tem cadernos."
 	],
@@ -2770,6 +2803,9 @@
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Poderá utilizar a ferramenta abaixo para voltar a encriptar os seus dados, caso saiba, por exemplo, que algumas das suas notas são encriptadas com um método de encriptação obsoleto."
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
+		""
 	],
 	"Your choice: ": [
 		"A sua escolha: "

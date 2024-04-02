@@ -8,6 +8,7 @@ import uuid from '@joplin/lib/uuid';
 const { connect } = require('react-redux');
 import Note from '@joplin/lib/models/Note';
 import { AppState } from '../../app.reducer';
+import { blur, focus } from '@joplin/lib/utils/focusHandler';
 const debounce = require('debounce');
 const styled = require('styled-components').default;
 
@@ -117,7 +118,7 @@ function SearchBar(props: Props) {
 
 	const onKeyDown = useCallback((event: any) => {
 		if (event.key === 'Escape') {
-			if (document.activeElement) (document.activeElement as any).blur();
+			if (document.activeElement) blur('SearchBar::onKeyDown', document.activeElement as any);
 			void onExitSearch();
 		}
 	}, [onExitSearch]);
@@ -127,7 +128,7 @@ function SearchBar(props: Props) {
 			void onExitSearch();
 		} else {
 			setSearchStarted(true);
-			props.inputRef.current.focus();
+			focus('SearchBar::onSearchButtonClick', props.inputRef.current);
 			props.dispatch({
 				type: 'FOCUS_SET',
 				field: 'globalSearch',

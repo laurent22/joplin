@@ -8,6 +8,16 @@ export interface CreateResourceFromPathOptions {
 	destinationResourceId?: string;
 }
 
+export interface CreatePdfFromImagesOptions {
+	minPage?: number;
+	maxPage?: number;
+	scaleFactor?: number;
+}
+
+export interface PdfInfo {
+	pageCount: number;
+}
+
 let isTestingEnv_ = false;
 
 // We need to ensure that there's only one instance of React being used by all
@@ -38,7 +48,7 @@ const shim = {
 	proxyAgent: null as any,
 
 	electronBridge: (): any => {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: electronBridge');
 	},
 
 	msleep_: (ms: number) => {
@@ -215,7 +225,7 @@ const shim = {
 	},
 
 	fetch: (_url: string, _options: any = null): any => {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: fetch');
 	},
 
 	fetchText: async (url: string, options: any = null): Promise<string> => {
@@ -225,56 +235,56 @@ const shim = {
 	},
 
 	createResourceFromPath: async (_filePath: string, _defaultProps: ResourceEntity = null, _options: CreateResourceFromPathOptions = null): Promise<ResourceEntity> => {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: createResourceFromPath');
 	},
 
 	FormData: typeof FormData !== 'undefined' ? FormData : null,
 
 	fsDriver: (): FsDriverBase => {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: fsDriver');
 	},
 
 	FileApiDriverLocal: null as any,
 
 	readLocalFileBase64: (_path: string): any => {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: readLocalFileBase64');
 	},
 
 	uploadBlob: (_url: string, _options: any): any => {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: uploadBlob');
 	},
 
 	sjclModule: null as any,
 
 	randomBytes: async (_count: number): Promise<any> => {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: randomBytes');
 	},
 
 	stringByteLength: (_s: string): any => {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: stringByteLength');
 	},
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	detectAndSetLocale: null as Function,
 
 	attachFileToNote: async (_note: any, _filePath: string): Promise<NoteEntity> => {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: attachFileToNote');
 	},
 
 	attachFileToNoteBody: async (_body: string, _filePath: string, _position: number, _options: any): Promise<string> => {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: attachFileToNoteBody');
 	},
 
 	imageToDataUrl: async (_filePath: string, _maxSize = 0): Promise<string> => {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: imageToDataUrl');
 	},
 
 	imageFromDataUrl: async (_imageDataUrl: string, _filePath: string, _options: any = null): Promise<any> => {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: imageFromDataUrl');
 	},
 
 	fetchBlob: function(_url: string, _options: any = null): any {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: fetchBlob');
 	},
 
 	// Does not do OCR -- just extracts existing text from a PDF.
@@ -282,30 +292,34 @@ const shim = {
 		throw new Error('Not implemented: textFromPdf');
 	},
 
-	pdfToImages: async (_pdfPath: string, _outputDirectoryPath: string): Promise<string[]> => {
-		throw new Error('Not implemented');
+	pdfToImages: async (_pdfPath: string, _outputDirectoryPath: string, _options?: CreatePdfFromImagesOptions): Promise<string[]> => {
+		throw new Error('Not implemented: pdfToImages');
+	},
+
+	pdfInfo: async (_pdfPath: string): Promise<PdfInfo> => {
+		throw new Error('Not implemented: pdfInfo');
 	},
 
 	Buffer: null as any,
 
 	openUrl: (_url: string): any => {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: openUrl');
 	},
 
 	httpAgent: (_url: string): any => {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: httpAgent');
 	},
 
 	openOrCreateFile: (_path: string, _defaultContents: any): any => {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: openOrCreateFile');
 	},
 
 	waitForFrame: (): any => {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: waitForFrame');
 	},
 
 	appVersion: (): any => {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: appVersion');
 	},
 
 	injectedJs: (_name: string) => '',
@@ -322,8 +336,15 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
-	showMessageBox: (_message: string, _options: any = null): any => {
+	// Returns the index of the button that was clicked. By default,
+	// 0 -> OK
+	// 1 -> Cancel
+	showMessageBox: (_message: string, _options: any = null): Promise<number> => {
 		throw new Error('Not implemented');
+	},
+
+	showConfirmationDialog: async (message: string): Promise<boolean> => {
+		return await shim.showMessageBox(message) === 0;
 	},
 
 	writeImageToFile: (_image: any, _format: any, _filePath: string): void => {

@@ -14,6 +14,16 @@ const jsDrawBundle = new BundledFile(
 	`${mobileDir}/components/NoteEditor/ImageEditor/js-draw/createJsDrawEditor.ts`,
 );
 
+const pluginBackgroundPageBundle = new BundledFile(
+	'pluginBackgroundPage',
+	`${mobileDir}/plugins/PluginRunner/backgroundPage/pluginRunnerBackgroundPage.ts`,
+);
+
+const noteViewerBundle = new BundledFile(
+	'noteBodyViewerBundle',
+	`${mobileDir}/components/NoteBodyViewer/bundledJs/noteBodyViewerBundle.ts`,
+);
+
 const gulpTasks = {
 	beforeBundle: {
 		fn: () => mkdirp(outputDir),
@@ -24,11 +34,23 @@ const gulpTasks = {
 	buildJsDrawEditor: {
 		fn: () => jsDrawBundle.build(),
 	},
+	buildNoteViewerBundle: {
+		fn: () => noteViewerBundle.build(),
+	},
 	watchCodeMirrorEditor: {
 		fn: () => codeMirrorBundle.startWatching(),
 	},
 	watchJsDrawEditor: {
 		fn: () => jsDrawBundle.startWatching(),
+	},
+	buildPluginBackgroundScript: {
+		fn: () => pluginBackgroundPageBundle.build(),
+	},
+	watchPluginBackgroundScript: {
+		fn: () => pluginBackgroundPageBundle.startWatching(),
+	},
+	watchNoteViewerBundle: {
+		fn: () => noteViewerBundle.startWatching(),
 	},
 	copyWebviewLib: {
 		fn: () => copyJs('webviewLib', `${mobileDir}/../lib/renderers/webviewLib.js`),

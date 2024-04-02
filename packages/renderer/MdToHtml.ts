@@ -49,6 +49,7 @@ const rules: RendererRules = {
 	fountain: require('./MdToHtml/rules/fountain').default,
 	mermaid: require('./MdToHtml/rules/mermaid').default,
 	source_map: require('./MdToHtml/rules/source_map').default,
+	tableHorizontallyScrollable: require('./MdToHtml/rules/tableHorizontallyScrollable').default,
 };
 
 const uslug = require('@joplin/fork-uslug');
@@ -102,7 +103,7 @@ interface PluginAsset {
 }
 
 // Types are a bit of a mess when it comes to plugin assets. Something
-// called "pluginAsset" in this class might refer to sublty different
+// called "pluginAsset" in this class might refer to subtly different
 // types. The logic should be cleaned up before types are added.
 interface PluginAssets {
 	[pluginName: string]: PluginAsset[];
@@ -156,7 +157,7 @@ export interface RuleOptions {
 	// Used by the image editor in the mobile app.
 	editPopupFiletypes?: string[];
 
-	// Shoould be the string representation a function that accepts two arguments:
+	// Should be the string representation a function that accepts two arguments:
 	// the target element to have the popup shown for and the id of the resource to edit.
 	createEditPopupSyntax?: string;
 	destroyEditPopupSyntax?: string;
@@ -548,12 +549,23 @@ export default class MdToHtml implements MarkupRenderer {
 
 		const allRules = { ...rules, ...this.extraRendererRules_ };
 
+		const loadPlugin = (plugin: any, options: any) => {
+			// Handle the case where we're bundling with webpack --
+			// some modules that are commonjs imports in nodejs
+			// act like ES6 imports.
+			if (typeof plugin !== 'function' && plugin.default) {
+				plugin = plugin.default;
+			}
+
+			markdownIt.use(plugin, options);
+		};
+
 		for (const key in allRules) {
 			if (!this.pluginEnabled(key)) continue;
 
 			const rule = allRules[key];
 
-			markdownIt.use(rule.plugin, {
+			loadPlugin(rule.plugin, {
 				context: context,
 				...ruleOptions,
 				...(ruleOptions.plugins[key] ? ruleOptions.plugins[key] : {}),
@@ -563,11 +575,11 @@ export default class MdToHtml implements MarkupRenderer {
 			});
 		}
 
-		markdownIt.use(markdownItAnchor, { slugify: slugify });
+		loadPlugin(markdownItAnchor, { slugify: slugify });
 
 		for (const key in plugins) {
 			if (this.pluginEnabled(key)) {
-				markdownIt.use(plugins[key].module, plugins[key].options);
+				loadPlugin(plugins[key].module, plugins[key].options);
 			}
 		}
 

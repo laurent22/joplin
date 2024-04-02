@@ -7,7 +7,7 @@ import Folder from '@joplin/lib/models/Folder';
 import Tag from '@joplin/lib/models/Tag';
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
-const { themeStyle } = require('../global-style.js');
+import { themeStyle } from '../global-style';
 import { ScreenHeader } from '../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
 import ActionButton from '../ActionButton';
@@ -17,6 +17,7 @@ const { BaseScreenComponent } = require('../base-screen');
 const { BackButtonService } = require('../../services/back-button.js');
 import { AppState } from '../../utils/types';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import { itemIsInTrash } from '@joplin/lib/services/trash';
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids.js');
 
 class NotesScreenComponent extends BaseScreenComponent<any> {
@@ -237,6 +238,8 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		const thisComp = this;
 
 		const makeActionButtonComp = () => {
+			if ((this.props.notesParentType === 'Folder' && itemIsInTrash(parent)) || !Folder.atLeastOneRealFolderExists(this.props.folders)) return null;
+
 			const getTargetFolderId = async () => {
 				if (!buttonFolderId && isAllNotes) {
 					return (await Folder.defaultFolder()).id;

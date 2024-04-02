@@ -141,13 +141,15 @@ export default class JoplinWorkspace {
 	/**
 	 * Called just before the editor context menu is about to open. Allows
 	 * adding items to it.
+	 *
+	 * <span class="platform-desktop">desktop</span>
 	 */
 	public filterEditorContextMenu(handler: FilterHandler<EditContextMenuFilterObject>) {
 		eventManager.filterOn('editorContextMenu', handler);
 	}
 
 	/**
-	 * Gets the currently selected note
+	 * Gets the currently selected note. Will be `null` if no note is selected.
 	 */
 	public async selectedNote(): Promise<any> {
 		const noteIds = this.store.getState().selectedNoteIds;

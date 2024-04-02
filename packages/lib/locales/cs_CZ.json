@@ -137,6 +137,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"O Joplinu"
 	],
@@ -311,6 +314,9 @@
 	"Automatically check for updates": [
 		"Automatická kontrola aktualizací"
 	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
+	],
 	"Automatically switch theme to match system theme": [
 		"Automaticky přepnout téma vzhledu podle nastavení systému"
 	],
@@ -332,7 +338,7 @@
 	"Browse...": [
 		"Procházet..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -457,6 +463,9 @@
 	],
 	"Close dropdown": [
 		"Zavřít rozevírací seznam"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Zavřít okno"
@@ -730,18 +739,6 @@
 	"Delete local data and re-download from sync target": [
 		"Smazat místní data a stáhnout je z cíle synchronizace"
 	],
-	"Delete note \"%s\"?": [
-		"Smazat poznámku \"%s\"?"
-	],
-	"Delete note?": [
-		"Smazat poznámku?"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Smazat zápisník \"%s\"?\n\nBudou smazány i všechny poznámky a pod-zápisníky v tomto zápisníku."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Smazat zápisník? Budou smazány i všechny poznámky a pod-zápisníky v něm obsažené."
-	],
 	"Delete plugin \"%s\"?": [
 		"Smazat rozšíření \"%s\"?"
 	],
@@ -753,9 +750,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
-	],
-	"Delete these %d notes?": [
-		"Smazat tyto \"%d\" poznámky?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Opravdu chcete smazat tuto pozvánku? Příjemce už nebude mít přístup k tomuto sdílenému zápisníku."
@@ -895,6 +889,9 @@
 	"Dropbox Login": [
 		"Dropbox přihlášení"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Duplikovat"
 	],
@@ -966,6 +963,9 @@
 	],
 	"emphasised text": [
 		"zvýrazněný text"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"Zapnout"
@@ -1269,6 +1269,9 @@
 	"Grant authorisation": [
 		"Udělení povolení"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"Záhlaví %d"
 	],
@@ -1332,6 +1335,9 @@
 	"Idle": [
 		"Nečinný"
 	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
+	],
 	"Ignore": [
 		"Ignorovat"
 	],
@@ -1364,6 +1370,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Aby to bylo možné, bude nutné zašifrovat a synchronizovat všechna vaše data, takže je nejlepší celou akci spustit přes noc.\n\nPostupujte podle těchto pokynů:\n\n1. Proveďte synchronizaci všech svých zařízení.\n2. Klepněte na \"%s\".\n3. Nechte vše doběhnout do konce. Dokud operace poběži, vyhněte se změnám poznámek na ostatních zařízeních, aby nedocházelo ke konfliktům.\n4. Až bude synchronizace na tomto zařízení dokončena, synchronizujte všechna ostatní zařízení a nechejte na nich synchronizaci doběhnout do konce.\n\nDůležité: toto stačí spustit pouze JEDNOU a na jednom zařízení."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Pro použití synchronizace systému souborů je vyžadováno vaše oprávnění k zápisu do externího úložiště."
@@ -1455,12 +1464,6 @@
 	"Joplin Cloud": [
 		"Joplin cloud"
 	],
-	"Joplin Cloud email": [
-		"E-mailová adresa Joplin cloudu"
-	],
-	"Joplin Cloud password": [
-		"Heslo Joplin cloudu"
-	],
 	"Joplin Export Directory": [
 		"Složka pro export"
 	],
@@ -1527,6 +1530,9 @@
 	"Later": [
 		"Později"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Rozložení"
 	],
@@ -1586,12 +1592,6 @@
 	"Log": [
 		"Log"
 	],
-	"Login": [
-		"Přihlášení"
-	],
-	"Login below.": [
-		"Přihlaste se níže."
-	],
 	"Login with Dropbox": [
 		"Přihlášení Dropbox"
 	],
@@ -1602,6 +1602,9 @@
 		"Odhlásit se"
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1665,6 +1668,9 @@
 		"Maximální celková velikost"
 	],
 	"Media player, math, diagrams, table of contents": [
+		""
+	],
+	"Minimise": [
 		""
 	],
 	"Missing keys": [
@@ -1793,7 +1799,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Nepřihlášeno k %s. Prosím vyplňte chybějící přihlašovací údaje."
 	],
 	"Not downloaded": [
@@ -1940,9 +1946,6 @@
 	"Options": [
 		"Nastavení"
 	],
-	"Or create an account.": [
-		"Nebo si vytvořte účet."
-	],
 	"Ordered list": [
 		"Seznam objednávek"
 	],
@@ -2032,6 +2035,9 @@
 	],
 	"Please wait...": [
 		"Počkejte prosím..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"Nástroje rozšíření"
@@ -2444,6 +2450,12 @@
 	"Solarised Light": [
 		"Solarised Light"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Některé položky nelze dešifrovat."
 	],
@@ -2464,6 +2476,9 @@
 	],
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Řadit položky podle <pole> (např. title, updated_time, created_time)."
+	],
+	"Source": [
+		"Zdroj"
 	],
 	"Source format: %s": [
 		"Zdrojový formát: %s"
@@ -2657,9 +2672,6 @@
 	"Text editor command": [
 		"Textový editor"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"Děkujeme! Váš účet Joplin Cloud je nyní nastaven a připraven k použití."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Aktivní profil nelze odstranit. Přepněte na jiný profil a zkuste to znovu."
 	],
@@ -2741,6 +2753,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Příjemce nebylo možné ze seznamu odstranit. Zkuste to prosím znovu.\n\nChyba byla: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Před synchronizací je třeba upgradovat její cíl. Dokončení operace může trvat několik minut a je třeba aplikaci restartovat. Chcete-li pokračovat, klepněte na odkaz."
 	],
@@ -2786,9 +2801,6 @@
 	"There was an error downloading this attachment:": [
 		"Při stahování této přílohy došlo k chybě:"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"Při nastavování vašeho účtu Joplin Cloud došlo k chybě. Ověřte prosím svůj e-mail a heslo a zkuste to znovu. Chyba:\n\n%s"
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Tyto položky zůstanou na tomto zařízení, ale nebudou uploadovány na cíl synchronizace. Pro přístup k těmto souborům hledejte jejich název nebo ID (v hranatých závorkách)."
 	],
@@ -2833,6 +2845,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"Toto otevře nové okno. Chcete uložit současné změny?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Tím sešit odstraní z vaší sbírky a vy již nebudete mít přístup k jeho obsahu. Chcete pokračovat?"
@@ -2930,6 +2945,9 @@
 	"Total: %d/%d": [
 		"Celkem: %d/%d"
 	],
+	"Trash": [
+		""
+	],
 	"Try again": [
 		"Zkusit znovu"
 	],
@@ -2965,6 +2983,9 @@
 	],
 	"Undo": [
 		"Zpět"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Neznámý flag: %s"
@@ -3154,6 +3175,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"Chystáte se připojit velký obrázek (%dx%d pixelů). Chcete jej před připojením zmenšit na %d pixelů?"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"Momentálně nemáte žádné zápisníky."

@@ -49,27 +49,27 @@ const blockQuoteDecoration = Decoration.line({
 });
 
 const header1LineDecoration = Decoration.line({
-	attributes: { class: 'cm-h1 cm-headerLine' },
+	attributes: { class: 'cm-h1 cm-headerLine cm-header' },
 });
 
 const header2LineDecoration = Decoration.line({
-	attributes: { class: 'cm-h2 cm-headerLine' },
+	attributes: { class: 'cm-h2 cm-headerLine cm-header' },
 });
 
 const header3LineDecoration = Decoration.line({
-	attributes: { class: 'cm-h3 cm-headerLine' },
+	attributes: { class: 'cm-h3 cm-headerLine cm-header' },
 });
 
 const header4LineDecoration = Decoration.line({
-	attributes: { class: 'cm-h4 cm-headerLine' },
+	attributes: { class: 'cm-h4 cm-headerLine cm-header' },
 });
 
 const header5LineDecoration = Decoration.line({
-	attributes: { class: 'cm-h5 cm-headerLine' },
+	attributes: { class: 'cm-h5 cm-headerLine cm-header' },
 });
 
 const header6LineDecoration = Decoration.line({
-	attributes: { class: 'cm-h6 cm-headerLine' },
+	attributes: { class: 'cm-h6 cm-headerLine cm-header' },
 });
 
 const tableHeaderDecoration = Decoration.line({
@@ -131,7 +131,7 @@ const computeDecorations = (view: EditorView) => {
 	const decorations: DecorationDescription[] = [];
 
 	// Add a decoration to all lines between the document position [from] up to
-	// and includeing the position [to].
+	// and including the position [to].
 	const addDecorationToLines = (from: number, to: number, decoration: Decoration) => {
 		let pos = from;
 		while (pos <= to) {

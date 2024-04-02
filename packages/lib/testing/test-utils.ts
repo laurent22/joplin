@@ -192,6 +192,7 @@ Setting.setConstant('appId', 'net.cozic.joplintest-cli');
 Setting.setConstant('appType', 'cli');
 Setting.setConstant('tempDir', baseTempDir);
 Setting.setConstant('cacheDir', baseTempDir);
+Setting.setConstant('resourceDir', baseTempDir);
 Setting.setConstant('pluginDataDir', `${profileDir}/profile/plugin-data`);
 Setting.setConstant('profileDir', profileDir);
 Setting.setConstant('rootProfileDir', rootProfileDir);
@@ -850,7 +851,7 @@ async function createNTestNotes(n: number, folder: any, tagIds: string[] = null,
 	const notes = [];
 	for (let i = 0; i < n; i++) {
 		const title_ = n > 1 ? `${title}${i}` : title;
-		const note = await Note.save({ title: title_, parent_id: folder.id, is_conflict: 0 });
+		const note = await Note.save({ title: title_, parent_id: folder.id, is_conflict: 0, deleted_time: 0 });
 		notes.push(note);
 		await time.msleep(10);
 	}
@@ -1040,6 +1041,11 @@ const simulateReadOnlyShareEnv = (shareId: string) => {
 export const newOcrService = () => {
 	const driver = new OcrDriverTesseract({ createWorker });
 	return new OcrService(driver);
+};
+
+export const mockMobilePlatform = (platform: string) => {
+	shim.mobilePlatform = () => platform;
+	shim.isNode = () => false;
 };
 
 export { supportDir, createNoteAndResource, createTempFile, createTestShareData, simulateReadOnlyShareEnv, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

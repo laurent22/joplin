@@ -8,6 +8,7 @@ import { EditorCommandType } from '@joplin/editor/types';
 import Logger from '@joplin/utils/Logger';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import { MarkupLanguage } from '@joplin/renderer';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 const logger = Logger.create('CodeMirror 6 commands');
 
@@ -88,7 +89,7 @@ const useEditorCommands = (props: Props) => {
 			},
 			textLink: async () => {
 				const url = await dialogs.prompt(_('Insert Hyperlink'));
-				editorRef.current.focus();
+				focus('useEditorCommands::textLink', editorRef.current);
 				if (url) wrapSelectionWithStrings(editorRef.current, '[', `](${url})`);
 			},
 			insertText: (value: any) => editorRef.current.insertText(value),
@@ -107,8 +108,8 @@ const useEditorCommands = (props: Props) => {
 				if ((editorRef.current as any)[value.name]) {
 					const result = (editorRef.current as any)[value.name](...value.args);
 					return result;
-				} else if (editorRef.current.commandExists(value.name)) {
-					const result = editorRef.current.execCommand(value.name);
+				} else if (editorRef.current.supportsCommand(value.name)) {
+					const result = editorRef.current.execCommand(value.name, ...value.args);
 					return result;
 				} else {
 					logger.warn('CodeMirror execCommand: unsupported command: ', value.name);
@@ -116,7 +117,7 @@ const useEditorCommands = (props: Props) => {
 			},
 			'editor.focus': () => {
 				if (props.visiblePanes.indexOf('editor') >= 0) {
-					editorRef.current.editor.focus();
+					focus('useEditorCommands::editor.focus', editorRef.current.editor);
 				} else {
 					// If we just call focus() then the iframe is focused,
 					// but not its content, such that scrolling up / down
@@ -125,7 +126,7 @@ const useEditorCommands = (props: Props) => {
 				}
 			},
 			search: () => {
-				editorRef.current.execCommand(EditorCommandType.ShowSearch);
+				return editorRef.current.execCommand(EditorCommandType.ShowSearch);
 			},
 		};
 	}, [

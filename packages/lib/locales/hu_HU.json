@@ -131,6 +131,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Joplin névjegy"
 	],
@@ -290,6 +293,9 @@
 	"Automatically check for updates": [
 		"Automatikus frissítés keresés"
 	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
+	],
 	"Automatically switch theme to match system theme": [
 		"Automatikusan kapcsoljon olyan témára, ami egyezik a rendszer témával"
 	],
@@ -311,7 +317,7 @@
 	"Browse...": [
 		"Tallózás..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -427,6 +433,9 @@
 	],
 	"Close": [
 		"Bezár"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Ablak bezárása"
@@ -693,26 +702,11 @@
 	"Delete local data and re-download from sync target": [
 		""
 	],
-	"Delete note \"%s\"?": [
-		"\"%s\" jegyzet törlése?"
-	],
-	"Delete note?": [
-		"Jegyzet törlése?"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"\"%s\" jegyzetfüzet törlése?\n\nA füzetben található minden jegyzet és aljegyzetfüzet is törlődni fog."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Jegyzetfüzet törlése? A füzetben található minden jegyzet és aljegyzetfüzet is törlődni fog."
-	],
 	"Delete plugin \"%s\"?": [
 		"\"%s\" bővítmény törlése?"
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
-	],
-	"Delete these %d notes?": [
-		"%d jegyzetek törlése?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		""
@@ -846,6 +840,9 @@
 	"Dropbox Login": [
 		"Dropbox Login"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Duplikált"
 	],
@@ -905,6 +902,9 @@
 	],
 	"emphasised text": [
 		"kiemelt szöveg"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"Engedélyez"
@@ -1192,6 +1192,9 @@
 	"Grant authorisation": [
 		"Engedély megadása"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		""
 	],
@@ -1249,6 +1252,9 @@
 	"Idle": [
 		"Tétlen"
 	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
+	],
 	"Ignore": [
 		"Mellőz"
 	],
@@ -1281,6 +1287,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Ahhoz hogy megcsinálja, a teljes adat készletét titkosítani és szinkronizálni kell, emiatt a legjobb ha ez éjszaka történik.\n\nAz indításhoz kövesse a következő utasításokat:\n\n1. Szinkronizálja az összes eszközét.\n2. Kattintson a \"%s\"-ra.\n3. Futtassa befejezésig. Amíg fut, kerülje bármelyik jegyzete módosítását a többi eszközén, a konfliktusok elkerüléséhez.\n4. Amint a szinkronizálás kész ezen az eszközön, szinkronizálja az összes többi eszközét és futtassa befejezésig.\n\nFontos: ezt egy eszközön csak EGYSZER kell futtatnia."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		""
@@ -1366,12 +1375,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"Joplin Cloud email"
-	],
-	"Joplin Cloud password": [
-		"Joplin Cloud jelszó"
-	],
 	"Joplin Export Directory": [
 		"Joplin Export Könyvtár"
 	],
@@ -1432,6 +1435,9 @@
 	"Later": [
 		"Később"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Elrendezés"
 	],
@@ -1478,12 +1484,6 @@
 	"Log": [
 		"Napló"
 	],
-	"Login": [
-		"Belépés"
-	],
-	"Login below.": [
-		"Belépés."
-	],
 	"Login with Dropbox": [
 		"Belép Dropbox-al"
 	],
@@ -1494,6 +1494,9 @@
 		"Kilépés"
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1542,6 +1545,9 @@
 		""
 	],
 	"Media player, math, diagrams, table of contents": [
+		""
+	],
+	"Minimise": [
 		""
 	],
 	"Missing keys": [
@@ -1664,7 +1670,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Nincs hitelesítve a %s-val. Kérem adja meg a hiányzó hitelesítő adatokat."
 	],
 	"Not downloaded": [
@@ -1802,9 +1808,6 @@
 	"Options": [
 		"Beállítások"
 	],
-	"Or create an account.": [
-		"Vagy hozzon létre új felhasználót."
-	],
 	"Other applications...": [
 		"Más applikációk…"
 	],
@@ -1891,6 +1894,9 @@
 	],
 	"Please wait...": [
 		"Kérem várjon..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"Bővítmény eszközök"
@@ -2264,6 +2270,12 @@
 	"Solarised Light": [
 		"Solarised Light"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Néhány elemet nem lehet visszafejteni."
 	],
@@ -2284,6 +2296,9 @@
 	],
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Elem rendezése <field> szerint (pl. title, updated_time, created_time)"
+	],
+	"Source": [
+		"Forrás"
 	],
 	"Source format: %s": [
 		"Forrás formátum: %s"
@@ -2474,9 +2489,6 @@
 	"Text editor command": [
 		"Szövegszerkesztő parancs"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		""
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
@@ -2555,6 +2567,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"A szinkronizációs célt frissíteni kell a Joplin szinkronizációhoz. Ez a művelet, igénybe vehet pár percet és az alkalmazást újra kell indítani. A folytatáshoz kattintson a lenti linkre."
 	],
@@ -2596,9 +2611,6 @@
 	],
 	"There was an error downloading this attachment:": [
 		"Hiba történt ezen csatolmány letöltése közben:"
-	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		""
 	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		""
@@ -2647,6 +2659,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"Ez új képernyőt nyit. Mentsem az aktuális változásokat?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		""
@@ -2729,6 +2744,9 @@
 	"Total: %d/%d": [
 		"Összes: %d/%d"
 	],
+	"Trash": [
+		""
+	],
 	"Try again": [
 		"Próbálja újra"
 	],
@@ -2761,6 +2779,9 @@
 	],
 	"Undo": [
 		"Visszavonás"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Ismeretlen jelző %s"
@@ -2942,6 +2963,9 @@
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		""
 	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
 	"You currently have no notebooks.": [
 		"Önnek nincs egyetlen jegyzetfüzete sem."
 	],
@@ -2953,6 +2977,9 @@
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Használhatja a lenti eszközt, hogy újra titkosítsa az adatait, ha például tudja, hogy néhány jegyzete elavult titkosítási módot használ."
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
+		""
 	],
 	"Your choice: ": [
 		"Ön választása: "

@@ -131,6 +131,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Om Joplin"
 	],
@@ -296,6 +299,9 @@
 	"Automatically check for updates": [
 		"Se etter oppdateringer automatisk"
 	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
+	],
 	"Automatically switch theme to match system theme": [
 		"Bytt tema automatisk for å matche systemtema"
 	],
@@ -317,7 +323,7 @@
 	"Browse...": [
 		"Utforsk..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -433,6 +439,9 @@
 	],
 	"Close": [
 		"Lukk"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Lukk vindu"
@@ -693,26 +702,11 @@
 	"Delete local data and re-download from sync target": [
 		"Slett lokale date og last ned på nytt fra synkroniseringsmålet"
 	],
-	"Delete note \"%s\"?": [
-		"Slette notatet \"%s\"?"
-	],
-	"Delete note?": [
-		"Slett notat?"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Slette notatboka \"%s\"?\n\nAlle notater og underliggende notatbøker i denne notatboken vil også bli slettet."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Slette notatbok? Alle notater og underliggende notatbøker i denne notatboken vil også bli slettet."
-	],
 	"Delete plugin \"%s\"?": [
 		"Slett utvidelse \"%s\"?"
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
-	],
-	"Delete these %d notes?": [
-		"Slett disse %d notatene?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Slett invitasjonen? Mottaker vil ikke lenger ha tilgang til denne delte notatboka."
@@ -849,6 +843,9 @@
 	"Dropbox Login": [
 		"Innlogging med Dropbox"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Dupliser"
 	],
@@ -908,6 +905,9 @@
 	],
 	"emphasised text": [
 		"framhevet tekst"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"Aktiver"
@@ -1198,6 +1198,9 @@
 	"Grant authorisation": [
 		"Tillat autorisasjon"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		""
 	],
@@ -1249,6 +1252,9 @@
 	"Idle": [
 		"Inaktiv"
 	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
+	],
 	"Ignore": [
 		"Ignorer"
 	],
@@ -1281,6 +1287,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"For å gjøre dette, må hele ditt datasett krypteres og synkroniseres, derfor er det best å gjøre dette over natten.\n\nFølg instruksjonene for å starte :\n\n1. Synkroniser alle dine enheter.\n2. Klikk \"%s\".\n3. La prosessen fullføre. Mens den kjører, unngå endringer på notatene dine på andre enheter, for å unngå konflikt.\n4. Når synkroniseringen er fullført på denne enheten så synkroniserer du dine andre enheter og lar dem fullføre prosessen.\n\nViktig: Du trenger kun å gjøre dette ÉN gang per enhet."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"For å kunne bruke filsystemsynkronisering behøves din tillatelse til å kunne skrive til ekstern lagring."
@@ -1369,12 +1378,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"Joplin Cloud-e-post"
-	],
-	"Joplin Cloud password": [
-		"Joplin Cloud-passord"
-	],
 	"Joplin Export Directory": [
 		"Joplin-eksportert katalog"
 	],
@@ -1441,6 +1444,9 @@
 	"Later": [
 		"Senere"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Visning"
 	],
@@ -1490,12 +1496,6 @@
 	"Log": [
 		"Logg"
 	],
-	"Login": [
-		"Innlogging"
-	],
-	"Login below.": [
-		"Innlogging nedenfor."
-	],
 	"Login with Dropbox": [
 		"Innlogging med Dropbox"
 	],
@@ -1506,6 +1506,9 @@
 		"Logg ut"
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1557,6 +1560,9 @@
 		""
 	],
 	"Media player, math, diagrams, table of contents": [
+		""
+	],
+	"Minimise": [
 		""
 	],
 	"Missing keys": [
@@ -1679,7 +1685,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Ikke autentisert med %s. Fyll inn manglende detaljer."
 	],
 	"Not downloaded": [
@@ -1817,9 +1823,6 @@
 	"Options": [
 		"Generelle innstillinger"
 	],
-	"Or create an account.": [
-		"Eller opprett en konto."
-	],
 	"Other applications...": [
 		"Andre programmer…"
 	],
@@ -1906,6 +1909,9 @@
 	],
 	"Please wait...": [
 		"Vennligst vent..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"Utvidelsesverktøy"
@@ -2279,6 +2285,12 @@
 	"Solarised Light": [
 		"Solarisert lys"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Noen elementer kan ikke dekrypteres."
 	],
@@ -2299,6 +2311,9 @@
 	],
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Sorter etter <field> (f.eks. title, updated_time, created_time)."
+	],
+	"Source": [
+		"Kilde"
 	],
 	"Source format: %s": [
 		"Kildeformat: %s"
@@ -2483,9 +2498,6 @@
 	"Text editor command": [
 		"Teksteditorkommando"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"Takk skal du ha! Joplin Cloud-kontoen din er nå konfigurert og klar til bruk."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
@@ -2567,6 +2579,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Mottakeren kunne ikke fjernes fra listen. Prøv på nytt.\n\nFeilen var: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Synkroniseringsmålet må være oppgradert før Joplin kan synkronisere. Det kan ta noen minutter å fullføre operasjonen og applikasjonen trenger å startes på nytt. Trykk på lenken for å fortsette."
 	],
@@ -2611,9 +2626,6 @@
 	],
 	"There was an error downloading this attachment:": [
 		"Det oppstod en feil ved nedlastingen av dette vedlegget:"
-	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"Det oppsto en feil under oppsett av Joplin Cloud-kontoen din. Bekreft e-postadressen og passordet ditt og prøv igjen. Feilen var:\n\n%s"
 	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Disse elementene blir værende på enheten, men vil ikke bli lastet opp til synkroniseringsmålet. For å finne disse elementene, enten søk etter tittel eller ID (som vises i parentes over)."
@@ -2662,6 +2674,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"Dette vil åpne et nytt vindu. Vil du lagre nåværende endringer?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Dette vil fjerne notatblokken fra samlingen din, og du vil ikke lenger ha tilgang til innholdet. Ønsker du å fortsette?"
@@ -2753,6 +2768,9 @@
 	"Total: %d/%d": [
 		"Totalt: %d/%d"
 	],
+	"Trash": [
+		""
+	],
 	"Try again": [
 		"Forsøk igjen"
 	],
@@ -2785,6 +2803,9 @@
 	],
 	"Undo": [
 		"Angre"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Ukjent flagg: %s"
@@ -2971,6 +2992,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"Du er i ferd med å legge ved et stort bilde (%dx%d piksler). Ønsker du å skalere dette ned til %d piksler før du legger det ved?"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"Du har ingen notatbøker."

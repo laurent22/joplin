@@ -2,6 +2,7 @@ import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/
 import { _ } from '@joplin/lib/locale';
 import layoutItemProp from '../../ResizableLayout/utils/layoutItemProp';
 import { AppState } from '../../../app.reducer';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 export const declaration: CommandDeclaration = {
 	name: 'focusElementSideBar',
@@ -24,10 +25,10 @@ export const runtime = (props: RuntimeProps): CommandRuntime => {
 				const item = props.getSelectedItem();
 				if (item) {
 					const anchorRef = props.anchorItemRefs.current[item.type][item.id];
-					if (anchorRef) anchorRef.current.focus();
+					if (anchorRef) focus('focusElementSideBar1', anchorRef.current);
 				} else {
 					const anchorRef = props.getFirstAnchorItemRef('folder');
-					if (anchorRef) anchorRef.current.focus();
+					if (anchorRef) focus('focusElementSideBar2', anchorRef.current);
 				}
 			}
 		},

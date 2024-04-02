@@ -2,8 +2,9 @@ import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
 import bridge from '../../../services/bridge';
 
-const canManuallySortNotes = (notesParentType: string, noteSortOrder: string) => {
+const canManuallySortNotes = (notesParentType: string, noteSortOrder: string, selectedFolderInTrash: boolean) => {
 	if (notesParentType !== 'Folder') return false;
+	if (selectedFolderInTrash) return false;
 
 	if (noteSortOrder !== 'order') {
 		const doIt = bridge().showConfirmMessageBox(_('To manually sort the notes, the sort order must be changed to "%s" in the menu "%s" > "%s"', _('Custom order'), _('View'), _('Sort notes by')), {

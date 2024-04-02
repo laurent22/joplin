@@ -13,6 +13,7 @@ import htmlpack from '@joplin/htmlpack';
 const { themeStyle } = require('../../theme');
 const { escapeHtml } = require('../../string-utils.js');
 import { assetsToHeaders } from '@joplin/renderer';
+import getPluginSettingValue from '../plugins/utils/getPluginSettingValue';
 
 export default class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 
@@ -112,6 +113,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 			const result = await this.markupToHtml_.render(item.markup_language, bodyMd, this.style_, {
 				resources: this.resources_,
 				plainResourceRendering: true,
+				settingValue: getPluginSettingValue,
 			});
 			const noteContent = [];
 			if (item.title) noteContent.push(`<div class="exported-note-title">${escapeHtml(item.title)}</div>`);

@@ -273,6 +273,11 @@ export const gitCurrentBranch = async (): Promise<string> => {
 };
 
 export async function githubUsername(email: string, name: string) {
+	if (email.endsWith('@users.noreply.github.com')) {
+		const splitted = email.split('@')[0].split('+');
+		return splitted.length === 1 ? splitted[0] : splitted[1];
+	}
+
 	const cache = await loadGitHubUsernameCache();
 	const cacheKey = `${email}:${name}`;
 	if (cacheKey in cache) return cache[cacheKey];
@@ -331,7 +336,7 @@ export function githubOauthToken() {
 // Note that the GitHub API releases/latest is broken on the joplin-android repo
 // as of Nov 2021 (last working on 3 November 2021, first broken on 19
 // November). It used to return the latest **published** release but now it
-// retuns... some release, always the same one, but not the latest one. GitHub
+// returns... some release, always the same one, but not the latest one. GitHub
 // says that nothing has changed on the API, although it used to work. So since
 // we can't use /latest anymore, we need to fetch all the releases to find the
 // latest published one.

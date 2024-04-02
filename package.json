@@ -29,7 +29,6 @@
     "crowdin": "crowdin",
     "crowdinDownload": "crowdin download",
     "crowdinUpload": "crowdin upload",
-    "cspell": "cspell",
     "dependencyTree": "madge",
     "generateTypes": "node packages/tools/generate-database-types",
     "linkChecker": "linkchecker https://joplinapp.org/ && linkchecker --check-extern https://joplinapp.org/api/references/plugin_api/classes/joplin.html",
@@ -65,7 +64,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "yarn lint-staged"
     }
   },
   "devDependencies": {
@@ -97,7 +96,7 @@
     "eslint-plugin-github": "4.10.1",
     "http-server": "14.1.1",
     "node-gyp": "9.4.1",
-    "nodemon": "3.0.2"
+    "nodemon": "3.0.3"
   },
   "packageManager": "yarn@3.6.4",
   "resolutions": {
@@ -108,6 +107,8 @@
     "react-native@0.71.10": "patch:react-native@npm%3A0.71.10#./.yarn/patches/react-native-animation-fix/react-native-npm-0.71.10-f9c32562d8.patch",
     "nanoid": "patch:nanoid@npm%3A3.3.7#./.yarn/patches/nanoid-npm-3.3.7-98824ba130.patch",
     "pdfjs-dist": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch",
-    "@react-native-community/slider@4.4.4": "patch:@react-native-community/slider@npm%3A4.4.4#./.yarn/patches/@react-native-community-slider-npm-4.4.4-d78e472f48.patch"
+    "@react-native-community/slider": "patch:@react-native-community/slider@npm%3A4.4.4#./.yarn/patches/@react-native-community-slider-npm-4.4.4-d78e472f48.patch",
+    "husky": "patch:husky@npm%3A3.1.0#./.yarn/patches/husky-npm-3.1.0-5cc13e4e34.patch",
+    "chokidar@^2.0.0": "3.5.3"
   }
 }

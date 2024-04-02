@@ -12,6 +12,12 @@ import Logger from '@joplin/utils/Logger';
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import ResourceService from '../services/ResourceService';
 import { LoadOptions } from './utils/types';
+import ActionLogger from '../utils/ActionLogger';
+
+import { getTrashFolder } from '../services/trash';
+import getConflictFolderId from './utils/getConflictFolderId';
+import getTrashFolderId from '../services/trash/getTrashFolderId';
+import { getCollator } from './utils/getCollator';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 const logger = Logger.create('models/Folder');
@@ -45,25 +51,30 @@ export default class Folder extends BaseItem {
 		return field in fieldsToLabels ? fieldsToLabels[field] : field;
 	}
 
-	public static noteIds(parentId: string, options: any = null) {
-		options = { includeConflicts: false, ...options };
+	public static async notes(parentId: string, options: LoadOptions = null) {
+		options = {
+			includeConflicts: false,
+			...options,
+		};
 
 		const where = ['parent_id = ?'];
 		if (!options.includeConflicts) {
 			where.push('is_conflict = 0');
 		}
 
-		return this.db()
-			.selectAll(`SELECT id FROM notes WHERE ${where.join(' AND ')}`, [parentId])
-		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-			.then((rows: any[]) => {
-				const output = [];
-				for (let i = 0; i < rows.length; i++) {
-					const row = rows[i];
-					output.push(row.id);
-				}
-				return output;
-			});
+		if (!options.includeDeleted) {
+			where.push('deleted_time = 0');
+		}
+
+		return this.modelSelectAll(`SELECT ${this.selectFields(options)} FROM notes WHERE ${where.join(' AND ')}`, [parentId]);
+	}
+
+	public static async noteIds(parentId: string, options: LoadOptions = null) {
+		const notes = await this.notes(parentId, {
+			fields: ['id'],
+			...options,
+		});
+		return notes.map(n => n.id);
 	}
 
 	public static async subFolderIds(parentId: string) {
@@ -81,6 +92,11 @@ export default class Folder extends BaseItem {
 		return this.db().exec(query);
 	}
 
+	public static byId(items: FolderEntity[], id: string) {
+		if (id === getTrashFolderId()) return getTrashFolder();
+		return super.byId(items, id);
+	}
+
 	public static async deleteAllByShareId(shareId: string, deleteOptions: DeleteOptions = null) {
 		const tableNameToClasses: Record<string, any> = {
 			'folders': Folder,
@@ -96,18 +112,29 @@ export default class Folder extends BaseItem {
 		}
 	}
 
-	public static async delete(folderId: string, options: DeleteOptions = null) {
+	public static async delete(folderId: string, options?: DeleteOptions) {
 		options = {
 			deleteChildren: true,
 			...options,
 		};
 
+		if (folderId === getTrashFolderId()) throw new Error('The trash folder cannot be deleted');
+
+		const toTrash = !!options.toTrash;
+
 		const folder = await Folder.load(folderId);
 		if (!folder) return; // noop
+
+		const actionLogger = ActionLogger.from(options.sourceDescription);
+		actionLogger.addDescription(`folder title: ${JSON.stringify(folder.title)}`);
+		options.sourceDescription = actionLogger;
 
 		if (options.deleteChildren) {
 			const childrenDeleteOptions: DeleteOptions = {
 				disableReadOnlyCheck: options.disableReadOnlyCheck,
+				sourceDescription: actionLogger,
+				deleteChildren: true,
+				toTrash,
 			};
 
 			const noteIds = await Folder.noteIds(folderId);
@@ -119,7 +146,14 @@ export default class Folder extends BaseItem {
 			}
 		}
 
-		await super.delete(folderId, options);
+		if (toTrash) {
+			const newFolder: FolderEntity = { id: folderId, deleted_time: Date.now() };
+			if ('toTrashParentId' in options) newFolder.parent_id = options.toTrashParentId;
+			if (options.toTrashParentId === newFolder.id) throw new Error('Parent ID cannot be the same as ID');
+			await this.save(newFolder);
+		} else {
+			await super.delete(folderId, options);
+		}
 
 		this.dispatch({
 			type: 'FOLDER_DELETE',
@@ -132,37 +166,49 @@ export default class Folder extends BaseItem {
 	}
 
 	public static conflictFolderId() {
-		return 'c04f1c7c04f1c7c04f1c7c04f1c7c04f';
+		return getConflictFolderId();
 	}
 
 	public static conflictFolder(): FolderEntity {
+		const now = Date.now();
+
 		return {
 			type_: this.TYPE_FOLDER,
 			id: this.conflictFolderId(),
 			parent_id: '',
 			title: this.conflictFolderTitle(),
-			updated_time: time.unixMs(),
-			user_updated_time: time.unixMs(),
+			updated_time: now,
+			user_updated_time: now,
 			share_id: '',
 			is_shared: 0,
+			deleted_time: 0,
 		};
 	}
 
 	// Calculates note counts for all folders and adds the note_count attribute to each folder
 	// Note: this only calculates the overall number of nodes for this folder and all its descendants
-	public static async addNoteCounts(folders: any[], includeCompletedTodos = true) {
-		const foldersById: any = {};
+	public static async addNoteCounts(folders: FolderEntity[], includeCompletedTodos = true) {
+		// This is old code so we keep it, but we should never ever add properties to objects from
+		// the database. Eventually we should refactor this.
+		interface FolderEntityWithNoteCount extends FolderEntity {
+			note_count?: number;
+		}
+
+		const foldersById: Record<string, FolderEntityWithNoteCount> = {};
 		for (const f of folders) {
 			foldersById[f.id] = f;
 
 			if (this.conflictFolderId() === f.id) {
-				f.note_count = await Note.conflictedCount();
+				foldersById[f.id].note_count = await Note.conflictedCount();
 			} else {
-				f.note_count = 0;
+				foldersById[f.id].note_count = 0;
 			}
 		}
 
-		const where = ['is_conflict = 0'];
+		const where = [
+			'is_conflict = 0',
+			'notes.deleted_time = 0',
+		];
 		if (!includeCompletedTodos) where.push('(notes.is_todo = 0 OR notes.todo_completed = 0)');
 
 		const sql = `
@@ -172,9 +218,14 @@ export default class Folder extends BaseItem {
 			GROUP BY folders.id
 		`;
 
-		const noteCounts = await this.db().selectAll(sql);
+		interface NoteCount {
+			folder_id: string;
+			note_count: number;
+		}
+
+		const noteCounts: NoteCount[] = await this.db().selectAll(sql);
 		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
-		noteCounts.forEach((noteCount: any) => {
+		noteCounts.forEach((noteCount) => {
 			let parentId = noteCount.folder_id;
 			do {
 				const folder = foldersById[parentId];
@@ -250,24 +301,52 @@ export default class Folder extends BaseItem {
 		return output;
 	}
 
+	public static handleTitleNaturalSorting(items: FolderEntity[], options: any) {
+		if (options.order?.length > 0 && options.order[0].by === 'title') {
+			const collator = getCollator();
+			items.sort((a, b) => ((options.order[0].dir === 'ASC') ? 1 : -1) * collator.compare(a.title, b.title));
+		}
+	}
+
 	public static async all(options: FolderLoadOptions = null) {
-		const output = await super.all(options);
+		let output: FolderEntity[] = await super.all(options);
+		if (options) {
+			this.handleTitleNaturalSorting(output, options);
+		}
+
+		if (options && options.includeDeleted === false) {
+			output = output.filter(f => !f.deleted_time);
+		}
+
+		if (options && options.includeTrash) {
+			output.push(getTrashFolder());
+		}
+
 		if (options && options.includeConflictFolder) {
 			const conflictCount = await Note.conflictedCount();
 			if (conflictCount) output.push(this.conflictFolder());
 		}
+
 		return output;
 	}
 
-	public static async childrenIds(folderId: string) {
-		const folders = await this.db().selectAll('SELECT id FROM folders WHERE parent_id = ?', [folderId]);
+	public static async childrenIds(folderId: string, options: LoadOptions = null) {
+		options = { ...options };
+
+		const where = ['parent_id = ?'];
+
+		if (!options.includeDeleted) {
+			where.push('deleted_time = 0');
+		}
+
+		const folders = await this.db().selectAll(`SELECT id FROM folders WHERE ${where.join(' AND ')}`, [folderId]);
 
 		let output: string[] = [];
 
 		for (let i = 0; i < folders.length; i++) {
 			const f = folders[i];
 			output.push(f.id);
-			const subChildrenIds = await this.childrenIds(f.id);
+			const subChildrenIds = await this.childrenIds(f.id, options);
 			output = output.concat(subChildrenIds);
 		}
 
@@ -593,7 +672,11 @@ export default class Folder extends BaseItem {
 	}
 
 	public static async allAsTree(folders: FolderEntity[] = null, options: any = null) {
-		const all = folders ? folders : await this.all(options);
+		interface FolderWithNotes extends FolderEntity {
+			notes?: NoteEntity[];
+		}
+
+		const all: FolderWithNotes[] = folders ? folders : await this.all(options);
 
 		if (options && options.includeNotes) {
 			for (const folder of all) {
@@ -682,7 +765,7 @@ export default class Folder extends BaseItem {
 				rootFolders.push(folder);
 			} else {
 				if (!idToFolders[folder.parent_id]) {
-					// It means the notebook is refering a folder that doesn't exist. In theory it shouldn't happen
+					// It means the notebook is referring a folder that doesn't exist. In theory it shouldn't happen
 					// but sometimes does - https://github.com/laurent22/joplin/issues/1068#issuecomment-450594708
 					rootFolders.push(folder);
 				} else {
@@ -698,9 +781,10 @@ export default class Folder extends BaseItem {
 		const output = folders ? folders : await this.allAsTree();
 
 		const sortFoldersAlphabetically = (folders: FolderEntityWithChildren[]) => {
+			const collator = getCollator();
 			folders.sort((a: FolderEntityWithChildren, b: FolderEntityWithChildren) => {
 				if (a.parent_id === b.parent_id) {
-					return a.title.localeCompare(b.title, undefined, { sensitivity: 'accent' });
+					return collator.compare(a.title, b.title);
 				}
 				return 0;
 			});
@@ -722,8 +806,13 @@ export default class Folder extends BaseItem {
 		return output;
 	}
 
+	public static async loadByTitleAndParent(title: string, parentId: string, options: LoadOptions = null): Promise<FolderEntity> {
+		return await this.modelSelectOne(`SELECT ${this.selectFields(options)} FROM folders WHERE title = ? and parent_id = ?`, [title, parentId]);
+	}
+
 	public static load(id: string, options: LoadOptions = null): Promise<FolderEntity> {
 		if (id === this.conflictFolderId()) return Promise.resolve(this.conflictFolder());
+		if (id === getTrashFolderId()) return Promise.resolve(getTrashFolder());
 		return super.load(id, options);
 	}
 
@@ -815,7 +904,7 @@ export default class Folder extends BaseItem {
 		// Ensures that any folder added to the state has all the required
 		// properties, in particular "share_id" and "parent_id', which are
 		// required in various parts of the code.
-		if (!('share_id' in savedFolder) || !('parent_id' in savedFolder)) {
+		if (!('share_id' in savedFolder) || !('parent_id' in savedFolder) || !('deleted_time' in savedFolder)) {
 			savedFolder = await this.load(savedFolder.id);
 		}
 
@@ -825,6 +914,20 @@ export default class Folder extends BaseItem {
 		});
 
 		return savedFolder;
+	}
+
+	public static async trashItemsOlderThan(ttl: number) {
+		const cutOffTime = Date.now() - ttl;
+
+		const getItemIds = async (table: string, cutOffTime: number): Promise<string[]> => {
+			const items = await this.db().selectAll(`SELECT id from ${table} WHERE deleted_time > 0 AND deleted_time < ?`, [cutOffTime]);
+			return items.map(i => i.id);
+		};
+
+		return {
+			noteIds: await getItemIds('notes', cutOffTime),
+			folderIds: await getItemIds('folders', cutOffTime),
+		};
 	}
 
 	public static serializeIcon(icon: FolderIcon): string {
@@ -845,6 +948,17 @@ export default class Folder extends BaseItem {
 		// visual alignment is correct for all folders, otherwise the folder tree
 		// looks messy.
 		return !!folders.find(f => !!f.icon);
+	}
+
+	public static getRealFolders(folders: FolderEntity[]) {
+		// returns all folders other than trash folder and deleted folders
+		const trashFolderId = getTrashFolderId();
+		return folders.filter((folder) => folder.id !== trashFolderId && folder.deleted_time === 0);
+	}
+
+	public static atLeastOneRealFolderExists(folders: FolderEntity[]) {
+		// returns true if at least one folder exists other than trash folder and deleted folders
+		return this.getRealFolders(folders).length > 0;
 	}
 
 }

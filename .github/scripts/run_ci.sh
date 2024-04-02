@@ -141,15 +141,13 @@ fi
 # for Linux only is sufficient.
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ]; then
-	if [ "$IS_LINUX" == "1" ]; then
-		echo "Step: Validating translations..."
+if [ "$IS_LINUX" == "1" ]; then
+	echo "Step: Validating translations..."
 
-		node packages/tools/validate-translation.js
-		testResult=$?
-		if [ $testResult -ne 0 ]; then
-			exit $testResult
-		fi
+	node packages/tools/validate-translation.js
+	testResult=$?
+	if [ $testResult -ne 0 ]; then
+		exit $testResult
 	fi
 fi
 
@@ -179,15 +177,13 @@ fi
 # See coding_style.md
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ]; then
-	if [ "$IS_LINUX" == "1" ]; then
-		echo "Step: Checking for files that should have been ignored..."
+if [ "$IS_LINUX" == "1" ]; then
+	echo "Step: Checking for files that should have been ignored..."
 
-		node packages/tools/checkIgnoredFiles.js 
-		testResult=$?
-		if [ $testResult -ne 0 ]; then
-			exit $testResult
-		fi
+	node packages/tools/checkIgnoredFiles.js 
+	testResult=$?
+	if [ $testResult -ne 0 ]; then
+		exit $testResult
 	fi
 fi
 
@@ -196,11 +192,27 @@ fi
 # =============================================================================
 
 if [ "$RUN_TESTS" == "1" ]; then
-	echo "Step: Check that the website still builds..."
+	if [ "$IS_LINUX" == "1" ]; then
+		echo "Step: Check that the website still builds..."
 
-	mkdir -p ../joplin-website/docs
-	ll ../joplin-website/docs/api/references/plugin_api
-	SKIP_SPONSOR_PROCESSING=1 yarn buildWebsite
+		mkdir -p ../joplin-website/docs
+		CROWDIN_PERSONAL_TOKEN="$CROWDIN_PERSONAL_TOKEN" yarn crowdinDownload
+		SKIP_SPONSOR_PROCESSING=1 yarn buildWebsite
+		testResult=$?
+		if [ $testResult -ne 0 ]; then
+			exit $testResult
+		fi
+	fi
+fi
+
+# =============================================================================
+# Spellchecking
+# =============================================================================
+
+if [ "$IS_LINUX" == "1" ]; then
+	echo "Step: Spellchecking..."
+
+	yarn spellcheck --all
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
 		exit $testResult

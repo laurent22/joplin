@@ -63,7 +63,7 @@
 		"%s = %s (%s)"
 	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
-		""
+		"%s не оптимизирован для синхронизации множества маленьких файлов, поэтому начальная синхронизация может быть долгой."
 	],
 	"%s: %d": [
 		"%s: %d"
@@ -76,6 +76,9 @@
 	],
 	"%s: %s": [
 		"%s: %s"
+	],
+	"%s: Missing password.": [
+		"%s: Отсутствует пароль."
 	],
 	"&Edit": [
 		"&Правка"
@@ -111,7 +114,7 @@
 		"(wysiwyg: %s)"
 	],
 	"(You may disable this prompt in the options)": [
-		""
+		"(Вы можете отключить это предупреждение в настройках)"
 	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"- Камера: позволяет сделать снимок и прикрепить его к заметке."
@@ -137,6 +140,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"О Joplin"
 	],
@@ -151,6 +157,12 @@
 	],
 	"Accept": [
 		"Принять"
+	],
+	"Access denied: Please check your username and password": [
+		"Отказано в доступе: Пожалуйста, проверьте ваши имя пользователя и пароль"
+	],
+	"Access denied: Please re-enter your password and/or username": [
+		"Отказано в доступе: Пожалуйста, повторно введите свой пароль и/или имя пользователя."
 	],
 	"Account": [
 		"Учетная запись"
@@ -186,7 +198,7 @@
 		"Добавить в словарь"
 	],
 	"Admin": [
-		"Амдинистратор"
+		"Администратор"
 	],
 	"Admin dashboard": [
 		"Панель администратора"
@@ -215,6 +227,12 @@
 	"Always": [
 		"Всегда"
 	],
+	"Always ask": [
+		"Всегда спрашивать"
+	],
+	"Always resize": [
+		"Всегда изменять размер"
+	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
 		"Неоднозначный блокнот \"%s\". Вместо этого используйте идентификатор блокнота - нажмите \"ti\", чтобы увидеть короткий идентификатор блокнота, или используйте $b для текущего выбранного блокнота"
 	],
@@ -222,10 +240,10 @@
 		"Неоднозначный блокнот \"%s\". Вместо этого используйте короткий идентификатор блокнота - нажмите \"ti\", чтобы увидеть короткий идентификатор блокнота"
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
-		""
+		"Найден автосохраненный рисунок. Прикрепить его копию к заметке?"
 	],
 	"An error occurred: %s": [
-		""
+		"Произошла ошибка: %s"
 	],
 	"An update is available, do you want to download it now?": [
 		"Доступно обновление, хотите загрузить его сейчас?"
@@ -305,6 +323,9 @@
 	"Automatically check for updates": [
 		"Автоматическая проверка наличия обновлений"
 	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
+	],
 	"Automatically switch theme to match system theme": [
 		"Автоматическая смена темы в соответствии с настройками системы"
 	],
@@ -326,8 +347,8 @@
 	"Browse...": [
 		"Обзор..."
 	],
-	"Built in": [
-		""
+	"Built-in": [
+		"Встроенный"
 	],
 	"Bulleted List": [
 		"Маркированный список"
@@ -455,6 +476,9 @@
 	"Close dropdown": [
 		"Закрыть выпадающий список"
 	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		"Закройте приложение, затем удалите свой профиль в \"%s\" и запустите приложение снова. Обязательно сначала создайте резервную копию, экспортировав все свои заметки в формате JEX."
+	],
 	"Close Window": [
 		"Закрыть окно"
 	],
@@ -467,11 +491,14 @@
 	"Code View": [
 		"Просмотр кода"
 	],
+	"Collaborate on a notebook with others": [
+		"Работайте над блокнотом вместе с другими людьми"
+	],
 	"Collaborate on notebooks with others": [
-		"Делитесь блокнотами с другими"
+		"Совместная работа над блокнотами с другими людьми"
 	],
 	"Collapse": [
-		"Коллапс"
+		"Свернуть"
 	],
 	"Coming alarms": [
 		"Ближайшие напоминания"
@@ -490,6 +517,9 @@
 	],
 	"Command palette...": [
 		"Палитра команд..."
+	],
+	"Compact": [
+		"Компактный"
 	],
 	"Completed": [
 		"Завершено"
@@ -600,7 +630,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Не удалось проверить состояние общего доступа к этому блокноту - прерывание. Пожалуйста, повторите попытку при подключении к Интернету."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"Не удалось проверить вашу личность: %s"
 	],
 	"Create": [
@@ -654,6 +684,12 @@
 	"Creates a new to-do.": [
 		"Создает новую задачу."
 	],
+	"Creating new note...": [
+		"Создание новой заметки..."
+	],
+	"Creating new to-do...": [
+		"Создание новой задачи..."
+	],
 	"Creating report...": [
 		"Создание отчета…"
 	],
@@ -667,16 +703,16 @@
 		"Пользовательский порядок"
 	],
 	"Custom stylesheet for Joplin-wide app styles": [
-		"Пользовательская таблица стилей для приложения"
+		"Пользовательская таблица стилей для приложения в целом"
 	],
 	"Custom stylesheet for rendered Markdown": [
-		"Пользовательская таблица стилей для отображаемых заметок"
+		"Пользовательская таблица стилей для отображения Markdown"
 	],
 	"Custom TLS certificates": [
 		"Пользовательские сертификаты TLS"
 	],
 	"Customise the note publishing banner": [
-		""
+		"Настройте баннер добавляемый в публикуемые заметки"
 	],
 	"Cut": [
 		"Вырезать"
@@ -738,20 +774,8 @@
 	"Delete note": [
 		"Удалить заметку"
 	],
-	"Delete note \"%s\"?": [
-		"Удалить заметку \"%s\"?"
-	],
-	"Delete note?": [
-		"Удалить заметку?"
-	],
 	"Delete notebook": [
 		"Удалить блокнот"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Удалить блокнот “%s”?\n\nВсе заметки и вложенные блокноты также будут удалены."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Удалить блокнот? Все содержимое блокнота, включая заметки и вложенные блокноты, будет удалено."
 	],
 	"Delete plugin \"%s\"?": [
 		"Удалить плагин \"%s\"?"
@@ -764,9 +788,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Удалить блокнот \"Входящие\"?\n\nЕсли вы удалите блокнот \"Входящие\", то все электронные письма, которые были недавно отправлены в этот блокнот, могут быть потеряны."
-	],
-	"Delete these %d notes?": [
-		"Удалить эти %d заметки?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Удалить приглашение? Получатель больше не сможет получить доступ к этому общему блокноту."
@@ -796,7 +817,7 @@
 		"Целевой формат: %s"
 	],
 	"Detailed": [
-		""
+		"Подробный"
 	],
 	"Directory": [
 		"Каталог"
@@ -821,6 +842,9 @@
 	],
 	"Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": [
 		"Отключение шифрования означает, что *все* ваши заметки и вложения будут расшифрованы и отправлены в незашифрованном виде к цели синхронизации. Вы хотите продолжить?"
+	],
+	"Discard": [
+		"Отменить"
 	],
 	"Discard changes": [
 		"Отменить изменения"
@@ -886,7 +910,7 @@
 		"Загрузка"
 	],
 	"Downloading %s language files...": [
-		"Загрузка %s языковые файлы.."
+		"Загрузка %s языковых файлов..."
 	],
 	"Downloading resources...": [
 		"Загрузка ресурсов..."
@@ -895,10 +919,10 @@
 		"Дракула"
 	],
 	"Draw picture": [
-		""
+		"Нарисовать картинку"
 	],
 	"Drawing": [
-		""
+		"Рисунок"
 	],
 	"Drop notes or files here": [
 		"Перетащите сюда заметки или файлы"
@@ -908,6 +932,9 @@
 	],
 	"Dropbox Login": [
 		"Вход в Dropbox"
+	],
+	"Due": [
+		""
 	],
 	"Duplicate": [
 		"Создать дубликат"
@@ -955,7 +982,7 @@
 		"Размер шрифта редактора"
 	],
 	"Editor maximum width": [
-		"Максимальная ширина редктора"
+		"Максимальная ширина редактора"
 	],
 	"Editor monospace font family": [
 		"Семейство моноширинных шрифтов редактора"
@@ -970,19 +997,22 @@
 		"Emacs"
 	],
 	"Email": [
-		"Email"
+		"Электронная почта"
 	],
 	"Email to note": [
-		""
+		"Письмо в заметку"
 	],
 	"Email to Note": [
-		""
+		"Письмо в Заметку"
 	],
 	"Emails": [
 		"Email'ы"
 	],
 	"emphasised text": [
 		"курсивный текст"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"Включить"
@@ -1036,7 +1066,7 @@
 		"Включить историю заметок"
 	],
 	"Enable optical character recognition (OCR)": [
-		""
+		"Включить оптическое распознавание символов (OCR)"
 	],
 	"Enable PDF viewer": [
 		"Включить программу для просмотра PDF файлов"
@@ -1104,6 +1134,9 @@
 	"Enter notebook title": [
 		"Введите название блокнота"
 	],
+	"Enter password": [
+		"Введите пароль"
+	],
 	"Enum": [
 		"Enum"
 	],
@@ -1127,6 +1160,12 @@
 	],
 	"Evernote Export File (as Markdown)": [
 		"Файл экспорта Evernote (Markdown)"
+	],
+	"Evernote Export Files (Directory, as HTML)": [
+		"Каталог с файлами экспорта Evernote (HTML)"
+	],
+	"Evernote Export Files (Directory, as Markdown)": [
+		"Каталог с файлами экспорта Evernote (Markdown)"
 	],
 	"Exits the application.": [
 		"Выйти из приложения."
@@ -1153,13 +1192,13 @@
 		"Экспорт профиля"
 	],
 	"Exported successfully!": [
-		""
+		"Экспортирование успешно завершено!"
 	],
 	"Exporting profile...": [
 		"Экспортирование профиля..."
 	],
 	"Exporting to \"%s\" as \"%s\" format. Please wait...": [
-		"Экспорт в \"%s\" в формате \"%s\". Пожалуйста, подождите..."
+		"Экспортирование в \"%s\" в формате \"%s\". Пожалуйста, подождите..."
 	],
 	"Exporting...": [
 		"Экспортирование..."
@@ -1196,6 +1235,9 @@
 	],
 	"File system": [
 		"Файловая система"
+	],
+	"Filter": [
+		"Фильтр"
 	],
 	"Filter tags": [
 		"Фильтр тегов"
@@ -1273,9 +1315,6 @@
 		"Создание ссылки...",
 		"Создание ссылок..."
 	],
-	"Geolocation, spellcheck, editor toolbar, image resize": [
-		""
-	],
 	"Get it now:": [
 		"Загрузить сейчас:"
 	],
@@ -1293,6 +1332,9 @@
 	],
 	"Grant authorisation": [
 		"Одобрить авторизацию"
+	],
+	"Have you authorised the application login in the above URL?": [
+		""
 	],
 	"Header %d": [
 		"Заголовок %d"
@@ -1315,8 +1357,11 @@
 	"Hide advanced": [
 		"Скрыть расширенные"
 	],
+	"Hide Advanced Settings": [
+		"Скрыть расширенные настройки"
+	],
 	"Hide disabled": [
-		"Скрыть отключенный"
+		"Скрыть отключенных"
 	],
 	"Hide disabled keys": [
 		"Скрыть отключенные ключи"
@@ -1343,7 +1388,7 @@
 		"HTML каталог"
 	],
 	"HTML document": [
-		""
+		"HTML документ"
 	],
 	"HTML File": [
 		"HTML файл"
@@ -1359,6 +1404,9 @@
 	],
 	"Idle": [
 		"Простой"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		"Игнорировать"
@@ -1393,6 +1441,9 @@
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Для этого весь ваш набор данных должен быть зашифрован и синхронизирован, поэтому лучше всего запускать процесс на ночь.\n\nДля начала, пожалуйста, следуйте этим инструкциям:\n\n1. Синхронизируйте все ваши устройства.\n2. Нажмите “%s”.\n3. Ждите завершения. Во время работы не изменяйте заметки на других устройствах, чтобы избежать конфликтов.\n4. После завершения синхронизации на этом устройстве синхронизируйте все остальные устройства и ждите завершения.\n\nВажно: вам нужно запустить процесс ОДИН РАЗ на одном устройстве."
 	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		"Для синхронизации обновите приложение до версии %s+"
+	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Для использование синхронизации файловой системы необходимо дать разрешение на запись во внешнее хранилище."
 	],
@@ -1400,7 +1451,7 @@
 		"Для использования веб-клиппера сделайте следующее:"
 	],
 	"In progress": [
-		"Выполнение"
+		"В ходе выполнения"
 	],
 	"In: %s": [
 		"В: %s"
@@ -1418,7 +1469,7 @@
 		"Информация"
 	],
 	"Inline Code": [
-		"Инлайн код"
+		"Встроенный код"
 	],
 	"Insert": [
 		"Вставка"
@@ -1483,12 +1534,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"E-mail для Joplin Cloud"
-	],
-	"Joplin Cloud password": [
-		"Пароль для Joplin Cloud"
-	],
 	"Joplin Export Directory": [
 		"Каталог экспорта Joplin"
 	],
@@ -1520,7 +1565,7 @@
 		"Сайт Joplin"
 	],
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
-		"Собственный сервис от Joplin. Кроме того, позволяет поучить доступ к специфичным функциям Joplin, как публикация заметок и общай работа с блокнотами."
+		"Собственный сервис синхронизации от Joplin. Также представляет возможность поучить доступ к таким специфичным функциям Joplin, как публикация заметок и совместная работа с блокнотами."
 	],
 	"KaTeX": [
 		"KaTeX"
@@ -1554,6 +1599,9 @@
 	],
 	"Later": [
 		"Позже"
+	],
+	"Latitude": [
+		""
 	],
 	"Layout": [
 		"Вид редактора"
@@ -1593,7 +1641,7 @@
 		"Текст ссылки"
 	],
 	"Links with protocol \"%s\" are not supported": [
-		"Ссылки с протоколом “%s” не поддерживаются"
+		"Ссылки с протоколом \"%s\" не поддерживаются"
 	],
 	"List item": [
 		"Элемент списка"
@@ -1616,12 +1664,6 @@
 	"Log": [
 		"Журнал"
 	],
-	"Login": [
-		"Вход"
-	],
-	"Login below.": [
-		"Войдите в систему."
-	],
 	"Login with Dropbox": [
 		"Войти с Dropbox"
 	],
@@ -1631,7 +1673,7 @@
 	"Logout": [
 		"Выйти из системы"
 	],
-	"Logs, profiles, sync status": [
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1694,7 +1736,7 @@
 	"Max Total Size": [
 		"Максимальный общий размер"
 	],
-	"Media player, math, diagrams, table of contents": [
+	"Minimise": [
 		""
 	],
 	"Missing keys": [
@@ -1743,7 +1785,7 @@
 		"N"
 	],
 	"Never resize": [
-		""
+		"Никогда не изменять размер"
 	],
 	"New note": [
 		"Новая заметка"
@@ -1823,7 +1865,7 @@
 	"Nord": [
 		"Север"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Не удалось аутентифицироваться с %s. Пожалуйста, предоставьте недостающие данные."
 	],
 	"Not downloaded": [
@@ -1873,6 +1915,9 @@
 	],
 	"Note list growth factor": [
 		"Фактор роста списка заметки"
+	],
+	"Note list style": [
+		"Стиль списка заметок"
 	],
 	"Note properties": [
 		"Свойства заметки"
@@ -1950,28 +1995,25 @@
 		"Открыть %s"
 	],
 	"Open PDF viewer": [
-		"Открыть просмотрщик PDF-файлов"
+		"Открыть программу просмотра PDF-файлов"
 	],
 	"Open profile directory": [
 		"Открыть директорию с настройками"
 	],
 	"Open Sync Wizard...": [
-		"Открытие мастера синхронизации..."
+		"Открыть мастер синхронизации..."
 	],
 	"Open...": [
 		"Открыть..."
 	],
 	"Opening section %s": [
-		""
+		"Открытие раздела %s"
 	],
 	"Operation cancelled": [
 		"Операция отменена"
 	],
 	"Options": [
 		"Настройки"
-	],
-	"Or create an account.": [
-		"Или создайте новую учетную запись."
 	],
 	"Ordered list": [
 		"Упорядоченный список"
@@ -2062,6 +2104,9 @@
 	],
 	"Please wait...": [
 		"Пожалуйста, подождите…"
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"Утилиты для плагинов"
@@ -2253,13 +2298,16 @@
 		"Сбросить мастер-пароль"
 	],
 	"Resize large images:": [
-		""
+		"Изменение размера больших изображений:"
 	],
 	"Resources: %d.": [
 		"Ресурсов: %d."
 	],
 	"Restart and upgrade": [
 		"Перезапустить и обновить"
+	],
+	"Restart in safe mode": [
+		"Перезапустить в безопасном режиме"
 	],
 	"Restart now": [
 		"Перезагрузить сейчас"
@@ -2327,6 +2375,9 @@
 	"Save changes": [
 		"Сохранить изменения"
 	],
+	"Save changes?": [
+		"Сохранить изменения?"
+	],
 	"Save geo-location with notes": [
 		"Сохранять информацию о географическом местоположении в заметках"
 	],
@@ -2339,11 +2390,17 @@
 	"Search for...": [
 		"Поиск..."
 	],
+	"Search hidden": [
+		"Поиск скрыт"
+	],
 	"Search in all the notes": [
 		"Поиск во всех заметках"
 	],
 	"Search in current note": [
 		"Поиск в текущей заметке"
+	],
+	"Search shown": [
+		"Поиск показан"
 	],
 	"Search...": [
 		"Поиск..."
@@ -2371,6 +2428,9 @@
 	],
 	"Select parent notebook": [
 		"Выбрать родительский блокнот"
+	],
+	"Send bug report": [
+		"Отправить отчёт об ошибке"
 	],
 	"Server is already running on port %d": [
 		"Сервер уже запущен. Порт: %d"
@@ -2402,6 +2462,9 @@
 	"Share a copy of all notes in a file format that can be imported by Joplin on a computer.": [
 		"Поделиться копией всех заметок в формате файла, который можно импортировать в Joplin на компьютере."
 	],
+	"Share a notebook with others": [
+		"Поделитесь блокнотом с другими людьми"
+	],
 	"Share Notebook": [
 		"Поделиться блокнотом"
 	],
@@ -2409,7 +2472,7 @@
 		"Поделиться блокнотом..."
 	],
 	"Share permissions": [
-		""
+		"Разрешения для общего доступа"
 	],
 	"Sharing notebook...": [
 		"Поделиться блокнотом..."
@@ -2430,7 +2493,7 @@
 		"Показать завершенные задачи"
 	],
 	"Show disabled": [
-		"Показать отключенные"
+		"Показать отключенных"
 	],
 	"Show disabled keys": [
 		"Показать отключенные ключи"
@@ -2451,10 +2514,13 @@
 		"Показать/скрыть боковую панель"
 	],
 	"Shrink large images before adding them to notes.": [
-		""
+		"Уменьшить большие изображения перед добавлением их в заметки."
+	],
+	"Side menu closed": [
+		"Боковое меню закрыто"
 	],
 	"Side menu opened": [
-		""
+		"Боковое меню открыто"
 	],
 	"Sidebar": [
 		"Боковая панель"
@@ -2477,6 +2543,12 @@
 	"Solarised Light": [
 		"Солнечная светлая"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		"Некоторые вложения не удалось загрузить. Пожалуйста, попробуйте загрузить их еще раз."
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		"Некоторые вложения необходимо загрузить. Установите режим загрузки вложений \"Всегда\" и повторите попытку."
+	],
 	"Some items cannot be decrypted.": [
 		"Некоторые элементы не могут быть расшифрованы."
 	],
@@ -2497,6 +2569,9 @@
 	],
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Сортирует элементы по полю <field> (напр. title, updated_time, created_time)."
+	],
+	"Source": [
+		"Источник"
 	],
 	"Source format: %s": [
 		"Исходный формат: %s"
@@ -2628,7 +2703,7 @@
 		"Синхронизированная версия: %s"
 	],
 	"Sync your notes": [
-		"Сортировать ваши заметки"
+		"Синхронизовать ваши заметки"
 	],
 	"Synchronisation": [
 		"Синхронизация"
@@ -2687,11 +2762,14 @@
 	"Teams": [
 		"Команды"
 	],
-	"Text editor command": [
-		"Команда текстового редактора"
+	"Text document": [
+		"Текстовый документ"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"Спасибо! Ваша учетная запись Joplin Cloud настроена и готова к использованию."
+	"Text editor command": [
+		"Команда запуска текстового редактора"
+	],
+	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
+		"[Веб-клиппер](%s) это расширение для браузера, которое позволяет сохранять веб-страницы и скриншоты в Joplin."
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Активный профиль не может быть удален. Переключитесь на другой профиль и повторите попытку."
@@ -2703,7 +2781,7 @@
 		"Приложение не завершилось должным образом. Хотите запустить в безопасном режиме?"
 	],
 	"The application has been authorised - you may now close this browser tab.": [
-		"Приложение авторизовано - можно закрыть вкладку браузера."
+		"Приложение авторизовано - можно закрыть вкладку браузера."
 	],
 	"The application has been authorised!": [
 		"Приложение успешно авторизовано!"
@@ -2737,6 +2815,10 @@
 	],
 	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
 		"Параметр \"фактор\" отвечает за то, как элемент будет расти или уменьшаться, чтобы поместиться в свободное пространство контейнера. Элемент с фактором 2 займёт в 2 раза больше места, чем элемент с фактором 1. Перезапустите приложение, чтобы изменения вступили в силу."
+	],
+	"The following attachment matches your search query:": [
+		"Следующее вложение соответствует вашему поисковому запросу:",
+		"Следующее вложение соответствует вашему поисковому запросу:"
 	],
 	"The following attachments are being watched for changes:": [
 		"Отслеживаются изменения следующих вложений:"
@@ -2774,11 +2856,17 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Получателя не удалось удалить из списка. Пожалуйста, попробуйте еще раз.\n\nОшибка была: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		"Цель синхронизации невозможно изменить по следующей причине: %s\n\nЕсли проблему не удается решить, возможно, вам придется сначала очистить данные, выполнив следующие инструкции:\n\n%s"
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Нужно обновить версию базы данных перед синхронизацией. Эта операция может потребовать несколько минут для завершения и приложение нужно будет перезапустить. Чтобы продолжить нажмите на ссылку."
 	],
 	"The sync target needs to be upgraded. Press this banner to proceed.": [
 		"Необходимо обновить цель синхронизации. Нажмите на этот баннер, чтобы продолжить."
+	],
+	"The synchronisation password is missing.": [
+		"Пароль синхронизации отсутствует."
 	],
 	"The tag \"%s\" already exists. Please choose a different name.": [
 		"Метка \"%s\" уже существует. Пожалуйста, выберите другое имя."
@@ -2819,9 +2907,6 @@
 	"There was an error downloading this attachment:": [
 		"Произошла ошибка при загрузке вложения:"
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"При настройке Joplin Cloud возникла ошибка. Пожалуйста, проверьте ваш e-mail и пароль и попробуйте заново. Ошибка: \n\n%s"
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Данные элементы останутся на устройстве, но не будут выгружены в цель синхронизации. Чтобы найти эти элементы, воспользуйтесь поиском по названию или ID (указан в квадратных скобках выше)."
 	],
@@ -2829,7 +2914,7 @@
 		"Данные плагины расширяют отрисовщик Markdown доп. функциями. Учтите, что эти функции не являются стандартными для Markdown и большинство из них будет работать только в Joplin. Кроме того, некоторые из них *несовместимы* с редактором WYSIWYG. При открытии заметки с такими плагинами в WYSIWYG форматирование будет утеряно. Ниже отмечены плагины, совместимые с редактором WYSIWYG."
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
-		""
+		"Это позволит другому пользователю поделиться с вами записной книжкой, и вы оба сможете совместно работать над ней. Однако это не даст вам возможности поделиться записной книжкой с кем-то еще, если у вас нет свойства \"%s\"."
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Это вложение еще не загружено или еще не расшифровано"
@@ -2839,6 +2924,9 @@
 	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"Данный токен используется только для авторизации доступа сторонних приложений к Joplin."
+	],
+	"This drawing may have unsaved changes.": [
+		"Этот рисунок может содержать несохраненные изменения."
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Это продвинутый инструмент для отображения вложений, прикреплённых к вашим заметкам. Удаляйте вложения с осторожностью - они не могут быть восстановлены."
@@ -2878,6 +2966,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"Будет открыто новое окно. Сохранить текущие изменения?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Это удалит блокнот из вашей коллекции, и вы больше не будете иметь доступа к его содержимому. Хотите продолжить?"
@@ -2930,6 +3021,9 @@
 	"to-do": [
 		"задача"
 	],
+	"to-do: %s": [
+		"задача: %s"
+	],
 	"Toggle comment": [
 		"Переключить комментарий"
 	],
@@ -2972,6 +3066,9 @@
 	"Total: %d/%d": [
 		"Всего: %d/%d"
 	],
+	"Trash": [
+		""
+	],
 	"Try again": [
 		"Еще раз"
 	],
@@ -2993,14 +3090,23 @@
 	"Type: %s.": [
 		"Тип: %s."
 	],
+	"Unable to edit resource of type %s": [
+		"Невозможно редактировать ресурс типа %s"
+	],
 	"Unable to export or share data. Reason: %s": [
 		"Невозможно экспортировать или поделиться данными. Причина: %s"
+	],
+	"Unable to share log data. Reason: %s": [
+		"Невозможно поделиться данными журнала. Причина: %s"
 	],
 	"Uncompleted to-dos on top": [
 		"Незавершенные задачи сверху"
 	],
 	"Undo": [
 		"Отменить"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		"Удалите и переустановите приложение. Обязательно сначала создайте резервную копию, экспортировав все свои заметки в формате JEX из настольного приложения."
 	],
 	"Unknown flag: %s": [
 		"Неизвестный флаг: %s"
@@ -3123,7 +3229,7 @@
 		"Просмотреть сейчас"
 	],
 	"Viewer": [
-		"Просмотрщик"
+		"Программа просмотра"
 	],
 	"Vim": [
 		"Vim"
@@ -3174,13 +3280,13 @@
 		"При создании новой задачи:"
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
-		""
+		"Если эта функция включена, приложение будет сканировать ваши вложения и извлекать из них текст. Это позволит вам искать текст в этих вложениях."
 	],
 	"Window unresponsive.": [
-		""
+		"Окно не отвечает."
 	],
 	"Words": [
-		"Cлова"
+		"Слова"
 	],
 	"y": [
 		"y"
@@ -3196,6 +3302,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"Вы собираетесь прикрепить крупное изображение (%dx%d пикселей). Вы хотите сжать его до %d пикселей перед прикреплением?"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"Блокноты отсутствуют."

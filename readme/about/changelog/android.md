@@ -1,12 +1,62 @@
 # Joplin Android Changelog
 
+## [android-v3.0.1](https://github.com/laurent22/joplin/releases/tag/android-v3.0.1) (Pre-release) - 2024-03-21T18:27:47Z
+
+- New: Add support for Markdown editor plugins (#10086 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- New: Add support for plugin panels and dialogs (#10121 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- New: Add support for renderer plugins (#10135 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- New: Add trash folder (#9671) (#483)
+- Improved: Added empty trash option on long pressing the trash folder (#10120) (#10092 by [@Sidd-R](https://github.com/Sidd-R))
+- Improved: Allow debugging plugins (#10156 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Change Joplin Cloud login process to allow MFA via browser (#9776 by [@pedr](https://github.com/pedr))
+- Improved: Fix conflicts notebook doesn't work with the trash feature (#10104) (#10073 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Log user actions (deletions) (#9585) (#9465 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Upgrade CodeMirror 6 packages (#10032) (#10031 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix broken plugin API: editor.execCommand (#10153) (#10152 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix clicking on a link results in a blank screen (#10168) (#10166 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix note editor's settings and plugins updated on every keystroke (#10116 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix plugin API memory leak (#10115 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix screen reader touch-to-focus broken on note list and note viewer pages (#10123) (#10122 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix shared data lost if Joplin is closed immediately after receiving a share (#10171) (#10170 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix trash folder sometimes has wrong icon (#10173) (#10172 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Improve note editor performance when quickly entering text (#10134) (#10130 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: New note button crashes app when there are no notebooks (#10087) (#10065 by [@Sidd-R](https://github.com/Sidd-R))
+- Fixed: Plugins: Fix warning after reloading plugins (#10165 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Shows only the real folders in the dropdown of parent folders. (#10147) (#10143 by [@Sidd-R](https://github.com/Sidd-R))
+
+## [android-v2.14.9](https://github.com/laurent22/joplin/releases/tag/android-v2.14.9) (Pre-release) - 2024-02-26T19:56:11Z
+
+- Fixed: Note editor: Support older WebView versions (#9986) (#9521 by Henry Heino)
+- Fixed: Sort notebooks in a case-insensitive way (#9996)
+
+## [android-v2.14.8](https://github.com/laurent22/joplin/releases/tag/android-v2.14.8) (Pre-release) - 2024-02-22T22:29:24Z
+
+- Improved: Immediately sort notes after toggling a checkbox (5820f63)
+- Fixed: Fix auto-indentation in some types of code blocks (#9972) (#9971 by Henry Heino)
+
+## [android-v2.14.7](https://github.com/laurent22/joplin/releases/tag/android-v2.14.7) (Pre-release) - 2024-02-19T10:40:10Z
+
+- Improved: Migrate profile in preparation for trash feature (115eb5d)
+- Improved: Updated packages tar-stream (v3.1.7)
+- Fixed: Fix full text search broken on Android 7 and earlier (#9914) (#9905 by Henry Heino)
+
+## [android-v2.14.6](https://github.com/laurent22/joplin/releases/tag/android-v2.14.6) (Pre-release) - 2024-02-09T12:41:18Z
+
+- Improved: Improve search engine error handling when preparing text for search (#9871 by Henry Heino)
+- Improved: Updated packages @js-draw/material-icons (v1.16.1), @react-native-community/netinfo (v11.2.1), @react-native-community/slider (v4.5.0), async-mutex (v0.4.1), follow-redirects (v1.15.5), js-draw (v1.16.1), moment (v2.30.1), react-native-document-picker (v9.1.0), react-native-localize (v3.0.6), react-native-paper (v5.11.7), react-native-safe-area-context (v4.8.2), react-native-share (v10.0.2), react-native-webview (v13.6.4), sass (v1.69.7), sharp (v0.33.2), sqlite3 (v5.1.7)
+- Fixed: Correctly search HTML-entity encoded text (#9694)
+- Fixed: Fix deeply-nested subnotebook titles invisible in the folder dropdown (#9906) (#9858 by Henry Heino)
+- Fixed: Fix regression: Crash when opening appearance/sync settings on some devices (#9864) (#7974 by Henry Heino)
+- Fixed: Fix share to Joplin when only "All notes" has been opened (#9876) (#9863 by Henry Heino)
+- Fixed: Increase space available for Notebook icon (#9877) (#9475 by [@pedr](https://github.com/pedr))
+
 ## [android-v2.14.5](https://github.com/laurent22/joplin/releases/tag/android-v2.14.5) (Pre-release) - 2024-02-02T23:09:50Z
 
 - Improved: Allow note viewer to extend to the edge of the screen while pinch zooming (#9820) (#9819 by Henry Heino)
 - Improved: Do not allow switching the sync target if not all resources are downloaded (#9263)
 - Improved: Removed ability to search by note ID to fix issue with certain plugins (#9769)
 - Improved: Updated packages react-native-paper (v5.11.6)
-- Fixed: Andoid: Fix crash on opening settings on some devices (#9806) (#7974 by Henry Heino)
+- Fixed: Fix crash on opening settings on some devices (#9806) (#7974 by Henry Heino)
 - Fixed: Clear "Some items cannot be synchronised" banner after situation is resolved (#9157)
 - Fixed: Detect faster left-right swipes to open the sidemenu (#9802) (#9142 by Henry Heino)
 - Fixed: Fix broken synchronisation link in welcome notes (#9804) (#9799 by Henry Heino)
@@ -310,7 +360,7 @@
 - Improved: Confirm closing settings with unsaved changes (#7566 by Henry Heino)
 - Improved: Upgrade to React Native 0.69 (7e29804)
 - Improved: Upgrade to React Native 0.70 (4bdb3d0)
-- Fixed: Fixed biometics prompt on new devices (9eff7e6)
+- Fixed: Fixed biometrics prompt on new devices (9eff7e6)
 - Fixed: Fixed issue when floating keyboard is visible (#7593) (#6682 by Henry Heino)
 - Fixed: Remove gray line around text editor (#7595) (#7594 by Henry Heino)
 
@@ -503,7 +553,7 @@
 
 ## [android-v2.3.4](https://github.com/laurent22/joplin/releases/tag/android-v2.3.4) (Pre-release) - 2021-08-15T13:27:57Z
 
-- Fixed: Bump hightlight.js to v11.2 (#5278) (#5245 by Roman Musin)
+- Fixed: Bump highlight.js to v11.2 (#5278) (#5245 by Roman Musin)
 
 ## [android-v2.3.3](https://github.com/laurent22/joplin/releases/tag/android-v2.3.3) (Pre-release) - 2021-08-12T20:46:15Z
 

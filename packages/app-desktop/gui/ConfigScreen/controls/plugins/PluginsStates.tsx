@@ -4,15 +4,16 @@ import PluginService, { defaultPluginSetting, Plugins, PluginSetting, PluginSett
 import { _ } from '@joplin/lib/locale';
 import styled from 'styled-components';
 import SearchPlugins from './SearchPlugins';
-import PluginBox, { ItemEvent, UpdateState } from './PluginBox';
+import PluginBox, { UpdateState } from './PluginBox';
 import Button, { ButtonLevel, ButtonSize } from '../../../Button/Button';
 import bridge from '../../../../services/bridge';
 import produce from 'immer';
 import { OnChangeEvent } from '../../../lib/SearchInput/SearchInput';
-import { PluginItem } from './PluginBox';
-import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
+import { PluginItem, ItemEvent, OnPluginSettingChangeEvent } from '@joplin/lib/components/shared/config/plugins/types';
+import RepositoryApi, { InstallMode } from '@joplin/lib/services/plugins/RepositoryApi';
 import Setting from '@joplin/lib/models/Setting';
-import useOnInstallHandler, { OnPluginSettingChangeEvent } from './useOnInstallHandler';
+import useOnInstallHandler from '@joplin/lib/components/shared/config/plugins/useOnInstallHandler';
+import useOnDeleteHandler from '@joplin/lib/components/shared/config/plugins/useOnDeleteHandler';
 import Logger from '@joplin/utils/Logger';
 import StyledMessage from '../../../style/StyledMessage';
 import StyledLink from '../../../style/StyledLink';
@@ -59,7 +60,7 @@ let repoApi_: RepositoryApi = null;
 
 function repoApi(): RepositoryApi {
 	if (repoApi_) return repoApi_;
-	repoApi_ = new RepositoryApi('https://github.com/joplin/plugins', Setting.value('tempDir'));
+	repoApi_ = RepositoryApi.ofDefaultJoplinRepo(Setting.value('tempDir'), InstallMode.Default);
 	// repoApi_ = new RepositoryApi('/Users/laurent/src/joplin-plugins-test', Setting.value('tempDir'));
 	return repoApi_;
 }
@@ -170,20 +171,6 @@ export default function(props: Props) {
 		};
 	}, [manifestsLoaded, pluginItems, pluginService.appVersion]);
 
-	const onDelete = useCallback(async (event: ItemEvent) => {
-		const item = event.item;
-		const confirm = await bridge().showConfirmMessageBox(_('Delete plugin "%s"?', item.manifest.name));
-		if (!confirm) return;
-
-		const newSettings = produce(pluginSettings, (draft: PluginSettings) => {
-			if (!draft[item.manifest.id]) draft[item.manifest.id] = defaultPluginSetting();
-			draft[item.manifest.id].deleted = true;
-		});
-
-		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [pluginSettings, props.onChange]);
-
 	const onToggle = useCallback((event: ItemEvent) => {
 		const item = event.item;
 
@@ -215,14 +202,14 @@ export default function(props: Props) {
 	}, [pluginSettings, props.onChange]);
 
 	const onBrowsePlugins = useCallback(() => {
-		void bridge().openExternal('https://github.com/joplin/plugins/blob/master/README.md#plugins');
+		void bridge().openExternal('https://joplinapp.org/plugins/');
 	}, []);
 
 	const onPluginSettingsChange = useCallback((event: OnPluginSettingChangeEvent) => {
 		props.onChange({ value: pluginService.serializePluginSettings(event.value) });
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, []);
+	}, [pluginService, props.onChange]);
 
+	const onDelete = useOnDeleteHandler(pluginSettings, onPluginSettingsChange, false);
 	const onUpdate = useOnInstallHandler(setUpdatingPluginIds, pluginSettings, repoApi, onPluginSettingsChange, true);
 
 	const onToolsClick = useCallback(async () => {

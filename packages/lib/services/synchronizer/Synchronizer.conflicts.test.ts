@@ -5,6 +5,7 @@ import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
+import { NoteEntity } from '../database/types';
 
 describe('Synchronizer.conflicts', () => {
 
@@ -103,7 +104,7 @@ describe('Synchronizer.conflicts', () => {
 
 		await Note.save({ title: 'note1', parent_id: folder1.id });
 		await synchronizerStart();
-		const items = await allNotesFolders();
+		const items: NoteEntity[] = await allNotesFolders();
 		expect(items.length).toBe(1);
 		expect(items[0].title).toBe('note1');
 		expect(items[0].is_conflict).toBe(1);

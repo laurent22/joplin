@@ -563,10 +563,10 @@ function useMenu(props: Props) {
 
 			const rootMenuFile = {
 				// Using a dummy entry for macOS here, because first menu
-				// becomes 'Joplin' and we need a nenu called 'File' later.
+				// becomes 'Joplin' and we need a menu called 'File' later.
 				label: shim.isMac() ? '&JoplinMainMenu' : _('&File'),
 				// `&` before one of the char in the label name mean, that
-				// <Alt + F> will open this menu. It's needed becase electron
+				// <Alt + F> will open this menu. It's needed because electron
 				// opens the first menu on Alt press if no hotkey assigned.
 				// Issue: https://github.com/laurent22/joplin/issues/934
 				submenu: [{
@@ -837,11 +837,31 @@ function useMenu(props: Props) {
 						separator(),
 						menuItemDic.showNoteProperties,
 						menuItemDic.showNoteContentProperties,
+						separator(),
+						menuItemDic.permanentlyDeleteNote,
 					],
 				},
 				tools: {
 					label: _('&Tools'),
 					submenu: toolsItems,
+				},
+				window: {
+					id: 'window',
+
+					// Adds the default MacOS actions (e.g. "tile left") to the menu.
+					//
+					// Note: If the dev tools are shown on startup, this adds additional tab-related
+					// actions to the menu that are not otherwise shown. See https://stackoverflow.com/a/77458809
+					role: 'windowMenu',
+
+					label: _('&Window'),
+					visible: !!shim.isMac(),
+					submenu: [
+						{
+							role: 'minimize',
+							accelerator: shim.isMac() && keymapService.getAccelerator('minimizeWindow'),
+						},
+					],
 				},
 				help: {
 					label: _('&Help'),
@@ -946,6 +966,7 @@ function useMenu(props: Props) {
 			}
 
 			const template = [
+				shim.isMac() ? rootMenus.macOsApp : null,
 				rootMenus.file,
 				rootMenus.edit,
 				rootMenus.view,
@@ -953,10 +974,9 @@ function useMenu(props: Props) {
 				rootMenus.folder,
 				rootMenus.note,
 				rootMenus.tools,
+				shim.isMac() ? rootMenus.window : null,
 				rootMenus.help,
-			];
-
-			if (shim.isMac()) template.splice(0, 0, rootMenus.macOsApp);
+			].filter(item => item !== null);
 
 			if (props.routeName !== 'Main') {
 				setMenu(Menu.buildFromTemplate([

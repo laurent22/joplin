@@ -1,12 +1,15 @@
 import ElectronAppWrapper from './ElectronAppWrapper';
 import shim from '@joplin/lib/shim';
 import { _, setLocale } from '@joplin/lib/locale';
-import { BrowserWindow, nativeTheme, nativeImage } from 'electron';
+import { BrowserWindow, nativeTheme, nativeImage, dialog, shell, MessageBoxSyncOptions } from 'electron';
+import { dirname, toSystemSlashes } from '@joplin/lib/path-utils';
+import { fileUriToPath } from '@joplin/utils/url';
+import { urlDecode } from '@joplin/lib/string-utils';
 import * as Sentry from '@sentry/electron/main';
-import { writeFileSync } from 'fs';
 import { homedir } from 'os';
 import { msleep } from '@joplin/utils/time';
-const { dirname, toSystemSlashes } = require('@joplin/lib/path-utils');
+import { pathExists, writeFileSync } from 'fs-extra';
+import { normalize } from 'path';
 
 interface LastSelectedPath {
 	file: string;
@@ -20,21 +23,35 @@ interface OpenDialogOptions {
 	filters?: any[];
 }
 
+interface MessageDialogOptions extends Omit<MessageBoxSyncOptions, 'message'> {
+	message?: string;
+}
+
 export class Bridge {
 
 	private electronWrapper_: ElectronAppWrapper;
 	private lastSelectedPaths_: LastSelectedPath;
 	private autoUploadCrashDumps_ = false;
+	private rootProfileDir_: string;
+	private appName_: string;
+	private appId_: string;
 
-	public constructor(electronWrapper: ElectronAppWrapper) {
+	public constructor(electronWrapper: ElectronAppWrapper, appId: string, appName: string, rootProfileDir: string, autoUploadCrashDumps: boolean) {
 		this.electronWrapper_ = electronWrapper;
+		this.appId_ = appId;
+		this.appName_ = appName;
+		this.rootProfileDir_ = rootProfileDir;
+		this.autoUploadCrashDumps_ = autoUploadCrashDumps;
 		this.lastSelectedPaths_ = {
 			file: null,
 			directory: null,
 		};
 
-		Sentry.init({
-			dsn: 'https://cceec550871b1e8a10fee4c7a28d5cf2@o4506576757522432.ingest.sentry.io/4506594281783296',
+		this.sentryInit();
+	}
+
+	private sentryInit() {
+		const options: Sentry.ElectronMainOptions = {
 			beforeSend: event => {
 				try {
 					const date = (new Date()).toISOString().replace(/[:-]/g, '').split('.')[0];
@@ -49,7 +66,26 @@ export class Bridge {
 					return event;
 				}
 			},
-		});
+		};
+
+		if (this.autoUploadCrashDumps_) options.dsn = 'https://cceec550871b1e8a10fee4c7a28d5cf2@o4506576757522432.ingest.sentry.io/4506594281783296';
+
+		// eslint-disable-next-line no-console
+		console.info('Sentry: Initialized with autoUploadCrashDumps:', this.autoUploadCrashDumps_);
+
+		Sentry.init(options);
+	}
+
+	public appId() {
+		return this.appId_;
+	}
+
+	public appName() {
+		return this.appName_;
+	}
+
+	public rootProfileDir() {
+		return this.rootProfileDir_;
 	}
 
 	public electronApp() {
@@ -60,15 +96,19 @@ export class Bridge {
 		return !this.electronApp().electronApp().isPackaged;
 	}
 
+	public get autoUploadCrashDumps() {
+		return this.autoUploadCrashDumps_;
+	}
+
+	public set autoUploadCrashDumps(v: boolean) {
+		this.autoUploadCrashDumps_ = v;
+	}
+
 	public async captureException(error: any) {
 		Sentry.captureException(error);
 		// We wait to give the "beforeSend" event handler time to process the crash dump and write
 		// it to file.
 		await msleep(10);
-	}
-
-	public setAutoUploadCrashDumps(v: boolean) {
-		this.autoUploadCrashDumps_ = v;
 	}
 
 	// The build directory contains additional external files that are going to
@@ -187,7 +227,6 @@ export class Bridge {
 	}
 
 	public async showSaveDialog(options: any) {
-		const { dialog } = require('electron');
 		if (!options) options = {};
 		if (!('defaultPath' in options) && this.lastSelectedPaths_.file) options.defaultPath = this.lastSelectedPaths_.file;
 		const { filePath } = await dialog.showSaveDialog(this.window(), options);
@@ -198,7 +237,6 @@ export class Bridge {
 	}
 
 	public async showOpenDialog(options: OpenDialogOptions = null) {
-		const { dialog } = require('electron');
 		if (!options) options = {};
 		let fileType = 'file';
 		if (options.properties && options.properties.includes('openDirectory')) fileType = 'directory';
@@ -212,13 +250,12 @@ export class Bridge {
 	}
 
 	// Don't use this directly - call one of the showXxxxxxxMessageBox() instead
-	private showMessageBox_(window: any, options: any): number {
-		const { dialog } = require('electron');
+	private showMessageBox_(window: any, options: MessageDialogOptions): number {
 		if (!window) window = this.window();
-		return dialog.showMessageBoxSync(window, options);
+		return dialog.showMessageBoxSync(window, { message: '', ...options });
 	}
 
-	public showErrorMessageBox(message: string, options: any = null) {
+	public showErrorMessageBox(message: string, options: MessageDialogOptions = null) {
 		options = {
 			buttons: [_('OK')],
 			...options,
@@ -231,7 +268,7 @@ export class Bridge {
 		});
 	}
 
-	public showConfirmMessageBox(message: string, options: any = null) {
+	public showConfirmMessageBox(message: string, options: MessageDialogOptions = null) {
 		options = {
 			buttons: [_('OK'), _('Cancel')],
 			...options,
@@ -246,9 +283,7 @@ export class Bridge {
 	}
 
 	/* returns the index of the clicked button */
-	public showMessageBox(message: string, options: any = null) {
-		if (options === null) options = {};
-
+	public showMessageBox(message: string, options: MessageDialogOptions = {}) {
 		const result = this.showMessageBox_(this.window(), { type: 'question',
 			message: message,
 			buttons: [_('OK'), _('Cancel')], ...options });
@@ -275,12 +310,29 @@ export class Bridge {
 		return require('electron').MenuItem;
 	}
 
-	public openExternal(url: string) {
-		return require('electron').shell.openExternal(url);
+	public async openExternal(url: string) {
+		const protocol = new URL(url).protocol;
+
+		if (protocol === 'file:') {
+			await this.openItem(url);
+		} else {
+			return shell.openExternal(url);
+		}
 	}
 
 	public async openItem(fullPath: string) {
-		return require('electron').shell.openPath(toSystemSlashes(fullPath));
+		if (fullPath.startsWith('file:/')) {
+			fullPath = fileUriToPath(urlDecode(fullPath), shim.platformName());
+		}
+		fullPath = normalize(fullPath);
+
+		// Note: pathExists is intended to mitigate a security issue related to network drives
+		//       on Windows.
+		if (await pathExists(fullPath)) {
+			return shell.openPath(fullPath);
+		} else {
+			return 'Path does not exist.';
+		}
 	}
 
 	public screen() {
@@ -328,9 +380,9 @@ export class Bridge {
 
 let bridge_: Bridge = null;
 
-export function initBridge(wrapper: ElectronAppWrapper) {
+export function initBridge(wrapper: ElectronAppWrapper, appId: string, appName: string, rootProfileDir: string, autoUploadCrashDumps: boolean) {
 	if (bridge_) throw new Error('Bridge already initialized');
-	bridge_ = new Bridge(wrapper);
+	bridge_ = new Bridge(wrapper, appId, appName, rootProfileDir, autoUploadCrashDumps);
 	return bridge_;
 }
 

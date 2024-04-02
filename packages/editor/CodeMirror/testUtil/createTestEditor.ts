@@ -5,7 +5,7 @@ import { SelectionRange, EditorSelection, EditorState, Extension } from '@codemi
 import { EditorView } from '@codemirror/view';
 import { MarkdownMathExtension } from '../markdown/markdownMathParser';
 import forceFullParse from './forceFullParse';
-import loadLangauges from './loadLanguages';
+import loadLanguages from './loadLanguages';
 
 // Creates and returns a minimal editor with markdown extensions. Waits to return the editor
 // until all syntax tree tags in `expectedSyntaxTreeTags` exist.
@@ -15,7 +15,7 @@ const createTestEditor = async (
 	expectedSyntaxTreeTags: string[],
 	extraExtensions: Extension[] = [],
 ): Promise<EditorView> => {
-	await loadLangauges();
+	await loadLanguages();
 
 	const editor = new EditorView({
 		doc: initialText,

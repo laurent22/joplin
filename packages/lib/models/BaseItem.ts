@@ -13,7 +13,7 @@ import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 import JoplinError from '../JoplinError';
 import { LoadOptions, SaveOptions } from './utils/types';
 import { State as ShareState } from '../services/share/reducer';
-import { checkIfItemCanBeAddedToFolder, checkIfItemCanBeChanged, checkIfItemsCanBeChanged, needsReadOnlyChecks } from './utils/readOnly';
+import { checkIfItemCanBeAddedToFolder, checkIfItemCanBeChanged, checkIfItemsCanBeChanged, needsShareReadOnlyChecks } from './utils/readOnly';
 
 const { sprintf } = require('sprintf-js');
 const moment = require('moment');
@@ -145,7 +145,7 @@ export default class BaseItem extends BaseModel {
 		const ItemClass = this.itemClass(this.modelType());
 		const itemType = ItemClass.modelType();
 		// The fact that we don't check if the item_id still exist in the corresponding item table, means
-		// that the returned number might be innaccurate (for example if a sync operation was cancelled)
+		// that the returned number might be inaccurate (for example if a sync operation was cancelled)
 		const sql = 'SELECT count(*) as total FROM sync_items WHERE sync_target = ? AND item_type = ?';
 		const r = await this.db().selectOne(sql, [syncTarget, itemType]);
 		return r.total;
@@ -168,7 +168,7 @@ export default class BaseItem extends BaseModel {
 		return p[0].length === 32 && p[1] === 'md';
 	}
 
-	public static itemClass(item: any): any {
+	public static itemClass(item: any): typeof BaseItem {
 		if (!item) throw new Error('Item cannot be null');
 
 		if (typeof item === 'object') {
@@ -269,17 +269,17 @@ export default class BaseItem extends BaseModel {
 		return ItemClass.load(id, options);
 	}
 
-	public static deleteItem(itemType: ModelType, id: string) {
+	public static deleteItem(itemType: ModelType, id: string, options: DeleteOptions) {
 		const ItemClass = this.itemClass(itemType);
-		return ItemClass.delete(id);
+		return ItemClass.delete(id, options);
 	}
 
-	public static async delete(id: string, options: DeleteOptions = null) {
+	public static async delete(id: string, options?: DeleteOptions) {
 		return this.batchDelete([id], options);
 	}
 
-	public static async batchDelete(ids: string[], options: DeleteOptions = null) {
-		if (!options) options = {};
+	public static async batchDelete(ids: string[], options: DeleteOptions) {
+		if (!options) options = { sourceDescription: '' };
 		let trackDeleted = true;
 		if (options && options.trackDeleted !== null && options.trackDeleted !== undefined) trackDeleted = options.trackDeleted;
 
@@ -293,7 +293,7 @@ export default class BaseItem extends BaseModel {
 			});
 		}
 
-		if (needsReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache, options.disableReadOnlyCheck)) {
+		if (needsShareReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache, options.disableReadOnlyCheck)) {
 			const previousItems = await this.loadItemsByTypeAndIds(this.modelType(), ids, { fields: ['share_id', 'id'] });
 			checkIfItemsCanBeChanged(this.modelType(), options.changeSource, previousItems, this.syncShareCache);
 		}
@@ -336,6 +336,15 @@ export default class BaseItem extends BaseModel {
 	public static async deletedItemCount(syncTarget: number) {
 		const r = await this.db().selectOne('SELECT count(*) as total FROM deleted_items WHERE sync_target = ?', [syncTarget]);
 		return r['total'];
+	}
+
+	public static async allItemsInTrash() {
+		const noteRows = await this.db().selectAll('SELECT id FROM notes WHERE deleted_time != 0');
+		const folderRows = await this.db().selectAll('SELECT id FROM folders WHERE deleted_time != 0');
+		return {
+			noteIds: noteRows.map(r => r.id),
+			folderIds: folderRows.map(r => r.id),
+		};
 	}
 
 	public static remoteDeletedItem(syncTarget: number, itemId: string) {
@@ -488,7 +497,7 @@ export default class BaseItem extends BaseModel {
 
 		// List of keys that won't be encrypted - mostly foreign keys required to link items
 		// with each others and timestamp required for synchronisation.
-		const keepKeys = ['id', 'note_id', 'tag_id', 'parent_id', 'share_id', 'updated_time', 'type_'];
+		const keepKeys = ['id', 'note_id', 'tag_id', 'parent_id', 'share_id', 'updated_time', 'deleted_time', 'type_'];
 		const reducedItem: any = {};
 
 		for (let i = 0; i < keepKeys.length; i++) {
@@ -917,7 +926,7 @@ export default class BaseItem extends BaseModel {
 
 		const isNew = this.isNew(o, options);
 
-		if (needsReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache)) {
+		if (needsShareReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache)) {
 			if (!isNew) {
 				const previousItem = await this.loadItemByTypeAndId(this.modelType(), o.id, { fields: ['id', 'share_id'] });
 				checkIfItemCanBeChanged(this.modelType(), options.changeSource, previousItem, this.syncShareCache);

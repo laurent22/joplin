@@ -131,6 +131,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"O Joplinu"
 	],
@@ -293,6 +296,9 @@
 	"Auto-pair braces, parenthesis, quotations, etc.": [
 		"Avtomatsko zapri oglate oklepaje, oklepaje, narekovaje, itd."
 	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
+	],
 	"Automatically switch theme to match system theme": [
 		"Avtomatsko zamenjaj teme glede na sistemski način teme"
 	],
@@ -314,7 +320,7 @@
 	"Browse...": [
 		"Brskaj..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -430,6 +436,9 @@
 	],
 	"Close": [
 		"Zapri"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Zapri okno"
@@ -671,26 +680,11 @@
 	"Delete local data and re-download from sync target": [
 		"Izbriši lokalne podatke in jih ponovno prenesi iz sinhronizacijskega cilja"
 	],
-	"Delete note \"%s\"?": [
-		"Izbriši beležko \"%s\"?"
-	],
-	"Delete note?": [
-		"Želite izbrisati beležko?"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Želite izbrisati zvezek \"%s\"?\n\nVsi zvezki in pod-zvezki znotraj beležke bodo hkrati izbrisani."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Želite izbrisati zvezek? Vse beležke znotraj zvezka bodo hkrati izbrisane."
-	],
 	"Delete plugin \"%s\"?": [
 		"Izbriši dodatek \"%s\"?"
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
-	],
-	"Delete these %d notes?": [
-		"Izbriši te %d beležke?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Izbrišem to povabilo? Prejemnik več ne bo imel dostopa do tega skupnega zvezka."
@@ -824,6 +818,9 @@
 	"Dropbox Login": [
 		"Prijava Dropbox"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Podvoji"
 	],
@@ -883,6 +880,9 @@
 	],
 	"emphasised text": [
 		"poudarjen tekst"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"Omogoči"
@@ -1160,6 +1160,9 @@
 	"Grant authorisation": [
 		"Sprejmi odobritev"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		""
 	],
@@ -1205,6 +1208,9 @@
 	"Idle": [
 		"V mirovanju"
 	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
+	],
 	"Ignore": [
 		"Ignoriraj"
 	],
@@ -1237,6 +1243,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Če želite to storiti, vaši celotni podatki bodo morali biti šifrirani in sinhronizirani, zato da je najboljše, da pustite teči čez noč.\n\nZa začetek, prosim sledite naslednjim korakom:\n\n1. Sinhronizirajte vse vaše naprave.\n2. Kliknite \"%s\"\n3. Pustite da teče do konca. Medtem ko teče se izogibajte spreminjanju katerekoli beležke na vaših napravah, da se izognete konfliktom.\n4. Ko se sinhronizacija konča na tej napravi, sinhronizirajte še vse ostale vaše naprave in pustite da teče do konca.\n\nPomembno: to zaženete samo ENKRAT na eni napravi."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Če želite uporabljati sinhronizacijo datotečnega sistema je vaše dovoljenje potrebno za zapisovanje na zunanji prostor."
@@ -1322,12 +1331,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"Joplin Cloud e-pošta"
-	],
-	"Joplin Cloud password": [
-		"Joplin Cloud geslo"
-	],
 	"Joplin Export Directory": [
 		"Joplin izvozno mesto"
 	],
@@ -1391,6 +1394,9 @@
 	"Later": [
 		"Kasneje"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Izgled"
 	],
@@ -1439,12 +1445,6 @@
 	"Log": [
 		"Dnevnik"
 	],
-	"Login": [
-		"Prijava"
-	],
-	"Login below.": [
-		"Prijavite se spodaj."
-	],
 	"Login with Dropbox": [
 		"Prijav z Dropbox"
 	],
@@ -1455,6 +1455,9 @@
 		""
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1497,6 +1500,9 @@
 		""
 	],
 	"Media player, math, diagrams, table of contents": [
+		""
+	],
+	"Minimise": [
 		""
 	],
 	"Missing Master Keys": [
@@ -1616,7 +1622,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Ni avtenticirano z %s. Prosim podajte manjkajoče podatke."
 	],
 	"Not downloaded": [
@@ -1748,9 +1754,6 @@
 	"Options": [
 		"Možnosti"
 	],
-	"Or create an account.": [
-		"Ali ustvarite račun."
-	],
 	"Output format: %s": [
 		"Format izhoda: %s"
 	],
@@ -1834,6 +1837,9 @@
 	],
 	"Please wait...": [
 		"Prosimo počakajte..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"Orodja dodatkov"
@@ -2180,6 +2186,12 @@
 	"Solarised Light": [
 		"Solarizirano svetlo"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Nekatere predmete ni možno dešifrirani."
 	],
@@ -2197,6 +2209,9 @@
 	],
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Razvrsti predmete glede na<field> (title, updated_time, created_time)."
+	],
+	"Source": [
+		"Vir"
 	],
 	"Source format: %s": [
 		"Format vira: %s"
@@ -2381,9 +2396,6 @@
 	"Text editor command": [
 		"Ukaz za urejevalnik besedila"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"Hvala! Vaš Joplin račun je sedaj nastavljen in pripravljen za uporabo."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
@@ -2459,6 +2471,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Sinhronizacijski cilj mora biti nadgrajen preden lahko Joplin sinhronizira. Operacija bo trajala nekaj minut da se dokonča in aplikacija bo morala biti ponovno zagnana. Za nadaljevanje pritisnite na povezavo."
 	],
@@ -2500,9 +2515,6 @@
 	],
 	"There was an error downloading this attachment:": [
 		"Prišlo je do napake pri nalaganju te priponke:"
-	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"Prišlo je do napake pri nastavitvi vašega Joplin računa. Prosimo preverite vaš e-mail naslov ter geslo in poizkusite znova. Napaka je bila:\n\n%s"
 	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Ti predmeti bodo ostali na napravi, ampak ne bodo naloženi na sinhronizacijski cilj. Če želite najti te predmete, iščite po ali naslovu ali ID (je prikazan zgoraj v oklepajih)"
@@ -2551,6 +2563,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"To bo odprlo novo okno. Želite shranite trenutne spremembe?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"Time format": [
 		"Način zapisa ure"
@@ -2630,6 +2645,9 @@
 	"Total: %d/%d": [
 		"Skupno: %d/%d"
 	],
+	"Trash": [
+		""
+	],
 	"Try again": [
 		"Poizkusi znova"
 	],
@@ -2662,6 +2680,9 @@
 	],
 	"Undo": [
 		"Razveljavi"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Nepoznana oznaka: %s"
@@ -2842,6 +2863,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"Vstavili boste veliko sliko (%dx %d pikslov). Želite rajši spremeniti velikost na %d pikslov pred vstavitvijo?"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"Trenutno nimate nobenih zvezkov."

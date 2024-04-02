@@ -1,0 +1,6 @@
+{
+	"extraScripts": [
+		"contentScripts/codeMirror5.ts",
+		"contentScripts/codeMirror6.ts"
+	]
+}

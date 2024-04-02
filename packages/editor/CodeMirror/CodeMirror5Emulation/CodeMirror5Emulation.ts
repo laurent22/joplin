@@ -6,8 +6,9 @@ import { LogMessageCallback } from '../../types';
 import editorCommands from '../editorCommands/editorCommands';
 import { StateEffect } from '@codemirror/state';
 import { StreamParser } from '@codemirror/language';
-import Decorator, { LineWidgetOptions } from './Decorator';
+import Decorator, { LineWidgetOptions, MarkTextOptions } from './Decorator';
 import insertLineAfter from '../editorCommands/insertLineAfter';
+import CodeMirror5BuiltInOptions from './CodeMirror5BuiltInOptions';
 const { pregQuote } = require('@joplin/lib/string-utils-common');
 
 
@@ -15,6 +16,8 @@ type CodeMirror5Command = (codeMirror: CodeMirror5Emulation)=> void;
 
 type EditorEventCallback = (editor: CodeMirror5Emulation, ...args: any[])=> void;
 type OptionUpdateCallback = (editor: CodeMirror5Emulation, newVal: any, oldVal: any)=> void;
+
+type OverlayType<State> = StreamParser<State>|{ query: RegExp };
 
 interface CodeMirror5OptionRecord {
 	onUpdate: OptionUpdateCallback;
@@ -26,6 +29,11 @@ interface DocumentPosition {
 	ch: number;
 }
 
+interface DocumentPositionRange {
+	from: DocumentPosition;
+	to: DocumentPosition;
+}
+
 const documentPositionFromPos = (doc: Text, pos: number): DocumentPosition => {
 	const line = doc.lineAt(pos);
 	return {
@@ -35,11 +43,18 @@ const documentPositionFromPos = (doc: Text, pos: number): DocumentPosition => {
 	};
 };
 
+const posFromDocumentPosition = (doc: Text, pos: DocumentPosition) => {
+	const line = doc.line(pos.line + 1);
+	return line.from + pos.ch;
+};
+
 export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 	private _events: Record<string, EditorEventCallback[]> = {};
 	private _options: Record<string, CodeMirror5OptionRecord> = Object.create(null);
 	private _decorator: Decorator;
 	private _decoratorExtension: Extension;
+	private _userExtensions: Record<string, any> = Object.create(null);
+	private _builtInOptions: CodeMirror5BuiltInOptions;
 
 	// Used by some plugins to store state.
 	public state: Record<string, any> = Object.create(null);
@@ -58,6 +73,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		const { decorator, extension: decoratorExtension } = Decorator.create(editor);
 		this._decorator = decorator;
 		this._decoratorExtension = decoratorExtension;
+		this._builtInOptions = new CodeMirror5BuiltInOptions(editor);
 
 		editor.dispatch({
 			effects: StateEffect.appendConfig.of(this.makeCM6Extensions()),
@@ -114,13 +130,18 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 			showPanel.of(() => {
 				const dom = document.createElement('div');
 				dom.classList.add('CodeMirror-measure');
+
+				// Make invisible, but still measurable
+				dom.style.visibility = 'hidden';
+				dom.style.pointerEvents = 'none';
+				dom.style.height = '0';
+				dom.style.overflow = 'auto';
+
 				return { dom };
 			}),
 
-			// Note: We can allow legacy CM5 CSS to apply to the editor
-			// with a line similar to the following:
-			//    EditorView.editorAttributes.of({ class: 'CodeMirror' }),
-			// Many of these styles, however, don't work well with CodeMirror 6.
+			// Allows legacy CM5 CSS to apply to the editor:
+			EditorView.editorAttributes.of({ class: 'CodeMirror' }),
 		];
 	}
 
@@ -271,8 +292,24 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		return getScrollFraction(this.editor);
 	}
 
+	// CodeMirror-Vim's scrollIntoView only supports pos as a DocumentPosition.
+	public override scrollIntoView(
+		pos: DocumentPosition|DocumentPositionRange, margin?: number,
+	): void {
+		const isPosition = (arg: unknown): arg is DocumentPosition => {
+			return (arg as any).line !== undefined && (arg as any).ch !== undefined;
+		};
+
+		if (isPosition(pos)) {
+			return super.scrollIntoView(pos, margin);
+		} else {
+			return super.scrollIntoView(pos.from, margin);
+		}
+	}
+
 	public defineExtension(name: string, value: any) {
-		(CodeMirror5Emulation.prototype as any)[name] ??= value;
+		(CodeMirror5Emulation.prototype as any)[name] = value;
+		this._userExtensions[name] = value;
 	}
 
 	public defineOption(name: string, defaultValue: any, onUpdate: OptionUpdateCallback) {
@@ -289,6 +326,8 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 			const oldValue = this._options[name].value;
 			this._options[name].value = value;
 			this._options[name].onUpdate(this, value, oldValue);
+		} else if (this._builtInOptions.supportsOption(name)) {
+			this._builtInOptions.setOption(name, value);
 		} else {
 			super.setOption(name, value);
 		}
@@ -302,14 +341,33 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		}
 	}
 
+	public override coordsChar(coords: { left: number; top: number }, mode?: 'div' | 'local'): DocumentPosition {
+		// codemirror-vim's API only supports "div" mode. Thus, we convert
+		// local to div:
+		if (mode !== 'div') {
+			const bbox = this.editor.contentDOM.getBoundingClientRect();
+			coords = {
+				left: coords.left - bbox.left,
+				top: coords.top - bbox.top,
+			};
+		}
+
+		return super.coordsChar(coords, 'div');
+	}
+
 	// codemirror-vim's API doesn't match the API docs here -- it expects addOverlay
 	// to return a SearchQuery. As such, this override returns "any".
-	public override addOverlay<State>(modeObject: StreamParser<State>|{ query: RegExp }): any {
+	public override addOverlay<State>(modeObject: OverlayType<State>): any {
 		if ('query' in modeObject) {
 			return super.addOverlay(modeObject);
 		}
 
-		this._decorator.addOverlay(modeObject);
+		return this._decorator.addOverlay(modeObject);
+	}
+
+	public override removeOverlay(overlay?: OverlayType<any>): void {
+		super.removeOverlay(overlay);
+		this._decorator.removeOverlay(overlay);
 	}
 
 	public addLineClass(lineNumber: number, where: string, className: string) {
@@ -321,7 +379,36 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 	}
 
 	public addLineWidget(lineNumber: number, node: HTMLElement, options: LineWidgetOptions) {
-		this._decorator.addLineWidget(lineNumber, node, options);
+		return this._decorator.addLineWidget(lineNumber, node, options);
+	}
+
+	public addWidget(pos: DocumentPosition, node: HTMLElement) {
+		if (node.parentElement) {
+			node.remove();
+		}
+
+		const loc = posFromDocumentPosition(this.editor.state.doc, pos);
+		const screenCoords = this.editor.coordsAtPos(loc);
+		const bbox = this.editor.contentDOM.getBoundingClientRect();
+
+		node.style.position = 'absolute';
+
+		const left = screenCoords.left - bbox.left;
+		node.style.left = `${left}px`;
+		node.style.maxWidth = `${bbox.width - left}px`;
+		node.style.top = `${screenCoords.top + this.editor.scrollDOM.scrollTop}px`;
+
+		this.editor.scrollDOM.appendChild(node);
+	}
+
+	public markText(from: DocumentPosition, to: DocumentPosition, options?: MarkTextOptions) {
+		const doc = this.editor.state.doc;
+
+		return this._decorator.markText(
+			posFromDocumentPosition(doc, from),
+			posFromDocumentPosition(doc, to),
+			options,
+		);
 	}
 
 	// TODO: Currently copied from useCursorUtils.ts.
@@ -398,20 +485,26 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 			return;
 		}
 
-		this.execCommand(commandName);
+		if (this.commandExists(commandName)) {
+			return this.execCommand(commandName);
+		}
 	}
 
 	public commandExists(commandName: string) {
-		return commandName in CodeMirror5Emulation.commands;
+		return commandName in CodeMirror5Emulation.commands || typeof this._userExtensions[commandName] === 'function';
 	}
 
-	public execCommand(name: string) {
+	public execCommand(name: string, ...args: any[]) {
 		if (!this.commandExists(name)) {
 			this.logMessage(`Unsupported CodeMirror command, ${name}`);
 			return;
 		}
 
-		CodeMirror5Emulation.commands[name as (keyof typeof CodeMirror5Emulation.commands)](this);
+		if (name in CodeMirror5Emulation.commands) {
+			return CodeMirror5Emulation.commands[name as (keyof typeof CodeMirror5Emulation.commands)](this);
+		} else if (typeof this._userExtensions[name] === 'function') {
+			return this._userExtensions[name].call(this, ...args);
+		}
 	}
 }
 

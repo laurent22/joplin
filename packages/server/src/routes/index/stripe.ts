@@ -285,7 +285,7 @@ export const postHandlers: PostHandlers = {
 			// 	} catch (error) {
 			// 		// We don't want this part to fail since the user has
 			// 		// already paid at that point, so we just default to Basic
-			// 		// in that case. Normally it shoud not happen anyway.
+			// 		// in that case. Normally it should not happen anyway.
 			// 		logger.error('Could not determine account type from price ID - defaulting to "Basic"', error);
 			// 	}
 

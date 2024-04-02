@@ -394,6 +394,10 @@ export default class ElectronAppWrapper {
 			this.tray_.setContextMenu(contextMenu);
 
 			this.tray_.on('click', () => {
+				if (!this.window()) {
+					console.warn('The window object was not available during the click event from tray icon');
+					return;
+				}
 				this.window().show();
 			});
 		} catch (error) {
@@ -424,6 +428,7 @@ export default class ElectronAppWrapper {
 			if (!win) return;
 			if (win.isMinimized()) win.restore();
 			win.show();
+			// eslint-disable-next-line no-restricted-properties
 			win.focus();
 			if (process.platform !== 'darwin') {
 				const url = argv.find((arg) => isCallbackUrl(arg));

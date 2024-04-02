@@ -65,6 +65,11 @@ export const getDefaultPluginPathsAndSettings = async (
 			// As such, we recreate the plugin state if necessary.
 			if (!draft[pluginId]) {
 				draft[pluginId] = defaultPluginSetting();
+
+				const enabledByDefault = defaultPluginsInfo[pluginId].enabled;
+				if (typeof enabledByDefault === 'boolean') {
+					draft[pluginId].enabled = enabledByDefault;
+				}
 			}
 		});
 	}

@@ -11,7 +11,7 @@ import AlarmServiceDriverNode from '@joplin/lib/services/AlarmServiceDriverNode'
 import Logger, { TargetType } from '@joplin/utils/Logger';
 import Setting from '@joplin/lib/models/Setting';
 import actionApi from '@joplin/lib/services/rest/actionApi.desktop';
-import BaseApplication from '@joplin/lib/BaseApplication';
+import BaseApplication, { StartOptions } from '@joplin/lib/BaseApplication';
 import DebugService from '@joplin/lib/debug/DebugService';
 import { _, setLocale } from '@joplin/lib/locale';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
@@ -129,10 +129,6 @@ class Application extends BaseApplication {
 			this.setupOcrService();
 		}
 
-		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'autoUploadCrashDumps') {
-			bridge().setAutoUploadCrashDumps(action.value);
-		}
-
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'style.editor.fontFamily' || action.type === 'SETTING_UPDATE_ALL') {
 			this.updateEditorFont();
 		}
@@ -205,8 +201,10 @@ class Application extends BaseApplication {
 
 		// The '*' and '!important' parts are necessary to make sure Russian text is displayed properly
 		// https://github.com/laurent22/joplin/issues/155
+		//
+		// Note: Be careful about the specificity here. Incorrect specificity can break monospaced fonts in tables.
 
-		const css = `.CodeMirror *, .cm-editor .cm-content { font-family: ${fontFamilies.join(', ')} !important; }`;
+		const css = `.CodeMirror5 *, .cm-editor .cm-content { font-family: ${fontFamilies.join(', ')} !important; }`;
 		const styleTag = document.createElement('style');
 		styleTag.type = 'text/css';
 		styleTag.appendChild(document.createTextNode(css));
@@ -281,17 +279,7 @@ class Application extends BaseApplication {
 		}
 
 		try {
-			const devPluginOptions = { devMode: true, builtIn: false };
-
-			if (Setting.value('plugins.devPluginPaths')) {
-				const paths = Setting.value('plugins.devPluginPaths').split(',').map((p: string) => p.trim());
-				await service.loadAndRunPlugins(paths, pluginSettings, devPluginOptions);
-			}
-
-			// Also load dev plugins that have passed via command line arguments
-			if (Setting.value('startupDevPlugins')) {
-				await service.loadAndRunPlugins(Setting.value('startupDevPlugins'), pluginSettings, devPluginOptions);
-			}
+			await service.loadAndRunDevPlugins(pluginSettings);
 		} catch (error) {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
 		}
@@ -383,14 +371,12 @@ class Application extends BaseApplication {
 		eventManager.on(EventName.ResourceChange, handleResourceChange);
 	}
 
-	public async start(argv: string[]): Promise<any> {
+	public async start(argv: string[], startOptions: StartOptions = null): Promise<any> {
 		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
 		// insert an extra argument so that they can be processed in a consistent way everywhere.
 		if (!bridge().electronIsDev()) argv.splice(1, 0, '.');
 
-		argv = await super.start(argv);
-
-		bridge().setAutoUploadCrashDumps(Setting.value('autoUploadCrashDumps'));
+		argv = await super.start(argv, startOptions);
 
 		await this.applySettingsSideEffects();
 
@@ -592,7 +578,11 @@ class Application extends BaseApplication {
 		ExternalEditWatcher.instance().setLogger(reg.logger());
 		ExternalEditWatcher.instance().initialize(bridge, this.store().dispatch);
 
-		ResourceEditWatcher.instance().initialize(reg.logger(), (action: any) => { this.store().dispatch(action); }, (path: string) => bridge().openItem(path));
+		ResourceEditWatcher.instance().initialize(
+			reg.logger(),
+			(action: any) => { this.store().dispatch(action); },
+			(path: string) => bridge().openItem(path),
+		);
 
 		// Forwards the local event to the global event manager, so that it can
 		// be picked up by the plugin manager.
@@ -630,16 +620,25 @@ class Application extends BaseApplication {
 
 		await this.setupOcrService();
 
-		eventManager.on(EventName.OcrServiceResourcesProcessed, () => {
+		eventManager.on(EventName.OcrServiceResourcesProcessed, async () => {
+			await ResourceService.instance().indexNoteResources();
+		});
+
+		eventManager.on(EventName.NoteResourceIndexed, async () => {
 			SearchEngine.instance().scheduleSyncTables();
 		});
 
-		// await populateDatabase(reg.db(), {
-		// 	clearDatabase: true,
-		// 	folderCount: 1000,
-		// 	rootFolderCount: 1,
-		// 	subFolderDepth: 1,
-		// });
+		// setTimeout(() => {
+		// 	void populateDatabase(reg.db(), {
+		// 		clearDatabase: true,
+		// 		folderCount: 200,
+		// 		noteCount: 3000,
+		// 		tagCount: 2000,
+		// 		tagsPerNote: 10,
+		// 		rootFolderCount: 20,
+		// 		subFolderDepth: 3,
+		// 	});
+		// }, 5000);
 
 		// setTimeout(() => {
 		// 	console.info(CommandService.instance().commandsToMarkdownTable(this.store().getState()));

@@ -13,7 +13,7 @@ describe('Synchronizer.tags', () => {
 		await switchClient(1);
 	});
 
-	async function shoudSyncTagTest(withEncryption: boolean) {
+	async function shouldSyncTagTest(withEncryption: boolean) {
 		let masterKey = null;
 		if (withEncryption) {
 			setEncryptionEnabled(true);
@@ -63,11 +63,11 @@ describe('Synchronizer.tags', () => {
 	}
 
 	it('should sync tags', (async () => {
-		await shoudSyncTagTest(false);
+		await shouldSyncTagTest(false);
 	}));
 
 	it('should sync encrypted tags', (async () => {
-		await shoudSyncTagTest(true);
+		await shouldSyncTagTest(true);
 	}));
 
 });

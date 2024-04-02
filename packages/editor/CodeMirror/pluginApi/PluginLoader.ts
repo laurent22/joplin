@@ -1,4 +1,4 @@
-import { LogMessageCallback, PluginData } from '../../types';
+import { LogMessageCallback, ContentScriptData } from '../../types';
 import CodeMirrorControl from '../CodeMirrorControl';
 import codeMirrorRequire from './codeMirrorRequire';
 
@@ -8,9 +8,11 @@ let pluginLoaderCounter = 0;
 type OnScriptLoadCallback = (exports: any)=> void;
 type OnPluginRemovedCallback = ()=> void;
 
+const contentScriptToId = (contentScript: ContentScriptData) => `${contentScript.pluginId}--${contentScript.contentScriptId}`;
+
 export default class PluginLoader {
 	private pluginScriptsContainer: HTMLElement;
-	private loadedPluginIds: string[] = [];
+	private loadedContentScriptIds: string[] = [];
 	private pluginRemovalCallbacks: Record<string, OnPluginRemovedCallback> = {};
 	private pluginLoaderId: number;
 
@@ -32,17 +34,18 @@ export default class PluginLoader {
 		(window as any).__pluginLoaderRequireFunctions[this.pluginLoaderId] = codeMirrorRequire;
 	}
 
-	public async setPlugins(plugins: PluginData[]) {
-		for (const plugin of plugins) {
-			if (!this.loadedPluginIds.includes(plugin.pluginId)) {
-				this.addPlugin(plugin);
+	public async setPlugins(contentScripts: ContentScriptData[]) {
+		for (const contentScript of contentScripts) {
+			const id = contentScriptToId(contentScript);
+			if (!this.loadedContentScriptIds.includes(id)) {
+				this.addPlugin(contentScript);
 			}
 		}
 
 		// Remove old plugins
-		const pluginIds = plugins.map(plugin => plugin.pluginId);
-		const removedIds = this.loadedPluginIds
-			.filter(id => !pluginIds.includes(id));
+		const contentScriptIds = contentScripts.map(contentScriptToId);
+		const removedIds = this.loadedContentScriptIds
+			.filter(id => !contentScriptIds.includes(id));
 
 		for (const id of removedIds) {
 			if (id in this.pluginRemovalCallbacks) {
@@ -51,10 +54,10 @@ export default class PluginLoader {
 		}
 	}
 
-	private addPlugin(plugin: PluginData) {
+	private addPlugin(plugin: ContentScriptData) {
 		const onRemoveCallbacks: OnPluginRemovedCallback[] = [];
 
-		this.logMessage(`Loading plugin ${plugin.pluginId}`);
+		this.logMessage(`Loading plugin ${plugin.pluginId}, content script ${plugin.contentScriptId}`);
 
 		const addScript = (onLoad: OnScriptLoadCallback) => {
 			const scriptElement = document.createElement('script');
@@ -68,13 +71,14 @@ export default class PluginLoader {
 				const js = await plugin.contentScriptJs();
 
 				// Stop if cancelled
-				if (!this.loadedPluginIds.includes(plugin.pluginId)) {
+				if (!this.loadedContentScriptIds.includes(contentScriptToId(plugin))) {
 					return;
 				}
 
-				scriptElement.innerText = `
+				scriptElement.appendChild(document.createTextNode(`
 				(async () => {
 					const exports = {};
+					const module = {};
 					const require = window.__pluginLoaderRequireFunctions[${JSON.stringify(this.pluginLoaderId)}];
 					const joplin = {
 						require,
@@ -82,9 +86,9 @@ export default class PluginLoader {
 		
 					${js};
 		
-					window.__pluginLoaderScriptLoadCallbacks[${JSON.stringify(scriptId)}](exports);
+					window.__pluginLoaderScriptLoadCallbacks[${JSON.stringify(scriptId)}](module.exports || exports);
 				})();
-				`;
+				`));
 
 				(window as any).__pluginLoaderScriptLoadCallbacks[scriptId] = onLoad;
 
@@ -109,13 +113,13 @@ export default class PluginLoader {
 			this.pluginScriptsContainer.appendChild(styleContainer);
 		};
 
-		this.pluginRemovalCallbacks[plugin.pluginId] = () => {
+		this.pluginRemovalCallbacks[contentScriptToId(plugin)] = () => {
 			for (const callback of onRemoveCallbacks) {
 				callback();
 			}
 
-			this.loadedPluginIds = this.loadedPluginIds.filter(id => {
-				return id !== plugin.pluginId;
+			this.loadedContentScriptIds = this.loadedContentScriptIds.filter(id => {
+				return id !== contentScriptToId(plugin);
 			});
 		};
 
@@ -129,7 +133,7 @@ export default class PluginLoader {
 				pluginId: plugin.pluginId,
 				contentScriptId: plugin.contentScriptId,
 			};
-			const loadedPlugin = exports.default(context);
+			const loadedPlugin = exports.default(context) ?? {};
 
 			loadedPlugin.plugin?.(this.editor);
 
@@ -173,7 +177,7 @@ export default class PluginLoader {
 			}
 		});
 
-		this.loadedPluginIds.push(plugin.pluginId);
+		this.loadedContentScriptIds.push(contentScriptToId(plugin));
 	}
 
 	public remove() {

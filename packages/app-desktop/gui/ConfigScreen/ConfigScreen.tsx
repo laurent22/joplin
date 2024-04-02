@@ -58,6 +58,15 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	}
 
 	private async checkSyncConfig_() {
+		if (this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
+			const isAuthenticated = await reg.syncTarget().isAuthenticated();
+			if (!isAuthenticated) {
+				return this.props.dispatch({
+					type: 'NAV_GO',
+					routeName: 'JoplinCloudLogin',
+				});
+			}
+		}
 		await shared.checkSyncConfig(this, this.state.settings);
 	}
 
@@ -336,10 +345,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				this.setState({ needRestart: true });
 			}
 			shared.updateSettingValue(this, key, value);
-
-			if (md.autoSave) {
-				shared.scheduleSaveSettings(this);
-			}
 		};
 
 		const md = Setting.settingMetadata(key);

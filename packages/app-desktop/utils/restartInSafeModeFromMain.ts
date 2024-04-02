@@ -1,16 +1,17 @@
 import Setting from '@joplin/lib/models/Setting';
 import bridge from '../bridge';
 import processStartFlags from '@joplin/lib/utils/processStartFlags';
-import BaseApplication, { safeModeFlagFilename } from '@joplin/lib/BaseApplication';
+import { safeModeFlagFilename } from '@joplin/lib/BaseApplication';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 import { writeFile } from 'fs-extra';
 import { join } from 'path';
+import determineBaseAppDirs from '@joplin/lib/determineBaseAppDirs';
 
 
 const restartInSafeModeFromMain = async () => {
 	// Only set constants here -- the main process doesn't have easy access (without loading
 	// a large amount of other code) to the database.
-	const appName = `joplin${bridge().env() === 'dev' ? 'dev' : ''}-desktop`;
+	const appName = bridge().appName();
 	Setting.setConstant('appId', `net.cozic.${appName}`);
 	Setting.setConstant('appType', 'desktop');
 	Setting.setConstant('appName', appName);
@@ -20,7 +21,7 @@ const restartInSafeModeFromMain = async () => {
 	shimInit({});
 
 	const startFlags = await processStartFlags(bridge().processArgv());
-	const rootProfileDir = BaseApplication.determineProfileDir(startFlags.matched);
+	const { rootProfileDir } = determineBaseAppDirs(startFlags.matched.profileDir, appName);
 	const { profileDir } = await initProfile(rootProfileDir);
 
 	// We can't access the database, so write to a file instead.

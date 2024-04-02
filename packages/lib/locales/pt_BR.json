@@ -140,6 +140,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Sobre o Joplin"
 	],
@@ -320,6 +323,9 @@
 	"Automatically check for updates": [
 		"Verificar atualizações automaticamente"
 	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
+	],
 	"Automatically switch theme to match system theme": [
 		"Automaticamente alterar o tema para o tema do sistema"
 	],
@@ -341,7 +347,7 @@
 	"Browse...": [
 		"Navegar..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -469,6 +475,9 @@
 	],
 	"Close dropdown": [
 		"Fechar menu"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"Fechar Janela"
@@ -621,7 +630,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Não foi possível verificar o status de compartilhamento deste caderno - abortando. Por favor, tente de novo quando estiver conectado na internet."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"Não foi possível verificar a sua identidade: %s"
 	],
 	"Create": [
@@ -765,20 +774,8 @@
 	"Delete note": [
 		"Excluir nota"
 	],
-	"Delete note \"%s\"?": [
-		"Excluir a nota \"%s\"?"
-	],
-	"Delete note?": [
-		"Excluir nota?"
-	],
 	"Delete notebook": [
 		"Excluir caderno"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Excluir o caderno\"%s\"?\n\nTodas as notas e sub-cadernos dentro deste também serão excluídos."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Excluir o caderno? Todas as notas e sub-cadernos dentro deste também serão excluídas."
 	],
 	"Delete plugin \"%s\"?": [
 		"Excluir o plugin \"%s\"?"
@@ -791,9 +788,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Excluir o caderno \"Inbox\"?\n\nAo excluir o caderno \"Inbox\", e-mails recentemente enviados a ele podem ser perdidos."
-	],
-	"Delete these %d notes?": [
-		"Excluir estas %d notas?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Deletar este convite? O destinatário não terá mais acesso a este caderno compartilhado."
@@ -942,6 +936,9 @@
 	"Dropbox Login": [
 		"Login no Dropbox"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Duplicar"
 	],
@@ -1019,6 +1016,9 @@
 	],
 	"emphasised text": [
 		"texto enfatizado"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"Habilitar"
@@ -1336,6 +1336,9 @@
 	"Grant authorisation": [
 		"Conceder autorização"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"Cabeçalho %d"
 	],
@@ -1402,6 +1405,9 @@
 	"Idle": [
 		"Inativo"
 	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
+	],
 	"Ignore": [
 		"Ignorar"
 	],
@@ -1434,6 +1440,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Para fazer isso, seu conjunto de dados inteiro terá que ser criptografado e sincronizado, então é melhor deixá-lo executando à noite.\n\nPara começar, por favor siga estas instruções:\n\n1. Sincronize todos os seus dispositivos.\n2. Clique \"%s\".\n3. Deixe executar até completar. Enquanto estiver executando, evite mudar qualquer nota em outros dispositivos, para evitar conflitos.\n4. Uma vez que a sincronia tenha sido feita, sincronize todos os outros dispositivos, e deixe-o executar até o fim.\n\nImportante: você só precisa executar isto UMA VEZ, em um dispositivo."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Para usar a sincronização do sistema de arquivos, é necessário sua permissão para gravar no armazenamento externo."
@@ -1525,12 +1534,6 @@
 	"Joplin Cloud": [
 		"Nuvem Joplin"
 	],
-	"Joplin Cloud email": [
-		"Nuvem Servidor Joplin"
-	],
-	"Joplin Cloud password": [
-		"Senha da Nuvem do Servidor Joplin"
-	],
 	"Joplin Export Directory": [
 		"Diretório de Exportação do Joplin"
 	],
@@ -1600,6 +1603,9 @@
 	"Later": [
 		"Mais tarde"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Layout"
 	],
@@ -1661,12 +1667,6 @@
 	"Log": [
 		"Log"
 	],
-	"Login": [
-		"Login"
-	],
-	"Login below.": [
-		"Login abaixo."
-	],
 	"Login with Dropbox": [
 		"Login com Dropbox"
 	],
@@ -1678,6 +1678,9 @@
 	],
 	"Logs, profiles, sync status": [
 		"Logo, perfis, status de sincronização"
+	],
+	"Longitude": [
+		""
 	],
 	"Make a donation": [
 		"Fazer uma doação"
@@ -1741,6 +1744,9 @@
 	],
 	"Media player, math, diagrams, table of contents": [
 		"Player de mídia, matemática, diagramas, tabela de conteúdo"
+	],
+	"Minimise": [
+		""
 	],
 	"Missing keys": [
 		"Chaves faltando"
@@ -1868,7 +1874,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Não autenticado com %s. Por favor, complete as credenciais que estiverem faltando."
 	],
 	"Not downloaded": [
@@ -2018,9 +2024,6 @@
 	"Options": [
 		"Opções"
 	],
-	"Or create an account.": [
-		"Ou crie uma nova nota."
-	],
 	"Ordered list": [
 		"Lista ordenada"
 	],
@@ -2110,6 +2113,9 @@
 	],
 	"Please wait...": [
 		"Por favor aguarde..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"Ferramentas de plugins"
@@ -2540,6 +2546,12 @@
 	"Solarised Light": [
 		"Solarizado Claro"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Alguns itens não podem ser descriptografados."
 	],
@@ -2560,6 +2572,9 @@
 	],
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Classificar o item por <campo> (ex.: título, horário_de_atualização, horário_de_criação)."
+	],
+	"Source": [
+		"Origem"
 	],
 	"Source format: %s": [
 		"Formato da origem: \"%s\""
@@ -2759,9 +2774,6 @@
 	"Text editor command": [
 		"Comando do editor de texto"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"Obrigado! Sua conta Joplin Cloud está configurada e pronta para uso."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Não é possível excluir o perfil atualmente ativo. Troque-o por um perfil diferente e tente novamente."
 	],
@@ -2843,6 +2855,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"O destinatário não pôde ser removido da lista. Por favor, tente novamente\n\nO erro foi: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"O alvo da sincronização precisa ser atualizado antes que o Joplin possa sincronizar. A operação pode levar alguns minutos para completar e o app terá que ser reiniciado. Para proceder, por favor, clique neste link."
 	],
@@ -2893,9 +2908,6 @@
 	],
 	"There was an error downloading this attachment:": [
 		"Houve um erro ao baixar este anexo:"
-	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"Ocorreu uma falha na configuração de sua conta Joplin Cloud. Verifique seu e-mail e sua senha e tente novamente.\nErro:\n\n%s"
 	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Estes itens continuarão no dispositivo mas não serão enviados ao alvo de sincronização. Para encontrar esses itens, pesquise pelo título ou pelo ID (que é exibido nos colchetes acima)"
@@ -2956,6 +2968,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"Isso abrirá uma nova tela. Salvar seu progresso atual?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Isso vai remover o cadernos de sua coleção e você não vai mais ter acesso ao conteúdo. Deseja continuar?"
@@ -3056,6 +3071,9 @@
 	"Total: %d/%d": [
 		"Total: %d/%d"
 	],
+	"Trash": [
+		""
+	],
 	"Try again": [
 		"Tente novamente"
 	],
@@ -3091,6 +3109,9 @@
 	],
 	"Undo": [
 		"Desfazer"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"Flag desconhecida: %s"
@@ -3286,6 +3307,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"Você está prestes a anexar uma imagem grande (%dx%d pixels). Você gostaria de diminuir o tamanho para %d pixels antes de anexar?"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"No momento, você não possui cadernos."

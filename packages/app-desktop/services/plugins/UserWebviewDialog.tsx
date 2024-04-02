@@ -5,6 +5,7 @@ import PluginService from '@joplin/lib/services/plugins/PluginService';
 import WebviewController from '@joplin/lib/services/plugins/WebviewController';
 import UserWebview, { Props as UserWebviewProps } from './UserWebview';
 import UserWebviewDialogButtonBar from './UserWebviewDialogButtonBar';
+import { focus } from '@joplin/lib/utils/focusHandler';
 const styled = require('styled-components').default;
 
 interface Props extends UserWebviewProps {
@@ -101,7 +102,7 @@ export default function UserWebviewDialog(props: Props) {
 		// We focus the dialog once it's ready to make sure that the ESC/Enter
 		// keyboard shortcuts are working.
 		// https://github.com/laurent22/joplin/issues/4474
-		if (webviewRef.current) webviewRef.current.focus();
+		if (webviewRef.current) focus('UserWebviewDialog', webviewRef.current);
 	}, []);
 
 	return (

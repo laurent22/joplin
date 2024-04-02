@@ -16,6 +16,11 @@ interface Release {
 	assets: ReleaseAsset[];
 }
 
+export enum InstallMode {
+	Restricted,
+	Default,
+}
+
 const findWorkingGitHubUrl = async (defaultContentUrl: string): Promise<string> => {
 	// From: https://github.com/laurent22/joplin/issues/5161#issuecomment-921642721
 
@@ -57,15 +62,21 @@ export default class RepositoryApi {
 	// Later on, other repo types could be supported.
 	private baseUrl_: string;
 	private tempDir_: string;
+	private readonly installMode_: InstallMode;
 	private release_: Release = null;
 	private manifests_: PluginManifest[] = null;
 	private githubApiUrl_: string;
 	private contentBaseUrl_: string;
 	private isUsingDefaultContentUrl_ = true;
 
-	public constructor(baseUrl: string, tempDir: string) {
+	public constructor(baseUrl: string, tempDir: string, installMode: InstallMode) {
+		this.installMode_ = installMode;
 		this.baseUrl_ = baseUrl;
 		this.tempDir_ = tempDir;
+	}
+
+	public static ofDefaultJoplinRepo(tempDirPath: string, installMode: InstallMode) {
+		return new RepositoryApi('https://github.com/joplin/plugins', tempDirPath, installMode);
 	}
 
 	public async initialize() {
@@ -73,8 +84,9 @@ export default class RepositoryApi {
 		// https://api.github.com/repos/joplin/plugins/releases
 		this.githubApiUrl_ = this.baseUrl_.replace(/^(https:\/\/)(github\.com\/)(.*)$/, '$1api.$2repos/$3');
 		const defaultContentBaseUrl = this.isLocalRepo ? this.baseUrl_ : `${this.baseUrl_.replace(/github\.com/, 'raw.githubusercontent.com')}/master`;
-		this.contentBaseUrl_ = this.isLocalRepo ? defaultContentBaseUrl : await findWorkingGitHubUrl(defaultContentBaseUrl);
 
+		const canUseMirrors = this.installMode_ === InstallMode.Default && !this.isLocalRepo;
+		this.contentBaseUrl_ = canUseMirrors ? await findWorkingGitHubUrl(defaultContentBaseUrl) : defaultContentBaseUrl;
 		this.isUsingDefaultContentUrl_ = this.contentBaseUrl_ === defaultContentBaseUrl;
 
 		await this.loadManifests();
@@ -165,6 +177,10 @@ export default class RepositoryApi {
 		}
 	}
 
+	private isBlockedByInstallMode(manifest: PluginManifest) {
+		return this.installMode_ === InstallMode.Restricted && manifest._recommended !== true;
+	}
+
 	public async search(query: string): Promise<PluginManifest[]> {
 		query = query.toLowerCase().trim();
 
@@ -172,6 +188,10 @@ export default class RepositoryApi {
 		const output: PluginManifest[] = [];
 
 		for (const manifest of manifests) {
+			if (this.isBlockedByInstallMode(manifest)) {
+				continue;
+			}
+
 			for (const field of ['name', 'description']) {
 				const v = (manifest as any)[field];
 				if (!v) continue;
@@ -183,6 +203,12 @@ export default class RepositoryApi {
 			}
 		}
 
+		output.sort((m1, m2) => {
+			if (m1._recommended && !m2._recommended) return -1;
+			if (!m1._recommended && m2._recommended) return +1;
+			return m1.name.toLowerCase() < m2.name.toLowerCase() ? -1 : +1;
+		});
+
 		return output;
 	}
 
@@ -192,6 +218,7 @@ export default class RepositoryApi {
 		const manifests = await this.manifests();
 		const manifest = manifests.find(m => m.id === pluginId);
 		if (!manifest) throw new Error(`No manifest for plugin ID "${pluginId}"`);
+		if (this.isBlockedByInstallMode(manifest)) throw new Error(`Plugin is blocked by intstallation policy. ID "${pluginId}"`);
 
 		const fileUrl = this.assetFileUrl(manifest.id); // this.repoFileUrl(`plugins/${manifest.id}/plugin.jpl`);
 		const hash = md5(Date.now() + Math.random());
@@ -229,7 +256,9 @@ export default class RepositoryApi {
 	public async pluginCanBeUpdated(pluginId: string, installedVersion: string, appVersion: string): Promise<boolean> {
 		const manifest = (await this.manifests()).find(m => m.id === pluginId);
 		if (!manifest) return false;
-		return compareVersions(installedVersion, manifest.version) < 0 && compareVersions(appVersion, manifest.app_min_version) >= 0;
+
+		const supportsCurrentAppVersion = compareVersions(installedVersion, manifest.version) < 0 && compareVersions(appVersion, manifest.app_min_version) >= 0;
+		return supportsCurrentAppVersion && !this.isBlockedByInstallMode(manifest);
 	}
 
 }

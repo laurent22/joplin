@@ -26,6 +26,7 @@ import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import useContextMenu from '../utils/useContextMenu';
 import useWebviewIpcMessage from '../utils/useWebviewIpcMessage';
 import Toolbar from '../Toolbar';
+import useEditorSearchHandler from '../utils/useEditorSearchHandler';
 
 const logger = Logger.create('CodeMirror6');
 const logDebug = (message: string) => logger.debug(message);
@@ -219,6 +220,10 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		const timeoutId = shim.setTimeout(async () => {
 			let bodyToRender = props.content;
 
+			if (!props.visiblePanes.includes('viewer')) {
+				return;
+			}
+
 			if (!bodyToRender.trim() && props.visiblePanes.indexOf('viewer') >= 0 && props.visiblePanes.indexOf('editor') < 0) {
 				// Fixes https://github.com/laurent22/joplin/issues/217
 				bodyToRender = `<i>${_('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout'))}</i>`;
@@ -299,40 +304,21 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	const cellViewerStyle = useMemo(() => {
 		const output = { ...styles.cellViewer };
 		if (!props.visiblePanes.includes('viewer')) {
-			// Note: setting webview.display to "none" is currently not supported due
-			// to this bug: https://github.com/electron/electron/issues/8277
-			// So instead setting the width 0.
-			output.width = 1;
-			output.maxWidth = 1;
+			output.display = 'none';
 		} else if (!props.visiblePanes.includes('editor')) {
 			output.borderLeftStyle = 'none';
 		}
 		return output;
 	}, [styles.cellViewer, props.visiblePanes]);
 
-	// Disable this effect to fix this:
-	//
-	// https://github.com/laurent22/joplin/issues/6514 It doesn't seem essential
-	// to automatically focus the editor when the layout changes. The workaround
-	// is to toggle the layout Cmd+L, then manually focus the editor Cmd+Shift+B.
-	//
-	// On the other hand, if we automatically focus the editor, and the user
-	// does not want this, there's no workaround, so it's better to have this
-	// disabled.
-
-	// const editorPaneVisible = props.visiblePanes.indexOf('editor') >= 0;
-
-	// useEffect(() => {
-	// 	if (!editorRef.current) return;
-
-	// 	// Anytime the user toggles the visible panes AND the editor is visible as a result
-	// 	// we should focus the editor
-	// 	// The intuition is that a panel toggle (with editor in view) is the equivalent of
-	// 	// an editor interaction so users should expect the editor to be focused
-	// 	if (editorPaneVisible) {
-	// 		editorRef.current.focus();
-	// 	}
-	// }, [editorPaneVisible]);
+	useEditorSearchHandler({
+		setLocalSearchResultCount: props.setLocalSearchResultCount,
+		searchMarkers: props.searchMarkers,
+		webviewRef,
+		editorRef,
+		noteContent: props.content,
+		renderedBody,
+	});
 
 	useContextMenu({
 		plugins: props.plugins,

@@ -6,6 +6,7 @@ const Datetime = require('react-datetime').default;
 import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+import { focus } from '@joplin/lib/utils/focusHandler';
 interface Props {
 	themeId: number;
 	defaultValue: any;
@@ -67,7 +68,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 	}
 
 	public componentDidUpdate() {
-		if (this.focusInput_ && this.answerInput_.current) this.answerInput_.current.focus();
+		if (this.focusInput_ && this.answerInput_.current) focus('PromptDialog::componentDidUpdate', this.answerInput_.current);
 		this.focusInput_ = false;
 	}
 
@@ -245,7 +246,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 		const onKeyDown = (event: any) => {
 			if (event.key === 'Enter') {
 				// If the dropdown is open, we don't close the dialog - instead
-				// the currently item will be selcted. If it is closed however
+				// the currently item will be selected. If it is closed however
 				// we confirm the dialog.
 				if ((this.props.inputType === 'tags' || this.props.inputType === 'dropdown') && this.menuIsOpened_) {
 					// Do nothing

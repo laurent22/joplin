@@ -12,15 +12,15 @@ import 'codemirror/addon/scroll/annotatescrollbar';
 import 'codemirror/addon/search/matchesonscrollbar';
 import 'codemirror/addon/search/searchcursor';
 
-import useListIdent from '../utils/useListIdent';
-import useScrollUtils from '../utils/useScrollUtils';
-import useCursorUtils from '../utils/useCursorUtils';
-import useLineSorting from '../utils/useLineSorting';
-import useEditorSearch from '../utils/useEditorSearch';
-import useJoplinMode from '../utils/useJoplinMode';
-import useKeymap from '../utils/useKeymap';
-import useExternalPlugins from '../utils/useExternalPlugins';
-import useJoplinCommands from '../utils/useJoplinCommands';
+import useListIdent from './utils/useListIdent';
+import useScrollUtils from './utils/useScrollUtils';
+import useCursorUtils from './utils/useCursorUtils';
+import useLineSorting from './utils/useLineSorting';
+import useEditorSearch from '../utils/useEditorSearchExtension';
+import useJoplinMode from './utils/useJoplinMode';
+import useKeymap from './utils/useKeymap';
+import useExternalPlugins from './utils/useExternalPlugins';
+import useJoplinCommands from './utils/useJoplinCommands';
 
 import 'codemirror/keymap/emacs';
 import 'codemirror/keymap/vim';
@@ -33,6 +33,7 @@ import Setting from '@joplin/lib/models/Setting';
 // import eventManager from '@joplin/lib/eventManager';
 
 import { reg } from '@joplin/lib/registry';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 // Based on http://pypl.github.io/PYPL.html
 const topLanguages = [
@@ -137,7 +138,7 @@ function Editor(props: EditorProps, ref: any) {
 
 	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 	const editor_drop = useCallback((cm: any, _event: any) => {
-		cm.focus();
+		focus('v5/Editor::editor_drop', cm);
 	}, []);
 
 	const editor_drag = useCallback((cm: any, event: any) => {
@@ -283,7 +284,7 @@ function Editor(props: EditorProps, ref: any) {
 		}
 	}, [pluginOptions, editor]);
 
-	return <div className='codeMirrorEditor' style={props.style} ref={editorParent} />;
+	return <div className='codeMirrorEditor CodeMirror5' style={props.style} ref={editorParent} />;
 }
 
 export default forwardRef(Editor);

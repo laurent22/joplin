@@ -6,6 +6,7 @@ import ToggleButton from '../../../lib/ToggleButton/ToggleButton';
 import Button, { ButtonLevel } from '../../../Button/Button';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import bridge from '../../../../services/bridge';
+import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 
 export enum InstallState {
 	NotInstalled = 1,
@@ -18,10 +19,6 @@ export enum UpdateState {
 	CanUpdate = 2,
 	Updating = 3,
 	HasBeenUpdated = 4,
-}
-
-export interface ItemEvent {
-	item: PluginItem;
 }
 
 interface Props {
@@ -46,15 +43,6 @@ function manifestToItem(manifest: PluginManifest): PluginItem {
 		builtIn: false,
 		hasBeenUpdated: false,
 	};
-}
-
-export interface PluginItem {
-	manifest: PluginManifest;
-	enabled: boolean;
-	deleted: boolean;
-	devMode: boolean;
-	builtIn: boolean;
-	hasBeenUpdated: boolean;
 }
 
 const CellRoot = styled.div<{ isCompatible: boolean }>`
@@ -228,7 +216,7 @@ export default function(props: Props) {
 	const renderDefaultPluginLabel = () => {
 		if (item.builtIn) {
 			return (
-				<BoxedLabel>{_('Built in')}</BoxedLabel>
+				<BoxedLabel>{_('Built-in')}</BoxedLabel>
 			);
 		}
 

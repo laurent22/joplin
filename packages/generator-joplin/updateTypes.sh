@@ -13,3 +13,5 @@ cp "$LIB_DIR/services/plugins/api/types.ts" "$SCRIPT_DIR/generators/app/template
 cp "$LIB_DIR/services/plugins/api/noteListType.ts" "$SCRIPT_DIR/generators/app/templates/api/"
 cp "$SCRIPT_DIR/generators/app/templates/api_index.ts" "$SCRIPT_DIR/generators/app/templates/api/index.ts"
 rm -f "$SCRIPT_DIR/generators/app/templates/api/types.d.ts"
+
+yarn updateCategories

@@ -115,6 +115,13 @@ class AppComponent extends Component {
 
 		this.clipScreenshot_click = async () => {
 			try {
+				// Firefox requires the <all_urls> host permission to take a
+				// screenshot of the current page, however, this may change
+				// in the future. Note that Firefox also forces this permission
+				// to be optional.
+				// See https://discourse.mozilla.org/t/browser-tabs-capturevisibletab-not-working-in-firefox-for-mv3/122965/3
+				await bridge().browser().permissions.request({ origins: ['<all_urls>'] });
+
 				const baseUrl = await bridge().clipperServerBaseUrl();
 
 				await bridge().sendCommandToActiveTab({
@@ -179,12 +186,14 @@ class AppComponent extends Component {
 	}
 
 	async loadContentScripts() {
-		await bridge().tabsExecuteScript({ file: '/content_scripts/setUpEnvironment.js' });
-		await bridge().tabsExecuteScript({ file: '/content_scripts/JSDOMParser.js' });
-		await bridge().tabsExecuteScript({ file: '/content_scripts/Readability.js' });
-		await bridge().tabsExecuteScript({ file: '/content_scripts/Readability-readerable.js' });
-		await bridge().tabsExecuteScript({ file: '/content_scripts/clipperUtils.js' });
-		await bridge().tabsExecuteScript({ file: '/content_scripts/index.js' });
+		await bridge().tabsExecuteScript([
+			'/content_scripts/setUpEnvironment.js',
+			'/content_scripts/JSDOMParser.js',
+			'/content_scripts/Readability.js',
+			'/content_scripts/Readability-readerable.js',
+			'/content_scripts/clipperUtils.js',
+			'/content_scripts/index.js',
+		]);
 	}
 
 	async componentDidMount() {
@@ -234,6 +243,7 @@ class AppComponent extends Component {
 				if (!ref) break;
 				lastRef = ref;
 			}
+			// eslint-disable-next-line no-restricted-properties
 			if (lastRef) lastRef.focus();
 		}
 	}

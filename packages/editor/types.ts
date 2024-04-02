@@ -15,6 +15,9 @@ export enum EditorCommandType {
 	ToggleItalicized = 'textItalic',
 	ToggleCode = 'textCode',
 	ToggleMath = 'textMath',
+	ToggleComment = 'toggleComment',
+	DuplicateLine = 'duplicateLine',
+	SortSelectedLines = 'sortSelectedLines',
 
 	ToggleNumberedList = 'textNumberedList',
 	ToggleBulletedList = 'textBulletedList',
@@ -37,6 +40,7 @@ export enum EditorCommandType {
 
 	// Editing and navigation commands
 	ScrollSelectionIntoView = 'scrollSelectionIntoView',
+	DeleteLine = 'deleteLine',
 	DeleteToLineEnd = 'killLine',
 	DeleteToLineStart = 'delLineLeft',
 	IndentMore = 'indentMore',
@@ -60,11 +64,17 @@ export enum EditorCommandType {
 
 	UndoSelection = 'undoSelection',
 	RedoSelection = 'redoSelection',
+
+	// Getters and multi-argument commands. These correspond to global Joplin
+	// commands.
+	SelectedText = 'selectedText',
+	InsertText = 'insertText',
+	ReplaceSelection = 'replaceSelection',
 }
 
 // Because the editor package can run in a WebView, plugin content scripts
 // need to be provided as text, rather than as file paths.
-export interface PluginData {
+export interface ContentScriptData {
 	pluginId: string;
 	contentScriptId: string;
 	contentScriptJs: ()=> Promise<string>;
@@ -73,8 +83,8 @@ export interface PluginData {
 }
 
 export interface EditorControl {
-	supportsCommand(name: EditorCommandType|string): boolean;
-	execCommand(name: EditorCommandType|string): void;
+	supportsCommand(name: EditorCommandType|string): boolean|Promise<boolean>;
+	execCommand(name: EditorCommandType|string, ...args: any[]): void|Promise<any>;
 
 	undo(): void;
 	redo(): void;
@@ -95,12 +105,12 @@ export interface EditorControl {
 
 	setSearchState(state: SearchState): void;
 
-	setPlugins(plugins: PluginData[]): Promise<void>;
+	setContentScripts(plugins: ContentScriptData[]): Promise<void>;
 }
 
 export enum EditorLanguageType {
-	Markdown,
-	Html,
+	Markdown = 'markdown',
+	Html = 'html',
 }
 
 export enum EditorKeymap {
@@ -116,6 +126,8 @@ export interface EditorTheme extends Theme {
 	isDesktop?: boolean;
 	monospaceFont?: string;
 	contentMaxWidth?: number;
+	marginLeft?: number;
+	marginRight?: number;
 }
 
 export interface EditorSettings {

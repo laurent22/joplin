@@ -134,6 +134,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"حول Joplin"
 	],
@@ -308,6 +311,9 @@
 	"Automatically check for updates": [
 		"البحت عن التحديثات بشكل تلقائي"
 	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
+	],
 	"Automatically switch theme to match system theme": [
 		"التبديل تلقائيا للتنسيق لمطابقة تنسيق النضام"
 	],
@@ -329,7 +335,7 @@
 	"Browse...": [
 		"استعراض..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -454,6 +460,9 @@
 	],
 	"Close dropdown": [
 		"إغلاق القائمة المنسدلة"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"إغلاق النافذة"
@@ -604,7 +613,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"لم يتمكن التحقق من حالة النشر الخاصة بهذه الملاحظة. المرجو العودة عند توفر الإنترنت."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"تعذر تصدير الملاحظات: %s"
 	],
 	"Create": [
@@ -739,20 +748,8 @@
 	"Delete note": [
 		"حذف الملاحظة"
 	],
-	"Delete note \"%s\"?": [
-		"حذف الملاحظة \"%s\" ؟"
-	],
-	"Delete note?": [
-		"حذف الملاحظة؟"
-	],
 	"Delete notebook": [
 		"حذف الملاحظة"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"حذف دفتر الملاحظات \"%s\" ؟\n\nسيتم حذف كل الملاحظات و دفاتر الملاحظات الفرعية ضمن هذا الدفتر أيضاً."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"حذف دفتر الملاحظات؟ سيتم حذف كل الملاحظات و دفاتر الملاحظات الفرعية ضمن هذا الدفتر أيضاً."
 	],
 	"Delete plugin \"%s\"?": [
 		"حذف المكون الإضافي \"%s\"؟"
@@ -765,9 +762,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
-	],
-	"Delete these %d notes?": [
-		"حذف ملاحظات %d هذه ؟"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"أحذف هذه الدعوة؟ لن يتمكن المستلم من الوصول إلى دفتر الملاحظات المشترك هذا بعد الآن."
@@ -907,6 +901,9 @@
 	"Dropbox Login": [
 		"تسجيل الدخول إلى Dropbox"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"تكرار"
 	],
@@ -981,6 +978,9 @@
 	],
 	"emphasised text": [
 		"نص مشدَّد علية"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"تمكين"
@@ -1287,6 +1287,9 @@
 	"Grant authorisation": [
 		"منح ال"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"الرأس %d"
 	],
@@ -1335,6 +1338,9 @@
 	"Idle": [
 		"خامل"
 	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
+	],
 	"Ignore": [
 		"تجاهل"
 	],
@@ -1367,6 +1373,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"للقيام بذلك، يجب تشفير مجموعة بياناتك بالكامل ومزامنتها، لذا من الأفضل تشغيلها خلال الليل.\n\nللبدء، يرجى اتباع هذه التعليمات:\n\n1. قم بمزامنة جميع أجهزتك.\n2. انقر فوق \"%s\" \n3. دعها تعمل حتى الاكتمال. أثناء تشغيله، تجنب تغيير أي ملاحظة على أجهزتك الأخرى، لتجنب التعارضات.\n4. بمجرد إتمام المزامنة على هذا الجهاز، قم بمزامنة جميع أجهزتك الأخرى واتركها تعمل حتى الاكتمال.\n\nهام: ما عليك سوى تشغيل هذا مرة واحدة على جهاز واحد."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"لاستخدام مزامنة نظام الملفات، يجب الحصول على إذن الكتابة إلى وحدة التخزين الخارجية."
@@ -1458,12 +1467,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"بريد Joplin Cloud"
-	],
-	"Joplin Cloud password": [
-		"كلمة مرور Joplin Cloud"
-	],
 	"Joplin Export Directory": [
 		"دليل تصدير بيانات Joplin"
 	],
@@ -1530,6 +1533,9 @@
 	"Later": [
 		"لاحقا"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"تخطيط"
 	],
@@ -1589,12 +1595,6 @@
 	"Log": [
 		"السجل"
 	],
-	"Login": [
-		"تسجيل الدخول"
-	],
-	"Login below.": [
-		"تسجيل الدخول أدناه."
-	],
 	"Login with Dropbox": [
 		"تسجيل الدخول عبر Dropbox"
 	],
@@ -1605,6 +1605,9 @@
 		"تسجيل الخروج"
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1659,6 +1662,9 @@
 		""
 	],
 	"Media player, math, diagrams, table of contents": [
+		""
+	],
+	"Minimise": [
 		""
 	],
 	"Missing Master Keys": [
@@ -1778,7 +1784,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"لا يمكن المصادقة باستخدام %s. يرجى التزويد بأي من بيانات اعتماد الدخول المفقودة."
 	],
 	"Not downloaded": [
@@ -1922,9 +1928,6 @@
 	"Options": [
 		"خيارات"
 	],
-	"Or create an account.": [
-		"أو أنشئ حساباً."
-	],
 	"Other applications...": [
 		"تطبيقات أخزى..."
 	],
@@ -2011,6 +2014,9 @@
 	],
 	"Please wait...": [
 		"الرجاء الإنتظار..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"أدوات الإضافات"
@@ -2354,6 +2360,12 @@
 	"Solarised Light": [
 		"Solarised Light"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"لا يمكن فك تشفير بعض العناصر."
 	],
@@ -2371,6 +2383,9 @@
 	],
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"يرتب العناصر حسب <حقل> (على سبيل المثال، العنوان ، تاريخ التحديث ، تاريخ الإنشاء)."
+	],
+	"Source": [
+		"المصدر"
 	],
 	"Source format: %s": [
 		"تنسيق المصدر: %s"
@@ -2555,9 +2570,6 @@
 	"Text editor command": [
 		"أمر محرر النصوص"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"شكراً لك! تم إعداد حساب Joplin Cloud الخاص بك وهو جاهز للاستخدام."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
@@ -2633,6 +2645,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"يجب ترقية هدف المزامنة قبل أن يتمكن Joplin من المزامنة. قد تستغرق العملية بضع دقائق حتى تكتمل ويحتاج التطبيق إلى إعادة التشغيل. للمتابعة الرجاء الضغط على الرابط."
 	],
@@ -2674,9 +2689,6 @@
 	],
 	"There was an error downloading this attachment:": [
 		"حدث خطأ أثناء تنزيل هذا المرفق:"
-	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"حدث خطأ أثناء إعداد حساب Joplin Cloud الخاص بك. يرجى التأكد من البريد الإلكتروني وكلمة المرور والمحاولة ثانية. الخطأ كان\n\n%s"
 	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"ستبقى هذه العناصر على الجهاز إلا أنها لن يجري رفعها إلى وجهة المزامنة. لكي تجد هذه العناصر ، عليك إما البحث عن العنوان أو المعرِّف (وهو معروض أعلاه بين قوسين)."
@@ -2725,6 +2737,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"هذا سيفتح شاشة جديدة. حفظ التغييرات الحالية الخاصة بك؟"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"Time format": [
 		"تنسيق الوقت"
@@ -2804,6 +2819,9 @@
 	"Total: %d/%d": [
 		"الإجمالي: %d/%d"
 	],
+	"Trash": [
+		""
+	],
 	"Try again": [
 		"حاول ثانية"
 	],
@@ -2836,6 +2854,9 @@
 	],
 	"Undo": [
 		"الغاء التحميل"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"علامة غير معروفة: %s"
@@ -3016,6 +3037,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"أنت على وشك إرفاق صورة كبيرة (%dx%d بكسل). هل ترغب في تغيّير حجمة إلى %d بكسل قبل إرفاقه؟"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"ليس لديك حاليا دفاتر ملاحظات."

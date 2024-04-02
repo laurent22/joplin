@@ -101,6 +101,17 @@ module.exports = {
 		'no-unneeded-ternary': 'error',
 		'github/array-foreach': ['error'],
 
+		'no-restricted-properties': ['error',
+			{
+				'property': 'focus',
+				'message': 'Please use focusHandler::focus() instead',
+			},
+			{
+				'property': 'blur',
+				'message': 'Please use focusHandler::blur() instead',
+			},
+		],
+
 		// -------------------------------
 		// Formatting
 		// -------------------------------
@@ -253,7 +264,7 @@ module.exports = {
 						selector: 'enumMember',
 						format: null,
 						'filter': {
-							'regex': '^(GET|POST|PUT|DELETE|PATCH|HEAD|SQLite|PostgreSQL|ASC|DESC|E2EE|OR|AND|UNION|INTERSECT|EXCLUSION|INCLUSION|EUR|GBP|USD|SJCL.*)$',
+							'regex': '^(GET|POST|PUT|DELETE|PATCH|HEAD|SQLite|PostgreSQL|ASC|DESC|E2EE|OR|AND|UNION|INTERSECT|EXCLUSION|INCLUSION|EUR|GBP|USD|SJCL.*|iOS)$',
 							'match': true,
 						},
 					},

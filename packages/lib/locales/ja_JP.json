@@ -137,6 +137,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Joplinについて"
 	],
@@ -317,6 +320,9 @@
 	"Automatically check for updates": [
 		"アップデートを自動的に確認する"
 	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
+	],
 	"Automatically switch theme to match system theme": [
 		"システムのテーマにあわせて自動設定"
 	],
@@ -338,7 +344,7 @@
 	"Browse...": [
 		"参照..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -466,6 +472,9 @@
 	],
 	"Close dropdown": [
 		"ドロップダウンを閉じる"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"ウィンドウを閉じる"
@@ -611,7 +620,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"このノートブックの共有状態を確認できなかったため処理を中断します。インターネット接続を確認してから再度お試しください。"
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"IDを確認できませんでした: %s"
 	],
 	"Create": [
@@ -755,20 +764,8 @@
 	"Delete note": [
 		"ノートを削除"
 	],
-	"Delete note \"%s\"?": [
-		"ノート \"%s\" を削除しますか？"
-	],
-	"Delete note?": [
-		"ノートを削除しますか？"
-	],
 	"Delete notebook": [
 		"ノートブックを削除"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"ノートブック \"%s\" を削除しますか？\n\nこのノートブックにあるノートとサブノートはすべて消えてしまいます。"
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"ノートブックを削除しますか？　このノートブックにあるノートとサブノートはすべて消えてしまいます。"
 	],
 	"Delete plugin \"%s\"?": [
 		"プラグイン \"%s\" を削除しますか？"
@@ -781,9 +778,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Inboxノートブックを削除しますか?\n\nInboxノートブックを削除すると、最近メール送信によって作成したノートが失われる可能性があります。"
-	],
-	"Delete these %d notes?": [
-		"これら %d のノートを削除しますか？"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"この招待を削除しますか? 削除後は招待の受信者がこの共有ノートブックにアクセスできなくなります。"
@@ -929,6 +923,9 @@
 	"Dropbox Login": [
 		"Dropboxログイン"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"複製"
 	],
@@ -1003,6 +1000,9 @@
 	],
 	"emphasised text": [
 		"強調したいテキスト"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"有効"
@@ -1316,6 +1316,9 @@
 	"Grant authorisation": [
 		"許可する"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"見出し %d"
 	],
@@ -1382,6 +1385,9 @@
 	"Idle": [
 		"待機中"
 	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
+	],
 	"Ignore": [
 		"無視"
 	],
@@ -1414,6 +1420,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"この処理では、既存データをすべて再暗号化し、同期しなおす必要がありますので、夜間等の実行をおすすめします。\n\nデータを再暗号化するには以下の手順にしたがってください。\n\n1. すべてのデバイスで同期を取ります。\n2. \"%s\" をクリックします。\n3. 再暗号化処理が完了するまでお待ちください。不整合を避けるため、処理中に他のデバイスでノートを変更しないように気をつけてください。\n4. 本デバイスの同期が完了したら、他のデバイスをすべて同期してください。\n\n重要: 再暗号化はどれか一つのデバイスで一回だけ実行してください。"
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"ファイルシステムの同期を使うには、外部ストレージへの書き込み権限が必要です。"
@@ -1505,12 +1514,6 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
-	"Joplin Cloud email": [
-		"Joplin Cloudメールアドレス"
-	],
-	"Joplin Cloud password": [
-		"Joplin Cloudパスワード"
-	],
 	"Joplin Export Directory": [
 		"Joplin エクスポートディレクトリ"
 	],
@@ -1580,6 +1583,9 @@
 	"Later": [
 		"あとで"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"レイアウト"
 	],
@@ -1640,12 +1646,6 @@
 	"Log": [
 		"ログ"
 	],
-	"Login": [
-		"ログイン"
-	],
-	"Login below.": [
-		"以下からログイン。"
-	],
 	"Login with Dropbox": [
 		"Dropboxでログイン"
 	],
@@ -1657,6 +1657,9 @@
 	],
 	"Logs, profiles, sync status": [
 		"ログ、プロファイル、同期の状態"
+	],
+	"Longitude": [
+		""
 	],
 	"Make a donation": [
 		"寄付する"
@@ -1720,6 +1723,9 @@
 	],
 	"Media player, math, diagrams, table of contents": [
 		"メディアプレーヤー、数式、作図、目次"
+	],
+	"Minimise": [
+		""
 	],
 	"Missing keys": [
 		"キーがありません"
@@ -1847,7 +1853,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"%s では認証できません。他の資格証明書を使用してください。"
 	],
 	"Not downloaded": [
@@ -1994,9 +2000,6 @@
 	"Options": [
 		"オプション"
 	],
-	"Or create an account.": [
-		"またはアカウントを作成。"
-	],
 	"Ordered list": [
 		"番号付きリスト"
 	],
@@ -2086,6 +2089,9 @@
 	],
 	"Please wait...": [
 		"お待ちください..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"プラグインツール"
@@ -2504,6 +2510,12 @@
 	"Solarised Light": [
 		"Solarised (明)"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"いくつかのアイテムは復号されませんでした。"
 	],
@@ -2524,6 +2536,9 @@
 	],
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"アイテムを<field>で並び替え (例： title, updated_time, created_time)."
+	],
+	"Source": [
+		"ソース"
 	],
 	"Source format: %s": [
 		"ソースフォーマット: %s"
@@ -2720,9 +2735,6 @@
 	"Text editor command": [
 		"テキストエディターのコマンド"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"ありがとうございます! Joplin Cloudアカウントのセットアップが完了し、利用できる状態になりました。"
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"使用中のプロファイルは削除できません。他のプロファイルに切り替えてから削除してください。"
 	],
@@ -2804,6 +2816,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"リストから受信者を削除できませんでした。もう一度お試しください。\n\nエラーの内容: \"%s\""
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"同期するには同期先をアップグレードする必要があります。アップグレードには数分かかるかもしれません。またアプリケーションの再起動が必要です。アップグレードするにはリンクをクリックしてください。"
 	],
@@ -2851,9 +2866,6 @@
 	],
 	"There was an error downloading this attachment:": [
 		"この添付ファイルをダウンロードするときにエラーが発生しました:"
-	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"Joplin Cloudアカウントのセットアップ中にエラーが発生しました。メールアドレスとパスワードを確認してもう一度お試しください。エラーの内容は次のとおりです:\n\n%s"
 	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"これらのアイテムはデバイスに残りましたが、同期先にアップロードされません。そのようなアイテムを探すには、題名またはID(上記の括弧内に表示されている)で検索してください。"
@@ -2908,6 +2920,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"新しい画面を開きます。変更を保存しますか?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"ノートブックをあなたのコレクションから削除しようとしています。今後そのコンテンツにアクセスできなくなりますが、続行しますか?"
@@ -3008,6 +3023,9 @@
 	"Total: %d/%d": [
 		"総数: %d/%d"
 	],
+	"Trash": [
+		""
+	],
 	"Try again": [
 		"再試行"
 	],
@@ -3040,6 +3058,9 @@
 	],
 	"Undo": [
 		"元に戻す"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"不明なフラグ: %s"
@@ -3235,6 +3256,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"大きな画像を添付しようとしています (%dx%d ピクセル)。長辺を %d ピクセルに縮小してから添付しますか？"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"ノートブックがありません。"

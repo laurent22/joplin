@@ -68,6 +68,9 @@
 	"&View": [
 		""
 	],
+	"&Window": [
+		""
+	],
 	"(%s)": [
 		""
 	],
@@ -102,6 +105,9 @@
 		""
 	],
 	"A5": [
+		""
+	],
+	"About": [
 		""
 	],
 	"About Joplin": [
@@ -227,6 +233,9 @@
 	"Authorisation token:": [
 		""
 	],
+	"Authorise": [
+		""
+	],
 	"Auto": [
 		""
 	],
@@ -237,6 +246,9 @@
 		""
 	],
 	"Automatically check for updates": [
+		""
+	],
+	"Automatically delete notes in the trash after a number of days": [
 		""
 	],
 	"Automatically switch theme to match system theme": [
@@ -260,7 +272,7 @@
 	"Browse...": [
 		""
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -356,6 +368,9 @@
 	"Close": [
 		""
 	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
+	],
 	"Close Window": [
 		""
 	],
@@ -426,6 +441,9 @@
 		""
 	],
 	"Copy Link Address": [
+		""
+	],
+	"Copy link to website": [
 		""
 	],
 	"Copy Markdown link": [
@@ -545,9 +563,6 @@
 	],
 	"Delete local data and re-download from sync target": [
 		""
-	],
-	"Delete note?": [
-		"Oharra ezabatu?"
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
@@ -684,6 +699,9 @@
 	"Dropbox Login": [
 		""
 	],
+	"Due": [
+		""
+	],
 	"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": [
 		"<oharra>rekin bat datozen oharrak [koaderno]ra kopiatzen ditu. Koadernorik ez bada zehazten, oharra oraingo koadernoan bikoiztuko da"
 	],
@@ -724,6 +742,9 @@
 		""
 	],
 	"emphasised text": [
+		""
+	],
+	"Empty trash": [
 		""
 	],
 	"Enable": [
@@ -769,6 +790,9 @@
 		""
 	],
 	"Enable optical character recognition (OCR)": [
+		""
+	],
+	"Enable or disable plugins": [
 		""
 	],
 	"Enable PDF viewer": [
@@ -870,6 +894,9 @@
 	"File system": [
 		"Fitxategi sistema"
 	],
+	"Filter": [
+		""
+	],
 	"Filter tags": [
 		""
 	],
@@ -918,6 +945,9 @@
 	"Found: %d.": [
 		"Aurkitua: %d"
 	],
+	"From a plugin": [
+		""
+	],
 	"Full changelog": [
 		""
 	],
@@ -943,6 +973,9 @@
 		""
 	],
 	"Grant authorisation": [
+		""
+	],
+	"Have you authorised the application login in the above URL?": [
 		""
 	],
 	"Header %d": [
@@ -987,6 +1020,9 @@
 	"Idle": [
 		""
 	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
+	],
 	"Ignore": [
 		""
 	],
@@ -1018,6 +1054,9 @@
 		""
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
+		""
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
 		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
@@ -1107,6 +1146,9 @@
 	"Keep note history for": [
 		""
 	],
+	"Keep notes in the trash for": [
+		""
+	],
 	"Keyboard Mode": [
 		""
 	],
@@ -1129,6 +1171,9 @@
 		"Hizkuntza"
 	],
 	"Later": [
+		""
+	],
+	"Latitude": [
 		""
 	],
 	"Layout": [
@@ -1171,6 +1216,9 @@
 	"Loaded": [
 		""
 	],
+	"Loading plugin repository...": [
+		""
+	],
 	"Location": [
 		""
 	],
@@ -1180,12 +1228,6 @@
 	"Log": [
 		"Egunkaria"
 	],
-	"Login": [
-		""
-	],
-	"Login below.": [
-		""
-	],
 	"Login with OneDrive": [
 		"Login with OneDrive"
 	],
@@ -1193,6 +1235,9 @@
 		""
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Manage your plugins": [
@@ -1226,6 +1271,9 @@
 		""
 	],
 	"Media player, math, diagrams, table of contents": [
+		""
+	],
+	"Minimise": [
 		""
 	],
 	"Missing required argument: %s": [
@@ -1312,7 +1360,7 @@
 	"Nord": [
 		""
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Ez da autentifikatu %s -rekin. Eman galdutako kredentzialak."
 	],
 	"Not downloaded": [
@@ -1459,6 +1507,15 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		""
 	],
+	"Plugin message": [
+		""
+	],
+	"Plugin repository failed to load": [
+		""
+	],
+	"Plugin search": [
+		""
+	],
 	"Plugin tools": [
 		""
 	],
@@ -1571,6 +1628,9 @@
 		""
 	],
 	"Recipients:": [
+		""
+	],
+	"Recommended": [
 		""
 	],
 	"Redo": [
@@ -1759,6 +1819,12 @@
 	"Solarised Light": [
 		""
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"Zenbait item ezin dira deszifratu."
 	],
@@ -1770,6 +1836,9 @@
 	],
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Itemak antolatzen ditu <field> arabera (esate baterako, izenburua, eguneratze_unea, sortze_unea)."
+	],
+	"Source": [
+		"Iturburua"
 	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		""
@@ -1909,7 +1978,7 @@
 	"Teams": [
 		""
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
+	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
 		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
@@ -1979,6 +2048,13 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		""
 	],
+	"The note was successfully moved to the trash.": [
+		"",
+		""
+	],
+	"The notebook and its content was successfully moved to the trash.": [
+		""
+	],
 	"The notebook could not be saved: %s": [
 		"Koadernoa ezin gorde daiteke: %s"
 	],
@@ -1989,6 +2065,9 @@
 		"Litezkeen komandoak hauek dira:"
 	],
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
+		""
+	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
 		""
 	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
@@ -2036,9 +2115,6 @@
 	"There was an error downloading this attachment:": [
 		""
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		""
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Itemok gailuan geratuko dira baina ez dira sinkronizatuko. Horiek aurkitzeko bilaketak egin titulu edo goiko parentesien arteko IDaren arabera."
 	],
@@ -2084,6 +2160,9 @@
 	"This will open a new screen. Save your current changes?": [
 		""
 	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
+	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		""
 	],
@@ -2091,6 +2170,9 @@
 		"Ordu formatua"
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
+		""
+	],
+	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
 		""
 	],
 	"To delete a tag, untag the associated notes.": [
@@ -2135,6 +2217,9 @@
 	"Total: %d/%d": [
 		"Denera: %d/%d"
 	],
+	"Trash": [
+		""
+	],
 	"Try again": [
 		""
 	],
@@ -2163,6 +2248,9 @@
 		""
 	],
 	"Undo": [
+		""
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
 		""
 	],
 	"Unknown flag: %s": [
@@ -2309,10 +2397,16 @@
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		""
 	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
 	"You do not have any installed plugin.": [
 		""
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
+		""
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
 		""
 	],
 	"Your choice: ": [

@@ -95,7 +95,7 @@ class Application extends BaseApplication {
 			let item = null;
 			if (type === BaseModel.TYPE_NOTE) {
 				if (!parent) throw new Error(_('No notebook has been specified.'));
-				item = await ItemClass.loadFolderNoteByField(parent.id, 'title', pattern);
+				item = await (ItemClass as typeof Note).loadFolderNoteByField(parent.id, 'title', pattern);
 			} else {
 				item = await ItemClass.loadByTitle(pattern);
 			}
@@ -307,6 +307,7 @@ class Application extends BaseApplication {
 			{ keys: ['tc'], type: 'function', command: 'toggle_console' },
 			{ keys: ['tm'], type: 'function', command: 'toggle_metadata' },
 			{ keys: ['ti'], type: 'function', command: 'toggle_ids' },
+			{ keys: ['r'], type: 'prompt', command: 'restore $n' },
 			{ keys: ['/'], type: 'prompt', command: 'search ""', cursorPosition: -2 },
 			{ keys: ['mn'], type: 'prompt', command: 'mknote ""', cursorPosition: -2 },
 			{ keys: ['mt'], type: 'prompt', command: 'mktodo ""', cursorPosition: -2 },

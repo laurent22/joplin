@@ -1,10 +1,12 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "Joplin Web Clipper [DEV]",
-    "version": "2.14.0",
+    "version": "3.0.0",
     "description": "Capture and save web pages and screenshots from your browser to Joplin.",
     "homepage_url": "https://joplinapp.org",
-    "content_security_policy": "script-src 'self'; object-src 'self'",
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self'"
+    },
     "icons": {
         "32": "icons/32.png",
         "48": "icons/48.png",
@@ -13,18 +15,21 @@
     "permissions": [
         "activeTab",
         "tabs",
-        "http://*/",
-        "https://*/",
-        "<all_urls>",
+        "scripting",
         "storage"
     ],
-    "browser_action": {
+    "host_permissions": [
+        "http://*/",
+        "https://*/",
+        "<all_urls>"
+    ],
+    "action": {
         "default_icon": "icons/32.png",
         "default_title": "Joplin Web Clipper",
         "default_popup": "popup/build/index.html"
     },
     "commands": {
-        "_execute_browser_action": {
+        "_execute_action": {
             "suggested_key": {
                 "default": "Alt+Shift+J"
             }
@@ -49,12 +54,12 @@
         }
     },
     "background": {
-        "scripts": [
-            "background.js"
-        ],
-        "persistent": false
+        "scripts": ["service_worker.mjs"],
+
+        "service_worker": "service_worker.mjs",
+        "type": "module"
     },
-    "applications": {
+    "browser_specific_settings": {
         "gecko": {
             "id": "{8419486a-54e9-11e8-9401-ac9e17909436}"
         }

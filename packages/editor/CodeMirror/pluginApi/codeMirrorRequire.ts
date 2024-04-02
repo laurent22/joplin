@@ -1,6 +1,7 @@
 
 import * as codeMirrorView from '@codemirror/view';
 import * as codeMirrorState from '@codemirror/state';
+import * as codeMirrorSearch from '@codemirror/search';
 import * as codeMirrorLanguage from '@codemirror/language';
 import * as codeMirrorAutocomplete from '@codemirror/autocomplete';
 import * as codeMirrorCommands from '@codemirror/commands';
@@ -21,6 +22,7 @@ import * as lezerMarkdown from '@lezer/markdown';
 const libraryNameToPackage: Record<string, any> = {
 	'@codemirror/view': codeMirrorView,
 	'@codemirror/state': codeMirrorState,
+	'@codemirror/search': codeMirrorSearch,
 	'@codemirror/language': codeMirrorLanguage,
 	'@codemirror/autocomplete': codeMirrorAutocomplete,
 	'@codemirror/commands': codeMirrorCommands,
@@ -40,6 +42,12 @@ const codeMirrorRequire = (library: string) => {
 	// a constructor or prototype object.
 	if (libraryNameToPackage.hasOwnProperty(library)) {
 		return libraryNameToPackage[library];
+	}
+
+	// Although window.require doesn't work on mobile, some desktop-only plugins
+	// originally developed for CodeMirror 5 rely on it.
+	if (typeof window.require === 'function') {
+		return window.require(library);
 	}
 
 	throw new Error(`Cannot find library ${library}`);

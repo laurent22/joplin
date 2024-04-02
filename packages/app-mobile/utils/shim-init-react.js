@@ -6,6 +6,7 @@ const { generateSecureRandom } = require('react-native-securerandom');
 const FsDriverRN = require('./fs-driver/fs-driver-rn').default;
 const { Buffer } = require('buffer');
 const { Linking, Platform } = require('react-native');
+const showMessageBox = require('./showMessageBox.js').default;
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 const { basename, fileExtension } = require('@joplin/lib/path-utils');
 const uuid = require('@joplin/lib/uuid').default;
@@ -15,8 +16,10 @@ const { setLocale, defaultLocale, closestSupportedLocale } = require('@joplin/li
 
 const injectedJs = {
 	webviewLib: require('@joplin/lib/rnInjectedJs/webviewLib'),
-	codeMirrorBundle: require('../lib/rnInjectedJs/CodeMirror.bundle'),
-	svgEditorBundle: require('../lib/rnInjectedJs/createJsDrawEditor.bundle'),
+	codeMirrorBundle: require('../lib/rnInjectedJs/codeMirrorBundle.bundle'),
+	svgEditorBundle: require('../lib/rnInjectedJs/svgEditorBundle.bundle'),
+	pluginBackgroundPage: require('../lib/rnInjectedJs/pluginBackgroundPage.bundle'),
+	noteBodyViewerBundle: require('../lib/rnInjectedJs/noteBodyViewerBundle.bundle'),
 };
 
 function shimInit() {
@@ -232,6 +235,8 @@ function shimInit() {
 	};
 
 	shim.Buffer = Buffer;
+
+	shim.showMessageBox = showMessageBox;
 
 	shim.openUrl = url => {
 		Linking.openURL(url);

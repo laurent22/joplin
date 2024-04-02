@@ -1,4 +1,4 @@
-import BaseModel from '../BaseModel';
+import BaseModel, { DeleteOptions } from '../BaseModel';
 import BaseItem from './BaseItem';
 import ItemChange from './ItemChange';
 import NoteResource from './NoteResource';
@@ -22,6 +22,7 @@ import { htmlentities } from '@joplin/utils/html';
 import { RecognizeResultLine } from '../services/ocr/utils/types';
 import eventManager, { EventName } from '../eventManager';
 import { unique } from '../array';
+import ActionLogger from '../utils/ActionLogger';
 import isSqliteSyntaxError from '../services/database/isSqliteSyntaxError';
 import { internalUrl, isResourceUrl, isSupportedImageMimeType, resourceFilename, resourceFullPath, resourcePathToId, resourceRelativePath, resourceUrlToId } from './utils/resourceUtils';
 
@@ -311,7 +312,9 @@ export default class Resource extends BaseItem {
 		return this.db().exec('UPDATE resources set `size` = ? WHERE id = ?', [fileSize, resourceId]);
 	}
 
-	public static async batchDelete(ids: string[], options: any = null) {
+	public static async batchDelete(ids: string[], options: DeleteOptions = {}) {
+		const actionLogger = ActionLogger.from(options.sourceDescription);
+
 		// For resources, there's not really batch deletion since there's the
 		// file data to delete too, so each is processed one by one with the
 		// file data being deleted last since the metadata deletion call may
@@ -321,14 +324,21 @@ export default class Resource extends BaseItem {
 			const resource = await Resource.load(id);
 			if (!resource) continue;
 
+			// Log just for the current item.
+			const logger = actionLogger.clone();
+			logger.addDescription(`title: ${resource.title}`);
+
 			const path = Resource.fullPath(resource);
-			await super.batchDelete([id], options);
+			await super.batchDelete([id], {
+				...options,
+				sourceDescription: logger,
+			});
 			await this.fsDriver().remove(path);
 			await NoteResource.deleteByResource(id); // Clean up note/resource relationships
 			await this.db().exec('DELETE FROM items_normalized WHERE item_id = ?', [id]);
 		}
 
-		await ResourceLocalState.batchDelete(ids);
+		await ResourceLocalState.batchDelete(ids, { sourceDescription: actionLogger });
 	}
 
 	public static async markForDownload(resourceId: string) {

@@ -140,6 +140,9 @@
 	"A5": [
 		"A5"
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"درباره joplin"
 	],
@@ -320,6 +323,9 @@
 	"Automatically check for updates": [
 		"بررسی خودکار برای بروزرسانی"
 	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
+	],
 	"Automatically switch theme to match system theme": [
 		"پوسته برنامه خودکار با پوسته سیستم تغییر کند"
 	],
@@ -341,7 +347,7 @@
 	"Browse...": [
 		"مرور..."
 	],
-	"Built in": [
+	"Built-in": [
 		""
 	],
 	"Bulleted List": [
@@ -469,6 +475,9 @@
 	],
 	"Close dropdown": [
 		"بستن حالت کشویی"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
 	],
 	"Close Window": [
 		"بستن صفحه"
@@ -621,7 +630,7 @@
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"وضعیت اشتراک‌گذاری این دفترچه تأیید نشد و بی‌نتیحه ماند. لطفاً زمانی که به اینترنت وصل شدید، دوباره امتحان نمایید."
 	],
-	"Could not verify your identify: %s": [
+	"Could not verify your identity: %s": [
 		"هویت شما تأیید نشد: %s"
 	],
 	"Create": [
@@ -765,20 +774,8 @@
 	"Delete note": [
 		"حذف یادداشت"
 	],
-	"Delete note \"%s\"?": [
-		"یادداشت «%s» حذف شود؟"
-	],
-	"Delete note?": [
-		"یادداشت حذف شود؟"
-	],
 	"Delete notebook": [
 		"حذف دفترچه"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"دفترچه «%s» حذف شود؟\n\nتمامی یادداشت‌ها و دفترچه‌های فرزند این دفترچه نیز حذف خواهند شد."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"دفترچه حذف شود؟ تمامی یادداشت‌ها و دفترچه‌های فرزند این دفترچه نیز حذف خواهند شد."
 	],
 	"Delete plugin \"%s\"?": [
 		"افزونه «%s» حذف شود؟"
@@ -791,9 +788,6 @@
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"دفترچه‌ی صندوق ورودی حذف شود؟\n\nاگر دفترچه صندوق ورودی را حذف کنید، ممکن است هر ایمیلی که اخیراً به آن ارسال شده است نیز از بین برود."
-	],
-	"Delete these %d notes?": [
-		"این %d یادداشت حذف شود؟"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"این دعوتنامه حذف شود؟ گیرنده دیگر به این دفترچه‌ی مشترک دسترسی نخواهد داشت."
@@ -939,6 +933,9 @@
 	"Dropbox Login": [
 		"ورود به Dropbox"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"تکراری"
 	],
@@ -1013,6 +1010,9 @@
 	],
 	"emphasised text": [
 		"متن تأکید شده"
+	],
+	"Empty trash": [
+		""
 	],
 	"Enable": [
 		"فعال سازی"
@@ -1327,6 +1327,9 @@
 	"Grant authorisation": [
 		"اعطای مجوز"
 	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
 	"Header %d": [
 		"سرصفحه %d"
 	],
@@ -1393,6 +1396,9 @@
 	"Idle": [
 		"بیکار"
 	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
+	],
 	"Ignore": [
 		"نادیده‌گرفتن"
 	],
@@ -1425,6 +1431,9 @@
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"برای انجام این کار، کل مجموعه داده شما باید رمزنگاری و همگام شود، بنابراین بهتر است آن را به یکباره اجرا نماید.\n\nبرای شروع، لطفا این دستورالعمل‌ها را دنبال کنید:\n1. همه دستگاه های خود را همگام سازی کنید.\n2. بر روی «%s» کلیک نمایید.\n3. اجازه دهید تا کامل شود. در حین اجرا، از تغییر هر یادداشتی در دستگاه‌های دیگر خود اجتناب نمایید  تا از بروز تداخل جلوگیری شود.\n4.پس از انجام همگام‌سازی در این دستگاه، همه دستگاه‌های دیگر خود را همگام‌سازی کنید و اجازه دهید تا کامل شود.\n\nنکته‌ی مهم: شما فقط باید این عملیات را یک مرتبه و تنها روی یک دستگاه اجرا کنید."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"برای استفاده از همگام‌سازی سیستم فایل، اجازه نوشتن روی حافظه خارجی مورد نیاز است."
@@ -1516,12 +1525,6 @@
 	"Joplin Cloud": [
 		"سرویس ابری joplin"
 	],
-	"Joplin Cloud email": [
-		"ایمیل ابری joplin"
-	],
-	"Joplin Cloud password": [
-		"گذرواژه سرور ابری joplin"
-	],
 	"Joplin Export Directory": [
 		"پوشه صادرات joplin"
 	],
@@ -1588,6 +1591,9 @@
 	"Later": [
 		"بعداً"
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"چیدمان"
 	],
@@ -1649,12 +1655,6 @@
 	"Log": [
 		"لاگ"
 	],
-	"Login": [
-		"ورود"
-	],
-	"Login below.": [
-		"از طریق زیر وارد شوید."
-	],
 	"Login with Dropbox": [
 		"ورود با Dropbox"
 	],
@@ -1665,6 +1665,9 @@
 		"خروج"
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1728,6 +1731,9 @@
 		"حداکثر اندازه مجموع"
 	],
 	"Media player, math, diagrams, table of contents": [
+		""
+	],
+	"Minimise": [
 		""
 	],
 	"Missing keys": [
@@ -1856,7 +1862,7 @@
 	"Nord": [
 		"Nord"
 	],
-	"Not authentified with %s. Please provide any missing credentials.": [
+	"Not authenticated with %s. Please provide any missing credentials.": [
 		"با %s تایید نشد. لطفا هر گواهی‌نامه‌ی ناموجود را ارائه نمایید."
 	],
 	"Not downloaded": [
@@ -2006,9 +2012,6 @@
 	"Options": [
 		"گزینه ها"
 	],
-	"Or create an account.": [
-		"یا ایحاد یک حساب‌کاربری."
-	],
 	"Ordered list": [
 		"لیست مرتب شده"
 	],
@@ -2098,6 +2101,9 @@
 	],
 	"Please wait...": [
 		"لطفاً صبور باشید..."
+	],
+	"Plugin repository failed to load": [
+		""
 	],
 	"Plugin tools": [
 		"ابزارهای افزونه"
@@ -2522,6 +2528,12 @@
 	"Solarised Light": [
 		"Solarised Light"
 	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
 	"Some items cannot be decrypted.": [
 		"بعضی از موارد نمی‌توانند رمزگشایی شوند."
 	],
@@ -2542,6 +2554,9 @@
 	],
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"مورد را بر‌ اساس <field> مرتب می‌کند (به عنوان مثال: عنوان، زمان به‌روزرسانی، زمان ایجاد)."
+	],
+	"Source": [
+		"منبع"
 	],
 	"Source format: %s": [
 		"فرمت مبدا: %s"
@@ -2738,9 +2753,6 @@
 	"Text editor command": [
 		"دستور ویرایشگر متن"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		"از شما سپاسگزاریم! حساب ابری joplin شما هم اکنون راه‌اندازی شده و آماده استفاده است."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"حساب‌کاربری فعال را نمی توان حذف کرد. به حساب‌کاربری دیگری بروید و دوباره امتحان کنید."
 	],
@@ -2822,6 +2834,9 @@
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"گیرنده را نمی توان از لیست حذف کرد. لطفا دوباره تلاش کنید.\n\nجزئیات خطا: «%s»"
 	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"قبل از اینکه joplin بتواند همگام‌سازی کند، هدف همگام‌سازی باید ارتقا یابد. ممکن است عملیات چند دقیقه طول بکشد و برنامه باید دوباره راه‌اندازی شود. برای ادامه لطفا روی لینک کلیک کنید."
 	],
@@ -2869,9 +2884,6 @@
 	],
 	"There was an error downloading this attachment:": [
 		"یک خطا در دانلود این پیوست بود:"
-	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		"هنگام تنظیم حساب Joplin Cloud شما خطایی روی داد. لطفا ایمیل و رمز عبور خود را تأیید کنید و دوباره امتحان کنید. :\n\nجزئیات خطا: %s"
 	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"این موارد در دستگاه باقی می‌مانند اما در هدف همگام‌سازی آپلود نمی‌شوند. برای یافتن این موارد، عنوان یا شناسه (که در پرانتز بالا نمایش داده شده است) را جستجو نمایید."
@@ -2932,6 +2944,9 @@
 	],
 	"This will open a new screen. Save your current changes?": [
 		"این یک صفحه جدید باز می‌کند. تغییرات فعلی ذخیره شوند؟"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"با این کار، دفترچه از مجموعه شما حذف می شود و دیگر به محتوای آن دسترسی نخواهید داشت. آیا مایل هستید ادامه دهید؟"
@@ -3029,6 +3044,9 @@
 	"Total: %d/%d": [
 		"مجموع: %d از %d"
 	],
+	"Trash": [
+		""
+	],
 	"Try again": [
 		"تلاش دوباره"
 	],
@@ -3064,6 +3082,9 @@
 	],
 	"Undo": [
 		"بازگرد"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
 	],
 	"Unknown flag: %s": [
 		"پرچم ناشناخته: %s"
@@ -3259,6 +3280,9 @@
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		"شما در شرف پیوست کردن یک تصویر بزرگ هستید (%dx%d پیکسل). آیا می خواهید اندازه آن را قبل از پیوست کردن به %d پیکسل تغییر دهید؟"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"شما در حال حاضر دفترچه‌ای ندارید."

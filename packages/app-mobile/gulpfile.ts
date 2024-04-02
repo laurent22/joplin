@@ -1,13 +1,13 @@
 const gulp = require('gulp');
 const utils = require('@joplin/tools/gulp/utils');
 
-import gulpTasks from './tools/buildInjectedJs/gulpTasks';
+import injectedJsGulpTasks from './tools/buildInjectedJs/gulpTasks';
 
 const tasks = {
 	encodeAssets: {
 		fn: require('./tools/encodeAssets'),
 	},
-	...gulpTasks,
+	...injectedJsGulpTasks,
 	podInstall: {
 		fn: require('./tools/podInstall'),
 	},
@@ -19,6 +19,8 @@ gulp.task('buildInjectedJs', gulp.series(
 	'beforeBundle',
 	'buildCodeMirrorEditor',
 	'buildJsDrawEditor',
+	'buildPluginBackgroundScript',
+	'buildNoteViewerBundle',
 	'copyWebviewLib',
 ));
 
@@ -28,6 +30,8 @@ gulp.task('watchInjectedJs', gulp.series(
 	gulp.parallel(
 		'watchCodeMirrorEditor',
 		'watchJsDrawEditor',
+		'watchPluginBackgroundScript',
+		'watchNoteViewerBundle',
 	),
 ));
 

@@ -8,7 +8,7 @@ import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import PluginBox, { InstallState } from './PluginBox';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { _ } from '@joplin/lib/locale';
-import useOnInstallHandler from './useOnInstallHandler';
+import useOnInstallHandler from '@joplin/lib/components/shared/config/plugins/useOnInstallHandler';
 import { themeStyle } from '@joplin/lib/theme';
 
 const Root = styled.div`
@@ -32,14 +32,6 @@ interface Props {
 	disabled: boolean;
 }
 
-function sortManifestResults(results: PluginManifest[]): PluginManifest[] {
-	return results.sort((m1, m2) => {
-		if (m1._recommended && !m2._recommended) return -1;
-		if (!m1._recommended && m2._recommended) return +1;
-		return m1.name.toLowerCase() < m2.name.toLowerCase() ? -1 : +1;
-	});
-}
-
 export default function(props: Props) {
 	const [searchStarted, setSearchStarted] = useState(false);
 	const [manifests, setManifests] = useState<PluginManifest[]>([]);
@@ -57,7 +49,7 @@ export default function(props: Props) {
 				setSearchResultCount(null);
 			} else {
 				const r = await props.repoApi().search(props.searchQuery);
-				setManifests(sortManifestResults(r));
+				setManifests(r);
 				setSearchResultCount(r.length);
 			}
 		});

@@ -1,8 +1,12 @@
 import Logger from '@joplin/utils/Logger';
 import shim from '../../../shim';
-import { downloadMediaFile } from './notes';
+import { downloadMediaFile, createResourcesFromPaths } from './notes';
 import Setting from '../../../models/Setting';
 import { readFile, readdir, remove, writeFile } from 'fs-extra';
+import Resource from '../../../models/Resource';
+import Api, { RequestMethod } from '../Api';
+import Note from '../../../models/Note';
+import { setupDatabase, switchClient } from '../../../testing/test-utils';
 const md5 = require('md5');
 
 const imagePath = `${__dirname}/../../../images/SideMenuHeader.png`;
@@ -10,8 +14,10 @@ const jpgBase64Content = '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBA
 
 describe('routes/notes', () => {
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		jest.resetAllMocks();
+		await setupDatabase(1);
+		await switchClient(1);
 	});
 
 	test.each([
@@ -19,7 +25,7 @@ describe('routes/notes', () => {
 		'htp/asdfasf.com',
 		'https//joplinapp.org',
 	])('should not return a local file for invalid protocols', async (invalidUrl) => {
-		await expect(downloadMediaFile(invalidUrl)).resolves.toBe('');
+		expect(await downloadMediaFile(invalidUrl)).toBe('');
 	});
 
 	test.each([
@@ -127,4 +133,44 @@ describe('routes/notes', () => {
 		await remove(response);
 		spy.mockRestore();
 	});
+
+	test('should be able to create resource from files in the filesystem', async () => {
+		const result = await createResourcesFromPaths([
+			{ originalUrl: 'asdf.png', path: `${__dirname}/../../../images/SideMenuHeader.png` },
+		]);
+
+		const resources = await Resource.all();
+
+		expect(result.length).toBe(1);
+		expect(result[0].originalUrl).toBe('asdf.png');
+		expect(result[0].path).toBe(`${__dirname}/../../../images/SideMenuHeader.png`);
+		expect(result[0].resource.title).toBe('SideMenuHeader.png');
+		expect(result[0].resource.file_extension).toBe('png');
+		expect(resources.length).toBe(1);
+		expect(result[0].resource).toEqual(resources[0]);
+	});
+
+	test('should not create resource from files that does not exist', async () => {
+		expect(
+			async () => createResourcesFromPaths([
+				{ originalUrl: 'not-a-real-file', path: '/does/not/exist' },
+			]),
+		).rejects.toThrow('Cannot access /does/not/exist');
+
+		const resources = await Resource.all();
+		expect(resources.length).toBe(0);
+	});
+
+	test('should be able to delete to trash', async () => {
+		const api = new Api();
+		const note1 = await Note.save({});
+		const note2 = await Note.save({});
+		const beforeTime = Date.now();
+		await api.route(RequestMethod.DELETE, `notes/${note1.id}`);
+		await api.route(RequestMethod.DELETE, `notes/${note2.id}`, { permanent: '1' });
+
+		expect((await Note.load(note1.id)).deleted_time).toBeGreaterThanOrEqual(beforeTime);
+		expect(await Note.load(note2.id)).toBeFalsy();
+	});
+
 });
