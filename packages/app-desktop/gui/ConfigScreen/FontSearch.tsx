@@ -20,8 +20,17 @@ const optionStyle: CSSProperties = {
 	cursor: 'pointer',
 };
 
-const FontSearch = (props: any) => {
-	const { _key: key, updateSettingValue, inputType, inputStyle, settings, fonts } = props;
+interface Props {
+	_key: string;
+	updateSettingValue: (key: string, value: string)=> void;
+	inputType: string;
+	inputStyle: CSSProperties;
+	fieldValue: string;
+	fonts: string[];
+}
+
+const FontSearch = (props: Props) => {
+	const { _key: key, updateSettingValue, inputType, inputStyle, fieldValue, fonts } = props;
 	const [hoveredFont, setHoveredFont] = useState('');
 	const [inputText, setInputText] = useState('');
 	const areFontsLoading = fonts.length === 0;
@@ -55,7 +64,7 @@ const FontSearch = (props: any) => {
 			<input
 				type={inputType}
 				style={inputStyle}
-				value={settings[key]}
+				value={fieldValue}
 				id={key}
 				onChange={(event: any) => {
 					onTextChange(event);

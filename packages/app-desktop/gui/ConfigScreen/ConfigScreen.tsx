@@ -590,7 +590,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 									updateSettingValue={updateSettingValue}
 									inputType={inputType}
 									inputStyle={inputStyle}
-									settings={this.state.settings}
+									fieldValue={this.state.settings[key]}
 									fonts={this.state.fonts}
 								/> :
 								<input
