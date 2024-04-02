@@ -8,6 +8,7 @@ Name | Type | Required? | Description
 `name` | string | **Yes** | Name of the plugin. Should be a user-friendly string, as it will be displayed in the UI.
 `version` | string | **Yes** | Version number such as "1.0.0".
 `app_min_version` | string | **Yes** | Minimum version of Joplin that the plugin is compatible with. In general it should be whatever version you are using to develop the plugin.
+`app_min_version_mobile` | string | No | Minimum version of Joplin on mobile platforms, if different from `app_min_version`
 `platforms` | string[] | No | List of platforms supported by the plugin. For example, `["desktop", "mobile"]`.
 `description` | string | No | Detailed description of the plugin.
 `author` | string | No | Plugin author name.
@@ -22,8 +23,6 @@ Name | Type | Required? | Description
 ## Platforms
 
 A list that can contain `"desktop"` and/or `"mobile"`.
-
-It's possible to specify a higher `app_min_version` for a particular platform by adding a `>=x.y.z` suffix. For example, `["mobile>=3.2.1", "desktop"]`, would mark the plugin as supporting Joplin versions 3.2.1 and later on mobile, and supporting `app_min_version` or later on desktop. Any version specified with such a suffix **must be greater than or equal to `app_min_version`**.
 
 ## Categories
 
@@ -82,7 +81,8 @@ If no promo tile is provided, your plugin icon will be displayed instead.
     "version": "1.0.0",
     "author": "John Smith",
     "app_min_version": "1.4",
-    "platforms": ["mobile>=3.0.3", "desktop"],
+    "app_min_version_mobile": "3.0.3",
+    "platforms": ["mobile", "desktop"],
     "homepage_url": "https://joplinapp.org",
     "screenshots": [
       {

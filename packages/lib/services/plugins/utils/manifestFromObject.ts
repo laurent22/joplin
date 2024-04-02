@@ -57,6 +57,7 @@ export default function manifestFromObject(o: any): PluginManifest {
 		name: getString('name', true),
 		version: getString('version', true),
 		app_min_version: getString('app_min_version', true),
+		app_min_version_mobile: getString('app_min_version', false),
 		platforms: getStrings('platforms', false),
 
 		author: getString('author', false),

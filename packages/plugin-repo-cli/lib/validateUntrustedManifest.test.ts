@@ -62,7 +62,7 @@ describe('validateUntrustedManifest', () => {
 			id: 'com.example.a-plugin-for-a-fake-platform',
 			_npm_package_name: 'joplin-plugin-plugin-for-an-invalid-version',
 			version: '1.2.3',
-			platforms: ['platform>=bad-version'],
+			platforms: [3, 4, 5],
 		};
 
 		expect(
