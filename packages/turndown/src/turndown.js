@@ -241,16 +241,17 @@ function replacementForNode (node, previousNode) {
   var rule = this.rules.forNode(node)
   var content = process.call(this, node, rule.escapeContent ? rule.escapeContent(node) : 'auto')
   var whitespace = node.flankingWhitespace
-  if (node.isCode) {
-    // Fix: Web clipper has trouble with code blocks on Joplin's website.
-    // See https://github.com/laurent22/joplin/pull/10126#issuecomment-2016523281 .
-    // If isCode, keep line breaks
-    content = content.replace(/^[ \t]+|[ \t]+$/g, '');
-  } else {
-    if (whitespace.leading || whitespace.trailing){
+  if (whitespace.leading || whitespace.trailing){
+    if (node.isCode) {
+      // Fix: Web clipper has trouble with code blocks on Joplin's website.
+      // See https://github.com/laurent22/joplin/pull/10126#issuecomment-2016523281 .
+      // If isCode, keep line breaks
+      content = content.replace(/^[ \t]+|[ \t]+$/g, '');
+    } else {
       content = content.trim()
     }
   }
+  
   return (
     whitespace.leading +
     rule.replacement(content, node, this.options, previousNode) +
