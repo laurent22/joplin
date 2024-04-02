@@ -6584,7 +6584,7 @@ __metadata:
     electron: 29.1.0
     electron-builder: 24.13.3
     electron-window-state: 5.0.3
-    font-list: ^1.5.1
+    font-list: 1.5.1
     formatcoords: 1.1.3
     fs-extra: 11.2.0
     glob: 10.3.10
@@ -21878,7 +21878,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"font-list@npm:^1.5.1":
+"font-list@npm:1.5.1":
   version: 1.5.1
   resolution: "font-list@npm:1.5.1"
   checksum: 2a80da12596c06b706239ae9ad7073b19140cf884367d3d142262ef6c52acdabb6a163fb0f8a9fd966389e43f7914328d2c71865e06dc15e427d74e71d82ebc9
