@@ -575,19 +575,34 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					</div>
 				);
 			} else {
+				const onTextChange = (event: any) => {
+					updateSettingValue(key, event.target.value);
+				};
 				return (
 					<div key={key} style={rowStyle}>
 						<div style={labelStyle}>
 							<label>{md.label()}</label>
 						</div>
-						<FontSearch
-							_key={key}
-							updateSettingValue={updateSettingValue}
-							inputType={inputType}
-							inputStyle={inputStyle}
-							settings={this.state.settings}
-							fonts={this.state.fonts}
-						/>
+						{
+							md.label() === 'Editor font family' || md.label() === 'Editor monospace font family' ?
+								<FontSearch
+									_key={key}
+									updateSettingValue={updateSettingValue}
+									inputType={inputType}
+									inputStyle={inputStyle}
+									settings={this.state.settings}
+									fonts={this.state.fonts}
+								/> :
+								<input
+									type={inputType}
+									style={inputStyle}
+									value={this.state.settings[key]}
+									onChange={(event: any) => {
+										onTextChange(event);
+									}}
+									spellCheck={false}
+								/>
+						}
 						<div style={{ width: inputStyle.width, minWidth: inputStyle.minWidth }}>
 							{descriptionComp}
 						</div>
