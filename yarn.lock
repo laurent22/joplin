@@ -6584,6 +6584,7 @@ __metadata:
     electron: 29.1.0
     electron-builder: 24.13.3
     electron-window-state: 5.0.3
+    font-list: ^1.5.1
     formatcoords: 1.1.3
     fs-extra: 11.2.0
     glob: 10.3.10
@@ -21874,6 +21875,13 @@ __metadata:
   version: 2.1.0
   resolution: "font-awesome-filetypes@npm:2.1.0"
   checksum: 0b1c17d71c2672826b639db990258855381d2976e7b1b371924170ae0865f62a5f082069b399be8b810ae4c6bb7ae1c30f808dae73f5756aa2dbd370e0d9e1fd
+  languageName: node
+  linkType: hard
+
+"font-list@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "font-list@npm:1.5.1"
+  checksum: 2a80da12596c06b706239ae9ad7073b19140cf884367d3d142262ef6c52acdabb6a163fb0f8a9fd966389e43f7914328d2c71865e06dc15e427d74e71d82ebc9
   languageName: node
   linkType: hard
 

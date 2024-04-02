@@ -20,6 +20,9 @@ import ToggleAdvancedSettingsButton from './controls/ToggleAdvancedSettingsButto
 import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
 import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
+import FontSearch from './FontSearch';
+import { fork } from 'node:child_process';
+import { join } from 'node:path';
 
 const settingKeyToControl: any = {
 	'plugins.states': control_PluginsStates,
@@ -40,6 +43,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			screenName: '',
 			changedSettingKeys: [],
 			needRestart: false,
+			fonts: [],
 		};
 
 		this.rowStyle_ = {
@@ -80,6 +84,10 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				void this.switchSection(this.props.defaultSection);
 			});
 		}
+		const child = fork(join(__dirname, 'loadFonts'));
+		child.on('message', (fonts: string[]) => {
+			this.setState({ fonts }, () => child.kill());
+		});
 	}
 
 	private async handleSettingButton(key: string) {
@@ -567,23 +575,18 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					</div>
 				);
 			} else {
-				const onTextChange = (event: any) => {
-					updateSettingValue(key, event.target.value);
-				};
-
 				return (
 					<div key={key} style={rowStyle}>
 						<div style={labelStyle}>
 							<label>{md.label()}</label>
 						</div>
-						<input
-							type={inputType}
-							style={inputStyle}
-							value={this.state.settings[key]}
-							onChange={(event: any) => {
-								onTextChange(event);
-							}}
-							spellCheck={false}
+						<FontSearch
+							_key={key}
+							updateSettingValue={updateSettingValue}
+							inputType={inputType}
+							inputStyle={inputStyle}
+							settings={this.state.settings}
+							fonts={this.state.fonts}
 						/>
 						<div style={{ width: inputStyle.width, minWidth: inputStyle.minWidth }}>
 							{descriptionComp}
