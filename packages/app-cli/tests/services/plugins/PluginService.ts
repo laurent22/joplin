@@ -264,10 +264,10 @@ describe('services_PluginService', () => {
 
 	it.each([
 		{
-			manifestPlatforms: ['desktop>=10'],
+			manifestPlatforms: ['desktop'],
 			isDesktop: true,
 			appVersion: '3.0.0',
-			shouldRun: false,
+			shouldRun: true,
 		},
 		{
 			manifestPlatforms: ['desktop'],
@@ -276,13 +276,13 @@ describe('services_PluginService', () => {
 			shouldRun: false,
 		},
 		{
-			manifestPlatforms: ['desktop', 'mobile>=3.0.7'],
+			manifestPlatforms: ['desktop', 'mobile'],
 			isDesktop: false,
 			appVersion: '3.0.6',
-			shouldRun: false,
+			shouldRun: true,
 		},
 		{
-			manifestPlatforms: ['desktop', 'mobile>=3.0.7'],
+			manifestPlatforms: [],
 			isDesktop: false,
 			appVersion: '3.0.8',
 			shouldRun: true,
