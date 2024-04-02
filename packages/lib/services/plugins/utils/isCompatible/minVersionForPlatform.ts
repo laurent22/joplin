@@ -3,7 +3,10 @@ import { ManifestSlice } from './types';
 
 // Returns false if the platform isn't supported at all,
 const minVersionForPlatform = (appPlatform: AppType, manifest: ManifestSlice): string|false => {
-	if (manifest.platforms && !manifest.platforms.includes(appPlatform)) {
+	const platforms = manifest.platforms ?? [];
+	// If platforms is not specified (or empty), default to supporting all platforms.
+	const supported = platforms.length === 0 || platforms.includes(appPlatform);
+	if (!supported) {
 		return false;
 	}
 
