@@ -1,5 +1,5 @@
 import React = require('react');
-import { useMemo, useState, useCallback, memo } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import { CSSProperties } from 'styled-components';
 
 interface Props {
@@ -79,4 +79,4 @@ const FontSearch = (props: Props) => {
 	);
 };
 
-export default memo(FontSearch);
+export default FontSearch;
