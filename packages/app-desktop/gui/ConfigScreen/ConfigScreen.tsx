@@ -21,8 +21,6 @@ import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/conf
 import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import FontSearch from './FontSearch';
-import { fork } from 'node:child_process';
-import { join } from 'node:path';
 
 const settingKeyToControl: any = {
 	'plugins.states': control_PluginsStates,
@@ -78,16 +76,16 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.setState({ settings: this.props.settings });
 	}
 
-	public componentDidMount() {
+	public async componentDidMount() {
 		if (this.props.defaultSection) {
 			this.setState({ selectedSectionName: this.props.defaultSection }, () => {
 				void this.switchSection(this.props.defaultSection);
 			});
 		}
-		const child = fork(join(__dirname, 'loadFonts'));
-		child.on('message', (fonts: string[]) => {
-			this.setState({ fonts }, () => child.kill());
-		});
+
+		const fonts = (await (window as any).queryLocalFonts()).map((font: any) => font.family);
+		const uniqueFonts = [...new Set(fonts)];
+		this.setState({ fonts: uniqueFonts });
 	}
 
 	private async handleSettingButton(key: string) {

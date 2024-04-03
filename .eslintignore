@@ -174,7 +174,6 @@ packages/app-desktop/gui/ConfigScreen/controls/ToggleAdvancedSettingsButton.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js
-packages/app-desktop/gui/ConfigScreen/loadFonts.js
 packages/app-desktop/gui/Dialog.js
 packages/app-desktop/gui/DialogButtonRow.js
 packages/app-desktop/gui/DialogButtonRow/useKeyboardHandler.js
