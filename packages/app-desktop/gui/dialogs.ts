@@ -21,14 +21,12 @@ class Dialogs {
 		}
 	}
 
-	public async prompt(message: string, title = '', defaultValue = '', options: any = null) {
-		if (options === null) options = {};
-
+	public async prompt(message: string, title = '', defaultValue = '', options: any = { cancel: true }) {
 		try {
 			const answer = await smalltalk.prompt(title, message, defaultValue, options);
 			return answer;
 		} catch (error) {
-			logger.error(error);
+			// dialog was cancelled
 			return null;
 		}
 	}
