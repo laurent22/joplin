@@ -303,7 +303,7 @@ function NoteEditor(props: Props, ref: any) {
 		automatchBraces: false,
 		ignoreModifiers: false,
 
-		indentWithTabs: false,
+		indentWithTabs: true,
 	}), [props.themeId, props.readOnly]);
 
 	const injectedJavaScript = `

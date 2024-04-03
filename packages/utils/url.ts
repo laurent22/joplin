@@ -100,3 +100,10 @@ export const fileUriToPath = (path: string, platform = 'linux') => {
 export const isDataUrl = (path: string) => {
 	return path.startsWith('data:');
 };
+
+export const isLink = (text: string) => {
+	if (!text) return false;
+	const linkRegex = /^(https?|file|joplin):\/\/[^)\s]+$/;
+	return !!text.match(linkRegex);
+};
+

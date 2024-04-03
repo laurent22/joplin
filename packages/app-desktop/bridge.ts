@@ -1,7 +1,7 @@
 import ElectronAppWrapper from './ElectronAppWrapper';
 import shim from '@joplin/lib/shim';
 import { _, setLocale } from '@joplin/lib/locale';
-import { BrowserWindow, nativeTheme, nativeImage, dialog, shell, MessageBoxSyncOptions } from 'electron';
+import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions } from 'electron';
 import { dirname, toSystemSlashes } from '@joplin/lib/path-utils';
 import { fileUriToPath } from '@joplin/utils/url';
 import { urlDecode } from '@joplin/lib/string-utils';
@@ -9,7 +9,8 @@ import * as Sentry from '@sentry/electron/main';
 import { homedir } from 'os';
 import { msleep } from '@joplin/utils/time';
 import { pathExists, writeFileSync } from 'fs-extra';
-import { normalize } from 'path';
+import { extname, normalize } from 'path';
+import isSafeToOpen from './utils/isSafeToOpen';
 
 interface LastSelectedPath {
 	file: string;
@@ -23,6 +24,7 @@ interface OpenDialogOptions {
 	filters?: any[];
 }
 
+type OnAllowedExtensionsChange = (newExtensions: string[])=> void;
 interface MessageDialogOptions extends Omit<MessageBoxSyncOptions, 'message'> {
 	message?: string;
 }
@@ -35,6 +37,9 @@ export class Bridge {
 	private rootProfileDir_: string;
 	private appName_: string;
 	private appId_: string;
+
+	private extraAllowedExtensions_: string[] = [];
+	private onAllowedExtensionsChangeListener_: OnAllowedExtensionsChange = ()=>{};
 
 	public constructor(electronWrapper: ElectronAppWrapper, appId: string, appName: string, rootProfileDir: string, autoUploadCrashDumps: boolean) {
 		this.electronWrapper_ = electronWrapper;
@@ -102,6 +107,23 @@ export class Bridge {
 
 	public set autoUploadCrashDumps(v: boolean) {
 		this.autoUploadCrashDumps_ = v;
+	}
+
+	public get extraAllowedOpenExtensions() {
+		return this.extraAllowedExtensions_;
+	}
+
+	public set extraAllowedOpenExtensions(newValue: string[]) {
+		const oldValue = this.extraAllowedExtensions_;
+		const changed = newValue.length !== oldValue.length || newValue.some((v, idx) => v !== oldValue[idx]);
+		if (changed) {
+			this.extraAllowedExtensions_ = newValue;
+			this.onAllowedExtensionsChangeListener_?.(this.extraAllowedExtensions_);
+		}
+	}
+
+	public setOnAllowedExtensionsChangeListener(listener: OnAllowedExtensionsChange) {
+		this.onAllowedExtensionsChangeListener_ = listener;
 	}
 
 	public async captureException(error: any) {
@@ -325,11 +347,43 @@ export class Bridge {
 			fullPath = fileUriToPath(urlDecode(fullPath), shim.platformName());
 		}
 		fullPath = normalize(fullPath);
-
 		// Note: pathExists is intended to mitigate a security issue related to network drives
 		//       on Windows.
 		if (await pathExists(fullPath)) {
-			return shell.openPath(fullPath);
+			const fileExtension = extname(fullPath);
+			const userAllowedExtension = this.extraAllowedOpenExtensions.includes(fileExtension);
+			if (userAllowedExtension || isSafeToOpen(fullPath)) {
+				return shell.openPath(fullPath);
+			} else {
+				const allowOpenId = 2;
+				const learnMoreId = 1;
+				const fileExtensionDescription = JSON.stringify(fileExtension);
+				const result = await dialog.showMessageBox(this.window(), {
+					title: _('Unknown file type'),
+					message:
+						_('Joplin doesn\'t recognise the %s extension. Opening this file could be dangerous. What would you like to do?', fileExtensionDescription),
+					type: 'warning',
+					checkboxLabel: _('Always open %s files without asking.', fileExtensionDescription),
+					buttons: [
+						_('Cancel'),
+						_('Learn more'),
+						_('Open it'),
+					],
+				});
+
+				if (result.response === learnMoreId) {
+					void this.openExternal('https://joplinapp.org/help/apps/attachments#unknown-filetype-warning');
+					return 'Learn more shown';
+				} else if (result.response !== allowOpenId) {
+					return 'Cancelled by user';
+				}
+
+				if (result.checkboxChecked) {
+					this.extraAllowedOpenExtensions = this.extraAllowedOpenExtensions.concat(fileExtension);
+				}
+
+				return shell.openPath(fullPath);
+			}
 		} else {
 			return 'Path does not exist.';
 		}

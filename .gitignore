@@ -454,6 +454,8 @@ packages/app-desktop/utils/7zip/pathToBundled7Zip.js
 packages/app-desktop/utils/checkForUpdatesUtils.test.js
 packages/app-desktop/utils/checkForUpdatesUtils.js
 packages/app-desktop/utils/checkForUpdatesUtilsTestData.js
+packages/app-desktop/utils/isSafeToOpen.test.js
+packages/app-desktop/utils/isSafeToOpen.js
 packages/app-desktop/utils/markupLanguageUtils.js
 packages/app-desktop/utils/restartInSafeModeFromMain.test.js
 packages/app-desktop/utils/restartInSafeModeFromMain.js
@@ -586,6 +588,8 @@ packages/app-mobile/plugins/PluginRunner/backgroundPage/initializeDialogWebView.
 packages/app-mobile/plugins/PluginRunner/backgroundPage/initializePluginBackgroundIframe.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/pluginRunnerBackgroundPage.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/startStopPlugin.js
+packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/getFormData.test.js
+packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/getFormData.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/makeSandboxedIframe.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/reportUnhandledErrors.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/wrapConsoleLog.js
@@ -1005,6 +1009,10 @@ packages/lib/services/plugins/utils/executeSandboxCall.js
 packages/lib/services/plugins/utils/getPluginNamespacedSettingKey.js
 packages/lib/services/plugins/utils/getPluginSettingKeyPrefix.js
 packages/lib/services/plugins/utils/getPluginSettingValue.js
+packages/lib/services/plugins/utils/isCompatible/index.test.js
+packages/lib/services/plugins/utils/isCompatible/index.js
+packages/lib/services/plugins/utils/isCompatible/minVersionForPlatform.js
+packages/lib/services/plugins/utils/isCompatible/types.js
 packages/lib/services/plugins/utils/loadContentScripts.js
 packages/lib/services/plugins/utils/makeListener.js
 packages/lib/services/plugins/utils/manifestFromObject.js
@@ -1012,6 +1020,8 @@ packages/lib/services/plugins/utils/mapEventHandlersToIds.js
 packages/lib/services/plugins/utils/types.js
 packages/lib/services/plugins/utils/validatePluginId.test.js
 packages/lib/services/plugins/utils/validatePluginId.js
+packages/lib/services/plugins/utils/validatePluginPlatforms.test.js
+packages/lib/services/plugins/utils/validatePluginPlatforms.js
 packages/lib/services/plugins/utils/validatePluginVersion.test.js
 packages/lib/services/plugins/utils/validatePluginVersion.js
 packages/lib/services/profileConfig/index.test.js
