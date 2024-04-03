@@ -6866,6 +6866,7 @@ __metadata:
     "@joplin/fork-sax": ^1.2.55
     "@joplin/fork-uslug": ^1.0.16
     "@joplin/htmlpack": ~3.0
+    "@joplin/onenote-converter": 0.0.1
     "@joplin/renderer": ~3.0
     "@joplin/turndown": ^4.0.73
     "@joplin/turndown-plugin-gfm": ^1.0.55
@@ -6915,7 +6916,6 @@ __metadata:
     node-notifier: 10.0.1
     node-persist: 3.1.3
     node-rsa: 1.1.1
-    onenote-converter: "file:../onenote-converter/pkg"
     pdfjs-dist: 3.11.174
     promise: 8.3.0
     query-string: 7.1.3
@@ -6941,6 +6941,12 @@ __metadata:
     uuid: 9.0.1
     word-wrap: 1.2.5
     xml2js: 0.4.23
+  languageName: unknown
+  linkType: soft
+
+"@joplin/onenote-converter@0.0.1, @joplin/onenote-converter@workspace:packages/onenote-converter/pkg":
+  version: 0.0.0-use.local
+  resolution: "@joplin/onenote-converter@workspace:packages/onenote-converter/pkg"
   languageName: unknown
   linkType: soft
 
@@ -32224,13 +32230,6 @@ __metadata:
   dependencies:
     wrappy: 1
   checksum: cd0a88501333edd640d95f0d2700fbde6bff20b3d4d9bdc521bdd31af0656b5706570d6c6afe532045a20bb8dc0849f8332d6f2a416e0ba6d3d3b98806c7db68
-  languageName: node
-  linkType: hard
-
-"onenote-converter@file:../onenote-converter/pkg::locator=%40joplin%2Flib%40workspace%3Apackages%2Flib":
-  version: 0.0.1
-  resolution: "onenote-converter@file:../onenote-converter/pkg#../onenote-converter/pkg::hash=07e458&locator=%40joplin%2Flib%40workspace%3Apackages%2Flib"
-  checksum: b0a0350f8713b31243ae114001e0374bf77b994d667f0b7e2dedd0da7f2d90da2b96895481b32d9a39ba07303ce892014c70fa31f5cc82b8c2df06dc8d0aecd6
   languageName: node
   linkType: hard
 

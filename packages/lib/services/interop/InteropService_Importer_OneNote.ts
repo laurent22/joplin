@@ -3,7 +3,7 @@ import { ImportExportResult, ImportModuleOutputFormat } from './types';
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import { NoteEntity } from '../database/types';
 import { rtrimSlashes } from '../../path-utils';
-import { oneNoteConverter } from 'onenote-converter';
+import { oneNoteConverter } from '@joplin/onenote-converter';
 import InteropService_Importer_Md from './InteropService_Importer_Md';
 
 export default class InteropService_Importer_OneNote extends InteropService_Importer_Base {
