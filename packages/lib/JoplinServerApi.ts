@@ -80,6 +80,10 @@ export default class JoplinServerApi {
 
 		const clientInfo = await this.getClientInfo();
 
+		if (!this.options_.username() || !this.options_.password()) {
+			return null;
+		}
+
 		try {
 			this.session_ = await this.exec_('POST', 'api/sessions', null, {
 				email: this.options_.username(),
