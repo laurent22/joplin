@@ -200,26 +200,31 @@ rules.listItem = {
     } else {
       var parent = node.parentNode
       if (isOrderedList(parent)) {
-        var start = parent.getAttribute('start')
-        var index = Array.prototype.indexOf.call(parent.children, node)
-        var indexStr = (start ? Number(start) + index : index + 1) + ''
-        // The content of the line that contains the bullet must align wih the following lines.
-        //
-        // i.e it should be:
-        //
-        // 9.  my content
-        //     second line
-        // 10. next one
-        //     second line
-        //
-        // But not:
-        //
-        // 9.  my content
-        //     second line
-        // 10.  next one
-        //     second line
-        //
-        prefix = indexStr + '.' + ' '.repeat(3 - indexStr.length)
+        if (node.isCode) {
+          // remove ordered list in code blocks 
+          prefix = '';
+        } else {
+          var start = parent.getAttribute('start')
+          var index = Array.prototype.indexOf.call(parent.children, node)
+          var indexStr = (start ? Number(start) + index : index + 1) + ''
+          // The content of the line that contains the bullet must align wih the following lines.
+          //
+          // i.e it should be:
+          //
+          // 9.  my content
+          //     second line
+          // 10. next one
+          //     second line
+          //
+          // But not:
+          //
+          // 9.  my content
+          //     second line
+          // 10.  next one
+          //     second line
+          //
+          prefix = indexStr + '.' + ' '.repeat(3 - indexStr.length)
+        }
       }
     } 
 
