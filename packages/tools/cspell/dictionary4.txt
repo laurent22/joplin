@@ -100,3 +100,4 @@ Trashable
 hideable
 unignore
 unignored
+unsyncable

@@ -206,6 +206,7 @@ export default class ReportService {
 			};
 
 			section.body.push({ type: ReportItemType.OpenList, key: 'disabledSyncItems' });
+
 			let hasIgnoredItems = false;
 			let hasUnignoredItems = false;
 			for (const row of disabledItems) {
@@ -224,6 +225,7 @@ export default class ReportService {
 			section.body.push({ type: ReportItemType.CloseList });
 			section = this.addRetryAllHandler(section);
 			sections.push(section);
+
 
 			if (hasIgnoredItems) {
 				section = { title: _('Ignored items that cannot be synchronised'), body: [] };
@@ -303,7 +305,6 @@ export default class ReportService {
 						await Resource.resetFetchErrorStatus(row.resource_id);
 						void ResourceFetcher.instance().autoAddResources();
 					},
-
 				});
 			}
 
