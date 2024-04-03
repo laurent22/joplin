@@ -1,24 +1,6 @@
 import React = require('react');
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, memo } from 'react';
 import { CSSProperties } from 'styled-components';
-
-const searchListStyle: CSSProperties = {
-	backgroundColor: 'var(--joplin-background-color)',
-	maxHeight: '200px',
-	minHeight: '10px', // Needed to prevent the list from collapsing when empty
-	width: '50%',
-	minWidth: '20em',
-	overflowY: 'auto',
-	border: '1px solid #ccc',
-	borderRadius: '5px',
-	display: 'none',
-	marginTop: '10px',
-};
-const optionStyle: CSSProperties = {
-	padding: '5px',
-	borderBottom: '1px solid #ccc',
-	cursor: 'pointer',
-};
 
 interface Props {
 	_key: string;
@@ -31,7 +13,6 @@ interface Props {
 
 const FontSearch = (props: Props) => {
 	const { _key: key, updateSettingValue, inputType, inputStyle, fieldValue, fonts } = props;
-	const [hoveredFont, setHoveredFont] = useState('');
 	const [inputText, setInputText] = useState('');
 	const areFontsLoading = fonts.length === 0;
 
@@ -42,7 +23,7 @@ const FontSearch = (props: Props) => {
 	}, [fonts, inputText]);
 
 	const showList = useCallback((display: boolean) => {
-		document.getElementById(`searchList-${key}`).style.display = display ? 'block' : 'none';
+		document.getElementById(`search-list-${key}`).style.display = display ? 'block' : 'none';
 	}, [key]);
 
 	const onTextChange = useCallback((event: any) => {
@@ -79,19 +60,15 @@ const FontSearch = (props: Props) => {
 				onBlur={onBlurHandle}
 				spellCheck={false}
 			/>
-			<div id={`searchList-${key}`} style={searchListStyle} >
+			<div className={'font-search-list'} id={`search-list-${key}`} >
 				{
-					areFontsLoading ? <div style={{ padding: '5px' }}>Loading...</div> :
+					areFontsLoading ? <div>Loading...</div> :
 						filteredFonts.map((font: string) =>
 							<div
 								key={font}
-								style={{ ...optionStyle, fontFamily: `"${font}"`,
-									color: hoveredFont === font ? 'var(--joplin-background-color)' : 'var(--joplin-color)',
-									backgroundColor: hoveredFont === font ? 'var(--joplin-color)' : 'var(--joplin-background-color)',
-								}}
+								style={{ fontFamily: `"${font}"` }}
 								onClick={onFontClick}
-								onMouseEnter={() => setHoveredFont(font)}
-								onMouseLeave={() => setHoveredFont('')}
+								className='font-search-item'
 							>
 								{font}
 							</div>,
@@ -102,4 +79,4 @@ const FontSearch = (props: Props) => {
 	);
 };
 
-export default FontSearch;
+export default memo(FontSearch);
