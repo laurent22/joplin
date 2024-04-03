@@ -85,6 +85,16 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	},
 	[EditorCommandType.InsertText]: replaceSelectionCommand,
 	[EditorCommandType.ReplaceSelection]: replaceSelectionCommand,
+
+	[EditorCommandType.SetText]: (editor, text: string) => {
+		editor.dispatch({
+			changes: [{
+				from: 0,
+				to: editor.state.doc.length,
+				insert: text,
+			}],
+		});
+	},
 };
 export default editorCommands;
 
