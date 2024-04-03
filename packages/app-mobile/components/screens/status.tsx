@@ -151,9 +151,9 @@ class StatusScreenComponent extends BaseScreenComponent<Props, State> {
 							return (
 								<View style={{ flex: 1, flexDirection: 'row' }}>
 									<Text style={style}>{item.text}</Text>
+									{ignoreButton}
 									{retryAllButton}
 									{retryButton}
-									{ignoreButton}
 								</View>
 							);
 						}
