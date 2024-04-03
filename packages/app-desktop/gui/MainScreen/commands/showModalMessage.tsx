@@ -14,14 +14,26 @@ export const runtime = (comp: any): CommandRuntime => {
 				return <div key={line} className="text">{line}</div>;
 			});
 
+
+			const hideModalMessage = () => {
+				comp.setState({ modalLayer: { visible: false, message: '' } });
+			};
+
 			comp.setState({
 				modalLayer: {
 					visible: true,
 					message:
-						<div className="modal-message">
-							<div id="loading-animation" />
-							<div className="text">
-								{lines}
+						<div className="import-message">
+							<div className="modal-message">
+								<div id="loading-animation"/>
+								<div className="text">
+									{lines}
+								</div>
+							</div>
+							<div className="close-modal">
+								<button className="close-button" onClick={hideModalMessage}
+								>Continue using the app while processing
+								</button>
 							</div>
 						</div>,
 				},

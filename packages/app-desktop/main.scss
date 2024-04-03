@@ -122,6 +122,18 @@ a {
 	margin: 40px 20px;
 }
 
+.close-modal {
+	display: flex;
+	justify-content: center;
+}
+
+.close-button {
+	.icon-button:active;
+	color: var(--joplin-color);
+	padding: 12px 24px;
+	cursor: pointer;
+}
+
 #loading-animation {
 	margin-right: 20px;
 	width: 20px;
