@@ -137,6 +137,10 @@ class Application extends BaseApplication {
 			webFrame.setZoomFactor(Setting.value('windowContentZoomFactor') / 100);
 		}
 
+		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'linking.extraAllowedExtensions' || action.type === 'SETTING_UPDATE_ALL') {
+			bridge().extraAllowedOpenExtensions = Setting.value('linking.extraAllowedExtensions');
+		}
+
 		if (['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >= 0) {
 			await AlarmService.updateNoteNotification(action.id, action.type === 'NOTE_DELETE');
 		}
@@ -609,6 +613,9 @@ class Application extends BaseApplication {
 		}
 
 		bridge().addEventListener('nativeThemeUpdated', this.bridge_nativeThemeUpdated);
+		bridge().setOnAllowedExtensionsChangeListener((newExtensions) => {
+			Setting.setValue('linking.extraAllowedExtensions', newExtensions);
+		});
 
 		await this.initPluginService();
 
