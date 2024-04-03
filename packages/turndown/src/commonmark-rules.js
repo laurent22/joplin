@@ -189,7 +189,10 @@ rules.listItem = {
         .replace(/\n+$/, '\n') // replace trailing newlines with just a single one
 
     var prefix = options.bulletListMarker + ' '
-    content = content.replace(/\n/gm, '\n    ') // indent
+    if (node.isCode===false) {
+      content = content.replace(/\n/gm, '\n    ') // indent
+    }
+    
 
     const joplinCheckbox = joplinCheckboxInfo(node);
     if (joplinCheckbox) {
@@ -269,6 +272,9 @@ rules.fencedCodeBlock = {
     }
 
     var fence = repeat(fenceChar, fenceSize)
+
+    // remove code block leading and trailing newlines
+    code = code.replace(/^\n+/, '').replace(/\n+$/, '')
 
     return (
       '\n\n' + fence + language + '\n' +

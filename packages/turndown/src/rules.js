@@ -43,7 +43,8 @@ Rules.prototype = {
   },
 
   forNode: function (node) {
-    if (node.isBlank) return this.blankRule
+    // code block keep blank lines
+    if (node.isCode === false && node.isBlank) return this.blankRule
     var rule
 
     if ((rule = findRule(this.array, node, this.options))) return rule
