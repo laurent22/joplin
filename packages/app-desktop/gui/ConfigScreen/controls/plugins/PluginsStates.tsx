@@ -11,7 +11,7 @@ import produce from 'immer';
 import { OnChangeEvent } from '../../../lib/SearchInput/SearchInput';
 import { PluginItem, ItemEvent, OnPluginSettingChangeEvent } from '@joplin/lib/components/shared/config/plugins/types';
 import RepositoryApi, { InstallMode } from '@joplin/lib/services/plugins/RepositoryApi';
-import Setting from '@joplin/lib/models/Setting';
+import Setting, { AppType } from '@joplin/lib/models/Setting';
 import useOnInstallHandler from '@joplin/lib/components/shared/config/plugins/useOnInstallHandler';
 import useOnDeleteHandler from '@joplin/lib/components/shared/config/plugins/useOnDeleteHandler';
 import Logger from '@joplin/utils/Logger';
@@ -60,7 +60,8 @@ let repoApi_: RepositoryApi = null;
 
 function repoApi(): RepositoryApi {
 	if (repoApi_) return repoApi_;
-	repoApi_ = RepositoryApi.ofDefaultJoplinRepo(Setting.value('tempDir'), InstallMode.Default);
+	const appInfo = { type: AppType.Desktop, version: PluginService.instance().appVersion };
+	repoApi_ = RepositoryApi.ofDefaultJoplinRepo(Setting.value('tempDir'), appInfo, InstallMode.Default);
 	// repoApi_ = new RepositoryApi('/Users/laurent/src/joplin-plugins-test', Setting.value('tempDir'));
 	return repoApi_;
 }
@@ -154,7 +155,7 @@ export default function(props: Props) {
 				.filter(plugin => !plugin.builtIn)
 				.map(p => p.manifest);
 
-			const pluginIds = await repoApi().canBeUpdatedPlugins(nonDefaultPlugins, pluginService.appVersion);
+			const pluginIds = await repoApi().canBeUpdatedPlugins(nonDefaultPlugins);
 			if (cancelled) return;
 
 			const conv: Record<string, boolean> = {};
@@ -256,7 +257,7 @@ export default function(props: Props) {
 				item={item}
 				themeId={props.themeId}
 				updateState={updateState}
-				isCompatible={PluginService.instance().isCompatible(item.manifest.app_min_version)}
+				isCompatible={PluginService.instance().isCompatible(item.manifest)}
 				onDelete={onDelete}
 				onToggle={onToggle}
 				onUpdate={onUpdateHandler}

@@ -86,7 +86,7 @@ export default function(props: Props) {
 					key={manifest.id}
 					manifest={manifest}
 					themeId={props.themeId}
-					isCompatible={PluginService.instance().isCompatible(manifest.app_min_version)}
+					isCompatible={PluginService.instance().isCompatible(manifest)}
 					onInstall={onInstall}
 					installState={installState(manifest.id)}
 				/>);

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import RepositoryApi, { InstallMode } from '@joplin/lib/services/plugins/RepositoryApi';
-import { afterAllCleanUp, afterEachCleanUp, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+import { afterAllCleanUp, afterEachCleanUp, mockMobilePlatform, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 
 import { render, screen, userEvent, waitFor } from '@testing-library/react-native';
 import '@testing-library/react-native/extend-expect';
@@ -103,5 +103,26 @@ describe('SearchPlugins', () => {
 		await expectSearchResultCountToBe(1);
 		expect(screen.getByText(/ABC Sheet Music/i)).toBeTruthy();
 		expect(screen.queryByText(/backlink/i)).toBeNull();
+	});
+
+	it('should mark incompatible plugins as incompatible', async () => {
+		const mock = mockMobilePlatform('android');
+		const repoApi = await newRepoApi(InstallMode.Default);
+		render(<SearchWrapper repoApi={repoApi}/>);
+
+		const searchBox = screen.queryByPlaceholderText('Search');
+		const user = userEvent.setup();
+		await user.type(searchBox, 'abc');
+
+		await expectSearchResultCountToBe(1);
+		expect(screen.queryByText('Incompatible')).toBeNull();
+
+		await user.clear(searchBox);
+		await user.type(searchBox, 'side bar toggle');
+		await expectSearchResultCountToBe(1);
+		expect(await screen.findByText(/Note list and side bar/i)).toBeVisible();
+		expect(await screen.findByText('Incompatible')).toBeVisible();
+
+		mock.reset();
 	});
 });

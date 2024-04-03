@@ -9,7 +9,11 @@ import Setting from '../../models/Setting';
 import Logger from '@joplin/utils/Logger';
 import RepositoryApi from './RepositoryApi';
 import produce from 'immer';
-import { compareVersions } from 'compare-versions';
+import { PluginManifest } from './utils/types';
+import isCompatible from './utils/isCompatible';
+import { AppType } from './api/types';
+import minVersionForPlatform from './utils/isCompatible/minVersionForPlatform';
+import { _ } from '../../locale';
 const uslug = require('@joplin/fork-uslug');
 
 const logger = Logger.create('PluginService');
@@ -437,8 +441,29 @@ export default class PluginService extends BaseService {
 		}
 	}
 
-	public isCompatible(pluginVersion: string): boolean {
-		return compareVersions(this.appVersion_, pluginVersion) >= 0;
+	private get appType_() {
+		return shim.mobilePlatform() ? AppType.Mobile : AppType.Desktop;
+	}
+
+	public isCompatible(manifest: PluginManifest): boolean {
+		return isCompatible(this.appVersion_, this.appType_, manifest);
+	}
+
+	public describeIncompatibility(manifest: PluginManifest) {
+		if (this.isCompatible(manifest)) return null;
+
+		const minVersion = minVersionForPlatform(this.appType_, manifest);
+		if (minVersion) {
+			return _('Please upgrade Joplin to version %s or later to use this plugin.', minVersion);
+		} else {
+			let platformDescription = 'Unknown';
+			if (this.appType_ === AppType.Mobile) {
+				platformDescription = _('Joplin Mobile');
+			} else if (this.appType_ === AppType.Desktop) {
+				platformDescription = _('Joplin Desktop');
+			}
+			return _('This plugin doesn\'t support %s.', platformDescription);
+		}
 	}
 
 	public get allPluginsStarted(): boolean {
@@ -451,8 +476,8 @@ export default class PluginService extends BaseService {
 	public async runPlugin(plugin: Plugin) {
 		if (this.isSafeMode) throw new Error(`Plugin was not started due to safe mode: ${plugin.manifest.id}`);
 
-		if (!this.isCompatible(plugin.manifest.app_min_version)) {
-			throw new Error(`Plugin "${plugin.id}" was disabled because it requires Joplin version ${plugin.manifest.app_min_version} and current version is ${this.appVersion_}.`);
+		if (!this.isCompatible(plugin.manifest)) {
+			throw new Error(`Plugin "${plugin.id}" was disabled: ${this.describeIncompatibility(plugin.manifest)}`);
 		} else {
 			this.store_.dispatch({
 				type: 'PLUGIN_ADD',
