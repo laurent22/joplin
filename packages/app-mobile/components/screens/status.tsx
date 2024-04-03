@@ -1,37 +1,46 @@
-const React = require('react');
+import * as React from 'react';
 
-const { View, Text, Button, FlatList } = require('react-native');
-const Setting = require('@joplin/lib/models/Setting').default;
-const { connect } = require('react-redux');
-const { ScreenHeader } = require('../ScreenHeader');
-const ReportService = require('@joplin/lib/services/ReportService').default;
-const { _ } = require('@joplin/lib/locale');
-const { BaseScreenComponent } = require('../base-screen');
-const { themeStyle } = require('../global-style');
+import { View, Text, Button, FlatList, TextStyle } from 'react-native';
+import Setting from '@joplin/lib/models/Setting';
+import { connect } from 'react-redux';
+import { ScreenHeader } from '../ScreenHeader';
+import ReportService, { ReportSection } from '@joplin/lib/services/ReportService';
+import { _ } from '@joplin/lib/locale';
+import { BaseScreenComponent } from '../base-screen';
+import { themeStyle } from '../global-style';
+import { AppState } from '../../utils/types';
 
-class StatusScreenComponent extends BaseScreenComponent {
-	static navigationOptions() {
+interface Props {
+	themeId: number;
+}
+
+interface State {
+	report: ReportSection[];
+}
+
+class StatusScreenComponent extends BaseScreenComponent<Props, State> {
+	public static navigationOptions(): any {
 		return { header: null };
 	}
 
-	constructor() {
-		super();
+	public constructor(props: Props) {
+		super(props);
 		this.state = {
 			report: [],
 		};
 	}
 
-	UNSAFE_componentWillMount() {
-		this.resfreshScreen();
+	public override componentDidMount() {
+		void this.refreshScreen();
 	}
 
-	async resfreshScreen() {
+	private async refreshScreen() {
 		const service = new ReportService();
 		const report = await service.status(Setting.value('sync.target'));
 		this.setState({ report: report });
 	}
 
-	styles() {
+	private styles() {
 		const theme = themeStyle(this.props.themeId);
 		return {
 			body: {
@@ -41,10 +50,10 @@ class StatusScreenComponent extends BaseScreenComponent {
 		};
 	}
 
-	render() {
+	public override render() {
 		const theme = themeStyle(this.props.themeId);
 
-		const renderBody = report => {
+		const renderBody = (report: ReportSection[]) => {
 			const baseStyle = {
 				paddingLeft: 6,
 				paddingRight: 6,
@@ -60,7 +69,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 			for (let i = 0; i < report.length; i++) {
 				const section = report[i];
 
-				let style = { ...baseStyle };
+				let style: TextStyle = { ...baseStyle };
 				style.fontWeight = 'bold';
 				if (i > 0) style.paddingTop = 20;
 				lines.push({ key: `section_${i}`, isSection: true, text: section.title });
@@ -80,7 +89,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 						if (item.canRetry) {
 							retryHandler = async () => {
 								await item.retryHandler();
-								this.resfreshScreen();
+								await this.refreshScreen();
 							};
 						}
 						text = item.text;
@@ -98,7 +107,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 				<FlatList
 					data={lines}
 					renderItem={({ item }) => {
-						const style = { ...baseStyle };
+						const style: TextStyle = { ...baseStyle };
 
 						if (item.isSection === true) {
 							style.fontWeight = 'bold';
@@ -141,16 +150,14 @@ class StatusScreenComponent extends BaseScreenComponent {
 			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader title={_('Status')} />
 				<View style={this.styles().body}>{body}</View>
-				<Button title={_('Refresh')} onPress={() => this.resfreshScreen()} />
+				<Button title={_('Refresh')} onPress={() => this.refreshScreen()} />
 			</View>
 		);
 	}
 }
 
-const StatusScreen = connect(state => {
+export default connect((state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 	};
 })(StatusScreenComponent);
-
-module.exports = { StatusScreen };
