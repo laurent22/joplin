@@ -10,6 +10,7 @@ export enum ContextMenuItemType {
 	Resource = 'resource',
 	Text = 'text',
 	Link = 'link',
+	Mermaid = 'mermaid',
 }
 
 export interface ContextMenuOptions {

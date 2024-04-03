@@ -69,6 +69,8 @@ export default function(editor: any, plugins: PluginStates, dispatch: Function, 
 				resourceId = Resource.pathToId(element.href);
 				itemType = resourceId ? ContextMenuItemType.Resource : ContextMenuItemType.Link;
 				linkToCopy = element.getAttribute('href') || '';
+			} else if (element.nodeName === 'svg') {
+				itemType = ContextMenuItemType.Mermaid;
 			} else {
 				itemType = ContextMenuItemType.Text;
 			}

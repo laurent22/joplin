@@ -201,6 +201,11 @@ export function menuItems(dispatch: Function, htmlToMd: HtmlToMarkdownHandler, m
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType === ContextMenuItemType.Link || !!options.linkToCopy,
 		},
+		saveMermaid: {
+			label: _('To save mermaid graph, go to the markdown editor.'),
+			onAction: async () => {},
+			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Mermaid,
+		},
 	};
 }
 
