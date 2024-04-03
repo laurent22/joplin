@@ -36,6 +36,7 @@ import { focus } from '@joplin/lib/utils/focusHandler';
 const md5 = require('md5');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
+import { isLink } from '@joplin/utils/url';
 
 const logger = Logger.create('TinyMCE');
 
@@ -1172,7 +1173,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					editor.insertContent(result.html);
 				}
 			} else {
-				if (BaseItem.isMarkdownTag(pastedText)) { // Paste a link to a note
+				if (BaseItem.isMarkdownTag(pastedText) || isLink(pastedText)) { // Paste a link to a note
 					logger.info('onPaste: pasting as a Markdown tag');
 					const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, pastedText, markupRenderOptions({ bodyOnly: true }));
 					editor.insertContent(result.html);
