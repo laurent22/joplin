@@ -6872,6 +6872,7 @@ __metadata:
     "@joplin/turndown-plugin-gfm": ^1.0.55
     "@joplin/utils": ~3.0
     "@testing-library/react-hooks": 8.0.1
+    "@types/adm-zip": 0.5.5
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
     "@types/js-yaml": 4.0.9
@@ -6882,6 +6883,7 @@ __metadata:
     "@types/node-rsa": 1.1.4
     "@types/react": 18.2.48
     "@types/uuid": 9.0.7
+    adm-zip: 0.5.12
     async-mutex: 0.4.1
     base-64: 1.0.0
     base64-stream: 1.0.0
@@ -10320,6 +10322,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/adm-zip@npm:0.5.5":
+  version: 0.5.5
+  resolution: "@types/adm-zip@npm:0.5.5"
+  dependencies:
+    "@types/node": "*"
+  checksum: 808c25b8a1c2e1c594cf9b1514e7953105cf96e19e38aa7dc109ff2537bda7345b950ef1f4e54a6e824e5503e29d24b0ff6d0aa1ff9bd4afb79ef0ef2df9ebab
+  languageName: node
+  linkType: hard
+
 "@types/asn1@npm:>=0.2.4":
   version: 0.2.4
   resolution: "@types/asn1@npm:0.2.4"
@@ -12455,6 +12466,13 @@ __metadata:
   version: 1.2.2
   resolution: "address@npm:1.2.2"
   checksum: ace439960c1e3564d8f523aff23a841904bf33a2a7c2e064f7f60a064194075758b9690e65bd9785692a4ef698a998c57eb74d145881a1cecab8ba658ddb1607
+  languageName: node
+  linkType: hard
+
+"adm-zip@npm:0.5.12":
+  version: 0.5.12
+  resolution: "adm-zip@npm:0.5.12"
+  checksum: 299bd727c5275f6f6d30f2540aad1c7d6e5671613ff5b720201d04fc69bb3ab00fa0770f922da38b26654381cbc5043113fb3458dd0d1aff8fede542493921f5
   languageName: node
   linkType: hard
 

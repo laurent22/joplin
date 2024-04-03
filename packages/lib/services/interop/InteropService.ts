@@ -135,16 +135,8 @@ export default class InteropService {
 				}, () => new InteropService_Importer_Md()),
 
 				makeImportModule({
-					format: 'one',
-					fileExtensions: ['one'],
-					sources: [FileSystemItem.File],
-					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
-					description: _('OneNote Section'),
-				}, () => new InteropService_Importer_OneNote()),
-
-				makeImportModule({
-					format: 'onetoc2',
-					fileExtensions: ['onetoc2'],
+					format: 'zip',
+					fileExtensions: ['zip'],
 					sources: [FileSystemItem.File],
 					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
 					description: _('OneNote Notebook'),

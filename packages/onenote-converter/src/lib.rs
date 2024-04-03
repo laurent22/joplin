@@ -1,6 +1,6 @@
+use crate::parser::Parser;
 use color_eyre::eyre::Result;
 use color_eyre::eyre::{eyre, ContextCompat};
-use crate::parser::Parser;
 use std::panic;
 use std::path::Path;
 use std::path::PathBuf;
@@ -11,10 +11,10 @@ use crate::utils::utils::log_to_wasm;
 
 mod notebook;
 mod page;
+mod parser;
 mod section;
 mod templates;
 mod utils;
-mod parser;
 
 extern crate console_error_panic_hook;
 extern crate web_sys;
@@ -37,7 +37,6 @@ pub fn oneNoteConverter(input: &str, output: &str) {
 }
 
 fn _main(input_paths: PathBuf, output_dir: PathBuf) -> Result<()> {
-
     assert!(!output_dir.is_file());
 
     convert(&input_paths, &output_dir)?;
@@ -82,7 +81,7 @@ pub fn convert(path: &Path, output_dir: &Path) -> Result<()> {
             notebook::Renderer::new().render(&notebook, &notebook_name, &output_dir)?;
         }
         Some(ext) => return Err(eyre!("Invalid file extension: {}", ext)),
-        _ => return Err(eyre!("Couldn't determine file type")),
+        _ => return Err(eyre!("Couldn't determine file type: {:?}", path)),
     }
 
     Ok(())

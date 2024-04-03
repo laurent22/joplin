@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@testing-library/react-hooks": "8.0.1",
+    "@types/adm-zip": "0.5.5",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.8",
     "@types/js-yaml": "4.0.9",
@@ -50,6 +51,7 @@
     "@joplin/turndown-plugin-gfm": "^1.0.55",
     "@joplin/utils": "~3.0",
     "@types/nanoid": "3.0.0",
+    "adm-zip": "0.5.12",
     "async-mutex": "0.4.1",
     "base-64": "1.0.0",
     "base64-stream": "1.0.0",
