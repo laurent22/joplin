@@ -14,6 +14,7 @@ import JoplinError from '../JoplinError';
 import { LoadOptions, SaveOptions } from './utils/types';
 import { State as ShareState } from '../services/share/reducer';
 import { checkIfItemCanBeAddedToFolder, checkIfItemCanBeChanged, checkIfItemsCanBeChanged, needsShareReadOnlyChecks } from './utils/readOnly';
+import { checkObjectHasProperties } from '@joplin/utils/object';
 
 const { sprintf } = require('sprintf-js');
 const moment = require('moment');
@@ -795,13 +796,19 @@ export default class BaseItem extends BaseModel {
 				syncInfo: row,
 				location: row.item_location,
 				item: item,
+				warning_dismissed: row.sync_warning_dismissed,
 			});
 		}
 		return output;
 	}
 
-	public static async syncDisabledItemsCount(syncTargetId: number) {
-		const r = await this.db().selectOne('SELECT count(*) as total FROM sync_items WHERE sync_disabled = 1 AND sync_target = ?', [syncTargetId]);
+	public static async syncDisabledItemsCount(syncTargetId: number, includeIgnored: boolean) {
+		const whereQueries = ['sync_disabled = 1', 'sync_target = ?'];
+		const whereArgs = [syncTargetId];
+		if (!includeIgnored) {
+			whereQueries.push('sync_warning_dismissed = 0');
+		}
+		const r = await this.db().selectOne(`SELECT count(*) as total FROM sync_items WHERE ${whereQueries.join(' AND ')}`, whereArgs);
 		return r ? r.total : 0;
 	}
 
@@ -837,6 +844,15 @@ export default class BaseItem extends BaseModel {
 
 	public static async saveSyncEnabled(itemType: ModelType, itemId: string) {
 		await this.db().exec('DELETE FROM sync_items WHERE item_type = ? AND item_id = ?', [itemType, itemId]);
+	}
+
+	public static async dismissItemSyncWarning(syncTarget: number, item: { type_?: number; id?: string }) {
+		checkObjectHasProperties(item, ['type_', 'id']);
+		const itemType = item.type_;
+		const itemId = item.id;
+		const sql = 'UPDATE sync_items SET sync_warning_dismissed = ? WHERE item_id = ? AND item_type = ? AND sync_target = ?';
+		const params = [1, itemId, itemType, syncTarget];
+		await this.db().exec(sql, params);
 	}
 
 	// When an item is deleted, its associated sync_items data is not immediately deleted for

@@ -9,9 +9,12 @@ import { _ } from '@joplin/lib/locale';
 import { BaseScreenComponent } from '../base-screen';
 import { themeStyle } from '../global-style';
 import { AppState } from '../../utils/types';
+import checkDisabledSyncItemsNotification from '@joplin/lib/services/synchronizer/utils/checkDisabledSyncItemsNotification';
+import { Dispatch } from 'redux';
 
 interface Props {
 	themeId: number;
+	dispatch: Dispatch;
 }
 
 interface State {
@@ -85,6 +88,7 @@ class StatusScreenComponent extends BaseScreenComponent<Props, State> {
 					let text = '';
 
 					let retryHandler = null;
+					let ignoreHandler = null;
 					if (typeof item === 'object') {
 						if (item.canRetry) {
 							retryHandler = async () => {
@@ -92,12 +96,19 @@ class StatusScreenComponent extends BaseScreenComponent<Props, State> {
 								await this.refreshScreen();
 							};
 						}
+						if (item.canIgnore) {
+							ignoreHandler = async () => {
+								await item.ignoreHandler();
+								await this.refreshScreen();
+								await checkDisabledSyncItemsNotification((action) => this.props.dispatch(action));
+							};
+						}
 						text = item.text;
 					} else {
 						text = item;
 					}
 
-					lines.push({ key: `item_${i}_${n}`, text: text, retryHandler: retryHandler });
+					lines.push({ key: `item_${i}_${n}`, text: text, retryHandler, ignoreHandler });
 				}
 
 				lines.push({ key: `divider2_${i}`, isDivider: true });
@@ -128,6 +139,12 @@ class StatusScreenComponent extends BaseScreenComponent<Props, State> {
 							</View>
 						) : null;
 
+						const ignoreButton = item.ignoreHandler ? (
+							<View style={{ flex: 0 }}>
+								<Button title={_('Ignore')} onPress={item.ignoreHandler} />
+							</View>
+						) : null;
+
 						if (item.isDivider) {
 							return <View style={{ borderBottomWidth: 1, borderBottomColor: theme.dividerColor, marginTop: 20, marginBottom: 20 }} />;
 						} else {
@@ -136,6 +153,7 @@ class StatusScreenComponent extends BaseScreenComponent<Props, State> {
 									<Text style={style}>{item.text}</Text>
 									{retryAllButton}
 									{retryButton}
+									{ignoreButton}
 								</View>
 							);
 						}

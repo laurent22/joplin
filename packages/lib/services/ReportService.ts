@@ -24,6 +24,8 @@ enum ReportItemType {
 type ReportItemOrString = ReportItem | string;
 
 export type RetryAllHandler = ()=> void;
+export type RetryHandler = ()=> Promise<void>;
+export type IgnoreHandler = ()=> Promise<void>;
 
 export interface ReportSection {
 	title: string;
@@ -39,7 +41,9 @@ export interface ReportItem {
 	text?: string;
 	canRetry?: boolean;
 	canRetryType?: CanRetryType;
-	retryHandler?: RetryAllHandler;
+	retryHandler?: RetryHandler;
+	canIgnore?: boolean;
+	ignoreHandler?: IgnoreHandler;
 }
 
 export default class ReportService {
@@ -179,10 +183,7 @@ export default class ReportService {
 
 			section.body.push(_('These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).'));
 
-			section.body.push({ type: ReportItemType.OpenList, key: 'disabledSyncItems' });
-
-			for (let i = 0; i < disabledItems.length; i++) {
-				const row = disabledItems[i];
+			const processRow = (row: typeof disabledItems[0]) => {
 				let msg = '';
 				if (row.location === BaseItem.SYNC_ITEM_LOCATION_LOCAL) {
 					msg = _('%s (%s) could not be uploaded: %s', row.item.title, row.item.id, row.syncInfo.sync_disabled_reason);
@@ -197,14 +198,45 @@ export default class ReportService {
 					retryHandler: async () => {
 						await BaseItem.saveSyncEnabled(row.item.type_, row.item.id);
 					},
+					canIgnore: !row.warning_dismissed,
+					ignoreHandler: async () => {
+						await BaseItem.dismissItemSyncWarning(syncTarget, row.item);
+					},
 				});
+			};
+
+			section.body.push({ type: ReportItemType.OpenList, key: 'disabledSyncItems' });
+			let hasIgnoredItems = false;
+			let hasUnignoredItems = false;
+			for (const row of disabledItems) {
+				if (!row.warning_dismissed) {
+					processRow(row);
+					hasUnignoredItems = true;
+				} else {
+					hasIgnoredItems = true;
+				}
+			}
+
+			if (!hasUnignoredItems) {
+				section.body.push(_('All item sync failures have been marked as "ignored".'));
 			}
 
 			section.body.push({ type: ReportItemType.CloseList });
-
 			section = this.addRetryAllHandler(section);
-
 			sections.push(section);
+
+			if (hasIgnoredItems) {
+				section = { title: _('Ignored items that cannot be synchronised'), body: [] };
+				section.body.push(_('These items failed to sync, but have been marked as "ignored". They won\'t cause the sync warning to appear, but still aren\'t synced. To unignore, click "retry".'));
+				section.body.push({ type: ReportItemType.OpenList, key: 'ignoredDisabledItems' });
+				for (const row of disabledItems) {
+					if (row.warning_dismissed) {
+						processRow(row);
+					}
+				}
+				section.body.push({ type: ReportItemType.CloseList });
+				sections.push(section);
+			}
 		}
 
 		const decryptionDisabledItems = await DecryptionWorker.instance().decryptionDisabledItems();
@@ -271,6 +303,7 @@ export default class ReportService {
 						await Resource.resetFetchErrorStatus(row.resource_id);
 						void ResourceFetcher.instance().autoAddResources();
 					},
+
 				});
 			}
 

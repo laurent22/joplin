@@ -98,3 +98,5 @@ Prec
 ellipsized
 Trashable
 hideable
+unignore
+unignored

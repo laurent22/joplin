@@ -14,7 +14,7 @@ export default async (dispatch: Dispatch) => {
 		return;
 	}
 
-	const disabledCount = await BaseItem.syncDisabledItemsCount(Setting.value('sync.target'));
+	const disabledCount = await BaseItem.syncDisabledItemsCount(Setting.value('sync.target'), false);
 	if (disabledCount) {
 		logger.info(`${disabledCount} disabled sync items: Triggering notification`);
 		dispatch({ type: 'SYNC_HAS_DISABLED_SYNC_ITEMS' });
