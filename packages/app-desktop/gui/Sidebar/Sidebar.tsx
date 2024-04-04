@@ -49,7 +49,7 @@ interface Props {
 	notesParentType: string;
 	selectedFolderId: string;
 	selectedTagId: string;
-	selectedSmartFilterId: string;
+	selectedSmartFilterId: string; // used by SmartFilter folder types
 	decryptionWorker: any;
 	resourceFetcher: any;
 	syncReport: any;
@@ -470,12 +470,11 @@ const SidebarComponent = (props: Props) => {
 	}, [props.folderHeaderIsExpanded, props.tagHeaderIsExpanded]);
 
 	const onAllNotesClick_ = useCallback(() => {
-		folderItem_click(ALL_NOTES_FILTER_ID);
 		props.dispatch({
 			type: 'SMART_FILTER_SELECT',
 			id: ALL_NOTES_FILTER_ID,
 		});
-	}, [props.dispatch, folderItem_click]);
+	}, [props.dispatch]);
 
 	const anchorItemRef = (type: string, id: string) => {
 		if (!anchorItemRefs.current[type]) anchorItemRefs.current[type] = {};
@@ -745,7 +744,7 @@ const SidebarComponent = (props: Props) => {
 
 
 	if (props.folders.length) {
-		const allNotesSelected = props.selectedFolderId === null ? true : props.selectedFolderId === ALL_NOTES_FILTER_ID;
+		const allNotesSelected = props.notesParentType === 'SmartFilter' && props.selectedSmartFilterId === ALL_NOTES_FILTER_ID;
 		const result = renderFolders(props, renderFolderItem);
 		const folderItems = [renderAllNotesItem(theme, allNotesSelected)].concat(result.items);
 		folderItemsOrder_.current = result.order;
