@@ -845,7 +845,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		}
 
 		if (this.props.navigation.state.isNewPhotoNote) {
-			this.setState({ note: { ...newNote, title: 'Untitled' } });
+			this.setState({ note: { ...newNote, title: _('Untitled') } });
 		} else {
 			this.setState({ note: newNote });
 		}
