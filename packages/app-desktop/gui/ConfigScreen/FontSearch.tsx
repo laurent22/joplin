@@ -12,7 +12,8 @@ interface Props {
 
 const FontSearch = (props: Props) => {
 	const { _key: key, updateSettingValue, type, style, value, fonts } = props;
-	const [inputText, setInputText] = useState('');
+	const [inputText, setInputText] = useState(value);
+	const [showList, setShowList] = useState(false);
 	const areFontsLoading = fonts.length === 0;
 
 	const filteredFonts = useMemo(() => {
@@ -21,45 +22,40 @@ const FontSearch = (props: Props) => {
 		);
 	}, [fonts, inputText]);
 
-	const showList = useCallback((display: boolean) => {
-		document.getElementById(`search-list-${key}`).style.display = display ? 'block' : 'none';
-	}, [key]);
-
 	const onTextChange = useCallback((event: any) => {
 		setInputText(event.target.value);
+		setShowList(true);
 		updateSettingValue(key, event.target.value);
-		showList(true);
-	}, [key, updateSettingValue, showList]);
+	}, [key, updateSettingValue]);
 
 	const onFocusHandle = useCallback((event: any) => {
 		setInputText(event.target.value); // To handle the case when the value is already set
-		showList(true);
-	}, [showList]);
+		setShowList(true);
+	}, []);
 
 	const onBlurHandle = useCallback(() =>
-		setTimeout(() => showList(false), 150) // Delay the hiding of the list to allow the click event to fire
-	, [showList]);
+		setTimeout(() => setShowList(false), 150) // Delay the hiding of the list to allow the click event to fire
+	, []);
 
 	const onFontClick = useCallback((event: any) => {
 		const font = event.target.innerText;
-		(document.getElementById(key) as HTMLDivElement).innerText = font;
+		setInputText(font);
+		setShowList(false);
 		updateSettingValue(key, font);
-		showList(false);
-	}, [key, updateSettingValue, showList]);
+	}, [key, updateSettingValue]);
 
 	return (
 		<>
 			<input
 				type={type}
 				style={style}
-				value={value}
-				id={key}
+				value={inputText}
 				onChange={onTextChange}
 				onFocus={onFocusHandle}
 				onBlur={onBlurHandle}
 				spellCheck={false}
 			/>
-			<div className={'font-search-list'} id={`search-list-${key}`} >
+			<div className={'font-search-list'} style={{ display: showList ? 'block' : 'none' }}>
 				{
 					areFontsLoading ? <div>Loading...</div> :
 						filteredFonts.map((font: string) =>
