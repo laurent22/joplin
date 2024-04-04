@@ -101,3 +101,4 @@ hideable
 unignore
 unignored
 unsyncable
+infini

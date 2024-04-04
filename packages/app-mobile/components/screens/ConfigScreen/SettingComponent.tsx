@@ -38,7 +38,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 	const containerStyle = props.styles.getContainerStyle(!!settingDescription);
 
 	if (md.isEnum) {
-		const value = props.value.toString();
+		const value = props.value?.toString();
 
 		const items = Setting.enumOptionsToValueLabels(md.options(), md.optionsOrder ? md.optionsOrder() : []);
 

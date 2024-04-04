@@ -90,7 +90,7 @@ if [ "$RUN_TESTS" == "1" ]; then
 	# On Linux, we run the Joplin Server tests using PostgreSQL
 	if [ "$IS_LINUX" == "1" ]; then
 		echo "Running Joplin Server tests using PostgreSQL..."
-		sudo docker-compose --file docker-compose.db-dev.yml up -d
+		sudo docker compose --file docker-compose.db-dev.yml up -d
 		cmdResult=$?
 		if [ $cmdResult -ne 0 ]; then
 			exit $cmdResult
