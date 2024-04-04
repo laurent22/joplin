@@ -26,6 +26,14 @@ const settingKeyToControl: any = {
 	'plugins.states': control_PluginsStates,
 };
 
+interface FontData {
+	family: string;
+	fullName: string;
+	postscriptName: string;
+	style: string;
+	blob: ()=> Promise<Blob>;
+}
+
 class ConfigScreenComponent extends React.Component<any, any> {
 
 	private rowStyle_: any = null;
@@ -83,7 +91,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			});
 		}
 
-		const fonts = (await (window as any).queryLocalFonts()).map((font: any) => font.family);
+		const fonts = (await (window as any).queryLocalFonts()).map((font: FontData) => font.family);
 		const uniqueFonts = [...new Set(fonts)];
 		this.setState({ fonts: uniqueFonts });
 	}
@@ -586,9 +594,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 								<FontSearch
 									_key={key}
 									updateSettingValue={updateSettingValue}
-									inputType={inputType}
-									inputStyle={inputStyle}
-									fieldValue={this.state.settings[key]}
+									type={inputType}
+									style={inputStyle}
+									value={this.state.settings[key]}
 									fonts={this.state.fonts}
 								/> :
 								<input

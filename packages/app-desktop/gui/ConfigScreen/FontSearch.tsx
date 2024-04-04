@@ -1,18 +1,17 @@
 import React = require('react');
-import { useMemo, useState, useCallback } from 'react';
-import { CSSProperties } from 'styled-components';
+import { useMemo, useState, useCallback, CSSProperties } from 'react';
 
 interface Props {
 	_key: string;
 	updateSettingValue: (key: string, value: string)=> void;
-	inputType: string;
-	inputStyle: CSSProperties;
-	fieldValue: string;
+	type: string;
+	style: CSSProperties;
+	value: string;
 	fonts: string[];
 }
 
 const FontSearch = (props: Props) => {
-	const { _key: key, updateSettingValue, inputType, inputStyle, fieldValue, fonts } = props;
+	const { _key: key, updateSettingValue, type, style, value, fonts } = props;
 	const [inputText, setInputText] = useState('');
 	const areFontsLoading = fonts.length === 0;
 
@@ -51,9 +50,9 @@ const FontSearch = (props: Props) => {
 	return (
 		<>
 			<input
-				type={inputType}
-				style={inputStyle}
-				value={fieldValue}
+				type={type}
+				style={style}
+				value={value}
 				id={key}
 				onChange={onTextChange}
 				onFocus={onFocusHandle}
