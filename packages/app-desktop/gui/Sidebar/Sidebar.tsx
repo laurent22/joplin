@@ -29,6 +29,7 @@ import { RuntimeProps } from './commands/focusElementSideBar';
 const { connect } = require('react-redux');
 import { renderFolders, renderTags } from '@joplin/lib/components/shared/side-menu-shared';
 import { getTrashFolderIcon, getTrashFolderId } from '@joplin/lib/services/trash';
+import { focus } from '@joplin/lib/utils/focusHandler';
 const { themeStyle } = require('@joplin/lib/theme');
 const bridge = require('@electron/remote').require('./bridge').default;
 const Menu = bridge().Menu;
@@ -674,7 +675,7 @@ const SidebarComponent = (props: Props) => {
 				id: focusItem.id,
 			});
 
-			focusItem.ref.current.focus();
+			focus('SideBar::onKeyDown', focusItem.ref.current);
 		}
 
 		if (keyCode === 9) {

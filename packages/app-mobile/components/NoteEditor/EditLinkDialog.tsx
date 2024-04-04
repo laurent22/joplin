@@ -11,6 +11,7 @@ import { _ } from '@joplin/lib/locale';
 import { EditorControl } from './types';
 import { useCallback } from 'react';
 import SelectionFormatting from '@joplin/editor/SelectionFormatting';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 interface LinkDialogProps {
 	editorControl: EditorControl;
@@ -100,7 +101,7 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 				autoFocus
 
 				onSubmitEditing={() => {
-					linkInputRef.current.focus();
+					focus('EditLinkDialog::onSubmitEditing', linkInputRef.current);
 				}}
 				onChangeText={(text: string) => setLinkLabel(text)}
 			/>

@@ -428,6 +428,7 @@ export default class ElectronAppWrapper {
 			if (!win) return;
 			if (win.isMinimized()) win.restore();
 			win.show();
+			// eslint-disable-next-line no-restricted-properties
 			win.focus();
 			if (process.platform !== 'darwin') {
 				const url = argv.find((arg) => isCallbackUrl(arg));

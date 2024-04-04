@@ -1169,11 +1169,6 @@ class Setting extends BaseModel {
 				type: SettingItemType.Object,
 				section: 'plugins',
 				public: true,
-				show: (_settings) => {
-					// Hide on iOS due to App Store guidelines. See
-					// https://github.com/laurent22/joplin/pull/10086 for details.
-					return shim.isNode() || shim.mobilePlatform() !== 'ios';
-				},
 				appTypes: [AppType.Desktop, AppType.Mobile],
 				needRestart: true,
 				autoSave: true,
@@ -1562,6 +1557,15 @@ class Setting extends BaseModel {
 				description: () => 'This beta adds improved accessibility and plugin API compatibility with the mobile editor. If you find bugs, please report them in the Discourse forum.',
 				storage: SettingStorage.File,
 				isGlobal: true,
+			},
+
+			'linking.extraAllowedExtensions': {
+				value: [],
+				type: SettingItemType.Array,
+				public: false,
+				appTypes: [AppType.Desktop],
+				label: () => 'Additional file types that can be opened without confirmation.',
+				storage: SettingStorage.File,
 			},
 
 			'net.customCertificates': {

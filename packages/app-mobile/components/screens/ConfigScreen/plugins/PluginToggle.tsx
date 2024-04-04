@@ -86,7 +86,7 @@ const PluginToggle: React.FC<Props> = props => {
 	}, [plugin, pluginId, pluginSettings]);
 
 	const isCompatible = useMemo(() => {
-		return PluginService.instance().isCompatible(plugin.manifest.app_min_version);
+		return PluginService.instance().isCompatible(plugin.manifest);
 	}, [plugin]);
 
 	return (

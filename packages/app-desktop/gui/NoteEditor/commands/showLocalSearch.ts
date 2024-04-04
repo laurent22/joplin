@@ -1,5 +1,6 @@
 import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 export const declaration: CommandDeclaration = {
 	name: 'showLocalSearch',
@@ -13,7 +14,7 @@ export const runtime = (comp: any): CommandRuntime => {
 				comp.editorRef.current.execCommand({ name: 'search' });
 			} else {
 				if (comp.noteSearchBarRef.current) {
-					comp.noteSearchBarRef.current.focus();
+					focus('showLocalSearch', comp.noteSearchBarRef.current);
 				} else {
 					comp.setShowLocalSearch(true);
 				}
