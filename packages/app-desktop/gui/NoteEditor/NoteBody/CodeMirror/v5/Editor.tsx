@@ -33,6 +33,7 @@ import Setting from '@joplin/lib/models/Setting';
 // import eventManager from '@joplin/lib/eventManager';
 
 import { reg } from '@joplin/lib/registry';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 // Based on http://pypl.github.io/PYPL.html
 const topLanguages = [
@@ -137,7 +138,7 @@ function Editor(props: EditorProps, ref: any) {
 
 	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 	const editor_drop = useCallback((cm: any, _event: any) => {
-		cm.focus();
+		focus('v5/Editor::editor_drop', cm);
 	}, []);
 
 	const editor_drag = useCallback((cm: any, event: any) => {

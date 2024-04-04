@@ -1559,6 +1559,15 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 
+			'linking.extraAllowedExtensions': {
+				value: [],
+				type: SettingItemType.Array,
+				public: false,
+				appTypes: [AppType.Desktop],
+				label: () => 'Additional file types that can be opened without confirmation.',
+				storage: SettingStorage.File,
+			},
+
 			'net.customCertificates': {
 				value: '',
 				type: SettingItemType.String,

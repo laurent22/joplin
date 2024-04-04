@@ -1,5 +1,6 @@
 import shim from '@joplin/lib/shim';
 import { useRef, useCallback, MutableRefObject } from 'react';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 export type FocusNote = (noteId: string)=> void;
 
@@ -16,14 +17,14 @@ const useFocusNote = (itemRefs: MutableRefObject<Record<string, HTMLDivElement>>
 			if (focusItemIID.current) shim.clearInterval(focusItemIID.current);
 			focusItemIID.current = shim.setInterval(() => {
 				if (itemRefs.current[noteId]) {
-					itemRefs.current[noteId].focus();
+					focus('useFocusNote1', itemRefs.current[noteId]);
 					shim.clearInterval(focusItemIID.current);
 					focusItemIID.current = null;
 				}
 			}, 10);
 		} else {
 			if (focusItemIID.current) shim.clearInterval(focusItemIID.current);
-			itemRefs.current[noteId].focus();
+			focus('useFocusNote2', itemRefs.current[noteId]);
 		}
 	}, [itemRefs]);
 

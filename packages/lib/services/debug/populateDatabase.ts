@@ -103,66 +103,31 @@ export default async function populateDatabase(db: any, options: Options = null)
 		if (!options.silent) console.info(`Folders: ${i} / ${options.folderCount}`);
 	}
 
-	let tagBatch = [];
 	for (let i = 0; i < options.tagCount; i++) {
 		const tagTitle = randomElement(wordList); // `tag${i}`
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-		tagBatch.push(Tag.save({ title: tagTitle }, { dispatchUpdateAction: false }).then((savedTag: any) => {
-			createdTagIds.push(savedTag.id);
-			// eslint-disable-next-line no-console
-			if (!options.silent) console.info(`Tags: ${i} / ${options.tagCount}`);
-		}));
-
-		if (tagBatch.length > 1000) {
-			await Promise.all(tagBatch);
-			tagBatch = [];
-		}
+		const savedTag = await Tag.save({ title: tagTitle }, { dispatchUpdateAction: false });
+		createdTagIds.push(savedTag.id);
+		// eslint-disable-next-line no-console
+		if (!options.silent) console.info(`Tags: ${i} / ${options.tagCount}`);
 	}
 
-	if (tagBatch.length) {
-		await Promise.all(tagBatch);
-		tagBatch = [];
-	}
-
-	let noteBatch = [];
 	for (let i = 0; i < options.noteCount; i++) {
 		const note: any = { title: `note${i}`, body: `This is note num. ${i}` };
 		const parentIndex = randomIndex(createdFolderIds);
 		note.parent_id = createdFolderIds[parentIndex];
 
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-		noteBatch.push(Note.save(note, { dispatchUpdateAction: false }).then((savedNote: any) => {
-			createdNoteIds.push(savedNote.id);
-			// eslint-disable-next-line no-console
-			console.info(`Notes: ${i} / ${options.noteCount}`);
-		}));
-
-		if (noteBatch.length > 1000) {
-			await Promise.all(noteBatch);
-			noteBatch = [];
-		}
-	}
-
-	if (noteBatch.length) {
-		await Promise.all(noteBatch);
-		noteBatch = [];
+		const savedNote = await Note.save(note, { dispatchUpdateAction: false });
+		createdNoteIds.push(savedNote.id);
+		// eslint-disable-next-line no-console
+		console.info(`Notes: ${i} / ${options.noteCount}`);
 	}
 
 	if (options.tagsPerNote) {
-		let noteTagBatch = [];
 		for (const noteId of createdNoteIds) {
 			const tagIds = randomElements(createdTagIds, options.tagsPerNote);
-			noteTagBatch.push(Tag.setNoteTagsByIds(noteId, tagIds));
-
-			if (noteTagBatch.length > 1000) {
-				await Promise.all(noteTagBatch);
-				noteTagBatch = [];
-			}
-		}
-
-		if (noteTagBatch.length) {
-			await Promise.all(noteTagBatch);
-			noteTagBatch = [];
+			await Tag.setNoteTagsByIds(noteId, tagIds);
 		}
 	}
 }

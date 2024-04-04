@@ -9,6 +9,7 @@ import useWebviewToPluginMessages from './hooks/useWebviewToPluginMessages';
 import useScriptLoader from './hooks/useScriptLoader';
 import Logger from '@joplin/utils/Logger';
 import styled from 'styled-components';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 const logger = Logger.create('UserWebview');
 
@@ -99,7 +100,7 @@ function UserWebview(props: Props, ref: any) {
 				}
 			},
 			focus: function() {
-				if (viewRef.current) viewRef.current.focus();
+				if (viewRef.current) focus('UserWebView::focus', viewRef.current);
 			},
 		};
 	});

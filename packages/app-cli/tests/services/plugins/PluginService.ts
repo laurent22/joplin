@@ -7,7 +7,7 @@ import Setting from '@joplin/lib/models/Setting';
 import * as fs from 'fs-extra';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-import { expectNotThrow, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir, supportDir } from '@joplin/lib/testing/test-utils';
+import { expectNotThrow, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir, supportDir, mockMobilePlatform } from '@joplin/lib/testing/test-utils';
 import { newPluginScript } from '../../testUtils';
 
 const testPluginDir = `${supportDir}/plugins`;
@@ -261,6 +261,68 @@ describe('services_PluginService', () => {
 			}
 		}
 	}));
+
+	it.each([
+		{
+			manifestPlatforms: ['desktop'],
+			isDesktop: true,
+			appVersion: '3.0.0',
+			shouldRun: true,
+		},
+		{
+			manifestPlatforms: ['desktop'],
+			isDesktop: false,
+			appVersion: '3.0.6',
+			shouldRun: false,
+		},
+		{
+			manifestPlatforms: ['desktop', 'mobile'],
+			isDesktop: false,
+			appVersion: '3.0.6',
+			shouldRun: true,
+		},
+		{
+			manifestPlatforms: [],
+			isDesktop: false,
+			appVersion: '3.0.8',
+			shouldRun: true,
+		},
+	])('should enable and disable plugins depending on what platform(s) they support (case %#: %j)', async ({ manifestPlatforms, isDesktop, appVersion, shouldRun }) => {
+		const pluginScript = `
+			/* joplin-manifest:
+			{
+				"id": "org.joplinapp.plugins.PluginTest",
+				"manifest_version": 1,
+				"app_min_version": "1.0.0",
+				"platforms": ${JSON.stringify(manifestPlatforms)},
+				"name": "JS Bundle test",
+				"version": "1.0.0"
+			}
+			*/
+
+			joplin.plugins.register({
+				onStart: async function() { },
+			});
+		`;
+
+		let resetPlatformMock = () => {};
+		if (!isDesktop) {
+			resetPlatformMock = mockMobilePlatform('android').reset;
+		}
+
+		try {
+			const service = newPluginService(appVersion);
+			const plugin = await service.loadPluginFromJsBundle('', pluginScript);
+
+			if (shouldRun) {
+				await expect(service.runPlugin(plugin)).resolves.toBeUndefined();
+			} else {
+				await expect(service.runPlugin(plugin)).rejects.toThrow(/disabled/);
+			}
+		} finally {
+			resetPlatformMock();
+		}
+	});
 
 	it('should install a plugin', (async () => {
 		const service = newPluginService();
