@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { Icon, Button, Card, Chip } from 'react-native-paper';
+import { Icon, Card, Chip } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import { View } from 'react-native';
-import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
+import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import shim from '@joplin/lib/shim';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
+import ActionButton, { PluginCallback } from './ActionButton';
 
 export enum InstallState {
 	NotInstalled,
@@ -18,8 +19,6 @@ export enum UpdateState {
 	Updating = 3,
 	HasBeenUpdated = 4,
 }
-
-type PluginCallback = (event: ItemEvent)=> void;
 
 interface Props {
 	item: PluginItem;
@@ -51,41 +50,42 @@ const PluginBox: React.FC<Props> = props => {
 	};
 
 	const installButton = (
-		<Button
-			onPress={() => props.onInstall?.({ item })}
+		<ActionButton
+			item={item}
+			onPress={props.onInstall}
 			disabled={props.installState !== InstallState.NotInstalled || !props.isCompatible}
 			loading={props.installState === InstallState.Installing}
-		>
-			{installButtonTitle()}
-		</Button>
+			title={installButtonTitle()}
+		/>
 	);
 
-	const updateButtonTitle = () => {
+	const getUpdateButtonTitle = () => {
 		if (props.updateState === UpdateState.Updating) return _('Updating...');
 		if (props.updateState === UpdateState.HasBeenUpdated) return _('Updated');
 		return _('Update');
 	};
 
 	const updateButton = (
-		<Button
-			onPress={() => props.onUpdate?.({ item })}
+		<ActionButton
+			item={item}
+			onPress={props.onUpdate}
 			disabled={props.updateState !== UpdateState.CanUpdate || !props.isCompatible}
 			loading={props.updateState === UpdateState.Updating}
-		>
-			{updateButtonTitle()}
-		</Button>
+			title={getUpdateButtonTitle()}
+		/>
 	);
+
 	const deleteButton = (
-		<Button
-			onPress={() => props.onDelete?.({ item })}
+		<ActionButton
+			item={item}
+			onPress={props.onDelete}
 			disabled={props.item.deleted}
-		>
-			{props.item.deleted ? _('Deleted') : _('Delete')}
-		</Button>
+			title={props.item.deleted ? _('Deleted') : _('Delete')}
+		/>
 	);
-	const disableButton = <Button onPress={() => props.onToggle?.({ item })}>{_('Disable')}</Button>;
-	const enableButton = <Button onPress={() => props.onToggle?.({ item })}>{_('Enable')}</Button>;
-	const aboutButton = <Button icon='web' onPress={() => props.onAboutPress?.({ item })}>{_('About')}</Button>;
+	const disableButton = <ActionButton item={item} onPress={props.onToggle} title={_('Disable')}/>;
+	const enableButton = <ActionButton item={item} onPress={props.onToggle} title={_('Enable')}/>;
+	const aboutButton = <ActionButton icon='web' item={item} onPress={props.onAboutPress} title={_('About')}/>;
 
 	const renderErrorsChip = () => {
 		if (!props.hasErrors) return null;
@@ -96,7 +96,7 @@ const PluginBox: React.FC<Props> = props => {
 				mode='outlined'
 				onPress={() => props.onShowPluginLog({ item })}
 			>
-				Error
+				{_('Error')}
 			</Chip>
 		);
 	};

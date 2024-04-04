@@ -18,7 +18,7 @@ joplin.plugins.register({
 			},
 
 			'multiOptionTest': {
-				value: 'en',
+				value: null,
 				type: SettingItemType.String,
 				section: 'myCustomSection',
 				isEnum: true,

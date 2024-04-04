@@ -2,7 +2,7 @@ import * as React from 'react';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import { afterAllCleanUp, afterEachCleanUp, createTempDir, mockMobilePlatform, setupDatabaseAndSynchronizer, supportDir, switchClient } from '@joplin/lib/testing/test-utils';
 
-import { render, screen, waitFor } from '@testing-library/react-native';
+import { render, screen } from '@testing-library/react-native';
 import '@testing-library/react-native/extend-expect';
 
 import Setting from '@joplin/lib/models/Setting';
@@ -124,18 +124,17 @@ describe('PluginStates', () => {
 				initialPluginSettings={defaultPluginSettings}
 			/>,
 		);
-		expect(await screen.findByText('ABC Sheet Music')).not.toBeNull();
-		expect(await screen.findByText('Backlinks to note')).not.toBeNull();
+		expect(await screen.findByText('ABC Sheet Music')).toBeVisible();
+		expect(await screen.findByText('Backlinks to note')).toBeVisible();
 
-		const shouldBothBeUpdatable = platform === 'android';
-		await waitFor(async () => {
-			const updateButtons = await screen.findAllByText('Update');
-			expect(updateButtons).toHaveLength(shouldBothBeUpdatable ? 2 : 1);
-		});
+		expect(await screen.findByRole('button', { name: 'Update ABC Sheet Music', disabled: false })).toBeVisible();
 
-		const updateButtons = await screen.findAllByText('Update');
-		for (const button of updateButtons) {
-			expect(button).not.toBeDisabled();
+		// Backlinks to note should not be updatable on iOS (it's not _recommended).
+		const backlinksToNoteQuery = { name: 'Update Backlinks to note', disabled: false };
+		if (platform === 'android') {
+			expect(await screen.findByRole('button', backlinksToNoteQuery)).toBeVisible();
+		} else {
+			expect(await screen.queryByRole('button', backlinksToNoteQuery)).toBeNull();
 		}
 	});
 });
