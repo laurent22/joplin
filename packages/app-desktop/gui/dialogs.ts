@@ -21,12 +21,15 @@ class Dialogs {
 		}
 	}
 
-	public async prompt(message: string, title = '', defaultValue = '', options: any = { cancel: true }) {
+	public async prompt(message: string, title = '', defaultValue = '', options: any = null) {
+		options = { cancel: true, ...options };
+
 		try {
+			// https://github.com/laurent22/joplin/pull/10258#discussion_r1550306545
 			const answer = await smalltalk.prompt(title, message, defaultValue, options);
 			return answer;
 		} catch (error) {
-			// dialog was cancelled
+			logger.warn('Prompt appears to have been cancelled:', error);
 			return null;
 		}
 	}
