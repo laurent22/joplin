@@ -18,12 +18,14 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		zip.extractAllTo(unzipTempDirectory, false);
 
 		// files that don't have a name seems to be local only and shouldn't be processed
-		const notebookFile = zip.getEntries()
-			.find(e => e.entryName.endsWith('.onetoc2') && e.name !== '.onetoc2');
+		const notebookFiles = zip.getEntries()
+			.filter(e => e.entryName.endsWith('.onetoc2') && e.name !== '.onetoc2');
 
 		const outputDirectory = await this.temporaryDirectory_(true);
-		const notebookFilePath = `${unzipTempDirectory}/${notebookFile.entryName}`;
-		await oneNoteConverter(notebookFilePath, outputDirectory);
+		for (const notebookFile of notebookFiles) {
+			const notebookFilePath = `${unzipTempDirectory}/${notebookFile.entryName}`;
+			await oneNoteConverter(notebookFilePath, outputDirectory);
+		}
 
 		const importer = new InteropService_Importer_Md();
 		importer.setMetadata({ fileExtensions: ['html'] });
