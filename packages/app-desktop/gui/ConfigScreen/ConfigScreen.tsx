@@ -4,7 +4,7 @@ import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel, ButtonSize } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
-import Setting, { AppType, SyncStartupOperation } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingItemSubType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import control_PluginsStates from './controls/plugins/PluginsStates';
 import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
 import { reg } from '@joplin/lib/registry';
@@ -582,7 +582,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 							<label>{md.label()}</label>
 						</div>
 						{
-							md.label() === 'Editor font family' || md.label() === 'Editor monospace font family' ?
+							md.subType === SettingItemSubType.FontFamily ?
 								<FontSearch
 									_key={key}
 									updateSettingValue={updateSettingValue}
