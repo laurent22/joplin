@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { View, Text, Button, FlatList, TextStyle } from 'react-native';
+import { View, Text, Button, FlatList, TextStyle, StyleSheet } from 'react-native';
 import Setting from '@joplin/lib/models/Setting';
 import { connect } from 'react-redux';
 import { ScreenHeader } from '../ScreenHeader';
@@ -45,16 +45,22 @@ class StatusScreenComponent extends BaseScreenComponent<Props, State> {
 
 	private styles() {
 		const theme = themeStyle(this.props.themeId);
-		return {
+		return StyleSheet.create({
 			body: {
 				flex: 1,
 				margin: theme.margin,
 			},
-		};
+			actionButton: {
+				flex: 0,
+				marginLeft: 2,
+				marginRight: 2,
+			},
+		});
 	}
 
 	public override render() {
 		const theme = themeStyle(this.props.themeId);
+		const styles = this.styles();
 
 		const renderBody = (report: ReportSection[]) => {
 			const baseStyle = {
@@ -134,13 +140,13 @@ class StatusScreenComponent extends BaseScreenComponent<Props, State> {
 						) : null;
 
 						const retryButton = item.retryHandler ? (
-							<View style={{ flex: 0 }}>
+							<View style={styles.actionButton}>
 								<Button title={_('Retry')} onPress={item.retryHandler} />
 							</View>
 						) : null;
 
 						const ignoreButton = item.ignoreHandler ? (
-							<View style={{ flex: 0 }}>
+							<View style={styles.actionButton}>
 								<Button title={_('Ignore')} onPress={item.ignoreHandler} />
 							</View>
 						) : null;
@@ -167,7 +173,7 @@ class StatusScreenComponent extends BaseScreenComponent<Props, State> {
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader title={_('Status')} />
-				<View style={this.styles().body}>{body}</View>
+				<View style={styles.body}>{body}</View>
 				<Button title={_('Refresh')} onPress={() => this.refreshScreen()} />
 			</View>
 		);
