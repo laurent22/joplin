@@ -54,7 +54,7 @@ export default connect((state: AppState) => {
 	const syncInfo = localSyncInfoFromState(state);
 
 	return {
-		themeId: state.settings.themeId,
+		themeId: state.settings.theme,
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		selectedFolderId: state.selectedFolderId,
