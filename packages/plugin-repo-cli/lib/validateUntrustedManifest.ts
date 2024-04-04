@@ -1,5 +1,6 @@
 import validatePluginId from '@joplin/lib/services/plugins/utils/validatePluginId';
 import validatePluginVersion from '@joplin/lib/services/plugins/utils/validatePluginVersion';
+import validatePluginPlatforms from '@joplin/lib/services/plugins/utils/validatePluginPlatforms';
 import checkIfPluginCanBeAdded from './checkIfPluginCanBeAdded';
 
 // Assumes that
@@ -12,6 +13,7 @@ const validateUntrustedManifest = (manifest: any, existingManifests: any) => {
 	// manifest properties are checked when the plugin is loaded into the app.
 	validatePluginId(manifest.id);
 	validatePluginVersion(manifest.version);
+	validatePluginPlatforms(manifest.platforms);
 
 	// This prevents a plugin author from marking their own plugin as _recommended.
 	if (typeof manifest._recommended !== 'undefined') {
