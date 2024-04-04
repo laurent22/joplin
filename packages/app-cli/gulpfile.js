@@ -1,11 +1,18 @@
 const gulp = require('gulp');
 const fs = require('fs-extra');
 const utils = require('@joplin/tools/gulp/utils');
+const { execSync } = require('child_process');
 
 const tasks = {};
 
+const buildOneNoteConverter = () => {
+	const profile = process.env.NODE_ENV === 'production' ? '--release' : '--debug';
+	return execSync(`yarn dlx wasm-pack build ../onenote-converter --target nodejs ${profile}`);
+};
+
 tasks.prepareBuild = {
 	fn: async () => {
+		buildOneNoteConverter();
 		const buildDir = `${__dirname}/build`;
 		await utils.copyDir(`${__dirname}/app`, buildDir, {
 			excluded: ['node_modules'],

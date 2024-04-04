@@ -6946,9 +6946,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/onenote-converter@0.0.1, @joplin/onenote-converter@workspace:packages/onenote-converter/pkg":
+"@joplin/onenote-converter@0.0.1, @joplin/onenote-converter@workspace:packages/onenote-converter":
   version: 0.0.0-use.local
-  resolution: "@joplin/onenote-converter@workspace:packages/onenote-converter/pkg"
+  resolution: "@joplin/onenote-converter@workspace:packages/onenote-converter"
   languageName: unknown
   linkType: soft
 
