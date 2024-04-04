@@ -19,7 +19,7 @@ const validations: Record<string, ValidationHandler> = {
 			const downloadErrorCount = await Resource.downloadStatusCounts(Resource.FETCH_STATUS_ERROR);
 			if (downloadErrorCount > 0) return _('Some attachments could not be downloaded. Please try to download them again.');
 
-			const disabledCount = await BaseItem.syncDisabledItemsCount(Setting.value('sync.target'), false);
+			const disabledCount = await BaseItem.syncDisabledItemsCount(Setting.value('sync.target'));
 			if (disabledCount > 0) return _('Some items could not be synchronised. Please try to synchronise them first.');
 
 			return '';

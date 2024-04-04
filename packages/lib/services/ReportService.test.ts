@@ -45,9 +45,9 @@ describe('ReportService', () => {
 		await synchronizerStart();
 		const syncTargetId = SyncTargetRegistry.nameToId('memory');
 
-		const ignoreReason = 'Test reason';
+		const disabledReason = 'Test reason';
 		for (const testNote of testNotes) {
-			await BaseItem.saveSyncDisabled(syncTargetId, testNote, ignoreReason);
+			await BaseItem.saveSyncDisabled(syncTargetId, testNote, disabledReason);
 		}
 
 		const service = new ReportService();
@@ -62,12 +62,16 @@ describe('ReportService', () => {
 			}
 		}
 		expect(ignorableItems).toHaveLength(noteCount);
-		expect(sectionBodyToText(unsyncableSection)).toContain(ignoreReason);
+		expect(sectionBodyToText(unsyncableSection)).toContain(disabledReason);
 
 		// Ignore all
+		expect(await BaseItem.syncDisabledItemsCount(syncTargetId)).toBe(noteCount);
+		expect(await BaseItem.syncDisabledItemsCountIncludingIgnored(syncTargetId)).toBe(noteCount);
 		for (const item of ignorableItems) {
 			await item.ignoreHandler();
 		}
+		expect(await BaseItem.syncDisabledItemsCount(syncTargetId)).toBe(0);
+		expect(await BaseItem.syncDisabledItemsCountIncludingIgnored(syncTargetId)).toBe(noteCount);
 
 		await synchronizerStart();
 		report = await service.status(syncTargetId);
@@ -75,18 +79,30 @@ describe('ReportService', () => {
 		// Should now be in the ignored section
 		const ignoredSection = getIgnoredSection(report);
 		expect(ignoredSection).toBeTruthy();
-		expect(sectionBodyToText(unsyncableSection)).toContain(ignoreReason);
-		expect(sectionBodyToText(getCannotSyncSection(report))).not.toContain(ignoreReason);
+		expect(sectionBodyToText(unsyncableSection)).toContain(disabledReason);
+		expect(sectionBodyToText(getCannotSyncSection(report))).not.toContain(disabledReason);
 
 		// Should not be possible to re-ignore an item in the ignored section
 		let ignoredItemCount = 0;
 		for (const item of ignoredSection.body) {
-			if (typeof item === 'object' && item.text?.includes(ignoreReason)) {
+			if (typeof item === 'object' && item.text?.includes(disabledReason)) {
 				expect(item.canIgnore).toBeFalsy();
 				expect(item.canRetry).toBe(true);
 				ignoredItemCount++;
 			}
 		}
+		// Should have the correct number of ignored items
+		expect(await BaseItem.syncDisabledItemsCountIncludingIgnored(syncTargetId)).toBe(ignoredItemCount);
 		expect(ignoredItemCount).toBe(noteCount);
+
+		// Clicking "retry" should un-ignore
+		for (const item of ignoredSection.body) {
+			if (typeof item === 'object' && item.text?.includes(disabledReason)) {
+				expect(item.canRetry).toBe(true);
+				await item.retryHandler();
+				break;
+			}
+		}
+		expect(await BaseItem.syncDisabledItemsCountIncludingIgnored(syncTargetId)).toBe(noteCount - 1);
 	});
 });

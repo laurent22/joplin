@@ -802,7 +802,7 @@ export default class BaseItem extends BaseModel {
 		return output;
 	}
 
-	public static async syncDisabledItemsCount(syncTargetId: number, includeIgnored: boolean) {
+	public static async syncDisabledItemsCount(syncTargetId: number, includeIgnored = false) {
 		const whereQueries = ['sync_disabled = 1', 'sync_target = ?'];
 		const whereArgs = [syncTargetId];
 		if (!includeIgnored) {
@@ -810,6 +810,10 @@ export default class BaseItem extends BaseModel {
 		}
 		const r = await this.db().selectOne(`SELECT count(*) as total FROM sync_items WHERE ${whereQueries.join(' AND ')}`, whereArgs);
 		return r ? r.total : 0;
+	}
+
+	public static async syncDisabledItemsCountIncludingIgnored(syncTargetId: number) {
+		return this.syncDisabledItemsCount(syncTargetId, true);
 	}
 
 	public static updateSyncTimeQueries(syncTarget: number, item: any, syncTime: number, syncDisabled = false, syncDisabledReason = '', itemLocation: number = null) {
