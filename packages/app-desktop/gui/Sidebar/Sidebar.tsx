@@ -49,7 +49,7 @@ interface Props {
 	notesParentType: string;
 	selectedFolderId: string;
 	selectedTagId: string;
-	selectedSmartFilterId: string; // used by SmartFilter folder types
+	selectedSmartFilterId: string; // used by SmartFilter parent types
 	decryptionWorker: any;
 	resourceFetcher: any;
 	syncReport: any;
