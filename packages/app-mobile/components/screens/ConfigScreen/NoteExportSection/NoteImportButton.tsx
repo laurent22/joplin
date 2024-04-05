@@ -17,16 +17,15 @@ interface Props {
 	styles: ConfigScreenStyles;
 }
 
+// Exported for search filtering
 export const importButtonDefaultTitle = () => _('Import from JEX');
-export const importButtonDescription = () => _('Import notes from a JEX (Joplin EXport) file.');
+export const importButtonDescription = () => _('Import notes from a JEX (Joplin Export) file.');
 
 const getTitle = (taskStatus: TaskStatus) => {
-	if (taskStatus === TaskStatus.NotStarted) {
-		return importButtonDefaultTitle();
-	} else if (taskStatus === TaskStatus.InProgress) {
+	if (taskStatus === TaskStatus.InProgress) {
 		return _('Importing...');
 	} else {
-		return _('Imported successfully!');
+		return importButtonDefaultTitle();
 	}
 };
 
@@ -73,7 +72,8 @@ const NoteImportButton: FunctionComponent<Props> = props => {
 		<TaskButton
 			taskName={importButtonDefaultTitle()}
 			description={importButtonDescription()}
-			title={getTitle}
+			buttonLabel={getTitle}
+			finishedLabel={_('Imported successfully!')}
 			styles={props.styles}
 			onRunTask={runImportTask}
 		/>

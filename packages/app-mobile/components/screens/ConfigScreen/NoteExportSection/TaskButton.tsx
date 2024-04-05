@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Alert, Text, View } from 'react-native';
+import { Alert, Text } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import { ProgressBar } from 'react-native-paper';
 import { FunctionComponent, useCallback, useState } from 'react';
@@ -27,7 +27,8 @@ export enum TaskStatus {
 
 interface Props {
 	taskName: string;
-	title: (status: TaskStatus)=> string;
+	buttonLabel: (status: TaskStatus)=> string;
+	finishedLabel: string;
 	description?: string;
 	styles: ConfigScreenStyles;
 	onRunTask: (
@@ -78,42 +79,36 @@ const TaskButton: FunctionComponent<Props> = props => {
 		}
 	}, [props.onRunTask, props.taskName, taskStatus]);
 
-	if (taskStatus === TaskStatus.NotStarted || taskStatus === TaskStatus.InProgress) {
-		const progressComponent = (
-			<ProgressBar
-				visible={taskStatus === TaskStatus.InProgress}
-				indeterminate={progress === undefined}
-				progress={progress}
-			/>
-		);
-
-		const startOrCancelExportButton = (
-			<SettingsButton
-				title={props.title(taskStatus)}
-				disabled={taskStatus === TaskStatus.InProgress}
-				description={taskStatus === TaskStatus.NotStarted ? props.description : null}
-				statusComponent={progressComponent}
-				clickHandler={startTask}
-				styles={props.styles}
-			/>
-		);
-
-		return startOrCancelExportButton;
-	} else {
-		const warningComponent = (
+	let statusComponent = (
+		<ProgressBar
+			visible={taskStatus === TaskStatus.InProgress}
+			indeterminate={progress === undefined}
+			progress={progress}
+		/>
+	);
+	if (taskStatus === TaskStatus.Done && warnings.length > 0) {
+		statusComponent = (
 			<Text style={props.styles.styleSheet.warningText}>
-				{_('Warnings:\n%s', warnings)}
+				{_('Completed with warnings:\n%s', warnings)}
 			</Text>
 		);
-
-		const taskSummary = (
-			<View style={props.styles.styleSheet.settingContainer}>
-				<Text style={props.styles.styleSheet.descriptionText}>{props.title(taskStatus)}</Text>
-				{warnings.length > 0 ? warningComponent : null}
-			</View>
-		);
-		return taskSummary;
 	}
+
+	let buttonDescription = props.description;
+	if (taskStatus === TaskStatus.Done) {
+		buttonDescription = props.finishedLabel;
+	}
+
+	return (
+		<SettingsButton
+			title={props.buttonLabel(taskStatus)}
+			disabled={taskStatus === TaskStatus.InProgress}
+			description={buttonDescription}
+			statusComponent={statusComponent}
+			clickHandler={startTask}
+			styles={props.styles}
+		/>
+	);
 };
 
 export default TaskButton;

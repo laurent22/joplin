@@ -21,12 +21,10 @@ export const exportButtonDefaultTitle = () => _('Export all notes as JEX');
 export const exportButtonDescription = () => _('Share a copy of all notes in a file format that can be imported by Joplin on a computer.');
 
 const getTitle = (taskStatus: TaskStatus) => {
-	if (taskStatus === TaskStatus.NotStarted) {
-		return exportButtonDefaultTitle();
-	} else if (taskStatus === TaskStatus.InProgress) {
+	if (taskStatus === TaskStatus.InProgress) {
 		return _('Exporting...');
 	} else {
-		return _('Exported successfully!');
+		return exportButtonDefaultTitle();
 	}
 };
 
@@ -73,7 +71,8 @@ const NoteExportButton: FunctionComponent<Props> = props => {
 	return (
 		<TaskButton
 			taskName={exportButtonDefaultTitle()}
-			title={getTitle}
+			buttonLabel={getTitle}
+			finishedLabel={_('Exported successfully!')}
 			description={exportButtonDescription()}
 			styles={props.styles}
 			onRunTask={runExportTask}
