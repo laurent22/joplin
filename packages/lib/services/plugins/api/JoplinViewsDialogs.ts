@@ -38,10 +38,12 @@ import { JoplinViewsDialogs as JoplinViewsDialogsImplementation } from '../BaseP
  */
 export default class JoplinViewsDialogs {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private store: any;
 	private plugin: Plugin;
 	private implementation_: JoplinViewsDialogsImplementation;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(implementation: any, plugin: Plugin, store: any) {
 		this.store = store;
 		this.plugin = plugin;
@@ -78,7 +80,10 @@ export default class JoplinViewsDialogs {
 	 * Displays a dialog to select a file or a directory. Same options and
 	 * output as
 	 * https://www.electronjs.org/docs/latest/api/dialog#dialogshowopendialogbrowserwindow-options
+	 *
+	 * <span class="platform-desktop">desktop</span>
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async showOpenDialog(options: any): Promise<any> {
 		return this.implementation_.showOpenDialog(options);
 	}

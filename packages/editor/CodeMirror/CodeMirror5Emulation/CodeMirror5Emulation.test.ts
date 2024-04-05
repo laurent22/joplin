@@ -161,14 +161,28 @@ describe('CodeMirror5Emulation', () => {
 
 		codeMirror.defineExtension('defineExtensionShouldOverride', testExtensionFn1);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		(codeMirror as any).defineExtensionShouldOverride();
 		expect(testExtensionFn1).toHaveBeenCalledTimes(1);
 		expect(testExtensionFn2).toHaveBeenCalledTimes(0);
 
 		codeMirror.defineExtension('defineExtensionShouldOverride', testExtensionFn2);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		(codeMirror as any).defineExtensionShouldOverride();
 		expect(testExtensionFn1).toHaveBeenCalledTimes(1);
 		expect(testExtensionFn2).toHaveBeenCalledTimes(1);
+	});
+
+	it('defineExtension should register an extension where this points to the editor', () => {
+		const codeMirror = makeCodeMirrorEmulation('Test...');
+		let lastThis = null;
+
+		codeMirror.defineExtension('testExtension', function() {
+			lastThis = this;
+		});
+		codeMirror.execCommand('testExtension');
+
+		expect(lastThis).toBe(codeMirror);
 	});
 });

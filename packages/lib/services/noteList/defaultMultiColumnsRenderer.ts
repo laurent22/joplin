@@ -33,6 +33,10 @@ const renderer: ListRenderer = {
 			display: flex;
 			height: 100%;
 
+			&:hover, :focus-visible {
+				background-color: var(--joplin-background-color-hover3);
+			}
+
 			> .item {
 				display: flex;
 				align-items: center;
@@ -110,6 +114,7 @@ const renderer: ListRenderer = {
 		`,
 	},
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onRenderNote: async (props: any) => {
 		return {
 			...props,

@@ -24,7 +24,7 @@ interface Props {
 	width: number;
 	newNoteButtonEnabled: boolean;
 	newTodoButtonEnabled: boolean;
-	newNoteButtonRef: React.MutableRefObject<any>;
+	setNewNoteButtonElement: React.Dispatch<React.SetStateAction<Element>>;
 	lineCount: number;
 	breakpoint: number;
 	dynamicBreakpoints: Breakpoints;
@@ -33,14 +33,18 @@ interface Props {
 	buttonVerticalGap: number;
 }
 
-const StyledRoot = styled.div`
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
+type StyleProps = any;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
+const StyledRoot: any = styled.div`
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
-	padding: ${(props: any) => props.padding}px;
-	background-color: ${(props: any) => props.theme.backgroundColor3};
-	gap: ${(props: any) => props.buttonVerticalGap}px;
-` as any;
+	padding: ${(props: StyleProps) => props.padding}px;
+	background-color: ${(props: StyleProps) => props.theme.backgroundColor3};
+	gap: ${(props: StyleProps) => props.buttonVerticalGap}px;
+`;
 
 const StyledButton = styled(Button)`
 	width: auto;
@@ -57,8 +61,8 @@ const StyledButton = styled(Button)`
 
 const StyledPairButtonL = styled(Button)`
 	border-radius: 3px 0 0 3px;
-	min-width: ${(props: any) => buttonSizePx(props)}px;
-	max-width: ${(props: any) => buttonSizePx(props)}px;
+	min-width: ${(props: StyleProps) => buttonSizePx(props)}px;
+	max-width: ${(props: StyleProps) => buttonSizePx(props)}px;
 `;
 
 const StyledPairButtonR = styled(Button)`
@@ -184,6 +188,7 @@ function NoteListControls(props: Props) {
 
 	function sortOrderFieldIcon() {
 		const field = props.sortOrderField;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const iconMap: any = {
 			user_updated_time: 'far fa-calendar-alt',
 			user_created_time: 'far fa-calendar-plus',
@@ -208,7 +213,10 @@ function NoteListControls(props: Props) {
 
 		return (
 			<TopRow className="new-note-todo-buttons">
-				<StyledButton ref={props.newNoteButtonRef}
+				<StyledButton
+					ref={(el: Element) => {
+						props.setNewNoteButtonElement(el);
+					}}
 					className="new-note-button"
 					tooltip={ showTooltip ? CommandService.instance().label('newNote') : '' }
 					iconName={noteIcon}

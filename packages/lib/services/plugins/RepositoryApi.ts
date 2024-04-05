@@ -3,6 +3,8 @@ import shim from '../../shim';
 import { PluginManifest } from './utils/types';
 const md5 = require('md5');
 import { compareVersions } from 'compare-versions';
+import isCompatible from './utils/isCompatible';
+import { AppType } from '../../models/Setting';
 
 const logger = Logger.create('RepositoryApi');
 
@@ -14,6 +16,16 @@ interface ReleaseAsset {
 interface Release {
 	upload_url: string;
 	assets: ReleaseAsset[];
+}
+
+export enum InstallMode {
+	Restricted,
+	Default,
+}
+
+export interface AppInfo {
+	version: string;
+	type: AppType;
 }
 
 const findWorkingGitHubUrl = async (defaultContentUrl: string): Promise<string> => {
@@ -57,19 +69,25 @@ export default class RepositoryApi {
 	// Later on, other repo types could be supported.
 	private baseUrl_: string;
 	private tempDir_: string;
+	private readonly installMode_: InstallMode;
+	private readonly appType_: AppType;
+	private readonly appVersion_: string;
 	private release_: Release = null;
 	private manifests_: PluginManifest[] = null;
 	private githubApiUrl_: string;
 	private contentBaseUrl_: string;
 	private isUsingDefaultContentUrl_ = true;
 
-	public constructor(baseUrl: string, tempDir: string) {
+	public constructor(baseUrl: string, tempDir: string, appInfo: AppInfo, installMode: InstallMode) {
+		this.installMode_ = installMode;
+		this.appType_ = appInfo.type;
+		this.appVersion_ = appInfo.version;
 		this.baseUrl_ = baseUrl;
 		this.tempDir_ = tempDir;
 	}
 
-	public static ofDefaultJoplinRepo(tempDirPath: string) {
-		return new RepositoryApi('https://github.com/joplin/plugins', tempDirPath);
+	public static ofDefaultJoplinRepo(tempDirPath: string, appInfo: AppInfo, installMode: InstallMode) {
+		return new RepositoryApi('https://github.com/joplin/plugins', tempDirPath, appInfo, installMode);
 	}
 
 	public async initialize() {
@@ -77,8 +95,9 @@ export default class RepositoryApi {
 		// https://api.github.com/repos/joplin/plugins/releases
 		this.githubApiUrl_ = this.baseUrl_.replace(/^(https:\/\/)(github\.com\/)(.*)$/, '$1api.$2repos/$3');
 		const defaultContentBaseUrl = this.isLocalRepo ? this.baseUrl_ : `${this.baseUrl_.replace(/github\.com/, 'raw.githubusercontent.com')}/master`;
-		this.contentBaseUrl_ = this.isLocalRepo ? defaultContentBaseUrl : await findWorkingGitHubUrl(defaultContentBaseUrl);
 
+		const canUseMirrors = this.installMode_ === InstallMode.Default && !this.isLocalRepo;
+		this.contentBaseUrl_ = canUseMirrors ? await findWorkingGitHubUrl(defaultContentBaseUrl) : defaultContentBaseUrl;
 		this.isUsingDefaultContentUrl_ = this.contentBaseUrl_ === defaultContentBaseUrl;
 
 		await this.loadManifests();
@@ -169,6 +188,10 @@ export default class RepositoryApi {
 		}
 	}
 
+	private isBlockedByInstallMode(manifest: PluginManifest) {
+		return this.installMode_ === InstallMode.Restricted && manifest._recommended !== true;
+	}
+
 	public async search(query: string): Promise<PluginManifest[]> {
 		query = query.toLowerCase().trim();
 
@@ -176,7 +199,12 @@ export default class RepositoryApi {
 		const output: PluginManifest[] = [];
 
 		for (const manifest of manifests) {
+			if (this.isBlockedByInstallMode(manifest)) {
+				continue;
+			}
+
 			for (const field of ['name', 'description']) {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				const v = (manifest as any)[field];
 				if (!v) continue;
 
@@ -188,6 +216,10 @@ export default class RepositoryApi {
 		}
 
 		output.sort((m1, m2) => {
+			const m1Compatible = isCompatible(this.appVersion_, this.appType_, m1);
+			const m2Compatible = isCompatible(this.appVersion_, this.appType_, m2);
+			if (m1Compatible && !m2Compatible) return -1;
+			if (!m1Compatible && m2Compatible) return 1;
 			if (m1._recommended && !m2._recommended) return -1;
 			if (!m1._recommended && m2._recommended) return +1;
 			return m1.name.toLowerCase() < m2.name.toLowerCase() ? -1 : +1;
@@ -202,6 +234,7 @@ export default class RepositoryApi {
 		const manifests = await this.manifests();
 		const manifest = manifests.find(m => m.id === pluginId);
 		if (!manifest) throw new Error(`No manifest for plugin ID "${pluginId}"`);
+		if (this.isBlockedByInstallMode(manifest)) throw new Error(`Plugin is blocked by intstallation policy. ID "${pluginId}"`);
 
 		const fileUrl = this.assetFileUrl(manifest.id); // this.repoFileUrl(`plugins/${manifest.id}/plugin.jpl`);
 		const hash = md5(Date.now() + Math.random());
@@ -225,21 +258,23 @@ export default class RepositoryApi {
 		return this.manifests_;
 	}
 
-	public async canBeUpdatedPlugins(installedManifests: PluginManifest[], appVersion: string): Promise<string[]> {
+	public async canBeUpdatedPlugins(installedManifests: PluginManifest[]): Promise<string[]> {
 		const output = [];
 
 		for (const manifest of installedManifests) {
-			const canBe = await this.pluginCanBeUpdated(manifest.id, manifest.version, appVersion);
+			const canBe = await this.pluginCanBeUpdated(manifest.id, manifest.version);
 			if (canBe) output.push(manifest.id);
 		}
 
 		return output;
 	}
 
-	public async pluginCanBeUpdated(pluginId: string, installedVersion: string, appVersion: string): Promise<boolean> {
+	public async pluginCanBeUpdated(pluginId: string, installedVersion: string): Promise<boolean> {
 		const manifest = (await this.manifests()).find(m => m.id === pluginId);
 		if (!manifest) return false;
-		return compareVersions(installedVersion, manifest.version) < 0 && compareVersions(appVersion, manifest.app_min_version) >= 0;
+
+		const supportsCurrentAppVersion = compareVersions(installedVersion, manifest.version) < 0 && isCompatible(this.appVersion_, this.appType_, manifest);
+		return supportsCurrentAppVersion && !this.isBlockedByInstallMode(manifest);
 	}
 
 }

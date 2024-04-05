@@ -97,3 +97,5 @@ activeline
 Prec
 ellipsized
 Trashable
+hideable
+infini

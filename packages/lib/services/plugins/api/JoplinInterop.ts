@@ -18,11 +18,15 @@ import { ExportModule, ImportModule } from './types';
  * See the documentation of the [[ExportModule]] and [[ImportModule]] for more information.
  *
  * You may also want to refer to the Joplin API documentation to see the list of properties for each item (note, notebook, etc.) - https://joplinapp.org/help/api/references/rest_api
+ *
+ * <span class="platform-desktop">desktop</span>: While it is possible to register import and export
+ * modules on mobile, there is no GUI to activate them.
  */
 export default class JoplinInterop {
 
 	public async registerExportModule(module: ExportModule) {
 		const internalModule = makeExportModule({
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			...module as any,
 			type: ModuleType.Exporter,
 			fileExtensions: module.fileExtensions ? module.fileExtensions : [],

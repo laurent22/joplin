@@ -1,7 +1,7 @@
 const React = require('react');
 
 import { connect } from 'react-redux';
-import { PureComponent } from 'react';
+import { PureComponent, ReactElement } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, ViewStyle } from 'react-native';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { BackButtonService } = require('../services/back-button.js');
@@ -21,13 +21,16 @@ import { FolderEntity } from '@joplin/lib/services/database/types';
 import { State } from '@joplin/lib/reducer';
 import CustomButton from './CustomButton';
 import FolderPicker from './FolderPicker';
-import { getTrashFolderId, itemIsInTrash } from '@joplin/lib/services/trash';
+import { itemIsInTrash } from '@joplin/lib/services/trash';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { ModelType } from '@joplin/lib/BaseModel';
+import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
+import { Dispatch } from 'redux';
 
 // We need this to suppress the useless warning
 // https://github.com/oblador/react-native-vector-icons/issues/1465
-// eslint-disable-next-line no-console
+// eslint-disable-next-line no-console, @typescript-eslint/no-explicit-any -- Old code before rule was applied
 Icon.loadFont().catch((error: any) => { console.info(error); });
 
 // Rather than applying a padding to the whole bar, it is applied to each
@@ -50,12 +53,12 @@ export interface MenuOptionType {
 	disabled?: boolean;
 }
 
-type DispatchCommandType=(event: { type: string })=> void;
 interface ScreenHeaderProps {
 	selectedNoteIds: string[];
 	selectedFolderId: string;
 	notesParentType: string;
 	noteSelectionEnabled: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	parentComponent: any;
 	showUndoButton: boolean;
 	undoButtonDisabled?: boolean;
@@ -69,8 +72,9 @@ interface ScreenHeaderProps {
 		onValueChange?: OnValueChangedListener;
 		mustSelect?: boolean;
 	};
+	plugins: PluginStates;
 
-	dispatch: DispatchCommandType;
+	dispatch: Dispatch;
 	onUndoButtonPress: OnPressCallback;
 	onRedoButtonPress: OnPressCallback;
 	onSaveButtonPress: OnPressCallback;
@@ -100,6 +104,7 @@ interface ScreenHeaderState {
 }
 
 class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeaderState> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private cachedStyles: any;
 	public dialogbox?: typeof DialogBox;
 	public constructor(props: ScreenHeaderProps) {
@@ -114,6 +119,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		const theme = themeStyle(themeId);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const styleObject: any = {
 			container: {
 				flexDirection: 'column',
@@ -256,6 +262,10 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		}
 	}
 
+	private pluginPanelToggleButton_press() {
+		this.props.dispatch({ type: 'SET_PLUGIN_PANELS_DIALOG_VISIBLE', visible: true });
+	}
+
 	private async duplicateButton_press() {
 		const noteIds = this.props.selectedNoteIds;
 
@@ -316,6 +326,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 	public render() {
 		const themeId = this.props.themeId;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function sideMenuButton(styles: any, onPress: OnPressCallback) {
 			return (
 				<TouchableOpacity
@@ -331,6 +342,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function backButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<TouchableOpacity
@@ -350,6 +362,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		}
 
 		function saveButton(
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			styles: any, onPress: OnPressCallback, disabled: boolean, show: boolean,
 		) {
 			if (!show) return null;
@@ -415,6 +428,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			});
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function selectAllButton(styles: any, onPress: OnPressCallback) {
 			return (
 				<CustomButton
@@ -429,6 +443,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function searchButton(styles: any, onPress: OnPressCallback) {
 			return (
 				<CustomButton
@@ -443,6 +458,25 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		const pluginPanelToggleButton = (styles: any, onPress: OnPressCallback) => {
+			const allPluginViews = Object.values(this.props.plugins).map(plugin => Object.values(plugin.views)).flat();
+			const allPanels = allPluginViews.filter(view => view.containerType === ContainerType.Panel);
+			if (allPanels.length === 0) return null;
+
+			return (
+				<CustomButton
+					onPress={onPress}
+					description={_('Plugin panels')}
+					themeId={themeId}
+					contentStyle={styles.iconButton}
+				>
+					<Icon name="extension-puzzle" style={styles.topIcon} />
+				</CustomButton>
+			);
+		};
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function deleteButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<CustomButton
@@ -461,6 +495,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function restoreButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<CustomButton
@@ -479,6 +514,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function duplicateButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<CustomButton
@@ -497,6 +533,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function sortButton(styles: any, onPress: OnPressCallback) {
 			return (
 				<TouchableOpacity
@@ -549,7 +586,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
-		const createTitleComponent = (disabled: boolean) => {
+		const createTitleComponent = (disabled: boolean, hideableAfterTitleComponents: ReactElement) => {
 			const folderPickerOptions = this.props.folderPickerOptions;
 
 			if (folderPickerOptions && folderPickerOptions.enabled) {
@@ -588,12 +625,18 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 							}
 						}}
 						mustSelect={!!folderPickerOptions.mustSelect}
-						folders={this.props.folders.filter(f => f.id !== getTrashFolderId())}
+						folders={Folder.getRealFolders(this.props.folders)}
+						coverableChildrenRight={hideableAfterTitleComponents}
 					/>
 				);
 			} else {
 				const title = 'title' in this.props && this.props.title !== null ? this.props.title : '';
-				return <Text ellipsizeMode={'tail'} numberOfLines={1} style={this.styles().titleText}>{title}</Text>;
+				return (
+					<>
+						<Text ellipsizeMode={'tail'} numberOfLines={1} style={this.styles().titleText}>{title}</Text>
+						{hideableAfterTitleComponents}
+					</>
+				);
 			}
 		};
 
@@ -618,15 +661,21 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		if (this.props.noteSelectionEnabled) backButtonDisabled = false;
 		const headerItemDisabled = !(this.props.selectedNoteIds.length > 0);
 
-		const titleComp = createTitleComponent(headerItemDisabled);
 		const sideMenuComp = !showSideMenuButton ? null : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
 		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), backButtonDisabled);
+		const pluginPanelsComp = pluginPanelToggleButton(this.styles(), () => this.pluginPanelToggleButton_press());
 		const selectAllButtonComp = !showSelectAllButton ? null : selectAllButton(this.styles(), () => this.selectAllButton_press());
 		const searchButtonComp = !showSearchButton ? null : searchButton(this.styles(), () => this.searchButton_press());
 		const deleteButtonComp = !selectedFolderInTrash && this.props.noteSelectionEnabled ? deleteButton(this.styles(), () => this.deleteButton_press(), headerItemDisabled) : null;
 		const restoreButtonComp = selectedFolderInTrash && this.props.noteSelectionEnabled ? restoreButton(this.styles(), () => this.restoreButton_press(), headerItemDisabled) : null;
 		const duplicateButtonComp = !selectedFolderInTrash && this.props.noteSelectionEnabled ? duplicateButton(this.styles(), () => this.duplicateButton_press(), headerItemDisabled) : null;
 		const sortButtonComp = !this.props.noteSelectionEnabled && this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
+
+		// To allow the notebook dropdown (and perhaps other components) to have sufficient
+		// space while in use, we allow certain buttons to be hidden.
+		const hideableRightComponents = pluginPanelsComp;
+
+		const titleComp = createTitleComponent(headerItemDisabled, hideableRightComponents);
 		const windowHeight = Dimensions.get('window').height - 50;
 
 		const contextMenuStyle: ViewStyle = {
@@ -707,6 +756,7 @@ const ScreenHeader = connect((state: State) => {
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
+		plugins: state.pluginService.plugins,
 	};
 })(ScreenHeaderComponent);
 

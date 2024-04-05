@@ -1,6 +1,8 @@
 import { PluginManifest, PluginPermission, Image, Icons } from './types';
 import validatePluginId from './validatePluginId';
+import validatePluginPlatforms from './validatePluginPlatforms';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function manifestFromObject(o: any): PluginManifest {
 
 	const getString = (name: string, required = true, defaultValue = ''): string => {
@@ -56,6 +58,8 @@ export default function manifestFromObject(o: any): PluginManifest {
 		name: getString('name', true),
 		version: getString('version', true),
 		app_min_version: getString('app_min_version', true),
+		app_min_version_mobile: getString('app_min_version', false),
+		platforms: getStrings('platforms', false),
 
 		author: getString('author', false),
 		description: getString('description', false),
@@ -72,6 +76,7 @@ export default function manifestFromObject(o: any): PluginManifest {
 	};
 
 	validatePluginId(manifest.id);
+	validatePluginPlatforms(manifest.platforms);
 
 	if (o.permissions) {
 		for (const p of o.permissions) {

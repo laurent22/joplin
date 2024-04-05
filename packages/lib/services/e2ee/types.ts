@@ -11,6 +11,7 @@ export interface MasterKeyEntity {
 	hasBeenUsed?: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export type RSAKeyPair = any; // Depends on implementation
 
 // This is the interface that each platform must implement. Data is passed as

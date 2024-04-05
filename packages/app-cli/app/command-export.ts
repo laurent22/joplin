@@ -24,6 +24,7 @@ class Command extends BaseCommand {
 		return [['--format <format>', _('Destination format: %s', formats.join(', '))], ['--note <note>', _('Exports only the given note.')], ['--notebook <notebook>', _('Exports only the given notebook.')]];
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public override async action(args: any) {
 		const exportOptions: ExportOptions = {};
 		exportOptions.path = args.path;
@@ -35,10 +36,12 @@ class Command extends BaseCommand {
 		if (args.options.note) {
 			const notes = await app().loadItems(BaseModel.TYPE_NOTE, args.options.note, { parent: app().currentFolder() });
 			if (!notes.length) throw new Error(_('Cannot find "%s".', args.options.note));
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			exportOptions.sourceNoteIds = notes.map((n: any) => n.id);
 		} else if (args.options.notebook) {
 			const folders = await app().loadItems(BaseModel.TYPE_FOLDER, args.options.notebook);
 			if (!folders.length) throw new Error(_('Cannot find "%s".', args.options.notebook));
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			exportOptions.sourceFolderIds = folders.map((n: any) => n.id);
 		}
 

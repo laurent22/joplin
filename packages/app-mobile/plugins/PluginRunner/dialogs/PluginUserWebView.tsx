@@ -67,13 +67,30 @@ const PluginUserWebView = (props: Props) => {
 				<title>Plugin Dialog</title>
 				<style>
 					body {
-						padding: 20px;
+						box-sizing: border-box;
+						padding: 0;
+						margin: 0;
 						color: var(--joplin-color);
+
+						/* -apple-system-body allows for correct font scaling on iOS devices */
+						font: -apple-system-body;
+						font-family: var(--joplin-font-family, sans-serif);
+					}
+
+					/* We need "display: flex" in order to accurately get the content size */
+					/* including margin and padding of children */
+					#joplin-plugin-content {
+						display: flex;
+						flex-direction: column;
+						padding: 10px;
+						box-sizing: border-box;
 					}
 				</style>
 			</head>
 			<body>
+				<div id="joplin-plugin-content">
 				${htmlContent}
+				</div>
 			</body>
 		</html>
 	`;
@@ -100,9 +117,10 @@ const PluginUserWebView = (props: Props) => {
 	return (
 		<ExtendedWebView
 			style={props.style}
-			baseUrl={plugin.baseDir}
+			baseDirectory={plugin.baseDir}
 			webviewInstanceId='joplin__PluginDialogWebView'
 			html={html}
+			hasPluginScripts={true}
 			injectedJavaScript={injectedJs}
 			onMessage={messenger.onWebViewMessage}
 			onLoadEnd={onWebViewLoaded}

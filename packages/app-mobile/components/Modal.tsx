@@ -13,8 +13,12 @@ const ModalElement: React.FC<ModalElementProps> = ({
 	containerStyle,
 	...modalProps
 }) => {
+	// supportedOrientations: On iOS, this allows the dialog to be shown in non-portrait orientations.
 	return (
-		<Modal {...modalProps}>
+		<Modal
+			supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
+			{...modalProps}
+		>
 			<View style={[styleSheet.modalContainer, containerStyle ? containerStyle : null]}>
 				{children}
 			</View>

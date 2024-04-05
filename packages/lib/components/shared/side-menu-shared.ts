@@ -2,6 +2,7 @@ import Folder from '../../models/Folder';
 import BaseModel from '../../BaseModel';
 import { FolderEntity, TagEntity } from '../../services/database/types';
 import { getDisplayParentId, getTrashFolderId } from '../../services/trash';
+import { getCollator } from '../../models/utils/getCollator';
 
 interface Props {
 	folders: FolderEntity[];
@@ -12,7 +13,9 @@ interface Props {
 	tags?: TagEntity[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export type RenderFolderItem = (folder: FolderEntity, selected: boolean, hasChildren: boolean, depth: number)=> any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export type RenderTagItem = (tag: TagEntity, selected: boolean)=> any;
 
 function folderHasChildren_(folders: FolderEntity[], folderId: string) {
@@ -42,6 +45,7 @@ function folderIsCollapsed(folders: FolderEntity[], folderId: string, collapsedF
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function renderFoldersRecursive_(props: Props, renderItem: RenderFolderItem, items: any[], parentId: string, depth: number, order: string[]) {
 	const folders = props.folders;
 	for (let i = 0; i < folders.length; i++) {
@@ -72,6 +76,7 @@ export const renderFolders = (props: Props, renderItem: RenderFolderItem) => {
 
 export const renderTags = (props: Props, renderItem: RenderTagItem) => {
 	const tags = props.tags.slice();
+	const collator = getCollator();
 	tags.sort((a, b) => {
 		// It seems title can sometimes be undefined (perhaps when syncing
 		// and before tag has been decrypted?). It would be best to find
@@ -83,7 +88,7 @@ export const renderTags = (props: Props, renderItem: RenderTagItem) => {
 		// Note: while newly created tags are normalized and lowercase
 		// imported tags might be any case, so we need to do case-insensitive
 		// sort.
-		return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : +1;
+		return collator.compare(a.title, b.title);
 	});
 	const tagItems = [];
 	const order: string[] = [];

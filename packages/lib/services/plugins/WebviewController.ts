@@ -22,9 +22,11 @@ interface CloseResponse {
 
 // TODO: Copied from:
 // packages/app-desktop/gui/ResizableLayout/utils/findItemByKey.ts
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function findItemByKey(layout: any, key: string): any {
 	if (!layout) throw new Error('Layout cannot be null');
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	function recurseFind(item: any): any {
 		if (item.key === key) return item;
 
@@ -50,6 +52,7 @@ export default class WebviewController extends ViewController {
 	// True if a **panel** is shown in a modal window.
 	private panelInModalMode_ = false;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(handle: ViewHandle, pluginId: string, store: any, baseDir: string, containerType: ContainerType) {
 		super(handle, pluginId, store);
 		this.baseDir_ = toSystemSlashes(baseDir, 'linux');
@@ -74,6 +77,7 @@ export default class WebviewController extends ViewController {
 		return 'webview';
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private setStoreProp(name: string, value: any) {
 		this.store.dispatch({
 			type: 'PLUGIN_VIEW_PROP_SET',
@@ -110,6 +114,7 @@ export default class WebviewController extends ViewController {
 		});
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public postMessage(message: any) {
 
 		const messageId = `plugin_${Date.now()}${Math.random()}`;
@@ -126,12 +131,14 @@ export default class WebviewController extends ViewController {
 
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async emitMessage(event: EmitMessageEvent): Promise<any> {
 
 		if (!this.messageListener_) return;
 		return this.messageListener_(event.message);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public onMessage(callback: any) {
 		this.messageListener_ = callback;
 	}

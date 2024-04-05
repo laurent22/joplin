@@ -10,6 +10,7 @@ import Setting from './models/Setting';
 
 const Color = require('color');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const themes: any = {
 	[Setting.THEME_LIGHT]: theme_light,
 	[Setting.THEME_DARK]: theme_dark,
@@ -42,6 +43,7 @@ export function themeById(themeId: string) {
 
 // globalStyle should be used for properties that do not change across themes
 // i.e. should not be used for colors
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const globalStyle: any = {
 	fontFamily: 'Roboto', // 'sans-serif',
 	margin: 15, // No text and no interactive component should be within this margin
@@ -111,9 +113,11 @@ globalStyle.buttonStyle = {
 	borderRadius: 4,
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function addExtraStyles(style: any) {
 	const zoomRatio = 1;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const fontSizes: any = {
 		fontSize: Math.round(12 * zoomRatio),
 		toolbarIconSize: 18,
@@ -335,6 +339,7 @@ export function addExtraStyles(style: any) {
 	return style;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const themeCache_: any = {};
 
 export function themeStyle(themeId: number) {
@@ -343,6 +348,7 @@ export function themeStyle(themeId: number) {
 	const cacheKey = themeId;
 	if (themeCache_[cacheKey]) return themeCache_[cacheKey];
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	let output: any = {};
 
 	// All theme are based on the light style, and just override the
@@ -355,6 +361,7 @@ export function themeStyle(themeId: number) {
 	return themeCache_[cacheKey];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const cachedStyles_: any = {
 	themeId: null,
 	styles: {},
@@ -363,7 +370,7 @@ const cachedStyles_: any = {
 // cacheKey must be a globally unique key, and must change whenever
 // the dependencies of the style change. If the style depends only
 // on the theme, a static string can be provided as a cache key.
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 export function buildStyle(cacheKey: any, themeId: number, callback: Function) {
 	cacheKey = Array.isArray(cacheKey) ? cacheKey.join('_') : cacheKey;
 

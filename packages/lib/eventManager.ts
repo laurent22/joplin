@@ -22,9 +22,12 @@ export enum EventName {
 
 export class EventManager {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private emitter_: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private appStatePrevious_: any;
 	private appStateWatchedProps_: string[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private appStateListeners_: any;
 
 	public constructor() {
@@ -44,6 +47,7 @@ export class EventManager {
 		return this.emitter_.on(eventName, callback);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public emit(eventName: EventName, object: any = null) {
 		return this.emitter_.emit(eventName, object);
 	}
@@ -68,6 +72,7 @@ export class EventManager {
 		return this.removeListener(`filter:${filterName}`, callback);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async filterEmit(filterName: string, object: any) {
 		let output = object;
 		const listeners = this.emitter_.listeners(`filter:${filterName}`);
@@ -112,6 +117,7 @@ export class EventManager {
 		this.appStateListeners_[propName].splice(idx, 1);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private stateValue_(state: any, propName: string) {
 		const parts = propName.split('.');
 		let s = state;
@@ -125,6 +131,7 @@ export class EventManager {
 	// This function works by keeping a copy of the watched props and, whenever this function
 	// is called, comparing the previous and new values and emitting events if they have changed.
 	// The appStateEmit function should be called from a middleware.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public appStateEmit(state: any) {
 		if (!this.appStateWatchedProps_.length) return;
 
@@ -150,6 +157,7 @@ export class EventManager {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public once(eventName: string, callback: any) {
 		return this.emitter_.once(eventName, callback);
 	}

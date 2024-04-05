@@ -18,5 +18,6 @@ export type CallbackIds = null|string|CallbackIds[]|Readonly<{
 // there's no clear way to enforce this in TypeScript (most methods lead to
 // a "missing index signature" error).
 export type ReturnsPromises<Type> = {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	[functionName in keyof Type]: (...args: any[])=> Promise<any>;
 };

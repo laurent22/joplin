@@ -27,6 +27,7 @@ class Command extends BaseCommand {
 		return new Promise<void>((resolve, reject) => {
 			// being defensive and not attempting to settle twice
 			let isSettled = false;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const chunks: any = [];
 
 			inputStream.on('readable', () => {
@@ -67,6 +68,7 @@ class Command extends BaseCommand {
 		});
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public override async action(args: any) {
 		const verbose = args.options.verbose;
 		const isExport = args.options.export;
@@ -91,6 +93,7 @@ class Command extends BaseCommand {
 			keys.sort();
 
 			if (isExport) {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				const resultObj = keys.reduce<Record<string, any>>((acc, key) => {
 					const value = Setting.value(key);
 					if (!verbose && !value) return acc;

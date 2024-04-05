@@ -18,7 +18,9 @@ export default class ResourceService extends BaseService {
 	private isIndexing_ = false;
 
 	private maintenanceCalls_: boolean[] = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private maintenanceTimer1_: any = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private maintenanceTimer2_: any = null;
 
 	public async indexNoteResources() {
@@ -50,6 +52,7 @@ export default class ResourceService extends BaseService {
 
 				if (!changes.length) break;
 
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				const noteIds = changes.map((a: any) => a.item_id);
 				const notes = await Note.modelSelectAll(`SELECT id, title, body, encryption_applied FROM notes WHERE id IN ("${noteIds.join('","')}")`);
 

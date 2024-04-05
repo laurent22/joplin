@@ -4,6 +4,23 @@ import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 import HtmlToMd from '@joplin/lib/HtmlToMd';
 import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
 
+const createTestMarkupConverters = () => {
+	const markupToHtml: MarkupToHtmlHandler = async (markupLanguage, markup, options) => {
+		const conv = markupLanguageUtils.newMarkupToHtml({}, {
+			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
+			customCss: '',
+		});
+		return conv.render(markupLanguage, markup, {}, options);
+	};
+
+	const htmlToMd: HtmlToMarkdownHandler = async (_markupLanguage, html, _originalCss) => {
+		const conv = new HtmlToMd();
+		return conv.parse(html);
+	};
+
+	return { markupToHtml, htmlToMd };
+};
+
 describe('resourceHandling', () => {
 	it('should sanitize pasted HTML', async () => {
 		Setting.setConstant('resourceDir', '/home/.config/joplin/resources');
@@ -27,18 +44,7 @@ describe('resourceHandling', () => {
 	});
 
 	it('should clean up pasted HTML', async () => {
-		const markupToHtml: MarkupToHtmlHandler = async (markupLanguage, markup, options) => {
-			const conv = markupLanguageUtils.newMarkupToHtml({}, {
-				resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
-				customCss: '',
-			});
-			return conv.render(markupLanguage, markup, {}, options);
-		};
-
-		const htmlToMd: HtmlToMarkdownHandler = async (_markupLanguage, html, _originalCss) => {
-			const conv = new HtmlToMd();
-			return conv.parse(html);
-		};
+		const { markupToHtml, htmlToMd } = createTestMarkupConverters();
 
 		const testCases = [
 			['<p style="background-color: red">Hello</p><p style="display: hidden;">World</p>', '<p>Hello</p>\n<p>World</p>\n'],
@@ -50,4 +56,11 @@ describe('resourceHandling', () => {
 		}
 	});
 
+	it('should preserve images pasted from the resource directory', async () => {
+		const { markupToHtml, htmlToMd } = createTestMarkupConverters();
+
+		// All images in the resource directory should be preserved.
+		const html = `<img src="file://${encodeURI(Setting.value('resourceDir'))}/resource.png" alt="test"/>`;
+		expect(await processPastedHtml(html, htmlToMd, markupToHtml)).toBe(html);
+	});
 });

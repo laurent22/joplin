@@ -2,6 +2,7 @@ const styled = require('styled-components').default;
 const { css } = require('styled-components');
 
 interface RootProps {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	readonly theme: any;
 	readonly disabled: boolean;
 	readonly hasTitle: boolean;
@@ -33,6 +34,7 @@ export const StyledRoot = styled.a<RootProps>`
 `;
 
 interface IconProps {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	readonly theme: any;
 	readonly title: string;
 }

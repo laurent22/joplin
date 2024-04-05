@@ -108,6 +108,7 @@ function iosVersionHack(majorMinorVersion: string) {
 }
 
 async function main() {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const argv: any = yargs.parserConfiguration({
 		'parse-numbers': false,
 		'parse-positional-numbers': false,

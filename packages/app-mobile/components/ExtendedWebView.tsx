@@ -3,7 +3,7 @@
 import * as React from 'react';
 
 import {
-	forwardRef, Ref, useCallback, useEffect, useImperativeHandle, useRef, useState,
+	forwardRef, Ref, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState,
 } from 'react';
 import { WebView, WebViewMessageEvent } from 'react-native-webview';
 import { WebViewErrorEvent, WebViewEvent, WebViewSource } from 'react-native-webview/lib/WebViewTypes';
@@ -21,6 +21,7 @@ export interface WebViewControl {
 	injectJS(script: string): void;
 
 	// message must be convertible to JSON
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	postMessage(message: any): void;
 }
 
@@ -50,6 +51,7 @@ interface Props {
 	mixedContentMode?: 'never' | 'always';
 
 	allowFileAccessFromJs?: boolean;
+	hasPluginScripts?: boolean;
 
 	// Initial javascript. Must evaluate to true.
 	injectedJavaScript: string;
@@ -68,7 +70,7 @@ interface Props {
 	onFileUpdate?: OnFileUpdateCallback;
 
 	// Defaults to the resource directory
-	baseUrl?: string;
+	baseDirectory?: string;
 }
 
 const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
@@ -96,18 +98,20 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 
 				true;`);
 			},
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			postMessage(message: any) {
 				webviewRef.current.postMessage(JSON.stringify(message));
 			},
 		};
 	}, [props.webviewInstanceId]);
 
-	const baseUrl = props.baseUrl ?? `file://${Setting.value('resourceDir')}/`;
+	const baseDirectory = props.baseDirectory ?? Setting.value('resourceDir');
+	const baseUrl = `file://${baseDirectory}`;
 
 	useEffect(() => {
 		let cancelled = false;
 		async function createHtmlFile() {
-			const tempFile = `${Setting.value('resourceDir')}/${props.webviewInstanceId}.html`;
+			const tempFile = `${baseDirectory}/${props.webviewInstanceId}.html`;
 			await shim.fsDriver().writeFile(tempFile, props.html, 'utf8');
 			if (cancelled) return;
 
@@ -136,11 +140,15 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 		return () => {
 			cancelled = true;
 		};
-	}, [props.html, props.webviewInstanceId, props.onFileUpdate, baseUrl]);
+	}, [props.html, props.webviewInstanceId, props.onFileUpdate, baseDirectory, baseUrl]);
 
 	const onError = useCallback((event: WebViewErrorEvent) => {
 		logger.error('Error', event.nativeEvent.description);
 	}, []);
+
+	const allowWebviewDebugging = useMemo(() => {
+		return Setting.value('env') === 'dev' || (!!props.hasPluginScripts && Setting.value('plugins.enableWebviewDebugging'));
+	}, [props.hasPluginScripts]);
 
 	// - `setSupportMultipleWindows` must be `true` for security reasons:
 	//   https://github.com/react-native-webview/react-native-webview/releases/tag/v11.0.0
@@ -159,6 +167,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 				// It seems that `backgroundColor: theme.backgroundColor` does not
 				// prevent the flash.
 				backgroundColor: 'transparent',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				...(props.style as any),
 			}}
 			ref={webviewRef}
@@ -172,7 +181,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			mixedContentMode={props.mixedContentMode}
 			allowFileAccess={true}
 			allowFileAccessFromFileURLs={props.allowFileAccessFromJs}
-			webviewDebuggingEnabled={Setting.value('env') === 'dev'}
+			webviewDebuggingEnabled={allowWebviewDebugging}
 			injectedJavaScript={props.injectedJavaScript}
 			onMessage={props.onMessage}
 			onError={props.onError ?? onError}

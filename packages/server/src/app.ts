@@ -27,6 +27,7 @@ import storageConnectionCheck from './utils/storageConnectionCheck';
 import { setLocale } from '@joplin/lib/locale';
 import initLib from '@joplin/lib/initLib';
 import checkAdminHandler from './middleware/checkAdminHandler';
+import ActionLogger from '@joplin/lib/utils/ActionLogger';
 
 interface Argv {
 	env?: Env;
@@ -39,11 +40,12 @@ const cors = require('@koa/cors');
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 shimInit({ nodeSqlite });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const defaultEnvVariables: Record<Env, any> = {
 	dev: {
 		// To test with the Postgres database, uncomment DB_CLIENT below and
 		// comment out SQLITE_DATABASE. Then start the Postgres server using
-		// `docker-compose --file docker-compose.db-dev.yml up`
+		// `docker compose --file docker-compose.db-dev.yml up`
 
 		// DB_CLIENT: 'pg',
 		SQLITE_DATABASE: `${sqliteDefaultDir}/db-dev.sqlite`,
@@ -65,9 +67,11 @@ function appLogger(): LoggerWrapper {
 	return appLogger_;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function markPasswords(o: Record<string, any>): Record<string, any> {
 	if (!o) return o;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: Record<string, any> = {};
 
 	for (const k of Object.keys(o)) {
@@ -81,6 +85,7 @@ function markPasswords(o: Record<string, any>): Record<string, any> {
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function getEnvFilePath(env: Env, argv: any): Promise<string> {
 	if (argv.envFile) return argv.envFile;
 
@@ -94,6 +99,7 @@ async function getEnvFilePath(env: Env, argv: any): Promise<string> {
 async function main() {
 	const { selectedCommand, argv: yargsArgv } = await setupCommands();
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const argv: Argv = yargsArgv as any;
 	const env: Env = argv.env as Env || Env.Prod;
 
@@ -232,6 +238,11 @@ async function main() {
 	Logger.initializeGlobalLogger(globalLogger);
 	initLib(globalLogger);
 
+	// Don't log deletions made by the @joplin/lib API -- ActionLogger is
+	// designed for Joplin client use.
+	ActionLogger.enabled = false;
+
+
 	if (envFilePath) appLogger().info(`Env variables were loaded from: ${envFilePath}`);
 
 	const pidFile = argv.pidfile as string;
@@ -247,6 +258,7 @@ async function main() {
 	if (selectedCommand) {
 		const commandArgv = {
 			...argv,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			_: (argv as any)._.slice(),
 		};
 		commandArgv._.splice(0, 1);
@@ -339,6 +351,7 @@ async function main() {
 	if (runCommandAndExitApp) process.exit(0);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 main().catch((error: any) => {
 	console.error(error);
 	process.exit(1);

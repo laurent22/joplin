@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function sortByValue(object: any) {
 	const temp = [];
 	for (const k in object) {
@@ -17,6 +18,7 @@ export function sortByValue(object: any) {
 		return v1 < v2 ? -1 : +1;
 	});
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {};
 	for (let i = 0; i < temp.length; i++) {
 		const item = temp[i];
@@ -26,6 +28,7 @@ export function sortByValue(object: any) {
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function fieldsEqual(o1: any, o2: any) {
 	if ((!o1 || !o2) && o1 !== o2) return false;
 
@@ -42,7 +45,9 @@ export function fieldsEqual(o1: any, o2: any) {
 	return true;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function convertValuesToFunctions(o: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {};
 	for (const n in o) {
 		if (!o.hasOwnProperty(n)) continue;
@@ -53,6 +58,7 @@ export function convertValuesToFunctions(o: any) {
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function isEmpty(o: any) {
 	if (!o) return true;
 	return Object.keys(o).length === 0 && o.constructor === Object;

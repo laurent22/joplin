@@ -116,7 +116,7 @@ import ProfileSwitcher from './components/ProfileSwitcher/ProfileSwitcher';
 import ProfileEditor from './components/ProfileSwitcher/ProfileEditor';
 import sensorInfo, { SensorInfo } from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
-import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
+import { getDatabaseName, getPluginDataDir, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
 import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
 import { ReactNode } from 'react';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
@@ -133,8 +133,10 @@ type SideMenuPosition = 'left' | 'right';
 
 const logger = Logger.create('root');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let storeDispatch: any = function(_action: any) {};
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const logReducerAction = function(action: any) {
 	if (['SIDE_MENU_OPEN_PERCENT', 'SYNC_REPORT_UPDATE'].indexOf(action.type) >= 0) return;
 
@@ -148,6 +150,7 @@ const biometricsEnabled = (sensorInfo: SensorInfo): boolean => {
 	return !!sensorInfo && sensorInfo.enabled;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const generalMiddleware = (store: any) => (next: any) => async (action: any) => {
 	logReducerAction(action);
 	PoorManIntervals.update(); // This function needs to be called regularly so put it here
@@ -156,6 +159,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	const newState = store.getState();
 	let doRefreshFolders = false;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	await reduxSharedMiddleware(store, next, action, storeDispatch as any);
 
 	if (action.type === 'NAV_GO') Keyboard.dismiss();
@@ -227,14 +231,17 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	}
 
 	if (doRefreshFolders) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		await scheduleRefreshFolders((action: any) => storeDispatch(action));
 	}
 
 	return result;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const navHistory: any[] = [];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function historyCanGoBackTo(route: any) {
 	if (route.routeName === 'Note') return false;
 	if (route.routeName === 'Folder') return false;
@@ -259,8 +266,10 @@ const appDefaultState: AppState = { ...defaultState, sideMenuOpenPercent: 0,
 	noteSideMenuOptions: null,
 	isOnMobileData: false,
 	disableSideMenuGestures: false,
+	showPanelsDialog: false,
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const appReducer = (state = appDefaultState, action: any) => {
 	let newState = state;
 	let historyGoingBack = false;
@@ -379,6 +388,11 @@ const appReducer = (state = appDefaultState, action: any) => {
 			newState.sideMenuOpenPercent = action.value;
 			break;
 
+		case 'SET_PLUGIN_PANELS_DIALOG_VISIBLE':
+			newState = { ...state };
+			newState.showPanelsDialog = action.visible;
+			break;
+
 		case 'NOTE_SELECTION_TOGGLE':
 
 			{
@@ -444,6 +458,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 const store = createStore(appReducer, applyMiddleware(generalMiddleware));
 storeDispatch = store.dispatch;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function resourceFetcher_downloadComplete(event: any) {
 	if (event.encrypted) {
 		void DecryptionWorker.instance().scheduleStart();
@@ -489,6 +504,7 @@ async function initialize(dispatch: Function) {
 	const resourceDir = getResourceDir(currentProfile, isSubProfile);
 	Setting.setConstant('resourceDir', resourceDir);
 	Setting.setConstant('pluginDir', `${getProfilesRootDir()}/plugins`);
+	Setting.setConstant('pluginDataDir', getPluginDataDir(currentProfile, isSubProfile));
 
 	await shim.fsDriver().mkdir(resourceDir);
 
@@ -667,6 +683,7 @@ async function initialize(dispatch: Function) {
 
 		reg.logger().info('Loading folders...');
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		await refreshFolders((action: any) => dispatch(action));
 
 		const tags = await Tag.allWithNotes();
@@ -806,6 +823,7 @@ class AppComponent extends React.Component {
 	private urlOpenListener_: EmitterSubscription|null = null;
 	private appStateChangeListener_: NativeEventSubscription|null = null;
 	private themeChangeListener_: NativeEventSubscription|null = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private dropdownAlert_ = (_data: any) => new Promise<any>(res => res);
 
 	public constructor() {
@@ -827,6 +845,7 @@ class AppComponent extends React.Component {
 			PoorManIntervals.update();
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.handleOpenURL_ = (event: any) => {
 			// logger.info('Sharing: handleOpenURL_: start');
 
@@ -991,6 +1010,7 @@ class AppComponent extends React.Component {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async componentDidUpdate(prevProps: any) {
 		if (this.props.biometricsDone !== prevProps.biometricsDone && this.props.biometricsDone) {
 			logger.info('Sharing: componentDidUpdate: biometricsDone');
@@ -1043,8 +1063,10 @@ class AppComponent extends React.Component {
 		this.setState({ sideMenuWidth: this.getSideMenuWidth() });
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public UNSAFE_componentWillReceiveProps(newProps: any) {
 		if (newProps.syncStarted !== this.lastSyncStarted_) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			if (!newProps.syncStarted) void refreshFolders((action: any) => this.props.dispatch(action));
 			this.lastSyncStarted_ = newProps.syncStarted;
 		}
@@ -1151,6 +1173,7 @@ class AppComponent extends React.Component {
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
 							</View>
+							{/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied */}
 							<DropdownAlert alert={(func: any) => (this.dropdownAlert_ = func)} />
 							{ !shouldShowMainContent && <BiometricPopup
 								dispatch={this.props.dispatch}
@@ -1200,6 +1223,7 @@ class AppComponent extends React.Component {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const mapStateToProps = (state: any) => {
 	return {
 		historyCanGoBack: state.historyCanGoBack,

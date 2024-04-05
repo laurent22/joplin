@@ -1,15 +1,16 @@
 import ElectronAppWrapper from './ElectronAppWrapper';
 import shim from '@joplin/lib/shim';
 import { _, setLocale } from '@joplin/lib/locale';
-import { BrowserWindow, nativeTheme, nativeImage, dialog, shell, MessageBoxSyncOptions } from 'electron';
-import { dirname, isUncPath, toSystemSlashes } from '@joplin/lib/path-utils';
+import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions } from 'electron';
+import { dirname, toSystemSlashes } from '@joplin/lib/path-utils';
 import { fileUriToPath } from '@joplin/utils/url';
 import { urlDecode } from '@joplin/lib/string-utils';
 import * as Sentry from '@sentry/electron/main';
 import { homedir } from 'os';
 import { msleep } from '@joplin/utils/time';
 import { pathExists, writeFileSync } from 'fs-extra';
-import { normalize } from 'path';
+import { extname, normalize } from 'path';
+import isSafeToOpen from './utils/isSafeToOpen';
 
 interface LastSelectedPath {
 	file: string;
@@ -20,9 +21,11 @@ interface OpenDialogOptions {
 	properties?: string[];
 	defaultPath?: string;
 	createDirectory?: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	filters?: any[];
 }
 
+type OnAllowedExtensionsChange = (newExtensions: string[])=> void;
 interface MessageDialogOptions extends Omit<MessageBoxSyncOptions, 'message'> {
 	message?: string;
 }
@@ -35,6 +38,9 @@ export class Bridge {
 	private rootProfileDir_: string;
 	private appName_: string;
 	private appId_: string;
+
+	private extraAllowedExtensions_: string[] = [];
+	private onAllowedExtensionsChangeListener_: OnAllowedExtensionsChange = ()=>{};
 
 	public constructor(electronWrapper: ElectronAppWrapper, appId: string, appName: string, rootProfileDir: string, autoUploadCrashDumps: boolean) {
 		this.electronWrapper_ = electronWrapper;
@@ -88,11 +94,6 @@ export class Bridge {
 		return this.rootProfileDir_;
 	}
 
-	private logWarning(...message: string[]) {
-		// eslint-disable-next-line no-console
-		console.warn('bridge:', ...message);
-	}
-
 	public electronApp() {
 		return this.electronWrapper_;
 	}
@@ -109,6 +110,24 @@ export class Bridge {
 		this.autoUploadCrashDumps_ = v;
 	}
 
+	public get extraAllowedOpenExtensions() {
+		return this.extraAllowedExtensions_;
+	}
+
+	public set extraAllowedOpenExtensions(newValue: string[]) {
+		const oldValue = this.extraAllowedExtensions_;
+		const changed = newValue.length !== oldValue.length || newValue.some((v, idx) => v !== oldValue[idx]);
+		if (changed) {
+			this.extraAllowedExtensions_ = newValue;
+			this.onAllowedExtensionsChangeListener_?.(this.extraAllowedExtensions_);
+		}
+	}
+
+	public setOnAllowedExtensionsChangeListener(listener: OnAllowedExtensionsChange) {
+		this.onAllowedExtensionsChangeListener_ = listener;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async captureException(error: any) {
 		Sentry.captureException(error);
 		// We wait to give the "beforeSend" event handler time to process the crash dump and write
@@ -174,6 +193,7 @@ export class Bridge {
 
 			electronApp: this.electronApp(),
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			shouldShowMenu: (_event: any, params: any) => {
 				return params.isEditable;
 			},
@@ -202,6 +222,7 @@ export class Bridge {
 		return require('electron').shell.showItemInFolder(toSystemSlashes(fullPath));
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public newBrowserWindow(options: any) {
 		return new BrowserWindow(options);
 	}
@@ -231,6 +252,7 @@ export class Bridge {
 		return this.window().webContents.closeDevTools();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async showSaveDialog(options: any) {
 		if (!options) options = {};
 		if (!('defaultPath' in options) && this.lastSelectedPaths_.file) options.defaultPath = this.lastSelectedPaths_.file;
@@ -245,16 +267,20 @@ export class Bridge {
 		if (!options) options = {};
 		let fileType = 'file';
 		if (options.properties && options.properties.includes('openDirectory')) fileType = 'directory';
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		if (!('defaultPath' in options) && (this.lastSelectedPaths_ as any)[fileType]) options.defaultPath = (this.lastSelectedPaths_ as any)[fileType];
 		if (!('createDirectory' in options)) options.createDirectory = true;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const { filePaths } = await dialog.showOpenDialog(this.window(), options as any);
 		if (filePaths && filePaths.length) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			(this.lastSelectedPaths_ as any)[fileType] = dirname(filePaths[0]);
 		}
 		return filePaths;
 	}
 
 	// Don't use this directly - call one of the showXxxxxxxMessageBox() instead
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private showMessageBox_(window: any, options: MessageDialogOptions): number {
 		if (!window) window = this.window();
 		return dialog.showMessageBoxSync(window, { message: '', ...options });
@@ -296,6 +322,7 @@ export class Bridge {
 		return result;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public showInfoMessageBox(message: string, options: any = {}) {
 		const result = this.showMessageBox_(this.window(), { type: 'info',
 			message: message,
@@ -330,14 +357,43 @@ export class Bridge {
 			fullPath = fileUriToPath(urlDecode(fullPath), shim.platformName());
 		}
 		fullPath = normalize(fullPath);
-		// On Windows, \\example.com\... links can map to network drives. Opening files on these
-		// drives can lead to arbitrary remote code execution.
-		const isUntrustedUncPath = isUncPath(fullPath);
-		if (isUntrustedUncPath) {
-			this.logWarning(`Not opening external file link: ${fullPath} -- it starts with two \\s, so could be to a network drive.`);
-			return 'Refusing to open file on a network drive.';
-		} else if (await pathExists(fullPath)) {
-			return shell.openPath(fullPath);
+		// Note: pathExists is intended to mitigate a security issue related to network drives
+		//       on Windows.
+		if (await pathExists(fullPath)) {
+			const fileExtension = extname(fullPath);
+			const userAllowedExtension = this.extraAllowedOpenExtensions.includes(fileExtension);
+			if (userAllowedExtension || isSafeToOpen(fullPath)) {
+				return shell.openPath(fullPath);
+			} else {
+				const allowOpenId = 2;
+				const learnMoreId = 1;
+				const fileExtensionDescription = JSON.stringify(fileExtension);
+				const result = await dialog.showMessageBox(this.window(), {
+					title: _('Unknown file type'),
+					message:
+						_('Joplin doesn\'t recognise the %s extension. Opening this file could be dangerous. What would you like to do?', fileExtensionDescription),
+					type: 'warning',
+					checkboxLabel: _('Always open %s files without asking.', fileExtensionDescription),
+					buttons: [
+						_('Cancel'),
+						_('Learn more'),
+						_('Open it'),
+					],
+				});
+
+				if (result.response === learnMoreId) {
+					void this.openExternal('https://joplinapp.org/help/apps/attachments#unknown-filetype-warning');
+					return 'Learn more shown';
+				} else if (result.response !== allowOpenId) {
+					return 'Cancelled by user';
+				}
+
+				if (result.checkboxChecked) {
+					this.extraAllowedOpenExtensions = this.extraAllowedOpenExtensions.concat(fileExtension);
+				}
+
+				return shell.openPath(fullPath);
+			}
 		} else {
 			return 'Path does not exist.';
 		}

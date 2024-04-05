@@ -243,6 +243,7 @@ class AppComponent extends Component {
 				if (!ref) break;
 				lastRef = ref;
 			}
+			// eslint-disable-next-line no-restricted-properties
 			if (lastRef) lastRef.focus();
 		}
 	}

@@ -30,10 +30,10 @@ import SectionSelector from './SectionSelector';
 import { Button, TextInput } from 'react-native-paper';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
-import PluginUploadButton, { buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
-import isInstallingPluginsAllowed from './plugins/utils/isPluginInstallingAllowed';
+import PluginUploadButton, { canInstallPluginsFromFile, buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
 
 interface ConfigScreenState {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	settings: any;
 	changedSettingKeys: string[];
 
@@ -49,12 +49,15 @@ interface ConfigScreenState {
 }
 
 interface ConfigScreenProps {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	settings: any;
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	navigation: any;
 }
 
 class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, ConfigScreenState> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static navigationOptions(): any {
 		return { header: null };
 	}
@@ -219,11 +222,13 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		return this.styles_[themeId];
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private onHeaderLayout(key: string, event: any) {
 		const layout = event.nativeEvent.layout;
 		this.componentsY_[`header_${key}`] = layout.y;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private onSectionLayout(key: string, event: any) {
 		const layout = event.nativeEvent.layout;
 		this.componentsY_[`section_${key}`] = layout.y;
@@ -324,6 +329,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		NavService.removeHandler(this.handleNavigateToNewScreen);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private renderButton(key: string, title: string, clickHandler: ()=> void, options: any = null) {
 		return (
 			<SettingsButton
@@ -337,6 +343,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public sectionToComponent(key: string, section: SettingMetadataSection, settings: any, isSelected: boolean) {
 		const settingComps: ReactElement[] = [];
 		const advancedSettingComps: ReactElement[] = [];
@@ -377,6 +384,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			}
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const addSettingButton = (key: string, title: string, clickHandler: ()=> void, options: any = null) => {
 			const relatedText = [title];
 			if (typeof options === 'object' && options?.description) {
@@ -471,7 +479,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				getPluginStatesSearchText(),
 			);
 
-			if (isInstallingPluginsAllowed()) {
+			if (canInstallPluginsFromFile()) {
 				addSettingComponent(
 					<PluginUploadButton
 						key='plugins-install-from-file'
@@ -563,7 +571,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 			addSettingText('version_info_app', `Joplin ${VersionInfo.appVersion}`);
 			addSettingText('version_info_db', _('Database v%s', reg.db().version()));
+			addSettingText('version_info_sync', _('Sync Version: %s', Setting.value('syncVersion')));
+			addSettingText('version_info_client_id', _('Client ID: %s', Setting.value('clientId')));
 			addSettingText('version_info_fts', _('FTS enabled: %d', this.props.settings['db.ftsEnabled']));
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			addSettingText('version_info_hermes', _('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0));
 
 			const featureFlagKeys = Setting.featureFlagKeys(AppType.Mobile);
@@ -621,6 +632,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		};
 
 		return (
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			<View key={key} onLayout={(event: any) => this.onSectionLayout(key, event)}>
 				<View>
 					{this.state.searching ? headerComponent : null}
@@ -631,7 +643,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 	private renderToggle(key: string, label: string, value: any, updateSettingValue: Function, descriptionComp: any = null) {
 		const theme = themeStyle(this.props.themeId);
 
@@ -641,6 +653,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 					<Text key="label" style={this.styles().styleSheet.switchSettingText}>
 						{label}
 					</Text>
+					{/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied */}
 					<Switch key="control" style={this.styles().styleSheet.switchSettingControl} trackColor={{ false: theme.dividerColor }} value={value} onValueChange={(value: any) => void updateSettingValue(key, value)} />
 				</View>
 				{descriptionComp}
@@ -648,6 +661,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private handleSetting = async (key: string, value: any): Promise<boolean> => {
 		// When the user tries to enable biometrics unlock, we ask for the
 		// fingerprint or Face ID, and if it's correct we save immediately. If
@@ -671,7 +685,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		return false;
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public settingToComponent(key: string, value: any) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const updateSettingValue = async (key: string, value: any) => {
 			const handled = await this.handleSetting(key, value);
 			if (!handled) shared.updateSettingValue(this, key, value);
@@ -689,11 +705,14 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private renderFeatureFlags(settings: any, featureFlagKeys: string[]): any[] {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const updateSettingValue = (key: string, value: any) => {
 			return shared.updateSettingValue(this, key, value);
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any[] = [];
 		for (const key of featureFlagKeys) {
 			output.push(this.renderToggle(key, key, settings[key], updateSettingValue));

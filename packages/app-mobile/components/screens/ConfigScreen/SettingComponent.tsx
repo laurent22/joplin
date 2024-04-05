@@ -15,6 +15,7 @@ interface Props {
 	settingId: string;
 
 	// The value associated with the given settings key
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	value: any;
 
 	styles: ConfigScreenStyles;
@@ -27,6 +28,7 @@ interface Props {
 const SettingComponent: React.FunctionComponent<Props> = props => {
 	const themeId = props.themeId;
 	const theme = themeStyle(themeId);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = null;
 
 	const md = Setting.settingMetadata(props.settingId);
@@ -38,7 +40,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 	const containerStyle = props.styles.getContainerStyle(!!settingDescription);
 
 	if (md.isEnum) {
-		const value = props.value.toString();
+		const value = props.value?.toString();
 
 		const items = Setting.enumOptionsToValueLabels(md.options(), md.optionsOrder ? md.optionsOrder() : []);
 
@@ -50,6 +52,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 					</Text>
 					<Dropdown
 						key="control"
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 						items={items as any}
 						selectedValue={value}
 						itemListStyle={{

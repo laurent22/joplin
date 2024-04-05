@@ -3,6 +3,7 @@
 import { msleep } from './time';
 import fetch from 'node-fetch';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const fetchWithRetry = async (url: string, opts: any = null) => {
 	if (!opts) opts = {};
 	let retry = opts && opts.retry || 3;

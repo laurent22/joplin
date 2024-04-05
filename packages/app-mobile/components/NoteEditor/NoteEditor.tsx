@@ -160,6 +160,7 @@ const useEditorControl = (
 			supportsCommand(command: EditorCommandType) {
 				return bodyControl.supportsCommand(command);
 			},
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			execCommand(command, ...args: any[]) {
 				return bodyControl.execCommand(command, ...args);
 			},
@@ -281,6 +282,7 @@ const useEditorControl = (
 	}, [webviewRef, bodyControl, setLinkDialogVisible, setSearchState]);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function NoteEditor(props: Props, ref: any) {
 	const webviewRef = useRef<WebViewControl>(null);
 
@@ -303,7 +305,7 @@ function NoteEditor(props: Props, ref: any) {
 		automatchBraces: false,
 		ignoreModifiers: false,
 
-		indentWithTabs: false,
+		indentWithTabs: true,
 	}), [props.themeId, props.readOnly]);
 
 	const injectedJavaScript = `
@@ -517,6 +519,7 @@ function NoteEditor(props: Props, ref: any) {
 					ref={webviewRef}
 					html={html}
 					injectedJavaScript={injectedJavaScript}
+					hasPluginScripts={codeMirrorPlugins.length > 0}
 					onMessage={onMessage}
 					onLoadEnd={onLoadEnd}
 					onError={onError}

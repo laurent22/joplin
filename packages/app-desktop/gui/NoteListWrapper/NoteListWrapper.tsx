@@ -1,6 +1,6 @@
 import { themeStyle } from '@joplin/lib/theme';
 import * as React from 'react';
-import { useMemo, useState, useEffect, useRef, useCallback } from 'react';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 import NoteList2 from '../NoteList/NoteList2';
 import NoteListControls from '../NoteListControls/NoteListControls';
 import { Size } from '../ResizableLayout/utils/types';
@@ -21,6 +21,7 @@ import usePrevious from '../hooks/usePrevious';
 const logger = Logger.create('NoteListWrapper');
 
 interface Props {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	resizableLayoutEventEmitter: any;
 	size: Size;
 	visible: boolean;
@@ -40,21 +41,21 @@ const StyledRoot = styled.div`
 	width: 100%;
 `;
 
-const getTextWidth = (newNoteRef: React.MutableRefObject<any>, text: string): number => {
+const getTextWidth = (newNoteButtonElement: Element, text: string): number => {
 	const canvas = document.createElement('canvas');
 	if (!canvas) throw new Error('Failed to create canvas element');
 	const ctx = canvas.getContext('2d');
 	if (!ctx) throw new Error('Failed to get context');
-	const fontWeight = getComputedStyle(newNoteRef.current).getPropertyValue('font-weight');
-	const fontSize = getComputedStyle(newNoteRef.current).getPropertyValue('font-size');
-	const fontFamily = getComputedStyle(newNoteRef.current).getPropertyValue('font-family');
+	const fontWeight = getComputedStyle(newNoteButtonElement).getPropertyValue('font-weight');
+	const fontSize = getComputedStyle(newNoteButtonElement).getPropertyValue('font-size');
+	const fontFamily = getComputedStyle(newNoteButtonElement).getPropertyValue('font-family');
 	ctx.font = `${fontWeight} ${fontSize} ${fontFamily}`;
 	return ctx.measureText(text).width;
 };
 
 // Even though these calculations mostly concern the NoteListControls component, we do them here
 // because we need to know the height of that control to calculate the note list height.
-const useNoteListControlsBreakpoints = (width: number, newNoteRef: React.MutableRefObject<any>, selectedFolderId: string) => {
+const useNoteListControlsBreakpoints = (width: number, newNoteButtonElement: Element, selectedFolderId: string) => {
 	const [dynamicBreakpoints, setDynamicBreakpoints] = useState<Breakpoints>({ Sm: BaseBreakpoint.Sm, Md: BaseBreakpoint.Md, Lg: BaseBreakpoint.Lg, Xl: BaseBreakpoint.Xl });
 	const previousWidth = usePrevious(width);
 	const widthHasChanged = width !== previousWidth;
@@ -62,13 +63,12 @@ const useNoteListControlsBreakpoints = (width: number, newNoteRef: React.Mutable
 
 	// Initialize language-specific breakpoints
 	useEffect(() => {
-		if (!widthHasChanged) return;
-		if (!newNoteRef.current) return;
+		if (!newNoteButtonElement) return;
 		if (!showNewNoteButton) return;
 
 		// Use the longest string to calculate the amount of extra width needed
-		const smAdditional = getTextWidth(newNoteRef, _('note')) > getTextWidth(newNoteRef, _('to-do')) ? getTextWidth(newNoteRef, _('note')) : getTextWidth(newNoteRef, _('to-do'));
-		const mdAdditional = getTextWidth(newNoteRef, _('New note')) > getTextWidth(newNoteRef, _('New to-do')) ? getTextWidth(newNoteRef, _('New note')) : getTextWidth(newNoteRef, _('New to-do'));
+		const smAdditional = getTextWidth(newNoteButtonElement, _('note')) > getTextWidth(newNoteButtonElement, _('to-do')) ? getTextWidth(newNoteButtonElement, _('note')) : getTextWidth(newNoteButtonElement, _('to-do'));
+		const mdAdditional = getTextWidth(newNoteButtonElement, _('New note')) > getTextWidth(newNoteButtonElement, _('New to-do')) ? getTextWidth(newNoteButtonElement, _('New note')) : getTextWidth(newNoteButtonElement, _('New to-do'));
 
 		const Sm = BaseBreakpoint.Sm + smAdditional * 2;
 		const Md = BaseBreakpoint.Md + mdAdditional * 2;
@@ -76,7 +76,7 @@ const useNoteListControlsBreakpoints = (width: number, newNoteRef: React.Mutable
 		const Xl = BaseBreakpoint.Xl;
 
 		setDynamicBreakpoints({ Sm, Md, Lg, Xl });
-	}, [newNoteRef, showNewNoteButton, widthHasChanged]);
+	}, [newNoteButtonElement, showNewNoteButton, widthHasChanged]);
 
 	const breakpoint: number = useMemo(() => {
 		// Find largest breakpoint that width is less than
@@ -108,11 +108,11 @@ export default function NoteListWrapper(props: Props) {
 	const theme = themeStyle(props.themeId);
 	const [controlHeight] = useState(theme.topRowHeight);
 	const listRenderer = useListRenderer(props.listRendererId, props.startupPluginsLoaded);
-	const newNoteButtonRef = useRef(null);
+	const [newNoteButtonElement, setNewNoteButtonElement] = useState<Element>(null);
 	const isMultiColumns = listRenderer ? listRenderer.multiColumns : false;
 	const columns = isMultiColumns ? props.columns : null;
 
-	const { breakpoint, dynamicBreakpoints, lineCount } = useNoteListControlsBreakpoints(props.size.width, newNoteButtonRef, props.selectedFolderId);
+	const { breakpoint, dynamicBreakpoints, lineCount } = useNoteListControlsBreakpoints(props.size.width, newNoteButtonElement, props.selectedFolderId);
 
 	const noteListControlsButtonSize = ButtonSize.Small;
 	const noteListControlsPadding = theme.mainPadding;
@@ -134,6 +134,7 @@ export default function NoteListWrapper(props: Props) {
 	}, [props.size, noteListControlsHeight, theme.noteListHeaderHeight, isMultiColumns]);
 
 	const onHeaderItemClick: OnItemClickHander = useCallback(event => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const field = depNameToNoteProp(event.name as any).split('.')[1];
 
 		if (!Setting.isAllowedEnumOption('notes.sortOrder.field', field)) {
@@ -178,7 +179,7 @@ export default function NoteListWrapper(props: Props) {
 			<NoteListControls
 				height={controlHeight}
 				width={noteListSize.width}
-				newNoteButtonRef={newNoteButtonRef}
+				setNewNoteButtonElement={setNewNoteButtonElement}
 				breakpoint={breakpoint}
 				dynamicBreakpoints={dynamicBreakpoints}
 				lineCount={lineCount}
