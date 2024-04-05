@@ -348,6 +348,15 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		const settingComps: ReactElement[] = [];
 		const advancedSettingComps: ReactElement[] = [];
 
+		const sectionDescription = Setting.sectionDescription(key, AppType.Mobile);
+		if (sectionDescription && !this.state.searching) {
+			settingComps.push(
+				<Text style={this.styles().styleSheet.sectionDescriptionText}>
+					{sectionDescription}
+				</Text>,
+			);
+		}
+
 		const headerTitle = Setting.sectionNameToLabel(section.name);
 
 		const matchesSearchQuery = (relatedText: string|string[]) => {

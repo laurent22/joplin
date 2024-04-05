@@ -19,6 +19,7 @@ export interface ConfigScreenStyleSheet {
 
 	sliderUnits: TextStyle;
 	settingDescriptionText: TextStyle;
+	sectionDescriptionText: TextStyle;
 	permissionText: TextStyle;
 	textInput: TextStyle;
 
@@ -144,6 +145,12 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 			paddingLeft: theme.marginLeft,
 			paddingRight: theme.marginRight,
 			paddingBottom: theme.marginBottom,
+		},
+		sectionDescriptionText: {
+			color: theme.colorFaded,
+			fontSize: theme.fontSize,
+			margin: 20,
+			flex: 1,
 		},
 		permissionText: {
 			color: theme.color,
