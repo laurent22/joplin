@@ -22,10 +22,6 @@ interface State {
 }
 
 class StatusScreenComponent extends BaseScreenComponent<Props, State> {
-	public static navigationOptions(): any {
-		return { header: null };
-	}
-
 	public constructor(props: Props) {
 		super(props);
 		this.state = {
