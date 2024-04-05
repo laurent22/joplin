@@ -57,6 +57,8 @@ export default class Note extends BaseItem {
 			user_updated_time: _('updated date'),
 			user_created_time: _('created date'),
 			order: _('custom order'),
+			todo_due: _('due date'),
+			todo_completed: _('completion date'),
 		};
 
 		return field in fieldsToLabels ? fieldsToLabels[field] : field;
