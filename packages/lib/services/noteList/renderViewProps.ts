@@ -12,13 +12,14 @@ export interface RenderViewPropsOptions {
 	noteTitleHtml: string;
 }
 
-const renderViewProp = (name: ListRendererDependency, value: any, options: RenderViewPropsOptions) => {
+const renderViewProp = (name: ListRendererDependency, value: any, options: RenderViewPropsOptions): string => {
 	const renderers: Partial<Record<ListRendererDependency, ()=> string>> = {
 		'note.user_updated_time': () => time.formatMsToLocal(value),
 		'note.user_created_time': () => time.formatMsToLocal(value),
 		'note.updated_time': () => time.formatMsToLocal(value),
 		'note.created_time': () => time.formatMsToLocal(value),
 		'note.todo_completed': () => value ? time.formatMsToLocal(value) : '',
+		'note.todo_due': () => value ? time.formatMsToLocal(value) : '',
 		'note.tags': () => value ? value.map((t: TagEntity) => t.title).join(', ') : '',
 		'note.title': () => options.noteTitleHtml,
 	};
