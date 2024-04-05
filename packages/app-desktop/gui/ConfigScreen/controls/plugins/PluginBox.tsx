@@ -7,6 +7,7 @@ import Button, { ButtonLevel } from '../../../Button/Button';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import bridge from '../../../../services/bridge';
 import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
 
 export enum InstallState {
 	NotInstalled = 1,
@@ -230,7 +231,7 @@ export default function(props: Props) {
 			return (
 				<CellFooter>
 					<NeedUpgradeMessage>
-						{_('Please upgrade Joplin to use this plugin')}
+						{PluginService.instance().describeIncompatibility(props.manifest)}
 					</NeedUpgradeMessage>
 				</CellFooter>
 			);

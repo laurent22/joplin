@@ -1,11 +1,34 @@
 import { Rectangle } from './types';
-export interface Implementation {
-    nativeImage: any;
-}
 export interface CreateFromBufferOptions {
     width?: number;
     height?: number;
     scaleFactor?: number;
+}
+export interface CreateFromPdfOptions {
+    /**
+     * The first page to export. Defaults to `1`, the first page in
+     * the document.
+     */
+    minPage?: number;
+    /**
+     * The number of the last page to convert. Defaults to the last page
+     * if not given.
+     *
+     * If `maxPage` is greater than the number of pages in the PDF, all pages
+     * in the PDF will be converted to images.
+     */
+    maxPage?: number;
+    scaleFactor?: number;
+}
+export interface PdfInfo {
+    pageCount: number;
+}
+export interface Implementation {
+    nativeImage: {
+        createFromPath: (path: string) => Promise<any>;
+        createFromPdf: (path: string, options: CreateFromPdfOptions) => Promise<any[]>;
+    };
+    getPdfInfo: (path: string) => Promise<PdfInfo>;
 }
 export interface ResizeOptions {
     width?: number;
@@ -34,6 +57,10 @@ export default class JoplinImaging {
     private cacheImage;
     createFromPath(filePath: string): Promise<Handle>;
     createFromResource(resourceId: string): Promise<Handle>;
+    createFromPdfPath(path: string, options?: CreateFromPdfOptions): Promise<Handle[]>;
+    createFromPdfResource(resourceId: string, options?: CreateFromPdfOptions): Promise<Handle[]>;
+    getPdfInfoFromPath(path: string): Promise<PdfInfo>;
+    getPdfInfoFromResource(resourceId: string): Promise<PdfInfo>;
     getSize(handle: Handle): Promise<any>;
     resize(handle: Handle, options?: ResizeOptions): Promise<string>;
     crop(handle: Handle, rectangle: Rectangle): Promise<string>;
@@ -57,5 +84,5 @@ export default class JoplinImaging {
      * Image data is not automatically deleted by Joplin so make sure you call
      * this method on the handle once you are done.
      */
-    free(handle: Handle): Promise<void>;
+    free(handles: Handle[] | Handle): Promise<void>;
 }

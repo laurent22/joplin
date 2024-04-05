@@ -1,5 +1,6 @@
 import { PluginManifest, PluginPermission, Image, Icons } from './types';
 import validatePluginId from './validatePluginId';
+import validatePluginPlatforms from './validatePluginPlatforms';
 
 export default function manifestFromObject(o: any): PluginManifest {
 
@@ -56,6 +57,8 @@ export default function manifestFromObject(o: any): PluginManifest {
 		name: getString('name', true),
 		version: getString('version', true),
 		app_min_version: getString('app_min_version', true),
+		app_min_version_mobile: getString('app_min_version', false),
+		platforms: getStrings('platforms', false),
 
 		author: getString('author', false),
 		description: getString('description', false),
@@ -72,6 +75,7 @@ export default function manifestFromObject(o: any): PluginManifest {
 	};
 
 	validatePluginId(manifest.id);
+	validatePluginPlatforms(manifest.platforms);
 
 	if (o.permissions) {
 		for (const p of o.permissions) {

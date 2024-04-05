@@ -27,6 +27,7 @@ import storageConnectionCheck from './utils/storageConnectionCheck';
 import { setLocale } from '@joplin/lib/locale';
 import initLib from '@joplin/lib/initLib';
 import checkAdminHandler from './middleware/checkAdminHandler';
+import ActionLogger from '@joplin/lib/utils/ActionLogger';
 
 interface Argv {
 	env?: Env;
@@ -43,7 +44,7 @@ const defaultEnvVariables: Record<Env, any> = {
 	dev: {
 		// To test with the Postgres database, uncomment DB_CLIENT below and
 		// comment out SQLITE_DATABASE. Then start the Postgres server using
-		// `docker-compose --file docker-compose.db-dev.yml up`
+		// `docker compose --file docker-compose.db-dev.yml up`
 
 		// DB_CLIENT: 'pg',
 		SQLITE_DATABASE: `${sqliteDefaultDir}/db-dev.sqlite`,
@@ -231,6 +232,11 @@ async function main() {
 	});
 	Logger.initializeGlobalLogger(globalLogger);
 	initLib(globalLogger);
+
+	// Don't log deletions made by the @joplin/lib API -- ActionLogger is
+	// designed for Joplin client use.
+	ActionLogger.enabled = false;
+
 
 	if (envFilePath) appLogger().info(`Env variables were loaded from: ${envFilePath}`);
 

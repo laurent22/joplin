@@ -6,6 +6,7 @@ import { Modal, Portal } from 'react-native-paper';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import WebviewController, { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import useViewInfos from './hooks/useViewInfos';
+import PluginPanelViewer from './PluginPanelViewer';
 
 interface Props {
 	themeId: number;
@@ -53,6 +54,7 @@ const PluginDialogManager: React.FC<Props> = props => {
 	return (
 		<>
 			{dialogs}
+			<PluginPanelViewer/>
 		</>
 	);
 };

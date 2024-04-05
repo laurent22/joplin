@@ -49,7 +49,7 @@ import PlainEditor from './NoteBody/PlainEditor/PlainEditor';
 import CodeMirror6 from './NoteBody/CodeMirror/v6/CodeMirror';
 import CodeMirror5 from './NoteBody/CodeMirror/v5/CodeMirror';
 import { openItemById } from './utils/contextMenu';
-import { namespacedKey } from '@joplin/lib/services/plugins/api/JoplinSettings';
+import getPluginSettingValue from '@joplin/lib/services/plugins/utils/getPluginSettingValue';
 import { MarkupLanguage } from '@joplin/renderer';
 
 const commands = [
@@ -162,10 +162,6 @@ function NoteEditor(props: NoteEditorProps) {
 		return formNote.saveActionQueue.waitForAllDone();
 	}
 
-	const settingValue = useCallback((pluginId: string, key: string) => {
-		return Setting.value(namespacedKey(pluginId, key));
-	}, []);
-
 	const whiteBackgroundNoteRendering = formNote.markup_language === MarkupLanguage.Html;
 
 	const markupToHtml = useMarkupToHtml({
@@ -173,7 +169,7 @@ function NoteEditor(props: NoteEditorProps) {
 		whiteBackgroundNoteRendering,
 		customCss: props.customCss,
 		plugins: props.plugins,
-		settingValue,
+		settingValue: getPluginSettingValue,
 	});
 
 	const allAssets = useCallback(async (markupLanguage: number, options: AllAssetsOptions = null): Promise<any[]> => {
@@ -464,13 +460,13 @@ function NoteEditor(props: NoteEditorProps) {
 		noteToolbarButtonInfos: props.toolbarButtonInfos,
 		plugins: props.plugins,
 		fontSize: Setting.value('style.editor.fontSize'),
-		fontFamily: Setting.value('style.editor.fontFamily'),
 		contentMaxWidth: props.contentMaxWidth,
 		isSafeMode: props.isSafeMode,
 		useCustomPdfViewer: props.useCustomPdfViewer,
 		// We need it to identify the context for which media is rendered.
 		// It is currently used to remember pdf scroll position for each attachments of each note uniquely.
 		noteId: props.noteId,
+		watchedNoteFiles: props.watchedNoteFiles,
 	};
 
 	let editor = null;

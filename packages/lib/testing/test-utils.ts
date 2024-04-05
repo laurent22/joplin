@@ -1043,4 +1043,19 @@ export const newOcrService = () => {
 	return new OcrService(driver);
 };
 
+export const mockMobilePlatform = (platform: string) => {
+	const originalMobilePlatform = shim.mobilePlatform;
+	const originalIsNode = shim.isNode;
+
+	shim.mobilePlatform = () => platform;
+	shim.isNode = () => false;
+
+	return {
+		reset: () => {
+			shim.mobilePlatform = originalMobilePlatform;
+			shim.isNode = originalIsNode;
+		},
+	};
+};
+
 export { supportDir, createNoteAndResource, createTempFile, createTestShareData, simulateReadOnlyShareEnv, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

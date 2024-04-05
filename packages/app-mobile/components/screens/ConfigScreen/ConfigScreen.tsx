@@ -30,8 +30,7 @@ import SectionSelector from './SectionSelector';
 import { Button, TextInput } from 'react-native-paper';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
-import PluginUploadButton, { buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
-import isInstallingPluginsAllowed from './plugins/utils/isPluginInstallingAllowed';
+import PluginUploadButton, { canInstallPluginsFromFile, buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
 import NoteImportButton, { importButtonDefaultTitle, importButtonDescription } from './NoteExportSection/NoteImportButton';
 
 interface ConfigScreenState {
@@ -472,7 +471,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				getPluginStatesSearchText(),
 			);
 
-			if (isInstallingPluginsAllowed()) {
+			if (canInstallPluginsFromFile()) {
 				addSettingComponent(
 					<PluginUploadButton
 						key='plugins-install-from-file'
@@ -568,6 +567,8 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 			addSettingText('version_info_app', `Joplin ${VersionInfo.appVersion}`);
 			addSettingText('version_info_db', _('Database v%s', reg.db().version()));
+			addSettingText('version_info_sync', _('Sync Version: %s', Setting.value('syncVersion')));
+			addSettingText('version_info_client_id', _('Client ID: %s', Setting.value('clientId')));
 			addSettingText('version_info_fts', _('FTS enabled: %d', this.props.settings['db.ftsEnabled']));
 			addSettingText('version_info_hermes', _('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0));
 

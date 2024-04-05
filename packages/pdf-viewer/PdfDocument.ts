@@ -146,7 +146,8 @@ export default class PdfDocument {
 			frame.contentWindow.onafterprint = () => {
 				frame.remove();
 			};
-			frame.focus();
+			console.warn('frame.focus() has been disabled!! Use focusHandler instead');
+			// frame.focus();
 			frame.contentWindow.print();
 		};
 		frame.src = this.url as string;

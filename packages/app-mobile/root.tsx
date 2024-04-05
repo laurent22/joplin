@@ -116,7 +116,7 @@ import ProfileSwitcher from './components/ProfileSwitcher/ProfileSwitcher';
 import ProfileEditor from './components/ProfileSwitcher/ProfileEditor';
 import sensorInfo, { SensorInfo } from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
-import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
+import { getDatabaseName, getPluginDataDir, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
 import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
 import { ReactNode } from 'react';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
@@ -259,6 +259,7 @@ const appDefaultState: AppState = { ...defaultState, sideMenuOpenPercent: 0,
 	noteSideMenuOptions: null,
 	isOnMobileData: false,
 	disableSideMenuGestures: false,
+	showPanelsDialog: false,
 };
 
 const appReducer = (state = appDefaultState, action: any) => {
@@ -379,6 +380,11 @@ const appReducer = (state = appDefaultState, action: any) => {
 			newState.sideMenuOpenPercent = action.value;
 			break;
 
+		case 'SET_PLUGIN_PANELS_DIALOG_VISIBLE':
+			newState = { ...state };
+			newState.showPanelsDialog = action.visible;
+			break;
+
 		case 'NOTE_SELECTION_TOGGLE':
 
 			{
@@ -489,6 +495,7 @@ async function initialize(dispatch: Function) {
 	const resourceDir = getResourceDir(currentProfile, isSubProfile);
 	Setting.setConstant('resourceDir', resourceDir);
 	Setting.setConstant('pluginDir', `${getProfilesRootDir()}/plugins`);
+	Setting.setConstant('pluginDataDir', getPluginDataDir(currentProfile, isSubProfile));
 
 	await shim.fsDriver().mkdir(resourceDir);
 

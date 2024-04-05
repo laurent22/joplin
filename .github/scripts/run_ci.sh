@@ -19,12 +19,6 @@ if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
 	IS_PULL_REQUEST=1
 fi
 
-# In some case it might not be possible to detect if we're on a pull request, for example when
-# pushing new code to an existing code (or maybe when pressing "Update branch" from GitHub). In that
-# case "GITHUB_EVENT_NAME" is "push" it's not clear what else could be checked. It seems safe to
-# always run the checks anyway so we do this for now.
-IS_PULL_REQUEST=1
-
 if [[ $GIT_TAG_NAME = $SERVER_TAG_PREFIX-* ]]; then
 	IS_SERVER_RELEASE=1
 fi
@@ -96,7 +90,7 @@ if [ "$RUN_TESTS" == "1" ]; then
 	# On Linux, we run the Joplin Server tests using PostgreSQL
 	if [ "$IS_LINUX" == "1" ]; then
 		echo "Running Joplin Server tests using PostgreSQL..."
-		sudo docker-compose --file docker-compose.db-dev.yml up -d
+		sudo docker compose --file docker-compose.db-dev.yml up -d
 		cmdResult=$?
 		if [ $cmdResult -ne 0 ]; then
 			exit $cmdResult
@@ -147,15 +141,13 @@ fi
 # for Linux only is sufficient.
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ]; then
-	if [ "$IS_LINUX" == "1" ]; then
-		echo "Step: Validating translations..."
+if [ "$IS_LINUX" == "1" ]; then
+	echo "Step: Validating translations..."
 
-		node packages/tools/validate-translation.js
-		testResult=$?
-		if [ $testResult -ne 0 ]; then
-			exit $testResult
-		fi
+	node packages/tools/validate-translation.js
+	testResult=$?
+	if [ $testResult -ne 0 ]; then
+		exit $testResult
 	fi
 fi
 
@@ -185,15 +177,13 @@ fi
 # See coding_style.md
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ]; then
-	if [ "$IS_LINUX" == "1" ]; then
-		echo "Step: Checking for files that should have been ignored..."
+if [ "$IS_LINUX" == "1" ]; then
+	echo "Step: Checking for files that should have been ignored..."
 
-		node packages/tools/checkIgnoredFiles.js 
-		testResult=$?
-		if [ $testResult -ne 0 ]; then
-			exit $testResult
-		fi
+	node packages/tools/checkIgnoredFiles.js 
+	testResult=$?
+	if [ $testResult -ne 0 ]; then
+		exit $testResult
 	fi
 fi
 
@@ -219,15 +209,13 @@ fi
 # Spellchecking
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ]; then
-	if [ "$IS_LINUX" == "1" ]; then
-		echo "Step: Spellchecking..."
+if [ "$IS_LINUX" == "1" ]; then
+	echo "Step: Spellchecking..."
 
-		yarn spellcheck --all
-		testResult=$?
-		if [ $testResult -ne 0 ]; then
-			exit $testResult
-		fi
+	yarn spellcheck --all
+	testResult=$?
+	if [ $testResult -ne 0 ]; then
+		exit $testResult
 	fi
 fi
 

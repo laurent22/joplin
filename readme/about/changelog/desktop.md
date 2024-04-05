@@ -1,5 +1,40 @@
 # Joplin Desktop Changelog
 
+## [v3.0.2](https://github.com/laurent22/joplin/releases/tag/v3.0.2) (Pre-release) - 2024-03-21T18:18:49Z
+
+- New: Add support for multiple columns note list ([#9924](https://github.com/laurent22/joplin/issues/9924))
+- New: Api: Add capability of limiting downloads ([#9788](https://github.com/laurent22/joplin/issues/9788) by [@pedr](https://github.com/pedr))
+- New: Add trash folder ([#9671](https://github.com/laurent22/joplin/issues/9671)) ([#483](https://github.com/laurent22/joplin/issues/483))
+- Improved: Allow 'All Notes' to have 'Toggle own sort order' ([#10021](https://github.com/laurent22/joplin/issues/10021)) ([#9984](https://github.com/laurent22/joplin/issues/9984) by [@HahaBill](https://github.com/HahaBill))
+- Improved: Beta editor: Fix search results not highlighted ([#9928](https://github.com/laurent22/joplin/issues/9928)) ([#9927](https://github.com/laurent22/joplin/issues/9927) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Change Joplin Cloud login process to allow MFA via browser ([#9445](https://github.com/laurent22/joplin/issues/9445) by [@pedr](https://github.com/pedr))
+- Improved: Configure RTE to handle the first table row as header ([#10059](https://github.com/laurent22/joplin/issues/10059) by [@Marph](https://github.com/Marph))
+- Improved: Fix Vim keymap error with beta editor ([#10049](https://github.com/laurent22/joplin/issues/10049)) ([#9981](https://github.com/laurent22/joplin/issues/9981) by [@RadCod3](https://github.com/RadCod3))
+- Improved: Fix conflicts notebook doesn't work with the trash feature ([#10104](https://github.com/laurent22/joplin/issues/10104)) ([#10073](https://github.com/laurent22/joplin/issues/10073) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Fix hiding the note preview pane is very slow for large notes ([#10006](https://github.com/laurent22/joplin/issues/10006)) ([#9890](https://github.com/laurent22/joplin/issues/9890) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Fixed text wrapping in Spellcheck button ([#10005](https://github.com/laurent22/joplin/issues/10005)) ([#9998](https://github.com/laurent22/joplin/issues/9998) by [@RadCod3](https://github.com/RadCod3))
+- Improved: Improve beta editor support for the Rich Markdown plugin ([#9935](https://github.com/laurent22/joplin/issues/9935) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improve support for plugins in the Rich Text Editor (implement `webviewApi.postMesage`) ([#10158](https://github.com/laurent22/joplin/issues/10158)) ([#8931](https://github.com/laurent22/joplin/issues/8931) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Link "browse all plugins" to joplinapp.org/plugins ([#10113](https://github.com/laurent22/joplin/issues/10113) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Log user actions (deletions) ([#9585](https://github.com/laurent22/joplin/issues/9585)) ([#9465](https://github.com/laurent22/joplin/issues/9465) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Prevent race condition when download limit is reached ([#10124](https://github.com/laurent22/joplin/issues/10124) by [@pedr](https://github.com/pedr))
+- Improved: Support Ctrl+Enter keyboard shortcut (Cmd+Enter on MacOS) ([#10003](https://github.com/laurent22/joplin/issues/10003)) ([#9980](https://github.com/laurent22/joplin/issues/9980) by [@cagnusmarlsen](https://github.com/cagnusmarlsen))
+- Improved: Upgrade CodeMirror 6 packages ([#10032](https://github.com/laurent22/joplin/issues/10032)) ([#10031](https://github.com/laurent22/joplin/issues/10031) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Upgrade to Electron 29 ([#10110](https://github.com/laurent22/joplin/issues/10110) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Beta editor plugins: Fix opening and closing settings can break some plugins with legacy code ([#10024](https://github.com/laurent22/joplin/issues/10024)) ([#10023](https://github.com/laurent22/joplin/issues/10023) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Beta markdown editor: Support overriding built-in keyboard shortcuts ([#10022](https://github.com/laurent22/joplin/issues/10022)) ([#10020](https://github.com/laurent22/joplin/issues/10020) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Command palette not showing note title ([#9961](https://github.com/laurent22/joplin/issues/9961)) ([#9919](https://github.com/laurent22/joplin/issues/9919) by [@pedr](https://github.com/pedr))
+- Fixed: Creating a profile changes the language of Joplin ([#10038](https://github.com/laurent22/joplin/issues/10038)) ([#9960](https://github.com/laurent22/joplin/issues/9960) by [@cagnusmarlsen](https://github.com/cagnusmarlsen))
+- Fixed: Filter Sync Target Info Logs ([#10014](https://github.com/laurent22/joplin/issues/10014)) ([#9985](https://github.com/laurent22/joplin/issues/9985) by Sagnik Mandal)
+- Fixed: Fix "New note" button rendering when startup with Trash can selected. ([#10076](https://github.com/laurent22/joplin/issues/10076)) ([#10060](https://github.com/laurent22/joplin/issues/10060) by [@khuongduy354](https://github.com/khuongduy354))
+- Fixed: Fix text not shown in plugin message boxes ([#10084](https://github.com/laurent22/joplin/issues/10084)) ([#10082](https://github.com/laurent22/joplin/issues/10082) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fixed Toggle Comment & Delete/Duplicate/Sort Line Options in Beta Editor ([#10016](https://github.com/laurent22/joplin/issues/10016)) ([#10007](https://github.com/laurent22/joplin/issues/10007) by Sagnik Mandal)
+- Fixed: Fixed sizing of new note buttons ([9acbac6](https://github.com/laurent22/joplin/commit/9acbac6))
+- Fixed: Improve visibility of selected note in OLED dark theme ([#10026](https://github.com/laurent22/joplin/issues/10026)) ([#9453](https://github.com/laurent22/joplin/issues/9453) by [@Mr-Kanister](https://github.com/Mr-Kanister))
+- Fixed: Preserve indentation from plain text when pasting on Rich Text Editor ([#9828](https://github.com/laurent22/joplin/issues/9828)) ([#9264](https://github.com/laurent22/joplin/issues/9264) by [@pedr](https://github.com/pedr))
+- Fixed: Show focus indicator when navigating with keyboard ([#9989](https://github.com/laurent22/joplin/issues/9989)) ([#9982](https://github.com/laurent22/joplin/issues/9982) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Special characters in notebooks and tags are not sorted alphabetically ([#10085](https://github.com/laurent22/joplin/issues/10085)) ([#10077](https://github.com/laurent22/joplin/issues/10077) by [@cagnusmarlsen](https://github.com/cagnusmarlsen))
+
 ## [v2.14.20](https://github.com/laurent22/joplin/releases/tag/v2.14.20) - 2024-03-18T17:05:17Z
 
 - Fixed: Fix OCR not working for certain languages ([#10097](https://github.com/laurent22/joplin/issues/10097))

@@ -13,9 +13,11 @@ import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import ResourceService from '../services/ResourceService';
 import { LoadOptions } from './utils/types';
 import ActionLogger from '../utils/ActionLogger';
+
 import { getTrashFolder } from '../services/trash';
 import getConflictFolderId from './utils/getConflictFolderId';
 import getTrashFolderId from '../services/trash/getTrashFolderId';
+import { getCollator } from './utils/getCollator';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 const logger = Logger.create('models/Folder');
@@ -179,6 +181,7 @@ export default class Folder extends BaseItem {
 			user_updated_time: now,
 			share_id: '',
 			is_shared: 0,
+			deleted_time: 0,
 		};
 	}
 
@@ -298,8 +301,18 @@ export default class Folder extends BaseItem {
 		return output;
 	}
 
+	public static handleTitleNaturalSorting(items: FolderEntity[], options: any) {
+		if (options.order?.length > 0 && options.order[0].by === 'title') {
+			const collator = getCollator();
+			items.sort((a, b) => ((options.order[0].dir === 'ASC') ? 1 : -1) * collator.compare(a.title, b.title));
+		}
+	}
+
 	public static async all(options: FolderLoadOptions = null) {
 		let output: FolderEntity[] = await super.all(options);
+		if (options) {
+			this.handleTitleNaturalSorting(output, options);
+		}
 
 		if (options && options.includeDeleted === false) {
 			output = output.filter(f => !f.deleted_time);
@@ -768,9 +781,10 @@ export default class Folder extends BaseItem {
 		const output = folders ? folders : await this.allAsTree();
 
 		const sortFoldersAlphabetically = (folders: FolderEntityWithChildren[]) => {
+			const collator = getCollator();
 			folders.sort((a: FolderEntityWithChildren, b: FolderEntityWithChildren) => {
 				if (a.parent_id === b.parent_id) {
-					return a.title.localeCompare(b.title, undefined, { sensitivity: 'accent' });
+					return collator.compare(a.title, b.title);
 				}
 				return 0;
 			});
@@ -936,10 +950,15 @@ export default class Folder extends BaseItem {
 		return !!folders.find(f => !!f.icon);
 	}
 
+	public static getRealFolders(folders: FolderEntity[]) {
+		// returns all folders other than trash folder and deleted folders
+		const trashFolderId = getTrashFolderId();
+		return folders.filter((folder) => folder.id !== trashFolderId && folder.deleted_time === 0);
+	}
+
 	public static atLeastOneRealFolderExists(folders: FolderEntity[]) {
 		// returns true if at least one folder exists other than trash folder and deleted folders
-		const trashFolderId = getTrashFolderId();
-		return folders.filter((folder) => folder.id !== trashFolderId && folder.deleted_time === 0).length > 0;
+		return this.getRealFolders(folders).length > 0;
 	}
 
 }
