@@ -6,6 +6,7 @@ import { expectThrow } from './testing/testUtils';
 describe('routeUtils', () => {
 
 	it('should parse a route path', async () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const testCases: any[] = [
 			['123456/content', '123456', 'content', ItemAddressingType.Id],
 			['123456', '123456', '', ItemAddressingType.Id],
@@ -28,6 +29,7 @@ describe('routeUtils', () => {
 	});
 
 	it('should find a matching route', async () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const testCases: any[] = [
 			['/admin/organizations', {
 				route: 1,
@@ -66,6 +68,7 @@ describe('routeUtils', () => {
 			}],
 		];
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const routes: Record<string, any> = {
 			'admin/organizations': 1,
 			'api/users': 2,
@@ -83,6 +86,7 @@ describe('routeUtils', () => {
 	});
 
 	it('should split an item path', async () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const testCases: any[] = [
 			['root:/Documents/MyFile.md:', ['root', 'Documents', 'MyFile.md']],
 			['documents:/CV.doc:', ['documents', 'CV.doc']],

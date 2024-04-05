@@ -322,9 +322,7 @@ packages/app-desktop/gui/NoteEditor/utils/useNoteSearchBar.js
 packages/app-desktop/gui/NoteEditor/utils/usePluginServiceRegistration.js
 packages/app-desktop/gui/NoteEditor/utils/useSearchMarkers.js
 packages/app-desktop/gui/NoteEditor/utils/useWindowCommandHandler.js
-packages/app-desktop/gui/NoteList/NoteList.js
 packages/app-desktop/gui/NoteList/NoteList2.js
-packages/app-desktop/gui/NoteList/NoteListSource.js
 packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js
 packages/app-desktop/gui/NoteList/commands/index.js
 packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.js
@@ -350,7 +348,6 @@ packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.js
 packages/app-desktop/gui/NoteListHeader/utils/useContextMenu.js
 packages/app-desktop/gui/NoteListHeader/utils/validateColumns.test.js
 packages/app-desktop/gui/NoteListHeader/utils/validateColumns.js
-packages/app-desktop/gui/NoteListItem.js
 packages/app-desktop/gui/NoteListItem/NoteListItem.js
 packages/app-desktop/gui/NoteListItem/utils/getNoteTitleHtml.js
 packages/app-desktop/gui/NoteListItem/utils/prepareViewProps.test.js
@@ -477,6 +474,8 @@ packages/app-desktop/utils/7zip/pathToBundled7Zip.js
 packages/app-desktop/utils/checkForUpdatesUtils.test.js
 packages/app-desktop/utils/checkForUpdatesUtils.js
 packages/app-desktop/utils/checkForUpdatesUtilsTestData.js
+packages/app-desktop/utils/isSafeToOpen.test.js
+packages/app-desktop/utils/isSafeToOpen.js
 packages/app-desktop/utils/markupLanguageUtils.js
 packages/app-desktop/utils/restartInSafeModeFromMain.test.js
 packages/app-desktop/utils/restartInSafeModeFromMain.js
@@ -579,6 +578,7 @@ packages/app-mobile/components/screens/ConfigScreen/SettingsButton.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsToggle.js
 packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.test.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginToggle.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginUploadButton.js
@@ -586,7 +586,6 @@ packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.test.j
 packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/testUtils/newRepoApi.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/testUtils/pluginServiceSetup.js
-packages/app-mobile/components/screens/ConfigScreen/plugins/utils/isPluginInstallingAllowed.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/utils/openWebsiteForPlugin.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/utils/useRepoApi.js
 packages/app-mobile/components/screens/ConfigScreen/types.js
@@ -608,6 +607,8 @@ packages/app-mobile/plugins/PluginRunner/backgroundPage/initializeDialogWebView.
 packages/app-mobile/plugins/PluginRunner/backgroundPage/initializePluginBackgroundIframe.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/pluginRunnerBackgroundPage.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/startStopPlugin.js
+packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/getFormData.test.js
+packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/getFormData.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/makeSandboxedIframe.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/reportUnhandledErrors.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/wrapConsoleLog.js
@@ -1025,6 +1026,10 @@ packages/lib/services/plugins/utils/executeSandboxCall.js
 packages/lib/services/plugins/utils/getPluginNamespacedSettingKey.js
 packages/lib/services/plugins/utils/getPluginSettingKeyPrefix.js
 packages/lib/services/plugins/utils/getPluginSettingValue.js
+packages/lib/services/plugins/utils/isCompatible/index.test.js
+packages/lib/services/plugins/utils/isCompatible/index.js
+packages/lib/services/plugins/utils/isCompatible/minVersionForPlatform.js
+packages/lib/services/plugins/utils/isCompatible/types.js
 packages/lib/services/plugins/utils/loadContentScripts.js
 packages/lib/services/plugins/utils/makeListener.js
 packages/lib/services/plugins/utils/manifestFromObject.js
@@ -1032,6 +1037,8 @@ packages/lib/services/plugins/utils/mapEventHandlersToIds.js
 packages/lib/services/plugins/utils/types.js
 packages/lib/services/plugins/utils/validatePluginId.test.js
 packages/lib/services/plugins/utils/validatePluginId.js
+packages/lib/services/plugins/utils/validatePluginPlatforms.test.js
+packages/lib/services/plugins/utils/validatePluginPlatforms.js
 packages/lib/services/plugins/utils/validatePluginVersion.test.js
 packages/lib/services/plugins/utils/validatePluginVersion.js
 packages/lib/services/profileConfig/index.test.js
@@ -1122,7 +1129,6 @@ packages/lib/services/trash/getTrashFolderId.js
 packages/lib/services/trash/index.test.js
 packages/lib/services/trash/index.js
 packages/lib/services/trash/isTrashableItem.js
-packages/lib/services/trash/isTrashableNoteOrFolder.js
 packages/lib/services/trash/permanentlyDeleteOldItems.test.js
 packages/lib/services/trash/permanentlyDeleteOldItems.js
 packages/lib/services/trash/restoreItems.test.js
@@ -1150,6 +1156,7 @@ packages/lib/utils/ActionLogger.test.js
 packages/lib/utils/ActionLogger.js
 packages/lib/utils/chunkGenerator.js
 packages/lib/utils/credentialFiles.js
+packages/lib/utils/focusHandler.js
 packages/lib/utils/ipc/RemoteMessenger.test.js
 packages/lib/utils/ipc/RemoteMessenger.js
 packages/lib/utils/ipc/TestMessenger.js

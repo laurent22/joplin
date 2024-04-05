@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function caseInsensitiveFindManifest(manifests: any, manifestId: string): any {
 	for (const id of Object.keys(manifests)) {
 		if (id.toLowerCase() === manifestId.toLowerCase()) return manifests[id];
@@ -5,6 +6,7 @@ function caseInsensitiveFindManifest(manifests: any, manifestId: string): any {
 	return null;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function(existingManifests: any, manifest: any) {
 	// If there's already a plugin with this ID published under a different
 	// package name, we skip it. Otherwise it would allow anyone to overwrite

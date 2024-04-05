@@ -56,5 +56,4 @@ describe('renderViewProps', () => {
 			},
 		});
 	});
-
 });

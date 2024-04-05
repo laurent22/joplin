@@ -91,6 +91,7 @@ export default class PerFolderSortOrderService {
 	}
 
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static onFolderSelectionMayChange(cause: string, event: any) {
 		if (cause !== 'notesParentType' && cause !== 'selectedFolderId') return;
 		this.folderState[cause] = event.value;

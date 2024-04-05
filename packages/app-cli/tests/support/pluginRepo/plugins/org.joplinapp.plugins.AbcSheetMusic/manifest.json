@@ -1,0 +1,37 @@
+{
+	"manifest_version": 1,
+	"id": "org.joplinapp.plugins.AbcSheetMusic",
+	"app_min_version": "2.13.5",
+	"version": "1.0.5",
+	"name": "ABC Sheet Music Plugin",
+	"description": "Turns ABC text notation into sheet music",
+	"author": "Laurent Cozic",
+	"homepage_url": "https://github.com/joplin/plugin-abc-sheet-music",
+	"repository_url": "https://github.com/joplin/plugin-abc-sheet-music",
+	"category": "viewer",
+	"keywords": [
+		"sheet music",
+		"abc",
+		"notation"
+	],
+	"screenshots": [
+		{
+			"src": "images/PeacherineRag.png"
+		},
+		{
+			"src": "images/Tablature.png"
+		}
+	],
+	"icons": {
+		"16": "images/icon-16.png",
+		"32": "images/icon-32.png",
+		"48": "images/icon-48.png",
+		"128": "images/icon-128.png"
+	},
+	"promo_tile": {
+		"src": "images/promo_tile.png"
+	},
+	"_publish_hash": "sha256:94a13d4833affbc949ba60174ab77419aa02b0777563a796f7480206b73a864b",
+	"_publish_commit": "master:2b128c7a21f010e9937a112e0cf1fb5c03f9ca75",
+	"_npm_package_name": "joplin-plugin-abc-sheet-music"
+}

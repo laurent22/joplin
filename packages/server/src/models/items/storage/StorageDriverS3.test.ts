@@ -9,6 +9,7 @@ import { shouldDeleteContent, shouldNotCreateItemIfContentNotSaved, shouldNotUpd
 let s3config_: StorageDriverConfig;
 const s = readCredentialFileSync('server-s3-test-units.json', '');
 if (s) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const parse: any = JSON.parse(s);
 	if ('enabled' in parse && parse.enabled === false) {
 		// disable S3 tests

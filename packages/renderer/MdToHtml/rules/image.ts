@@ -3,9 +3,11 @@ import { attributesHtml } from '../../htmlUtils';
 import * as utils from '../../utils';
 import createEventHandlingAttrs from '../createEventHandlingAttrs';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 	const defaultRender = markdownIt.renderer.rules.image;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	markdownIt.renderer.rules.image = (tokens: any[], idx: number, options: any, env: any, self: any) => {
 		const Resource = ruleOptions.ResourceModel;
 

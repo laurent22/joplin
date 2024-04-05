@@ -241,6 +241,7 @@ export default function(props: Props) {
 	}, [props.dispatch]);
 
 	function renderContent() {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const boxes: any[] = [];
 
 		for (const name of syncTargetNames) {

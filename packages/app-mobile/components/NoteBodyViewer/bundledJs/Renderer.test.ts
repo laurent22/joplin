@@ -109,6 +109,7 @@ describe('Renderer', () => {
 		const renderer = makeRenderer({});
 
 		const requestPluginSetting = jest.fn();
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const rerender = (pluginSettings: Record<string, any>) => {
 			return renderer.rerender(
 				{ language: MarkupLanguage.Markdown, markup: '```\ntest\n```' },

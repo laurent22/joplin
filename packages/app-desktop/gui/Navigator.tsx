@@ -5,6 +5,7 @@ import { AppState } from '../app.reducer';
 const bridge = require('@electron/remote').require('./bridge').default;
 
 interface Props {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	route: any;
 }
 

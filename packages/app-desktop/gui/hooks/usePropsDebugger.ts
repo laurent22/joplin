@@ -4,7 +4,9 @@
 
 import useEffectDebugger from './useEffectDebugger';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function usePropsDebugger(props: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const dependencies: any[] = [];
 	const dependencyNames: string[] = [];
 

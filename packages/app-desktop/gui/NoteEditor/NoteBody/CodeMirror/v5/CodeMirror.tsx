@@ -32,6 +32,7 @@ import useStyles from '../utils/useStyles';
 import useContextMenu from '../utils/useContextMenu';
 import useWebviewIpcMessage from '../utils/useWebviewIpcMessage';
 import useEditorSearchHandler from '../utils/useEditorSearchHandler';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 function markupRenderOptions(override: MarkupToHtmlOptions = null): MarkupToHtmlOptions {
 	return { ...override };
@@ -142,7 +143,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 					}
 				} else if (cmd.name === 'editor.focus') {
 					if (props.visiblePanes.indexOf('editor') >= 0) {
-						editorRef.current.focus();
+						focus('v5/CodeMirror::editor.focus', editorRef.current);
 					} else {
 						// If we just call focus() then the iframe is focused,
 						// but not its content, such that scrolling up / down
@@ -162,6 +163,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 						return selections.length ? selections[0] : '';
 					};
 
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const commands: any = {
 						selectedText: () => {
 							return selectedText();
@@ -169,6 +171,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 						selectedHtml: () => {
 							return selectedText();
 						},
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 						replaceSelection: (value: any) => {
 							return editorRef.current.replaceSelection(value);
 						},
@@ -188,7 +191,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 						textItalic: () => wrapSelectionWithStrings('*', '*', _('emphasised text')),
 						textLink: async () => {
 							const url = await dialogs.prompt(_('Insert Hyperlink'));
-							editorRef.current.focus();
+							focus('v5/CodeMirror::textLink', editorRef.current);
 							if (url) wrapSelectionWithStrings('[', `](${url})`);
 						},
 						textCode: () => {
@@ -208,6 +211,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 								}
 							}
 						},
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 						insertText: (value: any) => editorRef.current.insertAtCursor(value),
 						attachFile: async () => {
 							const cursor = editorRef.current.getCursor();
@@ -256,6 +260,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.content, props.visiblePanes, props.contentMarkupLanguage, addListItem, wrapSelectionWithStrings, setEditorPercentScroll, setViewerPercentScroll, resetScroll]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onEditorPaste = useCallback(async (event: any = null) => {
 		const resourceMds = await getResourcesFromPasteEvent(event);
 		if (!resourceMds.length) return;
@@ -323,8 +328,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		}
 	}, [editorPasteText, onEditorPaste]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const loadScript = async (script: any) => {
 		return new Promise((resolve) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			let element: any = document.createElement('script');
 			if (script.src.indexOf('.css') >= 0) {
 				element = document.createElement('link');
@@ -648,6 +655,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	useEffect(() => {
 		if (!webviewReady) return;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const options: any = {
 			pluginAssets: renderedBody.pluginAssets,
 			downloadResources: Setting.value('sync.resourceDownloadMode'),
@@ -698,30 +706,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		}
 		return output;
 	}, [styles.cellViewer, props.visiblePanes]);
-
-	// Disable this effect to fix this:
-	//
-	// https://github.com/laurent22/joplin/issues/6514 It doesn't seem essential
-	// to automatically focus the editor when the layout changes. The workaround
-	// is to toggle the layout Cmd+L, then manually focus the editor Cmd+Shift+B.
-	//
-	// On the other hand, if we automatically focus the editor, and the user
-	// does not want this, there's no workaround, so it's better to have this
-	// disabled.
-
-	// const editorPaneVisible = props.visiblePanes.indexOf('editor') >= 0;
-
-	// useEffect(() => {
-	// 	if (!editorRef.current) return;
-
-	// 	// Anytime the user toggles the visible panes AND the editor is visible as a result
-	// 	// we should focus the editor
-	// 	// The intuition is that a panel toggle (with editor in view) is the equivalent of
-	// 	// an editor interaction so users should expect the editor to be focused
-	// 	if (editorPaneVisible) {
-	// 		editorRef.current.focus();
-	// 	}
-	// }, [editorPaneVisible]);
 
 	useEffect(() => {
 		if (!editorRef.current) return;

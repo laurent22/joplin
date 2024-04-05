@@ -5,6 +5,7 @@ import bridge from '../../../services/bridge';
 import StyledLink from '../../style/StyledLink';
 
 interface Props {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	theme: any;
 	text: string;
 }

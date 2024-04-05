@@ -308,6 +308,7 @@ describe('UserModel', () => {
 		const { user: user3 } = await createUserAndSession(3);
 		const { user: user4 } = await createUserAndSession(4);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const syncInfo1: any = {
 			'version': 3,
 			'e2ee': {
@@ -326,9 +327,11 @@ describe('UserModel', () => {
 			},
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const syncInfo2: any = JSON.parse(JSON.stringify(syncInfo1));
 		syncInfo2.ppk.value.publicKey = 'PUBLIC_KEY_2';
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const syncInfo3: any = JSON.parse(JSON.stringify(syncInfo1));
 		delete syncInfo3.ppk;
 

@@ -5,11 +5,13 @@ const PushNotificationIOS = require('@react-native-community/push-notification-i
 export default class AlarmServiceDriver {
 
 	private hasPermission_: boolean = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private inAppNotificationHandler_: any = null;
 	private logger_: Logger;
 
 	public constructor(logger: Logger) {
 		this.logger_ = logger;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		PushNotificationIOS.addEventListener('localNotification', (instance: any) => {
 			if (!this.inAppNotificationHandler_) return;
 
@@ -31,16 +33,19 @@ export default class AlarmServiceDriver {
 		throw new Error('Available only for non-persistent alarms');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public setInAppNotificationHandler(v: any) {
 		this.inAppNotificationHandler_ = v;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async hasPermissions(perm: any = null) {
 		if (perm !== null) return perm.alert && perm.badge && perm.sound;
 
 		if (this.hasPermission_ !== null) return this.hasPermission_;
 
 		return new Promise((resolve) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			PushNotificationIOS.checkPermissions(async (perm: any) => {
 				const ok = await this.hasPermissions(perm);
 				this.hasPermission_ = ok;
@@ -50,6 +55,7 @@ export default class AlarmServiceDriver {
 	}
 
 	public async requestPermissions() {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const options: any = {
 			alert: 1,
 			badge: 1,
@@ -71,6 +77,7 @@ export default class AlarmServiceDriver {
 		}
 
 		// ID must be a string and userInfo must be supplied otherwise cancel won't work
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const iosNotification: any = {
 			id: `${notification.id}`,
 			alertTitle: notification.title,

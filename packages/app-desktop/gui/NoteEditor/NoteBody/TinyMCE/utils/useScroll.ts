@@ -2,6 +2,7 @@ import { useEffect, useCallback, useRef } from 'react';
 import shim from '@joplin/lib/shim';
 
 interface HookDependencies {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	editor: any;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onScroll: Function;
@@ -43,6 +44,7 @@ export default function useScroll(dependencies: HookDependencies) {
 		editor.getWin().scrollTo(0, maxScrollTop() * percent);
 	}, [editor, maxScrollTop]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const scheduleOnScroll = useCallback((event: any) => {
 		if (scrollTimeoutId_.current) {
 			shim.clearTimeout(scrollTimeoutId_.current);

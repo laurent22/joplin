@@ -217,6 +217,7 @@ describe('InteropService_Importer_Raw', () => {
 		await InteropService.instance().import(importOptions);
 		await InteropService.instance().import(importOptions);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const tree: any = await Folder.allAsTree(null, { includeNotes: true });
 
 		expect(tree[0].title).toBe('import test');

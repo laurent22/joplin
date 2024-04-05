@@ -15,6 +15,7 @@ class Command extends BaseCommand {
 		return _('Marks a to-do as done.');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async handleAction(commandInstance: BaseCommand, args: any, isCompleted: boolean) {
 		const note: NoteEntity = await app().loadItem(BaseModel.TYPE_NOTE, args.note);
 		commandInstance.encryptionCheck(note);
@@ -31,6 +32,7 @@ class Command extends BaseCommand {
 		});
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public override async action(args: any) {
 		await Command.handleAction(this, args, true);
 	}

@@ -115,6 +115,7 @@ const useOnKeyDown = (
 			event.preventDefault();
 
 			const selectedNotes = BaseModel.modelsByIds(notes, noteIds);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const todos = selectedNotes.filter((n: any) => !!n.is_todo);
 			if (!todos.length) return;
 

@@ -17,10 +17,12 @@ import useContentScripts from './hooks/useContentScripts';
 
 interface Props {
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
 	noteBody: string;
 	noteMarkupLanguage: number;
 	highlightedKeywords: string[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	noteResources: any;
 	paddingBottom: number;
 	initialScroll: number|null;
@@ -99,6 +101,7 @@ export default function NoteBodyViewer(props: Props) {
 		if (props.onLoadEnd) props.onLoadEnd();
 	}, [props.onLoadEnd]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const BackButtonDialogBox_ = BackButtonDialogBox as any;
 
 	const { html, injectedJs } = useSource(tempDir, props.themeId);

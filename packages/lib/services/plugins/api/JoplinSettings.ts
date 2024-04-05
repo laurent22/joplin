@@ -148,6 +148,7 @@ export default class JoplinSettings {
 	/**
 	 * Gets a setting value (only applies to setting you registered from your plugin)
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async value(key: string): Promise<any> {
 		return Setting.value(getPluginNamespacedSettingKey(this.plugin_.id, key));
 	}
@@ -155,6 +156,7 @@ export default class JoplinSettings {
 	/**
 	 * Sets a setting value (only applies to setting you registered from your plugin)
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async setValue(key: string, value: any) {
 		return Setting.setValue(getPluginNamespacedSettingKey(this.plugin_.id, key), value);
 	}
@@ -166,6 +168,7 @@ export default class JoplinSettings {
 	 *
 	 * https://github.com/laurent22/joplin/blob/dev/packages/lib/models/Setting.ts#L142
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async globalValue(key: string): Promise<any> {
 		return Setting.value(key);
 	}

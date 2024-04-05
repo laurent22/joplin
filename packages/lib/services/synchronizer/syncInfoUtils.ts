@@ -51,6 +51,7 @@ export async function migrateLocalSyncInfo(db: JoplinDatabase) {
 
 	const masterKeys = await db.selectAll('SELECT * FROM master_keys');
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const masterKeyMap: Record<string, any> = {};
 	for (const mk of masterKeys) masterKeyMap[mk.id] = mk;
 
@@ -85,6 +86,7 @@ export async function fetchSyncInfo(api: FileApi): Promise<SyncInfo> {
 	const syncTargetInfoText = await api.get('info.json');
 
 	// Returns version 0 if the sync target is empty
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	let output: any = { version: 0 };
 
 	if (syncTargetInfoText) {
@@ -229,6 +231,7 @@ export class SyncInfo {
 		if (serialized) this.load(serialized);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public toObject(): any {
 		return {
 			version: this.version,
@@ -265,6 +268,7 @@ export class SyncInfo {
 	}
 
 	public load(serialized: string) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const s: any = JSON.parse(serialized);
 		this.version = 'version' in s ? s.version : 0;
 		this.e2ee_ = 'e2ee' in s ? s.e2ee : { value: false, updatedTime: 0 };
@@ -283,8 +287,10 @@ export class SyncInfo {
 	}
 
 	public setWithTimestamp(fromSyncInfo: SyncInfo, propName: string) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		if (!(propName in (this as any))) throw new Error(`Invalid prop name: ${propName}`);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		(this as any)[propName] = (fromSyncInfo as any)[propName];
 		this.setKeyTimestamp(propName, fromSyncInfo.keyTimestamp(propName));
 	}
@@ -348,12 +354,16 @@ export class SyncInfo {
 	}
 
 	public keyTimestamp(name: string): number {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		if (!(`${name}_` in (this as any))) throw new Error(`Invalid name: ${name}`);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return (this as any)[`${name}_`].updatedTime;
 	}
 
 	public setKeyTimestamp(name: string, timestamp: number) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		if (!(`${name}_` in (this as any))) throw new Error(`Invalid name: ${name}`);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		(this as any)[`${name}_`].updatedTime = timestamp;
 	}
 
