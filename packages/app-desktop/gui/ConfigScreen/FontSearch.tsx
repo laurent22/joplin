@@ -28,10 +28,7 @@ const FontSearch = (props: Props) => {
 		updateSettingValue(key, event.target.value);
 	}, [key, updateSettingValue]);
 
-	const onFocusHandle = useCallback((event: any) => {
-		setInputText(event.target.value); // To handle the case when the value is already set
-		setShowList(true);
-	}, []);
+	const onFocusHandle = useCallback(() => setShowList(true), []);
 
 	const onBlurHandle = useCallback(() =>
 		setTimeout(() => setShowList(false), 150) // Delay the hiding of the list to allow the click event to fire
