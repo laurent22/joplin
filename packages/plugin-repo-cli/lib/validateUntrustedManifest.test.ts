@@ -57,6 +57,28 @@ describe('validateUntrustedManifest', () => {
 		).not.toThrow();
 	});
 
+	test('should only allow valid plugin platforms', () => {
+		const badManifest = {
+			id: 'com.example.a-plugin-for-a-fake-platform',
+			_npm_package_name: 'joplin-plugin-plugin-for-an-invalid-version',
+			version: '1.2.3',
+			platforms: [3, 4, 5],
+		};
+
+		expect(
+			() => validateUntrustedManifest(badManifest, originalManifests),
+		).toThrow();
+
+		const goodManifest = {
+			...badManifest,
+			platforms: ['mobile', 'desktop'],
+		};
+
+		expect(
+			() => validateUntrustedManifest(goodManifest, originalManifests),
+		).not.toThrow();
+	});
+
 	test('should not allow plugin authors to mark their own plugins as recommended', () => {
 		const newManifest1 = {
 			id: 'joplin-plugin.this.is.another.test',

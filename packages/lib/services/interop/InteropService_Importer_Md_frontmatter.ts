@@ -33,6 +33,7 @@ function normalizeYamlWhitespace(yaml: string[]): string[] {
 // references:
 // https://pandoc.org/MANUAL.html#extension-yaml_metadata_block
 // https://github.com/hao203/rmarkdown-YAML
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function extractAuthor(author: any): string {
 	if (!author) return '';
 
@@ -83,7 +84,9 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 		return { header, body };
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private toLowerCase(obj: Record<string, any>): Record<string, any> {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const newObj: Record<string, any> = {};
 		for (const key of Object.keys(obj)) {
 			newObj[key.toLowerCase()] = obj[key];

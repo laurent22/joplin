@@ -89,6 +89,7 @@ describe('RemoteMessenger', () => {
 
 	it('should preserve structure of transferred objects', async () => {
 		const transferObjectApi = {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			transfer: async (o: any) => o,
 		};
 		type ApiType = typeof transferObjectApi;
@@ -97,6 +98,7 @@ describe('RemoteMessenger', () => {
 		const messenger2 = new TestMessenger<ApiType, ApiType>('test', transferObjectApi);
 		messenger1.connectTo(messenger2);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const testObjects: any[] = [
 			{ foo: { bar: undefined, baz: null } },
 			{ foo: { bar: [1, 2, 3], baz: 'test' } },

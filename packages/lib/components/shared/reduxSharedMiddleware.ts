@@ -11,8 +11,10 @@ import shim from '../../shim';
 import { Dispatch } from 'redux';
 import { State } from '../../reducer';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let sortNoteListTimeout: any = null;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default async (store: any, _next: any, action: any, dispatch: Dispatch) => {
 	const newState: State = store.getState();
 

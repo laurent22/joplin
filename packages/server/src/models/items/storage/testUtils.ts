@@ -283,6 +283,7 @@ export function shouldThrowNotFoundIfNotExist(driverConfig: StorageDriverConfig)
 	test('should throw not found if item does not exist', async () => {
 		const driver = await loadStorageDriver(driverConfig, db());
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let error: any = null;
 		try {
 			await driver.read('doesntexist', { models: models() });

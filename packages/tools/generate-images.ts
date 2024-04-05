@@ -582,6 +582,7 @@ const saveResults = async (filePath: string, results: Results) => {
 };
 
 const makeOperationKey = async (source: Source, sourcePath: string, operation: Operation): Promise<string> => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any[] = [];
 	output.push(source.id);
 	output.push(await md5File(sourcePath));

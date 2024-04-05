@@ -70,6 +70,8 @@ export enum EditorCommandType {
 	SelectedText = 'selectedText',
 	InsertText = 'insertText',
 	ReplaceSelection = 'replaceSelection',
+
+	SetText = 'setText',
 }
 
 // Because the editor package can run in a WebView, plugin content scripts
@@ -79,11 +81,13 @@ export interface ContentScriptData {
 	contentScriptId: string;
 	contentScriptJs: ()=> Promise<string>;
 	loadCssAsset: (name: string)=> Promise<string>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	postMessageHandler: (message: any)=> any;
 }
 
 export interface EditorControl {
 	supportsCommand(name: EditorCommandType|string): boolean|Promise<boolean>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	execCommand(name: EditorCommandType|string, ...args: any[]): void|Promise<any>;
 
 	undo(): void;

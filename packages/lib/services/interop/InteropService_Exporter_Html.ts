@@ -24,9 +24,11 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 	private resourceDir_: string;
 	private markupToHtml_: MarkupToHtml;
 	private resources_: ResourceEntity[] = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private style_: any;
 	private packIntoSingleFile_ = false;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async init(path: string, options: any = {}) {
 		this.customCss_ = options.customCss ? options.customCss : '';
 
@@ -86,6 +88,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		return newBody;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async processItem(_itemType: number, item: any) {
 		if ([BaseModel.TYPE_NOTE, BaseModel.TYPE_FOLDER].indexOf(item.type_) < 0) return;
 
@@ -152,6 +155,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async processResource(resource: any, filePath: string) {
 		const destResourcePath = `${this.resourceDir_}/${basename(filePath)}`;
 		await shim.fsDriver().copy(filePath, destResourcePath);

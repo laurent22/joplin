@@ -1,6 +1,7 @@
 import * as fs from 'fs-extra';
 import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from '@joplin/lib/markdownUtils';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default async function(readmePath: string, manifests: any) {
 	let rows: MarkdownTableRow[] = [];
 
@@ -50,6 +51,7 @@ export default async function(readmePath: string, manifests: any) {
 		},
 	];
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	rows.sort((a: any, b: any) => {
 		return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : +1;
 	});

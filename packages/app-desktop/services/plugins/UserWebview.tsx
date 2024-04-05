@@ -13,6 +13,9 @@ import { focus } from '@joplin/lib/utils/focusHandler';
 
 const logger = Logger.create('UserWebview');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+type StyleProps = any;
+
 export interface Props {
 	html: string;
 	scripts: string[];
@@ -23,6 +26,7 @@ export interface Props {
 	minHeight?: number;
 	fitToContent?: boolean;
 	borderBottom?: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	theme?: any;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onSubmit?: Function;
@@ -35,13 +39,15 @@ export interface Props {
 const StyledFrame = styled.iframe<{ fitToContent: boolean; borderBottom: boolean }>`
 	padding: 0;
 	margin: 0;
-	width: ${(props: any) => props.fitToContent ? `${props.width}px` : '100%'};
-	height: ${(props: any) => props.fitToContent ? `${props.height}px` : '100%'};
+	width: ${(props: StyleProps) => props.fitToContent ? `${props.width}px` : '100%'};
+	height: ${(props: StyleProps) => props.fitToContent ? `${props.height}px` : '100%'};
 	border: none;
-	border-bottom: ${(props: any) => props.borderBottom ? `1px solid ${props.theme.dividerColor}` : 'none'};
+	border-bottom: ${(props: StyleProps) => props.borderBottom ? `1px solid ${props.theme.dividerColor}` : 'none'};
 `;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function serializeForm(form: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {};
 	const formData = new FormData(form);
 	for (const key of formData.keys()) {
@@ -50,8 +56,10 @@ function serializeForm(form: any) {
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function serializeForms(document: any) {
 	const forms = document.getElementsByTagName('form');
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {};
 	let untitledIndex = 0;
 
@@ -63,6 +71,7 @@ function serializeForms(document: any) {
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function UserWebview(props: Props, ref: any) {
 	const minWidth = props.minWidth ? props.minWidth : 200;
 	const minHeight = props.minHeight ? props.minHeight : 20;
@@ -81,6 +90,7 @@ function UserWebview(props: Props, ref: any) {
 		return viewRef.current.contentWindow;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	function postMessage(name: string, args: any = null) {
 		const win = frameWindow();
 		if (!win) return;

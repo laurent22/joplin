@@ -3,6 +3,8 @@ import { Icon, Button, Card, Chip } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import { View } from 'react-native';
 import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
+import shim from '@joplin/lib/shim';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
 
 export enum InstallState {
 	NotInstalled,
@@ -35,6 +37,7 @@ interface Props {
 	onShowPluginLog?: PluginCallback;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const PluginIcon = (props: any) => <Icon {...props} source='puzzle'/>;
 
 const PluginBox: React.FC<Props> = props => {
@@ -100,7 +103,7 @@ const PluginBox: React.FC<Props> = props => {
 	};
 
 	const renderRecommendedChip = () => {
-		if (!props.item.manifest._recommended) {
+		if (!props.item.manifest._recommended || !props.isCompatible) {
 			return null;
 		}
 		return <Chip icon='crown' mode='outlined'>{_('Recommended')}</Chip>;
@@ -113,10 +116,26 @@ const PluginBox: React.FC<Props> = props => {
 		return <Chip icon='code-tags-check' mode='outlined'>{_('Built-in')}</Chip>;
 	};
 
+	const renderIncompatibleChip = () => {
+		if (props.isCompatible) return null;
+		return (
+			<Chip
+				icon='alert'
+				mode='outlined'
+				onPress={() => {
+					void shim.showMessageBox(
+						PluginService.instance().describeIncompatibility(props.item.manifest),
+						{ buttons: [_('OK')] },
+					);
+				}}
+			>{_('Incompatible')}</Chip>
+		);
+	};
+
 	const updateStateIsIdle = props.updateState !== UpdateState.Idle;
 
 	return (
-		<Card style={{ margin: 8 }} testID='plugin-card'>
+		<Card style={{ margin: 8, opacity: props.isCompatible ? undefined : 0.75 }} testID='plugin-card'>
 			<Card.Title
 				title={manifest.name}
 				subtitle={manifest.description}
@@ -124,6 +143,7 @@ const PluginBox: React.FC<Props> = props => {
 			/>
 			<Card.Content>
 				<View style={{ flexDirection: 'row' }}>
+					{renderIncompatibleChip()}
 					{renderErrorsChip()}
 					{renderRecommendedChip()}
 					{renderBuiltInChip()}

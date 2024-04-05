@@ -11,6 +11,7 @@ export interface Options {
 	useCustomPdfViewer: boolean;
 	noteId: string;
 	vendorDir: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	theme: any;
 }
 

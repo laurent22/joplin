@@ -23,6 +23,7 @@ describe('shares', () => {
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 		const { user: user3 } = await createUserAndSession(3);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const tree: any = {
 			'000000000000000000000000000000F1': {
 				'00000000000000000000000000000001': null,
@@ -49,6 +50,7 @@ describe('shares', () => {
 		});
 
 		{
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const shares = await getApi<PaginatedResults<any>>(session1.id, 'shares');
 			expect(shares.items.length).toBe(2);
 
@@ -60,6 +62,7 @@ describe('shares', () => {
 			expect(share2).toBeTruthy();
 			expect(share2.type).toBe(ShareType.Note);
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const shareUsers = await getApi<PaginatedResults<any>>(session1.id, `shares/${share1.id}/users`);
 			expect(shareUsers.items.length).toBe(2);
 

@@ -33,8 +33,9 @@ function itemVisible(item: LayoutItem, moveMode: boolean) {
 	return item.visible !== false;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 function renderContainer(item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, resizedItemMaxSize: Size | null, onResizeStart: Function, onResize: Function, onResizeStop: Function, children: any[], isLastChild: boolean, moveMode: boolean): any {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const style: any = {
 		display: itemVisible(item, moveMode) ? 'flex' : 'none',
 		flexDirection: item.direction,
@@ -61,8 +62,11 @@ function renderContainer(item: LayoutItem, parent: LayoutItem | null, sizes: Lay
 				className={className}
 				style={style}
 				size={size}
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				onResizeStart={onResizeStart as any}
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				onResize={onResize as any}
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				onResizeStop={onResizeStop as any}
 				enable={enable}
 				minWidth={'minWidth' in item ? item.minWidth : itemMinWidth}
@@ -85,8 +89,10 @@ function renderContainer(item: LayoutItem, parent: LayoutItem | null, sizes: Lay
 function ResizableLayout(props: Props) {
 	const eventEmitter = useRef(new EventEmitter());
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const [resizedItem, setResizedItem] = useState<any>(null);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	function renderItemWrapper(comp: any, item: LayoutItem, parent: LayoutItem | null, size: Size, moveMode: boolean) {
 		const moveOverlay = moveMode ? (
 			<StyledMoveOverlay>
@@ -109,6 +115,7 @@ function ResizableLayout(props: Props) {
 		);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	function renderLayoutItem(item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, isVisible: boolean, isLastChild: boolean): any {
 		function onResizeStart() {
 			setResizedItem({
@@ -119,10 +126,12 @@ function ResizableLayout(props: Props) {
 			});
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function onResize(_event: any, direction: string, _refToElement: any, delta: any) {
 			const newWidth = Math.max(itemMinWidth, resizedItem.initialWidth + delta.width);
 			const newHeight = Math.max(itemMinHeight, resizedItem.initialHeight + delta.height);
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const newSize: any = {};
 
 			if (item.width) newSize.width = item.width;
@@ -140,6 +149,7 @@ function ResizableLayout(props: Props) {
 			eventEmitter.current.emit('resize');
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function onResizeStop(_event: any, _direction: any, _refToElement: any, delta: any) {
 			onResize(_event, _direction, _refToElement, delta);
 			setResizedItem(null);
@@ -177,6 +187,7 @@ function ResizableLayout(props: Props) {
 	useWindowResizeEvent(eventEmitter);
 	const sizes = useLayoutItemSizes(props.layout, props.moveMode);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	function renderMoveModeBox(rootComp: any) {
 		return (
 			<MoveModeRootWrapper>

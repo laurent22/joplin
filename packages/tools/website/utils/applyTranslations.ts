@@ -95,6 +95,7 @@ export default (html: string, _languageCode: string, translations: Translations)
 
 	const parser = new htmlparser2.Parser({
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		onopentag: (name: string, attrs: any) => {
 			if (name === 'script') state.inScript = true;
 

@@ -35,6 +35,7 @@ interface State {
 
 class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private viewerRef_: any;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private helpButton_onClick: Function;
@@ -103,6 +104,7 @@ class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 		if (this.props.onBack) this.props.onBack();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private revisionList_onChange(event: any) {
 		const value = event.target.value;
 
@@ -154,6 +156,7 @@ class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 		});
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async webview_ipcMessage(event: any) {
 		// For the revision view, we only support a minimal subset of the IPC messages.
 		// For example, we don't need interactive checkboxes or sync between viewer and editor view.
@@ -219,6 +222,7 @@ class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 		const viewer = <NoteTextViewer themeId={this.props.themeId} viewerStyle={{ display: 'flex', flex: 1, borderLeft: 'none' }} ref={this.viewerRef_} onDomReady={this.viewer_domReady} onIpcMessage={this.webview_ipcMessage} />;
 
 		return (
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			<div style={style.root as any}>
 				{titleInput}
 				{viewer}
