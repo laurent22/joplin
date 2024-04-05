@@ -6,6 +6,7 @@ export interface QueueItemAction {
 
 export interface QueueItem {
 	action: QueueItemAction;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	context: any;
 }
 
@@ -23,6 +24,7 @@ export default class AsyncActionQueue {
 	private queue_: QueueItem[] = [];
 	private interval_: number;
 	private intervalType_: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private scheduleProcessingIID_: any = null;
 	private processing_ = false;
 
@@ -31,6 +33,7 @@ export default class AsyncActionQueue {
 		this.intervalType_ = intervalType;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public push(action: QueueItemAction, context: any = null) {
 		this.queue_.push({
 			action: action,

@@ -12,6 +12,7 @@ export interface RenderViewPropsOptions {
 	noteTitleHtml: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const renderViewProp = (name: ListRendererDependency, value: any, options: RenderViewPropsOptions): string => {
 	const renderers: Partial<Record<ListRendererDependency, ()=> string>> = {
 		'note.user_updated_time': () => time.formatMsToLocal(value),

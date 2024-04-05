@@ -15,7 +15,9 @@ import uuid from '../../uuid';
 
 export default class InteropService_Importer_Raw extends InteropService_Importer_Base {
 	public async exec(result: ImportExportResult) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const itemIdMap: any = {};
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const createdResources: any = {};
 		const noteTagsToCreate = [];
 		const destinationFolderId = this.options_.destinationFolderId;
@@ -35,6 +37,7 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 
 		const stats = await shim.fsDriver().readDirStats(this.sourcePath_);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const folderExists = function(stats: any[], folderId: string) {
 			folderId = folderId.toLowerCase();
 			for (let i = 0; i < stats.length; i++) {
@@ -45,6 +48,7 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 			return false;
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let defaultFolder_: any = null;
 		const defaultFolder = async () => {
 			if (defaultFolder_) return defaultFolder_;

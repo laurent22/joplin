@@ -28,6 +28,7 @@ const Root = styled.div`
 	flex-direction: column;
 `;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const UserPluginsRoot = styled.div<any>`
 	${space}
 	display: flex;
@@ -38,12 +39,14 @@ const ToolsButton = styled(Button)`
 	margin-right: 6px;
 `;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const RepoApiErrorMessage = styled(StyledMessage)<any>`
 	max-width: ${props => props.maxWidth}px;
 	margin-bottom: 10px;
 `;
 
 interface Props {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	value: any;
 	themeId: number;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -233,6 +236,7 @@ export default function(props: Props) {
 		setSearchQuery(event.value);
 	}, []);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onSearchPluginSettingsChange = useCallback((event: any) => {
 		props.onChange({ value: pluginService.serializePluginSettings(event.value) });
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied

@@ -67,6 +67,7 @@ const getPostContent = async (post: Post): Promise<PostContent> => {
 const generateRssFeed = async (posts: Post[]) => {
 	let pubDate = null;
 	let postCount = 0;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const feedItems: any[] = [];
 	for (const post of posts.reverse()) {
 		const content = await getPostContent(post);

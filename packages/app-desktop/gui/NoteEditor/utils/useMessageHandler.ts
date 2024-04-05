@@ -7,8 +7,9 @@ import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import { reg } from '@joplin/lib/registry';
 const bridge = require('@electron/remote').require('./bridge').default;
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 export default function useMessageHandler(scrollWhenReady: any, setScrollWhenReady: Function, editorRef: any, setLocalSearchResultCount: Function, dispatch: Function, formNote: FormNote, htmlToMd: HtmlToMarkdownHandler, mdToHtml: MarkupToHtmlHandler) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return useCallback(async (event: any) => {
 		const msg = event.channel ? event.channel : '';
 		const args = event.args;

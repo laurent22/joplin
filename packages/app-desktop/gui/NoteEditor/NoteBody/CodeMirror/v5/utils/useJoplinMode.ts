@@ -4,18 +4,22 @@ import MarkdownUtils from '@joplin/lib/markdownUtils';
 import Setting from '@joplin/lib/models/Setting';
 
 interface JoplinModeState {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	outer: any;
 	openCharacter: string;
 	inTable: boolean;
 	inCodeBlock: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	inner: any;
 }
 
 
 // Joplin markdown is a the same as markdown mode, but it has configured defaults
 // and support for katex math blocks
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function useJoplinMode(CodeMirror: any) {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	CodeMirror.defineMode('joplin-markdown', (config: any) => {
 		const markdownConfig = {
 			name: 'markdown',
@@ -37,6 +41,7 @@ export default function useJoplinMode(CodeMirror: any) {
 
 		// Find token will search for a valid katex start or end token
 		// If found then it will return the index, otherwise -1
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function findToken(stream: any, token: RegExp) {
 			const match = token.exec(stream.string.slice(stream.pos));
 
@@ -64,6 +69,7 @@ export default function useJoplinMode(CodeMirror: any) {
 				};
 			},
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			token: function(stream: any, state: JoplinModeState) {
 				let currentMode = markdownMode;
 				let currentState = state.outer;
@@ -170,6 +176,7 @@ export default function useJoplinMode(CodeMirror: any) {
 				return token;
 			},
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			indent: function(state: JoplinModeState, textAfter: string, line: any) {
 				const mode = state.openCharacter ? stex : markdownMode;
 				if (!mode.indent) return CodeMirror.Pass;

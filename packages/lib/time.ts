@@ -102,6 +102,7 @@ class Time {
 		return moment(ms).format(format) as string;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public formatLocalToMs(localDateTime: any, format: string = null) {
 		if (format === null) format = this.dateTimeFormat();
 		const m = moment(localDateTime, format);
@@ -110,6 +111,7 @@ class Time {
 	}
 
 	// Mostly used as a utility function for the DateTime Electron component
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public anythingToDateTime(o: any, defaultValue: Date = null) {
 		if (o && o.toDate) return o.toDate();
 		if (!o) return defaultValue;
@@ -119,6 +121,7 @@ class Time {
 		return m.isValid() ? m.toDate() : defaultValue;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public anythingToMs(o: any, defaultValue: number = null) {
 		if (o && o.toDate) return o.toDate();
 		if (!o) return defaultValue;
@@ -146,11 +149,13 @@ class Time {
 	}
 
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public goBackInTime(startDate: any, n: number, period: any) {
 		// period is a string (eg. "day", "week", "month", "year" ), n is an integer
 		return moment(startDate).startOf(period).subtract(n, period).format('x');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public goForwardInTime(startDate: any, n: number, period: any) {
 		return moment(startDate).startOf(period).add(n, period).format('x');
 	}

@@ -1,7 +1,7 @@
 import PostMessageService, { MessageResponse, ResponderComponentType } from '@joplin/lib/services/PostMessageService';
 import { useEffect } from 'react';
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 export default function(frameWindow: any, isReady: boolean, pluginId: string, viewId: string, postMessage: Function) {
 	useEffect(() => {
 		PostMessageService.instance().registerResponder(ResponderComponentType.UserWebview, viewId, (message: MessageResponse) => {
@@ -17,6 +17,7 @@ export default function(frameWindow: any, isReady: boolean, pluginId: string, vi
 	useEffect(() => {
 		if (!frameWindow) return () => {};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function onMessage_(event: any) {
 
 			if (!event.data || !event.data.target) {

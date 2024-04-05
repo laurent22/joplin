@@ -24,6 +24,7 @@ export default class WebViewToRNMessenger<LocalInterface, RemoteInterface> exten
 	};
 
 	protected override postMessage(message: SerializableData): void {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		(window as any).ReactNativeWebView.postMessage(JSON.stringify(message));
 	}
 

@@ -36,6 +36,7 @@ export function checkRepeatPassword(fields: CheckRepeatPasswordInput, required: 
 	return '';
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function makeUser(userId: Uuid, fields: any): User {
 	const user: User = {};
 
@@ -52,6 +53,7 @@ function makeUser(userId: Uuid, fields: any): User {
 
 const router = new Router(RouteType.Web);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 router.get('users/:id', async (path: SubPath, ctx: AppContext, formUser: User = null, error: any = null) => {
 	const owner = ctx.joplin.owner;
 	if (path.id !== 'me' && path.id !== owner.id) throw new ErrorForbidden();
@@ -111,6 +113,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, formUser: User = 
 
 	if (config().accountTypesEnabled) {
 		view.content.showAccountTypes = true;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		view.content.accountTypes = accountTypeOptions().map((o: any) => {
 			o.selected = user.account_type === o.value;
 			return o;

@@ -449,6 +449,7 @@ describe('services/SearchEngine', () => {
 	}));
 
 	it('should parse normal query strings', (async () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const testCases: [string, any][] = [
 			['abcd efgh', { _: ['abcd', 'efgh'] }],
 			['abcd   efgh', { _: ['abcd', 'efgh'] }],
@@ -465,8 +466,11 @@ describe('services/SearchEngine', () => {
 			const expected = t[1];
 			const actual = await engine.parseQuery(input);
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const _Values = actual.terms._ ? actual.terms._.map((v: any) => v.value) : undefined;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const titleValues = actual.terms.title ? actual.terms.title.map((v: any) => v.value) : undefined;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const bodyValues = actual.terms.body ? actual.terms.body.map((v: any) => v.value) : undefined;
 
 			expect(JSON.stringify(_Values)).toBe(JSON.stringify(expected._));

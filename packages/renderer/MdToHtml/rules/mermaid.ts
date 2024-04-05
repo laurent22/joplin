@@ -2,6 +2,7 @@ import { RuleOptions } from '../../MdToHtml';
 
 export default {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	assets: function(theme: any) {
 		return [
 			{ name: 'mermaid.min.js' },
@@ -38,14 +39,16 @@ export default {
 		];
 	},
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	plugin: function(markdownIt: any, ruleOptions: RuleOptions) {
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 		const defaultRender: Function = markdownIt.renderer.rules.fence || function(tokens: any[], idx: number, options: any, env: any, self: any) {
 			return self.renderToken(tokens, idx, options, env, self);
 		};
 
 		const exportButtonMarkup = isDesktop(ruleOptions.platformName) ? exportGraphButton(ruleOptions) : '';
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		markdownIt.renderer.rules.fence = function(tokens: any[], idx: number, options: any, env: any, self: any) {
 			const token = tokens[idx];
 			if (token.info !== 'mermaid') return defaultRender(tokens, idx, options, env, self);

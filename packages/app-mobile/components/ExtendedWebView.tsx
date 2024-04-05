@@ -21,6 +21,7 @@ export interface WebViewControl {
 	injectJS(script: string): void;
 
 	// message must be convertible to JSON
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	postMessage(message: any): void;
 }
 
@@ -97,6 +98,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 
 				true;`);
 			},
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			postMessage(message: any) {
 				webviewRef.current.postMessage(JSON.stringify(message));
 			},
@@ -165,6 +167,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 				// It seems that `backgroundColor: theme.backgroundColor` does not
 				// prevent the flash.
 				backgroundColor: 'transparent',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				...(props.style as any),
 			}}
 			ref={webviewRef}

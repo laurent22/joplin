@@ -31,6 +31,7 @@ export const Dropdown = (props: Props) => {
 		return optionComps;
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onChange = useCallback((event: any) => {
 		props.onChange({ value: event.target.value });
 	}, [props.onChange]);

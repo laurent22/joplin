@@ -9,6 +9,7 @@ const bridge = require('@electron/remote').require('./bridge').default;
 interface MultiNoteActionsProps {
 	themeId: number;
 	selectedNoteIds: string[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	notes: any[];
 	dispatch: Dispatch;
 	watchedNoteFiles: string[];
@@ -18,6 +19,7 @@ interface MultiNoteActionsProps {
 }
 
 function styles_(props: MultiNoteActionsProps) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return buildStyle('MultiNoteActions', props.themeId, (theme: any) => {
 		return {
 			root: {
@@ -41,6 +43,7 @@ function styles_(props: MultiNoteActionsProps) {
 export default function MultiNoteActions(props: MultiNoteActionsProps) {
 	const styles = styles_(props);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const multiNotesButton_click = (item: any) => {
 		if (item.submenu) {
 			item.submenu.popup({ window: bridge().window() });

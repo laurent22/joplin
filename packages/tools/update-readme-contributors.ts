@@ -19,6 +19,7 @@ async function gitHubContributors(page: number): Promise<Contributor[]> {
 			url: `https://api.github.com/repos/laurent22/joplin/contributors${page ? `?page=${page}` : ''}`,
 			json: true,
 			headers: { 'User-Agent': 'Joplin Readme Updater' },
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		}, (error: any, response: any, data: any) => {
 			if (error) {
 				reject(error);

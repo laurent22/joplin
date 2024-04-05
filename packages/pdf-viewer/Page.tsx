@@ -121,6 +121,7 @@ export default function Page(props: PageProps) {
 		if (props.onClick) props.onClick(props.pageNo);
 	}, [props.onClick, props.pageNo]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	let style: any = {};
 	if (props.scaledSize) {
 		style = {

@@ -73,6 +73,7 @@ const topLanguages = [
 for (let i = 0; i < topLanguages.length; i++) {
 	const mode = topLanguages[i];
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	if (CodeMirror.modeInfo.find((m: any) => m.mode === mode)) {
 		require(`codemirror/mode/${mode}/${mode}`);
 	} else {
@@ -82,22 +83,31 @@ for (let i = 0; i < topLanguages.length; i++) {
 
 export interface EditorProps {
 	value: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	searchMarkers: any;
 	mode: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	codeMirrorTheme: any;
 	readOnly: boolean;
 	autoMatchBraces: boolean | object;
 	keyMap: string;
 	plugins: PluginStates;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onChange: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onScroll: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onEditorPaste: any;
 	isSafeMode: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onResize: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onUpdate: any;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function Editor(props: EditorProps, ref: any) {
 	const [editor, setEditor] = useState(null);
 	const editorParent = useRef(null);
@@ -111,6 +121,7 @@ function Editor(props: EditorProps, ref: any) {
 	useLineSorting(CodeMirror);
 	useEditorSearch(CodeMirror);
 	useJoplinMode(CodeMirror);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const pluginOptions: any = useExternalPlugins(CodeMirror, props.plugins);
 	useKeymap(CodeMirror);
 	useJoplinCommands(CodeMirror);
@@ -119,6 +130,7 @@ function Editor(props: EditorProps, ref: any) {
 		return editor;
 	});
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const editor_change = useCallback((cm: any, change: any) => {
 		if (props.onChange && change.origin !== 'setValue') {
 			props.onChange(cm.getValue());
@@ -126,21 +138,22 @@ function Editor(props: EditorProps, ref: any) {
 		}
 	}, [props.onChange]);
 
-	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const editor_scroll = useCallback((_cm: any) => {
 		props.onScroll();
 	}, [props.onScroll]);
 
-	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const editor_paste = useCallback((_cm: any, _event: any) => {
 		props.onEditorPaste();
 	}, [props.onEditorPaste]);
 
-	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const editor_drop = useCallback((cm: any, _event: any) => {
 		focus('v5/Editor::editor_drop', cm);
 	}, []);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const editor_drag = useCallback((cm: any, event: any) => {
 		// This is the type for all drag and drops that are external to codemirror
 		// setting the cursor allows us to drop them in the right place
@@ -152,10 +165,12 @@ function Editor(props: EditorProps, ref: any) {
 		event.dataTransfer.dropEffect = 'copy';
 	}, []);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const editor_resize = useCallback((cm: any) => {
 		props.onResize(cm);
 	}, [props.onResize]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const editor_update = useCallback((cm: any) => {
 		const edited = Date.now() - lastEditTime.current <= 100;
 		props.onUpdate(cm, edited);
@@ -166,11 +181,13 @@ function Editor(props: EditorProps, ref: any) {
 
 		const userOptions = {};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const safeOptions: Record<string, any> = {
 			value: props.value,
 			readOnly: props.readOnly,
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const unsafeOptions: Record<string, any> = {
 			screenReaderLabel: props.value,
 			theme: props.codeMirrorTheme,
@@ -187,6 +204,7 @@ function Editor(props: EditorProps, ref: any) {
 			keyMap: props.keyMap ? props.keyMap : 'default',
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let cmOptions: Record<string, any> = { ...safeOptions };
 
 		if (!props.isSafeMode) {

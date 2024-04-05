@@ -8,6 +8,9 @@ import UserWebviewDialogButtonBar from './UserWebviewDialogButtonBar';
 import { focus } from '@joplin/lib/utils/focusHandler';
 const styled = require('styled-components').default;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+type StyleProps = any;
+
 interface Props extends UserWebviewProps {
 	buttons: ButtonSpec[];
 	fitToContent: boolean;
@@ -29,12 +32,12 @@ const StyledRoot = styled.div`
 const Dialog = styled.div`
 	display: flex;
 	flex-direction: column;
-	background-color: ${(props: any) => props.theme.backgroundColor};
-	padding: ${(props: any) => `${props.theme.mainPadding}px`};
+	background-color: ${(props: StyleProps) => props.theme.backgroundColor};
+	padding: ${(props: StyleProps) => `${props.theme.mainPadding}px`};
 	border-radius: 4px;
 	box-shadow: 0 6px 10px #00000077;
-	width: ${(props: any) => props.fitToContent ? 'auto' : '90vw'};
-	height: ${(props: any) => props.fitToContent ? 'auto' : '80vh'};
+	width: ${(props: StyleProps) => props.fitToContent ? 'auto' : '90vw'};
+	height: ${(props: StyleProps) => props.fitToContent ? 'auto' : '80vh'};
 `;
 
 const UserWebViewWrapper = styled.div`

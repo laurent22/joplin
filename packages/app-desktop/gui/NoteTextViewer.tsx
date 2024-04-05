@@ -8,18 +8,23 @@ interface Props {
 	onDomReady: Function;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onIpcMessage: Function;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	viewerStyle: any;
 	contentMaxWidth?: number;
 	themeId: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default class NoteTextViewerComponent extends React.Component<Props, any> {
 
 	private initialized_ = false;
 	private domReady_ = false;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private webviewRef_: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private webviewListeners_: any = null;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(props: any) {
 		super(props);
 
@@ -44,11 +49,13 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 		this.webview_message = this.webview_message.bind(this);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private webview_domReady(event: any) {
 		this.domReady_ = true;
 		if (this.props.onDomReady) this.props.onDomReady(event);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private webview_ipcMessage(event: any) {
 		if (this.props.onIpcMessage) this.props.onIpcMessage(event);
 	}
@@ -57,6 +64,7 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 		this.webview_domReady({});
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private webview_message(event: any) {
 		if (!event.data || event.data.target !== 'main') return;
 
@@ -147,6 +155,7 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 	// Wrap WebView functions
 	// ----------------------------------------------------------------
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public send(channel: string, arg0: any = null, arg1: any = null) {
 		const win = this.webviewRef_.current.contentWindow;
 

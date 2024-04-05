@@ -143,6 +143,7 @@ function ldapConfigFromEnv(env: EnvVariables): LdapConfig[] {
 
 let config_: Config = null;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function initConfig(envType: Env, env: EnvVariables, overrides: any = null) {
 	runningInDocker_ = !!env.RUNNING_IN_DOCKER;
 

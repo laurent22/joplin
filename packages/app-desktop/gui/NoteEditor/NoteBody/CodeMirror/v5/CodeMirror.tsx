@@ -163,6 +163,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 						return selections.length ? selections[0] : '';
 					};
 
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const commands: any = {
 						selectedText: () => {
 							return selectedText();
@@ -170,6 +171,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 						selectedHtml: () => {
 							return selectedText();
 						},
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 						replaceSelection: (value: any) => {
 							return editorRef.current.replaceSelection(value);
 						},
@@ -209,6 +211,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 								}
 							}
 						},
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 						insertText: (value: any) => editorRef.current.insertAtCursor(value),
 						attachFile: async () => {
 							const cursor = editorRef.current.getCursor();
@@ -257,6 +260,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.content, props.visiblePanes, props.contentMarkupLanguage, addListItem, wrapSelectionWithStrings, setEditorPercentScroll, setViewerPercentScroll, resetScroll]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onEditorPaste = useCallback(async (event: any = null) => {
 		const resourceMds = await getResourcesFromPasteEvent(event);
 		if (!resourceMds.length) return;
@@ -324,8 +328,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		}
 	}, [editorPasteText, onEditorPaste]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const loadScript = async (script: any) => {
 		return new Promise((resolve) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			let element: any = document.createElement('script');
 			if (script.src.indexOf('.css') >= 0) {
 				element = document.createElement('link');
@@ -649,6 +655,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	useEffect(() => {
 		if (!webviewReady) return;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const options: any = {
 			pluginAssets: renderedBody.pluginAssets,
 			downloadResources: Setting.value('sync.resourceDownloadMode'),

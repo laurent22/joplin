@@ -15,9 +15,11 @@ export interface CommandContext {
 }
 
 export interface CommandRuntime {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	execute(context: CommandContext, ...args: any[]): Promise<any | void>;
 	enabledCondition?: EnabledCondition;
 	// Used for the (optional) toolbar button title
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	mapStateToTitle?(state: any): string;
 }
 
@@ -60,7 +62,9 @@ interface Commands {
 }
 
 interface ReduxStore {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	dispatch(action: any): void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	getState(): any;
 }
 
@@ -96,12 +100,13 @@ export default class CommandService extends BaseService {
 	}
 
 	private commands_: Commands = {};
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private store_: any;
 	private devMode_: boolean;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private stateToWhenClauseContext_: Function;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 	public initialize(store: any, devMode: boolean, stateToWhenClauseContext: Function) {
 		utils.store = store;
 		this.store_ = store;
@@ -199,24 +204,28 @@ export default class CommandService extends BaseService {
 		command.runtime = runtime;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public registerCommands(commands: any[]) {
 		for (const command of commands) {
 			CommandService.instance().registerRuntime(command.declaration.name, command.runtime());
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public unregisterCommands(commands: any[]) {
 		for (const command of commands) {
 			CommandService.instance().unregisterRuntime(command.declaration.name);
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public componentRegisterCommands(component: any, commands: any[]) {
 		for (const command of commands) {
 			CommandService.instance().registerRuntime(command.declaration.name, command.runtime(component));
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public componentUnregisterCommands(commands: any[]) {
 		for (const command of commands) {
 			CommandService.instance().unregisterRuntime(command.declaration.name);
@@ -232,12 +241,14 @@ export default class CommandService extends BaseService {
 	private createContext(): CommandContext {
 		return {
 			state: this.store_.getState(),
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			dispatch: (action: any) => {
 				this.store_.dispatch(action);
 			},
 		};
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async execute(commandName: string, ...args: any[]): Promise<any | void> {
 		const command = this.commandByName(commandName);
 		// Some commands such as "showModalMessage" can be executed many
@@ -248,6 +259,7 @@ export default class CommandService extends BaseService {
 		return command.runtime.execute(this.createContext(), ...args);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public scheduleExecute(commandName: string, args: any) {
 		shim.setTimeout(() => {
 			void this.execute(commandName, args);
@@ -265,6 +277,7 @@ export default class CommandService extends BaseService {
 	// When looping on commands and checking their enabled state, the whenClauseContext
 	// should be specified (created using currentWhenClauseContext) to avoid having
 	// to re-create it on each call.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public isEnabled(commandName: string, whenClauseContext: any = null): boolean {
 		const command = this.commandByName(commandName);
 		if (!command || !command.runtime) return false;
@@ -278,6 +291,7 @@ export default class CommandService extends BaseService {
 	// The title is dynamic and derived from the state, which is why the state is passed
 	// as an argument. Title can be used for example to display the alarm date on the
 	// "set alarm" toolbar button.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public title(commandName: string, state: any = null): string {
 		const command = this.commandByName(commandName);
 		if (!command || !command.runtime) return null;

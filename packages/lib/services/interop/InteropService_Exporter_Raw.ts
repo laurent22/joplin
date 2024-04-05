@@ -16,6 +16,7 @@ export default class InteropService_Exporter_Raw extends InteropService_Exporter
 		await shim.fsDriver().mkdir(this.resourceDir_);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async processItem(itemType: number, item: any) {
 		const ItemClass = BaseItem.getClassByItemType(itemType);
 		const serialized = await ItemClass.serialize(item);
@@ -23,6 +24,7 @@ export default class InteropService_Exporter_Raw extends InteropService_Exporter
 		await shim.fsDriver().writeFile(filePath, serialized, 'utf-8');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async processResource(_resource: any, filePath: string) {
 		const destResourcePath = `${this.resourceDir_}/${basename(filePath)}`;
 		await shim.fsDriver().copy(filePath, destResourcePath);

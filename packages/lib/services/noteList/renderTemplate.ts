@@ -6,10 +6,12 @@ import { objectValueFromPath } from '@joplin/utils/object';
 interface Cell {
 	name: ColumnName;
 	styleHtml: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	value: any;
 	contentHtml: ()=> string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const valueToString = (value: any) => {
 	if (value === undefined || value === null) return '';
 	return value.toString();

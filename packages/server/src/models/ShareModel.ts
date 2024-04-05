@@ -101,6 +101,7 @@ export default class ShareModel extends BaseModel<Share> {
 		return !!r;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public shareUrl(shareOwnerId: Uuid, id: Uuid, query: any = null): string {
 		return setQueryParameters(`${this.personalizedUserContentBaseUrl(shareOwnerId)}/shares/${id}`, query);
 	}
@@ -464,6 +465,7 @@ export default class ShareModel extends BaseModel<Share> {
 				this.db('items')
 					.select('id')
 					.where('jop_share_id', '=', shareId),
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			).groupBy('user_id') as any;
 	}
 

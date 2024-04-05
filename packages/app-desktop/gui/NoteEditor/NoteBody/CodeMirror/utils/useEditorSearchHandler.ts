@@ -5,8 +5,11 @@ const debounce = require('debounce');
 
 interface Props {
 	setLocalSearchResultCount(count: number): void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	searchMarkers: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	webviewRef: RefObject<any>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	editorRef: RefObject<any>;
 
 	noteContent: string;

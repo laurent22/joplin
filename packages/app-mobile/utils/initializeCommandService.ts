@@ -19,6 +19,7 @@ const registerCommands = (commands: CommandSpecification[]) => {
 	}
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const initializeCommandService = (store: Store<AppState, any>) => {
 	CommandService.instance().initialize(store, Setting.value('env') === 'dev', stateToWhenClauseContext);
 	for (const declaration of editorCommandDeclarations) {

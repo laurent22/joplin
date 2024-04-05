@@ -71,6 +71,7 @@ export interface Table {
 	headers: Header[];
 	rows: Row[];
 	baseUrl?: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	requestQuery?: any;
 	pageCount?: number;
 	pagination?: Pagination;
@@ -82,6 +83,7 @@ export interface TableView {
 	paginationLinks: PageLink[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function makeTablePagination(query: any, defaultOrderField: string, defaultOrderDir: PaginationOrderDir): Pagination {
 	const limit = Number(query.limit) || pageMaxSize;
 	const order: PaginationOrder[] = requestPaginationOrder(query, defaultOrderField, defaultOrderDir);
