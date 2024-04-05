@@ -115,13 +115,13 @@ export class EventManager {
 		this.appStateListeners_[propName].splice(idx, 1);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private stateValue_(state: AppState, propName: string): any {
+	private stateValue_(state: AppState, propName: string) {
 		const parts = propName.split('.');
-		let s = state;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code from before rule was applied.
+		let s: any = state;
 		for (const p of parts) {
 			if (!(p in s)) throw new Error(`Invalid state property path: ${propName}`);
-			s = s[p as keyof AppState];
+			s = s[p];
 		}
 		return s;
 	}
