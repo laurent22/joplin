@@ -142,6 +142,7 @@ export default class Decorator {
 	}
 
 	private _decorationCache: Record<string, Decoration> = Object.create(null);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private _overlays: (StreamParser<any>)[] = [];
 
 	private classNameToCssDecoration(className: string, isLineDecoration: boolean, id?: number) {
@@ -272,6 +273,7 @@ export default class Decorator {
 					);
 					let lastPos = 0;
 
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					(reader as any).baseToken ??= (): null => null;
 
 					while (!reader.eol()) {
@@ -334,6 +336,7 @@ export default class Decorator {
 		};
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public removeOverlay(overlay: any) {
 		this._overlays = this._overlays.filter(other => other !== overlay);
 

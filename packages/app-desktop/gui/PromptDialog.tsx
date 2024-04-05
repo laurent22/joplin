@@ -6,25 +6,34 @@ const Datetime = require('react-datetime').default;
 import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+import { focus } from '@joplin/lib/utils/focusHandler';
 interface Props {
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	defaultValue: any;
 	visible: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	buttons: any[];
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onClose: Function;
 	inputType: string;
 	description: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	answer?: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	autocomplete: any;
 	label: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default class PromptDialog extends React.Component<Props, any> {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private answerInput_: any;
 	private focusInput_: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private styles_: any;
 	private styleKey_: string;
 	private menuIsOpened_ = false;
@@ -67,7 +76,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 	}
 
 	public componentDidUpdate() {
-		if (this.focusInput_ && this.answerInput_.current) this.answerInput_.current.focus();
+		if (this.focusInput_ && this.answerInput_.current) focus('PromptDialog::componentDidUpdate', this.answerInput_.current);
 		this.focusInput_ = false;
 	}
 
@@ -134,6 +143,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 		};
 
 		this.styles_.select = {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			control: (provided: any) => {
 				return { ...provided,
 					minWidth: width * 0.2,
@@ -141,12 +151,14 @@ export default class PromptDialog extends React.Component<Props, any> {
 					fontFamily: theme.fontFamily,
 				};
 			},
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			input: (provided: any) => {
 				return { ...provided,
 					minWidth: '20px',
 					color: theme.color,
 				};
 			},
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			menu: (provided: any) => {
 				return { ...provided,
 					color: theme.color,
@@ -154,6 +166,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 					backgroundColor: theme.backgroundColor,
 				};
 			},
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			option: (provided: any, state: any) => {
 				return { ...provided,
 					color: theme.color,
@@ -161,11 +174,13 @@ export default class PromptDialog extends React.Component<Props, any> {
 					paddingLeft: `${10 + (state.data.indentDepth || 0) * 20}px`,
 				};
 			},
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			multiValueLabel: (provided: any) => {
 				return { ...provided,
 					fontFamily: theme.fontFamily,
 				};
 			},
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			multiValueRemove: (provided: any) => {
 				return { ...provided,
 					color: theme.color,
@@ -173,6 +188,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 			},
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.styles_.selectTheme = (tagTheme: any) => {
 			return { ...tagTheme,
 				borderRadius: 2,
@@ -220,6 +236,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 			this.setState({ visible: false, answer: '' });
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const onChange = (event: any) => {
 			this.setState({ answer: event.target.value });
 		};
@@ -233,15 +250,18 @@ export default class PromptDialog extends React.Component<Props, any> {
 		// 	return m.isValid() ? m.toDate() : null;
 		// }
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const onDateTimeChange = (momentObject: any) => {
 			this.setState({ answer: momentObject });
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const onSelectChange = (newValue: any) => {
 			this.setState({ answer: newValue });
 			this.focusInput_ = true;
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const onKeyDown = (event: any) => {
 			if (event.key === 'Enter') {
 				// If the dropdown is open, we don't close the dialog - instead
@@ -262,10 +282,13 @@ export default class PromptDialog extends React.Component<Props, any> {
 		let inputComp = null;
 
 		if (this.props.inputType === 'datetime') {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			inputComp = <Datetime className="datetime-picker" value={this.state.answer} inputProps={{ style: styles.input }} dateFormat={time.dateFormat()} timeFormat={time.timeFormat()} onChange={(momentObject: any) => onDateTimeChange(momentObject)} />;
 		} else if (this.props.inputType === 'tags') {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			inputComp = <CreatableSelect className="tag-selector" onMenuOpen={this.select_menuOpen} onMenuClose={this.select_menuClose} styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} value={this.state.answer} placeholder="" components={makeAnimated()} isMulti={true} isClearable={false} backspaceRemovesValue={true} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={(event: any) => onKeyDown(event)} />;
 		} else if (this.props.inputType === 'dropdown') {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			inputComp = <Select className="item-selector" onMenuOpen={this.select_menuOpen} onMenuClose={this.select_menuClose} styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated()} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={(event: any) => onKeyDown(event)} />;
 		} else {
 			inputComp = <input style={styles.input} ref={this.answerInput_} value={this.state.answer} type="text" onChange={event => onChange(event)} onKeyDown={event => onKeyDown(event)} />;

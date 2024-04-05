@@ -2,12 +2,13 @@
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
 # FIRST Translator Ji-Hyeon Gim <potatogim@potatogim.net>, YEAR.
-# SENCOND Translator Hye-Rim Kim <kissofsea@gmail.com>, 2024.
+# SECOND Translator Kim Hye-Rim <kissofsea@gmail.com>, 2024.
+# Kim Hye-Rim : 2024-02-25, 2024-04-01
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin 2.14.16\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Hye-Rim Kim <kissofsea@gmail.com>\n"
+"Last-Translator: Kim Hye-Rim <kissofsea@gmail.com>\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -94,7 +95,7 @@ msgstr "보기(&V)"
 #: packages/app-desktop/gui/MenuBar.tsx:857
 #, fuzzy
 msgid "&Window"
-msgstr "창 닫기"
+msgstr "창(&W)"
 
 #: packages/lib/models/Setting.ts:1645 packages/lib/models/Setting.ts:1836
 msgid "%d days"
@@ -236,9 +237,9 @@ msgid ""
 "convert the to-do back to a regular note."
 msgstr ""
 "<todo-command>로 \"toggle\" 이나 \"clear\"를 사용하실 수 있습니다. "
-"\"toggle\"은 주어진 '할 일'의 상태를 '완료됨' 또는 '완료되지 않음'으로 바꾸"
-"는 데 사용됩니다 (만약 대상이 일반적인 노트일 경우에는 '할 일'로 전환됩니"
-"다). \"clear\"는 '할 일'을 일반적인 노트로 변환하는 데 사용됩니다."
+"\"toggle\"은 주어진 목록의 상태를 '완료됨' 또는 '완료되지 않음'으로 바꾸는 데 사용됩니다."
+"(만약 대상이 일반적인 노트일 경우에는 목록으로 전환됩니다)."
+"\"clear\"는 목록을 일반적인 노트로 변환하는 데 사용됩니다."
 
 #: packages/lib/models/Setting.ts:1453
 msgid "A3"
@@ -254,7 +255,7 @@ msgstr "A5"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox.tsx:86
 msgid "About"
-msgstr ""
+msgstr "정보"
 
 #: packages/app-desktop/gui/MenuBar.tsx:573
 #: packages/app-desktop/gui/MenuBar.tsx:908
@@ -523,9 +524,8 @@ msgstr "인증 토큰:"
 
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:84
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:158
-#, fuzzy
 msgid "Authorise"
-msgstr "인증 토큰:"
+msgstr "권한 부여"
 
 #: packages/lib/models/Setting.ts:753
 msgid "Auto"
@@ -545,7 +545,7 @@ msgstr "자동으로 업데이트를 확인"
 
 #: packages/lib/models/Setting.ts:1823
 msgid "Automatically delete notes in the trash after a number of days"
-msgstr ""
+msgstr "다음 기간이 지나면 자동으로 휴지통에 있는 노트 삭제"
 
 #: packages/lib/models/Setting.ts:874
 msgid "Automatically switch theme to match system theme"
@@ -918,7 +918,7 @@ msgstr "명령 팔레트..."
 
 #: packages/lib/services/noteList/defaultListRenderer.ts:24
 msgid "Compact"
-msgstr "컴팩트"
+msgstr "간단히 보기"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:12
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:66
@@ -975,12 +975,11 @@ msgstr "통합결제"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:103
 msgid "Content provided by %s"
-msgstr "%s에서 제공"
+msgstr "%s에서 제공한 콘텐츠"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:72
-#, fuzzy
 msgid "Content provided by: %s"
-msgstr "%s에서 제공"
+msgstr "콘텐츠 제공자: %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:65
 msgid "Continue"
@@ -992,7 +991,7 @@ msgstr "노트로 변환"
 
 #: packages/app-mobile/components/screens/Note.tsx:1242
 msgid "Convert to todo"
-msgstr "'할 일'로 변환"
+msgstr "목록으로 변환"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:89
 msgid "Converting speech to text..."
@@ -1025,9 +1024,8 @@ msgstr "링크 주소 복사"
 
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:90
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:166
-#, fuzzy
 msgid "Copy link to website"
-msgstr "Joplin 웹사이트"
+msgstr "웹사이트 링크 복사"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:101
 #: packages/app-mobile/components/screens/Note.tsx:1251
@@ -1192,7 +1190,7 @@ msgstr "새 노트북을 만듭니다."
 
 #: packages/app-cli/app/command-mktodo.js:12
 msgid "Creates a new to-do."
-msgstr "새 '할 일'을 만듭니다."
+msgstr "새 목록을 만듭니다."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:113
 msgid "Creating new note..."
@@ -1200,7 +1198,7 @@ msgstr "새 노트 만들기..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:113
 msgid "Creating new to-do..."
-msgstr "새 '할 일' 만들기..."
+msgstr "새 목록 만들기..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:29
 msgid "Creating report..."
@@ -1371,9 +1369,8 @@ msgstr "이 프로필을 삭제할까요?"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox.tsx:81
-#, fuzzy
 msgid "Deleted"
-msgstr "삭제"
+msgstr "삭제됨"
 
 #: packages/lib/Synchronizer.ts:196
 msgid "Deleted local items: %d."
@@ -1406,7 +1403,7 @@ msgstr "목표 포맷: %s"
 #: packages/lib/services/noteList/defaultLeftToRightListRenderer.ts:25
 #: packages/lib/services/noteList/defaultMultiColumnsRenderer.ts:8
 msgid "Detailed"
-msgstr "상세한"
+msgstr "상세히 보기"
 
 #: packages/lib/services/interop/Module.ts:62
 msgid "Directory"
@@ -1480,8 +1477,9 @@ msgid ""
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
-"특정 형식의 항목만 표시합니다. 노트의 경우 `n`, 할 일의 경우 `t`, 노트와 할 "
-"일 모두는 `nt` 입니다. (예시: 할 일은 `-tt`, 노트와 할 일은 `-tnt`)."
+"특정 형식의 항목만 표시합니다."
+"노트의 경우 `n`, 목록의 경우 `t`, 노트와 목록 모두는 `nt` 입니다."
+"(예시: 목록은 `-tt`, 노트와 목록은 `-tnt`)."
 
 #: packages/app-cli/app/command-status.js:13
 msgid "Displays summary about the notes and notebooks."
@@ -1597,7 +1595,7 @@ msgstr "Dropbox 로그인"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:13
 msgid "Due"
-msgstr ""
+msgstr "마감"
 
 #: packages/app-desktop/gui/MainScreen/commands/duplicateNote.ts:7
 #: packages/app-mobile/components/ScreenHeader.tsx:489
@@ -1725,7 +1723,7 @@ msgstr "강조"
 #: packages/app-desktop/commands/emptyTrash.ts:16
 #: packages/app-desktop/commands/emptyTrash.ts:8
 msgid "Empty trash"
-msgstr ""
+msgstr "휴지통 비우기"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:143
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:86
@@ -1808,9 +1806,8 @@ msgid "Enable optical character recognition (OCR)"
 msgstr "문자 인식(OCR) 활성화"
 
 #: packages/lib/models/Setting.ts:2717
-#, fuzzy
 msgid "Enable or disable plugins"
-msgstr "플러그인 관리"
+msgstr "플러그인 활성화/비활성화"
 
 #: packages/lib/models/Setting.ts:1209
 msgid "Enable PDF viewer"
@@ -2162,7 +2159,6 @@ msgid "Found: %d."
 msgstr "발견됨: %d."
 
 #: packages/app-mobile/components/screens/ConfigScreen/SectionSelector.tsx:42
-#, fuzzy
 msgid "From a plugin"
 msgstr "모든 플러그인 보기"
 
@@ -2229,7 +2225,7 @@ msgstr "허가된 권한"
 
 #: packages/app-cli/app/command-sync.ts:114
 msgid "Have you authorised the application login in the above URL?"
-msgstr ""
+msgstr "위 URL에서 애플리케이션 로그인을 승인하셨나요?"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useHeaderButtons.ts:14
 msgid "Header %d"
@@ -2335,6 +2331,8 @@ msgid ""
 "If you have already authorised, please wait for the application to sync to "
 "Joplin Cloud."
 msgstr ""
+"이미 승인하셨다면, 애플리케이션이 Joplin Cloud에 동기화될 때까지 기다려주세요"
+"Joplin Cloud."
 
 #: packages/app-desktop/ElectronAppWrapper.ts:85
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:358
@@ -2571,9 +2569,8 @@ msgstr "Joplin 클라우드"
 
 #: packages/app-desktop/gui/Root.tsx:228
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:146
-#, fuzzy
 msgid "Joplin Cloud Login"
-msgstr "Joplin 클라우드"
+msgstr "Joplin 클라우드 로그인"
 
 #: packages/lib/services/interop/InteropService.ts:148
 #: packages/lib/services/interop/InteropService.ts:65
@@ -2641,12 +2638,11 @@ msgstr "KaTeX"
 
 #: packages/lib/models/Setting.ts:1647
 msgid "Keep note history for"
-msgstr "다음과 같이 노트 변경 이력을 유지"
+msgstr "다음 기간 동안 노트 변경 이력을 유지"
 
 #: packages/lib/models/Setting.ts:1839
-#, fuzzy
 msgid "Keep notes in the trash for"
-msgstr "다음과 같이 노트 변경 이력을 유지"
+msgstr "다음 기간 동안 노트를 휴지통에 보관"
 
 #: packages/lib/models/Setting.ts:1485
 msgid "Keyboard Mode"
@@ -2690,7 +2686,7 @@ msgstr "나중에"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:7
 msgid "Latitude"
-msgstr ""
+msgstr "위도"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:616
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:229
@@ -2761,9 +2757,8 @@ msgid "Loaded"
 msgstr "로딩됨"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:85
-#, fuzzy
 msgid "Loading plugin repository..."
-msgstr "플러그인 저장소에 연결할 수 없습니다."
+msgstr "플러그인 저장소 불러오는 중..."
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:87
 msgid "Loading..."
@@ -2806,7 +2801,7 @@ msgstr "로그, 프로필, 동기화 상태"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:8
 msgid "Longitude"
-msgstr ""
+msgstr "경도"
 
 #: packages/app-desktop/gui/MenuBar.tsx:880
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:560
@@ -2859,11 +2854,11 @@ msgstr "마크다운 + Front Matter"
 
 #: packages/app-cli/app/command-done.ts:15
 msgid "Marks a to-do as done."
-msgstr "'할 일' 항목을 완료로 표시합니다."
+msgstr "목록 항목을 완료로 표시합니다."
 
 #: packages/app-cli/app/command-undone.js:12
 msgid "Marks a to-do as non-completed."
-msgstr "할 일을 '완료되지 않음'으로 표시합니다."
+msgstr "목록을 '완료되지 않음'으로 표시합니다."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:70
 msgid "Markup"
@@ -2906,7 +2901,7 @@ msgstr "미디어 플레이어, 수학, 도표, 목차"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 msgid "Minimise"
-msgstr ""
+msgstr "최소화"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:318
 msgid "Missing keys"
@@ -2948,16 +2943,16 @@ msgstr "%d개의 노트를 \"%s\" 노트북으로 옮길까요?"
 #: packages/app-cli/app/command-rmbook.ts:27
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:206
-#, fuzzy
 msgid ""
 "Move notebook \"%s\" to the trash?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will also be moved to the "
 "trash."
 msgstr ""
-"\"%s\" 노트북을 삭제할까요?\n"
+"\"%s\" 노트북을 휴지통으로 이동할까요?\n"
 "\n"
-"이 노트북 안에 있는 모든 노트와 더불어 하위 노트북들도 함께 삭제됩니다."
+"이 노트북 안에 있는 모든 노트와 더불어 하위 노트북들도 함께 휴지통으로 이동합"
+"니다."
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.ts:8
 msgid "Move to notebook"
@@ -3023,7 +3018,7 @@ msgstr "새 태그:"
 #: packages/app-mobile/components/screens/Notes.tsx:252
 #: packages/app-mobile/setupQuickActions.ts:19
 msgid "New to-do"
-msgstr "새 '할 일'"
+msgstr "새 목록"
 
 #: packages/app-desktop/checkForUpdates.ts:107
 msgid "New version: %s"
@@ -3169,15 +3164,15 @@ msgstr "노트 역사"
 
 #: packages/app-cli/app/command-done.ts:22
 msgid "Note is not a to-do: \"%s\""
-msgstr "노트는 '할 일' 항목이 아닙니다: \"%s\""
+msgstr "노트는 목록 항목이 아닙니다: \"%s\""
 
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:8
 msgid "Note list"
-msgstr "노트 목록"
+msgstr "노트 리스트"
 
 #: packages/lib/models/Setting.ts:1696
 msgid "Note list growth factor"
-msgstr "노트 목록 증가 인수"
+msgstr "노트 리스트 증가 인수"
 
 #: packages/app-desktop/gui/MenuBar.tsx:747
 msgid "Note list style"
@@ -3405,19 +3400,16 @@ msgid "Per user. Minimum of %d users."
 msgstr "사용자당 최소 %d명의 사용자 수입니다."
 
 #: packages/app-desktop/gui/MainScreen/commands/permanentlyDeleteNote.ts:8
-#, fuzzy
 msgid "Permanently delete note"
-msgstr "선택된 노트 삭제"
+msgstr "선택된 노트를 영구적으로 삭제"
 
 #: packages/lib/models/Note.ts:900
-#, fuzzy
 msgid "Permanently delete note \"%s\"?"
-msgstr "\"%s\" 노트를 삭제할까요?"
+msgstr "\"%s\" 노트를 영구적으로 삭제하시겠습니까?"
 
 #: packages/lib/models/Note.ts:902
-#, fuzzy
 msgid "Permanently delete these %d notes?"
-msgstr "%d 개의 노트들을 삭제할까요?"
+msgstr "\"%d\"개의 노트 영구적으로 삭제하시겠습니까?"
 
 #: packages/app-mobile/components/screens/Note.tsx:492
 msgid "Permission needed"
@@ -3508,18 +3500,16 @@ msgid "Please wait..."
 msgstr "잠시만 기다려주세요..."
 
 #: packages/app-mobile/plugins/PlatformImplementation.ts:52
-#, fuzzy
 msgid "Plugin message"
-msgstr "플러그인"
+msgstr "플러그인 메시지"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:81
 msgid "Plugin repository failed to load"
-msgstr ""
+msgstr "플러그인 저장소를 불러오지 못했습니다"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:28
-#, fuzzy
 msgid "Plugin search"
-msgstr "플러그인"
+msgstr "플러그인 검색"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:325
 msgid "Plugin tools"
@@ -3712,9 +3702,8 @@ msgid "Recipients:"
 msgstr "공유 수신자:"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox.tsx:106
-#, fuzzy
 msgid "Recommended"
-msgstr "명령"
+msgstr "추천"
 
 #: packages/app-desktop/gui/MenuBar.tsx:709
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
@@ -3824,27 +3813,23 @@ msgstr "지금 재시작"
 #: packages/app-mobile/components/screens/Note.tsx:1267
 #: packages/app-mobile/components/side-menu-content.tsx:155
 msgid "Restore"
-msgstr "복구"
+msgstr "복원"
 
 #: packages/app-desktop/gui/MainScreen/commands/restoreNote.ts:10
-#, fuzzy
 msgid "Restore note"
-msgstr "복구된 노트들"
+msgstr "노트 복원"
 
 #: packages/app-desktop/gui/MainScreen/commands/restoreFolder.ts:9
-#, fuzzy
 msgid "Restore notebook"
-msgstr "새 노트북을 만듭니다"
+msgstr "노트북 복원"
 
 #: packages/app-cli/app/command-restore.ts:12
-#, fuzzy
 msgid "Restore the items matching <pattern> from the trash."
-msgstr "<note-pattern>에 일치하는 노트를 삭제합니다."
+msgstr "<pattern>에 일치하는 노트를 삭제합니다."
 
 #: packages/lib/services/trash/index.ts:87
-#, fuzzy
 msgid "Restored items"
-msgstr "복구된 노트들"
+msgstr "복원된 항목"
 
 #: packages/lib/services/RevisionService.ts:241
 msgid "Restored Notes"
@@ -4130,7 +4115,7 @@ msgstr "모두 표시"
 
 #: packages/lib/models/Setting.ts:935
 msgid "Show completed to-dos"
-msgstr "완료된 '할 일'을 표시"
+msgstr "완료된 목록을 표시"
 
 #: packages/server/src/routes/admin/users.ts:203
 msgid "Show disabled"
@@ -4399,7 +4384,7 @@ msgstr "윗줄과 위치 바꾸기"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNoteType.ts:8
 msgid "Switch between note and to-do type"
-msgstr "'노트' 또는 '할 일' 형식으로 전환합니다"
+msgstr "노트 또는 목록 형식으로 전환합니다"
 
 #: packages/app-desktop/gui/MenuBar.tsx:506
 #: packages/app-mobile/components/side-menu-content.tsx:477
@@ -4408,7 +4393,7 @@ msgstr "프로파일 전환"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:82
 msgid "Switch to note type"
-msgstr "'노트'  형식으로 전환합니다"
+msgstr "노트 형식으로 전환합니다"
 
 #: packages/app-desktop/commands/switchProfile1.ts:7
 #: packages/app-desktop/commands/switchProfile2.ts:7
@@ -4418,7 +4403,7 @@ msgstr "%d 프로파일로 전환"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:91
 msgid "Switch to to-do type"
-msgstr "'할 일' 형식으로 전환합니다"
+msgstr "목록 형식으로 전환합니다"
 
 #: packages/app-cli/app/command-use.ts:12
 msgid ""
@@ -4713,15 +4698,13 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "노트 \"%s\"가 노트북 \"%s\"에 성공적으로 복구되었습니다."
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:63
-#, fuzzy
 msgid "The note was successfully moved to the trash."
 msgid_plural "The notes were successfully moved to the trash."
-msgstr[0] "노트 \"%s\"가 노트북 \"%s\"에 성공적으로 복구되었습니다."
+msgstr[0] "노트가 성공적으로 휴지통으로 이동하였습니다."
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:61
-#, fuzzy
 msgid "The notebook and its content was successfully moved to the trash."
-msgstr "노트 \"%s\"가 노트북 \"%s\"에 성공적으로 복구되었습니다."
+msgstr "노트북과 하위 콘텐츠가 성공적으로 휴지통으로 이동되었습니다."
 
 #: packages/app-mobile/components/screens/folder.js:77
 msgid "The notebook could not be saved: %s"
@@ -4987,7 +4970,7 @@ msgstr ""
 
 #: packages/app-desktop/commands/emptyTrash.ts:14
 msgid "This will permanently delete all items in the trash. Continue?"
-msgstr ""
+msgstr "휴지통에 있는 모든 항목이 영구적으로 삭제됩니다. 계속하시겠습니까?"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
 msgid ""
@@ -5021,11 +5004,11 @@ msgstr "Joplin을 Dropbox와 동기화하려면 다음 절차를 따라주세요
 #: packages/app-cli/app/command-sync.ts:108
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:80
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:149
-#, fuzzy
 msgid ""
 "To allow Joplin to synchronise with Joplin Cloud, please login using this "
 "URL:"
-msgstr "Joplin을 Dropbox와 동기화하려면 다음 절차를 따라주세요:"
+msgstr ""
+"Joplin을 Joplin Cloud와 동기화하려면 다음 URL을 사용하여 로그인하십시오:"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:53
 msgid "To continue, please enter your master password below."
@@ -5087,16 +5070,15 @@ msgstr ""
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:114
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:70
 msgid "to-do"
-msgstr "할 일"
+msgstr "목록"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:6
-#, fuzzy
 msgid "To-do"
-msgstr "할 일"
+msgstr "목록"
 
 #: packages/app-mobile/components/note-item.js:145
 msgid "to-do: %s"
-msgstr "할 일: %s"
+msgstr "목록: %s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:134
 msgid "Toggle comment"
@@ -5160,7 +5142,7 @@ msgstr "합계: %d/%d"
 
 #: packages/lib/services/trash/index.ts:41
 msgid "Trash"
-msgstr ""
+msgstr "휴지통"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:315
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:123
@@ -5216,7 +5198,7 @@ msgstr "로그 데이터를 공유할 수 없습니다. 이유: %s"
 
 #: packages/lib/models/Setting.ts:934
 msgid "Uncompleted to-dos on top"
-msgstr "완료되지 않은 '할 일'을 맨 위에"
+msgstr "완료되지 않은 목록을 맨 위에"
 
 #: packages/app-desktop/gui/MenuBar.tsx:705
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:118
@@ -5361,7 +5343,7 @@ msgid ""
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
 "긴 목록 포맷을 사용합니다. 포맷은 ID, NOTE_COUNT (노트북에 해당), DATE, "
-"TODO_CHECKED (할 일에 해당), TITLE 입니다"
+"TODO_CHECKED (목록에 해당), TITLE 입니다"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.ts:181
 msgid "Use spell checker"
@@ -5466,9 +5448,8 @@ msgid "Voice typing..."
 msgstr "음성 입력 중..."
 
 #: packages/lib/services/joplinCloudUtils.ts:23
-#, fuzzy
 msgid "Waiting for authorisation..."
-msgstr "허가된 권한"
+msgstr "승인을 기다리는 중..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:202
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:109
@@ -5539,7 +5520,7 @@ msgstr "새 노트를 만들 때:"
 
 #: packages/lib/models/Setting.ts:1111
 msgid "When creating a new to-do:"
-msgstr "새 '할 일'을 만들 때:"
+msgstr "새 목록을 만들 때:"
 
 #: packages/lib/models/Setting.ts:847
 msgid ""
@@ -5587,7 +5568,7 @@ msgstr ""
 
 #: packages/lib/services/joplinCloudUtils.ts:41
 msgid "You are logged in into Joplin Cloud, you can leave this screen now."
-msgstr ""
+msgstr "Joplin Cloud에 로그인되어 있으므로 지금 이 화면을 종료해도 됩니다."
 
 #: packages/app-mobile/components/NoteList.tsx:95
 msgid "You currently have no notebooks."
@@ -5610,15 +5591,12 @@ msgstr ""
 "암호화 방법으로 암호화된 것을 알고 있는 경우가 이에 해당합니다."
 
 #: packages/lib/services/joplinCloudUtils.ts:49
-#, fuzzy
 msgid ""
 "You were unable to connect to Joplin Cloud. Please check your credentials "
 "and try again. Error:"
 msgstr ""
-"Joplin 클라우드 계정을 설정하는 동안 오류가 발생했습니다. 전자우편과 비밀번호"
-"를 확인한 후에 다시 시도해주세요. 발생한 오류:\n"
-"\n"
-"%s"
+"Joplin 클라우드에 연결할 수 없습니다. 자격을 확인하고 다시 시도해주세요."
+"오류:"
 
 #: packages/app-cli/app/cli-utils.js:160
 msgid "Your choice: "
@@ -5816,7 +5794,7 @@ msgstr "축소"
 #~ msgstr "템플릿에서 노트 생성"
 
 #~ msgid "Create to-do from template"
-#~ msgstr "템플릿에서 할 일 생성"
+#~ msgstr "템플릿에서 목록 생성"
 
 #~ msgid "Open template directory"
 #~ msgstr "템플릿 디렉터리 열기"
@@ -6040,8 +6018,8 @@ msgstr "축소"
 #~ "Click on the (+) button to create a new note or notebook. Click on the "
 #~ "side menu to access your existing notebooks."
 #~ msgstr ""
-#~ "(+) 버튼을 눌러 새 노트 및 노트북을 만드세요. 측면 메뉴를 눌러 기존의 노트"
-#~ "북을 관리하세요."
+#~ "(+) 버튼을 눌러 새 노트 및 노트북을 만드세요. 측면 메뉴를 눌러"
+#~ "기존의 노트북을 관리하세요."
 
 #~ msgid ""
 #~ "You currently have no notebook. Create one by clicking on (+) button."

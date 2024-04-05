@@ -3,6 +3,7 @@ import { CallbackIds, SerializableData, SerializableDataAndCallbacks } from '../
 type CallMethodWithIdCallback = (id: string, args: SerializableDataAndCallbacks[])=> Promise<SerializableDataAndCallbacks>;
 
 // Intended to be used to track callbacks for garbage collection
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 type OnAfterCallbackCreated = (callbackId: string, callbackRef: ()=> any)=> void;
 
 // Below, we use TypeScript syntax to specify the return type of mergeCallbacksAndSerializable

@@ -33,6 +33,7 @@ const logDebug = (message: string) => logger.debug(message);
 
 interface RenderedBody {
 	html: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginAssets: any[];
 }
 
@@ -77,6 +78,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		}
 	}, [props.content]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onEditorPaste = useCallback(async (event: any = null) => {
 		const resourceMds = await getResourcesFromPasteEvent(event);
 		if (!resourceMds.length) return;
@@ -183,6 +185,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 				let commandOutput = null;
 				if (cmd.name in commands) {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					commandOutput = (commands as any)[cmd.name](cmd.value);
 				} else if (editorRef.current.supportsCommand(cmd.name)) {
 					commandOutput = editorRef.current.execCommand(cmd.name);
@@ -270,6 +273,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			lineCount = editorRef.current.editor.state.doc.lines;
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const options: any = {
 			pluginAssets: renderedBody.pluginAssets,
 			downloadResources: Setting.value('sync.resourceDownloadMode'),
@@ -310,30 +314,6 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		}
 		return output;
 	}, [styles.cellViewer, props.visiblePanes]);
-
-	// Disable this effect to fix this:
-	//
-	// https://github.com/laurent22/joplin/issues/6514 It doesn't seem essential
-	// to automatically focus the editor when the layout changes. The workaround
-	// is to toggle the layout Cmd+L, then manually focus the editor Cmd+Shift+B.
-	//
-	// On the other hand, if we automatically focus the editor, and the user
-	// does not want this, there's no workaround, so it's better to have this
-	// disabled.
-
-	// const editorPaneVisible = props.visiblePanes.indexOf('editor') >= 0;
-
-	// useEffect(() => {
-	// 	if (!editorRef.current) return;
-
-	// 	// Anytime the user toggles the visible panes AND the editor is visible as a result
-	// 	// we should focus the editor
-	// 	// The intuition is that a panel toggle (with editor in view) is the equivalent of
-	// 	// an editor interaction so users should expect the editor to be focused
-	// 	if (editorPaneVisible) {
-	// 		editorRef.current.focus();
-	// 	}
-	// }, [editorPaneVisible]);
 
 	useEditorSearchHandler({
 		setLocalSearchResultCount: props.setLocalSearchResultCount,

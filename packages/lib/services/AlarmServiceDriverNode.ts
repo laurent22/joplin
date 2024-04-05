@@ -11,7 +11,9 @@ interface Options {
 export default class AlarmServiceDriverNode {
 
 	private appName_: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private notifications_: any = {};
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private service_: any = null;
 
 	public constructor(options: Options) {
@@ -20,6 +22,7 @@ export default class AlarmServiceDriverNode {
 		this.appName_ = options.appName;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public setService(s: any) {
 		this.service_ = s;
 	}
@@ -43,6 +46,7 @@ export default class AlarmServiceDriverNode {
 	}
 
 	private displayDefaultNotification(notification: Notification) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const o: any = {
 			appID: this.appName_,
 			title: notification.title,
@@ -57,6 +61,7 @@ export default class AlarmServiceDriverNode {
 
 		this.logger().info('AlarmServiceDriverNode::scheduleNotification: Triggering notification (default):', o);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		notifier.notify(o, (error: any, response: any) => {
 			this.logger().info('AlarmServiceDriverNode::scheduleNotification: node-notifier response:', error, response);
 		});
@@ -74,8 +79,10 @@ export default class AlarmServiceDriverNode {
 		//
 		// In fact it's likely that we could use this on other platforms too
 		try {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const options: any = {
 				body: notification.body ? notification.body : '-',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				onerror: (error: any) => {
 					this.logger().error('AlarmServiceDriverNode::displayMacNotification', error);
 				},

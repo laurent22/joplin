@@ -3,6 +3,7 @@ import { Size } from '@joplin/utils/types';
 import { useEffect, useState } from 'react';
 import { ItemFlow } from '@joplin/lib/services/plugins/api/noteListType';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const useItemElement = (rootElement: HTMLDivElement, noteId: string, noteHtml: string, style: any, itemSize: Size, onClick: React.MouseEventHandler<HTMLDivElement>, flow: ItemFlow) => {
 	const [itemElement, setItemElement] = useState<HTMLDivElement>(null);
 
@@ -13,11 +14,13 @@ const useItemElement = (rootElement: HTMLDivElement, noteId: string, noteHtml: s
 		element.setAttribute('data-id', noteId);
 		element.className = 'note-list-item';
 		for (const [n, v] of Object.entries(style)) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			(element.style as any)[n] = v;
 		}
 		if (flow === ItemFlow.LeftToRight) element.style.width = `${itemSize.width}px`;
 		element.style.height = `${itemSize.height}px`;
 		element.innerHTML = noteHtml;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		element.addEventListener('click', onClick as any);
 
 		rootElement.appendChild(element);

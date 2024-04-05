@@ -93,7 +93,7 @@ const PluginSearch: React.FC<Props> = props => {
 				key={manifest.id}
 				item={item.item}
 				installState={item.installState}
-				isCompatible={PluginService.instance().isCompatible(manifest.app_min_version)}
+				isCompatible={PluginService.instance().isCompatible(manifest)}
 				onInstall={installPlugin}
 				onAboutPress={onOpenWebsiteForPluginPress}
 			/>

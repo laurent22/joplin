@@ -56,6 +56,7 @@ export const parsePoFile = async (filePath: string) => {
 // to a <string, string> map, with the English text on the left and the
 // translation on the right. If a particular translation is missing, no entry
 // will be returned. The caller should display the English text in this case.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const parseTranslations = (gettextTranslations: any) => {
 	const output: Translations = {};
 

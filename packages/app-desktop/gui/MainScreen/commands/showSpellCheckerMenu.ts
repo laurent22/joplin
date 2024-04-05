@@ -19,6 +19,7 @@ export const runtime = (): CommandRuntime => {
 			useSpellChecker = useSpellChecker === null ? context.state.settings['spellChecker.enabled'] : useSpellChecker;
 
 			const menuItems = SpellCheckerService.instance().spellCheckerConfigMenuItems(selectedLanguages, useSpellChecker);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const menu = Menu.buildFromTemplate(menuItems as any);
 			menu.popup({ window: bridge().window() });
 		},

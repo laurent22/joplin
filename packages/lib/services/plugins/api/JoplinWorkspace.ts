@@ -59,8 +59,10 @@ type ResourceChangeHandler = (event: ResourceChangeEvent)=> void;
 export default class JoplinWorkspace {
 	// TODO: unregister events when plugin is closed or disabled
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private store: any;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(store: any) {
 		this.store = store;
 	}
@@ -94,6 +96,7 @@ export default class JoplinWorkspace {
 	 * Called when the content of the current note changes.
 	 */
 	public async onNoteChange(handler: ItemChangeHandler): Promise<Disposable> {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const wrapperHandler = (event: any) => {
 			if (event.itemType !== ModelType.Note) return;
 			if (!this.store.getState().selectedNoteIds.includes(event.itemId)) return;
@@ -151,6 +154,7 @@ export default class JoplinWorkspace {
 	/**
 	 * Gets the currently selected note. Will be `null` if no note is selected.
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async selectedNote(): Promise<any> {
 		const noteIds = this.store.getState().selectedNoteIds;
 		if (noteIds.length !== 1) { return null; }

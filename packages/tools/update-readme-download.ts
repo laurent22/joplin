@@ -66,6 +66,7 @@ function setReadmeContent(content: string) {
 	return fs.writeFileSync(destMarkdownPath, content);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function main(argv: any) {
 	const waitForVersion = argv.length === 3 ? argv[2] : null;
 

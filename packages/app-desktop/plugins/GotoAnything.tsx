@@ -43,8 +43,10 @@ interface Props {
 	themeId: number;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	folders: any[];
 	showCompletedTodos: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	userData: any;
 }
 
@@ -97,9 +99,12 @@ class GotoAnything {
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public dispatch: Function;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static Dialog: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static manifest: any;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public onTrigger(event: any) {
 		this.dispatch({
 			type: 'PLUGINLEGACY_DIALOG_SET',
@@ -113,11 +118,16 @@ class GotoAnything {
 
 class Dialog extends React.PureComponent<Props, State> {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private styles_: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private inputRef: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private itemListRef: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private listUpdateIID_: any;
 	private markupToHtml_: MarkupToHtml;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private userCallback_: any = null;
 
 	public constructor(props: Props) {
@@ -234,6 +244,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		});
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public onKeyDown(event: any) {
 		if (event.keyCode === 27) { // ESCAPE
 			this.props.dispatch({
@@ -244,6 +255,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private modalLayer_onClick(event: any) {
 		if (event.currentTarget === event.target) {
 			this.props.dispatch({
@@ -258,6 +270,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		this.setState({ showHelp: !this.state.showHelp });
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private input_onChange(event: any) {
 		this.setState({ query: event.target.value });
 
@@ -342,14 +355,17 @@ class Dialog extends React.PureComponent<Props, State> {
 				searchQuery = gotoAnythingStyleQuery(this.state.query);
 				// SearchEngine returns the title normalized, that is why we need to
 				// override this field below with the original title
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				results = (await SearchEngine.instance().search(searchQuery)) as any[];
 
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				resultsInBody = !!results.find((row: any) => row.fields.includes('body'));
 
 				const resourceIds = results.filter(r => r.item_type === ModelType.Resource).map(r => r.item_id);
 				const resources = await Resource.resourceOcrTextsByIds(resourceIds);
 
 				if (!resultsInBody || this.state.query.length <= 1) {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const notes = await Note.byIds(results.map((result: any) => result.id), { fields: ['id', 'title'] });
 					for (let i = 0; i < results.length; i++) {
 						const row = results[i];
@@ -365,11 +381,14 @@ class Dialog extends React.PureComponent<Props, State> {
 					// going to apply a limit to the number of fetched notes.
 					// https://github.com/laurent22/joplin/issues/9944
 					if (!this.props.showCompletedTodos) {
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 						results = results.filter((row: any) => !row.is_todo || !row.todo_completed);
 					}
 
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const notes = await Note.byIds(results.map((result: any) => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed', 'title'] });
 					// Can't make any sense of this code so...
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const notesById = notes.reduce((obj, { id, body, markup_language, title }) => ((obj[[id] as any] = { id, body, markup_language, title }), obj), {});
 
 					// Filter out search results that are associated with non-existing notes.
@@ -410,6 +429,7 @@ class Dialog extends React.PureComponent<Props, State> {
 								// e.g. 'Joplin is a free, open source' and 'open source note taking application'
 								// will result in 'Joplin is a free, open source note taking application'
 								const mergedIndices = mergeOverlappingIntervals(indices, 3);
+								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 								fragments = mergedIndices.map((f: any) => body.slice(f[0], f[1])).join(' ... ');
 								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
 								if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
@@ -450,6 +470,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		this.itemListRef.current.makeItemIndexVisible(index);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async gotoItem(item: any) {
 		this.props.dispatch({
 			pluginName: PLUGIN_NAME,
@@ -513,6 +534,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private listItem_onClick(event: any) {
 		const itemId = event.currentTarget.getAttribute('data-id');
 		const parentId = event.currentTarget.getAttribute('data-parent-id');
@@ -550,6 +572,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public selectedItemIndex(results: any[] = undefined, itemId: string = undefined) {
 		if (typeof results === 'undefined') results = this.state.results;
 		if (typeof itemId === 'undefined') itemId = this.state.selectedItemId;
@@ -566,6 +589,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		return { ...this.state.results[index], commandArgs: this.state.commandArgs };
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private input_onKeyDown(event: any) {
 		const keyCode = event.keyCode;
 

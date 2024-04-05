@@ -1,6 +1,7 @@
 import { useState, useCallback, MutableRefObject, useEffect } from 'react';
 import Logger from '@joplin/utils/Logger';
 import { SearchMarkers } from './useSearchMarkers';
+import { focus } from '@joplin/lib/utils/focusHandler';
 const CommandService = require('@joplin/lib/services/CommandService').default;
 
 const logger = Logger.create('useNoteSearchBar');
@@ -26,6 +27,7 @@ function defaultLocalSearch(): LocalSearch {
 }
 
 export interface UseNoteSearchBarProps {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	noteSearchBarRef: MutableRefObject<any>;
 }
 
@@ -36,7 +38,7 @@ export default function useNoteSearchBar({ noteSearchBarRef }: UseNoteSearchBarP
 
 	useEffect(() => {
 		if (showLocalSearch && noteSearchBarRef.current) {
-			noteSearchBarRef.current.focus();
+			focus('useNoteSearchBar', noteSearchBarRef.current);
 		}
 	}, [showLocalSearch, noteSearchBarRef]);
 

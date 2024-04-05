@@ -29,6 +29,7 @@ import { RuntimeProps } from './commands/focusElementSideBar';
 const { connect } = require('react-redux');
 import { renderFolders, renderTags } from '@joplin/lib/components/shared/side-menu-shared';
 import { getTrashFolderIcon, getTrashFolderId } from '@joplin/lib/services/trash';
+import { focus } from '@joplin/lib/utils/focusHandler';
 const { themeStyle } = require('@joplin/lib/theme');
 const bridge = require('@electron/remote').require('./bridge').default;
 const Menu = bridge().Menu;
@@ -49,8 +50,11 @@ interface Props {
 	selectedFolderId: string;
 	selectedTagId: string;
 	selectedSmartFilterId: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	decryptionWorker: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	resourceFetcher: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	syncReport: any;
 	tags: TagEntity[];
 	syncStarted: boolean;
@@ -63,13 +67,16 @@ const commands = [
 	require('./commands/focusElementSideBar'),
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function ExpandIcon(props: any) {
 	const theme = themeStyle(props.themeId);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const style: any = { width: 16, maxWidth: 16, opacity: 0.5, fontSize: Math.round(theme.toolbarIconSize * 0.8), display: 'flex', justifyContent: 'center' };
 	if (!props.isVisible) style.visibility = 'hidden';
 	return <i className={props.isExpanded ? 'fas fa-caret-down' : 'fas fa-caret-right'} style={style}></i>;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function ExpandLink(props: any) {
 	return props.hasChildren ? (
 		<StyledExpandLink href="#" data-folder-id={props.folderId} onClick={props.onClick}>
@@ -94,6 +101,7 @@ const renderFolderIcon = (folderIcon: FolderIcon) => {
 	return <div style={{ marginRight: 7, display: 'flex' }}><FolderIconBox folderIcon={folderIcon}/></div>;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function FolderItem(props: any) {
 	const { hasChildren, showFolderIcon, isExpanded, parentId, depth, selected, folderId, folderTitle, folderIcon, anchorRef, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_, shareId } = props;
 
@@ -140,12 +148,15 @@ const menuUtils = new MenuUtils(CommandService.instance());
 
 const SidebarComponent = (props: Props) => {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const folderItemsOrder_ = useRef<any[]>();
 	folderItemsOrder_.current = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const tagItemsOrder_ = useRef<any[]>();
 	tagItemsOrder_.current = [];
 
 	const rootRef = useRef(null);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const anchorItemRefs = useRef<Record<string, any>>({});
 
 	// This whole component is a bit of a mess and rather than passing
@@ -204,6 +215,7 @@ const SidebarComponent = (props: Props) => {
 		getFirstAnchorItemRef,
 	]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onFolderDragStart_ = useCallback((event: any) => {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
 		if (!folderId) return;
@@ -213,11 +225,13 @@ const SidebarComponent = (props: Props) => {
 		event.dataTransfer.setData('text/x-jop-folder-ids', JSON.stringify([folderId]));
 	}, []);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onFolderDragOver_ = useCallback((event: any) => {
 		if (event.dataTransfer.types.indexOf('text/x-jop-note-ids') >= 0) event.preventDefault();
 		if (event.dataTransfer.types.indexOf('text/x-jop-folder-ids') >= 0) event.preventDefault();
 	}, []);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onFolderDrop_ = useCallback(async (event: any) => {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
 		const dt = event.dataTransfer;
@@ -244,6 +258,7 @@ const SidebarComponent = (props: Props) => {
 		}
 	}, []);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onTagDrop_ = useCallback(async (event: any) => {
 		const tagId = event.currentTarget.getAttribute('data-tag-id');
 		const dt = event.dataTransfer;
@@ -259,6 +274,7 @@ const SidebarComponent = (props: Props) => {
 		}
 	}, []);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onFolderToggleClick_ = useCallback((event: any) => {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
 
@@ -278,6 +294,7 @@ const SidebarComponent = (props: Props) => {
 		menu.popup({ window: bridge().window() });
 	}, []);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const itemContextMenu = useCallback(async (event: any) => {
 		const itemId = event.currentTarget.getAttribute('data-id');
 		if (itemId === Folder.conflictFolderId()) return;
@@ -456,6 +473,7 @@ const SidebarComponent = (props: Props) => {
 		});
 	}, [props.dispatch]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const tagItem_click = useCallback((tag: any) => {
 		props.dispatch({
 			type: 'TAG_SELECT',
@@ -487,7 +505,9 @@ const SidebarComponent = (props: Props) => {
 		return count ? <StyledNoteCount className="note-count-label">{count}</StyledNoteCount> : null;
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const renderExpandIcon = (theme: any, isExpanded: boolean, isVisible: boolean) => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const style: any = { width: 16, maxWidth: 16, opacity: 0.5, fontSize: Math.round(theme.toolbarIconSize * 0.8), display: 'flex', justifyContent: 'center' };
 		if (!isVisible) style.visibility = 'hidden';
 		return <i className={isExpanded ? 'fas fa-caret-down' : 'fas fa-caret-right'} style={style}></i>;
@@ -529,6 +549,7 @@ const SidebarComponent = (props: Props) => {
 	const renderFolderItem = (folder: FolderEntity, selected: boolean, hasChildren: boolean, depth: number) =>{
 		const anchorRef = anchorItemRef('folder', folder.id);
 		const isExpanded = props.collapsedFolderIds.indexOf(folder.id) < 0;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let noteCount = (folder as any).note_count;
 
 		// For now hide the count for folders in the trash because it doesn't work and getting it to
@@ -539,6 +560,7 @@ const SidebarComponent = (props: Props) => {
 		if (isExpanded) {
 			for (let i = 0; i < props.folders.length; i++) {
 				if (props.folders[i].parent_id === folder.id) {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					noteCount -= (props.folders[i] as any).note_count;
 				}
 			}
@@ -568,6 +590,7 @@ const SidebarComponent = (props: Props) => {
 		/>;
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const renderTag = (tag: any, selected: boolean) => {
 		const anchorRef = anchorItemRef('tag', tag.id);
 		let noteCount = null;
@@ -603,7 +626,7 @@ const SidebarComponent = (props: Props) => {
 		);
 	};
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 	const renderHeader = (key: string, label: string, iconName: string, contextMenuHandler: Function = null, onPlusButtonClick: Function = null, extraProps: any = {}) => {
 		const headerClick = extraProps.onClick || null;
 		delete extraProps.onClick;
@@ -615,6 +638,7 @@ const SidebarComponent = (props: Props) => {
 					ref={ref}
 					{...extraProps}
 					onContextMenu={contextMenuHandler}
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					onClick={(event: any) => {
 						// if a custom click event is attached, trigger that.
 						if (headerClick) {
@@ -631,6 +655,7 @@ const SidebarComponent = (props: Props) => {
 		);
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onKeyDown = useCallback((event: any) => {
 		const keyCode = event.keyCode;
 		const selectedItem = getSelectedItem();
@@ -674,7 +699,7 @@ const SidebarComponent = (props: Props) => {
 				id: focusItem.id,
 			});
 
-			focusItem.ref.current.focus();
+			focus('SideBar::onKeyDown', focusItem.ref.current);
 		}
 
 		if (keyCode === 9) {

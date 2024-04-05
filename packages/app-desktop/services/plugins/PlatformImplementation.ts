@@ -13,6 +13,7 @@ const { clipboard, nativeImage } = require('electron');
 const packageInfo = require('../../packageInfo');
 
 interface Components {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	[key: string]: any;
 }
 
@@ -72,6 +73,7 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 		};
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public registerComponent(name: string, component: any) {
 		this.components_[name] = component;
 	}

@@ -5,8 +5,10 @@ import { Mutex, MutexInterface, withTimeout } from 'async-mutex';
 
 export default class PdfDocument {
 	public url: string | Uint8Array;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private doc: any = null;
 	public pageCount: number = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private pages: any = {};
 	private rendererMutex: MutexInterface = null;
 	private pageSize: {
@@ -24,6 +26,7 @@ export default class PdfDocument {
 		this.url = url;
 		const loadingTask = pdfjsLib.getDocument(url);
 		try {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const pdfDocument: any = await loadingTask.promise;
 			this.doc = pdfDocument;
 			this.pageCount = pdfDocument.numPages;
@@ -146,7 +149,8 @@ export default class PdfDocument {
 			frame.contentWindow.onafterprint = () => {
 				frame.remove();
 			};
-			frame.focus();
+			console.warn('frame.focus() has been disabled!! Use focusHandler instead');
+			// frame.focus();
 			frame.contentWindow.print();
 		};
 		frame.src = this.url as string;

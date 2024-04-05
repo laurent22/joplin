@@ -32,6 +32,7 @@ describe('share_users', () => {
 		const { share: share1 } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.Folder, folderItem1);
 		const { share: share2 } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.Folder, folderItem2);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const shareUsers = await getApi<PaginatedResults<any>>(session2.id, 'share_users');
 		expect(shareUsers.items.length).toBe(2);
 		expect(shareUsers.items.find(su => su.share.id === share1.id)).toBeTruthy();

@@ -41,6 +41,7 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 			return () => {};
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const pasteEventHandler = (_editor: any, event: Event) => {
 			props.onEditorPaste(event);
 		};
@@ -76,6 +77,7 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 						const path = shim.fsDriver().resolveRelativePathWithinDir(assetPath, name);
 						return shim.fsDriver().readFile(path, 'utf8');
 					},
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					postMessageHandler: (message: any) => {
 						const plugin = PluginService.instance().pluginById(pluginId);
 						return plugin.emitContentScriptMessage(contentScript.id, message);

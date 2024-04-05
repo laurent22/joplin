@@ -14,6 +14,7 @@ interface Callbacks {
 	onRequestEditResource: (message: string)=> void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function useOnResourceLongPress(callbacks: Callbacks, dialogBoxRef: any) {
 	const { onJoplinLinkClick, onRequestEditResource } = callbacks;
 

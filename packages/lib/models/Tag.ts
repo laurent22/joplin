@@ -30,6 +30,7 @@ export default class Tag extends BaseItem {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async notes(tagId: string, options: any = null) {
 		if (options === null) options = {};
 
@@ -136,6 +137,7 @@ export default class Tag extends BaseItem {
 		return await Tag.modelSelectAll('SELECT * FROM tags_with_note_count');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async searchAllWithNotes(options: any) {
 		if (!options) options = {};
 		if (!options.conditions) options.conditions = [];
@@ -143,6 +145,7 @@ export default class Tag extends BaseItem {
 		return this.search(options);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async tagsByNoteId(noteId: string, options: any = null) {
 		options = {
 			...options,
@@ -215,6 +218,7 @@ export default class Tag extends BaseItem {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async save(o: TagEntity, options: any = null) {
 		options = { dispatchUpdateAction: true,
 			userSideValidation: false, ...options };

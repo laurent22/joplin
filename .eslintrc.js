@@ -101,6 +101,19 @@ module.exports = {
 		'no-unneeded-ternary': 'error',
 		'github/array-foreach': ['error'],
 
+		'no-restricted-properties': ['error',
+			{
+				'property': 'focus',
+				'message': 'Please use focusHandler::focus() instead',
+			},
+			{
+				'property': 'blur',
+				'message': 'Please use focusHandler::blur() instead',
+			},
+		],
+
+		'@typescript-eslint/no-explicit-any': ['error'],
+
 		// -------------------------------
 		// Formatting
 		// -------------------------------

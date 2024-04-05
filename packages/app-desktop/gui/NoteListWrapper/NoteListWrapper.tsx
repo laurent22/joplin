@@ -21,6 +21,7 @@ import usePrevious from '../hooks/usePrevious';
 const logger = Logger.create('NoteListWrapper');
 
 interface Props {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	resizableLayoutEventEmitter: any;
 	size: Size;
 	visible: boolean;
@@ -133,6 +134,7 @@ export default function NoteListWrapper(props: Props) {
 	}, [props.size, noteListControlsHeight, theme.noteListHeaderHeight, isMultiColumns]);
 
 	const onHeaderItemClick: OnItemClickHander = useCallback(event => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const field = depNameToNoteProp(event.name as any).split('.')[1];
 
 		if (!Setting.isAllowedEnumOption('notes.sortOrder.field', field)) {

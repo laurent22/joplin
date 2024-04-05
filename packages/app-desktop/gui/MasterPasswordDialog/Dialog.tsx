@@ -94,14 +94,17 @@ export default function(props: Props) {
 		return !hasMasterPasswordEncryptedData;
 	}, [hasMasterPasswordEncryptedData, mode]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onCurrentPasswordChange = useCallback((event: any) => {
 		setCurrentPassword(event.target.value);
 	}, []);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onPasswordChange1 = useCallback((event: any) => {
 		setPassword1(event.target.value);
 	}, []);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onPasswordChange2 = useCallback((event: any) => {
 		setPassword2(event.target.value);
 	}, []);

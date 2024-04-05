@@ -10,6 +10,7 @@ export enum ErrorCode {
 }
 
 export interface ErrorOptions {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	details?: any;
 	code?: ErrorCode;
 }
@@ -21,6 +22,7 @@ export class ApiError extends Error {
 
 	public httpCode: number;
 	public code: ErrorCode;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public details: any;
 
 	public constructor(message: string, httpCode: number = null, code: ErrorCode | ErrorOptions = undefined) {
@@ -156,6 +158,7 @@ interface PlainObjectError {
 	stack?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function errorToPlainObject(error: any): PlainObjectError {
 	if (typeof error === 'string') return { message: error };
 

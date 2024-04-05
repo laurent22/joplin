@@ -194,8 +194,10 @@ export async function getDeltaContext(sessionId: string, path: string, paginatio
 	return context;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function getDelta(sessionId: string, path: string, pagination: Pagination): Promise<PaginatedResults<any>> {
 	const context = await getDeltaContext(sessionId, path, pagination);
 	checkContextError(context);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return context.response.body as PaginatedResults<any>;
 }

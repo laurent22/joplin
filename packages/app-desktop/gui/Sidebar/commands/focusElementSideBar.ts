@@ -2,6 +2,7 @@ import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/
 import { _ } from '@joplin/lib/locale';
 import layoutItemProp from '../../ResizableLayout/utils/layoutItemProp';
 import { AppState } from '../../../app.reducer';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 export const declaration: CommandDeclaration = {
 	name: 'focusElementSideBar',
@@ -10,8 +11,11 @@ export const declaration: CommandDeclaration = {
 };
 
 export interface RuntimeProps {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	getSelectedItem(): any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	getFirstAnchorItemRef(type: string): any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	anchorItemRefs: any;
 }
 
@@ -24,10 +28,10 @@ export const runtime = (props: RuntimeProps): CommandRuntime => {
 				const item = props.getSelectedItem();
 				if (item) {
 					const anchorRef = props.anchorItemRefs.current[item.type][item.id];
-					if (anchorRef) anchorRef.current.focus();
+					if (anchorRef) focus('focusElementSideBar1', anchorRef.current);
 				} else {
 					const anchorRef = props.getFirstAnchorItemRef('folder');
-					if (anchorRef) anchorRef.current.focus();
+					if (anchorRef) focus('focusElementSideBar2', anchorRef.current);
 				}
 			}
 		},

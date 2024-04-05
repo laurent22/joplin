@@ -14,9 +14,11 @@ import themeToCss from '@joplin/lib/services/style/themeToCss';
 import { themeStyle } from '@joplin/lib/theme';
 
 interface Props {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	themeId: any;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function(props: Props): any {
 	const [styleSheetContent, setStyleSheetContent] = useState('');
 

@@ -26,8 +26,11 @@ interface DecryptedMasterKey {
 }
 
 export interface EncryptionCustomHandler {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	context?: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	encrypt(context: any, hexaBytes: string, password: string): Promise<string>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	decrypt(context: any, hexaBytes: string, password: string): Promise<string>;
 }
 
@@ -53,6 +56,7 @@ export default class EncryptionService {
 
 	public static instance_: EncryptionService = null;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static fsDriver_: any = null;
 
 	// Note: 1 MB is very slow with Node and probably even worse on mobile.
@@ -110,6 +114,7 @@ export default class EncryptionService {
 	public activeMasterKeyId() {
 		const id = getActiveMasterKeyId();
 		if (!id) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const error: any = new Error('No master key is defined as active. Check this: Either one or more master keys exist but no password was provided for any of them. Or no master key exist. Or master keys and password exist, but none was set as active.');
 			error.code = 'noActiveMasterKey';
 			throw error;
@@ -142,6 +147,7 @@ export default class EncryptionService {
 
 	public loadedMasterKey(id: string) {
 		if (!this.decryptedMasterKeys_[id]) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const error: any = new Error(`Master key is not loaded: ${id}`);
 			error.code = 'masterKeyNotLoaded';
 			error.masterKeyId = id;
@@ -170,6 +176,7 @@ export default class EncryptionService {
 	}
 
 	private async randomHexString(byteCount: number) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const bytes: any[] = await shim.randomBytes(byteCount);
 		return bytes
 			.map(a => {
@@ -213,6 +220,7 @@ export default class EncryptionService {
 	private async generateMasterKeyContent_(password: string, options: EncryptOptions = null) {
 		options = { encryptionMethod: this.defaultMasterKeyEncryptionMethod_, ...options };
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const bytes: any[] = await shim.randomBytes(256);
 		const hexaBytes = bytes.map(a => hexPad(a.toString(16), 2)).join('');
 
@@ -258,6 +266,7 @@ export default class EncryptionService {
 		return true;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private wrapSjclError(sjclError: any) {
 		const error = new Error(sjclError.message);
 		error.stack = sjclError.stack;
@@ -415,6 +424,7 @@ export default class EncryptionService {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async encryptAbstract_(source: any, destination: any, options: EncryptOptions = null) {
 		options = { encryptionMethod: this.defaultEncryptionMethod(), ...options };
 
@@ -449,9 +459,11 @@ export default class EncryptionService {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async decryptAbstract_(source: any, destination: any, options: EncryptOptions = null) {
 		if (!options) options = {};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const header: any = await this.decodeHeaderSource_(source);
 		const masterKeyPlainText = this.loadedMasterKey(header.masterKeyId).plainText;
 
@@ -490,8 +502,10 @@ export default class EncryptionService {
 	}
 
 	private stringWriter_() {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any = {
 			data: [],
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			append: async function(data: any) {
 				output.data.push(data);
 			},
@@ -503,6 +517,7 @@ export default class EncryptionService {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async fileReader_(path: string, encoding: any) {
 		const handle = await this.fsDriver().open(path, 'r');
 		const reader = {
@@ -517,8 +532,10 @@ export default class EncryptionService {
 		return reader;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async fileWriter_(path: string, encoding: any) {
 		return {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			append: async (data: any) => {
 				return this.fsDriver().appendFile(path, data, encoding);
 			},
@@ -526,6 +543,7 @@ export default class EncryptionService {
 		};
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async encryptString(plainText: any, options: EncryptOptions = null): Promise<string> {
 		const source = this.stringReader_(plainText);
 		const destination = this.stringWriter_();
@@ -533,6 +551,7 @@ export default class EncryptionService {
 		return destination.result();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async decryptString(cipherText: any, options: EncryptOptions = null): Promise<string> {
 		const source = this.stringReader_(cipherText);
 		const destination = this.stringWriter_();
@@ -591,11 +610,13 @@ export default class EncryptionService {
 	}
 
 	public headerTemplate(version: number) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const r = (this.headerTemplates_ as any)[version];
 		if (!r) throw new Error(`Unknown header version: ${version}`);
 		return r;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public encodeHeader_(header: any) {
 		// Sanity check
 		if (header.masterKeyId.length !== 32) throw new Error(`Invalid master key ID size: ${header.masterKeyId}`);
@@ -607,11 +628,13 @@ export default class EncryptionService {
 		return `JED01${encryptionMetadata}`;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async decodeHeaderString(cipherText: any) {
 		const source = this.stringReader_(cipherText);
 		return this.decodeHeaderSource_(source);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async decodeHeaderSource_(source: any) {
 		const identifier = await source.read(5);
 		if (!isValidHeaderIdentifier(identifier)) throw new JoplinError(`Invalid encryption identifier. Data is not actually encrypted? ID was: ${identifier}`, 'invalidIdentifier');
@@ -622,7 +645,9 @@ export default class EncryptionService {
 		return this.decodeHeaderBytes_(identifier + mdSizeHex + md);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public decodeHeaderBytes_(headerHexaBytes: any) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const reader: any = this.stringReader_(headerHexaBytes, true);
 		const identifier = reader.read(3);
 		const version = parseInt(reader.read(2), 16);
@@ -631,6 +656,7 @@ export default class EncryptionService {
 
 		parseInt(reader.read(6), 16); // Read the size and move the reader pointer forward
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any = {};
 
 		for (let i = 0; i < template.fields.length; i++) {
@@ -658,6 +684,7 @@ export default class EncryptionService {
 		return [EncryptionMethod.SJCL, EncryptionMethod.SJCL1a, EncryptionMethod.SJCL1b, EncryptionMethod.SJCL2, EncryptionMethod.SJCL3, EncryptionMethod.SJCL4].indexOf(method) >= 0;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async itemIsEncrypted(item: any) {
 		if (!item) throw new Error('No item');
 		const ItemClass = BaseItem.itemClass(item);

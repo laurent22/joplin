@@ -20,6 +20,7 @@ interface Props {
 	tempDir: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const onPostPluginMessage = async (contentScriptId: string, message: any) => {
 	logger.debug(`Handling message from content script: ${contentScriptId}:`, message);
 
