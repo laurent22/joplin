@@ -21,6 +21,7 @@ class Command extends BaseCommand {
 		];
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public override async action(args: any) {
 		const pattern = args['note-pattern'];
 		const force = args.options && args.options.force === true;

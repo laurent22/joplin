@@ -8,7 +8,9 @@ import { PaginatedResults } from '../../models/utils/pagination';
 const router = new Router(RouteType.Api);
 
 router.put('api/batch_items', async (path: SubPath, ctx: AppContext) => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: PaginatedResults<any> = {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		items: await putItemContents(path, ctx, true) as any,
 		has_more: false,
 	};

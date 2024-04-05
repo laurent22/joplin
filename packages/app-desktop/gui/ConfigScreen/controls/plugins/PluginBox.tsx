@@ -98,6 +98,7 @@ const BoxedLabel = styled.div`
 	margin-top: auto;
 `;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const StyledNameAndVersion = styled.div<{ mb: any }>`
 	font-family: ${props => props.theme.fontFamily};
 	color: ${props => props.theme.color};

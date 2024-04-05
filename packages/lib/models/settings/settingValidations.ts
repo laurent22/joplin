@@ -5,6 +5,7 @@ import Resource from '../Resource';
 import Setting from '../Setting';
 
 // Should return an error message if there's a problem, and an empty string if not.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 type ValidationHandler = (oldValue: any, newValue: any)=> Promise<string>;
 
 const validations: Record<string, ValidationHandler> = {
@@ -39,6 +40,7 @@ const validations: Record<string, ValidationHandler> = {
 
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const validateSetting = async (settingName: string, oldValue: any, newValue: any) => {
 	if (oldValue === newValue) return '';
 	if (!validations[settingName]) return '';
@@ -46,6 +48,7 @@ const validateSetting = async (settingName: string, oldValue: any, newValue: any
 	return await validations[settingName](oldValue, newValue);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default async (settingKeys: string[], newValues: Record<string, any>) => {
 	for (const key of settingKeys) {
 		const oldValue = Setting.value(key);

@@ -50,8 +50,10 @@ const styles = StyleSheet.create({
 	},
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default class SelectDateTimeDialog extends React.PureComponent<any, any> {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(props: any) {
 		super(props);
 
@@ -67,6 +69,7 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 		this.onSetDate = this.onSetDate.bind(this);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public UNSAFE_componentWillReceiveProps(newProps: any) {
 		if (newProps.date !== this.state.date) {
 			this.setState({ date: newProps.date });

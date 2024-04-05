@@ -29,6 +29,7 @@ export default (props: Props) => {
 		output.options.types = notyfContext.options.types.map(type => {
 			if (type.type === 'success') {
 				type.background = theme.backgroundColor5;
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				(type.icon as any).color = theme.backgroundColor5;
 			}
 			return type;
@@ -36,6 +37,7 @@ export default (props: Props) => {
 		return output;
 	}, [notyfContext, theme]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onCancelClick = useCallback(async (event: any) => {
 		notyf.dismissAll();
 

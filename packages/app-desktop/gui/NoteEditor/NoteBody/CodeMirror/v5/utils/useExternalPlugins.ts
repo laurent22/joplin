@@ -7,6 +7,7 @@ import uuid from '@joplin/lib/uuid';
 
 import { reg } from '@joplin/lib/registry';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function useExternalPlugins(CodeMirror: any, plugins: PluginStates) {
 	const [options, setOptions] = useState({});
 	useEffect(() => {

@@ -20,6 +20,7 @@ export default async function(request: Request, id: string = null, _link: string
 		if (id === 'check') {
 			if ('auth_token' in request.query) {
 				if (context.authToken && request.query.auth_token === context.authToken.value) {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const output: any = {
 						status: context.authToken.status,
 					};

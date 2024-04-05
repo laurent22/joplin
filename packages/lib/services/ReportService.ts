@@ -75,6 +75,7 @@ export default class ReportService {
 		return row.join(',');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public csvCreate(rows: any[]) {
 		const output = [];
 		for (let i = 0; i < rows.length; i++) {
@@ -83,6 +84,7 @@ export default class ReportService {
 		return output.join('\n');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async basicItemList(option: any = null) {
 		if (!option) option = {};
 		if (!option.format) option.format = 'array';
@@ -107,6 +109,7 @@ export default class ReportService {
 	}
 
 	public async syncStatus(syncTarget: number) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any = {
 			items: {},
 			total: {},

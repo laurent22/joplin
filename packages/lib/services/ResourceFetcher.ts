@@ -12,20 +12,28 @@ export default class ResourceFetcher extends BaseService {
 
 	public static instance_: ResourceFetcher;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 	public dispatch: Function = (_o: any) => {};
 	private logger_: Logger = new Logger();
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private queue_: any[] = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private fetchingItems_: any = {};
 	private maxDownloads_ = 3;
 	private addingResources_ = false;
 	private eventEmitter_ = new EventEmitter();
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private autoAddResourcesCalls_: any[] = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private fileApi_: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private updateReportIID_: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private scheduleQueueProcessIID_: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private scheduleAutoAddResourcesIID_: any;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(fileApi: any = null) {
 		super();
 		this.setFileApi(fileApi);
@@ -55,6 +63,7 @@ export default class ResourceFetcher extends BaseService {
 		return this.logger_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public setFileApi(v: any) {
 		if (v !== null && typeof v !== 'function') throw new Error(`fileApi must be a function that returns the API. Type is ${typeof v}`);
 		this.fileApi_ = v;
@@ -244,6 +253,7 @@ export default class ResourceFetcher extends BaseService {
 
 			this.logger().info(`ResourceFetcher: Auto-added resources: ${count}`);
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			await notifyDisabledSyncItems((action: any) => this.dispatch(action));
 		} finally {
 			this.addingResources_ = false;

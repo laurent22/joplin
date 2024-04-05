@@ -24,6 +24,7 @@ const timers = require('timers');
 const zlib = require('zlib');
 const dgram = require('dgram');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const proxySettings: any = {};
 
 type FetchBlobOptions = {
@@ -31,6 +32,7 @@ type FetchBlobOptions = {
 	method?: string;
 	maxRedirects?: number;
 	timeout?: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	headers?: any;
 	downloadController?: DownloadController;
 };
@@ -94,6 +96,7 @@ const gunzipFile = function(source: string, destination: string) {
 	});
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function setupProxySettings(options: any) {
 	proxySettings.maxConcurrentConnections = options.maxConcurrentConnections;
 	proxySettings.proxyTimeout = options.proxyTimeout;
@@ -102,11 +105,16 @@ function setupProxySettings(options: any) {
 }
 
 interface ShimInitOptions {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	sharp: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	keytar: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	React: any;
 	appVersion: ()=> string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	electronBridge: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	nodeSqlite: any;
 	pdfJs: typeof pdfJsNamespace;
 }
@@ -163,6 +171,7 @@ function shimInit(options: ShimInitOptions = null) {
 		return Array.from(buffer);
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	shim.detectAndSetLocale = function(Setting: any) {
 		let locale = shim.isElectron() ? shim.electronBridge().getLocale() : process.env.LANG;
 		if (!locale) locale = defaultLocale();
@@ -281,6 +290,7 @@ function shimInit(options: ShimInitOptions = null) {
 						fit: 'inside',
 						withoutEnlargement: true,
 					})
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					.toFile(targetPath, (error: any, info: any) => {
 						if (error) {
 							reject(error);
@@ -363,6 +373,7 @@ function shimInit(options: ShimInitOptions = null) {
 		const fileStat = await shim.fsDriver().stat(targetPath);
 		resource.size = fileStat.size;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const saveOptions: any = { isNew: true };
 		if (options.userSideValidation) saveOptions.userSideValidation = true;
 
@@ -413,6 +424,7 @@ function shimInit(options: ShimInitOptions = null) {
 		return newBody.join('\n\n');
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	shim.attachFileToNote = async function(note, filePath, position: number = null, options: any = null) {
 		if (!options) options = {};
 		if (note.markup_language) options.markupLanguage = note.markup_language;
@@ -438,6 +450,7 @@ function shimInit(options: ShimInitOptions = null) {
 				if (size.width > maxSize || size.height > maxSize) {
 					console.warn(`Image is over ${maxSize}px - resizing it: ${filePath}`);
 
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const options: any = {};
 					if (size.width > size.height) {
 						options.width = maxSize;
@@ -503,6 +516,7 @@ function shimInit(options: ShimInitOptions = null) {
 		}, options);
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	shim.fetchBlob = async function(url: any, options: FetchBlobOptions) {
 		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
 		if (!options.method) options.method = 'GET';
@@ -522,6 +536,7 @@ function shimInit(options: ShimInitOptions = null) {
 		const filePath = options.path;
 		const downloadController = options.downloadController;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function makeResponse(response: any) {
 			return {
 				ok: response.statusCode < 400,
@@ -537,6 +552,7 @@ function shimInit(options: ShimInitOptions = null) {
 			};
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const requestOptions: any = {
 			protocol: url.protocol,
 			host: url.hostname,
@@ -553,8 +569,10 @@ function shimInit(options: ShimInitOptions = null) {
 
 		const doFetchOperation = async () => {
 			return new Promise((resolve, reject) => {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				let file: any = null;
 
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				const cleanUpOnError = (error: any) => {
 					// We ignore any unlink error as we only want to report on the main error
 					void fs.unlink(filePath)
@@ -577,10 +595,12 @@ function shimInit(options: ShimInitOptions = null) {
 					// Note: relative paths aren't supported
 					file = fs.createWriteStream(filePath);
 
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					file.on('error', (error: any) => {
 						cleanUpOnError(error);
 					});
 
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const request = http.request(requestOptions, (response: any) => {
 
 						if (downloadController) {
@@ -622,6 +642,7 @@ function shimInit(options: ShimInitOptions = null) {
 						request.destroy(new Error(`Request timed out. Timeout value: ${requestOptions.timeout}ms.`));
 					});
 
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					request.on('error', (error: any) => {
 						cleanUpOnError(error);
 					});
@@ -746,6 +767,7 @@ function shimInit(options: ShimInitOptions = null) {
 
 	shim.requireDynamic = (path) => {
 		if (path.indexOf('.') === 0) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const sites: any = callsites();
 			if (sites.length <= 1) throw new Error(`Cannot require file (1) ${path}`);
 			const filename = sites[1].getFileName();
@@ -800,6 +822,7 @@ function shimInit(options: ShimInitOptions = null) {
 			return document.createElement('canvas');
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const canvasToBuffer = async (canvas: any): Promise<Buffer> => {
 			const quality = 0.8;
 			if (isTesting) {

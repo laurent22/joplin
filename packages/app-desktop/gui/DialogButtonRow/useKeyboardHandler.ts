@@ -29,6 +29,7 @@ export default (props: Props) => {
 		return ln && globalKeydownHandlersRef.current[ln - 1] === elementId;
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const isInSubModal = (targetElement: any) => {
 		// If we are inside a sub-modal within the dialog, we shouldn't handle
 		// global key events. It can be for example the emoji picker. In general
@@ -39,6 +40,7 @@ export default (props: Props) => {
 		return false;
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onKeyDown = useCallback((event: any) => {
 		// Early exit if it's neither ENTER nor ESCAPE, because isInSubModal
 		// function can be costly.

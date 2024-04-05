@@ -3,8 +3,10 @@
 // This wraps an error message, allowing to set a prefix,
 // while preserving all the important properties
 // in particular the stack trace and original error message.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function wrapError(prefix: string, error: any) {
 	if (!error) throw new Error('Unknown error');
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const newError: any = new Error([prefix, error.message || ''].join(': '));
 
 	if ('name' in error) newError.name = error.name;

@@ -15,6 +15,7 @@ const ShareExtension = (NativeModules.ShareExtension) ?
 		data: () => NativeModules.ShareExtension.data(),
 		close: () => NativeModules.ShareExtension.close(),
 		shareURL: (Platform.OS === 'ios') ? NativeModules.ShareExtension.getConstants().SHARE_EXTENSION_SHARE_URL : '',
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		addShareListener: (Platform.OS === 'android') ? ((handler: (event: any)=> void) => {
 			if (!eventEmitter) {
 				eventEmitter = new NativeEventEmitter(NativeModules.ShareExtension);

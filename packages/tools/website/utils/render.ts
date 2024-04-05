@@ -30,6 +30,7 @@ export function getMarkdownIt() {
 		html: true,
 	});
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	markdownIt.core.ruler.push('tableClass', (state: any) => {
 		const tokens = state.tokens;
 		for (let i = 0; i < tokens.length; i++) {

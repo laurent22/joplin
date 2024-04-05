@@ -48,6 +48,7 @@ export default class JoplinContentScripts {
 	 * [postMessage
 	 * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages)
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async onMessage(contentScriptId: string, callback: any) {
 		this.plugin.onContentScriptMessage(contentScriptId, callback);
 	}

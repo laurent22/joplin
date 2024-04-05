@@ -25,6 +25,7 @@ export default class SyncTargetNone extends BaseSyncTarget {
 	}
 
 	protected async initSynchronizer() {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return null as any;
 	}
 }

@@ -21,6 +21,7 @@ const moment = require('moment');
 
 export interface ItemsThatNeedDecryptionResult {
 	hasMore: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	items: any[];
 }
 
@@ -46,7 +47,9 @@ export interface EncryptedItemsStats {
 
 export default class BaseItem extends BaseModel {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static encryptionService_: any = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static revisionService_: any = null;
 	public static shareService_: ShareService = null;
 	private static syncShareCache_: ShareState | null = null;
@@ -55,6 +58,7 @@ export default class BaseItem extends BaseModel {
 	// - itemsThatNeedSync()
 	// - syncedItems()
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static syncItemDefinitions_: any[] = [
 		{ type: BaseModel.TYPE_NOTE, className: 'Note' },
 		{ type: BaseModel.TYPE_FOLDER, className: 'Folder' },
@@ -77,6 +81,7 @@ export default class BaseItem extends BaseModel {
 		return true;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static loadClass(className: string, classRef: any) {
 		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
 			if (BaseItem.syncItemDefinitions_[i].className === className) {
@@ -152,6 +157,7 @@ export default class BaseItem extends BaseModel {
 		return r.total;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static systemPath(itemOrId: any, extension: string = null) {
 		if (extension === null) extension = 'md';
 
@@ -162,6 +168,7 @@ export default class BaseItem extends BaseModel {
 	public static isSystemPath(path: string) {
 		// 1b175bb38bba47baac22b0b47f778113.md
 		if (!path || !path.length) return false;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let p: any = path.split('/');
 		p = p[p.length - 1];
 		p = p.split('.');
@@ -169,6 +176,7 @@ export default class BaseItem extends BaseModel {
 		return p[0].length === 32 && p[1] === 'md';
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static itemClass(item: any): typeof BaseItem {
 		if (!item) throw new Error('Item cannot be null');
 
@@ -211,6 +219,7 @@ export default class BaseItem extends BaseModel {
 	public static pathToId(path: string): string {
 		const p = path.split('/');
 		const s = p[p.length - 1].split('.');
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let name: any = s[0];
 		if (!name) return name;
 		name = name.split('-');
@@ -234,6 +243,7 @@ export default class BaseItem extends BaseModel {
 		if (!ids.length) return [];
 
 		const classes = this.syncItemClassNames();
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let output: any[] = [];
 		for (let i = 0; i < classes.length; i++) {
 			const ItemClass = this.getClass(classes[i]);
@@ -244,6 +254,7 @@ export default class BaseItem extends BaseModel {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async loadItemsByTypeAndIds(itemType: ModelType, ids: string[], options: LoadOptions = null): Promise<any[]> {
 		if (!ids.length) return [];
 
@@ -259,6 +270,7 @@ export default class BaseItem extends BaseModel {
 		return result.length ? result[0] : null;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static loadItemByField(itemType: number, field: string, value: any) {
 		const ItemClass = this.itemClass(itemType);
 		return ItemClass.loadByField(field, value);
@@ -352,6 +364,7 @@ export default class BaseItem extends BaseModel {
 		return this.db().exec('DELETE FROM deleted_items WHERE item_id = ? AND sync_target = ?', [itemId, syncTarget]);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static serialize_format(propName: string, propValue: any) {
 		if (['created_time', 'updated_time', 'sync_time', 'user_updated_time', 'user_created_time'].indexOf(propName) >= 0) {
 			if (!propValue) return '';
@@ -374,6 +387,7 @@ export default class BaseItem extends BaseModel {
 			.replace(/\r/g, '\\r');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static unserialize_format(type: ModelType, propName: string, propValue: any) {
 		if (propName[propName.length - 1] === '_') return propValue; // Private property
 
@@ -402,6 +416,7 @@ export default class BaseItem extends BaseModel {
 			: propValue;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async serialize(item: any, shownKeys: any[] = null) {
 		if (shownKeys === null) {
 			shownKeys = this.itemClass(item).fieldNames();
@@ -410,6 +425,7 @@ export default class BaseItem extends BaseModel {
 
 		item = this.filter(item);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any = {};
 
 		if ('title' in item && shownKeys.indexOf('title') >= 0) {
@@ -477,6 +493,7 @@ export default class BaseItem extends BaseModel {
 		}
 
 		if (item.encryption_applied) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const e: any = new Error('Trying to encrypt item that is already encrypted');
 			e.code = 'cannotEncryptEncrypted';
 			throw e;
@@ -499,11 +516,13 @@ export default class BaseItem extends BaseModel {
 		// List of keys that won't be encrypted - mostly foreign keys required to link items
 		// with each others and timestamp required for synchronisation.
 		const keepKeys = ['id', 'note_id', 'tag_id', 'parent_id', 'share_id', 'updated_time', 'deleted_time', 'type_'];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const reducedItem: any = {};
 
 		for (let i = 0; i < keepKeys.length; i++) {
 			const n = keepKeys[i];
 			if (!item.hasOwnProperty(n)) continue;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			reducedItem[n] = (item as any)[n];
 		}
 
@@ -512,6 +531,7 @@ export default class BaseItem extends BaseModel {
 		return ItemClass.serialize(reducedItem);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async decrypt(item: any) {
 		if (!item.encryption_cipher_text) throw new Error(`Item is not encrypted: ${item.id}`);
 
@@ -528,6 +548,7 @@ export default class BaseItem extends BaseModel {
 
 	public static async unserialize(content: string) {
 		const lines = content.split('\n');
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let output: any = {};
 		let state = 'readingProps';
 		const body: string[] = [];
@@ -679,6 +700,7 @@ export default class BaseItem extends BaseModel {
 			// // CHANGED:
 			// 'SELECT * FROM [ITEMS] items JOIN sync_items s ON s.item_id = items.id WHERE sync_target = ? AND'
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			let extraWhere: any = [];
 			if (className === 'Note') extraWhere.push('is_conflict = 0');
 			if (className === 'Resource') extraWhere.push('encryption_blob_encrypted = 0');
@@ -742,6 +764,7 @@ export default class BaseItem extends BaseModel {
 				changedItems = await ItemClass.modelSelectAll(sql);
 			}
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const neverSyncedItemIds = neverSyncedItem.map((it: any) => it.id);
 			const items = neverSyncedItem.concat(changedItems);
 
@@ -756,6 +779,7 @@ export default class BaseItem extends BaseModel {
 	}
 
 	public static syncItemClassNames(): string[] {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return BaseItem.syncItemDefinitions_.map((def: any) => {
 			return def.className;
 		});
@@ -772,6 +796,7 @@ export default class BaseItem extends BaseModel {
 	}
 
 	public static syncItemTypes(): ModelType[] {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return BaseItem.syncItemDefinitions_.map((def: any) => {
 			return def.type;
 		});
@@ -816,6 +841,7 @@ export default class BaseItem extends BaseModel {
 		return this.syncDisabledItemsCount(syncTargetId, true);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static updateSyncTimeQueries(syncTarget: number, item: any, syncTime: number, syncDisabled = false, syncDisabledReason = '', itemLocation: number = null) {
 		const itemType = item.type_;
 		const itemId = item.id;
@@ -835,11 +861,13 @@ export default class BaseItem extends BaseModel {
 		];
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async saveSyncTime(syncTarget: number, item: any, syncTime: number) {
 		const queries = this.updateSyncTimeQueries(syncTarget, item, syncTime);
 		return this.db().transactionExecBatch(queries);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async saveSyncDisabled(syncTargetId: number, item: any, syncDisabledReason: string, itemLocation: number = null) {
 		const syncTime = 'sync_time' in item ? item.sync_time : 0;
 		const queries = this.updateSyncTimeQueries(syncTargetId, item, syncTime, true, syncDisabledReason, itemLocation);
@@ -879,6 +907,7 @@ export default class BaseItem extends BaseModel {
 		await this.db().transactionExecBatch(queries);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static displayTitle(item: any) {
 		if (!item) return '';
 		if (item.encryption_applied) return `🔑 ${_('Encrypted')}`;
@@ -901,6 +930,7 @@ export default class BaseItem extends BaseModel {
 			);
 
 			const items = await ItemClass.modelSelectAll(sql);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const ids = items.map((item: any) => {
 				return item.id;
 			});
@@ -937,6 +967,7 @@ export default class BaseItem extends BaseModel {
 		await this.db().exec('UPDATE sync_items SET force_sync = 1');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async save(o: any, options: SaveOptions = null) {
 		if (!options) options = {};
 
@@ -968,6 +999,7 @@ export default class BaseItem extends BaseModel {
 		return super.save(o, options);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static markdownTag(itemOrId: any) {
 		const item = typeof itemOrId === 'object' ? itemOrId : {
 			id: itemOrId,
@@ -982,6 +1014,7 @@ export default class BaseItem extends BaseModel {
 		return output.join('');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static isMarkdownTag(md: any) {
 		if (!md) return false;
 		return !!md.match(/^\[.*?\]\(:\/[0-9a-zA-Z]{32}\)$/);

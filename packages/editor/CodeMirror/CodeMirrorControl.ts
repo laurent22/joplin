@@ -17,6 +17,7 @@ interface Callbacks {
 	onLogMessage: LogMessageCallback;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 type EditorUserCommand = (...args: any[])=> any;
 
 export default class CodeMirrorControl extends CodeMirror5Emulation implements EditorControl {
@@ -38,6 +39,7 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		return name in editorCommands || this._userCommands.has(name) || super.commandExists(name);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public override execCommand(name: string, ...args: any[]) {
 		let commandOutput;
 		if (this._userCommands.has(name)) {

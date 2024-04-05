@@ -37,6 +37,7 @@ interface Props {
 	onShowPluginLog?: PluginCallback;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const PluginIcon = (props: any) => <Icon {...props} source='puzzle'/>;
 
 const PluginBox: React.FC<Props> = props => {

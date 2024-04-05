@@ -21,9 +21,11 @@ import { ViewHandle } from './types';
  */
 export default class JoplinViewsPanels {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private store: any;
 	private plugin: Plugin;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(plugin: Plugin, store: any) {
 		this.store = store;
 		this.plugin = plugin;
@@ -102,6 +104,7 @@ export default class JoplinViewsPanels {
 	 *
 	 * It is particularly useful when the webview needs to react to events emitted by the plugin or the joplin api.
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public postMessage(handle: ViewHandle, message: any): void {
 		return this.controller(handle).postMessage(message);
 	}

@@ -12,6 +12,7 @@ export default class InteropService_Importer_Base {
 	protected sourcePath_ = '';
 	protected options_: ImportOptions = {};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public setMetadata(md: any) {
 		this.metadata_ = md;
 	}
@@ -20,6 +21,7 @@ export default class InteropService_Importer_Base {
 		return this.metadata_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async init(sourcePath: string, options: any) {
 		this.sourcePath_ = sourcePath;
 		this.options_ = options;

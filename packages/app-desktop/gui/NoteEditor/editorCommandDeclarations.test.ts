@@ -1,6 +1,7 @@
 import WhenClause from '@joplin/lib/services/WhenClause';
 import { enabledCondition } from './editorCommandDeclarations';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const baseContext: Record<string, any> = {
 	modalDialogVisible: false,
 	gotoAnythingVisible: false,
@@ -64,6 +65,7 @@ describe('editorCommandDeclarations', () => {
 			},
 			true,
 		],
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	])('should create the enabledCondition', (context: Record<string, any>, expected: boolean) => {
 		const condition = enabledCondition('textBold');
 		const wc = new WhenClause(condition);

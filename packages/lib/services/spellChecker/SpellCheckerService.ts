@@ -103,6 +103,7 @@ export default class SpellCheckerService {
 		this.driver_.addWordToSpellCheckerDictionary(language, word);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public contextMenuItems(misspelledWord: string, dictionarySuggestions: string[]): any[] {
 		if (!misspelledWord) return [];
 
@@ -158,6 +159,7 @@ export default class SpellCheckerService {
 			languageMenuItems.push(this.changeLanguageMenuItem(locale, enabled, selectedLanguages.includes(locale)));
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		languageMenuItems.sort((a: any, b: any) => {
 			return a.label < b.label ? -1 : +1;
 		});
@@ -170,8 +172,10 @@ export default class SpellCheckerService {
 			return this.changeLanguageMenuItem(language, true, selectedLanguages.includes(language));
 		});
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		if (latestLanguageItems.length) latestLanguageItems.splice(0, 0, { type: 'separator' } as any);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		latestLanguageItems.sort((a: any, b: any) => {
 			return a.label < b.label ? -1 : +1;
 		});

@@ -24,6 +24,7 @@ interface Props {
 	searchQuery: string;
 	onSearchQueryChange(event: OnChangeEvent): void;
 	pluginSettings: PluginSettings;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onPluginSettingsChange(event: any): void;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	renderDescription: Function;

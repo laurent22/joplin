@@ -43,6 +43,7 @@ class Command extends BaseCommand {
 
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async action(args: any) {
 		const targetFolder = args.options.parent;
 

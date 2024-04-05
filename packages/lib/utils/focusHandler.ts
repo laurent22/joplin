@@ -32,10 +32,12 @@ const toggleFocus = (source: string, element: FocusableElement, action: ToggleFo
 	element[action]();
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const focus = (source: string, element: any) => {
 	toggleFocus(source, element, ToggleFocusAction.Focus);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const blur = (source: string, element: any) => {
 	toggleFocus(source, element, ToggleFocusAction.Blur);
 };

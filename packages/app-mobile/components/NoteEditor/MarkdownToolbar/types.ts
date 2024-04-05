@@ -35,6 +35,7 @@ export interface ButtonGroup {
 
 export interface StyleSheetData {
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	styles: any;
 }
 

@@ -1,4 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function(markdownIt: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	markdownIt.core.ruler.push('anchorHeader', (state: any): boolean => {
 		const tokens = state.tokens;
 		const Token = state.Token;

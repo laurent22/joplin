@@ -1,8 +1,10 @@
 import * as React from 'react';
 
 interface Props {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
 	itemHeight: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	items: any[];
 	disabled?: boolean;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -22,6 +24,7 @@ interface State {
 class ItemList extends React.Component<Props, State> {
 
 	private scrollTop_: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private listRef: any;
 
 	public constructor(props: Props) {
@@ -72,15 +75,18 @@ class ItemList extends React.Component<Props, State> {
 		this.updateStateItemIndexes(newProps);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public onScroll(event: any) {
 		this.scrollTop_ = event.target.scrollTop;
 		this.updateStateItemIndexes();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public onKeyDown(event: any) {
 		if (this.props.onKeyDown) this.props.onKeyDown(event);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public onDrop(event: any) {
 		if (this.props.onNoteDrop) this.props.onNoteDrop(event);
 	}

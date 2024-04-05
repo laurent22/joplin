@@ -4,6 +4,7 @@ const { buildStyle } = require('@joplin/lib/theme');
 
 export default function styles(props: NoteBodyEditorProps) {
 	const leftExtraToolbarContainerWidth = props.watchedNoteFiles.length > 0 ? 120 : 80;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return buildStyle(['TinyMCE', props.style.width, props.style.height, leftExtraToolbarContainerWidth], props.themeId, (theme: any) => {
 		const extraToolbarContainer = {
 			boxSizing: 'content-box',

@@ -20,6 +20,7 @@ export const Root = styled.div`
 `;
 
 interface Props {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	inputRef?: any;
 	notesParentType: string;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -87,6 +88,7 @@ function SearchBar(props: Props) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.selectedNoteId]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	function onChange(event: any) {
 		if (event.value.length === 0) {
 			// Revert to previous state if query string becomes empty
@@ -116,8 +118,10 @@ function SearchBar(props: Props) {
 		}, 300);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onKeyDown = useCallback((event: any) => {
 		if (event.key === 'Escape') {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			if (document.activeElement) blur('SearchBar::onKeyDown', document.activeElement as any);
 			void onExitSearch();
 		}
