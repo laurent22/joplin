@@ -1,5 +1,6 @@
 import React = require('react');
 import { useMemo, useState, useCallback, CSSProperties } from 'react';
+import { _ } from '@joplin/lib/locale';
 
 interface Props {
 	type: string;
@@ -52,7 +53,7 @@ const FontSearch = (props: Props) => {
 			/>
 			<div className={'font-search-list'} style={{ display: showList ? 'block' : 'none' }}>
 				{
-					areFontsLoading ? <div>Loading...</div> :
+					areFontsLoading ? <div>{_('Loading...')}</div> :
 						filteredFonts.map((font: string) =>
 							<div
 								key={font}
