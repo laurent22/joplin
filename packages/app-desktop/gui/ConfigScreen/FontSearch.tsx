@@ -2,16 +2,15 @@ import React = require('react');
 import { useMemo, useState, useCallback, CSSProperties } from 'react';
 
 interface Props {
-	_key: string;
-	updateSettingValue: (key: string, value: string)=> void;
 	type: string;
 	style: CSSProperties;
 	value: string;
 	fonts: string[];
+	onChange: (font: string)=> void;
 }
 
 const FontSearch = (props: Props) => {
-	const { _key: key, updateSettingValue, type, style, value, fonts } = props;
+	const { type, style, value, fonts, onChange } = props;
 	const [inputText, setInputText] = useState(value);
 	const [showList, setShowList] = useState(false);
 	const areFontsLoading = fonts.length === 0;
@@ -25,8 +24,8 @@ const FontSearch = (props: Props) => {
 	const onTextChange: React.ChangeEventHandler<HTMLInputElement> = useCallback((event) => {
 		setInputText(event.target.value);
 		setShowList(true);
-		updateSettingValue(key, event.target.value);
-	}, [key, updateSettingValue]);
+		onChange(event.target.value);
+	}, [onChange]);
 
 	const onFocusHandle = useCallback(() => setShowList(true), []);
 
@@ -38,8 +37,8 @@ const FontSearch = (props: Props) => {
 		const font = (event.target as HTMLDivElement).innerText;
 		setInputText(font);
 		setShowList(false);
-		updateSettingValue(key, font);
-	}, [key, updateSettingValue]);
+		onChange(font);
+	}, [onChange]);
 
 	return (
 		<>
