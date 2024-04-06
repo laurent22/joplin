@@ -9,6 +9,7 @@ import shim from '../../shim';
 
 const logger = Logger.create('ExternalEditWatcher/utils');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const spawnCommand = async (path: string, args: string[], options: any) => {
 	return new Promise((resolve, reject) => {
 		// App bundles need to be opened using the `open` command.
@@ -28,6 +29,7 @@ const spawnCommand = async (path: string, args: string[], options: any) => {
 			path = 'open';
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const wrapError = (error: any) => {
 			if (!error) return error;
 			const msg = error.message ? [error.message] : [];
@@ -47,6 +49,7 @@ const spawnCommand = async (path: string, args: string[], options: any) => {
 				}
 			}, 100);
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			subProcess.on('error', (error: any) => {
 				shim.clearInterval(iid);
 				reject(wrapError(error));
@@ -71,6 +74,7 @@ const textEditorCommand = () => {
 	};
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const openFileWithExternalEditor = async (filePath: string, bridge: any) => {
 	const cmd = textEditorCommand();
 	if (!cmd) {

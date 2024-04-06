@@ -50,6 +50,7 @@ export enum SettingStorage {
 
 // This is the definition of a setting item
 export interface SettingItem {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	value: any;
 	type: SettingItemType;
 	public: boolean;
@@ -61,10 +62,13 @@ export interface SettingItem {
 	label?(): string;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	description?: Function;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	options?(): any;
 	optionsOrder?(): string[];
 	appTypes?: AppType[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	show?(settings: any): boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	filter?(value: any): any;
 	secure?: boolean;
 	advanced?: boolean;
@@ -100,6 +104,7 @@ export interface SettingItems {
 // They are saved to database at regular intervals.
 interface CacheItem {
 	key: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	value: any;
 }
 
@@ -184,6 +189,7 @@ interface SettingSections {
 
 interface DefaultMigration {
 	name: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	previousDefault: any;
 }
 
@@ -299,6 +305,7 @@ class Setting extends BaseModel {
 		isDemo: false,
 		appName: 'joplin',
 		appId: 'SET_ME', // Each app should set this identifier
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		appType: 'SET_ME' as any, // 'cli' or 'mobile'
 		resourceDirName: '',
 		resourceDir: '',
@@ -319,10 +326,13 @@ class Setting extends BaseModel {
 	public static allowFileStorage = true;
 
 	private static metadata_: SettingItems = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static keychainService_: any = null;
 	private static keys_: string[] = null;
 	private static cache_: CacheItem[] = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static saveTimeoutId_: any = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static changeEventTimeoutId_: any = null;
 	private static customMetadata_: SettingItems = {};
 	private static customSections_: SettingSections = {};
@@ -389,6 +399,7 @@ class Setting extends BaseModel {
 		return this.keychainService_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static setKeychainService(s: any) {
 		this.keychainService_ = s;
 	}
@@ -413,6 +424,7 @@ class Setting extends BaseModel {
 		// public for the mobile and desktop apps because they are handled separately in menus.
 
 		const themeOptions = () => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const output: any = {};
 			output[Setting.THEME_LIGHT] = _('Light');
 			output[Setting.THEME_DARK] = _('Dark');
@@ -485,6 +497,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					try {
 						return settings['sync.target'] === SyncTargetRegistry.nameToId('filesystem');
@@ -492,6 +505,7 @@ class Setting extends BaseModel {
 						return false;
 					}
 				},
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				filter: (value: any) => {
 					return value ? rtrimSlashes(value) : '';
 				},
@@ -505,6 +519,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('nextcloud');
 				},
@@ -517,6 +532,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('nextcloud');
 				},
@@ -528,6 +544,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('nextcloud');
 				},
@@ -540,6 +557,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
 				},
@@ -552,6 +570,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
 				},
@@ -563,6 +582,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
 				},
@@ -575,6 +595,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					try {
 						return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
@@ -594,6 +615,7 @@ class Setting extends BaseModel {
 				value: 'https://s3.amazonaws.com/',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				},
@@ -608,6 +630,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				},
@@ -622,6 +645,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				},
@@ -633,6 +657,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				},
@@ -644,6 +669,7 @@ class Setting extends BaseModel {
 				value: false,
 				type: SettingItemType.Bool,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				},
@@ -655,6 +681,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer');
 				},
@@ -673,6 +700,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer');
 				},
@@ -684,6 +712,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer');
 				},
@@ -805,6 +834,7 @@ class Setting extends BaseModel {
 				public: true,
 				label: () => _('Date format'),
 				options: () => {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const options: any = {};
 					const now = new Date('2017-01-30T12:00:00').getTime();
 					options[Setting.DATE_FORMAT_1] = time.formatMsToLocal(now, Setting.DATE_FORMAT_1);
@@ -828,6 +858,7 @@ class Setting extends BaseModel {
 				public: true,
 				label: () => _('Time format'),
 				options: () => {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const options: any = {};
 					const now = new Date('2017-01-30T20:30:00').getTime();
 					options[Setting.TIME_FORMAT_1] = time.formatMsToLocal(now, Setting.TIME_FORMAT_1);
@@ -944,7 +975,8 @@ class Setting extends BaseModel {
 				label: () => _('Sort notes by'),
 				options: () => {
 					const Note = require('./Note').default;
-					const noteSortFields = ['user_updated_time', 'user_created_time', 'title', 'order'];
+					const noteSortFields = ['user_updated_time', 'user_created_time', 'title', 'order', 'todo_due', 'todo_completed'];
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const options: any = {};
 					for (let i = 0; i < noteSortFields.length; i++) {
 						options[noteSortFields[i]] = toTitleCase(Note.fieldToLabel(noteSortFields[i]));
@@ -1041,6 +1073,7 @@ class Setting extends BaseModel {
 				options: () => {
 					const Folder = require('./Folder').default;
 					const folderSortFields = ['title', 'last_note_user_updated_time'];
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const options: any = {};
 					for (let i = 0; i < folderSortFields.length; i++) {
 						options[folderSortFields[i]] = toTitleCase(Folder.fieldToLabel(folderSortFields[i]));
@@ -1095,6 +1128,7 @@ class Setting extends BaseModel {
 				section: 'note',
 				public: true,
 				appTypes: [AppType.Mobile],
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => settings['editor.mobile.removeSpaceBelowToolbar'],
 				label: () => 'Remove extra space below the markdown toolbar',
 				description: () => 'Works around bug on some devices where the markdown toolbar does not touch the bottom of the screen.',
@@ -1170,11 +1204,6 @@ class Setting extends BaseModel {
 				type: SettingItemType.Object,
 				section: 'plugins',
 				public: true,
-				show: (_settings) => {
-					// Hide on iOS due to App Store guidelines. See
-					// https://github.com/laurent22/joplin/pull/10086 for details.
-					return shim.isNode() || shim.mobilePlatform() !== 'ios';
-				},
 				appTypes: [AppType.Desktop, AppType.Mobile],
 				needRestart: true,
 				autoSave: true,
@@ -1514,6 +1543,7 @@ class Setting extends BaseModel {
 				advanced: true,
 				label: () => _('Keyboard Mode'),
 				options: () => {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const output: any = {};
 					output[''] = _('Default');
 					output['emacs'] = _('Emacs');
@@ -1567,11 +1597,21 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 
+			'linking.extraAllowedExtensions': {
+				value: [],
+				type: SettingItemType.Array,
+				public: false,
+				appTypes: [AppType.Desktop],
+				label: () => 'Additional file types that can be opened without confirmation.',
+				storage: SettingStorage.File,
+			},
+
 			'net.customCertificates': {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
 				advanced: true,
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return [
 						SyncTargetRegistry.nameToId('amazon_s3'),
@@ -1591,6 +1631,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.Bool,
 				advanced: true,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return (shim.isNode() || shim.mobilePlatform() === 'android') &&
 						[
@@ -1865,6 +1906,7 @@ class Setting extends BaseModel {
 				unitLabel: (value: number = null) => {
 					return value === null ? _('days') : _('%d days', value);
 				},
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => settings['trash.autoDeletionEnabled'],
 				label: () => _('Keep notes in the trash for'),
 				storage: SettingStorage.File,
@@ -2121,6 +2163,7 @@ class Setting extends BaseModel {
 		// saving to database shouldn't). When the keychain works, the secure keys
 		// are deleted from the database and transferred to the keychain in saveAll().
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const rowKeys = rows.map((r: any) => r.key);
 		const secureKeys = this.keys(false, null, { secureOnly: true });
 		const secureItems: CacheItem[] = [];
@@ -2173,6 +2216,7 @@ class Setting extends BaseModel {
 
 	public static toPlainObject() {
 		const keys = this.keys();
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const keyToValues: any = {};
 		for (let i = 0; i < keys.length; i++) {
 			keyToValues[keys[i]] = this.value(keys[i]);
@@ -2187,11 +2231,14 @@ class Setting extends BaseModel {
 		});
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static setConstant(key: string, value: any) {
 		if (!(key in this.constants_)) throw new Error(`Unknown constant key: ${key}`);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		(this.constants_ as any)[key] = value;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static setValue(key: string, value: any) {
 		if (!this.cache_) throw new Error('Settings have not been initialized!');
 
@@ -2250,6 +2297,7 @@ class Setting extends BaseModel {
 		this.scheduleChangeEvent();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static incValue(key: string, inc: any) {
 		return this.setValue(key, this.value(key) + inc);
 	}
@@ -2262,6 +2310,7 @@ class Setting extends BaseModel {
 	// If yes, then it just returns 'true'. If its not present then, it will
 	// update it and return 'false'
 	public static setArrayValue(settingName: string, value: string): boolean {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const settingValue: any[] = this.value(settingName);
 		if (settingValue.includes(value)) return true;
 		settingValue.push(value);
@@ -2269,12 +2318,14 @@ class Setting extends BaseModel {
 		return false;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static objectValue(settingKey: string, objectKey: string, defaultValue: any = null) {
 		const o = this.value(settingKey);
 		if (!o || !(objectKey in o)) return defaultValue;
 		return o[objectKey];
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static setObjectValue(settingKey: string, objectKey: string, value: any) {
 		let o = this.value(settingKey);
 		if (typeof o !== 'object') o = {};
@@ -2325,6 +2376,7 @@ class Setting extends BaseModel {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static valueToString(key: string, value: any) {
 		const md = this.settingMetadata(key);
 		value = this.formatValue(key, value);
@@ -2337,11 +2389,13 @@ class Setting extends BaseModel {
 		throw new Error(`Unhandled value type: ${md.type}`);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static filterValue(key: string, value: any) {
 		const md = this.settingMetadata(key);
 		return md.filter ? md.filter(value) : value;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static formatValue(key: string | SettingItemType, value: any) {
 		const type = typeof key === 'string' ? this.settingMetadata(key).type : key;
 
@@ -2384,6 +2438,7 @@ class Setting extends BaseModel {
 		// with strict equality and the value is updated only if changed. However if the caller acquire
 		// an object and change a key, the objects will be detected as equal. By returning a copy
 		// we avoid this problem.
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function copyIfNeeded(value: any) {
 			if (value === null || value === undefined) return value;
 			if (Array.isArray(value)) return value.slice();
@@ -2392,6 +2447,7 @@ class Setting extends BaseModel {
 		}
 
 		if (key in this.constants_) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const v = (this.constants_ as any)[key];
 			const output = typeof v === 'function' ? v() : v;
 			if (output === 'SET_ME') throw new Error(`SET_ME constant has not been set: ${key}`);
@@ -2411,6 +2467,7 @@ class Setting extends BaseModel {
 	}
 
 	// This function returns the default value if the setting key does not exist.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static valueNoThrow(key: string, defaultValue: any) {
 		if (!this.keyExists(key)) return defaultValue;
 		return this.value(key);
@@ -2431,6 +2488,7 @@ class Setting extends BaseModel {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static enumOptionLabel(key: string, value: any) {
 		const options = this.enumOptions(key);
 		for (const n in options) {
@@ -2457,6 +2515,7 @@ class Setting extends BaseModel {
 		return output.join(', ');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static isAllowedEnumOption(key: string, value: any) {
 		const options = this.enumOptions(key);
 		return !!options[value];
@@ -2466,9 +2525,11 @@ class Setting extends BaseModel {
 	// { sync.5.path: 'http://example', sync.5.username: 'testing' }
 	// and baseKey is 'sync.5', the function will return
 	// { path: 'http://example', username: 'testing' }
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static subValues(baseKey: string, settings: any, options: any = null) {
 		const includeBaseKeyInName = !!options && !!options.includeBaseKeyInName;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any = {};
 		for (const key in settings) {
 			if (!settings.hasOwnProperty(key)) continue;
@@ -2616,6 +2677,7 @@ class Setting extends BaseModel {
 
 		const metadata = this.metadata();
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any = {};
 		for (const key in metadata) {
 			if (!metadata.hasOwnProperty(key)) continue;
@@ -2668,7 +2730,9 @@ class Setting extends BaseModel {
 
 	public static groupMetadatasBySections(metadatas: SettingItem[]): MetadataBySection {
 		const sections = [];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const generalSection: any = { name: 'general', metadatas: [] };
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const nameToSections: any = {};
 		nameToSections['general'] = generalSection;
 		sections.push(generalSection);

@@ -55,6 +55,7 @@ describe('file-api-driver', () => {
 		await fileApi().put('subdir/test2.txt', 'testing2');
 		const files = await fileApi().list('subdir');
 		expect(files.items.length).toBe(2);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		expect(files.items.map((f: any) => f.path).sort()).toEqual(['test1.txt', 'test2.txt'].sort());
 	}));
 

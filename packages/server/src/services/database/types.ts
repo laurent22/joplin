@@ -148,6 +148,7 @@ export interface File {
 	id?: Uuid;
 	owner_id?: Uuid;
 	name?: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	content?: any;
 	mime_type?: string;
 	size?: number;

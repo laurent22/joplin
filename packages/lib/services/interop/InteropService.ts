@@ -27,6 +27,7 @@ export default class InteropService {
 
 	private defaultModules_: Module[];
 	private userModules_: Module[] = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private eventEmitter_: any = null;
 	private static instance_: InteropService;
 
@@ -301,7 +302,9 @@ export default class InteropService {
 		return result;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private normalizeItemForExport(_itemType: ModelType, item: any): any {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const override: any = {};
 		if ('is_shared' in item) override.is_shared = 0;
 		if ('share_id' in item) override.share_id = '';
@@ -326,11 +329,13 @@ export default class InteropService {
 		let sourceFolderIds = options.sourceFolderIds ? options.sourceFolderIds : [];
 		const sourceNoteIds = options.sourceNoteIds ? options.sourceNoteIds : [];
 		const result: ImportExportResult = { warnings: [] };
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const itemsToExport: any[] = [];
 
 		options.onProgress?.(ExportProgressState.QueuingItems, null);
 		let totalItemsToProcess = 0;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const queueExportItem = (itemType: number, itemOrId: any) => {
 			totalItemsToProcess ++;
 			itemsToExport.push({
@@ -404,6 +409,7 @@ export default class InteropService {
 		await exporter.init(exportPath, options);
 
 		const typeOrder = [BaseModel.TYPE_FOLDER, BaseModel.TYPE_RESOURCE, BaseModel.TYPE_NOTE, BaseModel.TYPE_TAG, BaseModel.TYPE_NOTE_TAG];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const context: any = {
 			resourcePaths: {},
 		};

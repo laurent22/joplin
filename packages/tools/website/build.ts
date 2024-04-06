@@ -90,6 +90,7 @@ const jsBasePath = `${websiteAssetDir}/js`;
 const jsBaseUrl = `${baseUrl}/js`;
 
 async function getAssetUrls(): Promise<AssetUrls> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const scriptsToImport: any[] = [
 		// {
 		// 	id: 'tippy',

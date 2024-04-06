@@ -83,6 +83,7 @@ class ImportScreenComponent extends React.Component<Props, State> {
 		let lastProgress = '';
 
 		const options = {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			onProgress: (progressState: any) => {
 				const line = [];
 				line.push(_('Found: %d.', progressState.loaded));
@@ -94,6 +95,7 @@ class ImportScreenComponent extends React.Component<Props, State> {
 				lastProgress = line.join(' ');
 				this.addMessage('progress', lastProgress);
 			},
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			onError: (error: any) => {
 				// Don't display the error directly because most of the time it doesn't matter
 				// (eg. for weird broken HTML, but the note is still imported)

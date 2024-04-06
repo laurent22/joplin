@@ -18,16 +18,19 @@ export default class InteropService_Exporter_Jex extends InteropService_Exporter
 		await this.rawExporter_.init(this.tempDir_);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async processItem(itemType: number, item: any) {
 		return this.rawExporter_.processItem(itemType, item);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async processResource(resource: any, filePath: string) {
 		return this.rawExporter_.processResource(resource, filePath);
 	}
 
 	public async close() {
 		const stats = await shim.fsDriver().readDirStats(this.tempDir_, { recursive: true });
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const filePaths = stats.filter((a: any) => !a.isDirectory()).map((a: any) => a.path);
 
 		if (!filePaths.length) throw new Error(_('There is no data to export.'));

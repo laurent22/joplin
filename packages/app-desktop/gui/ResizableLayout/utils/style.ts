@@ -4,6 +4,7 @@ import styled from 'styled-components';
 // Need to use `attrs` otherwise styled-components creates many instances of the
 // style when the component is resized.
 // https://github.com/styled-components/styled-components/issues/1212
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const StyledWrapperRoot: any = styled.div.attrs((props: any) => ({
 	style: {
 		width: props.size.width,

@@ -5,6 +5,7 @@ import { SqlParams, SqlQuery, StringOrSqlQuery } from './services/database/types
 
 const Mutex = require('async-mutex').Mutex;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export type Row = Record<string, any>;
 
 export default class Database {
@@ -16,6 +17,7 @@ export default class Database {
 
 	protected debugMode_ = false;
 	private sqlQueryLogEnabled_ = false;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private driver_: any;
 	private logger_ = new Logger();
 	private logExcludedQueryTypes_: string[] = [];
@@ -23,6 +25,7 @@ export default class Database {
 	private profilingEnabled_ = false;
 	private queryId_ = 1;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(driver: any) {
 		this.driver_ = driver;
 	}
@@ -34,6 +37,7 @@ export default class Database {
 	// Converts the SQLite error to a regular JS error
 	// so that it prints a stacktrace when passed to
 	// console.error()
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public sqliteErrorToJsError(error: any, sql: string = null, params: SqlParams = null) {
 		return this.driver().sqliteErrorToJsError(error, sql, params);
 	}
@@ -50,6 +54,7 @@ export default class Database {
 		return this.driver_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async open(options: any) {
 		try {
 			await this.driver().open(options);
@@ -172,6 +177,7 @@ export default class Database {
 		return this.tryCall('selectAll', sql, params);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async selectAllFields(sql: string, params: SqlParams, field: string): Promise<any[]> {
 		const rows = await this.tryCall('selectAll', sql, params);
 		const output = [];
@@ -225,6 +231,7 @@ export default class Database {
 			if (s) s = s.toUpperCase();
 			if (s === 'INTEGER') s = 'INT';
 			if (!(`TYPE_${s}` in this)) throw new Error(`Unknown fieldType: ${s}`);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			return (this as any)[`TYPE_${s}`];
 		}
 		if (type === 'syncTarget') {
@@ -248,6 +255,7 @@ export default class Database {
 		return undefined;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static formatValue(type: number, value: any) {
 		if (value === null || value === undefined) return null;
 		if (type === this.TYPE_INT) return Number(value);
@@ -270,6 +278,7 @@ export default class Database {
 		if (params !== null && params.length) this.logger().debug(JSON.stringify(params));
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static insertQuery(tableName: string, data: Record<string, any>) {
 		if (!data || !Object.keys(data).length) throw new Error('Data is empty');
 
@@ -291,6 +300,7 @@ export default class Database {
 		};
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static updateQuery(tableName: string, data: Record<string, any>, where: string | Record<string, any>) {
 		if (!data || !Object.keys(data).length) throw new Error('Data is empty');
 
@@ -350,6 +360,7 @@ export default class Database {
 		return sql.trim().split('\n');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public wrapQueries(queries: any[]) {
 		const output = [];
 		for (let i = 0; i < queries.length; i++) {
@@ -358,6 +369,7 @@ export default class Database {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public wrapQuery(sql: any, params: SqlParams = null): SqlQuery {
 		if (!sql) throw new Error(`Cannot wrap empty string: ${sql}`);
 

@@ -12,6 +12,7 @@ const logger = Logger.create('loadPlugins');
 type CancelEvent = { cancelled: boolean };
 
 const loadPlugins = async (
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginRunner: BasePluginRunner, pluginSettings: PluginSettings, store: Store<any>, cancel: CancelEvent,
 ) => {
 	try {

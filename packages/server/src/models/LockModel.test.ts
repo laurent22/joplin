@@ -62,7 +62,9 @@ describe('LockModel', () => {
 	test('should validate locks', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		await expectHttpError(async () => models().lock().acquireLock(user1.id, 'wrongtype' as any, LockClientType.Desktop, '1111'), ErrorUnprocessableEntity.httpCode);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		await expectHttpError(async () => models().lock().acquireLock(user1.id, LockType.Exclusive, 'wrongclienttype' as any, '1111'), ErrorUnprocessableEntity.httpCode);
 		await expectHttpError(async () => models().lock().acquireLock(user1.id, LockType.Exclusive, LockClientType.Desktop, 'veryverylongclientidveryverylongclientidveryverylongclientidveryverylongclientid'), ErrorUnprocessableEntity.httpCode);
 	});

@@ -3,6 +3,7 @@
 // Hide warnings from js-draw.
 // jsdom doesn't support ResizeObserver and HTMLCanvasElement.getContext.
 HTMLCanvasElement.prototype.getContext = () => null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 window.ResizeObserver = class { public observe() { } } as any;
 
 import { describe, it, expect, jest } from '@jest/globals';

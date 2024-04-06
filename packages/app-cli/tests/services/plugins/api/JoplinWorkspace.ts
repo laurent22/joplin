@@ -17,6 +17,7 @@ describe('JoplinWorkspace', () => {
 	});
 
 	test('should listen to noteChange events', async () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const appState: Record<string, any> = {
 			selectedNoteIds: [],
 		};
@@ -49,6 +50,7 @@ describe('JoplinWorkspace', () => {
 
 		const folder = (await Folder.all())[0];
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const result: any = JSON.parse(folder.title);
 
 		expect(result.id).toBe(note.id);

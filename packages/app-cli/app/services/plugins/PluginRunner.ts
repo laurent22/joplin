@@ -8,14 +8,17 @@ import uuid from '@joplin/lib/uuid';
 const sandboxProxy = require('@joplin/lib/services/plugins/sandboxProxy');
 
 function createConsoleWrapper(pluginId: string) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const wrapper: any = {};
 
 	for (const n in console) {
 		// eslint-disable-next-line no-console
 		if (!console.hasOwnProperty(n)) continue;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		wrapper[n] = (...args: any[]) => {
 			const newArgs = args.slice();
 			newArgs.splice(0, 0, `Plugin "${pluginId}":`);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			return (console as any)[n](...newArgs);
 		};
 	}
@@ -33,6 +36,7 @@ function createConsoleWrapper(pluginId: string) {
 export default class PluginRunner extends BasePluginRunner {
 
 	private eventHandlers_: EventHandlers = {};
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private activeSandboxCalls_: any = {};
 
 	public constructor() {
@@ -41,12 +45,14 @@ export default class PluginRunner extends BasePluginRunner {
 		this.eventHandler = this.eventHandler.bind(this);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async eventHandler(eventHandlerId: string, args: any[]) {
 		const cb = this.eventHandlers_[eventHandlerId];
 		return cb(...args);
 	}
 
 	private newSandboxProxy(pluginId: string, sandbox: Global) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const target = async (path: string, args: any[]) => {
 			const callId = `${pluginId}::${path}::${uuid.createNano()}`;
 			this.activeSandboxCalls_[callId] = true;

@@ -24,6 +24,7 @@ describe('api_ping', () => {
 
 		await routeHandler(context);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const body = context.response.body as any;
 
 		expect(context.response.status).toBe(200);
