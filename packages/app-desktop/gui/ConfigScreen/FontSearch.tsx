@@ -28,9 +28,9 @@ const FontSearch = (props: Props) => {
 		onChange(event.target.value);
 	}, [onChange]);
 
-	const onFocusHandle = useCallback(() => setShowList(true), []);
+	const onFocusHandle: React.FocusEventHandler<HTMLInputElement> = useCallback(() => setShowList(true), []);
 
-	const onBlurHandle = useCallback(() => {
+	const onBlurHandle: React.FocusEventHandler<HTMLInputElement> = useCallback(() => {
 		if (!isListHovered) {
 			setShowList(false);
 		}
