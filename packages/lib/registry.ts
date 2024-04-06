@@ -5,15 +5,20 @@ import SyncTargetRegistry from './SyncTargetRegistry';
 
 class Registry {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private syncTargets_: any = {};
 	private logger_: Logger = null;
 	private schedSyncCalls_: boolean[] = [];
 	private waitForReSyncCalls_: boolean[] = [];
 	private setupRecurrentCalls_: boolean[] = [];
 	private timerCallbackCalls_: boolean[] = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private showErrorMessageBoxHandler_: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private scheduleSyncId_: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private recurrentSyncId_: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private db_: any;
 	private isOnMobileData_ = false;
 
@@ -30,6 +35,7 @@ class Registry {
 		this.logger_ = l;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public setShowErrorMessageBoxHandler(v: any) {
 		this.showErrorMessageBoxHandler_ = v;
 	}
@@ -86,6 +92,7 @@ class Registry {
 		}
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public scheduleSync = async (delay: number = null, syncOptions: any = null, doWifiConnectionCheck = false) => {
 		this.schedSyncCalls_.push(true);
 
@@ -157,6 +164,7 @@ class Registry {
 							this.logger().info('Starting scheduled sync');
 							const options = { ...syncOptions, context: context };
 							if (!options.saveContextHandler) {
+								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 								options.saveContextHandler = (newContext: any) => {
 									Setting.setValue(contextKey, JSON.stringify(newContext));
 								};
@@ -224,6 +232,7 @@ class Registry {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public setDb = (v: any) => {
 		this.db_ = v;
 	};

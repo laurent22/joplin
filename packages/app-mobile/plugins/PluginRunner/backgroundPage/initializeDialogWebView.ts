@@ -61,6 +61,7 @@ const initializeDialogWebView = (messageChannelId: string) => {
 	};
 	const messenger = new WebViewToRNMessenger<DialogWebViewApi, DialogMainProcessApi>(messageChannelId, localApi);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	(window as any).webviewApi = {
 		postMessage: messenger.remoteApi.postMessage,
 		onMessage: messenger.remoteApi.onMessage,
@@ -71,6 +72,7 @@ const initializeDialogWebView = (messageChannelId: string) => {
 
 	// If dialog content scripts were bundled with Webpack for NodeJS,
 	// they may expect a global "exports" to be present.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	(window as any).exports ??= {};
 };
 

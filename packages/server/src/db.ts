@@ -12,6 +12,7 @@ import { compareVersions } from 'compare-versions';
 //
 // In our case, all bigInteger are timestamps, which JavaScript can handle
 // fine as numbers.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 require('pg').types.setTypeParser(20, (val: any) => {
 	return parseInt(val, 10);
 });
@@ -63,7 +64,9 @@ export interface KnexDatabaseConfig {
 
 export interface ConnectionCheckResult {
 	isCreated: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	error: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	latestMigration: any;
 	connection: DbConnection;
 }
@@ -144,6 +147,7 @@ export const setCollateC = async (db: DbConnection, tableName: string, columnNam
 	await db.raw(`ALTER TABLE ${tableName} ALTER COLUMN ${columnName} SET DATA TYPE character varying(32) COLLATE "C"`);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function makeSlowQueryHandler(duration: number, connection: any, sql: string, bindings: any[]) {
 	return setTimeout(() => {
 		try {
@@ -156,10 +160,12 @@ function makeSlowQueryHandler(duration: number, connection: any, sql: string, bi
 
 export function setupSlowQueryLog(connection: DbConnection, slowQueryLogMinDuration: number) {
 	interface QueryInfo {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		timeoutId: any;
 		startTime: number;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const queryInfos: Record<any, QueryInfo> = {};
 
 	// These queries do not return a response, so "query-response" is not
@@ -196,7 +202,9 @@ export function setupSlowQueryLog(connection: DbConnection, slowQueryLogMinDurat
 	});
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const filterBindings = (bindings: any[]): Record<string, any> => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: Record<string, any> = {};
 
 	for (let i = 0; i < bindings.length; i++) {
@@ -214,6 +222,7 @@ interface KnexQueryErrorResponse {
 }
 
 interface KnexQueryErrorData {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	bindings: any[];
 	queryContext: QueryContext;
 }
@@ -279,6 +288,7 @@ export async function migrateUnlock(db: DbConnection) {
 }
 
 export async function migrateList(db: DbConnection, asString = true) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const migrations: any = await db.migrate.list({
 		directory: migrationDir,
 	});
@@ -301,12 +311,14 @@ export async function migrateList(db: DbConnection, asString = true) {
 	//   ]
 	// ]
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const getMigrationName = (migrationInfo: any) => {
 		if (migrationInfo && migrationInfo.name) return migrationInfo.name;
 		if (migrationInfo && migrationInfo.file) return migrationInfo.file;
 		return migrationInfo;
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const formatName = (migrationInfo: any) => {
 		const s = getMigrationName(migrationInfo).split('.');
 		s.pop();
@@ -388,6 +400,7 @@ export async function truncateTables(db: DbConnection, includedTables: string[] 
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function isNoSuchTableError(error: any): boolean {
 	if (error) {
 		// Postgres error: 42P01: undefined_table
@@ -400,6 +413,7 @@ function isNoSuchTableError(error: any): boolean {
 	return false;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function isUniqueConstraintError(error: any): boolean {
 	if (error) {
 		// Postgres error: 23505: unique_violation

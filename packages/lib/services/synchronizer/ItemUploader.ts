@@ -16,6 +16,7 @@ export default class ItemUploader {
 
 	private api_: FileApi;
 	private apiCall_: ApiCallFunction;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private preUploadedItems_: Record<string, any> = {};
 	private preUploadedItemUpdatedTimes_: Record<string, number> = {};
 	private maxBatchSize_ = 1 * 1024 * 1024; // 1MB;

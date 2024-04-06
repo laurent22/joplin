@@ -30,6 +30,7 @@ export default class Plugin {
 	private contentScripts_: ContentScripts = {};
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private dispatch_: Function;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private eventEmitter_: any;
 	private devMode_ = false;
 	private builtIn_ = false;
@@ -116,6 +117,7 @@ export default class Plugin {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public emit(eventName: string, event: any = null) {
 		return this.eventEmitter_.emit(eventName, event);
 	}
@@ -175,15 +177,18 @@ export default class Plugin {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public emitMessage(message: any) {
 		if (!this.messageListener_) return;
 		return this.messageListener_(message);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public onMessage(callback: any) {
 		this.messageListener_ = callback;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public onContentScriptMessage(id: string, callback: any) {
 		if (!this.contentScriptById(id)) {
 			// The script could potentially be registered later on, but still
@@ -194,6 +199,7 @@ export default class Plugin {
 		this.contentScriptMessageListeners_[id] = callback;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public emitContentScriptMessage(id: string, message: any) {
 		if (!this.contentScriptMessageListeners_[id]) return;
 		return this.contentScriptMessageListeners_[id](message);

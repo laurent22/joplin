@@ -248,6 +248,7 @@ async function main() {
 			{ name: 'mac_count', label: 'macOS' },
 			{ name: 'linux_count', label: 'Linux' },
 			{ name: 'total_count', label: 'Total' },
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		], rows as any[]),
 	];
 

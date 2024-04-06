@@ -24,7 +24,9 @@ export enum UuidType {
 export interface SaveOptions {
 	isNew?: boolean;
 	skipValidation?: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	validationRules?: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	previousItem?: any;
 	queryContext?: QueryContext;
 }
@@ -38,6 +40,7 @@ export interface AllPaginatedOptions extends LoadOptions {
 }
 
 export interface DeleteOptions {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	validationRules?: any;
 	allowNoOp?: boolean;
 	deletedItemUserIds?: Record<Uuid, Uuid[]>;
@@ -45,6 +48,7 @@ export interface DeleteOptions {
 
 export interface ValidateOptions {
 	isNew?: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	rules?: any;
 }
 
@@ -238,6 +242,7 @@ export default abstract class BaseModel<T> {
 	}
 
 	public async all(options: LoadOptions = {}): Promise<T[]> {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const rows: any[] = await this.db(this.tableName).select(this.selectFields(options));
 		return rows as T[];
 	}
@@ -280,6 +285,7 @@ export default abstract class BaseModel<T> {
 	public fromApiInput(object: T): T {
 		const blackList = ['updated_time', 'created_time', 'owner_id'];
 		const whiteList = Object.keys(databaseSchema[this.tableName]);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any = { ...object };
 
 		for (const f in object) {
@@ -310,6 +316,7 @@ export default abstract class BaseModel<T> {
 	protected async isNew(object: T, options: SaveOptions): Promise<boolean> {
 		if (options.isNew === false) return false;
 		if (options.isNew === true) return true;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		if ('id' in (object as any) && !(object as WithUuid).id) throw new Error('ID cannot be undefined or null');
 		return !(object as WithUuid).id;
 	}

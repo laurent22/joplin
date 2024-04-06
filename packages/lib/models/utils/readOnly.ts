@@ -46,6 +46,7 @@ export const checkIfItemCanBeChanged = (itemType: ModelType, changeSource: numbe
 	}
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const checkIfItemCanBeAddedToFolder = async (itemType: ModelType, Folder: any, changeSource: number, shareState: ShareState, parentId: string) => {
 	if (needsShareReadOnlyChecks(itemType, changeSource, shareState) && parentId) {
 		const parentFolder = await Folder.load(parentId, { fields: ['id', 'share_id'] });
@@ -101,6 +102,7 @@ export const itemIsReadOnlySync = (itemType: ModelType, changeSource: number, it
 	return !shareUser.can_write;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const itemIsReadOnly = async (BaseItem: any, itemType: ModelType, changeSource: number, itemId: string, userId: string, shareState: ShareState): Promise<boolean> => {
 	// if (!needsShareReadOnlyChecks(itemType, changeSource, shareState)) return false;
 	const item: ItemSlice = await BaseItem.loadItem(itemType, itemId, { fields: ['id', 'share_id', 'deleted_time'] });

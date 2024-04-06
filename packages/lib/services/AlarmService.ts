@@ -5,10 +5,12 @@ import Note from '../models/Note';
 
 export default class AlarmService {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static driver_: any;
 	private static logger_: Logger;
 	// private static inAppNotificationHandler_:any;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static setDriver(v: any) {
 		this.driver_ = v;
 
@@ -28,6 +30,7 @@ export default class AlarmService {
 		return this.logger_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static setInAppNotificationHandler(v: any) {
 		// this.inAppNotificationHandler_ = v;
 		if (this.driver_.setInAppNotificationHandler) this.driver_.setInAppNotificationHandler(v);
@@ -50,6 +53,7 @@ export default class AlarmService {
 
 	// When passing a note, make sure it has all the required properties
 	// (better to pass a complete note or else just the ID)
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async updateNoteNotification(noteOrId: any, isDeleted = false) {
 		try {
 			let note = null;

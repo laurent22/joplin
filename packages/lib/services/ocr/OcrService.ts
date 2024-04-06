@@ -32,6 +32,7 @@ export default class OcrService {
 
 	private driver_: OcrDriverBase;
 	private isRunningInBackground_ = false;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private maintenanceTimer_: any = null;
 	private pdfExtractDir_: string = null;
 	private isProcessingResources_ = false;

@@ -17,6 +17,7 @@ async function fetchUser(path: SubPath, ctx: AppContext): Promise<User> {
 }
 
 async function postedUserFromContext(ctx: AppContext): Promise<User> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return ctx.joplin.models.user().fromApiInput(await bodyFields<any>(ctx.req));
 }
 

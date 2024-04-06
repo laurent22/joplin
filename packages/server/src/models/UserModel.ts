@@ -202,6 +202,7 @@ export default class UserModel extends BaseModel<User> {
 			];
 
 			for (const key of Object.keys(resource)) {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				if (!user.is_admin && !canBeChangedByNonAdmin.includes(key) && (resource as any)[key] !== (previousResource as any)[key]) {
 					throw new ErrorForbidden(`non-admin user cannot change "${key}"`);
 				}
@@ -218,6 +219,7 @@ export default class UserModel extends BaseModel<User> {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async checkMaxItemSizeLimit(user: User, buffer: Buffer, item: Item, joplinItem: any) {
 		// If the item is encrypted, we apply a multiplier because encrypted
 		// items can be much larger (seems to be up to twice the size but for
@@ -633,6 +635,7 @@ export default class UserModel extends BaseModel<User> {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async syncInfo(userId: Uuid): Promise<any> {
 		const item = await this.models().item().loadByName(userId, 'info.json');
 

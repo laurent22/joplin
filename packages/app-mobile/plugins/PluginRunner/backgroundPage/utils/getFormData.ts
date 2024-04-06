@@ -5,6 +5,7 @@ const getFormData = () => {
 
 	const serializeForm = (form: HTMLFormElement) => {
 		const formData = new FormData(form);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const serializedData: Record<string, any> = {};
 		for (const key of formData.keys()) {
 			serializedData[key] = formData.get(key);

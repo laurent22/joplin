@@ -14,6 +14,7 @@ interface ToolbarButtonProps {
 	onActionComplete?: ()=> void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const useStyles = (baseStyleSheet: any, baseButtonStyle: any, buttonSpec: ButtonSpec, visible: boolean, disabled: boolean) => {
 	return useMemo(() => {
 		const activatedStyle = buttonSpec.active ? baseStyleSheet.buttonActive : {};

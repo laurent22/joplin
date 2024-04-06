@@ -1,7 +1,9 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function(markdownIt: any) {
 	// Add `file:` protocol in linkify to allow text in the format of "file://..." to translate into
 	// file-URL links in html view
 	markdownIt.linkify.add('file:', {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		validate: function(text: string, pos: number, self: any) {
 			const tail = text.slice(pos);
 			if (!self.re.file) {

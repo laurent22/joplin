@@ -29,6 +29,7 @@ class Command extends BaseCommand {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public override async action(args: any) {
 		const stdoutWidth = app().commandStdoutMaxWidth();
 

@@ -79,7 +79,9 @@ export const execApi = async (method: HttpMethod, path: string, body: Record<str
 			//     }
 			// }
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			(error as any).apiObject = apiObject;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			(error as any).status = response.status;
 
 			if (apiObject?.extras?.wait_seconds) {
@@ -90,6 +92,7 @@ export const execApi = async (method: HttpMethod, path: string, body: Record<str
 			throw error;
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return response.json() as any;
 	}
 };
@@ -121,10 +124,12 @@ export const getTopicByExternalId = async (externalId: string): Promise<ForumTop
 	}
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const createTopic = async (topic: any): Promise<ForumTopic> => {
 	return execApi(HttpMethod.POST, 'posts', topic);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const createPost = async (topicId: number, post: any): Promise<ForumTopic> => {
 	return execApi(HttpMethod.POST, 'posts', {
 		topic_id: topicId,
@@ -132,6 +137,7 @@ export const createPost = async (topicId: number, post: any): Promise<ForumTopic
 	});
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const updatePost = async (postId: number, content: any): Promise<void> => {
 	await execApi(HttpMethod.PUT, `posts/${postId}.json`, content);
 };

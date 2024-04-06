@@ -9,8 +9,10 @@ export interface ManifestOverride {
 
 export type ManifestOverrides = Record<string, ManifestOverride>;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function applyManifestOverrides(manifests: any, overrides: ManifestOverrides) {
 	for (const [pluginId, override] of Object.entries(overrides)) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const manifest: any = manifests[pluginId];
 
 		if (!manifest) {
@@ -32,6 +34,7 @@ export function applyManifestOverrides(manifests: any, overrides: ManifestOverri
 }
 
 export function getObsoleteManifests(overrides: ManifestOverrides) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {};
 
 	for (const [pluginId, override] of Object.entries(overrides)) {

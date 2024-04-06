@@ -41,8 +41,10 @@ export default function cssToTheme(css: string, sourceFilePath: string): Theme {
 
 	if (!rootRule || !rootRule.selectors.includes(':root')) throw new Error('`:root` rule not found');
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const declarations: any[] = rootRule.declarations;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {};
 	for (const declaration of declarations) {
 		if (declaration.type !== 'declaration') continue; // Skip comment lines
