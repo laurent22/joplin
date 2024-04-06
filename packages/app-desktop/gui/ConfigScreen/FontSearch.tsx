@@ -23,7 +23,6 @@ const FontSearch = (props: Props) => {
 
 	const onTextChange: React.ChangeEventHandler<HTMLInputElement> = useCallback((event) => {
 		setInputText(event.target.value);
-		setShowList(true);
 		onChange(event.target.value);
 	}, [onChange]);
 
