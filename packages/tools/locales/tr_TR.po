@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Türkçe\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Arda Kılıçdağı <arda@kilicdagi.com>\n"
 "Language-Team: Turkish (Turkey)\n"
 "Language: tr_TR\n"
@@ -253,7 +255,7 @@ msgstr "A5"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox.tsx:86
 msgid "About"
-msgstr ""
+msgstr "Hakkında"
 
 #: packages/app-desktop/gui/MenuBar.tsx:573
 #: packages/app-desktop/gui/MenuBar.tsx:908
@@ -533,9 +535,8 @@ msgstr "Yetkilendirme anahtarı:"
 
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:84
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:158
-#, fuzzy
 msgid "Authorise"
-msgstr "Yetkilendirme anahtarı:"
+msgstr "Yetkilendir"
 
 #: packages/lib/models/Setting.ts:753
 msgid "Auto"
@@ -555,7 +556,7 @@ msgstr "Otomatik olarak güncellemeleri denetle"
 
 #: packages/lib/models/Setting.ts:1823
 msgid "Automatically delete notes in the trash after a number of days"
-msgstr ""
+msgstr "Çöp kutusundaki notları belirli bir gün ardından siler"
 
 #: packages/lib/models/Setting.ts:874
 msgid "Automatically switch theme to match system theme"
@@ -990,9 +991,8 @@ msgid "Content provided by %s"
 msgstr "İçerik %s tarafından sağlandı"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:72
-#, fuzzy
 msgid "Content provided by: %s"
-msgstr "İçerik %s tarafından sağlandı"
+msgstr "İçerik sağlayıcı: %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:65
 msgid "Continue"
@@ -1037,9 +1037,8 @@ msgstr "Bağlantı Adresini Kopyala"
 
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:90
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:166
-#, fuzzy
 msgid "Copy link to website"
-msgstr "Joplin Web Sitesi"
+msgstr "Web sitesinin adresini kopyala"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:101
 #: packages/app-mobile/components/screens/Note.tsx:1251
@@ -1382,9 +1381,8 @@ msgstr "Bu profil silinsin mi?"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox.tsx:81
-#, fuzzy
 msgid "Deleted"
-msgstr "Sil"
+msgstr "Silinme"
 
 #: packages/lib/Synchronizer.ts:196
 msgid "Deleted local items: %d."
@@ -1612,7 +1610,7 @@ msgstr "Dropbox Girişi"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:13
 msgid "Due"
-msgstr ""
+msgstr "Şu tarihe kadar: "
 
 #: packages/app-desktop/gui/MainScreen/commands/duplicateNote.ts:7
 #: packages/app-mobile/components/ScreenHeader.tsx:489
@@ -1740,7 +1738,7 @@ msgstr "vurgulanan metin"
 #: packages/app-desktop/commands/emptyTrash.ts:16
 #: packages/app-desktop/commands/emptyTrash.ts:8
 msgid "Empty trash"
-msgstr ""
+msgstr "Çöp kutusunu boşalt"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:143
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:86
@@ -1823,9 +1821,8 @@ msgid "Enable optical character recognition (OCR)"
 msgstr "Optik karakter tanıma (OCR)'ı etkinleştir"
 
 #: packages/lib/models/Setting.ts:2717
-#, fuzzy
 msgid "Enable or disable plugins"
-msgstr "Eklentileri yönet"
+msgstr "Eklentileri aktifleştir veya pasifleştir"
 
 #: packages/lib/models/Setting.ts:1209
 msgid "Enable PDF viewer"
@@ -2185,9 +2182,8 @@ msgid "Found: %d."
 msgstr "Bulundu: %d."
 
 #: packages/app-mobile/components/screens/ConfigScreen/SectionSelector.tsx:42
-#, fuzzy
 msgid "From a plugin"
-msgstr "Tüm eklentilere göz at"
+msgstr "Bir eklenti aracılığıyla"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:566
 msgid "FTS enabled: %d"
@@ -2256,6 +2252,7 @@ msgstr "Yetkilendirme ver"
 #: packages/app-cli/app/command-sync.ts:114
 msgid "Have you authorised the application login in the above URL?"
 msgstr ""
+"Uygulamanın giriş yapması için yukarıdaki URL'i kullanıp izin verdiniz mi?"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useHeaderButtons.ts:14
 msgid "Header %d"
@@ -2361,6 +2358,8 @@ msgid ""
 "If you have already authorised, please wait for the application to sync to "
 "Joplin Cloud."
 msgstr ""
+"Eğer hali hazırda giriş yaptıysanız, lütfen uygulamanın Joplin Cloud ile "
+"senkronizasyonu için kısa bir süre bekleyin."
 
 #: packages/app-desktop/ElectronAppWrapper.ts:85
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:358
@@ -2604,9 +2603,8 @@ msgstr "Joplin Cloud"
 
 #: packages/app-desktop/gui/Root.tsx:228
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:146
-#, fuzzy
 msgid "Joplin Cloud Login"
-msgstr "Joplin Cloud"
+msgstr "Joplin Cloud Giriş"
 
 #: packages/lib/services/interop/InteropService.ts:148
 #: packages/lib/services/interop/InteropService.ts:65
@@ -2678,9 +2676,8 @@ msgid "Keep note history for"
 msgstr "Not tarihçesini şu kadar süre tut"
 
 #: packages/lib/models/Setting.ts:1839
-#, fuzzy
 msgid "Keep notes in the trash for"
-msgstr "Not tarihçesini şu kadar süre tut"
+msgstr "Çöp kutusunda notları şu kadar süre tut: "
 
 #: packages/lib/models/Setting.ts:1485
 msgid "Keyboard Mode"
@@ -2724,7 +2721,7 @@ msgstr "Daha sonra"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:7
 msgid "Latitude"
-msgstr ""
+msgstr "Enlem"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:616
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:229
@@ -2796,9 +2793,8 @@ msgid "Loaded"
 msgstr "Yüklenme"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:85
-#, fuzzy
 msgid "Loading plugin repository..."
-msgstr "Eklenti sunucusuna bağlanılamadı."
+msgstr "Eklenti depo sunucusu yükleniyor..."
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:87
 msgid "Loading..."
@@ -2841,7 +2837,7 @@ msgstr "Loglar, profiller, senkronizasyon durumu"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:8
 msgid "Longitude"
-msgstr ""
+msgstr "Boylam"
 
 #: packages/app-desktop/gui/MenuBar.tsx:880
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:560
@@ -2982,16 +2978,16 @@ msgstr "%d notlarını not defterine taşı \"%s\"?"
 #: packages/app-cli/app/command-rmbook.ts:27
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:206
-#, fuzzy
 msgid ""
 "Move notebook \"%s\" to the trash?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will also be moved to the "
 "trash."
 msgstr ""
-"“%s” not defteri silinsin mi ?\n"
+"“%s” not defteri çöp kutusuna taşınsın mı?\n"
 "\n"
-"Not defteri içersindeki tüm not ve alt not defterleri de silinecektir."
+"Not defteri içersindeki tüm not ve alt not defterleri de çöp kutusuna "
+"taşınacak."
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.ts:8
 msgid "Move to notebook"
@@ -3443,19 +3439,16 @@ msgid "Per user. Minimum of %d users."
 msgstr "Kullanıcı başına. Minimum %d kullanıcı."
 
 #: packages/app-desktop/gui/MainScreen/commands/permanentlyDeleteNote.ts:8
-#, fuzzy
 msgid "Permanently delete note"
-msgstr "Seçili notları sil"
+msgstr "Notu kalıcı olarak sil"
 
 #: packages/lib/models/Note.ts:900
-#, fuzzy
 msgid "Permanently delete note \"%s\"?"
-msgstr "\"%s\" notu silinsin mi?"
+msgstr "\"%s\" notu kalıcı olarak silinsin mi?"
 
 #: packages/lib/models/Note.ts:902
-#, fuzzy
 msgid "Permanently delete these %d notes?"
-msgstr "Bu %d not silinsin mi?"
+msgstr "%d notları kalıcı olarak silinsin mi?"
 
 #: packages/app-mobile/components/screens/Note.tsx:492
 msgid "Permission needed"
@@ -3549,18 +3542,16 @@ msgid "Please wait..."
 msgstr "Lütfen bekleyin..."
 
 #: packages/app-mobile/plugins/PlatformImplementation.ts:52
-#, fuzzy
 msgid "Plugin message"
-msgstr "Eklentiler"
+msgstr "Eklenti mesajı"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:81
 msgid "Plugin repository failed to load"
-msgstr ""
+msgstr "Eklenti depo sunucusu yüklenemedi"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:28
-#, fuzzy
 msgid "Plugin search"
-msgstr "Eklentiler"
+msgstr "Eklenti ara"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:325
 msgid "Plugin tools"
@@ -3753,9 +3744,8 @@ msgid "Recipients:"
 msgstr "Alıcılar:"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox.tsx:106
-#, fuzzy
 msgid "Recommended"
-msgstr "komut"
+msgstr "Önerilen"
 
 #: packages/app-desktop/gui/MenuBar.tsx:709
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
@@ -3868,24 +3858,20 @@ msgid "Restore"
 msgstr "Geri yükle"
 
 #: packages/app-desktop/gui/MainScreen/commands/restoreNote.ts:10
-#, fuzzy
 msgid "Restore note"
-msgstr "Geri Yüklenen Notlar"
+msgstr "Notu geri yükle"
 
 #: packages/app-desktop/gui/MainScreen/commands/restoreFolder.ts:9
-#, fuzzy
 msgid "Restore notebook"
-msgstr "Not defteri oluştur"
+msgstr "Not defterini geri yükle"
 
 #: packages/app-cli/app/command-restore.ts:12
-#, fuzzy
 msgid "Restore the items matching <pattern> from the trash."
-msgstr "Eşleşen notları siler <note-pattern>."
+msgstr "Çöp kutusundaki <note-pattern> ile eşleşen notları geri yükler."
 
 #: packages/lib/services/trash/index.ts:87
-#, fuzzy
 msgid "Restored items"
-msgstr "Geri Yüklenen Notlar"
+msgstr "Geri yüklenen notlar"
 
 #: packages/lib/services/RevisionService.ts:241
 msgid "Restored Notes"
@@ -4779,16 +4765,14 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "“%s” notu başarılı bir şekilde “%s” not defterine geri yüklendi."
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:63
-#, fuzzy
 msgid "The note was successfully moved to the trash."
 msgid_plural "The notes were successfully moved to the trash."
-msgstr[0] "“%s” notu başarılı bir şekilde “%s” not defterine geri yüklendi."
-msgstr[1] "“%s” notu başarılı bir şekilde “%s” not defterine geri yüklendi."
+msgstr[0] "Not başarıyla çöp kutusuna taşındı."
+msgstr[1] "Notlar başarıyla çöp kutusuna taşındı."
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:61
-#, fuzzy
 msgid "The notebook and its content was successfully moved to the trash."
-msgstr "“%s” notu başarılı bir şekilde “%s” not defterine geri yüklendi."
+msgstr "Not defteri ve içerikleri başarıyla çöp kutusuna taşındı."
 
 #: packages/app-mobile/components/screens/folder.js:77
 msgid "The notebook could not be saved: %s"
@@ -5070,6 +5054,7 @@ msgstr "Yeni bir pencere açılacak. Değişiklikler kaydedilsin mi?"
 #: packages/app-desktop/commands/emptyTrash.ts:14
 msgid "This will permanently delete all items in the trash. Continue?"
 msgstr ""
+"Bu işlem çöp kutusundaki tüm öğeleri kalıcı olarak silecek. Devam edilsin mi?"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
 msgid ""
@@ -5106,13 +5091,12 @@ msgstr ""
 #: packages/app-cli/app/command-sync.ts:108
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:80
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:149
-#, fuzzy
 msgid ""
 "To allow Joplin to synchronise with Joplin Cloud, please login using this "
 "URL:"
 msgstr ""
-"Joplin'in Dropbox ile senkronize edilmesine izin vermek için lütfen "
-"aşağıdaki adımları izleyin:"
+"Joplin'in Joplin Cloud ile senkronize edilmesine izin vermek için lütfen bu "
+"linkli kullanarak giriş yapın:"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:53
 msgid "To continue, please enter your master password below."
@@ -5180,9 +5164,8 @@ msgid "to-do"
 msgstr "yapılacak"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:6
-#, fuzzy
 msgid "To-do"
-msgstr "yapılacak"
+msgstr "Yapılacaklar"
 
 #: packages/app-mobile/components/note-item.js:145
 msgid "to-do: %s"
@@ -5252,7 +5235,7 @@ msgstr "Toplam: %d/%d"
 
 #: packages/lib/services/trash/index.ts:41
 msgid "Trash"
-msgstr ""
+msgstr "Çöp kutusu"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:315
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:123
@@ -5561,9 +5544,8 @@ msgid "Voice typing..."
 msgstr "Sesle yazılıyor..."
 
 #: packages/lib/services/joplinCloudUtils.ts:23
-#, fuzzy
 msgid "Waiting for authorisation..."
-msgstr "Yetkilendirme ver"
+msgstr "Yetkilendirme için bekleniyor..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:202
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:109
@@ -5683,7 +5665,7 @@ msgstr ""
 
 #: packages/lib/services/joplinCloudUtils.ts:41
 msgid "You are logged in into Joplin Cloud, you can leave this screen now."
-msgstr ""
+msgstr "Joplin Cloud'a giriş yaptınız, şimdi ekranı kapatabilirsiniz."
 
 #: packages/app-mobile/components/NoteList.tsx:95
 msgid "You currently have no notebooks."
@@ -5707,15 +5689,12 @@ msgstr ""
 "kullanabilirsiniz."
 
 #: packages/lib/services/joplinCloudUtils.ts:49
-#, fuzzy
 msgid ""
 "You were unable to connect to Joplin Cloud. Please check your credentials "
 "and try again. Error:"
 msgstr ""
-"Joplin iCloud hesabınız oluşturulurken bir sorunla karşılaşıldı. Lütfen e-"
-"posta adresinizi ve parolanızı kontrol ederek yeniden deneyin: Hata Mesajı:\n"
-"\n"
-"%s"
+"Joplin Cloud'a bağlanılamadı. Lütfen giriş bilgilerinizi control ederek "
+"yeniden deneyin. Hata Mesajı:"
 
 #: packages/app-cli/app/cli-utils.js:160
 msgid "Your choice: "
