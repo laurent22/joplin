@@ -14,6 +14,7 @@ const FontSearch = (props: Props) => {
 	const { type, style, value, fonts, onChange } = props;
 	const [inputText, setInputText] = useState(value);
 	const [showList, setShowList] = useState(false);
+	const [isListHovered, setIsListHovered] = useState(false);
 	const areFontsLoading = fonts.length === 0;
 
 	const filteredFonts = useMemo(() => {
@@ -29,9 +30,11 @@ const FontSearch = (props: Props) => {
 
 	const onFocusHandle = useCallback(() => setShowList(true), []);
 
-	const onBlurHandle = useCallback(() =>
-		setTimeout(() => setShowList(false), 150) // Delay the hiding of the list to allow the click event to fire
-	, []);
+	const onBlurHandle = useCallback(() => {
+		if (!isListHovered) {
+			setShowList(false);
+		}
+	}, [isListHovered]);
 
 	const onFontClick: React.MouseEventHandler<HTMLDivElement> = useCallback((event) => {
 		const font = (event.target as HTMLDivElement).innerText;
@@ -39,6 +42,10 @@ const FontSearch = (props: Props) => {
 		setShowList(false);
 		onChange(font);
 	}, [onChange]);
+
+	const onListHover: React.MouseEventHandler<HTMLDivElement> = useCallback(() => setIsListHovered(true), []);
+
+	const onListLeave: React.MouseEventHandler<HTMLDivElement> = useCallback(() => setIsListHovered(false), []);
 
 	return (
 		<>
@@ -51,7 +58,12 @@ const FontSearch = (props: Props) => {
 				onBlur={onBlurHandle}
 				spellCheck={false}
 			/>
-			<div className={'font-search-list'} style={{ display: showList ? 'block' : 'none' }}>
+			<div
+				className={'font-search-list'}
+				style={{ display: showList ? 'block' : 'none' }}
+				onMouseEnter={onListHover}
+				onMouseLeave={onListLeave}
+			>
 				{
 					areFontsLoading ? <div>{_('Loading...')}</div> :
 						filteredFonts.map((font: string) =>
