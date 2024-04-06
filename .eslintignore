@@ -83,6 +83,7 @@ plugin_types/
 readme/
 packages/react-native-vosk/lib/
 packages/lib/countable/Countable.js
+packages/onenote-converter/pkg/onenote_converter.js
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 packages/app-cli/app/LinkSelector.js
