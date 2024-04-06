@@ -22,7 +22,7 @@ const FontSearch = (props: Props) => {
 		);
 	}, [fonts, inputText]);
 
-	const onTextChange = useCallback((event: any) => {
+	const onTextChange: React.ChangeEventHandler<HTMLInputElement> = useCallback((event) => {
 		setInputText(event.target.value);
 		setShowList(true);
 		updateSettingValue(key, event.target.value);
@@ -34,8 +34,8 @@ const FontSearch = (props: Props) => {
 		setTimeout(() => setShowList(false), 150) // Delay the hiding of the list to allow the click event to fire
 	, []);
 
-	const onFontClick = useCallback((event: any) => {
-		const font = event.target.innerText;
+	const onFontClick: React.MouseEventHandler<HTMLDivElement> = useCallback((event) => {
+		const font = (event.target as HTMLDivElement).innerText;
 		setInputText(font);
 		setShowList(false);
 		updateSettingValue(key, font);

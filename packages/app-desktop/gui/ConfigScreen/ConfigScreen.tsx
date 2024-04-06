@@ -31,6 +31,12 @@ interface Font {
 	family: string;
 }
 
+declare global {
+	interface Window {
+		queryLocalFonts(): Promise<Font[]>;
+	}
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 class ConfigScreenComponent extends React.Component<any, any> {
 
@@ -91,7 +97,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			});
 		}
 
-		const fonts = (await (window as any).queryLocalFonts()).map((font: Font) => font.family);
+		const fonts = (await window.queryLocalFonts()).map((font: Font) => font.family);
 		const uniqueFonts = [...new Set(fonts)];
 		this.setState({ fonts: uniqueFonts });
 	}
@@ -620,7 +626,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 									type={inputType}
 									style={inputStyle}
 									value={this.state.settings[key]}
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 									onChange={(event: any) => {
 										onTextChange(event);
 									}}
