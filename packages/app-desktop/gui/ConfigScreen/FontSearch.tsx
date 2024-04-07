@@ -15,15 +15,18 @@ const FontSearch = (props: Props) => {
 	const [inputText, setInputText] = useState(value);
 	const [showList, setShowList] = useState(false);
 	const [isListHovered, setIsListHovered] = useState(false);
+	const [isFontSelected, setIsFontSelected] = useState(value !== '');
 	const areFontsLoading = fonts.length === 0;
 
 	const filteredFonts = useMemo(() => {
+		if (isFontSelected) return fonts;
 		return fonts.filter((font: string) =>
 			font.toLowerCase().startsWith(inputText.toLowerCase()),
 		);
-	}, [fonts, inputText]);
+	}, [fonts, inputText, isFontSelected]);
 
 	const onTextChange: React.ChangeEventHandler<HTMLInputElement> = useCallback((event) => {
+		setIsFontSelected(false);
 		setInputText(event.target.value);
 		onChange(event.target.value);
 	}, [onChange]);
@@ -41,6 +44,7 @@ const FontSearch = (props: Props) => {
 		setInputText(font);
 		setShowList(false);
 		onChange(font);
+		setIsFontSelected(true);
 	}, [onChange]);
 
 	const onListHover: React.MouseEventHandler<HTMLDivElement> = useCallback(() => setIsListHovered(true), []);
