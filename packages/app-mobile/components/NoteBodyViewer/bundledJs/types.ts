@@ -8,6 +8,7 @@ export interface RendererWebViewOptions {
 		resourceDir: string;
 		resourceDownloadMode: string;
 	};
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginOptions: Record<string, any>;
 }
 
@@ -26,6 +27,7 @@ export interface NoteViewerLocalApi {
 export interface NoteViewerRemoteApi {
 	onScroll(scrollTop: number): void;
 	onPostMessage(message: string): void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onPostPluginMessage(contentScriptId: string, message: any): Promise<any>;
 	fsDriver: RendererFsDriver;
 }

@@ -13,7 +13,9 @@ interface Props {
 	tags?: TagEntity[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export type RenderFolderItem = (folder: FolderEntity, selected: boolean, hasChildren: boolean, depth: number)=> any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export type RenderTagItem = (tag: TagEntity, selected: boolean)=> any;
 
 function folderHasChildren_(folders: FolderEntity[], folderId: string) {
@@ -43,6 +45,7 @@ function folderIsCollapsed(folders: FolderEntity[], folderId: string, collapsedF
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function renderFoldersRecursive_(props: Props, renderItem: RenderFolderItem, items: any[], parentId: string, depth: number, order: string[]) {
 	const folders = props.folders;
 	for (let i = 0; i < folders.length; i++) {

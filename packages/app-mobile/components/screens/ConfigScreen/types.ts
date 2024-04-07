@@ -7,4 +7,5 @@ export interface CustomSettingSection {
 	keywords: string[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export type UpdateSettingValueCallback = (key: string, value: any)=> Promise<void>;

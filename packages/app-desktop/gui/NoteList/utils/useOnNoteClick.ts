@@ -7,6 +7,7 @@ const useOnNoteClick = (dispatch: Dispatch, focusNote: FocusNote) => {
 	const onNoteClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
 		const noteId = event.currentTarget.getAttribute('data-id');
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const targetTagName = event.target ? (event.target as any).tagName : '';
 
 		// If we are for example on a checkbox, don't process the click since it

@@ -13,6 +13,7 @@ describe('mergeCallbacksAndSerializable', () => {
 				'test[2]',
 			],
 		};
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const data: any = {
 			foo: {
 				fn1: undefined,
@@ -27,6 +28,7 @@ describe('mergeCallbacksAndSerializable', () => {
 		};
 
 		const callMethodWithId = jest.fn();
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const merged: any = mergeCallbacksAndSerializable(data, callbacks, callMethodWithId, ()=>{});
 
 		// Should have created functions

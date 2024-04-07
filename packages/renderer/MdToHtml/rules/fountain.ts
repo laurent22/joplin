@@ -103,6 +103,7 @@ const pluginAssets = function() {
 	];
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function renderFountainScript(markdownIt: any, content: string) {
 	const result = fountain.parse(content);
 
@@ -119,11 +120,14 @@ function renderFountainScript(markdownIt: any, content: string) {
 	`;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function plugin(markdownIt: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const defaultRender = markdownIt.renderer.rules.fence || function(tokens: any[], idx: number, options: any, _env: any, self: any) {
 		return self.renderToken(tokens, idx, options);
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	markdownIt.renderer.rules.fence = function(tokens: any[], idx: number, options: any, env: any, self: any) {
 		const token = tokens[idx];
 		if (token.info !== 'fountain') return defaultRender(tokens, idx, options, env, self);

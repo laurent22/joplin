@@ -19,6 +19,7 @@ import * as lezerMarkdown from '@lezer/markdown';
 //
 // Plugins can't bundle their own copies of the CodeMirror libraries, as multiple
 // copies of some libraries can cause issues.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const libraryNameToPackage: Record<string, any> = {
 	'@codemirror/view': codeMirrorView,
 	'@codemirror/state': codeMirrorState,

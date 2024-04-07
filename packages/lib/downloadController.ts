@@ -11,6 +11,7 @@ export interface DownloadController {
 	maxImagesCount: number;
 	imageCountExpected: number;
 	printStats(imagesCountExpected: number): void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	handleChunk(request: any): (chunk: any)=> void;
 	limitMessage(): string;
 }
@@ -64,7 +65,9 @@ export class LimitedDownloadController implements DownloadController {
 		return this.imageCountExpected_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public handleChunk(request: any) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return (chunk: any) => {
 			try {
 				this.totalBytes += chunk.length;

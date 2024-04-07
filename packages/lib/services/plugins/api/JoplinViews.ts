@@ -16,6 +16,7 @@ import JoplinViewsNoteList from './JoplinViewsNoteList';
  */
 export default class JoplinViews {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private store: any;
 	private plugin: Plugin;
 
@@ -25,8 +26,10 @@ export default class JoplinViews {
 	private toolbarButtons_: JoplinViewsToolbarButtons = null;
 	private dialogs_: JoplinViewsDialogs = null;
 	private noteList_: JoplinViewsNoteList = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private implementation_: any = null;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(implementation: any, plugin: Plugin, store: any) {
 		this.store = store;
 		this.plugin = plugin;

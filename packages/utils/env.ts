@@ -68,6 +68,7 @@ export const parseEnvFile = (env_file: string, options: Options = {}) => {
 
 		} catch (error) {
 			if (options.raise) {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				(error as any).message = `Environment file could not be read: ${env_file}: ${(error as any).message}`;
 				throw error;
 			} else {
@@ -96,6 +97,7 @@ export const parseEnvFile = (env_file: string, options: Options = {}) => {
 			} else {
 				lineVariables.push(line);
 
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				const key_value = line.match(/^([^=]+)\s*=\s*(.*)$/) as any;
 
 				const env_key = key_value[1];

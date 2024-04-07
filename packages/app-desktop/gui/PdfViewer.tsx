@@ -8,6 +8,9 @@ import CommandService from '@joplin/lib/services/CommandService';
 import styled from 'styled-components';
 import { themeStyle } from '@joplin/lib/theme';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
+type StyleProps = any;
+
 const Window = styled.div`
 	height: 100%;
     width: 100%;
@@ -15,8 +18,8 @@ const Window = styled.div`
     top: 0px;
     left: 0px;
     z-index: 999;
-    background-color: ${(props: any) => props.theme.backgroundColor};
-	color: ${(props: any) => props.theme.color};
+    background-color: ${(props: StyleProps) => props.theme.backgroundColor};
+	color: ${(props: StyleProps) => props.theme.color};
 	`;
 
 const IFrame = styled.iframe`
@@ -29,6 +32,7 @@ interface Props {
 	themeId: number;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	resource: any;
 	pageNo: number;
 }
@@ -68,6 +72,7 @@ export default function PdfViewer(props: Props) {
 		menu.popup({ window: bridge().window() });
 	}, [props.dispatch]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onMessage_ = useCallback(async (event: any) => {
 		if (!event.data || !event.data.name) {
 			return;

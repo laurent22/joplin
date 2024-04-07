@@ -27,6 +27,7 @@ type_: 4`,
 
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function getShareContent(shareId: string, query: any = {}): Promise<string | Buffer> {
 	const context = await koaAppContext({
 		request: {
@@ -37,6 +38,7 @@ async function getShareContent(shareId: string, query: any = {}): Promise<string
 	});
 	await routeHandler(context);
 	await checkContextError(context);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return context.response.body as any;
 }
 

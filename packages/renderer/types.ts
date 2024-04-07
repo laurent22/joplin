@@ -1,6 +1,7 @@
 import { MarkupLanguage } from './MarkupToHtml';
 import { Options as NoteStyleOptions } from './noteStyle';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export type ItemIdToUrlHandler = (resource: any)=> string;
 
 interface ResourceEntity {
@@ -13,6 +14,7 @@ interface ResourceEntity {
 export interface FsDriver {
 	writeFile: (path: string, content: string, encoding: string)=> Promise<void>;
 	exists: (path: string)=> Promise<boolean>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	cacheCssToFile: (cssStrings: string[])=> Promise<any>;
 }
 
@@ -26,8 +28,10 @@ export interface RenderOptions {
 	externalAssetsOnly?: boolean;
 	highlightedKeywords?: string[];
 	codeTheme?: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	theme?: any;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	plugins?: Record<string, any>;
 	audioPlayerEnabled?: boolean;
 	videoPlayerEnabled?: boolean;
@@ -42,6 +46,7 @@ export interface RenderOptions {
 	vendorDir?: string;
 	itemIdToUrl?: ItemIdToUrlHandler;
 	allowedFilePrefixes?: string[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	settingValue?: (pluginId: string, key: string)=> any;
 
 	resources?: Record<string, ResourceEntity>;
@@ -70,8 +75,10 @@ export interface RenderResult {
 }
 
 export interface MarkupRenderer {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	render(markup: string, theme: any, options: RenderOptions): Promise<RenderResult>;
 	clearCache(): void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	allAssets(theme: any, noteStyleOptions: NoteStyleOptions|null): Promise<RenderResultPluginAsset[]>;
 }
 
@@ -80,9 +87,11 @@ interface StripMarkupOptions {
 }
 
 export interface MarkupToHtmlConverter {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	render(markupLanguage: MarkupLanguage, markup: string, theme: any, options: any): Promise<RenderResult>;
 	clearCache(markupLanguage: MarkupLanguage): void;
 	stripMarkup(markupLanguage: MarkupLanguage, markup: string, options: StripMarkupOptions): string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	allAssets(markupLanguage: MarkupLanguage, theme: any, noteStyleOptions: NoteStyleOptions|null): Promise<RenderResultPluginAsset[]>;
 }
 

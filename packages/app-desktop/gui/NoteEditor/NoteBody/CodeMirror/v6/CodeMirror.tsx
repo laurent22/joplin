@@ -33,6 +33,7 @@ const logDebug = (message: string) => logger.debug(message);
 
 interface RenderedBody {
 	html: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginAssets: any[];
 }
 
@@ -77,6 +78,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		}
 	}, [props.content]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onEditorPaste = useCallback(async (event: any = null) => {
 		const resourceMds = await getResourcesFromPasteEvent(event);
 		if (!resourceMds.length) return;
@@ -183,6 +185,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 				let commandOutput = null;
 				if (cmd.name in commands) {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					commandOutput = (commands as any)[cmd.name](cmd.value);
 				} else if (editorRef.current.supportsCommand(cmd.name)) {
 					commandOutput = editorRef.current.execCommand(cmd.name);
@@ -270,6 +273,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			lineCount = editorRef.current.editor.state.doc.lines;
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const options: any = {
 			pluginAssets: renderedBody.pluginAssets,
 			downloadResources: Setting.value('sync.resourceDownloadMode'),

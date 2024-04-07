@@ -77,7 +77,9 @@ type OnAllMethodsRespondedToListener = ()=> void;
 // TODO: Remove after upgrading nodejs/browser types sufficiently
 //       (FinalizationRegistry is supported in modern browsers).
 declare class FinalizationRegistry {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(onDrop: any);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public register(v: any, id: string): void;
 }
 
@@ -122,6 +124,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 			return new Proxy(baseObject, {
 				// Map all properties to functions that invoke remote
 				// methods.
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				get: (_target, property: string): any => {
 					if (property === '___is_joplin_wrapper___') {
 						return true;
@@ -211,6 +214,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 		});
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private canRemoteAccessProperty(parentObject: any, methodName: string) {
 		// TODO: There may be a better way to do this -- this currently assumes that
 		//       **only** the following property names should be avoided.
@@ -233,6 +237,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 		return this.invokeRemoteMethod(['__callbacks', callbackId], callbackArgs);
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private trackCallbackFinalization = (callbackId: string, callback: any) => {
 		this.callbackTracker?.register(callback, callbackId);
 	};
@@ -241,6 +246,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 	private async invokeLocalMethod(message: InvokeMethodMessage) {
 		try {
 			const methodFromPath = (path: string[]) => {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				const parentObjectStack: any[] = [];
 
 				// We also use invokeLocalMethod to call callbacks that were previously
@@ -253,7 +259,9 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 					};
 				}
 
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				let parentObject: any;
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				let currentObject: any = this.localInterface;
 				for (let i = 0; i < path.length; i++) {
 					const propertyName = path[i];

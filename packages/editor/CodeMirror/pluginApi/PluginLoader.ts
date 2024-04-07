@@ -5,6 +5,7 @@ import codeMirrorRequire from './codeMirrorRequire';
 let pluginScriptIdCounter = 0;
 let pluginLoaderCounter = 0;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 type OnScriptLoadCallback = (exports: any)=> void;
 type OnPluginRemovedCallback = ()=> void;
 
@@ -27,10 +28,13 @@ export default class PluginLoader {
 
 		// addPlugin works by creating <script> elements with the plugin's content. To pass
 		// information to this <script>, we use global objects:
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		(window as any).__pluginLoaderScriptLoadCallbacks ??= Object.create(null);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		(window as any).__pluginLoaderRequireFunctions ??= Object.create(null);
 
 		this.pluginLoaderId = pluginLoaderCounter++;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		(window as any).__pluginLoaderRequireFunctions[this.pluginLoaderId] = codeMirrorRequire;
 	}
 
@@ -90,6 +94,7 @@ export default class PluginLoader {
 				})();
 				`));
 
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				(window as any).__pluginLoaderScriptLoadCallbacks[scriptId] = onLoad;
 
 				this.pluginScriptsContainer.appendChild(scriptElement);
