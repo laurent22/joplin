@@ -870,7 +870,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		if (this.props.navigation.state.isNewPhotoNote && this.titleTextFieldRef?.current) {
 			this.setState({ note: { ...newNote, title: _(`Photo taken on ${(new Date()).toLocaleString()}`) } });
-			this.titleTextFieldRef.current.focus();
+			focus('Note::attachFile', this.titleTextFieldRef.current);
 		} else {
 			this.setState({ note: newNote });
 		}
