@@ -68,6 +68,7 @@ export default class InteropServiceHelper {
 
 			win = bridge().newBrowserWindow(windowOptions);
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			return new Promise<any>((resolve, reject) => {
 				win.webContents.on('did-finish-load', () => {
 
@@ -85,6 +86,7 @@ export default class InteropServiceHelper {
 								// pdfs.
 								// https://github.com/laurent22/joplin/issues/6254.
 								await win.webContents.executeJavaScript('document.querySelectorAll(\'details\').forEach(el=>el.setAttribute(\'open\',\'\'))');
+								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 								const data = await win.webContents.printToPDF(options as any);
 								resolve(data);
 							} catch (error) {
@@ -126,6 +128,7 @@ export default class InteropServiceHelper {
 									resolve(null);
 								}, 1000);
 							} else {
+								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 								win.webContents.print(options as any, (success: boolean, reason: string) => {
 									cleanup();
 									if (!success && reason !== 'cancelled') reject(new Error(`Could not print: ${reason}`));

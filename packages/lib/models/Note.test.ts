@@ -109,6 +109,7 @@ describe('models/Note', () => {
 		for (let i = 0; i < testCases.length; i++) {
 			const t = testCases[i];
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const input: any = t[0];
 
 			const note1 = await Note.save(input);

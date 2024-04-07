@@ -33,6 +33,7 @@ export interface SearchPanelProps {
 }
 
 interface ActionButtonProps {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	styles: any;
 	themeId: number;
 	iconName: string;
@@ -54,6 +55,7 @@ const ActionButton = (props: ActionButtonProps) => {
 };
 
 interface ToggleButtonProps {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	styles: any;
 	themeId: number;
 	iconName: string;
@@ -147,6 +149,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 	const state = props.searchState;
 	const control = props.searchControl;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const updateSearchState = (changedData: any) => {
 		const newState = { ...state, ...changedData };
 		control.setSearchState(newState);

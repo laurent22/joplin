@@ -1,11 +1,12 @@
 import { _ } from '@joplin/lib/locale';
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 export default (cmd: any, stdout: Function, store: Function, gui: Function) => {
 	cmd.setStdout((text: string) => {
 		return stdout(text);
 	});
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	cmd.setDispatcher((action: any) => {
 		if (store()) {
 			return store().dispatch(action);
@@ -14,6 +15,7 @@ export default (cmd: any, stdout: Function, store: Function, gui: Function) => {
 		}
 	});
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	cmd.setPrompt(async (message: string, options: any) => {
 		if (!options) options = {};
 		if (!options.type) options.type = 'boolean';

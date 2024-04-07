@@ -8,15 +8,19 @@ export const declaration: CommandDeclaration = {
 	label: () => _('Move to notebook'),
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const runtime = (comp: any): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext, noteIds: string[] = null) => {
 			noteIds = noteIds || context.state.selectedNoteIds;
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const folders: any[] = await Folder.sortFolderTree();
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const startFolders: any[] = [];
 			const maxDepth = 15;
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const addOptions = (folders: any[], depth: number) => {
 				for (let i = 0; i < folders.length; i++) {
 					const folder = folders[i];
@@ -33,6 +37,7 @@ export const runtime = (comp: any): CommandRuntime => {
 					inputType: 'dropdown',
 					value: '',
 					autocomplete: startFolders,
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					onClose: async (answer: any) => {
 						if (answer) {
 							for (let i = 0; i < noteIds.length; i++) {

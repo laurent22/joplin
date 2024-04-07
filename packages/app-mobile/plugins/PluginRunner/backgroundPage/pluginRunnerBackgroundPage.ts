@@ -4,6 +4,7 @@ export { runPlugin, stopPlugin } from './startStopPlugin';
 const legacyPluginIds = [
 	'outline',
 	'ylc395.noteLinkSystem',
+	'com.github.joplin.kanban',
 ];
 
 const pathLibrary = require('path');
@@ -28,6 +29,7 @@ export const requireModule = (moduleName: string, fromPluginId: string) => {
 				readFile: () => '',
 				writeFileSync: () => '',
 				writeFile: () => '',
+				appendFile: () => '',
 			};
 		}
 		if (moduleName === 'process') {

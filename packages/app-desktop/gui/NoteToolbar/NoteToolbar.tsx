@@ -9,12 +9,14 @@ const { buildStyle } = require('@joplin/lib/theme');
 
 interface NoteToolbarProps {
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
 	toolbarButtonInfos: ToolbarButtonInfo[];
 	disabled: boolean;
 }
 
 function styles_(props: NoteToolbarProps) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return buildStyle('NoteToolbar', props.themeId, (theme: any) => {
 		return {
 			root: {
@@ -33,6 +35,7 @@ function NoteToolbar(props: NoteToolbarProps) {
 
 const toolbarButtonUtils = new ToolbarButtonUtils(CommandService.instance());
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const mapStateToProps = (state: any) => {
 	const whenClauseContext = stateToWhenClauseContext(state);
 

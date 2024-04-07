@@ -7,6 +7,7 @@ import KvStore from '@joplin/lib/services/KvStore';
 export default class PluginAssetsLoader {
 
 	private static instance_: PluginAssetsLoader = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private logger_: any = null;
 
 	public static instance() {
@@ -15,6 +16,7 @@ export default class PluginAssetsLoader {
 		return PluginAssetsLoader.instance_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public setLogger(logger: any) {
 		this.logger_ = logger;
 	}

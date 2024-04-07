@@ -42,11 +42,14 @@ export interface ImportOptions {
 	format?: string;
 	// modulePath?: string;
 	destinationFolderId?: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	destinationFolder?: any;
 	outputFormat?: ImportModuleOutputFormat;
 
 	// Only supported by some importers.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onProgress?: (progressState: any, progress?: any)=> void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onError?: (error: any)=> void;
 
 	defaultFolderTitle?: string;

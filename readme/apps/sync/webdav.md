@@ -8,6 +8,7 @@ WebDAV-compatible services that are known to work with Joplin:
 - [DriveHQ](https://www.drivehq.com)
 - [Fastmail](https://www.fastmail.com/)
 - [HiDrive](https://www.strato.fr/stockage-en-ligne/) from Strato. [Setup help](https://github.com/laurent22/joplin/issues/309)
+- [InfiniCLOUD](https://infini-cloud.net/)
 - [Nginx WebDAV Module](https://nginx.org/en/docs/http/ngx_http_dav_module.html)
 - [Nextcloud](https://nextcloud.com/)
 - [OwnCloud](https://owncloud.org/)

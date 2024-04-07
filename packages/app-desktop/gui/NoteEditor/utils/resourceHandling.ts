@@ -28,16 +28,19 @@ export async function handleResourceDownloadMode(noteBody: string) {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let resourceCache_: any = {};
 
 export function clearResourceCache() {
 	resourceCache_ = {};
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function attachedResources(noteBody: string): Promise<any> {
 	if (!noteBody) return {};
 	const resourceIds = await Note.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, noteBody);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {};
 	for (let i = 0; i < resourceIds.length; i++) {
 		const id = resourceIds[i];
@@ -62,6 +65,7 @@ export async function attachedResources(noteBody: string): Promise<any> {
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function commandAttachFileToBody(body: string, filePaths: string[] = null, options: any = null) {
 	options = {
 		createFileURL: false,
@@ -103,6 +107,7 @@ export async function commandAttachFileToBody(body: string, filePaths: string[] 
 	return body;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function resourcesStatus(resourceInfos: any) {
 	let lowestIndex = joplinRendererUtils.resourceStatusIndex('ready');
 	for (const id in resourceInfos) {
@@ -113,6 +118,7 @@ export function resourcesStatus(resourceInfos: any) {
 	return joplinRendererUtils.resourceStatusName(lowestIndex);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function getResourcesFromPasteEvent(event: any) {
 	const output = [];
 	const formats = clipboard.availableFormats();

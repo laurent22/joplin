@@ -7,6 +7,7 @@ import { execRequest, execRequestC } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, expectHttpError, expectThrow } from '../../utils/testing/testUtils';
 import { uuidgen } from '@joplin/lib/uuid';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function postUser(sessionId: string, email: string, password: string = null, props: any = null): Promise<User> {
 	password = password === null ? uuidgen() : password;
 
@@ -30,6 +31,7 @@ async function postUser(sessionId: string, email: string, password: string = nul
 	return context.response.body;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function patchUser(sessionId: string, user: any, url = ''): Promise<User> {
 	const context = await koaAppContext({
 		sessionId: sessionId,
@@ -115,6 +117,7 @@ describe('index/users', () => {
 		const doc = parseHtml(userHtml);
 
 		// <input class="input" type="email" name="email" value="user1@localhost"/>
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		expect((doc.querySelector('input[name=email]') as any).value).toBe('user1@localhost');
 	});
 

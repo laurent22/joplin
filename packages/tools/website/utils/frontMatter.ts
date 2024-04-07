@@ -59,6 +59,7 @@ export const stripOffFrontMatter = (md: string): MarkdownAndFrontMatter => {
 
 	if (state !== 'doc') throw new Error('Front matter block was not closed with "---"');
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const header: Record<string, any> = yaml.load(headerLines.join('\n'), { schema: yaml.FAILSAFE_SCHEMA });
 
 	if (header.created) header.created = moment(header.created).toDate();
@@ -73,6 +74,7 @@ export const stripOffFrontMatter = (md: string): MarkdownAndFrontMatter => {
 // source_url: https://www.patreon.com/posts/any-ideas-for-53317699
 // ---
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const formatFrontMatterValue = (key: string, value: any) => {
 	if (['created', 'updated'].includes(key)) {
 		return moment((value as Date)).toISOString();
@@ -87,6 +89,7 @@ export const compileWithFrontMatter = (md: MarkdownAndFrontMatter): string => {
 	if (Object.keys(md.header).length) {
 		const header = { ...md.header };
 		for (const [key, value] of Object.entries(header)) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			(header as any)[key] = formatFrontMatterValue(key, value);
 		}
 		const headerString = yaml.dump(header, { noCompatMode: true, schema: yaml.FAILSAFE_SCHEMA, lineWidth: 100000 });

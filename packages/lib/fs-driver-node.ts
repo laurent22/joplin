@@ -5,9 +5,11 @@ const fs = require('fs-extra');
 
 export default class FsDriverNode extends FsDriverBase {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private fsErrorToJsError_(error: any, path: string = null) {
 		let msg = error.toString();
 		if (path !== null) msg += `. Path: ${path}`;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any = new Error(msg);
 		if (error.code) output.code = error.code;
 		return output;
@@ -99,10 +101,12 @@ export default class FsDriverNode extends FsDriverBase {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async setTimestamp(path: string, timestampDate: any) {
 		return fs.utimes(path, timestampDate, timestampDate);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async readDirStats(path: string, options: any = null) {
 		if (!options) options = {};
 		if (!('recursive' in options)) options.recursive = false;
@@ -127,6 +131,7 @@ export default class FsDriverNode extends FsDriverBase {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async open(path: string, mode: any) {
 		try {
 			return await fs.open(path, mode);
@@ -135,6 +140,7 @@ export default class FsDriverNode extends FsDriverBase {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async close(handle: any) {
 		try {
 			return await fs.close(handle);
@@ -174,6 +180,7 @@ export default class FsDriverNode extends FsDriverBase {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async readFileChunk(handle: any, length: number, encoding = 'base64') {
 		// let buffer = new Buffer(length);
 		let buffer = Buffer.alloc(length);
@@ -193,10 +200,12 @@ export default class FsDriverNode extends FsDriverBase {
 		return md5File(path);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async tarExtract(options: any) {
 		await require('tar').extract(options);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async tarCreate(options: any, filePaths: string[]) {
 		await require('tar').create(options, filePaths);
 	}

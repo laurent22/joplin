@@ -8,6 +8,7 @@ export const declaration: CommandDeclaration = {
 	iconName: 'fa-file',
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const runtime = (comp: any): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext, noteIds: string[] = null) => {

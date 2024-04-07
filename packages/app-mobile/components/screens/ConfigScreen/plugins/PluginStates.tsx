@@ -47,7 +47,7 @@ const PluginStates: React.FC<Props> = props => {
 			.map(plugin => {
 				return plugin.manifest;
 			});
-		const updatablePluginIds = await repoApi.canBeUpdatedPlugins(manifests, PluginService.instance().appVersion);
+		const updatablePluginIds = await repoApi.canBeUpdatedPlugins(manifests);
 
 		const conv: Record<string, boolean> = {};
 		for (const id of updatablePluginIds) {

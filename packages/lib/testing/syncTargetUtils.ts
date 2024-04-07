@@ -40,7 +40,9 @@ export const testData = {
 	},
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function createTestData(data: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	async function recurseStruct(s: any, parentId = '') {
 		for (const n in s) {
 			if (n.toLowerCase().includes('folder')) {
@@ -64,7 +66,9 @@ export async function createTestData(data: any) {
 	await recurseStruct(data);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function checkTestData(data: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	async function recurseCheck(s: any) {
 		for (const n in s) {
 			const obj = s[n];

@@ -55,6 +55,7 @@ describe('errorsHaveChanged', () => {
 		];
 
 		for (const t of testCases) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const [oldErrors, newErrors, expected] = t as any;
 
 			const result = errorsHaveChanged(oldErrors, newErrors);

@@ -3,6 +3,7 @@ import { CustomError, CustomErrorCode } from '../../../utils/errors';
 import { StorageDriverConfig, StorageDriverType } from '../../../utils/types';
 import StorageDriverBase from './StorageDriverBase';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function stream2buffer(stream: any): Promise<Buffer> {
 	return new Promise((resolve, reject) => {
 		const buffer: Uint8Array[] = [];
@@ -18,6 +19,7 @@ function stream2buffer(stream: any): Promise<Buffer> {
 			resolve(Buffer.concat(buffer));
 		});
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		stream.on('error', (error: any) => {
 			if (hasError) return;
 			hasError = true;

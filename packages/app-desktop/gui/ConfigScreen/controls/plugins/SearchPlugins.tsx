@@ -24,6 +24,7 @@ interface Props {
 	searchQuery: string;
 	onSearchQueryChange(event: OnChangeEvent): void;
 	pluginSettings: PluginSettings;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onPluginSettingsChange(event: any): void;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	renderDescription: Function;
@@ -86,7 +87,7 @@ export default function(props: Props) {
 					key={manifest.id}
 					manifest={manifest}
 					themeId={props.themeId}
-					isCompatible={PluginService.instance().isCompatible(manifest.app_min_version)}
+					isCompatible={PluginService.instance().isCompatible(manifest)}
 					onInstall={onInstall}
 					installState={installState(manifest.id)}
 				/>);

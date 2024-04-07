@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const isInsideContainer = (node: any, className: string): boolean => {
 	while (node) {
 		if (node.classList && node.classList.contains(className)) return true;
@@ -6,6 +7,7 @@ export const isInsideContainer = (node: any, className: string): boolean => {
 	return false;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const waitForElement = async (parent: any, id: string): Promise<any> => {
 	return new Promise((resolve, reject) => {
 		const iid = setInterval(() => {
