@@ -197,6 +197,8 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		this.editorRef = React.createRef();
 
+		this.titleTextFieldRef = React.createRef();
+
 		const saveDialog = async () => {
 			if (this.isModified()) {
 				const buttonId = await dialogs.pop(this, _('This note has been modified:'), [{ text: _('Save changes'), id: 'save' }, { text: _('Discard changes'), id: 'discard' }, { text: _('Cancel'), id: 'cancel' }]);
@@ -844,8 +846,9 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			newNote.body += `\n${resourceTag}`;
 		}
 
-		if (this.props.navigation.state.isNewPhotoNote) {
-			this.setState({ note: { ...newNote, title: _('Untitled') } });
+		if (this.props.navigation.state.isNewPhotoNote && this.titleTextFieldRef?.current) {
+			this.setState({ note: { ...newNote, title: _(`Photo taken on ${(new Date()).toLocaleString()}`) } });
+			this.titleTextFieldRef.current.focus();
 		} else {
 			this.setState({ note: newNote });
 		}
