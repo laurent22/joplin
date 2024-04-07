@@ -26,7 +26,7 @@ const WarningBannerWrapper: React.FC<WrapperProps> = props => {
 };
 
 describe('WarningBanner', () => {
-	let navServiceMock: jest.Mock<(route: any)=> void>;
+	let navServiceMock: jest.Mock<(route: unknown)=> void>;
 	beforeEach(() => {
 		navServiceMock = jest.fn();
 		NavService.dispatch = navServiceMock;
