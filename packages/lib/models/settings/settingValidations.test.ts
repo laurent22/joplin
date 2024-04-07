@@ -28,7 +28,7 @@ describe('settingValidations', () => {
 
 		// Should pass after dismissing all warnings
 		for (const testNote of testNotes) {
-			await BaseItem.dismissItemSyncWarning(syncTargetId, testNote);
+			await BaseItem.ignoreItemSyncWarning(syncTargetId, testNote);
 		}
 		expect(await settingValidations(['sync.target'], { 'sync.target': newSyncTargetId })).toBe('');
 	});

@@ -878,7 +878,7 @@ export default class BaseItem extends BaseModel {
 		await this.db().exec('DELETE FROM sync_items WHERE item_type = ? AND item_id = ?', [itemType, itemId]);
 	}
 
-	public static async dismissItemSyncWarning(syncTarget: number, item: { type_?: number; id?: string }) {
+	public static async ignoreItemSyncWarning(syncTarget: number, item: { type_?: number; id?: string }) {
 		checkObjectHasProperties(item, ['type_', 'id']);
 		const itemType = item.type_;
 		const itemId = item.id;

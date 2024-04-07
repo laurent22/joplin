@@ -203,7 +203,7 @@ export default class ReportService {
 					},
 					canIgnore: !row.warning_ignored,
 					ignoreHandler: async () => {
-						await BaseItem.dismissItemSyncWarning(syncTarget, row.item);
+						await BaseItem.ignoreItemSyncWarning(syncTarget, row.item);
 					},
 				});
 			};
