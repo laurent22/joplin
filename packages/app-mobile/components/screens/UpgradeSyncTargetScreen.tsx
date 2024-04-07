@@ -7,6 +7,7 @@ const { connect } = require('react-redux');
 import { themeStyle } from '../global-style';
 import ScreenHeader from '../ScreenHeader';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function UpgradeSyncTargetScreen(props: any) {
 	const upgradeResult = useSyncTargetUpgrade();
 
@@ -65,6 +66,7 @@ function UpgradeSyncTargetScreen(props: any) {
 	);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default connect((state: any) => {
 	return {
 		themeId: state.settings.theme,

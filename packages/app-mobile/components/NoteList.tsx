@@ -14,6 +14,7 @@ import { themeStyle } from './global-style';
 
 interface NoteListProps {
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	dispatch: (action: any)=> void;
 	notesSource: string;
 	items: NoteEntity[];
@@ -24,6 +25,7 @@ interface NoteListProps {
 
 class NoteListComponent extends Component<NoteListProps> {
 	private rootRef_: FlatList;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private styles_: Record<string, StyleSheet.NamedStyles<any>>;
 
 	public constructor(props: NoteListProps) {

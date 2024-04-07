@@ -30,6 +30,7 @@ const defaultOnPress = () => {};
 
 // Returns a render function compatible with React Native Paper.
 const getIconRenderFunction = (iconName: string) => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return (props: any) => <Icon name={iconName} {...props} />;
 };
 

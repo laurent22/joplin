@@ -65,6 +65,7 @@ describe('useDragAndDrop', () => {
 			],
 		],
 	])('should drop columns', (columns, header, insertAt, expected) => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const actual = dropHeaderAt(columns, header, insertAt as any).map(c => c.name);
 		expect(actual).toEqual(expected);
 	});

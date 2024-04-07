@@ -6,6 +6,7 @@ interface Size {
 	hash: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function(frameWindow: any, htmlHash: string, minWidth: number, minHeight: number, fitToContent: boolean, isReady: boolean) {
 	const [contentSize, setContentSize] = useState<Size>({
 		width: minWidth,

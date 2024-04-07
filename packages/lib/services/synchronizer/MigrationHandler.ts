@@ -112,6 +112,7 @@ export default class MigrationHandler extends BaseService {
 		});
 
 		let autoLockError = null;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.lockHandler_.startAutoLockRefresh(exclusiveLock, (error: any) => {
 			autoLockError = error;
 		});

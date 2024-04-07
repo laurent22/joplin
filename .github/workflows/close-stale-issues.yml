@@ -9,7 +9,7 @@ jobs:
     if: github.repository == 'laurent22/joplin'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/stale@v4
+      - uses: actions/stale@v9
         with:
           # Use this to do a dry run from a pull request
           # debug-only: true

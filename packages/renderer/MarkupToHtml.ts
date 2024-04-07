@@ -17,8 +17,10 @@ export interface Options {
 	isSafeMode?: boolean;
 	ResourceModel?: OptionsResourceModel;
 	customCss?: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	extraRendererRules?: any[];
 	resourceBaseUrl?: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginOptions?: any; // Not sure if needed
 	tempDir?: string; // Not sure if needed
 	fsDriver?: FsDriver; // Not sure if needed
@@ -31,6 +33,7 @@ export default class MarkupToHtml implements MarkupToHtmlConverter {
 
 	private renderers_: Record<string, MarkupRenderer> = {};
 	private options_: Options;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private rawMarkdownIt_: any;
 
 	public constructor(options: Options = null) {
@@ -54,10 +57,12 @@ export default class MarkupToHtml implements MarkupToHtmlConverter {
 			throw new Error(`Invalid markup language: ${markupLanguage}`);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.renderers_[markupLanguage] = new RendererClass(this.options_ as any);
 		return this.renderers_[markupLanguage];
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public stripMarkup(markupLanguage: MarkupLanguage, markup: string, options: any = null) {
 		if (!markup) return '';
 
@@ -89,6 +94,7 @@ export default class MarkupToHtml implements MarkupToHtmlConverter {
 		if (r.clearCache) r.clearCache();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async render(markupLanguage: MarkupLanguage, markup: string, theme: any, options: any): Promise<RenderResult> {
 		if (this.options_.isSafeMode) {
 			const htmlentities = new AllHtmlEntities();
@@ -101,6 +107,7 @@ export default class MarkupToHtml implements MarkupToHtmlConverter {
 		return this.renderer(markupLanguage).render(markup, theme, options);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async allAssets(markupLanguage: MarkupLanguage, theme: any, noteStyleOptions: NoteStyleOptions = null) {
 		return this.renderer(markupLanguage).allAssets(theme, noteStyleOptions);
 	}

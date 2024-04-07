@@ -4,6 +4,7 @@ import { Dimensions } from 'react-native';
 import { State } from '@joplin/lib/reducer';
 
 class SideMenuComponent extends SideMenu_ {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public onLayoutChange(e: any) {
 		const { width, height } = e.nativeEvent.layout;
 		const openMenuOffsetPercentage = this.props.openMenuOffset / Dimensions.get('window').width;

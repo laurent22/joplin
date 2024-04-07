@@ -14,6 +14,7 @@ interface DecryptionResult {
 	skippedItemCount?: number;
 	decryptedItemCounts?: number;
 	decryptedItemCount?: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	error: any;
 }
 
@@ -25,7 +26,9 @@ export default class DecryptionWorker {
 	private logger_: Logger;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public dispatch: Function = () => {};
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private scheduleId_: any = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private eventEmitter_: any;
 	private kvStore_: KvStore = null;
 	private maxDecryptionAttempts_ = 2;
@@ -62,6 +65,7 @@ export default class DecryptionWorker {
 		return DecryptionWorker.instance_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public setEncryptionService(v: any) {
 		this.encryptionService_ = v;
 	}
@@ -112,12 +116,14 @@ export default class DecryptionWorker {
 		await this.kvStore().deleteByPrefix('decrypt:');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public dispatchReport(report: any) {
 		const action = { ...report };
 		action.type = 'DECRYPTION_WORKER_SET';
 		this.dispatch(action);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async start_(options: any = null): Promise<DecryptionResult> {
 		if (options === null) options = {};
 		if (!('masterKeyNotLoadedHandler' in options)) options.masterKeyNotLoadedHandler = 'throw';
@@ -163,6 +169,7 @@ export default class DecryptionWorker {
 		this.state_ = 'started';
 
 		const excludedIds = [];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const decryptedItemCounts: any = {};
 		let skippedItemCount = 0;
 
@@ -293,6 +300,7 @@ export default class DecryptionWorker {
 		return finalReport;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async start(options: any = {}) {
 		this.startCalls_.push(true);
 		let output = null;

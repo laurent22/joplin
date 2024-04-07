@@ -4,6 +4,7 @@ export const defaultState = {
 	watchedResources: {},
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const reducer = produce((draft: Draft<any>, action: any) => {
 	if (action.type.indexOf('RESOURCE_EDIT_WATCHER_') !== 0) return;
 

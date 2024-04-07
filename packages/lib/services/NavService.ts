@@ -6,6 +6,7 @@ export default class NavService {
 	public static dispatch: Function = () => {};
 	private static handlers_: OnNavigateCallback[] = [];
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async go(routeName: string, additionalProps: Record<string, any>|null = null) {
 		if (this.handlers_.length) {
 			const r = await this.handlers_[this.handlers_.length - 1]();

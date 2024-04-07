@@ -25,6 +25,7 @@ export default class FolderListWidget extends ListWidget {
 		this.trimItemTitle = false;
 		this.showIds = false;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.itemRenderer = (item: any) => {
 			const output = [];
 			if (item === '-') {
@@ -42,6 +43,7 @@ export default class FolderListWidget extends ListWidget {
 					if (this.folderHasChildren_(this.folders, item.id)) {
 						for (let i = 0; i < this.folders.length; i++) {
 							if (this.folders[i].parent_id === item.id) {
+								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 								noteCount -= (this.folders[i] as any).note_count;
 							}
 						}
@@ -165,6 +167,7 @@ export default class FolderListWidget extends ListWidget {
 
 			this.logger().info('FFFFFFFFFFFFF', JSON.stringify(this.folders, null, 4));
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			let newItems: any[] = [];
 			const orderFolders = (parentId: string) => {
 				this.logger().info('PARENT', parentId);

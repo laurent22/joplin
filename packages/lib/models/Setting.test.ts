@@ -6,6 +6,7 @@ import { defaultProfileConfig } from '../services/profileConfig/types';
 import { createNewProfile, saveProfileConfig } from '../services/profileConfig';
 import initProfile from '../services/profileConfig/initProfile';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function loadSettingsFromFile(): Promise<any> {
 	return JSON.parse(await readFile(Setting.settingFilePath, 'utf8'));
 }

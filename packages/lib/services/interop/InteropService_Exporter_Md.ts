@@ -23,6 +23,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		await shim.fsDriver().mkdir(this.resourceDir_);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async makeDirPath_(item: any, pathPart: string = null, findUniqueFilename = true) {
 		let output = '';
 		while (true) {
@@ -39,6 +40,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async replaceLinkedItemIdsByRelativePaths_(item: any) {
 		const relativePathToRoot = await this.makeDirPath_(item, '..');
 
@@ -66,7 +68,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		return await this.replaceItemIdsByRelativePaths_(noteBody, linkedNoteIds, notePaths, createRelativePath);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 	private async replaceItemIdsByRelativePaths_(noteBody: string, linkedItemIds: string[], paths: any, fn_createRelativePath: Function) {
 		let newBody = noteBody;
 
@@ -79,9 +81,11 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		return newBody;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async prepareForProcessingItemType(itemType: number, itemsToExport: any[]) {
 		if (itemType === BaseModel.TYPE_NOTE) {
 			// Create unique file path for the note
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const context: any = {
 				notePaths: {},
 			};
@@ -115,6 +119,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		return await Note.replaceResourceInternalToExternalLinks(await Note.serialize(modNote, ['body']));
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async processItem(_itemType: number, item: any) {
 		if ([BaseModel.TYPE_NOTE, BaseModel.TYPE_FOLDER].indexOf(item.type_) < 0) return;
 

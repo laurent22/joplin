@@ -274,6 +274,7 @@ export const getFeaturesByPlan = (planName: PlanName, featureOn: boolean): PlanF
 export const getFeatureLabel = (planName: PlanName, featureId: FeatureId): string => {
 	const feature = features()[featureId];
 	const k = `${planName}Info`;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	if ((feature as any)[k]) return (feature as any)[k];
 	return feature.title;
 };
@@ -308,6 +309,7 @@ export const createFeatureTableMd = () => {
 
 	const getCellInfo = (planName: PlanName, feature: PlanFeature) => {
 		if (!feature[planName]) return '-';
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const infoShort: string = (feature as any)[`${planName}InfoShort`];
 		if (infoShort) return infoShort;
 		return '✔️';

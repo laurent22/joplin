@@ -36,7 +36,9 @@ export interface PdfInfo {
 
 export interface Implementation {
 	nativeImage: {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		createFromPath: (path: string)=> Promise<any>;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		createFromPdf: (path: string, options: CreateFromPdfOptions)=> Promise<any[]>;
 	};
 	getPdfInfo: (path: string)=> Promise<PdfInfo>;
@@ -52,6 +54,7 @@ export type Handle = string;
 
 interface Image {
 	handle: Handle;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	data: any;
 }
 
@@ -95,6 +98,7 @@ export default class JoplinImaging {
 		return image;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private cacheImage(data: any) {
 		const handle = this.createImageHandle();
 		this.images_.push({
@@ -199,6 +203,7 @@ export default class JoplinImaging {
 	 * Creates a new Joplin resource from the image data. The image will be
 	 * first converted to a JPEG.
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async toJpgResource(handle: Handle, resourceProps: any, quality = 80) {
 		const tempFilePath = this.tempFilePath('jpg');
 		await this.toJpgFile(handle, tempFilePath, quality);
@@ -211,6 +216,7 @@ export default class JoplinImaging {
 	 * Creates a new Joplin resource from the image data. The image will be
 	 * first converted to a PNG.
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async toPngResource(handle: Handle, resourceProps: any) {
 		const tempFilePath = this.tempFilePath('png');
 		await this.toPngFile(handle, tempFilePath);

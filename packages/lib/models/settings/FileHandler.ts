@@ -4,6 +4,7 @@ import Setting from '../Setting';
 
 const logger = Logger.create('Settings');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export type SettingValues = Record<string, any>;
 
 export default class FileHandler {

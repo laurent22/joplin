@@ -12,6 +12,7 @@ class Command extends BaseCommand {
 		return _('Restore the items matching <pattern> from the trash.');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public override async action(args: any) {
 		const pattern = args['pattern'];
 

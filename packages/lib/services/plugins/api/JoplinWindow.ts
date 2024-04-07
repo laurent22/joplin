@@ -10,9 +10,11 @@ export interface Implementation {
 export default class JoplinWindow {
 
 	private plugin_: Plugin;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private store_: any;
 	private implementation_: Implementation;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(implementation: Implementation, plugin: Plugin, store: any) {
 		this.implementation_ = implementation;
 		this.plugin_ = plugin;

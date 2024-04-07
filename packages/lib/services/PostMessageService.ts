@@ -40,12 +40,15 @@ export enum ResponderComponentType {
 
 export interface MessageResponse {
 	responseId: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	response: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	error: any;
 }
 
 type MessageResponder = (message: MessageResponse)=> void;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 type ViewMessageHandler = (message: any)=> void;
 
 interface Message {
@@ -55,6 +58,7 @@ interface Message {
 	from: MessageParticipant;
 	to: MessageParticipant;
 	id: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	content: any;
 }
 
@@ -110,6 +114,7 @@ export default class PostMessageService {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private sendResponse(message: Message, responseContent: any, error: any) {
 
 		let responder: MessageResponder = null;
@@ -131,6 +136,7 @@ export default class PostMessageService {
 		});
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private responder(type: ResponderComponentType, viewId: string): any {
 		return this.responders_[[type, viewId].join(':')];
 	}

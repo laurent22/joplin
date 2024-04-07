@@ -13,6 +13,7 @@ import { adminDashboardUrl, adminEmailsUrl, adminTasksUrl, adminUserDeletionsUrl
 import { MenuItem, setSelectedMenu } from '../utils/views/menu';
 
 export interface RenderOptions {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	partials?: any;
 	cssFiles?: string[];
 	jsFiles?: string[];
@@ -25,6 +26,7 @@ export interface View {
 	path: string;
 	layout?: string;
 	navbar?: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	content?: any;
 	partials?: string[];
 	cssFiles?: string[];
@@ -59,6 +61,7 @@ interface GlobalParams {
 	appShortName?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function isView(o: any): boolean {
 	if (typeof o !== 'object' || !o) return false;
 	return 'path' in o && 'name' in o;
@@ -281,6 +284,7 @@ export default class MustacheService {
 
 		const contentHtml = await this.renderFileContent(filePath, view, globalParams);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const layoutView: any = {
 			global: globalParams,
 			pageName: this.formatPageName(view.name),

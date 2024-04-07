@@ -30,6 +30,7 @@ const setMessageBoxResponse = (electronApp: ElectronApplication, responseMatch: 
 			checkboxChecked: false,
 		// We're mocking, so include "as any" to prevent this from breaking when we upgrade
 		// Electron.
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		} as any);
 	}, responseMatch);
 };

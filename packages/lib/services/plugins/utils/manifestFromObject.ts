@@ -2,6 +2,7 @@ import { PluginManifest, PluginPermission, Image, Icons } from './types';
 import validatePluginId from './validatePluginId';
 import validatePluginPlatforms from './validatePluginPlatforms';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function manifestFromObject(o: any): PluginManifest {
 
 	const getString = (name: string, required = true, defaultValue = ''): string => {

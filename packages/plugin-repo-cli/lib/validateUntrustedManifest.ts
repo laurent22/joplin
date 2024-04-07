@@ -6,6 +6,7 @@ import checkIfPluginCanBeAdded from './checkIfPluginCanBeAdded';
 // Assumes that
 // 1. manifest._npm_package_name is correct,
 // 2. other fields were set by the plugin author and are thus untrusted.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const validateUntrustedManifest = (manifest: any, existingManifests: any) => {
 	// At this point, we need to check the manifest ID as it's used in various
 	// places including as directory name and object key in manifests.json, so

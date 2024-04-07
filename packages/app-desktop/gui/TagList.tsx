@@ -9,7 +9,9 @@ const { themeStyle } = require('@joplin/lib/theme');
 
 interface Props {
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	items: any[];
 }
 
@@ -32,6 +34,7 @@ function TagList(props: Props) {
 	const tags = useMemo(() => {
 		const output = props.items.slice();
 		const collator = getCollator(collatorLocale);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		output.sort((a: any, b: any) => {
 			return collator.compare(a.title, b.title);
 		});

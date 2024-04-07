@@ -5,6 +5,7 @@ import { remove } from 'fs-extra';
 const sqlts = require('@rmp135/sql-ts').default;
 const fs = require('fs-extra');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function createRuntimeObject(table: any) {
 	const colStrings = [];
 	for (const col of table.columns) {
@@ -21,6 +22,7 @@ const stringToSingular = (word: string) => {
 	return word;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const generateListRenderDependencyType = (tables: any[]) => {
 	const output: string[] = [];
 
@@ -63,6 +65,7 @@ async function main() {
 
 		const definitions = await sqlts.toObject(sqlTsConfig);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		definitions.tables = definitions.tables.map((t: any) => {
 			t.columns.push({
 				nullable: false,
@@ -77,7 +80,9 @@ async function main() {
 			return t;
 		});
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		definitions.tables = definitions.tables.map((table: any) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			table.columns = table.columns.map((column: any) => {
 				return {
 					...column,

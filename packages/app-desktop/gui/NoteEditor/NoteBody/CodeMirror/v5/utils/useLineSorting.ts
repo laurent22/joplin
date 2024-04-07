@@ -1,6 +1,8 @@
 // Duplicates AceEditors line sorting function
 // https://discourse.joplinapp.org/t/sort-lines/8874/2
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function useLineSorting(CodeMirror: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	CodeMirror.commands.sortSelectedLines = function(cm: any) {
 		const ranges = cm.listSelections();
 		// Batches the insert operations, if this wasn't done the inserts

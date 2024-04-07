@@ -11,8 +11,11 @@ export const declaration: CommandDeclaration = {
 };
 
 export interface RuntimeProps {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	getSelectedItem(): any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	getFirstAnchorItemRef(type: string): any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	anchorItemRefs: any;
 }
 

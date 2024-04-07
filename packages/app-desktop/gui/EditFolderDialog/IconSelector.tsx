@@ -58,6 +58,7 @@ export const IconSelector = (props: Props) => {
 	useEffect(() => {
 		if (!emojiButtonClassReady) return () => {};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const p: EmojiButton = new (window as any).EmojiButton({
 			zIndex: 10000,
 		});
