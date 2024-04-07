@@ -821,7 +821,7 @@ export default class BaseItem extends BaseModel {
 				syncInfo: row,
 				location: row.item_location,
 				item: item,
-				warning_dismissed: row.sync_warning_dismissed,
+				warning_ignored: row.sync_warning_ignored,
 			});
 		}
 		return output;
@@ -831,7 +831,7 @@ export default class BaseItem extends BaseModel {
 		const whereQueries = ['sync_disabled = 1', 'sync_target = ?'];
 		const whereArgs = [syncTargetId];
 		if (!includeIgnored) {
-			whereQueries.push('sync_warning_dismissed = 0');
+			whereQueries.push('sync_warning_ignored = 0');
 		}
 		const r = await this.db().selectOne(`SELECT count(*) as total FROM sync_items WHERE ${whereQueries.join(' AND ')}`, whereArgs);
 		return r ? r.total : 0;
@@ -882,7 +882,7 @@ export default class BaseItem extends BaseModel {
 		checkObjectHasProperties(item, ['type_', 'id']);
 		const itemType = item.type_;
 		const itemId = item.id;
-		const sql = 'UPDATE sync_items SET sync_warning_dismissed = ? WHERE item_id = ? AND item_type = ? AND sync_target = ?';
+		const sql = 'UPDATE sync_items SET sync_warning_ignored = ? WHERE item_id = ? AND item_type = ? AND sync_target = ?';
 		const params = [1, itemId, itemType, syncTarget];
 		await this.db().exec(sql, params);
 	}

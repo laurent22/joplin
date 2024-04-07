@@ -201,7 +201,7 @@ export default class ReportService {
 					retryHandler: async () => {
 						await BaseItem.saveSyncEnabled(row.item.type_, row.item.id);
 					},
-					canIgnore: !row.warning_dismissed,
+					canIgnore: !row.warning_ignored,
 					ignoreHandler: async () => {
 						await BaseItem.dismissItemSyncWarning(syncTarget, row.item);
 					},
@@ -213,7 +213,7 @@ export default class ReportService {
 			let hasIgnoredItems = false;
 			let hasUnignoredItems = false;
 			for (const row of disabledItems) {
-				if (!row.warning_dismissed) {
+				if (!row.warning_ignored) {
 					processRow(row);
 					hasUnignoredItems = true;
 				} else {
@@ -235,7 +235,7 @@ export default class ReportService {
 				section.body.push(_('These items failed to sync, but have been marked as "ignored". They won\'t cause the sync warning to appear, but still aren\'t synced. To unignore, click "retry".'));
 				section.body.push({ type: ReportItemType.OpenList, key: 'ignoredDisabledItems' });
 				for (const row of disabledItems) {
-					if (row.warning_dismissed) {
+					if (row.warning_ignored) {
 						processRow(row);
 					}
 				}
