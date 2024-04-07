@@ -20,8 +20,10 @@ interface HookDependencies {
 	setShowLocalSearch: Function;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	noteSearchBarRef: any;
 	editorRef: RefObject<NoteBodyEditorRef>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	titleInputRef: any;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	saveNoteAndWait: Function;
@@ -34,6 +36,7 @@ function editorCommandRuntime(
 	setFormNote: SetFormNoteCallback,
 ): CommandRuntime {
 	return {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		execute: async (_context: CommandContext, ...args: any[]) => {
 			if (!editorRef.current) {
 				reg.logger().warn('Received command, but editor is gone', declaration.name);

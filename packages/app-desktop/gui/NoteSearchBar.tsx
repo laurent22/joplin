@@ -18,11 +18,13 @@ interface Props {
 	resultCount: number;
 	selectedIndex: number;
 	visiblePanes: string[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
 }
 
 class NoteSearchBar extends React.Component<Props> {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private backgroundColor: any;
 
 	public constructor(props: Props) {
@@ -51,6 +53,7 @@ class NoteSearchBar extends React.Component<Props> {
 		return style;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public buttonIconComponent(iconName: string, clickHandler: any, isEnabled: boolean) {
 		const theme = themeStyle(this.props.themeId);
 
@@ -79,11 +82,13 @@ class NoteSearchBar extends React.Component<Props> {
 		);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private searchInput_change(event: any) {
 		const query = event.currentTarget.value;
 		this.triggerOnChange(query);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private searchInput_keyDown(event: any) {
 		if (event.keyCode === 13) {
 			// ENTER
@@ -128,7 +133,9 @@ class NoteSearchBar extends React.Component<Props> {
 	}
 
 	public focus() {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		focus('NoteSearchBar::focus', this.refs.searchInput as any);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		(this.refs.searchInput as any).select();
 	}
 

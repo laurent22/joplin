@@ -13,6 +13,7 @@ export interface RendererSetupOptions {
 		resourceDownloadMode: string;
 	};
 	fsDriver: RendererFsDriver;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginOptions: Record<string, any>;
 }
 
@@ -20,6 +21,7 @@ export interface RendererSettings {
 	theme: string;
 	onResourceLoaded: ()=> void;
 	highlightedKeywords: string[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	resources: Record<string, any>;
 	codeTheme: string;
 	noteHash: string;
@@ -28,6 +30,7 @@ export interface RendererSettings {
 	createEditPopupSyntax: string;
 	destroyEditPopupSyntax: string;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginSettings: Record<string, any>;
 	requestPluginSetting: (pluginId: string, settingKey: string)=> void;
 }
@@ -158,6 +161,7 @@ export default class Renderer {
 			if (document.readyState === 'complete') {
 				clearInterval(readyStateCheckInterval);
 				if (this.setupOptions.settings.resourceDownloadMode === 'manual') {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					(window as any).webviewLib.setupResourceManualDownload();
 				}
 

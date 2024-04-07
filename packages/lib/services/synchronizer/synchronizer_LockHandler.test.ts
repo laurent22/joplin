@@ -97,7 +97,9 @@ describe('synchronizer_LockHandler', () => {
 		});
 
 		const lock = await handler.acquireLock(LockType.Sync, LockClientType.Desktop, '111');
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let autoLockError: any = null;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		handler.startAutoLockRefresh(lock, (error: any) => {
 			autoLockError = error;
 		});

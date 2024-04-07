@@ -76,6 +76,7 @@ export default async function(ctx: AppContext) {
 			ctx.response.body = await ctx.joplin.services.mustache.renderView(view);
 		} else { // JSON
 			ctx.response.set('Content-Type', 'application/json');
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const r: any = { error: error.message };
 			if (ctx.joplin.env === Env.Dev && error.stack) r.stack = error.stack;
 			if (error.code) r.code = error.code;

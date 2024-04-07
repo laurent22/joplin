@@ -462,7 +462,9 @@ const codeToCountry_: CodeToCountryMap = {
 	ZW: ['Zimbabwe', 'Zimbabwe'],
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let supportedLocales_: any = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let localeStats_: any = null;
 
 const loadedLocales_: Record<string, Record<string, string[]>> = {};
@@ -681,10 +683,12 @@ export const toIso639Alpha3 = (code: string) => {
 	return info.alpha3;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function _(s: string, ...args: any[]): string {
 	return stringByLocale(currentLocale_, s, ...args);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function _n(singular: string, plural: string, n: number, ...args: any[]) {
 	if (['en_GB', 'en_US'].includes(currentLocale_)) {
 		if (n > 1) return _(plural, ...args);
@@ -710,6 +714,7 @@ function _n(singular: string, plural: string, n: number, ...args: any[]) {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const stringByLocale = (locale: string, s: string, ...args: any[]): string => {
 	const strings = localeStrings(locale);
 	const result = strings[s];

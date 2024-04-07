@@ -10,8 +10,10 @@ const wrapConsoleLog = (onLog: OnLogCallback) => {
 	let inOnLogCallback = false;
 
 	const wrapLogFunction = (key: keyof typeof console, logLevel: LogLevel) => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const originalLog = (console[key] as any) ?? (()=>{});
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		console[key] = function(...args: any[]) {
 			originalLog.call(this, ...args);
 			if (inOnLogCallback) return;
@@ -40,6 +42,7 @@ const wrapConsoleLog = (onLog: OnLogCallback) => {
 			} finally {
 				inOnLogCallback = false;
 			}
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		} as any;
 	};
 

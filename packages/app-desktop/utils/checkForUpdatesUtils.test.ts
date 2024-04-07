@@ -4,6 +4,7 @@ import { releases1, releases2 } from './checkForUpdatesUtilsTestData';
 describe('checkForUpdates', () => {
 
 	it('should extract version info and return the non-arm64 version', async () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const testCases: [any, Platform, Architecture, boolean, Release][] = [
 			[
 				releases1,

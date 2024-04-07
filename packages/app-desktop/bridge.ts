@@ -21,6 +21,7 @@ interface OpenDialogOptions {
 	properties?: string[];
 	defaultPath?: string;
 	createDirectory?: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	filters?: any[];
 }
 
@@ -126,6 +127,7 @@ export class Bridge {
 		this.onAllowedExtensionsChangeListener_ = listener;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async captureException(error: any) {
 		Sentry.captureException(error);
 		// We wait to give the "beforeSend" event handler time to process the crash dump and write
@@ -191,6 +193,7 @@ export class Bridge {
 
 			electronApp: this.electronApp(),
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			shouldShowMenu: (_event: any, params: any) => {
 				return params.isEditable;
 			},
@@ -219,6 +222,7 @@ export class Bridge {
 		return require('electron').shell.showItemInFolder(toSystemSlashes(fullPath));
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public newBrowserWindow(options: any) {
 		return new BrowserWindow(options);
 	}
@@ -248,6 +252,7 @@ export class Bridge {
 		return this.window().webContents.closeDevTools();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async showSaveDialog(options: any) {
 		if (!options) options = {};
 		if (!('defaultPath' in options) && this.lastSelectedPaths_.file) options.defaultPath = this.lastSelectedPaths_.file;
@@ -262,16 +267,20 @@ export class Bridge {
 		if (!options) options = {};
 		let fileType = 'file';
 		if (options.properties && options.properties.includes('openDirectory')) fileType = 'directory';
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		if (!('defaultPath' in options) && (this.lastSelectedPaths_ as any)[fileType]) options.defaultPath = (this.lastSelectedPaths_ as any)[fileType];
 		if (!('createDirectory' in options)) options.createDirectory = true;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const { filePaths } = await dialog.showOpenDialog(this.window(), options as any);
 		if (filePaths && filePaths.length) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			(this.lastSelectedPaths_ as any)[fileType] = dirname(filePaths[0]);
 		}
 		return filePaths;
 	}
 
 	// Don't use this directly - call one of the showXxxxxxxMessageBox() instead
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private showMessageBox_(window: any, options: MessageDialogOptions): number {
 		if (!window) window = this.window();
 		return dialog.showMessageBoxSync(window, { message: '', ...options });
@@ -313,6 +322,7 @@ export class Bridge {
 		return result;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public showInfoMessageBox(message: string, options: any = {}) {
 		const result = this.showMessageBox_(this.window(), { type: 'info',
 			message: message,

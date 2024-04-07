@@ -22,10 +22,14 @@ const { splitCommandBatch } = require('@joplin/lib/string-utils');
 
 class Application extends BaseApplication {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private commands_: Record<string, any> = {};
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private commandMetadata_: any = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private activeCommand_: any = null;
 	private allCommandsLoaded_ = false;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private gui_: any = null;
 	private cache_ = new Cache();
 
@@ -37,6 +41,7 @@ class Application extends BaseApplication {
 		return this.gui().stdoutMaxWidth();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async guessTypeAndLoadItem(pattern: string, options: any = null) {
 		let type = BaseModel.TYPE_NOTE;
 		if (pattern.indexOf('/') === 0) {
@@ -46,6 +51,7 @@ class Application extends BaseApplication {
 		return this.loadItem(type, pattern, options);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async loadItem(type: ModelType | 'folderOrNote', pattern: string, options: any = null) {
 		const output = await this.loadItems(type, pattern, options);
 
@@ -70,6 +76,7 @@ class Application extends BaseApplication {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async loadItems(type: ModelType | 'folderOrNote', pattern: string, options: any = null): Promise<(FolderEntity | NoteEntity)[]> {
 		if (type === 'folderOrNote') {
 			const folders: FolderEntity[] = await this.loadItems(BaseModel.TYPE_FOLDER, pattern, options);
@@ -160,6 +167,7 @@ class Application extends BaseApplication {
 		}
 
 		if (uiType !== null) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const temp: Record<string, any> = {};
 			for (const n in this.commands_) {
 				if (!this.commands_.hasOwnProperty(n)) continue;
@@ -219,6 +227,7 @@ class Application extends BaseApplication {
 			CommandClass = require(`${__dirname}/command-${name}.js`);
 		} catch (error) {
 			if (error.message && error.message.indexOf('Cannot find module') >= 0) {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				const e: any = new Error(_('No such command: %s', name));
 				e.type = 'notFound';
 				throw e;
@@ -238,6 +247,7 @@ class Application extends BaseApplication {
 			isDummy: () => {
 				return true;
 			},
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			prompt: (initialText = '', promptString = '', options: any = null) => {
 				return cliUtils.prompt(initialText, promptString, options);
 			},
@@ -260,6 +270,7 @@ class Application extends BaseApplication {
 		};
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async execCommand(argv: string[]): Promise<any> {
 		if (!argv.length) return this.execCommand(['help']);
 		// reg.logger().debug('execCommand()', argv);
@@ -390,6 +401,7 @@ class Application extends BaseApplication {
 
 		argv = await super.start(argv, { keychainEnabled });
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		cliUtils.setStdout((object: any) => {
 			return this.stdout(object);
 		});
@@ -439,6 +451,7 @@ class Application extends BaseApplication {
 			// initialised. So we manually call dispatchUpdateAll() to force an update.
 			Setting.dispatchUpdateAll();
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			await refreshFolders((action: any) => this.store().dispatch(action));
 
 			const tags = await Tag.allWithNotes();

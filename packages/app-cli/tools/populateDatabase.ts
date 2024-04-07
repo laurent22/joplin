@@ -5,7 +5,7 @@
 //
 // To get it working:
 //
-// - Run the Postgres database -- `sudo docker-compose --file docker-compose.db-dev.yml up`
+// - Run the Postgres database -- `sudo docker compose --file docker-compose.db-dev.yml up`
 // - Update the DB parameters in ~/joplin-credentials/server.env to use the dev
 //   database
 // - Run the server - `JOPLIN_IS_TESTING=1 yarn start-dev`

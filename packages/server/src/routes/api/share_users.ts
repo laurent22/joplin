@@ -15,6 +15,7 @@ router.patch('api/share_users/:id', async (path: SubPath, ctx: AppContext) => {
 
 	await shareUserModel.checkIfAllowed(ctx.joplin.owner, AclAction.Update, shareUser);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const body = await bodyFields<any>(ctx.req);
 
 	if ('status' in body) {
@@ -35,6 +36,7 @@ router.del('api/share_users/:id', async (path: SubPath, ctx: AppContext) => {
 router.get('api/share_users', async (_path: SubPath, ctx: AppContext) => {
 	const shareUsers = await ctx.joplin.models.shareUser().byUserId(ctx.joplin.owner.id);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const items: any[] = [];
 	for (const su of shareUsers) {
 		const share = await ctx.joplin.models.share().load(su.share_id);

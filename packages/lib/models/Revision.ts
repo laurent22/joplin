@@ -9,6 +9,7 @@ const { sprintf } = require('sprintf-js');
 const dmp = new DiffMatchPatch();
 
 export interface ObjectPatch {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	new: Record<string, any>;
 	deleted: string[];
 }
@@ -83,6 +84,7 @@ export default class Revision extends BaseItem {
 		return true;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static createObjectPatch(oldObject: any, newObject: any) {
 		if (!oldObject) oldObject = {};
 
@@ -111,6 +113,7 @@ export default class Revision extends BaseItem {
 		return patch.replace(/[\n\r]/g, '');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static applyObjectPatch(object: any, patch: string) {
 		const parsedPatch: ObjectPatch = JSON.parse(this.sanitizeObjectPatch(patch));
 		const output = { ...object };
@@ -347,6 +350,7 @@ export default class Revision extends BaseItem {
 		return existingRev && existingRev.item_updated_time === updatedTime;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static parsePatch(patch: any): any[] {
 		return patch ? JSON.parse(patch) : [];
 	}

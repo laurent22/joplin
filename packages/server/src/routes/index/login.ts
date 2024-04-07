@@ -10,6 +10,7 @@ import limiterLoginBruteForce from '../../utils/request/limiterLoginBruteForce';
 import { cookieSet } from '../../utils/cookies';
 import { homeUrl } from '../../utils/urlUtils';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function makeView(error: any = null): View {
 	const view = defaultView('login', 'Login');
 	view.content = {

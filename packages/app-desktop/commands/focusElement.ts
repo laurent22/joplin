@@ -6,6 +6,7 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		execute: async (_context: any, target: string) => {
 			if (target === 'noteBody') return CommandService.instance().execute('focusElementNoteBody');
 			if (target === 'noteList') return CommandService.instance().execute('focusElementNoteList');

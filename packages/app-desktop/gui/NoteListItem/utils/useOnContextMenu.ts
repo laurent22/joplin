@@ -15,6 +15,7 @@ const useOnContextMenu = (
 	plugins: PluginStates,
 	customCss: string,
 ) => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return useCallback((event: any) => {
 		const currentNoteId = event.currentTarget.getAttribute('data-id');
 		if (!currentNoteId) return;

@@ -35,7 +35,9 @@ class Command extends BaseCommand {
 		return false;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async action(args: any) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const schema: Record<string, any> = {
 			title: 'JSON schema for Joplin setting files',
 			'$id': Setting.schemaUrl,
@@ -52,6 +54,7 @@ class Command extends BaseCommand {
 			const type = settingTypeToSchemaType(md.type);
 			if (!type) continue;
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const props: Record<string, any> = {};
 			props.type = type;
 			props.default = md.value;
@@ -61,6 +64,7 @@ class Command extends BaseCommand {
 			if (md.description && md.description('desktop')) description.push(md.description('desktop'));
 
 			if (description.length) props.description = description.join('. ');
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			if (md.isEnum) props.enum = Object.keys(md.options()).map((v: any) => Setting.formatValue(key, v));
 			if ('minimum' in md) props.minimum = md.minimum;
 			if ('maximum' in md) props.maximum = md.maximum;

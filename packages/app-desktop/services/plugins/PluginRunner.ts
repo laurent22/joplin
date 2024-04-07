@@ -15,6 +15,7 @@ const logger = Logger.create('PluginRunner');
 
 // Electron error messages are useless so wrap the renderer call and print
 // additional information when an error occurs.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function ipcRendererSend(message: string, args: any) {
 	try {
 		return ipcRenderer.send(message, args);
@@ -34,15 +35,20 @@ export interface PluginMessage {
 	pluginId: string;
 	callbackId?: string;
 	path?: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	args?: any[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	result?: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	error?: any;
 	mainWindowCallbackId?: string;
 }
 
 let callbackIndex = 1;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const callbackPromises: any = {};
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function mapEventIdsToHandlers(pluginId: string, arg: any) {
 	if (Array.isArray(arg)) {
 		for (let i = 0; i < arg.length; i++) {
@@ -52,6 +58,7 @@ function mapEventIdsToHandlers(pluginId: string, arg: any) {
 	} else if (typeof arg === 'string' && arg.indexOf('___plugin_event_') === 0) {
 		const eventId = arg;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return async (...args: any[]) => {
 			const callbackId = `cb_${pluginId}_${Date.now()}_${callbackIndex++}`;
 
@@ -93,6 +100,7 @@ export default class PluginRunner extends BasePluginRunner {
 		this.eventHandler = this.eventHandler.bind(this);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async eventHandler(eventHandlerId: string, args: any[]) {
 		const cb = this.eventHandlers_[eventHandlerId];
 		return cb(...args);
@@ -140,6 +148,7 @@ export default class PluginRunner extends BasePluginRunner {
 			});
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		ipcRenderer.on('pluginMessage', async (_event: any, message: PluginMessage) => {
 			if (message.target !== PluginMessageTarget.MainWindow) return;
 			if (message.pluginId !== plugin.id) return;
@@ -174,7 +183,9 @@ export default class PluginRunner extends BasePluginRunner {
 				// 	return;
 				// }
 
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				let result: any = null;
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				let error: any = null;
 				try {
 					result = await executeSandboxCall(plugin.id, pluginApi, fullPath, mappedArgs, this.eventHandler);

@@ -10,6 +10,7 @@ import requestFields from './requestFields';
 //
 // It's however convenient for smaller lists as it reduces the need for
 // building complex SQL queries.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function(itemType: ModelType, items: any[], request: Request): ModelFeedPage {
 	const fields = requestFields(request, itemType);
 	const pagination = requestPaginationOptions(request);
@@ -20,8 +21,10 @@ export default function(itemType: ModelType, items: any[], request: Request): Mo
 	const sortBy = pagination.order[0].by;
 	const sortDir = pagination.order[0].dir;
 	const caseInsensitive = pagination.order[0].caseInsensitive;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const sortedItems = items.slice().map((item: any) => {
 		if (!fields.length) return item;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const newItem: any = {};
 		for (const k of Object.keys(item)) {
 			if (!fields.includes(k)) continue;
@@ -30,6 +33,7 @@ export default function(itemType: ModelType, items: any[], request: Request): Mo
 		return newItem;
 	});
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	sortedItems.sort((a: any, b: any) => {
 		let v1 = a && (sortBy in a) ? a[sortBy] : '';
 		let v2 = b && (sortBy in b) ? b[sortBy] : '';

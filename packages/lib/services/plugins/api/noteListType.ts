@@ -11,10 +11,12 @@ export enum ItemFlow {
 	LeftToRight = 'leftToRight',
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export type RenderNoteView = Record<string, any>;
 
 export interface OnChangeEvent {
 	elementId: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	value: any;
 	noteId: string;
 }
@@ -23,6 +25,7 @@ export interface OnClickEvent {
 	elementId: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export type OnRenderNoteHandler = (props: any)=> Promise<RenderNoteView>;
 export type OnChangeHandler = (event: OnChangeEvent)=> Promise<void>;
 export type OnClickHandler = (event: OnClickEvent)=> Promise<void>;

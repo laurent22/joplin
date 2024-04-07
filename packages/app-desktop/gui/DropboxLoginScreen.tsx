@@ -11,8 +11,10 @@ interface Props {
 	themeId: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 class DropboxLoginScreenComponent extends React.Component<any, any> {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private shared_: any;
 
 	public constructor(props: Props) {
@@ -61,6 +63,7 @@ class DropboxLoginScreenComponent extends React.Component<any, any> {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const mapStateToProps = (state: any) => {
 	return {
 		themeId: state.settings.theme,
