@@ -125,8 +125,7 @@ function NoteEditor(props: NoteEditorProps) {
 			return async function() {
 				const note = await formNoteToNote(formNote);
 				reg.logger().debug('Saving note...', note);
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const savedNote: any = await Note.save(note);
+				const savedNote = await Note.save(note);
 
 				setFormNote((prev: FormNote) => {
 					return { ...prev, user_updated_time: savedNote.user_updated_time, hasChanged: false };

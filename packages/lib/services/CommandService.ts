@@ -1,5 +1,5 @@
 import { State } from '../reducer';
-import eventManager, { EventName } from '../eventManager';
+import eventManager, { EventListenerCallback, EventName } from '../eventManager';
 import BaseService from './BaseService';
 import shim from '../shim';
 import WhenClause from './WhenClause';
@@ -55,6 +55,16 @@ export interface CommandDeclaration {
 export interface Command {
 	declaration: CommandDeclaration;
 	runtime?: CommandRuntime;
+}
+
+interface CommandSpec {
+	declaration: CommandDeclaration;
+	runtime: ()=> CommandRuntime;
+}
+
+interface ComponentCommandSpec<ComponentType> {
+	declaration: CommandDeclaration;
+	runtime: (component: ComponentType)=> CommandRuntime;
 }
 
 interface Commands {
@@ -114,13 +124,11 @@ export default class CommandService extends BaseService {
 		this.stateToWhenClauseContext_ = stateToWhenClauseContext;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public on(eventName: EventName, callback: Function) {
+	public on(eventName: EventName, callback: EventListenerCallback) {
 		eventManager.on(eventName, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public off(eventName: EventName, callback: Function) {
+	public off(eventName: EventName, callback: EventListenerCallback) {
 		eventManager.off(eventName, callback);
 	}
 
@@ -204,29 +212,26 @@ export default class CommandService extends BaseService {
 		command.runtime = runtime;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public registerCommands(commands: any[]) {
+	public registerCommands(commands: CommandSpec[]) {
 		for (const command of commands) {
 			CommandService.instance().registerRuntime(command.declaration.name, command.runtime());
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public unregisterCommands(commands: any[]) {
+	public unregisterCommands(commands: CommandSpec[]) {
 		for (const command of commands) {
 			CommandService.instance().unregisterRuntime(command.declaration.name);
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public componentRegisterCommands(component: any, commands: any[]) {
+	public componentRegisterCommands<ComponentType>(component: ComponentType, commands: ComponentCommandSpec<ComponentType>[]) {
 		for (const command of commands) {
 			CommandService.instance().registerRuntime(command.declaration.name, command.runtime(component));
 		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public componentUnregisterCommands(commands: any[]) {
+	public componentUnregisterCommands(commands: ComponentCommandSpec<any>[]) {
 		for (const command of commands) {
 			CommandService.instance().unregisterRuntime(command.declaration.name);
 		}
