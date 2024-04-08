@@ -1,50 +1,64 @@
-const React = require('react');
+import * as React from 'react';
 
-const { View, Text, Button, FlatList } = require('react-native');
-const Setting = require('@joplin/lib/models/Setting').default;
-const { connect } = require('react-redux');
-const { ScreenHeader } = require('../ScreenHeader');
-const ReportService = require('@joplin/lib/services/ReportService').default;
-const { _ } = require('@joplin/lib/locale');
-const { BaseScreenComponent } = require('../base-screen');
-const { themeStyle } = require('../global-style');
+import { View, Text, Button, FlatList, TextStyle, StyleSheet } from 'react-native';
+import Setting from '@joplin/lib/models/Setting';
+import { connect } from 'react-redux';
+import { ScreenHeader } from '../ScreenHeader';
+import ReportService, { ReportSection } from '@joplin/lib/services/ReportService';
+import { _ } from '@joplin/lib/locale';
+import { BaseScreenComponent } from '../base-screen';
+import { themeStyle } from '../global-style';
+import { AppState } from '../../utils/types';
+import checkDisabledSyncItemsNotification from '@joplin/lib/services/synchronizer/utils/checkDisabledSyncItemsNotification';
+import { Dispatch } from 'redux';
 
-class StatusScreenComponent extends BaseScreenComponent {
-	static navigationOptions() {
-		return { header: null };
-	}
+interface Props {
+	themeId: number;
+	dispatch: Dispatch;
+}
 
-	constructor() {
-		super();
+interface State {
+	report: ReportSection[];
+}
+
+class StatusScreenComponent extends BaseScreenComponent<Props, State> {
+	public constructor(props: Props) {
+		super(props);
 		this.state = {
 			report: [],
 		};
 	}
 
-	UNSAFE_componentWillMount() {
-		this.resfreshScreen();
+	public override componentDidMount() {
+		void this.refreshScreen();
 	}
 
-	async resfreshScreen() {
+	private async refreshScreen() {
 		const service = new ReportService();
 		const report = await service.status(Setting.value('sync.target'));
 		this.setState({ report: report });
 	}
 
-	styles() {
+	private styles() {
 		const theme = themeStyle(this.props.themeId);
-		return {
+		return StyleSheet.create({
 			body: {
 				flex: 1,
 				margin: theme.margin,
 			},
-		};
+			actionButton: {
+				flex: 0,
+				marginLeft: 2,
+				marginRight: 2,
+			},
+		});
 	}
 
-	render() {
+	public override render() {
 		const theme = themeStyle(this.props.themeId);
+		const styles = this.styles();
 
-		const renderBody = report => {
+		const renderBody = (report: ReportSection[]) => {
 			const baseStyle = {
 				paddingLeft: 6,
 				paddingRight: 6,
@@ -60,7 +74,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 			for (let i = 0; i < report.length; i++) {
 				const section = report[i];
 
-				let style = { ...baseStyle };
+				let style: TextStyle = { ...baseStyle };
 				style.fontWeight = 'bold';
 				if (i > 0) style.paddingTop = 20;
 				lines.push({ key: `section_${i}`, isSection: true, text: section.title });
@@ -76,11 +90,19 @@ class StatusScreenComponent extends BaseScreenComponent {
 					let text = '';
 
 					let retryHandler = null;
+					let ignoreHandler = null;
 					if (typeof item === 'object') {
 						if (item.canRetry) {
 							retryHandler = async () => {
 								await item.retryHandler();
-								this.resfreshScreen();
+								await this.refreshScreen();
+							};
+						}
+						if (item.canIgnore) {
+							ignoreHandler = async () => {
+								await item.ignoreHandler();
+								await this.refreshScreen();
+								await checkDisabledSyncItemsNotification((action) => this.props.dispatch(action));
 							};
 						}
 						text = item.text;
@@ -88,7 +110,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 						text = item;
 					}
 
-					lines.push({ key: `item_${i}_${n}`, text: text, retryHandler: retryHandler });
+					lines.push({ key: `item_${i}_${n}`, text: text, retryHandler, ignoreHandler });
 				}
 
 				lines.push({ key: `divider2_${i}`, isDivider: true });
@@ -98,7 +120,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 				<FlatList
 					data={lines}
 					renderItem={({ item }) => {
-						const style = { ...baseStyle };
+						const style: TextStyle = { ...baseStyle };
 
 						if (item.isSection === true) {
 							style.fontWeight = 'bold';
@@ -114,8 +136,14 @@ class StatusScreenComponent extends BaseScreenComponent {
 						) : null;
 
 						const retryButton = item.retryHandler ? (
-							<View style={{ flex: 0 }}>
+							<View style={styles.actionButton}>
 								<Button title={_('Retry')} onPress={item.retryHandler} />
+							</View>
+						) : null;
+
+						const ignoreButton = item.ignoreHandler ? (
+							<View style={styles.actionButton}>
+								<Button title={_('Ignore')} onPress={item.ignoreHandler} />
 							</View>
 						) : null;
 
@@ -125,6 +153,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 							return (
 								<View style={{ flex: 1, flexDirection: 'row' }}>
 									<Text style={style}>{item.text}</Text>
+									{ignoreButton}
 									{retryAllButton}
 									{retryButton}
 								</View>
@@ -140,17 +169,15 @@ class StatusScreenComponent extends BaseScreenComponent {
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader title={_('Status')} />
-				<View style={this.styles().body}>{body}</View>
-				<Button title={_('Refresh')} onPress={() => this.resfreshScreen()} />
+				<View style={styles.body}>{body}</View>
+				<Button title={_('Refresh')} onPress={() => this.refreshScreen()} />
 			</View>
 		);
 	}
 }
 
-const StatusScreen = connect(state => {
+export default connect((state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 	};
 })(StatusScreenComponent);
-
-module.exports = { StatusScreen };
