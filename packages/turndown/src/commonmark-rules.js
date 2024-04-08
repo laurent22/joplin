@@ -739,67 +739,6 @@ rules.joplinSourceBlock = {
   }
 }
 
-rules.codeBlockOfDivWithClassOfCodebody = {
-  filter: function (node, options) {
-    if (options.codeBlockStyle !== 'fenced') return false;
-    const isDivOfClassCodebody = node.nodeName === "DIV" && node.classList.contains('codebody');
-    if (isDivOfClassCodebody) {
-      node.isCode = true;
-    }
-    return isDivOfClassCodebody;
-  },
-
-  replacement: function (content, node, options) {
-    var className = node.className || ''
-    var language = (className.match(/language-(\S+)/) || [null, ''])[1]
-
-    // remove code block leading and trailing newlines
-    content = content.replace(/^\n+/, '').replace(/\n+$/, '')
-
-    return '\n\n```' + language + '\n' + content + '\n```\n\n';
-  }
-}
-
-
-// rules.codeBlockOfDivWithClassOfCodebody = {
-//   filter: function (node, options) {
-//     if (options.codeBlockStyle !== 'fenced') return false;
-//     const isDivOfClassCodebody = node.nodeName === "DIV" && node.classList.contains('codebody');
-//     if (isDivOfClassCodebody) {
-//       node.isCode = true;
-//     }
-//     return isDivOfClassCodebody;
-//   },
-
-//   replacement: function (content, node, options) {
-//     var className = node.className || ''
-//     var language = (className.match(/language-(\S+)/) || [null, ''])[1]
-//     var code = content
-
-//     var fenceChar = options.fence.charAt(0)
-//     var fenceSize = 3
-//     var fenceInCodeRegex = new RegExp('^' + fenceChar + '{3,}', 'gm')
-
-//     var match
-//     while ((match = fenceInCodeRegex.exec(code))) {
-//       if (match[0].length >= fenceSize) {
-//         fenceSize = match[0].length + 1
-//       }
-//     }
-//     var fence = repeat(fenceChar, fenceSize)
-
-//     // remove code block leading and trailing newlines
-//     code = code.replace(/^\n+/, '').replace(/\n+$/, '')
-
-//     return (
-//       '\n\n' + fence + language + '\n' +
-//       code.replace(/\n$/, '') +
-//       '\n' + fence + '\n\n'
-//     )
-//   }
-// }
-
-
 
 // ===============================================================================
 // Checkboxes
