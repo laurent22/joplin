@@ -88,6 +88,8 @@ describe('JoplinWorkspace', () => {
 		const pluginScript = newPluginScript(`
 			joplin.plugins.register({
 				onStart: async () => {
+					// Register each listener 8 times to improve test reliability -- it's possible
+					// for listeners for the same events to be added/removed by other sources.
 					for (let i = 0; i < 8; i++) {
 						await joplin.workspace.onNoteChange(async (event) => { });
 						await joplin.workspace.onResourceChange(async (event) => { });
