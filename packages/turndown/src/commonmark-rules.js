@@ -1,4 +1,3 @@
-import { stringify } from '@adobe/css-tools';
 import { repeat, isCodeBlockSpecialCase1, isCodeBlockSpecialCase2, isCodeBlock, getStyleProp } from './utilities'
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = (new Entities()).encode;
