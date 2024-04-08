@@ -6,8 +6,14 @@ FROM node:18-bullseye AS builder
 
 RUN apt-get update \
     && apt-get install -y \
+    curl \
     python tini \
     && rm -rf /var/lib/apt/lists/*
+
+# The recommended way of installing Rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
+ENV PATH="/root/.cargo/bin:${PATH}"
 
 # Enables Yarn
 RUN corepack enable
