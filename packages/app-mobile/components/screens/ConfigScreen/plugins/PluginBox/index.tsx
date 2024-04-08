@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Icon, Card, Chip } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
-import { View } from 'react-native';
+import { Alert, Linking, View } from 'react-native';
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import shim from '@joplin/lib/shim';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
@@ -35,6 +35,23 @@ interface Props {
 	onAboutPress?: PluginCallback;
 	onShowPluginLog?: PluginCallback;
 }
+
+const onRecommendedPress = () => {
+	Alert.alert(
+		'',
+		_('The Joplin team has vetted this plugin and it meets our standards for security and performance.'),
+		[
+			{
+				text: _('Learn more'),
+				onPress: () => Linking.openURL('https://github.com/joplin/plugins/blob/master/readme/recommended.md'),
+			},
+			{
+				text: _('OK'),
+			},
+		],
+		{ cancelable: true },
+	);
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const PluginIcon = (props: any) => <Icon {...props} source='puzzle'/>;
@@ -106,7 +123,13 @@ const PluginBox: React.FC<Props> = props => {
 		if (!props.item.manifest._recommended || !props.isCompatible) {
 			return null;
 		}
-		return <Chip icon='crown' mode='outlined'>{_('Recommended')}</Chip>;
+		return <Chip
+			icon='crown'
+			mode='outlined'
+			onPress={onRecommendedPress}
+		>
+			{_('Recommended')}
+		</Chip>;
 	};
 
 	const renderBuiltInChip = () => {
