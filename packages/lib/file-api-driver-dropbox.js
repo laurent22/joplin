@@ -1,7 +1,7 @@
 const time = require('./time').default;
 const shim = require('./shim').default;
 const JoplinError = require('./JoplinError').default;
-const chunkGenerator = require('./utils/chunkGenerator').default;
+const ChunkGenerator = require('./utils/chunkGenerator').default;
 
 class FileApiDriverDropbox {
 	constructor(api) {
@@ -178,7 +178,10 @@ class FileApiDriverDropbox {
 				// depending on the platform.
 				const chunkSize = 5 * 1024 * 1024; // 5MB
 
-				const generator = new chunkGenerator(options.path, chunkSize);
+				// base64
+				const offset = shim.isNode() ? 6990508 : chunkSize;
+
+				const generator = new ChunkGenerator(options.path, chunkSize);
 				await generator.init();
 
 				let endpoint = 'files/upload_session/start';
@@ -204,7 +207,7 @@ class FileApiDriverDropbox {
 						endpoint = 'files/upload_session/finish';
 						args.cursor = {
 							session_id: sessionId,
-							offset: index * chunkSize,
+							offset: index * offset,
 						};
 						args.commit = {
 							path: this.makePath_(path),
@@ -216,7 +219,7 @@ class FileApiDriverDropbox {
 						args.close = false;
 						args.cursor = {
 							session_id: sessionId,
-							offset: index * chunkSize,
+							offset: index * offset,
 						};
 					}
 
@@ -243,12 +246,6 @@ class FileApiDriverDropbox {
 				throw new JoplinError('Cannot upload because content is restricted by Dropbox (restricted_content)', 'rejectedByTarget');
 			} else if (this.hasErrorCode_(error, 'payload_too_large')) {
 				throw new JoplinError('Cannot upload because payload size is rejected by Dropbox (payload_too_large)', 'rejectedByTarget');
-			} else if (this.hasErrorCode_(error, 'not_found')) {
-				throw new JoplinError('Cannot upload because session ID is not found');
-			} else if (this.hasErrorCode_(error, 'closed')) {
-				throw new JoplinError('Cannot upload because upload session is closed');
-			} else if (this.hasErrorCode_(error, 'incorrect_offset')) {
-				throw new JoplinError('Cannot upload because incorrect offset');
 			} else {
 				throw error;
 			}

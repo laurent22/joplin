@@ -1,20 +1,16 @@
-import chunkGenerator from '../chunkGenerator';
+import ChunkGenerator from '../chunkGenerator';
 import { open, readFile, unlink } from 'fs/promises';
 
 // it should exists and be a function
 
-describe('chunkGenerator', () => {
-	test('should exists and be a class', () => {
-		expect(typeof chunkGenerator).toBe('function');
-	});
-
+describe('ChunkGenerator', () => {
 	test('it should return correct amount of chunks', async () => {
 		const file = `${process.cwd()}/utils/tests/empty.pdf`;
 		const chunkSize = 4096;
 
 		const numberOfChunks = Math.ceil(11631 / 4096);
 
-		const generator = new chunkGenerator(file, chunkSize);
+		const generator = new ChunkGenerator(file, chunkSize);
 		await generator.init();
 
 		const { value } = await generator.next();
@@ -29,7 +25,7 @@ describe('chunkGenerator', () => {
 
 		const file = await open(reconstructedFilePath, 'a');
 
-		const generator = new chunkGenerator(filePath, chunkSize);
+		const generator = new ChunkGenerator(filePath, chunkSize);
 		await generator.init();
 
 		while (true) {
