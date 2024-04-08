@@ -352,7 +352,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		const sectionDescription = Setting.sectionDescription(key, AppType.Mobile);
 		if (sectionDescription && !this.state.searching) {
 			settingComps.push(
-				<Text style={this.styles().styleSheet.sectionDescriptionText}>
+				<Text key='section-description' style={this.styles().styleSheet.sectionDescriptionText}>
 					{sectionDescription}
 				</Text>,
 			);
