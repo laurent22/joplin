@@ -1,5 +1,5 @@
 import React = require('react');
-import { useMemo, useState, useCallback, CSSProperties } from 'react';
+import { useMemo, useState, useCallback, CSSProperties, useEffect } from 'react';
 import { _ } from '@joplin/lib/locale';
 
 interface Props {
@@ -16,7 +16,8 @@ const FontSearch = (props: Props) => {
 	const [showList, setShowList] = useState(false);
 	const [isListHovered, setIsListHovered] = useState(false);
 	const [isFontSelected, setIsFontSelected] = useState(value !== '');
-	const areFontsLoading = fonts.length === 0;
+	const [renderedFonts, setRenderedFonts] = useState<string[]>([]);
+	const areFontsLoading = renderedFonts.length === 0;
 
 	const filteredFonts = useMemo(() => {
 		if (isFontSelected) return fonts;
@@ -24,6 +25,26 @@ const FontSearch = (props: Props) => {
 			font.toLowerCase().startsWith(inputText.toLowerCase()),
 		);
 	}, [fonts, inputText, isFontSelected]);
+
+	useEffect(() => {
+		setRenderedFonts(filteredFonts.slice(0, 20));
+	}, [filteredFonts]);
+
+	// Lazy loading
+	const onListScroll: React.UIEventHandler<HTMLDivElement> = useCallback((event) => {
+		const scrollTop = (event.target as HTMLDivElement).scrollTop;
+		const scrollHeight = (event.target as HTMLDivElement).scrollHeight;
+		const clientHeight = (event.target as HTMLDivElement).clientHeight;
+
+		// Check if the user has scrolled to the bottom of the container
+		// A small buffer of 20 pixels is subtracted from the total scrollHeight to ensure new content starts loading slightly before the user reaches the absolute bottom, providing a smoother experience.
+		if (scrollTop + clientHeight >= scrollHeight - 20) {
+			// Load the next 20 fonts
+			const remainingFonts = filteredFonts.slice(renderedFonts.length, renderedFonts.length + 20);
+
+			setRenderedFonts([...renderedFonts, ...remainingFonts]);
+		}
+	}, [filteredFonts, renderedFonts]);
 
 	const onTextChange: React.ChangeEventHandler<HTMLInputElement> = useCallback((event) => {
 		setIsFontSelected(false);
@@ -67,10 +88,11 @@ const FontSearch = (props: Props) => {
 				style={{ display: showList ? 'block' : 'none' }}
 				onMouseEnter={onListHover}
 				onMouseLeave={onListLeave}
+				onScroll={onListScroll}
 			>
 				{
 					areFontsLoading ? <div>{_('Loading...')}</div> :
-						filteredFonts.map((font: string) =>
+						renderedFonts.map((font: string) =>
 							<div
 								key={font}
 								style={{ fontFamily: `"${font}"` }}
