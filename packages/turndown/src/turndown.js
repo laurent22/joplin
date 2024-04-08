@@ -248,10 +248,10 @@ function replacementForNode (node, previousNode) {
       // if isCode, keep line breaks
       //test case: packages/app-cli/tests/html_to_md/code_multiline_3.html
 
-      //If the leading blank or leading blank of the current node Including line breaks, and the leading blank of the current node is equal to the leading blank of it's first child node, and the trailing blank of the current node is equal to the leading blank of it's last child node, it indicates that the leading blank and leading blank of this current node is from it's child nodes, so should not be added repeatedly, this remove multiple line breaks.
+      //If the leading blank of current node or leading blank of current node including line breaks, and the leading blank of current node is equal to the leading blank of it's first child node, and the trailing blank of the current node is equal to the leading blank of it's last child node, it indicates that the leading blank and leading blank of current node is from it's child nodes, so should not be added repeatedly, this remove multiple line breaks.
       //test case: packages/app-cli/tests/html_to_md/code_multiline_5.html
-      if ( (whitespace.leading.indexOf('\n')!=-1 || whitespace.trailing.indexOf('\n')!=-1) && 
-        node.childNodes && node.childNodes.length>0) {
+      if ( (whitespace.leading.indexOf('\n') !== -1 || whitespace.trailing.indexOf('\n') !== -1) && 
+        node.childNodes && node.childNodes.length > 0) {
 
         var firstChileWhitespace = node.childNodes[0].flankingWhitespace
         var lastChileWhitespace = node.childNodes[node.childNodes.length-1].flankingWhitespace

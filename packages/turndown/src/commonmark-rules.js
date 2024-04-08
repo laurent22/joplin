@@ -163,6 +163,7 @@ rules.list = {
     if (parent && isCodeBlock(parent) && node.classList && node.classList.contains('pre-numbering')){
       // Ignore code-block children of type ul with class pre-numbering.
       // See https://github.com/laurent22/joplin/pull/10126#discussion_r1532204251 .
+      // test case: packages/app-cli/tests/html_to_md/code_multiline_2.html
       return '';
     } else if (parent.nodeName === 'LI' && parent.lastElementChild === node) {
       return '\n' + content
@@ -203,6 +204,8 @@ rules.listItem = {
       if (isOrderedList(parent)) {
         if (node.isCode) {
           // remove ordered list in code blocks 
+          // See https://github.com/laurent22/joplin/pull/10126
+          // test case: packages/app-cli/tests/html_to_md/code_multiline_4.html
           prefix = '';
         } else {
           var start = parent.getAttribute('start')
