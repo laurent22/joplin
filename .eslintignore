@@ -577,7 +577,8 @@ packages/app-mobile/components/screens/ConfigScreen/SettingItem.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsButton.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsToggle.js
 packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
-packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/ActionButton.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.test.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginToggle.js
@@ -597,6 +598,7 @@ packages/app-mobile/components/screens/Notes.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/search.js
+packages/app-mobile/components/screens/status.js
 packages/app-mobile/components/side-menu-content.js
 packages/app-mobile/components/voiceTyping/VoiceTypingDialog.js
 packages/app-mobile/gulpfile.js
@@ -858,6 +860,7 @@ packages/lib/models/Tag.test.js
 packages/lib/models/Tag.js
 packages/lib/models/dateTimeFormats.test.js
 packages/lib/models/settings/FileHandler.js
+packages/lib/models/settings/settingValidations.test.js
 packages/lib/models/settings/settingValidations.js
 packages/lib/models/utils/getCollator.js
 packages/lib/models/utils/getConflictFolderId.js
@@ -897,6 +900,7 @@ packages/lib/services/KvStore.js
 packages/lib/services/MigrationService.js
 packages/lib/services/NavService.js
 packages/lib/services/PostMessageService.js
+packages/lib/services/ReportService.test.js
 packages/lib/services/ReportService.js
 packages/lib/services/ResourceEditWatcher/index.js
 packages/lib/services/ResourceEditWatcher/reducer.js
@@ -924,6 +928,7 @@ packages/lib/services/database/migrations/43.js
 packages/lib/services/database/migrations/44.js
 packages/lib/services/database/migrations/45.js
 packages/lib/services/database/migrations/46.js
+packages/lib/services/database/migrations/47.js
 packages/lib/services/database/migrations/index.js
 packages/lib/services/database/sqlStringToLines.js
 packages/lib/services/database/types.js
