@@ -1,3 +1,4 @@
+import { stringify } from '@adobe/css-tools';
 import { repeat, isCodeBlockSpecialCase1, isCodeBlockSpecialCase2, isCodeBlock, getStyleProp } from './utilities'
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = (new Entities()).encode;
@@ -279,7 +280,7 @@ rules.fencedCodeBlock = {
     var fence = repeat(fenceChar, fenceSize)
 
     // remove code block leading and trailing newlines
-    code = code.replace(/^\n+/, '').replace(/\n+$/, '')
+    code = code.trim()
 
     return (
       '\n\n' + fence + language + '\n' +
