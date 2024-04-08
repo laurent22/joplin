@@ -47,6 +47,7 @@ const StyledAddRecipient = styled.div`
 	margin-bottom: 1em;
 `;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const StyledRecipient = styled(StyledMessage)<any>`
 	display: flex;
 	flex-direction: row;
@@ -68,8 +69,11 @@ const StyledRecipients = styled.div`
 	margin-bottom: 10px;
 `;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
+type StyleProps = any;
+
 const StyledRecipientList = styled.div`
-	border: 1px solid ${(props: any) => props.theme.dividerColor};
+	border: 1px solid ${(props: StyleProps) => props.theme.dividerColor};
 	border-radius: 3px;
 	height: 300px;
 	overflow-x: hidden;
@@ -81,6 +85,7 @@ const StyledError = styled(StyledMessage)`
 	margin-bottom: 1em;
 `;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const StyledShareState = styled(StyledMessage)<any>`
 	word-break: break-all;
 	margin-bottom: 1em;
@@ -187,12 +192,14 @@ function ShareFolderDialog(props: Props) {
 
 		let errorSet = false;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const handleError = (error: any) => {
 			if (!errorSet) setLatestError(error);
 			errorSet = true;
 			logger.error(error);
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const defer = (error: any) => {
 			if (error) handleError(error);
 			setShareState(ShareState.Idle);
@@ -229,6 +236,7 @@ function ShareFolderDialog(props: Props) {
 		}
 	}, [recipientPermissions, props.folderId, recipientEmail]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	function recipientEmail_change(event: any) {
 		setRecipientEmail(event.target.value);
 	}

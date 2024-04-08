@@ -3,6 +3,7 @@ import Note from '@joplin/lib/models/Note';
 import { DragEvent as ReactDragEvent } from 'react';
 
 interface HookDependencies {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	editorRef: any;
 }
 

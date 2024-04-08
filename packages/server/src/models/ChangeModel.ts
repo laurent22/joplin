@@ -16,6 +16,7 @@ export const defaultChangeTtl = 180 * Day;
 
 export interface DeltaChange extends Change {
 	jop_updated_time?: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	jopItem?: any;
 }
 
@@ -42,6 +43,7 @@ export function defaultDeltaPagination(): ChangePagination {
 	};
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function requestDeltaPagination(query: any): ChangePagination {
 	if (!query) return defaultDeltaPagination();
 
@@ -160,6 +162,7 @@ export default class ChangeModel extends BaseModel<Change> {
 
 		if (!doCountQuery) subParams2.push(limit);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let query: Knex.Raw<any> = null;
 
 		const finalParams = subParams1.concat(subParams2);

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function useViewIsReady(viewRef: any) {
 	// Just checking if the iframe is ready is not sufficient because its content
 	// might not be ready (for example, IPC listeners might not be initialised).
@@ -18,6 +19,7 @@ export default function useViewIsReady(viewRef: any) {
 			setIFrameReady(true);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function onMessage(event: any) {
 			const data = event.data;
 

@@ -21,6 +21,7 @@ interface State {
 }
 
 class ModalDialog extends React.Component<Props, State> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private styles_: any;
 
 	public constructor(props: Props) {

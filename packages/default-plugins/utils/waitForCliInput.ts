@@ -3,6 +3,7 @@ const readline = require('readline/promises');
 
 /* eslint-disable no-console */
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let readlineInterface: any = null;
 const waitForCliInput = async () => {
 	readlineInterface ??= readline.createInterface({

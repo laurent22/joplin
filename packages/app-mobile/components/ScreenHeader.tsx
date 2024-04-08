@@ -26,10 +26,11 @@ import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
+import { Dispatch } from 'redux';
 
 // We need this to suppress the useless warning
 // https://github.com/oblador/react-native-vector-icons/issues/1465
-// eslint-disable-next-line no-console
+// eslint-disable-next-line no-console, @typescript-eslint/no-explicit-any -- Old code before rule was applied
 Icon.loadFont().catch((error: any) => { console.info(error); });
 
 // Rather than applying a padding to the whole bar, it is applied to each
@@ -52,12 +53,12 @@ export interface MenuOptionType {
 	disabled?: boolean;
 }
 
-type DispatchCommandType=(event: { type: string })=> void;
 interface ScreenHeaderProps {
 	selectedNoteIds: string[];
 	selectedFolderId: string;
 	notesParentType: string;
 	noteSelectionEnabled: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	parentComponent: any;
 	showUndoButton: boolean;
 	undoButtonDisabled?: boolean;
@@ -73,7 +74,7 @@ interface ScreenHeaderProps {
 	};
 	plugins: PluginStates;
 
-	dispatch: DispatchCommandType;
+	dispatch: Dispatch;
 	onUndoButtonPress: OnPressCallback;
 	onRedoButtonPress: OnPressCallback;
 	onSaveButtonPress: OnPressCallback;
@@ -103,6 +104,7 @@ interface ScreenHeaderState {
 }
 
 class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeaderState> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private cachedStyles: any;
 	public dialogbox?: typeof DialogBox;
 	public constructor(props: ScreenHeaderProps) {
@@ -117,6 +119,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		const theme = themeStyle(themeId);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const styleObject: any = {
 			container: {
 				flexDirection: 'column',
@@ -260,7 +263,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 	}
 
 	private pluginPanelToggleButton_press() {
-		this.props.dispatch({ type: 'TOGGLE_PLUGIN_PANELS_DIALOG' });
+		this.props.dispatch({ type: 'SET_PLUGIN_PANELS_DIALOG_VISIBLE', visible: true });
 	}
 
 	private async duplicateButton_press() {
@@ -323,6 +326,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 	public render() {
 		const themeId = this.props.themeId;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function sideMenuButton(styles: any, onPress: OnPressCallback) {
 			return (
 				<TouchableOpacity
@@ -338,6 +342,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function backButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<TouchableOpacity
@@ -357,6 +362,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		}
 
 		function saveButton(
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			styles: any, onPress: OnPressCallback, disabled: boolean, show: boolean,
 		) {
 			if (!show) return null;
@@ -422,6 +428,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			});
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function selectAllButton(styles: any, onPress: OnPressCallback) {
 			return (
 				<CustomButton
@@ -436,6 +443,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function searchButton(styles: any, onPress: OnPressCallback) {
 			return (
 				<CustomButton
@@ -450,6 +458,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const pluginPanelToggleButton = (styles: any, onPress: OnPressCallback) => {
 			const allPluginViews = Object.values(this.props.plugins).map(plugin => Object.values(plugin.views)).flat();
 			const allPanels = allPluginViews.filter(view => view.containerType === ContainerType.Panel);
@@ -467,6 +476,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function deleteButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<CustomButton
@@ -485,6 +495,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function restoreButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<CustomButton
@@ -503,6 +514,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function duplicateButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<CustomButton
@@ -521,6 +533,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function sortButton(styles: any, onPress: OnPressCallback) {
 			return (
 				<TouchableOpacity

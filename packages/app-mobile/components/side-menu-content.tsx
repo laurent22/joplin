@@ -22,7 +22,7 @@ const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 // We need this to suppress the useless warning
 // https://github.com/oblador/react-native-vector-icons/issues/1465
-// eslint-disable-next-line no-console
+// eslint-disable-next-line no-console, @typescript-eslint/no-explicit-any -- Old code before rule was applied
 Icon.loadFont().catch((error: any) => { console.info(error); });
 
 interface Props {
@@ -32,8 +32,11 @@ interface Props {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	collapsedFolderIds: string[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	syncReport: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	decryptionWorker: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	resourceFetcher: any;
 	syncOnlyOverWifi: boolean;
 	isOnMobileData: boolean;
@@ -55,6 +58,7 @@ const syncIconRotation = syncIconRotationValue.interpolate({
 
 const folderIconRightMargin = 10;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let syncIconAnimation: any;
 
 const SideMenuContentComponent = (props: Props) => {
@@ -63,6 +67,7 @@ const SideMenuContentComponent = (props: Props) => {
 	const styles_ = useMemo(() => {
 		const theme = themeStyle(props.themeId);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const styles: any = {
 			menu: {
 				flex: 1,
@@ -147,6 +152,7 @@ const SideMenuContentComponent = (props: Props) => {
 
 		const folder = folderOrAll as FolderEntity;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const menuItems: any[] = [];
 
 		if (folder && folder.id === getTrashFolderId()) {
@@ -370,6 +376,7 @@ const SideMenuContentComponent = (props: Props) => {
 		if (actionDone === 'auth') props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 	}, [performSync, props.dispatch]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const renderFolderIcon = (folderId: string, theme: any, folderIcon: FolderIcon) => {
 		if (!folderIcon) {
 			if (folderId === getTrashFolderId()) {
@@ -393,6 +400,7 @@ const SideMenuContentComponent = (props: Props) => {
 	const renderFolderItem = (folder: FolderEntity, selected: boolean, hasChildren: boolean, depth: number) => {
 		const theme = themeStyle(props.themeId);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const folderButtonStyle: any = {
 			flex: 1,
 			flexDirection: 'row',
@@ -404,6 +412,7 @@ const SideMenuContentComponent = (props: Props) => {
 		if (selected) folderButtonStyle.backgroundColor = theme.selectedColor;
 		folderButtonStyle.paddingLeft = depth * 10 + theme.marginLeft;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const iconWrapperStyle: any = { paddingLeft: 10, paddingRight: 10 };
 		if (selected) iconWrapperStyle.backgroundColor = theme.selectedColor;
 

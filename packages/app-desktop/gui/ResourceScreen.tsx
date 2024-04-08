@@ -36,8 +36,11 @@ interface State {
 interface ResourceTable {
 	resources: InnerResource[];
 	sorting: ActiveSorting;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onResourceClick: (resource: InnerResource)=> any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onResourceDelete: (resource: InnerResource)=> any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onToggleSorting: (order: SortingOrder)=> any;
 	themeId: number;
 	style: Style;
@@ -212,6 +215,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.themeId);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const rootStyle: any = {
 			...style,
 			overflowY: 'scroll',
@@ -261,6 +265,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const mapStateToProps = (state: any) => ({
 	themeId: state.settings.theme,
 });

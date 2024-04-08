@@ -14,6 +14,7 @@ const prepareViewProps = async (
 	folder: FolderEntity | null,
 	itemIndex: number,
 ) => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {};
 
 	for (const dep of dependencies) {
@@ -40,6 +41,7 @@ const prepareViewProps = async (
 				// load by default.
 				if (!(propName in note)) note = await Note.load(note.id);
 				if (!(propName in note)) throw new Error(`Invalid dependency name: ${dep}`);
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				output.note[propName] = (note as any)[propName];
 			}
 		}
@@ -51,6 +53,7 @@ const prepareViewProps = async (
 			if (!output.item) output.item = {};
 			if (!output.item.size) output.item.size = {};
 			if (!(propName in itemSize)) throw new Error(`Invalid dependency name: ${dep}`);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			output.item.size[propName] = (itemSize as any)[propName];
 		}
 

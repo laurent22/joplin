@@ -104,6 +104,7 @@ export default class UserDeletionService extends BaseService {
 			return;
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let error: any = null;
 		let success = true;
 

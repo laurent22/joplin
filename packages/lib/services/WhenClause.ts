@@ -10,6 +10,7 @@ interface AdvancedExpression {
 	// __sub_1 || test3
 	compiledText: string;
 	// { __sub_1: "test1 && test2" }
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	subExpressions: any;
 }
 
@@ -17,6 +18,7 @@ function parseAdvancedExpression(advancedExpression: string): AdvancedExpression
 	let subExpressionIndex = -1;
 	let subExpressions = '';
 	let currentSubExpressionKey = '';
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const subContext: any = {};
 
 	let inBrackets = false;
@@ -65,6 +67,7 @@ export default class WhenClause {
 		this.validate_ = validate;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private createContext(ctx: any): IContext {
 		return {
 			getValue: (key: string) => {
@@ -79,9 +82,11 @@ export default class WhenClause {
 		return this.ruleCache_[exp];
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public evaluate(context: any): boolean {
 		if (this.validate_) this.validate(context);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const subContext: any = {};
 
 		for (const k in this.expression_.subExpressions) {
@@ -93,6 +98,7 @@ export default class WhenClause {
 		return this.rules(this.expression_.compiledText).evaluate(this.createContext(fullContext));
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public validate(context: any) {
 		const keys = this.rules(this.expression_.original.replace(/[()]/g, ' ')).keys();
 		for (const key of keys) {

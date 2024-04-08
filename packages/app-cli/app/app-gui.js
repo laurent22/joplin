@@ -441,6 +441,7 @@ class AppGui {
 		if (cmd === 'activate') {
 			const w = this.widget('mainWindow').focusedWidget;
 			if (w.name === 'folderList') {
+				// eslint-disable-next-line no-restricted-properties
 				this.widget('noteList').focus();
 			} else if (w.name === 'noteList' || w.name === 'noteText') {
 				this.processPromptCommand('edit $n');

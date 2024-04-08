@@ -32,6 +32,7 @@ import { DownloadController } from '../../../downloadController';
 
 const logger = Logger.create('routes/notes');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let htmlToMdParser_: any = null;
 
 function htmlToMdParser() {
@@ -41,6 +42,7 @@ function htmlToMdParser() {
 }
 
 type RequestNote = {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	id?: any;
 	parent_id?: string;
 	title: string;
@@ -59,8 +61,10 @@ type RequestNote = {
 	body_html: string;
 	base_url?: string;
 	convert_to: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	anchor_names?: any[];
 	image_sizes?: object;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	stylesheets: any;
 };
 
@@ -82,6 +86,7 @@ interface ResourceFromPath extends DownloadedMediaFile {
 
 
 async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {
 		title: requestNote.title ? requestNote.title : '',
 		body: requestNote.body ? requestNote.body : '',
@@ -166,6 +171,7 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function buildNoteStyleSheet(stylesheets: any[]) {
 	if (!stylesheets) return [];
 
@@ -192,6 +198,7 @@ async function buildNoteStyleSheet(stylesheets: any[]) {
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function tryToGuessExtFromMimeType(response: any, mediaPath: string) {
 	const mimeType = mimeTypeFromHeaders(response.headers);
 	if (!mimeType) return mediaPath;
@@ -336,7 +343,9 @@ async function removeTempFiles(urls: ResourceFromPath[]) {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function replaceUrlsByResources(markupLanguage: number, md: string, urls: ResourceFromPath[], imageSizes: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const imageSizesIndexes: any = {};
 
 	if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
@@ -356,7 +365,7 @@ function replaceUrlsByResources(markupLanguage: number, md: string, urls: Resour
 		//
 		//     /(!?\[.*?\]\()([^\s\)]+)(.*?\))/g
 		//
-		// eslint-disable-next-line no-useless-escape
+		// eslint-disable-next-line no-useless-escape, @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return md.replace(/(!?\[.*?\]\()([^\s\)]+)(.*?\))/g, (_match: any, before: string, url: string, after: string) => {
 			let type = 'link';
 			if (before.startsWith('[embedded_pdf]')) {
@@ -404,12 +413,14 @@ export function extractMediaUrls(markupLanguage: number, text: string): string[]
 }
 
 // Note must have been saved first
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function attachImageFromDataUrl(note: any, imageDataUrl: string, cropRect: any) {
 	const tempDir = Setting.value('tempDir');
 	const mime = mimeUtils.fromDataUrl(imageDataUrl);
 	let ext = mimeUtils.toFileExtension(mime) || '';
 	if (ext) ext = `.${ext}`;
 	const tempFilePath = `${tempDir}/${md5(`${Math.random()}_${Date.now()}`)}${ext}`;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const imageConvOptions: any = {};
 	if (cropRect) imageConvOptions.cropRect = cropRect;
 	await shim.imageFromDataUrl(imageDataUrl, tempFilePath, imageConvOptions);
@@ -419,6 +430,7 @@ async function attachImageFromDataUrl(note: any, imageDataUrl: string, cropRect:
 export const extractNoteFromHTML = async (
 	requestNote: RequestNote,
 	requestId: number,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	imageSizes: any,
 	fetchOptions?: FetchOptions,
 	allowedProtocols?: string[],

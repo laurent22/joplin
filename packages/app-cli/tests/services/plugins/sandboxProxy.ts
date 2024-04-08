@@ -11,11 +11,13 @@ describe('services_plugins_sandboxProxy', () => {
 	it('should create a new sandbox proxy', (async () => {
 		interface Result {
 			path: string;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			args: any[];
 		}
 
 		const results: Result[] = [];
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const target: any = (path: string, args: any[]) => {
 			results.push({ path, args });
 		};
@@ -34,11 +36,13 @@ describe('services_plugins_sandboxProxy', () => {
 	it('should allow importing a namespace', (async () => {
 		interface Result {
 			path: string;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			args: any[];
 		}
 
 		const results: Result[] = [];
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const target: any = (path: string, args: any[]) => {
 			results.push({ path, args });
 		};

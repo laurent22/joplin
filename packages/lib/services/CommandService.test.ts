@@ -21,6 +21,7 @@ function newService(): CommandService {
 	return service;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function createCommand(name: string, options: any): TestCommand {
 	const declaration: CommandDeclaration = {
 		name: name,
@@ -237,6 +238,7 @@ describe('services_CommandService', () => {
 		let propValue = null;
 
 		registerCommand(service, createCommand('test1', {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			execute: (_context: any, greeting: string) => {
 				propValue = greeting;
 			},

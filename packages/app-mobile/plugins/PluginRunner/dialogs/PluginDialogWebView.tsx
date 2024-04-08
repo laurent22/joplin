@@ -33,6 +33,11 @@ const useStyles = (
 		const useDialogSize = fitToContent && dialogContentSize;
 		const dialogHasLoaded = !!dialogContentSize;
 
+		const maxWidth = windowSize.width * 0.97;
+		const maxHeight = windowSize.height * 0.95;
+		const dialogWidth = useDialogSize ? dialogContentSize.width : maxWidth;
+		const dialogHeight = useDialogSize ? dialogContentSize.height : maxHeight;
+
 		return StyleSheet.create({
 			webView: {
 				backgroundColor: 'transparent',
@@ -41,15 +46,18 @@ const useStyles = (
 			webViewContainer: {
 				flexGrow: 1,
 				flexShrink: 1,
+
+				maxWidth,
+				maxHeight,
+				width: dialogWidth,
+				height: dialogHeight,
 			},
 			dialog: {
 				backgroundColor: theme.backgroundColor,
 				borderRadius: 12,
 
-				maxHeight: useDialogSize ? dialogContentSize?.height : undefined,
-				maxWidth: useDialogSize ? dialogContentSize?.width : undefined,
-				height: windowSize.height * 0.97,
-				width: windowSize.width * 0.97,
+				maxWidth,
+				maxHeight,
 				opacity: dialogHasLoaded ? 1 : 0.1,
 
 				// Center
@@ -58,6 +66,7 @@ const useStyles = (
 			},
 			buttonRow: {
 				flexDirection: 'row',
+				flexShrink: 0,
 				padding: 12,
 				justifyContent: 'flex-end',
 			},
@@ -81,6 +90,7 @@ const PluginDialogWebView: React.FC<Props> = props => {
 	const dialogSize = useDialogSize({
 		dialogControl,
 		webViewLoadCount,
+		watchForSizeChanges: view.fitToContent,
 	});
 	const styles = useStyles(props.themeId, dialogSize, view.fitToContent);
 

@@ -5,6 +5,9 @@ import { ButtonSpec } from '@joplin/lib/services/plugins/api/types';
 const styled = require('styled-components').default;
 const { space } = require('styled-system');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+type StyleProps = any;
+
 interface Props {
 	buttons: ButtonSpec[];
 }
@@ -14,7 +17,7 @@ const StyledRoot = styled.div`
 	width: 100%;
 	box-sizing: border-box;
 	justify-content: flex-end;
-	padding-top: ${(props: any) => props.theme.mainPadding}px;
+	padding-top: ${(props: StyleProps) => props.theme.mainPadding}px;
 `;
 
 const StyledButton = styled(Button)`${space}`;
@@ -22,7 +25,7 @@ const StyledButton = styled(Button)`${space}`;
 function buttonTitle(b: ButtonSpec) {
 	if (b.title) return b.title;
 
-	const defaultTitles: any = {
+	const defaultTitles: Record<string, string> = {
 		'ok': _('OK'),
 		'cancel': _('Cancel'),
 		'yes': _('Yes'),

@@ -21,6 +21,7 @@ export interface WebViewControl {
 	injectJS(script: string): void;
 
 	// message must be convertible to JSON
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	postMessage(message: any): void;
 }
 
@@ -69,7 +70,7 @@ interface Props {
 	onFileUpdate?: OnFileUpdateCallback;
 
 	// Defaults to the resource directory
-	baseUrl?: string;
+	baseDirectory?: string;
 }
 
 const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
@@ -97,18 +98,20 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 
 				true;`);
 			},
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			postMessage(message: any) {
 				webviewRef.current.postMessage(JSON.stringify(message));
 			},
 		};
 	}, [props.webviewInstanceId]);
 
-	const baseUrl = props.baseUrl ?? `file://${Setting.value('resourceDir')}/`;
+	const baseDirectory = props.baseDirectory ?? Setting.value('resourceDir');
+	const baseUrl = `file://${baseDirectory}`;
 
 	useEffect(() => {
 		let cancelled = false;
 		async function createHtmlFile() {
-			const tempFile = `${Setting.value('resourceDir')}/${props.webviewInstanceId}.html`;
+			const tempFile = `${baseDirectory}/${props.webviewInstanceId}.html`;
 			await shim.fsDriver().writeFile(tempFile, props.html, 'utf8');
 			if (cancelled) return;
 
@@ -137,7 +140,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 		return () => {
 			cancelled = true;
 		};
-	}, [props.html, props.webviewInstanceId, props.onFileUpdate, baseUrl]);
+	}, [props.html, props.webviewInstanceId, props.onFileUpdate, baseDirectory, baseUrl]);
 
 	const onError = useCallback((event: WebViewErrorEvent) => {
 		logger.error('Error', event.nativeEvent.description);
@@ -164,6 +167,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 				// It seems that `backgroundColor: theme.backgroundColor` does not
 				// prevent the flash.
 				backgroundColor: 'transparent',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				...(props.style as any),
 			}}
 			ref={webviewRef}

@@ -308,6 +308,7 @@ const ImageEditor = (props: Props) => {
 		}
 	}, [props.onSave, onRequestCloseEditor, onReadyToLoadData]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onError = useCallback((event: any) => {
 		logger.error('ImageEditor: WebView error: ', event);
 	}, []);

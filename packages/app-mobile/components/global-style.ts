@@ -14,8 +14,10 @@ const baseStyle = {
 	lineHeight: '1.6em',
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const themeCache_: any = {};
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function addExtraStyles(style: any) {
 	style.marginRight = style.margin;
 	style.marginLeft = style.margin;
@@ -75,8 +77,10 @@ function addExtraStyles(style: any) {
 	return style;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function editorFont(fontId: any) {
 	// IMPORTANT: The font mapping must match the one in Setting.js
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const fonts: any = {
 		[Setting.FONT_DEFAULT]: null,
 		[Setting.FONT_MENLO]: 'Menlo',
