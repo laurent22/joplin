@@ -208,7 +208,7 @@ export default class Plugin {
 		return this.contentScriptMessageListeners_[id](message);
 	}
 
-	public addUnloadCleanupCallback(callback: OnUnloadListener) {
+	public addOnUnloadListener(callback: OnUnloadListener) {
 		this.cleanupCallbacks_.push(callback);
 	}
 

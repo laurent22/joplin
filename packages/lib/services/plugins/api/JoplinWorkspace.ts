@@ -96,7 +96,7 @@ export default class JoplinWorkspace {
 		const dispose = () => {
 			eventManager.appStateOff('selectedNoteIds', callback);
 		};
-		this.plugin.addUnloadCleanupCallback(dispose);
+		this.plugin.addOnUnloadListener(dispose);
 
 		return {};
 
@@ -116,7 +116,7 @@ export default class JoplinWorkspace {
 		const dispose = () => {
 			eventManager.off(EventName.NoteContentChange, callback);
 		};
-		this.plugin.addUnloadCleanupCallback(dispose);
+		this.plugin.addOnUnloadListener(dispose);
 	}
 
 	/**
@@ -174,7 +174,7 @@ export default class JoplinWorkspace {
 	 */
 	public filterEditorContextMenu(handler: FilterHandler<EditContextMenuFilterObject>) {
 		eventManager.filterOn('editorContextMenu', handler);
-		this.plugin.addUnloadCleanupCallback(() => {
+		this.plugin.addOnUnloadListener(() => {
 			eventManager.filterOff('editorContextMenu', handler);
 		});
 	}

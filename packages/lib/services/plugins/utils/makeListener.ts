@@ -9,7 +9,7 @@ export default function(
 	const dispose = () => {
 		eventManager.off(eventName, callback);
 	};
-	plugin.addUnloadCleanupCallback(dispose);
+	plugin.addOnUnloadListener(dispose);
 
 	return {};
 
