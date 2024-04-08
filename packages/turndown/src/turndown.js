@@ -245,8 +245,25 @@ function replacementForNode (node, previousNode) {
     if (node.isCode) {
       // Fix: Web clipper has trouble with code blocks on Joplin's website.
       // See https://github.com/laurent22/joplin/pull/10126#issuecomment-2016523281 .
-      // If isCode, keep line breaks
-      content = content.replace(/^[ \t]+|[ \t]+$/g, '');
+      // if isCode, keep line breaks
+      //test case: packages/app-cli/tests/html_to_md/code_multiline_3.html (from https://joplinapp.org/help/api/tutorials/toc_plugin/)
+
+      //If the leading blank or leading blank of the current node Including line breaks, and the leading blank of the current node is equal to the leading blank of it's first child node, and the trailing blank of the current node is equal to the leading blank of it's last child node, it indicates that the leading blank and leading blank of this current node is from it's child nodes, so should not be added repeatedly, this remove multiple line breaks.
+      //test case: packages/app-cli/tests/html_to_md/code_multiline_5.html (from https://www.slingacademy.com/article/python-aiohttp-how-to-download-files-using-streams/)
+      if ( (whitespace.leading.indexOf('\n')!=-1 || whitespace.trailing.indexOf('\n')!=-1) && 
+        node.childNodes && node.childNodes.length>0) {
+
+        var firstChileWhitespace = node.childNodes[0].flankingWhitespace
+        var lastChileWhitespace = node.childNodes[node.childNodes.length-1].flankingWhitespace
+
+        if (whitespace.leading === firstChileWhitespace.leading && 
+          whitespace.trailing === lastChileWhitespace.trailing){
+            content = content.trim()
+          }
+      }else {
+        // keep line breaks
+        content = content.replace(/^[ \t]+|[ \t]+$/g, '');
+      }
     } else {
       content = content.trim()
     }
