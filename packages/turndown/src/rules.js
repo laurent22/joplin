@@ -44,7 +44,7 @@ Rules.prototype = {
 
   forNode: function (node) {
     // code block keep blank lines
-    // See https://github.com/laurent22/joplin/pull/10126#discussion_r1532204251 .
+    // See https://github.com/laurent22/joplin/pull/10126 .
     // test case: packages/app-cli/tests/html_to_md/code_multiline_4.html
     if (node.isCode === false && node.isBlank) return this.blankRule
     var rule
