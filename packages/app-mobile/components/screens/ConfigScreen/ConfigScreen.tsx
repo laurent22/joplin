@@ -18,7 +18,7 @@ import * as shared from '@joplin/lib/components/shared/config/config-shared';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import biometricAuthenticate from '../../biometrics/biometricAuthenticate';
 import configScreenStyles, { ConfigScreenStyles } from './configScreenStyles';
-import NoteExportButton, { exportButtonDescription, exportButtonTitle } from './NoteExportSection/NoteExportButton';
+import NoteExportButton, { exportButtonDescription, exportButtonDefaultTitle } from './NoteExportSection/NoteExportButton';
 import SettingsButton from './SettingsButton';
 import Clipboard from '@react-native-community/clipboard';
 import { ReactElement, ReactNode } from 'react';
@@ -31,6 +31,7 @@ import { Button, TextInput } from 'react-native-paper';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
 import PluginUploadButton, { canInstallPluginsFromFile, buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
+import NoteImportButton, { importButtonDefaultTitle, importButtonDescription } from './NoteExportSection/NoteImportButton';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -524,10 +525,14 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			addSettingButton('fix_search_engine_index', this.state.fixingSearchIndex ? _('Fixing search index...') : _('Fix search index'), this.fixSearchEngineIndexButtonPress_, { disabled: this.state.fixingSearchIndex, description: _('Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.') });
 		}
 
-		if (section.name === 'export') {
+		if (section.name === 'importOrExport') {
 			addSettingComponent(
 				<NoteExportButton key='export_as_jex_button' styles={this.styles()} />,
-				[exportButtonTitle(), exportButtonDescription()],
+				[exportButtonDefaultTitle(), exportButtonDescription()],
+			);
+			addSettingComponent(
+				<NoteImportButton key='import_as_jex_button' styles={this.styles()} />,
+				[importButtonDefaultTitle(), importButtonDescription()],
 			);
 			addSettingComponent(
 				<ExportDebugReportButton key='export_report_button' styles={this.styles()}/>,
