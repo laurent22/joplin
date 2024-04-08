@@ -33,6 +33,7 @@ COPY packages/renderer ./packages/renderer
 COPY packages/tools ./packages/tools
 COPY packages/utils ./packages/utils
 COPY packages/lib ./packages/lib
+COPY packages/onenote-converter ./packages/onenote-converter
 COPY packages/server ./packages/server
 
 # For some reason there's both a .yarn/cache and .yarn/berry/cache that are
