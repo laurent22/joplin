@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Icon, Card, Chip } from 'react-native-paper';
+import { Icon, Card, Chip, Text } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
-import { Alert, Linking, View } from 'react-native';
+import { Alert, Linking, TextStyle, View } from 'react-native';
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import shim from '@joplin/lib/shim';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
@@ -55,6 +55,11 @@ const onRecommendedPress = () => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const PluginIcon = (props: any) => <Icon {...props} source='puzzle'/>;
+
+const versionTextStyle: TextStyle = {
+	margin: 10,
+	opacity: 0.8,
+};
 
 const PluginBox: React.FC<Props> = props => {
 	const manifest = props.item.manifest;
@@ -157,10 +162,13 @@ const PluginBox: React.FC<Props> = props => {
 
 	const updateStateIsIdle = props.updateState !== UpdateState.Idle;
 
+	const titleComponent = <>
+		{manifest.name} <Text variant='bodySmall' style={versionTextStyle}>v{manifest.version}</Text>
+	</>;
 	return (
 		<Card style={{ margin: 8, opacity: props.isCompatible ? undefined : 0.75 }} testID='plugin-card'>
 			<Card.Title
-				title={manifest.name}
+				title={titleComponent}
 				subtitle={manifest.description}
 				left={PluginIcon}
 			/>
