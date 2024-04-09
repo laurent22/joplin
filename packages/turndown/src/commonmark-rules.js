@@ -190,7 +190,7 @@ rules.listItem = {
         .replace(/\n+$/, '\n') // replace trailing newlines with just a single one
 
     var prefix = options.bulletListMarker + ' '
-    if (node.isCode===false) {
+    if (node.isCode === false) {
       content = content.replace(/\n/gm, '\n    ') // indent
     }
     
