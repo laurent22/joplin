@@ -32,6 +32,7 @@ import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/Plug
 import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
 import PluginUploadButton, { canInstallPluginsFromFile, buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
 import NoteImportButton, { importButtonDefaultTitle, importButtonDescription } from './NoteExportSection/NoteImportButton';
+import SectionDescription from './SectionDescription';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -349,16 +350,19 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		const settingComps: ReactElement[] = [];
 		const advancedSettingComps: ReactElement[] = [];
 
+		const headerTitle = Setting.sectionNameToLabel(section.name);
 		const sectionDescription = Setting.sectionDescription(key, AppType.Mobile);
 		if (sectionDescription && !this.state.searching) {
+			const title = Setting.sectionDescriptionTitle(key, AppType.Mobile);
 			settingComps.push(
-				<Text key='section-description' style={this.styles().styleSheet.sectionDescriptionText}>
-					{sectionDescription}
-				</Text>,
+				<SectionDescription
+					key='section-description'
+					title={title}
+					description={sectionDescription}
+					helpLink={Setting.sectionHelpLink(key, AppType.Mobile)}
+				/>,
 			);
 		}
-
-		const headerTitle = Setting.sectionNameToLabel(section.name);
 
 		const matchesSearchQuery = (relatedText: string|string[]) => {
 			let searchThrough;
