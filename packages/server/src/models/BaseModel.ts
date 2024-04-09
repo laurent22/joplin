@@ -2,7 +2,7 @@ import { WithDates, WithUuid, databaseSchema, ItemType, Uuid, User } from '../se
 import { DbConnection, QueryContext } from '../db';
 import TransactionHandler from '../utils/TransactionHandler';
 import { uuidgen } from '@joplin/lib/uuid';
-import { ErrorUnprocessableEntity, ErrorBadRequest, ErrorNotFound } from '../utils/errors';
+import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 import { Models, NewModelFactoryHandler } from './factory';
 import { Config, Env } from '../utils/types';
 import personalizedUserContentBaseUrl from '@joplin/lib/services/joplinServer/personalizedUserContentBaseUrl';
@@ -390,7 +390,7 @@ export default abstract class BaseModel<T> {
 	}
 
 	public async load(id: Uuid | number, options: LoadOptions = {}): Promise<T> {
-		if (!id) throw new ErrorNotFound('id cannot be empty');
+		if (!id) throw new ErrorBadRequest('id cannot be empty');
 
 		return this.db(this.tableName).select(options.fields || this.defaultFields).where({ id: id }).first();
 	}
