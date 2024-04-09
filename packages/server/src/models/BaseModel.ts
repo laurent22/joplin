@@ -396,7 +396,7 @@ export default abstract class BaseModel<T> {
 	}
 
 	public async delete(id: string | string[] | number | number[], options: DeleteOptions = {}): Promise<void> {
-		if (!id) throw new Error('id cannot be empty');
+		if (!id) throw new ErrorBadRequest('id cannot be empty');
 
 		const ids = (typeof id === 'string' || typeof id === 'number') ? [id] : id;
 
