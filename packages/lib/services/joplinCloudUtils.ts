@@ -4,7 +4,6 @@ import { ApplicationPlatform, ApplicationType } from '../types';
 import shim from '../shim';
 import { _ } from '../locale';
 import eventManager, { EventName } from '../eventManager';
-import { fetchSyncInfo } from './synchronizer/syncInfoUtils';
 import { reg } from '../registry';
 
 type ActionType = 'LINK_USED' | 'COMPLETED' | 'ERROR';
@@ -111,9 +110,11 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string) => {
 
 		Setting.setValue('sync.10.username', jsonBody.id);
 		Setting.setValue('sync.10.password', jsonBody.password);
+
 		const fileApi = await reg.syncTarget().fileApi();
-		await fetchSyncInfo(fileApi);
+		await fileApi.driver().api().loadSession();
 		eventManager.emit(EventName.SessionEstablished);
+
 		return { success: true };
 	};
 
