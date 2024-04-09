@@ -17,7 +17,7 @@ const FontSearch = (props: Props) => {
 	const [isListHovered, setIsListHovered] = useState(false);
 	const [isFontSelected, setIsFontSelected] = useState(value !== '');
 	const [renderedFonts, setRenderedFonts] = useState<string[]>([]);
-	const areFontsLoading = renderedFonts.length === 0;
+	const areFontsLoading = fonts.length === 0;
 
 	const filteredFonts = useMemo(() => {
 		if (isFontSelected) return fonts;
