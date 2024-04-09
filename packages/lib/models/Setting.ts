@@ -2796,7 +2796,7 @@ class Setting extends BaseModel {
 			if (appType === AppType.Mobile) {
 				description.push(_('Not all plugins will work correctly on this device.'));
 			}
-			return description.join('\n');
+			return description.join(' ');
 		}
 
 		if (this.customSections_[name] && this.customSections_[name].description) return this.customSections_[name].description;
