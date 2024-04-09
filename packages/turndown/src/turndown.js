@@ -246,6 +246,7 @@ function replacementForNode (node, previousNode) {
       // Fix: Web clipper has trouble with code blocks on Joplin's website.
       // See https://github.com/laurent22/joplin/pull/10126#issuecomment-2016523281 .
       // if isCode, keep line breaks
+      //test case: packages/app-cli/tests/html_to_md/code_multiline_1.html
       //test case: packages/app-cli/tests/html_to_md/code_multiline_3.html
 
       //If the leading blank of current node or leading blank of current node including line breaks, and the leading blank of current node is equal to the leading blank of it's first child node, and the trailing blank of the current node is equal to the leading blank of it's last child node, it indicates that the leading blank and leading blank of current node is from it's child nodes, so should not be added repeatedly, this remove multiple line breaks.
@@ -256,8 +257,8 @@ function replacementForNode (node, previousNode) {
         var firstChildWhitespace = node.childNodes[0].flankingWhitespace
         var lastChildWhitespace = node.childNodes[node.childNodes.length-1].flankingWhitespace
 
-        if (whitespace.leading === firstChileWhitespace.leading && 
-          whitespace.trailing === lastChileWhitespace.trailing){
+        if (whitespace.leading === firstChildWhitespace.leading && 
+          whitespace.trailing === lastChildWhitespace.trailing){
             content = content.trim()
           }
       }else {

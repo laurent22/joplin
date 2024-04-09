@@ -282,7 +282,7 @@ rules.fencedCodeBlock = {
     var fence = repeat(fenceChar, fenceSize)
 
     // remove code block leading and trailing empty lines
-    code = code.replace(/^( *\t*\n)+/, '').trimEnd()
+    code = code.replace(/^([ \t]*\n)+/, '').trimEnd()
 
     return (
       '\n\n' + fence + language + '\n' +
