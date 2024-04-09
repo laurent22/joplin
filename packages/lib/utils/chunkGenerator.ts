@@ -1,6 +1,7 @@
 import shim from '../shim';
 
 class ChunkGenerator {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private handle: any;
 	private filePath: string;
 	private chunkSize: number;
