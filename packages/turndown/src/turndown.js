@@ -253,8 +253,8 @@ function replacementForNode (node, previousNode) {
       if ( (whitespace.leading.indexOf('\n') !== -1 || whitespace.trailing.indexOf('\n') !== -1) && 
         node.childNodes && node.childNodes.length > 0) {
 
-        var firstChileWhitespace = node.childNodes[0].flankingWhitespace
-        var lastChileWhitespace = node.childNodes[node.childNodes.length-1].flankingWhitespace
+        var firstChildWhitespace = node.childNodes[0].flankingWhitespace
+        var lastChildWhitespace = node.childNodes[node.childNodes.length-1].flankingWhitespace
 
         if (whitespace.leading === firstChileWhitespace.leading && 
           whitespace.trailing === lastChileWhitespace.trailing){
