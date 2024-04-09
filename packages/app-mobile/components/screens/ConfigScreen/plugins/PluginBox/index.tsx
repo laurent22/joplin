@@ -57,7 +57,6 @@ const onRecommendedPress = () => {
 const PluginIcon = (props: any) => <Icon {...props} source='puzzle'/>;
 
 const versionTextStyle: TextStyle = {
-	margin: 10,
 	opacity: 0.8,
 };
 
@@ -163,7 +162,7 @@ const PluginBox: React.FC<Props> = props => {
 	const updateStateIsIdle = props.updateState !== UpdateState.Idle;
 
 	const titleComponent = <>
-		{manifest.name} <Text variant='bodySmall' style={versionTextStyle}>v{manifest.version}</Text>
+		<Text variant='titleMedium'>{manifest.name}</Text> <Text variant='bodySmall' style={versionTextStyle}>v{manifest.version}</Text>
 	</>;
 	return (
 		<Card style={{ margin: 8, opacity: props.isCompatible ? undefined : 0.75 }} testID='plugin-card'>
