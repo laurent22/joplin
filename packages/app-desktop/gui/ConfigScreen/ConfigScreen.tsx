@@ -19,7 +19,6 @@ import JoplinCloudConfigScreen from '../JoplinCloudConfigScreen';
 import ToggleAdvancedSettingsButton from './controls/ToggleAdvancedSettingsButton';
 import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
 import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
-import StyledLink from '../style/StyledLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -154,21 +153,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		if (!description) return null;
 
 		const theme = themeStyle(this.props.themeId);
-
-		const helpLinkUrl = Setting.sectionHelpLink(section.name, AppType.Desktop);
-		let helpLinkComponent = null;
-		if (helpLinkUrl) {
-			helpLinkComponent = <StyledLink
-				href='#'
-				onClick={() => bridge().openExternal(helpLinkUrl)}
-				style={theme.linkStyle}
-			>{_('Learn more.')}</StyledLink>;
-		}
-
 		return (
 			<div style={{ ...theme.textStyle, marginBottom: 15 }}>
 				{description}
-				{' '}{helpLinkComponent}
 			</div>
 		);
 	}

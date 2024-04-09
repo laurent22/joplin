@@ -353,13 +353,12 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		const headerTitle = Setting.sectionNameToLabel(section.name);
 		const sectionDescription = Setting.sectionDescription(key, AppType.Mobile);
 		if (sectionDescription && !this.state.searching) {
-			const title = Setting.sectionDescriptionTitle(key, AppType.Mobile);
 			settingComps.push(
 				<SectionDescription
 					key='section-description'
-					title={title}
+					title={headerTitle}
 					description={sectionDescription}
-					helpLink={Setting.sectionHelpLink(key, AppType.Mobile)}
+					helpLink={undefined}
 				/>,
 			);
 		}

@@ -2791,33 +2791,10 @@ class Setting extends BaseModel {
 		if (name === 'general' && appType === AppType.Desktop) {
 			return _('Notes and settings are stored in: %s', toSystemSlashes(this.value('profileDir'), process.platform));
 		}
-		if (name === 'plugins') {
-			const description = [_('Plugins extend Joplin\'s functionality with additional features. These plugins are developed and maintained by Joplin community members.')];
-			if (appType === AppType.Mobile) {
-				description.push(_('Not all plugins will work correctly on this device.'));
-			}
-			return description.join(' ');
-		}
 
 		if (this.customSections_[name] && this.customSections_[name].description) return this.customSections_[name].description;
 
 		return '';
-	}
-
-	public static sectionDescriptionTitle(name: string, appType: AppType) {
-		if (name === 'plugins' && appType === AppType.Mobile) {
-			return `${_('Plugins')} (Beta)`;
-		}
-
-		return this.sectionNameToLabel(name);
-	}
-
-	public static sectionHelpLink(name: string, appType: AppType) {
-		if (name === 'plugins') {
-			return `https://joplinapp.org/help/apps/plugins${appType === AppType.Mobile ? '#on-mobile' : ''}`;
-		}
-
-		return undefined;
 	}
 
 	public static sectionMetadataToSummary(metadata: SettingMetadataSection): string {
