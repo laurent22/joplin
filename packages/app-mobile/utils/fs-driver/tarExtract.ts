@@ -23,7 +23,6 @@ const tarExtract = async (options: TarExtractOptions) => {
 
 	const extract = tarStreamExtract({ defaultEncoding: 'base64' });
 
-	let processingEntryPromise = Promise.resolve();
 	extract.on('entry', async (header, stream, next) => {
 		const outPath = fsDriver.resolveRelativePathWithinDir(cwd, header.name);
 
@@ -31,27 +30,28 @@ const tarExtract = async (options: TarExtractOptions) => {
 			throw new Error(`Extracting ${outPath} would overwrite`);
 		}
 
-		// Move to the next item when all available data has been read.
-		stream.once('end', () => next());
+		// Allows moving to the next item after all data for this entry has been read
+		// **and** this data has been processed.
+		// See https://github.com/laurent22/joplin/issues/10285
+		const streamEndPromise = new Promise<void>((resolve) => {
+			stream.once('end', () => resolve());
+		});
 
-		await processingEntryPromise;
-		processingEntryPromise = (async () => {
-			if (header.type === 'directory') {
-				await fsDriver.mkdir(outPath);
-			} else if (header.type === 'file') {
-				const parentDir = dirname(outPath);
-				await fsDriver.mkdir(parentDir);
+		if (header.type === 'directory') {
+			await fsDriver.mkdir(outPath);
+		} else if (header.type === 'file') {
+			const parentDir = dirname(outPath);
+			await fsDriver.mkdir(parentDir);
 
-				await fsDriver.appendBinaryReadableToFile(outPath, stream);
-			} else {
-				throw new Error(`Unsupported file system entity type: ${header.type}`);
-			}
-		})();
-		await processingEntryPromise;
+			await fsDriver.appendBinaryReadableToFile(outPath, stream);
+		} else {
+			throw new Error(`Unsupported file system entity type: ${header.type}`);
+		}
 
 		// Drain the rest of the stream.
 		stream.resume();
-
+		await streamEndPromise;
+		next();
 	});
 
 	let finished = false;
@@ -92,7 +92,6 @@ const tarExtract = async (options: TarExtractOptions) => {
 	}
 
 	await finishPromise;
-	await processingEntryPromise;
 };
 
 export default tarExtract;
