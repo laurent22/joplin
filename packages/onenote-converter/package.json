@@ -1,9 +1,9 @@
 {
-  "name": "@joplin/onenote-converter",
+  "name": "onenote-builder",
   "collaborators": [
     "Pedro Luiz <pedrlz.frn@gmail.com>"
   ],
-  "description": "Convert Microsoft OneNote® notebooks to HTML",
+  "description": "This package file only exists to build the @joplin/onenote-converter",
   "version": "0.0.1",
   "license": "MIT",
   "repository": {
@@ -11,19 +11,7 @@
     "url": "https://github.com/laurent22/joplin"
   },
   "scripts": {
-    "build": "node ./build.js"
-  },
-  "files": [
-    "pkg/onenote_converter_bg.wasm",
-    "pkg/onenote_converter.js",
-    "pkg/onenote_converter.d.ts"
-  ],
-  "main": "pkg/onenote_converter.js",
-  "types": "pkg/onenote_converter.d.ts",
-  "keywords": [
-    "onenote"
-  ],
-  "dependencies": {
-    "wasm-pack": "0.12.1"
+    "buildProduction": "yarn dlx wasm-pack build --release --target nodejs --scope joplin",
+    "buildDev": "yarn dlx wasm-pack build --dev --target nodejs --scope joplin"
   }
 }

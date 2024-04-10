@@ -1,0 +1,23 @@
+{
+  "name": "@joplin/onenote-converter",
+  "collaborators": [
+    "Pedro Luiz <pedrlz.frn@gmail.com>"
+  ],
+  "description": "Convert Microsoft OneNote® notebooks to HTML",
+  "version": "0.0.1",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/laurent22/joplin"
+  },
+  "files": [
+    "onenote_converter_bg.wasm",
+    "onenote_converter.js",
+    "onenote_converter.d.ts"
+  ],
+  "main": "onenote_converter.js",
+  "types": "onenote_converter.d.ts",
+  "keywords": [
+    "onenote"
+  ]
+}
