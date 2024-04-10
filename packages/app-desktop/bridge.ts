@@ -362,7 +362,7 @@ export class Bridge {
 		if (await pathExists(fullPath)) {
 			const fileExtension = extname(fullPath);
 			const userAllowedExtension = this.extraAllowedOpenExtensions.includes(fileExtension);
-			if (userAllowedExtension || isSafeToOpen(fullPath)) {
+			if (userAllowedExtension || await isSafeToOpen(fullPath)) {
 				return shell.openPath(fullPath);
 			} else {
 				const allowOpenId = 2;

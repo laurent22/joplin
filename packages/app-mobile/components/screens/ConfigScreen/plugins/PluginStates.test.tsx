@@ -86,6 +86,9 @@ describe('PluginStates', () => {
 		await switchClient(0);
 		pluginServiceSetup();
 		resetRepoApi();
+
+		await mockMobilePlatform('android');
+		await mockRepositoryApiConstructor();
 	});
 	afterEach(async () => {
 		for (const pluginId of PluginService.instance().pluginIds) {
@@ -136,5 +139,23 @@ describe('PluginStates', () => {
 		} else {
 			expect(await screen.queryByRole('button', backlinksToNoteQuery)).toBeNull();
 		}
+	});
+
+	it('should show the current plugin version on updatable plugins', async () => {
+		const abcPluginId = 'org.joplinapp.plugins.AbcSheetMusic';
+		const defaultPluginSettings: PluginSettings = { [abcPluginId]: defaultPluginSetting() };
+
+		const outdatedVersion = '0.0.1';
+		await loadMockPlugin(abcPluginId, 'ABC Sheet Music', outdatedVersion, defaultPluginSettings);
+		expect(PluginService.instance().plugins[abcPluginId]).toBeTruthy();
+
+		render(
+			<PluginStatesWrapper
+				initialPluginSettings={defaultPluginSettings}
+			/>,
+		);
+		expect(await screen.findByText('ABC Sheet Music')).toBeVisible();
+		expect(await screen.findByRole('button', { name: 'Update ABC Sheet Music', disabled: false })).toBeVisible();
+		expect(await screen.findByText(`v${outdatedVersion}`)).toBeVisible();
 	});
 });
