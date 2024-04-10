@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, Modal, View, LayoutRectangle, ViewStyle, TextStyle, FlatList, LayoutChangeEvent } from 'react-native';
+import { TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, Modal, View, LayoutRectangle, ViewStyle, TextStyle, FlatList } from 'react-native';
 import { Component, ReactElement } from 'react';
 import { _ } from '@joplin/lib/locale';
 
@@ -54,17 +54,8 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 		};
 	}
 
-	private updateHeaderCoordinates = (event: LayoutChangeEvent) => {
+	private updateHeaderCoordinates = () => {
 		if (!this.headerRef) return;
-
-		const { width, height } = event.nativeEvent.layout;
-
-		const lastLayout = this.state.headerSize;
-		if (width !== lastLayout.width || height !== lastLayout.height) {
-			this.setState({
-				headerSize: { x: lastLayout.x, y: lastLayout.y, width, height },
-			});
-		}
 
 		// https://stackoverflow.com/questions/30096038/react-native-getting-the-position-of-an-element
 		this.headerRef.measure((_fx, _fy, width, height, px, py) => {
@@ -78,6 +69,10 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 	};
 
 	private onOpenList = () => {
+		// On iOS, we need to re-measure just before opening the list. Measurements from just after
+		// onLayout can be inaccurate in some cases (in the past, this had caused the menu to be
+		// drawn far offscreen).
+		this.updateHeaderCoordinates();
 		this.setState({ listVisible: true });
 	};
 	private onCloseList = () => {

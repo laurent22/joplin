@@ -311,4 +311,7 @@ export default class JoplinServerApi {
 		}
 	}
 
+	public async loadSession() {
+		await this.session();
+	}
 }

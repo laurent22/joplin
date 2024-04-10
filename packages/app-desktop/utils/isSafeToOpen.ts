@@ -1,6 +1,8 @@
+import { stat } from 'fs-extra';
+import { extname } from 'path';
 
 
-const isSafeToOpen = (path: string) => {
+const isSafeToOpen = async (path: string) => {
 	// This is intended to fix an issue where some platforms would execute attachment
 	// files without confirmation depending on the file extension (e.g. .EXE). This is
 	// mostly for Windows.
@@ -173,6 +175,11 @@ const isSafeToOpen = (path: string) => {
 			return true;
 		}
 	}
+
+	if (extname(path) === '' && (await stat(path)).isDirectory()) {
+		return true;
+	}
+
 	return false;
 };
 

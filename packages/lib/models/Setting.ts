@@ -2711,7 +2711,7 @@ class Setting extends BaseModel {
 			'server',
 			'keymap',
 			'tools',
-			'export',
+			'importOrExport',
 			'moreInfo',
 		];
 	}
@@ -2776,7 +2776,7 @@ class Setting extends BaseModel {
 		if (name === 'keymap') return _('Keyboard Shortcuts');
 		if (name === 'joplinCloud') return _('Joplin Cloud');
 		if (name === 'tools') return _('Tools');
-		if (name === 'export') return _('Export');
+		if (name === 'importOrExport') return _('Import and Export');
 		if (name === 'moreInfo') return _('More information');
 
 		if (this.customSections_[name] && this.customSections_[name].label) return this.customSections_[name].label;
@@ -2804,7 +2804,7 @@ class Setting extends BaseModel {
 			'note': _('Geolocation, spellcheck, editor toolbar, image resize'),
 			'revisionService': _('Toggle note history, keep notes for'),
 			'tools': _('Logs, profiles, sync status'),
-			'export': _('Export your data'),
+			'importOrExport': _('Import or export your data'),
 			'plugins': _('Enable or disable plugins'),
 			'moreInfo': _('Donate, website'),
 		};
@@ -2846,7 +2846,7 @@ class Setting extends BaseModel {
 			'keymap': 'fa fa-keyboard',
 			'joplinCloud': 'fa fa-cloud',
 			'tools': 'fa fa-toolbox',
-			'export': 'fa fa-file-export',
+			'importOrExport': 'fa fa-file-export',
 			'moreInfo': 'fa fa-info-circle',
 		};
 

@@ -20,8 +20,8 @@ jobs:
     steps:
 
       - uses: actions/checkout@v4
-      - uses: olegtarasov/get-tag@v2.1
-      - uses: actions/setup-node@v2
+      - uses: olegtarasov/get-tag@v2.1.3
+      - uses: actions/setup-node@v4
         with:
           # We need to pin the version to 18.15, because 18.16+ fails with this error:
           # https://github.com/facebook/react-native/issues/36440
@@ -40,7 +40,7 @@ jobs:
           brew install pango
 
       # See github-action-main.yml for explanation
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
