@@ -11,7 +11,10 @@
     "url": "https://github.com/laurent22/joplin"
   },
   "scripts": {
-    "buildProduction": "yarn dlx wasm-pack build --release --target nodejs --scope joplin",
-    "buildDev": "yarn dlx wasm-pack build --dev --target nodejs --scope joplin"
+    "buildProduction": "wasm-pack build --release --target nodejs --scope joplin",
+    "buildDev": "wasm-pack build --dev --target nodejs --scope joplin"
+  },
+  "devDependencies": {
+    "wasm-pack": "0.12.1"
   }
 }
