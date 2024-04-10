@@ -30,7 +30,6 @@ impl Renderer {
         if !notebook_dir.is_dir() {
             let copy_notebook_dir = notebook_dir.clone();
             let pat = copy_notebook_dir.into_os_string().into_string().unwrap();
-            utils::log_to_wasm!("Create notebookdir {}", pat);
             let _ = make_dir(&pat);
         }
 

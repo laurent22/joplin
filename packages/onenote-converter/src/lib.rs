@@ -76,8 +76,6 @@ pub fn convert(path: &Path, output_dir: &Path) -> Result<()> {
                 .wrap_err("Parent folder has no name")?
                 .to_string_lossy();
 
-            log_to_wasm!("notebook_name {:?}", notebook_name);
-
             notebook::Renderer::new().render(&notebook, &notebook_name, &output_dir)?;
         }
         Some(ext) => return Err(eyre!("Invalid file extension: {}", ext)),

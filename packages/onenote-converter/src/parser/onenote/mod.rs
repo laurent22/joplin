@@ -45,8 +45,7 @@ impl Parser {
     /// table of contents of the notebook as well as all contained
     /// sections from the folder that the table of contents file is in.
     pub fn parse_notebook(&mut self, path: &Path) -> Result<Notebook> {
-        log_to_wasm!("Parsing notebook");
-        log_to_wasm!("path {:?}", path);
+        log_to_wasm!("Parsing notebook: {?}", path);
         let file_content = read_file(path.as_os_str().to_str().unwrap()).unwrap();
         let array = Uint8Array::new(&file_content);
         let data = array.to_vec();
@@ -88,8 +87,7 @@ impl Parser {
     /// The `path` argument must point to a `.one` file that contains a
     /// OneNote section.
     pub fn parse_section(&mut self, path: &Path) -> Result<Section> {
-        log_to_wasm!("Parsing section");
-        log_to_wasm!("path {:?}", path);
+        log_to_wasm!("Parsing section: {:?}", path);
         let file_content = read_file(path.as_os_str().to_str().unwrap()).unwrap();
         let array = Uint8Array::new(&file_content);
         let data = array.to_vec();

@@ -12,7 +12,6 @@ impl<'a> Renderer<'a> {
             let filename = self.determine_image_filename(image)?;
             let path = self.output.join(filename.clone());
             let path_as_str = path.as_os_str().to_str().unwrap();
-            log_to_wasm!("Writing image to {}", path_as_str);
             let _ = write_file(path_as_str, data);
 
             let mut attrs = AttributeSet::new();
