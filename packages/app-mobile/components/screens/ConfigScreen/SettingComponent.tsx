@@ -135,7 +135,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 						autoCorrect={false}
 						autoComplete="off"
 						selectionColor={theme.textSelectionColor}
-						keyboardAppearance={theme.settingKeyboardAppearance}
+						keyboardAppearance={theme.keyboardAppearance}
 						autoCapitalize="none"
 						key="control"
 						style={styleSheet.settingControl}

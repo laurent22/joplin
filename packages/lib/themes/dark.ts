@@ -56,6 +56,9 @@ const theme: Theme = {
 
 	codeMirrorTheme: 'material-darker',
 	codeThemeCss: 'atom-one-dark-reasonable.css',
+
+	headerBackgroundColor: '#2D3136',
+	textSelectionColor: '#00AEFF',
 };
 
 export default theme;

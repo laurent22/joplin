@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { themeStyle } from '@joplin/lib/theme';
+import { themeStyle } from './global-style';
 import { _ } from '@joplin/lib/locale';
 const { Modal, View, Button, Text, StyleSheet } = require('react-native');
 import time from '@joplin/lib/time';
