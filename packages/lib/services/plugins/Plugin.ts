@@ -43,7 +43,7 @@ export default class Plugin {
 	private dataDir_: string;
 	private dataDirCreated_ = false;
 	private hasErrors_ = false;
-	private cleanupCallbacks_: OnUnloadListener[] = [];
+	private onUnloadListeners_: OnUnloadListener[] = [];
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public constructor(baseDir: string, manifest: PluginManifest, scriptText: string, dispatch: Function, dataDir: string) {
@@ -209,14 +209,14 @@ export default class Plugin {
 	}
 
 	public addOnUnloadListener(callback: OnUnloadListener) {
-		this.cleanupCallbacks_.push(callback);
+		this.onUnloadListeners_.push(callback);
 	}
 
 	public onUnload() {
-		for (const callback of this.cleanupCallbacks_) {
+		for (const callback of this.onUnloadListeners_) {
 			callback();
 		}
-		this.cleanupCallbacks_ = [];
+		this.onUnloadListeners_ = [];
 
 		this.dispatch_({
 			type: 'PLUGIN_UNLOAD',
