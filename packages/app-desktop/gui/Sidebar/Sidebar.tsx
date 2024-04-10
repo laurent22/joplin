@@ -24,13 +24,12 @@ import PerFolderSortOrderService from '../../services/sortOrder/PerFolderSortOrd
 import { getFolderCallbackUrl, getTagCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import FolderIconBox from '../FolderIconBox';
 import onFolderDrop from '@joplin/lib/models/utils/onFolderDrop';
-import { Theme } from '@joplin/lib/themes/type';
 import { RuntimeProps } from './commands/focusElementSideBar';
 const { connect } = require('react-redux');
 import { renderFolders, renderTags } from '@joplin/lib/components/shared/side-menu-shared';
 import { getTrashFolderIcon, getTrashFolderId } from '@joplin/lib/services/trash';
 import { focus } from '@joplin/lib/utils/focusHandler';
-const { themeStyle } = require('@joplin/lib/theme');
+import { ThemeStyle, themeStyle } from '@joplin/lib/theme';
 const bridge = require('@electron/remote').require('./bridge').default;
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -505,10 +504,10 @@ const SidebarComponent = (props: Props) => {
 		return count ? <StyledNoteCount className="note-count-label">{count}</StyledNoteCount> : null;
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const renderExpandIcon = (theme: any, isExpanded: boolean, isVisible: boolean) => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const style: any = { width: 16, maxWidth: 16, opacity: 0.5, fontSize: Math.round(theme.toolbarIconSize * 0.8), display: 'flex', justifyContent: 'center' };
+	const renderExpandIcon = (theme: ThemeStyle, isExpanded: boolean, isVisible: boolean) => {
+		const style: React.CSSProperties = {
+			width: 16, maxWidth: 16, opacity: 0.5, fontSize: Math.round(theme.toolbarIconSize * 0.8), display: 'flex', justifyContent: 'center',
+		};
 		if (!isVisible) style.visibility = 'hidden';
 		return <i className={isExpanded ? 'fas fa-caret-down' : 'fas fa-caret-right'} style={style}></i>;
 	};
@@ -527,7 +526,7 @@ const SidebarComponent = (props: Props) => {
 		menu.popup({ window: bridge().window() });
 	}, []);
 
-	const renderAllNotesItem = (theme: Theme, selected: boolean) => {
+	const renderAllNotesItem = (theme: ThemeStyle, selected: boolean) => {
 		return (
 			<StyledListItem key="allNotesHeader" selected={selected} className={'list-item-container list-item-depth-0 all-notes'} isSpecialItem={true}>
 				<StyledExpandLink>{renderExpandIcon(theme, false, false)}</StyledExpandLink>

@@ -360,8 +360,10 @@ const cachedStyles_: any = {
 // cacheKey must be a globally unique key, and must change whenever
 // the dependencies of the style change. If the style depends only
 // on the theme, a static string can be provided as a cache key.
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-export function buildStyle(cacheKey: any, themeId: number, callback: Function) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored code from before rule was applied
+type BuildStyleCallback = (style: ThemeStyle)=> any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code from before rule was applied
+export function buildStyle(cacheKey: any, themeId: number, callback: BuildStyleCallback) {
 	cacheKey = Array.isArray(cacheKey) ? cacheKey.join('_') : cacheKey;
 
 	// We clear the cache whenever switching themes
