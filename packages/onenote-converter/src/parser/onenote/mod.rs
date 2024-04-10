@@ -4,7 +4,7 @@ use crate::parser::onenote::notebook::Notebook;
 use crate::parser::onenote::section::{Section, SectionEntry, SectionGroup};
 use crate::parser::onestore::parse_store;
 use crate::parser::reader::Reader;
-use crate::parser::utils::{exists, read_file};
+use crate::parser::utils::{exists, is_directory, read_file};
 use crate::parser::utils::utils::log_to_wasm;
 use std::ffi::OsStr;
 use std::panic;
@@ -45,7 +45,7 @@ impl Parser {
     /// table of contents of the notebook as well as all contained
     /// sections from the folder that the table of contents file is in.
     pub fn parse_notebook(&mut self, path: &Path) -> Result<Notebook> {
-        log_to_wasm!("Parsing notebook: {?}", path);
+        log_to_wasm!("Parsing notebook: {:?}", path);
         let file_content = read_file(path.as_os_str().to_str().unwrap()).unwrap();
         let array = Uint8Array::new(&file_content);
         let data = array.to_vec();
@@ -64,13 +64,19 @@ impl Parser {
             .iter()
             .map(|name| Path::new(base_dir).join(name))
             .filter(|p| !p.ends_with("OneNote_RecycleBin"))
-            .map(|path| {
-                let path_as_str = path.as_os_str().to_str().unwrap();
+            .filter(|p| {
+                let path_as_str = p.as_os_str().to_str().unwrap();
                 let is_file = match exists(path_as_str) {
                     Ok(is_file) => is_file,
                     Err(_err) => false,
                 };
-                if is_file {
+                return is_file;
+            })
+            .map(|path| {
+                let is_dir = is_directory(path.as_os_str().to_str().unwrap()).unwrap();
+                log_to_wasm!("dir: {:?}", path);
+                log_to_wasm!("Is dir: {}", is_dir);
+                if !is_dir {
                     self.parse_section(&path).map(SectionEntry::Section)
                 } else {
                     self.parse_section_group(&path)
@@ -117,6 +123,8 @@ impl Parser {
             .to_string_lossy()
             .to_string();
 
+        // TODO: remove read_dir()
+        // find a case where this happens
         for entry in path.read_dir()? {
             let entry = entry?;
             let is_toc = entry

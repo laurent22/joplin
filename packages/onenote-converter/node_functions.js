@@ -8,6 +8,12 @@ function mkdirSyncRecursive(path) {
 	}
 }
 
+function isDirectory(path) {
+	if (!fs.existsSync(path)) return false;
+	return fs.lstatSync(path).isDirectory();
+}
+
 module.exports = {
 	mkdirSyncRecursive,
+	isDirectory,
 };
