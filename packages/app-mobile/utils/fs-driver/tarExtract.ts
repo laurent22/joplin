@@ -23,6 +23,7 @@ const tarExtract = async (options: TarExtractOptions) => {
 
 	const extract = tarStreamExtract({ defaultEncoding: 'base64' });
 
+	let processingEntryPromise = Promise.resolve();
 	extract.on('entry', async (header, stream, next) => {
 		const outPath = fsDriver.resolveRelativePathWithinDir(cwd, header.name);
 
@@ -33,16 +34,20 @@ const tarExtract = async (options: TarExtractOptions) => {
 		// Move to the next item when all available data has been read.
 		stream.once('end', () => next());
 
-		if (header.type === 'directory') {
-			await fsDriver.mkdir(outPath);
-		} else if (header.type === 'file') {
-			const parentDir = dirname(outPath);
-			await fsDriver.mkdir(parentDir);
+		await processingEntryPromise;
+		processingEntryPromise = (async () => {
+			if (header.type === 'directory') {
+				await fsDriver.mkdir(outPath);
+			} else if (header.type === 'file') {
+				const parentDir = dirname(outPath);
+				await fsDriver.mkdir(parentDir);
 
-			await fsDriver.appendBinaryReadableToFile(outPath, stream);
-		} else {
-			throw new Error(`Unsupported file system entity type: ${header.type}`);
-		}
+				await fsDriver.appendBinaryReadableToFile(outPath, stream);
+			} else {
+				throw new Error(`Unsupported file system entity type: ${header.type}`);
+			}
+		})();
+		await processingEntryPromise;
 
 		// Drain the rest of the stream.
 		stream.resume();
@@ -87,6 +92,7 @@ const tarExtract = async (options: TarExtractOptions) => {
 	}
 
 	await finishPromise;
+	await processingEntryPromise;
 };
 
 export default tarExtract;
