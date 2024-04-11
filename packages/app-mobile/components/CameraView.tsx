@@ -8,11 +8,6 @@ const { _ } = require('@joplin/lib/locale');
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 
-// We need this to suppress the useless warning
-// https://github.com/oblador/react-native-vector-icons/issues/1465
-// eslint-disable-next-line no-console, @typescript-eslint/no-explicit-any -- Old code before rule was applied
-Icon.loadFont().catch((error: any) => { console.info(error); });
-
 class CameraView extends Component {
 	public constructor() {
 		super();

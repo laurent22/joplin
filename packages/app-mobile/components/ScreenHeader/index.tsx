@@ -25,11 +25,6 @@ import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { Dispatch } from 'redux';
 import WarningBanner from './WarningBanner';
 
-// We need this to suppress the useless warning
-// https://github.com/oblador/react-native-vector-icons/issues/1465
-// eslint-disable-next-line no-console, @typescript-eslint/no-explicit-any -- Old code before rule was applied
-Icon.loadFont().catch((error: any) => { console.info(error); });
-
 // Rather than applying a padding to the whole bar, it is applied to each
 // individual component (button, picker, etc.) so that the touchable areas
 // are widder and to give more room to the picker component which has a larger
