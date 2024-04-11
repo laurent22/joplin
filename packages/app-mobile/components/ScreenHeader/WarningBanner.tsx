@@ -7,6 +7,7 @@ import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import Setting from '@joplin/lib/models/Setting';
 import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
+import { substrWithEllipsis } from '@joplin/lib/string-utils';
 
 interface Props {
 	themeId: number;
@@ -15,9 +16,9 @@ interface Props {
 	shouldUpgradeSyncTarget: boolean;
 	showShouldUpgradeSyncTargetMessage: boolean|undefined;
 	hasDisabledEncryptionItems: boolean;
-	mustUpgradeAppMessage: string
-	shareInvitations: ShareInvitation[],
-	processingShareInvitationResponse: boolean,
+	mustUpgradeAppMessage: string;
+	shareInvitations: ShareInvitation[];
+	processingShareInvitationResponse: boolean;
 }
 
 
@@ -60,7 +61,9 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 
 		warningComps.push(renderWarningBox(
 			'ShareManager',
-			_('%s (%s) would like to share a notebook with you.', sharer.full_name, sharer.email),
+			_('%s (%s) would like to share a notebook with you.',
+				substrWithEllipsis(sharer.full_name, 0, 48),
+				substrWithEllipsis(sharer.email, 0, 52)),
 		));
 	}
 
