@@ -1,5 +1,6 @@
 /* eslint-disable multiline-comment-style */
 
+import Plugin from '../Plugin';
 import { ModelType } from '../../../BaseModel';
 import eventManager, { EventName } from '../../../eventManager';
 import Setting from '../../../models/Setting';
@@ -76,14 +77,14 @@ type ResourceChangeHandler = WorkspaceEventHandler<ResourceChangeEvent>;
  * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins)
  */
 export default class JoplinWorkspace {
-	// TODO: unregister events when plugin is closed or disabled
-
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private store: any;
+	private plugin: Plugin;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(store: any) {
+	public constructor(plugin: Plugin, store: any) {
 		this.store = store;
+		this.plugin = plugin;
 	}
 
 	/**
@@ -92,6 +93,10 @@ export default class JoplinWorkspace {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public async onNoteSelectionChange(callback: WorkspaceEventHandler<NoteSelectionChangeEvent>): Promise<Disposable> {
 		eventManager.appStateOn('selectedNoteIds', callback);
+		const dispose = () => {
+			eventManager.appStateOff('selectedNoteIds', callback);
+		};
+		this.plugin.addOnUnloadListener(dispose);
 
 		return {};
 
@@ -108,6 +113,10 @@ export default class JoplinWorkspace {
 	 */
 	public async onNoteContentChange(callback: WorkspaceEventHandler<NoteContentChangeEvent>) {
 		eventManager.on(EventName.NoteContentChange, callback);
+		const dispose = () => {
+			eventManager.off(EventName.NoteContentChange, callback);
+		};
+		this.plugin.addOnUnloadListener(dispose);
 	}
 
 	/**
@@ -125,7 +134,7 @@ export default class JoplinWorkspace {
 			});
 		};
 
-		return makeListener(eventManager, EventName.ItemChange, wrapperHandler);
+		return makeListener(this.plugin, eventManager, EventName.ItemChange, wrapperHandler);
 	}
 
 	/**
@@ -133,28 +142,28 @@ export default class JoplinWorkspace {
 	 * called when a resource is added or deleted.
 	 */
 	public async onResourceChange(handler: ResourceChangeHandler): Promise<void> {
-		makeListener(eventManager, EventName.ResourceChange, handler);
+		makeListener(this.plugin, eventManager, EventName.ResourceChange, handler);
 	}
 
 	/**
 	 * Called when an alarm associated with a to-do is triggered.
 	 */
 	public async onNoteAlarmTrigger(handler: WorkspaceEventHandler<NoteAlarmTriggerEvent>): Promise<Disposable> {
-		return makeListener(eventManager, EventName.NoteAlarmTrigger, handler);
+		return makeListener(this.plugin, eventManager, EventName.NoteAlarmTrigger, handler);
 	}
 
 	/**
 	 * Called when the synchronisation process is starting.
 	 */
 	public async onSyncStart(handler: SyncStartHandler): Promise<Disposable> {
-		return makeListener(eventManager, EventName.SyncStart, handler);
+		return makeListener(this.plugin, eventManager, EventName.SyncStart, handler);
 	}
 
 	/**
 	 * Called when the synchronisation process has finished.
 	 */
 	public async onSyncComplete(callback: WorkspaceEventHandler<SyncCompleteEvent>): Promise<Disposable> {
-		return makeListener(eventManager, EventName.SyncComplete, callback);
+		return makeListener(this.plugin, eventManager, EventName.SyncComplete, callback);
 	}
 
 	/**
@@ -165,6 +174,9 @@ export default class JoplinWorkspace {
 	 */
 	public filterEditorContextMenu(handler: FilterHandler<EditContextMenuFilterObject>) {
 		eventManager.filterOn('editorContextMenu', handler);
+		this.plugin.addOnUnloadListener(() => {
+			eventManager.filterOff('editorContextMenu', handler);
+		});
 	}
 
 	/**

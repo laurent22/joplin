@@ -4,6 +4,7 @@ import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import { newPluginScript, newPluginService } from '../../../testUtils';
+import eventManager, { EventName } from '@joplin/lib/eventManager';
 
 describe('JoplinWorkspace', () => {
 
@@ -81,4 +82,33 @@ describe('JoplinWorkspace', () => {
 		expect(modFolder.title).toBe('changedtitle');
 	});
 
+	test('should remove event listeners when plugins are unloaded', async () => {
+		const service = newPluginService();
+
+		const pluginScript = newPluginScript(`
+			joplin.plugins.register({
+				onStart: async () => {
+					// Register each listener 8 times to improve test reliability -- it's possible
+					// for listeners for the same events to be added/removed by other sources.
+					for (let i = 0; i < 8; i++) {
+						await joplin.workspace.onNoteChange(async (event) => { });
+						await joplin.workspace.onResourceChange(async (event) => { });
+						await joplin.workspace.filterEditorContextMenu(async (event) => { });
+					}
+				}
+			})
+		`);
+		const plugin = await service.loadPluginFromJsBundle('', pluginScript);
+		await service.runPlugin(plugin);
+
+		const itemChangeListenerCounter = eventManager.listenerCounter_(EventName.ItemChange);
+		const resourceChangeListenerCounter = eventManager.listenerCounter_(EventName.ResourceChange);
+
+		plugin.onUnload();
+
+		expect(itemChangeListenerCounter.getCountRemoved()).toBeGreaterThanOrEqual(8);
+		expect(resourceChangeListenerCounter.getCountRemoved()).toBeGreaterThanOrEqual(8);
+
+		await service.destroy();
+	});
 });
