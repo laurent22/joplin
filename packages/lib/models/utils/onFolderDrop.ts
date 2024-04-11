@@ -5,8 +5,19 @@ import restoreItems from '../../services/trash/restoreItems';
 import Folder from '../Folder';
 import Note from '../Note';
 
+const rootFolder = {
+	id: '',
+	deleted_time: 0,
+	type_: ModelType.Folder,
+};
+
 export default async (noteIds: string[], folderIds: string[], targetFolderId: string) => {
-	const targetFolder = await Folder.load(targetFolderId, { fields: ['id', 'deleted_time'] });
+	let targetFolder: FolderEntity;
+	if (targetFolderId !== '') {
+		targetFolder = await Folder.load(targetFolderId, { fields: ['id', 'deleted_time'] });
+	} else {
+		targetFolder = rootFolder;
+	}
 
 	if (!targetFolder) throw new Error(`No such folder: ${targetFolderId}`);
 
