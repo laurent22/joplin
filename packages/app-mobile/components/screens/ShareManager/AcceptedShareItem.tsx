@@ -8,6 +8,7 @@ import shim from '@joplin/lib/shim';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import Folder from '@joplin/lib/models/Folder';
 import { FolderEntity } from '@joplin/lib/services/database/types';
+import Logger from '@joplin/utils/Logger';
 
 interface Props {
 	invitation: ShareInvitation;
@@ -40,6 +41,8 @@ const useFolderTitle = (folderId: string) => {
 	return folderTitle ?? '...';
 };
 
+const logger = Logger.create('AcceptedShareItem');
+
 const AcceptedShareItem: React.FC<Props> = props => {
 	const invitation = props.invitation;
 	const sharer = invitation.share.user;
@@ -55,6 +58,12 @@ const AcceptedShareItem: React.FC<Props> = props => {
 			await shim.showConfirmationDialog(_('This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?'));
 			await ShareService.instance().leaveSharedFolder(invitation.share.folder_id, sharer.id);
 			setHasLeft(true);
+		} catch (error) {
+			logger.error('Failed to leave share', error);
+			await shim.showMessageBox(
+				_('Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s', error),
+				{ buttons: [_('OK')] },
+			);
 		} finally {
 			setLeaving(false);
 		}
