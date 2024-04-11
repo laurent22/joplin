@@ -7,6 +7,7 @@ import ShareService from '@joplin/lib/services/share/ShareService';
 import shim from '@joplin/lib/shim';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import Folder from '@joplin/lib/models/Folder';
+import { FolderEntity } from '@joplin/lib/services/database/types';
 
 interface Props {
 	invitation: ShareInvitation;
@@ -14,6 +15,30 @@ interface Props {
 }
 
 const AcceptedIcon = (props: { size: number }) => <Icon {...props} source='account-multiple-check'/>;
+
+const useFolderTitle = (folderId: string) => {
+	const [folderTitle, setFolderTitle] = useState(undefined);
+
+	useAsyncEffect(async event => {
+		let folder: FolderEntity|null = null;
+
+		// If the share was just accepted, the folder might not exist yet.
+		// In this case, check for the shared item multiple times.
+		while (!folder && !event.cancelled) {
+			folder = await Folder.load(folderId);
+			if (folder) {
+				setFolderTitle(folder.title);
+				break;
+			}
+
+			await new Promise<void>(resolve => {
+				shim.setTimeout(() => resolve(), 1000);
+			});
+		}
+	}, [folderId]);
+
+	return folderTitle ?? '...';
+};
 
 const AcceptedShareItem: React.FC<Props> = props => {
 	const invitation = props.invitation;
@@ -35,19 +60,13 @@ const AcceptedShareItem: React.FC<Props> = props => {
 		}
 	}, [invitation, sharer]);
 
-	const [notebookTitle, setNotebookTitle] = useState('...');
 	const folderId = invitation.share.folder_id;
-	useAsyncEffect(async event => {
-		const folder = await Folder.load(folderId);
-		if (!event.cancelled) {
-			setNotebookTitle(folder?.title ?? '...');
-		}
-	}, [folderId]);
+	const folderTitle = useFolderTitle(folderId);
 
 	return <Card>
 		<Card.Title
 			left={AcceptedIcon}
-			title={_('Notebook: %s (%s)', notebookTitle, folderId)}
+			title={_('Notebook: %s (%s)', folderTitle, folderId)}
 			subtitle={_('Share from %s (%s)', sharer.full_name, sharer.email)}
 		/>
 		<Card.Actions>
@@ -55,7 +74,7 @@ const AcceptedShareItem: React.FC<Props> = props => {
 				icon='share-off'
 				onPress={onLeaveShare}
 				disabled={props.processing || leaving || hasLeft}
-				loading={leaving}
+				loading={leaving || !folderTitle}
 			>{_('Leave share')}</Button>
 		</Card.Actions>
 	</Card>;
