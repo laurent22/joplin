@@ -11,7 +11,6 @@ import { ItemEvent } from '@joplin/lib/components/shared/config/plugins/types';
 import NavService from '@joplin/lib/services/NavService';
 import useRepoApi from './utils/useRepoApi';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
-import SectionDescription from '../SectionDescription';
 
 interface Props {
 	themeId: number;
@@ -127,11 +126,6 @@ const PluginStates: React.FC<Props> = props => {
 
 	return (
 		<View>
-			<SectionDescription
-				title={`${_('Plugins')} (Beta)`}
-				description={_('Plugins extend Joplin\'s functionality with additional features. These plugins are developed and maintained by Joplin community members. Not all plugins will work correctly on this device.')}
-				helpLink={'https://joplinapp.org/help/apps/plugins/#on-mobile'}
-			/>
 			{renderRepoApiStatus()}
 			{installedPluginCards}
 			{showSearch ? searchComponent : null}

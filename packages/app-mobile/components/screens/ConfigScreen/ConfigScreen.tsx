@@ -356,9 +356,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			settingComps.push(
 				<SectionDescription
 					key='section-description'
-					title={headerTitle}
-					description={sectionDescription}
-					helpLink={undefined}
+					content={sectionDescription}
 				/>,
 			);
 		}
