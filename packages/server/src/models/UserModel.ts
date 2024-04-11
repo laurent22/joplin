@@ -298,9 +298,12 @@ export default class UserModel extends BaseModel<User> {
 		if ('email' in user) {
 			const existingUser = await this.loadByEmail(user.email);
 			if (existingUser && existingUser.id !== user.id) throw new ErrorUnprocessableEntity(`there is already a user with this email: ${user.email}`);
+			// See https://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690 (found via https://stackoverflow.com/a/574698)
+			if (user.email.length > 254) throw new ErrorUnprocessableEntity('Please enter an email address between 0 and 254 characters');
 			if (!this.validateEmail(user.email)) throw new ErrorUnprocessableEntity(`Invalid email: ${user.email}`);
 		}
 
+		if ('full_name' in user && user.full_name.length > 512) throw new ErrorUnprocessableEntity('Full name must be at most 2048 characters');
 		return super.validate(user, options);
 	}
 
