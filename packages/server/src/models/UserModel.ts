@@ -304,6 +304,7 @@ export default class UserModel extends BaseModel<User> {
 		}
 
 		if ('full_name' in user && user.full_name.length > 512) throw new ErrorUnprocessableEntity('Full name must be at most 2048 characters');
+
 		return super.validate(user, options);
 	}
 
