@@ -454,4 +454,5 @@ describe('UserModel', () => {
 		expect(error.message).toBe(`Unable to save user because password already seems to be hashed. User id: ${user.id}`);
 		expect(error instanceof ErrorBadRequest).toBe(true);
 	});
+
 });
