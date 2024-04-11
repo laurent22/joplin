@@ -39,3 +39,9 @@
 	color: var(--joplin-background-color); 
 	background-color: var(--joplin-color);
 }
+
+.monospace-checkbox {
+	margin-top: 5px;
+	display: flex;
+	align-items: center;
+}

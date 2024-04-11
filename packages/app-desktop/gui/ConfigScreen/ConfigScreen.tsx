@@ -613,13 +613,14 @@ class ConfigScreenComponent extends React.Component<any, any> {
 							<label>{md.label()}</label>
 						</div>
 						{
-							md.subType === SettingItemSubType.FontFamily ?
+							md.subType === SettingItemSubType.FontFamily || md.subType === SettingItemSubType.MonospaceFontFamily ?
 								<FontSearch
 									type={inputType}
 									style={inputStyle}
 									value={this.state.settings[key]}
 									fonts={this.state.fonts}
 									onChange={fontFamily => updateSettingValue(key, fontFamily)}
+									subtype={md.subType}
 								/> :
 								<input
 									type={inputType}
