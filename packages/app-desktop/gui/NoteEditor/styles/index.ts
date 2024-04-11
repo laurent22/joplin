@@ -1,10 +1,9 @@
 import { NoteEditorProps } from '../utils/types';
 
-const { buildStyle } = require('@joplin/lib/theme');
+import { buildStyle } from '@joplin/lib/theme';
 
 export default function styles(props: NoteEditorProps) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return buildStyle(['NoteEditor'], props.themeId, (theme: any) => {
+	return buildStyle(['NoteEditor'], props.themeId, theme => {
 		return {
 			root: {
 				boxSizing: 'border-box',

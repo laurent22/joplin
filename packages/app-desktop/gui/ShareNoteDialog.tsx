@@ -28,8 +28,7 @@ interface Props {
 }
 
 function styles_(props: Props) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return buildStyle('ShareNoteDialog', props.themeId, (theme: any) => {
+	return buildStyle('ShareNoteDialog', props.themeId, theme => {
 		return {
 			root: {
 				minWidth: 500,

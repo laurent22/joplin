@@ -1,6 +1,7 @@
-const Setting = require('@joplin/lib/models/Setting').default;
-const { Platform } = require('react-native');
-const { themeById } = require('@joplin/lib/theme');
+import Setting from '@joplin/lib/models/Setting';
+import { Platform, TextStyle, ViewStyle } from 'react-native';
+import { themeById } from '@joplin/lib/theme';
+import { Theme as BaseTheme } from '@joplin/lib/themes/type';
 
 const baseStyle = {
 	appearance: 'light',
@@ -14,74 +15,95 @@ const baseStyle = {
 	lineHeight: '1.6em',
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const themeCache_: any = {};
+export type ThemeStyle = BaseTheme & typeof baseStyle & {
+	fontSize: number;
+	fontSizeSmaller: number;
+	marginRight: number;
+	marginLeft: number;
+	marginTop: number;
+	marginBottom: number;
+	icon: TextStyle;
+	lineInput: ViewStyle;
+	buttonRow: ViewStyle;
+	normalText: TextStyle;
+	urlText: TextStyle;
+	headerStyle: TextStyle;
+	headerWrapperStyle: ViewStyle;
+	keyboardAppearance: 'light'|'dark';
+};
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function addExtraStyles(style: any) {
-	style.marginRight = style.margin;
-	style.marginLeft = style.margin;
-	style.marginTop = style.margin;
-	style.marginBottom = style.margin;
+const themeCache_: Record<string, ThemeStyle> = {};
 
-	style.icon = {
-		color: style.color,
+function extraStyles(theme: BaseTheme) {
+	const icon: TextStyle = {
+		color: theme.color,
 		fontSize: 30,
 	};
 
-	style.lineInput = {
-		color: style.color,
-		backgroundColor: style.backgroundColor,
+	const lineInput: TextStyle = {
+		color: theme.color,
+		backgroundColor: theme.backgroundColor,
 		borderBottomWidth: 1,
-		borderColor: style.dividerColor,
+		borderColor: theme.dividerColor,
 		paddingBottom: 0,
 	};
 
 	if (Platform.OS === 'ios') {
-		delete style.lineInput.borderBottomWidth;
-		delete style.lineInput.borderColor;
+		delete lineInput.borderBottomWidth;
+		delete lineInput.borderColor;
 	}
 
-	style.buttonRow = {
+	const buttonRow: ViewStyle = {
 		flexDirection: 'row',
 		borderTopWidth: 1,
-		borderTopColor: style.dividerColor,
+		borderTopColor: theme.dividerColor,
 		paddingTop: 10,
 	};
 
-	style.normalText = {
-		color: style.color,
-		fontSize: style.fontSize,
+	const fontSize = baseStyle.fontSize;
+	const normalText: TextStyle = {
+		color: theme.color,
+		fontSize: fontSize,
 	};
 
-	style.urlText = {
-		color: style.urlColor,
-		fontSize: style.fontSize,
+	const urlText: TextStyle = {
+		color: theme.urlColor,
+		fontSize,
 	};
 
-	style.headerStyle = {
-		color: style.color,
-		fontSize: style.fontSize * 1.2,
+	const headerStyle: TextStyle = {
+		color: theme.color,
+		fontSize: fontSize * 1.2,
 		fontWeight: 'bold',
 	};
 
-	style.headerWrapperStyle = {
-		backgroundColor: style.headerBackgroundColor,
+	const headerWrapperStyle: TextStyle = {
+		backgroundColor: theme.headerBackgroundColor,
 	};
 
-	style.keyboardAppearance = style.appearance;
+	return {
+		marginRight: baseStyle.margin,
+		marginLeft: baseStyle.margin,
+		marginTop: baseStyle.margin,
+		marginBottom: baseStyle.margin,
 
-	style.color5 = style.backgroundColor4;
-	style.backgroundColor5 = style.color4;
+		icon,
+		lineInput,
+		buttonRow,
+		normalText,
+		urlText,
+		headerStyle,
+		headerWrapperStyle,
 
-	return style;
+		keyboardAppearance: theme.appearance,
+		color5: theme.color5 ?? theme.backgroundColor4,
+		backgroundColor5: theme.backgroundColor5 ?? theme.color4,
+	};
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function editorFont(fontId: any) {
+function editorFont(fontId: number) {
 	// IMPORTANT: The font mapping must match the one in Setting.js
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const fonts: any = {
+	const fonts: Record<number, string|null> = {
 		[Setting.FONT_DEFAULT]: null,
 		[Setting.FONT_MENLO]: 'Menlo',
 		[Setting.FONT_COURIER_NEW]: 'Courier New',
@@ -104,8 +126,13 @@ function themeStyle(theme: number) {
 	const cacheKey = [theme].join('-');
 	if (themeCache_[cacheKey]) return themeCache_[cacheKey];
 
-	const output = { ...baseStyle, ...themeById(theme) };
-	themeCache_[cacheKey] = addExtraStyles(output);
+	const baseTheme = themeById(theme);
+	const output: ThemeStyle = {
+		...baseStyle,
+		...baseTheme,
+		...extraStyles(baseTheme),
+	};
+	themeCache_[cacheKey] = output;
 	return themeCache_[cacheKey];
 }
 

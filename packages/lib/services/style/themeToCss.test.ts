@@ -55,6 +55,10 @@ const input: Theme = {
 
 	codeMirrorTheme: 'default',
 	codeThemeCss: 'atom-one-light.css',
+
+	headerBackgroundColor: '#ffffff',
+	textSelectionColor: '#a0a0ff',
+	colorBright2: '#ffffff',
 };
 
 const expected = `
@@ -76,6 +80,7 @@ const expected = `
 	--joplin-color2: #ffffff;
 	--joplin-color3: #738598;
 	--joplin-color4: #2D6BDC;
+	--joplin-color-bright2: #ffffff;
 	--joplin-color-correct: green;
 	--joplin-color-error: red;
 	--joplin-color-error2: #ff6c6c;
@@ -85,6 +90,7 @@ const expected = `
 	--joplin-color-warn3: #ff7626;
 	--joplin-color-warn-url: #155BDA;
 	--joplin-divider-color: #dddddd;
+	--joplin-header-background-color: #ffffff;
 	--joplin-odd-background-color: #eeeeee;
 	--joplin-raised-background-color: #e5e5e5;
 	--joplin-raised-color: #222222;
@@ -93,6 +99,7 @@ const expected = `
 	--joplin-selected-color: #e5e5e5;
 	--joplin-selected-color2: #131313;
 	--joplin-table-background-color: rgb(247, 247, 247);
+	--joplin-text-selection-color: #a0a0ff;
 	--joplin-url-color: #155BDA;
 	--joplin-warning-background-color: #FFD08D;
 }`;

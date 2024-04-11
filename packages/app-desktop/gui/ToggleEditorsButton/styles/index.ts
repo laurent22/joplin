@@ -1,9 +1,8 @@
 import { Props, Value } from '../ToggleEditorsButton';
-const { buildStyle } = require('@joplin/lib/theme');
+import { buildStyle } from '@joplin/lib/theme';
 
 export default function styles(props: Props) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return buildStyle(['ToggleEditorsButton', props.value], props.themeId, (theme: any) => {
+	return buildStyle(['ToggleEditorsButton', props.value], props.themeId, theme => {
 		const iconSize = 15;
 		const mdIconWidth = iconSize * 1.25;
 		const buttonHeight = theme.toolbarHeight - 7;

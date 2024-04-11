@@ -41,8 +41,7 @@ const EncryptionConfigScreen = (props: Props) => {
 
 	const nonExistingMasterKeyIds = props.notLoadedMasterKeys.slice();
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const theme: any = useMemo(() => {
+	const theme = useMemo(() => {
 		return themeStyle(props.themeId);
 	}, [props.themeId]);
 

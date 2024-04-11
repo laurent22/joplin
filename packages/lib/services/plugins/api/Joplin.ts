@@ -49,7 +49,7 @@ export default class Joplin {
 		this.data_ = new JoplinData(plugin);
 		this.plugins_ = new JoplinPlugins(plugin);
 		this.imaging_ = new JoplinImaging(implementation.imaging);
-		this.workspace_ = new JoplinWorkspace(store);
+		this.workspace_ = new JoplinWorkspace(plugin, store);
 		this.filters_ = new JoplinFilters();
 		this.commands_ = new JoplinCommands();
 		this.views_ = new JoplinViews(implementation.joplin.views, plugin, store);

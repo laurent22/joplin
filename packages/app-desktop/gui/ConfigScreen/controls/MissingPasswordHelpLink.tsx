@@ -3,10 +3,10 @@ import * as React from 'react';
 import shim from '@joplin/lib/shim';
 import bridge from '../../../services/bridge';
 import StyledLink from '../../style/StyledLink';
+import { ThemeStyle } from '@joplin/lib/theme';
 
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	theme: any;
+	theme: ThemeStyle;
 	text: string;
 }
 
@@ -19,7 +19,7 @@ const MacOSMissingPasswordHelpLink: React.FunctionComponent<Props> = props => {
 	const macInfoLink = (
 		<StyledLink href="#"
 			onClick={openMissingPasswordFAQ}
-			style={props.theme.linkStyle}
+			style={props.theme.urlStyle}
 		>
 			{props.text}
 		</StyledLink>
