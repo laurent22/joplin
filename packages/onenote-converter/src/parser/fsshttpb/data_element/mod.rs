@@ -10,9 +10,9 @@ use crate::parser::fsshttpb::data_element::object_group::ObjectGroup;
 use crate::parser::fsshttpb::data_element::revision_manifest::RevisionManifest;
 use crate::parser::fsshttpb::data_element::storage_index::StorageIndex;
 use crate::parser::fsshttpb::data_element::storage_manifest::StorageManifest;
+use crate::parser::Reader;
 use std::collections::HashMap;
 use std::fmt::Debug;
-use crate::parser::Reader;
 
 pub(crate) mod cell_manifest;
 pub(crate) mod data_element_fragment;

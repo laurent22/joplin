@@ -1,8 +1,8 @@
 use crate::page::Renderer;
-use crate::utils::{px, AttributeSet, StyleSet};
-use color_eyre::Result;
 use crate::parser::contents::{List, OutlineElement};
 use crate::parser::property::common::ColorRef;
+use crate::utils::{px, AttributeSet, StyleSet};
+use color_eyre::Result;
 
 const FORMAT_NUMBERED_LIST: char = '\u{fffd}';
 

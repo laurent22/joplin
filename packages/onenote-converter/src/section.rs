@@ -1,7 +1,7 @@
+use crate::parser::section::Section;
 use crate::utils::{make_dir, write_file};
 use crate::{page, templates};
 use color_eyre::eyre::Result;
-use crate::parser::section::Section;
 use std::collections::HashSet;
 use std::path::{Path, PathBuf};
 

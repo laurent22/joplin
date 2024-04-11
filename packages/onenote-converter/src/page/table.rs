@@ -1,7 +1,7 @@
 use crate::page::Renderer;
+use crate::parser::contents::{OutlineElement, Table, TableCell};
 use crate::utils::{px, AttributeSet, StyleSet};
 use color_eyre::Result;
-use crate::parser::contents::{OutlineElement, Table, TableCell};
 
 impl<'a> Renderer<'a> {
     pub(crate) fn render_table(&mut self, table: &Table) -> Result<String> {

@@ -16,7 +16,7 @@ pub(crate) enum RevisionRole {
 
 impl RevisionRole {
     pub(crate) fn parse(id: ExGuid) -> Result<RevisionRole> {
-        let guid = guid!({4A3717F8-1C14-49E7-9526-81D942DE1741});
+        let guid = guid!({ 4A3717F8 - 1C14 - 49E7 - 9526 - 81D942DE1741 });
 
         if id.guid != guid {
             return Err(

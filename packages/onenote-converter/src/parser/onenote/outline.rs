@@ -1,7 +1,9 @@
 use crate::parser::errors::{ErrorKind, Result};
 use crate::parser::fsshttpb::data::exguid::ExGuid;
 use crate::parser::one::property::layout_alignment::LayoutAlignment;
-use crate::parser::one::property_set::{outline_element_node, outline_group, outline_node, PropertySetId};
+use crate::parser::one::property_set::{
+    outline_element_node, outline_group, outline_node, PropertySetId,
+};
 use crate::parser::onenote::content::{parse_content, Content};
 use crate::parser::onenote::list::{parse_list, List};
 use crate::parser::onestore::object_space::ObjectSpace;

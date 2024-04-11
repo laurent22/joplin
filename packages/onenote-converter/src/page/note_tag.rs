@@ -1,8 +1,8 @@
 use crate::page::Renderer;
-use crate::utils::StyleSet;
 use crate::parser::contents::{NoteTag, OutlineElement};
 use crate::parser::property::common::ColorRef;
 use crate::parser::property::note_tag::{ActionItemStatus, NoteTagShape};
+use crate::utils::StyleSet;
 use std::borrow::Cow;
 
 const COLOR_BLUE: &str = "#4673b7";

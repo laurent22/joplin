@@ -268,7 +268,7 @@ fn parse_ink_path(
     let idx_x = props
         .dimensions
         .iter()
-        .position(|d| d.id == guid!({598a6a8f-52c0-4ba0-93af-af357411a561}))
+        .position(|d| d.id == guid!({ 598a6a8f - 52c0 - 4ba0 - 93af - af357411a561 }))
         .ok_or_else(|| {
             ErrorKind::MalformedOneNoteData("ink stroke properties has no x dimension".into())
         })?;

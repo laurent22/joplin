@@ -4,8 +4,8 @@ use crate::parser::onenote::notebook::Notebook;
 use crate::parser::onenote::section::{Section, SectionEntry, SectionGroup};
 use crate::parser::onestore::parse_store;
 use crate::parser::reader::Reader;
-use crate::parser::utils::{exists, is_directory, read_file};
 use crate::parser::utils::utils::log_to_wasm;
+use crate::parser::utils::{exists, is_directory, read_file};
 use std::ffi::OsStr;
 use std::panic;
 use std::path::Path;
@@ -148,7 +148,6 @@ impl Parser {
         }
         .into())
     }
-
 }
 
 impl Default for Parser {

@@ -1,9 +1,9 @@
 use crate::page::Renderer;
+use crate::parser::contents::EmbeddedFile;
+use crate::parser::property::embedded_file::FileType;
 use crate::utils::write_file;
 use color_eyre::eyre::ContextCompat;
 use color_eyre::Result;
-use crate::parser::contents::EmbeddedFile;
-use crate::parser::property::embedded_file::FileType;
 use std::path::PathBuf;
 
 impl<'a> Renderer<'a> {

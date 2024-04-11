@@ -1,7 +1,7 @@
 use crate::page::Renderer;
+use crate::parser::contents::{Ink, InkBoundingBox, InkPoint, InkStroke};
 use crate::utils::{px, AttributeSet, StyleSet};
 use itertools::Itertools;
-use crate::parser::contents::{Ink, InkBoundingBox, InkPoint, InkStroke};
 
 impl<'a> Renderer<'a> {
     const SVG_SCALING_FACTOR: f32 = 2540.0 / 96.0;

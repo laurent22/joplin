@@ -1,7 +1,7 @@
+use crate::parser::page::{Page, PageContent};
 use crate::section;
 use crate::utils::StyleSet;
 use color_eyre::Result;
-use crate::parser::page::{Page, PageContent};
 use std::collections::{HashMap, HashSet};
 use std::path::PathBuf;
 

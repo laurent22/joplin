@@ -4,7 +4,9 @@ use crate::parser::one::property::charset::Charset;
 use crate::parser::one::property::color_ref::ColorRef;
 use crate::parser::one::property::layout_alignment::LayoutAlignment;
 use crate::parser::one::property::paragraph_alignment::ParagraphAlignment;
-use crate::parser::one::property_set::{embedded_ink_container, paragraph_style_object, rich_text_node};
+use crate::parser::one::property_set::{
+    embedded_ink_container, paragraph_style_object, rich_text_node,
+};
 use crate::parser::onenote::ink::{parse_ink_data, Ink, InkBoundingBox};
 use crate::parser::onenote::note_tag::{parse_note_tags, NoteTag};
 use crate::parser::onestore::object_space::ObjectSpace;

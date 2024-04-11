@@ -1,8 +1,8 @@
 use crate::page::Renderer;
+use crate::parser::contents::Image;
 use crate::utils::utils::log_to_wasm;
 use crate::utils::{px, write_file, AttributeSet, StyleSet};
 use color_eyre::Result;
-use crate::parser::contents::Image;
 
 impl<'a> Renderer<'a> {
     pub(crate) fn render_image(&mut self, image: &Image) -> Result<String> {

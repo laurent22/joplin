@@ -1,11 +1,11 @@
 use crate::parser::errors::Result;
-use widestring::U16CString;
 use itertools::Itertools;
 use std::collections::HashMap;
 use std::fmt;
 use std::fmt::Display;
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
+use widestring::U16CString;
 
 pub(crate) fn px(inches: f32) -> String {
     format!("{}px", (inches * 48.0).round())
@@ -76,7 +76,7 @@ impl Display for StyleSet {
 extern "C" {
     #[derive(Debug)]
     pub type Buffer;
-    
+
     #[derive(Debug)]
     pub type Nothing;
 

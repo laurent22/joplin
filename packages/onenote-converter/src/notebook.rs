@@ -1,10 +1,10 @@
-use crate::templates::notebook::Toc;
-use crate::utils::{make_dir, write_file, utils};
-use crate::{section, templates};
-use color_eyre::eyre::{eyre, Result};
 use crate::parser::notebook::Notebook;
 use crate::parser::property::common::Color;
 use crate::parser::section::{Section, SectionEntry};
+use crate::templates::notebook::Toc;
+use crate::utils::{make_dir, utils, write_file};
+use crate::{section, templates};
+use color_eyre::eyre::{eyre, Result};
 use palette::rgb::Rgb;
 use palette::{Alpha, ConvertFrom, Hsl, Saturate, Shade, Srgb};
 use std::path::Path;
