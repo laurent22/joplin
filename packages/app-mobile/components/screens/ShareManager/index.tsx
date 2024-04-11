@@ -52,7 +52,7 @@ const useStyles = (theme: ThemeStyle) => {
 	}, [theme]);
 };
 
-const ManageSharesComponent: React.FC<Props> = props => {
+export const ShareManagerComponent: React.FC<Props> = props => {
 	const theme = themeStyle(props.themeId);
 	const styles = useStyles(theme);
 
@@ -115,6 +115,7 @@ const ManageSharesComponent: React.FC<Props> = props => {
 						onRefresh={onRefresh}
 					/>
 				}
+				testID='refreshControl'
 			>
 				<Text style={styles.header}>{_('Incoming shares')}</Text>
 				<View style={styles.shareListContainer}>
@@ -132,4 +133,4 @@ export default connect((state: AppState) => {
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 	};
-})(ManageSharesComponent);
+})(ShareManagerComponent);

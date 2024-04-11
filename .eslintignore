@@ -602,6 +602,7 @@ packages/app-mobile/components/screens/NoteTagsDialog.js
 packages/app-mobile/components/screens/Notes.js
 packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.js
 packages/app-mobile/components/screens/ShareManager/IncomingShareItem.js
+packages/app-mobile/components/screens/ShareManager/index.test.js
 packages/app-mobile/components/screens/ShareManager/index.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/encryption-config.js
@@ -650,6 +651,7 @@ packages/app-mobile/utils/ShareExtension.js
 packages/app-mobile/utils/ShareUtils.test.js
 packages/app-mobile/utils/ShareUtils.js
 packages/app-mobile/utils/TlsUtils.js
+packages/app-mobile/utils/appDefaultState.js
 packages/app-mobile/utils/autodetectTheme.js
 packages/app-mobile/utils/checkPermissions.js
 packages/app-mobile/utils/createRootStyle.js
@@ -671,6 +673,7 @@ packages/app-mobile/utils/polyfills/index.js
 packages/app-mobile/utils/setupNotifications.js
 packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/showMessageBox.js
+packages/app-mobile/utils/testing/createMockReduxStore.js
 packages/app-mobile/utils/types.js
 packages/default-plugins/build.js
 packages/default-plugins/buildDefaultPlugins.js
@@ -1151,6 +1154,8 @@ packages/lib/shim-init-node.js
 packages/lib/shim.js
 packages/lib/string-utils.test.js
 packages/lib/string-utils.js
+packages/lib/testing/share/makeMockShareInvitation.js
+packages/lib/testing/share/mockShareService.js
 packages/lib/testing/syncTargetUtils.js
 packages/lib/testing/test-utils-synchronizer.js
 packages/lib/testing/test-utils.js

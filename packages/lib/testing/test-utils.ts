@@ -66,6 +66,7 @@ import initLib from '../initLib';
 import OcrDriverTesseract from '../services/ocr/drivers/OcrDriverTesseract';
 import OcrService from '../services/ocr/OcrService';
 import { createWorker } from 'tesseract.js';
+import { reg } from '../registry';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -379,6 +380,7 @@ async function setupDatabase(id: number = null, options: any = null) {
 	await clearSettingFile(id);
 	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
 
+	reg.setDb(databases_[id]);
 	Setting.setValue('sync.target', syncTargetId());
 }
 

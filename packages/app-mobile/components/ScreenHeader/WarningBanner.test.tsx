@@ -5,6 +5,7 @@ import NavService from '@joplin/lib/services/NavService';
 import { render, screen, userEvent } from '@testing-library/react-native';
 import '@testing-library/jest-native/extend-expect';
 import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
+import makeShareInvitation from '@joplin/lib/testing/share/makeMockShareInvitation';
 
 interface WrapperProps {
 	showMissingMasterKeyMessage?: boolean;
@@ -31,29 +32,6 @@ const WarningBannerWrapper: React.FC<WrapperProps> = props => {
 	/>;
 };
 
-let idCounter = 0;
-const makeShareInvitation = (userName: string, userEmail: string, status: ShareUserStatus): ShareInvitation => {
-	const shareTypeFolder = 3;
-	return {
-		id: `test-${idCounter++}`,
-		master_key: null,
-		share: {
-			type: shareTypeFolder,
-			id: `share-id-${idCounter++}`,
-			folder_id: 'some-id-here',
-			user: {
-				id: `user-${idCounter++}`,
-				full_name: userName,
-				email: userEmail,
-			},
-			master_key_id: null,
-			note_id: null,
-		},
-		status: status,
-		can_read: 1,
-		can_write: 1,
-	};
-};
 
 describe('WarningBanner', () => {
 	let navServiceMock: jest.Mock<(route: unknown)=> void>;

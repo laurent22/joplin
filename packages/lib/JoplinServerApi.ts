@@ -29,7 +29,7 @@ enum ExecOptionsTarget {
 	File = 'file',
 }
 
-interface ExecOptions {
+export interface ExecOptions {
 	responseFormat?: ExecOptionsResponseFormat;
 	target?: ExecOptionsTarget;
 	path?: string;
