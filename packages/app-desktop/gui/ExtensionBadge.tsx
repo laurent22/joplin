@@ -1,7 +1,7 @@
 import * as React from 'react';
 import bridge from '../services/bridge';
 import { _ } from '@joplin/lib/locale';
-import { themeStyle } from '@joplin/lib/theme';
+import { ThemeStyle, themeStyle } from '@joplin/lib/theme';
 const { createSelector } = require('reselect');
 
 interface Props {
@@ -17,8 +17,7 @@ const themeSelector = (_state: any, props: any) => themeStyle(props.themeId);
 
 const styleSelector = createSelector(
 	themeSelector,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	(theme: any) => {
+	(theme: ThemeStyle) => {
 		const output = {
 			root: {
 				width: 220,
