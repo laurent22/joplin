@@ -7,21 +7,21 @@ interface Props {
 	type: string;
 	style: CSSProperties;
 	value: string;
-	fonts: string[];
+	availableFonts: string[];
 	onChange: (font: string)=> void;
 	subtype: string;
 }
 
 const FontSearch = (props: Props) => {
-	const { type, style, value, fonts: allFonts, onChange, subtype } = props;
-	const [fonts, setFonts] = useState(allFonts);
+	const { type, style, value, availableFonts, onChange, subtype } = props;
+	const [filteredAvailableFonts, setFilteredAvailableFonts] = useState(availableFonts);
 	const [inputText, setInputText] = useState(value);
 	const [showList, setShowList] = useState(false);
 	const [isListHovered, setIsListHovered] = useState(false);
 	const [isFontSelected, setIsFontSelected] = useState(value !== '');
-	const [renderedFonts, setRenderedFonts] = useState<string[]>([]);
+	const [visibleFonts, setVisibleFonts] = useState<string[]>([]);
 	const [isMonoBoxChecked, setIsMonoBoxChecked] = useState(false);
-	const areFontsLoading = fonts.length === 0;
+	const isLoadingFonts = filteredAvailableFonts.length === 0;
 
 	useEffect(() => {
 		if (subtype === SettingItemSubType.MonospaceFontFamily) {
@@ -30,27 +30,27 @@ const FontSearch = (props: Props) => {
 	}, [subtype]);
 
 	useEffect(() => {
-		if (!isMonoBoxChecked) return setFonts(allFonts);
-		const localMonospacedFonts = allFonts.filter((font: string) =>
+		if (!isMonoBoxChecked) return setFilteredAvailableFonts(availableFonts);
+		const localMonospacedFonts = availableFonts.filter((font: string) =>
 			monospaceKeywords.some((word: string) => font.toLowerCase().includes(word)) ||
 			knownMonospacedFonts.includes(font.toLowerCase()),
 		);
-		setFonts(localMonospacedFonts);
-	}, [isMonoBoxChecked, allFonts]);
+		setFilteredAvailableFonts(localMonospacedFonts);
+	}, [isMonoBoxChecked, availableFonts]);
 
-	const filteredFonts = useMemo(() => {
-		if (isFontSelected) return fonts;
-		return fonts.filter((font: string) =>
+	const displayedFonts = useMemo(() => {
+		if (isFontSelected) return filteredAvailableFonts;
+		return filteredAvailableFonts.filter((font: string) =>
 			font.toLowerCase().startsWith(inputText.toLowerCase()),
 		);
-	}, [fonts, inputText, isFontSelected]);
+	}, [filteredAvailableFonts, inputText, isFontSelected]);
 
 	useEffect(() => {
-		setRenderedFonts(filteredFonts.slice(0, 20));
-	}, [filteredFonts]);
+		setVisibleFonts(displayedFonts.slice(0, 20));
+	}, [displayedFonts]);
 
 	// Lazy loading
-	const onListScroll: React.UIEventHandler<HTMLDivElement> = useCallback((event) => {
+	const handleListScroll: React.UIEventHandler<HTMLDivElement> = useCallback((event) => {
 		const scrollTop = (event.target as HTMLDivElement).scrollTop;
 		const scrollHeight = (event.target as HTMLDivElement).scrollHeight;
 		const clientHeight = (event.target as HTMLDivElement).clientHeight;
@@ -59,27 +59,27 @@ const FontSearch = (props: Props) => {
 		// A small buffer of 20 pixels is subtracted from the total scrollHeight to ensure new content starts loading slightly before the user reaches the absolute bottom, providing a smoother experience.
 		if (scrollTop + clientHeight >= scrollHeight - 20) {
 			// Load the next 20 fonts
-			const remainingFonts = filteredFonts.slice(renderedFonts.length, renderedFonts.length + 20);
+			const remainingFonts = displayedFonts.slice(visibleFonts.length, visibleFonts.length + 20);
 
-			setRenderedFonts([...renderedFonts, ...remainingFonts]);
+			setVisibleFonts([...visibleFonts, ...remainingFonts]);
 		}
-	}, [filteredFonts, renderedFonts]);
+	}, [displayedFonts, visibleFonts]);
 
-	const onTextChange: React.ChangeEventHandler<HTMLInputElement> = useCallback((event) => {
+	const handleTextChange: React.ChangeEventHandler<HTMLInputElement> = useCallback((event) => {
 		setIsFontSelected(false);
 		setInputText(event.target.value);
 		onChange(event.target.value);
 	}, [onChange]);
 
-	const onFocusHandle: React.FocusEventHandler<HTMLInputElement> = useCallback(() => setShowList(true), []);
+	const handleFocus: React.FocusEventHandler<HTMLInputElement> = useCallback(() => setShowList(true), []);
 
-	const onBlurHandle: React.FocusEventHandler<HTMLInputElement> = useCallback(() => {
+	const handleBlur: React.FocusEventHandler<HTMLInputElement> = useCallback(() => {
 		if (!isListHovered) {
 			setShowList(false);
 		}
 	}, [isListHovered]);
 
-	const onFontClick: React.MouseEventHandler<HTMLDivElement> = useCallback((event) => {
+	const handleFontClick: React.MouseEventHandler<HTMLDivElement> = useCallback((event) => {
 		const font = (event.target as HTMLDivElement).innerText;
 		setInputText(font);
 		setShowList(false);
@@ -87,11 +87,11 @@ const FontSearch = (props: Props) => {
 		setIsFontSelected(true);
 	}, [onChange]);
 
-	const onListHover: React.MouseEventHandler<HTMLDivElement> = useCallback(() => setIsListHovered(true), []);
+	const handleListHover: React.MouseEventHandler<HTMLDivElement> = useCallback(() => setIsListHovered(true), []);
 
-	const onListLeave: React.MouseEventHandler<HTMLDivElement> = useCallback(() => setIsListHovered(false), []);
+	const handleListLeave: React.MouseEventHandler<HTMLDivElement> = useCallback(() => setIsListHovered(false), []);
 
-	const onMonoBoxCheck: React.ChangeEventHandler<HTMLInputElement> = useCallback(() => {
+	const handleMonoBoxCheck: React.ChangeEventHandler<HTMLInputElement> = useCallback(() => {
 		setIsMonoBoxChecked(!isMonoBoxChecked);
 	}, [isMonoBoxChecked]);
 
@@ -101,25 +101,25 @@ const FontSearch = (props: Props) => {
 				type={type}
 				style={style}
 				value={inputText}
-				onChange={onTextChange}
-				onFocus={onFocusHandle}
-				onBlur={onBlurHandle}
+				onChange={handleTextChange}
+				onFocus={handleFocus}
+				onBlur={handleBlur}
 				spellCheck={false}
 			/>
 			<div
 				className={'font-search-list'}
 				style={{ display: showList ? 'block' : 'none' }}
-				onMouseEnter={onListHover}
-				onMouseLeave={onListLeave}
-				onScroll={onListScroll}
+				onMouseEnter={handleListHover}
+				onMouseLeave={handleListLeave}
+				onScroll={handleListScroll}
 			>
 				{
-					areFontsLoading ? <div>{_('Loading...')}</div> :
-						renderedFonts.map((font: string) =>
+					isLoadingFonts ? <div>{_('Loading...')}</div> :
+						visibleFonts.map((font: string) =>
 							<div
 								key={font}
 								style={{ fontFamily: `"${font}"` }}
-								onClick={onFontClick}
+								onClick={handleFontClick}
 								className='font-search-item'
 							>
 								{font}
@@ -131,7 +131,7 @@ const FontSearch = (props: Props) => {
 				<input
 					type='checkbox'
 					checked={isMonoBoxChecked}
-					onChange={onMonoBoxCheck}
+					onChange={handleMonoBoxCheck}
 					id={`show-monospace-fonts_${subtype}`}
 				/>
 				<label htmlFor={`show-monospace-fonts_${subtype}`}>{_('Show monospace fonts only.')}</label>
