@@ -58,7 +58,7 @@ function StatusScreen(props: Props) {
 		flexDirection: 'column',
 	};
 
-	const retryStyle = { ...theme.urlStyle, marginLeft: 5 };
+	const inlineLinkStyle = { ...theme.urlStyle, marginLeft: 5 };
 	const retryAllStyle = { ...theme.urlStyle, marginTop: 5, display: 'inline-block' };
 
 	const containerPadding = theme.configScreenPadding;
@@ -107,9 +107,21 @@ function StatusScreen(props: Props) {
 			const item = section.body[n];
 			let text = '';
 
+			let ignoreLink = null;
 			let retryLink = null;
 			let itemType = null;
 			if (typeof item === 'object') {
+				if (item.canIgnore) {
+					const onClick = async () => {
+						await item.ignoreHandler();
+						void refreshScreen();
+					};
+					ignoreLink = (
+						<a href="#" onClick={onClick} style={inlineLinkStyle}>
+							{_('Ignore')}
+						</a>
+					);
+				}
 				if (item.canRetry) {
 					const onClick = async () => {
 						await item.retryHandler();
@@ -117,7 +129,7 @@ function StatusScreen(props: Props) {
 					};
 
 					retryLink = (
-						<a href="#" onClick={onClick} style={retryStyle}>
+						<a href="#" onClick={onClick} style={inlineLinkStyle}>
 							{_('Retry')}
 						</a>
 					);
@@ -142,18 +154,19 @@ function StatusScreen(props: Props) {
 
 			if (!text) text = '\xa0';
 
+			const actionLinks = <>{ignoreLink} {retryLink}</>;
 			if (currentListKey) {
 				listItems.push(
 					<li style={theme.textStyle} key={`item_${n}`}>
 						<span>{text}</span>
-						{retryLink}
+						{actionLinks}
 					</li>,
 				);
 			} else {
 				items.push(
 					<div style={theme.textStyle} key={`item_${n}`}>
 						<span>{text}</span>
-						{retryLink}
+						{actionLinks}
 					</div>,
 				);
 			}

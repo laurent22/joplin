@@ -179,7 +179,11 @@ const shim = {
 		// that definitely exist and in this case repeating the request works.
 		// Error is:
 		// request to https://graph.microsoft.com/v1.0/drive/special/approot failed, reason: getaddrinfo ENOTFOUND graph.microsoft.com graph.microsoft.com:443
-		if (error.code === 'ENOTFOUND') return true;
+		//
+		// 2024-04-07: Strictly speaking we shouldn't repeat the request if the resource doesn't
+		// exist. Hopefully OneDrive has now fixed this issue and the hack is no longer necessary.
+		//
+		// (error.code === 'ENOTFOUND') return true;
 
 		// network timeout at: https://public-ch3302...859f9b0e3ab.md
 		if (error.message && error.message.indexOf('network timeout') === 0) return true;

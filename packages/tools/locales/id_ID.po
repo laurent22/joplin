@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Liffindra Angga Zaaldian <findrakecil@icloud.com>\n"
 "Language-Team: \n"
 "Language: id_ID\n"
@@ -92,9 +94,8 @@ msgid "&View"
 msgstr "&Tampilan"
 
 #: packages/app-desktop/gui/MenuBar.tsx:857
-#, fuzzy
 msgid "&Window"
-msgstr "Tutup jendela"
+msgstr "&Jendela"
 
 #: packages/lib/models/Setting.ts:1645 packages/lib/models/Setting.ts:1836
 msgid "%d days"
@@ -214,7 +215,7 @@ msgstr "%s: %s"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:202
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:263
 msgid "%s: Missing password."
-msgstr "%s: membutuhkan kata sandi."
+msgstr "%s: Kata sandi terlewatkan."
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
@@ -255,7 +256,7 @@ msgstr "A5"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox.tsx:86
 msgid "About"
-msgstr ""
+msgstr "Tentang"
 
 #: packages/app-desktop/gui/MenuBar.tsx:573
 #: packages/app-desktop/gui/MenuBar.tsx:908
@@ -535,9 +536,8 @@ msgstr "Token otorisasi:"
 
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:84
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:158
-#, fuzzy
 msgid "Authorise"
-msgstr "Token otorisasi:"
+msgstr "Otorisasikan"
 
 #: packages/lib/models/Setting.ts:753
 msgid "Auto"
@@ -557,7 +557,7 @@ msgstr "Periksa pembaruan secara otomatis"
 
 #: packages/lib/models/Setting.ts:1823
 msgid "Automatically delete notes in the trash after a number of days"
-msgstr ""
+msgstr "Hapus catatan secara otomatis di tempat sampah setelah beberapa hari"
 
 #: packages/lib/models/Setting.ts:874
 msgid "Automatically switch theme to match system theme"
@@ -860,7 +860,7 @@ msgstr "Tutup"
 
 #: packages/app-mobile/components/Dropdown.tsx:165
 msgid "Close dropdown"
-msgstr "Tutup tarik-turun"
+msgstr "Tutup senarai"
 
 #: packages/lib/models/settings/settingValidations.ts:32
 msgid ""
@@ -997,9 +997,8 @@ msgid "Content provided by %s"
 msgstr "Konten disediakan oleh %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:72
-#, fuzzy
 msgid "Content provided by: %s"
-msgstr "Konten disediakan oleh %s"
+msgstr "Konten disediakan oleh: %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:65
 msgid "Continue"
@@ -1044,9 +1043,8 @@ msgstr "Salin Alamat Tautan"
 
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:90
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:166
-#, fuzzy
 msgid "Copy link to website"
-msgstr "Situs web Joplin"
+msgstr "Salin tautan ke situs web"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:101
 #: packages/app-mobile/components/screens/Note.tsx:1251
@@ -1390,9 +1388,8 @@ msgstr "Hapus profil ini?"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox.tsx:81
-#, fuzzy
 msgid "Deleted"
-msgstr "Hapus"
+msgstr "Dihapus"
 
 #: packages/lib/Synchronizer.ts:196
 msgid "Deleted local items: %d."
@@ -1620,7 +1617,7 @@ msgstr "Masuk dengan Dropbox"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:13
 msgid "Due"
-msgstr ""
+msgstr "Jatuh tempo"
 
 #: packages/app-desktop/gui/MainScreen/commands/duplicateNote.ts:7
 #: packages/app-mobile/components/ScreenHeader.tsx:489
@@ -1749,7 +1746,7 @@ msgstr "teks yang ditekankan"
 #: packages/app-desktop/commands/emptyTrash.ts:16
 #: packages/app-desktop/commands/emptyTrash.ts:8
 msgid "Empty trash"
-msgstr ""
+msgstr "Kosongkan tempat sampah"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:143
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:86
@@ -1832,9 +1829,8 @@ msgid "Enable optical character recognition (OCR)"
 msgstr "Nyalakan pengenalan karakter optik (OCR)"
 
 #: packages/lib/models/Setting.ts:2717
-#, fuzzy
 msgid "Enable or disable plugins"
-msgstr "Kelola plugin Anda"
+msgstr "Nyalakan atau matikan plugin"
 
 #: packages/lib/models/Setting.ts:1209
 msgid "Enable PDF viewer"
@@ -2193,9 +2189,8 @@ msgid "Found: %d."
 msgstr "Ditemukan: %d."
 
 #: packages/app-mobile/components/screens/ConfigScreen/SectionSelector.tsx:42
-#, fuzzy
 msgid "From a plugin"
-msgstr "Telusuri semua plugin"
+msgstr "Dari sebuah plugin"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:566
 msgid "FTS enabled: %d"
@@ -2262,7 +2257,7 @@ msgstr "Berikan otorisasi"
 
 #: packages/app-cli/app/command-sync.ts:114
 msgid "Have you authorised the application login in the above URL?"
-msgstr ""
+msgstr "Sudahkah Anda memberikan izin masuk aplikasi dari URL di atas?"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useHeaderButtons.ts:14
 msgid "Header %d"
@@ -2368,6 +2363,8 @@ msgid ""
 "If you have already authorised, please wait for the application to sync to "
 "Joplin Cloud."
 msgstr ""
+"Jika Anda telah memberi izin, silakan tunggu aplikasi menyelaraskan ke "
+"Joplin Cloud."
 
 #: packages/app-desktop/ElectronAppWrapper.ts:85
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:358
@@ -2609,9 +2606,8 @@ msgstr "Joplin Cloud"
 
 #: packages/app-desktop/gui/Root.tsx:228
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:146
-#, fuzzy
 msgid "Joplin Cloud Login"
-msgstr "Joplin Cloud"
+msgstr "Masuk Joplin Cloud"
 
 #: packages/lib/services/interop/InteropService.ts:148
 #: packages/lib/services/interop/InteropService.ts:65
@@ -2683,9 +2679,8 @@ msgid "Keep note history for"
 msgstr "Simpan riwayat catatan untuk"
 
 #: packages/lib/models/Setting.ts:1839
-#, fuzzy
 msgid "Keep notes in the trash for"
-msgstr "Simpan riwayat catatan untuk"
+msgstr "Simpan catatan di tempat sampah untuk"
 
 #: packages/lib/models/Setting.ts:1485
 msgid "Keyboard Mode"
@@ -2729,7 +2724,7 @@ msgstr "Nanti"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:7
 msgid "Latitude"
-msgstr ""
+msgstr "Garis lintang"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:616
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:229
@@ -2800,9 +2795,8 @@ msgid "Loaded"
 msgstr "Termuat"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:85
-#, fuzzy
 msgid "Loading plugin repository..."
-msgstr "Tidak dapat terhubung ke repositori plugin."
+msgstr "Memuat repositori plugin…"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:87
 msgid "Loading..."
@@ -2846,7 +2840,7 @@ msgstr "Log, profil, status penyelarasan"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:8
 msgid "Longitude"
-msgstr ""
+msgstr "Garis bujur"
 
 #: packages/app-desktop/gui/MenuBar.tsx:880
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:560
@@ -2946,7 +2940,7 @@ msgstr "Pemutar media, matematika, diagram, daftar isi"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 msgid "Minimise"
-msgstr ""
+msgstr "Kecilkan"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:318
 msgid "Missing keys"
@@ -2988,16 +2982,16 @@ msgstr "Pindahkan %d catatan ke buku catatan \"%s\"?"
 #: packages/app-cli/app/command-rmbook.ts:27
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:206
-#, fuzzy
 msgid ""
 "Move notebook \"%s\" to the trash?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will also be moved to the "
 "trash."
 msgstr ""
-"Hapus buku catatan \"%s\"?\n"
+"Pindahkan buku catatan \"%s\" ke tempat sampah?\n"
 "\n"
-"Semua catatan dan sub-buku catatan dalam buku catatan ini juga akan dihapus."
+"Semua catatan dan sub-buku catatan dalam buku catatan ini juga akan "
+"dipindahkan ke tempat sampah."
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.ts:8
 msgid "Move to notebook"
@@ -3456,19 +3450,16 @@ msgid "Per user. Minimum of %d users."
 msgstr "Tiap pengguna. Minimal %d pengguna."
 
 #: packages/app-desktop/gui/MainScreen/commands/permanentlyDeleteNote.ts:8
-#, fuzzy
 msgid "Permanently delete note"
-msgstr "Hapus catatan terpilih"
+msgstr "Hapus catatan selamanya"
 
 #: packages/lib/models/Note.ts:900
-#, fuzzy
 msgid "Permanently delete note \"%s\"?"
-msgstr "Hapus catatan \"%s\"?"
+msgstr "Hapus catatan \"%s\" selamanya?"
 
 #: packages/lib/models/Note.ts:902
-#, fuzzy
 msgid "Permanently delete these %d notes?"
-msgstr "Hapus %d catatan ini?"
+msgstr "Hapus %d catatan tersebut selamanya?"
 
 #: packages/app-mobile/components/screens/Note.tsx:492
 msgid "Permission needed"
@@ -3565,18 +3556,16 @@ msgid "Please wait..."
 msgstr "Mohon tunggu..."
 
 #: packages/app-mobile/plugins/PlatformImplementation.ts:52
-#, fuzzy
 msgid "Plugin message"
-msgstr "Plugin"
+msgstr "Pesan plugin"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:81
 msgid "Plugin repository failed to load"
-msgstr ""
+msgstr "Repositori plugin gagal dimuat"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:28
-#, fuzzy
 msgid "Plugin search"
-msgstr "Plugin"
+msgstr "Cari plugin"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:325
 msgid "Plugin tools"
@@ -3769,9 +3758,8 @@ msgid "Recipients:"
 msgstr "Penerima:"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox.tsx:106
-#, fuzzy
 msgid "Recommended"
-msgstr "perintah"
+msgstr "Disarankan"
 
 #: packages/app-desktop/gui/MenuBar.tsx:709
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
@@ -3886,24 +3874,20 @@ msgid "Restore"
 msgstr "Pulihkan"
 
 #: packages/app-desktop/gui/MainScreen/commands/restoreNote.ts:10
-#, fuzzy
 msgid "Restore note"
-msgstr "Catatan yang Dipulihkan"
+msgstr "Pulihkan catatan"
 
 #: packages/app-desktop/gui/MainScreen/commands/restoreFolder.ts:9
-#, fuzzy
 msgid "Restore notebook"
-msgstr "Buat buku catatan"
+msgstr "Pulihkan buku catatan"
 
 #: packages/app-cli/app/command-restore.ts:12
-#, fuzzy
 msgid "Restore the items matching <pattern> from the trash."
-msgstr "Menghapus catatan yang cocok dengan <note-pattern>."
+msgstr "Pulihkan benda yang cocok dengan <note-pattern> dari tempat sampah."
 
 #: packages/lib/services/trash/index.ts:87
-#, fuzzy
 msgid "Restored items"
-msgstr "Catatan yang Dipulihkan"
+msgstr "Benda yang Dipulihkan"
 
 #: packages/lib/services/RevisionService.ts:241
 msgid "Restored Notes"
@@ -4802,15 +4786,13 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "Catatan \"%s\" telah berhasil dipulihkan ke buku catatan \"%s\"."
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:63
-#, fuzzy
 msgid "The note was successfully moved to the trash."
 msgid_plural "The notes were successfully moved to the trash."
-msgstr[0] "Catatan \"%s\" telah berhasil dipulihkan ke buku catatan \"%s\"."
+msgstr[0] "Catatan telah berhasil dipindahkan ke tempat sampah."
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:61
-#, fuzzy
 msgid "The notebook and its content was successfully moved to the trash."
-msgstr "Catatan \"%s\" telah berhasil dipulihkan ke buku catatan \"%s\"."
+msgstr "Buku catatan dan isinya telah berhasil dipindahkan ke tempat sampah."
 
 #: packages/app-mobile/components/screens/folder.js:77
 msgid "The notebook could not be saved: %s"
@@ -5086,7 +5068,7 @@ msgstr "Ini akan membuka layar baru. Simpan perubahan Anda saat ini?"
 
 #: packages/app-desktop/commands/emptyTrash.ts:14
 msgid "This will permanently delete all items in the trash. Continue?"
-msgstr ""
+msgstr "Ini akan menghapus semua benda di tempat sampah selamanya. Lanjutkan?"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
 msgid ""
@@ -5123,13 +5105,12 @@ msgstr ""
 #: packages/app-cli/app/command-sync.ts:108
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:80
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:149
-#, fuzzy
 msgid ""
 "To allow Joplin to synchronise with Joplin Cloud, please login using this "
 "URL:"
 msgstr ""
-"Untuk mengizinkan Joplin menyelaraskan dengan Dropbox, silakan ikuti langkah-"
-"langkah berikut:"
+"Untuk mengizinkan Joplin menyelaraskan dengan Joplin Cloud, silakan masuk "
+"dengan URL berikut:"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:53
 msgid "To continue, please enter your master password below."
@@ -5199,9 +5180,8 @@ msgid "to-do"
 msgstr "tugas"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:6
-#, fuzzy
 msgid "To-do"
-msgstr "tugas"
+msgstr "Tugas"
 
 #: packages/app-mobile/components/note-item.js:145
 msgid "to-do: %s"
@@ -5269,7 +5249,7 @@ msgstr "Jumlah: %d/%d"
 
 #: packages/lib/services/trash/index.ts:41
 msgid "Trash"
-msgstr ""
+msgstr "Tempat sampah"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:315
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:123
@@ -5578,9 +5558,8 @@ msgid "Voice typing..."
 msgstr "Pengetikan suara…"
 
 #: packages/lib/services/joplinCloudUtils.ts:23
-#, fuzzy
 msgid "Waiting for authorisation..."
-msgstr "Berikan otorisasi"
+msgstr "Sedang menunggu otorisasi…"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:202
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:109
@@ -5701,7 +5680,7 @@ msgstr ""
 
 #: packages/lib/services/joplinCloudUtils.ts:41
 msgid "You are logged in into Joplin Cloud, you can leave this screen now."
-msgstr ""
+msgstr "Anda telah masuk ke Joplin Cloud, Anda dapat meninggalkan layar ini."
 
 #: packages/app-mobile/components/NoteList.tsx:95
 msgid "You currently have no notebooks."
@@ -5725,15 +5704,12 @@ msgstr ""
 "enkripsi yang telah usang."
 
 #: packages/lib/services/joplinCloudUtils.ts:49
-#, fuzzy
 msgid ""
 "You were unable to connect to Joplin Cloud. Please check your credentials "
 "and try again. Error:"
 msgstr ""
-"Terjadi galat saat mengatur akun Joplin Cloud Anda. Silakan verifikasi surel "
-"dan kata sandi Anda dan coba lagi. Galat tersebut:\n"
-"\n"
-"%s"
+"Anda tidak dapat terhubung ke Joplin Cloud. Silakan periksa kredensial Anda "
+"dan coba lagi. Galat:"
 
 #: packages/app-cli/app/cli-utils.js:160
 msgid "Your choice: "
