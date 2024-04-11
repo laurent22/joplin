@@ -9,10 +9,12 @@ import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import Folder from '@joplin/lib/models/Folder';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/utils/Logger';
+import { ViewStyle } from 'react-native';
 
 interface Props {
 	invitation: ShareInvitation;
 	processing: boolean;
+	containerStyle: ViewStyle;
 }
 
 const AcceptedIcon = (props: { size: number }) => <Icon {...props} source='account-multiple-check'/>;
@@ -55,9 +57,10 @@ const AcceptedShareItem: React.FC<Props> = props => {
 	const onLeaveShare = useCallback(async () => {
 		try {
 			setLeaving(true);
-			await shim.showConfirmationDialog(_('This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?'));
-			await ShareService.instance().leaveSharedFolder(invitation.share.folder_id, sharer.id);
-			setHasLeft(true);
+			if (await shim.showConfirmationDialog(_('This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?'))) {
+				await ShareService.instance().leaveSharedFolder(invitation.share.folder_id, sharer.id);
+				setHasLeft(true);
+			}
 		} catch (error) {
 			logger.error('Failed to leave share', error);
 			await shim.showMessageBox(
@@ -72,7 +75,7 @@ const AcceptedShareItem: React.FC<Props> = props => {
 	const folderId = invitation.share.folder_id;
 	const folderTitle = useFolderTitle(folderId);
 
-	return <Card>
+	return <Card style={props.containerStyle}>
 		<Card.Title
 			left={AcceptedIcon}
 			title={_('Notebook: %s (%s)', folderTitle, folderId)}

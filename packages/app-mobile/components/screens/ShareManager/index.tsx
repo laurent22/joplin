@@ -44,6 +44,10 @@ const useStyles = (theme: ThemeStyle) => {
 			scrollingContainer: {
 				height: '100%',
 			},
+			shareListItem: {
+				maxWidth: 700,
+				marginBottom: 5,
+			},
 		});
 	}, [theme]);
 };
@@ -68,6 +72,7 @@ const ManageSharesComponent: React.FC<Props> = props => {
 					key={`incoming-share-${share.id}`}
 					invitation={share}
 					processing={props.processingShareInvitationResponse}
+					containerStyle={styles.shareListItem}
 				/>,
 			);
 		} else if (share.status === ShareUserStatus.Accepted) {
@@ -76,6 +81,7 @@ const ManageSharesComponent: React.FC<Props> = props => {
 					key={`accepted-share-${share.id}`}
 					invitation={share}
 					processing={props.processingShareInvitationResponse}
+					containerStyle={styles.shareListItem}
 				/>,
 			);
 		}
