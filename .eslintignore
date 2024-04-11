@@ -597,10 +597,12 @@ packages/app-mobile/components/screens/ConfigScreen/plugins/utils/useRepoApi.js
 packages/app-mobile/components/screens/ConfigScreen/types.js
 packages/app-mobile/components/screens/JoplinCloudLoginScreen.js
 packages/app-mobile/components/screens/LogScreen.js
-packages/app-mobile/components/screens/ManageShares.js
 packages/app-mobile/components/screens/Note.js
 packages/app-mobile/components/screens/NoteTagsDialog.js
 packages/app-mobile/components/screens/Notes.js
+packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.js
+packages/app-mobile/components/screens/ShareManager/IncomingShareItem.js
+packages/app-mobile/components/screens/ShareManager/index.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/search.js

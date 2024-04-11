@@ -54,6 +54,10 @@ export default class BaseSyncTarget {
 		return false;
 	}
 
+	public static supportsShare(): boolean {
+		return false;
+	}
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public option(name: string, defaultValue: any = null) {
 		return this.options_ && name in this.options_ ? this.options_[name] : defaultValue;

@@ -128,6 +128,7 @@ import KeymapService from '@joplin/lib/services/KeymapService';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import initializeCommandService from './utils/initializeCommandService';
 import PlatformImplementation from './plugins/PlatformImplementation';
+import ShareManager from './components/screens/ShareManager';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -1122,7 +1123,7 @@ class AppComponent extends React.Component {
 			JoplinCloudLogin: { screen: JoplinCloudLoginScreen },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },
-			ShareManager: { screen: },
+			ShareManager: { screen: ShareManager },
 			ProfileSwitcher: { screen: ProfileSwitcher },
 			ProfileEditor: { screen: ProfileEditor },
 			Log: { screen: LogScreen },

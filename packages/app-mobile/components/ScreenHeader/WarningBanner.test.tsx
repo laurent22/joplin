@@ -22,6 +22,8 @@ const WarningBannerWrapper: React.FC<WrapperProps> = props => {
 		showShouldUpgradeSyncTargetMessage={props.showShouldUpgradeSyncTargetMessage ?? false}
 		hasDisabledEncryptionItems={props.hasDisabledEncryptionItems ?? false}
 		mustUpgradeAppMessage={props.mustUpgradeAppMessage ?? ''}
+		shareInvitations={[]}
+		processingShareInvitationResponse={false}
 	/>;
 };
 
