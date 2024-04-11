@@ -2,8 +2,9 @@ import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import * as React from 'react';
 import NoteListUtils from './utils/NoteListUtils';
 import { Dispatch } from 'redux';
+import { ThemeStyle } from '@joplin/lib/theme';
 
-const { buildStyle } = require('@joplin/lib/theme');
+import { buildStyle } from '@joplin/lib/theme';
 const bridge = require('@electron/remote').require('./bridge').default;
 
 interface MultiNoteActionsProps {
@@ -19,8 +20,7 @@ interface MultiNoteActionsProps {
 }
 
 function styles_(props: MultiNoteActionsProps) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return buildStyle('MultiNoteActions', props.themeId, (theme: any) => {
+	return buildStyle('MultiNoteActions', props.themeId, (theme: ThemeStyle) => {
 		return {
 			root: {
 				display: 'inline-flex',
