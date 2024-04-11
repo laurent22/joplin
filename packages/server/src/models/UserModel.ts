@@ -303,7 +303,7 @@ export default class UserModel extends BaseModel<User> {
 			if (!this.validateEmail(user.email)) throw new ErrorUnprocessableEntity(`Invalid email: ${user.email}`);
 		}
 
-		if ('full_name' in user && user.full_name.length > 512) throw new ErrorUnprocessableEntity('Full name must be at most 2048 characters');
+		if ('full_name' in user && user.full_name.length > 512) throw new ErrorUnprocessableEntity('Full name must be at most 512 characters');
 
 		return super.validate(user, options);
 	}
