@@ -18,6 +18,7 @@ export interface LayoutItem {
 	children?: LayoutItem[];
 	direction?: LayoutItemDirection;
 	resizableRight?: boolean;
+	resizableLeft?: boolean;
 	resizableBottom?: boolean;
 	visible?: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

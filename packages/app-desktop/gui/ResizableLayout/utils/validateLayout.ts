@@ -58,9 +58,24 @@ function updateItemSize(itemIndex: number, itemDraft: LayoutItem, parent: Layout
 // of a container.
 function updateResizeRules(itemIndex: number, itemDraft: LayoutItem, parent: LayoutItem) {
 	if (!parent) return;
-	const isLastVisibleChild = isLastVisible(itemIndex, itemDraft, parent);
-	itemDraft.resizableRight = parent.direction === LayoutItemDirection.Row && !isLastVisibleChild;
-	itemDraft.resizableBottom = parent.direction === LayoutItemDirection.Column && !isLastVisibleChild;
+
+	if (itemDraft.key === 'editor') return;
+
+	if (isElementAfterEditor(itemIndex, parent)) {
+		itemDraft.resizableLeft = true;
+	} else {
+		const isLastVisibleChild = isLastVisible(itemIndex, itemDraft, parent);
+		itemDraft.resizableRight = parent.direction === LayoutItemDirection.Row && !isLastVisibleChild;
+		itemDraft.resizableBottom = parent.direction === LayoutItemDirection.Column && !isLastVisibleChild;
+	}
+}
+
+// editor is dynamically sized, elements before it have resizableRight, elements after it have resizableLeft.
+function isElementAfterEditor(itemIndex: number, parent: LayoutItem) {
+	if (parent.key !== 'root') return false;
+
+	const editorIndex = parent.children.findIndex((child) => child.key === 'editor');
+	return itemIndex > editorIndex;
 }
 
 // Container direction should alternate between row (for the root) and

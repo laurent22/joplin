@@ -44,12 +44,12 @@ function renderContainer(item: LayoutItem, parent: LayoutItem | null, sizes: Lay
 	const size: Size = itemSize(item, parent, sizes, true);
 
 	const className = `resizableLayoutItem rli-${item.key}`;
-	if (item.resizableRight || item.resizableBottom) {
+	if (item.resizableRight || item.resizableBottom || item.resizableLeft) {
 		const enable = {
 			top: false,
 			right: !!item.resizableRight && !isLastChild,
 			bottom: !!item.resizableBottom && !isLastChild,
-			left: false,
+			left: !!item.resizableLeft,
 			topRight: false,
 			bottomRight: false,
 			bottomLeft: false,
