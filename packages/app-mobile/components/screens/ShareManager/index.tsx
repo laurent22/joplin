@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import IncomingShareItem from './IncomingShareItem';
 import AcceptedShareItem from './AcceptedShareItem';
 import ShareService from '@joplin/lib/services/share/ShareService';
+import { ThemeStyle } from '../../global-style';
 
 interface Props {
 	themeId: number;
@@ -17,8 +18,7 @@ interface Props {
 	processingShareInvitationResponse: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- see https://github.com/laurent22/joplin/pull/10297
-const useStyles = (theme: any) => {
+const useStyles = (theme: ThemeStyle) => {
 	return useMemo(() => {
 		const margin = theme.margin;
 		return StyleSheet.create({
