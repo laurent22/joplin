@@ -127,8 +127,8 @@ describe('PluginStates', () => {
 				initialPluginSettings={defaultPluginSettings}
 			/>,
 		);
-		expect(await screen.findByText('ABC Sheet Music')).toBeVisible();
-		expect(await screen.findByText('Backlinks to note')).toBeVisible();
+		expect(await screen.findByText(/^ABC Sheet Music/)).toBeVisible();
+		expect(await screen.findByText(/^Backlinks to note/)).toBeVisible();
 
 		expect(await screen.findByRole('button', { name: 'Update ABC Sheet Music', disabled: false })).toBeVisible();
 
@@ -154,7 +154,7 @@ describe('PluginStates', () => {
 				initialPluginSettings={defaultPluginSettings}
 			/>,
 		);
-		expect(await screen.findByText('ABC Sheet Music')).toBeVisible();
+		expect(await screen.findByText(/^ABC Sheet Music/)).toBeVisible();
 		expect(await screen.findByRole('button', { name: 'Update ABC Sheet Music', disabled: false })).toBeVisible();
 		expect(await screen.findByText(`v${outdatedVersion}`)).toBeVisible();
 	});
