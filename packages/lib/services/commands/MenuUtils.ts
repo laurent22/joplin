@@ -10,10 +10,10 @@ export interface MenuItem {
 	id?: string;
 	label?: string;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	click?: Function;
+	click?: ()=> void;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	role?: any;
-	type?: string;
+	type?: 'normal'|'separator'|'submenu';
 	accelerator?: string;
 	checked?: boolean;
 	enabled?: boolean;
