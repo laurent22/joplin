@@ -18,15 +18,13 @@ const DialogBox = require('react-native-dialogbox').default;
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { FolderEntity } from '@joplin/lib/services/database/types';
-import { State } from '@joplin/lib/reducer';
 import CustomButton from './CustomButton';
 import FolderPicker from './FolderPicker';
 import { itemIsInTrash } from '@joplin/lib/services/trash';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { PluginStates } from '@joplin/lib/services/plugins/reducer';
-import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { Dispatch } from 'redux';
+import { AppState } from '../utils/types';
 
 // We need this to suppress the useless warning
 // https://github.com/oblador/react-native-vector-icons/issues/1465
@@ -72,7 +70,7 @@ interface ScreenHeaderProps {
 		onValueChange?: OnValueChangedListener;
 		mustSelect?: boolean;
 	};
-	plugins: PluginStates;
+	openPluginPanels: Record<string, boolean>;
 
 	dispatch: Dispatch;
 	onUndoButtonPress: OnPressCallback;
@@ -460,9 +458,8 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const pluginPanelToggleButton = (styles: any, onPress: OnPressCallback) => {
-			const allPluginViews = Object.values(this.props.plugins).map(plugin => Object.values(plugin.views)).flat();
-			const allPanels = allPluginViews.filter(view => view.containerType === ContainerType.Panel);
-			if (allPanels.length === 0) return null;
+			const hasOpenPanels = Object.values(this.props.openPluginPanels).some(isOpen => isOpen);
+			if (!hasOpenPanels) return null;
 
 			return (
 				<CustomButton
@@ -739,7 +736,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 	};
 }
 
-const ScreenHeader = connect((state: State) => {
+const ScreenHeader = connect((state: AppState) => {
 	const syncInfo = localSyncInfoFromState(state);
 
 	return {
@@ -757,6 +754,7 @@ const ScreenHeader = connect((state: State) => {
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
 		plugins: state.pluginService.plugins,
+		openPluginPanels: state.openPluginPanels,
 	};
 })(ScreenHeaderComponent);
 

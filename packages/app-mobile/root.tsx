@@ -267,6 +267,7 @@ const appDefaultState: AppState = { ...defaultState, sideMenuOpenPercent: 0,
 	isOnMobileData: false,
 	disableSideMenuGestures: false,
 	showPanelsDialog: false,
+	openPluginPanels: Object.create(null),
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -391,6 +392,12 @@ const appReducer = (state = appDefaultState, action: any) => {
 		case 'SET_PLUGIN_PANELS_DIALOG_VISIBLE':
 			newState = { ...state };
 			newState.showPanelsDialog = action.visible;
+			break;
+		case 'SET_PANEL_VISIBLE':
+			{
+				const openPanels = { ...state.openPluginPanels, [action.panelKey]: action.visible };
+				newState = { ...state, openPluginPanels: openPanels };
+			}
 			break;
 
 		case 'NOTE_SELECTION_TOGGLE':
