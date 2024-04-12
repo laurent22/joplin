@@ -10,7 +10,7 @@ const editPatch = async (targetPluginId: string, outputParentDir: string|null) =
 
 	await buildDefaultPlugins(outputParentDir, {
 		beforePatch: async () => {
-			// To make editing the patch easier, a commit is created just before applying
+			// To make updating just the patch possible, a commit is created just before applying
 			// the patch.
 			await execCommand('git add .');
 			await execCommand(['git', 'config', 'user.name', 'Build script']);
