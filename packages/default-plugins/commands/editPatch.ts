@@ -15,7 +15,6 @@ const editPatch = async (targetPluginId: string, outputParentDir: string|null) =
 			await execCommand('git add .');
 			await execCommand(['git', 'config', 'user.name', 'Build script']);
 			await execCommand(['git', 'config', 'user.email', '']);
-			await execCommand(['git', 'config', 'commit.gpgSign', 'false']);
 			await execCommand(['git', 'commit', '-m', 'Initial commit']);
 		},
 		beforeInstall: async (buildDir, pluginId) => {
