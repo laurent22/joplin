@@ -1,5 +1,5 @@
 import { EditorView, KeyBinding, keymap } from '@codemirror/view';
-import { EditorCommandType, EditorControl, EditorSettings, LogMessageCallback, ContentScriptData, SearchState } from '../types';
+import { EditorCommandType, EditorControl, EditorSettings, LogMessageCallback, ContentScriptData, SearchState, UserEventSource } from '../types';
 import CodeMirror5Emulation from './CodeMirror5Emulation/CodeMirror5Emulation';
 import editorCommands from './editorCommands/editorCommands';
 import { Compartment, EditorSelection, Extension, StateEffect } from '@codemirror/state';
@@ -89,8 +89,8 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		this.editor.scrollDOM.scrollTop = fraction * maxScroll;
 	}
 
-	public insertText(text: string) {
-		this.editor.dispatch(this.editor.state.replaceSelection(text));
+	public insertText(text: string, userEvent?: UserEventSource) {
+		this.editor.dispatch(this.editor.state.replaceSelection(text), { userEvent });
 	}
 
 	public updateBody(newBody: string) {
