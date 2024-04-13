@@ -110,6 +110,22 @@ export default class ChangeModel extends BaseModel<Change> {
 		// UPDATE changes do not have the user_id set because they are specific
 		// to the item, not to a particular user.
 
+		// The extra complexity is due to the fact that items can be shared between users.
+		//
+		// - CREATE: When a user creates an item, a corresponding user_item is added to their
+		//   collection. When that item is shared with another user, a user_item is also added to
+		//   that user's collection, via ShareModel::updateSharedItems(). Each user has their own
+		//   `change` object for the creation operations. For example if a user shares a note with
+		//   two users, there will be a total of three `change` objects for that item, each
+		//   associated with on of these users. See UserItemModel::addMulti()
+		//
+		// - DELETE: When an item is deleted, all corresponding user_items are deleted. Likewise,
+		//   there's a `change` object per user. See UserItemModel::deleteBy()
+		//
+		// - UPDATE: Updates are different because only one `change` object will be created per
+		//   change, even if the item is shared multiple times. This is why we need a different
+		//   query for it. See ItemModel::save()
+
 		// This used to be just one query but it kept getting slower and slower
 		// as the `changes` table grew. So it is now split into two queries
 		// merged by a UNION ALL.
@@ -144,13 +160,17 @@ export default class ChangeModel extends BaseModel<Change> {
 
 		if (!doCountQuery) subParams1.push(limit);
 
+		// The "+ 0" was added to prevent Postgres from scanning the `changes` table in `counter`
+		// order, which is an extremely slow query plan. With "+ 0" it went from 2 minutes to 6
+		// seconds for a particular query. https://dba.stackexchange.com/a/338597/37012
+
 		const subQuery2 = `
 			SELECT ${fieldsSql}
 			FROM "changes"
 			WHERE counter > ?
 			AND type = ?
 			AND item_id IN (SELECT item_id FROM user_items WHERE user_id = ?)
-			ORDER BY "counter" ASC
+			ORDER BY "counter" + 0 ASC
 			${doCountQuery ? '' : 'LIMIT ?'}
 		`;
 
