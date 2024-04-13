@@ -35,8 +35,7 @@ interface Props {
 const EncryptionConfigScreen = (props: Props) => {
 	const { inputPasswords, onInputPasswordChange } = useInputPasswords(props.passwords);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const theme: any = useMemo(() => {
+	const theme = useMemo(() => {
 		return themeStyle(props.themeId);
 	}, [props.themeId]);
 

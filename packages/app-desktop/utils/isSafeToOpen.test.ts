@@ -1,10 +1,10 @@
 import { remove, writeFile } from 'fs-extra';
 import { createTempDir } from '@joplin/lib/testing/test-utils';
 import { join } from 'path';
-import isUnsafeToOpen from './isSafeToOpen';
+import isSafeToOpen from './isSafeToOpen';
 
 
-describe('isUnsafeToOpen', () => {
+describe('isSafeToOpen', () => {
 	test.each([
 		{ fileName: 'a.txt', expected: true },
 		{ fileName: 'a.json', expected: true },
@@ -24,7 +24,7 @@ describe('isUnsafeToOpen', () => {
 		try {
 			const fullPath = join(tempDir, fileName);
 			await writeFile(fullPath, 'test');
-			expect(await isUnsafeToOpen(fullPath)).toBe(expected);
+			expect(await isSafeToOpen(fullPath)).toBe(expected);
 		} finally {
 			await remove(tempDir);
 		}

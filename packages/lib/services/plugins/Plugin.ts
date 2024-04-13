@@ -21,6 +21,8 @@ interface ContentScripts {
 	[type: string]: ContentScript[];
 }
 
+type OnUnloadListener = ()=> void;
+
 export default class Plugin {
 
 	private baseDir_: string;
@@ -41,6 +43,7 @@ export default class Plugin {
 	private dataDir_: string;
 	private dataDirCreated_ = false;
 	private hasErrors_ = false;
+	private onUnloadListeners_: OnUnloadListener[] = [];
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public constructor(baseDir: string, manifest: PluginManifest, scriptText: string, dispatch: Function, dataDir: string) {
@@ -205,7 +208,16 @@ export default class Plugin {
 		return this.contentScriptMessageListeners_[id](message);
 	}
 
+	public addOnUnloadListener(callback: OnUnloadListener) {
+		this.onUnloadListeners_.push(callback);
+	}
+
 	public onUnload() {
+		for (const callback of this.onUnloadListeners_) {
+			callback();
+		}
+		this.onUnloadListeners_ = [];
+
 		this.dispatch_({
 			type: 'PLUGIN_UNLOAD',
 			pluginId: this.id,

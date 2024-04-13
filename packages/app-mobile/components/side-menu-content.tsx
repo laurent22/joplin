@@ -7,7 +7,7 @@ import Folder from '@joplin/lib/models/Folder';
 import Synchronizer from '@joplin/lib/Synchronizer';
 import NavService from '@joplin/lib/services/NavService';
 import { _ } from '@joplin/lib/locale';
-import { themeStyle } from './global-style';
+import { ThemeStyle, themeStyle } from './global-style';
 import { renderFolders } from '@joplin/lib/components/shared/side-menu-shared';
 import { FolderEntity, FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
@@ -376,8 +376,7 @@ const SideMenuContentComponent = (props: Props) => {
 		if (actionDone === 'auth') props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 	}, [performSync, props.dispatch]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const renderFolderIcon = (folderId: string, theme: any, folderIcon: FolderIcon) => {
+	const renderFolderIcon = (folderId: string, theme: ThemeStyle, folderIcon: FolderIcon) => {
 		if (!folderIcon) {
 			if (folderId === getTrashFolderId()) {
 				folderIcon = getTrashFolderIcon(FolderIconType.Emoji);

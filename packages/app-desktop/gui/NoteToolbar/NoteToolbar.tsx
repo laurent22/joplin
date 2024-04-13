@@ -5,7 +5,7 @@ import { utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import ToolbarButtonUtils, { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 const { connect } = require('react-redux');
-const { buildStyle } = require('@joplin/lib/theme');
+import { buildStyle } from '@joplin/lib/theme';
 
 interface NoteToolbarProps {
 	themeId: number;
@@ -16,8 +16,7 @@ interface NoteToolbarProps {
 }
 
 function styles_(props: NoteToolbarProps) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return buildStyle('NoteToolbar', props.themeId, (theme: any) => {
+	return buildStyle('NoteToolbar', props.themeId, theme => {
 		return {
 			root: {
 				...props.style,

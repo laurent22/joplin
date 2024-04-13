@@ -158,6 +158,22 @@ export class EventManager {
 		return this.emitter_.once(eventName, callback);
 	}
 
+	// For testing only; only applies to listeners registered with .on.
+	public listenerCounter_(event: EventName) {
+		const initialListeners = this.emitter_.listeners(event);
+		return {
+			getCountRemoved: () => {
+				const currentListeners = this.emitter_.listeners(event);
+				let countRemoved = 0;
+				for (const listener of initialListeners) {
+					if (!currentListeners.includes(listener)) {
+						countRemoved ++;
+					}
+				}
+				return countRemoved;
+			},
+		};
+	}
 }
 
 const eventManager = new EventManager();

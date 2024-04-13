@@ -1,16 +1,15 @@
 import * as React from 'react';
-import { Text, Alert, View } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
-import { ProgressBar } from 'react-native-paper';
-import { FunctionComponent, useCallback, useState } from 'react';
+import { FunctionComponent } from 'react';
 import shim from '@joplin/lib/shim';
 import { join } from 'path';
 import Share from 'react-native-share';
-import exportAllFolders, { makeExportCacheDirectory } from './utils/exportAllFolders';
+import exportAllFolders from './utils/exportAllFolders';
 import { ExportProgressState } from '@joplin/lib/services/interop/types';
 import { ConfigScreenStyles } from '../configScreenStyles';
-import SettingsButton from '../SettingsButton';
+import makeImportExportCacheDirectory from './utils/makeImportExportCacheDirectory';
+import TaskButton, { OnProgressCallback, SetAfterCompleteListenerCallback, TaskStatus } from './TaskButton';
 
 const logger = Logger.create('NoteExportButton');
 
@@ -18,99 +17,67 @@ interface Props {
 	styles: ConfigScreenStyles;
 }
 
-enum ExportStatus {
-	NotStarted,
-	Exporting,
-	Exported,
-}
-
-export const exportButtonTitle = () => _('Export all notes as JEX');
+export const exportButtonDefaultTitle = () => _('Export all notes as JEX');
 export const exportButtonDescription = () => _('Share a copy of all notes in a file format that can be imported by Joplin on a computer.');
 
-const NoteExportButton: FunctionComponent<Props> = props => {
-	const [exportStatus, setExportStatus] = useState<ExportStatus>(ExportStatus.NotStarted);
-	const [exportProgress, setExportProgress] = useState<number|undefined>(0);
-	const [warnings, setWarnings] = useState<string>('');
+const getTitle = (taskStatus: TaskStatus) => {
+	if (taskStatus === TaskStatus.InProgress) {
+		return _('Exporting...');
+	} else {
+		return exportButtonDefaultTitle();
+	}
+};
 
-	const startExport = useCallback(async () => {
-		// Don't run multiple exports at the same time.
-		if (exportStatus === ExportStatus.Exporting) {
-			return;
-		}
+const runExportTask = async (
+	onProgress: OnProgressCallback,
+	setAfterCompleteListener: SetAfterCompleteListenerCallback,
+) => {
+	const exportTargetPath = join(await makeImportExportCacheDirectory(), 'jex-export.jex');
+	logger.info(`Exporting all folders to path ${exportTargetPath}`);
 
-		setExportStatus(ExportStatus.Exporting);
-		const exportTargetPath = join(await makeExportCacheDirectory(), 'jex-export.jex');
-		logger.info(`Exporting all folders to path ${exportTargetPath}`);
-
-		try {
-			// Initially, undetermined progress
-			setExportProgress(undefined);
-
-			const status = await exportAllFolders(exportTargetPath, (status, progress) => {
-				if (progress !== null) {
-					setExportProgress(progress);
-				} else if (status === ExportProgressState.Closing || status === ExportProgressState.QueuingItems) {
-					// We don't have a numeric progress value and the closing/queuing state may take a while.
-					// Set a special progress value:
-					setExportProgress(undefined);
-				}
-			});
-
-			setExportStatus(ExportStatus.Exported);
-			setWarnings(status.warnings.join('\n'));
-
+	setAfterCompleteListener(async (success: boolean) => {
+		if (success) {
 			await Share.open({
 				type: 'application/jex',
 				filename: 'export.jex',
 				url: `file://${exportTargetPath}`,
 				failOnCancel: false,
 			});
-		} catch (e) {
-			logger.error('Unable to export:', e);
-
-			// Display a message to the user (e.g. in the case where the user is out of disk space).
-			Alert.alert(_('Error'), _('Unable to export or share data. Reason: %s', e.toString()));
-			setExportStatus(ExportStatus.NotStarted);
-		} finally {
-			await shim.fsDriver().remove(exportTargetPath);
 		}
-	}, [exportStatus]);
+		await shim.fsDriver().remove(exportTargetPath);
+	});
 
-	if (exportStatus === ExportStatus.NotStarted || exportStatus === ExportStatus.Exporting) {
-		const progressComponent = (
-			<ProgressBar
-				visible={exportStatus === ExportStatus.Exporting}
-				indeterminate={exportProgress === undefined}
-				progress={exportProgress}/>
-		);
+	// Initially, undetermined progress
+	onProgress(undefined);
 
-		const startOrCancelExportButton = (
-			<SettingsButton
-				title={exportStatus === ExportStatus.Exporting ? _('Exporting...') : exportButtonTitle()}
-				disabled={exportStatus === ExportStatus.Exporting}
-				description={exportStatus === ExportStatus.NotStarted ? exportButtonDescription() : null}
-				statusComponent={progressComponent}
-				clickHandler={startExport}
-				styles={props.styles}
-			/>
-		);
+	const status = await exportAllFolders(exportTargetPath, (status, progress) => {
+		if (progress !== null) {
+			onProgress(progress);
+		} else if (status === ExportProgressState.Closing || status === ExportProgressState.QueuingItems) {
+			// We don't have a numeric progress value and the closing/queuing state may take a while.
+			// Set a special progress value:
+			onProgress(undefined);
+		}
+	});
 
-		return startOrCancelExportButton;
-	} else {
-		const warningComponent = (
-			<Text style={props.styles.styleSheet.warningText}>
-				{_('Warnings:\n%s', warnings)}
-			</Text>
-		);
+	onProgress(1);
 
-		const exportSummary = (
-			<View style={props.styles.styleSheet.settingContainer}>
-				<Text style={props.styles.styleSheet.descriptionText}>{_('Exported successfully!')}</Text>
-				{warnings.length > 0 ? warningComponent : null}
-			</View>
-		);
-		return exportSummary;
-	}
+	logger.info('Export complete');
+
+	return { warnings: status.warnings, success: true };
+};
+
+const NoteExportButton: FunctionComponent<Props> = props => {
+	return (
+		<TaskButton
+			taskName={exportButtonDefaultTitle()}
+			buttonLabel={getTitle}
+			finishedLabel={_('Exported successfully!')}
+			description={exportButtonDescription()}
+			styles={props.styles}
+			onRunTask={runExportTask}
+		/>
+	);
 };
 
 export default NoteExportButton;

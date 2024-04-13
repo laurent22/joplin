@@ -5,6 +5,7 @@ import Setting, { SettingItem as InternalSettingItem, SettingSectionSource } fro
 import Plugin from '../Plugin';
 import getPluginNamespacedSettingKey from '../utils/getPluginNamespacedSettingKey';
 import getPluginSettingKeyPrefix from '../utils/getPluginSettingKeyPrefix';
+import makeListener from '../utils/makeListener';
 import { SettingItem, SettingSection } from './types';
 
 // That's all the plugin as of 27/08/21 - any new plugin after that will not be
@@ -180,12 +181,13 @@ export default class JoplinSettings {
 	 */
 	public async onChange(handler: ChangeHandler): Promise<void> {
 		// Filter out keys that are not related to this plugin
-		eventManager.on(EventName.SettingsChange, (event: ChangeEvent) => {
+		const listener = (event: ChangeEvent) => {
 			const keys = event.keys
 				.filter(k => k.indexOf(getPluginSettingKeyPrefix(this.plugin_.id)) === 0)
 				.map(k => k.substr(getPluginSettingKeyPrefix(this.plugin_.id).length));
 			if (!keys.length) return;
 			handler({ keys });
-		});
+		};
+		makeListener(this.plugin_, eventManager, EventName.SettingsChange, listener);
 	}
 }

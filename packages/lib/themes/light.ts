@@ -55,6 +55,10 @@ const theme: Theme = {
 
 	codeMirrorTheme: 'default',
 	codeThemeCss: 'atom-one-light.css',
+
+	headerBackgroundColor: '#F0F0F0',
+	textSelectionColor: '#0096FF',
+	colorBright2: '#ffffff',
 };
 
 export default theme;
