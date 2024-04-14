@@ -11,6 +11,12 @@ type TData = {
 	type: string;
 };
 
+enum QuickActionType {
+	NewNote = 'New note',
+	NewTodo = 'New to-do',
+	NewPhotoNote = 'New photo note',
+}
+
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default (dispatch: Function, folderId: string) => {
 	const userInfo = { url: '' };
@@ -36,7 +42,7 @@ export default (dispatch: Function, folderId: string) => {
 		dispatch({ type: 'NAV_BACK' });
 		dispatch({ type: 'SIDE_MENU_CLOSE' });
 
-		const isTodo = data.type === 'New to-do' ? 1 : 0;
+		const isTodo = data.type === QuickActionType.NewTodo ? 1 : 0;
 
 		void Note.save({
 			parent_id: folderId,
@@ -48,7 +54,7 @@ export default (dispatch: Function, folderId: string) => {
 				noteId: newNote.id,
 				folderId,
 				routeName: 'Note',
-				isNewPhotoNote: data.type === 'New Photo Note',
+				isNewPhotoNote: data.type === QuickActionType.NewPhotoNote,
 			});
 		});
 	};

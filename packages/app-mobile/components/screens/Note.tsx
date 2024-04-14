@@ -925,6 +925,13 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 	private cameraView_onCancel() {
 		this.setState({ showCamera: false });
+		if (this.props.navigation.state.isNewPhotoNote) {
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Note',
+				isNewPhotoNote: false,
+			});
+		}
 	}
 
 	private async attachNewDrawing(svgData: string) {
