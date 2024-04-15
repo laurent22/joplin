@@ -2784,9 +2784,13 @@ class Setting extends BaseModel {
 		return name;
 	}
 
-	public static sectionDescription(name: string) {
-		if (name === 'markdownPlugins') return _('These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.');
-		if (name === 'general') return _('Notes and settings are stored in: %s', toSystemSlashes(this.value('profileDir'), process.platform));
+	public static sectionDescription(name: string, appType: AppType) {
+		if (name === 'markdownPlugins' && appType === AppType.Desktop) {
+			return _('These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.');
+		}
+		if (name === 'general' && appType === AppType.Desktop) {
+			return _('Notes and settings are stored in: %s', toSystemSlashes(this.value('profileDir'), process.platform));
+		}
 
 		if (this.customSections_[name] && this.customSections_[name].description) return this.customSections_[name].description;
 
