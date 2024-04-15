@@ -3,6 +3,9 @@ import { WarningBannerComponent } from './WarningBanner';
 import Setting from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
 import { render, screen, userEvent } from '@testing-library/react-native';
+import '@testing-library/jest-native/extend-expect';
+import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
+import makeShareInvitation from '@joplin/lib/testing/share/makeMockShareInvitation';
 
 interface WrapperProps {
 	showMissingMasterKeyMessage?: boolean;
@@ -11,6 +14,8 @@ interface WrapperProps {
 	showShouldUpgradeSyncTargetMessage?: boolean;
 	hasDisabledEncryptionItems?: boolean;
 	mustUpgradeAppMessage?: string;
+	shareInvitations?: ShareInvitation[];
+	processingShareInvitationResponse?: boolean;
 }
 
 const WarningBannerWrapper: React.FC<WrapperProps> = props => {
@@ -22,8 +27,11 @@ const WarningBannerWrapper: React.FC<WrapperProps> = props => {
 		showShouldUpgradeSyncTargetMessage={props.showShouldUpgradeSyncTargetMessage ?? false}
 		hasDisabledEncryptionItems={props.hasDisabledEncryptionItems ?? false}
 		mustUpgradeAppMessage={props.mustUpgradeAppMessage ?? ''}
+		shareInvitations={props.shareInvitations ?? []}
+		processingShareInvitationResponse={props.processingShareInvitationResponse ?? false}
 	/>;
 };
+
 
 describe('WarningBanner', () => {
 	let navServiceMock: jest.Mock<(route: unknown)=> void>;
@@ -44,5 +52,45 @@ describe('WarningBanner', () => {
 		await user.press(masterKeyWarning);
 
 		expect(navServiceMock.mock.lastCall).toMatchObject([{ routeName: 'EncryptionConfig' }]);
+	});
+
+	test.each([
+		[makeShareInvitation('Test user', 'email@example.com', ShareUserStatus.Waiting), true],
+		[makeShareInvitation('Test user', 'email@example.com', ShareUserStatus.Accepted), false],
+		[makeShareInvitation('Test user', 'email@example.com', ShareUserStatus.Rejected), false],
+	])('should display a warning banner when there is an incoming share (case %#)', (invitation, shouldShow) => {
+		const invitations = [invitation];
+		render(<WarningBannerWrapper shareInvitations={invitations}/>);
+		const checkShownState = () => {
+			if (shouldShow) {
+				expect(screen.getByText(/would like to share a notebook/)).toBeVisible();
+			} else {
+				expect(screen.queryByText(/would like to share a notebook/)).toBeNull();
+			}
+		};
+		checkShownState();
+
+		// Should not be affected by additional rejected/accepted invitations
+		for (const inviteType of [ShareUserStatus.Accepted, ShareUserStatus.Rejected]) {
+			render(
+				<WarningBannerWrapper
+					shareInvitations={[...invitations, makeShareInvitation('A', 'a@example.com', inviteType)]}
+				/>,
+			);
+			checkShownState();
+		}
+	});
+
+	test('should not display a share warning banner while processing shares', () => {
+		const invitations = [makeShareInvitation('Test Name', 'email@example.com', ShareUserStatus.Waiting)];
+		const query = /Test Name \(email@example\.com\) would like to share a notebook/;
+		render(<WarningBannerWrapper shareInvitations={invitations} processingShareInvitationResponse={false}/>);
+		expect(screen.getByText(query)).toBeVisible();
+
+		render(<WarningBannerWrapper shareInvitations={invitations} processingShareInvitationResponse={true}/>);
+		expect(screen.queryByText(query)).toBeNull();
+
+		render(<WarningBannerWrapper shareInvitations={invitations} processingShareInvitationResponse={false}/>);
+		expect(screen.getByText(query)).toBeVisible();
 	});
 });

@@ -10,5 +10,4 @@ export interface AppState extends State {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	noteSideMenuOptions: any;
 	disableSideMenuGestures: boolean;
-	themeId: number;
 }
