@@ -1,10 +1,11 @@
-import SyncTargetRegistry from '../SyncTargetRegistry';
 import { _ } from '../locale';
 import ReportService, { ReportSection } from './ReportService';
-import { createNTestNotes, decryptionWorker, setupDatabaseAndSynchronizer, switchClient, synchronizerStart } from '../testing/test-utils';
+import { createNTestNotes, decryptionWorker, setupDatabaseAndSynchronizer, supportDir, switchClient, syncTargetId, synchronizer, synchronizerStart } from '../testing/test-utils';
 import Folder from '../models/Folder';
 import BaseItem from '../models/BaseItem';
 import DecryptionWorker from './DecryptionWorker';
+import Note from '../models/Note';
+import shim from '../shim';
 
 
 const getSectionsWithTitle = (report: ReportSection[], title: string) => {
@@ -32,8 +33,8 @@ const sectionBodyToText = (section: ReportSection) => {
 describe('ReportService', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
+		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
-		await synchronizerStart();
 		// For compatibility with code that calls DecryptionWorker.instance()
 		DecryptionWorker.instance_ = decryptionWorker();
 	});
@@ -43,15 +44,14 @@ describe('ReportService', () => {
 		const noteCount = 5;
 		const testNotes = await createNTestNotes(noteCount, folder);
 		await synchronizerStart();
-		const syncTargetId = SyncTargetRegistry.nameToId('memory');
 
 		const disabledReason = 'Test reason';
 		for (const testNote of testNotes) {
-			await BaseItem.saveSyncDisabled(syncTargetId, testNote, disabledReason);
+			await BaseItem.saveSyncDisabled(syncTargetId(), testNote, disabledReason);
 		}
 
 		const service = new ReportService();
-		let report = await service.status(syncTargetId);
+		let report = await service.status(syncTargetId());
 
 		// Items should all initially be listed as "cannot be synchronized", but should be ignorable.
 		const unsyncableSection = getCannotSyncSection(report);
@@ -65,16 +65,16 @@ describe('ReportService', () => {
 		expect(sectionBodyToText(unsyncableSection)).toContain(disabledReason);
 
 		// Ignore all
-		expect(await BaseItem.syncDisabledItemsCount(syncTargetId)).toBe(noteCount);
-		expect(await BaseItem.syncDisabledItemsCountIncludingIgnored(syncTargetId)).toBe(noteCount);
+		expect(await BaseItem.syncDisabledItemsCount(syncTargetId())).toBe(noteCount);
+		expect(await BaseItem.syncDisabledItemsCountIncludingIgnored(syncTargetId())).toBe(noteCount);
 		for (const item of ignorableItems) {
 			await item.ignoreHandler();
 		}
-		expect(await BaseItem.syncDisabledItemsCount(syncTargetId)).toBe(0);
-		expect(await BaseItem.syncDisabledItemsCountIncludingIgnored(syncTargetId)).toBe(noteCount);
+		expect(await BaseItem.syncDisabledItemsCount(syncTargetId())).toBe(0);
+		expect(await BaseItem.syncDisabledItemsCountIncludingIgnored(syncTargetId())).toBe(noteCount);
 
 		await synchronizerStart();
-		report = await service.status(syncTargetId);
+		report = await service.status(syncTargetId());
 
 		// Should now be in the ignored section
 		const ignoredSection = getIgnoredSection(report);
@@ -92,7 +92,7 @@ describe('ReportService', () => {
 			}
 		}
 		// Should have the correct number of ignored items
-		expect(await BaseItem.syncDisabledItemsCountIncludingIgnored(syncTargetId)).toBe(ignoredItemCount);
+		expect(await BaseItem.syncDisabledItemsCountIncludingIgnored(syncTargetId())).toBe(ignoredItemCount);
 		expect(ignoredItemCount).toBe(noteCount);
 
 		// Clicking "retry" should un-ignore
@@ -103,6 +103,47 @@ describe('ReportService', () => {
 				break;
 			}
 		}
-		expect(await BaseItem.syncDisabledItemsCountIncludingIgnored(syncTargetId)).toBe(noteCount - 1);
+		expect(await BaseItem.syncDisabledItemsCountIncludingIgnored(syncTargetId())).toBe(noteCount - 1);
+	});
+
+	it('should support ignoring sync errors for resources that failed to download', async () => {
+		const createAttachmentDownloadError = async () => {
+			await switchClient(2);
+
+			const note1 = await Note.save({ title: 'note' });
+			await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
+			await synchronizerStart();
+
+			await switchClient(1);
+
+			const previousMax = synchronizer().maxResourceSize_;
+			synchronizer().maxResourceSize_ = 1;
+			await synchronizerStart();
+			synchronizer().maxResourceSize_ = previousMax;
+		};
+		await createAttachmentDownloadError();
+
+		const service = new ReportService();
+		let report = await service.status(syncTargetId());
+
+		const unsyncableSection = getCannotSyncSection(report);
+		expect(sectionBodyToText(unsyncableSection)).toContain('could not be downloaded');
+
+		// Item for the download error should be ignorable
+		const ignorableItems = [];
+		for (const item of unsyncableSection.body) {
+			if (typeof item === 'object' && item.canIgnore) {
+				ignorableItems.push(item);
+			}
+		}
+		expect(ignorableItems).toHaveLength(1);
+
+		await ignorableItems[0].ignoreHandler();
+
+		// Should now be ignored.
+		report = await service.status(syncTargetId());
+		expect(
+			getIgnoredSection(report).body.some(item => typeof item === 'object' && item.canRetry === true),
+		).toBe(true);
 	});
 });
