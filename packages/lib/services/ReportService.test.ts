@@ -8,16 +8,18 @@ import Note from '../models/Note';
 import shim from '../shim';
 
 
-const getSectionsWithTitle = (report: ReportSection[], title: string) => {
-	return report.filter(section => section.title === title);
+const firstSectionWithTitle = (report: ReportSection[], title: string) => {
+	const sections = report.filter(section => section.title === title);
+	if (sections.length === 0) return null;
+	return sections[0];
 };
 
 const getCannotSyncSection = (report: ReportSection[]) => {
-	return getSectionsWithTitle(report, _('Items that cannot be synchronised'))[0];
+	return firstSectionWithTitle(report, _('Items that cannot be synchronised'));
 };
 
 const getIgnoredSection = (report: ReportSection[]) => {
-	return getSectionsWithTitle(report, _('Ignored items that cannot be synchronised'))[0];
+	return firstSectionWithTitle(report, _('Ignored items that cannot be synchronised'));
 };
 
 const sectionBodyToText = (section: ReportSection) => {
@@ -142,8 +144,19 @@ describe('ReportService', () => {
 
 		// Should now be ignored.
 		report = await service.status(syncTargetId());
-		expect(
-			getIgnoredSection(report).body.some(item => typeof item === 'object' && item.canRetry === true),
-		).toBe(true);
+		const ignoredItem = getIgnoredSection(report).body.find(item => typeof item === 'object' && item.canRetry === true);
+		expect(ignoredItem).not.toBeFalsy();
+
+		// Type narrowing
+		if (typeof ignoredItem === 'string') throw new Error('should be an object');
+
+		// Should be possible to retry
+		await ignoredItem.retryHandler();
+		await synchronizerStart();
+
+		// Should be fixed after retrying
+		report = await service.status(syncTargetId());
+		expect(getIgnoredSection(report)).toBeNull();
+		expect(getCannotSyncSection(report)).toBeNull();
 	});
 });
