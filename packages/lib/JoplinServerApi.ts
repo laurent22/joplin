@@ -107,11 +107,13 @@ export default class JoplinServerApi {
 		return this.session_ ? this.session_.user_id : '';
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static connectionErrorMessage(error: any) {
 		const msg = error && error.message ? error.message : 'Unknown error';
 		return _('Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s', msg);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private hidePasswords(o: any): any {
 		if (typeof o === 'string') {
 			try {
@@ -130,6 +132,7 @@ export default class JoplinServerApi {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private requestToCurl_(url: string, options: any) {
 		const output = [];
 		output.push('curl');
@@ -151,6 +154,7 @@ export default class JoplinServerApi {
 		return output.join(' ');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async exec_(method: string, path = '', query: Record<string, any> = null, body: any = null, headers: any = null, options: ExecOptions = null) {
 		if (headers === null) headers = {};
 		if (options === null) options = {};
@@ -165,6 +169,7 @@ export default class JoplinServerApi {
 		if (sessionId) headers['X-API-AUTH'] = sessionId;
 		headers['X-API-MIN-VERSION'] = '2.6.0'; // Need server 2.6 for new lock support
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const fetchOptions: any = {};
 		fetchOptions.headers = headers;
 		fetchOptions.method = method;
@@ -195,6 +200,7 @@ export default class JoplinServerApi {
 				logger.debug(this.requestToCurl_(url, fetchOptions));
 			}
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			let response: any = null;
 
 			if (options.source === 'file' && (method === 'POST' || method === 'PUT')) {
@@ -229,6 +235,7 @@ export default class JoplinServerApi {
 				return new JoplinError(message, code, `${method} ${path}: ${message} (${code}): ${shortResponseText()}`);
 			};
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			let responseJson_: any = null;
 			const loadResponseJson = async () => {
 				if (!responseText) return null;
@@ -287,6 +294,7 @@ export default class JoplinServerApi {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async exec(method: string, path = '', query: Record<string, any> = null, body: any = null, headers: any = null, options: ExecOptions = null) {
 		for (let i = 0; i < 2; i++) {
 			try {
@@ -303,4 +311,7 @@ export default class JoplinServerApi {
 		}
 	}
 
+	public async loadSession() {
+		await this.session();
+	}
 }

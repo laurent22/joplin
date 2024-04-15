@@ -5,6 +5,7 @@ import { RuleOptions } from '../../MdToHtml';
 const stringUtils = require('../../stringUtils.js');
 const md5 = require('md5');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function createHighlightedTokens(Token: any, splitted: string[]) {
 	let token;
 	const output = [];
@@ -35,9 +36,11 @@ function createHighlightedTokens(Token: any, splitted: string[]) {
 }
 
 // function installRule(markdownIt, mdOptions, ruleOptions) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 	const divider = md5(Date.now().toString() + Math.random().toString());
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	markdownIt.core.ruler.push('highlight_keywords', (state: any) => {
 		const keywords = ruleOptions.highlightedKeywords;
 		if (!keywords || !keywords.length) return;

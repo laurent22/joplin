@@ -86,6 +86,7 @@ const useScroll = (itemsPerLine: number, noteCount: number, itemSize: Size, list
 		setScrollTopLikeYouMeanIt(newScrollTop);
 	}, [itemsPerLine, noteCount, itemSize.height, scrollTop, listSize.height, maxScrollTop, setScrollTopLikeYouMeanIt]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onScroll = useCallback((event: any) => {
 		// Ignore the scroll event if it has just been set programmatically.
 		if (Date.now() - lastScrollSetTime.current < 500) return;

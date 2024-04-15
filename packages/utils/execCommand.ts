@@ -8,6 +8,7 @@ interface ExecCommandOptions {
 	showStdout?: boolean;
 	showStderr?: boolean;
 	quiet?: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	env?: Record<string, any>;
 }
 

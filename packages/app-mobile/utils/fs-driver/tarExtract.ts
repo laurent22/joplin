@@ -30,8 +30,12 @@ const tarExtract = async (options: TarExtractOptions) => {
 			throw new Error(`Extracting ${outPath} would overwrite`);
 		}
 
-		// Move to the next item when all available data has been read.
-		stream.once('end', () => next());
+		// Allows moving to the next item after all data for this entry has been read
+		// **and** this data has been processed.
+		// See https://github.com/laurent22/joplin/issues/10285
+		const streamEndPromise = new Promise<void>((resolve) => {
+			stream.once('end', () => resolve());
+		});
 
 		if (header.type === 'directory') {
 			await fsDriver.mkdir(outPath);
@@ -46,7 +50,8 @@ const tarExtract = async (options: TarExtractOptions) => {
 
 		// Drain the rest of the stream.
 		stream.resume();
-
+		await streamEndPromise;
+		next();
 	});
 
 	let finished = false;

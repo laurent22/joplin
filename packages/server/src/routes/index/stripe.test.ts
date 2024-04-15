@@ -33,6 +33,7 @@ function mockStripe(options: StripeOptions = null) {
 }
 
 interface WebhookOptions {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	stripe?: any;
 	eventId?: string;
 	subscriptionId?: string;
@@ -41,6 +42,7 @@ interface WebhookOptions {
 	userEmail?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function simulateWebhook(ctx: AppContext, type: string, object: any, options: WebhookOptions = {}) {
 	options = {
 		stripe: mockStripe({ userEmail: options.userEmail }),

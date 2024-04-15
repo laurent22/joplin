@@ -41,6 +41,7 @@ export function checkRepeatPassword(fields: CheckRepeatPasswordInput, required: 
 	return '';
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function boolOrDefaultToValue(fields: any, fieldName: string): number | null {
 	if (fields[fieldName] === '') return null;
 	const output = Number(fields[fieldName]);
@@ -48,6 +49,7 @@ function boolOrDefaultToValue(fields: any, fieldName: string): number | null {
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function intOrDefaultToValue(fields: any, fieldName: string): number | null {
 	if (fields[fieldName] === '') return null;
 	const output = Number(fields[fieldName]);
@@ -55,6 +57,7 @@ function intOrDefaultToValue(fields: any, fieldName: string): number | null {
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function makeUser(isNew: boolean, fields: any): User {
 	const user: User = {};
 
@@ -207,6 +210,7 @@ router.get('admin/users', async (_path: SubPath, ctx: AppContext) => {
 	return view;
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 router.get('admin/users/:id', async (path: SubPath, ctx: AppContext, user: User = null, error: any = null) => {
 	const owner = ctx.joplin.owner;
 	const isMe = userIsMe(path);
@@ -283,6 +287,7 @@ router.get('admin/users/:id', async (path: SubPath, ctx: AppContext, user: User 
 
 	if (config().accountTypesEnabled) {
 		view.content.showAccountTypes = true;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		view.content.accountTypes = accountTypeOptions().map((o: any) => {
 			o.selected = user.account_type === o.value;
 			return o;

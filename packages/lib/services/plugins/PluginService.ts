@@ -91,13 +91,16 @@ export default class PluginService extends BaseService {
 	}
 
 	private appVersion_: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private store_: any = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private platformImplementation_: any = null;
 	private plugins_: Plugins = {};
 	private runner_: BasePluginRunner = null;
 	private startedPlugins_: Record<string, boolean> = {};
 	private isSafeMode_ = false;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public initialize(appVersion: string, platformImplementation: any, runner: BasePluginRunner, store: any) {
 		this.appVersion_ = appVersion;
 		this.store_ = store;
@@ -174,6 +177,7 @@ export default class PluginService extends BaseService {
 		return this.plugins_[id];
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public unserializePluginSettings(settings: any): PluginSettings {
 		const output = { ...settings };
 
@@ -252,6 +256,7 @@ export default class PluginService extends BaseService {
 		const unpackDir = `${Setting.value('cacheDir')}/${fname}`;
 		const manifestFilePath = `${unpackDir}/manifest.json`;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let manifest: any = await this.loadManifestToObject(manifestFilePath);
 
 		if (!manifest || manifest._package_hash !== hash) {
@@ -278,6 +283,7 @@ export default class PluginService extends BaseService {
 
 	// Loads the manifest as a simple object with no validation. Used only
 	// when unpacking a package.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async loadManifestToObject(path: string): Promise<any> {
 		try {
 			const manifestText = await shim.fsDriver().readFile(path, 'utf8');
@@ -347,6 +353,7 @@ export default class PluginService extends BaseService {
 
 		const dataDir = `${Setting.value('pluginDataDir')}/${manifest.id}`;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const plugin = new Plugin(baseDir, manifest, scriptText, (action: any) => this.store_.dispatch(action), dataDir);
 
 		for (const notice of deprecationNotices) {
@@ -384,12 +391,14 @@ export default class PluginService extends BaseService {
 			pluginPaths = pluginDirOrPaths;
 		} else {
 			pluginPaths = (await shim.fsDriver().readDirStats(pluginDirOrPaths))
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				.filter((stat: any) => {
 					if (stat.isDirectory()) return true;
 					if (stat.path.toLowerCase().endsWith('.js')) return true;
 					if (stat.path.toLowerCase().endsWith('.jpl')) return true;
 					return false;
 				})
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				.map((stat: any) => `${pluginDirOrPaths}/${stat.path}`);
 		}
 

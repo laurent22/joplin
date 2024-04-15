@@ -7,6 +7,7 @@ interface Size {
 	height: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function useElementSize(elementRef: any): Size {
 	const [size, setSize] = useState({
 		width: 0,

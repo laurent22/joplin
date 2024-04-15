@@ -57,11 +57,16 @@ export interface Request {
 	method: RequestMethod;
 	path: string;
 	query: RequestQuery;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	body: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	bodyJson_: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	bodyJson: any;
 	files: RequestFile[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	params: any[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	action?: any;
 }
 
@@ -83,6 +88,7 @@ export interface RequestContext {
 	token: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 type RouteFunction = (request: Request, id: string, link: string, context: RequestContext)=> Promise<any | void>;
 
 interface ResourceNameToRoute {
@@ -94,13 +100,15 @@ export default class Api {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private token_: string | Function;
 	private authToken_: AuthToken = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private knownNounces_: any = {};
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private actionApi_: any;
 	private resourceNameToRoute_: ResourceNameToRoute = {};
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private dispatch_: Function;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 	public constructor(token: string | Function = null, dispatch: Function = null, actionApi: any = null) {
 		this.token_ = token;
 		this.actionApi_ = actionApi;
@@ -127,6 +135,7 @@ export default class Api {
 		return typeof this.token_ === 'function' ? this.token_() : this.token_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private dispatch(action: any) {
 		if (action.type === 'API_AUTH_TOKEN_SET') {
 			this.authToken_ = {
@@ -171,6 +180,7 @@ export default class Api {
 	}
 
 	// Response can be any valid JSON object, so a string, and array or an object (key/value pairs).
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async route(method: RequestMethod, path: string, query: RequestQuery = null, body: any = null, files: RequestFile[] = null): Promise<any> {
 		if (!files) files = [];
 		if (!query) query = {};
@@ -263,6 +273,7 @@ export default class Api {
 		if (request.query.token !== this.token) throw new ErrorForbidden('Invalid "token" parameter');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async execServiceActionFromRequest_(externalApi: any, request: Request) {
 		const action = externalApi[request.action];
 		if (!action) throw new ErrorNotFound(`Invalid action: ${request.action}`);

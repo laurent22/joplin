@@ -124,6 +124,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 			// So in this situation, we use must manually align the internal codemirror selection
 			// to the contextmenu selection
 			if (editorRef.current && !editorRef.current.cm6 && spellCheckerMenuItems.length > 0) {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				(editorRef.current as any).alignSelection(params);
 			}
 
@@ -144,7 +145,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 				}));
 			}
 
-			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
+			// eslint-disable-next-line github/array-foreach, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 			menuUtils.pluginContextMenuItems(props.plugins, MenuItemLocation.EditorContextMenu).forEach((item: any) => {
 				menu.append(new MenuItem(item));
 			});

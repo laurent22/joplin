@@ -28,6 +28,7 @@ export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: b
 
 	if (isBatch) {
 		let totalSize = 0;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		items = bodyFields.items.map((item: any) => {
 			totalSize += item.name.length + (item.body ? item.body.length : 0);
 			return {

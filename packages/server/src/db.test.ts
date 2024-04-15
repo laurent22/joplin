@@ -2,7 +2,9 @@ import { afterAllTests, beforeAllDb, beforeEachDb, db } from './utils/testing/te
 import sqlts from '@rmp135/sql-ts';
 import { DbConnection, migrateDown, migrateLatest, migrateUp, needsMigration, nextMigration } from './db';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function dbSchemaSnapshot(db: DbConnection): Promise<any> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return sqlts.toTypeScript({}, db as any);
 }
 
@@ -29,6 +31,7 @@ describe('db', () => {
 			'20211030103016_item_owner_name_unique',
 			'20211111134329_storage_index',
 			'20220121172409_email_recipient_default',
+			'20240413141308_changes_optimization',
 		];
 
 		let startProcessing = false;

@@ -5,17 +5,18 @@ import { utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import ToolbarButtonUtils, { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 const { connect } = require('react-redux');
-const { buildStyle } = require('@joplin/lib/theme');
+import { buildStyle } from '@joplin/lib/theme';
 
 interface NoteToolbarProps {
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
 	toolbarButtonInfos: ToolbarButtonInfo[];
 	disabled: boolean;
 }
 
 function styles_(props: NoteToolbarProps) {
-	return buildStyle('NoteToolbar', props.themeId, (theme: any) => {
+	return buildStyle('NoteToolbar', props.themeId, theme => {
 		return {
 			root: {
 				...props.style,
@@ -33,6 +34,7 @@ function NoteToolbar(props: NoteToolbarProps) {
 
 const toolbarButtonUtils = new ToolbarButtonUtils(CommandService.instance());
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const mapStateToProps = (state: any) => {
 	const whenClauseContext = stateToWhenClauseContext(state);
 

@@ -2,6 +2,7 @@ import Setting from '@joplin/lib/models/Setting';
 import { waitForFolderCount, setupDatabaseAndSynchronizer, switchClient, afterEachCleanUp } from '@joplin/lib/testing/test-utils';
 import Folder from '@joplin/lib/models/Folder';
 import { newPluginScript, newPluginService } from '../../../testUtils';
+import eventManager, { EventName } from '@joplin/lib/eventManager';
 
 describe('JoplinSettings', () => {
 
@@ -64,6 +65,38 @@ describe('JoplinSettings', () => {
 		expect(settingNames.join(',')).toBe('myCustomSetting1,myCustomSetting2');
 
 		await service.destroy();
+	});
+
+	test('should de-register settings change listeners when a plugin is unloaded', async () => {
+		const service = newPluginService();
+
+		const pluginScript = newPluginScript(`
+			joplin.plugins.register({
+				onStart: async function() {
+					await joplin.settings.registerSettings({
+						'test-setting': {
+							value: 1234,
+							type: 1,
+							public: false,
+							label: 'Test',
+						}
+					});
+
+					// Register 8 listeners to improve test reliability in the case
+					// where listeners are added/removed from other sources.
+					for (let i = 0; i < 8; i++) {
+						await joplin.settings.onChange((event) => { });
+					}
+				},
+			});
+		`);
+
+		const plugin = await service.loadPluginFromJsBundle('', pluginScript);
+		await service.runPlugin(plugin);
+
+		const listenerCounter = eventManager.listenerCounter_(EventName.SettingsChange);
+		plugin.onUnload();
+		expect(listenerCounter.getCountRemoved()).toBeGreaterThanOrEqual(8);
 	});
 
 	test('should allow registering multiple settings', async () => {

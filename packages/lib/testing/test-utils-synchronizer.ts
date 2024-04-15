@@ -38,7 +38,7 @@ export async function remoteResources() {
 	return remoteItemsByTypes([BaseModel.TYPE_RESOURCE]);
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 export async function localNotesFoldersSameAsRemote(locals: any[], expect: Function) {
 	let error = null;
 	try {

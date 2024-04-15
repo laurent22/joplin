@@ -7,6 +7,7 @@ export const declaration: CommandDeclaration = {
 	label: () => _('Search in current note'),
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const runtime = (comp: any): CommandRuntime => {
 	return {
 		execute: async () => {

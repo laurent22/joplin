@@ -82,6 +82,7 @@ describe('services_PluginService', () => {
 
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(2);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		expect(allFolders.map((f: any) => f.title).sort().join(', ')).toBe('multi - simple1, multi - simple2');
 	}));
 

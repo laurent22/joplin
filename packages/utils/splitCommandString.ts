@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default (command: string, options: any = null) => {
 	options = options || {};
 	if (!('handleEscape' in options)) {

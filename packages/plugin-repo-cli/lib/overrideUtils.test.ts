@@ -3,6 +3,7 @@ import { applyManifestOverrides, getObsoleteManifests, getSupersededPackages, Ma
 describe('overrideUtils', () => {
 
 	test('should get the obsolete manifests', () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const manifestOverrides: any = {
 			'ambrt.backlinksToNote': {
 				'manifest_version': 1,
@@ -44,6 +45,7 @@ describe('overrideUtils', () => {
 	});
 
 	test('should apply the overrides', () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const manifests: any = {
 			'io.github.jackgruber.copytags': {
 				'manifest_version': 1,

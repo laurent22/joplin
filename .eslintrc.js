@@ -112,6 +112,8 @@ module.exports = {
 			},
 		],
 
+		'@typescript-eslint/no-explicit-any': ['error'],
+
 		// -------------------------------
 		// Formatting
 		// -------------------------------

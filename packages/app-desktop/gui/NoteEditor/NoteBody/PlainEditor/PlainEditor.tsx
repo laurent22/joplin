@@ -36,6 +36,7 @@ const PlainEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEdito
 		}
 	}, [props.content]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onChange = useCallback((event: any) => {
 		props.onChange({ changeId: null, content: event.target.value });
 	}, [props.onChange]);

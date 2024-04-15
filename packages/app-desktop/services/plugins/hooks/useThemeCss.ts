@@ -9,6 +9,7 @@ interface HookDependencies {
 	themeId: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function themeToCssVariables(theme: any) {
 	const lines = [];
 	lines.push(':root {');

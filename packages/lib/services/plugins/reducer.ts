@@ -88,7 +88,9 @@ export const utils = {
 		return output;
 	},
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	viewsByType: function(plugins: PluginStates, type: string): any[] {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any[] = [];
 
 		for (const pluginId in plugins) {
@@ -137,6 +139,7 @@ export const utils = {
 	},
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const reducer = (draftRoot: Draft<any>, action: any) => {
 	if (action.type.indexOf('PLUGIN_') !== 0) return;
 
@@ -162,6 +165,7 @@ const reducer = (draftRoot: Draft<any>, action: any) => {
 		case 'PLUGIN_VIEW_PROP_SET':
 
 			if (action.name !== 'html') {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				(draft.plugins[action.pluginId].views[action.id] as any)[action.name] = action.value;
 			} else {
 				draft.pluginHtmlContents[action.pluginId] ??= {};
@@ -171,6 +175,7 @@ const reducer = (draftRoot: Draft<any>, action: any) => {
 
 		case 'PLUGIN_VIEW_PROP_PUSH':
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			(draft.plugins[action.pluginId].views[action.id] as any)[action.name].push(action.value);
 			break;
 

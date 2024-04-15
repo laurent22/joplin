@@ -8,6 +8,7 @@ import { ImageEditorCallbacks, LocalizedStrings } from './types';
 import startAutosaveLoop from './startAutosaveLoop';
 
 declare namespace ReactNativeWebView {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const postMessage: (data: any)=> void;
 }
 

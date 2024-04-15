@@ -9,6 +9,7 @@ import { EventName } from '@joplin/lib/eventManager';
 import normalizeAccelerator from '../../utils/normalizeAccelerator';
 import { CodeMirrorVersion } from '../../utils/types';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function useKeymap(CodeMirror: any) {
 
 	function save() {

@@ -9,6 +9,7 @@ const logger = Logger.create('SpellCheckerServiceDriverNative');
 
 export default class SpellCheckerServiceDriverNative extends SpellCheckerServiceDriverBase {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private session(): any {
 		return bridge().window().webContents.session;
 	}

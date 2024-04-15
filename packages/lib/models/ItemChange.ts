@@ -11,7 +11,9 @@ export interface ChangeSinceIdOptions {
 
 export default class ItemChange extends BaseModel {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static addChangeMutex_: any = new Mutex();
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static saveCalls_: any[] = [];
 
 	public static TYPE_CREATE = 1;
@@ -31,6 +33,7 @@ export default class ItemChange extends BaseModel {
 		return BaseModel.TYPE_ITEM_CHANGE;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async addMulti(itemType: ModelType, itemIds: string[], type: number, changeSource: any = null, beforeChangeItemJsons: string[] = null) {
 		if (!itemIds.length) return;
 
@@ -76,6 +79,7 @@ export default class ItemChange extends BaseModel {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async add(itemType: ModelType, itemId: string, type: number, changeSource: any = null, beforeChangeItemJson: string = null) {
 		await this.addMulti(itemType, [itemId], type, changeSource, beforeChangeItemJson ? [beforeChangeItemJson] : null);
 	}

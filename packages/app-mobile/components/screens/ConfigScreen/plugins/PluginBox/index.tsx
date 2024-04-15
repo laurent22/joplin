@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { Icon, Button, Card, Chip } from 'react-native-paper';
+import { Icon, Card, Chip, Text } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
-import { View } from 'react-native';
-import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
+import { Alert, Linking, StyleSheet, View } from 'react-native';
+import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import shim from '@joplin/lib/shim';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
+import ActionButton, { PluginCallback } from './ActionButton';
 
 export enum InstallState {
 	NotInstalled,
@@ -18,8 +19,6 @@ export enum UpdateState {
 	Updating = 3,
 	HasBeenUpdated = 4,
 }
-
-type PluginCallback = (event: ItemEvent)=> void;
 
 interface Props {
 	item: PluginItem;
@@ -37,7 +36,35 @@ interface Props {
 	onShowPluginLog?: PluginCallback;
 }
 
+const onRecommendedPress = () => {
+	Alert.alert(
+		'',
+		_('The Joplin team has vetted this plugin and it meets our standards for security and performance.'),
+		[
+			{
+				text: _('Learn more'),
+				onPress: () => Linking.openURL('https://github.com/joplin/plugins/blob/master/readme/recommended.md'),
+			},
+			{
+				text: _('OK'),
+			},
+		],
+		{ cancelable: true },
+	);
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const PluginIcon = (props: any) => <Icon {...props} source='puzzle'/>;
+
+const styles = StyleSheet.create({
+	versionText: {
+		opacity: 0.8,
+	},
+	title: {
+		// Prevents the title text from being clipped on Android
+		verticalAlign: 'middle',
+	},
+});
 
 const PluginBox: React.FC<Props> = props => {
 	const manifest = props.item.manifest;
@@ -51,41 +78,42 @@ const PluginBox: React.FC<Props> = props => {
 	};
 
 	const installButton = (
-		<Button
-			onPress={() => props.onInstall?.({ item })}
+		<ActionButton
+			item={item}
+			onPress={props.onInstall}
 			disabled={props.installState !== InstallState.NotInstalled || !props.isCompatible}
 			loading={props.installState === InstallState.Installing}
-		>
-			{installButtonTitle()}
-		</Button>
+			title={installButtonTitle()}
+		/>
 	);
 
-	const updateButtonTitle = () => {
+	const getUpdateButtonTitle = () => {
 		if (props.updateState === UpdateState.Updating) return _('Updating...');
 		if (props.updateState === UpdateState.HasBeenUpdated) return _('Updated');
 		return _('Update');
 	};
 
 	const updateButton = (
-		<Button
-			onPress={() => props.onUpdate?.({ item })}
+		<ActionButton
+			item={item}
+			onPress={props.onUpdate}
 			disabled={props.updateState !== UpdateState.CanUpdate || !props.isCompatible}
 			loading={props.updateState === UpdateState.Updating}
-		>
-			{updateButtonTitle()}
-		</Button>
+			title={getUpdateButtonTitle()}
+		/>
 	);
+
 	const deleteButton = (
-		<Button
-			onPress={() => props.onDelete?.({ item })}
+		<ActionButton
+			item={item}
+			onPress={props.onDelete}
 			disabled={props.item.deleted}
-		>
-			{props.item.deleted ? _('Deleted') : _('Delete')}
-		</Button>
+			title={props.item.deleted ? _('Deleted') : _('Delete')}
+		/>
 	);
-	const disableButton = <Button onPress={() => props.onToggle?.({ item })}>{_('Disable')}</Button>;
-	const enableButton = <Button onPress={() => props.onToggle?.({ item })}>{_('Enable')}</Button>;
-	const aboutButton = <Button icon='web' onPress={() => props.onAboutPress?.({ item })}>{_('About')}</Button>;
+	const disableButton = <ActionButton item={item} onPress={props.onToggle} title={_('Disable')}/>;
+	const enableButton = <ActionButton item={item} onPress={props.onToggle} title={_('Enable')}/>;
+	const aboutButton = <ActionButton icon='web' item={item} onPress={props.onAboutPress} title={_('About')}/>;
 
 	const renderErrorsChip = () => {
 		if (!props.hasErrors) return null;
@@ -96,7 +124,7 @@ const PluginBox: React.FC<Props> = props => {
 				mode='outlined'
 				onPress={() => props.onShowPluginLog({ item })}
 			>
-				Error
+				{_('Error')}
 			</Chip>
 		);
 	};
@@ -105,7 +133,13 @@ const PluginBox: React.FC<Props> = props => {
 		if (!props.item.manifest._recommended || !props.isCompatible) {
 			return null;
 		}
-		return <Chip icon='crown' mode='outlined'>{_('Recommended')}</Chip>;
+		return <Chip
+			icon='crown'
+			mode='outlined'
+			onPress={onRecommendedPress}
+		>
+			{_('Recommended')}
+		</Chip>;
 	};
 
 	const renderBuiltInChip = () => {
@@ -133,10 +167,14 @@ const PluginBox: React.FC<Props> = props => {
 
 	const updateStateIsIdle = props.updateState !== UpdateState.Idle;
 
+	const titleComponent = <>
+		<Text variant='titleMedium'>{manifest.name}</Text> <Text variant='bodySmall' style={styles.versionText}>v{manifest.version}</Text>
+	</>;
 	return (
 		<Card style={{ margin: 8, opacity: props.isCompatible ? undefined : 0.75 }} testID='plugin-card'>
 			<Card.Title
-				title={manifest.name}
+				title={titleComponent}
+				titleStyle={styles.title}
 				subtitle={manifest.description}
 				left={PluginIcon}
 			/>

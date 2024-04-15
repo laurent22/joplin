@@ -28,6 +28,7 @@ export default function useEditorSearchExtension(CodeMirror: CodeMirror5Emulatio
 		setMarkers([]);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	function clearOverlay(cm: any) {
 		if (overlay) cm.removeOverlay(overlay);
 		if (scrollbarMarks) {
@@ -50,6 +51,7 @@ export default function useEditorSearchExtension(CodeMirror: CodeMirror5Emulatio
 
 	// Modified from codemirror/addons/search/search.js
 	function searchOverlay(query: RegExp) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return { token: function(stream: any) {
 			query.lastIndex = stream.pos;
 			const match = query.exec(stream.string);
@@ -68,9 +70,11 @@ export default function useEditorSearchExtension(CodeMirror: CodeMirror5Emulatio
 	// Highlights the currently active found work
 	// It's possible to get tricky with this functions and just use findNext/findPrev
 	// but this is fast enough and works more naturally with the current search logic
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	function highlightSearch(cm: any, searchTerm: RegExp, index: number, scrollTo: boolean, withSelection: boolean) {
 		const cursor = cm.getSearchCursor(searchTerm);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let match: any = null;
 		for (let j = 0; j < index + 1; j++) {
 			if (!cursor.findNext()) {
@@ -99,6 +103,7 @@ export default function useEditorSearchExtension(CodeMirror: CodeMirror5Emulatio
 		return keyword.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	function getSearchTerm(keyword: any) {
 		const value = escapeRegExp(keyword.value);
 		return new RegExp(value, 'gi');
@@ -111,6 +116,7 @@ export default function useEditorSearchExtension(CodeMirror: CodeMirror5Emulatio
 		};
 	}, []);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	CodeMirror?.defineExtension('setMarkers', function(keywords: any, options: any) {
 		if (!options) {
 			options = { selectedIndex: 0, searchTimestamp: 0 };
@@ -121,6 +127,7 @@ export default function useEditorSearchExtension(CodeMirror: CodeMirror5Emulatio
 		// HIGHLIGHT KEYWORDS
 		// When doing a global search it's possible to have multiple keywords
 		// This means we need to highlight each one
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const marks: any = [];
 		for (let i = 0; i < keywords.length; i++) {
 			const keyword = keywords[i];

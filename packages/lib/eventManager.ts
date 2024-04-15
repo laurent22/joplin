@@ -1,6 +1,6 @@
 const fastDeepEqual = require('fast-deep-equal');
-
-const events = require('events');
+import { EventEmitter } from 'events';
+import type { State as AppState } from './reducer';
 
 export enum EventName {
 	ResourceCreate = 'resourceCreate',
@@ -20,54 +20,59 @@ export enum EventName {
 	NoteResourceIndexed = 'noteResourceIndexed',
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code from before rule was applied
+export type EventListenerCallback = (...args: any[])=> void;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code from before rule was applied
+type AppStateChangeCallback = (event: { value: any })=> void;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code from before rule was applied
+type FilterObject = any;
+export type FilterHandler = (object: FilterObject)=> FilterObject;
+
 export class EventManager {
 
-	private emitter_: any;
-	private appStatePrevious_: any;
+	private emitter_: EventEmitter;
+	private appStatePrevious_: Record<string, AppState[keyof AppState]>;
 	private appStateWatchedProps_: string[];
-	private appStateListeners_: any;
+	private appStateListeners_: Record<string, AppStateChangeCallback[]>;
 
 	public constructor() {
 		this.reset();
 	}
 
 	public reset() {
-		this.emitter_ = new events.EventEmitter();
+		this.emitter_ = new EventEmitter();
 
 		this.appStatePrevious_ = {};
 		this.appStateWatchedProps_ = [];
 		this.appStateListeners_ = {};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public on(eventName: EventName, callback: Function) {
+	public on(eventName: EventName, callback: EventListenerCallback) {
 		return this.emitter_.on(eventName, callback);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public emit(eventName: EventName, object: any = null) {
 		return this.emitter_.emit(eventName, object);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public removeListener(eventName: string, callback: Function) {
+	public removeListener(eventName: string, callback: EventListenerCallback) {
 		return this.emitter_.removeListener(eventName, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public off(eventName: EventName, callback: Function) {
+	public off(eventName: EventName, callback: EventListenerCallback) {
 		return this.removeListener(eventName, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public filterOn(filterName: string, callback: Function) {
+	public filterOn(filterName: string, callback: FilterHandler) {
 		return this.emitter_.on(`filter:${filterName}`, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public filterOff(filterName: string, callback: Function) {
+	public filterOff(filterName: string, callback: FilterHandler) {
 		return this.removeListener(`filter:${filterName}`, callback);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async filterEmit(filterName: string, object: any) {
 		let output = object;
 		const listeners = this.emitter_.listeners(`filter:${filterName}`);
@@ -90,8 +95,7 @@ export class EventManager {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public appStateOn(propName: string, callback: Function) {
+	public appStateOn(propName: string, callback: AppStateChangeCallback) {
 		if (!this.appStateListeners_[propName]) {
 			this.appStateListeners_[propName] = [];
 			this.appStateWatchedProps_.push(propName);
@@ -100,8 +104,7 @@ export class EventManager {
 		this.appStateListeners_[propName].push(callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public appStateOff(propName: string, callback: Function) {
+	public appStateOff(propName: string, callback: AppStateChangeCallback) {
 		if (!this.appStateListeners_[propName]) {
 			throw new Error('EventManager: Trying to unregister a state prop watch for a non-watched prop (1)');
 		}
@@ -112,9 +115,10 @@ export class EventManager {
 		this.appStateListeners_[propName].splice(idx, 1);
 	}
 
-	private stateValue_(state: any, propName: string) {
+	private stateValue_(state: AppState, propName: string) {
 		const parts = propName.split('.');
-		let s = state;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code from before rule was applied.
+		let s: any = state;
 		for (const p of parts) {
 			if (!(p in s)) throw new Error(`Invalid state property path: ${propName}`);
 			s = s[p];
@@ -125,7 +129,7 @@ export class EventManager {
 	// This function works by keeping a copy of the watched props and, whenever this function
 	// is called, comparing the previous and new values and emitting events if they have changed.
 	// The appStateEmit function should be called from a middleware.
-	public appStateEmit(state: any) {
+	public appStateEmit(state: AppState) {
 		if (!this.appStateWatchedProps_.length) return;
 
 		for (const propName of this.appStateWatchedProps_) {
@@ -150,10 +154,26 @@ export class EventManager {
 		}
 	}
 
-	public once(eventName: string, callback: any) {
+	public once(eventName: string, callback: EventListenerCallback) {
 		return this.emitter_.once(eventName, callback);
 	}
 
+	// For testing only; only applies to listeners registered with .on.
+	public listenerCounter_(event: EventName) {
+		const initialListeners = this.emitter_.listeners(event);
+		return {
+			getCountRemoved: () => {
+				const currentListeners = this.emitter_.listeners(event);
+				let countRemoved = 0;
+				for (const listener of initialListeners) {
+					if (!currentListeners.includes(listener)) {
+						countRemoved ++;
+					}
+				}
+				return countRemoved;
+			},
+		};
+	}
 }
 
 const eventManager = new EventManager();
