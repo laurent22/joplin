@@ -194,6 +194,7 @@ export default class ReportService {
 					msg = _('Item "%s" could not be downloaded: %s', row.syncInfo.item_id, row.syncInfo.sync_disabled_reason);
 				}
 
+				// row.item may be undefined when location !== SYNC_ITEM_LOCATION_LOCAL
 				const item = { type_: row.syncInfo.item_type, id: row.syncInfo.item_id };
 				section.body.push({
 					text: msg,
