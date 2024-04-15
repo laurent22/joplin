@@ -70,4 +70,25 @@ describe('onFolderDrop', () => {
 		expect(n1.parent_id).toBe(folder2.id);
 	});
 
+	it('should drop a non-deleted folder to the virtual root notebook', async () => {
+		const folder1 = await Folder.save({});
+		const folder2 = await Folder.save({ parent_id: folder1.id });
+
+		await onFolderDrop([], [folder2.id], '');
+
+		const folder2Reloaded = await Folder.load(folder2.id);
+		expect(folder2Reloaded.parent_id).toBe(folder1.parent_id);
+		expect(folder2Reloaded.parent_id).toBe('');
+	});
+
+	it('should drop a deleted folder to the virtual root notebook', async () => {
+		const folder1 = await Folder.save({});
+		await Folder.delete(folder1.id, { toTrash: true });
+
+		await onFolderDrop([], [folder1.id], '');
+
+		const folder1Reloaded = await Folder.load(folder1.id);
+		expect(folder1Reloaded.parent_id).toBe('');
+		expect(folder1Reloaded.deleted_time).toBe(0);
+	});
 });
