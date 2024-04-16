@@ -1,7 +1,8 @@
 import React = require('react');
-import { useMemo, useState, useCallback, CSSProperties, useEffect } from 'react';
+import { useMemo, useState, useCallback, CSSProperties, useEffect, useRef } from 'react';
 import { _ } from '@joplin/lib/locale';
 import { SettingItemSubType } from '@joplin/lib/models/Setting';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 interface Props {
 	type: string;
@@ -22,6 +23,7 @@ const FontSearch = (props: Props) => {
 	const [visibleFonts, setVisibleFonts] = useState<string[]>([]);
 	const [isMonoBoxChecked, setIsMonoBoxChecked] = useState(false);
 	const isLoadingFonts = filteredAvailableFonts.length === 0;
+	const fontInputRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
 		if (subtype === SettingItemSubType.MonospaceFontFamily) {
@@ -93,6 +95,7 @@ const FontSearch = (props: Props) => {
 
 	const handleMonoBoxCheck: React.ChangeEventHandler<HTMLInputElement> = useCallback(() => {
 		setIsMonoBoxChecked(!isMonoBoxChecked);
+		focus('FontSearch::fontInputRef', fontInputRef.current);
 	}, [isMonoBoxChecked]);
 
 	return (
@@ -105,6 +108,7 @@ const FontSearch = (props: Props) => {
 				onFocus={handleFocus}
 				onBlur={handleBlur}
 				spellCheck={false}
+				ref={fontInputRef}
 			/>
 			<div
 				className={'font-search-list'}
@@ -115,26 +119,30 @@ const FontSearch = (props: Props) => {
 			>
 				{
 					isLoadingFonts ? <div>{_('Loading...')}</div> :
-						visibleFonts.map((font: string) =>
-							<div
-								key={font}
-								style={{ fontFamily: `"${font}"` }}
-								onClick={handleFontClick}
-								className='font-search-item'
-							>
-								{font}
-							</div>,
-						)
+						<>
+							<div className='monospace-checkbox'>
+								<input
+									type='checkbox'
+									checked={isMonoBoxChecked}
+									onChange={handleMonoBoxCheck}
+									id={`show-monospace-fonts_${subtype}`}
+								/>
+								<label htmlFor={`show-monospace-fonts_${subtype}`}>{_('Show monospace fonts only.')}</label>
+							</div>
+							{
+								visibleFonts.map((font: string) =>
+									<div
+										key={font}
+										style={{ fontFamily: `"${font}"` }}
+										onClick={handleFontClick}
+										className='font-search-item'
+									>
+										{font}
+									</div>,
+								)
+							}
+						</>
 				}
-			</div>
-			<div className='monospace-checkbox'>
-				<input
-					type='checkbox'
-					checked={isMonoBoxChecked}
-					onChange={handleMonoBoxCheck}
-					id={`show-monospace-fonts_${subtype}`}
-				/>
-				<label htmlFor={`show-monospace-fonts_${subtype}`}>{_('Show monospace fonts only.')}</label>
 			</div>
 		</>
 	);

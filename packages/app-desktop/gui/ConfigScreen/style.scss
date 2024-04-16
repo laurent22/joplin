@@ -16,7 +16,6 @@
 .font-search-list {
 	background-color: var(--joplin-background-color);
 	max-height: 200px;
-	min-height: 10px; // Needed to prevent the list from collapsing when empty
 	width: 50%;
 	min-width: 20em;
 	overflow-y: auto;
@@ -41,7 +40,7 @@
 }
 
 .monospace-checkbox {
-	margin-top: 5px;
+	background-color: var(--joplin-background-color3);
 	display: flex;
 	align-items: center;
 }
