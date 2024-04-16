@@ -33,6 +33,7 @@ import PluginStates, { getSearchText as getPluginStatesSearchText } from './plug
 import PluginUploadButton, { canInstallPluginsFromFile, buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
 import NoteImportButton, { importButtonDefaultTitle, importButtonDescription } from './NoteExportSection/NoteImportButton';
 import SectionDescription from './SectionDescription';
+import EnablePluginSupportPage from './plugins/EnablePluginSupportPage';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -482,29 +483,44 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				shared.updateSettingValue(this, pluginStatesKey, value);
 			};
 
-			addSettingComponent(
-				<PluginStates
-					key={'plugin-states'}
-					styles={this.styles()}
-					themeId={this.props.themeId}
-					pluginSettings={settings[pluginStatesKey]}
-
-					updatePluginStates={updatePluginStates}
-					shouldShowBasedOnSearchQuery={this.state.searching ? matchesSearchQuery : null}
-				/>,
-				getPluginStatesSearchText(),
-			);
-
-			if (canInstallPluginsFromFile()) {
+			if (settings['plugins.pluginSupportEnabled']) {
 				addSettingComponent(
-					<PluginUploadButton
-						key='plugins-install-from-file'
+					<PluginStates
+						key={'plugin-states'}
+						styles={this.styles()}
+						themeId={this.props.themeId}
 						pluginSettings={settings[pluginStatesKey]}
+
 						updatePluginStates={updatePluginStates}
+						shouldShowBasedOnSearchQuery={this.state.searching ? matchesSearchQuery : null}
 					/>,
-					pluginUploadButtonSearchText(),
+					getPluginStatesSearchText(),
+				);
+
+				if (canInstallPluginsFromFile()) {
+					addSettingComponent(
+						<PluginUploadButton
+							key='plugins-install-from-file'
+							pluginSettings={settings[pluginStatesKey]}
+							updatePluginStates={updatePluginStates}
+						/>,
+						pluginUploadButtonSearchText(),
+					);
+				}
+			} else {
+				const enablePluginSupport = () => {
+					shared.updateSettingValue(this, 'plugins.pluginSupportEnabled', true);
+				};
+				addSettingComponent(
+					<EnablePluginSupportPage
+						key='plugin-support-disabled-screen'
+						themeId={this.props.themeId}
+						onEnablePluginSupport={enablePluginSupport}
+					/>,
+					['plugins', _('Plugins')],
 				);
 			}
+
 		}
 
 		if (section.name === 'sync') {

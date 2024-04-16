@@ -42,6 +42,7 @@ const usePlugins = (
 
 interface Props {
 	serializedPluginSettings: string;
+	pluginSupportEnabled: boolean;
 	pluginStates: PluginStates;
 	pluginHtmlContents: PluginHtmlContents;
 	themeId: number;
@@ -82,6 +83,9 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 		// Note that we intentionally load the webview even if all plugins are disabled.
 		const hasPlugins = Object.values(pluginSettings).length > 0;
 		if (!hasPlugins) {
+			return null;
+		}
+		if (!props.pluginSupportEnabled) {
 			return null;
 		}
 
@@ -138,6 +142,7 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 export default connect((state: AppState) => {
 	const result: Props = {
 		serializedPluginSettings: state.settings['plugins.states'],
+		pluginSupportEnabled: state.settings['plugins.pluginSupportEnabled'],
 		pluginStates: state.pluginService.plugins,
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
 		themeId: state.settings.theme,

@@ -801,7 +801,7 @@ const SidebarComponent = (props: Props) => {
 
 
 	if (props.folders.length) {
-		const allNotesSelected = props.selectedFolderId === ALL_NOTES_FILTER_ID;
+		const allNotesSelected = props.notesParentType === 'SmartFilter' && props.selectedSmartFilterId === ALL_NOTES_FILTER_ID;
 		const result = renderFolders(props, renderFolderItem);
 		const folderItems = [renderAllNotesItem(theme, allNotesSelected)].concat(result.items);
 		folderItemsOrder_.current = result.order;

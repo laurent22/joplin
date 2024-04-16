@@ -1216,16 +1216,29 @@ class Setting extends BaseModel {
 				section: 'plugins',
 				public: true,
 				appTypes: [AppType.Mobile],
-				show: (_settings) => {
+				show: (settings) => {
 					// Hide on iOS due to App Store guidelines. See
 					// https://github.com/laurent22/joplin/pull/10086 for details.
-					return shim.mobilePlatform() !== 'ios';
+					return shim.mobilePlatform() !== 'ios' && settings['plugins.pluginSupportEnabled'];
 				},
 				needRestart: true,
 				advanced: true,
 
 				label: () => _('Plugin WebView debugging'),
 				description: () => _('Allows debugging mobile plugins. See %s for details.', 'https://https://joplinapp.org/help/api/references/mobile_plugin_debugging/'),
+			},
+
+			'plugins.pluginSupportEnabled': {
+				value: false,
+				public: true,
+				autoSave: true,
+				section: 'plugins',
+				advanced: true,
+				type: SettingItemType.Bool,
+				appTypes: [AppType.Mobile],
+				label: () => _('Enable plugin support'),
+				// On mobile, we have a screen that manages this setting when it's disabled.
+				show: (settings) => settings['plugins.pluginSupportEnabled'],
 			},
 
 			'plugins.devPluginPaths': {
