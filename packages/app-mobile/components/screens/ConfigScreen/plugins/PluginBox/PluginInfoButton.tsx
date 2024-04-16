@@ -9,7 +9,6 @@ import { Linking, ScrollView, StyleSheet, View } from 'react-native';
 import DismissibleDialog from '../../../../DismissibleDialog';
 import openWebsiteForPlugin from '../utils/openWebsiteForPlugin';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
-import ActionButton from './ActionButton';
 
 interface Props {
 	themeId: number;
@@ -60,15 +59,12 @@ const PluginInfoModal: React.FC<Props> = props => {
 			<Text variant='titleLarge'>{props.item.manifest.name}</Text>
 			<Text variant='bodyLarge'>{props.item.manifest.author ? _('by %s', props.item.manifest.author) : ''}</Text>
 			<Text style={styles.descriptionText}>{props.item.manifest.description ?? _('No description')}</Text>
-
-			<ActionButton
-				item={props.item}
-				icon={'web'}
-				title={_('More information')}
-				onPress={openWebsiteForPlugin}
-			/>
 		</View>
 	);
+
+	const onAboutPress = useCallback(() => {
+		void openWebsiteForPlugin({ item: props.item });
+	}, [props.item]);
 
 	return (
 		<Portal>
@@ -79,6 +75,11 @@ const PluginInfoModal: React.FC<Props> = props => {
 			>
 				<ScrollView>
 					{aboutPlugin}
+					<List.Item
+						left={props => <List.Icon {...props} icon='web'/>}
+						title={_('About')}
+						onPress={onAboutPress}
+					/>
 					<List.Accordion
 						title={_('Report an issue')}
 						left={props => <List.Icon {...props} icon='bug' />}
