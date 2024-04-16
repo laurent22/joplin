@@ -30,6 +30,7 @@ interface Props {
 	installState?: InstallState;
 	updateState?: UpdateState;
 
+	onAboutPress?: PluginCallback;
 	onInstall?: PluginCallback;
 	onUpdate?: PluginCallback;
 	onDelete?: PluginCallback;
@@ -114,6 +115,7 @@ const PluginBox: React.FC<Props> = props => {
 	);
 	const disableButton = <ActionButton item={item} onPress={props.onToggle} title={_('Disable')}/>;
 	const enableButton = <ActionButton item={item} onPress={props.onToggle} title={_('Enable')}/>;
+	const aboutButton = <ActionButton item={item} onPress={props.onAboutPress} icon='web' title={_('About')}/>;
 
 	const renderErrorsChip = () => {
 		if (!props.hasErrors) return null;
@@ -165,6 +167,13 @@ const PluginBox: React.FC<Props> = props => {
 		);
 	};
 
+	const renderRightEdgeButton = (buttonProps: { size: number }) => {
+		// If .onAboutPress is given (e.g. when searching), there's another way to get information
+		// about the plugin. In this case, we don't show the right-side information link.
+		if (props.onAboutPress) return null;
+		return <PluginInfoButton {...buttonProps} themeId={props.themeId} item={props.item}/>;
+	};
+
 	const updateStateIsIdle = props.updateState !== UpdateState.Idle;
 
 	const titleComponent = <>
@@ -177,7 +186,7 @@ const PluginBox: React.FC<Props> = props => {
 				titleStyle={styles.title}
 				subtitle={manifest.description}
 				left={PluginIcon}
-				right={(rightProps) => <PluginInfoButton {...rightProps} themeId={props.themeId} item={props.item}/>}
+				right={renderRightEdgeButton}
 			/>
 			<Card.Content>
 				<View style={{ flexDirection: 'row' }}>
@@ -188,6 +197,7 @@ const PluginBox: React.FC<Props> = props => {
 				</View>
 			</Card.Content>
 			<Card.Actions>
+				{props.onAboutPress ? aboutButton : null}
 				{props.onInstall ? installButton : null}
 				{props.onDelete && !props.item.builtIn ? deleteButton : null}
 				{props.onUpdate && updateStateIsIdle ? updateButton : null}

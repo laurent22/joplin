@@ -11,6 +11,7 @@ import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/Plug
 import useInstallHandler from '@joplin/lib/components/shared/config/plugins/useOnInstallHandler';
 import { OnPluginSettingChangeEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
+import openWebsiteForPlugin from './utils/openWebsiteForPlugin';
 
 interface Props {
 	themeId: number;
@@ -95,6 +96,7 @@ const PluginSearch: React.FC<Props> = props => {
 				installState={item.installState}
 				isCompatible={PluginService.instance().isCompatible(manifest)}
 				onInstall={installPlugin}
+				onAboutPress={openWebsiteForPlugin}
 			/>
 		);
 	}, [installPlugin, props.themeId]);

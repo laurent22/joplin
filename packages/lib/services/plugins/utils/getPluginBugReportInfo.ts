@@ -6,6 +6,7 @@ import { PackageInfo } from '../../../versionInfo';
 import PluginService from '../PluginService';
 import { PluginManifest } from './types';
 import { reg } from '../../../registry';
+import time from '../../../time';
 
 export interface ReportPluginIssueOption {
 	key: string;
@@ -33,14 +34,14 @@ const getPluginBugReportInfo = async (pluginManifest: ManifestSlice, packageInfo
 
 		if (githubUrl || gitlabUrl) {
 			return {
-				key: 'report-bug-on-repo',
+				key: 'report-to-maintainers',
 				title: _('Report to maintainers on %s', githubUrl ? 'GitHub' : 'GitLab'),
 				mobileIcon: 'source-branch',
 				url: githubUrl ?? gitlabUrl,
 			};
 		} else if (pluginManifest.repository_url) {
 			return {
-				key: 'visit-repository',
+				key: 'report-to-maintainers',
 				mobileIcon: 'bug',
 				title: _('Visit the plugin\'s source code repository'),
 				description: pluginManifest.repository_url,
@@ -69,7 +70,7 @@ const getPluginBugReportInfo = async (pluginManifest: ManifestSlice, packageInfo
 				postTitle,
 				postBody,
 				forumTags,
-				pluginErrors.map(error => [error.level, error.message].join(': ')),
+				pluginErrors.map(error => [time.formatMsToLocal(error.timestamp), error.message].join(': ')),
 				packageInfo,
 				PluginService.instance(),
 				Setting.value('plugins.states'),
