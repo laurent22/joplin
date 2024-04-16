@@ -347,6 +347,7 @@ function useMenu(props: Props) {
 				const url = makeDiscourseDebugUrl(
 					`Error importing notes from format: ${module.format}`,
 					`- Input format: ${module.format}\n- Output format: ${module.outputFormat}`,
+					[],
 					errors,
 					packageInfo,
 					PluginService.instance(),

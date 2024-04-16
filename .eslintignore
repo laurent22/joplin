@@ -488,6 +488,7 @@ packages/app-mobile/components/ActionButton.js
 packages/app-mobile/components/BackButtonDialogBox.js
 packages/app-mobile/components/CameraView.js
 packages/app-mobile/components/CustomButton.js
+packages/app-mobile/components/DismissibleDialog.js
 packages/app-mobile/components/Dropdown.test.js
 packages/app-mobile/components/Dropdown.js
 packages/app-mobile/components/ExtendedWebView.js
@@ -584,6 +585,7 @@ packages/app-mobile/components/screens/ConfigScreen/SettingsButton.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsToggle.js
 packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/ActionButton.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.test.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.js
@@ -665,6 +667,7 @@ packages/app-mobile/utils/fs-driver/tarExtract.test.js
 packages/app-mobile/utils/fs-driver/tarExtract.js
 packages/app-mobile/utils/fs-driver/testUtil/createFilesFromPathRecord.js
 packages/app-mobile/utils/fs-driver/testUtil/verifyDirectoryMatches.js
+packages/app-mobile/utils/getPackageInfo.js
 packages/app-mobile/utils/initializeCommandService.js
 packages/app-mobile/utils/ipc/RNToWebViewMessenger.js
 packages/app-mobile/utils/ipc/WebViewToRNMessenger.js
@@ -1043,6 +1046,7 @@ packages/lib/services/plugins/utils/executeSandboxCall.js
 packages/lib/services/plugins/utils/getPluginNamespacedSettingKey.js
 packages/lib/services/plugins/utils/getPluginSettingKeyPrefix.js
 packages/lib/services/plugins/utils/getPluginSettingValue.js
+packages/lib/services/plugins/utils/getReportPluginInformation.js
 packages/lib/services/plugins/utils/isCompatible/index.test.js
 packages/lib/services/plugins/utils/isCompatible/index.js
 packages/lib/services/plugins/utils/isCompatible/minVersionForPlatform.js

@@ -1,7 +1,7 @@
 
 import { PluginHtmlContents, PluginStates, ViewInfo } from '@joplin/lib/services/plugins/reducer';
 import * as React from 'react';
-import { Button, IconButton, Portal, SegmentedButtons, Text } from 'react-native-paper';
+import { Button, Portal, SegmentedButtons, Text } from 'react-native-paper';
 import useViewInfos from './hooks/useViewInfos';
 import WebviewController, { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -9,13 +9,11 @@ import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { connect } from 'react-redux';
 import { AppState } from '../../../utils/types';
 import PluginUserWebView from './PluginUserWebView';
-import { View, useWindowDimensions, StyleSheet, AccessibilityInfo } from 'react-native';
+import { View, StyleSheet, AccessibilityInfo } from 'react-native';
 import { _ } from '@joplin/lib/locale';
-import { Theme } from '@joplin/lib/themes/type';
-import { themeStyle } from '@joplin/lib/theme';
 import Setting from '@joplin/lib/models/Setting';
 import { Dispatch } from 'redux';
-import Modal from '../../../components/Modal';
+import DismissibleDialog from '../../../components/DismissibleDialog';
 
 interface Props {
 	themeId: number;
@@ -27,40 +25,16 @@ interface Props {
 }
 
 
-const useStyles = (themeId: number) => {
-	const windowSize = useWindowDimensions();
-
-	return useMemo(() => {
-		const theme: Theme = themeStyle(themeId);
-
-		return StyleSheet.create({
-			webView: {
-				backgroundColor: 'transparent',
-				display: 'flex',
-			},
-			webViewContainer: {
-				flexGrow: 1,
-				flexShrink: 1,
-			},
-			closeButtonContainer: {
-				flexDirection: 'row',
-				justifyContent: 'flex-end',
-			},
-			dialog: {
-				backgroundColor: theme.backgroundColor,
-				borderRadius: 12,
-				padding: 10,
-
-				height: windowSize.height * 0.9,
-				width: windowSize.width * 0.97,
-
-				// Center
-				marginLeft: 'auto',
-				marginRight: 'auto',
-			},
-		});
-	}, [themeId, windowSize.width, windowSize.height]);
-};
+const styles = StyleSheet.create({
+	webView: {
+		backgroundColor: 'transparent',
+		display: 'flex',
+	},
+	webViewContainer: {
+		flexGrow: 1,
+		flexShrink: 1,
+	},
+});
 
 type ButtonInfo = {
 	value: string;
@@ -141,7 +115,6 @@ const PluginPanelViewer: React.FC<Props> = props => {
 			});
 	}, [viewInfoById]);
 
-	const styles = useStyles(props.themeId);
 	const { selectedTabId, setSelectedTabId } = useSelectedTabId(buttonInfos, viewInfoById);
 
 	const viewInfo = viewInfoById[selectedTabId];
@@ -194,30 +167,16 @@ const PluginPanelViewer: React.FC<Props> = props => {
 		});
 	}, [props.dispatch]);
 
-	const closeButton = (
-		<View style={styles.closeButtonContainer}>
-			<IconButton
-				icon='close'
-				accessibilityLabel={_('Close')}
-				onPress={onClose}
-			/>
-		</View>
-	);
-
 	return (
 		<Portal>
-			<Modal
+			<DismissibleDialog
+				themeId={props.themeId}
 				visible={props.visible}
 				onDismiss={onClose}
-				onRequestClose={onClose}
-				animationType='fade'
-				transparent={true}
-				containerStyle={styles.dialog}
 			>
-				{closeButton}
 				{renderTabContent()}
 				{renderTabSelector()}
-			</Modal>
+			</DismissibleDialog>
 		</Portal>
 	);
 };

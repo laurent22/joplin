@@ -38,6 +38,12 @@ interface Target extends TargetOptions {
 	type: TargetType;
 }
 
+interface LogEntry {
+	timestamp: number;
+	level: string;
+	message: string;
+}
+
 interface LastEntriesOptions {
 	levels?: LogLevel[];
 	filter?: string;
@@ -219,7 +225,7 @@ class Logger {
 	}
 
 	// Only for database at the moment
-	public async lastEntries(limit = 100, options: LastEntriesOptions|null = null) {
+	public async lastEntries(limit = 100, options: LastEntriesOptions|null = null): Promise<LogEntry[]> {
 		if (options === null) options = {};
 		if (!options.levels) options.levels = [LogLevel.Debug, LogLevel.Info, LogLevel.Warn, LogLevel.Error];
 		if (!options.levels.length) return [];

@@ -90,6 +90,7 @@ const PluginSearch: React.FC<Props> = props => {
 
 		return (
 			<PluginBox
+				themeId={props.themeId}
 				key={manifest.id}
 				item={item.item}
 				installState={item.installState}
@@ -98,7 +99,7 @@ const PluginSearch: React.FC<Props> = props => {
 				onAboutPress={onOpenWebsiteForPluginPress}
 			/>
 		);
-	}, [installPlugin]);
+	}, [installPlugin, props.themeId]);
 
 	return (
 		<View style={{ flexDirection: 'column' }}>

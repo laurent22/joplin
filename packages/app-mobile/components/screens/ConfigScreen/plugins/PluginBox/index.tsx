@@ -6,6 +6,7 @@ import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import shim from '@joplin/lib/shim';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import ActionButton, { PluginCallback } from './ActionButton';
+import PluginInfoButton from './PluginInfoButton';
 
 export enum InstallState {
 	NotInstalled,
@@ -21,6 +22,7 @@ export enum UpdateState {
 }
 
 interface Props {
+	themeId: number;
 	item: PluginItem;
 	isCompatible: boolean;
 
@@ -177,6 +179,7 @@ const PluginBox: React.FC<Props> = props => {
 				titleStyle={styles.title}
 				subtitle={manifest.description}
 				left={PluginIcon}
+				right={(rightProps) => <PluginInfoButton {...rightProps} themeId={props.themeId} item={props.item}/>}
 			/>
 			<Card.Content>
 				<View style={{ flexDirection: 'row' }}>

@@ -10,7 +10,7 @@ export interface PackageInfo {
 	build: {
 		appId: string;
 	};
-	git: {
+	git?: {
 		branch: string;
 		hash: string;
 	};

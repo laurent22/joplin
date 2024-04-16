@@ -18,7 +18,7 @@ const getOsName = (platform: typeof process.platform) => {
 	return '';
 };
 
-export default (title: string, body: string, errors: (string | Error)[], packageInfo: PackageInfo, pluginService: PluginService, pluginSettings: PluginSettings) => {
+export default (title: string, body: string, tags: string[], errors: (string | Error)[], packageInfo: PackageInfo, pluginService: PluginService, pluginSettings: PluginSettings) => {
 	const v = versionInfo(packageInfo, pluginService.enabledPlugins(pluginSettings));
 
 	const errorBlock = renderErrorBlock(errors);
@@ -31,6 +31,10 @@ export default (title: string, body: string, errors: (string | Error)[], package
 		'desktop-about-content': v.body,
 		content: `#### Body\n\n${body}${errorBlock ? `\n\n#### Errors\n\n${errorBlock}` : ''}`,
 	};
+
+	if (tags.length > 0) {
+		query.tags = tags.join(',');
+	}
 
 	const queryString = Object.keys(query).map(k => `${k}=${encodeURIComponent(query[k])}`).join('&');
 
