@@ -61,6 +61,7 @@ const PluginInfoModal: React.FC<Props> = props => {
 
 			<ActionButton
 				item={props.item}
+				icon={'web'}
 				title={_('More information')}
 				onPress={openWebsiteForPlugin}
 			/>
@@ -103,9 +104,9 @@ const PluginInfoButton: React.FC<Props> = props => {
 		<>
 			{showInfoModal ? <PluginInfoModal {...props} onModalDismiss={onModalDismiss} /> : null}
 			<IconButton
-				icon='information-outline'
+				size={props.size}
+				icon='information'
 				onPress={onInfoButtonPress}
-				accessibilityLabel={_('Info')}
 			/>
 		</>
 	);
