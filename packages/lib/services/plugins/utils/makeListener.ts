@@ -1,9 +1,15 @@
-import { EventManager, EventName } from '../../../eventManager';
+import Plugin from '../Plugin';
+import { EventListenerCallback, EventManager, EventName } from '../../../eventManager';
 import { Disposable } from '../api/types';
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export default function(eventManager: EventManager, eventName: EventName, callback: Function): Disposable {
+export default function(
+	plugin: Plugin, eventManager: EventManager, eventName: EventName, callback: EventListenerCallback,
+): Disposable {
 	eventManager.on(eventName, callback);
+	const dispose = () => {
+		eventManager.off(eventName, callback);
+	};
+	plugin.addOnUnloadListener(dispose);
 
 	return {};
 
@@ -16,8 +22,6 @@ export default function(eventManager: EventManager, eventName: EventName, callba
 	// await joplin.workspace.removeListener(listenerId);
 
 	// return {
-	// 	dispose: () => {
-	// 		eventManager.off(eventName, callback);
-	// 	}
+	// 	dispose,
 	// };
 }

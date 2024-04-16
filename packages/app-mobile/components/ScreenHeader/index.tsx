@@ -1,37 +1,29 @@
-const React = require('react');
-
-import { connect } from 'react-redux';
+import * as React from 'react';
 import { PureComponent, ReactElement } from 'react';
+import { connect } from 'react-redux';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, ViewStyle } from 'react-native';
 const Icon = require('react-native-vector-icons/Ionicons').default;
-const { BackButtonService } = require('../services/back-button.js');
+const { BackButtonService } = require('../../services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import { _, _n } from '@joplin/lib/locale';
-import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-import { themeStyle } from './global-style';
-import { OnValueChangedListener } from './Dropdown';
-const { dialogs } = require('../utils/dialogs.js');
+import { themeStyle } from '../global-style';
+import { OnValueChangedListener } from '../Dropdown';
+const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
-import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import { State } from '@joplin/lib/reducer';
-import CustomButton from './CustomButton';
-import FolderPicker from './FolderPicker';
+import CustomButton from '../CustomButton';
+import FolderPicker from '../FolderPicker';
 import { itemIsInTrash } from '@joplin/lib/services/trash';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { Dispatch } from 'redux';
-
-// We need this to suppress the useless warning
-// https://github.com/oblador/react-native-vector-icons/issues/1465
-// eslint-disable-next-line no-console
-Icon.loadFont().catch((error: any) => { console.info(error); });
+import WarningBanner from './WarningBanner';
 
 // Rather than applying a padding to the whole bar, it is applied to each
 // individual component (button, picker, etc.) so that the touchable areas
@@ -41,10 +33,6 @@ const PADDING_V = 10;
 
 type OnSelectCallbackType=()=> void;
 type OnPressCallback=()=> void;
-interface NavButtonPressEvent {
-	// Name of the screen to navigate to
-	screen: string;
-}
 
 export interface MenuOptionType {
 	onPress: OnPressCallback;
@@ -58,6 +46,7 @@ interface ScreenHeaderProps {
 	selectedFolderId: string;
 	notesParentType: string;
 	noteSelectionEnabled: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	parentComponent: any;
 	showUndoButton: boolean;
 	undoButtonDisabled?: boolean;
@@ -89,12 +78,7 @@ interface ScreenHeaderProps {
 	showSaveButton?: boolean;
 
 	historyCanGoBack?: boolean;
-	showMissingMasterKeyMessage?: boolean;
-	hasDisabledSyncItems?: boolean;
-	hasDisabledEncryptionItems?: boolean;
-	shouldUpgradeSyncTarget?: boolean;
 	showShouldUpgradeSyncTargetMessage?: boolean;
-	mustUpgradeAppMessage: string;
 
 	themeId: number;
 }
@@ -103,6 +87,7 @@ interface ScreenHeaderState {
 }
 
 class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeaderState> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private cachedStyles: any;
 	public dialogbox?: typeof DialogBox;
 	public constructor(props: ScreenHeaderProps) {
@@ -117,6 +102,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		const theme = themeStyle(themeId);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const styleObject: any = {
 			container: {
 				flexDirection: 'column',
@@ -206,11 +192,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				fontSize: theme.fontSize,
 				paddingTop: 15,
 				paddingBottom: 15,
-			},
-			warningBox: {
-				backgroundColor: '#ff9900',
-				flexDirection: 'row',
-				padding: theme.marginLeft,
 			},
 		};
 
@@ -309,20 +290,9 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		}
 	}
 
-	private warningBox_press(event: NavButtonPressEvent) {
-		void NavService.go(event.screen);
-	}
-
-	private renderWarningBox(screen: string, message: string) {
-		return (
-			<TouchableOpacity key={screen} style={this.styles().warningBox} onPress={() => this.warningBox_press({ screen: screen })} activeOpacity={0.8}>
-				<Text style={{ flex: 1 }}>{message}</Text>
-			</TouchableOpacity>
-		);
-	}
-
 	public render() {
 		const themeId = this.props.themeId;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function sideMenuButton(styles: any, onPress: OnPressCallback) {
 			return (
 				<TouchableOpacity
@@ -338,6 +308,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function backButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<TouchableOpacity
@@ -357,6 +328,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		}
 
 		function saveButton(
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			styles: any, onPress: OnPressCallback, disabled: boolean, show: boolean,
 		) {
 			if (!show) return null;
@@ -422,6 +394,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			});
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function selectAllButton(styles: any, onPress: OnPressCallback) {
 			return (
 				<CustomButton
@@ -436,6 +409,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function searchButton(styles: any, onPress: OnPressCallback) {
 			return (
 				<CustomButton
@@ -450,6 +424,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const pluginPanelToggleButton = (styles: any, onPress: OnPressCallback) => {
 			const allPluginViews = Object.values(this.props.plugins).map(plugin => Object.values(plugin.views)).flat();
 			const allPanels = allPluginViews.filter(view => view.containerType === ContainerType.Panel);
@@ -467,6 +442,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function deleteButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<CustomButton
@@ -485,6 +461,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function restoreButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<CustomButton
@@ -503,6 +480,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function duplicateButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<CustomButton
@@ -521,6 +499,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function sortButton(styles: any, onPress: OnPressCallback) {
 			return (
 				<TouchableOpacity
@@ -627,17 +606,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			}
 		};
 
-		const warningComps = [];
-
-		if (this.props.showMissingMasterKeyMessage) warningComps.push(this.renderWarningBox('EncryptionConfig', _('Press to set the decryption password.')));
-		if (this.props.hasDisabledSyncItems) warningComps.push(this.renderWarningBox('Status', _('Some items cannot be synchronised. Press for more info.')));
-		if (this.props.shouldUpgradeSyncTarget && this.props.showShouldUpgradeSyncTargetMessage !== false) warningComps.push(this.renderWarningBox('UpgradeSyncTarget', _('The sync target needs to be upgraded. Press this banner to proceed.')));
-		if (this.props.mustUpgradeAppMessage) warningComps.push(this.renderWarningBox('UpgradeApp', this.props.mustUpgradeAppMessage));
-
-		if (this.props.hasDisabledEncryptionItems) {
-			warningComps.push(this.renderWarningBox('Status', _('Some items cannot be decrypted.')));
-		}
-
 		const showSideMenuButton = !!this.props.showSideMenuButton && !this.props.noteSelectionEnabled;
 		const showSelectAllButton = this.props.noteSelectionEnabled;
 		const showSearchButton = !!this.props.showSearchButton && !this.props.noteSelectionEnabled;
@@ -711,7 +679,9 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					{sortButtonComp}
 					{menuComp}
 				</View>
-				{warningComps}
+				<WarningBanner
+					showShouldUpgradeSyncTargetMessage={this.props.showShouldUpgradeSyncTargetMessage}
+				/>
 				<DialogBox
 					ref={(dialogbox: typeof DialogBox) => {
 						this.dialogbox = dialogbox;
@@ -727,22 +697,15 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 }
 
 const ScreenHeader = connect((state: State) => {
-	const syncInfo = localSyncInfoFromState(state);
-
 	return {
 		historyCanGoBack: state.historyCanGoBack,
 		locale: state.settings.locale,
 		folders: state.folders,
 		themeId: state.settings.theme,
-		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		selectedNoteIds: state.selectedNoteIds,
 		selectedFolderId: state.selectedFolderId,
 		notesParentType: state.notesParentType,
-		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
-		hasDisabledSyncItems: state.hasDisabledSyncItems,
-		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
-		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
 		plugins: state.pluginService.plugins,
 	};
 })(ScreenHeaderComponent);

@@ -3,10 +3,13 @@ import Setting from '../models/Setting';
 import { ApplicationPlatform, ApplicationType } from '../types';
 import shim from '../shim';
 import { _ } from '../locale';
+import eventManager, { EventName } from '../eventManager';
+import { reg } from '../registry';
 
 type ActionType = 'LINK_USED' | 'COMPLETED' | 'ERROR';
 type Action = {
 	type: ActionType;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	payload?: any;
 };
 
@@ -107,6 +110,11 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string) => {
 
 		Setting.setValue('sync.10.username', jsonBody.id);
 		Setting.setValue('sync.10.password', jsonBody.password);
+
+		const fileApi = await reg.syncTarget().fileApi();
+		await fileApi.driver().api().loadSession();
+		eventManager.emit(EventName.SessionEstablished);
+
 		return { success: true };
 	};
 

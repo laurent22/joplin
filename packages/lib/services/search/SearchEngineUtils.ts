@@ -55,6 +55,7 @@ export default class SearchEngineUtils {
 			todoCompletedAutoAdded = true;
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const previewOptions: any = { order: [],
 			fields: fields,
 			conditions: [`id IN ("${noteIds.join('","')}")`], ...options };

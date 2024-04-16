@@ -6,6 +6,7 @@ describe('pagination', () => {
 	test('should create options from request query parameters', async () => {
 		const d = defaultPagination();
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const testCases: any = [
 			[
 				null,
@@ -57,6 +58,7 @@ describe('pagination', () => {
 		];
 
 		for (const t of testCases) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const input: any = t[0];
 			const expected: Pagination = t[1];
 			const actual: Pagination = requestPagination(input);

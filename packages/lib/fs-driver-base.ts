@@ -22,10 +22,12 @@ export default class FsDriverBase {
 		throw new Error('Not implemented: stat()');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async readFile(_path: string, _encoding = 'utf8'): Promise<any> {
 		throw new Error('Not implemented: readFile');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async appendFile(_path: string, _content: string, _encoding = 'base64'): Promise<any> {
 		throw new Error('Not implemented: appendFile');
 	}
@@ -55,14 +57,17 @@ export default class FsDriverBase {
 		return this.move(source, dest);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async readFileChunk(_handle: any, _length: number, _encoding = 'base64'): Promise<string> {
 		throw new Error('Not implemented: readFileChunk');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async open(_path: string, _mode: any): Promise<any> {
 		throw new Error('Not implemented: open');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async close(_handle: any): Promise<any> {
 		throw new Error('Not implemented: close');
 	}
@@ -203,10 +208,12 @@ export default class FsDriverBase {
 		};
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async tarExtract(_options: any) {
 		throw new Error('Not implemented: tarExtract');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async tarCreate(_options: any, _filePaths: string[]) {
 		throw new Error('Not implemented: tarCreate');
 	}

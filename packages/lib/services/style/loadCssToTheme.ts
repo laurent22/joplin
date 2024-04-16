@@ -4,6 +4,7 @@ import shim from '../../shim';
 import cssToTheme from './cssToTheme';
 
 export default async function(cssBaseDir: string): Promise<Record<string, Theme>> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const themeDirs = (await shim.fsDriver().readDirStats(cssBaseDir)).filter((f: any) => f.isDirectory());
 
 	const output: Record<string, Theme> = {};

@@ -2,6 +2,7 @@ import { URL } from 'url';
 import config from '../config';
 import { Uuid } from '../services/database/types';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function setQueryParameters(url: string, query: any): string {
 	if (!query) return url;
 

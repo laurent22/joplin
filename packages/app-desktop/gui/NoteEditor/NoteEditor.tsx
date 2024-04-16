@@ -65,6 +65,7 @@ function NoteEditor(props: NoteEditorProps) {
 	const [isReadOnly, setIsReadOnly] = useState<boolean>(false);
 
 	const editorRef = useRef<NoteBodyEditorRef>();
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const titleInputRef = useRef<any>();
 	const isMountedRef = useRef(true);
 	const noteSearchBarRef = useRef(null);
@@ -124,7 +125,7 @@ function NoteEditor(props: NoteEditorProps) {
 			return async function() {
 				const note = await formNoteToNote(formNote);
 				reg.logger().debug('Saving note...', note);
-				const savedNote: any = await Note.save(note);
+				const savedNote = await Note.save(note);
 
 				setFormNote((prev: FormNote) => {
 					return { ...prev, user_updated_time: savedNote.user_updated_time, hasChanged: false };
@@ -172,6 +173,7 @@ function NoteEditor(props: NoteEditorProps) {
 		settingValue: getPluginSettingValue,
 	});
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const allAssets = useCallback(async (markupLanguage: number, options: AllAssetsOptions = null): Promise<any[]> => {
 		options = {
 			contentMaxWidthTarget: '',
@@ -220,6 +222,7 @@ function NoteEditor(props: NoteEditorProps) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [formNote.id, previousNoteId]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onFieldChange = useCallback((field: string, value: any, changeId = 0) => {
 		if (!isMountedRef.current) {
 			// When the component is unmounted, various actions can happen which can
@@ -280,6 +283,7 @@ function NoteEditor(props: NoteEditorProps) {
 
 	const onBodyChange = useCallback((event: OnChangeEvent) => onFieldChange('body', event.content, event.changeId), [onFieldChange]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onTitleChange = useCallback((event: any) => onFieldChange('title', event.target.value), [onFieldChange]);
 
 	// const onTitleKeydown = useCallback((event:any) => {
@@ -318,6 +322,7 @@ function NoteEditor(props: NoteEditorProps) {
 		}
 	}, [formNote.id, props.syncUserId, shareCache]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onBodyWillChange = useCallback((event: any) => {
 		handleProvisionalFlag();
 
@@ -339,6 +344,7 @@ function NoteEditor(props: NoteEditorProps) {
 
 	const onMessage = useMessageHandler(scrollWhenReady, setScrollWhenReady, editorRef, setLocalSearchResultCount, props.dispatch, formNote, htmlToMarkdown, markupToHtml);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const externalEditWatcher_noteChange = useCallback((event: any) => {
 		if (event.id === formNote.id) {
 			const newFormNote = {
@@ -352,6 +358,7 @@ function NoteEditor(props: NoteEditorProps) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [formNote]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onNotePropertyChange = useCallback((event: any) => {
 		setFormNote(formNote => {
 			if (formNote.id !== event.note.id) return formNote;
@@ -360,6 +367,7 @@ function NoteEditor(props: NoteEditorProps) {
 
 			for (const key in event.note) {
 				if (key === 'id') continue;
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				(newFormNote as any)[key] = event.note[key];
 			}
 
@@ -401,6 +409,7 @@ function NoteEditor(props: NoteEditorProps) {
 		});
 	}, [props.dispatch]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	function renderNoNotes(rootStyle: any) {
 		const emptyDivStyle = {
 			backgroundColor: 'black',
@@ -466,6 +475,7 @@ function NoteEditor(props: NoteEditorProps) {
 		// We need it to identify the context for which media is rendered.
 		// It is currently used to remember pdf scroll position for each attachments of each note uniquely.
 		noteId: props.noteId,
+		watchedNoteFiles: props.watchedNoteFiles,
 	};
 
 	let editor = null;
@@ -511,6 +521,7 @@ function NoteEditor(props: NoteEditorProps) {
 	if (showRevisions) {
 		const theme = themeStyle(props.themeId);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const revStyle: any = {
 			// ...props.style,
 			display: 'inline-flex',

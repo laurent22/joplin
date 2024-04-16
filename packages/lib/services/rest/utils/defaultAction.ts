@@ -12,6 +12,7 @@ export default async function(modelType: number, request: Request, id: string = 
 
 	const ModelClass = BaseItem.getClassByItemType(modelType);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const getOneModel = async (options: any = null) => {
 		const model = await ModelClass.load(id, options || {});
 		if (!model) throw new ErrorNotFound();

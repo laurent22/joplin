@@ -5,6 +5,7 @@ import shim from './shim';
 import { FolderLoadOptions } from './models/utils/types';
 
 const refreshCalls_: boolean[] = [];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let scheduleRefreshFoldersIID_: any = null;
 
 export const allForDisplay = async (options: FolderLoadOptions = {}) => {

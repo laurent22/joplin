@@ -4,6 +4,7 @@ import updateReadme from './updateReadme';
 describe('updateReadme', () => {
 
 	test('should update the README file', async () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const manifests: any = {
 			'io.github.jackgruber.copytags': {
 				'manifest_version': 1,

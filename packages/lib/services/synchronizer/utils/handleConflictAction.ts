@@ -9,6 +9,7 @@ import { SyncAction, conflictActions } from './types';
 
 const logger = Logger.create('handleConflictAction');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExists: boolean, remoteContent: any, local: any, syncTargetId: number, itemIsReadOnly: boolean, dispatch: Dispatch) => {
 	if (!conflictActions.includes(action)) return;
 

@@ -151,6 +151,7 @@ async function main() {
 	console.info(await execCommand('npm run build'));
 
 	type PlatformDistOptions = {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		removeManifestKeys(manifest: Record<string, any>): Record<string, any>;
 		outputPath?: string;
 	};

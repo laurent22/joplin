@@ -112,6 +112,7 @@ export default (props: Props) => {
 		);
 	}, [profileConfig]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const renderProfileItem = (event: any) => {
 		const profile = event.item as Profile;
 		const titleStyle = { fontWeight: profile.id === profileConfig.currentProfileId ? 'bold' : 'normal' };

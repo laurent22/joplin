@@ -36,6 +36,7 @@ import { focus } from '@joplin/lib/utils/focusHandler';
 const md5 = require('md5');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
+import { isLink } from '@joplin/utils/url';
 
 const logger = Logger.create('TinyMCE');
 
@@ -66,6 +67,7 @@ function awfulInitHack(html: string): string {
 	return html === '<div id="rendered-md"></div>' ? '<div id="rendered-md"><p></p></div>' : html;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function findEditableContainer(node: any): any {
 	while (node) {
 		if (node.classList && node.classList.contains('joplin-editable')) return node;
@@ -75,6 +77,7 @@ function findEditableContainer(node: any): any {
 }
 
 let markupToHtml_ = new MarkupToHtml();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function stripMarkup(markupLanguage: number, markup: string, options: any = null) {
 	if (!markupToHtml_) markupToHtml_ = new MarkupToHtml();
 	return	markupToHtml_.stripMarkup(markupLanguage, markup, options);
@@ -86,9 +89,11 @@ interface LastOnChangeEventInfo {
 	contentKey: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let dispatchDidUpdateIID_: any = null;
 let changeId_ = 1;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	const [editor, setEditor] = useState<Editor|null>(null);
 	const [scriptLoaded, setScriptLoaded] = useState(false);
@@ -111,6 +116,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	});
 
 	const rootIdRef = useRef<string>(`tinymce-${Date.now()}${Math.round(Math.random() * 10000)}`);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const editorRef = useRef<any>(null);
 	editorRef.current = editor;
 
@@ -122,6 +128,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	usePluginServiceRegistration(ref);
 	useContextMenu(editor, props.plugins, props.dispatch, props.htmlToMarkdown, props.markupToHtml);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const dispatchDidUpdate = (editor: any) => {
 		if (dispatchDidUpdateIID_) shim.clearTimeout(dispatchDidUpdateIID_);
 		dispatchDidUpdateIID_ = shim.setTimeout(() => {
@@ -130,6 +137,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		}, 10);
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const insertResourcesIntoContent = useCallback(async (filePaths: string[] = null, options: any = null) => {
 		const resourceMd = await commandAttachFileToBody('', filePaths, options);
 		if (!resourceMd) return;
@@ -140,6 +148,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	const insertResourcesIntoContentRef = useRef(null);
 	insertResourcesIntoContentRef.current = insertResourcesIntoContent;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onEditorContentClick = useCallback((event: any) => {
 		const nodeName = event.target ? event.target.nodeName : '';
 
@@ -227,6 +236,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 				if (commandProcessed) return true;
 
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				const additionalCommands: any = {
 					selectedText: () => {
 						return stripMarkup(MarkupToHtml.MARKUP_LANGUAGE_HTML, editor.selection.getContent());
@@ -234,6 +244,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					selectedHtml: () => {
 						return editor.selection.getContent();
 					},
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					replaceSelection: (value: any) => {
 						editor.selection.setContent(value);
 						editor.fire(TinyMceEditorEvents.JoplinChange);
@@ -312,6 +323,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		let cancelled = false;
 
 		async function loadScripts() {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const scriptsToLoad: any[] = [
 				{
 					src: `${bridge().vendorDir()}/lib/tinymce/tinymce.min.js`,
@@ -549,9 +561,12 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		// our styling is overwritten which causes some elements to have the wrong styling. Removing the
 		// style and re-applying it on editorReady gives our styles precedence and prevents any flashing
 		//
+		// watchedNoteFiles is here , as it triggers a re-render of styles whenever it changes,
+		// this keeps the toolbar header styles in sync with toggle external editing button
+		//
 		// tl;dr: editorReady is used here because the css needs to be re-applied after TinyMCE init
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [editorReady, props.themeId, lightTheme, props.whiteBackgroundNoteRendering]);
+	}, [editorReady, props.themeId, lightTheme, props.whiteBackgroundNoteRendering, props.watchedNoteFiles]);
 
 	// -----------------------------------------------------------------------------------------
 	// Enable or disable the editor
@@ -601,6 +616,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				`joplinInsertDateTime${toolbarPluginButtons}`,
 			];
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const editors = await (window as any).tinymce.init({
 				selector: `#${rootIdRef.current}`,
 				width: '100%',
@@ -793,6 +809,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	// Set the initial content and load the plugin CSS and JS files
 	// -----------------------------------------------------------------------------------------
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const loadDocumentAssets = (themeId: number, editor: any, pluginAssets: any[]) => {
 		const theme = themeStyle(themeId);
 
@@ -809,13 +826,17 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			`gui/note-viewer/pluginAssets/highlight.js/${theme.codeThemeCss}`,
 		].concat(
 			pluginAssets
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				.filter((a: any) => a.mime === 'text/css')
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				.map((a: any) => a.path),
 		);
 
 		const allJsFiles = [].concat(
 			pluginAssets
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				.filter((a: any) => a.mime === 'application/javascript')
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				.map((a: any) => a.path),
 		);
 
@@ -1018,6 +1039,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	const prop_htmlToMarkdownRef = useRef<HtmlToMarkdownHandler>();
 	prop_htmlToMarkdownRef.current = props.htmlToMarkdown;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const nextOnChangeEventInfo = useRef<any>(null);
 
 	async function execOnChangeEvent() {
@@ -1049,6 +1071,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onChangeHandlerTimeoutRef = useRef<any>(null);
 
 	useEffect(() => {
@@ -1077,6 +1100,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}, 1000);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function onExecCommand(event: any) {
 			const c: string = event.command;
 			if (!c) return;
@@ -1113,6 +1137,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const onSetAttrib = (event: any) => {
 			// Dispatch onChange when a link is edited
 			if (event.attrElm[0].nodeName === 'A') {
@@ -1136,6 +1161,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		// onChange even though nothing is changed. The alternative would be to
 		// check the content before and after, but this is too slow, so let's
 		// keep it this way for now.
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function onKeyUp(event: any) {
 			if (['Backspace', 'Delete', 'Enter', 'Tab'].includes(event.key)) {
 				onChangeHandler();
@@ -1169,7 +1195,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					editor.insertContent(result.html);
 				}
 			} else {
-				if (BaseItem.isMarkdownTag(pastedText)) { // Paste a link to a note
+				if (BaseItem.isMarkdownTag(pastedText) || isLink(pastedText)) { // Paste a link to a note
 					logger.info('onPaste: pasting as a Markdown tag');
 					const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, pastedText, markupRenderOptions({ bodyOnly: true }));
 					editor.insertContent(result.html);
@@ -1191,12 +1217,14 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		async function onCopy(event: any) {
 			const copiedContent = editor.selection.getContent();
 			copyHtmlToClipboard(copiedContent);
 			event.preventDefault();
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		async function onCut(event: any) {
 			const selectedContent = editor.selection.getContent();
 			copyHtmlToClipboard(selectedContent);
@@ -1212,6 +1240,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		async function onKeyDown(event: any) {
 			// It seems "paste as text" is handled automatically on Windows and Linux,
 			// so we need to run the below code only on macOS. If we were to run this

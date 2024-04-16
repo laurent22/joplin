@@ -100,3 +100,12 @@ Trashable
 hideable
 HIdtrMwpS9CHsODBEbMBZg
 6-Hne-XCQyqf_cJtsGUcqw
+unignore
+unignored
+unsyncable
+infini
+libgbm
+libgtk
+libasound
+libatk
+ENOTFOUND

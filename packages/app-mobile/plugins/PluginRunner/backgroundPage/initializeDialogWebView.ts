@@ -2,6 +2,7 @@ import { DialogWebViewApi, DialogMainProcessApi } from '../types';
 import reportUnhandledErrors from './utils/reportUnhandledErrors';
 import wrapConsoleLog from './utils/wrapConsoleLog';
 import WebViewToRNMessenger from '../../../utils/ipc/WebViewToRNMessenger';
+import getFormData from './utils/getFormData';
 
 let themeCssElement: HTMLStyleElement|null = null;
 
@@ -37,16 +38,7 @@ const initializeDialogWebView = (messageChannelId: string) => {
 			return includeScriptsOrStyles('js', paths);
 		},
 		getFormData: async () => {
-			const firstForm = document.querySelector('form');
-			if (!firstForm) return null;
-
-			const formData = new FormData(firstForm);
-
-			const result = Object.create(null);
-			for (const key of formData.keys()) {
-				result[key] = formData.get(key);
-			}
-			return result;
+			return getFormData();
 		},
 		setThemeCss: async (css: string) => {
 			themeCssElement?.remove?.();
@@ -60,14 +52,16 @@ const initializeDialogWebView = (messageChannelId: string) => {
 			// we need to multiply by the devicePixelRatio:
 			const dpr = window.devicePixelRatio ?? 1;
 
+			const element = document.getElementById('joplin-plugin-content') ?? document.body;
 			return {
-				width: document.body.clientWidth * dpr,
-				height: document.body.clientHeight * dpr,
+				width: element.clientWidth * dpr,
+				height: element.clientHeight * dpr,
 			};
 		},
 	};
 	const messenger = new WebViewToRNMessenger<DialogWebViewApi, DialogMainProcessApi>(messageChannelId, localApi);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	(window as any).webviewApi = {
 		postMessage: messenger.remoteApi.postMessage,
 		onMessage: messenger.remoteApi.onMessage,
@@ -78,6 +72,7 @@ const initializeDialogWebView = (messageChannelId: string) => {
 
 	// If dialog content scripts were bundled with Webpack for NodeJS,
 	// they may expect a global "exports" to be present.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	(window as any).exports ??= {};
 };
 

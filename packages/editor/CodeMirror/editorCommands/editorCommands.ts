@@ -13,6 +13,7 @@ import sortSelectedLines from './sortSelectedLines';
 import { closeSearchPanel, findNext, findPrevious, openSearchPanel, replaceAll, replaceNext } from '@codemirror/search';
 import { focus } from '@joplin/lib/utils/focusHandler';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export type EditorCommandFunction = (editor: EditorView, ...args: any[])=> void|any;
 
 const replaceSelectionCommand = (editor: EditorView, toInsert: string) => {
@@ -85,6 +86,16 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	},
 	[EditorCommandType.InsertText]: replaceSelectionCommand,
 	[EditorCommandType.ReplaceSelection]: replaceSelectionCommand,
+
+	[EditorCommandType.SetText]: (editor, text: string) => {
+		editor.dispatch({
+			changes: [{
+				from: 0,
+				to: editor.state.doc.length,
+				insert: text,
+			}],
+		});
+	},
 };
 export default editorCommands;
 

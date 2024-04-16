@@ -460,7 +460,6 @@ packages/app-desktop/services/plugins/hooks/useThemeCss.js
 packages/app-desktop/services/plugins/hooks/useViewIsReady.js
 packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.js
 packages/app-desktop/services/restart.js
-packages/app-desktop/services/share/invitationRespond.js
 packages/app-desktop/services/sortOrder/PerFolderSortOrderService.test.js
 packages/app-desktop/services/sortOrder/PerFolderSortOrderService.js
 packages/app-desktop/services/sortOrder/notesSortOrderUtils.test.js
@@ -474,6 +473,8 @@ packages/app-desktop/utils/7zip/pathToBundled7Zip.js
 packages/app-desktop/utils/checkForUpdatesUtils.test.js
 packages/app-desktop/utils/checkForUpdatesUtils.js
 packages/app-desktop/utils/checkForUpdatesUtilsTestData.js
+packages/app-desktop/utils/isSafeToOpen.test.js
+packages/app-desktop/utils/isSafeToOpen.js
 packages/app-desktop/utils/markupLanguageUtils.js
 packages/app-desktop/utils/restartInSafeModeFromMain.test.js
 packages/app-desktop/utils/restartInSafeModeFromMain.js
@@ -547,7 +548,10 @@ packages/app-mobile/components/NoteList.js
 packages/app-mobile/components/ProfileSwitcher/ProfileEditor.js
 packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js
 packages/app-mobile/components/ProfileSwitcher/useProfileConfig.js
-packages/app-mobile/components/ScreenHeader.js
+packages/app-mobile/components/ScreenHeader/WarningBanner.test.js
+packages/app-mobile/components/ScreenHeader/WarningBanner.js
+packages/app-mobile/components/ScreenHeader/WarningBox.js
+packages/app-mobile/components/ScreenHeader/index.js
 packages/app-mobile/components/SelectDateTimeDialog.js
 packages/app-mobile/components/SideMenu.js
 packages/app-mobile/components/TextInput.js
@@ -565,9 +569,13 @@ packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebu
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.test.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.js
+packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.js
+packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/utils/exportAllFolders.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/utils/exportDebugReport.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/utils/exportProfile.js
+packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/utils/makeImportExportCacheDirectory.js
+packages/app-mobile/components/screens/ConfigScreen/SectionDescription.js
 packages/app-mobile/components/screens/ConfigScreen/SectionHeader.js
 packages/app-mobile/components/screens/ConfigScreen/SectionSelector.js
 packages/app-mobile/components/screens/ConfigScreen/SettingComponent.js
@@ -575,7 +583,8 @@ packages/app-mobile/components/screens/ConfigScreen/SettingItem.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsButton.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsToggle.js
 packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
-packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/ActionButton.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.test.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginToggle.js
@@ -592,9 +601,14 @@ packages/app-mobile/components/screens/LogScreen.js
 packages/app-mobile/components/screens/Note.js
 packages/app-mobile/components/screens/NoteTagsDialog.js
 packages/app-mobile/components/screens/Notes.js
+packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.js
+packages/app-mobile/components/screens/ShareManager/IncomingShareItem.js
+packages/app-mobile/components/screens/ShareManager/index.test.js
+packages/app-mobile/components/screens/ShareManager/index.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/search.js
+packages/app-mobile/components/screens/status.js
 packages/app-mobile/components/side-menu-content.js
 packages/app-mobile/components/voiceTyping/VoiceTypingDialog.js
 packages/app-mobile/gulpfile.js
@@ -605,6 +619,8 @@ packages/app-mobile/plugins/PluginRunner/backgroundPage/initializeDialogWebView.
 packages/app-mobile/plugins/PluginRunner/backgroundPage/initializePluginBackgroundIframe.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/pluginRunnerBackgroundPage.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/startStopPlugin.js
+packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/getFormData.test.js
+packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/getFormData.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/makeSandboxedIframe.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/reportUnhandledErrors.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/wrapConsoleLog.js
@@ -636,6 +652,7 @@ packages/app-mobile/utils/ShareExtension.js
 packages/app-mobile/utils/ShareUtils.test.js
 packages/app-mobile/utils/ShareUtils.js
 packages/app-mobile/utils/TlsUtils.js
+packages/app-mobile/utils/appDefaultState.js
 packages/app-mobile/utils/autodetectTheme.js
 packages/app-mobile/utils/checkPermissions.js
 packages/app-mobile/utils/createRootStyle.js
@@ -657,6 +674,7 @@ packages/app-mobile/utils/polyfills/index.js
 packages/app-mobile/utils/setupNotifications.js
 packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/showMessageBox.js
+packages/app-mobile/utils/testing/createMockReduxStore.js
 packages/app-mobile/utils/types.js
 packages/default-plugins/build.js
 packages/default-plugins/buildDefaultPlugins.js
@@ -854,6 +872,7 @@ packages/lib/models/Tag.test.js
 packages/lib/models/Tag.js
 packages/lib/models/dateTimeFormats.test.js
 packages/lib/models/settings/FileHandler.js
+packages/lib/models/settings/settingValidations.test.js
 packages/lib/models/settings/settingValidations.js
 packages/lib/models/utils/getCollator.js
 packages/lib/models/utils/getConflictFolderId.js
@@ -893,6 +912,7 @@ packages/lib/services/KvStore.js
 packages/lib/services/MigrationService.js
 packages/lib/services/NavService.js
 packages/lib/services/PostMessageService.js
+packages/lib/services/ReportService.test.js
 packages/lib/services/ReportService.js
 packages/lib/services/ResourceEditWatcher/index.js
 packages/lib/services/ResourceEditWatcher/reducer.js
@@ -920,6 +940,7 @@ packages/lib/services/database/migrations/43.js
 packages/lib/services/database/migrations/44.js
 packages/lib/services/database/migrations/45.js
 packages/lib/services/database/migrations/46.js
+packages/lib/services/database/migrations/47.js
 packages/lib/services/database/migrations/index.js
 packages/lib/services/database/sqlStringToLines.js
 packages/lib/services/database/types.js
@@ -1022,6 +1043,10 @@ packages/lib/services/plugins/utils/executeSandboxCall.js
 packages/lib/services/plugins/utils/getPluginNamespacedSettingKey.js
 packages/lib/services/plugins/utils/getPluginSettingKeyPrefix.js
 packages/lib/services/plugins/utils/getPluginSettingValue.js
+packages/lib/services/plugins/utils/isCompatible/index.test.js
+packages/lib/services/plugins/utils/isCompatible/index.js
+packages/lib/services/plugins/utils/isCompatible/minVersionForPlatform.js
+packages/lib/services/plugins/utils/isCompatible/types.js
 packages/lib/services/plugins/utils/loadContentScripts.js
 packages/lib/services/plugins/utils/makeListener.js
 packages/lib/services/plugins/utils/manifestFromObject.js
@@ -1029,6 +1054,8 @@ packages/lib/services/plugins/utils/mapEventHandlersToIds.js
 packages/lib/services/plugins/utils/types.js
 packages/lib/services/plugins/utils/validatePluginId.test.js
 packages/lib/services/plugins/utils/validatePluginId.js
+packages/lib/services/plugins/utils/validatePluginPlatforms.test.js
+packages/lib/services/plugins/utils/validatePluginPlatforms.js
 packages/lib/services/plugins/utils/validatePluginVersion.test.js
 packages/lib/services/plugins/utils/validatePluginVersion.js
 packages/lib/services/profileConfig/index.test.js
@@ -1076,6 +1103,7 @@ packages/lib/services/search/gotoAnythingStyleQuery.js
 packages/lib/services/search/queryBuilder.js
 packages/lib/services/share/ShareService.test.js
 packages/lib/services/share/ShareService.js
+packages/lib/services/share/invitationRespond.js
 packages/lib/services/share/reducer.js
 packages/lib/services/spellChecker/SpellCheckerService.js
 packages/lib/services/spellChecker/SpellCheckerServiceDriverBase.js
@@ -1127,6 +1155,8 @@ packages/lib/shim-init-node.js
 packages/lib/shim.js
 packages/lib/string-utils.test.js
 packages/lib/string-utils.js
+packages/lib/testing/share/makeMockShareInvitation.js
+packages/lib/testing/share/mockShareService.js
 packages/lib/testing/syncTargetUtils.js
 packages/lib/testing/test-utils-synchronizer.js
 packages/lib/testing/test-utils.js

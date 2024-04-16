@@ -8,6 +8,7 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		execute: async (_context: any, noteIds: string[], format: ExportModuleOutputFormat, targetDirectoryPath: string) => {
 			const exportOptions: ExportOptions = {
 				path: targetDirectoryPath,

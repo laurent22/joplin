@@ -13,6 +13,7 @@ const logger = Logger.create('EmailService');
 
 export default class EmailService extends BaseService {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private transport_: any;
 
 	private async transport(): Promise<Mail> {

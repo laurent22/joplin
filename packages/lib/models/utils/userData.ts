@@ -86,6 +86,7 @@ export const setItemUserData = async <T>(itemType: ModelType, itemId: string, na
 
 	if (itemType === ModelType.Note) itemToSave.parent_id = item.parent_id;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const saveOptions: any = { autoTimestamp: false };
 
 	if (itemType === ModelType.Note) return Note.save(itemToSave, saveOptions);

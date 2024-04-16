@@ -13,6 +13,7 @@ export interface Options {
 	subFolderDepth?: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function randomIndex(array: any[]): number {
 	return Math.round(Math.random() * (array.length - 1));
 }
@@ -26,6 +27,7 @@ function randomIndexes(arrayLength: number, count: number): number[] {
 	return arr;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function randomElements(array: any[], count: number): any[] {
 	const indexes = randomIndexes(array.length, count);
 	const output = [];
@@ -35,6 +37,7 @@ function randomElements(array: any[], count: number): any[] {
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function randomElement(array: any[]): any {
 	const idx = randomIndex(array);
 	return array[idx];
@@ -42,6 +45,7 @@ function randomElement(array: any[]): any {
 
 // Use the constants below to define how many folders, notes and tags
 // should be created.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default async function populateDatabase(db: any, options: Options = null) {
 	options = {
 		folderCount: 0,
@@ -64,6 +68,7 @@ export default async function populateDatabase(db: any, options: Options = null)
 	let rootFolderCount = 0;
 
 	for (let i = 0; i < options.folderCount; i++) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const folder: any = {
 			title: `folder${i}`,
 		};
@@ -113,6 +118,7 @@ export default async function populateDatabase(db: any, options: Options = null)
 	}
 
 	for (let i = 0; i < options.noteCount; i++) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const note: any = { title: `note${i}`, body: `This is note num. ${i}` };
 		const parentIndex = randomIndex(createdFolderIds);
 		note.parent_id = createdFolderIds[parentIndex];

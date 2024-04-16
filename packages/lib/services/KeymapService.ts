@@ -1,4 +1,4 @@
-import eventManager, { EventName } from '../eventManager';
+import eventManager, { EventListenerCallback, EventName } from '../eventManager';
 import shim from '../shim';
 import { _ } from '../locale';
 import keysRegExp from './KeymapService_keysRegExp';
@@ -127,6 +127,7 @@ export default class KeymapService extends BaseService {
 	private customKeymapPath: string;
 	private defaultKeymapItems: KeymapItem[];
 	private lastSaveTime_: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private modifiersRegExp: any;
 
 	public constructor() {
@@ -383,6 +384,7 @@ export default class KeymapService extends BaseService {
 		if (!isValid) throw new Error(_('Accelerator "%s" is not valid.', accelerator));
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public domToElectronAccelerator(event: any) {
 		const parts = [];
 
@@ -413,13 +415,11 @@ export default class KeymapService extends BaseService {
 		return parts.join('+');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public on(eventName: EventName, callback: Function) {
+	public on(eventName: EventName, callback: EventListenerCallback) {
 		eventManager.on(eventName, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public off(eventName: EventName, callback: Function) {
+	public off(eventName: EventName, callback: EventListenerCallback) {
 		eventManager.off(eventName, callback);
 	}
 

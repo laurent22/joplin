@@ -6,9 +6,16 @@ import { objectValueFromPath } from '@joplin/utils/object';
 interface Cell {
 	name: ColumnName;
 	styleHtml: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	value: any;
 	contentHtml: ()=> string;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+const valueToString = (value: any) => {
+	if (value === undefined || value === null) return '';
+	return value.toString();
+};
 
 export default (columns: NoteListColumns, itemTemplate: string, itemValueTemplates: ListRendererItemValueTemplates, view: RenderNoteView) => {
 	// `note.title` is special and has already been rendered to HTML at this point, so we need
@@ -36,7 +43,7 @@ export default (columns: NoteListColumns, itemTemplate: string, itemValueTemplat
 				if (itemValueTemplates[name]) {
 					return Mustache.render(itemValueTemplates[name], view);
 				}
-				return ['note.titleHtml', 'note.title'].includes(name) ? this.value : escapeHtml(this.value);
+				return ['note.titleHtml', 'note.title'].includes(name) ? this.value : escapeHtml(valueToString(this.value));
 			},
 		});
 	}

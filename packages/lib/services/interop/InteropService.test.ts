@@ -20,6 +20,7 @@ async function recreateExportDir() {
 	await fs.mkdirp(dir);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function fieldsEqual(model1: any, model2: any, fieldNames: string[]) {
 	for (let i = 0; i < fieldNames.length; i++) {
 		const f = fieldNames[i];
@@ -30,6 +31,7 @@ function fieldsEqual(model1: any, model2: any, fieldNames: string[]) {
 function memoryExportModule() {
 	interface Item {
 		type: number;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		object: any;
 	}
 
@@ -60,6 +62,7 @@ function memoryExportModule() {
 				result.destPath = context.destPath;
 			},
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			onProcessItem: async (_context: CustomExportContext, itemType: number, item: any) => {
 				result.items.push({
 					type: itemType,
@@ -67,6 +70,7 @@ function memoryExportModule() {
 				});
 			},
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			onProcessResource: async (_context: CustomExportContext, resource: any, filePath: string) => {
 				result.resources.push({
 					filePath: filePath,
@@ -139,6 +143,7 @@ describe('services_InteropService', () => {
 		await service.import({ path: filePath });
 
 		const allFolders = await Folder.all();
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		expect(allFolders.map((f: any) => f.title).sort().join(' - ')).toBe('folder - folder (1)');
 	}));
 
@@ -591,6 +596,7 @@ describe('services_InteropService', () => {
 
 		const filePath = `${exportDir()}/example.test`;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const result: any = {
 			destPath: '',
 			itemTypes: [],
@@ -603,6 +609,7 @@ describe('services_InteropService', () => {
 		const module: Module = makeExportModule({
 			type: ModuleType.Exporter,
 			description: 'Test Export Module',
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			format: 'testing' as any,
 			fileExtensions: ['test'],
 		}, () => {
@@ -611,11 +618,13 @@ describe('services_InteropService', () => {
 					result.destPath = context.destPath;
 				},
 
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				onProcessItem: async (_context: CustomExportContext, itemType: number, item: any) => {
 					result.itemTypes.push(itemType);
 					result.items.push(item);
 				},
 
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				onProcessResource: async (_context: CustomExportContext, resource: any, filePath: string) => {
 					result.resources.push(resource);
 					result.filePaths.push(filePath);
@@ -630,6 +639,7 @@ describe('services_InteropService', () => {
 		const service = InteropService.instance();
 		service.registerModule(module);
 		await service.export({
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			format: 'testing' as any,
 			path: filePath,
 		});
@@ -637,6 +647,7 @@ describe('services_InteropService', () => {
 		expect(result.destPath).toBe(filePath);
 		expect(result.itemTypes.sort().join('_')).toBe('1_1_2_4');
 		expect(result.items.length).toBe(4);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		expect(result.items.map((o: any) => o.title).sort().join('_')).toBe('folder1_note1_note2_photo.jpg');
 		expect(result.resources.length).toBe(1);
 		expect(result.resources[0].title).toBe('photo.jpg');

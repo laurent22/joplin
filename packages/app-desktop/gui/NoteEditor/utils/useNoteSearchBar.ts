@@ -27,6 +27,7 @@ function defaultLocalSearch(): LocalSearch {
 }
 
 export interface UseNoteSearchBarProps {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	noteSearchBarRef: MutableRefObject<any>;
 }
 
