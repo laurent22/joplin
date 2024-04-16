@@ -7,6 +7,7 @@ import PluginService from '../PluginService';
 import { PluginManifest } from './types';
 import { reg } from '../../../registry';
 import time from '../../../time';
+import { substrWithEllipsis } from '../../../string-utils';
 
 export interface ReportPluginIssueOption {
 	key: string;
@@ -58,8 +59,13 @@ const getPluginBugReportInfo = async (pluginManifest: ManifestSlice, packageInfo
 		const forumTags = ['broken-plugin'];
 		const postBody = 'Describe the issue here.';
 
+		const errorCount = 10;
 		const pluginErrors = await reg.logger().lastEntries(
-			100, { filter: pluginManifest.id, levels: [LogLevel.Error, LogLevel.Warn] },
+			errorCount, { filter: pluginManifest.id, levels: [LogLevel.Error, LogLevel.Warn] },
+		);
+		// Limit the length of each error message -- too-large errors can break the link (HTTP ERROR 414)
+		const errorTexts = pluginErrors.map(
+			error => substrWithEllipsis([time.formatMsToLocal(error.timestamp), error.message].join(': '), 0, 256),
 		);
 
 		return {
@@ -70,7 +76,7 @@ const getPluginBugReportInfo = async (pluginManifest: ManifestSlice, packageInfo
 				postTitle,
 				postBody,
 				forumTags,
-				pluginErrors.map(error => [time.formatMsToLocal(error.timestamp), error.message].join(': ')),
+				errorTexts,
 				packageInfo,
 				PluginService.instance(),
 				Setting.value('plugins.states'),
