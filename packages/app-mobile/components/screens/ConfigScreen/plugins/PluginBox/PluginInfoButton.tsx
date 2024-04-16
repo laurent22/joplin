@@ -3,7 +3,7 @@ import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import { useCallback, useState } from 'react';
 import { IconButton, List, Portal, Text } from 'react-native-paper';
-import getReportPluginInformation, { ReportPluginIssueOption } from '@joplin/lib/services/plugins/utils/getReportPluginInformation';
+import getPluginBugReportInfo, { ReportPluginIssueOption } from '@joplin/lib/services/plugins/utils/getPluginBugReportInfo';
 import getPackageInfo from '../../../../../utils/getPackageInfo';
 import { Linking, ScrollView, StyleSheet, View } from 'react-native';
 import DismissibleDialog from '../../../../DismissibleDialog';
@@ -18,22 +18,33 @@ interface Props {
 	onModalDismiss?: ()=> void;
 }
 
-const styles = StyleSheet.create({
-	aboutPluginContainer: {
-		paddingLeft: 10,
-		paddingRight: 10,
-	},
-	descriptionText: {
-		marginTop: 5,
-		marginBottom: 5,
-	},
-});
+interface IssueReportLinkProps {
+	section: ReportPluginIssueOption;
+}
+
+const IssueReportLink: React.FC<IssueReportLinkProps> = props => {
+	const section = props.section;
+
+	const onPress = useCallback(() => {
+		void Linking.openURL(section.url);
+	}, [section.url]);
+
+	return (
+		<List.Item
+			title={section.title}
+			titleNumberOfLines={2}
+			description={section.description}
+			onPress={onPress}
+			left={props => <List.Icon {...props} icon={section.mobileIcon} />}
+		/>
+	);
+};
 
 const PluginInfoModal: React.FC<Props> = props => {
 	const [reportInfo, setReportInfo] = useState<ReportPluginIssueOption[]>([]);
 	useAsyncEffect(async event => {
 		const packageInfo = getPackageInfo();
-		const reportPluginOptions = await getReportPluginInformation(props.item.manifest, packageInfo);
+		const reportPluginOptions = await getPluginBugReportInfo(props.item.manifest, packageInfo);
 		if (!event.cancelled) {
 			setReportInfo(reportPluginOptions);
 		}
@@ -41,16 +52,7 @@ const PluginInfoModal: React.FC<Props> = props => {
 
 	const issueReportListItems: React.ReactNode[] = [];
 	for (const section of reportInfo) {
-		issueReportListItems.push(
-			<List.Item
-				key={`${section.url}-${section.title}`}
-				title={section.title}
-				titleNumberOfLines={2}
-				description={section.description}
-				onPress={() => Linking.openURL(section.url)}
-				left={props => <List.Icon {...props} icon={section.mobileIcon} />}
-			/>,
-		);
+		issueReportListItems.push(<IssueReportLink key={section.key} section={section} />);
 	}
 
 	const aboutPlugin = (
@@ -89,6 +91,8 @@ const PluginInfoModal: React.FC<Props> = props => {
 	);
 };
 
+
+
 const PluginInfoButton: React.FC<Props> = props => {
 	const [showInfoModal, setShowInfoModal] = useState(false);
 	const onInfoButtonPress = useCallback(() => {
@@ -111,5 +115,16 @@ const PluginInfoButton: React.FC<Props> = props => {
 		</>
 	);
 };
+
+const styles = StyleSheet.create({
+	aboutPluginContainer: {
+		paddingLeft: 10,
+		paddingRight: 10,
+	},
+	descriptionText: {
+		marginTop: 5,
+		marginBottom: 5,
+	},
+});
 
 export default PluginInfoButton;

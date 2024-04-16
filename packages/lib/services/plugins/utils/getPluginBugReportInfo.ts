@@ -17,7 +17,7 @@ export interface ReportPluginIssueOption {
 }
 
 type ManifestSlice = Pick<PluginManifest, 'name'|'id'|'repository_url'|'homepage_url'>;
-const getReportPluginInformation = async (pluginManifest: ManifestSlice, packageInfo: PackageInfo): Promise<ReportPluginIssueOption[]> => {
+const getPluginBugReportInfo = async (pluginManifest: ManifestSlice, packageInfo: PackageInfo): Promise<ReportPluginIssueOption[]> => {
 	const githubUrlExp = /^https?:\/\/(?:www\.)?github\.com\//;
 	const gitlabUrlExp = /^https?:\/\/(?:www\.)?gitlab\.com\//;
 	const isGitHubUrl = (url: string) => !!(githubUrlExp.exec(url));
@@ -94,4 +94,4 @@ const getReportPluginInformation = async (pluginManifest: ManifestSlice, package
 	return options;
 };
 
-export default getReportPluginInformation;
+export default getPluginBugReportInfo;
