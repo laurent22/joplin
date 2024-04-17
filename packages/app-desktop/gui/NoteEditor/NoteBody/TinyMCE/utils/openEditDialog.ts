@@ -95,7 +95,7 @@ export default function openEditDialog(editor: any, markupToHtml: any, dispatchD
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		onSubmit: async (dialogApi: any) => {
 			const newSource = newBlockSource(dialogApi.getData().languageInput, dialogApi.getData().codeTextArea, source);
-			const md = `${newSource.openCharacters}${newSource.content.trim()}${newSource.closeCharacters}`;
+			const md = `${newSource.openCharacters}${newSource.content}${newSource.closeCharacters}`;
 			const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, md, { bodyOnly: true });
 
 			// markupToHtml will return the complete editable HTML, but we only
