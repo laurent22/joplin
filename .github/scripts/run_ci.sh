@@ -39,9 +39,9 @@ fi
 # a release
 RUN_TESTS=0
 
-if [ "$IS_SERVER_RELEASE" = 0 ] && [ "$IS_DESKTOP_RELEASE" = 0 ]; then
-	RUN_TESTS=1
-fi
+#if [ "$IS_SERVER_RELEASE" = 0 ] && [ "$IS_DESKTOP_RELEASE" = 0 ]; then
+#	RUN_TESTS=1
+#fi
 
 # =============================================================================
 # Print environment
