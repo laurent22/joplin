@@ -6,6 +6,7 @@ import Button from './Button/Button';
 
 type JoplinCloudConfigScreenProps = {
 	inboxEmail: string;
+	joplinCloudAccountType: number;
 };
 
 const JoplinCloudConfigScreen = (props: JoplinCloudConfigScreenProps) => {
@@ -13,19 +14,29 @@ const JoplinCloudConfigScreen = (props: JoplinCloudConfigScreenProps) => {
 		clipboard.writeText(props.inboxEmail);
 	};
 
+	const isEmailToNoteAvailableInAccount = props.joplinCloudAccountType !== 1;
+
 	return (
 		<div>
 			<h2>{_('Email to note')}</h2>
 			<p>{_('Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook')}</p>
-			<p className='inbox-email-value'>{props.inboxEmail}</p>
-			<Button onClick={copyToClipboard} title={_('Copy to clipboard')} />
+			{
+				isEmailToNoteAvailableInAccount ? <>
+					<p className='inbox-email-value'>{props.inboxEmail}</p>
+					<Button onClick={copyToClipboard} title={_('Copy to clipboard')} />
+				</>
+					: <div className='alert-warn'>
+						<p>{_('Your account doesn\'t have access to this feature')}</p>
+					</div>
+			}
 		</div>
 	);
 };
 
 const mapStateToProps = (state: AppState) => {
 	return {
-		inboxEmail: state.settings['sync.10.inboxEmail'],
+		inboxEmail: state.settings,
+		joplinCloudAccountType: state.settings['sync.10.accountType'],
 	};
 };
 
