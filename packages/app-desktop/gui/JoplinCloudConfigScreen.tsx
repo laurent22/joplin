@@ -3,6 +3,7 @@ import { AppState } from '../app.reducer';
 import { _ } from '@joplin/lib/locale';
 import { clipboard } from 'electron';
 import Button from './Button/Button';
+import { Fragment } from 'react';
 
 type JoplinCloudConfigScreenProps = {
 	inboxEmail: string;
@@ -21,10 +22,10 @@ const JoplinCloudConfigScreen = (props: JoplinCloudConfigScreenProps) => {
 			<h2>{_('Email to note')}</h2>
 			<p>{_('Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook')}</p>
 			{
-				isEmailToNoteAvailableInAccount ? <>
+				isEmailToNoteAvailableInAccount ? <Fragment>
 					<p className='inbox-email-value'>{props.inboxEmail}</p>
 					<Button onClick={copyToClipboard} title={_('Copy to clipboard')} />
-				</>
+				</Fragment>
 					: <div className='alert-warn'>
 						<p>{_('Your account doesn\'t have access to this feature')}</p>
 					</div>
@@ -35,7 +36,7 @@ const JoplinCloudConfigScreen = (props: JoplinCloudConfigScreenProps) => {
 
 const mapStateToProps = (state: AppState) => {
 	return {
-		inboxEmail: state.settings,
+		inboxEmail: state.settings['sync.10.inboxEmail'],
 		joplinCloudAccountType: state.settings['sync.10.accountType'],
 	};
 };
