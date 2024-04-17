@@ -4651,6 +4651,10 @@ msgstr ""
 msgid "Toggle external editing"
 msgstr ""
 
+#: packages/app-desktop/gui/MainScreen/commands/toggleMenuBar.ts:9
+msgid "Toggle menu bar"
+msgstr ""
+
 #: packages/lib/models/Setting.ts:2714
 msgid "Toggle note history, keep notes for"
 msgstr ""

@@ -760,6 +760,7 @@ function useMenu(props: Props) {
 						menuItemDic.resetLayout,
 						separator(),
 						menuItemDic.toggleSideBar,
+						menuItemDic.toggleMenuBar,
 						menuItemDic.toggleNoteList,
 						menuItemDic.toggleVisiblePanes,
 						{
