@@ -1,5 +1,5 @@
 name: Joplin Continuous Integration
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 jobs:
   pre_job:
     if: github.repository == 'laurent22/joplin'
