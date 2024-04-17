@@ -525,7 +525,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 					{
 						!isEmailToNoteAvailableInAccount && (
 							<View style={this.styles().styleSheet.settingContainerNoBottomBorder}>
-								<Text style={this.styles().styleSheet.descriptionText}>{_('Your account doesn\'t have access to this feature')}</Text>
+								<Text style={this.styles().styleSheet.descriptionAlert}>{_('Your account doesn\'t have access to this feature')}</Text>
 							</View>
 						)
 					}
