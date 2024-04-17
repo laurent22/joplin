@@ -20,9 +20,9 @@ impl Renderer {
 
     pub fn render(&mut self, notebook: &Notebook, name: &str, output_dir: &Path) -> Result<()> {
         if !output_dir.is_dir() {
-            utils::log_to_wasm!("Create outputdir: {:?}", output_dir);
+            utils::log!("Create outputdir: {:?}", output_dir);
             let r = make_dir(output_dir.as_os_str().to_str().unwrap());
-            utils::log_to_wasm!("Result outputdir: {:?}", r);
+            utils::log!("Result outputdir: {:?}", r);
         }
 
         let notebook_dir = output_dir.join(sanitize_filename::sanitize(name));
@@ -48,7 +48,7 @@ impl Renderer {
                     let dir_name = sanitize_filename::sanitize(group.display_name());
                     let group_dir = notebook_dir.join(dir_name);
                     if !group_dir.is_dir() {
-                        utils::log_to_wasm!("Create groupdir {:?}", group_dir);
+                        utils::log!("Create groupdir {:?}", group_dir);
                         let _ = make_dir(group_dir.as_os_str().to_str().unwrap());
                     }
 

@@ -103,14 +103,20 @@ extern "C" {
 
 pub mod utils {
 
-    // A macro to provide `println!(..)`-style syntax for `console.log` logging.
-    macro_rules! log_to_wasm {
+    macro_rules! log {
         ( $( $t:tt )* ) => {
-            web_sys::console::log_1(&format!( $( $t )* ).into());
+            web_sys::console::log_2(&format!("OneNoteConverter: ").into(), &format!( $( $t )* ).into());
         }
     }
 
-    pub(crate) use log_to_wasm;
+    macro_rules! log_warn {
+        ( $( $t:tt )* ) => {
+            web_sys::console::warn_2(&format!("OneNoteConverter: ").into(), &format!( $( $t )* ).into());
+        }
+    }
+
+    pub(crate) use log;
+    pub(crate) use log_warn;
 }
 
 pub(crate) trait Utf16ToString {

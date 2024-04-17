@@ -105,18 +105,6 @@ extern "C" {
     pub fn exists(path: &str) -> std::result::Result<bool, JsValue>;
 }
 
-pub mod utils {
-
-    // A macro to provide `println!(..)`-style syntax for `console.log` logging.
-    macro_rules! log_to_wasm {
-        ( $( $t:tt )* ) => {
-            web_sys::console::log_1(&format!( $( $t )* ).into());
-        }
-    }
-
-    pub(crate) use log_to_wasm;
-}
-
 pub(crate) trait Utf16ToString {
     fn utf16_to_string(&self) -> Result<String>;
 }

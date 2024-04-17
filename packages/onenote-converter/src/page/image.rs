@@ -1,6 +1,5 @@
 use crate::page::Renderer;
 use crate::parser::contents::Image;
-use crate::utils::utils::log_to_wasm;
 use crate::utils::{px, write_file, AttributeSet, StyleSet};
 use color_eyre::Result;
 

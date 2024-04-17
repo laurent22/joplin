@@ -5,6 +5,7 @@ use crate::parser::one::property::{simple, PropertyType};
 use crate::parser::one::property_set::PropertySetId;
 use crate::parser::onestore::object::Object;
 use crate::parser::shared::multi_byte;
+use crate::utils::utils::log_warn;
 
 /// An ink stroke.
 #[allow(dead_code)]
@@ -32,8 +33,10 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
     let path = simple::parse_vec(PropertyType::InkPath, object)?
         .map(|data| multi_byte::decode_signed(&data))
         .ok_or_else(|| {
-            ErrorKind::MalformedOneNoteFileData("ink stroke node has no ink path".into())
-        })?;
+            log_warn!("ink stroke node has no ink path");
+            Vec::<i64>::new()
+            // ErrorKind::MalformedOneNoteFileData("ink stroke node has no ink path".into())
+        }).unwrap();
     let bias = simple::parse_u8(PropertyType::InkBias, object)?
         .map(|bias| match bias {
             0 => Ok(InkBias::Handwriting),

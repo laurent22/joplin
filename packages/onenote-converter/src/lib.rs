@@ -7,7 +7,7 @@ use std::path::PathBuf;
 use std::process::exit;
 use wasm_bindgen::prelude::wasm_bindgen;
 
-use crate::utils::utils::log_to_wasm;
+use crate::utils::utils::log;
 
 mod notebook;
 mod page;
@@ -39,6 +39,7 @@ pub fn oneNoteConverter(input: &str, output: &str) {
 fn _main(input_paths: PathBuf, output_dir: PathBuf) -> Result<()> {
     assert!(!output_dir.is_file());
 
+    log!("Input pahts: {:?}", input_paths);
     convert(&input_paths, &output_dir)?;
 
     Ok(())
@@ -65,8 +66,7 @@ pub fn convert(path: &Path, output_dir: &Path) -> Result<()> {
                 .to_string_lossy();
             println!("Processing notebook {}...", name);
 
-            utils::utils::log_to_wasm!("Before parsing notebook");
-            utils::utils::log_to_wasm!("{:?}", path);
+            utils::utils::log!("Before parsing notebook: {:?}", path);
             let notebook = parser.parse_notebook(&path)?;
 
             let notebook_name = path

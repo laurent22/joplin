@@ -8,6 +8,7 @@ use crate::parser::one::property::{simple, PropertyType};
 use crate::parser::one::property_set::note_tag_container::Data as NoteTagData;
 use crate::parser::one::property_set::PropertySetId;
 use crate::parser::onestore::object::Object;
+use crate::utils::utils::log_warn;
 
 /// An embedded file.
 ///
@@ -61,8 +62,10 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
     let layout_alignment_self = LayoutAlignment::parse(PropertyType::LayoutAlignmentSelf, object)?;
     let embedded_file_container =
         ObjectReference::parse(PropertyType::EmbeddedFileContainer, object)?.ok_or_else(|| {
-            ErrorKind::MalformedOneNoteFileData("embedded file has no file container".into())
-        })?;
+            log_warn!("embeded file has no file container");
+            picture_container
+            // ErrorKind::MalformedOneNoteFileData("embedded file has no file container".into())
+        }).unwrap();
     let embedded_file_name = simple::parse_string(PropertyType::EmbeddedFileName, object)?
         .ok_or_else(|| {
             ErrorKind::MalformedOneNoteFileData("embedded file has no file name".into())
