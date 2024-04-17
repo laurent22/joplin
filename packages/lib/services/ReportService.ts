@@ -194,16 +194,18 @@ export default class ReportService {
 					msg = _('Item "%s" could not be downloaded: %s', row.syncInfo.item_id, row.syncInfo.sync_disabled_reason);
 				}
 
+				// row.item may be undefined when location !== SYNC_ITEM_LOCATION_LOCAL
+				const item = { type_: row.syncInfo.item_type, id: row.syncInfo.item_id };
 				section.body.push({
 					text: msg,
 					canRetry: true,
 					canRetryType: CanRetryType.ItemSync,
 					retryHandler: async () => {
-						await BaseItem.saveSyncEnabled(row.item.type_, row.item.id);
+						await BaseItem.saveSyncEnabled(item.type_, item.id);
 					},
 					canIgnore: !row.warning_ignored,
 					ignoreHandler: async () => {
-						await BaseItem.ignoreItemSyncWarning(syncTarget, row.item);
+						await BaseItem.ignoreItemSyncWarning(syncTarget, item);
 					},
 				});
 			};

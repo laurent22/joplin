@@ -149,7 +149,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public renderSectionDescription(section: any) {
-		const description = Setting.sectionDescription(section.name);
+		const description = Setting.sectionDescription(section.name, AppType.Desktop);
 		if (!description) return null;
 
 		const theme = themeStyle(this.props.themeId);

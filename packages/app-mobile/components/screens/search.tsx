@@ -15,11 +15,6 @@ import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { AppState } from '../../utils/types';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 
-// We need this to suppress the useless warning
-// https://github.com/oblador/react-native-vector-icons/issues/1465
-// eslint-disable-next-line no-console, @typescript-eslint/no-explicit-any -- Old code before rule was applied
-Icon.loadFont().catch((error: any) => { console.info(error); });
-
 class SearchScreenComponent extends BaseScreenComponent {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

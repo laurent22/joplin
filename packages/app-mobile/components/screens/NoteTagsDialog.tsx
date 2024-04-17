@@ -11,11 +11,6 @@ import { AppState } from '../../utils/types';
 import { TagEntity } from '@joplin/lib/services/database/types';
 const naturalCompare = require('string-natural-compare');
 
-// We need this to suppress the useless warning
-// https://github.com/oblador/react-native-vector-icons/issues/1465
-// eslint-disable-next-line no-console, @typescript-eslint/no-explicit-any -- Old code before rule was applied
-Icon.loadFont().catch((error: any) => { console.info(error); });
-
 interface Props {
 	themeId: number;
 	noteId: string|null;

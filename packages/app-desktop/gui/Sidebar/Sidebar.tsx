@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useRef, useCallback, useMemo } from 'react';
+import { useEffect, useRef, useCallback, useMemo, DragEventHandler, MouseEventHandler, RefObject } from 'react';
 import { StyledRoot, StyledAddButton, StyledShareIcon, StyledHeader, StyledHeaderIcon, StyledAllNotesIcon, StyledHeaderLabel, StyledListItem, StyledListItemAnchor, StyledExpandLink, StyledNoteCount, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton, StyledSpanFix } from './styles';
 import { ButtonLevel } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -19,40 +19,38 @@ import Tag from '@joplin/lib/models/Tag';
 import Logger from '@joplin/utils/Logger';
 import { FolderEntity, FolderIcon, FolderIconType, TagEntity } from '@joplin/lib/services/database/types';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
-import { store } from '@joplin/lib/reducer';
+import { StateDecryptionWorker, StateResourceFetcher, store } from '@joplin/lib/reducer';
 import PerFolderSortOrderService from '../../services/sortOrder/PerFolderSortOrderService';
 import { getFolderCallbackUrl, getTagCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import FolderIconBox from '../FolderIconBox';
 import onFolderDrop from '@joplin/lib/models/utils/onFolderDrop';
 import { RuntimeProps } from './commands/focusElementSideBar';
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import { renderFolders, renderTags } from '@joplin/lib/components/shared/side-menu-shared';
 import { getTrashFolderIcon, getTrashFolderId } from '@joplin/lib/services/trash';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import { ThemeStyle, themeStyle } from '@joplin/lib/theme';
-const bridge = require('@electron/remote').require('./bridge').default;
+import { Dispatch } from 'redux';
+import bridge from '../../services/bridge';
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
-const { substrWithEllipsis } = require('@joplin/lib/string-utils');
+import { substrWithEllipsis } from '@joplin/lib/string-utils';
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
-const { clipboard } = require('electron');
+import { clipboard } from 'electron';
 
 const logger = Logger.create('Sidebar');
 
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	folders: FolderEntity[];
 	collapsedFolderIds: string[];
 	notesParentType: string;
 	selectedFolderId: string;
 	selectedTagId: string;
 	selectedSmartFilterId: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	decryptionWorker: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	resourceFetcher: any;
+	decryptionWorker: StateDecryptionWorker;
+	resourceFetcher: StateResourceFetcher;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	syncReport: any;
 	tags: TagEntity[];
@@ -66,17 +64,30 @@ const commands = [
 	require('./commands/focusElementSideBar'),
 ];
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function ExpandIcon(props: any) {
+interface ExpandIconProps {
+	themeId: number;
+	isExpanded: boolean;
+	isVisible: boolean;
+}
+
+function ExpandIcon(props: ExpandIconProps) {
 	const theme = themeStyle(props.themeId);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const style: any = { width: 16, maxWidth: 16, opacity: 0.5, fontSize: Math.round(theme.toolbarIconSize * 0.8), display: 'flex', justifyContent: 'center' };
+	const style: React.CSSProperties = {
+		width: 16, maxWidth: 16, opacity: 0.5, fontSize: Math.round(theme.toolbarIconSize * 0.8), display: 'flex', justifyContent: 'center',
+	};
 	if (!props.isVisible) style.visibility = 'hidden';
 	return <i className={props.isExpanded ? 'fas fa-caret-down' : 'fas fa-caret-right'} style={style}></i>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function ExpandLink(props: any) {
+interface ExpandLinkProps {
+	themeId: number;
+	folderId: string;
+	hasChildren: boolean;
+	isExpanded: boolean;
+	onClick: MouseEventHandler<HTMLElement>;
+}
+
+function ExpandLink(props: ExpandLinkProps) {
 	return props.hasChildren ? (
 		<StyledExpandLink href="#" data-folder-id={props.folderId} onClick={props.onClick}>
 			<ExpandIcon themeId={props.themeId} isVisible={true} isExpanded={props.isExpanded}/>
@@ -100,8 +111,33 @@ const renderFolderIcon = (folderIcon: FolderIcon) => {
 	return <div style={{ marginRight: 7, display: 'flex' }}><FolderIconBox folderIcon={folderIcon}/></div>;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function FolderItem(props: any) {
+type ItemDragListener = DragEventHandler<HTMLElement>;
+type ItemContextMenuListener = MouseEventHandler<HTMLElement>;
+type ItemClickListener = MouseEventHandler<HTMLElement>;
+
+interface FolderItemProps {
+	themeId: number;
+	hasChildren: boolean;
+	showFolderIcon: boolean;
+	isExpanded: boolean;
+	parentId: string;
+	depth: number;
+	selected: boolean;
+	folderId: string;
+	folderTitle: string;
+	folderIcon: FolderIcon;
+	anchorRef: RefObject<HTMLElement>;
+	noteCount: number;
+	onFolderDragStart_: ItemDragListener;
+	onFolderDragOver_: ItemDragListener;
+	onFolderDrop_: ItemDragListener;
+	itemContextMenu: ItemContextMenuListener;
+	folderItem_click: (folderId: string)=> void;
+	onFolderToggleClick_: ItemClickListener;
+	shareId: string;
+}
+
+function FolderItem(props: FolderItemProps) {
 	const { hasChildren, showFolderIcon, isExpanded, parentId, depth, selected, folderId, folderTitle, folderIcon, anchorRef, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_, shareId } = props;
 
 	const noteCountComp = noteCount ? <StyledNoteCount className="note-count-label">{noteCount}</StyledNoteCount> : null;
@@ -147,11 +183,9 @@ const menuUtils = new MenuUtils(CommandService.instance());
 
 const SidebarComponent = (props: Props) => {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const folderItemsOrder_ = useRef<any[]>();
+	const folderItemsOrder_ = useRef<string[]>();
 	folderItemsOrder_.current = [];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const tagItemsOrder_ = useRef<any[]>();
+	const tagItemsOrder_ = useRef<string[]>();
 	tagItemsOrder_.current = [];
 
 	const rootRef = useRef(null);
@@ -214,8 +248,7 @@ const SidebarComponent = (props: Props) => {
 		getFirstAnchorItemRef,
 	]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onFolderDragStart_ = useCallback((event: any) => {
+	const onFolderDragStart_: ItemDragListener = useCallback(event => {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
 		if (!folderId) return;
 
@@ -224,14 +257,12 @@ const SidebarComponent = (props: Props) => {
 		event.dataTransfer.setData('text/x-jop-folder-ids', JSON.stringify([folderId]));
 	}, []);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onFolderDragOver_ = useCallback((event: any) => {
+	const onFolderDragOver_: ItemDragListener = useCallback(event => {
 		if (event.dataTransfer.types.indexOf('text/x-jop-note-ids') >= 0) event.preventDefault();
 		if (event.dataTransfer.types.indexOf('text/x-jop-folder-ids') >= 0) event.preventDefault();
 	}, []);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onFolderDrop_ = useCallback(async (event: any) => {
+	const onFolderDrop_: ItemDragListener = useCallback(async event => {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
 		const dt = event.dataTransfer;
 		if (!dt) return;
@@ -257,8 +288,7 @@ const SidebarComponent = (props: Props) => {
 		}
 	}, []);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onTagDrop_ = useCallback(async (event: any) => {
+	const onTagDrop_: ItemDragListener = useCallback(async event => {
 		const tagId = event.currentTarget.getAttribute('data-tag-id');
 		const dt = event.dataTransfer;
 		if (!dt) return;
@@ -273,8 +303,7 @@ const SidebarComponent = (props: Props) => {
 		}
 	}, []);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onFolderToggleClick_ = useCallback((event: any) => {
+	const onFolderToggleClick_: ItemClickListener = useCallback(event => {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
 
 		props.dispatch({
@@ -293,8 +322,7 @@ const SidebarComponent = (props: Props) => {
 		menu.popup({ window: bridge().window() });
 	}, []);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const itemContextMenu = useCallback(async (event: any) => {
+	const itemContextMenu: ItemContextMenuListener = useCallback(async event => {
 		const itemId = event.currentTarget.getAttribute('data-id');
 		if (itemId === Folder.conflictFolderId()) return;
 
@@ -472,8 +500,7 @@ const SidebarComponent = (props: Props) => {
 		});
 	}, [props.dispatch]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const tagItem_click = useCallback((tag: any) => {
+	const tagItem_click = useCallback((tag: TagEntity|undefined) => {
 		props.dispatch({
 			type: 'TAG_SELECT',
 			id: tag ? tag.id : null,
@@ -625,8 +652,15 @@ const SidebarComponent = (props: Props) => {
 		);
 	};
 
-	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-	const renderHeader = (key: string, label: string, iconName: string, contextMenuHandler: Function = null, onPlusButtonClick: Function = null, extraProps: any = {}) => {
+	const renderHeader = (
+		key: string,
+		label: string,
+		iconName: string,
+		contextMenuHandler: ItemContextMenuListener|null = null,
+		onPlusButtonClick: ItemClickListener|null = null,
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		extraProps: any = {},
+	) => {
 		const headerClick = extraProps.onClick || null;
 		delete extraProps.onClick;
 		const ref = anchorItemRef('headers', key);
@@ -637,8 +671,7 @@ const SidebarComponent = (props: Props) => {
 					ref={ref}
 					{...extraProps}
 					onContextMenu={contextMenuHandler}
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					onClick={(event: any) => {
+					onClick={(event: MouseEvent) => {
 						// if a custom click event is attached, trigger that.
 						if (headerClick) {
 							headerClick(key, event);
@@ -655,7 +688,7 @@ const SidebarComponent = (props: Props) => {
 	};
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onKeyDown = useCallback((event: any) => {
+	const onKeyDown = useCallback((event: KeyboardEvent) => {
 		const keyCode = event.keyCode;
 		const selectedItem = getSelectedItem();
 

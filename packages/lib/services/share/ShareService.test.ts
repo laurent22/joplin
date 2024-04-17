@@ -1,8 +1,6 @@
 import Note from '../../models/Note';
 import { createFolderTree, encryptionService, loadEncryptionMasterKey, msleep, resourceService, setupDatabaseAndSynchronizer, simulateReadOnlyShareEnv, supportDir, switchClient, synchronizerStart } from '../../testing/test-utils';
 import ShareService from './ShareService';
-import reducer, { defaultState } from '../../reducer';
-import { createStore } from 'redux';
 import { NoteEntity, ResourceEntity } from '../database/types';
 import Folder from '../../models/Folder';
 import { setEncryptionEnabled, setPpk } from '../synchronizer/syncInfoUtils';
@@ -19,6 +17,7 @@ import ResourceService from '../ResourceService';
 import Setting from '../../models/Setting';
 import { ModelType } from '../../BaseModel';
 import { remoteNotesFoldersResources } from '../../testing/test-utils-synchronizer';
+import mockShareService from '../../testing/share/mockShareService';
 
 interface TestShareFolderServiceOptions {
 	master_key_id?: string;
@@ -26,31 +25,14 @@ interface TestShareFolderServiceOptions {
 
 const testImagePath = `${supportDir}/photo.jpg`;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const testReducer = (state: any = defaultState, action: any) => {
-	return reducer(state, action);
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function mockService(api: any) {
-	const service = new ShareService();
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const store = createStore(testReducer as any);
-	service.initialize(store, encryptionService(), api);
-	return service;
-}
 
 const mockServiceForNoteSharing = () => {
-	return mockService({
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		exec: (method: string, path = '', _query: Record<string, any> = null, _body: any = null, _headers: any = null, _options: any = null): Promise<any> => {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			if (method === 'GET' && path === 'api/shares') return { items: [] } as any;
-			return null;
+	return mockShareService({
+		getShares: async () => {
+			return { items: [] };
 		},
-		personalizedUserContentBaseUrl(_userId: string) {
-
-		},
+		postShares: async () => null,
+		getShareInvitations: async () => null,
 	});
 };
 
@@ -134,9 +116,9 @@ describe('ShareService', () => {
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	function testShareFolderService(extraExecHandlers: Record<string, Function> = {}, options: TestShareFolderServiceOptions = {}) {
-		return mockService({
+		return mockShareService({
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			exec: async (method: string, path: string, query: Record<string, any>, body: any) => {
+			onExec: async (method: string, path: string, query: Record<string, any>, body: any) => {
 				if (extraExecHandlers[`${method} ${path}`]) return extraExecHandlers[`${method} ${path}`](query, body);
 
 				if (method === 'GET' && path === 'api/shares') {

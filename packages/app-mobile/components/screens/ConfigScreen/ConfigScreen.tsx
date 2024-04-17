@@ -32,6 +32,7 @@ import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/Plug
 import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
 import PluginUploadButton, { canInstallPluginsFromFile, buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
 import NoteImportButton, { importButtonDefaultTitle, importButtonDescription } from './NoteExportSection/NoteImportButton';
+import SectionDescription from './SectionDescription';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -145,6 +146,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 	private logButtonPress_ = () => {
 		void NavService.go('Log');
+	};
+
+	private manageSharesPress_ = () => {
+		void NavService.go('ShareManager');
 	};
 
 	private setShowSearch_(searching: boolean) {
@@ -350,6 +355,15 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		const advancedSettingComps: ReactElement[] = [];
 
 		const headerTitle = Setting.sectionNameToLabel(section.name);
+		const sectionDescription = Setting.sectionDescription(key, AppType.Mobile);
+		if (sectionDescription && !this.state.searching) {
+			settingComps.push(
+				<SectionDescription
+					key='section-description'
+					content={sectionDescription}
+				/>,
+			);
+		}
 
 		const matchesSearchQuery = (relatedText: string|string[]) => {
 			let searchThrough;
@@ -523,6 +537,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			addSettingButton('status_button', _('Sync Status'), this.syncStatusButtonPress_);
 			addSettingButton('log_button', _('Log'), this.logButtonPress_);
 			addSettingButton('fix_search_engine_index', this.state.fixingSearchIndex ? _('Fixing search index...') : _('Fix search index'), this.fixSearchEngineIndexButtonPress_, { disabled: this.state.fixingSearchIndex, description: _('Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.') });
+			const syncTargetInfo = SyncTargetRegistry.infoById(this.state.settings['sync.target']);
+			if (syncTargetInfo.supportsShare) {
+				addSettingButton('manage_shares_button', _('Manage shared folders'), this.manageSharesPress_);
+			}
 		}
 
 		if (section.name === 'importOrExport') {

@@ -50,6 +50,19 @@ describe('UserModel', () => {
 		// check that the email is valid
 		error = await checkThrowAsync(async () => await models().user().save({ id: user1.id, email: 'ohno' }));
 		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
+
+		// check that the email is not too long
+		error = await checkThrowAsync(async () => await models().user().save({ id: user1.id, email: `${'long'.repeat(100)}@example.com` }));
+		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
+
+		// check that the full name is not too long
+		error = await checkThrowAsync(async () => await models().user().save({ id: user1.id, full_name: 'long'.repeat(400) }));
+		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
+
+		// should not throw if updating with valid data
+		expect(
+			await checkThrowAsync(async () => await models().user().save({ id: user1.id, full_name: 'Example', email: 'new_email@example.com' })),
+		).toBe(null);
 	});
 
 	// test('should delete a user', async () => {

@@ -40,7 +40,7 @@ import ElectronAppWrapper from '../../ElectronAppWrapper';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import commands from './commands/index';
-import invitationRespond from '../../services/share/invitationRespond';
+import invitationRespond from '@joplin/lib/services/share/invitationRespond';
 import restart from '../../services/restart';
 const { connect } = require('react-redux');
 import PromptDialog from '../PromptDialog';

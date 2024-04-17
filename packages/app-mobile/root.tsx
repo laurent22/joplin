@@ -111,7 +111,6 @@ import { setRSA } from '@joplin/lib/services/e2ee/ppk';
 import RSA from './services/e2ee/RSA.react-native';
 import { runIntegrationTests as runRsaIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 import { Theme, ThemeAppearance } from '@joplin/lib/themes/type';
-import { AppState } from './utils/types';
 import ProfileSwitcher from './components/ProfileSwitcher/ProfileSwitcher';
 import ProfileEditor from './components/ProfileSwitcher/ProfileEditor';
 import sensorInfo, { SensorInfo } from './components/biometrics/sensorInfo';
@@ -128,6 +127,8 @@ import KeymapService from '@joplin/lib/services/KeymapService';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import initializeCommandService from './utils/initializeCommandService';
 import PlatformImplementation from './plugins/PlatformImplementation';
+import ShareManager from './components/screens/ShareManager';
+import appDefaultState, { DEFAULT_ROUTE } from './utils/appDefaultState';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -253,21 +254,6 @@ function historyCanGoBackTo(route: any) {
 
 	return true;
 }
-
-const DEFAULT_ROUTE = {
-	type: 'NAV_GO',
-	routeName: 'Notes',
-	smartFilterId: 'c3176726992c11e9ac940492261af972',
-};
-
-const appDefaultState: AppState = { ...defaultState, sideMenuOpenPercent: 0,
-	route: DEFAULT_ROUTE,
-	noteSelectionEnabled: false,
-	noteSideMenuOptions: null,
-	isOnMobileData: false,
-	disableSideMenuGestures: false,
-	showPanelsDialog: false,
-};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const appReducer = (state = appDefaultState, action: any) => {
@@ -1122,6 +1108,7 @@ class AppComponent extends React.Component {
 			JoplinCloudLogin: { screen: JoplinCloudLoginScreen },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },
+			ShareManager: { screen: ShareManager },
 			ProfileSwitcher: { screen: ProfileSwitcher },
 			ProfileEditor: { screen: ProfileEditor },
 			Log: { screen: LogScreen },

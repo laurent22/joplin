@@ -1,9 +1,9 @@
-import ShareService from '@joplin/lib/services/share/ShareService';
+import ShareService from './ShareService';
 import Logger from '@joplin/utils/Logger';
-import Folder from '@joplin/lib/models/Folder';
-import { reg } from '@joplin/lib/registry';
-import { _ } from '@joplin/lib/locale';
-import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
+import Folder from '../../models/Folder';
+import { reg } from '../../registry';
+import { _ } from '../../locale';
+import { MasterKeyEntity } from '../e2ee/types';
 
 const logger = Logger.create('invitationRespond');
 
