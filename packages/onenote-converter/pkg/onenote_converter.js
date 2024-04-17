@@ -267,6 +267,14 @@ module.exports.__wbg_log_5bb5f88f245d7762 = function() { return logError(functio
     console.log(getObject(arg0));
 }, arguments) };
 
+module.exports.__wbg_log_1746d5c75ec89963 = function() { return logError(function (arg0, arg1) {
+    console.log(getObject(arg0), getObject(arg1));
+}, arguments) };
+
+module.exports.__wbg_warn_1982e858bdcc0c42 = function() { return logError(function (arg0, arg1) {
+    console.warn(getObject(arg0), getObject(arg1));
+}, arguments) };
+
 module.exports.__wbg_new_63b92bc8671ed464 = function() { return logError(function (arg0) {
     const ret = new Uint8Array(getObject(arg0));
     return addHeapObject(ret);

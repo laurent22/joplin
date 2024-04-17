@@ -108,7 +108,8 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		let updated = md;
 		const markdownLinks = markdownUtils.extractFileUrls(md);
 		const htmlLinks = htmlUtils.extractFileUrls(md);
-		const fileLinks = unique(markdownLinks.concat(htmlLinks));
+		const pdfLinks = htmlUtils.extractPdfUrls(md);
+		const fileLinks = unique(markdownLinks.concat(htmlLinks).concat(pdfLinks));
 		for (const encodedLink of fileLinks) {
 			const link = decodeURI(encodedLink);
 
