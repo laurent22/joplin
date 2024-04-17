@@ -21,6 +21,18 @@ interface IssueReportLinkProps {
 	section: ReportPluginIssueOption;
 }
 
+const styles = StyleSheet.create({
+	aboutPluginContainer: {
+		paddingLeft: 10,
+		paddingRight: 10,
+		paddingBottom: 10,
+	},
+	descriptionText: {
+		marginTop: 5,
+		marginBottom: 5,
+	},
+});
+
 const IssueReportLink: React.FC<IssueReportLinkProps> = props => {
 	const section = props.section;
 
@@ -92,8 +104,6 @@ const PluginInfoModal: React.FC<Props> = props => {
 	);
 };
 
-
-
 const PluginInfoButton: React.FC<Props> = props => {
 	const [showInfoModal, setShowInfoModal] = useState(false);
 	const onInfoButtonPress = useCallback(() => {
@@ -116,16 +126,5 @@ const PluginInfoButton: React.FC<Props> = props => {
 		</>
 	);
 };
-
-const styles = StyleSheet.create({
-	aboutPluginContainer: {
-		paddingLeft: 10,
-		paddingRight: 10,
-	},
-	descriptionText: {
-		marginTop: 5,
-		marginBottom: 5,
-	},
-});
 
 export default PluginInfoButton;
