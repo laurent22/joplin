@@ -37,7 +37,6 @@ interface FolderItemProps {
 	folderIcon: FolderIcon;
 	selectedFolderId: string;
 	notesParentType: string;
-	// anchorRef: RefObject<HTMLElement>;
 	noteCount: number;
 	onFolderDragStart_: ItemDragListener;
 	onFolderDragOver_: ItemDragListener;
@@ -46,11 +45,12 @@ interface FolderItemProps {
 	folderItem_click: (folderId: string)=> void;
 	onFolderToggleClick_: ItemClickListener;
 	shareId: string;
+	selected: boolean;
+	anchorRef: React.Ref<HTMLElement>;
 }
 
 function FolderItem(props: FolderItemProps) {
-	const { hasChildren, showFolderIcon, isExpanded, parentId, depth, folderId, folderTitle, folderIcon, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_, shareId } = props;
-	const selected = props.selectedFolderId === folderId && props.notesParentType === 'Folder';
+	const { hasChildren, showFolderIcon, isExpanded, parentId, depth, selected, folderId, folderTitle, folderIcon, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_, shareId } = props;
 
 	const noteCountComp = noteCount ? <StyledNoteCount className="note-count-label">{noteCount}</StyledNoteCount> : null;
 	const shareIcon = shareId && !parentId ? <StyledShareIcon className="fas fa-share-alt"></StyledShareIcon> : null;
@@ -69,6 +69,7 @@ function FolderItem(props: FolderItemProps) {
 		<StyledListItem depth={depth} selected={selected} className={`list-item-container list-item-depth-${depth} ${selected ? 'selected' : ''}`} onDragStart={onFolderDragStart_} onDragOver={onFolderDragOver_} onDrop={onFolderDrop_} draggable={draggable} data-folder-id={folderId}>
 			<ExpandLink hasChildren={hasChildren} folderId={folderId} onClick={onFolderToggleClick_} isExpanded={isExpanded}/>
 			<StyledListItemAnchor
+				ref={props.anchorRef}
 				className="list-item"
 				isConflictFolder={folderId === Folder.conflictFolderId()}
 				href="#"

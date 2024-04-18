@@ -1,6 +1,6 @@
 import Setting from '@joplin/lib/models/Setting';
 import * as React from 'react';
-import { forwardRef, useCallback } from 'react';
+import { useCallback } from 'react';
 import { StyledListItem, StyledListItemAnchor, StyledSpanFix } from './styles';
 import { TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
 import BaseModel from '@joplin/lib/BaseModel';
@@ -12,13 +12,14 @@ export type TagLinkClickEvent = { tag: TagsWithNoteCountEntity|undefined };
 
 interface Props {
 	selected: boolean;
+	anchorRef: React.Ref<HTMLElement>;
 	tag: TagsWithNoteCountEntity;
 	onTagDrop: React.DragEventHandler<HTMLElement>;
 	onContextMenu: React.MouseEventHandler<HTMLElement>;
 	onClick: (event: TagLinkClickEvent)=> void;
 }
 
-const TagLink = forwardRef((props: Props, ref: React.ForwardedRef<HTMLAnchorElement>) => {
+const TagItem = (props: Props) => {
 	const { tag, selected } = props;
 
 	let noteCount = null;
@@ -39,7 +40,7 @@ const TagLink = forwardRef((props: Props, ref: React.ForwardedRef<HTMLAnchorElem
 		>
 			<EmptyExpandLink/>
 			<StyledListItemAnchor
-				ref={ref}
+				ref={props.anchorRef}
 				className="list-item"
 				href="#"
 				selected={selected}
@@ -53,6 +54,6 @@ const TagLink = forwardRef((props: Props, ref: React.ForwardedRef<HTMLAnchorElem
 			</StyledListItemAnchor>
 		</StyledListItem>
 	);
-});
+};
 
-export default TagLink;
+export default TagItem;

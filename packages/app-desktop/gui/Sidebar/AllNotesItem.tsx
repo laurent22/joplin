@@ -8,7 +8,6 @@ import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
 import PerFolderSortOrderService from '../../services/sortOrder/PerFolderSortOrderService';
 import { _ } from '@joplin/lib/locale';
-import { AppState } from '../../app.reducer';
 import { connect } from 'react-redux';
 import EmptyExpandLink from './EmptyExpandLink';
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
@@ -18,8 +17,8 @@ const MenuItem = bridge().MenuItem;
 
 interface Props {
 	dispatch: Dispatch;
-	selectedSmartFilterId: string;
-	notesParentType: string;
+	selected: boolean;
+	anchorRef: React.Ref<HTMLAnchorElement>;
 }
 
 const menuUtils = new MenuUtils(CommandService.instance());
@@ -46,16 +45,16 @@ const AllNotesItem: React.FC<Props> = props => {
 		menu.popup({ window: bridge().window() });
 	}, []);
 
-	const selected = props.selectedSmartFilterId === ALL_NOTES_FILTER_ID && props.notesParentType === 'SmartFilter';
 	return (
-		<StyledListItem key="allNotesHeader" selected={selected} className={'list-item-container list-item-depth-0 all-notes'} isSpecialItem={true}>
+		<StyledListItem key="allNotesHeader" selected={props.selected} className={'list-item-container list-item-depth-0 all-notes'} isSpecialItem={true}>
 			<EmptyExpandLink/>
 			<StyledAllNotesIcon className="icon-notes"/>
 			<StyledListItemAnchor
+				ref={props.anchorRef}
 				className="list-item"
 				isSpecialItem={true}
 				href="#"
-				selected={selected}
+				selected={props.selected}
 				onClick={onAllNotesClick_}
 				onContextMenu={toggleAllNotesContextMenu}
 			>
@@ -65,9 +64,4 @@ const AllNotesItem: React.FC<Props> = props => {
 	);
 };
 
-export default connect((state: AppState) => {
-	return {
-		selectedSmartFilterId: state.selectedSmartFilterId,
-		notesParentType: state.notesParentType,
-	};
-})(AllNotesItem);
+export default connect(()=>({}))(AllNotesItem);

@@ -46,6 +46,10 @@ interface RenderFoldersProps {
 	collapsedFolderIds: string[];
 }
 
+export const isFolderSelected = (folder: FolderEntity, context: { selectedFolderId: string; notesParentType: string }) => {
+	return context.selectedFolderId === folder.id && context.notesParentType === 'Folder';
+};
+
 function renderFoldersRecursive_<T>(props: RenderFoldersProps, renderItem: RenderFolderItem<T>, items: T[], parentId: string, depth: number, order: string[]): ItemsWithOrder<T> {
 	const folders = props.folders;
 	for (let i = 0; i < folders.length; i++) {
@@ -57,7 +61,7 @@ function renderFoldersRecursive_<T>(props: RenderFoldersProps, renderItem: Rende
 		if (folderIsCollapsed(props.folders, folder.id, props.collapsedFolderIds)) continue;
 		const hasChildren = folderHasChildren_(folders, folder.id);
 		order.push(folder.id);
-		items.push(renderItem(folder, props.selectedFolderId === folder.id && props.notesParentType === 'Folder', hasChildren, depth));
+		items.push(renderItem(folder, isFolderSelected(folder, props), hasChildren, depth));
 		if (hasChildren) {
 			const result = renderFoldersRecursive_(props, renderItem, items, folder.id, depth + 1, order);
 			items = result.items;
@@ -74,7 +78,7 @@ export const renderFolders = <T> (props: RenderFoldersProps, renderItem: RenderF
 	return renderFoldersRecursive_(props, renderItem, [], '', 0, []);
 };
 
-export const sortTags = (tags: TagEntity[]) => {
+const sortTags = (tags: TagEntity[]) => {
 	tags = tags.slice();
 	const collator = getCollator();
 	tags.sort((a, b) => {
@@ -93,6 +97,10 @@ export const sortTags = (tags: TagEntity[]) => {
 	return tags;
 };
 
+export const isTagSelected = (tag: TagEntity, context: { selectedTagId: string; notesParentType: string }) => {
+	return context.selectedTagId === tag.id && context.notesParentType === 'Tag';
+};
+
 interface RenderTagsProps {
 	tags: TagsWithNoteCountEntity[];
 	selectedTagId: string;
@@ -106,7 +114,7 @@ export const renderTags = <T> (props: RenderTagsProps, renderItem: RenderTagItem
 	for (let i = 0; i < tags.length; i++) {
 		const tag = tags[i];
 		order.push(tag.id);
-		tagItems.push(renderItem(tag, props.selectedTagId === tag.id && props.notesParentType === 'Tag'));
+		tagItems.push(renderItem(tag, isTagSelected(tag, props)));
 	}
 	return {
 		items: tagItems,

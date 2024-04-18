@@ -30,7 +30,6 @@ export type AllNotesListItem = {
 
 export type TagListItem = {
 	kind: ListItemType.Tag;
-	selected: boolean;
 	tag: TagsWithNoteCountEntity;
 };
 
@@ -46,3 +45,5 @@ export type ListItem = HeaderListItem|AllNotesListItem|TagListItem|FolderListIte
 export type ItemDragListener = DragEventHandler<HTMLElement>;
 export type ItemContextMenuListener = MouseEventHandler<HTMLElement>;
 export type ItemClickListener = MouseEventHandler<HTMLElement>;
+
+export type SetSelectedIndexCallback = (newIndex: number)=> void;

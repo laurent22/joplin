@@ -35,10 +35,9 @@ const useSidebarListData = (props: Props): ListItem[] => {
 			selectedTagId: props.selectedTagId,
 		};
 
-		return renderTags<ListItem>(renderProps, (tag, selected): TagListItem => {
+		return renderTags<ListItem>(renderProps, (tag, _selected): TagListItem => {
 			return {
 				kind: ListItemType.Tag,
-				selected,
 				tag,
 			};
 		});

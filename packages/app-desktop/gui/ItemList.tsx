@@ -20,8 +20,7 @@ interface State {
 class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 
 	private scrollTop_: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private listRef: any;
+	private listRef: React.MutableRefObject<HTMLDivElement>;
 
 	public constructor(props: Props<ItemType>) {
 		super(props);
@@ -61,6 +60,10 @@ class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 
 	public offsetScroll() {
 		return this.scrollTop_;
+	}
+
+	public get container() {
+		return this.listRef.current;
 	}
 
 	public UNSAFE_componentWillMount() {

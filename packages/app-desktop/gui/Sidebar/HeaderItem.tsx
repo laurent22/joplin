@@ -8,6 +8,7 @@ interface Props {
 	item: HeaderListItem;
 	contextMenuHandler: ItemContextMenuListener|null;
 	onDrop: React.DragEventHandler|null;
+	anchorRef: React.Ref<HTMLElement>;
 }
 
 const HeaderItem: React.FC<Props> = props => {
@@ -30,6 +31,8 @@ const HeaderItem: React.FC<Props> = props => {
 			<StyledHeader
 				onContextMenu={props.contextMenuHandler}
 				onClick={onClick}
+				tabIndex={0}
+				ref={props.anchorRef}
 			>
 				<StyledHeaderIcon className={item.iconName}/>
 				<StyledHeaderLabel>{item.label}</StyledHeaderLabel>

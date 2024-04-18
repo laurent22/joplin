@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DragEventHandler, MouseEventHandler, useCallback, useMemo, useRef } from 'react';
 import { ItemClickListener, ItemDragListener, ListItem, ListItemType } from '../types';
-import TagLink, { TagLinkClickEvent } from '../TagLink';
+import TagItem, { TagLinkClickEvent } from '../TagItem';
 import { Dispatch } from 'redux';
 import { clipboard } from 'electron';
 import { getTrashFolderId } from '@joplin/lib/services/trash';
@@ -41,6 +41,9 @@ interface Props {
 	plugins: PluginStates;
 	folders: FolderEntity[];
 	collapsedFolderIds: string[];
+
+	selectedIndex: number;
+	onSelectedElementShown: (element: HTMLElement)=> void;
 }
 
 type ItemContextMenuListener = MouseEventHandler<HTMLElement>;
@@ -324,12 +327,25 @@ const useOnRenderItem = (props: Props) => {
 		return Folder.shouldShowFolderIcons(props.folders);
 	}, [props.folders]);
 
-	return useCallback((item: ListItem, _index: number) => {
+	const selectedIndexRef = useRef(props.selectedIndex);
+	selectedIndexRef.current = props.selectedIndex;
+
+	return useCallback((item: ListItem, index: number) => {
+		const selected = props.selectedIndex === index;
+		const anchorRefCallback = selected ? (
+			(element: HTMLElement) => {
+				if (selectedIndexRef.current === index) {
+					props.onSelectedElementShown(element);
+				}
+			}
+		) : null;
+
 		if (item.kind === ListItemType.Tag) {
 			const tag = item.tag;
-			return <TagLink
+			return <TagItem
 				key={tag.id}
-				selected={item.selected}
+				anchorRef={anchorRefCallback}
+				selected={selected}
 				onClick={tagItem_click}
 				onTagDrop={onTagDrop_}
 				onContextMenu={onItemContextMenu}
@@ -356,6 +372,8 @@ const useOnRenderItem = (props: Props) => {
 			}
 			return <FolderItem
 				key={folder.id}
+				anchorRef={anchorRefCallback}
+				selected={selected}
 				folderId={folder.id}
 				folderTitle={Folder.displayTitle(folder)}
 				folderIcon={Folder.unserializeIcon(folder.icon)}
@@ -377,11 +395,16 @@ const useOnRenderItem = (props: Props) => {
 			return <HeaderItem
 				key={item.id}
 				item={item}
+				anchorRef={anchorRefCallback}
 				contextMenuHandler={header_contextMenu}
 				onDrop={item.supportsFolderDrop ? onFolderDrop_ : null}
 			/>;
 		} else if (item.kind === ListItemType.AllNotes) {
-			return <AllNotesItem key='all-notes' />;
+			return <AllNotesItem
+				key='all-notes'
+				selected={selected}
+				anchorRef={anchorRefCallback}
+			/>;
 		} else {
 			const exhaustivenessCheck: never = item;
 			return exhaustivenessCheck;
@@ -399,6 +422,8 @@ const useOnRenderItem = (props: Props) => {
 		props.folders,
 		showFolderIcons,
 		tagItem_click,
+		props.selectedIndex,
+		props.onSelectedElementShown,
 	]);
 };
 

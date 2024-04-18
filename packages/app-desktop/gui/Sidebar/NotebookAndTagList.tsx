@@ -7,8 +7,12 @@ import { FolderEntity, TagsWithNoteCountEntity } from '@joplin/lib/services/data
 import useOnRenderItem from './hooks/useOnRenderItem';
 import { Dispatch } from 'redux';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import useElementHeight from '../hooks/useElementHeight';
+import useSelectedSidebarIndex from './hooks/useSelectedSidebarIndex';
+import useOnSidebarKeyDownHandler from './hooks/useOnSidebarKeyDownHandler';
+import { ListItem } from './types';
+import useFocusHandler from './hooks/useFocusHandler';
 
 interface Props {
 	dispatch: Dispatch;
@@ -18,6 +22,7 @@ interface Props {
 	notesParentType: string;
 	selectedTagId: string;
 	selectedFolderId: string;
+	selectedSmartFilterId: string;
 	collapsedFolderIds: string[];
 	folderHeaderIsExpanded: boolean;
 	tagHeaderIsExpanded: boolean;
@@ -27,8 +32,27 @@ interface Props {
 
 const NotebookAndTagList: React.FC<Props> = props => {
 	const items = useSidebarListData(props);
+	const { selectedIndex, updateSelectedIndex } = useSelectedSidebarIndex({
+		...props,
+		sidebarData: items,
+	});
 
-	const onRenderItem = useOnRenderItem(props);
+	const [selectedListElement, setSelectedListElement] = useState<HTMLElement|null>(null);
+	const onRenderItem = useOnRenderItem({
+		...props,
+		selectedIndex,
+		onSelectedElementShown: setSelectedListElement,
+	});
+
+	const onKeyEventHandler = useOnSidebarKeyDownHandler({
+		dispatch: props.dispatch,
+		sidebarData: items,
+		selectedIndex,
+		updateSelectedIndex,
+	});
+
+	const itemListRef = useRef<ItemList<ListItem>>();
+	useFocusHandler({ itemListRef, selectedListElement, selectedIndex });
 
 	const [itemListContainer, setItemListContainer] = useState<HTMLDivElement|null>(null);
 	const listHeight = useElementHeight(itemListContainer);
@@ -41,10 +65,12 @@ const NotebookAndTagList: React.FC<Props> = props => {
 		>
 			<ItemList
 				className='items'
+				ref={itemListRef}
 				style={listStyle}
 				itemHeight={30}
 				items={items}
 				itemRenderer={onRenderItem}
+				onKeyDown={onKeyEventHandler}
 			/>
 		</div>
 	);
@@ -59,6 +85,7 @@ const mapStateToProps = (state: AppState) => {
 		selectedFolderId: state.selectedFolderId,
 		selectedTagId: state.selectedTagId,
 		collapsedFolderIds: state.collapsedFolderIds,
+		selectedSmartFilterId: state.selectedSmartFilterId,
 		plugins: state.pluginService.plugins,
 		tagHeaderIsExpanded: state.settings.tagHeaderIsExpanded,
 		folderHeaderIsExpanded: state.settings.folderHeaderIsExpanded,

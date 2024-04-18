@@ -1,8 +1,8 @@
 import { FolderEntity } from '../../services/database/types';
 import { getTrashFolder, getTrashFolderId } from '../../services/trash';
-import { RenderFolderItem, renderFolders } from './side-menu-shared';
+import { renderFolders } from './side-menu-shared';
 
-const renderItem: RenderFolderItem = (folder: FolderEntity, selected: boolean, hasChildren: boolean, depth: number) => {
+const renderItem = (folder: FolderEntity, selected: boolean, hasChildren: boolean, depth: number) => {
 	return [folder.id, selected, hasChildren, depth];
 };
 
