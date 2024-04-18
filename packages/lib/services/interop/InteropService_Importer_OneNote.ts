@@ -4,8 +4,8 @@ import InteropService_Importer_Base from './InteropService_Importer_Base';
 import { NoteEntity } from '../database/types';
 import { rtrimSlashes } from '../../path-utils';
 import { oneNoteConverter } from '@joplin/onenote-converter';
-import InteropService_Importer_Md from './InteropService_Importer_Md';
 import * as AdmZip from 'adm-zip';
+import InteropService_Importer_OneNoteHtml from './InteropService_Importer_OneNoteHtml';
 
 export default class InteropService_Importer_OneNote extends InteropService_Importer_Base {
 	protected importedNotes: Record<string, NoteEntity> = {};
@@ -33,7 +33,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			}
 		}
 
-		const importer = new InteropService_Importer_Md();
+		const importer = new InteropService_Importer_OneNoteHtml();
 		importer.setMetadata({ fileExtensions: ['html'] });
 		await importer.init(outputDirectory, {
 			...this.options_,
