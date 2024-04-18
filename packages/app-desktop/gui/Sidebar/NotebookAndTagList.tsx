@@ -31,10 +31,10 @@ interface Props {
 
 
 const NotebookAndTagList: React.FC<Props> = props => {
-	const items = useSidebarListData(props);
+	const listItems = useSidebarListData(props);
 	const { selectedIndex, updateSelectedIndex } = useSelectedSidebarIndex({
 		...props,
-		sidebarData: items,
+		listItems: listItems,
 	});
 
 	const [selectedListElement, setSelectedListElement] = useState<HTMLElement|null>(null);
@@ -46,13 +46,13 @@ const NotebookAndTagList: React.FC<Props> = props => {
 
 	const onKeyEventHandler = useOnSidebarKeyDownHandler({
 		dispatch: props.dispatch,
-		sidebarData: items,
+		listItems: listItems,
 		selectedIndex,
 		updateSelectedIndex,
 	});
 
 	const itemListRef = useRef<ItemList<ListItem>>();
-	useFocusHandler({ itemListRef, selectedListElement, selectedIndex });
+	useFocusHandler({ itemListRef, selectedListElement, selectedIndex, listItems });
 
 	const [itemListContainer, setItemListContainer] = useState<HTMLDivElement|null>(null);
 	const listHeight = useElementHeight(itemListContainer);
@@ -68,7 +68,7 @@ const NotebookAndTagList: React.FC<Props> = props => {
 				ref={itemListRef}
 				style={listStyle}
 				itemHeight={30}
-				items={items}
+				items={listItems}
 				itemRenderer={onRenderItem}
 				onKeyDown={onKeyEventHandler}
 			/>

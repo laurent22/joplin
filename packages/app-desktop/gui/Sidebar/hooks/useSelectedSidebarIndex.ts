@@ -7,7 +7,7 @@ const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
 interface Props {
 	dispatch: Dispatch;
-	sidebarData: ListItem[];
+	listItems: ListItem[];
 
 	notesParentType: string;
 	selectedTagId: string;
@@ -17,8 +17,8 @@ interface Props {
 
 const useSelectedSidebarIndex = (props: Props) => {
 	const appStateSelectedIndex = useMemo(() => {
-		for (let i = 0; i < props.sidebarData.length; i++) {
-			const listItem = props.sidebarData[i];
+		for (let i = 0; i < props.listItems.length; i++) {
+			const listItem = props.listItems[i];
 
 			let selected = false;
 			if (listItem.kind === ListItemType.AllNotes) {
@@ -39,8 +39,13 @@ const useSelectedSidebarIndex = (props: Props) => {
 			}
 		}
 		return -1;
-	}, [props.sidebarData, props.selectedFolderId, props.selectedTagId, props.selectedSmartFilterId, props.notesParentType]);
+	}, [props.listItems, props.selectedFolderId, props.selectedTagId, props.selectedSmartFilterId, props.notesParentType]);
 
+	// Not all list items correspond with selectable Joplin folders/notebooks/tags, but we want to
+	// be able to select them anyway. This is handled with selectedIndexOverride.
+	//
+	// When selectedIndexOverride >= 0, it corresponds to the index of a selected item with no corresponding
+	// Joplin object.
 	const [selectedIndexOverride, setSelectedIndexOverride] = useState(-1);
 	useEffect(() => {
 		setSelectedIndexOverride(-1);
@@ -49,11 +54,12 @@ const useSelectedSidebarIndex = (props: Props) => {
 	const updateSelectedIndex = useCallback((newIndex: number) => {
 		if (newIndex < 0) {
 			newIndex = 0;
-		} else if (newIndex >= props.sidebarData.length) {
-			newIndex = props.sidebarData.length - 1;
+		} else if (newIndex >= props.listItems.length) {
+			newIndex = props.listItems.length - 1;
 		}
 
-		const newItem = props.sidebarData[newIndex];
+		const newItem = props.listItems[newIndex];
+		let newOverrideIndex = -1;
 		if (newItem.kind === ListItemType.AllNotes) {
 			props.dispatch({
 				type: 'SMART_FILTER_SELECT',
@@ -70,9 +76,10 @@ const useSelectedSidebarIndex = (props: Props) => {
 				id: newItem.tag.id,
 			});
 		} else {
-			setSelectedIndexOverride(newIndex);
+			newOverrideIndex = newIndex;
 		}
-	}, [props.sidebarData, props.dispatch]);
+		setSelectedIndexOverride(newOverrideIndex);
+	}, [props.listItems, props.dispatch]);
 
 	const selectedIndex = selectedIndexOverride === -1 ? appStateSelectedIndex : selectedIndexOverride;
 	return { selectedIndex, updateSelectedIndex };

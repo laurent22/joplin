@@ -13,7 +13,11 @@ export enum ListItemType {
 	AllNotes = 'all-notes',
 }
 
-export type HeaderListItem = {
+interface BaseListItem {
+	key: string;
+}
+
+export interface HeaderListItem extends BaseListItem {
 	kind: ListItemType.Header;
 	label: string;
 	iconName: string;
@@ -22,23 +26,23 @@ export type HeaderListItem = {
 	onPlusButtonClick: MouseEventHandler<HTMLElement>|null;
 	extraProps: Record<string, string>;
 	supportsFolderDrop: boolean;
-};
+}
 
-export type AllNotesListItem = {
+export interface AllNotesListItem extends BaseListItem {
 	kind: ListItemType.AllNotes;
-};
+}
 
-export type TagListItem = {
+export interface TagListItem extends BaseListItem {
 	kind: ListItemType.Tag;
 	tag: TagsWithNoteCountEntity;
-};
+}
 
-export type FolderListItem = {
+export interface FolderListItem extends BaseListItem {
 	kind: ListItemType.Notebook;
 	folder: FolderEntity;
 	hasChildren: boolean;
 	depth: number;
-};
+}
 
 export type ListItem = HeaderListItem|AllNotesListItem|TagListItem|FolderListItem;
 

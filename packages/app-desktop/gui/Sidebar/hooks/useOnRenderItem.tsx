@@ -343,7 +343,7 @@ const useOnRenderItem = (props: Props) => {
 		if (item.kind === ListItemType.Tag) {
 			const tag = item.tag;
 			return <TagItem
-				key={tag.id}
+				key={item.key}
 				anchorRef={anchorRefCallback}
 				selected={selected}
 				onClick={tagItem_click}
@@ -371,7 +371,7 @@ const useOnRenderItem = (props: Props) => {
 				}
 			}
 			return <FolderItem
-				key={folder.id}
+				key={item.key}
 				anchorRef={anchorRefCallback}
 				selected={selected}
 				folderId={folder.id}
@@ -401,7 +401,7 @@ const useOnRenderItem = (props: Props) => {
 			/>;
 		} else if (item.kind === ListItemType.AllNotes) {
 			return <AllNotesItem
-				key='all-notes'
+				key={item.key}
 				selected={selected}
 				anchorRef={anchorRefCallback}
 			/>;

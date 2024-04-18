@@ -5,16 +5,16 @@ import CommandService from '@joplin/lib/services/CommandService';
 
 interface Props {
 	dispatch: Dispatch;
-	sidebarData: ListItem[];
+	listItems: ListItem[];
 	selectedIndex: number;
 	updateSelectedIndex: SetSelectedIndexCallback;
 }
 
 const useOnSidebarKeyDownHandler = (props: Props) => {
-	const { updateSelectedIndex, sidebarData, selectedIndex, dispatch } = props;
+	const { updateSelectedIndex, listItems, selectedIndex, dispatch } = props;
 
 	return useCallback<KeyboardEventHandler<HTMLElement>>((event) => {
-		const selectedItem = sidebarData[selectedIndex];
+		const selectedItem = listItems[selectedIndex];
 		if (selectedItem && selectedItem.kind === ListItemType.Notebook && event.code === 'Space') {
 			event.preventDefault();
 
@@ -43,7 +43,7 @@ const useOnSidebarKeyDownHandler = (props: Props) => {
 			event.preventDefault();
 			updateSelectedIndex(selectedIndex + indexChange);
 		}
-	}, [selectedIndex, sidebarData, updateSelectedIndex, dispatch]);
+	}, [selectedIndex, listItems, updateSelectedIndex, dispatch]);
 };
 
 export default useOnSidebarKeyDownHandler;

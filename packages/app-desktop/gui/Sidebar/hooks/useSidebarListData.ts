@@ -30,6 +30,7 @@ const useSidebarListData = (props: Props): ListItem[] => {
 			return {
 				kind: ListItemType.Tag,
 				tag,
+				key: tag.id,
 			};
 		});
 	}, [props.tags]);
@@ -46,6 +47,7 @@ const useSidebarListData = (props: Props): ListItem[] => {
 				folder,
 				hasChildren,
 				depth,
+				key: folder.id,
 			};
 		});
 	}, [props.folders, props.collapsedFolderIds]);
@@ -56,6 +58,7 @@ const useSidebarListData = (props: Props): ListItem[] => {
 			label: _('Notebooks'),
 			iconName: 'icon-notebooks',
 			id: HeaderId.NotebookHeader,
+			key: HeaderId.NotebookHeader,
 			onClick: onHeaderClick,
 			onPlusButtonClick: onAddFolderButtonClick,
 			extraProps: {
@@ -65,7 +68,7 @@ const useSidebarListData = (props: Props): ListItem[] => {
 			supportsFolderDrop: true,
 		};
 		const notebooksSectionContent: ListItem[] = props.folderHeaderIsExpanded ? [
-			{ kind: ListItemType.AllNotes },
+			{ kind: ListItemType.AllNotes, key: 'all-notes' },
 			...folderItems.items,
 		] : [];
 
@@ -74,6 +77,7 @@ const useSidebarListData = (props: Props): ListItem[] => {
 			label: _('Tags'),
 			iconName: 'icon-tags',
 			id: HeaderId.TagHeader,
+			key: HeaderId.TagHeader,
 			onClick: onHeaderClick,
 			onPlusButtonClick: null,
 			extraProps: {
