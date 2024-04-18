@@ -5805,9 +5805,6 @@ msgstr "Отдалить"
 #~ "Шаг 1: Для авторизации приложения откройте следующую ссылку в вашем "
 #~ "браузере:"
 
-#~ msgid "Delete note?"
-#~ msgstr "Удалить заметку?"
-
 #~ msgid ""
 #~ "Delete notebook? All notes and sub-notebooks within this notebook will "
 #~ "also be deleted."
