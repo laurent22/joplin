@@ -11,6 +11,7 @@ export enum ListItemType {
 	Tag = 'tag',
 	Notebook = 'notebook',
 	AllNotes = 'all-notes',
+	Spacer = 'spacer',
 }
 
 interface BaseListItem {
@@ -44,7 +45,11 @@ export interface FolderListItem extends BaseListItem {
 	depth: number;
 }
 
-export type ListItem = HeaderListItem|AllNotesListItem|TagListItem|FolderListItem;
+export interface SpacerListItem extends BaseListItem {
+	kind: ListItemType.Spacer;
+}
+
+export type ListItem = HeaderListItem|AllNotesListItem|TagListItem|FolderListItem|SpacerListItem;
 
 export type ItemDragListener = DragEventHandler<HTMLElement>;
 export type ItemContextMenuListener = MouseEventHandler<HTMLElement>;

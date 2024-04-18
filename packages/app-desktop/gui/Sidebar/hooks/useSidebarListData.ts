@@ -70,6 +70,7 @@ const useSidebarListData = (props: Props): ListItem[] => {
 		const notebooksSectionContent: ListItem[] = props.folderHeaderIsExpanded ? [
 			{ kind: ListItemType.AllNotes, key: 'all-notes' },
 			...folderItems.items,
+			{ kind: ListItemType.Spacer, key: 'after-notebooks-spacer' },
 		] : [];
 
 		const tagsHeader: HeaderListItem = {

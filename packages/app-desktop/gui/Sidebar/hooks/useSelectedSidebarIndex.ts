@@ -23,7 +23,7 @@ const useSelectedSidebarIndex = (props: Props) => {
 			let selected = false;
 			if (listItem.kind === ListItemType.AllNotes) {
 				selected = props.selectedSmartFilterId === ALL_NOTES_FILTER_ID && props.notesParentType === 'SmartFilter';
-			} else if (listItem.kind === ListItemType.Header) {
+			} else if (listItem.kind === ListItemType.Header || listItem.kind === ListItemType.Spacer) {
 				selected = false;
 			} else if (listItem.kind === ListItemType.Notebook) {
 				selected = isFolderSelected(listItem.folder, { selectedFolderId: props.selectedFolderId, notesParentType: props.notesParentType });

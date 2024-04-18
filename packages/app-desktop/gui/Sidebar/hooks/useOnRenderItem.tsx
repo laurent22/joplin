@@ -405,6 +405,10 @@ const useOnRenderItem = (props: Props) => {
 				selected={selected}
 				anchorRef={anchorRefCallback}
 			/>;
+		} else if (item.kind === ListItemType.Spacer) {
+			return (
+				<a key={item.key} className='sidebar-spacer-item' ref={anchorRefCallback} aria-label={_('Spacer')}></a>
+			);
 		} else {
 			const exhaustivenessCheck: never = item;
 			return exhaustivenessCheck;
