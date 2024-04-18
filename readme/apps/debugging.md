@@ -8,10 +8,10 @@ If the application starts with a white screen, open **Help &gt; Toggle Developme
 
 Otherwise, follow these instructions:
 
-- Click on menu **Help &gt; Open Profile Directory** and add a file named "flags.txt" in your directory with the following content: `--open-dev-tools --debug --log-level debug`
-- Restart the application
-- The development tools should now be opened. Click the "Console" tab
-- Now repeat the action that was causing problem. The console might output warnings or errors - please add them to the GitHub issue. Also open log.txt in the config folder and if there is any error or warning, please also add them to the issue.
+1. Click on menu **Help &gt; Open Profile Directory** and add a file named "flags.txt" in your directory with the following content: `--open-dev-tools --debug --log-level debug`
+2. Restart the application
+3. The development tools should now be opened. Click the "Console" tab
+4. Now repeat the action that was causing problem. The console might output warnings or errors - please add them to the GitHub issue. Also open log.txt in the config folder and if there is any error or warning, please also add them to the issue.
 
 Make sure you disable debugging once you've finished. Leaving it enabled can cause your log.txt to grow very quickly. To disable debugging, simply delete the "flags.txt" file created.
 
@@ -25,19 +25,19 @@ Safe mode is a special mode that disables all plugins and renders the notes as p
 
 There's two ways to start in safe mode:
 
-1. From the app, click on **Help &gt; Toggle safe mode**. The app will restart in safe mode.
+- From the app, click on **Help &gt; Toggle safe mode**. The app will restart in safe mode.
 
-2. If that doesn't work, if for example the app freezes before you can access this menu, you can set a debug flag in "flags.txt" file, [as described above](#desktop-application). Simply set the content to `--safe-mode --open-dev-tools --debug --log-level debug`.
+- If that doesn't work, if for example the app freezes before you can access this menu, you can set a debug flag in "flags.txt" file, [as described above](#desktop-application). Simply set the content to `--safe-mode --open-dev-tools --debug --log-level debug`.
 
 ## CLI application
 
-- Start the app with `joplin --debug --log-level debug`
-- Check log.txt as specified above for the desktop application and attach the log to the GitHub issue (or just the warnings/errors if any). The profile directory would be in `~/.config/joplin`.
+1. Start the app with `joplin --debug --log-level debug`
+2. Check log.txt as specified above for the desktop application and attach the log to the GitHub issue (or just the warnings/errors if any). The profile directory would be in `~/.config/joplin`.
 
 ## Mobile application
 
-- In the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md), press on the **Log button**, and from the options menu, press "share".
-- Attach the shared log (or just relevant portions) to the GitHub issue.
+1. In the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md), press on the **Log button**, and from the options menu, press "share".
+2. Attach the shared log (or just relevant portions) to the GitHub issue.
 
 If you recently (within two weeks) upgraded from 12.11.x to version 12.12.x, [be sure to check the log for and remove any sensitive data shared with Joplin](https://github.com/laurent22/joplin/issues/8211).
 
@@ -47,9 +47,9 @@ https://developer.android.com/studio/debug/bug-report
 
 To get a bug report directly from your device, do the following:
 
-- Be sure you have [Developer Options](https://developer.android.com/studio/debug/dev-options) enabled.
-- In Developer options, tap Take bug report.
-- Select the type of bug report you want and tap Report.
+1. Be sure you have [Developer Options](https://developer.android.com/studio/debug/dev-options) enabled.
+2. In Developer options, tap Take bug report.
+3. Select the type of bug report you want and tap Report.
 
 After a moment you get a notification that the bug report is ready. To share the bug report, tap the notification.
 
