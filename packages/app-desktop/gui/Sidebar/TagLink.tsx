@@ -1,12 +1,12 @@
 import Setting from '@joplin/lib/models/Setting';
 import * as React from 'react';
 import { forwardRef, useCallback } from 'react';
-import ExpandIcon from './ExpandIcon';
-import { StyledExpandLink, StyledListItem, StyledListItemAnchor, StyledSpanFix } from './styles';
+import { StyledListItem, StyledListItemAnchor, StyledSpanFix } from './styles';
 import { TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
 import BaseModel from '@joplin/lib/BaseModel';
 import NoteCount from './NoteCount';
 import Tag from '@joplin/lib/models/Tag';
+import EmptyExpandLink from './EmptyExpandLink';
 
 export type TagLinkClickEvent = { tag: TagsWithNoteCountEntity|undefined };
 
@@ -37,7 +37,7 @@ const TagLink = forwardRef((props: Props, ref: React.ForwardedRef<HTMLAnchorElem
 			onDrop={props.onTagDrop}
 			data-tag-id={tag.id}
 		>
-			<StyledExpandLink>{<ExpandIcon isExpanded={false} isVisible={false}/>}</StyledExpandLink>
+			<EmptyExpandLink/>
 			<StyledListItemAnchor
 				ref={ref}
 				className="list-item"

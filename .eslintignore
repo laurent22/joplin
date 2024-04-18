@@ -396,6 +396,7 @@ packages/app-desktop/gui/SearchBar/SearchBar.js
 packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js
 packages/app-desktop/gui/ShareNoteDialog.js
 packages/app-desktop/gui/Sidebar/AllNotesItem.js
+packages/app-desktop/gui/Sidebar/EmptyExpandLink.js
 packages/app-desktop/gui/Sidebar/ExpandIcon.js
 packages/app-desktop/gui/Sidebar/ExpandLink.js
 packages/app-desktop/gui/Sidebar/FolderItem.js

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { MouseEventHandler } from 'react';
 import ExpandIcon from './ExpandIcon';
+import EmptyExpandLink from './EmptyExpandLink';
 
 interface ExpandLinkProps {
-	themeId: number;
 	folderId: string;
 	hasChildren: boolean;
 	isExpanded: boolean;
@@ -16,7 +16,7 @@ const ExpandLink: React.FC<ExpandLinkProps> = props => {
 			<ExpandIcon isVisible={true} isExpanded={props.isExpanded}/>
 		</a>
 	) : (
-		<a className='sidebar-expand-link'><ExpandIcon isVisible={false} isExpanded={false}/></a>
+		<EmptyExpandLink/>
 	);
 };
 

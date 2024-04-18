@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { StyledAllNotesIcon, StyledExpandLink, StyledListItem, StyledListItemAnchor } from './styles';
-import ExpandIcon from './ExpandIcon';
+import { StyledAllNotesIcon, StyledListItem, StyledListItemAnchor } from './styles';
 import { useCallback } from 'react';
 import { Dispatch } from 'redux';
 import bridge from '../../services/bridge';
@@ -12,6 +11,7 @@ import PerFolderSortOrderService from '../../services/sortOrder/PerFolderSortOrd
 import { _ } from '@joplin/lib/locale';
 import { AppState } from '../../app.reducer';
 import { connect } from 'react-redux';
+import EmptyExpandLink from './EmptyExpandLink';
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
 interface Props {
@@ -47,7 +47,7 @@ const AllNotesItem: React.FC<Props> = props => {
 	const selected = props.selectedSmartFilterId === ALL_NOTES_FILTER_ID && props.notesParentType === 'SmartFilter';
 	return (
 		<StyledListItem key="allNotesHeader" selected={selected} className={'list-item-container list-item-depth-0 all-notes'} isSpecialItem={true}>
-			<StyledExpandLink><ExpandIcon isExpanded={false} isVisible={false} /></StyledExpandLink>
+			<EmptyExpandLink/>
 			<StyledAllNotesIcon className="icon-notes"/>
 			<StyledListItemAnchor
 				className="list-item"

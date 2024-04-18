@@ -90,20 +90,6 @@ export const StyledShareIcon = styled.i`
 	margin-left: 8px;
 `;
 
-export const StyledExpandLink = styled.a`
-	color: ${(props: StyleProps) => props.theme.color2};
-	cursor: default;
-	opacity: 0.8;
-	text-decoration: none;
-	padding-right: 8px;
-	display: flex;
-	align-items: center;
-	width: 16px;
-	max-width: 16px;
-	min-width: 16px;
-	height: 100%;
-`;
-
 export const StyledNoteCount = styled.div`
 	color: ${(props: StyleProps) => props.theme.colorFaded2};
 	padding-left: 8px;
