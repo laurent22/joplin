@@ -138,6 +138,64 @@ describe('useLayoutItemSizes', () => {
 		expect(itemSize(parent.children[1], parent, sizes, false)).toEqual({ width: 95, height: 50 });
 	});
 
+	test('should give elements resizeableRight, if editor is last element', () => {
+		const defaultLayout: LayoutItem = {
+			key: 'root',
+			children: [
+				{ key: 'sideBar', width: 250 },
+				{ key: 'noteList', width: 250 },
+				{ key: 'editor' },
+			],
+		};
+
+		const layout = validateLayout(defaultLayout);
+
+		const editor = layout.children.find(c => c.key === 'editor');
+		expect(editor).not.toHaveProperty('width');
+		expect(editor.resizableRight).toBe(undefined);
+		expect(editor.resizableLeft).toBe(undefined);
+
+		for (const child of layout.children) {
+			if (child.key === 'editor') continue;
+			expect(child.resizableRight).toBe(true);
+			expect(child.resizableLeft).toBe(undefined);
+		}
+	});
+
+	test('should give elements after editor resizeableLeft, if editor is not last element', () => {
+		const defaultLayout: LayoutItem = {
+			key: 'root',
+			children: [
+				{ key: 'sideBar', width: 250 },
+				{ key: 'editor' },
+				{ key: 'noteList', width: 250 },
+				{ key: 'some-extension', width: 250 },
+			],
+		};
+
+		const layout = validateLayout(defaultLayout);
+
+		const editor = layout.children.find(c => c.key === 'editor');
+		expect(editor).not.toHaveProperty('width');
+		expect(editor.resizableRight).toBe(undefined);
+		expect(editor.resizableLeft).toBe(undefined);
+
+		let flag = true;
+		for (const child of layout.children) {
+			if (child.key === 'editor') {
+				flag = !flag;
+				continue;
+			}
+			if (flag) {
+				expect(child.resizableRight).toBe(true);
+				expect(child.resizableLeft).toBe(undefined);
+			} else {
+				expect(child.resizableRight).toBe(undefined);
+				expect(child.resizableLeft).toBe(true);
+			}
+		}
+	});
+
 	test('should decrease size of the largest item if the total size would be larger than the container', () => {
 		const layout: LayoutItem = validateLayout({
 			key: 'root',
