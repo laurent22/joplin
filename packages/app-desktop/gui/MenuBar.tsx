@@ -760,7 +760,7 @@ function useMenu(props: Props) {
 						menuItemDic.resetLayout,
 						separator(),
 						menuItemDic.toggleSideBar,
-						menuItemDic.toggleMenuBar,
+						shim.isMac() ? noItem : menuItemDic.toggleMenuBar,
 						menuItemDic.toggleNoteList,
 						menuItemDic.toggleVisiblePanes,
 						{
