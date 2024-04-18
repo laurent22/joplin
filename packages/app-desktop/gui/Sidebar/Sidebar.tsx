@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useRef } from 'react';
 import { StyledRoot, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton } from './styles';
 import { ButtonLevel } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -24,33 +23,6 @@ interface Props {
 }
 
 const SidebarComponent = (props: Props) => {
-
-	const folderItemsOrder_ = useRef<string[]>();
-	folderItemsOrder_.current = [];
-	const tagItemsOrder_ = useRef<string[]>();
-	tagItemsOrder_.current = [];
-
-	const rootRef = useRef(null);
-
-	// const renderAllNotesItem = (selected: boolean) => {
-	// 	return (
-	// 		<StyledListItem key="allNotesHeader" selected={selected} className={'list-item-container list-item-depth-0 all-notes'} isSpecialItem={true}>
-	// 			<StyledExpandLink><ExpandIcon isExpanded={false} isVisible={false}/></StyledExpandLink>
-	// 			<StyledAllNotesIcon className="icon-notes"/>
-	// 			<StyledListItemAnchor
-	// 				className="list-item"
-	// 				isSpecialItem={true}
-	// 				href="#"
-	// 				selected={selected}
-	// 				onClick={onAllNotesClick_}
-	// 				onContextMenu={toggleAllNotesContextMenu}
-	// 			>
-	// 				{_('All notes')}
-	// 			</StyledListItemAnchor>
-	// 		</StyledListItem>
-	// 	);
-	// };
-
 	const renderSynchronizeButton = (type: string) => {
 		const label = type === 'sync' ? _('Synchronise') : _('Cancel');
 		const iconAnimation = type !== 'sync' ? 'icon-infinite-rotation 1s linear infinite' : '';
@@ -102,7 +74,7 @@ const SidebarComponent = (props: Props) => {
 	);
 
 	return (
-		<StyledRoot ref={rootRef} className="sidebar">
+		<StyledRoot className="sidebar">
 			<div style={{ flex: 1 }}>{<NotebookAndTagList/>}</div>
 			<div style={{ flex: 0, padding: theme.mainPadding }}>
 				{syncReportComp}
