@@ -4,8 +4,8 @@ import { FolderEntity, TagEntity, TagsWithNoteCountEntity } from '../../services
 import { getDisplayParentId, getTrashFolderId } from '../../services/trash';
 import { getCollator } from '../../models/utils/getCollator';
 
-export type RenderFolderItem<T> = (folder: FolderEntity, selected: boolean, hasChildren: boolean, depth: number)=> T;
-export type RenderTagItem<T> = (tag: TagsWithNoteCountEntity, selected: boolean)=> T;
+export type RenderFolderItem<T> = (folder: FolderEntity, hasChildren: boolean, depth: number)=> T;
+export type RenderTagItem<T> = (tag: TagsWithNoteCountEntity)=> T;
 
 function folderHasChildren_(folders: FolderEntity[], folderId: string) {
 	if (folderId === getTrashFolderId()) {
@@ -41,8 +41,6 @@ type ItemsWithOrder<ItemType> = {
 
 interface RenderFoldersProps {
 	folders: FolderEntity[];
-	selectedFolderId: string;
-	notesParentType: string;
 	collapsedFolderIds: string[];
 }
 
@@ -61,7 +59,7 @@ function renderFoldersRecursive_<T>(props: RenderFoldersProps, renderItem: Rende
 		if (folderIsCollapsed(props.folders, folder.id, props.collapsedFolderIds)) continue;
 		const hasChildren = folderHasChildren_(folders, folder.id);
 		order.push(folder.id);
-		items.push(renderItem(folder, isFolderSelected(folder, props), hasChildren, depth));
+		items.push(renderItem(folder, hasChildren, depth));
 		if (hasChildren) {
 			const result = renderFoldersRecursive_(props, renderItem, items, folder.id, depth + 1, order);
 			items = result.items;
@@ -101,20 +99,14 @@ export const isTagSelected = (tag: TagEntity, context: { selectedTagId: string; 
 	return context.selectedTagId === tag.id && context.notesParentType === 'Tag';
 };
 
-interface RenderTagsProps {
-	tags: TagsWithNoteCountEntity[];
-	selectedTagId: string;
-	notesParentType: string;
-}
-
-export const renderTags = <T> (props: RenderTagsProps, renderItem: RenderTagItem<T>): ItemsWithOrder<T> => {
-	const tags = sortTags(props.tags);
+export const renderTags = <T> (unsortedTags: TagsWithNoteCountEntity[], renderItem: RenderTagItem<T>): ItemsWithOrder<T> => {
+	const tags = sortTags(unsortedTags);
 	const tagItems = [];
 	const order: string[] = [];
 	for (let i = 0; i < tags.length; i++) {
 		const tag = tags[i];
 		order.push(tag.id);
-		tagItems.push(renderItem(tag, isTagSelected(tag, props)));
+		tagItems.push(renderItem(tag));
 	}
 	return {
 		items: tagItems,
