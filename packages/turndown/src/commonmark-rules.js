@@ -489,7 +489,11 @@ rules.code = {
     }
 
     content = content.replace(/\r?\n|\r/g, '\n')
-    // If code is multiline and in codeBlock, just return it, codeBlock well add fence(default is ```).
+    // If code is multiline and in codeBlock, just return it, codeBlock will add fence(default is ```).
+    //
+    // This handles the case where a <code> element is nested directly within a <pre> and
+    // should not be turned into an inline code region.
+    //
     // See https://github.com/laurent22/joplin/pull/10126 .
     if (content.indexOf('\n') !== -1 && node.parentNode && isCodeBlock(node.parentNode)){
       return content
