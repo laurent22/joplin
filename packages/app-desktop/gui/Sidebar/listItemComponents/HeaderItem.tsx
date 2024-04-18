@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useCallback } from 'react';
-import { ButtonLevel } from '../Button/Button';
-import { StyledAddButton, StyledHeader, StyledHeaderIcon, StyledHeaderLabel } from './styles';
-import { HeaderListItem, ItemContextMenuListener } from './types';
+import { ButtonLevel } from '../../Button/Button';
+import { StyledAddButton, StyledHeader, StyledHeaderIcon, StyledHeaderLabel } from '../styles';
+import { HeaderListItem, ItemContextMenuListener } from '../types';
 
 interface Props {
 	item: HeaderListItem;

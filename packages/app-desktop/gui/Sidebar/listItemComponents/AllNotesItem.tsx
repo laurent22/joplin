@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { StyledAllNotesIcon, StyledListItem, StyledListItemAnchor } from './styles';
+import { StyledAllNotesIcon, StyledListItem, StyledListItemAnchor } from '../styles';
 import { useCallback } from 'react';
 import { Dispatch } from 'redux';
-import bridge from '../../services/bridge';
+import bridge from '../../../services/bridge';
 import Setting from '@joplin/lib/models/Setting';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
-import PerFolderSortOrderService from '../../services/sortOrder/PerFolderSortOrderService';
+import PerFolderSortOrderService from '../../../services/sortOrder/PerFolderSortOrderService';
 import { _ } from '@joplin/lib/locale';
 import { connect } from 'react-redux';
 import EmptyExpandLink from './EmptyExpandLink';

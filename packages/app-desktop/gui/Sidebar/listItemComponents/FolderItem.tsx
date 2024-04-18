@@ -2,13 +2,13 @@ import * as React from 'react';
 
 import { FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import ExpandLink from './ExpandLink';
-import { StyledListItem, StyledListItemAnchor, StyledNoteCount, StyledShareIcon, StyledSpanFix } from './styles';
-import { ItemClickListener, ItemContextMenuListener, ItemDragListener } from './types';
-import FolderIconBox from '../FolderIconBox';
+import { StyledListItem, StyledListItemAnchor, StyledNoteCount, StyledShareIcon, StyledSpanFix } from '../styles';
+import { ItemClickListener, ItemContextMenuListener, ItemDragListener } from '../types';
+import FolderIconBox from '../../FolderIconBox';
 import { getTrashFolderIcon, getTrashFolderId } from '@joplin/lib/services/trash';
 import Folder from '@joplin/lib/models/Folder';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { AppState } from '../../app.reducer';
+import { AppState } from '../../../app.reducer';
 import { connect } from 'react-redux';
 
 const renderFolderIcon = (folderIcon: FolderIcon) => {

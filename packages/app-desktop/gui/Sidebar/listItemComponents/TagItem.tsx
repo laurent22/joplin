@@ -1,7 +1,7 @@
 import Setting from '@joplin/lib/models/Setting';
 import * as React from 'react';
 import { useCallback } from 'react';
-import { StyledListItem, StyledListItemAnchor, StyledSpanFix } from './styles';
+import { StyledListItem, StyledListItemAnchor, StyledSpanFix } from '../styles';
 import { TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
 import BaseModel from '@joplin/lib/BaseModel';
 import NoteCount from './NoteCount';

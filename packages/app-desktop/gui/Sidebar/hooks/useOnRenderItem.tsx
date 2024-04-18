@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DragEventHandler, MouseEventHandler, useCallback, useMemo, useRef } from 'react';
 import { ItemClickListener, ItemDragListener, ListItem, ListItemType } from '../types';
-import TagItem, { TagLinkClickEvent } from '../TagItem';
+import TagItem, { TagLinkClickEvent } from '../listItemComponents/TagItem';
 import { Dispatch } from 'redux';
 import { clipboard } from 'electron';
 import { getTrashFolderId } from '@joplin/lib/services/trash';
@@ -24,11 +24,11 @@ import PerFolderSortOrderService from '../../../services/sortOrder/PerFolderSort
 import { getFolderCallbackUrl, getTagCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
-import FolderItem from '../FolderItem';
+import FolderItem from '../listItemComponents/FolderItem';
 import Logger from '@joplin/utils/Logger';
 import onFolderDrop from '@joplin/lib/models/utils/onFolderDrop';
-import HeaderItem from '../HeaderItem';
-import AllNotesItem from '../AllNotesItem';
+import HeaderItem from '../listItemComponents/HeaderItem';
+import AllNotesItem from '../listItemComponents/AllNotesItem';
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
