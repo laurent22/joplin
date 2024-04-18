@@ -4,7 +4,6 @@ import { useCallback } from 'react';
 import { Dispatch } from 'redux';
 import bridge from '../../services/bridge';
 import Setting from '@joplin/lib/models/Setting';
-import { Menu, MenuItem } from 'electron';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
 import PerFolderSortOrderService from '../../services/sortOrder/PerFolderSortOrderService';
@@ -13,6 +12,9 @@ import { AppState } from '../../app.reducer';
 import { connect } from 'react-redux';
 import EmptyExpandLink from './EmptyExpandLink';
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
+
+const Menu = bridge().Menu;
+const MenuItem = bridge().MenuItem;
 
 interface Props {
 	dispatch: Dispatch;

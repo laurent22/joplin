@@ -3,7 +3,7 @@ import { DragEventHandler, MouseEventHandler, useCallback, useMemo, useRef } fro
 import { ItemClickListener, ItemDragListener, ListItem, ListItemType } from '../types';
 import TagLink, { TagLinkClickEvent } from '../TagLink';
 import { Dispatch } from 'redux';
-import { Menu, MenuItem, clipboard } from 'electron';
+import { clipboard } from 'electron';
 import { getTrashFolderId } from '@joplin/lib/services/trash';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import Tag from '@joplin/lib/models/Tag';
@@ -29,6 +29,9 @@ import Logger from '@joplin/utils/Logger';
 import onFolderDrop from '@joplin/lib/models/utils/onFolderDrop';
 import HeaderItem from '../HeaderItem';
 import AllNotesItem from '../AllNotesItem';
+
+const Menu = bridge().Menu;
+const MenuItem = bridge().MenuItem;
 
 const logger = Logger.create('useOnRenderItem');
 
