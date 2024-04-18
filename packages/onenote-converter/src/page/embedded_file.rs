@@ -20,7 +20,7 @@ impl<'a> Renderer<'a> {
         match file_type {
             FileType::Audio => content = format!("<audio controls src=\"{}\"></audio>", filename),
             FileType::Video => content = format!("<video controls src=\"{}\"></video>", filename),
-            FileType::Unknown => content = format!("<embed src=\"{}\" />", filename),
+            FileType::Unknown => content = format!("<p style=\"font-size: 11pt; line-height: 17px;\"><a href=\"{}\">{}</a></p>", filename, filename),
         };
 
         Ok(self.render_with_note_tags(file.note_tags(), content))
