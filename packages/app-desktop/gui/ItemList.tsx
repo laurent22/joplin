@@ -1,19 +1,15 @@
 import * as React from 'react';
+import { DragEventHandler, KeyboardEventHandler, UIEventHandler } from 'react';
 
-interface Props {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	style: any;
+interface Props<ItemType> {
+	style: React.CSSProperties & { height: number };
 	itemHeight: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	items: any[];
+	items: ItemType[];
 	disabled?: boolean;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onKeyDown?: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	itemRenderer: Function;
+	onKeyDown?: KeyboardEventHandler<HTMLElement>;
+	itemRenderer: (item: ItemType, index: number)=> React.JSX.Element;
 	className?: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onNoteDrop?: Function;
+	onItemDrop?: DragEventHandler<HTMLElement>;
 }
 
 interface State {
@@ -21,13 +17,13 @@ interface State {
 	bottomItemIndex: number;
 }
 
-class ItemList extends React.Component<Props, State> {
+class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 
 	private scrollTop_: number;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private listRef: any;
 
-	public constructor(props: Props) {
+	public constructor(props: Props<ItemType>) {
 		super(props);
 
 		this.scrollTop_ = 0;
@@ -39,12 +35,12 @@ class ItemList extends React.Component<Props, State> {
 		this.onDrop = this.onDrop.bind(this);
 	}
 
-	public visibleItemCount(props: Props = undefined) {
+	public visibleItemCount(props: Props<ItemType> = undefined) {
 		if (typeof props === 'undefined') props = this.props;
 		return Math.ceil(props.style.height / props.itemHeight);
 	}
 
-	public updateStateItemIndexes(props: Props = undefined) {
+	public updateStateItemIndexes(props: Props<ItemType> = undefined) {
 		if (typeof props === 'undefined') props = this.props;
 
 		const topItemIndex = Math.floor(this.scrollTop_ / props.itemHeight);
@@ -71,25 +67,22 @@ class ItemList extends React.Component<Props, State> {
 		this.updateStateItemIndexes();
 	}
 
-	public UNSAFE_componentWillReceiveProps(newProps: Props) {
+	public UNSAFE_componentWillReceiveProps(newProps: Props<ItemType>) {
 		this.updateStateItemIndexes(newProps);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public onScroll(event: any) {
-		this.scrollTop_ = event.target.scrollTop;
+	public onScroll: UIEventHandler<HTMLDivElement> = event => {
+		this.scrollTop_ = (event.target as HTMLElement).scrollTop;
 		this.updateStateItemIndexes();
-	}
+	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public onKeyDown(event: any) {
+	public onKeyDown: KeyboardEventHandler<HTMLElement> = event => {
 		if (this.props.onKeyDown) this.props.onKeyDown(event);
-	}
+	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public onDrop(event: any) {
-		if (this.props.onNoteDrop) this.props.onNoteDrop(event);
-	}
+	public onDrop: DragEventHandler<HTMLElement> = event => {
+		if (this.props.onItemDrop) this.props.onItemDrop(event);
+	};
 
 	public makeItemIndexVisible(itemIndex: number) {
 		const top = Math.min(this.props.items.length - 1, this.state.topItemIndex);
@@ -130,8 +123,11 @@ class ItemList extends React.Component<Props, State> {
 
 	public render() {
 		const items = this.props.items;
-		const style = { ...this.props.style, overflowX: 'hidden',
-			overflowY: 'auto' };
+		const style: React.CSSProperties = {
+			...this.props.style,
+			overflowX: 'hidden',
+			overflowY: 'auto',
+		};
 
 		// if (this.props.disabled) style.opacity = 0.5;
 
