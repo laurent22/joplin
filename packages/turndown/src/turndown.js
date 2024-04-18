@@ -258,9 +258,9 @@ function replacementForNode (node, previousNode) {
         var lastChildWhitespace = node.childNodes[node.childNodes.length-1].flankingWhitespace
 
         if (whitespace.leading === firstChildWhitespace.leading && 
-          whitespace.trailing === lastChildWhitespace.trailing){
+          whitespace.trailing === lastChildWhitespace.trailing) {
             content = content.trim()
-          }
+        }
       } else {
         // keep line breaks
         content = content.replace(/^[ \t]+|[ \t]+$/g, '');
