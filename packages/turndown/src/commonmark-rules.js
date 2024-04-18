@@ -202,7 +202,7 @@ rules.listItem = {
       var parent = node.parentNode
       if (isOrderedList(parent)) {
         if (node.isCode) {
-          // remove ordered list in code blocks 
+          // Ordered lists in code blocks are often for line numbers. Remove them. 
           // See https://github.com/laurent22/joplin/pull/10126
           // test case: packages/app-cli/tests/html_to_md/code_multiline_4.html
           prefix = '';
