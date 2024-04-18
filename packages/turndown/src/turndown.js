@@ -261,7 +261,7 @@ function replacementForNode (node, previousNode) {
           whitespace.trailing === lastChildWhitespace.trailing){
             content = content.trim()
           }
-      }else {
+      } else {
         // keep line breaks
         content = content.replace(/^[ \t]+|[ \t]+$/g, '');
       }
