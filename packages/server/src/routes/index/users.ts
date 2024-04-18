@@ -36,6 +36,7 @@ export function checkRepeatPassword(fields: CheckRepeatPasswordInput, required: 
 	return '';
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function makeUser(userId: Uuid, fields: any): User {
 	const user: User = {};
 
@@ -52,6 +53,7 @@ function makeUser(userId: Uuid, fields: any): User {
 
 const router = new Router(RouteType.Web);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 router.get('users/:id', async (path: SubPath, ctx: AppContext, formUser: User = null, error: any = null) => {
 	const owner = ctx.joplin.owner;
 	if (path.id !== 'me' && path.id !== owner.id) throw new ErrorForbidden();
@@ -90,6 +92,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, formUser: User = 
 	view.content.error = error;
 	view.content.postUrl = postUrl;
 	view.content.csrfTag = await createCsrfTag(ctx);
+	view.content.showSendAccountConfirmationEmailButton = !user.email_confirmed;
 
 	if (subscription) {
 		const lastPaymentAttempt = models.subscription().lastPaymentAttempt(subscription);
@@ -110,6 +113,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, formUser: User = 
 
 	if (config().accountTypesEnabled) {
 		view.content.showAccountTypes = true;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		view.content.accountTypes = accountTypeOptions().map((o: any) => {
 			o.selected = user.account_type === o.value;
 			return o;
@@ -213,6 +217,7 @@ interface FormFields {
 	update_subscription_basic_button: string;
 	update_subscription_pro_button: string;
 	stop_impersonate_button: string;
+	send_account_confirmation_email: string;
 }
 
 router.post('users', async (path: SubPath, ctx: AppContext) => {
@@ -246,6 +251,8 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 			// that user, except the current one (otherwise they would be
 			// logged out).
 			if (userToSave.password) await models.session().deleteByUserId(userToSave.id, contextSessionId(ctx));
+		} else if (fields.send_account_confirmation_email) {
+			await models.user().sendAccountConfirmationEmail(user);
 		} else if (fields.stop_impersonate_button) {
 			await stopImpersonating(ctx);
 			return redirect(ctx, config().baseUrl);

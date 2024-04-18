@@ -6,9 +6,10 @@ import shim from '../shim';
 import ItemChange from '../models/ItemChange';
 import Note from '../models/Note';
 import Resource from '../models/Resource';
-import SearchEngine from './searchengine/SearchEngine';
+import SearchEngine from './search/SearchEngine';
 import ItemChangeUtils from './ItemChangeUtils';
 import time from '../time';
+import eventManager, { EventName } from '../eventManager';
 const { sprintf } = require('sprintf-js');
 
 export default class ResourceService extends BaseService {
@@ -17,7 +18,9 @@ export default class ResourceService extends BaseService {
 	private isIndexing_ = false;
 
 	private maintenanceCalls_: boolean[] = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private maintenanceTimer1_: any = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private maintenanceTimer2_: any = null;
 
 	public async indexNoteResources() {
@@ -44,11 +47,12 @@ export default class ResourceService extends BaseService {
 					AND id > ?
 					ORDER BY id ASC
 					LIMIT 10
-					`, [BaseModel.TYPE_NOTE, Setting.value('resourceService.lastProcessedChangeId')]
+					`, [BaseModel.TYPE_NOTE, Setting.value('resourceService.lastProcessedChangeId')],
 				);
 
 				if (!changes.length) break;
 
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				const noteIds = changes.map((a: any) => a.item_id);
 				const notes = await Note.modelSelectAll(`SELECT id, title, body, encryption_applied FROM notes WHERE id IN ("${noteIds.join('","')}")`);
 
@@ -107,6 +111,8 @@ export default class ResourceService extends BaseService {
 
 		this.isIndexing_ = false;
 
+		eventManager.emit(EventName.NoteResourceIndexed);
+
 		this.logger().info('ResourceService::indexNoteResources: Completed');
 	}
 
@@ -129,7 +135,7 @@ export default class ResourceService extends BaseService {
 					await this.setAssociatedResources(note.id, note.body);
 				}
 			} else {
-				await Resource.delete(resourceId);
+				await Resource.delete(resourceId, { sourceDescription: 'deleteOrphanResources' });
 			}
 		}
 	}

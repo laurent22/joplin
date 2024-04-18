@@ -6,6 +6,7 @@ export const declaration: CommandDeclaration = {
 	label: () => _('Share notebook...'),
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const runtime = (comp: any): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext, folderId: string = null) => {
@@ -18,6 +19,6 @@ export const runtime = (comp: any): CommandRuntime => {
 				},
 			});
 		},
-		enabledCondition: 'joplinServerConnected && (folderIsShareRootAndOwnedByUser || !folderIsShared)',
+		enabledCondition: 'joplinServerConnected && joplinCloudAccountType != 1 && (folderIsShareRootAndOwnedByUser || !folderIsShared)',
 	};
 };

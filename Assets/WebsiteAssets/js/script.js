@@ -1,6 +1,31 @@
-function getOs() {
+async function getOs() {
+
+	// The macOS release is available for Intel and Apple silicon processors,
+	// and the only way to get that info is through this new
+	// `getHighEntropyValues` function (which is not available on all browsers).
+	// So here we either return "macOs" for Intel or "macOsM1" for Apple
+	// Silicon. If we don't know which it is, we return "macOsUndefined".
+	// https://stackoverflow.com/a/75177111/561309
+
+	if (navigator.appVersion.indexOf("Mac")!=-1) {
+		let platformInfo = null;
+		try {
+			platformInfo = await navigator.userAgentData.getHighEntropyValues(['architecture'])
+		} catch (error) {
+			console.warn('Failed getting Mac architecture:', error);
+			return 'macOsUndefined';
+		}
+
+		console.info('Got platform info:', platformInfo);
+
+		if (platformInfo.architecture === 'arm') {
+			return "macOsM1";
+		} else {
+			return "macOs";
+		}
+	}
+
 	if (navigator.appVersion.indexOf("Win")!=-1) return "windows";
-	if (navigator.appVersion.indexOf("Mac")!=-1) return "macOs";
 	if (navigator.appVersion.indexOf("X11")!=-1) return "linux";
 	if (navigator.appVersion.indexOf("Linux")!=-1) return "linux";
 	return null;
@@ -45,7 +70,7 @@ function setupMobileMenu() {
 	});
 }
 
-function setupDownloadPage() {
+async function setupDownloadPage() {
 	if (!$('.page-download').length) return;
 
 	const downloadLinks = {};
@@ -55,6 +80,7 @@ function setupDownloadPage() {
 		
 		if (href.indexOf('-Setup') > 0) downloadLinks['windows'] = href;
 		if (href.indexOf('.dmg') > 0) downloadLinks['macOs'] = href;
+		if (href.endsWith('arm64.DMG')) downloadLinks['macOsM1'] = href;
 		if (href.indexOf('.AppImage') > 0) downloadLinks['linux'] = href;
 	});
 
@@ -70,14 +96,23 @@ function setupDownloadPage() {
 	if (mobileOs) {
 		$('.page-download .intro').hide();
 	} else {
-		const os = getOs();
-		if (!os || !downloadLinks[os]) {
+		const os = await getOs();
+
+		if (os === 'macOsUndefined') {
+			// If we don't know which macOS version it is, we let the user choose.
+			$('.main-content .intro').html('<p class="macos-m1-info">The macOS release is available for Intel processors or for Apple Silicon (M1) processors. Please select your version:</p>');
+			const macOsLink = $('.download-link-macOs');
+			const macOsM1Link = $('.download-link-macOsM1');
+			$('.macos-m1-info').after('<p style="font-style: italic; font-size: .8em;">To find out what processor you have, click on the <b>Apple logo</b> in the macOS menu bar, choose <b>About This Mac</b> from the dropdown menu. If you have an Apple silicon it should say"Apple M1" under "Chip". Otherwise you have an Intel processor.</p>');
+			$('.macos-m1-info').after(macOsM1Link);
+			$('.macos-m1-info').after(macOsLink);
+		} else if (!os || !downloadLinks[os]) {
 			// If we don't know, display the section to manually download the app
 			$('.page-download .get-it-desktop').show();
 		} else if (os === 'linux') {
 			// If it's Linux, the user should probably install it using the
 			// install script so we redirect to the install section
-			window.location = 'https://joplinapp.org/help/#desktop-applications';
+			window.location = 'https://joplinapp.org/help/install';
 		} else {
 			// Otherwise, start the download
 			const downloadLink = downloadLinks[os];
@@ -89,5 +124,5 @@ function setupDownloadPage() {
 
 $(function () {
 	setupMobileMenu();
-	setupDownloadPage();
+	void setupDownloadPage();
 });

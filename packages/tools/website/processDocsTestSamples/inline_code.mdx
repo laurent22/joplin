@@ -1,0 +1,1 @@
+If `yarn dist` fails, it may need administrative rights.

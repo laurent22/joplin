@@ -21,6 +21,7 @@ function newService(): CommandService {
 	return service;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function createCommand(name: string, options: any): TestCommand {
 	const declaration: CommandDeclaration = {
 		name: name,
@@ -237,6 +238,7 @@ describe('services_CommandService', () => {
 		let propValue = null;
 
 		registerCommand(service, createCommand('test1', {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			execute: (_context: any, greeting: string) => {
 				propValue = greeting;
 			},
@@ -262,5 +264,39 @@ describe('services_CommandService', () => {
 		await expectNotThrow(async () => service.isEnabled('test1', { cond1: true, cond2: false }));
 	}));
 
+	it('commands should allow specifying an icon', () => {
+		const service = newService();
 
+		const iconName = 'fas fa-check';
+		registerCommand(service, {
+			declaration: {
+				name: 'test-command-with-icon',
+				label: 'Adding icons to commands',
+				iconName,
+			},
+			runtime: {
+				execute: async () => {},
+			},
+		});
+
+		const command = service.commandByName('test-command-with-icon');
+		expect(command.declaration.iconName).toBe(iconName);
+	});
+
+	it('commands should have a non-empty default icon', () => {
+		const service = newService();
+
+		registerCommand(service, {
+			declaration: {
+				name: 'test1',
+				label: 'Test toolbar icon',
+			},
+			runtime: {
+				execute: async () => {},
+			},
+		});
+
+		const command = service.commandByName('test1');
+		expect(command.declaration.iconName).toBe('fas fa-cog');
+	});
 });

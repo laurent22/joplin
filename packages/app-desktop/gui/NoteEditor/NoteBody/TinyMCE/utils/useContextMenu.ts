@@ -7,32 +7,39 @@ import { ContextMenuOptions, ContextMenuItemType } from '../../../utils/contextM
 import { menuItems } from '../../../utils/contextMenu';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
-import convertToScreenCoordinates from '../../../../utils/convertToScreenCoordinates';
 import Setting from '@joplin/lib/models/Setting';
 
 import Resource from '@joplin/lib/models/Resource';
 import { TinyMceEditorEvents } from './types';
+import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from '../../../utils/types';
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
 // x and y are the absolute coordinates, as returned by the context-menu event
 // handler on the webContent. This function will return null if the point is
 // not within the TinyMCE editor.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function contextMenuElement(editor: any, x: number, y: number) {
 	if (!editor || !editor.getDoc()) return null;
 
 	const iframes = document.getElementsByClassName('tox-edit-area__iframe');
 	if (!iframes.length) return null;
 
-	const iframeRect = convertToScreenCoordinates(Setting.value('windowContentZoomFactor'), iframes[0].getBoundingClientRect());
+	const zoom = Setting.value('windowContentZoomFactor') / 100;
+	const xScreen = x / zoom;
+	const yScreen = y / zoom;
 
-	if (iframeRect.x < x && iframeRect.y < y && iframeRect.right > x && iframeRect.bottom > y) {
-		const relativeX = x - iframeRect.x;
-		const relativeY = y - iframeRect.y;
-		return editor.getDoc().elementFromPoint(relativeX, relativeY);
+	// We use .elementFromPoint to handle the case where a dialog is covering
+	// part of the editor.
+	const targetElement = document.elementFromPoint(xScreen, yScreen);
+	if (targetElement !== iframes[0]) {
+		return null;
 	}
 
-	return null;
+	const iframeRect = iframes[0].getBoundingClientRect();
+	const relativeX = xScreen - iframeRect.left;
+	const relativeY = yScreen - iframeRect.top;
+	return editor.getDoc().elementFromPoint(relativeX, relativeY);
 }
 
 interface ContextMenuActionOptions {
@@ -41,13 +48,14 @@ interface ContextMenuActionOptions {
 
 const contextMenuActionOptions: ContextMenuActionOptions = { current: null };
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export default function(editor: any, plugins: PluginStates, dispatch: Function) {
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
+export default function(editor: any, plugins: PluginStates, dispatch: Function, htmlToMd: HtmlToMarkdownHandler, mdToHtml: MarkupToHtmlHandler) {
 	useEffect(() => {
 		if (!editor) return () => {};
 
-		const contextMenuItems = menuItems(dispatch);
+		const contextMenuItems = menuItems(dispatch, htmlToMd, mdToHtml);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function onContextMenu(_event: any, params: any) {
 			const element = contextMenuElement(editor, params.x, params.y);
 			if (!element) return;
@@ -82,6 +90,8 @@ export default function(editor: any, plugins: PluginStates, dispatch: Function) 
 				fireEditorEvent: (event: TinyMceEditorEvents) => {
 					editor.fire(event);
 				},
+				htmlToMd,
+				mdToHtml,
 			};
 
 			let template = [];
@@ -118,5 +128,5 @@ export default function(editor: any, plugins: PluginStates, dispatch: Function) 
 				bridge().window().webContents.off('context-menu', onContextMenu);
 			}
 		};
-	}, [editor, plugins, dispatch]);
+	}, [editor, plugins, dispatch, htmlToMd, mdToHtml]);
 }

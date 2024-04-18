@@ -1,10 +1,12 @@
-import { writeFile, remove } from 'fs-extra';
+import { writeFile, remove, mkdirp } from 'fs-extra';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
-import { createTempDir, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
-import { FolderEntity, NoteEntity } from '../database/types';
+import { createTempDir, setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
+import { FolderEntity, NoteEntity, ResourceEntity } from '../database/types';
 import InteropService from './InteropService';
 import { ImportOptions } from './types';
+import { copyFile } from 'fs/promises';
+import Resource from '../../models/Resource';
 
 const extractId = (rawContent: string): string => {
 	const lines = rawContent.split('\n');
@@ -51,6 +53,8 @@ icon:
 type_: 2`;
 
 const rawNote1 = `Note 1
+
+![photo.jpg](:/b3ab7288b56d4dbf884e73bea1248dd1)
 
 id: 7e5e0c7202414cd38e2db12e2e92ac91
 parent_id: 15fa3f4abe89429b8836cdc5859fe74b
@@ -110,13 +114,39 @@ conflict_original_id:
 master_key_id: 
 type_: 1`;
 
+const rawResource = `Resource 1
+
+id: b3ab7288b56d4dbf884e73bea1248dd1
+mime: image/jpeg
+filename: 
+created_time: 2023-12-14T16:54:47.661Z
+updated_time: 2023-12-14T16:54:49.956Z
+user_created_time: 2023-12-14T16:54:47.661Z
+user_updated_time: 2023-12-14T16:54:49.956Z
+file_extension: jpg
+encryption_cipher_text: 
+encryption_applied: 0
+encryption_blob_encrypted: 0
+size: 2720
+is_shared: 0
+share_id: 
+master_key_id: 
+user_data: 
+blob_updated_time: 1702572887661
+type_: 4`;
+
 let tempDir: string;
 
 const createFiles = async () => {
+	const resourceDir = `${tempDir}/resources`;
+	await mkdirp(resourceDir);
+
 	await writeFile(makeFilePath(tempDir, rawFolder1), rawFolder1);
 	await writeFile(makeFilePath(tempDir, rawFolder2), rawFolder2);
 	await writeFile(makeFilePath(tempDir, rawNote1), rawNote1);
 	await writeFile(makeFilePath(tempDir, rawNote2), rawNote2);
+	await writeFile(makeFilePath(tempDir, rawResource), rawResource);
+	await copyFile(`${supportDir}/photo.jpg`, `${resourceDir}/${extractId(rawResource)}.jpg`);
 };
 
 describe('InteropService_Importer_Raw', () => {
@@ -146,21 +176,32 @@ describe('InteropService_Importer_Raw', () => {
 		const folder2: FolderEntity = await Folder.loadByTitle('sub-notebook');
 		const note1: NoteEntity = await Note.loadByTitle('Note 1');
 		const note2: NoteEntity = await Note.loadByTitle('Note 2');
+		const resource: ResourceEntity = await Resource.loadByTitle('Resource 1');
 
+		// Check that all items have been created
 		expect(folder1).toBeTruthy();
 		expect(folder2).toBeTruthy();
 		expect(note1).toBeTruthy();
 		expect(note2).toBeTruthy();
+		expect(resource).toBeTruthy();
 
+		// Check that all IDs have been replaced - we don't keep the original
+		// IDs when importing data.
 		expect(folder1.id).not.toBe(extractId(rawFolder1));
 		expect(folder2.id).not.toBe(extractId(rawFolder2));
 		expect(note1.id).not.toBe(extractId(rawNote1));
 		expect(note2.id).not.toBe(extractId(rawNote2));
+		expect(resource.id).not.toBe(extractId(rawResource));
 
+		// Check that the notes are linked to the correct folder IDs
 		expect(folder1.parent_id).toBe('');
 		expect(folder2.parent_id).toBe(folder1.id);
 		expect(note1.parent_id).toBe(folder1.id);
 		expect(note2.parent_id).toBe(folder2.id);
+
+		// Check that the resource is still linked to the note and with the
+		// correct ID.
+		expect(note1.body).toBe(`![photo.jpg](:/${resource.id})`);
 	});
 
 	it('should handle duplicate names', async () => {
@@ -176,6 +217,7 @@ describe('InteropService_Importer_Raw', () => {
 		await InteropService.instance().import(importOptions);
 		await InteropService.instance().import(importOptions);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const tree: any = await Folder.allAsTree(null, { includeNotes: true });
 
 		expect(tree[0].title).toBe('import test');

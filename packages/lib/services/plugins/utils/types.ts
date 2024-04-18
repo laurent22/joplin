@@ -2,7 +2,7 @@ export enum PluginPermission {
 	Model = 'model',
 }
 
-export interface Screenshot {
+export interface Image {
 	src: string;
 	label: string;
 }
@@ -20,15 +20,18 @@ export interface PluginManifest {
 	name: string;
 	version: string;
 	app_min_version: string;
+	app_min_version_mobile?: string;
+	platforms?: string[];
 	author?: string;
 	description?: string;
 	homepage_url?: string;
 	repository_url?: string;
 	keywords?: string[];
 	categories?: string[];
-	screenshots?: Screenshot[];
+	screenshots?: Image[];
 	permissions?: PluginPermission[];
 	icons?: Icons;
+	promo_tile?: Image;
 
 	// Private keys
 	_package_hash?: string;
@@ -37,5 +40,4 @@ export interface PluginManifest {
 	_npm_package_name?: string;
 	_obsolete?: boolean;
 	_recommended?: boolean;
-	_built_in?: boolean;
 }

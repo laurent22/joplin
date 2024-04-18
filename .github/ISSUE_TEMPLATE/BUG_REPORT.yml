@@ -1,0 +1,62 @@
+name: Bug Report
+description: Report a reproducible bug or regression in Joplin.
+labels: ['bug']
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: "Operating system"
+      multiple: false
+      options:
+        - "Windows"
+        - "macOS"
+        - "Linux"
+        - "Android"
+        - "iOS"
+    validations:
+      required: true
+      
+  - type: input
+    id: version
+    attributes:
+      label: "Joplin version"
+      placeholder: "For example 1.0.5"
+      description: Please note that we will close the issue if the exact version is not provided, as we cannot help without this.
+    validations:
+      required: true
+      
+  - type: textarea
+    id: desktop-about-content
+    attributes:
+      label: "Desktop version info"
+      description: "If this issue is about the **desktop app**, please open the \"About\" dialog under the \"Help\" or \"Joplin\" menu and copy its content here."
+      placeholder: "Joplin 2.13.5 (dev, darwin)\n\nClient ID: ..."
+  
+  - type: textarea
+    id: current
+    attributes:
+      label: Current behaviour
+      description: What did Joplin do? Include screenshots and video recordings for UI problems if needed. If you are reporting a clipper bug, please include an example URL that shows the issue.
+      placeholder: |
+        1. This
+        2. Then that
+        3. Then this
+        4. Etc.
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: What did you expect Joplin to do?
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: "If relevant, please provide a log file as described here: https://joplinapp.org/help/apps/debugging"

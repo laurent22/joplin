@@ -2,10 +2,6 @@ const React = require('react');
 const Component = React.Component;
 const { View, TouchableHighlight } = require('react-native');
 const Icon = require('react-native-vector-icons/Ionicons').default;
-// We need this to suppress the useless warning
-// https://github.com/oblador/react-native-vector-icons/issues/1465
-// eslint-disable-next-line no-console
-Icon.loadFont().catch((error) => { console.info(error); });
 
 const styles = {
 	checkboxIcon: {
@@ -40,7 +36,7 @@ class Checkbox extends Component {
 	}
 
 	render() {
-		const iconName = this.state.checked ? 'md-checkbox-outline' : 'md-square-outline';
+		const iconName = this.state.checked ? 'checkbox-outline' : 'square-outline';
 
 		const style = this.props.style ? { ...this.props.style } : {};
 		style.justifyContent = 'center';

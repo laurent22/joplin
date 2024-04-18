@@ -5,7 +5,7 @@ import { MB } from '../../utils/bytes';
 import { cookieGet } from '../../utils/cookies';
 import { execRequestC } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, models } from '../../utils/testing/testUtils';
-import uuidgen from '../../utils/uuidgen';
+import { uuidgen } from '@joplin/lib/uuid';
 import { FormUser } from './signup';
 
 describe('index_signup', () => {

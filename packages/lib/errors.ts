@@ -3,4 +3,7 @@
 export enum ErrorCode {
 	IsReadOnly = 'isReadOnly',
 	NotFound = 'notFound',
+	UnsupportedMimeType = 'unsupportedMimeType',
+	MustUpgradeApp = 'mustUpgradeApp',
+	DownloadLimiter = 'downloadLimiter',
 }

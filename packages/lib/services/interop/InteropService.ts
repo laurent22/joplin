@@ -1,4 +1,4 @@
-import { ModuleType, FileSystemItem, ImportModuleOutputFormat, ImportOptions, ExportOptions, ImportExportResult, ExportProgressState } from './types';
+import { ModuleType, FileSystemItem, ImportModuleOutputFormat, ImportOptions, ExportOptions, ImportExportResult, ExportProgressState, ExportModuleOutputFormat } from './types';
 import shim from '../../shim';
 import { _ } from '../../locale';
 import BaseItem from '../../models/BaseItem';
@@ -27,6 +27,7 @@ export default class InteropService {
 
 	private defaultModules_: Module[];
 	private userModules_: Module[] = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private eventEmitter_: any = null;
 	private static instance_: InteropService;
 
@@ -60,6 +61,56 @@ export default class InteropService {
 				}, () => new InteropService_Importer_Jex()),
 
 				makeImportModule({
+					format: 'raw',
+					sources: [FileSystemItem.Directory],
+					description: _('Joplin Export Directory'),
+					separatorAfter: true,
+				}, () => new InteropService_Importer_Raw()),
+
+				makeImportModule({
+					format: 'enex',
+					fileExtensions: ['enex'],
+					sources: [FileSystemItem.File],
+					description: _('Evernote Export File (as HTML)'),
+					supportsMobile: false,
+					outputFormat: ImportModuleOutputFormat.Html,
+				}, dynamicRequireModuleFactory('./InteropService_Importer_EnexToHtml')),
+
+				makeImportModule({
+					format: 'enex',
+					fileExtensions: ['enex'],
+					sources: [FileSystemItem.File],
+					description: _('Evernote Export File (as Markdown)'),
+					supportsMobile: false,
+					isDefault: true,
+				}, dynamicRequireModuleFactory('./InteropService_Importer_EnexToMd')),
+
+				makeImportModule({
+					format: 'enex',
+					fileExtensions: ['enex'],
+					sources: [FileSystemItem.Directory],
+					description: _('Evernote Export Files (Directory, as HTML)'),
+					supportsMobile: false,
+					outputFormat: ImportModuleOutputFormat.Html,
+				}, dynamicRequireModuleFactory('./InteropService_Importer_EnexToHtml')),
+
+				makeImportModule({
+					format: 'enex',
+					fileExtensions: ['enex'],
+					sources: [FileSystemItem.Directory],
+					description: _('Evernote Export Files (Directory, as Markdown)'),
+					supportsMobile: false,
+				}, dynamicRequireModuleFactory('./InteropService_Importer_EnexToMd')),
+
+				makeImportModule({
+					format: 'html',
+					fileExtensions: ['html'],
+					sources: [FileSystemItem.File, FileSystemItem.Directory],
+					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
+					description: _('HTML document'),
+				}, () => new InteropService_Importer_Md()),
+
+				makeImportModule({
 					format: 'md',
 					fileExtensions: ['md', 'markdown', 'txt', 'html'],
 					sources: [FileSystemItem.File, FileSystemItem.Directory],
@@ -76,58 +127,42 @@ export default class InteropService {
 				}, () => new InteropService_Importer_Md_frontmatter()),
 
 				makeImportModule({
-					format: 'raw',
-					sources: [FileSystemItem.Directory],
-					description: _('Joplin Export Directory'),
-				}, () => new InteropService_Importer_Raw()),
-
-				makeImportModule({
-					format: 'enex',
-					fileExtensions: ['enex'],
-					sources: [FileSystemItem.File],
-					description: _('Evernote Export File (as Markdown)'),
-					supportsMobile: false,
-					isDefault: true,
-				}, dynamicRequireModuleFactory('./InteropService_Importer_EnexToMd')),
-
-				makeImportModule({
-					format: 'enex',
-					fileExtensions: ['enex'],
-					sources: [FileSystemItem.File],
-					description: _('Evernote Export File (as HTML)'),
-					supportsMobile: false,
-					outputFormat: ImportModuleOutputFormat.Html,
-				}, dynamicRequireModuleFactory('./InteropService_Importer_EnexToHtml')),
+					format: 'txt',
+					fileExtensions: ['txt'],
+					sources: [FileSystemItem.File, FileSystemItem.Directory],
+					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
+					description: _('Text document'),
+				}, () => new InteropService_Importer_Md()),
 			];
 
 			const exportModules = [
 				makeExportModule({
-					format: 'jex',
+					format: ExportModuleOutputFormat.Jex,
 					fileExtensions: ['jex'],
 					target: FileSystemItem.File,
 					description: _('Joplin Export File'),
 				}, () => new InteropService_Exporter_Jex()),
 
 				makeExportModule({
-					format: 'raw',
+					format: ExportModuleOutputFormat.Raw,
 					target: FileSystemItem.Directory,
 					description: _('Joplin Export Directory'),
 				}, () => new InteropService_Exporter_Raw()),
 
 				makeExportModule({
-					format: 'md',
+					format: ExportModuleOutputFormat.Markdown,
 					target: FileSystemItem.Directory,
 					description: _('Markdown'),
 				}, () => new InteropService_Exporter_Md()),
 
 				makeExportModule({
-					format: 'md_frontmatter',
+					format: ExportModuleOutputFormat.MarkdownFrontMatter,
 					target: FileSystemItem.Directory,
 					description: _('Markdown + Front Matter'),
 				}, () => new InteropService_Exporter_Md_frontmatter()),
 
 				makeExportModule({
-					format: 'html',
+					format: ExportModuleOutputFormat.Html,
 					fileExtensions: ['html', 'htm'],
 					target: FileSystemItem.File,
 					isNoteArchive: false,
@@ -136,7 +171,7 @@ export default class InteropService {
 				}, dynamicRequireModuleFactory('./InteropService_Exporter_Html')),
 
 				makeExportModule({
-					format: 'html',
+					format: ExportModuleOutputFormat.Html,
 					target: FileSystemItem.Directory,
 					description: _('HTML Directory'),
 					supportsMobile: false,
@@ -155,7 +190,7 @@ export default class InteropService {
 	}
 
 	// Find the module that matches the given type ("importer" or "exporter")
-	// and the given format. Some formats can have multiple assocated importers
+	// and the given format. Some formats can have multiple associated importers
 	// or exporters, such as ENEX. In this case, the one marked as "isDefault"
 	// is returned. This is useful to auto-detect the module based on the format.
 	// For more precise matching, newModuleFromPath_ should be used.
@@ -267,7 +302,9 @@ export default class InteropService {
 		return result;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private normalizeItemForExport(_itemType: ModelType, item: any): any {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const override: any = {};
 		if ('is_shared' in item) override.is_shared = 0;
 		if ('share_id' in item) override.share_id = '';
@@ -284,7 +321,7 @@ export default class InteropService {
 
 	public async export(options: ExportOptions): Promise<ImportExportResult> {
 		options = {
-			format: 'jex',
+			format: ExportModuleOutputFormat.Jex,
 			...options,
 		};
 
@@ -292,11 +329,13 @@ export default class InteropService {
 		let sourceFolderIds = options.sourceFolderIds ? options.sourceFolderIds : [];
 		const sourceNoteIds = options.sourceNoteIds ? options.sourceNoteIds : [];
 		const result: ImportExportResult = { warnings: [] };
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const itemsToExport: any[] = [];
 
 		options.onProgress?.(ExportProgressState.QueuingItems, null);
 		let totalItemsToProcess = 0;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const queueExportItem = (itemType: number, itemOrId: any) => {
 			totalItemsToProcess ++;
 			itemsToExport.push({
@@ -370,6 +409,7 @@ export default class InteropService {
 		await exporter.init(exportPath, options);
 
 		const typeOrder = [BaseModel.TYPE_FOLDER, BaseModel.TYPE_RESOURCE, BaseModel.TYPE_NOTE, BaseModel.TYPE_TAG, BaseModel.TYPE_NOTE_TAG];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const context: any = {
 			resourcePaths: {},
 		};

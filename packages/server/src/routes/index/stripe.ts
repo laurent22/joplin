@@ -22,6 +22,7 @@ const router: Router = new Router(RouteType.Web);
 
 router.public = true;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function stripeEvent(stripe: Stripe, req: any): Promise<Stripe.Event> {
 	if (!stripeConfig().webhookSecret) throw new Error('webhookSecret is required');
 
@@ -30,7 +31,7 @@ async function stripeEvent(stripe: Stripe, req: any): Promise<Stripe.Event> {
 	return stripe.webhooks.constructEvent(
 		body,
 		req.headers['stripe-signature'],
-		stripeConfig().webhookSecret
+		stripeConfig().webhookSecret,
 	);
 }
 
@@ -41,6 +42,7 @@ interface CreateCheckoutSessionFields {
 	email: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 type StripeRouteHandler = (stripe: Stripe, path: SubPath, ctx: AppContext)=> Promise<any>;
 
 interface PostHandlers {
@@ -115,7 +117,7 @@ export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, 
 			customerName,
 			accountType,
 			stripeUserId,
-			stripeSubscriptionId
+			stripeSubscriptionId,
 		);
 	}
 };
@@ -285,7 +287,7 @@ export const postHandlers: PostHandlers = {
 			// 	} catch (error) {
 			// 		// We don't want this part to fail since the user has
 			// 		// already paid at that point, so we just default to Basic
-			// 		// in that case. Normally it shoud not happen anyway.
+			// 		// in that case. Normally it should not happen anyway.
 			// 		logger.error('Could not determine account type from price ID - defaulting to "Basic"', error);
 			// 	}
 
@@ -330,7 +332,7 @@ export const postHandlers: PostHandlers = {
 					customer.email,
 					accountType,
 					stripeUserId,
-					stripeSubscriptionId
+					stripeSubscriptionId,
 				);
 			},
 
@@ -455,8 +457,8 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 	checkoutTest: async (_stripe: Stripe, _path: SubPath, ctx: AppContext) => {
 		if (globalConfig().env === Env.Prod) throw new ErrorForbidden();
 
-		const basicPrice = findPrice(stripeConfig().prices, { accountType: 1, period: PricePeriod.Monthly });
-		const proPrice = findPrice(stripeConfig().prices, { accountType: 2, period: PricePeriod.Monthly });
+		const basicPrice = findPrice(stripeConfig(), { accountType: 1, period: PricePeriod.Monthly });
+		const proPrice = findPrice(stripeConfig(), { accountType: 2, period: PricePeriod.Monthly });
 
 		const customPriceId = ctx.request.query.price_id;
 
@@ -537,7 +539,9 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 };
 
 router.post('stripe/:id', async (path: SubPath, ctx: AppContext) => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	if (!(postHandlers as any)[path.id]) throw new ErrorNotFound(`No such action: ${path.id}`);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return (postHandlers as any)[path.id](initStripe(), path, ctx);
 });
 

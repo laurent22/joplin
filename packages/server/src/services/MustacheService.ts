@@ -9,10 +9,11 @@ import { makeUrl, SubPath, UrlType } from '../utils/routeUtils';
 import MarkdownIt = require('markdown-it');
 import { headerAnchor } from '@joplin/renderer';
 import { _ } from '@joplin/lib/locale';
-import { adminDashboardUrl, adminEmailsUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, changesUrl, homeUrl, itemsUrl } from '../utils/urlUtils';
+import { adminDashboardUrl, adminEmailsUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, homeUrl, itemsUrl } from '../utils/urlUtils';
 import { MenuItem, setSelectedMenu } from '../utils/views/menu';
 
 export interface RenderOptions {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	partials?: any;
 	cssFiles?: string[];
 	jsFiles?: string[];
@@ -25,6 +26,7 @@ export interface View {
 	path: string;
 	layout?: string;
 	navbar?: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	content?: any;
 	partials?: string[];
 	cssFiles?: string[];
@@ -56,8 +58,10 @@ interface GlobalParams {
 	adminMenu?: MenuItem[];
 	navbarMenu?: MenuItem[];
 	currentPath?: SubPath;
+	appShortName?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function isView(o: any): boolean {
 	if (typeof o !== 'object' || !o) return false;
 	return 'path' in o && 'name' in o;
@@ -150,10 +154,6 @@ export default class MustacheService {
 					url: itemsUrl(),
 				},
 				{
-					title: _('Logs'),
-					url: changesUrl(),
-				},
-				{
 					title: _('Admin'),
 					url: adminDashboardUrl(),
 					icon: 'fas fa-hammer',
@@ -179,6 +179,7 @@ export default class MustacheService {
 			showErrorStackTraces: config().showErrorStackTraces,
 			isJoplinCloud: config().isJoplinCloud,
 			fullYear: (new Date()).getFullYear(),
+			appShortName: config().isJoplinCloud ? 'cloud' : 'server',
 		};
 	}
 
@@ -234,7 +235,7 @@ export default class MustacheService {
 					...view.content,
 					global: globalParams,
 				},
-				this.partials_
+				this.partials_,
 			);
 		} else if (ext === '.md') {
 			const markdownIt = new MarkdownIt({
@@ -283,6 +284,7 @@ export default class MustacheService {
 
 		const contentHtml = await this.renderFileContent(filePath, view, globalParams);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const layoutView: any = {
 			global: globalParams,
 			pageName: this.formatPageName(view.name),

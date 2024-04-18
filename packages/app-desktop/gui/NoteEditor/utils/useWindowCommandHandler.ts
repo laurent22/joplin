@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { FormNote, ScrollOptionTypes } from './types';
+import { RefObject, useEffect } from 'react';
+import { FormNote, NoteBodyEditorRef, ScrollOptionTypes } from './types';
 import editorCommandDeclarations, { enabledCondition } from '../editorCommandDeclarations';
 import CommandService, { CommandDeclaration, CommandRuntime, CommandContext } from '@joplin/lib/services/CommandService';
 import time from '@joplin/lib/time';
@@ -12,24 +12,31 @@ const commandsWithDependencies = [
 	require('../commands/pasteAsText'),
 ];
 
+type SetFormNoteCallback = (callback: (prev: FormNote)=> FormNote)=> void;
+
 interface HookDependencies {
 	formNote: FormNote;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	setShowLocalSearch: Function;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	noteSearchBarRef: any;
-	editorRef: any;
+	editorRef: RefObject<NoteBodyEditorRef>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	titleInputRef: any;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	saveNoteAndWait: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	setFormNote: Function;
+	setFormNote: SetFormNoteCallback;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-function editorCommandRuntime(declaration: CommandDeclaration, editorRef: any, setFormNote: Function): CommandRuntime {
+function editorCommandRuntime(
+	declaration: CommandDeclaration,
+	editorRef: RefObject<NoteBodyEditorRef>,
+	setFormNote: SetFormNoteCallback,
+): CommandRuntime {
 	return {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		execute: async (_context: CommandContext, ...args: any[]) => {
 			if (!editorRef.current) {
 				reg.logger().warn('Received command, but editor is gone', declaration.name);

@@ -1,18 +1,11 @@
 import Logger from '@joplin/utils/Logger';
 import time from './time';
 import shim from './shim';
+import { SqlParams, SqlQuery, StringOrSqlQuery } from './services/database/types';
 
 const Mutex = require('async-mutex').Mutex;
 
-type SqlParams = any[];
-
-export interface SqlQuery {
-	sql: string;
-	params?: SqlParams;
-}
-
-type StringOrSqlQuery = string | SqlQuery;
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export type Row = Record<string, any>;
 
 export default class Database {
@@ -24,6 +17,7 @@ export default class Database {
 
 	protected debugMode_ = false;
 	private sqlQueryLogEnabled_ = false;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private driver_: any;
 	private logger_ = new Logger();
 	private logExcludedQueryTypes_: string[] = [];
@@ -31,6 +25,7 @@ export default class Database {
 	private profilingEnabled_ = false;
 	private queryId_ = 1;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(driver: any) {
 		this.driver_ = driver;
 	}
@@ -42,6 +37,7 @@ export default class Database {
 	// Converts the SQLite error to a regular JS error
 	// so that it prints a stacktrace when passed to
 	// console.error()
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public sqliteErrorToJsError(error: any, sql: string = null, params: SqlParams = null) {
 		return this.driver().sqliteErrorToJsError(error, sql, params);
 	}
@@ -58,6 +54,7 @@ export default class Database {
 		return this.driver_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async open(options: any) {
 		try {
 			await this.driver().open(options);
@@ -88,7 +85,10 @@ export default class Database {
 	}
 
 	public escapeFieldsToString(fields: string[] | string): string {
-		if (fields === '*') return '*';
+		if (typeof fields === 'string') {
+			if (fields === '*') return '*';
+			throw new Error(`Invalid field value (only "*" is supported): ${fields}`);
+		}
 
 		const output = [];
 		for (let i = 0; i < fields.length; i++) {
@@ -173,10 +173,11 @@ export default class Database {
 		// }
 	}
 
-	public async selectAll(sql: string, params: SqlParams = null): Promise<Row[]> {
+	public async selectAll<T = Row>(sql: string, params: SqlParams = null): Promise<T[]> {
 		return this.tryCall('selectAll', sql, params);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async selectAllFields(sql: string, params: SqlParams, field: string): Promise<any[]> {
 		const rows = await this.tryCall('selectAll', sql, params);
 		const output = [];
@@ -229,7 +230,8 @@ export default class Database {
 		if (type === 'fieldType') {
 			if (s) s = s.toUpperCase();
 			if (s === 'INTEGER') s = 'INT';
-			if (!(`TYPE_${s}` in this)) throw new Error(`Unkonwn fieldType: ${s}`);
+			if (!(`TYPE_${s}` in this)) throw new Error(`Unknown fieldType: ${s}`);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			return (this as any)[`TYPE_${s}`];
 		}
 		if (type === 'syncTarget') {
@@ -253,30 +255,13 @@ export default class Database {
 		return undefined;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static formatValue(type: number, value: any) {
 		if (value === null || value === undefined) return null;
 		if (type === this.TYPE_INT) return Number(value);
 		if (type === this.TYPE_TEXT) return value;
 		if (type === this.TYPE_NUMERIC) return Number(value);
 		throw new Error(`Unknown type: ${type}`);
-	}
-
-	public sqlStringToLines(sql: string) {
-		const output = [];
-		const lines = sql.split('\n');
-		let statement = '';
-		for (let i = 0; i < lines.length; i++) {
-			const line = lines[i];
-			if (line === '') continue;
-			if (line.substr(0, 2) === '--') continue;
-			statement += line.trim();
-			if (line[line.length - 1] === ',') statement += ' ';
-			if (line[line.length - 1] === ';') {
-				output.push(statement);
-				statement = '';
-			}
-		}
-		return output;
 	}
 
 	public logQuery(sql: string, params: SqlParams = null) {
@@ -293,6 +278,7 @@ export default class Database {
 		if (params !== null && params.length) this.logger().debug(JSON.stringify(params));
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static insertQuery(tableName: string, data: Record<string, any>) {
 		if (!data || !Object.keys(data).length) throw new Error('Data is empty');
 
@@ -314,6 +300,7 @@ export default class Database {
 		};
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static updateQuery(tableName: string, data: Record<string, any>, where: string | Record<string, any>) {
 		if (!data || !Object.keys(data).length) throw new Error('Data is empty');
 
@@ -373,6 +360,7 @@ export default class Database {
 		return sql.trim().split('\n');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public wrapQueries(queries: any[]) {
 		const output = [];
 		for (let i = 0; i < queries.length; i++) {
@@ -381,6 +369,7 @@ export default class Database {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public wrapQuery(sql: any, params: SqlParams = null): SqlQuery {
 		if (!sql) throw new Error(`Cannot wrap empty string: ${sql}`);
 

@@ -22,7 +22,7 @@ export const notesSortOrderNextField = (currentField: string) => {
 };
 
 export const setNotesSortOrder = (field?: string, reverse?: boolean) => {
-	// field: Sort order's field. undefined means changing a field cyclicly.
+	// field: Sort order's field. undefined means changing a field cyclically.
 	// reverse: whether the sort order is reversed or not. undefined means toggling.
 	let nextField = field;
 	let nextReverse = reverse;

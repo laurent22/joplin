@@ -7,16 +7,20 @@ const { themeStyle } = require('@joplin/lib/theme');
 
 interface Props {
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	items: any[];
 	disabled: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 class ToolbarBaseComponent extends React.Component<Props, any> {
 
 	public render() {
 		const theme = themeStyle(this.props.themeId);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const style: any = { display: 'flex',
 			flexDirection: 'row',
 			boxSizing: 'border-box',
@@ -24,14 +28,19 @@ class ToolbarBaseComponent extends React.Component<Props, any> {
 			padding: theme.toolbarPadding,
 			paddingRight: theme.mainPadding, ...this.props.style };
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const groupStyle: any = {
 			display: 'flex',
 			flexDirection: 'row',
 			boxSizing: 'border-box',
+			minWidth: 0,
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const leftItemComps: any[] = [];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const centerItemComps: any[] = [];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const rightItemComps: any[] = [];
 
 		if (this.props.items) {
@@ -83,6 +92,7 @@ class ToolbarBaseComponent extends React.Component<Props, any> {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const mapStateToProps = (state: any) => {
 	return { themeId: state.settings.theme };
 };

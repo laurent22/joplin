@@ -1,381 +1,2426 @@
 {
- "%d days": "%d วัน",
- "%d hour": "%d ชั่วโมง",
- "%d hours": "%d ชั่วโมง",
- "%d minutes": "%d นาที",
- "%s %s (%s, %s)": "%s %s (%s, %s)",
- "%s (%s): %s": "%s (%s): %s",
- "%s / %s": "%s / %s",
- "%s / %s / %s": "%s / %s / %s",
- "%s = %s": "%s = %s",
- "%s = %s (%s)": "%s = %s (%s)",
- "%s: %d": "%s: %d",
- "%s: %d notes": "%s: %d บันทึก",
- "%s: %d/%d": "%s: %d/%d",
- "%s: %s": "%s: %s",
- "&Edit": "&แก้ไข",
- "&File": "&ไฟล์",
- "&Help": "&ช่วยเหลือ",
- "&Tools": "&เครื่องมือ",
- "&View": "&มุมมอง",
- "- Camera: to allow taking a picture and attaching it to a note.": "- กล้อง: สำหรับถ่ายภาพและแนบไว้กับบันทึก",
- "- Location: to allow attaching geo-location information to a note.": "- สถานที่ตั้ง: สำหรับแนบข้อมูลที่ตั้งทางภูมิศาสตร์ไว้กับบันทึก",
- "- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": "- แหล่งเก็บข้อมูล: สำหรับการแนบไฟล์กับบันทึกและการเปิดใช้งานการซิงโครไนซ์กับไฟล์ระบบ",
- "A3": "A3",
- "A4": "A4",
- "A5": "A5",
- "About Joplin": "เกี่ยวกับ Joplin",
- "Accept": "ยอมรับ",
- "Add body": "เพิ่มเนื้อความ",
- "Add or remove tags:": "เพิ่มหรือลบแท็ก:",
- "Add title": "เพิ่มชื่อเรื่อง",
- "Advanced options": "ตัวเลือกขั้นสูง",
- "All notes": "บันทึกทั้งหมด",
- "Application": "แอปพลิเคชัน",
- "Apply": "ใช้",
- "Attach file": "แนบไฟล์",
- "Attach photo": "แนบรูปภาพ",
- "Attach...": "แนบ...",
- "Attachments that could not be downloaded": "ไฟล์แนบไม่สามารถดาวน์โหลดได้",
- "Authentication was not completed (did not receive an authentication token).": "การขออนุมัติไม่สมบูรณ์ (ไม่ได้รับ Token เพื่อขออนุมัติ)",
- "Authorisation token:": "Token สำหรับการขออนุมัติ:",
- "Auto": "อัตโนมัติ",
- "Bold": "ตัวหนา",
- "Cancel": "ยกเลิก",
- "Cancelling...": "กำลังยกเลิก...",
- "Cancelling... Please wait.": "กำลังยกเลิก... โปรดรอสักครู่...",
- "Cannot access %s": "ไม่สามารถเข้าถึง %s",
- "Cannot copy note to \"%s\" notebook": "มันสามารถคัดลอกบันทึกไปที่สมุดบันทึก \"%s\"",
- "Cannot find \"%s\".": "ไม่พบ \"%s\"",
- "Cannot move note to \"%s\" notebook": "ไม่สามารถย้ายบันทึกไปที่สมุดบันทึก \"%s\"",
- "Characters": "ตัวอักษร",
- "Characters excluding spaces": "ตัวอักษรไม่รวมวรรค",
- "Check for updates...": "ตรวจสอบการอัพเดท...",
- "Check synchronisation configuration": "ตรวจสอบการตั้งค่าซิงโครไนซ์",
- "Checkbox": "ช่องทำเครื่องหมาย",
- "Checking... Please wait.": "กำลังตรวจสอบ... โปรดรอสักครู่...",
- "Choose an option": "เลือก",
- "Chrome Web Store": "Chrome Web Store",
- "Clear alarm": "ยกเลิกแจ้งเตือน",
- "Client ID: %s": "Client ID: %s",
- "Close": "ปิด",
- "Close Window": "ปิดหน้าต่าง",
- "Code": "Code",
- "Completed decryption.": "ถอดรหัสเรียบร้อยแล้ว",
- "Configuration": "การตั้งค่า",
- "Confirm password cannot be empty": "รหัสผ่านยืนยันไม่สามารถเว้นว่างได้",
- "Confirm password:": "ยืนยันรหัสผ่าน:",
- "Conflicts": "ขัดแย้ง",
- "Convert to note": "แปลงเป็นบันทึก",
- "Convert to todo": "แปลงเป็น to-do",
- "Copy": "คัดลอก",
- "Copy Link Address": "คัดลอกที่อยู่ลิงก์",
- "Copy Markdown link": "คัดลอกลิงก์ Markdown",
- "Copy path to clipboard": "คัดลอกที่อยู่ (path) ไปที่คลิปบอร์ด",
- "Copy Shareable Link": "คัดลอกลิงก์ที่สามารถแบ่งปันได้",
- "Copy token": "คัดลอก Token",
- "Could not authorise application:\n\n%s\n\nPlease try again.": "ไม่สามารถอนุมัติแอปพลิเคชั่น:\n\n%s\n\nโปรดลองอีกครั้ง",
- "Create a notebook": "สร้างสมุดบันทึก",
- "Created": "สร้างเมื่อ",
- "Created: %d.": "สร้างเมื่อ: %d",
- "Created: %s": "สร้างเมื่อ: %s",
- "Creates a new note.": "สร้างบันทึกใหม่",
- "Creates a new notebook.": "สร้างสมุดบันทึกใหม่",
- "Creates a new to-do.": "สร้าง to-do ใหม่",
- "Creating new %s...": "สร้าง %s...",
- "Creating report...": "กำลังสร้างรายงาน...",
- "Custom TLS certificates": "TLS certificate แบบกำหนดเอง",
- "Cut": "ตัด",
- "Date format": "รูปแบบวันที่",
- "days": "วัน",
- "Decrypted items: %s / %s": "รายการที่ถูกถอดรหัส: %s / %s",
- "Decrypting items: %d/%d": "กำลังถอดรหัสรายการ: %d/%d",
- "Default": "ค่าเริ่มต้น",
- "Delete": "ลบ",
- "Delete note?": "ลบบันทึก?",
- "Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": "ลบสมุดบันทึกหรือไม่ บันทึกและสมุดบันทึกย่อยทั้งหมดในสมุดบันทึกนี้จะถูกลบ",
- "Deletes the given notebook.": "ลบสมุดบันทึกที่เลือก",
- "Deletes the notebook without asking for confirmation.": "ลบสมุดบันทึกโดยไม่ต้องถามการยืนยัน",
- "Deletes the notes without asking for confirmation.": "ลบสมุดบันทึกโดยไม่ถามยืนยัน",
- "Directory": "ไดเรกทอรี่",
- "Disable Web Clipper Service": "ปิดบริการ Web Clipper",
- "Disabled": "ปิด",
- "Discard changes": "ยกเลิกการเปลี่ยนแปลง",
- "Displays a geolocation URL for the note.": "แสดง URL ตำแหน่งภูมิศาสตร์สำหรับบันทึก",
- "Displays only the first top <num> notes.": "แสดงเฉพาะบันทึก <num> อันดับแรก",
- "Displays the complete information about note.": "แสดงข้อมูลทั้งหมดของบันทึก",
- "Displays the given note.": "แสดงบันทึกที่เลือก",
- "Displays usage information.": "แสดงข้อมูลการใช้งาน",
- "Displays version information": "แสดงข้อมูลเวอร์ชั่น",
- "Do it now": "ทำตอนนี้",
- "Download and install the relevant extension for your browser:": "ดาวน์โหลดและติดตั้งส่วนเสริมที่เกี่ยวข้องสำหรับเว็บเบราว์เซอร์ของคุณ:",
- "Downloaded": "ดาวน์โหลดแล้ว",
- "Downloaded and decrypted": "ดาวน์โหลดและถอดรหัสแล้ว",
- "Downloaded and encrypted": "ดาวน์โหลดและเข้ารหัสแล้ว",
- "Downloading": "กำลังดาวน์โหลด",
- "Downloading resources...": "กำลังดาวน์โหลดทรัพยากร...",
- "Dracula": "Dracula",
- "Dropbox": "Dropbox",
- "Dropbox Login": "เข้าสู่ระบบ Dropbox",
- "Edit": "แก้ไข",
- "Edit note.": "แก้ไขบันทึก",
- "Edit notebook": "แก้ไขสมุดบันทึก",
- "Editor": "ตัวแก้ไข",
- "Editor font": "แบบตัวอักษรของตัวแก้ไข",
- "Editor font family": "ตระกูลของแบบตัวอักษรของตัวแก้ไข",
- "Editor font size": "ขนาดตัวอักษรของตัวแก้ไข",
- "Emacs": "Emacs",
- "Enable": "เปิด",
- "Enable ++insert++ syntax": "เปิดใช้งาน ++insert++syntax",
- "Enable ==mark== syntax": "เปิดใช้งาน ==mark== syntax",
- "Enable ^sup^ syntax": "เปิดใช้งาน ^sup^ syntax",
- "Enable abbreviation syntax": "เปิดใช้งาน abbreviation syntax",
- "Enable deflist syntax": "เปิดใช้งาน deflist syntax",
- "Enable footnotes": "เปิดใช้งาน Footnotes",
- "Enable Fountain syntax support": "เปิดใช้งานการรองรับ Fountain syntax",
- "Enable markdown emoji": "เปิดใช้งาน Markdown Emoji",
- "Enable math expressions": "เปิดใช้งาน Math Expressions",
- "Enable Mermaid diagrams support": "เปิดใช้งานการรองรับ Mermaid diagram",
- "Enable multimarkdown table extension": "เปิดใช้งานส่วนเสริมตาราง Multimarkdown",
- "Enable note history": "เปิดใช้ประวัติบันทึกย้อนหลัง",
- "Enable soft breaks": "เปิดใช้งาน Soft Break",
- "Enable table of contents extension": "เปิดใช้งานส่วนเสริมสารบัญ",
- "Enable Web Clipper Service": "เปิดใช้บริการ Web Clipper",
- "Enable ~sub~ syntax": "เปิดใช้งาน ~sub~ syntax",
- "Enabled": "เปิด",
- "Encrypted": "เข้ารหัสแล้ว",
- "Encryption": "การเข้ารหัส",
- "Encryption Config": "ตั้งค่าการเข้ารหัส",
- "Enter code here": "กรอกรหัสที่นี่",
- "Enter notebook title": "กรอกชื่อของสมุดบันทึก",
- "Enum": "Enum",
- "Error": "ผิดพลาด",
- "Evernote Export File (as HTML)": "ไฟล์ส่งออก Evernote (เป็น HTML)",
- "Evernote Export File (as Markdown)": "ไฟล์ส่งออก Evernote (เป็น Markdown)",
- "Exits the application.": "ออกจากแอปพลิเคชั่น",
- "Export": "ส่งออก",
- "Exports only the given notebook.": "ส่งออกเฉพาะสมุดบันทึกที่เลือก",
- "Fatal error:": "ผิดพลาดร้ายแรง:",
- "File": "ไฟล์",
- "Firefox Extension": "ส่วนเสริมของ Firefox",
- "Fix search index": "ซ่อมดัชนีย์ค้นหา",
- "Fixing search index...": "กำลังซ่อมดัชนีค้นหา...",
- "Folders": "โฟลเดอร์",
- "For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:": "สำหรับข้อมูลเพิ่มเติมเกี่ยวกับการเข้ารหัสแบบ End-To-End Encryption (E2EE) และคำแนะนำในการเปิดใช้งาน โปรดอ่านคู่มือการใช้งาน:",
- "For the list of keyboard shortcuts and config options, type `help keymap`": "สำหรับรายการคีย์ลัดและตัวเลือกการตั้งค่า พิมพ์ `help keymap`",
- "Found: %d.": "พบ: %d",
- "General": "ทั่วไป",
- "Generating link...": "กำลังสร้างลิงก์...",
- "Go to source URL": "ไปที่ URL แหล่งที่มา",
- "Heading": "หัวข้อ",
- "Help": "ช่วยเหลือ",
- "Hide %s": "ซ่อน %s",
- "HTML Directory": "ไดเรกทอรี่ HTML",
- "HTML File": "ไฟล์ HTML",
- "Hyperlink": "ไฮเปอร์ลิงก์",
- "Icon": "ไอคอน",
- "Ignore TLS certificate errors": "เพิกเฉยข้อผิดพลาด TLS certificate",
- "Import": "นำเข้า",
- "Importing from \"%s\" as \"%s\" format. Please wait...": "กำลังนำเข้าจาก “%s” ไปเป็นฟอร์แมต “%s” โปรดรอสักครู่...",
- "Importing notes...": "กำลังนำเข้าบันทึก...",
- "Imports data into Joplin.": "นำเข้าข้อมูลเข้ามาที่ Joplin",
- "In order to use the web clipper, you need to do the following:": "ในการที่จะใช้ web clipper คุณจำเป็นต้องทำสิ่งต่อไปนี้:",
- "In progress": "กำลังกำเนินการ",
- "In: %s": "ใน: %s",
- "Information": "ข้อมูล",
- "Insert Hyperlink": "แทรกไฮเปอร์ลิงก์",
- "Install": "ติตตั้ง",
- "Installed": "ติตตั้งสำเร็จ",
- "Installing...": "กำลังติตตั้ง...",
- "Invalid command: \"%s\"": "คำสั่งไม่ถูกต้อง: \"%s\"",
- "Italic": "ตัวเอียง",
- "Items that cannot be decrypted": "รายการที่ไม่สามารถทำการถอดรหัส",
- "Items that cannot be synchronised": "รายการที่ไม่สามารถทำการซิงโครไนซ์",
- "Joplin Export Directory": "ไดเรกทอรี่ส่งออก Joplin",
- "Joplin Export File": "ไฟล์ส่งออก Joplin",
- "Joplin website": "เว็บไซต์ของ Joplin",
- "Keyboard Mode": "โหมดของคีย์บอร์ด",
- "Landscape": "แนวนอน",
- "Language": "ภาษา",
- "Last error: %s": "ข้อผิดพลาดล่าสุด: %s",
- "Later": "ภายหลัง",
- "Legal": "Legal",
- "Letter": "Letter",
- "Lines": "บรรทัด",
- "Link has been copied to clipboard!": "ลิงก์ได้ถูกคัดลอกไปที่คลิปบอร์ดแล้ว",
- "Links with protocol \"%s\" are not supported": "ไม่รองรับลิงก์ที่ใช้โปรโตคอลนี้ “%s”",
- "Login": "ลงชื่อเข้าใช้",
- "Login with Dropbox": "เข้าสู่ระบบด้วย Dropbox",
- "Login with OneDrive": "เข้าสู่ระบบด้วย OneDrive",
- "Manual": "ทำด้วยตนเอง",
- "Markdown": "Markdown",
- "Markup": "Markup",
- "Master Key %s": "มาสเตอร์คีย์ %s",
- "More information": "ข้อมูลเพิ่มเติม",
- "Move %d notes to notebook \"%s\"?": "ย้ายบันทึก %d ไปที่สมุดบันทึก “%s”?",
- "Move to notebook...": "ย้ายไปสมุดบันทึก...",
- "n": "n",
- "N": "N",
- "New note": "สร้างบันทึกใหม่",
- "New notebook": "สร้างสมุดบันทึกใหม่",
- "New sub-notebook": "สร้างสมุดบันทึกย่อยใหม่",
- "New tags:": "แท็กใหม่:",
- "New to-do": "สร้าง to-do",
- "New version: %s": "เวอร์ชั่นใหม่: %s",
- "Nextcloud": "Nextcloud",
- "Nextcloud password": "รหัสผ่าน Nextcloud",
- "Nextcloud username": "ชื่อผู้ใช้ Nextcloud",
- "Nextcloud WebDAV URL": "Nextcloud WebDAV URL",
- "No": "ไม่",
- "No active notebook.": "ไม่มีสมุดบันทึกที่ถูกใช้งาน",
- "No item with ID %s": "ไม่มีรายการที่มี ID %s",
- "No resources!": "ไม่มีทรัพยากร",
- "No such command: %s": "ไม่มีคำสั่ง: %s",
- "Nord": "Nord",
- "Not downloaded": "ยังไม่ได้ดาวน์โหลด",
- "note": "บันทึก",
- "Note": "บันทึก",
- "Note History": "ประวัติบันทึกย้อนหลัง",
- "Note list": "รายการบันทึก",
- "Note properties": "คุณสมบัติของบันทึก",
- "Note title": "ชื่อบันทึก",
- "Notebook: %s": "สมุดบันทึก: %s",
- "Notebooks": "สมุดบันทึก",
- "Numbered List": "รายการแบบตัวเลข",
- "OK": "ตกลง",
- "OLED Dark": "OLED Dark",
- "OneDrive": "OneDrive",
- "OneDrive Login": "เข้าสู่ระบบ OneDrive",
- "Open %s": "เปิด %s",
- "Open...": "เปิด...",
- "Operation cancelled": "ระบวนการถูกยกเลิก",
- "Options": "ตัวเลือก",
- "Page size for PDF export": "ขนาดของหน้า สำหรับการส่งออก PDF",
- "Password": "รหัสผ่าน",
- "Password:": "รหัสผ่าน:",
- "Passwords do not match!": "รหัสผ่านไม่เหมือนกัน!",
- "Paste": "วาง",
- "PDF File": "ไฟล์ PDF",
- "Permission to use camera": "สิทธิ์การเข้าใช้งานกล้อง",
- "Please select a notebook first.": "โปรดเลือกสมุดบันทึกก่อน",
- "Please wait...": "โปรดรอสักครู่...",
- "Plugins": "ปลั๊กอิน",
- "Portrait": "แนวตั้ง",
- "Possible values: %s.": "ค่าที่เป็นไปได้: %s",
- "Preferences": "การตั้งค่า",
- "Preferences...": "การตั้งค่า",
- "Press Ctrl+D or type \"exit\" to exit the application": "กด Ctrl+D หรือพิมพ์ \"exit\" เพื่อออกจากแอปพลิเคชั่น",
- "Press to set the decryption password.": "โปรดตั้งรหัสผ่านสำหรับการถอดรหัส",
- "Previous versions of this note": "เวอร์ชั่นก่อนหน้าของบันทึกนี้",
- "Print": "พิมพ์",
- "Profile Version: %s": "เวอร์ชั่นโปรไฟล์: %s",
- "Properties": "คุณสมบัติ",
- "Quit": "ออก",
- "Read time: %s min": "เวลาอ่าน: %s นาที",
- "Refresh": "รีเฟรช",
- "Reject": "ปฏิเสธ",
- "Remove tag \"%s\" from all notes?": "ลบแท็ก \"%s\" ออกจากบันทึกทั้งหมด?",
- "Remove this search from the sidebar?": "ลบการค้นหานี้ออกจากแถบด้านข้าง?",
- "Rename": "แก้ไขชื่อ",
- "Rename notebook:": "แก้ไขชื่อสมุดบันทึก",
- "Rename tag:": "แก้ไขชื่อแท็ก",
- "Resources: %d.": "ทรัพยากร: %d",
- "Restore": "กู้คืน",
- "Retry": "ลองอีกครั้ง",
- "Save": "บันทึก",
- "Save as...": "บันทึกเป็น...",
- "Save changes": "บันทึกการเปลี่ยนแปลง",
- "Search": "ค้นหา",
- "Search in all the notes": "ค้นหาในบันทึกทั้งหมด",
- "Search in current note": "ค้นหาในบันทึกปัจจุบัน",
- "Search...": "ค้นหา...",
- "Search:": "ค้นหา:",
- "Select all": "เลือกทั้งหมด",
- "Server is already running on port %d": "เซิร์ฟเวอร์กำลังทำงานอยู่แล้วที่พอร์ต %d",
- "Server is running on port %d": "เซิร์ฟเวอร์กำลังทำงานที่พอร์ต %d",
- "Set alarm": "ตั้งการแจ้งเตือน",
- "Set alarm:": "ตั้งการแจ้งเตือน:",
- "Set the password": "ตั้งรหัสผ่าน",
- "Share": "แบ่งปัน",
- "Show all": "แสดงทั้งหมด",
- "Show tray icon": "แสดงไอคอนใน System tray",
- "Sidebar": "แถบด้านข้าง",
- "Size": "ขนาด",
- "Skipped: %d.": "ข้าม: %d",
- "Solarised Dark": "Solarised Dark",
- "Solarised Light": "Solarised Light",
- "Some items cannot be synchronised. Press for more info.": "มีบางรายการที่ไม่สามารถทำการซิงโครไนซ์ได้ กดเพื่อดูข้อมูลเพิ่มเติม",
- "Sort notebooks by": "จัดเรียงสมุดบันทึกโดย",
- "Sort notes by": "จัดเรียงบันทึกโดย",
- "Source format: %s": "ฟอร์แมตต้นฉบับ: %s",
- "Specify the port that should be used by the API server. If not set, a default will be used.": "ระบุพอร์ตที่จะใช้โดยเซิร์ฟเวอร์ API ถ้าไม่ระบุ จะใช้ค่าเริ่มต้น",
- "Split View": "มุมมองแบบแบ่งครึ่ง",
- "Start application minimised in the tray icon": "เริ่มต้นแอปพลิเคชั่นโดยย่อไว้ที่ไอคอน System tray",
- "Starting synchronisation...": "เริ่มต้นการซิงโครไนซ์...",
- "Status": "สถานะ",
- "Status: %s": "สถานะ: %s",
- "Status: Started on port %d": "สถานะ: เริ่มทำงาน ที่พอร์ต %d",
- "Step 1: Enable the clipper service": "ขั้นตอนที่ 1: เปิดใช้บริการ clipper",
- "Step 1: Open this URL in your browser to authorise the application:": "ขั้นตอนที่ 1: เปิด URL นี้ในเว็บเบราว์เซอร์ เพื่อขออนุมัติแอปพลิเคชั่น",
- "Step 2: Enter the code provided by Dropbox:": "ขั้นตอนที่ 2: กรอกรหัสที่ได้มาจาก Dropbox:",
- "Step 2: Install the extension": "ขั้นตอนที่ 2: ติดตั้งส่วนเสริม",
- "Sync Status": "สถานะการซิงค์",
- "Sync status (synced items / total items)": "สถานะซิงค์ (รายการที่ซิงค์ไปแล้ว / รายการทั้งหมด)",
- "Sync Version: %s": "ซิงค์เวอร์ชั่น: %s",
- "Synchronisation": "การซิงโครไนซ์",
- "Synchronisation interval": "ความถี่ในการซิงโครไนซ์",
- "Synchronisation Status": "สถานะการซิงโครไนซ์",
- "Synchronisation target": "จุดหมายการซิงโครไนซ์",
- "Synchronisation target: %s (%s)": "จุดหมายการซิงโครไนซ์: %s (%s)",
- "Synchronise": "ซิงโครไนซ์",
- "Synchronises with remote storage.": "ซิงโครไนซ์กับแหล่งเก็บข้อมูลระยะไกล",
- "Synchronising...": "กำลังซิงโครไนซ์...",
- "Tabloid": "Tabloid",
- "Tagged: %d.": "แท็ก: %d",
- "Tags": "แท็ก",
- "Thank you! Your Joplin Cloud account is now setup and ready to use.": "ขอบคุณ Joplin Cloud account ของคุณพร้อมใช้งานแล้ว",
- "The application has been authorised - you may now close this browser tab.": "แอปพลิเคชั่นนี้ได้รับการอนุมัติแล้ว - คุณสามารถปิดแท็ปเว็บเบราว์เซอร์นี้ได้",
- "The application has been authorised!": "แอปพลิเคชั่นได้รับการอนุมัติแล้ว!",
- "The application has been successfully authorised.": "แอปพลิเคชั่นนี้ได้รับการอนุมัติเป็นที่เรียบร้อยแล้ว",
- "The command \"%s\" is only available in GUI mode": "คำสั่ง “%s” มีเฉพาะในโหมด GUI เท่านั้น",
- "The Joplin mobile app does not currently support this type of link: %s": "แอป Joplin mobile ยังไม่รองรับชนิดของลิงก์นี้: %s",
- "The notebook could not be saved: %s": "ไม่สามารถบันทึกสมุดบันทึก: %s",
- "The notes have been imported: %s": "บันทึกได้ถูกนำเข้าแล้ว: %s",
- "The possible commands are:": "คำสั่งที่เป็นไปได้คือ:",
- "The tag \"%s\" already exists. Please choose a different name.": "แท็ก “%s” มีอยู่แล้ว โปรดใช้ชื่ออื่น",
- "Theme": "ธีม",
- "There are currently no notes. Create one by clicking on the (+) button.": "ไม่มีบันทึกอยู่เลย สามารถสร้างบันทึกใหม่ได้โดยคลิกที่ปุ่ม (+)",
- "This attachment is not downloaded or not decrypted yet.": "ไฟล์แนบนี้ยังไม่ได้ดาวน์โหลดหรือยังไม่ได้ถอดรหัส",
- "This authorisation token is only needed to allow third-party applications to access Joplin.": "Token สำหรับการขออนุมัตินี้ ใช้เพื่ออนุญาตแอปพลิเคชั่น third-party เพื่อเข้าถึง Joplin",
- "This note does not have geolocation information.": "บันทึกนี้ไม่มีตำแหน่งภูมิศาสตร์",
- "This note has no history": "บันทึกนี้ไม่มีประวัติย้อนหลัง",
- "Time format": "รูปแบบเวลา",
- "to-do": "to-do",
- "Toggle sidebar": "สลับแถบด้านข้าง",
- "Token has been copied to the clipboard!": "Token ได้ถูกคัดลอกไปที่คลิปบอร์ดแล้ว!",
- "Tools": "เครื่องมือ",
- "Total: %d/%d": "ทั้งหมด: %d/%d",
- "Try again": "ลองอีกครั้ง",
- "Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": "พิมพ์ `help [คำสั่ง]` สำหรับข้อมูลเพิ่มเติมของคำสั่งนั้นๆ หรือพิมพ์ `help all` สำหรับข้อมูลการใช้งานทั้งหมด",
- "Type `joplin help` for usage information.": "พิมพ์ `joplin help` สำหรับข้อมูลการใช้งาน",
- "Untitled": "ไม่มีชื่อ",
- "Updated": "แก้ไขเมื่อ",
- "Updated: %d.": "แก้ไขเมื่อ: %d",
- "URL": "URL",
- "View on map": "แสดงในแผนที่",
- "Vim": "Vim",
- "Web Clipper": "Web Clipper",
- "WebDAV": "WebDAV",
- "WebDAV password": "รหัสผ่าน WebDAV",
- "WebDAV URL": "WebDAV URL",
- "WebDAV username": "ชื่อผู้ใช้ WebDAV",
- "Website and documentation": "เว็บไซต์และเอกสารต่างๆ",
- "Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": "ยินดีต้อนรับสู่ Joplin!\n\nพิมพ์ `:help shortcuts` สำหรับรายการคีย์ลัด หรือพิมพ์ `:help` สำหรับข้อมูลการใช้งาน\n\nตัวอย่างเช่น สร้างสมุดบันทึกใหม่พิมพ์ `mb`; สร้างบันทึกใหม่พิมพ์ `mn`.",
- "When creating a new to-do:": "เมื่อสร้าง to-do ใหม่:",
- "Words": "คำ",
- "y": "y",
- "Y": "Y",
- "Yes": "ใช่",
- "Your permission to use your camera is required.": "จำเป็นต้องมีสิทธ์การเข้าถึงกล้อง",
- "Your version: %s": "เวอร์ชั่นของคุณ: %s"
+	"\"%s\" is missing the required \"%s\" property.": [
+		""
+	],
+	"%d days": [
+		"%d วัน"
+	],
+	"%d GB": [
+		""
+	],
+	"%d GB storage space": [
+		""
+	],
+	"%d hour": [
+		"%d ชั่วโมง"
+	],
+	"%d hours": [
+		"%d ชั่วโมง"
+	],
+	"%d MB": [
+		""
+	],
+	"%d minutes": [
+		"%d นาที"
+	],
+	"%d notes match this pattern. Delete them?": [
+		""
+	],
+	"%s": [
+		""
+	],
+	"%s %s (%s, %s)": [
+		"%s %s (%s, %s)"
+	],
+	"%s (%s) would like to share a notebook with you.": [
+		""
+	],
+	"%s (%s): %s": [
+		"%s (%s): %s"
+	],
+	"%s / %s": [
+		"%s / %s"
+	],
+	"%s / %s / %s": [
+		"%s / %s / %s"
+	],
+	"%s = %s": [
+		"%s = %s"
+	],
+	"%s = %s (%s)": [
+		"%s = %s (%s)"
+	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s: %d": [
+		"%s: %d"
+	],
+	"%s: %d notes": [
+		"%s: %d บันทึก"
+	],
+	"%s: %d/%d": [
+		"%s: %d/%d"
+	],
+	"%s: %s": [
+		"%s: %s"
+	],
+	"&Edit": [
+		"&แก้ไข"
+	],
+	"&File": [
+		"&ไฟล์"
+	],
+	"&Go": [
+		""
+	],
+	"&Help": [
+		"&ช่วยเหลือ"
+	],
+	"&Tools": [
+		"&เครื่องมือ"
+	],
+	"&View": [
+		"&มุมมอง"
+	],
+	"(%s)": [
+		""
+	],
+	"(In plugin: %s)": [
+		""
+	],
+	"(None)": [
+		""
+	],
+	"(wysiwyg: %s)": [
+		""
+	],
+	"(You may disable this prompt in the options)": [
+		""
+	],
+	"- Camera: to allow taking a picture and attaching it to a note.": [
+		"- กล้อง: สำหรับถ่ายภาพและแนบไว้กับบันทึก"
+	],
+	"- Location: to allow attaching geo-location information to a note.": [
+		"- สถานที่ตั้ง: สำหรับแนบข้อมูลที่ตั้งทางภูมิศาสตร์ไว้กับบันทึก"
+	],
+	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
+		"- แหล่งเก็บข้อมูล: สำหรับการแนบไฟล์กับบันทึกและการเปิดใช้งานการซิงโครไนซ์กับไฟล์ระบบ"
+	],
+	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
+		""
+	],
+	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
+		""
+	],
+	"A3": [
+		"A3"
+	],
+	"A4": [
+		"A4"
+	],
+	"A5": [
+		"A5"
+	],
+	"About": [
+		""
+	],
+	"About Joplin": [
+		"เกี่ยวกับ Joplin"
+	],
+	"accelerator": [
+		""
+	],
+	"Accelerator \"%s\" is not valid.": [
+		""
+	],
+	"Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to unexpected behaviour.": [
+		""
+	],
+	"Accept": [
+		"ยอมรับ"
+	],
+	"Access denied: Please check your username and password": [
+		""
+	],
+	"Access denied: Please re-enter your password and/or username": [
+		""
+	],
+	"Account": [
+		""
+	],
+	"Add body": [
+		"เพิ่มเนื้อความ"
+	],
+	"Add or remove tags:": [
+		"เพิ่มหรือลบแท็ก:"
+	],
+	"Add recipient:": [
+		""
+	],
+	"Add title": [
+		"เพิ่มชื่อเรื่อง"
+	],
+	"Add to dictionary": [
+		""
+	],
+	"Admin": [
+		""
+	],
+	"Admin dashboard": [
+		""
+	],
+	"Advanced options": [
+		"ตัวเลือกขั้นสูง"
+	],
+	"All data, including notes, notebooks and tags will be permanently deleted.": [
+		""
+	],
+	"All notes": [
+		"บันทึกทั้งหมด"
+	],
+	"All potential ports are in use - please report the issue at %s": [
+		""
+	],
+	"Also displays unset and hidden config variables.": [
+		""
+	],
+	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
+		""
+	],
+	"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti\" to see the short notebook id": [
+		""
+	],
+	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		""
+	],
+	"An error occurred: %s": [
+		""
+	],
+	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
+		""
+	],
+	"Application": [
+		"แอปพลิเคชัน"
+	],
+	"Apply": [
+		"ใช้"
+	],
+	"Are you sure you want to renew the authorisation token?": [
+		""
+	],
+	"Are you sure you want to return to the default layout? The current layout configuration will be lost.": [
+		""
+	],
+	"Arguments:": [
+		""
+	],
+	"Aritim Dark": [
+		""
+	],
+	"Attach file": [
+		"แนบไฟล์"
+	],
+	"Attach photo": [
+		"แนบรูปภาพ"
+	],
+	"Attach...": [
+		"แนบ..."
+	],
+	"Attachment download behaviour": [
+		""
+	],
+	"Attachments that could not be downloaded": [
+		"ไฟล์แนบไม่สามารถดาวน์โหลดได้"
+	],
+	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
+		""
+	],
+	"Authentication was not completed (did not receive an authentication token).": [
+		"การขออนุมัติไม่สมบูรณ์ (ไม่ได้รับ Token เพื่อขออนุมัติ)"
+	],
+	"Authorisation token:": [
+		"Token สำหรับการขออนุมัติ:"
+	],
+	"Auto": [
+		"อัตโนมัติ"
+	],
+	"Auto-add disabled accounts for deletion": [
+		""
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
+	],
+	"Automatically switch theme to match system theme": [
+		""
+	],
+	"Basic": [
+		""
+	],
+	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
+		""
+	],
+	"Bold": [
+		"ตัวหนา"
+	],
+	"Browse all plugins": [
+		""
+	],
+	"Built-in": [
+		""
+	],
+	"Can view": [
+		""
+	],
+	"Can view and edit": [
+		""
+	],
+	"Cancel": [
+		"ยกเลิก"
+	],
+	"Cancelling...": [
+		"กำลังยกเลิก..."
+	],
+	"Cancelling... Please wait.": [
+		"กำลังยกเลิก... โปรดรอสักครู่..."
+	],
+	"Cannot access %s": [
+		"ไม่สามารถเข้าถึง %s"
+	],
+	"Cannot copy note to \"%s\" notebook": [
+		"มันสามารถคัดลอกบันทึกไปที่สมุดบันทึก \"%s\""
+	],
+	"Cannot find \"%s\".": [
+		"ไม่พบ \"%s\""
+	],
+	"Cannot move note to \"%s\" notebook": [
+		"ไม่สามารถย้ายบันทึกไปที่สมุดบันทึก \"%s\""
+	],
+	"Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem.": [
+		""
+	],
+	"Cannot save %s \"%s\" because it is larger than the allowed limit (%s)": [
+		""
+	],
+	"Cannot save %s \"%s\" because it would go over the total allowed size (%s) for this account": [
+		""
+	],
+	"Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end encryption. They may do so from the screen Configuration > Encryption.": [
+		""
+	],
+	"Case sensitive": [
+		""
+	],
+	"Change application layout": [
+		""
+	],
+	"Characters": [
+		"ตัวอักษร"
+	],
+	"Characters excluding spaces": [
+		"ตัวอักษรไม่รวมวรรค"
+	],
+	"Check for updates...": [
+		"ตรวจสอบการอัพเดท..."
+	],
+	"Check synchronisation configuration": [
+		"ตรวจสอบการตั้งค่าซิงโครไนซ์"
+	],
+	"Checkbox": [
+		"ช่องทำเครื่องหมาย"
+	],
+	"Checking... Please wait.": [
+		"กำลังตรวจสอบ... โปรดรอสักครู่..."
+	],
+	"Choose an option": [
+		"เลือก"
+	],
+	"Chrome Web Store": [
+		"Chrome Web Store"
+	],
+	"Clear alarm": [
+		"ยกเลิกแจ้งเตือน"
+	],
+	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
+		""
+	],
+	"Client ID: %s": [
+		"Client ID: %s"
+	],
+	"Close": [
+		"ปิด"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
+	],
+	"Close Window": [
+		"ปิดหน้าต่าง"
+	],
+	"Code": [
+		"Code"
+	],
+	"Code Block": [
+		""
+	],
+	"Collapse": [
+		""
+	],
+	"Coming alarms": [
+		""
+	],
+	"Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on \"Check synchronisation configuration\".": [
+		""
+	],
+	"command": [
+		""
+	],
+	"Command": [
+		""
+	],
+	"Command palette": [
+		""
+	],
+	"Command palette...": [
+		""
+	],
+	"Compact": [
+		""
+	],
+	"Completed": [
+		""
+	],
+	"Completed decryption.": [
+		"ถอดรหัสเรียบร้อยแล้ว"
+	],
+	"Compress old changes": [
+		""
+	],
+	"Configuration": [
+		"การตั้งค่า"
+	],
+	"Confirm password cannot be empty": [
+		"รหัสผ่านยืนยันไม่สามารถเว้นว่างได้"
+	],
+	"Confirm password:": [
+		"ยืนยันรหัสผ่าน:"
+	],
+	"Conflicted: %d": [
+		""
+	],
+	"Conflicts": [
+		"ขัดแย้ง"
+	],
+	"Consolidated billing": [
+		""
+	],
+	"Continue": [
+		""
+	],
+	"Convert to note": [
+		"แปลงเป็นบันทึก"
+	],
+	"Convert to todo": [
+		"แปลงเป็น to-do"
+	],
+	"Copy": [
+		"คัดลอก"
+	],
+	"Copy Link Address": [
+		"คัดลอกที่อยู่ลิงก์"
+	],
+	"Copy Markdown link": [
+		"คัดลอกลิงก์ Markdown"
+	],
+	"Copy path to clipboard": [
+		"คัดลอกที่อยู่ (path) ไปที่คลิปบอร์ด"
+	],
+	"Copy Shareable Link": [
+		"คัดลอกลิงก์ที่สามารถแบ่งปันได้"
+	],
+	"Copy token": [
+		"คัดลอก Token"
+	],
+	"Could not authorise application:\n\n%s\n\nPlease try again.": [
+		"ไม่สามารถอนุมัติแอปพลิเคชั่น:\n\n%s\n\nโปรดลองอีกครั้ง"
+	],
+	"Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s": [
+		""
+	],
+	"Could not connect to plugin repository.": [
+		""
+	],
+	"Could not export notes: %s": [
+		""
+	],
+	"Could not install plugin: %s": [
+		""
+	],
+	"Could not respond to the invitation. Please try again, or check with the notebook owner if they are still sharing it.\n\nThe error was: \"%s\"": [
+		""
+	],
+	"Could not upgrade master key: %s": [
+		""
+	],
+	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
+		""
+	],
+	"Create a notebook": [
+		"สร้างสมุดบันทึก"
+	],
+	"Created": [
+		"สร้างเมื่อ"
+	],
+	"Created local items: %d.": [
+		""
+	],
+	"Created remote items: %d.": [
+		""
+	],
+	"Created: %d.": [
+		"สร้างเมื่อ: %d"
+	],
+	"Created: %s": [
+		"สร้างเมื่อ: %s"
+	],
+	"Creates a new note.": [
+		"สร้างบันทึกใหม่"
+	],
+	"Creates a new notebook.": [
+		"สร้างสมุดบันทึกใหม่"
+	],
+	"Creates a new to-do.": [
+		"สร้าง to-do ใหม่"
+	],
+	"Creating report...": [
+		"กำลังสร้างรายงาน..."
+	],
+	"custom order": [
+		""
+	],
+	"Custom order": [
+		""
+	],
+	"Custom TLS certificates": [
+		"TLS certificate แบบกำหนดเอง"
+	],
+	"Customise the note publishing banner": [
+		""
+	],
+	"Cut": [
+		"ตัด"
+	],
+	"Dashboard": [
+		""
+	],
+	"Date": [
+		""
+	],
+	"Date format": [
+		"รูปแบบวันที่"
+	],
+	"days": [
+		"วัน"
+	],
+	"Decrease indent level": [
+		""
+	],
+	"Decrypted items: %s / %s": [
+		"รายการที่ถูกถอดรหัส: %s / %s"
+	],
+	"Decrypting items: %d/%d": [
+		"กำลังถอดรหัสรายการ: %d/%d"
+	],
+	"Default": [
+		"ค่าเริ่มต้น"
+	],
+	"Default: %s": [
+		""
+	],
+	"Delete": [
+		"ลบ"
+	],
+	"Delete local data and re-download from sync target": [
+		""
+	],
+	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
+		""
+	],
+	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
+		""
+	],
+	"Deleted local items: %d.": [
+		""
+	],
+	"Deleted remote items: %d.": [
+		""
+	],
+	"Deletes the given notebook.": [
+		"ลบสมุดบันทึกที่เลือก"
+	],
+	"Deletes the notebook without asking for confirmation.": [
+		"ลบสมุดบันทึกโดยไม่ต้องถามการยืนยัน"
+	],
+	"Deletes the notes matching <note-pattern>.": [
+		""
+	],
+	"Deletes the notes without asking for confirmation.": [
+		"ลบสมุดบันทึกโดยไม่ถามยืนยัน"
+	],
+	"Detailed": [
+		""
+	],
+	"Directory": [
+		"ไดเรกทอรี่"
+	],
+	"Directory to synchronise with (absolute path)": [
+		""
+	],
+	"Disable safe mode and restart": [
+		""
+	],
+	"Disable Web Clipper Service": [
+		"ปิดบริการ Web Clipper"
+	],
+	"Disabled": [
+		"ปิด"
+	],
+	"Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": [
+		""
+	],
+	"Discard changes": [
+		"ยกเลิกการเปลี่ยนแปลง"
+	],
+	"Dismiss": [
+		""
+	],
+	"Displays a geolocation URL for the note.": [
+		"แสดง URL ตำแหน่งภูมิศาสตร์สำหรับบันทึก"
+	],
+	"Displays only the first top <num> notes.": [
+		"แสดงเฉพาะบันทึก <num> อันดับแรก"
+	],
+	"Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-tnt` would display notes and to-dos.": [
+		""
+	],
+	"Displays summary about the notes and notebooks.": [
+		""
+	],
+	"Displays the complete information about note.": [
+		"แสดงข้อมูลทั้งหมดของบันทึก"
+	],
+	"Displays the given note.": [
+		"แสดงบันทึกที่เลือก"
+	],
+	"Displays usage information.": [
+		"แสดงข้อมูลการใช้งาน"
+	],
+	"Displays version information": [
+		"แสดงข้อมูลเวอร์ชั่น"
+	],
+	"Do it now": [
+		"ทำตอนนี้"
+	],
+	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
+		""
+	],
+	"Done": [
+		""
+	],
+	"Download and install the relevant extension for your browser:": [
+		"ดาวน์โหลดและติดตั้งส่วนเสริมที่เกี่ยวข้องสำหรับเว็บเบราว์เซอร์ของคุณ:"
+	],
+	"Downloaded": [
+		"ดาวน์โหลดแล้ว"
+	],
+	"Downloaded and decrypted": [
+		"ดาวน์โหลดและถอดรหัสแล้ว"
+	],
+	"Downloaded and encrypted": [
+		"ดาวน์โหลดและเข้ารหัสแล้ว"
+	],
+	"Downloading": [
+		"กำลังดาวน์โหลด"
+	],
+	"Downloading resources...": [
+		"กำลังดาวน์โหลดทรัพยากร..."
+	],
+	"Dracula": [
+		"Dracula"
+	],
+	"Draw picture": [
+		""
+	],
+	"Drawing": [
+		""
+	],
+	"Drop notes or files here": [
+		""
+	],
+	"Dropbox": [
+		"Dropbox"
+	],
+	"Dropbox Login": [
+		"เข้าสู่ระบบ Dropbox"
+	],
+	"Due": [
+		""
+	],
+	"Duplicate": [
+		""
+	],
+	"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": [
+		""
+	],
+	"Edit": [
+		"แก้ไข"
+	],
+	"Edit note.": [
+		"แก้ไขบันทึก"
+	],
+	"Edit notebook": [
+		"แก้ไขสมุดบันทึก"
+	],
+	"Edit profile configuration...": [
+		""
+	],
+	"Editor": [
+		"ตัวแก้ไข"
+	],
+	"Editor font": [
+		"แบบตัวอักษรของตัวแก้ไข"
+	],
+	"Editor font family": [
+		"ตระกูลของแบบตัวอักษรของตัวแก้ไข"
+	],
+	"Editor font size": [
+		"ขนาดตัวอักษรของตัวแก้ไข"
+	],
+	"Editor maximum width": [
+		""
+	],
+	"Emacs": [
+		"Emacs"
+	],
+	"Email": [
+		""
+	],
+	"Email to Note": [
+		""
+	],
+	"Emails": [
+		""
+	],
+	"emphasised text": [
+		""
+	],
+	"Empty trash": [
+		""
+	],
+	"Enable": [
+		"เปิด"
+	],
+	"Enable ++insert++ syntax": [
+		"เปิดใช้งาน ++insert++syntax"
+	],
+	"Enable ==mark== syntax": [
+		"เปิดใช้งาน ==mark== syntax"
+	],
+	"Enable ^sup^ syntax": [
+		"เปิดใช้งาน ^sup^ syntax"
+	],
+	"Enable abbreviation syntax": [
+		"เปิดใช้งาน abbreviation syntax"
+	],
+	"Enable biometrics authentication?": [
+		""
+	],
+	"Enable deflist syntax": [
+		"เปิดใช้งาน deflist syntax"
+	],
+	"Enable footnotes": [
+		"เปิดใช้งาน Footnotes"
+	],
+	"Enable Fountain syntax support": [
+		"เปิดใช้งานการรองรับ Fountain syntax"
+	],
+	"Enable markdown emoji": [
+		"เปิดใช้งาน Markdown Emoji"
+	],
+	"Enable math expressions": [
+		"เปิดใช้งาน Math Expressions"
+	],
+	"Enable Mermaid diagrams support": [
+		"เปิดใช้งานการรองรับ Mermaid diagram"
+	],
+	"Enable multimarkdown table extension": [
+		"เปิดใช้งานส่วนเสริมตาราง Multimarkdown"
+	],
+	"Enable note history": [
+		"เปิดใช้ประวัติบันทึกย้อนหลัง"
+	],
+	"Enable optical character recognition (OCR)": [
+		""
+	],
+	"Enable or disable plugins": [
+		""
+	],
+	"Enable PDF viewer": [
+		""
+	],
+	"Enable soft breaks": [
+		"เปิดใช้งาน Soft Break"
+	],
+	"Enable spellcheck in the text editor": [
+		""
+	],
+	"Enable table of contents extension": [
+		"เปิดใช้งานส่วนเสริมสารบัญ"
+	],
+	"Enable video player": [
+		""
+	],
+	"Enable Web Clipper Service": [
+		"เปิดใช้บริการ Web Clipper"
+	],
+	"Enable ~sub~ syntax": [
+		"เปิดใช้งาน ~sub~ syntax"
+	],
+	"Enabled": [
+		"เปิด"
+	],
+	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
+		""
+	],
+	"Encrypted": [
+		"เข้ารหัสแล้ว"
+	],
+	"Encryption": [
+		"การเข้ารหัส"
+	],
+	"Encryption Config": [
+		"ตั้งค่าการเข้ารหัส"
+	],
+	"Enter code here": [
+		"กรอกรหัสที่นี่"
+	],
+	"Enter master password:": [
+		""
+	],
+	"Enter notebook title": [
+		"กรอกชื่อของสมุดบันทึก"
+	],
+	"Enum": [
+		"Enum"
+	],
+	"Error": [
+		"ผิดพลาด"
+	],
+	"Error opening note in editor: %s": [
+		""
+	],
+	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
+		""
+	],
+	"Evernote Export File (as HTML)": [
+		"ไฟล์ส่งออก Evernote (เป็น HTML)"
+	],
+	"Evernote Export File (as Markdown)": [
+		"ไฟล์ส่งออก Evernote (เป็น Markdown)"
+	],
+	"Exits the application.": [
+		"ออกจากแอปพลิเคชั่น"
+	],
+	"Expand": [
+		""
+	],
+	"Export": [
+		"ส่งออก"
+	],
+	"Export debug report": [
+		""
+	],
+	"Export Debug Report": [
+		""
+	],
+	"Exported successfully!": [
+		""
+	],
+	"Exports Joplin data to the given path. By default, it will export the complete database including notebooks, notes, tags and resources.": [
+		""
+	],
+	"Exports only the given notebook.": [
+		"ส่งออกเฉพาะสมุดบันทึกที่เลือก"
+	],
+	"Fail-safe": [
+		""
+	],
+	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
+		""
+	],
+	"Fatal error:": [
+		"ผิดพลาดร้ายแรง:"
+	],
+	"Feature flags": [
+		""
+	],
+	"Fetched items: %d/%d.": [
+		""
+	],
+	"Fetching resources: %d/%d": [
+		""
+	],
+	"File": [
+		"ไฟล์"
+	],
+	"File system": [
+		""
+	],
+	"Find and replace": [
+		""
+	],
+	"Firefox Extension": [
+		"ส่วนเสริมของ Firefox"
+	],
+	"Fix search index": [
+		"ซ่อมดัชนีย์ค้นหา"
+	],
+	"Fixing search index...": [
+		"กำลังซ่อมดัชนีค้นหา..."
+	],
+	"Focus": [
+		""
+	],
+	"Folders": [
+		"โฟลเดอร์"
+	],
+	"For debugging purpose only: export your profile to an external SD card.": [
+		""
+	],
+	"For example \"%s\"": [
+		""
+	],
+	"For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:": [
+		"สำหรับข้อมูลเพิ่มเติมเกี่ยวกับการเข้ารหัสแบบ End-To-End Encryption (E2EE) และคำแนะนำในการเปิดใช้งาน โปรดอ่านคู่มือการใช้งาน:"
+	],
+	"For the list of keyboard shortcuts and config options, type `help keymap`": [
+		"สำหรับรายการคีย์ลัดและตัวเลือกการตั้งค่า พิมพ์ `help keymap`"
+	],
+	"Force path style": [
+		""
+	],
+	"Forward": [
+		""
+	],
+	"Found: %d.": [
+		"พบ: %d"
+	],
+	"From a plugin": [
+		""
+	],
+	"Full changelog": [
+		""
+	],
+	"Full name": [
+		""
+	],
+	"General": [
+		"ทั่วไป"
+	],
+	"Generating link...": [
+		"กำลังสร้างลิงก์..."
+	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
+	"Get it now:": [
+		""
+	],
+	"Get pre-releases when checking for updates": [
+		""
+	],
+	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
+		""
+	],
+	"Go to source URL": [
+		"ไปที่ URL แหล่งที่มา"
+	],
+	"Goto Anything...": [
+		""
+	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
+	"Header %d": [
+		""
+	],
+	"Headers": [
+		""
+	],
+	"Heading": [
+		"หัวข้อ"
+	],
+	"Help": [
+		"ช่วยเหลือ"
+	],
+	"Hide %s": [
+		"ซ่อน %s"
+	],
+	"Hide advanced": [
+		""
+	],
+	"Hide disabled keys": [
+		""
+	],
+	"Hide keyboard": [
+		""
+	],
+	"Hide more actions": [
+		""
+	],
+	"Highlight": [
+		""
+	],
+	"Home": [
+		""
+	],
+	"HTML Directory": [
+		"ไดเรกทอรี่ HTML"
+	],
+	"HTML document": [
+		""
+	],
+	"HTML File": [
+		"ไฟล์ HTML"
+	],
+	"Hyperlink": [
+		"ไฮเปอร์ลิงก์"
+	],
+	"Icon": [
+		"ไอคอน"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
+	],
+	"Ignore": [
+		""
+	],
+	"Ignore TLS certificate errors": [
+		"เพิกเฉยข้อผิดพลาด TLS certificate"
+	],
+	"Images": [
+		""
+	],
+	"Import": [
+		"นำเข้า"
+	],
+	"Importing from \"%s\" as \"%s\" format. Please wait...": [
+		"กำลังนำเข้าจาก “%s” ไปเป็นฟอร์แมต “%s” โปรดรอสักครู่..."
+	],
+	"Importing notes...": [
+		"กำลังนำเข้าบันทึก..."
+	],
+	"Imports data into Joplin.": [
+		"นำเข้าข้อมูลเข้ามาที่ Joplin"
+	],
+	"In \"Manual\" mode, attachments are downloaded only when you click on them. In \"Auto\", they are downloaded when you open the note. In \"Always\", all the attachments are downloaded whether you open the note or not.": [
+		""
+	],
+	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
+		""
+	],
+	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
+		""
+	],
+	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
+		""
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
+	],
+	"In order to use file system synchronisation your permission to write to external storage is required.": [
+		""
+	],
+	"In order to use the web clipper, you need to do the following:": [
+		"ในการที่จะใช้ web clipper คุณจำเป็นต้องทำสิ่งต่อไปนี้:"
+	],
+	"In progress": [
+		"กำลังกำเนินการ"
+	],
+	"In: %s": [
+		"ใน: %s"
+	],
+	"Increase indent level": [
+		""
+	],
+	"Indent less": [
+		""
+	],
+	"Indent more": [
+		""
+	],
+	"Information": [
+		"ข้อมูล"
+	],
+	"Inline Code": [
+		""
+	],
+	"Insert": [
+		""
+	],
+	"Insert Hyperlink": [
+		"แทรกไฮเปอร์ลิงก์"
+	],
+	"Install": [
+		"ติตตั้ง"
+	],
+	"Install from file": [
+		""
+	],
+	"Installed": [
+		"ติตตั้งสำเร็จ"
+	],
+	"Installing...": [
+		"กำลังติตตั้ง..."
+	],
+	"Invalid answer: %s": [
+		""
+	],
+	"Invalid command: \"%s\"": [
+		"คำสั่งไม่ถูกต้อง: \"%s\""
+	],
+	"Italic": [
+		"ตัวเอียง"
+	],
+	"Items": [
+		""
+	],
+	"Items that cannot be decrypted": [
+		"รายการที่ไม่สามารถทำการถอดรหัส"
+	],
+	"Items that cannot be synchronised": [
+		"รายการที่ไม่สามารถทำการซิงโครไนซ์"
+	],
+	"Join us on Twitter": [
+		""
+	],
+	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
+		""
+	],
+	"Joplin Export Directory": [
+		"ไดเรกทอรี่ส่งออก Joplin"
+	],
+	"Joplin Export File": [
+		"ไฟล์ส่งออก Joplin"
+	],
+	"Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.": [
+		""
+	],
+	"Joplin Server URL": [
+		""
+	],
+	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
+		""
+	],
+	"Joplin website": [
+		"เว็บไซต์ของ Joplin"
+	],
+	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
+		""
+	],
+	"KaTeX": [
+		""
+	],
+	"Keyboard Mode": [
+		"โหมดของคีย์บอร์ด"
+	],
+	"Keychain Supported: %s": [
+		""
+	],
+	"Keys that need upgrading": [
+		""
+	],
+	"Landscape": [
+		"แนวนอน"
+	],
+	"Language": [
+		"ภาษา"
+	],
+	"Last error: %s": [
+		"ข้อผิดพลาดล่าสุด: %s"
+	],
+	"Later": [
+		"ภายหลัง"
+	],
+	"Latitude": [
+		""
+	],
+	"Layout": [
+		""
+	],
+	"Layout button sequence": [
+		""
+	],
+	"Leave it blank to download the language files from the default website": [
+		""
+	],
+	"Legal": [
+		"Legal"
+	],
+	"Letter": [
+		"Letter"
+	],
+	"Lines": [
+		"บรรทัด"
+	],
+	"Link has been copied to clipboard!": [
+		"ลิงก์ได้ถูกคัดลอกไปที่คลิปบอร์ดแล้ว"
+	],
+	"Links with protocol \"%s\" are not supported": [
+		"ไม่รองรับลิงก์ที่ใช้โปรโตคอลนี้ “%s”"
+	],
+	"List item": [
+		""
+	],
+	"Lists": [
+		""
+	],
+	"Loading plugin repository...": [
+		""
+	],
+	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
+		""
+	],
+	"Log": [
+		""
+	],
+	"Login with Dropbox": [
+		"เข้าสู่ระบบด้วย Dropbox"
+	],
+	"Login with OneDrive": [
+		"เข้าสู่ระบบด้วย OneDrive"
+	],
+	"Logout": [
+		""
+	],
+	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
+		""
+	],
+	"Manage your plugins": [
+		""
+	],
+	"Manual": [
+		"ทำด้วยตนเอง"
+	],
+	"Markdown": [
+		"Markdown"
+	],
+	"Markdown + Front Matter": [
+		""
+	],
+	"Marks a to-do as done.": [
+		""
+	],
+	"Marks a to-do as non-completed.": [
+		""
+	],
+	"Markup": [
+		"Markup"
+	],
+	"Master Key %s": [
+		"มาสเตอร์คีย์ %s"
+	],
+	"Max concurrent connections": [
+		""
+	],
+	"Max Item Size": [
+		""
+	],
+	"Media player, math, diagrams, table of contents": [
+		""
+	],
+	"Minimise": [
+		""
+	],
+	"Missing keys": [
+		""
+	],
+	"Missing Master Keys": [
+		""
+	],
+	"Missing required argument: %s": [
+		""
+	],
+	"Missing required flag value: %s": [
+		""
+	],
+	"Mobile data - auto-sync disabled": [
+		""
+	],
+	"More information": [
+		"ข้อมูลเพิ่มเติม"
+	],
+	"More than one item match \"%s\". Please narrow down your query.": [
+		""
+	],
+	"Move %d notes to notebook \"%s\"?": [
+		"ย้ายบันทึก %d ไปที่สมุดบันทึก “%s”?"
+	],
+	"Move to notebook...": [
+		"ย้ายไปสมุดบันทึก..."
+	],
+	"n": [
+		"n"
+	],
+	"N": [
+		"N"
+	],
+	"Never resize": [
+		""
+	],
+	"New note": [
+		"สร้างบันทึกใหม่"
+	],
+	"New notebook": [
+		"สร้างสมุดบันทึกใหม่"
+	],
+	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
+		""
+	],
+	"New sub-notebook": [
+		"สร้างสมุดบันทึกย่อยใหม่"
+	],
+	"New tags:": [
+		"แท็กใหม่:"
+	],
+	"New to-do": [
+		"สร้าง to-do"
+	],
+	"New version: %s": [
+		"เวอร์ชั่นใหม่: %s"
+	],
+	"Next match": [
+		""
+	],
+	"Nextcloud": [
+		"Nextcloud"
+	],
+	"Nextcloud password": [
+		"รหัสผ่าน Nextcloud"
+	],
+	"Nextcloud username": [
+		"ชื่อผู้ใช้ Nextcloud"
+	],
+	"Nextcloud WebDAV URL": [
+		"Nextcloud WebDAV URL"
+	],
+	"No": [
+		"ไม่"
+	],
+	"No active notebook.": [
+		"ไม่มีสมุดบันทึกที่ถูกใช้งาน"
+	],
+	"No item with ID %s": [
+		"ไม่มีรายการที่มี ID %s"
+	],
+	"No notes in here. Create one by clicking on \"New note\".": [
+		""
+	],
+	"No resources!": [
+		"ไม่มีทรัพยากร"
+	],
+	"No such command: %s": [
+		"ไม่มีคำสั่ง: %s"
+	],
+	"No suggestions": [
+		""
+	],
+	"No text editor is defined. Please set it using `config editor <editor-path>`": [
+		""
+	],
+	"Nord": [
+		"Nord"
+	],
+	"Not authenticated with %s. Please provide any missing credentials.": [
+		""
+	],
+	"Not downloaded": [
+		"ยังไม่ได้ดาวน์โหลด"
+	],
+	"Not generated": [
+		""
+	],
+	"note": [
+		"บันทึก"
+	],
+	"Note": [
+		"บันทึก"
+	],
+	"Note area growth factor": [
+		""
+	],
+	"Note does not exist: \"%s\". Create it?": [
+		""
+	],
+	"Note History": [
+		"ประวัติบันทึกย้อนหลัง"
+	],
+	"Note is not a to-do: \"%s\"": [
+		""
+	],
+	"Note list": [
+		"รายการบันทึก"
+	],
+	"Note list growth factor": [
+		""
+	],
+	"Note properties": [
+		"คุณสมบัติของบันทึก"
+	],
+	"Note title": [
+		"ชื่อบันทึก"
+	],
+	"Note: When a note is shared, it will no longer be encrypted on the server.": [
+		""
+	],
+	"Notebook list growth factor": [
+		""
+	],
+	"Notebook: %s": [
+		"สมุดบันทึก: %s"
+	],
+	"Notebooks": [
+		"สมุดบันทึก"
+	],
+	"Notes can only be created within a notebook.": [
+		""
+	],
+	"Numbered List": [
+		"รายการแบบตัวเลข"
+	],
+	"OK": [
+		"ตกลง"
+	],
+	"OLED Dark": [
+		"OLED Dark"
+	],
+	"One of your master keys use an obsolete encryption method.": [
+		""
+	],
+	"One or more items are currently encrypted and you may need to supply a master password. To do so please type `e2ee decrypt`. If you have already supplied the password, the encrypted items are being decrypted in the background and will be available soon.": [
+		""
+	],
+	"One or more master keys need a password.": [
+		""
+	],
+	"OneDrive": [
+		"OneDrive"
+	],
+	"OneDrive Login": [
+		"เข้าสู่ระบบ OneDrive"
+	],
+	"Only one note can be printed at a time.": [
+		""
+	],
+	"Open %s": [
+		"เปิด %s"
+	],
+	"Open PDF viewer": [
+		""
+	],
+	"Open Sync Wizard...": [
+		""
+	],
+	"Open...": [
+		"เปิด..."
+	],
+	"Opening section %s": [
+		""
+	],
+	"Operation cancelled": [
+		"ระบวนการถูกยกเลิก"
+	],
+	"Options": [
+		"ตัวเลือก"
+	],
+	"Page size for PDF export": [
+		"ขนาดของหน้า สำหรับการส่งออก PDF"
+	],
+	"Password": [
+		"รหัสผ่าน"
+	],
+	"Password:": [
+		"รหัสผ่าน:"
+	],
+	"Passwords do not match!": [
+		"รหัสผ่านไม่เหมือนกัน!"
+	],
+	"Paste": [
+		"วาง"
+	],
+	"Paste as text": [
+		""
+	],
+	"Path:": [
+		""
+	],
+	"PDF File": [
+		"ไฟล์ PDF"
+	],
+	"Per user. Minimum of %d users.": [
+		""
+	],
+	"Permission to use camera": [
+		"สิทธิ์การเข้าใช้งานกล้อง"
+	],
+	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
+		""
+	],
+	"Please confirm that you would like to re-encrypt your complete database.": [
+		""
+	],
+	"Please enter your password in the master key list below before upgrading the key.": [
+		""
+	],
+	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
+		""
+	],
+	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
+		""
+	],
+	"Please record your voice...": [
+		""
+	],
+	"Please select a notebook first.": [
+		"โปรดเลือกสมุดบันทึกก่อน"
+	],
+	"Please select where the sync status should be exported to": [
+		""
+	],
+	"Please specify import format for %s": [
+		""
+	],
+	"Please upgrade Joplin to use this plugin": [
+		""
+	],
+	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
+		""
+	],
+	"Please wait...": [
+		"โปรดรอสักครู่..."
+	],
+	"Plugin repository failed to load": [
+		""
+	],
+	"Plugins": [
+		"ปลั๊กอิน"
+	],
+	"Portrait": [
+		"แนวตั้ง"
+	],
+	"Possible keys/values:": [
+		""
+	],
+	"Possible values: %s.": [
+		"ค่าที่เป็นไปได้: %s"
+	],
+	"Preferences": [
+		"การตั้งค่า"
+	],
+	"Preferences...": [
+		"การตั้งค่า"
+	],
+	"Preferred dark theme": [
+		""
+	],
+	"Preferred light theme": [
+		""
+	],
+	"Press Ctrl+D or type \"exit\" to exit the application": [
+		"กด Ctrl+D หรือพิมพ์ \"exit\" เพื่อออกจากแอปพลิเคชั่น"
+	],
+	"Press the shortcut": [
+		""
+	],
+	"Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the shortcut.": [
+		""
+	],
+	"Press to set the decryption password.": [
+		"โปรดตั้งรหัสผ่านสำหรับการถอดรหัส"
+	],
+	"Previous match": [
+		""
+	],
+	"Previous versions of this note": [
+		"เวอร์ชั่นก่อนหน้าของบันทึกนี้"
+	],
+	"Print": [
+		"พิมพ์"
+	],
+	"Priority support": [
+		""
+	],
+	"Privacy Policy": [
+		""
+	],
+	"Pro": [
+		""
+	],
+	"Process failed payment subscriptions": [
+		""
+	],
+	"Process oversized accounts": [
+		""
+	],
+	"Process user deletions": [
+		""
+	],
+	"Profile": [
+		""
+	],
+	"Profile Version: %s": [
+		"เวอร์ชั่นโปรไฟล์: %s"
+	],
+	"Properties": [
+		"คุณสมบัติ"
+	],
+	"Proxy timeout (seconds)": [
+		""
+	],
+	"Proxy URL": [
+		""
+	],
+	"Public-private key pair:": [
+		""
+	],
+	"Publish Notes": [
+		""
+	],
+	"Publish notes to the internet": [
+		""
+	],
+	"Quit": [
+		"ออก"
+	],
+	"Re-upload local data to sync target": [
+		""
+	],
+	"Read more about it": [
+		""
+	],
+	"Read time: %s min": [
+		"เวลาอ่าน: %s นาที"
+	],
+	"Recipient has accepted the invitation": [
+		""
+	],
+	"Recipient has not yet accepted the invitation": [
+		""
+	],
+	"Recipient has rejected the invitation": [
+		""
+	],
+	"Recipients:": [
+		""
+	],
+	"Recommended": [
+		""
+	],
+	"Redo": [
+		""
+	],
+	"Refresh": [
+		"รีเฟรช"
+	],
+	"Reject": [
+		"ปฏิเสธ"
+	],
+	"Remove tag \"%s\" from all notes?": [
+		"ลบแท็ก \"%s\" ออกจากบันทึกทั้งหมด?"
+	],
+	"Remove this search from the sidebar?": [
+		"ลบการค้นหานี้ออกจากแถบด้านข้าง?"
+	],
+	"Rename": [
+		"แก้ไขชื่อ"
+	],
+	"Rename notebook:": [
+		"แก้ไขชื่อสมุดบันทึก"
+	],
+	"Rename tag:": [
+		"แก้ไขชื่อแท็ก"
+	],
+	"Renames the given <item> (note or notebook) to <name>.": [
+		""
+	],
+	"Renew token": [
+		""
+	],
+	"Replace": [
+		""
+	],
+	"Replace with...": [
+		""
+	],
+	"Replace: ": [
+		""
+	],
+	"Resize large images:": [
+		""
+	],
+	"Resources: %d.": [
+		"ทรัพยากร: %d"
+	],
+	"Restart and upgrade": [
+		""
+	],
+	"Restart now": [
+		""
+	],
+	"Restore": [
+		"กู้คืน"
+	],
+	"Restore the items matching <pattern> from the trash.": [
+		""
+	],
+	"Retry": [
+		"ลองอีกครั้ง"
+	],
+	"Reveal file in folder": [
+		""
+	],
+	"Reverses the sorting order.": [
+		""
+	],
+	"Runs the commands contained in the text file. There should be one command per line.": [
+		""
+	],
+	"S3": [
+		""
+	],
+	"S3 access key": [
+		""
+	],
+	"S3 bucket": [
+		""
+	],
+	"S3 region": [
+		""
+	],
+	"S3 secret key": [
+		""
+	],
+	"S3 URL": [
+		""
+	],
+	"Safe mode is currently active. Note rendering and all plugins are temporarily disabled.": [
+		""
+	],
+	"Save": [
+		"บันทึก"
+	],
+	"Save as...": [
+		"บันทึกเป็น..."
+	],
+	"Save changes": [
+		"บันทึกการเปลี่ยนแปลง"
+	],
+	"Search": [
+		"ค้นหา"
+	],
+	"Search in all the notes": [
+		"ค้นหาในบันทึกทั้งหมด"
+	],
+	"Search in current note": [
+		"ค้นหาในบันทึกปัจจุบัน"
+	],
+	"Search...": [
+		"ค้นหา..."
+	],
+	"Search:": [
+		"ค้นหา:"
+	],
+	"Searches for the given <pattern> in all the notes.": [
+		""
+	],
+	"See the pre-release page for more details: %s": [
+		""
+	],
+	"Select all": [
+		"เลือกทั้งหมด"
+	],
+	"Server is already running on port %d": [
+		"เซิร์ฟเวอร์กำลังทำงานอยู่แล้วที่พอร์ต %d"
+	],
+	"Server is running on port %d": [
+		"เซิร์ฟเวอร์กำลังทำงานที่พอร์ต %d"
+	],
+	"Set alarm": [
+		"ตั้งการแจ้งเตือน"
+	],
+	"Set alarm:": [
+		"ตั้งการแจ้งเตือน:"
+	],
+	"Set it to 0 to make it take the complete available space. Recommended width is 600.": [
+		""
+	],
+	"Set the password": [
+		"ตั้งรหัสผ่าน"
+	],
+	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
+		""
+	],
+	"Share": [
+		"แบ่งปัน"
+	],
+	"Share a copy of all notes in a file format that can be imported by Joplin on a computer.": [
+		""
+	],
+	"Share permissions": [
+		""
+	],
+	"Show all": [
+		"แสดงทั้งหมด"
+	],
+	"Show tray icon": [
+		"แสดงไอคอนใน System tray"
+	],
+	"Show/hide the sidebar": [
+		""
+	],
+	"Shrink large images before adding them to notes.": [
+		""
+	],
+	"Side menu closed": [
+		""
+	],
+	"Side menu opened": [
+		""
+	],
+	"Sidebar": [
+		"แถบด้านข้าง"
+	],
+	"Size": [
+		"ขนาด"
+	],
+	"Skip this version": [
+		""
+	],
+	"Skipped items: %d (use --retry-failed-items to retry decrypting them)": [
+		""
+	],
+	"Skipped: %d.": [
+		"ข้าม: %d"
+	],
+	"Solarised Dark": [
+		"Solarised Dark"
+	],
+	"Solarised Light": [
+		"Solarised Light"
+	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
+	"Some items cannot be synchronised. Press for more info.": [
+		"มีบางรายการที่ไม่สามารถทำการซิงโครไนซ์ได้ กดเพื่อดูข้อมูลเพิ่มเติม"
+	],
+	"Sort notebooks by": [
+		"จัดเรียงสมุดบันทึกโดย"
+	],
+	"Sort notes by": [
+		"จัดเรียงบันทึกโดย"
+	],
+	"Sort selected lines": [
+		""
+	],
+	"Source": [
+		"ต้นฉบับ"
+	],
+	"Source format: %s": [
+		"ฟอร์แมตต้นฉบับ: %s"
+	],
+	"Specify the port that should be used by the API server. If not set, a default will be used.": [
+		"ระบุพอร์ตที่จะใช้โดยเซิร์ฟเวอร์ API ถ้าไม่ระบุ จะใช้ค่าเริ่มต้น"
+	],
+	"Spell checker": [
+		""
+	],
+	"Split View": [
+		"มุมมองแบบแบ่งครึ่ง"
+	],
+	"Start application minimised in the tray icon": [
+		"เริ่มต้นแอปพลิเคชั่นโดยย่อไว้ที่ไอคอน System tray"
+	],
+	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
+		""
+	],
+	"Starting synchronisation...": [
+		"เริ่มต้นการซิงโครไนซ์..."
+	],
+	"Starting to edit note. Close the editor to get back to the prompt.": [
+		""
+	],
+	"Statistics...": [
+		""
+	],
+	"Status": [
+		"สถานะ"
+	],
+	"Status: %s": [
+		"สถานะ: %s"
+	],
+	"Status: Started on port %d": [
+		"สถานะ: เริ่มทำงาน ที่พอร์ต %d"
+	],
+	"Step 1: Enable the clipper service": [
+		"ขั้นตอนที่ 1: เปิดใช้บริการ clipper"
+	],
+	"Step 1: Open this URL in your browser to authorise the application:": [
+		"ขั้นตอนที่ 1: เปิด URL นี้ในเว็บเบราว์เซอร์ เพื่อขออนุมัติแอปพลิเคชั่น"
+	],
+	"Step 2: Enter the code provided by Dropbox:": [
+		"ขั้นตอนที่ 2: กรอกรหัสที่ได้มาจาก Dropbox:"
+	],
+	"Step 2: Install the extension": [
+		"ขั้นตอนที่ 2: ติดตั้งส่วนเสริม"
+	],
+	"Stop": [
+		""
+	],
+	"Storage space": [
+		""
+	],
+	"Strikethrough": [
+		""
+	],
+	"strong text": [
+		""
+	],
+	"Submit": [
+		""
+	],
+	"Subscript": [
+		""
+	],
+	"Superscript": [
+		""
+	],
+	"Swap line down": [
+		""
+	],
+	"Swap line up": [
+		""
+	],
+	"Switches to [notebook] - all further operations will happen within this notebook.": [
+		""
+	],
+	"Sync as many devices as you want": [
+		""
+	],
+	"Sync Status": [
+		"สถานะการซิงค์"
+	],
+	"Sync status (synced items / total items)": [
+		"สถานะซิงค์ (รายการที่ซิงค์ไปแล้ว / รายการทั้งหมด)"
+	],
+	"Sync target must be upgraded! Run `%s` to proceed.": [
+		""
+	],
+	"Sync Target Upgrade": [
+		""
+	],
+	"Sync to provided target (defaults to sync.target config value)": [
+		""
+	],
+	"Sync Version: %s": [
+		"ซิงค์เวอร์ชั่น: %s"
+	],
+	"Synchronisation": [
+		"การซิงโครไนซ์"
+	],
+	"Synchronisation interval": [
+		"ความถี่ในการซิงโครไนซ์"
+	],
+	"Synchronisation Status": [
+		"สถานะการซิงโครไนซ์"
+	],
+	"Synchronisation target": [
+		"จุดหมายการซิงโครไนซ์"
+	],
+	"Synchronisation target: %s (%s)": [
+		"จุดหมายการซิงโครไนซ์: %s (%s)"
+	],
+	"Synchronise": [
+		"ซิงโครไนซ์"
+	],
+	"Synchronise only over WiFi connection": [
+		""
+	],
+	"Synchronises with remote storage.": [
+		"ซิงโครไนซ์กับแหล่งเก็บข้อมูลระยะไกล"
+	],
+	"Synchronising...": [
+		"กำลังซิงโครไนซ์..."
+	],
+	"Tabloid": [
+		"Tabloid"
+	],
+	"tag1, tag2, ...": [
+		""
+	],
+	"Tagged: %d.": [
+		"แท็ก: %d"
+	],
+	"Tags": [
+		"แท็ก"
+	],
+	"Tasks": [
+		""
+	],
+	"Teams": [
+		""
+	],
+	"Text document": [
+		""
+	],
+	"Text editor command": [
+		""
+	],
+	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
+		""
+	],
+	"The active profile cannot be deleted. Switch to a different profile and try again.": [
+		""
+	],
+	"The app is now going to close. Please relaunch it to complete the process.": [
+		""
+	],
+	"The application did not close properly. Would you like to start in safe mode?": [
+		""
+	],
+	"The application has been authorised - you may now close this browser tab.": [
+		"แอปพลิเคชั่นนี้ได้รับการอนุมัติแล้ว - คุณสามารถปิดแท็ปเว็บเบราว์เซอร์นี้ได้"
+	],
+	"The application has been authorised!": [
+		"แอปพลิเคชั่นได้รับการอนุมัติแล้ว!"
+	],
+	"The application has been successfully authorised.": [
+		"แอปพลิเคชั่นนี้ได้รับการอนุมัติเป็นที่เรียบร้อยแล้ว"
+	],
+	"The application must be restarted for these changes to take effect.": [
+		""
+	],
+	"The attachments will no longer be watched when you switch to a different note.": [
+		""
+	],
+	"The command \"%s\" is only available in GUI mode": [
+		"คำสั่ง “%s” มีเฉพาะในโหมด GUI เท่านั้น"
+	],
+	"The default admin password is insecure and has not been changed! [Change it now](%s)": [
+		""
+	],
+	"The default encryption method has been changed to a more secure one and it is recommended that you apply it to your data.": [
+		""
+	],
+	"The default encryption method has been changed, you should re-encrypt your data.": [
+		""
+	],
+	"The default profile cannot be deleted": [
+		""
+	],
+	"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": [
+		""
+	],
+	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
+		""
+	],
+	"The following attachment matches your search query:": [
+		""
+	],
+	"The following attachments are being watched for changes:": [
+		""
+	],
+	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
+		""
+	],
+	"The Joplin mobile app does not currently support this type of link: %s": [
+		"แอป Joplin mobile ยังไม่รองรับชนิดของลิงก์นี้: %s"
+	],
+	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
+		""
+	],
+	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
+		""
+	],
+	"The master key has been upgraded successfully!": [
+		""
+	],
+	"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
+		""
+	],
+	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
+		""
+	],
+	"The note was successfully moved to the trash.": [
+		""
+	],
+	"The notebook and its content was successfully moved to the trash.": [
+		""
+	],
+	"The notebook could not be saved: %s": [
+		"ไม่สามารถบันทึกสมุดบันทึก: %s"
+	],
+	"The notes have been imported: %s": [
+		"บันทึกได้ถูกนำเข้าแล้ว: %s"
+	],
+	"The possible commands are:": [
+		"คำสั่งที่เป็นไปได้คือ:"
+	],
+	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
+		""
+	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
+	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
+		""
+	],
+	"The sync target needs to be upgraded. Press this banner to proceed.": [
+		""
+	],
+	"The tag \"%s\" already exists. Please choose a different name.": [
+		"แท็ก “%s” มีอยู่แล้ว โปรดใช้ชื่ออื่น"
+	],
+	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
+		""
+	],
+	"The Web Clipper needs your authorisation to access your data.": [
+		""
+	],
+	"The web clipper service is enabled and set to auto-start.": [
+		""
+	],
+	"The web clipper service is not enabled.": [
+		""
+	],
+	"The WebDAV implementation of %s is incompatible with Joplin, and as such is no longer supported. Please use a different sync method.": [
+		""
+	],
+	"Theme": [
+		"ธีม"
+	],
+	"There are currently no notes. Create one by clicking on the (+) button.": [
+		"ไม่มีบันทึกอยู่เลย สามารถสร้างบันทึกใหม่ได้โดยคลิกที่ปุ่ม (+)"
+	],
+	"There are unsaved changes.": [
+		""
+	],
+	"There is currently no notebook. Create one by clicking on \"New notebook\".": [
+		""
+	],
+	"There was a [conflict](%s) on the attachment below.\n\n%s": [
+		""
+	],
+	"There was an error downloading this attachment:": [
+		""
+	],
+	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
+		""
+	],
+	"These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.": [
+		""
+	],
+	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
+		""
+	],
+	"This attachment is not downloaded or not decrypted yet": [
+		""
+	],
+	"This attachment is not downloaded or not decrypted yet.": [
+		"ไฟล์แนบนี้ยังไม่ได้ดาวน์โหลดหรือยังไม่ได้ถอดรหัส"
+	],
+	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
+		"Token สำหรับการขออนุมัตินี้ ใช้เพื่ออนุญาตแอปพลิเคชั่น third-party เพื่อเข้าถึง Joplin"
+	],
+	"This drawing may have unsaved changes.": [
+		""
+	],
+	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
+		""
+	],
+	"This note does not have geolocation information.": [
+		"บันทึกนี้ไม่มีตำแหน่งภูมิศาสตร์"
+	],
+	"This note has no content. Click on \"%s\" to toggle the editor and edit the note.": [
+		""
+	],
+	"This note has no history": [
+		"บันทึกนี้ไม่มีประวัติย้อนหลัง"
+	],
+	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
+		""
+	],
+	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
+		""
+	],
+	"This will open a new screen. Save your current changes?": [
+		""
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
+	],
+	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
+		""
+	],
+	"Time format": [
+		"รูปแบบเวลา"
+	],
+	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
+		""
+	],
+	"To delete a tag, untag the associated notes.": [
+		""
+	],
+	"To delete: %d": [
+		""
+	],
+	"To enter command line mode, press \":\"": [
+		""
+	],
+	"To exit command line mode, press ESCAPE": [
+		""
+	],
+	"To manually sort the notes, the sort order must be changed to \"%s\" in the menu \"%s\" > \"%s\"": [
+		""
+	],
+	"To move from one pane to another, press Tab or Shift+Tab.": [
+		""
+	],
+	"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": [
+		""
+	],
+	"To switch the profile, the app is going to close and you will need to restart it.": [
+		""
+	],
+	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
+		""
+	],
+	"to-do": [
+		"to-do"
+	],
+	"Toggle editor layout": [
+		""
+	],
+	"Toggle sidebar": [
+		"สลับแถบด้านข้าง"
+	],
+	"Token has been copied to the clipboard!": [
+		"Token ได้ถูกคัดลอกไปที่คลิปบอร์ดแล้ว!"
+	],
+	"Tools": [
+		"เครื่องมือ"
+	],
+	"Total: %d/%d": [
+		"ทั้งหมด: %d/%d"
+	],
+	"Trash": [
+		""
+	],
+	"Try again": [
+		"ลองอีกครั้ง"
+	],
+	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
+		"พิมพ์ `help [คำสั่ง]` สำหรับข้อมูลเพิ่มเติมของคำสั่งนั้นๆ หรือพิมพ์ `help all` สำหรับข้อมูลการใช้งานทั้งหมด"
+	],
+	"Type `joplin help` for usage information.": [
+		"พิมพ์ `joplin help` สำหรับข้อมูลการใช้งาน"
+	],
+	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
+		""
+	],
+	"Unable to edit resource of type %s": [
+		""
+	],
+	"Unable to export or share data. Reason: %s": [
+		""
+	],
+	"Unable to share log data. Reason: %s": [
+		""
+	],
+	"Undo": [
+		""
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
+	],
+	"Unknown flag: %s": [
+		""
+	],
+	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
+		""
+	],
+	"Unshare this notebook? The recipients will no longer have access to its content.": [
+		""
+	],
+	"Unsupported link or message: %s": [
+		""
+	],
+	"Untitled": [
+		"ไม่มีชื่อ"
+	],
+	"Updated": [
+		"แก้ไขเมื่อ"
+	],
+	"Updated local items: %d.": [
+		""
+	],
+	"Updated remote items: %d.": [
+		""
+	],
+	"Updated: %d.": [
+		"แก้ไขเมื่อ: %d"
+	],
+	"Upgrade": [
+		""
+	],
+	"Upgrade the sync target to the latest version.": [
+		""
+	],
+	"URL": [
+		"URL"
+	],
+	"Usage: %s": [
+		""
+	],
+	"Use biometrics to secure access to the app": [
+		""
+	],
+	"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE": [
+		""
+	],
+	"Use spell checker": [
+		""
+	],
+	"Use the arrows and page up/down to scroll the lists and text areas (including this console).": [
+		""
+	],
+	"Use the arrows to move the layout items. Press \"Escape\" to exit.": [
+		""
+	],
+	"Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.": [
+		""
+	],
+	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
+		""
+	],
+	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
+		""
+	],
+	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
+		""
+	],
+	"User deletions": [
+		""
+	],
+	"Users": [
+		""
+	],
+	"Verify your identity": [
+		""
+	],
+	"View on map": [
+		"แสดงในแผนที่"
+	],
+	"View them now": [
+		""
+	],
+	"Vim": [
+		"Vim"
+	],
+	"Voice typing language files (URL)": [
+		""
+	],
+	"Voice typing...": [
+		""
+	],
+	"Web Clipper": [
+		"Web Clipper"
+	],
+	"WebDAV": [
+		"WebDAV"
+	],
+	"WebDAV password": [
+		"รหัสผ่าน WebDAV"
+	],
+	"WebDAV URL": [
+		"WebDAV URL"
+	],
+	"WebDAV username": [
+		"ชื่อผู้ใช้ WebDAV"
+	],
+	"Website and documentation": [
+		"เว็บไซต์และเอกสารต่างๆ"
+	],
+	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
+		"ยินดีต้อนรับสู่ Joplin!\n\nพิมพ์ `:help shortcuts` สำหรับรายการคีย์ลัด หรือพิมพ์ `:help` สำหรับข้อมูลการใช้งาน\n\nตัวอย่างเช่น สร้างสมุดบันทึกใหม่พิมพ์ `mb`; สร้างบันทึกใหม่พิมพ์ `mn`."
+	],
+	"Welcome!": [
+		""
+	],
+	"When creating a new to-do:": [
+		"เมื่อสร้าง to-do ใหม่:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
+	],
+	"Window unresponsive.": [
+		""
+	],
+	"Words": [
+		"คำ"
+	],
+	"y": [
+		"y"
+	],
+	"Y": [
+		"Y"
+	],
+	"Yes": [
+		"ใช่"
+	],
+	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
+		""
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You do not have any installed plugin.": [
+		""
+	],
+	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
+		""
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
+		""
+	],
+	"Your data is going to be re-encrypted and synced again.": [
+		""
+	],
+	"Your password is needed to decrypt some of your data.": [
+		""
+	],
+	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
+		""
+	],
+	"Your permission to use your camera is required.": [
+		"จำเป็นต้องมีสิทธ์การเข้าถึงกล้อง"
+	],
+	"Your version: %s": [
+		"เวอร์ชั่นของคุณ: %s"
+	]
 }

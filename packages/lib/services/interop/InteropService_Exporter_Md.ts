@@ -5,7 +5,7 @@ import markdownUtils from '../../markdownUtils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import { NoteEntity, ResourceEntity } from '../database/types';
-import { basename, dirname, friendlySafeFilename } from '../../path-utils';
+import { basename, dirname, friendlySafeFilename, safeFilename } from '../../path-utils';
 import { MarkupToHtml } from '@joplin/renderer';
 
 export default class InteropService_Exporter_Md extends InteropService_Exporter_Base {
@@ -23,6 +23,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		await shim.fsDriver().mkdir(this.resourceDir_);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async makeDirPath_(item: any, pathPart: string = null, findUniqueFilename = true) {
 		let output = '';
 		while (true) {
@@ -39,7 +40,8 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		}
 	}
 
-	private async relaceLinkedItemIdsByRelativePaths_(item: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	private async replaceLinkedItemIdsByRelativePaths_(item: any) {
 		const relativePathToRoot = await this.makeDirPath_(item, '..');
 
 		const newBody = await this.replaceResourceIdsByRelativePaths_(item.body, relativePathToRoot);
@@ -66,7 +68,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		return await this.replaceItemIdsByRelativePaths_(noteBody, linkedNoteIds, notePaths, createRelativePath);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 	private async replaceItemIdsByRelativePaths_(noteBody: string, linkedItemIds: string[], paths: any, fn_createRelativePath: Function) {
 		let newBody = noteBody;
 
@@ -79,9 +81,11 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		return newBody;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async prepareForProcessingItemType(itemType: number, itemsToExport: any[]) {
 		if (itemType === BaseModel.TYPE_NOTE) {
 			// Create unique file path for the note
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const context: any = {
 				notePaths: {},
 			};
@@ -115,6 +119,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		return await Note.replaceResourceInternalToExternalLinks(await Note.serialize(modNote, ['body']));
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async processItem(_itemType: number, item: any) {
 		if ([BaseModel.TYPE_NOTE, BaseModel.TYPE_FOLDER].indexOf(item.type_) < 0) return;
 
@@ -130,7 +135,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 			const notePaths = this.context() && this.context().notePaths ? this.context().notePaths : {};
 			const noteFilePath = `${this.destDir_}/${notePaths[item.id]}`;
 
-			const noteBody = await this.relaceLinkedItemIdsByRelativePaths_(item);
+			const noteBody = await this.replaceLinkedItemIdsByRelativePaths_(item);
 			const modNote = { ...item, body: noteBody };
 			const noteContent = await this.getNoteExportContent_(modNote);
 			await shim.fsDriver().mkdir(dirname(noteFilePath));
@@ -142,7 +147,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		let fileName = basename(filePath);
 
 		if (resource.filename) {
-			fileName = resource.filename;
+			fileName = safeFilename(resource.filename);
 		} else if (resource.title) {
 			fileName = friendlySafeFilename(resource.title, null, true);
 		}

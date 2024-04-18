@@ -4,12 +4,15 @@ import { readJsonFile } from './utils';
 export interface ManifestOverride {
 	_obsolete?: boolean;
 	_recommended?: boolean;
+	_superseded_package?: string;
 }
 
 export type ManifestOverrides = Record<string, ManifestOverride>;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function applyManifestOverrides(manifests: any, overrides: ManifestOverrides) {
 	for (const [pluginId, override] of Object.entries(overrides)) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const manifest: any = manifests[pluginId];
 
 		if (!manifest) {
@@ -31,6 +34,7 @@ export function applyManifestOverrides(manifests: any, overrides: ManifestOverri
 }
 
 export function getObsoleteManifests(overrides: ManifestOverrides) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {};
 
 	for (const [pluginId, override] of Object.entries(overrides)) {
@@ -49,3 +53,16 @@ function pluginManifestOverridesPath(repoDir: string): string {
 export async function readManifestOverrides(repoDir: string): Promise<ManifestOverrides> {
 	return readJsonFile(pluginManifestOverridesPath(repoDir), {});
 }
+
+export const getSupersededPackages = (manifestOverrides: ManifestOverrides): string[] => {
+	const supersededPackages = [];
+
+	for (const id in manifestOverrides) {
+		const supersededPackage = manifestOverrides[id]._superseded_package;
+		if (supersededPackage) {
+			supersededPackages.push(supersededPackage);
+		}
+	}
+
+	return supersededPackages;
+};

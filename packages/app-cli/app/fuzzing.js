@@ -39,7 +39,7 @@ async function createClients() {
 			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			execCommand(client, 'config sync.target 2').then(() => {
 				return execCommand(client, `config sync.2.path ${syncDir}`);
-			})
+			}),
 		);
 		output.push(client);
 	}

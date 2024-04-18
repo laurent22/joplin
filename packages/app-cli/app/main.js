@@ -10,7 +10,7 @@ if (compareVersion(nodeVersion, '10.0.0') < 0) {
 	process.exit(1);
 }
 
-const { app } = require('./app.js');
+const app = require('./app').default;
 const Folder = require('@joplin/lib/models/Folder').default;
 const Resource = require('@joplin/lib/models/Resource').default;
 const BaseItem = require('@joplin/lib/models/BaseItem').default;

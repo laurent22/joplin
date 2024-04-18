@@ -17,9 +17,12 @@ function isFontAwesomeIcon(iconName: string) {
 	return s.length === 2 && ['fa', 'fas'].includes(s[0]);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function getProp(props: Props, name: string, defaultValue: any = null) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	if (props.toolbarButtonInfo && (name in props.toolbarButtonInfo)) return (props.toolbarButtonInfo as any)[name];
 	if (!(name in props)) return defaultValue;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return (props as any)[name];
 }
 
@@ -43,7 +46,10 @@ export default function ToolbarButton(props: Props) {
 	if (!isEnabled) classes.push('disabled');
 
 	const onClick = getProp(props, 'onClick');
-
+	const style: React.CSSProperties = {
+		whiteSpace: 'nowrap',
+		overflow: 'hidden',
+		textOverflow: 'ellipsis' };
 	return (
 		<StyledRoot
 			className={classes.join(' ')}
@@ -56,7 +62,7 @@ export default function ToolbarButton(props: Props) {
 			}}
 		>
 			{icon}
-			{title}
+			<span style={style}>{title}</span>
 		</StyledRoot>
 	);
 }

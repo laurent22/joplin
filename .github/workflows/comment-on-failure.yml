@@ -1,0 +1,14 @@
+name: comment-on-failure
+on:
+  workflow_run:
+    workflows:
+      - Joplin Continuous Integration
+      - react-native-android-build-apk
+      - Build macOS M1
+    types: [ completed ]
+
+jobs:
+  comment-failure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: quipper/comment-failure-action@v0.1.1

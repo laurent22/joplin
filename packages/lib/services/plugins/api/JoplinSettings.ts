@@ -1,8 +1,11 @@
 /* eslint-disable multiline-comment-style */
 
-import eventManager from '../../../eventManager';
+import eventManager, { EventName } from '../../../eventManager';
 import Setting, { SettingItem as InternalSettingItem, SettingSectionSource } from '../../../models/Setting';
 import Plugin from '../Plugin';
+import getPluginNamespacedSettingKey from '../utils/getPluginNamespacedSettingKey';
+import getPluginSettingKeyPrefix from '../utils/getPluginSettingKeyPrefix';
+import makeListener from '../utils/makeListener';
 import { SettingItem, SettingSection } from './types';
 
 // That's all the plugin as of 27/08/21 - any new plugin after that will not be
@@ -86,16 +89,6 @@ export default class JoplinSettings {
 		this.plugin_ = plugin;
 	}
 
-	private get keyPrefix(): string {
-		return `plugin-${this.plugin_.id}.`;
-	}
-
-	// Ensures that the plugin settings and sections are within their own namespace, to prevent them from
-	// overwriting other plugin settings or the default settings.
-	private namespacedKey(key: string): string {
-		return `${this.keyPrefix}${key}`;
-	}
-
 	/**
 	 * Registers new settings.
 	 * Note that registering a setting item is dynamic and will be gone next time Joplin starts.
@@ -116,7 +109,7 @@ export default class JoplinSettings {
 
 			if ('subType' in setting) internalSettingItem.subType = setting.subType;
 			if ('isEnum' in setting) internalSettingItem.isEnum = setting.isEnum;
-			if ('section' in setting) internalSettingItem.section = this.namespacedKey(setting.section);
+			if ('section' in setting) internalSettingItem.section = getPluginNamespacedSettingKey(this.plugin_.id, setting.section);
 			if ('options' in setting) internalSettingItem.options = () => setting.options;
 			if ('appTypes' in setting) internalSettingItem.appTypes = setting.appTypes;
 			if ('secure' in setting) internalSettingItem.secure = setting.secure;
@@ -126,7 +119,7 @@ export default class JoplinSettings {
 			if ('step' in setting) internalSettingItem.step = setting.step;
 			if ('storage' in setting) internalSettingItem.storage = setting.storage;
 
-			await Setting.registerSetting(this.namespacedKey(key), internalSettingItem);
+			await Setting.registerSetting(getPluginNamespacedSettingKey(this.plugin_.id, key), internalSettingItem);
 		}
 	}
 
@@ -140,7 +133,7 @@ export default class JoplinSettings {
 		this.plugin_.deprecationNotice(
 			'1.8',
 			'joplin.settings.registerSetting() is deprecated in favour of joplin.settings.registerSettings()',
-			!registerSettingAllowedPluginIds.includes(this.plugin_.id)
+			!registerSettingAllowedPluginIds.includes(this.plugin_.id),
 		);
 
 		await this.registerSettings({ [key]: settingItem });
@@ -150,21 +143,23 @@ export default class JoplinSettings {
 	 * Registers a new setting section. Like for registerSetting, it is dynamic and needs to be done every time the plugin starts.
 	 */
 	public async registerSection(name: string, section: SettingSection) {
-		return Setting.registerSection(this.namespacedKey(name), SettingSectionSource.Plugin, section);
+		return Setting.registerSection(getPluginNamespacedSettingKey(this.plugin_.id, name), SettingSectionSource.Plugin, section);
 	}
 
 	/**
 	 * Gets a setting value (only applies to setting you registered from your plugin)
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async value(key: string): Promise<any> {
-		return Setting.value(this.namespacedKey(key));
+		return Setting.value(getPluginNamespacedSettingKey(this.plugin_.id, key));
 	}
 
 	/**
 	 * Sets a setting value (only applies to setting you registered from your plugin)
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async setValue(key: string, value: any) {
-		return Setting.setValue(this.namespacedKey(key), value);
+		return Setting.setValue(getPluginNamespacedSettingKey(this.plugin_.id, key), value);
 	}
 
 	/**
@@ -174,6 +169,7 @@ export default class JoplinSettings {
 	 *
 	 * https://github.com/laurent22/joplin/blob/dev/packages/lib/models/Setting.ts#L142
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async globalValue(key: string): Promise<any> {
 		return Setting.value(key);
 	}
@@ -185,12 +181,13 @@ export default class JoplinSettings {
 	 */
 	public async onChange(handler: ChangeHandler): Promise<void> {
 		// Filter out keys that are not related to this plugin
-		eventManager.on('settingsChange', (event: ChangeEvent) => {
+		const listener = (event: ChangeEvent) => {
 			const keys = event.keys
-				.filter(k => k.indexOf(this.keyPrefix) === 0)
-				.map(k => k.substr(this.keyPrefix.length));
+				.filter(k => k.indexOf(getPluginSettingKeyPrefix(this.plugin_.id)) === 0)
+				.map(k => k.substr(getPluginSettingKeyPrefix(this.plugin_.id).length));
 			if (!keys.length) return;
 			handler({ keys });
-		});
+		};
+		makeListener(this.plugin_, eventManager, EventName.SettingsChange, listener);
 	}
 }

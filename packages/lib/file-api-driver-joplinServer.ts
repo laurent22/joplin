@@ -49,8 +49,10 @@ export default class FileApiDriverJoplinServer {
 		return 3;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private metadataToStat_(md: any, path: string, isDeleted = false, rootPath: string) {
-		const output = {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		const output: any = {
 			path: rootPath ? path.substr(rootPath.length + 1) : path,
 			updated_time: md.updated_time,
 			jop_updated_time: md.jop_updated_time,
@@ -58,9 +60,15 @@ export default class FileApiDriverJoplinServer {
 			isDeleted: isDeleted,
 		};
 
+		// Only add this object is it's also present in the raw data. This is
+		// because `getSupportsDeltaWithItems()` relies on it being present or
+		// not to decide if the sync target supports "delta with items".
+		if ('jopItem' in md) output.jopItem = md.jopItem;
+
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private metadataToStats_(mds: any[], rootPath: string) {
 		const output = [];
 		for (let i = 0; i < mds.length; i++) {
@@ -85,6 +93,7 @@ export default class FileApiDriverJoplinServer {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async delta(path: string, options: any) {
 		const context = options ? options.context : null;
 		let cursor = context ? context.cursor : null;
@@ -94,6 +103,7 @@ export default class FileApiDriverJoplinServer {
 				const query = cursor ? { cursor } : {};
 				const response = await this.api().exec('GET', `${this.apiFilePath_(path)}/delta`, query);
 				const stats = response.items
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					.filter((item: any) => {
 						// We don't need to know about lock changes, since this
 						// is handled by the LockHandler.
@@ -109,6 +119,7 @@ export default class FileApiDriverJoplinServer {
 						if (item.item_name.indexOf('.resource/') === 0) return false;
 						return true;
 					})
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					.map((item: any) => {
 						return this.metadataToStat_(item, item.item_name, item.type === 3, '');
 					});
@@ -131,6 +142,7 @@ export default class FileApiDriverJoplinServer {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async list(path: string, options: any = null) {
 		options = {
 			context: null,
@@ -148,6 +160,7 @@ export default class FileApiDriverJoplinServer {
 
 		const results = await this.api().exec('GET', `${this.apiFilePath_(searchPath)}/children`, query);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const newContext: any = {};
 		if (results.cursor) newContext.cursor = results.cursor;
 
@@ -155,9 +168,11 @@ export default class FileApiDriverJoplinServer {
 			items: this.metadataToStats_(results.items, isUsingWildcard ? path : ''),
 			hasMore: results.has_more,
 			context: newContext,
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		} as any;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async get(path: string, options: any) {
 		if (!options) options = {};
 		if (!options.responseFormat) options.responseFormat = 'text';
@@ -175,14 +190,17 @@ export default class FileApiDriverJoplinServer {
 		// they can have names such as ".resources/xxxxxxxxxx'
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private isRejectedBySyncTargetError(error: any) {
 		return error.code === 413 || error.code === 409 || error.httpCode === 413 || error.httpCode === 409;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private isReadyOnlyError(error: any) {
 		return error && error.code === 'isReadOnly';
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async put(path: string, content: any, options: any = null) {
 		try {
 			const output = await this.api().exec('PUT', `${this.apiFilePath_(path)}/content`, options && options.shareId ? { share_id: options.shareId } : null, content, {
@@ -202,9 +220,11 @@ export default class FileApiDriverJoplinServer {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async multiPut(items: MultiPutItem[], options: any = null) {
 		const output = await this.api().exec('PUT', 'api/batch_items', null, { items: items }, null, options);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		for (const [, response] of Object.entries<any>(output.items)) {
 			if (response.error && this.isRejectedBySyncTargetError(response.error)) {
 				response.error.code = 'rejectedByTarget';

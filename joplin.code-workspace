@@ -182,6 +182,13 @@
 			"docs/images/flags": true,
 			"lerna-debug.log": true,
 			"node_modules/": true,
+			"packages/doc-builder/build": true,
+			"packages/doc-builder/help": true,
+			"packages/doc-builder/news": true,
+			"packages/doc-builder/i18n": true,
+			"packages/doc-builder/.docusaurus": true,
+			"packages/doc-builder/static/images": true,
+			"readme/i18n": true,
 			"packages/app-cli/**/*.*~": true,
 			"packages/app-cli/**/*.mo": true,
 			"packages/app-cli/**/build/": true,
@@ -362,6 +369,12 @@
 				"type": "shell",
 				"command": "cd ${workspaceFolder}/packages/server && yarn tsc",
 				"group": "build",
+			},
+			{
+				"label": "transpile-lib",
+				"type": "shell",
+				"command": "cd ${workspaceFolder}/packages/lib && yarn tsc",
+				"group": "build",
 			}
 		]
 	},
@@ -381,14 +394,28 @@
 					"!**/node_modules/**"
 				],
 				"program": "${workspaceFolder}/packages/server/src/app.ts",
+				"localRoot": "${workspaceFolder}/packages/server",
 				"args": [
 					"--env", "dev"
 				],
 				"env": {
 					"JOPLIN_IS_TESTING": "1",
-					"TERMS_URL": "https://example.com",
-					"PRIVACY_URL": "https://example.com",
+					"APP_BASE_URL": "http://joplincloud.local:22300",
+					"API_BASE_URL": "http://api.joplincloud.local:22300",
 				}
+			},
+			{
+				"type": "node",
+				"request": "launch",
+				"name": "lib: debug test file",
+				"preLaunchTask": "transpile-lib",
+				"program": "${workspaceFolder}/packages/lib/node_modules/.bin/jest",
+				"args": [
+					"${fileBasenameNoExtension}",
+					"--config", 
+					"packages/lib/jest.config.js",
+				],
+				"console": "integratedTerminal",
 			}
 		]
 	}

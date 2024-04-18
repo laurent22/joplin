@@ -6,7 +6,7 @@ Joplin allows you to synchronise your data using various file hosting services. 
 
 [Joplin Cloud](https://joplinapp.org/plans/) is a web service specifically designed for Joplin. Besides synchronising your data, it also allows you to publish a note to the internet, or share a notebook with your friends, family or colleagues. Joplin Cloud, compared to other services, also features a number of performance improvements allowing for faster synchronisation.
 
-To use it, go to the config screen, then to the Synchronisation section. In the list of sync target, select "Joplin Cloud". Enter your email and password, and you're ready to use Joplin Cloud.
+To use it, go to the config screen, then to the Synchronisation section. In the list of sync targets, select "Joplin Cloud". Enter your email and password, and you're ready to use Joplin Cloud.
 
 ## Setting up Dropbox synchronisation
 
@@ -18,8 +18,8 @@ Nextcloud is a self-hosted, private cloud solution. To set it up, go to the conf
 
 ## Setting up OneDrive or WebDAV synchronisation
 
-OneDrive and WebDAV are also supported as synchronisation services. Please see [the synchronisation documentation](https://github.com/laurent22/joplin#synchronisation) for more information.
+OneDrive and WebDAV are also supported as synchronisation services. Please see [the synchronisation documentation](https://joplinapp.org/help/apps/sync/) for more information.
 
 ## Using End-To-End Encryption
 
-Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the data can read it. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the [End-To-End Encryption Tutorial](https://joplinapp.org/e2ee/) for more information about this feature and how to enable it.
+Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the data can read it. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the [End-To-End Encryption Tutorial](https://joplinapp.org/help/apps/sync/e2ee) for more information about this feature and how to enable it.

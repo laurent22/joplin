@@ -39,6 +39,8 @@ const defaultEnvValues: EnvVariables = {
 	MAX_TIME_DRIFT: 2000,
 	NTP_SERVER: 'pool.ntp.org:123',
 
+	DELTA_INCLUDES_ITEMS: true,
+
 	// ==================================================
 	// URL config
 	// ==================================================
@@ -105,6 +107,29 @@ const defaultEnvValues: EnvVariables = {
 
 	USER_DATA_AUTO_DELETE_ENABLED: false,
 	USER_DATA_AUTO_DELETE_AFTER_DAYS: 90,
+
+	// ==================================================
+	// LDAP configuration
+	// ==================================================
+
+	LDAP_1_ENABLED: false,
+	LDAP_1_USER_AUTO_CREATION: true, // if set to true, users will be created on the fly with data from ldap
+	LDAP_1_HOST: '', // ldap server in following format ldap(s)://servername:port
+	LDAP_1_MAIL_ATTRIBUTE: 'mail',
+	LDAP_1_FULLNAME_ATTRIBUTE: 'displayName',
+	LDAP_1_BASE_DN: '',
+	LDAP_1_BIND_DN: '', // used for user search - leave empty if ldap server allows anonymous bind
+	LDAP_1_BIND_PW: '', // used for user search - leave empty if ldap server allows anonymous bind
+
+	LDAP_2_ENABLED: false,
+	LDAP_2_USER_AUTO_CREATION: true, // if set to true, users will be created on the fly after ldap authentication
+	LDAP_2_HOST: '', // ldap server in following format ldap(s)://servername:port
+	LDAP_2_MAIL_ATTRIBUTE: 'mail',
+	LDAP_2_FULLNAME_ATTRIBUTE: 'fullName',
+	LDAP_2_BASE_DN: '',
+	LDAP_2_BIND_DN: '', // used for user search - leave empty if ldap server allows anonymous bind
+	LDAP_2_BIND_PW: '', // used for user search - leave empty if ldap server allows anonymous bind
+
 };
 
 export interface EnvVariables {
@@ -118,6 +143,7 @@ export interface EnvVariables {
 	RUNNING_IN_DOCKER: boolean;
 	MAX_TIME_DRIFT: number;
 	NTP_SERVER: string;
+	DELTA_INCLUDES_ITEMS: boolean;
 	IS_ADMIN_INSTANCE: boolean;
 	INSTANCE_NAME: string;
 
@@ -162,6 +188,24 @@ export interface EnvVariables {
 
 	USER_DATA_AUTO_DELETE_ENABLED: boolean;
 	USER_DATA_AUTO_DELETE_AFTER_DAYS: number;
+
+	LDAP_1_ENABLED: boolean;
+	LDAP_1_USER_AUTO_CREATION: boolean;
+	LDAP_1_HOST: string;
+	LDAP_1_MAIL_ATTRIBUTE: string;
+	LDAP_1_FULLNAME_ATTRIBUTE: string;
+	LDAP_1_BASE_DN: string;
+	LDAP_1_BIND_DN: string;
+	LDAP_1_BIND_PW: string;
+
+	LDAP_2_ENABLED: boolean;
+	LDAP_2_USER_AUTO_CREATION: boolean;
+	LDAP_2_HOST: string;
+	LDAP_2_MAIL_ATTRIBUTE: string;
+	LDAP_2_FULLNAME_ATTRIBUTE: string;
+	LDAP_2_BASE_DN: string;
+	LDAP_2_BIND_DN: string;
+	LDAP_2_BIND_PW: string;
 }
 
 const parseBoolean = (s: string): boolean => {
@@ -170,6 +214,7 @@ const parseBoolean = (s: string): boolean => {
 	throw new Error(`Invalid boolean value: "${s}" (Must be one of "true", "false", "0, "1")`);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function parseEnv(rawEnv: Record<string, string>, defaultOverrides: any = null): EnvVariables {
 	const output: EnvVariables = {
 		...defaultEnvValues,
@@ -185,10 +230,13 @@ export function parseEnv(rawEnv: Record<string, string>, defaultOverrides: any =
 			if (typeof value === 'number') {
 				const v = Number(rawEnvValue);
 				if (isNaN(v)) throw new Error(`Invalid number value "${rawEnvValue}"`);
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				(output as any)[key] = v;
 			} else if (typeof value === 'boolean') {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				(output as any)[key] = parseBoolean(rawEnvValue);
 			} else if (typeof value === 'string') {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				(output as any)[key] = `${rawEnvValue}`;
 			} else {
 				throw new Error(`Invalid env default value type: ${typeof value}`);

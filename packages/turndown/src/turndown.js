@@ -16,7 +16,8 @@ var escapes = [
   [/\[/g, '\\['],
   [/\]/g, '\\]'],
   [/^>/g, '\\>'],
-  [/_/g, '\\_'],
+  // A list of valid \p values can be found here: https://unicode.org/reports/tr44/#GC_Values_Table
+  [/(^|\p{Punctuation}|\p{Separator}|\p{Symbol})_(\P{Separator})/ug, '$1\\_$2'],
   [/^(\d+)\. /g, '$1\\. ']
 ]
 
@@ -38,11 +39,27 @@ export default function TurndownService (options) {
     br: '  ',
     disableEscapeContent: false,
     preformattedCode: false,
+    preserveNestedTables: false,
+    preserveColorStyles: false,
     blankReplacement: function (content, node) {
       return node.isBlock ? '\n\n' : ''
     },
     keepReplacement: function (content, node) {
-      return node.isBlock ? '\n\n' + node.outerHTML + '\n\n' : node.outerHTML
+      // In markdown, multiple blank lines end an HTML block. We thus
+      // include an HTML comment to make otherwise blank lines not blank.
+      const mutliBlankLineRegex = /\n([ \t\r]*)\n/g;
+
+      // We run the replacement multiple times to handle multiple blank
+      // lines in a row.
+      //
+      // For example, "Foo\n\n\nBar" becomes "Foo\n<!-- -->\n\nBar" after the
+      // first replacement.
+      let html = node.outerHTML;
+      while (html.match(mutliBlankLineRegex)) {
+        html = html.replace(mutliBlankLineRegex, '\n<!-- -->$1\n');
+      }
+
+      return node.isBlock ? '\n\n' + html + '\n\n' : html
     },
     defaultReplacement: function (content, node) {
       return node.isBlock ? '\n\n' + content + '\n\n' : content
@@ -145,7 +162,12 @@ TurndownService.prototype = {
     return escapes.reduce(function (accumulator, escape) {
       return accumulator.replace(escape[0], escape[1])
     }, string)
-  }
+  },
+
+  isCodeBlock: function(node) {
+    return isCodeBlock(node);
+  },
+
 }
 
 /**
@@ -159,27 +181,32 @@ TurndownService.prototype = {
 function process (parentNode, escapeContent = 'auto') {
   if (this.options.disableEscapeContent) escapeContent = false;
 
-  var self = this
-  return reduce.call(parentNode.childNodes, function (output, node) {
-    node = new Node(node, self.options)
+  let output = '';
+  let previousNode = null;
+
+  for (let node of parentNode.childNodes) {
+    node = new Node(node, this.options);
 
     var replacement = ''
     if (node.nodeType === 3) {
       if (node.isCode || escapeContent === false) {
         replacement = node.nodeValue
       } else {
-        replacement = self.escape(node.nodeValue)
+        replacement = this.escape(node.nodeValue);
 
         // Escape < and > so that, for example, this kind of HTML text: "This is a tag: &lt;p&gt;" is still rendered as "This is a tag: &lt;p&gt;"
         // and not "This is a tag: <p>". If the latter, it means the HTML will be rendered if the viewer supports HTML (which, in Joplin, it does).
         replacement = replacement.replace(/<(.+?)>/g, '&lt;$1&gt;');
       }
     } else if (node.nodeType === 1) {
-      replacement = replacementForNode.call(self, node)
+      replacement = replacementForNode.call(this, node, previousNode);
     }
 
-    return join(output, replacement)
-  }, '')
+    output = join(output, replacement);
+    previousNode = node;
+  }
+
+  return output;
 }
 
 /**
@@ -205,19 +232,20 @@ function postProcess (output) {
  * Converts an element node to its Markdown equivalent
  * @private
  * @param {HTMLElement} node The node to convert
+ * @param {HTMLElement|null} previousNode The node immediately before this node.
  * @returns A Markdown representation of the node
  * @type String
  */
 
-function replacementForNode (node) {
+function replacementForNode (node, previousNode) {
   var rule = this.rules.forNode(node)
-  var content = process.call(this, node, rule.escapeContent ? rule.escapeContent() : 'auto')
+  var content = process.call(this, node, rule.escapeContent ? rule.escapeContent(node) : 'auto')
   var whitespace = node.flankingWhitespace
   if (whitespace.leading || whitespace.trailing) content = content.trim()
 
   return (
     whitespace.leading +
-    rule.replacement(content, node, this.options) +
+    rule.replacement(content, node, this.options, previousNode) +
     whitespace.trailing
   )
 }

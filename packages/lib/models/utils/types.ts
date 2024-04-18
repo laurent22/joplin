@@ -1,4 +1,4 @@
-import { SqlQuery } from '../../database';
+import { SqlQuery } from '../../services/database/types';
 
 export enum PaginationOrderDir {
 	ASC = 'ASC',
@@ -21,10 +21,27 @@ export interface Pagination {
 export interface LoadOptions {
 	caseInsensitive?: boolean;
 	fields?: string | string[];
+	where?: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	whereParams?: any[];
+	order?: {
+		by: string;
+		dir: string;
+		caseInsensitive?: boolean;
+	}[];
+	limit?: number;
+	includeConflicts?: boolean;
+	includeDeleted?: boolean;
+}
+
+export interface FolderLoadOptions extends LoadOptions {
+	includeConflictFolder?: boolean;
+	includeTrash?: boolean;
 }
 
 export interface SaveOptions {
 	isNew?: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	oldItem?: any;
 	userSideValidation?: boolean;
 	nextQueries?: SqlQuery[];

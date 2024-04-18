@@ -28,7 +28,7 @@ ReactNativeAN.scheduleAlarm = async (details) => {
 	const today = new Date();
 	if (past < today) {
 		throw new Error(
-			'failed to schedule alarm because fire date is in the past'
+			'failed to schedule alarm because fire date is in the past',
 		);
 	}
 

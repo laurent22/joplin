@@ -122,7 +122,7 @@ a {
 	margin: 40px 20px;
 }
 
-.modal-message #loading-animation {
+#loading-animation {
 	margin-right: 20px;
 	width: 20px;
 	height: 20px;
@@ -141,8 +141,23 @@ a {
 	to {transform: rotate(360deg);}
 }
 
-*:focus {
-    outline: none;
+
+*:focus-visible {
+	outline: 1px solid var(--joplin-color-warn);
+}
+
+// The browser-default focus-visible indicator was originally removed for aesthetic
+// reasons. However, this causes accessibility issues.
+//
+// As a comprimise, we disable the focus-visible indicator in cases where the user is
+// probably not navigating with the keyboard. Note that :focus-visible alone is not
+// sufficient because it matches any focused input (https://stackoverflow.com/a/66109577).
+//
+// See https://github.com/laurent22/joplin/issues/9982.
+input:not([type=button]):not([type=checkbox]), select {
+	&:focus-visible {
+		outline: none;
+	}
 }
 
 /* =========================================================================================

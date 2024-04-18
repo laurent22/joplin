@@ -4,6 +4,7 @@ import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/
 import shim from '@joplin/lib/shim';
 const { themeStyle } = require('@joplin/lib/theme');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function newTestMdToHtml(options: any = null) {
 	options = {
 		ResourceModel: {
@@ -37,6 +38,7 @@ describe('MdToHtml', () => {
 
 			// if (mdFilename !== 'sanitize_9.md') continue;
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const mdToHtmlOptions: any = {
 				bodyOnly: true,
 			};
@@ -66,8 +68,10 @@ describe('MdToHtml', () => {
 					actualHtml,
 					'--------------------------------- Raw:',
 					actualHtml.split('\n'),
-					'--------------------------------- Expected:',
+					'--------------------------------- Expected (Lines)',
 					expectedHtml.split('\n'),
+					'--------------------------------- Expected (Text)',
+					expectedHtml,
 					'--------------------------------------------',
 					'',
 				];
@@ -84,6 +88,7 @@ describe('MdToHtml', () => {
 	}));
 
 	it('should return enabled plugin assets', (async () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const pluginOptions: any = {};
 		const pluginNames = MdToHtml.pluginNames();
 
@@ -248,7 +253,7 @@ describe('MdToHtml', () => {
 			const result = await mdToHtml.render(input, null, { bodyOnly: true, mapsToLine: true });
 			expect(result.html.trim()).toBe('<h1 id="head" class="maps-to-line" source-line="0" source-line-end="1">Head</h1>\n' +
 				'<p class="maps-to-line" source-line="1" source-line-end="2">Fruits</p>\n' +
-				'<ul>\n<li class="maps-to-line" source-line="2" source-line-end="3">Apple</li>\n</ul>'
+				'<ul>\n<li class="maps-to-line" source-line="2" source-line-end="3">Apple</li>\n</ul>',
 			);
 		}
 	}));
@@ -288,5 +293,30 @@ describe('MdToHtml', () => {
 			const trimmedTex = tex.replace(/^[\n]/, '').replace(/[\n]$/, '');
 			expect(html.html).toContain(opening + trimmedTex + closing);
 		}
+	});
+
+	it('should render inline KaTeX after a numbered equation', async () => {
+		const mdToHtml = newTestMdToHtml();
+
+		// This test is intended to verify that inline KaTeX renders correctly
+		// after creating a numbered equation with \begin{align}...\end{align}.
+		//
+		// See https://github.com/laurent22/joplin/issues/9455 for details.
+
+		const markdown = [
+			'$$',
+			'\\begin{align}\\text{Block}\\end{align}',
+			'$$',
+			'',
+			'$\\text{Inline}$',
+		].join('\n');
+		const { html } = await mdToHtml.render(markdown, null, { bodyOnly: true });
+
+		// Because we don't control the output of KaTeX, this test should be as general as
+		// possible while still verifying that rendering (without an error) occurs.
+
+		// Should have rendered the inline and block content without errors
+		expect(html).toContain('Inline</span>');
+		expect(html).toContain('Block</span>');
 	});
 });

@@ -3,6 +3,7 @@ import convertLinksToLocale from './convertLinksToLocale';
 describe('convertLinksToLocale', () => {
 
 	it('should convert links', async () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const tests: [string, any, string][] = [
 			[
 				'test [link](/help/link)',

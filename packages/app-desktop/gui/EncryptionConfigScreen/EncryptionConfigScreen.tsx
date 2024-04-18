@@ -17,8 +17,10 @@ import Setting from '@joplin/lib/models/Setting';
 import CommandService from '@joplin/lib/services/CommandService';
 import { PublicPrivateKeyPair } from '@joplin/lib/services/e2ee/ppk';
 import ToggleAdvancedSettingsButton from '../ConfigScreen/controls/ToggleAdvancedSettingsButton';
+import MacOSMissingPasswordHelpLink from '../ConfigScreen/controls/MissingPasswordHelpLink';
 
 interface Props {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	themeId: any;
 	masterKeys: MasterKeyEntity[];
 	passwords: Record<string, string>;
@@ -33,7 +35,7 @@ interface Props {
 const EncryptionConfigScreen = (props: Props) => {
 	const { inputPasswords, onInputPasswordChange } = useInputPasswords(props.passwords);
 
-	const theme: any = useMemo(() => {
+	const theme = useMemo(() => {
 		return themeStyle(props.themeId);
 	}, [props.themeId]);
 
@@ -63,7 +65,7 @@ const EncryptionConfigScreen = (props: Props) => {
 				<tr key={mk.id}>
 					<td style={theme.textStyle}>{mk.id}</td>
 					<td><button onClick={() => onUpgradeMasterKey(mk)} style={theme.buttonStyle}>Upgrade</button></td>
-				</tr>
+				</tr>,
 			);
 		}
 
@@ -156,6 +158,7 @@ const EncryptionConfigScreen = (props: Props) => {
 		}
 
 		const headerComp = isEnabledMasterKeys ? <h2>{_('Encryption keys')}</h2> : <a onClick={() => toggleShowDisabledMasterKeys() } style={{ ...theme.urlStyle, display: 'inline-block', marginBottom: 10 }} href="#">{showTable ? _('Hide disabled keys') : _('Show disabled keys')}</a>;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const infoComp: any = null; // isEnabledMasterKeys ? <p>{'Note: Only one key is going to be used for encryption (the one marked as "active"). Any of the keys might be used for decryption, depending on how the notes or notebooks were originally encrypted.'}</p> : null;
 		const tableComp = !showTable ? null : (
 			<table>
@@ -252,7 +255,16 @@ const EncryptionConfigScreen = (props: Props) => {
 		const buttonTitle = CommandService.instance().label('openMasterPasswordDialog');
 
 		const needPasswordMessage = !needMasterPassword ? null : (
-			<p className="needpassword">{_('Your password is needed to decrypt some of your data.')}<br/>{_('Please click on "%s" to proceed, or set the passwords in the "%s" list below.', buttonTitle, _('Encryption keys'))}</p>
+			<p className="needpassword">
+				{_('Your password is needed to decrypt some of your data.')}
+				<br/>
+				{_('Please click on "%s" to proceed, or set the passwords in the "%s" list below.', buttonTitle, _('Encryption keys'))}
+				<br/>
+				<MacOSMissingPasswordHelpLink
+					theme={theme}
+					text={_('%s: Missing password.', _('Help'))}
+				/>
+			</p>
 		);
 
 		return (
@@ -299,7 +311,7 @@ const EncryptionConfigScreen = (props: Props) => {
 				rows.push(
 					<tr key={id}>
 						<td style={theme.textStyle}>{id}</td>
-					</tr>
+					</tr>,
 				);
 			}
 

@@ -1,5 +1,5 @@
 import PluginRunner from '../../../app/services/plugins/PluginRunner';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
 import MdToHtml from '@joplin/renderer/MdToHtml';
 import shim from '@joplin/lib/shim';
@@ -7,7 +7,7 @@ import Setting from '@joplin/lib/models/Setting';
 import * as fs from 'fs-extra';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-import { expectNotThrow, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir, supportDir } from '@joplin/lib/testing/test-utils';
+import { expectNotThrow, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir, supportDir, mockMobilePlatform } from '@joplin/lib/testing/test-utils';
 import { newPluginScript } from '../../testUtils';
 
 const testPluginDir = `${supportDir}/plugins`;
@@ -24,7 +24,7 @@ function newPluginService(appVersion = '1.4') {
 		{
 			dispatch: () => {},
 			getState: () => {},
-		}
+		},
 	);
 	return service;
 }
@@ -82,6 +82,7 @@ describe('services_PluginService', () => {
 
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(2);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		expect(allFolders.map((f: any) => f.title).sort().join(', ')).toBe('multi - simple1, multi - simple2');
 	}));
 
@@ -206,7 +207,7 @@ describe('services_PluginService', () => {
 
 		const mdToHtml = new MdToHtml();
 		const module = require(contentScript.path).default;
-		mdToHtml.loadExtraRendererRule(contentScript.id, tempDir, module({}));
+		mdToHtml.loadExtraRendererRule(contentScript.id, tempDir, module({}), '');
 
 		const result = await mdToHtml.render([
 			'```justtesting',
@@ -262,6 +263,68 @@ describe('services_PluginService', () => {
 		}
 	}));
 
+	it.each([
+		{
+			manifestPlatforms: ['desktop'],
+			isDesktop: true,
+			appVersion: '3.0.0',
+			shouldRun: true,
+		},
+		{
+			manifestPlatforms: ['desktop'],
+			isDesktop: false,
+			appVersion: '3.0.6',
+			shouldRun: false,
+		},
+		{
+			manifestPlatforms: ['desktop', 'mobile'],
+			isDesktop: false,
+			appVersion: '3.0.6',
+			shouldRun: true,
+		},
+		{
+			manifestPlatforms: [],
+			isDesktop: false,
+			appVersion: '3.0.8',
+			shouldRun: true,
+		},
+	])('should enable and disable plugins depending on what platform(s) they support (case %#: %j)', async ({ manifestPlatforms, isDesktop, appVersion, shouldRun }) => {
+		const pluginScript = `
+			/* joplin-manifest:
+			{
+				"id": "org.joplinapp.plugins.PluginTest",
+				"manifest_version": 1,
+				"app_min_version": "1.0.0",
+				"platforms": ${JSON.stringify(manifestPlatforms)},
+				"name": "JS Bundle test",
+				"version": "1.0.0"
+			}
+			*/
+
+			joplin.plugins.register({
+				onStart: async function() { },
+			});
+		`;
+
+		let resetPlatformMock = () => {};
+		if (!isDesktop) {
+			resetPlatformMock = mockMobilePlatform('android').reset;
+		}
+
+		try {
+			const service = newPluginService(appVersion);
+			const plugin = await service.loadPluginFromJsBundle('', pluginScript);
+
+			if (shouldRun) {
+				await expect(service.runPlugin(plugin)).resolves.toBeUndefined();
+			} else {
+				await expect(service.runPlugin(plugin)).rejects.toThrow(/disabled/);
+			}
+		} finally {
+			resetPlatformMock();
+		}
+	});
+
 	it('should install a plugin', (async () => {
 		const service = newPluginService();
 		const pluginPath = `${testPluginDir}/jpl_test/org.joplinapp.FirstJplPlugin.jpl`;
@@ -304,4 +367,33 @@ describe('services_PluginService', () => {
 		expect(JSON.parse(folders[0].title)).toBe(expectedPath);
 	}));
 
+	it('should uninstall multiple plugins', async () => {
+		const service = newPluginService();
+		const pluginId1 = 'org.joplinapp.FirstJplPlugin';
+		const pluginId2 = 'org.joplinapp.plugins.TocDemo';
+		const pluginPath1 = `${testPluginDir}/jpl_test/${pluginId1}.jpl`;
+		const pluginPath2 = `${testPluginDir}/toc/${pluginId2}.jpl`;
+
+		await service.installPlugin(pluginPath1);
+		await service.installPlugin(pluginPath2);
+
+		// Both should be installed
+		expect(await fs.pathExists(`${Setting.value('pluginDir')}/${pluginId1}.jpl`)).toBe(true);
+		expect(await fs.pathExists(`${Setting.value('pluginDir')}/${pluginId2}.jpl`)).toBe(true);
+
+		const pluginSettings: PluginSettings = {
+			[pluginId1]: { enabled: true, deleted: true, hasBeenUpdated: false },
+			[pluginId2]: { enabled: true, deleted: true, hasBeenUpdated: false },
+		};
+
+		const newPluginSettings = await service.uninstallPlugins(pluginSettings);
+
+		// Should have deleted plugins
+		expect(await fs.pathExists(`${Setting.value('pluginDir')}/${pluginId1}.jpl`)).toBe(false);
+		expect(await fs.pathExists(`${Setting.value('pluginDir')}${pluginId2}.jpl`)).toBe(false);
+
+		// Should clear deleted plugins from settings
+		expect(newPluginSettings[pluginId1]).toBe(undefined);
+		expect(newPluginSettings[pluginId2]).toBe(undefined);
+	});
 });

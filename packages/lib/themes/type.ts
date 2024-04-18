@@ -62,4 +62,8 @@ export interface Theme {
 	codeThemeCss: string;
 
 	highlightedColor?: string;
+
+	headerBackgroundColor: string;
+	textSelectionColor: string;
+	colorBright2: string;
 }

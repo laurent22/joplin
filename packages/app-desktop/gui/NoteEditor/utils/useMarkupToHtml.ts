@@ -1,43 +1,34 @@
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { useCallback, useMemo } from 'react';
-import { ResourceInfos } from './types';
 import markupLanguageUtils from '../../../utils/markupLanguageUtils';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 
 const { themeStyle } = require('@joplin/lib/theme');
 import Note from '@joplin/lib/models/Note';
+import { MarkupToHtmlOptions } from './types';
 
 interface HookDependencies {
 	themeId: number;
 	customCss: string;
 	plugins: PluginStates;
-}
-
-export interface MarkupToHtmlOptions {
-	replaceResourceInternalToExternalLinks?: boolean;
-	resourceInfos?: ResourceInfos;
-	contentMaxWidth?: number;
-	plugins?: Record<string, any>;
-	bodyOnly?: boolean;
-	mapsToLine?: boolean;
-	useCustomPdfViewer?: boolean;
-	noteId?: string;
-	vendorDir?: string;
-	platformName?: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	settingValue: (pluginId: string, key: string)=> any;
+	whiteBackgroundNoteRendering: boolean;
 }
 
 export default function useMarkupToHtml(deps: HookDependencies) {
-	const { themeId, customCss, plugins } = deps;
+	const { themeId, customCss, plugins, whiteBackgroundNoteRendering } = deps;
 
 	const markupToHtml = useMemo(() => {
-		return markupLanguageUtils.newMarkupToHtml(deps.plugins, {
+		return markupLanguageUtils.newMarkupToHtml(plugins, {
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
 			customCss: customCss || '',
 		});
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [plugins, customCss]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return useCallback(async (markupLanguage: number, md: string, options: MarkupToHtmlOptions = null): Promise<any> => {
 		options = {
 			replaceResourceInternalToExternalLinks: false,
@@ -59,14 +50,19 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 
 		delete options.replaceResourceInternalToExternalLinks;
 
-		const result = await markupToHtml.render(markupLanguage, md, theme, { codeTheme: theme.codeThemeCss,
+		const result = await markupToHtml.render(markupLanguage, md, theme, {
+			codeTheme: theme.codeThemeCss,
 			resources: resources,
 			postMessageSyntax: 'ipcProxySendToHost',
 			splitted: true,
 			externalAssetsOnly: true,
-			codeHighlightCacheKey: 'useMarkupToHtml', ...options });
+			codeHighlightCacheKey: 'useMarkupToHtml',
+			settingValue: deps.settingValue,
+			whiteBackgroundNoteRendering,
+			...options,
+		});
 
 		return result;
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [themeId, customCss, markupToHtml]);
+	}, [themeId, customCss, markupToHtml, whiteBackgroundNoteRendering]);
 }

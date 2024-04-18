@@ -28,12 +28,16 @@ export default class ResourceEditWatcher {
 
 	private static instance_: ResourceEditWatcher;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private logger_: any;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private dispatch: Function;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private watcher_: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private chokidar_: any;
 	private watchedItems_: WatchedItems = {};
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private eventEmitter_: any;
 	private tempDir_ = '';
 	private openItem_: OpenItemFn;
@@ -46,7 +50,7 @@ export default class ResourceEditWatcher {
 		this.eventEmitter_ = new EventEmitter();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 	public initialize(logger: any, dispatch: Function, openItem: OpenItemFn) {
 		this.logger_ = logger;
 		this.dispatch = dispatch;
@@ -84,15 +88,19 @@ export default class ResourceEditWatcher {
 
 	public externalApi() {
 		return {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			openAndWatch: async ({ resourceId }: any) => {
 				return this.openAndWatch(resourceId);
 			},
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			watch: async ({ resourceId }: any) => {
 				await this.watch(resourceId);
 			},
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			stopWatching: async ({ resourceId }: any) => {
 				return this.stopWatching(resourceId);
 			},
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			isWatched: async ({ resourceId }: any) => {
 				return !!this.watchedItemByResourceId(resourceId);
 			},
@@ -151,7 +159,7 @@ export default class ResourceEditWatcher {
 				//
 				// We also need this because some events are handled twice - once in the "all" event
 				// handle and once in the "raw" event handler, due to a bug in chokidar. So having
-				// this check means we don't unecessarily save the resource twice when the file is
+				// this check means we don't unnecessarily save the resource twice when the file is
 				// modified by the user.
 				this.logger().debug(`ResourceEditWatcher: No timestamp and file size change - skip: ${resourceId}`);
 				return;
@@ -170,6 +178,7 @@ export default class ResourceEditWatcher {
 				// times per seconds, even when nothing is changed.
 				useFsEvents: false,
 			});
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			this.watcher_.on('all', (event: any, path: string) => {
 				path = path ? toSystemSlashes(path, 'linux') : '';
 
@@ -197,6 +206,7 @@ export default class ResourceEditWatcher {
 			// that event is not event triggered.
 			// https://github.com/laurent22/joplin/issues/3407
 			//
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			this.watcher_.on('raw', (event: string, _path: string, options: any) => {
 				const watchedPath = options.watchedPath ? toSystemSlashes(options.watchedPath, 'linux') : '';
 

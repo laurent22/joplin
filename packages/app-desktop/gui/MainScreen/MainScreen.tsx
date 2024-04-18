@@ -13,19 +13,20 @@ import Sidebar from '../Sidebar/Sidebar';
 import UserWebview from '../../services/plugins/UserWebview';
 import UserWebviewDialog from '../../services/plugins/UserWebviewDialog';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
-import { stateUtils } from '@joplin/lib/reducer';
+import { StateLastDeletion, stateUtils } from '@joplin/lib/reducer';
 import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import NoteListWrapper from '../NoteListWrapper/NoteListWrapper';
 import { AppState } from '../../app.reducer';
 import { saveLayout, loadLayout } from '../ResizableLayout/utils/persist';
 import Setting from '@joplin/lib/models/Setting';
+import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
 import produce from 'immer';
 import shim from '@joplin/lib/shim';
 import bridge from '../../services/bridge';
 import time from '@joplin/lib/time';
 import styled from 'styled-components';
-import { themeStyle } from '@joplin/lib/theme';
+import { themeStyle, ThemeStyle } from '@joplin/lib/theme';
 import validateLayout from '../ResizableLayout/utils/validateLayout';
 import iterateItems from '../ResizableLayout/utils/iterateItems';
 import removeItem from '../ResizableLayout/utils/removeItem';
@@ -39,11 +40,15 @@ import ElectronAppWrapper from '../../ElectronAppWrapper';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import commands from './commands/index';
-import invitationRespond from '../../services/share/invitationRespond';
+import invitationRespond from '@joplin/lib/services/share/invitationRespond';
 import restart from '../../services/restart';
 const { connect } = require('react-redux');
 import PromptDialog from '../PromptDialog';
 import NotePropertiesDialog from '../NotePropertiesDialog';
+import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
+import validateColumns from '../NoteListHeader/utils/validateColumns';
+import TrashNotification from '../TrashNotification/TrashNotification';
+
 const PluginManager = require('@joplin/lib/services/PluginManager');
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -60,26 +65,38 @@ interface Props {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	mainLayout: LayoutItem;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
 	layoutMoveMode: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	editorNoteStatuses: any;
 	customCss: string;
 	shouldUpgradeSyncTarget: boolean;
 	hasDisabledSyncItems: boolean;
 	hasDisabledEncryptionItems: boolean;
+	hasMissingSyncCredentials: boolean;
 	showMissingMasterKeyMessage: boolean;
 	showNeedUpgradingMasterKeyMessage: boolean;
 	showShouldReencryptMessage: boolean;
-	showInstallTemplatesPlugin: boolean;
 	themeId: number;
 	settingEditorCodeView: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginsLegacy: any;
 	startupPluginsLoaded: boolean;
 	shareInvitations: ShareInvitation[];
 	isSafeMode: boolean;
+	enableBetaMarkdownEditor: boolean;
 	needApiAuth: boolean;
 	processingShareInvitationResponse: boolean;
 	isResettingLayout: boolean;
+	listRendererId: string;
+	lastDeletion: StateLastDeletion;
+	lastDeletionNotificationTime: number;
+	selectedFolderId: string;
+	mustUpgradeAppMessage: string;
+	notesSortOrderField: string;
+	notesSortOrderReverse: boolean;
+	notesColumns: NoteListColumns;
 }
 
 interface ShareFolderDialogOptions {
@@ -88,10 +105,14 @@ interface ShareFolderDialogOptions {
 }
 
 interface State {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	promptOptions: any;
 	modalLayer: LayerModalState;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	notePropertiesDialogOptions: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	noteContentPropertiesDialogOptions: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	shareNoteDialogOptions: any;
 	shareFolderDialogOptions: ShareFolderDialogOptions;
 }
@@ -118,9 +139,11 @@ const defaultLayout: LayoutItem = {
 
 class MainScreenComponent extends React.Component<Props, State> {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private waitForNotesSavedIID_: any;
 	private isPrinting_: boolean;
 	private styleKey_: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private styles_: any;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private promptOnClose_: Function;
@@ -162,6 +185,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 		window.addEventListener('resize', this.window_resize);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		ipcRenderer.on('asynchronous-message', (_event: any, message: string, args: any) => {
 			if (message === 'openCallbackUrl') {
 				this.openCallbackUrl(args.url);
@@ -233,7 +257,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		try {
 			output = loadLayout(Object.keys(userLayout).length ? userLayout : null, defaultLayout, rootLayoutSize);
 
-			// For unclear reasons, layout items sometimes end up witout a key.
+			// For unclear reasons, layout items sometimes end up without a key.
 			// In that case, we can't do anything with them, so remove them
 			// here. It could be due to the deprecated plugin API, which allowed
 			// creating panel without a key, although in this case it should
@@ -260,7 +284,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 	public setupAppCloseHandling() {
 		this.waitForNotesSavedIID_ = null;
 
-		// This event is dispached from the main process when the app is about
+		// This event is dispatched from the main process when the app is about
 		// to close. The renderer process must respond with the "appCloseReply"
 		// and tell the main process whether the app can really be closed or not.
 		// For example, it cannot be closed right away if a note is being saved.
@@ -316,6 +340,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 	}
 
 	public updateRootLayoutSize() {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.updateMainLayout(produce(this.props.mainLayout, (draft: any) => {
 			const s = this.rootLayoutSize();
 			draft.width = s.width;
@@ -386,6 +411,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public layoutModeListenerKeyDown(event: any) {
 		if (event.key !== 'Escape') return;
 		if (!this.props.layoutMoveMode) return;
@@ -411,6 +437,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async printTo_(target: string, options: any) {
 		// Concurrent print calls are disallowed to avoid incorrect settings being restored upon completion
 		if (this.isPrinting_) {
@@ -517,9 +544,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private renderNotificationMessage(message: string, callForAction: string, callForActionHandler: Function, callForAction2: string = null, callForActionHandler2: Function = null) {
+	private renderNotificationMessage(message: string, callForAction: string = null, callForActionHandler: Function = null, callForAction2: string = null, callForActionHandler2: Function = null) {
 		const theme = themeStyle(this.props.themeId);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const urlStyle: any = { color: theme.colorWarnUrl, textDecoration: 'underline' };
+
+		if (!callForAction) return <span>{message}</span>;
 
 		const cfa = (
 			<a href="#" style={urlStyle} onClick={() => callForActionHandler()}>
@@ -541,7 +571,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 		);
 	}
 
-	public renderNotification(theme: any, styles: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public renderNotification(theme: ThemeStyle, styles: any) {
 		if (!this.messageBoxVisible()) return null;
 
 		const onViewStatusScreen = () => {
@@ -561,12 +592,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 			});
 		};
 
-		const onViewPluginScreen = () => {
+		const onViewSyncSettingsScreen = () => {
 			this.props.dispatch({
 				type: 'NAV_GO',
 				routeName: 'Config',
 				props: {
-					defaultSection: 'plugins',
+					defaultSection: 'sync',
 				},
 			});
 		};
@@ -596,31 +627,37 @@ class MainScreenComponent extends React.Component<Props, State> {
 			msg = this.renderNotificationMessage(
 				_('Safe mode is currently active. Note rendering and all plugins are temporarily disabled.'),
 				_('Disable safe mode and restart'),
-				onDisableSafeModeAndRestart
+				onDisableSafeModeAndRestart,
+			);
+		} else if (this.props.hasMissingSyncCredentials) {
+			msg = this.renderNotificationMessage(
+				_('The synchronisation password is missing.'),
+				_('Set the password'),
+				onViewSyncSettingsScreen,
 			);
 		} else if (this.props.shouldUpgradeSyncTarget) {
 			msg = this.renderNotificationMessage(
 				_('The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.'),
 				_('Restart and upgrade'),
-				onRestartAndUpgrade
+				onRestartAndUpgrade,
 			);
 		} else if (this.props.hasDisabledEncryptionItems) {
 			msg = this.renderNotificationMessage(
 				_('Some items cannot be decrypted.'),
 				_('View them now'),
-				onViewStatusScreen
+				onViewStatusScreen,
 			);
 		} else if (this.props.showNeedUpgradingMasterKeyMessage) {
 			msg = this.renderNotificationMessage(
 				_('One of your master keys use an obsolete encryption method.'),
 				_('View them now'),
-				onViewEncryptionConfigScreen
+				onViewEncryptionConfigScreen,
 			);
 		} else if (this.props.showShouldReencryptMessage) {
 			msg = this.renderNotificationMessage(
 				_('The default encryption method has been changed, you should re-encrypt your data.'),
 				_('More info'),
-				onViewEncryptionConfigScreen
+				onViewEncryptionConfigScreen,
 			);
 		} else if (this.showShareInvitationNotification(this.props)) {
 			const invitation = this.props.shareInvitations.find(inv => inv.status === 0);
@@ -631,26 +668,22 @@ class MainScreenComponent extends React.Component<Props, State> {
 				_('Accept'),
 				() => onInvitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, true),
 				_('Reject'),
-				() => onInvitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, false)
+				() => onInvitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, false),
 			);
 		} else if (this.props.hasDisabledSyncItems) {
 			msg = this.renderNotificationMessage(
 				_('Some items cannot be synchronised.'),
 				_('View them now'),
-				onViewStatusScreen
+				onViewStatusScreen,
 			);
 		} else if (this.props.showMissingMasterKeyMessage) {
 			msg = this.renderNotificationMessage(
 				_('One or more master keys need a password.'),
 				_('Set the password'),
-				onViewEncryptionConfigScreen
+				onViewEncryptionConfigScreen,
 			);
-		} else if (this.props.showInstallTemplatesPlugin) {
-			msg = this.renderNotificationMessage(
-				'The template feature has been moved to a plugin called "Templates".',
-				'Install plugin',
-				onViewPluginScreen
-			);
+		} else if (this.props.mustUpgradeAppMessage) {
+			msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
 		}
 
 		return (
@@ -662,7 +695,17 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	public messageBoxVisible(props: Props = null) {
 		if (!props) props = this.props;
-		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget || props.isSafeMode || this.showShareInvitationNotification(props) || this.props.needApiAuth || this.props.showInstallTemplatesPlugin;
+		return props.hasDisabledSyncItems ||
+			props.showMissingMasterKeyMessage ||
+			props.hasMissingSyncCredentials ||
+			props.showNeedUpgradingMasterKeyMessage ||
+			props.showShouldReencryptMessage ||
+			props.hasDisabledEncryptionItems ||
+			this.props.shouldUpgradeSyncTarget ||
+			props.isSafeMode ||
+			this.showShareInvitationNotification(props) ||
+			this.props.needApiAuth ||
+			!!this.props.mustUpgradeAppMessage;
 	}
 
 	public registerCommands() {
@@ -677,6 +720,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private resizableLayout_resize(event: any) {
 		this.updateMainLayout(event.layout);
 	}
@@ -686,6 +730,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		this.updateMainLayout(newLayout);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private resizableLayout_renderItem(key: string, event: any) {
 		// Key should never be undefined but somehow it can happen, also not
 		// clear how. For now in this case render nothing so that the app
@@ -700,6 +745,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 		// const viewsToRemove:string[] = [];
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const components: any = {
 			sideBar: () => {
 				return <Sidebar key={key} />;
@@ -712,11 +758,23 @@ class MainScreenComponent extends React.Component<Props, State> {
 					visible={event.visible}
 					size={event.size}
 					themeId={this.props.themeId}
+					listRendererId={this.props.listRendererId}
+					startupPluginsLoaded={this.props.startupPluginsLoaded}
+					notesSortOrderField={this.props.notesSortOrderField}
+					notesSortOrderReverse={this.props.notesSortOrderReverse}
+					columns={this.props.notesColumns}
+					selectedFolderId={this.props.selectedFolderId}
 				/>;
 			},
 
 			editor: () => {
-				const bodyEditor = this.props.settingEditorCodeView ? 'CodeMirror' : 'TinyMCE';
+				let bodyEditor = this.props.settingEditorCodeView ? 'CodeMirror' : 'TinyMCE';
+
+				if (this.props.isSafeMode) {
+					bodyEditor = 'PlainText';
+				} else if (this.props.settingEditorCodeView && this.props.enableBetaMarkdownEditor) {
+					bodyEditor = 'CodeMirror6';
+				}
 				return <NoteEditor key={key} bodyEditor={bodyEditor} />;
 			},
 		};
@@ -814,6 +872,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		const styles = this.styles(this.props.themeId, style.width, style.height, this.messageBoxVisible());
 
 		if (!this.promptOnClose_) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			this.promptOnClose_ = (answer: any, buttonType: any) => {
 				return this.state.promptOptions.onClose(answer, buttonType);
 			};
@@ -854,6 +913,13 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} themeId={this.props.themeId} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />
 
+				<TrashNotification
+					lastDeletion={this.props.lastDeletion}
+					lastDeletionNotificationTime={this.props.lastDeletionNotificationTime}
+					themeId={this.props.themeId}
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					dispatch={this.props.dispatch as any}
+				/>
 				{messageComp}
 				{layoutComp}
 				{pluginDialog}
@@ -875,6 +941,7 @@ const mapStateToProps = (state: AppState) => {
 		showNeedUpgradingMasterKeyMessage: showNeedUpgradingEnabledMasterKeyMessage,
 		showShouldReencryptMessage: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
+		hasMissingSyncCredentials: shouldShowMissingPasswordWarning(state.settings['sync.target'], state.settings),
 		pluginsLegacy: state.pluginsLegacy,
 		plugins: state.pluginService.plugins,
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
@@ -887,9 +954,17 @@ const mapStateToProps = (state: AppState) => {
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		isSafeMode: state.settings.isSafeMode,
+		enableBetaMarkdownEditor: state.settings['editor.beta'],
 		needApiAuth: state.needApiAuth,
-		showInstallTemplatesPlugin: state.hasLegacyTemplates && !state.pluginService.plugins['joplin.plugin.templates'],
 		isResettingLayout: state.isResettingLayout,
+		listRendererId: state.settings['notes.listRendererId'],
+		lastDeletion: state.lastDeletion,
+		lastDeletionNotificationTime: state.lastDeletionNotificationTime,
+		selectedFolderId: state.selectedFolderId,
+		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
+		notesSortOrderField: state.settings['notes.sortOrder.field'],
+		notesSortOrderReverse: state.settings['notes.sortOrder.reverse'],
+		notesColumns: validateColumns(state.settings['notes.columns']),
 	};
 };
 

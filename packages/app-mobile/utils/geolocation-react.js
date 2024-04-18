@@ -33,7 +33,7 @@ class GeolocationReact {
 				error => {
 					reject(error);
 				},
-				options
+				options,
 			);
 		});
 	}

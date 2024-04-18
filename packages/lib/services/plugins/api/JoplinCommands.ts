@@ -24,6 +24,12 @@ import { Command } from './types';
  * To view what arguments are supported, you can open any of these files
  * and look at the `execute()` command.
  *
+ * Note that many of these commands only work on desktop. The more limited list of mobile
+ * commands can be found in these places:
+ *
+ * * [Global commands](https://github.com/laurent22/joplin/tree/dev/packages/app-mobile/commands)
+ * * [Editor commands](https://github.com/laurent22/joplin/blob/dev/packages/app-mobile/components/NoteEditor/commandDeclarations.ts)
+ *
  * ## Executing editor commands
  *
  * There might be a situation where you want to invoke editor commands
@@ -55,8 +61,7 @@ import { Command } from './types';
 export default class JoplinCommands {
 
 	/**
-	 * <span class="platform-desktop">desktop</span> Executes the given
-	 * command.
+	 * Executes the given command.
 	 *
 	 * The command can take any number of arguments, and the supported
 	 * arguments will vary based on the command. For custom commands, this
@@ -73,12 +78,13 @@ export default class JoplinCommands {
 	 * await joplin.commands.execute('newFolder', "SOME_FOLDER_ID");
 	 * ```
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async execute(commandName: string, ...args: any[]): Promise<any | void> {
 		return CommandService.instance().execute(commandName, ...args);
 	}
 
 	/**
-	 * <span class="platform-desktop">desktop</span> Registers a new command.
+	 * Registers a new command.
 	 *
 	 * ```typescript
 	 * // Register a new commmand called "testCommand1"
@@ -102,6 +108,7 @@ export default class JoplinCommands {
 		if ('iconName' in command) declaration.iconName = command.iconName;
 
 		const runtime: CommandRuntime = {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			execute: (_context: CommandContext, ...args: any[]) => {
 				return command.execute(...args);
 			},

@@ -15,12 +15,12 @@ import * as fs from 'fs-extra';
 import * as jsdom from 'jsdom';
 import setupAppContext from '../setupAppContext';
 import { ApiError } from '../errors';
-import { getApi, putApi } from './apiUtils';
+import { deleteApi, getApi, putApi } from './apiUtils';
 import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { initializeJoplinUtils } from '../joplinUtils';
 import MustacheService from '../../services/MustacheService';
-import uuidgen from '../uuidgen';
+import { uuidgen } from '@joplin/lib/uuid';
 import { createCsrfToken } from '../csrf';
 import { cookieSet } from '../cookies';
 import { parseEnv } from '../../env';
@@ -73,13 +73,16 @@ export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOpt
 	unitName = unitName.replace(/\//g, '_');
 
 	createdDbPath_ = `${packageRootDir}/db-test-${unitName}.sqlite`;
+	await fs.remove(createdDbPath_);
 
 	const tempDir = `${packageRootDir}/temp/test-${unitName}`;
 	await fs.mkdirp(tempDir);
 
-	// Uncomment the code below to run the test units with Postgres. Run this:
+	// To run the test units with Postgres. Run this:
 	//
-	// sudo docker compose -f docker-compose.db-dev.yml up
+	// docker compose -f docker-compose.db-dev.yml up
+	//
+	// JOPLIN_TESTS_SERVER_DB=pg yarn test
 
 	if (process.env.JOPLIN_TESTS_SERVER_DB === 'pg') {
 		await initConfig(Env.Dev, parseEnv({
@@ -111,6 +114,10 @@ export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOpt
 	await initializeJoplinUtils(config(), models(), mustache);
 }
 
+export const createdDbPath = () => {
+	return createdDbPath_;
+};
+
 export async function afterAllTests() {
 	if (db_) {
 		await disconnectDb(db_);
@@ -135,6 +142,7 @@ export async function beforeEachDb() {
 export interface AppContextTestOptions {
 	// owner?: User;
 	sessionId?: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	request?: any;
 }
 
@@ -199,10 +207,12 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 
 	const appLogger = Logger.create('AppTest');
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const baseAppContext = await setupAppContext({} as any, Env.Dev, db_, () => appLogger);
 
 	// Set type to "any" because the Koa context has many properties and we
 	// don't need to mock all of them.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const appContext: any = {
 		baseAppContext,
 		joplin: {
@@ -237,7 +247,7 @@ export function koaNext(): Promise<void> {
 
 export const testAssetDir = `${packageRootDir}/assets/tests`;
 
-interface UserAndSession {
+export interface UserAndSession {
 	user: User;
 	session: Session;
 	password: string;
@@ -284,10 +294,12 @@ export const createUser = async function(index = 1, isAdmin = false): Promise<Us
 	return models().user().save({ email: `user${index}@localhost`, password: '123456', is_admin: isAdmin ? 1 : 0 }, { skipValidation: true });
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function createItemTree(userId: Uuid, parentFolderId: string, tree: any): Promise<void> {
 	const itemModel = models().item();
 
 	for (const jopId in tree) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const children: any = tree[jopId];
 		const isFolder = children !== null;
 
@@ -318,6 +330,7 @@ export async function createItemTree(userId: Uuid, parentFolderId: string, tree:
 // 	}
 // }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function createItemTree3(userId: Uuid, parentFolderId: string, shareId: Uuid, tree: any[]): Promise<void> {
 	const itemModel = models().item();
 	const user = await models().user().load(userId);
@@ -352,6 +365,10 @@ export async function updateItem(sessionId: string, path: string, content: strin
 	return models().item().load(item.id);
 }
 
+export async function deleteItem(sessionId: string, jopId: string): Promise<void> {
+	await deleteApi(sessionId, `items/root:/${jopId}.md:`);
+}
+
 export async function createNote(sessionId: string, note: NoteEntity): Promise<Item> {
 	note = {
 		id: '00000000000000000000000000000001',
@@ -365,6 +382,11 @@ export async function createNote(sessionId: string, note: NoteEntity): Promise<I
 
 export async function updateNote(sessionId: string, note: NoteEntity): Promise<Item> {
 	return updateItem(sessionId, `root:/${note.id}.md:`, makeNoteSerializedBody(note));
+}
+
+export async function deleteNote(userId: Uuid, noteJopId: string): Promise<void> {
+	const item = await models().item().loadByJopId(userId, noteJopId, { fields: ['id'] });
+	await models().item().delete(item.id);
 }
 
 export async function updateFolder(sessionId: string, folder: FolderEntity): Promise<Item> {
@@ -437,7 +459,7 @@ export function readCredentialFileSync(filename: string, defaultValue: string = 
 	return r.toString();
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 export async function checkThrowAsync(asyncFn: Function): Promise<any> {
 	try {
 		await asyncFn();
@@ -447,7 +469,7 @@ export async function checkThrowAsync(asyncFn: Function): Promise<any> {
 	return null;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 export async function expectThrow(asyncFn: Function, errorCode: any = undefined): Promise<any> {
 	let hasThrown = false;
 	let thrownError = null;
@@ -540,6 +562,7 @@ share_id: ${note.share_id || ''}
 conflict_original_id: 
 master_key_id: 
 user_data: 
+deleted_time: 0
 type_: 1`;
 }
 
@@ -561,7 +584,16 @@ type_: 2`;
 }
 
 export function makeResourceSerializedBody(resource: ResourceEntity = {}): string {
-	return `Test Resource
+	resource = {
+		id: randomHash(),
+		mime: 'plain/text',
+		file_extension: 'txt',
+		size: 0,
+		title: 'Test Resource',
+		...resource,
+	};
+
+	return `${resource.title}
 
 id: ${resource.id}
 mime: ${resource.mime}

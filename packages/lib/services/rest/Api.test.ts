@@ -9,7 +9,7 @@ import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 import NoteTag from '../../models/NoteTag';
 import ResourceService from '../../services/ResourceService';
-import SearchEngine from '../../services/searchengine/SearchEngine';
+import SearchEngine from '../search/SearchEngine';
 const { MarkupToHtml } = require('@joplin/renderer');
 import { ResourceEntity } from '../database/types';
 
@@ -35,7 +35,7 @@ const createNoteForPagination = async (numOrTitle: number | string, time: number
 
 let api: Api = null;
 
-describe('services_rest_Api', () => {
+describe('services/rest/Api', () => {
 
 	beforeEach(async () => {
 		api = new Api();
@@ -71,7 +71,7 @@ describe('services_rest_Api', () => {
 
 	it('should delete folders', (async () => {
 		const f1 = await Folder.save({ title: 'mon carnet' });
-		await api.route(RequestMethod.DELETE, `folders/${f1.id}`);
+		await api.route(RequestMethod.DELETE, `folders/${f1.id}`, { permanent: '1' });
 
 		const f1b = await Folder.load(f1.id);
 		expect(!f1b).toBe(true);
@@ -108,6 +108,22 @@ describe('services_rest_Api', () => {
 		const response = await api.route(RequestMethod.GET, `folders/${f1.id}/notes`);
 		expect(response.items.length).toBe(2);
 	}));
+
+	it('should return folders as a tree', async () => {
+		const folder1 = await Folder.save({ title: 'Folder 1' });
+		await Folder.save({ title: 'Folder 2', parent_id: folder1.id });
+		await Folder.save({ title: 'Folder 3', parent_id: folder1.id });
+
+		const response = await api.route(RequestMethod.GET, 'folders', { as_tree: 1 });
+		expect(response).toMatchObject([{
+			title: 'Folder 1',
+			id: folder1.id,
+			children: [
+				{ title: 'Folder 2' },
+				{ title: 'Folder 3' },
+			],
+		}]);
+	});
 
 	it('should fail on invalid paths', (async () => {
 		const hasThrown = await checkThrowAsync(async () => await api.route(RequestMethod.GET, 'schtroumpf'));
@@ -154,6 +170,7 @@ describe('services_rest_Api', () => {
 	}));
 
 	it('should allow setting note properties', (async () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let response: any = null;
 		const f = await Folder.save({ title: 'mon carnet' });
 
@@ -560,6 +577,7 @@ describe('services_rest_Api', () => {
 		expect(response3.items.length).toBe(2);
 
 		// Also check that it only returns the required fields
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		response3.items.sort((a: any, b: any) => {
 			return a.id < b.id ? -1 : +1;
 		});

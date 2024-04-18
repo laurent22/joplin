@@ -13,7 +13,7 @@ describe('Module', () => {
 
 		const importModuleMultiSource = makeImportModule(
 			baseMetadata,
-			() => new InteropService_Importer_Base()
+			() => new InteropService_Importer_Base(),
 		);
 
 		const importModuleSingleSource = makeImportModule({
@@ -38,7 +38,8 @@ describe('Module', () => {
 
 	it('should return correct default fullLabel for an ExportModule', () => {
 		const testExportModule = makeExportModule({
-			format: 'format_test_______TEST',
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			format: 'format_test_______TEST' as any,
 			description: 'Testing...',
 		}, () => new InteropService_Exporter_Base());
 

@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const releases1: any = [
 	{
 		'url': 'https://api.github.com/repos/laurent22/joplin/releases/111428211',
@@ -4043,6 +4044,7 @@ export const releases1: any = [
 	},
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const releases2: any = [
 	{
 		'url': 'https://api.github.com/repos/laurent22/joplin/releases/111428211',

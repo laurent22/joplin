@@ -1,0 +1,15 @@
+{
+	"manifest_version": 1,
+	"id": "com.example.cm6-test",
+	"app_min_version": "2.13",
+	"version": "1.0.0",
+	"name": "CodeMirror 6 plugin",
+	"description": "",
+	"author": "",
+	"homepage_url": "",
+	"repository_url": "",
+	"keywords": [],
+	"categories": [],
+	"screenshots": [],
+	"icons": {}
+}

@@ -46,6 +46,7 @@ export interface SaveFromRawContentItem {
 
 export interface SaveFromRawContentResultItem {
 	item: Item;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	error: any;
 }
 
@@ -144,6 +145,7 @@ export default class ItemModel extends BaseModel<Item> {
 		const output: Item = {};
 		const propNames = ['id', 'name', 'updated_time', 'created_time'];
 		for (const k of Object.keys(object)) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			if (propNames.includes(k)) (output as any)[k] = (object as any)[k];
 		}
 		return output;
@@ -268,19 +270,46 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 	public async loadWithContent(id: Uuid, options: ItemLoadOptions = {}): Promise<Item> {
-		const item: Item = await this
+		const output = await this.loadWithContentMulti([id], options);
+		return output.length ? output[0] : null;
+	}
+
+	public async loadWithContentMulti(ids: Uuid[], options: ItemLoadOptions = {}): Promise<Item[]> {
+		const fields = this.selectFields(options, ['*'], 'items', ['items.content_size']);
+		const contentIndex = fields.findIndex(f => f === 'items.content');
+		if (contentIndex >= 0) {
+			fields.splice(contentIndex, 1);
+		}
+
+		const items: Item[] = await this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
-			.select(this.selectFields(options, ['*'], 'items', ['items.content_size']))
-			.where('items.id', '=', id)
-			.first();
+			.select(fields)
+			.whereIn('items.id', ids);
 
-		const content = await this.storageDriverRead(id, item.content_size, { models: this.models() });
+		const promises: Promise<Buffer>[] = [];
+		const itemIndexToId: Record<number, string> = {};
 
-		return {
-			...item,
-			content,
-		};
+		for (let i = 0; i < items.length; i++) {
+			const item = items[i];
+			itemIndexToId[i] = item.id;
+			promises.push(this.storageDriverRead(item.id, item.content_size, { models: this.models() }));
+		}
+
+		await Promise.all(promises);
+
+		const output: Item[] = [];
+
+		for (let i = 0; i < promises.length; i++) {
+			const promise = promises[i];
+			const item = items.find(it => it.id === itemIndexToId[i]);
+			output.push({
+				...item,
+				content: await promise,
+			});
+		}
+
+		return output;
 	}
 
 	public async loadAsSerializedJoplinItem(id: Uuid): Promise<string> {
@@ -348,7 +377,7 @@ export default class ItemModel extends BaseModel<Item> {
 		throw new Error(`Could not atomically update content for item: ${JSON.stringify(item)}`);
 	}
 
-	// Loop throught the items in the database and import their content to the
+	// Loop through the items in the database and import their content to the
 	// target storage. Only items not already in that storage will be processed.
 	public async importContentToStorage(toStorageConfig: StorageDriverConfig | StorageDriverBase, options: ImportContentToStorageOptions = null) {
 		options = {
@@ -436,7 +465,7 @@ export default class ItemModel extends BaseModel<Item> {
 				.whereIn('id', this.db(this.tableName)
 					.select(['id'])
 					.where('content', '!=', Buffer.from(''))
-					.limit(options.batchSize)
+					.limit(options.batchSize),
 				);
 
 			totalDone += updatedRows.length;
@@ -517,6 +546,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public itemToJoplinItem(itemRow: Item): any {
 		if (itemRow.jop_type <= 0) throw new Error(`Not a Joplin item: ${itemRow.id}`);
 		if (!itemRow.content) throw new Error('Item content is missing');
@@ -532,6 +562,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return item;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async loadAsJoplinItem(id: Uuid): Promise<any> {
 		const raw = await this.loadWithContent(id);
 		return this.itemToJoplinItem(raw);
@@ -552,6 +583,7 @@ export default class ItemModel extends BaseModel<Item> {
 			error: Error;
 			resourceIds?: string[];
 			isNote?: boolean;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			joplinItem?: any;
 		}
 
@@ -573,6 +605,7 @@ export default class ItemModel extends BaseModel<Item> {
 						name: rawItem.name,
 					};
 
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					let joplinItem: any = null;
 
 					let resourceIds: string[] = [];
@@ -800,10 +833,12 @@ export default class ItemModel extends BaseModel<Item> {
 		};
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async allForDebug(): Promise<any[]> {
 		const items = await this.all({ fields: ['*'] });
 		return items.map(i => {
 			if (!i.content) return i;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			i.content = i.content.toString() as any;
 			return i;
 		});
@@ -1037,7 +1072,7 @@ export default class ItemModel extends BaseModel<Item> {
 					const userIds: Uuid[] = unique(
 						userItems
 							.map(u => u.user_id)
-							.concat(changes.map(c => c.user_id))
+							.concat(changes.map(c => c.user_id)),
 					);
 
 					const totalSizes: TotalSizeRow[] = [];

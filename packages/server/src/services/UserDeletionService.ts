@@ -71,7 +71,7 @@ export default class UserDeletionService extends BaseService {
 				user,
 				flags,
 			}),
-			userId
+			userId,
 		);
 
 		await this.models.userFlag().add(userId, UserFlagType.UserDeletionInProgress);
@@ -104,6 +104,7 @@ export default class UserDeletionService extends BaseService {
 			return;
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let error: any = null;
 		let success = true;
 
@@ -130,7 +131,7 @@ export default class UserDeletionService extends BaseService {
 			{
 				processAccount: true,
 				processData: true,
-			}
+			},
 		);
 
 		if (addedUserIds.length) {

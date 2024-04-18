@@ -71,7 +71,7 @@ EXPOSE ${APP_PORT}
 # https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md#handling-kernel-signals
 WORKDIR /home/$user/packages/server
 ENTRYPOINT ["tini", "--"]
-CMD ["node", "dist/app.js"]
+CMD ["yarn", "start-prod"]
 
 # Build-time metadata
 # https://github.com/opencontainers/image-spec/blob/master/annotations.md

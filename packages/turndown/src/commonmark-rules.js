@@ -45,11 +45,18 @@ rules.paragraph = {
 rules.lineBreak = {
   filter: 'br',
 
-  replacement: function (content, node, options) {
+  replacement: function (_content, node, options, previousNode) {
+    let brReplacement = options.br + '\n';
+
     // Code blocks may include <br/>s -- replacing them should not be necessary
     // in code blocks.
-    const brReplacement = node.isCode ? '' : options.br;
-    return brReplacement + '\n'
+    if (node.isCode) {
+      brReplacement = '\n';
+    } else if (previousNode && previousNode.nodeName === 'BR') {
+      brReplacement = '<br/>';
+    }
+
+    return brReplacement;
   }
 }
 
@@ -118,6 +125,19 @@ rules.subscript = {
   replacement: function (content, node, options) {
     return '<sub>' + content + '</sub>'
   }
+}
+
+// Handles foreground color changes as created by the rich text editor.
+// We intentionally don't handle the general style="color: colorhere" case as
+// this may leave unwanted formatting when saving websites as markdown.
+rules.foregroundColor = {
+  filter: function (node, options) {
+    return options.preserveColorStyles && node.nodeName === 'SPAN' && getStyleProp(node, 'color');
+  },
+
+  replacement: function (content, node, options) {
+    return `<span style="color: ${htmlentities(getStyleProp(node, 'color'))};">${content}</span>`;
+  },
 }
 
 // ==============================
@@ -273,6 +293,9 @@ function filterLinkHref (href) {
   // Replace the spaces with %20 because otherwise they can cause problems for some
   // renderer and space is not a valid URL character anyway.
   href = href.replace(/ /g, '%20');
+  // Newlines and tabs also break renderers
+  href = href.replace(/\n/g, '%0A');
+  href = href.replace(/\t/g, '%09');
   // Brackets also should be escaped
   href = href.replace(/\(/g, '%28');
   href = href.replace(/\)/g, '%29');
@@ -311,6 +334,12 @@ rules.inlineLink = {
       node.nodeName === 'A' &&
       (node.getAttribute('href') || node.getAttribute('name') || node.getAttribute('id'))
     )
+  },
+
+  escapeContent: function (node, _options) {
+    // Disable escaping content (including '_'s) when the link has the same URL and href.
+    // This prevents links from being broken by added escapes.
+    return node.getAttribute('href') !== node.textContent;
   },
 
   replacement: function (content, node, options) {
@@ -617,7 +646,9 @@ rules.mathjaxScriptBlock = {
 
 rules.joplinHtmlInMarkdown = {
   filter: function (node) {
-    return node && node.classList && node.classList.contains('jop-noMdConv');
+    // Tables are special because they may be entirely kept as HTML depending on
+    // the logic in table.js, for example if they contain code.
+    return node && node.classList && node.classList.contains('jop-noMdConv') && node.nodeName !== 'TABLE';
   },
 
   replacement: function (content, node) {

@@ -78,7 +78,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 				// KeymapService is already synchronized with the in-state keymap
 				await keymapService.saveCustomKeymap(filePath);
 			} catch (error) {
-				bridge().showerrororMessageBox(error.message);
+				bridge().showErrorMessageBox(error.message);
 			}
 		}
 	};
@@ -88,7 +88,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 			<div>
 				{accelerator.split('+').map(part => <kbd style={styles.kbd} key={part}>{part}</kbd>).reduce(
 					(accumulator, part) => (accumulator.length ? [...accumulator, ' + ', part] : [part]),
-					[]
+					[],
 				)}
 			</div>
 		);

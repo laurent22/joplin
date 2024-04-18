@@ -1,5 +1,6 @@
 import { unique } from '@joplin/lib/ArrayUtils';
-import htmlUtils from '@joplin/renderer/htmlUtils';
+import { attributesHtml, isSelfClosingTag } from '@joplin/renderer/htmlUtils';
+import { Translations } from '../../utils/translation';
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 const htmlparser2 = require('@joplin/fork-htmlparser2');
@@ -15,7 +16,7 @@ const trimHtml = (content: string) => {
 		.replace(/\t+$/, '');
 };
 
-const findTranslation = (englishString: string, translations: Record<string, string>): string => {
+const findTranslation = (englishString: string, translations: Translations): string => {
 	const stringsToTry = unique([
 		englishString,
 		englishString.replace(/<br\/>/gi, '<br>'),
@@ -26,7 +27,8 @@ const findTranslation = (englishString: string, translations: Record<string, str
 	]) as string[];
 
 	for (const stringToTry of stringsToTry) {
-		if (translations[stringToTry]) return translations[stringToTry];
+		// Note that we don't currently support plural forms for the website
+		if (translations[stringToTry] && translations[stringToTry].length) return translations[stringToTry][0];
 	}
 
 	return englishString;
@@ -38,7 +40,7 @@ const encodeHtml = (decodedText: string): string => {
 		.replace(/{{&gt; /gi, '{{> '); // Don't break Mustache partials
 };
 
-export default (html: string, _languageCode: string, translations: Record<string, string>) => {
+export default (html: string, _languageCode: string, translations: Translations) => {
 	const output: string[] = [];
 
 	interface State {
@@ -61,11 +63,11 @@ export default (html: string, _languageCode: string, translations: Record<string
 		// The opening tag is "div".
 		currentTranslationTag: string[];
 
-		// Once we finished processing the translable block, this will contain
+		// Once we finished processing the translatable block, this will contain
 		// the string to be translated. It may contain HTML.
 		currentTranslationContent: string[];
 
-		// Tells if we're at the beginning of a translable block.
+		// Tells if we're at the beginning of a translatable block.
 		translateIsOpening: boolean;
 
 		inScript: boolean;
@@ -93,6 +95,7 @@ export default (html: string, _languageCode: string, translations: Record<string
 
 	const parser = new htmlparser2.Parser({
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		onopentag: (name: string, attrs: any) => {
 			if (name === 'script') state.inScript = true;
 
@@ -106,9 +109,9 @@ export default (html: string, _languageCode: string, translations: Record<string
 				state.translateStack.push(name);
 			}
 
-			let attrHtml = htmlUtils.attributesHtml(attrs);
+			let attrHtml = attributesHtml(attrs);
 			if (attrHtml) attrHtml = ` ${attrHtml}`;
-			const closingSign = htmlUtils.isSelfClosingTag(name) ? '/>' : '>';
+			const closingSign = isSelfClosingTag(name) ? '/>' : '>';
 
 			pushContent(state, `<${name}${attrHtml}${closingSign}`);
 			state.translateIsOpening = false;
@@ -133,7 +136,7 @@ export default (html: string, _languageCode: string, translations: Record<string
 
 			if (name === 'script') state.inScript = false;
 
-			if (htmlUtils.isSelfClosingTag(name)) return;
+			if (isSelfClosingTag(name)) return;
 			pushContent(state, `</${name}>`);
 		},
 

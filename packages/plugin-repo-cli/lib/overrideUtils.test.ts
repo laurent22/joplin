@@ -1,8 +1,9 @@
-import { applyManifestOverrides, getObsoleteManifests, ManifestOverrides } from './overrideUtils';
+import { applyManifestOverrides, getObsoleteManifests, getSupersededPackages, ManifestOverrides } from './overrideUtils';
 
 describe('overrideUtils', () => {
 
 	test('should get the obsolete manifests', () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const manifestOverrides: any = {
 			'ambrt.backlinksToNote': {
 				'manifest_version': 1,
@@ -44,6 +45,7 @@ describe('overrideUtils', () => {
 	});
 
 	test('should apply the overrides', () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const manifests: any = {
 			'io.github.jackgruber.copytags': {
 				'manifest_version': 1,
@@ -51,7 +53,7 @@ describe('overrideUtils', () => {
 				'app_min_version': '1.6.2',
 				'version': '1.0.1',
 				'name': 'Tagging',
-				'description': 'Plugin to extend the Joplin tagging menu with a coppy all tags and a tagging dialog with more control. (Formerly Copy Tags).',
+				'description': 'Plugin to extend the Joplin tagging menu with a copy all tags and a tagging dialog with more control. (Formerly Copy Tags).',
 				'author': 'JackGruber',
 				'homepage_url': 'https://github.com/JackGruber/joplin-plugin-tagging/blob/master/README.md',
 				'repository_url': 'https://github.com/JackGruber/joplin-plugin-tagging',
@@ -92,4 +94,16 @@ describe('overrideUtils', () => {
 		expect(updatedManifests['joplin.plugin.ambrt.backlinksToNote']._recommended).toBe(undefined);
 	});
 
+	test('should get superseded packages', () => {
+		const manifestOverrides = {
+			'joplin.plugin.benji.favorites': {
+				_superseded_package: 'joplin-plugin-benji-favorites',
+			},
+			'io.github.jackgruber.copytags': {
+				_recommended: true,
+			},
+		};
+		const supersededPackages = getSupersededPackages(manifestOverrides);
+		expect(supersededPackages).toMatchObject(['joplin-plugin-benji-favorites']);
+	});
 });

@@ -104,5 +104,7 @@ export default async function(env: Env, models: Models, config: Config, services
 
 	await taskService.registerTasks(tasks);
 
+	await taskService.resetInterruptedTasks();
+
 	return taskService;
 }

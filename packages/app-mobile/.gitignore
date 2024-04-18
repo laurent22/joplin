@@ -66,9 +66,14 @@ yarn-error.log
 lib/csstojs/
 lib/rnInjectedJs/
 dist/
-components/NoteEditor/CodeMirror/CodeMirror.bundle.js
-components/NoteEditor/CodeMirror/CodeMirror.bundle.min.js
+plugins/sources/*
+plugins/PluginRunner/**/*.bundle.js
+components/NoteBodyViewer/**/*.bundle.js
+components/NoteBodyViewer/**/*.bundle.js.LICENSE.txt
+components/NoteEditor/**/*.bundle.js
 components/NoteEditor/**/*.bundle.js.md5
+components/NoteEditor/**/*.bundle.min.js
+components/NoteEditor/**/*.bundle.js.LICENSE.txt
 
 utils/fs-driver-android.js
 android/app/build-*

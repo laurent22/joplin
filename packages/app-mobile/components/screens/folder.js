@@ -5,7 +5,7 @@ const { connect } = require('react-redux');
 const Folder = require('@joplin/lib/models/Folder').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const { ScreenHeader } = require('../ScreenHeader');
-const { BaseScreenComponent } = require('../base-screen.js');
+const { BaseScreenComponent } = require('../base-screen');
 const { dialogs } = require('../../utils/dialogs.js');
 const { _ } = require('@joplin/lib/locale');
 const { default: FolderPicker } = require('../FolderPicker');
@@ -107,7 +107,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 					<FolderPicker
 						themeId={this.props.themeId}
 						placeholder={_('Select parent notebook')}
-						folders={this.props.folders}
+						folders={Folder.getRealFolders(this.props.folders)}
 						selectedFolderId={this.state.folder.parent_id}
 						onValueChange={newValue => this.parent_changeValue(newValue)}
 						mustSelect

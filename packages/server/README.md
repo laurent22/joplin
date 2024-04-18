@@ -30,7 +30,7 @@ The following tags are available:
 
 ## Setup the database
 
-You can setup the container to either use an existing PostgreSQL server, or connect it to a new database using docker-compose.
+You can setup the container to either use an existing PostgreSQL server, or connect it to a new database using `docker compose`.
 
 ### Using an existing PostgreSQL server
 
@@ -56,7 +56,7 @@ POSTGRES_CONNECTION_STRING=postgresql://username:password@your_joplin_postgres_s
 
 Ensure that the provided database and user exist as Joplin Server will not create them. When running on macOS or Windows through Docker Desktop, a mapping of localhost is made automatically. On Linux, you can add `--net=host --add-host=host.docker.internal:127.0.0.1` to the `docker run` command line to make the mapping happen. Any other `POSTGRES_HOST` than localhost or 127.0.0.1 should work as expected without further action.
 
-### Using docker-compose
+### Using `docker compose`
 
 1. Using the [sample docker-compose file](https://raw.githubusercontent.com/laurent22/joplin/dev/docker-compose.server.yml), create a docker compose file in the location of your Docker configuration files. Example: /home/[user]/docker/docker-compose.yml
 2. Update the fields in the docker-compose file as seen in the sample file.
@@ -106,13 +106,13 @@ Fallback drivers have two write modes:
 
 - In **ReadAndClear** mode, it's going to clear the fallback driver content every time an item is moved to the main driver. It means that over time the old storage will be cleared and all content will be on the new storage.
 
-- In **ReadAndWrite** mode, it's going to write the content to the fallback driver too. This is purely for safey - it allows deploying the new storage (such as the filesystem or S3) but still keep the old storage up-to-date. So if something goes wrong it's possible to go back to the old storage until the new one is working.
+- In **ReadAndWrite** mode, it's going to write the content to the fallback driver too. This is purely for safety - it allows deploying the new storage (such as the filesystem or S3) but still keep the old storage up-to-date. So if something goes wrong it's possible to go back to the old storage until the new one is working.
 
 It's recommended to start with ReadAndWrite mode.
 
 This simple setup with main and fallback driver is sufficient to start using a new storage, however old content that never gets updated will stay on the database. To migrate this content too, you can use the `storage import` command. It takes a connection string and move all items from the old storage to the new one.
 
-For example, to move all content from the database to the filesytem:
+For example, to move all content from the database to the filesystem:
 
 	docker exec -it CONTAINER_ID node packages/server/dist/app.js storage import --connection 'Type=Filesystem; Path=/path/to/dir'
 
@@ -152,8 +152,8 @@ Checking the log can be done the standard Docker way:
 # With Docker:
 docker logs --follow CONTAINER
 
-# With docker-compose:
-docker-compose --file docker-compose.server.yml logs
+# With `docker compose`:
+docker compose --file docker-compose.server.yml logs
 ```
 
 # Setup for development
@@ -166,7 +166,7 @@ By default the server supports SQLite for development, so nothing needs to be se
 
 ### PostgreSQL
 
-To use Postgres, from the monorepo root, run `docker-compose --file docker-compose.server-dev.yml up`, which will start the PostgreSQL database.
+To use Postgres, from the monorepo root, run `docker compose --file docker-compose.server-dev.yml up`, which will start the PostgreSQL database.
 
 ## Starting the server
 
@@ -174,8 +174,8 @@ From `packages/server`, run `npm run start-dev`
 
 # Changelog
 
-[View the changelog](https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md)
+[View the changelog](https://github.com/laurent22/joplin/blob/dev/readme/about/changelog/server.md)
 
 # License
 
-See LICENSE.md in this directory
+See [LICENSE.md](https://github.com/laurent22/joplin/blob/dev/packages/server/LICENSE.md)

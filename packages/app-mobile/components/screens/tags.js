@@ -3,10 +3,10 @@ const React = require('react');
 const { View, Text, FlatList, StyleSheet, TouchableOpacity } = require('react-native');
 const { connect } = require('react-redux');
 const Tag = require('@joplin/lib/models/Tag').default;
-const { themeStyle } = require('../global-style.js');
+const { themeStyle } = require('../global-style');
 const { ScreenHeader } = require('../ScreenHeader');
 const { _ } = require('@joplin/lib/locale');
-const { BaseScreenComponent } = require('../base-screen.js');
+const { BaseScreenComponent } = require('../base-screen');
 
 class TagsScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {

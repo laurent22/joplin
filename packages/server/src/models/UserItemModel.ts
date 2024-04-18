@@ -174,6 +174,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		} else if (options.byUserItem) {
 			userItems = [options.byUserItem];
 		} else if (options.byUserItemIds) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			userItems = await this.loadByIds(options.byUserItemIds as any);
 		} else {
 			throw new Error('Invalid options');
@@ -185,6 +186,9 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		await this.withTransaction(async () => {
 			for (const userItem of userItems) {
 				const item = items.find(i => i.id === userItem.item_id);
+
+				// The item may have been deleted between the async calls above
+				if (!item) continue;
 
 				if (options.recordChanges && this.models().item().shouldRecordChange(item.name)) {
 					await this.models().change().save({

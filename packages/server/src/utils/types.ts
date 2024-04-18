@@ -111,7 +111,7 @@ export enum StorageDriverType {
 //   old storage will be cleared and all content will be on the new storage.
 //
 // - In ReadAndWrite mode, it's going to write the content to the fallback
-//   driver too. This is purely for safey - it allows deploying the new storage
+//   driver too. This is purely for safety - it allows deploying the new storage
 //   (such as the filesystem or S3) but still keep the old content up-to-date.
 //   So if something goes wrong it's possible to go back to the old storage
 //   until the new one is working.
@@ -129,6 +129,17 @@ export interface StorageDriverConfig {
 	accessKeyId?: string;
 	secretAccessKeyId?: string;
 	bucket?: string;
+}
+
+export interface LdapConfig {
+	enabled: boolean;
+	userCreation: boolean;
+	host: string;
+	mailAttribute: string;
+	fullNameAttribute: string;
+	baseDN: string;
+	bindDN: string;
+	bindPW: string;
 }
 
 export interface Config extends EnvVariables {
@@ -165,6 +176,7 @@ export interface Config extends EnvVariables {
 	storageDriverFallback: StorageDriverConfig;
 	itemSizeHardLimit: number;
 	maxTimeDrift: number;
+	ldap: LdapConfig[];
 }
 
 export enum HttpMethod {

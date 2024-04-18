@@ -13,16 +13,21 @@ import Note from '@joplin/lib/models/Note';
 import { reg } from '@joplin/lib/registry';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
+import { NoteEntity } from '@joplin/lib/services/database/types';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 export interface OnLoadEvent {
 	formNote: FormNote;
 }
 
-interface HookDependencies {
+export interface HookDependencies {
 	syncStarted: boolean;
+	decryptionStarted: boolean;
 	noteId: string;
 	isProvisional: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	titleInputRef: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	editorRef: any;
 	onBeforeLoad(event: OnLoadEvent): void;
 	onAfterLoad(event: OnLoadEvent): void;
@@ -61,15 +66,22 @@ function resourceInfosChanged(a: ResourceInfos, b: ResourceInfos): boolean {
 }
 
 export default function useFormNote(dependencies: HookDependencies) {
-	const { syncStarted, noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad } = dependencies;
+	const {
+		syncStarted, decryptionStarted, noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad,
+	} = dependencies;
 
 	const [formNote, setFormNote] = useState<FormNote>(defaultFormNote());
 	const [isNewNote, setIsNewNote] = useState(false);
 	const prevSyncStarted = usePrevious(syncStarted);
+	const prevDecryptionStarted = usePrevious(decryptionStarted);
 	const previousNoteId = usePrevious(formNote.id);
 	const [resourceInfos, setResourceInfos] = useState<ResourceInfos>({});
 
-	async function initNoteState(n: any) {
+	// Increasing the value of this counter cancels any ongoing note refreshes and starts
+	// a new refresh.
+	const [formNoteRefreshScheduled, setFormNoteRefreshScheduled] = useState<number>(0);
+
+	async function initNoteState(n: NoteEntity) {
 		let originalCss = '';
 
 		if (n.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
@@ -83,6 +95,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 			body: n.body,
 			is_todo: n.is_todo,
 			parent_id: n.parent_id,
+			deleted_time: n.deleted_time,
 			bodyWillChangeId: 0,
 			bodyChangeId: 0,
 			markup_language: n.markup_language,
@@ -106,14 +119,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 	}
 
 	useEffect(() => {
-		// Check that synchronisation has just finished - and
-		// if the note has never been changed, we reload it.
-		// If the note has already been changed, it's a conflict
-		// that's already been handled by the synchronizer.
-
-		if (!prevSyncStarted) return () => {};
-		if (syncStarted) return () => {};
-		if (formNote.hasChanged) return () => {};
+		if (formNoteRefreshScheduled <= 0) return () => {};
 
 		reg.logger().info('Sync has finished and note has never been changed - reloading it');
 
@@ -132,6 +138,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 			}
 
 			await initNoteState(n);
+			setFormNoteRefreshScheduled(0);
 		};
 
 		void loadNote();
@@ -139,8 +146,34 @@ export default function useFormNote(dependencies: HookDependencies) {
 		return () => {
 			cancelled = true;
 		};
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [prevSyncStarted, syncStarted, formNote]);
+	}, [formNoteRefreshScheduled, noteId]);
+
+	const refreshFormNote = useCallback(() => {
+		// Increase the counter to cancel any ongoing refresh attempts
+		// and start a new one.
+		setFormNoteRefreshScheduled(formNoteRefreshScheduled + 1);
+	}, [formNoteRefreshScheduled]);
+
+	useEffect(() => {
+		// Check that synchronisation has just finished - and
+		// if the note has never been changed, we reload it.
+		// If the note has already been changed, it's a conflict
+		// that's already been handled by the synchronizer.
+		const decryptionJustEnded = prevDecryptionStarted && !decryptionStarted;
+		const syncJustEnded = prevSyncStarted && !syncStarted;
+
+		if (!decryptionJustEnded && !syncJustEnded) return;
+		if (formNote.hasChanged) return;
+
+		// Refresh the form note.
+		// This is kept separate from the above logic so that when prevSyncStarted is changed
+		// from true to false, it doesn't cancel the note from loading.
+		refreshFormNote();
+	}, [
+		prevSyncStarted, syncStarted,
+		prevDecryptionStarted, decryptionStarted,
+		formNote.hasChanged, refreshFormNote,
+	]);
 
 	useEffect(() => {
 		if (!noteId) {
@@ -161,7 +194,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 
 			requestAnimationFrame(() => {
 				if (Setting.value(focusSettingName) === 'title') {
-					if (titleInputRef.current) titleInputRef.current.focus();
+					if (titleInputRef.current) focus('useFormNote::handleAutoFocus', titleInputRef.current);
 				} else {
 					if (editorRef.current) editorRef.current.execCommand({ name: 'editor.focus' });
 				}
@@ -193,6 +226,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [noteId, isProvisional, formNote]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onResourceChange = useCallback(async (event: any = null) => {
 		const resourceIds = await Note.linkedResourceIds(formNote.body);
 		if (!event || resourceIds.indexOf(event.id) >= 0) {

@@ -1,16 +1,17 @@
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import CommandService from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
-import { ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
+import { ExportModuleOutputFormat, ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
 import { ExportModule } from '@joplin/lib/services/interop/Module';
 
 import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
-const bridge = require('@electron/remote').require('./bridge').default;
+import bridge from './services/bridge';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 const { friendlySafeFilename } = require('@joplin/lib/path-utils');
 import time from '@joplin/lib/time';
+import { BrowserWindow } from 'electron';
 const md5 = require('md5');
 const url = require('url');
 
@@ -31,7 +32,7 @@ export default class InteropServiceHelper {
 		const tempFile = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.html`;
 
 		const fullExportOptions: ExportOptions = { path: tempFile,
-			format: 'html',
+			format: ExportModuleOutputFormat.Html,
 			target: FileSystemItem.File,
 			sourceNoteIds: [noteId],
 			customCss: '', ...exportOptions };
@@ -45,12 +46,12 @@ export default class InteropServiceHelper {
 	}
 
 	private static async exportNoteTo_(target: string, noteId: string, options: ExportNoteOptions = {}) {
-		let win: any = null;
+		let win: BrowserWindow|null = null;
 		let htmlFile: string = null;
 
 		const cleanup = () => {
 			if (win) win.destroy();
-			if (htmlFile) shim.fsDriver().remove(htmlFile);
+			if (htmlFile) void shim.fsDriver().remove(htmlFile);
 		};
 
 		try {
@@ -67,7 +68,8 @@ export default class InteropServiceHelper {
 
 			win = bridge().newBrowserWindow(windowOptions);
 
-			return new Promise((resolve, reject) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			return new Promise<any>((resolve, reject) => {
 				win.webContents.on('did-finish-load', () => {
 
 					// did-finish-load will trigger when most assets are done loading, probably
@@ -83,8 +85,9 @@ export default class InteropServiceHelper {
 								// contents of the tag are visible in printed
 								// pdfs.
 								// https://github.com/laurent22/joplin/issues/6254.
-								win.webContents.executeJavaScript('document.querySelectorAll(\'details\').forEach(el=>el.setAttribute(\'open\',\'\'))');
-								const data = await win.webContents.printToPDF(options);
+								await win.webContents.executeJavaScript('document.querySelectorAll(\'details\').forEach(el=>el.setAttribute(\'open\',\'\'))');
+								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+								const data = await win.webContents.printToPDF(options as any);
 								resolve(data);
 							} catch (error) {
 								reject(error);
@@ -104,21 +107,40 @@ export default class InteropServiceHelper {
 							// https://github.com/electron/electron/issues/28192
 							// Still doesn't work but at least it doesn't crash
 							// the app.
+							//
+							// 2024-01-31: Printing with webContents.print still
+							// fails on Linux (even if run in the main process).
+							// As such, we use window.print(), which seems to work.
 
-							win.webContents.print(options, (success: boolean, reason: string) => {
-								// TODO: This is correct but broken in Electron 4. Need to upgrade to 5+
-								// It calls the callback right away with "false" even if the document hasn't be print yet.
+							if (shim.isLinux()) {
+								await win.webContents.executeJavaScript(`
+									// Blocks while the print dialog is open
+									window.print();
+								`);
 
-								cleanup();
-								if (!success && reason !== 'cancelled') reject(new Error(`Could not print: ${reason}`));
-								resolve(null);
-							});
+								shim.setTimeout(() => {
+									// To prevent a crash, the window can only be closed after a timeout.
+									// This timeout can't be too small, or else it may still crash (e.g. 100ms
+									// is too short).
+									//
+									// See https://github.com/electron/electron/issues/31635 for details
+									cleanup();
+									resolve(null);
+								}, 1000);
+							} else {
+								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+								win.webContents.print(options as any, (success: boolean, reason: string) => {
+									cleanup();
+									if (!success && reason !== 'cancelled') reject(new Error(`Could not print: ${reason}`));
+									resolve(null);
+								});
+							}
 						}
 					}, 2000);
 
 				});
 
-				win.loadURL(url.format({
+				void win.loadURL(url.format({
 					pathname: htmlFile,
 					protocol: 'file:',
 					slashes: true,

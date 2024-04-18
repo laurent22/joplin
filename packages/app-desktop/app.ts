@@ -11,7 +11,7 @@ import AlarmServiceDriverNode from '@joplin/lib/services/AlarmServiceDriverNode'
 import Logger, { TargetType } from '@joplin/utils/Logger';
 import Setting from '@joplin/lib/models/Setting';
 import actionApi from '@joplin/lib/services/rest/actionApi.desktop';
-import BaseApplication from '@joplin/lib/BaseApplication';
+import BaseApplication, { StartOptions } from '@joplin/lib/BaseApplication';
 import DebugService from '@joplin/lib/debug/DebugService';
 import { _, setLocale } from '@joplin/lib/locale';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
@@ -22,14 +22,13 @@ import stateToWhenClauseContext from './services/commands/stateToWhenClauseConte
 import ResourceService from '@joplin/lib/services/ResourceService';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 import appReducer, { createAppDefaultState } from './app.reducer';
-const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
 import Folder from '@joplin/lib/models/Folder';
 import Tag from '@joplin/lib/models/Tag';
 import { reg } from '@joplin/lib/registry';
-const packageInfo = require('./packageInfo.js');
+const packageInfo: PackageInfo = require('./packageInfo.js');
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import ClipperServer from '@joplin/lib/ClipperServer';
-const { webFrame } = require('electron');
+import { ipcRenderer, webFrame } from 'electron';
 const Menu = bridge().Menu;
 const PluginManager = require('@joplin/lib/services/PluginManager');
 import RevisionService from '@joplin/lib/services/RevisionService';
@@ -63,10 +62,16 @@ import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
 import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
-import eventManager from '@joplin/lib/eventManager';
+import eventManager, { EventName } from '@joplin/lib/eventManager';
 import path = require('path');
-import { checkPreInstalledDefaultPlugins, installDefaultPlugins, setSettingsForDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
+import { afterDefaultPluginsLoaded, loadAndRunDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
+import { parseNotesParent } from '@joplin/lib/reducer';
+import OcrService from '@joplin/lib/services/ocr/OcrService';
+import OcrDriverTesseract from '@joplin/lib/services/ocr/drivers/OcrDriverTesseract';
+import SearchEngine from '@joplin/lib/services/search/SearchEngine';
+import { PackageInfo } from '@joplin/lib/versionInfo';
+import { refreshFolders } from '@joplin/lib/folders-screen-utils';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -74,13 +79,15 @@ const pluginClasses = [
 
 const appDefaultState = createAppDefaultState(
 	bridge().windowContentSize(),
-	resourceEditWatcherDefaultState
+	resourceEditWatcherDefaultState,
 );
 
 class Application extends BaseApplication {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private checkAllPluginStartedIID_: any = null;
 	private initPluginServiceDone_ = false;
+	private ocrService_: OcrService;
 
 	public constructor() {
 		super();
@@ -92,6 +99,7 @@ class Application extends BaseApplication {
 		return true;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public reducer(state: AppState = appDefaultState, action: any) {
 		let newState = appReducer(state, action);
 		newState = resourceEditWatcherReducer(newState, action);
@@ -107,6 +115,7 @@ class Application extends BaseApplication {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	protected async generalMiddleware(store: any, next: any, action: any) {
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'locale' || action.type === 'SETTING_UPDATE_ALL') {
 			setLocale(Setting.value('locale'));
@@ -119,12 +128,20 @@ class Application extends BaseApplication {
 			this.updateTray();
 		}
 
+		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'ocr.enabled' || action.type === 'SETTING_UPDATE_ALL') {
+			this.setupOcrService();
+		}
+
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'style.editor.fontFamily' || action.type === 'SETTING_UPDATE_ALL') {
 			this.updateEditorFont();
 		}
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'windowContentZoomFactor' || action.type === 'SETTING_UPDATE_ALL') {
 			webFrame.setZoomFactor(Setting.value('windowContentZoomFactor') / 100);
+		}
+
+		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'linking.extraAllowedExtensions' || action.type === 'SETTING_UPDATE_ALL') {
+			bridge().extraAllowedOpenExtensions = Setting.value('linking.extraAllowedExtensions');
 		}
 
 		if (['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >= 0) {
@@ -191,8 +208,10 @@ class Application extends BaseApplication {
 
 		// The '*' and '!important' parts are necessary to make sure Russian text is displayed properly
 		// https://github.com/laurent22/joplin/issues/155
+		//
+		// Note: Be careful about the specificity here. Incorrect specificity can break monospaced fonts in tables.
 
-		const css = `.CodeMirror * { font-family: ${fontFamilies.join(', ')} !important; }`;
+		const css = `.CodeMirror5 *, .cm-editor .cm-content { font-family: ${fontFamilies.join(', ')} !important; }`;
 		const styleTag = document.createElement('style');
 		styleTag.type = 'text/css';
 		styleTag.appendChild(document.createTextNode(css));
@@ -217,13 +236,16 @@ class Application extends BaseApplication {
 		// The context menu must be setup in renderer process because that's where
 		// the spell checker service lives.
 		electronContextMenu({
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			shouldShowMenu: (_event: any, params: any) => {
 				// params.inputFieldType === 'none' when right-clicking the text editor. This is a bit of a hack to detect it because in this
 				// case we don't want to use the built-in context menu but a custom one.
 				return params.isEditable && params.inputFieldType !== 'none';
 			},
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			menu: (actions: any, props: any) => {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(props.misspelledWord, props.dictionarySuggestions).map((item: any) => new MenuItem(item));
 
 				const output = [
@@ -238,26 +260,6 @@ class Application extends BaseApplication {
 		});
 	}
 
-	private async checkForLegacyTemplates() {
-		const templatesDir = `${Setting.value('profileDir')}/templates`;
-		if (await shim.fsDriver().exists(templatesDir)) {
-			try {
-				const files = await shim.fsDriver().readDirStats(templatesDir);
-				for (const file of files) {
-					if (file.path.endsWith('.md')) {
-						// There is at least one template.
-						this.store().dispatch({
-							type: 'CONTAINS_LEGACY_TEMPLATES',
-						});
-						break;
-					}
-				}
-			} catch (error) {
-				reg.logger().error(`Failed to read templates directory: ${error}`);
-			}
-		}
-	}
-
 	private async initPluginService() {
 		if (this.initPluginServiceDone_) return;
 		this.initPluginServiceDone_ = true;
@@ -267,7 +269,6 @@ class Application extends BaseApplication {
 		const pluginRunner = new PluginRunner();
 		service.initialize(packageInfo.version, PlatformImplementation.instance(), pluginRunner, this.store());
 		service.isSafeMode = Setting.value('isSafeMode');
-		const defaultPluginsId = Object.keys(getDefaultPluginsInfo());
 
 		let pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
 		{
@@ -275,15 +276,11 @@ class Application extends BaseApplication {
 			// time, however we only effectively uninstall the plugin the next
 			// time the app is started. What plugin should be uninstalled is
 			// stored in the settings.
-			const newSettings = service.clearUpdateState(await service.uninstallPlugins(pluginSettings));
-			Setting.setValue('plugins.states', newSettings);
+			pluginSettings = service.clearUpdateState(await service.uninstallPlugins(pluginSettings));
+			Setting.setValue('plugins.states', pluginSettings);
 		}
 
-		checkPreInstalledDefaultPlugins(defaultPluginsId, pluginSettings);
-
 		try {
-			const defaultPluginsDir = path.join(bridge().buildDir(), 'defaultPlugins');
-			pluginSettings = await installDefaultPlugins(service, defaultPluginsDir, defaultPluginsId, pluginSettings);
 			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
 				await service.loadAndRunPlugins(Setting.value('pluginDir'), pluginSettings);
 			}
@@ -292,17 +289,19 @@ class Application extends BaseApplication {
 		}
 
 		try {
-			if (Setting.value('plugins.devPluginPaths')) {
-				const paths = Setting.value('plugins.devPluginPaths').split(',').map((p: string) => p.trim());
-				await service.loadAndRunPlugins(paths, pluginSettings, true);
-			}
-
-			// Also load dev plugins that have passed via command line arguments
-			if (Setting.value('startupDevPlugins')) {
-				await service.loadAndRunPlugins(Setting.value('startupDevPlugins'), pluginSettings, true);
-			}
+			await service.loadAndRunDevPlugins(pluginSettings);
 		} catch (error) {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
+		}
+
+		// Load default plugins after loading other plugins -- this allows users
+		// to override built-in plugins with development versions with the same
+		// ID.
+		const defaultPluginsDir = path.join(bridge().buildDir(), 'defaultPlugins');
+		try {
+			pluginSettings = await loadAndRunDefaultPlugins(service, defaultPluginsDir, getDefaultPluginsInfo(), pluginSettings);
+		} catch (error) {
+			this.logger().error(`There was an error loading plugins from ${defaultPluginsDir}:`, error);
 		}
 
 		{
@@ -312,7 +311,7 @@ class Application extends BaseApplication {
 			// out we remove from the state any plugin that has *not* been loaded
 			// above (meaning the file was missing).
 			// https://github.com/laurent22/joplin/issues/5253
-			const oldSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
+			const oldSettings = pluginSettings;
 			const newSettings: PluginSettings = {};
 			for (const pluginId of Object.keys(oldSettings)) {
 				if (!service.pluginIds.includes(pluginId)) {
@@ -322,6 +321,7 @@ class Application extends BaseApplication {
 				newSettings[pluginId] = oldSettings[pluginId];
 			}
 			Setting.setValue('plugins.states', newSettings);
+			pluginSettings = newSettings;
 		}
 
 		this.checkAllPluginStartedIID_ = setInterval(() => {
@@ -331,7 +331,12 @@ class Application extends BaseApplication {
 					type: 'STARTUP_PLUGINS_LOADED',
 					value: true,
 				});
-				setSettingsForDefaultPlugins(getDefaultPluginsInfo());
+
+				// Sends an event to the main process -- this is used by the Playwright
+				// tests to wait for plugins to load.
+				ipcRenderer.send('startup-plugins-loaded');
+
+				void afterDefaultPluginsLoaded(service.plugins, getDefaultPluginsInfo(), pluginSettings);
 			}
 		}, 500);
 	}
@@ -348,14 +353,42 @@ class Application extends BaseApplication {
 		Setting.setValue('wasClosedSuccessfully', false);
 	}
 
-	public async start(argv: string[]): Promise<any> {
+	private setupOcrService() {
+		if (Setting.value('ocr.enabled')) {
+			if (!this.ocrService_) {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				const Tesseract = (window as any).Tesseract;
+
+				const driver = new OcrDriverTesseract(
+					{ createWorker: Tesseract.createWorker },
+					`${bridge().buildDir()}/tesseract.js/worker.min.js`,
+					`${bridge().buildDir()}/tesseract.js-core`,
+				);
+
+				this.ocrService_ = new OcrService(driver);
+			}
+
+			void this.ocrService_.runInBackground();
+		} else {
+			if (!this.ocrService_) return;
+			void this.ocrService_.stopRunInBackground();
+		}
+
+		const handleResourceChange = () => {
+			void this.ocrService_.maintenance();
+		};
+
+		eventManager.on(EventName.ResourceCreate, handleResourceChange);
+		eventManager.on(EventName.ResourceChange, handleResourceChange);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public async start(argv: string[], startOptions: StartOptions = null): Promise<any> {
 		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
 		// insert an extra argument so that they can be processed in a consistent way everywhere.
 		if (!bridge().electronIsDev()) argv.splice(1, 0, '.');
 
-		argv = await super.start(argv);
-
-		// this.crashDetectionHandler();
+		argv = await super.start(argv, startOptions);
 
 		await this.applySettingsSideEffects();
 
@@ -431,7 +464,8 @@ class Application extends BaseApplication {
 		// manually call dispatchUpdateAll() to force an update.
 		Setting.dispatchUpdateAll();
 
-		await FoldersScreenUtils.refreshFolders();
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		await refreshFolders((action: any) => this.dispatch(action));
 
 		const tags = await Tag.allWithNotes();
 
@@ -447,10 +481,35 @@ class Application extends BaseApplication {
 		// 	items: masterKeys,
 		// });
 
-		this.store().dispatch({
-			type: 'FOLDER_SELECT',
-			id: Setting.value('activeFolderId'),
-		});
+		const getNotesParent = async () => {
+			let notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
+			if (notesParent.type === 'Tag' && !(await Tag.load(notesParent.selectedItemId))) {
+				notesParent = {
+					type: 'Folder',
+					selectedItemId: Setting.value('activeFolderId'),
+				};
+			}
+			return notesParent;
+		};
+
+		const notesParent = await getNotesParent();
+
+		if (notesParent.type === 'SmartFilter') {
+			this.store().dispatch({
+				type: 'SMART_FILTER_SELECT',
+				id: notesParent.selectedItemId,
+			});
+		} else if (notesParent.type === 'Tag') {
+			this.store().dispatch({
+				type: 'TAG_SELECT',
+				id: notesParent.selectedItemId,
+			});
+		} else {
+			this.store().dispatch({
+				type: 'FOLDER_SELECT',
+				id: notesParent.selectedItemId,
+			});
+		}
 
 		this.store().dispatch({
 			type: 'FOLDER_SET_COLLAPSED_ALL',
@@ -468,8 +527,6 @@ class Application extends BaseApplication {
 			type: 'NOTE_DEVTOOLS_SET',
 			value: Setting.value('flagOpenDevTools'),
 		});
-
-		await this.checkForLegacyTemplates();
 
 		// Note: Auto-update is a misnomer in the code.
 		// The code below only checks, if a new version is available.
@@ -534,18 +591,25 @@ class Application extends BaseApplication {
 		ExternalEditWatcher.instance().setLogger(reg.logger());
 		ExternalEditWatcher.instance().initialize(bridge, this.store().dispatch);
 
-		ResourceEditWatcher.instance().initialize(reg.logger(), (action: any) => { this.store().dispatch(action); }, (path: string) => bridge().openItem(path));
+		ResourceEditWatcher.instance().initialize(
+			reg.logger(),
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			(action: any) => { this.store().dispatch(action); },
+			(path: string) => bridge().openItem(path),
+		);
 
 		// Forwards the local event to the global event manager, so that it can
 		// be picked up by the plugin manager.
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		ResourceEditWatcher.instance().on('resourceChange', (event: any) => {
-			eventManager.emit('resourceChange', event);
+			eventManager.emit(EventName.ResourceChange, event);
 		});
 
 		RevisionService.instance().runInBackground();
 
 		// Make it available to the console window - useful to call revisionService.collectRevisions()
 		if (Setting.value('env') === 'dev') {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			(window as any).joplin = {
 				revisionService: RevisionService.instance(),
 				migrationService: MigrationService.instance(),
@@ -555,10 +619,15 @@ class Application extends BaseApplication {
 				bridge: bridge(),
 				debug: new DebugService(reg.db()),
 				resourceService: ResourceService.instance(),
+				searchEngine: SearchEngine.instance(),
+				ocrService: () => this.ocrService_,
 			};
 		}
 
 		bridge().addEventListener('nativeThemeUpdated', this.bridge_nativeThemeUpdated);
+		bridge().setOnAllowedExtensionsChangeListener((newExtensions) => {
+			Setting.setValue('linking.extraAllowedExtensions', newExtensions);
+		});
 
 		await this.initPluginService();
 
@@ -568,12 +637,27 @@ class Application extends BaseApplication {
 
 		this.startRotatingLogMaintenance(Setting.value('profileDir'));
 
-		// await populateDatabase(reg.db(), {
-		// 	clearDatabase: true,
-		// 	folderCount: 1000,
-		// 	rootFolderCount: 1,
-		// 	subFolderDepth: 1,
-		// });
+		await this.setupOcrService();
+
+		eventManager.on(EventName.OcrServiceResourcesProcessed, async () => {
+			await ResourceService.instance().indexNoteResources();
+		});
+
+		eventManager.on(EventName.NoteResourceIndexed, async () => {
+			SearchEngine.instance().scheduleSyncTables();
+		});
+
+		// setTimeout(() => {
+		// 	void populateDatabase(reg.db(), {
+		// 		clearDatabase: true,
+		// 		folderCount: 200,
+		// 		noteCount: 3000,
+		// 		tagCount: 2000,
+		// 		tagsPerNote: 10,
+		// 		rootFolderCount: 20,
+		// 		subFolderDepth: 3,
+		// 	});
+		// }, 5000);
 
 		// setTimeout(() => {
 		// 	console.info(CommandService.instance().commandsToMarkdownTable(this.store().getState()));

@@ -1,4 +1,5 @@
-import utils, { ItemIdToUrlHandler } from '../utils';
+import { ItemIdToUrlHandler, OptionsResourceModel } from '../types';
+import * as utils from '../utils';
 import createEventHandlingAttrs from './createEventHandlingAttrs';
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
@@ -7,8 +8,9 @@ const { getClassNameForMimeType } = require('font-awesome-filetypes');
 
 export interface Options {
 	title?: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	resources?: any;
-	ResourceModel?: any;
+	ResourceModel?: OptionsResourceModel;
 	linkRenderingType?: number;
 	plainResourceRendering?: boolean;
 	postMessageSyntax?: string;
@@ -18,6 +20,7 @@ export interface Options {
 
 export interface LinkReplacementResult {
 	html: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	resource: any;
 	resourceReady: boolean;
 	resourceFullPath: string;
@@ -97,6 +100,7 @@ export default function(href: string, options: Options = null): LinkReplacementR
 		js = createEventHandlingAttrs(resourceId, {
 			enableLongPress: options.enableLongPress ?? false,
 			postMessageSyntax: options.postMessageSyntax ?? 'void',
+			enableEditPopup: false,
 		}, onClick);
 	} else {
 		js = `onclick='${htmlentities(js)}'`;

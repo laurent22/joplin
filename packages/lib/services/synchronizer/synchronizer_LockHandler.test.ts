@@ -6,7 +6,7 @@ import { isNetworkSyncTarget, fileApi, setupDatabaseAndSynchronizer, synchronize
 // ECONNRESET and similar errors (Dropbox or OneDrive migth also throttle). Also we can't use a
 // low lock TTL value because the lock might expire between the time it's written and the time it's checked.
 // For that reason we add this multiplier for non-memory sync targets.
-const timeoutMultipler = isNetworkSyncTarget() ? 100 : 1;
+const timeoutMultiplier = isNetworkSyncTarget() ? 100 : 1;
 
 let lockHandler_: LockHandler = null;
 
@@ -80,11 +80,11 @@ describe('synchronizer_LockHandler', () => {
 	}));
 
 	it('should auto-refresh a lock', (async () => {
-		const handler = newLockHandler({ autoRefreshInterval: 100 * timeoutMultipler });
+		const handler = newLockHandler({ autoRefreshInterval: 100 * timeoutMultiplier });
 		const lock = await handler.acquireLock(LockType.Sync, LockClientType.Desktop, '111');
 		const lockBefore = activeLock(await handler.locks(), new Date(), handler.lockTtl, LockType.Sync, LockClientType.Desktop, '111');
 		handler.startAutoLockRefresh(lock, () => {});
-		await msleep(500 * timeoutMultipler);
+		await msleep(500 * timeoutMultiplier);
 		const lockAfter = activeLock(await handler.locks(), new Date(), handler.lockTtl, LockType.Sync, LockClientType.Desktop, '111');
 		expect(lockAfter.updatedTime).toBeGreaterThan(lockBefore.updatedTime);
 		handler.stopAutoLockRefresh(lock);
@@ -92,18 +92,20 @@ describe('synchronizer_LockHandler', () => {
 
 	it('should call the error handler when lock has expired while being auto-refreshed', (async () => {
 		const handler = newLockHandler({
-			lockTtl: 50 * timeoutMultipler,
-			autoRefreshInterval: 200 * timeoutMultipler,
+			lockTtl: 50 * timeoutMultiplier,
+			autoRefreshInterval: 200 * timeoutMultiplier,
 		});
 
 		const lock = await handler.acquireLock(LockType.Sync, LockClientType.Desktop, '111');
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let autoLockError: any = null;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		handler.startAutoLockRefresh(lock, (error: any) => {
 			autoLockError = error;
 		});
 
 		try {
-			await msleep(250 * timeoutMultipler);
+			await msleep(250 * timeoutMultiplier);
 
 			expect(autoLockError).toBeTruthy();
 			expect(autoLockError.code).toBe('lockExpired');
@@ -133,13 +135,13 @@ describe('synchronizer_LockHandler', () => {
 	}));
 
 	it('should allow exclusive lock if the sync locks have expired', (async () => {
-		const lockHandler = newLockHandler({ lockTtl: 500 * timeoutMultipler });
+		const lockHandler = newLockHandler({ lockTtl: 500 * timeoutMultiplier });
 		if (lockHandler.useBuiltInLocks) return; // Tested server side
 
 		await lockHandler.acquireLock(LockType.Sync, LockClientType.Mobile, '111');
 		await lockHandler.acquireLock(LockType.Sync, LockClientType.Mobile, '222');
 
-		await msleep(600 * timeoutMultipler);
+		await msleep(600 * timeoutMultiplier);
 
 		await expectNotThrow(async () => {
 			await lockHandler.acquireLock(LockType.Exclusive, LockClientType.Desktop, '333');

@@ -20,6 +20,7 @@ export default function() {
 		'setTags',
 		'showLocalSearch',
 		'showNoteContentProperties',
+		'permanentlyDeleteNote',
 		'synchronize',
 		'textBold',
 		'textCode',
@@ -67,5 +68,6 @@ export default function() {
 		'switchProfile2',
 		'switchProfile3',
 		'pasteAsText',
+		'showNoteProperties',
 	];
 }

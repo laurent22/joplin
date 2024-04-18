@@ -4,7 +4,7 @@ import { _ } from '@joplin/lib/locale';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
-const bridge = require('@electron/remote').require('./bridge').default;
+import bridge from '../services/bridge';
 const prettyBytes = require('pretty-bytes');
 import Resource from '@joplin/lib/models/Resource';
 
@@ -36,8 +36,11 @@ interface State {
 interface ResourceTable {
 	resources: InnerResource[];
 	sorting: ActiveSorting;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onResourceClick: (resource: InnerResource)=> any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onResourceDelete: (resource: InnerResource)=> any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onToggleSorting: (order: SortingOrder)=> any;
 	themeId: number;
 	style: Style;
@@ -111,7 +114,7 @@ const ResourceTableComp = (props: ResourceTable) => {
 						<td style={cellStyle} className="dataCell">
 							<button style={theme.buttonStyle} onClick={() => props.onResourceDelete(resource)}>{_('Delete')}</button>
 						</td>
-					</tr>
+					</tr>,
 				)}
 			</tbody>
 		</table>
@@ -174,9 +177,10 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		if (!ok) {
 			return;
 		}
-		Resource.delete(resource.id)
+		Resource.delete(resource.id, { sourceDescription: 'ResourceScreen' })
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.catch((error: Error) => {
+				console.error(error);
 				bridge().showErrorMessageBox(error.message);
 			})
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
@@ -187,7 +191,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 
 	public openResource(resource: InnerResource) {
 		const resourcePath = Resource.fullPath(resource);
-		const ok = bridge().openExternal(`file://${resourcePath}`);
+		const ok = bridge().openItem(resourcePath);
 		if (!ok) {
 			bridge().showErrorMessageBox(`This file could not be opened: ${resourcePath}`);
 		}
@@ -211,6 +215,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.themeId);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const rootStyle: any = {
 			...style,
 			overflowY: 'scroll',
@@ -260,6 +265,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const mapStateToProps = (state: any) => ({
 	themeId: state.settings.theme,
 });

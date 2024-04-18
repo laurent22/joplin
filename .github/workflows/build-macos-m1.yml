@@ -19,9 +19,9 @@ jobs:
     runs-on: macos-latest
     steps:
 
-      - uses: actions/checkout@v2
-      - uses: olegtarasov/get-tag@v2.1
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: olegtarasov/get-tag@v2.1.3
+      - uses: actions/setup-node@v4
         with:
           # We need to pin the version to 18.15, because 18.16+ fails with this error:
           # https://github.com/facebook/react-native/issues/36440
@@ -33,6 +33,17 @@ jobs:
           # https://yarnpkg.com/getting-started/install
           corepack enable
 
+      - name: Install macOs dependencies
+        if: runner.os == 'macOS'
+        run: |
+          # Required for building the canvas package
+          brew install pango
+
+      # See github-action-main.yml for explanation
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
       - name: Build macOS M1 app
         env:
           APPLE_ASC_PROVIDER: ${{ secrets.APPLE_ASC_PROVIDER }}
@@ -41,7 +52,8 @@ jobs:
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
           CSC_KEY_PASSWORD: ${{ secrets.APPLE_CSC_KEY_PASSWORD }}
           CSC_LINK: ${{ secrets.APPLE_CSC_LINK }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
           IS_CONTINUOUS_INTEGRATION: 1
           BUILD_SEQUENCIAL: 1
         run: |
@@ -55,7 +67,9 @@ jobs:
 
           if [[ $GIT_TAG_NAME = v* ]]; then
             echo "Building and publishing desktop application..."
-            PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist --mac --arm64
+            PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn dist --mac --arm64
+
+            yarn renameReleaseAssets --repo="$GH_REPO" --tag="$GIT_TAG_NAME" --token="$GITHUB_TOKEN"
           else
             echo "Building but *not* publishing desktop application..."
 
@@ -66,5 +80,5 @@ jobs:
             export CSC_IDENTITY_AUTO_DISCOVERY=false
             npm pkg set 'build.mac.identity'=null --json
 
-            PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist --publish=never
+            PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn dist  --mac --arm64 --publish=never
           fi

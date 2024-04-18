@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 interface Props {
 	themeId: number;
@@ -17,11 +18,13 @@ interface Props {
 	resultCount: number;
 	selectedIndex: number;
 	visiblePanes: string[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
 }
 
 class NoteSearchBar extends React.Component<Props> {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private backgroundColor: any;
 
 	public constructor(props: Props) {
@@ -32,6 +35,8 @@ class NoteSearchBar extends React.Component<Props> {
 		this.previousButton_click = this.previousButton_click.bind(this);
 		this.nextButton_click = this.nextButton_click.bind(this);
 		this.closeButton_click = this.closeButton_click.bind(this);
+
+		// eslint-disable-next-line no-restricted-properties
 		this.focus = this.focus.bind(this);
 
 		this.backgroundColor = undefined;
@@ -48,6 +53,7 @@ class NoteSearchBar extends React.Component<Props> {
 		return style;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public buttonIconComponent(iconName: string, clickHandler: any, isEnabled: boolean) {
 		const theme = themeStyle(this.props.themeId);
 
@@ -76,11 +82,13 @@ class NoteSearchBar extends React.Component<Props> {
 		);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private searchInput_change(event: any) {
 		const query = event.currentTarget.value;
 		this.triggerOnChange(query);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private searchInput_keyDown(event: any) {
 		if (event.keyCode === 13) {
 			// ENTER
@@ -125,7 +133,9 @@ class NoteSearchBar extends React.Component<Props> {
 	}
 
 	public focus() {
-		(this.refs.searchInput as any).focus();
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		focus('NoteSearchBar::focus', this.refs.searchInput as any);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		(this.refs.searchInput as any).select();
 	}
 

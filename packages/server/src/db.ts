@@ -4,6 +4,7 @@ import * as pathUtils from 'path';
 import time from '@joplin/lib/time';
 import Logger from '@joplin/utils/Logger';
 import { databaseSchema } from './services/database/types';
+import { compareVersions } from 'compare-versions';
 
 // Make sure bigInteger values are numbers and not strings
 //
@@ -11,6 +12,7 @@ import { databaseSchema } from './services/database/types';
 //
 // In our case, all bigInteger are timestamps, which JavaScript can handle
 // fine as numbers.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 require('pg').types.setTypeParser(20, (val: any) => {
 	return parseInt(val, 10);
 });
@@ -62,7 +64,9 @@ export interface KnexDatabaseConfig {
 
 export interface ConnectionCheckResult {
 	isCreated: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	error: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	latestMigration: any;
 	connection: DbConnection;
 }
@@ -143,6 +147,7 @@ export const setCollateC = async (db: DbConnection, tableName: string, columnNam
 	await db.raw(`ALTER TABLE ${tableName} ALTER COLUMN ${columnName} SET DATA TYPE character varying(32) COLLATE "C"`);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function makeSlowQueryHandler(duration: number, connection: any, sql: string, bindings: any[]) {
 	return setTimeout(() => {
 		try {
@@ -155,10 +160,12 @@ function makeSlowQueryHandler(duration: number, connection: any, sql: string, bi
 
 export function setupSlowQueryLog(connection: DbConnection, slowQueryLogMinDuration: number) {
 	interface QueryInfo {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		timeoutId: any;
 		startTime: number;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const queryInfos: Record<any, QueryInfo> = {};
 
 	// These queries do not return a response, so "query-response" is not
@@ -195,7 +202,9 @@ export function setupSlowQueryLog(connection: DbConnection, slowQueryLogMinDurat
 	});
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const filterBindings = (bindings: any[]): Record<string, any> => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: Record<string, any> = {};
 
 	for (let i = 0; i < bindings.length; i++) {
@@ -213,6 +222,7 @@ interface KnexQueryErrorResponse {
 }
 
 interface KnexQueryErrorData {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	bindings: any[];
 	queryContext: QueryContext;
 }
@@ -278,6 +288,7 @@ export async function migrateUnlock(db: DbConnection) {
 }
 
 export async function migrateList(db: DbConnection, asString = true) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const migrations: any = await db.migrate.list({
 		directory: migrationDir,
 	});
@@ -300,12 +311,14 @@ export async function migrateList(db: DbConnection, asString = true) {
 	//   ]
 	// ]
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const getMigrationName = (migrationInfo: any) => {
 		if (migrationInfo && migrationInfo.name) return migrationInfo.name;
 		if (migrationInfo && migrationInfo.file) return migrationInfo.file;
 		return migrationInfo;
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const formatName = (migrationInfo: any) => {
 		const s = getMigrationName(migrationInfo).split('.');
 		s.pop();
@@ -374,8 +387,10 @@ export async function dropTables(db: DbConnection): Promise<void> {
 	}
 }
 
-export async function truncateTables(db: DbConnection): Promise<void> {
+export async function truncateTables(db: DbConnection, includedTables: string[] = []): Promise<void> {
 	for (const tableName of allTableNames()) {
+		if (includedTables.length && !includedTables.includes(tableName)) continue;
+
 		try {
 			await db(tableName).truncate();
 		} catch (error) {
@@ -385,6 +400,7 @@ export async function truncateTables(db: DbConnection): Promise<void> {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function isNoSuchTableError(error: any): boolean {
 	if (error) {
 		// Postgres error: 42P01: undefined_table
@@ -397,6 +413,7 @@ function isNoSuchTableError(error: any): boolean {
 	return false;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function isUniqueConstraintError(error: any): boolean {
 	if (error) {
 		// Postgres error: 23505: unique_violation
@@ -408,6 +425,31 @@ export function isUniqueConstraintError(error: any): boolean {
 
 	return false;
 }
+
+const parsePostgresVersionString = (versionString: string) => {
+	// PostgreSQL 16.1 (Debian 16.1-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
+	const matches = versionString.match('PostgreSQL (.*?) ');
+	if (!matches || matches.length !== 2) throw new Error(`Cannot parse Postgres version string: ${versionString}`);
+	return matches[1];
+};
+
+export const versionCheck = async (db: DbConnection) => {
+	if (isPostgres(db)) {
+		// We only support Postgres v12+
+		// https://github.com/laurent22/joplin/issues/9695
+		// https://www.postgresql.org/docs/current/rules-materializedviews.html
+		const minPostgresVersion = '12.0';
+		const result = await db.select(db.raw('version()')).first();
+		if (result && result.version) {
+			const version = parsePostgresVersionString(result.version);
+			if (compareVersions(version, minPostgresVersion) < 0) throw new Error(`Postgres version not supported: ${result.version}. Min required version is: ${minPostgresVersion}`);
+		} else {
+			throw new Error(`Could not fetch Postgres version info. Got: ${JSON.stringify(result)}`);
+		}
+	} else {
+		// Not implemented
+	}
+};
 
 export async function latestMigration(db: DbConnection): Promise<Migration | null> {
 	try {

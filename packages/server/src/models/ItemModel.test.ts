@@ -528,7 +528,7 @@ describe('ItemModel', () => {
 		expect(item[0].name).toBe('000000000000000000000000000000F2.md');
 	});
 
-	// Case where an item is orphaned and the associated user is still prsent.
+	// Case where an item is orphaned and the associated user is still present.
 	test('should process orphaned items - 2', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);
@@ -556,6 +556,33 @@ describe('ItemModel', () => {
 
 		expect((await models().userItem().byUserId(user1.id)).length).toBe(1);
 		expect((await models().userItem().byUserId(user2.id)).length).toBe(1);
+	});
+
+	test('should return multiple item contents', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+
+		await createItemTree3(user1.id, '', '', [
+			{
+				id: '000000000000000000000000000000F1',
+				title: 'Folder 1',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+						title: 'Note 1',
+					},
+					{
+						id: '00000000000000000000000000000002',
+						title: 'Note 2',
+					},
+				],
+			},
+		]);
+
+		const itemIds = (await models().item().all()).map(i => i.id);
+		const items = await models().item().loadWithContentMulti(itemIds);
+
+		const jopItems = items.map(it => models().item().itemToJoplinItem(it));
+		expect(jopItems.map(it => it.title).sort()).toEqual(['Folder 1', 'Note 1', 'Note 2']);
 	});
 
 });

@@ -1,9 +1,10 @@
 import markdownUtils from './markdownUtils';
 import { ResourceEntity } from './services/database/types';
+import { htmlentities } from '@joplin/utils/html';
 const stringPadding = require('string-padding');
 const stringToStream = require('string-to-stream');
 const resourceUtils = require('./resourceUtils.js');
-const cssParser = require('css');
+const cssParser = require('@adobe/css-tools');
 
 const BLOCK_OPEN = '[[BLOCK_OPEN]]';
 const BLOCK_CLOSE = '[[BLOCK_CLOSE]]';
@@ -24,6 +25,7 @@ enum SectionType {
 interface Section {
 	type: SectionType;
 	parent: Section;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	lines: any[];
 	isHeader?: boolean;
 }
@@ -53,6 +55,7 @@ interface ParserState {
 	inPre: boolean;
 	inQuote: boolean;
 	lists: ParserStateList[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	anchorAttributes: any[];
 	spanAttributes: string[];
 	tags: ParserStateTag[];
@@ -302,8 +305,8 @@ function isWhiteSpace(c: string): boolean {
 	return c === '\n' || c === '\r' || c === '\v' || c === '\f' || c === '\t' || c === ' ';
 }
 
-// Like QString::simpified(), except that it preserves non-breaking spaces (which
-// Evernote uses for identation, etc.)
+// Like QString::simplified(), except that it preserves non-breaking spaces (which
+// Evernote uses for indentation, etc.)
 function simplifyString(s: string): string {
 	let output = '';
 	let previousWhite = false;
@@ -324,6 +327,7 @@ function simplifyString(s: string): string {
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function collapseWhiteSpaceAndAppend(lines: string[], state: any, text: string) {
 	if (state.inCode.length) {
 		lines.push(text);
@@ -368,26 +372,49 @@ function tagAttributeToMdText(attr: string): string {
 	return attr;
 }
 
-function addResourceTag(lines: string[], resource: ResourceEntity, alt = ''): string[] {
-	// Note: refactor to use Resource.markdownTag
 
-	if (!alt) alt = resource.title;
-	if (!alt) alt = resource.filename;
-	if (!alt) alt = '';
+interface AddResourceOptions {
+	alt?: string;
+	width?: number;
+	height?: number;
+}
 
-	alt = tagAttributeToMdText(alt);
-	if (resourceUtils.isImageMimeType(resource.mime)) {
-		lines.push('![');
-		lines.push(alt);
-		lines.push(`](:/${resource.id})`);
+const addResourceTag = (lines: string[], src: string, mime: string, options: AddResourceOptions): string[] => {
+	const alt = options.alt ? tagAttributeToMdText(options.alt) : '';
+
+	if (resourceUtils.isImageMimeType(mime)) {
+		if (!!options.width || !!options.height) {
+			const attrs: Record<string, string> = { src };
+			if (options.width) attrs.width = options.width.toString();
+			if (options.height) attrs.height = options.height.toString();
+			if (alt) attrs.alt = alt;
+
+			const attrsHtml: string[] = [];
+			for (const [key, value] of Object.entries(attrs)) {
+				attrsHtml.push(`${key}="${htmlentities(value)}"`);
+			}
+
+			lines.push(`<img ${attrsHtml.join(' ')}/>`);
+		} else {
+			lines.push('![');
+			lines.push(alt);
+			lines.push(`](${markdownUtils.escapeLinkUrl(src)})`);
+		}
 	} else {
 		lines.push('[');
 		lines.push(alt);
-		lines.push(`](:/${resource.id})`);
+		lines.push(`](${markdownUtils.escapeLinkUrl(src)})`);
 	}
 
 	return lines;
-}
+};
+
+const altFromResource = (resource: ResourceEntity): string => {
+	let alt = '';
+	if (!alt) alt = resource.title;
+	if (!alt) alt = resource.filename;
+	return alt;
+};
 
 function isBlockTag(n: string) {
 	return ['div', 'p', 'dl', 'dd', 'dt', 'center', 'address'].indexOf(n) >= 0;
@@ -430,8 +457,10 @@ function isNewLineBlock(s: string) {
 	return s === BLOCK_OPEN || s === BLOCK_CLOSE;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function attributeToLowerCase(node: any) {
 	if (!node.attributes) return {};
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {};
 	for (const n in node.attributes) {
 		if (!node.attributes.hasOwnProperty(n)) continue;
@@ -440,6 +469,7 @@ function attributeToLowerCase(node: any) {
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function cssValue(context: any, style: string, propName: string | string[]): string {
 	if (!style) return null;
 
@@ -450,17 +480,19 @@ function cssValue(context: any, style: string, propName: string | string[]): str
 		if (!o.stylesheet.rules.length) return null;
 
 		for (const propName of propNames) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const prop = o.stylesheet.rules[0].declarations.find((d: any) => d.property.toLowerCase() === propName);
 			if (prop && prop.value) return prop.value.trim().toLowerCase();
 		}
 
 		return null;
 	} catch (error) {
-		displaySaxWarning(context, error.message);
+		displaySaxWarning(context, `Invalid CSS value: ${error.message}`);
 		return null;
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function isInvisibleBlock(context: any, attributes: any) {
 	const display = cssValue(context, attributes.style, 'display');
 	return display && display.indexOf('none') === 0;
@@ -480,6 +512,7 @@ function trimBlockOpenAndClose(lines: string[]): string[] {
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function isSpanWithStyle(attributes: any) {
 	if (attributes) {
 		if ('style' in attributes) {
@@ -491,6 +524,7 @@ function isSpanWithStyle(attributes: any) {
 	return false;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function isSpanStyleBold(attributes: any) {
 	let style = attributes.style;
 	if (!style) return false;
@@ -505,12 +539,14 @@ function isSpanStyleBold(attributes: any) {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function isSpanStyleItalic(attributes: any) {
 	let style = attributes.style;
 	style = style.replace(/\s+/g, '');
 	return (style.toLowerCase().includes('font-style:italic'));
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function displaySaxWarning(context: any, message: string) {
 	const line = [];
 	const parser = context ? context._parser : null;
@@ -521,6 +557,7 @@ function displaySaxWarning(context: any, message: string) {
 	console.warn(line.join(': '));
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function isCodeBlock(context: any, nodeName: string, attributes: any) {
 	if (nodeName === 'code') return true;
 
@@ -540,6 +577,7 @@ function isCodeBlock(context: any, nodeName: string, attributes: any) {
 	return false;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function isHighlight(context: any, _nodeName: string, attributes: any) {
 	if (attributes && attributes.style) {
 		// Evernote uses various inconsistent CSS prefixes: so far I've found
@@ -562,6 +600,7 @@ function isHighlight(context: any, _nodeName: string, attributes: any) {
 	return false;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: ExtractedTask[]): Promise<EnexXmlToMdArrayResult> {
 	const remainingResources = resources.slice();
 
@@ -595,6 +634,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 			parent: null,
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		saxStream.on('error', (e: any) => {
 			console.warn(e);
 		});
@@ -636,6 +676,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 			section.lines = collapseWhiteSpaceAndAppend(section.lines, state, text);
 		});
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		saxStream.on('opentag', function(node: any) {
 			const nodeAttributes = attributeToLowerCase(node);
 			const n = node.name.toLowerCase();
@@ -806,12 +847,14 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 			} else if (n === 'q') {
 				section.lines.push('"');
 			} else if (n === 'img') {
+				// Many (most?) img tags don't have no source associated,
+				// especially when they were imported from HTML
 				if (nodeAttributes.src) {
-					// Many (most?) img tags don't have no source associated, especially when they were imported from HTML
-					let s = '![';
-					if (nodeAttributes.alt) s += tagAttributeToMdText(nodeAttributes.alt);
-					s += `](${markdownUtils.escapeLinkUrl(nodeAttributes.src)})`;
-					section.lines.push(s);
+					section.lines = addResourceTag(section.lines, nodeAttributes.src, 'image/png', {
+						width: nodeAttributes.width ? Number(nodeAttributes.width) : 0,
+						height: nodeAttributes.height ? Number(nodeAttributes.height) : 0,
+						alt: nodeAttributes.alt ? nodeAttributes.alt : '',
+					});
 				}
 			} else if (isAnchor(n)) {
 				state.anchorAttributes.push(nodeAttributes);
@@ -879,7 +922,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 					//	<!DOCTYPE en-export SYSTEM "http://xml.evernote.com/pub/evernote-export2.dtd">
 					//	<en-export export-date="20161221T203133Z" application="Evernote/Windows" version="6.x">
 					//		<note>
-					//			<title>Commande</title>
+					//			<title>Command</title>
 					//			<content>
 					//				<![CDATA[
 					//					<?xml version="1.0" encoding="UTF-8"?>
@@ -925,10 +968,14 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 				}
 
 				// If the resource does not appear among the note's resources, it
-				// means it's an attachement. It will be appended along with the
+				// means it's an attachment. It will be appended along with the
 				// other remaining resources at the bottom of the markdown text.
 				if (resource && !!resource.id) {
-					section.lines = addResourceTag(section.lines, resource, nodeAttributes.alt);
+					section.lines = addResourceTag(section.lines, `:/${resource.id}`, resource.mime, {
+						alt: nodeAttributes.alt ? nodeAttributes.alt : altFromResource(resource),
+						width: nodeAttributes.width ? Number(nodeAttributes.width) : 0,
+						height: nodeAttributes.height ? Number(nodeAttributes.height) : 0,
+					});
 				}
 			} else if (n === 'span') {
 				if (isSpanWithStyle(nodeAttributes)) {
@@ -1050,7 +1097,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 					// it's interactive bits) and it's not user-generated content such as a URL that would appear in a comment.
 					// So in this case, we still want to preserve the information but display it in a discreet way as a simple [L].
 
-					// Need to pop everything inside the current [] because it can only be special chars that we don't want (they would create uncessary newlines)
+					// Need to pop everything inside the current [] because it can only be special chars that we don't want (they would create unnecessary newlines)
 					for (let i = section.lines.length - 1; i >= 0; i--) {
 						if (section.lines[i] !== '[') {
 							section.lines.pop();
@@ -1209,6 +1256,14 @@ function drawTable(table: Section) {
 			continue;
 		}
 
+		if (typeof tr === 'string') {
+			// A <TABLE> tag should only have <TR> tags as direct children.
+			// However certain Evernote notes can contain other random tags
+			// such as empty DIVs. In that case we just skip the content.
+			// See test "table_with_invalid_content.html".
+			continue;
+		}
+
 		const isHeader = tr.isHeader;
 		const line = [];
 		const headerLine = [];
@@ -1216,9 +1271,15 @@ function drawTable(table: Section) {
 		for (let tdIndex = 0; tdIndex < tr.lines.length; tdIndex++) {
 			const td = tr.lines[tdIndex];
 
+			if (typeof td === 'string') {
+				// Same comment as above the <TR> tags.
+				continue;
+			}
+
 			if (flatRender) {
 				line.push(BLOCK_OPEN);
 
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				let currentCells: any[] = [];
 
 				const renderCurrentCells = () => {
@@ -1300,6 +1361,7 @@ function drawTable(table: Section) {
 	lines.push(BLOCK_CLOSE);
 
 	if (caption) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const captionLines: any[] = renderLines(caption.lines);
 		lines = lines.concat(captionLines);
 	}
@@ -1361,6 +1423,7 @@ function postProcessMarkdown(lines: string[]) {
 
 // A "line" can be some Markdown text, or it can be a section, like a table,
 // etc. so this function returns an array of strings.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function renderLine(line: any) {
 	if (typeof line === 'object' && line.type === 'table') {
 		// A table
@@ -1391,6 +1454,7 @@ function renderLine(line: any) {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function renderLines(lines: any[]) {
 	let mdLines: string[] = [];
 	for (let i = 0; i < lines.length; i++) {
@@ -1411,7 +1475,9 @@ async function enexXmlToMd(xmlString: string, resources: ResourceEntity[], tasks
 		const r = result.resources[i];
 		if (firstAttachment) mdLines.push(NEWLINE);
 		mdLines.push(NEWLINE);
-		mdLines = addResourceTag(mdLines, r, r.filename);
+		mdLines = addResourceTag(mdLines, `:/${r.id}`, r.mime, {
+			alt: altFromResource(r),
+		});
 		firstAttachment = false;
 	}
 
@@ -1422,4 +1488,4 @@ async function enexXmlToMd(xmlString: string, resources: ResourceEntity[], tasks
 	return output.join('\n');
 }
 
-export { enexXmlToMd, processMdArrayNewLines, NEWLINE, addResourceTag, cssValue };
+export { enexXmlToMd, processMdArrayNewLines, NEWLINE, cssValue };

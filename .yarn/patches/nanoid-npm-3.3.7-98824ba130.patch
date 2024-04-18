@@ -1,0 +1,12 @@
+diff --git a/package.json b/package.json
+index 4f24d9658ca167733dbe9c3fb3bcfc3f4e6d20c8..15062cc4eb3bc8e14b54b07a9c873e5a5c4b6ab8 100644
+--- a/package.json
++++ b/package.json
+@@ -35,7 +35,6 @@
+   "module": "index.js",
+   "exports": {
+     ".": {
+-      "browser": "./index.browser.js",
+       "require": {
+         "types": "./index.d.cts",
+         "default": "./index.cjs"

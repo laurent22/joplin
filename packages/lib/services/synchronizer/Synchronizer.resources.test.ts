@@ -1,9 +1,9 @@
 import time from '../../time';
 import shim from '../../shim';
 import Setting from '../../models/Setting';
-import { NoteEntity } from '../../services/database/types';
+import { NoteEntity, ResourceEntity } from '../../services/database/types';
 import { remoteNotesFoldersResources, remoteResources } from '../../testing/test-utils-synchronizer';
-import { synchronizerStart, tempFilePath, resourceFetcher, supportDir, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, checkThrowAsync } from '../../testing/test-utils';
+import { synchronizerStart, tempFilePath, resourceFetcher, supportDir, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, checkThrowAsync, msleep } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Resource from '../../models/Resource';
@@ -27,7 +27,7 @@ describe('Synchronizer.resources', () => {
 		insideBeforeEach = false;
 	});
 
-	it('should sync resources', (async () => {
+	it('should sync resources', async () => {
 		while (insideBeforeEach) await time.msleep(500);
 
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -58,9 +58,9 @@ describe('Synchronizer.resources', () => {
 
 		const resourcePath1_2 = Resource.fullPath(resource1_2);
 		expect(fileContentEqual(resourcePath1, resourcePath1_2)).toBe(true);
-	}));
+	});
 
-	it('should handle resource download errors', (async () => {
+	it('should handle resource download errors', async () => {
 		while (insideBeforeEach) await time.msleep(500);
 
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -87,9 +87,9 @@ describe('Synchronizer.resources', () => {
 		const ls = await Resource.localState(resource1);
 		expect(ls.fetch_status).toBe(Resource.FETCH_STATUS_ERROR);
 		expect(ls.fetch_error).toBe('did not work');
-	}));
+	});
 
-	it('should set the resource file size if it is missing', (async () => {
+	it('should set the resource file size if it is missing', async () => {
 		while (insideBeforeEach) await time.msleep(500);
 
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -110,9 +110,9 @@ describe('Synchronizer.resources', () => {
 		await fetcher.waitForAllFinished();
 		r1 = await Resource.load(r1.id);
 		expect(r1.size).toBe(2720);
-	}));
+	});
 
-	it('should delete resources', (async () => {
+	it('should delete resources', async () => {
 		while (insideBeforeEach) await time.msleep(500);
 
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -142,9 +142,9 @@ describe('Synchronizer.resources', () => {
 		allResources = await Resource.all();
 		expect(allResources.length).toBe(0);
 		expect(await shim.fsDriver().exists(resourcePath1)).toBe(false);
-	}));
+	});
 
-	it('should encrypt resources', (async () => {
+	it('should encrypt resources', async () => {
 		setEncryptionEnabled(true);
 		const masterKey = await loadEncryptionMasterKey();
 
@@ -170,9 +170,9 @@ describe('Synchronizer.resources', () => {
 		const resourcePath1_2 = Resource.fullPath(resource1_2);
 
 		expect(fileContentEqual(resourcePath1, resourcePath1_2)).toBe(true);
-	}));
+	});
 
-	it('should sync resource blob changes', (async () => {
+	it('should sync resource blob changes', async () => {
 		const tempFile = tempFilePath('txt');
 		await shim.fsDriver().writeFile(tempFile, '1234', 'utf8');
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -204,9 +204,9 @@ describe('Synchronizer.resources', () => {
 		const resource1_1 = (await Resource.all())[0];
 		expect(resource1_1.size).toBe(newSize);
 		expect(await Resource.resourceBlobContent(resource1_1.id, 'utf8')).toBe('1234 MOD');
-	}));
+	});
 
-	it('should handle resource conflicts', (async () => {
+	it('should handle resource conflicts', async () => {
 		{
 			const tempFile = tempFilePath('txt');
 			await shim.fsDriver().writeFile(tempFile, '1234', 'utf8');
@@ -271,9 +271,9 @@ describe('Synchronizer.resources', () => {
 			expect(resourceConflictFolder).toBeTruthy();
 			expect(resourceConflictFolder.parent_id).toBeFalsy();
 		}
-	}));
+	});
 
-	it('should handle resource conflicts if a resource is changed locally but deleted remotely', (async () => {
+	it('should handle resource conflicts if a resource is changed locally but deleted remotely', async () => {
 		{
 			const tempFile = tempFilePath('txt');
 			await shim.fsDriver().writeFile(tempFile, '1234', 'utf8');
@@ -287,8 +287,7 @@ describe('Synchronizer.resources', () => {
 
 		{
 			await synchronizerStart();
-			await resourceFetcher().start();
-			await resourceFetcher().waitForAllFinished();
+			await resourceFetcher().startAndWait();
 		}
 
 		await switchClient(1);
@@ -316,9 +315,9 @@ describe('Synchronizer.resources', () => {
 			expect(originalResource.id).not.toBe(conflictResource.id);
 			expect(conflictResource.title).toBe('modified resource');
 		}
-	}));
+	});
 
-	it('should not upload a resource if it has not been fetched yet', (async () => {
+	it('should not upload a resource if it has not been fetched yet', async () => {
 		// In some rare cases, the synchronizer might try to upload a resource even though it
 		// doesn't have the resource file. It can happen in this situation:
 		// - C1 create resource
@@ -350,9 +349,9 @@ describe('Synchronizer.resources', () => {
 		await BaseItem.saveSyncEnabled(ModelType.Resource, resource.id);
 		await synchronizerStart();
 		expect((await remoteResources()).length).toBe(1);
-	}));
+	});
 
-	it('should not download resources over the limit', (async () => {
+	it('should not download resources over the limit', async () => {
 		const note1 = await Note.save({ title: 'note' });
 		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		await synchronizer().start();
@@ -368,6 +367,53 @@ describe('Synchronizer.resources', () => {
 		expect(syncItems.length).toBe(2);
 		expect(syncItems[1].item_location).toBe(BaseItem.SYNC_ITEM_LOCATION_REMOTE);
 		expect(syncItems[1].sync_disabled).toBe(1);
-	}));
+	});
+
+	it('should not upload blob if it has not changed', async () => {
+		const note = await Note.save({});
+		await shim.attachFileToNote(note, `${supportDir}/sample.txt`);
+		const resource: ResourceEntity = (await Resource.all())[0];
+		const resourcePath = `.resource/${resource.id}`;
+
+		await synchronizer().api().put(resourcePath, 'before upload');
+		expect(await synchronizer().api().get(resourcePath)).toBe('before upload');
+		await synchronizerStart();
+		expect(await synchronizer().api().get(resourcePath)).toBe('just testing');
+
+		// ----------------------------------------------------------------------
+		// Change metadata only and check that blob is not uploaded. To do this,
+		// we manually overwrite the data on the sync target, then sync. If the
+		// synchronizer doesn't upload the blob, this manually changed data
+		// should remain.
+		// ----------------------------------------------------------------------
+
+		await Resource.save({ id: resource.id, title: 'my new title' });
+		await synchronizer().api().put(resourcePath, 'check if changed');
+		await synchronizerStart();
+		expect(await synchronizer().api().get(resourcePath)).toBe('check if changed');
+
+		// ----------------------------------------------------------------------
+		// Now change the blob, and check that the remote item has been
+		// overwritten.
+		// ----------------------------------------------------------------------
+
+		await Resource.updateResourceBlobContent(resource.id, `${supportDir}/sample.txt`);
+		await synchronizerStart();
+		expect(await synchronizer().api().get(resourcePath)).toBe('just testing');
+
+		// ----------------------------------------------------------------------
+		// Change the blob, then change the metadata, and sync. Even though
+		// blob_updated_time is earlier than updated_time, it should still
+		// update everything on the sync target, because both times are after
+		// the item sync_time.
+		// ----------------------------------------------------------------------
+
+		await Resource.updateResourceBlobContent(resource.id, `${supportDir}/sample2.txt`);
+		await msleep(1);
+		await Resource.save({ id: resource.id, title: 'my new title 2' });
+		await synchronizerStart();
+		expect(await synchronizer().api().get(resourcePath)).toBe('just testing 2');
+		expect(await synchronizer().api().get(`${resource.id}.md`)).toContain('my new title 2');
+	});
 
 });

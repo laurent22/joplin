@@ -1,10 +1,12 @@
-export const unique = function(array: any[]) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+export const unique = function<T extends any>(array: T[]): T[] {
 	return array.filter((elem, index, self) => {
 		return index === self.indexOf(elem);
 	});
 };
 
-export const removeElement = function(array: any[], element: any) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+export const removeElement = function<T extends any>(array: T[], element: T): T[] {
 	const index = array.indexOf(element);
 	if (index < 0) return array;
 	const newArray = array.slice();
@@ -13,6 +15,7 @@ export const removeElement = function(array: any[], element: any) {
 };
 
 // https://stackoverflow.com/a/10264318/561309
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const binarySearch = function(items: any[], value: any) {
 	let startIndex = 0,
 		stopIndex = items.length - 1,
@@ -34,6 +37,7 @@ export const binarySearch = function(items: any[], value: any) {
 	return items[middle] !== value ? -1 : middle;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const findByKey = function(array: any[], key: any, value: any) {
 	for (let i = 0; i < array.length; i++) {
 		const o = array[i];
@@ -43,6 +47,7 @@ export const findByKey = function(array: any[], key: any, value: any) {
 	return null;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const contentEquals = function(array1: any[], array2: any[]) {
 	if (array1 === array2) return true;
 	if (!array1.length && !array2.length) return true;
@@ -58,9 +63,11 @@ export const contentEquals = function(array1: any[], array2: any[]) {
 
 // Merges multiple overlapping intervals into a single interval
 // e.g. [0, 25], [20, 50], [75, 100] --> [0, 50], [75, 100]
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const mergeOverlappingIntervals = function(intervals: any[], limit: number) {
 	intervals.sort((a, b) => a[0] - b[0]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const stack: any[] = [];
 	if (intervals.length) {
 		stack.push(intervals[0]);
@@ -78,6 +85,7 @@ export const mergeOverlappingIntervals = function(intervals: any[], limit: numbe
 	return stack;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const shuffle = function(array: any[]) {
 	array = array.slice();
 	for (let i = array.length - 1; i > 0; i--) {
@@ -91,7 +99,9 @@ export const shuffle = function(array: any[]) {
 
 // Used to replace lodash.pull, so that we don't need to import the whole
 // package. Not optimised.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const pull = (array: any[], ...elements: any[]) => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any[] = [];
 	for (const e of array) {
 		if (elements.includes(e)) continue;

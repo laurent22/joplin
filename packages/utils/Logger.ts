@@ -18,23 +18,29 @@ export enum LogLevel {
 	Debug = 40,
 }
 
+type FormatFunction = (level: LogLevel, targetPrefix?: string)=> string;
+
 interface TargetOptions {
 	level?: LogLevel;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	database?: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	console?: any;
 	prefix?: string;
 	path?: string;
 	source?: string;
 
 	// Default message format
-	format?: string;
-
-	// If specified, will use this as format if it's an info message
-	formatInfo?: string;
+	format?: string | FormatFunction;
 }
 
 interface Target extends TargetOptions {
 	type: TargetType;
+}
+
+interface LastEntriesOptions {
+	levels?: LogLevel[];
+	filter?: string;
 }
 
 export interface LoggerWrapper {
@@ -86,6 +92,14 @@ class Logger {
 		this.enabled_ = v;
 	}
 
+	public status(): string {
+		const output: string[] = [];
+		output.push(`Enabled: ${this.enabled}`);
+		output.push(`Level: ${this.level()}`);
+		output.push(`Targets: ${this.targets().map(t => t.type).join(', ')}`);
+		return output.join('\n');
+	}
+
 	public static initializeGlobalLogger(logger: Logger) {
 		this.globalLogger_ = logger;
 	}
@@ -100,7 +114,9 @@ class Logger {
 			// statement comes from.
 
 			console.warn('Logger: Trying to access globalLogger, but it has not been initialized. Make sure that initializeGlobalLogger() has been called before logging. Will use the console as fallback.');
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const output: any = {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				log: (level: LogLevel, prefix: string, ...object: any[]) => {
 					// eslint-disable-next-line no-console
 					console.info(`[UNINITIALIZED GLOBAL LOGGER] ${this.levelIdToString(level)}: ${prefix}:`, object);
@@ -115,9 +131,13 @@ class Logger {
 
 	public static create(prefix: string): LoggerWrapper {
 		return {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			debug: (...object: any[]) => this.globalLogger.log(LogLevel.Debug, prefix, ...object),
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			info: (...object: any[]) => this.globalLogger.log(LogLevel.Info, prefix, ...object),
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			warn: (...object: any[]) => this.globalLogger.log(LogLevel.Warn, prefix, ...object),
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			error: (...object: any[]) => this.globalLogger.log(LogLevel.Error, prefix, ...object),
 		};
 	}
@@ -140,17 +160,20 @@ class Logger {
 		const target = { type: type };
 		for (const n in options) {
 			if (!options.hasOwnProperty(n)) continue;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			(target as any)[n] = (options as any)[n];
 		}
 
 		this.targets_.push(target);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public objectToString(object: any) {
 		let output = '';
 
 		if (typeof object === 'object') {
 			if (object instanceof Error) {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				object = object as any;
 				output = object.toString();
 				if (object.code) output += `\nCode: ${object.code}`;
@@ -167,10 +190,17 @@ class Logger {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public objectsToString(...object: any[]) {
 		const output = [];
-		for (let i = 0; i < object.length; i++) {
-			output.push(`"${this.objectToString(object[i])}"`);
+		if (object.length === 1) {
+			// Quoting when there is only one argument can make the log more difficult to read,
+			// particularly when formatting is handled elsewhere.
+			output.push(this.objectToString(object[0]));
+		} else {
+			for (let i = 0; i < object.length; i++) {
+				output.push(`"${this.objectToString(object[i])}"`);
+			}
 		}
 		return output.join(', ');
 	}
@@ -189,7 +219,7 @@ class Logger {
 	}
 
 	// Only for database at the moment
-	public async lastEntries(limit = 100, options: any = null) {
+	public async lastEntries(limit = 100, options: LastEntriesOptions|null = null) {
 		if (options === null) options = {};
 		if (!options.levels) options.levels = [LogLevel.Debug, LogLevel.Info, LogLevel.Warn, LogLevel.Error];
 		if (!options.levels.length) return [];
@@ -197,9 +227,21 @@ class Logger {
 		for (let i = 0; i < this.targets_.length; i++) {
 			const target = this.targets_[i];
 			if (target.type === 'database') {
-				let sql = `SELECT * FROM logs WHERE level IN (${options.levels.join(',')}) ORDER BY timestamp DESC`;
-				if (limit !== null) sql += ` LIMIT ${limit}`;
-				return await target.database.selectAll(sql);
+				const sql = [`SELECT * FROM logs WHERE level IN (${options.levels.join(',')})`];
+				const sqlParams = [];
+
+				if (options.filter) {
+					sql.push('AND message LIKE ?');
+					sqlParams.push(`%${options.filter}%`);
+				}
+
+				sql.push('ORDER BY timestamp DESC');
+				if (limit !== null) {
+					sql.push('LIMIT ?');
+					sqlParams.push(limit);
+				}
+
+				return await target.database.selectAll(sql.join(' '), sqlParams);
 			}
 		}
 		return [];
@@ -210,6 +252,7 @@ class Logger {
 		return this.level();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public log(level: LogLevel, prefix: string | null, ...object: any[]) {
 		if (!this.targets_.length || !this.enabled) return;
 
@@ -225,10 +268,11 @@ class Logger {
 				if (level === LogLevel.Warn) fn = 'warn';
 				if (level === LogLevel.Info) fn = 'info';
 				const consoleObj = target.console ? target.console : console;
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				let items: any[] = [];
 
 				if (target.format) {
-					const format = level === LogLevel.Info && target.formatInfo ? target.formatInfo : target.format;
+					const format = typeof target.format === 'string' ? target.format : target.format(level, targetPrefix);
 
 					const s = sprintf(format, {
 						date_time: moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -264,7 +308,7 @@ class Logger {
 				writeToFileMutex_.acquire().then((r: Function) => {
 					release = r;
 					return Logger.fsDriver().appendFile(target.path as string, `${line.join(': ')}\n`, 'utf8');
-					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
+					// eslint-disable-next-line promise/prefer-await-to-then, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 				}).catch((error: any) => {
 					console.error('Cannot write to log file:', error);
 					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
@@ -298,15 +342,26 @@ class Logger {
 		}
 	}
 
+	// For tests
+	public async waitForFileWritesToComplete_() {
+		const release = await writeToFileMutex_.acquire();
+		release();
+		return;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public error(...object: any[]) {
 		return this.log(LogLevel.Error, null, ...object);
 	}
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public warn(...object: any[]) {
 		return this.log(LogLevel.Warn, null, ...object);
 	}
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public info(...object: any[]) {
 		return this.log(LogLevel.Info, null, ...object);
 	}
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public debug(...object: any[]) {
 		return this.log(LogLevel.Debug, null, ...object);
 	}

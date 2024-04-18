@@ -35,6 +35,7 @@ const selfClosingElements = [
 
 class HtmlUtils {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public headAndBodyHtml(doc: any) {
 		const output = [];
 		if (doc.head) output.push(doc.head.innerHTML);
@@ -87,6 +88,7 @@ class HtmlUtils {
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public replaceImageUrls(html: string, callback: Function) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return this.processImageTags(html, (data: any) => {
 			const newSrc = callback(data.src);
 			return {
@@ -159,6 +161,7 @@ class HtmlUtils {
 		});
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public attributesHtml(attr: any) {
 		const output = [];
 
@@ -188,7 +191,7 @@ export function plainTextToHtml(plainText: string): string {
 	let currentLine = '';
 
 	for (let line of lines) {
-		line = line.trim();
+		line = line.trimEnd();
 		if (!line) {
 			if (currentLine) {
 				step1.push(`<p>${currentLine}</p>`);

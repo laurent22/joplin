@@ -6,13 +6,15 @@ import { connect } from 'react-redux';
 import { FlatList, Text, StyleSheet, Button, View } from 'react-native';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
+import Folder from '@joplin/lib/models/Folder';
 
 const { _ } = require('@joplin/lib/locale');
 const { NoteItem } = require('./note-item.js');
-const { themeStyle } = require('./global-style.js');
+import { themeStyle } from './global-style';
 
 interface NoteListProps {
-	themeId: string;
+	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	dispatch: (action: any)=> void;
 	notesSource: string;
 	items: NoteEntity[];
@@ -23,6 +25,7 @@ interface NoteListProps {
 
 class NoteListComponent extends Component<NoteListProps> {
 	private rootRef_: FlatList;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private styles_: Record<string, StyleSheet.NamedStyles<any>>;
 
 	public constructor(props: NoteListProps) {
@@ -90,7 +93,7 @@ class NoteListComponent extends Component<NoteListProps> {
 				keyExtractor={item => item.id}
 			/>;
 		} else {
-			if (!this.props.folders.length) {
+			if (!Folder.atLeastOneRealFolderExists(this.props.folders)) {
 				const noItemMessage = _('You currently have no notebooks.');
 				return (
 					<View style={this.styles().noNotebookView}>
@@ -105,6 +108,7 @@ class NoteListComponent extends Component<NoteListProps> {
 		}
 	}
 }
+
 
 const NoteList = connect((state: AppState) => {
 	return {

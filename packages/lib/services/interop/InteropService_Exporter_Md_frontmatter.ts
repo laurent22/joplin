@@ -24,6 +24,14 @@ interface FrontMatterContext extends NoteTagContext, TagContext {}
 function trimQuotes(rawOutput: string): string {
 	return rawOutput.split('\n').map(line => {
 		const index = line.indexOf(': \'-');
+		const indexWithSpace = line.indexOf(': \'- ');
+
+		// We don't apply this processing if the string starts with a dash
+		// followed by a space. Those should actually be in quotes, otherwise
+		// they are detected as invalid list items when we later try to import
+		// the file.
+		if (index === indexWithSpace) return line;
+
 		if (index >= 0) {
 			// The plus 2 eats the : and space characters
 			const start = line.substring(0, index + 2);
@@ -31,6 +39,7 @@ function trimQuotes(rawOutput: string): string {
 			const end = line.substring(index + 3, line.length - 1);
 			return start + end;
 		}
+
 		return line;
 	}).join('\n');
 }
@@ -39,6 +48,7 @@ export const fieldOrder = ['title', 'updated', 'created', 'source', 'author', 'l
 
 export default class InteropService_Exporter_Md_frontmatter extends InteropService_Exporter_Md {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async prepareForProcessingItemType(itemType: number, itemsToExport: any[]) {
 		await super.prepareForProcessingItemType(itemType, itemsToExport);
 
@@ -90,7 +100,7 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 
 	private extractMetadata(note: NoteEntity) {
 		const md: MdFrontMatterExport = {};
-		// Every variable needs to be converted seperately, so they will be handles in groups
+		// Every variable needs to be converted separately, so they will be handles in groups
 		//
 		// title
 		if (note.title) { md['title'] = note.title; }

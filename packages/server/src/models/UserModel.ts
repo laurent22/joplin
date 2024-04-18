@@ -27,7 +27,10 @@ import changeEmailConfirmationTemplate from '../views/emails/changeEmailConfirma
 import changeEmailNotificationTemplate from '../views/emails/changeEmailNotificationTemplate';
 import { NotificationKey } from './NotificationModel';
 import prettyBytes = require('pretty-bytes');
-import { Env } from '../utils/types';
+import { Config, Env, LdapConfig } from '../utils/types';
+import ldapLogin from '../utils/ldapLogin';
+import { DbConnection } from '../db';
+import { NewModelFactoryHandler } from './factory';
 
 const logger = Logger.create('UserModel');
 
@@ -113,6 +116,14 @@ export function accountTypeToString(accountType: AccountType): string {
 
 export default class UserModel extends BaseModel<User> {
 
+	private ldapConfig_: LdapConfig[];
+
+	public constructor(db: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
+		super(db, modelFactory, config);
+
+		this.ldapConfig_ = config.ldap;
+	}
+
 	public get tableName(): string {
 		return 'users';
 	}
@@ -124,8 +135,22 @@ export default class UserModel extends BaseModel<User> {
 
 	public async login(email: string, password: string): Promise<User> {
 		const user = await this.loadByEmail(email);
+
+		for (const config of this.ldapConfig_) {
+			if (config.enabled) {
+				const ldapUser = await ldapLogin(email, password, user, config);
+				if (ldapUser && !user) {
+					const savedUser: User = await this.save(ldapUser, { skipValidation: true });
+					return savedUser;
+				}
+				if (ldapUser && user) {
+					return ldapUser;
+				}
+			}
+		}
+
 		if (!user) return null;
-		if (!checkPassword(password, user.password)) return null;
+		if (!(await checkPassword(password, user.password))) return null;
 		return user;
 	}
 
@@ -177,6 +202,7 @@ export default class UserModel extends BaseModel<User> {
 			];
 
 			for (const key of Object.keys(resource)) {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				if (!user.is_admin && !canBeChangedByNonAdmin.includes(key) && (resource as any)[key] !== (previousResource as any)[key]) {
 					throw new ErrorForbidden(`non-admin user cannot change "${key}"`);
 				}
@@ -193,6 +219,7 @@ export default class UserModel extends BaseModel<User> {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async checkMaxItemSizeLimit(user: User, buffer: Buffer, item: Item, joplinItem: any) {
 		// If the item is encrypted, we apply a multiplier because encrypted
 		// items can be much larger (seems to be up to twice the size but for
@@ -219,7 +246,7 @@ export default class UserModel extends BaseModel<User> {
 			throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it is larger than the allowed limit (%s)',
 				isNote ? _('note') : _('attachment'),
 				itemTitle ? itemTitle : item.name,
-				formatBytes(maxItemSize)
+				formatBytes(maxItemSize),
 			));
 		}
 
@@ -236,7 +263,7 @@ export default class UserModel extends BaseModel<User> {
 				throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it would go over the total allowed size (%s) for this account',
 					isNote ? _('note') : _('attachment'),
 					itemTitle ? itemTitle : item.name,
-					formatBytes(maxTotalItemSize)
+					formatBytes(maxTotalItemSize),
 				));
 			}
 		}
@@ -271,8 +298,12 @@ export default class UserModel extends BaseModel<User> {
 		if ('email' in user) {
 			const existingUser = await this.loadByEmail(user.email);
 			if (existingUser && existingUser.id !== user.id) throw new ErrorUnprocessableEntity(`there is already a user with this email: ${user.email}`);
+			// See https://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690 (found via https://stackoverflow.com/a/574698)
+			if (user.email.length > 254) throw new ErrorUnprocessableEntity('Please enter an email address between 0 and 254 characters');
 			if (!this.validateEmail(user.email)) throw new ErrorUnprocessableEntity(`Invalid email: ${user.email}`);
 		}
+
+		if ('full_name' in user && user.full_name.length > 256) throw new ErrorUnprocessableEntity('Full name must be at most 256 characters');
 
 		return super.validate(user, options);
 	}
@@ -608,6 +639,7 @@ export default class UserModel extends BaseModel<User> {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async syncInfo(userId: Uuid): Promise<any> {
 		const item = await this.models().item().loadByName(userId, 'info.json');
 
@@ -635,15 +667,25 @@ export default class UserModel extends BaseModel<User> {
 	public async save(object: User, options: SaveOptions = {}): Promise<User> {
 		const user = this.formatValues(object);
 
+		const isNew = await this.isNew(object, options);
+
 		if (user.password) {
 			if (isHashedPassword(user.password)) {
-				throw new ErrorBadRequest(`Unable to save user because password already seems to be hashed. User id: ${user.id}`);
+				if (!isNew) {
+					// We have this check because if an existing user is loaded,
+					// then saved again, the "password" field will be hashed a
+					// second time, and we don't want this.
+					throw new ErrorBadRequest(`Unable to save user because password already seems to be hashed. User id: ${user.id}`);
+				} else {
+					// OK - We allow supplying an already hashed password for
+					// new users. This is mostly used for testing, because
+					// generating a bcrypt hash for each user is slow.
+				}
+			} else {
+				if (!options.skipValidation) this.validatePassword(user.password);
+				user.password = await hashPassword(user.password);
 			}
-			if (!options.skipValidation) this.validatePassword(user.password);
-			user.password = hashPassword(user.password);
 		}
-
-		const isNew = await this.isNew(object, options);
 
 		return this.withTransaction(async () => {
 			const savedUser = await super.save(user, options);

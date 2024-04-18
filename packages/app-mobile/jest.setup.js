@@ -7,6 +7,8 @@ const path = require('path');
 const { tmpdir } = require('os');
 const uuid = require('@joplin/lib/uuid').default;
 const sqlite3 = require('sqlite3');
+const React = require('react');
+require('../../jest.base-setup.js')();
 
 import { setImmediate } from 'timers';
 
@@ -14,25 +16,26 @@ import { setImmediate } from 'timers';
 // so is removed by jsdom).
 window.setImmediate = setImmediate;
 
-// Prevents the CodeMirror error "getClientRects is undefined".
-// See https://github.com/jsdom/jsdom/issues/3002#issue-652790925
-document.createRange = () => {
-	const range = new Range();
-	range.getBoundingClientRect = jest.fn();
-	range.getClientRects = () => {
-		return {
-			length: 0,
-			item: () => null,
-			[Symbol.iterator]: jest.fn(),
-		};
+shimInit({
+	nodeSqlite: sqlite3,
+	React,
+});
+
+// This library has the following error when running within Jest:
+//   Invariant Violation: `new NativeEventEmitter()` requires a non-null argument.
+jest.mock('react-native-device-info', () => {
+	return {
+		hasNotch: () => false,
 	};
+});
 
-	return range;
-};
-
-
-shimInit({ nodeSqlite: sqlite3 });
-
+// react-native-webview expects native iOS/Android code so needs to be mocked.
+jest.mock('react-native-webview', () => {
+	const { View } = require('react-native');
+	return {
+		WebView: View,
+	};
+});
 
 // react-native-fs's CachesDirectoryPath export doesn't work in a testing environment.
 // Use a temporary folder instead.

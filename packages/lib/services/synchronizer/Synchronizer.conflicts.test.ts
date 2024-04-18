@@ -5,6 +5,7 @@ import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
+import { NoteEntity } from '../database/types';
 
 describe('Synchronizer.conflicts', () => {
 
@@ -46,12 +47,14 @@ describe('Synchronizer.conflicts', () => {
 		for (const n in conflictedNote) {
 			if (!conflictedNote.hasOwnProperty(n)) continue;
 			if (n === 'id' || n === 'is_conflict' || n === 'conflict_original_id') continue;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			expect(conflictedNote[n]).toBe((note2conf as any)[n]);
 		}
 
 		const noteUpdatedFromRemote = await Note.load(note1.id);
 		for (const n in noteUpdatedFromRemote) {
 			if (!noteUpdatedFromRemote.hasOwnProperty(n)) continue;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			expect((noteUpdatedFromRemote as any)[n]).toBe((note2 as any)[n]);
 		}
 	}));
@@ -103,7 +106,7 @@ describe('Synchronizer.conflicts', () => {
 
 		await Note.save({ title: 'note1', parent_id: folder1.id });
 		await synchronizerStart();
-		const items = await allNotesFolders();
+		const items: NoteEntity[] = await allNotesFolders();
 		expect(items.length).toBe(1);
 		expect(items[0].title).toBe('note1');
 		expect(items[0].is_conflict).toBe(1);

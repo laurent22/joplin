@@ -17,6 +17,7 @@ const formatRepoUrl = (url: string): string => {
 	return url;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function(manifest: any, previousManifest: any = null): string {
 	// "repository_url": "https://github.com/JackGruber/joplin-plugin-copytags",
 	// "_publish_commit": "master:b52b01f6d3b709a811ac214253636a7c207c87dd",

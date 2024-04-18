@@ -40,8 +40,11 @@ yarn install
 # to change after installation.
 git reset --hard
 
-JOPLIN_GITHUB_OAUTH_TOKEN=$JOPLIN_GITHUB_OAUTH_TOKEN yarn run updateMarkdownDoc
-yarn run updateNews $DISCOURSE_API_KEY $DISCOURSE_USERNAME
+JOPLIN_GITHUB_OAUTH_TOKEN=$JOPLIN_GITHUB_OAUTH_TOKEN yarn updateMarkdownDoc
+
+# Automatically update certain forum posts
+yarn updateNews $DISCOURSE_API_KEY $DISCOURSE_USERNAME
+yarn postPreReleasesToForum $DISCOURSE_API_KEY $DISCOURSE_USERNAME
 
 # We commit and push the change. It will be a noop if nothing was actually
 # changed
@@ -55,6 +58,7 @@ Auto-updated using $SCRIPT_NAME" || true
 git pull --rebase
 git push
 
+
 # ------------------------------------------------------------------------------
 # Build and deploy the website
 # ------------------------------------------------------------------------------
@@ -64,7 +68,31 @@ git checkout master
 git pull --rebase
 
 cd "$JOPLIN_ROOT_DIR"
-yarn run buildWebsite
+CROWDIN_PERSONAL_TOKEN="$CROWDIN_PERSONAL_TOKEN" yarn crowdinDownload
+yarn buildWebsite
+
+cd "$JOPLIN_WEBSITE_ROOT_DIR"
+
+# Copy and update the plugin website.
+# 
+# For security, the plugin website is built in a separate job without access to SSH
+# keys. This file contains the built output of the other job.
+# 
+# We apply this to the existing plugin website to prevent the changes from being overwritten.
+BUILT_PLUGIN_WEBSITE_FILE="$JOPLIN_ROOT_DIR/../plugin-website.tar.gz"
+
+if [ -f "$BUILT_PLUGIN_WEBSITE_FILE" ]; then
+	cd "$JOPLIN_WEBSITE_ROOT_DIR/docs"
+
+	mkdir -p plugins
+	cd plugins
+
+	tar -xzvf "$BUILT_PLUGIN_WEBSITE_FILE"
+else
+	echo "Not updating plugin website -- release ($BUILT_PLUGIN_WEBSITE_FILE) not present"
+	exit 1
+fi
+
 
 cd "$JOPLIN_WEBSITE_ROOT_DIR"
 git add -A

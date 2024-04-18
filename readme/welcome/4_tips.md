@@ -8,7 +8,7 @@ The first few notes should have given you an overview of the main functionalitie
 
 The Web Clipper is a browser extension that allows you to save web pages and screenshots from your browser. To start using it, open the Joplin desktop application, go to the Web Clipper Options and follow the instructions.
 
-More info on the official website: https://joplinapp.org/clipper/
+More info on the official website: https://joplinapp.org/help/apps/clipper
 
 ## Plugins
 
@@ -20,19 +20,19 @@ Any kind of file can be attached to a note. In Markdown, links to these files ar
 
 Images can be attached either by clicking on "Attach file" or by pasting (with `Ctrl+V` or `Cmd+V`) an image directly in the editor, or by drag and dropping an image.
 
-More info about attachments: https://joplinapp.org/help/#attachments
+More info about attachments: https://joplinapp.org/help/apps/attachments
 
 ## Search
 
-Joplin supports advanced search queries, which are fully documented on the official website: https://joplinapp.org/help/#searching
+Joplin supports advanced search queries, which are fully documented on the official website: https://joplinapp.org/help/apps/search
 
 ## Alarms
 
-An alarm can be associated with any to-do. It will be triggered at the given time by displaying a notification. To use this feature, see the documentation: https://joplinapp.org/help/#notifications
+An alarm can be associated with any to-do. It will be triggered at the given time by displaying a notification. To use this feature, see the documentation: https://joplinapp.org/help/apps/notifications
 
 ## Markdown advanced tips
 
-Joplin uses and renders [Github-flavoured Markdown](https://joplinapp.org/markdown/) with a few variations and additions.
+Joplin uses and renders [Github-flavoured Markdown](https://joplinapp.org/help/apps/markdown) with a few variations and additions.
 
 For example, tables are supported:
 
@@ -56,7 +56,7 @@ f(x) = \int_{-\infty}^\infty
     \,d\xi
 $$
 
-Various other tricks are possible, such as using HTML, or customising the CSS. See the Markdown documentation for more info - https://joplinapp.org/markdown/
+Various other tricks are possible, such as using HTML, or customising the CSS. See the Markdown documentation for more info - https://joplinapp.org/help/apps/markdown
 
 ## Community and further help
 

@@ -2,15 +2,11 @@
 
 ## CSS
 
-Plugins add custom content to the UI using
-[webview panels](https://joplinapp.org/api/references/plugin_api/classes/joplinviewspanels.html).
-The HTML content of a a panel is styled with CSS.
+Plugins add custom content to the UI using [webview panels](https://joplinapp.org/api/references/plugin_api/classes/joplinviewspanels.html). The HTML content of a a panel is styled with CSS.
 
-To keep the look and feel of a plugin consistent with the rest of the Joplin UI,
-you are automatically provided with variables derived from the current theme.
+To keep the look and feel of a plugin consistent with the rest of the Joplin UI, you are automatically provided with variables derived from the current theme.
 
-Variables follow the naming convention `--joplin-{property}` and are used
-in your plugin's stylesheet as shown here.
+Variables follow the naming convention `--joplin-{property}` and are used in your plugin's stylesheet as shown here.
 
 ```css
 /* webview.css */
@@ -22,8 +18,7 @@ in your plugin's stylesheet as shown here.
 
 ## Icons
 
-In addition to variables, you have access to a set of standard font assets that ship with Joplin.
-These include:
+In addition to variables, you have access to a set of standard font assets that ship with Joplin. These include:
 
 * [Roboto](https://fonts.google.com/specimen/Roboto?preview.text_type=custom) - (the standard UI font, `font-family` referenced above)
 * [Font Awesome](https://fontawesome.com/icons?d=gallery&p=2&m=free) - icon library
@@ -40,7 +35,7 @@ To display an icon, use CSS and HTML like the following.
     color: var(--joplin-color);
 }
 .secondary {
-    color: var(--joplin-color-2);
+    color: var(--joplin-color2);
 }
 ```
 

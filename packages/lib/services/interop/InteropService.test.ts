@@ -1,5 +1,5 @@
 import InteropService from '../../services/interop/InteropService';
-import { CustomExportContext, CustomImportContext, ModuleType } from '../../services/interop/types';
+import { CustomExportContext, CustomImportContext, ExportModuleOutputFormat, ModuleType } from '../../services/interop/types';
 import shim from '../../shim';
 import { fileContentEqual, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, exportDir, supportDir } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
@@ -20,6 +20,7 @@ async function recreateExportDir() {
 	await fs.mkdirp(dir);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function fieldsEqual(model1: any, model2: any, fieldNames: string[]) {
 	for (let i = 0; i < fieldNames.length; i++) {
 		const f = fieldNames[i];
@@ -30,6 +31,7 @@ function fieldsEqual(model1: any, model2: any, fieldNames: string[]) {
 function memoryExportModule() {
 	interface Item {
 		type: number;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		object: any;
 	}
 
@@ -52,7 +54,7 @@ function memoryExportModule() {
 
 	const module: Module = makeExportModule({
 		description: 'Memory Export Module',
-		format: 'memory',
+		format: ExportModuleOutputFormat.Memory,
 		fileExtensions: ['memory'],
 	}, () => {
 		return new InteropService_Exporter_Custom({
@@ -60,6 +62,7 @@ function memoryExportModule() {
 				result.destPath = context.destPath;
 			},
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			onProcessItem: async (_context: CustomExportContext, itemType: number, item: any) => {
 				result.items.push({
 					type: itemType,
@@ -67,6 +70,7 @@ function memoryExportModule() {
 				});
 			},
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			onProcessResource: async (_context: CustomExportContext, resource: any, filePath: string) => {
 				result.resources.push({
 					filePath: filePath,
@@ -139,6 +143,7 @@ describe('services_InteropService', () => {
 		await service.import({ path: filePath });
 
 		const allFolders = await Folder.all();
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		expect(allFolders.map((f: any) => f.title).sort().join(' - ')).toBe('folder - folder (1)');
 	}));
 
@@ -416,7 +421,7 @@ describe('services_InteropService', () => {
 
 		const outDir = exportDir();
 
-		await service.export({ path: outDir, format: 'md', sourceNoteIds: [note11.id, note21.id] });
+		await service.export({ path: outDir, format: ExportModuleOutputFormat.Markdown, sourceNoteIds: [note11.id, note21.id] });
 
 		// verify that the md files exist
 		expect(await shim.fsDriver().exists(`${outDir}/folder1`)).toBe(true);
@@ -441,7 +446,7 @@ describe('services_InteropService', () => {
 
 		const outDir = exportDir();
 
-		await service.export({ path: outDir, format: 'md' });
+		await service.export({ path: outDir, format: ExportModuleOutputFormat.Markdown });
 
 		expect(await shim.fsDriver().exists(`${outDir}/folder1/生活.md`)).toBe(true);
 		expect(await shim.fsDriver().exists(`${outDir}/folder1/生活-1.md`)).toBe(true);
@@ -461,7 +466,7 @@ describe('services_InteropService', () => {
 
 		await service.export({
 			path: exportDir(),
-			format: 'md',
+			format: ExportModuleOutputFormat.Markdown,
 			sourceFolderIds: [folder1.id],
 		});
 
@@ -478,7 +483,7 @@ describe('services_InteropService', () => {
 
 		await service.export({
 			path: exportDir(),
-			format: 'md',
+			format: ExportModuleOutputFormat.Markdown,
 			sourceFolderIds: [folder1.id],
 			includeConflicts: false,
 		});
@@ -490,7 +495,7 @@ describe('services_InteropService', () => {
 
 		await service.export({
 			path: exportDir(),
-			format: 'md',
+			format: ExportModuleOutputFormat.Markdown,
 			sourceFolderIds: [folder1.id],
 			includeConflicts: true,
 		});
@@ -515,7 +520,7 @@ describe('services_InteropService', () => {
 
 		const result = await service.export({
 			path: exportDir(),
-			format: 'md',
+			format: ExportModuleOutputFormat.Markdown,
 		});
 
 		expect(result.warnings.length).toBe(0);
@@ -533,7 +538,7 @@ describe('services_InteropService', () => {
 		service.registerModule(module);
 
 		await service.export({
-			format: 'memory',
+			format: ExportModuleOutputFormat.Memory,
 		});
 
 		const exportedNote = (result.items.find(i => i.type === ModelType.Note)).object as NoteEntity;
@@ -591,6 +596,7 @@ describe('services_InteropService', () => {
 
 		const filePath = `${exportDir()}/example.test`;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const result: any = {
 			destPath: '',
 			itemTypes: [],
@@ -603,7 +609,8 @@ describe('services_InteropService', () => {
 		const module: Module = makeExportModule({
 			type: ModuleType.Exporter,
 			description: 'Test Export Module',
-			format: 'testing',
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			format: 'testing' as any,
 			fileExtensions: ['test'],
 		}, () => {
 			return new InteropService_Exporter_Custom({
@@ -611,11 +618,13 @@ describe('services_InteropService', () => {
 					result.destPath = context.destPath;
 				},
 
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				onProcessItem: async (_context: CustomExportContext, itemType: number, item: any) => {
 					result.itemTypes.push(itemType);
 					result.items.push(item);
 				},
 
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				onProcessResource: async (_context: CustomExportContext, resource: any, filePath: string) => {
 					result.resources.push(resource);
 					result.filePaths.push(filePath);
@@ -630,13 +639,15 @@ describe('services_InteropService', () => {
 		const service = InteropService.instance();
 		service.registerModule(module);
 		await service.export({
-			format: 'testing',
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			format: 'testing' as any,
 			path: filePath,
 		});
 
 		expect(result.destPath).toBe(filePath);
 		expect(result.itemTypes.sort().join('_')).toBe('1_1_2_4');
 		expect(result.items.length).toBe(4);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		expect(result.items.map((o: any) => o.title).sort().join('_')).toBe('folder1_note1_note2_photo.jpg');
 		expect(result.resources.length).toBe(1);
 		expect(result.resources[0].title).toBe('photo.jpg');

@@ -5,23 +5,25 @@
 // same effect.
 //
 // It's still reliable because the lifecyle of adding the CSS and removing on
-// unmout is handled properly. There should only be one such component on the
+// unmount is handled properly. There should only be one such component on the
 // page.
 
 import { useEffect, useState } from 'react';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import themeToCss from '@joplin/lib/services/style/themeToCss';
-import { addExtraStyles, themeById } from '@joplin/lib/theme';
+import { themeStyle } from '@joplin/lib/theme';
 
 interface Props {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	themeId: any;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function(props: Props): any {
 	const [styleSheetContent, setStyleSheetContent] = useState('');
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
-		const theme = addExtraStyles(themeById(props.themeId));
+		const theme = themeStyle(props.themeId);
 		const themeCss = themeToCss(theme);
 		if (event.cancelled) return;
 		setStyleSheetContent(themeCss);

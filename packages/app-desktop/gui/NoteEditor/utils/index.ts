@@ -9,7 +9,11 @@ export async function htmlToMarkdown(markupLanguage: number, html: string, origi
 
 	if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN) {
 		const htmlToMd = new HtmlToMd();
-		newBody = htmlToMd.parse(html, { preserveImageTagsWithSize: true });
+		newBody = htmlToMd.parse(html, {
+			preserveImageTagsWithSize: true,
+			preserveNestedTables: true,
+			preserveColorStyles: true,
+		});
 		newBody = await Note.replaceResourceExternalToInternalLinks(newBody, { useAbsolutePaths: true });
 	} else {
 		newBody = await Note.replaceResourceExternalToInternalLinks(html, { useAbsolutePaths: true });
@@ -19,12 +23,15 @@ export async function htmlToMarkdown(markupLanguage: number, html: string, origi
 	return newBody;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function formNoteToNote(formNote: FormNote): Promise<any> {
 	return {
 		id: formNote.id,
-		// Should also include parent_id so that the reducer can know in which folder the note should go when saving
+		// Should also include parent_id and deleted_time so that the reducer
+		// can know in which folder the note should go when saving.
 		// https://discourse.joplinapp.org/t/experimental-wysiwyg-editor-in-joplin/6915/57?u=laurent
 		parent_id: formNote.parent_id,
+		deleted_time: formNote.deleted_time,
 		title: formNote.title,
 		body: formNote.body,
 	};

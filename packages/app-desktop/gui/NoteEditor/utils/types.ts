@@ -1,14 +1,16 @@
-// eslint-disable-next-line no-unused-vars
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
-import { State as ShareState } from '@joplin/lib/services/share/reducer';
 import { MarkupLanguage } from '@joplin/renderer';
-import { RenderResult, RenderResultPluginAsset } from '@joplin/renderer/MarkupToHtml';
-import { MarkupToHtmlOptions } from './useMarkupToHtml';
+import { RenderResult, RenderResultPluginAsset } from '@joplin/renderer/types';
+import { Dispatch } from 'redux';
+import { ProcessResultsRow } from '@joplin/lib/services/search/SearchEngine';
+import { DropHandler } from './useDropHandler';
 
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
+	themeId?: number;
+	whiteBackgroundNoteRendering?: boolean;
 }
 
 export interface ToolbarButtonInfos {
@@ -16,28 +18,34 @@ export interface ToolbarButtonInfos {
 }
 
 export interface NoteEditorProps {
-	// style: any;
 	noteId: string;
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	selectedNoteIds: string[];
 	selectedFolderId: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	notes: any[];
 	watchedNoteFiles: string[];
 	isProvisional: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	editorNoteStatuses: any;
 	syncStarted: boolean;
+	decryptionStarted: boolean;
 	bodyEditor: string;
 	notesParentType: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	selectedNoteTags: any[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	lastEditorScrollPercents: any;
 	selectedNoteHash: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	searches: any[];
 	selectedSearchId: string;
 	customCss: string;
 	noteVisiblePanes: string[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	watchedResources: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	highlightedWords: any[];
 	plugins: PluginStates;
 	toolbarButtonInfos: ToolbarButtonInfo[];
@@ -46,38 +54,81 @@ export interface NoteEditorProps {
 	contentMaxWidth: number;
 	isSafeMode: boolean;
 	useCustomPdfViewer: boolean;
-	shareCache: ShareState;
+	shareCacheSetting: string;
 	syncUserId: string;
+	searchResults: ProcessResultsRow[];
 }
 
+export interface NoteBodyEditorRef {
+	content(): string|Promise<string>;
+	resetScroll(): void;
+	scrollTo(options: ScrollOptions): void;
+
+	supportsCommand(name: string): boolean|Promise<boolean>;
+	execCommand(command: CommandValue): Promise<void>;
+}
+
+export interface MarkupToHtmlOptions {
+	replaceResourceInternalToExternalLinks?: boolean;
+	resourceInfos?: ResourceInfos;
+	contentMaxWidth?: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	plugins?: Record<string, any>;
+	bodyOnly?: boolean;
+	mapsToLine?: boolean;
+	useCustomPdfViewer?: boolean;
+	noteId?: string;
+	vendorDir?: string;
+	platformName?: string;
+	allowedFilePrefixes?: string[];
+	whiteBackgroundNoteRendering?: boolean;
+}
+
+export type MarkupToHtmlHandler = (markupLanguage: MarkupLanguage, markup: string, options: MarkupToHtmlOptions)=> Promise<RenderResult>;
+export type HtmlToMarkdownHandler = (markupLanguage: number, html: string, originalCss: string)=> Promise<string>;
+
 export interface NoteBodyEditorProps {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	ref: any;
 	themeId: number;
+
+	// When this is true it means the note must always be rendered using a white
+	// background theme. This applies to the Markdown editor note view, and to
+	// the RTE. It does not apply to other elements such as the toolbar, dialogs
+	// or the CodeMirror editor. This is used to correctly render HTML notes and
+	// avoid cases where black text is rendered over a dark background.
+	whiteBackgroundNoteRendering: boolean;
+
 	content: string;
 	contentKey: string;
 	contentMarkupLanguage: number;
 	contentOriginalCss: string;
 	onChange(event: OnChangeEvent): void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onWillChange(event: any): void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onMessage(event: any): void;
-	onScroll(event: any): void;
-	markupToHtml: (markupLanguage: MarkupLanguage, markup: string, options: MarkupToHtmlOptions)=> Promise<RenderResult>;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	htmlToMarkdown: Function;
+	onScroll(event: { percent: number }): void;
+	markupToHtml: MarkupToHtmlHandler;
+	htmlToMarkdown: HtmlToMarkdownHandler;
 	allAssets: (markupLanguage: MarkupLanguage, options: AllAssetsOptions)=> Promise<RenderResultPluginAsset[]>;
 	disabled: boolean;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	noteToolbar: any;
 	setLocalSearchResultCount(count: number): void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	searchMarkers: any;
 	visiblePanes: string[];
 	keyboardMode: string;
 	resourceInfos: ResourceInfos;
+	resourceDirectory: string;
 	locale: string;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onDrop: Function;
+	onDrop: DropHandler;
 	noteToolbarButtonInfos: ToolbarButtonInfo[];
 	plugins: PluginStates;
 	fontSize: number;
@@ -85,6 +136,7 @@ export interface NoteBodyEditorProps {
 	isSafeMode: boolean;
 	noteId: string;
 	useCustomPdfViewer: boolean;
+	watchedNoteFiles: string[];
 }
 
 export interface FormNote {
@@ -93,10 +145,12 @@ export interface FormNote {
 	body: string;
 	parent_id: string;
 	is_todo: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	bodyEditorContent?: any;
 	markup_language: number;
 	user_updated_time: number;
 	encryption_applied: number;
+	deleted_time: number;
 
 	hasChanged: boolean;
 
@@ -136,6 +190,7 @@ export function defaultFormNote(): FormNote {
 	return {
 		id: '',
 		parent_id: '',
+		deleted_time: 0,
 		title: '',
 		body: '',
 		is_todo: 0,
@@ -151,7 +206,9 @@ export function defaultFormNote(): FormNote {
 }
 
 export interface ResourceInfo {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	localState: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	item: any;
 }
 
@@ -167,22 +224,27 @@ export enum ScrollOptionTypes {
 
 export interface ScrollOptions {
 	type: ScrollOptionTypes;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	value: any;
 }
 
 export interface OnChangeEvent {
 	changeId: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	content: any;
 }
 
 export interface EditorCommand {
 	name: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	value: any;
 }
 
 export interface CommandValue {
 	name: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	args?: any; // Should be an array for CodeMirror or an object for TinyMCE
 	ui?: boolean; // For TinyMCE only
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	value?: any; // For TinyMCE only
 }

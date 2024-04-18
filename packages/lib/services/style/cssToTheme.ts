@@ -2,7 +2,7 @@ import { Theme } from '../../themes/type';
 
 // Need to include it that way due to a bug in the lib:
 // https://github.com/reworkcss/css/pull/146#issuecomment-740412799
-const cssParse = require('css/lib/parse');
+import { CssRuleAST, CssTypes, parse as cssParse } from '@adobe/css-tools';
 
 function formatCssToThemeVariable(cssVariable: string): string {
 	const elements = cssVariable.substr(2).split('-');
@@ -27,15 +27,24 @@ export default function cssToTheme(css: string, sourceFilePath: string): Theme {
 		source: sourceFilePath,
 	});
 
-	if (!o?.stylesheet?.rules?.length) throw new Error(`Invalid CSS color file: ${sourceFilePath}`);
+	const rules = o?.stylesheet?.rules;
 
-	// Need "as any" because outdated TS definition file
+	if (!rules?.length) throw new Error(`Invalid CSS color file: ${sourceFilePath}`);
 
-	const rootRule = o.stylesheet.rules[0];
-	if (!rootRule.selectors.includes(':root')) throw new Error('`:root` rule not found');
+	let rootRule: CssRuleAST|null = null;
+	for (const rule of rules) {
+		if (rule.type === CssTypes.rule) {
+			rootRule = rule;
+			break;
+		}
+	}
 
+	if (!rootRule || !rootRule.selectors.includes(':root')) throw new Error('`:root` rule not found');
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const declarations: any[] = rootRule.declarations;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {};
 	for (const declaration of declarations) {
 		if (declaration.type !== 'declaration') continue; // Skip comment lines

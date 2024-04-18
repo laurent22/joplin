@@ -66,6 +66,7 @@ export const defaultState: State = {
 };
 
 export const parseShareCache = (serialized: string): State => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	let raw: any = {};
 	try {
 		raw = JSON.parse(serialized);
@@ -80,10 +81,6 @@ export const parseShareCache = (serialized: string): State => {
 		shareInvitations: raw.shareInvitations || [],
 		processingShareInvitationResponse: false,
 	};
-};
-
-export const readFromSettings = (state: RootState): State => {
-	return parseShareCache(state.settings['sync.shareCache']);
 };
 
 export function isSharedFolderOwner(state: RootState, folderId: string): boolean {
@@ -102,6 +99,7 @@ export function isRootSharedFolder(folder: FolderEntity): boolean {
 	return !!folder.share_id && !folder.parent_id;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const reducer = (draftRoot: Draft<RootState>, action: any) => {
 	if (action.type.indexOf('SHARE_') !== 0) return;
 
@@ -123,6 +121,7 @@ const reducer = (draftRoot: Draft<RootState>, action: any) => {
 		case 'SHARE_USER_UPDATE_ONE':
 
 			{
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				const shareUser = (draft.shareUsers as any)[action.shareId].find((su: StateShareUser) => su.id === action.shareUser.id);
 				if (!shareUser) throw new Error(`No such user: ${JSON.stringify(action)}`);
 

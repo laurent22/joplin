@@ -11,10 +11,14 @@
 // https://github.com/facebook/metro/issues/1#issuecomment-511228599
 
 const path = require('path');
+const { getDefaultConfig } = require('metro-config');
 
 const localPackages = {
 	'@joplin/lib': path.resolve(__dirname, '../lib/'),
 	'@joplin/renderer': path.resolve(__dirname, '../renderer/'),
+	'@joplin/turndown': path.resolve(__dirname, '../turndown/'),
+	'@joplin/turndown-plugin-gfm': path.resolve(__dirname, '../turndown-plugin-gfm/'),
+	'@joplin/editor': path.resolve(__dirname, '../editor/'),
 	'@joplin/tools': path.resolve(__dirname, '../tools/'),
 	'@joplin/utils': path.resolve(__dirname, '../utils/'),
 	'@joplin/fork-htmlparser2': path.resolve(__dirname, '../fork-htmlparser2/'),
@@ -42,6 +46,8 @@ for (const [, v] of Object.entries(localPackages)) {
 	watchedFolders.push(v);
 }
 
+const defaultConfig = getDefaultConfig.getDefaultValues(__dirname);
+
 module.exports = {
 	transformer: {
 		getTransformOptions: async () => ({
@@ -52,6 +58,13 @@ module.exports = {
 		}),
 	},
 	resolver: {
+		assetExts: [
+			...defaultConfig.resolver.assetExts,
+
+			// Allow loading .jpl plugin files
+			'jpl',
+		],
+
 		// This configuration allows you to build React-Native modules and test
 		// them without having to publish the module. Any exports provided by
 		// your source should be added to the "target" parameter. Any import not
@@ -72,7 +85,7 @@ module.exports = {
 					}
 					return path.join(process.cwd(), `node_modules/${name}`);
 				},
-			}
+			},
 		),
 	},
 	projectRoot: path.resolve(__dirname),

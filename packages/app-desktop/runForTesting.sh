@@ -2,6 +2,8 @@
 
 # Setup the sync parameters for user X and create a few folders and notes to
 # allow sharing. Also calls the API to create the test users and clear the data.
+# This script was setup for the desktop app but can now also be used to test the
+# CLI using the `clix` users.
 
 # ----------------------------------------------------------------------------------
 # For example, to setup a user for sharing, and another as recipient with E2EE
@@ -37,6 +39,13 @@
 
 # ./runForTesting.sh 1 createTeams,createData,resetTeam,sync && ./runForTesting.sh 2 resetTeam,sync && ./runForTesting.sh 1
 
+# ----------------------------------------------------------------------------------
+# Testing the CLI app with commands:
+# ----------------------------------------------------------------------------------
+
+# ./runForTesting.sh cli1 createUsers,createData,reset,sync
+# ./runForTesting.sh cli1 -- import /path/to/file.jex
+
 set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
@@ -49,6 +58,7 @@ fi
 
 USER_NUM=$1
 USER_PROFILE_NUM=$USER_NUM
+IS_DESKTOP=1
 
 if [ "$USER_NUM" = "1a" ]; then
 	USER_NUM=1
@@ -68,6 +78,18 @@ fi
 if [ "$USER_NUM" = "2b" ]; then
 	USER_NUM=2
 	USER_PROFILE_NUM=2b
+fi
+
+if [ "$USER_NUM" = "cli1" ]; then
+	USER_NUM=1
+	USER_PROFILE_NUM=1
+	IS_DESKTOP=0
+fi
+
+if [ "$USER_NUM" = "cli1a" ]; then
+	USER_NUM=1
+	USER_PROFILE_NUM=1a
+	IS_DESKTOP=0
 fi
 
 COMMANDS=($(echo $2 | tr "," "\n"))
@@ -135,6 +157,10 @@ do
 	
 		echo "sync --use-lock 0" >> "$CMD_FILE" 
 
+	elif [[ $CMD == "--" ]]; then
+
+		break
+
 	else
 	
 		echo "Unknown command: $CMD"
@@ -146,9 +172,22 @@ done
 cd "$ROOT_DIR/packages/app-cli"
 yarn start --profile "$PROFILE_DIR" batch "$CMD_FILE"
 
-if [[ $COMMANDS != "" ]]; then
-	exit 0
+if [[ $CMD != "--" ]]; then
+	if [[ $COMMANDS != "" ]]; then
+		exit 0
+	fi
 fi
 
-cd "$ROOT_DIR/packages/app-desktop"
-yarn start --profile "$PROFILE_DIR"
+if [ "$IS_DESKTOP" = "1" ]; then
+	cd "$ROOT_DIR/packages/app-desktop"
+	yarn start --profile "$PROFILE_DIR"
+else
+	cd "$ROOT_DIR/packages/app-cli"
+	if [[ $CMD == "--" ]]; then
+		shift
+		shift
+		yarn start --profile "$PROFILE_DIR" "$@"
+	else
+		yarn start --profile "$PROFILE_DIR"
+	fi	
+fi

@@ -5,8 +5,9 @@ import bridge from './services/bridge';
 import KvStore from '@joplin/lib/services/KvStore';
 import * as ArrayUtils from '@joplin/lib/ArrayUtils';
 import { CheckForUpdateOptions, extractVersionInfo, GitHubRelease } from './utils/checkForUpdatesUtils';
-const packageInfo = require('./packageInfo.js');
-const compareVersions = require('compare-versions');
+import { PackageInfo } from '@joplin/lib/versionInfo';
+import { compareVersions } from 'compare-versions';
+const packageInfo: PackageInfo = require('./packageInfo.js');
 
 const logger = Logger.create('checkForUpdates');
 
@@ -23,8 +24,8 @@ function onCheckEnded() {
 	isCheckingForUpdate_ = false;
 }
 
-async function fetchLatestRelease() {
-	const response = await shim.fetch('https://api.github.com/repos/laurent22/joplin/releases');
+async function fetchLatestReleases() {
+	const response = await shim.fetch('https://objects.joplinusercontent.com/r/releases');
 
 	if (!response.ok) {
 		const responseText = await response.text();
@@ -63,6 +64,7 @@ async function addSkippedVersion(s: string) {
 	await KvStore.instance().setValue('updateCheck::skippedVersions', JSON.stringify(versions));
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default async function checkForUpdates(inBackground: boolean, parentWindow: any, options: CheckForUpdateOptions) {
 	if (isCheckingForUpdate_) {
 		logger.info('Skipping check because it is already running');
@@ -76,7 +78,7 @@ export default async function checkForUpdates(inBackground: boolean, parentWindo
 	logger.info(`Checking with options ${JSON.stringify(options)}`);
 
 	try {
-		const releases = await fetchLatestRelease();
+		const releases = await fetchLatestReleases();
 		const release = extractVersionInfo(releases, process.platform, process.arch, shim.isPortable(), options);
 
 		logger.info(`Current version: ${packageInfo.version}`);
@@ -113,7 +115,7 @@ export default async function checkForUpdates(inBackground: boolean, parentWindo
 				} else if (buttonIndex === 1) {
 					await addSkippedVersion(release.version);
 				} else if (buttonIndex === 2) {
-					void bridge().openExternal('https://joplinapp.org/changelog/');
+					void bridge().openExternal('https://joplinapp.org/help/about/changelog/desktop');
 				}
 			}
 		}

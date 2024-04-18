@@ -5,7 +5,7 @@ import ItemChange from '../../../models/ItemChange';
 import Resource from '../../../models/Resource';
 import time from '../../../time';
 import resourceRemotePath from './resourceRemotePath';
-import { ApiCallFunction, LogSyncOperationFunction } from './types';
+import { ApiCallFunction, LogSyncOperationFunction, SyncAction } from './types';
 
 export default async (syncTargetId: number, cancelling: boolean, logSyncOperation: LogSyncOperationFunction, apiCall: ApiCallFunction, dispatch: Dispatch) => {
 	const deletedItems = await BaseItem.deletedItems(syncTargetId);
@@ -24,7 +24,7 @@ export default async (syncTargetId: number, cancelling: boolean, logSyncOperatio
 				await apiCall('delete', remoteContentPath);
 			}
 
-			logSyncOperation('deleteRemote', null, { id: item.item_id }, 'local has been deleted');
+			logSyncOperation(SyncAction.DeleteRemote, null, { id: item.item_id }, 'local has been deleted');
 		} catch (error) {
 			if (error.code === 'isReadOnly') {
 				let remoteContent = await apiCall('get', path);

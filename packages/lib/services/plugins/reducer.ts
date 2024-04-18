@@ -1,13 +1,18 @@
 import { Draft } from 'immer';
+import { ContainerType } from './WebviewController';
+import { ButtonSpec } from './api/types';
 
-export interface ViewInfo {
-	view: any;
-	plugin: any;
-}
-
-interface PluginViewState {
+export interface PluginViewState {
 	id: string;
 	type: string;
+	opened: boolean;
+	buttons: ButtonSpec[];
+	fitToContent?: boolean;
+	scripts?: string[];
+	html?: string;
+	commandName?: string;
+	location?: string;
+	containerType: ContainerType;
 }
 
 interface PluginViewStates {
@@ -29,6 +34,11 @@ interface PluginState {
 	views: PluginViewStates;
 }
 
+export interface ViewInfo {
+	view: PluginViewState;
+	plugin: PluginState;
+}
+
 export interface PluginStates {
 	[key: string]: PluginState;
 }
@@ -44,6 +54,7 @@ export interface PluginHtmlContents {
 export interface State {
 	plugins: PluginStates;
 	pluginHtmlContents: PluginHtmlContents;
+	allPluginsStarted: boolean;
 }
 
 export const stateRootKey = 'pluginService';
@@ -51,12 +62,13 @@ export const stateRootKey = 'pluginService';
 export const defaultState: State = {
 	plugins: {},
 	pluginHtmlContents: {},
+	allPluginsStarted: false,
 };
 
 export const utils = {
 
 	// It is best to use viewsByType instead as this method creates new objects
-	// which might trigger unecessary renders even when plugin and views haven't changed.
+	// which might trigger unnecessary renders even when plugin and views haven't changed.
 	viewInfosByType: function(plugins: PluginStates, type: string): ViewInfo[] {
 		const output: ViewInfo[] = [];
 
@@ -76,7 +88,9 @@ export const utils = {
 		return output;
 	},
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	viewsByType: function(plugins: PluginStates, type: string): any[] {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any[] = [];
 
 		for (const pluginId in plugins) {
@@ -125,6 +139,7 @@ export const utils = {
 	},
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const reducer = (draftRoot: Draft<any>, action: any) => {
 	if (action.type.indexOf('PLUGIN_') !== 0) return;
 
@@ -150,6 +165,7 @@ const reducer = (draftRoot: Draft<any>, action: any) => {
 		case 'PLUGIN_VIEW_PROP_SET':
 
 			if (action.name !== 'html') {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				(draft.plugins[action.pluginId].views[action.id] as any)[action.name] = action.value;
 			} else {
 				draft.pluginHtmlContents[action.pluginId] ??= {};
@@ -159,7 +175,13 @@ const reducer = (draftRoot: Draft<any>, action: any) => {
 
 		case 'PLUGIN_VIEW_PROP_PUSH':
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			(draft.plugins[action.pluginId].views[action.id] as any)[action.name].push(action.value);
+			break;
+
+		case 'PLUGIN_All_STARTED_SET':
+
+			draft.allPluginsStarted = action.value;
 			break;
 
 		case 'PLUGIN_CONTENT_SCRIPTS_ADD': {
@@ -173,6 +195,10 @@ const reducer = (draftRoot: Draft<any>, action: any) => {
 			});
 			break;
 		}
+
+		case 'PLUGIN_UNLOAD':
+			delete draft.plugins[action.pluginId];
+			break;
 
 		}
 	} catch (error) {
