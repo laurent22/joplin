@@ -172,15 +172,6 @@ class HtmlUtils {
 
 		return output.join(' ');
 	}
-
-	public replaceOneNoteEmbedTagsToAnchor(html: string) {
-		if (!html) return '';
-
-		const defaultTextStyle = 'font-size: 11pt; line-height: 17px;';
-
-		return html.replace(/<embed([\s\S]*?)src=["']([\s\S]*?)["']([\s\S]*?)>/gi, `<p style="${defaultTextStyle}"><a$1href="$2"$3>$2</a></p>`);
-	}
-
 }
 
 export default new HtmlUtils();
