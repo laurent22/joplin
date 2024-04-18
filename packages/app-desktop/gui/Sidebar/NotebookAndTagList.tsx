@@ -7,7 +7,8 @@ import { FolderEntity, TagsWithNoteCountEntity } from '@joplin/lib/services/data
 import useOnRenderItem from './hooks/useOnRenderItem';
 import { Dispatch } from 'redux';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import useElementHeight from '../hooks/useElementHeight';
 
 interface Props {
 	dispatch: Dispatch;
@@ -23,23 +24,6 @@ interface Props {
 	plugins: PluginStates;
 }
 
-const useListContainerHeight = (container: HTMLElement) => {
-	const [height, setHeight] = useState(500);
-
-	useEffect(() => {
-		if (!container) return () => {};
-		const observer = new ResizeObserver(() => {
-			setHeight(container.clientHeight);
-		});
-		observer.observe(container);
-
-		return () => {
-			observer.disconnect();
-		};
-	}, [container]);
-
-	return height;
-};
 
 const NotebookAndTagList: React.FC<Props> = props => {
 	const items = useSidebarListData(props);
@@ -47,7 +31,7 @@ const NotebookAndTagList: React.FC<Props> = props => {
 	const onRenderItem = useOnRenderItem(props);
 
 	const [itemListContainer, setItemListContainer] = useState<HTMLDivElement|null>(null);
-	const listHeight = useListContainerHeight(itemListContainer);
+	const listHeight = useElementHeight(itemListContainer);
 	const listStyle = useMemo(() => ({ height: listHeight }), [listHeight]);
 
 	return (
