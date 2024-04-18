@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { PureComponent, ReactElement } from 'react';
+import { PureComponent, ReactElement, RefObject } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, ViewStyle } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, ViewStyle, findNodeHandle, AccessibilityInfo } from 'react-native';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { BackButtonService } = require('../../services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
@@ -89,10 +89,12 @@ interface ScreenHeaderState {
 class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeaderState> {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private cachedStyles: any;
+	private menuOptionsRef: RefObject<View>;
 	public dialogbox?: typeof DialogBox;
 	public constructor(props: ScreenHeaderProps) {
 		super(props);
 		this.cachedStyles = {};
+		this.menuOptionsRef = React.createRef();
 	}
 
 	private styles() {
@@ -519,7 +521,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		const selectedFolder = this.props.notesParentType === 'Folder' ? Folder.byId(this.props.folders, this.props.selectedFolderId) : null;
 		const selectedFolderInTrash = itemIsInTrash(selectedFolder);
-
+		let isFirstItem = true;
 		if (!this.props.noteSelectionEnabled) {
 			for (let i = 0; i < this.props.menuOptions.length; i++) {
 				const o = this.props.menuOptions[i];
@@ -527,11 +529,20 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				if (o.isDivider) {
 					menuOptionComponents.push(<View key={`menuOption_${key++}`} style={this.styles().divider} />);
 				} else {
-					menuOptionComponents.push(
-						<MenuOption value={o.onPress} key={`menuOption_${key++}`} style={this.styles().contextMenuItem} disabled={!!o.disabled}>
-							<Text style={o.disabled ? this.styles().contextMenuItemTextDisabled : this.styles().contextMenuItemText}>{o.title}</Text>
-						</MenuOption>,
-					);
+					if (isFirstItem) {
+						menuOptionComponents.push(
+							<MenuOption ref={this.menuOptionsRef} value={o.onPress} key={`menuOption_${key++}`} style={this.styles().contextMenuItem} disabled={!!o.disabled}>
+								<Text style={o.disabled ? this.styles().contextMenuItemTextDisabled : this.styles().contextMenuItemText}>{o.title}</Text>
+							</MenuOption>,
+						);
+						isFirstItem = false;
+					} else {
+						menuOptionComponents.push(
+							<MenuOption value={o.onPress} key={`menuOption_${key++}`} style={this.styles().contextMenuItem} disabled={!!o.disabled}>
+								<Text style={o.disabled ? this.styles().contextMenuItemTextDisabled : this.styles().contextMenuItemText}>{o.title}</Text>
+							</MenuOption>,
+						);
+					}
 				}
 			}
 
@@ -643,7 +654,14 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		const menuComp =
 			!menuOptionComponents.length || !showContextMenuButton ? null : (
-				<Menu onSelect={value => this.menu_select(value)} style={this.styles().contextMenu}>
+				<Menu onSelect={value => this.menu_select(value)} style={this.styles().contextMenu} onOpen={() => {
+					setTimeout(() => {
+						const menuFirstItem = findNodeHandle(this.menuOptionsRef.current);
+						if (menuFirstItem) {
+							AccessibilityInfo.setAccessibilityFocus(menuFirstItem);
+						}
+					}, 500);
+				}} >
 					<MenuTrigger style={contextMenuStyle}>
 						<View accessibilityLabel={_('Actions')}>
 							<Icon name="ellipsis-vertical" style={this.styles().contextMenuTrigger} />
