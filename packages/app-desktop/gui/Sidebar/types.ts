@@ -1,6 +1,10 @@
 import { FolderEntity, TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
 import { DragEventHandler, MouseEventHandler, MouseEvent as ReactMouseEvent } from 'react';
 
+export enum HeaderId {
+	TagHeader = 'tagHeader',
+	NotebookHeader = 'notebookHeader',
+}
 
 export enum ListItemType {
 	Header = 'header',
@@ -13,8 +17,8 @@ export type HeaderListItem = {
 	kind: ListItemType.Header;
 	label: string;
 	iconName: string;
-	id: string;
-	onClick: ((headerId: string, event: ReactMouseEvent<HTMLElement>)=> void)|null;
+	id: HeaderId;
+	onClick: ((headerId: HeaderId, event: ReactMouseEvent<HTMLElement>)=> void)|null;
 	onPlusButtonClick: MouseEventHandler<HTMLElement>|null;
 	extraProps: Record<string, string>;
 	supportsFolderDrop: boolean;

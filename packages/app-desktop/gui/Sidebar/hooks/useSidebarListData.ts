@@ -1,9 +1,10 @@
 import { useMemo, useRef } from 'react';
-import { FolderListItem, HeaderListItem, ListItem, ListItemType, TagListItem } from '../types';
+import { FolderListItem, HeaderId, HeaderListItem, ListItem, ListItemType, TagListItem } from '../types';
 import { FolderEntity, TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
 import { renderFolders, renderTags } from '@joplin/lib/components/shared/side-menu-shared';
 import { _ } from '@joplin/lib/locale';
 import CommandService from '@joplin/lib/services/CommandService';
+import Setting from '@joplin/lib/models/Setting';
 
 interface Props {
 	tags: TagsWithNoteCountEntity[];
@@ -12,10 +13,18 @@ interface Props {
 	selectedTagId: string;
 	selectedFolderId: string;
 	collapsedFolderIds: string[];
+	folderHeaderIsExpanded: boolean;
+	tagHeaderIsExpanded: boolean;
 }
 
 const onAddFolderButtonClick = () => {
 	void CommandService.instance().execute('newFolder');
+};
+
+const onHeaderClick = (headerId: HeaderId) => {
+	const settingKey = headerId === HeaderId.TagHeader ? 'tagHeaderIsExpanded' : 'folderHeaderIsExpanded';
+	const current = Setting.value(settingKey);
+	Setting.setValue(settingKey, !current);
 };
 
 const useSidebarListData = (props: Props): ListItem[] => {
@@ -65,8 +74,8 @@ const useSidebarListData = (props: Props): ListItem[] => {
 			kind: ListItemType.Header,
 			label: _('Notebooks'),
 			iconName: 'icon-notebooks',
-			id: 'folderHeader',
-			onClick: null,
+			id: HeaderId.NotebookHeader,
+			onClick: onHeaderClick,
 			onPlusButtonClick: onAddFolderButtonClick,
 			extraProps: {
 				['data-folder-id']: '',
@@ -74,27 +83,33 @@ const useSidebarListData = (props: Props): ListItem[] => {
 			},
 			supportsFolderDrop: true,
 		};
+		const notebooksSectionContent: ListItem[] = props.folderHeaderIsExpanded ? [
+			{ kind: ListItemType.AllNotes },
+			...folderItems.items,
+		] : [];
+
 		const tagsHeader: HeaderListItem = {
 			kind: ListItemType.Header,
 			label: _('Tags'),
 			iconName: 'icon-tags',
-			id: 'tagHeader',
-			onClick: null,
+			id: HeaderId.TagHeader,
+			onClick: onHeaderClick,
 			onPlusButtonClick: null,
 			extraProps: {
 				toggleblock: '1',
 			},
 			supportsFolderDrop: false,
 		};
+		const tagsSectionContent: ListItem[] = props.tagHeaderIsExpanded ? tagItems.items : [];
+
 		const items: ListItem[] = [
 			notebooksHeader,
-			{ kind: ListItemType.AllNotes },
-			...folderItems.items,
+			...notebooksSectionContent,
 			tagsHeader,
-			...tagItems.items,
+			...tagsSectionContent,
 		];
 		return items;
-	}, [tagItems, folderItems]);
+	}, [tagItems, folderItems, props.folderHeaderIsExpanded, props.tagHeaderIsExpanded]);
 };
 
 export default useSidebarListData;

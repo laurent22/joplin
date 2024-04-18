@@ -18,6 +18,8 @@ interface Props {
 	selectedTagId: string;
 	selectedFolderId: string;
 	collapsedFolderIds: string[];
+	folderHeaderIsExpanded: boolean;
+	tagHeaderIsExpanded: boolean;
 	plugins: PluginStates;
 }
 
@@ -74,6 +76,8 @@ const mapStateToProps = (state: AppState) => {
 		selectedTagId: state.selectedTagId,
 		collapsedFolderIds: state.collapsedFolderIds,
 		plugins: state.pluginService.plugins,
+		tagHeaderIsExpanded: state.settings.tagHeaderIsExpanded,
+		folderHeaderIsExpanded: state.settings.folderHeaderIsExpanded,
 	};
 };
 
