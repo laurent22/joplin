@@ -81,7 +81,7 @@ type DownloadedMediaFile = {
 	path: string;
 };
 
-interface ResourceFromPath extends DownloadedMediaFile {
+export interface ResourceFromPath extends DownloadedMediaFile {
 	resource: ResourceEntity;
 }
 
