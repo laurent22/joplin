@@ -1,5 +1,3 @@
-
-
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 
@@ -83,4 +81,3 @@ test.describe('sidebar', () => {
 		await expect(expandButton).not.toBeVisible();
 	});
 });
-
