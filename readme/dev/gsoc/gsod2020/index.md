@@ -110,7 +110,7 @@ All students will create a report page by tool up to their choice. Keep this up-
 
 ## Instructions for mentors
 ### Ideas 
-If you're a Joplin developer or motivated user and you wish to participate in Summer of Code, make a proposal in the the [Features category of the Joplin Forum](https://discourse.joplinapp.org/c/features), based what your Joplin project needs.
+If you're a Joplin developer or motivated user and you wish to participate in Summer of Code, make a proposal in the [Features category of the Joplin Forum](https://discourse.joplinapp.org/c/features), based what your Joplin project needs.
 
 If you wish to mentor, please read the [GSoD Mentor Guide](https://developers.google.com/season-of-docs/docs/admin-guide) and the [Season of Doc FAQ](https://developers.google.com/season-of-docs/docs/faq). Also, please contact the staff and get the go-ahead from them before editing the ideas page, adding your idea.
 
