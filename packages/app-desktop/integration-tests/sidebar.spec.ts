@@ -52,12 +52,13 @@ test.describe('sidebar', () => {
 		await expect(notebookAHeader).toBeAttached();
 		await notebookAHeader.click();
 
-		await sidebar.forceUpdateSorting(electronApp);
-
 		await mainScreen.createNewNote('Test note A');
 
+		await sidebar.forceUpdateSorting(electronApp);
+
 		await notebookAHeader.click();
-		await expect(mainWindow.locator(':focus')).toHaveText('Notebook A');
+		// Only check beginning of text -- may have a note count number
+		await expect(mainWindow.locator(':focus')).toHaveText(/^Notebook A/);
 
 		// Tab should switch to the notebook list
 		await mainWindow.keyboard.press('Tab');
@@ -68,7 +69,6 @@ test.describe('sidebar', () => {
 		await mainWindow.keyboard.press('Tab');
 		await mainWindow.keyboard.up('Shift');
 
-		// Only check beginning of text -- may have a note count number
 		await expect(mainWindow.locator(':focus')).toHaveText(/^Notebook A/);
 	});
 
