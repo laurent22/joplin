@@ -1022,8 +1022,6 @@ packages/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo.js
 packages/lib/services/plugins/reducer.js
 packages/lib/services/plugins/utils/createViewHandle.js
 packages/lib/services/plugins/utils/executeSandboxCall.js
-packages/lib/services/plugins/utils/getPluginBugReportInfo.test.js
-packages/lib/services/plugins/utils/getPluginBugReportInfo.js
 packages/lib/services/plugins/utils/getPluginNamespacedSettingKey.js
 packages/lib/services/plugins/utils/getPluginSettingKeyPrefix.js
 packages/lib/services/plugins/utils/getPluginSettingValue.js
