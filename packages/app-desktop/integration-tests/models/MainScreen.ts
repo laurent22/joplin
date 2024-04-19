@@ -20,7 +20,6 @@ export default class MainScreen {
 
 	public async waitFor() {
 		await this.newNoteButton.waitFor();
-		await this.noteEditor.waitFor();
 		await this.noteListContainer.waitFor();
 	}
 

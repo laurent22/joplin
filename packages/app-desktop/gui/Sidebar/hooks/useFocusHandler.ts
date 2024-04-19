@@ -1,4 +1,4 @@
-import { RefObject, useCallback, useEffect, useMemo, useRef } from 'react';
+import { MutableRefObject, RefObject, useCallback, useEffect, useMemo, useRef } from 'react';
 import { ListItem } from '../types';
 import ItemList from '../../ItemList';
 import { focus } from '@joplin/lib/utils/focusHandler';
@@ -10,12 +10,23 @@ interface Props {
 	listItems: ListItem[];
 }
 
-const useFocusHandler = (props: Props) => {
-	const { itemListRef, selectedListElement, selectedIndex, listItems } = props;
+const useFocusAfterNextRenderHandler = (
+	shouldFocusAfterNextRender: MutableRefObject<boolean>,
+	selectedListElement: HTMLElement|null,
+) => {
+	useEffect(() => {
+		if (!shouldFocusAfterNextRender.current || !selectedListElement) return;
+		focus('FolderAndTagList/useFocusHandler/afterRender', selectedListElement);
+		shouldFocusAfterNextRender.current = false;
+	}, [selectedListElement, shouldFocusAfterNextRender]);
+};
 
-	// When set to true, when selectedListElement next changes, select it.
-	const shouldFocusNextSelectedItem = useRef(false);
-
+const useRefocusOnSelectionChangeHandler = (
+	itemListRef: RefObject<ItemList<ListItem>>,
+	shouldFocusAfterNextRender: MutableRefObject<boolean>,
+	listItems: ListItem[],
+	selectedIndex: number,
+) => {
 	// We keep track of the key to avoid scrolling unnecessarily. For example, when the
 	// selection's index changes because a notebook is expanded/collapsed, we don't necessarily
 	// want to scroll the selection into view.
@@ -34,28 +45,31 @@ const useFocusHandler = (props: Props) => {
 		if (!itemListRef.current || !selectedItemKey) return;
 
 		const hasFocus = !!itemListRef.current.container.querySelector(':scope :focus');
-		shouldFocusNextSelectedItem.current = hasFocus;
+		shouldFocusAfterNextRender.current = hasFocus;
 
 		if (hasFocus) {
 			itemListRef.current.makeItemIndexVisible(selectedIndexRef.current);
 		}
-	}, [selectedItemKey, itemListRef]);
+	}, [selectedItemKey, itemListRef, shouldFocusAfterNextRender]);
+};
 
-	useEffect(() => {
-		if (!shouldFocusNextSelectedItem.current || !selectedListElement) return;
-		focus('FolderAndTagList/useFocusHandler/afterRender', selectedListElement);
-		shouldFocusNextSelectedItem.current = false;
-	}, [selectedListElement]);
+const useFocusHandler = (props: Props) => {
+	const { itemListRef, selectedListElement, selectedIndex, listItems } = props;
+
+	// When set to true, when selectedListElement next changes, select it.
+	const shouldFocusAfterNextRender = useRef(false);
+
+	useRefocusOnSelectionChangeHandler(itemListRef, shouldFocusAfterNextRender, listItems, selectedIndex);
+	useFocusAfterNextRenderHandler(shouldFocusAfterNextRender, selectedListElement);
 
 	const focusSidebar = useCallback(() => {
-		const selectedIndex = selectedIndexRef.current;
 		if (!selectedListElement || !itemListRef.current.isIndexVisible(selectedIndex)) {
-			itemListRef.current.makeItemIndexVisible(selectedIndexRef.current);
-			shouldFocusNextSelectedItem.current = true;
+			itemListRef.current.makeItemIndexVisible(selectedIndex);
+			shouldFocusAfterNextRender.current = true;
 		} else {
 			focus('FolderAndTagList/useFocusHandler/focusSidebar', selectedListElement);
 		}
-	}, [selectedListElement, itemListRef]);
+	}, [selectedListElement, selectedIndex, itemListRef]);
 
 	return { focusSidebar };
 };

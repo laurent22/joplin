@@ -37,4 +37,11 @@ export default class Sidebar {
 	public async sortByTitle(electronApp: ElectronApplication) {
 		return this.sortBy(electronApp, 'Title');
 	}
+
+	public async forceUpdateSorting(electronApp: ElectronApplication) {
+		// By default, notebooks will not be in the correct position in the list for about 1 second.
+		// Change the notebook list sort order to force an immediate refresh.
+		await this.sortByDate(electronApp);
+		await this.sortByTitle(electronApp);
+	}
 }

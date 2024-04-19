@@ -27,10 +27,7 @@ test.describe('sidebar', () => {
 		await expect(notebookBHeader).toBeVisible();
 		await notebookBHeader.click();
 
-		// By default, notebooks will not be in the correct position in the list for about 1 second.
-		// Change the notebook list sort order to force an immediate refresh.
-		await sidebar.sortByDate(electronApp);
-		await sidebar.sortByTitle(electronApp);
+		await sidebar.forceUpdateSorting(electronApp);
 
 		await notebookBHeader.click();
 		await mainWindow.keyboard.press('ArrowUp');
@@ -47,6 +44,34 @@ test.describe('sidebar', () => {
 		await expect(mainWindow.locator(':focus')).toHaveText('All notes');
 	});
 
+	test('should focus the note list when pressing tab', async ({ electronApp, mainWindow }) => {
+		const mainScreen = new MainScreen(mainWindow);
+		const sidebar = mainScreen.sidebar;
+
+		const notebookAHeader = await sidebar.createNewNotebook('Notebook A');
+		await expect(notebookAHeader).toBeAttached();
+		await notebookAHeader.click();
+
+		await sidebar.forceUpdateSorting(electronApp);
+
+		await mainScreen.createNewNote('Test note A');
+
+		await notebookAHeader.click();
+		await expect(mainWindow.locator(':focus')).toHaveText('Notebook A');
+
+		// Tab should switch to the notebook list
+		await mainWindow.keyboard.press('Tab');
+		await expect(mainWindow.locator(':focus')).toHaveText('Test note A');
+
+		// Shift-tab should navigate back
+		await mainWindow.keyboard.down('Shift');
+		await mainWindow.keyboard.press('Tab');
+		await mainWindow.keyboard.up('Shift');
+
+		// Only check beginning of text -- may have a note count number
+		await expect(mainWindow.locator(':focus')).toHaveText(/^Notebook A/);
+	});
+
 	test('should allow changing the parent of a notebook by drag-and-drop', async ({ electronApp, mainWindow }) => {
 		const mainScreen = new MainScreen(mainWindow);
 		const sidebar = mainScreen.sidebar;
@@ -57,9 +82,7 @@ test.describe('sidebar', () => {
 		const childNotebookHeader = await sidebar.createNewNotebook('Child notebook');
 		await expect(childNotebookHeader).toBeVisible();
 
-		// Force correct sorting
-		await sidebar.sortByDate(electronApp);
-		await sidebar.sortByTitle(electronApp);
+		await sidebar.forceUpdateSorting(electronApp);
 
 		await childNotebookHeader.dragTo(parentNotebookHeader);
 
