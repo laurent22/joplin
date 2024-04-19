@@ -207,11 +207,20 @@ if command -v lsb_release &> /dev/null; then
   # It is present in Debian 1X. A (temporary) patch will be applied at .desktop file
   # Linux Mint 4 Debbie is based on Debian 10 and requires the same param handling.
   #
-  # This also works around Ubuntu 23.10+'s restrictions on unprivileged user namespaces. Electron
+  # TODO: Remove: This is likely no longer an issue. See https://issues.chromium.org/issues/40462640.
+  if [[ $DISTVER =~ Debian1. || ( "$DISTVER" = "Linuxmint4" && "$DISTCODENAME" = "debbie" ) || ( "$DISTVER" = "CentOS" && "$DISTMAJOR" =~ 6|7 ) ]]; then
+    BAD_HELPER_BINARY=true
+  fi
+  
+  # Work around Ubuntu 23.10+'s restrictions on unprivileged user namespaces. Electron
   # uses these to sandbox processes. Unfortunately, it doesn't look like we can get around this
   # without writing the AppImage to a non-user-writable location (without invalidating other security
   # controls). See https://discourse.joplinapp.org/t/possible-future-requirement-for-no-sandbox-flag-for-ubuntu-23-10/.
-  if [[ $DISTVER = "Ubuntu23.10" || $DISTVER =~ Debian1. || ( "$DISTVER" = "Linuxmint4" && "$DISTCODENAME" = "debbie" ) || ( "$DISTVER" = "CentOS" && "$DISTMAJOR" =~ 6|7 ) ]]; then
+  if [[ "$DISTVER" =~ ^Ubuntu && $DISTMAJOR -ge 23 ]]; then
+    HAS_USERNS_RESTRICTIONS=true
+  fi
+
+  if [[ $HAS_USERNS_RESTRICTIONS || $BAD_HELPER_BINARY ]]; then
     SANDBOXPARAM="--no-sandbox"
     print "${COLOR_YELLOW}WARNING${COLOR_RESET} Electron sandboxing disabled."
     print "    See https://discourse.joplinapp.org/t/32160/5 for details."
