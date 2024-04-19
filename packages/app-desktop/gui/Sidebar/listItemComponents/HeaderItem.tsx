@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { ButtonLevel } from '../../Button/Button';
 import { StyledAddButton, StyledHeader, StyledHeaderIcon, StyledHeaderLabel } from '../styles';
 import { HeaderListItem, ItemContextMenuListener } from '../types';
+import { _ } from '@joplin/lib/locale';
 
 interface Props {
 	item: HeaderListItem;
@@ -22,6 +23,13 @@ const HeaderItem: React.FC<Props> = props => {
 		}
 	}, [onItemClick, itemId]);
 
+	const addButton = <StyledAddButton
+		iconLabel={_('New')}
+		onClick={item.onPlusButtonClick}
+		iconName='fas fa-plus'
+		level={ButtonLevel.SidebarSecondary}
+	/>;
+
 	return (
 		<div
 			className='sidebar-header-container'
@@ -37,7 +45,7 @@ const HeaderItem: React.FC<Props> = props => {
 				<StyledHeaderIcon className={item.iconName}/>
 				<StyledHeaderLabel>{item.label}</StyledHeaderLabel>
 			</StyledHeader>
-			{ item.onPlusButtonClick && <StyledAddButton onClick={item.onPlusButtonClick} iconName="fas fa-plus" level={ButtonLevel.SidebarSecondary}/> }
+			{ item.onPlusButtonClick && addButton }
 		</div>
 	);
 };

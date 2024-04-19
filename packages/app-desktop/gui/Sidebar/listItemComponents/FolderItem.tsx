@@ -67,7 +67,7 @@ function FolderItem(props: FolderItemProps) {
 
 	return (
 		<StyledListItem depth={depth} selected={selected} className={`list-item-container list-item-depth-${depth} ${selected ? 'selected' : ''}`} onDragStart={onFolderDragStart_} onDragOver={onFolderDragOver_} onDrop={onFolderDrop_} draggable={draggable} data-folder-id={folderId}>
-			<ExpandLink hasChildren={hasChildren} folderId={folderId} onClick={onFolderToggleClick_} isExpanded={isExpanded}/>
+			<ExpandLink hasChildren={hasChildren} folderTitle={folderTitle} folderId={folderId} onClick={onFolderToggleClick_} isExpanded={isExpanded}/>
 			<StyledListItemAnchor
 				ref={props.anchorRef}
 				className="list-item"
@@ -84,7 +84,7 @@ function FolderItem(props: FolderItemProps) {
 				}}
 				onDoubleClick={onFolderToggleClick_}
 			>
-				{doRenderFolderIcon()}<StyledSpanFix className="title" style={{ lineHeight: 0 }}>{folderTitle}</StyledSpanFix>
+				{doRenderFolderIcon()}<StyledSpanFix className="title">{folderTitle}</StyledSpanFix>
 				{shareIcon} {noteCountComp}
 			</StyledListItemAnchor>
 		</StyledListItem>

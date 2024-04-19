@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, useState, useRef, useEffect } from 'react';
+import { useCallback, useState, useRef, useEffect, useId } from 'react';
 import { _ } from '@joplin/lib/locale';
 import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
 import Dialog from '../Dialog';
@@ -127,13 +127,14 @@ export default function(props: Props) {
 		}
 	}, []);
 
+	const formTitleInputId = useId();
 	function renderForm() {
 		return (
 			<div>
 				<div className="form">
 					<div className="form-input-group">
-						<label>{_('Title')}</label>
-						<StyledInput type="text" ref={titleInputRef} value={folderTitle} onChange={onFolderTitleChange}/>
+						<label htmlFor={formTitleInputId}>{_('Title')}</label>
+						<StyledInput id={formTitleInputId} type="text" ref={titleInputRef} value={folderTitle} onChange={onFolderTitleChange}/>
 					</div>
 
 					<div className="form-input-group">
