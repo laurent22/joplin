@@ -1,24 +1,18 @@
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
-import { useCallback, useState } from 'react';
-import { IconButton, List, Portal, Text } from 'react-native-paper';
-import getPluginBugReportInfo, { ReportPluginIssueOption } from '@joplin/lib/services/plugins/utils/getPluginBugReportInfo';
-import getPackageInfo from '../../../../../utils/getPackageInfo';
+import { useCallback, useMemo, useState } from 'react';
+import { Button, IconButton, List, Portal, Text } from 'react-native-paper';
+import getPluginIssueReportUrl from '@joplin/lib/services/plugins/utils/getPluginIssueReportUrl';
 import { Linking, ScrollView, StyleSheet, View } from 'react-native';
 import DismissibleDialog from '../../../../DismissibleDialog';
 import openWebsiteForPlugin from '../utils/openWebsiteForPlugin';
-import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 
 interface Props {
 	themeId: number;
 	size: number;
 	item: PluginItem;
 	onModalDismiss?: ()=> void;
-}
-
-interface IssueReportLinkProps {
-	section: ReportPluginIssueOption;
 }
 
 const styles = StyleSheet.create({
@@ -31,41 +25,12 @@ const styles = StyleSheet.create({
 		marginTop: 5,
 		marginBottom: 5,
 	},
+	fraudulentPluginButton: {
+		opacity: 0.6,
+	},
 });
 
-const IssueReportLink: React.FC<IssueReportLinkProps> = props => {
-	const section = props.section;
-
-	const onPress = useCallback(() => {
-		void Linking.openURL(section.url);
-	}, [section.url]);
-
-	return (
-		<List.Item
-			title={section.title}
-			titleNumberOfLines={2}
-			description={section.description}
-			onPress={onPress}
-			left={props => <List.Icon {...props} icon={section.mobileIcon} />}
-		/>
-	);
-};
-
 const PluginInfoModal: React.FC<Props> = props => {
-	const [reportInfo, setReportInfo] = useState<ReportPluginIssueOption[]>([]);
-	useAsyncEffect(async event => {
-		const packageInfo = getPackageInfo();
-		const reportPluginOptions = await getPluginBugReportInfo(props.item.manifest, packageInfo);
-		if (!event.cancelled) {
-			setReportInfo(reportPluginOptions);
-		}
-	}, [props.item]);
-
-	const issueReportListItems: React.ReactNode[] = [];
-	for (const section of reportInfo) {
-		issueReportListItems.push(<IssueReportLink key={section.key} section={section} />);
-	}
-
 	const aboutPlugin = (
 		<View style={styles.aboutPluginContainer}>
 			<Text variant='titleLarge'>{props.item.manifest.name}</Text>
@@ -77,6 +42,26 @@ const PluginInfoModal: React.FC<Props> = props => {
 	const onAboutPress = useCallback(() => {
 		void openWebsiteForPlugin({ item: props.item });
 	}, [props.item]);
+
+	const reportIssueUrl = useMemo(() => {
+		return getPluginIssueReportUrl(props.item.manifest);
+	}, [props.item]);
+
+	const onReportIssuePress = useCallback(() => {
+		void Linking.openURL(reportIssueUrl);
+	}, [reportIssueUrl]);
+
+	const reportIssueButton = (
+		<List.Item
+			left={props => <List.Icon {...props} icon='bug'/>}
+			title={_('Report an issue')}
+			onPress={onReportIssuePress}
+		/>
+	);
+
+	const onReportFraudulentPress = useCallback(() => {
+		void Linking.openURL('https://github.com/laurent22/joplin/security/advisories/new');
+	}, []);
 
 	return (
 		<Portal>
@@ -92,13 +77,13 @@ const PluginInfoModal: React.FC<Props> = props => {
 						title={_('About')}
 						onPress={onAboutPress}
 					/>
-					<List.Accordion
-						title={_('Report an issue')}
-						left={props => <List.Icon {...props} icon='bug' />}
-					>
-						{issueReportListItems}
-					</List.Accordion>
+					{ reportIssueUrl ? reportIssueButton : null }
 				</ScrollView>
+				<Button
+					icon='shield-bug'
+					style={styles.fraudulentPluginButton}
+					onPress={onReportFraudulentPress}
+				>{_('Report fraudulent plugin')}</Button>
 			</DismissibleDialog>
 		</Portal>
 	);
