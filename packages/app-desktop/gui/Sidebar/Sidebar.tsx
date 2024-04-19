@@ -75,7 +75,7 @@ const SidebarComponent = (props: Props) => {
 
 	return (
 		<StyledRoot className="sidebar">
-			<div style={{ flex: 1 }}>{<FolderAndTagList/>}</div>
+			<div style={{ flex: 1 }}><FolderAndTagList/></div>
 			<div style={{ flex: 0, padding: theme.mainPadding }}>
 				{syncReportComp}
 				{syncButton}
