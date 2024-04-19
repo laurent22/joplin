@@ -34,6 +34,15 @@ function folderIsCollapsed(folders: FolderEntity[], folderId: string, collapsedF
 	}
 }
 
+interface FolderSelectedContext {
+	selectedFolderId: string;
+	notesParentType: string;
+}
+export const isFolderSelected = (folder: FolderEntity, context: FolderSelectedContext) => {
+	return context.selectedFolderId === folder.id && context.notesParentType === 'Folder';
+};
+
+
 type ItemsWithOrder<ItemType> = {
 	items: ItemType[];
 	order: string[];
@@ -43,10 +52,6 @@ interface RenderFoldersProps {
 	folders: FolderEntity[];
 	collapsedFolderIds: string[];
 }
-
-export const isFolderSelected = (folder: FolderEntity, context: { selectedFolderId: string; notesParentType: string }) => {
-	return context.selectedFolderId === folder.id && context.notesParentType === 'Folder';
-};
 
 function renderFoldersRecursive_<T>(props: RenderFoldersProps, renderItem: RenderFolderItem<T>, items: T[], parentId: string, depth: number, order: string[]): ItemsWithOrder<T> {
 	const folders = props.folders;
@@ -95,7 +100,11 @@ const sortTags = (tags: TagEntity[]) => {
 	return tags;
 };
 
-export const isTagSelected = (tag: TagEntity, context: { selectedTagId: string; notesParentType: string }) => {
+interface TagSelectedContext {
+	selectedTagId: string;
+	notesParentType: string;
+}
+export const isTagSelected = (tag: TagEntity, context: TagSelectedContext) => {
 	return context.selectedTagId === tag.id && context.notesParentType === 'Tag';
 };
 
