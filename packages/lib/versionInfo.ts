@@ -2,7 +2,6 @@ import { _ } from './locale';
 import Setting from './models/Setting';
 import { reg } from './registry';
 import { Plugins } from './services/plugins/PluginService';
-import shim from './shim';
 
 export interface PackageInfo {
 	name: string;
@@ -11,7 +10,7 @@ export interface PackageInfo {
 	build: {
 		appId: string;
 	};
-	git?: {
+	git: {
 		branch: string;
 		hash: string;
 	};
@@ -71,7 +70,7 @@ export default function versionInfo(packageInfo: PackageInfo, plugins: Plugins) 
 	];
 
 	const body = [
-		_('%s %s (%s, %s)', p.name, p.version, Setting.value('env'), shim.platformName()),
+		_('%s %s (%s, %s)', p.name, p.version, Setting.value('env'), process.platform),
 		'',
 		_('Client ID: %s', Setting.value('clientId')),
 		_('Sync Version: %s', Setting.value('syncVersion')),
