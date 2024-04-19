@@ -9,7 +9,7 @@
 #
 # APP_BASE_URL: This is the base public URL where the service will be running.
 #	- If Joplin Server needs to be accessible over the internet, configure APP_BASE_URL as follows: https://example.com/joplin. 
-#	- If Joplin Server does not need to be accessible over the internet, set the the APP_BASE_URL to your server's hostname. 
+#	- If Joplin Server does not need to be accessible over the internet, set the APP_BASE_URL to your server's hostname. 
 #     For Example: http://[hostname]:22300. The base URL can include the port.
 # APP_PORT: The local port on which the Docker container will listen. 
 #	- This would typically be mapped to port to 443 (TLS) with a reverse proxy.
