@@ -9,7 +9,7 @@ import { StateDecryptionWorker, StateResourceFetcher } from '@joplin/lib/reducer
 import { connect } from 'react-redux';
 import { themeStyle } from '@joplin/lib/theme';
 import { Dispatch } from 'redux';
-import NotebookAndTagList from './NotebookAndTagList';
+import FolderAndTagList from './FolderAndTagList';
 
 
 interface Props {
@@ -75,7 +75,7 @@ const SidebarComponent = (props: Props) => {
 
 	return (
 		<StyledRoot className="sidebar">
-			<div style={{ flex: 1 }}>{<NotebookAndTagList/>}</div>
+			<div style={{ flex: 1 }}>{<FolderAndTagList/>}</div>
 			<div style={{ flex: 0, padding: theme.mainPadding }}>
 				{syncReportComp}
 				{syncButton}

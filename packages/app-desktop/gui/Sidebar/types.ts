@@ -3,13 +3,13 @@ import { DragEventHandler, MouseEventHandler, MouseEvent as ReactMouseEvent } fr
 
 export enum HeaderId {
 	TagHeader = 'tagHeader',
-	NotebookHeader = 'notebookHeader',
+	FolderHeader = 'folderHeader',
 }
 
 export enum ListItemType {
 	Header = 'header',
 	Tag = 'tag',
-	Notebook = 'notebook',
+	Folder = 'folder',
 	AllNotes = 'all-notes',
 	Spacer = 'spacer',
 }
@@ -39,7 +39,7 @@ export interface TagListItem extends BaseListItem {
 }
 
 export interface FolderListItem extends BaseListItem {
-	kind: ListItemType.Notebook;
+	kind: ListItemType.Folder;
 	folder: FolderEntity;
 	hasChildren: boolean;
 	depth: number;

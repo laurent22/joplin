@@ -25,7 +25,7 @@ const useSelectedSidebarIndex = (props: Props) => {
 				selected = props.selectedSmartFilterId === ALL_NOTES_FILTER_ID && props.notesParentType === 'SmartFilter';
 			} else if (listItem.kind === ListItemType.Header || listItem.kind === ListItemType.Spacer) {
 				selected = false;
-			} else if (listItem.kind === ListItemType.Notebook) {
+			} else if (listItem.kind === ListItemType.Folder) {
 				selected = isFolderSelected(listItem.folder, { selectedFolderId: props.selectedFolderId, notesParentType: props.notesParentType });
 			} else if (listItem.kind === ListItemType.Tag) {
 				selected = isTagSelected(listItem.tag, { selectedTagId: props.selectedTagId, notesParentType: props.notesParentType });
@@ -65,7 +65,7 @@ const useSelectedSidebarIndex = (props: Props) => {
 				type: 'SMART_FILTER_SELECT',
 				id: ALL_NOTES_FILTER_ID,
 			});
-		} else if (newItem.kind === ListItemType.Notebook) {
+		} else if (newItem.kind === ListItemType.Folder) {
 			props.dispatch({
 				type: 'FOLDER_SELECT',
 				id: newItem.folder.id,

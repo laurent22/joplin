@@ -42,7 +42,7 @@ const useFocusHandler = (props: Props) => {
 
 	useEffect(() => {
 		if (!shouldFocusNextSelectedItem.current || !selectedListElement) return;
-		focus('NotebookAndTagList', selectedListElement);
+		focus('FolderAndTagList/useFocusHandler', selectedListElement);
 		shouldFocusNextSelectedItem.current = false;
 	}, [selectedListElement]);
 };

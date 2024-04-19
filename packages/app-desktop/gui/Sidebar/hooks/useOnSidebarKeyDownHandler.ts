@@ -15,7 +15,7 @@ const useOnSidebarKeyDownHandler = (props: Props) => {
 
 	return useCallback<KeyboardEventHandler<HTMLElement>>((event) => {
 		const selectedItem = listItems[selectedIndex];
-		if (selectedItem && selectedItem.kind === ListItemType.Notebook && event.code === 'Space') {
+		if (selectedItem && selectedItem.kind === ListItemType.Folder && event.code === 'Space') {
 			event.preventDefault();
 
 			dispatch({

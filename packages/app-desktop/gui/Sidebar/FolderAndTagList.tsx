@@ -30,7 +30,7 @@ interface Props {
 }
 
 
-const NotebookAndTagList: React.FC<Props> = props => {
+const FolderAndTagList: React.FC<Props> = props => {
 	const listItems = useSidebarListData(props);
 	const { selectedIndex, updateSelectedIndex } = useSelectedSidebarIndex({
 		...props,
@@ -60,17 +60,18 @@ const NotebookAndTagList: React.FC<Props> = props => {
 
 	return (
 		<div
-			className='notebook-and-tag-list'
+			className='folder-and-tag-list'
 			ref={setItemListContainer}
 		>
 			<ItemList
 				className='items'
 				ref={itemListRef}
 				style={listStyle}
-				itemHeight={30}
 				items={listItems}
 				itemRenderer={onRenderItem}
 				onKeyDown={onKeyEventHandler}
+
+				itemHeight={30}
 			/>
 		</div>
 	);
@@ -92,4 +93,4 @@ const mapStateToProps = (state: AppState) => {
 	};
 };
 
-export default connect(mapStateToProps)(NotebookAndTagList);
+export default connect(mapStateToProps)(FolderAndTagList);

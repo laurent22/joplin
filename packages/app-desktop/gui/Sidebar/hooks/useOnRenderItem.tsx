@@ -351,7 +351,7 @@ const useOnRenderItem = (props: Props) => {
 				onContextMenu={onItemContextMenu}
 				tag={tag}
 			/>;
-		} else if (item.kind === ListItemType.Notebook) {
+		} else if (item.kind === ListItemType.Folder) {
 			const folder = item.folder;
 			const isExpanded = props.collapsedFolderIds.indexOf(folder.id) < 0;
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

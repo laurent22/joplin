@@ -43,7 +43,7 @@ const useSidebarListData = (props: Props): ListItem[] => {
 		};
 		return renderFolders<ListItem>(renderProps, (folder, hasChildren, depth): FolderListItem => {
 			return {
-				kind: ListItemType.Notebook,
+				kind: ListItemType.Folder,
 				folder,
 				hasChildren,
 				depth,
@@ -53,12 +53,12 @@ const useSidebarListData = (props: Props): ListItem[] => {
 	}, [props.folders, props.collapsedFolderIds]);
 
 	return useMemo(() => {
-		const notebooksHeader: HeaderListItem = {
+		const foldersHeader: HeaderListItem = {
 			kind: ListItemType.Header,
 			label: _('Notebooks'),
 			iconName: 'icon-notebooks',
-			id: HeaderId.NotebookHeader,
-			key: HeaderId.NotebookHeader,
+			id: HeaderId.FolderHeader,
+			key: HeaderId.FolderHeader,
 			onClick: onHeaderClick,
 			onPlusButtonClick: onAddFolderButtonClick,
 			extraProps: {
@@ -67,10 +67,10 @@ const useSidebarListData = (props: Props): ListItem[] => {
 			},
 			supportsFolderDrop: true,
 		};
-		const notebooksSectionContent: ListItem[] = props.folderHeaderIsExpanded ? [
+		const foldersSectionContent: ListItem[] = props.folderHeaderIsExpanded ? [
 			{ kind: ListItemType.AllNotes, key: 'all-notes' },
 			...folderItems.items,
-			{ kind: ListItemType.Spacer, key: 'after-notebooks-spacer' },
+			{ kind: ListItemType.Spacer, key: 'after-folders-spacer' },
 		] : [];
 
 		const tagsHeader: HeaderListItem = {
@@ -89,8 +89,8 @@ const useSidebarListData = (props: Props): ListItem[] => {
 		const tagsSectionContent: ListItem[] = props.tagHeaderIsExpanded ? tagItems.items : [];
 
 		const items: ListItem[] = [
-			notebooksHeader,
-			...notebooksSectionContent,
+			foldersHeader,
+			...foldersSectionContent,
 			tagsHeader,
 			...tagsSectionContent,
 		];
