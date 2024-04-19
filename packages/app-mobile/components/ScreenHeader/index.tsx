@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { PureComponent, ReactElement, RefObject } from 'react';
+import { PureComponent, ReactElement, RefObject, Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, ViewStyle, findNodeHandle, AccessibilityInfo } from 'react-native';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { BackButtonService } = require('../../services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
-import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
+import { Menu, MenuOptions, MenuOption, MenuTrigger, MenuOptionProps } from 'react-native-popup-menu';
 import { _, _n } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
@@ -89,7 +89,7 @@ interface ScreenHeaderState {
 class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeaderState> {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private cachedStyles: any;
-	private menuOptionsRef: RefObject<View>;
+	private menuOptionsRef: RefObject<Component<MenuOptionProps>>;
 	public dialogbox?: typeof DialogBox;
 	public constructor(props: ScreenHeaderProps) {
 		super(props);
