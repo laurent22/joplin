@@ -30,13 +30,18 @@ const useRefocusOnSelectionChangeHandler = (
 	// We keep track of the key to avoid scrolling unnecessarily. For example, when the
 	// selection's index changes because a notebook is expanded/collapsed, we don't necessarily
 	// want to scroll the selection into view.
+	const lastSelectedItemKey = useRef('');
 	const selectedItemKey = useMemo(() => {
 		if (selectedIndex >= 0 && selectedIndex < listItems.length) {
 			return listItems[selectedIndex].key;
 		} else {
-			return undefined;
+			// When nothing is selected, re-use the key from before.
+			// This prevents the view from scrolling when a dropdown containing the
+			// selection is closed, then opened again.
+			return lastSelectedItemKey.current;
 		}
 	}, [listItems, selectedIndex]);
+	lastSelectedItemKey.current = selectedItemKey;
 
 	const selectedIndexRef = useRef(selectedIndex);
 	selectedIndexRef.current = selectedIndex;
