@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useMemo, useRef } from 'react';
+import { RefObject, useCallback, useEffect, useMemo, useRef } from 'react';
 import { ListItem } from '../types';
 import ItemList from '../../ItemList';
 import { focus } from '@joplin/lib/utils/focusHandler';
@@ -13,6 +13,7 @@ interface Props {
 const useFocusHandler = (props: Props) => {
 	const { itemListRef, selectedListElement, selectedIndex, listItems } = props;
 
+	// When set to true, when selectedListElement next changes, select it.
 	const shouldFocusNextSelectedItem = useRef(false);
 
 	// We keep track of the key to avoid scrolling unnecessarily. For example, when the
@@ -42,9 +43,21 @@ const useFocusHandler = (props: Props) => {
 
 	useEffect(() => {
 		if (!shouldFocusNextSelectedItem.current || !selectedListElement) return;
-		focus('FolderAndTagList/useFocusHandler', selectedListElement);
+		focus('FolderAndTagList/useFocusHandler/afterRender', selectedListElement);
 		shouldFocusNextSelectedItem.current = false;
 	}, [selectedListElement]);
+
+	const focusSidebar = useCallback(() => {
+		const selectedIndex = selectedIndexRef.current;
+		if (!selectedListElement || !itemListRef.current.isIndexVisible(selectedIndex)) {
+			itemListRef.current.makeItemIndexVisible(selectedIndexRef.current);
+			shouldFocusNextSelectedItem.current = true;
+		} else {
+			focus('FolderAndTagList/useFocusHandler/focusSidebar', selectedListElement);
+		}
+	}, [selectedListElement, itemListRef]);
+
+	return { focusSidebar };
 };
 
 export default useFocusHandler;

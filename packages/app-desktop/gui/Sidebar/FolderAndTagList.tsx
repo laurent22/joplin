@@ -1,22 +1,25 @@
 import * as React from 'react';
 import { AppState } from '../../app.reducer';
-import ItemList from '../ItemList';
-import { connect } from 'react-redux';
-import useSidebarListData from './hooks/useSidebarListData';
 import { FolderEntity, TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
-import useOnRenderItem from './hooks/useOnRenderItem';
-import { Dispatch } from 'redux';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { useMemo, useRef, useState } from 'react';
+import ItemList from '../ItemList';
 import useElementHeight from '../hooks/useElementHeight';
+import useSidebarListData from './hooks/useSidebarListData';
 import useSelectedSidebarIndex from './hooks/useSelectedSidebarIndex';
 import useOnSidebarKeyDownHandler from './hooks/useOnSidebarKeyDownHandler';
-import { ListItem } from './types';
 import useFocusHandler from './hooks/useFocusHandler';
+import useOnRenderItem from './hooks/useOnRenderItem';
+import { ListItem } from './types';
+import useSidebarCommandHandler from './hooks/useSidebarCommandHandler';
 
 interface Props {
 	dispatch: Dispatch;
 	themeId: number;
+	plugins: PluginStates;
+
 	tags: TagsWithNoteCountEntity[];
 	folders: FolderEntity[];
 	notesParentType: string;
@@ -26,7 +29,6 @@ interface Props {
 	collapsedFolderIds: string[];
 	folderHeaderIsExpanded: boolean;
 	tagHeaderIsExpanded: boolean;
-	plugins: PluginStates;
 }
 
 
@@ -52,7 +54,9 @@ const FolderAndTagList: React.FC<Props> = props => {
 	});
 
 	const itemListRef = useRef<ItemList<ListItem>>();
-	useFocusHandler({ itemListRef, selectedListElement, selectedIndex, listItems });
+	const { focusSidebar } = useFocusHandler({ itemListRef, selectedListElement, selectedIndex, listItems });
+
+	useSidebarCommandHandler({ focusSidebar });
 
 	const [itemListContainer, setItemListContainer] = useState<HTMLDivElement|null>(null);
 	const listHeight = useElementHeight(itemListContainer);

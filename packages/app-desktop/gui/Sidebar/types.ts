@@ -51,8 +51,14 @@ export interface SpacerListItem extends BaseListItem {
 
 export type ListItem = HeaderListItem|AllNotesListItem|TagListItem|FolderListItem|SpacerListItem;
 
+
+export type SetSelectedIndexCallback = (newIndex: number)=> void;
+
+
 export type ItemDragListener = DragEventHandler<HTMLElement>;
 export type ItemContextMenuListener = MouseEventHandler<HTMLElement>;
 export type ItemClickListener = MouseEventHandler<HTMLElement>;
 
-export type SetSelectedIndexCallback = (newIndex: number)=> void;
+export interface SidebarCommandRuntimeProps {
+	focusSidebar: ()=> void;
+}

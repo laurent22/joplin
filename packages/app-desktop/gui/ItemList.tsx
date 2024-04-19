@@ -87,11 +87,22 @@ class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 		if (this.props.onItemDrop) this.props.onItemDrop(event);
 	};
 
-	public makeItemIndexVisible(itemIndex: number) {
-		const top = Math.min(this.props.items.length - 1, this.state.topItemIndex);
-		const bottom = Math.max(0, this.state.bottomItemIndex);
+	public get firstVisibleIndex() {
+		return Math.min(this.props.items.length - 1, this.state.topItemIndex);
+	}
 
-		if (itemIndex >= top && itemIndex <= bottom) return;
+	public get lastVisibleIndex() {
+		return Math.max(0, this.state.bottomItemIndex);
+	}
+
+	public isIndexVisible(itemIndex: number) {
+		return itemIndex >= this.firstVisibleIndex && itemIndex <= this.lastVisibleIndex;
+	}
+
+	public makeItemIndexVisible(itemIndex: number) {
+		if (this.isIndexVisible(itemIndex)) return;
+
+		const top = this.firstVisibleIndex;
 
 		let scrollTop = 0;
 		if (itemIndex < top) {

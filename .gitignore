@@ -383,6 +383,7 @@ packages/app-desktop/gui/Sidebar/hooks/useFocusHandler.js
 packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.js
 packages/app-desktop/gui/Sidebar/hooks/useOnSidebarKeyDownHandler.js
 packages/app-desktop/gui/Sidebar/hooks/useSelectedSidebarIndex.js
+packages/app-desktop/gui/Sidebar/hooks/useSidebarCommandHandler.js
 packages/app-desktop/gui/Sidebar/hooks/useSidebarListData.js
 packages/app-desktop/gui/Sidebar/listItemComponents/AllNotesItem.js
 packages/app-desktop/gui/Sidebar/listItemComponents/EmptyExpandLink.js
