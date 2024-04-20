@@ -12,3 +12,35 @@
 .config-screen-content > .section:last-child {
 	border-bottom: 0;
 }
+
+.font-search-list {
+	background-color: var(--joplin-background-color);
+	max-height: 200px;
+	width: 50%;
+	min-width: 20em;
+	overflow-y: auto;
+	border: 1px solid var(--joplin-border-color4);
+	border-radius: 5px;
+	display: none;
+	margin-top: 10px;
+}
+
+.font-search-list > div {
+	padding: 5px;
+}
+
+.font-search-item {
+	border-bottom: 1px solid var(--joplin-border-color4);
+	cursor: pointer;
+}
+
+.font-search-item:hover {
+	color: var(--joplin-background-color); 
+	background-color: var(--joplin-color);
+}
+
+.monospace-checkbox {
+	background-color: var(--joplin-background-color3);
+	display: flex;
+	align-items: center;
+}

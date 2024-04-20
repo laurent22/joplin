@@ -4,7 +4,7 @@ import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel, ButtonSize } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
-import Setting, { AppType, SyncStartupOperation } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingItemSubType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import control_PluginsStates from './controls/plugins/PluginsStates';
 import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
 import { reg } from '@joplin/lib/registry';
@@ -20,11 +20,22 @@ import ToggleAdvancedSettingsButton from './controls/ToggleAdvancedSettingsButto
 import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
 import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
+import FontSearch from './FontSearch';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const settingKeyToControl: any = {
 	'plugins.states': control_PluginsStates,
 };
+
+interface Font {
+	family: string;
+}
+
+declare global {
+	interface Window {
+		queryLocalFonts(): Promise<Font[]>;
+	}
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 class ConfigScreenComponent extends React.Component<any, any> {
@@ -44,6 +55,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			screenName: '',
 			changedSettingKeys: [],
 			needRestart: false,
+			fonts: [],
 		};
 
 		this.rowStyle_ = {
@@ -78,12 +90,16 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.setState({ settings: this.props.settings });
 	}
 
-	public componentDidMount() {
+	public async componentDidMount() {
 		if (this.props.defaultSection) {
 			this.setState({ selectedSectionName: this.props.defaultSection }, () => {
 				void this.switchSection(this.props.defaultSection);
 			});
 		}
+
+		const fonts = (await window.queryLocalFonts()).map((font: Font) => font.family);
+		const uniqueFonts = [...new Set(fonts)];
+		this.setState({ fonts: uniqueFonts });
 	}
 
 	private async handleSettingButton(key: string) {
@@ -591,22 +607,32 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				const onTextChange = (event: any) => {
 					updateSettingValue(key, event.target.value);
 				};
-
 				return (
 					<div key={key} style={rowStyle}>
 						<div style={labelStyle}>
 							<label>{md.label()}</label>
 						</div>
-						<input
-							type={inputType}
-							style={inputStyle}
-							value={this.state.settings[key]}
-							// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-							onChange={(event: any) => {
-								onTextChange(event);
-							}}
-							spellCheck={false}
-						/>
+						{
+							md.subType === SettingItemSubType.FontFamily || md.subType === SettingItemSubType.MonospaceFontFamily ?
+								<FontSearch
+									type={inputType}
+									style={inputStyle}
+									value={this.state.settings[key]}
+									availableFonts={this.state.fonts}
+									onChange={fontFamily => updateSettingValue(key, fontFamily)}
+									subtype={md.subType}
+								/> :
+								<input
+									type={inputType}
+									style={inputStyle}
+									value={this.state.settings[key]}
+									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+									onChange={(event: any) => {
+										onTextChange(event);
+									}}
+									spellCheck={false}
+								/>
+						}
 						<div style={{ width: inputStyle.width, minWidth: inputStyle.minWidth }}>
 							{descriptionComp}
 						</div>
