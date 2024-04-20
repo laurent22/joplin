@@ -10,9 +10,9 @@ export default class Sidebar {
 		this.container = page.locator('.rli-sideBar');
 	}
 
-	public async createNewNotebook(title: string) {
-		const newNotebookButton = this.container.getByRole('button', { name: 'New' });
-		await newNotebookButton.click();
+	public async createNewFolder(title: string) {
+		const newFolderButton = this.container.getByRole('button', { name: 'New' });
+		await newFolderButton.click();
 
 		const titleInput = this.mainScreen.dialog.getByLabel('Title');
 		await titleInput.fill(title);

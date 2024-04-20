@@ -2,40 +2,40 @@ import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 
 test.describe('sidebar', () => {
-	test('should be able to create new notebooks', async ({ mainWindow }) => {
+	test('should be able to create new folders', async ({ mainWindow }) => {
 		const mainScreen = new MainScreen(mainWindow);
 		const sidebar = mainScreen.sidebar;
 
 		for (let i = 0; i < 3; i++) {
-			const title = `Test notebook ${i}`;
-			await sidebar.createNewNotebook(title);
+			const title = `Test folder ${i}`;
+			await sidebar.createNewFolder(title);
 			await expect(sidebar.container.getByText(title)).toBeAttached();
 		}
 
-		// The first notebook should still be visible
-		await expect(sidebar.container.getByText('Test notebook 0')).toBeAttached();
+		// The first folder should still be visible
+		await expect(sidebar.container.getByText('Test folder 0')).toBeAttached();
 	});
 
-	test('should allow changing the focused notebook with the arrow keys', async ({ electronApp, mainWindow }) => {
+	test('should allow changing the focused folder with the arrow keys', async ({ electronApp, mainWindow }) => {
 		const mainScreen = new MainScreen(mainWindow);
 		const sidebar = mainScreen.sidebar;
 
-		const notebookAHeader = await sidebar.createNewNotebook('Notebook A');
-		await expect(notebookAHeader).toBeVisible();
+		const folderAHeader = await sidebar.createNewFolder('Folder A');
+		await expect(folderAHeader).toBeVisible();
 
-		const notebookBHeader = await sidebar.createNewNotebook('Notebook B');
-		await expect(notebookBHeader).toBeVisible();
-		await notebookBHeader.click();
+		const folderBHeader = await sidebar.createNewFolder('Folder B');
+		await expect(folderBHeader).toBeVisible();
+		await folderBHeader.click();
 
 		await sidebar.forceUpdateSorting(electronApp);
 
-		await notebookBHeader.click();
+		await folderBHeader.click();
 		await mainWindow.keyboard.press('ArrowUp');
-		await expect(mainWindow.locator(':focus')).toHaveText('Notebook A');
+		await expect(mainWindow.locator(':focus')).toHaveText('Folder A');
 		await mainWindow.keyboard.press('ArrowDown');
-		await expect(mainWindow.locator(':focus')).toHaveText('Notebook B');
+		await expect(mainWindow.locator(':focus')).toHaveText('Folder B');
 		await mainWindow.keyboard.press('ArrowUp');
-		await expect(mainWindow.locator(':focus')).toHaveText('Notebook A');
+		await expect(mainWindow.locator(':focus')).toHaveText('Folder A');
 		await mainWindow.keyboard.press('ArrowUp');
 		await expect(mainWindow.locator(':focus')).toHaveText('All notes');
 		await mainWindow.keyboard.press('ArrowUp');
@@ -48,19 +48,19 @@ test.describe('sidebar', () => {
 		const mainScreen = new MainScreen(mainWindow);
 		const sidebar = mainScreen.sidebar;
 
-		const notebookAHeader = await sidebar.createNewNotebook('Notebook A');
-		await expect(notebookAHeader).toBeAttached();
-		await notebookAHeader.click();
+		const folderAHeader = await sidebar.createNewFolder('Folder A');
+		await expect(folderAHeader).toBeAttached();
+		await folderAHeader.click();
 
 		await mainScreen.createNewNote('Test note A');
 
 		await sidebar.forceUpdateSorting(electronApp);
 
-		await notebookAHeader.click();
+		await folderAHeader.click();
 		// Only check beginning of text -- may have a note count number
-		await expect(mainWindow.locator(':focus')).toHaveText(/^Notebook A/);
+		await expect(mainWindow.locator(':focus')).toHaveText(/^Folder A/);
 
-		// Tab should switch to the notebook list
+		// Tab should switch to the folder list
 		await mainWindow.keyboard.press('Tab');
 		await expect(mainWindow.locator(':focus')).toHaveText('Test note A');
 
@@ -69,37 +69,37 @@ test.describe('sidebar', () => {
 		await mainWindow.keyboard.press('Tab');
 		await mainWindow.keyboard.up('Shift');
 
-		await expect(mainWindow.locator(':focus')).toHaveText(/^Notebook A/);
+		await expect(mainWindow.locator(':focus')).toHaveText(/^Folder A/);
 	});
 
-	test('should allow changing the parent of a notebook by drag-and-drop', async ({ electronApp, mainWindow }) => {
+	test('should allow changing the parent of a folder by drag-and-drop', async ({ electronApp, mainWindow }) => {
 		const mainScreen = new MainScreen(mainWindow);
 		const sidebar = mainScreen.sidebar;
 
-		const parentNotebookHeader = await sidebar.createNewNotebook('Parent notebook');
-		await expect(parentNotebookHeader).toBeVisible();
+		const parentFolderHeader = await sidebar.createNewFolder('Parent folder');
+		await expect(parentFolderHeader).toBeVisible();
 
-		const childNotebookHeader = await sidebar.createNewNotebook('Child notebook');
-		await expect(childNotebookHeader).toBeVisible();
+		const childFolderHeader = await sidebar.createNewFolder('Child folder');
+		await expect(childFolderHeader).toBeVisible();
 
 		await sidebar.forceUpdateSorting(electronApp);
 
-		await childNotebookHeader.dragTo(parentNotebookHeader);
+		await childFolderHeader.dragTo(parentFolderHeader);
 
-		// Verify that it's now a child notebook -- expand and collapse the parent
-		const collapseButton = sidebar.container.getByRole('link', { name: 'Collapse Parent notebook' });
+		// Verify that it's now a child folder -- expand and collapse the parent
+		const collapseButton = sidebar.container.getByRole('link', { name: 'Collapse Parent folder' });
 		await expect(collapseButton).toBeVisible();
 		await collapseButton.click();
 
 		// Should be collapsed
-		await expect(childNotebookHeader).not.toBeAttached();
+		await expect(childFolderHeader).not.toBeAttached();
 
-		const expandButton = sidebar.container.getByRole('link', { name: 'Expand Parent notebook' });
+		const expandButton = sidebar.container.getByRole('link', { name: 'Expand Parent folder' });
 		await expandButton.click();
 
 		// Should be possible to move back to the root
-		const rootNotebookHeader = sidebar.container.getByText('Notebooks');
-		await childNotebookHeader.dragTo(rootNotebookHeader);
+		const rootFolderHeader = sidebar.container.getByText('Notebooks');
+		await childFolderHeader.dragTo(rootFolderHeader);
 		await expect(collapseButton).not.toBeVisible();
 		await expect(expandButton).not.toBeVisible();
 	});
