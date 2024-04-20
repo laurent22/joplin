@@ -41,7 +41,7 @@ const useSelectedSidebarIndex = (props: Props) => {
 		return -1;
 	}, [props.listItems, props.selectedFolderId, props.selectedTagId, props.selectedSmartFilterId, props.notesParentType]);
 
-	// Not all list items correspond with selectable Joplin folders/notebooks/tags, but we want to
+	// Not all list items correspond with selectable Joplin folders/tags, but we want to
 	// be able to select them anyway. This is handled with selectedIndexOverride.
 	//
 	// When selectedIndexOverride >= 0, it corresponds to the index of a selected item with no corresponding
