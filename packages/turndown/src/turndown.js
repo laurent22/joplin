@@ -202,7 +202,7 @@ function process (parentNode, escapeContent = 'auto') {
       replacement = replacementForNode.call(this, node, previousNode);
     }
 
-    output = join(output, replacement);
+    output = join(output, replacement, parentNode.isCode);
     previousNode = node;
   }
 
@@ -221,7 +221,7 @@ function postProcess (output) {
   var self = this
   this.rules.forEach(function (rule) {
     if (typeof rule.append === 'function') {
-      output = join(output, rule.append(self.options))
+      output = join(output, rule.append(self.options), false)
     }
   })
 
@@ -241,8 +241,35 @@ function replacementForNode (node, previousNode) {
   var rule = this.rules.forNode(node)
   var content = process.call(this, node, rule.escapeContent ? rule.escapeContent(node) : 'auto')
   var whitespace = node.flankingWhitespace
-  if (whitespace.leading || whitespace.trailing) content = content.trim()
+  if (whitespace.leading || whitespace.trailing){
+    if (node.isCode) {
+      // Fix: Web clipper has trouble with code blocks on Joplin's website.
+      // See https://github.com/laurent22/joplin/pull/10126#issuecomment-2016523281 .
+      // if isCode, keep line breaks
+      //test case: packages/app-cli/tests/html_to_md/code_multiline_1.html
+      //test case: packages/app-cli/tests/html_to_md/code_multiline_3.html
 
+      //If the leading blank of current node or leading blank of current node including line breaks, and the leading blank of current node is equal to the leading blank of it's first child node, and the trailing blank of the current node is equal to the leading blank of it's last child node, it indicates that the leading blank and leading blank of current node is from it's child nodes, so should not be added repeatedly, this remove multiple line breaks.
+      //test case: packages/app-cli/tests/html_to_md/code_multiline_5.html
+      if ( (whitespace.leading.indexOf('\n') !== -1 || whitespace.trailing.indexOf('\n') !== -1) && 
+        node.childNodes && node.childNodes.length > 0) {
+
+        var firstChildWhitespace = node.childNodes[0].flankingWhitespace
+        var lastChildWhitespace = node.childNodes[node.childNodes.length-1].flankingWhitespace
+
+        if (whitespace.leading === firstChildWhitespace.leading && 
+          whitespace.trailing === lastChildWhitespace.trailing) {
+            content = content.trim()
+        }
+      } else {
+        // keep line breaks
+        content = content.replace(/^[ \t]+|[ \t]+$/g, '');
+      }
+    } else {
+      content = content.trim()
+    }
+  }
+  
   return (
     whitespace.leading +
     rule.replacement(content, node, this.options, previousNode) +
@@ -259,13 +286,20 @@ function replacementForNode (node, previousNode) {
  * @type String
  */
 
-function join (output, replacement) {
-  var s1 = trimTrailingNewlines(output)
-  var s2 = trimLeadingNewlines(replacement)
-  var nls = Math.max(output.length - s1.length, replacement.length - s2.length)
-  var separator = '\n\n'.substring(0, nls)
+function join (output, replacement, isCode) {
+  if (isCode === true) {
+    // Fix: Web clipper has trouble with code blocks on Joplin's website.
+    // See https://github.com/laurent22/joplin/pull/10126#issuecomment-2016523281 .
+    // If isCode, keep line breaks
+    return output + replacement
+  } else {
+    var s1 = trimTrailingNewlines(output)
+    var s2 = trimLeadingNewlines(replacement)
+    var nls = Math.max(output.length - s1.length, replacement.length - s2.length)
+    var separator = '\n\n'.substring(0, nls)
 
-  return s1 + separator + s2
+    return s1 + separator + s2
+  }  
 }
 
 /**
