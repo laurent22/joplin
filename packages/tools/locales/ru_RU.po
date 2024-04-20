@@ -2,19 +2,23 @@
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Previous-Translator: Титан <fignin@ya.ru>"
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Титан <fignin@ya.ru>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Dmitriy Q <dmitry@atsip.ru>\n"
 "Language-Team: Sergey Segeda <thesermanarm@gmail.com>\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:549
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -284,14 +288,12 @@ msgstr "Принять"
 
 #: packages/lib/WebDavApi.js:451
 msgid "Access denied: Please check your username and password"
-msgstr ""
-"Отказано в доступе: Пожалуйста, проверьте ваши имя пользователя и пароль"
+msgstr "Доступ запрещен: Пожалуйста, проверьте имя пользователя и пароль"
 
 #: packages/lib/WebDavApi.js:449
 msgid "Access denied: Please re-enter your password and/or username"
 msgstr ""
-"Отказано в доступе: Пожалуйста, повторно введите свой пароль и/или имя "
-"пользователя."
+"Доступ запрещен: Пожалуйста, введите пароль и/или имя пользователя повторно"
 
 #: packages/server/src/routes/admin/users.ts:141
 msgid "Account"
@@ -612,11 +614,11 @@ msgstr "Можно поделиться"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:114
 msgid "Can view"
-msgstr "Можно просматривать"
+msgstr "Возможность просмотра"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:115
 msgid "Can view and edit"
-msgstr "Можно просматривать и редактировать"
+msgstr "Возможность просмотра и редактирования"
 
 #: packages/app-desktop/bridge.ts:278 packages/app-desktop/bridge.ts:294
 #: packages/app-desktop/checkForUpdates.ts:108
@@ -673,24 +675,23 @@ msgstr "Невозможно изменить зашифрованный эле�
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Не удалось скопировать заметку в блокнот \"%s\""
 
-#: packages/app-mobile/components/screens/Notes.tsx:168
+#: packages/app-mobile/components/screens/Notes.tsx:165
 msgid "Cannot create a new note: %s"
 msgstr "Невозможно создать новую заметку: %s"
 
-#: packages/app-cli/app/command-attach.ts:21
-#: packages/app-cli/app/command-cat.ts:25 packages/app-cli/app/command-cp.ts:24
-#: packages/app-cli/app/command-cp.ts:27
-#: packages/app-cli/app/command-done.ts:21
-#: packages/app-cli/app/command-export.ts:37
-#: packages/app-cli/app/command-export.ts:41
-#: packages/app-cli/app/command-geoloc.ts:20
-#: packages/app-cli/app/command-help.ts:66
-#: packages/app-cli/app/command-import.ts:36
-#: packages/app-cli/app/command-mv.ts:24 packages/app-cli/app/command-mv.ts:45
-#: packages/app-cli/app/command-ren.ts:23
-#: packages/app-cli/app/command-restore.ts:19
-#: packages/app-cli/app/command-rmbook.ts:26
-#: packages/app-cli/app/command-rmnote.ts:26
+#: packages/app-cli/app/command-attach.js:21
+#: packages/app-cli/app/command-cat.js:25 packages/app-cli/app/command-cp.js:24
+#: packages/app-cli/app/command-cp.js:27
+#: packages/app-cli/app/command-done.js:20
+#: packages/app-cli/app/command-export.js:36
+#: packages/app-cli/app/command-export.js:40
+#: packages/app-cli/app/command-geoloc.js:20
+#: packages/app-cli/app/command-help.js:66
+#: packages/app-cli/app/command-import.js:34
+#: packages/app-cli/app/command-mv.js:24 packages/app-cli/app/command-mv.js:45
+#: packages/app-cli/app/command-ren.js:23
+#: packages/app-cli/app/command-rmbook.js:25
+#: packages/app-cli/app/command-rmnote.js:25
 #: packages/app-cli/app/command-search.js:27
 #: packages/app-cli/app/command-set.ts:32
 #: packages/app-cli/app/command-tag.js:33
@@ -1059,7 +1060,7 @@ msgstr[0] "Скопировать общедоступную ссылку"
 msgstr[1] "Скопировать общедоступные ссылки"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:21
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:502
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:370
 msgid "Copy to clipboard"
 msgstr "Скопировать в буфер обмена"
 
@@ -1338,13 +1339,33 @@ msgstr "Удалить строку"
 msgid "Delete local data and re-download from sync target"
 msgstr "Удалить локальные данные и перегрузить данные с цели синхронизации"
 
-#: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:7
+#: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:8
 msgid "Delete note"
 msgstr "Удалить заметку"
+
+#: packages/lib/models/Note.ts:778
+msgid "Delete note \"%s\"?"
+msgstr "Удалить заметку \"%s\"?"
+
+#: packages/app-cli/app/command-rmnote.js:27
+#: packages/app-mobile/components/screens/Note.tsx:536
+msgid "Delete note?"
+msgstr "Удалить заметку?"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:9
 msgid "Delete notebook"
 msgstr "Удалить блокнот"
+
+#: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
+#: packages/app-mobile/components/side-menu-content.tsx:162
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"Удалить блокнот “%s”?\n"
+"\n"
+"Все заметки и вложенные блокноты также будут удалены."
 
 #: packages/lib/components/shared/config/plugins/useOnDeleteHandler.ts:15
 msgid "Delete plugin \"%s\"?"
@@ -1368,8 +1389,12 @@ msgid ""
 msgstr ""
 "Удалить блокнот \"Входящие\"?\n"
 "\n"
-"Если вы удалите блокнот \"Входящие\", то все электронные письма, которые "
-"были недавно отправлены в этот блокнот, могут быть потеряны."
+"При удалении блокнота \"Входящие\" все сообщения электронной почты, недавно "
+"отправленные в него, могут быть потеряны."
+
+#: packages/lib/models/Note.ts:780
+msgid "Delete these %d notes?"
+msgstr "Удалить эти %d заметки?"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:237
 msgid ""
@@ -1719,18 +1744,13 @@ msgid "Email"
 msgstr "Электронная почта"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:18
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:491
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:364
 msgid "Email to note"
-msgstr "Письмо в заметку"
+msgstr "Электронная почта для заметок"
 
 #: packages/lib/utils/joplinCloud.ts:187
 msgid "Email to Note"
-msgstr "Письмо в Заметку"
-
-#: packages/lib/models/Setting.ts:2711
-#, fuzzy
-msgid "Email To Note, login information"
-msgstr "Письмо в Заметку, данные для входа"
+msgstr "Электронная почта для заметок"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:129
@@ -2001,9 +2021,9 @@ msgstr "Экспорт"
 msgid "Export all"
 msgstr "Экспортировать все"
 
-#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:27
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
 msgid "Export all notes as JEX"
-msgstr "Экспортировать все заметки в формате JEX"
+msgstr "Экспорт всех заметок как JEX"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:185
 msgid "Export debug report"
@@ -2024,7 +2044,7 @@ msgstr "Экспортировать ваши данные"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:108
 msgid "Exported successfully!"
-msgstr "Экспортирование успешно завершено!"
+msgstr "Успешно экспортировано!"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:36
 msgid "Exporting profile..."
@@ -2034,9 +2054,9 @@ msgstr "Экспортирование профиля..."
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Экспортирование в \"%s\" в формате \"%s\". Пожалуйста, подождите..."
 
-#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:89
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
 msgid "Exporting..."
-msgstr "Экспортирование..."
+msgstr "Экспорт..."
 
 #: packages/app-cli/app/command-export.ts:14
 msgid ""
@@ -2739,7 +2759,8 @@ msgstr "Порядок переключения вида"
 #: packages/lib/models/Setting.ts:1814
 msgid "Leave it blank to download the language files from the default website"
 msgstr ""
-"Оставьте поле пустым, чтобы скачать языковые файлы с сайта по умолчанию"
+"Оставьте этот параметр пустым, чтобы загрузить языковые файлы с веб-сайта по "
+"умолчанию"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -4149,8 +4170,8 @@ msgid ""
 "Share a copy of all notes in a file format that can be imported by Joplin on "
 "a computer."
 msgstr ""
-"Поделиться копией всех заметок в формате файла, который можно импортировать "
-"в Joplin на компьютере."
+"Поделиться копией всех заметок в формате файла, который может быть "
+"импортирован в Joplin на компьютере."
 
 #: packages/lib/utils/joplinCloud.ts:125
 msgid "Share a notebook with others"
@@ -5016,23 +5037,26 @@ msgstr ""
 "заметкам. Удаляйте вложения с осторожностью - они не могут быть "
 "восстановлены."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:282
+#: packages/app-mobile/components/ScreenHeader.tsx:278
 msgid "This note could not be deleted: %s"
 msgid_plural "These notes could not be deleted: %s"
-msgstr[0] "Эта заметка не может быть удалена: %s"
-msgstr[1] "Эти заметки не могут быть удалены: %s"
+msgstr[0] "Эту заметку не удалось удалить: %s"
+msgstr[1] "Эти заметки не удалось удалить: %s"
+msgstr[2] "Эти заметок не удалось удалить: %s"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:269
+#: packages/app-mobile/components/ScreenHeader.tsx:258
 msgid "This note could not be duplicated: %s"
 msgid_plural "These notes could not be duplicated: %s"
 msgstr[0] "Эта заметка не может быть продублирована: %s"
 msgstr[1] "Эти заметки не могут быть продублированы: %s"
+msgstr[2] "Эти заметок не могут быть продублированы: %s"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:587
+#: packages/app-mobile/components/ScreenHeader.tsx:549
 msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
-msgstr[0] "Эта заметка не может быть перемещена: %s"
-msgstr[1] "Эти заметки не могут быть перемещены: %s"
+msgstr[0] "Эту заметку не удалось переместить: %s"
+msgstr[1] "Эти заметки не удалось переместить: %s"
+msgstr[2] "Эти заметок не удалось переместить: %s"
 
 #: packages/lib/models/Note.ts:122
 msgid "This note does not have geolocation information."
@@ -5318,11 +5342,7 @@ msgstr "Невозможно редактировать ресурс типа %s
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:72
 msgid "Unable to export or share data. Reason: %s"
-msgstr "Невозможно экспортировать или поделиться данными. Причина: %s"
-
-#: packages/app-mobile/components/screens/LogScreen.tsx:108
-msgid "Unable to share log data. Reason: %s"
-msgstr "Невозможно поделиться данными журнала. Причина: %s"
+msgstr "Невозможно экспортировать или передать данные. Причина: %s"
 
 #: packages/lib/models/Setting.ts:934
 msgid "Uncompleted to-dos on top"
@@ -5595,7 +5615,7 @@ msgstr ""
 "Предупреждение: не все данные показаны по соображениям производительности "
 "(ограничение:%s)."
 
-#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:102
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:100
 msgid ""
 "Warnings:\n"
 "%s"
@@ -5784,9 +5804,6 @@ msgstr "Отдалить"
 #~ msgstr ""
 #~ "Шаг 1: Для авторизации приложения откройте следующую ссылку в вашем "
 #~ "браузере:"
-
-#~ msgid "Delete note?"
-#~ msgstr "Удалить заметку?"
 
 #~ msgid ""
 #~ "Delete notebook? All notes and sub-notebooks within this notebook will "
