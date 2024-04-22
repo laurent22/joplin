@@ -253,7 +253,7 @@ if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cin
 Encoding=UTF-8
 Name=Joplin
 Comment=Joplin for Desktop
-Exec=${HOME}/.joplin/Joplin.AppImage ${SANDBOXPARAM} %u
+Exec=env APPIMAGELAUNCHER_DISABLE=TRUE ${HOME}/.joplin/Joplin.AppImage ${SANDBOXPARAM} %u
 Icon=joplin
 StartupWMClass=Joplin
 Type=Application
