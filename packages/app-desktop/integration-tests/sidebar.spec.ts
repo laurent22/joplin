@@ -61,7 +61,7 @@ test.describe('sidebar', () => {
 		await expect(mainWindow.locator(':focus')).toHaveText('Folder A 1');
 
 		// Tab should switch to the folder list
-		await mainWindow.keyboard.press('Tab');
+		await folderAHeader.press('Tab');
 		await expect(mainWindow.locator(':focus')).toHaveText('Test note A');
 
 		// Shift-tab should navigate back
