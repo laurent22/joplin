@@ -21,7 +21,7 @@ interface NoteListProps {
 	items: NoteEntity[];
 	folders: FolderEntity[];
 	noteSelectionEnabled?: boolean;
-	selectedFolderId?: string;
+	selectedFolderId: string|null;
 }
 
 class NoteListComponent extends Component<NoteListProps> {
