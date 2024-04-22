@@ -64,4 +64,4 @@ const AllNotesItem: React.FC<Props> = props => {
 	);
 };
 
-export default connect(()=>({}))(AllNotesItem);
+export default connect()(AllNotesItem);

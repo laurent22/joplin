@@ -8,8 +8,6 @@ import FolderIconBox from '../../FolderIconBox';
 import { getTrashFolderIcon, getTrashFolderId } from '@joplin/lib/services/trash';
 import Folder from '@joplin/lib/models/Folder';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { AppState } from '../../../app.reducer';
-import { connect } from 'react-redux';
 
 const renderFolderIcon = (folderIcon: FolderIcon) => {
 	if (!folderIcon) {
@@ -26,7 +24,6 @@ const renderFolderIcon = (folderIcon: FolderIcon) => {
 };
 
 interface FolderItemProps {
-	themeId: number;
 	hasChildren: boolean;
 	showFolderIcon: boolean;
 	isExpanded: boolean;
@@ -35,8 +32,6 @@ interface FolderItemProps {
 	folderId: string;
 	folderTitle: string;
 	folderIcon: FolderIcon;
-	selectedFolderId: string;
-	notesParentType: string;
 	noteCount: number;
 	onFolderDragStart_: ItemDragListener;
 	onFolderDragOver_: ItemDragListener;
@@ -91,10 +86,4 @@ function FolderItem(props: FolderItemProps) {
 	);
 }
 
-export default connect((state: AppState) => {
-	return {
-		themeId: state.settings.theme,
-		notesParentType: state.notesParentType,
-		selectedFolderId: state.selectedFolderId,
-	};
-})(FolderItem);
+export default FolderItem;
