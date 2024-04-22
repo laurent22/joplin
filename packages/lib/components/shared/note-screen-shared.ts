@@ -153,7 +153,7 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, fold
 			if (stateNote.id !== geoNote.id) return; // Another note has been loaded while geoloc was being retrieved
 
 			// Geo-location for this note has been saved to the database however the properties
-			// are is not in the state so set them now.
+			// are not in the state so set them now.
 
 			const geoInfo = {
 				longitude: geoNote.longitude,

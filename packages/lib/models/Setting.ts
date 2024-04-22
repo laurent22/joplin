@@ -36,6 +36,8 @@ export enum SettingItemSubType {
 	FilePathAndArgs = 'file_path_and_args',
 	FilePath = 'file_path', // Not supported on mobile!
 	DirectoryPath = 'directory_path', // Not supported on mobile!
+	FontFamily = 'font_family',
+	MonospaceFontFamily = 'monospace_font_family',
 }
 
 interface KeysOptions {
@@ -1360,6 +1362,7 @@ class Setting extends BaseModel {
 							_('Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.'),
 						storage: SettingStorage.File,
 						isGlobal: true,
+						subType: SettingItemSubType.FontFamily,
 					},
 			'style.editor.monospaceFontFamily': {
 				value: '',
@@ -1372,6 +1375,7 @@ class Setting extends BaseModel {
 					_('Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.'),
 				storage: SettingStorage.File,
 				isGlobal: true,
+				subType: SettingItemSubType.MonospaceFontFamily,
 			},
 
 			'style.editor.contentMaxWidth': { value: 0, type: SettingItemType.Int, public: true, storage: SettingStorage.File, isGlobal: true, appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor maximum width'), description: () => _('Set it to 0 to make it take the complete available space. Recommended width is 600.') },
