@@ -103,4 +103,27 @@ test.describe('sidebar', () => {
 		await expect(collapseButton).not.toBeVisible();
 		await expect(expandButton).not.toBeVisible();
 	});
+
+	test('all notes section should list all notes', async ({ mainWindow }) => {
+		const mainScreen = new MainScreen(mainWindow);
+		const sidebar = mainScreen.sidebar;
+
+		const testFolderA = await sidebar.createNewFolder('Folder A');
+		await expect(testFolderA).toBeAttached();
+
+		await mainScreen.createNewNote('A note in Folder A');
+		await mainScreen.createNewNote('Another note in Folder A');
+
+		const testFolderB = await sidebar.createNewFolder('Folder B');
+		await expect(testFolderB).toBeAttached();
+
+		await mainScreen.createNewNote('A note in Folder B');
+
+		const allNotesButton = sidebar.container.getByText('All notes');
+		await allNotesButton.click();
+
+		await expect(mainWindow.getByText('A note in Folder A')).toBeAttached();
+		await expect(mainWindow.getByText('Another note in Folder A')).toBeAttached();
+		await expect(mainWindow.getByText('A note in Folder B')).toBeAttached();
+	});
 });
