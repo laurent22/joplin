@@ -1,7 +1,7 @@
 
 import * as React from 'react';
 import ExtendedWebView, { WebViewControl } from '../../components/ExtendedWebView';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import shim from '@joplin/lib/shim';
 import PluginRunner from './PluginRunner';
 import loadPlugins from '../loadPlugins';
@@ -39,6 +39,21 @@ const usePlugins = (
 	}, [pluginRunner, store, webviewLoaded, pluginSettings]);
 };
 
+const useUnloadPluginsOnGlobalDisable = (
+	pluginStates: PluginStates,
+	pluginSupportEnabled: boolean,
+) => {
+	const pluginStatesRef = useRef(pluginStates);
+	pluginStatesRef.current = pluginStates;
+	useAsyncEffect(async event => {
+		if (!pluginSupportEnabled && Object.keys(pluginStatesRef.current).length) {
+			for (const pluginId in pluginStatesRef.current) {
+				await PluginService.instance().unloadPlugin(pluginId);
+				if (event.cancelled) return;
+			}
+		}
+	}, [pluginSupportEnabled]);
+};
 
 interface Props {
 	serializedPluginSettings: string;
@@ -64,6 +79,7 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 
 	const pluginSettings = usePluginSettings(props.serializedPluginSettings);
 	usePlugins(pluginRunner, webviewLoaded, pluginSettings);
+	useUnloadPluginsOnGlobalDisable(props.pluginStates, props.pluginSupportEnabled);
 
 	const onLoadStart = useCallback(() => {
 		// Handles the case where the webview reloads (e.g. due to an error or performance
@@ -77,15 +93,18 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 	}, []);
 
 
-	const renderWebView = () => {
-		// To avoid increasing startup time/memory usage on devices with no plugins, don't
-		// load the webview if unnecessary.
-		// Note that we intentionally load the webview even if all plugins are disabled.
-		const hasPlugins = Object.values(pluginSettings).length > 0;
-		if (!hasPlugins) {
-			return null;
+	// To avoid increasing startup time/memory usage on devices with no plugins, don't
+	// load the webview if unnecessary.
+	// Note that we intentionally load the webview even if all plugins are disabled.
+	const loadWebView = Object.values(pluginSettings).length > 0 && props.pluginSupportEnabled;
+	useEffect(() => {
+		if (!loadWebView) {
+			setLoaded(false);
 		}
-		if (!props.pluginSupportEnabled) {
+	}, [loadWebView]);
+
+	const renderWebView = () => {
+		if (!loadWebView) {
 			return null;
 		}
 
