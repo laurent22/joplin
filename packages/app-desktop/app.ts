@@ -140,10 +140,6 @@ class Application extends BaseApplication {
 			webFrame.setZoomFactor(Setting.value('windowContentZoomFactor') / 100);
 		}
 
-		if (!shim.isMac() && (action.type === 'SETTING_UPDATE_ONE' && action.key === 'hideMenuBar' || action.type === 'SETTING_UPDATE_ALL')) {
-			this.updateMenuBar();
-		}
-
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'linking.extraAllowedExtensions' || action.type === 'SETTING_UPDATE_ALL') {
 			bridge().extraAllowedOpenExtensions = Setting.value('linking.extraAllowedExtensions');
 		}
@@ -203,15 +199,6 @@ class Application extends BaseApplication {
 			]);
 			app.createTray(contextMenu);
 		}
-	}
-
-	public updateMenuBar() {
-		// macOS disallows the removal of the menu bar
-		if (shim.isMac()) return;
-
-		const window = bridge().window();
-		window.setAutoHideMenuBar(Setting.value('hideMenuBar'));
-		window.setMenuBarVisibility(!Setting.value('hideMenuBar'));
 	}
 
 	public updateEditorFont() {

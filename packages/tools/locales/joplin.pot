@@ -4651,7 +4651,7 @@ msgstr ""
 msgid "Toggle external editing"
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/commands/toggleMenuBar.ts:9
+#: packages/app-desktop/gui/MenuBar.tsx:774
 msgid "Toggle menu bar"
 msgstr ""
 

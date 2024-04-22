@@ -1283,8 +1283,8 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 
-			hideMenuBar: {
-				value: false,
+			showMenuBar: {
+				value: true, // Show the menu bar by default
 				type: SettingItemType.Bool,
 				public: false,
 				appTypes: [AppType.Desktop],
