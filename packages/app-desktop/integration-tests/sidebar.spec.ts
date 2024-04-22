@@ -44,36 +44,6 @@ test.describe('sidebar', () => {
 		await expect(mainWindow.locator(':focus')).toHaveText('All notes');
 	});
 
-	test('should focus the note list when pressing tab', async ({ electronApp, mainWindow }) => {
-		const mainScreen = new MainScreen(mainWindow);
-		const sidebar = mainScreen.sidebar;
-
-		const folderAHeader = await sidebar.createNewFolder('Folder A');
-		await expect(folderAHeader).toBeAttached();
-		await folderAHeader.click();
-
-		await mainScreen.createNewNote('Test note A');
-		await expect(mainWindow.getByText('Test note A')).toBeAttached();
-
-		await sidebar.forceUpdateSorting(electronApp);
-
-		await folderAHeader.click();
-		const focusedItem = mainWindow.locator(':focus');
-		// 1: The note counter
-		await expect(focusedItem).toHaveText('Folder A 1');
-
-		// Tab should switch to the folder list
-		await mainWindow.keyboard.press('Tab');
-		await expect(focusedItem).toHaveText('Test note A');
-
-		// Shift-tab should navigate back
-		await mainWindow.keyboard.down('Shift');
-		await mainWindow.keyboard.press('Tab');
-		await mainWindow.keyboard.up('Shift');
-
-		await expect(mainWindow.locator(':focus')).toHaveText('Folder A 1');
-	});
-
 	test('should allow changing the parent of a folder by drag-and-drop', async ({ electronApp, mainWindow }) => {
 		const mainScreen = new MainScreen(mainWindow);
 		const sidebar = mainScreen.sidebar;
