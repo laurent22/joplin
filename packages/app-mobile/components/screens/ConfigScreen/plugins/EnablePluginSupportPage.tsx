@@ -68,7 +68,7 @@ const EnablePluginSupportPage: React.FC<Props> = props => {
 			{renderCard('source-branch-check', _('Open Source'), _('Most plugins have source code available for review on the plugin website.'))}
 			{renderCard('flag-remove', _('Report system'), _('We have a system for reporting and removing problematic plugins.'))}
 			<Button onPress={onLearnMorePress}>{_('Learn more')}</Button>
-			<Button mode='contained' onPress={props.onEnablePluginSupport}>{_('Enable plugin support')}</Button>
+			<Button mode='contained' icon='check' onPress={props.onEnablePluginSupport}>{_('Enable plugin support')}</Button>
 		</View>
 	);
 };
