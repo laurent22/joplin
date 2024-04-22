@@ -262,7 +262,6 @@ tkwidgets
 tldr
 TLDR
 Todos
-toggleblock
 togglebutton
 togglemenuitem
 Tolu

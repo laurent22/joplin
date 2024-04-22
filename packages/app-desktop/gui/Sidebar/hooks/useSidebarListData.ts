@@ -63,7 +63,6 @@ const useSidebarListData = (props: Props): ListItem[] => {
 			onPlusButtonClick: onAddFolderButtonClick,
 			extraProps: {
 				['data-folder-id']: '',
-				toggleblock: '1',
 			},
 			supportsFolderDrop: true,
 		};
@@ -81,9 +80,7 @@ const useSidebarListData = (props: Props): ListItem[] => {
 			key: HeaderId.TagHeader,
 			onClick: onHeaderClick,
 			onPlusButtonClick: null,
-			extraProps: {
-				toggleblock: '1',
-			},
+			extraProps: { },
 			supportsFolderDrop: false,
 		};
 		const tagsSectionContent: ListItem[] = props.tagHeaderIsExpanded ? tagItems.items : [];
