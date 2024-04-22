@@ -53,16 +53,18 @@ test.describe('sidebar', () => {
 		await folderAHeader.click();
 
 		await mainScreen.createNewNote('Test note A');
+		await expect(mainWindow.getByText('Test note A')).toBeAttached();
 
 		await sidebar.forceUpdateSorting(electronApp);
 
 		await folderAHeader.click();
+		const focusedItem = mainWindow.locator(':focus');
 		// 1: The note counter
-		await expect(mainWindow.locator(':focus')).toHaveText('Folder A 1');
+		await expect(focusedItem).toHaveText('Folder A 1');
 
 		// Tab should switch to the folder list
-		await folderAHeader.press('Tab');
-		await expect(mainWindow.locator(':focus')).toHaveText('Test note A');
+		await mainWindow.keyboard.press('Tab');
+		await expect(focusedItem).toHaveText('Test note A');
 
 		// Shift-tab should navigate back
 		await mainWindow.keyboard.down('Shift');
@@ -104,14 +106,17 @@ test.describe('sidebar', () => {
 		await expect(expandButton).not.toBeVisible();
 	});
 
-	test('all notes section should list all notes', async ({ mainWindow }) => {
+	test('all notes section should list all notes', async ({ electronApp, mainWindow }) => {
 		const mainScreen = new MainScreen(mainWindow);
 		const sidebar = mainScreen.sidebar;
 
 		const testFolderA = await sidebar.createNewFolder('Folder A');
 		await expect(testFolderA).toBeAttached();
 
+		await sidebar.forceUpdateSorting(electronApp);
+
 		await mainScreen.createNewNote('A note in Folder A');
+		await expect(mainWindow.getByText('A note in Folder A')).toBeAttached();
 		await mainScreen.createNewNote('Another note in Folder A');
 
 		const testFolderB = await sidebar.createNewFolder('Folder B');
