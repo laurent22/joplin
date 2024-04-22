@@ -57,8 +57,8 @@ test.describe('sidebar', () => {
 		await sidebar.forceUpdateSorting(electronApp);
 
 		await folderAHeader.click();
-		// Only check beginning of text -- may have a note count number
-		await expect(mainWindow.locator(':focus')).toHaveText(/^Folder A/);
+		// 1: The note counter
+		await expect(mainWindow.locator(':focus')).toHaveText('Folder A 1');
 
 		// Tab should switch to the folder list
 		await mainWindow.keyboard.press('Tab');
@@ -69,7 +69,7 @@ test.describe('sidebar', () => {
 		await mainWindow.keyboard.press('Tab');
 		await mainWindow.keyboard.up('Shift');
 
-		await expect(mainWindow.locator(':focus')).toHaveText(/^Folder A/);
+		await expect(mainWindow.locator(':focus')).toHaveText('Folder A 1');
 	});
 
 	test('should allow changing the parent of a folder by drag-and-drop', async ({ electronApp, mainWindow }) => {
