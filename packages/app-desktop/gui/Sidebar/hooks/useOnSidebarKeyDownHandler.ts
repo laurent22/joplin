@@ -22,6 +22,8 @@ const useOnSidebarKeyDownHandler = (props: Props) => {
 				type: 'FOLDER_TOGGLE',
 				id: selectedItem.folder.id,
 			});
+		} else if ((event.ctrlKey || event.metaKey) && event.code === 'KeyA') { // ctrl+a or cmd+a
+			event.preventDefault();
 		}
 
 		let indexChange = 0;
