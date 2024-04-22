@@ -23,7 +23,7 @@ const useStyles = (themeId: number) => {
 
 		return StyleSheet.create({
 			descriptionContainer: {
-				padding: 16,
+				padding: theme.margin,
 			},
 			firstPrecautionCard: {
 				...basePrecautionCard,
@@ -31,10 +31,13 @@ const useStyles = (themeId: number) => {
 			},
 			precautionCard: {
 				...basePrecautionCard,
-				borderTopColor: theme.colorFaded,
+				borderTopColor: theme.dividerColor,
 				borderTopWidth: 1,
-				paddingTop: 8,
+				paddingTop: theme.itemMarginTop,
 				borderRadius: 0,
+			},
+			actionButtonContainer: {
+				margin: theme.margin,
 			},
 		});
 	}, [themeId]);
@@ -67,8 +70,10 @@ const EnablePluginSupportPage: React.FC<Props> = props => {
 			{renderCard('crown', _('Recommended Plugins'), _('We mark plugins developed by trusted Joplin community members as "recommended".'))}
 			{renderCard('source-branch-check', _('Open Source'), _('Most plugins have source code available for review on the plugin website.'))}
 			{renderCard('flag-remove', _('Report system'), _('We have a system for reporting and removing problematic plugins.'))}
-			<Button onPress={onLearnMorePress}>{_('Learn more')}</Button>
-			<Button mode='contained' icon='check' onPress={props.onEnablePluginSupport}>{_('Enable plugin support')}</Button>
+			<View style={styles.actionButtonContainer}>
+				<Button onPress={onLearnMorePress}>{_('Learn more')}</Button>
+				<Button mode='contained' icon='check' onPress={props.onEnablePluginSupport}>{_('Enable plugin support')}</Button>
+			</View>
 		</View>
 	);
 };
