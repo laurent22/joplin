@@ -6,8 +6,6 @@ const htmlentities = new Entities().encode;
 const urlUtils = require('../urlUtils.js');
 const { getClassNameForMimeType } = require('font-awesome-filetypes');
 
-type UpdateTitleHandler = (title: string|undefined)=> string;
-
 export interface Options {
 	title?: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -17,7 +15,6 @@ export interface Options {
 	plainResourceRendering?: boolean;
 	postMessageSyntax?: string;
 	enableLongPress?: boolean;
-	mapTitle?: UpdateTitleHandler;
 	itemIdToUrl?: ItemIdToUrlHandler;
 }
 
@@ -110,10 +107,6 @@ export default function(href: string, options: Options = null): LinkReplacementR
 	}
 
 	if (hrefAttr.indexOf('#') === 0 && href.indexOf('#') === 0) js = ''; // If it's an internal anchor, don't add any JS since the webview is going to handle navigating to the right place
-
-	if (options.mapTitle) {
-		title = options.mapTitle(title);
-	}
 
 	const attrHtml = [];
 	attrHtml.push('data-from-md');
