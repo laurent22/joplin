@@ -5,7 +5,6 @@ import ResourceService from './ResourceService';
 import Logger from '@joplin/utils/Logger';
 import shim from '../shim';
 import notifyDisabledSyncItems from './synchronizer/utils/checkDisabledSyncItemsNotification';
-import { GetOptionsTarget, type FileApi } from '../file-api';
 const { Dirnames } = require('./synchronizer/utils/types');
 const EventEmitter = require('events');
 
@@ -25,7 +24,8 @@ export default class ResourceFetcher extends BaseService {
 	private eventEmitter_ = new EventEmitter();
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private autoAddResourcesCalls_: any[] = [];
-	private fileApi_: ()=> FileApi;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	private fileApi_: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private updateReportIID_: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -193,7 +193,7 @@ export default class ResourceFetcher extends BaseService {
 		this.eventEmitter_.emit('downloadStarted', { id: resource.id });
 
 		try {
-			await fileApi.get(remoteResourceContentPath, { path: localResourceContentPath, target: GetOptionsTarget.File });
+			await fileApi.get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' });
 			if (!(await shim.fsDriver().exists(localResourceContentPath))) throw new Error(`Resource not found: ${resource.id}`);
 
 			await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_DONE });
