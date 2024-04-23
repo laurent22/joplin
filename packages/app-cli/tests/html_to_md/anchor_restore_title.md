@@ -1,0 +1,6 @@
+- [https://example.com](https://example.com "Just a title")
+- http://example.com
+- Title overriden, as it would be by the rich text editor: file:///mnt/c/test.txt
+- Title overriden and updated, as it could be if edited by a user in the rich text editor: [file:///mnt/c/test.txt](file:///mnt/c/test.txt "[edit] Ctrl-click to open [edit]")
+- Title overriden and updated with a different href from its title: [file:///mnt/c/test.txt](https://joplinapp.org/ "[edit] Ctrl-click to open [edit]")
+- With an empty original title: https://joplinapp.org/

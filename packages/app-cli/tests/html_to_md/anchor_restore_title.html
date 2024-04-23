@@ -1,0 +1,40 @@
+<ul>
+	<li><a href="https://example.com" title="Just a title">https://example.com</a></li>
+	<li><a href="http://example.com" title="http://example.com">http://example.com</a></li>
+	<li>
+		Title overriden, as it would be by the rich text editor:
+		<a
+			href="file:///mnt/c/test.txt"
+			title="Ctrl-click to open"
+			data-joplin-original-title="file:///mnt/c/test.txt"
+			data-joplin-mapped-title="Ctrl-click to open"
+		>file:///mnt/c/test.txt</a>
+	</li>
+	<li>
+		Title overriden and updated, as it could be if edited by a user in the rich text editor:
+		<a
+			href="file:///mnt/c/test.txt"
+			title="[edit] Ctrl-click to open [edit]"
+			data-joplin-original-title="file:///mnt/c/test.txt"
+			data-joplin-mapped-title="Ctrl-click to open"
+		>file:///mnt/c/test.txt</a>
+	</li>
+	<li>
+		Title overriden and updated with a different href from its title:
+		<a
+			href="https://joplinapp.org/"
+			title="[edit] Ctrl-click to open [edit]"
+			data-joplin-original-title="https://joplinapp.org/"
+			data-joplin-mapped-title="Ctrl-click to open"
+		>file:///mnt/c/test.txt</a>
+	</li>
+	<li>
+		With an empty original title:
+		<a
+			href="https://joplinapp.org/"
+			title="Ctrl-click to open"
+			data-joplin-original-title=""
+			data-joplin-mapped-title="Ctrl-click to open"
+		>https://joplinapp.org/</a>
+	</li>
+</ul>
