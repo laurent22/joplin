@@ -6,7 +6,7 @@ export type ItemIdToUrlHandler = (resource: any)=> string;
 export type MapLinkTitleCallback = (title: string, url: string)=> string;
 
 interface ResourceEntity {
-	id: string;
+	id?: string;
 	title?: string;
 	mime?: string;
 	file_extension?: string;

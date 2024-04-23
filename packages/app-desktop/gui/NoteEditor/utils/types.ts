@@ -6,6 +6,7 @@ import { RenderResult, RenderResultPluginAsset } from '@joplin/renderer/types';
 import { Dispatch } from 'redux';
 import { ProcessResultsRow } from '@joplin/lib/services/search/SearchEngine';
 import { DropHandler } from './useDropHandler';
+import { ResourceEntity } from '@joplin/lib/services/database/types';
 
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
@@ -82,6 +83,7 @@ export interface MarkupToHtmlOptions {
 	platformName?: string;
 	allowedFilePrefixes?: string[];
 	whiteBackgroundNoteRendering?: boolean;
+	resources?: Record<string, ResourceEntity>;
 }
 
 export type MarkupToHtmlHandler = (markupLanguage: MarkupLanguage, markup: string, options: MarkupToHtmlOptions)=> Promise<RenderResult>;

@@ -3,7 +3,7 @@ import HtmlToHtml from './HtmlToHtml';
 import htmlUtils from './htmlUtils';
 import { Options as NoteStyleOptions } from './noteStyle';
 import { AllHtmlEntities } from 'html-entities';
-import { FsDriver, MarkupRenderer, MarkupToHtmlConverter, OptionsResourceModel, RenderResult } from './types';
+import { FsDriver, MarkupRenderer, MarkupToHtmlConverter, OptionsResourceModel, RenderOptions, RenderResult } from './types';
 import defaultResourceModel from './defaultResourceModel';
 const MarkdownIt = require('markdown-it');
 
@@ -95,7 +95,7 @@ export default class MarkupToHtml implements MarkupToHtmlConverter {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async render(markupLanguage: MarkupLanguage, markup: string, theme: any, options: any): Promise<RenderResult> {
+	public async render(markupLanguage: MarkupLanguage, markup: string, theme: any, options: RenderOptions): Promise<RenderResult> {
 		if (this.options_.isSafeMode) {
 			const htmlentities = new AllHtmlEntities();
 			return {

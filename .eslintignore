@@ -284,6 +284,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/PlainEditor/PlainEditor.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/joplinCommandToTinyMceCommands.js
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/markupRenderOptions.test.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/markupRenderOptions.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js
