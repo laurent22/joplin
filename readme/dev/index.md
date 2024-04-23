@@ -119,3 +119,6 @@ In that case we will not merge the pull request, even if only small changes are 
 Also, please note that since we have spent time reviewing the pull request and proposing solutions, we reserve the right to re-use that knowledge to create a new pull request, potentially based on your changes.
 
 We'd much prefer that you complete the pull request though, so we'll be sure to ping you a few times before that!
+
+## Language
+Communicate with English unless otherwise noted.
