@@ -366,9 +366,13 @@ rules.inlineLink = {
     if (!href) {
       return getNamedAnchorFromLink(node, options) + filterLinkContent(content)
     } else {
-      // data-original-title: Support for Joplin's rich text editor, which updates link titles
-      // to "ctrl+click to open link: url".
-      const titleAttrValue = node.getAttribute('data-original-title') || node.title || '';
+      // Rich text editor support:
+      // Joplin's rich text editor updates link titles before displaying them in the rich text editor
+      // (e.g. to "ctrl+click to open link: url"). Restore the original title:
+      const originalTitle = node.getAttribute('data-joplin-original-title');
+      const mappedTitle = node.getAttribute('data-joplin-mapped-title');
+      const titleAttrValue = node.title && node.title === mappedTitle ? originalTitle : node.title;
+
       var title = titleAttrValue && titleAttrValue !== href ? ' "' + titleAttrValue + '"' : ''
       if (!href) title = ''
       let output = getNamedAnchorFromLink(node, options) + '[' + filterLinkContent(content) + '](' + href + title + ')'

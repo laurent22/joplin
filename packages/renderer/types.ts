@@ -3,7 +3,7 @@ import { Options as NoteStyleOptions } from './noteStyle';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export type ItemIdToUrlHandler = (resource: any)=> string;
-export type MapLinkTitleCallback = (title: string)=> string;
+export type MapLinkTitleCallback = (title: string, url: string)=> string;
 
 interface ResourceEntity {
 	id: string;

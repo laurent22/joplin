@@ -114,7 +114,10 @@ export default function(href: string, options: Options = null): LinkReplacementR
 	if (resourceIdAttr) attrHtml.push(resourceIdAttr);
 	if (title) attrHtml.push(`title='${htmlentities(title)}'`);
 	if (mime) attrHtml.push(`type='${htmlentities(mime)}'`);
-	if (options.originalTitle) attrHtml.push(`data-original-title='${htmlentities(options.originalTitle)}'`);
+	if (options.originalTitle && options.originalTitle !== title) {
+		attrHtml.push(`data-joplin-original-title='${htmlentities(options.originalTitle)}'`);
+		attrHtml.push(`data-joplin-mapped-title='${htmlentities(title)}'`);
+	}
 
 	let resourceFullPath = resource && options?.ResourceModel?.fullPath ? options.ResourceModel.fullPath(resource) : null;
 

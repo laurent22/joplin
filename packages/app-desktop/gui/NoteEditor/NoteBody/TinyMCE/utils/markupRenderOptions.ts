@@ -8,11 +8,15 @@ const markupRenderOptions = (override?: MarkupToHtmlOptions) => {
 	return baseMarkupRendererOptions({
 		plugins: {
 			link_open: {
-				mapLinkTitle: (originalTitle: string|undefined, url: string) => {
+				mapLinkTitle: (originalTitle: string, url: string) => {
+					if (originalTitle && originalTitle !== url) {
+						return originalTitle;
+					}
+
 					if (shim.isMac()) {
-						return _('Cmd+click to open hyperlink: %s', originalTitle ?? url);
+						return _('Cmd+click to open hyperlink: %s', url);
 					} else {
-						return _('Ctrl+click to open hyperlink: %s', originalTitle ?? url);
+						return _('Ctrl+click to open hyperlink: %s', url);
 					}
 				},
 			},

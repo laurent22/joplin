@@ -17,7 +17,7 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 
 		if (ruleOptions.mapLinkTitle) {
 			originalTitle = title;
-			title = ruleOptions.mapLinkTitle(title);
+			title = ruleOptions.mapLinkTitle(title, href);
 		}
 
 		const replacement = linkReplacement(href, {
