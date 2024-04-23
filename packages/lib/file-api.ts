@@ -1,4 +1,4 @@
-import Logger from '@joplin/utils/Logger';
+import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import shim from './shim';
 import BaseItem from './models/BaseItem';
 import time from './time';
@@ -98,6 +98,36 @@ async function tryAndRepeat(fn: Function, count: number) {
 			await time.sleep(1 + retryCount * 3);
 		}
 	}
+}
+
+export interface DeltaOptions {
+	allItemIdsHandler(): Promise<string[]>;
+	logger?: LoggerWrapper;
+	wipeOutFailSafe: boolean;
+}
+
+export enum GetOptionsTarget {
+	String = 'string',
+	File = 'file',
+}
+
+export interface GetOptions {
+	target?: GetOptionsTarget;
+	path?: string;
+	encoding?: string;
+
+	source?: string;
+}
+
+export interface PutOptions {
+	path?: string;
+	source?: string;
+}
+
+export interface ItemStat {
+	path: string;
+	updated_time: number;
+	isDir: boolean;
 }
 
 class FileApi {
@@ -316,7 +346,7 @@ class FileApi {
 		return tryAndRepeat(() => this.driver_.mkdir(this.fullPath(path)), this.requestRepeatCount());
 	}
 
-	public async stat(path: string) {
+	public async stat(path: string): Promise<ItemStat> {
 		logger.debug(`stat ${this.fullPath(path)}`);
 
 		const output = await tryAndRepeat(() => this.driver_.stat(this.fullPath(path)), this.requestRepeatCount());
@@ -327,8 +357,7 @@ class FileApi {
 	}
 
 	// Returns UTF-8 encoded string by default, or a Response if `options.target = 'file'`
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public get(path: string, options: any = null) {
+	public get(path: string, options: GetOptions = null) {
 		if (!options) options = {};
 		if (!options.encoding) options.encoding = 'utf8';
 		logger.debug(`get ${this.fullPath(path)}`);
@@ -336,7 +365,7 @@ class FileApi {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async put(path: string, content: any, options: any = null) {
+	public async put(path: string, content: any, options: PutOptions = null) {
 		logger.debug(`put ${this.fullPath(path)}`, options);
 
 		if (options && options.source === 'file') {
@@ -372,8 +401,7 @@ class FileApi {
 		return tryAndRepeat(() => this.driver_.clearRoot(this.baseDir()), this.requestRepeatCount());
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public delta(path: string, options: any = null): Promise<PaginatedList> {
+	public delta(path: string, options: DeltaOptions|null = null): Promise<PaginatedList> {
 		logger.debug(`delta ${this.fullPath(path)}`);
 		return tryAndRepeat(() => this.driver_.delta(this.fullPath(path), options), this.requestRepeatCount());
 	}
@@ -423,7 +451,7 @@ function basicDeltaContextFromOptions_(options: any) {
 // a built-in delta API. OneDrive and Dropbox have one for example, but Nextcloud and obviously
 // the file system do not.
 // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-async function basicDelta(path: string, getDirStatFn: Function, options: any) {
+async function basicDelta(path: string, getDirStatFn: Function, options: DeltaOptions) {
 	const outputLimit = 50;
 	const itemIds = await options.allItemIdsHandler();
 	if (!Array.isArray(itemIds)) throw new Error('Delta API not supported - local IDs must be provided');

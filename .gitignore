@@ -757,6 +757,7 @@ packages/lib/ObjectUtils.js
 packages/lib/PoorManIntervals.js
 packages/lib/RotatingLogs.test.js
 packages/lib/RotatingLogs.js
+packages/lib/SyncTargetFilesystem.js
 packages/lib/SyncTargetJoplinCloud.js
 packages/lib/SyncTargetJoplinServer.js
 packages/lib/SyncTargetNone.js
@@ -796,6 +797,7 @@ packages/lib/errorUtils.js
 packages/lib/errors.js
 packages/lib/eventManager.js
 packages/lib/file-api-driver-joplinServer.js
+packages/lib/file-api-driver-local.js
 packages/lib/file-api-driver-memory.js
 packages/lib/file-api-driver.test.js
 packages/lib/file-api.test.js

@@ -13,7 +13,7 @@ import { DownloadController } from './downloadController';
 import { TextItem } from 'pdfjs-dist/types/src/display/api';
 import replaceUnsupportedCharacters from './utils/replaceUnsupportedCharacters';
 
-const { FileApiDriverLocal } = require('./file-api-driver-local');
+import FileApiDriverLocal from './file-api-driver-local';
 const mimeUtils = require('./mime-utils.js').mime;
 const { _ } = require('./locale');
 const http = require('http');
