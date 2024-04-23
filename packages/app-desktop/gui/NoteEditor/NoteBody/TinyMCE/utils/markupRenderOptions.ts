@@ -1,4 +1,3 @@
-
 import { _ } from '@joplin/lib/locale';
 import baseMarkupRendererOptions from '../../../utils/markupRenderOptions';
 import { MarkupToHtmlOptions } from '../../../utils/types';
