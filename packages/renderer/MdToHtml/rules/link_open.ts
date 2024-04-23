@@ -12,10 +12,17 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 		const href = utils.getAttr(token.attrs, 'href');
 		const resourceHrefInfo = urlUtils.parseResourceUrl(href);
 		const isResourceUrl = ruleOptions.resources && !!resourceHrefInfo;
-		const title = utils.getAttr(token.attrs, 'title', isResourceUrl ? '' : href);
+		let title = utils.getAttr(token.attrs, 'title', isResourceUrl ? '' : href);
+		let originalTitle: string|undefined = undefined;
+
+		if (ruleOptions.mapLinkTitle) {
+			originalTitle = title;
+			title = ruleOptions.mapLinkTitle(title);
+		}
 
 		const replacement = linkReplacement(href, {
 			title,
+			originalTitle,
 			resources: ruleOptions.resources,
 			ResourceModel: ruleOptions.ResourceModel,
 			linkRenderingType: ruleOptions.linkRenderingType,

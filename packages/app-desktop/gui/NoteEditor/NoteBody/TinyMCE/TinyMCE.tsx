@@ -28,7 +28,7 @@ import { joplinCommandToTinyMceCommands, TinyMceCommand } from './utils/joplinCo
 import shouldPasteResources from './utils/shouldPasteResources';
 import lightTheme from '@joplin/lib/themes/light';
 import { Options as NoteStyleOptions } from '@joplin/renderer/noteStyle';
-import markupRenderOptions from '../../utils/markupRenderOptions';
+import markupRenderOptions from './utils/markupRenderOptions';
 import { DropHandler } from '../../utils/useDropHandler';
 import Logger from '@joplin/utils/Logger';
 import useWebViewApi from './utils/useWebViewApi';

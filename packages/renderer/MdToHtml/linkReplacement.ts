@@ -8,6 +8,7 @@ const { getClassNameForMimeType } = require('font-awesome-filetypes');
 
 export interface Options {
 	title?: string;
+	originalTitle?: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	resources?: any;
 	ResourceModel?: OptionsResourceModel;
@@ -113,6 +114,7 @@ export default function(href: string, options: Options = null): LinkReplacementR
 	if (resourceIdAttr) attrHtml.push(resourceIdAttr);
 	if (title) attrHtml.push(`title='${htmlentities(title)}'`);
 	if (mime) attrHtml.push(`type='${htmlentities(mime)}'`);
+	if (options.originalTitle) attrHtml.push(`data-original-title='${htmlentities(options.originalTitle)}'`);
 
 	let resourceFullPath = resource && options?.ResourceModel?.fullPath ? options.ResourceModel.fullPath(resource) : null;
 

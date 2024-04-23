@@ -4,7 +4,7 @@ import { fileExtension } from '@joplin/utils/path';
 import setupLinkify from './MdToHtml/setupLinkify';
 import validateLinks from './MdToHtml/validateLinks';
 import { Options as NoteStyleOptions } from './noteStyle';
-import { FsDriver, ItemIdToUrlHandler, MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult, RenderResultPluginAsset } from './types';
+import { FsDriver, ItemIdToUrlHandler, MapLinkTitleCallback, MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult, RenderResultPluginAsset } from './types';
 import hljs from './highlight';
 import * as MarkdownIt from 'markdown-it';
 
@@ -183,6 +183,7 @@ export interface RuleOptions {
 	useCustomPdfViewer: boolean;
 	noteId?: string;
 	vendorDir?: string;
+	mapLinkTitle?: MapLinkTitleCallback;
 	itemIdToUrl?: ItemIdToUrlHandler;
 
 	// Passed to the HTML sanitizer: Allows file:// URLs with
