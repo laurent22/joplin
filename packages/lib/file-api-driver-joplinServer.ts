@@ -1,6 +1,6 @@
-import { GetOptions, MultiPutItem } from './file-api';
+import { MultiPutItem } from './file-api';
 import JoplinError from './JoplinError';
-import JoplinServerApi, { ExecOptions, ExecOptionsResponseFormat } from './JoplinServerApi';
+import JoplinServerApi from './JoplinServerApi';
 import { trimSlashes } from './path-utils';
 import { Lock, LockClientType, LockType } from './services/synchronizer/LockHandler';
 
@@ -172,12 +172,12 @@ export default class FileApiDriverJoplinServer {
 		} as any;
 	}
 
-	public async get(path: string, options: GetOptions) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code from before rule was applied
-		const execOptions: ExecOptions = { ...(options as any) };
-		if (!execOptions.responseFormat) execOptions.responseFormat = ExecOptionsResponseFormat.Text;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public async get(path: string, options: any) {
+		if (!options) options = {};
+		if (!options.responseFormat) options.responseFormat = 'text';
 		try {
-			const response = await this.api().exec('GET', `${this.apiFilePath_(path)}/content`, null, null, null, execOptions);
+			const response = await this.api().exec('GET', `${this.apiFilePath_(path)}/content`, null, null, null, options);
 			return response;
 		} catch (error) {
 			if (error.code !== 404) throw error;

@@ -19,7 +19,7 @@ interface Options {
 	env?: Env;
 }
 
-export enum ExecOptionsResponseFormat {
+enum ExecOptionsResponseFormat {
 	Json = 'json',
 	Text = 'text',
 }
