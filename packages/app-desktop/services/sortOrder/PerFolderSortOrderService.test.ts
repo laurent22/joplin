@@ -4,7 +4,7 @@ import Setting from '@joplin/lib/models/Setting';
 import { AppState, createAppDefaultState } from '../../app.reducer';
 import eventManager from '@joplin/lib/eventManager';
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
-const { ALL_NOTES_FILTER_ID } = require('../reserved-ids');
+const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
 const folderId1 = 'aa012345678901234567890123456789';
 const folderId2 = 'bb012345678901234567890123456789';
