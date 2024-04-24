@@ -19,10 +19,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@adobe/css-tools@npm:4.3.2":
-  version: 4.3.2
-  resolution: "@adobe/css-tools@npm:4.3.2"
-  checksum: 9667d61d55dc3b0a315c530ae84e016ce5267c4dd8ac00abb40108dc98e07b98e3090ce8b87acd51a41a68d9e84dcccb08cdf21c902572a9cf9dcaf830da4ae3
+"@adobe/css-tools@npm:4.3.3":
+  version: 4.3.3
+  resolution: "@adobe/css-tools@npm:4.3.3"
+  checksum: d21f3786b84911fee59c995a146644a85c98692979097b26484ffa9e442fb1a92ccd68ce984e3e7cf8d5933c3560fbc0ad3e3cd1de50b9a723d1c012e793bbcb
   languageName: node
   linkType: hard
 
@@ -6846,7 +6846,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/htmlpack@workspace:packages/htmlpack"
   dependencies:
-    "@adobe/css-tools": 4.3.2
+    "@adobe/css-tools": 4.3.3
     "@joplin/fork-htmlparser2": ^4.1.51
     "@types/fs-extra": 11.0.4
     datauri: 4.1.0
@@ -6859,7 +6859,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/lib@workspace:packages/lib"
   dependencies:
-    "@adobe/css-tools": 4.3.2
+    "@adobe/css-tools": 4.3.3
     "@aws-sdk/client-s3": 3.296.0
     "@aws-sdk/s3-request-presigner": 3.296.0
     "@joplin/fork-htmlparser2": ^4.1.51
@@ -7195,7 +7195,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/turndown@workspace:packages/turndown"
   dependencies:
-    "@adobe/css-tools": 4.3.2
+    "@adobe/css-tools": 4.3.3
     "@rollup/plugin-commonjs": 25.0.7
     "@rollup/plugin-node-resolve": 15.2.3
     "@rollup/plugin-replace": 5.0.5
