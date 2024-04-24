@@ -1,5 +1,6 @@
 import * as path from 'path';
 import { readJsonFile } from './utils';
+import { Manifests } from './types';
 
 export interface ManifestOverride {
 	_obsolete?: boolean;
@@ -9,11 +10,9 @@ export interface ManifestOverride {
 
 export type ManifestOverrides = Record<string, ManifestOverride>;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function applyManifestOverrides(manifests: any, overrides: ManifestOverrides) {
+export function applyManifestOverrides(manifests: Manifests, overrides: ManifestOverrides) {
 	for (const [pluginId, override] of Object.entries(overrides)) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const manifest: any = manifests[pluginId];
+		const manifest = manifests[pluginId];
 
 		if (!manifest) {
 			// If the manifest does not exist in the destination, it means the
@@ -34,8 +33,7 @@ export function applyManifestOverrides(manifests: any, overrides: ManifestOverri
 }
 
 export function getObsoleteManifests(overrides: ManifestOverrides) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: any = {};
+	const output: Manifests = {};
 
 	for (const [pluginId, override] of Object.entries(overrides)) {
 		if (override._obsolete) {

@@ -1197,6 +1197,8 @@ packages/pdf-viewer/ui/IconButtons.js
 packages/pdf-viewer/ui/ZoomControls.js
 packages/plugin-repo-cli/commands/updateRelease.js
 packages/plugin-repo-cli/index.js
+packages/plugin-repo-cli/lib/applyManifestDefaults.test.js
+packages/plugin-repo-cli/lib/applyManifestDefaults.js
 packages/plugin-repo-cli/lib/checkIfPluginCanBeAdded.test.js
 packages/plugin-repo-cli/lib/checkIfPluginCanBeAdded.js
 packages/plugin-repo-cli/lib/errorsHaveChanged.test.js

@@ -8,8 +8,9 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as process from 'process';
 import { resolveRelativePathWithinDir, gitPullTry, gitRepoCleanTry, gitRepoClean } from '@joplin/tools/tool-utils.js';
+import applyManifestDefaults, { readManifestDefaults } from './lib/applyManifestDefaults';
 import updateReadme from './lib/updateReadme';
-import { NpmPackage } from './lib/types';
+import { Manifests, NpmPackage } from './lib/types';
 import gitCompareUrl from './lib/gitCompareUrl';
 import commandUpdateRelease from './commands/updateRelease';
 import { isJoplinPluginPackage, readJsonFile } from './lib/utils';
@@ -164,8 +165,7 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string, dryRun
 	await execCommand('npm init --yes --loglevel silent', { quiet: true });
 
 	let actionType: ProcessingActionType = ProcessingActionType.Update;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	let manifests: any = {};
+	let manifests: Manifests = {};
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	let manifest: any = {};
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -200,6 +200,7 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string, dryRun
 			...manifests,
 		};
 
+		manifests = applyManifestDefaults(manifests, await readManifestDefaults(repoDir));
 		manifests = applyManifestOverrides(manifests, manifestOverrides);
 
 		await writeManifests(repoDir, manifests);
