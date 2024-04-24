@@ -228,8 +228,8 @@ function shimInit(options: ShimInitOptions = null) {
 			image.src = filePath;
 			await new Promise<void>((resolve, reject) => {
 				image.onload = () => resolve();
-				image.onerror = () => reject(`Image at ${filePath} failed to load.`);
-				image.onabort = () => reject(`Loading stopped for image at ${filePath}.`);
+				image.onerror = () => reject(new Error(`Image at ${filePath} failed to load.`));
+				image.onabort = () => reject(new Error(`Loading stopped for image at ${filePath}.`));
 			});
 			if (!image.complete || (image.width === 0 && image.height === 0)) {
 				throw new Error(`Image is invalid or does not exist: ${filePath}`);

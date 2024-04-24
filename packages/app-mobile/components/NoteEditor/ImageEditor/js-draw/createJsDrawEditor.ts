@@ -133,7 +133,7 @@ export const createJsDrawEditor = (
 			const request = new XMLHttpRequest();
 
 			const onError = () => {
-				reject(`Failed to load initial SVG data: ${request.status}, ${request.statusText}, ${request.responseText}`);
+				reject(new Error(`Failed to load initial SVG data: ${request.status}, ${request.statusText}, ${request.responseText}`));
 			};
 
 			request.addEventListener('load', _ => {
