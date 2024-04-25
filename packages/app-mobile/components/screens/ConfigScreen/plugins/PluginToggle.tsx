@@ -11,6 +11,7 @@ import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 
 interface Props {
 	pluginId: string;
+	themeId: number;
 	styles: ConfigScreenStyles;
 	pluginSettings: string;
 	updatablePluginIds: Record<string, boolean>;
@@ -91,6 +92,7 @@ const PluginToggle: React.FC<Props> = props => {
 
 	return (
 		<PluginBox
+			themeId={props.themeId}
 			item={pluginItem}
 			isCompatible={isCompatible}
 			hasErrors={plugin.hasErrors}

@@ -30,7 +30,7 @@ export interface ValueMap {
 
 export default function getResponsiveValue(valueMap: ValueMap): number {
 	if (Object.keys(valueMap).length === 0) {
-		throw 'valueMap cannot be an empty object!';
+		throw new Error('valueMap cannot be an empty object!');
 	}
 
 	const width = Dimensions.get('window').width;

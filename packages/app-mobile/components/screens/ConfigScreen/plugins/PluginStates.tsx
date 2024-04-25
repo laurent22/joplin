@@ -98,6 +98,7 @@ const PluginStates: React.FC<Props> = props => {
 			installedPluginCards.push(
 				<PluginToggle
 					key={`plugin-${key}`}
+					themeId={props.themeId}
 					pluginId={plugin.id}
 					styles={props.styles}
 					pluginSettings={props.pluginSettings}
