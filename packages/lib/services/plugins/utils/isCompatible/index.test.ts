@@ -8,7 +8,7 @@ describe('isCompatible', () => {
 			manifest: { app_min_version: '2.0' },
 			appVersion: '2.1.0',
 			shouldSupportDesktop: true,
-			shouldSupportMobile: true,
+			shouldSupportMobile: false,
 		},
 		{
 			manifest: { app_min_version: '2.0' },
@@ -20,7 +20,7 @@ describe('isCompatible', () => {
 			manifest: { app_min_version: '3.0.2' },
 			appVersion: '3.0.2',
 			shouldSupportDesktop: true,
-			shouldSupportMobile: true,
+			shouldSupportMobile: false,
 		},
 
 		// Should support the case where only one platform is provided, with no version
@@ -83,9 +83,13 @@ describe('isCompatible', () => {
 			shouldSupportMobile: true,
 		},
 	])('should correctly return whether a plugin is compatible with a given version of Joplin (case %#: %j)', ({ manifest, appVersion, shouldSupportDesktop, shouldSupportMobile }) => {
-		const mobileCompatible = isCompatible(appVersion, AppType.Mobile, manifest);
+		const fullManifest = {
+			id: 'com.example.id',
+			...manifest,
+		};
+		const mobileCompatible = isCompatible(appVersion, AppType.Mobile, fullManifest);
 		expect(mobileCompatible).toBe(shouldSupportMobile);
-		const desktopCompatible = isCompatible(appVersion, AppType.Desktop, manifest);
+		const desktopCompatible = isCompatible(appVersion, AppType.Desktop, fullManifest);
 		expect(desktopCompatible).toBe(shouldSupportDesktop);
 	});
 });
