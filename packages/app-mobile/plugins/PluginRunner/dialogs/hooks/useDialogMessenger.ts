@@ -30,7 +30,11 @@ const useDialogMessenger = (props: Props) => {
 				PostMessageService.instance().registerViewMessageHandler(
 					ResponderComponentType.UserWebview,
 					viewId,
-					callback,
+					(message: SerializableData) => {
+						// For compatibility with desktop, the message needs to be wrapped in
+						// an object.
+						return callback({ message });
+					},
 				);
 			},
 			onError: async (error: string) => {
