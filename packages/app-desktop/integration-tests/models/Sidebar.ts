@@ -1,4 +1,3 @@
-
 import activateMainMenuItem from '../util/activateMainMenuItem';
 import type MainScreen from './MainScreen';
 import { ElectronApplication, Locator, Page } from '@playwright/test';
