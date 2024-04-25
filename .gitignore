@@ -776,6 +776,7 @@ packages/lib/commands/index.js
 packages/lib/commands/openMasterPasswordDialog.js
 packages/lib/commands/synchronize.js
 packages/lib/components/EncryptionConfigScreen/utils.js
+packages/lib/components/shared/NoteList/getEmptyFolderMessage.js
 packages/lib/components/shared/config/config-shared.js
 packages/lib/components/shared/config/plugins/types.js
 packages/lib/components/shared/config/plugins/useOnDeleteHandler.js
