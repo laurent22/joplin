@@ -22,7 +22,7 @@ Name | Type | Required? | Description
 
 ## Platforms
 
-A list that can contain `"desktop"` and/or `"mobile"`.
+A list that can contain `"desktop"` and/or `"mobile"`. If not given, it defaults to `[ "desktop" ]` for most plugins.
 
 ## Categories
 
