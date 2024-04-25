@@ -44,8 +44,8 @@ const useSelectedSidebarIndex = (props: Props) => {
 	// Not all list items correspond with selectable Joplin folders/tags, but we want to
 	// be able to select them anyway. This is handled with selectedIndexOverride.
 	//
-	// When selectedIndexOverride >= 0, it corresponds to the index of a selected item with no corresponding
-	// Joplin object.
+	// When selectedIndexOverride >= 0, it corresponds to the index of a selected item with no
+	// specific note parent item (e.g. a header).
 	const [selectedIndexOverride, setSelectedIndexOverride] = useState(-1);
 	useEffect(() => {
 		setSelectedIndexOverride(-1);
