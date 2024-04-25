@@ -9,9 +9,9 @@ import * as fs from 'fs-extra';
 import * as pdfJsNamespace from 'pdfjs-dist';
 import { writeFile } from 'fs/promises';
 import { ResourceEntity } from './services/database/types';
-import { DownloadController } from './downloadController';
 import { TextItem } from 'pdfjs-dist/types/src/display/api';
 import replaceUnsupportedCharacters from './utils/replaceUnsupportedCharacters';
+import { FetchBlobOptions } from './types';
 
 import FileApiDriverLocal from './file-api-driver-local';
 const mimeUtils = require('./mime-utils.js').mime;
@@ -26,16 +26,6 @@ const dgram = require('dgram');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const proxySettings: any = {};
-
-type FetchBlobOptions = {
-	path?: string;
-	method?: string;
-	maxRedirects?: number;
-	timeout?: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	headers?: any;
-	downloadController?: DownloadController;
-};
 
 function fileExists(filePath: string) {
 	try {

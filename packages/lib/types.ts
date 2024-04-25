@@ -1,3 +1,5 @@
+import { DownloadController } from './downloadController';
+
 export enum ApplicationPlatform {
 	Unknown = 0,
 	Windows = 1,
@@ -13,3 +15,12 @@ export enum ApplicationType {
 	Mobile = 2,
 	Cli = 3,
 }
+
+export type FetchBlobOptions = {
+	path?: string;
+	method?: string;
+	maxRedirects?: number;
+	timeout?: number;
+	headers?: Record<string, string>;
+	downloadController?: DownloadController;
+};
