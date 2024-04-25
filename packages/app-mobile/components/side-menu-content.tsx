@@ -93,6 +93,8 @@ const SideMenuContentComponent = (props: Props) => {
 				fontSize: 22,
 				color: theme.color,
 				width: 26,
+				textAlign: 'center',
+				textAlignVertical: 'center',
 			},
 		};
 
