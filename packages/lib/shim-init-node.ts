@@ -9,11 +9,11 @@ import * as fs from 'fs-extra';
 import * as pdfJsNamespace from 'pdfjs-dist';
 import { writeFile } from 'fs/promises';
 import { ResourceEntity } from './services/database/types';
-import { DownloadController } from './downloadController';
 import { TextItem } from 'pdfjs-dist/types/src/display/api';
 import replaceUnsupportedCharacters from './utils/replaceUnsupportedCharacters';
+import { FetchBlobOptions } from './types';
 
-const { FileApiDriverLocal } = require('./file-api-driver-local');
+import FileApiDriverLocal from './file-api-driver-local';
 const mimeUtils = require('./mime-utils.js').mime;
 const { _ } = require('./locale');
 const http = require('http');
@@ -26,16 +26,6 @@ const dgram = require('dgram');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const proxySettings: any = {};
-
-type FetchBlobOptions = {
-	path?: string;
-	method?: string;
-	maxRedirects?: number;
-	timeout?: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	headers?: any;
-	downloadController?: DownloadController;
-};
 
 function fileExists(filePath: string) {
 	try {
@@ -228,8 +218,8 @@ function shimInit(options: ShimInitOptions = null) {
 			image.src = filePath;
 			await new Promise<void>((resolve, reject) => {
 				image.onload = () => resolve();
-				image.onerror = () => reject(`Image at ${filePath} failed to load.`);
-				image.onabort = () => reject(`Loading stopped for image at ${filePath}.`);
+				image.onerror = () => reject(new Error(`Image at ${filePath} failed to load.`));
+				image.onabort = () => reject(new Error(`Loading stopped for image at ${filePath}.`));
 			});
 			if (!image.complete || (image.width === 0 && image.height === 0)) {
 				throw new Error(`Image is invalid or does not exist: ${filePath}`);

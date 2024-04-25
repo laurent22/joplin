@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { FlatList, Text, StyleSheet, Button, View } from 'react-native';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
+import getEmptyFolderMessage from '@joplin/lib/components/shared/NoteList/getEmptyFolderMessage';
 import Folder from '@joplin/lib/models/Folder';
 
 const { _ } = require('@joplin/lib/locale');
@@ -20,7 +21,7 @@ interface NoteListProps {
 	items: NoteEntity[];
 	folders: FolderEntity[];
 	noteSelectionEnabled?: boolean;
-	selectedFolderId?: string;
+	selectedFolderId: string|null;
 }
 
 class NoteListComponent extends Component<NoteListProps> {
@@ -102,8 +103,9 @@ class NoteListComponent extends Component<NoteListProps> {
 					</View>
 				);
 			} else {
-				const noItemMessage = _('There are currently no notes. Create one by clicking on the (+) button.');
-				return <Text style={this.styles().noItemMessage}>{noItemMessage}</Text>;
+				return <Text style={this.styles().noItemMessage}>
+					{getEmptyFolderMessage(this.props.folders, this.props.selectedFolderId)}
+				</Text>;
 			}
 		}
 	}
@@ -117,6 +119,7 @@ const NoteList = connect((state: AppState) => {
 		notesSource: state.notesSource,
 		themeId: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
+		selectedFolderId: state.selectedFolderId,
 	};
 })(NoteListComponent);
 

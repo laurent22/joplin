@@ -164,7 +164,7 @@ export function execCommandWithPipes(executable: string, args: string[]) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		child.on('close', (code: any) => {
 			if (code !== 0) {
-				reject(`Ended with code ${code}`);
+				reject(new Error(`Ended with code ${code}`));
 			} else {
 				resolve(null);
 			}

@@ -8,7 +8,6 @@ import setIgnoreTlsErrors from '../../../utils/TlsUtils';
 import { reg } from '@joplin/lib/registry';
 import { State } from '@joplin/lib/reducer';
 const { BackButtonService } = require('../../../services/back-button.js');
-const VersionInfo = require('react-native-version-info').default;
 import { connect } from 'react-redux';
 import ScreenHeader from '../../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
@@ -34,6 +33,8 @@ import PluginUploadButton, { canInstallPluginsFromFile, buttonLabel as pluginUpl
 import NoteImportButton, { importButtonDefaultTitle, importButtonDescription } from './NoteExportSection/NoteImportButton';
 import SectionDescription from './SectionDescription';
 import EnablePluginSupportPage from './plugins/EnablePluginSupportPage';
+import getPackageInfo from '../../../utils/getPackageInfo';
+import versionInfo from '@joplin/lib/versionInfo';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -618,13 +619,20 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			addSettingLink('website_link', _('Joplin website'), 'https://joplinapp.org/');
 			addSettingLink('privacy_link', _('Privacy Policy'), 'https://joplinapp.org/privacy/');
 
-			addSettingText('version_info_app', `Joplin ${VersionInfo.appVersion}`);
-			addSettingText('version_info_db', _('Database v%s', reg.db().version()));
-			addSettingText('version_info_sync', _('Sync Version: %s', Setting.value('syncVersion')));
-			addSettingText('version_info_client_id', _('Client ID: %s', Setting.value('clientId')));
-			addSettingText('version_info_fts', _('FTS enabled: %d', this.props.settings['db.ftsEnabled']));
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			addSettingText('version_info_hermes', _('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0));
+			const packageInfo = getPackageInfo();
+			const appInfo = versionInfo(packageInfo, PluginService.instance().enabledPlugins(settings['plugins.states']));
+			const versionInfoText = [
+				appInfo.body,
+				'',
+				_('FTS enabled: %d', this.props.settings['db.ftsEnabled']),
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				_('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0),
+			].join('\n');
+
+			addSettingText('version_info', versionInfoText);
+			addSettingButton('copy_app_info', _('Copy version info'), () => {
+				Clipboard.setString(versionInfoText);
+			});
 
 			const featureFlagKeys = Setting.featureFlagKeys(AppType.Mobile);
 			if (featureFlagKeys.length) {

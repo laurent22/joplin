@@ -2,7 +2,7 @@ import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/
 import { _ } from '@joplin/lib/locale';
 import layoutItemProp from '../../ResizableLayout/utils/layoutItemProp';
 import { AppState } from '../../../app.reducer';
-import { focus } from '@joplin/lib/utils/focusHandler';
+import { SidebarCommandRuntimeProps } from '../types';
 
 export const declaration: CommandDeclaration = {
 	name: 'focusElementSideBar',
@@ -10,29 +10,13 @@ export const declaration: CommandDeclaration = {
 	parentLabel: () => _('Focus'),
 };
 
-export interface RuntimeProps {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	getSelectedItem(): any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	getFirstAnchorItemRef(type: string): any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	anchorItemRefs: any;
-}
-
-export const runtime = (props: RuntimeProps): CommandRuntime => {
+export const runtime = (props: SidebarCommandRuntimeProps): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext) => {
 			const sidebarVisible = layoutItemProp((context.state as AppState).mainLayout, 'sideBar', 'visible');
 
 			if (sidebarVisible) {
-				const item = props.getSelectedItem();
-				if (item) {
-					const anchorRef = props.anchorItemRefs.current[item.type][item.id];
-					if (anchorRef) focus('focusElementSideBar1', anchorRef.current);
-				} else {
-					const anchorRef = props.getFirstAnchorItemRef('folder');
-					if (anchorRef) focus('focusElementSideBar2', anchorRef.current);
-				}
+				props.focusSidebar();
 			}
 		},
 

@@ -1,9 +1,9 @@
 import { FolderEntity } from '../../services/database/types';
 import { getTrashFolder, getTrashFolderId } from '../../services/trash';
-import { RenderFolderItem, renderFolders } from './side-menu-shared';
+import { renderFolders } from './side-menu-shared';
 
-const renderItem: RenderFolderItem = (folder: FolderEntity, selected: boolean, hasChildren: boolean, depth: number) => {
-	return [folder.id, selected, hasChildren, depth];
+const renderItem = (folder: FolderEntity, hasChildren: boolean, depth: number) => {
+	return [folder.id, hasChildren, depth];
 };
 
 describe('side-menu-shared', () => {
@@ -49,9 +49,9 @@ describe('side-menu-shared', () => {
 			},
 			{
 				items: [
-					['1', false, true, 0],
-					['3', false, false, 1],
-					['2', true, false, 0],
+					['1', true, 0],
+					['3', false, 1],
+					['2', false, 0],
 				],
 				order: ['1', '3', '2'],
 			},
@@ -79,9 +79,9 @@ describe('side-menu-shared', () => {
 			},
 			{
 				items: [
-					['1', false, false, 0],
-					[getTrashFolderId(), false, true, 0],
-					['2', false, false, 1],
+					['1', false, 0],
+					[getTrashFolderId(), true, 0],
+					['2', false, 1],
 				],
 				order: ['1', getTrashFolderId(), '2'],
 			},

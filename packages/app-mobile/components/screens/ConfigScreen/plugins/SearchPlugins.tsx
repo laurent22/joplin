@@ -10,8 +10,8 @@ import PluginBox, { InstallState } from './PluginBox';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import useInstallHandler from '@joplin/lib/components/shared/config/plugins/useOnInstallHandler';
 import { OnPluginSettingChangeEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
-import onOpenWebsiteForPluginPress from './utils/openWebsiteForPlugin';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
+import openWebsiteForPlugin from './utils/openWebsiteForPlugin';
 
 interface Props {
 	themeId: number;
@@ -90,15 +90,16 @@ const PluginSearch: React.FC<Props> = props => {
 
 		return (
 			<PluginBox
+				themeId={props.themeId}
 				key={manifest.id}
 				item={item.item}
 				installState={item.installState}
 				isCompatible={PluginService.instance().isCompatible(manifest)}
 				onInstall={installPlugin}
-				onAboutPress={onOpenWebsiteForPluginPress}
+				onAboutPress={openWebsiteForPlugin}
 			/>
 		);
-	}, [installPlugin]);
+	}, [installPlugin, props.themeId]);
 
 	return (
 		<View style={{ flexDirection: 'column' }}>
