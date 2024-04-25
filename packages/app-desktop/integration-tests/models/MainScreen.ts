@@ -1,21 +1,25 @@
 import { Page, Locator, ElectronApplication } from '@playwright/test';
 import NoteEditorScreen from './NoteEditorScreen';
 import activateMainMenuItem from '../util/activateMainMenuItem';
+import Sidebar from './Sidebar';
 
 export default class MainScreen {
 	public readonly newNoteButton: Locator;
 	public readonly noteListContainer: Locator;
+	public readonly sidebar: Sidebar;
+	public readonly dialog: Locator;
 	public readonly noteEditor: NoteEditorScreen;
 
 	public constructor(private page: Page) {
 		this.newNoteButton = page.locator('.new-note-button');
 		this.noteListContainer = page.locator('.rli-noteList');
+		this.sidebar = new Sidebar(page, this);
+		this.dialog = page.locator('.dialog-root');
 		this.noteEditor = new NoteEditorScreen(page);
 	}
 
 	public async waitFor() {
 		await this.newNoteButton.waitFor();
-		await this.noteEditor.waitFor();
 		await this.noteListContainer.waitFor();
 	}
 

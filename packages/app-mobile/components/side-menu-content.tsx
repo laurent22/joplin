@@ -8,7 +8,7 @@ import Synchronizer from '@joplin/lib/Synchronizer';
 import NavService from '@joplin/lib/services/NavService';
 import { _ } from '@joplin/lib/locale';
 import { ThemeStyle, themeStyle } from './global-style';
-import { renderFolders } from '@joplin/lib/components/shared/side-menu-shared';
+import { isFolderSelected, renderFolders } from '@joplin/lib/components/shared/side-menu-shared';
 import { FolderEntity, FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
 import Setting from '@joplin/lib/models/Setting';
@@ -393,7 +393,7 @@ const SideMenuContentComponent = (props: Props) => {
 		}
 	};
 
-	const renderFolderItem = (folder: FolderEntity, selected: boolean, hasChildren: boolean, depth: number) => {
+	const renderFolderItem = (folder: FolderEntity, hasChildren: boolean, depth: number) => {
 		const theme = themeStyle(props.themeId);
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -405,6 +405,7 @@ const SideMenuContentComponent = (props: Props) => {
 			paddingRight: theme.marginRight,
 			paddingLeft: 10,
 		};
+		const selected = isFolderSelected(folder, { selectedFolderId: props.selectedFolderId, notesParentType: props.notesParentType });
 		if (selected) folderButtonStyle.backgroundColor = theme.selectedColor;
 		folderButtonStyle.paddingLeft = depth * 10 + theme.marginLeft;
 
