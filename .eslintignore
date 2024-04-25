@@ -489,6 +489,7 @@ packages/app-mobile/components/ActionButton.js
 packages/app-mobile/components/BackButtonDialogBox.js
 packages/app-mobile/components/CameraView.js
 packages/app-mobile/components/CustomButton.js
+packages/app-mobile/components/DismissibleDialog.js
 packages/app-mobile/components/Dropdown.test.js
 packages/app-mobile/components/Dropdown.js
 packages/app-mobile/components/ExtendedWebView.js
@@ -585,6 +586,7 @@ packages/app-mobile/components/screens/ConfigScreen/SettingsButton.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsToggle.js
 packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/ActionButton.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.test.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.js
@@ -1045,6 +1047,8 @@ packages/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo.js
 packages/lib/services/plugins/reducer.js
 packages/lib/services/plugins/utils/createViewHandle.js
 packages/lib/services/plugins/utils/executeSandboxCall.js
+packages/lib/services/plugins/utils/getPluginIssueReportUrl.test.js
+packages/lib/services/plugins/utils/getPluginIssueReportUrl.js
 packages/lib/services/plugins/utils/getPluginNamespacedSettingKey.js
 packages/lib/services/plugins/utils/getPluginSettingKeyPrefix.js
 packages/lib/services/plugins/utils/getPluginSettingValue.js
