@@ -78,8 +78,6 @@ class Logger {
 	private level_: LogLevel = LogLevel.Info;
 	private lastDbCleanup_: number = Date.now();
 	private enabled_ = true;
-	private keptLineCount_ = 0;
-	private keptLines_: string[] = [];
 
 	public static fsDriver() {
 		if (!Logger.fsDriver_) Logger.fsDriver_ = dummyFsDriver;
@@ -94,18 +92,6 @@ class Logger {
 		this.enabled_ = v;
 	}
 
-	public get keptLineCount() {
-		return this.keptLineCount_;
-	}
-
-	public set keptLineCount(v: number) {
-		this.keptLineCount_ = v;
-	}
-
-	public get keptLines() {
-		return this.keptLines_;
-	}
-
 	public status(): string {
 		const output: string[] = [];
 		output.push(`Enabled: ${this.enabled}`);
@@ -116,6 +102,12 @@ class Logger {
 
 	public static initializeGlobalLogger(logger: Logger) {
 		this.globalLogger_ = logger;
+	}
+
+	public logFilePath() {
+		const fileTarget = this.targets().find(t => t.type === TargetType.File);
+		if (!fileTarget) return '';
+		return fileTarget.path || '';
 	}
 
 	public static get globalLogger(): Logger {
@@ -360,13 +352,6 @@ class Logger {
 
 				target.database.transactionExecBatch(queries);
 			}
-		}
-
-		if (this.keptLineCount) {
-			if (!logLine) logLine = this.logInfoToString(level, prefix, ...object);
-			this.keptLines_.push(logLine);
-			const toDelete = this.keptLines_.length - this.keptLineCount;
-			if (toDelete >= 0) this.keptLines_.splice(0, toDelete);
 		}
 	}
 

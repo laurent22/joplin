@@ -1,4 +1,7 @@
-// eslint-disable-next-line import/prefer-default-export
+export const KB = 1024;
+export const MB = KB * KB;
+export const GB = KB * MB;
+
 export const bytesToHuman = (bytes: number) => {
 	const units = ['Bytes', 'KB', 'MB', 'GB'];
 	let unitIndex = 0;

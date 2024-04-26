@@ -54,36 +54,33 @@ describe('Logger', () => {
 			'',
 		].join('\n'));
 
-		// Shouldn't have kept any line, since keptLineCount was not set
-		expect(logger.keptLines).toEqual([]);
-
 		jest.useRealTimers();
 	});
 
-	it('should keep the last lines', async () => {
-		jest.useFakeTimers().setSystemTime(new Date('2020-01-01'));
+	// it('should keep the last lines', async () => {
+	// 	jest.useFakeTimers().setSystemTime(new Date('2020-01-01'));
 
-		const logger = createLogger();
-		logger.keptLineCount = 2;
-		logger.info('one');
-		logger.info('two');
-		logger.info('three');
+	// 	const logger = createLogger();
+	// 	logger.keptLineCount = 2;
+	// 	logger.info('one');
+	// 	logger.info('two');
+	// 	logger.info('three');
 
-		await logger.waitForFileWritesToComplete_();
+	// 	await logger.waitForFileWritesToComplete_();
 
-		expect(await getLogContent()).toBe([
-			'2020-01-01 00:00:00: testing: one',
-			'2020-01-01 00:00:00: testing: two',
-			'2020-01-01 00:00:00: testing: three',
-			'',
-		].join('\n'));
+	// 	expect(await getLogContent()).toBe([
+	// 		'2020-01-01 00:00:00: testing: one',
+	// 		'2020-01-01 00:00:00: testing: two',
+	// 		'2020-01-01 00:00:00: testing: three',
+	// 		'',
+	// 	].join('\n'));
 
-		expect(logger.keptLines).toEqual([
-			'2020-01-01 00:00:00: testing: two',
-			'2020-01-01 00:00:00: testing: three',
-		]);
+	// 	expect(logger.keptLines).toEqual([
+	// 		'2020-01-01 00:00:00: testing: two',
+	// 		'2020-01-01 00:00:00: testing: three',
+	// 	]);
 
-		jest.useRealTimers();
-	});
+	// 	jest.useRealTimers();
+	// });
 
 });
