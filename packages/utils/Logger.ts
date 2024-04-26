@@ -78,6 +78,8 @@ class Logger {
 	private level_: LogLevel = LogLevel.Info;
 	private lastDbCleanup_: number = Date.now();
 	private enabled_ = true;
+	private keptLineCount_ = 0;
+	private keptLines_: string[] = [];
 
 	public static fsDriver() {
 		if (!Logger.fsDriver_) Logger.fsDriver_ = dummyFsDriver;
@@ -90,6 +92,18 @@ class Logger {
 
 	public set enabled(v: boolean) {
 		this.enabled_ = v;
+	}
+
+	public get keptLineCount() {
+		return this.keptLineCount_;
+	}
+
+	public set keptLineCount(v: number) {
+		this.keptLineCount_ = v;
+	}
+
+	public get keptLines() {
+		return this.keptLines_;
 	}
 
 	public status(): string {
@@ -252,13 +266,23 @@ class Logger {
 		return this.level();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public log(level: LogLevel, prefix: string | null, ...object: any[]) {
+	private logInfoToString(level: LogLevel, prefix: string | null, ...object: unknown[]) {
+		const timestamp = moment().format('YYYY-MM-DD HH:mm:ss');
+		const line = [timestamp];
+		if (prefix) line.push(prefix);
+		const levelString = [LogLevel.Error, LogLevel.Warn].includes(level) ? `[${Logger.levelIdToString(level)}] ` : '';
+		line.push((levelString ? levelString : '') + this.objectsToString(...object));
+		return `${line.join(': ')}`;
+	}
+
+	public log(level: LogLevel, prefix: string | null, ...object: unknown[]) {
 		if (!this.targets_.length || !this.enabled) return;
+
+		let logLine = '';
 
 		for (let i = 0; i < this.targets_.length; i++) {
 			const target = this.targets_[i];
-			const targetPrefix = prefix ? prefix : target.prefix;
+			const targetPrefix = prefix ? prefix : (target.prefix || '');
 
 			if (this.targetLevel(target) < level) continue;
 
@@ -285,15 +309,12 @@ class Logger {
 				} else {
 					const prefixItems = [moment().format('HH:mm:ss')];
 					if (targetPrefix) prefixItems.push(targetPrefix);
-					items = [`${prefixItems.join(': ')}:`].concat(...object);
+					items = [`${prefixItems.join(': ')}:` as unknown].concat(...object);
 				}
 
 				consoleObj[fn](...items);
 			} else if (target.type === 'file') {
-				const timestamp = moment().format('YYYY-MM-DD HH:mm:ss');
-				const line = [timestamp];
-				if (targetPrefix) line.push(targetPrefix);
-				line.push(this.objectsToString(...object));
+				logLine = this.logInfoToString(level, targetPrefix, ...object);
 
 				// Write to file using a mutex so that log entries appear in the
 				// correct order (otherwise, since the async call is not awaited
@@ -307,7 +328,7 @@ class Logger {
 				/* eslint-disable-next-line promise/prefer-await-to-then, @typescript-eslint/ban-types -- Old code before rule was applied, Old code before rule was applied */
 				writeToFileMutex_.acquire().then((r: Function) => {
 					release = r;
-					return Logger.fsDriver().appendFile(target.path as string, `${line.join(': ')}\n`, 'utf8');
+					return Logger.fsDriver().appendFile(target.path as string, `${logLine}\n`, 'utf8');
 					// eslint-disable-next-line promise/prefer-await-to-then, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 				}).catch((error: any) => {
 					console.error('Cannot write to log file:', error);
@@ -339,6 +360,13 @@ class Logger {
 
 				target.database.transactionExecBatch(queries);
 			}
+		}
+
+		if (this.keptLineCount) {
+			if (!logLine) logLine = this.logInfoToString(level, prefix, ...object);
+			this.keptLines_.push(logLine);
+			const toDelete = this.keptLines_.length - this.keptLineCount;
+			if (toDelete >= 0) this.keptLines_.splice(0, toDelete);
 		}
 	}
 
