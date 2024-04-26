@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { _ } from '@joplin/lib/locale';
 import { useMemo, useRef, useEffect } from 'react';
 import { AppState } from '../../app.reducer';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
@@ -22,6 +21,7 @@ import * as focusElementNoteList from './commands/focusElementNoteList';
 import CommandService from '@joplin/lib/services/CommandService';
 import useDragAndDrop from './utils/useDragAndDrop';
 import { itemIsInTrash } from '@joplin/lib/services/trash';
+import getEmptyFolderMessage from '@joplin/lib/components/shared/NoteList/getEmptyFolderMessage';
 import Folder from '@joplin/lib/models/Folder';
 const { connect } = require('react-redux');
 
@@ -187,7 +187,7 @@ const NoteList = (props: Props) => {
 
 	const renderEmptyList = () => {
 		if (props.notes.length) return null;
-		return <div className="emptylist">{props.folders.length ? _('No notes in here. Create one by clicking on "New note".') : _('There is currently no notebook. Create one by clicking on "New notebook".')}</div>;
+		return <div className="emptylist">{getEmptyFolderMessage(props.folders, props.selectedFolderId)}</div>;
 	};
 
 	const renderFiller = (key: string, style: React.CSSProperties) => {

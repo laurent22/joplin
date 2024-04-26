@@ -13,6 +13,7 @@ export interface SortOrder {
 interface FolderState {
 	notesParentType: string;
 	selectedFolderId: string;
+	selectedSmartFilterId: string;
 }
 
 interface SortOrderPool {
@@ -21,8 +22,10 @@ interface SortOrderPool {
 
 export default class PerFolderSortOrderService {
 
+	// To support a custom sort order in "all notebooks", previousFolderId
+	// can also be a smart filter ID.
 	private static previousFolderId: string = null;
-	private static folderState: FolderState = { notesParentType: '', selectedFolderId: '' };
+	private static folderState: FolderState = { notesParentType: '', selectedFolderId: '', selectedSmartFilterId: '' };
 	// Since perFolderSortOrders and sharedSortOrder is persisted using Setting,
 	// their structures are not nested.
 	private static perFolderSortOrders: SortOrderPool = null;
@@ -40,6 +43,7 @@ export default class PerFolderSortOrderService {
 		this.loadSharedSortOrder();
 		eventManager.appStateOn('notesParentType', this.onFolderSelectionMayChange.bind(this, 'notesParentType'));
 		eventManager.appStateOn('selectedFolderId', this.onFolderSelectionMayChange.bind(this, 'selectedFolderId'));
+		eventManager.appStateOn('selectedSmartFilterId', this.onFolderSelectionMayChange.bind(this, 'selectedSmartFilterId'));
 		this.previousFolderId = Setting.value('activeFolderId');
 	}
 
@@ -93,7 +97,9 @@ export default class PerFolderSortOrderService {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static onFolderSelectionMayChange(cause: string, event: any) {
-		if (cause !== 'notesParentType' && cause !== 'selectedFolderId') return;
+		if (cause !== 'notesParentType' && cause !== 'selectedFolderId' && cause !== 'selectedSmartFilterId') {
+			return;
+		}
 		this.folderState[cause] = event.value;
 		const selectedId = this.getSelectedFolderId();
 		if (this.previousFolderId === selectedId) return;
@@ -127,6 +133,8 @@ export default class PerFolderSortOrderService {
 	private static getSelectedFolderId(): string {
 		if (this.folderState.notesParentType === 'Folder') {
 			return this.folderState.selectedFolderId;
+		} else if (this.folderState.notesParentType === 'SmartFilter') {
+			return this.folderState.selectedSmartFilterId;
 		} else {
 			return '';
 		}

@@ -1,0 +1,13 @@
+
+.sidebar-expand-icon {
+	width: 16px;
+	max-width: 16px;
+	opacity: 0.5px;
+	font-size: calc(var(--joplin-toolbar-icon-size) * 0.8);
+	display: flex;
+	justify-content: center;
+
+	&:not(.-visible) {
+		visibility: hidden;
+	}
+}

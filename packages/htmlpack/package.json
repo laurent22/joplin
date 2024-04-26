@@ -14,7 +14,7 @@
   "author": "Laurent Cozic",
   "license": "MIT",
   "dependencies": {
-    "@adobe/css-tools": "4.3.2",
+    "@adobe/css-tools": "4.3.3",
     "@joplin/fork-htmlparser2": "^4.1.51",
     "datauri": "4.1.0",
     "fs-extra": "11.2.0",
