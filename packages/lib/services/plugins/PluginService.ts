@@ -68,6 +68,8 @@ export interface PluginSettings {
 	[pluginId: string]: PluginSetting;
 }
 
+export type SerializedPluginSettings = Record<string, Partial<PluginSetting>>|string;
+
 interface PluginLoadOptions {
 	devMode: boolean;
 	builtIn: boolean;
@@ -177,8 +179,11 @@ export default class PluginService extends BaseService {
 		return this.plugins_[id];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public unserializePluginSettings(settings: any): PluginSettings {
+	public unserializePluginSettings(settings: SerializedPluginSettings): PluginSettings {
+		if (typeof settings === 'string') {
+			settings = JSON.parse(settings) as PluginSettings;
+		}
+
 		const output = { ...settings };
 
 		for (const pluginId in output) {
@@ -188,7 +193,7 @@ export default class PluginService extends BaseService {
 			};
 		}
 
-		return output;
+		return output as PluginSettings;
 	}
 
 	public serializePluginSettings(settings: PluginSettings): string {
