@@ -191,14 +191,14 @@ function menuItemSetEnabled(id: string, enabled: boolean) {
 	menuItem.enabled = enabled;
 }
 
-function applyMenuBarVisibility(props: Props) {
+const applyMenuBarVisibility = (showMenuBar: boolean) => {
 	// The menu bar cannot be hidden on macOS
 	if (shim.isMac()) return;
 
 	const window = bridge().window();
-	window.setAutoHideMenuBar(!props.showMenuBar);
-	window.setMenuBarVisibility(props.showMenuBar);
-}
+	window.setAutoHideMenuBar(!showMenuBar);
+	window.setMenuBarVisibility(showMenuBar);
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function useMenuStates(menu: any, props: Props) {
@@ -770,15 +770,7 @@ function useMenu(props: Props) {
 						menuItemDic.resetLayout,
 						separator(),
 						menuItemDic.toggleSideBar,
-						shim.isMac() ? noItem : {
-							label: _('Toggle menu bar'),
-							accelerator: keymapService.getAccelerator('toggleMenuBar'),
-							click: () => {
-								Setting.setValue('showMenuBar', !Setting.value('showMenuBar'));
-								applyMenuBarVisibility(props);
-							},
-						},
-						// shim.isMac() ? noItem : menuItemDic.toggleMenuBar,
+						shim.isMac() ? noItem : menuItemDic.toggleMenuBar,
 						menuItemDic.toggleNoteList,
 						menuItemDic.toggleVisiblePanes,
 						{
@@ -1102,7 +1094,7 @@ function useMenu(props: Props) {
 function MenuBar(props: Props): any {
 	const menu = useMenu(props);
 	if (menu) Menu.setApplicationMenu(menu);
-	applyMenuBarVisibility(props);
+	applyMenuBarVisibility(props.showMenuBar);
 	return null;
 }
 
