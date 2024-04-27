@@ -24,13 +24,12 @@ const shouldShowBasedOnSettingSearchQuery = ()=>true;
 const PluginStatesWrapper = (props: WrapperProps) => {
 	const styles = configScreenStyles(Setting.THEME_LIGHT);
 
-	const [pluginStates, setPluginStates] = useState(() => {
-		return PluginService.instance().serializePluginSettings(props.initialPluginSettings ?? {});
+	const [pluginSettings, setPluginSettings] = useState(() => {
+		return props.initialPluginSettings ?? {};
 	});
 
 	const updatePluginStates = useCallback((newStates: PluginSettings) => {
-		const serialized = PluginService.instance().serializePluginSettings(newStates);
-		setPluginStates(serialized);
+		setPluginSettings(newStates);
 	}, []);
 
 	return (
@@ -38,7 +37,7 @@ const PluginStatesWrapper = (props: WrapperProps) => {
 			themeId={Setting.THEME_LIGHT}
 			styles={styles}
 			updatePluginStates={updatePluginStates}
-			pluginSettings={pluginStates}
+			pluginSettings={pluginSettings}
 			shouldShowBasedOnSearchQuery={shouldShowBasedOnSettingSearchQuery}
 		/>
 	);

@@ -390,6 +390,8 @@ class Application extends BaseApplication {
 
 		argv = await super.start(argv, startOptions);
 
+		bridge().setLogFilePath(Logger.globalLogger.logFilePath());
+
 		await this.applySettingsSideEffects();
 
 		if (Setting.value('sync.upgradeState') === Setting.SYNC_UPGRADE_STATE_MUST_DO) {
