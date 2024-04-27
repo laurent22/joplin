@@ -68,7 +68,7 @@ export interface PluginSettings {
 	[pluginId: string]: PluginSetting;
 }
 
-export type SerializedPluginSettings = Record<string, Partial<PluginSetting>>|string;
+export type SerializedPluginSettings = Record<string, Partial<PluginSetting>>;
 
 interface PluginLoadOptions {
 	devMode: boolean;
@@ -181,10 +181,6 @@ export default class PluginService extends BaseService {
 	}
 
 	public unserializePluginSettings(settings: SerializedPluginSettings): PluginSettings {
-		if (typeof settings === 'string') {
-			settings = JSON.parse(settings) as PluginSettings;
-		}
-
 		const output = { ...settings };
 
 		for (const pluginId in output) {
