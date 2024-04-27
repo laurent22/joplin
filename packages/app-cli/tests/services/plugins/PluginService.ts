@@ -283,10 +283,11 @@ describe('services_PluginService', () => {
 			shouldRun: true,
 		},
 		{
+			// Should default to desktop-only
 			manifestPlatforms: [],
 			isDesktop: false,
 			appVersion: '3.0.8',
-			shouldRun: true,
+			shouldRun: false,
 		},
 	])('should enable and disable plugins depending on what platform(s) they support (case %#: %j)', async ({ manifestPlatforms, isDesktop, appVersion, shouldRun }) => {
 		const pluginScript = `
