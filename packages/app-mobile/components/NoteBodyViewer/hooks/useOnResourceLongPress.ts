@@ -29,7 +29,7 @@ export default function useOnResourceLongPress(callbacks: Callbacks, dialogBoxRe
 				return;
 			}
 
-			const name = resource.title ? resource.title : resource.file_name;
+			const name = resource.title ? resource.title : resource.filename;
 			const mime: string|undefined = resource.mime;
 
 			const actions = [];
