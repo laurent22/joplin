@@ -771,7 +771,11 @@ function shimInit(options: ShimInitOptions = null) {
 	};
 
 	const loadPdf = async (path: string) => {
-		const loadingTask = pdfJs.getDocument(path);
+		const loadingTask = pdfJs.getDocument({
+			url: path,
+			// https://github.com/mozilla/pdf.js/issues/4244#issuecomment-1479534301
+			useSystemFonts: true,
+		});
 		return await loadingTask.promise;
 	};
 

@@ -68,6 +68,8 @@ export interface PluginSettings {
 	[pluginId: string]: PluginSetting;
 }
 
+export type SerializedPluginSettings = Record<string, Partial<PluginSetting>>;
+
 interface PluginLoadOptions {
 	devMode: boolean;
 	builtIn: boolean;
@@ -158,6 +160,7 @@ export default class PluginService extends BaseService {
 
 			plugin.onUnload();
 			await this.runner_.stop(plugin);
+			plugin.running = false;
 
 			this.deletePluginAt(pluginId);
 			this.startedPlugins_ = { ...this.startedPlugins_ };
@@ -177,8 +180,7 @@ export default class PluginService extends BaseService {
 		return this.plugins_[id];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public unserializePluginSettings(settings: any): PluginSettings {
+	public unserializePluginSettings(settings: SerializedPluginSettings): PluginSettings {
 		const output = { ...settings };
 
 		for (const pluginId in output) {
@@ -188,7 +190,7 @@ export default class PluginService extends BaseService {
 			};
 		}
 
-		return output;
+		return output as PluginSettings;
 	}
 
 	public serializePluginSettings(settings: PluginSettings): string {
@@ -410,11 +412,32 @@ export default class PluginService extends BaseService {
 
 			try {
 				const plugin = await this.loadPluginFromPath(pluginPath);
+				const enabled = this.pluginEnabled(settings, plugin.id);
 
-				// After transforming the plugin path to an ID, multiple plugins might end up with the same ID. For
-				// example "MyPlugin" and "myplugin" would have the same ID. Technically it's possible to have two
-				// such folders but to keep things sane we disallow it.
-				if (this.plugins_[plugin.id]) throw new Error(`There is already a plugin with this ID: ${plugin.id}`);
+				const existingPlugin = this.plugins_[plugin.id];
+				if (existingPlugin) {
+					const isSamePlugin = existingPlugin.baseDir === plugin.baseDir;
+
+					// On mobile, plugins can reload without restarting the app. If a plugin is currently
+					// running and hasn't changed, it doesn't need to be reloaded.
+					if (isSamePlugin) {
+						const isSameVersion =
+							existingPlugin.manifest.version === plugin.manifest.version
+							&& existingPlugin.manifest._package_hash === plugin.manifest._package_hash;
+						if (isSameVersion && existingPlugin.running === enabled) {
+							logger.debug('Not reloading same-version plugin', plugin.id);
+							continue;
+						} else {
+							logger.info('Reloading plugin with ID', plugin.id);
+							await this.unloadPlugin(plugin.id);
+						}
+					} else {
+						// After transforming the plugin path to an ID, multiple plugins might end up with the same ID. For
+						// example "MyPlugin" and "myplugin" would have the same ID. Technically it's possible to have two
+						// such folders but to keep things sane we disallow it.
+						throw new Error(`There is already a plugin with this ID: ${plugin.id}`);
+					}
+				}
 
 				// We mark the plugin as built-in even if not enabled (being built-in affects
 				// update UI).
@@ -422,7 +445,7 @@ export default class PluginService extends BaseService {
 
 				this.setPluginAt(plugin.id, plugin);
 
-				if (!this.pluginEnabled(settings, plugin.id)) {
+				if (!enabled) {
 					logger.info(`Not running disabled plugin: "${plugin.id}"`);
 					continue;
 				}
@@ -507,6 +530,7 @@ export default class PluginService extends BaseService {
 
 		plugin.on('started', onStarted);
 
+		plugin.running = true;
 		const pluginApi = new Global(this.platformImplementation_, plugin, this.store_);
 		return this.runner_.run(plugin, pluginApi);
 	}

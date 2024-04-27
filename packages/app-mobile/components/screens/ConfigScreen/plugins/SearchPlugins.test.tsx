@@ -7,8 +7,7 @@ import '@testing-library/react-native/extend-expect';
 
 import SearchPlugins from './SearchPlugins';
 import Setting from '@joplin/lib/models/Setting';
-import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
-import { useMemo } from 'react';
+import { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import pluginServiceSetup from './testUtils/pluginServiceSetup';
 import newRepoApi from './testUtils/newRepoApi';
 
@@ -22,14 +21,10 @@ interface WrapperProps {
 const noOpFunction = ()=>{};
 
 const SearchWrapper = (props: WrapperProps) => {
-	const serializedPluginSettings = useMemo(() => {
-		return PluginService.instance().serializePluginSettings(props.pluginSettings ?? {});
-	}, [props.pluginSettings]);
-
 	return (
 		<SearchPlugins
 			themeId={Setting.THEME_LIGHT}
-			pluginSettings={serializedPluginSettings}
+			pluginSettings={props.pluginSettings ?? {}}
 			repoApiInitialized={props.repoApiInitialized ?? true}
 			repoApi={props.repoApi}
 			onUpdatePluginStates={props.onUpdatePluginStates ?? noOpFunction}

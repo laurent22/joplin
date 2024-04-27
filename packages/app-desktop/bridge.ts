@@ -6,11 +6,14 @@ import { dirname, toSystemSlashes } from '@joplin/lib/path-utils';
 import { fileUriToPath } from '@joplin/utils/url';
 import { urlDecode } from '@joplin/lib/string-utils';
 import * as Sentry from '@sentry/electron/main';
+import { ErrorEvent } from '@sentry/types/types';
 import { homedir } from 'os';
 import { msleep } from '@joplin/utils/time';
-import { pathExists, writeFileSync } from 'fs-extra';
+import { pathExists, pathExistsSync, writeFileSync } from 'fs-extra';
 import { extname, normalize } from 'path';
 import isSafeToOpen from './utils/isSafeToOpen';
+import { closeSync, openSync, readSync, statSync } from 'fs';
+import { KB } from '@joplin/utils/bytes';
 
 interface LastSelectedPath {
 	file: string;
@@ -38,6 +41,7 @@ export class Bridge {
 	private rootProfileDir_: string;
 	private appName_: string;
 	private appId_: string;
+	private logFilePath_ = '';
 
 	private extraAllowedExtensions_: string[] = [];
 	private onAllowedExtensionsChangeListener_: OnAllowedExtensionsChange = ()=>{};
@@ -56,12 +60,53 @@ export class Bridge {
 		this.sentryInit();
 	}
 
+	public setLogFilePath(v: string) {
+		this.logFilePath_ = v;
+	}
+
 	private sentryInit() {
+		const getLogLines = () => {
+			try {
+				if (!this.logFilePath_ || !pathExistsSync(this.logFilePath_)) return '';
+				const { size } = statSync(this.logFilePath_);
+				if (!size) return '';
+
+				const bytesToRead = Math.min(size, 100 * KB);
+				const handle = openSync(this.logFilePath_, 'r');
+				const position = size - bytesToRead;
+				const buffer = Buffer.alloc(bytesToRead);
+				readSync(handle, buffer, 0, bytesToRead, position);
+				closeSync(handle);
+				return buffer.toString('utf-8');
+			} catch (error) {
+				// Can't do anything in this context
+				return '';
+			}
+		};
+
+		const getLogAttachment = () => {
+			const lines = getLogLines();
+			if (!lines) return null;
+			return { filename: 'joplin-log.txt', data: lines };
+		};
+
 		const options: Sentry.ElectronMainOptions = {
-			beforeSend: event => {
+			beforeSend: (event, hint) => {
 				try {
+					const logAttachment = getLogAttachment();
+					if (logAttachment) hint.attachments = [logAttachment];
 					const date = (new Date()).toISOString().replace(/[:-]/g, '').split('.')[0];
-					writeFileSync(`${homedir()}/joplin_crash_dump_${date}.json`, JSON.stringify(event, null, '\t'), 'utf-8');
+
+					interface ErrorEventWithLog extends ErrorEvent {
+						log: string[];
+					}
+
+					const errorEventWithLog: ErrorEventWithLog = {
+						...event,
+						log: logAttachment ? logAttachment.data.trim().split('\n') : [],
+					};
+
+					writeFileSync(`${homedir()}/joplin_crash_dump_${date}.json`, JSON.stringify(errorEventWithLog, null, '\t'), 'utf-8');
 				} catch (error) {
 					// Ignore the error since we can't handle it here
 				}

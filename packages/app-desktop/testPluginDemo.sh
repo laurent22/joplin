@@ -6,7 +6,7 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 TEMP_PATH=~/src/plugin-tests
 NEED_COMPILING=1
-PLUGIN_PATH=~/src/plugin-abc
+PLUGIN_PATH=~/src/joplin/packages/app-cli/tests/support/plugins/imaging
 
 if [[ $NEED_COMPILING == 1 ]]; then
 	mkdir -p "$TEMP_PATH"
@@ -18,7 +18,7 @@ if [[ $NEED_COMPILING == 1 ]]; then
 
 	rsync -a --delete "$PLUGIN_PATH/" "$TEMP_PLUGIN_PATH/" 
 
-	npm install --prefix="$TEMP_PLUGIN_PATH" && yarn start --dev-plugins "$TEMP_PLUGIN_PATH"
+	NODE_OPTIONS=--openssl-legacy-provider npm install --prefix="$TEMP_PLUGIN_PATH" && yarn start --dev-plugins "$TEMP_PLUGIN_PATH"
 else
 	yarn start --dev-plugins "$PLUGIN_PATH"
 fi

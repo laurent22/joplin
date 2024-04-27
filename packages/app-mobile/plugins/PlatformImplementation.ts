@@ -3,7 +3,7 @@ import { Implementation as WindowImplementation } from '@joplin/lib/services/plu
 import Setting from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry';
 import BasePlatformImplementation, { Joplin } from '@joplin/lib/services/plugins/BasePlatformImplementation';
-import { Implementation as ImagingImplementation } from '@joplin/lib/services/plugins/api/JoplinImaging';
+import { CreateFromPdfOptions, Implementation as ImagingImplementation } from '@joplin/lib/services/plugins/api/JoplinImaging';
 import RNVersionInfo from 'react-native-version-info';
 import { _ } from '@joplin/lib/locale';
 import shim from '@joplin/lib/shim';
@@ -76,7 +76,12 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 
 	public get imaging(): ImagingImplementation {
 		return {
-			nativeImage: null,
+			createFromPath: async (_path: string) => {
+				throw new Error('Not implemented: createFromPath');
+			},
+			createFromPdf: (_path: string, _options: CreateFromPdfOptions) => {
+				throw new Error('Not implemented: createFromPdf');
+			},
 			getPdfInfo: async () => {
 				throw new Error('Not implemented: getPdfInfo');
 			},

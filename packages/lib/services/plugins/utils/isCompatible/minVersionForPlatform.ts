@@ -1,10 +1,15 @@
 import { AppType } from '../../../../models/Setting';
+import getDefaultPlatforms from './getDefaultPlatforms';
 import { ManifestSlice } from './types';
 
 // Returns false if the platform isn't supported at all,
 const minVersionForPlatform = (appPlatform: AppType, manifest: ManifestSlice): string|false => {
-	const platforms = manifest.platforms ?? [];
-	// If platforms is not specified (or empty), default to supporting all platforms.
+	let platforms = manifest.platforms;
+
+	if (!platforms || platforms.length === 0) {
+		platforms = getDefaultPlatforms(manifest.id);
+	}
+
 	const supported = platforms.length === 0 || platforms.includes(appPlatform);
 	if (!supported) {
 		return false;

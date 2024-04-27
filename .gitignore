@@ -1052,6 +1052,7 @@ packages/lib/services/plugins/utils/getPluginIssueReportUrl.js
 packages/lib/services/plugins/utils/getPluginNamespacedSettingKey.js
 packages/lib/services/plugins/utils/getPluginSettingKeyPrefix.js
 packages/lib/services/plugins/utils/getPluginSettingValue.js
+packages/lib/services/plugins/utils/isCompatible/getDefaultPlatforms.js
 packages/lib/services/plugins/utils/isCompatible/index.test.js
 packages/lib/services/plugins/utils/isCompatible/index.js
 packages/lib/services/plugins/utils/isCompatible/minVersionForPlatform.js

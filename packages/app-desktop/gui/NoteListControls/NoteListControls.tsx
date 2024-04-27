@@ -187,6 +187,8 @@ function NoteListControls(props: Props) {
 	}
 
 	function sortOrderFieldIcon() {
+		const defaultIcon = 'fas fa-cog';
+
 		const field = props.sortOrderField;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const iconMap: any = {
@@ -194,8 +196,10 @@ function NoteListControls(props: Props) {
 			user_created_time: 'far fa-calendar-plus',
 			title: 'fas fa-font',
 			order: 'fas fa-wrench',
+			todo_due: 'fas fa-calendar-check',
+			todo_completed: 'fas fa-check',
 		};
-		return `${iconMap[field] || iconMap['title']} ${field}`;
+		return `${iconMap[field] || defaultIcon} ${field}`;
 	}
 
 	function sortOrderReverseIcon() {

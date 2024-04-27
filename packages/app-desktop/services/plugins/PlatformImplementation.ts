@@ -8,7 +8,9 @@ import BasePlatformImplementation, { Joplin } from '@joplin/lib/services/plugins
 import { CreateFromPdfOptions, Implementation as ImagingImplementation } from '@joplin/lib/services/plugins/api/JoplinImaging';
 import shim from '@joplin/lib/shim';
 import { join } from 'path';
-import uuid from '@joplin/lib/uuid';
+import uuid, { uuidgen } from '@joplin/lib/uuid';
+import { hasProtocol } from '@joplin/utils/url';
+import { fileExtension } from '@joplin/utils/path';
 const { clipboard, nativeImage } = require('electron');
 const packageInfo = require('../../packageInfo');
 
@@ -97,24 +99,33 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 				await shim.fsDriver().remove(tempDir);
 			}
 		};
+
 		return {
-			nativeImage: {
-				async createFromPath(path: string) {
-					if (path.toLowerCase().endsWith('.pdf')) {
-						const images = await createFromPdf(path, { minPage: 1, maxPage: 1 });
+			createFromPath: async (path: string) => {
+				let pathToProcess = path;
+				let ext = fileExtension(path).toLowerCase();
 
-						if (images.length === 0) {
-							// Match the behavior or Electron's nativeImage when reading an invalid image.
-							return nativeImage.createEmpty();
-						}
+				if (hasProtocol(path, ['http', 'https', 'file'])) {
+					ext = fileExtension((new URL(path)).pathname);
+					const tempFilePath = `${Setting.value('tempDir')}/${uuidgen()}${ext ? `.${ext}` : ''}`;
+					await shim.fetchBlob(path, { path: tempFilePath });
+					pathToProcess = tempFilePath;
+				}
 
-						return images[0];
-					} else {
-						return nativeImage.createFromPath(path);
+				if (ext === 'pdf') {
+					const images = await createFromPdf(pathToProcess, { minPage: 1, maxPage: 1 });
+
+					if (images.length === 0) {
+						// Match the behavior or Electron's nativeImage when reading an invalid image.
+						return nativeImage.createEmpty();
 					}
-				},
-				createFromPdf,
+
+					return images[0];
+				} else {
+					return nativeImage.createFromPath(pathToProcess);
+				}
 			},
+			createFromPdf,
 			getPdfInfo(path: string) {
 				return shim.pdfInfo(path);
 			},

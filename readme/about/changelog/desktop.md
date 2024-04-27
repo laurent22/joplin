@@ -1,5 +1,28 @@
 # Joplin Desktop Changelog
 
+## [v3.0.6](https://github.com/laurent22/joplin/releases/tag/v3.0.6) (Pre-release) - 2024-04-27T13:16:04Z
+
+- New: Add context menu item to view OCR text of an attachment ([8bdec4c](https://github.com/laurent22/joplin/commit/8bdec4c))
+- New: Added search list for configuration font input fields ([#10248](https://github.com/laurent22/joplin/issues/10248) by [@ab-elhaddad](https://github.com/ab-elhaddad))
+- Improved: Attach log to crash dump when the application crashes ([c5dfa4c](https://github.com/laurent22/joplin/commit/c5dfa4c))
+- Improved: Display a message when Joplin Cloud user don't have access to email to note feature ([#10322](https://github.com/laurent22/joplin/issues/10322) by [@pedr](https://github.com/pedr))
+- Improved: Do not trim markdown upon saving in rich text ([#10321](https://github.com/laurent22/joplin/issues/10321)) ([#10315](https://github.com/laurent22/joplin/issues/10315) by [@chaNcharge](https://github.com/chaNcharge))
+- Improved: Improved log formatting and allow saving last lines of log to memory ([74bc9b3](https://github.com/laurent22/joplin/commit/74bc9b3))
+- Improved: Refactor sidebar to better handle thousands of tags and notebooks ([#10331](https://github.com/laurent22/joplin/issues/10331)) ([#4251](https://github.com/laurent22/joplin/issues/4251) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Support URLs in plugin API imaging.createFromPath ([#10334](https://github.com/laurent22/joplin/issues/10334))
+- Improved: Ubuntu 24.04: Work around unprivileged user namespace restrictions by adding the --no-sandbox flag to the launcher ([#10338](https://github.com/laurent22/joplin/issues/10338)) ([#10332](https://github.com/laurent22/joplin/issues/10332) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @adobe/css-tools (v4.3.3)
+- Fixed: After deleting the last note from the conflicts folder, the application state is invalid ([#10189](https://github.com/laurent22/joplin/issues/10189))
+- Fixed: Display correct sorting icon ([#10283](https://github.com/laurent22/joplin/issues/10283))
+- Fixed: Do not invite user to create new notes in the trash folder ([#10356](https://github.com/laurent22/joplin/issues/10356)) ([#10191](https://github.com/laurent22/joplin/issues/10191) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix "new notebook" shown in context menu when right-clicking on the "Tags" header ([#10378](https://github.com/laurent22/joplin/issues/10378) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix note disappears while editing ([#10370](https://github.com/laurent22/joplin/issues/10370)) ([#10194](https://github.com/laurent22/joplin/issues/10194) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fixed error when processing certain PDF files for OCR ([#10056](https://github.com/laurent22/joplin/issues/10056))
+- Fixed: Linux: Allow passing `--enable-wayland-ime` flag to fix input method issues on startup ([#10349](https://github.com/laurent22/joplin/issues/10349)) ([#10345](https://github.com/laurent22/joplin/issues/10345) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Old.reddit pages are not saved correctly as HTML by the Web Clipper ([#10274](https://github.com/laurent22/joplin/issues/10274))
+- Fixed: Search results from API change when fields param is used ([#10088](https://github.com/laurent22/joplin/issues/10088))
+- Fixed: When web clipper clipping code blocks, keep code in multiline and delete code number lines ([#10126](https://github.com/laurent22/joplin/issues/10126)) ([#5626](https://github.com/laurent22/joplin/issues/5626) by [@wljince007](https://github.com/wljince007))
+
 ## [v3.0.3](https://github.com/laurent22/joplin/releases/tag/v3.0.3) (Pre-release) - 2024-04-18T15:41:38Z
 
 - Improved: Allow creating plugins that process pasted text in the beta editor ([#10310](https://github.com/laurent22/joplin/issues/10310) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

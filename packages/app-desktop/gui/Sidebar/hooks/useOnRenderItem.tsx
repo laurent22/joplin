@@ -79,17 +79,6 @@ const useOnRenderItem = (props: Props) => {
 		}
 	}, []);
 
-
-	const header_contextMenu = useCallback(async () => {
-		const menu = new Menu();
-
-		menu.append(
-			new MenuItem(menuUtils.commandToStatefulMenuItem('newFolder')),
-		);
-
-		menu.popup({ window: bridge().window() });
-	}, []);
-
 	const onItemContextMenu: ItemContextMenuListener = useCallback(async event => {
 		const itemId = event.currentTarget.getAttribute('data-id');
 		if (itemId === Folder.conflictFolderId()) return;
@@ -396,7 +385,6 @@ const useOnRenderItem = (props: Props) => {
 				key={item.id}
 				item={item}
 				anchorRef={anchorRefCallback}
-				contextMenuHandler={header_contextMenu}
 				onDrop={item.supportsFolderDrop ? onFolderDrop_ : null}
 			/>;
 		} else if (item.kind === ListItemType.AllNotes) {
@@ -415,7 +403,6 @@ const useOnRenderItem = (props: Props) => {
 		}
 	}, [
 		folderItem_click,
-		header_contextMenu,
 		onFolderDragOver_,
 		onFolderDragStart_,
 		onFolderDrop_,
