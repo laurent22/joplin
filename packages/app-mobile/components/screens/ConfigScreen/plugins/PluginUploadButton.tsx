@@ -1,6 +1,6 @@
 
 import { _ } from '@joplin/lib/locale';
-import PluginService, { PluginSettings, defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings, SerializedPluginSettings, defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
 import * as React from 'react';
 import { useCallback, useState } from 'react';
 import { Button } from 'react-native-paper';
@@ -14,7 +14,7 @@ import Setting from '@joplin/lib/models/Setting';
 
 interface Props {
 	updatePluginStates: (settingValue: PluginSettings)=> void;
-	pluginSettings: string;
+	pluginSettings: SerializedPluginSettings;
 }
 
 const logger = Logger.create('PluginUploadButton');
