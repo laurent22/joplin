@@ -448,7 +448,7 @@ describe('services_PluginService', () => {
 			expect(service.pluginIds).toHaveLength(2);
 			expect(service.pluginById(pluginId1).running).toBe(true);
 			expect(service.pluginById(pluginId2).running).toBe(true);
-			expect(await readLoadCounterNote()).toBe(`${pluginId1} 1\n${pluginId2} 1`);
+			expect(await readLoadCounterNote()).toBe(`${pluginId1}\n${pluginId2}`);
 
 			// Updating just plugin 1 reload just plugin 1.
 			await writePluginScript('0.0.2', pluginId1);
