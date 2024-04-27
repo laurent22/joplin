@@ -2,12 +2,19 @@ import * as React from 'react';
 import { useCallback } from 'react';
 import { ButtonLevel } from '../../Button/Button';
 import { StyledAddButton, StyledHeader, StyledHeaderIcon, StyledHeaderLabel } from '../styles';
-import { HeaderListItem, ItemContextMenuListener } from '../types';
+import { HeaderId, HeaderListItem } from '../types';
 import { _ } from '@joplin/lib/locale';
+import bridge from '../../../services/bridge';
+import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
+import CommandService from '@joplin/lib/services/CommandService';
+
+const Menu = bridge().Menu;
+const MenuItem = bridge().MenuItem;
+const menuUtils = new MenuUtils(CommandService.instance());
+
 
 interface Props {
 	item: HeaderListItem;
-	contextMenuHandler: ItemContextMenuListener|null;
 	onDrop: React.DragEventHandler|null;
 	anchorRef: React.Ref<HTMLElement>;
 }
@@ -23,6 +30,18 @@ const HeaderItem: React.FC<Props> = props => {
 		}
 	}, [onItemClick, itemId]);
 
+	const onContextMenu = useCallback(async () => {
+		if (itemId === HeaderId.FolderHeader) {
+			const menu = new Menu();
+
+			menu.append(
+				new MenuItem(menuUtils.commandToStatefulMenuItem('newFolder')),
+			);
+
+			menu.popup({ window: bridge().window() });
+		}
+	}, [itemId]);
+
 	const addButton = <StyledAddButton
 		iconLabel={_('New')}
 		onClick={item.onPlusButtonClick}
@@ -37,7 +56,7 @@ const HeaderItem: React.FC<Props> = props => {
 			onDrop={props.onDrop}
 		>
 			<StyledHeader
-				onContextMenu={props.contextMenuHandler}
+				onContextMenu={onContextMenu}
 				onClick={onClick}
 				tabIndex={0}
 				ref={props.anchorRef}
