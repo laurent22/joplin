@@ -49,9 +49,12 @@ const useLoadedPluginIds = (pluginSettings: SerializedPluginSettings) => {
 
 	const [pluginReloadCounter, setPluginReloadCounter] = useState(0);
 	const loadedPluginIds = useMemo(() => {
+		if (pluginReloadCounter > 0) {
+			logger.debug(`Not all plugins were loaded in the last render. Re-loading (try ${pluginReloadCounter})`);
+		}
+
 		const pluginService = PluginService.instance();
 		return allPluginIds.filter(id => !!pluginService.plugins[id]);
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- This should reload when the counter increases.
 	}, [allPluginIds, pluginReloadCounter]);
 	const hasLoadingPlugins = loadedPluginIds.length !== allPluginIds.length;
 
@@ -62,7 +65,6 @@ const useLoadedPluginIds = (pluginSettings: SerializedPluginSettings) => {
 	const timeoutRef = useRef(null);
 	if (hasLoadingPlugins && !timeoutRef.current) {
 		timeoutRef.current = shim.setTimeout(() => {
-			logger.debug('Not all plugins are loaded. Re-rendering...');
 			timeoutRef.current = null;
 			setPluginReloadCounter(pluginReloadCounterRef.current + 1);
 		}, 1000);

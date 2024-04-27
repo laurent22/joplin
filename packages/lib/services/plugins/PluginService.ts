@@ -425,7 +425,9 @@ export default class PluginService extends BaseService {
 					// On mobile, plugins can reload without restarting the app. If a plugin is currently
 					// running and hasn't changed, it doesn't need to be reloaded.
 					if (isSamePlugin) {
-						const isSameVersion = existingPlugin.manifest.version === plugin.manifest.version && existingPlugin.manifest._package_hash === plugin.manifest._package_hash;
+						const isSameVersion =
+							existingPlugin.manifest.version === plugin.manifest.version
+							&& existingPlugin.manifest._package_hash === plugin.manifest._package_hash;
 						if (isSameVersion && existingPlugin.running === enabled) {
 							logger.debug('Not reloading same-version plugin', plugin.id);
 							continue;
@@ -462,7 +464,7 @@ export default class PluginService extends BaseService {
 	}
 
 	public async loadAndRunDevPlugins(settings: PluginSettings) {
-		const devPluginOptions = { devMode: true, builtIn: false, skipRunning: true };
+		const devPluginOptions = { devMode: true, builtIn: false };
 
 		if (Setting.value('plugins.devPluginPaths')) {
 			const paths = Setting.value('plugins.devPluginPaths').split(',').map((p: string) => p.trim());

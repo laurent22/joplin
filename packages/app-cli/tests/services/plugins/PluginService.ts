@@ -398,10 +398,10 @@ describe('services_PluginService', () => {
 		expect(newPluginSettings[pluginId2]).toBe(undefined);
 	});
 
-	it('should reload plugins that have changed while keeping unchanged plugins running', async () => {
+	it('re-running loadAndRunPlugins should reload plugins that have changed but keep unchanged plugins running', async () => {
 		const testDir = await createTempDir();
 		try {
-			const loadCounterNote = await Note.save({ title: 'Plugin load counter' });
+			const loadCounterNote = await Note.save({ title: 'Log of plugin loads' });
 			const readLoadCounterNote = async () => {
 				return (await Note.load(loadCounterNote.id)).body;
 			};
@@ -424,8 +424,7 @@ describe('services_PluginService', () => {
 							const noteId = ${JSON.stringify(loadCounterNote.id)};
 							const pluginId = ${JSON.stringify(id)};
 							const note = await joplin.data.get(['notes', noteId], { fields: ['body'] });
-							const loadCount = note.body.split(pluginId).length;
-							const newBody = note.body + '\\n' + pluginId + ' ' + loadCount;
+							const newBody = note.body + '\\n' + pluginId;
 							await joplin.data.put(['notes', noteId], null, { body: newBody.trim() });
 						},
 					});
@@ -457,7 +456,7 @@ describe('services_PluginService', () => {
 
 			expect(service.pluginById(pluginId1).running).toBe(true);
 			expect(service.pluginById(pluginId2).running).toBe(true);
-			expect(await readLoadCounterNote()).toBe(`${pluginId1} 1\n${pluginId2} 1\n${pluginId1} 2`);
+			expect(await readLoadCounterNote()).toBe(`${pluginId1}\n${pluginId2}\n${pluginId1}`);
 
 			// Disabling plugin 1 should not reload plugin 2
 			pluginSettings = { ...pluginSettings, [pluginId1]: { ...defaultPluginSetting(), enabled: false } };
@@ -465,7 +464,7 @@ describe('services_PluginService', () => {
 
 			expect(service.pluginById(pluginId1).running).toBe(false);
 			expect(service.pluginById(pluginId2).running).toBe(true);
-			expect(await readLoadCounterNote()).toBe(`${pluginId1} 1\n${pluginId2} 1\n${pluginId1} 2`);
+			expect(await readLoadCounterNote()).toBe(`${pluginId1}\n${pluginId2}\n${pluginId1}`);
 
 			await service.destroy();
 		} finally {
