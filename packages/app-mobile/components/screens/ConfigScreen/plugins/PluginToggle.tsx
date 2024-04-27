@@ -1,7 +1,7 @@
 
 import * as React from 'react';
 import { ConfigScreenStyles } from '../configScreenStyles';
-import PluginService, { PluginSettings, defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings, defaultPluginSetting, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { useCallback, useMemo, useState } from 'react';
 import PluginBox, { UpdateState } from './PluginBox';
 import useOnDeleteHandler from '@joplin/lib/components/shared/config/plugins/useOnDeleteHandler';
@@ -13,7 +13,7 @@ interface Props {
 	pluginId: string;
 	themeId: number;
 	styles: ConfigScreenStyles;
-	pluginSettings: string;
+	pluginSettings: SerializedPluginSettings;
 	updatablePluginIds: Record<string, boolean>;
 	repoApi: RepositoryApi;
 

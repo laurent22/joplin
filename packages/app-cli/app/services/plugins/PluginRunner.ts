@@ -5,6 +5,8 @@ import executeSandboxCall from '@joplin/lib/services/plugins/utils/executeSandbo
 import Global from '@joplin/lib/services/plugins/api/Global';
 import mapEventHandlersToIds, { EventHandlers } from '@joplin/lib/services/plugins/utils/mapEventHandlersToIds';
 import uuid from '@joplin/lib/uuid';
+import Joplin from '@joplin/lib/services/plugins/api/Joplin';
+import { Console } from 'console';
 const sandboxProxy = require('@joplin/lib/services/plugins/sandboxProxy');
 
 function createConsoleWrapper(pluginId: string) {
@@ -33,11 +35,18 @@ function createConsoleWrapper(pluginId: string) {
 // For example, all plugin calls go through a proxy, however they could made directly since
 // the plugin script is running within the same process as the main app.
 
+interface SandboxProxy {
+	joplin: Joplin;
+	console: typeof Console;
+	stop: ()=> void;
+}
+
 export default class PluginRunner extends BasePluginRunner {
 
 	private eventHandlers_: EventHandlers = {};
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private activeSandboxCalls_: any = {};
+	private sandboxProxies: Map<string, SandboxProxy> = new Map();
 
 	public constructor() {
 		super();
@@ -52,8 +61,14 @@ export default class PluginRunner extends BasePluginRunner {
 	}
 
 	private newSandboxProxy(pluginId: string, sandbox: Global) {
+		let stopped = false;
+
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const target = async (path: string, args: any[]) => {
+			if (stopped) {
+				throw new Error(`Plugin with ID ${pluginId} has been stopped. Cannot execute sandbox call.`);
+			}
+
 			const callId = `${pluginId}::${path}::${uuid.createNano()}`;
 			this.activeSandboxCalls_[callId] = true;
 			const promise = executeSandboxCall(pluginId, sandbox, `joplin.${path}`, mapEventHandlersToIds(args, this.eventHandlers_), this.eventHandler);
@@ -64,10 +79,15 @@ export default class PluginRunner extends BasePluginRunner {
 			return promise;
 		};
 
-		return {
+		const proxy = {
 			joplin: sandboxProxy(target),
 			console: createConsoleWrapper(pluginId),
+			stop: () => {
+				stopped = true;
+			},
 		};
+		this.sandboxProxies.set(pluginId, proxy);
+		return proxy;
 	}
 
 	public async run(plugin: Plugin, sandbox: Global): Promise<void> {
@@ -88,6 +108,13 @@ export default class PluginRunner extends BasePluginRunner {
 				reject(error);
 			}
 		});
+	}
+
+	public async stop(plugin: Plugin): Promise<void> {
+		// TODO: Node VM doesn't support stopping plugins without running them in a child process.
+		// For now, we stop the plugin by making interactions with the Joplin API throw Errors.
+		const proxy = this.sandboxProxies.get(plugin.id);
+		proxy?.stop();
 	}
 
 	public async waitForSandboxCalls(): Promise<void> {

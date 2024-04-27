@@ -7,7 +7,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import PluginBox, { InstallState } from './PluginBox';
-import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import useInstallHandler from '@joplin/lib/components/shared/config/plugins/useOnInstallHandler';
 import { OnPluginSettingChangeEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
@@ -15,7 +15,7 @@ import openWebsiteForPlugin from './utils/openWebsiteForPlugin';
 
 interface Props {
 	themeId: number;
-	pluginSettings: string;
+	pluginSettings: SerializedPluginSettings;
 	repoApiInitialized: boolean;
 	onUpdatePluginStates: (states: PluginSettings)=> void;
 	repoApi: RepositoryApi;

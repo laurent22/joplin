@@ -43,6 +43,7 @@ export default class Plugin {
 	private dataDir_: string;
 	private dataDirCreated_ = false;
 	private hasErrors_ = false;
+	private running_ = false;
 	private onUnloadListeners_: OnUnloadListener[] = [];
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -85,6 +86,14 @@ export default class Plugin {
 
 	public get baseDir(): string {
 		return this.baseDir_;
+	}
+
+	public get running(): boolean {
+		return this.running_;
+	}
+
+	public set running(running: boolean) {
+		this.running_ = running;
 	}
 
 	public async dataDir(): Promise<string> {

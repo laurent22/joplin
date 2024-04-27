@@ -8,7 +8,7 @@ import loadPlugins from '../loadPlugins';
 import { connect, useStore } from 'react-redux';
 import Logger from '@joplin/utils/Logger';
 import { View } from 'react-native';
-import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { PluginHtmlContents, PluginStates } from '@joplin/lib/services/plugins/reducer';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import PluginDialogManager from './dialogs/PluginDialogManager';
@@ -16,7 +16,7 @@ import { AppState } from '../../utils/types';
 
 const logger = Logger.create('PluginRunnerWebView');
 
-const usePluginSettings = (serializedPluginSettings: string) => {
+const usePluginSettings = (serializedPluginSettings: SerializedPluginSettings) => {
 	return useMemo(() => {
 		const pluginService = PluginService.instance();
 		return pluginService.unserializePluginSettings(serializedPluginSettings);
@@ -41,7 +41,7 @@ const usePlugins = (
 
 
 interface Props {
-	serializedPluginSettings: string;
+	serializedPluginSettings: SerializedPluginSettings;
 	pluginStates: PluginStates;
 	pluginHtmlContents: PluginHtmlContents;
 	themeId: number;
