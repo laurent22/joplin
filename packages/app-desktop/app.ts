@@ -467,7 +467,7 @@ class Application extends BaseApplication {
 		Setting.dispatchUpdateAll();
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		await refreshFolders((action: any) => this.dispatch(action));
+		await refreshFolders((action: any) => this.dispatch(action), '');
 
 		const tags = await Tag.allWithNotes();
 

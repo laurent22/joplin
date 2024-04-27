@@ -575,10 +575,10 @@ export default class BaseApplication {
 		if (doRefreshFolders) {
 			if (doRefreshFolders === 'now') {
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				await refreshFolders((action: any) => this.dispatch(action));
+				await refreshFolders((action: any) => this.dispatch(action), newState.selectedFolderId);
 			} else {
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				await scheduleRefreshFolders((action: any) => this.dispatch(action));
+				await scheduleRefreshFolders((action: any) => this.dispatch(action), newState.selectedFolderId);
 			}
 		}
 		return result;

@@ -36,7 +36,9 @@ export const allForDisplay = async (options: FolderLoadOptions = {}) => {
 	return folders;
 };
 
-export const refreshFolders = async (dispatch: Dispatch) => {
+// `selectedFolderId` should be the currently selected folder. Set it to an empty string if that
+// information is not available in the current context.
+export const refreshFolders = async (dispatch: Dispatch, selectedFolderId: string) => {
 	refreshCalls_.push(true);
 	try {
 		const folders = await allForDisplay({
@@ -48,16 +50,27 @@ export const refreshFolders = async (dispatch: Dispatch) => {
 			type: 'FOLDER_UPDATE_ALL',
 			items: folders,
 		});
+
+		// If the currently selected folder no longer exist, select a default folder
+		if (selectedFolderId && !folders.find(f => f.id === selectedFolderId)) {
+			const defaultFolder = await Folder.defaultFolder();
+			if (defaultFolder) {
+				dispatch({
+					type: 'FOLDER_SELECT',
+					id: defaultFolder.id,
+				});
+			}
+		}
 	} finally {
 		refreshCalls_.pop();
 	}
 };
 
-export const scheduleRefreshFolders = async (dispatch: Dispatch) => {
+export const scheduleRefreshFolders = async (dispatch: Dispatch, selectedFolderId: string) => {
 	if (scheduleRefreshFoldersIID_) shim.clearTimeout(scheduleRefreshFoldersIID_);
 	scheduleRefreshFoldersIID_ = shim.setTimeout(() => {
 		scheduleRefreshFoldersIID_ = null;
-		void refreshFolders(dispatch);
+		void refreshFolders(dispatch, selectedFolderId);
 	}, 1000);
 };
 

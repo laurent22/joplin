@@ -233,7 +233,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 
 	if (doRefreshFolders) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		await scheduleRefreshFolders((action: any) => storeDispatch(action));
+		await scheduleRefreshFolders((action: any) => storeDispatch(action), newState.selectedFolderId);
 	}
 
 	return result;
@@ -670,7 +670,7 @@ async function initialize(dispatch: Function) {
 		reg.logger().info('Loading folders...');
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		await refreshFolders((action: any) => dispatch(action));
+		await refreshFolders((action: any) => dispatch(action), '');
 
 		const tags = await Tag.allWithNotes();
 
@@ -1053,7 +1053,7 @@ class AppComponent extends React.Component {
 	public UNSAFE_componentWillReceiveProps(newProps: any) {
 		if (newProps.syncStarted !== this.lastSyncStarted_) {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			if (!newProps.syncStarted) void refreshFolders((action: any) => this.props.dispatch(action));
+			if (!newProps.syncStarted) void refreshFolders((action: any) => this.props.dispatch(action), this.props.selectedFolderId);
 			this.lastSyncStarted_ = newProps.syncStarted;
 		}
 	}
