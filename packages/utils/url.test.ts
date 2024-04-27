@@ -1,4 +1,4 @@
-import { fileUriToPath } from './url';
+import { fileUriToPath, hasProtocol } from './url';
 
 describe('utils/url', () => {
 
@@ -27,5 +27,41 @@ describe('utils/url', () => {
 		expect(fileUriToPath('file:///d:/better')).toBe('d:/better');
 		expect(fileUriToPath('file:///c:/AUTOEXEC.BAT', 'win32')).toBe('c:\\AUTOEXEC.BAT');
 	}));
+
+	test.each([
+		[
+			'https://joplinapp.org',
+			'https',
+			true,
+		],
+		[
+			'https://joplinapp.org',
+			'http',
+			false,
+		],
+		[
+			'https://joplinapp.org',
+			['http', 'https'],
+			true,
+		],
+		[
+			'https://joplinapp.org',
+			[],
+			false,
+		],
+		[
+			'',
+			[],
+			false,
+		],
+		[
+			'joplin://openNote?id=ABCD',
+			['http', 'https', 'joplin'],
+			true,
+		],
+	])('should tell if a URL has a particular protocol', (url, protocol, expected) => {
+		const actual = hasProtocol(url, protocol);
+		expect(actual).toBe(expected);
+	});
 
 });
