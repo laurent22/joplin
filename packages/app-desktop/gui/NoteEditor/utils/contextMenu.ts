@@ -5,16 +5,18 @@ import bridge from '../../../services/bridge';
 import { ContextMenuItemType, ContextMenuOptions, ContextMenuItems, resourceInfo, textToDataUri, svgUriToPng, svgDimensions } from './contextMenuUtils';
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
-import Resource from '@joplin/lib/models/Resource';
+import Resource, { resourceOcrStatusToString } from '@joplin/lib/models/Resource';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import { processPastedHtml } from './resourceHandling';
-import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
+import { NoteEntity, ResourceEntity, ResourceOcrStatus } from '@joplin/lib/services/database/types';
 import { TinyMceEditorEvents } from '../NoteBody/TinyMCE/utils/types';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
 import Setting from '@joplin/lib/models/Setting';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
+import shim from '@joplin/lib/shim';
+import { openFileWithExternalEditor } from '@joplin/lib/services/ExternalEditWatcher/utils';
 const fs = require('fs-extra');
 const { writeFile } = require('fs-extra');
 const { clipboard } = require('electron');
@@ -134,6 +136,21 @@ export function menuItems(dispatch: Function, htmlToMd: HtmlToMarkdownHandler, m
 				bridge().showItemInFolder(resourcePath);
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.textToCopy && itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
+		},
+		copyOcrText: {
+			label: _('View OCR text'),
+			onAction: async (options: ContextMenuOptions) => {
+				const { resource } = await resourceInfo(options);
+
+				if (resource.ocr_status === ResourceOcrStatus.Done) {
+					const tempFilePath = `${Setting.value('tempDir')}/${resource.id}_ocr.txt`;
+					await shim.fsDriver().writeFile(tempFilePath, resource.ocr_text, 'utf8');
+					await openFileWithExternalEditor(tempFilePath, bridge());
+				} else {
+					bridge().showInfoMessageBox(_('This attachment does not have OCR data (Status: %s)', resourceOcrStatusToString(resource.ocr_status)));
+				}
+			},
+			isActive: (itemType: ContextMenuItemType, _options: ContextMenuOptions) => itemType === ContextMenuItemType.Resource,
 		},
 		copyPathToClipboard: {
 			label: _('Copy path to clipboard'),

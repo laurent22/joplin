@@ -26,6 +26,17 @@ import ActionLogger from '../utils/ActionLogger';
 import isSqliteSyntaxError from '../services/database/isSqliteSyntaxError';
 import { internalUrl, isResourceUrl, isSupportedImageMimeType, resourceFilename, resourceFullPath, resourcePathToId, resourceRelativePath, resourceUrlToId } from './utils/resourceUtils';
 
+export const resourceOcrStatusToString = (status: ResourceOcrStatus) => {
+	const s = {
+		[ResourceOcrStatus.Todo]: _('Idle'),
+		[ResourceOcrStatus.Processing]: _('Processing'),
+		[ResourceOcrStatus.Error]: _('Error'),
+		[ResourceOcrStatus.Done]: _('Done'),
+	};
+
+	return s[status];
+};
+
 export default class Resource extends BaseItem {
 
 	public static IMAGE_MAX_DIMENSION = 1920;
@@ -628,6 +639,10 @@ export default class Resource extends BaseItem {
 		const output = await super.save(resource, options);
 		if (isNew) eventManager.emit(EventName.ResourceCreate);
 		return output;
+	}
+
+	public static load(id: string, options: LoadOptions = null): Promise<ResourceEntity> {
+		return super.load(id, options);
 	}
 
 }
