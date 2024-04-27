@@ -1,5 +1,20 @@
 # Joplin Android Changelog
 
+## [android-v3.0.3](https://github.com/laurent22/joplin/releases/tag/android-v3.0.3) (Pre-release) - 2024-04-27T11:21:48Z
+
+- Improved: Display a message when Joplin Cloud user don't have access to email to note feature (#10322 by [@pedr](https://github.com/pedr))
+- Improved: Make editor styles closer to desktop (#10377 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Make most plugins default to being desktop-only (#10376) (#10360 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Plugin support: Simplify reporting plugin issues (#10319 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Support copying app information (#10336 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @adobe/css-tools (v4.3.3)
+- Fixed: After deleting the last note from the conflicts folder, the application state is invalid (#10189)
+- Fixed: Do not invite user to create new notes in the trash folder (#10356) (#10191 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix cursor jumps before end of word while typing -- update `@codemirror/view` to v6.26.3 (#10353) (#10352 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix quickly enabling/disabling multiple plugins can lead to errors and missing plugins (#10380 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix sync icon off-center (#10350) (#10351 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugins: Fix API incompatibility in arguments to `onMessage` listeners in panels (#10375 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.0.2](https://github.com/laurent22/joplin/releases/tag/android-v3.0.2) (Pre-release) - 2024-04-15T18:06:46Z
 
 - Improved: Allow marking a plugin as mobile-only or desktop-only (#10229) (#10206 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
