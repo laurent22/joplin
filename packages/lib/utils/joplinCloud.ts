@@ -178,7 +178,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 		},
 		share: {
 			title: shareNotebookTitle,
-			description: 'You can [share a notebook](https://joplinapp.org/help/dev/spec/server_sharing/) with other Joplin Cloud users, who can then view the notes and edit them.',
+			description: 'You can [share a notebook](https://joplinapp.org/help/apps/share_notebook/) with other Joplin Cloud users, who can then view the notes and edit them.',
 			basic: false,
 			pro: true,
 			teams: true,
