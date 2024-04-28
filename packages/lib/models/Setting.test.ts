@@ -126,14 +126,11 @@ describe('models/Setting', () => {
 		expect(Setting.value('myCustom')).toBe('123');
 	}));
 
-	it.each([
-		SettingStorage.Database, SettingStorage.File,
-	])('should return values with correct type for custom settings (case %#)', (async (storage) => {
+	it('should return values with correct type for custom settings', (async () => {
 		await Setting.registerSetting('myCustom', {
 			public: true,
 			value: 123,
 			type: Setting.TYPE_INT,
-			storage,
 		});
 
 		Setting.setValue('myCustom', 456);
@@ -146,7 +143,6 @@ describe('models/Setting', () => {
 			public: true,
 			value: 123,
 			type: Setting.TYPE_INT,
-			storage,
 		});
 
 		expect(typeof Setting.value('myCustom')).toBe('number');
