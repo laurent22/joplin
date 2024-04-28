@@ -65,14 +65,19 @@ describe('models/Setting', () => {
 		await expectThrow(async () => Setting.value('itsgone'), 'unknown_key');
 	}));
 
-	it('should allow registering new settings dynamically', (async () => {
+	it.each([
+		SettingStorage.Database, SettingStorage.File,
+	])('should allow registering new settings dynamically (storage: %d)', (async (storage) => {
 		await expectThrow(async () => Setting.setValue('myCustom', '123'), 'unknown_key');
 
 		await Setting.registerSetting('myCustom', {
 			public: true,
 			value: 'default',
 			type: Setting.TYPE_STRING,
+			storage,
 		});
+
+		expect(Setting.value('myCustom')).toBe('default');
 
 		await expectNotThrow(async () => Setting.setValue('myCustom', '123'));
 
@@ -121,11 +126,14 @@ describe('models/Setting', () => {
 		expect(Setting.value('myCustom')).toBe('123');
 	}));
 
-	it('should return values with correct type for custom settings', (async () => {
+	it.each([
+		SettingStorage.Database, SettingStorage.File,
+	])('should return values with correct type for custom settings (case %#)', (async (storage) => {
 		await Setting.registerSetting('myCustom', {
 			public: true,
 			value: 123,
 			type: Setting.TYPE_INT,
+			storage,
 		});
 
 		Setting.setValue('myCustom', 456);
@@ -138,6 +146,7 @@ describe('models/Setting', () => {
 			public: true,
 			value: 123,
 			type: Setting.TYPE_INT,
+			storage,
 		});
 
 		expect(typeof Setting.value('myCustom')).toBe('number');
@@ -328,7 +337,7 @@ describe('models/Setting', () => {
 
 		expect((await Setting.loadOne('locale')).value).toBe('fr_FR');
 		expect((await Setting.loadOne('theme')).value).toBe(Setting.THEME_DARK);
-		expect((await Setting.loadOne('sync.target')).value).toBe(undefined);
+		expect((await Setting.loadOne('sync.target'))).toBe(null);
 	});
 
 	it('should save sub-profile settings', async () => {

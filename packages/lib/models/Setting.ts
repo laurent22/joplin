@@ -2103,6 +2103,7 @@ class Setting extends BaseModel {
 	}
 
 	// Low-level method to load a setting directly from the database. Should not be used in most cases.
+	// Does not apply setting default values.
 	public static async loadOne(key: string): Promise<CacheItem | null> {
 		if (this.keyStorage(key) === SettingStorage.File) {
 			let fileSettings = await this.fileHandler.load();
@@ -2113,10 +2114,14 @@ class Setting extends BaseModel {
 				fileSettings = mergeGlobalAndLocalSettings(rootFileSettings, fileSettings);
 			}
 
-			return {
-				key,
-				value: fileSettings[key],
-			};
+			if (key in fileSettings) {
+				return {
+					key,
+					value: fileSettings[key],
+				};
+			} else {
+				return null;
+			}
 		}
 
 		// Always check in the database first, including for secure settings,
