@@ -129,6 +129,7 @@ import initializeCommandService from './utils/initializeCommandService';
 import PlatformImplementation from './plugins/PlatformImplementation';
 import ShareManager from './components/screens/ShareManager';
 import appDefaultState, { DEFAULT_ROUTE } from './utils/appDefaultState';
+import { OpenPluginPanels } from './utils/types';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -380,8 +381,33 @@ const appReducer = (state = appDefaultState, action: any) => {
 			break;
 		case 'SET_PANEL_VISIBLE':
 			{
-				const openPanels = { ...state.openPluginPanels, [action.panelKey]: action.visible };
+				const openPanels: OpenPluginPanels = { ...state.openPluginPanels };
+				const visible: boolean = action.visible;
+				const key = action.panelKey;
+				if (visible) {
+					openPanels[key] = { pluginId: action.pluginId };
+				} else {
+					delete openPanels[key];
+				}
 				newState = { ...state, openPluginPanels: openPanels };
+			}
+			break;
+		case 'PLUGIN_UNLOAD':
+			if (state.openPluginPanels) {
+				const newOpenPanels: OpenPluginPanels = {};
+				let panelsChanged = false;
+				for (const [panelKey, panelData] of Object.entries(state.openPluginPanels)) {
+					const pluginId = panelData.pluginId;
+					if (action.pluginId === pluginId) {
+						panelsChanged = true;
+					} else {
+						newOpenPanels[panelKey] = { pluginId };
+					}
+				}
+				if (panelsChanged) {
+					logger.debug('Unloading', action.pluginId, 'changed plugin panels. Now: ', newOpenPanels, 'was:', state.openPluginPanels);
+					newState = { ...state, openPluginPanels: newOpenPanels };
+				}
 			}
 			break;
 

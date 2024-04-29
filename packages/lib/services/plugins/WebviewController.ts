@@ -151,6 +151,7 @@ export default class WebviewController extends ViewController {
 		this.store.dispatch({
 			type: 'SET_PANEL_VISIBLE',
 			panelKey: this.handle,
+			pluginId: this.pluginId,
 			visible: show,
 		});
 	}

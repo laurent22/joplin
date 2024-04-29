@@ -429,7 +429,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const pluginPanelToggleButton = (styles: any, onPress: OnPressCallback) => {
-			const hasOpenPanels = Object.values(this.props.openPluginPanels).some(isOpen => isOpen);
+			const hasOpenPanels = Object.keys(this.props.openPluginPanels).length > 0;
 			if (!hasOpenPanels) return null;
 
 			return (
