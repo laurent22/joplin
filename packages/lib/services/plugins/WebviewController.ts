@@ -61,6 +61,8 @@ export default class WebviewController extends ViewController {
 			containerType: containerType,
 			html: '',
 			scripts: [],
+			// Opened is used for dialogs and mobile panels (which are shown
+			// like dialogs):
 			opened: containerType === ContainerType.Panel,
 			buttons: null,
 			fitToContent: true,
@@ -154,10 +156,10 @@ export default class WebviewController extends ViewController {
 	public async show(show = true): Promise<void> {
 		if (this.showWithAppLayout()) {
 			this.store.dispatch({
-				type: 'SET_PANEL_VISIBLE',
-				panelKey: this.handle,
-				pluginId: this.pluginId,
-				visible: show,
+				type: 'MAIN_LAYOUT_SET_ITEM_PROP',
+				itemKey: this.handle,
+				propName: 'visible',
+				propValue: show,
 			});
 		} else {
 			this.setStoreProp('opened', show);

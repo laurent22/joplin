@@ -181,19 +181,22 @@ export default function(state: AppState, action: any) {
 			};
 			break;
 
-		case 'SET_PANEL_VISIBLE':
+		case 'MAIN_LAYOUT_SET_ITEM_PROP':
 
 			{
 				if (!state.mainLayout) {
-					logger.warn('SET_PANEL_VISIBLE: Trying to set an item prop on the layout, but layout is empty: ', JSON.stringify(action));
+					logger.warn('MAIN_LAYOUT_SET_ITEM_PROP: Trying to set an item prop on the layout, but layout is empty: ', JSON.stringify(action));
 				} else {
 					let newLayout = produce(state.mainLayout, (draftLayout: LayoutItem) => {
 						iterateItems(draftLayout, (_itemIndex: number, item: LayoutItem, _parent: LayoutItem) => {
 							if (!item) {
-								logger.warn('SET_PANEL_VISIBLE: Found an empty item in layout: ', JSON.stringify(state.mainLayout));
-							} else if (item.key === action.panelKey) {
-								item.visible = action.visible;
-								return false;
+								logger.warn('MAIN_LAYOUT_SET_ITEM_PROP: Found an empty item in layout: ', JSON.stringify(state.mainLayout));
+							} else {
+								if (item.key === action.itemKey) {
+									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+									(item as any)[action.propName] = action.propValue;
+									return false;
+								}
 							}
 
 							return true;
