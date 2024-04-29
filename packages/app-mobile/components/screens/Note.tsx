@@ -1210,7 +1210,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		const pluginCommands = pluginUtils.commandNamesFromViews(this.props.plugins, 'noteToolbar');
 
-		const cacheKey = md5([isTodo, isSaved, JSON.stringify(pluginCommands)].join('_'));
+		const cacheKey = md5([isTodo, isSaved, pluginCommands.join(',')].join('_'));
 		if (!this.menuOptionsCache_) this.menuOptionsCache_ = {};
 
 		if (this.menuOptionsCache_[cacheKey]) return this.menuOptionsCache_[cacheKey];
@@ -1337,6 +1337,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 						onPress: async () => {
 							void commandService.execute(commandName);
 						},
+						disabled: !commandService.isEnabled(commandName),
 					});
 				}
 			}

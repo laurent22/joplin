@@ -149,10 +149,9 @@ export default class WebviewController extends ViewController {
 
 	public async show(show = true): Promise<void> {
 		this.store.dispatch({
-			type: 'MAIN_LAYOUT_SET_ITEM_PROP',
-			itemKey: this.handle,
-			propName: 'visible',
-			propValue: show,
+			type: 'SET_PANEL_VISIBLE',
+			panelKey: this.handle,
+			visible: show,
 		});
 	}
 

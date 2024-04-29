@@ -4,10 +4,10 @@ import * as React from 'react';
 import { Button, Portal, SegmentedButtons, Text } from 'react-native-paper';
 import useViewInfos from './hooks/useViewInfos';
 import WebviewController, { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { connect } from 'react-redux';
-import { AppState } from '../../../utils/types';
+import { AppState, OpenPluginPanels } from '../../../utils/types';
 import PluginUserWebView from './PluginUserWebView';
 import { View, StyleSheet, AccessibilityInfo } from 'react-native';
 import { _ } from '@joplin/lib/locale';
@@ -18,6 +18,7 @@ import DismissibleDialog from '../../../components/DismissibleDialog';
 interface Props {
 	themeId: number;
 
+	openedPanels: OpenPluginPanels;
 	pluginHtmlContents: PluginHtmlContents;
 	pluginStates: PluginStates;
 	visible: boolean;
@@ -42,31 +43,40 @@ type ButtonInfo = {
 	icon: string;
 };
 
-const useSelectedTabId = (buttonInfos: ButtonInfo[], viewInfoById: Record<string, ViewInfo>) => {
+const useSelectedTabId = (
+	buttonInfos: ButtonInfo[],
+	viewInfoById: Record<string, ViewInfo>,
+	visiblePanels: OpenPluginPanels,
+) => {
+	const viewInfoByIdRef = useRef(viewInfoById);
+	viewInfoByIdRef.current = viewInfoById;
+	const visiblePanelsRef = useRef(visiblePanels);
+	visiblePanelsRef.current = visiblePanels;
+
 	const getDefaultSelectedTabId = useCallback((): string|undefined => {
 		const lastSelectedId = Setting.value('ui.lastSelectedPluginPanel');
-		if (lastSelectedId && viewInfoById[lastSelectedId]) {
+		if (lastSelectedId && viewInfoByIdRef.current[lastSelectedId] && visiblePanels[lastSelectedId]) {
 			return lastSelectedId;
 		} else {
 			return buttonInfos[0]?.value;
 		}
-	}, [buttonInfos, viewInfoById]);
+	}, [buttonInfos, visiblePanels]);
 
 	const [selectedTabId, setSelectedTabId] = useState<string|undefined>(getDefaultSelectedTabId);
 
 	useEffect(() => {
-		if (!selectedTabId) {
+		if (!selectedTabId || !visiblePanels[selectedTabId]) {
 			setSelectedTabId(getDefaultSelectedTabId());
 		}
-	}, [selectedTabId, getDefaultSelectedTabId]);
+	}, [selectedTabId, visiblePanels, getDefaultSelectedTabId]);
 
 	useEffect(() => {
 		if (!selectedTabId) return () => {};
 
-		const info = viewInfoById[selectedTabId];
+		const info = viewInfoByIdRef.current[selectedTabId];
 
 		let controller: WebviewController|null = null;
-		if (info && info.view.opened) {
+		if (info && visiblePanelsRef.current[info.view.id]) {
 			const plugin = PluginService.instance().pluginById(info.plugin.id);
 			controller = plugin.viewController(info.view.id) as WebviewController;
 			controller.setIsShownInModal(true);
@@ -78,7 +88,7 @@ const useSelectedTabId = (buttonInfos: ButtonInfo[], viewInfoById: Record<string
 		return () => {
 			controller?.setIsShownInModal(false);
 		};
-	}, [viewInfoById, selectedTabId]);
+	}, [selectedTabId]);
 
 	return { setSelectedTabId, selectedTabId };
 };
@@ -98,7 +108,7 @@ const PluginPanelViewer: React.FC<Props> = props => {
 	const viewInfoById = useMemo(() => {
 		const result: Record<string, ViewInfo> = {};
 		for (const info of viewInfos) {
-			result[`${info.plugin.id}--${info.view.id}`] = info;
+			result[info.view.id] = info;
 		}
 		return result;
 	}, [viewInfos]);
@@ -106,6 +116,7 @@ const PluginPanelViewer: React.FC<Props> = props => {
 	const buttonInfos = useMemo(() => {
 		return Object.entries(viewInfoById)
 			.filter(([_id, info]) => info.view.containerType === ContainerType.Panel)
+			.filter(([_id, info]) => props.openedPanels[info.view.id])
 			.map(([id, info]) => {
 				return {
 					value: id,
@@ -113,9 +124,9 @@ const PluginPanelViewer: React.FC<Props> = props => {
 					icon: 'puzzle',
 				};
 			});
-	}, [viewInfoById]);
+	}, [viewInfoById, props.openedPanels]);
 
-	const { selectedTabId, setSelectedTabId } = useSelectedTabId(buttonInfos, viewInfoById);
+	const { selectedTabId, setSelectedTabId } = useSelectedTabId(buttonInfos, viewInfoById, props.openedPanels);
 
 	const viewInfo = viewInfoById[selectedTabId];
 
@@ -187,5 +198,6 @@ export default connect((state: AppState) => {
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
 		visible: state.showPanelsDialog,
 		pluginStates: state.pluginService.plugins,
+		openedPanels: state.openPluginPanels,
 	};
 })(PluginPanelViewer);

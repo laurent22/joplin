@@ -378,6 +378,12 @@ const appReducer = (state = appDefaultState, action: any) => {
 			newState = { ...state };
 			newState.showPanelsDialog = action.visible;
 			break;
+		case 'SET_PANEL_VISIBLE':
+			{
+				const openPanels = { ...state.openPluginPanels, [action.panelKey]: action.visible };
+				newState = { ...state, openPluginPanels: openPanels };
+			}
+			break;
 
 		case 'NOTE_SELECTION_TOGGLE':
 

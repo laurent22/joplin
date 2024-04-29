@@ -14,16 +14,14 @@ import { OnValueChangedListener } from '../Dropdown';
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 import { FolderEntity } from '@joplin/lib/services/database/types';
-import { State } from '@joplin/lib/reducer';
 import CustomButton from '../CustomButton';
 import FolderPicker from '../FolderPicker';
 import { itemIsInTrash } from '@joplin/lib/services/trash';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { PluginStates } from '@joplin/lib/services/plugins/reducer';
-import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { Dispatch } from 'redux';
 import WarningBanner from './WarningBanner';
+import { AppState, OpenPluginPanels } from '../../utils/types';
 
 // Rather than applying a padding to the whole bar, it is applied to each
 // individual component (button, picker, etc.) so that the touchable areas
@@ -65,7 +63,7 @@ interface ScreenHeaderProps {
 		onValueChange?: OnValueChangedListener;
 		mustSelect?: boolean;
 	};
-	plugins: PluginStates;
+	openPluginPanels: OpenPluginPanels;
 
 	dispatch: Dispatch;
 	onUndoButtonPress: OnPressCallback;
@@ -431,9 +429,8 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const pluginPanelToggleButton = (styles: any, onPress: OnPressCallback) => {
-			const allPluginViews = Object.values(this.props.plugins).map(plugin => Object.values(plugin.views)).flat();
-			const allPanels = allPluginViews.filter(view => view.containerType === ContainerType.Panel);
-			if (allPanels.length === 0) return null;
+			const hasOpenPanels = Object.values(this.props.openPluginPanels).some(isOpen => isOpen);
+			if (!hasOpenPanels) return null;
 
 			return (
 				<CustomButton
@@ -701,7 +698,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 	};
 }
 
-const ScreenHeader = connect((state: State) => {
+const ScreenHeader = connect((state: AppState) => {
 	return {
 		historyCanGoBack: state.historyCanGoBack,
 		locale: state.settings.locale,
@@ -712,6 +709,7 @@ const ScreenHeader = connect((state: State) => {
 		selectedFolderId: state.selectedFolderId,
 		notesParentType: state.notesParentType,
 		plugins: state.pluginService.plugins,
+		openPluginPanels: state.openPluginPanels,
 	};
 })(ScreenHeaderComponent);
 
