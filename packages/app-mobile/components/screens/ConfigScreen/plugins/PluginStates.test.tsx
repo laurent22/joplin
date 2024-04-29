@@ -1,8 +1,8 @@
 import * as React from 'react';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
-import { afterAllCleanUp, afterEachCleanUp, createTempDir, mockMobilePlatform, setupDatabaseAndSynchronizer, supportDir, switchClient } from '@joplin/lib/testing/test-utils';
+import { createTempDir, mockMobilePlatform, setupDatabaseAndSynchronizer, supportDir, switchClient } from '@joplin/lib/testing/test-utils';
 
-import { render, screen } from '@testing-library/react-native';
+import { act, render, screen } from '@testing-library/react-native';
 import '@testing-library/react-native/extend-expect';
 
 import Setting from '@joplin/lib/models/Setting';
@@ -15,10 +15,15 @@ import { remove, writeFile } from 'fs-extra';
 import { join } from 'path';
 import shim from '@joplin/lib/shim';
 import { resetRepoApi } from './utils/useRepoApi';
+import { Store } from 'redux';
+import { AppState } from '../../../../utils/types';
+import createMockReduxStore from '../../../../utils/testing/createMockReduxStore';
 
 interface WrapperProps {
 	initialPluginSettings: PluginSettings;
 }
+
+let reduxStore: Store<AppState> = null;
 
 const shouldShowBasedOnSettingSearchQuery = ()=>true;
 const PluginStatesWrapper = (props: WrapperProps) => {
@@ -34,8 +39,8 @@ const PluginStatesWrapper = (props: WrapperProps) => {
 
 	return (
 		<PluginStates
-			themeId={Setting.THEME_LIGHT}
 			styles={styles}
+			themeId={Setting.THEME_LIGHT}
 			updatePluginStates={updatePluginStates}
 			pluginSettings={pluginSettings}
 			shouldShowBasedOnSearchQuery={shouldShowBasedOnSettingSearchQuery}
@@ -65,6 +70,7 @@ const loadMockPlugin = async (id: string, name: string, version: string, pluginS
 		app_min_version: '1.4',
 		name,
 		description: 'Test plugin',
+		platforms: ['mobile', 'desktop'],
 		version,
 		homepage_url: 'https://joplinapp.org',
 	})}
@@ -76,14 +82,17 @@ const loadMockPlugin = async (id: string, name: string, version: string, pluginS
 	`;
 	const pluginPath = join(await createTempDir(), 'plugin.js');
 	await writeFile(pluginPath, pluginSource, 'utf-8');
-	await service.loadAndRunPlugins([pluginPath], pluginSettings);
+	await act(async () => {
+		await service.loadAndRunPlugins([pluginPath], pluginSettings);
+	});
 };
 
 describe('PluginStates', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);
-		pluginServiceSetup();
+		reduxStore = createMockReduxStore();
+		pluginServiceSetup(reduxStore);
 		resetRepoApi();
 
 		await mockMobilePlatform('android');
@@ -91,11 +100,9 @@ describe('PluginStates', () => {
 	});
 	afterEach(async () => {
 		for (const pluginId of PluginService.instance().pluginIds) {
-			await PluginService.instance().unloadPlugin(pluginId);
+			await act(() => PluginService.instance().unloadPlugin(pluginId));
 		}
-		await afterEachCleanUp();
 	});
-	afterAll(() => afterAllCleanUp());
 
 	it.each([
 		'android',
@@ -156,5 +163,33 @@ describe('PluginStates', () => {
 		expect(await screen.findByText(/^ABC Sheet Music/)).toBeVisible();
 		expect(await screen.findByRole('button', { name: 'Update ABC Sheet Music', disabled: false })).toBeVisible();
 		expect(await screen.findByText(`v${outdatedVersion}`)).toBeVisible();
+	});
+
+	it('should update the list of installed plugins when a plugin is installed and uninstalled', async () => {
+		const pluginSettings: PluginSettings = { };
+
+		render(
+			<PluginStatesWrapper
+				initialPluginSettings={pluginSettings}
+			/>,
+		);
+
+		// Initially, no plugins should be visible.
+		expect(screen.queryByText(/^ABC Sheet Music/)).toBeNull();
+
+		const testPluginId1 = 'org.joplinapp.plugins.AbcSheetMusic';
+		const testPluginId2 = 'org.joplinapp.plugins.test.plugin.id';
+		await act(() => loadMockPlugin(testPluginId1, 'ABC Sheet Music', '1.2.3', pluginSettings));
+		await act(() => loadMockPlugin(testPluginId2, 'A test plugin', '1.0.0', pluginSettings));
+		expect(PluginService.instance().plugins[testPluginId1]).toBeTruthy();
+
+		// Should update the list of installed plugins even though the plugin settings didn't change.
+		expect(await screen.findByText(/^ABC Sheet Music/)).toBeVisible();
+		expect(await screen.findByText(/^A test plugin/)).toBeVisible();
+
+		// Uninstalling one plugin should keep the other in the list
+		await act(() => PluginService.instance().uninstallPlugin(testPluginId1));
+		expect(await screen.findByText(/^A test plugin/)).toBeVisible();
+		expect(screen.queryByText(/^ABC Sheet Music/)).toBeNull();
 	});
 });
