@@ -53,8 +53,7 @@ const useStyles = (themeId: number) => {
 				borderRadius: 10,
 				marginLeft: theme.marginLeft * 2,
 				marginRight: theme.marginRight * 2,
-				marginTop: theme.margin / 2,
-				marginBottom: theme.margin / 2,
+				marginBottom: theme.margin,
 			},
 		});
 
@@ -113,7 +112,7 @@ const EnablePluginSupportPage: React.FC<Props> = props => {
 				title={_('What are plugins?')}
 				titleStyle={styles.title}
 			>
-				<Text style={styles.descriptionText}>{_('Plugins extend Joplin with features are not present by default. Plugins can extend Joplin\'s editor, viewer, and more.')}</Text>
+				<Text style={styles.descriptionText}>{_('Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin\'s editor, viewer, and more.')}</Text>
 			</List.Section>
 			<Divider/>
 			<List.Section
