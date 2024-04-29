@@ -64,7 +64,7 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 	}
 
 	protected async getNoteExportContent_(modNote: NoteEntity) {
-		let tagTitles:string[] = [];
+		let tagTitles: string[] = [];
 		const context: FrontMatterContext = this.context();
 		if (context.noteTags[modNote.id]) {
 			const tagIds = context.noteTags[modNote.id];
@@ -73,6 +73,7 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 			tagTitles = tagIds.map((id: string) => context.tagTitles[id]).filter(e => !!e).sort();
 		}
 
-		return serialize(modNote, tagTitles);	}
+		return serialize(modNote, tagTitles);
+	}
 
 }

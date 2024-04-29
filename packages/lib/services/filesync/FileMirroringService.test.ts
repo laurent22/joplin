@@ -1,7 +1,7 @@
-import Folder from "../../models/Folder";
-import Note from "../../models/Note";
-import { createTempDir, setupDatabaseAndSynchronizer, switchClient } from "../../testing/test-utils";
-import FileMirroringService from "./FileMirroringService";
+import Folder from '../../models/Folder';
+import Note from '../../models/Note';
+import { createTempDir, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import FileMirroringService from './FileMirroringService';
 
 describe('FileMirroringService', () => {
 
@@ -10,7 +10,7 @@ describe('FileMirroringService', () => {
 		await switchClient(1);
 	});
 
-	it('should sync with a local dir', async()=> {
+	it('should sync with a local dir', async ()=> {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const folder2 = await Folder.save({ title: 'folder2' });
 		const folder3 = await Folder.save({ title: 'folder3', parent_id: folder2.id });

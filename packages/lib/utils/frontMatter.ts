@@ -1,7 +1,7 @@
-import Note from "../models/Note";
-import { NoteEntity } from "../services/database/types";
-import { MdFrontMatterExport } from "../services/interop/types";
-import time from "../time";
+import Note from '../models/Note';
+import { NoteEntity } from '../services/database/types';
+import { MdFrontMatterExport } from '../services/interop/types';
+import time from '../time';
 import * as yaml from 'js-yaml';
 
 export interface ParsedMeta {
@@ -11,7 +11,7 @@ export interface ParsedMeta {
 
 const convertDate = (datetime: number): string => {
 	return time.unixMsToRfc3339Sec(datetime);
-}
+};
 
 export const fieldOrder = ['title', 'updated', 'created', 'source', 'author', 'latitude', 'longitude', 'altitude', 'completed?', 'due', 'tags'];
 
@@ -40,9 +40,9 @@ function trimQuotes(rawOutput: string): string {
 	}).join('\n');
 }
 
-export const noteToFrontMatter = (note: NoteEntity, tagTitles:string[]) => {
+export const noteToFrontMatter = (note: NoteEntity, tagTitles: string[]) => {
 	const md: MdFrontMatterExport = {};
-	// Every variable needs to be converted seperately, so they will be handles in groups
+	// Every variable needs to be converted separately, so they will be handles in groups
 	//
 	// title
 	if (note.title) { md['title'] = note.title; }
@@ -92,13 +92,13 @@ export const noteToFrontMatter = (note: NoteEntity, tagTitles:string[]) => {
 	// For now the trimQuotes function only trims quotes associated with a negative number
 	// but it can be extended to support more special cases in the future if necessary.
 	return trimQuotes(rawOutput);
-}
+};
 
-export const serialize = async (modNote: NoteEntity, tagTitles:string[]) => {
+export const serialize = async (modNote: NoteEntity, tagTitles: string[]) => {
 	const noteContent = await Note.replaceResourceInternalToExternalLinks(await Note.serialize(modNote, ['body']));
 	const metadata = noteToFrontMatter(modNote, tagTitles);
 	return `---\n${metadata}---\n\n${noteContent}`;
-}
+};
 
 function isTruthy(str: string): boolean {
 	return str.toLowerCase() in ['true', 'yes'];
@@ -116,12 +116,12 @@ function normalizeYamlWhitespace(yaml: string[]): string[] {
 	});
 }
 
-// This is a helper functon to convert an arbitrary author variable into a string
+// This is a helper function to convert an arbitrary author variable into a string
 // the use case is for loading from r-markdown/pandoc style notes
 // references:
 // https://pandoc.org/MANUAL.html#extension-yaml_metadata_block
 // https://github.com/hao203/rmarkdown-YAML
-function extractAuthor(author: any): string {
+function extractAuthor(author: unknown): string {
 	if (!author) return '';
 
 	if (typeof(author) === 'string') {
@@ -131,7 +131,7 @@ function extractAuthor(author: any): string {
 		return extractAuthor(author[0]);
 	} else if (typeof(author) === 'object') {
 		if ('name' in author) {
-			return author['name'];
+			return author['name'] as string;
 		}
 	}
 
@@ -167,8 +167,9 @@ const getNoteHeader = (note: string) => {
 	const body = bodyLines.join('\n');
 
 	return { header, body };
-}
+};
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const toLowerCase = (obj: Record<string, any>): Record<string, any> => {
 	const newObj: Record<string, any> = {};
 	for (const key of Object.keys(obj)) {
@@ -176,7 +177,7 @@ const toLowerCase = (obj: Record<string, any>): Record<string, any> => {
 	}
 
 	return newObj;
-}
+};
 
 export const parse = (note: string): ParsedMeta => {
 	if (!note.startsWith('---')) return { metadata: { body: note }, tags: [] };
@@ -229,7 +230,7 @@ export const parse = (note: string): ParsedMeta => {
 		}
 	}
 
-	// Tags are handled seperately from typical metadata
+	// Tags are handled separately from typical metadata
 	let tags: string[] = [];
 	if ('tags' in md) {
 		// Only create unique tags
@@ -245,4 +246,4 @@ export const parse = (note: string): ParsedMeta => {
 	metadata['body'] = body;
 
 	return { metadata, tags };
-}
+};
