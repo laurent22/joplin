@@ -24,7 +24,7 @@ const loadPlugins = async (
 		pluginService.isSafeMode = Setting.value('isSafeMode');
 
 		for (const pluginId of Object.keys(pluginService.plugins)) {
-			if (!pluginSettings[pluginId]?.enabled) {
+			if (pluginSettings[pluginId] && !pluginSettings[pluginId].enabled) {
 				logger.info('Unloading disabled plugin', pluginId);
 				await pluginService.unloadPlugin(pluginId);
 			}
