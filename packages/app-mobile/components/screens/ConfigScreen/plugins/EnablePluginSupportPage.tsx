@@ -1,8 +1,8 @@
 import { _ } from '@joplin/lib/locale';
-import { themeStyle } from '@joplin/lib/theme';
+import { themeStyle } from '../../../global-style';
 import * as React from 'react';
 import { useMemo } from 'react';
-import { Linking, View, StyleSheet, ViewStyle } from 'react-native';
+import { Linking, View, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { Button, Card, Divider, Icon, List, Text } from 'react-native-paper';
 
 interface Props {
@@ -18,34 +18,72 @@ const useStyles = (themeId: number) => {
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
 		const basePrecautionCard: ViewStyle = {
-			margin: 8,
+			margin: theme.margin,
 		};
 
-		return StyleSheet.create({
-			descriptionContainer: {
+		const baseTitleStyle: TextStyle = {
+			fontWeight: 'bold',
+			color: theme.color,
+			fontSize: theme.fontSize,
+		};
+
+		const styles = StyleSheet.create({
+			descriptionText: {
 				padding: theme.margin,
-				display: 'flex',
-				flexDirection: 'column',
-				gap: 10,
+				paddingTop: 0,
 			},
 			firstPrecautionCard: {
 				...basePrecautionCard,
-				marginTop: 6,
 			},
 			precautionCard: {
 				...basePrecautionCard,
+				marginTop: 0,
 			},
-			cardContent: { paddingTop: 10, paddingBottom: 15 },
-			title: { fontWeight: 'bold' },
-			actionButtonContainer: {
+			cardContent: {
+				paddingTop: theme.itemMarginTop,
+				paddingBottom: theme.itemMarginBottom,
+			},
+			title: baseTitleStyle,
+			header: {
+				...baseTitleStyle,
 				margin: theme.margin,
+				marginBottom: 0,
+			},
+			actionButton: {
+				borderRadius: 10,
+				marginLeft: theme.marginLeft * 2,
+				marginRight: theme.marginRight * 2,
+				marginTop: theme.margin / 2,
+				marginBottom: theme.margin / 2,
 			},
 		});
+
+		const themeOverride = {
+			secondaryButton: {
+				colors: {
+					primary: theme.color4,
+					outline: theme.color4,
+				},
+			},
+			primaryButton: {
+				colors: {
+					primary: theme.color4,
+					onPrimary: theme.backgroundColor4,
+				},
+			},
+			card: {
+				colors: {
+					outline: theme.codeBorderColor,
+				},
+			},
+		};
+
+		return { styles, themeOverride };
 	}, [themeId]);
 };
 
 const EnablePluginSupportPage: React.FC<Props> = props => {
-	const styles = useStyles(props.themeId);
+	const { styles, themeOverride } = useStyles(props.themeId);
 
 	let isFirstCard = true;
 	const renderCard = (icon: string, title: string, description: string) => {
@@ -56,6 +94,7 @@ const EnablePluginSupportPage: React.FC<Props> = props => {
 				mode='outlined'
 				style={style}
 				contentStyle={styles.cardContent}
+				theme={themeOverride.card}
 			>
 				<Card.Title
 					title={title}
@@ -70,33 +109,27 @@ const EnablePluginSupportPage: React.FC<Props> = props => {
 
 	return (
 		<View>
-			<List.Accordion
+			<List.Section
 				title={_('What are plugins?')}
 				titleStyle={styles.title}
 			>
-				<View style={styles.descriptionContainer}>
-					<Text>{_('Plugins extend Joplin with features are not present by default. Plugins can extend Joplin\'s editor, viewer, and more.')}</Text>
-				</View>
-			</List.Accordion>
+				<Text style={styles.descriptionText}>{_('Plugins extend Joplin with features are not present by default. Plugins can extend Joplin\'s editor, viewer, and more.')}</Text>
+			</List.Section>
 			<Divider/>
-			<List.Accordion
+			<List.Section
 				title={_('Plugin security')}
 				titleStyle={styles.title}
 			>
-				<View style={styles.descriptionContainer}>
-					<Text>{_('Like any software you install, plugins can potentially cause security issues or data loss.')}</Text>
-				</View>
-			</List.Accordion>
+				<Text style={styles.descriptionText}>{_('Like any software you install, plugins can potentially cause security issues or data loss.')}</Text>
+			</List.Section>
 			<Divider/>
-			<View style={styles.descriptionContainer}>
-				<Text variant='titleMedium'>{_('Here\'s what we do to make plugins safer:')}</Text>
-			</View>
-			{renderCard('crown', _('Recommended Plugins'), _('We mark plugins developed by trusted Joplin community members as "recommended".'))}
+			<Text variant='titleMedium' style={styles.header}>{_('Here\'s what we do to make plugins safer:')}</Text>
+			{renderCard('crown', _('Recommended plugins'), _('We mark plugins developed by trusted Joplin community members as "recommended".'))}
 			{renderCard('source-branch-check', _('Open Source'), _('Most plugins have source code available for review on the plugin website.'))}
 			{renderCard('flag-remove', _('Report system'), _('We have a system for reporting and removing problematic plugins.'))}
-			<View style={styles.actionButtonContainer}>
-				<Button onPress={onLearnMorePress}>{_('Learn more')}</Button>
-				<Button mode='contained' onPress={props.onEnablePluginSupport}>{_('Enable plugin support')}</Button>
+			<View>
+				<Button style={styles.actionButton} theme={themeOverride.secondaryButton} onPress={onLearnMorePress}>{_('Learn more')}</Button>
+				<Button style={styles.actionButton} theme={themeOverride.primaryButton} mode='contained' onPress={props.onEnablePluginSupport}>{_('Enable plugin support')}</Button>
 			</View>
 		</View>
 	);
