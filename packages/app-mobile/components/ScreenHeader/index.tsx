@@ -14,14 +14,16 @@ import { OnValueChangedListener } from '../Dropdown';
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 import { FolderEntity } from '@joplin/lib/services/database/types';
+import { State } from '@joplin/lib/reducer';
 import CustomButton from '../CustomButton';
 import FolderPicker from '../FolderPicker';
 import { itemIsInTrash } from '@joplin/lib/services/trash';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { ModelType } from '@joplin/lib/BaseModel';
+import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { Dispatch } from 'redux';
 import WarningBanner from './WarningBanner';
-import { AppState, OpenPluginPanels } from '../../utils/types';
 
 // Rather than applying a padding to the whole bar, it is applied to each
 // individual component (button, picker, etc.) so that the touchable areas
@@ -34,7 +36,7 @@ type OnPressCallback=()=> void;
 
 export type MenuOptionType = {
 	onPress: OnPressCallback;
-	isDivider?: false;
+	isDivider?: boolean;
 	title: string;
 	disabled?: boolean;
 }|{
@@ -63,7 +65,7 @@ interface ScreenHeaderProps {
 		onValueChange?: OnValueChangedListener;
 		mustSelect?: boolean;
 	};
-	openPluginPanels: OpenPluginPanels;
+	plugins: PluginStates;
 
 	dispatch: Dispatch;
 	onUndoButtonPress: OnPressCallback;
@@ -429,8 +431,11 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const pluginPanelToggleButton = (styles: any, onPress: OnPressCallback) => {
-			const hasOpenPanels = Object.keys(this.props.openPluginPanels).length > 0;
-			if (!hasOpenPanels) return null;
+			const allPluginViews = Object.values(this.props.plugins).map(plugin => Object.values(plugin.views)).flat();
+			const allVisiblePanels = allPluginViews.filter(
+				view => view.containerType === ContainerType.Panel && view.opened,
+			);
+			if (allVisiblePanels.length === 0) return null;
 
 			return (
 				<CustomButton
@@ -698,7 +703,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 	};
 }
 
-const ScreenHeader = connect((state: AppState) => {
+const ScreenHeader = connect((state: State) => {
 	return {
 		historyCanGoBack: state.historyCanGoBack,
 		locale: state.settings.locale,
@@ -709,7 +714,6 @@ const ScreenHeader = connect((state: AppState) => {
 		selectedFolderId: state.selectedFolderId,
 		notesParentType: state.notesParentType,
 		plugins: state.pluginService.plugins,
-		openPluginPanels: state.openPluginPanels,
 	};
 })(ScreenHeaderComponent);
 

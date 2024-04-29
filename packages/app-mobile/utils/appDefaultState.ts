@@ -18,6 +18,5 @@ const appDefaultState: AppState = {
 	isOnMobileData: false,
 	disableSideMenuGestures: false,
 	showPanelsDialog: false,
-	openPluginPanels: {},
 };
 export default appDefaultState;
