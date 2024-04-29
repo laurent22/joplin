@@ -34,12 +34,17 @@ const PADDING_V = 10;
 type OnSelectCallbackType=()=> void;
 type OnPressCallback=()=> void;
 
-export interface MenuOptionType {
+export type MenuOptionType = {
 	onPress: OnPressCallback;
-	isDivider?: boolean;
+	isDivider?: false;
 	title: string;
 	disabled?: boolean;
-}
+}|{
+	isDivider: true;
+	title?: undefined;
+	onPress?: undefined;
+	disabled?: false;
+};
 
 interface ScreenHeaderProps {
 	selectedNoteIds: string[];
