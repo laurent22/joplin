@@ -5,7 +5,7 @@ const { SearchScreen } = require('./screens/search.js');
 import { Component } from 'react';
 import { KeyboardAvoidingView, Keyboard, Platform, View, KeyboardEvent, Dimensions, EmitterSubscription } from 'react-native';
 import { AppState } from '../utils/types';
-const { themeStyle } = require('./global-style.js');
+import { themeStyle } from './global-style';
 
 interface State {
 	autoCompletionBarExtraHeight: number;
@@ -13,8 +13,11 @@ interface State {
 }
 
 interface Props {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	route: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	screens: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	dispatch: (action: any)=> void;
 	themeId: number;
 }

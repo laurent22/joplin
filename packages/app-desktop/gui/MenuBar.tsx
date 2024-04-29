@@ -60,6 +60,7 @@ function getPluginCommandNames(plugins: PluginStates): string[] {
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 function createPluginMenuTree(label: string, menuItems: MenuItem[], onMenuItemClick: Function) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {
 		label: label,
 		submenu: [],
@@ -76,13 +77,16 @@ function createPluginMenuTree(label: string, menuItems: MenuItem[], onMenuItemCl
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const useSwitchProfileMenuItems = (profileConfig: ProfileConfig, menuItemDic: any) => {
 	return useMemo(() => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const switchProfileMenuItems: any[] = [];
 
 		for (let i = 0; i < profileConfig.profiles.length; i++) {
 			const profile = profileConfig.profiles[i];
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			let menuItem: any = {};
 			const profileNum = i + 1;
 
@@ -113,9 +117,11 @@ const useSwitchProfileMenuItems = (profileConfig: ProfileConfig, menuItemDic: an
 };
 
 const useNoteListMenuItems = (noteListRendererIds: string[]) => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const [menuItems, setMenuItems] = useState<any[]>([]);
 
 	useAsyncEffect(async (event) => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any[] = [];
 		for (const id of noteListRendererIds) {
 			const renderer = getListRendererById(id);
@@ -141,6 +147,7 @@ const useNoteListMenuItems = (noteListRendererIds: string[]) => {
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	menuItemProps: any;
 	routeName: string;
 	selectedFolderId: string;
@@ -152,7 +159,9 @@ interface Props {
 	showNoteCounts: boolean;
 	uncompletedTodosOnTop: boolean;
 	showCompletedTodos: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginMenuItems: any[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginMenus: any[];
 	['spellChecker.enabled']: boolean;
 	['spellChecker.languages']: string[];
@@ -181,8 +190,10 @@ function menuItemSetEnabled(id: string, enabled: boolean) {
 	menuItem.enabled = enabled;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function useMenuStates(menu: any, props: Props) {
 	useEffect(() => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let timeoutId: any = null;
 
 		function scheduleUpdate() {
@@ -212,10 +223,12 @@ function useMenuStates(menu: any, props: Props) {
 				const sortOptions = Setting.enumOptions(`${type}.sortOrder.field`);
 				for (const field in sortOptions) {
 					if (!sortOptions.hasOwnProperty(field)) continue;
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					menuItemSetChecked(`sort:${type}:${field}`, (props as any)[`${type}.sortOrder.field`] === field);
 				}
 
 				const id = type === 'notes' ? 'toggleNotesSortOrderReverse' : `sort:${type}:reverse`;
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				menuItemSetChecked(id, (props as any)[`${type}.sortOrder.reverse`]);
 			}
 
@@ -289,12 +302,14 @@ function useMenu(props: Props) {
 
 		void CommandService.instance().execute('showModalMessage', modalMessage);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const errors: any[] = [];
 
 		const importOptions = {
 			path,
 			format: module.format,
 			outputFormat: module.outputFormat,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			onProgress: (status: any) => {
 				const statusStrings: string[] = Object.keys(status).map((key: string) => {
 					return `${key}: ${status[key]}`;
@@ -302,6 +317,7 @@ function useMenu(props: Props) {
 
 				void CommandService.instance().execute('showModalMessage', `${modalMessage}\n\n${statusStrings.join('\n')}`);
 			},
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			onError: (error: any) => {
 				errors.push(error);
 				console.warn(error);
@@ -349,6 +365,7 @@ function useMenu(props: Props) {
 	const onImportModuleClickRef = useRef(null);
 	onImportModuleClickRef.current = onImportModuleClick;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const pluginCommandNames = useMemo(() => props.pluginMenuItems.map((view: any) => view.commandName), [props.pluginMenuItems]);
 
 	const menuItemDic = useMemo(() => {
@@ -360,11 +377,13 @@ function useMenu(props: Props) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [commandNames, pluginCommandNames, props.locale]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const switchProfileMenuItems: any[] = useSwitchProfileMenuItems(props.profileConfig, menuItemDic);
 
 	const noteListMenuItems = useNoteListMenuItems(props.noteListRendererIds);
 
 	useEffect(() => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let timeoutId: any = null;
 
 		function updateMenu() {
@@ -442,6 +461,7 @@ function useMenu(props: Props) {
 							label: module.fullLabel(),
 							click: async () => {
 								await InteropServiceHelper.export(
+									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 									(action: any) => props.dispatch(action),
 									module,
 									{
@@ -507,9 +527,11 @@ function useMenu(props: Props) {
 				submenu: switchProfileMenuItems,
 			};
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			let toolsItems: any[] = [];
 
 			// we need this workaround, because on macOS the menu is different
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const toolsItemsWindowsLinux: any[] = [
 				{
 					label: _('Options'),
@@ -686,6 +708,7 @@ function useMenu(props: Props) {
 				});
 			}
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const rootMenus: any = {
 				edit: {
 					id: 'edit',
@@ -837,6 +860,8 @@ function useMenu(props: Props) {
 						separator(),
 						menuItemDic.showNoteProperties,
 						menuItemDic.showNoteContentProperties,
+						separator(),
+						menuItemDic.permanentlyDeleteNote,
 					],
 				},
 				tools: {
@@ -920,6 +945,7 @@ function useMenu(props: Props) {
 			// It seems the "visible" property of separators is ignored by Electron, making
 			// it display separators that we want hidden. So this function iterates through
 			// them and remove them completely.
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const cleanUpSeparators = (items: any[]) => {
 				const output = [];
 				for (const item of items) {
@@ -989,6 +1015,7 @@ function useMenu(props: Props) {
 							menuItemDic.textCut,
 							menuItemDic.textPaste,
 							menuItemDic.textSelectAll,
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 						] as any,
 					},
 				]));
@@ -1052,6 +1079,7 @@ function useMenu(props: Props) {
 	return menu;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function MenuBar(props: Props): any {
 	const menu = useMenu(props);
 	if (menu) Menu.setApplicationMenu(menu);

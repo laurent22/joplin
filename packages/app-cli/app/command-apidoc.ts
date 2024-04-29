@@ -37,6 +37,7 @@ class Command extends BaseCommand {
 		return markdownUtils.createMarkdownTable(headers, tableFields);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public override async action(args: any) {
 		const models = [
 			{
@@ -398,6 +399,11 @@ async function fetchAllNotes() {
 				lines.push('### DELETE /tags/:id/notes/:note_id');
 				lines.push('');
 				lines.push('Remove the tag from the note.');
+				lines.push('');
+			}
+
+			if (model.type === BaseModel.TYPE_NOTE || model.type === BaseModel.TYPE_FOLDER) {
+				lines.push(`By default, the ${singular} will be moved **to the trash**. To permanently delete it, add the query parameter \`permanent=1\``);
 				lines.push('');
 			}
 		}

@@ -1,5 +1,6 @@
 
 // TODO: copied from string-utils
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function formatCssSize(v: any): string {
 	if (typeof v === 'string') {
 		if (v.includes('px') || v.includes('em') || v.includes('%')) return v;
@@ -48,6 +49,7 @@ export const whiteBackgroundNoteStyle = () => {
 	`;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function(theme: any, options: Options = null) {
 	options = {
 		contentMaxWidth: 0,
@@ -432,6 +434,11 @@ export default function(theme: any, options: Options = null) {
 		/* https://github.com/laurent22/joplin/issues/5740 */
 		pre.hljs {
 			overflow-x: auto;
+		}
+
+		.joplin-table-wrapper{
+			overflow-x: auto;
+			overflow-y: hidden;
 		}
 
 		/* =============================================== */

@@ -30,13 +30,13 @@ import MasterKey from '../models/MasterKey';
 import BaseItem from '../models/BaseItem';
 import { FileApi } from '../file-api';
 const FileApiDriverMemory = require('../file-api-driver-memory').default;
-const { FileApiDriverLocal } = require('../file-api-driver-local');
+import FileApiDriverLocal from '../file-api-driver-local';
 const { FileApiDriverWebDav } = require('../file-api-driver-webdav.js');
 const { FileApiDriverDropbox } = require('../file-api-driver-dropbox.js');
 const { FileApiDriverOneDrive } = require('../file-api-driver-onedrive.js');
 import SyncTargetRegistry from '../SyncTargetRegistry';
 const SyncTargetMemory = require('../SyncTargetMemory.js');
-const SyncTargetFilesystem = require('../SyncTargetFilesystem.js');
+import SyncTargetFilesystem from '../SyncTargetFilesystem';
 const SyncTargetNextcloud = require('../SyncTargetNextcloud.js');
 const SyncTargetDropbox = require('../SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('../SyncTargetAmazonS3.js');
@@ -66,6 +66,7 @@ import initLib from '../initLib';
 import OcrDriverTesseract from '../services/ocr/drivers/OcrDriverTesseract';
 import OcrService from '../services/ocr/OcrService';
 import { createWorker } from 'tesseract.js';
+import { reg } from '../registry';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -192,6 +193,7 @@ Setting.setConstant('appId', 'net.cozic.joplintest-cli');
 Setting.setConstant('appType', 'cli');
 Setting.setConstant('tempDir', baseTempDir);
 Setting.setConstant('cacheDir', baseTempDir);
+Setting.setConstant('resourceDir', baseTempDir);
 Setting.setConstant('pluginDataDir', `${profileDir}/profile/plugin-data`);
 Setting.setConstant('profileDir', profileDir);
 Setting.setConstant('rootProfileDir', rootProfileDir);
@@ -267,6 +269,7 @@ const settingFilename = (id: number): string => {
 	return `settings-${id}.json`;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function switchClient(id: number, options: any = null) {
 	options = { keychainEnabled: false, ...options };
 
@@ -334,6 +337,7 @@ async function clearDatabase(id: number = null) {
 	await databases_[id].transactionExecBatch(queries);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function setupDatabase(id: number = null, options: any = null) {
 	options = { keychainEnabled: false, ...options };
 
@@ -376,6 +380,7 @@ async function setupDatabase(id: number = null, options: any = null) {
 	await clearSettingFile(id);
 	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
 
+	reg.setDb(databases_[id]);
 	Setting.setValue('sync.target', syncTargetId());
 }
 
@@ -384,6 +389,7 @@ async function clearSettingFile(id: number) {
 	await fs.remove(Setting.settingFilePath);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function createFolderTree(parentId: string, tree: any[], num = 0): Promise<FolderEntity> {
 	let rootFolder: FolderEntity = null;
 
@@ -444,6 +450,7 @@ const createNoteAndResource = async (options: CreateNoteAndResourceOptions = nul
 	return { note, resource };
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function setupDatabaseAndSynchronizer(id: number, options: any = null) {
 	if (id === null) id = currentClient_;
 
@@ -502,6 +509,7 @@ function synchronizer(id: number = null) {
 // This is like calling synchronizer.start() but it handles the
 // complexity of passing around the sync context depending on
 // the client.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function synchronizerStart(id: number = null, extraOptions: any = null) {
 	if (id === null) id = currentClient_;
 
@@ -702,6 +710,7 @@ function fileApi() {
 	return fileApis_[syncTargetId_];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function objectsEqual(o1: any, o2: any) {
 	if (Object.getOwnPropertyNames(o1).length !== Object.getOwnPropertyNames(o2).length) return false;
 	for (const n in o1) {
@@ -722,7 +731,7 @@ async function checkThrowAsync(asyncFn: Function) {
 	return hasThrown;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 async function expectThrow(asyncFn: Function, errorCode: any = undefined, errorMessage: string = undefined) {
 	let hasThrown = false;
 	let thrownError = null;
@@ -816,18 +825,22 @@ async function allSyncTargetItemsEncrypted() {
 	return totalCount === encryptedCount;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function id(a: any) {
 	return a.id;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function ids(a: any[]) {
 	return a.map(n => n.id);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function sortedIds(a: any[]) {
 	return ids(a).sort();
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function at(a: any[], indexes: any[]) {
 	const out = [];
 	for (let i = 0; i < indexes.length; i++) {
@@ -846,11 +859,12 @@ async function createNTestFolders(n: number) {
 	return folders;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function createNTestNotes(n: number, folder: any, tagIds: string[] = null, title = 'note') {
 	const notes = [];
 	for (let i = 0; i < n; i++) {
 		const title_ = n > 1 ? `${title}${i}` : title;
-		const note = await Note.save({ title: title_, parent_id: folder.id, is_conflict: 0 });
+		const note = await Note.save({ title: title_, parent_id: folder.id, is_conflict: 0, deleted_time: 0 });
 		notes.push(note);
 		await time.msleep(10);
 	}
@@ -931,6 +945,7 @@ export async function naughtyStrings() {
 class TestApp extends BaseApplication {
 
 	private hasGui_: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private middlewareCalls_: any[];
 	private logger_: LoggerWrapper;
 
@@ -947,6 +962,7 @@ class TestApp extends BaseApplication {
 		return this.hasGui_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async start(argv: any[]) {
 		this.logger_.info('Test app starting...');
 
@@ -968,6 +984,7 @@ class TestApp extends BaseApplication {
 		this.logger_.info('Test app started...');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async generalMiddleware(store: any, next: any, action: any) {
 		this.middlewareCalls_.push(true);
 		try {
@@ -1040,6 +1057,21 @@ const simulateReadOnlyShareEnv = (shareId: string) => {
 export const newOcrService = () => {
 	const driver = new OcrDriverTesseract({ createWorker });
 	return new OcrService(driver);
+};
+
+export const mockMobilePlatform = (platform: string) => {
+	const originalMobilePlatform = shim.mobilePlatform;
+	const originalIsNode = shim.isNode;
+
+	shim.mobilePlatform = () => platform;
+	shim.isNode = () => false;
+
+	return {
+		reset: () => {
+			shim.mobilePlatform = originalMobilePlatform;
+			shim.isNode = originalIsNode;
+		},
+	};
 };
 
 export { supportDir, createNoteAndResource, createTempFile, createTestShareData, simulateReadOnlyShareEnv, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

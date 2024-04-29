@@ -7,6 +7,7 @@ import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 const { sprintf } = require('sprintf-js');
 import time from '@joplin/lib/time';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 const { cliUtils } = require('./cli-utils.js');
 
 class Command extends BaseCommand {
@@ -33,11 +34,13 @@ class Command extends BaseCommand {
 		];
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public override async action(args: any) {
 		const pattern = args['note-pattern'];
 		let items = [];
 		const options = args.options;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const queryOptions: any = {};
 		if (options.limit) queryOptions.limit = options.limit;
 		if (options.sort) {
@@ -71,7 +74,7 @@ class Command extends BaseCommand {
 			let hasTodos = false;
 			for (let i = 0; i < items.length; i++) {
 				const item = items[i];
-				if (item.is_todo) {
+				if ((item as NoteEntity).is_todo) {
 					hasTodos = true;
 					break;
 				}
@@ -103,8 +106,8 @@ class Command extends BaseCommand {
 				}
 
 				if (hasTodos) {
-					if (item.is_todo) {
-						row.push(sprintf('[%s]', item.todo_completed ? 'X' : ' '));
+					if ((item as NoteEntity).is_todo) {
+						row.push(sprintf('[%s]', (item as NoteEntity).todo_completed ? 'X' : ' '));
 					} else {
 						row.push('   ');
 					}

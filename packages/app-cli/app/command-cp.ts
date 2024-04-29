@@ -13,6 +13,7 @@ class Command extends BaseCommand {
 		return _('Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public override async action(args: any) {
 		let folder = null;
 		if (args['notebook']) {

@@ -1,5 +1,5 @@
 import { TextStyle, ViewStyle, StyleSheet } from 'react-native';
-const { themeStyle } = require('../../global-style.js');
+import { themeStyle } from '../../global-style';
 
 type SidebarButtonStyle = ViewStyle & { height: number };
 
@@ -15,6 +15,7 @@ export interface ConfigScreenStyleSheet {
 	settingTextEmphasis: TextStyle;
 	linkText: TextStyle;
 	descriptionText: TextStyle;
+	descriptionAlert: TextStyle;
 	warningText: TextStyle;
 
 	sliderUnits: TextStyle;
@@ -116,6 +117,11 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		},
 		descriptionText: {
 			color: theme.colorFaded,
+			fontSize: theme.fontSizeSmaller,
+			flex: 1,
+		},
+		descriptionAlert: {
+			color: theme.color,
 			fontSize: theme.fontSizeSmaller,
 			flex: 1,
 		},

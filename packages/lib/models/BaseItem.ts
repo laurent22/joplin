@@ -13,13 +13,15 @@ import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 import JoplinError from '../JoplinError';
 import { LoadOptions, SaveOptions } from './utils/types';
 import { State as ShareState } from '../services/share/reducer';
-import { checkIfItemCanBeAddedToFolder, checkIfItemCanBeChanged, checkIfItemsCanBeChanged, needsReadOnlyChecks } from './utils/readOnly';
+import { checkIfItemCanBeAddedToFolder, checkIfItemCanBeChanged, checkIfItemsCanBeChanged, needsShareReadOnlyChecks } from './utils/readOnly';
+import { checkObjectHasProperties } from '@joplin/utils/object';
 
 const { sprintf } = require('sprintf-js');
 const moment = require('moment');
 
 export interface ItemsThatNeedDecryptionResult {
 	hasMore: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	items: any[];
 }
 
@@ -45,7 +47,9 @@ export interface EncryptedItemsStats {
 
 export default class BaseItem extends BaseModel {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static encryptionService_: any = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static revisionService_: any = null;
 	public static shareService_: ShareService = null;
 	private static syncShareCache_: ShareState | null = null;
@@ -54,6 +58,7 @@ export default class BaseItem extends BaseModel {
 	// - itemsThatNeedSync()
 	// - syncedItems()
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static syncItemDefinitions_: any[] = [
 		{ type: BaseModel.TYPE_NOTE, className: 'Note' },
 		{ type: BaseModel.TYPE_FOLDER, className: 'Folder' },
@@ -76,6 +81,7 @@ export default class BaseItem extends BaseModel {
 		return true;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static loadClass(className: string, classRef: any) {
 		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
 			if (BaseItem.syncItemDefinitions_[i].className === className) {
@@ -151,6 +157,7 @@ export default class BaseItem extends BaseModel {
 		return r.total;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static systemPath(itemOrId: any, extension: string = null) {
 		if (extension === null) extension = 'md';
 
@@ -161,6 +168,7 @@ export default class BaseItem extends BaseModel {
 	public static isSystemPath(path: string) {
 		// 1b175bb38bba47baac22b0b47f778113.md
 		if (!path || !path.length) return false;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let p: any = path.split('/');
 		p = p[p.length - 1];
 		p = p.split('.');
@@ -168,7 +176,8 @@ export default class BaseItem extends BaseModel {
 		return p[0].length === 32 && p[1] === 'md';
 	}
 
-	public static itemClass(item: any): any {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public static itemClass(item: any): typeof BaseItem {
 		if (!item) throw new Error('Item cannot be null');
 
 		if (typeof item === 'object') {
@@ -210,6 +219,7 @@ export default class BaseItem extends BaseModel {
 	public static pathToId(path: string): string {
 		const p = path.split('/');
 		const s = p[p.length - 1].split('.');
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let name: any = s[0];
 		if (!name) return name;
 		name = name.split('-');
@@ -233,6 +243,7 @@ export default class BaseItem extends BaseModel {
 		if (!ids.length) return [];
 
 		const classes = this.syncItemClassNames();
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let output: any[] = [];
 		for (let i = 0; i < classes.length; i++) {
 			const ItemClass = this.getClass(classes[i]);
@@ -243,6 +254,7 @@ export default class BaseItem extends BaseModel {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async loadItemsByTypeAndIds(itemType: ModelType, ids: string[], options: LoadOptions = null): Promise<any[]> {
 		if (!ids.length) return [];
 
@@ -258,6 +270,7 @@ export default class BaseItem extends BaseModel {
 		return result.length ? result[0] : null;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static loadItemByField(itemType: number, field: string, value: any) {
 		const ItemClass = this.itemClass(itemType);
 		return ItemClass.loadByField(field, value);
@@ -269,17 +282,17 @@ export default class BaseItem extends BaseModel {
 		return ItemClass.load(id, options);
 	}
 
-	public static deleteItem(itemType: ModelType, id: string) {
+	public static deleteItem(itemType: ModelType, id: string, options: DeleteOptions) {
 		const ItemClass = this.itemClass(itemType);
-		return ItemClass.delete(id);
+		return ItemClass.delete(id, options);
 	}
 
-	public static async delete(id: string, options: DeleteOptions = null) {
+	public static async delete(id: string, options?: DeleteOptions) {
 		return this.batchDelete([id], options);
 	}
 
-	public static async batchDelete(ids: string[], options: DeleteOptions = null) {
-		if (!options) options = {};
+	public static async batchDelete(ids: string[], options: DeleteOptions) {
+		if (!options) options = { sourceDescription: '' };
 		let trackDeleted = true;
 		if (options && options.trackDeleted !== null && options.trackDeleted !== undefined) trackDeleted = options.trackDeleted;
 
@@ -293,7 +306,7 @@ export default class BaseItem extends BaseModel {
 			});
 		}
 
-		if (needsReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache, options.disableReadOnlyCheck)) {
+		if (needsShareReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache, options.disableReadOnlyCheck)) {
 			const previousItems = await this.loadItemsByTypeAndIds(this.modelType(), ids, { fields: ['share_id', 'id'] });
 			checkIfItemsCanBeChanged(this.modelType(), options.changeSource, previousItems, this.syncShareCache);
 		}
@@ -338,10 +351,20 @@ export default class BaseItem extends BaseModel {
 		return r['total'];
 	}
 
+	public static async allItemsInTrash() {
+		const noteRows = await this.db().selectAll('SELECT id FROM notes WHERE deleted_time != 0');
+		const folderRows = await this.db().selectAll('SELECT id FROM folders WHERE deleted_time != 0');
+		return {
+			noteIds: noteRows.map(r => r.id),
+			folderIds: folderRows.map(r => r.id),
+		};
+	}
+
 	public static remoteDeletedItem(syncTarget: number, itemId: string) {
 		return this.db().exec('DELETE FROM deleted_items WHERE item_id = ? AND sync_target = ?', [itemId, syncTarget]);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static serialize_format(propName: string, propValue: any) {
 		if (['created_time', 'updated_time', 'sync_time', 'user_updated_time', 'user_created_time'].indexOf(propName) >= 0) {
 			if (!propValue) return '';
@@ -364,6 +387,7 @@ export default class BaseItem extends BaseModel {
 			.replace(/\r/g, '\\r');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static unserialize_format(type: ModelType, propName: string, propValue: any) {
 		if (propName[propName.length - 1] === '_') return propValue; // Private property
 
@@ -392,6 +416,7 @@ export default class BaseItem extends BaseModel {
 			: propValue;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async serialize(item: any, shownKeys: any[] = null) {
 		if (shownKeys === null) {
 			shownKeys = this.itemClass(item).fieldNames();
@@ -400,6 +425,7 @@ export default class BaseItem extends BaseModel {
 
 		item = this.filter(item);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any = {};
 
 		if ('title' in item && shownKeys.indexOf('title') >= 0) {
@@ -467,6 +493,7 @@ export default class BaseItem extends BaseModel {
 		}
 
 		if (item.encryption_applied) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const e: any = new Error('Trying to encrypt item that is already encrypted');
 			e.code = 'cannotEncryptEncrypted';
 			throw e;
@@ -488,12 +515,14 @@ export default class BaseItem extends BaseModel {
 
 		// List of keys that won't be encrypted - mostly foreign keys required to link items
 		// with each others and timestamp required for synchronisation.
-		const keepKeys = ['id', 'note_id', 'tag_id', 'parent_id', 'share_id', 'updated_time', 'type_'];
+		const keepKeys = ['id', 'note_id', 'tag_id', 'parent_id', 'share_id', 'updated_time', 'deleted_time', 'type_'];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const reducedItem: any = {};
 
 		for (let i = 0; i < keepKeys.length; i++) {
 			const n = keepKeys[i];
 			if (!item.hasOwnProperty(n)) continue;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			reducedItem[n] = (item as any)[n];
 		}
 
@@ -502,6 +531,7 @@ export default class BaseItem extends BaseModel {
 		return ItemClass.serialize(reducedItem);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async decrypt(item: any) {
 		if (!item.encryption_cipher_text) throw new Error(`Item is not encrypted: ${item.id}`);
 
@@ -518,6 +548,7 @@ export default class BaseItem extends BaseModel {
 
 	public static async unserialize(content: string) {
 		const lines = content.split('\n');
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let output: any = {};
 		let state = 'readingProps';
 		const body: string[] = [];
@@ -669,6 +700,7 @@ export default class BaseItem extends BaseModel {
 			// // CHANGED:
 			// 'SELECT * FROM [ITEMS] items JOIN sync_items s ON s.item_id = items.id WHERE sync_target = ? AND'
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			let extraWhere: any = [];
 			if (className === 'Note') extraWhere.push('is_conflict = 0');
 			if (className === 'Resource') extraWhere.push('encryption_blob_encrypted = 0');
@@ -732,6 +764,7 @@ export default class BaseItem extends BaseModel {
 				changedItems = await ItemClass.modelSelectAll(sql);
 			}
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const neverSyncedItemIds = neverSyncedItem.map((it: any) => it.id);
 			const items = neverSyncedItem.concat(changedItems);
 
@@ -746,6 +779,7 @@ export default class BaseItem extends BaseModel {
 	}
 
 	public static syncItemClassNames(): string[] {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return BaseItem.syncItemDefinitions_.map((def: any) => {
 			return def.className;
 		});
@@ -762,6 +796,7 @@ export default class BaseItem extends BaseModel {
 	}
 
 	public static syncItemTypes(): ModelType[] {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return BaseItem.syncItemDefinitions_.map((def: any) => {
 			return def.type;
 		});
@@ -786,16 +821,27 @@ export default class BaseItem extends BaseModel {
 				syncInfo: row,
 				location: row.item_location,
 				item: item,
+				warning_ignored: row.sync_warning_ignored,
 			});
 		}
 		return output;
 	}
 
-	public static async syncDisabledItemsCount(syncTargetId: number) {
-		const r = await this.db().selectOne('SELECT count(*) as total FROM sync_items WHERE sync_disabled = 1 AND sync_target = ?', [syncTargetId]);
+	public static async syncDisabledItemsCount(syncTargetId: number, includeIgnored = false) {
+		const whereQueries = ['sync_disabled = 1', 'sync_target = ?'];
+		const whereArgs = [syncTargetId];
+		if (!includeIgnored) {
+			whereQueries.push('sync_warning_ignored = 0');
+		}
+		const r = await this.db().selectOne(`SELECT count(*) as total FROM sync_items WHERE ${whereQueries.join(' AND ')}`, whereArgs);
 		return r ? r.total : 0;
 	}
 
+	public static async syncDisabledItemsCountIncludingIgnored(syncTargetId: number) {
+		return this.syncDisabledItemsCount(syncTargetId, true);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static updateSyncTimeQueries(syncTarget: number, item: any, syncTime: number, syncDisabled = false, syncDisabledReason = '', itemLocation: number = null) {
 		const itemType = item.type_;
 		const itemId = item.id;
@@ -815,11 +861,13 @@ export default class BaseItem extends BaseModel {
 		];
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async saveSyncTime(syncTarget: number, item: any, syncTime: number) {
 		const queries = this.updateSyncTimeQueries(syncTarget, item, syncTime);
 		return this.db().transactionExecBatch(queries);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async saveSyncDisabled(syncTargetId: number, item: any, syncDisabledReason: string, itemLocation: number = null) {
 		const syncTime = 'sync_time' in item ? item.sync_time : 0;
 		const queries = this.updateSyncTimeQueries(syncTargetId, item, syncTime, true, syncDisabledReason, itemLocation);
@@ -828,6 +876,15 @@ export default class BaseItem extends BaseModel {
 
 	public static async saveSyncEnabled(itemType: ModelType, itemId: string) {
 		await this.db().exec('DELETE FROM sync_items WHERE item_type = ? AND item_id = ?', [itemType, itemId]);
+	}
+
+	public static async ignoreItemSyncWarning(syncTarget: number, item: { type_?: number; id?: string }) {
+		checkObjectHasProperties(item, ['type_', 'id']);
+		const itemType = item.type_;
+		const itemId = item.id;
+		const sql = 'UPDATE sync_items SET sync_warning_ignored = ? WHERE item_id = ? AND item_type = ? AND sync_target = ?';
+		const params = [1, itemId, itemType, syncTarget];
+		await this.db().exec(sql, params);
 	}
 
 	// When an item is deleted, its associated sync_items data is not immediately deleted for
@@ -850,6 +907,7 @@ export default class BaseItem extends BaseModel {
 		await this.db().transactionExecBatch(queries);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static displayTitle(item: any) {
 		if (!item) return '';
 		if (item.encryption_applied) return `🔑 ${_('Encrypted')}`;
@@ -872,6 +930,7 @@ export default class BaseItem extends BaseModel {
 			);
 
 			const items = await ItemClass.modelSelectAll(sql);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const ids = items.map((item: any) => {
 				return item.id;
 			});
@@ -908,6 +967,7 @@ export default class BaseItem extends BaseModel {
 		await this.db().exec('UPDATE sync_items SET force_sync = 1');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async save(o: any, options: SaveOptions = null) {
 		if (!options) options = {};
 
@@ -917,7 +977,7 @@ export default class BaseItem extends BaseModel {
 
 		const isNew = this.isNew(o, options);
 
-		if (needsReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache)) {
+		if (needsShareReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache)) {
 			if (!isNew) {
 				const previousItem = await this.loadItemByTypeAndId(this.modelType(), o.id, { fields: ['id', 'share_id'] });
 				checkIfItemCanBeChanged(this.modelType(), options.changeSource, previousItem, this.syncShareCache);
@@ -939,6 +999,7 @@ export default class BaseItem extends BaseModel {
 		return super.save(o, options);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static markdownTag(itemOrId: any) {
 		const item = typeof itemOrId === 'object' ? itemOrId : {
 			id: itemOrId,
@@ -953,6 +1014,7 @@ export default class BaseItem extends BaseModel {
 		return output.join('');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static isMarkdownTag(md: any) {
 		if (!md) return false;
 		return !!md.match(/^\[.*?\]\(:\/[0-9a-zA-Z]{32}\)$/);

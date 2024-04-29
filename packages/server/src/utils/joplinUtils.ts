@@ -31,6 +31,7 @@ const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 const logger = Logger.create('JoplinUtils');
 
 export interface FileViewerResponse {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	body: any;
 	mime: string;
 	size: number;
@@ -38,11 +39,14 @@ export interface FileViewerResponse {
 }
 
 interface ResourceInfo {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	localState: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	item: any;
 }
 
 interface LinkedItemInfo {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	item: any;
 	file: File;
 }
@@ -93,10 +97,12 @@ export function isJoplinItemName(name: string): boolean {
 	return !!name.match(/^[0-9a-zA-Z]{32}\.md$/);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function unserializeJoplinItem(body: string): Promise<any> {
 	return BaseItem.unserialize(body);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function serializeJoplinItem(item: any): Promise<string> {
 	const ModelClass = BaseItem.itemClass(item);
 	return ModelClass.serialize(item);
@@ -119,6 +125,7 @@ export async function localFileFromUrl(url: string): Promise<string> {
 }
 
 async function getResourceInfos(linkedItemInfos: LinkedItemInfos): Promise<ResourceInfos> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: Record<string, any> = {};
 
 	for (const itemId of Object.keys(linkedItemInfos)) {
@@ -159,6 +166,7 @@ async function renderResource(userId: string, resourceId: string, item: Item, co
 	// sufficient to download the resource. However, if we want a more user
 	// friendly download, we need to know the resource original name and mime
 	// type. So below, we try to get that information.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	let jopItem: any = null;
 
 	try {
@@ -181,6 +189,7 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 		ResourceModel: Resource as OptionsResourceModel,
 	});
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const renderOptions: any = {
 		resources: resourceInfos,
 
@@ -296,6 +305,7 @@ interface RenderItemQuery {
 export async function renderItem(userId: Uuid, item: Item, share: Share, query: RenderItemQuery): Promise<FileViewerResponse> {
 	interface FileToRender {
 		item: Item;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		content: any;
 		jopItemId: string;
 	}
@@ -306,6 +316,7 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 	let linkedItemInfos: LinkedItemInfos = {};
 	let resourceInfos: ResourceInfos = {};
 	let fileToRender: FileToRender;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	let itemToRender: any = null;
 
 	if (query.resource_id) {
@@ -352,6 +363,7 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 
 		fileToRender = {
 			item: item,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			content: null as any,
 			jopItemId: rootNote.id,
 		};

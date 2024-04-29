@@ -7,18 +7,18 @@ import Folder from '@joplin/lib/models/Folder';
 import Synchronizer from '@joplin/lib/Synchronizer';
 import NavService from '@joplin/lib/services/NavService';
 import { _ } from '@joplin/lib/locale';
-const { themeStyle } = require('./global-style.js');
-import { renderFolders } from '@joplin/lib/components/shared/side-menu-shared';
-import { FolderEntity, FolderIcon } from '@joplin/lib/services/database/types';
+import { ThemeStyle, themeStyle } from './global-style';
+import { isFolderSelected, renderFolders } from '@joplin/lib/components/shared/side-menu-shared';
+import { FolderEntity, FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
 import Setting from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry';
 import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
-
-// We need this to suppress the useless warning
-// https://github.com/oblador/react-native-vector-icons/issues/1465
-// eslint-disable-next-line no-console
-Icon.loadFont().catch((error: any) => { console.info(error); });
+import { getTrashFolderIcon, getTrashFolderId } from '@joplin/lib/services/trash';
+import restoreItems from '@joplin/lib/services/trash/restoreItems';
+import emptyTrash from '@joplin/lib/services/trash/emptyTrash';
+import { ModelType } from '@joplin/lib/BaseModel';
+const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 interface Props {
 	syncStarted: boolean;
@@ -27,8 +27,11 @@ interface Props {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	collapsedFolderIds: string[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	syncReport: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	decryptionWorker: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	resourceFetcher: any;
 	syncOnlyOverWifi: boolean;
 	isOnMobileData: boolean;
@@ -50,6 +53,7 @@ const syncIconRotation = syncIconRotationValue.interpolate({
 
 const folderIconRightMargin = 10;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let syncIconAnimation: any;
 
 const SideMenuContentComponent = (props: Props) => {
@@ -58,6 +62,7 @@ const SideMenuContentComponent = (props: Props) => {
 	const styles_ = useMemo(() => {
 		const theme = themeStyle(props.themeId);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const styles: any = {
 			menu: {
 				flex: 1,
@@ -88,6 +93,8 @@ const SideMenuContentComponent = (props: Props) => {
 				fontSize: 22,
 				color: theme.color,
 				width: 26,
+				textAlign: 'center',
+				textAlignVertical: 'center',
 			},
 		};
 
@@ -142,58 +149,116 @@ const SideMenuContentComponent = (props: Props) => {
 
 		const folder = folderOrAll as FolderEntity;
 
-		const generateFolderDeletion = () => {
-			const folderDeletion = (message: string) => {
-				Alert.alert('', message, [
-					{
-						text: _('OK'),
-						onPress: () => {
-							void Folder.delete(folder.id);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		const menuItems: any[] = [];
+
+		if (folder && folder.id === getTrashFolderId()) {
+			menuItems.push({
+				text: _('Empty trash'),
+				onPress: async () => {
+					Alert.alert('', _('This will permanently delete all items in the trash. Continue?'), [
+						{
+							text: _('Empty trash'),
+							onPress: async () => {
+								await emptyTrash();
+							},
 						},
-					},
-					{
-						text: _('Cancel'),
-						onPress: () => { },
-						style: 'cancel',
-					},
-				]);
+						{
+							text: _('Cancel'),
+							onPress: () => { },
+							style: 'cancel',
+						},
+					]);
+				},
+				style: 'destructive',
+			});
+
+		} else if (folder && !!folder.deleted_time) {
+			menuItems.push({
+				text: _('Restore'),
+				onPress: async () => {
+					await restoreItems(ModelType.Folder, [folder.id]);
+				},
+				style: 'destructive',
+			});
+
+			// Alert.alert(
+			// 	'',
+			// 	_('Notebook: %s', folder.title),
+			// 	[
+			// 		{
+			// 			text: _('Restore'),
+			// 			onPress: async () => {
+			// 				await restoreItems(ModelType.Folder, [folder.id]);
+			// 			},
+			// 			style: 'destructive',
+			// 		},
+			// 		{
+			// 			text: _('Cancel'),
+			// 			onPress: () => {},
+			// 			style: 'cancel',
+			// 		},
+			// 	],
+			// 	{
+			// 		cancelable: false,
+			// 	},
+			// );
+		} else {
+			const generateFolderDeletion = () => {
+				const folderDeletion = (message: string) => {
+					Alert.alert('', message, [
+						{
+							text: _('OK'),
+							onPress: () => {
+								void Folder.delete(folder.id, { toTrash: true, sourceDescription: 'side-menu-content (long-press)' });
+							},
+						},
+						{
+							text: _('Cancel'),
+							onPress: () => { },
+							style: 'cancel',
+						},
+					]);
+				};
+
+				if (folder.id === props.inboxJopId) {
+					return folderDeletion(
+						_('Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that\'s recently been sent to it may be lost.'),
+					);
+				}
+				return folderDeletion(_('Move notebook "%s" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.', substrWithEllipsis(folder.title, 0, 32)));
 			};
 
-			if (folder.id === props.inboxJopId) {
-				return folderDeletion(
-					_('Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that\'s recently been sent to it may be lost.'),
-				);
-			}
-			return folderDeletion(_('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', folder.title));
-		};
+			menuItems.push({
+				text: _('Edit'),
+				onPress: () => {
+					props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+
+					props.dispatch({
+						type: 'NAV_GO',
+						routeName: 'Folder',
+						folderId: folder.id,
+					});
+				},
+			});
+
+			menuItems.push({
+				text: _('Delete'),
+				onPress: generateFolderDeletion,
+				style: 'destructive',
+			});
+		}
+
+		menuItems.push({
+			text: _('Cancel'),
+			onPress: () => {},
+			style: 'cancel',
+		});
 
 		Alert.alert(
 			'',
 			_('Notebook: %s', folder.title),
-			[
-				{
-					text: _('Edit'),
-					onPress: () => {
-						props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-
-						props.dispatch({
-							type: 'NAV_GO',
-							routeName: 'Folder',
-							folderId: folder.id,
-						});
-					},
-				},
-				{
-					text: _('Delete'),
-					onPress: generateFolderDeletion,
-					style: 'destructive',
-				},
-				{
-					text: _('Cancel'),
-					onPress: () => {},
-					style: 'cancel',
-				},
-			],
+			menuItems,
 			{
 				cancelable: false,
 			},
@@ -308,9 +373,11 @@ const SideMenuContentComponent = (props: Props) => {
 		if (actionDone === 'auth') props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 	}, [performSync, props.dispatch]);
 
-	const renderFolderIcon = (theme: any, folderIcon: FolderIcon) => {
+	const renderFolderIcon = (folderId: string, theme: ThemeStyle, folderIcon: FolderIcon) => {
 		if (!folderIcon) {
-			if (alwaysShowFolderIcons) {
+			if (folderId === getTrashFolderId()) {
+				folderIcon = getTrashFolderIcon(FolderIconType.Emoji);
+			} else if (alwaysShowFolderIcons) {
 				return <Icon name="folder-outline" style={styles_.emptyFolderIcon} />;
 			} else {
 				return null;
@@ -326,9 +393,10 @@ const SideMenuContentComponent = (props: Props) => {
 		}
 	};
 
-	const renderFolderItem = (folder: FolderEntity, selected: boolean, hasChildren: boolean, depth: number) => {
+	const renderFolderItem = (folder: FolderEntity, hasChildren: boolean, depth: number) => {
 		const theme = themeStyle(props.themeId);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const folderButtonStyle: any = {
 			flex: 1,
 			flexDirection: 'row',
@@ -337,9 +405,11 @@ const SideMenuContentComponent = (props: Props) => {
 			paddingRight: theme.marginRight,
 			paddingLeft: 10,
 		};
+		const selected = isFolderSelected(folder, { selectedFolderId: props.selectedFolderId, notesParentType: props.notesParentType });
 		if (selected) folderButtonStyle.backgroundColor = theme.selectedColor;
 		folderButtonStyle.paddingLeft = depth * 10 + theme.marginLeft;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const iconWrapperStyle: any = { paddingLeft: 10, paddingRight: 10 };
 		if (selected) iconWrapperStyle.backgroundColor = theme.selectedColor;
 
@@ -378,7 +448,7 @@ const SideMenuContentComponent = (props: Props) => {
 					}}
 				>
 					<View style={folderButtonStyle}>
-						{renderFolderIcon(theme, folderIcon)}
+						{renderFolderIcon(folder.id, theme, folderIcon)}
 						<Text numberOfLines={1} style={styles_.folderButtonText}>
 							{Folder.displayTitle(folder)}
 						</Text>

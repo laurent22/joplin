@@ -7,7 +7,7 @@ import Folder from '@joplin/lib/models/Folder';
 import Tag from '@joplin/lib/models/Tag';
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
-const { themeStyle } = require('../global-style.js');
+import { themeStyle } from '../global-style';
 import { ScreenHeader } from '../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
 import ActionButton from '../ActionButton';
@@ -17,8 +17,10 @@ const { BaseScreenComponent } = require('../base-screen');
 const { BackButtonService } = require('../../services/back-button.js');
 import { AppState } from '../../utils/types';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import { itemIsInTrash } from '@joplin/lib/services/trash';
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids.js');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 class NotesScreenComponent extends BaseScreenComponent<any> {
 
 	private onAppStateChangeSub_: NativeEventSubscription = null;
@@ -109,12 +111,14 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		BackButtonService.removeHandler(this.backHandler);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async componentDidUpdate(prevProps: any) {
 		if (prevProps.notesOrder !== this.props.notesOrder || prevProps.selectedFolderId !== this.props.selectedFolderId || prevProps.selectedTagId !== this.props.selectedTagId || prevProps.selectedSmartFilterId !== this.props.selectedSmartFilterId || prevProps.notesParentType !== this.props.notesParentType || prevProps.uncompletedTodosOnTop !== this.props.uncompletedTodosOnTop || prevProps.showCompletedTodos !== this.props.showCompletedTodos) {
 			await this.refreshNotes(this.props);
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async refreshNotes(props: any = null) {
 		if (props === null) props = this.props;
 
@@ -168,6 +172,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		}
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public parentItem(props: any = null) {
 		if (!props) props = this.props;
 
@@ -237,6 +242,8 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		const thisComp = this;
 
 		const makeActionButtonComp = () => {
+			if ((this.props.notesParentType === 'Folder' && itemIsInTrash(parent)) || !Folder.atLeastOneRealFolderExists(this.props.folders)) return null;
+
 			const getTargetFolderId = async () => {
 				if (!buttonFolderId && isAllNotes) {
 					return (await Folder.defaultFolder()).id;
@@ -289,6 +296,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 				<NoteList />
 				{actionButtonComp}
 				<DialogBox
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					ref={(dialogbox: any) => {
 						this.dialogbox = dialogbox;
 					}}
@@ -316,6 +324,8 @@ const NotesScreen = connect((state: AppState) => {
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		notesOrder: stateUtils.notesOrder(state.settings),
 	};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 })(NotesScreenComponent as any);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default NotesScreen as any;

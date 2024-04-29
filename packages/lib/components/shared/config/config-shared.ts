@@ -1,4 +1,4 @@
-import Setting, { AppType } from '../../../models/Setting';
+import Setting, { AppType, SettingMetadataSection, SettingSectionSource } from '../../../models/Setting';
 import SyncTargetRegistry from '../../../SyncTargetRegistry';
 const ObjectUtils = require('../../../ObjectUtils');
 const { _ } = require('../../../locale');
@@ -13,6 +13,7 @@ const logger = Logger.create('config-shared');
 
 interface ConfigScreenState {
 	checkSyncConfigResult: { ok: boolean; errorMessage: string }|'checking'|null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	settings: any;
 	changedSettingKeys: string[];
 	showAdvancedSettings: boolean;
@@ -26,11 +27,14 @@ export const defaultScreenState: ConfigScreenState = {
 };
 
 interface ConfigScreenComponent {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	settingToComponent(settingId: string, setting: any): ReactNode;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	sectionToComponent(sectionName: string, section: any, settings: any, isSelected: boolean): ReactNode;
 
 	state: Partial<ConfigScreenState>;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	setState(callbackOrNew: any, callback?: ()=> void): void;
 }
 
@@ -65,6 +69,7 @@ export const advancedSettingsButton_click = (comp: ConfigScreenComponent) => {
 	});
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const checkSyncConfig = async (comp: ConfigScreenComponent, settings: any) => {
 	const syncTargetId = settings['sync.target'];
 	const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId);
@@ -100,6 +105,7 @@ export const checkSyncConfigMessages = (comp: ConfigScreenComponent) => {
 	return output;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const updateSettingValue = (comp: ConfigScreenComponent, key: string, value: any, callback?: ()=> void) => {
 	if (!callback) callback = () => {};
 
@@ -127,6 +133,11 @@ export const updateSettingValue = (comp: ConfigScreenComponent, key: string, val
 			changedSettingKeys: changedSettingKeys,
 		};
 	}, callback);
+
+	const metadata = Setting.settingMetadata(key);
+	if (metadata.autoSave) {
+		scheduleSaveSettings(comp);
+	}
 };
 
 let scheduleSaveSettingsIID: ReturnType<typeof setTimeout>|null = null;
@@ -161,6 +172,7 @@ export const saveSettings = async (comp: ConfigScreenComponent) => {
 	return true;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const settingsToComponents = (comp: ConfigScreenComponent, device: AppType, settings: any) => {
 	const keys = Setting.keys(true, device);
 	const settingComps = [];
@@ -180,6 +192,7 @@ export const settingsToComponents = (comp: ConfigScreenComponent, device: AppTyp
 	return settingComps;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 type SettingsSelectorState = { device: AppType; settings: any };
 const deviceSelector = (state: SettingsSelectorState) => state.device;
 const settingsSelector = (state: SettingsSelectorState) => state.settings;
@@ -223,7 +236,7 @@ export const settingsSections = createSelector(
 			});
 		} else {
 			output.push(...([
-				'tools', 'export', 'moreInfo',
+				'tools', 'importOrExport', 'moreInfo',
 			].map(name => {
 				return {
 					name,
@@ -245,10 +258,27 @@ export const settingsSections = createSelector(
 
 		const order = Setting.sectionOrder();
 
+		const sortOrderFor = (section: SettingMetadataSection) => {
+			if (section.source === SettingSectionSource.Plugin) {
+				// Plugins should go after all other sections
+				return order.length + 1;
+			}
+
+			return order.indexOf(section.name);
+		};
+
 		output.sort((a, b) => {
-			const o1 = order.indexOf(a.name);
-			const o2 = order.indexOf(b.name);
-			return o1 < o2 ? -1 : +1;
+			const o1 = sortOrderFor(a);
+			const o2 = sortOrderFor(b);
+
+			if (o1 === o2) {
+				const l1 = Setting.sectionNameToLabel(a.name);
+				const l2 = Setting.sectionNameToLabel(b.name);
+
+				return l1.toLowerCase() < l2.toLowerCase() ? -1 : +1;
+			}
+
+			return o1 - o2;
 		});
 
 		return output;
@@ -256,6 +286,7 @@ export const settingsSections = createSelector(
 );
 
 export const settingsToComponents2 = (
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	comp: ConfigScreenComponent, device: AppType, settings: any, selectedSectionName = '',
 ) => {
 	const sectionComps: ReactNode[] = [];

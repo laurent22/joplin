@@ -5,10 +5,12 @@ import Note from '../models/Note';
 
 export default class AlarmService {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static driver_: any;
 	private static logger_: Logger;
 	// private static inAppNotificationHandler_:any;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static setDriver(v: any) {
 		this.driver_ = v;
 
@@ -28,6 +30,7 @@ export default class AlarmService {
 		return this.logger_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static setInAppNotificationHandler(v: any) {
 		// this.inAppNotificationHandler_ = v;
 		if (this.driver_.setInAppNotificationHandler) this.driver_.setInAppNotificationHandler(v);
@@ -45,11 +48,12 @@ export default class AlarmService {
 			this.logger().info(`Clearing notification for non-existing note. Alarm ${alarmIds[i]}`);
 			await this.driver().clearNotification(alarmIds[i]);
 		}
-		await Alarm.batchDelete(alarmIds);
+		await Alarm.batchDelete(alarmIds, { sourceDescription: 'AlarmService/garbageCollect' });
 	}
 
 	// When passing a note, make sure it has all the required properties
 	// (better to pass a complete note or else just the ID)
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async updateNoteNotification(noteOrId: any, isDeleted = false) {
 		try {
 			let note = null;
@@ -93,7 +97,7 @@ export default class AlarmService {
 			if (clearAlarm) {
 				this.logger().info(`Clearing notification for note ${noteId}`);
 				await driver.clearNotification(alarm.id);
-				await Alarm.delete(alarm.id);
+				await Alarm.delete(alarm.id, { sourceDescription: 'AlarmService/clearAlarm' });
 			}
 
 			if (isDeleted || !Note.needAlarm(note)) return;

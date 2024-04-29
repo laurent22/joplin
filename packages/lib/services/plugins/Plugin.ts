@@ -21,6 +21,8 @@ interface ContentScripts {
 	[type: string]: ContentScript[];
 }
 
+type OnUnloadListener = ()=> void;
+
 export default class Plugin {
 
 	private baseDir_: string;
@@ -30,6 +32,7 @@ export default class Plugin {
 	private contentScripts_: ContentScripts = {};
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private dispatch_: Function;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private eventEmitter_: any;
 	private devMode_ = false;
 	private builtIn_ = false;
@@ -39,6 +42,9 @@ export default class Plugin {
 	private contentScriptMessageListeners_: Record<string, Function> = {};
 	private dataDir_: string;
 	private dataDirCreated_ = false;
+	private hasErrors_ = false;
+	private running_ = false;
+	private onUnloadListeners_: OnUnloadListener[] = [];
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public constructor(baseDir: string, manifest: PluginManifest, scriptText: string, dispatch: Function, dataDir: string) {
@@ -82,6 +88,14 @@ export default class Plugin {
 		return this.baseDir_;
 	}
 
+	public get running(): boolean {
+		return this.running_;
+	}
+
+	public set running(running: boolean) {
+		this.running_ = running;
+	}
+
 	public async dataDir(): Promise<string> {
 		if (this.dataDirCreated_) return this.dataDir_;
 
@@ -97,6 +111,14 @@ export default class Plugin {
 		return Object.keys(this.viewControllers_).length;
 	}
 
+	public get hasErrors(): boolean {
+		return this.hasErrors_;
+	}
+
+	public set hasErrors(hasErrors: boolean) {
+		this.hasErrors_ = hasErrors;
+	}
+
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public on(eventName: string, callback: Function) {
 		return this.eventEmitter_.on(eventName, callback);
@@ -107,6 +129,7 @@ export default class Plugin {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public emit(eventName: string, event: any = null) {
 		return this.eventEmitter_.emit(eventName, event);
 	}
@@ -166,15 +189,18 @@ export default class Plugin {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public emitMessage(message: any) {
 		if (!this.messageListener_) return;
 		return this.messageListener_(message);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public onMessage(callback: any) {
 		this.messageListener_ = callback;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public onContentScriptMessage(id: string, callback: any) {
 		if (!this.contentScriptById(id)) {
 			// The script could potentially be registered later on, but still
@@ -185,9 +211,26 @@ export default class Plugin {
 		this.contentScriptMessageListeners_[id] = callback;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public emitContentScriptMessage(id: string, message: any) {
 		if (!this.contentScriptMessageListeners_[id]) return;
 		return this.contentScriptMessageListeners_[id](message);
+	}
+
+	public addOnUnloadListener(callback: OnUnloadListener) {
+		this.onUnloadListeners_.push(callback);
+	}
+
+	public onUnload() {
+		for (const callback of this.onUnloadListeners_) {
+			callback();
+		}
+		this.onUnloadListeners_ = [];
+
+		this.dispatch_({
+			type: 'PLUGIN_UNLOAD',
+			pluginId: this.id,
+		});
 	}
 
 }

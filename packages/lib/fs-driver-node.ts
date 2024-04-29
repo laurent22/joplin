@@ -1,4 +1,3 @@
-import { resolve as nodeResolve } from 'path';
 import FsDriverBase, { Stat } from './fs-driver-base';
 import time from './time';
 const md5File = require('md5-file');
@@ -6,9 +5,11 @@ const fs = require('fs-extra');
 
 export default class FsDriverNode extends FsDriverBase {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private fsErrorToJsError_(error: any, path: string = null) {
 		let msg = error.toString();
 		if (path !== null) msg += `. Path: ${path}`;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any = new Error(msg);
 		if (error.code) output.code = error.code;
 		return output;
@@ -84,7 +85,7 @@ export default class FsDriverNode extends FsDriverBase {
 		return r;
 	}
 
-	public async stat(path: string) {
+	public async stat(path: string): Promise<Stat> {
 		try {
 			const stat = await fs.stat(path);
 			return {
@@ -100,10 +101,12 @@ export default class FsDriverNode extends FsDriverBase {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async setTimestamp(path: string, timestampDate: any) {
 		return fs.utimes(path, timestampDate, timestampDate);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async readDirStats(path: string, options: any = null) {
 		if (!options) options = {};
 		if (!('recursive' in options)) options.recursive = false;
@@ -128,6 +131,7 @@ export default class FsDriverNode extends FsDriverBase {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async open(path: string, mode: any) {
 		try {
 			return await fs.open(path, mode);
@@ -136,6 +140,7 @@ export default class FsDriverNode extends FsDriverBase {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async close(handle: any) {
 		try {
 			return await fs.close(handle);
@@ -175,6 +180,7 @@ export default class FsDriverNode extends FsDriverBase {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async readFileChunk(handle: any, length: number, encoding = 'base64') {
 		// let buffer = new Buffer(length);
 		let buffer = Buffer.alloc(length);
@@ -186,28 +192,20 @@ export default class FsDriverNode extends FsDriverBase {
 		throw new Error(`Unsupported encoding: ${encoding}`);
 	}
 
-	public resolve(path: string) {
-		return require('path').resolve(path);
-	}
-
-	// Resolves the provided relative path to an absolute path within baseDir. The function
-	// also checks that the absolute path is within baseDir, to avoid security issues.
-	// It is expected that baseDir is a safe path (not user-provided).
-	public resolveRelativePathWithinDir(baseDir: string, relativePath: string) {
-		const resolvedBaseDir = nodeResolve(baseDir);
-		const resolvedPath = nodeResolve(baseDir, relativePath);
-		if (resolvedPath.indexOf(resolvedBaseDir) !== 0) throw new Error(`Resolved path for relative path "${relativePath}" is not within base directory "${baseDir}" (Was resolved to ${resolvedPath})`);
-		return resolvedPath;
+	public resolve(...pathComponents: string[]) {
+		return require('path').resolve(...pathComponents);
 	}
 
 	public async md5File(path: string): Promise<string> {
 		return md5File(path);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async tarExtract(options: any) {
 		await require('tar').extract(options);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async tarCreate(options: any, filePaths: string[]) {
 		await require('tar').create(options, filePaths);
 	}

@@ -5,14 +5,39 @@ import Setting from '../../../models/Setting';
 import shim from '../../../shim';
 import { Rectangle } from './types';
 
-export interface Implementation {
-	nativeImage: any;
-}
-
 export interface CreateFromBufferOptions {
 	width?: number;
 	height?: number;
 	scaleFactor?: number;
+}
+
+export interface CreateFromPdfOptions {
+	/**
+	 * The first page to export. Defaults to `1`, the first page in
+	 * the document.
+	 */
+	minPage?: number;
+
+	/**
+	 * The number of the last page to convert. Defaults to the last page
+	 * if not given.
+	 *
+	 * If `maxPage` is greater than the number of pages in the PDF, all pages
+	 * in the PDF will be converted to images.
+	 */
+	maxPage?: number;
+
+	scaleFactor?: number;
+}
+
+export interface PdfInfo {
+	pageCount: number;
+}
+
+export interface Implementation {
+	createFromPath: (path: string)=> Promise<unknown>;
+	createFromPdf: (path: string, options: CreateFromPdfOptions)=> Promise<unknown[]>;
+	getPdfInfo: (path: string)=> Promise<PdfInfo>;
 }
 
 export interface ResizeOptions {
@@ -25,8 +50,17 @@ export type Handle = string;
 
 interface Image {
 	handle: Handle;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	data: any;
 }
+
+const getResourcePath = async (resourceId: string): Promise<string> => {
+	const resource = await Resource.load(resourceId);
+	if (!resource) throw new Error(`No such resource: ${resourceId}`);
+	const resourcePath = await Resource.fullPath(resource);
+	if (!(await shim.fsDriver().exists(resourcePath))) throw new Error(`Could not load resource path: ${resourcePath}`);
+	return resourcePath;
+};
 
 /**
  * Provides imaging functions to resize or process images. You create an image
@@ -39,6 +73,7 @@ interface Image {
  * [View the
  * example](https://github.com/laurent22/joplin/blob/dev/packages/app-cli/tests/support/plugins/imaging/src/index.ts)
  *
+ * <span class="platform-desktop">desktop</span>
  */
 export default class JoplinImaging {
 
@@ -59,6 +94,7 @@ export default class JoplinImaging {
 		return image;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private cacheImage(data: any) {
 		const handle = this.createImageHandle();
 		this.images_.push({
@@ -78,16 +114,34 @@ export default class JoplinImaging {
 	// 	return this.cacheImage(this.implementation_.nativeImage.createFromBuffer(buffer, options));
 	// }
 
+	/**
+	 * Creates an image from the provided path. Note that images and PDFs are supported. If you
+	 * provide a URL instead of a local path, the file will be downloaded first then converted to an
+	 * image.
+	 */
 	public async createFromPath(filePath: string): Promise<Handle> {
-		return this.cacheImage(this.implementation_.nativeImage.createFromPath(filePath));
+		return this.cacheImage(await this.implementation_.createFromPath(filePath));
 	}
 
 	public async createFromResource(resourceId: string): Promise<Handle> {
-		const resource = await Resource.load(resourceId);
-		if (!resource) throw new Error(`No such resource: ${resourceId}`);
-		const resourcePath = await Resource.fullPath(resource);
-		if (!(await shim.fsDriver().exists(resourcePath))) throw new Error(`Could not load resource path: ${resourcePath}`);
-		return this.createFromPath(resourcePath);
+		return this.createFromPath(await getResourcePath(resourceId));
+	}
+
+	public async createFromPdfPath(path: string, options?: CreateFromPdfOptions): Promise<Handle[]> {
+		const images = await this.implementation_.createFromPdf(path, options);
+		return images.map(image => this.cacheImage(image));
+	}
+
+	public async createFromPdfResource(resourceId: string, options?: CreateFromPdfOptions): Promise<Handle[]> {
+		return this.createFromPdfPath(await getResourcePath(resourceId), options);
+	}
+
+	public async getPdfInfoFromPath(path: string): Promise<PdfInfo> {
+		return await this.implementation_.getPdfInfo(path);
+	}
+
+	public async getPdfInfoFromResource(resourceId: string): Promise<PdfInfo> {
+		return this.getPdfInfoFromPath(await getResourcePath(resourceId));
 	}
 
 	public async getSize(handle: Handle) {
@@ -150,6 +204,7 @@ export default class JoplinImaging {
 	 * Creates a new Joplin resource from the image data. The image will be
 	 * first converted to a JPEG.
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async toJpgResource(handle: Handle, resourceProps: any, quality = 80) {
 		const tempFilePath = this.tempFilePath('jpg');
 		await this.toJpgFile(handle, tempFilePath, quality);
@@ -162,6 +217,7 @@ export default class JoplinImaging {
 	 * Creates a new Joplin resource from the image data. The image will be
 	 * first converted to a PNG.
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async toPngResource(handle: Handle, resourceProps: any) {
 		const tempFilePath = this.tempFilePath('png');
 		await this.toPngFile(handle, tempFilePath);
@@ -174,9 +230,15 @@ export default class JoplinImaging {
 	 * Image data is not automatically deleted by Joplin so make sure you call
 	 * this method on the handle once you are done.
 	 */
-	public async free(handle: Handle) {
-		const index = this.images_.findIndex(i => i.handle === handle);
-		if (index >= 0) this.images_.splice(index, 1);
+	public async free(handles: Handle[]|Handle) {
+		if (!Array.isArray(handles)) {
+			handles = [handles];
+		}
+
+		for (const handle of handles) {
+			const index = this.images_.findIndex(i => i.handle === handle);
+			if (index >= 0) this.images_.splice(index, 1);
+		}
 	}
 
 }

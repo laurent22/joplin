@@ -1,0 +1,223 @@
+import * as fs from 'fs-extra';
+import { execCommand, rootDir } from './tool-utils';
+const md5File = require('md5-file');
+import * as glob from 'glob';
+
+const clipperDir = `${rootDir}/packages/app-clipper`;
+const tmpSourceDirName = 'Clipper-source';
+
+async function copyDir(baseSourceDir: string, sourcePath: string, baseDestDir: string) {
+	await fs.mkdirp(`${baseDestDir}/${sourcePath}`);
+	await fs.copy(`${baseSourceDir}/${sourcePath}`, `${baseDestDir}/${sourcePath}`);
+}
+
+async function copyToDist(distDir: string) {
+	await copyDir(clipperDir, 'popup/build', distDir);
+	await copyDir(clipperDir, 'content_scripts', distDir);
+	await copyDir(clipperDir, 'icons', distDir);
+	await copyDir(clipperDir, 'util', distDir);
+	await fs.copy(`${clipperDir}/service_worker.mjs`, `${distDir}/service_worker.mjs`);
+	await fs.copy(`${clipperDir}/manifest.json`, `${distDir}/manifest.json`);
+	await fs.remove(`${distDir}/popup/build/manifest.json`);
+}
+
+async function updateManifestVersionNumber(manifestPath: string) {
+	const manifestText = await fs.readFile(manifestPath, 'utf-8');
+	const manifest = JSON.parse(manifestText);
+	const v = manifest.version.split('.');
+	const buildNumber = Number(v.pop()) + 1;
+	v.push(buildNumber);
+	manifest.version = v.join('.');
+	console.info(`New version: ${manifest.version}`);
+	await fs.writeFile(manifestPath, JSON.stringify(manifest, null, 4));
+	return manifest.version;
+}
+
+async function createSourceZip() {
+	const tmpSourceDir = `${__dirname}/../${tmpSourceDirName}`;
+	const filename = 'joplin-webclipper-source.zip';
+	const filePath = `${clipperDir}/dist/${filename}`;
+	console.info('Creating source tarball for code validation...');
+	console.info(`Chdir: ${clipperDir}/..`);
+	process.chdir(`${clipperDir}/..`);
+	console.info(await execCommand(`rm -f "${filePath}"`));
+	console.info(await execCommand(`rsync -a --delete --exclude 'node_modules/' --exclude 'build/' --exclude 'dist/' "${clipperDir}/" "${tmpSourceDir}/"`));
+	console.info(await execCommand(`7z a -tzip ${filename} "${tmpSourceDirName}"`));
+	console.info(await execCommand(`mv ${filename} "${clipperDir}/dist/" && rm -rf "${tmpSourceDirName}"`));
+
+	return filePath;
+}
+
+async function compareFiles(path1: string, path2: string) {
+	return await md5File(path1) === await md5File(path2);
+}
+
+async function compareDir(dir1: string, dir2: string) {
+	console.info(`Comparing directories ${dir1} to ${dir2}`);
+
+	const globOptions = {
+		ignore: [
+			'**/node_modules/**',
+			'**/.git/**',
+		],
+	};
+
+	const filterFiles = (f: string) => {
+		const stat = fs.statSync(f);
+		return !stat.isDirectory();
+	};
+
+	const files1 = glob.sync(`${dir1}/**/*`, globOptions).filter(filterFiles).map(f => f.substr(dir1.length + 1));
+	const files2 = glob.sync(`${dir2}/**/*`, globOptions).filter(filterFiles).map(f => f.substr(dir2.length + 1));
+
+	const missingFiles1: string[] = [];
+	const missingFiles2: string[] = [];
+	const canBeMissing1: string[] = [];
+	const canBeMissing2: string[] = ['manifest.json'];
+	const differentFiles: string[] = [];
+	for (const f of files1) {
+		if (!files2.includes(f)) {
+			if (canBeMissing2.includes(f)) continue;
+			missingFiles2.push(f);
+			continue;
+		}
+
+		const sameFiles = await compareFiles(`${dir1}/${f}`, `${dir2}/${f}`);
+		if (!sameFiles) differentFiles.push(f);
+	}
+
+	for (const f of files2) {
+		if (!files1.includes(f)) {
+			if (canBeMissing1.includes(f)) continue;
+			missingFiles1.push(f);
+		}
+	}
+
+	if (missingFiles1.length) console.info(`Missing from ${dir1}:`, missingFiles1);
+	if (missingFiles2.length) console.info(`Missing from ${dir2}:`, missingFiles2);
+	if (differentFiles.length) console.info(`Different files: ${differentFiles}`);
+
+	if (!differentFiles.length && !missingFiles1.length && !missingFiles2.length) {
+		console.info('All files are equal');
+		return true;
+	}
+
+	return false;
+}
+
+async function checkSourceZip(sourceZip: string, compiledZip: string) {
+	const tmpDir = `${require('os').tmpdir()}/${Date.now()}`;
+
+	console.info(`Checking source ZIP in ${tmpDir}`);
+
+	const sourceDir = `${tmpDir}/source`;
+	const compiledDir = `${tmpDir}/compiled`;
+	await fs.mkdirp(sourceDir);
+	await fs.mkdirp(compiledDir);
+
+	process.chdir(sourceDir);
+	console.info(await execCommand(`cp "${sourceZip}" .`));
+	console.info(await execCommand(`unzip "${sourceZip}"`));
+	process.chdir(`${sourceDir}/Clipper-source/popup`);
+	console.info(await execCommand('npm install'));
+	console.info(await execCommand('npm run build'));
+
+	process.chdir(compiledDir);
+	console.info(await execCommand(`cp "${compiledZip}" .`));
+	console.info(await execCommand(`unzip "${compiledZip}"`));
+
+	const areEqual = await compareDir(`${sourceDir}/Clipper-source/popup/build`, `${compiledDir}/popup/build`);
+
+	if (areEqual) {
+		await fs.remove(sourceDir);
+		await fs.remove(compiledDir);
+	}
+}
+
+async function setReleaseMode(isReleaseMode: boolean) {
+	const joplinEnvPath = `${clipperDir}/util/joplinEnv.mjs`;
+	await fs.writeFile(joplinEnvPath, `// AUTOGENERATED by release-clipper\n\nexport default () => '${isReleaseMode ? 'prod' : 'dev'}';`);
+}
+
+async function main() {
+	console.info(await execCommand('git pull'));
+
+	const newVersion = await updateManifestVersionNumber(`${clipperDir}/manifest.json`);
+
+	console.info('Building extension...');
+	process.chdir(`${clipperDir}/popup`);
+	await setReleaseMode(true);
+	console.info(await execCommand(`rm -rf ${clipperDir}/popup/build`));
+	console.info(await execCommand('npm run build'));
+
+	type PlatformDistOptions = {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		removeManifestKeys(manifest: Record<string, any>): Record<string, any>;
+		outputPath?: string;
+	};
+	const dists: Record<string, PlatformDistOptions> = {
+		chrome: {
+			removeManifestKeys: (manifest) => {
+				manifest = { ...manifest };
+				delete manifest.browser_specific_settings;
+
+				manifest.background = { ...manifest.background };
+				delete manifest.background.scripts;
+				delete manifest.background.persistent;
+
+				return manifest;
+			},
+		},
+		firefox: {
+			removeManifestKeys: (manifest) => {
+				manifest = { ...manifest };
+
+				manifest.background = { ...manifest.background };
+				delete manifest.background.service_worker;
+
+				return manifest;
+			},
+		},
+	};
+
+	for (const distName in dists) {
+		const dist = dists[distName];
+		const distDir = `${clipperDir}/dist/${distName}`;
+		await fs.remove(distDir);
+		await fs.mkdirp(distDir);
+		await copyToDist(distDir);
+
+		const manifestText = await fs.readFile(`${distDir}/manifest.json`, 'utf-8');
+		let manifest = JSON.parse(manifestText);
+		manifest.name = 'Joplin Web Clipper';
+		if (dist.removeManifestKeys) manifest = dist.removeManifestKeys(manifest);
+		await fs.writeFile(`${distDir}/manifest.json`, JSON.stringify(manifest, null, 4));
+
+		process.chdir(distDir);
+		console.info(await execCommand(`rm -f "${distName}.zip"`));
+		console.info(await execCommand(`7z a -tzip ${distName}.zip *`));
+		console.info(await execCommand(`mv ${distName}.zip ..`));
+
+		dists[distName].outputPath = `${clipperDir}/dist/${distName}.zip`;
+	}
+
+	const sourceZip = await createSourceZip();
+	await checkSourceZip(sourceZip, dists.firefox.outputPath);
+
+	await setReleaseMode(false);
+
+	process.chdir(clipperDir);
+	if (!process.argv.includes('--no-publish')) {
+		console.info(await execCommand('git add -A'));
+		console.info(await execCommand(`git commit -m "Clipper release v${newVersion}"`));
+		console.info(await execCommand(`git tag clipper-${newVersion}`));
+		console.info(await execCommand('git push'));
+		console.info(await execCommand('git push --tags'));
+	}
+}
+
+main().catch((error) => {
+	console.error('Fatal error');
+	console.error(error);
+	process.exit(1);
+});

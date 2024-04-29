@@ -2,6 +2,7 @@ import paginationToSql from './paginationToSql';
 import { Pagination, PaginationOrder } from './types';
 
 export interface ModelFeedPage {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	items: any[];
 	has_more: boolean;
 	total?: number;
@@ -9,11 +10,13 @@ export interface ModelFeedPage {
 
 export interface WhereQuery {
 	sql: string;
-	params: any[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	params?: any[];
 }
 
 // Note: this method might return more fields than was requested as it will
 // also return fields that are necessary for pagination.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default async function(db: any, tableName: string, pagination: Pagination, whereQuery: WhereQuery = null, fields: string[] = null): Promise<ModelFeedPage> {
 	fields = fields ? fields.slice() : ['id'];
 
@@ -47,8 +50,6 @@ export default async function(db: any, tableName: string, pagination: Pagination
 		LIMIT ${pagination.limit}
 		OFFSET ${offset}
 	`;
-
-	// console.info('SQL', sql, sqlParams);
 
 	const rows = await db.selectAll(sql, sqlParams);
 

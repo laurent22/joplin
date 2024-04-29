@@ -1,9 +1,9 @@
 const React = require('react');
 
-import { FunctionComponent } from 'react';
+import { FunctionComponent, ReactElement } from 'react';
 import { _ } from '@joplin/lib/locale';
 import Folder, { FolderEntityWithChildren } from '@joplin/lib/models/Folder';
-const { themeStyle } = require('./global-style.js');
+import { themeStyle } from './global-style';
 import Dropdown, { DropdownListItem, OnValueChangedListener } from './Dropdown';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 
@@ -16,6 +16,7 @@ interface FolderPickerProps {
 	placeholder?: string;
 	darkText?: boolean;
 	themeId?: number;
+	coverableChildrenRight?: ReactElement|ReactElement[];
 }
 
 
@@ -27,6 +28,7 @@ const FolderPicker: FunctionComponent<FolderPickerProps> = ({
 	folders,
 	placeholder,
 	darkText,
+	coverableChildrenRight,
 	themeId,
 }) => {
 	const theme = themeStyle(themeId);
@@ -66,6 +68,7 @@ const FolderPicker: FunctionComponent<FolderPickerProps> = ({
 			disabled={disabled}
 			labelTransform="trim"
 			selectedValue={selectedFolderId || ''}
+			coverableChildrenRight={coverableChildrenRight}
 			itemListStyle={{
 				backgroundColor: theme.backgroundColor,
 			}}

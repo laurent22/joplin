@@ -4,6 +4,7 @@ import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
 import Note from '@joplin/lib/models/Note';
 import time from '@joplin/lib/time';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 
 export const declaration: CommandDeclaration = {
 	name: 'editAlarm',
@@ -11,6 +12,7 @@ export const declaration: CommandDeclaration = {
 	iconName: 'icon-alarm',
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const runtime = (comp: any): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext, noteId: string = null) => {
@@ -28,8 +30,9 @@ export const runtime = (comp: any): CommandRuntime => {
 					inputType: 'datetime',
 					buttons: ['ok', 'cancel', 'clear'],
 					value: note.todo_due ? new Date(note.todo_due) : defaultDate,
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					onClose: async (answer: any, buttonType: string) => {
-						let newNote = null;
+						let newNote: NoteEntity = null;
 
 						if (buttonType === 'clear') {
 							newNote = {
@@ -56,6 +59,7 @@ export const runtime = (comp: any): CommandRuntime => {
 
 		enabledCondition: 'oneNoteSelected && noteIsTodo && !noteTodoCompleted',
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		mapStateToTitle: (state: any) => {
 			const note = stateUtils.selectedNote(state);
 			return note && note.todo_due ? time.formatMsToLocal(note.todo_due) : null;

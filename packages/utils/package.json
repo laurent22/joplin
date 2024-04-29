@@ -1,11 +1,14 @@
 {
   "name": "@joplin/utils",
-  "version": "2.14.0",
+  "version": "3.0.0",
   "description": "Utilities for Joplin",
   "repository": "https://github.com/laurent22/joplin/tree/dev/packages/utils",
   "exports": {
     ".": "./dist/index.js",
+    "./bytes": "./dist/bytes.js",
+    "./dom": "./dist/dom.js",
     "./env": "./dist/env.js",
+    "./object": "./dist/object.js",
     "./fs": "./dist/fs.js",
     "./html": "./dist/html.js",
     "./Logger": "./dist/Logger.js",
@@ -29,7 +32,7 @@
   "author": "",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "@joplin/fork-htmlparser2": "^4.1.50",
+    "@joplin/fork-htmlparser2": "^4.1.51",
     "async-mutex": "0.4.1",
     "execa": "5.1.1",
     "fs-extra": "11.2.0",

@@ -2,7 +2,7 @@
 	"extends": "../../tsconfig.json",
 	"include": [
 		"**/*.ts",
-		"**/*.tsx",
+		"**/*.tsx", "../app-desktop/commands/emptyTrash.ts",
 	],
 	"exclude": [
 		"**/node_modules",

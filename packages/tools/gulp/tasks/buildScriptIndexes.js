@@ -10,7 +10,7 @@ async function processDirectory(dir, indexFilePath = null, typeScriptType = null
 	if (!importNameTemplate) importNameTemplate = '* as FILE_NAME';
 	if (!exportNameTemplate) exportNameTemplate = 'FILE_NAME';
 
-	const tsFiles = glob.sync('{**/*.ts,**/*.tsx}', {
+	const tsFiles = glob.sync('{*.ts,*.tsx}', {
 		cwd: dir,
 	}).filter(f => `${dir}/${f}` !== indexFilePath)
 	//
@@ -67,6 +67,7 @@ module.exports = {
 		await processDirectory(`${rootDir}/packages/app-desktop/gui/NoteList/commands`);
 		await processDirectory(`${rootDir}/packages/app-desktop/gui/NoteListControls/commands`);
 		await processDirectory(`${rootDir}/packages/app-desktop/gui/Sidebar/commands`);
+		await processDirectory(`${rootDir}/packages/app-mobile/commands`);
 		await processDirectory(`${rootDir}/packages/lib/commands`);
 
 		await processDirectory(

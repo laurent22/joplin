@@ -35,7 +35,7 @@ To display an icon, use CSS and HTML like the following.
     color: var(--joplin-color);
 }
 .secondary {
-    color: var(--joplin-color-2);
+    color: var(--joplin-color2);
 }
 ```
 

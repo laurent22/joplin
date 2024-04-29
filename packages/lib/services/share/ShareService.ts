@@ -22,6 +22,7 @@ export interface ApiShare {
 	master_key_id: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function formatShareInvitations(invitations: any[]): ShareInvitation[] {
 	return invitations.map(inv => {
 		return {
@@ -35,6 +36,7 @@ export default class ShareService {
 
 	private static instance_: ShareService;
 	private api_: JoplinServerApi = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private store_: Store<any> = null;
 	private encryptionService_: EncryptionService = null;
 	private initialized_ = false;
@@ -45,6 +47,7 @@ export default class ShareService {
 		return this.instance_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public initialize(store: Store<any>, encryptionService: EncryptionService, api: JoplinServerApi = null) {
 		this.initialized_ = true;
 		this.store_ = store;
@@ -57,6 +60,7 @@ export default class ShareService {
 		return [9, 10].includes(Setting.value('sync.target')); // Joplin Server, Joplin Cloud targets
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private get store(): Store<any> {
 		return this.store_;
 	}
@@ -204,8 +208,9 @@ export default class ShareService {
 		// call deleteAllByShareId()
 		await Folder.updateAllShareIds(ResourceService.instance());
 
-		await Folder.delete(folderId, { deleteChildren: false, disableReadOnlyCheck: true });
-		await Folder.deleteAllByShareId(folder.share_id, { disableReadOnlyCheck: true, trackDeleted: false });
+		const source = 'ShareService.leaveSharedFolder';
+		await Folder.delete(folderId, { deleteChildren: false, disableReadOnlyCheck: true, sourceDescription: source });
+		await Folder.deleteAllByShareId(folder.share_id, { disableReadOnlyCheck: true, trackDeleted: false, sourceDescription: source });
 	}
 
 	// Finds any folder that is associated with a share, but the user no longer

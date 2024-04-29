@@ -5,9 +5,10 @@ import Setting from '../../models/Setting.js';
 const Note = require('../../models/Note').default;
 
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let searchEngine: any = null;
 
-describe('services_SearchEngineUtils', () => {
+describe('SearchEngineUtils', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
@@ -32,6 +33,7 @@ describe('services_SearchEngineUtils', () => {
 			expect(rows.map(r=>r.id)).toContain(todo1.id);
 			expect(rows.map(r=>r.id)).toContain(todo2.id);
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const options: any = {};
 			options.fields = ['id', 'title'];
 
@@ -57,6 +59,7 @@ describe('services_SearchEngineUtils', () => {
 			expect(rows.map(r=>r.id)).toContain(note1.id);
 			expect(rows.map(r=>r.id)).toContain(todo1.id);
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const options: any = {};
 			options.fields = ['id', 'title'];
 			const rows2 = (await SearchEngineUtils.notesForQuery('abcd', true, options, searchEngine)).notes;

@@ -34,6 +34,7 @@ export default class ToolbarButtonUtils {
 		return this.service_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private commandToToolbarButton(commandName: string, whenClauseContext: any): ToolbarButtonInfo {
 		const newEnabled = this.service.isEnabled(commandName, whenClauseContext);
 		const newTitle = this.service.title(commandName);
@@ -70,11 +71,13 @@ export default class ToolbarButtonUtils {
 	// This method ensures that if the provided commandNames and state hasn't changed
 	// the output also won't change. Invididual toolbarButtonInfo also won't changed
 	// if the state they use hasn't changed. This is to avoid useless renders of the toolbars.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public commandsToToolbarButtons(commandNames: string[], whenClauseContext: any): ToolbarButtonInfo[] {
 		const output: ToolbarButtonInfo[] = [];
 
 		for (const commandName of commandNames) {
 			if (commandName === '-') {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				output.push(separatorItem as any);
 				continue;
 			}

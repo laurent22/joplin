@@ -73,6 +73,7 @@ export default async (params: Params) => {
 			teamId: process.env.APPLE_ASC_PROVIDER,
 
 			tool: 'notarytool',
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		} as any);
 	} catch (error) {
 		console.error(error);

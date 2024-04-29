@@ -5,6 +5,8 @@ import { join } from 'path';
 import FsDriverBase from '@joplin/lib/fs-driver-base';
 import Logger from '@joplin/utils/Logger';
 import { Buffer } from 'buffer';
+import createFilesFromPathRecord from './testUtil/createFilesFromPathRecord';
+import verifyDirectoryMatches from './testUtil/verifyDirectoryMatches';
 
 const logger = Logger.create('fs-driver-tests');
 
@@ -181,7 +183,7 @@ const testReadFileChunkUtf8 = async (tempDir: string) => {
 	await expectToBe(readData, undefined);
 };
 
-const testTarCreate = async (tempDir: string) => {
+const testTarCreateAndExtract = async (tempDir: string) => {
 	logger.info('Testing fsDriver.tarCreate...');
 
 	const directoryToPack = join(tempDir, uuid.createNano());
@@ -193,34 +195,31 @@ const testTarCreate = async (tempDir: string) => {
 
 	// small utf-8 encoded files
 	for (let i = 0; i < 10; i ++) {
-		const testFilePath = join(directoryToPack, uuid.createNano());
-
+		const testFileName = uuid.createNano();
 		const fileContent = `✅ Testing... ä ✅ File #${i}`;
-		await fsDriver.writeFile(testFilePath, fileContent, 'utf-8');
 
-		fileContents[testFilePath] = fileContent;
+		fileContents[testFileName] = fileContent;
 	}
 
 	// larger utf-8 encoded files
 	for (let i = 0; i < 3; i ++) {
-		const testFilePath = join(directoryToPack, uuid.createNano());
+		const testFileName = uuid.createNano();
 
 		let fileContent = `✅ Testing... ä ✅ File #${i}`;
-
 		for (let j = 0; j < 8; j ++) {
 			fileContent += fileContent;
 		}
 
-		await fsDriver.writeFile(testFilePath, fileContent, 'utf-8');
-
-		fileContents[testFilePath] = fileContent;
+		fileContents[testFileName] = fileContent;
 	}
+
+	await createFilesFromPathRecord(directoryToPack, fileContents);
 
 	// Pack the files
 	const pathsToTar = Object.keys(fileContents);
 	const tarOutputPath = join(tempDir, 'test-tar.tar');
 	await fsDriver.tarCreate({
-		cwd: tempDir,
+		cwd: directoryToPack,
 		file: tarOutputPath,
 	}, pathsToTar);
 
@@ -231,6 +230,27 @@ const testTarCreate = async (tempDir: string) => {
 	for (const fileContent of Object.values(fileContents)) {
 		await expectToBe(rawTarData.includes(fileContent), true);
 	}
+
+	logger.info('Testing fsDriver.tarExtract...');
+
+	const outputDirectory = join(tempDir, uuid.createNano());
+	await fsDriver.mkdir(outputDirectory);
+	await fsDriver.tarExtract({
+		cwd: outputDirectory,
+		file: tarOutputPath,
+	});
+
+	await verifyDirectoryMatches(outputDirectory, fileContents);
+};
+
+const testMd5File = async (tempDir: string) => {
+	logger.info('Testing fsDriver.md5file...');
+	const fsDriver = shim.fsDriver();
+
+	const testFilePath = join(tempDir, `test-md5-${uuid.createNano()}`);
+	await fsDriver.writeFile(testFilePath, '🚧test', 'utf8');
+
+	await expectToBe(await fsDriver.md5File(testFilePath), 'ba11ba1be5042133a71874731e3d42cd');
 };
 
 // In the past, some fs-driver functionality has worked correctly on some devices and not others.
@@ -247,7 +267,10 @@ const runOnDeviceTests = async () => {
 		await testAppendFile(tempDir);
 		await testReadWriteFileUtf8(tempDir);
 		await testReadFileChunkUtf8(tempDir);
-		await testTarCreate(tempDir);
+		await testTarCreateAndExtract(tempDir);
+		await testMd5File(tempDir);
+
+		logger.info('Done');
 	} catch (error) {
 		const errorMessage = `On-device testing failed with an exception: ${error}.`;
 

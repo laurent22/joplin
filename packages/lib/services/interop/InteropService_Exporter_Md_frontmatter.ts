@@ -17,6 +17,7 @@ interface FrontMatterContext extends NoteTagContext, TagContext {}
 
 export default class InteropService_Exporter_Md_frontmatter extends InteropService_Exporter_Md {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async prepareForProcessingItemType(itemType: number, itemsToExport: any[]) {
 		await super.prepareForProcessingItemType(itemType, itemsToExport);
 

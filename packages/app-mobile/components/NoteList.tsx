@@ -6,23 +6,27 @@ import { connect } from 'react-redux';
 import { FlatList, Text, StyleSheet, Button, View } from 'react-native';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
+import getEmptyFolderMessage from '@joplin/lib/components/shared/NoteList/getEmptyFolderMessage';
+import Folder from '@joplin/lib/models/Folder';
 
 const { _ } = require('@joplin/lib/locale');
 const { NoteItem } = require('./note-item.js');
-const { themeStyle } = require('./global-style.js');
+import { themeStyle } from './global-style';
 
 interface NoteListProps {
-	themeId: string;
+	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	dispatch: (action: any)=> void;
 	notesSource: string;
 	items: NoteEntity[];
 	folders: FolderEntity[];
 	noteSelectionEnabled?: boolean;
-	selectedFolderId?: string;
+	selectedFolderId: string|null;
 }
 
 class NoteListComponent extends Component<NoteListProps> {
 	private rootRef_: FlatList;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private styles_: Record<string, StyleSheet.NamedStyles<any>>;
 
 	public constructor(props: NoteListProps) {
@@ -90,7 +94,7 @@ class NoteListComponent extends Component<NoteListProps> {
 				keyExtractor={item => item.id}
 			/>;
 		} else {
-			if (!this.props.folders.length) {
+			if (!Folder.atLeastOneRealFolderExists(this.props.folders)) {
 				const noItemMessage = _('You currently have no notebooks.');
 				return (
 					<View style={this.styles().noNotebookView}>
@@ -99,12 +103,14 @@ class NoteListComponent extends Component<NoteListProps> {
 					</View>
 				);
 			} else {
-				const noItemMessage = _('There are currently no notes. Create one by clicking on the (+) button.');
-				return <Text style={this.styles().noItemMessage}>{noItemMessage}</Text>;
+				return <Text style={this.styles().noItemMessage}>
+					{getEmptyFolderMessage(this.props.folders, this.props.selectedFolderId)}
+				</Text>;
 			}
 		}
 	}
 }
+
 
 const NoteList = connect((state: AppState) => {
 	return {
@@ -113,6 +119,7 @@ const NoteList = connect((state: AppState) => {
 		notesSource: state.notesSource,
 		themeId: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
+		selectedFolderId: state.selectedFolderId,
 	};
 })(NoteListComponent);
 

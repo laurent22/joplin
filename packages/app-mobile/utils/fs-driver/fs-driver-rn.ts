@@ -3,13 +3,12 @@ const RNFetchBlob = require('rn-fetch-blob').default;
 import * as RNFS from 'react-native-fs';
 import RNSAF, { DocumentFileDetail, openDocumentTree } from '@joplin/react-native-saf-x';
 import { Platform } from 'react-native';
-import * as tar from 'tar-stream';
-import { resolve } from 'path';
-import { Buffer } from 'buffer';
-import Logger from '@joplin/utils/Logger';
+import tarCreate from './tarCreate';
+import tarExtract from './tarExtract';
 import JoplinError from '@joplin/lib/JoplinError';
+const md5 = require('md5');
+import { resolve } from 'path';
 
-const logger = Logger.create('fs-driver-rn');
 
 const ANDROID_URI_PREFIX = 'content://';
 
@@ -51,12 +50,13 @@ const normalizeEncoding = (encoding: string): SupportedEncoding => {
 
 export default class FsDriverRN extends FsDriverBase {
 	public appendFileSync() {
-		throw new Error('Not implemented');
+		throw new Error('Not implemented: appendFileSync');
 	}
 
 	// Requires that the file already exists.
 	// TODO: Update for compatibility with fs-driver-node's appendFile (which does not
 	//       require that the file exists).
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public appendFile(path: string, content: any, rawEncoding = 'base64') {
 		const encoding = normalizeEncoding(rawEncoding);
 
@@ -67,6 +67,7 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	// Encoding can be either "utf8", "utf-8", or "base64"
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public writeFile(path: string, content: any, rawEncoding = 'base64') {
 		const encoding = normalizeEncoding(rawEncoding);
 
@@ -85,6 +86,7 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	// Returns a format compatible with Node.js format
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private rnfsStatToStd_(stat: any, path: string) {
 		let birthtime;
 		const mtime = stat.lastModified ? new Date(stat.lastModified) : stat.mtime;
@@ -105,12 +107,14 @@ export default class FsDriverRN extends FsDriverBase {
 		};
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async readDirStats(path: string, options: any = null) {
 		if (!options) options = {};
 		if (!('recursive' in options)) options.recursive = false;
 
 		const isScoped = isScopedUri(path);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let stats: any[] = [];
 		try {
 			if (isScoped) {
@@ -122,6 +126,7 @@ export default class FsDriverRN extends FsDriverBase {
 			throw new Error(`Could not read directory: ${path}: ${error.message}`);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let output: any[] = [];
 		for (let i = 0; i < stats.length; i++) {
 			const stat = stats[i];
@@ -212,7 +217,7 @@ export default class FsDriverRN extends FsDriverBase {
 		// return RNFS.touch(path, timestampDate, timestampDate);
 	}
 
-	public async open(path: string, mode: number) {
+	public async open(path: string, mode: string) {
 		if (isScopedUri(path)) {
 			throw new Error('open() not implemented in FsDriverAndroid');
 		}
@@ -228,7 +233,8 @@ export default class FsDriverRN extends FsDriverBase {
 		};
 	}
 
-	public close(): Promise<void> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public close(_handle: any): Promise<void> {
 		// Nothing
 		return null;
 	}
@@ -283,6 +289,7 @@ export default class FsDriverRN extends FsDriverBase {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async readFileChunk(handle: any, length: number, rawEncoding = 'base64') {
 		if (!handle?.stat) {
 			throw new JoplinError('File does not exist (reading file chunk).', 'ENOENT');
@@ -302,58 +309,33 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	public resolve(...paths: string[]): string {
-		throw new Error(`Not implemented: resolve(): ${JSON.stringify(paths)}`);
+		return resolve(...paths);
 	}
 
 	public async md5File(path: string): Promise<string> {
-		throw new Error(`Not implemented: md5File(): ${path}`);
+		if (isScopedUri(path)) {
+			// Warning: Slow
+			const fileData = Buffer.from(await this.readFile(path, 'base64'), 'base64');
+			return md5(fileData);
+		} else {
+			return await RNFS.hash(path, 'md5');
+		}
 	}
 
-	public async tarExtract(_options: any) {
-		throw new Error('Not implemented: tarExtract');
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public async tarExtract(options: any) {
+		await tarExtract({
+			cwd: RNFS.DocumentDirectoryPath,
+			...options,
+		});
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async tarCreate(options: any, filePaths: string[]) {
-		// Choose a default cwd if not given
-		const cwd = options.cwd ?? RNFS.DocumentDirectoryPath;
-		const file = resolve(cwd, options.file);
-
-		if (await this.exists(file)) {
-			throw new Error('Error! Destination already exists');
-		}
-
-		const pack = tar.pack();
-
-		for (const path of filePaths) {
-			const absPath = resolve(cwd, path);
-			const stat = await this.stat(absPath);
-			const sizeBytes: number = stat.size;
-
-			const entry = pack.entry({ name: path, size: sizeBytes }, (error) => {
-				if (error) {
-					logger.error(`Tar error: ${error}`);
-				}
-			});
-
-			const chunkSize = 1024 * 100; // 100 KiB
-			for (let offset = 0; offset < sizeBytes; offset += chunkSize) {
-				// The RNFS documentation suggests using base64 for binary files.
-				const part = await RNFS.read(absPath, chunkSize, offset, 'base64');
-				entry.write(Buffer.from(part, 'base64'));
-			}
-			entry.end();
-		}
-
-		pack.finalize();
-
-		// The streams used by tar-stream seem not to support a chunk size
-		// (it seems despite the typings provided).
-		let data: number[]|null = null;
-		while ((data = pack.read()) !== null) {
-			const buff = Buffer.from(data);
-			const base64Data = buff.toString('base64');
-			await this.appendFile(file, base64Data, 'base64');
-		}
+		await tarCreate({
+			cwd: RNFS.DocumentDirectoryPath,
+			...options,
+		}, filePaths);
 	}
 
 	public async getExternalDirectoryPath(): Promise<string | undefined> {

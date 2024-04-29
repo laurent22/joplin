@@ -8,26 +8,25 @@ import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 const { NoteItem } = require('../note-item.js');
 const { BaseScreenComponent } = require('../base-screen');
-const { themeStyle } = require('../global-style.js');
+import { themeStyle } from '../global-style';
 const DialogBox = require('react-native-dialogbox').default;
 import SearchEngineUtils from '@joplin/lib/services/search/SearchEngineUtils';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { AppState } from '../../utils/types';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 
-// We need this to suppress the useless warning
-// https://github.com/oblador/react-native-vector-icons/issues/1465
-// eslint-disable-next-line no-console
-Icon.loadFont().catch((error: any) => { console.info(error); });
-
 class SearchScreenComponent extends BaseScreenComponent {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private state: any = null;
 	private isMounted_ = false;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private styles_: any = {};
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private scheduleSearchTimer_: any = null;
 
 	public static navigationOptions() {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return { header: null } as any;
 	}
 
@@ -45,6 +44,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 		if (this.styles_[this.props.themeId]) return this.styles_[this.props.themeId];
 		this.styles_ = {};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const styles: any = {
 			body: {
 				flex: 1,
@@ -199,6 +199,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 					<FlatList data={this.state.notes} keyExtractor={(item) => item.id} renderItem={event => <NoteItem note={event.item} />} />
 				</View>
 				<DialogBox
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					ref={(dialogbox: any) => {
 						this.dialogbox = dialogbox;
 					}}

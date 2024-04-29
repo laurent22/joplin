@@ -1,17 +1,19 @@
 import * as React from 'react';
 
-import Setting, { AppType, SettingMetadataSection } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingMetadataSection, SettingSectionSource } from '@joplin/lib/models/Setting';
 import { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { ConfigScreenStyles } from './configScreenStyles';
 import { FlatList, Text, Pressable, View, ViewStyle } from 'react-native';
 import { settingsSections } from '@joplin/lib/components/shared/config/config-shared';
 import Icon from '../../Icon';
+import { _ } from '@joplin/lib/locale';
 
 interface Props {
 	styles: ConfigScreenStyles;
 
 	width: number|undefined;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	settings: any;
 	selectedSectionName: string|null;
 	openSection: (sectionName: string)=> void;
@@ -31,6 +33,17 @@ const SectionSelector: FunctionComponent<Props> = props => {
 		const icon = Setting.sectionNameToIcon(section.name, AppType.Mobile);
 		const label = Setting.sectionNameToLabel(section.name);
 		const shortDescription = Setting.sectionMetadataToSummary(section);
+		const isPlugin = item.source === SettingSectionSource.Plugin;
+
+		const titleStyle = selected ? styles.sidebarSelectedButtonText : styles.sidebarButtonMainText;
+
+		const sourceIcon = isPlugin ? (
+			<Icon
+				name='fas fa-puzzle-piece'
+				accessibilityLabel={_('From a plugin')}
+				style={titleStyle}
+			/>
+		) : null;
 
 		return (
 			<Pressable
@@ -47,7 +60,8 @@ const SectionSelector: FunctionComponent<Props> = props => {
 				/>
 				<View style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
 					<Text
-						style={selected ? styles.sidebarSelectedButtonText : styles.sidebarButtonMainText}
+						numberOfLines={1}
+						style={titleStyle}
 					>
 						{label}
 					</Text>
@@ -59,6 +73,7 @@ const SectionSelector: FunctionComponent<Props> = props => {
 						{shortDescription ?? ''}
 					</Text>
 				</View>
+				{sourceIcon}
 			</Pressable>
 		);
 	};

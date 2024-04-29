@@ -149,6 +149,11 @@ const config = {
 		],
 	],
 
+	markdown: {
+		mermaid: true,
+	},
+	themes: ['@docusaurus/theme-mermaid'],
+
 	presets: [
 		[
 			'classic',
@@ -164,6 +169,7 @@ const config = {
 					},
 				},
 				blog: {
+					blogTitle: 'News',
 					showReadingTime: true,
 					blogSidebarCount: 'ALL',
 					path: 'news',

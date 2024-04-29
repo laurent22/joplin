@@ -13,7 +13,7 @@ import Sidebar from '../Sidebar/Sidebar';
 import UserWebview from '../../services/plugins/UserWebview';
 import UserWebviewDialog from '../../services/plugins/UserWebviewDialog';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
-import { stateUtils } from '@joplin/lib/reducer';
+import { StateLastDeletion, stateUtils } from '@joplin/lib/reducer';
 import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import NoteListWrapper from '../NoteListWrapper/NoteListWrapper';
@@ -26,7 +26,7 @@ import shim from '@joplin/lib/shim';
 import bridge from '../../services/bridge';
 import time from '@joplin/lib/time';
 import styled from 'styled-components';
-import { themeStyle } from '@joplin/lib/theme';
+import { themeStyle, ThemeStyle } from '@joplin/lib/theme';
 import validateLayout from '../ResizableLayout/utils/validateLayout';
 import iterateItems from '../ResizableLayout/utils/iterateItems';
 import removeItem from '../ResizableLayout/utils/removeItem';
@@ -40,11 +40,15 @@ import ElectronAppWrapper from '../../ElectronAppWrapper';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import commands from './commands/index';
-import invitationRespond from '../../services/share/invitationRespond';
+import invitationRespond from '@joplin/lib/services/share/invitationRespond';
 import restart from '../../services/restart';
 const { connect } = require('react-redux');
 import PromptDialog from '../PromptDialog';
 import NotePropertiesDialog from '../NotePropertiesDialog';
+import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
+import validateColumns from '../NoteListHeader/utils/validateColumns';
+import TrashNotification from '../TrashNotification/TrashNotification';
+
 const PluginManager = require('@joplin/lib/services/PluginManager');
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -61,8 +65,10 @@ interface Props {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	mainLayout: LayoutItem;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
 	layoutMoveMode: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	editorNoteStatuses: any;
 	customCss: string;
 	shouldUpgradeSyncTarget: boolean;
@@ -74,6 +80,7 @@ interface Props {
 	showShouldReencryptMessage: boolean;
 	themeId: number;
 	settingEditorCodeView: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginsLegacy: any;
 	startupPluginsLoaded: boolean;
 	shareInvitations: ShareInvitation[];
@@ -83,7 +90,13 @@ interface Props {
 	processingShareInvitationResponse: boolean;
 	isResettingLayout: boolean;
 	listRendererId: string;
+	lastDeletion: StateLastDeletion;
+	lastDeletionNotificationTime: number;
+	selectedFolderId: string;
 	mustUpgradeAppMessage: string;
+	notesSortOrderField: string;
+	notesSortOrderReverse: boolean;
+	notesColumns: NoteListColumns;
 }
 
 interface ShareFolderDialogOptions {
@@ -92,10 +105,14 @@ interface ShareFolderDialogOptions {
 }
 
 interface State {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	promptOptions: any;
 	modalLayer: LayerModalState;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	notePropertiesDialogOptions: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	noteContentPropertiesDialogOptions: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	shareNoteDialogOptions: any;
 	shareFolderDialogOptions: ShareFolderDialogOptions;
 }
@@ -122,9 +139,11 @@ const defaultLayout: LayoutItem = {
 
 class MainScreenComponent extends React.Component<Props, State> {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private waitForNotesSavedIID_: any;
 	private isPrinting_: boolean;
 	private styleKey_: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private styles_: any;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private promptOnClose_: Function;
@@ -166,6 +185,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 		window.addEventListener('resize', this.window_resize);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		ipcRenderer.on('asynchronous-message', (_event: any, message: string, args: any) => {
 			if (message === 'openCallbackUrl') {
 				this.openCallbackUrl(args.url);
@@ -320,6 +340,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 	}
 
 	public updateRootLayoutSize() {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.updateMainLayout(produce(this.props.mainLayout, (draft: any) => {
 			const s = this.rootLayoutSize();
 			draft.width = s.width;
@@ -390,6 +411,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public layoutModeListenerKeyDown(event: any) {
 		if (event.key !== 'Escape') return;
 		if (!this.props.layoutMoveMode) return;
@@ -415,6 +437,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async printTo_(target: string, options: any) {
 		// Concurrent print calls are disallowed to avoid incorrect settings being restored upon completion
 		if (this.isPrinting_) {
@@ -523,6 +546,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private renderNotificationMessage(message: string, callForAction: string = null, callForActionHandler: Function = null, callForAction2: string = null, callForActionHandler2: Function = null) {
 		const theme = themeStyle(this.props.themeId);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const urlStyle: any = { color: theme.colorWarnUrl, textDecoration: 'underline' };
 
 		if (!callForAction) return <span>{message}</span>;
@@ -547,7 +571,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 		);
 	}
 
-	public renderNotification(theme: any, styles: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public renderNotification(theme: ThemeStyle, styles: any) {
 		if (!this.messageBoxVisible()) return null;
 
 		const onViewStatusScreen = () => {
@@ -695,6 +720,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private resizableLayout_resize(event: any) {
 		this.updateMainLayout(event.layout);
 	}
@@ -704,6 +730,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		this.updateMainLayout(newLayout);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private resizableLayout_renderItem(key: string, event: any) {
 		// Key should never be undefined but somehow it can happen, also not
 		// clear how. For now in this case render nothing so that the app
@@ -718,6 +745,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 		// const viewsToRemove:string[] = [];
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const components: any = {
 			sideBar: () => {
 				return <Sidebar key={key} />;
@@ -732,6 +760,10 @@ class MainScreenComponent extends React.Component<Props, State> {
 					themeId={this.props.themeId}
 					listRendererId={this.props.listRendererId}
 					startupPluginsLoaded={this.props.startupPluginsLoaded}
+					notesSortOrderField={this.props.notesSortOrderField}
+					notesSortOrderReverse={this.props.notesSortOrderReverse}
+					columns={this.props.notesColumns}
+					selectedFolderId={this.props.selectedFolderId}
 				/>;
 			},
 
@@ -840,6 +872,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		const styles = this.styles(this.props.themeId, style.width, style.height, this.messageBoxVisible());
 
 		if (!this.promptOnClose_) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			this.promptOnClose_ = (answer: any, buttonType: any) => {
 				return this.state.promptOptions.onClose(answer, buttonType);
 			};
@@ -880,6 +913,13 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} themeId={this.props.themeId} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />
 
+				<TrashNotification
+					lastDeletion={this.props.lastDeletion}
+					lastDeletionNotificationTime={this.props.lastDeletionNotificationTime}
+					themeId={this.props.themeId}
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					dispatch={this.props.dispatch as any}
+				/>
 				{messageComp}
 				{layoutComp}
 				{pluginDialog}
@@ -918,7 +958,13 @@ const mapStateToProps = (state: AppState) => {
 		needApiAuth: state.needApiAuth,
 		isResettingLayout: state.isResettingLayout,
 		listRendererId: state.settings['notes.listRendererId'],
+		lastDeletion: state.lastDeletion,
+		lastDeletionNotificationTime: state.lastDeletionNotificationTime,
+		selectedFolderId: state.selectedFolderId,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
+		notesSortOrderField: state.settings['notes.sortOrder.field'],
+		notesSortOrderReverse: state.settings['notes.sortOrder.reverse'],
+		notesColumns: validateColumns(state.settings['notes.columns']),
 	};
 };
 

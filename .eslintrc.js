@@ -70,6 +70,10 @@ module.exports = {
 		'no-var': ['error'],
 		'no-new-func': ['error'],
 		'import/prefer-default-export': ['error'],
+		'prefer-promise-reject-errors': ['error', {
+			allowEmptyReject: true,
+		}],
+		'no-throw-literal': ['error'],
 
 		// This rule should not be enabled since it matters in what order
 		// imports are done, in particular in relation to the shim.setReact
@@ -100,6 +104,19 @@ module.exports = {
 		'promise/prefer-await-to-then': 'error',
 		'no-unneeded-ternary': 'error',
 		'github/array-foreach': ['error'],
+
+		'no-restricted-properties': ['error',
+			{
+				'property': 'focus',
+				'message': 'Please use focusHandler::focus() instead',
+			},
+			{
+				'property': 'blur',
+				'message': 'Please use focusHandler::blur() instead',
+			},
+		],
+
+		'@typescript-eslint/no-explicit-any': ['error'],
 
 		// -------------------------------
 		// Formatting

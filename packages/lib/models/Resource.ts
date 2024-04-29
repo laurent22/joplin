@@ -1,4 +1,4 @@
-import BaseModel from '../BaseModel';
+import BaseModel, { DeleteOptions } from '../BaseModel';
 import BaseItem from './BaseItem';
 import ItemChange from './ItemChange';
 import NoteResource from './NoteResource';
@@ -22,8 +22,20 @@ import { htmlentities } from '@joplin/utils/html';
 import { RecognizeResultLine } from '../services/ocr/utils/types';
 import eventManager, { EventName } from '../eventManager';
 import { unique } from '../array';
+import ActionLogger from '../utils/ActionLogger';
 import isSqliteSyntaxError from '../services/database/isSqliteSyntaxError';
 import { internalUrl, isResourceUrl, isSupportedImageMimeType, resourceFilename, resourceFullPath, resourcePathToId, resourceRelativePath, resourceUrlToId } from './utils/resourceUtils';
+
+export const resourceOcrStatusToString = (status: ResourceOcrStatus) => {
+	const s = {
+		[ResourceOcrStatus.Todo]: _('Idle'),
+		[ResourceOcrStatus.Processing]: _('Processing'),
+		[ResourceOcrStatus.Error]: _('Error'),
+		[ResourceOcrStatus.Done]: _('Done'),
+	};
+
+	return s[status];
+};
 
 export default class Resource extends BaseItem {
 
@@ -36,6 +48,7 @@ export default class Resource extends BaseItem {
 
 	public static shareService_: ShareService = null;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static fsDriver_: any;
 
 	public static tableName() {
@@ -60,6 +73,7 @@ export default class Resource extends BaseItem {
 		return isSupportedImageMimeType(type);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static fetchStatuses(resourceIds: string[]): Promise<any[]> {
 		if (!resourceIds.length) return Promise.resolve([]);
 		return this.db().selectAll(`SELECT resource_id, fetch_status FROM resource_local_states WHERE resource_id IN ("${resourceIds.join('","')}")`);
@@ -213,6 +227,7 @@ export default class Resource extends BaseItem {
 
 		const share = resource.share_id ? await this.shareService().shareById(resource.share_id) : null;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		if (!getEncryptionEnabled() || !itemCanBeEncrypted(resource as any, share)) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (resource.encryption_blob_encrypted) throw new Error('Trying to access encrypted resource but encryption is currently disabled');
@@ -240,6 +255,7 @@ export default class Resource extends BaseItem {
 		return { path: encryptedPath, resource: resourceCopy };
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static markupTag(resource: any, markupLanguage: MarkupLanguage = MarkupLanguage.Markdown) {
 		let tagAlt = resource.alt ? resource.alt : resource.title;
 		if (!tagAlt) tagAlt = '';
@@ -286,15 +302,18 @@ export default class Resource extends BaseItem {
 		return resourceUrlToId(url);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async localState(resourceOrId: any): Promise<ResourceLocalStateEntity> {
 		return ResourceLocalState.byResourceId(typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static setLocalStateQueries(resourceOrId: any, state: ResourceLocalStateEntity) {
 		const id = typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId;
 		return ResourceLocalState.saveQueries({ ...state, resource_id: id });
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async setLocalState(resourceOrId: any, state: ResourceLocalStateEntity) {
 		const id = typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId;
 		await ResourceLocalState.save({ ...state, resource_id: id });
@@ -311,7 +330,9 @@ export default class Resource extends BaseItem {
 		return this.db().exec('UPDATE resources set `size` = ? WHERE id = ?', [fileSize, resourceId]);
 	}
 
-	public static async batchDelete(ids: string[], options: any = null) {
+	public static async batchDelete(ids: string[], options: DeleteOptions = {}) {
+		const actionLogger = ActionLogger.from(options.sourceDescription);
+
 		// For resources, there's not really batch deletion since there's the
 		// file data to delete too, so each is processed one by one with the
 		// file data being deleted last since the metadata deletion call may
@@ -321,14 +342,21 @@ export default class Resource extends BaseItem {
 			const resource = await Resource.load(id);
 			if (!resource) continue;
 
+			// Log just for the current item.
+			const logger = actionLogger.clone();
+			logger.addDescription(`title: ${resource.title}`);
+
 			const path = Resource.fullPath(resource);
-			await super.batchDelete([id], options);
+			await super.batchDelete([id], {
+				...options,
+				sourceDescription: logger,
+			});
 			await this.fsDriver().remove(path);
 			await NoteResource.deleteByResource(id); // Clean up note/resource relationships
 			await this.db().exec('DELETE FROM items_normalized WHERE item_id = ?', [id]);
 		}
 
-		await ResourceLocalState.batchDelete(ids);
+		await ResourceLocalState.batchDelete(ids, { sourceDescription: actionLogger });
 	}
 
 	public static async markForDownload(resourceId: string) {
@@ -445,6 +473,7 @@ export default class Resource extends BaseItem {
 		return folder.id;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static async resourceConflictFolder(): Promise<any> {
 		const conflictFolderTitle = _('Conflicts (attachments)');
 		const Folder = this.getClass('Folder');
@@ -554,6 +583,7 @@ export default class Resource extends BaseItem {
 		const makeQuery = (useRowValue: boolean): SqlQuery => {
 			const whereSql = useRowValue ? '(updated_time, id) > (?, ?)' : 'updated_time > ?';
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const params: any[] = [updatedTime];
 			if (useRowValue) {
 				params.push(id);
@@ -609,6 +639,10 @@ export default class Resource extends BaseItem {
 		const output = await super.save(resource, options);
 		if (isNew) eventManager.emit(EventName.ResourceCreate);
 		return output;
+	}
+
+	public static load(id: string, options: LoadOptions = null): Promise<ResourceEntity> {
+		return super.load(id, options);
 	}
 
 }

@@ -40,6 +40,30 @@ describe('htmlUtils', () => {
 				'<img onerror="http://downloadmalware.com"/>',
 				'&lt;img onerror=&quot;http://downloadmalware.com&quot;/&gt;',
 			],
+			[
+				'Some text indented by a tab:\n\tIndented',
+				'<p>Some text indented by a tab:<br/>&nbsp;&nbsp;&nbsp;&nbsp;Indented</p>',
+			],
+			[
+				'Some text indented by two spaces:\n  Indented',
+				'<p>Some text indented by two spaces:<br/>&nbsp;&nbsp;Indented</p>',
+			],
+			[
+				'Some text with      white space between the content\nNewLine',
+				'<p>Some text with      white space between the content<br/>NewLine</p>',
+			],
+			[
+				'Some text with \t tab\nNewLine',
+				'<p>Some text with \t tab<br/>NewLine</p>',
+			],
+			[
+				'Tab at the end of the line is ignored\t\nNewLine',
+				'<p>Tab at the end of the line is ignored<br/>NewLine</p>',
+			],
+			[
+				'White space at the end of the line is ignored       \nNewLine',
+				'<p>White space at the end of the line is ignored<br/>NewLine</p>',
+			],
 		];
 
 		for (const t of testCases) {

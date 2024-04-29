@@ -22,7 +22,9 @@ type FormatFunction = (level: LogLevel, targetPrefix?: string)=> string;
 
 interface TargetOptions {
 	level?: LogLevel;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	database?: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	console?: any;
 	prefix?: string;
 	path?: string;
@@ -102,6 +104,12 @@ class Logger {
 		this.globalLogger_ = logger;
 	}
 
+	public logFilePath() {
+		const fileTarget = this.targets().find(t => t.type === TargetType.File);
+		if (!fileTarget) return '';
+		return fileTarget.path || '';
+	}
+
 	public static get globalLogger(): Logger {
 		if (!this.globalLogger_) {
 			// The global logger normally is initialized early, so we shouldn't
@@ -112,7 +120,9 @@ class Logger {
 			// statement comes from.
 
 			console.warn('Logger: Trying to access globalLogger, but it has not been initialized. Make sure that initializeGlobalLogger() has been called before logging. Will use the console as fallback.');
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const output: any = {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				log: (level: LogLevel, prefix: string, ...object: any[]) => {
 					// eslint-disable-next-line no-console
 					console.info(`[UNINITIALIZED GLOBAL LOGGER] ${this.levelIdToString(level)}: ${prefix}:`, object);
@@ -127,9 +137,13 @@ class Logger {
 
 	public static create(prefix: string): LoggerWrapper {
 		return {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			debug: (...object: any[]) => this.globalLogger.log(LogLevel.Debug, prefix, ...object),
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			info: (...object: any[]) => this.globalLogger.log(LogLevel.Info, prefix, ...object),
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			warn: (...object: any[]) => this.globalLogger.log(LogLevel.Warn, prefix, ...object),
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			error: (...object: any[]) => this.globalLogger.log(LogLevel.Error, prefix, ...object),
 		};
 	}
@@ -152,17 +166,20 @@ class Logger {
 		const target = { type: type };
 		for (const n in options) {
 			if (!options.hasOwnProperty(n)) continue;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			(target as any)[n] = (options as any)[n];
 		}
 
 		this.targets_.push(target);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public objectToString(object: any) {
 		let output = '';
 
 		if (typeof object === 'object') {
 			if (object instanceof Error) {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				object = object as any;
 				output = object.toString();
 				if (object.code) output += `\nCode: ${object.code}`;
@@ -179,10 +196,17 @@ class Logger {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public objectsToString(...object: any[]) {
 		const output = [];
-		for (let i = 0; i < object.length; i++) {
-			output.push(`"${this.objectToString(object[i])}"`);
+		if (object.length === 1) {
+			// Quoting when there is only one argument can make the log more difficult to read,
+			// particularly when formatting is handled elsewhere.
+			output.push(this.objectToString(object[0]));
+		} else {
+			for (let i = 0; i < object.length; i++) {
+				output.push(`"${this.objectToString(object[i])}"`);
+			}
 		}
 		return output.join(', ');
 	}
@@ -234,12 +258,23 @@ class Logger {
 		return this.level();
 	}
 
-	public log(level: LogLevel, prefix: string | null, ...object: any[]) {
+	private logInfoToString(level: LogLevel, prefix: string | null, ...object: unknown[]) {
+		const timestamp = moment().format('YYYY-MM-DD HH:mm:ss');
+		const line = [timestamp];
+		if (prefix) line.push(prefix);
+		const levelString = [LogLevel.Error, LogLevel.Warn].includes(level) ? `[${Logger.levelIdToString(level)}] ` : '';
+		line.push((levelString ? levelString : '') + this.objectsToString(...object));
+		return `${line.join(': ')}`;
+	}
+
+	public log(level: LogLevel, prefix: string | null, ...object: unknown[]) {
 		if (!this.targets_.length || !this.enabled) return;
+
+		let logLine = '';
 
 		for (let i = 0; i < this.targets_.length; i++) {
 			const target = this.targets_[i];
-			const targetPrefix = prefix ? prefix : target.prefix;
+			const targetPrefix = prefix ? prefix : (target.prefix || '');
 
 			if (this.targetLevel(target) < level) continue;
 
@@ -249,6 +284,7 @@ class Logger {
 				if (level === LogLevel.Warn) fn = 'warn';
 				if (level === LogLevel.Info) fn = 'info';
 				const consoleObj = target.console ? target.console : console;
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				let items: any[] = [];
 
 				if (target.format) {
@@ -265,15 +301,12 @@ class Logger {
 				} else {
 					const prefixItems = [moment().format('HH:mm:ss')];
 					if (targetPrefix) prefixItems.push(targetPrefix);
-					items = [`${prefixItems.join(': ')}:`].concat(...object);
+					items = [`${prefixItems.join(': ')}:` as unknown].concat(...object);
 				}
 
 				consoleObj[fn](...items);
 			} else if (target.type === 'file') {
-				const timestamp = moment().format('YYYY-MM-DD HH:mm:ss');
-				const line = [timestamp];
-				if (targetPrefix) line.push(targetPrefix);
-				line.push(this.objectsToString(...object));
+				logLine = this.logInfoToString(level, targetPrefix, ...object);
 
 				// Write to file using a mutex so that log entries appear in the
 				// correct order (otherwise, since the async call is not awaited
@@ -287,8 +320,8 @@ class Logger {
 				/* eslint-disable-next-line promise/prefer-await-to-then, @typescript-eslint/ban-types -- Old code before rule was applied, Old code before rule was applied */
 				writeToFileMutex_.acquire().then((r: Function) => {
 					release = r;
-					return Logger.fsDriver().appendFile(target.path as string, `${line.join(': ')}\n`, 'utf8');
-					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
+					return Logger.fsDriver().appendFile(target.path as string, `${logLine}\n`, 'utf8');
+					// eslint-disable-next-line promise/prefer-await-to-then, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 				}).catch((error: any) => {
 					console.error('Cannot write to log file:', error);
 					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
@@ -322,15 +355,26 @@ class Logger {
 		}
 	}
 
+	// For tests
+	public async waitForFileWritesToComplete_() {
+		const release = await writeToFileMutex_.acquire();
+		release();
+		return;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public error(...object: any[]) {
 		return this.log(LogLevel.Error, null, ...object);
 	}
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public warn(...object: any[]) {
 		return this.log(LogLevel.Warn, null, ...object);
 	}
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public info(...object: any[]) {
 		return this.log(LogLevel.Info, null, ...object);
 	}
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public debug(...object: any[]) {
 		return this.log(LogLevel.Debug, null, ...object);
 	}

@@ -107,7 +107,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 					<FolderPicker
 						themeId={this.props.themeId}
 						placeholder={_('Select parent notebook')}
-						folders={this.props.folders}
+						folders={Folder.getRealFolders(this.props.folders)}
 						selectedFolderId={this.state.folder.parent_id}
 						onValueChange={newValue => this.parent_changeValue(newValue)}
 						mustSelect

@@ -20,6 +20,7 @@ export default async function(request: Request) {
 
 	if (modelType !== BaseItem.TYPE_NOTE) {
 		const ModelClass = BaseItem.getClassByItemType(modelType);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const options: any = {};
 		const fields = requestFields(request, modelType);
 		if (fields.length) options.fields = fields;
@@ -36,5 +37,8 @@ export default async function(request: Request) {
 		results = (await SearchEngineUtils.notesForQuery(query, false, options)).notes;
 	}
 
-	return collectionToPaginatedResults(modelType, results, request);
+	// We do not sort the results if the "order_by" query parameter is not specified, because the
+	// search engine has already sorted them in order of relevance.
+	// https://github.com/laurent22/joplin/issues/10088
+	return collectionToPaginatedResults(modelType, results, request, { sort: !!request.query.order_by });
 }

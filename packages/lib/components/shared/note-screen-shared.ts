@@ -13,11 +13,16 @@ import ItemChange from '../../models/ItemChange';
 import BaseItem from '../../models/BaseItem';
 
 export interface BaseNoteScreenComponent {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	props: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	state: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	setState: (newState: any)=> void;
 
+	scheduleSave(): void;
 	scheduleFocusUpdate(): void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	attachFile(asset: any, fileType: any): void;
 	lastLoadedNoteId_?: string;
 }
@@ -25,17 +30,24 @@ export interface BaseNoteScreenComponent {
 interface Shared {
 	noteExists?: (noteId: string)=> Promise<boolean>;
 	handleNoteDeletedWhileEditing_?: (note: NoteEntity)=> Promise<NoteEntity>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	saveNoteButton_press?: (comp: BaseNoteScreenComponent, folderId: string, options: any)=> Promise<void>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	saveOneProperty?: (comp: BaseNoteScreenComponent, name: string, value: any)=> void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	noteComponent_change?: (comp: BaseNoteScreenComponent, propName: string, propValue: any)=> void;
 	clearResourceCache?: ()=> void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	attachedResources?: (noteBody: string)=> Promise<any>;
 	isModified?: (comp: BaseNoteScreenComponent)=> boolean;
 	initState?: (comp: BaseNoteScreenComponent)=> Promise<void>;
 	toggleIsTodo_onPress?: (comp: BaseNoteScreenComponent)=> void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	toggleCheckboxRange?: (ipcMessage: string, noteBody: string)=> any;
 	toggleCheckbox?: (ipcMessage: string, noteBody: string)=> string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	installResourceHandling?: (refreshResourceHandler: any)=> void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	uninstallResourceHandling?: (refreshResourceHandler: any)=> void;
 }
 
@@ -64,6 +76,7 @@ shared.handleNoteDeletedWhileEditing_ = async (note: NoteEntity) => {
 	return Note.load(newNote.id);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, folderId: string = null, options: any = null) {
 	options = { autoTitle: true, ...options };
 
@@ -119,6 +132,7 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, fold
 		note.body = stateNote.body;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const newState: any = {
 		lastSavedNote: { ...note },
 		note: note,
@@ -139,7 +153,7 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, fold
 			if (stateNote.id !== geoNote.id) return; // Another note has been loaded while geoloc was being retrieved
 
 			// Geo-location for this note has been saved to the database however the properties
-			// are is not in the state so set them now.
+			// are not in the state so set them now.
 
 			const geoInfo = {
 				longitude: geoNote.longitude,
@@ -160,12 +174,14 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, fold
 	releaseMutex();
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 shared.saveOneProperty = async function(comp: BaseNoteScreenComponent, name: string, value: any) {
 	let note = { ...comp.state.note };
 
 	const recreatedNote = await shared.handleNoteDeletedWhileEditing_(note);
 	if (recreatedNote) note = recreatedNote;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	let toSave: any = { id: note.id };
 	toSave[name] = value;
 	toSave = await Note.save(toSave);
@@ -177,7 +193,9 @@ shared.saveOneProperty = async function(comp: BaseNoteScreenComponent, name: str
 	});
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 shared.noteComponent_change = function(comp: BaseNoteScreenComponent, propName: string, propValue: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const newState: any = {};
 
 	const note = { ...comp.state.note };
@@ -185,8 +203,10 @@ shared.noteComponent_change = function(comp: BaseNoteScreenComponent, propName: 
 	newState.note = note;
 
 	comp.setState(newState);
+	comp.scheduleSave();
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let resourceCache_: any = {};
 
 shared.clearResourceCache = function() {
@@ -197,6 +217,7 @@ shared.attachedResources = async function(noteBody: string) {
 	if (!noteBody) return {};
 	const resourceIds = await Note.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, noteBody);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {};
 	for (let i = 0; i < resourceIds.length; i++) {
 		const id = resourceIds[i];
@@ -323,22 +344,27 @@ function toggleCheckboxLine(ipcMessage: string, noteBody: string) {
 shared.toggleCheckboxRange = function(ipcMessage: string, noteBody: string) {
 	const [lineIndex, line] = toggleCheckboxLine(ipcMessage, noteBody).slice(1);
 	const from = { line: lineIndex, ch: 0 };
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const to = { line: lineIndex, ch: (line as any).length };
 	return { line, from, to };
 };
 
 shared.toggleCheckbox = function(ipcMessage: string, noteBody: string) {
 	const [newBody, lineIndex, line] = toggleCheckboxLine(ipcMessage, noteBody);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	(newBody as any)[lineIndex as any] = line;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return (newBody as any).join('\n');
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 shared.installResourceHandling = function(refreshResourceHandler: any) {
 	ResourceFetcher.instance().on('downloadComplete', refreshResourceHandler);
 	ResourceFetcher.instance().on('downloadStarted', refreshResourceHandler);
 	DecryptionWorker.instance().on('resourceDecrypted', refreshResourceHandler);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 shared.uninstallResourceHandling = function(refreshResourceHandler: any) {
 	ResourceFetcher.instance().off('downloadComplete', refreshResourceHandler);
 	ResourceFetcher.instance().off('downloadStarted', refreshResourceHandler);

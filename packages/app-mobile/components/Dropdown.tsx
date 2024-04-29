@@ -1,6 +1,6 @@
-const React = require('react');
+import * as React from 'react';
 import { TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, Modal, View, LayoutRectangle, ViewStyle, TextStyle, FlatList } from 'react-native';
-import { Component } from 'react';
+import { Component, ReactElement } from 'react';
 import { _ } from '@joplin/lib/locale';
 
 type ValueType = string;
@@ -29,6 +29,11 @@ interface DropdownProps {
 
 	selectedValue: ValueType|null;
 	onValueChange?: OnValueChangedListener;
+
+	// Shown to the right of the dropdown when closed, hidden when opened.
+	// Avoids abrupt size transitions that would be caused by externally resizing the space
+	// available for the dropdown on open/close.
+	coverableChildrenRight?: ReactElement[]|ReactElement;
 }
 
 interface DropdownState {
@@ -37,7 +42,7 @@ interface DropdownState {
 }
 
 class Dropdown extends Component<DropdownProps, DropdownState> {
-	private headerRef: TouchableOpacity;
+	private headerRef: View;
 
 	public constructor(props: DropdownProps) {
 		super(props);
@@ -49,14 +54,30 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 		};
 	}
 
-	private updateHeaderCoordinates() {
+	private updateHeaderCoordinates = () => {
+		if (!this.headerRef) return;
+
 		// https://stackoverflow.com/questions/30096038/react-native-getting-the-position-of-an-element
 		this.headerRef.measure((_fx, _fy, width, height, px, py) => {
-			this.setState({
-				headerSize: { x: px, y: py, width: width, height: height },
-			});
+			const lastLayout = this.state.headerSize;
+			if (px !== lastLayout.x || py !== lastLayout.y || width !== lastLayout.width || height !== lastLayout.height) {
+				this.setState({
+					headerSize: { x: px, y: py, width: width, height: height },
+				});
+			}
 		});
-	}
+	};
+
+	private onOpenList = () => {
+		// On iOS, we need to re-measure just before opening the list. Measurements from just after
+		// onLayout can be inaccurate in some cases (in the past, this had caused the menu to be
+		// drawn far offscreen).
+		this.updateHeaderCoordinates();
+		this.setState({ listVisible: true });
+	};
+	private onCloseList = () => {
+		this.setState({ listVisible: false });
+	};
 
 	public render() {
 		const items = this.props.items;
@@ -100,10 +121,13 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 			paddingRight: 10,
 		};
 
-		const headerWrapperStyle = { ...(this.props.headerWrapperStyle ? this.props.headerWrapperStyle : {}), height: 35,
+		const headerWrapperStyle: ViewStyle = {
+			...(this.props.headerWrapperStyle ? this.props.headerWrapperStyle : {}),
+			height: 35,
 			flex: 1,
 			flexDirection: 'row',
-			alignItems: 'center' };
+			alignItems: 'center',
+		};
 
 		const headerStyle = { ...(this.props.headerStyle ? this.props.headerStyle : {}), flex: 1 };
 
@@ -125,10 +149,6 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 			headerLabel = headerLabel.trim();
 		}
 
-		const closeList = () => {
-			this.setState({ listVisible: false });
-		};
-
 		const itemRenderer = ({ item }: { item: DropdownListItem }) => {
 			const key = item.value ? item.value.toString() : '__null'; // The top item ("Move item to notebook...") has a null value.
 			const indentWidth = Math.min((item.depth ?? 0) * 32, dropdownWidth * 2 / 3);
@@ -139,7 +159,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 					accessibilityRole="menuitem"
 					key={key}
 					onPress={() => {
-						closeList();
+						this.onCloseList();
 						if (this.props.onValueChange) this.props.onValueChange(item.value);
 					}}
 				>
@@ -157,7 +177,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 		const screenReaderCloseMenuButton = (
 			<TouchableWithoutFeedback
 				accessibilityRole='button'
-				onPress={()=> closeList()}
+				onPress={this.onCloseList}
 			>
 				<Text style={{
 					opacity: 0,
@@ -168,34 +188,34 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 
 		return (
 			<View style={{ flex: 1, flexDirection: 'column' }}>
-				<TouchableOpacity
-					style={headerWrapperStyle as any}
+				<View
+					style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}
+					onLayout={this.updateHeaderCoordinates}
 					ref={ref => (this.headerRef = ref)}
-					disabled={this.props.disabled}
-					onPress={() => {
-						this.updateHeaderCoordinates();
-						this.setState({ listVisible: true });
-					}}
 				>
-					<Text ellipsizeMode="tail" numberOfLines={1} style={headerStyle}>
-						{headerLabel}
-					</Text>
-					<Text style={headerArrowStyle}>{'▼'}</Text>
-				</TouchableOpacity>
+					<TouchableOpacity
+						style={headerWrapperStyle}
+						disabled={this.props.disabled}
+						onPress={this.onOpenList}
+					>
+						<Text ellipsizeMode="tail" numberOfLines={1} style={headerStyle}>
+							{headerLabel}
+						</Text>
+						<Text style={headerArrowStyle}>{'▼'}</Text>
+					</TouchableOpacity>
+					{this.state.listVisible ? null : this.props.coverableChildrenRight}
+				</View>
 				<Modal
 					transparent={true}
+					animationType='fade'
 					visible={this.state.listVisible}
-					onRequestClose={() => {
-						closeList();
-					}}
+					onRequestClose={this.onCloseList}
 					supportedOrientations={['landscape', 'portrait']}
 				>
 					<TouchableWithoutFeedback
 						accessibilityElementsHidden={true}
 						importantForAccessibility='no-hide-descendants'
-						onPress={() => {
-							closeList();
-						}}
+						onPress={this.onCloseList}
 						style={backgroundCloseButtonStyle}
 					>
 						<View style={{ flex: 1 }}/>

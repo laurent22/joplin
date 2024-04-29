@@ -5,6 +5,7 @@ import codeMirrorRequire from './codeMirrorRequire';
 let pluginScriptIdCounter = 0;
 let pluginLoaderCounter = 0;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 type OnScriptLoadCallback = (exports: any)=> void;
 type OnPluginRemovedCallback = ()=> void;
 
@@ -27,10 +28,13 @@ export default class PluginLoader {
 
 		// addPlugin works by creating <script> elements with the plugin's content. To pass
 		// information to this <script>, we use global objects:
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		(window as any).__pluginLoaderScriptLoadCallbacks ??= Object.create(null);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		(window as any).__pluginLoaderRequireFunctions ??= Object.create(null);
 
 		this.pluginLoaderId = pluginLoaderCounter++;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		(window as any).__pluginLoaderRequireFunctions[this.pluginLoaderId] = codeMirrorRequire;
 	}
 
@@ -78,6 +82,7 @@ export default class PluginLoader {
 				scriptElement.appendChild(document.createTextNode(`
 				(async () => {
 					const exports = {};
+					const module = {};
 					const require = window.__pluginLoaderRequireFunctions[${JSON.stringify(this.pluginLoaderId)}];
 					const joplin = {
 						require,
@@ -85,10 +90,11 @@ export default class PluginLoader {
 		
 					${js};
 		
-					window.__pluginLoaderScriptLoadCallbacks[${JSON.stringify(scriptId)}](exports);
+					window.__pluginLoaderScriptLoadCallbacks[${JSON.stringify(scriptId)}](module.exports || exports);
 				})();
 				`));
 
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				(window as any).__pluginLoaderScriptLoadCallbacks[scriptId] = onLoad;
 
 				this.pluginScriptsContainer.appendChild(scriptElement);
@@ -132,7 +138,7 @@ export default class PluginLoader {
 				pluginId: plugin.pluginId,
 				contentScriptId: plugin.contentScriptId,
 			};
-			const loadedPlugin = exports.default(context);
+			const loadedPlugin = exports.default(context) ?? {};
 
 			loadedPlugin.plugin?.(this.editor);
 

@@ -119,6 +119,9 @@
 	"A5": [
 		""
 	],
+	"About": [
+		""
+	],
 	"About Joplin": [
 		"Относно Joplin"
 	],
@@ -249,6 +252,9 @@
 		""
 	],
 	"Auto-pair braces, parenthesis, quotations, etc.": [
+		""
+	],
+	"Automatically delete notes in the trash after a number of days": [
 		""
 	],
 	"Automatically switch theme to match system theme": [
@@ -551,23 +557,8 @@
 	"Delete local data and re-download from sync target": [
 		""
 	],
-	"Delete note \"%s\"?": [
-		"Да изтрия ли бележка \"%s\"?"
-	],
-	"Delete note?": [
-		"Да изтрия ли бележката?"
-	],
-	"Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": [
-		"Да изтрия ли тетрадка \"%s\"?\n\nВсички бележки и под-тетрадки също ще бъдат изтрити."
-	],
-	"Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": [
-		"Да изтрия ли тетрадката? Всички бележки и под-тетрадки в нея също ще бъдат изтрити."
-	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
-	],
-	"Delete these %d notes?": [
-		"Да изтрия ли тези %d бележки?"
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		""
@@ -692,6 +683,9 @@
 	"Dropbox Login": [
 		"Вписване в Dropbox"
 	],
+	"Due": [
+		""
+	],
 	"Duplicate": [
 		"Дуплицирай"
 	],
@@ -737,6 +731,9 @@
 	"Emails": [
 		""
 	],
+	"Empty trash": [
+		""
+	],
 	"Enable": [
 		"Включи"
 	],
@@ -777,6 +774,9 @@
 		"Пусни история за бележките"
 	],
 	"Enable optical character recognition (OCR)": [
+		""
+	],
+	"Enable or disable plugins": [
 		""
 	],
 	"Enable PDF viewer": [
@@ -932,6 +932,9 @@
 	"Found: %d.": [
 		"Намерени: %d."
 	],
+	"From a plugin": [
+		""
+	],
 	"FTS enabled: %d": [
 		"FTS пуснат: %d"
 	],
@@ -961,6 +964,9 @@
 	],
 	"Goto Anything...": [
 		"Отиди на нещо..."
+	],
+	"Have you authorised the application login in the above URL?": [
+		""
 	],
 	"Header %d": [
 		""
@@ -1000,6 +1006,9 @@
 	],
 	"Idle": [
 		"В момента не прави нищо"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
 	],
 	"Ignore": [
 		""
@@ -1160,6 +1169,9 @@
 	"Later": [
 		""
 	],
+	"Latitude": [
+		""
+	],
 	"Layout": [
 		"Разположеня"
 	],
@@ -1193,6 +1205,9 @@
 	"Loaded": [
 		""
 	],
+	"Loading plugin repository...": [
+		""
+	],
 	"Location": [
 		"Местоположение"
 	],
@@ -1201,12 +1216,6 @@
 	],
 	"Log": [
 		"Лог"
-	],
-	"Login": [
-		""
-	],
-	"Login below.": [
-		""
 	],
 	"Login with Dropbox": [
 		"Вписване с Dropbox"
@@ -1218,6 +1227,9 @@
 		""
 	],
 	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
 		""
 	],
 	"Make a donation": [
@@ -1538,6 +1550,9 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		""
 	],
+	"Plugin repository failed to load": [
+		""
+	],
 	"Plugins": [
 		"Разширения"
 	],
@@ -1638,6 +1653,9 @@
 		""
 	],
 	"Recipients:": [
+		""
+	],
+	"Recommended": [
 		""
 	],
 	"Redo": [
@@ -1871,6 +1889,9 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Сортира обектите по <поле>. Напр. title (заглавие), updated_time (последна промяна), created_time (създадена)."
 	],
+	"Source": [
+		"Източник"
+	],
 	"Source format: %s": [
 		"Формат на източника: %s"
 	],
@@ -2030,9 +2051,6 @@
 	"Text editor command": [
 		"Команда за стартиране на текстов редактор"
 	],
-	"Thank you! Your Joplin Cloud account is now setup and ready to use.": [
-		""
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
@@ -2163,9 +2181,6 @@
 	"There was an error downloading this attachment:": [
 		""
 	],
-	"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s": [
-		""
-	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Тези обекти ще останат на устройството, но няма да бъдат качени на целта за синхронизация. За да намерите тези обекти, потърсете за заглавията или идентификаторите им (може да ги видите в скобите по горе)."
 	],
@@ -2209,6 +2224,9 @@
 		"Това позволява на Joplin да върви на заден план. Препоръчва се да пуснете тази настройка, за да се синхронизират бележките ви постоянно, и така да намалите вероятността да се появят конфликти."
 	],
 	"This will open a new screen. Save your current changes?": [
+		""
+	],
+	"This will permanently delete all items in the trash. Continue?": [
 		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
@@ -2273,6 +2291,9 @@
 	],
 	"Total: %d/%d": [
 		"Общо: %d/%d"
+	],
+	"Trash": [
+		""
 	],
 	"Try again": [
 		""
@@ -2460,10 +2481,16 @@
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
 		""
 	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
 	"You do not have any installed plugin.": [
 		""
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
+		""
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
 		""
 	],
 	"Your choice: ": [

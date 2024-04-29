@@ -36,13 +36,14 @@ interface Props {
 	noteTitle: string;
 	noteIsTodo: number;
 	isProvisional: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	titleInputRef: any;
 	onTitleChange(event: ChangeEvent<HTMLInputElement>): void;
 	disabled: boolean;
 }
 
 function styles_(props: Props) {
-	return buildStyle(['NoteEditorTitleBar'], props.themeId, (theme: any) => {
+	return buildStyle(['NoteEditorTitleBar'], props.themeId, theme => {
 		return {
 			titleInput: {
 				flex: 1,
@@ -69,6 +70,7 @@ function styles_(props: Props) {
 			},
 			toolbarStyle: {
 				marginBottom: 0,
+				minWidth: 0,
 			},
 		};
 	});
@@ -77,6 +79,7 @@ function styles_(props: Props) {
 export default function NoteTitleBar(props: Props) {
 	const styles = styles_(props);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onTitleKeydown = useCallback((event: any) => {
 		const keyCode = event.keyCode;
 

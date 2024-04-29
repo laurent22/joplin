@@ -28,7 +28,7 @@ interface Props {
 }
 
 function styles_(props: Props) {
-	return buildStyle('ShareNoteDialog', props.themeId, (theme: any) => {
+	return buildStyle('ShareNoteDialog', props.themeId, theme => {
 		return {
 			root: {
 				minWidth: 500,
@@ -153,6 +153,7 @@ export function ShareNoteDialog(props: Props) {
 		}
 	}, [recursiveShare, notes]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const unshareNoteButton_click = async (event: any) => {
 		await ShareService.instance().unshareNote(event.noteId);
 		await ShareService.instance().refreshShares();
@@ -170,6 +171,7 @@ export function ShareNoteDialog(props: Props) {
 		);
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const renderNoteList = (notes: any) => {
 		const noteComps = [];
 		for (const note of notes) {

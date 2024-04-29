@@ -15,6 +15,9 @@ export enum EditorCommandType {
 	ToggleItalicized = 'textItalic',
 	ToggleCode = 'textCode',
 	ToggleMath = 'textMath',
+	ToggleComment = 'toggleComment',
+	DuplicateLine = 'duplicateLine',
+	SortSelectedLines = 'sortSelectedLines',
 
 	ToggleNumberedList = 'textNumberedList',
 	ToggleBulletedList = 'textBulletedList',
@@ -37,6 +40,7 @@ export enum EditorCommandType {
 
 	// Editing and navigation commands
 	ScrollSelectionIntoView = 'scrollSelectionIntoView',
+	DeleteLine = 'deleteLine',
 	DeleteToLineEnd = 'killLine',
 	DeleteToLineStart = 'delLineLeft',
 	IndentMore = 'indentMore',
@@ -60,6 +64,14 @@ export enum EditorCommandType {
 
 	UndoSelection = 'undoSelection',
 	RedoSelection = 'redoSelection',
+
+	// Getters and multi-argument commands. These correspond to global Joplin
+	// commands.
+	SelectedText = 'selectedText',
+	InsertText = 'insertText',
+	ReplaceSelection = 'replaceSelection',
+
+	SetText = 'setText',
 }
 
 // Because the editor package can run in a WebView, plugin content scripts
@@ -69,12 +81,19 @@ export interface ContentScriptData {
 	contentScriptId: string;
 	contentScriptJs: ()=> Promise<string>;
 	loadCssAsset: (name: string)=> Promise<string>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	postMessageHandler: (message: any)=> any;
 }
 
+// Intended to correspond with https://codemirror.net/docs/ref/#state.Transaction%5EuserEvent
+export enum UserEventSource {
+	Paste = 'input.paste',
+}
+
 export interface EditorControl {
-	supportsCommand(name: EditorCommandType|string): boolean;
-	execCommand(name: EditorCommandType|string): void;
+	supportsCommand(name: EditorCommandType|string): boolean|Promise<boolean>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	execCommand(name: EditorCommandType|string, ...args: any[]): void|Promise<any>;
 
 	undo(): void;
 	redo(): void;
@@ -84,7 +103,7 @@ export interface EditorControl {
 	// 0 corresponds to the top, 1 corresponds to the bottom.
 	setScrollPercent(fraction: number): void;
 
-	insertText(text: string): void;
+	insertText(text: string, source?: UserEventSource): void;
 	updateBody(newBody: string): void;
 
 	updateSettings(newSettings: EditorSettings): void;
@@ -112,10 +131,12 @@ export enum EditorKeymap {
 export interface EditorTheme extends Theme {
 	fontFamily: string;
 	fontSize?: number;
-	fontSizeUnits?: number;
+	fontSizeUnits?: string;
 	isDesktop?: boolean;
 	monospaceFont?: string;
 	contentMaxWidth?: number;
+	marginLeft?: number;
+	marginRight?: number;
 }
 
 export interface EditorSettings {

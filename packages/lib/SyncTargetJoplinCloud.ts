@@ -45,8 +45,24 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 		return false;
 	}
 
-	public async isAuthenticated() {
+	public static override supportsShare(): boolean {
 		return true;
+	}
+
+	public async isAuthenticated() {
+		try {
+			const fileApi = await this.fileApi();
+			const api = fileApi.driver().api();
+			const sessionId = await api.sessionId();
+			return !!sessionId;
+		} catch (error) {
+			if (error.code === 403) return false;
+			throw error;
+		}
+	}
+
+	public authRouteName() {
+		return 'JoplinCloudLogin';
 	}
 
 	public static requiresPassword() {

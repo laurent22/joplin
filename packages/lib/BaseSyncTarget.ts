@@ -5,7 +5,7 @@ import shim from './shim';
 import ResourceService from './services/ResourceService';
 import ShareService from './services/share/ShareService';
 
-interface CheckConfigResult {
+export interface CheckConfigResult {
 	ok: boolean;
 	errorMessage: string;
 }
@@ -16,12 +16,17 @@ export default class BaseSyncTarget {
 	public static dispatch: Function = () => {};
 
 	private synchronizer_: Synchronizer = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private initState_: any = null;
 	private logger_: Logger = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private options_: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private db_: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	protected fileApi_: any;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(db: any, options: any = null) {
 		this.db_ = db;
 		this.options_ = options;
@@ -49,6 +54,11 @@ export default class BaseSyncTarget {
 		return false;
 	}
 
+	public static supportsShare(): boolean {
+		return false;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public option(name: string, defaultValue: any = null) {
 		return this.options_ && name in this.options_ ? this.options_[name] : defaultValue;
 	}
@@ -66,6 +76,7 @@ export default class BaseSyncTarget {
 	}
 
 	// If [] is returned it means all platforms are supported
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static unsupportedPlatforms(): any[] {
 		return [];
 	}
@@ -96,6 +107,7 @@ export default class BaseSyncTarget {
 		throw new Error('initSynchronizer() not implemented');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	protected async initFileApi(): Promise<any> {
 		throw new Error('initFileApi() not implemented');
 	}
@@ -109,6 +121,7 @@ export default class BaseSyncTarget {
 	// Usually each sync target should create and setup its own file API via initFileApi()
 	// but for testing purposes it might be convenient to provide it here so that multiple
 	// clients can share and sync to the same file api (see test-utils.js)
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public setFileApi(v: any) {
 		this.fileApi_ = v;
 	}
@@ -149,6 +162,7 @@ export default class BaseSyncTarget {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async checkConfig(_options: any): Promise<CheckConfigResult> {
 		throw new Error('Not implemented');
 	}

@@ -24,15 +24,16 @@ const mapRangeConfig = {
 	},
 };
 
-interface LineCssDecorationSpec extends DecorationRange {
+interface CssDecorationSpec extends DecorationRange {
 	cssClass: string;
+	id?: number;
 }
 
-const addLineDecorationEffect = StateEffect.define<LineCssDecorationSpec>(mapRangeConfig);
-const removeLineDecorationEffect = StateEffect.define<LineCssDecorationSpec>(mapRangeConfig);
-const addMarkDecorationEffect = StateEffect.define<LineCssDecorationSpec>(mapRangeConfig);
-// TODO: Support removing mark decorations
-//     const removeMarkDecorationEffect = StateEffect.define<LineDecorationSpec>(mapRangeConfig);
+const addLineDecorationEffect = StateEffect.define<CssDecorationSpec>(mapRangeConfig);
+const removeLineDecorationEffect = StateEffect.define<CssDecorationSpec>(mapRangeConfig);
+const addMarkDecorationEffect = StateEffect.define<CssDecorationSpec>(mapRangeConfig);
+const removeMarkDecorationEffect = StateEffect.define<CssDecorationSpec>(mapRangeConfig);
+const refreshOverlaysEffect = StateEffect.define();
 
 export interface LineWidgetOptions {
 	className?: string;
@@ -46,6 +47,9 @@ interface LineWidgetDecorationSpec extends DecorationRange {
 const addLineWidgetEffect = StateEffect.define<LineWidgetDecorationSpec>(mapRangeConfig);
 const removeLineWidgetEffect = StateEffect.define<{ element: HTMLElement }>();
 
+export interface MarkTextOptions {
+	className: string;
+}
 
 class WidgetDecorationWrapper extends WidgetType {
 	public constructor(
@@ -64,6 +68,9 @@ class WidgetDecorationWrapper extends WidgetType {
 			container.classList.add(this.options.className);
 		}
 
+		// Applies margins and related CSS:
+		container.classList.add('cm-line');
+
 		return container;
 	}
 }
@@ -78,6 +85,7 @@ interface LineWidgetControl {
 export default class Decorator {
 	private _extension: Extension;
 	private _effectDecorations: DecorationSet = Decoration.none;
+	private _nextLineWidgetId = 0;
 
 	private constructor(private editor: EditorView) {
 		const decorator = this;
@@ -93,8 +101,24 @@ export default class Decorator {
 				}
 
 				public update(update: ViewUpdate) {
-					if (update.viewportChanged || update.docChanged) {
+					const updated = false;
+					const doUpdate = () => {
+						if (updated) return;
+
 						this.decorations = decorator.createOverlayDecorations(update.view);
+					};
+
+					if (update.viewportChanged || update.docChanged) {
+						doUpdate();
+					} else {
+						for (const transaction of update.transactions) {
+							for (const effect of transaction.effects) {
+								if (effect.is(refreshOverlaysEffect)) {
+									doUpdate();
+									break;
+								}
+							}
+						}
 					}
 				}
 			}, {
@@ -118,20 +142,21 @@ export default class Decorator {
 	}
 
 	private _decorationCache: Record<string, Decoration> = Object.create(null);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private _overlays: (StreamParser<any>)[] = [];
 
-	private classNameToCssDecoration(className: string, isLineDecoration: boolean) {
+	private classNameToCssDecoration(className: string, isLineDecoration: boolean, id?: number) {
 		let decoration;
 
-		if (className in this._decorationCache) {
+		if (className in this._decorationCache && id === undefined) {
 			decoration = this._decorationCache[className];
 		} else {
 			const attributes = { class: className };
 
 			if (isLineDecoration) {
-				decoration = Decoration.line({ attributes });
+				decoration = Decoration.line({ attributes, id });
 			} else {
-				decoration = Decoration.mark({ attributes });
+				decoration = Decoration.mark({ attributes, id });
 			}
 
 			this._decorationCache[className] = decoration;
@@ -153,7 +178,7 @@ export default class Decorator {
 				const isLineDecoration = effect.is(addLineDecorationEffect);
 				if (isMarkDecoration || isLineDecoration) {
 					const decoration = this.classNameToCssDecoration(
-						effect.value.cssClass, isLineDecoration,
+						effect.value.cssClass, isLineDecoration, effect.value.id,
 					);
 
 					const value = effect.value;
@@ -165,21 +190,25 @@ export default class Decorator {
 					decorations = decorations.update({
 						add: [decoration.range(from, to)],
 					});
-				} else if (effect.is(removeLineDecorationEffect)) {
+				} else if (effect.is(removeLineDecorationEffect) || effect.is(removeMarkDecorationEffect)) {
 					const doc = transaction.state.doc;
 					const targetFrom = doc.lineAt(effect.value.from).from;
 					const targetTo = doc.lineAt(effect.value.to).to;
 
-					const targetDecoration = this.classNameToCssDecoration(effect.value.cssClass, true);
+					const targetId = effect.value.id;
+					const targetDecoration = this.classNameToCssDecoration(
+						effect.value.cssClass, effect.is(removeLineDecorationEffect),
+					);
 
 					decorations = decorations.update({
 						// Returns true only for decorations that should be kept.
 						filter: (from, to, value) => {
-							if (from >= targetFrom && to <= targetTo && value.eq(targetDecoration)) {
-								return false;
+							if (targetId !== undefined) {
+								return value.spec.id !== effect.value.id;
 							}
 
-							return true;
+							const isInRange = from >= targetFrom && to <= targetTo;
+							return isInRange && value.eq(targetDecoration);
 						},
 					});
 				} else if (effect.is(addLineWidgetEffect)) {
@@ -244,6 +273,7 @@ export default class Decorator {
 					);
 					let lastPos = 0;
 
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					(reader as any).baseToken ??= (): null => null;
 
 					while (!reader.eol()) {
@@ -296,6 +326,23 @@ export default class Decorator {
 
 	public addOverlay<State>(modeObject: StreamParser<State>) {
 		this._overlays.push(modeObject);
+
+		this.editor.dispatch({
+			effects: [refreshOverlaysEffect.of(null)],
+		});
+
+		return {
+			clear: () => this.removeOverlay(modeObject),
+		};
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public removeOverlay(overlay: any) {
+		this._overlays = this._overlays.filter(other => other !== overlay);
+
+		this.editor.dispatch({
+			effects: [refreshOverlaysEffect.of(null)],
+		});
 	}
 
 	private addRemoveLineClass(lineNumber: number, className: string, add: boolean) {
@@ -334,6 +381,27 @@ export default class Decorator {
 		});
 
 		return lineClasses;
+	}
+
+	public markText(from: number, to: number, options?: MarkTextOptions) {
+		const effectOptions: CssDecorationSpec = {
+			cssClass: options.className ?? '',
+			id: this._nextLineWidgetId++,
+			from,
+			to,
+		};
+
+		this.editor.dispatch({
+			effects: addMarkDecorationEffect.of(effectOptions),
+		});
+
+		return {
+			clear: () => {
+				this.editor.dispatch({
+					effects: removeMarkDecorationEffect.of(effectOptions),
+				});
+			},
+		};
 	}
 
 	private createLineWidgetControl(node: HTMLElement, options: LineWidgetOptions): LineWidgetControl {

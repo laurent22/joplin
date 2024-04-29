@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { reg } from '@joplin/lib/registry.js';
 import { ScreenHeader } from '../ScreenHeader';
 import time from '@joplin/lib/time';
-const { themeStyle } = require('../global-style.js');
+import { themeStyle } from '../global-style';
 import Logger from '@joplin/utils/Logger';
 import { BaseScreenComponent } from '../base-screen';
 import { _ } from '@joplin/lib/locale';
@@ -20,10 +20,12 @@ const logger = Logger.create('LogScreen');
 
 interface Props {
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	navigation: any;
 }
 
 interface State {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	logEntries: any[];
 	showErrorsOnly: boolean;
 	filter: string|undefined;
@@ -31,8 +33,10 @@ interface State {
 
 class LogScreenComponent extends BaseScreenComponent<Props, State> {
 	private readonly menuOptions_: MenuOptionType[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private styles_: any;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static navigationOptions(): any {
 		return { header: null };
 	}
@@ -57,6 +61,7 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 		];
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private refreshLogTimeout: any = null;
 	public override componentDidUpdate(_prevProps: Props, prevState: State) {
 		if ((prevState?.filter ?? '') !== (this.state.filter ?? '')) {
@@ -86,6 +91,7 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 	}
 
 	private async onSharePress() {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const allEntries: any[] = await this.getLogEntries(this.state.showErrorsOnly);
 		const logData = allEntries.map(entry => this.formatLogEntry(entry)).join('\n');
 
@@ -119,6 +125,7 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 
 		const theme = themeStyle(this.props.themeId);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const styles: any = {
 			row: {
 				flexDirection: 'row',
@@ -171,10 +178,12 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 		void this.refreshLogEntries(!this.state.showErrorsOnly);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private formatLogEntry(item: any) {
 		return `${time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm:ss')}: ${item.message}`;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private onRenderLogRow = ({ item }: any) => {
 		let textStyle = this.styles().rowText;
 		if (item.level === Logger.LEVEL_WARN) textStyle = this.styles().rowTextWarn;

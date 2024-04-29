@@ -3,6 +3,7 @@ import shared from '@joplin/lib/components/shared/note-screen-shared';
 import { useCallback, RefObject } from 'react';
 
 interface Props {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onMessage(event: any): void;
 	getLineScrollPercent(): number;
 	setEditorPercentScroll(fraction: number): void;
@@ -13,6 +14,7 @@ interface Props {
 const useWebviewIpcMessage = (props: Props) => {
 	const editorRef = props.editorRef;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return useCallback((event: any) => {
 		const msg = event.channel ? event.channel : '';
 		const args = event.args;

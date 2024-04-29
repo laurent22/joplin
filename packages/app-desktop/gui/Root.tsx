@@ -28,6 +28,7 @@ import ImportScreen from './ImportScreen';
 const { ResourceScreen } = require('./ResourceScreen.js');
 import Navigator from './Navigator';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
+import JoplinCloudLoginScreen from './JoplinCloudLoginScreen';
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
 const bridge = require('@electron/remote').require('./bridge').default;
 
@@ -57,28 +58,33 @@ interface RegisteredDialogProps {
 }
 
 interface RegisteredDialog {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	render: (props: RegisteredDialogProps, customProps: any)=> any;
 }
 
 const registeredDialogs: Record<string, RegisteredDialog> = {
 	syncWizard: {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		render: (props: RegisteredDialogProps, customProps: any) => {
 			return <SyncWizardDialog key={props.key} dispatch={props.dispatch} themeId={props.themeId} {...customProps}/>;
 		},
 	},
 
 	masterPassword: {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		render: (props: RegisteredDialogProps, customProps: any) => {
 			return <MasterPasswordDialog key={props.key} dispatch={props.dispatch} themeId={props.themeId} {...customProps}/>;
 		},
 	},
 
 	editFolder: {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		render: (props: RegisteredDialogProps, customProps: any) => {
 			return <EditFolderDialog key={props.key} dispatch={props.dispatch} themeId={props.themeId} {...customProps}/>;
 		},
 	},
 	pdfViewer: {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		render: (props: RegisteredDialogProps, customProps: any) => {
 			return <PdfViewer key={props.key} dispatch={props.dispatch} themeId={props.themeId} {...customProps}/>;
 		},
@@ -89,14 +95,9 @@ const GlobalStyle = createGlobalStyle`
 	* {
 		box-sizing: border-box;
 	}
-
-	/*
-	div, span, a {
-		font-family: ${(props: any) => props.theme.fontFamily};
-	}
-	*/
 `;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let wcsTimeoutId_: any = null;
 
 async function initialize() {
@@ -127,6 +128,7 @@ async function initialize() {
 	});
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 class RootComponent extends React.Component<Props, any> {
 	public async componentDidMount() {
 		if (this.props.appState === 'starting') {
@@ -199,6 +201,7 @@ class RootComponent extends React.Component<Props, any> {
 
 		if (!props.dialogs.length) return null;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any[] = [];
 		for (const dialog of props.dialogs) {
 			const md = registeredDialogs[dialog.name];
@@ -224,6 +227,7 @@ class RootComponent extends React.Component<Props, any> {
 			Main: { screen: MainScreen },
 			OneDriveLogin: { screen: OneDriveLoginScreen, title: () => _('OneDrive Login') },
 			DropboxLogin: { screen: DropboxLoginScreen, title: () => _('Dropbox Login') },
+			JoplinCloudLogin: { screen: JoplinCloudLoginScreen, title: () => _('Joplin Cloud Login') },
 			Import: { screen: ImportScreen, title: () => _('Import') },
 			Config: { screen: ConfigScreen, title: () => _('Options') },
 			Resources: { screen: ResourceScreen, title: () => _('Note attachments') },

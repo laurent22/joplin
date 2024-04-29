@@ -57,6 +57,7 @@ export interface ProcessResultsRow {
 export interface ComplexTerm {
 	type: 'regex' | 'text';
 	value: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	scriptType: any;
 	valueRegex?: RegExp;
 }
@@ -76,12 +77,14 @@ export default class SearchEngine {
 	public static SEARCH_TYPE_NONLATIN_SCRIPT = SearchType.Nonlatin;
 	public static SEARCH_TYPE_FTS = SearchType.Fts;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 	public dispatch: Function = (_o: any) => {};
 	private logger_ = new Logger();
 	private db_: JoplinDatabase = null;
 	private isIndexing_ = false;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private syncCalls_: any[] = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private scheduleSyncTablesIID_: any;
 
 	public static instance() {
@@ -98,6 +101,7 @@ export default class SearchEngine {
 		return this.logger_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public setDb(db: any) {
 		this.db_ = db;
 	}
@@ -119,7 +123,7 @@ export default class SearchEngine {
 	}
 
 	private async doInitialNoteIndexing_() {
-		const notes = await this.db().selectAll<NoteEntity>('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
+		const notes = await this.db().selectAll<NoteEntity>('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND deleted_time = 0');
 		const noteIds = notes.map(n => n.id);
 
 		const lastChangeId = await ItemChange.lastChangeId();
@@ -132,7 +136,7 @@ export default class SearchEngine {
 			const notes = await Note.modelSelectAll(`
 				SELECT ${SearchEngine.relevantFields}
 				FROM notes
-				WHERE id IN ("${currentIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`);
+				WHERE id IN ("${currentIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0 AND deleted_time = 0`);
 			const queries = [];
 
 			for (let i = 0; i < notes.length; i++) {
@@ -215,7 +219,7 @@ export default class SearchEngine {
 				const noteIds = changes.map(a => a.item_id);
 				const notes = await Note.modelSelectAll(`
 					SELECT ${SearchEngine.relevantFields}
-					FROM notes WHERE id IN ("${noteIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`,
+					FROM notes WHERE id IN ("${noteIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0 AND deleted_time = 0`,
 				);
 
 				for (let i = 0; i < changes.length; i++) {
@@ -332,6 +336,7 @@ export default class SearchEngine {
 		return row && row['total'] ? row['total'] : 0;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private fieldNamesFromOffsets_(offsets: any[]) {
 		const notesNormalizedFieldNames = this.db().tableFieldNames('notes_normalized');
 		const occurrenceCount = Math.floor(offsets.length / 4);
@@ -393,8 +398,10 @@ export default class SearchEngine {
 		// l 12
 		const X = matchInfo.map(m => m.slice(1 + 1 + 1 + numColumns + numColumns)); // x
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const hitsThisRow = (array: any, c: number, p: number) => array[3 * (c + p * numColumns) + 0];
 		// const hitsAllRows = (array, c, p) => array[3 * (c + p*NUM_COLS) + 1];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const docsWithHits = (array: any, c: number, p: number) => array[3 * (c + p * numColumns) + 2];
 
 		const IDF = (n: number, N: number) => Math.max(Math.log(((N - n + 0.5) / (n + 0.5)) + 1), 0);
@@ -440,25 +447,31 @@ export default class SearchEngine {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private processBasicSearchResults_(rows: any[], parsedQuery: any) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const valueRegexs = parsedQuery.keys.includes('_') ? parsedQuery.terms['_'].map((term: any) => term.valueRegex || term.value) : [];
 		const isTitleSearch = parsedQuery.keys.includes('title');
 		const isOnlyTitle = parsedQuery.keys.length === 1 && isTitleSearch;
 
 		for (let i = 0; i < rows.length; i++) {
 			const row = rows[i];
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const testTitle = (regex: any) => new RegExp(regex, 'ig').test(row.title);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const matchedFields: any = {
 				title: isTitleSearch || valueRegexs.some(testTitle),
 				body: !isOnlyTitle,
 			};
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			row.fields = Object.keys(matchedFields).filter((key: any) => matchedFields[key]);
 			row.weight = 0;
 			row.fuzziness = 0;
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private processResults_(rows: ProcessResultsRow[], parsedQuery: any, isBasicSearchResults = false) {
 		if (isBasicSearchResults) {
 			this.processBasicSearchResults_(rows, parsedQuery);
@@ -466,6 +479,7 @@ export default class SearchEngine {
 			this.calculateWeightBM25_(rows);
 			for (let i = 0; i < rows.length; i++) {
 				const row = rows[i];
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				const offsets = row.offsets.split(' ').map((o: any) => Number(o));
 				row.fields = this.fieldNamesFromOffsets_(offsets);
 			}
@@ -492,6 +506,7 @@ export default class SearchEngine {
 	}
 
 	// https://stackoverflow.com/a/13818704/561309
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public queryTermToRegex(term: any) {
 		while (term.length && term.indexOf('*') === 0) {
 			term = term.substr(1);
@@ -591,9 +606,11 @@ export default class SearchEngine {
 		};
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public allParsedQueryTerms(parsedQuery: any) {
 		if (!parsedQuery || !parsedQuery.termCount) return [];
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let output: any[] = [];
 		for (const col in parsedQuery.terms) {
 			if (!parsedQuery.terms.hasOwnProperty(col)) continue;
@@ -638,11 +655,14 @@ export default class SearchEngine {
 	public async basicSearch(query: string) {
 		query = query.replace(/\*/, '');
 		const parsedQuery = await this.parseQuery(query);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const searchOptions: any = {};
 
 		for (const key of parsedQuery.keys) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			if ((parsedQuery.terms as any)[key].length === 0) continue;
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const term = (parsedQuery.terms as any)[key].map((x: Term) => x.value).join(' ');
 			if (key === '_') searchOptions.anywherePattern = `*${term}*`;
 			if (key === 'title') searchOptions.titlePattern = `*${term}*`;
@@ -652,6 +672,7 @@ export default class SearchEngine {
 		return Note.previews(null, searchOptions);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private determineSearchType_(query: string, preferredSearchType: any) {
 		if (preferredSearchType === SearchEngine.SEARCH_TYPE_BASIC) return SearchEngine.SEARCH_TYPE_BASIC;
 		if (preferredSearchType === SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT) return SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT;
@@ -659,6 +680,7 @@ export default class SearchEngine {
 		// If preferredSearchType is "fts" we auto-detect anyway
 		// because it's not always supported.
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let allTerms: any[] = [];
 		try {
 			allTerms = filterParser(query);
@@ -737,6 +759,7 @@ export default class SearchEngine {
 
 		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
 			searchString = this.normalizeText_(searchString);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			rows = (await this.basicSearch(searchString)) as any[];
 			this.processResults_(rows, parsedQuery, true);
 		} else {
@@ -801,16 +824,25 @@ export default class SearchEngine {
 						}
 					}
 
-					const resourcesToNotes = await NoteResource.associatedResourceNotes(itemRows.map(r => r.item_id), { fields: ['note_id', 'parent_id'] });
+					const resourcesToNotes = await NoteResource.associatedResourceNotes(
+						itemRows.map(r => r.item_id),
+						{
+							fields: ['note_id', 'parent_id', 'deleted_time'],
+						},
+					);
+
+					const deletedNoteIds: string[] = [];
 
 					for (const itemRow of itemRows) {
 						const notes = resourcesToNotes[itemRow.item_id];
 						const note = notes && notes.length ? notes[0] : null;
+						if (note && note.deleted_time) deletedNoteIds.push(note.note_id);
 						itemRow.id = note ? note.note_id : null;
 						itemRow.parent_id = note ? note.parent_id : null;
 					}
 
 					if (!options.includeOrphanedResources) itemRows = itemRows.filter(r => !!r.id);
+					itemRows = itemRows.filter(r => !deletedNoteIds.includes(r.id));
 
 					rows = rows.concat(itemRows);
 				}

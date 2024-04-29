@@ -1,4 +1,5 @@
 const React = require('react');
+import { CSSProperties } from 'react';
 const { connect } = require('react-redux');
 const { clipboard } = require('electron');
 import ExtensionBadge from './ExtensionBadge';
@@ -46,7 +47,8 @@ class ClipperConfigScreenComponent extends React.Component {
 	public render() {
 		const theme = themeStyle(this.props.themeId);
 
-		const containerStyle = { ...theme.containerStyle, overflowY: 'scroll',
+		const containerStyle: CSSProperties = { ...theme.containerStyle,
+			overflowY: 'scroll',
 			// padding: theme.configScreenPadding,
 			backgroundColor: theme.backgroundColor3 };
 
@@ -104,7 +106,8 @@ class ClipperConfigScreenComponent extends React.Component {
 			);
 		}
 
-		const apiTokenStyle = { ...theme.textStyle, color: theme.colorFaded,
+		const apiTokenStyle: CSSProperties = { ...theme.textStyle,
+			color: theme.colorFaded,
 			wordBreak: 'break-all',
 			paddingTop: 10,
 			paddingBottom: 10 };

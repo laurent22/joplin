@@ -23,22 +23,29 @@ export interface NoteEditorProps {
 	dispatch: Dispatch;
 	selectedNoteIds: string[];
 	selectedFolderId: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	notes: any[];
 	watchedNoteFiles: string[];
 	isProvisional: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	editorNoteStatuses: any;
 	syncStarted: boolean;
 	decryptionStarted: boolean;
 	bodyEditor: string;
 	notesParentType: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	selectedNoteTags: any[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	lastEditorScrollPercents: any;
 	selectedNoteHash: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	searches: any[];
 	selectedSearchId: string;
 	customCss: string;
 	noteVisiblePanes: string[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	watchedResources: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	highlightedWords: any[];
 	plugins: PluginStates;
 	toolbarButtonInfos: ToolbarButtonInfo[];
@@ -57,7 +64,7 @@ export interface NoteBodyEditorRef {
 	resetScroll(): void;
 	scrollTo(options: ScrollOptions): void;
 
-	supportsCommand(name: string): boolean;
+	supportsCommand(name: string): boolean|Promise<boolean>;
 	execCommand(command: CommandValue): Promise<void>;
 }
 
@@ -65,6 +72,7 @@ export interface MarkupToHtmlOptions {
 	replaceResourceInternalToExternalLinks?: boolean;
 	resourceInfos?: ResourceInfos;
 	contentMaxWidth?: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	plugins?: Record<string, any>;
 	bodyOnly?: boolean;
 	mapsToLine?: boolean;
@@ -80,7 +88,9 @@ export type MarkupToHtmlHandler = (markupLanguage: MarkupLanguage, markup: strin
 export type HtmlToMarkdownHandler = (markupLanguage: number, html: string, originalCss: string)=> Promise<string>;
 
 export interface NoteBodyEditorProps {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	ref: any;
 	themeId: number;
 
@@ -96,7 +106,9 @@ export interface NoteBodyEditorProps {
 	contentMarkupLanguage: number;
 	contentOriginalCss: string;
 	onChange(event: OnChangeEvent): void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onWillChange(event: any): void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onMessage(event: any): void;
 	onScroll(event: { percent: number }): void;
 	markupToHtml: MarkupToHtmlHandler;
@@ -105,8 +117,10 @@ export interface NoteBodyEditorProps {
 	disabled: boolean;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	noteToolbar: any;
 	setLocalSearchResultCount(count: number): void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	searchMarkers: any;
 	visiblePanes: string[];
 	keyboardMode: string;
@@ -122,6 +136,7 @@ export interface NoteBodyEditorProps {
 	isSafeMode: boolean;
 	noteId: string;
 	useCustomPdfViewer: boolean;
+	watchedNoteFiles: string[];
 }
 
 export interface FormNote {
@@ -130,10 +145,12 @@ export interface FormNote {
 	body: string;
 	parent_id: string;
 	is_todo: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	bodyEditorContent?: any;
 	markup_language: number;
 	user_updated_time: number;
 	encryption_applied: number;
+	deleted_time: number;
 
 	hasChanged: boolean;
 
@@ -173,6 +190,7 @@ export function defaultFormNote(): FormNote {
 	return {
 		id: '',
 		parent_id: '',
+		deleted_time: 0,
 		title: '',
 		body: '',
 		is_todo: 0,
@@ -188,7 +206,9 @@ export function defaultFormNote(): FormNote {
 }
 
 export interface ResourceInfo {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	localState: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	item: any;
 }
 
@@ -204,22 +224,27 @@ export enum ScrollOptionTypes {
 
 export interface ScrollOptions {
 	type: ScrollOptionTypes;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	value: any;
 }
 
 export interface OnChangeEvent {
 	changeId: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	content: any;
 }
 
 export interface EditorCommand {
 	name: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	value: any;
 }
 
 export interface CommandValue {
 	name: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	args?: any; // Should be an array for CodeMirror or an object for TinyMCE
 	ui?: boolean; // For TinyMCE only
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	value?: any; // For TinyMCE only
 }

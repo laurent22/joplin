@@ -13,8 +13,6 @@ import { Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, NativeSyn
 import { Platform, PermissionsAndroid } from 'react-native';
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
-import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
-import { openDocument } from '@joplin/react-native-saf-x';
 import Note from '@joplin/lib/models/Note';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Resource from '@joplin/lib/models/Resource';
@@ -23,19 +21,19 @@ const Clipboard = require('@react-native-community/clipboard').default;
 const md5 = require('md5');
 const { BackButtonService } = require('../../services/back-button.js');
 import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';
-import BaseModel from '@joplin/lib/BaseModel';
+import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import ActionButton from '../ActionButton';
 const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 import ScreenHeader, { MenuOptionType } from '../ScreenHeader';
-const NoteTagsDialog = require('./NoteTagsDialog');
+import NoteTagsDialog from './NoteTagsDialog';
 import time from '@joplin/lib/time';
 const { Checkbox } = require('../checkbox.js');
 import { _, currentLocale } from '@joplin/lib/locale';
 import { reg } from '@joplin/lib/registry';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import { BaseScreenComponent } from '../base-screen';
-const { themeStyle, editorFont } = require('../global-style.js');
+import { themeStyle, editorFont } from '../global-style';
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 import ImageResizer from '@bam.tech/react-native-image-resizer';
@@ -57,71 +55,26 @@ import { join } from 'path';
 import { Dispatch } from 'redux';
 import { RefObject } from 'react';
 import { SelectionRange } from '../NoteEditor/types';
+import { AppState } from '../../utils/types';
+import restoreItems from '@joplin/lib/services/trash/restoreItems';
+import { getDisplayParentTitle } from '@joplin/lib/services/trash';
+import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+import pickDocument from '../../utils/pickDocument';
+import debounce from '../../utils/debounce';
+import { focus } from '@joplin/lib/utils/focusHandler';
 const urlUtils = require('@joplin/lib/urlUtils');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const emptyArray: any[] = [];
 
 const logger = Logger.create('screens/Note');
-
-interface SelectedDocument {
-	type: string;
-	mime: string;
-	uri: string;
-	fileName: string;
-}
-
-const pickDocument = async (multiple: boolean): Promise<SelectedDocument[]> => {
-	let result: SelectedDocument[] = [];
-	try {
-		if (shim.fsDriver().isUsingAndroidSAF()) {
-			const openDocResult = await openDocument({ multiple });
-			if (!openDocResult) {
-				throw new Error('User canceled document picker');
-			}
-			result = openDocResult.map(r => {
-				const converted: SelectedDocument = {
-					type: r.mime,
-					fileName: r.name,
-					mime: r.mime,
-					uri: r.uri,
-				};
-
-				return converted;
-			});
-		} else {
-			let docPickerResult: DocumentPickerResponse[] = [];
-			if (multiple) {
-				docPickerResult = await DocumentPicker.pick({ allowMultiSelection: true });
-			} else {
-				docPickerResult = [await DocumentPicker.pickSingle()];
-			}
-
-			result = docPickerResult.map(r => {
-				return {
-					mime: '',
-					type: r.type,
-					uri: r.uri,
-					fileName: r.name,
-				};
-			});
-		}
-	} catch (error) {
-		if (DocumentPicker.isCancel(error) || error?.message?.includes('cancel')) {
-			logger.info('pickDocuments: user has cancelled');
-			return [];
-		} else {
-			throw error;
-		}
-	}
-
-	return result;
-};
 
 interface Props {
 	provisionalNoteIds: string[];
 	dispatch: Dispatch;
 	noteId: string;
 	useEditorBeta: boolean;
+	plugins: PluginStates;
 	themeId: number;
 	editorFontSize: number;
 	editorFont: number; // e.g. Setting.FONT_MENLO
@@ -134,10 +87,11 @@ interface Props {
 }
 
 interface State {
-	note: any;
+	note: NoteEntity;
 	mode: 'view'|'edit';
 	readOnly: boolean;
 	folder: FolderEntity|null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	lastSavedNote: any;
 	isLoading: boolean;
 	titleTextInputHeight: number;
@@ -167,23 +121,34 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	// a re-render.
 	private lastBodyScroll: number|undefined = undefined;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private saveActionQueues_: any;
 	private doFocusUpdate_: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private styles_: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private editorRef: any;
 	private titleTextFieldRef: RefObject<TextInput>;
 	private navHandler: OnNavigateCallback;
 	private backHandler: ()=> Promise<boolean>;
 	private undoRedoService_: UndoRedoService;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private noteTagDialog_closeRequested: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private onJoplinLinkClick_: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private refreshResource: (resource: any, noteBody?: string)=> Promise<void>;
 	private selection: SelectionRange;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private menuOptionsCache_: Record<string, any>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private focusUpdateIID_: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private folderPickerOptions_: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public dialogbox: any;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static navigationOptions(): any {
 		return { header: null };
 	}
@@ -308,21 +273,12 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 					if (!item) throw new Error(_('No item with ID %s', itemId));
 
 					if (item.type_ === BaseModel.TYPE_NOTE) {
-						// Easier to just go back, then go to the note since
-						// the Note screen doesn't handle reloading a different note
-
 						this.props.dispatch({
-							type: 'NAV_BACK',
+							type: 'NAV_GO',
+							routeName: 'Note',
+							noteId: item.id,
+							noteHash: resourceUrlInfo.hash,
 						});
-
-						shim.setTimeout(() => {
-							this.props.dispatch({
-								type: 'NAV_GO',
-								routeName: 'Note',
-								noteId: item.id,
-								noteHash: resourceUrlInfo.hash,
-							});
-						}, 5);
 					} else if (item.type_ === BaseModel.TYPE_RESOURCE) {
 						if (!(await Resource.isReady(item))) throw new Error(_('This attachment is not downloaded or not decrypted yet.'));
 
@@ -344,6 +300,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			}
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.refreshResource = async (resource: any, noteBody: string = null) => {
 			if (noteBody === null && this.state.note && this.state.note.body) noteBody = this.state.note.body;
 			if (noteBody === null) return;
@@ -374,7 +331,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		this.screenHeader_redoButtonPress = this.screenHeader_redoButtonPress.bind(this);
 		this.onBodyViewerLoadEnd = this.onBodyViewerLoadEnd.bind(this);
 		this.onBodyViewerCheckboxChange = this.onBodyViewerCheckboxChange.bind(this);
-		this.onBodyChange = this.onBodyChange.bind(this);
 		this.onUndoRedoDepthChange = this.onUndoRedoDepthChange.bind(this);
 		this.voiceTypingDialog_onText = this.voiceTypingDialog_onText.bind(this);
 		this.voiceTypingDialog_onDismiss = this.voiceTypingDialog_onDismiss.bind(this);
@@ -384,10 +340,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		return this.props.useEditorBeta;
 	}
 
-	private onBodyChange(event: EditorChangeEvent) {
-		shared.noteComponent_change(this, 'body', event.value);
-		this.scheduleSave();
-	}
 
 	private onUndoRedoDepthChange(event: UndoRedoDepthChangeEvent) {
 		if (this.useEditorBeta()) {
@@ -411,6 +363,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		const undoState = await this.undoRedoService_[type](this.undoState());
 		if (!undoState) return;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.setState((state: any) => {
 			const newNote = { ...state.note };
 			newNote.body = undoState.body;
@@ -452,6 +405,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		this.styles_ = {};
 
 		// TODO: Clean up these style names and nesting
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const styles: any = {
 			screen: {
 				flex: 1,
@@ -574,10 +528,12 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		void this.requestGeoLocationPermissions();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public onMarkForDownload(event: any) {
 		void ResourceFetcher.instance().markForDownload(event.resourceId);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public componentDidUpdate(prevProps: any, prevState: any) {
 		if (this.doFocusUpdate_) {
 			this.doFocusUpdate_ = false;
@@ -606,6 +562,28 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 				disableSideMenuGestures: this.state.showImageEditor,
 			});
 		}
+
+		if (prevProps.noteId && this.props.noteId && prevProps.noteId !== this.props.noteId) {
+			// Easier to just go back, then go to the note since
+			// the Note screen doesn't handle reloading a different note
+			const noteId = this.props.noteId;
+			const noteHash = this.props.noteHash;
+
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Notes',
+				folderId: this.state.note.parent_id,
+			});
+
+			shim.setTimeout(() => {
+				this.props.dispatch({
+					type: 'NAV_GO',
+					routeName: 'Note',
+					noteId: noteId,
+					noteHash: noteHash,
+				});
+			}, 5);
+		}
 	}
 
 	public componentWillUnmount() {
@@ -624,10 +602,9 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	private title_changeText(text: string) {
 		shared.noteComponent_change(this, 'title', text);
 		this.setState({ newAndNoTitleChangeNoteId: null });
-		this.scheduleSave();
 	}
 
-	private body_changeText(text: string) {
+	private onPlainEditorTextChange = (text: string) => {
 		if (!this.undoRedoService_.canUndo) {
 			this.undoRedoService_.push(this.undoState());
 		} else {
@@ -635,9 +612,17 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		}
 
 		shared.noteComponent_change(this, 'body', text);
-		this.scheduleSave();
-	}
+	};
 
+	// Avoid saving immediately -- the NoteEditor's content isn't controlled by its props
+	// and updating this.state.note immediately causes slow rerenders.
+	//
+	// See https://github.com/laurent22/joplin/issues/10130
+	private onMarkdownEditorTextChange = debounce((event: EditorChangeEvent) => {
+		shared.noteComponent_change(this, 'body', event.value);
+	}, 100);
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private onPlainEditorSelectionChange = (event: NativeSyntheticEvent<any>) => {
 		this.selection = event.nativeEvent.selection;
 	};
@@ -669,6 +654,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		Keyboard.dismiss();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async saveOneProperty(name: string, value: any) {
 		await shared.saveOneProperty(this, name, value);
 	}
@@ -677,12 +663,9 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		const note = this.state.note;
 		if (!note.id) return;
 
-		const ok = await dialogs.confirm(this, _('Delete note?'));
-		if (!ok) return;
-
 		const folderId = note.parent_id;
 
-		await Note.delete(note.id);
+		await Note.delete(note.id, { toTrash: true, sourceDescription: 'Delete note button' });
 
 		this.props.dispatch({
 			type: 'NAV_GO',
@@ -703,6 +686,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 				(width: number, height: number) => {
 					resolve({ width: width, height: height });
 				},
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				(error: any) => {
 					reject(error);
 				},
@@ -905,6 +889,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		this.setState({ showCamera: true });
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private cameraView_onPhoto(data: any) {
 		void this.attachFile(
 			{
@@ -1220,6 +1205,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		const isTodo = note && !!note.is_todo;
 		const isSaved = note && note.id;
 		const readOnly = this.state.readOnly;
+		const isDeleted = !!this.state.note.deleted_time;
 
 		const cacheKey = md5([isTodo, isSaved].join('_'));
 		if (!this.menuOptionsCache_) this.menuOptionsCache_ = {};
@@ -1281,7 +1267,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			});
 		}
 
-		if (isSaved) {
+		if (isSaved && !isDeleted) {
 			output.push({
 				title: _('Tags'),
 				onPress: () => {
@@ -1289,6 +1275,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 				},
 			});
 		}
+
 		output.push({
 			title: isTodo ? _('Convert to note') : _('Convert to todo'),
 			onPress: () => {
@@ -1296,7 +1283,8 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			},
 			disabled: readOnly,
 		});
-		if (isSaved) {
+
+		if (isSaved && !isDeleted) {
 			output.push({
 				title: _('Copy Markdown link'),
 				onPress: () => {
@@ -1304,12 +1292,27 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 				},
 			});
 		}
+
 		output.push({
 			title: _('Properties'),
 			onPress: () => {
 				this.properties_onPress();
 			},
 		});
+
+		if (isDeleted) {
+			output.push({
+				title: _('Restore'),
+				onPress: async () => {
+					await restoreItems(ModelType.Note, [this.state.note.id]);
+					this.props.dispatch({
+						type: 'NAV_GO',
+						routeName: 'Notes',
+					});
+				},
+			});
+		}
+
 		output.push({
 			title: _('Delete'),
 			onPress: () => {
@@ -1348,15 +1351,11 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		// Avoid writing `this.titleTextFieldRef.current` -- titleTextFieldRef may
 		// be undefined.
 		if (fieldToFocus === 'title' && this.titleTextFieldRef?.current) {
-			this.titleTextFieldRef.current.focus();
+			focus('Note::focusUpdate', this.titleTextFieldRef.current);
 		}
-		// if (fieldToFocus === 'body' && this.markdownEditorRef.current) {
-		// 	if (this.markdownEditorRef.current) {
-		// 		this.markdownEditorRef.current.focus();
-		// 	}
-		// }
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async folderPickerOptions_valueChanged(itemValue: any) {
 		const note = this.state.note;
 		const isProvisionalNote = this.props.provisionalNoteIds.includes(note.id);
@@ -1480,6 +1479,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 						onLoadEnd={this.onBodyViewerLoadEnd}
 						onScroll={this.onBodyViewerScroll}
 						initialScroll={this.lastBodyScroll}
+						pluginStates={this.props.plugins}
 					/>
 				);
 		} else {
@@ -1507,7 +1507,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 						ref="noteBodyTextField"
 						multiline={true}
 						value={note.body}
-						onChangeText={(text: string) => this.body_changeText(text)}
+						onChangeText={this.onPlainEditorTextChange}
 						onSelectionChange={this.onPlainEditorSelectionChange}
 						blurOnSubmit={false}
 						selectionColor={theme.textSelectionColor}
@@ -1529,20 +1529,18 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 					themeId={this.props.themeId}
 					initialText={note.body}
 					initialSelection={this.selection}
-					onChange={this.onBodyChange}
+					onChange={this.onMarkdownEditorTextChange}
 					onSelectionChange={this.onMarkdownEditorSelectionChange}
 					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
 					onAttach={() => this.showAttachMenu()}
 					readOnly={this.state.readOnly}
+					plugins={this.props.plugins}
 					style={{
 						...editorStyle,
+
+						// Allow the editor to set its own padding
 						paddingLeft: 0,
 						paddingRight: 0,
-					}}
-					contentStyle={{
-						// Apply padding to the editor's content, but not the toolbar.
-						paddingLeft: editorStyle.paddingLeft,
-						paddingRight: editorStyle.paddingRight,
 					}}
 				/>;
 			}
@@ -1550,6 +1548,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		const renderActionButton = () => {
 			if (this.state.voiceTypingDialogShown) return null;
+			if (!this.state.note || !!this.state.note.deleted_time) return null;
 
 			const editButton = {
 				label: _('Edit'),
@@ -1615,7 +1614,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 					undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
 					onUndoButtonPress={this.screenHeader_undoButtonPress}
 					onRedoButtonPress={this.screenHeader_redoButtonPress}
-					title={this.state.folder ? this.state.folder.title : ''}
+					title={getDisplayParentTitle(this.state.note, this.state.folder)}
 				/>
 				{titleComp}
 				{bodyComponent}
@@ -1625,6 +1624,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
 				<DialogBox
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					ref={(dialogbox: any) => {
 						this.dialogbox = dialogbox;
 					}}
@@ -1635,7 +1635,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	}
 }
 
-const NoteScreen = connect((state: any) => {
+const NoteScreen = connect((state: AppState) => {
 	return {
 		noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 		noteHash: state.selectedNoteHash,
@@ -1652,6 +1652,7 @@ const NoteScreen = connect((state: any) => {
 		showSideMenu: state.showSideMenu,
 		provisionalNoteIds: state.provisionalNoteIds,
 		highlightedWords: state.highlightedWords,
+		plugins: state.pluginService.plugins,
 
 		// What we call "beta editor" in this component is actually the (now
 		// default) CodeMirror editor. That should be refactored to make it less

@@ -97,6 +97,7 @@ export const resourceStatusName = function(index: number) {
 	throw new Error(`Unknown index: ${index}`);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const resourceStatus = function(ResourceModel: OptionsResourceModel, resourceInfo: any) {
 	if (!ResourceModel) return 'ready';
 
@@ -122,6 +123,7 @@ export const resourceStatus = function(ResourceModel: OptionsResourceModel, reso
 	return status;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const imageReplacement = function(ResourceModel: OptionsResourceModel, src: string, resources: any, resourceBaseUrl: string, itemIdToUrl: ItemIdToUrlHandler = null) {
 	if (!ResourceModel || !resources) return null;
 
