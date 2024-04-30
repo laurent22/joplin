@@ -685,8 +685,6 @@ packages/app-mobile/utils/fs-driver/runOnDeviceTests.js
 packages/app-mobile/utils/fs-driver/tarCreate.js
 packages/app-mobile/utils/fs-driver/tarExtract.test.js
 packages/app-mobile/utils/fs-driver/tarExtract.js
-packages/app-mobile/utils/fs-driver/testUtil/createFilesFromPathRecord.js
-packages/app-mobile/utils/fs-driver/testUtil/verifyDirectoryMatches.js
 packages/app-mobile/utils/getPackageInfo.js
 packages/app-mobile/utils/initializeCommandService.js
 packages/app-mobile/utils/ipc/RNToWebViewMessenger.js
@@ -1222,6 +1220,8 @@ packages/lib/utils/ipc/utils/separateCallbacksFromSerializable.test.js
 packages/lib/utils/ipc/utils/separateCallbacksFromSerializable.js
 packages/lib/utils/ipc/utils/separateCallbacksFromSerializableArray.js
 packages/lib/utils/joplinCloud.js
+packages/lib/utils/pathRecord/createFilesFromPathRecord.js
+packages/lib/utils/pathRecord/verifyDirectoryMatches.js
 packages/lib/utils/processStartFlags.js
 packages/lib/utils/replaceUnsupportedCharacters.test.js
 packages/lib/utils/replaceUnsupportedCharacters.js

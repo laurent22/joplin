@@ -13,7 +13,7 @@ const convertDate = (datetime: number): string => {
 	return time.unixMsToRfc3339Sec(datetime);
 };
 
-export const fieldOrder = ['title', 'updated', 'created', 'source', 'author', 'latitude', 'longitude', 'altitude', 'completed?', 'due', 'tags'];
+export const fieldOrder = ['title', 'id', 'updated', 'created', 'source', 'author', 'latitude', 'longitude', 'altitude', 'completed?', 'due', 'tags'];
 
 // There is a special case (negative numbers) where the yaml library will force quotations
 // These need to be stripped
@@ -40,12 +40,18 @@ function trimQuotes(rawOutput: string): string {
 	}).join('\n');
 }
 
-export const noteToFrontMatter = (note: NoteEntity, tagTitles: string[]) => {
+interface NoteToFrontMatterOptions {
+	includeId: boolean;
+}
+
+export const noteToFrontMatter = (note: NoteEntity, tagTitles: string[], options: NoteToFrontMatterOptions) => {
 	const md: MdFrontMatterExport = {};
 	// Every variable needs to be converted separately, so they will be handles in groups
 	//
 	// title
 	if (note.title) { md['title'] = note.title; }
+
+	if (note.id && options.includeId) { md['id'] = note.id; }
 
 	// source, author
 	if (note.source_url) { md['source'] = note.source_url; }
@@ -94,9 +100,9 @@ export const noteToFrontMatter = (note: NoteEntity, tagTitles: string[]) => {
 	return trimQuotes(rawOutput);
 };
 
-export const serialize = async (modNote: NoteEntity, tagTitles: string[]) => {
+export const serialize = async (modNote: NoteEntity, tagTitles: string[], options: NoteToFrontMatterOptions) => {
 	const noteContent = await Note.replaceResourceInternalToExternalLinks(await Note.serialize(modNote, ['body']));
-	const metadata = noteToFrontMatter(modNote, tagTitles);
+	const metadata = noteToFrontMatter(modNote, tagTitles, options);
 	return `---\n${metadata}---\n\n${noteContent}`;
 };
 
@@ -191,6 +197,10 @@ export const parse = (note: string): ParsedMeta => {
 		source_url: md['source'] || '',
 		is_todo: ('completed?' in md) ? 1 : 0,
 	};
+
+	if ('id' in md && typeof md['id'] === 'string' && md.id.match(/^[0-9a-zA-Z]{32}$/)) {
+		metadata['id'] = md.id;
+	}
 
 	if ('author' in md) { metadata['author'] = extractAuthor(md['author']); }
 

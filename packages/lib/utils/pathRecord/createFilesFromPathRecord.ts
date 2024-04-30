@@ -1,5 +1,5 @@
 
-import shim from '@joplin/lib/shim';
+import shim from '../../shim';
 import { join, dirname } from 'path';
 
 const createFilesFromPathRecord = async (baseDir: string, fileContents: Record<string, string>) => {

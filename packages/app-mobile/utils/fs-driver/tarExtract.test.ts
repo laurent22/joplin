@@ -6,8 +6,8 @@
 import shim from '@joplin/lib/shim';
 import { createTempDir } from '@joplin/lib/testing/test-utils';
 import { join } from 'path';
-import createFilesFromPathRecord from './testUtil/createFilesFromPathRecord';
-import verifyDirectoryMatches from './testUtil/verifyDirectoryMatches';
+import createFilesFromPathRecord from '@joplin/lib/utils/pathRecord/createFilesFromPathRecord';
+import verifyDirectoryMatches from '@joplin/lib/utils/pathRecord/verifyDirectoryMatches';
 import tarExtract from './tarExtract';
 import { remove } from 'fs-extra';
 

@@ -4,11 +4,12 @@ import Folder, { FolderEntityWithChildren } from '../../models/Folder';
 import Note from '../../models/Note';
 import { friendlySafeFilename } from '../../path-utils';
 import shim from '../../shim';
-import { noteToFrontMatter, serialize } from '../../utils/frontMatter';
+import { serialize } from '../../utils/frontMatter';
 import { FolderEntity, NoteEntity, NoteTagEntity, TagEntity } from '../database/types';
 import loadFolderInfo from './folderInfo/loadFolderInfo';
 import { parse as parseFrontMatter } from '../../utils/frontMatter';
 import { basename, dirname, join, normalize } from 'path';
+import writeFolderInfo from './folderInfo/writeFolderInfo';
 
 
 type FolderItem = FolderEntity | NoteEntity;
@@ -16,9 +17,8 @@ type FolderItem = FolderEntity | NoteEntity;
 type ItemTree = Map<string, FolderItem>;
 
 interface Actions {
-	onCreateFolderItem: (type: ModelType, path: string, item: FolderItem)=> Promise<void>;
-	onUpdateFolderItem: (type: ModelType, path: string, item: FolderItem)=> Promise<void>;
-	onDeleteFolderItem: (type: ModelType, path: string)=> Promise<void>;
+	onCreateRemoteItem: (type: ModelType, path: string, item: FolderItem)=> Promise<void>;
+	onUpdateItem: (type: ModelType, path: string, localItem: FolderItem|null, remoteItem: FolderItem)=> Promise<void>;
 }
 
 const makeItemPaths = (basePath: string, items: FolderItem[]) => {
@@ -42,9 +42,8 @@ const makeItemPaths = (basePath: string, items: FolderItem[]) => {
 	return output;
 };
 
-const addStatToTree = async (stat: Stat, tree: ItemTree): Promise<FolderItem> => {
+const addStatToTree = async (baseFolder: string, stat: Stat, tree: ItemTree): Promise<void> => {
 	const base: FolderItem = {
-		created_time: stat.birthtime.getTime(),
 		updated_time: stat.mtime.getTime(),
 	};
 	const parentPath = normalize(dirname(stat.path));
@@ -53,33 +52,34 @@ const addStatToTree = async (stat: Stat, tree: ItemTree): Promise<FolderItem> =>
 	}
 
 	if (stat.isDirectory()) {
-		const folderInfo = await loadFolderInfo(stat.path);
+		const folderInfo = await loadFolderInfo(join(baseFolder, stat.path));
+		if (folderInfo.id && !Folder.load(folderInfo.id)) {
+			delete folderInfo.id;
+		}
 		const result: FolderEntity = {
 			...base,
+			title: folderInfo.title,
 			id: folderInfo.id,
+			type_: ModelType.Folder,
 		};
 		if (folderInfo.icon) {
 			result.icon = folderInfo.icon;
 		}
-		return result;
+		tree.set(stat.path, result);
 	} else {
-		const fileContent = await shim.fsDriver().readFile(stat.path, 'utf8');
+		const fileContent = await shim.fsDriver().readFile(join(baseFolder, stat.path), 'utf8');
 		const { metadata } = parseFrontMatter(fileContent);
+
 		const result: NoteEntity = {
 			...base,
+			...metadata,
+
 			title: metadata.title ?? basename(stat.path, '.md'),
-			author: metadata.author,
+			body: metadata.body ?? '',
 
-			source_url: metadata.source,
-			todo_completed: metadata.todo_completed,
-			todo_due: metadata.todo_due,
-			latitude: metadata.latitude,
-			longitude: metadata.longitude,
-			altitude: metadata.altitude,
-
-			body: metadata.body,
+			type_: ModelType.Note,
 		};
-		return result;
+		tree.set(stat.path, result);
 	}
 };
 
@@ -88,7 +88,7 @@ const buildRemoteTree = async (basePath: string): Promise<ItemTree> => {
 	stats.sort((a, b) => a.path.length - b.path.length);
 	const result: ItemTree = new Map();
 	for (const stat of stats) {
-		await addStatToTree(stat, result);
+		await addStatToTree(basePath, stat, result);
 	}
 	return result;
 };
@@ -99,17 +99,18 @@ const mergeTrees = async (basePath: string, localTree: ItemTree, remoteTree: Ite
 		const itemType = item.type_ ? item.type_ : ModelType.Note;
 
 		if (!remoteTree.has(path)) {
-			await actions.onCreateFolderItem(itemType, fullPath, item);
+			await actions.onCreateRemoteItem(itemType, fullPath, item);
 		} else {
-			await actions.onUpdateFolderItem(itemType, fullPath, item);
+			const remoteItem = remoteTree.get(path);
+			await actions.onUpdateItem(itemType, fullPath, item, remoteItem);
 		}
 	}
 
-	for (const [path, item] of remoteTree.entries()) {
-		if (!path.startsWith(basePath)) throw new Error(`path ${path} should be a subfolder of basePath ${basePath}`);
-		const subpath = path.substring(basePath.length + 1);
-		if (!localTree.has(subpath)) {
-			await actions.onDeleteFolderItem(item.type_ ?? ModelType.Note, subpath);
+	for (const [path, remoteItem] of remoteTree.entries()) {
+		const fullPath = join(basePath, path);
+
+		if (!localTree.has(path)) {
+			await actions.onUpdateItem(remoteItem.type_, fullPath, null, remoteItem);
 		}
 	}
 };
@@ -145,51 +146,92 @@ export default class {
 		const getNoteMd = async (note: NoteEntity) => {
 			const tagIds = noteTags.filter(nt => nt.note_id === note.id).map(nt => nt.tag_id);
 			const tagTitles = tags.filter(t => tagIds.includes(t.id)).map(t => t.title);
-			return serialize(note, tagTitles);
+
+			const toSave = { ...note };
+
+			// Avoid including extra metadata
+			if (toSave.user_created_time === toSave.created_time) {
+				delete toSave.user_created_time;
+			}
+			if (toSave.user_updated_time === toSave.updated_time) {
+				delete toSave.user_updated_time;
+			}
+
+			return serialize(toSave, tagTitles, { includeId: true });
 		};
 
 		await mergeTrees(filePath, localTree, remoteTree, {
-			onCreateFolderItem: async (type, path, item) => {
+			onCreateRemoteItem: async (type, path, item) => {
 				if (type === ModelType.Folder) {
 					await shim.fsDriver().mkdir(path);
 				} else {
 					await shim.fsDriver().writeFile(path, await getNoteMd(item), 'utf8');
 				}
 			},
-			onUpdateFolderItem: async (type, path, fileItem) => {
+			onUpdateItem: async (type, path, localItem, remoteItem) => {
+				const isNew = !localItem;
 				if (type === ModelType.Folder) {
-					await shim.fsDriver().mkdir(path);
-				} else {
-					const databaseNote = fileItem ? await Note.load(fileItem.id) : null;
-
-					const overwriteFile = async () => {
-						const md = await noteToFrontMatter(fileItem, []);
-						await shim.fsDriver().writeFile(path, md, 'utf8');
-					};
-					const overwriteNote = async () => {
-						await Note.save({
-							...databaseNote,
-							...fileItem,
+					const updateRemote = async (sourceData: FolderEntity) => {
+						await writeFolderInfo(path, {
+							id: sourceData.id,
+							icon: sourceData.icon,
+							title: sourceData.title,
 						});
 					};
+					const updateLocal = async () => {
+						const toSave = { ...remoteItem };
+						delete toSave.updated_time;
+						const savedFolder = await Folder.save(toSave, { isNew });
+						if (savedFolder.id !== remoteItem.id) {
+							await updateRemote(savedFolder);
+						}
+					};
 
-					if (databaseNote) {
-						if (databaseNote.updated_time > fileItem.updated_time) {
-							await overwriteFile();
+					if (localItem) {
+						if (localItem.title !== remoteItem.title) {
+							if (localItem.updated_time > remoteItem.updated_time) {
+								await updateRemote(localItem);
+							} else {
+								await updateLocal();
+							}
+						}
+					} else {
+						await updateLocal();
+					}
+				} else {
+					const overwriteRemote = async (sourceNote: NoteEntity) => {
+						await shim.fsDriver().writeFile(path, await getNoteMd(sourceNote), 'utf8');
+					};
+					const overwriteLocal = async () => {
+						const toSave = {
+							...localItem,
+							...remoteItem,
+						};
+						// Change the updated_time when saving to reflect that, in Joplin,
+						// the note was just updated.
+						delete toSave.updated_time;
+						const savedNote = await Note.save(toSave, { isNew });
+
+						// Handle the case where the file item has an invalid ID.
+						if (savedNote.id !== remoteItem.id) {
+							await overwriteRemote(savedNote);
+						}
+					};
+
+					if (localItem) {
+						if (localItem.updated_time > remoteItem.updated_time) {
+							await overwriteRemote(localItem);
 						} else {
-							await overwriteNote();
+							await overwriteLocal();
 						}
 
-						if (databaseNote.deleted_time) {
+						if (localItem.deleted_time) {
 							await shim.fsDriver().remove(path);
 						}
 					} else {
-						await overwriteFile();
+						await overwriteLocal();
 					}
 				}
-			},
-			onDeleteFolderItem: async (_type, path) => {
-				await shim.fsDriver().remove(path);
 			},
 		});
 	}

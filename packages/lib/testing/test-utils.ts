@@ -263,6 +263,10 @@ async function afterAllCleanUp() {
 			console.warn('Could not clear sync target root:', error);
 		}
 	}
+
+	if (await fs.pathExists(baseTempDir)) {
+		await fs.remove(baseTempDir);
+	}
 }
 
 const settingFilename = (id: number): string => {
