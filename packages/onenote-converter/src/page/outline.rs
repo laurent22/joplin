@@ -18,7 +18,7 @@ impl<'a> Renderer<'a> {
                 width.max(13.0)
             };
 
-            styles.set("max-width", px(outline_width));
+            styles.set("width", px(outline_width));
         };
 
         if outline.offset_horizontal().is_some() || outline.offset_vertical().is_some() {
