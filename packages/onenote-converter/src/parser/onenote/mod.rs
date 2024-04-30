@@ -5,8 +5,7 @@ use crate::parser::onenote::section::{Section, SectionEntry, SectionGroup};
 use crate::parser::onestore::parse_store;
 use crate::parser::reader::Reader;
 use crate::utils::utils::log;
-use crate::parser::utils::{exists, is_directory, read_file};
-use std::ffi::OsStr;
+use crate::parser::utils::{exists, is_directory, read_file, read_dir};
 use std::panic;
 use std::path::Path;
 use web_sys::js_sys::Uint8Array;
@@ -121,23 +120,19 @@ impl Parser {
             .to_string_lossy()
             .to_string();
 
-        // TODO: remove read_dir()
-        // find a case where this happens
-        for entry in path.read_dir()? {
-            let entry = entry?;
-            let is_toc = entry
-                .path()
-                .extension()
-                .map(|ext| ext == OsStr::new("onetoc2"))
-                .unwrap_or_default();
-
-            if is_toc {
-                return self
-                    .parse_notebook(&entry.path())
-                    .map(|group| SectionGroup {
-                        display_name,
-                        entries: group.entries,
-                    });
+        if let Some(entries) = read_dir(path) {
+            for entry in entries {
+                let entry_path = Path::new(&entry);
+                if let Some(ext) = entry_path.extension() {
+                    if ext == "onetoc2" {
+                        return self
+                            .parse_notebook(entry_path)
+                            .map(|group| SectionGroup {
+                                display_name,
+                                entries: group.entries,
+                            });
+                    }
+                }
             }
         }
 

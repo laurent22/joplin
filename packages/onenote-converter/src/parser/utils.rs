@@ -1,11 +1,14 @@
 use crate::parser::errors::Result;
 use itertools::Itertools;
+use web_sys::js_sys::Uint8Array;
 use std::collections::HashMap;
 use std::fmt;
 use std::fmt::Display;
+use std::path::Path;
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
 use widestring::U16CString;
+use crate::utils::utils::log;
 
 pub(crate) fn px(inches: f32) -> String {
     format!("{}px", (inches * 48.0).round())
@@ -91,6 +94,19 @@ extern "C" {
 
     #[wasm_bindgen(js_name = isDirectory, catch)]
     pub fn is_directory(path: &str) -> std::result::Result<bool, JsValue>;
+
+    #[wasm_bindgen(js_name = readDir, catch)]
+    fn read_dir_js(path: &str) -> std::result::Result<FileContent, JsValue>;
+}
+
+pub fn read_dir(path: &Path) -> Option<Vec<String>> {
+    let result_ptr = read_dir_js(path.as_os_str().to_str().unwrap()).unwrap();
+
+    let array = Uint8Array::new(&result_ptr);
+    let data = array.to_vec();
+    let result_str = String::from_utf8_lossy(&data).into_owned();
+
+    Some(result_str.split('\n').map(|s| s.to_string()).collect())
 }
 
 #[wasm_bindgen(module = "fs")]

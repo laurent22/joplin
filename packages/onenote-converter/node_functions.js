@@ -13,7 +13,13 @@ function isDirectory(path) {
 	return fs.lstatSync(path).isDirectory();
 }
 
+function readDir(path) {
+	const dirContents = fs.readdirSync(path, { withFileTypes: true });
+	return dirContents.map(entry => entry.name).join('\n');
+}
+
 module.exports = {
 	mkdirSyncRecursive,
 	isDirectory,
+	readDir,
 };
