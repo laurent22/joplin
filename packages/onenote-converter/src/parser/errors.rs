@@ -81,6 +81,10 @@ pub enum ErrorKind {
     #[error("Malformed OneNote file data: {0}")]
     MalformedOneNoteFileData(Cow<'static, str>),
 
+    /// Malformed data was encountered when parsing the OneNote file contents.
+    #[error("Malformed OneNote incorrect type: {0}")]
+    MalformedOneNoteIncorrectType(String),
+
     /// Malformed data was encountered when parsing the OneStore data.
     #[error("Malformed OneStore data: {0}")]
     MalformedOneStoreData(Cow<'static, str>),
