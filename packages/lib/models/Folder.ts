@@ -369,22 +369,23 @@ export default class Folder extends BaseItem {
 		}
 	}
 
-	public static async allChildrenFolders(folderId: string): Promise<FolderEntity[]> {
+	public static async allChildrenFolders(folderId: string, fields: string[] = ['id', 'parent_id', 'share_id']): Promise<FolderEntity[]> {
+		const fieldsString = this.db().escapeFields(fields);
 		const sql = `
 			WITH RECURSIVE
-				folders_cte(id, parent_id, share_id) AS (
-					SELECT id, parent_id, share_id
+				folders_cte(${fieldsString}) AS (
+					SELECT ${fieldsString}
 						FROM folders
 						WHERE parent_id = ?
 					UNION ALL
-						SELECT folders.id, folders.parent_id, folders.share_id
+						SELECT ${this.db().escapeFields(fields.map(f => `folders.${f}`))}
 							FROM folders
 							INNER JOIN folders_cte AS folders_cte ON (folders.parent_id = folders_cte.id)
 				)
-				SELECT id, parent_id, share_id FROM folders_cte;
+				SELECT ${fieldsString} FROM folders_cte;
 		`;
 
-		return this.db().selectAll(sql, [folderId]);
+		return this.modelSelectAll(sql, [folderId]);
 	}
 
 	public static async rootSharedFolders(): Promise<FolderEntity[]> {
@@ -713,7 +714,7 @@ export default class Folder extends BaseItem {
 			return nestedTreeStructure;
 		}
 
-		return getNestedChildren(all, '');
+		return getNestedChildren(all, options.toplevelId ?? '');
 	}
 
 	public static folderPath(folders: FolderEntity[], folderId: string) {

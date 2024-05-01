@@ -340,6 +340,10 @@ class BaseModel {
 		return this.modelSelectAll(q.sql, q.params);
 	}
 
+	public static async allByParentId(parentId: string, options: LoadOptions|null = null) {
+		return await this.all({ ...options, fields: options.fields ?? ['id', 'parent_id'], where: 'parent_id = ?', whereParams: [parentId] });
+	}
+
 	public static async byIds(ids: string[], options: LoadOptions = null) {
 		if (!ids.length) return [];
 		if (!options) options = {};

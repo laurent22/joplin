@@ -5,11 +5,12 @@ import Note from '../../models/Note';
 import { friendlySafeFilename } from '../../path-utils';
 import shim from '../../shim';
 import { serialize } from '../../utils/frontMatter';
-import { FolderEntity, NoteEntity, NoteTagEntity, TagEntity } from '../database/types';
+import { FolderEntity, NoteEntity } from '../database/types';
 import loadFolderInfo from './folderInfo/loadFolderInfo';
 import { parse as parseFrontMatter } from '../../utils/frontMatter';
 import { basename, dirname, extname, join, normalize } from 'path';
 import writeFolderInfo from './folderInfo/writeFolderInfo';
+const { ALL_NOTES_FILTER_ID } = require('../../reserved-ids.js');
 
 type FolderItem = FolderEntity | NoteEntity;
 
@@ -46,20 +47,22 @@ const makeItemPaths = (basePath: string, items: FolderItem[]) => {
 	return output;
 };
 
-const addStatToRemoteTree = async (baseFolder: string, stat: Stat, remoteTree: ItemTree, remoteIdToPath: IdToPath): Promise<void> => {
+const addStatToRemoteTree = async (baseFolderPath: string, baseFolderId: string, stat: Stat, remoteTree: ItemTree, remoteIdToPath: IdToPath): Promise<void> => {
 	const base: FolderItem = {
 		updated_time: stat.mtime.getTime(),
 	};
 	const parentPath = normalize(dirname(stat.path));
 	if (remoteTree.has(parentPath)) {
 		base.parent_id = remoteTree.get(parentPath).id;
+	} else if (parentPath === '.') {
+		base.parent_id = baseFolderId;
 	}
 
 	const isFolder = stat.isDirectory();
 
 	let result: FolderItem;
 	if (isFolder) {
-		const folderInfo = await loadFolderInfo(join(baseFolder, stat.path));
+		const folderInfo = await loadFolderInfo(join(baseFolderPath, stat.path));
 		if (folderInfo.id && !Folder.load(folderInfo.id)) {
 			delete folderInfo.id;
 		}
@@ -76,7 +79,7 @@ const addStatToRemoteTree = async (baseFolder: string, stat: Stat, remoteTree: I
 	} else {
 		if (extname(stat.path) !== '.md') return;
 
-		const fileContent = await shim.fsDriver().readFile(join(baseFolder, stat.path), 'utf8');
+		const fileContent = await shim.fsDriver().readFile(join(baseFolderPath, stat.path), 'utf8');
 		const { metadata } = parseFrontMatter(fileContent);
 
 		result = {
@@ -98,7 +101,7 @@ const addStatToRemoteTree = async (baseFolder: string, stat: Stat, remoteTree: I
 	}
 };
 
-const buildRemoteTree = async (basePath: string) => {
+const buildRemoteTree = async (basePath: string, baseFolderId: string) => {
 	const stats = await shim.fsDriver().readDirStats(basePath, { recursive: true });
 
 	// Sort so that parent folders are visited before child folders.
@@ -107,16 +110,16 @@ const buildRemoteTree = async (basePath: string) => {
 	const remoteTree: ItemTree = new Map();
 	const remoteIdToItem: IdToPath = new Map();
 	for (const stat of stats) {
-		await addStatToRemoteTree(basePath, stat, remoteTree, remoteIdToItem);
+		await addStatToRemoteTree(basePath, baseFolderId, stat, remoteTree, remoteIdToItem);
 	}
 	return { remoteTree, remoteIdToItem };
 };
 
 const mergeTrees = async (basePath: string, localTree: ItemTree, remoteTree: ItemTree, remoteIdToPath: IdToPath, actions: Actions) => {
-	const updateItem = async (type: ModelType, path: string, localItem: FolderItem|null, remoteItem: FolderItem|null) => {
+	const updateItem = async (type: ModelType, remotePath: string, localItem: FolderItem|null, remoteItem: FolderItem|null) => {
 		const isNew = !localItem;
 		const updateRemote = async (sourceData: FolderEntity) => {
-			await actions.onUpdateRemoteItem(type, path, sourceData);
+			await actions.onUpdateRemoteItem(type, remotePath, sourceData);
 		};
 		const updateLocal = async () => {
 			const updatedItem = await actions.onUpdateLocalItem(type, localItem, remoteItem, isNew);
@@ -146,7 +149,7 @@ const mergeTrees = async (basePath: string, localTree: ItemTree, remoteTree: Ite
 			}
 
 			if (localItem.deleted_time && remoteItem) {
-				await actions.onDeleteRemoteItem(type, path, remoteItem);
+				await actions.onDeleteRemoteItem(type, remotePath, remoteItem);
 			}
 		} else {
 			await updateLocal();
@@ -154,32 +157,43 @@ const mergeTrees = async (basePath: string, localTree: ItemTree, remoteTree: Ite
 	};
 
 	const handledIds = new Set<string>();
-	for (const [path, item] of localTree.entries()) {
-		const fullPath = join(basePath, path);
-		const itemType = item.type_ ? item.type_ : ModelType.Note;
+	for (const [path, localItem] of localTree.entries()) {
+		const fullLocalPath = join(basePath, path);
+		const itemType = localItem.type_ ? localItem.type_ : ModelType.Note;
 
 		if (!remoteTree.has(path)) {
-			const remotePath = remoteIdToPath.get(item.id);
+			const remotePath = remoteIdToPath.get(localItem.id);
 
 			// New item
 			if (!remotePath) {
-				await actions.onUpdateRemoteItem(itemType, fullPath, item);
-			} else {
-				// Moved item
-				const remoteItem = remoteTree.get(remotePath);
-				if (remoteItem.updated_time < item.updated_time) {
-					await actions.onMoveRemoteItem(itemType, remotePath, path);
-				} else {
-					await actions.onMoveLocalItem(itemType, item, remoteItem.parent_id);
+				// Skip if deleted both locally and remotely
+				if (!localItem.deleted_time) {
+					await actions.onUpdateRemoteItem(itemType, fullLocalPath, localItem);
 				}
-				await updateItem(itemType, fullPath, item, remoteItem);
+			} else {
+				const remoteItem = remoteTree.get(remotePath);
+				const fullRemotePath = join(basePath, remotePath);
+
+				// Moved item
+				if (remoteItem.parent_id !== localItem.parent_id) {
+					if (remoteItem.updated_time < localItem.updated_time) {
+						await actions.onMoveRemoteItem(itemType, fullRemotePath, fullLocalPath);
+					} else {
+						await actions.onMoveLocalItem(itemType, localItem, remoteItem.parent_id);
+					}
+				}
+				// Otherwise, the item may have a custom filename -- don't rename.
+				// TODO: Do we want to rename in that case?
+
+				await updateItem(itemType, fullRemotePath, localItem, remoteItem);
 			}
 		} else {
 			const remoteItem = remoteTree.get(path);
-			await updateItem(itemType, fullPath, item, remoteItem);
+			const fullRemotePath = fullLocalPath;
+			await updateItem(itemType, fullRemotePath, localItem, remoteItem);
 		}
 
-		handledIds.add(item.id);
+		handledIds.add(localItem.id);
 	}
 
 	for (const [path, remoteItem] of remoteTree.entries()) {
@@ -193,40 +207,49 @@ const mergeTrees = async (basePath: string, localTree: ItemTree, remoteTree: Ite
 
 export default class {
 
-	public async syncDir(filePath: string, noteTags: NoteTagEntity[], tags: TagEntity[]) {
-		const allFolders = await Folder.allAsTree(null, { fields: ['id', 'title', 'parent_id'] });
-		const allNotes: NoteEntity[] = await Note.all({ fields: ['id', 'title', 'body', 'is_todo', 'parent_id'] });
+	public async syncDir(filePath: string, baseFolderId: string) {
+		const folderFields = ['id', 'icon', 'title', 'parent_id', 'updated_time', 'deleted_time'];
+		const isAllNotes = baseFolderId === ALL_NOTES_FILTER_ID || baseFolderId === '';
+		if (isAllNotes) baseFolderId = '';
+
+		const childrenFolders =
+			isAllNotes ? await Folder.all({ fields: folderFields }) : await Folder.allChildrenFolders(baseFolderId, folderFields);
+		const allFolders = await Folder.allAsTree(childrenFolders, { toplevelId: baseFolderId });
 
 		const localTree: ItemTree = new Map();
 		const localIdToItem: Map<string, FolderItem> = new Map();
 
-		const processFolders = (basePath: string, folders: FolderEntityWithChildren[], notes: NoteEntity[]) => {
-			const idToItemPath = makeItemPaths(basePath, folders.concat(notes));
+		const processFolders = async (basePath: string, parentId: string, folders: FolderEntityWithChildren[]) => {
+			const folderIdToItemPath = makeItemPaths(basePath, folders);
 
 			for (const folder of folders) {
 				localIdToItem.set(folder.id, folder);
 
-				const folderPath = idToItemPath.get(folder.id);
+				const folderPath = folderIdToItemPath.get(folder.id);
 				localTree.set(folderPath, folder);
-				const folderNotes = allNotes.filter(n => n.parent_id === folder.id);
-				processFolders(folderPath, folder.children || [], folderNotes);
+				await processFolders(folderPath, folder.id, folder.children || []);
 			}
 
-			for (const note of notes) {
+			const noteFields = ['id', 'title', 'body', 'is_todo', 'parent_id', 'updated_time', 'deleted_time'];
+			const childNotes = await Note.allByParentId(parentId, { fields: noteFields });
+			const noteIdToItemPath = makeItemPaths(basePath, childNotes);
+
+			for (const note of childNotes) {
+				if (localIdToItem.has(note.id)) throw new Error(`Refusing to process note with ID ${note.id} twice.`);
 				localIdToItem.set(note.id, note);
 
-				const notePath = idToItemPath.get(note.id);
+				const notePath = noteIdToItemPath.get(note.id);
 				localTree.set(notePath, note);
 			}
 		};
 
-		processFolders('', allFolders, allNotes.filter(n => !n.parent_id));
+		await processFolders('', baseFolderId, allFolders);
 
-		const { remoteTree, remoteIdToItem } = await buildRemoteTree(filePath);
+		const { remoteTree, remoteIdToItem } = await buildRemoteTree(filePath, baseFolderId);
 
 		const getNoteMd = async (note: NoteEntity) => {
-			const tagIds = noteTags.filter(nt => nt.note_id === note.id).map(nt => nt.tag_id);
-			const tagTitles = tags.filter(t => tagIds.includes(t.id)).map(t => t.title);
+			// const tagIds = [];//noteTags.filter(nt => nt.note_id === note.id).map(nt => nt.tag_id);
+			const tagTitles: string[] = [];// tags.filter(t => tagIds.includes(t.id)).map(t => t.title);
 
 			const toSave = { ...note };
 
@@ -272,9 +295,9 @@ export default class {
 			},
 			onDeleteLocalItem: async (type, localItem): Promise<void> => {
 				if (type === ModelType.Note) {
-					await Note.delete(localItem.id);
+					await Note.delete(localItem.id, { toTrash: true, sourceDescription: 'FileMirroringService' });
 				} else {
-					await Folder.delete(localItem.id);
+					await Folder.delete(localItem.id, { toTrash: true, sourceDescription: 'FileMirroringService' });
 				}
 			},
 			onDeleteRemoteItem: async (_type, path, _item): Promise<void> => {
@@ -292,5 +315,4 @@ export default class {
 			},
 		});
 	}
-
 }

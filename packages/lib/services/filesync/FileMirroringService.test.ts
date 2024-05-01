@@ -1,4 +1,3 @@
-import { readFile } from 'fs-extra';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import { createTempDir, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
@@ -8,6 +7,7 @@ import createFilesFromPathRecord from '../../utils/pathRecord/createFilesFromPat
 import verifyDirectoryMatches from '../../utils/pathRecord/verifyDirectoryMatches';
 import * as fs from 'fs-extra';
 import shim from '../../shim';
+const { ALL_NOTES_FILTER_ID } = require('../../reserved-ids.js');
 
 describe('FileMirroringService', () => {
 
@@ -17,8 +17,9 @@ describe('FileMirroringService', () => {
 	});
 
 	it('should create notes in a local dir', async ()=> {
-		const folder1 = await Folder.save({ title: 'folder1' });
-		const folder2 = await Folder.save({ title: 'folder2' });
+		const baseFolder = await Folder.save({ title: 'Base folder' });
+		const folder1 = await Folder.save({ title: 'folder1', parent_id: baseFolder.id });
+		const folder2 = await Folder.save({ title: 'folder2', parent_id: baseFolder.id });
 		const folder3 = await Folder.save({ title: 'folder3', parent_id: folder2.id });
 		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id, body: 'Test' });
 		const note2 = await Note.save({ title: 'note2', parent_id: folder1.id, body: '# Heading' });
@@ -28,41 +29,58 @@ describe('FileMirroringService', () => {
 		const tempDir = await createTempDir();
 		const service = new FileMirroringService();
 
-		await service.syncDir(tempDir, [], []);
+		await service.syncDir(tempDir, baseFolder.id);
 
-		expect(await readFile(join(tempDir, folder1.title, `${note1.title}.md`), 'utf8')).toBe([
-			'---',
-			'title: note1',
-			`id: ${note1.id}`,
-			'---',
-			'',
-			'Test',
-		].join('\n'));
-		expect(await readFile(join(tempDir, folder1.title, `${note2.title}.md`), 'utf8')).toBe([
-			'---',
-			'title: note2',
-			`id: ${note2.id}`,
-			'---',
-			'',
-			'# Heading',
-		].join('\n'));
-		expect(await readFile(join(tempDir, folder2.title, folder3.title, `${note3.title}.md`), 'utf8')).toBe([
-			'---',
-			'title: note3',
-			`id: ${note3.id}`,
-			'completed?: no',
-			'---',
-			'',
-			'',
-		].join('\n'));
-		expect(await readFile(join(tempDir, folder2.title, folder3.title, `${note3Copy.title} (1).md`), 'utf8')).toBe([
-			'---',
-			'title: note3',
-			`id: ${note3Copy.id}`,
-			'---',
-			'',
-			'',
-		].join('\n'));
+		await verifyDirectoryMatches(tempDir, {
+			[join(folder1.title, `${note1.title}.md`)]: [
+				'---',
+				'title: note1',
+				`id: ${note1.id}`,
+				'---',
+				'',
+				'Test',
+			].join('\n'),
+			[join(folder1.title, `${note2.title}.md`)]: [
+				'---',
+				'title: note2',
+				`id: ${note2.id}`,
+				'---',
+				'',
+				'# Heading',
+			].join('\n'),
+			[join(folder1.title, '.folder.yml')]: [
+				`title: ${folder1.title}`,
+				`id: ${folder1.id}`,
+				'',
+			].join('\n'),
+			[join(folder2.title, folder3.title, `${note3.title}.md`)]: [
+				'---',
+				'title: note3',
+				`id: ${note3.id}`,
+				'completed?: no',
+				'---',
+				'',
+				'',
+			].join('\n'),
+			[join(folder2.title, folder3.title, `${note3Copy.title} (1).md`)]: [
+				'---',
+				'title: note3',
+				`id: ${note3Copy.id}`,
+				'---',
+				'',
+				'',
+			].join('\n'),
+			[join(folder2.title, '.folder.yml')]: [
+				`title: ${folder2.title}`,
+				`id: ${folder2.id}`,
+				'',
+			].join('\n'),
+			[join(folder2.title, folder3.title, '.folder.yml')]: [
+				`title: ${folder3.title}`,
+				`id: ${folder3.id}`,
+				'',
+			].join('\n'),
+		});
 	});
 
 	it('should import notes from a local dir', async () => {
@@ -74,23 +92,24 @@ describe('FileMirroringService', () => {
 		});
 
 		const service = new FileMirroringService();
-		await service.syncDir(tempDir, [], []);
+		const baseFolder = await Folder.save({ title: 'base' });
+		await service.syncDir(tempDir, baseFolder.id);
 
-		const baseFolder = await Folder.loadByTitle('test');
+		const innerFolder = await Folder.loadByTitle('test');
 
-		expect(baseFolder).toMatchObject({ title: 'test' });
+		expect(innerFolder).toMatchObject({ title: 'test' });
 		const noteA = await Note.loadByTitle('A test');
 		expect(noteA).toMatchObject({
 			is_todo: 0,
 			title: 'A test',
-			parent_id: baseFolder.id,
+			parent_id: innerFolder.id,
 			body: '',
 		});
 		const noteB = await Note.loadByTitle('Another test');
 		expect(noteB).toMatchObject({
 			is_todo: 0,
 			title: 'Another test',
-			parent_id: baseFolder.id,
+			parent_id: innerFolder.id,
 			body: 'Foo',
 		});
 
@@ -108,7 +127,7 @@ describe('FileMirroringService', () => {
 			'test/a.md': `---\ntitle: A test\nid: ${noteA.id}\n---\n\n`,
 			'test/b.md': `---\ntitle: Another test\nid: ${noteB.id}\n---\n\nFoo`,
 			'test/foo/b.md': `---\ntitle: Another test (subfolder)\nid: ${noteB2.id}\n---\n\n`,
-			'test/.folder.yml': `title: ${baseFolder.title}\nid: ${baseFolder.id}\n`,
+			'test/.folder.yml': `title: ${innerFolder.title}\nid: ${innerFolder.id}\n`,
 			'test/foo/.folder.yml': `title: ${subFolder.title}\nid: ${subFolder.id}\n`,
 		});
 	});
@@ -121,7 +140,7 @@ describe('FileMirroringService', () => {
 		});
 
 		const service = new FileMirroringService();
-		await service.syncDir(tempDir, [], []);
+		await service.syncDir(tempDir, ALL_NOTES_FILTER_ID);
 
 		const parentFolder = await Folder.loadByTitle('testFolder');
 		const note = await Note.loadByTitle('a note');
@@ -154,12 +173,12 @@ describe('FileMirroringService', () => {
 		});
 
 		const service = new FileMirroringService();
-		await service.syncDir(tempDir, [], []);
+		await service.syncDir(tempDir, ALL_NOTES_FILTER_ID);
 
 		await fs.appendFile(join(tempDir, 'test/test_note.md'), 'Testing 123...');
 		await fs.appendFile(join(tempDir, 'test/a.md'), 'Testing...');
 
-		await service.syncDir(tempDir, [], []);
+		await service.syncDir(tempDir, ALL_NOTES_FILTER_ID);
 
 		const folder = await Folder.loadByTitle('test');
 
@@ -192,7 +211,7 @@ describe('FileMirroringService', () => {
 		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
 
 		// Should not change directory unnecessarily
-		await service.syncDir(tempDir, [], []);
+		await service.syncDir(tempDir, ALL_NOTES_FILTER_ID);
 		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
 	});
 
@@ -204,20 +223,21 @@ describe('FileMirroringService', () => {
 		await createFilesFromPathRecord(tempDir, testData);
 
 		const service = new FileMirroringService();
-		await service.syncDir(tempDir, [], []);
+		const baseFolderId = (await Folder.save({ title: 'base folder' })).id;
+		await service.syncDir(tempDir, baseFolderId);
 
 		const noteIds = await Note.allIds();
 		expect(noteIds).toHaveLength(expectedNoteCount);
 
 		for (const id of noteIds) {
-			await Note.delete(id);
-			await service.syncDir(tempDir, [], []);
+			await Note.delete(id, { toTrash: true });
+			expectedNoteCount --;
+			await service.syncDir(tempDir, baseFolderId);
 
 			const dirStats = await shim.fsDriver().readDirStats(tempDir, { recursive: true });
 			const markdownFiles = dirStats.map(stat => stat.path).filter(path => extname(path) === '.md');
 
 			expect(markdownFiles.length).toBe(expectedNoteCount);
-			expectedNoteCount --;
 		}
 	});
 
