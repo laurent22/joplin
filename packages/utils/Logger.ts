@@ -177,7 +177,23 @@ class Logger {
 	public objectToString(object: any) {
 		let output = '';
 
-		if (typeof object === 'object') {
+		if (Array.isArray(object)) {
+			const serialized: string[] = [];
+			for (const e of object) {
+				serialized.push(this.objectToString(e));
+			}
+			output = `[${serialized.join(', ')}]`;
+		} else if (typeof object === 'string') {
+			output = object;
+		} else if (object === undefined) {
+			output = '<undefined>';
+		} else if (object === null) {
+			output = '<null>';
+		} else if (object === true) {
+			output = '<true>';
+		} else if (object === false) {
+			output = '<false>';
+		} else if (typeof object === 'object') {
 			if (object instanceof Error) {
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				object = object as any;
@@ -190,7 +206,7 @@ class Logger {
 				output = JSON.stringify(object);
 			}
 		} else {
-			output = object;
+			output = object.toString();
 		}
 
 		return output;
@@ -199,16 +215,10 @@ class Logger {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public objectsToString(...object: any[]) {
 		const output = [];
-		if (object.length === 1) {
-			// Quoting when there is only one argument can make the log more difficult to read,
-			// particularly when formatting is handled elsewhere.
-			output.push(this.objectToString(object[0]));
-		} else {
-			for (let i = 0; i < object.length; i++) {
-				output.push(`"${this.objectToString(object[i])}"`);
-			}
+		for (let i = 0; i < object.length; i++) {
+			output.push(this.objectToString(object[i]));
 		}
-		return output.join(', ');
+		return output.join(' ');
 	}
 
 	public static databaseCreateTableSql() {
