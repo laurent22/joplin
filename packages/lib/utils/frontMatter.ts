@@ -191,7 +191,7 @@ export const parse = (note: string): ParsedMeta => {
 
 	const { header, body } = getNoteHeader(note);
 
-	const md = toLowerCase(yaml.load(header, { schema: yaml.FAILSAFE_SCHEMA }));
+	const md = toLowerCase(yaml.load(header, { schema: yaml.FAILSAFE_SCHEMA }) ?? {});
 	const metadata: NoteEntity = {
 		title: md['title'] || '',
 		source_url: md['source'] || '',

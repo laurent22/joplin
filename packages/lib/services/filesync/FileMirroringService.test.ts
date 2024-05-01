@@ -3,10 +3,11 @@ import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import { createTempDir, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import FileMirroringService from './FileMirroringService';
-import { join } from 'path';
+import { extname, join } from 'path';
 import createFilesFromPathRecord from '../../utils/pathRecord/createFilesFromPathRecord';
 import verifyDirectoryMatches from '../../utils/pathRecord/verifyDirectoryMatches';
 import * as fs from 'fs-extra';
+import shim from '../../shim';
 
 describe('FileMirroringService', () => {
 
@@ -112,6 +113,38 @@ describe('FileMirroringService', () => {
 		});
 	});
 
+	it('should handle the case where a note has no or empty frontmatter', async () => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, {
+			'testFolder/a note.md': 'This is a test note with no frontmatter.',
+			'testFolder/empty frontmatter.md': '---\n---\nTest.',
+		});
+
+		const service = new FileMirroringService();
+		await service.syncDir(tempDir, [], []);
+
+		const parentFolder = await Folder.loadByTitle('testFolder');
+		const note = await Note.loadByTitle('a note');
+		expect(note).toMatchObject({
+			title: 'a note',
+			body: 'This is a test note with no frontmatter.',
+			parent_id: parentFolder.id,
+		});
+
+		const note2 = await Note.loadByTitle('empty frontmatter');
+		expect(note2).toMatchObject({
+			title: 'empty frontmatter',
+			body: 'Test.',
+			parent_id: parentFolder.id,
+		});
+
+		await verifyDirectoryMatches(tempDir, {
+			'testFolder/a note.md': `---\ntitle: a note\nid: ${note.id}\n---\n\nThis is a test note with no frontmatter.`,
+			'testFolder/empty frontmatter.md': `---\ntitle: empty frontmatter\nid: ${note2.id}\n---\n\nTest.`,
+			'testFolder/.folder.yml': `title: testFolder\nid: ${parentFolder.id}\n`,
+		});
+	});
+
 	it('should apply changes made to a local dir to notes', async () => {
 		const tempDir = await createTempDir();
 		await createFilesFromPathRecord(tempDir, {
@@ -163,7 +196,32 @@ describe('FileMirroringService', () => {
 		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
 	});
 
-	// it('should delete notes in dir when deleted in DB', async () => {
+	it.each([
+		[{ 'test/foo.md': 'This is a test' }, 1],
+		[{ 'test/foo.md': '---\ntitle: Foo---\n\n', 'test/bar.md': '---\ntitle: bar\n---\n\n' }, 2],
+	])('should delete notes in dir when deleted in DB (case %#)', async (testData, expectedNoteCount) => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, testData);
+
+		const service = new FileMirroringService();
+		await service.syncDir(tempDir, [], []);
+
+		const noteIds = await Note.allIds();
+		expect(noteIds).toHaveLength(expectedNoteCount);
+
+		for (const id of noteIds) {
+			await Note.delete(id);
+			await service.syncDir(tempDir, [], []);
+
+			const dirStats = await shim.fsDriver().readDirStats(tempDir, { recursive: true });
+			const markdownFiles = dirStats.map(stat => stat.path).filter(path => extname(path) === '.md');
+
+			expect(markdownFiles.length).toBe(expectedNoteCount);
+			expectedNoteCount --;
+		}
+	});
+
+	// it('should delete notes locally when deleted remotely', async () => {
 	// 	;
 	// });
 

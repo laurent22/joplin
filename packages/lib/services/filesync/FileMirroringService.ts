@@ -83,7 +83,9 @@ const addStatToRemoteTree = async (baseFolder: string, stat: Stat, remoteTree: I
 			...base,
 			...metadata,
 
-			title: metadata.title ?? basename(stat.path, '.md'),
+			// Use || to handle the case where the title is empty, which can happen for empty
+			// frontmatter.
+			title: metadata.title || basename(stat.path, '.md'),
 			body: metadata.body ?? '',
 
 			type_: ModelType.Note,
