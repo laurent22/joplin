@@ -6,6 +6,7 @@ import FileMirroringService from './FileMirroringService';
 import { join } from 'path';
 import createFilesFromPathRecord from '../../utils/pathRecord/createFilesFromPathRecord';
 import verifyDirectoryMatches from '../../utils/pathRecord/verifyDirectoryMatches';
+import * as fs from 'fs-extra';
 
 describe('FileMirroringService', () => {
 
@@ -106,12 +107,61 @@ describe('FileMirroringService', () => {
 			'test/a.md': `---\ntitle: A test\nid: ${noteA.id}\n---\n\n`,
 			'test/b.md': `---\ntitle: Another test\nid: ${noteB.id}\n---\n\nFoo`,
 			'test/foo/b.md': `---\ntitle: Another test (subfolder)\nid: ${noteB2.id}\n---\n\n`,
+			'test/.folder.yml': `title: ${baseFolder.title}\nid: ${baseFolder.id}\n`,
+			'test/foo/.folder.yml': `title: ${subFolder.title}\nid: ${subFolder.id}\n`,
 		});
 	});
 
-	// it('should apply changes made to a local dir to notes', async () => {
-	// 	;
-	// });
+	it('should apply changes made to a local dir to notes', async () => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, {
+			'test/test_note.md': '---\ntitle: test_note\n---',
+			'test/a.md': '---\ntitle: A test\n---',
+			'test/b.md': '---\ntitle: Another test\n---\nFoo',
+		});
+
+		const service = new FileMirroringService();
+		await service.syncDir(tempDir, [], []);
+
+		await fs.appendFile(join(tempDir, 'test/test_note.md'), 'Testing 123...');
+		await fs.appendFile(join(tempDir, 'test/a.md'), 'Testing...');
+
+		await service.syncDir(tempDir, [], []);
+
+		const folder = await Folder.loadByTitle('test');
+
+		const testNote = await Note.loadByTitle('test_note');
+		expect(testNote).toMatchObject({
+			title: 'test_note',
+			body: 'Testing 123...',
+			parent_id: folder.id,
+		});
+
+		const noteA = await Note.loadByTitle('A test');
+		expect(noteA).toMatchObject({
+			title: 'A test',
+			body: 'Testing...',
+			parent_id: folder.id,
+		});
+
+		const noteB = await Note.loadByTitle('Another test');
+		expect(noteB).toMatchObject({
+			title: 'Another test',
+			body: 'Foo',
+			parent_id: folder.id,
+		});
+		const expectedDirectoryContent = {
+			'test/test_note.md': `---\ntitle: test_note\nid: ${testNote.id}\n---\n\nTesting 123...`,
+			'test/a.md': `---\ntitle: A test\nid: ${noteA.id}\n---\n\nTesting...`,
+			'test/b.md': `---\ntitle: Another test\nid: ${noteB.id}\n---\n\nFoo`,
+			'test/.folder.yml': `title: test\nid: ${folder.id}\n`,
+		};
+		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
+
+		// Should not change directory unnecessarily
+		await service.syncDir(tempDir, [], []);
+		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
+	});
 
 	// it('should delete notes in dir when deleted in DB', async () => {
 	// 	;

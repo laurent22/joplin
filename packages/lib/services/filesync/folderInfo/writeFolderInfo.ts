@@ -5,7 +5,17 @@ import * as yaml from 'js-yaml';
 
 const writeFolderInfo = async (folderPath: string, folderInfo: FolderInfo): Promise<void> => {
 	const folderInfoPath = join(folderPath, folderInfoFileName);
-	const folderInfoYaml = yaml.dump(folderInfo);
+
+	folderInfo = { ...folderInfo };
+	if (folderInfo.icon === '') {
+		delete folderInfo.icon;
+	}
+
+	const fieldOrder = ['title', 'id', 'icon'];
+	const folderInfoYaml = yaml.dump(
+		folderInfo,
+		{ sortKeys: (a, b) => fieldOrder.indexOf(a) - fieldOrder.indexOf(b) },
+	);
 	await shim.fsDriver().writeFile(folderInfoPath, folderInfoYaml, 'utf8');
 };
 export default writeFolderInfo;
