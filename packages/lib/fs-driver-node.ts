@@ -1,7 +1,7 @@
-import FsDriverBase, { Stat } from './fs-driver-base';
+import FsDriverBase, { DirectoryWatchEventType, OnWatchEventListener, Stat } from './fs-driver-base';
 import time from './time';
 const md5File = require('md5-file');
-const fs = require('fs-extra');
+import * as fs from 'fs-extra';
 
 export default class FsDriverNode extends FsDriverBase {
 
@@ -21,7 +21,8 @@ export default class FsDriverNode extends FsDriverBase {
 
 	public async appendFile(path: string, string: string, encoding = 'base64') {
 		try {
-			return await fs.appendFile(path, string, { encoding: encoding });
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code
+			return await fs.appendFile(path, string, { encoding: encoding as any });
 		} catch (error) {
 			throw this.fsErrorToJsError_(error, path);
 		}
@@ -32,7 +33,8 @@ export default class FsDriverNode extends FsDriverBase {
 			if (encoding === 'buffer') {
 				return await fs.writeFile(path, string);
 			} else {
-				return await fs.writeFile(path, string, { encoding: encoding });
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code
+				return await fs.writeFile(path, string, { encoding: encoding as any });
 			}
 		} catch (error) {
 			throw this.fsErrorToJsError_(error, path);
@@ -152,7 +154,8 @@ export default class FsDriverNode extends FsDriverBase {
 	public async readFile(path: string, encoding = 'utf8') {
 		try {
 			if (encoding === 'Buffer') return await fs.readFile(path); // Returns the raw buffer
-			return await fs.readFile(path, encoding);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code
+			return await fs.readFile(path, encoding as any);
 		} catch (error) {
 			throw this.fsErrorToJsError_(error, path);
 		}
@@ -190,6 +193,18 @@ export default class FsDriverNode extends FsDriverBase {
 		if (encoding === 'base64') return buffer.toString('base64');
 		if (encoding === 'ascii') return buffer.toString('ascii');
 		throw new Error(`Unsupported encoding: ${encoding}`);
+	}
+
+	public override watchDirectory(path: string, onEventHandler: OnWatchEventListener) {
+		const watcher = fs.watch(path, { recursive: true }, (eventType, path) => {
+			onEventHandler(eventType as DirectoryWatchEventType, path);
+		});
+
+		return {
+			close: () => {
+				watcher.close();
+			},
+		};
 	}
 
 	public resolve(...pathComponents: string[]) {

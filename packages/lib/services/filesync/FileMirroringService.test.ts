@@ -1,6 +1,6 @@
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
-import { createTempDir, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import { createFolderTree, createTempDir, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import FileMirroringService from './FileMirroringService';
 import { extname, join } from 'path';
 import createFilesFromPathRecord from '../../utils/pathRecord/createFilesFromPathRecord';
@@ -27,9 +27,9 @@ describe('FileMirroringService', () => {
 		const note3Copy = await Note.save({ title: 'note3', parent_id: folder3.id });
 
 		const tempDir = await createTempDir();
-		const service = new FileMirroringService();
+		const service = new FileMirroringService(tempDir, baseFolder.id);
 
-		await service.syncDir(tempDir, baseFolder.id);
+		await service.fullSync();
 
 		await verifyDirectoryMatches(tempDir, {
 			[join(folder1.title, `${note1.title}.md`)]: [
@@ -91,9 +91,9 @@ describe('FileMirroringService', () => {
 			'test/foo/b.md': '---\ntitle: Another test (subfolder)\n---',
 		});
 
-		const service = new FileMirroringService();
 		const baseFolder = await Folder.save({ title: 'base' });
-		await service.syncDir(tempDir, baseFolder.id);
+		const service = new FileMirroringService(tempDir, baseFolder.id);
+		await service.fullSync();
 
 		const innerFolder = await Folder.loadByTitle('test');
 
@@ -139,8 +139,8 @@ describe('FileMirroringService', () => {
 			'testFolder/empty frontmatter.md': '---\n---\nTest.',
 		});
 
-		const service = new FileMirroringService();
-		await service.syncDir(tempDir, ALL_NOTES_FILTER_ID);
+		const service = new FileMirroringService(tempDir, ALL_NOTES_FILTER_ID);
+		await service.fullSync();
 
 		const parentFolder = await Folder.loadByTitle('testFolder');
 		const note = await Note.loadByTitle('a note');
@@ -172,13 +172,13 @@ describe('FileMirroringService', () => {
 			'test/b.md': '---\ntitle: Another test\n---\nFoo',
 		});
 
-		const service = new FileMirroringService();
-		await service.syncDir(tempDir, ALL_NOTES_FILTER_ID);
+		const service = new FileMirroringService(tempDir, ALL_NOTES_FILTER_ID);
+		await service.fullSync();
 
 		await fs.appendFile(join(tempDir, 'test/test_note.md'), 'Testing 123...');
 		await fs.appendFile(join(tempDir, 'test/a.md'), 'Testing...');
 
-		await service.syncDir(tempDir, ALL_NOTES_FILTER_ID);
+		await service.fullSync();
 
 		const folder = await Folder.loadByTitle('test');
 
@@ -211,7 +211,7 @@ describe('FileMirroringService', () => {
 		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
 
 		// Should not change directory unnecessarily
-		await service.syncDir(tempDir, ALL_NOTES_FILTER_ID);
+		await service.fullSync();
 		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
 	});
 
@@ -222,9 +222,9 @@ describe('FileMirroringService', () => {
 		const tempDir = await createTempDir();
 		await createFilesFromPathRecord(tempDir, testData);
 
-		const service = new FileMirroringService();
 		const baseFolderId = (await Folder.save({ title: 'base folder' })).id;
-		await service.syncDir(tempDir, baseFolderId);
+		const service = new FileMirroringService(tempDir, baseFolderId);
+		await service.fullSync();
 
 		const noteIds = await Note.allIds();
 		expect(noteIds).toHaveLength(expectedNoteCount);
@@ -232,13 +232,90 @@ describe('FileMirroringService', () => {
 		for (const id of noteIds) {
 			await Note.delete(id, { toTrash: true });
 			expectedNoteCount --;
-			await service.syncDir(tempDir, baseFolderId);
+			await service.fullSync();
 
 			const dirStats = await shim.fsDriver().readDirStats(tempDir, { recursive: true });
 			const markdownFiles = dirStats.map(stat => stat.path).filter(path => extname(path) === '.md');
 
 			expect(markdownFiles.length).toBe(expectedNoteCount);
 		}
+	});
+
+	it('should move notes in dir when moved in DB', async () => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, {
+			'a note.md': 'Note 1',
+			'another note.md': 'Note 2',
+			'newFolder/test.md': 'Note 3',
+		});
+
+		const service = new FileMirroringService(tempDir, ALL_NOTES_FILTER_ID);
+		await service.fullSync();
+
+		const note1 = await Note.loadByTitle('a note');
+		expect(note1.body).toBe('Note 1');
+		const note2 = await Note.loadByTitle('another note');
+		expect(note2.body).toBe('Note 2');
+		const note3 = await Note.loadByTitle('test');
+		expect(note3.body).toBe('Note 3');
+
+		const targetFolder = await Folder.loadByTitle('newFolder');
+		await Note.moveToFolder(note1.id, targetFolder.id);
+
+		await service.fullSync();
+
+		await verifyDirectoryMatches(tempDir, {
+			'another note.md': `---\ntitle: another note\nid: ${note2.id}\n---\n\nNote 2`,
+			'newFolder/test.md': `---\ntitle: test\nid: ${note3.id}\n---\n\nNote 3`,
+			'newFolder/a note.md': `---\ntitle: a note\nid: ${note1.id}\n---\n\nNote 1`,
+			'newFolder/.folder.yml': `title: newFolder\nid: ${targetFolder.id}\n`,
+		});
+	});
+
+	it('should remove notes from dir when moved out of synced folder in DB', async () => {
+		const syncFolder = await createFolderTree('', [
+			{
+				title: 'folder 1',
+				children: [
+					{
+						title: 'note 1',
+						body: 'Note 1',
+					},
+					{
+						title: 'note 2',
+					},
+				],
+			},
+		]);
+
+		const unsyncedFolderId = (await Folder.save({ title: 'Unsynced' })).id;
+		const note1Id = (await Note.loadByTitle('note 1')).id;
+		const note2Id = (await Note.loadByTitle('note 2')).id;
+
+		const tempDir = await createTempDir();
+		const service = new FileMirroringService(tempDir, syncFolder.id);
+		await service.fullSync();
+
+		await verifyDirectoryMatches(tempDir, {
+			'note 1.md': `---\ntitle: note 1\nid: ${note1Id}\n---\n\nNote 1`,
+			'note 2.md': `---\ntitle: note 2\nid: ${note2Id}\n---\n\n`,
+		});
+
+		await Note.moveToFolder(note1Id, unsyncedFolderId);
+
+		await service.fullSync();
+
+		await verifyDirectoryMatches(tempDir, {
+			'note 2.md': `---\ntitle: note 2\nid: ${note2Id}\n---\n\n`,
+		});
+
+		// Note should still exist
+		expect(await Note.load(note1Id)).toMatchObject({
+			id: note1Id,
+			parent_id: unsyncedFolderId,
+			body: 'Note 1',
+			deleted_time: 0,
+		});
 	});
 
 	// it('should delete notes locally when deleted remotely', async () => {
