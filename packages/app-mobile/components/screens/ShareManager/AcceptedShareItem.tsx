@@ -79,7 +79,7 @@ const AcceptedShareItem: React.FC<Props> = props => {
 		<Card.Title
 			left={AcceptedIcon}
 			title={_('Notebook: %s (%s)', folderTitle, folderId)}
-			subtitle={_('Invitation from %s (%s)', sharer.full_name, sharer.email)}
+			subtitle={_('Share from %s (%s)', sharer.full_name, sharer.email)}
 		/>
 		<Card.Actions>
 			<Button
