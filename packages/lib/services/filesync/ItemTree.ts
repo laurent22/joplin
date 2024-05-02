@@ -159,7 +159,7 @@ export default class ItemTree {
 		return this.move(this.pathFromId(itemId), this.pathFromId(newParentId), listeners);
 	}
 
-	public move(fromPath: string, toPath: string, listeners: MoveActionListener): Promise<void> {
+	public async move(fromPath: string, toPath: string, listeners: MoveActionListener): Promise<void> {
 		fromPath = normalize(fromPath);
 		toPath = normalize(toPath);
 
@@ -181,26 +181,23 @@ export default class ItemTree {
 		this.pathToItem_.set(toPath, item);
 		this.idToPath_.set(item.id, toPath);
 
+		await listeners.onMove({
+			fromPath,
+			toPath,
+			movedItem: { ...item, parent_id: toParentId },
+		});
+
 		const canHaveChildren = item.type_ === ModelType.Folder;
-		const promises: Promise<void>[] = [];
 		if (canHaveChildren) {
 			// Handle the case where an item starts with path but is not a child of it
 			const prefix = fromPath.endsWith('/') ? fromPath : `${fromPath}/`;
 			for (const [path] of this.items()) {
 				if (path.startsWith(prefix) && path !== prefix) {
 					const childToPath = join(toPath, path.substring(prefix.length));
-					promises.push(this.move(path, childToPath, listeners));
+					await this.move(path, childToPath, listeners);
 				}
 			}
 		}
-
-		promises.push(listeners.onMove({
-			fromPath,
-			toPath,
-			movedItem: { ...item, parent_id: toParentId },
-		}));
-		// eslint-disable-next-line -- TODO: Fix & determine whether this is really necessary.
-		return Promise.all(promises).then(() => {});
 	}
 
 	public deleteItemAtId(id: string, listeners: DeleteActionListener) {

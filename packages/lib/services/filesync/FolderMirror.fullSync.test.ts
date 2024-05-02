@@ -14,6 +14,9 @@ describe('FolderMirror.fullSync', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
+
+		// Required for AsyncActionQueue
+		jest.useRealTimers();
 	});
 
 	it('should create notes in a local dir', async ()=> {
@@ -338,6 +341,29 @@ describe('FolderMirror.fullSync', () => {
 		expect(await Folder.load(newFolderId)).toMatchObject({
 			id: newFolderId,
 			title: 'New title',
+		});
+	});
+
+	it('should rename folders in dir when renamed in DB', async () => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, {
+			'another note.md': 'Note 2',
+			'newFolder/test.md': 'Note 3',
+		});
+
+		const service = new FolderMirror(tempDir, '');
+		await service.fullSync();
+
+		const newFolderId = (await Folder.loadByTitle('newFolder')).id;
+		await Folder.save({ id: newFolderId, title: 'New Title' });
+
+		await service.fullSync();
+
+		expect(await fs.readFile(join(tempDir, 'New Title', '.folder.yml'), 'utf8')).toBe(`title: New Title\nid: ${newFolderId}\n`);
+
+		expect(await Folder.load(newFolderId)).toMatchObject({
+			id: newFolderId,
+			title: 'New Title',
 		});
 	});
 

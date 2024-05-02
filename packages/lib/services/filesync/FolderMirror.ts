@@ -145,8 +145,10 @@ const mergeTrees = async (localTree: ItemTree, remoteTree: ItemTree, modifyLocal
 				}
 			}
 
-			if (dirname(remotePath) !== dirname(localPath)) {
-				if (localItem.updated_time > remoteItem.updated_time) {
+			// Because folders can have children, it's more important to keep their paths up-to-date.
+			const isRenamedFolder = remotePath !== localPath && localItem.type_ === ModelType.Folder;
+			if (dirname(remotePath) !== dirname(localPath) || isRenamedFolder) {
+				if (localItem.updated_time >= remoteItem.updated_time) {
 					await remoteTree.move(remotePath, localPath, modifyRemote);
 				} else {
 					await localTree.move(localPath, remotePath, modifyLocal);
@@ -213,6 +215,7 @@ export default class {
 	private localTree_: ItemTree;
 	private remoteTree_: ItemTree;
 	private actionQueue_: AsyncActionQueue<ActionQueueEvent>;
+	private fullSyncEndListeners_: ((error: unknown)=> void)[] = [];
 
 	public constructor(private baseFilePath: string, private baseFolderId: string) {
 		if (baseFolderId === ALL_NOTES_FILTER_ID) {
@@ -312,7 +315,16 @@ export default class {
 			},
 			onMove: async ({ fromPath, toPath })=> {
 				debugLogger.debug('remote.onMove', fromPath, '->', toPath);
-				await shim.fsDriver().move(join(baseFilePath, fromPath), join(baseFilePath, toPath));
+				const fullFromPath = join(baseFilePath, fromPath);
+				const fullToPath = join(baseFilePath, toPath);
+
+				// Because fsDriver.move is recursive, it may be the case that this item was already
+				// moved when a parent directory was.
+				if (!(await shim.fsDriver().exists(fullFromPath)) && await shim.fsDriver().exists(fullToPath)) {
+					debugLogger.debug('remote.onMove/skip -- already done');
+				} else {
+					await shim.fsDriver().move(fullFromPath, fullToPath);
+				}
 			},
 		};
 	}
@@ -355,14 +367,16 @@ export default class {
 	}
 
 	public fullSync() {
-		return new Promise<void>(resolve => {
-			this.actionQueue_.push(
-				async (event: ActionQueueEvent) => {
-					await this.handleQueueAction(event);
+		return new Promise<void>((resolve, reject) => {
+			this.fullSyncEndListeners_.push((error) => {
+				if (error) {
+					reject(error);
+				} else {
 					resolve();
-				},
-				{ type: FolderMirrorEventType.FullSync },
-			);
+				}
+			});
+
+			this.actionQueue_.push(this.handleQueueAction, { type: FolderMirrorEventType.FullSync });
 		});
 	}
 
@@ -372,12 +386,16 @@ export default class {
 		const folderFields = ['id', 'icon', 'title', 'parent_id', 'updated_time', 'deleted_time'];
 		const isAllNotes = baseFolderId === '';
 
+		debugLogger.debug('starting full sync');
+		debugLogger.group();
+
 		const childrenFolders =
 			isAllNotes ? await Folder.all({ fields: folderFields }) : await Folder.allChildrenFolders(baseFolderId, folderFields);
 		const allFolders = await Folder.allAsTree(childrenFolders, { toplevelId: baseFolderId });
 
 		this.localTree_.resetData();
 		this.remoteTree_.resetData();
+
 
 		const processFolders = async (basePath: string, parentId: string, folders: FolderEntityWithChildren[]) => {
 			const folderIdToItemPath = makeItemPaths(basePath, folders);
@@ -400,6 +418,7 @@ export default class {
 		};
 
 		await processFolders('', baseFolderId, allFolders);
+		debugLogger.debug('built local tree');
 
 		const generatedIds: string[] = [];
 		await fillRemoteTree(filePath, this.remoteTree_, {
@@ -423,8 +442,11 @@ export default class {
 			const item = this.remoteTree_.getAtId(id);
 			await this.remoteTree_.updateAtPath(path, item, this.modifyRemoteActions_);
 		}
+		debugLogger.debug('built remote tree', generatedIds.length, 'new IDs');
 
 		await mergeTrees(this.localTree_, this.remoteTree_, this.modifyLocalActions_, this.modifyRemoteActions_);
+
+		debugLogger.groupEnd();
 	}
 
 	private async databaseItemChangeTask(id: string) {
@@ -515,9 +537,24 @@ export default class {
 	}
 
 	private handleQueueAction = async (context: ActionQueueEvent) => {
+		debugLogger.debug('action', context.type);
 		switch (context.type) {
 		case FolderMirrorEventType.FullSync:
-			return this.fullSyncTask();
+			try {
+				await this.fullSyncTask();
+			} catch (error) {
+				for (const listener of this.fullSyncEndListeners_) {
+					listener(error);
+				}
+				this.fullSyncEndListeners_ = [];
+				throw error;
+			}
+
+			for (const listener of this.fullSyncEndListeners_) {
+				listener(null);
+			}
+			this.fullSyncEndListeners_ = [];
+			break;
 		case FolderMirrorEventType.DatabaseItemChange:
 			return this.databaseItemChangeTask(context.id);
 		case FolderMirrorEventType.DatabaseItemDelete:
