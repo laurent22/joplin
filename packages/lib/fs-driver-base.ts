@@ -21,7 +21,11 @@ export enum DirectoryWatchEventType {
 	Unlink = 'unlink',
 	Change = 'change',
 }
-export type OnWatchEventListener = (eventType: DirectoryWatchEventType, path: string)=> void;
+export interface DirectoryWatchEvent {
+	type: DirectoryWatchEventType;
+	path: string;
+}
+export type OnWatchEventListener = (event: DirectoryWatchEvent)=> void;
 export interface DirectoryWatcher {
 	close(): Promise<void>;
 }

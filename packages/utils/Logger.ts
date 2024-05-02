@@ -78,6 +78,7 @@ class Logger {
 	private level_: LogLevel = LogLevel.Info;
 	private lastDbCleanup_: number = Date.now();
 	private enabled_ = true;
+	private indentation_: string[] = [];
 
 	public static fsDriver() {
 		if (!Logger.fsDriver_) Logger.fsDriver_ = dummyFsDriver;
@@ -270,6 +271,8 @@ class Logger {
 	public log(level: LogLevel, prefix: string | null, ...object: unknown[]) {
 		if (!this.targets_.length || !this.enabled) return;
 
+		object = [...this.indentation_, ...object];
+
 		let logLine = '';
 
 		for (let i = 0; i < this.targets_.length; i++) {
@@ -377,6 +380,12 @@ class Logger {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public debug(...object: any[]) {
 		return this.log(LogLevel.Debug, null, ...object);
+	}
+	public group() {
+		this.indentation_.push('  ');
+	}
+	public groupEnd() {
+		this.indentation_.pop();
 	}
 
 	public static levelStringToId(s: string) {

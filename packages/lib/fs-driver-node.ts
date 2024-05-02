@@ -199,19 +199,19 @@ export default class FsDriverNode extends FsDriverBase {
 	public override async watchDirectory(path: string, onEventHandler: OnWatchEventListener) {
 		const watcher = chokidar.watch(path, { persistent: false });
 		watcher.on('change', path => {
-			onEventHandler(DirectoryWatchEventType.Change, path);
+			onEventHandler({ type: DirectoryWatchEventType.Change, path });
 		});
 		watcher.on('add', path => {
-			onEventHandler(DirectoryWatchEventType.Add, path);
+			onEventHandler({ type: DirectoryWatchEventType.Add, path });
 		});
 		watcher.on('unlink', path => {
-			onEventHandler(DirectoryWatchEventType.Unlink, path);
+			onEventHandler({ type: DirectoryWatchEventType.Unlink, path });
 		});
 		watcher.on('addDir', path => {
-			onEventHandler(DirectoryWatchEventType.Add, path);
+			onEventHandler({ type: DirectoryWatchEventType.Add, path });
 		});
 		watcher.on('unlinkDir', path => {
-			onEventHandler(DirectoryWatchEventType.Unlink, path);
+			onEventHandler({ type: DirectoryWatchEventType.Unlink, path });
 		});
 
 		return new Promise<DirectoryWatcher>((resolve, reject) => {

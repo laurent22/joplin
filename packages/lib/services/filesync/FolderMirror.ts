@@ -1,5 +1,5 @@
 import { ModelType } from '../../BaseModel';
-import { DirectoryWatchEventType, DirectoryWatcher, Stat } from '../../fs-driver-base';
+import { DirectoryWatchEvent, DirectoryWatchEventType, DirectoryWatcher, Stat } from '../../fs-driver-base';
 import Folder, { FolderEntityWithChildren } from '../../models/Folder';
 import Note from '../../models/Note';
 import { friendlySafeFilename } from '../../path-utils';
@@ -13,7 +13,15 @@ import writeFolderInfo from './folderInfo/writeFolderInfo';
 import { FolderItem } from './types';
 import ItemTree, { ActionListeners, AddActionListener, UpdateEvent, noOpActionListeners } from './ItemTree';
 import uuid from '../../uuid';
+import BaseItem from '../../models/BaseItem';
+import AsyncActionQueue from '../../AsyncActionQueue';
+import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 const { ALL_NOTES_FILTER_ID } = require('../../reserved-ids.js');
+
+const debugLogger = new Logger();
+debugLogger.addTarget(TargetType.Console);
+debugLogger.setLevel(LogLevel.Debug);
+debugLogger.enabled = false;
 
 const makeItemPaths = (basePath: string, items: FolderItem[]) => {
 	const output: Map<string, string> = new Map();
@@ -203,15 +211,22 @@ export default class {
 
 		this.modifyLocalActions_ = {
 			onAdd: async ({ item }) => {
+				// Determine if it's new or not -- the item could be coming from a
+				// different (unsynced) folder.
+				const isNew = !item.id || !await BaseItem.loadItemById(item.id, { fields: ['id'] });
+				debugLogger.debug('onAdd', item.title, isNew ? '[new]' : '[update]');
+
 				let result;
 				if (item.type_ === ModelType.Folder) {
-					result = await Folder.save(item, { isNew: true });
+					result = await Folder.save(item, { isNew });
 				} else {
-					result = await Note.save(item, { isNew: true });
+					result = await Note.save(item, { isNew });
 				}
 				return result;
 			},
 			onUpdate: async ({ item }) => {
+				debugLogger.debug('onUpdate', item.title);
+
 				if (item.type_ === ModelType.Folder) {
 					await Folder.save(item, { isNew: false });
 				} else {
@@ -219,6 +234,8 @@ export default class {
 				}
 			},
 			onDelete: async ({ item }): Promise<void> => {
+				debugLogger.debug('onDelete', item.title);
+
 				if (item.type_ === ModelType.Note) {
 					await Note.delete(item.id, { toTrash: true, sourceDescription: 'FileMirroringService' });
 				} else {
@@ -226,6 +243,8 @@ export default class {
 				}
 			},
 			onMove: async ({ movedItem })=> {
+				debugLogger.debug('onMove', movedItem.title);
+
 				if (movedItem.type_ === ModelType.Folder) {
 					await Folder.save({ ...movedItem });
 				} else {
@@ -283,37 +302,74 @@ export default class {
 	public async watch() {
 		if (this.watcher_) return;
 
-		this.watcher_ = await shim.fsDriver().watchDirectory(this.baseFilePath, async (eventType, fullPath): Promise<void> => {
+		const itemAtPath = async (relativePath: string) => {
+			let stat = await shim.fsDriver().stat(join(this.baseFilePath, relativePath));
+			stat = { ...stat, path: relativePath };
+
+			return await statToItem(this.baseFilePath, stat, this.remoteTree_);
+		};
+
+		const handleFileAdd = async (path: string, item?: FolderItem) => {
+			if (path.startsWith('.')) return;
+
+			item ??= await itemAtPath(path);
+			if (!item) return; // Unsupported
+
+			debugLogger.debug('handleAdd at', path);
+			debugLogger.group();
+
+			// Add parent dirs
+			await handleFileAdd(dirname(path));
+
+			item = await this.localTree_.processItem(item, this.modifyLocalActions_);
+			await this.remoteTree_.processItem(item, noOpActionListeners);
+
+			debugLogger.groupEnd();
+		};
+
+		const handleWatcherEvent = async (event: DirectoryWatchEvent): Promise<void> => {
+			const fullPath = event.path;
 			const path = relative(this.baseFilePath, fullPath);
 			if (!path || path === '.') return;
 
-			if (await shim.fsDriver().exists(fullPath)) {
-				let stat = await shim.fsDriver().stat(fullPath);
-				stat = { ...stat, path };
+			debugLogger.debug('event', event.type, path);
+			debugLogger.group();
 
-				let item = await statToItem(this.baseFilePath, stat, this.remoteTree_);
+			try {
+				if (await shim.fsDriver().exists(fullPath)) {
+					const item = await itemAtPath(path);
 
-				// Unsupported file type
-				if (!item) return;
+					// Unsupported file type
+					if (!item) return;
 
-				if (eventType === DirectoryWatchEventType.Add) { // File created, renamed, or deleted
-					if (!this.localTree_.hasPath(path)) { // Ignore if during initial scan
-						item = await this.localTree_.addItemAt(path, item, this.modifyLocalActions_);
-						await this.remoteTree_.addItemAt(path, item, noOpActionListeners);
+					if (event.type === DirectoryWatchEventType.Add) { // File created, renamed, or deleted
+						await handleFileAdd(path, item);
+					} else if (event.type === DirectoryWatchEventType.Change) {
+						await this.localTree_.updateAtPath(path, item, this.modifyLocalActions_);
+						await this.remoteTree_.updateAtPath(path, item, noOpActionListeners);
+					} else if (event.type === DirectoryWatchEventType.Unlink) {
+						throw new Error(`Path ${path} was marked as unlinked, but still exists.`);
+					} else {
+						const exhaustivenessCheck: never = event.type;
+						return exhaustivenessCheck;
 					}
-				} else if (eventType === DirectoryWatchEventType.Change) {
-					await this.localTree_.updateAtPath(path, item, this.modifyLocalActions_);
-					await this.remoteTree_.updateAtPath(path, item, noOpActionListeners);
-				} else if (eventType === DirectoryWatchEventType.Unlink) {
-					throw new Error(`Path ${path} was marked as unlinked, but still exists.`);
-				} else {
-					const exhaustivenessCheck: never = eventType;
-					return exhaustivenessCheck;
+				} else if (this.remoteTree_.hasPath(path)) {
+					debugLogger.debug(`file doesn't exist at ${fullPath}. Delete`);
+					await this.localTree_.deleteAtPath(path, this.modifyLocalActions_);
+					await this.remoteTree_.deleteAtPath(path, noOpActionListeners);
 				}
-			} else if (this.remoteTree_.hasPath(path)) {
-				await this.localTree_.deleteAtPath(path, this.modifyLocalActions_);
-				await this.remoteTree_.deleteAtPath(path, noOpActionListeners);
+			} finally {
+				debugLogger.groupEnd();
 			}
+		};
+
+		const actionQueue = new AsyncActionQueue<DirectoryWatchEvent>();
+		actionQueue.setCanSkipTaskHandler((currentTask, nextTask) => {
+			return currentTask.context.path === nextTask.context.path && currentTask.context.type === nextTask.context.type;
+		});
+
+		this.watcher_ = await shim.fsDriver().watchDirectory(this.baseFilePath, async (event): Promise<void> => {
+			actionQueue.push(handleWatcherEvent, event);
 		});
 	}
 

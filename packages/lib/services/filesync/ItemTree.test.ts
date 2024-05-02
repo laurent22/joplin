@@ -75,6 +75,34 @@ describe('ItemTree', () => {
 		tree.checkRep_();
 	});
 
+	test('should move all children when moving a folder', async () => {
+		const tree = new ItemTree(baseItem);
+
+		const item1 = { title: 'Test 1', id: 'test-id1', type_: ModelType.Folder };
+		await tree.addItemTo('', item1, noOpActionListeners);
+		const item2 = { title: 'Test 2', id: 'test-id2', type_: ModelType.Folder };
+		await tree.addItemTo('Test 1', item2, noOpActionListeners);
+		const item3 = { title: 'Test 3', id: 'test-id3', type_: ModelType.Folder };
+		await tree.addItemTo('Test 1/Test 2', item3, noOpActionListeners);
+		const item4 = { title: 'Test 4', id: 'test-id4', type_: ModelType.Note };
+		await tree.addItemTo('Test 1/Test 2/Test 3', item4, noOpActionListeners);
+		const item5 = { title: 'Test 5', id: 'test-id5', type_: ModelType.Folder };
+		await tree.addItemTo('', item5, noOpActionListeners);
+
+		tree.checkRep_();
+		await tree.moveToParent('test-id1', 'test-id5', noOpActionListeners);
+		tree.checkRep_();
+
+		expect([...tree.items()]).toMatchObject([
+			['.', baseItem],
+			['Test 5', item5],
+			['Test 5/Test 1', item1],
+			['Test 5/Test 1/Test 2', item2],
+			['Test 5/Test 1/Test 2/Test 3', item3],
+			['Test 5/Test 1/Test 2/Test 3/Test 4.md', item4],
+		]);
+	});
+
 	test('should delete all children when deleting a folder', async () => {
 		const tree = new ItemTree(baseItem);
 		await tree.addItemTo('', { title: 'Test 1', id: 'test-id1', type_: ModelType.Folder }, noOpActionListeners);
