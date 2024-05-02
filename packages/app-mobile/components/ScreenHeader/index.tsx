@@ -34,12 +34,17 @@ const PADDING_V = 10;
 type OnSelectCallbackType=()=> void;
 type OnPressCallback=()=> void;
 
-export interface MenuOptionType {
+export type MenuOptionType = {
 	onPress: OnPressCallback;
 	isDivider?: boolean;
 	title: string;
 	disabled?: boolean;
-}
+}|{
+	isDivider: true;
+	title?: undefined;
+	onPress?: undefined;
+	disabled?: false;
+};
 
 interface ScreenHeaderProps {
 	selectedNoteIds: string[];
@@ -427,8 +432,10 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const pluginPanelToggleButton = (styles: any, onPress: OnPressCallback) => {
 			const allPluginViews = Object.values(this.props.plugins).map(plugin => Object.values(plugin.views)).flat();
-			const allPanels = allPluginViews.filter(view => view.containerType === ContainerType.Panel);
-			if (allPanels.length === 0) return null;
+			const allVisiblePanels = allPluginViews.filter(
+				view => view.containerType === ContainerType.Panel && view.opened,
+			);
+			if (allVisiblePanels.length === 0) return null;
 
 			return (
 				<CustomButton
