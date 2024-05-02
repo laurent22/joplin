@@ -65,6 +65,9 @@
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s nu este optimizat pentru sincronizarea multor fișiere mici, astfel încât sincronizarea inițială va fi lentă."
 	],
+	"%s tab opened": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -158,6 +161,9 @@
 	"Accept": [
 		"Accept"
 	],
+	"Accepted shares": [
+		""
+	],
 	"Access denied: Please check your username and password": [
 		"Acces refuzat: Vă rugăm să vă verificați numele de utilizator și parola"
 	],
@@ -212,11 +218,17 @@
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"Toate datele, inclusiv notițele, caietele de notițe și etichetele vor fi șterse definitiv."
 	],
+	"All item sync failures have been marked as \"ignored\".": [
+		""
+	],
 	"All notes": [
 		"Toate notițele"
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Toate porturile potențiale sunt în uz - vă rugăm să raportați problema la %s"
+	],
+	"Allows debugging mobile plugins. See %s for details.": [
+		""
 	],
 	"Also displays unset and hidden config variables.": [
 		"Afișează, de asemenea, variabile de configurare nesetate și ascunse."
@@ -229,6 +241,9 @@
 	],
 	"Always ask": [
 		"Mereu întrebați"
+	],
+	"Always open %s files without asking.": [
+		""
 	],
 	"Always resize": [
 		"Mereu redimensionați"
@@ -349,6 +364,9 @@
 	],
 	"Bulleted List": [
 		"Listă cu puncte"
+	],
+	"by %s": [
+		""
 	],
 	"Can Share": [
 		"Se poate partaja"
@@ -524,8 +542,14 @@
 	"Completed decryption.": [
 		"Decriptare completă."
 	],
+	"Completed with warnings:\n%s": [
+		""
+	],
 	"Completed: %s (%s)": [
 		"Completat: %s (%s)"
+	],
+	"completion date": [
+		""
 	],
 	"Compress old changes": [
 		"Comprimarea modificărilor vechi"
@@ -721,9 +745,6 @@
 	"Dashboard": [
 		"Dashboard"
 	],
-	"Database v%s": [
-		"Baza de date v%s"
-	],
 	"Date": [
 		"Data"
 	],
@@ -798,6 +819,9 @@
 	],
 	"Deleted remote items: %d.": [
 		"Elemente șterse de la distanță: %d."
+	],
+	"Deletes notes permanently, skipping the trash.": [
+		""
 	],
 	"Deletes the given notebook.": [
 		"Șterge agenda."
@@ -1189,9 +1213,6 @@
 	"Export profile": [
 		"Exportați profilul"
 	],
-	"Export your data": [
-		"Exportați datele dumneavoastră"
-	],
 	"Exported successfully!": [
 		"Exportat cu succes!"
 	],
@@ -1218,6 +1239,9 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Fail-safe: Nu ștergeți datele locale atunci când ținta de sincronizare este goală (adesea rezultatul unei configurații greșite sau al unei erori)."
+	],
+	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
+		""
 	],
 	"Fatal error:": [
 		"Eroare fatală:"
@@ -1263,9 +1287,6 @@
 	],
 	"Focus title": [
 		"Focus titlu"
-	],
-	"Folders": [
-		"Fișiere"
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Numai în scop de depanare: exportați profilul pe un card SD extern."
@@ -1350,6 +1371,9 @@
 	"Help": [
 		"Ajutor"
 	],
+	"Here's what we do to make plugins safer:": [
+		""
+	],
 	"Hermes enabled: %d": [
 		"Hermes activat: %d"
 	],
@@ -1419,6 +1443,15 @@
 	"Import": [
 		"Importați"
 	],
+	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+		""
+	],
+	"Import from JEX": [
+		""
+	],
+	"Import notes from a JEX (Joplin Export) file.": [
+		""
+	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		"Se exportă către \"%s\" în format \"%s\". Vă rugăm să așteptați..."
 	],
@@ -1454,6 +1487,9 @@
 	],
 	"In: %s": [
 		"În: %s"
+	],
+	"Incompatible": [
+		""
 	],
 	"Increase indent level": [
 		"Creșteți nivelul de indentare"
@@ -1532,6 +1568,9 @@
 	],
 	"Joplin Cloud": [
 		"Joplin Cloud"
+	],
+	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
+		""
 	],
 	"Joplin Export Directory": [
 		"Joplin Export Directory"
@@ -1625,6 +1664,9 @@
 	],
 	"Light": [
 		"Light"
+	],
+	"Like any software you install, plugins can potentially cause security issues or data loss.": [
+		""
 	],
 	"Lines": [
 		"Linii"
@@ -1772,6 +1814,9 @@
 	"More than one item match \"%s\". Please narrow down your query.": [
 		"Mai multe elemente se potrivesc cu „%s\". Vă rugăm să restrângeți interogarea."
 	],
+	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
 	"Move %d notes to notebook \"%s\"?": [
 		"Mutați %d notițe în caietul de notițe \"%s\"?"
 	],
@@ -1795,6 +1840,9 @@
 	],
 	"Never resize": [
 		"Nu redimensionați niciodată"
+	],
+	"New": [
+		""
 	],
 	"New note": [
 		"Adăugați o nouă notiță"
@@ -1843,6 +1891,9 @@
 	],
 	"No active notebook.": [
 		"Niciun caiet de notițe activ."
+	],
+	"No incoming shares": [
+		""
 	],
 	"No item with ID %s": [
 		"Niciun item cu ID-ul %s"
@@ -2105,9 +2156,6 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"Vă rugăm să specificați notebook-ul în care trebuie importate notițele."
 	],
-	"Please upgrade Joplin to use this plugin": [
-		"Vă rugăm să actualizați Joplin pentru a utiliza acest plugin"
-	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Vă rugăm să așteptați descărcarea și decriptarea tuturor atașamentelor. De asemenea, puteți comuta la %s pentru a edita notița."
 	],
@@ -2120,8 +2168,14 @@
 	"Plugin tools": [
 		"Instrumente Plugin"
 	],
+	"Plugin WebView debugging": [
+		""
+	],
 	"Plugins": [
 		"Plugin"
+	],
+	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
+		""
 	],
 	"Portrait": [
 		"Portrait"
@@ -2182,6 +2236,9 @@
 	],
 	"Process user deletions": [
 		"Procesarea ștergerilor de utilizator"
+	],
+	"Processing": [
+		""
 	],
 	"Profile": [
 		"Profil"
@@ -2299,6 +2356,12 @@
 	],
 	"Replace: ": [
 		"Înlocuiți: "
+	],
+	"Report an issue": [
+		""
+	],
+	"Report fraudulent plugin": [
+		""
 	],
 	"Reset application layout": [
 		"Resetarea aspectului aplicației"
@@ -2588,6 +2651,9 @@
 	"Source: ": [
 		"Sursă: "
 	],
+	"Spacer": [
+		""
+	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		"Specificați portul care trebuie utilizat de serverul API. Dacă nu este setat, se va utiliza un port implicit."
 	],
@@ -2765,6 +2831,9 @@
 	"Take photo": [
 		"Faceți foto"
 	],
+	"Task \"%s\" failed with error: %s": [
+		""
+	],
 	"Task list": [
 		"Lista de task-uri"
 	],
@@ -2908,9 +2977,6 @@
 	"There are unsaved changes.": [
 		"Există schimbări nesalvate."
 	],
-	"There is currently no notebook. Create one by clicking on \"New notebook\".": [
-		"În prezent, nu există niciun notebook. Creați unul făcând clic pe “Notebook nou”."
-	],
 	"There is no data to export.": [
 		"Nu există date de exportat."
 	],
@@ -2920,6 +2986,9 @@
 	"There was an error downloading this attachment:": [
 		"A apărut o eroare la descărcarea acestui atașament:"
 	],
+	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
+		""
+	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Aceste elemente vor rămâne pe dispozitiv, dar nu vor fi încărcate pe obiectivul de sincronizare. Pentru a găsi aceste elemente, căutați fie titlul, fie ID-ul (care este afișat în paranteze mai sus)."
 	],
@@ -2928,6 +2997,9 @@
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
 		"Acest lucru permite unui alt utilizator să partajeze un notebook cu dvs., iar apoi puteți colabora amândoi la el. Cu toate acestea, nu vă permite să partajați un notebook cu altcineva, cu excepția cazului în care aveți caracteristica “%s”."
+	],
+	"This attachment does not have OCR data (Status: %s)": [
+		""
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Acest atașament nu este descărcat sau nu este încă decriptat"
@@ -2971,11 +3043,17 @@
 	"This note has no history": [
 		"Această notă nu are istoric"
 	],
+	"This plugin doesn't support %s.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Acest editor Rich Text are o serie de limitări și este recomandat să le cunoașteți înainte de a-l utiliza."
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"Acest serviciu permite extensia browserul-ui pentru a comunica cu Joplin. Atunci când se permite firewall poate cere să dea permisiunea Joplin pentru a asculta un anumit port."
+	],
+	"This subfolder of the trash has no notes.": [
+		""
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
 		"Acest lucru va permite ca Joplin să ruleze în fundal. Se recomandă să activați această setare pentru ca notele dvs. să fie sincronizate în mod constant, reducând astfel numărul de conflicte."
@@ -3112,9 +3190,6 @@
 	"Unable to edit resource of type %s": [
 		"Nu se poate edita resursa de tip %s"
 	],
-	"Unable to export or share data. Reason: %s": [
-		"Imposibilitatea de a exporta sau de a partaja date. Motivul: %s"
-	],
 	"Unable to share log data. Reason: %s": [
 		"Imposibilitatea de a partaja datele din jurnal. Motivul: %s"
 	],
@@ -3241,6 +3316,9 @@
 	"View": [
 		"Vizualizați"
 	],
+	"View OCR text": [
+		""
+	],
 	"View on map": [
 		"Vizualizați pe hartă"
 	],
@@ -3265,8 +3343,11 @@
 	"Warning: not all resources shown for performance reasons (limit: %s).": [
 		"Avertizare: nu toate resursele sunt afișate din motive de performanță (limită:% s)."
 	],
-	"Warnings:\n%s": [
-		"Avertizare: %s"
+	"We have a system for reporting and removing problematic plugins.": [
+		""
+	],
+	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
+		""
 	],
 	"Web Clipper": [
 		"Web Clipper"
@@ -3336,6 +3417,9 @@
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Puteți utiliza instrumentul de mai jos pentru a vă cripta din nou datele, de exemplu, dacă știți că unele note sunt criptate cu o metodă de criptare învechită."
+	],
+	"Your account doesn't have access to this feature": [
+		""
 	],
 	"Your choice: ": [
 		"Alegerea dumneavoastră: "

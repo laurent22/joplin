@@ -59,6 +59,9 @@
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		""
 	],
+	"%s tab opened": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -149,6 +152,9 @@
 	"Accept": [
 		"Aksepter"
 	],
+	"Accepted shares": [
+		""
+	],
 	"Access denied: Please check your username and password": [
 		""
 	],
@@ -200,17 +206,26 @@
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		""
 	],
+	"All item sync failures have been marked as \"ignored\".": [
+		""
+	],
 	"All notes": [
 		"Alle notater"
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Alle potensielle porter er i bruk - vennligst rapporter saken ved %s"
 	],
+	"Allows debugging mobile plugins. See %s for details.": [
+		""
+	],
 	"Also displays unset and hidden config variables.": [
 		"Viser også ikke-satte og skjulte konfigurasjonsvariabler."
 	],
 	"Always": [
 		"Alltid"
+	],
+	"Always open %s files without asking.": [
+		""
 	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
 		""
@@ -328,6 +343,9 @@
 	],
 	"Bulleted List": [
 		"Kulepunktliste"
+	],
+	"by %s": [
+		""
 	],
 	"Can view": [
 		""
@@ -461,6 +479,9 @@
 	"Collapse": [
 		""
 	],
+	"Collapse %s": [
+		""
+	],
 	"Coming alarms": [
 		"Kommende alarmer"
 	],
@@ -485,8 +506,14 @@
 	"Completed decryption.": [
 		"Dekryptering fullført."
 	],
+	"Completed with warnings:\n%s": [
+		""
+	],
 	"Completed: %s (%s)": [
 		"Fullført: %s (%s)"
+	],
+	"completion date": [
+		""
 	],
 	"Compress old changes": [
 		"Komprimer gamle endringer"
@@ -654,9 +681,6 @@
 	"Dashboard": [
 		"Kontrollpanel"
 	],
-	"Database v%s": [
-		"Database v%s"
-	],
 	"Date": [
 		"Dato"
 	],
@@ -716,6 +740,9 @@
 	],
 	"Deleted remote items: %d.": [
 		"Slettet eksterne elementer: %d."
+	],
+	"Deletes notes permanently, skipping the trash.": [
+		""
 	],
 	"Deletes the given notebook.": [
 		"Sletter den valgte notatboka."
@@ -1056,6 +1083,9 @@
 	"Expand": [
 		""
 	],
+	"Expand %s": [
+		""
+	],
 	"Export": [
 		"Eksporter"
 	],
@@ -1095,6 +1125,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Feilhåndtering: Ikke slett lokal data når synkroniseringsmålet er tomt (ofte resultatet av en miskonfigurering eller bug)"
 	],
+	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
+		""
+	],
 	"Fatal error:": [
 		"Kritisk feil:"
 	],
@@ -1133,9 +1166,6 @@
 	],
 	"Focus title": [
 		"Fokuser på tittel"
-	],
-	"Folders": [
-		"Kataloger"
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Kun av hensyn til feilsøking: eksporter din profil til et eksternt SD-kort."
@@ -1213,6 +1243,9 @@
 	"Help": [
 		"Hjelp"
 	],
+	"Here's what we do to make plugins safer:": [
+		""
+	],
 	"Hide %s": [
 		"Skjul %s"
 	],
@@ -1267,6 +1300,18 @@
 	"Import": [
 		"Importer"
 	],
+	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+		""
+	],
+	"Import from JEX": [
+		""
+	],
+	"Import notes from a JEX (Joplin Export) file.": [
+		""
+	],
+	"Imported successfully!": [
+		""
+	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		"Importerer fra \"%s\" i \"%s\"-format. Vennligst vent..."
 	],
@@ -1302,6 +1347,9 @@
 	],
 	"In: %s": [
 		"I: %s"
+	],
+	"Incompatible": [
+		""
 	],
 	"Increase indent level": [
 		""
@@ -1377,6 +1425,9 @@
 	],
 	"Joplin Cloud": [
 		"Joplin Cloud"
+	],
+	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
+		""
 	],
 	"Joplin Export Directory": [
 		"Joplin-eksportert katalog"
@@ -1467,6 +1518,9 @@
 	],
 	"Light": [
 		"Lys"
+	],
+	"Like any software you install, plugins can potentially cause security issues or data loss.": [
+		""
 	],
 	"Lines": [
 		"Linjer"
@@ -1586,6 +1640,9 @@
 	"More than one item match \"%s\". Please narrow down your query.": [
 		"Mer enn ett treff for \"%s\". Gjør søket mer spesifikt."
 	],
+	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
 	"Move %d notes to notebook \"%s\"?": [
 		"Flytt %d notater til notatbok \"%s\"?"
 	],
@@ -1605,6 +1662,9 @@
 		"N"
 	],
 	"Never resize": [
+		""
+	],
+	"New": [
 		""
 	],
 	"New note": [
@@ -1654,6 +1714,9 @@
 	],
 	"No active notebook.": [
 		"Ingen aktiv notatbok."
+	],
+	"No incoming shares": [
+		""
 	],
 	"No item with ID %s": [
 		"Ingen elementer med ID %s"
@@ -1901,9 +1964,6 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"Velg notatbok som notatene skal importeres til."
 	],
-	"Please upgrade Joplin to use this plugin": [
-		"Oppgrader Joplin for å bruke denne utvidelsen"
-	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Vent til at alle vedleggene er lastet ned og dekryptert. Du kan også bytte til %s for å redigere notatet."
 	],
@@ -1916,8 +1976,14 @@
 	"Plugin tools": [
 		"Utvidelsesverktøy"
 	],
+	"Plugin WebView debugging": [
+		""
+	],
 	"Plugins": [
 		"Utvidelser"
+	],
+	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
+		""
 	],
 	"Portrait": [
 		"Portrett"
@@ -1975,6 +2041,9 @@
 	],
 	"Process user deletions": [
 		"Behandle brukerslettinger"
+	],
+	"Processing": [
+		""
 	],
 	"Profile": [
 		"Profil"
@@ -2073,6 +2142,12 @@
 		""
 	],
 	"Replace: ": [
+		""
+	],
+	"Report an issue": [
+		""
+	],
+	"Report fraudulent plugin": [
 		""
 	],
 	"Reset master password": [
@@ -2321,6 +2396,9 @@
 	"Source: ": [
 		"Kilde: "
 	],
+	"Spacer": [
+		""
+	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		"Spesifiser porten som skal brukes av API-serveren. Hvis ikke satt vil en standardport brukes."
 	],
@@ -2489,6 +2567,9 @@
 	"Take photo": [
 		"Ta bilde"
 	],
+	"Task \"%s\" failed with error: %s": [
+		""
+	],
 	"Tasks": [
 		"Oppgaver"
 	],
@@ -2615,9 +2696,6 @@
 	"There are unsaved changes.": [
 		""
 	],
-	"There is currently no notebook. Create one by clicking on \"New notebook\".": [
-		"For øyeblikket finnes det ingen notatbok. Lag en ved å klikke på \"Ny notatbok\"."
-	],
 	"There is no data to export.": [
 		"Det er ingen data å eksportere."
 	],
@@ -2627,6 +2705,9 @@
 	"There was an error downloading this attachment:": [
 		"Det oppstod en feil ved nedlastingen av dette vedlegget:"
 	],
+	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
+		""
+	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Disse elementene blir værende på enheten, men vil ikke bli lastet opp til synkroniseringsmålet. For å finne disse elementene, enten søk etter tittel eller ID (som vises i parentes over)."
 	],
@@ -2634,6 +2715,9 @@
 		"Disse utvidelsene forbedrer Markdown-renderen med utvidet funksjonalitet. Vær oppmerksom på at, selv om funksjonaliteten kan være nyttig, så er det ikke standard Markdown og vil dermed kun virke i Joplin. I tillegg er noen av dem *inkompatible* med WYIWYG editoren. Hvis du åpner et notat og benytter en av disse utvidelsene, vil du miste utvidelsesformatering. Det er angitt under hvilke utvidelser som er kompatible eller ikke med WYSIWYG editoren."
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
+		""
+	],
+	"This attachment does not have OCR data (Status: %s)": [
 		""
 	],
 	"This attachment is not downloaded or not decrypted yet": [
@@ -2663,11 +2747,17 @@
 	"This note has no history": [
 		"Dette notatet har ingen historikk"
 	],
+	"This plugin doesn't support %s.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Denne riktekst-editoren har en rekke begrensinger og det er anbefalt at man er oppmerksom på dette før man benytter den."
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"Denne tjenesten tillater nettleserutvidelser å kommunisere med Joplin. Når du aktiverer den kan brannmuren spørre om du vil gi Joplin tillatelse til å lytte på en bestemt port."
+	],
+	"This subfolder of the trash has no notes.": [
+		""
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
 		"Dette vil tillatte Joplin å kjøre i bakgrunnen. Det er anbefalt å aktivere denne innstillingen så notatene dine blir synkronisert konstant, slik at du reduserer mulige konflikter."
@@ -2790,9 +2880,6 @@
 		"Type: %s."
 	],
 	"Unable to edit resource of type %s": [
-		""
-	],
-	"Unable to export or share data. Reason: %s": [
 		""
 	],
 	"Unable to share log data. Reason: %s": [
@@ -2918,6 +3005,9 @@
 	"View": [
 		"Visning"
 	],
+	"View OCR text": [
+		""
+	],
 	"View on map": [
 		"Vis på kart"
 	],
@@ -2941,6 +3031,12 @@
 	],
 	"Warning: not all resources shown for performance reasons (limit: %s).": [
 		"Advarsel: ikke alle ressurser vist av ytelseshensyn (grense: %s)."
+	],
+	"We have a system for reporting and removing problematic plugins.": [
+		""
+	],
+	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
+		""
 	],
 	"Web Clipper": [
 		"Web Clipper"
@@ -3007,6 +3103,9 @@
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Du kan bruke verktøyet under for å rekryptere ditt innhold, for eksempel hvis du vet at noen av dine notater er kryptert med en utdatert krypteringsmetode."
+	],
+	"Your account doesn't have access to this feature": [
+		""
 	],
 	"Your choice: ": [
 		"Ditt valg: "

@@ -65,6 +65,9 @@
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s 는 많은 작은 파일을 동기화하는 데 최적화되어 있지 않으므로 초기 동기화 속도가 느려집니다."
 	],
+	"%s tab opened": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -129,7 +132,7 @@
 		"[노트]로부터 [태그]를 지우거나 지정할 때, 아니면 [태그]와 관련된 노트의 목록을 확인할 때 <tag-command>로 \"add\", \"remove\", \"list\" 또는 \"notetags\" 를 사용하실 수 있습니다. 또한 `tag list` 명령어로 모든 태그의 목록을 확인할 수 있습니다 (긴 태그인 옵션 -l 을 사용하실수 있습니다)."
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
-		"<todo-command>로 \"toggle\" 이나 \"clear\"를 사용하실 수 있습니다. \"toggle\"은 주어진 '할 일'의 상태를 '완료됨' 또는 '완료되지 않음'으로 바꾸는 데 사용됩니다 (만약 대상이 일반적인 노트일 경우에는 '할 일'로 전환됩니다). \"clear\"는 '할 일'을 일반적인 노트로 변환하는 데 사용됩니다."
+		"<todo-command>로 \"toggle\" 이나 \"clear\"를 사용하실 수 있습니다. \"toggle\"은 주어진 목록의 상태를 '완료됨' 또는 '완료되지 않음'으로 바꾸는 데 사용됩니다.(만약 대상이 일반적인 노트일 경우에는 목록으로 전환됩니다).\"clear\"는 목록을 일반적인 노트로 변환하는 데 사용됩니다."
 	],
 	"A3": [
 		"A3"
@@ -141,7 +144,7 @@
 		"A5"
 	],
 	"About": [
-		""
+		"정보"
 	],
 	"About Joplin": [
 		"Joplin에 대해서"
@@ -157,6 +160,9 @@
 	],
 	"Accept": [
 		"허용"
+	],
+	"Accepted shares": [
+		""
 	],
 	"Access denied: Please check your username and password": [
 		"접근 거부: 아이디와 비밀번호를 확인해주세요"
@@ -212,11 +218,17 @@
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"노트, 노트북, 태그를 포함한 모든 데이터는 영구적으로 삭제됩니다."
 	],
+	"All item sync failures have been marked as \"ignored\".": [
+		""
+	],
 	"All notes": [
 		"모든 노트"
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"모든 포트들이 사용 중입니다 - %s에 문제를 공유해주시면 감사하겠습니다"
+	],
+	"Allows debugging mobile plugins. See %s for details.": [
+		""
 	],
 	"Also displays unset and hidden config variables.": [
 		"또한 설정하지 않았거나 숨겨진 설정 변수를 표시합니다."
@@ -229,6 +241,9 @@
 	],
 	"Always ask": [
 		"항상 묻기"
+	],
+	"Always open %s files without asking.": [
+		""
 	],
 	"Always resize": [
 		"항상 크기 조정"
@@ -311,6 +326,9 @@
 	"Authorisation token:": [
 		"인증 토큰:"
 	],
+	"Authorise": [
+		"권한 부여"
+	],
 	"Auto": [
 		"자동"
 	],
@@ -324,7 +342,7 @@
 		"자동으로 업데이트를 확인"
 	],
 	"Automatically delete notes in the trash after a number of days": [
-		""
+		"다음 기간이 지나면 자동으로 휴지통에 있는 노트 삭제"
 	],
 	"Automatically switch theme to match system theme": [
 		"시스템 테마에 적합한 테마로 자동으로 변경"
@@ -352,6 +370,9 @@
 	],
 	"Bulleted List": [
 		"글머리 기호 목록"
+	],
+	"by %s": [
+		""
 	],
 	"Can Share": [
 		"공유 가능"
@@ -519,7 +540,7 @@
 		"명령 팔레트..."
 	],
 	"Compact": [
-		"컴팩트"
+		"간단히 보기"
 	],
 	"Completed": [
 		"완료됨"
@@ -527,8 +548,14 @@
 	"Completed decryption.": [
 		"복호화가 완료되었습니다."
 	],
+	"Completed with warnings:\n%s": [
+		""
+	],
 	"Completed: %s (%s)": [
 		"완료됨: %s (%s)"
+	],
+	"completion date": [
+		""
 	],
 	"Compress old changes": [
 		"오래된 변경을 압축"
@@ -558,7 +585,10 @@
 		"통합결제"
 	],
 	"Content provided by %s": [
-		"%s에서 제공"
+		"%s에서 제공한 콘텐츠"
+	],
+	"Content provided by: %s": [
+		"콘텐츠 제공자: %s"
 	],
 	"Continue": [
 		"계속"
@@ -567,7 +597,7 @@
 		"노트로 변환"
 	],
 	"Convert to todo": [
-		"'할 일'로 변환"
+		"목록으로 변환"
 	],
 	"Converting speech to text...": [
 		"음성을 텍스트로 변환하는 중..."
@@ -586,6 +616,9 @@
 	],
 	"Copy Link Address": [
 		"링크 주소 복사"
+	],
+	"Copy link to website": [
+		"웹사이트 링크 복사"
 	],
 	"Copy Markdown link": [
 		"마크다운 링크 복사"
@@ -681,13 +714,13 @@
 		"새 노트북을 만듭니다."
 	],
 	"Creates a new to-do.": [
-		"새 '할 일'을 만듭니다."
+		"새 목록을 만듭니다."
 	],
 	"Creating new note...": [
 		"새 노트 만들기..."
 	],
 	"Creating new to-do...": [
-		"새 '할 일' 만들기..."
+		"새 목록 만들기..."
 	],
 	"Creating report...": [
 		"보고서 생성하기..."
@@ -721,9 +754,6 @@
 	],
 	"Dashboard": [
 		"대시보드"
-	],
-	"Database v%s": [
-		"데이터베이스 v%s"
 	],
 	"Date": [
 		"날짜"
@@ -794,11 +824,17 @@
 	"Delete this profile?": [
 		"이 프로필을 삭제할까요?"
 	],
+	"Deleted": [
+		"삭제됨"
+	],
 	"Deleted local items: %d.": [
 		"로컬 항목 삭제됨: %d."
 	],
 	"Deleted remote items: %d.": [
 		"원격 항목 삭제됨: %d."
+	],
+	"Deletes notes permanently, skipping the trash.": [
+		""
 	],
 	"Deletes the given notebook.": [
 		"해당 노트북을 삭제합니다."
@@ -816,7 +852,7 @@
 		"목표 포맷: %s"
 	],
 	"Detailed": [
-		"상세한"
+		"상세히 보기"
 	],
 	"Directory": [
 		"폴더"
@@ -858,7 +894,7 @@
 		"맨 처음 <num>개의 노트만 표시합니다."
 	],
 	"Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-tnt` would display notes and to-dos.": [
-		"특정 형식의 항목만 표시합니다. 노트의 경우 `n`, 할 일의 경우 `t`, 노트와 할 일 모두는 `nt` 입니다. (예시: 할 일은 `-tt`, 노트와 할 일은 `-tnt`)."
+		"특정 형식의 항목만 표시합니다.노트의 경우 `n`, 목록의 경우 `t`, 노트와 목록 모두는 `nt` 입니다.(예시: 목록은 `-tt`, 노트와 목록은 `-tnt`)."
 	],
 	"Displays summary about the notes and notebooks.": [
 		"노트와 노트북에 관한 요약 정보를 표시합니다."
@@ -936,7 +972,7 @@
 		"Dropbox 로그인"
 	],
 	"Due": [
-		""
+		"마감"
 	],
 	"Duplicate": [
 		"복제"
@@ -1017,7 +1053,7 @@
 		"강조"
 	],
 	"Empty trash": [
-		""
+		"휴지통 비우기"
 	],
 	"Enable": [
 		"활성화"
@@ -1072,6 +1108,9 @@
 	],
 	"Enable optical character recognition (OCR)": [
 		"문자 인식(OCR) 활성화"
+	],
+	"Enable or disable plugins": [
+		"플러그인 활성화/비활성화"
 	],
 	"Enable PDF viewer": [
 		"PDF 보기 활성화"
@@ -1196,9 +1235,6 @@
 	"Export profile": [
 		"프로파일 내보내기"
 	],
-	"Export your data": [
-		"나의 데이터 내보내기"
-	],
 	"Exported successfully!": [
 		"성공적으로 내보냈습니다!"
 	],
@@ -1225,6 +1261,9 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"안전 장치: 동기화할 대상이 비어 있다면, 로컬 데이터를 지우지 않습니다. (종종 잘못된 설정이나 버그로 인해 발생됩니다)"
+	],
+	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
+		""
 	],
 	"Fatal error:": [
 		"치명적인 오류:"
@@ -1274,9 +1313,6 @@
 	"Focus title": [
 		"제목에 포커스"
 	],
-	"Folders": [
-		"폴더"
-	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"디버깅 목적으로만 사용: 프로파일을 외장 SD 카드에 내보냅니다."
 	],
@@ -1303,6 +1339,9 @@
 	],
 	"Found: %d.": [
 		"발견됨: %d."
+	],
+	"From a plugin": [
+		"모든 플러그인 보기"
 	],
 	"FTS enabled: %d": [
 		"FTS 활성됨: %d"
@@ -1344,7 +1383,7 @@
 		"허가된 권한"
 	],
 	"Have you authorised the application login in the above URL?": [
-		""
+		"위 URL에서 애플리케이션 로그인을 승인하셨나요?"
 	],
 	"Header %d": [
 		"헤더 %d"
@@ -1357,6 +1396,9 @@
 	],
 	"Help": [
 		"도움말"
+	],
+	"Here's what we do to make plugins safer:": [
+		""
 	],
 	"Hermes enabled: %d": [
 		"Hermes 사용: %d"
@@ -1416,7 +1458,7 @@
 		"대기"
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
-		""
+		"이미 승인하셨다면, 애플리케이션이 Joplin Cloud에 동기화될 때까지 기다려주세요Joplin Cloud."
 	],
 	"Ignore": [
 		"무시하기"
@@ -1429,6 +1471,15 @@
 	],
 	"Import": [
 		"가져오기"
+	],
+	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+		""
+	],
+	"Import from JEX": [
+		""
+	],
+	"Import notes from a JEX (Joplin Export) file.": [
+		""
 	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		"\"%s\"에서 \"%s\" 포맷으로 가져오는 중입니다. 잠시만 기다려주세요..."
@@ -1465,6 +1516,9 @@
 	],
 	"In: %s": [
 		"내부: %s"
+	],
+	"Incompatible": [
+		""
 	],
 	"Increase indent level": [
 		"들여쓰기 수준 높이기"
@@ -1544,6 +1598,12 @@
 	"Joplin Cloud": [
 		"Joplin 클라우드"
 	],
+	"Joplin Cloud Login": [
+		"Joplin 클라우드 로그인"
+	],
+	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
+		""
+	],
 	"Joplin Export Directory": [
 		"Joplin 내보내기 폴더"
 	],
@@ -1581,7 +1641,10 @@
 		"KaTeX"
 	],
 	"Keep note history for": [
-		"다음과 같이 노트 변경 이력을 유지"
+		"다음 기간 동안 노트 변경 이력을 유지"
+	],
+	"Keep notes in the trash for": [
+		"다음 기간 동안 노트를 휴지통에 보관"
 	],
 	"Keyboard Mode": [
 		"키보드 모드"
@@ -1614,7 +1677,7 @@
 		"나중에"
 	],
 	"Latitude": [
-		""
+		"위도"
 	],
 	"Layout": [
 		"배치"
@@ -1636,6 +1699,9 @@
 	],
 	"Light": [
 		"라이트"
+	],
+	"Like any software you install, plugins can potentially cause security issues or data loss.": [
+		""
 	],
 	"Lines": [
 		"줄"
@@ -1664,6 +1730,9 @@
 	"Loaded": [
 		"로딩됨"
 	],
+	"Loading plugin repository...": [
+		"플러그인 저장소 불러오는 중..."
+	],
 	"Loading...": [
 		"로딩 중..."
 	],
@@ -1689,7 +1758,7 @@
 		"로그, 프로필, 동기화 상태"
 	],
 	"Longitude": [
-		""
+		"경도"
 	],
 	"Make a donation": [
 		"기부하기"
@@ -1722,10 +1791,10 @@
 		"마크다운 + Front Matter"
 	],
 	"Marks a to-do as done.": [
-		"'할 일' 항목을 완료로 표시합니다."
+		"목록 항목을 완료로 표시합니다."
 	],
 	"Marks a to-do as non-completed.": [
-		"할 일을 '완료되지 않음'으로 표시합니다."
+		"목록을 '완료되지 않음'으로 표시합니다."
 	],
 	"Markup": [
 		"마크업"
@@ -1755,7 +1824,7 @@
 		"미디어 플레이어, 수학, 도표, 목차"
 	],
 	"Minimise": [
-		""
+		"최소화"
 	],
 	"Missing keys": [
 		"키를 찾을 수 없음"
@@ -1781,8 +1850,14 @@
 	"More than one item match \"%s\". Please narrow down your query.": [
 		"\"%s\"에 대한 하나 이상의 항목이 일치합니다. 검색 범위를 한번 좁혀보세요."
 	],
+	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
 	"Move %d notes to notebook \"%s\"?": [
 		"%d개의 노트를 \"%s\" 노트북으로 옮길까요?"
+	],
+	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
+		"\"%s\" 노트북을 휴지통으로 이동할까요?\n\n이 노트북 안에 있는 모든 노트와 더불어 하위 노트북들도 함께 휴지통으로 이동합니다."
 	],
 	"Move to notebook": [
 		"노트북으로 옮기기"
@@ -1805,6 +1880,9 @@
 	"Never resize": [
 		"크기 조정 안 함"
 	],
+	"New": [
+		""
+	],
 	"New note": [
 		"새 노트"
 	],
@@ -1824,7 +1902,7 @@
 		"새 태그:"
 	],
 	"New to-do": [
-		"새 '할 일'"
+		"새 목록"
 	],
 	"New version: %s": [
 		"새 버전: %s"
@@ -1852,6 +1930,9 @@
 	],
 	"No active notebook.": [
 		"활성화된 노트북이 없습니다."
+	],
+	"No incoming shares": [
+		""
 	],
 	"No item with ID %s": [
 		"식별자 %s에 해당하는 항목이 없습니다"
@@ -1926,13 +2007,13 @@
 		"노트 역사"
 	],
 	"Note is not a to-do: \"%s\"": [
-		"노트는 '할 일' 항목이 아닙니다: \"%s\""
+		"노트는 목록 항목이 아닙니다: \"%s\""
 	],
 	"Note list": [
-		"노트 목록"
+		"노트 리스트"
 	],
 	"Note list growth factor": [
-		"노트 목록 증가 인수"
+		"노트 리스트 증가 인수"
 	],
 	"Note list style": [
 		"노트 목록 스타일"
@@ -2075,6 +2156,15 @@
 	"Per user. Minimum of %d users.": [
 		"사용자당 최소 %d명의 사용자 수입니다."
 	],
+	"Permanently delete note": [
+		"선택된 노트를 영구적으로 삭제"
+	],
+	"Permanently delete note \"%s\"?": [
+		"\"%s\" 노트를 영구적으로 삭제하시겠습니까?"
+	],
+	"Permanently delete these %d notes?": [
+		"\"%d\"개의 노트 영구적으로 삭제하시겠습니까?"
+	],
 	"Permission needed": [
 		"권한 요구"
 	],
@@ -2114,23 +2204,32 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"노트를 가져와서 저장할 노트북을 지정해주세요."
 	],
-	"Please upgrade Joplin to use this plugin": [
-		"이 플러그인을 사용하기 위해서는 Joplin을 업그레이드해야 합니다"
-	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"모든 첨부 파일들을 내려받아서 복호화할 때까지 기다려주세요. %s를 통해 이 노트를 편집하도록 전환할 수 있습니다."
 	],
 	"Please wait...": [
 		"잠시만 기다려주세요..."
 	],
+	"Plugin message": [
+		"플러그인 메시지"
+	],
 	"Plugin repository failed to load": [
-		""
+		"플러그인 저장소를 불러오지 못했습니다"
+	],
+	"Plugin search": [
+		"플러그인 검색"
 	],
 	"Plugin tools": [
 		"플러그인 도구"
 	],
+	"Plugin WebView debugging": [
+		""
+	],
 	"Plugins": [
 		"플러그인"
+	],
+	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
+		""
 	],
 	"Portrait": [
 		"세로 방향"
@@ -2191,6 +2290,9 @@
 	],
 	"Process user deletions": [
 		"사용자 삭제 처리"
+	],
+	"Processing": [
+		""
 	],
 	"Profile": [
 		"프로파일"
@@ -2261,6 +2363,9 @@
 	"Recipients:": [
 		"공유 수신자:"
 	],
+	"Recommended": [
+		"추천"
+	],
 	"Redo": [
 		"다시 실행"
 	],
@@ -2309,6 +2414,12 @@
 	"Replace: ": [
 		"바꾸기: "
 	],
+	"Report an issue": [
+		""
+	],
+	"Report fraudulent plugin": [
+		""
+	],
 	"Reset application layout": [
 		"애플리케이션 레이아웃 재설정"
 	],
@@ -2331,7 +2442,19 @@
 		"지금 재시작"
 	],
 	"Restore": [
-		"복구"
+		"복원"
+	],
+	"Restore note": [
+		"노트 복원"
+	],
+	"Restore notebook": [
+		"노트북 복원"
+	],
+	"Restore the items matching <pattern> from the trash.": [
+		"<pattern>에 일치하는 노트를 삭제합니다."
+	],
+	"Restored items": [
+		"복원된 항목"
 	],
 	"Restored Notes": [
 		"복구된 노트들"
@@ -2508,7 +2631,7 @@
 		"모두 표시"
 	],
 	"Show completed to-dos": [
-		"완료된 '할 일'을 표시"
+		"완료된 목록을 표시"
 	],
 	"Show disabled": [
 		"비활성화 보기"
@@ -2600,6 +2723,9 @@
 	"Source: ": [
 		"원본: "
 	],
+	"Spacer": [
+		""
+	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		"API 서버가 사용할 포트를 선택해주세요. 선택되지 않으면, 기본 포트를 선택합니다."
 	],
@@ -2685,19 +2811,19 @@
 		"윗줄과 위치 바꾸기"
 	],
 	"Switch between note and to-do type": [
-		"'노트' 또는 '할 일' 형식으로 전환합니다"
+		"노트 또는 목록 형식으로 전환합니다"
 	],
 	"Switch profile": [
 		"프로파일 전환"
 	],
 	"Switch to note type": [
-		"'노트'  형식으로 전환합니다"
+		"노트 형식으로 전환합니다"
 	],
 	"Switch to profile %d": [
 		"%d 프로파일로 전환"
 	],
 	"Switch to to-do type": [
-		"'할 일' 형식으로 전환합니다"
+		"목록 형식으로 전환합니다"
 	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"[notebook]으로 전환 - 앞으로의 모든 작업은 이 노트북 안에서만 해당됩니다."
@@ -2776,6 +2902,9 @@
 	],
 	"Take photo": [
 		"사진 찍기"
+	],
+	"Task \"%s\" failed with error: %s": [
+		""
 	],
 	"Task list": [
 		"작업 목록"
@@ -2867,6 +2996,12 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"노트 \"%s\"가 노트북 \"%s\"에 성공적으로 복구되었습니다."
 	],
+	"The note was successfully moved to the trash.": [
+		"노트가 성공적으로 휴지통으로 이동하였습니다."
+	],
+	"The notebook and its content was successfully moved to the trash.": [
+		"노트북과 하위 콘텐츠가 성공적으로 휴지통으로 이동되었습니다."
+	],
 	"The notebook could not be saved: %s": [
 		"노트북을 저장할 수 없습니다: %s"
 	],
@@ -2921,9 +3056,6 @@
 	"There are unsaved changes.": [
 		"저장되지 않은 변경사항이 있습니다."
 	],
-	"There is currently no notebook. Create one by clicking on \"New notebook\".": [
-		"노트북이 없습니다. \"새 노트북\"을 선택해서 노트북을 새로 만드세요."
-	],
 	"There is no data to export.": [
 		"내보낼 데이터가 없습니다."
 	],
@@ -2933,6 +3065,9 @@
 	"There was an error downloading this attachment:": [
 		"첨부 파일을 내려받는 중에 오류가 발생했습니다:"
 	],
+	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
+		""
+	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"해당 항목들은 기기에 남아 있지만 동기화 대상에 업로드되지는 않을 것입니다. 이런 항목을 찾길 원하신다면 제목 또는 ID로 검색하세요. (상단 괄호 안에 표시되어 있습니다)"
 	],
@@ -2941,6 +3076,9 @@
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
 		"다른 사용자가 귀하와 노트북을 공유할 수 있으며, 귀하와 귀하 모두 노트북에서 공동 작업을 할 수 있습니다. 그러나 \"%s\" 기능이 없으면 다른 사람과 노트북을 공유할 수 없습니다."
+	],
+	"This attachment does not have OCR data (Status: %s)": [
+		""
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"이 첨부 파일은 아직 내려받기 또는 복호화되지 않았습니다"
@@ -2978,11 +3116,17 @@
 	"This note has no history": [
 		"이 노트의 변경 내역이 없습니다"
 	],
+	"This plugin doesn't support %s.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"서식 있는 텍스트 편집기에는 몇가지의 제약 사항들이 있으며, 사용하기 전에 이러한 제약 사항들을 미리 알고 있는 것이 좋습니다."
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"이 서비스는 브라우저 확장 기능이 Joplin과 연결하도록 해줍니다. 서비스를 활성화시 방화벽에서 Joplin에게 특정 포트 접근을 허가할 것인지 물어볼 수 있습니다."
+	],
+	"This subfolder of the trash has no notes.": [
+		""
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
 		"Joplin을 백그라운드에서 구동합니다. 노트가 정기적으로 동기화되어 충돌 횟수를 줄일 수 있기 때문에 이 옵션을 활성화하는 것을 추천합니다."
@@ -2991,7 +3135,7 @@
 		"새로운 화면으로 전환됩니다. 현재 화면의 변경 사항들을 저장하시겠습니까?"
 	],
 	"This will permanently delete all items in the trash. Continue?": [
-		""
+		"휴지통에 있는 모든 항목이 영구적으로 삭제됩니다. 계속하시겠습니까?"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"컬렉션에서 노트북이 제거되고 더 이상 접근할 수 없습니다. 계속하시겠어요?"
@@ -3007,6 +3151,9 @@
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"Joplin을 Dropbox와 동기화하려면 다음 절차를 따라주세요:"
+	],
+	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
+		"Joplin을 Joplin Cloud와 동기화하려면 다음 URL을 사용하여 로그인하십시오:"
 	],
 	"To continue, please enter your master password below.": [
 		"계속하려면 아래에 마스터 비밀번호를 입력해주세요."
@@ -3042,10 +3189,13 @@
 		"앱이 정상적으로 작동하기 위해서는 다음 권한이 있어야 합니다. '설정 > 애플리케이션 > Joplin > 권한'에서 허가해주세요"
 	],
 	"to-do": [
-		"할 일"
+		"목록"
+	],
+	"To-do": [
+		"목록"
 	],
 	"to-do: %s": [
-		"할 일: %s"
+		"목록: %s"
 	],
 	"Toggle comment": [
 		"주석 전환"
@@ -3093,7 +3243,7 @@
 		"합계: %d/%d"
 	],
 	"Trash": [
-		""
+		"휴지통"
 	],
 	"Try again": [
 		"다시 시도"
@@ -3119,14 +3269,11 @@
 	"Unable to edit resource of type %s": [
 		"유형 %s 의 리소스를 편집할 수 없습니다"
 	],
-	"Unable to export or share data. Reason: %s": [
-		"데이터를 내보내거나 공유할 수 없습니다. 이유: %s"
-	],
 	"Unable to share log data. Reason: %s": [
 		"로그 데이터를 공유할 수 없습니다. 이유: %s"
 	],
 	"Uncompleted to-dos on top": [
-		"완료되지 않은 '할 일'을 맨 위에"
+		"완료되지 않은 목록을 맨 위에"
 	],
 	"Undo": [
 		"실행 취소"
@@ -3210,7 +3357,7 @@
 		"생체 인식을 사용하여 앱에 대한 액세스 보호"
 	],
 	"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE": [
-		"긴 목록 포맷을 사용합니다. 포맷은 ID, NOTE_COUNT (노트북에 해당), DATE, TODO_CHECKED (할 일에 해당), TITLE 입니다"
+		"긴 목록 포맷을 사용합니다. 포맷은 ID, NOTE_COUNT (노트북에 해당), DATE, TODO_CHECKED (목록에 해당), TITLE 입니다"
 	],
 	"Use spell checker": [
 		"맞춤법 검사기 사용"
@@ -3248,6 +3395,9 @@
 	"View": [
 		"보기"
 	],
+	"View OCR text": [
+		""
+	],
 	"View on map": [
 		"지도에 표시"
 	],
@@ -3266,14 +3416,20 @@
 	"Voice typing...": [
 		"음성 입력 중..."
 	],
+	"Waiting for authorisation...": [
+		"승인을 기다리는 중..."
+	],
 	"Warning": [
 		"경고"
 	],
 	"Warning: not all resources shown for performance reasons (limit: %s).": [
 		"경고: 성능상의 문제로 모든 리소스를 표시하지 않습니다 (제한: %s)."
 	],
-	"Warnings:\n%s": [
-		"경고:\n%s"
+	"We have a system for reporting and removing problematic plugins.": [
+		""
+	],
+	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
+		""
 	],
 	"Web Clipper": [
 		"웹 클리퍼"
@@ -3303,7 +3459,7 @@
 		"새 노트를 만들 때:"
 	],
 	"When creating a new to-do:": [
-		"새 '할 일'을 만들 때:"
+		"새 목록을 만들 때:"
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"이 기능을 활성화하면 애플리케이션이 첨부파일을 스캔하고 첨부파일에서 텍스트를 추출합니다. 이렇게 하면 첨부 파일에 있는 텍스트를 검색할 수 있습니다."
@@ -3330,7 +3486,7 @@
 		"크기가 큰 이미지(%dx%d 픽셀)를 첨부하려고 합니다. 첨부하기 전에 크기를 %d 픽셀로 줄이시겠습니까?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
-		""
+		"Joplin Cloud에 로그인되어 있으므로 지금 이 화면을 종료해도 됩니다."
 	],
 	"You currently have no notebooks.": [
 		"현재 노트북이 없습니다."
@@ -3343,6 +3499,12 @@
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"아래 도구를 사용하여 데이터를 다시 암호화할 수 있습니다. 일부 노트가 오래된 암호화 방법으로 암호화된 것을 알고 있는 경우가 이에 해당합니다."
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
+		"Joplin 클라우드에 연결할 수 없습니다. 자격을 확인하고 다시 시도해주세요.오류:"
+	],
+	"Your account doesn't have access to this feature": [
+		""
 	],
 	"Your choice: ": [
 		"선택한 항목: "
