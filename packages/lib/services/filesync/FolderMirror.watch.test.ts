@@ -8,6 +8,7 @@ import reducer, { State as AppState, defaultState } from '../../reducer';
 import BaseItem from '../../models/BaseItem';
 import eventManager, { EventName } from '../../eventManager';
 import Folder from '../../models/Folder';
+import createFilesFromPathRecord from '../../utils/pathRecord/createFilesFromPathRecord';
 
 const waitForItemChange = () => {
 	return new Promise<void>(resolve => {
@@ -30,7 +31,7 @@ describe('FileMirroringService.watch', () => {
 		BaseItem.dispatch = store.dispatch;
 	});
 
-	test('should create notes and folders locally when created in a watched remote folder', async () => {
+	test('should create notes and folders locally when created in an initially-empty, watched remote folder', async () => {
 		const tempDir = await createTempDir();
 		const service = new FileMirroringService(tempDir, '');
 		await service.watch();
@@ -62,6 +63,28 @@ describe('FileMirroringService.watch', () => {
 		await changeListener;
 
 		expect(await Note.loadByTitle('test_note')).toMatchObject({ body: 'A note in a folder', parent_id: subfolder.id });
+
+		await service.stopWatching();
+	});
+
+	test('should modify items locally when changed in a watched, non-empty remote folder', async () => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, {
+			'a.md': '---\ntitle: A test\n---',
+			'b.md': '---\ntitle: Another test\n---\n\n# Content',
+			'test/foo/c.md': 'Another note',
+		});
+		const service = new FileMirroringService(tempDir, '');
+		await service.fullSync();
+		await service.watch();
+
+		expect(await Note.loadByTitle('A test')).toMatchObject({ body: '', parent_id: '' });
+
+		const changeListener = waitForItemChange();
+		await fs.writeFile(join(tempDir, 'a.md'), '---\ntitle: A test\n---\n\nNew content', 'utf8');
+		await changeListener;
+
+		expect(await Note.loadByTitle('A test')).toMatchObject({ body: 'New content', parent_id: '' });
 
 		await service.stopWatching();
 	});

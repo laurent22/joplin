@@ -80,7 +80,7 @@ const statToItem = async (baseFolderPath: string, stat: Stat, remoteTree: ItemTr
 			// Use || to handle the case where the title is empty, which can happen for empty
 			// frontmatter.
 			title: metadata.title || basename(stat.path, '.md'),
-			body: metadata.body ?? '',
+			body: await Note.replaceResourceExternalToInternalLinks(metadata.body ?? ''),
 
 			type_: ModelType.Note,
 		};
@@ -103,6 +103,18 @@ const fillRemoteTree = async (baseFolderPath: string, remoteTree: ItemTree, addI
 	}
 };
 
+const keysMatch = (localItem: FolderItem, remoteItem: FolderItem, keys: ((keyof FolderEntity)|(keyof NoteEntity))[]) => {
+	for (const key of keys) {
+		if (key in localItem !== key in remoteItem) {
+			return false;
+		}
+		if (key in localItem && localItem[key as keyof typeof localItem] !== remoteItem[key as keyof typeof remoteItem]) {
+			return false;
+		}
+	}
+	return true;
+};
+
 const mergeTrees = async (localTree: ItemTree, remoteTree: ItemTree, modifyLocal: ActionListeners, modifyRemote: ActionListeners) => {
 	const handledIds = new Set<string>();
 	for (const [localPath, localItem] of localTree.items()) {
@@ -114,18 +126,7 @@ const mergeTrees = async (localTree: ItemTree, remoteTree: ItemTree, modifyLocal
 			const remoteItem = remoteTree.getAtId(id);
 			const remotePath = remoteTree.pathFromId(id);
 
-			const keysMatch = (key: (keyof FolderEntity)|(keyof NoteEntity)) => {
-				if (key in localItem !== key in remoteItem) {
-					return false;
-				}
-				if (key in localItem) {
-					return localItem[key as keyof typeof localItem] === remoteItem[key as keyof typeof remoteItem];
-				}
-				return true;
-			};
-			if (
-				!keysMatch('title') || !keysMatch('body') || !keysMatch('icon')
-			) {
+			if (!keysMatch(localItem, remoteItem, ['title', 'body', 'icon'])) {
 				if (localItem.updated_time > remoteItem.updated_time) {
 					await remoteTree.updateAtPath(remotePath, localItem, modifyRemote);
 				} else {
@@ -174,9 +175,8 @@ const getNoteMd = async (note: NoteEntity) => {
 	if (toSave.user_created_time === toSave.created_time) {
 		delete toSave.user_created_time;
 	}
-	if (toSave.user_updated_time === toSave.updated_time) {
-		delete toSave.user_updated_time;
-	}
+	delete toSave.user_updated_time;
+	delete toSave.updated_time;
 
 	return serialize(toSave, tagTitles, { includeId: true });
 };
@@ -266,6 +266,12 @@ export default class {
 
 	public async onLocalItemUpdate(item: FolderItem) {
 		if (this.watcher_ && this.localTree_.hasId(item.parent_id)) {
+			if (this.localTree_.hasId(item.id)) {
+				const localItem = this.localTree_.getAtId(item.id);
+				if (keysMatch(localItem, item, ['title', 'body', 'icon', 'parent_id'])) {
+					return;
+				}
+			}
 			await this.localTree_.processItem(item, noOpActionListeners);
 			await this.remoteTree_.processItem(item, this.modifyRemoteActions_);
 		}
@@ -284,9 +290,14 @@ export default class {
 
 				let item = await statToItem(this.baseFilePath, stat, this.remoteTree_);
 
+				// Unsupported file type
+				if (!item) return;
+
 				if (eventType === DirectoryWatchEventType.Add) { // File created, renamed, or deleted
-					item = await this.localTree_.addItemAt(path, item, this.modifyLocalActions_);
-					await this.remoteTree_.addItemAt(path, item, noOpActionListeners);
+					if (!this.localTree_.hasPath(path)) { // Ignore if during initial scan
+						item = await this.localTree_.addItemAt(path, item, this.modifyLocalActions_);
+						await this.remoteTree_.addItemAt(path, item, noOpActionListeners);
+					}
 				} else if (eventType === DirectoryWatchEventType.Change) {
 					await this.localTree_.updateAtPath(path, item, this.modifyLocalActions_);
 					await this.remoteTree_.updateAtPath(path, item, noOpActionListeners);
