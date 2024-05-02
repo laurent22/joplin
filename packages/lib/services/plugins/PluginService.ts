@@ -80,6 +80,8 @@ function makePluginId(source: string): string {
 	return uslug(source).substr(0, 32);
 }
 
+type LoadedPluginsChangeListener = ()=> void;
+
 export default class PluginService extends BaseService {
 
 	private static instance_: PluginService = null;
@@ -101,6 +103,7 @@ export default class PluginService extends BaseService {
 	private runner_: BasePluginRunner = null;
 	private startedPlugins_: Record<string, boolean> = {};
 	private isSafeMode_ = false;
+	private pluginsChangeListeners_: LoadedPluginsChangeListener[] = [];
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public initialize(appVersion: string, platformImplementation: any, runner: BasePluginRunner, store: any) {
@@ -139,11 +142,25 @@ export default class PluginService extends BaseService {
 		this.isSafeMode_ = v;
 	}
 
+	public waitForLoadedPluginsChange() {
+		return new Promise<void>(resolve => {
+			this.pluginsChangeListeners_.push(() => resolve());
+		});
+	}
+
+	private dispatchPluginsChangeListeners() {
+		for (const listener of this.pluginsChangeListeners_) {
+			listener();
+		}
+		this.pluginsChangeListeners_ = [];
+	}
+
 	private setPluginAt(pluginId: string, plugin: Plugin) {
 		this.plugins_ = {
 			...this.plugins_,
 			[pluginId]: plugin,
 		};
+		this.dispatchPluginsChangeListeners();
 	}
 
 	private deletePluginAt(pluginId: string) {
@@ -151,6 +168,8 @@ export default class PluginService extends BaseService {
 
 		this.plugins_ = { ...this.plugins_ };
 		delete this.plugins_[pluginId];
+
+		this.dispatchPluginsChangeListeners();
 	}
 
 	public async unloadPlugin(pluginId: string) {

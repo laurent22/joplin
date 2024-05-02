@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { ConfigScreenStyles } from '../configScreenStyles';
 import { View } from 'react-native';
 import { Banner, Button, Text } from 'react-native-paper';
@@ -11,8 +11,7 @@ import { ItemEvent } from '@joplin/lib/components/shared/config/plugins/types';
 import NavService from '@joplin/lib/services/NavService';
 import useRepoApi from './utils/useRepoApi';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
-import shim from '@joplin/lib/shim';
-import Logger from '@joplin/utils/Logger';
+import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 
 interface Props {
 	themeId: number;
@@ -37,38 +36,19 @@ export const getSearchText = () => {
 	return searchText;
 };
 
-const logger = Logger.create('PluginStates');
-
 // Loaded plugins: All plugins with available manifests.
-const useLoadedPluginIds = (pluginSettings: SerializedPluginSettings) => {
-	const allPluginIds = useMemo(() => {
-		return Object.keys(
-			PluginService.instance().unserializePluginSettings(pluginSettings),
-		);
-	}, [pluginSettings]);
+const useLoadedPluginIds = () => {
+	const getLoadedPlugins = useCallback(() => {
+		return PluginService.instance().pluginIds;
+	}, []);
+	const [loadedPluginIds, setLoadedPluginIds] = useState(getLoadedPlugins);
 
-	const [pluginReloadCounter, setPluginReloadCounter] = useState(0);
-	const loadedPluginIds = useMemo(() => {
-		if (pluginReloadCounter > 0) {
-			logger.debug(`Not all plugins were loaded in the last render. Re-loading (try ${pluginReloadCounter})`);
+	useAsyncEffect(async event => {
+		while (!event.cancelled) {
+			await PluginService.instance().waitForLoadedPluginsChange();
+			setLoadedPluginIds(getLoadedPlugins());
 		}
-
-		const pluginService = PluginService.instance();
-		return allPluginIds.filter(id => !!pluginService.plugins[id]);
-	}, [allPluginIds, pluginReloadCounter]);
-	const hasLoadingPlugins = loadedPluginIds.length !== allPluginIds.length;
-
-	// Force a re-render if not all plugins have available metadata. This can happen
-	// if plugins are still loading.
-	const pluginReloadCounterRef = useRef(0);
-	pluginReloadCounterRef.current = pluginReloadCounter;
-	const timeoutRef = useRef(null);
-	if (hasLoadingPlugins && !timeoutRef.current) {
-		timeoutRef.current = shim.setTimeout(() => {
-			timeoutRef.current = null;
-			setPluginReloadCounter(pluginReloadCounterRef.current + 1);
-		}, 1000);
-	}
+	}, []);
 
 	return loadedPluginIds;
 };
@@ -130,7 +110,7 @@ const PluginStates: React.FC<Props> = props => {
 	const installedPluginCards = [];
 	const pluginService = PluginService.instance();
 
-	const pluginIds = useLoadedPluginIds(props.pluginSettings);
+	const pluginIds = useLoadedPluginIds();
 	for (const pluginId of pluginIds) {
 		const plugin = pluginService.plugins[pluginId];
 
