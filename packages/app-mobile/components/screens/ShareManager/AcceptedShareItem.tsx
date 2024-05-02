@@ -64,7 +64,7 @@ const AcceptedShareItem: React.FC<Props> = props => {
 		} catch (error) {
 			logger.error('Failed to leave share', error);
 			await shim.showMessageBox(
-				_('Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s', error),
+				_('Failed to leave shared notebook. Please verify that Joplin is connected to the internet and able to sync.\nError: %s', error),
 				{ buttons: [_('OK')] },
 			);
 		} finally {
@@ -79,7 +79,7 @@ const AcceptedShareItem: React.FC<Props> = props => {
 		<Card.Title
 			left={AcceptedIcon}
 			title={_('Notebook: %s (%s)', folderTitle, folderId)}
-			subtitle={_('Share from %s (%s)', sharer.full_name, sharer.email)}
+			subtitle={_('Invitation from %s (%s)', sharer.full_name, sharer.email)}
 		/>
 		<Card.Actions>
 			<Button
@@ -87,7 +87,7 @@ const AcceptedShareItem: React.FC<Props> = props => {
 				onPress={onLeaveShare}
 				disabled={props.processing || leaving || hasLeft}
 				loading={leaving || !folderTitle}
-			>{_('Leave share')}</Button>
+			>{_('Leave notebook')}</Button>
 		</Card.Actions>
 	</Card>;
 };
