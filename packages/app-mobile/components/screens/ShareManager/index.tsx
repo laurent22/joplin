@@ -95,7 +95,7 @@ export const ShareManagerComponent: React.FC<Props> = props => {
 	const renderAcceptedShares = () => {
 		if (acceptedShareComponents.length === 0) return null;
 		return <>
-			<Text style={styles.header}>{_('Accepted share invitations')}</Text>
+			<Text style={styles.header}>{_('Accepted invitations')}</Text>
 			<View style={styles.shareListContainer}>
 				{acceptedShareComponents}
 			</View>
@@ -117,7 +117,7 @@ export const ShareManagerComponent: React.FC<Props> = props => {
 				}
 				testID='refreshControl'
 			>
-				<Text style={styles.header}>{_('New share invitations')}</Text>
+				<Text style={styles.header}>{_('New invitations')}</Text>
 				<View style={styles.shareListContainer}>
 					{renderNoIncomingShares()}
 					{incomingShareComponents}
