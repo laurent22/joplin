@@ -60,6 +60,9 @@ const statToItem = async (baseFolderPath: string, stat: Stat, remoteTree: ItemTr
 			title: folderInfo.title,
 			type_: ModelType.Folder,
 		};
+		if (folderInfo.folder_info_updated) {
+			item.updated_time = Math.max(folderInfo.folder_info_updated, item.updated_time);
+		}
 		if (folderInfo.id) {
 			item.id = folderInfo.id;
 		}

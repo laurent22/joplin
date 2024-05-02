@@ -318,6 +318,29 @@ describe('FileMirroringService.fullSync', () => {
 		});
 	});
 
+	it('should rename folders in DB when renamed in dir', async () => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, {
+			'another note.md': 'Note 2',
+			'newFolder/test.md': 'Note 3',
+		});
+
+		const service = new FolderMirror(tempDir, '');
+		await service.fullSync();
+
+		const newFolderId = (await Folder.loadByTitle('newFolder')).id;
+
+		expect(await fs.readFile(join(tempDir, 'newFolder', '.folder.yml'), 'utf8')).toBe(`title: newFolder\nid: ${newFolderId}\n`);
+
+		await fs.writeFile(join(tempDir, 'newFolder', '.folder.yml'), `title: New title\nid: ${newFolderId}\n`);
+		await service.fullSync();
+
+		expect(await Folder.load(newFolderId)).toMatchObject({
+			id: newFolderId,
+			title: 'New title',
+		});
+	});
+
 	// it('should delete notes locally when deleted remotely', async () => {
 	// 	;
 	// });

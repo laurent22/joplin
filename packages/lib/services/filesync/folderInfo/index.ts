@@ -5,4 +5,5 @@ export interface FolderInfo {
 	id?: string;
 	title: string;
 	icon: string;
+	folder_info_updated?: number;
 }

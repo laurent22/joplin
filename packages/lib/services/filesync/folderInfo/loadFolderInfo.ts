@@ -38,10 +38,13 @@ const loadFolderInfo = async (folderPath: string): Promise<FolderInfo> => {
 		icon = folderInfo.icon;
 	}
 
+	const folderInfoStats = await shim.fsDriver().stat(folderInfoPath);
+
 	return {
 		id: folderInfo.id,
 		title,
 		icon,
+		folder_info_updated: folderInfoStats.mtime.getTime(),
 	};
 };
 
