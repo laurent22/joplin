@@ -17,12 +17,13 @@ export interface ReadDirStatsOptions {
 }
 
 export enum DirectoryWatchEventType {
-	Rename = 'rename',
+	Add = 'add',
+	Unlink = 'unlink',
 	Change = 'change',
 }
 export type OnWatchEventListener = (eventType: DirectoryWatchEventType, path: string)=> void;
 export interface DirectoryWatcher {
-	close(): void;
+	close(): Promise<void>;
 }
 
 export default class FsDriverBase {
@@ -114,7 +115,7 @@ export default class FsDriverBase {
 		throw new Error('Not implemented: resolve');
 	}
 
-	public watchDirectory(_path: string, _onEventHandler: OnWatchEventListener): DirectoryWatcher {
+	public watchDirectory(_path: string, _onEventHandler: OnWatchEventListener): Promise<DirectoryWatcher> {
 		throw new Error('Not implemented: watchDirectory');
 	}
 

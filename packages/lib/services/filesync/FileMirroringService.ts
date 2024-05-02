@@ -8,7 +8,7 @@ import { serialize } from '../../utils/frontMatter';
 import { FolderEntity, NoteEntity } from '../database/types';
 import loadFolderInfo from './folderInfo/loadFolderInfo';
 import { parse as parseFrontMatter } from '../../utils/frontMatter';
-import { basename, dirname, extname, join, normalize } from 'path';
+import { basename, dirname, extname, join, normalize, relative } from 'path';
 import writeFolderInfo from './folderInfo/writeFolderInfo';
 import { FolderItem } from './types';
 import ItemTree, { ActionListeners, AddActionListener, UpdateEvent, noOpActionListeners } from './ItemTree';
@@ -260,32 +260,40 @@ export default class {
 	public async watch() {
 		if (this.watcher_) return;
 
-		this.watcher_ = shim.fsDriver().watchDirectory(this.baseFilePath, async (eventType, filePath): Promise<void> => {
-			if (await shim.fsDriver().exists(filePath)) {
-				const stat = await shim.fsDriver().stat(filePath);
+		this.watcher_ = await shim.fsDriver().watchDirectory(this.baseFilePath, async (eventType, fullPath): Promise<void> => {
+			const path = relative(this.baseFilePath, fullPath);
+			if (!path || path === '.') return;
+
+			if (await shim.fsDriver().exists(fullPath)) {
+				let stat = await shim.fsDriver().stat(fullPath);
+				stat = { ...stat, path };
+
 				let item = await statToItem(this.baseFilePath, stat, this.remoteTree_);
 
-				if (eventType === DirectoryWatchEventType.Rename) { // File created, renamed, or deleted
-					item = await this.localTree_.addItemAt(filePath, item, this.modifyLocalActions_);
-					await this.remoteTree_.addItemAt(filePath, item, noOpActionListeners);
+				if (eventType === DirectoryWatchEventType.Add) { // File created, renamed, or deleted
+					item = await this.localTree_.addItemAt(path, item, this.modifyLocalActions_);
+					await this.remoteTree_.addItemAt(path, item, noOpActionListeners);
 				} else if (eventType === DirectoryWatchEventType.Change) {
-					await this.localTree_.update(filePath, item, this.modifyLocalActions_);
-					await this.remoteTree_.update(filePath, item, noOpActionListeners);
+					await this.localTree_.update(path, item, this.modifyLocalActions_);
+					await this.remoteTree_.update(path, item, noOpActionListeners);
+				} else if (eventType === DirectoryWatchEventType.Unlink) {
+					throw new Error(`Path ${path} was marked as unlinked, but still exists.`);
 				} else {
 					const exhaustivenessCheck: never = eventType;
 					return exhaustivenessCheck;
 				}
-			} else if (this.remoteTree_.hasPath(filePath)) {
-				await this.localTree_.deleteItemAt(filePath, this.modifyLocalActions_);
-				await this.remoteTree_.deleteItemAt(filePath, noOpActionListeners);
+			} else if (this.remoteTree_.hasPath(path)) {
+				await this.localTree_.deleteItemAt(path, this.modifyLocalActions_);
+				await this.remoteTree_.deleteItemAt(path, noOpActionListeners);
 			}
 		});
 	}
 
 	public async stopWatching() {
 		if (this.watcher_) {
-			this.watcher_.close();
+			const closePromise = this.watcher_.close();
 			this.watcher_ = null;
+			await closePromise;
 		}
 	}
 

@@ -9,7 +9,7 @@ import * as fs from 'fs-extra';
 import shim from '../../shim';
 const { ALL_NOTES_FILTER_ID } = require('../../reserved-ids.js');
 
-describe('FileMirroringService', () => {
+describe('FileMirroringService.fullSync', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

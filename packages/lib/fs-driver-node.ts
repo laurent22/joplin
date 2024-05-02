@@ -1,6 +1,7 @@
-import FsDriverBase, { DirectoryWatchEventType, OnWatchEventListener, Stat } from './fs-driver-base';
+import FsDriverBase, { DirectoryWatchEventType, DirectoryWatcher, OnWatchEventListener, Stat } from './fs-driver-base';
 import time from './time';
 const md5File = require('md5-file');
+import * as chokidar from 'chokidar';
 import * as fs from 'fs-extra';
 
 export default class FsDriverNode extends FsDriverBase {
@@ -195,16 +196,43 @@ export default class FsDriverNode extends FsDriverBase {
 		throw new Error(`Unsupported encoding: ${encoding}`);
 	}
 
-	public override watchDirectory(path: string, onEventHandler: OnWatchEventListener) {
-		const watcher = fs.watch(path, { recursive: true }, (eventType, path) => {
-			onEventHandler(eventType as DirectoryWatchEventType, path);
+	public override async watchDirectory(path: string, onEventHandler: OnWatchEventListener) {
+		const watcher = chokidar.watch(path, { persistent: false });
+		watcher.on('change', path => {
+			onEventHandler(DirectoryWatchEventType.Change, path);
+		});
+		watcher.on('add', path => {
+			onEventHandler(DirectoryWatchEventType.Add, path);
+		});
+		watcher.on('unlink', path => {
+			onEventHandler(DirectoryWatchEventType.Unlink, path);
+		});
+		watcher.on('addDir', path => {
+			onEventHandler(DirectoryWatchEventType.Add, path);
+		});
+		watcher.on('unlinkDir', path => {
+			onEventHandler(DirectoryWatchEventType.Unlink, path);
 		});
 
-		return {
-			close: () => {
-				watcher.close();
-			},
-		};
+		return new Promise<DirectoryWatcher>((resolve, reject) => {
+			let resolved = false;
+			watcher.once('ready', () => {
+				resolved = true;
+				resolve({
+					close: () => {
+						return watcher.close();
+					},
+				});
+			});
+
+			watcher.once('error', (error) => {
+				if (!resolved) {
+					reject(error);
+				} else {
+					throw error;
+				}
+			});
+		});
 	}
 
 	public resolve(...pathComponents: string[]) {
