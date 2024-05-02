@@ -95,7 +95,8 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 
 	// To avoid increasing startup time/memory usage on devices with no plugins, don't
 	// load the webview if unnecessary.
-	// Note that we intentionally load the webview even if all plugins are disabled.
+	// Note that we intentionally load the webview even if all plugins are disabled, as
+	// this allows any plugins we don't have settings for to run.
 	const loadWebView = props.pluginSupportEnabled;
 	useEffect(() => {
 		if (!loadWebView) {
