@@ -182,15 +182,28 @@ const getNoteMd = async (note: NoteEntity) => {
 
 	const toSave = { ...note };
 
-	// Avoid including extra metadata
-	if (toSave.user_created_time === toSave.created_time) {
-		delete toSave.user_created_time;
-	}
+	// Avoid including extra metadata TODO
+	delete toSave.user_created_time;
 	delete toSave.user_updated_time;
 	delete toSave.updated_time;
+	delete toSave.created_time;
 
 	return serialize(toSave, tagTitles, { includeId: true });
 };
+
+enum FolderMirrorEventType {
+	FullSync = 'fullSync',
+	WatcherEvent = 'dirChange',
+	DatabaseItemChange = 'dbChange',
+	DatabaseItemDelete = 'dbDelete',
+}
+
+type LocalChangeEvent = { type: FolderMirrorEventType.DatabaseItemChange; id: string };
+type LocalDeleteEvent = { type: FolderMirrorEventType.DatabaseItemDelete; id: string };
+type WatcherEvent = { type: FolderMirrorEventType.WatcherEvent; event: DirectoryWatchEvent };
+type FullSyncEvent = { type: FolderMirrorEventType.FullSync };
+
+type ActionQueueEvent = LocalChangeEvent|LocalDeleteEvent|WatcherEvent|FullSyncEvent;
 
 export default class {
 
@@ -199,6 +212,7 @@ export default class {
 	private modifyLocalActions_: ActionListeners;
 	private localTree_: ItemTree;
 	private remoteTree_: ItemTree;
+	private actionQueue_: AsyncActionQueue<ActionQueueEvent>;
 
 	public constructor(private baseFilePath: string, private baseFolderId: string) {
 		if (baseFolderId === ALL_NOTES_FILTER_ID) {
@@ -208,6 +222,26 @@ export default class {
 		const baseItem = { id: this.baseFolderId, type_: ModelType.Folder };
 		this.localTree_ = new ItemTree(baseItem);
 		this.remoteTree_ = new ItemTree(baseItem);
+
+		this.actionQueue_ = new AsyncActionQueue();
+		this.actionQueue_.setCanSkipTaskHandler((current, next) => {
+			const currentContext = current.context;
+			const nextContext = next.context;
+			if (currentContext.type !== next.context.type) return false;
+
+			if (currentContext.type === FolderMirrorEventType.FullSync) {
+				return true;
+			} else if (
+				currentContext.type === FolderMirrorEventType.DatabaseItemChange
+				|| currentContext.type === FolderMirrorEventType.DatabaseItemDelete
+			) {
+				if (currentContext.type !== nextContext.type) throw new Error('Unreachable');
+
+				return currentContext.id === nextContext.id;
+			} else {
+				return false;
+			}
+		});
 
 		this.modifyLocalActions_ = {
 			onAdd: async ({ item }) => {
@@ -254,6 +288,8 @@ export default class {
 		};
 
 		const onRemoteAddOrUpdate = async ({ path, item }: UpdateEvent) => {
+			debugLogger.debug('remote.update', path);
+
 			const fullPath = join(baseFilePath, path);
 			if (item.type_ === ModelType.Folder) {
 				await shim.fsDriver().mkdir(fullPath);
@@ -271,9 +307,11 @@ export default class {
 			onAdd: onRemoteAddOrUpdate,
 			onUpdate: onRemoteAddOrUpdate,
 			onDelete: async ({ path }): Promise<void> => {
+				debugLogger.debug('remote.onDelete', path);
 				await shim.fsDriver().remove(join(baseFilePath, path));
 			},
 			onMove: async ({ fromPath, toPath })=> {
+				debugLogger.debug('remote.onMove', fromPath, '->', toPath);
 				await shim.fsDriver().move(join(baseFilePath, fromPath), join(baseFilePath, toPath));
 			},
 		};
@@ -281,96 +319,27 @@ export default class {
 
 	public async onLocalItemDelete(id: string) {
 		if (this.watcher_ && this.localTree_.hasId(id)) {
-			await this.localTree_.deleteItemAtId(id, noOpActionListeners);
-			await this.remoteTree_.deleteItemAtId(id, this.modifyRemoteActions_);
+			this.actionQueue_.push(this.handleQueueAction, { type: FolderMirrorEventType.DatabaseItemDelete, id });
 		}
 	}
 
-	public async onLocalItemUpdate(item: FolderItem) {
+	public onLocalItemUpdate(item: FolderItem) {
 		if (this.watcher_ && this.localTree_.hasId(item.parent_id)) {
-			if (this.localTree_.hasId(item.id)) {
-				const localItem = this.localTree_.getAtId(item.id);
-				if (keysMatch(localItem, item, ['title', 'body', 'icon', 'parent_id'])) {
-					return;
-				}
-			}
-			await this.localTree_.processItem(item, noOpActionListeners);
-			await this.remoteTree_.processItem(item, this.modifyRemoteActions_);
+			this.actionQueue_.push(this.handleQueueAction, { type: FolderMirrorEventType.DatabaseItemChange, id: item.id });
 		}
 	}
 
 	public async watch() {
 		if (this.watcher_) return;
 
-		const itemAtPath = async (relativePath: string) => {
-			let stat = await shim.fsDriver().stat(join(this.baseFilePath, relativePath));
-			stat = { ...stat, path: relativePath };
-
-			return await statToItem(this.baseFilePath, stat, this.remoteTree_);
-		};
-
-		const handleFileAdd = async (path: string, item?: FolderItem) => {
-			if (path.startsWith('.')) return;
-
-			item ??= await itemAtPath(path);
-			if (!item) return; // Unsupported
-
-			debugLogger.debug('handleAdd at', path);
-			debugLogger.group();
-
-			// Add parent dirs
-			await handleFileAdd(dirname(path));
-
-			item = await this.localTree_.processItem(item, this.modifyLocalActions_);
-			await this.remoteTree_.processItem(item, noOpActionListeners);
-
-			debugLogger.groupEnd();
-		};
-
-		const handleWatcherEvent = async (event: DirectoryWatchEvent): Promise<void> => {
-			const fullPath = event.path;
-			const path = relative(this.baseFilePath, fullPath);
-			if (!path || path === '.') return;
-
-			debugLogger.debug('event', event.type, path);
-			debugLogger.group();
-
-			try {
-				if (await shim.fsDriver().exists(fullPath)) {
-					const item = await itemAtPath(path);
-
-					// Unsupported file type
-					if (!item) return;
-
-					if (event.type === DirectoryWatchEventType.Add) { // File created, renamed, or deleted
-						await handleFileAdd(path, item);
-					} else if (event.type === DirectoryWatchEventType.Change) {
-						await this.localTree_.updateAtPath(path, item, this.modifyLocalActions_);
-						await this.remoteTree_.updateAtPath(path, item, noOpActionListeners);
-					} else if (event.type === DirectoryWatchEventType.Unlink) {
-						throw new Error(`Path ${path} was marked as unlinked, but still exists.`);
-					} else {
-						const exhaustivenessCheck: never = event.type;
-						return exhaustivenessCheck;
-					}
-				} else if (this.remoteTree_.hasPath(path)) {
-					debugLogger.debug(`file doesn't exist at ${fullPath}. Delete`);
-					await this.localTree_.deleteAtPath(path, this.modifyLocalActions_);
-					await this.remoteTree_.deleteAtPath(path, noOpActionListeners);
-				}
-			} finally {
-				debugLogger.groupEnd();
-			}
-		};
-
-		const actionQueue = new AsyncActionQueue<DirectoryWatchEvent>();
-		actionQueue.setCanSkipTaskHandler((currentTask, nextTask) => {
-			return currentTask.context.path === nextTask.context.path && currentTask.context.type === nextTask.context.type;
-		});
-
+		let watcherLoaded = false;
 		this.watcher_ = await shim.fsDriver().watchDirectory(this.baseFilePath, async (event): Promise<void> => {
-			actionQueue.push(handleWatcherEvent, event);
+			// Skip events from an initial scan, which should already be handled by a full sync.
+			if (!watcherLoaded) return;
+
+			this.actionQueue_.push(this.handleQueueAction, { type: FolderMirrorEventType.WatcherEvent, event });
 		});
+		watcherLoaded = true;
 	}
 
 	public async stopWatching() {
@@ -381,7 +350,23 @@ export default class {
 		}
 	}
 
-	public async fullSync() {
+	public async waitForIdle() {
+		await this.actionQueue_.waitForAllDone();
+	}
+
+	public fullSync() {
+		return new Promise<void>(resolve => {
+			this.actionQueue_.push(
+				async (event: ActionQueueEvent) => {
+					await this.handleQueueAction(event);
+					resolve();
+				},
+				{ type: FolderMirrorEventType.FullSync },
+			);
+		});
+	}
+
+	private async fullSyncTask() {
 		const filePath = this.baseFilePath;
 		const baseFolderId = this.baseFolderId;
 		const folderFields = ['id', 'icon', 'title', 'parent_id', 'updated_time', 'deleted_time'];
@@ -441,4 +426,109 @@ export default class {
 
 		await mergeTrees(this.localTree_, this.remoteTree_, this.modifyLocalActions_, this.modifyRemoteActions_);
 	}
+
+	private async databaseItemChangeTask(id: string) {
+		const item: FolderItem = await BaseItem.loadItemById(id);
+		if (item.type_ !== ModelType.Folder && item.type_ !== ModelType.Note) {
+			throw new Error('databaseItemChangeTask only supports notes and folders');
+		}
+
+		debugLogger.debug('onLocalItemUpdate', item.title, 'in', this.localTree_.pathFromId(item.parent_id));
+
+		if (this.localTree_.hasId(item.id)) {
+			const localItem = this.localTree_.getAtId(item.id);
+			if (keysMatch(localItem, item, ['title', 'body', 'icon', 'parent_id'])) {
+				debugLogger.debug('onLocalItemUpdate/skip');
+				return;
+			}
+		}
+		await this.localTree_.processItem(item, noOpActionListeners);
+		await this.remoteTree_.processItem(item, this.modifyRemoteActions_);
+	}
+
+	private async databaseItemDeleteTask(id: string) {
+		debugLogger.debug('onLocalItemDelete', this.localTree_.pathFromId(id));
+
+		await this.localTree_.deleteItemAtId(id, noOpActionListeners);
+		await this.remoteTree_.deleteItemAtId(id, this.modifyRemoteActions_);
+	}
+
+	private async handleWatcherEventTask(event: DirectoryWatchEvent): Promise<void> {
+		const itemAtPath = async (relativePath: string) => {
+			let stat = await shim.fsDriver().stat(join(this.baseFilePath, relativePath));
+			stat = { ...stat, path: relativePath };
+
+			return await statToItem(this.baseFilePath, stat, this.remoteTree_);
+		};
+
+		const handleFileAdd = async (path: string, item?: FolderItem) => {
+			if (path.startsWith('.')) return;
+
+			item ??= await itemAtPath(path);
+			if (!item) return; // Unsupported
+
+			debugLogger.debug('handleAdd at', path);
+			debugLogger.group();
+
+			// Add parent dirs
+			await handleFileAdd(dirname(path));
+
+			item = await this.localTree_.processItem(item, this.modifyLocalActions_);
+			await this.remoteTree_.processItem(item, noOpActionListeners);
+
+			debugLogger.groupEnd();
+		};
+
+		const fullPath = event.path;
+		const path = relative(this.baseFilePath, fullPath);
+		if (!path || path === '.') return;
+
+		debugLogger.debug('event', event.type, path);
+		debugLogger.group();
+
+		try {
+			if (await shim.fsDriver().exists(fullPath)) {
+				const item = await itemAtPath(path);
+
+				// Unsupported file type
+				if (!item) return;
+
+				if (event.type === DirectoryWatchEventType.Add) { // File created, renamed, or deleted
+					await handleFileAdd(path, item);
+				} else if (event.type === DirectoryWatchEventType.Change) {
+					await this.localTree_.updateAtPath(path, item, this.modifyLocalActions_);
+					await this.remoteTree_.updateAtPath(path, item, noOpActionListeners);
+				} else if (event.type === DirectoryWatchEventType.Unlink) {
+					throw new Error(`Path ${path} was marked as unlinked, but still exists.`);
+				} else {
+					const exhaustivenessCheck: never = event.type;
+					return exhaustivenessCheck;
+				}
+			} else if (this.remoteTree_.hasPath(path)) {
+				debugLogger.debug(`file doesn't exist at ${fullPath}. Delete`);
+				await this.localTree_.deleteAtPath(path, this.modifyLocalActions_);
+				await this.remoteTree_.deleteAtPath(path, noOpActionListeners);
+			}
+		} finally {
+			debugLogger.groupEnd();
+		}
+	}
+
+	private handleQueueAction = async (context: ActionQueueEvent) => {
+		switch (context.type) {
+		case FolderMirrorEventType.FullSync:
+			return this.fullSyncTask();
+		case FolderMirrorEventType.DatabaseItemChange:
+			return this.databaseItemChangeTask(context.id);
+		case FolderMirrorEventType.DatabaseItemDelete:
+			return this.databaseItemDeleteTask(context.id);
+		case FolderMirrorEventType.WatcherEvent:
+			return this.handleWatcherEventTask(context.event);
+		default:
+		{
+			const exhaustivenessCheck: never = context;
+			return exhaustivenessCheck;
+		}
+		}
+	};
 }

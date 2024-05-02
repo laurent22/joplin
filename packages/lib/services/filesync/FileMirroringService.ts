@@ -14,10 +14,21 @@ export default class FileMirroringService {
 
 	public constructor() {}
 
-	public mirrorFolder(outputPath: string, baseFolderId: string) {
+	public async mirrorFolder(outputPath: string, baseFolderId: string) {
 		const folderMirror = new FolderMirror(outputPath, baseFolderId);
 		this.mirrors_.push(folderMirror);
+		await folderMirror.fullSync();
+		await folderMirror.watch();
 		return folderMirror;
+	}
+
+	public async reset() {
+		const mirrors = this.mirrors_;
+		this.mirrors_ = [];
+		for (const mirror of mirrors) {
+			await mirror.stopWatching();
+			await mirror.waitForIdle();
+		}
 	}
 
 	private static mirrors() {

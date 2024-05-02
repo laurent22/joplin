@@ -12,9 +12,7 @@ export const runtime = (): CommandRuntime => {
 	return {
 		execute: async (_context: unknown, folderId: string) => {
 			const outputPath = await shim.pickFolder();
-			const mirror = FileMirroringService.instance().mirrorFolder(outputPath, folderId);
-			await mirror.fullSync();
-			await mirror.watch();
+			await FileMirroringService.instance().mirrorFolder(outputPath, folderId);
 		},
 		enabledCondition: '',
 	};

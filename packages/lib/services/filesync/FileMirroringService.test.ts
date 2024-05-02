@@ -1,6 +1,6 @@
 import Note from '../../models/Note';
 import { createTempDir, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
-import FileMirroringService from './FolderMirror';
+import FileMirroringService from './FileMirroringService';
 import { join } from 'path';
 import * as fs from 'fs-extra';
 import { Store, createStore } from 'redux';
@@ -11,6 +11,7 @@ import Folder from '../../models/Folder';
 import createFilesFromPathRecord from '../../utils/pathRecord/createFilesFromPathRecord';
 import { NoteEntity } from '../database/types';
 import { ModelType } from '../../BaseModel';
+import verifyDirectoryMatches from '../../utils/pathRecord/verifyDirectoryMatches';
 
 type ShouldMatchItemCallback = (item: NoteEntity)=> boolean;
 const waitForNoteChange = (itemMatcher?: ShouldMatchItemCallback) => {
@@ -21,7 +22,7 @@ const waitForNoteChange = (itemMatcher?: ShouldMatchItemCallback) => {
 		};
 
 		const eventHandler = async (event: ItemChangeEvent) => {
-			if (event.eventType !== ModelType.Note) return;
+			if (event.itemType !== ModelType.Note) return;
 
 			if (!itemMatcher) {
 				onResolve();
@@ -55,11 +56,13 @@ describe('FileMirroringService.watch', () => {
 
 		BaseItem.dispatch = store.dispatch;
 	});
+	afterEach(async () => {
+		await FileMirroringService.instance().reset();
+	});
 
 	test('should create notes and folders locally when created in an initially-empty, watched remote folder', async () => {
 		const tempDir = await createTempDir();
-		const service = new FileMirroringService(tempDir, '');
-		await service.watch();
+		await FileMirroringService.instance().mirrorFolder(tempDir, '');
 
 		let changeListener = waitForNoteChange();
 		await fs.writeFile(join(tempDir, 'a.md'), 'This is a test...', 'utf8');
@@ -88,8 +91,6 @@ describe('FileMirroringService.watch', () => {
 		await changeListener;
 
 		expect(await Note.loadByTitle('test_note')).toMatchObject({ body: 'A note in a folder', parent_id: subfolder.id });
-
-		await service.stopWatching();
 	});
 
 	test('should modify items locally when changed in a watched, non-empty remote folder', async () => {
@@ -99,9 +100,7 @@ describe('FileMirroringService.watch', () => {
 			'b.md': '---\ntitle: Another test\n---\n\n# Content',
 			'test/foo/c.md': 'Another note',
 		});
-		const service = new FileMirroringService(tempDir, '');
-		await service.fullSync();
-		await service.watch();
+		await FileMirroringService.instance().mirrorFolder(tempDir, '');
 
 		expect(await Note.loadByTitle('A test')).toMatchObject({ body: '', parent_id: '' });
 
@@ -111,8 +110,6 @@ describe('FileMirroringService.watch', () => {
 		await waitForTestNoteToBeWritten(tempDir);
 
 		expect(await Note.loadByTitle('A test')).toMatchObject({ body: 'New content', parent_id: '' });
-
-		await service.stopWatching();
 	});
 
 	test('should move notes when moved in a watched folder', async () => {
@@ -121,9 +118,7 @@ describe('FileMirroringService.watch', () => {
 			'a.md': '---\ntitle: A test\n---',
 			'test/foo/c.md': 'Another note',
 		});
-		const service = new FileMirroringService(tempDir, '');
-		await service.fullSync();
-		await service.watch();
+		await FileMirroringService.instance().mirrorFolder(tempDir, '');
 
 		const testFolderId = (await Folder.loadByTitle('test')).id;
 		const noteId = (await Note.loadByTitle('A test')).id;
@@ -134,11 +129,9 @@ describe('FileMirroringService.watch', () => {
 
 		const movedNote = await Note.loadByTitle('A test');
 		expect(movedNote).toMatchObject({ parent_id: testFolderId, id: noteId });
-
-		await service.stopWatching();
 	});
 
-	test('should move folders when moved in a watched folder', async () => {
+	test('should move folders locally when moved in a watched folder', async () => {
 		const tempDir = await createTempDir();
 		await createFilesFromPathRecord(tempDir, {
 			'testFolder1/a.md': 'Note A',
@@ -146,9 +139,7 @@ describe('FileMirroringService.watch', () => {
 			'testFolder2/testFolder3/c.md': 'Note C',
 		});
 
-		const service = new FileMirroringService(tempDir, '');
-		await service.fullSync();
-		await service.watch();
+		await FileMirroringService.instance().mirrorFolder(tempDir, '');
 
 		const moveItemC = waitForNoteChange(item => item.body === 'Note C');
 		await fs.move(join(tempDir, 'testFolder2'), join(tempDir, 'testFolder1', 'testFolder2'));
@@ -165,7 +156,23 @@ describe('FileMirroringService.watch', () => {
 
 		const noteC = await Note.loadByTitle('c');
 		expect(noteC.parent_id).toBe(testFolder3.id);
+	});
 
-		await service.stopWatching();
+	test('should update notes remotely when updated locally', async () => {
+		const tempDir = await createTempDir();
+
+		const note = await Note.save({ title: 'Test note', body: '', parent_id: '' });
+		const mirror = await FileMirroringService.instance().mirrorFolder(tempDir, '');
+
+		await verifyDirectoryMatches(tempDir, {
+			'Test note.md': `---\ntitle: Test note\nid: ${note.id}\n---\n\n`,
+		});
+
+		await Note.save({ title: 'Test note', body: 'New body', id: note.id });
+		await mirror.waitForIdle();
+
+		await verifyDirectoryMatches(tempDir, {
+			'Test note.md': `---\ntitle: Test note\nid: ${note.id}\n---\n\nNew body`,
+		});
 	});
 });
