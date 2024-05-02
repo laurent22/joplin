@@ -793,6 +793,7 @@ packages/lib/clipperUtils.js
 packages/lib/commands/historyBackward.js
 packages/lib/commands/historyForward.js
 packages/lib/commands/index.js
+packages/lib/commands/mirrorFolder.js
 packages/lib/commands/openMasterPasswordDialog.js
 packages/lib/commands/synchronize.js
 packages/lib/components/EncryptionConfigScreen/utils.js

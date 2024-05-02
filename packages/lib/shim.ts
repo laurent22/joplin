@@ -381,6 +381,10 @@ const shim = {
 		return await shim.showMessageBox(message) === 0;
 	},
 
+	pickFolder: async (): Promise<string> => {
+		throw new Error('Not implemented: pickFolder');
+	},
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	writeImageToFile: (_image: any, _format: any, _filePath: string): void => {
 		throw new Error('Not implemented');

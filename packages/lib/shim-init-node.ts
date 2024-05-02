@@ -869,6 +869,11 @@ function shimInit(options: ShimInitOptions = null) {
 		const doc = await loadPdf(pdfPath);
 		return { pageCount: doc.numPages };
 	};
+
+	shim.pickFolder = async (): Promise<string> => {
+		const filePaths = await shim.electronBridge().showOpenDialog({ properties: ['openDirectory'] });
+		return filePaths[0];
+	};
 }
 
 module.exports = { shimInit, setupProxySettings };

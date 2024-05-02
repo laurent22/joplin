@@ -1,3 +1,4 @@
+import { ModelType } from '../../BaseModel';
 import { FolderEntity, NoteEntity } from '../database/types';
 import FolderMirror from './FolderMirror';
 
@@ -28,11 +29,11 @@ export default class FileMirroringService {
 	}
 
 	public static onFolderUpdate(item: FolderEntity) {
-		return this.mirrors().map(mirror => mirror.onLocalItemUpdate(item));
+		return this.mirrors().map(mirror => mirror.onLocalItemUpdate({ type_: ModelType.Folder, ...item }));
 	}
 
 	public static onNoteUpdate(note: NoteEntity) {
-		return this.mirrors().map(mirror => mirror.onLocalItemUpdate(note));
+		return this.mirrors().map(mirror => mirror.onLocalItemUpdate({ type_: ModelType.Note, ...note }));
 	}
 
 	public static onNoteDelete(id: string) {
