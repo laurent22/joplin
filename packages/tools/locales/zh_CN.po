@@ -6,6 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: qx100 <ztymaxwell@gmail.com>\n"
 "Language-Team: zh_CN <737445366KG@Gmail.com>\n"
 "Language: zh_CN\n"
@@ -87,9 +89,8 @@ msgid "&View"
 msgstr "视图 (&V)"
 
 #: packages/app-desktop/gui/MenuBar.tsx:857
-#, fuzzy
 msgid "&Window"
-msgstr "关闭窗口"
+msgstr "窗口 (&W)"
 
 #: packages/lib/models/Setting.ts:1645 packages/lib/models/Setting.ts:1836
 msgid "%d days"
@@ -245,7 +246,7 @@ msgstr "A5"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox.tsx:86
 msgid "About"
-msgstr ""
+msgstr "关于"
 
 #: packages/app-desktop/gui/MenuBar.tsx:573
 #: packages/app-desktop/gui/MenuBar.tsx:908
@@ -510,9 +511,8 @@ msgstr "授权令牌："
 
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:84
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:158
-#, fuzzy
 msgid "Authorise"
-msgstr "授权令牌："
+msgstr "授权"
 
 #: packages/lib/models/Setting.ts:753
 msgid "Auto"
@@ -532,7 +532,7 @@ msgstr "自动检查更新"
 
 #: packages/lib/models/Setting.ts:1823
 msgid "Automatically delete notes in the trash after a number of days"
-msgstr ""
+msgstr "几天后自动删除回收站中的笔记"
 
 #: packages/lib/models/Setting.ts:874
 msgid "Automatically switch theme to match system theme"
@@ -556,7 +556,7 @@ msgid ""
 "unlock Joplin. If the device is on lockout, consider switching it off and on "
 "to reset biometrics scanning."
 msgstr ""
-"设备上未设置生物识别解锁。请设置它以解锁Joplin。如果设备处于锁定状态，请考虑"
+"设备上未设置生物识别解锁。请设置它以解锁 Joplin。如果设备处于锁定状态，请考虑"
 "将其关闭和打开以重置生物特征扫描。"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:55
@@ -958,7 +958,6 @@ msgid "Content provided by %s"
 msgstr "内容由 %s 提供"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:72
-#, fuzzy
 msgid "Content provided by: %s"
 msgstr "内容由 %s 提供"
 
@@ -1005,9 +1004,8 @@ msgstr "复制链接地址"
 
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:90
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:166
-#, fuzzy
 msgid "Copy link to website"
-msgstr "Joplin 官网"
+msgstr "将链接复制到网站"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:101
 #: packages/app-mobile/components/screens/Note.tsx:1251
@@ -1344,9 +1342,8 @@ msgstr "是否删除此配置文件？"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox.tsx:81
-#, fuzzy
 msgid "Deleted"
-msgstr "删除"
+msgstr "已删除"
 
 #: packages/lib/Synchronizer.ts:196
 msgid "Deleted local items: %d."
@@ -1569,7 +1566,7 @@ msgstr "登录 Dropbox"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:13
 msgid "Due"
-msgstr ""
+msgstr "截止日期"
 
 #: packages/app-desktop/gui/MainScreen/commands/duplicateNote.ts:7
 #: packages/app-mobile/components/ScreenHeader.tsx:489
@@ -1697,7 +1694,7 @@ msgstr "强调文本"
 #: packages/app-desktop/commands/emptyTrash.ts:16
 #: packages/app-desktop/commands/emptyTrash.ts:8
 msgid "Empty trash"
-msgstr ""
+msgstr "清空回收站"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:143
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:86
@@ -1780,9 +1777,8 @@ msgid "Enable optical character recognition (OCR)"
 msgstr "启用光学字符识别 (OCR)"
 
 #: packages/lib/models/Setting.ts:2717
-#, fuzzy
 msgid "Enable or disable plugins"
-msgstr "管理您的插件"
+msgstr "启用或禁用插件"
 
 #: packages/lib/models/Setting.ts:1209
 msgid "Enable PDF viewer"
@@ -2133,9 +2129,8 @@ msgid "Found: %d."
 msgstr "已找到：%d 条。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/SectionSelector.tsx:42
-#, fuzzy
 msgid "From a plugin"
-msgstr "浏览所有插件"
+msgstr "从一个插件"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:566
 msgid "FTS enabled: %d"
@@ -2199,7 +2194,7 @@ msgstr "批准授权"
 
 #: packages/app-cli/app/command-sync.ts:114
 msgid "Have you authorised the application login in the above URL?"
-msgstr ""
+msgstr "您是否已授权应用程序在上述URL中登录？"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useHeaderButtons.ts:14
 msgid "Header %d"
@@ -2304,7 +2299,7 @@ msgstr "空闲"
 msgid ""
 "If you have already authorised, please wait for the application to sync to "
 "Joplin Cloud."
-msgstr ""
+msgstr "如果您已授权，请等待应用程序同步到 Joplin Cloud。"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:85
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:358
@@ -2336,7 +2331,7 @@ msgstr "正在导入笔记..."
 
 #: packages/app-cli/app/command-import.ts:16
 msgid "Imports data into Joplin."
-msgstr "导入数据到 Jolin。"
+msgstr "导入数据到 Joplin。"
 
 #: packages/lib/models/Setting.ts:748
 msgid ""
@@ -2534,9 +2529,8 @@ msgstr "Joplin Cloud"
 
 #: packages/app-desktop/gui/Root.tsx:228
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:146
-#, fuzzy
 msgid "Joplin Cloud Login"
-msgstr "Joplin Cloud"
+msgstr "Joplin Cloud 登录"
 
 #: packages/lib/services/interop/InteropService.ts:148
 #: packages/lib/services/interop/InteropService.ts:65
@@ -2604,9 +2598,8 @@ msgid "Keep note history for"
 msgstr "保留笔记历史"
 
 #: packages/lib/models/Setting.ts:1839
-#, fuzzy
 msgid "Keep notes in the trash for"
-msgstr "保留笔记历史"
+msgstr "将笔记移到回收站"
 
 #: packages/lib/models/Setting.ts:1485
 msgid "Keyboard Mode"
@@ -2650,7 +2643,7 @@ msgstr "稍后"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:7
 msgid "Latitude"
-msgstr ""
+msgstr "纬度"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:616
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:229
@@ -2721,9 +2714,8 @@ msgid "Loaded"
 msgstr "已加载"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:85
-#, fuzzy
 msgid "Loading plugin repository..."
-msgstr "无法连接到插件库。"
+msgstr "正在加载插件库..."
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:87
 msgid "Loading..."
@@ -2766,7 +2758,7 @@ msgstr "日志，配置文件与同步状态"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:8
 msgid "Longitude"
-msgstr ""
+msgstr "经度"
 
 #: packages/app-desktop/gui/MenuBar.tsx:880
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:560
@@ -2866,7 +2858,7 @@ msgstr "媒体播放器，数学公式，图表等设置"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 msgid "Minimise"
-msgstr ""
+msgstr "最小化"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:318
 msgid "Missing keys"
@@ -2907,16 +2899,15 @@ msgstr "是否移动 %d 条笔记到笔记本 “%s”？"
 #: packages/app-cli/app/command-rmbook.ts:27
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:206
-#, fuzzy
 msgid ""
 "Move notebook \"%s\" to the trash?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will also be moved to the "
 "trash."
 msgstr ""
-"是否删除笔记本 “%s”？\n"
+"是否将笔记本 “%s”移到回收站？\n"
 "\n"
-"所有在该笔记本内的笔记和子笔记本也将同时被删除。"
+"所有该笔记本内的笔记和子笔记本也将同时被移到回收站。"
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.ts:8
 msgid "Move to notebook"
@@ -3362,19 +3353,16 @@ msgid "Per user. Minimum of %d users."
 msgstr "每个用户。至少有%d个用户。"
 
 #: packages/app-desktop/gui/MainScreen/commands/permanentlyDeleteNote.ts:8
-#, fuzzy
 msgid "Permanently delete note"
-msgstr "删除选中的笔记"
+msgstr "永久删除选中的笔记"
 
 #: packages/lib/models/Note.ts:900
-#, fuzzy
 msgid "Permanently delete note \"%s\"?"
-msgstr "是否删除笔记 “%s”？"
+msgstr "是否永久删除笔记 “%s”？"
 
 #: packages/lib/models/Note.ts:902
-#, fuzzy
 msgid "Permanently delete these %d notes?"
-msgstr "是否删除这 %d 条笔记？"
+msgstr "是否永久删除这 %d 条笔记？"
 
 #: packages/app-mobile/components/screens/Note.tsx:492
 msgid "Permission needed"
@@ -3461,18 +3449,16 @@ msgid "Please wait..."
 msgstr "请稍候..."
 
 #: packages/app-mobile/plugins/PlatformImplementation.ts:52
-#, fuzzy
 msgid "Plugin message"
-msgstr "插件"
+msgstr "插件消息"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:81
 msgid "Plugin repository failed to load"
-msgstr ""
+msgstr "插件库加载失败"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:28
-#, fuzzy
 msgid "Plugin search"
-msgstr "插件"
+msgstr "插件搜索"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:325
 msgid "Plugin tools"
@@ -3663,9 +3649,8 @@ msgid "Recipients:"
 msgstr "收件人："
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox.tsx:106
-#, fuzzy
 msgid "Recommended"
-msgstr "命令"
+msgstr "推荐"
 
 #: packages/app-desktop/gui/MenuBar.tsx:709
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
@@ -3778,24 +3763,20 @@ msgid "Restore"
 msgstr "恢复"
 
 #: packages/app-desktop/gui/MainScreen/commands/restoreNote.ts:10
-#, fuzzy
 msgid "Restore note"
-msgstr "已恢复的笔记"
+msgstr "恢复笔记"
 
 #: packages/app-desktop/gui/MainScreen/commands/restoreFolder.ts:9
-#, fuzzy
 msgid "Restore notebook"
-msgstr "新建笔记本"
+msgstr "恢复笔记本"
 
 #: packages/app-cli/app/command-restore.ts:12
-#, fuzzy
 msgid "Restore the items matching <pattern> from the trash."
-msgstr "删除符合 <note-pattern> 的笔记。"
+msgstr "恢复符合 <note-pattern> 的笔记。"
 
 #: packages/lib/services/trash/index.ts:87
-#, fuzzy
 msgid "Restored items"
-msgstr "已恢复的笔记"
+msgstr "已恢复的条目"
 
 #: packages/lib/services/RevisionService.ts:241
 msgid "Restored Notes"
@@ -4197,9 +4178,8 @@ msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr "通过 <field> 排序条目（示例：title, updated_time, created_time）。"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:9
-#, fuzzy
 msgid "Source"
-msgstr "来源： "
+msgstr "来源"
 
 #: packages/app-cli/app/command-import.ts:27
 msgid "Source format: %s"
@@ -4642,15 +4622,13 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "笔记 “%s” 已成功恢复到笔记本 “%s” 中。"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:63
-#, fuzzy
 msgid "The note was successfully moved to the trash."
 msgid_plural "The notes were successfully moved to the trash."
-msgstr[0] "笔记 “%s” 已成功恢复到笔记本 “%s” 中。"
+msgstr[0] "已成功将笔记移到回收站中。"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:61
-#, fuzzy
 msgid "The notebook and its content was successfully moved to the trash."
-msgstr "笔记 “%s” 已成功恢复到笔记本 “%s” 中。"
+msgstr "已成功将笔记本及其内容移到回收站中。"
 
 #: packages/app-mobile/components/screens/folder.js:77
 msgid "The notebook could not be saved: %s"
@@ -4735,7 +4713,7 @@ msgstr "网页剪藏未启用。"
 msgid ""
 "The WebDAV implementation of %s is incompatible with Joplin, and as such is "
 "no longer supported. Please use a different sync method."
-msgstr "%s的WebDAV工具与Joplin不兼容，因此不再受支持。请使用其他同步方法。"
+msgstr "%s的 WebDAV 工具与 Joplin 不兼容，因此不再受支持。请使用其他同步方法。"
 
 #: packages/lib/models/Setting.ts:861
 msgid "Theme"
@@ -4901,7 +4879,7 @@ msgstr "这将打开一个新页面。是否保存当前更改？"
 
 #: packages/app-desktop/commands/emptyTrash.ts:14
 msgid "This will permanently delete all items in the trash. Continue?"
-msgstr ""
+msgstr "这将永久删除回收站中的所有条目。是否继续？"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
 msgid ""
@@ -4934,11 +4912,10 @@ msgstr "要让 Joplin 与 Dropbox 同步，请按下列步骤操作："
 #: packages/app-cli/app/command-sync.ts:108
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:80
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:149
-#, fuzzy
 msgid ""
 "To allow Joplin to synchronise with Joplin Cloud, please login using this "
 "URL:"
-msgstr "要让 Joplin 与 Dropbox 同步，请按下列步骤操作："
+msgstr "要让 Joplin 与  Joplin Cloud 同步，请使用以下URL登录："
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:53
 msgid "To continue, please enter your master password below."
@@ -5000,7 +4977,6 @@ msgid "to-do"
 msgstr "待办事项"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:6
-#, fuzzy
 msgid "To-do"
 msgstr "待办事项"
 
@@ -5070,7 +5046,7 @@ msgstr "总数：%d/%d 条"
 
 #: packages/lib/services/trash/index.ts:41
 msgid "Trash"
-msgstr ""
+msgstr "回收站"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:315
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:123
@@ -5365,9 +5341,8 @@ msgid "Voice typing..."
 msgstr "使用语音输入..."
 
 #: packages/lib/services/joplinCloudUtils.ts:23
-#, fuzzy
 msgid "Waiting for authorisation..."
-msgstr "批准授权"
+msgstr "正在等待授权..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:202
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:109
@@ -5484,7 +5459,7 @@ msgstr ""
 
 #: packages/lib/services/joplinCloudUtils.ts:41
 msgid "You are logged in into Joplin Cloud, you can leave this screen now."
-msgstr ""
+msgstr "您已登录到 Joplin Cloud，现在可以关闭此界面。"
 
 #: packages/app-mobile/components/NoteList.tsx:95
 msgid "You currently have no notebooks."
@@ -5507,15 +5482,10 @@ msgstr ""
 "法时，可使用该项目。"
 
 #: packages/lib/services/joplinCloudUtils.ts:49
-#, fuzzy
 msgid ""
 "You were unable to connect to Joplin Cloud. Please check your credentials "
 "and try again. Error:"
-msgstr ""
-"设置您的 Joplin Cloud 帐号时发生了一个错误。请确认您的邮箱和密码是否正确，然"
-"后再试一次。错误是：\n"
-"\n"
-"%s"
+msgstr "无法连接到 Joplin Cloud 。请检查您的凭据，然后重试。错误："
 
 #: packages/app-cli/app/cli-utils.js:160
 msgid "Your choice: "
