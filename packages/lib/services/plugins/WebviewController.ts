@@ -3,6 +3,7 @@ import shim from '../../shim';
 import { ButtonSpec, DialogResult, ViewHandle } from './api/types';
 const { toSystemSlashes } = require('../../path-utils');
 import PostMessageService, { MessageParticipant } from '../PostMessageService';
+import { PluginViewState } from './reducer';
 
 export enum ContainerType {
 	Panel = 'panel',
@@ -49,27 +50,28 @@ export default class WebviewController extends ViewController {
 	private messageListener_: Function = null;
 	private closeResponse_: CloseResponse = null;
 
-	// True if a **panel** is shown in a modal window.
-	private panelInModalMode_ = false;
-
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(handle: ViewHandle, pluginId: string, store: any, baseDir: string, containerType: ContainerType) {
 		super(handle, pluginId, store);
 		this.baseDir_ = toSystemSlashes(baseDir, 'linux');
 
+		const view: PluginViewState = {
+			id: this.handle,
+			type: this.type,
+			containerType: containerType,
+			html: '',
+			scripts: [],
+			// Opened is used for dialogs and mobile panels (which are shown
+			// like dialogs):
+			opened: containerType === ContainerType.Panel,
+			buttons: null,
+			fitToContent: true,
+		};
+
 		this.store.dispatch({
 			type: 'PLUGIN_VIEW_ADD',
 			pluginId: pluginId,
-			view: {
-				id: this.handle,
-				type: this.type,
-				containerType: containerType,
-				html: '',
-				scripts: [],
-				opened: false,
-				buttons: null,
-				fitToContent: true,
-			},
+			view,
 		});
 	}
 
@@ -147,39 +149,36 @@ export default class WebviewController extends ViewController {
 	// Specific to panels
 	// ---------------------------------------------
 
+	private showWithAppLayout() {
+		return this.containerType === ContainerType.Panel && !!this.store.getState().mainLayout;
+	}
+
 	public async show(show = true): Promise<void> {
-		this.store.dispatch({
-			type: 'MAIN_LAYOUT_SET_ITEM_PROP',
-			itemKey: this.handle,
-			propName: 'visible',
-			propValue: show,
-		});
+		if (this.showWithAppLayout()) {
+			this.store.dispatch({
+				type: 'MAIN_LAYOUT_SET_ITEM_PROP',
+				itemKey: this.handle,
+				propName: 'visible',
+				propValue: show,
+			});
+		} else {
+			this.setStoreProp('opened', show);
+		}
 	}
 
 	public async hide(): Promise<void> {
 		return this.show(false);
 	}
 
-	// This method allows us to determine whether a panel is shown in dialog mode,
-	// which is used on mobile.
-	public setIsShownInModal(shown: boolean) {
-		this.panelInModalMode_ = shown;
-	}
-
 	public get visible(): boolean {
 		const appState = this.store.getState();
 
-		if (this.panelInModalMode_) {
-			return true;
+		// Mobile: There is no appState.mainLayout
+		if (!this.showWithAppLayout()) {
+			return this.storeView.opened;
 		}
 
 		const mainLayout = appState.mainLayout;
-
-		// Mobile: There is no appState.mainLayout
-		if (!mainLayout) {
-			return false;
-		}
-
 		const item = findItemByKey(mainLayout, this.handle);
 		return item ? item.visible : false;
 	}

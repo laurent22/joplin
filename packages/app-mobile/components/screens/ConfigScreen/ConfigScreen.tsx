@@ -489,8 +489,8 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 					<PluginStates
 						key={'plugin-states'}
 						styles={this.styles()}
-						pluginSettings={settings[pluginStatesKey]}
 						themeId={this.props.themeId}
+						pluginSettings={settings[pluginStatesKey]}
 
 						updatePluginStates={updatePluginStates}
 						shouldShowBasedOnSearchQuery={this.state.searching ? matchesSearchQuery : null}

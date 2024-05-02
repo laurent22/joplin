@@ -3,8 +3,8 @@ import { PluginHtmlContents, PluginStates, ViewInfo } from '@joplin/lib/services
 import * as React from 'react';
 import { Button, Portal, SegmentedButtons, Text } from 'react-native-paper';
 import useViewInfos from './hooks/useViewInfos';
-import WebviewController, { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { connect } from 'react-redux';
 import { AppState } from '../../../utils/types';
@@ -42,43 +42,38 @@ type ButtonInfo = {
 	icon: string;
 };
 
-const useSelectedTabId = (buttonInfos: ButtonInfo[], viewInfoById: Record<string, ViewInfo>) => {
+const useSelectedTabId = (
+	buttonInfos: ButtonInfo[],
+	viewInfoById: Record<string, ViewInfo>,
+) => {
+	const viewInfoByIdRef = useRef(viewInfoById);
+	viewInfoByIdRef.current = viewInfoById;
+
 	const getDefaultSelectedTabId = useCallback((): string|undefined => {
 		const lastSelectedId = Setting.value('ui.lastSelectedPluginPanel');
-		if (lastSelectedId && viewInfoById[lastSelectedId]) {
+		const lastSelectedInfo = viewInfoByIdRef.current[lastSelectedId];
+		if (lastSelectedId && lastSelectedInfo && lastSelectedInfo.view.opened) {
 			return lastSelectedId;
 		} else {
 			return buttonInfos[0]?.value;
 		}
-	}, [buttonInfos, viewInfoById]);
+	}, [buttonInfos]);
 
 	const [selectedTabId, setSelectedTabId] = useState<string|undefined>(getDefaultSelectedTabId);
 
 	useEffect(() => {
-		if (!selectedTabId) {
+		if (!selectedTabId || !viewInfoById[selectedTabId]?.view?.opened) {
 			setSelectedTabId(getDefaultSelectedTabId());
 		}
-	}, [selectedTabId, getDefaultSelectedTabId]);
+	}, [selectedTabId, viewInfoById, getDefaultSelectedTabId]);
 
 	useEffect(() => {
-		if (!selectedTabId) return () => {};
+		if (!selectedTabId) return;
 
-		const info = viewInfoById[selectedTabId];
-
-		let controller: WebviewController|null = null;
-		if (info && info.view.opened) {
-			const plugin = PluginService.instance().pluginById(info.plugin.id);
-			controller = plugin.viewController(info.view.id) as WebviewController;
-			controller.setIsShownInModal(true);
-		}
-
+		const info = viewInfoByIdRef.current[selectedTabId];
 		Setting.setValue('ui.lastSelectedPluginPanel', selectedTabId);
 		AccessibilityInfo.announceForAccessibility(_('%s tab opened', getTabLabel(info)));
-
-		return () => {
-			controller?.setIsShownInModal(false);
-		};
-	}, [viewInfoById, selectedTabId]);
+	}, [selectedTabId]);
 
 	return { setSelectedTabId, selectedTabId };
 };
@@ -98,7 +93,7 @@ const PluginPanelViewer: React.FC<Props> = props => {
 	const viewInfoById = useMemo(() => {
 		const result: Record<string, ViewInfo> = {};
 		for (const info of viewInfos) {
-			result[`${info.plugin.id}--${info.view.id}`] = info;
+			result[info.view.id] = info;
 		}
 		return result;
 	}, [viewInfos]);
@@ -106,6 +101,7 @@ const PluginPanelViewer: React.FC<Props> = props => {
 	const buttonInfos = useMemo(() => {
 		return Object.entries(viewInfoById)
 			.filter(([_id, info]) => info.view.containerType === ContainerType.Panel)
+			.filter(([_id, info]) => info.view.opened)
 			.map(([id, info]) => {
 				return {
 					value: id,

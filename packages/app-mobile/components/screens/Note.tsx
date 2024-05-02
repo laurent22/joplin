@@ -58,10 +58,11 @@ import { SelectionRange } from '../NoteEditor/types';
 import { AppState } from '../../utils/types';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { getDisplayParentTitle } from '@joplin/lib/services/trash';
-import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import pickDocument from '../../utils/pickDocument';
 import debounce from '../../utils/debounce';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import CommandService from '@joplin/lib/services/CommandService';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -1207,7 +1208,9 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		const readOnly = this.state.readOnly;
 		const isDeleted = !!this.state.note.deleted_time;
 
-		const cacheKey = md5([isTodo, isSaved].join('_'));
+		const pluginCommands = pluginUtils.commandNamesFromViews(this.props.plugins, 'noteToolbar');
+
+		const cacheKey = md5([isTodo, isSaved, pluginCommands.join(',')].join('_'));
 		if (!this.menuOptionsCache_) this.menuOptionsCache_ = {};
 
 		if (this.menuOptionsCache_[cacheKey]) return this.menuOptionsCache_[cacheKey];
@@ -1320,6 +1323,25 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			},
 			disabled: readOnly,
 		});
+
+		if (pluginCommands.length) {
+			output.push({ isDivider: true });
+
+			const commandService = CommandService.instance();
+			for (const commandName of pluginCommands) {
+				if (commandName === '-') {
+					output.push({ isDivider: true });
+				} else {
+					output.push({
+						title: commandService.description(commandName),
+						onPress: async () => {
+							void commandService.execute(commandName);
+						},
+						disabled: !commandService.isEnabled(commandName),
+					});
+				}
+			}
+		}
 
 		this.menuOptionsCache_ = {};
 		this.menuOptionsCache_[cacheKey] = output;
