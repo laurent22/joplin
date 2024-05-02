@@ -40,6 +40,10 @@ const waitForTestNoteToBeWritten = async (parentDir: string) => {
 	const waitForActionsToComplete = waitForNoteChange(item => item.body === 'waitForActionsToComplete');
 	await fs.writeFile(join(parentDir, 'waitForQueue.md'), 'waitForActionsToComplete', 'utf8');
 	await waitForActionsToComplete;
+
+	const waitForDeleteAction = waitForNoteChange(item => item.body === 'waitForActionsToComplete');
+	await fs.remove(join(parentDir, 'waitForQueue.md'));
+	await waitForDeleteAction;
 };
 
 let store: Store<AppState>;
@@ -173,6 +177,35 @@ describe('FileMirroringService.watch', () => {
 
 		await verifyDirectoryMatches(tempDir, {
 			'Test note.md': `---\ntitle: Test note\nid: ${note.id}\n---\n\nNew body`,
+		});
+	});
+
+	test('should rename folders locally when renamed remotely with .folder.yml', async () => {
+		const tempDir = await createTempDir();
+		const folder1 = await Folder.save({ title: 'Test', parent_id: '' });
+		const folder2 = await Folder.save({ title: 'Test 2', parent_id: '' });
+		const note1 = await Note.save({ parent_id: folder2.id, title: 'Note' });
+
+		const mirror = await FileMirroringService.instance().mirrorFolder(tempDir, '');
+
+		await mirror.waitForIdle();
+		await verifyDirectoryMatches(tempDir, {
+			'Test/.folder.yml': `title: Test\nid: ${folder1.id}\n`,
+			'Test 2/.folder.yml': `title: Test 2\nid: ${folder2.id}\n`,
+			'Test 2/Note.md': `---\ntitle: Note\nid: ${note1.id}\n---\n\n`,
+		});
+
+		await fs.writeFile(join(tempDir, 'Test', '.folder.yml'), `title: Updated\nid: ${folder1.id}`, 'utf8');
+
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		expect(await Folder.load(folder1.id)).toMatchObject({ parent_id: '', title: 'Updated' });
+
+		await verifyDirectoryMatches(tempDir, {
+			'Test/.folder.yml': `title: Updated\nid: ${folder1.id}`,
+			'Test 2/.folder.yml': `title: Test 2\nid: ${folder2.id}\n`,
+			'Test 2/Note.md': `---\ntitle: Note\nid: ${note1.id}\n---\n\n`,
 		});
 	});
 });

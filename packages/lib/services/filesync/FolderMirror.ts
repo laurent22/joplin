@@ -16,6 +16,7 @@ import uuid from '../../uuid';
 import BaseItem from '../../models/BaseItem';
 import AsyncActionQueue from '../../AsyncActionQueue';
 import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
+import { folderInfoFileName } from './folderInfo';
 const { ALL_NOTES_FILTER_ID } = require('../../reserved-ids.js');
 
 const debugLogger = new Logger();
@@ -195,7 +196,7 @@ const getNoteMd = async (note: NoteEntity) => {
 
 enum FolderMirrorEventType {
 	FullSync = 'fullSync',
-	WatcherEvent = 'dirChange',
+	WatcherEvent = 'watcherEvent',
 	DatabaseItemChange = 'dbChange',
 	DatabaseItemDelete = 'dbDelete',
 }
@@ -501,19 +502,30 @@ export default class {
 			debugLogger.groupEnd();
 		};
 
-		const fullPath = event.path;
-		const path = relative(this.baseFilePath, fullPath);
+		let fullPath = event.path;
+		let path = relative(this.baseFilePath, fullPath);
+
 		if (!path || path === '.') return;
 
 		debugLogger.debug('event', event.type, path);
 		debugLogger.group();
+
+		// Folder changed (because of the folder metadata file)
+		if (basename(fullPath) === folderInfoFileName) {
+			debugLogger.debug('Folder info changed');
+			fullPath = dirname(fullPath);
+			path = dirname(path);
+		}
 
 		try {
 			if (await shim.fsDriver().exists(fullPath)) {
 				const item = await itemAtPath(path);
 
 				// Unsupported file type
-				if (!item) return;
+				if (!item) {
+					debugLogger.debug('Unsupported file type', path);
+					return;
+				}
 
 				if (event.type === DirectoryWatchEventType.Add) { // File created, renamed, or deleted
 					await handleFileAdd(path, item);
