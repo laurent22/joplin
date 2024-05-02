@@ -1,6 +1,6 @@
 import Note from '../../models/Note';
 import { createTempDir, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
-import FileMirroringService from './FileMirroringService';
+import FileMirroringService from './FolderMirror';
 import { join } from 'path';
 import * as fs from 'fs-extra';
 import { Store, createStore } from 'redux';

@@ -1,6 +1,7 @@
 const fastDeepEqual = require('fast-deep-equal');
 import { EventEmitter } from 'events';
 import type { State as AppState } from './reducer';
+import type { ModelType } from './BaseModel';
 
 export enum EventName {
 	ResourceCreate = 'resourceCreate',
@@ -18,6 +19,12 @@ export enum EventName {
 	NoteContentChange = 'noteContentChange',
 	OcrServiceResourcesProcessed = 'ocrServiceResourcesProcessed',
 	NoteResourceIndexed = 'noteResourceIndexed',
+}
+
+export interface ItemChangeEvent {
+	itemType: ModelType;
+	itemId: string;
+	eventType: number;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code from before rule was applied

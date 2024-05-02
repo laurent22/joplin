@@ -978,9 +978,10 @@ packages/lib/services/e2ee/ppkTestUtils.js
 packages/lib/services/e2ee/types.js
 packages/lib/services/e2ee/utils.test.js
 packages/lib/services/e2ee/utils.js
-packages/lib/services/filesync/FileMirroringService.fullSync.test.js
 packages/lib/services/filesync/FileMirroringService.js
-packages/lib/services/filesync/FileMirroringService.watch.test.js
+packages/lib/services/filesync/FolderMirror.fullSync.test.js
+packages/lib/services/filesync/FolderMirror.js
+packages/lib/services/filesync/FolderMirror.watch.test.js
 packages/lib/services/filesync/ItemTree.test.js
 packages/lib/services/filesync/ItemTree.js
 packages/lib/services/filesync/folderInfo/index.js

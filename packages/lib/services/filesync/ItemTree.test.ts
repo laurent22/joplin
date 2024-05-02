@@ -74,4 +74,23 @@ describe('ItemTree', () => {
 		expect(() => tree.move('Test 1.md', 'Test 2.md', noOpActionListeners)).toThrow();
 		tree.checkRep_();
 	});
+
+	test('should delete all children when deleting a folder', async () => {
+		const tree = new ItemTree(baseItem);
+		await tree.addItemTo('', { title: 'Test 1', id: 'test-id1', type_: ModelType.Folder }, noOpActionListeners);
+		await tree.addItemTo('Test 1', { title: 'Test 2', id: 'test-id2', type_: ModelType.Folder }, noOpActionListeners);
+		await tree.addItemTo('Test 1/Test 2', { title: 'Test 3', id: 'test-id3', type_: ModelType.Folder }, noOpActionListeners);
+		await tree.addItemTo('Test 1/Test 2/Test 3', { title: 'Test 4', id: 'test-id4', type_: ModelType.Note }, noOpActionListeners);
+		await tree.addItemTo('Test 1/Test 2/Test 3', { title: 'Test 4.5', id: 'test-id4.5', type_: ModelType.Note }, noOpActionListeners);
+		await tree.addItemTo('', { title: 'Test 5', id: 'test-id5', type_: ModelType.Folder }, noOpActionListeners);
+
+		tree.checkRep_();
+		await tree.deleteAtPath('Test 1', noOpActionListeners);
+
+		expect([...tree.items()]).toMatchObject([
+			['.', baseItem],
+			['Test 5', { title: 'Test 5', id: 'test-id5', type_: ModelType.Folder }],
+		]);
+		tree.checkRep_();
+	});
 });

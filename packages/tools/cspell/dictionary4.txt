@@ -108,3 +108,4 @@ libasound
 libatk
 ENOTFOUND
 unsynced
+filesync

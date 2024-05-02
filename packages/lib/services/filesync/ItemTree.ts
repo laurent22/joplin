@@ -153,6 +153,10 @@ export default class ItemTree {
 		return item;
 	}
 
+	public moveToParent(itemId: string, newParentId: string, listeners: MoveActionListener) {
+		return this.move(this.pathFromId(itemId), this.pathFromId(newParentId), listeners);
+	}
+
 	public move(fromPath: string, toPath: string, listeners: MoveActionListener): Promise<void> {
 		fromPath = normalize(fromPath);
 		toPath = normalize(toPath);
@@ -183,19 +187,42 @@ export default class ItemTree {
 		});
 	}
 
-	public deleteItemAt(path: string, listeners: DeleteActionListener): Promise<void> {
+	public deleteItemAtId(id: string, listeners: DeleteActionListener) {
+		return this.deleteAtPath(this.pathFromId(id), listeners);
+	}
+
+	public deleteAtPath(path: string, listeners: DeleteActionListener): Promise<void> {
 		path = normalize(path);
 		if (!this.hasPath(path)) {
 			throw new Error(`Cannot delete item at non-existent path ${path}`);
 		}
+
 		const item = this.getAtPath(path);
-		this.idToPath_.delete(path);
+
+		const canHaveChildren = item.type_ === ModelType.Folder;
+		const promises: Promise<void>[] = [];
+		if (canHaveChildren) {
+			// Handle the case where an item starts with path but is not a child of it
+			// (e.g. this/is/a/test2 is not a child of this/is/a/test).
+			const prefix = path.endsWith('/') ? path : `${path}/`;
+			for (const [path] of this.items()) {
+				if (path.startsWith(prefix) && path !== prefix) {
+					promises.push(this.deleteAtPath(path, listeners));
+				}
+			}
+		}
+
+		this.idToPath_.delete(item.id);
 		this.pathToItem_.delete(path);
 
-		return listeners.onDelete({ path, item });
+		// Return using Promise.all to avoid race conditions (do as much processing before
+		// becoming async as possible).
+		promises.push(listeners.onDelete({ path, item }));
+		// eslint-disable-next-line -- TODO: Fix & determine whether this is really necessary.
+		return Promise.all(promises).then(() => {});
 	}
 
-	public update(path: string, newItem: FolderItem, listeners: UpdateActionListener) {
+	public updateAtPath(path: string, newItem: FolderItem, listeners: UpdateActionListener) {
 		path = normalize(path);
 		const existingItem = this.getAtPath(path);
 		newItem = { ...existingItem, ...newItem };
@@ -212,6 +239,35 @@ export default class ItemTree {
 		return listeners.onUpdate({ path, item: newItem });
 	}
 
+	public async processItem(item: FolderItem, listeners: ActionListeners) {
+		if (this.hasId(item.id)) {
+			const existingItem = this.getAtId(item.id);
+
+			if (item.deleted_time) {
+				await this.deleteItemAtId(item.id, listeners);
+			} else {
+				let canUpdate = true;
+
+				if (existingItem.parent_id !== item.parent_id) {
+					const newParentId = item.parent_id;
+					if (this.hasId(newParentId)) {
+						await this.moveToParent(item.id, newParentId, listeners);
+					} else {
+						// Moved to an external folder
+						await this.deleteItemAtId(item.id, listeners);
+						canUpdate = false;
+					}
+				}
+
+				if (canUpdate) {
+					await this.updateAtPath(this.pathFromId(item.id), item, listeners);
+				}
+			}
+		} else {
+			await this.addItemTo(item.parent_id, item, listeners);
+		}
+	}
+
 	public items() {
 		return this.pathToItem_.entries();
 	}
@@ -219,13 +275,20 @@ export default class ItemTree {
 	// For tests/debugging --verifies that pathToItem_ and idToPath_ are consistent.
 	public checkRep_() {
 		for (const [id, path] of this.idToPath_.entries()) {
-			if (!this.pathToItem_.has(path)) throw new Error('Paths in idToPath_ must be in pathToItem_');
+			if (!this.pathToItem_.has(path)) {
+				throw new Error(`Paths in idToPath_ must be in pathToItem_ (path: ${path}, id: ${id})`);
+			}
 			if (this.getAtPath(path).id !== id) throw new Error('ID Mismatch');
 			if (normalize(path) !== path) throw new Error(`All paths should be normalized (path: ${path})`);
 		}
 
 		for (const [path, item] of this.pathToItem_.entries()) {
-			if (!this.idToPath_.has(item.id)) throw new Error(`Items in pathToItem_ must also be in idToPath_ (path ${path})`);
+			if (!this.idToPath_.has(item.id)) {
+				throw new Error(`Items in pathToItem_ must also be in idToPath_ (path ${path})`);
+			}
+			if (item.parent_id && !this.hasId(item.parent_id)) {
+				throw new Error(`Missing item's parent (item: ${item.title}:${item.id}, parent_id: ${item.parent_id})`);
+			}
 		}
 	}
 }

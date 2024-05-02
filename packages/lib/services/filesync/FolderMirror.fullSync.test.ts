@@ -1,7 +1,7 @@
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import { createFolderTree, createTempDir, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
-import FileMirroringService from './FileMirroringService';
+import FolderMirror from './FolderMirror';
 import { extname, join } from 'path';
 import createFilesFromPathRecord from '../../utils/pathRecord/createFilesFromPathRecord';
 import verifyDirectoryMatches from '../../utils/pathRecord/verifyDirectoryMatches';
@@ -27,7 +27,7 @@ describe('FileMirroringService.fullSync', () => {
 		const note3Copy = await Note.save({ title: 'note3', parent_id: folder3.id });
 
 		const tempDir = await createTempDir();
-		const service = new FileMirroringService(tempDir, baseFolder.id);
+		const service = new FolderMirror(tempDir, baseFolder.id);
 
 		await service.fullSync();
 
@@ -92,7 +92,7 @@ describe('FileMirroringService.fullSync', () => {
 		});
 
 		const baseFolder = await Folder.save({ title: 'base' });
-		const service = new FileMirroringService(tempDir, baseFolder.id);
+		const service = new FolderMirror(tempDir, baseFolder.id);
 		await service.fullSync();
 
 		const innerFolder = await Folder.loadByTitle('test');
@@ -139,7 +139,7 @@ describe('FileMirroringService.fullSync', () => {
 			'testFolder/empty frontmatter.md': '---\n---\nTest.',
 		});
 
-		const service = new FileMirroringService(tempDir, ALL_NOTES_FILTER_ID);
+		const service = new FolderMirror(tempDir, ALL_NOTES_FILTER_ID);
 		await service.fullSync();
 
 		const parentFolder = await Folder.loadByTitle('testFolder');
@@ -172,7 +172,7 @@ describe('FileMirroringService.fullSync', () => {
 			'test/b.md': '---\ntitle: Another test\n---\nFoo',
 		});
 
-		const service = new FileMirroringService(tempDir, ALL_NOTES_FILTER_ID);
+		const service = new FolderMirror(tempDir, ALL_NOTES_FILTER_ID);
 		await service.fullSync();
 
 		await fs.appendFile(join(tempDir, 'test/test_note.md'), 'Testing 123...');
@@ -223,7 +223,7 @@ describe('FileMirroringService.fullSync', () => {
 		await createFilesFromPathRecord(tempDir, testData);
 
 		const baseFolderId = (await Folder.save({ title: 'base folder' })).id;
-		const service = new FileMirroringService(tempDir, baseFolderId);
+		const service = new FolderMirror(tempDir, baseFolderId);
 		await service.fullSync();
 
 		const noteIds = await Note.allIds();
@@ -249,7 +249,7 @@ describe('FileMirroringService.fullSync', () => {
 			'newFolder/test.md': 'Note 3',
 		});
 
-		const service = new FileMirroringService(tempDir, ALL_NOTES_FILTER_ID);
+		const service = new FolderMirror(tempDir, ALL_NOTES_FILTER_ID);
 		await service.fullSync();
 
 		const note1 = await Note.loadByTitle('a note');
@@ -293,7 +293,7 @@ describe('FileMirroringService.fullSync', () => {
 		const note2Id = (await Note.loadByTitle('note 2')).id;
 
 		const tempDir = await createTempDir();
-		const service = new FileMirroringService(tempDir, syncFolder.id);
+		const service = new FolderMirror(tempDir, syncFolder.id);
 		await service.fullSync();
 
 		await verifyDirectoryMatches(tempDir, {

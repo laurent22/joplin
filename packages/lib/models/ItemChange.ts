@@ -1,6 +1,6 @@
 import BaseModel, { ModelType } from '../BaseModel';
 import shim from '../shim';
-import eventManager, { EventName } from '../eventManager';
+import eventManager, { EventName, ItemChangeEvent } from '../eventManager';
 import { ItemChangeEntity, SqlQuery } from '../services/database/types';
 const Mutex = require('async-mutex').Mutex;
 
@@ -70,11 +70,12 @@ export default class ItemChange extends BaseModel {
 			ItemChange.saveCalls_.pop();
 
 			for (const itemId of itemIds) {
-				eventManager.emit(EventName.ItemChange, {
+				const event: ItemChangeEvent = {
 					itemType: itemType,
 					itemId: itemId,
 					eventType: type,
-				});
+				};
+				eventManager.emit(EventName.ItemChange, event);
 			}
 		}
 	}
