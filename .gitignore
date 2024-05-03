@@ -946,6 +946,7 @@ packages/lib/services/interop/InteropService_Importer_Md.test.js
 packages/lib/services/interop/InteropService_Importer_Md.js
 packages/lib/services/interop/InteropService_Importer_Md_frontmatter.test.js
 packages/lib/services/interop/InteropService_Importer_Md_frontmatter.js
+packages/lib/services/interop/InteropService_Importer_OneNote.test.js
 packages/lib/services/interop/InteropService_Importer_OneNote.js
 packages/lib/services/interop/InteropService_Importer_Raw.test.js
 packages/lib/services/interop/InteropService_Importer_Raw.js

@@ -19,7 +19,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 
 		// files that don't have a name seems to be local only and shouldn't be processed
 		const notebookFiles = zip.getEntries()
-			.filter(e => e.entryName.endsWith('.onetoc2') && e.name !== '.onetoc2' && e.name !== 'OneNote_RecycleBin.onetoc2');
+			.filter(e => e.name !== '.onetoc2' && e.name !== 'OneNote_RecycleBin.onetoc2');
 
 		const validNotebookFiles = notebookFiles.length ? notebookFiles : zip.getEntries();
 
