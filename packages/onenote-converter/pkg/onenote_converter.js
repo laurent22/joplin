@@ -1,7 +1,7 @@
 let imports = {};
 imports['__wbindgen_placeholder__'] = module.exports;
 let wasm;
-const { mkdirSyncRecursive, isDirectory } = require(String.raw`./snippets/onenote-converter-6981a13478d338f0/node_functions.js`);
+const { mkdirSyncRecursive, isDirectory, readDir } = require(String.raw`./snippets/onenote-converter-6981a13478d338f0/node_functions.js`);
 const { writeFileSync, readFileSync, existsSync } = require(`fs`);
 const { TextDecoder, TextEncoder } = require(`util`);
 
@@ -240,6 +240,11 @@ module.exports.__wbg_isDirectory_8e0fb33be0dac663 = function() { return handleEr
     const ret = isDirectory(getStringFromWasm0(arg0, arg1));
     _assertBoolean(ret);
     return ret;
+}, arguments) };
+
+module.exports.__wbg_readDir_f1ea9d82729fd652 = function() { return handleError(function (arg0, arg1) {
+    const ret = readDir(getStringFromWasm0(arg0, arg1));
+    return addHeapObject(ret);
 }, arguments) };
 
 module.exports.__wbg_readFileSync_dce2cb2a612e5268 = function() { return handleError(function (arg0, arg1) {
