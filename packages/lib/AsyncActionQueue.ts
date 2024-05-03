@@ -88,6 +88,9 @@ export default class AsyncActionQueue<Context = any> {
 						await current.action(current.context);
 					}
 				}
+			} catch (error) {
+				i ++; // Don't repeat the failed task.
+				throw error;
 			} finally {
 				// Removing processed items in a try {} finally {...} prevents
 				// items from being processed twice, even if one throws an Error.
