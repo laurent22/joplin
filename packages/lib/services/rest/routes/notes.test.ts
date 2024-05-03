@@ -184,4 +184,40 @@ describe('routes/notes', () => {
 
 		expect(result.length).toBe(2);
 	});
+
+	test('should not return notes in the trash by default', async () => {
+		const api = new Api();
+		const note1 = await Note.save({});
+		const note2 = await Note.save({});
+		await Note.delete(note1.id, { toTrash: true });
+
+		{
+			const notes = await api.route(RequestMethod.GET, 'notes');
+			expect(notes.items.length).toBe(1);
+			expect(notes.items[0].id).toBe(note2.id);
+		}
+
+		{
+			const notes = await api.route(RequestMethod.GET, 'notes', { include_deleted: '1' });
+			expect(notes.items.length).toBe(2);
+		}
+	});
+
+	test('should not return conflicts by default', async () => {
+		const api = new Api();
+		const note1 = await Note.save({});
+		await Note.save({ is_conflict: 1 });
+
+		{
+			const notes = await api.route(RequestMethod.GET, 'notes');
+			expect(notes.items.length).toBe(1);
+			expect(notes.items[0].id).toBe(note1.id);
+		}
+
+		{
+			const notes = await api.route(RequestMethod.GET, 'notes', { include_conflicts: '1' });
+			expect(notes.items.length).toBe(2);
+		}
+	});
+
 });

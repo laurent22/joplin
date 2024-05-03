@@ -51,6 +51,8 @@ interface RequestQuery {
 
 	// For note deletion
 	permanent?: string;
+	include_deleted?: string;
+	include_conflicts?: string;
 }
 
 export interface Request {
