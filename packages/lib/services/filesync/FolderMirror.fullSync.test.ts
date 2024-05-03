@@ -387,6 +387,29 @@ describe('FolderMirror.fullSync', () => {
 		});
 	});
 
+	test('should give notes new IDs when duplicated', async () => {
+		const tempDir = await createTempDir();
+		const noteId = (await Note.save({ title: 'note', parent_id: '' })).id;
+
+		const mirror = new FolderMirror(tempDir, '');
+		await mirror.fullSync();
+
+		await verifyDirectoryMatches(tempDir, {
+			'note.md': `---\ntitle: note\nid: ${noteId}\n---\n\n`,
+		});
+
+		await fs.writeFile(join(tempDir, 'Same-id note.md'), `---\ntitle: Same-id note\nid: ${noteId}\n---\n\nTest`, 'utf-8');
+
+		await mirror.fullSync();
+
+		const noteCopy = await Note.loadByTitle('Same-id note');
+		await verifyDirectoryMatches(tempDir, {
+			'Same-id note.md': `---\ntitle: Same-id note\nid: ${noteCopy.id}\n---\n\nTest`,
+			'note.md': `---\ntitle: note\nid: ${noteId}\n---\n\n`,
+		});
+		expect(noteCopy.id).not.toBe(noteId);
+	});
+
 	// it('should delete notes locally when deleted remotely', async () => {
 	// 	;
 	// });

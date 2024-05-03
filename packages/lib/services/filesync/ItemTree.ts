@@ -148,6 +148,9 @@ export default class ItemTree {
 		if (item.parent_id !== parentId) {
 			throw new Error(`Changed parent ID (${item.parent_id}->${parentId})`);
 		}
+		if (this.idToPath_.has(item.id)) {
+			throw new Error(`ID already taken (${item.id}, title: ${item.title}@${path})`);
+		}
 		this.checkRep_();
 
 		this.pathToItem_.set(path, item);
@@ -272,7 +275,9 @@ export default class ItemTree {
 		return path;
 	}
 
-	public async processItem(item: FolderItem, listeners: ActionListeners) {
+	// To better handle duplicate items/ids, observedPath should be used for remote items
+	// that have an actual path and the item is known to be at that path. Omit for local items.
+	public async processItem(observedPath: string|null, item: FolderItem, listeners: ActionListeners) {
 		this.checkRep_();
 
 		let result = item;
@@ -285,10 +290,17 @@ export default class ItemTree {
 			} else {
 				let canUpdate = true;
 
-				if (existingItem.parent_id !== item.parent_id) {
+				const moved = existingItem.parent_id !== item.parent_id || observedPath !== this.pathFromId(item.id);
+				if (moved) {
 					const newParentId = item.parent_id;
 					if (this.hasId(newParentId)) {
-						await this.moveToParent(item.id, newParentId, listeners);
+						// Use the observedPath to handle the case where a file was both moved
+						// and renamed (and both changes need to be reflected).
+						if (observedPath) {
+							await this.move(this.pathFromId(item.id), observedPath, listeners);
+						} else {
+							await this.moveToParent(item.id, newParentId, listeners);
+						}
 						this.checkRep_();
 					} else {
 						// Moved to an external folder
@@ -332,6 +344,9 @@ export default class ItemTree {
 		for (const [path, item] of this.pathToItem_.entries()) {
 			if (!this.idToPath_.has(item.id)) {
 				throw new Error(`Items in pathToItem_ must also be in idToPath_ (path ${path})`);
+			}
+			if (this.idToPath_.get(item.id) !== path) {
+				throw new Error(`Path mismatch -- ${path} is marked as the path for ${item.id}, but so is ${this.idToPath_.get(item.id)}.`);
 			}
 			if (item.parent_id && !this.hasId(item.parent_id)) {
 				throw new Error(`Missing item's parent (item: ${item.title}:${item.id}, parent_id: ${item.parent_id})`);

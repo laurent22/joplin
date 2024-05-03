@@ -22,7 +22,7 @@ const { ALL_NOTES_FILTER_ID } = require('../../reserved-ids.js');
 const debugLogger = new Logger();
 debugLogger.addTarget(TargetType.Console);
 debugLogger.setLevel(LogLevel.Debug);
-debugLogger.enabled = false;
+debugLogger.enabled = true;
 
 const makeItemPaths = (basePath: string, items: FolderItem[]) => {
 	const output: Map<string, string> = new Map();
@@ -110,6 +110,11 @@ const fillRemoteTree = async (baseFolderPath: string, remoteTree: ItemTree, addI
 	for (const stat of stats) {
 		const item = await statToItem(baseFolderPath, stat, remoteTree);
 		if (!item) continue;
+
+		if (remoteTree.hasId(item.id)) {
+			debugLogger.debug('Removing ID from item with duplicated ID. Item: ', item.title, item.id, 'at', stat.path);
+			delete item.id;
+		}
 
 		await remoteTree.addItemAt(stat.path, item, addItemHandler);
 	}
@@ -341,10 +346,15 @@ export default class {
 
 				// Because fsDriver.move is recursive, it may be the case that this item was already
 				// moved when a parent directory was.
-				if (!(await shim.fsDriver().exists(fullFromPath)) && await shim.fsDriver().exists(fullToPath)) {
+				const sourceExists = await shim.fsDriver().exists(fullFromPath);
+				if (!sourceExists && await shim.fsDriver().exists(fullToPath)) {
 					debugLogger.debug('remote.onMove/skip -- already done');
 				} else {
-					await shim.fsDriver().move(fullFromPath, fullToPath);
+					if (!sourceExists) {
+						throw new Error(`Cannot move -- neither source nor destination exists. Incorrect toPath? ${toPath}`);
+					} else {
+						await shim.fsDriver().move(fullFromPath, fullToPath);
+					}
 				}
 			},
 		};
@@ -485,8 +495,8 @@ export default class {
 				return;
 			}
 		}
-		await this.localTree_.processItem(item, noOpActionListeners);
-		await this.remoteTree_.processItem(item, this.modifyRemoteActions_);
+		await this.localTree_.processItem(null, item, noOpActionListeners);
+		await this.remoteTree_.processItem(null, item, this.modifyRemoteActions_);
 
 		await this.localTree_.optimizeItemPath(item, noOpActionListeners);
 		await this.remoteTree_.optimizeItemPath(item, this.modifyRemoteActions_);
@@ -519,7 +529,7 @@ export default class {
 			// Add parent dirs
 			await handleFileAdd(dirname(path));
 
-			item = await this.localTree_.processItem(item, this.modifyLocalActions_);
+			item = await this.localTree_.processItem(null, item, this.modifyLocalActions_);
 
 			let writeToDisk = false;
 			if (item.type_ === ModelType.Folder) {
@@ -528,10 +538,22 @@ export default class {
 				writeToDisk = !await shim.fsDriver().exists(join(this.baseFilePath, path, folderInfoFileName));
 			}
 
+			// Handle the case where a note is duplicated and has metadata with an
+			// already-in-use ID. Creating a new ID for the new item does not work here
+			// because of how renaming events are fired. When a file is renamed, it is
+			// copied, **then** the original is deleted. As such, we can't assign the new copy
+			// a new ID without breaking file renaming.
+			if (item.id && this.remoteTree_.hasId(item.id)) {
+				const remotePath = this.remoteTree_.pathFromId(item.id);
+				if (remotePath !== path) {
+					writeToDisk = true;
+				}
+			}
+
 			if (writeToDisk) {
-				await this.remoteTree_.processItem(item, this.modifyRemoteActions_);
+				await this.remoteTree_.processItem(path, item, this.modifyRemoteActions_);
 			} else {
-				await this.remoteTree_.processItem(item, noOpActionListeners);
+				await this.remoteTree_.processItem(path, item, noOpActionListeners);
 			}
 
 			debugLogger.groupEnd();
@@ -568,8 +590,8 @@ export default class {
 					if (!item.id && this.remoteTree_.hasPath(path)) {
 						item.id = this.remoteTree_.idAtPath(path);
 					}
-					item = await this.localTree_.processItem(item, this.modifyLocalActions_);
-					await this.remoteTree_.processItem(item, noOpActionListeners);
+					item = await this.localTree_.processItem(null, item, this.modifyLocalActions_);
+					await this.remoteTree_.processItem(path, item, noOpActionListeners);
 				} else if (event.type === DirectoryWatchEventType.Unlink) {
 					throw new Error(`Path ${path} was marked as unlinked, but still exists.`);
 				} else {
@@ -577,9 +599,11 @@ export default class {
 					return exhaustivenessCheck;
 				}
 			} else if (this.remoteTree_.hasPath(path)) {
-				debugLogger.debug(`file doesn't exist at ${fullPath}. Delete`);
-				await this.localTree_.deleteAtPath(path, this.modifyLocalActions_);
+				const remoteItem = this.remoteTree_.getAtPath(path);
+				debugLogger.debug(`file (note title: ${remoteItem.title}) doesn't exist at ${fullPath}. Delete`);
+
 				await this.remoteTree_.deleteAtPath(path, noOpActionListeners);
+				await this.localTree_.deleteItemAtId(remoteItem.id, this.modifyLocalActions_);
 			}
 		} finally {
 			debugLogger.groupEnd();

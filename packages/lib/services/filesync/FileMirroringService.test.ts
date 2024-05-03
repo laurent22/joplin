@@ -143,7 +143,8 @@ describe('FileMirroringService.watch', () => {
 			'testFolder2/testFolder3/c.md': 'Note C',
 		});
 
-		await FileMirroringService.instance().mirrorFolder(tempDir, '');
+		const watcher = await FileMirroringService.instance().mirrorFolder(tempDir, '');
+		await watcher.waitForIdle();
 
 		const moveItemC = waitForNoteChange(item => item.body === 'Note C');
 		await fs.move(join(tempDir, 'testFolder2'), join(tempDir, 'testFolder1', 'testFolder2'));
@@ -265,7 +266,6 @@ describe('FileMirroringService.watch', () => {
 			'Renamed.md': `---\ntitle: Renamed\nid: ${note3.id}\n---\n\n`,
 		});
 	});
-	// test('should rename (or leave unchanged) folders locally when renamed by movivng')
 
 	test('should add metadata to folders when created remotely', async () => {
 		const tempDir = await createTempDir();
@@ -282,5 +282,29 @@ describe('FileMirroringService.watch', () => {
 		await verifyDirectoryMatches(tempDir, {
 			'Test/.folder.yml': `title: Test\nid: ${folder.id}\n`,
 		});
+	});
+
+	// TODO: Can we assign a new ID in this case? If so, it might require a heuristic to determine
+	// whether or not the file is being duplicated or moved.
+	test('should delete originals when a note with an existing ID is created', async () => {
+		const tempDir = await createTempDir();
+		const noteId = (await Note.save({ title: 'note', parent_id: '' })).id;
+
+		const mirror = await FileMirroringService.instance().mirrorFolder(tempDir, '');
+		await mirror.waitForIdle();
+
+		await verifyDirectoryMatches(tempDir, {
+			'note.md': `---\ntitle: note\nid: ${noteId}\n---\n\n`,
+		});
+
+		const noteChangeTask = waitForNoteChange();
+		await fs.writeFile(join(tempDir, 'Same-id note.md'), `---\ntitle: Same-id note\nid: ${noteId}\n---\n\nTest`, 'utf-8');
+		await noteChangeTask;
+
+		const noteCopy = await Note.loadByTitle('Same-id note');
+		await verifyDirectoryMatches(tempDir, {
+			'Same-id note.md': `---\ntitle: Same-id note\nid: ${noteCopy.id}\n---\n\nTest`,
+		});
+		expect(noteCopy.id).toBe(noteId);
 	});
 });
