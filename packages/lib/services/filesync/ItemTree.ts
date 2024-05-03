@@ -100,7 +100,7 @@ export default class ItemTree {
 		return this.getAtPath(path).id;
 	}
 
-	private getUniqueItemPathInParent(parentPath: string, item: FolderItem) {
+	private getUniqueItemPathInParent(parentPath: string, item: FolderItem, allowPresentPaths: string[] = []) {
 		const isFolder = item.type_ === ModelType.Folder;
 		const basename = friendlySafeFilename(item.title);
 
@@ -111,7 +111,7 @@ export default class ItemTree {
 			filename = `${basename}${counter ? ` (${counter})` : ''}${isFolder ? '' : '.md'}`;
 			path = join(parentPath, filename);
 			counter++;
-		} while (this.hasPath(path));
+		} while (this.hasPath(path) && !allowPresentPaths.includes(path));
 
 		return path;
 	}
@@ -259,6 +259,19 @@ export default class ItemTree {
 		return listeners.onUpdate({ path, item: newItem });
 	}
 
+	public async optimizeItemPath(item: FolderItem, listeners: ActionListeners) {
+		if (!this.hasId(item.id)) return null;
+		const path = this.pathFromId(item.id);
+		if (!this.hasPath(dirname(path))) return null;
+
+		const titleBasedPath = this.getUniqueItemPathInParent(dirname(path), item, [path]);
+		if (path !== titleBasedPath) {
+			await this.move(path, titleBasedPath, listeners);
+			return titleBasedPath;
+		}
+		return path;
+	}
+
 	public async processItem(item: FolderItem, listeners: ActionListeners) {
 		this.checkRep_();
 
@@ -286,7 +299,8 @@ export default class ItemTree {
 				}
 
 				if (canUpdate) {
-					await this.updateAtPath(this.pathFromId(item.id), item, listeners);
+					const path = this.pathFromId(item.id);
+					await this.updateAtPath(path, item, listeners);
 					this.checkRep_();
 				}
 			}

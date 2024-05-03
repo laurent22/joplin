@@ -30,9 +30,9 @@ describe('FolderMirror.fullSync', () => {
 		const note3Copy = await Note.save({ title: 'note3', parent_id: folder3.id });
 
 		const tempDir = await createTempDir();
-		const service = new FolderMirror(tempDir, baseFolder.id);
+		const mirror = new FolderMirror(tempDir, baseFolder.id);
 
-		await service.fullSync();
+		await mirror.fullSync();
 
 		await verifyDirectoryMatches(tempDir, {
 			[join(folder1.title, `${note1.title}.md`)]: [
@@ -95,8 +95,8 @@ describe('FolderMirror.fullSync', () => {
 		});
 
 		const baseFolder = await Folder.save({ title: 'base' });
-		const service = new FolderMirror(tempDir, baseFolder.id);
-		await service.fullSync();
+		const mirror = new FolderMirror(tempDir, baseFolder.id);
+		await mirror.fullSync();
 
 		const innerFolder = await Folder.loadByTitle('test');
 
@@ -142,8 +142,8 @@ describe('FolderMirror.fullSync', () => {
 			'testFolder/empty frontmatter.md': '---\n---\nTest.',
 		});
 
-		const service = new FolderMirror(tempDir, ALL_NOTES_FILTER_ID);
-		await service.fullSync();
+		const mirror = new FolderMirror(tempDir, ALL_NOTES_FILTER_ID);
+		await mirror.fullSync();
 
 		const parentFolder = await Folder.loadByTitle('testFolder');
 		const note = await Note.loadByTitle('a note');
@@ -175,13 +175,13 @@ describe('FolderMirror.fullSync', () => {
 			'test/b.md': '---\ntitle: Another test\n---\nFoo',
 		});
 
-		const service = new FolderMirror(tempDir, ALL_NOTES_FILTER_ID);
-		await service.fullSync();
+		const mirror = new FolderMirror(tempDir, ALL_NOTES_FILTER_ID);
+		await mirror.fullSync();
 
 		await fs.appendFile(join(tempDir, 'test/test_note.md'), 'Testing 123...');
 		await fs.appendFile(join(tempDir, 'test/a.md'), 'Testing...');
 
-		await service.fullSync();
+		await mirror.fullSync();
 
 		const folder = await Folder.loadByTitle('test');
 
@@ -214,7 +214,7 @@ describe('FolderMirror.fullSync', () => {
 		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
 
 		// Should not change directory unnecessarily
-		await service.fullSync();
+		await mirror.fullSync();
 		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
 	});
 
@@ -226,8 +226,8 @@ describe('FolderMirror.fullSync', () => {
 		await createFilesFromPathRecord(tempDir, testData);
 
 		const baseFolderId = (await Folder.save({ title: 'base folder' })).id;
-		const service = new FolderMirror(tempDir, baseFolderId);
-		await service.fullSync();
+		const mirror = new FolderMirror(tempDir, baseFolderId);
+		await mirror.fullSync();
 
 		const noteIds = await Note.allIds();
 		expect(noteIds).toHaveLength(expectedNoteCount);
@@ -235,7 +235,7 @@ describe('FolderMirror.fullSync', () => {
 		for (const id of noteIds) {
 			await Note.delete(id, { toTrash: true });
 			expectedNoteCount --;
-			await service.fullSync();
+			await mirror.fullSync();
 
 			const dirStats = await shim.fsDriver().readDirStats(tempDir, { recursive: true });
 			const markdownFiles = dirStats.map(stat => stat.path).filter(path => extname(path) === '.md');
@@ -252,8 +252,8 @@ describe('FolderMirror.fullSync', () => {
 			'newFolder/test.md': 'Note 3',
 		});
 
-		const service = new FolderMirror(tempDir, ALL_NOTES_FILTER_ID);
-		await service.fullSync();
+		const mirror = new FolderMirror(tempDir, ALL_NOTES_FILTER_ID);
+		await mirror.fullSync();
 
 		const note1 = await Note.loadByTitle('a note');
 		expect(note1.body).toBe('Note 1');
@@ -265,7 +265,7 @@ describe('FolderMirror.fullSync', () => {
 		const targetFolder = await Folder.loadByTitle('newFolder');
 		await Note.moveToFolder(note1.id, targetFolder.id);
 
-		await service.fullSync();
+		await mirror.fullSync();
 
 		await verifyDirectoryMatches(tempDir, {
 			'another note.md': `---\ntitle: another note\nid: ${note2.id}\n---\n\nNote 2`,
@@ -296,8 +296,8 @@ describe('FolderMirror.fullSync', () => {
 		const note2Id = (await Note.loadByTitle('note 2')).id;
 
 		const tempDir = await createTempDir();
-		const service = new FolderMirror(tempDir, syncFolder.id);
-		await service.fullSync();
+		const mirror = new FolderMirror(tempDir, syncFolder.id);
+		await mirror.fullSync();
 
 		await verifyDirectoryMatches(tempDir, {
 			'note 1.md': `---\ntitle: note 1\nid: ${note1Id}\n---\n\nNote 1`,
@@ -306,7 +306,7 @@ describe('FolderMirror.fullSync', () => {
 
 		await Note.moveToFolder(note1Id, unsyncedFolderId);
 
-		await service.fullSync();
+		await mirror.fullSync();
 
 		await verifyDirectoryMatches(tempDir, {
 			'note 2.md': `---\ntitle: note 2\nid: ${note2Id}\n---\n\n`,
@@ -328,15 +328,15 @@ describe('FolderMirror.fullSync', () => {
 			'newFolder/test.md': 'Note 3',
 		});
 
-		const service = new FolderMirror(tempDir, '');
-		await service.fullSync();
+		const mirror = new FolderMirror(tempDir, '');
+		await mirror.fullSync();
 
 		const newFolderId = (await Folder.loadByTitle('newFolder')).id;
 
 		expect(await fs.readFile(join(tempDir, 'newFolder', '.folder.yml'), 'utf8')).toBe(`title: newFolder\nid: ${newFolderId}\n`);
 
 		await fs.writeFile(join(tempDir, 'newFolder', '.folder.yml'), `title: New title\nid: ${newFolderId}\n`);
-		await service.fullSync();
+		await mirror.fullSync();
 
 		expect(await Folder.load(newFolderId)).toMatchObject({
 			id: newFolderId,
@@ -351,19 +351,39 @@ describe('FolderMirror.fullSync', () => {
 			'newFolder/test.md': 'Note 3',
 		});
 
-		const service = new FolderMirror(tempDir, '');
-		await service.fullSync();
+		const mirror = new FolderMirror(tempDir, '');
+		await mirror.fullSync();
 
 		const newFolderId = (await Folder.loadByTitle('newFolder')).id;
 		await Folder.save({ id: newFolderId, title: 'New Title' });
 
-		await service.fullSync();
+		await mirror.fullSync();
 
 		expect(await fs.readFile(join(tempDir, 'New Title', '.folder.yml'), 'utf8')).toBe(`title: New Title\nid: ${newFolderId}\n`);
 
 		expect(await Folder.load(newFolderId)).toMatchObject({
 			id: newFolderId,
 			title: 'New Title',
+		});
+	});
+
+	it('should add a note to the remote, even if a note at the same path (but different ID) already exists', async () => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, {
+			'note.md': '---\ntitle: note\nid: 1234567890abcdef0123123456789012\n---\n\n',
+		});
+
+		await Note.save({ title: 'note', id: '000000000000abcf0123123456789012', parent_id: '' }, { isNew: true });
+
+		const mirror = new FolderMirror(tempDir, '');
+		await mirror.fullSync();
+
+		expect(await Note.load('1234567890abcdef0123123456789012')).toMatchObject({ title: 'note', parent_id: '' });
+		expect(await Note.load('000000000000abcf0123123456789012')).toMatchObject({ title: 'note', parent_id: '' });
+
+		await verifyDirectoryMatches(tempDir, {
+			'note.md': '---\ntitle: note\nid: 1234567890abcdef0123123456789012\n---\n\n',
+			'note (1).md': '---\ntitle: note\nid: 000000000000abcf0123123456789012\n---\n\n',
 		});
 	});
 

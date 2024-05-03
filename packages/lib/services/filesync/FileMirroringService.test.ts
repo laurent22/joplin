@@ -209,6 +209,64 @@ describe('FileMirroringService.watch', () => {
 		});
 	});
 
+	test('should rename notes remotely when renamed locally', async () => {
+		const tempDir = await createTempDir();
+		const folder = await Folder.save({ title: 'Test folder', parent_id: '' });
+		const note1 = await Note.save({ parent_id: folder.id, title: 'Note' });
+		const note2 = await Note.save({ parent_id: folder.id, title: 'Note' });
+		const note3 = await Note.save({ parent_id: folder.id, title: 'Test note' });
+
+		const mirror = await FileMirroringService.instance().mirrorFolder(tempDir, '');
+		await mirror.waitForIdle();
+
+		await verifyDirectoryMatches(tempDir, {
+			'Test folder/.folder.yml': `title: Test folder\nid: ${folder.id}\n`,
+			'Test folder/Note.md': `---\ntitle: Note\nid: ${note1.id}\n---\n\n`,
+			'Test folder/Note (1).md': `---\ntitle: Note\nid: ${note2.id}\n---\n\n`,
+			'Test folder/Test note.md': `---\ntitle: Test note\nid: ${note3.id}\n---\n\n`,
+		});
+
+		let renameTask = waitForNoteChange();
+		await Note.save({ id: note1.id, title: 'Renamed' });
+		await renameTask;
+		await mirror.waitForIdle();
+
+		await verifyDirectoryMatches(tempDir, {
+			'Test folder/.folder.yml': `title: Test folder\nid: ${folder.id}\n`,
+			'Test folder/Renamed.md': `---\ntitle: Renamed\nid: ${note1.id}\n---\n\n`,
+			'Test folder/Note (1).md': `---\ntitle: Note\nid: ${note2.id}\n---\n\n`,
+			'Test folder/Test note.md': `---\ntitle: Test note\nid: ${note3.id}\n---\n\n`,
+		});
+
+		renameTask = waitForNoteChange();
+		await Note.save({ id: note2.id, title: 'Renamed' });
+		await renameTask;
+		renameTask = waitForNoteChange();
+		await Note.save({ id: note3.id, title: 'Renamed' });
+		await renameTask;
+		await mirror.waitForIdle();
+
+		await verifyDirectoryMatches(tempDir, {
+			'Test folder/.folder.yml': `title: Test folder\nid: ${folder.id}\n`,
+			'Test folder/Renamed.md': `---\ntitle: Renamed\nid: ${note1.id}\n---\n\n`,
+			'Test folder/Renamed (1).md': `---\ntitle: Renamed\nid: ${note2.id}\n---\n\n`,
+			'Test folder/Renamed (2).md': `---\ntitle: Renamed\nid: ${note3.id}\n---\n\n`,
+		});
+
+		renameTask = waitForNoteChange();
+		await Note.save({ id: note3.id, parent_id: '' });
+		await renameTask;
+		await mirror.waitForIdle();
+
+		await verifyDirectoryMatches(tempDir, {
+			'Test folder/.folder.yml': `title: Test folder\nid: ${folder.id}\n`,
+			'Test folder/Renamed.md': `---\ntitle: Renamed\nid: ${note1.id}\n---\n\n`,
+			'Test folder/Renamed (1).md': `---\ntitle: Renamed\nid: ${note2.id}\n---\n\n`,
+			'Renamed.md': `---\ntitle: Renamed\nid: ${note3.id}\n---\n\n`,
+		});
+	});
+	// test('should rename (or leave unchanged) folders locally when renamed by movivng')
+
 	test('should add metadata to folders when created remotely', async () => {
 		const tempDir = await createTempDir();
 		const mirror = await FileMirroringService.instance().mirrorFolder(tempDir, '');

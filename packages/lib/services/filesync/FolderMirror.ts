@@ -161,21 +161,41 @@ const mergeTrees = async (localTree: ItemTree, remoteTree: ItemTree, modifyLocal
 				await localTree.deleteAtPath(localPath, noOpActionListeners);
 			}
 		} else if (!localItem.deleted_time) {
-			await remoteTree.addItemAt(localPath, localItem, modifyRemote);
+			debugLogger.debug('Add local item to remote:', localPath);
+			// Add to the parent -- handles the case where an item with localPath already
+			// exists in the remote.
+			const localParentPath = dirname(localPath);
+			await remoteTree.addItemTo(localParentPath, localItem, modifyRemote);
 		}
 
 		handledIds.add(localItem.id);
 	}
 
 	for (const [path, remoteItem] of remoteTree.items()) {
-		if (!localTree.hasPath(path) && !handledIds.has(remoteItem.id)) {
-			if (await Note.load(remoteItem.id)) {
-				// TODO: What should be done with changes to the remote note (if any)?
-				await remoteTree.deleteAtPath(path, modifyRemote);
-			} else {
-				await localTree.addItemAt(path, remoteItem, modifyLocal);
-			}
+		if (handledIds.has(remoteItem.id)) continue;
+
+		debugLogger.debug('found unhandled remote ID', remoteItem.id, `(title: ${remoteItem.title})`);
+		debugLogger.group();
+
+		const itemExists = !!await BaseItem.loadItemById(remoteItem.id);
+		const inLocalTree = localTree.hasId(remoteItem.id);
+		debugLogger.debug('Exists', itemExists, 'inLocal', inLocalTree);
+
+		if (itemExists && !inLocalTree) {
+			// If the note does exist, but isn't in the local tree, it was moved out of the
+			// mirrored folder.
+			// TODO: Update local?
+			await remoteTree.deleteAtPath(path, modifyRemote);
+		} else if (!inLocalTree) {
+			const parentPath = dirname(path);
+			await localTree.addItemTo(parentPath, remoteItem, modifyLocal);
+		} else {
+			localTree.checkRep_();
+			remoteTree.checkRep_();
+			throw new Error('Item is in local tree but was not processed by the first pass. Was the item added during the sync (while also matching the ID in the remote folder)?');
 		}
+
+		debugLogger.groupEnd();
 	}
 };
 
@@ -467,6 +487,9 @@ export default class {
 		}
 		await this.localTree_.processItem(item, noOpActionListeners);
 		await this.remoteTree_.processItem(item, this.modifyRemoteActions_);
+
+		await this.localTree_.optimizeItemPath(item, noOpActionListeners);
+		await this.remoteTree_.optimizeItemPath(item, this.modifyRemoteActions_);
 	}
 
 	private async databaseItemDeleteTask(id: string) {
