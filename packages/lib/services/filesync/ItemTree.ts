@@ -148,9 +148,11 @@ export default class ItemTree {
 		if (item.parent_id !== parentId) {
 			throw new Error(`Changed parent ID (${item.parent_id}->${parentId})`);
 		}
+		this.checkRep_();
 
 		this.pathToItem_.set(path, item);
 		this.idToPath_.set(item.id, path);
+		this.checkRep_();
 
 		return item;
 	}
@@ -162,6 +164,7 @@ export default class ItemTree {
 	public async move(fromPath: string, toPath: string, listeners: MoveActionListener): Promise<void> {
 		fromPath = normalize(fromPath);
 		toPath = normalize(toPath);
+		this.checkRep_();
 
 		const item = this.getAtPath(fromPath);
 
@@ -198,6 +201,7 @@ export default class ItemTree {
 				}
 			}
 		}
+		this.checkRep_();
 	}
 
 	public deleteItemAtId(id: string, listeners: DeleteActionListener) {
@@ -209,6 +213,7 @@ export default class ItemTree {
 		if (!this.hasPath(path)) {
 			throw new Error(`Cannot delete item at non-existent path ${path}`);
 		}
+		this.checkRep_();
 
 		const item = this.getAtPath(path);
 
@@ -227,6 +232,7 @@ export default class ItemTree {
 
 		this.idToPath_.delete(item.id);
 		this.pathToItem_.delete(path);
+		this.checkRep_();
 
 		// Return using Promise.all to avoid race conditions (do as much processing before
 		// becoming async as possible).
@@ -248,6 +254,7 @@ export default class ItemTree {
 
 		newItem.updated_time = time.unixMs();
 		this.pathToItem_.set(path, newItem);
+		this.checkRep_();
 
 		return listeners.onUpdate({ path, item: newItem });
 	}

@@ -22,7 +22,7 @@ const { ALL_NOTES_FILTER_ID } = require('../../reserved-ids.js');
 const debugLogger = new Logger();
 debugLogger.addTarget(TargetType.Console);
 debugLogger.setLevel(LogLevel.Debug);
-debugLogger.enabled = true;
+debugLogger.enabled = false;
 
 const makeItemPaths = (basePath: string, items: FolderItem[]) => {
 	const output: Map<string, string> = new Map();
@@ -531,7 +531,7 @@ export default class {
 
 		try {
 			if (await shim.fsDriver().exists(fullPath)) {
-				const item = await itemAtPath(path);
+				let item = await itemAtPath(path);
 
 				// Unsupported file type
 				if (!item) {
@@ -542,8 +542,11 @@ export default class {
 				if (event.type === DirectoryWatchEventType.Add) { // File created, renamed, or deleted
 					await handleFileAdd(path, item);
 				} else if (event.type === DirectoryWatchEventType.Change) {
-					await this.localTree_.updateAtPath(path, item, this.modifyLocalActions_);
-					await this.remoteTree_.updateAtPath(path, item, noOpActionListeners);
+					if (!item.id && this.remoteTree_.hasPath(path)) {
+						item.id = this.remoteTree_.idAtPath(path);
+					}
+					item = await this.localTree_.processItem(item, this.modifyLocalActions_);
+					await this.remoteTree_.processItem(item, noOpActionListeners);
 				} else if (event.type === DirectoryWatchEventType.Unlink) {
 					throw new Error(`Path ${path} was marked as unlinked, but still exists.`);
 				} else {

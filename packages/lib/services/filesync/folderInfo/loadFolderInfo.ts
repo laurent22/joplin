@@ -3,6 +3,7 @@ import { FolderInfo, folderInfoFileName } from '.';
 import shim from '../../../shim';
 import * as yaml from 'js-yaml';
 import uuid from '../../../uuid';
+import parseFolderIcon from './parseFolderIcon';
 
 const loadFolderInfo = async (folderPath: string): Promise<FolderInfo> => {
 	const folderInfoPath = join(folderPath, folderInfoFileName);
@@ -35,7 +36,8 @@ const loadFolderInfo = async (folderPath: string): Promise<FolderInfo> => {
 		if (typeof folderInfo.icon !== 'string') {
 			throw new Error(`${folderInfoPath} has an icon property that is not a string.`);
 		}
-		icon = folderInfo.icon;
+
+		icon = JSON.stringify(parseFolderIcon(folderInfo.icon));
 	}
 
 	const folderInfoStats = await shim.fsDriver().stat(folderInfoPath);
