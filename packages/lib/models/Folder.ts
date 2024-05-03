@@ -946,10 +946,15 @@ export default class Folder extends BaseItem {
 
 	public static unserializeIcon(icon: string): FolderIcon {
 		if (!icon) return null;
-		return {
-			...defaultFolderIcon(),
-			...JSON.parse(icon),
-		};
+		try {
+			return {
+				...defaultFolderIcon(),
+				...JSON.parse(icon),
+			};
+		} catch (error) {
+			logger.warn('Failed to deserialize an icon. Error: ', error);
+			return null;
+		}
 	}
 
 	public static shouldShowFolderIcons(folders: FolderEntity[]) {
