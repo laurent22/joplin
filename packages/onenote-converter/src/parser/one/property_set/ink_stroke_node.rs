@@ -36,7 +36,8 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
             log_warn!("ink stroke node has no ink path");
             Vec::<i64>::new()
             // ErrorKind::MalformedOneNoteFileData("ink stroke node has no ink path".into())
-        }).unwrap();
+        })
+        .unwrap();
     let bias = simple::parse_u8(PropertyType::InkBias, object)?
         .map(|bias| match bias {
             0 => Ok(InkBias::Handwriting),

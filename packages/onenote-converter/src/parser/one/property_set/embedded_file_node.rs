@@ -61,11 +61,13 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
         LayoutAlignment::parse(PropertyType::LayoutAlignmentInParent, object)?;
     let layout_alignment_self = LayoutAlignment::parse(PropertyType::LayoutAlignmentSelf, object)?;
     let embedded_file_container =
-        ObjectReference::parse(PropertyType::EmbeddedFileContainer, object)?.ok_or_else(|| {
-            log_warn!("embeded file has no file container");
-            picture_container
-            // ErrorKind::MalformedOneNoteFileData("embedded file has no file container".into())
-        }).unwrap();
+        ObjectReference::parse(PropertyType::EmbeddedFileContainer, object)?
+            .ok_or_else(|| {
+                log_warn!("embeded file has no file container");
+                picture_container
+                // ErrorKind::MalformedOneNoteFileData("embedded file has no file container".into())
+            })
+            .unwrap();
     let embedded_file_name = simple::parse_string(PropertyType::EmbeddedFileName, object)?
         .ok_or_else(|| {
             ErrorKind::MalformedOneNoteFileData("embedded file has no file name".into())

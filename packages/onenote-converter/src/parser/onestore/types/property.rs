@@ -1,8 +1,8 @@
 use crate::parser::errors::{ErrorKind, Result};
 use crate::parser::onestore::types::prop_set::PropertySet;
 use crate::parser::Reader;
-use std::fmt;
 use std::convert::TryFrom;
+use std::fmt;
 
 /// A property value.
 #[derive(Debug, Clone)]
@@ -54,7 +54,6 @@ impl PropertyValue {
             None
         }
     }
-
 
     pub(crate) fn try_to_u8(&self) -> Option<u8> {
         u8::try_from(self).ok()

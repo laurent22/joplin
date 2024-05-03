@@ -1,14 +1,14 @@
 use crate::parser::errors::Result;
+use crate::utils::utils::log;
 use itertools::Itertools;
-use web_sys::js_sys::Uint8Array;
 use std::collections::HashMap;
 use std::fmt;
 use std::fmt::Display;
 use std::path::Path;
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
+use web_sys::js_sys::Uint8Array;
 use widestring::U16CString;
-use crate::utils::utils::log;
 
 pub(crate) fn px(inches: f32) -> String {
     format!("{}px", (inches * 48.0).round())

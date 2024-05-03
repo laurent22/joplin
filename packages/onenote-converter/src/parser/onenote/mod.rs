@@ -4,8 +4,8 @@ use crate::parser::onenote::notebook::Notebook;
 use crate::parser::onenote::section::{Section, SectionEntry, SectionGroup};
 use crate::parser::onestore::parse_store;
 use crate::parser::reader::Reader;
+use crate::parser::utils::{exists, is_directory, read_dir, read_file};
 use crate::utils::utils::log;
-use crate::parser::utils::{exists, is_directory, read_file, read_dir};
 use std::panic;
 use std::path::Path;
 use web_sys::js_sys::Uint8Array;
@@ -125,12 +125,10 @@ impl Parser {
                 let entry_path = Path::new(&entry);
                 if let Some(ext) = entry_path.extension() {
                     if ext == "onetoc2" {
-                        return self
-                            .parse_notebook(entry_path)
-                            .map(|group| SectionGroup {
-                                display_name,
-                                entries: group.entries,
-                            });
+                        return self.parse_notebook(entry_path).map(|group| SectionGroup {
+                            display_name,
+                            entries: group.entries,
+                        });
                     }
                 }
             }
