@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: ERYpTION\n"
 "Language-Team: \n"
 "Language: da_DK\n"
@@ -137,11 +139,8 @@ msgid "%d notes match this pattern. Delete them?"
 msgstr "%d noter der matcher dette mønster. Slet dem?"
 
 #: packages/app-cli/app/command-rmnote.ts:40
-#, fuzzy
 msgid "%d notes will be permanently deleted. Continue?"
-msgstr ""
-"Dette vil slette alle elementer i papirkurven permanent. Ønsker du at "
-"fortsætte?"
+msgstr "%d noter vil blive slettet permanent. Vil du fortsætte?"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:227
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:237
@@ -200,7 +199,7 @@ msgstr ""
 
 #: packages/app-mobile/plugins/PluginRunner/dialogs/PluginPanelViewer.tsx:75
 msgid "%s tab opened"
-msgstr ""
+msgstr "%s fane åbnet"
 
 #: packages/lib/services/ReportService.ts:286
 #: packages/lib/services/ReportService.ts:287
@@ -234,10 +233,11 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> (etiket-kommando) kan enten være \"add\" (tilføj), \"remove\" "
-"(slet) eller \"list\" (liste) for at tilføje eller fjerne [tag] fra [note], "
-"eller for at liste de noter der bruger [tag]. Kommandoen `tag-list` kan "
-"bruges til at vise alle etiketter (brug -l for at vise den lange udgave)."
+"<tag-command> (etiket-kommando) kan enten være \"add\" (tilføj), "
+"\"remove\" (slet) eller \"list\" (liste) for at tilføje eller fjerne [tag] "
+"fra [note], eller for at liste de noter der bruger [tag]. Kommandoen `tag-"
+"list` kan bruges til at vise alle etiketter (brug -l for at vise den lange "
+"udgave)."
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
@@ -297,7 +297,7 @@ msgstr "Acceptér"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:98
 msgid "Accepted shares"
-msgstr ""
+msgstr "Accepterede delinger"
 
 #: packages/lib/WebDavApi.js:451
 msgid "Access denied: Please check your username and password"
@@ -381,6 +381,7 @@ msgstr ""
 #: packages/lib/services/ReportService.ts:227
 msgid "All item sync failures have been marked as \"ignored\"."
 msgstr ""
+"Alle fejl i elementsynkroniseringen er blevet markeret som \"ignoreret\"."
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/AllNotesItem.tsx:61
 #: packages/app-mobile/components/screens/Notes.tsx:185
@@ -394,7 +395,7 @@ msgstr "Alle mulige porte er i brug - rapportér venligst problemet på %s"
 
 #: packages/lib/models/Setting.ts:1228
 msgid "Allows debugging mobile plugins. See %s for details."
-msgstr ""
+msgstr "Gør det muligt at fejlsøge mobil-plugins. Se %s for detaljer."
 
 #: packages/app-cli/app/command-config.ts:19
 msgid "Also displays unset and hidden config variables."
@@ -414,7 +415,7 @@ msgstr "Spørg altid"
 
 #: packages/app-desktop/bridge.ts:421
 msgid "Always open %s files without asking."
-msgstr ""
+msgstr "Åbn altid %s-filer uden at spørge."
 
 #: packages/lib/models/Setting.ts:1186
 msgid "Always resize"
@@ -634,7 +635,7 @@ msgstr "Punktliste"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:37
 msgid "by %s"
-msgstr ""
+msgstr "af %s"
 
 #: packages/server/src/routes/admin/users.ts:160
 msgid "Can Share"
@@ -930,9 +931,8 @@ msgid "Collapse"
 msgstr "Fold sammen"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:26
-#, fuzzy
 msgid "Collapse %s"
-msgstr "Fold sammen"
+msgstr "Fold %s sammen"
 
 #: packages/lib/services/ReportService.ts:351
 msgid "Coming alarms"
@@ -985,6 +985,8 @@ msgid ""
 "Completed with warnings:\n"
 "%s"
 msgstr ""
+"Gennemført med advarsler:\n"
+"%s"
 
 #: packages/lib/Synchronizer.ts:207
 msgid "Completed: %s (%s)"
@@ -992,7 +994,7 @@ msgstr "Fuldført: %s (%s)"
 
 #: packages/lib/models/Note.ts:64
 msgid "completion date"
-msgstr ""
+msgstr "Gennemførelsesdato"
 
 #: packages/server/src/services/TaskService.ts:28
 msgid "Compress old changes"
@@ -1114,9 +1116,8 @@ msgid "Copy token"
 msgstr "Kopier token"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:633
-#, fuzzy
 msgid "Copy version info"
-msgstr "Viser versionsinfo"
+msgstr "Kopiér versionsinfo"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:43
 msgid ""
@@ -1445,7 +1446,7 @@ msgstr "Slettede fjern-emner: %d."
 
 #: packages/app-cli/app/command-rmnote.ts:20
 msgid "Deletes notes permanently, skipping the trash."
-msgstr ""
+msgstr "Sletter noter permanent og springer papirkurven over."
 
 #: packages/app-cli/app/command-rmbook.ts:14
 msgid "Deletes the given notebook."
@@ -1666,9 +1667,8 @@ msgid "Due"
 msgstr "Forfaldne"
 
 #: packages/lib/models/Note.ts:63
-#, fuzzy
 msgid "due date"
-msgstr "opdateringsdato"
+msgstr "forfaldsdato"
 
 #: packages/app-desktop/gui/MainScreen/commands/duplicateNote.ts:7
 #: packages/app-mobile/components/ScreenHeader/index.tsx:498
@@ -1890,9 +1890,8 @@ msgstr "Aktivér PDF-viser"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:131
 #: packages/lib/models/Setting.ts:1239
-#, fuzzy
 msgid "Enable plugin support"
-msgstr "Slå typografunderstøttelse til"
+msgstr "Aktivér understøttelse af plugins"
 
 #: packages/lib/models/Setting.ts:1261
 msgid "Enable soft breaks"
@@ -2049,9 +2048,8 @@ msgid "Expand"
 msgstr "Udvid"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:28
-#, fuzzy
 msgid "Expand %s"
-msgstr "Udvid"
+msgstr "Udvid %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:191
@@ -2130,6 +2128,9 @@ msgid ""
 "internet and able to sync.\n"
 "Error: %s"
 msgstr ""
+"Kunne ikke forlade delingen. Kontroller, at Joplin har forbindelse til "
+"internettet og er i stand til at synkronisere.\n"
+"Fejl: %s"
 
 #: packages/app-cli/app/main.js:100
 msgid "Fatal error:"
@@ -2339,7 +2340,7 @@ msgstr "Hjælp"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:125
 msgid "Here's what we do to make plugins safer:"
-msgstr ""
+msgstr "Her er, hvad vi gør for at gøre plugins mere sikre:"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:629
 msgid "Hermes enabled: %d"
@@ -2442,9 +2443,8 @@ msgid "Ignore TLS certificate errors"
 msgstr "Ignorer TLS certifikat-fejl"
 
 #: packages/lib/services/ReportService.ts:236
-#, fuzzy
 msgid "Ignored items that cannot be synchronised"
-msgstr "Emner kan ikke synkroniseres"
+msgstr "Ignorerede elementer, der ikke kan synkroniseres"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:106
 msgid "Images"
@@ -2458,33 +2458,32 @@ msgid "Import"
 msgstr "Importer"
 
 #: packages/lib/models/Setting.ts:2801
-#, fuzzy
 msgid "Import and Export"
-msgstr "Eksporter fejlrapport"
+msgstr "Import og eksport"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:66
 msgid ""
 "Import failed. Make sure a JEX file was selected.\n"
 "Details: %s"
 msgstr ""
+"Importen mislykkedes. Sørg for, at der er valgt en JEX-fil.\n"
+"Detaljer: %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:21
 msgid "Import from JEX"
-msgstr ""
+msgstr "Importér fra JEX"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:22
 msgid "Import notes from a JEX (Joplin Export) file."
-msgstr ""
+msgstr "Importér noter fra en JEX-fil (Joplin Export)."
 
 #: packages/lib/models/Setting.ts:2833
-#, fuzzy
 msgid "Import or export your data"
-msgstr "Eksportér dine data"
+msgstr "Importér eller eksportér dine data"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:76
-#, fuzzy
 msgid "Imported successfully!"
-msgstr "Eksporteret med succes!"
+msgstr "Importeret!"
 
 #: packages/app-desktop/gui/MenuBar.tsx:301
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
@@ -2495,9 +2494,8 @@ msgid "Importing notes..."
 msgstr "Importerer noter..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:26
-#, fuzzy
 msgid "Importing..."
-msgstr "Eksporterer..."
+msgstr "Importerer..."
 
 #: packages/app-cli/app/command-import.ts:16
 msgid "Imports data into Joplin."
@@ -2591,13 +2589,12 @@ msgid "In: %s"
 msgstr "I: %s"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:120
-#, fuzzy
 msgid "Incoming shares"
-msgstr "Kommende alarmer"
+msgstr "Indgående delinger"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:166
 msgid "Incompatible"
-msgstr ""
+msgstr "Inkompatibel"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:52
 msgid "Increase indent level"
@@ -2722,15 +2719,16 @@ msgid "Joplin Cloud Login"
 msgstr "Joplin Cloud Login"
 
 #: packages/lib/services/plugins/PluginService.ts:514
-#, fuzzy
 msgid "Joplin Desktop"
-msgstr "Joplin hjemmeside"
+msgstr "Joplin Desktop"
 
 #: packages/app-desktop/bridge.ts:419
 msgid ""
 "Joplin doesn't recognise the %s extension. Opening this file could be "
 "dangerous. What would you like to do?"
 msgstr ""
+"Joplin genkender ikke filtypen %s. Det kan være farligt at åbne denne fil. "
+"Hvad ønsker du at gøre?"
 
 #: packages/lib/services/interop/InteropService.ts:149
 #: packages/lib/services/interop/InteropService.ts:66
@@ -2757,9 +2755,8 @@ msgid "Joplin Forum"
 msgstr "Joplin-forum"
 
 #: packages/lib/services/plugins/PluginService.ts:512
-#, fuzzy
 msgid "Joplin Mobile"
-msgstr "Joplin hjemmeside"
+msgstr "Joplin Mobil"
 
 #: packages/lib/SyncTargetJoplinServer.ts:61
 msgid "Joplin Server"
@@ -2865,9 +2862,8 @@ msgstr "Indstil knap-rækkefølge"
 #: packages/app-desktop/bridge.ts:424
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:130
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:47
-#, fuzzy
 msgid "Learn more"
-msgstr "Indryk mere"
+msgstr "Få mere at vide"
 
 #: packages/lib/models/Setting.ts:1899
 msgid "Leave it blank to download the language files from the default website"
@@ -2878,9 +2874,8 @@ msgid "Leave notebook..."
 msgstr "Forlad notesbog..."
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:90
-#, fuzzy
 msgid "Leave share"
-msgstr "Gem ændringer"
+msgstr "Forlad deling"
 
 #: packages/lib/models/Setting.ts:1529
 msgid "Legal"
@@ -2899,6 +2894,8 @@ msgid ""
 "Like any software you install, plugins can potentially cause security issues "
 "or data loss."
 msgstr ""
+"Som al anden software, du installerer, kan plugins potentielt forårsage "
+"sikkerhedsproblemer eller datatab."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:108
 msgid "Lines"
@@ -3010,9 +3007,8 @@ msgid "Manage profiles"
 msgstr "Administrer profiler"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:569
-#, fuzzy
 msgid "Manage shared notebooks"
-msgstr "Administrer profiler"
+msgstr "Administrer delte notesbøger"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:332
 msgid "Manage your plugins"
@@ -3130,6 +3126,7 @@ msgstr "Mere end et emne matcher \"%s\".  Præciser din søgning."
 msgid ""
 "Most plugins have source code available for review on the plugin website."
 msgstr ""
+"De fleste plugins har kildekode, der kan gennemgås på plugin-hjemmesiden."
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:587
 msgid "Move %d notes to notebook \"%s\"?"
@@ -3180,7 +3177,7 @@ msgstr "Ændr aldrig størrelse"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/HeaderItem.tsx:46
 msgid "New"
-msgstr ""
+msgstr "Ny"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:10
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
@@ -3258,13 +3255,12 @@ msgid "No active notebook."
 msgstr "Ingen aktiv notesbog."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:38
-#, fuzzy
 msgid "No description"
-msgstr "Link-kryptering"
+msgstr "Ingen beskrivelse"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:92
 msgid "No incoming shares"
-msgstr ""
+msgstr "Ingen indgående delinger"
 
 #: packages/app-mobile/components/screens/Note.tsx:274
 msgid "No item with ID %s"
@@ -3299,9 +3295,8 @@ msgid "No suggestions"
 msgstr "Ingen forslag"
 
 #: packages/app-mobile/plugins/PluginRunner/dialogs/PluginPanelViewer.tsx:120
-#, fuzzy
 msgid "No tab selected"
-msgstr "Ingen notesbog er valgt."
+msgstr "Ingen fane valgt"
 
 #: packages/app-cli/app/command-edit.ts:31
 msgid ""
@@ -3430,9 +3425,8 @@ msgid "Notebook: %s"
 msgstr "Notesbog: %s"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:81
-#, fuzzy
 msgid "Notebook: %s (%s)"
-msgstr "Notesbog: %s"
+msgstr "Notesbog: %s (%s)"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useSidebarListData.ts:58
 #: packages/app-mobile/components/side-menu-content.tsx:561
@@ -3532,9 +3526,8 @@ msgid "Open %s"
 msgstr "Åbn %s"
 
 #: packages/app-desktop/bridge.ts:425
-#, fuzzy
 msgid "Open it"
-msgstr "Åbn"
+msgstr "Åbn den"
 
 #: packages/app-desktop/gui/MainScreen/commands/openPdfViewer.ts:7
 msgid "Open PDF viewer"
@@ -3545,9 +3538,8 @@ msgid "Open profile directory"
 msgstr "Åbn profilmappe"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:127
-#, fuzzy
 msgid "Open Source"
-msgstr "Kilde"
+msgstr "Open Source"
 
 #: packages/lib/models/Setting.ts:461
 msgid "Open Sync Wizard..."
@@ -3645,23 +3637,22 @@ msgid "Permanently delete note \"%s\"?"
 msgstr "Slet noten \"%s\" permanent?"
 
 #: packages/app-cli/app/command-rmbook.ts:36
-#, fuzzy
 msgid ""
 "Permanently delete notebook \"%s\"?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will be permanently deleted."
 msgstr ""
-"Slet notesbog? Alle noter og undernotesbøger i denne notesbog bliver også "
-"slettet."
+"Slet notesbogen \"%s\" permanent?\n"
+"\n"
+"Alle noter og undernotesbøger i denne notesbog vil blive slettet permanent."
 
 #: packages/lib/models/Note.ts:930
 msgid "Permanently delete these %d notes?"
 msgstr "Slet disse %d noter permanent?"
 
 #: packages/app-cli/app/command-rmbook.ts:20
-#, fuzzy
 msgid "Permanently deletes the notebook, skipping the trash."
-msgstr "Slet disse %d noter permanent?"
+msgstr "Sletter notesbogen permanent og springer papirkurven over."
 
 #: packages/app-mobile/components/screens/Note.tsx:497
 msgid "Permission needed"
@@ -3738,9 +3729,8 @@ msgid "Please specify the notebook where the notes should be imported to."
 msgstr "Angiv hvilken notesbog, noterne skal importeres til."
 
 #: packages/lib/services/plugins/PluginService.ts:508
-#, fuzzy
 msgid "Please upgrade Joplin to version %s or later to use this plugin."
-msgstr "Opgrader venligst Joplin for at benytte denne udvidelse"
+msgstr "Opgrader Joplin til version %s eller nyere for at bruge dette plugin."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1375
 msgid ""
@@ -3760,9 +3750,8 @@ msgid "Plugin message"
 msgstr "Udvidelsebesked"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:443
-#, fuzzy
 msgid "Plugin panels"
-msgstr "Udvidelsesværtøjer"
+msgstr "Plugin-paneler"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:97
 msgid "Plugin repository failed to load"
@@ -3773,9 +3762,8 @@ msgid "Plugin search"
 msgstr "Udvidelsesøgning"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:119
-#, fuzzy
 msgid "Plugin security"
-msgstr "Udvidelsesøgning"
+msgstr "Plugin-sikkerhed"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:330
 msgid "Plugin tools"
@@ -3783,7 +3771,7 @@ msgstr "Udvidelsesværtøjer"
 
 #: packages/lib/models/Setting.ts:1227
 msgid "Plugin WebView debugging"
-msgstr ""
+msgstr "Plugin WebView-fejlfinding"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
@@ -3797,6 +3785,8 @@ msgid ""
 "Plugins extend Joplin with features that are not present by default. Plugins "
 "can extend Joplin's editor, viewer, and more."
 msgstr ""
+"Plugins udvider Joplin med funktioner, der ikke er til stede som standard. "
+"Plugins kan udvide Joplins editor, viewer og meget mere."
 
 #: packages/lib/models/Setting.ts:1534
 msgid "Portrait"
@@ -3884,7 +3874,7 @@ msgstr "Behandl brugersletninger"
 
 #: packages/lib/models/Resource.ts:32
 msgid "Processing"
-msgstr ""
+msgstr "Behandler"
 
 #: packages/server/src/routes/admin/users.ts:254
 msgid "Profile"
@@ -3987,9 +3977,8 @@ msgid "Recommended"
 msgstr "Anbefalet"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:126
-#, fuzzy
 msgid "Recommended plugins"
-msgstr "Anbefalet"
+msgstr "Anbefalede plugins"
 
 #: packages/app-desktop/gui/MenuBar.tsx:732
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
@@ -4065,16 +4054,15 @@ msgstr "Erstat: "
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:57
 msgid "Report an issue"
-msgstr ""
+msgstr "Rapportér et problem"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:86
 msgid "Report fraudulent plugin"
-msgstr ""
+msgstr "Rapporter bedragerisk plugin"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:128
-#, fuzzy
 msgid "Report system"
-msgstr "Filsystem"
+msgstr "Rapporteringssystem"
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
 msgid "Reset application layout"
@@ -4385,9 +4373,8 @@ msgstr "Del en notesbog med andre"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:82
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:33
-#, fuzzy
 msgid "Share from %s (%s)"
-msgstr "%s = %s (%s)"
+msgstr "Deling fra %s (%s)"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:391
 msgid "Share Notebook"
@@ -4402,9 +4389,8 @@ msgid "Share permissions"
 msgstr "Deletilladelser"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:107
-#, fuzzy
 msgid "Shares"
-msgstr "Del"
+msgstr "Delinger"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:357
 msgid "Sharing notebook..."
@@ -4440,9 +4426,8 @@ msgid "Show disabled keys"
 msgstr "Vis deaktiverede nøgler"
 
 #: packages/app-desktop/gui/ConfigScreen/FontSearch.tsx:130
-#, fuzzy
 msgid "Show monospace fonts only."
-msgstr "Editor monospace skrifttypefamilie"
+msgstr "Vis kun monospace-skrifttyper."
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:19
 msgid "Show more actions"
@@ -4850,7 +4835,7 @@ msgstr "Tag et foto"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:72
 msgid "Task \"%s\" failed with error: %s"
-msgstr ""
+msgstr "Afstandsstykke"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:32
 msgid "Task list"
@@ -5154,9 +5139,8 @@ msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Der er ingen noter. Opret note ved at klikke på (+) knappen."
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:9
-#, fuzzy
 msgid "There are no notes in the trash folder."
-msgstr "Behold noter i papirkurven i"
+msgstr "Der er ingen noter i papirkurvsfolderen."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:262
 msgid "There are unsaved changes."
@@ -5186,6 +5170,9 @@ msgid ""
 "cause the sync warning to appear, but still aren't synced. To unignore, "
 "click \"retry\"."
 msgstr ""
+"Disse elementer kunne ikke synkroniseres, men er blevet markeret som "
+"\"ignoreret\". De får ikke synkroniseringsadvarslen til at dukke op, men er "
+"stadig ikke synkroniseret. Klik på \"Prøv igen\" for at fjerne markeringen."
 
 #: packages/lib/services/ReportService.ts:187
 msgid ""
@@ -5227,7 +5214,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
 msgid "This attachment does not have OCR data (Status: %s)"
-msgstr ""
+msgstr "Denne vedhæftede fil har ikke OCR-data (Status: %s)"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:54
 #: packages/lib/services/ResourceEditWatcher/index.ts:234
@@ -5302,7 +5289,7 @@ msgstr "Denne note har ingen historie"
 
 #: packages/lib/services/plugins/PluginService.ts:516
 msgid "This plugin doesn't support %s."
-msgstr ""
+msgstr "Dette plugin understøtter ikke %s."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:505
 msgid ""
@@ -5324,7 +5311,7 @@ msgstr ""
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:11
 msgid "This subfolder of the trash has no notes."
-msgstr ""
+msgstr "Denne undermappe i papirkurven har ingen noter."
 
 #: packages/lib/models/Setting.ts:1295
 msgid ""
@@ -5347,11 +5334,8 @@ msgstr ""
 "fortsætte?"
 
 #: packages/app-cli/app/command-rmnote.ts:40
-#, fuzzy
 msgid "This will permanently delete the note \"%s\". Continue?"
-msgstr ""
-"Dette vil slette alle elementer i papirkurven permanent. Ønsker du at "
-"fortsætte?"
+msgstr "Dette vil slette noten \"%s\" permanent. Vil du fortsætte?"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:60
@@ -5599,9 +5583,8 @@ msgstr ""
 "applikationen."
 
 #: packages/app-desktop/bridge.ts:417
-#, fuzzy
 msgid "Unknown file type"
-msgstr "Ukendt markering: %s"
+msgstr "Ukendt filtype"
 
 #: packages/lib/utils/processStartFlags.ts:178
 msgid "Unknown flag: %s"
@@ -5810,7 +5793,7 @@ msgstr "Vis"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:141
 msgid "View OCR text"
-msgstr ""
+msgstr "Vis OCR-tekst"
 
 #: packages/app-mobile/components/screens/Note.tsx:1099
 msgid "View on map"
@@ -5858,13 +5841,15 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:128
 msgid "We have a system for reporting and removing problematic plugins."
-msgstr ""
+msgstr "Vi har et system til at rapportere og fjerne problematiske plugins."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:126
 msgid ""
 "We mark plugins developed by trusted Joplin community members as "
 "\"recommended\"."
 msgstr ""
+"Vi markerer plugins, der er udviklet af pålidelige medlemmer af Joplin-"
+"fællesskabet, som \"anbefalede\"."
 
 #: packages/lib/models/Setting.ts:2797 packages/lib/utils/joplinCloud.ts:166
 msgid "Web Clipper"
@@ -5913,9 +5898,8 @@ msgid "Welcome!"
 msgstr "Velkommen!"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:112
-#, fuzzy
 msgid "What are plugins?"
-msgstr "Slet udvidelse \"%s\"?"
+msgstr "Hvad er plugins?"
 
 #: packages/lib/models/Setting.ts:1164
 msgid "When creating a new note:"
@@ -6008,7 +5992,7 @@ msgstr ""
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:30
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:545
 msgid "Your account doesn't have access to this feature"
-msgstr ""
+msgstr "Din konto har ikke adgang til denne funktion"
 
 #: packages/app-cli/app/cli-utils.js:160
 msgid "Your choice: "
