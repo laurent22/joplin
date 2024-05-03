@@ -13,10 +13,15 @@
   "files": [
     "onenote_converter_bg.wasm",
     "onenote_converter.js",
+    "onenote_converter_bg.js",
     "onenote_converter.d.ts"
   ],
-  "main": "onenote_converter.js",
+  "module": "onenote_converter.js",
   "types": "onenote_converter.d.ts",
+  "sideEffects": [
+    "./onenote_converter.js",
+    "./snippets/*"
+  ],
   "keywords": [
     "onenote"
   ]
