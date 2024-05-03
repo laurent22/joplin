@@ -208,4 +208,21 @@ describe('FileMirroringService.watch', () => {
 			'Test 2/Note.md': `---\ntitle: Note\nid: ${note1.id}\n---\n\n`,
 		});
 	});
+
+	test('should add metadata to folders when created remotely', async () => {
+		const tempDir = await createTempDir();
+		const mirror = await FileMirroringService.instance().mirrorFolder(tempDir, '');
+		await mirror.waitForIdle();
+
+		await fs.mkdir(join(tempDir, 'Test'));
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		const folder = await Folder.loadByTitle('Test');
+		expect(folder).toMatchObject({ title: 'Test' });
+
+		await verifyDirectoryMatches(tempDir, {
+			'Test/.folder.yml': `title: Test\nid: ${folder.id}\n`,
+		});
+	});
 });

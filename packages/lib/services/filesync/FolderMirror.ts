@@ -22,7 +22,7 @@ const { ALL_NOTES_FILTER_ID } = require('../../reserved-ids.js');
 const debugLogger = new Logger();
 debugLogger.addTarget(TargetType.Console);
 debugLogger.setLevel(LogLevel.Debug);
-debugLogger.enabled = false;
+debugLogger.enabled = true;
 
 const makeItemPaths = (basePath: string, items: FolderItem[]) => {
 	const output: Map<string, string> = new Map();
@@ -497,7 +497,19 @@ export default class {
 			await handleFileAdd(dirname(path));
 
 			item = await this.localTree_.processItem(item, this.modifyLocalActions_);
-			await this.remoteTree_.processItem(item, noOpActionListeners);
+
+			let writeToDisk = false;
+			if (item.type_ === ModelType.Folder) {
+				// When folders are added remotely, we often need to update/correct the metadata.
+				// Avoid writing to disk otherwise as it can fire add events.
+				writeToDisk = !await shim.fsDriver().exists(join(this.baseFilePath, path, folderInfoFileName));
+			}
+
+			if (writeToDisk) {
+				await this.remoteTree_.processItem(item, this.modifyRemoteActions_);
+			} else {
+				await this.remoteTree_.processItem(item, noOpActionListeners);
+			}
 
 			debugLogger.groupEnd();
 		};
