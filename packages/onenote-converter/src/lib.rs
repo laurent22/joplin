@@ -1,10 +1,9 @@
-use crate::parser::Parser;
+pub use crate::parser::Parser;
 use color_eyre::eyre::Result;
 use color_eyre::eyre::{eyre, ContextCompat};
 use std::panic;
 use std::path::Path;
 use std::path::PathBuf;
-use std::process::exit;
 use wasm_bindgen::prelude::wasm_bindgen;
 
 use crate::utils::utils::log;
@@ -31,8 +30,6 @@ pub fn oneNoteConverter(input: &str, output: &str) {
 
         console::log_1(&(e.to_string()).into());
         eprintln!("{:?}", e);
-
-        exit(1);
     }
 }
 
