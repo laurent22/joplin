@@ -172,7 +172,7 @@ impl<'a> Renderer<'a> {
         }
 
         if let Some(line_spacing) = text.paragraph_line_spacing_exact() {
-            styles.set("line-height", ((line_spacing as f32) / 2.0).to_string() + "pt");
+            styles.set("line-height", ((line_spacing as f32) * 50.0).floor().to_string() + "pt");
             // TODO: why not implemented?
             // if line_spacing > 0.0 {
             //     dbg!(text);
