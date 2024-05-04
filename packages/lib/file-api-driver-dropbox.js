@@ -151,9 +151,11 @@ class FileApiDriverDropbox {
 				} catch (_error) {
 					// Since roughly May 2nd, 2024, sending a GET request to files/download sometimes fails
 					// until another file is requested. Because POST requests with empty bodies don't work on iOS,
-					// we send a request for a different file, then request the original.
+					// we send a request for a different file, then re-request the original.
 					//
-					// This workaround seems to require that the file we request exist.
+					// See https://github.com/laurent22/joplin/issues/10396
+
+					// This workaround requires that the file we request exist.
 					const { items } = await this.list();
 					const files = items.filter(item => !item.isDir);
 
