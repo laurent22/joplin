@@ -45,7 +45,7 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 
-		<!-- Left over from before upgrading from RN 0.71 -->
+		<!-- Left over from before upgrading from RN 0.71, 0.73 -->
 		<key>NSExceptionDomains</key>
 		<dict>
 			<key>localhost</key>
