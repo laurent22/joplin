@@ -14,6 +14,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
+import com.facebook.react.flipper.ReactNativeFlipper;
 
 import net.cozic.joplin.share.SharePackage;
 import net.cozic.joplin.ssl.SslPackage;
