@@ -2850,7 +2850,6 @@ msgid "Keep note history for"
 msgstr "Notizenverlauf speichern für"
 
 #: packages/lib/models/Setting.ts:1925
-#, fuzzy
 msgid "Keep notes in the trash for"
 msgstr "Behalte Notizen im Papierkorb für"
 
@@ -4065,12 +4064,10 @@ msgid "Recipients:"
 msgstr "Empfänger:"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:143
-#, fuzzy
 msgid "Recommended"
 msgstr "Empfohlen"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:126
-#, fuzzy
 msgid "Recommended plugins"
 msgstr "Empfohlene Erweiterungen"
 
