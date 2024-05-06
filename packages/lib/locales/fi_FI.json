@@ -65,6 +65,9 @@
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		""
 	],
+	"%s tab opened": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -155,6 +158,9 @@
 	"Accept": [
 		"Hyväksy"
 	],
+	"Accepted shares": [
+		""
+	],
 	"Access denied: Please check your username and password": [
 		""
 	],
@@ -209,11 +215,17 @@
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"Kaikki tiedot, mukaan lukien muistiinpanot, muistikirjat ja tunnisteet, poistetaan pysyvästi."
 	],
+	"All item sync failures have been marked as \"ignored\".": [
+		""
+	],
 	"All notes": [
 		"Kaikki muistiinpanot"
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Kaikki mahdolliset portit ovat käytössä - ilmoita ongelmasta osoitteessa %s"
+	],
+	"Allows debugging mobile plugins. See %s for details.": [
+		""
 	],
 	"Also displays unset and hidden config variables.": [
 		"Näyttää myös merkitsemättömät ja piilotetut konfigurointimuuttujat."
@@ -223,6 +235,9 @@
 	],
 	"Always": [
 		"Aina"
+	],
+	"Always open %s files without asking.": [
+		""
 	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
 		"Epäselvä muistikirja \"%s\". Käytä sen sijaan muistikirjan tunnusta - paina \"ti\" nähdäksesi lyhyen muistikirjan tunnuksen tai käytä $b nykyiselle valitulle muistikirjalle"
@@ -343,6 +358,9 @@
 	],
 	"Bulleted List": [
 		"Luettelomerkitty luettelo"
+	],
+	"by %s": [
+		""
 	],
 	"Can Share": [
 		"Voit jakaa"
@@ -509,8 +527,14 @@
 	"Completed decryption.": [
 		"Salaus on valmis."
 	],
+	"Completed with warnings:\n%s": [
+		""
+	],
 	"Completed: %s (%s)": [
 		"Valmis: %s (%s)"
+	],
+	"completion date": [
+		""
 	],
 	"Compress old changes": [
 		"Pakkaa vanhat muutokset"
@@ -690,9 +714,6 @@
 	"Dashboard": [
 		"Koontinäyttö"
 	],
-	"Database v%s": [
-		"Tietokanta v%s"
-	],
 	"Date": [
 		"Päivämäärä"
 	],
@@ -761,6 +782,9 @@
 	],
 	"Deleted remote items: %d.": [
 		"Poistetut etäkohteet: %d."
+	],
+	"Deletes notes permanently, skipping the trash.": [
+		""
 	],
 	"Deletes the given notebook.": [
 		"Poistaa annetun muistikirjan."
@@ -1152,6 +1176,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Vikaturvallinen: Älä pyyhi paikallisia tietoja, kun synkronointikohde on tyhjä (usein virheellisen määritysvirheen tai virheen seurauksena)"
 	],
+	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
+		""
+	],
 	"Fatal error:": [
 		"Vakava virhe:"
 	],
@@ -1196,9 +1223,6 @@
 	],
 	"Focus title": [
 		"Tarkennuksen otsikko"
-	],
-	"Folders": [
-		"Kansiot"
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Vain virheenkorjausta varten: vie profiilisi ulkoiselle SD-kortille."
@@ -1282,6 +1306,9 @@
 	"Help": [
 		"Apua"
 	],
+	"Here's what we do to make plugins safer:": [
+		""
+	],
 	"Hide %s": [
 		"Piilota %s"
 	],
@@ -1348,6 +1375,18 @@
 	"Import": [
 		"Tuo"
 	],
+	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+		""
+	],
+	"Import from JEX": [
+		""
+	],
+	"Import notes from a JEX (Joplin Export) file.": [
+		""
+	],
+	"Imported successfully!": [
+		""
+	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		"Tuodaan kohteesta \"%s\" as \"%s\" muodossa. Odota..."
 	],
@@ -1383,6 +1422,9 @@
 	],
 	"In: %s": [
 		"Sisään: %s"
+	],
+	"Incompatible": [
+		""
 	],
 	"Increase indent level": [
 		"Lisää sisennystä"
@@ -1461,6 +1503,9 @@
 	],
 	"Joplin Cloud": [
 		"Joplin Cloud"
+	],
+	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
+		""
 	],
 	"Joplin Export Directory": [
 		"Joplin vie hakemisto"
@@ -1551,6 +1596,9 @@
 	],
 	"Light": [
 		"Vaalea"
+	],
+	"Like any software you install, plugins can potentially cause security issues or data loss.": [
+		""
 	],
 	"Lines": [
 		"Rivit"
@@ -1694,6 +1742,9 @@
 	"More than one item match \"%s\". Please narrow down your query.": [
 		"Useampi kuin yksi kohta vastaa \"%s\". Tarkenna kyselyäsi."
 	],
+	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
 	"Move %d notes to notebook \"%s\"?": [
 		"Siirrä %d muistiinpanot muistikirjaan \"%s\"?"
 	],
@@ -1716,6 +1767,9 @@
 		"E"
 	],
 	"Never resize": [
+		""
+	],
+	"New": [
 		""
 	],
 	"New note": [
@@ -1765,6 +1819,9 @@
 	],
 	"No active notebook.": [
 		"Ei aktiivista muistikirjaa."
+	],
+	"No incoming shares": [
+		""
 	],
 	"No item with ID %s": [
 		"Ei kohdetta tunnuksella %s"
@@ -2024,9 +2081,6 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"Määritä muistikirja, johon muistiinpanot tuodaan."
 	],
-	"Please upgrade Joplin to use this plugin": [
-		"Päivitä Joplin käyttääksesi tätä laajennusta"
-	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Odota, että kaikki liitteet ladataan ja puretaan. Voit myös vaihtaa kohtaan %s muokkaamaan muistiinpanoa."
 	],
@@ -2039,8 +2093,14 @@
 	"Plugin tools": [
 		"Laajennustyökalut"
 	],
+	"Plugin WebView debugging": [
+		""
+	],
 	"Plugins": [
 		"Laajennukset"
+	],
+	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
+		""
 	],
 	"Portrait": [
 		"Pystysuunta"
@@ -2101,6 +2161,9 @@
 	],
 	"Process user deletions": [
 		"Käsittele käyttäjien poistot"
+	],
+	"Processing": [
+		""
 	],
 	"Profile": [
 		"Profiili"
@@ -2218,6 +2281,12 @@
 	],
 	"Replace: ": [
 		"Vaihda: "
+	],
+	"Report an issue": [
+		""
+	],
+	"Report fraudulent plugin": [
+		""
 	],
 	"Reset application layout": [
 		"Palauta sovelluksen asettelu"
@@ -2480,6 +2549,9 @@
 	"Source: ": [
 		"Lähde: "
 	],
+	"Spacer": [
+		""
+	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		"Määritä portti, jota API palvelimen on käytettävä. Jos sitä ei ole määritetty, käytetään oletusarvoa."
 	],
@@ -2654,6 +2726,9 @@
 	"Take photo": [
 		"Ota valokuva"
 	],
+	"Task \"%s\" failed with error: %s": [
+		""
+	],
 	"Task list": [
 		"Tehtävälista"
 	],
@@ -2783,9 +2858,6 @@
 	"There are unsaved changes.": [
 		"On tallentamattomia muutoksia."
 	],
-	"There is currently no notebook. Create one by clicking on \"New notebook\".": [
-		"Tällä hetkellä ei ole muistikirjaa. Luo uusi napsauttamalla \"Uusi muistikirja\"."
-	],
 	"There is no data to export.": [
 		"Vietäviä tietoja ei ole."
 	],
@@ -2795,6 +2867,9 @@
 	"There was an error downloading this attachment:": [
 		"Tämän liitteen lataamisessa tapahtui virhe:"
 	],
+	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
+		""
+	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Nämä kohteet pysyvät laitteessa, mutta niitä ei ladata synkronointikohteeseen. Löytääksesi nämä kohteet, etsi joko otsikko tai tunnus (joka näkyy edellä olevissa hakasulkeissa)."
 	],
@@ -2802,6 +2877,9 @@
 		"Nämä laajennukset parantavat Markdown renderöijää lisäominaisuuksilla. Huomaa, että vaikka nämä ominaisuudet voivat olla hyödyllisiä, ne eivät ole tavallisia markdown ja siksi suurin osa niistä toimii vain Joplinissa. Lisäksi jotkut niistä ovat *yhteensopimattomia* WYSIWYG editorin kanssa. Jos avaat viestin, joka käyttää jotakin näistä laajennuksia editorissa, menetät laajennuksen muotoilun. Alla on ilmoitettu, mitkä laajennukset ovat yhteensopivia tai eivät ole yhteensopivia WYSIWYG editorin kanssa."
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
+		""
+	],
+	"This attachment does not have OCR data (Status: %s)": [
 		""
 	],
 	"This attachment is not downloaded or not decrypted yet": [
@@ -2828,11 +2906,17 @@
 	"This note has no history": [
 		"Tällä muistiinpanolla ei ole historiaa"
 	],
+	"This plugin doesn't support %s.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Tällä Rich Text -editorilla on useita rajoituksia, on suositeltavaa olla tietoinen niistä ennen sen käyttöä."
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"Tämän palvelun avulla selainlaajennus voi olla yhteydessä Jopliniin. Kun se otetaan käyttöön, palomuuri voi pyytää sinua antamaan Joplinille luvan kuunnella tiettyä porttia."
+	],
+	"This subfolder of the trash has no notes.": [
+		""
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
 		"Antaa Joplinille mahdollisuuden toimia taustalla. On suositeltavaa ottaa tämä asetus käyttöön, jotta muistiinpanoja synkronoidaan jatkuvasti, näin vähennetään ristiriitojen määrää."
@@ -2966,9 +3050,6 @@
 	"Unable to edit resource of type %s": [
 		""
 	],
-	"Unable to export or share data. Reason: %s": [
-		""
-	],
 	"Unable to share log data. Reason: %s": [
 		""
 	],
@@ -3095,6 +3176,9 @@
 	"View": [
 		"Näytä"
 	],
+	"View OCR text": [
+		""
+	],
 	"View on map": [
 		"Näytä kartalla"
 	],
@@ -3118,6 +3202,12 @@
 	],
 	"Warning: not all resources shown for performance reasons (limit: %s).": [
 		"Varoitus: kaikkia resursseja ei näytetä suorituskyvyn vuoksi (raja: %s)."
+	],
+	"We have a system for reporting and removing problematic plugins.": [
+		""
+	],
+	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
+		""
 	],
 	"Web Clipper": [
 		"Web Clipper"
@@ -3187,6 +3277,9 @@
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Voit käyttää alla olevaa työkalua tietojen salaamiseen uudelleen, esimerkiksi jos tiedät, että osa muistiinpanoistasi on salattu vanhentuneella salausmenetelmällä."
+	],
+	"Your account doesn't have access to this feature": [
+		""
 	],
 	"Your choice: ": [
 		"Sinun valintasi: "

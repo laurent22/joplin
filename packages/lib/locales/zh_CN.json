@@ -65,6 +65,9 @@
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s 未针对同步许多小文件进行优化，因此您的首次同步将会很慢。"
 	],
+	"%s tab opened": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -100,6 +103,9 @@
 	],
 	"&View": [
 		"视图 (&V)"
+	],
+	"&Window": [
+		"窗口 (&W)"
 	],
 	"(%s)": [
 		"(%s)"
@@ -141,7 +147,7 @@
 		"A5"
 	],
 	"About": [
-		""
+		"关于"
 	],
 	"About Joplin": [
 		"关于 Joplin"
@@ -157,6 +163,9 @@
 	],
 	"Accept": [
 		"接受"
+	],
+	"Accepted shares": [
+		""
 	],
 	"Access denied: Please check your username and password": [
 		"访问被拒绝：请检查您的用户名和密码"
@@ -212,11 +221,17 @@
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"包含笔记，笔记本和标签在内的所有数据将会被永久删除。"
 	],
+	"All item sync failures have been marked as \"ignored\".": [
+		""
+	],
 	"All notes": [
 		"全部笔记"
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"所有默认端口都已经被使用中 - 请在 %s 反馈这个问题"
+	],
+	"Allows debugging mobile plugins. See %s for details.": [
+		""
 	],
 	"Also displays unset and hidden config variables.": [
 		"同时显示未设置的与隐藏的配置变量。"
@@ -229,6 +244,9 @@
 	],
 	"Always ask": [
 		"每次询问"
+	],
+	"Always open %s files without asking.": [
+		""
 	],
 	"Always resize": [
 		"自动缩放"
@@ -311,6 +329,9 @@
 	"Authorisation token:": [
 		"授权令牌："
 	],
+	"Authorise": [
+		"授权"
+	],
 	"Auto": [
 		"自动"
 	],
@@ -324,7 +345,7 @@
 		"自动检查更新"
 	],
 	"Automatically delete notes in the trash after a number of days": [
-		""
+		"几天后自动删除回收站中的笔记"
 	],
 	"Automatically switch theme to match system theme": [
 		"根据系统主题自动切换"
@@ -336,7 +357,7 @@
 		"Basic"
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
-		"设备上未设置生物识别解锁。请设置它以解锁Joplin。如果设备处于锁定状态，请考虑将其关闭和打开以重置生物特征扫描。"
+		"设备上未设置生物识别解锁。请设置它以解锁 Joplin。如果设备处于锁定状态，请考虑将其关闭和打开以重置生物特征扫描。"
 	],
 	"Bold": [
 		"加粗"
@@ -352,6 +373,9 @@
 	],
 	"Bulleted List": [
 		"无序列表"
+	],
+	"by %s": [
+		""
 	],
 	"Can Share": [
 		"分享"
@@ -527,8 +551,14 @@
 	"Completed decryption.": [
 		"已完成解密。"
 	],
+	"Completed with warnings:\n%s": [
+		""
+	],
 	"Completed: %s (%s)": [
 		"已完成：%s（%s）"
+	],
+	"completion date": [
+		""
 	],
 	"Compress old changes": [
 		"压缩旧的更改"
@@ -560,6 +590,9 @@
 	"Content provided by %s": [
 		"内容由 %s 提供"
 	],
+	"Content provided by: %s": [
+		"内容由 %s 提供"
+	],
 	"Continue": [
 		"继续"
 	],
@@ -586,6 +619,9 @@
 	],
 	"Copy Link Address": [
 		"复制链接地址"
+	],
+	"Copy link to website": [
+		"将链接复制到网站"
 	],
 	"Copy Markdown link": [
 		"复制 Markdown 链接"
@@ -722,9 +758,6 @@
 	"Dashboard": [
 		"面板"
 	],
-	"Database v%s": [
-		"数据库 v%s"
-	],
 	"Date": [
 		"日期"
 	],
@@ -794,11 +827,17 @@
 	"Delete this profile?": [
 		"是否删除此配置文件？"
 	],
+	"Deleted": [
+		"已删除"
+	],
 	"Deleted local items: %d.": [
 		"已删除本地条目：%d。"
 	],
 	"Deleted remote items: %d.": [
 		"已删除远程条目：%d。"
+	],
+	"Deletes notes permanently, skipping the trash.": [
+		""
 	],
 	"Deletes the given notebook.": [
 		"删除选定的笔记本。"
@@ -936,7 +975,7 @@
 		"登录 Dropbox"
 	],
 	"Due": [
-		""
+		"截止日期"
 	],
 	"Duplicate": [
 		"复制"
@@ -1017,7 +1056,7 @@
 		"强调文本"
 	],
 	"Empty trash": [
-		""
+		"清空回收站"
 	],
 	"Enable": [
 		"启用"
@@ -1072,6 +1111,9 @@
 	],
 	"Enable optical character recognition (OCR)": [
 		"启用光学字符识别 (OCR)"
+	],
+	"Enable or disable plugins": [
+		"启用或禁用插件"
 	],
 	"Enable PDF viewer": [
 		"启用 PDF 查看器"
@@ -1196,9 +1238,6 @@
 	"Export profile": [
 		"导出配置文件"
 	],
-	"Export your data": [
-		"导出数据"
-	],
 	"Exported successfully!": [
 		"导出成功！"
 	],
@@ -1225,6 +1264,9 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"故障保护(Fail-safe) ：当同步目标为空时（通常是配置错误或Bug），不要删除本地数据"
+	],
+	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
+		""
 	],
 	"Fatal error:": [
 		"严重错误："
@@ -1274,9 +1316,6 @@
 	"Focus title": [
 		"聚焦标题"
 	],
-	"Folders": [
-		"文件夹"
-	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"仅用于调试目的：将您的配置文件导出到外部 SD 卡。"
 	],
@@ -1303,6 +1342,9 @@
 	],
 	"Found: %d.": [
 		"已找到：%d 条。"
+	],
+	"From a plugin": [
+		"从一个插件"
 	],
 	"FTS enabled: %d": [
 		"FTS 已开启：%d"
@@ -1344,7 +1386,7 @@
 		"批准授权"
 	],
 	"Have you authorised the application login in the above URL?": [
-		""
+		"您是否已授权应用程序在上述URL中登录？"
 	],
 	"Header %d": [
 		"Header %d"
@@ -1357,6 +1399,9 @@
 	],
 	"Help": [
 		"帮助"
+	],
+	"Here's what we do to make plugins safer:": [
+		""
 	],
 	"Hermes enabled: %d": [
 		"已启用Hermes：%d"
@@ -1416,7 +1461,7 @@
 		"空闲"
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
-		""
+		"如果您已授权，请等待应用程序同步到 Joplin Cloud。"
 	],
 	"Ignore": [
 		"忽略"
@@ -1430,6 +1475,15 @@
 	"Import": [
 		"导入"
 	],
+	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+		""
+	],
+	"Import from JEX": [
+		""
+	],
+	"Import notes from a JEX (Joplin Export) file.": [
+		""
+	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		"从 “%s” 导入为 “%s” 格式 。请稍等..."
 	],
@@ -1437,7 +1491,7 @@
 		"正在导入笔记..."
 	],
 	"Imports data into Joplin.": [
-		"导入数据到 Jolin。"
+		"导入数据到 Joplin。"
 	],
 	"In \"Manual\" mode, attachments are downloaded only when you click on them. In \"Auto\", they are downloaded when you open the note. In \"Always\", all the attachments are downloaded whether you open the note or not.": [
 		"“手动” 模式下，仅在单击附件时才会下载。“自动” 模式下，打开笔记，其中的附件就会被全部下载。“总是” 模式下，无论是否打开笔记，所有的附件均会被下载。"
@@ -1465,6 +1519,9 @@
 	],
 	"In: %s": [
 		"已处理：%s"
+	],
+	"Incompatible": [
+		""
 	],
 	"Increase indent level": [
 		"增加缩进级别"
@@ -1544,6 +1601,12 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
+	"Joplin Cloud Login": [
+		"Joplin Cloud 登录"
+	],
+	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
+		""
+	],
 	"Joplin Export Directory": [
 		"Joplin 导出目录"
 	],
@@ -1583,6 +1646,9 @@
 	"Keep note history for": [
 		"保留笔记历史"
 	],
+	"Keep notes in the trash for": [
+		"将笔记移到回收站"
+	],
 	"Keyboard Mode": [
 		"键盘模式"
 	],
@@ -1614,7 +1680,7 @@
 		"稍后"
 	],
 	"Latitude": [
-		""
+		"纬度"
 	],
 	"Layout": [
 		"布局"
@@ -1636,6 +1702,9 @@
 	],
 	"Light": [
 		"明亮"
+	],
+	"Like any software you install, plugins can potentially cause security issues or data loss.": [
+		""
 	],
 	"Lines": [
 		"行"
@@ -1664,6 +1733,9 @@
 	"Loaded": [
 		"已加载"
 	],
+	"Loading plugin repository...": [
+		"正在加载插件库..."
+	],
 	"Loading...": [
 		"正在加载…"
 	],
@@ -1689,7 +1761,7 @@
 		"日志，配置文件与同步状态"
 	],
 	"Longitude": [
-		""
+		"经度"
 	],
 	"Make a donation": [
 		"捐助"
@@ -1755,7 +1827,7 @@
 		"媒体播放器，数学公式，图表等设置"
 	],
 	"Minimise": [
-		""
+		"最小化"
 	],
 	"Missing keys": [
 		"缺少密钥(keys)"
@@ -1781,8 +1853,14 @@
 	"More than one item match \"%s\". Please narrow down your query.": [
 		"不止一项匹配 “%s”。请缩小您的检索范围。"
 	],
+	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
 	"Move %d notes to notebook \"%s\"?": [
 		"是否移动 %d 条笔记到笔记本 “%s”？"
+	],
+	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
+		"是否将笔记本 “%s”移到回收站？\n\n所有该笔记本内的笔记和子笔记本也将同时被移到回收站。"
 	],
 	"Move to notebook": [
 		"移动到笔记本"
@@ -1804,6 +1882,9 @@
 	],
 	"Never resize": [
 		"从不缩放"
+	],
+	"New": [
+		""
 	],
 	"New note": [
 		"新建笔记"
@@ -1852,6 +1933,9 @@
 	],
 	"No active notebook.": [
 		"无有效的笔记本。"
+	],
+	"No incoming shares": [
+		""
 	],
 	"No item with ID %s": [
 		"没有 ID 为 %s 的项"
@@ -2075,6 +2159,15 @@
 	"Per user. Minimum of %d users.": [
 		"每个用户。至少有%d个用户。"
 	],
+	"Permanently delete note": [
+		"永久删除选中的笔记"
+	],
+	"Permanently delete note \"%s\"?": [
+		"是否永久删除笔记 “%s”？"
+	],
+	"Permanently delete these %d notes?": [
+		"是否永久删除这 %d 条笔记？"
+	],
 	"Permission needed": [
 		"需要权限"
 	],
@@ -2114,23 +2207,32 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"请指定导入笔记的目标笔记本。"
 	],
-	"Please upgrade Joplin to use this plugin": [
-		"请升级 Joplin 以使用此插件"
-	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"请等待所有附件均被下载并解密。您可以切换到 %s 编辑笔记。"
 	],
 	"Please wait...": [
 		"请稍候..."
 	],
+	"Plugin message": [
+		"插件消息"
+	],
 	"Plugin repository failed to load": [
-		""
+		"插件库加载失败"
+	],
+	"Plugin search": [
+		"插件搜索"
 	],
 	"Plugin tools": [
 		"插件工具"
 	],
+	"Plugin WebView debugging": [
+		""
+	],
 	"Plugins": [
 		"插件"
+	],
+	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
+		""
 	],
 	"Portrait": [
 		"竖版"
@@ -2191,6 +2293,9 @@
 	],
 	"Process user deletions": [
 		"处理用户删除"
+	],
+	"Processing": [
+		""
 	],
 	"Profile": [
 		"配置文件"
@@ -2261,6 +2366,9 @@
 	"Recipients:": [
 		"收件人："
 	],
+	"Recommended": [
+		"推荐"
+	],
 	"Redo": [
 		"恢复"
 	],
@@ -2309,6 +2417,12 @@
 	"Replace: ": [
 		"替换: "
 	],
+	"Report an issue": [
+		""
+	],
+	"Report fraudulent plugin": [
+		""
+	],
 	"Reset application layout": [
 		"重置应用布局"
 	],
@@ -2332,6 +2446,18 @@
 	],
 	"Restore": [
 		"恢复"
+	],
+	"Restore note": [
+		"恢复笔记"
+	],
+	"Restore notebook": [
+		"恢复笔记本"
+	],
+	"Restore the items matching <pattern> from the trash.": [
+		"恢复符合 <note-pattern> 的笔记。"
+	],
+	"Restored items": [
+		"已恢复的条目"
 	],
 	"Restored Notes": [
 		"已恢复的笔记"
@@ -2591,11 +2717,17 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"通过 <field> 排序条目（示例：title, updated_time, created_time）。"
 	],
+	"Source": [
+		"来源"
+	],
 	"Source format: %s": [
 		"原数据格式：%s"
 	],
 	"Source: ": [
 		"来源： "
+	],
+	"Spacer": [
+		""
 	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		"请指定 API 服务器应使用的端口。如果未设置，将使用默认值。"
@@ -2774,6 +2906,9 @@
 	"Take photo": [
 		"拍照"
 	],
+	"Task \"%s\" failed with error: %s": [
+		""
+	],
 	"Task list": [
 		"任务列表"
 	],
@@ -2864,6 +2999,12 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"笔记 “%s” 已成功恢复到笔记本 “%s” 中。"
 	],
+	"The note was successfully moved to the trash.": [
+		"已成功将笔记移到回收站中。"
+	],
+	"The notebook and its content was successfully moved to the trash.": [
+		"已成功将笔记本及其内容移到回收站中。"
+	],
 	"The notebook could not be saved: %s": [
 		"无法保存笔记本：%s"
 	],
@@ -2904,7 +3045,7 @@
 		"网页剪藏未启用。"
 	],
 	"The WebDAV implementation of %s is incompatible with Joplin, and as such is no longer supported. Please use a different sync method.": [
-		"%s的WebDAV工具与Joplin不兼容，因此不再受支持。请使用其他同步方法。"
+		"%s的 WebDAV 工具与 Joplin 不兼容，因此不再受支持。请使用其他同步方法。"
 	],
 	"Theme": [
 		"主题"
@@ -2918,9 +3059,6 @@
 	"There are unsaved changes.": [
 		"一些修改尚未保存。"
 	],
-	"There is currently no notebook. Create one by clicking on \"New notebook\".": [
-		"当前没有笔记本。点击 “新建笔记本” 创建。"
-	],
 	"There is no data to export.": [
 		"没有可导出的数据。"
 	],
@@ -2930,6 +3068,9 @@
 	"There was an error downloading this attachment:": [
 		"下载此附件时出错："
 	],
+	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
+		""
+	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"这些条目将只保留在本设备上，不会上传到同步目标。若需查找这些项，请搜索标题或 ID（显示在上方括号中）。"
 	],
@@ -2938,6 +3079,9 @@
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
 		"这允许其他用户与你共享笔记本，然后你们可以在笔记本上进行协作。但它不允许您与他人共享笔记本，除非您拥有\"%s\"功能。"
+	],
+	"This attachment does not have OCR data (Status: %s)": [
+		""
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"该附件没有下载或者尚未解密"
@@ -2975,11 +3119,17 @@
 	"This note has no history": [
 		"此笔记没有历史记录"
 	],
+	"This plugin doesn't support %s.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"此富文本编辑器有许多限制，建议在使用之前留意。"
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"该服务允许浏览器扩展插件与 Joplin 通信。当启用它时，您的防火墙可能会请求允许 Joplin 监听一个特定的端口。"
+	],
+	"This subfolder of the trash has no notes.": [
+		""
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
 		"这将允许 Joplin 在后台运行，如果您经常修改和同步笔记，推荐启用该设置来减少可能的冲突。"
@@ -2988,7 +3138,7 @@
 		"这将打开一个新页面。是否保存当前更改？"
 	],
 	"This will permanently delete all items in the trash. Continue?": [
-		""
+		"这将永久删除回收站中的所有条目。是否继续？"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"这将从您的收藏中删除该笔记本，您将不再有机会访问其内容。您希望继续吗？"
@@ -3004,6 +3154,9 @@
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"要让 Joplin 与 Dropbox 同步，请按下列步骤操作："
+	],
+	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
+		"要让 Joplin 与  Joplin Cloud 同步，请使用以下URL登录："
 	],
 	"To continue, please enter your master password below.": [
 		"若要继续，请在下面输入您的主密码(master password)。"
@@ -3039,6 +3192,9 @@
 		"本应用程序需要下列权限才能正常运作。请在您的手机设置（应用 > Joplin > 权限）中启用它们"
 	],
 	"to-do": [
+		"待办事项"
+	],
+	"To-do": [
 		"待办事项"
 	],
 	"to-do: %s": [
@@ -3090,7 +3246,7 @@
 		"总数：%d/%d 条"
 	],
 	"Trash": [
-		""
+		"回收站"
 	],
 	"Try again": [
 		"重试"
@@ -3115,9 +3271,6 @@
 	],
 	"Unable to edit resource of type %s": [
 		"无法编辑类型为 %s 的资源"
-	],
-	"Unable to export or share data. Reason: %s": [
-		"无法导出或共享数据。 原因：%s"
 	],
 	"Unable to share log data. Reason: %s": [
 		"发送日志数据失败: %s"
@@ -3245,6 +3398,9 @@
 	"View": [
 		"视图"
 	],
+	"View OCR text": [
+		""
+	],
 	"View on map": [
 		"在地图上查看"
 	],
@@ -3263,14 +3419,20 @@
 	"Voice typing...": [
 		"使用语音输入..."
 	],
+	"Waiting for authorisation...": [
+		"正在等待授权..."
+	],
 	"Warning": [
 		"警告"
 	],
 	"Warning: not all resources shown for performance reasons (limit: %s).": [
 		"警告：由于性能原因无法显示所有资源（最多：%s）。"
 	],
-	"Warnings:\n%s": [
-		"警告:\n%s"
+	"We have a system for reporting and removing problematic plugins.": [
+		""
+	],
+	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
+		""
 	],
 	"Web Clipper": [
 		"网页剪藏器"
@@ -3327,7 +3489,7 @@
 		"正在尝试将大图片 (%dx%d 像素) 添加到笔记中，是否要需要将其缩放为 %d 像素后再添加？"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
-		""
+		"您已登录到 Joplin Cloud，现在可以关闭此界面。"
 	],
 	"You currently have no notebooks.": [
 		"您当前没有笔记本。"
@@ -3340,6 +3502,12 @@
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"您可以使用下面的工具重新加密您的数据。例如当您知道某些笔记使用了过时的加密方法时，可使用该项目。"
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
+		"无法连接到 Joplin Cloud 。请检查您的凭据，然后重试。错误："
+	],
+	"Your account doesn't have access to this feature": [
+		""
 	],
 	"Your choice: ": [
 		"您的选择： "

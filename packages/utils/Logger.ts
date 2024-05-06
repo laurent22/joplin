@@ -104,6 +104,12 @@ class Logger {
 		this.globalLogger_ = logger;
 	}
 
+	public logFilePath() {
+		const fileTarget = this.targets().find(t => t.type === TargetType.File);
+		if (!fileTarget) return '';
+		return fileTarget.path || '';
+	}
+
 	public static get globalLogger(): Logger {
 		if (!this.globalLogger_) {
 			// The global logger normally is initialized early, so we shouldn't
@@ -171,7 +177,23 @@ class Logger {
 	public objectToString(object: any) {
 		let output = '';
 
-		if (typeof object === 'object') {
+		if (Array.isArray(object)) {
+			const serialized: string[] = [];
+			for (const e of object) {
+				serialized.push(this.objectToString(e));
+			}
+			output = `[${serialized.join(', ')}]`;
+		} else if (typeof object === 'string') {
+			output = object;
+		} else if (object === undefined) {
+			output = '<undefined>';
+		} else if (object === null) {
+			output = '<null>';
+		} else if (object === true) {
+			output = '<true>';
+		} else if (object === false) {
+			output = '<false>';
+		} else if (typeof object === 'object') {
 			if (object instanceof Error) {
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				object = object as any;
@@ -184,7 +206,7 @@ class Logger {
 				output = JSON.stringify(object);
 			}
 		} else {
-			output = object;
+			output = object.toString();
 		}
 
 		return output;
@@ -193,16 +215,10 @@ class Logger {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public objectsToString(...object: any[]) {
 		const output = [];
-		if (object.length === 1) {
-			// Quoting when there is only one argument can make the log more difficult to read,
-			// particularly when formatting is handled elsewhere.
-			output.push(this.objectToString(object[0]));
-		} else {
-			for (let i = 0; i < object.length; i++) {
-				output.push(`"${this.objectToString(object[i])}"`);
-			}
+		for (let i = 0; i < object.length; i++) {
+			output.push(this.objectToString(object[i]));
 		}
-		return output.join(', ');
+		return output.join(' ');
 	}
 
 	public static databaseCreateTableSql() {
@@ -252,13 +268,23 @@ class Logger {
 		return this.level();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public log(level: LogLevel, prefix: string | null, ...object: any[]) {
+	private logInfoToString(level: LogLevel, prefix: string | null, ...object: unknown[]) {
+		const timestamp = moment().format('YYYY-MM-DD HH:mm:ss');
+		const line = [timestamp];
+		if (prefix) line.push(prefix);
+		const levelString = [LogLevel.Error, LogLevel.Warn].includes(level) ? `[${Logger.levelIdToString(level)}] ` : '';
+		line.push((levelString ? levelString : '') + this.objectsToString(...object));
+		return `${line.join(': ')}`;
+	}
+
+	public log(level: LogLevel, prefix: string | null, ...object: unknown[]) {
 		if (!this.targets_.length || !this.enabled) return;
+
+		let logLine = '';
 
 		for (let i = 0; i < this.targets_.length; i++) {
 			const target = this.targets_[i];
-			const targetPrefix = prefix ? prefix : target.prefix;
+			const targetPrefix = prefix ? prefix : (target.prefix || '');
 
 			if (this.targetLevel(target) < level) continue;
 
@@ -285,15 +311,12 @@ class Logger {
 				} else {
 					const prefixItems = [moment().format('HH:mm:ss')];
 					if (targetPrefix) prefixItems.push(targetPrefix);
-					items = [`${prefixItems.join(': ')}:`].concat(...object);
+					items = [`${prefixItems.join(': ')}:` as unknown].concat(...object);
 				}
 
 				consoleObj[fn](...items);
 			} else if (target.type === 'file') {
-				const timestamp = moment().format('YYYY-MM-DD HH:mm:ss');
-				const line = [timestamp];
-				if (targetPrefix) line.push(targetPrefix);
-				line.push(this.objectsToString(...object));
+				logLine = this.logInfoToString(level, targetPrefix, ...object);
 
 				// Write to file using a mutex so that log entries appear in the
 				// correct order (otherwise, since the async call is not awaited
@@ -307,7 +330,7 @@ class Logger {
 				/* eslint-disable-next-line promise/prefer-await-to-then, @typescript-eslint/ban-types -- Old code before rule was applied, Old code before rule was applied */
 				writeToFileMutex_.acquire().then((r: Function) => {
 					release = r;
-					return Logger.fsDriver().appendFile(target.path as string, `${line.join(': ')}\n`, 'utf8');
+					return Logger.fsDriver().appendFile(target.path as string, `${logLine}\n`, 'utf8');
 					// eslint-disable-next-line promise/prefer-await-to-then, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 				}).catch((error: any) => {
 					console.error('Cannot write to log file:', error);

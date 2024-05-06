@@ -12,9 +12,12 @@ import waitForCliInput from './utils/waitForCliInput';
 import getPathToPatchFileFor from './utils/getPathToPatchFileFor';
 import getCurrentCommitHash from './utils/getCurrentCommitHash';
 
-type BeforeEachInstallCallback = (buildDir: string, pluginName: string)=> Promise<void>;
+interface Options {
+	beforeInstall: (buildDir: string, pluginName: string)=> Promise<void>;
+	beforePatch: ()=> Promise<void>;
+}
 
-const buildDefaultPlugins = async (outputParentDir: string|null, beforeInstall: BeforeEachInstallCallback) => {
+const buildDefaultPlugins = async (outputParentDir: string|null, options: Options) => {
 	const pluginSourcesDir = resolve(join(__dirname, 'plugin-sources'));
 	const pluginRepositoryData = await readRepositoryJson(join(__dirname, 'pluginRepositories.json'));
 
@@ -71,11 +74,8 @@ const buildDefaultPlugins = async (outputParentDir: string|null, beforeInstall: 
 			logStatus('Initializing repository.');
 			await execCommand('git init . -b main');
 
-			logStatus('Creating initial commit.');
-			await execCommand('git add .');
-			await execCommand(['git', 'config', 'user.name', 'Build script']);
-			await execCommand(['git', 'config', 'user.email', '']);
-			await execCommand(['git', 'commit', '-m', 'Initial commit']);
+			logStatus('Running before-patch hook.');
+			await options.beforePatch();
 
 			const patchFile = getPathToPatchFileFor(pluginId);
 			if (await exists(patchFile)) {
@@ -83,7 +83,7 @@ const buildDefaultPlugins = async (outputParentDir: string|null, beforeInstall: 
 				await execCommand(['git', 'apply', patchFile]);
 			}
 
-			await beforeInstall(buildDir, pluginId);
+			await options.beforeInstall(buildDir, pluginId);
 
 			logStatus('Installing dependencies.');
 			await execCommand('npm install');

@@ -62,6 +62,9 @@
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		""
 	],
+	"%s tab opened": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -152,6 +155,9 @@
 	"Accept": [
 		"Aceptar"
 	],
+	"Accepted shares": [
+		""
+	],
 	"Access denied: Please check your username and password": [
 		""
 	],
@@ -206,11 +212,17 @@
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"Todos los datos, incluyendo notas, libretas y etiquetas, serán borrados."
 	],
+	"All item sync failures have been marked as \"ignored\".": [
+		""
+	],
 	"All notes": [
 		"Todas las notas"
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Todos los puertos potenciales están en uso - por favor informe del problema en %s"
+	],
+	"Allows debugging mobile plugins. See %s for details.": [
+		""
 	],
 	"Also displays unset and hidden config variables.": [
 		"También muestra variables no configuradas u ocultas."
@@ -220,6 +232,9 @@
 	],
 	"Always": [
 		"Siempre"
+	],
+	"Always open %s files without asking.": [
+		""
 	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
 		"Libreta \"%s\" es ambigua. Utilice el id de la libreta - presione \"ti\" para ver el id abreviado o utilice $b para la libreta seleccionada"
@@ -340,6 +355,9 @@
 	],
 	"Bulleted List": [
 		"Lista con Viñetas"
+	],
+	"by %s": [
+		""
 	],
 	"Can Share": [
 		"Puede compartir"
@@ -503,8 +521,14 @@
 	"Completed decryption.": [
 		"Descifrado completado."
 	],
+	"Completed with warnings:\n%s": [
+		""
+	],
 	"Completed: %s (%s)": [
 		"Completado: %s (%s)"
+	],
+	"completion date": [
+		""
 	],
 	"Compress old changes": [
 		"Comprimir cambios antiguos"
@@ -681,9 +705,6 @@
 	"Dashboard": [
 		"Tablero de Mandos"
 	],
-	"Database v%s": [
-		"Base de datos v%s"
-	],
 	"Date": [
 		"Fecha"
 	],
@@ -752,6 +773,9 @@
 	],
 	"Deleted remote items: %d.": [
 		"Elementos remotos borrados: %d."
+	],
+	"Deletes notes permanently, skipping the trash.": [
+		""
 	],
 	"Deletes the given notebook.": [
 		"Elimina la libreta dada."
@@ -1143,6 +1167,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"A prueba de fallos: No borre los datos locales cuando el objetivo de sincronización esté vacío (a menudo como resultado de una configuración errónea o de una falla)."
 	],
+	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
+		""
+	],
 	"Fatal error:": [
 		"Error fatal:"
 	],
@@ -1187,9 +1214,6 @@
 	],
 	"Focus title": [
 		"Enfocar título"
-	],
-	"Folders": [
-		"Carpetas"
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Solo para fines de depuración: exporte su perfil a una tarjeta SD externa."
@@ -1273,6 +1297,9 @@
 	"Help": [
 		"Ayuda"
 	],
+	"Here's what we do to make plugins safer:": [
+		""
+	],
 	"Hide %s": [
 		"Ocultar %s"
 	],
@@ -1339,6 +1366,18 @@
 	"Import": [
 		"Importar"
 	],
+	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+		""
+	],
+	"Import from JEX": [
+		""
+	],
+	"Import notes from a JEX (Joplin Export) file.": [
+		""
+	],
+	"Imported successfully!": [
+		""
+	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		"Importando desde «%s» como formato «%s». Por favor espere..."
 	],
@@ -1374,6 +1413,9 @@
 	],
 	"In: %s": [
 		"En: %s"
+	],
+	"Incompatible": [
+		""
 	],
 	"Increase indent level": [
 		"Aumentar un nivel de sangría"
@@ -1452,6 +1494,9 @@
 	],
 	"Joplin Cloud": [
 		"Joplin Cloud"
+	],
+	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
+		""
 	],
 	"Joplin Export Directory": [
 		"Directorio de Exportación de Joplin"
@@ -1542,6 +1587,9 @@
 	],
 	"Light": [
 		"Claro"
+	],
+	"Like any software you install, plugins can potentially cause security issues or data loss.": [
+		""
 	],
 	"Lines": [
 		"Líneas"
@@ -1682,6 +1730,9 @@
 	"More than one item match \"%s\". Please narrow down your query.": [
 		"Hay más de un elemento que coincide con «%s». Intente mejorar su consulta."
 	],
+	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
 	"Move %d notes to notebook \"%s\"?": [
 		"¿Desea mover %d notas a libreta «%s»?"
 	],
@@ -1704,6 +1755,9 @@
 		"N"
 	],
 	"Never resize": [
+		""
+	],
+	"New": [
 		""
 	],
 	"New note": [
@@ -1753,6 +1807,9 @@
 	],
 	"No active notebook.": [
 		"No hay libreta activa."
+	],
+	"No incoming shares": [
+		""
 	],
 	"No item with ID %s": [
 		"No hay elementos con el ID %s"
@@ -2012,9 +2069,6 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"Por favor especifique la libreta donde las notas deben ser importadas."
 	],
-	"Please upgrade Joplin to use this plugin": [
-		"Por favor, actualice Joplin para usar este plugin"
-	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Por favor espere a que todos los adjuntos hayan sido descargados y descifrados. Puede también cambiar a %s para editar la nota."
 	],
@@ -2027,8 +2081,14 @@
 	"Plugin tools": [
 		"Herramientas de Plugin"
 	],
+	"Plugin WebView debugging": [
+		""
+	],
 	"Plugins": [
 		"Plugins"
+	],
+	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
+		""
 	],
 	"Portrait": [
 		"Vertical"
@@ -2089,6 +2149,9 @@
 	],
 	"Process user deletions": [
 		"Procesar eliminaciones de usuarios"
+	],
+	"Processing": [
+		""
 	],
 	"Profile": [
 		"Perfil"
@@ -2206,6 +2269,12 @@
 	],
 	"Replace: ": [
 		"Reemplazar: "
+	],
+	"Report an issue": [
+		""
+	],
+	"Report fraudulent plugin": [
+		""
 	],
 	"Reset master password": [
 		"Restablecer contraseña maestra"
@@ -2468,6 +2537,9 @@
 	"Source: ": [
 		"Origen: "
 	],
+	"Spacer": [
+		""
+	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		"Especifique el puerto que debe utilizar el servidor de la API. Si no está configurado, se utilizará un valor predeterminado."
 	],
@@ -2642,6 +2714,9 @@
 	"Take photo": [
 		"Tomar una foto"
 	],
+	"Task \"%s\" failed with error: %s": [
+		""
+	],
 	"Task list": [
 		"Lista de tareas"
 	],
@@ -2771,9 +2846,6 @@
 	"There are unsaved changes.": [
 		"Hay cambios sin guardar."
 	],
-	"There is currently no notebook. Create one by clicking on \"New notebook\".": [
-		"No hay ninguna libreta. Cree una haciendo clic en «Libreta nueva»."
-	],
 	"There is no data to export.": [
 		"No hay datos para exportar."
 	],
@@ -2783,6 +2855,9 @@
 	"There was an error downloading this attachment:": [
 		"Ha habido un error al descargar este adjunto:"
 	],
+	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
+		""
+	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Estos elementos se mantendrán en el dispositivo pero no serán subidos al objetivo de sincronización. Para encontrar dichos elementos, busque su título o su ID (el cual se muestra arriba entre corchetes)."
 	],
@@ -2790,6 +2865,9 @@
 		"Estos plugins mejoran el renderizador de Markdown con características adicionales. Tenga en cuenta que, si bien estas características pueden ser útiles, no son Markdown estándar y, por lo tanto, la mayoría de ellas solo funcionarán en Joplin. Además, algunas de ellas son *incompatibles* con el editor WYSIWYG. Si abre una nota que usa uno de estos complementos en ese editor, perderá el formato del complemento. A continuación se indica qué complementos son compatibles o no con el editor WYSIWYG."
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
+		""
+	],
+	"This attachment does not have OCR data (Status: %s)": [
 		""
 	],
 	"This attachment is not downloaded or not decrypted yet": [
@@ -2816,11 +2894,17 @@
 	"This note has no history": [
 		"Esta nota no tiene historial"
 	],
+	"This plugin doesn't support %s.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Este editor de Texto Enriquecido tiene ciertas limitaciones y se recomienda estar consciente de estas antes de usarlo."
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"Este servicio le permite a la extensión de navegador comunicarse con Joplin. Cuando lo habilite, su cortafuegos solicitarle permisos para que Joplin escuche un puerto en particular."
+	],
+	"This subfolder of the trash has no notes.": [
+		""
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
 		"Esto permitirá que Joplin se ejecute en segundo plano. Se recomienda habilitar esta configuración para que sus notas estén sincronizadas constantemente, reduciendo así el número de conflictos."
@@ -2954,9 +3038,6 @@
 	"Unable to edit resource of type %s": [
 		""
 	],
-	"Unable to export or share data. Reason: %s": [
-		""
-	],
 	"Unable to share log data. Reason: %s": [
 		""
 	],
@@ -3083,6 +3164,9 @@
 	"View": [
 		"Ver"
 	],
+	"View OCR text": [
+		""
+	],
 	"View on map": [
 		"Ver en mapa"
 	],
@@ -3106,6 +3190,12 @@
 	],
 	"Warning: not all resources shown for performance reasons (limit: %s).": [
 		"Advertencia: no se muestran todos los recursos por razones de rendimiento (límite: %s)."
+	],
+	"We have a system for reporting and removing problematic plugins.": [
+		""
+	],
+	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
+		""
 	],
 	"Web Clipper": [
 		"Web Clipper"
@@ -3172,6 +3262,9 @@
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Puede utilizar la siguiente herramienta para volver a cifrar sus datos, por ejemplo, si sabe que algunas de sus notas están cifradas con un método de cifrado obsoleto."
+	],
+	"Your account doesn't have access to this feature": [
+		""
 	],
 	"Your choice: ": [
 		"Su elección: "

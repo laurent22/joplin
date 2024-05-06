@@ -35,12 +35,8 @@ export interface PdfInfo {
 }
 
 export interface Implementation {
-	nativeImage: {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		createFromPath: (path: string)=> Promise<any>;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		createFromPdf: (path: string, options: CreateFromPdfOptions)=> Promise<any[]>;
-	};
+	createFromPath: (path: string)=> Promise<unknown>;
+	createFromPdf: (path: string, options: CreateFromPdfOptions)=> Promise<unknown[]>;
 	getPdfInfo: (path: string)=> Promise<PdfInfo>;
 }
 
@@ -118,8 +114,13 @@ export default class JoplinImaging {
 	// 	return this.cacheImage(this.implementation_.nativeImage.createFromBuffer(buffer, options));
 	// }
 
+	/**
+	 * Creates an image from the provided path. Note that images and PDFs are supported. If you
+	 * provide a URL instead of a local path, the file will be downloaded first then converted to an
+	 * image.
+	 */
 	public async createFromPath(filePath: string): Promise<Handle> {
-		return this.cacheImage(await this.implementation_.nativeImage.createFromPath(filePath));
+		return this.cacheImage(await this.implementation_.createFromPath(filePath));
 	}
 
 	public async createFromResource(resourceId: string): Promise<Handle> {
@@ -127,7 +128,7 @@ export default class JoplinImaging {
 	}
 
 	public async createFromPdfPath(path: string, options?: CreateFromPdfOptions): Promise<Handle[]> {
-		const images = await this.implementation_.nativeImage.createFromPdf(path, options);
+		const images = await this.implementation_.createFromPdf(path, options);
 		return images.map(image => this.cacheImage(image));
 	}
 

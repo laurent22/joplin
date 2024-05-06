@@ -65,6 +65,9 @@
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s tidak dioptimalkan untuk menyelaraskan banyak berkas kecil sehingga penyelarasan awal akan menjadi lambat."
 	],
+	"%s tab opened": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -78,7 +81,7 @@
 		"%s: %s"
 	],
 	"%s: Missing password.": [
-		"%s: membutuhkan kata sandi."
+		"%s: Kata sandi terlewatkan."
 	],
 	"&Edit": [
 		"&Sunting"
@@ -100,6 +103,9 @@
 	],
 	"&View": [
 		"&Tampilan"
+	],
+	"&Window": [
+		"&Jendela"
 	],
 	"(%s)": [
 		"(%s)"
@@ -141,7 +147,7 @@
 		"A5"
 	],
 	"About": [
-		""
+		"Tentang"
 	],
 	"About Joplin": [
 		"Tentang Joplin"
@@ -157,6 +163,9 @@
 	],
 	"Accept": [
 		"Terima"
+	],
+	"Accepted shares": [
+		""
 	],
 	"Access denied: Please check your username and password": [
 		"Akses ditolak: Periksa nama pengguna dan kata sandi Anda"
@@ -212,11 +221,17 @@
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"Semua data, termasuk catatan, buku catatan dan label akan dihapus selamanya."
 	],
+	"All item sync failures have been marked as \"ignored\".": [
+		""
+	],
 	"All notes": [
 		"Semua catatan"
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Semua porta yang memungkinkan sedang digunakan - silakan laporkan masalah ini di %s"
+	],
+	"Allows debugging mobile plugins. See %s for details.": [
+		""
 	],
 	"Also displays unset and hidden config variables.": [
 		"Tampilkan juga variabel pengaturan yang belum disetel dan yang tersembunyi."
@@ -229,6 +244,9 @@
 	],
 	"Always ask": [
 		"Selalu minta"
+	],
+	"Always open %s files without asking.": [
+		""
 	],
 	"Always resize": [
 		"Selalu sesuaikan"
@@ -311,6 +329,9 @@
 	"Authorisation token:": [
 		"Token otorisasi:"
 	],
+	"Authorise": [
+		"Otorisasikan"
+	],
 	"Auto": [
 		"Otomatis"
 	],
@@ -324,7 +345,7 @@
 		"Periksa pembaruan secara otomatis"
 	],
 	"Automatically delete notes in the trash after a number of days": [
-		""
+		"Hapus catatan secara otomatis di tempat sampah setelah beberapa hari"
 	],
 	"Automatically switch theme to match system theme": [
 		"Alihkan tema agar sesuai dengan tema sistem secara otomatis"
@@ -352,6 +373,9 @@
 	],
 	"Bulleted List": [
 		"Daftar berpoin"
+	],
+	"by %s": [
+		""
 	],
 	"Can Share": [
 		"Dapat membagikan"
@@ -474,7 +498,7 @@
 		"Tutup"
 	],
 	"Close dropdown": [
-		"Tutup tarik-turun"
+		"Tutup senarai"
 	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		"Tutup aplikasi, kemudian hapus profil Anda pada “%s”, dan buka aplikasi kembali. Pastikan Anda membuat cadangan sebelumnya dengan mengekspor semua catatan Anda sebagai JEX."
@@ -527,8 +551,14 @@
 	"Completed decryption.": [
 		"Proses dekripsi selesai."
 	],
+	"Completed with warnings:\n%s": [
+		""
+	],
 	"Completed: %s (%s)": [
 		"Selesai: %s (%s)"
+	],
+	"completion date": [
+		""
 	],
 	"Compress old changes": [
 		"Mampatkan perubahan lama"
@@ -560,6 +590,9 @@
 	"Content provided by %s": [
 		"Konten disediakan oleh %s"
 	],
+	"Content provided by: %s": [
+		"Konten disediakan oleh: %s"
+	],
 	"Continue": [
 		"Lanjutkan"
 	],
@@ -586,6 +619,9 @@
 	],
 	"Copy Link Address": [
 		"Salin Alamat Tautan"
+	],
+	"Copy link to website": [
+		"Salin tautan ke situs web"
 	],
 	"Copy Markdown link": [
 		"Salin tautan Markdown"
@@ -722,9 +758,6 @@
 	"Dashboard": [
 		"Dasbor"
 	],
-	"Database v%s": [
-		"Basis data v%s"
-	],
 	"Date": [
 		"Tanggal"
 	],
@@ -794,11 +827,17 @@
 	"Delete this profile?": [
 		"Hapus profil ini?"
 	],
+	"Deleted": [
+		"Dihapus"
+	],
 	"Deleted local items: %d.": [
 		"Item lokal yang dihapus: %d."
 	],
 	"Deleted remote items: %d.": [
 		"Item jarak jauh yang dihapus: %d."
+	],
+	"Deletes notes permanently, skipping the trash.": [
+		""
 	],
 	"Deletes the given notebook.": [
 		"Menghapus buku catatan yang diberikan."
@@ -936,7 +975,7 @@
 		"Masuk dengan Dropbox"
 	],
 	"Due": [
-		""
+		"Jatuh tempo"
 	],
 	"Duplicate": [
 		"Gandakan"
@@ -1017,7 +1056,7 @@
 		"teks yang ditekankan"
 	],
 	"Empty trash": [
-		""
+		"Kosongkan tempat sampah"
 	],
 	"Enable": [
 		"Nyalakan"
@@ -1072,6 +1111,9 @@
 	],
 	"Enable optical character recognition (OCR)": [
 		"Nyalakan pengenalan karakter optik (OCR)"
+	],
+	"Enable or disable plugins": [
+		"Nyalakan atau matikan plugin"
 	],
 	"Enable PDF viewer": [
 		"Nyalakan penampil PDF"
@@ -1196,9 +1238,6 @@
 	"Export profile": [
 		"Ekspor profil"
 	],
-	"Export your data": [
-		"Ekspor data Anda"
-	],
 	"Exported successfully!": [
 		"Telah diekspor dengan sukses!"
 	],
@@ -1225,6 +1264,9 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Gagal-aman: Jangan menghapus data lokal ketika sasaran penyelarasan sedang kosong (seringkali akibat kesalahan konfigurasi atau bug)"
+	],
+	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
+		""
 	],
 	"Fatal error:": [
 		"Galat fatal:"
@@ -1274,9 +1316,6 @@
 	"Focus title": [
 		"Fokus pada judul"
 	],
-	"Folders": [
-		"Folder"
-	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Hanya untuk keperluan debugging: ekspor profil Anda ke kartu SD eksternal."
 	],
@@ -1303,6 +1342,9 @@
 	],
 	"Found: %d.": [
 		"Ditemukan: %d."
+	],
+	"From a plugin": [
+		"Dari sebuah plugin"
 	],
 	"FTS enabled: %d": [
 		"FTS dinyalakan: %d"
@@ -1344,7 +1386,7 @@
 		"Berikan otorisasi"
 	],
 	"Have you authorised the application login in the above URL?": [
-		""
+		"Sudahkah Anda memberikan izin masuk aplikasi dari URL di atas?"
 	],
 	"Header %d": [
 		"Tajuk %d"
@@ -1357,6 +1399,9 @@
 	],
 	"Help": [
 		"Bantuan"
+	],
+	"Here's what we do to make plugins safer:": [
+		""
 	],
 	"Hermes enabled: %d": [
 		"Hermes dinyalakan: %d"
@@ -1416,7 +1461,7 @@
 		"Menganggur"
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
-		""
+		"Jika Anda telah memberi izin, silakan tunggu aplikasi menyelaraskan ke Joplin Cloud."
 	],
 	"Ignore": [
 		"Abaikan"
@@ -1429,6 +1474,15 @@
 	],
 	"Import": [
 		"Impor"
+	],
+	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+		""
+	],
+	"Import from JEX": [
+		""
+	],
+	"Import notes from a JEX (Joplin Export) file.": [
+		""
 	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		"Mengimpor dari \"%s\" sebagai format \"%s\". Mohon tunggu..."
@@ -1465,6 +1519,9 @@
 	],
 	"In: %s": [
 		"Di: %s"
+	],
+	"Incompatible": [
+		""
 	],
 	"Increase indent level": [
 		"Naikkan tingkat indentasi"
@@ -1544,6 +1601,12 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
+	"Joplin Cloud Login": [
+		"Masuk Joplin Cloud"
+	],
+	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
+		""
+	],
 	"Joplin Export Directory": [
 		"Direktori Ekspor Joplin"
 	],
@@ -1583,6 +1646,9 @@
 	"Keep note history for": [
 		"Simpan riwayat catatan untuk"
 	],
+	"Keep notes in the trash for": [
+		"Simpan catatan di tempat sampah untuk"
+	],
 	"Keyboard Mode": [
 		"Mode Papan Ketik"
 	],
@@ -1614,7 +1680,7 @@
 		"Nanti"
 	],
 	"Latitude": [
-		""
+		"Garis lintang"
 	],
 	"Layout": [
 		"Tata letak"
@@ -1636,6 +1702,9 @@
 	],
 	"Light": [
 		"Terang"
+	],
+	"Like any software you install, plugins can potentially cause security issues or data loss.": [
+		""
 	],
 	"Lines": [
 		"Garis"
@@ -1664,6 +1733,9 @@
 	"Loaded": [
 		"Termuat"
 	],
+	"Loading plugin repository...": [
+		"Memuat repositori plugin…"
+	],
 	"Loading...": [
 		"Memuat…"
 	],
@@ -1689,7 +1761,7 @@
 		"Log, profil, status penyelarasan"
 	],
 	"Longitude": [
-		""
+		"Garis bujur"
 	],
 	"Make a donation": [
 		"Berikan sumbangan"
@@ -1755,7 +1827,7 @@
 		"Pemutar media, matematika, diagram, daftar isi"
 	],
 	"Minimise": [
-		""
+		"Kecilkan"
 	],
 	"Missing keys": [
 		"Kunci yang hilang"
@@ -1781,8 +1853,14 @@
 	"More than one item match \"%s\". Please narrow down your query.": [
 		"Lebih dari satu benda cocok dengan \"%s\". Silakan persempit pencarian Anda."
 	],
+	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
 	"Move %d notes to notebook \"%s\"?": [
 		"Pindahkan %d catatan ke buku catatan \"%s\"?"
+	],
+	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
+		"Pindahkan buku catatan \"%s\" ke tempat sampah?\n\nSemua catatan dan sub-buku catatan dalam buku catatan ini juga akan dipindahkan ke tempat sampah."
 	],
 	"Move to notebook": [
 		"Pindahkan ke buku catatan"
@@ -1804,6 +1882,9 @@
 	],
 	"Never resize": [
 		"Jangan pernah ukur ulang"
+	],
+	"New": [
+		""
 	],
 	"New note": [
 		"Catatan baru"
@@ -1852,6 +1933,9 @@
 	],
 	"No active notebook.": [
 		"Tidak ada buku catatan yang aktif."
+	],
+	"No incoming shares": [
+		""
 	],
 	"No item with ID %s": [
 		"Tidak ada benda dengan ID %s"
@@ -2075,6 +2159,15 @@
 	"Per user. Minimum of %d users.": [
 		"Tiap pengguna. Minimal %d pengguna."
 	],
+	"Permanently delete note": [
+		"Hapus catatan selamanya"
+	],
+	"Permanently delete note \"%s\"?": [
+		"Hapus catatan \"%s\" selamanya?"
+	],
+	"Permanently delete these %d notes?": [
+		"Hapus %d catatan tersebut selamanya?"
+	],
 	"Permission needed": [
 		"Perlu izin"
 	],
@@ -2114,23 +2207,32 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"Silakan tentukan di buku catatan mana catatan akan diimpor."
 	],
-	"Please upgrade Joplin to use this plugin": [
-		"Silakan tingkatkan Joplin untuk menggunakan plugin ini"
-	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Silakan tunggu sampai semua lampiran telah diunduh dan didekripsi. Anda juga bisa beralih ke %s untuk menyunting catatan."
 	],
 	"Please wait...": [
 		"Mohon tunggu..."
 	],
+	"Plugin message": [
+		"Pesan plugin"
+	],
 	"Plugin repository failed to load": [
-		""
+		"Repositori plugin gagal dimuat"
+	],
+	"Plugin search": [
+		"Cari plugin"
 	],
 	"Plugin tools": [
 		"Perkakas plugin"
 	],
+	"Plugin WebView debugging": [
+		""
+	],
 	"Plugins": [
 		"Plugin"
+	],
+	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
+		""
 	],
 	"Portrait": [
 		"Tegak"
@@ -2191,6 +2293,9 @@
 	],
 	"Process user deletions": [
 		"Memproses penghapusan pengguna"
+	],
+	"Processing": [
+		""
 	],
 	"Profile": [
 		"Profil"
@@ -2261,6 +2366,9 @@
 	"Recipients:": [
 		"Penerima:"
 	],
+	"Recommended": [
+		"Disarankan"
+	],
 	"Redo": [
 		"Ulangi"
 	],
@@ -2309,6 +2417,12 @@
 	"Replace: ": [
 		"Ganti: "
 	],
+	"Report an issue": [
+		""
+	],
+	"Report fraudulent plugin": [
+		""
+	],
 	"Reset application layout": [
 		"Atur ulang tata letak aplikasi"
 	],
@@ -2332,6 +2446,18 @@
 	],
 	"Restore": [
 		"Pulihkan"
+	],
+	"Restore note": [
+		"Pulihkan catatan"
+	],
+	"Restore notebook": [
+		"Pulihkan buku catatan"
+	],
+	"Restore the items matching <pattern> from the trash.": [
+		"Pulihkan benda yang cocok dengan <note-pattern> dari tempat sampah."
+	],
+	"Restored items": [
+		"Benda yang Dipulihkan"
 	],
 	"Restored Notes": [
 		"Catatan yang Dipulihkan"
@@ -2600,6 +2726,9 @@
 	"Source: ": [
 		"Sumber: "
 	],
+	"Spacer": [
+		""
+	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		"Tentukan port yang akan digunakan oleh server API. Jika tidak disetel, maka pengaturan bawaan akan digunakan."
 	],
@@ -2777,6 +2906,9 @@
 	"Take photo": [
 		"Ambil foto"
 	],
+	"Task \"%s\" failed with error: %s": [
+		""
+	],
 	"Task list": [
 		"Daftar tugas"
 	],
@@ -2867,6 +2999,12 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"Catatan \"%s\" telah berhasil dipulihkan ke buku catatan \"%s\"."
 	],
+	"The note was successfully moved to the trash.": [
+		"Catatan telah berhasil dipindahkan ke tempat sampah."
+	],
+	"The notebook and its content was successfully moved to the trash.": [
+		"Buku catatan dan isinya telah berhasil dipindahkan ke tempat sampah."
+	],
 	"The notebook could not be saved: %s": [
 		"Buku catatan tidak dapat disimpan: %s"
 	],
@@ -2921,9 +3059,6 @@
 	"There are unsaved changes.": [
 		"Ada perubahan yang belum tersimpan."
 	],
-	"There is currently no notebook. Create one by clicking on \"New notebook\".": [
-		"Saat ini belum ada buku catatan. Buat satu dengan menekan  pada \"Buku catatan baru\"."
-	],
 	"There is no data to export.": [
 		"Tidak ada data untuk diekspor."
 	],
@@ -2933,6 +3068,9 @@
 	"There was an error downloading this attachment:": [
 		"Terjadi galat saat mengunduh lampiran ini:"
 	],
+	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
+		""
+	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Benda berikut akan tetap berada di perangkat tetapi tidak akan diunggah ke sasaran penyelarasan. Untuk menemukan benda berikut, cari judulnya atau ID (yang ditampilkan dalam tanda kurung di atas)."
 	],
@@ -2941,6 +3079,9 @@
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
 		"Ini memungkinkan pengguna lain untuk berbagi sebuah buku catatan dengan Anda, dan kemudian Anda berdua dapat bekerja bersama padanya. Namun itu tidak membolehkan Anda untuk berbagi sebuah buku catatan dengan orang lain, kecuali Anda memiliki kemampuan “%s”."
+	],
+	"This attachment does not have OCR data (Status: %s)": [
+		""
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Lampiran ini belum diunduh atau belum didekripsi"
@@ -2978,11 +3119,17 @@
 	"This note has no history": [
 		"Catatan ini tidak memiliki riwayat"
 	],
+	"This plugin doesn't support %s.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Penyunting Rich Text ini memiliki beberapa batasan dan disarankan untuk menyadarinya sebelum menggunakannya."
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"Layanan ini mengizinkan ekstensi peramban untuk berkomunikasi dengan Joplin. Ketika menyalakannya firewall Anda mungkin akan meminta Anda untuk memberi izin kepada Joplin untuk mendengarkan port tertentu."
+	],
+	"This subfolder of the trash has no notes.": [
+		""
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
 		"Ini akan mengizinkan Joplin berjalan di latar belakang. Disarankan untuk menyalakan pengaturan ini agar catatan Anda terus diselaraskan, sehingga mengurangi jumlah perbedaan."
@@ -2991,7 +3138,7 @@
 		"Ini akan membuka layar baru. Simpan perubahan Anda saat ini?"
 	],
 	"This will permanently delete all items in the trash. Continue?": [
-		""
+		"Ini akan menghapus semua benda di tempat sampah selamanya. Lanjutkan?"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Ini akan menghapus buku catatan dari koleksi Anda dan Anda tidak akan memiliki akses lagi ke isinya. Apakah Anda ingin melanjutkan?"
@@ -3007,6 +3154,9 @@
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"Untuk mengizinkan Joplin menyelaraskan dengan Dropbox, silakan ikuti langkah-langkah berikut:"
+	],
+	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
+		"Untuk mengizinkan Joplin menyelaraskan dengan Joplin Cloud, silakan masuk dengan URL berikut:"
 	],
 	"To continue, please enter your master password below.": [
 		"Untuk melanjutkan, silakan masukkan kata sandi utama di bawah."
@@ -3043,6 +3193,9 @@
 	],
 	"to-do": [
 		"tugas"
+	],
+	"To-do": [
+		"Tugas"
 	],
 	"to-do: %s": [
 		"tugas: %s"
@@ -3093,7 +3246,7 @@
 		"Jumlah: %d/%d"
 	],
 	"Trash": [
-		""
+		"Tempat sampah"
 	],
 	"Try again": [
 		"Coba lagi"
@@ -3118,9 +3271,6 @@
 	],
 	"Unable to edit resource of type %s": [
 		"Tidak dapat menyunting sumber daya dari jenis %s"
-	],
-	"Unable to export or share data. Reason: %s": [
-		"Tidak dapat mengekspor atau membagikan data. Alasan: %s"
 	],
 	"Unable to share log data. Reason: %s": [
 		"Tidak dapat membagikan data log. Alasan: %s"
@@ -3248,6 +3398,9 @@
 	"View": [
 		"Tampilan"
 	],
+	"View OCR text": [
+		""
+	],
 	"View on map": [
 		"Lihat di peta"
 	],
@@ -3266,14 +3419,20 @@
 	"Voice typing...": [
 		"Pengetikan suara…"
 	],
+	"Waiting for authorisation...": [
+		"Sedang menunggu otorisasi…"
+	],
 	"Warning": [
 		"Peringatan"
 	],
 	"Warning: not all resources shown for performance reasons (limit: %s).": [
 		"Peringatan: tidak semua sumber daya ditampilkan karena alasan kinerja (batas: %s)."
 	],
-	"Warnings:\n%s": [
-		"Peringatan:\n%s"
+	"We have a system for reporting and removing problematic plugins.": [
+		""
+	],
+	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
+		""
 	],
 	"Web Clipper": [
 		"Web Clipper"
@@ -3330,7 +3489,7 @@
 		"Anda akan melampirkan gambar besar (%dx%d piksel). Apakah Anda ingin mengubah ukurannya hingga %d piksel sebelum melampirkannya?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
-		""
+		"Anda telah masuk ke Joplin Cloud, Anda dapat meninggalkan layar ini."
 	],
 	"You currently have no notebooks.": [
 		"Saat ini tidak ada buku catatan."
@@ -3343,6 +3502,12 @@
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Anda dapat menggunakan perkakas di bawah ini untuk mengenkripsi ulang data, misalnya jika Anda tahu bahwa beberapa catatan Anda dienkripsi dengan metode enkripsi yang telah usang."
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
+		"Anda tidak dapat terhubung ke Joplin Cloud. Silakan periksa kredensial Anda dan coba lagi. Galat:"
+	],
+	"Your account doesn't have access to this feature": [
+		""
 	],
 	"Your choice: ": [
 		"Pilihan Anda: "

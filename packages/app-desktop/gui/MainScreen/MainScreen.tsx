@@ -26,7 +26,7 @@ import shim from '@joplin/lib/shim';
 import bridge from '../../services/bridge';
 import time from '@joplin/lib/time';
 import styled from 'styled-components';
-import { themeStyle } from '@joplin/lib/theme';
+import { themeStyle, ThemeStyle } from '@joplin/lib/theme';
 import validateLayout from '../ResizableLayout/utils/validateLayout';
 import iterateItems from '../ResizableLayout/utils/iterateItems';
 import removeItem from '../ResizableLayout/utils/removeItem';
@@ -40,7 +40,7 @@ import ElectronAppWrapper from '../../ElectronAppWrapper';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import commands from './commands/index';
-import invitationRespond from '../../services/share/invitationRespond';
+import invitationRespond from '@joplin/lib/services/share/invitationRespond';
 import restart from '../../services/restart';
 const { connect } = require('react-redux');
 import PromptDialog from '../PromptDialog';
@@ -572,7 +572,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public renderNotification(theme: any, styles: any) {
+	public renderNotification(theme: ThemeStyle, styles: any) {
 		if (!this.messageBoxVisible()) return null;
 
 		const onViewStatusScreen = () => {

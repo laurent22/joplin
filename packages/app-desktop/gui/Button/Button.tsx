@@ -22,6 +22,7 @@ interface Props {
 	title?: string;
 	iconName?: string;
 	level?: ButtonLevel;
+	iconLabel?: string;
 	className?: string;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onClick?: Function;
@@ -219,7 +220,7 @@ const Button = React.forwardRef((props: Props, ref: any) => {
 
 	function renderIcon() {
 		if (!props.iconName) return null;
-		return <StyledIcon animation={props.iconAnimation} mr={iconOnly ? '0' : '6px'} color={props.color} className={props.iconName}/>;
+		return <StyledIcon aria-label={props.iconLabel} animation={props.iconAnimation} mr={iconOnly ? '0' : '6px'} color={props.color} className={props.iconName}/>;
 	}
 
 	function renderTitle() {

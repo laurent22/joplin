@@ -23,10 +23,11 @@ const loadPlugins = async (
 		);
 		pluginService.isSafeMode = Setting.value('isSafeMode');
 
-		// Unload any existing plugins (important for React Native's fast refresh)
-		logger.debug('Unloading plugins...');
-		for (const pluginId of pluginService.pluginIds) {
-			await pluginService.unloadPlugin(pluginId);
+		for (const pluginId of Object.keys(pluginService.plugins)) {
+			if (pluginSettings[pluginId] && !pluginSettings[pluginId].enabled) {
+				logger.info('Unloading disabled plugin', pluginId);
+				await pluginService.unloadPlugin(pluginId);
+			}
 
 			if (cancel.cancelled) {
 				return;

@@ -8,7 +8,6 @@ import setIgnoreTlsErrors from '../../../utils/TlsUtils';
 import { reg } from '@joplin/lib/registry';
 import { State } from '@joplin/lib/reducer';
 const { BackButtonService } = require('../../../services/back-button.js');
-const VersionInfo = require('react-native-version-info').default;
 import { connect } from 'react-redux';
 import ScreenHeader from '../../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
@@ -32,6 +31,10 @@ import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/Plug
 import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
 import PluginUploadButton, { canInstallPluginsFromFile, buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
 import NoteImportButton, { importButtonDefaultTitle, importButtonDescription } from './NoteExportSection/NoteImportButton';
+import SectionDescription from './SectionDescription';
+import EnablePluginSupportPage from './plugins/EnablePluginSupportPage';
+import getPackageInfo from '../../../utils/getPackageInfo';
+import versionInfo from '@joplin/lib/versionInfo';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -145,6 +148,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 	private logButtonPress_ = () => {
 		void NavService.go('Log');
+	};
+
+	private manageSharesPress_ = () => {
+		void NavService.go('ShareManager');
 	};
 
 	private setShowSearch_(searching: boolean) {
@@ -340,6 +347,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				description={options?.description}
 				statusComponent={options?.statusComp}
 				styles={this.styles()}
+				disabled={options?.disabled}
 			/>
 		);
 	}
@@ -350,6 +358,15 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		const advancedSettingComps: ReactElement[] = [];
 
 		const headerTitle = Setting.sectionNameToLabel(section.name);
+		const sectionDescription = Setting.sectionDescription(key, AppType.Mobile);
+		if (sectionDescription && !this.state.searching) {
+			settingComps.push(
+				<SectionDescription
+					key='section-description'
+					content={sectionDescription}
+				/>,
+			);
+		}
 
 		const matchesSearchQuery = (relatedText: string|string[]) => {
 			let searchThrough;
@@ -467,29 +484,44 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				shared.updateSettingValue(this, pluginStatesKey, value);
 			};
 
-			addSettingComponent(
-				<PluginStates
-					key={'plugin-states'}
-					styles={this.styles()}
-					themeId={this.props.themeId}
-					pluginSettings={settings[pluginStatesKey]}
-
-					updatePluginStates={updatePluginStates}
-					shouldShowBasedOnSearchQuery={this.state.searching ? matchesSearchQuery : null}
-				/>,
-				getPluginStatesSearchText(),
-			);
-
-			if (canInstallPluginsFromFile()) {
+			if (settings['plugins.pluginSupportEnabled']) {
 				addSettingComponent(
-					<PluginUploadButton
-						key='plugins-install-from-file'
+					<PluginStates
+						key={'plugin-states'}
+						styles={this.styles()}
+						themeId={this.props.themeId}
 						pluginSettings={settings[pluginStatesKey]}
+
 						updatePluginStates={updatePluginStates}
+						shouldShowBasedOnSearchQuery={this.state.searching ? matchesSearchQuery : null}
 					/>,
-					pluginUploadButtonSearchText(),
+					getPluginStatesSearchText(),
+				);
+
+				if (canInstallPluginsFromFile()) {
+					addSettingComponent(
+						<PluginUploadButton
+							key='plugins-install-from-file'
+							pluginSettings={settings[pluginStatesKey]}
+							updatePluginStates={updatePluginStates}
+						/>,
+						pluginUploadButtonSearchText(),
+					);
+				}
+			} else {
+				const enablePluginSupport = () => {
+					shared.updateSettingValue(this, 'plugins.pluginSupportEnabled', true);
+				};
+				addSettingComponent(
+					<EnablePluginSupportPage
+						key='plugin-support-disabled-screen'
+						themeId={this.props.themeId}
+						onEnablePluginSupport={enablePluginSupport}
+					/>,
+					['plugins', _('Plugins')],
 				);
 			}
+
 		}
 
 		if (section.name === 'sync') {
@@ -499,18 +531,27 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		if (section.name === 'joplinCloud') {
 			const label = _('Email to note');
 			const description = _('Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook');
+			const isEmailToNoteAvailableInAccount = this.props.settings['sync.10.accountType'] !== 1;
+			const inboxEmailValue = isEmailToNoteAvailableInAccount ? this.props.settings['sync.10.inboxEmail'] : '-';
 			addSettingComponent(
 				<View key="joplinCloud">
 					<View style={this.styles().styleSheet.settingContainerNoBottomBorder}>
 						<Text style={this.styles().styleSheet.settingText}>{label}</Text>
-						<Text style={this.styles().styleSheet.settingTextEmphasis}>{this.props.settings['sync.10.inboxEmail']}</Text>
+						<Text style={this.styles().styleSheet.settingTextEmphasis}>{inboxEmailValue}</Text>
 					</View>
+					{
+						!isEmailToNoteAvailableInAccount && (
+							<View style={this.styles().styleSheet.settingContainerNoBottomBorder}>
+								<Text style={this.styles().styleSheet.descriptionAlert}>{_('Your account doesn\'t have access to this feature')}</Text>
+							</View>
+						)
+					}
 					{
 						this.renderButton(
 							'sync.10.inboxEmail',
 							_('Copy to clipboard'),
-							() => Clipboard.setString(this.props.settings['sync.10.inboxEmail']),
-							{ description },
+							() => isEmailToNoteAvailableInAccount && Clipboard.setString(this.props.settings['sync.10.inboxEmail']),
+							{ description, disabled: !isEmailToNoteAvailableInAccount },
 						)
 					}
 				</View>,
@@ -523,6 +564,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			addSettingButton('status_button', _('Sync Status'), this.syncStatusButtonPress_);
 			addSettingButton('log_button', _('Log'), this.logButtonPress_);
 			addSettingButton('fix_search_engine_index', this.state.fixingSearchIndex ? _('Fixing search index...') : _('Fix search index'), this.fixSearchEngineIndexButtonPress_, { disabled: this.state.fixingSearchIndex, description: _('Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.') });
+			const syncTargetInfo = SyncTargetRegistry.infoById(this.state.settings['sync.target']);
+			if (syncTargetInfo.supportsShare) {
+				addSettingButton('manage_shares_button', _('Manage shared notebooks'), this.manageSharesPress_);
+			}
 		}
 
 		if (section.name === 'importOrExport') {
@@ -574,13 +619,20 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			addSettingLink('website_link', _('Joplin website'), 'https://joplinapp.org/');
 			addSettingLink('privacy_link', _('Privacy Policy'), 'https://joplinapp.org/privacy/');
 
-			addSettingText('version_info_app', `Joplin ${VersionInfo.appVersion}`);
-			addSettingText('version_info_db', _('Database v%s', reg.db().version()));
-			addSettingText('version_info_sync', _('Sync Version: %s', Setting.value('syncVersion')));
-			addSettingText('version_info_client_id', _('Client ID: %s', Setting.value('clientId')));
-			addSettingText('version_info_fts', _('FTS enabled: %d', this.props.settings['db.ftsEnabled']));
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			addSettingText('version_info_hermes', _('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0));
+			const packageInfo = getPackageInfo();
+			const appInfo = versionInfo(packageInfo, PluginService.instance().enabledPlugins(settings['plugins.states']));
+			const versionInfoText = [
+				appInfo.body,
+				'',
+				_('FTS enabled: %d', this.props.settings['db.ftsEnabled']),
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				_('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0),
+			].join('\n');
+
+			addSettingText('version_info', versionInfoText);
+			addSettingButton('copy_app_info', _('Copy version info'), () => {
+				Clipboard.setString(versionInfoText);
+			});
 
 			const featureFlagKeys = Setting.featureFlagKeys(AppType.Mobile);
 			if (featureFlagKeys.length) {

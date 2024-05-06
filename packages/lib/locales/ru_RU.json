@@ -65,6 +65,9 @@
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s не оптимизирован для синхронизации множества маленьких файлов, поэтому начальная синхронизация может быть долгой."
 	],
+	"%s tab opened": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -158,11 +161,14 @@
 	"Accept": [
 		"Принять"
 	],
+	"Accepted shares": [
+		""
+	],
 	"Access denied: Please check your username and password": [
-		"Отказано в доступе: Пожалуйста, проверьте ваши имя пользователя и пароль"
+		"Доступ запрещен: Пожалуйста, проверьте имя пользователя и пароль"
 	],
 	"Access denied: Please re-enter your password and/or username": [
-		"Отказано в доступе: Пожалуйста, повторно введите свой пароль и/или имя пользователя."
+		"Доступ запрещен: Пожалуйста, введите пароль и/или имя пользователя повторно"
 	],
 	"Account": [
 		"Учетная запись"
@@ -212,11 +218,17 @@
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"Все данные, включая заметки, блокноты и теги, будут удалены безвозвратно."
 	],
+	"All item sync failures have been marked as \"ignored\".": [
+		""
+	],
 	"All notes": [
 		"Все заметки"
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Все возможные порты заняты - пожалуйста, сообщите о проблеме в %s"
+	],
+	"Allows debugging mobile plugins. See %s for details.": [
+		""
 	],
 	"Also displays unset and hidden config variables.": [
 		"Также выводит неустановленные и скрытые параметры конфигурации."
@@ -229,6 +241,9 @@
 	],
 	"Always ask": [
 		"Всегда спрашивать"
+	],
+	"Always open %s files without asking.": [
+		""
 	],
 	"Always resize": [
 		"Всегда изменять размер"
@@ -353,14 +368,17 @@
 	"Bulleted List": [
 		"Маркированный список"
 	],
+	"by %s": [
+		""
+	],
 	"Can Share": [
 		"Можно поделиться"
 	],
 	"Can view": [
-		"Можно просматривать"
+		"Возможность просмотра"
 	],
 	"Can view and edit": [
-		"Можно просматривать и редактировать"
+		"Возможность просмотра и редактирования"
 	],
 	"Cancel": [
 		"Отмена"
@@ -527,8 +545,14 @@
 	"Completed decryption.": [
 		"Расшифровка завершена."
 	],
+	"Completed with warnings:\n%s": [
+		""
+	],
 	"Completed: %s (%s)": [
 		"Завершено: %s (%s)"
+	],
+	"completion date": [
+		""
 	],
 	"Compress old changes": [
 		"Сжатие старых изменений"
@@ -723,9 +747,6 @@
 	"Dashboard": [
 		"Панель управления"
 	],
-	"Database v%s": [
-		"База данных v%s"
-	],
 	"Date": [
 		"Дата"
 	],
@@ -787,7 +808,7 @@
 		"Удаление выбранных заметок"
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
-		"Удалить блокнот \"Входящие\"?\n\nЕсли вы удалите блокнот \"Входящие\", то все электронные письма, которые были недавно отправлены в этот блокнот, могут быть потеряны."
+		"Удалить блокнот \"Входящие\"?\n\nПри удалении блокнота \"Входящие\" все сообщения электронной почты, недавно отправленные в него, могут быть потеряны."
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Удалить приглашение? Получатель больше не сможет получить доступ к этому общему блокноту."
@@ -800,6 +821,9 @@
 	],
 	"Deleted remote items: %d.": [
 		"Удалено удаленных элементов: %d."
+	],
+	"Deletes notes permanently, skipping the trash.": [
+		""
 	],
 	"Deletes the given notebook.": [
 		"Удаляет заданный блокнот."
@@ -1000,10 +1024,10 @@
 		"Электронная почта"
 	],
 	"Email to note": [
-		"Письмо в заметку"
+		"Электронная почта для заметок"
 	],
 	"Email to Note": [
-		"Письмо в Заметку"
+		"Электронная почта для заметок"
 	],
 	"Emails": [
 		"Email'ы"
@@ -1180,7 +1204,7 @@
 		"Экспортировать все"
 	],
 	"Export all notes as JEX": [
-		"Экспортировать все заметки в формате JEX"
+		"Экспорт всех заметок как JEX"
 	],
 	"Export debug report": [
 		"Экспортировать отладочный отчет"
@@ -1192,7 +1216,7 @@
 		"Экспорт профиля"
 	],
 	"Exported successfully!": [
-		"Экспортирование успешно завершено!"
+		"Успешно экспортировано!"
 	],
 	"Exporting profile...": [
 		"Экспортирование профиля..."
@@ -1201,7 +1225,7 @@
 		"Экспортирование в \"%s\" в формате \"%s\". Пожалуйста, подождите..."
 	],
 	"Exporting...": [
-		"Экспортирование..."
+		"Экспорт..."
 	],
 	"Exports Joplin data to the given path. By default, it will export the complete database including notebooks, notes, tags and resources.": [
 		"Экспортирует данные Joplin в указанный каталог. По умолчанию экспортируется полная база данных, включая блокноты, заметки, метки и ресурсы."
@@ -1217,6 +1241,9 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Защита от сбоев: Не очищать локальные данные, когда цель синхронизации пустая (обычно случается из-за ошибки приложения или настроек)"
+	],
+	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
+		""
 	],
 	"Fatal error:": [
 		"Фатальная ошибка:"
@@ -1265,9 +1292,6 @@
 	],
 	"Focus title": [
 		"Фокус на названии"
-	],
-	"Folders": [
-		"Каталоги"
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Только для отладки: экспорт вашего профиля на внешнюю SD карту."
@@ -1348,6 +1372,9 @@
 	"Help": [
 		"Помощь"
 	],
+	"Here's what we do to make plugins safer:": [
+		""
+	],
 	"Hermes enabled: %d": [
 		"Hermes включен: %d"
 	],
@@ -1420,6 +1447,15 @@
 	"Import": [
 		"Импорт"
 	],
+	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+		""
+	],
+	"Import from JEX": [
+		""
+	],
+	"Import notes from a JEX (Joplin Export) file.": [
+		""
+	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		"Импорт из \"%s\" в формате \"%s\". Пожалуйста, подождите..."
 	],
@@ -1455,6 +1491,9 @@
 	],
 	"In: %s": [
 		"В: %s"
+	],
+	"Incompatible": [
+		""
 	],
 	"Increase indent level": [
 		"Увеличить уровень отступа"
@@ -1534,6 +1573,9 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
+	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
+		""
+	],
 	"Joplin Export Directory": [
 		"Каталог экспорта Joplin"
 	],
@@ -1610,7 +1652,7 @@
 		"Порядок переключения вида"
 	],
 	"Leave it blank to download the language files from the default website": [
-		"Оставьте поле пустым, чтобы скачать языковые файлы с сайта по умолчанию"
+		"Оставьте этот параметр пустым, чтобы загрузить языковые файлы с веб-сайта по умолчанию"
 	],
 	"Leave notebook...": [
 		"Покинуть блокнот..."
@@ -1623,6 +1665,9 @@
 	],
 	"Light": [
 		"Светлая"
+	],
+	"Like any software you install, plugins can potentially cause security issues or data loss.": [
+		""
 	],
 	"Lines": [
 		"Строки"
@@ -1763,6 +1808,9 @@
 	"More than one item match \"%s\". Please narrow down your query.": [
 		"Более одного элемента соответствуют выражению \"%s\". Пожалуйста, уточните ваш запрос."
 	],
+	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
 	"Move %d notes to notebook \"%s\"?": [
 		"Переместить %d заметок в блокнот \"%s\"?"
 	],
@@ -1786,6 +1834,9 @@
 	],
 	"Never resize": [
 		"Никогда не изменять размер"
+	],
+	"New": [
+		""
 	],
 	"New note": [
 		"Новая заметка"
@@ -1834,6 +1885,9 @@
 	],
 	"No active notebook.": [
 		"Нет активного блокнота."
+	],
+	"No incoming shares": [
+		""
 	],
 	"No item with ID %s": [
 		"Нет элементов с ID %s"
@@ -2096,9 +2150,6 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"Пожалуйста, укажите блокнот, в который должны быть импортированы заметки."
 	],
-	"Please upgrade Joplin to use this plugin": [
-		"Обновите Joplin для использования этого плагина"
-	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Пожалуйста, дождитесь окончания загрузки и расшифровки всех вложений. Вы можете переключиться на %s для редактирования заметки."
 	],
@@ -2111,8 +2162,14 @@
 	"Plugin tools": [
 		"Утилиты для плагинов"
 	],
+	"Plugin WebView debugging": [
+		""
+	],
 	"Plugins": [
 		"Плагины"
+	],
+	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
+		""
 	],
 	"Portrait": [
 		"Вертикально"
@@ -2173,6 +2230,9 @@
 	],
 	"Process user deletions": [
 		"Обработка удаления пользователей"
+	],
+	"Processing": [
+		""
 	],
 	"Profile": [
 		"Профиль"
@@ -2290,6 +2350,12 @@
 	],
 	"Replace: ": [
 		"Замена: "
+	],
+	"Report an issue": [
+		""
+	],
+	"Report fraudulent plugin": [
+		""
 	],
 	"Reset application layout": [
 		"Сброс макета приложения"
@@ -2460,7 +2526,7 @@
 		"Поделиться"
 	],
 	"Share a copy of all notes in a file format that can be imported by Joplin on a computer.": [
-		"Поделиться копией всех заметок в формате файла, который можно импортировать в Joplin на компьютере."
+		"Поделиться копией всех заметок в формате файла, который может быть импортирован в Joplin на компьютере."
 	],
 	"Share a notebook with others": [
 		"Поделитесь блокнотом с другими людьми"
@@ -2578,6 +2644,9 @@
 	],
 	"Source: ": [
 		"Источник: "
+	],
+	"Spacer": [
+		""
 	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		"Укажите порт для использования сервером API. Если порт не указан - будет использовано значение по умолчанию."
@@ -2753,6 +2822,9 @@
 	"Take photo": [
 		"Сделать фото"
 	],
+	"Task \"%s\" failed with error: %s": [
+		""
+	],
 	"Task list": [
 		"Список задач"
 	],
@@ -2895,9 +2967,6 @@
 	"There are unsaved changes.": [
 		"Существуют несохраненные изменения."
 	],
-	"There is currently no notebook. Create one by clicking on \"New notebook\".": [
-		"Блокноты отсутствуют. Создайте новый, нажав на \"Новый блокнот\"."
-	],
 	"There is no data to export.": [
 		"Нет данных для экспорта."
 	],
@@ -2907,6 +2976,9 @@
 	"There was an error downloading this attachment:": [
 		"Произошла ошибка при загрузке вложения:"
 	],
+	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
+		""
+	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Данные элементы останутся на устройстве, но не будут выгружены в цель синхронизации. Чтобы найти эти элементы, воспользуйтесь поиском по названию или ID (указан в квадратных скобках выше)."
 	],
@@ -2915,6 +2987,9 @@
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
 		"Это позволит другому пользователю поделиться с вами записной книжкой, и вы оба сможете совместно работать над ней. Однако это не даст вам возможности поделиться записной книжкой с кем-то еще, если у вас нет свойства \"%s\"."
+	],
+	"This attachment does not have OCR data (Status: %s)": [
+		""
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Это вложение еще не загружено или еще не расшифровано"
@@ -2932,16 +3007,19 @@
 		"Это продвинутый инструмент для отображения вложений, прикреплённых к вашим заметкам. Удаляйте вложения с осторожностью - они не могут быть восстановлены."
 	],
 	"This note could not be deleted: %s": [
-		"Эта заметка не может быть удалена: %s",
-		"Эти заметки не могут быть удалены: %s"
+		"Эту заметку не удалось удалить: %s",
+		"Эти заметки не удалось удалить: %s",
+		"Эти заметок не удалось удалить: %s"
 	],
 	"This note could not be duplicated: %s": [
 		"Эта заметка не может быть продублирована: %s",
-		"Эти заметки не могут быть продублированы: %s"
+		"Эти заметки не могут быть продублированы: %s",
+		"Эти заметок не могут быть продублированы: %s"
 	],
 	"This note could not be moved: %s": [
-		"Эта заметка не может быть перемещена: %s",
-		"Эти заметки не могут быть перемещены: %s"
+		"Эту заметку не удалось переместить: %s",
+		"Эти заметки не удалось переместить: %s",
+		"Эти заметок не удалось переместить: %s"
 	],
 	"This note does not have geolocation information.": [
 		"Эта заметка не содержит информации о географическом местоположении."
@@ -2955,11 +3033,17 @@
 	"This note has no history": [
 		"Эта заметка не имеет предыдущих версий"
 	],
+	"This plugin doesn't support %s.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Рекомендуется принять во внимание ряд ограничений, которые имеются у данного текстового редактора, перед его использованием."
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"Эта служба позволяет расширению браузера взаимодействовать с Joplin. После ее включения брандмауэр ОС может запросить разрешение на использование Joplin определенного порта."
+	],
+	"This subfolder of the trash has no notes.": [
+		""
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
 		"Это позволит Joplin работать в фоновом режиме. Рекомендуется включить этот параметр, чтобы ваши заметки синхронизировались постоянно, что уменьшит количество возможных конфликтов."
@@ -3093,12 +3177,6 @@
 	"Unable to edit resource of type %s": [
 		"Невозможно редактировать ресурс типа %s"
 	],
-	"Unable to export or share data. Reason: %s": [
-		"Невозможно экспортировать или поделиться данными. Причина: %s"
-	],
-	"Unable to share log data. Reason: %s": [
-		"Невозможно поделиться данными журнала. Причина: %s"
-	],
 	"Uncompleted to-dos on top": [
 		"Незавершенные задачи сверху"
 	],
@@ -3222,6 +3300,9 @@
 	"View": [
 		"Вид"
 	],
+	"View OCR text": [
+		""
+	],
 	"View on map": [
 		"Посмотреть на карте"
 	],
@@ -3246,8 +3327,11 @@
 	"Warning: not all resources shown for performance reasons (limit: %s).": [
 		"Предупреждение: не все данные показаны по соображениям производительности (ограничение:%s)."
 	],
-	"Warnings:\n%s": [
-		"Предупреждения:\n%s"
+	"We have a system for reporting and removing problematic plugins.": [
+		""
+	],
+	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
+		""
 	],
 	"Web Clipper": [
 		"Настройки веб-клиппера"
@@ -3317,6 +3401,9 @@
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Вы можете использовать инструмент ниже для повторного шифрования ваших данных, например, если вы знаете, что некоторые из ваших заметок зашифрованы с использованием устаревшего метода шифрования."
+	],
+	"Your account doesn't have access to this feature": [
+		""
 	],
 	"Your choice: ": [
 		"Ваш выбор: "

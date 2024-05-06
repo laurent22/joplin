@@ -45,7 +45,7 @@ interface StateClipperServer {
 	port: number;
 }
 
-interface StateDecryptionWorker {
+export interface StateDecryptionWorker {
 	state: string;
 	itemIndex: number;
 	itemCount: number;
@@ -55,8 +55,9 @@ interface StateDecryptionWorker {
 	skippedItemCount: number;
 }
 
-interface StateResourceFetcher {
+export interface StateResourceFetcher {
 	toFetchCount: number;
+	fetchingCount: number;
 }
 
 export interface StateLastDeletion {
@@ -187,6 +188,7 @@ export const defaultState: State = {
 	selectedNoteTags: [],
 	resourceFetcher: {
 		toFetchCount: 0,
+		fetchingCount: 0,
 	},
 	backwardHistoryNotes: [],
 	forwardHistoryNotes: [],

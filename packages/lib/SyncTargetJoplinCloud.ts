@@ -45,6 +45,10 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 		return false;
 	}
 
+	public static override supportsShare(): boolean {
+		return true;
+	}
+
 	public async isAuthenticated() {
 		try {
 			const fileApi = await this.fileApi();

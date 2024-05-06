@@ -65,6 +65,9 @@
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		""
 	],
+	"%s tab opened": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -158,6 +161,9 @@
 	"Accept": [
 		"Αποδοχή"
 	],
+	"Accepted shares": [
+		""
+	],
 	"Access denied: Please check your username and password": [
 		"Απαγορεύεται η πρόσβαση: παρακαλώ ελέγξτε το όνομα χρήστη και τον κωδικό σας"
 	],
@@ -212,11 +218,17 @@
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"Όλα τα δεδομένα, συμπεριλαμβανομένων των σημειώσεων, των σημειωματάριων και των ετικετών, θα διαγραφούν οριστικά."
 	],
+	"All item sync failures have been marked as \"ignored\".": [
+		""
+	],
 	"All notes": [
 		"Όλες οι σημειώσεις"
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Όλες οι πιθανές θύρες χρησιμοποιούνται - αναφέρετε το ζήτημα στο %s"
+	],
+	"Allows debugging mobile plugins. See %s for details.": [
+		""
 	],
 	"Also displays unset and hidden config variables.": [
 		"Εμφανίζει επίσης μη ορισμένες και κρυφές μεταβλητές."
@@ -229,6 +241,9 @@
 	],
 	"Always ask": [
 		"Ερώτηση πάντα"
+	],
+	"Always open %s files without asking.": [
+		""
 	],
 	"Always resize": [
 		"Πάντα προσαρμογή μεγέθους"
@@ -352,6 +367,9 @@
 	],
 	"Bulleted List": [
 		"Λίστα με κουκκίδες"
+	],
+	"by %s": [
+		""
 	],
 	"Can Share": [
 		"Μπορεί να μοιραστεί"
@@ -527,8 +545,14 @@
 	"Completed decryption.": [
 		"Η αποκρυπτογράφηση ολοκληρώθηκε."
 	],
+	"Completed with warnings:\n%s": [
+		""
+	],
 	"Completed: %s (%s)": [
 		"Ολοκληρώθηκε: %s (%s)"
+	],
+	"completion date": [
+		""
 	],
 	"Compress old changes": [
 		"Συμπίεση παλαιών αλλαγών"
@@ -723,9 +747,6 @@
 	"Dashboard": [
 		"Οθόνη Διαχείρισης"
 	],
-	"Database v%s": [
-		"Βάση Δεδομένων v%s"
-	],
 	"Date": [
 		"Ημερομηνία"
 	],
@@ -800,6 +821,9 @@
 	],
 	"Deleted remote items: %d.": [
 		"Διαγραμμένα απομακρυσμένα στοιχεία: %d."
+	],
+	"Deletes notes permanently, skipping the trash.": [
+		""
 	],
 	"Deletes the given notebook.": [
 		"Διαγράφει το καθορισμένο σημειωματάριο."
@@ -1191,9 +1215,6 @@
 	"Export profile": [
 		"Εξαγωγή προφίλ"
 	],
-	"Export your data": [
-		"Εξαγωγή των δεδομένων σας"
-	],
 	"Exported successfully!": [
 		"Επιτυχής εξαγωγή!"
 	],
@@ -1220,6 +1241,9 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Δικλείδα ασφαλείας: Να μη διαγράφονται τα τοπικά δεδομένα όταν ο προορισμός συγχρονισμού είναι κενός (συχνά το αποτέλεσμα μιας εσφαλμένης ρύθμισης παραμέτρων ή ενός σφάλματος)"
+	],
+	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
+		""
 	],
 	"Fatal error:": [
 		"Ανεπανόρθωτο σφάλμα:"
@@ -1265,9 +1289,6 @@
 	],
 	"Focus title": [
 		"Eστίαση στον τίτλο"
-	],
-	"Folders": [
-		"Φάκελοι"
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Για τον εντοπισμό σφαλμάτων και μόνο: εξαγάγετε το προφίλ σας σε μια εξωτερική κάρτα SD."
@@ -1351,6 +1372,9 @@
 	"Help": [
 		"Βοήθεια"
 	],
+	"Here's what we do to make plugins safer:": [
+		""
+	],
 	"Hermes enabled: %d": [
 		"Hermes ενεργοποιημένο: %d"
 	],
@@ -1420,6 +1444,15 @@
 	"Import": [
 		"Εισαγωγή"
 	],
+	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+		""
+	],
+	"Import from JEX": [
+		""
+	],
+	"Import notes from a JEX (Joplin Export) file.": [
+		""
+	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		"Εισαγωγή από \"%s\" σε μορφή \"%s\". Παρακαλώ περιμένετε..."
 	],
@@ -1455,6 +1488,9 @@
 	],
 	"In: %s": [
 		"Στο: %s"
+	],
+	"Incompatible": [
+		""
 	],
 	"Increase indent level": [
 		"Αύξηση του επιπέδου εσοχής"
@@ -1533,6 +1569,9 @@
 	],
 	"Joplin Cloud": [
 		"Joplin Cloud"
+	],
+	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
+		""
 	],
 	"Joplin Export Directory": [
 		"Φάκελος εξαγωγής Joplin"
@@ -1626,6 +1665,9 @@
 	],
 	"Light": [
 		"Light"
+	],
+	"Like any software you install, plugins can potentially cause security issues or data loss.": [
+		""
 	],
 	"Lines": [
 		"Γραμμές"
@@ -1772,6 +1814,9 @@
 	"More than one item match \"%s\". Please narrow down your query.": [
 		"Περισσότερα από ένα στοιχεία ταιριάζουν με το \"%s\". Παρακαλώ περιορίστε το ερώτημά σας."
 	],
+	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
 	"Move %d notes to notebook \"%s\"?": [
 		"Μετακίνηση %d σημειώσεων στο σημειωματάριο \"%s\";"
 	],
@@ -1795,6 +1840,9 @@
 	],
 	"Never resize": [
 		"Ποτέ προσαρμογή μεγέθους"
+	],
+	"New": [
+		""
 	],
 	"New note": [
 		"Νέα σημείωση"
@@ -1843,6 +1891,9 @@
 	],
 	"No active notebook.": [
 		"Δεν υπάρχει ενεργό σημειωματάριο."
+	],
+	"No incoming shares": [
+		""
 	],
 	"No item with ID %s": [
 		"Δεν υπάρχει στοιχείο με αναγνωριστικό %s"
@@ -2105,9 +2156,6 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"Προσδιορίστε το σημειωματάριο στο οποίο πρέπει να εισαχθούν οι σημειώσεις."
 	],
-	"Please upgrade Joplin to use this plugin": [
-		"Παρακαλώ αναβαθμίστε το Joplin για να χρησιμοποιήσετε αυτό το πρόσθετο"
-	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Παρακαλώ περιμένετε να γίνει λήψη και αποκρυπτογράφηση όλων των συνημμένων. Μπορείτε επίσης να μεταβείτε στο %s για να επεξεργαστείτε τη σημείωση."
 	],
@@ -2120,8 +2168,14 @@
 	"Plugin tools": [
 		"Εργαλεία πρόσθετων"
 	],
+	"Plugin WebView debugging": [
+		""
+	],
 	"Plugins": [
 		"Πρόσθετα"
+	],
+	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
+		""
 	],
 	"Portrait": [
 		"Κάθετη"
@@ -2182,6 +2236,9 @@
 	],
 	"Process user deletions": [
 		"Επεξεργασία διαγραφών χρηστών"
+	],
+	"Processing": [
+		""
 	],
 	"Profile": [
 		"Προφίλ"
@@ -2299,6 +2356,12 @@
 	],
 	"Replace: ": [
 		"Αντικατάσταση: "
+	],
+	"Report an issue": [
+		""
+	],
+	"Report fraudulent plugin": [
+		""
 	],
 	"Reset application layout": [
 		"Επαναφορά διάταξης εφαρμογής"
@@ -2582,6 +2645,9 @@
 	"Source: ": [
 		"Πηγή: "
 	],
+	"Spacer": [
+		""
+	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		"Καθορίστε τη πόρτα που πρέπει να χρησιμοποιείται από το διακομιστή API. Εάν δεν οριστεί, θα χρησιμοποιηθεί μια προεπιλογή."
 	],
@@ -2759,6 +2825,9 @@
 	"Take photo": [
 		"Βγάλτε μια φωτογραφία"
 	],
+	"Task \"%s\" failed with error: %s": [
+		""
+	],
 	"Task list": [
 		"Λίστα εργασιών"
 	],
@@ -2897,9 +2966,6 @@
 	"There are unsaved changes.": [
 		"Υπάρχουν μη αποθηκευμένες αλλαγές."
 	],
-	"There is currently no notebook. Create one by clicking on \"New notebook\".": [
-		"Δεν υπάρχει κανένα σημειωματάριο. Δημιουργήστε ένα πατώντας στο \"Νέο σημειωματάριο\"."
-	],
 	"There is no data to export.": [
 		"Δεν υπάρχουν δεδομένα για εξαγωγή."
 	],
@@ -2909,6 +2975,9 @@
 	"There was an error downloading this attachment:": [
 		"Παρουσιάστηκε σφάλμα κατά τη λήψη αυτού του συνημμένου:"
 	],
+	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
+		""
+	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Αυτά τα στοιχεία θα παραμείνουν στη συσκευή, αλλά δεν θα μεταφορτωθούν στο στόχο συγχρονισμού. Για να βρείτε αυτά τα στοιχεία, αναζητήστε είτε τον τίτλο είτε το αναγνωριστικό (το οποίο εμφανίζεται στις παραπάνω παρενθέσεις)."
 	],
@@ -2917,6 +2986,9 @@
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
 		"Επιτρέπει σε άλλο χρήστη να μοιραστεί ένα σημειωματάριο με εσάς, ώστε να μπορείτε να συνεργαστείτε πάνω σε αυτό. Δεν επιτρέπει, ωστόσο, την κοινοποίηση σημειωματαρίου σε κάποιον τρίτο, εκτός αν διαθέτετε τη δυνατότητα “%s”."
+	],
+	"This attachment does not have OCR data (Status: %s)": [
+		""
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Αυτό το συνημμένο δεν έχει ακόμη μεταφορτωθεί ή αποκρυπτογραφηθεί"
@@ -2957,11 +3029,17 @@
 	"This note has no history": [
 		"Αυτή η σημείωση δεν έχει ιστορικό"
 	],
+	"This plugin doesn't support %s.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Αυτός ο επεξεργαστής εμπλουτισμένου κειμένου έχει ορισμένους περιορισμούς και συνιστάται να τους γνωρίζετε πριν το χρησιμοποιήσετε."
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"Αυτή η υπηρεσία επιτρέπει στην επέκταση του προγράμματος περιήγησης να επικοινωνεί με το Joplin. Όταν την ενεργοποιήσετε, το τείχος προστασίας μπορεί να σας ζητήσει να δώσετε άδεια στο Joplin να επικοινωνεί μέσω της συγκεκριμένης πόρτας."
+	],
+	"This subfolder of the trash has no notes.": [
+		""
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
 		"Αυτό θα επιτρέψει στο Joplin να τρέξει στο παρασκήνιο. Συνιστάται να ενεργοποιήσετε αυτήν τη ρύθμιση έτσι ώστε οι σημειώσεις σας να συγχρονίζονται συνεχώς, μειώνοντας έτσι τον αριθμό των διενέξεων."
@@ -3098,9 +3176,6 @@
 	"Unable to edit resource of type %s": [
 		"Αδύνατη η επεξεργασία πόρου του τύπου %s"
 	],
-	"Unable to export or share data. Reason: %s": [
-		"Αδύνατη η εξαγωγή η κοινοποίηση δεδομένων. Αιτία: %s"
-	],
 	"Unable to share log data. Reason: %s": [
 		"Αδύνατη η κοινοποίηση δεδομένων αρχείου καταγραφής. Αιτία: %s"
 	],
@@ -3227,6 +3302,9 @@
 	"View": [
 		"Προβολή"
 	],
+	"View OCR text": [
+		""
+	],
 	"View on map": [
 		"Προβολή στο χάρτη"
 	],
@@ -3251,8 +3329,11 @@
 	"Warning: not all resources shown for performance reasons (limit: %s).": [
 		"Προειδοποίηση: δεν εμφανίζονται όλοι οι πόροι για λόγους απόδοσης (όριο:% s)."
 	],
-	"Warnings:\n%s": [
-		"Προειδοποιήσεις: %s"
+	"We have a system for reporting and removing problematic plugins.": [
+		""
+	],
+	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
+		""
 	],
 	"Web Clipper": [
 		"Web Clipper"
@@ -3322,6 +3403,9 @@
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Μπορείτε να χρησιμοποιήσετε το παρακάτω εργαλείο για να κρυπτογραφήσετε εκ νέου τα δεδομένα σας, για παράδειγμα, εάν γνωρίζετε ότι ορισμένες από τις σημειώσεις σας είναι κρυπτογραφημένες με μια παρωχημένη μέθοδο κρυπτογράφησης."
+	],
+	"Your account doesn't have access to this feature": [
+		""
 	],
 	"Your choice: ": [
 		"Η επιλογή σας: "

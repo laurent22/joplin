@@ -1,5 +1,51 @@
 # Joplin Android Changelog
 
+## [android-v3.0.3](https://github.com/laurent22/joplin/releases/tag/android-v3.0.3) (Pre-release) - 2024-04-27T11:21:48Z
+
+- Improved: Display a message when Joplin Cloud user don't have access to email to note feature (#10322 by [@pedr](https://github.com/pedr))
+- Improved: Make editor styles closer to desktop (#10377 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Make most plugins default to being desktop-only (#10376) (#10360 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Plugin support: Simplify reporting plugin issues (#10319 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Support copying app information (#10336 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @adobe/css-tools (v4.3.3)
+- Fixed: After deleting the last note from the conflicts folder, the application state is invalid (#10189)
+- Fixed: Do not invite user to create new notes in the trash folder (#10356) (#10191 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix cursor jumps before end of word while typing -- update `@codemirror/view` to v6.26.3 (#10353) (#10352 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix quickly enabling/disabling multiple plugins can lead to errors and missing plugins (#10380 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix sync icon off-center (#10350) (#10351 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugins: Fix API incompatibility in arguments to `onMessage` listeners in panels (#10375 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [android-v3.0.2](https://github.com/laurent22/joplin/releases/tag/android-v3.0.2) (Pre-release) - 2024-04-15T18:06:46Z
+
+- Improved: Allow marking a plugin as mobile-only or desktop-only (#10229) (#10206 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Allow marking items as "ignored" in sync status  (#10261) (#10245 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Avoid unnecessary requests if Joplin Cloud credentials are empty (#10256 by [@pedr](https://github.com/pedr))
+- Improved: Bump @codemirror/view version. (#10174 by [@itzTheMeow](https://github.com/itzTheMeow))
+- Improved: Default to tab indentation for consistency with desktop platforms (#10242 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Display recommended plugin alert (#10281) (#10207 by [@DarkFalc0n](https://github.com/DarkFalc0n))
+- Improved: Do not repeat failed requests with ENOTFOUND error (#6173)
+- Improved: Improve focus handling (00084c5)
+- Improved: Make tables horizontally scrollable (#10161 by [@wljince007](https://github.com/wljince007))
+- Improved: Plugin API: Improve support for the Kanban and similar plugins (#10247 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Plugin API: Support `clipboard.availableFormats` (#10209 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Plugins: Autohide the plugin panel toggle in toolbar to increase size for notebook dropdown (#10212 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Show plugin versions in settings (#10289) (#10288 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Show sync version and client id in More Info (#10254 by Self Not Found)
+- Improved: Support accepting Joplin Cloud shares (#10300 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Support description banners on plugin-registered settings screens (#10286 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Support importing from JEX files (#10269 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Toggle plugin panels using a button in the toolbar (#10180 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update farsi/persian translation fa.po (#10181 by [@mimeyn](https://github.com/mimeyn))
+- Fixed: Email to note address not presented in configuration screen before synchronisation (#10293) (#10292 by [@pedr](https://github.com/pedr))
+- Fixed: Fix "new note" button is shown in the trash notebook (#10227) (#10188 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix dropdowns invisible when opening settings by clicking "synchronize" (#10271) (#10270 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix error on retry or ignore attachment too large error (#10314) (#10313 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix plugin card titles are clipped (#10296 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugin API: Fix crash when a plugin registers an enum setting with no default (#10263 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugin API: Fix error when calling `plugins.dataDir` (#10262 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugin API: Fix unable to require `@codemirror/search`  (#10205 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugins: Fix event listener memory leak when disabling/uninstalling plugins (#10280 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.0.1](https://github.com/laurent22/joplin/releases/tag/android-v3.0.1) (Pre-release) - 2024-03-21T18:27:47Z
 
 - New: Add support for Markdown editor plugins (#10086 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

@@ -147,6 +147,7 @@ packages/app-desktop/gui/Button/Button.js
 packages/app-desktop/gui/ClipperConfigScreen.js
 packages/app-desktop/gui/ConfigScreen/ButtonBar.js
 packages/app-desktop/gui/ConfigScreen/ConfigScreen.js
+packages/app-desktop/gui/ConfigScreen/FontSearch.js
 packages/app-desktop/gui/ConfigScreen/Sidebar.js
 packages/app-desktop/gui/ConfigScreen/controls/MissingPasswordHelpLink.js
 packages/app-desktop/gui/ConfigScreen/controls/ToggleAdvancedSettingsButton.js
@@ -375,10 +376,26 @@ packages/app-desktop/gui/Root_UpgradeSyncTarget.js
 packages/app-desktop/gui/SearchBar/SearchBar.js
 packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js
 packages/app-desktop/gui/ShareNoteDialog.js
+packages/app-desktop/gui/Sidebar/FolderAndTagList.js
 packages/app-desktop/gui/Sidebar/Sidebar.js
 packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js
 packages/app-desktop/gui/Sidebar/commands/index.js
+packages/app-desktop/gui/Sidebar/hooks/useFocusHandler.js
+packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.js
+packages/app-desktop/gui/Sidebar/hooks/useOnSidebarKeyDownHandler.js
+packages/app-desktop/gui/Sidebar/hooks/useSelectedSidebarIndex.js
+packages/app-desktop/gui/Sidebar/hooks/useSidebarCommandHandler.js
+packages/app-desktop/gui/Sidebar/hooks/useSidebarListData.js
+packages/app-desktop/gui/Sidebar/listItemComponents/AllNotesItem.js
+packages/app-desktop/gui/Sidebar/listItemComponents/EmptyExpandLink.js
+packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.js
+packages/app-desktop/gui/Sidebar/listItemComponents/ExpandLink.js
+packages/app-desktop/gui/Sidebar/listItemComponents/FolderItem.js
+packages/app-desktop/gui/Sidebar/listItemComponents/HeaderItem.js
+packages/app-desktop/gui/Sidebar/listItemComponents/NoteCount.js
+packages/app-desktop/gui/Sidebar/listItemComponents/TagItem.js
 packages/app-desktop/gui/Sidebar/styles/index.js
+packages/app-desktop/gui/Sidebar/types.js
 packages/app-desktop/gui/StatusScreen/StatusScreen.js
 packages/app-desktop/gui/StyleSheets/StyleSheetContainer.js
 packages/app-desktop/gui/SyncWizard/Dialog.js
@@ -393,6 +410,7 @@ packages/app-desktop/gui/ToolbarSpace.js
 packages/app-desktop/gui/TrashNotification/TrashNotification.js
 packages/app-desktop/gui/dialogs.js
 packages/app-desktop/gui/hooks/useEffectDebugger.js
+packages/app-desktop/gui/hooks/useElementHeight.js
 packages/app-desktop/gui/hooks/useImperativeHandlerDebugger.js
 packages/app-desktop/gui/hooks/usePrevious.js
 packages/app-desktop/gui/hooks/usePropsDebugger.js
@@ -413,6 +431,8 @@ packages/app-desktop/integration-tests/main.spec.js
 packages/app-desktop/integration-tests/models/MainScreen.js
 packages/app-desktop/integration-tests/models/NoteEditorScreen.js
 packages/app-desktop/integration-tests/models/SettingsScreen.js
+packages/app-desktop/integration-tests/models/Sidebar.js
+packages/app-desktop/integration-tests/sidebar.spec.js
 packages/app-desktop/integration-tests/simpleBackup.spec.js
 packages/app-desktop/integration-tests/util/activateMainMenuItem.js
 packages/app-desktop/integration-tests/util/createStartupArgs.js
@@ -440,7 +460,6 @@ packages/app-desktop/services/plugins/hooks/useThemeCss.js
 packages/app-desktop/services/plugins/hooks/useViewIsReady.js
 packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.js
 packages/app-desktop/services/restart.js
-packages/app-desktop/services/share/invitationRespond.js
 packages/app-desktop/services/sortOrder/PerFolderSortOrderService.test.js
 packages/app-desktop/services/sortOrder/PerFolderSortOrderService.js
 packages/app-desktop/services/sortOrder/notesSortOrderUtils.test.js
@@ -469,6 +488,7 @@ packages/app-mobile/components/ActionButton.js
 packages/app-mobile/components/BackButtonDialogBox.js
 packages/app-mobile/components/CameraView.js
 packages/app-mobile/components/CustomButton.js
+packages/app-mobile/components/DismissibleDialog.js
 packages/app-mobile/components/Dropdown.test.js
 packages/app-mobile/components/Dropdown.js
 packages/app-mobile/components/ExtendedWebView.js
@@ -529,7 +549,10 @@ packages/app-mobile/components/NoteList.js
 packages/app-mobile/components/ProfileSwitcher/ProfileEditor.js
 packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js
 packages/app-mobile/components/ProfileSwitcher/useProfileConfig.js
-packages/app-mobile/components/ScreenHeader.js
+packages/app-mobile/components/ScreenHeader/WarningBanner.test.js
+packages/app-mobile/components/ScreenHeader/WarningBanner.js
+packages/app-mobile/components/ScreenHeader/WarningBox.js
+packages/app-mobile/components/ScreenHeader/index.js
 packages/app-mobile/components/SelectDateTimeDialog.js
 packages/app-mobile/components/SideMenu.js
 packages/app-mobile/components/TextInput.js
@@ -553,6 +576,7 @@ packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/utils/expo
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/utils/exportDebugReport.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/utils/exportProfile.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/utils/makeImportExportCacheDirectory.js
+packages/app-mobile/components/screens/ConfigScreen/SectionDescription.js
 packages/app-mobile/components/screens/ConfigScreen/SectionHeader.js
 packages/app-mobile/components/screens/ConfigScreen/SectionSelector.js
 packages/app-mobile/components/screens/ConfigScreen/SettingComponent.js
@@ -560,7 +584,9 @@ packages/app-mobile/components/screens/ConfigScreen/SettingItem.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsButton.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsToggle.js
 packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/ActionButton.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.test.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.js
@@ -578,6 +604,10 @@ packages/app-mobile/components/screens/LogScreen.js
 packages/app-mobile/components/screens/Note.js
 packages/app-mobile/components/screens/NoteTagsDialog.js
 packages/app-mobile/components/screens/Notes.js
+packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.js
+packages/app-mobile/components/screens/ShareManager/IncomingShareItem.js
+packages/app-mobile/components/screens/ShareManager/index.test.js
+packages/app-mobile/components/screens/ShareManager/index.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/search.js
@@ -625,6 +655,7 @@ packages/app-mobile/utils/ShareExtension.js
 packages/app-mobile/utils/ShareUtils.test.js
 packages/app-mobile/utils/ShareUtils.js
 packages/app-mobile/utils/TlsUtils.js
+packages/app-mobile/utils/appDefaultState.js
 packages/app-mobile/utils/autodetectTheme.js
 packages/app-mobile/utils/checkPermissions.js
 packages/app-mobile/utils/createRootStyle.js
@@ -637,6 +668,7 @@ packages/app-mobile/utils/fs-driver/tarExtract.test.js
 packages/app-mobile/utils/fs-driver/tarExtract.js
 packages/app-mobile/utils/fs-driver/testUtil/createFilesFromPathRecord.js
 packages/app-mobile/utils/fs-driver/testUtil/verifyDirectoryMatches.js
+packages/app-mobile/utils/getPackageInfo.js
 packages/app-mobile/utils/initializeCommandService.js
 packages/app-mobile/utils/ipc/RNToWebViewMessenger.js
 packages/app-mobile/utils/ipc/WebViewToRNMessenger.js
@@ -646,6 +678,7 @@ packages/app-mobile/utils/polyfills/index.js
 packages/app-mobile/utils/setupNotifications.js
 packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/showMessageBox.js
+packages/app-mobile/utils/testing/createMockReduxStore.js
 packages/app-mobile/utils/types.js
 packages/default-plugins/build.js
 packages/default-plugins/buildDefaultPlugins.js
@@ -747,6 +780,7 @@ packages/lib/ObjectUtils.js
 packages/lib/PoorManIntervals.js
 packages/lib/RotatingLogs.test.js
 packages/lib/RotatingLogs.js
+packages/lib/SyncTargetFilesystem.js
 packages/lib/SyncTargetJoplinCloud.js
 packages/lib/SyncTargetJoplinServer.js
 packages/lib/SyncTargetNone.js
@@ -765,6 +799,7 @@ packages/lib/commands/index.js
 packages/lib/commands/openMasterPasswordDialog.js
 packages/lib/commands/synchronize.js
 packages/lib/components/EncryptionConfigScreen/utils.js
+packages/lib/components/shared/NoteList/getEmptyFolderMessage.js
 packages/lib/components/shared/config/config-shared.js
 packages/lib/components/shared/config/plugins/types.js
 packages/lib/components/shared/config/plugins/useOnDeleteHandler.js
@@ -786,6 +821,7 @@ packages/lib/errorUtils.js
 packages/lib/errors.js
 packages/lib/eventManager.js
 packages/lib/file-api-driver-joplinServer.js
+packages/lib/file-api-driver-local.js
 packages/lib/file-api-driver-memory.js
 packages/lib/file-api-driver.test.js
 packages/lib/file-api.test.js
@@ -1013,9 +1049,12 @@ packages/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo.js
 packages/lib/services/plugins/reducer.js
 packages/lib/services/plugins/utils/createViewHandle.js
 packages/lib/services/plugins/utils/executeSandboxCall.js
+packages/lib/services/plugins/utils/getPluginIssueReportUrl.test.js
+packages/lib/services/plugins/utils/getPluginIssueReportUrl.js
 packages/lib/services/plugins/utils/getPluginNamespacedSettingKey.js
 packages/lib/services/plugins/utils/getPluginSettingKeyPrefix.js
 packages/lib/services/plugins/utils/getPluginSettingValue.js
+packages/lib/services/plugins/utils/isCompatible/getDefaultPlatforms.js
 packages/lib/services/plugins/utils/isCompatible/index.test.js
 packages/lib/services/plugins/utils/isCompatible/index.js
 packages/lib/services/plugins/utils/isCompatible/minVersionForPlatform.js
@@ -1076,6 +1115,7 @@ packages/lib/services/search/gotoAnythingStyleQuery.js
 packages/lib/services/search/queryBuilder.js
 packages/lib/services/share/ShareService.test.js
 packages/lib/services/share/ShareService.js
+packages/lib/services/share/invitationRespond.js
 packages/lib/services/share/reducer.js
 packages/lib/services/spellChecker/SpellCheckerService.js
 packages/lib/services/spellChecker/SpellCheckerServiceDriverBase.js
@@ -1127,6 +1167,8 @@ packages/lib/shim-init-node.js
 packages/lib/shim.js
 packages/lib/string-utils.test.js
 packages/lib/string-utils.js
+packages/lib/testing/share/makeMockShareInvitation.js
+packages/lib/testing/share/mockShareService.js
 packages/lib/testing/syncTargetUtils.js
 packages/lib/testing/test-utils-synchronizer.js
 packages/lib/testing/test-utils.js

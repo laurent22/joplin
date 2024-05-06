@@ -1,21 +1,19 @@
 
 import { PluginHtmlContents, PluginStates, ViewInfo } from '@joplin/lib/services/plugins/reducer';
 import * as React from 'react';
-import { Button, IconButton, Portal, SegmentedButtons, Text } from 'react-native-paper';
+import { Button, Portal, SegmentedButtons, Text } from 'react-native-paper';
 import useViewInfos from './hooks/useViewInfos';
-import WebviewController, { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { connect } from 'react-redux';
 import { AppState } from '../../../utils/types';
 import PluginUserWebView from './PluginUserWebView';
-import { View, useWindowDimensions, StyleSheet, AccessibilityInfo } from 'react-native';
+import { View, StyleSheet, AccessibilityInfo } from 'react-native';
 import { _ } from '@joplin/lib/locale';
-import { Theme } from '@joplin/lib/themes/type';
-import { themeStyle } from '@joplin/lib/theme';
 import Setting from '@joplin/lib/models/Setting';
 import { Dispatch } from 'redux';
-import Modal from '../../../components/Modal';
+import DismissibleDialog from '../../../components/DismissibleDialog';
 
 interface Props {
 	themeId: number;
@@ -27,40 +25,16 @@ interface Props {
 }
 
 
-const useStyles = (themeId: number) => {
-	const windowSize = useWindowDimensions();
-
-	return useMemo(() => {
-		const theme: Theme = themeStyle(themeId);
-
-		return StyleSheet.create({
-			webView: {
-				backgroundColor: 'transparent',
-				display: 'flex',
-			},
-			webViewContainer: {
-				flexGrow: 1,
-				flexShrink: 1,
-			},
-			closeButtonContainer: {
-				flexDirection: 'row',
-				justifyContent: 'flex-end',
-			},
-			dialog: {
-				backgroundColor: theme.backgroundColor,
-				borderRadius: 12,
-				padding: 10,
-
-				height: windowSize.height * 0.9,
-				width: windowSize.width * 0.97,
-
-				// Center
-				marginLeft: 'auto',
-				marginRight: 'auto',
-			},
-		});
-	}, [themeId, windowSize.width, windowSize.height]);
-};
+const styles = StyleSheet.create({
+	webView: {
+		backgroundColor: 'transparent',
+		display: 'flex',
+	},
+	webViewContainer: {
+		flexGrow: 1,
+		flexShrink: 1,
+	},
+});
 
 type ButtonInfo = {
 	value: string;
@@ -68,43 +42,38 @@ type ButtonInfo = {
 	icon: string;
 };
 
-const useSelectedTabId = (buttonInfos: ButtonInfo[], viewInfoById: Record<string, ViewInfo>) => {
+const useSelectedTabId = (
+	buttonInfos: ButtonInfo[],
+	viewInfoById: Record<string, ViewInfo>,
+) => {
+	const viewInfoByIdRef = useRef(viewInfoById);
+	viewInfoByIdRef.current = viewInfoById;
+
 	const getDefaultSelectedTabId = useCallback((): string|undefined => {
 		const lastSelectedId = Setting.value('ui.lastSelectedPluginPanel');
-		if (lastSelectedId && viewInfoById[lastSelectedId]) {
+		const lastSelectedInfo = viewInfoByIdRef.current[lastSelectedId];
+		if (lastSelectedId && lastSelectedInfo && lastSelectedInfo.view.opened) {
 			return lastSelectedId;
 		} else {
 			return buttonInfos[0]?.value;
 		}
-	}, [buttonInfos, viewInfoById]);
+	}, [buttonInfos]);
 
 	const [selectedTabId, setSelectedTabId] = useState<string|undefined>(getDefaultSelectedTabId);
 
 	useEffect(() => {
-		if (!selectedTabId) {
+		if (!selectedTabId || !viewInfoById[selectedTabId]?.view?.opened) {
 			setSelectedTabId(getDefaultSelectedTabId());
 		}
-	}, [selectedTabId, getDefaultSelectedTabId]);
+	}, [selectedTabId, viewInfoById, getDefaultSelectedTabId]);
 
 	useEffect(() => {
-		if (!selectedTabId) return () => {};
+		if (!selectedTabId) return;
 
-		const info = viewInfoById[selectedTabId];
-
-		let controller: WebviewController|null = null;
-		if (info && info.view.opened) {
-			const plugin = PluginService.instance().pluginById(info.plugin.id);
-			controller = plugin.viewController(info.view.id) as WebviewController;
-			controller.setIsShownInModal(true);
-		}
-
+		const info = viewInfoByIdRef.current[selectedTabId];
 		Setting.setValue('ui.lastSelectedPluginPanel', selectedTabId);
 		AccessibilityInfo.announceForAccessibility(_('%s tab opened', getTabLabel(info)));
-
-		return () => {
-			controller?.setIsShownInModal(false);
-		};
-	}, [viewInfoById, selectedTabId]);
+	}, [selectedTabId]);
 
 	return { setSelectedTabId, selectedTabId };
 };
@@ -124,7 +93,7 @@ const PluginPanelViewer: React.FC<Props> = props => {
 	const viewInfoById = useMemo(() => {
 		const result: Record<string, ViewInfo> = {};
 		for (const info of viewInfos) {
-			result[`${info.plugin.id}--${info.view.id}`] = info;
+			result[info.view.id] = info;
 		}
 		return result;
 	}, [viewInfos]);
@@ -132,6 +101,7 @@ const PluginPanelViewer: React.FC<Props> = props => {
 	const buttonInfos = useMemo(() => {
 		return Object.entries(viewInfoById)
 			.filter(([_id, info]) => info.view.containerType === ContainerType.Panel)
+			.filter(([_id, info]) => info.view.opened)
 			.map(([id, info]) => {
 				return {
 					value: id,
@@ -141,7 +111,6 @@ const PluginPanelViewer: React.FC<Props> = props => {
 			});
 	}, [viewInfoById]);
 
-	const styles = useStyles(props.themeId);
 	const { selectedTabId, setSelectedTabId } = useSelectedTabId(buttonInfos, viewInfoById);
 
 	const viewInfo = viewInfoById[selectedTabId];
@@ -194,30 +163,16 @@ const PluginPanelViewer: React.FC<Props> = props => {
 		});
 	}, [props.dispatch]);
 
-	const closeButton = (
-		<View style={styles.closeButtonContainer}>
-			<IconButton
-				icon='close'
-				accessibilityLabel={_('Close')}
-				onPress={onClose}
-			/>
-		</View>
-	);
-
 	return (
 		<Portal>
-			<Modal
+			<DismissibleDialog
+				themeId={props.themeId}
 				visible={props.visible}
 				onDismiss={onClose}
-				onRequestClose={onClose}
-				animationType='fade'
-				transparent={true}
-				containerStyle={styles.dialog}
 			>
-				{closeButton}
 				{renderTabContent()}
 				{renderTabSelector()}
-			</Modal>
+			</DismissibleDialog>
 		</Portal>
 	);
 };

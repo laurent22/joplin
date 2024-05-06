@@ -1,22 +1,11 @@
 import Folder from '../../models/Folder';
 import BaseModel from '../../BaseModel';
-import { FolderEntity, TagEntity } from '../../services/database/types';
+import { FolderEntity, TagEntity, TagsWithNoteCountEntity } from '../../services/database/types';
 import { getDisplayParentId, getTrashFolderId } from '../../services/trash';
 import { getCollator } from '../../models/utils/getCollator';
 
-interface Props {
-	folders: FolderEntity[];
-	selectedFolderId: string;
-	notesParentType: string;
-	collapsedFolderIds: string[];
-	selectedTagId: string;
-	tags?: TagEntity[];
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export type RenderFolderItem = (folder: FolderEntity, selected: boolean, hasChildren: boolean, depth: number)=> any;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export type RenderTagItem = (tag: TagEntity, selected: boolean)=> any;
+export type RenderFolderItem<T> = (folder: FolderEntity, hasChildren: boolean, depth: number)=> T;
+export type RenderTagItem<T> = (tag: TagsWithNoteCountEntity)=> T;
 
 function folderHasChildren_(folders: FolderEntity[], folderId: string) {
 	if (folderId === getTrashFolderId()) {
@@ -45,8 +34,26 @@ function folderIsCollapsed(folders: FolderEntity[], folderId: string, collapsedF
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function renderFoldersRecursive_(props: Props, renderItem: RenderFolderItem, items: any[], parentId: string, depth: number, order: string[]) {
+interface FolderSelectedContext {
+	selectedFolderId: string;
+	notesParentType: string;
+}
+export const isFolderSelected = (folder: FolderEntity, context: FolderSelectedContext) => {
+	return context.selectedFolderId === folder.id && context.notesParentType === 'Folder';
+};
+
+
+type ItemsWithOrder<ItemType> = {
+	items: ItemType[];
+	order: string[];
+};
+
+interface RenderFoldersProps {
+	folders: FolderEntity[];
+	collapsedFolderIds: string[];
+}
+
+function renderFoldersRecursive_<T>(props: RenderFoldersProps, renderItem: RenderFolderItem<T>, items: T[], parentId: string, depth: number, order: string[]): ItemsWithOrder<T> {
 	const folders = props.folders;
 	for (let i = 0; i < folders.length; i++) {
 		const folder = folders[i];
@@ -57,7 +64,7 @@ function renderFoldersRecursive_(props: Props, renderItem: RenderFolderItem, ite
 		if (folderIsCollapsed(props.folders, folder.id, props.collapsedFolderIds)) continue;
 		const hasChildren = folderHasChildren_(folders, folder.id);
 		order.push(folder.id);
-		items.push(renderItem(folder, props.selectedFolderId === folder.id && props.notesParentType === 'Folder', hasChildren, depth));
+		items.push(renderItem(folder, hasChildren, depth));
 		if (hasChildren) {
 			const result = renderFoldersRecursive_(props, renderItem, items, folder.id, depth + 1, order);
 			items = result.items;
@@ -70,12 +77,12 @@ function renderFoldersRecursive_(props: Props, renderItem: RenderFolderItem, ite
 	};
 }
 
-export const renderFolders = (props: Props, renderItem: RenderFolderItem) => {
+export const renderFolders = <T> (props: RenderFoldersProps, renderItem: RenderFolderItem<T>): ItemsWithOrder<T> => {
 	return renderFoldersRecursive_(props, renderItem, [], '', 0, []);
 };
 
-export const renderTags = (props: Props, renderItem: RenderTagItem) => {
-	const tags = props.tags.slice();
+const sortTags = (tags: TagEntity[]) => {
+	tags = tags.slice();
 	const collator = getCollator();
 	tags.sort((a, b) => {
 		// It seems title can sometimes be undefined (perhaps when syncing
@@ -90,12 +97,25 @@ export const renderTags = (props: Props, renderItem: RenderTagItem) => {
 		// sort.
 		return collator.compare(a.title, b.title);
 	});
+	return tags;
+};
+
+interface TagSelectedContext {
+	selectedTagId: string;
+	notesParentType: string;
+}
+export const isTagSelected = (tag: TagEntity, context: TagSelectedContext) => {
+	return context.selectedTagId === tag.id && context.notesParentType === 'Tag';
+};
+
+export const renderTags = <T> (unsortedTags: TagsWithNoteCountEntity[], renderItem: RenderTagItem<T>): ItemsWithOrder<T> => {
+	const tags = sortTags(unsortedTags);
 	const tagItems = [];
 	const order: string[] = [];
 	for (let i = 0; i < tags.length; i++) {
 		const tag = tags[i];
 		order.push(tag.id);
-		tagItems.push(renderItem(tag, props.selectedTagId === tag.id && props.notesParentType === 'Tag'));
+		tagItems.push(renderItem(tag));
 	}
 	return {
 		items: tagItems,

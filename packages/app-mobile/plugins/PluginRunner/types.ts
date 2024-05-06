@@ -30,11 +30,19 @@ export interface DialogInfo {
 	html: string;
 }
 
-export type WebViewOnMessageCallback = (arg: SerializableData)=> void;
+export type WebViewPostMessageCallback = (message: SerializableData)=> Promise<SerializableData>;
+
+// To be compatible with the desktop app, onMessage handlers registered within a dialog
+// or panel are given an event with a message property.
+interface OnMessageEvent {
+	message: SerializableData;
+}
+export type DialogOnMessageListener = (event: OnMessageEvent)=> Promise<void|SerializableData>;
+export type DialogSetOnMessageListenerCallback = (onMessage: DialogOnMessageListener)=> Promise<void>;
 
 export interface DialogMainProcessApi {
-	postMessage: (message: SerializableData)=> Promise<SerializableData>;
-	onMessage: (callback: WebViewOnMessageCallback)=> void;
+	postMessage: WebViewPostMessageCallback;
+	onMessage: DialogSetOnMessageListenerCallback;
 	onError: (message: string)=> Promise<void>;
 	onLog: (level: LogLevel, message: string)=> Promise<void>;
 }

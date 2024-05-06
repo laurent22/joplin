@@ -30,13 +30,13 @@ import MasterKey from '../models/MasterKey';
 import BaseItem from '../models/BaseItem';
 import { FileApi } from '../file-api';
 const FileApiDriverMemory = require('../file-api-driver-memory').default;
-const { FileApiDriverLocal } = require('../file-api-driver-local');
+import FileApiDriverLocal from '../file-api-driver-local';
 const { FileApiDriverWebDav } = require('../file-api-driver-webdav.js');
 const { FileApiDriverDropbox } = require('../file-api-driver-dropbox.js');
 const { FileApiDriverOneDrive } = require('../file-api-driver-onedrive.js');
 import SyncTargetRegistry from '../SyncTargetRegistry';
 const SyncTargetMemory = require('../SyncTargetMemory.js');
-const SyncTargetFilesystem = require('../SyncTargetFilesystem.js');
+import SyncTargetFilesystem from '../SyncTargetFilesystem';
 const SyncTargetNextcloud = require('../SyncTargetNextcloud.js');
 const SyncTargetDropbox = require('../SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('../SyncTargetAmazonS3.js');
@@ -66,6 +66,7 @@ import initLib from '../initLib';
 import OcrDriverTesseract from '../services/ocr/drivers/OcrDriverTesseract';
 import OcrService from '../services/ocr/OcrService';
 import { createWorker } from 'tesseract.js';
+import { reg } from '../registry';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -379,6 +380,7 @@ async function setupDatabase(id: number = null, options: any = null) {
 	await clearSettingFile(id);
 	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
 
+	reg.setDb(databases_[id]);
 	Setting.setValue('sync.target', syncTargetId());
 }
 

@@ -31,6 +31,7 @@ describe('db', () => {
 			'20211030103016_item_owner_name_unique',
 			'20211111134329_storage_index',
 			'20220121172409_email_recipient_default',
+			'20240413141308_changes_optimization',
 		];
 
 		let startProcessing = false;

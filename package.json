@@ -10,7 +10,7 @@
     "url": "git+https://github.com/laurent22/joplin.git"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "scripts": {
     "buildApiDoc": "yarn workspace joplin start apidoc ../../readme/api/references/rest_api.md",

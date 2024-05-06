@@ -151,12 +151,13 @@ describe('routes/notes', () => {
 	});
 
 	test('should not create resource from files that does not exist', async () => {
-		expect(
-			async () => createResourcesFromPaths([
-				{ originalUrl: 'not-a-real-file', path: '/does/not/exist' },
-			]),
-		).rejects.toThrow('Cannot access /does/not/exist');
+		Logger.globalLogger.enabled = false;
+		const result = await createResourcesFromPaths([
+			{ originalUrl: 'not-a-real-file', path: '/does/not/exist' },
+		]);
+		Logger.globalLogger.enabled = true;
 
+		expect(result[0].resource).toBe(null);
 		const resources = await Resource.all();
 		expect(resources.length).toBe(0);
 	});
@@ -171,6 +172,52 @@ describe('routes/notes', () => {
 
 		expect((await Note.load(note1.id)).deleted_time).toBeGreaterThanOrEqual(beforeTime);
 		expect(await Note.load(note2.id)).toBeFalsy();
+	});
+
+	test('should not stop execution if a file can not be processed', async () => {
+		Logger.globalLogger.enabled = false;
+		const result = await createResourcesFromPaths([
+			{ originalUrl: 'asdf.png', path: `${__dirname}/bad-path-should-not-exist` },
+			{ originalUrl: 'asdf.png', path: `${__dirname}/../../../images/SideMenuHeader.png` },
+		]);
+		Logger.globalLogger.enabled = true;
+
+		expect(result.length).toBe(2);
+	});
+
+	test('should not return notes in the trash by default', async () => {
+		const api = new Api();
+		const note1 = await Note.save({});
+		const note2 = await Note.save({});
+		await Note.delete(note1.id, { toTrash: true });
+
+		{
+			const notes = await api.route(RequestMethod.GET, 'notes');
+			expect(notes.items.length).toBe(1);
+			expect(notes.items[0].id).toBe(note2.id);
+		}
+
+		{
+			const notes = await api.route(RequestMethod.GET, 'notes', { include_deleted: '1' });
+			expect(notes.items.length).toBe(2);
+		}
+	});
+
+	test('should not return conflicts by default', async () => {
+		const api = new Api();
+		const note1 = await Note.save({});
+		await Note.save({ is_conflict: 1 });
+
+		{
+			const notes = await api.route(RequestMethod.GET, 'notes');
+			expect(notes.items.length).toBe(1);
+			expect(notes.items[0].id).toBe(note1.id);
+		}
+
+		{
+			const notes = await api.route(RequestMethod.GET, 'notes', { include_conflicts: '1' });
+			expect(notes.items.length).toBe(2);
+		}
 	});
 
 });

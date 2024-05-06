@@ -16,7 +16,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 const { clipboard } = require('electron');
 import { reg } from '@joplin/lib/registry';
 import ErrorBoundary from '../../../../ErrorBoundary';
-import { EditorKeymap, EditorLanguageType, EditorSettings } from '@joplin/editor/types';
+import { EditorKeymap, EditorLanguageType, EditorSettings, UserEventSource } from '@joplin/editor/types';
 import useStyles from '../utils/useStyles';
 import { EditorEvent, EditorEventType } from '@joplin/editor/events';
 import useScrollHandler from '../utils/useScrollHandler';
@@ -78,12 +78,11 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		}
 	}, [props.content]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onEditorPaste = useCallback(async (event: any = null) => {
+	const onEditorPaste = useCallback(async (event: Event|null = null) => {
 		const resourceMds = await getResourcesFromPasteEvent(event);
 		if (!resourceMds.length) return;
 		if (editorRef.current) {
-			editorRef.current.insertText(resourceMds.join('\n'));
+			editorRef.current.insertText(resourceMds.join('\n'), UserEventSource.Paste);
 		}
 	}, []);
 
@@ -130,7 +129,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	const editorPasteText = useCallback(async () => {
 		if (editorRef.current) {
 			const modifiedMd = await Note.replaceResourceExternalToInternalLinks(clipboard.readText(), { useAbsolutePaths: true });
-			editorRef.current.insertText(modifiedMd);
+			editorRef.current.insertText(modifiedMd, UserEventSource.Paste);
 		}
 	}, []);
 

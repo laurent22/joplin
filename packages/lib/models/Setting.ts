@@ -36,6 +36,8 @@ export enum SettingItemSubType {
 	FilePathAndArgs = 'file_path_and_args',
 	FilePath = 'file_path', // Not supported on mobile!
 	DirectoryPath = 'directory_path', // Not supported on mobile!
+	FontFamily = 'font_family',
+	MonospaceFontFamily = 'monospace_font_family',
 }
 
 interface KeysOptions {
@@ -1214,16 +1216,29 @@ class Setting extends BaseModel {
 				section: 'plugins',
 				public: true,
 				appTypes: [AppType.Mobile],
-				show: (_settings) => {
+				show: (settings) => {
 					// Hide on iOS due to App Store guidelines. See
 					// https://github.com/laurent22/joplin/pull/10086 for details.
-					return shim.mobilePlatform() !== 'ios';
+					return shim.mobilePlatform() !== 'ios' && settings['plugins.pluginSupportEnabled'];
 				},
 				needRestart: true,
 				advanced: true,
 
 				label: () => _('Plugin WebView debugging'),
 				description: () => _('Allows debugging mobile plugins. See %s for details.', 'https://https://joplinapp.org/help/api/references/mobile_plugin_debugging/'),
+			},
+
+			'plugins.pluginSupportEnabled': {
+				value: false,
+				public: true,
+				autoSave: true,
+				section: 'plugins',
+				advanced: true,
+				type: SettingItemType.Bool,
+				appTypes: [AppType.Mobile],
+				label: () => _('Enable plugin support'),
+				// On mobile, we have a screen that manages this setting when it's disabled.
+				show: (settings) => settings['plugins.pluginSupportEnabled'],
 			},
 
 			'plugins.devPluginPaths': {
@@ -1360,6 +1375,7 @@ class Setting extends BaseModel {
 							_('Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.'),
 						storage: SettingStorage.File,
 						isGlobal: true,
+						subType: SettingItemSubType.FontFamily,
 					},
 			'style.editor.monospaceFontFamily': {
 				value: '',
@@ -1372,6 +1388,7 @@ class Setting extends BaseModel {
 					_('Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.'),
 				storage: SettingStorage.File,
 				isGlobal: true,
+				subType: SettingItemSubType.MonospaceFontFamily,
 			},
 
 			'style.editor.contentMaxWidth': { value: 0, type: SettingItemType.Int, public: true, storage: SettingStorage.File, isGlobal: true, appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor maximum width'), description: () => _('Set it to 0 to make it take the complete available space. Recommended width is 600.') },
@@ -2099,6 +2116,7 @@ class Setting extends BaseModel {
 	}
 
 	// Low-level method to load a setting directly from the database. Should not be used in most cases.
+	// Does not apply setting default values.
 	public static async loadOne(key: string): Promise<CacheItem | null> {
 		if (this.keyStorage(key) === SettingStorage.File) {
 			let fileSettings = await this.fileHandler.load();
@@ -2109,10 +2127,14 @@ class Setting extends BaseModel {
 				fileSettings = mergeGlobalAndLocalSettings(rootFileSettings, fileSettings);
 			}
 
-			return {
-				key,
-				value: fileSettings[key],
-			};
+			if (key in fileSettings) {
+				return {
+					key,
+					value: fileSettings[key],
+				};
+			} else {
+				return null;
+			}
 		}
 
 		// Always check in the database first, including for secure settings,
@@ -2784,9 +2806,13 @@ class Setting extends BaseModel {
 		return name;
 	}
 
-	public static sectionDescription(name: string) {
-		if (name === 'markdownPlugins') return _('These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.');
-		if (name === 'general') return _('Notes and settings are stored in: %s', toSystemSlashes(this.value('profileDir'), process.platform));
+	public static sectionDescription(name: string, appType: AppType) {
+		if (name === 'markdownPlugins' && appType === AppType.Desktop) {
+			return _('These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.');
+		}
+		if (name === 'general' && appType === AppType.Desktop) {
+			return _('Notes and settings are stored in: %s', toSystemSlashes(this.value('profileDir'), process.platform));
+		}
 
 		if (this.customSections_[name] && this.customSections_[name].description) return this.customSections_[name].description;
 

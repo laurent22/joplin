@@ -18,10 +18,10 @@ There are also a few forks of existing packages under the "fork-*" name.
 
 ## Required dependencies
 
-- Install Node 16+. On Windows, also install the build tools - https://nodejs.org/en/
+- Install Node 18+. On Windows, also install the build tools - https://nodejs.org/en/
   - [Enable Yarn](https://yarnpkg.com/getting-started/install): `corepack enable`
 - macOS: Install Cocoapods - `brew install cocoapods`. Apple Silicon [may require libvips](https://github.com/laurent22/joplin/pull/5966#issuecomment-1007158597) - `brew install vips`.
-- Linux: Install dependencies - `sudo apt install build-essential libnss3 libsecret-1-dev python rsync`
+- Linux: Install dependencies - `sudo apt install build-essential libnss3 libsecret-1-dev python rsync libgbm-dev libatk-bridge2.0-0 libgtk-3.0 libasound2`
 
 ## Building
 

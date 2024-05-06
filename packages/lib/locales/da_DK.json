@@ -65,6 +65,9 @@
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s er ikke optimeret til at synkronisere mange små filer, så din første synkronisering vil være langsom."
 	],
+	"%s tab opened": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -144,7 +147,7 @@
 		"A5"
 	],
 	"About": [
-		""
+		"Om"
 	],
 	"About Joplin": [
 		"Om Joplin"
@@ -160,6 +163,9 @@
 	],
 	"Accept": [
 		"Acceptér"
+	],
+	"Accepted shares": [
+		""
 	],
 	"Access denied: Please check your username and password": [
 		"Adgang nægtet: Tjek venligst dit brugernavn og din adgangskode"
@@ -215,11 +221,17 @@
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"Alle data, herunder noter, notesbøger og etiketter, bliver slettet permanent."
 	],
+	"All item sync failures have been marked as \"ignored\".": [
+		""
+	],
 	"All notes": [
 		"Alle noter"
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Alle mulige porte er i brug - rapportér venligst problemet på %s"
+	],
+	"Allows debugging mobile plugins. See %s for details.": [
+		""
 	],
 	"Also displays unset and hidden config variables.": [
 		"Viser også tomme eller skjulte konfigurations variabler."
@@ -232,6 +244,9 @@
 	],
 	"Always ask": [
 		"Spørg altid"
+	],
+	"Always open %s files without asking.": [
+		""
 	],
 	"Always resize": [
 		"Ændr altid størrelsen"
@@ -314,6 +329,9 @@
 	"Authorisation token:": [
 		"Autoriseringstoken:"
 	],
+	"Authorise": [
+		"Autorisér"
+	],
 	"Auto": [
 		"Auto"
 	],
@@ -327,7 +345,7 @@
 		"Tjek automatisk efter opdateringer"
 	],
 	"Automatically delete notes in the trash after a number of days": [
-		""
+		"Slet automatisk noter i papirkurven efter et antal dage"
 	],
 	"Automatically switch theme to match system theme": [
 		"Skifter automatisk tema så det matcher systemets tema"
@@ -355,6 +373,9 @@
 	],
 	"Bulleted List": [
 		"Punktliste"
+	],
+	"by %s": [
+		""
 	],
 	"Can Share": [
 		"Kan dele"
@@ -530,8 +551,14 @@
 	"Completed decryption.": [
 		"Dekryptering færdig."
 	],
+	"Completed with warnings:\n%s": [
+		""
+	],
 	"Completed: %s (%s)": [
 		"Fuldført: %s (%s)"
+	],
+	"completion date": [
+		""
 	],
 	"Compress old changes": [
 		"Komprimér gamle ændringer"
@@ -563,6 +590,9 @@
 	"Content provided by %s": [
 		"Indhold leveret af %s"
 	],
+	"Content provided by: %s": [
+		"Indhold leveret af: %s"
+	],
 	"Continue": [
 		"Fortsæt"
 	],
@@ -589,6 +619,9 @@
 	],
 	"Copy Link Address": [
 		"Kopier linkadresse"
+	],
+	"Copy link to website": [
+		"Kopiér link til hjemmeside"
 	],
 	"Copy Markdown link": [
 		"Kopier markdown link"
@@ -726,9 +759,6 @@
 	"Dashboard": [
 		"Kontrolpanel"
 	],
-	"Database v%s": [
-		"Database v%s"
-	],
 	"Date": [
 		"Dato"
 	],
@@ -798,11 +828,17 @@
 	"Delete this profile?": [
 		"Slet denne profil?"
 	],
+	"Deleted": [
+		"Slettet"
+	],
 	"Deleted local items: %d.": [
 		"Slettede lokale emner: %d."
 	],
 	"Deleted remote items: %d.": [
 		"Slettede fjern-emner: %d."
+	],
+	"Deletes notes permanently, skipping the trash.": [
+		""
 	],
 	"Deletes the given notebook.": [
 		"Sletter aktuelle notesbog."
@@ -940,7 +976,7 @@
 		"Dropbox login"
 	],
 	"Due": [
-		""
+		"Forfaldne"
 	],
 	"Duplicate": [
 		"Dupliker"
@@ -1021,7 +1057,7 @@
 		"fremhævet tekst"
 	],
 	"Empty trash": [
-		""
+		"Tøm papirkurven"
 	],
 	"Enable": [
 		"Aktivér"
@@ -1076,6 +1112,9 @@
 	],
 	"Enable optical character recognition (OCR)": [
 		"Aktivér optisk tegngenkendelse (OCR)"
+	],
+	"Enable or disable plugins": [
+		"Aktivér eller deaktivér udvidelser"
 	],
 	"Enable PDF viewer": [
 		"Aktivér PDF-viser"
@@ -1200,9 +1239,6 @@
 	"Export profile": [
 		"Eksporter profil"
 	],
-	"Export your data": [
-		"Eksportér dine data"
-	],
 	"Exported successfully!": [
 		"Eksporteret med succes!"
 	],
@@ -1229,6 +1265,9 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Sikring: Fjern ikke lokal data når målet for synkroniseringen er tom (ofte et resultat af fejlkonfigurering eller bugs)"
+	],
+	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
+		""
 	],
 	"Fatal error:": [
 		"Kritisk fejl:"
@@ -1278,9 +1317,6 @@
 	"Focus title": [
 		"Fokuser på titel"
 	],
-	"Folders": [
-		"Mapper"
-	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Kun til fejlsøgning: Eksporter din profil til et eksternt SD-kort."
 	],
@@ -1307,6 +1343,9 @@
 	],
 	"Found: %d.": [
 		"Fundet: %d."
+	],
+	"From a plugin": [
+		"Fra en udvidelse"
 	],
 	"FTS enabled: %d": [
 		"Fuld-tekst søgning slået til: %d"
@@ -1349,7 +1388,7 @@
 		"Giv tilladelse"
 	],
 	"Have you authorised the application login in the above URL?": [
-		""
+		"Har du godkendt login til applikationen i ovenstående URL?"
 	],
 	"Header %d": [
 		"Overskrift %d"
@@ -1362,6 +1401,9 @@
 	],
 	"Help": [
 		"Hjælp"
+	],
+	"Here's what we do to make plugins safer:": [
+		""
 	],
 	"Hermes enabled: %d": [
 		"Hermes aktiveret: %d"
@@ -1421,7 +1463,7 @@
 		"Ledig"
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
-		""
+		"Hvis du allerede har godkendt, skal du vente på, at applikationen synkroniseres med Joplin Cloud."
 	],
 	"Ignore": [
 		"Ignorér"
@@ -1434,6 +1476,15 @@
 	],
 	"Import": [
 		"Importer"
+	],
+	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+		""
+	],
+	"Import from JEX": [
+		""
+	],
+	"Import notes from a JEX (Joplin Export) file.": [
+		""
 	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		"Importerer fra \"%s\" som \"%s\"-format. Vent venligst..."
@@ -1470,6 +1521,9 @@
 	],
 	"In: %s": [
 		"I: %s"
+	],
+	"Incompatible": [
+		""
 	],
 	"Increase indent level": [
 		"Øg indrykningsniveau"
@@ -1549,6 +1603,12 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
+	"Joplin Cloud Login": [
+		"Joplin Cloud Login"
+	],
+	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
+		""
+	],
 	"Joplin Export Directory": [
 		"Joplin eksport mappe"
 	],
@@ -1588,6 +1648,9 @@
 	"Keep note history for": [
 		"Behold note-historie i"
 	],
+	"Keep notes in the trash for": [
+		"Behold noter i papirkurven i"
+	],
 	"Keyboard Mode": [
 		"Tastaturtilstand"
 	],
@@ -1619,7 +1682,7 @@
 		"Senere"
 	],
 	"Latitude": [
-		""
+		"Breddegrad"
 	],
 	"Layout": [
 		"Layout"
@@ -1641,6 +1704,9 @@
 	],
 	"Light": [
 		"Lyst"
+	],
+	"Like any software you install, plugins can potentially cause security issues or data loss.": [
+		""
 	],
 	"Lines": [
 		"Linjer"
@@ -1670,6 +1736,9 @@
 	"Loaded": [
 		"Indlæst"
 	],
+	"Loading plugin repository...": [
+		"Indlæser udvidelsesarkiv..."
+	],
 	"Loading...": [
 		"Indlæser..."
 	],
@@ -1695,7 +1764,7 @@
 		"Logfiler, profiler, synkroniseringsstatus"
 	],
 	"Longitude": [
-		""
+		"Længdegrad"
 	],
 	"Make a donation": [
 		"Giv en donation"
@@ -1787,8 +1856,14 @@
 	"More than one item match \"%s\". Please narrow down your query.": [
 		"Mere end et emne matcher \"%s\".  Præciser din søgning."
 	],
+	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
 	"Move %d notes to notebook \"%s\"?": [
 		"Flyt %d noter til notesbogen \"%s\"?"
+	],
+	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
+		"Flytte notesbogen \"%s\" til papirkurven?\n\nAlle noter og undernoter i denne notesbog vil også blive flyttet til papirkurven."
 	],
 	"Move to notebook": [
 		"Flyt til notesbog"
@@ -1810,6 +1885,9 @@
 	],
 	"Never resize": [
 		"Ændr aldrig størrelse"
+	],
+	"New": [
+		""
 	],
 	"New note": [
 		"Ny note"
@@ -1858,6 +1936,9 @@
 	],
 	"No active notebook.": [
 		"Ingen aktiv notesbog."
+	],
+	"No incoming shares": [
+		""
 	],
 	"No item with ID %s": [
 		"Intet emne med ID'en %s"
@@ -2081,6 +2162,15 @@
 	"Per user. Minimum of %d users.": [
 		"Pr. bruger. Minimum %d brugere."
 	],
+	"Permanently delete note": [
+		"Slet note permanent"
+	],
+	"Permanently delete note \"%s\"?": [
+		"Slet noten \"%s\" permanent?"
+	],
+	"Permanently delete these %d notes?": [
+		"Slet disse %d noter permanent?"
+	],
 	"Permission needed": [
 		"Tilladelse nødvendig"
 	],
@@ -2120,23 +2210,32 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"Angiv hvilken notesbog, noterne skal importeres til."
 	],
-	"Please upgrade Joplin to use this plugin": [
-		"Opgrader venligst Joplin for at benytte denne udvidelse"
-	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Vent venligst på at alle vedhæftninger downloades og dekrypteres. Du kan også skifte til %s for at redigere noten."
 	],
 	"Please wait...": [
 		"Vent venligst..."
 	],
+	"Plugin message": [
+		"Udvidelsebesked"
+	],
 	"Plugin repository failed to load": [
-		""
+		"Plugin-arkivet kunne ikke indlæses"
+	],
+	"Plugin search": [
+		"Udvidelsesøgning"
 	],
 	"Plugin tools": [
 		"Udvidelsesværtøjer"
 	],
+	"Plugin WebView debugging": [
+		""
+	],
 	"Plugins": [
 		"Udvidelser"
+	],
+	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
+		""
 	],
 	"Portrait": [
 		"Portræt"
@@ -2197,6 +2296,9 @@
 	],
 	"Process user deletions": [
 		"Behandl brugersletninger"
+	],
+	"Processing": [
+		""
 	],
 	"Profile": [
 		"Profil"
@@ -2267,6 +2369,9 @@
 	"Recipients:": [
 		"Modtagere:"
 	],
+	"Recommended": [
+		"Anbefalet"
+	],
 	"Redo": [
 		"Gentag"
 	],
@@ -2315,6 +2420,12 @@
 	"Replace: ": [
 		"Erstat: "
 	],
+	"Report an issue": [
+		""
+	],
+	"Report fraudulent plugin": [
+		""
+	],
 	"Reset application layout": [
 		"Nulstil applikationslayout"
 	],
@@ -2338,6 +2449,18 @@
 	],
 	"Restore": [
 		"Gendan"
+	],
+	"Restore note": [
+		"Gendan note"
+	],
+	"Restore notebook": [
+		"Gendan notesbog"
+	],
+	"Restore the items matching <pattern> from the trash.": [
+		"Gendan de elementer, der matcher <pattern>, fra papirkurven."
+	],
+	"Restored items": [
+		"Gendannede elementer"
 	],
 	"Restored Notes": [
 		"Gendannede noter"
@@ -2606,6 +2729,9 @@
 	"Source: ": [
 		"Kilde: "
 	],
+	"Spacer": [
+		""
+	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		"Angiv hvilken port API-serveren skal bruge. Ellers bruges standardporten."
 	],
@@ -2783,6 +2909,9 @@
 	"Take photo": [
 		"Tag et foto"
 	],
+	"Task \"%s\" failed with error: %s": [
+		""
+	],
 	"Task list": [
 		"Opgaveliste"
 	],
@@ -2874,6 +3003,13 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"Noten \"%s\" er blevet gendannet til notesbogen \"%s\"."
 	],
+	"The note was successfully moved to the trash.": [
+		"Noten blev flyttet til papirkurven.",
+		"Noter blev flyttet til papirkurven."
+	],
+	"The notebook and its content was successfully moved to the trash.": [
+		"Notesbogen og dens indhold blev flyttet til papirkurven."
+	],
 	"The notebook could not be saved: %s": [
 		"Notesbogen kan ikke gemmes: %s"
 	],
@@ -2928,9 +3064,6 @@
 	"There are unsaved changes.": [
 		"Der er ikke-gemte ændringer."
 	],
-	"There is currently no notebook. Create one by clicking on \"New notebook\".": [
-		"Der er ingen notesbog. Opret en ved at klikke på \"Ny Notesbog\"."
-	],
 	"There is no data to export.": [
 		"Der er ingen data at eksportere."
 	],
@@ -2940,6 +3073,9 @@
 	"There was an error downloading this attachment:": [
 		"Der opstod en fejl ved download af denne vedhæftning:"
 	],
+	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
+		""
+	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Disse emner bliver på enheden, og bliver ikke overført til synk-modtager. For at finde disse emner; enten søg efter titel eller ID (som er vist i klammer herover)"
 	],
@@ -2948,6 +3084,9 @@
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
 		"Dette giver en anden bruger mulighed for at dele en notesbog med dig, og I kan så begge samarbejde om den. Det giver dig dog ikke mulighed for at dele en notesbog med en anden, medmindre du har funktionen \"%s\"."
+	],
+	"This attachment does not have OCR data (Status: %s)": [
+		""
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Denne vedhæftning er ikke downloadet eller ikke dekrypteret endnu"
@@ -2988,11 +3127,17 @@
 	"This note has no history": [
 		"Denne note har ingen historie"
 	],
+	"This plugin doesn't support %s.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Denne Rich Text editor har en række begrænsninger, og det anbefales at være opmærksom på disse, før den bruges."
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"Denne tjeneste tillader browser udvidelsen at kommunikere med Joplin. Når du slår den til kan det være, at din firewall beder om tilladelse til at lytte på en bestemt port."
+	],
+	"This subfolder of the trash has no notes.": [
+		""
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
 		"Dette tillader Joplin at køre i baggrunden. Det er anbefalet at slå dette til for at holde dine noter synkroniserede og dermed undgå konflikter."
@@ -3001,7 +3146,7 @@
 		"Dette åbner i et nyt vindue. Vil du gemme dine ændringer?"
 	],
 	"This will permanently delete all items in the trash. Continue?": [
-		""
+		"Dette vil slette alle elementer i papirkurven permanent. Ønsker du at fortsætte?"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Dette vil fjerne notesbogen fra din samling, og du vil ikke længere have adgang til dens indhold. Ønsker du at fortsætte?"
@@ -3017,6 +3162,9 @@
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"For at give Joplin tilladelse til at synkronisere med Dropbox, skal du følge nedenstående trin:"
+	],
+	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
+		"For at Joplin kan synkronisere med Joplin Cloud, skal du logge ind ved hjælp af denne URL:"
 	],
 	"To continue, please enter your master password below.": [
 		"Indtast din hovedadgangskode nedenfor for at fortsætte."
@@ -3053,6 +3201,9 @@
 	],
 	"to-do": [
 		"opgave"
+	],
+	"To-do": [
+		"Opgave"
 	],
 	"to-do: %s": [
 		"opgave: %s"
@@ -3103,7 +3254,7 @@
 		"I alt: %d/%d"
 	],
 	"Trash": [
-		""
+		"Papirkurv"
 	],
 	"Try again": [
 		"Prøv igen"
@@ -3128,9 +3279,6 @@
 	],
 	"Unable to edit resource of type %s": [
 		"Kan ikke redigere ressource af typen %s"
-	],
-	"Unable to export or share data. Reason: %s": [
-		"Kan ikke eksportere eller dele data. Årsag: %s"
 	],
 	"Unable to share log data. Reason: %s": [
 		"Kan ikke dele logdata. Årsag: %s"
@@ -3258,6 +3406,9 @@
 	"View": [
 		"Vis"
 	],
+	"View OCR text": [
+		""
+	],
 	"View on map": [
 		"Vis på kort"
 	],
@@ -3276,14 +3427,20 @@
 	"Voice typing...": [
 		"Stemmeindtastning..."
 	],
+	"Waiting for authorisation...": [
+		"Venter på godkendelse..."
+	],
 	"Warning": [
 		"Advarsel"
 	],
 	"Warning: not all resources shown for performance reasons (limit: %s).": [
 		"Advarsel: Ikke alle ressourcer kan vises af ydelsesmæssige årsager (Begrænsning: %s)."
 	],
-	"Warnings:\n%s": [
-		"Advarsler:\n%s"
+	"We have a system for reporting and removing problematic plugins.": [
+		""
+	],
+	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
+		""
 	],
 	"Web Clipper": [
 		"Web-clipper"
@@ -3340,7 +3497,7 @@
 		"Du er ved at vedhæfte et stort billede (%dx%d pixels). Ønsker du at nedskalere det til %d pixels før vedhæftning?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
-		""
+		"Du er logget ind på Joplin Cloud, du kan forlade dette skærmbillede nu."
 	],
 	"You currently have no notebooks.": [
 		"Du har ingen notesbøger."
@@ -3353,6 +3510,12 @@
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Du kan bruge værktøjet nedenfor til at genkryptere dine data for eksempel hvis du ved at nogle af dine noter er krypteret med en forældet krypteringsmetode."
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
+		"Du kunne ikke oprette forbindelse til Joplin Cloud. Tjek dine legitimationsoplysninger og prøv igen. Fejl:"
+	],
+	"Your account doesn't have access to this feature": [
+		""
 	],
 	"Your choice: ": [
 		"Dit valg: "

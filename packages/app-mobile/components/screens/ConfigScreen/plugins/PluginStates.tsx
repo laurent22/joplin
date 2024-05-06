@@ -4,18 +4,19 @@ import { ConfigScreenStyles } from '../configScreenStyles';
 import { View } from 'react-native';
 import { Banner, Button, Text } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
-import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginToggle from './PluginToggle';
 import SearchPlugins from './SearchPlugins';
 import { ItemEvent } from '@joplin/lib/components/shared/config/plugins/types';
 import NavService from '@joplin/lib/services/NavService';
 import useRepoApi from './utils/useRepoApi';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
+import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 
 interface Props {
 	themeId: number;
 	styles: ConfigScreenStyles;
-	pluginSettings: string;
+	pluginSettings: SerializedPluginSettings;
 	settingsSearchQuery?: string;
 
 	updatePluginStates: (settingValue: PluginSettings)=> void;
@@ -33,6 +34,23 @@ export const getSearchText = () => {
 	}
 	searchText.push(...searchInputSearchText());
 	return searchText;
+};
+
+// Loaded plugins: All plugins with available manifests.
+const useLoadedPluginIds = () => {
+	const getLoadedPlugins = useCallback(() => {
+		return PluginService.instance().pluginIds;
+	}, []);
+	const [loadedPluginIds, setLoadedPluginIds] = useState(getLoadedPlugins);
+
+	useAsyncEffect(async event => {
+		while (!event.cancelled) {
+			await PluginService.instance().waitForLoadedPluginsChange();
+			setLoadedPluginIds(getLoadedPlugins());
+		}
+	}, []);
+
+	return loadedPluginIds;
 };
 
 const PluginStates: React.FC<Props> = props => {
@@ -91,14 +109,17 @@ const PluginStates: React.FC<Props> = props => {
 
 	const installedPluginCards = [];
 	const pluginService = PluginService.instance();
-	for (const key in pluginService.plugins) {
-		const plugin = pluginService.plugins[key];
+
+	const pluginIds = useLoadedPluginIds();
+	for (const pluginId of pluginIds) {
+		const plugin = pluginService.plugins[pluginId];
 
 		if (!props.shouldShowBasedOnSearchQuery || props.shouldShowBasedOnSearchQuery(plugin.manifest.name)) {
 			installedPluginCards.push(
 				<PluginToggle
-					key={`plugin-${key}`}
-					pluginId={plugin.id}
+					key={`plugin-${pluginId}`}
+					themeId={props.themeId}
+					pluginId={pluginId}
 					styles={props.styles}
 					pluginSettings={props.pluginSettings}
 					updatablePluginIds={updatablePluginIds}

@@ -84,6 +84,10 @@ export default class FsDriverBase {
 		throw new Error('Not implemented: remove');
 	}
 
+	public async setTimestamp(_path: string, _timestampDate: Date): Promise<void> {
+		throw new Error('Not implemented: setTimestamp');
+	}
+
 	public async isDirectory(path: string) {
 		const stat = await this.stat(path);
 		return !stat ? false : stat.isDirectory();

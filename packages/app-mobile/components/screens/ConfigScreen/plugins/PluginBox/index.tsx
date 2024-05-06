@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { Icon, Card, Chip, Text } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
-import { Alert, Linking, TextStyle, View } from 'react-native';
+import { Alert, Linking, StyleSheet, View } from 'react-native';
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import shim from '@joplin/lib/shim';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import ActionButton, { PluginCallback } from './ActionButton';
+import PluginInfoButton from './PluginInfoButton';
 
 export enum InstallState {
 	NotInstalled,
@@ -21,6 +22,7 @@ export enum UpdateState {
 }
 
 interface Props {
+	themeId: number;
 	item: PluginItem;
 	isCompatible: boolean;
 
@@ -28,11 +30,11 @@ interface Props {
 	installState?: InstallState;
 	updateState?: UpdateState;
 
+	onAboutPress?: PluginCallback;
 	onInstall?: PluginCallback;
 	onUpdate?: PluginCallback;
 	onDelete?: PluginCallback;
 	onToggle?: PluginCallback;
-	onAboutPress?: PluginCallback;
 	onShowPluginLog?: PluginCallback;
 }
 
@@ -56,9 +58,15 @@ const onRecommendedPress = () => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const PluginIcon = (props: any) => <Icon {...props} source='puzzle'/>;
 
-const versionTextStyle: TextStyle = {
-	opacity: 0.8,
-};
+const styles = StyleSheet.create({
+	versionText: {
+		opacity: 0.8,
+	},
+	title: {
+		// Prevents the title text from being clipped on Android
+		verticalAlign: 'middle',
+	},
+});
 
 const PluginBox: React.FC<Props> = props => {
 	const manifest = props.item.manifest;
@@ -107,7 +115,7 @@ const PluginBox: React.FC<Props> = props => {
 	);
 	const disableButton = <ActionButton item={item} onPress={props.onToggle} title={_('Disable')}/>;
 	const enableButton = <ActionButton item={item} onPress={props.onToggle} title={_('Enable')}/>;
-	const aboutButton = <ActionButton icon='web' item={item} onPress={props.onAboutPress} title={_('About')}/>;
+	const aboutButton = <ActionButton item={item} onPress={props.onAboutPress} icon='web' title={_('About')}/>;
 
 	const renderErrorsChip = () => {
 		if (!props.hasErrors) return null;
@@ -159,17 +167,26 @@ const PluginBox: React.FC<Props> = props => {
 		);
 	};
 
+	const renderRightEdgeButton = (buttonProps: { size: number }) => {
+		// If .onAboutPress is given (e.g. when searching), there's another way to get information
+		// about the plugin. In this case, we don't show the right-side information link.
+		if (props.onAboutPress) return null;
+		return <PluginInfoButton {...buttonProps} themeId={props.themeId} item={props.item}/>;
+	};
+
 	const updateStateIsIdle = props.updateState !== UpdateState.Idle;
 
 	const titleComponent = <>
-		<Text variant='titleMedium'>{manifest.name}</Text> <Text variant='bodySmall' style={versionTextStyle}>v{manifest.version}</Text>
+		<Text variant='titleMedium'>{manifest.name}</Text> <Text variant='bodySmall' style={styles.versionText}>v{manifest.version}</Text>
 	</>;
 	return (
 		<Card style={{ margin: 8, opacity: props.isCompatible ? undefined : 0.75 }} testID='plugin-card'>
 			<Card.Title
 				title={titleComponent}
+				titleStyle={styles.title}
 				subtitle={manifest.description}
 				left={PluginIcon}
+				right={renderRightEdgeButton}
 			/>
 			<Card.Content>
 				<View style={{ flexDirection: 'row' }}>

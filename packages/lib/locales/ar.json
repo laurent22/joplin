@@ -62,6 +62,9 @@
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		""
 	],
+	"%s tab opened": [
+		""
+	],
 	"%s: %d": [
 		"%s : %d"
 	],
@@ -152,6 +155,9 @@
 	"Accept": [
 		"قبول"
 	],
+	"Accepted shares": [
+		""
+	],
 	"Access denied: Please check your username and password": [
 		"تم رفض الدخول: المرجو التأكد من اسم المستخدم و كلمة السر"
 	],
@@ -206,11 +212,17 @@
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"جميع البيانات، بما فيها الملاحظات، ملفات الملاحظات و العلامات ستحذف بشكل دائم."
 	],
+	"All item sync failures have been marked as \"ignored\".": [
+		""
+	],
 	"All notes": [
 		"جميع الملاحظات"
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"كافة المنافذ المحتملة قيد الاستخدام - الرجاء الإبلاغ عن المشكلة على %s"
+	],
+	"Allows debugging mobile plugins. See %s for details.": [
+		""
 	],
 	"Also displays unset and hidden config variables.": [
 		"يظهر أيضاً متغيرات الإعداد غير المضبوطة أو تلك المخفية."
@@ -220,6 +232,9 @@
 	],
 	"Always": [
 		"دائمًا"
+	],
+	"Always open %s files without asking.": [
+		""
 	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
 		""
@@ -340,6 +355,9 @@
 	],
 	"Bulleted List": [
 		"قائمة تعداد نقطي"
+	],
+	"by %s": [
+		""
 	],
 	"Can Share": [
 		"يمكن المشاركة"
@@ -506,8 +524,14 @@
 	"Completed decryption.": [
 		"اكتمل فك التشفير."
 	],
+	"Completed with warnings:\n%s": [
+		""
+	],
 	"Completed: %s (%s)": [
 		"مكتملة: %s (%s)"
+	],
+	"completion date": [
+		""
 	],
 	"Compress old changes": [
 		"كثف التعديلات الماضية"
@@ -697,9 +721,6 @@
 	"Dashboard": [
 		"لوحة التحكم"
 	],
-	"Database v%s": [
-		"قاعدة البيانات v%s"
-	],
 	"Date": [
 		"التاريخ"
 	],
@@ -774,6 +795,9 @@
 	],
 	"Deleted remote items: %d.": [
 		"العناصر البعيدة المحذوفة: %d."
+	],
+	"Deletes notes permanently, skipping the trash.": [
+		""
 	],
 	"Deletes the given notebook.": [
 		"يحذف دفتر الملاحظات المعطى."
@@ -1168,6 +1192,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"آمن من الفشل: لا تقم بمسح البيانات المحلية عندما يكون هدف المزامنة فارغًا (غالبًا ما يكون نتيجة لحدوث خطأ في التكوين أو خلل برمجي)"
 	],
+	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
+		""
+	],
 	"Fatal error:": [
 		"خطأ فادح:"
 	],
@@ -1212,9 +1239,6 @@
 	],
 	"Focus title": [
 		"التركيز على العنوان"
-	],
-	"Folders": [
-		"مجلدات"
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"التصدير هذا لغرض التصحيح فقط: قم بتصدير ملف التعريف الخاص بك إلى بطاقة SD الخارجية."
@@ -1302,6 +1326,9 @@
 	"Help": [
 		"مساعدة"
 	],
+	"Here's what we do to make plugins safer:": [
+		""
+	],
 	"Hide %s": [
 		"أخف %s"
 	],
@@ -1353,6 +1380,15 @@
 	"Import": [
 		"استيراد"
 	],
+	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+		""
+	],
+	"Import from JEX": [
+		""
+	],
+	"Import notes from a JEX (Joplin Export) file.": [
+		""
+	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		"الاستيراد من \"%s\" بتنسيق \"%s\". فضلاً انتظر..."
 	],
@@ -1388,6 +1424,9 @@
 	],
 	"In: %s": [
 		"في: %s"
+	],
+	"Incompatible": [
+		""
 	],
 	"Increase indent level": [
 		""
@@ -1466,6 +1505,9 @@
 	],
 	"Joplin Cloud": [
 		"Joplin Cloud"
+	],
+	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
+		""
 	],
 	"Joplin Export Directory": [
 		"دليل تصدير بيانات Joplin"
@@ -1553,6 +1595,9 @@
 	],
 	"Light": [
 		"فاتحة"
+	],
+	"Like any software you install, plugins can potentially cause security issues or data loss.": [
+		""
 	],
 	"Lines": [
 		"خطوط"
@@ -1685,6 +1730,9 @@
 	"More than one item match \"%s\". Please narrow down your query.": [
 		"أكثر من عنصر واحد يطابق \"%s\". يرجى تضييق الاستعلام الخاص بك."
 	],
+	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
 	"Move %d notes to notebook \"%s\"?": [
 		"نقل %d ملاحظات إلى دفتر الملاحظات \"%s\" ؟"
 	],
@@ -1704,6 +1752,9 @@
 		"لا"
 	],
 	"Never resize": [
+		""
+	],
+	"New": [
 		""
 	],
 	"New note": [
@@ -1753,6 +1804,9 @@
 	],
 	"No active notebook.": [
 		"لا يوجد دفتر ملاحظات نشط."
+	],
+	"No incoming shares": [
+		""
 	],
 	"No item with ID %s": [
 		"لا يوجد عنصر بالمعرّف %s"
@@ -2006,9 +2060,6 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"فضلاً حدّد دفتر الملاحظات الذي ترغب استيراد الملاحظات إليه."
 	],
-	"Please upgrade Joplin to use this plugin": [
-		"يرجى تحديث Joplin لإستخدام هذا البرنامج الإضافي"
-	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"يرجى الانتظار حتى يتم تنزيل جميع المرفقات وفك تشفيرها. يمكنك أيضًا التبديل إلى %s لتحرير الملاحظة."
 	],
@@ -2021,8 +2072,14 @@
 	"Plugin tools": [
 		"أدوات الإضافات"
 	],
+	"Plugin WebView debugging": [
+		""
+	],
 	"Plugins": [
 		"المكونات الإضافية"
+	],
+	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
+		""
 	],
 	"Portrait": [
 		"طولي"
@@ -2082,6 +2139,9 @@
 		""
 	],
 	"Process user deletions": [
+		""
+	],
+	"Processing": [
 		""
 	],
 	"Profile": [
@@ -2181,6 +2241,12 @@
 		""
 	],
 	"Replace: ": [
+		""
+	],
+	"Report an issue": [
+		""
+	],
+	"Report fraudulent plugin": [
 		""
 	],
 	"Resources: %d.": [
@@ -2393,6 +2459,9 @@
 	"Source: ": [
 		"المصدر: "
 	],
+	"Spacer": [
+		""
+	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		"حدد المنفذ الذي يجب استخدامه بواسطة خادم API. إذا لم يتم تعيينه، سيتم استخدام تلقائي."
 	],
@@ -2561,6 +2630,9 @@
 	"Take photo": [
 		"التقاط صورة"
 	],
+	"Task \"%s\" failed with error: %s": [
+		""
+	],
 	"Tasks": [
 		""
 	],
@@ -2678,9 +2750,6 @@
 	"There are unsaved changes.": [
 		""
 	],
-	"There is currently no notebook. Create one by clicking on \"New notebook\".": [
-		"لا يوجد دفتر ملاحظات حالياً. أنشئ واحداً بالضغط على \"دفتر ملاحظات جديد\"."
-	],
 	"There is no data to export.": [
 		"لا يوجد بيانات للتصدير."
 	],
@@ -2690,6 +2759,9 @@
 	"There was an error downloading this attachment:": [
 		"حدث خطأ أثناء تنزيل هذا المرفق:"
 	],
+	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
+		""
+	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"ستبقى هذه العناصر على الجهاز إلا أنها لن يجري رفعها إلى وجهة المزامنة. لكي تجد هذه العناصر ، عليك إما البحث عن العنوان أو المعرِّف (وهو معروض أعلاه بين قوسين)."
 	],
@@ -2697,6 +2769,9 @@
 		"تعمل هذه المكونات الإضافية على تحسين عارض Markdown بميّزات إضافية. يرجى ملاحظة أنه على الرغم من أن هذه الميزات قد تكون مفيدة، إلا أنها ليست Markdown قياسية وبالتالي فإن معظمها سيعمل فقط في Joplin. بالإضافة إلى ذلك، بعضها *غير متوافق* مع محرّر WYSIWYG. إذا فتحت ملاحظة تستخدم أحد هذه المكونات الإضافية في ذلك المحرر، فستفقد تنسيق المكون الإضافي. تمت الإشارة أدناه إلى المكونات الإضافية المتوافقة مع محرر WYSIWYG و الغير متوافقة."
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
+		""
+	],
+	"This attachment does not have OCR data (Status: %s)": [
 		""
 	],
 	"This attachment is not downloaded or not decrypted yet": [
@@ -2726,11 +2801,17 @@
 	"This note has no history": [
 		"هذه المذكرة ليس لها تاريخ"
 	],
+	"This plugin doesn't support %s.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"يحتوي محرر النص المنسق هذا على عدد من القيود ومن المستحسن أن تكون على دراية بها قبل استخدامه."
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"تتيح هذه الخدمة تواصل إضافة المستعرض مع Joplin. عندما تفعّلها قد يسألك الجدار الناري أن تعطي الإذن لـ Joplin بالاستماع إلى منفذ محدّد."
+	],
+	"This subfolder of the trash has no notes.": [
+		""
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
 		"هذا يتيح لـ Joplin العمل في الخلفية. نوصي بتفعيل هذا الإعداد لكي تجري مزامنة ملاحظاتك باستمرار ، مما يقلل عدد حالات التعارض."
@@ -2841,9 +2922,6 @@
 		"النوع: %s."
 	],
 	"Unable to edit resource of type %s": [
-		""
-	],
-	"Unable to export or share data. Reason: %s": [
 		""
 	],
 	"Unable to share log data. Reason: %s": [
@@ -2963,6 +3041,9 @@
 	"View": [
 		"عرض"
 	],
+	"View OCR text": [
+		""
+	],
 	"View on map": [
 		"عرض على الخريطة"
 	],
@@ -2986,6 +3067,12 @@
 	],
 	"Warning: not all resources shown for performance reasons (limit: %s).": [
 		"تحذير: لم يتم عرض كافّة الموارد لأسباب تتعلق بالأداء (الحد: %s)."
+	],
+	"We have a system for reporting and removing problematic plugins.": [
+		""
+	],
+	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
+		""
 	],
 	"Web Clipper": [
 		"Web Clipper"
@@ -3052,6 +3139,9 @@
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"يمكنك استخدام الأداة أدناه لإعادة تشفير بياناتك، على سبيل المثال إذا كنت تعلم أن بعض ملاحظاتك مشفرة بطريقة تشفير قديمة."
+	],
+	"Your account doesn't have access to this feature": [
+		""
 	],
 	"Your choice: ": [
 		"اختيارك هو: "

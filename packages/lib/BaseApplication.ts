@@ -30,7 +30,7 @@ import fs = require('fs-extra');
 const EventEmitter = require('events');
 const syswidecas = require('./vendor/syswide-cas');
 import SyncTargetRegistry from './SyncTargetRegistry';
-const SyncTargetFilesystem = require('./SyncTargetFilesystem.js');
+import SyncTargetFilesystem from './SyncTargetFilesystem';
 const SyncTargetNextcloud = require('./SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('./SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('./SyncTargetDropbox.js');
@@ -575,10 +575,10 @@ export default class BaseApplication {
 		if (doRefreshFolders) {
 			if (doRefreshFolders === 'now') {
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				await refreshFolders((action: any) => this.dispatch(action));
+				await refreshFolders((action: any) => this.dispatch(action), newState.selectedFolderId);
 			} else {
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				await scheduleRefreshFolders((action: any) => this.dispatch(action));
+				await scheduleRefreshFolders((action: any) => this.dispatch(action), newState.selectedFolderId);
 			}
 		}
 		return result;

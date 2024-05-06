@@ -115,3 +115,13 @@ export const isLink = (text: string) => {
 	return !!text.match(linkRegex);
 };
 
+export const hasProtocol = (url: string, protocol: string | string[]) => {
+	if (!url) return false;
+
+	const protocols = typeof protocol === 'string' ? [protocol] : protocol;
+	url = url.toLowerCase();
+	for (const p of protocols) {
+		if (url.startsWith(`${p.toLowerCase()}://`)) return true;
+	}
+	return false;
+};

@@ -102,3 +102,8 @@ unignore
 unignored
 unsyncable
 infini
+libgbm
+libgtk
+libasound
+libatk
+ENOTFOUND

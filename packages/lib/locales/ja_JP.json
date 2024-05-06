@@ -65,6 +65,9 @@
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		""
 	],
+	"%s tab opened": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -155,6 +158,9 @@
 	"Accept": [
 		"承諾"
 	],
+	"Accepted shares": [
+		""
+	],
 	"Access denied: Please check your username and password": [
 		"アクセスが拒否されました: ユーザー名とパスワードを確認してください"
 	],
@@ -209,11 +215,17 @@
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"ノート、ノートブック、タグを含むすべてのデータが完全に削除されます。"
 	],
+	"All item sync failures have been marked as \"ignored\".": [
+		""
+	],
 	"All notes": [
 		"すべてのノート"
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"使用候補のポートはすべて利用中です - 問題を %s に報告してください"
+	],
+	"Allows debugging mobile plugins. See %s for details.": [
+		""
 	],
 	"Also displays unset and hidden config variables.": [
 		"未設定または非表示の設定項目も表示します。"
@@ -226,6 +238,9 @@
 	],
 	"Always ask": [
 		"常に確認する"
+	],
+	"Always open %s files without asking.": [
+		""
 	],
 	"Always resize": [
 		"常にリサイズする"
@@ -349,6 +364,9 @@
 	],
 	"Bulleted List": [
 		"箇条書きリスト"
+	],
+	"by %s": [
+		""
 	],
 	"Can Share": [
 		"共有可能"
@@ -518,8 +536,14 @@
 	"Completed decryption.": [
 		"復号が完了しました。"
 	],
+	"Completed with warnings:\n%s": [
+		""
+	],
 	"Completed: %s (%s)": [
 		"完了: %s (%s)"
+	],
+	"completion date": [
+		""
 	],
 	"Compress old changes": [
 		"古い変更を圧縮する"
@@ -713,9 +737,6 @@
 	"Dashboard": [
 		"ダッシュボード"
 	],
-	"Database v%s": [
-		"データベース v%s"
-	],
 	"Date": [
 		"日時"
 	],
@@ -790,6 +811,9 @@
 	],
 	"Deleted remote items: %d.": [
 		"リモートアイテムの削除: %d."
+	],
+	"Deletes notes permanently, skipping the trash.": [
+		""
 	],
 	"Deletes the given notebook.": [
 		"指定されたノートブックを削除します。"
@@ -1172,9 +1196,6 @@
 	"Export profile": [
 		"プロファイルをエクスポート"
 	],
-	"Export your data": [
-		"データをエクスポートする"
-	],
 	"Exported successfully!": [
 		"エクスポート成功!"
 	],
@@ -1201,6 +1222,9 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"フェイルセーフ: 同期先が空の場合、設定ミスやバグによる可能性を考慮して、ローカルデータを消去しないようにする"
+	],
+	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
+		""
 	],
 	"Fatal error:": [
 		"致命的なエラー:"
@@ -1246,9 +1270,6 @@
 	],
 	"Focus title": [
 		"題名にフォーカス"
-	],
-	"Folders": [
-		"フォルダー"
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"デバッグ専用: プロファイルを外部SDカードにエクスポートします。"
@@ -1331,6 +1352,9 @@
 	"Help": [
 		"ヘルプ"
 	],
+	"Here's what we do to make plugins safer:": [
+		""
+	],
 	"Hermes enabled: %d": [
 		"Hermes有効: %d"
 	],
@@ -1400,6 +1424,15 @@
 	"Import": [
 		"インポート"
 	],
+	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+		""
+	],
+	"Import from JEX": [
+		""
+	],
+	"Import notes from a JEX (Joplin Export) file.": [
+		""
+	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		"\"%s\" を \"%s\" フォーマットとしてインポート中。しばらくお待ちください..."
 	],
@@ -1435,6 +1468,9 @@
 	],
 	"In: %s": [
 		"内: %s"
+	],
+	"Incompatible": [
+		""
 	],
 	"Increase indent level": [
 		"インデントを増やす"
@@ -1513,6 +1549,9 @@
 	],
 	"Joplin Cloud": [
 		"Joplin Cloud"
+	],
+	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
+		""
 	],
 	"Joplin Export Directory": [
 		"Joplin エクスポートディレクトリ"
@@ -1606,6 +1645,9 @@
 	],
 	"Light": [
 		"明るい"
+	],
+	"Like any software you install, plugins can potentially cause security issues or data loss.": [
+		""
 	],
 	"Lines": [
 		"行数"
@@ -1751,6 +1793,9 @@
 	"More than one item match \"%s\". Please narrow down your query.": [
 		"一つ以上のアイテムが\"%s\"に一致しました。クエリを絞るようにしてください。"
 	],
+	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
 	"Move %d notes to notebook \"%s\"?": [
 		"%d 個のノートを \"%s\" ノートブックに移動しますか？"
 	],
@@ -1774,6 +1819,9 @@
 	],
 	"Never resize": [
 		"リサイズしない"
+	],
+	"New": [
+		""
 	],
 	"New note": [
 		"新しいノート"
@@ -1822,6 +1870,9 @@
 	],
 	"No active notebook.": [
 		"有効なノートブックがありません。"
+	],
+	"No incoming shares": [
+		""
 	],
 	"No item with ID %s": [
 		"ID %s のアイテムはありません"
@@ -2081,9 +2132,6 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"ノートをどのノートブックにインポートするのか指定してください。"
 	],
-	"Please upgrade Joplin to use this plugin": [
-		"このプラグインを使うにはJoplinをアップグレードしてください"
-	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"すべての添付ファイルのダウンロードと復号が終わるまでお待ちください。%sに切り替えてノートを編集することはできます。"
 	],
@@ -2096,8 +2144,14 @@
 	"Plugin tools": [
 		"プラグインツール"
 	],
+	"Plugin WebView debugging": [
+		""
+	],
 	"Plugins": [
 		"プラグイン"
+	],
+	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
+		""
 	],
 	"Portrait": [
 		"縦"
@@ -2158,6 +2212,9 @@
 	],
 	"Process user deletions": [
 		"ユーザー削除を実施する"
+	],
+	"Processing": [
+		""
 	],
 	"Profile": [
 		"プロファイル"
@@ -2275,6 +2332,12 @@
 	],
 	"Replace: ": [
 		"置換文字列: "
+	],
+	"Report an issue": [
+		""
+	],
+	"Report fraudulent plugin": [
+		""
 	],
 	"Reset application layout": [
 		"画面レイアウトをリセット"
@@ -2546,6 +2609,9 @@
 	"Source: ": [
 		"ソース: "
 	],
+	"Spacer": [
+		""
+	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		"APIサーバーが使用するポートを指定してください。未設定時はデフォルトのポートが使用されます。"
 	],
@@ -2723,6 +2789,9 @@
 	"Take photo": [
 		"写真を撮影する"
 	],
+	"Task \"%s\" failed with error: %s": [
+		""
+	],
 	"Task list": [
 		"タスクリスト"
 	],
@@ -2855,9 +2924,6 @@
 	"There are unsaved changes.": [
 		"保存されていない変更があります。"
 	],
-	"There is currently no notebook. Create one by clicking on \"New notebook\".": [
-		"ノートブックがありません。新しいノートブックを作成してください。"
-	],
 	"There is no data to export.": [
 		"エクスポートするデータがありません。"
 	],
@@ -2867,6 +2933,9 @@
 	"There was an error downloading this attachment:": [
 		"この添付ファイルをダウンロードするときにエラーが発生しました:"
 	],
+	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
+		""
+	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"これらのアイテムはデバイスに残りましたが、同期先にアップロードされません。そのようなアイテムを探すには、題名またはID(上記の括弧内に表示されている)で検索してください。"
 	],
@@ -2874,6 +2943,9 @@
 		"Markdownレンダラーの機能を拡張する拡張書式プラグインの一覧です。これらの拡張書式は有用ですが、Markdown標準ではないため、Joplin上でしか動作しないことにご注意ください。また、一部の拡張書式はWYSIWYGエディターと互換性がありません。非互換の拡張書式を使用しているノートをWYSIWYGエディターで開いた場合、該当書式は失われてしまいます。どのプラグインがWYSIWYGに対応しているかは下記の一覧でご確認ください。"
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
+		""
+	],
+	"This attachment does not have OCR data (Status: %s)": [
 		""
 	],
 	"This attachment is not downloaded or not decrypted yet": [
@@ -2909,11 +2981,17 @@
 	"This note has no history": [
 		"このノートに履歴はありません"
 	],
+	"This plugin doesn't support %s.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"リッチテキストエディターには多くの制限がありますので、それらをご承知の上でご使用ください。"
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"このサービスはブラウザー拡張機能からJoplinへのアクセスを可能にします。本サービスを有効化する際には、Joplinが特定のポートで接続を待ち受けることについて、お使いのファイアーウォールから許可を求められる場合があります。"
+	],
+	"This subfolder of the trash has no notes.": [
+		""
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
 		"有効にすると、Joplinがバックグラウンドで動作するようになります。ノートを定期的に同期し、衝突を減らすために強くおすすめする設定です。"
@@ -3047,9 +3125,6 @@
 	"Type: %s.": [
 		"種類: %s."
 	],
-	"Unable to export or share data. Reason: %s": [
-		"データをエクスポートまたは共有できません。理由: %s"
-	],
 	"Unable to share log data. Reason: %s": [
 		"ログを共有できません。理由: %s"
 	],
@@ -3176,6 +3251,9 @@
 	"View": [
 		"表示"
 	],
+	"View OCR text": [
+		""
+	],
 	"View on map": [
 		"地図上に表示"
 	],
@@ -3200,8 +3278,11 @@
 	"Warning: not all resources shown for performance reasons (limit: %s).": [
 		"注意: 性能上の理由により、リソースは最大 %s 件までしか表示されません。"
 	],
-	"Warnings:\n%s": [
-		"警告:\n%s"
+	"We have a system for reporting and removing problematic plugins.": [
+		""
+	],
+	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
+		""
 	],
 	"Web Clipper": [
 		"Webクリッパー"
@@ -3271,6 +3352,9 @@
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"ここでは既存データの再暗号化を行えます。たとえば、旧式のアルゴリズムで暗号化されたノートがあるとわかっているような場合に新しいアルゴリズムで暗号化しなおすことが可能です。"
+	],
+	"Your account doesn't have access to this feature": [
+		""
 	],
 	"Your choice: ": [
 		"選択: "
