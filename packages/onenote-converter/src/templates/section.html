@@ -6,17 +6,17 @@
 <nav>
     <ul>
         {% for page in pages %}
-        <li><a href="{{ page.path|encode }}" target="content" class="l{{ page.level }}" title="{{ page.name }}">{{ page.name }}</a></li>
+        <li class="l{{page.level}}"><a href="{{ page.path|encode }}" target="content" title="{{ page.name }}">{{ page.name }}</a></li>
         {% endfor %}
     </ul>
 </nav>
 <iframe src="" frameborder="0" name="content" class="content"></iframe>
 
 <style>
-    .l2 { padding-left: 10px; }
-    .l3 { padding-left: 20px; }
-    .l4 { padding-left: 30px; }
-    .l5 { padding-left: 40px; }
+    .l2 { padding: 10px 20px 10px 40px }
+    .l3 { padding: 10px 20px 10px 60px }
+    .l4 { padding: 10px 20px 10px 80px }
+    .l5 { padding: 10px 20px 10px 100px }
 </style>
 <script>
     document.addEventListener('click', function (event) {

@@ -48,4 +48,24 @@ describe('InteropService_Importer_OneNote', () => {
 		// note.body doesn't have line feed character, but file input has
 		expect(note.body).toEqual(expectedBody.slice(0, expectedBody.length - 1));
 	});
+
+	it('should preserve indentation of subpages in Section page', async () => {
+		const notes = await importNote(`${supportDir}/onenote/subpages.zip`);
+
+		const sectionPage = notes.find(n => n.title === 'Section');
+		const menuHtml = sectionPage.body.split('<ul>')[1].split('</ul>')[0];
+		const menuLines = menuHtml.split('</li>');
+
+		const pageTwo = notes.find(n => n.title === 'Page 2');
+		expect(menuLines[3].trim()).toBe(`<li class="l1"><a href=":/${pageTwo.id}" target="content" title="Page 2">${pageTwo.title}</a>`);
+
+		const pageTwoA = notes.find(n => n.title === 'Page 2-a');
+		expect(menuLines[4].trim()).toBe(`<li class="l2"><a href=":/${pageTwoA.id}" target="content" title="Page 2-a">${pageTwoA.title}</a>`);
+
+		const pageTwoAA = notes.find(n => n.title === 'Page 2-a-a');
+		expect(menuLines[5].trim()).toBe(`<li class="l3"><a href=":/${pageTwoAA.id}" target="content" title="Page 2-a-a">${pageTwoAA.title}</a>`);
+
+		const pageTwoB = notes.find(n => n.title === 'Page 2-b');
+		expect(menuLines[7].trim()).toBe(`<li class="l2"><a href=":/${pageTwoB.id}" target="content" title="Page 2-b">${pageTwoB.title}</a>`);
+	});
 });
