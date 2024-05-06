@@ -138,7 +138,7 @@
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
     "js-sha512": "0.8.0",
-    "nan": "2.18.0",
+    "nan": "2.19.0",
     "react-test-renderer": "18.2.0",
     "ts-node": "10.9.2",
     "typescript": "5.2.2"
