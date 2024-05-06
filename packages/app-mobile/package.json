@@ -18,7 +18,7 @@
     "postinstall": "jetify"
   },
   "dependencies": {
-    "@bam.tech/react-native-image-resizer": "3.0.7",
+    "@bam.tech/react-native-image-resizer": "3.0.9",
     "@joplin/editor": "~3.0",
     "@joplin/lib": "~3.0",
     "@joplin/react-native-alarm-notification": "~3.0",
