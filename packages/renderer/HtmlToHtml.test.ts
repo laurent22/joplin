@@ -32,6 +32,19 @@ describe('HtmlToHtml', () => {
 					css: '',
 				},
 			],
+			// cSpell:disable
+			[
+				`<style></style>
+<p><br></p><div class="moz-forward-container"><br><br>-------- Message transféré --------<table class="moz-email-headers-table" cellspacing="0" cellpadding="0" border="0"><tbody><tr><th valign="BASELINE" nowrap="nowrap" align="RIGHT">Sujet&nbsp;:</th><td>
+Your car rental booking DC-7706328 is confirmed (pick-up on 1 October 2024)</td></tr></tbody></table><style type="text/css"></style>`,
+				{
+					html: `
+<p><br></p><div class="moz-forward-container"><br><br>-------- Message transféré --------<table class="moz-email-headers-table" cellspacing="0" cellpadding="0" border="0"><tbody><tr><th valign="BASELINE" nowrap="nowrap" align="RIGHT">Sujet&nbsp;:</th><td>
+Your car rental booking DC-7706328 is confirmed (pick-up on 1 October 2024)</td></tr></tbody></table><style type="text/css"></style>`,
+					css: '',
+				},
+			],
+			// cSpell:enable
 		];
 
 		for (const t of testCases) {
