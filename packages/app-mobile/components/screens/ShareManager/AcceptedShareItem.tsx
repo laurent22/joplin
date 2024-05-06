@@ -64,7 +64,7 @@ const AcceptedShareItem: React.FC<Props> = props => {
 		} catch (error) {
 			logger.error('Failed to leave share', error);
 			await shim.showMessageBox(
-				_('Failed to leave shared notebook. Please verify that Joplin is connected to the internet and able to sync.\nError: %s', error),
+				_('Error: %s', error),
 				{ buttons: [_('OK')] },
 			);
 		} finally {
