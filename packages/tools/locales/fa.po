@@ -570,7 +570,7 @@ msgid "Auto-add disabled accounts for deletion"
 msgstr "افزودن خودکار حساب های غیرفعال برای حذف"
 
 #: packages/lib/models/Setting.ts:996
-msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgid "Auto-pair braces, parentheses, quotations, etc."
 msgstr "جفت‌سازی خودکار کروشه، پرانتز، نقل قول و غیره."
 
 #: packages/lib/models/Setting.ts:1471

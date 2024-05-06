@@ -569,7 +569,7 @@ msgid "Auto-add disabled accounts for deletion"
 msgstr "Lisää käytöstä poistetut tilit automaattisesti poistettavaksi"
 
 #: packages/lib/models/Setting.ts:996
-msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgid "Auto-pair braces, parentheses, quotations, etc."
 msgstr "Yhdistä sulut, sulkeet, lainaukset jne."
 
 #: packages/lib/models/Setting.ts:1471

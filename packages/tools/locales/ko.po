@@ -564,7 +564,7 @@ msgid "Auto-add disabled accounts for deletion"
 msgstr "삭제를 위해 비활성화된 계정을 자동으로 추가"
 
 #: packages/lib/models/Setting.ts:996
-msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgid "Auto-pair braces, parentheses, quotations, etc."
 msgstr "괄호, 중괄호, 인용 부호 등의 자동 완성."
 
 #: packages/lib/models/Setting.ts:1471
