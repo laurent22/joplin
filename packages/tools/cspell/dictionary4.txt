@@ -107,3 +107,4 @@ libgtk
 libasound
 libatk
 ENOTFOUND
+Scaleway
