@@ -75,8 +75,8 @@ export default class ItemModel extends BaseModel<Item> {
 
 	private static storageDrivers_: Map<StorageDriverConfig, StorageDriverBase> = new Map();
 
-	public constructor(db: DbConnection, dbReader: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
-		super(db, dbReader, modelFactory, config);
+	public constructor(db: DbConnection, dbReplica: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
+		super(db, dbReplica, modelFactory, config);
 
 		this.storageDriverConfig_ = config.storageDriver;
 		this.storageDriverConfigFallback_ = config.storageDriverFallback;
@@ -102,7 +102,7 @@ export default class ItemModel extends BaseModel<Item> {
 		let driver = ItemModel.storageDrivers_.get(config);
 
 		if (!driver) {
-			driver = await loadStorageDriver(config, this.db, this.dbReader);
+			driver = await loadStorageDriver(config, this.db, this.dbReplica);
 			ItemModel.storageDrivers_.set(config, driver);
 		}
 
@@ -331,7 +331,7 @@ export default class ItemModel extends BaseModel<Item> {
 			let fromDriver: StorageDriverBase = drivers[item.content_storage_id];
 
 			if (!fromDriver) {
-				fromDriver = await loadStorageDriver(item.content_storage_id, this.db, this.dbReader);
+				fromDriver = await loadStorageDriver(item.content_storage_id, this.db, this.dbReplica);
 				drivers[item.content_storage_id] = fromDriver;
 			}
 

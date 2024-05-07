@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItemTree, createResource, createNote, createItemTree3, db, tempDir, expectNotThrow, expectHttpError, dbReader } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItemTree, createResource, createNote, createItemTree3, db, tempDir, expectNotThrow, expectHttpError, dbReplica } from '../utils/testing/testUtils';
 import { shareFolderWithUser } from '../utils/testing/shareApiUtils';
 import { resourceBlobPath } from '../utils/joplinUtils';
 import newModelFactory from './factory';
@@ -275,7 +275,7 @@ describe('ItemModel', () => {
 	test('should respect the hard item size limit', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 
-		let models = newModelFactory(db(), dbReader(), config());
+		let models = newModelFactory(db(), dbReplica(), config());
 
 		let result = await models.item().saveFromRawContent(user1, {
 			body: Buffer.from('1234'),
@@ -285,7 +285,7 @@ describe('ItemModel', () => {
 		const item = result['test1.txt'].item;
 
 		config().itemSizeHardLimit = 3;
-		models = newModelFactory(db(), dbReader(), config());
+		models = newModelFactory(db(), dbReplica(), config());
 
 		result = await models.item().saveFromRawContent(user1, {
 			body: Buffer.from('1234'),
@@ -297,7 +297,7 @@ describe('ItemModel', () => {
 		await expectHttpError(async () => models.item().loadWithContent(item.id), ErrorPayloadTooLarge.httpCode);
 
 		config().itemSizeHardLimit = 1000;
-		models = newModelFactory(db(), dbReader(), config());
+		models = newModelFactory(db(), dbReplica(), config());
 
 		await expectNotThrow(async () => models.item().loadWithContent(item.id));
 	});
@@ -316,18 +316,18 @@ describe('ItemModel', () => {
 			path: tempDir2,
 		};
 
-		const fromModels = newModelFactory(db(), dbReader(), {
+		const fromModels = newModelFactory(db(), dbReplica(), {
 			...config(),
 			storageDriver: fromStorageConfig,
 		});
 
-		const toModels = newModelFactory(db(), dbReader(), {
+		const toModels = newModelFactory(db(), dbReplica(), {
 			...config(),
 			storageDriver: toStorageConfig,
 		});
 
-		const fromDriver = await loadStorageDriver(fromStorageConfig, db(), dbReader());
-		const toDriver = await loadStorageDriver(toStorageConfig, db(), dbReader());
+		const fromDriver = await loadStorageDriver(fromStorageConfig, db(), dbReplica());
+		const toDriver = await loadStorageDriver(toStorageConfig, db(), dbReplica());
 
 		return {
 			fromStorageConfig,
@@ -364,7 +364,7 @@ describe('ItemModel', () => {
 
 		await msleep(2);
 
-		const toModels = newModelFactory(db(), dbReader(), {
+		const toModels = newModelFactory(db(), dbReplica(), {
 			...config(),
 			storageDriver: toStorageConfig,
 		});

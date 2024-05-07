@@ -165,6 +165,7 @@ export interface Config extends EnvVariables {
 	accountTypesEnabled: boolean;
 	showErrorStackTraces: boolean;
 	database: DatabaseConfig;
+	databaseReplica: DatabaseConfig;
 	mailer: MailerConfig;
 	stripe: StripeConfig;
 	supportEmail: string;

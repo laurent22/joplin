@@ -257,12 +257,12 @@ export function db() {
 	return db_;
 }
 
-export function dbReader() {
+export function dbReplica() {
 	return db_;
 }
 
 export function models() {
-	return modelFactory(db(), dbReader(), config());
+	return modelFactory(db(), dbReplica(), config());
 }
 
 export function parseHtml(html: string): Document {
