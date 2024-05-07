@@ -29,7 +29,7 @@ async function setupServices(env: Env, models: Models, config: Config): Promise<
 }
 
 export default async function(appContext: AppContext, env: Env, dbConnection: DbConnection, appLogger: ()=> LoggerWrapper): Promise<AppContext> {
-	const models = newModelFactory(dbConnection, config());
+	const models = newModelFactory(dbConnection, dbConnection, config());
 
 	// The joplinBase object is immutable because it is shared by all requests.
 	// Then a "joplin" context property is created from it per request, which

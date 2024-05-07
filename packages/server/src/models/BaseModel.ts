@@ -64,13 +64,15 @@ export default abstract class BaseModel<T> {
 
 	private defaultFields_: string[] = [];
 	private db_: DbConnection;
+	private dbReader_: DbConnection;
 	private transactionHandler_: TransactionHandler;
 	private modelFactory_: NewModelFactoryHandler;
 	private config_: Config;
 	private savePoints_: SavePoint[] = [];
 
-	public constructor(db: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
+	public constructor(db: DbConnection, dbReader: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
 		this.db_ = db;
+		this.dbReader_ = dbReader;
 		this.modelFactory_ = modelFactory;
 		this.config_ = config;
 
@@ -111,6 +113,10 @@ export default abstract class BaseModel<T> {
 	public get db(): DbConnection {
 		if (this.transactionHandler_.activeTransaction) return this.transactionHandler_.activeTransaction;
 		return this.db_;
+	}
+
+	public get dbReader(): DbConnection {
+		return this.dbReader_;
 	}
 
 	protected get defaultFields(): string[] {

@@ -118,8 +118,8 @@ export default class UserModel extends BaseModel<User> {
 
 	private ldapConfig_: LdapConfig[];
 
-	public constructor(db: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
-		super(db, modelFactory, config);
+	public constructor(db: DbConnection, dbReader: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
+		super(db, dbReader, modelFactory, config);
 
 		this.ldapConfig_ = config.ldap;
 	}

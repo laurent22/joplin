@@ -54,7 +54,7 @@ export async function createTestUsers(db: DbConnection, config: Config, options:
 	};
 
 	const password = '111111';
-	const models = newModelFactory(db, config);
+	const models = newModelFactory(db, db, config);
 
 	await truncateTables(db, includedTables);
 
@@ -127,7 +127,7 @@ export async function createTestUsers(db: DbConnection, config: Config, options:
 }
 
 export async function createUserDeletions(db: DbConnection, config: Config) {
-	const models = newModelFactory(db, config);
+	const models = newModelFactory(db, db, config);
 
 	const users = await models.user().all();
 

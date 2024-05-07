@@ -257,8 +257,12 @@ export function db() {
 	return db_;
 }
 
+export function dbReader() {
+	return db_;
+}
+
 export function models() {
-	return modelFactory(db(), config());
+	return modelFactory(db(), dbReader(), config());
 }
 
 export function parseHtml(html: string): Document {

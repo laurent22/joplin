@@ -1,4 +1,4 @@
-import { afterAllTests, beforeAllDb, beforeEachDb, db, expectThrow, models } from '../../../utils/testing/testUtils';
+import { afterAllTests, beforeAllDb, beforeEachDb, db, dbReader, expectThrow, models } from '../../../utils/testing/testUtils';
 import { StorageDriverType } from '../../../utils/types';
 import loadStorageDriver from './loadStorageDriver';
 
@@ -18,13 +18,13 @@ describe('loadStorageDriver', () => {
 
 	test('should load a driver and assign an ID to it', async () => {
 		{
-			const newDriver = await loadStorageDriver({ type: StorageDriverType.Memory }, db());
+			const newDriver = await loadStorageDriver({ type: StorageDriverType.Memory }, db(), dbReader());
 			expect(newDriver.storageId).toBe(1);
 			expect((await models().storage().count())).toBe(1);
 		}
 
 		{
-			const newDriver = await loadStorageDriver({ type: StorageDriverType.Filesystem, path: '/just/testing' }, db());
+			const newDriver = await loadStorageDriver({ type: StorageDriverType.Filesystem, path: '/just/testing' }, db(), dbReader());
 			expect(newDriver.storageId).toBe(2);
 			expect((await models().storage().count())).toBe(2);
 		}
