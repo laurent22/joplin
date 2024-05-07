@@ -549,7 +549,7 @@ msgid "Auto-add disabled accounts for deletion"
 msgstr "自动添加已禁用的账户以便删除"
 
 #: packages/lib/models/Setting.ts:996
-msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgid "Auto-pair braces, parentheses, quotations, etc."
 msgstr "自动配对花括号、圆括号、引号等。"
 
 #: packages/lib/models/Setting.ts:1471

@@ -43,9 +43,9 @@ export interface Command {
 	 * Or | \|\| | "noteIsTodo \|\| noteTodoCompleted"
 	 * And | && | "oneNoteSelected && !inConflictFolder"
 	 *
-	 * Joplin, unlike VSCode, also supports parenthesis, which allows creating
+	 * Joplin, unlike VSCode, also supports parentheses, which allows creating
 	 * more complex expressions such as `cond1 || (cond2 && cond3)`. Only one
-	 * level of parenthesis is possible (nested ones aren't supported).
+	 * level of parentheses is possible (nested ones aren't supported).
 	 *
 	 * Currently the supported context variables aren't documented, but you can
 	 * find the list below:

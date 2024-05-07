@@ -553,7 +553,7 @@ msgid "Auto-add disabled accounts for deletion"
 msgstr "自動於刪除清單中加入已停用帳戶"
 
 #: packages/lib/models/Setting.ts:996
-msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgid "Auto-pair braces, parentheses, quotations, etc."
 msgstr "自動配對大括號、括號、引號等。"
 
 #: packages/lib/models/Setting.ts:1471

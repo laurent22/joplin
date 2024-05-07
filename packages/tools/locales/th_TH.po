@@ -564,7 +564,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.ts:996
 #, fuzzy
-msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgid "Auto-pair braces, parentheses, quotations, etc."
 msgstr "จับคู่อัตโนมัติ {}, (), \"\", ฯลฯ"
 
 #: packages/lib/models/Setting.ts:1471

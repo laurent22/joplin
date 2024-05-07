@@ -993,7 +993,7 @@ class Setting extends BaseModel {
 				public: true,
 				section: 'note',
 				appTypes: [AppType.Desktop],
-				label: () => _('Auto-pair braces, parenthesis, quotations, etc.'),
+				label: () => _('Auto-pair braces, parentheses, quotations, etc.'),
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},

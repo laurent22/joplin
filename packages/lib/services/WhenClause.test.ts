@@ -16,7 +16,7 @@ describe('WhenClause', () => {
 		})).toBe(false);
 	});
 
-	test('should work with parenthesis', async () => {
+	test('should work with parentheses', async () => {
 		const wc = new WhenClause('(test1 && test2) || test3 && (test4 && !test5)');
 
 		expect(wc.evaluate({
