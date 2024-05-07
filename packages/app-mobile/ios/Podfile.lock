@@ -360,7 +360,7 @@ PODS:
     - React-Core
   - react-native-rsa-native (2.0.5):
     - React
-  - react-native-saf-x (2.14.0):
+  - react-native-saf-x (2.14.1):
     - React-Core
   - react-native-safe-area-context (4.8.2):
     - React-Core
@@ -790,7 +790,7 @@ SPEC CHECKSUMS:
   react-native-image-resizer: 681f7607418b97c084ba2d0999b153b103040d8a
   react-native-netinfo: 8a7fd3f7130ef4ad2fb4276d5c9f8d3f28d2df3d
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
-  react-native-saf-x: e0d30813901e54dad462dacda96555f725c2284f
+  react-native-saf-x: 3a4af99f10f0296e7d2319b5cdbf0d85547ab125
   react-native-safe-area-context: 0ee144a6170530ccc37a0fd9388e28d06f516a89
   react-native-slider: ae9441a884f8465762f1f68d31eafad42663adb4
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
@@ -830,4 +830,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 3b2cace838120977b5b54871752c9dddf5a11cea
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.15.2
