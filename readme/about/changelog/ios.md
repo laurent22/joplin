@@ -1,5 +1,11 @@
 # Joplin iOS Changelog
 
+## [ios-v12.14.7](https://github.com/laurent22/joplin/releases/tag/ios-v12.14.7) - 2024-05-07T16:24:05Z
+
+- New: Add Privacy manifest file (#10406 by Henry Heino)
+- Fixed: Allow pasting URLs copied from the share sheet (#10048) (#10047 by Henry Heino)
+- Fixed: Fix Dropbox sync (#10400) (#10396 by Henry Heino)
+
 ## [ios-v13.0.1](https://github.com/laurent22/joplin/releases/tag/ios-v13.0.1) - 2024-04-20T10:38:22Z
 
 - New: Add support for plugin panels and dialogs (#10121 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
