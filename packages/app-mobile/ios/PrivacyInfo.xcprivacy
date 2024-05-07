@@ -28,6 +28,28 @@
 				<string>35F9.1</string>
 			</array>
 		</dict>
+
+		<!--
+			react-native-fs is unmaintained and doesn't have a privacy manifest.
+			Include the APIs it accesses here.
+			See https://github.com/itinance/react-native-fs/issues/1232 for details. 
+		-->
+		<dict>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<string>C617.1</string>
+			</array>
+			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
+		</dict>
+		<dict>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<string>E174.1</string>
+			</array>
+			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategoryDiskSpace</string>
+		</dict>
 	</array>
 	<key>NSPrivacyCollectedDataTypes</key>
 	<array/>
