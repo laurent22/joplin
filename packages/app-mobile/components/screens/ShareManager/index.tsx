@@ -89,13 +89,13 @@ export const ShareManagerComponent: React.FC<Props> = props => {
 
 	const renderNoIncomingShares = () => {
 		if (incomingShareComponents.length > 0) return null;
-		return <Text key='no-shares' style={styles.noSharesText}>{_('No incoming shares')}</Text>;
+		return <Text key='no-shares' style={styles.noSharesText}>{_('No new invitations')}</Text>;
 	};
 
 	const renderAcceptedShares = () => {
 		if (acceptedShareComponents.length === 0) return null;
 		return <>
-			<Text style={styles.header}>{_('Accepted shares')}</Text>
+			<Text style={styles.header}>{_('Accepted invitations')}</Text>
 			<View style={styles.shareListContainer}>
 				{acceptedShareComponents}
 			</View>
@@ -117,7 +117,7 @@ export const ShareManagerComponent: React.FC<Props> = props => {
 				}
 				testID='refreshControl'
 			>
-				<Text style={styles.header}>{_('Incoming shares')}</Text>
+				<Text style={styles.header}>{_('New invitations')}</Text>
 				<View style={styles.shareListContainer}>
 					{renderNoIncomingShares()}
 					{incomingShareComponents}
