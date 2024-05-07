@@ -1298,6 +1298,13 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 
+			showMenuBar: {
+				value: true, // Show the menu bar by default
+				type: SettingItemType.Bool,
+				public: false,
+				appTypes: [AppType.Desktop],
+			},
+
 			startMinimized: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'application', public: true, appTypes: [AppType.Desktop], label: () => _('Start application minimised in the tray icon') },
 
 			collapsedFolderIds: { value: [], type: SettingItemType.Array, public: false },
