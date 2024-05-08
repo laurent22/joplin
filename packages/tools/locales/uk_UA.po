@@ -572,7 +572,7 @@ msgid "Auto-add disabled accounts for deletion"
 msgstr "Автоматично додавати вимкнені облікові записи для видалення"
 
 #: packages/lib/models/Setting.ts:996
-msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgid "Auto-pair braces, parentheses, quotations, etc."
 msgstr "Автоматичне закриття дужок, лапок тощо."
 
 #: packages/lib/models/Setting.ts:1471

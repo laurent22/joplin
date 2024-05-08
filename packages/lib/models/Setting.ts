@@ -993,7 +993,7 @@ class Setting extends BaseModel {
 				public: true,
 				section: 'note',
 				appTypes: [AppType.Desktop],
-				label: () => _('Auto-pair braces, parenthesis, quotations, etc.'),
+				label: () => _('Auto-pair braces, parentheses, quotations, etc.'),
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
@@ -1296,6 +1296,13 @@ class Setting extends BaseModel {
 				},
 				storage: SettingStorage.File,
 				isGlobal: true,
+			},
+
+			showMenuBar: {
+				value: true, // Show the menu bar by default
+				type: SettingItemType.Bool,
+				public: false,
+				appTypes: [AppType.Desktop],
 			},
 
 			startMinimized: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'application', public: true, appTypes: [AppType.Desktop], label: () => _('Start application minimised in the tray icon') },

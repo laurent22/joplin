@@ -85,6 +85,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Ctrl+Shift+N', command: 'focusElementNoteTitle' },
 		{ accelerator: 'Ctrl+Shift+B', command: 'focusElementNoteBody' },
 		{ accelerator: 'F10', command: 'toggleSideBar' },
+		{ accelerator: 'Ctrl+Shift+M', command: 'toggleMenuBar' },
 		{ accelerator: 'F11', command: 'toggleNoteList' },
 		{ accelerator: 'Ctrl+L', command: 'toggleVisiblePanes' },
 		{ accelerator: 'Ctrl+0', command: 'zoomActualSize' },

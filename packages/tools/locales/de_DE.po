@@ -266,7 +266,7 @@ msgstr "A5"
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:118
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:77
 msgid "About"
-msgstr ""
+msgstr "Über"
 
 #: packages/app-desktop/gui/MenuBar.tsx:595
 #: packages/app-desktop/gui/MenuBar.tsx:931
@@ -381,7 +381,7 @@ msgstr ""
 
 #: packages/lib/services/ReportService.ts:227
 msgid "All item sync failures have been marked as \"ignored\"."
-msgstr ""
+msgstr "Alle Fehlsynchronisierungen wurden als „ignoriert“ markiert."
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/AllNotesItem.tsx:61
 #: packages/app-mobile/components/screens/Notes.tsx:185
@@ -398,6 +398,7 @@ msgstr ""
 #: packages/lib/models/Setting.ts:1228
 msgid "Allows debugging mobile plugins. See %s for details."
 msgstr ""
+"Ermöglicht das Debuggen von mobilen Erweiterungen. Siehe %s für Details."
 
 #: packages/app-cli/app/command-config.ts:19
 msgid "Also displays unset and hidden config variables."
@@ -581,7 +582,7 @@ msgid "Auto-add disabled accounts for deletion"
 msgstr "Automatisches Hinzufügen deaktivierter Accounts zur Löschliste"
 
 #: packages/lib/models/Setting.ts:996
-msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgid "Auto-pair braces, parentheses, quotations, etc."
 msgstr ""
 "Automatisches Hinzufügen von geschweiften Klammern, runden Klammern, "
 "Anführungszeichen usw."
@@ -592,7 +593,7 @@ msgstr "Automatisch auf Aktualisierungen prüfen"
 
 #: packages/lib/models/Setting.ts:1908
 msgid "Automatically delete notes in the trash after a number of days"
-msgstr ""
+msgstr "Automatisch Notizen im Papierkorb nach einer Anzahl von Tagen löschen"
 
 # Thema vs Theme
 # Not sure what other applications use. I don't have any German apps thus I can't say.
@@ -2849,9 +2850,8 @@ msgid "Keep note history for"
 msgstr "Notizenverlauf speichern für"
 
 #: packages/lib/models/Setting.ts:1925
-#, fuzzy
 msgid "Keep notes in the trash for"
-msgstr "Notizenverlauf speichern für"
+msgstr "Behalte Notizen im Papierkorb für"
 
 #: packages/lib/models/Setting.ts:1558
 msgid "Keyboard Mode"
@@ -2895,7 +2895,7 @@ msgstr "Später"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:7
 msgid "Latitude"
-msgstr ""
+msgstr "Breitengrad"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:623
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:231
@@ -2944,6 +2944,8 @@ msgid ""
 "Like any software you install, plugins can potentially cause security issues "
 "or data loss."
 msgstr ""
+"Ähnlich wie bei jeder anderen Software, die du installierst, können "
+"Erweiterungen potenziell Sicherheitsprobleme oder Datenverlust verursachen."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:108
 msgid "Lines"
@@ -3034,7 +3036,7 @@ msgstr "Protokolle, Profile, Synchronisierungsstatus"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:8
 msgid "Longitude"
-msgstr ""
+msgstr "Längengrad"
 
 #: packages/app-desktop/gui/MenuBar.tsx:903
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
@@ -3139,7 +3141,7 @@ msgstr "Medienspieler, Mathematik, Diagramme, Inhaltsverzeichnis"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 msgid "Minimise"
-msgstr ""
+msgstr "Minimieren"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:320
 msgid "Missing keys"
@@ -3178,6 +3180,8 @@ msgstr ""
 msgid ""
 "Most plugins have source code available for review on the plugin website."
 msgstr ""
+"Die meisten Erweiterungen stellen den Quellcode auf der Erweiterungswebsite "
+"zur Verfügung, um eingesehen zu werden."
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:587
 msgid "Move %d notes to notebook \"%s\"?"
@@ -3230,7 +3234,7 @@ msgstr "Größe niemals anpassen"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/HeaderItem.tsx:46
 msgid "New"
-msgstr ""
+msgstr "Neu"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:10
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
@@ -3833,7 +3837,7 @@ msgstr "Erweiterungswerkzeuge"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:97
 msgid "Plugin repository failed to load"
-msgstr ""
+msgstr "Erweiterungs-Repository konnte nicht geladen werden."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:27
 #, fuzzy
@@ -3865,6 +3869,9 @@ msgid ""
 "Plugins extend Joplin with features that are not present by default. Plugins "
 "can extend Joplin's editor, viewer, and more."
 msgstr ""
+"Mit Erweiterungen lassen sich in Joplin zusätzliche Funktionen hinzufügen, "
+"die standardmäßig nicht verfügbar sind. Sie können den Editor, die Ansicht "
+"und vieles mehr erweitern."
 
 #: packages/lib/models/Setting.ts:1534
 msgid "Portrait"
@@ -3958,7 +3965,7 @@ msgstr "Verarbeite Benutzerlöschungen"
 
 #: packages/lib/models/Resource.ts:32
 msgid "Processing"
-msgstr ""
+msgstr "Verarbeitung"
 
 #: packages/server/src/routes/admin/users.ts:254
 msgid "Profile"
@@ -4057,14 +4064,12 @@ msgid "Recipients:"
 msgstr "Empfänger:"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:143
-#, fuzzy
 msgid "Recommended"
-msgstr "Befehl"
+msgstr "Empfohlen"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:126
-#, fuzzy
 msgid "Recommended plugins"
-msgstr "Befehl"
+msgstr "Empfohlene Erweiterungen"
 
 #: packages/app-desktop/gui/MenuBar.tsx:732
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
@@ -4141,11 +4146,11 @@ msgstr "Ersetze: "
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:57
 msgid "Report an issue"
-msgstr ""
+msgstr "Problem melden"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:86
 msgid "Report fraudulent plugin"
-msgstr ""
+msgstr "Melde betrügerische Erweiterung"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:128
 #, fuzzy
@@ -4660,7 +4665,7 @@ msgstr "Quelle: "
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:398
 msgid "Spacer"
-msgstr ""
+msgstr "Abstandhalter"
 
 #: packages/lib/models/Setting.ts:1711
 msgid ""
@@ -4945,7 +4950,7 @@ msgstr "Foto aufnehmen"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:72
 msgid "Task \"%s\" failed with error: %s"
-msgstr ""
+msgstr "Aufgabe \"%s\" fehlgeschlagen mit Fehler: %s"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:32
 msgid "Task list"
@@ -5303,6 +5308,10 @@ msgid ""
 "cause the sync warning to appear, but still aren't synced. To unignore, "
 "click \"retry\"."
 msgstr ""
+"Diese Elemente konnten nicht synchronisiert werden, wurden jedoch als "
+"„ignoriert“ markiert. Sie werden keine Synchronisierungswarnung auslösen, "
+"sind aber immer noch nicht synchronisiert. Um die Ignorierung aufzuheben, "
+"klicke auf „Erneut versuchen“."
 
 #: packages/lib/services/ReportService.ts:187
 msgid ""
@@ -5345,7 +5354,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
 msgid "This attachment does not have OCR data (Status: %s)"
-msgstr ""
+msgstr "Dieser Anhang enthält keine OCR-Daten (Status: %s)"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:54
 #: packages/lib/services/ResourceEditWatcher/index.ts:234
@@ -5420,7 +5429,7 @@ msgstr "Diese Notiz hat keinen Verlauf"
 
 #: packages/lib/services/plugins/PluginService.ts:516
 msgid "This plugin doesn't support %s."
-msgstr ""
+msgstr "Diese Erweiterung unterstützt %s nicht."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:505
 msgid ""
@@ -5442,7 +5451,7 @@ msgstr ""
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:11
 msgid "This subfolder of the trash has no notes."
-msgstr ""
+msgstr "Dieser Unterordner im Papierkorb enthält keine Notizen."
 
 #: packages/lib/models/Setting.ts:1295
 msgid ""
@@ -5462,7 +5471,8 @@ msgstr ""
 #: packages/app-desktop/commands/emptyTrash.ts:14
 #: packages/app-mobile/components/side-menu-content.tsx:159
 msgid "This will permanently delete all items in the trash. Continue?"
-msgstr ""
+msgstr "Diese Aktion wird alle Elemente im Papierkorb löschen. Möchtest du "
+"fortfahren?"
 
 #: packages/app-cli/app/command-rmnote.ts:40
 #, fuzzy
@@ -5653,7 +5663,7 @@ msgstr "Insgesamt: %d/%d"
 
 #: packages/lib/services/trash/index.ts:44
 msgid "Trash"
-msgstr ""
+msgstr "Papierkorb"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:320
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:123
@@ -5935,7 +5945,7 @@ msgstr "Ansicht"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:141
 msgid "View OCR text"
-msgstr ""
+msgstr "OCR-Text anzeigen"
 
 #: packages/app-mobile/components/screens/Note.tsx:1099
 msgid "View on map"
@@ -5985,12 +5995,15 @@ msgstr ""
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:128
 msgid "We have a system for reporting and removing problematic plugins."
 msgstr ""
+"Wir haben ein System zur Meldung und Entfernung problematischer Erweiterungen."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:126
 msgid ""
 "We mark plugins developed by trusted Joplin community members as "
 "\"recommended\"."
 msgstr ""
+"Wir kennzeichen Erweiterungen, die von vertrauenswürdigen Mitgliedern der "
+"Joplin-Community entwickelt wurden, als „empfohlen“."
 
 #: packages/lib/models/Setting.ts:2797 packages/lib/utils/joplinCloud.ts:166
 msgid "Web Clipper"
@@ -6100,6 +6113,8 @@ msgstr ""
 #: packages/lib/services/joplinCloudUtils.ts:44
 msgid "You are logged in into Joplin Cloud, you can leave this screen now."
 msgstr ""
+"Du bist in Joplin Cloud angemeldet, du kannst jetzt diesen Bildschirm "
+"verlassen."
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "You currently have no notebooks."
@@ -6137,7 +6152,7 @@ msgstr ""
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:30
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:545
 msgid "Your account doesn't have access to this feature"
-msgstr ""
+msgstr "Dein Konto hat keinen Zugriff auf dieses Feature."
 
 #: packages/app-cli/app/cli-utils.js:160
 msgid "Your choice: "

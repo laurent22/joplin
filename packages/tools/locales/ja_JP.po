@@ -563,7 +563,7 @@ msgid "Auto-add disabled accounts for deletion"
 msgstr "無効アカウントを削除に自動追加"
 
 #: packages/lib/models/Setting.ts:996
-msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgid "Auto-pair braces, parentheses, quotations, etc."
 msgstr "始めの括弧や引用符入力時に終わりの括弧や引用符を自動入力する。"
 
 #: packages/lib/models/Setting.ts:1471

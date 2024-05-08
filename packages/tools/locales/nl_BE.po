@@ -576,7 +576,7 @@ msgstr ""
 
 # The "." at the end of the original text is not the period at the end of a sentence but merely the period to indicate that etc. is an abbreviation (of etcetera).
 #: packages/lib/models/Setting.ts:996
-msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgid "Auto-pair braces, parentheses, quotations, etc."
 msgstr "Haakjes, aanhalingstekens, etc. automatisch aanvullen"
 
 #: packages/lib/models/Setting.ts:1471

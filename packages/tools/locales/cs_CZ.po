@@ -575,7 +575,7 @@ msgid "Auto-add disabled accounts for deletion"
 msgstr "Automatické přidání zakázaných účtů k odstranění"
 
 #: packages/lib/models/Setting.ts:996
-msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgid "Auto-pair braces, parentheses, quotations, etc."
 msgstr "Automaticky zdvojit uvozovky, závorky, apod."
 
 #: packages/lib/models/Setting.ts:1471
