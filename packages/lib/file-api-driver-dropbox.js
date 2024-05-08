@@ -149,7 +149,10 @@ class FileApiDriverDropbox {
 				// Use a random If-None-Match value to prevent React Native from using the cache.
 				// Passing "cache: no-store" doesn't seem to be sufficient, so If-None-Match is set to a value
 				// that will never match the ETag.
+				//
 				// Something similar is done for WebDAV.
+				//
+				// See https://github.com/laurent22/joplin/issues/10396
 				response = await fetchPath('GET', path, { 'If-None-Match': `JoplinIgnore-${Math.floor(Math.random() * 100000)}` });
 			}
 			return response;
