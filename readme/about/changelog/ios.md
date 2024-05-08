@@ -1,5 +1,10 @@
 # Joplin iOS Changelog
 
+## [ios-v12.14.8](https://github.com/laurent22/joplin/releases/tag/ios-v12.14.8) - 2024-05-08T13:40:01Z
+
+- Fixed: Fix Dropbox sync for large file collections (#10411) (#10396 by Henry Heino)
+- Fixed: Fixed app for iOS 12 (966fe38)
+
 ## [ios-v12.14.7](https://github.com/laurent22/joplin/releases/tag/ios-v12.14.7) - 2024-05-07T16:24:05Z
 
 - New: Add Privacy manifest file (#10406 by Henry Heino)
