@@ -994,7 +994,7 @@ msgstr "Fuldført: %s (%s)"
 
 #: packages/lib/models/Note.ts:64
 msgid "completion date"
-msgstr "Gennemførelsesdato"
+msgstr "dato for færdiggørelse"
 
 #: packages/server/src/services/TaskService.ts:28
 msgid "Compress old changes"
@@ -4559,7 +4559,7 @@ msgstr "Kilde: "
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:398
 msgid "Spacer"
-msgstr ""
+msgstr "Mellemrum"
 
 #: packages/lib/models/Setting.ts:1711
 msgid ""
