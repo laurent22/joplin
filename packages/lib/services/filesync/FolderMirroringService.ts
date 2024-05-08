@@ -2,11 +2,11 @@ import { ModelType } from '../../BaseModel';
 import { FolderEntity, NoteEntity } from '../database/types';
 import FolderMirror from './FolderMirror';
 
-export default class FileMirroringService {
-	private static instance_: FileMirroringService|null = null;
+export default class FolderMirroringService {
+	private static instance_: FolderMirroringService|null = null;
 
 	public static instance() {
-		this.instance_ ??= new FileMirroringService();
+		this.instance_ ??= new FolderMirroringService();
 		return this.instance_;
 	}
 

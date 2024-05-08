@@ -1,6 +1,6 @@
 import { CommandRuntime, CommandDeclaration } from '../services/CommandService';
 import { _ } from '../locale';
-import FileMirroringService from '../services/filesync/FileMirroringService';
+import FolderMirroringService from '../services/filesync/FolderMirroringService';
 import shim from '../shim';
 
 export const declaration: CommandDeclaration = {
@@ -12,7 +12,7 @@ export const runtime = (): CommandRuntime => {
 	return {
 		execute: async (_context: unknown, folderId: string) => {
 			const outputPath = await shim.pickFolder();
-			await FileMirroringService.instance().mirrorFolder(outputPath, folderId);
+			await FolderMirroringService.instance().mirrorFolder(outputPath, folderId);
 		},
 		enabledCondition: '',
 	};

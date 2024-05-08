@@ -11,7 +11,7 @@ import { FolderEntity, NoteEntity } from './services/database/types';
 import { getListRendererIds } from './services/noteList/renderers';
 import { ProcessResultsRow } from './services/search/SearchEngine';
 import { getDisplayParentId } from './services/trash';
-import FileMirroringService from './services/filesync/FileMirroringService';
+import FolderMirroringService from './services/filesync/FolderMirroringService';
 const fastDeepEqual = require('fast-deep-equal');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
@@ -1340,7 +1340,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 		additionalReducer.reducer(draft, action);
 	}
 
-	void FileMirroringService.handleReducerAction(action);
+	void FolderMirroringService.handleReducerAction(action);
 
 	// if (Setting.value('env') === 'dev') {
 	// 	return Object.freeze(newState);

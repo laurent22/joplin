@@ -1,6 +1,6 @@
 import Note from '../../models/Note';
 import { createTempDir, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
-import FileMirroringService from './FileMirroringService';
+import FolderMirroringService from './FolderMirroringService';
 import { join } from 'path';
 import * as fs from 'fs-extra';
 import { Store, createStore } from 'redux';
@@ -47,7 +47,7 @@ const waitForTestNoteToBeWritten = async (parentDir: string) => {
 };
 
 let store: Store<AppState>;
-describe('FileMirroringService.watch', () => {
+describe('FolderMirroringService', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -64,12 +64,12 @@ describe('FileMirroringService.watch', () => {
 		jest.useRealTimers();
 	});
 	afterEach(async () => {
-		await FileMirroringService.instance().reset();
+		await FolderMirroringService.instance().reset();
 	});
 
 	test('should create notes and folders locally when created in an initially-empty, watched remote folder', async () => {
 		const tempDir = await createTempDir();
-		await FileMirroringService.instance().mirrorFolder(tempDir, '');
+		await FolderMirroringService.instance().mirrorFolder(tempDir, '');
 
 		let changeListener = waitForNoteChange();
 		await fs.writeFile(join(tempDir, 'a.md'), 'This is a test...', 'utf8');
@@ -107,7 +107,7 @@ describe('FileMirroringService.watch', () => {
 			'b.md': '---\ntitle: Another test\n---\n\n# Content',
 			'test/foo/c.md': 'Another note',
 		});
-		await FileMirroringService.instance().mirrorFolder(tempDir, '');
+		await FolderMirroringService.instance().mirrorFolder(tempDir, '');
 
 		expect(await Note.loadByTitle('A test')).toMatchObject({ body: '', parent_id: '' });
 
@@ -125,7 +125,7 @@ describe('FileMirroringService.watch', () => {
 			'a.md': '---\ntitle: A test\n---',
 			'test/foo/c.md': 'Another note',
 		});
-		await FileMirroringService.instance().mirrorFolder(tempDir, '');
+		await FolderMirroringService.instance().mirrorFolder(tempDir, '');
 
 		const testFolderId = (await Folder.loadByTitle('test')).id;
 		const noteId = (await Note.loadByTitle('A test')).id;
@@ -146,7 +146,7 @@ describe('FileMirroringService.watch', () => {
 			'testFolder2/testFolder3/c.md': 'Note C',
 		});
 
-		const watcher = await FileMirroringService.instance().mirrorFolder(tempDir, '');
+		const watcher = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
 		await watcher.waitForIdle();
 
 		const moveItemC = waitForNoteChange(item => item.body === 'Note C');
@@ -176,7 +176,7 @@ describe('FileMirroringService.watch', () => {
 		const tempDir = await createTempDir();
 
 		const note = await Note.save({ title: 'Test note', body: '', parent_id: '' });
-		const mirror = await FileMirroringService.instance().mirrorFolder(tempDir, '');
+		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
 
 		await verifyDirectoryMatches(tempDir, {
 			'Test note.md': `---\ntitle: Test note\nid: ${note.id}\n---\n\n`,
@@ -196,7 +196,7 @@ describe('FileMirroringService.watch', () => {
 		const folder2 = await Folder.save({ title: 'Test 2', parent_id: '' });
 		const note1 = await Note.save({ parent_id: folder2.id, title: 'Note' });
 
-		const mirror = await FileMirroringService.instance().mirrorFolder(tempDir, '');
+		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
 
 		await mirror.waitForIdle();
 		await verifyDirectoryMatches(tempDir, {
@@ -230,7 +230,7 @@ describe('FileMirroringService.watch', () => {
 		const note2 = await Note.save({ parent_id: folder.id, title: 'Note' });
 		const note3 = await Note.save({ parent_id: folder.id, title: 'Test note' });
 
-		const mirror = await FileMirroringService.instance().mirrorFolder(tempDir, '');
+		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
 		await mirror.waitForIdle();
 
 		await verifyDirectoryMatches(tempDir, {
@@ -282,7 +282,7 @@ describe('FileMirroringService.watch', () => {
 
 	test('should add metadata to folders when created remotely', async () => {
 		const tempDir = await createTempDir();
-		const mirror = await FileMirroringService.instance().mirrorFolder(tempDir, '');
+		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
 		await mirror.waitForIdle();
 
 		await fs.mkdir(join(tempDir, 'Test'));
@@ -303,7 +303,7 @@ describe('FileMirroringService.watch', () => {
 		const tempDir = await createTempDir();
 		const noteId = (await Note.save({ title: 'note', parent_id: '' })).id;
 
-		const mirror = await FileMirroringService.instance().mirrorFolder(tempDir, '');
+		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
 		await mirror.waitForIdle();
 
 		await verifyDirectoryMatches(tempDir, {
