@@ -540,6 +540,8 @@
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
+					"-weak_framework",
+					SwiftUI,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin;
 				PRODUCT_NAME = Joplin;
@@ -568,6 +570,8 @@
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
+					"-weak_framework",
+					SwiftUI,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin;
 				PRODUCT_NAME = Joplin;
@@ -720,6 +724,13 @@
 				MARKETING_VERSION = 12.14.7;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"JoplinCommonShareExtension\"",
+					"-weak_framework",
+					SwiftUI,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin.ShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -750,6 +761,13 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MARKETING_VERSION = 12.14.7;
 				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"JoplinCommonShareExtension\"",
+					"-weak_framework",
+					SwiftUI,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin.ShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
