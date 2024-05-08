@@ -341,6 +341,7 @@ describe('FolderMirror.fullSync', () => {
 		expect(await Folder.load(newFolderId)).toMatchObject({
 			id: newFolderId,
 			title: 'New title',
+			deleted_time: 0, // Should not be deleted
 		});
 	});
 

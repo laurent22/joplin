@@ -59,6 +59,9 @@ describe('FileMirroringService.watch', () => {
 		store = createStore(testReducer);
 
 		BaseItem.dispatch = store.dispatch;
+
+		// Needed for AsyncActionQueue
+		jest.useRealTimers();
 	});
 	afterEach(async () => {
 		await FileMirroringService.instance().reset();
@@ -161,6 +164,12 @@ describe('FileMirroringService.watch', () => {
 
 		const noteC = await Note.loadByTitle('c');
 		expect(noteC.parent_id).toBe(testFolder3.id);
+
+		// None of the folders should be deleted by the move.
+		expect(testFolder1.deleted_time).toBe(0);
+		expect(testFolder2.deleted_time).toBe(0);
+		expect(testFolder3.deleted_time).toBe(0);
+		expect(noteC.deleted_time).toBe(0);
 	});
 
 	test('should update notes remotely when updated locally', async () => {
@@ -201,10 +210,14 @@ describe('FileMirroringService.watch', () => {
 		await waitForTestNoteToBeWritten(tempDir);
 		await mirror.waitForIdle();
 
-		expect(await Folder.load(folder1.id)).toMatchObject({ parent_id: '', title: 'Updated' });
+		expect(await Folder.load(folder1.id)).toMatchObject({
+			parent_id: '',
+			title: 'Updated',
+			deleted_time: 0, // Should not be deleted
+		});
 
 		await verifyDirectoryMatches(tempDir, {
-			'Test/.folder.yml': `title: Updated\nid: ${folder1.id}`,
+			'Updated/.folder.yml': `title: Updated\nid: ${folder1.id}`,
 			'Test 2/.folder.yml': `title: Test 2\nid: ${folder2.id}\n`,
 			'Test 2/Note.md': `---\ntitle: Note\nid: ${note1.id}\n---\n\n`,
 		});

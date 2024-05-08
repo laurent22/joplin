@@ -279,6 +279,13 @@ export default class {
 				const isNew = !item.id || !await BaseItem.loadItemById(item.id, { fields: ['id'] });
 				debugLogger.debug('onAdd', item.title, isNew ? '[new]' : '[update]');
 
+				// Sometimes, when an item is moved, it is given the deleted flag because it
+				// is first unlinked, then moved.
+				if (item.deleted_time || !('deleted_time' in item)) {
+					debugLogger.debug('onAdd/move item from trash');
+					item = { ...item, deleted_time: 0 };
+				}
+
 				let result;
 				if (item.type_ === ModelType.Folder) {
 					result = await Folder.save(item, { isNew });
@@ -289,6 +296,11 @@ export default class {
 			},
 			onUpdate: async ({ item }) => {
 				debugLogger.debug('onUpdate', item.title);
+
+				if (item.deleted_time) {
+					debugLogger.debug('onUpdate/move item from trash');
+					item = { ...item, deleted_time: 0 };
+				}
 
 				if (item.type_ === ModelType.Folder) {
 					await Folder.save(item, { isNew: false });
@@ -444,7 +456,9 @@ export default class {
 
 			for (const note of childNotes) {
 				const notePath = noteIdToItemPath.get(note.id);
-				await this.localTree_.addItemAt(notePath, note, noOpActionListeners);
+				if (!note.deleted_time) {
+					await this.localTree_.addItemAt(notePath, note, noOpActionListeners);
+				}
 			}
 		};
 
@@ -491,7 +505,7 @@ export default class {
 		if (this.localTree_.hasId(item.id)) {
 			const localItem = this.localTree_.getAtId(item.id);
 			if (keysMatch(localItem, item, ['title', 'body', 'icon', 'parent_id'])) {
-				debugLogger.debug('onLocalItemUpdate/skip');
+				debugLogger.debug('onLocalItemUpdate/skip', item.title, item.deleted_time);
 				return;
 			}
 		}
@@ -522,6 +536,9 @@ export default class {
 
 			item ??= await itemAtPath(path);
 			if (!item) return; // Unsupported
+
+			// Un-deletes the item, if it's already present in the database.
+			item = { ...item, deleted_time: 0 };
 
 			debugLogger.debug('handleAdd at', path);
 			debugLogger.group();
@@ -590,8 +607,18 @@ export default class {
 					if (!item.id && this.remoteTree_.hasPath(path)) {
 						item.id = this.remoteTree_.idAtPath(path);
 					}
+
+					const originalRemoteItem = this.remoteTree_.getAtId(item.id);
+
 					item = await this.localTree_.processItem(null, item, this.modifyLocalActions_);
 					await this.remoteTree_.processItem(path, item, noOpActionListeners);
+
+					// When a folder or note is renamed in its frontmatter, also update the filename.
+					if (item.title !== originalRemoteItem?.title) {
+						debugLogger.debug('Optimize remote path');
+						await this.remoteTree_.optimizeItemPath(item, this.modifyRemoteActions_);
+						await this.localTree_.optimizeItemPath(item, noOpActionListeners);
+					}
 				} else if (event.type === DirectoryWatchEventType.Unlink) {
 					throw new Error(`Path ${path} was marked as unlinked, but still exists.`);
 				} else {

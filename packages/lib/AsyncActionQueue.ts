@@ -1,3 +1,4 @@
+import Logger from '@joplin/utils/Logger';
 import shim from './shim';
 
 export interface QueueItemAction<Context> {
@@ -15,6 +16,8 @@ export enum IntervalType {
 }
 
 type CanSkipTaskHandler<Context> = (current: QueueItem<Context>, next: QueueItem<Context>)=> boolean;
+
+const logger = Logger.create('AsyncActionQueue');
 
 // The AsyncActionQueue can be used to debounce asynchronous actions, to make sure
 // they run in the right order, and also to ensure that if multiple actions are emitted
@@ -90,6 +93,7 @@ export default class AsyncActionQueue<Context = any> {
 				}
 			} catch (error) {
 				i ++; // Don't repeat the failed task.
+				logger.warn('Unhandled error:', error);
 				throw error;
 			} finally {
 				// Removing processed items in a try {} finally {...} prevents

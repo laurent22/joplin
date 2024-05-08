@@ -128,6 +128,8 @@ export default class ItemTree {
 
 	public async addItemAt(path: string, item: FolderItem, listeners: AddActionListener) {
 		path = normalize(path);
+		this.checkRep_();
+
 		if (this.pathToItem_.has(path)) {
 			throw new Error(`Can't set item ${item.id}:${item.title} at path ${path} -- that path is already present.`);
 		}
@@ -151,6 +153,9 @@ export default class ItemTree {
 		if (this.idToPath_.has(item.id)) {
 			throw new Error(`ID already taken (${item.id}, title: ${item.title}@${path})`);
 		}
+		if (item.deleted_time) {
+			throw new Error(`Cannot add a deleted item to the tree (${item.title}@${path})`);
+		}
 		this.checkRep_();
 
 		this.pathToItem_.set(path, item);
@@ -169,7 +174,7 @@ export default class ItemTree {
 		toPath = normalize(toPath);
 		this.checkRep_();
 
-		const item = this.getAtPath(fromPath);
+		let item = this.getAtPath(fromPath);
 
 		let toParentPath;
 		if (!this.hasPath(toPath)) {
@@ -179,6 +184,11 @@ export default class ItemTree {
 			toPath = this.getUniqueItemPathInParent(toParentPath, item);
 		} else {
 			throw new Error(`Cannot move item from ${fromPath} to ${toPath} -- cannot make item a child of a non-folder.`);
+		}
+
+		// Handle the case where an item is being moved from the trash.
+		if (item.deleted_time) {
+			item = { ...item, deleted_time: 0 };
 		}
 
 		const toParentId = this.idAtPath(toParentPath);
@@ -316,7 +326,7 @@ export default class ItemTree {
 					this.checkRep_();
 				}
 			}
-		} else {
+		} else if (!item.deleted_time) {
 			const parentPath = this.pathFromId(item.parent_id);
 			result = await this.addItemTo(parentPath, item, listeners);
 
@@ -350,6 +360,10 @@ export default class ItemTree {
 			}
 			if (item.parent_id && !this.hasId(item.parent_id)) {
 				throw new Error(`Missing item's parent (item: ${item.title}:${item.id}, parent_id: ${item.parent_id})`);
+			}
+
+			if (item.deleted_time) {
+				throw new Error(`Deleted item (${item.title}:${item.id}) is present in the folder tree (path: ${path})`);
 			}
 		}
 	}

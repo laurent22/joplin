@@ -5,7 +5,7 @@ import time from './time';
 import JoplinDatabase, { TableField } from './JoplinDatabase';
 import { LoadOptions, SaveOptions } from './models/utils/types';
 import ActionLogger, { ItemActionType as ItemActionType } from './utils/ActionLogger';
-import { SqlQuery } from './services/database/types';
+import { NoteEntity, SqlQuery } from './services/database/types';
 const Mutex = require('async-mutex').Mutex;
 
 // New code should make use of this enum
@@ -340,7 +340,7 @@ class BaseModel {
 		return this.modelSelectAll(q.sql, q.params);
 	}
 
-	public static async allByParentId(parentId: string, options: LoadOptions|null = null) {
+	public static async allByParentId(parentId: string, options: LoadOptions|null = null): Promise<NoteEntity[]> {
 		return await this.all({ ...options, fields: options.fields ?? ['id', 'parent_id'], where: 'parent_id = ?', whereParams: [parentId] });
 	}
 
