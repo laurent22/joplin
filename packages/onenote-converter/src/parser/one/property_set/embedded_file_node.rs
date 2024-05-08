@@ -64,10 +64,9 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
         ObjectReference::parse(PropertyType::EmbeddedFileContainer, object)?
             .ok_or_else(|| {
                 log_warn!("embeded file has no file container");
-                picture_container
-                // ErrorKind::MalformedOneNoteFileData("embedded file has no file container".into())
-            })
-            .unwrap();
+                ErrorKind::MalformedOneNoteFileData("embedded file has no file container".into())
+            })?;
+            
     let embedded_file_name = simple::parse_string(PropertyType::EmbeddedFileName, object)?
         .ok_or_else(|| {
             ErrorKind::MalformedOneNoteFileData("embedded file has no file name".into())
