@@ -85,6 +85,7 @@ packages/app-cli/app/command-geoloc.js
 packages/app-cli/app/command-help.js
 packages/app-cli/app/command-import.js
 packages/app-cli/app/command-ls.js
+packages/app-cli/app/command-mirror-folder.js
 packages/app-cli/app/command-mkbook.test.js
 packages/app-cli/app/command-mkbook.js
 packages/app-cli/app/command-mv.js
