@@ -1,5 +1,6 @@
 use crate::page::Renderer;
 use crate::parser::contents::Image;
+use crate::utils::utils::log;
 use crate::utils::{px, write_file, AttributeSet, StyleSet};
 use color_eyre::Result;
 
@@ -11,6 +12,7 @@ impl<'a> Renderer<'a> {
             let filename = self.determine_image_filename(image)?;
             let path = self.output.join(filename.clone());
             let path_as_str = path.as_os_str().to_str().unwrap();
+            log!("Writing image: {:?}", path_as_str);
             let _ = write_file(path_as_str, data);
 
             let mut attrs = AttributeSet::new();

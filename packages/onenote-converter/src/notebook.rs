@@ -2,7 +2,8 @@ use crate::parser::notebook::Notebook;
 use crate::parser::property::common::Color;
 use crate::parser::section::{Section, SectionEntry};
 use crate::templates::notebook::Toc;
-use crate::utils::{make_dir, utils, write_file};
+use crate::utils::utils::log;
+use crate::utils::{make_dir, write_file};
 use crate::{section, templates};
 use color_eyre::eyre::{eyre, Result};
 use palette::rgb::Rgb;
@@ -20,17 +21,17 @@ impl Renderer {
 
     pub fn render(&mut self, notebook: &Notebook, name: &str, output_dir: &Path) -> Result<()> {
         if !output_dir.is_dir() {
-            utils::log!("Create outputdir: {:?}", output_dir);
-            let r = make_dir(output_dir.as_os_str().to_str().unwrap());
-            utils::log!("Result outputdir: {:?}", r);
+            log!("Create outputdir: {:?}", output_dir);
+            let _ = make_dir(output_dir.as_os_str().to_str().unwrap());
         }
 
         let notebook_dir = output_dir.join(sanitize_filename::sanitize(name));
 
         if !notebook_dir.is_dir() {
             let copy_notebook_dir = notebook_dir.clone();
-            let pat = copy_notebook_dir.into_os_string().into_string().unwrap();
-            let _ = make_dir(&pat);
+            let path = copy_notebook_dir.into_os_string().into_string().unwrap();
+            log!("Create notebookdir: {:?}", path);
+            let _ = make_dir(&path);
         }
 
         let mut toc = Vec::new();
@@ -48,7 +49,7 @@ impl Renderer {
                     let dir_name = sanitize_filename::sanitize(group.display_name());
                     let group_dir = notebook_dir.join(dir_name);
                     if !group_dir.is_dir() {
-                        utils::log!("Create groupdir {:?}", group_dir);
+                        log!("Create groupdir {:?}", group_dir);
                         let _ = make_dir(group_dir.as_os_str().to_str().unwrap());
                     }
 

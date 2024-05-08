@@ -6,7 +6,7 @@ use std::path::Path;
 use std::path::PathBuf;
 use wasm_bindgen::prelude::wasm_bindgen;
 
-use crate::utils::utils::log;
+use crate::utils::utils::{log, log_warn};
 
 mod notebook;
 mod page;
@@ -26,17 +26,14 @@ pub fn oneNoteConverter(input: &str, output: &str) {
     let output_dir = PathBuf::from(output);
 
     if let Err(e) = _main(input_paths, output_dir) {
-        use web_sys::console;
-
-        console::log_1(&(e.to_string()).into());
-        eprintln!("{:?}", e);
+        log_warn!("Something went wrong: {:?}", e);
     }
 }
 
 fn _main(input_paths: PathBuf, output_dir: PathBuf) -> Result<()> {
     assert!(!output_dir.is_file());
 
-    log!("Input pahts: {:?}", input_paths);
+    log!("Input path: {:?}", input_paths);
     convert(&input_paths, &output_dir)?;
 
     Ok(())
@@ -48,7 +45,7 @@ pub fn convert(path: &Path, output_dir: &Path) -> Result<()> {
     match path.extension().map(|p| p.to_string_lossy()).as_deref() {
         Some("one") => {
             let name = path.file_name().unwrap_or_default().to_string_lossy();
-            println!("Processing section {}...", name);
+            log!("Processing .one file {}", name);
 
             let section = parser.parse_section(&path)?;
 
@@ -61,9 +58,8 @@ pub fn convert(path: &Path, output_dir: &Path) -> Result<()> {
                 .file_name()
                 .unwrap_or_default()
                 .to_string_lossy();
-            println!("Processing notebook {}...", name);
+            log!("Processing .onetoc2 file {}", name);
 
-            utils::utils::log!("Before parsing notebook: {:?}", path);
             let notebook = parser.parse_notebook(&path)?;
 
             let notebook_name = path

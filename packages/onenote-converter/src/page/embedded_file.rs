@@ -2,6 +2,7 @@ use crate::page::Renderer;
 use crate::parser::contents::EmbeddedFile;
 use crate::parser::property::embedded_file::FileType;
 use crate::utils::write_file;
+use crate::utils::utils::log;
 use color_eyre::eyre::ContextCompat;
 use color_eyre::Result;
 use std::path::PathBuf;
@@ -13,6 +14,7 @@ impl<'a> Renderer<'a> {
         let filename = self.determine_filename(file.filename())?;
         let path = self.output.join(filename.clone());
         let path_as_str = path.as_os_str().to_str().unwrap();
+        log!("Writing embedded file: {:?}", path_as_str);
         let _ = write_file(path_as_str, file.data());
 
         let file_type = Self::guess_type(file);

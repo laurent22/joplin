@@ -1,5 +1,6 @@
 use crate::parser::section::Section;
 use crate::utils::{make_dir, write_file};
+use crate::utils::utils::log;
 use crate::{page, templates};
 use color_eyre::eyre::Result;
 use std::collections::HashSet;
@@ -21,6 +22,7 @@ impl Renderer {
     pub fn render(&mut self, section: &Section, output_dir: &Path) -> Result<PathBuf> {
         let section_dir = output_dir.join(sanitize_filename::sanitize(section.display_name()));
 
+        log!("Rendering sectiondir {:?}", section_dir);
         let _ = make_dir(section_dir.as_os_str().to_str().unwrap());
 
         let mut toc = Vec::new();
@@ -44,6 +46,7 @@ impl Renderer {
                 let output = renderer.render_page(page)?;
 
                 let path_as_str = output_file.as_os_str().to_str().unwrap();
+                log!("Writing page series: {:?}", path_as_str);
                 let _ = write_file(path_as_str, output.as_bytes());
 
                 toc.push((
@@ -60,6 +63,7 @@ impl Renderer {
         let toc_html = templates::section::render(section.display_name(), toc)?;
         let toc_file = output_dir.join(format!("{}.html", section.display_name()));
         let path_as_str = toc_file.as_os_str().to_str().unwrap();
+        log!("Writing toc page series: {:?}", path_as_str);
         let _ = write_file(path_as_str, toc_html.as_bytes());
 
         Ok(section_dir)

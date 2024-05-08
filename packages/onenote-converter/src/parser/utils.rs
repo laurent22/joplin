@@ -1,5 +1,4 @@
 use crate::parser::errors::Result;
-use crate::utils::utils::log;
 use itertools::Itertools;
 use std::collections::HashMap;
 use std::fmt;
@@ -89,9 +88,6 @@ extern "C" {
 
 #[wasm_bindgen(module = "/node_functions.js")]
 extern "C" {
-    #[wasm_bindgen(js_name = mkdirSyncRecursive, catch)]
-    pub fn make_dir(path: &str) -> std::result::Result<Nothing, JsValue>;
-
     #[wasm_bindgen(js_name = isDirectory, catch)]
     pub fn is_directory(path: &str) -> std::result::Result<bool, JsValue>;
 
