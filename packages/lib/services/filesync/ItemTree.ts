@@ -4,8 +4,9 @@ import { normalize } from 'path';
 import { ModelType } from '../../BaseModel';
 import { friendlySafeFilename } from '../../path-utils';
 import time from '../../time';
+import LinkTracker from './LinkTracker';
 
-export interface AddEvent {
+export interface AddOrUpdateEvent {
 	path: string;
 	item: FolderItem;
 }
@@ -16,18 +17,13 @@ export interface MoveEvent {
 	movedItem: FolderItem;
 }
 
-export interface UpdateEvent {
-	path: string;
-	item: FolderItem;
-}
-
 export interface DeleteEvent {
 	path: string;
 	item: FolderItem;
 }
 
 export interface AddActionListener {
-	onAdd(event: AddEvent): Promise<FolderItem|void>;
+	onAdd(event: AddOrUpdateEvent): Promise<FolderItem|void>;
 }
 
 interface MoveActionListener {
@@ -35,7 +31,7 @@ interface MoveActionListener {
 }
 
 interface UpdateActionListener {
-	onUpdate(event: UpdateEvent): Promise<void>;
+	onUpdate(event: AddOrUpdateEvent): Promise<void>;
 }
 
 interface DeleteActionListener {
@@ -55,13 +51,15 @@ export default class ItemTree {
 	private pathToItem_: Map<string, FolderItem> = new Map();
 	private idToPath_: Map<string, string> = new Map();
 
-	public constructor(private baseItem: FolderItem) {
+	public constructor(private baseItem: FolderItem, private linkTracker?: LinkTracker) {
+		this.linkTracker?.setTree(this);
 		this.resetData();
 	}
 
 	public resetData() {
 		this.pathToItem_.clear();
 		this.idToPath_.clear();
+		this.linkTracker?.reset();
 
 		this.pathToItem_.set('.', this.baseItem);
 		this.idToPath_.set(this.baseItem.id, '.');
@@ -160,6 +158,8 @@ export default class ItemTree {
 
 		this.pathToItem_.set(path, item);
 		this.idToPath_.set(item.id, path);
+
+		this.linkTracker?.onItemUpdate(item);
 		this.checkRep_();
 
 		return item;
@@ -214,6 +214,8 @@ export default class ItemTree {
 				}
 			}
 		}
+
+		await this.linkTracker?.onItemMove(item, fromPath, toPath);
 		this.checkRep_();
 	}
 
@@ -267,6 +269,7 @@ export default class ItemTree {
 
 		newItem.updated_time = time.unixMs();
 		this.pathToItem_.set(path, newItem);
+		this.linkTracker?.onItemUpdate(newItem);
 		this.checkRep_();
 
 		return listeners.onUpdate({ path, item: newItem });

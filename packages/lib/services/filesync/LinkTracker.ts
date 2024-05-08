@@ -1,4 +1,4 @@
-import { join } from 'path/posix';
+import { dirname, join } from 'path/posix';
 import { ModelType } from '../../BaseModel';
 import { NoteEntity } from '../database/types';
 import ItemTree from './ItemTree';
@@ -12,16 +12,16 @@ export enum LinkType {
 // TODO: Some of these are taken from urlUtils.js
 const idLinkRegexes = [
 	// Example: [foo](:/12345678901234567890123456789012)
-	/\[.*\]\((:\/[a-zA-Z0-9]{32})(?:\s+".*")?\)/gi,
+	/\]\((:\/[a-zA-Z0-9]{32})(?:\s+".*?")?\)/gi,
 
 	// Example: [foo]: :/12345678901234567890123456789012
-	/\[.*\]:\s*(:\/[a-zA-Z0-9]{32})/gi,
+	/\]:\s*(:\/[a-zA-Z0-9]{32})/gi,
 
 	// Example: <img src=":/12345678901234567890123456789012"/>
-	/<img[\s\S]*src=["'](:\/[a-zA-Z0-9]{32})["'][\s\S]*>/gi,
+	/<img[\s\S]*?src=["'](:\/[a-zA-Z0-9]{32})["'][\s\S]*?>/gi,
 
 	// Example: <a href=":/12345678901234567890123456789012">
-	/<a[\s\S]*href=["'](:\/[a-zA-Z0-9]{32})["'][\s\S]*>/gi,
+	/<a[\s\S]*?href=["'](:\/[a-zA-Z0-9]{32})["'][\s\S]*?>/gi,
 ];
 const getIdLinks = (text: string) => {
 	const linkIds: string[] = [];
@@ -40,10 +40,10 @@ const getIdLinks = (text: string) => {
 
 const pathLinkRegexes = [
 	// Example: [foo](./foo.md)
-	/\[.*\]\((\.\.?\/.*\.md)(?:\s+".*")?\)/gi,
+	/\]\((\.\.?\/.*?\.md)(?:\s+".*?")?\)/gi,
 
 	// // Example: [foo]: ./bar.md
-	/\[.*\]:\s*(\.\.?\/.*\.md))/gi,
+	/[\n]\[[^\]]*\]:\s*(\.\.?\/.*?\.md)/gi,
 
 	// // Example: <img src=":/12345678901234567890123456789012"/>
 	// /<img[\s\S]*src=["']\.\/(\.\/.*)["'][\s\S]*>/gi,
@@ -71,9 +71,9 @@ const isIdLink = (link: string) => !!/:\/[a-zA-Z0-9]{32}/.exec(link);
 type LinkSourceId = string;
 type LinkTargetId = string;
 
-export default class LinkTracker {
-	// private linkSourceIdToLinks_: Map<string, ItemLink> = new Map();
+type OnNoteUpdateCallback = (note: NoteEntity)=>Promise<void>;
 
+export default class LinkTracker {
 	// We can have both resolved and unresolved links.
 	//
 	// Unresolved links are broken edges in the note graph and can happen because a link
@@ -85,11 +85,23 @@ export default class LinkTracker {
 	// Link sources are always IDs
 	private linkTargetIdToSource_: Map<LinkTargetId, Set<LinkSourceId>> = new Map();
 	private unresolvedLinkToSourceId_: Map<LinkSourceId, Set<string>> = new Map();
+	private tree: ItemTree;
 
-	public constructor(private tree: ItemTree, private linkType: LinkType) {}
+	public constructor(private linkType: LinkType, private onNoteUpdate: OnNoteUpdateCallback) {
+	}
+
+	public setTree(tree: ItemTree) {
+		this.tree = tree;
+	}
+
+	public reset() {
+		this.linkTargetIdToSource_.clear();
+		this.unresolvedLinkToSourceId_.clear();
+	}
 
 	private resolveLinkToId(link: string, fromPath: string) {
 		if (isIdLink(link)) {
+			link = link.substring(':/'.length);
 			if (this.tree.hasId(link)) {
 				return link;
 			}
@@ -99,6 +111,7 @@ export default class LinkTracker {
 			if (this.tree.hasPath(fullPath)) {
 				return this.tree.idAtPath(fullPath);
 			}
+			console.log('tree lacks', fullPath, this.tree);
 			return null;
 		}
 	}
@@ -140,46 +153,75 @@ export default class LinkTracker {
 		}
 	}
 
-	public onItemMove(_item: FolderItem) {
+	public async onItemMove(item: FolderItem, fromPath: string, toPath: string) {
+		// Updating links on item move is only necessary for path links
+		if (this.linkType === LinkType.IdLink) return;
 
+		const linkedItems = this.linkTargetIdToSource_.get(item.id);
+		if (!linkedItems) return;
+
+		for (const itemId of linkedItems) {
+			if (!this.tree.hasId(itemId)) continue;
+		
+			const itemWithLink = this.tree.getAtId(itemId);
+			if (itemWithLink.type_ === ModelType.Note) {
+				const note = itemWithLink as NoteEntity;
+				let body = note.body;
+				for (const regex of pathLinkRegexes) {
+					body = body.replace(regex, (match) => {
+						return match.replace(fromPath, toPath);
+					});
+				}
+				await this.onNoteUpdate({
+					...itemWithLink,
+					body,
+				});
+			}
+		}
 	}
 
-	public convertLinkTypes(text: string, fromPath: string) {
-		let regexList;
-		if (this.linkType === LinkType.IdLink) {
-			regexList = idLinkRegexes;
-		} else if (this.linkType === LinkType.PathLink) {
-			regexList = pathLinkRegexes;
+	public convertLinkTypes(toType: LinkType, text: string, fromPath: string) {
+		console.log('convert link types to', toType);
+		let otherLinkTypeRegexes;
+		if (toType === LinkType.IdLink) {
+			otherLinkTypeRegexes = pathLinkRegexes;
+		} else if (toType === LinkType.PathLink) {
+			otherLinkTypeRegexes = idLinkRegexes;
 		} else {
-			const exhaustivenessCheck: never = this.linkType;
+			const exhaustivenessCheck: never = toType;
 			return exhaustivenessCheck;
 		}
 
 		// Path from fromPath to the root of the folder tree
-		const pathToRoot = fromPath.replace(/([^/]+)\//, '../');
+		const parentPath = dirname(fromPath);
+		const pathToRoot = parentPath.replace(/([^/]+)(\/|$)/, '../');
+		console.log('to root', pathToRoot, 'from parent', parentPath);
 
-		for (const regex of regexList) {
-			text = text.replace(regex, (match) => {
-				const url = match[1];
-				const targetId = this.resolveLinkToId(url, fromPath);
+		for (const regex of otherLinkTypeRegexes) {
+			text = text.replace(regex, (fullMatch, url) => {
+				const targetId = this.resolveLinkToId(url, parentPath);
 
 				// Can't resolve -- don't replace.
 				if (!targetId) {
-					return match[0];
+					console.log('no', url);
+					return fullMatch;
 				}
 
 				let newUrl;
-				if (this.linkType === LinkType.IdLink) {
-					newUrl = targetId;
-				} else if (this.linkType === LinkType.PathLink) {
+				if (toType === LinkType.IdLink) {
+					newUrl = `:/${targetId}`;
+				} else if (toType === LinkType.PathLink) {
 					const targetPath = this.tree.pathFromId(targetId);
-					newUrl = join(pathToRoot, targetPath);
+					newUrl = `./${join(pathToRoot, targetPath)}`;
 				} else {
-					const exhaustivenessCheck: never = this.linkType;
+					const exhaustivenessCheck: never = toType;
 					return exhaustivenessCheck;
 				}
-				return match[0].replace(url, newUrl);
+				console.log('new', url, '->', newUrl);
+
+				return fullMatch.replace(url, newUrl);
 			});
+			console.log('scanned', text, 'with', regex);
 		}
 
 		return text;

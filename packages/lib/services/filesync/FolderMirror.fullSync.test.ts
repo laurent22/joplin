@@ -411,6 +411,121 @@ describe('FolderMirror.fullSync', () => {
 		expect(noteCopy.id).not.toBe(noteId);
 	});
 
+	test('should convert note links to relative links', async () => {
+		const tempDir = await createTempDir();
+		const note1Id = (await Note.save({ title: 'note1', parent_id: '', body: `Test` })).id;
+		const note2Id = (await Note.save({ title: 'note2', parent_id: '', body: `[Test](:/${note1Id})` })).id;
+		const note3Id = (await Note.save({ title: 'note2', parent_id: '', body: `[Test](:/${note1Id}),[Test](:/${note1Id})` })).id;
+		const note4Id = (await Note.save({ title: 'note4', parent_id: '', body: `[Test](:/${note2Id})\n\n[Test link](:/${note3Id})` })).id;
+
+		const mirror = new FolderMirror(tempDir, '');
+		await mirror.fullSync();
+
+		const expectedDirectoryContent = {
+			'note1.md': `---\ntitle: note1\nid: ${note1Id}\n---\n\nTest`,
+			'note2.md': `---\ntitle: note2\nid: ${note2Id}\n---\n\n[Test](./note1.md)`,
+			'note2 (1).md': `---\ntitle: note2\nid: ${note3Id}\n---\n\n[Test](./note1.md),[Test](./note1.md)`,
+			'note4.md': `---\ntitle: note4\nid: ${note4Id}\n---\n\n[Test](./note2.md)\n\n[Test link](./note2 (1).md)`,
+		};
+
+		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
+		await mirror.fullSync();
+		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
+
+		expect(await Note.load(note1Id)).toMatchObject({
+			title: 'note1',
+			body: 'Test',
+		});
+		expect(await Note.load(note2Id)).toMatchObject({
+			title: 'note2',
+			body: `[Test](:/${note1Id})`,
+		});
+		expect(await Note.load(note3Id)).toMatchObject({
+			title: 'note2',
+			body: `[Test](:/${note1Id}),[Test](:/${note1Id})`,
+		});
+	});
+
+	test('should convert relative links to note links', async () => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, {
+			'note.md': '---\ntitle: note\n---\n\n# Test\n\n[other note](./foo/a.md)',
+			'note2.md': '---\ntitle: note2\n---\n\n# Test\n\n[Another note](./foo/a.md), and [another](./note.md)',
+			'foo/a.md': '---\ntitle: NoteA\n---\n\n[first](../note.md)',
+			'foo/b.md': '---\ntitle: b\n---\n\n[first](./a.md)',
+		});
+
+		const mirror = new FolderMirror(tempDir, '');
+		await mirror.fullSync();
+
+		const folder = await Folder.loadByTitle('foo');
+		expect(folder.parent_id).toBe('');
+
+		const note = await Note.loadByTitle('note');
+		const note2 = await Note.loadByTitle('note2');
+		const noteA = await Note.loadByTitle('NoteA');
+		const noteB = await Note.loadByTitle('b');
+
+		expect(note).toMatchObject({
+			parent_id: '',
+			body: `# Test\n\n[other note](:/${noteA.id})`,
+		});
+		expect(note2).toMatchObject({
+			parent_id: '',
+			body: `# Test\n\n[Another note](:/${noteA.id}), and [another](:/${note.id})`,
+		});
+
+		const expectedDirectoryContent = {
+			'note.md': `---\ntitle: note\nid: ${note.id}\n---\n\n# Test\n\n[other note](./foo/a.md)`,
+			'note2.md': `---\ntitle: note2\nid: ${note2.id}\n---\n\n# Test\n\n[Another note](./foo/a.md), and [another](./note.md)`,
+			'foo/b.md': `---\ntitle: b\nid: ${noteB.id}\n---\n\n[first](./a.md)`,
+			'foo/a.md': `---\ntitle: NoteA\nid: ${noteA.id}\n---\n\n[first](../note.md)`,
+			'foo/.folder.yml': `title: foo\nid: ${folder.id}\n`
+		};
+		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
+		await mirror.fullSync();
+		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
+	});
+
+	test('should fix relative links when folders are renamed', async () => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, {
+			'note.md': '---\ntitle: note\n---\n\n# Test\n\n[other note](./foo/a.md)',
+			'note2.md': '---\ntitle: note2\n---\n\n# Test\n\n[Another note](./foo/a.md), and [another](./note.md)',
+			'foo/a.md': '---\ntitle: NoteA\n---\n\n[first](../note.md)',
+			'foo/b.md': '---\ntitle: b\n---\n\n[first](./a.md)',
+			'foo/.folder.yml': 'title: renamed\nid: aad95b08c3784853ba356db1c0a8f327'
+		});
+
+		const mirror = new FolderMirror(tempDir, '');
+		await mirror.fullSync();
+
+		const folder = await Folder.loadByTitle('foo');
+		expect(folder.parent_id).toBe('');
+
+		const note = await Note.loadByTitle('note');
+		const note2 = await Note.loadByTitle('note2');
+		const noteA = await Note.loadByTitle('NoteA');
+		const noteB = await Note.loadByTitle('b');
+
+		expect(note).toMatchObject({
+			parent_id: '',
+			body: `# Test\n\n[other note](:/${noteA.id})`,
+		});
+		expect(note2).toMatchObject({
+			parent_id: '',
+			body: `# Test\n\n[Another note](:/${noteA.id}), and [another](:/${note.id})`,
+		});
+
+		await verifyDirectoryMatches(tempDir, {
+			'note.md': `---\ntitle: note\nid: ${note.id}\n---\n\n# Test\n\n[other note](./renamed/a.md)`,
+			'note2.md': `---\ntitle: note2\nid: ${note2.id}\n---\n\n# Test\n\n[Another note](./renamed/NoteA.md), and [another](./note.md)`,
+			'renamed/b.md': `---\ntitle: b\nid: ${noteB.id}\n---\n\n[first](./a.md)`,
+			'renamed/a.md': `---\ntitle: NoteA\nid: ${noteA.id}\n---\n\n[first](../note.md)`,
+			'renamed/.folder.yml': `title: renamed\n${folder.id}`
+		});
+	});
+
 	// it('should delete notes locally when deleted remotely', async () => {
 	// 	;
 	// });

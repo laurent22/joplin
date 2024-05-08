@@ -11,12 +11,13 @@ import { parse as parseFrontMatter } from '../../utils/frontMatter';
 import { basename, dirname, extname, join, normalize, relative } from 'path';
 import writeFolderInfo from './folderInfo/writeFolderInfo';
 import { FolderItem } from './types';
-import ItemTree, { ActionListeners, AddActionListener, UpdateEvent, noOpActionListeners } from './ItemTree';
+import ItemTree, { ActionListeners, AddActionListener, AddOrUpdateEvent, noOpActionListeners } from './ItemTree';
 import uuid from '../../uuid';
 import BaseItem from '../../models/BaseItem';
 import AsyncActionQueue from '../../AsyncActionQueue';
 import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 import { folderInfoFileName } from './folderInfo';
+import LinkTracker, { LinkType } from './LinkTracker';
 const { ALL_NOTES_FILTER_ID } = require('../../reserved-ids.js');
 
 const debugLogger = new Logger();
@@ -242,6 +243,7 @@ export default class {
 	private remoteTree_: ItemTree;
 	private actionQueue_: AsyncActionQueue<ActionQueueEvent>;
 	private fullSyncEndListeners_: ((error: unknown)=> void)[] = [];
+	private remoteLinkTracker_: LinkTracker;
 
 	public constructor(private baseFilePath: string, private baseFolderId: string) {
 		if (baseFolderId === ALL_NOTES_FILTER_ID) {
@@ -249,8 +251,11 @@ export default class {
 		}
 
 		const baseItem = { id: this.baseFolderId, type_: ModelType.Folder };
+
 		this.localTree_ = new ItemTree(baseItem);
-		this.remoteTree_ = new ItemTree(baseItem);
+
+		this.remoteLinkTracker_ = new LinkTracker(LinkType.PathLink, this.onLinkTrackerItemUpdate_);
+		this.remoteTree_ = new ItemTree(baseItem, this.remoteLinkTracker_);
 
 		this.actionQueue_ = new AsyncActionQueue();
 		this.actionQueue_.setCanSkipTaskHandler((current, next) => {
@@ -272,41 +277,42 @@ export default class {
 			}
 		});
 
+		const onLocalAddOrUpdate = async (event: AddOrUpdateEvent, isNew: boolean) => {
+			let item = event.item;
+
+			// Sometimes, when an item is moved, it is given the deleted flag because it
+			// is first unlinked, then moved.
+			if (item.deleted_time || !('deleted_time' in item)) {
+				debugLogger.debug('onAddOrUpdate/move item from trash');
+				item = { ...item, deleted_time: 0 };
+			}
+
+			let result;
+			if (item.type_ === ModelType.Folder) {
+				result = await Folder.save(item, { isNew });
+			} else if (item.type_ === ModelType.Note) {
+				const note = item as NoteEntity;
+				const toSave = {
+					...note,
+					body: this.remoteLinkTracker_.convertLinkTypes(LinkType.IdLink, note.body, event.path),
+				};
+				result = await Note.save(toSave, { isNew });
+			}
+			return result;
+		};
+
 		this.modifyLocalActions_ = {
-			onAdd: async ({ item }) => {
+			onAdd: async (event) => {
 				// Determine if it's new or not -- the item could be coming from a
 				// different (unsynced) folder.
+				const item = event.item;
 				const isNew = !item.id || !await BaseItem.loadItemById(item.id, { fields: ['id'] });
 				debugLogger.debug('onAdd', item.title, isNew ? '[new]' : '[update]');
-
-				// Sometimes, when an item is moved, it is given the deleted flag because it
-				// is first unlinked, then moved.
-				if (item.deleted_time || !('deleted_time' in item)) {
-					debugLogger.debug('onAdd/move item from trash');
-					item = { ...item, deleted_time: 0 };
-				}
-
-				let result;
-				if (item.type_ === ModelType.Folder) {
-					result = await Folder.save(item, { isNew });
-				} else {
-					result = await Note.save(item, { isNew });
-				}
-				return result;
+				return onLocalAddOrUpdate(event, isNew);
 			},
-			onUpdate: async ({ item }) => {
-				debugLogger.debug('onUpdate', item.title);
-
-				if (item.deleted_time) {
-					debugLogger.debug('onUpdate/move item from trash');
-					item = { ...item, deleted_time: 0 };
-				}
-
-				if (item.type_ === ModelType.Folder) {
-					await Folder.save(item, { isNew: false });
-				} else {
-					await Note.save(item, { isNew: false });
-				}
+			onUpdate: async (event) => {
+				debugLogger.debug('onUpdate', event.item.title);
+				await onLocalAddOrUpdate(event, false);
 			},
 			onDelete: async ({ item }): Promise<void> => {
 				debugLogger.debug('onDelete', item.title);
@@ -328,7 +334,7 @@ export default class {
 			},
 		};
 
-		const onRemoteAddOrUpdate = async ({ path, item }: UpdateEvent) => {
+		const onRemoteAddOrUpdate = async ({ path, item }: AddOrUpdateEvent) => {
 			debugLogger.debug('remote.update', path);
 
 			const fullPath = join(baseFilePath, path);
@@ -339,8 +345,15 @@ export default class {
 					icon: (item as FolderEntity).icon,
 					title: item.title,
 				});
+			} else if (item.type_ === ModelType.Note) {
+				const note = item as NoteEntity;
+				const toSave = {
+					...note,
+					body: this.remoteLinkTracker_.convertLinkTypes(LinkType.PathLink, note.body, path),
+				};
+				await shim.fsDriver().writeFile(fullPath, await getNoteMd(toSave), 'utf8');
 			} else {
-				await shim.fsDriver().writeFile(fullPath, await getNoteMd(item), 'utf8');
+				throw new Error(`Cannot handle item with type ${item.type_}`);
 			}
 		};
 
@@ -371,6 +384,11 @@ export default class {
 			},
 		};
 	}
+
+	private onLinkTrackerItemUpdate_ = async (updatedItem: FolderItem) => {
+		updatedItem = await this.remoteTree_.processItem(null, updatedItem, this.modifyRemoteActions_);
+		await this.localTree_.processItem(null, updatedItem, this.modifyLocalActions_);
+	};
 
 	public async onLocalItemDelete(id: string) {
 		if (this.watcher_ && this.localTree_.hasId(id)) {
