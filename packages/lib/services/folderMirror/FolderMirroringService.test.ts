@@ -396,6 +396,57 @@ describe('FolderMirroringService', () => {
 		});
 	});
 
+	test('should replace links in a file when link target is renamed in the database', async () => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, {
+			'note1.md': '---\ntitle: note1\n---\n\n[note a](./folder/a.md), [note b](./folder/b.md)',
+			'folder/a.md': '---\ntitle: a\n---\n\n[first](../note1.md)',
+			'folder/b.md': '---\ntitle: b\n---\n\n[first](./a.md)',
+		});
+
+		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		const folder = await Folder.loadByTitle('folder');
+		const note1 = await Note.loadByTitle('note1');
+		const noteA = await Note.loadByTitle('a');
+		const noteB = await Note.loadByTitle('b');
+
+		expect(note1).toMatchObject({
+			title: 'note1',
+			parent_id: '',
+			body: `[note a](:/${noteA.id}), [note b](:/${noteB.id})`,
+		});
+		expect(noteB).toMatchObject({
+			title: 'b',
+			parent_id: folder.id,
+			body: `[first](:/${noteA.id})`,
+		});
+
+		await Note.save({ id: noteB.id, title: 'c' });
+		await Note.save({ id: noteB.id, title: 'note-c' });
+		await mirror.waitForIdle();
+
+		await verifyDirectoryMatches(tempDir, {
+			'folder/a.md': `---\ntitle: a\nid: ${noteA.id}\n---\n\n[first](../note1.md)`,
+			'folder/note-c.md': `---\ntitle: note-c\nid: ${noteB.id}\n---\n\n[first](./a.md)`,
+			'folder/.folder.yml': `title: folder\nid: ${folder.id}\n`,
+			'note1.md': `---\ntitle: note1\nid: ${note1.id}\n---\n\n[note a](./folder/a.md), [note b](./folder/note-c.md)`,
+		});
+
+		await Note.save({ id: noteA.id, title: 'note-a-test' });
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		await verifyDirectoryMatches(tempDir, {
+			'folder/note-a-test.md': `---\ntitle: note-a-test\nid: ${noteA.id}\n---\n\n[first](../note1.md)`,
+			'folder/note-c.md': `---\ntitle: note-c\nid: ${noteB.id}\n---\n\n[first](./note-a-test.md)`,
+			'folder/.folder.yml': `title: folder\nid: ${folder.id}\n`,
+			'note1.md': `---\ntitle: note1\nid: ${note1.id}\n---\n\n[note a](./folder/note-a-test.md), [note b](./folder/note-c.md)`,
+		});
+	});
+
 	test('renaming a folder with .folder.yml should also rewrite links', async () => {
 		const tempDir = await createTempDir();
 		await createFilesFromPathRecord(tempDir, {

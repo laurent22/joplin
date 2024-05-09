@@ -67,6 +67,14 @@ const getPathLinks = (text: string) => {
 	return linkPaths;
 };
 
+const pathToLinkUrl = (targetPath: string, parentPath: string) => {
+	const result = relative(parentPath, targetPath);
+	if (result.startsWith('./') || result.startsWith('../')) {
+		return result;
+	}
+	return `./${result}`;
+};
+
 const isIdLink = (link: string) => !!/:\/[a-zA-Z0-9]{32}/.exec(link);
 
 type LinkSourceId = string;
@@ -183,7 +191,7 @@ export default class LinkTracker {
 			return;
 		}
 
-		debugLogger.debug('LinkTracker.onItemMove');
+		debugLogger.debug('LinkTracker.onItemMove', fromPath, toPath);
 		debugLogger.group();
 
 		for (const itemId of linkedItems) {
@@ -197,13 +205,24 @@ export default class LinkTracker {
 				debugLogger.debug('update linked item', this.tree.pathFromId(itemId));
 
 				const note = itemWithLink as NoteEntity;
+				const parentPath = dirname(this.tree.pathFromId(note.id));
 				let body = note.body;
 				for (const regex of pathLinkRegexes) {
-					body = body.replace(regex, (match) => {
-						return match.replace(fromPath, toPath);
+					body = body.replace(regex, (match, oldUrl) => {
+						const oldPath = this.normalizeLink(oldUrl, parentPath);
+						if (oldPath !== fromPath) {
+							debugLogger.debug('skip', match, 'because', oldPath, 'is not', fromPath);
+							return match;
+						}
+
+						const newUrl = pathToLinkUrl(toPath, parentPath);
+						const newLink = match.replace(oldUrl, newUrl);
+						debugLogger.debug('update link', match, '->', newLink);
+						return newLink;
 					});
 				}
 				if (body !== note.body) {
+					debugLogger.debug('Item body change in', itemWithLink.title, note.body, '->', body);
 					await this.onNoteUpdate({
 						...itemWithLink,
 						body,
@@ -247,10 +266,7 @@ export default class LinkTracker {
 					newUrl = `:/${targetId}`;
 				} else if (toType === LinkType.PathLink) {
 					const targetPath = this.tree.pathFromId(targetId);
-					newUrl = `${relative(parentPath, targetPath)}`;
-					if (!newUrl.startsWith('../') && !newUrl.startsWith('./')) {
-						newUrl = `./${newUrl}`;
-					}
+					newUrl = pathToLinkUrl(targetPath, parentPath);
 				} else {
 					const exhaustivenessCheck: never = toType;
 					return exhaustivenessCheck;
