@@ -105,6 +105,7 @@ pub mod utils {
 
     macro_rules! log {
         ( $( $t:tt )* ) => {
+            #[cfg(debug_assertions)]
             web_sys::console::log_2(&format!("OneNoteConverter: ").into(), &format!( $( $t )* ).into());
         }
     }
