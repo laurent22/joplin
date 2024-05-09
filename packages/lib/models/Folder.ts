@@ -714,7 +714,7 @@ export default class Folder extends BaseItem {
 			return nestedTreeStructure;
 		}
 
-		return getNestedChildren(all, options.toplevelId ?? '');
+		return getNestedChildren(all, options?.toplevelId ?? '');
 	}
 
 	public static folderPath(folders: FolderEntity[], folderId: string) {

@@ -15,15 +15,11 @@ import ItemTree, { ActionListeners, AddActionListener, AddOrUpdateEvent, noOpAct
 import uuid from '../../uuid';
 import BaseItem from '../../models/BaseItem';
 import AsyncActionQueue from '../../AsyncActionQueue';
-import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 import { folderInfoFileName } from './folderInfo';
 import LinkTracker, { LinkType } from './LinkTracker';
+import debugLogger from './debugLogger';
 const { ALL_NOTES_FILTER_ID } = require('../../reserved-ids.js');
 
-const debugLogger = new Logger();
-debugLogger.addTarget(TargetType.Console);
-debugLogger.setLevel(LogLevel.Debug);
-debugLogger.enabled = true;
 
 const makeItemPaths = (basePath: string, items: FolderItem[]) => {
 	const output: Map<string, string> = new Map();
@@ -156,8 +152,10 @@ const mergeTrees = async (localTree: ItemTree, remoteTree: ItemTree, modifyLocal
 			const isRenamedFolder = remotePath !== localPath && localItem.type_ === ModelType.Folder;
 			if (dirname(remotePath) !== dirname(localPath) || isRenamedFolder) {
 				if (localItem.updated_time >= remoteItem.updated_time) {
+					debugLogger.debug('moveRemote', remotePath, '->', localPath);
 					await remoteTree.move(remotePath, localPath, modifyRemote);
 				} else {
+					debugLogger.debug('moveLocal', localPath, '->', remotePath);
 					await localTree.move(localPath, remotePath, modifyLocal);
 				}
 			}
@@ -180,7 +178,7 @@ const mergeTrees = async (localTree: ItemTree, remoteTree: ItemTree, modifyLocal
 	for (const [path, remoteItem] of remoteTree.items()) {
 		if (handledIds.has(remoteItem.id)) continue;
 
-		debugLogger.debug('found unhandled remote ID', remoteItem.id, `(title: ${remoteItem.title})`);
+		debugLogger.debug('found unhandled remote ID', remoteItem.id, `(title: ${remoteItem.title} at ${path})`);
 		debugLogger.group();
 
 		const itemExists = !!await BaseItem.loadItemById(remoteItem.id);
@@ -190,11 +188,9 @@ const mergeTrees = async (localTree: ItemTree, remoteTree: ItemTree, modifyLocal
 		if (itemExists && !inLocalTree) {
 			// If the note does exist, but isn't in the local tree, it was moved out of the
 			// mirrored folder.
-			// TODO: Update local?
 			await remoteTree.deleteAtPath(path, modifyRemote);
 		} else if (!inLocalTree) {
-			const parentPath = dirname(path);
-			await localTree.addItemTo(parentPath, remoteItem, modifyLocal);
+			await localTree.processItem(path, remoteItem, modifyLocal);
 		} else {
 			localTree.checkRep_();
 			remoteTree.checkRep_();

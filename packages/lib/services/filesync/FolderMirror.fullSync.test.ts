@@ -413,7 +413,7 @@ describe('FolderMirror.fullSync', () => {
 
 	test('should convert note links to relative links', async () => {
 		const tempDir = await createTempDir();
-		const note1Id = (await Note.save({ title: 'note1', parent_id: '', body: `Test` })).id;
+		const note1Id = (await Note.save({ title: 'note1', parent_id: '', body: 'Test' })).id;
 		const note2Id = (await Note.save({ title: 'note2', parent_id: '', body: `[Test](:/${note1Id})` })).id;
 		const note3Id = (await Note.save({ title: 'note2', parent_id: '', body: `[Test](:/${note1Id}),[Test](:/${note1Id})` })).id;
 		const note4Id = (await Note.save({ title: 'note4', parent_id: '', body: `[Test](:/${note2Id})\n\n[Test link](:/${note3Id})` })).id;
@@ -480,7 +480,7 @@ describe('FolderMirror.fullSync', () => {
 			'note2.md': `---\ntitle: note2\nid: ${note2.id}\n---\n\n# Test\n\n[Another note](./foo/a.md), and [another](./note.md)`,
 			'foo/b.md': `---\ntitle: b\nid: ${noteB.id}\n---\n\n[first](./a.md)`,
 			'foo/a.md': `---\ntitle: NoteA\nid: ${noteA.id}\n---\n\n[first](../note.md)`,
-			'foo/.folder.yml': `title: foo\nid: ${folder.id}\n`
+			'foo/.folder.yml': `title: foo\nid: ${folder.id}\n`,
 		};
 		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
 		await mirror.fullSync();
@@ -494,13 +494,13 @@ describe('FolderMirror.fullSync', () => {
 			'note2.md': '---\ntitle: note2\n---\n\n# Test\n\n[Another note](./foo/a.md), and [another](./note.md)',
 			'foo/a.md': '---\ntitle: NoteA\n---\n\n[first](../note.md)',
 			'foo/b.md': '---\ntitle: b\n---\n\n[first](./a.md)',
-			'foo/.folder.yml': 'title: renamed\nid: aad95b08c3784853ba356db1c0a8f327'
+			'foo/.folder.yml': 'title: renamed\nid: aad95b08c3784853ba356db1c0a8f327',
 		});
 
 		const mirror = new FolderMirror(tempDir, '');
 		await mirror.fullSync();
 
-		const folder = await Folder.loadByTitle('foo');
+		const folder = await Folder.loadByTitle('renamed');
 		expect(folder.parent_id).toBe('');
 
 		const note = await Note.loadByTitle('note');
@@ -518,11 +518,11 @@ describe('FolderMirror.fullSync', () => {
 		});
 
 		await verifyDirectoryMatches(tempDir, {
-			'note.md': `---\ntitle: note\nid: ${note.id}\n---\n\n# Test\n\n[other note](./renamed/a.md)`,
-			'note2.md': `---\ntitle: note2\nid: ${note2.id}\n---\n\n# Test\n\n[Another note](./renamed/NoteA.md), and [another](./note.md)`,
-			'renamed/b.md': `---\ntitle: b\nid: ${noteB.id}\n---\n\n[first](./a.md)`,
-			'renamed/a.md': `---\ntitle: NoteA\nid: ${noteA.id}\n---\n\n[first](../note.md)`,
-			'renamed/.folder.yml': `title: renamed\n${folder.id}`
+			'note.md': `---\ntitle: note\nid: ${note.id}\n---\n\n# Test\n\n[other note](./foo/a.md)`,
+			'note2.md': `---\ntitle: note2\nid: ${note2.id}\n---\n\n# Test\n\n[Another note](./foo/a.md), and [another](./note.md)`,
+			'foo/b.md': `---\ntitle: b\nid: ${noteB.id}\n---\n\n[first](./a.md)`,
+			'foo/a.md': `---\ntitle: NoteA\nid: ${noteA.id}\n---\n\n[first](../note.md)`,
+			'foo/.folder.yml': `title: renamed\nid: ${folder.id}\n`,
 		});
 	});
 

@@ -3,6 +3,7 @@ import { ModelType } from '../../BaseModel';
 import { NoteEntity } from '../database/types';
 import ItemTree from './ItemTree';
 import { FolderItem } from './types';
+import debugLogger from './debugLogger';
 
 export enum LinkType {
 	PathLink = 'pathLink',
@@ -71,7 +72,7 @@ const isIdLink = (link: string) => !!/:\/[a-zA-Z0-9]{32}/.exec(link);
 type LinkSourceId = string;
 type LinkTargetId = string;
 
-type OnNoteUpdateCallback = (note: NoteEntity)=>Promise<void>;
+type OnNoteUpdateCallback = (note: NoteEntity)=> Promise<void>;
 
 export default class LinkTracker {
 	// We can have both resolved and unresolved links.
@@ -99,7 +100,16 @@ export default class LinkTracker {
 		this.unresolvedLinkToSourceId_.clear();
 	}
 
+	private normalizeLink(link: string, fromPath: string) {
+		if (isIdLink(link)) return link;
+		if (link.startsWith('./') || link.startsWith('../')) {
+			return join(fromPath, link);
+		}
+		return link;
+	}
+
 	private resolveLinkToId(link: string, fromPath: string) {
+		link = this.normalizeLink(link, fromPath);
 		if (isIdLink(link)) {
 			link = link.substring(':/'.length);
 			if (this.tree.hasId(link)) {
@@ -107,11 +117,9 @@ export default class LinkTracker {
 			}
 			return null;
 		} else {
-			const fullPath = join(fromPath, link);
-			if (this.tree.hasPath(fullPath)) {
-				return this.tree.idAtPath(fullPath);
+			if (this.tree.hasPath(link)) {
+				return this.tree.idAtPath(link);
 			}
-			console.log('tree lacks', fullPath, 'from', link, 'in', this.tree);
 			return null;
 		}
 	}
@@ -124,14 +132,22 @@ export default class LinkTracker {
 		const noteParentPath = dirname(notePath);
 		const body = note.body;
 
+		debugLogger.debug(`LinkTracker.onItemUpdate ${item.title}@${notePath}`);
+		debugLogger.group();
+
+
 		const links = this.linkType === LinkType.IdLink ? getIdLinks(body) : getPathLinks(body);
+		debugLogger.debug('link count', links.length);
+
 		for (const link of links) {
 			const id = this.resolveLinkToId(link, noteParentPath);
 			if (!id) {
-				if (!this.unresolvedLinkToSourceId_.has(link)) {
-					this.unresolvedLinkToSourceId_.set(link, new Set());
+				const normalizedLink = this.normalizeLink(link, noteParentPath);
+				if (!this.unresolvedLinkToSourceId_.has(normalizedLink)) {
+					this.unresolvedLinkToSourceId_.set(normalizedLink, new Set());
 				}
-				this.unresolvedLinkToSourceId_.get(link).add(note.id);
+				this.unresolvedLinkToSourceId_.get(normalizedLink).add(note.id);
+				debugLogger.debug('marked link', link, 'to', normalizedLink, 'as unresolved');
 			} else {
 				if (!this.linkTargetIdToSource_.has(id)) {
 					this.linkTargetIdToSource_.set(id, new Set());
@@ -142,6 +158,8 @@ export default class LinkTracker {
 
 		for (const [link, sourceIds] of this.unresolvedLinkToSourceId_.entries()) {
 			if (link === `:/${item.id}` || link === notePath) {
+				debugLogger.debug('resolve', link);
+
 				this.unresolvedLinkToSourceId_.delete(link);
 				const targetId = note.id;
 				if (!this.linkTargetIdToSource_.has(targetId)) {
@@ -152,6 +170,7 @@ export default class LinkTracker {
 				}
 			}
 		}
+		debugLogger.groupEnd();
 	}
 
 	public async onItemMove(item: FolderItem, fromPath: string, toPath: string) {
@@ -159,13 +178,24 @@ export default class LinkTracker {
 		if (this.linkType === LinkType.IdLink) return;
 
 		const linkedItems = this.linkTargetIdToSource_.get(item.id);
-		if (!linkedItems) return;
+		if (!linkedItems) {
+			debugLogger.debug('LinkTracker.onItemMove/has no links', toPath);
+			return;
+		}
+
+		debugLogger.debug('LinkTracker.onItemMove');
+		debugLogger.group();
 
 		for (const itemId of linkedItems) {
-			if (!this.tree.hasId(itemId)) continue;
-		
+			if (!this.tree.hasId(itemId)) {
+				debugLogger.debug('skip item -- not in tree', itemId);
+				continue;
+			}
+
 			const itemWithLink = this.tree.getAtId(itemId);
 			if (itemWithLink.type_ === ModelType.Note) {
+				debugLogger.debug('update linked item', this.tree.pathFromId(itemId));
+
 				const note = itemWithLink as NoteEntity;
 				let body = note.body;
 				for (const regex of pathLinkRegexes) {
@@ -179,10 +209,14 @@ export default class LinkTracker {
 				});
 			}
 		}
+
+		debugLogger.groupEnd();
 	}
 
 	public convertLinkTypes(toType: LinkType, text: string, fromPath: string) {
-		console.log('convert link types to', toType);
+		debugLogger.debug('convert link types to', toType, 'at', fromPath);
+		debugLogger.group();
+
 		let otherLinkTypeRegexes;
 		if (toType === LinkType.IdLink) {
 			otherLinkTypeRegexes = pathLinkRegexes;
@@ -195,8 +229,6 @@ export default class LinkTracker {
 
 		// Path from fromPath to the root of the folder tree
 		const parentPath = dirname(fromPath);
-		const pathToRoot = parentPath.replace(/([^/]+)(\/|$)/, '../');
-		console.log('to root', pathToRoot, 'from parent', parentPath);
 
 		for (const regex of otherLinkTypeRegexes) {
 			text = text.replace(regex, (fullMatch, url) => {
@@ -204,7 +236,7 @@ export default class LinkTracker {
 
 				// Can't resolve -- don't replace.
 				if (!targetId) {
-					console.log('no', url);
+					debugLogger.debug('can\'t resolve:', url);
 					return fullMatch;
 				}
 
@@ -221,13 +253,14 @@ export default class LinkTracker {
 					const exhaustivenessCheck: never = toType;
 					return exhaustivenessCheck;
 				}
-				console.log('new', url, '->', newUrl);
+				debugLogger.debug('new', url, '->', newUrl);
 
 				return fullMatch.replace(url, newUrl);
 			});
-			console.log('scanned', text, 'with', regex);
+			debugLogger.debug('scanned', text, 'with', regex);
 		}
 
+		debugLogger.groupEnd();
 		return text;
 	}
 }

@@ -967,6 +967,7 @@ packages/lib/services/filesync/FolderMirroringService.js
 packages/lib/services/filesync/ItemTree.test.js
 packages/lib/services/filesync/ItemTree.js
 packages/lib/services/filesync/LinkTracker.js
+packages/lib/services/filesync/debugLogger.js
 packages/lib/services/filesync/folderInfo/index.js
 packages/lib/services/filesync/folderInfo/loadFolderInfo.js
 packages/lib/services/filesync/folderInfo/parseFolderIcon.js
