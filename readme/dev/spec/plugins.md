@@ -223,8 +223,8 @@ flowchart
 	postMessage(["postMessage({ kind: InvokeMethod, ... })"])
 	rm1--2-->postMessage--3-->rm2
 	subgraph MainProcess
-		call(["await m1.remoteApi.setCss('...')"])
-		call--1-->rm1
+		callMethod(["await m1.remoteApi.setCss('...')"])
+		callMethod--1-->rm1
 		rm1["m1 = RemoteMessenger< MainProcessApi,WebViewApi >"]
 	end
 	subgraph WebView
@@ -247,8 +247,8 @@ flowchart
 	end
 	subgraph MainProcess
 		rm1["m1 = RemoteMessenger< MainProcessApi,WebViewApi >"]
-		call(["await m1.remoteApi.setCss('...')"])
-		rm1--8-->call
+		callMethod(["await m1.remoteApi.setCss('...')"])
+		rm1--8-->callMethod
 	end
 ```
 
