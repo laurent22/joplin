@@ -11,7 +11,7 @@ import { FolderEntity, NoteEntity } from './services/database/types';
 import { getListRendererIds } from './services/noteList/renderers';
 import { ProcessResultsRow } from './services/search/SearchEngine';
 import { getDisplayParentId } from './services/trash';
-import FolderMirroringService from './services/filesync/FolderMirroringService';
+import FolderMirroringService from './services/folderMirror/FolderMirroringService';
 const fastDeepEqual = require('fast-deep-equal');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');

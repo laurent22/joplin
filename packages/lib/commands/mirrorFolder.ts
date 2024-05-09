@@ -1,6 +1,6 @@
 import { CommandRuntime, CommandDeclaration } from '../services/CommandService';
 import { _ } from '../locale';
-import FolderMirroringService from '../services/filesync/FolderMirroringService';
+import FolderMirroringService from '../services/folderMirror/FolderMirroringService';
 import shim from '../shim';
 
 export const declaration: CommandDeclaration = {

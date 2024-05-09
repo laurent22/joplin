@@ -2,7 +2,7 @@ import BaseCommand from './base-command';
 import BaseModel from '@joplin/lib/BaseModel';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
-import FolderMirroringService from '@joplin/lib/services/filesync/FolderMirroringService';
+import FolderMirroringService from '@joplin/lib/services/folderMirror/FolderMirroringService';
 
 interface CommandArguments {
 	options: {

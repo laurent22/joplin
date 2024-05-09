@@ -71,7 +71,7 @@ describe('ItemTree', () => {
 		const tree = new ItemTree(baseItem);
 		await tree.addItemTo('', { title: 'Test 1', id: '12345678901234567890123456789012', type_: ModelType.Note }, noOpActionListeners);
 		await tree.addItemTo('', { title: 'Test 2', id: '22345678901234567890123456789012', type_: ModelType.Note }, noOpActionListeners);
-		expect(() => tree.move('Test 1.md', 'Test 2.md', noOpActionListeners)).toThrow();
+		await expect(async () => tree.move('Test 1.md', 'Test 2.md', noOpActionListeners)).rejects.toThrow();
 		tree.checkRep_();
 	});
 
