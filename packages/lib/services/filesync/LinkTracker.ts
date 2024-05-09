@@ -1,4 +1,4 @@
-import { dirname, join } from 'path/posix';
+import { dirname, join, relative } from 'path/posix';
 import { ModelType } from '../../BaseModel';
 import { NoteEntity } from '../database/types';
 import ItemTree from './ItemTree';
@@ -111,7 +111,7 @@ export default class LinkTracker {
 			if (this.tree.hasPath(fullPath)) {
 				return this.tree.idAtPath(fullPath);
 			}
-			console.log('tree lacks', fullPath, this.tree);
+			console.log('tree lacks', fullPath, 'from', link, 'in', this.tree);
 			return null;
 		}
 	}
@@ -121,11 +121,12 @@ export default class LinkTracker {
 
 		const note = (item as NoteEntity);
 		const notePath = this.tree.pathFromId(note.id);
+		const noteParentPath = dirname(notePath);
 		const body = note.body;
 
 		const links = this.linkType === LinkType.IdLink ? getIdLinks(body) : getPathLinks(body);
 		for (const link of links) {
-			const id = this.resolveLinkToId(link, notePath);
+			const id = this.resolveLinkToId(link, noteParentPath);
 			if (!id) {
 				if (!this.unresolvedLinkToSourceId_.has(link)) {
 					this.unresolvedLinkToSourceId_.set(link, new Set());
@@ -212,7 +213,10 @@ export default class LinkTracker {
 					newUrl = `:/${targetId}`;
 				} else if (toType === LinkType.PathLink) {
 					const targetPath = this.tree.pathFromId(targetId);
-					newUrl = `./${join(pathToRoot, targetPath)}`;
+					newUrl = `${relative(parentPath, targetPath)}`;
+					if (!newUrl.startsWith('../') && !newUrl.startsWith('./')) {
+						newUrl = `./${newUrl}`;
+					}
 				} else {
 					const exhaustivenessCheck: never = toType;
 					return exhaustivenessCheck;
