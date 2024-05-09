@@ -20,7 +20,8 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 
 		const files = zip.getEntries();
 		if (files.length === 0) {
-			return result.warnings.push('Zip file has no files.');
+			result.warnings.push('Zip file has no files.');
+			return result;
 		}
 
 		const baseFolderFromBackup = shim.getParentFolderName(files[0].entryName);
