@@ -486,6 +486,9 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
+	getParentFolderName: (_path: string): string => {
+		throw new Error('Not implemented');
+	},
 };
 
 export default shim;

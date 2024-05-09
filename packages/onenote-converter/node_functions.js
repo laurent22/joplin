@@ -3,6 +3,7 @@ const fs = require('fs');
 
 function mkdirSyncRecursive(path) {
 	if (!fs.existsSync(path)) {
+		// TOOD: fix this for windows
 		mkdirSyncRecursive(path.substring(0, path.lastIndexOf('/')));
 		fs.mkdirSync(path);
 	}

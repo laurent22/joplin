@@ -223,13 +223,16 @@ function _assertBoolean(n) {
 /**
 * @param {string} input
 * @param {string} output
+* @param {string} base_path
 */
-module.exports.oneNoteConverter = function(input, output) {
+module.exports.oneNoteConverter = function(input, output, base_path) {
     const ptr0 = passStringToWasm0(input, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len0 = WASM_VECTOR_LEN;
     const ptr1 = passStringToWasm0(output, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len1 = WASM_VECTOR_LEN;
-    wasm.oneNoteConverter(ptr0, len0, ptr1, len1);
+    const ptr2 = passStringToWasm0(base_path, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len2 = WASM_VECTOR_LEN;
+    wasm.oneNoteConverter(ptr0, len0, ptr1, len1, ptr2, len2);
 };
 
 function _assertNum(n) {
@@ -266,10 +269,6 @@ module.exports.__wbg_existsSync_fef3d1ee40dd0bc2 = function() { return handleErr
     const ret = existsSync(getStringFromWasm0(arg0, arg1));
     _assertBoolean(ret);
     return ret;
-}, arguments) };
-
-module.exports.__wbg_log_5bb5f88f245d7762 = function() { return logError(function (arg0) {
-    console.log(getObject(arg0));
 }, arguments) };
 
 module.exports.__wbg_log_1746d5c75ec89963 = function() { return logError(function (arg0, arg1) {

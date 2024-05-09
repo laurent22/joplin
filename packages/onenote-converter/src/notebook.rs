@@ -20,10 +20,8 @@ impl Renderer {
     }
 
     pub fn render(&mut self, notebook: &Notebook, name: &str, output_dir: &Path) -> Result<()> {
-        if !output_dir.is_dir() {
-            log!("Create outputdir: {:?}", output_dir);
-            let _ = make_dir(output_dir.as_os_str().to_str().unwrap());
-        }
+        log!("Create outputdir: {:?}", output_dir);
+        let _ = make_dir(output_dir.as_os_str().to_str().unwrap());
 
         let notebook_dir = output_dir.join(sanitize_filename::sanitize(name));
 

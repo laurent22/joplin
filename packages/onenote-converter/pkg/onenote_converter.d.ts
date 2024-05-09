@@ -3,5 +3,6 @@
 /**
 * @param {string} input
 * @param {string} output
+* @param {string} base_path
 */
-export function oneNoteConverter(input: string, output: string): void;
+export function oneNoteConverter(input: string, output: string, base_path: string): void;

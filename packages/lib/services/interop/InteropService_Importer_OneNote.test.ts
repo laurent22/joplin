@@ -68,4 +68,18 @@ describe('InteropService_Importer_OneNote', () => {
 		const pageTwoB = notes.find(n => n.title === 'Page 2-b');
 		expect(menuLines[7].trim()).toBe(`<li class="l2"><a href=":/${pageTwoB.id}" target="content" title="Page 2-b">${pageTwoB.title}</a>`);
 	});
+
+	it('should created subsections', async () => {
+		const notes = await importNote(`${supportDir}/onenote/subsections.zip`);
+		const folders = await Folder.all();
+
+		const parentSection = folders.find(f => f.title === 'Group Section 1');
+		const subSection = folders.find(f => f.title === 'Group Section 1-a');
+		const notesFromParentSection = notes.filter(n => n.parent_id === parentSection.id);
+
+		expect(parentSection.id).toBe(subSection.parent_id);
+		expect(folders.length).toBe(6);
+		expect(notes.length).toBe(9);
+		expect(notesFromParentSection.length).toBe(3);
+	});
 });
