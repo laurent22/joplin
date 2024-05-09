@@ -303,7 +303,8 @@ export default class ItemTree {
 			} else {
 				let canUpdate = true;
 
-				const moved = existingItem.parent_id !== item.parent_id || observedPath !== this.pathFromId(item.id);
+				const differentObservedPath = observedPath && observedPath !== this.pathFromId(item.id);
+				const moved = existingItem.parent_id !== item.parent_id || differentObservedPath;
 				if (moved) {
 					const newParentId = item.parent_id;
 					if (this.hasId(newParentId)) {

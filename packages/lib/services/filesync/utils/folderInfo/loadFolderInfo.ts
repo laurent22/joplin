@@ -1,8 +1,8 @@
 import { basename, join } from 'path';
 import { FolderInfo, folderInfoFileName } from '.';
-import shim from '../../../shim';
+import shim from '../../../../shim';
 import * as yaml from 'js-yaml';
-import uuid from '../../../uuid';
+import uuid from '../../../../uuid';
 import parseFolderIcon from './parseFolderIcon';
 
 const loadFolderInfo = async (folderPath: string): Promise<FolderInfo> => {

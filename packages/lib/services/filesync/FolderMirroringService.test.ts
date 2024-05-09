@@ -320,4 +320,117 @@ describe('FolderMirroringService', () => {
 		});
 		expect(noteCopy.id).toBe(noteId);
 	});
+
+	test('should replace links in a file when changed in its note', async () => {
+		const tempDir = await createTempDir();
+		const note1Id = (await Note.save({ title: 'note1', parent_id: '', body: 'Test' })).id;
+		const note2Id = (await Note.save({ title: 'note2', parent_id: '', body: `[Test](:/${note1Id})` })).id;
+		const note3Id = (await Note.save({ title: 'note3', parent_id: '', body: `[Test](:/${note2Id})` })).id;
+
+		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
+		await mirror.waitForIdle();
+
+		await Note.save({ id: note2Id, body: `[Test](:/${note3Id})` });
+
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		await verifyDirectoryMatches(tempDir, {
+			'note1.md': `---\ntitle: note1\nid: ${note1Id}\n---\n\nTest`,
+			'note2.md': `---\ntitle: note2\nid: ${note2Id}\n---\n\n[Test](./note3.md)`,
+			'note3.md': `---\ntitle: note3\nid: ${note3Id}\n---\n\n[Test](./note2.md)`,
+		});
+
+		await Note.save({ id: note3Id, title: 'note3 updated' });
+
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		await verifyDirectoryMatches(tempDir, {
+			'note1.md': `---\ntitle: note1\nid: ${note1Id}\n---\n\nTest`,
+			'note2.md': `---\ntitle: note2\nid: ${note2Id}\n---\n\n[Test](./note3 updated.md)`,
+			'note3 updated.md': `---\ntitle: note3 updated\nid: ${note3Id}\n---\n\n[Test](./note2.md)`,
+		});
+	});
+
+	test('should replace links in a note when changed in its file', async () => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, {
+			'note1.md': '---\ntitle: note1\n---\n\n# Test\n\n[other note](./foo/a.md)',
+			'note2.md': '---\ntitle: note2\n---\n\n# Test\n\n[Another note](./foo/a.md), and [another](./note1.md)',
+			'foo/a.md': '---\ntitle: NoteA\n---\n\n[first](../note.md)',
+			'foo/b.md': '---\ntitle: NoteB\n---\n\n[first](./a.md)',
+		});
+
+		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
+		await mirror.waitForIdle();
+
+		const note1 = await Note.loadByTitle('note1');
+		const noteA = await Note.loadByTitle('NoteA');
+		expect(note1).toMatchObject({
+			parent_id: '',
+			title: 'note1',
+			body: `# Test\n\n[other note](:/${noteA.id})`,
+		});
+
+		const note2 = await Note.loadByTitle('note2');
+
+		// Updating links in a file should also update the links in the database
+		await fs.writeFile(join(tempDir, 'note2.md'), `---\ntitle: note2\nid: ${note2.id}\n---\n\n[Test](./foo/b.md), [Test 2](./foo/a.md)`, 'utf8');
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		const noteB = await Note.loadByTitle('NoteB');
+		expect(await Note.load(note2.id)).toMatchObject({
+			parent_id: '',
+			title: 'note2',
+			body: `[Test](:/${noteB.id}), [Test 2](:/${noteA.id})`,
+		});
+
+		await verifyDirectoryMatches(tempDir, {
+			'note1.md': `---\ntitle: note1\nid: ${note1.id}\n---\n\n# Test\n\n[other note](./foo/a.md)`,
+			'note2.md': `---\ntitle: note2\nid: ${note2.id}\n---\n\n[Test](./foo/b.md), [Test 2](./foo/a.md)`,
+			'foo/a.md': `---\ntitle: NoteA\nid: ${noteA.id}\n---\n\n[first](../note.md)`,
+			'foo/b.md': `---\ntitle: NoteB\nid: ${noteB.id}\n---\n\n[first](./a.md)`,
+			'foo/.folder.yml': `title: foo\nid: ${noteB.parent_id}\n`,
+		});
+	});
+
+	test('renaming a folder with .folder.yml should also rewrite links', async () => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, {
+			'note1.md': '---\ntitle: note1\n---\n\n# Test\n\n[other note](./original/note2.md)',
+			'original/note2.md': '---\ntitle: note2\n---\n\n[first](../note1.md)',
+			'original/note3.md': '---\ntitle: note3\n---\n\n[second](./note2.md)',
+			'original/sub/note4.md': '---\ntitle: note4\n---\n\n[second](../note2.md), [third](../note3.md)',
+		});
+
+		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
+
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		const note1 = await Note.loadByTitle('note1');
+		const note2 = await Note.loadByTitle('note2');
+		const note3 = await Note.loadByTitle('note3');
+		const note4 = await Note.loadByTitle('note4');
+		await fs.writeFile(join(tempDir, 'original', '.folder.yml'), `title: Renamed\nid: ${note2.parent_id}\n`);
+
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		const expectedDirectoryContent = {
+			'note1.md': `---\ntitle: note1\nid: ${note1.id}\n---\n\n# Test\n\n[other note](./Renamed/note2.md)`,
+			'Renamed/note2.md': `---\ntitle: note2\nid: ${note2.id}\n---\n\n[first](../note1.md)`,
+			'Renamed/note3.md': `---\ntitle: note3\nid: ${note3.id}\n---\n\n[second](./note2.md)`,
+			'Renamed/sub/note4.md': `---\ntitle: note4\nid: ${note4.id}\n---\n\n[second](../note2.md), [third](../note3.md)`,
+			'Renamed/sub/.folder.yml': `title: sub\nid: ${note4.parent_id}\n`,
+			'Renamed/.folder.yml': `title: Renamed\nid: ${note2.parent_id}\n`,
+		};
+		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
+
+		// Shouldn't change after a full sync
+		await mirror.fullSync();
+		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
+	});
 });

@@ -487,7 +487,7 @@ describe('FolderMirror.fullSync', () => {
 		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
 	});
 
-	test('should fix relative links when folders are renamed', async () => {
+	test('relative links should stay consistent with folder naming when folders are renamed', async () => {
 		const tempDir = await createTempDir();
 		await createFilesFromPathRecord(tempDir, {
 			'note.md': '---\ntitle: note\n---\n\n# Test\n\n[other note](./foo/a.md)',

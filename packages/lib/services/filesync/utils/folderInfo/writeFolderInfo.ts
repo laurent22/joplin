@@ -1,6 +1,6 @@
 import { join } from 'path';
 import { FolderInfo, folderInfoFileName } from '.';
-import shim from '../../../shim';
+import shim from '../../../../shim';
 import * as yaml from 'js-yaml';
 
 const writeFolderInfo = async (folderPath: string, folderInfo: FolderInfo): Promise<void> => {

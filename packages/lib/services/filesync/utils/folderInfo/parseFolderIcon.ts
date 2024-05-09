@@ -1,4 +1,4 @@
-import { FolderIcon, FolderIconType } from '../../database/types';
+import { FolderIcon, FolderIconType } from '../../../database/types';
 
 const parseFolderIcon = (iconData: string): FolderIcon => {
 	if (iconData.match(/^\s*\{/)) { // JSON

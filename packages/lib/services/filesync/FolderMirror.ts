@@ -6,18 +6,18 @@ import { friendlySafeFilename } from '../../path-utils';
 import shim from '../../shim';
 import { serialize } from '../../utils/frontMatter';
 import { FolderEntity, NoteEntity } from '../database/types';
-import loadFolderInfo from './folderInfo/loadFolderInfo';
+import loadFolderInfo from './utils/folderInfo/loadFolderInfo';
 import { parse as parseFrontMatter } from '../../utils/frontMatter';
 import { basename, dirname, extname, join, normalize, relative } from 'path';
-import writeFolderInfo from './folderInfo/writeFolderInfo';
+import writeFolderInfo from './utils/folderInfo/writeFolderInfo';
 import { FolderItem } from './types';
 import ItemTree, { ActionListeners, AddActionListener, AddOrUpdateEvent, noOpActionListeners } from './ItemTree';
 import uuid from '../../uuid';
 import BaseItem from '../../models/BaseItem';
 import AsyncActionQueue from '../../AsyncActionQueue';
-import { folderInfoFileName } from './folderInfo';
+import { folderInfoFileName } from './utils/folderInfo';
 import LinkTracker, { LinkType } from './LinkTracker';
-import debugLogger from './debugLogger';
+import debugLogger from './utils/debugLogger';
 const { ALL_NOTES_FILTER_ID } = require('../../reserved-ids.js');
 
 
@@ -382,8 +382,11 @@ export default class {
 	}
 
 	private onLinkTrackerItemUpdate_ = async (updatedItem: FolderItem) => {
+		debugLogger.debug('Link tracker item update', updatedItem.title);
+		debugLogger.group();
 		updatedItem = await this.remoteTree_.processItem(null, updatedItem, this.modifyRemoteActions_);
 		await this.localTree_.processItem(null, updatedItem, this.modifyLocalActions_);
+		debugLogger.groupEnd();
 	};
 
 	public async onLocalItemDelete(id: string) {
@@ -517,7 +520,18 @@ export default class {
 		debugLogger.debug('onLocalItemUpdate', item.title, 'in', this.localTree_.pathFromId(item.parent_id));
 
 		if (this.localTree_.hasId(item.id)) {
-			const localItem = this.localTree_.getAtId(item.id);
+			let localItem = this.localTree_.getAtId(item.id);
+
+			// Ensure that all links are database links
+			if (localItem.type_ === ModelType.Note) {
+				const path = this.localTree_.pathFromId(item.id);
+				const body = (localItem as NoteEntity).body;
+				localItem = {
+					...localItem,
+					body: this.remoteLinkTracker_.convertLinkTypes(LinkType.IdLink, body, path),
+				};
+			}
+
 			if (keysMatch(localItem, item, ['title', 'body', 'icon', 'parent_id'])) {
 				debugLogger.debug('onLocalItemUpdate/skip', item.title, item.deleted_time);
 				return;

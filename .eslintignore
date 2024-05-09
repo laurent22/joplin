@@ -987,12 +987,12 @@ packages/lib/services/filesync/FolderMirroringService.js
 packages/lib/services/filesync/ItemTree.test.js
 packages/lib/services/filesync/ItemTree.js
 packages/lib/services/filesync/LinkTracker.js
-packages/lib/services/filesync/debugLogger.js
-packages/lib/services/filesync/folderInfo/index.js
-packages/lib/services/filesync/folderInfo/loadFolderInfo.js
-packages/lib/services/filesync/folderInfo/parseFolderIcon.js
-packages/lib/services/filesync/folderInfo/writeFolderInfo.js
 packages/lib/services/filesync/types.js
+packages/lib/services/filesync/utils/debugLogger.js
+packages/lib/services/filesync/utils/folderInfo/index.js
+packages/lib/services/filesync/utils/folderInfo/loadFolderInfo.js
+packages/lib/services/filesync/utils/folderInfo/parseFolderIcon.js
+packages/lib/services/filesync/utils/folderInfo/writeFolderInfo.js
 packages/lib/services/interop/InteropService.test.js
 packages/lib/services/interop/InteropService.js
 packages/lib/services/interop/InteropService_Exporter_Base.js

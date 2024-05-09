@@ -3,7 +3,7 @@ import { ModelType } from '../../BaseModel';
 import { NoteEntity } from '../database/types';
 import ItemTree from './ItemTree';
 import { FolderItem } from './types';
-import debugLogger from './debugLogger';
+import debugLogger from './utils/debugLogger';
 
 export enum LinkType {
 	PathLink = 'pathLink',
@@ -203,10 +203,12 @@ export default class LinkTracker {
 						return match.replace(fromPath, toPath);
 					});
 				}
-				await this.onNoteUpdate({
-					...itemWithLink,
-					body,
-				});
+				if (body !== note.body) {
+					await this.onNoteUpdate({
+						...itemWithLink,
+						body,
+					});
+				}
 			}
 		}
 
