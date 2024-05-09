@@ -5,7 +5,8 @@ import { createTempDir, setupDatabaseAndSynchronizer, supportDir, switchClient }
 import { NoteEntity } from '../database/types';
 import InteropService_Importer_OneNote from './InteropService_Importer_OneNote';
 import { MarkupToHtml } from '@joplin/renderer';
-
+import BaseModel from '../../BaseModel';
+import uuid from '../../uuid';
 
 describe('InteropService_Importer_OneNote', () => {
 	let tempDir: string;
@@ -81,5 +82,16 @@ describe('InteropService_Importer_OneNote', () => {
 		expect(folders.length).toBe(6);
 		expect(notes.length).toBe(9);
 		expect(notesFromParentSection.length).toBe(3);
+	});
+
+	it('should expect notes to be rendered the same', async () => {
+		let idx = 0;
+		BaseModel.setIdGenerator(() => String(idx++));
+		const notes = await importNote(`${supportDir}/onenote/complex_notes.zip`);
+
+		for (const note of notes) {
+			expect(note.body).toMatchSnapshot(note.title);
+		}
+		BaseModel.setIdGenerator(uuid.create);
 	});
 });
