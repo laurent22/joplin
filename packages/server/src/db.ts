@@ -5,6 +5,7 @@ import time from '@joplin/lib/time';
 import Logger from '@joplin/utils/Logger';
 import { databaseSchema } from './services/database/types';
 import { compareVersions } from 'compare-versions';
+import { copyFile } from 'fs-extra';
 
 // Make sure bigInteger values are numbers and not strings
 //
@@ -227,6 +228,8 @@ interface KnexQueryErrorData {
 	queryContext: QueryContext;
 }
 
+const dbConnectionConfigs_: Map<DbConnection, DatabaseConfig> = new Map();
+
 export async function connectDb(dbConfig: DatabaseConfig): Promise<DbConnection> {
 	const connection = knex(makeKnexConfig(dbConfig));
 
@@ -255,12 +258,32 @@ export async function connectDb(dbConfig: DatabaseConfig): Promise<DbConnection>
 		logger.error(...msg);
 	});
 
+	dbConnectionConfigs_.set(connection, dbConfig);
+
 	return connection;
 }
+
+export const reconnectDb = async (db: DbConnection) => {
+	const dbConfig = dbConnectionConfigs_.get(db);
+
+	await disconnectDb(db);
+
+	await db.initialize(makeKnexConfig(dbConfig));
+};
 
 export async function disconnectDb(db: DbConnection) {
 	await db.destroy();
 }
+
+export const sqliteSyncSlave = async (master: DbConnection, slave: DbConnection) => {
+	const masterConfig = dbConnectionConfigs_.get(master);
+	const slaveConfig = dbConnectionConfigs_.get(slave);
+	await disconnectDb(master);
+	await disconnectDb(slave);
+	await copyFile(masterConfig.name, slaveConfig.name);
+	await reconnectDb(master);
+	await reconnectDb(slave);
+};
 
 export async function migrateLatest(db: DbConnection, disableTransactions = false) {
 	await db.migrate.latest({

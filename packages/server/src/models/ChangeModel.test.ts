@@ -343,18 +343,4 @@ describe('ChangeModel', () => {
 		expect('jopItem' in result.items[0]).toBe(false);
 	});
 
-	// test('should use slave', async () => {
-	// 	const { session, user } = await createUserAndSession(1, true);
-	// 	const changeModel = models().change();
-
-	// 	const item1 = await createFolder(session.id, { title: 'folder' });
-
-	// 	// {
-	// 	// 	const changes = (await changeModel.delta(user.id)).items;
-	// 	// 	expect(changes.length).toBe(1);
-	// 	// 	expect(changes[0].item_id).toBe(item1.id);
-	// 	// 	expect(changes[0].type).toBe(ChangeType.Create);
-	// 	// }
-	// });
-
 });

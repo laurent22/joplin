@@ -1,0 +1,136 @@
+import { afterAllTests, beforeAllDb, beforeEachDb, createFolder, createUserAndSession, db, dbSlave, expectThrow, models, packageRootDir, updateFolder } from './utils/testing/testUtils';
+import { connectDb, disconnectDb, reconnectDb, sqliteSyncSlave } from './db';
+import { ChangeType, Event } from './services/database/types';
+import { DatabaseConfig, DatabaseConfigClient } from './utils/types';
+import { createDb } from './tools/dbTools';
+import { msleep } from './utils/time';
+
+const event1: Event = {
+	id: 'test1',
+	type: 1,
+	name: 'test',
+	created_time: Date.now(),
+};
+
+const event2 = {
+	...event1,
+	id: 'test2',
+};
+
+const beforeTest = async (extraEnv: Record<string, string> = null) => {
+	await beforeAllDb('db.replication', null, extraEnv);
+	await beforeEachDb();
+};
+
+const afterTest = async () => {
+	await afterAllTests();
+};
+
+describe('db.replication', () => {
+
+	it('should reconnect a database', async () => {
+		await beforeTest();
+
+		await disconnectDb(db());
+		await expectThrow(async () => db().insert(event1).into('events'));
+
+		await reconnectDb(db());
+		await db().insert(event1).into('events');
+
+		{
+			const results = await db().select('*').from('events');
+			expect(results.length).toBe(1);
+			expect(results[0].id).toBe('test1');
+		}
+
+		await reconnectDb(db());
+		await db().insert(event2).into('events');
+
+		{
+			const results = await db().select('*').from('events');
+			expect(results.length).toBe(2);
+			expect([results[0].id, results[1].id].sort()).toEqual(['test1', 'test2']);
+		}
+
+		await afterTest();
+	});
+
+	it('should manually sync an SQLite slave instance', async () => {
+		const masterConfig: DatabaseConfig = {
+			client: DatabaseConfigClient.SQLite,
+			name: `${packageRootDir}/db-master-test.sqlite`,
+		};
+
+		const slaveConfig: DatabaseConfig = {
+			client: DatabaseConfigClient.SQLite,
+			name: `${packageRootDir}/db-slave-test.sqlite`,
+		};
+
+		await createDb(masterConfig, { dropIfExists: true });
+		await createDb(slaveConfig, { dropIfExists: true });
+
+		const master = await connectDb(masterConfig);
+		const slave = await connectDb(slaveConfig);
+
+		await master.insert(event1).into('events');
+
+		expect((await master.select('*').from('events')).length).toBe(1);
+		expect((await slave.select('*').from('events')).length).toBe(0);
+
+		await sqliteSyncSlave(master, slave);
+
+		expect((await master.select('*').from('events')).length).toBe(1);
+		expect((await slave.select('*').from('events')).length).toBe(1);
+
+		await disconnectDb(master);
+		await disconnectDb(slave);
+	});
+
+	test('should track changes - using replication', async () => {
+		await beforeTest({ DB_USE_SLAVE: '1' });
+
+		const { session, user } = await createUserAndSession(1, true);
+		const changeModel = models().change();
+
+		const folder = {
+			id: '000000000000000000000000000000F1',
+			title: 'title 1',
+		};
+
+		const folderItem = await createFolder(session.id, folder);
+		await msleep(1);
+
+		let result = await changeModel.delta(user.id);
+
+		// We get nothing because the slave has not been synced yet
+		expect(result.items.length).toBe(0);
+
+		// But we still get the item because it doesn't use the slave database
+		expect((await models().item().loadAsJoplinItem(folderItem.id)).title).toBe('title 1');
+
+		// After sync, we should get the change
+		await sqliteSyncSlave(db(), dbSlave());
+		result = await changeModel.delta(user.id);
+		expect(result.items.length).toBe(1);
+		expect(result.items[0].type).toBe(ChangeType.Create);
+
+		await updateFolder(session.id, { ...folder, title: 'title 2' });
+		result = await changeModel.delta(user.id, { cursor: result.cursor });
+
+		// Nothing because it hasn't been synced yet
+		expect(result.items.length).toBe(0);
+
+		// But we get the latest item if requesting it directly
+		expect((await models().item().loadAsJoplinItem(folderItem.id)).title).toBe('title 2');
+
+		// After sync, we should get the change
+		await sqliteSyncSlave(db(), dbSlave());
+		result = await changeModel.delta(user.id, { cursor: result.cursor });
+
+		expect(result.items.length).toBe(1);
+		expect(result.items[0].type).toBe(ChangeType.Update);
+
+		await afterTest();
+	});
+
+});

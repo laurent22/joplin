@@ -29,7 +29,7 @@ import initLib from '@joplin/lib/initLib';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
-const packageRootDir = path.dirname(path.dirname(path.dirname(__dirname)));
+export const packageRootDir = path.dirname(path.dirname(path.dirname(__dirname)));
 
 let db_: DbConnection = null;
 let dbSlave_: DbConnection = null;
@@ -71,7 +71,7 @@ function initGlobalLogger() {
 
 let createdDbPath_: string = null;
 let createdDbSlavePath_: string = null;
-export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOptions = null) {
+export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOptions = null, extraEnv: Record<string, string> = null) {
 	unitName = unitName.replace(/\//g, '_');
 
 	createdDbPath_ = `${packageRootDir}/db-test-${unitName}.sqlite`;
@@ -92,7 +92,6 @@ export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOpt
 	if (process.env.JOPLIN_TESTS_SERVER_DB === 'pg') {
 		await initConfig(Env.Dev, parseEnv({
 			DB_CLIENT: 'pg',
-			DB_USE_SLAVE: '1',
 
 			POSTGRES_DATABASE: unitName,
 			POSTGRES_USER: 'joplin',
@@ -103,15 +102,16 @@ export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOpt
 			SLAVE_POSTGRES_PASSWORD: 'joplin',
 
 			SUPPORT_EMAIL: 'testing@localhost',
+			...extraEnv,
 		}), {
 			tempDir: tempDir,
 		});
 	} else {
 		await initConfig(Env.Dev, parseEnv({
-			DB_USE_SLAVE: '1',
 			SQLITE_DATABASE: createdDbPath_,
 			SLAVE_SQLITE_DATABASE: createdDbSlavePath_,
 			SUPPORT_EMAIL: 'testing@localhost',
+			...extraEnv,
 		}), {
 			tempDir: tempDir,
 		});
