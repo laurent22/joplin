@@ -1,5 +1,5 @@
 diff --git a/ReactAndroid/src/main/java/com/facebook/react/animated/NativeAnimatedModule.java b/ReactAndroid/src/main/java/com/facebook/react/animated/NativeAnimatedModule.java
-index 76749aaff7f948b7d980a4ae157208b46735f2a8..60234139b01e5abbfd227518f3e2aec2b8b6e94c 100644
+index 8a719ca35af1cc3a4192c5c5f8258fd4f7fea990..5f8831f81cd164a4f627423427ead92fa286b115 100644
 --- a/ReactAndroid/src/main/java/com/facebook/react/animated/NativeAnimatedModule.java
 +++ b/ReactAndroid/src/main/java/com/facebook/react/animated/NativeAnimatedModule.java
 @@ -37,7 +37,7 @@ import com.facebook.react.uimanager.common.ViewUtil;
