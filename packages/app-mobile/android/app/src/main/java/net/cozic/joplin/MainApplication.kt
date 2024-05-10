@@ -10,7 +10,6 @@ import com.facebook.react.ReactPackage
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.load
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
-import com.facebook.react.flipper.ReactNativeFlipper.initializeFlipper
 import com.facebook.soloader.SoLoader
 import net.cozic.joplin.share.SharePackage
 import net.cozic.joplin.ssl.SslPackage
@@ -21,9 +20,9 @@ class MainApplication : Application(), ReactApplication {
         override fun getPackages(): List<ReactPackage> =
                 PackageList(this).packages.apply {
                     // Packages that cannot be autolinked yet can be added manually here, for example:
-                    SharePackage()
-                    SslPackage()
-                    TextInputPackage()
+                    add(SharePackage())
+                    add(SslPackage())
+                    add(TextInputPackage())
                 }
 
         override fun getJSMainModuleName(): String = "index"
