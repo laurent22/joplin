@@ -5,7 +5,8 @@
 version: '3'
 
 services:
-    db:
+
+    postgres_master:
         image: postgres:16
         command: postgres -c work_mem=100000
         ports:
@@ -14,6 +15,34 @@ services:
             - POSTGRES_PASSWORD=joplin
             - POSTGRES_USER=joplin
             - POSTGRES_DB=joplin
+
+            # - POSTGRESQL_PGAUDIT_LOG=READ,WRITE
+            - POSTGRESQL_LOG_HOSTNAME=true
+            - POSTGRESQL_REPLICATION_MODE=master
+            - POSTGRESQL_REPLICATION_USER=repl_user
+            - POSTGRESQL_REPLICATION_PASSWORD=repl_password
+
+    postgres_slave:
+        image: postgres:16
+        command: postgres -c work_mem=100000
+        ports:
+            - "5433:5432"
+        depends_on:
+            - postgres_master
+        environment:
+            - POSTGRES_PASSWORD=joplin
+            - POSTGRES_USER=joplin
+            - POSTGRES_DB=joplin
+
+            # - POSTGRESQL_PGAUDIT_LOG=READ,WRITE
+            - POSTGRESQL_MASTER_HOST=postgresql-master
+            - POSTGRESQL_LOG_HOSTNAME=true
+            - POSTGRESQL_REPLICATION_MODE=slave
+            - POSTGRESQL_REPLICATION_USER=repl_user
+            - POSTGRESQL_REPLICATION_PASSWORD=repl_password
+            - POSTGRESQL_MASTER_PORT_NUMBER=5432
+
+
      
         # Use this to specify additional Postgres
         # config parameters:

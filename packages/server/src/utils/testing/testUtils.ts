@@ -32,6 +32,7 @@ import initLib from '@joplin/lib/initLib';
 const packageRootDir = path.dirname(path.dirname(path.dirname(__dirname)));
 
 let db_: DbConnection = null;
+let dbSlave_: DbConnection = null;
 
 // require('source-map-support').install();
 
@@ -69,11 +70,15 @@ function initGlobalLogger() {
 }
 
 let createdDbPath_: string = null;
+let createdDbSlavePath_: string = null;
 export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOptions = null) {
 	unitName = unitName.replace(/\//g, '_');
 
 	createdDbPath_ = `${packageRootDir}/db-test-${unitName}.sqlite`;
 	await fs.remove(createdDbPath_);
+
+	createdDbSlavePath_ = `${packageRootDir}/db-slave-test-${unitName}.sqlite`;
+	await fs.remove(createdDbSlavePath_);
 
 	const tempDir = `${packageRootDir}/temp/test-${unitName}`;
 	await fs.mkdirp(tempDir);
@@ -87,16 +92,25 @@ export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOpt
 	if (process.env.JOPLIN_TESTS_SERVER_DB === 'pg') {
 		await initConfig(Env.Dev, parseEnv({
 			DB_CLIENT: 'pg',
+			DB_USE_SLAVE: '1',
+
 			POSTGRES_DATABASE: unitName,
 			POSTGRES_USER: 'joplin',
 			POSTGRES_PASSWORD: 'joplin',
+
+			SLAVE_POSTGRES_DATABASE: unitName,
+			SLAVE_POSTGRES_USER: 'joplin',
+			SLAVE_POSTGRES_PASSWORD: 'joplin',
+
 			SUPPORT_EMAIL: 'testing@localhost',
 		}), {
 			tempDir: tempDir,
 		});
 	} else {
 		await initConfig(Env.Dev, parseEnv({
+			DB_USE_SLAVE: '1',
 			SQLITE_DATABASE: createdDbPath_,
+			SLAVE_SQLITE_DATABASE: createdDbSlavePath_,
 			SUPPORT_EMAIL: 'testing@localhost',
 		}), {
 			tempDir: tempDir,
@@ -107,6 +121,9 @@ export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOpt
 
 	await createDb(config().database, { dropIfExists: true, ...createDbOptions });
 	db_ = await connectDb(config().database);
+
+	await createDb(config().databaseSlave, { dropIfExists: true, ...createDbOptions });
+	dbSlave_ = await connectDb(config().databaseSlave);
 
 	const mustache = new MustacheService(config().viewDir, config().baseUrl);
 	await mustache.loadPartials();
@@ -122,6 +139,11 @@ export async function afterAllTests() {
 	if (db_) {
 		await disconnectDb(db_);
 		db_ = null;
+	}
+
+	if (dbSlave_) {
+		await disconnectDb(dbSlave_);
+		dbSlave_ = null;
 	}
 
 	if (tempDir_) {
@@ -257,12 +279,16 @@ export function db() {
 	return db_;
 }
 
-export function dbReplica() {
-	return db_;
+export function dbSlave() {
+	return dbSlave_;
+}
+
+export function dbSlaveSync() {
+
 }
 
 export function models() {
-	return modelFactory(db(), dbReplica(), config());
+	return modelFactory(db(), dbSlave(), config());
 }
 
 export function parseHtml(html: string): Document {

@@ -20,8 +20,8 @@ export function runningInDocker(): boolean {
 	return runningInDocker_;
 }
 
-function databaseHostFromEnv(runningInDocker: boolean, env: EnvVariables, replica: boolean): string {
-	const postgresHost = replica ? env.REPLICA_POSTGRES_HOST : env.POSTGRES_HOST;
+function databaseHostFromEnv(runningInDocker: boolean, env: EnvVariables, slave: boolean): string {
+	const postgresHost = slave ? env.SLAVE_POSTGRES_HOST : env.POSTGRES_HOST;
 
 	if (postgresHost) {
 		// When running within Docker, the app localhost is different from the
@@ -44,7 +44,7 @@ export const fullVersionString = (config: Config) => {
 	return output.join(' ');
 };
 
-function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables, replica: boolean): DatabaseConfig {
+function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables, slave: boolean): DatabaseConfig {
 	const baseConfig: DatabaseConfig = {
 		client: DatabaseConfigClient.Null,
 		name: '',
@@ -61,16 +61,16 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables, repl
 		if (env.POSTGRES_CONNECTION_STRING) {
 			return {
 				...databaseConfig,
-				connectionString: replica ? env.REPLICA_POSTGRES_CONNECTION_STRING : env.POSTGRES_CONNECTION_STRING,
+				connectionString: slave ? env.SLAVE_POSTGRES_CONNECTION_STRING : env.POSTGRES_CONNECTION_STRING,
 			};
 		} else {
 			return {
 				...databaseConfig,
-				name: replica ? env.REPLICA_POSTGRES_DATABASE : env.POSTGRES_DATABASE,
-				user: replica ? env.REPLICA_POSTGRES_USER : env.POSTGRES_USER,
-				password: replica ? env.REPLICA_POSTGRES_PASSWORD : env.POSTGRES_PASSWORD,
-				port: replica ? env.REPLICA_POSTGRES_PORT : env.POSTGRES_PORT,
-				host: databaseHostFromEnv(runningInDocker, env, replica) || 'localhost',
+				name: slave ? env.SLAVE_POSTGRES_DATABASE : env.POSTGRES_DATABASE,
+				user: slave ? env.SLAVE_POSTGRES_USER : env.POSTGRES_USER,
+				password: slave ? env.SLAVE_POSTGRES_PASSWORD : env.POSTGRES_PASSWORD,
+				port: slave ? env.SLAVE_POSTGRES_PORT : env.POSTGRES_PORT,
+				host: databaseHostFromEnv(runningInDocker, env, slave) || 'localhost',
 			};
 		}
 	}
@@ -78,7 +78,7 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables, repl
 	return {
 		...baseConfig,
 		client: DatabaseConfigClient.SQLite,
-		name: env.SQLITE_DATABASE,
+		name: slave ? env.SLAVE_SQLITE_DATABASE : env.SQLITE_DATABASE,
 		asyncStackTraces: true,
 	};
 }
@@ -173,7 +173,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		tempDir: `${rootDir}/temp`,
 		logDir: `${rootDir}/logs`,
 		database: dbConfig,
-		databaseReplica: env.DB_USE_REPLICA ? databaseConfigFromEnv(runningInDocker_, env, true) : dbConfig,
+		databaseSlave: env.DB_USE_SLAVE ? databaseConfigFromEnv(runningInDocker_, env, true) : dbConfig,
 		mailer: mailerConfigFromEnv(env),
 		stripe: stripeConfigFromEnv(stripePublicConfig, env),
 		port: appPort,
