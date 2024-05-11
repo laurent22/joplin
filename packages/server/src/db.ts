@@ -279,6 +279,8 @@ export async function disconnectDb(db: DbConnection) {
 	await db.destroy();
 }
 
+// This is used in tests to simulate replication in a controlled way. It allows testing how the
+// server behaves when part of the data is stale.
 export const sqliteSyncSlave = async (master: DbConnection, slave: DbConnection) => {
 	const masterConfig = dbConnectionConfigs_.get(master);
 	const slaveConfig = dbConnectionConfigs_.get(slave);
