@@ -62,6 +62,7 @@ type RequestNote = {
 	body_html: string;
 	base_url?: string;
 	convert_to: string;
+	source: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	anchor_names?: any[];
 	image_sizes?: object;
