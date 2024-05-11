@@ -1,5 +1,5 @@
 import { afterAllTests, beforeAllDb, beforeEachDb, createFolder, createUserAndSession, db, dbSlave, expectThrow, models, packageRootDir, updateFolder } from './utils/testing/testUtils';
-import { connectDb, disconnectDb, reconnectDb, sqliteSyncSlave } from './db';
+import { connectDb, disconnectDb, isPostgres, reconnectDb, sqliteSyncSlave } from './db';
 import { ChangeType, Event } from './services/database/types';
 import { DatabaseConfig, DatabaseConfigClient } from './utils/types';
 import { createDb } from './tools/dbTools';
@@ -29,6 +29,8 @@ const afterTest = async () => {
 describe('db.replication', () => {
 
 	it('should reconnect a database', async () => {
+		if (isPostgres(db())) return;
+
 		await beforeTest();
 
 		await disconnectDb(db());
@@ -56,6 +58,8 @@ describe('db.replication', () => {
 	});
 
 	it('should manually sync an SQLite slave instance', async () => {
+		if (isPostgres(db())) return;
+
 		const masterConfig: DatabaseConfig = {
 			client: DatabaseConfigClient.SQLite,
 			name: `${packageRootDir}/db-master-test.sqlite`,
@@ -87,6 +91,8 @@ describe('db.replication', () => {
 	});
 
 	test('should track changes - using replication', async () => {
+		if (isPostgres(db())) return;
+
 		await beforeTest({ DB_USE_SLAVE: '1' });
 
 		const { session, user } = await createUserAndSession(1, true);

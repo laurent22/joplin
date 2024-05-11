@@ -128,6 +128,10 @@ export async function waitForConnection(dbConfig: DatabaseConfig): Promise<Conne
 }
 
 export const clientType = (db: DbConnection): DatabaseConfigClient => {
+	// We have this extra check so that in tests we can quickly find out the database backend
+	// without having to use an initialized connection.
+	if (process.env.JOPLIN_TESTS_SERVER_DB === 'pg') return DatabaseConfigClient.PostgreSQL;
+	if (process.env.JOPLIN_TESTS_SERVER_DB === 'sqlite') return DatabaseConfigClient.SQLite;
 	return db.client.config.client;
 };
 
