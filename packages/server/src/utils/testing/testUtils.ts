@@ -2,7 +2,7 @@ import { DbConnection, connectDb, disconnectDb, truncateTables } from '../../db'
 import { User, Session, Item, Uuid } from '../../services/database/types';
 import { createDb, CreateDbOptions } from '../../tools/dbTools';
 import modelFactory from '../../models/factory';
-import { AppContext, Env } from '../types';
+import { AppContext, DatabaseConfigClient, Env } from '../types';
 import config, { initConfig } from '../../config';
 import Logger from '@joplin/utils/Logger';
 import FakeCookies from './koa/FakeCookies';
@@ -69,6 +69,11 @@ function initGlobalLogger() {
 	initLib(globalLogger);
 }
 
+export const getDatabaseClientType = () => {
+	if (process.env.JOPLIN_TESTS_SERVER_DB === 'pg') return DatabaseConfigClient.PostgreSQL;
+	return DatabaseConfigClient.SQLite;
+};
+
 let createdDbPath_: string = null;
 let createdDbSlavePath_: string = null;
 export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOptions = null, extraEnv: Record<string, string> = null) {
@@ -89,7 +94,7 @@ export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOpt
 	//
 	// JOPLIN_TESTS_SERVER_DB=pg yarn test
 
-	if (process.env.JOPLIN_TESTS_SERVER_DB === 'pg') {
+	if (getDatabaseClientType() === DatabaseConfigClient.PostgreSQL) {
 		await initConfig(Env.Dev, parseEnv({
 			DB_CLIENT: 'pg',
 

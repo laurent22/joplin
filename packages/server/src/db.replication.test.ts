@@ -1,5 +1,5 @@
-import { afterAllTests, beforeAllDb, beforeEachDb, createFolder, createUserAndSession, db, dbSlave, expectThrow, models, packageRootDir, updateFolder } from './utils/testing/testUtils';
-import { connectDb, disconnectDb, isPostgres, reconnectDb, sqliteSyncSlave } from './db';
+import { afterAllTests, beforeAllDb, beforeEachDb, createFolder, createUserAndSession, db, dbSlave, expectThrow, getDatabaseClientType, models, packageRootDir, updateFolder } from './utils/testing/testUtils';
+import { connectDb, disconnectDb, reconnectDb, sqliteSyncSlave } from './db';
 import { ChangeType, Event } from './services/database/types';
 import { DatabaseConfig, DatabaseConfigClient } from './utils/types';
 import { createDb } from './tools/dbTools';
@@ -29,7 +29,7 @@ const afterTest = async () => {
 describe('db.replication', () => {
 
 	it('should reconnect a database', async () => {
-		if (isPostgres(db())) return;
+		if (getDatabaseClientType() === DatabaseConfigClient.PostgreSQL) return;
 
 		await beforeTest();
 
@@ -58,7 +58,7 @@ describe('db.replication', () => {
 	});
 
 	it('should manually sync an SQLite slave instance', async () => {
-		if (isPostgres(db())) return;
+		if (getDatabaseClientType() === DatabaseConfigClient.PostgreSQL) return;
 
 		const masterConfig: DatabaseConfig = {
 			client: DatabaseConfigClient.SQLite,
@@ -91,12 +91,13 @@ describe('db.replication', () => {
 	});
 
 	test('should track changes - using replication', async () => {
-		if (isPostgres(db())) return;
+		if (getDatabaseClientType() === DatabaseConfigClient.PostgreSQL) return;
 
 		await beforeTest({ DB_USE_SLAVE: '1' });
 
 		const { session, user } = await createUserAndSession(1, true);
 		const changeModel = models().change();
+		changeModel.usersWithReplication_ = [user.id];
 
 		const folder = {
 			id: '000000000000000000000000000000F1',
