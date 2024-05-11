@@ -166,6 +166,7 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 	if ('longitude' in requestNote) output.longitude = requestNote.longitude;
 	if ('latitude' in requestNote) output.latitude = requestNote.latitude;
 	if ('altitude' in requestNote) output.altitude = requestNote.altitude;
+	if ('source' in requestNote) output.source = requestNote.source;
 
 	if (!output.markup_language) output.markup_language = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 
