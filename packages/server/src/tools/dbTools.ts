@@ -7,6 +7,7 @@ const { execCommand } = require('@joplin/tools/tool-utils');
 export interface CreateDbOptions {
 	dropIfExists?: boolean;
 	autoMigrate?: boolean;
+	envValues?: Record<string, string>;
 }
 
 export interface DropDbOptions {

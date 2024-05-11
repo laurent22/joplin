@@ -5,8 +5,11 @@ import { DatabaseConfig, DatabaseConfigClient } from './utils/types';
 import { createDb } from './tools/dbTools';
 import { msleep } from './utils/time';
 
+const eventId1 = '4f405391-bd72-4a4f-809f-344fc6cd4b31';
+const eventId2 = '4f405391-bd72-4a4f-809f-344fc6cd4b32';
+
 const event1: Event = {
-	id: 'test1',
+	id: eventId1,
 	type: 1,
 	name: 'test',
 	created_time: Date.now(),
@@ -14,11 +17,11 @@ const event1: Event = {
 
 const event2 = {
 	...event1,
-	id: 'test2',
+	id: eventId2,
 };
 
-const beforeTest = async (extraEnv: Record<string, string> = null) => {
-	await beforeAllDb('db.replication', null, extraEnv);
+const beforeTest = async (envValues: Record<string, string> = null) => {
+	await beforeAllDb('db.replication', envValues ? { envValues } : null);
 	await beforeEachDb();
 };
 
@@ -42,7 +45,7 @@ describe('db.replication', () => {
 		{
 			const results = await db().select('*').from('events');
 			expect(results.length).toBe(1);
-			expect(results[0].id).toBe('test1');
+			expect(results[0].id).toBe(eventId1);
 		}
 
 		await reconnectDb(db());
@@ -51,7 +54,7 @@ describe('db.replication', () => {
 		{
 			const results = await db().select('*').from('events');
 			expect(results.length).toBe(2);
-			expect([results[0].id, results[1].id].sort()).toEqual(['test1', 'test2']);
+			expect([results[0].id, results[1].id].sort()).toEqual([eventId1, eventId2]);
 		}
 
 		await afterTest();

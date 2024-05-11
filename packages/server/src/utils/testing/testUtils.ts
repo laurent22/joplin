@@ -76,10 +76,10 @@ export const getDatabaseClientType = () => {
 
 let createdDbPath_: string = null;
 let createdDbSlavePath_: string = null;
-export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOptions = null, extraEnv: Record<string, string> = null) {
+export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOptions = null) {
 	unitName = unitName.replace(/\//g, '_');
 
-	const useDbSlave = extraEnv && extraEnv.DB_USE_SLAVE === '1';
+	const useDbSlave = createDbOptions?.envValues && createDbOptions?.envValues.DB_USE_SLAVE === '1';
 
 	createdDbPath_ = `${packageRootDir}/db-test-${unitName}.sqlite`;
 	await fs.remove(createdDbPath_);
@@ -109,7 +109,7 @@ export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOpt
 			SLAVE_POSTGRES_PASSWORD: 'joplin',
 
 			SUPPORT_EMAIL: 'testing@localhost',
-			...extraEnv,
+			...createDbOptions?.envValues,
 		}), {
 			tempDir: tempDir,
 		});
@@ -118,7 +118,7 @@ export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOpt
 			SQLITE_DATABASE: createdDbPath_,
 			SLAVE_SQLITE_DATABASE: createdDbSlavePath_,
 			SUPPORT_EMAIL: 'testing@localhost',
-			...extraEnv,
+			...createDbOptions?.envValues,
 		}), {
 			tempDir: tempDir,
 		});
