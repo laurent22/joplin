@@ -5,7 +5,7 @@ import * as Koa from 'koa';
 import * as fs from 'fs-extra';
 import Logger, { LogLevel, LoggerWrapper, TargetType } from '@joplin/utils/Logger';
 import config, { fullVersionString, initConfig, runningInDocker } from './config';
-import { migrateLatest, waitForConnection, sqliteDefaultDir, latestMigration, needsMigration, migrateList, versionCheck } from './db';
+import { migrateLatest, waitForConnection, sqliteDefaultDir, latestMigration, needsMigration, migrateList, versionCheck, ConnectionCheckResult } from './db';
 import { AppContext, Env, KoaNext } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import { getDeviceTimeDrift } from '@joplin/lib/ntp';
@@ -270,7 +270,7 @@ async function main() {
 			});
 		} else {
 			const connectionCheck = await waitForConnection(config().database);
-			const models = newModelFactory(connectionCheck.connection, config());
+			const models = newModelFactory(connectionCheck.connection, connectionCheck.connection, config());
 
 			await selectedCommand.run(commandArgv, {
 				db: connectionCheck.connection,
@@ -293,6 +293,12 @@ async function main() {
 			appLogger().info('Skipping NTP time check because MAX_TIME_DRIFT is 0.');
 		}
 
+		const printConnectionCheckInfo = (connectionCheck: ConnectionCheckResult) => {
+			const connectionCheckLogInfo = { ...connectionCheck };
+			delete connectionCheckLogInfo.connection;
+			appLogger().info('Connection check:', connectionCheckLogInfo);
+		};
+
 		setLocale('en_GB');
 
 		appLogger().info('Running in Docker:', runningInDocker());
@@ -307,11 +313,8 @@ async function main() {
 
 		appLogger().info('Trying to connect to database...');
 		const connectionCheck = await waitForConnection(config().database);
+		printConnectionCheckInfo(connectionCheck);
 
-		const connectionCheckLogInfo = { ...connectionCheck };
-		delete connectionCheckLogInfo.connection;
-
-		appLogger().info('Connection check:', connectionCheckLogInfo);
 		const ctx = app.context as AppContext;
 
 		await versionCheck(connectionCheck.connection);
@@ -328,16 +331,32 @@ async function main() {
 			appLogger().info('Skipped database auto-migration.');
 		}
 
-		await setupAppContext(ctx, env, connectionCheck.connection, appLogger);
+		if (config().DB_USE_SLAVE) appLogger().info('Using database replication - trying to connect to slave...');
+		const slaveConnectionCheck = config().DB_USE_SLAVE ? await waitForConnection(config().databaseSlave) : null;
+
+		if (slaveConnectionCheck) {
+			printConnectionCheckInfo(slaveConnectionCheck);
+			appLogger().info(`Users with replication: ${config().USERS_WITH_REPLICATION}`);
+		} else {
+			appLogger().info('Not using database replication...');
+		}
+
+		await setupAppContext(
+			ctx,
+			env,
+			connectionCheck.connection,
+			slaveConnectionCheck ? slaveConnectionCheck.connection : connectionCheck.connection,
+			appLogger,
+		);
 
 		await initializeJoplinUtils(config(), ctx.joplinBase.models, ctx.joplinBase.services.mustache);
 
 		appLogger().info('Performing main storage check...');
-		appLogger().info(await storageConnectionCheck(config().storageDriver, ctx.joplinBase.db, ctx.joplinBase.models));
+		appLogger().info(await storageConnectionCheck(config().storageDriver, ctx.joplinBase.db, ctx.joplinBase.dbSlave, ctx.joplinBase.models));
 
 		if (config().storageDriverFallback) {
 			appLogger().info('Performing fallback storage check...');
-			appLogger().info(await storageConnectionCheck(config().storageDriverFallback, ctx.joplinBase.db, ctx.joplinBase.models));
+			appLogger().info(await storageConnectionCheck(config().storageDriverFallback, ctx.joplinBase.db, ctx.joplinBase.dbSlave, ctx.joplinBase.models));
 		}
 
 		appLogger().info('Starting services...');
