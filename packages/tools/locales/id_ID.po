@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Liffindra Angga Zaaldian <findrakecil@icloud.com>\n"
 "Language-Team: \n"
 "Language: id_ID\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:607
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -137,9 +139,8 @@ msgid "%d notes match this pattern. Delete them?"
 msgstr "%d catatan cocok dengan pola ini. Hapus semuanya?"
 
 #: packages/app-cli/app/command-rmnote.ts:40
-#, fuzzy
 msgid "%d notes will be permanently deleted. Continue?"
-msgstr "Ini akan menghapus semua benda di tempat sampah selamanya. Lanjutkan?"
+msgstr "%d catatan akan dihapus selamanya. Lanjutkan?"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:227
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:237
@@ -198,7 +199,7 @@ msgstr ""
 
 #: packages/app-mobile/plugins/PluginRunner/dialogs/PluginPanelViewer.tsx:75
 msgid "%s tab opened"
-msgstr ""
+msgstr "%s tab dibuka"
 
 #: packages/lib/services/ReportService.ts:286
 #: packages/lib/services/ReportService.ts:287
@@ -296,7 +297,7 @@ msgstr "Terima"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:98
 msgid "Accepted shares"
-msgstr ""
+msgstr "Pembagian yang diterima"
 
 #: packages/lib/WebDavApi.js:451
 msgid "Access denied: Please check your username and password"
@@ -379,6 +380,7 @@ msgstr ""
 #: packages/lib/services/ReportService.ts:227
 msgid "All item sync failures have been marked as \"ignored\"."
 msgstr ""
+"Semua berkas yang gagal diselaraskan telah ditandai sebagai “diabaikan”."
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/AllNotesItem.tsx:61
 #: packages/app-mobile/components/screens/Notes.tsx:185
@@ -394,7 +396,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.ts:1228
 msgid "Allows debugging mobile plugins. See %s for details."
-msgstr ""
+msgstr "Bolehkan debug untuk plugin ponsel. Lihat %s untuk selengkapnya."
 
 #: packages/app-cli/app/command-config.ts:19
 msgid "Also displays unset and hidden config variables."
@@ -415,7 +417,7 @@ msgstr "Selalu minta"
 
 #: packages/app-desktop/bridge.ts:421
 msgid "Always open %s files without asking."
-msgstr ""
+msgstr "Selalu buka berkas %s tanpa bertanya."
 
 #: packages/lib/models/Setting.ts:1186
 msgid "Always resize"
@@ -637,7 +639,7 @@ msgstr "Daftar berpoin"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:37
 msgid "by %s"
-msgstr ""
+msgstr "oleh %s"
 
 #: packages/server/src/routes/admin/users.ts:160
 msgid "Can Share"
@@ -936,9 +938,8 @@ msgid "Collapse"
 msgstr "Lipat"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:26
-#, fuzzy
 msgid "Collapse %s"
-msgstr "Lipat"
+msgstr "Lipat %s"
 
 #: packages/lib/services/ReportService.ts:351
 msgid "Coming alarms"
@@ -991,6 +992,8 @@ msgid ""
 "Completed with warnings:\n"
 "%s"
 msgstr ""
+"Telah selesai dengan peringatan:\n"
+"%s"
 
 #: packages/lib/Synchronizer.ts:207
 msgid "Completed: %s (%s)"
@@ -998,7 +1001,7 @@ msgstr "Selesai: %s (%s)"
 
 #: packages/lib/models/Note.ts:64
 msgid "completion date"
-msgstr ""
+msgstr "tanggal diselesaikan"
 
 #: packages/server/src/services/TaskService.ts:28
 msgid "Compress old changes"
@@ -1118,9 +1121,8 @@ msgid "Copy token"
 msgstr "Salin token"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:633
-#, fuzzy
 msgid "Copy version info"
-msgstr "Menampilkan informasi versi"
+msgstr "Salin informasi versi"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:43
 msgid ""
@@ -1449,7 +1451,7 @@ msgstr "Item jarak jauh yang dihapus: %d."
 
 #: packages/app-cli/app/command-rmnote.ts:20
 msgid "Deletes notes permanently, skipping the trash."
-msgstr ""
+msgstr "Hapus catatan selamanya, bukan ke tong sampah."
 
 #: packages/app-cli/app/command-rmbook.ts:14
 msgid "Deletes the given notebook."
@@ -1672,9 +1674,8 @@ msgid "Due"
 msgstr "Jatuh tempo"
 
 #: packages/lib/models/Note.ts:63
-#, fuzzy
 msgid "due date"
-msgstr "tanggal diperbarui"
+msgstr "tanggal jatuh tempo"
 
 #: packages/app-desktop/gui/MainScreen/commands/duplicateNote.ts:7
 #: packages/app-mobile/components/ScreenHeader/index.tsx:498
@@ -1897,9 +1898,8 @@ msgstr "Nyalakan penampil PDF"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:131
 #: packages/lib/models/Setting.ts:1239
-#, fuzzy
 msgid "Enable plugin support"
-msgstr "Nyalakan dukungan typographer"
+msgstr "Nyalakan dukungan plugin"
 
 #: packages/lib/models/Setting.ts:1261
 msgid "Enable soft breaks"
@@ -2057,9 +2057,8 @@ msgid "Expand"
 msgstr "Buka"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:28
-#, fuzzy
 msgid "Expand %s"
-msgstr "Buka"
+msgstr "Buka %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:191
@@ -2139,6 +2138,8 @@ msgid ""
 "internet and able to sync.\n"
 "Error: %s"
 msgstr ""
+"Gagal meninggalkan pembagian. Pastikan Joplin tersambung ke internet dan "
+"mampu menyelaraskan. Galat: %s"
 
 #: packages/app-cli/app/main.js:100
 msgid "Fatal error:"
@@ -2348,7 +2349,7 @@ msgstr "Bantuan"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:125
 msgid "Here's what we do to make plugins safer:"
-msgstr ""
+msgstr "Berikut adalah yang kami lakukan untuk membuat plugin lebih aman:"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:629
 msgid "Hermes enabled: %d"
@@ -2451,9 +2452,8 @@ msgid "Ignore TLS certificate errors"
 msgstr "Abaikan galat sertifikat TLS"
 
 #: packages/lib/services/ReportService.ts:236
-#, fuzzy
 msgid "Ignored items that cannot be synchronised"
-msgstr "Benda-benda yang tidak dapat diselaraskan"
+msgstr "Benda-benda yang diabaikan yang tidak dapat diselaraskan"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:106
 msgid "Images"
@@ -2467,33 +2467,32 @@ msgid "Import"
 msgstr "Impor"
 
 #: packages/lib/models/Setting.ts:2801
-#, fuzzy
 msgid "Import and Export"
-msgstr "Ekspor laporan debug"
+msgstr "Impor dan ekspor"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:66
 msgid ""
 "Import failed. Make sure a JEX file was selected.\n"
 "Details: %s"
 msgstr ""
+"Gagal mengimpor. Pastikan berkas JEX telah terpilih.\n"
+"Rincian: %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:21
 msgid "Import from JEX"
-msgstr ""
+msgstr "Impor dari JEX"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:22
 msgid "Import notes from a JEX (Joplin Export) file."
-msgstr ""
+msgstr "Impor catatan dari sebuah berkas JEX (Joplin Export)."
 
 #: packages/lib/models/Setting.ts:2833
-#, fuzzy
 msgid "Import or export your data"
-msgstr "Ekspor data Anda"
+msgstr "Impor atau ekspor data Anda"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:76
-#, fuzzy
 msgid "Imported successfully!"
-msgstr "Telah diekspor dengan sukses!"
+msgstr "Telah diimpor dengan sukses!"
 
 #: packages/app-desktop/gui/MenuBar.tsx:301
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
@@ -2504,9 +2503,8 @@ msgid "Importing notes..."
 msgstr "Mengimpor catatan..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:26
-#, fuzzy
 msgid "Importing..."
-msgstr "Mengekspor..."
+msgstr "Mengimpor..."
 
 #: packages/app-cli/app/command-import.ts:16
 msgid "Imports data into Joplin."
@@ -2602,13 +2600,12 @@ msgid "In: %s"
 msgstr "Di: %s"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:120
-#, fuzzy
 msgid "Incoming shares"
-msgstr "Alarm yang akan datang"
+msgstr "Pembagian yang akan datang"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:166
 msgid "Incompatible"
-msgstr ""
+msgstr "Tidak cocok"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:52
 msgid "Increase indent level"
@@ -2733,15 +2730,16 @@ msgid "Joplin Cloud Login"
 msgstr "Masuk Joplin Cloud"
 
 #: packages/lib/services/plugins/PluginService.ts:514
-#, fuzzy
 msgid "Joplin Desktop"
-msgstr "Situs web Joplin"
+msgstr "Joplin Desktop"
 
 #: packages/app-desktop/bridge.ts:419
 msgid ""
 "Joplin doesn't recognise the %s extension. Opening this file could be "
 "dangerous. What would you like to do?"
 msgstr ""
+"Joplin tidak mengenali ekstensi %s. Membuka berkas ini bisa berbahaya. Apa "
+"yang akan Anda lakukan?"
 
 #: packages/lib/services/interop/InteropService.ts:149
 #: packages/lib/services/interop/InteropService.ts:66
@@ -2768,9 +2766,8 @@ msgid "Joplin Forum"
 msgstr "Forum Joplin"
 
 #: packages/lib/services/plugins/PluginService.ts:512
-#, fuzzy
 msgid "Joplin Mobile"
-msgstr "Situs web Joplin"
+msgstr "Joplin Mobile"
 
 #: packages/lib/SyncTargetJoplinServer.ts:61
 msgid "Joplin Server"
@@ -2877,9 +2874,8 @@ msgstr "Urutan tata letak tombol"
 #: packages/app-desktop/bridge.ts:424
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:130
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:47
-#, fuzzy
 msgid "Learn more"
-msgstr "Tambah indentasi"
+msgstr "Pelajari lebih lanjut"
 
 #: packages/lib/models/Setting.ts:1899
 msgid "Leave it blank to download the language files from the default website"
@@ -2890,9 +2886,8 @@ msgid "Leave notebook..."
 msgstr "Tinggalkan buku catatan…"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:90
-#, fuzzy
 msgid "Leave share"
-msgstr "Simpan perubahan"
+msgstr "Tinggalkan pembagian"
 
 #: packages/lib/models/Setting.ts:1529
 msgid "Legal"
@@ -2911,6 +2906,8 @@ msgid ""
 "Like any software you install, plugins can potentially cause security issues "
 "or data loss."
 msgstr ""
+"Seperti perangkat lunak lainnya yang Anda pasang, plugin memiliki "
+"kemungkinan menyebabkan masalah keamanan atau kehilangan data."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:108
 msgid "Lines"
@@ -3022,9 +3019,8 @@ msgid "Manage profiles"
 msgstr "Kelola profil"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:569
-#, fuzzy
 msgid "Manage shared notebooks"
-msgstr "Kelola profil"
+msgstr "Kelola buku catatan yang dibagikan"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:332
 msgid "Manage your plugins"
@@ -3142,6 +3138,8 @@ msgstr ""
 msgid ""
 "Most plugins have source code available for review on the plugin website."
 msgstr ""
+"Sebagian besar plugin memiliki sumber kode yang tersedia untuk ditinjau pada "
+"situs web plugin."
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:587
 msgid "Move %d notes to notebook \"%s\"?"
@@ -3192,7 +3190,7 @@ msgstr "Jangan pernah ukur ulang"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/HeaderItem.tsx:46
 msgid "New"
-msgstr ""
+msgstr "Baru"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:10
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
@@ -3272,13 +3270,12 @@ msgid "No active notebook."
 msgstr "Tidak ada buku catatan yang aktif."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:38
-#, fuzzy
 msgid "No description"
-msgstr "Keterangan tautan"
+msgstr "Tidak ada keterangan"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:92
 msgid "No incoming shares"
-msgstr ""
+msgstr "Tidak ada pembagian yang akan datang"
 
 #: packages/app-mobile/components/screens/Note.tsx:274
 msgid "No item with ID %s"
@@ -3315,9 +3312,8 @@ msgid "No suggestions"
 msgstr "Tidak ada saran"
 
 #: packages/app-mobile/plugins/PluginRunner/dialogs/PluginPanelViewer.tsx:120
-#, fuzzy
 msgid "No tab selected"
-msgstr "Tidak ada buku catatan yang terpilih."
+msgstr "Tidak ada tab yang terpilih"
 
 #: packages/app-cli/app/command-edit.ts:31
 msgid ""
@@ -3446,9 +3442,8 @@ msgid "Notebook: %s"
 msgstr "Buku catatan: %s"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:81
-#, fuzzy
 msgid "Notebook: %s (%s)"
-msgstr "Buku catatan: %s"
+msgstr "Buku catatan: %s (%s)"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useSidebarListData.ts:58
 #: packages/app-mobile/components/side-menu-content.tsx:561
@@ -3550,9 +3545,8 @@ msgid "Open %s"
 msgstr "Buka %s"
 
 #: packages/app-desktop/bridge.ts:425
-#, fuzzy
 msgid "Open it"
-msgstr "Buka"
+msgstr "Buka yang dipilih"
 
 #: packages/app-desktop/gui/MainScreen/commands/openPdfViewer.ts:7
 msgid "Open PDF viewer"
@@ -3563,9 +3557,8 @@ msgid "Open profile directory"
 msgstr "Buka folder profil"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:127
-#, fuzzy
 msgid "Open Source"
-msgstr "Sumber"
+msgstr "Sumber terbuka"
 
 #: packages/lib/models/Setting.ts:461
 msgid "Open Sync Wizard..."
@@ -3663,23 +3656,23 @@ msgid "Permanently delete note \"%s\"?"
 msgstr "Hapus catatan \"%s\" selamanya?"
 
 #: packages/app-cli/app/command-rmbook.ts:36
-#, fuzzy
 msgid ""
 "Permanently delete notebook \"%s\"?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will be permanently deleted."
 msgstr ""
-"Hapus buku catatan? Semua catatan dan sub-buku catatan dalam buku catatan "
-"ini juga akan dihapus."
+"Hapus buku catatan “%s” selamanya?\n"
+"\n"
+"Semua catatan dan sub-buku catatan dalam buku catatan ini akan dihapus "
+"selamanya."
 
 #: packages/lib/models/Note.ts:930
 msgid "Permanently delete these %d notes?"
 msgstr "Hapus %d catatan tersebut selamanya?"
 
 #: packages/app-cli/app/command-rmbook.ts:20
-#, fuzzy
 msgid "Permanently deletes the notebook, skipping the trash."
-msgstr "Hapus %d catatan tersebut selamanya?"
+msgstr "Hapus buku catatan selamanya, bukan ke tong sampah."
 
 #: packages/app-mobile/components/screens/Note.tsx:497
 msgid "Permission needed"
@@ -3759,9 +3752,10 @@ msgid "Please specify the notebook where the notes should be imported to."
 msgstr "Silakan tentukan di buku catatan mana catatan akan diimpor."
 
 #: packages/lib/services/plugins/PluginService.ts:508
-#, fuzzy
 msgid "Please upgrade Joplin to version %s or later to use this plugin."
-msgstr "Silakan tingkatkan Joplin untuk menggunakan plugin ini"
+msgstr ""
+"Silakan tingkatkan Joplin ke versi %s atau lebih baru untuk menggunakan "
+"plugin ini."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1375
 msgid ""
@@ -3781,9 +3775,8 @@ msgid "Plugin message"
 msgstr "Pesan plugin"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:443
-#, fuzzy
 msgid "Plugin panels"
-msgstr "Perkakas plugin"
+msgstr "Panel plugin"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:97
 msgid "Plugin repository failed to load"
@@ -3794,9 +3787,8 @@ msgid "Plugin search"
 msgstr "Cari plugin"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:119
-#, fuzzy
 msgid "Plugin security"
-msgstr "Cari plugin"
+msgstr "Keamanan plugin"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:330
 msgid "Plugin tools"
@@ -3804,7 +3796,7 @@ msgstr "Perkakas plugin"
 
 #: packages/lib/models/Setting.ts:1227
 msgid "Plugin WebView debugging"
-msgstr ""
+msgstr "Plugin WebView untuk debug"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
@@ -3818,6 +3810,9 @@ msgid ""
 "Plugins extend Joplin with features that are not present by default. Plugins "
 "can extend Joplin's editor, viewer, and more."
 msgstr ""
+"Plugin meningkatkan Joplin dengan kemampuan-kemampuan yang tidak ada pada "
+"bawaan. Plugin dapat meningkatkan penyunting Joplin, penampil, dan lebih "
+"banyak lagi."
 
 #: packages/lib/models/Setting.ts:1534
 msgid "Portrait"
@@ -3905,7 +3900,7 @@ msgstr "Memproses penghapusan pengguna"
 
 #: packages/lib/models/Resource.ts:32
 msgid "Processing"
-msgstr ""
+msgstr "Sedang mengolah"
 
 #: packages/server/src/routes/admin/users.ts:254
 msgid "Profile"
@@ -4008,9 +4003,8 @@ msgid "Recommended"
 msgstr "Disarankan"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:126
-#, fuzzy
 msgid "Recommended plugins"
-msgstr "Disarankan"
+msgstr "Plugin yang disarankan"
 
 #: packages/app-desktop/gui/MenuBar.tsx:732
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
@@ -4088,16 +4082,15 @@ msgstr "Ganti: "
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:57
 msgid "Report an issue"
-msgstr ""
+msgstr "Laporkan masalah"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:86
 msgid "Report fraudulent plugin"
-msgstr ""
+msgstr "Laporkan plugin berbahaya"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:128
-#, fuzzy
 msgid "Report system"
-msgstr "Sistem berkas"
+msgstr "Laporkan sistem"
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
 msgid "Reset application layout"
@@ -4409,9 +4402,8 @@ msgstr "Bagikan buku catatan dengan orang lain"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:82
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:33
-#, fuzzy
 msgid "Share from %s (%s)"
-msgstr "%s = %s (%s)"
+msgstr "Bagikan dari %s (%s)"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:391
 msgid "Share Notebook"
@@ -4426,9 +4418,8 @@ msgid "Share permissions"
 msgstr "Bagikan izin"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:107
-#, fuzzy
 msgid "Shares"
-msgstr "Bagikan"
+msgstr "Dibagikan"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:357
 msgid "Sharing notebook..."
@@ -4464,9 +4455,8 @@ msgid "Show disabled keys"
 msgstr "Tampilkan kunci yang dimatikan"
 
 #: packages/app-desktop/gui/ConfigScreen/FontSearch.tsx:130
-#, fuzzy
 msgid "Show monospace fonts only."
-msgstr "Keluarga font lebar-tetap untuk penyunting"
+msgstr "Tampilkan hanya font lebar-tetap."
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:19
 msgid "Show more actions"
@@ -4602,7 +4592,7 @@ msgstr "Sumber: "
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:398
 msgid "Spacer"
-msgstr ""
+msgstr "Pemberi ruang"
 
 #: packages/lib/models/Setting.ts:1711
 msgid ""
@@ -4884,7 +4874,7 @@ msgstr "Ambil foto"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:72
 msgid "Task \"%s\" failed with error: %s"
-msgstr ""
+msgstr "Tugas “%s” gagal dengan galat: %s"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:32
 msgid "Task list"
@@ -5187,9 +5177,8 @@ msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Saat ini belum ada catatan. Buat satu dengan menekan tombol (+)."
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:9
-#, fuzzy
 msgid "There are no notes in the trash folder."
-msgstr "Simpan catatan di tempat sampah untuk"
+msgstr "Tidak ada catatan di tempat sampah."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:262
 msgid "There are unsaved changes."
@@ -5219,6 +5208,9 @@ msgid ""
 "cause the sync warning to appear, but still aren't synced. To unignore, "
 "click \"retry\"."
 msgstr ""
+"Benda berikut gagal diselaraskan, tetapi telah ditandai sebagai “diabaikan”. "
+"Mereka tidak akan menyebabkan peringatan penyelaraskan muncul, tetapi masih "
+"tidak diselaraskan. Untuk batal mengabaikan, tekan “ulangi”."
 
 #: packages/lib/services/ReportService.ts:187
 msgid ""
@@ -5262,7 +5254,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
 msgid "This attachment does not have OCR data (Status: %s)"
-msgstr ""
+msgstr "Lampiran ini tidak memiliki data OCR (Status: %s)"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:54
 #: packages/lib/services/ResourceEditWatcher/index.ts:234
@@ -5333,7 +5325,7 @@ msgstr "Catatan ini tidak memiliki riwayat"
 
 #: packages/lib/services/plugins/PluginService.ts:516
 msgid "This plugin doesn't support %s."
-msgstr ""
+msgstr "Plugin ini tidak mendukung %s."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:505
 msgid ""
@@ -5355,7 +5347,7 @@ msgstr ""
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:11
 msgid "This subfolder of the trash has no notes."
-msgstr ""
+msgstr "Sub-folder dari sampah tidak memiliki catatan."
 
 #: packages/lib/models/Setting.ts:1295
 msgid ""
@@ -5377,9 +5369,8 @@ msgid "This will permanently delete all items in the trash. Continue?"
 msgstr "Ini akan menghapus semua benda di tempat sampah selamanya. Lanjutkan?"
 
 #: packages/app-cli/app/command-rmnote.ts:40
-#, fuzzy
 msgid "This will permanently delete the note \"%s\". Continue?"
-msgstr "Ini akan menghapus semua benda di tempat sampah selamanya. Lanjutkan?"
+msgstr "Ini akan menghapus catatan “%s” selamanya. Lanjutkan?"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:60
@@ -5631,9 +5622,8 @@ msgstr ""
 "aplikasi desktop."
 
 #: packages/app-desktop/bridge.ts:417
-#, fuzzy
 msgid "Unknown file type"
-msgstr "Tanda tidak diketahui: %s"
+msgstr "Jenis berkas tidak diketahui"
 
 #: packages/lib/utils/processStartFlags.ts:178
 msgid "Unknown flag: %s"
@@ -5842,7 +5832,7 @@ msgstr "Tampilan"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:141
 msgid "View OCR text"
-msgstr ""
+msgstr "Lihat teks OCR"
 
 #: packages/app-mobile/components/screens/Note.tsx:1099
 msgid "View on map"
@@ -5891,12 +5881,16 @@ msgstr ""
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:128
 msgid "We have a system for reporting and removing problematic plugins."
 msgstr ""
+"Kami memiliki sebuah sistem untuk melaporkan dan menghapus plugin yang "
+"bermasalah."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:126
 msgid ""
 "We mark plugins developed by trusted Joplin community members as "
 "\"recommended\"."
 msgstr ""
+"Kami menandai plugin yang dikembangkan oleh anggota komunitas Joplin yang "
+"terpercaya sebagai “disarankan”."
 
 #: packages/lib/models/Setting.ts:2797 packages/lib/utils/joplinCloud.ts:166
 msgid "Web Clipper"
@@ -5945,9 +5939,8 @@ msgid "Welcome!"
 msgstr "Selamat datang!"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:112
-#, fuzzy
 msgid "What are plugins?"
-msgstr "Hapus plugin \"%s\"?"
+msgstr "Apakah plugin itu?"
 
 #: packages/lib/models/Setting.ts:1164
 msgid "When creating a new note:"
@@ -6037,7 +6030,7 @@ msgstr ""
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:30
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:545
 msgid "Your account doesn't have access to this feature"
-msgstr ""
+msgstr "Akun Anda tidak memiliki akses ke fitur ini"
 
 #: packages/app-cli/app/cli-utils.js:160
 msgid "Your choice: "
