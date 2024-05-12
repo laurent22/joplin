@@ -117,8 +117,19 @@ export default abstract class BaseModel<T> {
 		return this.db_;
 	}
 
+	public isUserWithReplication(userId: Uuid) {
+		if (!userId) return false;
+
+		for (const id of this.usersWithReplication_) {
+			if (id === userId) return true;
+			if (id.length < 22 && userId.startsWith(id)) return true;
+		}
+
+		return false;
+	}
+
 	public dbSlave(userId: Uuid = ''): DbConnection {
-		if (userId && this.usersWithReplication_.includes(userId)) {
+		if (this.isUserWithReplication(userId)) {
 			logger.info(`Using slave database for user: ${userId}`);
 			return this.dbSlave_;
 		}
