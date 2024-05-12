@@ -1675,7 +1675,7 @@ msgstr "Jatuh tempo"
 
 #: packages/lib/models/Note.ts:63
 msgid "due date"
-msgstr "Tanggal jatuh tempo"
+msgstr "tanggal jatuh tempo"
 
 #: packages/app-desktop/gui/MainScreen/commands/duplicateNote.ts:7
 #: packages/app-mobile/components/ScreenHeader/index.tsx:498
@@ -3313,7 +3313,7 @@ msgstr "Tidak ada saran"
 
 #: packages/app-mobile/plugins/PluginRunner/dialogs/PluginPanelViewer.tsx:120
 msgid "No tab selected"
-msgstr "Tidak ada tab yang terpilih."
+msgstr "Tidak ada tab yang terpilih"
 
 #: packages/app-cli/app/command-edit.ts:31
 msgid ""
