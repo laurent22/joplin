@@ -629,6 +629,10 @@ export default class SearchEngine {
 		// https://github.com/laurent22/joplin/issues/9694
 		normalizedText = htmlentitiesDecode(normalizedText);
 
+		// The FTS tokenizer doesn't understand some types of space,
+		// including nonbreaking spaces and CRLF.
+		normalizedText = normalizedText.replace(/\s/g, ' ');
+
 		return removeDiacritics(normalizedText.toLowerCase());
 	}
 
