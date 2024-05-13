@@ -33,7 +33,7 @@ router.get('admin/reports/:id', async (path: SubPath, ctx: AppContext) => {
 	if (reportType === ReportType.UserActivity) {
 		const query = parseQuery(ctx.query as Record<string, string>);
 
-		const changes = await userActivity(ctx.joplin.db, { interval: query.intervalHours * Hour });
+		const changes = await userActivity(ctx.joplin.dbSlave, { interval: query.intervalHours * Hour });
 
 		const models = ctx.joplin.models;
 		const users = await models.user().loadByIds(changes.map(c => c.user_id), { fields: ['id', 'email'] });

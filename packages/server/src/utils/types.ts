@@ -25,6 +25,7 @@ export interface NotificationView {
 interface AppContextJoplin {
 	env: Env;
 	db: DbConnection;
+	dbSlave: DbConnection;
 	models: Models;
 	appLogger(): LoggerWrapper;
 	notifications: NotificationView[];
