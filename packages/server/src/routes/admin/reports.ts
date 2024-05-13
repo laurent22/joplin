@@ -9,6 +9,7 @@ import { adminUserUrl, adminReportUrl } from '../../utils/urlUtils';
 import { Hour } from '../../utils/time';
 import { ErrorNotFound } from '../../utils/errors';
 import { ReportType } from '../../services/reports/types';
+import { formatBytes } from '../../utils/bytes';
 
 const router: Router = new Router(RouteType.Web);
 
@@ -59,6 +60,9 @@ router.get('admin/reports/:id', async (path: SubPath, ctx: AppContext) => {
 					{
 						value: change.delete_count.toString(),
 					},
+					{
+						value: formatBytes(change.uploaded_size),
+					},
 				],
 			});
 		}
@@ -84,6 +88,10 @@ router.get('admin/reports/:id', async (path: SubPath, ctx: AppContext) => {
 				{
 					name: 'deleted_count',
 					label: 'Deleted',
+				},
+				{
+					name: 'uploaded_size',
+					label: 'Uploaded',
 				},
 			],
 			rows: changeRows,

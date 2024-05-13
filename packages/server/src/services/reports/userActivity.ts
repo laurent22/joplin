@@ -1,5 +1,6 @@
 import { DbConnection } from '../../db';
-import { ChangeType, Uuid } from '../database/types';
+import { unique } from '../../utils/array';
+import { ChangeType, Item, Uuid } from '../database/types';
 
 export interface Options {
 	interval: number;
@@ -19,6 +20,7 @@ export default async (db: DbConnection, options: Options = null) => {
 		updated_time: number;
 		counter: number;
 		type: ChangeType;
+		item_id: Uuid;
 	}
 
 	interface GroupedChange {
@@ -27,14 +29,17 @@ export default async (db: DbConnection, options: Options = null) => {
 		create_count: number;
 		update_count: number;
 		delete_count: number;
+		uploaded_size: number;
 	}
+
+	type ItemSlice = Pick<Item, 'content_size' | 'id'>;
 
 	let changes: ChangeSlice[] = [];
 	let counter = 0;
 
 	while (true) {
 		const query = db('changes')
-			.select('user_id', 'updated_time', 'counter', 'type')
+			.select('user_id', 'updated_time', 'counter', 'item_id', 'type')
 			.orderBy('counter', 'desc')
 			.limit(options.batchSize);
 
@@ -53,7 +58,14 @@ export default async (db: DbConnection, options: Options = null) => {
 		counter = filteredResults[filteredResults.length - 1].counter;
 	}
 
+	const itemIds = unique(changes.map(c => c.item_id));
+
+	const items: ItemSlice[] = await db('items')
+		.select('id', 'content_size')
+		.whereIn('id', itemIds);
+
 	const groupedChanges: GroupedChange[] = [];
+
 	for (const c of changes) {
 		let grouped = groupedChanges.find(g => g.user_id === c.user_id);
 		if (!grouped) {
@@ -63,6 +75,7 @@ export default async (db: DbConnection, options: Options = null) => {
 				create_count: 0,
 				update_count: 0,
 				delete_count: 0,
+				uploaded_size: 0,
 			};
 
 			groupedChanges.push(grouped);
@@ -72,6 +85,15 @@ export default async (db: DbConnection, options: Options = null) => {
 		if (c.type === ChangeType.Update) grouped.update_count++;
 		if (c.type === ChangeType.Delete) grouped.delete_count++;
 		grouped.total_count++;
+
+		const item = items.find(it => it.id === c.item_id);
+		if (item) {
+			if ([ChangeType.Create, ChangeType.Update].includes(c.type)) {
+				grouped.uploaded_size += item.content_size;
+			}
+		}
+
+		if (!itemIds.includes(c.item_id)) itemIds.push(c.item_id);
 	}
 
 	groupedChanges.sort((a, b) => {
