@@ -434,6 +434,11 @@ export async function updateFolder(sessionId: string, folder: FolderEntity): Pro
 	return updateItem(sessionId, `root:/${folder.id}.md:`, makeFolderSerializedBody(folder));
 }
 
+export async function deleteFolder(userId: string, folderJopId: string): Promise<void> {
+	const item = await models().item().loadByJopId(userId, folderJopId, { fields: ['id'] });
+	await models().item().delete(item.id);
+}
+
 export async function createFolder(sessionId: string, folder: FolderEntity): Promise<Item> {
 	folder = {
 		id: '000000000000000000000000000000F1',
