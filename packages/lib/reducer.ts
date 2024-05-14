@@ -883,6 +883,12 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			break;
 		}
 
+		case 'INITIAL_SELECTION_SET':
+			// To allow creating notes when opening the app with all notes and/or tags,
+			// we also need a "last selected folder ID".
+			draft.selectedFolderId ??= draft.settings.activeFolderId;
+			break;
+
 		case 'SMART_FILTER_SELECT':
 			draft.notesParentType = 'SmartFilter';
 			draft.selectedSmartFilterId = action.id;

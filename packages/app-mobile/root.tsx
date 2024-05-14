@@ -710,6 +710,10 @@ async function initialize(dispatch: Function) {
 			});
 		}
 
+		this.store().dispatch({
+			type: 'INITIAL_SELECTION_SET',
+		});
+
 		await clearSharedFilesCache();
 	} catch (error) {
 		alert(`Initialization error: ${error.message}`);

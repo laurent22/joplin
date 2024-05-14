@@ -514,6 +514,10 @@ class Application extends BaseApplication {
 		}
 
 		this.store().dispatch({
+			type: 'INITIAL_SELECTION_SET',
+		});
+
+		this.store().dispatch({
 			type: 'FOLDER_SET_COLLAPSED_ALL',
 			ids: Setting.value('collapsedFolderIds'),
 		});
