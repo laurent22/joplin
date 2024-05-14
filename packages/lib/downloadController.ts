@@ -23,21 +23,25 @@ export class LimitedDownloadController implements DownloadController {
 	private imagesCount_ = 0;
 	// how many images links the content has
 	private imageCountExpected_ = 0;
-	private isLimitExceeded_ = false;
+	private largeImageBytes = 0;
+	private requestId = '';
 
 	private maxTotalBytes = 0;
 	public readonly maxImagesCount: number;
 	private ownerId = '';
+	private bytesPerUrl: { [url: string]: number } = {};
 
-	public constructor(ownerId: string, maxTotalBytes: number, maxImagesCount: number) {
+	public constructor(ownerId: string, maxTotalBytes: number, maxImagesCount: number, largeImageBytes: number, requestId: string) {
 		this.ownerId = ownerId;
 		this.maxTotalBytes = maxTotalBytes;
 		this.maxImagesCount = maxImagesCount;
+		this.largeImageBytes = largeImageBytes;
+		this.requestId = requestId;
 	}
 
 	public set totalBytes(value: number) {
 		if (this.totalBytes_ >= this.maxTotalBytes) {
-			throw new JoplinError(`Total bytes stored (${this.totalBytes_}) has exceeded the amount established (${this.maxTotalBytes})`, ErrorCode.DownloadLimiter);
+			throw new JoplinError(`${this.requestId}: Total bytes stored (${this.totalBytes_}) has exceeded the amount established (${this.maxTotalBytes})`, ErrorCode.DownloadLimiter);
 		}
 		this.totalBytes_ = value;
 	}
@@ -48,7 +52,7 @@ export class LimitedDownloadController implements DownloadController {
 
 	public set imagesCount(value: number) {
 		if (this.imagesCount_ > this.maxImagesCount) {
-			throw new JoplinError(`Total images to be stored (${this.imagesCount_}) has exceeded the amount established (${this.maxImagesCount})`, ErrorCode.DownloadLimiter);
+			throw new JoplinError(`${this.requestId}: Total images to be stored (${this.imagesCount_}) has exceeded the amount established (${this.maxImagesCount})`, ErrorCode.DownloadLimiter);
 		}
 		this.imagesCount_ = value;
 	}
@@ -66,10 +70,12 @@ export class LimitedDownloadController implements DownloadController {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public handleChunk(request: any) {
+	public handleChunk(request: any, url: string) {
+		this.bytesPerUrl[url] = 0;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return (chunk: any) => {
 			try {
+				this.bytesPerUrl[url] += chunk.length;
 				this.totalBytes += chunk.length;
 			} catch (error) {
 				request.destroy(error);
@@ -78,12 +84,17 @@ export class LimitedDownloadController implements DownloadController {
 	}
 
 	public printStats() {
-		if (!this.isLimitExceeded_) return;
-
-		const owner = `Owner id: ${this.ownerId}`;
-		const totalBytes = `Total bytes stored: ${this.totalBytes}. Maximum: ${this.maxTotalBytes}`;
+		const largeImages = Object.entries(this.bytesPerUrl).filter(e => e[1] > this.largeImageBytes);
+		for (const image of largeImages) {
+			const [url, bytes] = image;
+			logger.info(`${this.requestId}: Large image found: ${url} - ${bytesToHuman(bytes)}`);
+		}
+		const owner = `User: ${this.ownerId}`;
+		const totalBytes = `Total downloaded: ${bytesToHuman(this.totalBytes)}. Maximum: ${bytesToHuman(this.maxTotalBytes)}`;
 		const totalImages = `Images initiated for download: ${this.imagesCount_}. Maximum: ${this.maxImagesCount}. Expected: ${this.imageCountExpected}`;
-		logger.info(`${owner} - ${totalBytes} - ${totalImages}`);
+		logger.info(`${this.requestId}: ${owner}`);
+		logger.info(`${this.requestId}: ${totalBytes}`);
+		logger.info(`${this.requestId}: ${totalImages}`);
 	}
 
 	public limitMessage() {
