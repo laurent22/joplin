@@ -215,7 +215,9 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	}
 
 	if (action.type === 'NAV_GO' && action.routeName === 'Notes') {
-		Setting.setValue('activeFolderId', newState.selectedFolderId);
+		if (newState.selectedFolderId) {
+			Setting.setValue('activeFolderId', newState.selectedFolderId);
+		}
 		const notesParent: NotesParent = {
 			type: action.smartFilterId ? 'SmartFilter' : 'Folder',
 			selectedItemId: action.smartFilterId ? action.smartFilterId : newState.selectedFolderId,
