@@ -2,8 +2,7 @@ import * as React from 'react';
 import { useCallback, useMemo } from 'react';
 import { TextStyle, StyleSheet } from 'react-native';
 import { ButtonSpec, StyleSheetData } from './types';
-import CustomButton from '../../CustomButton';
-import Icon from '../../Icon';
+import IconButton from '../../IconButton';
 
 export const buttonSize = 54;
 
@@ -58,16 +57,16 @@ const ToolbarButton = ({ styleSheet, spec, onActionComplete, style }: ToolbarBut
 	}, [disabled, sourceOnPress, onActionComplete]);
 
 	return (
-		<CustomButton
-			style={styles.buttonStyle}
+		<IconButton
+			containerStyle={styles.buttonStyle}
 			themeId={styleSheet.themeId}
 			onPress={onPress}
 			description={ spec.description }
-			accessibilityRole="button"
 			disabled={ disabled }
-		>
-			<Icon name={spec.icon} style={styles.iconStyle} accessibilityLabel={null}/>
-		</CustomButton>
+
+			iconName={spec.icon}
+			iconStyle={styles.iconStyle}
+		/>
 	);
 };
 
