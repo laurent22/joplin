@@ -24,20 +24,30 @@ const rsa: RSA = {
 	},
 
 	encrypt: async (plaintextUtf8: string, rsaKeyPair: RSAKeyPair): Promise<string> => {
-		// TODO: Support long-data encryption.
+		// TODO: Support long-data encryption in a way compatible with node-rsa.
 		return RnRSA.encrypt(plaintextUtf8, rsaKeyPair.public);
 	},
 
 	decrypt: async (ciphertextBase64: string, rsaKeyPair: RSAKeyPair): Promise<string> => {
-		// Multiply by 6/8: Each character corresponds to 6 bits, but there are 8 bits in a byte.
-		// Remove =s: Each = means "discard two bits" for up to 4 bits.
-		// Note: It's okay for this to be a slight overestimate.
-		// See also https://en.wikipedia.org/wiki/Base64
-		const ciphertextLength = Math.floor(ciphertextBase64.replace(/=/g, '').length * 6 / 8);
-
+		const ciphertextBuffer = Buffer.from(ciphertextBase64, 'base64');
 		const maximumEncryptedSize = Math.floor(rsaKeyPair.keySizeBits / 8); // Usually 256
-		if (ciphertextLength > maximumEncryptedSize) {
-			const ciphertextBuffer = Buffer.from(ciphertextBase64, 'base64');
+
+		// On iOS, .decrypt fails without throwing or rejecting.
+		// This function throws for consistency with Android.
+		const handleError = (plainText: string|undefined) => {
+			if (plainText === undefined) {
+				throw new Error(`
+					RN RSA: Decryption failed.
+						cipherTextLength=${ciphertextBuffer.length},
+						maxEncryptedSize=${maximumEncryptedSize}
+				`.trim());
+			}
+		};
+
+		// Master keys are encrypted with RSA and are longer than the default modulus size of 256 bytes.
+		// node-rsa supports encrypting larger amounts of data using RSA.
+		// See their implementation for details: https://github.com/rzcoder/node-rsa/blob/e7e7f7d2942a3bac1d2e132a881e5a3aceda10a1/src/libs/rsa.js#L252
+		if (ciphertextBuffer.length > maximumEncryptedSize) {
 			// Use a numBlocks and blockSize that match node-rsa:
 			const numBlocks = Math.ceil(ciphertextBuffer.length / maximumEncryptedSize);
 			const blockSize = maximumEncryptedSize;
@@ -49,25 +59,14 @@ const rsa: RSA = {
 				);
 				const plainText = await RnRSA.decrypt(ciphertextBlock.toString('base64'), rsaKeyPair.private);
 
-				// On iOS, .decrypt fails without throwing or rejecting.
-				if (plainText === undefined) {
-					throw new Error(`
-						RN RSA: Decryption failed.
-							pt=${plainText}
-							i=${i}
-							cipherTextLength=${ciphertextLength},${ciphertextBuffer.length},
-							blockLength=${ciphertextBlock.length}
-							numBlocks=${numBlocks},
-							blockSize=${blockSize},
-							maxEncryptedSize=${maximumEncryptedSize}
-					`.trim());
-				}
-
+				handleError(plainText);
 				result.push(plainText);
 			}
 			return result.join('');
 		} else {
-			return RnRSA.decrypt(ciphertextBase64, rsaKeyPair.private);
+			const plainText = await RnRSA.decrypt(ciphertextBase64, rsaKeyPair.private);
+			handleError(plainText);
+			return plainText;
 		}
 	},
 
