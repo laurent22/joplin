@@ -51,7 +51,7 @@ const useActionButtons = (props: ActionButtonRowProps) => {
 		});
 
 		actionButtons.push({
-			icon: 'material search',
+			icon: 'material magnify',
 			description: (
 				props.searchState.dialogVisible ? _('Close') : _('Find and replace')
 			),
@@ -63,7 +63,7 @@ const useActionButtons = (props: ActionButtonRowProps) => {
 		});
 
 		actionButtons.push({
-			icon: 'material keyboard-hide',
+			icon: 'material keyboard-close',
 			description: _('Hide keyboard'),
 			disabled: !props.keyboardVisible,
 			visible: props.hasSoftwareKeyboard && Platform.OS === 'ios',
