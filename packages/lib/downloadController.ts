@@ -12,7 +12,7 @@ export interface DownloadController {
 	imageCountExpected: number;
 	printStats(imagesCountExpected: number): void;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	handleChunk(request: any): (chunk: any)=> void;
+	handleChunk(request: any, url: string): (chunk: any)=> void;
 	limitMessage(): string;
 }
 
@@ -23,7 +23,7 @@ export class LimitedDownloadController implements DownloadController {
 	private imagesCount_ = 0;
 	// how many images links the content has
 	private imageCountExpected_ = 0;
-	private largeImageBytes = 0;
+	private largeImageBytes = Number.POSITIVE_INFINITY;
 	private requestId = '';
 
 	private maxTotalBytes = 0;
