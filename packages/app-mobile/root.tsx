@@ -710,7 +710,7 @@ async function initialize(dispatch: Function) {
 			});
 		}
 
-		this.store().dispatch({
+		dispatch({
 			type: 'INITIAL_SELECTION_SET',
 		});
 
