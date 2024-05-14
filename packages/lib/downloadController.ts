@@ -28,11 +28,9 @@ export class LimitedDownloadController implements DownloadController {
 
 	private maxTotalBytes = 0;
 	public readonly maxImagesCount: number;
-	private ownerId = '';
 	private bytesPerUrl: { [url: string]: number } = {};
 
-	public constructor(ownerId: string, maxTotalBytes: number, maxImagesCount: number, largeImageBytes: number, requestId: string) {
-		this.ownerId = ownerId;
+	public constructor(maxTotalBytes: number, maxImagesCount: number, largeImageBytes: number, requestId: string) {
 		this.maxTotalBytes = maxTotalBytes;
 		this.maxImagesCount = maxImagesCount;
 		this.largeImageBytes = largeImageBytes;
@@ -89,10 +87,8 @@ export class LimitedDownloadController implements DownloadController {
 			const [url, bytes] = image;
 			logger.info(`${this.requestId}: Large image found: ${url} - ${bytesToHuman(bytes)}`);
 		}
-		const owner = `User: ${this.ownerId}`;
 		const totalBytes = `Total downloaded: ${bytesToHuman(this.totalBytes)}. Maximum: ${bytesToHuman(this.maxTotalBytes)}`;
 		const totalImages = `Images initiated for download: ${this.imagesCount_}. Maximum: ${this.maxImagesCount}. Expected: ${this.imageCountExpected}`;
-		logger.info(`${this.requestId}: ${owner}`);
 		logger.info(`${this.requestId}: ${totalBytes}`);
 		logger.info(`${this.requestId}: ${totalImages}`);
 	}
