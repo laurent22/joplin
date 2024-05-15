@@ -12,7 +12,7 @@ export interface DownloadController {
 	imageCountExpected: number;
 	printStats(imagesCountExpected: number): void;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	handleChunk(request: any, url: string): (chunk: any)=> void;
+	handleChunk(request: any): (chunk: any)=> void;
 	limitMessage(): string;
 }
 
@@ -23,17 +23,14 @@ export class LimitedDownloadController implements DownloadController {
 	private imagesCount_ = 0;
 	// how many images links the content has
 	private imageCountExpected_ = 0;
-	private largeImageBytes = Number.POSITIVE_INFINITY;
 	private requestId = '';
 
 	private maxTotalBytes = 0;
 	public readonly maxImagesCount: number;
-	private bytesPerUrl: { [url: string]: number } = {};
 
-	public constructor(maxTotalBytes: number, maxImagesCount: number, largeImageBytes: number, requestId: string) {
+	public constructor(maxTotalBytes: number, maxImagesCount: number, requestId: string) {
 		this.maxTotalBytes = maxTotalBytes;
 		this.maxImagesCount = maxImagesCount;
-		this.largeImageBytes = largeImageBytes;
 		this.requestId = requestId;
 	}
 
@@ -68,12 +65,10 @@ export class LimitedDownloadController implements DownloadController {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public handleChunk(request: any, url: string) {
-		this.bytesPerUrl[url] = 0;
+	public handleChunk(request: any) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return (chunk: any) => {
 			try {
-				this.bytesPerUrl[url] += chunk.length;
 				this.totalBytes += chunk.length;
 			} catch (error) {
 				request.destroy(error);
@@ -82,11 +77,6 @@ export class LimitedDownloadController implements DownloadController {
 	}
 
 	public printStats() {
-		const largeImages = Object.entries(this.bytesPerUrl).filter(e => e[1] > this.largeImageBytes);
-		for (const image of largeImages) {
-			const [url, bytes] = image;
-			logger.info(`${this.requestId}: Large image found: ${url} - ${bytesToHuman(bytes)}`);
-		}
 		const totalBytes = `Total downloaded: ${bytesToHuman(this.totalBytes)}. Maximum: ${bytesToHuman(this.maxTotalBytes)}`;
 		const totalImages = `Images initiated for download: ${this.imagesCount_}. Maximum: ${this.maxImagesCount}. Expected: ${this.imageCountExpected}`;
 		logger.info(`${this.requestId}: ${totalBytes}`);

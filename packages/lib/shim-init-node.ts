@@ -594,7 +594,7 @@ function shimInit(options: ShimInitOptions = null) {
 					const request = http.request(requestOptions, (response: any) => {
 
 						if (downloadController) {
-							response.on('data', downloadController.handleChunk(request, url.href));
+							response.on('data', downloadController.handleChunk(request));
 						}
 
 						response.pipe(file);
