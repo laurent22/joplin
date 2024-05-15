@@ -248,7 +248,7 @@ const isValidUrl = (url: string, isDataUrl: boolean, urlProtocol?: string, allow
 	return isAllowedProtocol;
 };
 
-export async function downloadMediaFile(url: string, requestId: string, fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
+export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
 	// The URL we get to download have been extracted from the Markdown document
 	url = markdownUtils.unescapeLinkUrl(url);
 
@@ -280,25 +280,25 @@ export async function downloadMediaFile(url: string, requestId: string, fetchOpt
 		}
 		return newMediaPath ?? mediaPath;
 	} catch (error) {
-		logger.warn(`${requestId}: Cannot download image at ${url}`, error);
+		logger.warn(`Cannot download image at ${url}`, error);
 		return '';
 	}
 }
 
-async function downloadMediaFiles(urls: string[], requestId: string, fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
+async function downloadMediaFiles(urls: string[], fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
 	const output: DownloadedMediaFile[] = [];
 
 	const downloadController = fetchOptions?.downloadController ?? null;
 
 	const downloadOne = async (url: string) => {
 		if (downloadController) downloadController.imagesCount += 1;
-		const mediaPath = await downloadMediaFile(url, requestId, fetchOptions, allowedProtocols);
+		const mediaPath = await downloadMediaFile(url, fetchOptions, allowedProtocols);
 		if (mediaPath) output.push({ path: mediaPath, originalUrl: url });
 	};
 
 	const maximumImageDownloadsAllowed = downloadController ? downloadController.maxImagesCount : Number.POSITIVE_INFINITY;
 	const urlsAllowedByController = urls.slice(0, maximumImageDownloadsAllowed);
-	logger.info(`${requestId}: Media files allowed to be downloaded: ${maximumImageDownloadsAllowed}`);
+	logger.info(`Media files allowed to be downloaded: ${maximumImageDownloadsAllowed}`);
 
 	const promises = [];
 	for (const url of urlsAllowedByController) {
@@ -315,13 +315,13 @@ async function downloadMediaFiles(urls: string[], requestId: string, fetchOption
 	return output;
 }
 
-export async function createResourcesFromPaths(mediaFiles: DownloadedMediaFile[], requestId: string) {
+export async function createResourcesFromPaths(mediaFiles: DownloadedMediaFile[]) {
 	const processFile = async (mediaFile: DownloadedMediaFile) => {
 		try {
 			const resource = await shim.createResourceFromPath(mediaFile.path);
 			return { ...mediaFile, resource };
 		} catch (error) {
-			logger.warn(`${requestId}: Cannot create resource for ${mediaFile.originalUrl}`, error);
+			logger.warn(`Cannot create resource for ${mediaFile.originalUrl}`, error);
 			return { ...mediaFile, resource: null };
 		}
 	};
@@ -439,10 +439,10 @@ export const extractNoteFromHTML = async (
 
 	logger.info(`Request (${requestId}): Downloading media files: ${mediaUrls.length}`);
 
-	const mediaFiles = await downloadMediaFiles(mediaUrls, requestId, fetchOptions, allowedProtocols);
+	const mediaFiles = await downloadMediaFiles(mediaUrls, fetchOptions, allowedProtocols);
 
 	logger.info(`Request (${requestId}): Creating resources from paths (resizing images): ${mediaFiles.length}`);
-	const resources = await createResourcesFromPaths(mediaFiles, requestId);
+	const resources = await createResourcesFromPaths(mediaFiles);
 
 	logger.info(`Request (${requestId}): Deleting temporary files`);
 	await removeTempFiles(resources);

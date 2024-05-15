@@ -25,7 +25,7 @@ describe('routes/notes', () => {
 		'htp/asdfasf.com',
 		'https//joplinapp.org',
 	])('should not return a local file for invalid protocols', async (invalidUrl) => {
-		expect(await downloadMediaFile(invalidUrl, '')).toBe('');
+		expect(await downloadMediaFile(invalidUrl)).toBe('');
 	});
 
 	test.each([
@@ -37,7 +37,7 @@ describe('routes/notes', () => {
 		});
 		const spy = jest.spyOn(shim, 'fetchBlob').mockImplementation(fetchBlobSpy);
 
-		const response = await downloadMediaFile(url, '');
+		const response = await downloadMediaFile(url);
 
 		const files = await readdir(Setting.value('tempDir'));
 
@@ -52,7 +52,7 @@ describe('routes/notes', () => {
 		const url = `file:///${imagePath}`;
 		const originalFileContent = await readFile(imagePath);
 
-		const response = await downloadMediaFile(url, '', null, ['file:']);
+		const response = await downloadMediaFile(url, null, ['file:']);
 
 		const files = await readdir(Setting.value('tempDir'));
 		expect(files.length).toBe(1);
@@ -67,7 +67,7 @@ describe('routes/notes', () => {
 		const url = 'data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7';
 		const originalFileContent = Buffer.from(url.split('data:image/gif;base64,')[1], 'base64');
 
-		const response = await downloadMediaFile(url, '');
+		const response = await downloadMediaFile(url);
 
 		const files = await readdir(Setting.value('tempDir'));
 		expect(files.length).toBe(1);
@@ -82,7 +82,7 @@ describe('routes/notes', () => {
 		const url = 'data:application/octet-stream;base64,dGhpcyBpcyBhIG1lc3NhZ2UK';
 
 		Logger.globalLogger.enabled = false;
-		const response = await downloadMediaFile(url, '');
+		const response = await downloadMediaFile(url);
 		Logger.globalLogger.enabled = true;
 
 		const files = await readdir(Setting.value('tempDir'));
@@ -93,7 +93,7 @@ describe('routes/notes', () => {
 	test('should not process URLs from cid: protocol', async () => {
 		const url = 'cid:ii_loq3d1100';
 
-		const response = await downloadMediaFile(url, '');
+		const response = await downloadMediaFile(url);
 
 		const files = await readdir(Setting.value('tempDir'));
 		expect(files.length).toBe(0);
@@ -104,7 +104,7 @@ describe('routes/notes', () => {
 		const url = 'file:///home/user/file.db';
 
 		const allowedProtocols: string[] = [];
-		const mediaFilePath = await downloadMediaFile(url, '', null, allowedProtocols);
+		const mediaFilePath = await downloadMediaFile(url, null, allowedProtocols);
 
 		const files = await readdir(Setting.value('tempDir'));
 		expect(files.length).toBe(0);
@@ -124,7 +124,7 @@ describe('routes/notes', () => {
 			};
 		});
 
-		const response = await downloadMediaFile(url, '');
+		const response = await downloadMediaFile(url);
 
 		const files = await readdir(Setting.value('tempDir'));
 		expect(files.length).toBe(1);
@@ -137,7 +137,7 @@ describe('routes/notes', () => {
 	test('should be able to create resource from files in the filesystem', async () => {
 		const result = await createResourcesFromPaths([
 			{ originalUrl: 'asdf.png', path: `${__dirname}/../../../images/SideMenuHeader.png` },
-		], '');
+		]);
 
 		const resources = await Resource.all();
 
@@ -154,7 +154,7 @@ describe('routes/notes', () => {
 		Logger.globalLogger.enabled = false;
 		const result = await createResourcesFromPaths([
 			{ originalUrl: 'not-a-real-file', path: '/does/not/exist' },
-		], '');
+		]);
 		Logger.globalLogger.enabled = true;
 
 		expect(result[0].resource).toBe(null);
@@ -179,7 +179,7 @@ describe('routes/notes', () => {
 		const result = await createResourcesFromPaths([
 			{ originalUrl: 'asdf.png', path: `${__dirname}/bad-path-should-not-exist` },
 			{ originalUrl: 'asdf.png', path: `${__dirname}/../../../images/SideMenuHeader.png` },
-		], '');
+		]);
 		Logger.globalLogger.enabled = true;
 
 		expect(result.length).toBe(2);
