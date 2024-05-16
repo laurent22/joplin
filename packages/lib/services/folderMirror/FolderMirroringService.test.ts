@@ -484,4 +484,77 @@ describe('FolderMirroringService', () => {
 		await mirror.fullSync();
 		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
 	});
+
+	test('should fix invalid note IDs', async () => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, {
+			'note.md': '---\ntitle: note\nid: notAnId\n---\n\nTest',
+		});
+
+		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
+
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		const note = await Note.loadByTitle('note');
+		expect(note.id).not.toBe('notAnId');
+		expect(note.id).toMatch(/^[a-z0-9]{32}$/);
+
+		await verifyDirectoryMatches(tempDir, {
+			'note.md': `---\ntitle: note\nid: ${note.id}\n---\n\nTest`,
+		});
+
+		await fs.writeFile(join(tempDir, 'note2.md'), '---\ntitle: note2\nid: not-an-id\n---\n\nTest', 'utf-8');
+
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		const note2 = await Note.loadByTitle('note2');
+		expect(note2.id).toMatch(/^[a-z0-9]{32}$/);
+
+		await verifyDirectoryMatches(tempDir, {
+			'note.md': `---\ntitle: note\nid: ${note.id}\n---\n\nTest`,
+			'note2.md': `---\ntitle: note2\nid: ${note2.id}\n---\n\nTest`,
+		});
+	});
+
+	test('should fix invalid folder IDs', async () => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, {
+			'folder/.folder.yml': 'title: folder\nid: invalid',
+			'folder/note.md': '---\ntitle: note\nid: e393d2f435dc4eae8f4dc690055c7960\n---\n\nTest',
+		});
+
+		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
+
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		const folder = await Folder.loadByTitle('folder');
+		expect(folder.id).toMatch(/^[a-z0-9]{32}$/);
+
+		const note = await Note.loadByTitle('note');
+		expect(note.id).toBe('e393d2f435dc4eae8f4dc690055c7960');
+
+		await verifyDirectoryMatches(tempDir, {
+			'folder/note.md': `---\ntitle: note\nid: ${note.id}\n---\n\nTest`,
+			'folder/.folder.yml': `title: folder\nid: ${folder.id}\n`,
+		});
+
+		await fs.writeFile(join(tempDir, 'folder', '.folder.yml'), 'title: folder\nid: invalid-again', 'utf-8');
+
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		expect(await Folder.loadByTitle('folder')).toMatchObject({
+			id: folder.id,
+			title: folder.title,
+			created_time: folder.created_time,
+		});
+
+		await verifyDirectoryMatches(tempDir, {
+			'folder/note.md': `---\ntitle: note\nid: ${note.id}\n---\n\nTest`,
+			'folder/.folder.yml': `title: folder\nid: ${folder.id}\n`,
+		});
+	});
 });

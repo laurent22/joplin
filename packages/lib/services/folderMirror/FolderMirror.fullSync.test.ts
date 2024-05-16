@@ -526,6 +526,29 @@ describe('FolderMirror.fullSync', () => {
 		});
 	});
 
+	test('should ignore invalid IDs', async () => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, {
+			'note.md': '---\ntitle: note\nid: notAnId\n---\n\nTest',
+			'folder/.folder.yml': 'title: folder\nid: another-bad-id',
+		});
+
+		const mirror = new FolderMirror(tempDir, '');
+		await mirror.fullSync();
+
+		const note = await Note.loadByTitle('note');
+		expect(note.id).not.toBe('notAnId');
+		expect(note.id).toMatch(/^[a-z0-9]{32}$/);
+
+		const folder = await Folder.loadByTitle('folder');
+		expect(folder.id).toMatch(/^[a-z0-9]{32}$/);
+
+		await verifyDirectoryMatches(tempDir, {
+			'note.md': `---\ntitle: note\nid: ${note.id}\n---\n\nTest`,
+			'folder/.folder.yml': `title: folder\nid: ${folder.id}\n`,
+		});
+	});
+
 	// it('should delete notes locally when deleted remotely', async () => {
 	// 	;
 	// });
