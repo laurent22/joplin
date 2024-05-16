@@ -11,7 +11,7 @@ Joplin mobile app supports inserting and editing vector drawings using its image
 
 ## Adding a drawing
 
-![screenshot: Note actions menu is open, an arrow points to "Draw picture"](/images/draw/add-new-image.svg)
+![Mobile editor screenshot: A red arrow points at thee second item in the note actions menu, labeled "Draw picture"](/images/draw/add-new-image.svg)
 
 Drawings can be added using the "draw picture" option in the note actions menu. When Joplin is in viewing mode, drawings are added to the end of the note. In editing mode, drawings are added at the cursor.
 
@@ -27,7 +27,7 @@ On desktop, drawings can be edited using the [Freehand Drawing plugin](https://j
 
 ### Save, undo, and exit
 
-![screenshot: Close, redo, undo, and save buttons are all labeled at the top of the screen](/images/draw/editor-toolbar-top.svg)
+![Image editor screenshot: Close, redo, undo, and save toolbar buttons are all labeled](/images/draw/editor-toolbar-top.svg)
 
 Actions for managing changes are at the top of the screen:
 - **Close**: Hides the editor. If there are unsaved changes, this gives the option to save or discard them.
@@ -39,7 +39,7 @@ Actions for managing changes are at the top of the screen:
 
 It's possible to show the label for most buttons by long-pressing:
 
-![screenshot: Undo button labeled with "Long-press"](/images/draw/long-press-edit.svg)
+![Image editor screenshot: Undo button labeled with "Long-press"](/images/draw/long-press-edit.svg)
 
 :::
 
@@ -47,7 +47,7 @@ It's possible to show the label for most buttons by long-pressing:
 
 Tools can be changed by clicking on them in the toolbar. Clicking an already-selected toolbar button allows changing that tool's settings.
 
-![screenshot: First: Arrow points to the first pen tool. Second: A pop-up menu is shown with options including color, thickness, pen type, ...](/images/draw/show-pen-menu.svg)
+![Image editor screenshot: First: Arrow points to the first pen tool. Second: A pop-up menu is shown with options including color, thickness, pen type, ...](/images/draw/show-pen-menu.svg)
 
 To see more information about a tool's setting, click the help button (<img alt="screenshot: help" src="/images/draw/help-icon.png" width="30"/>).
 
@@ -58,7 +58,7 @@ Drawings are saved as Joplin resources. To allow drawings to be edited in other 
 
 This means that it should be possible to edit and view most drawings in other apps that support SVG:
 
-<img alt="screenshot: Drawing open in other apps" src="/images/draw/drawing-opened-in-other-apps.png" width="60%"/>
+<img alt="screenshot of a drawing open in three different apps" src="/images/draw/drawing-opened-in-other-apps.png" width="60%"/>
 
 
 ## Other features
@@ -82,7 +82,7 @@ The "hand" tool's settings include:
 
 Color pickers include a "pick color from screen" tool:
 
-![screenshot: Pick color from screen tool highlighted](/images/draw/pick-color-from-screen.svg)
+![Image editor screenshot: "Pick color from screen" in the pen tool menu is highlighted](/images/draw/pick-color-from-screen.svg)
 
 This tool allows setting the current pen, text, or selection color to a color displayed on the screen.
 
@@ -90,4 +90,4 @@ This tool allows setting the current pen, text, or selection color to a color di
 
 After selecting content with the selection tool, the selection tool menu allows duplicating, deleting, and changing the color of the selection:
 
-![screenshot: Format selection includes ability to change the color of selected content](/images/draw/average-selection-color.svg)
+![Screenshot of the selection tool menu: Format selection option is labeled](/images/draw/average-selection-color.svg)
