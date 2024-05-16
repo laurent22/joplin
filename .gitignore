@@ -10,7 +10,6 @@ _vieux/
 !var/sessions/.gitkeep
 !var/SymfonyRequirements.php
 .DS_Store
-.vscode/*
 *.map
 *.pro.user
 *.sublime-workspace
