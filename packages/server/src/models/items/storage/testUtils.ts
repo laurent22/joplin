@@ -3,7 +3,7 @@
 import config from '../../../config';
 import { Item } from '../../../services/database/types';
 import { CustomErrorCode } from '../../../utils/errors';
-import { createUserAndSession, db, makeNoteSerializedBody, models } from '../../../utils/testing/testUtils';
+import { createUserAndSession, db, dbSlave, makeNoteSerializedBody, models } from '../../../utils/testing/testUtils';
 import { Config, StorageDriverConfig, StorageDriverMode } from '../../../utils/types';
 import newModelFactory from '../../factory';
 import loadStorageDriver from './loadStorageDriver';
@@ -15,7 +15,7 @@ const newTestModels = (driverConfig: StorageDriverConfig, driverConfigFallback: 
 		storageDriver: driverConfig,
 		storageDriverFallback: driverConfigFallback,
 	};
-	return newModelFactory(db(), newConfig);
+	return newModelFactory(db(), dbSlave(), newConfig);
 };
 
 export function shouldWriteToContentAndReadItBack(driverConfig: StorageDriverConfig) {
@@ -281,7 +281,7 @@ export function shouldUpdateContentStorageIdAfterSwitchingDriver(oldDriverConfig
 
 export function shouldThrowNotFoundIfNotExist(driverConfig: StorageDriverConfig) {
 	test('should throw not found if item does not exist', async () => {
-		const driver = await loadStorageDriver(driverConfig, db());
+		const driver = await loadStorageDriver(driverConfig, db(), dbSlave());
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let error: any = null;

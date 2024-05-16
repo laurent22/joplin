@@ -62,6 +62,7 @@ type RequestNote = {
 	body_html: string;
 	base_url?: string;
 	convert_to: string;
+	source?: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	anchor_names?: any[];
 	image_sizes?: object;
@@ -166,6 +167,7 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 	if ('longitude' in requestNote) output.longitude = requestNote.longitude;
 	if ('latitude' in requestNote) output.latitude = requestNote.latitude;
 	if ('altitude' in requestNote) output.altitude = requestNote.altitude;
+	if ('source' in requestNote) output.source = requestNote.source;
 
 	if (!output.markup_language) output.markup_language = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 

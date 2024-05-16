@@ -1,6 +1,9 @@
 const time = require('./time').default;
 const shim = require('./shim').default;
 const JoplinError = require('./JoplinError').default;
+const Logger = require('@joplin/utils/Logger').default;
+
+const logger = Logger.create('file-api-driver-dropbox');
 
 class FileApiDriverDropbox {
 	constructor(api) {
@@ -97,14 +100,14 @@ class FileApiDriverDropbox {
 		}
 	}
 
-	async list(path) {
+	async list(path, options) {
 		let response = await this.api().exec('POST', 'files/list_folder', {
 			path: this.makePath_(path),
 		});
 
 		let output = this.metadataToStats_(response.entries);
 
-		while (response.has_more) {
+		while (response.has_more && !options?.firstPageOnly) {
 			response = await this.api().exec('POST', 'files/list_folder/continue', {
 				cursor: response.cursor,
 			});
@@ -114,7 +117,7 @@ class FileApiDriverDropbox {
 
 		return {
 			items: output,
-			hasMore: false,
+			hasMore: !!response.has_more,
 			context: { cursor: response.cursor },
 		};
 	}
@@ -148,7 +151,9 @@ class FileApiDriverDropbox {
 			} else {
 				try {
 					response = await fetchPath('GET', path);
-				} catch (_error) {
+				} catch (error) {
+					logger.warn('Request to files/download failed. Retrying with workaround. Error: ', error);
+
 					// May 2024: Sending a GET request to files/download sometimes fails
 					// until another file is requested. Because POST requests with empty bodies don't work on iOS,
 					// we send a request for a different file, then re-request the original.
@@ -156,7 +161,7 @@ class FileApiDriverDropbox {
 					// See https://github.com/laurent22/joplin/issues/10396
 
 					// This workaround requires that the file we request exist.
-					const { items } = await this.list();
+					const { items } = await this.list('', { firstPageOnly: true });
 					const files = items.filter(item => !item.isDir && item.path !== path);
 
 					if (files.length > 0) {

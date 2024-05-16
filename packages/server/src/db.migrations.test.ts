@@ -8,10 +8,10 @@ async function dbSchemaSnapshot(db: DbConnection): Promise<any> {
 	return sqlts.toTypeScript({}, db as any);
 }
 
-describe('db', () => {
+describe('db.migrations', () => {
 
 	beforeEach(async () => {
-		await beforeAllDb('db', { autoMigrate: false });
+		await beforeAllDb('db.migrations', { autoMigrate: false });
 		await beforeEachDb();
 	});
 

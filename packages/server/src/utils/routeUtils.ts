@@ -118,7 +118,7 @@ export function isPathBasedAddressing(fileId: string): boolean {
 
 export const urlMatchesSchema = (url: string, schema: string): boolean => {
 	url = stripOffQueryParameters(url);
-	const regex = new RegExp(`${schema.replace(/:id/, '[a-zA-Z0-9]+')}$`);
+	const regex = new RegExp(`${schema.replace(/:id/, '[a-zA-Z0-9_]+')}$`);
 	return !!url.match(regex);
 };
 
@@ -314,6 +314,7 @@ export enum UrlType {
 	Privacy = 'privacy',
 	Tasks = 'admin/tasks',
 	UserDeletions = 'admin/user_deletions',
+	Reports = 'admin/reports',
 }
 
 export function makeUrl(urlType: UrlType): string {

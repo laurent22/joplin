@@ -87,7 +87,7 @@ export default class StorageCommand extends BaseCommand {
 			},
 
 			[ArgvCommand.CheckConnection]: async () => {
-				logger.info(await storageConnectionCheck(argv.connection, runContext.db, runContext.models));
+				logger.info(await storageConnectionCheck(argv.connection, runContext.db, runContext.db, runContext.models));
 			},
 
 			[ArgvCommand.DeleteDatabaseContentColumn]: async () => {
