@@ -215,9 +215,10 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	}
 
 	if (action.type === 'NAV_GO' && action.routeName === 'Notes') {
-		if (newState.selectedFolderId) {
+		if ('selectedFolderId' in newState) {
 			Setting.setValue('activeFolderId', newState.selectedFolderId);
 		}
+
 		const notesParent: NotesParent = {
 			type: action.smartFilterId ? 'SmartFilter' : 'Folder',
 			selectedItemId: action.smartFilterId ? action.smartFilterId : newState.selectedFolderId,
@@ -471,6 +472,21 @@ const initializeTempDir = async () => {
 	return tempDir;
 };
 
+const getInitialActiveFolder = async () => {
+	let folderId = Setting.value('activeFolderId');
+
+	// In some cases (e.g. new profile/install), activeFolderId hasn't been set yet.
+	// Because activeFolderId is used to determine the parent for new notes, initialize
+	// it here:
+	if (!folderId) {
+		folderId = (await Folder.defaultFolder())?.id;
+		if (folderId) {
+			Setting.setValue('activeFolderId', folderId);
+		}
+	}
+	return await Folder.load(folderId);
+};
+
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 async function initialize(dispatch: Function) {
 	shimInit();
@@ -688,10 +704,7 @@ async function initialize(dispatch: Function) {
 		// 	items: masterKeys,
 		// });
 
-		const folderId = Setting.value('activeFolderId');
-		let folder = await Folder.load(folderId);
-
-		if (!folder) folder = await Folder.defaultFolder();
+		const folder = await getInitialActiveFolder();
 
 		dispatch({
 			type: 'FOLDER_SET_COLLAPSED_ALL',
