@@ -1,3 +1,4 @@
+import { normalize } from 'path';
 import { ModelType } from '../../BaseModel';
 import { FolderEntity, NoteEntity } from '../database/types';
 import FolderMirror from './FolderMirror';
@@ -10,11 +11,25 @@ export default class FolderMirroringService {
 		return this.instance_;
 	}
 
+	// Maps from directories to mirrors
 	private mirrors_: FolderMirror[] = [];
 
 	public constructor() {}
 
 	public async mirrorFolder(outputPath: string, baseFolderId: string) {
+		outputPath = normalize(outputPath);
+
+		for (const mirror of this.mirrors_) {
+			if (mirror.baseFilePath === outputPath) {
+				if (mirror.baseFolderId === baseFolderId) {
+					await mirror.fullSync();
+					return mirror;
+				} else {
+					throw new Error('Can\'t mirror two different folders to the same path.');
+				}
+			}
+		}
+
 		const folderMirror = new FolderMirror(outputPath, baseFolderId);
 		this.mirrors_.push(folderMirror);
 		await folderMirror.fullSync();

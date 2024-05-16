@@ -241,7 +241,7 @@ export default class {
 	private fullSyncEndListeners_: ((error: unknown)=> void)[] = [];
 	private remoteLinkTracker_: LinkTracker;
 
-	public constructor(private baseFilePath: string, private baseFolderId: string) {
+	public constructor(public readonly baseFilePath: string, public readonly baseFolderId: string) {
 		if (baseFolderId === ALL_NOTES_FILTER_ID) {
 			this.baseFolderId = '';
 		}

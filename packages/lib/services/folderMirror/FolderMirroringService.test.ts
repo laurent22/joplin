@@ -67,6 +67,15 @@ describe('FolderMirroringService', () => {
 		await FolderMirroringService.instance().reset();
 	});
 
+	test('should return an existing folder mirror, if it exists', async () => {
+		const tempDir = await createTempDir();
+		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
+		expect(mirror).toBe(await FolderMirroringService.instance().mirrorFolder(tempDir, ''));
+
+		const otherTempDir = await createTempDir();
+		expect(mirror).not.toBe(await FolderMirroringService.instance().mirrorFolder(otherTempDir, ''));
+	});
+
 	test('should create notes and folders locally when created in an initially-empty, watched remote folder', async () => {
 		const tempDir = await createTempDir();
 		await FolderMirroringService.instance().mirrorFolder(tempDir, '');
