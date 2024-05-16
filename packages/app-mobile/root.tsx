@@ -1187,6 +1187,8 @@ class AppComponent extends React.Component {
 					onPrimaryContainer: theme.color5,
 					primaryContainer: theme.backgroundColor5,
 
+					outline: theme.codeBorderColor,
+
 					primary: theme.color,
 					onPrimary: theme.backgroundColor,
 

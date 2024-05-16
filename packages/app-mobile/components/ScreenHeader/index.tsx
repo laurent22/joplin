@@ -445,7 +445,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					themeId={themeId}
 					contentWrapperStyle={styles.iconButton}
 
-					iconName="extension-puzzle"
+					iconName="ionicon extension-puzzle"
 					iconStyle={styles.topIcon}
 				/>
 			);

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Icon, Card, Chip, Text } from 'react-native-paper';
+import { Card, Chip, Text } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import { Alert, Linking, StyleSheet, View } from 'react-native';
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
@@ -54,9 +54,6 @@ const onRecommendedPress = () => {
 		{ cancelable: true },
 	);
 };
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const PluginIcon = (props: any) => <Icon {...props} source='puzzle'/>;
 
 const styles = StyleSheet.create({
 	versionText: {
@@ -180,12 +177,11 @@ const PluginBox: React.FC<Props> = props => {
 		<Text variant='titleMedium'>{manifest.name}</Text> <Text variant='bodySmall' style={styles.versionText}>v{manifest.version}</Text>
 	</>;
 	return (
-		<Card style={{ margin: 8, opacity: props.isCompatible ? undefined : 0.75 }} testID='plugin-card'>
+		<Card mode='outlined' style={{ margin: 8, opacity: props.isCompatible ? undefined : 0.75 }} testID='plugin-card'>
 			<Card.Title
 				title={titleComponent}
 				titleStyle={styles.title}
 				subtitle={manifest.description}
-				left={PluginIcon}
 				right={renderRightEdgeButton}
 			/>
 			<Card.Content>

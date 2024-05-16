@@ -584,6 +584,8 @@ packages/app-mobile/components/base-screen.js
 packages/app-mobile/components/biometrics/BiometricPopup.js
 packages/app-mobile/components/biometrics/biometricAuthenticate.js
 packages/app-mobile/components/biometrics/sensorInfo.js
+packages/app-mobile/components/buttons/TextButton.js
+packages/app-mobile/components/buttons/index.js
 packages/app-mobile/components/getResponsiveValue.test.js
 packages/app-mobile/components/getResponsiveValue.js
 packages/app-mobile/components/global-style.js
