@@ -169,53 +169,73 @@ export default class ItemTree {
 		return this.move(this.pathFromId(itemId), this.pathFromId(newParentId), listeners);
 	}
 
-	public async move(fromPath: string, toPath: string, listeners: MoveActionListener): Promise<void> {
-		fromPath = normalize(fromPath);
-		toPath = normalize(toPath);
-		this.checkRep_();
+	public async move(baseFromPath: string, baseToPath: string, listeners: MoveActionListener): Promise<void> {
+		// Some actions need to be done for every item, but **after** the full tree has been moved.
+		// These actions should be added to stabilizeCallbacks.
+		type OnStabilizeCallback = ()=> Promise<void>;
+		const stabilizeCallbacks: OnStabilizeCallback[] = [];
 
-		let item = this.getAtPath(fromPath);
+		const moveInternal = async (fromPath: string, toPath: string) => {
+			fromPath = normalize(fromPath);
+			toPath = normalize(toPath);
+			this.checkRep_();
 
-		let toParentPath;
-		if (!this.hasPath(toPath)) {
-			toParentPath = dirname(toPath);
-		} else if (this.getAtPath(toPath).type_ === ModelType.Folder) {
-			toParentPath = toPath;
-			toPath = this.getUniqueItemPathInParent(toParentPath, item);
-		} else {
-			throw new Error(`Cannot move item from ${fromPath} to ${toPath} -- cannot make item a child of a non-folder.`);
-		}
+			let item = this.getAtPath(fromPath);
 
-		// Handle the case where an item is being moved from the trash.
-		if (item.deleted_time) {
-			item = { ...item, deleted_time: 0 };
-		}
+			let toParentPath;
+			if (!this.hasPath(toPath)) {
+				toParentPath = dirname(toPath);
+			} else if (this.getAtPath(toPath).type_ === ModelType.Folder) {
+				toParentPath = toPath;
+				toPath = this.getUniqueItemPathInParent(toParentPath, item);
+			} else {
+				throw new Error(`Cannot move item from ${fromPath} to ${toPath} -- cannot make item a child of a non-folder.`);
+			}
 
-		const toParentId = this.idAtPath(toParentPath);
+			// Handle the case where an item is being moved from the trash.
+			if (item.deleted_time) {
+				item = { ...item, deleted_time: 0 };
+			}
 
-		this.pathToItem_.delete(fromPath);
-		this.pathToItem_.set(toPath, item);
-		this.idToPath_.set(item.id, toPath);
+			const toParentId = this.idAtPath(toParentPath);
 
-		await listeners.onMove({
-			fromPath,
-			toPath,
-			movedItem: { ...item, parent_id: toParentId },
-		});
+			this.pathToItem_.delete(fromPath);
+			this.pathToItem_.set(toPath, item);
+			this.idToPath_.set(item.id, toPath);
 
-		const canHaveChildren = item.type_ === ModelType.Folder;
-		if (canHaveChildren) {
-			// Handle the case where an item starts with path but is not a child of it
-			const prefix = fromPath.endsWith('/') ? fromPath : `${fromPath}/`;
-			for (const [path] of this.items()) {
-				if (path.startsWith(prefix) && path !== prefix) {
-					const childToPath = join(toPath, path.substring(prefix.length));
-					await this.move(path, childToPath, listeners);
+			await listeners.onMove({
+				fromPath,
+				toPath,
+				movedItem: { ...item, parent_id: toParentId },
+			});
+
+			const canHaveChildren = item.type_ === ModelType.Folder;
+			if (canHaveChildren) {
+				// Handle the case where an item starts with path but is not a child of it
+				const prefix = fromPath.endsWith('/') ? fromPath : `${fromPath}/`;
+				for (const [path] of this.items()) {
+					if (path.startsWith(prefix) && path !== prefix) {
+						const childToPath = join(toPath, path.substring(prefix.length));
+						await moveInternal(path, childToPath);
+					}
 				}
 			}
+
+			// .onItemMove assumes an up-to-date tree. Call it after the tree has
+			// finished updating.
+			stabilizeCallbacks.push(() => {
+				return this.linkTracker?.onItemMove(item, fromPath, toPath);
+			});
+		};
+
+		await moveInternal(baseFromPath, baseToPath);
+
+		this.checkRep_();
+
+		for (const callback of stabilizeCallbacks) {
+			await callback();
 		}
 
-		await this.linkTracker?.onItemMove(item, fromPath, toPath);
 		this.checkRep_();
 	}
 
