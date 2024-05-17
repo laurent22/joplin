@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, Chip, Text } from 'react-native-paper';
+import { Card, Text } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import { StyleSheet, View } from 'react-native';
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
@@ -9,6 +9,8 @@ import ActionButton, { PluginCallback } from './ActionButton';
 import PluginInfoButton from './PluginInfoButton';
 import { ButtonType } from '../../../../buttons/TextButton';
 import RecommendedChip from './RecommendedChip';
+import SmallChip from './SmallChip';
+import { themeStyle } from '@joplin/lib/theme';
 
 export enum InstallState {
 	NotInstalled,
@@ -100,17 +102,20 @@ const PluginBox: React.FC<Props> = props => {
 	const enableButton = <ActionButton item={item} onPress={props.onToggle} title={_('Enable')}/>;
 	const aboutButton = <ActionButton type={ButtonType.Link} item={item} onPress={props.onAboutPress} title={_('About')}/>;
 
+	const theme = themeStyle(props.themeId);
+
 	const renderErrorsChip = () => {
 		if (!props.hasErrors) return null;
 
 		return (
-			<Chip
+			<SmallChip
+				foreground={theme.colorWarn}
+				background={theme.warningBackgroundColor}
 				icon='alert'
-				mode='outlined'
 				onPress={() => props.onShowPluginLog({ item })}
 			>
 				{_('Error')}
-			</Chip>
+			</SmallChip>
 		);
 	};
 
@@ -125,22 +130,21 @@ const PluginBox: React.FC<Props> = props => {
 		if (!props.item.builtIn) {
 			return null;
 		}
-		return <Chip icon='code-tags-check' mode='outlined'>{_('Built-in')}</Chip>;
+		return <SmallChip icon='code-tags-check'>{_('Built-in')}</SmallChip>;
 	};
 
 	const renderIncompatibleChip = () => {
 		if (props.isCompatible) return null;
 		return (
-			<Chip
+			<SmallChip
 				icon='alert'
-				mode='outlined'
 				onPress={() => {
 					void shim.showMessageBox(
 						PluginService.instance().describeIncompatibility(props.item.manifest),
 						{ buttons: [_('OK')] },
 					);
 				}}
-			>{_('Incompatible')}</Chip>
+			>{_('Incompatible')}</SmallChip>
 		);
 	};
 

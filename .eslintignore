@@ -613,6 +613,7 @@ packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportP
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/ActionButton.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedChip.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/SmallChip.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.test.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.js
