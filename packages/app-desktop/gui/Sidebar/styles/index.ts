@@ -85,7 +85,7 @@ export const StyledListItemAnchor = styled.a`
 	user-select: none;
 	height: 100%;
 
-	/* The background color of the selected item already shows the focus. */
+	/* A different background color is already used to indicate focus for sidebar list items. */
 	&:focus-visible {
 		outline: none;
 	}
