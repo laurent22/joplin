@@ -84,6 +84,11 @@ export const StyledListItemAnchor = styled.a`
 	align-items: center;
 	user-select: none;
 	height: 100%;
+
+	/* The background color of the selected item already shows the focus. */
+	&:focus-visible {
+		outline: none;
+	}
 `;
 
 export const StyledShareIcon = styled.i`
