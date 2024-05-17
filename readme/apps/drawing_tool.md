@@ -1,13 +1,13 @@
 # Drawing tool
 
-Joplin mobile app supports inserting and editing vector drawings using its image editor. On desktop, this is supported through the [Freehand Drawing plugin](https://joplinapp.org/plugins/plugin/io.github.personalizedrefrigerator.js-draw/).
+Joplin supports inserting and editing drawings. On mobile, this is built in. On desktop, this is supported through the [Freehand Drawing plugin](https://joplinapp.org/plugins/plugin/io.github.personalizedrefrigerator.js-draw/).
 
 ## Core features
 
-- Inserting and manipulating freehand drawings, images, and plain text.
+- Inserting and manipulating drawings, images, and plain text.
 - Drawing with a stylus and/or touchscreen.
 - Embedding multiple drawings in the same note.
-- [Very large zoom range](#near-infinite-zoom)
+- A [very large zoom range](#near-infinite-zoom) 
 
 ## On mobile
 
@@ -18,7 +18,7 @@ Joplin mobile app supports inserting and editing vector drawings using its image
   <figcaption>The note actions menu includes a "Draw picture" option.</figcaption>
 </figure>
 
-Clicking "Draw picture" adds a new drawing to the note. When Joplin is in viewing mode, drawings are added to the end of the note. In editing mode, drawings are added at the cursor.
+Clicking "Draw picture" adds a new drawing to the note. When Joplin's note viewer is open, drawings are added to the end of the note. In editing mode, drawings are added at the cursor.
 
 ### Editing an existing drawing
 
@@ -47,7 +47,7 @@ Double-click on an existing drawing to edit it:
   <figcaption>In the Rich Text editor, double-clicking allows editing an existing drawing. This also works in the markdown viewer.</figcaption>
 </figure>
 
-For more ways to edit drawings on desktop, see the [Freehand Drawing plugin's FAQ](https://joplinapp.org/plugins/plugin/io.github.personalizedrefrigerator.js-draw/#faq).
+For more ways to edit existing drawings on desktop, see the [Freehand Drawing plugin's FAQ](https://joplinapp.org/plugins/plugin/io.github.personalizedrefrigerator.js-draw/#faq).
 
 
 ## The editor
@@ -58,17 +58,16 @@ For more ways to edit drawings on desktop, see the [Freehand Drawing plugin's FA
   <img src="/images/draw/editor-toolbar-top.svg" alt=""/>
   <figcaption>The top of the editor includes options for saving, closing, and undo/redo.</figcaption>
 </figure>
-![Image editor screenshot: Close, redo, undo, and save toolbar buttons are all labeled]()
 
 Actions for managing changes are at the top of the screen:
 - **Close**: Hides the editor. If there are unsaved changes, this gives the option to save or discard them.
-- **Save**: Save changes to the drawing in Joplin, *without* closing the editor.
+- **Save**: Save changes to the drawing, *without* closing the editor.
 - **Undo**: Reverts the last change to the drawing.
-- **Redo**: Un-reverts the last change.
+- **Redo**: Redoes an undone change.
 
 :::note
 
-It's possible to show the label for most buttons by long-pressing. For example, long-pressing on the edit button shows a tooltip similar to the following:
+Long-pressing on a toolbar button shows a brief description. For example, long-pressing on the undo button shows "undo":
 
 ![](/images/draw/long-press-edit.svg)
 
@@ -76,20 +75,20 @@ It's possible to show the label for most buttons by long-pressing. For example, 
 
 ### Tools
 
-Tools can be changed by clicking on them in the toolbar. Clicking an already-selected toolbar button allows changing that tool's settings.
+Clicking on an unselected tool switches to that tool. Clicking an already-selected toolbar button allows changing that tool's settings:
 
 <figure>
   <img src="/images/draw/show-pen-menu.svg" alt=""/>
   <figcaption>Clicking on the pen tool shows a menu that includes color options, different pen styles, shapes, and autocorrect.</figcaption>
 </figure>
 
-To see more information about a tool's setting, click the help button (<img alt="help" src="/images/draw/help-icon.png" width="30"/>).
+Most tool menus have a help button (<img alt="help" src="/images/draw/help-icon.png" width="30"/>) that shows additional information about the different available settings.
 
 ## How are drawings saved?
 
-Drawings are saved as Joplin resources. To allow drawings to be edited in other applications, Joplin uses the [SVG image format](https://en.wikipedia.org/wiki/SVG).
+Drawings are saved as Joplin resources using the [SVG image format](https://en.wikipedia.org/wiki/SVG).
 
-This means that it should be possible to edit and view most drawings in other apps that support SVG:
+This means that it should be possible to view and/or edit and view drawings in other apps that support SVG:
 
 <figure>
   <img src="/images/draw/drawing-opened-in-other-apps.png" alt=""/>
