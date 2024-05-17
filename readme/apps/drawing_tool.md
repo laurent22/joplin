@@ -7,7 +7,7 @@ Joplin supports inserting and editing drawings. On mobile, this is built in. On 
 - Inserting and manipulating drawings, images, and plain text.
 - Drawing with a stylus and/or touchscreen.
 - Embedding multiple drawings in the same note.
-- A [very large zoom range](#near-infinite-zoom) 
+- A [very large zoom range](#large-zoom-range) 
 
 ## On mobile
 
