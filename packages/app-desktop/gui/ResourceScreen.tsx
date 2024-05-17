@@ -143,7 +143,8 @@ const getNextSortingOrderType = (s: SortingType): SortingType => {
 	}
 };
 
-const MAX_RESOURCES = 10000;
+const defaultMaxResources = 10000;
+const searchMaxResources = 1000;
 
 class ResourceScreenComponent extends React.Component<Props, State> {
 	public constructor(props: Props) {
@@ -157,6 +158,16 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 			},
 			isLoading: false,
 		};
+	}
+
+	private get maxResources() {
+		// Use a smaller maximum when searching for performance -- results update
+		// when the search input changes.
+		if (this.state.filter) {
+			return searchMaxResources;
+		} else {
+			return defaultMaxResources;
+		}
 	}
 
 	private reloadResourcesCounter = 0;
@@ -181,7 +192,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 				dir: this.state.sorting.type,
 				caseInsensitive: true,
 			}],
-			limit: MAX_RESOURCES,
+			limit: this.maxResources,
 			fields: ['title', 'id', 'size', 'file_extension'],
 			...searchOptions,
 		});
@@ -287,8 +298,8 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 							{_('No resources!')}
 						</div>
 						}
-						{this.state.resources && this.state.resources.length === MAX_RESOURCES &&
-							<div>{_('Warning: not all resources shown for performance reasons (limit: %s).', MAX_RESOURCES)}</div>
+						{this.state.resources && this.state.resources.length === this.maxResources &&
+							<div>{_('Warning: not all resources shown for performance reasons (limit: %s).', this.maxResources)}</div>
 						}
 						{this.state.resources && <ResourceTableComp
 							themeId={this.props.themeId}
