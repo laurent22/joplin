@@ -23,11 +23,11 @@ interface Props extends Omit<ButtonProps, 'item'|'onPress'|'children'> {
 
 export type TextButtonProps = Omit<Props, 'themeId'>;
 
-const useStyles = (themeId: number, styleOverride: StyleProp<ViewStyle>) => {
+const useStyles = ({ themeId, style: styleOverride, loading }: Props) => {
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
 
-		const overrides = StyleSheet.flatten(styleOverride);
+		const overrides = StyleSheet.flatten(styleOverride as StyleProp<ViewStyle>);
 
 		const button: TextStyle = {
 			borderRadius: 10,
@@ -51,7 +51,9 @@ const useStyles = (themeId: number, styleOverride: StyleProp<ViewStyle>) => {
 			buttonLabel: {
 				fontWeight: '600',
 				fontSize: theme.fontSize * 0.95,
-				marginLeft: 14,
+				// Additional space is needed when loading to prevent overlap
+				// with the button label.
+				marginLeft: 14 + (loading ? 10 : 0),
 				marginRight: 14,
 			},
 		});
@@ -78,11 +80,11 @@ const useStyles = (themeId: number, styleOverride: StyleProp<ViewStyle>) => {
 		};
 
 		return { styles, themeOverride };
-	}, [themeId, styleOverride]);
+	}, [themeId, styleOverride, loading]);
 };
 
 const TextButton: React.FC<Props> = props => {
-	const { styles, themeOverride } = useStyles(props.themeId, props.style);
+	const { styles, themeOverride } = useStyles(props);
 
 	let mode: ButtonProps['mode'];
 	let theme: ButtonProps['theme'];
