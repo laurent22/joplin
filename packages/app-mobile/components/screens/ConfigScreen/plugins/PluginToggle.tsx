@@ -94,6 +94,7 @@ const PluginToggle: React.FC<Props> = props => {
 		<PluginBox
 			themeId={props.themeId}
 			item={pluginItem}
+			showInfoButton={true}
 			isCompatible={isCompatible}
 			hasErrors={plugin.hasErrors}
 			onShowPluginLog={props.onShowPluginLog}

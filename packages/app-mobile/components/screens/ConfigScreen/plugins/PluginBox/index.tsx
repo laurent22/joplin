@@ -1,16 +1,12 @@
 import * as React from 'react';
-import { Card, Text } from 'react-native-paper';
+import { Card } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
-import { StyleSheet, View } from 'react-native';
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
-import shim from '@joplin/lib/shim';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
 import ActionButton, { PluginCallback } from './ActionButton';
 import PluginInfoButton from './PluginInfoButton';
 import { ButtonType } from '../../../../buttons/TextButton';
-import RecommendedChip from './RecommendedChip';
-import SmallChip from './SmallChip';
-import { themeStyle } from '@joplin/lib/theme';
+import PluginChips from './PluginChips';
+import PluginTitle from './PluginTitle';
 
 export enum InstallState {
 	NotInstalled,
@@ -29,6 +25,7 @@ interface Props {
 	themeId: number;
 	item: PluginItem;
 	isCompatible: boolean;
+	showInfoButton: boolean;
 
 	hasErrors?: boolean;
 	installState?: InstallState;
@@ -41,16 +38,6 @@ interface Props {
 	onToggle?: PluginCallback;
 	onShowPluginLog?: PluginCallback;
 }
-
-const styles = StyleSheet.create({
-	versionText: {
-		opacity: 0.8,
-	},
-	title: {
-		// Prevents the title text from being clipped on Android
-		verticalAlign: 'middle',
-	},
-});
 
 const PluginBox: React.FC<Props> = props => {
 	const manifest = props.item.manifest;
@@ -102,79 +89,27 @@ const PluginBox: React.FC<Props> = props => {
 	const enableButton = <ActionButton item={item} onPress={props.onToggle} title={_('Enable')}/>;
 	const aboutButton = <ActionButton type={ButtonType.Link} item={item} onPress={props.onAboutPress} title={_('About')}/>;
 
-	const theme = themeStyle(props.themeId);
-
-	const renderErrorsChip = () => {
-		if (!props.hasErrors) return null;
-
-		return (
-			<SmallChip
-				foreground={theme.colorWarn}
-				background={theme.warningBackgroundColor}
-				icon='alert'
-				onPress={() => props.onShowPluginLog({ item })}
-			>
-				{_('Error')}
-			</SmallChip>
-		);
-	};
-
-	const renderRecommendedChip = () => {
-		if (!props.item.manifest._recommended || !props.isCompatible) {
-			return null;
-		}
-		return <RecommendedChip themeId={props.themeId}/>;
-	};
-
-	const renderBuiltInChip = () => {
-		if (!props.item.builtIn) {
-			return null;
-		}
-		return <SmallChip icon='code-tags-check'>{_('Built-in')}</SmallChip>;
-	};
-
-	const renderIncompatibleChip = () => {
-		if (props.isCompatible) return null;
-		return (
-			<SmallChip
-				icon='alert'
-				onPress={() => {
-					void shim.showMessageBox(
-						PluginService.instance().describeIncompatibility(props.item.manifest),
-						{ buttons: [_('OK')] },
-					);
-				}}
-			>{_('Incompatible')}</SmallChip>
-		);
-	};
-
 	const renderRightEdgeButton = (buttonProps: { size: number }) => {
-		// If .onAboutPress is given (e.g. when searching), there's another way to get information
-		// about the plugin. In this case, we don't show the right-side information link.
-		if (props.onAboutPress) return null;
+		if (!props.showInfoButton) return null;
 		return <PluginInfoButton {...buttonProps} themeId={props.themeId} item={props.item}/>;
 	};
 
 	const updateStateIsIdle = props.updateState !== UpdateState.Idle;
 
-	const titleComponent = <>
-		<Text variant='titleMedium'>{manifest.name}</Text> <Text variant='bodySmall' style={styles.versionText}>v{manifest.version}</Text>
-	</>;
 	return (
 		<Card mode='outlined' style={{ margin: 8, opacity: props.isCompatible ? undefined : 0.7 }} testID='plugin-card'>
 			<Card.Title
-				title={titleComponent}
-				titleStyle={styles.title}
+				title={<PluginTitle manifest={item.manifest} />}
 				subtitle={manifest.description}
 				right={renderRightEdgeButton}
 			/>
 			<Card.Content>
-				<View style={{ flexDirection: 'row' }}>
-					{renderIncompatibleChip()}
-					{renderErrorsChip()}
-					{renderRecommendedChip()}
-					{renderBuiltInChip()}
-				</View>
+				<PluginChips
+					themeId={props.themeId}
+					item={props.item}
+					hasErrors={props.hasErrors}
+					isCompatible={props.isCompatible}
+				/>
 			</Card.Content>
 			<Card.Actions>
 				{props.onAboutPress ? aboutButton : null}

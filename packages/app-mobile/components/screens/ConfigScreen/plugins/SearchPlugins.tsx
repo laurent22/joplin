@@ -95,6 +95,7 @@ const PluginSearch: React.FC<Props> = props => {
 				item={item.item}
 				installState={item.installState}
 				isCompatible={PluginService.instance().isCompatible(manifest)}
+				showInfoButton={false}
 				onInstall={installPlugin}
 				onAboutPress={openWebsiteForPlugin}
 			/>
