@@ -50,7 +50,7 @@ describe('SearchPlugins', () => {
 		const repoApi = await newRepoApi(InstallMode.Default);
 		render(<SearchWrapper repoApi={repoApi}/>);
 
-		const searchBox = screen.queryByPlaceholderText('Search');
+		const searchBox = screen.queryByPlaceholderText('Search plugins');
 		expect(searchBox).toBeVisible();
 
 		// No plugin cards should be visible by default
@@ -78,7 +78,7 @@ describe('SearchPlugins', () => {
 		const repoApi = await newRepoApi(InstallMode.Restricted);
 		render(<SearchWrapper repoApi={repoApi}/>);
 
-		const searchBox = screen.queryByPlaceholderText('Search');
+		const searchBox = screen.queryByPlaceholderText('Search plugins');
 		expect(searchBox).toBeVisible();
 
 		const user = userEvent.setup();
@@ -104,7 +104,7 @@ describe('SearchPlugins', () => {
 		const repoApi = await newRepoApi(InstallMode.Default);
 		render(<SearchWrapper repoApi={repoApi}/>);
 
-		const searchBox = screen.queryByPlaceholderText('Search');
+		const searchBox = screen.queryByPlaceholderText('Search plugins');
 		const user = userEvent.setup();
 		await user.type(searchBox, 'abc');
 

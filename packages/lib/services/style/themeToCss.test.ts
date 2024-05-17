@@ -45,6 +45,7 @@ const input: Theme = {
 	searchMarkerColor: 'black',
 
 	warningBackgroundColor: '#FFD08D',
+	deleteColor: '#F00000',
 
 	tableBackgroundColor: 'rgb(247, 247, 247)',
 	codeBackgroundColor: 'rgb(243, 243, 243)',

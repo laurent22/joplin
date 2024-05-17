@@ -105,8 +105,9 @@ const PluginSearch: React.FC<Props> = props => {
 		<View style={{ flexDirection: 'column' }}>
 			<Searchbar
 				testID='searchbar'
-				placeholder={_('Search')}
+				placeholder={_('Search plugins')}
 				onChangeText={setSearchQuery}
+				mode='view'
 				value={searchQuery}
 				editable={props.repoApiInitialized}
 			/>

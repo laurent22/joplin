@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { Card, Chip, Text } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
-import { Alert, Linking, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import shim from '@joplin/lib/shim';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import ActionButton, { PluginCallback } from './ActionButton';
 import PluginInfoButton from './PluginInfoButton';
+import { ButtonType } from '../../../../buttons/TextButton';
+import RecommendedChip from './RecommendedChip';
 
 export enum InstallState {
 	NotInstalled,
@@ -37,23 +39,6 @@ interface Props {
 	onToggle?: PluginCallback;
 	onShowPluginLog?: PluginCallback;
 }
-
-const onRecommendedPress = () => {
-	Alert.alert(
-		'',
-		_('The Joplin team has vetted this plugin and it meets our standards for security and performance.'),
-		[
-			{
-				text: _('Learn more'),
-				onPress: () => Linking.openURL('https://github.com/joplin/plugins/blob/master/readme/recommended.md'),
-			},
-			{
-				text: _('OK'),
-			},
-		],
-		{ cancelable: true },
-	);
-};
 
 const styles = StyleSheet.create({
 	versionText: {
@@ -105,6 +90,7 @@ const PluginBox: React.FC<Props> = props => {
 	const deleteButton = (
 		<ActionButton
 			item={item}
+			type={ButtonType.Delete}
 			onPress={props.onDelete}
 			disabled={props.item.deleted}
 			title={props.item.deleted ? _('Deleted') : _('Delete')}
@@ -112,7 +98,7 @@ const PluginBox: React.FC<Props> = props => {
 	);
 	const disableButton = <ActionButton item={item} onPress={props.onToggle} title={_('Disable')}/>;
 	const enableButton = <ActionButton item={item} onPress={props.onToggle} title={_('Enable')}/>;
-	const aboutButton = <ActionButton item={item} onPress={props.onAboutPress} icon='web' title={_('About')}/>;
+	const aboutButton = <ActionButton type={ButtonType.Link} item={item} onPress={props.onAboutPress} title={_('About')}/>;
 
 	const renderErrorsChip = () => {
 		if (!props.hasErrors) return null;
@@ -132,13 +118,7 @@ const PluginBox: React.FC<Props> = props => {
 		if (!props.item.manifest._recommended || !props.isCompatible) {
 			return null;
 		}
-		return <Chip
-			icon='crown'
-			mode='outlined'
-			onPress={onRecommendedPress}
-		>
-			{_('Recommended')}
-		</Chip>;
+		return <RecommendedChip themeId={props.themeId}/>;
 	};
 
 	const renderBuiltInChip = () => {
@@ -177,7 +157,7 @@ const PluginBox: React.FC<Props> = props => {
 		<Text variant='titleMedium'>{manifest.name}</Text> <Text variant='bodySmall' style={styles.versionText}>v{manifest.version}</Text>
 	</>;
 	return (
-		<Card mode='outlined' style={{ margin: 8, opacity: props.isCompatible ? undefined : 0.75 }} testID='plugin-card'>
+		<Card mode='outlined' style={{ margin: 8, opacity: props.isCompatible ? undefined : 0.7 }} testID='plugin-card'>
 			<Card.Title
 				title={titleComponent}
 				titleStyle={styles.title}

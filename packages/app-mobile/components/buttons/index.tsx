@@ -1,7 +1,7 @@
 import * as React from 'react';
-import TextButton, { ButtonType, Props as TextButtonProps } from './TextButton';
+import TextButton, { ButtonType, TextButtonProps } from './TextButton';
 
-type Props = Omit<TextButtonProps, 'type'|'themeId'>;
+type Props = Omit<TextButtonProps, 'type'>;
 
 const makeTextButtonComponent = (type: ButtonType) => {
 	return (props: Props) => {
