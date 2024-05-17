@@ -23,7 +23,7 @@ interface Props extends Omit<ButtonProps, 'item'|'onPress'|'children'> {
 
 export type TextButtonProps = Omit<Props, 'themeId'>;
 
-const useStyles = ({ themeId, style: styleOverride, loading }: Props) => {
+const useStyles = ({ themeId, style: styleOverride, loading, icon }: Props) => {
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
 
@@ -53,7 +53,7 @@ const useStyles = ({ themeId, style: styleOverride, loading }: Props) => {
 				fontSize: theme.fontSize * 0.95,
 				// Additional space is needed when loading to prevent overlap
 				// with the button label.
-				marginLeft: 14 + (loading ? 10 : 0),
+				marginLeft: 14 + (loading || icon ? 10 : 0),
 				marginRight: 14,
 			},
 		});
@@ -80,7 +80,7 @@ const useStyles = ({ themeId, style: styleOverride, loading }: Props) => {
 		};
 
 		return { styles, themeOverride };
-	}, [themeId, styleOverride, loading]);
+	}, [themeId, styleOverride, loading, icon]);
 };
 
 const TextButton: React.FC<Props> = props => {
