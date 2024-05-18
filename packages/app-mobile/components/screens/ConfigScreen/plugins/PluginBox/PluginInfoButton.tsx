@@ -3,12 +3,17 @@ import * as React from 'react';
 import { useCallback, useState } from 'react';
 import { IconButton } from 'react-native-paper';
 import PluginInfoModal from '../PluginInfoModal';
+import { PluginCallback } from './ActionButton';
 
 interface Props {
 	themeId: number;
 	size: number;
 	item: PluginItem;
 	onModalDismiss?: ()=> void;
+
+	onUpdate: PluginCallback;
+	onDelete: PluginCallback;
+	onToggle: PluginCallback;
 }
 
 const PluginInfoButton: React.FC<Props> = props => {
@@ -24,7 +29,11 @@ const PluginInfoButton: React.FC<Props> = props => {
 
 	return (
 		<>
-			{showInfoModal ? <PluginInfoModal {...props} visible={true} onModalDismiss={onModalDismiss} /> : null}
+			<PluginInfoModal
+				{...props}
+				visible={showInfoModal}
+				onModalDismiss={onModalDismiss}
+			/>
 			<IconButton
 				size={props.size}
 				icon='information'

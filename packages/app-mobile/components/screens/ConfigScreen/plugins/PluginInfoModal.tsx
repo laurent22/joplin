@@ -2,7 +2,7 @@ import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import { useCallback, useMemo } from 'react';
-import { Button, Card, List, Portal, Text } from 'react-native-paper';
+import { Button, Card, Divider, Portal, Switch, Text } from 'react-native-paper';
 import getPluginIssueReportUrl from '@joplin/lib/services/plugins/utils/getPluginIssueReportUrl';
 import { Linking, ScrollView, StyleSheet, View } from 'react-native';
 import DismissibleDialog from '../../../DismissibleDialog';
@@ -10,6 +10,8 @@ import openWebsiteForPlugin from './utils/openWebsiteForPlugin';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import PluginChips from './PluginBox/PluginChips';
 import PluginTitle from './PluginBox/PluginTitle';
+import { PluginCallback } from './PluginBox/ActionButton';
+import TextButton, { ButtonType } from '../../../buttons/TextButton';
 
 interface Props {
 	themeId: number;
@@ -17,22 +19,53 @@ interface Props {
 	item: PluginItem|null;
 	visible: boolean;
 	onModalDismiss: ()=> void;
+
+	onUpdate: PluginCallback;
+	onDelete: PluginCallback;
+	onToggle: PluginCallback;
 }
 
 const styles = StyleSheet.create({
-	aboutPluginContainer: {
-		paddingLeft: 10,
-		paddingRight: 10,
-		paddingBottom: 10,
-	},
 	descriptionText: {
 		marginTop: 5,
 		marginBottom: 5,
 	},
+	buttonContainer: {
+		display: 'flex',
+		flexDirection: 'column',
+		gap: 20,
+		marginLeft: 10,
+		marginRight: 10,
+		marginTop: 30,
+	},
 	fraudulentPluginButton: {
 		opacity: 0.6,
 	},
+	enabledSwitchContainer: {
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		padding: 10,
+		marginTop: 12,
+		marginBottom: 14,
+	},
 });
+
+interface EnabledSwitchProps {
+	item: PluginItem;
+	onToggle: PluginCallback;
+}
+
+const EnabledSwitch: React.FC<EnabledSwitchProps> = props => {
+	const onChange = useCallback(() => {
+		props.onToggle({ item: props.item });
+	}, [props.item, props.onToggle]);
+	return <View style={styles.enabledSwitchContainer}>
+		<Text>{_('Enabled')}</Text>
+		<Switch value={props.item.enabled} onChange={onChange} />
+	</View>;
+};
 
 const PluginInfoModalContent: React.FC<Props> = props => {
 	const manifest = props.item.manifest;
@@ -75,11 +108,10 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 	}, [reportIssueUrl]);
 
 	const reportIssueButton = (
-		<List.Item
-			left={props => <List.Icon {...props} icon='bug'/>}
-			title={_('Report an issue')}
+		<TextButton
+			type={ButtonType.Secondary}
 			onPress={onReportIssuePress}
-		/>
+		>{_('Report an issue')}</TextButton>
 	);
 
 	const onReportFraudulentPress = useCallback(() => {
@@ -89,12 +121,15 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 	return <>
 		<ScrollView>
 			{aboutPlugin}
-			<List.Item
-				left={props => <List.Icon {...props} icon='web'/>}
-				title={_('About')}
-				onPress={onAboutPress}
-			/>
-			{ reportIssueUrl ? reportIssueButton : null }
+			<EnabledSwitch item={props.item} onToggle={props.onToggle}/>
+			<Divider />
+			<View style={styles.buttonContainer}>
+				<TextButton
+					type={ButtonType.Primary}
+					onPress={onAboutPress}
+				>{_('About')}</TextButton>
+				{ reportIssueUrl ? reportIssueButton : null }
+			</View>
 		</ScrollView>
 		<Button
 			icon='shield-bug'

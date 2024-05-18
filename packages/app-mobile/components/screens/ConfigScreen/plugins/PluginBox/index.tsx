@@ -91,7 +91,16 @@ const PluginBox: React.FC<Props> = props => {
 
 	const renderRightEdgeButton = (buttonProps: { size: number }) => {
 		if (!props.showInfoButton) return null;
-		return <PluginInfoButton {...buttonProps} themeId={props.themeId} item={props.item}/>;
+		return (
+			<PluginInfoButton
+				{...buttonProps}
+				themeId={props.themeId}
+				item={props.item}
+				onDelete={props.onDelete}
+				onToggle={props.onToggle}
+				onUpdate={props.onUpdate}
+			/>
+		);
 	};
 
 	const updateStateIsIdle = props.updateState !== UpdateState.Idle;
