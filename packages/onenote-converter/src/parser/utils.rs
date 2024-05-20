@@ -74,29 +74,17 @@ impl Display for StyleSet {
     }
 }
 
-#[wasm_bindgen]
-extern "C" {
-    #[derive(Debug)]
-    pub type Buffer;
-
-    #[derive(Debug)]
-    pub type Nothing;
-
-    #[derive(Debug)]
-    pub type FileContent;
-}
-
 #[wasm_bindgen(module = "/node_functions.js")]
 extern "C" {
     #[wasm_bindgen(js_name = isDirectory, catch)]
-    pub fn is_directory(path: &str) -> std::result::Result<bool, JsValue>;
+    pub unsafe fn is_directory(path: &str) -> std::result::Result<bool, JsValue>;
 
     #[wasm_bindgen(js_name = readDir, catch)]
-    fn read_dir_js(path: &str) -> std::result::Result<FileContent, JsValue>;
+    unsafe fn read_dir_js(path: &str) -> std::result::Result<JsValue, JsValue>;
 }
 
-pub fn read_dir(path: &Path) -> Option<Vec<String>> {
-    let result_ptr = read_dir_js(path.as_os_str().to_str().unwrap()).unwrap();
+pub unsafe fn read_dir(path: &str) -> Option<Vec<String>> {
+    let result_ptr = read_dir_js(path).unwrap();
 
     let array = Uint8Array::new(&result_ptr);
     let data = array.to_vec();
@@ -107,14 +95,11 @@ pub fn read_dir(path: &Path) -> Option<Vec<String>> {
 
 #[wasm_bindgen(module = "fs")]
 extern "C" {
-    #[wasm_bindgen(js_name = writeFileSync, catch)]
-    pub fn write_file(path: &str, data: &[u8]) -> std::result::Result<Buffer, JsValue>;
-
     #[wasm_bindgen(js_name = readFileSync, catch)]
-    pub fn read_file(path: &str) -> std::result::Result<FileContent, JsValue>;
+    pub unsafe fn read_file(path: &str) -> std::result::Result<JsValue, JsValue>;
 
     #[wasm_bindgen(js_name = existsSync, catch)]
-    pub fn exists(path: &str) -> std::result::Result<bool, JsValue>;
+    pub unsafe fn exists(path: &str) -> std::result::Result<bool, JsValue>;
 }
 
 pub(crate) trait Utf16ToString {

@@ -1,12 +1,11 @@
 pub use crate::parser::Parser;
 use color_eyre::eyre::Result;
-use color_eyre::eyre::{eyre, ContextCompat};
+use color_eyre::eyre::{eyre};
 use std::panic;
-use std::path::Path;
-use std::path::PathBuf;
 use wasm_bindgen::prelude::wasm_bindgen;
 
-use crate::utils::utils::{log, log_warn};
+use crate::utils::utils::{log_warn, log};
+use crate::utils::{get_file_extension, get_file_name, get_output_path, get_parent_dir, join_path};
 
 mod notebook;
 mod page;
@@ -22,73 +21,57 @@ extern crate web_sys;
 pub fn oneNoteConverter(input: &str, output: &str, base_path: &str) {
     panic::set_hook(Box::new(console_error_panic_hook::hook));
 
-    let input_paths = PathBuf::from(input);
-    let output_dir = PathBuf::from(output);
-
-    if let Err(e) = _main(input_paths, output_dir, base_path) {
-        log_warn!("Something went wrong: {:?}", e);
+    if let Err(e) = _main(input, output, base_path) {
+        log_warn!("{:?}", e);
     }
 }
 
-fn _main(input_paths: PathBuf, output_dir: PathBuf, base_path: &str) -> Result<()> {
-    assert!(!output_dir.is_file());
-
-    log!("Input path: {:?}", input_paths);
-    convert(&input_paths, &output_dir, base_path)?;
+fn _main(input_path: &str, output_dir: &str, base_path: &str) -> Result<()> {
+    log!("Starting parsing of the file: {:?}", input_path);
+    convert(&input_path, &output_dir, base_path)?;
 
     Ok(())
 }
 
-pub fn convert(path: &Path, output_dir: &Path, base_path: &str) -> Result<()> {
+pub fn convert(path: &str, output_dir: &str, base_path: &str) -> Result<()> {
     let mut parser = Parser::new();
 
-    match path.extension().map(|p| p.to_string_lossy()).as_deref() {
-        Some("one") => {
-            let name = path.file_name().unwrap_or_default().to_string_lossy();
-            log!("Processing .one file {}", name);
+    let extension: String = unsafe { get_file_extension(path) }
+        .unwrap()
+        .as_string()
+        .unwrap();
 
-            let section = parser.parse_section(&path)?;
+    match extension.as_str() {
+        ".one" => {
+            let name: String = unsafe { get_file_name(path) }.unwrap().as_string().unwrap();
+            log!("Parsing .one file: {}", name);
 
-            section::Renderer::new().render(&section, output_dir)?;
+            let section = parser.parse_section(path.to_owned())?;
+
+            section::Renderer::new().render(&section, output_dir.to_owned())?;
         }
-        Some("onetoc2") => {
-            let name = path
-                .file_name()
-                .unwrap_or_default()
-                .to_str()
+        ".onetoc2" => {
+            let name: String = unsafe { get_file_name(path) }.unwrap().as_string().unwrap();
+            log!("Parsing .onetoc2 file: {}", name);
+
+            let notebook = parser.parse_notebook(path.to_owned())?;
+
+            let notebook_name = unsafe { get_parent_dir(path) }
+                .expect("Input file has no parent folder")
+                .as_string()
+                .expect("Parent folder has no name");
+            log!("notebook name: {:?}", notebook_name);
+
+            let notebook_output_dir = unsafe { get_output_path(base_path, output_dir, path) }
+                .unwrap()
+                .as_string()
                 .unwrap();
-            log!("Processing .onetoc2 file {}", name);
+            log!("Notebok directory: {:?}", notebook_output_dir);
 
-            let notebook = parser.parse_notebook(&path)?;
-
-            let notebook_name = path
-                .parent()
-                .wrap_err("Input file has no parent folder")?
-                .file_name()
-                .wrap_err("Parent folder has no name")?
-                .to_str()
-                .unwrap()
-                .to_owned();
-
-            // TODO: Replace '/'
-            let path_str = path.to_str().unwrap();
-            let group_section_directory = path_str
-                .strip_suffix(name)
-                .unwrap()
-                .strip_suffix(&(notebook_name.clone() + r"/"))
-                .unwrap()
-                .strip_prefix(base_path)
-                .or(Some(""))
-                .unwrap();
-
-
-            notebook::Renderer::new().render(
-                &notebook, 
-                &notebook_name, 
-                &output_dir.join(group_section_directory)
-            )?;
+            log!("notebook output dir: {:?}", notebook_output_dir);
+            notebook::Renderer::new().render(&notebook, &notebook_name, &notebook_output_dir)?;
         }
-        Some(ext) => return Err(eyre!("Invalid file extension: {}", ext)),
+        ext => return Err(eyre!("Invalid file extension: {}", ext)),
         _ => return Err(eyre!("Couldn't determine file type: {:?}", path)),
     }
 

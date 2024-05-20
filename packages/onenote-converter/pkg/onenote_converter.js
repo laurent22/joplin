@@ -1,15 +1,94 @@
 let imports = {};
 imports['__wbindgen_placeholder__'] = module.exports;
 let wasm;
-const { isDirectory, readDir, mkdirSyncRecursive } = require(String.raw`./snippets/onenote-converter-6981a13478d338f0/node_functions.js`);
-const { writeFileSync, readFileSync, existsSync } = require(`fs`);
-const { TextDecoder, TextEncoder } = require(`util`);
+const { isDirectory, readDir, mkdirSyncRecursive, removePrefix, getOutputPath, getParentDir, normalizeAndWriteFile } = require(String.raw`./snippets/onenote-converter-6981a13478d338f0/node_functions.js`);
+const { readFileSync, existsSync } = require(`fs`);
+const { basename, extname, dirname, join } = require(`path`);
+const { TextEncoder, TextDecoder } = require(`util`);
 
 const heap = new Array(128).fill(undefined);
 
 heap.push(undefined, null, true, false);
 
 function getObject(idx) { return heap[idx]; }
+
+let WASM_VECTOR_LEN = 0;
+
+let cachedUint8Memory0 = null;
+
+function getUint8Memory0() {
+    if (cachedUint8Memory0 === null || cachedUint8Memory0.byteLength === 0) {
+        cachedUint8Memory0 = new Uint8Array(wasm.memory.buffer);
+    }
+    return cachedUint8Memory0;
+}
+
+let cachedTextEncoder = new TextEncoder('utf-8');
+
+const encodeString = (typeof cachedTextEncoder.encodeInto === 'function'
+    ? function (arg, view) {
+    return cachedTextEncoder.encodeInto(arg, view);
+}
+    : function (arg, view) {
+    const buf = cachedTextEncoder.encode(arg);
+    view.set(buf);
+    return {
+        read: arg.length,
+        written: buf.length
+    };
+});
+
+function passStringToWasm0(arg, malloc, realloc) {
+
+    if (realloc === undefined) {
+        const buf = cachedTextEncoder.encode(arg);
+        const ptr = malloc(buf.length, 1) >>> 0;
+        getUint8Memory0().subarray(ptr, ptr + buf.length).set(buf);
+        WASM_VECTOR_LEN = buf.length;
+        return ptr;
+    }
+
+    let len = arg.length;
+    let ptr = malloc(len, 1) >>> 0;
+
+    const mem = getUint8Memory0();
+
+    let offset = 0;
+
+    for (; offset < len; offset++) {
+        const code = arg.charCodeAt(offset);
+        if (code > 0x7F) break;
+        mem[ptr + offset] = code;
+    }
+
+    if (offset !== len) {
+        if (offset !== 0) {
+            arg = arg.slice(offset);
+        }
+        ptr = realloc(ptr, len, len = offset + arg.length * 3, 1) >>> 0;
+        const view = getUint8Memory0().subarray(ptr + offset, ptr + len);
+        const ret = encodeString(arg, view);
+
+        offset += ret.written;
+        ptr = realloc(ptr, len, offset, 1) >>> 0;
+    }
+
+    WASM_VECTOR_LEN = offset;
+    return ptr;
+}
+
+function isLikeNone(x) {
+    return x === undefined || x === null;
+}
+
+let cachedInt32Memory0 = null;
+
+function getInt32Memory0() {
+    if (cachedInt32Memory0 === null || cachedInt32Memory0.byteLength === 0) {
+        cachedInt32Memory0 = new Int32Array(wasm.memory.buffer);
+    }
+    return cachedInt32Memory0;
+}
 
 let heap_next = heap.length;
 
@@ -28,15 +107,6 @@ function takeObject(idx) {
 let cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
 
 cachedTextDecoder.decode();
-
-let cachedUint8Memory0 = null;
-
-function getUint8Memory0() {
-    if (cachedUint8Memory0 === null || cachedUint8Memory0.byteLength === 0) {
-        cachedUint8Memory0 = new Uint8Array(wasm.memory.buffer);
-    }
-    return cachedUint8Memory0;
-}
 
 function getStringFromWasm0(ptr, len) {
     ptr = ptr >>> 0;
@@ -116,71 +186,6 @@ function debugString(val) {
     // TODO we could test for more things here, like `Set`s and `Map`s.
     return className;
 }
-
-let WASM_VECTOR_LEN = 0;
-
-let cachedTextEncoder = new TextEncoder('utf-8');
-
-const encodeString = (typeof cachedTextEncoder.encodeInto === 'function'
-    ? function (arg, view) {
-    return cachedTextEncoder.encodeInto(arg, view);
-}
-    : function (arg, view) {
-    const buf = cachedTextEncoder.encode(arg);
-    view.set(buf);
-    return {
-        read: arg.length,
-        written: buf.length
-    };
-});
-
-function passStringToWasm0(arg, malloc, realloc) {
-
-    if (realloc === undefined) {
-        const buf = cachedTextEncoder.encode(arg);
-        const ptr = malloc(buf.length, 1) >>> 0;
-        getUint8Memory0().subarray(ptr, ptr + buf.length).set(buf);
-        WASM_VECTOR_LEN = buf.length;
-        return ptr;
-    }
-
-    let len = arg.length;
-    let ptr = malloc(len, 1) >>> 0;
-
-    const mem = getUint8Memory0();
-
-    let offset = 0;
-
-    for (; offset < len; offset++) {
-        const code = arg.charCodeAt(offset);
-        if (code > 0x7F) break;
-        mem[ptr + offset] = code;
-    }
-
-    if (offset !== len) {
-        if (offset !== 0) {
-            arg = arg.slice(offset);
-        }
-        ptr = realloc(ptr, len, len = offset + arg.length * 3, 1) >>> 0;
-        const view = getUint8Memory0().subarray(ptr + offset, ptr + len);
-        const ret = encodeString(arg, view);
-
-        offset += ret.written;
-        ptr = realloc(ptr, len, offset, 1) >>> 0;
-    }
-
-    WASM_VECTOR_LEN = offset;
-    return ptr;
-}
-
-let cachedInt32Memory0 = null;
-
-function getInt32Memory0() {
-    if (cachedInt32Memory0 === null || cachedInt32Memory0.byteLength === 0) {
-        cachedInt32Memory0 = new Int32Array(wasm.memory.buffer);
-    }
-    return cachedInt32Memory0;
-}
 /**
 * @param {string} input
 * @param {string} output
@@ -209,27 +214,41 @@ function getArrayU8FromWasm0(ptr, len) {
     return getUint8Memory0().subarray(ptr / 1, ptr / 1 + len);
 }
 
-module.exports.__wbg_existsSync_fef3d1ee40dd0bc2 = function() { return handleError(function (arg0, arg1) {
-    const ret = existsSync(getStringFromWasm0(arg0, arg1));
-    return ret;
+module.exports.__wbg_join_13fcc6aa248ce243 = function() { return handleError(function (arg0, arg1, arg2, arg3) {
+    const ret = join(getStringFromWasm0(arg0, arg1), getStringFromWasm0(arg2, arg3));
+    return addHeapObject(ret);
 }, arguments) };
+
+module.exports.__wbindgen_string_get = function(arg0, arg1) {
+    const obj = getObject(arg1);
+    const ret = typeof(obj) === 'string' ? obj : undefined;
+    var ptr1 = isLikeNone(ret) ? 0 : passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    var len1 = WASM_VECTOR_LEN;
+    getInt32Memory0()[arg0 / 4 + 1] = len1;
+    getInt32Memory0()[arg0 / 4 + 0] = ptr1;
+};
 
 module.exports.__wbindgen_object_drop_ref = function(arg0) {
     takeObject(arg0);
 };
+
+module.exports.__wbg_existsSync_fef3d1ee40dd0bc2 = function() { return handleError(function (arg0, arg1) {
+    const ret = existsSync(getStringFromWasm0(arg0, arg1));
+    return ret;
+}, arguments) };
 
 module.exports.__wbg_isDirectory_8e0fb33be0dac663 = function() { return handleError(function (arg0, arg1) {
     const ret = isDirectory(getStringFromWasm0(arg0, arg1));
     return ret;
 }, arguments) };
 
-module.exports.__wbg_writeFileSync_dec3d3709c4ea593 = function() { return handleError(function (arg0, arg1, arg2, arg3) {
-    const ret = writeFileSync(getStringFromWasm0(arg0, arg1), getArrayU8FromWasm0(arg2, arg3));
+module.exports.__wbg_normalizeAndWriteFile_ec3f9624dc064f6f = function() { return handleError(function (arg0, arg1, arg2, arg3) {
+    const ret = normalizeAndWriteFile(getStringFromWasm0(arg0, arg1), getArrayU8FromWasm0(arg2, arg3));
     return addHeapObject(ret);
 }, arguments) };
 
-module.exports.__wbg_mkdirSyncRecursive_b92f184dee879e44 = function() { return handleError(function (arg0, arg1) {
-    const ret = mkdirSyncRecursive(getStringFromWasm0(arg0, arg1));
+module.exports.__wbg_removePrefix_7a999edd559fd0e6 = function() { return handleError(function (arg0, arg1, arg2, arg3) {
+    const ret = removePrefix(getStringFromWasm0(arg0, arg1), getStringFromWasm0(arg2, arg3));
     return addHeapObject(ret);
 }, arguments) };
 
@@ -238,13 +257,43 @@ module.exports.__wbindgen_string_new = function(arg0, arg1) {
     return addHeapObject(ret);
 };
 
-module.exports.__wbg_readFileSync_dce2cb2a612e5268 = function() { return handleError(function (arg0, arg1) {
-    const ret = readFileSync(getStringFromWasm0(arg0, arg1));
+module.exports.__wbg_mkdirSyncRecursive_b92f184dee879e44 = function() { return handleError(function (arg0, arg1) {
+    const ret = mkdirSyncRecursive(getStringFromWasm0(arg0, arg1));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_extname_0c314acf648141d7 = function() { return handleError(function (arg0, arg1) {
+    const ret = extname(getStringFromWasm0(arg0, arg1));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_basename_8509b1ba32f9422a = function() { return handleError(function (arg0, arg1) {
+    const ret = basename(getStringFromWasm0(arg0, arg1));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_getParentDir_3ed7ef3bfa04fc4c = function() { return handleError(function (arg0, arg1) {
+    const ret = getParentDir(getStringFromWasm0(arg0, arg1));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_getOutputPath_c8878b16ae903260 = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4, arg5) {
+    const ret = getOutputPath(getStringFromWasm0(arg0, arg1), getStringFromWasm0(arg2, arg3), getStringFromWasm0(arg4, arg5));
     return addHeapObject(ret);
 }, arguments) };
 
 module.exports.__wbg_readDir_f1ea9d82729fd652 = function() { return handleError(function (arg0, arg1) {
     const ret = readDir(getStringFromWasm0(arg0, arg1));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_readFileSync_dce2cb2a612e5268 = function() { return handleError(function (arg0, arg1) {
+    const ret = readFileSync(getStringFromWasm0(arg0, arg1));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_dirname_a04a74019d90c213 = function() { return handleError(function (arg0, arg1) {
+    const ret = dirname(getStringFromWasm0(arg0, arg1));
     return addHeapObject(ret);
 }, arguments) };
 

@@ -3,7 +3,7 @@ use crate::parser::property::common::Color;
 use crate::parser::section::{Section, SectionEntry};
 use crate::templates::notebook::Toc;
 use crate::utils::utils::log;
-use crate::utils::{make_dir, write_file};
+use crate::utils::{join_path, make_dir, remove_prefix, write_file};
 use crate::{section, templates};
 use color_eyre::eyre::{eyre, Result};
 use palette::rgb::Rgb;
@@ -19,18 +19,14 @@ impl Renderer {
         Renderer
     }
 
-    pub fn render(&mut self, notebook: &Notebook, name: &str, output_dir: &Path) -> Result<()> {
-        log!("Create outputdir: {:?}", output_dir);
-        let _ = make_dir(output_dir.as_os_str().to_str().unwrap());
+    pub fn render(&mut self, notebook: &Notebook, name: &str, output_dir: &str) -> Result<()> {
+        log!("Notebook name: {:?} ", name);
+        let _ = unsafe { make_dir(output_dir) };
 
-        let notebook_dir = output_dir.join(sanitize_filename::sanitize(name));
+        // let notebook_dir = unsafe { join_path(output_dir, sanitize_filename::sanitize(name).as_str()) }.unwrap().as_string().unwrap();
+        let notebook_dir = output_dir.to_owned();
 
-        if !notebook_dir.is_dir() {
-            let copy_notebook_dir = notebook_dir.clone();
-            let path = copy_notebook_dir.into_os_string().into_string().unwrap();
-            log!("Create notebookdir: {:?}", path);
-            let _ = make_dir(&path);
-        }
+        let _ = unsafe { make_dir(&notebook_dir) };
 
         let mut toc = Vec::new();
 
@@ -39,23 +35,30 @@ impl Renderer {
                 SectionEntry::Section(section) => {
                     toc.push(Toc::Section(self.render_section(
                         section,
-                        &notebook_dir,
-                        output_dir,
+                        notebook_dir.clone(),
+                        output_dir.into(),
                     )?));
                 }
                 SectionEntry::SectionGroup(group) => {
                     let dir_name = sanitize_filename::sanitize(group.display_name());
-                    let group_dir = notebook_dir.join(dir_name);
-                    if !group_dir.is_dir() {
-                        log!("Create groupdir {:?}", group_dir);
-                        let _ = make_dir(group_dir.as_os_str().to_str().unwrap());
-                    }
+                    let section_group_dir =
+                        unsafe { join_path(notebook_dir.as_str(), dir_name.as_str()) }
+                            .unwrap()
+                            .as_string()
+                            .unwrap();
+
+                    log!("Section group directory: {:?}", section_group_dir);
+                    let _ = unsafe { make_dir(section_group_dir.as_str()) };
 
                     let mut entries = Vec::new();
 
                     for entry in group.entries() {
                         if let SectionEntry::Section(section) = entry {
-                            entries.push(self.render_section(section, &group_dir, &output_dir)?);
+                            entries.push(self.render_section(
+                                section,
+                                section_group_dir.clone(),
+                                output_dir.to_owned(),
+                            )?);
                         } else {
                             return Err(eyre!("Nested section groups are not yet supported"));
                         }
@@ -70,9 +73,11 @@ impl Renderer {
         }
 
         let toc_html = templates::notebook::render(name, &toc)?;
-        let toc_file = output_dir.join(format!("{}.html", name));
-        let path_as_str = toc_file.as_os_str().to_str().unwrap();
-        let _ = write_file(path_as_str, toc_html.as_bytes());
+        let toc_path = unsafe { join_path(output_dir, format!("{}.html", name).as_str()) }
+            .unwrap()
+            .as_string()
+            .unwrap();
+        // let _ =  unsafe { write_file(toc_path.as_str(), toc_html.as_bytes()) };
 
         Ok(())
     }
@@ -80,15 +85,21 @@ impl Renderer {
     fn render_section(
         &mut self,
         section: &Section,
-        notebook_dir: &Path,
-        base_dir: &Path,
+        notebook_dir: String,
+        base_dir: String,
     ) -> Result<templates::notebook::Section> {
         let mut renderer = section::Renderer::new();
-        let path = renderer.render(section, notebook_dir)?;
+        let section_path = renderer.render(section, notebook_dir)?;
+        log!("section_path: {:?}", section_path);
 
+        let path_from_base_dir = unsafe { remove_prefix(section_path.as_str(), base_dir.as_str()) }
+            .unwrap()
+            .as_string()
+            .unwrap();
+        log!("path_from_base_dir: {:?}", path_from_base_dir);
         Ok(templates::notebook::Section {
             name: section.display_name().to_string(),
-            path: path.strip_prefix(base_dir)?.to_string_lossy().to_string(),
+            path: path_from_base_dir,
             color: section.color().map(prepare_color),
         })
     }

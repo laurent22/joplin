@@ -72,33 +72,59 @@ impl Display for StyleSet {
     }
 }
 
-#[wasm_bindgen]
-extern "C" {
-    pub type Buffer;
-
-    #[derive(Debug)]
-    pub type Nothing;
-
-    #[derive(Debug)]
-    pub type FileContent;
-}
-
 #[wasm_bindgen(module = "/node_functions.js")]
 extern "C" {
     #[wasm_bindgen(js_name = mkdirSyncRecursive, catch)]
-    pub fn make_dir(path: &str) -> std::result::Result<Nothing, JsValue>;
+    pub unsafe fn make_dir(path: &str) -> std::result::Result<JsValue, JsValue>;
+
+    #[wasm_bindgen(js_name = pathSep, catch)]
+    pub unsafe fn path_sep() -> std::result::Result<JsValue, JsValue>;
+
+    #[wasm_bindgen(js_name = removePrefix, catch)]
+    pub unsafe fn remove_prefix(
+        base_path: &str,
+        prefix: &str,
+    ) -> std::result::Result<JsValue, JsValue>;
+
+    #[wasm_bindgen(js_name = getOutputPath, catch)]
+    pub unsafe fn get_output_path(
+        input_dir: &str,
+        output_dir: &str,
+        file_path: &str,
+    ) -> std::result::Result<JsValue, JsValue>;
+
+    #[wasm_bindgen(js_name = getParentDir, catch)]
+    pub unsafe fn get_parent_dir(input_dir: &str) -> std::result::Result<JsValue, JsValue>;
+
+    #[wasm_bindgen(js_name = normalizeAndWriteFile, catch)]
+    pub unsafe fn write_file(path: &str, data: &[u8]) -> std::result::Result<JsValue, JsValue>;
 }
 
 #[wasm_bindgen(module = "fs")]
 extern "C" {
-    #[wasm_bindgen(js_name = writeFileSync, catch)]
-    pub fn write_file(path: &str, data: &[u8]) -> std::result::Result<Buffer, JsValue>;
+    // #[wasm_bindgen(js_name = writeFileSync, catch)]
+    // pub unsafe fn write_file(path: &str, data: &[u8]) -> std::result::Result<JsValue, JsValue>;
 
     #[wasm_bindgen(js_name = readFileSync, catch)]
-    pub fn read_file(path: &str) -> std::result::Result<FileContent, JsValue>;
+    pub unsafe fn read_file(path: &str) -> std::result::Result<JsValue, JsValue>;
 
     #[wasm_bindgen(js_name = existsSync, catch)]
-    pub fn exists(path: &str) -> std::result::Result<bool, JsValue>;
+    pub unsafe fn exists(path: &str) -> std::result::Result<bool, JsValue>;
+}
+
+#[wasm_bindgen(module = "path")]
+extern "C" {
+    #[wasm_bindgen(js_name = basename, catch)]
+    pub unsafe fn get_file_name(path: &str) -> std::result::Result<JsValue, JsValue>;
+
+    #[wasm_bindgen(js_name = extname, catch)]
+    pub unsafe fn get_file_extension(path: &str) -> std::result::Result<JsValue, JsValue>;
+
+    #[wasm_bindgen(js_name = dirname, catch)]
+    pub unsafe fn get_dir_name(path: &str) -> std::result::Result<JsValue, JsValue>;
+
+    #[wasm_bindgen(js_name = join, catch)]
+    pub unsafe fn join_path(path_1: &str, path_2: &str) -> std::result::Result<JsValue, JsValue>;
 }
 
 pub mod utils {

@@ -3,7 +3,6 @@ use crate::section;
 use crate::utils::StyleSet;
 use color_eyre::Result;
 use std::collections::{HashMap, HashSet};
-use std::path::PathBuf;
 
 pub(crate) mod content;
 pub(crate) mod embedded_file;
@@ -16,7 +15,7 @@ pub(crate) mod rich_text;
 pub(crate) mod table;
 
 pub(crate) struct Renderer<'a> {
-    output: PathBuf,
+    output: String,
     section: &'a mut section::Renderer,
 
     in_list: bool,
@@ -25,7 +24,7 @@ pub(crate) struct Renderer<'a> {
 }
 
 impl<'a> Renderer<'a> {
-    pub(crate) fn new(output: PathBuf, section: &'a mut section::Renderer) -> Self {
+    pub(crate) fn new(output: String, section: &'a mut section::Renderer) -> Self {
         Self {
             output,
             section,

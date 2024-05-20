@@ -6,16 +6,25 @@ import { rtrimSlashes } from '../../path-utils';
 import { oneNoteConverter } from '@joplin/onenote-converter';
 import * as AdmZip from 'adm-zip';
 import InteropService_Importer_Md from './InteropService_Importer_Md';
-import shim from '../../shim';
+import { join, resolve } from 'path';
+import Logger from '@joplin/utils/Logger';
+import path = require('path');
+
+const logger = Logger.create('InteropService_Importer_OneNote');
 
 export default class InteropService_Importer_OneNote extends InteropService_Importer_Base {
 	protected importedNotes: Record<string, NoteEntity> = {};
 
-	public async exec(result: ImportExportResult) {
+	private getEntryDirectory(unzippedPath: string, entryName: string) {
+		const withoutBasePath = entryName.replace(unzippedPath, '');
+		return path.normalize(withoutBasePath).split(path.sep)[0];
+	}
 
+	public async exec(result: ImportExportResult) {
 		const sourcePath = rtrimSlashes(this.sourcePath_);
 		const unzipTempDirectory = await this.temporaryDirectory_(true);
 		const zip = new AdmZip(sourcePath);
+		logger.info('Unzipping files...');
 		zip.extractAllTo(unzipTempDirectory, false);
 
 		const files = zip.getEntries();
@@ -24,34 +33,35 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			return result;
 		}
 
-		const baseFolderFromBackup = shim.getParentFolderName(files[0].entryName);
-
 		// files that don't have a name seems to be local only and shouldn't be processed
 		const notebookFiles = zip.getEntries()
 			.filter(e => e.name !== '.onetoc2' && e.name !== 'OneNote_RecycleBin.onetoc2');
-		const tableOfContentFiles = notebookFiles.filter(n => n.name.endsWith('.onetoc2'));
 
-		const validNotebookFiles = tableOfContentFiles.length ? tableOfContentFiles : notebookFiles;
+		const tempOutputDirectory = await this.temporaryDirectory_(true);
+		const baseFolder = this.getEntryDirectory(unzipTempDirectory, files[0].entryName);
+		const notebookBaseDir = path.join(unzipTempDirectory, baseFolder, path.sep);
+		const outputDirectory2 = path.join(tempOutputDirectory, baseFolder);
 
-		const outputDirectory = await this.temporaryDirectory_(true);
-		for (const notebookFile of validNotebookFiles) {
-			const notebookBaseDir = `${unzipTempDirectory}/${baseFolderFromBackup}/`;
-			const notebookFilePath = `${unzipTempDirectory}/${notebookFile.entryName}`;
+		logger.info('Extracting OneNote to HTML');
+		for (const notebookFile of notebookFiles) {
+			const notebookFilePath = join(unzipTempDirectory, notebookFile.entryName);
 			try {
-				await oneNoteConverter(notebookFilePath, outputDirectory, notebookBaseDir);
+				await oneNoteConverter(notebookFilePath, resolve(outputDirectory2), notebookBaseDir);
 			} catch (error) {
 				console.error(error);
 			}
 		}
 
+		logger.info('Importing HTML into Joplin');
 		const importer = new InteropService_Importer_Md();
 		importer.setMetadata({ fileExtensions: ['html'] });
-		await importer.init(outputDirectory, {
+		await importer.init(tempOutputDirectory, {
 			...this.options_,
 			format: 'html',
 			outputFormat: ImportModuleOutputFormat.Html,
 
 		});
+		logger.info('Finished');
 		result = await importer.exec(result);
 
 		// remover temp directories?
