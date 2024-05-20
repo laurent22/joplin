@@ -26,6 +26,10 @@ export interface AppStateDialog {
 	props: Record<string, any>;
 }
 
+export interface EditorScrollPercents {
+	[noteId: string]: number;
+}
+
 export interface AppState extends State {
 	route: AppStateRoute;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -34,8 +38,7 @@ export interface AppState extends State {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	windowContentSize: any;
 	watchedNoteFiles: string[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	lastEditorScrollPercents: any;
+	lastEditorScrollPercents: EditorScrollPercents;
 	devToolsVisible: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	visibleDialogs: any; // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
