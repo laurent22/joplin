@@ -2,7 +2,7 @@ import { DbConnection, connectDb, disconnectDb, truncateTables } from '../../db'
 import { User, Session, Item, Uuid } from '../../services/database/types';
 import { createDb, CreateDbOptions } from '../../tools/dbTools';
 import modelFactory from '../../models/factory';
-import { AppContext, Env } from '../types';
+import { AppContext, DatabaseConfigClient, Env } from '../types';
 import config, { initConfig } from '../../config';
 import Logger from '@joplin/utils/Logger';
 import FakeCookies from './koa/FakeCookies';
@@ -29,9 +29,10 @@ import initLib from '@joplin/lib/initLib';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
-const packageRootDir = path.dirname(path.dirname(path.dirname(__dirname)));
+export const packageRootDir = path.dirname(path.dirname(path.dirname(__dirname)));
 
 let db_: DbConnection = null;
+let dbSlave_: DbConnection = null;
 
 // require('source-map-support').install();
 
@@ -68,12 +69,23 @@ function initGlobalLogger() {
 	initLib(globalLogger);
 }
 
+export const getDatabaseClientType = () => {
+	if (process.env.JOPLIN_TESTS_SERVER_DB === 'pg') return DatabaseConfigClient.PostgreSQL;
+	return DatabaseConfigClient.SQLite;
+};
+
 let createdDbPath_: string = null;
+let createdDbSlavePath_: string = null;
 export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOptions = null) {
 	unitName = unitName.replace(/\//g, '_');
 
+	const useDbSlave = createDbOptions?.envValues && createDbOptions?.envValues.DB_USE_SLAVE === '1';
+
 	createdDbPath_ = `${packageRootDir}/db-test-${unitName}.sqlite`;
 	await fs.remove(createdDbPath_);
+
+	createdDbSlavePath_ = `${packageRootDir}/db-slave-test-${unitName}.sqlite`;
+	await fs.remove(createdDbSlavePath_);
 
 	const tempDir = `${packageRootDir}/temp/test-${unitName}`;
 	await fs.mkdirp(tempDir);
@@ -84,20 +96,29 @@ export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOpt
 	//
 	// JOPLIN_TESTS_SERVER_DB=pg yarn test
 
-	if (process.env.JOPLIN_TESTS_SERVER_DB === 'pg') {
+	if (getDatabaseClientType() === DatabaseConfigClient.PostgreSQL) {
 		await initConfig(Env.Dev, parseEnv({
 			DB_CLIENT: 'pg',
+
 			POSTGRES_DATABASE: unitName,
 			POSTGRES_USER: 'joplin',
 			POSTGRES_PASSWORD: 'joplin',
+
+			SLAVE_POSTGRES_DATABASE: unitName,
+			SLAVE_POSTGRES_USER: 'joplin',
+			SLAVE_POSTGRES_PASSWORD: 'joplin',
+
 			SUPPORT_EMAIL: 'testing@localhost',
+			...createDbOptions?.envValues,
 		}), {
 			tempDir: tempDir,
 		});
 	} else {
 		await initConfig(Env.Dev, parseEnv({
 			SQLITE_DATABASE: createdDbPath_,
+			SLAVE_SQLITE_DATABASE: createdDbSlavePath_,
 			SUPPORT_EMAIL: 'testing@localhost',
+			...createDbOptions?.envValues,
 		}), {
 			tempDir: tempDir,
 		});
@@ -107,6 +128,13 @@ export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOpt
 
 	await createDb(config().database, { dropIfExists: true, ...createDbOptions });
 	db_ = await connectDb(config().database);
+
+	if (useDbSlave) {
+		await createDb(config().databaseSlave, { dropIfExists: true, ...createDbOptions });
+		dbSlave_ = await connectDb(config().databaseSlave);
+	} else {
+		dbSlave_ = db_;
+	}
 
 	const mustache = new MustacheService(config().viewDir, config().baseUrl);
 	await mustache.loadPartials();
@@ -122,6 +150,11 @@ export async function afterAllTests() {
 	if (db_) {
 		await disconnectDb(db_);
 		db_ = null;
+	}
+
+	if (dbSlave_) {
+		await disconnectDb(dbSlave_);
+		dbSlave_ = null;
 	}
 
 	if (tempDir_) {
@@ -208,7 +241,7 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 	const appLogger = Logger.create('AppTest');
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const baseAppContext = await setupAppContext({} as any, Env.Dev, db_, () => appLogger);
+	const baseAppContext = await setupAppContext({} as any, Env.Dev, db_, dbSlave_, () => appLogger);
 
 	// Set type to "any" because the Koa context has many properties and we
 	// don't need to mock all of them.
@@ -257,8 +290,16 @@ export function db() {
 	return db_;
 }
 
+export function dbSlave() {
+	return dbSlave_;
+}
+
+export function dbSlaveSync() {
+
+}
+
 export function models() {
-	return modelFactory(db(), config());
+	return modelFactory(db(), dbSlave(), config());
 }
 
 export function parseHtml(html: string): Document {
@@ -391,6 +432,11 @@ export async function deleteNote(userId: Uuid, noteJopId: string): Promise<void>
 
 export async function updateFolder(sessionId: string, folder: FolderEntity): Promise<Item> {
 	return updateItem(sessionId, `root:/${folder.id}.md:`, makeFolderSerializedBody(folder));
+}
+
+export async function deleteFolder(userId: string, folderJopId: string): Promise<void> {
+	const item = await models().item().loadByJopId(userId, folderJopId, { fields: ['id'] });
+	await models().item().delete(item.id);
 }
 
 export async function createFolder(sessionId: string, folder: FolderEntity): Promise<Item> {

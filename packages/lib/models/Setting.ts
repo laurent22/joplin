@@ -993,7 +993,7 @@ class Setting extends BaseModel {
 				public: true,
 				section: 'note',
 				appTypes: [AppType.Desktop],
-				label: () => _('Auto-pair braces, parenthesis, quotations, etc.'),
+				label: () => _('Auto-pair braces, parentheses, quotations, etc.'),
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
@@ -1216,16 +1216,29 @@ class Setting extends BaseModel {
 				section: 'plugins',
 				public: true,
 				appTypes: [AppType.Mobile],
-				show: (_settings) => {
+				show: (settings) => {
 					// Hide on iOS due to App Store guidelines. See
 					// https://github.com/laurent22/joplin/pull/10086 for details.
-					return shim.mobilePlatform() !== 'ios';
+					return shim.mobilePlatform() !== 'ios' && settings['plugins.pluginSupportEnabled'];
 				},
 				needRestart: true,
 				advanced: true,
 
 				label: () => _('Plugin WebView debugging'),
 				description: () => _('Allows debugging mobile plugins. See %s for details.', 'https://https://joplinapp.org/help/api/references/mobile_plugin_debugging/'),
+			},
+
+			'plugins.pluginSupportEnabled': {
+				value: false,
+				public: true,
+				autoSave: true,
+				section: 'plugins',
+				advanced: true,
+				type: SettingItemType.Bool,
+				appTypes: [AppType.Mobile],
+				label: () => _('Enable plugin support'),
+				// On mobile, we have a screen that manages this setting when it's disabled.
+				show: (settings) => settings['plugins.pluginSupportEnabled'],
 			},
 
 			'plugins.devPluginPaths': {
@@ -1283,6 +1296,13 @@ class Setting extends BaseModel {
 				},
 				storage: SettingStorage.File,
 				isGlobal: true,
+			},
+
+			showMenuBar: {
+				value: true, // Show the menu bar by default
+				type: SettingItemType.Bool,
+				public: false,
+				appTypes: [AppType.Desktop],
 			},
 
 			startMinimized: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'application', public: true, appTypes: [AppType.Desktop], label: () => _('Start application minimised in the tray icon') },
@@ -2103,6 +2123,7 @@ class Setting extends BaseModel {
 	}
 
 	// Low-level method to load a setting directly from the database. Should not be used in most cases.
+	// Does not apply setting default values.
 	public static async loadOne(key: string): Promise<CacheItem | null> {
 		if (this.keyStorage(key) === SettingStorage.File) {
 			let fileSettings = await this.fileHandler.load();
@@ -2113,10 +2134,14 @@ class Setting extends BaseModel {
 				fileSettings = mergeGlobalAndLocalSettings(rootFileSettings, fileSettings);
 			}
 
-			return {
-				key,
-				value: fileSettings[key],
-			};
+			if (key in fileSettings) {
+				return {
+					key,
+					value: fileSettings[key],
+				};
+			} else {
+				return null;
+			}
 		}
 
 		// Always check in the database first, including for secure settings,

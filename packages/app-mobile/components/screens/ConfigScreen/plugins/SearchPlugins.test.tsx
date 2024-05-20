@@ -1,6 +1,6 @@
 import * as React from 'react';
 import RepositoryApi, { InstallMode } from '@joplin/lib/services/plugins/RepositoryApi';
-import { afterAllCleanUp, afterEachCleanUp, mockMobilePlatform, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+import { mockMobilePlatform, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 
 import { render, screen, userEvent, waitFor } from '@testing-library/react-native';
 import '@testing-library/react-native/extend-expect';
@@ -10,6 +10,7 @@ import Setting from '@joplin/lib/models/Setting';
 import { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import pluginServiceSetup from './testUtils/pluginServiceSetup';
 import newRepoApi from './testUtils/newRepoApi';
+import createMockReduxStore from '../../../../utils/testing/createMockReduxStore';
 
 interface WrapperProps {
 	repoApi: RepositoryApi;
@@ -42,10 +43,8 @@ describe('SearchPlugins', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);
-		pluginServiceSetup();
+		pluginServiceSetup(createMockReduxStore());
 	});
-	afterEach(() => afterEachCleanUp());
-	afterAll(() => afterAllCleanUp());
 
 	it('should find results', async () => {
 		const repoApi = await newRepoApi(InstallMode.Default);

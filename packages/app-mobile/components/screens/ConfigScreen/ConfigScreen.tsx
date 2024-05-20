@@ -32,6 +32,7 @@ import PluginStates, { getSearchText as getPluginStatesSearchText } from './plug
 import PluginUploadButton, { canInstallPluginsFromFile, buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
 import NoteImportButton, { importButtonDefaultTitle, importButtonDescription } from './NoteExportSection/NoteImportButton';
 import SectionDescription from './SectionDescription';
+import EnablePluginSupportPage from './plugins/EnablePluginSupportPage';
 import getPackageInfo from '../../../utils/getPackageInfo';
 import versionInfo from '@joplin/lib/versionInfo';
 
@@ -483,29 +484,44 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				shared.updateSettingValue(this, pluginStatesKey, value);
 			};
 
-			addSettingComponent(
-				<PluginStates
-					key={'plugin-states'}
-					styles={this.styles()}
-					themeId={this.props.themeId}
-					pluginSettings={settings[pluginStatesKey]}
-
-					updatePluginStates={updatePluginStates}
-					shouldShowBasedOnSearchQuery={this.state.searching ? matchesSearchQuery : null}
-				/>,
-				getPluginStatesSearchText(),
-			);
-
-			if (canInstallPluginsFromFile()) {
+			if (settings['plugins.pluginSupportEnabled']) {
 				addSettingComponent(
-					<PluginUploadButton
-						key='plugins-install-from-file'
+					<PluginStates
+						key={'plugin-states'}
+						styles={this.styles()}
+						themeId={this.props.themeId}
 						pluginSettings={settings[pluginStatesKey]}
+
 						updatePluginStates={updatePluginStates}
+						shouldShowBasedOnSearchQuery={this.state.searching ? matchesSearchQuery : null}
 					/>,
-					pluginUploadButtonSearchText(),
+					getPluginStatesSearchText(),
+				);
+
+				if (canInstallPluginsFromFile()) {
+					addSettingComponent(
+						<PluginUploadButton
+							key='plugins-install-from-file'
+							pluginSettings={settings[pluginStatesKey]}
+							updatePluginStates={updatePluginStates}
+						/>,
+						pluginUploadButtonSearchText(),
+					);
+				}
+			} else {
+				const enablePluginSupport = () => {
+					shared.updateSettingValue(this, 'plugins.pluginSupportEnabled', true);
+				};
+				addSettingComponent(
+					<EnablePluginSupportPage
+						key='plugin-support-disabled-screen'
+						themeId={this.props.themeId}
+						onEnablePluginSupport={enablePluginSupport}
+					/>,
+					['plugins', _('Plugins')],
 				);
 			}
+
 		}
 
 		if (section.name === 'sync') {
@@ -550,7 +566,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			addSettingButton('fix_search_engine_index', this.state.fixingSearchIndex ? _('Fixing search index...') : _('Fix search index'), this.fixSearchEngineIndexButtonPress_, { disabled: this.state.fixingSearchIndex, description: _('Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.') });
 			const syncTargetInfo = SyncTargetRegistry.infoById(this.state.settings['sync.target']);
 			if (syncTargetInfo.supportsShare) {
-				addSettingButton('manage_shares_button', _('Manage shared folders'), this.manageSharesPress_);
+				addSettingButton('manage_shares_button', _('Manage shared notebooks'), this.manageSharesPress_);
 			}
 		}
 

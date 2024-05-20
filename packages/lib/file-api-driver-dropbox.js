@@ -1,6 +1,9 @@
 const time = require('./time').default;
 const shim = require('./shim').default;
 const JoplinError = require('./JoplinError').default;
+const Logger = require('@joplin/utils/Logger').default;
+
+const logger = Logger.create('file-api-driver-dropbox');
 
 class FileApiDriverDropbox {
 	constructor(api) {
@@ -97,14 +100,14 @@ class FileApiDriverDropbox {
 		}
 	}
 
-	async list(path) {
+	async list(path, options) {
 		let response = await this.api().exec('POST', 'files/list_folder', {
 			path: this.makePath_(path),
 		});
 
 		let output = this.metadataToStats_(response.entries);
 
-		while (response.has_more) {
+		while (response.has_more && !options?.firstPageOnly) {
 			response = await this.api().exec('POST', 'files/list_folder/continue', {
 				cursor: response.cursor,
 			});
@@ -114,7 +117,7 @@ class FileApiDriverDropbox {
 
 		return {
 			items: output,
-			hasMore: false,
+			hasMore: !!response.has_more,
 			context: { cursor: response.cursor },
 		};
 	}
@@ -130,16 +133,44 @@ class FileApiDriverDropbox {
 			// support POST requests with an empty body:
 			//
 			// https://www.dropboxforum.com/t5/Dropbox-API-Support-Feedback/Error-1017-quot-cannot-parse-response-quot/td-p/589595
+			const needsFetchWorkaround = shim.mobilePlatform() === 'ios';
 
-			const response = await this.api().exec(
-				'GET',
-				'files/download',
-				null,
-				{
-					'Dropbox-API-Arg': JSON.stringify({ path: this.makePath_(path) }),
-				},
-				options,
-			);
+			const fetchPath = (method, path) => {
+				return this.api().exec(
+					method,
+					'files/download',
+					null,
+					{ 'Dropbox-API-Arg': JSON.stringify({ path: this.makePath_(path) }) },
+					options,
+				);
+			};
+
+			let response;
+			if (!needsFetchWorkaround) {
+				response = await fetchPath('POST', path);
+			} else {
+				try {
+					response = await fetchPath('GET', path);
+				} catch (error) {
+					logger.warn('Request to files/download failed. Retrying with workaround. Error: ', error);
+
+					// May 2024: Sending a GET request to files/download sometimes fails
+					// until another file is requested. Because POST requests with empty bodies don't work on iOS,
+					// we send a request for a different file, then re-request the original.
+					//
+					// See https://github.com/laurent22/joplin/issues/10396
+
+					// This workaround requires that the file we request exist.
+					const { items } = await this.list('', { firstPageOnly: true });
+					const files = items.filter(item => !item.isDir && item.path !== path);
+
+					if (files.length > 0) {
+						await fetchPath('GET', files[0].path);
+					}
+
+					response = await fetchPath('GET', path);
+				}
+			}
 			return response;
 		} catch (error) {
 			if (this.hasErrorCode_(error, 'not_found')) {

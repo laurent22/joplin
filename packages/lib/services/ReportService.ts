@@ -332,7 +332,7 @@ export default class ReportService {
 
 		sections.push(section);
 
-		section = { title: _('Folders'), body: [] };
+		section = { title: _('Notebooks'), body: [] };
 
 		const folders = await Folder.all({
 			order: [{ by: 'title', dir: 'ASC' }],

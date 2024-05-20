@@ -38,7 +38,7 @@ describe('Logger', () => {
 	});
 
 	it('should log to file', async () => {
-		jest.useFakeTimers().setSystemTime(new Date('2020-01-01'));
+		jest.useFakeTimers().setSystemTime(new Date('2020-01-01 00:00:00'));
 
 		const logger = createLogger();
 		logger.debug('one');
@@ -57,8 +57,24 @@ describe('Logger', () => {
 		jest.useRealTimers();
 	});
 
+	test.each([
+		[['one', 'two'], 'one two'],
+		[[true, false, undefined, null], '<true> <false> <undefined> <null>'],
+		[['123', 123], '123 123'],
+		[[['a', 'b', ['sub1', 'sub2']]], '[a, b, [sub1, sub2]]'],
+		[[''], ''],
+		[[{ that: 'is json', sub: { key1: 'abc', key2: 'def' } }], '{"that":"is json","sub":{"key1":"abc","key2":"def"}}'],
+	])('should format messages correctly', async (input, expected) => {
+		jest.useFakeTimers().setSystemTime(new Date('2020-01-01 00:00:00'));
+		const logger = createLogger();
+		logger.info(...input);
+		await logger.waitForFileWritesToComplete_();
+		expect(await getLogContent()).toBe(`2020-01-01 00:00:00: testing: ${expected}\n`);
+		jest.useRealTimers();
+	});
+
 	// it('should keep the last lines', async () => {
-	// 	jest.useFakeTimers().setSystemTime(new Date('2020-01-01'));
+	// 	jest.useFakeTimers().setSystemTime(new Date('2020-01-01 00:00:00'));
 
 	// 	const logger = createLogger();
 	// 	logger.keptLineCount = 2;

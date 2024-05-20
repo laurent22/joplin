@@ -10,7 +10,6 @@ _vieux/
 !var/sessions/.gitkeep
 !var/SymfonyRequirements.php
 .DS_Store
-.vscode/*
 *.map
 *.pro.user
 *.sublime-workspace
@@ -223,6 +222,7 @@ packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.test.js
 packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js
 packages/app-desktop/gui/MainScreen/commands/toggleEditors.js
 packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js
+packages/app-desktop/gui/MainScreen/commands/toggleMenuBar.js
 packages/app-desktop/gui/MainScreen/commands/toggleNoteList.js
 packages/app-desktop/gui/MainScreen/commands/toggleNoteType.js
 packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.js
@@ -585,6 +585,7 @@ packages/app-mobile/components/screens/ConfigScreen/SettingItem.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsButton.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsToggle.js
 packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/ActionButton.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.js

@@ -340,6 +340,20 @@ describe('services/SearchEngine', () => {
 		expect((await engine.search('testing')).length).toBe(1);
 	}));
 
+	it('should use nonbreaking spaces as separators', (async () => {
+		await Note.save({
+			title: 'Test',
+			body: 'This is\u00A0a\u00A0test\r\nof different\r\nspace separators.',
+		});
+
+		await engine.syncTables();
+
+		expect((await engine.search('test')).length).toBe(1);
+		expect((await engine.search('different')).length).toBe(1);
+		expect((await engine.search('space')).length).toBe(1);
+		expect((await engine.search('separators')).length).toBe(1);
+	}));
+
 	it('should supports various query types', (async () => {
 		let rows;
 

@@ -14,7 +14,7 @@ export interface Options {
 	assignDriverId?: boolean;
 }
 
-export default async function(config: StorageDriverConfig | number, db: DbConnection, options: Options = null): Promise<StorageDriverBase | null> {
+export default async function(config: StorageDriverConfig | number, db: DbConnection, dbSlave: DbConnection, options: Options = null): Promise<StorageDriverBase | null> {
 	if (!config) return null;
 
 	options = {
@@ -27,14 +27,14 @@ export default async function(config: StorageDriverConfig | number, db: DbConnec
 	if (typeof config === 'number') {
 		storageId = config;
 
-		const models = newModelFactory(db, globalConfig());
+		const models = newModelFactory(db, dbSlave, globalConfig());
 		const storage = await models.storage().byId(storageId);
 		if (!storage) throw new Error(`No such storage ID: ${storageId}`);
 
 		config = parseStorageDriverConnectionString(storage.connection_string);
 	} else {
 		if (options.assignDriverId) {
-			const models = newModelFactory(db, globalConfig());
+			const models = newModelFactory(db, dbSlave, globalConfig());
 
 			const connectionString = serializeStorageConfig(config);
 			let storage = await models.storage().byConnectionString(connectionString);

@@ -212,6 +212,8 @@ command | 16
 
 Gets all notes
 
+By default, this call will return the all notes **except** the notes in the trash folder and any conflict note. To include these too, you can specify `include_deleted=1` and `include_conflicts=1` as query parameters.
+
 ### GET /notes/:id
 
 Gets note with ID :id

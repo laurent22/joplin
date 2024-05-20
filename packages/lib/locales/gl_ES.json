@@ -53,6 +53,9 @@
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		""
 	],
+	"%s tab opened": [
+		""
+	],
 	"%s: %d notes": [
 		"%s: %d notas"
 	],
@@ -122,6 +125,9 @@
 	"Accept": [
 		""
 	],
+	"Accepted shares": [
+		""
+	],
 	"Access denied: Please check your username and password": [
 		""
 	],
@@ -158,7 +164,13 @@
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		""
 	],
+	"All item sync failures have been marked as \"ignored\".": [
+		""
+	],
 	"All potential ports are in use - please report the issue at %s": [
+		""
+	],
+	"Allows debugging mobile plugins. See %s for details.": [
 		""
 	],
 	"Also displays unset and hidden config variables.": [
@@ -168,6 +180,9 @@
 		""
 	],
 	"Always ask": [
+		""
+	],
+	"Always open %s files without asking.": [
 		""
 	],
 	"Always resize": [
@@ -272,6 +287,9 @@
 	"Bulleted List": [
 		""
 	],
+	"by %s": [
+		""
+	],
 	"Can Share": [
 		""
 	],
@@ -371,6 +389,9 @@
 	"Collapse": [
 		""
 	],
+	"Collapse %s": [
+		""
+	],
 	"Coming alarms": [
 		"Alarmas próximas"
 	],
@@ -391,6 +412,12 @@
 	],
 	"Completed decryption.": [
 		"Descifrado completado."
+	],
+	"Completed with warnings:\n%s": [
+		""
+	],
+	"completion date": [
+		""
 	],
 	"Compress old changes": [
 		""
@@ -519,9 +546,6 @@
 	"Dashboard": [
 		""
 	],
-	"Database v%s": [
-		""
-	],
 	"Date": [
 		""
 	],
@@ -554,6 +578,9 @@
 	],
 	"Deleted remote items: %d.": [
 		"Elementos remotos borrados: %d."
+	],
+	"Deletes notes permanently, skipping the trash.": [
+		""
 	],
 	"Deletes the given notebook.": [
 		"Eliminar o carderno indicado."
@@ -840,6 +867,9 @@
 	"Expand": [
 		""
 	],
+	"Expand %s": [
+		""
+	],
 	"Export": [
 		"Exportar"
 	],
@@ -865,6 +895,9 @@
 		""
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
+		""
+	],
+	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
 		""
 	],
 	"Fatal error:": [
@@ -899,9 +932,6 @@
 	],
 	"Focus title": [
 		"Foco no título"
-	],
-	"Folders": [
-		"Cartafoles"
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		""
@@ -969,6 +999,9 @@
 	"Heading": [
 		""
 	],
+	"Here's what we do to make plugins safer:": [
+		""
+	],
 	"Hide %s": [
 		"Ocultar %s"
 	],
@@ -1014,6 +1047,18 @@
 	"Import": [
 		"Importar"
 	],
+	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+		""
+	],
+	"Import from JEX": [
+		""
+	],
+	"Import notes from a JEX (Joplin Export) file.": [
+		""
+	],
+	"Imported successfully!": [
+		""
+	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		"Importando de «%s» como formato «%s». Agarde..."
 	],
@@ -1046,6 +1091,9 @@
 	],
 	"In progress": [
 		"En proceso"
+	],
+	"Incompatible": [
+		""
 	],
 	"Increase indent level": [
 		""
@@ -1099,6 +1147,9 @@
 		""
 	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
+		""
+	],
+	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
 		""
 	],
 	"Joplin Export Directory": [
@@ -1167,6 +1218,9 @@
 	"Layout button sequence": [
 		""
 	],
+	"Learn more": [
+		""
+	],
 	"Leave it blank to download the language files from the default website": [
 		""
 	],
@@ -1178,6 +1232,9 @@
 	],
 	"Light": [
 		"Claro"
+	],
+	"Like any software you install, plugins can potentially cause security issues or data loss.": [
+		""
 	],
 	"Lines": [
 		""
@@ -1276,6 +1333,9 @@
 	"More than one item match \"%s\". Please narrow down your query.": [
 		"Hai máis dun elemento que coincide con «%s». Refine a busca."
 	],
+	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
 	"Move %d notes to notebook \"%s\"?": [
 		"Mover %d notas para o caderno \"%s\"?"
 	],
@@ -1286,6 +1346,9 @@
 		"N"
 	],
 	"Never resize": [
+		""
+	],
+	"New": [
 		""
 	],
 	"New note": [
@@ -1326,6 +1389,9 @@
 	],
 	"No active notebook.": [
 		"Ningún caderno activo."
+	],
+	"No incoming shares": [
+		""
 	],
 	"No item with ID %s": [
 		""
@@ -1519,7 +1585,7 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"Indique o caderno ao que importar as notas."
 	],
-	"Please upgrade Joplin to use this plugin": [
+	"Please upgrade Joplin to version %s or later to use this plugin.": [
 		""
 	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
@@ -1528,16 +1594,28 @@
 	"Plugin message": [
 		""
 	],
+	"Plugin panels": [
+		""
+	],
 	"Plugin repository failed to load": [
 		""
 	],
 	"Plugin search": [
 		""
 	],
+	"Plugin security": [
+		""
+	],
 	"Plugin tools": [
 		""
 	],
+	"Plugin WebView debugging": [
+		""
+	],
 	"Plugins": [
+		""
+	],
+	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
 		""
 	],
 	"Portrait": [
@@ -1600,6 +1678,9 @@
 	"Process user deletions": [
 		""
 	],
+	"Processing": [
+		""
+	],
 	"Profile": [
 		""
 	],
@@ -1651,6 +1732,9 @@
 	"Recommended": [
 		""
 	],
+	"Recommended plugins": [
+		""
+	],
 	"Redo": [
 		""
 	],
@@ -1685,6 +1769,12 @@
 		""
 	],
 	"Replace: ": [
+		""
+	],
+	"Report an issue": [
+		""
+	],
+	"Report fraudulent plugin": [
 		""
 	],
 	"Resize large images:": [
@@ -1807,6 +1897,9 @@
 	"Share permissions": [
 		""
 	],
+	"Shares": [
+		""
+	],
 	"Shortcuts are not available in CLI mode.": [
 		"Os atallos non están dispoñíbeis no modo CLI."
 	],
@@ -1872,6 +1965,9 @@
 	],
 	"Source format: %s": [
 		"Formato da orixe: %s"
+	],
+	"Spacer": [
+		""
 	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		""
@@ -2005,6 +2101,9 @@
 	"Tags": [
 		"Etiquetas"
 	],
+	"Task \"%s\" failed with error: %s": [
+		""
+	],
 	"Tasks": [
 		""
 	],
@@ -2130,11 +2229,11 @@
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"Non ten notas actualmente. Cree unha premendo no botón (+)."
 	],
-	"There are unsaved changes.": [
+	"There are no notes in the trash folder.": [
 		""
 	],
-	"There is currently no notebook. Create one by clicking on \"New notebook\".": [
-		"Este no é un caderno. Cree un, premendo en «Novo caderno»."
+	"There are unsaved changes.": [
+		""
 	],
 	"There is no data to export.": [
 		"Non hai datos para exportar."
@@ -2145,6 +2244,9 @@
 	"There was an error downloading this attachment:": [
 		""
 	],
+	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
+		""
+	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Estes elementos permanecerán no dispositivo pero non se enviarán ao destino de sincronización. Co fin de atopar estes elementos pode buscalos polo título ou polo ID (mostrados entre corchetes arriba)."
 	],
@@ -2152,6 +2254,9 @@
 		""
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
+		""
+	],
+	"This attachment does not have OCR data (Status: %s)": [
 		""
 	],
 	"This attachment is not downloaded or not decrypted yet": [
@@ -2178,10 +2283,16 @@
 	"This note has no content. Click on \"%s\" to toggle the editor and edit the note.": [
 		"Esta nota non ten contido. Prema en «%s» para ir ao editor e modificar a nota."
 	],
+	"This plugin doesn't support %s.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		""
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
+		""
+	],
+	"This subfolder of the trash has no notes.": [
 		""
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
@@ -2280,9 +2391,6 @@
 	"Unable to edit resource of type %s": [
 		""
 	],
-	"Unable to export or share data. Reason: %s": [
-		""
-	],
 	"Unable to share log data. Reason: %s": [
 		""
 	],
@@ -2376,6 +2484,9 @@
 	"Verify your identity": [
 		""
 	],
+	"View OCR text": [
+		""
+	],
 	"View on map": [
 		"Ver no mapa"
 	],
@@ -2397,7 +2508,10 @@
 	"Warning: not all resources shown for performance reasons (limit: %s).": [
 		""
 	],
-	"Warnings:\n%s": [
+	"We have a system for reporting and removing problematic plugins.": [
+		""
+	],
+	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
 		""
 	],
 	"Web Clipper": [
@@ -2458,6 +2572,9 @@
 		""
 	],
 	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
+		""
+	],
+	"Your account doesn't have access to this feature": [
 		""
 	],
 	"Your choice: ": [

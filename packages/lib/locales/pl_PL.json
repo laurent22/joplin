@@ -65,6 +65,9 @@
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		""
 	],
+	"%s tab opened": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -158,6 +161,9 @@
 	"Accept": [
 		"Akceptuj"
 	],
+	"Accepted shares": [
+		""
+	],
 	"Access denied: Please check your username and password": [
 		"Odmowa dostępu: Sprawdź nazwę użytkownika i hasło"
 	],
@@ -212,11 +218,17 @@
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"Wszystkie dane, włączając notatki, notatniki i tagi zostaną trwale usunięte."
 	],
+	"All item sync failures have been marked as \"ignored\".": [
+		""
+	],
 	"All notes": [
 		"Wszystkie notatki"
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Wszystkie możliwe porty są w użyciu - proszę zgłosić błąd na %s"
+	],
+	"Allows debugging mobile plugins. See %s for details.": [
+		""
 	],
 	"Also displays unset and hidden config variables.": [
 		"Wyświetla także nieustawione i ukryte zmienne konfiguracyjne."
@@ -229,6 +241,9 @@
 	],
 	"Always ask": [
 		"Zawsze pytaj"
+	],
+	"Always open %s files without asking.": [
+		""
 	],
 	"Always resize": [
 		"Zmień rozmiar"
@@ -352,6 +367,9 @@
 	],
 	"Bulleted List": [
 		"Lista punktowa"
+	],
+	"by %s": [
+		""
 	],
 	"Can Share": [
 		"Może udostępniać"
@@ -527,8 +545,14 @@
 	"Completed decryption.": [
 		"Deszyfrowywanie zakończone."
 	],
+	"Completed with warnings:\n%s": [
+		""
+	],
 	"Completed: %s (%s)": [
 		"Ukończono: %s (%s)"
+	],
+	"completion date": [
+		""
 	],
 	"Compress old changes": [
 		"Skompresuj stare zmiany"
@@ -724,9 +748,6 @@
 	"Dashboard": [
 		"Panel"
 	],
-	"Database v%s": [
-		"Baza danych v%s"
-	],
 	"Date": [
 		"Data"
 	],
@@ -801,6 +822,9 @@
 	],
 	"Deleted remote items: %d.": [
 		"Usunięto zdalne obiekty: %d."
+	],
+	"Deletes notes permanently, skipping the trash.": [
+		""
 	],
 	"Deletes the given notebook.": [
 		"Usuwa wybrany notatnik."
@@ -1192,9 +1216,6 @@
 	"Export profile": [
 		"Eksportuj profil"
 	],
-	"Export your data": [
-		"Eksportuj swoje dane"
-	],
 	"Exported successfully!": [
 		"Eksportowanie zakończone pomyślnie!"
 	],
@@ -1221,6 +1242,9 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Bezpieczny: nie usuwaj lokalnych danych kiedy cel synchronizacji jest pusty (często w wyniku nieprawidłowej konfiguracji lub błędu)"
+	],
+	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
+		""
 	],
 	"Fatal error:": [
 		"Błąd krytyczny:"
@@ -1266,9 +1290,6 @@
 	],
 	"Focus title": [
 		"Przejdź do tytułu"
-	],
-	"Folders": [
-		"Foldery"
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Tylko w celu debugowania: eksportuj profil na zewnętrzną kartę SD."
@@ -1353,6 +1374,9 @@
 	"Help": [
 		"Pomoc"
 	],
+	"Here's what we do to make plugins safer:": [
+		""
+	],
 	"Hermes enabled: %d": [
 		"Hermes włączony: %d"
 	],
@@ -1422,6 +1446,15 @@
 	"Import": [
 		"Zaimportuj"
 	],
+	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+		""
+	],
+	"Import from JEX": [
+		""
+	],
+	"Import notes from a JEX (Joplin Export) file.": [
+		""
+	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		"Importowanie z \"%s\"  jako \"%s\". Proszę czekać..."
 	],
@@ -1457,6 +1490,9 @@
 	],
 	"In: %s": [
 		"W: %s"
+	],
+	"Incompatible": [
+		""
 	],
 	"Increase indent level": [
 		"Zwiększ poziom wcięcia"
@@ -1535,6 +1571,9 @@
 	],
 	"Joplin Cloud": [
 		"ChmuraJoplin"
+	],
+	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
+		""
 	],
 	"Joplin Export Directory": [
 		"Katalog Eksportu Joplin"
@@ -1628,6 +1667,9 @@
 	],
 	"Light": [
 		"Jasny"
+	],
+	"Like any software you install, plugins can potentially cause security issues or data loss.": [
+		""
 	],
 	"Lines": [
 		"Wiersze"
@@ -1775,6 +1817,9 @@
 	"More than one item match \"%s\". Please narrow down your query.": [
 		"Więcej niż jeden wynik spełnia zapytanie \"%s\". Proszę zawęzić wyszukiwanie."
 	],
+	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
 	"Move %d notes to notebook \"%s\"?": [
 		"Przenieść %d notatek do notatnika \"%s\"?"
 	],
@@ -1798,6 +1843,9 @@
 	],
 	"Never resize": [
 		"Nie zmieniaj rozmiaru"
+	],
+	"New": [
+		""
 	],
 	"New note": [
 		"Nowa notatka"
@@ -1846,6 +1894,9 @@
 	],
 	"No active notebook.": [
 		"Brak aktywnego notatnika."
+	],
+	"No incoming shares": [
+		""
 	],
 	"No item with ID %s": [
 		"Brak przedmiotu z ID %s"
@@ -2108,9 +2159,6 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"Proszę określić notatnik do którego będą zaimportowane notatki."
 	],
-	"Please upgrade Joplin to use this plugin": [
-		"Zaaktualizuj Joplin, aby używać tej wtyczki"
-	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Poczekaj na pobranie I odszyfrowanie wszystkich załączników. Możesz też przenieść się do %s żeby edytować notatkę."
 	],
@@ -2123,8 +2171,14 @@
 	"Plugin tools": [
 		"Narzędzia wtyczek"
 	],
+	"Plugin WebView debugging": [
+		""
+	],
 	"Plugins": [
 		"Wtyczki"
+	],
+	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
+		""
 	],
 	"Portrait": [
 		"Pionowo"
@@ -2185,6 +2239,9 @@
 	],
 	"Process user deletions": [
 		"Przetwarzanie usuwania użytkowników"
+	],
+	"Processing": [
+		""
 	],
 	"Profile": [
 		"Profil"
@@ -2302,6 +2359,12 @@
 	],
 	"Replace: ": [
 		"Zamień: "
+	],
+	"Report an issue": [
+		""
+	],
+	"Report fraudulent plugin": [
+		""
 	],
 	"Reset application layout": [
 		"Zresetuj układ aplikacji"
@@ -2585,6 +2648,9 @@
 	"Source: ": [
 		"Źródło: "
 	],
+	"Spacer": [
+		""
+	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		"Jeśli nie określisz portu używany przez serwer API, użyty zostanie domyślny."
 	],
@@ -2762,6 +2828,9 @@
 	"Take photo": [
 		"Wykonaj zdjęcie"
 	],
+	"Task \"%s\" failed with error: %s": [
+		""
+	],
 	"Task list": [
 		"Lista zadań"
 	],
@@ -2900,9 +2969,6 @@
 	"There are unsaved changes.": [
 		"Istnieją niezapisane zmiany."
 	],
-	"There is currently no notebook. Create one by clicking on \"New notebook\".": [
-		"Brak notatników. Utwórz nowy, naciskając na \"Nowy notatnik\"."
-	],
 	"There is no data to export.": [
 		"Brak danych do eksportu."
 	],
@@ -2912,6 +2978,9 @@
 	"There was an error downloading this attachment:": [
 		"Wystąpił błąd pobierania załącznika:"
 	],
+	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
+		""
+	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Obiekty pozostaną na urządzeniu, jednakże nie zostaną wysłane na serwis synchronizacji. W celu wyszukania tych obiektów, proszę szukać po tytule lub po ID (które jest wyświetlane w klamrach poniżej)."
 	],
@@ -2920,6 +2989,9 @@
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
 		"Pozwala to innemu użytkownikowi na udostępnienie ci notatnika, a następnie oboje możecie nad nim współpracować. Nie pozwala to jednak na udostępnienie notatnika komuś innemu, chyba że masz funkcję \"%s\"."
+	],
+	"This attachment does not have OCR data (Status: %s)": [
+		""
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Załącznik nie został jeszcze pobrany lub odszyfrowany"
@@ -2963,11 +3035,17 @@
 	"This note has no history": [
 		"Ta notatka nie posiada historii"
 	],
+	"This plugin doesn't support %s.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Ten edytor tekstu sformatowanego ma wiele ograniczeń i zaleca się, abyś był ich świadomy przed jego użyciem."
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"Ta usługa umożliwia rozszerzeniu do przeglądarki komunikować się  z Joplin. Kiedy zostanie aktywowana, zapora systemowa może zapytać o uprawnienia dla Joplin w celu nasłuchiwania na określonym porcie."
+	],
+	"This subfolder of the trash has no notes.": [
+		""
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
 		"Pozwala Joplin pracować w tle. Rekomendowanym jest, aby aktywować to ustawienie, przez co notatki będę stale synchronizowane, redukując liczbę błędów."
@@ -3104,9 +3182,6 @@
 	"Unable to edit resource of type %s": [
 		"Nie można edytować zasobu typu %s"
 	],
-	"Unable to export or share data. Reason: %s": [
-		"Nie można eksportować ani udostępniać danych. Powód: %s"
-	],
 	"Unable to share log data. Reason: %s": [
 		"Nie można udostępniać danych dziennika. Powód: %s"
 	],
@@ -3233,6 +3308,9 @@
 	"View": [
 		"Widok"
 	],
+	"View OCR text": [
+		""
+	],
 	"View on map": [
 		"Pokaż na mapie"
 	],
@@ -3257,8 +3335,11 @@
 	"Warning: not all resources shown for performance reasons (limit: %s).": [
 		"Uwaga, aby zachować dobrą wydajność, nie wszystkie zasoby zostały wyświetlone (limit: %s)."
 	],
-	"Warnings:\n%s": [
-		"Uwaga:\n%s"
+	"We have a system for reporting and removing problematic plugins.": [
+		""
+	],
+	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
+		""
 	],
 	"Web Clipper": [
 		"Web clipper"
@@ -3328,6 +3409,9 @@
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Możesz skorzystać z narzędzia poniżej żeby ponownie zaszyfrować swoje dane, na przykład jeśli wiesz że część twoich notatek jest szyfrowana przestarzałą metodą."
+	],
+	"Your account doesn't have access to this feature": [
+		""
 	],
 	"Your choice: ": [
 		"Twój wybór: "

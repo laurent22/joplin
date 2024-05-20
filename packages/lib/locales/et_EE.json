@@ -56,6 +56,9 @@
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		""
 	],
+	"%s tab opened": [
+		""
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -134,6 +137,9 @@
 	"Accept": [
 		""
 	],
+	"Accepted shares": [
+		""
+	],
 	"Access denied: Please check your username and password": [
 		""
 	],
@@ -176,10 +182,16 @@
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		""
 	],
+	"All item sync failures have been marked as \"ignored\".": [
+		""
+	],
 	"All notes": [
 		"Kõik märkmed"
 	],
 	"All potential ports are in use - please report the issue at %s": [
+		""
+	],
+	"Allows debugging mobile plugins. See %s for details.": [
 		""
 	],
 	"Also displays unset and hidden config variables.": [
@@ -187,6 +199,9 @@
 	],
 	"Always": [
 		"Alati"
+	],
+	"Always open %s files without asking.": [
+		""
 	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
 		""
@@ -290,6 +305,9 @@
 	"Bulleted List": [
 		"Täpp-loend"
 	],
+	"by %s": [
+		""
+	],
 	"Can view": [
 		""
 	],
@@ -380,6 +398,9 @@
 	"Collapse": [
 		""
 	],
+	"Collapse %s": [
+		""
+	],
 	"command": [
 		""
 	],
@@ -397,6 +418,12 @@
 	],
 	"Completed decryption.": [
 		"Dekrüpteerimine on lõpetatud."
+	],
+	"Completed with warnings:\n%s": [
+		""
+	],
+	"completion date": [
+		""
 	],
 	"Compress old changes": [
 		""
@@ -522,9 +549,6 @@
 	"Dashboard": [
 		""
 	],
-	"Database v%s": [
-		"Andmebaas v%s"
-	],
 	"Date": [
 		""
 	],
@@ -566,6 +590,9 @@
 	],
 	"Deleted remote items: %d.": [
 		"Kustutatud kaugüksused: %d."
+	],
+	"Deletes notes permanently, skipping the trash.": [
+		""
 	],
 	"Deletes the given notebook.": [
 		"Kustutab antud märkmiku."
@@ -795,6 +822,9 @@
 	"Expand": [
 		""
 	],
+	"Expand %s": [
+		""
+	],
 	"Export": [
 		"Eksport"
 	],
@@ -814,6 +844,9 @@
 		"Ekspordib ainult antud märkmiku."
 	],
 	"Fail-safe": [
+		""
+	],
+	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
 		""
 	],
 	"Fatal error:": [
@@ -848,9 +881,6 @@
 	],
 	"Focus": [
 		"Fookus"
-	],
-	"Folders": [
-		"Kaustad"
 	],
 	"For example \"%s\"": [
 		""
@@ -916,6 +946,9 @@
 	"Help": [
 		"Abi"
 	],
+	"Here's what we do to make plugins safer:": [
+		""
+	],
 	"Hide %s": [
 		"Peida %s"
 	],
@@ -973,6 +1006,18 @@
 	"Import": [
 		"Impordi"
 	],
+	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+		""
+	],
+	"Import from JEX": [
+		""
+	],
+	"Import notes from a JEX (Joplin Export) file.": [
+		""
+	],
+	"Imported successfully!": [
+		""
+	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		""
 	],
@@ -1005,6 +1050,9 @@
 	],
 	"In: %s": [
 		"Asukoht: %s"
+	],
+	"Incompatible": [
+		""
 	],
 	"Increase indent level": [
 		""
@@ -1066,6 +1114,9 @@
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
 		""
 	],
+	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
+		""
+	],
 	"Joplin Forum": [
 		"Joplini Foorum"
 	],
@@ -1114,6 +1165,9 @@
 	"Layout": [
 		"Paigutus"
 	],
+	"Learn more": [
+		""
+	],
 	"Leave it blank to download the language files from the default website": [
 		""
 	],
@@ -1125,6 +1179,9 @@
 	],
 	"Light": [
 		"Hele"
+	],
+	"Like any software you install, plugins can potentially cause security issues or data loss.": [
+		""
 	],
 	"Lines": [
 		""
@@ -1211,6 +1268,9 @@
 	"More than one item match \"%s\". Please narrow down your query.": [
 		"\"%s\" vastab rohkem kui ühele üksusele. Palun kitsendage oma päringut."
 	],
+	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
 	"Move %d notes to notebook \"%s\"?": [
 		"Kas teisaldada %d märkmed märkmikku \"%s\"?"
 	],
@@ -1224,6 +1284,9 @@
 		"N"
 	],
 	"Never resize": [
+		""
+	],
+	"New": [
 		""
 	],
 	"New note": [
@@ -1264,6 +1327,9 @@
 	],
 	"No active notebook.": [
 		"Aktiivset märkmikku pole."
+	],
+	"No incoming shares": [
+		""
 	],
 	"No item with ID %s": [
 		"Üksust ID-ga %s ei ole"
@@ -1445,7 +1511,7 @@
 	"Please select where the sync status should be exported to": [
 		"Palun valige, kus sünkroonimise olekut tuleks eksportida"
 	],
-	"Please upgrade Joplin to use this plugin": [
+	"Please upgrade Joplin to version %s or later to use this plugin.": [
 		""
 	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
@@ -1454,8 +1520,14 @@
 	"Plugin repository failed to load": [
 		""
 	],
+	"Plugin WebView debugging": [
+		""
+	],
 	"Plugins": [
 		"Pluginad"
+	],
+	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
+		""
 	],
 	"Portrait": [
 		"Portree"
@@ -1514,6 +1586,9 @@
 	"Process user deletions": [
 		""
 	],
+	"Processing": [
+		""
+	],
 	"Profile": [
 		""
 	],
@@ -1562,6 +1637,9 @@
 	"Recommended": [
 		""
 	],
+	"Recommended plugins": [
+		""
+	],
 	"Redo": [
 		""
 	],
@@ -1602,6 +1680,12 @@
 		""
 	],
 	"Replace: ": [
+		""
+	],
+	"Report an issue": [
+		""
+	],
+	"Report fraudulent plugin": [
 		""
 	],
 	"Resize large images:": [
@@ -1799,6 +1883,9 @@
 	"Source format: %s": [
 		"Allika Formaat: %s"
 	],
+	"Spacer": [
+		""
+	],
 	"Spell checker": [
 		""
 	],
@@ -1910,6 +1997,9 @@
 	"Take photo": [
 		"Pildista"
 	],
+	"Task \"%s\" failed with error: %s": [
+		""
+	],
 	"Tasks": [
 		""
 	],
@@ -2016,19 +2106,22 @@
 	"There are unsaved changes.": [
 		""
 	],
-	"There is currently no notebook. Create one by clicking on \"New notebook\".": [
-		"Praegu pole märkmikku. Loo üks klõpsates \"New notebook\"."
-	],
 	"There is no data to export.": [
 		"Eksportivaid andmeid pole."
 	],
 	"There was an error downloading this attachment:": [
 		"Selle manuse allalaadimisel ilmnes tõrge:"
 	],
+	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
+		""
+	],
 	"These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.": [
 		""
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
+		""
+	],
+	"This attachment does not have OCR data (Status: %s)": [
 		""
 	],
 	"This attachment is not downloaded or not decrypted yet": [
@@ -2055,11 +2148,17 @@
 	"This note has no history": [
 		"Sellel märkel pole ajalugu"
 	],
+	"This plugin doesn't support %s.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		""
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"See teenus võimaldab brauseri laiendil suhelda Joplini-ga. Kui lubate selle, võib tulemüür paluda teil anda luba Joplini kuulata teatud porti."
+	],
+	"This subfolder of the trash has no notes.": [
+		""
 	],
 	"This will open a new screen. Save your current changes?": [
 		"See avab uue ekraani. Kas salvestada praegused muudatused?"
@@ -2149,9 +2248,6 @@
 		"Tüüp: %s."
 	],
 	"Unable to edit resource of type %s": [
-		""
-	],
-	"Unable to export or share data. Reason: %s": [
 		""
 	],
 	"Unable to share log data. Reason: %s": [
@@ -2244,6 +2340,9 @@
 	"Verify your identity": [
 		""
 	],
+	"View OCR text": [
+		""
+	],
 	"View on map": [
 		"Vaata kaardilt"
 	],
@@ -2263,6 +2362,12 @@
 		"Hoiatus"
 	],
 	"Warning: not all resources shown for performance reasons (limit: %s).": [
+		""
+	],
+	"We have a system for reporting and removing problematic plugins.": [
+		""
+	],
+	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
 		""
 	],
 	"Web Clipper": [
@@ -2323,6 +2428,9 @@
 		""
 	],
 	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
+		""
+	],
+	"Your account doesn't have access to this feature": [
 		""
 	],
 	"Your choice: ": [

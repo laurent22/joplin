@@ -75,11 +75,11 @@ export async function ppkPasswordIsValid(service: EncryptionService, ppk: Public
 
 async function loadPpk(service: EncryptionService, ppk: PublicPrivateKeyPair, password: string): Promise<RSAKeyPair> {
 	const privateKeyPlainText = await decryptPrivateKey(service, ppk.privateKey, password);
-	return rsa().loadKeys(ppk.publicKey, privateKeyPlainText);
+	return rsa().loadKeys(ppk.publicKey, privateKeyPlainText, ppk.keySize);
 }
 
-async function loadPublicKey(publicKey: PublicKey): Promise<RSAKeyPair> {
-	return rsa().loadKeys(publicKey, '');
+async function loadPublicKey(publicKey: PublicKey, keySize: number): Promise<RSAKeyPair> {
+	return rsa().loadKeys(publicKey, '', keySize);
 }
 
 function ppkEncryptionHandler(ppkId: string, rsaKeyPair: RSAKeyPair): EncryptionCustomHandler {
@@ -129,7 +129,8 @@ export async function ppkDecryptMasterKeyContent(service: EncryptionService, mas
 }
 
 export async function mkReencryptFromPasswordToPublicKey(service: EncryptionService, masterKey: MasterKeyEntity, decryptionPassword: string, encryptionPublicKey: PublicPrivateKeyPair): Promise<MasterKeyEntity> {
-	const encryptionHandler = ppkEncryptionHandler(encryptionPublicKey.id, await loadPublicKey(encryptionPublicKey.publicKey));
+	const loadedPublicKey = await loadPublicKey(encryptionPublicKey.publicKey, encryptionPublicKey.keySize);
+	const encryptionHandler = ppkEncryptionHandler(encryptionPublicKey.id, loadedPublicKey);
 
 	const plainText = await service.decryptMasterKeyContent(masterKey, decryptionPassword);
 	const newContent = await service.encryptMasterKeyContent(EncryptionMethod.Custom, plainText, '', { encryptionHandler });

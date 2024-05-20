@@ -239,11 +239,6 @@ async function fetchAllNotes() {
 					type: Database.enumId('fieldType', 'text'),
 					description: 'If an image is provided, you can also specify an optional rectangle that will be used to crop the image. In format `{ x: x, y: y, width: width, height: height }`',
 				});
-				// tableFields.push({
-				// 	name: 'tags',
-				// 	type: Database.enumId('fieldType', 'text'),
-				// 	description: 'Comma-separated list of tags. eg. `tag1,tag2`.',
-				// });
 			}
 
 			lines.push(`## ${toTitleCase(tableName)}`);
@@ -266,6 +261,11 @@ async function fetchAllNotes() {
 
 			if (model.type === BaseModel.TYPE_FOLDER) {
 				lines.push('The folders are returned as a tree. The sub-notebooks of a notebook, if any, are under the `children` key.');
+				lines.push('');
+			}
+
+			if (model.type === BaseModel.TYPE_NOTE) {
+				lines.push('By default, this call will return the all notes **except** the notes in the trash folder and any conflict note. To include these too, you can specify `include_deleted=1` and `include_conflicts=1` as query parameters.');
 				lines.push('');
 			}
 

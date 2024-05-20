@@ -172,6 +172,7 @@ interface Props {
 	pluginSettings: PluginSettings;
 	noteListRendererIds: string[];
 	noteListRendererId: string;
+	showMenuBar: boolean;
 }
 
 const commandNames: string[] = menuCommandNames();
@@ -189,6 +190,15 @@ function menuItemSetEnabled(id: string, enabled: boolean) {
 	if (!menuItem) return;
 	menuItem.enabled = enabled;
 }
+
+const applyMenuBarVisibility = (showMenuBar: boolean) => {
+	// The menu bar cannot be hidden on macOS
+	if (shim.isMac()) return;
+
+	const window = bridge().window();
+	window.setAutoHideMenuBar(!showMenuBar);
+	window.setMenuBarVisibility(showMenuBar);
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function useMenuStates(menu: any, props: Props) {
@@ -760,6 +770,7 @@ function useMenu(props: Props) {
 						menuItemDic.resetLayout,
 						separator(),
 						menuItemDic.toggleSideBar,
+						shim.isMac() ? noItem : menuItemDic.toggleMenuBar,
 						menuItemDic.toggleNoteList,
 						menuItemDic.toggleVisiblePanes,
 						{
@@ -1083,6 +1094,7 @@ function useMenu(props: Props) {
 function MenuBar(props: Props): any {
 	const menu = useMenu(props);
 	if (menu) Menu.setApplicationMenu(menu);
+	applyMenuBarVisibility(props.showMenuBar);
 	return null;
 }
 
@@ -1112,6 +1124,7 @@ const mapStateToProps = (state: AppState) => {
 		profileConfig: state.profileConfig,
 		noteListRendererIds: state.noteListRendererIds,
 		noteListRendererId: state.settings['notes.listRendererId'],
+		showMenuBar: state.settings.showMenuBar,
 	};
 };
 
