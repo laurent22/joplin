@@ -46,11 +46,11 @@ const pathLinkRegexes = [
 	// // Example: [foo]: ./bar.md
 	/[\n]\[[^\]]*\]:\s*(\.\.?\/.*?\.md)/gi,
 
-	// // Example: <img src=":/12345678901234567890123456789012"/>
-	// /<img[\s\S]*src=["']\.\/(\.\/.*)["'][\s\S]*>/gi,
+	// Example: <img src="../resources/foo.png"/>
+	/<img[\s\S]*src=["'](\.\.?\/.*?)["'][\s\S]*>/gi,
 
-	// // Example: <a href=":/12345678901234567890123456789012">
-	// /<a[\s\S]*href=["']:\/([a-zA-Z0-9]{32})["'][\s\S]*>/gi,
+	// Example: <a href="./a.md">
+	/<a[\s\S]*href=["'](\.\.?\/.*?\.md)["'][\s\S]*>/gi,
 ];
 const getPathLinks = (text: string) => {
 
@@ -93,7 +93,7 @@ export default class LinkTracker {
 	//
 	// Link sources are always IDs
 	private linkTargetIdToSource_: Map<LinkTargetId, Set<LinkSourceId>> = new Map();
-	private unresolvedLinkToSourceId_: Map<LinkSourceId, Set<string>> = new Map();
+	private unresolvedLinkToSourceId_: Map<string, Set<LinkSourceId>> = new Map();
 	private tree: ItemTree;
 
 	public constructor(private linkType: LinkType, private onNoteUpdate: OnNoteUpdateCallback) {
