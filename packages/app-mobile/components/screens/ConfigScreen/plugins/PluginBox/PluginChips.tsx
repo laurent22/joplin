@@ -3,11 +3,10 @@ import PluginService from '@joplin/lib/services/plugins/PluginService';
 import shim from '@joplin/lib/shim';
 import * as React from 'react';
 import { View } from 'react-native';
-import SmallChip from './SmallChip';
 import { _ } from '@joplin/lib/locale';
-import { themeStyle } from '@joplin/lib/theme';
 import { PluginCallback } from './ActionButton';
 import RecommendedChip from './RecommendedChip';
+import { Chip } from 'react-native-paper';
 
 interface Props {
 	themeId: number;
@@ -20,20 +19,18 @@ interface Props {
 
 const PluginChips: React.FC<Props> = props => {
 	const item = props.item;
-	const theme = themeStyle(props.themeId);
 
 	const renderErrorsChip = () => {
 		if (!props.hasErrors) return null;
 
 		return (
-			<SmallChip
-				foreground={theme.colorWarn}
-				background={theme.warningBackgroundColor}
+			<Chip
 				icon='alert'
+				mode='flat'
 				onPress={() => props.onShowPluginLog({ item })}
 			>
 				{_('Error')}
-			</SmallChip>
+			</Chip>
 		);
 	};
 
@@ -48,13 +45,13 @@ const PluginChips: React.FC<Props> = props => {
 		if (!props.item.builtIn) {
 			return null;
 		}
-		return <SmallChip icon='code-tags-check'>{_('Built-in')}</SmallChip>;
+		return <Chip icon='code-tags-check'>{_('Built-in')}</Chip>;
 	};
 
 	const renderIncompatibleChip = () => {
 		if (props.isCompatible) return null;
 		return (
-			<SmallChip
+			<Chip
 				icon='alert'
 				onPress={() => {
 					void shim.showMessageBox(
@@ -62,7 +59,7 @@ const PluginChips: React.FC<Props> = props => {
 						{ buttons: [_('OK')] },
 					);
 				}}
-			>{_('Incompatible')}</SmallChip>
+			>{_('Incompatible')}</Chip>
 		);
 	};
 

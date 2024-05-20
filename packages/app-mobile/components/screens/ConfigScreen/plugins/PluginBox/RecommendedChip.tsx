@@ -2,7 +2,8 @@ import { _ } from '@joplin/lib/locale';
 import * as React from 'react';
 import { themeStyle } from '../../../../global-style';
 import { Alert, Linking } from 'react-native';
-import SmallChip from './SmallChip';
+import { Chip } from 'react-native-paper';
+import { useMemo } from 'react';
 
 
 interface Props {
@@ -27,15 +28,26 @@ const onRecommendedPress = () => {
 };
 
 const RecommendedChip: React.FC<Props> = props => {
-	const theme = themeStyle(props.themeId);
-	return <SmallChip
+	const themeOverride = useMemo(() => {
+		const theme = themeStyle(props.themeId);
+
+		return {
+			colors: {
+				secondaryContainer: theme.searchMarkerBackgroundColor,
+				onSecondaryContainer: theme.searchMarkerColor,
+				primary: theme.searchMarkerColor,
+			},
+		};
+	}, [props.themeId]);
+
+	return <Chip
 		icon='crown'
-		foreground={theme.searchMarkerColor}
-		background={theme.searchMarkerBackgroundColor}
+		compact={true}
+		theme={themeOverride}
 		onPress={onRecommendedPress}
 	>
 		{_('Recommended')}
-	</SmallChip>;
+	</Chip>;
 };
 
 export default RecommendedChip;

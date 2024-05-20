@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { ReactNode, useMemo } from 'react';
-import { StyleProp, StyleSheet, TextStyle, ViewStyle } from 'react-native';
 import { themeStyle } from '../global-style';
 import { Button, ButtonProps } from 'react-native-paper';
 import { connect } from 'react-redux';
@@ -23,40 +22,9 @@ interface Props extends Omit<ButtonProps, 'item'|'onPress'|'children'> {
 
 export type TextButtonProps = Omit<Props, 'themeId'>;
 
-const useStyles = ({ themeId, style: styleOverride, loading, icon }: Props) => {
+const useStyles = ({ themeId }: Props) => {
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
-
-		const overrides = StyleSheet.flatten(styleOverride as StyleProp<ViewStyle>);
-
-		const button: TextStyle = {
-			borderRadius: 10,
-			fontWeight: '600',
-			fontSize: theme.fontSize,
-		};
-
-		const styles = StyleSheet.create({
-			blockButton: {
-				...button,
-				...overrides,
-			},
-			inlineButton: {
-				...button,
-				borderRadius: 5,
-				marginRight: theme.marginRight / 2,
-				marginLeft: theme.marginLeft / 2,
-				padding: 0,
-				...overrides,
-			},
-			buttonLabel: {
-				fontWeight: '600',
-				fontSize: theme.fontSize * 0.95,
-				// Additional space is needed when loading to prevent overlap
-				// with the button label.
-				marginLeft: 14 + (loading || icon ? 10 : 0),
-				marginRight: 14,
-			},
-		});
 
 		const themeOverride = {
 			secondaryButton: {
@@ -79,12 +47,12 @@ const useStyles = ({ themeId, style: styleOverride, loading, icon }: Props) => {
 			},
 		};
 
-		return { styles, themeOverride };
-	}, [themeId, styleOverride, loading, icon]);
+		return { themeOverride };
+	}, [themeId]);
 };
 
 const TextButton: React.FC<Props> = props => {
-	const { styles, themeOverride } = useStyles(props);
+	const { themeOverride } = useStyles(props);
 
 	let mode: ButtonProps['mode'];
 	let theme: ButtonProps['theme'];
@@ -108,8 +76,6 @@ const TextButton: React.FC<Props> = props => {
 
 	return <Button
 		{...props}
-		style={props.inline ? styles.inlineButton : styles.blockButton}
-		labelStyle={styles.buttonLabel}
 		theme={theme}
 		mode={mode}
 		onPress={props.onPress}
