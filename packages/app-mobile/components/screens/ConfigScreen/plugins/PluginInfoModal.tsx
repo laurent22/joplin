@@ -10,7 +10,7 @@ import openWebsiteForPlugin from './utils/openWebsiteForPlugin';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import PluginChips from './PluginBox/PluginChips';
 import PluginTitle from './PluginBox/PluginTitle';
-import { PluginCallback } from './PluginBox/ActionButton';
+import ActionButton, { PluginCallback } from './PluginBox/ActionButton';
 import TextButton, { ButtonType } from '../../../buttons/TextButton';
 
 interface Props {
@@ -118,6 +118,17 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 		void Linking.openURL('https://github.com/laurent22/joplin/security/advisories/new');
 	}, []);
 
+	const deleteButton = (
+		<ActionButton
+			item={props.item}
+			inline={false}
+			type={ButtonType.Delete}
+			onPress={props.onDelete}
+			disabled={props.item.deleted}
+			title={props.item.deleted ? _('Deleted') : _('Delete')}
+		/>
+	);
+
 	return <>
 		<ScrollView>
 			{aboutPlugin}
@@ -128,6 +139,10 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 					type={ButtonType.Primary}
 					onPress={onAboutPress}
 				>{_('About')}</TextButton>
+				{deleteButton}
+			</View>
+			<Divider />
+			<View style={styles.buttonContainer}>
 				{ reportIssueUrl ? reportIssueButton : null }
 			</View>
 		</ScrollView>

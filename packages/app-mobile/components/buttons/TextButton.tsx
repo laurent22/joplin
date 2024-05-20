@@ -67,8 +67,8 @@ const useStyles = ({ themeId, style: styleOverride, loading, icon }: Props) => {
 			},
 			deleteButton: {
 				colors: {
-					primary: theme.deleteColor,
-					outline: theme.deleteColor,
+					primary: theme.destructiveColor,
+					outline: theme.destructiveColor,
 				},
 			},
 			primaryButton: {

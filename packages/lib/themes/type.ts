@@ -50,7 +50,7 @@ export interface Theme {
 	searchMarkerColor: string;
 
 	warningBackgroundColor: string;
-	deleteColor: string;
+	destructiveColor: string;
 
 	tableBackgroundColor: string;
 	codeBackgroundColor: string;
