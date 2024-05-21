@@ -223,7 +223,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <nav>
     <ul>
         
-        <li class="l1"><a href=":/2" target="content" title="asdf">asdf</a></li>
+        <li class="l1"><a href=":/4" target="content" title="asdf">asdf</a></li>
         
     </ul>
 </nav>
@@ -363,17 +363,17 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <nav>
     <ul>
         
-        <li class="l1"><a href=":/8" target="content" title="A simple filename">A simple filename</a></li>
+        <li class="l1"><a href=":/10" target="content" title="A simple filename">A simple filename</a></li>
         
-        <li class="l1"><a href=":/6" target="content" title="A page with a lot of svgs">A page with a lot of svgs</a></li>
+        <li class="l1"><a href=":/8" target="content" title="A page with a lot of svgs">A page with a lot of svgs</a></li>
         
-        <li class="l1"><a href=":/5" target="content" title="A page can have any width it wants?">A page can have any width it wants?</a></li>
+        <li class="l1"><a href=":/7" target="content" title="A page can have any width it wants?">A page can have any width it wants?</a></li>
         
-        <li class="l1"><a href=":/7" target="content" title="A page with text and drawing above it">A page with text and drawing above it</a></li>
+        <li class="l1"><a href=":/9" target="content" title="A page with text and drawing above it">A page with text and drawing above it</a></li>
         
-        <li class="l1"><a href=":/10" target="content" title="text">text</a></li>
+        <li class="l1"><a href=":/12" target="content" title="text">text</a></li>
         
-        <li class="l1"><a href=":/9" target="content" title="Page with more than one font size">Page with more than one font size</a></li>
+        <li class="l1"><a href=":/11" target="content" title="Page with more than one font size">Page with more than one font size</a></li>
         
     </ul>
 </nav>
@@ -488,6 +488,46 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 24pt; padding-bottom: 7px; padding-top: 7px;">Donec ac condimentum dui, tincidunt rhoncus augue. Maecenas aliquam non nisl ac fringilla. Aliquam pulvinar enim sit amet accumsan tristique. Cras sapien ipsum, ultricies eu dui eget, efficitur ornare elit. Curabitur hendrerit mauris dolor, gravida elementum enim convallis quis. Vivamus varius luctus massa, in egestas mi egestas id. Nullam elementum scelerisque nisi sit amet pellentesque. In varius mollis risus, vel laoreet tortor. Pellentesque et blandit velit, nec auctor nunc. Aliquam quis purus vel ligula auctor rhoncus. Duis sed tempus metus. Praesent ac libero sed leo posuere feugiat id vel felis. Aenean commodo dapibus hendrerit. Sed eleifend, tortor sed placerat auctor, dolor dolor efficitur dolor, ut rhoncus eros libero sed ante. Mauris quis blandit sem. Nullam porta urna eros, at viverra sem iaculis in.</p></div>
 <div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
 </div><svg style="height: 7px; left: 49px; overflow: visible; position: absolute; top: 301px; width: 53px;" viewBox="1284 7972 1402 194"><path d="M 1349 8042 l 5 0 10 0 16 0 26 0 30 0 31 0 32 0 31 0 30 0 28 5 28 6 27 6 26 4 31 3 32 2 32 2 36 0 35 0 34 0 37 -1 36 0 34 0 32 0 30 0 28 0 27 0 27 0 26 0 26 0 26 0 26 0 26 0 27 0 26 0 27 0 26 0 26 0 27 0 26 0 27 0 26 0 27 0 26 0 27 0 22 0" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70" /></svg><svg style="height: 21px; left: 210px; overflow: visible; position: absolute; top: 386px; width: 34px;" viewBox="5569 10225 910 559"><path d="M 5635 10688 l 4 0 11 0 16 0 25 0 30 0 32 0 32 0 35 0 36 0 34 0 37 0 36 0 34 0 32 0 35 0 34 0 33 0 31 0 34 0 34 0 33 0 35 0 31 -5 24 -10 15 -16 9 -21 5 -24 1 -26 -1 -32 -1 -33 -2 -34 -1 -32 -1 -35 -1 -35 0 -33 -1 -32 0 -25" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70" /></svg><svg style="height: 18px; left: 45px; overflow: visible; position: absolute; top: 225px; width: 21px;" viewBox="1200 5942 550 468"><path d="M 1270 6323 l 0 -9 0 -17 0 -22 0 -25 0 -32 4 -34 6 -34 6 -37 5 -37 7 -30 17 -22 24 -10 27 -2 37 7 41 10 41 10 46 13 47 12 42 9 34 7" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70" /></svg><svg style="height: 28px; left: 44px; overflow: visible; position: absolute; top: 413px; width: 26px;" viewBox="1166 10934 698 749"><path d="M 1772 11058 l -4 -4 -15 -6 -22 -6 -27 -5 -28 -7 -34 -8 -35 -7 -35 -5 -32 -3 -31 -2 -29 -1 -28 0 -27 0 -26 0 -31 5 -36 11 -34 16 -26 21 -18 33 -10 43 -6 49 -2 53 1 50 1 50 1 45 6 40 8 35 11 26 11 23 9 20 7 22 4 22 2 19" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70" /></svg><svg style="height: 33px; left: 146px; overflow: visible; position: absolute; top: 674px; width: 40px;" viewBox="3876 17844 1068 872"><path d="M 3942 18624 l 4 -4 11 -6 16 -6 21 -4 28 -13 32 -14 33 -12 32 -10 31 -6 34 -4 34 -2 34 -1 31 0 34 1 34 1 33 0 31 1 30 0 28 0 27 0 27 0 31 5 32 6 32 5 30 5 30 3 33 2 33 1 33 1 26 -5 19 -11 12 -21 7 -27 3 -29 0 -40 -1 -47 -2 -56 -1 -56 -1 -50 -1 -53 -1 -49 0 -44 0 -38 0 -38 0 -36 0 -33 0 -26" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70" /></svg><svg style="height: 33px; left: 47px; overflow: visible; position: absolute; top: 712px; width: 6px;" viewBox="1253 18850 166 864"><path d="M 1323 18915 l 0 5 0 10 0 26 0 32 0 36 0 35 0 38 0 38 0 35 0 33 0 35 0 35 0 33 0 35 0 36 0 33 0 36 0 36 0 34 0 36 0 36 0 30" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70" /></svg><svg style="height: 8px; left: 48px; overflow: visible; position: absolute; top: 713px; width: 27px;" viewBox="1257 18866 716 198"><path d="M 1323 18968 l 4 0 11 0 16 0 25 0 30 0 32 0 32 0 31 0 29 0 29 0 27 0 32 0 32 0 32 0 31 0 30 0 28 0 32 -9 37 -12 34 -11" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70" /></svg><svg style="height: 31px; left: 168px; overflow: visible; position: absolute; top: 830px; width: 27px;" viewBox="4448 21966 723 810"><path d="M 5079 22063 l -4 0 -15 0 -22 0 -27 0 -28 -4 -34 -6 -35 -6 -35 -4 -32 -4 -36 -2 -35 -1 -33 0 -36 0 -36 5 -34 6 -31 6 -30 5 -24 7 -17 13 -10 17 -5 26 -2 30 0 32 5 31 8 35 7 36 10 34 10 32 13 30 11 29 10 27 16 31 20 32 20 32 20 31 8 34 1 34 -8 29 -11 20" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70" /></svg><svg style="height: 31px; left: 255px; overflow: visible; position: absolute; top: 1142px; width: 25px;" viewBox="6751 30221 669 824"><path d="M 7328 30291 l -4 5 -15 5 -23 6 -31 5 -34 3 -35 2 -34 1 -37 1 -36 0 -34 -5 -36 -6 -36 -6 -34 -5 -32 -3 -30 -3 -23 4 -17 10 -10 16 -6 21 3 29 6 32 7 33 6 33 9 35 9 35 7 34 10 28 10 28 7 29 6 28 3 28 2 28 1 27 -9 31 -13 33 -16 32 -16 31 -17 29 -14 24" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70" /></svg>
+
+<script>
+    if (window.parent !== null) {
+        window.parent.postMessage(window.location.href, '*');
+    }
+</script>
+</body>
+</html>"
+`;
+
+exports[`InteropService_Importer_OneNote should import a simple OneNote notebook: Page title 1`] = `
+"<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Page title</title>
+    <style>
+    * { margin: 0; padding: 0; font-weight: normal; }
+    table, tr, td { border-color: #A3A3A3; }
+    ul, ol { padding: 0; }
+    .title .outline-element { display: inline; }
+    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
+    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
+    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
+    .ink-text { top: 0; left: 0; }
+    .note-tag-icon { position: relative; }
+    .note-tag-icon > svg { position: absolute; }
+    .icon-secondary > svg { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
+    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">Page title</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt;">Friday, May 3, 2024</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt;">6:30 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">Page content</p></div>
+</div>
 
 <script>
     if (window.parent !== null) {

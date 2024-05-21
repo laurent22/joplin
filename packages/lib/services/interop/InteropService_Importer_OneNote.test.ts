@@ -35,19 +35,19 @@ describe('InteropService_Importer_OneNote', () => {
 	});
 	it('should import a simple OneNote notebook', async () => {
 		const notes = await importNote(`${supportDir}/onenote/simple_notebook.zip`);
+		const folders = await Folder.all();
 
 		expect(notes.length).toBe(2);
-		// expect(note[1]).toBe('navigation page');
-		// expect(note.length).toBe(1);
-		const note = notes[0];
-		expect(note.title).toBe('Page title');
-		// we might be able to be able to populate these with some work
-		// expect(note.created_time).toBe('...');
-		// expect(note.updated_time).toBe('...');
-		expect(note.markup_language).toBe(MarkupToHtml.MARKUP_LANGUAGE_HTML);
-		const expectedBody = await fs.readFile(`${supportDir}/onenote/simple_notebook.html`, 'utf-8');
-		// note.body doesn't have line feed character, but file input has
-		expect(note.body).toEqual(expectedBody.slice(0, expectedBody.length - 1));
+		const mainNote = notes[0];
+
+		expect(folders.length).toBe(3);
+		const parentFolder = folders.find(f => f.id === mainNote.parent_id);
+		expect(parentFolder.title).toBe('Section title');
+		expect(folders.find(f => f.id === parentFolder.parent_id).title).toBe('Simple notebook');
+
+		expect(mainNote.title).toBe('Page title');
+		expect(mainNote.markup_language).toBe(MarkupToHtml.MARKUP_LANGUAGE_HTML);
+		expect(mainNote.body).toMatchSnapshot(mainNote.title);
 	});
 
 	it('should preserve indentation of subpages in Section page', async () => {
@@ -76,12 +76,16 @@ describe('InteropService_Importer_OneNote', () => {
 
 		const parentSection = folders.find(f => f.title === 'Group Section 1');
 		const subSection = folders.find(f => f.title === 'Group Section 1-a');
+		const subSection1 = folders.find(f => f.title === 'Subsection 1');
+		const subSection2 = folders.find(f => f.title === 'Subsection 2');
 		const notesFromParentSection = notes.filter(n => n.parent_id === parentSection.id);
 
+		expect(parentSection.id).toBe(subSection1.parent_id);
+		expect(parentSection.id).toBe(subSection2.parent_id);
 		expect(parentSection.id).toBe(subSection.parent_id);
-		expect(folders.length).toBe(6);
-		expect(notes.length).toBe(9);
-		expect(notesFromParentSection.length).toBe(3);
+		expect(folders.length).toBe(7);
+		expect(notes.length).toBe(6);
+		expect(notesFromParentSection.length).toBe(2);
 	});
 
 	it('should expect notes to be rendered the same', async () => {
