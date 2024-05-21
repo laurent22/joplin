@@ -20,9 +20,9 @@ export default class PdfDocument {
 		this.rendererMutex = withTimeout(new Mutex(), 40 * 1000);
 	}
 
-	public loadDoc = async (url: string | Uint8Array) => {
+	public loadDoc = async (url: string) => {
 		this.url = url;
-		const loadingTask = pdfjsLib.getDocument(url);
+		const loadingTask = pdfjsLib.getDocument({ url, isEvalSupported: false });
 		try {
 			const pdfDocument: any = await loadingTask.promise;
 			this.doc = pdfDocument;

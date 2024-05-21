@@ -736,8 +736,16 @@ function shimInit(options: ShimInitOptions = null) {
 		}
 	};
 
+	const getPdfJsDocument = (path: string) => {
+		return pdfJs.getDocument({
+			url: path,
+			// IMPORTANT: Set to false to mitigate CVE-2024-4367.
+			isEvalSupported: false,
+		});
+	};
+
 	shim.pdfExtractEmbeddedText = async (pdfPath: string): Promise<string[]> => {
-		const loadingTask = pdfJs.getDocument(pdfPath);
+		const loadingTask = getPdfJsDocument(pdfPath);
 		const doc = await loadingTask.promise;
 		const textByPage = [];
 
@@ -791,7 +799,7 @@ function shimInit(options: ShimInitOptions = null) {
 
 		const filePrefix = `page_${Date.now()}`;
 		const output: string[] = [];
-		const loadingTask = pdfJs.getDocument(pdfPath);
+		const loadingTask = getPdfJsDocument(pdfPath);
 		const doc = await loadingTask.promise;
 
 		try {
