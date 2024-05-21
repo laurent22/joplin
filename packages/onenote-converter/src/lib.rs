@@ -5,7 +5,7 @@ use std::panic;
 use wasm_bindgen::prelude::wasm_bindgen;
 
 use crate::utils::utils::{log, log_warn};
-use crate::utils::{get_file_extension, get_file_name, get_output_path, get_parent_dir, join_path};
+use crate::utils::{get_file_extension, get_file_name, get_output_path, get_parent_dir};
 
 mod notebook;
 mod page;
@@ -48,7 +48,12 @@ pub fn convert(path: &str, output_dir: &str, base_path: &str) -> Result<()> {
 
             let section = parser.parse_section(path.to_owned())?;
 
-            section::Renderer::new().render(&section, output_dir.to_owned())?;
+            let section_output_dir = unsafe { get_output_path(base_path, output_dir, path) }
+                .unwrap()
+                .as_string()
+                .unwrap();
+
+            section::Renderer::new().render(&section, section_output_dir.to_owned())?;
         }
         ".onetoc2" => {
             let name: String = unsafe { get_file_name(path) }.unwrap().as_string().unwrap();

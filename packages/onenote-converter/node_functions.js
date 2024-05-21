@@ -16,7 +16,7 @@ function isDirectory(filepath) {
 
 function readDir(filepath) {
 	const dirContents = fs.readdirSync(filepath, { withFileTypes: true });
-	return dirContents.map(entry => entry.name).join('\n');
+	return dirContents.map(entry => filepath + path.sep + entry.name).join('\n');
 }
 
 function removePrefix(basePath, prefix) {

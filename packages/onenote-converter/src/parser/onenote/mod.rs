@@ -5,7 +5,7 @@ use crate::parser::onenote::section::{Section, SectionEntry, SectionGroup};
 use crate::parser::onestore::parse_store;
 use crate::parser::reader::Reader;
 use crate::parser::utils::{exists, is_directory, read_dir, read_file};
-use crate::utils::utils::log;
+use crate::utils::utils::{log, log_warn};
 use crate::utils::{get_dir_name, get_file_extension, get_file_name, join_path};
 use std::panic;
 use web_sys::js_sys::Uint8Array;
@@ -44,7 +44,7 @@ impl Parser {
     /// table of contents of the notebook as well as all contained
     /// sections from the folder that the table of contents file is in.
     pub fn parse_notebook(&mut self, path: String) -> Result<Notebook> {
-        log!("Parsing notebook: {:?}", path);
+        log_warn!("Parsing notebook: {:?}", path);
         let file_content = unsafe { read_file(path.as_str()) }.unwrap();
         let array = Uint8Array::new(&file_content);
         let data = array.to_vec();

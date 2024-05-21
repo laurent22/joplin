@@ -2,7 +2,7 @@ use crate::parser::notebook::Notebook;
 use crate::parser::property::common::Color;
 use crate::parser::section::{Section, SectionEntry};
 use crate::templates::notebook::Toc;
-use crate::utils::utils::log;
+use crate::utils::utils::{log, log_warn};
 use crate::utils::{join_path, make_dir, remove_prefix, write_file};
 use crate::{section, templates};
 use color_eyre::eyre::{eyre, Result};
@@ -20,7 +20,7 @@ impl Renderer {
     }
 
     pub fn render(&mut self, notebook: &Notebook, name: &str, output_dir: &str) -> Result<()> {
-        log!("Notebook name: {:?} ", name);
+        log!("Notebook name: {:?} {:?}", name, output_dir);
         let _ = unsafe { make_dir(output_dir) };
 
         // let notebook_dir = unsafe { join_path(output_dir, sanitize_filename::sanitize(name).as_str()) }.unwrap().as_string().unwrap();
