@@ -40,7 +40,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		const notebookBaseDir = path.join(unzipTempDirectory, baseFolder, path.sep);
 		const outputDirectory2 = path.join(tempOutputDirectory, baseFolder);
 
-		const notebookFiles = zip.getEntries().filter(e => e.name !== 'OneNote_RecycleBin.onetoc2');
+		const notebookFiles = zip.getEntries().filter(e => e.name !== '.onetoc2' && e.name !== 'OneNote_RecycleBin.onetoc2');
 
 		logger.info('Extracting OneNote to HTML');
 		for (const notebookFile of notebookFiles) {
