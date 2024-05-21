@@ -1,10 +1,10 @@
 pub use crate::parser::Parser;
+use color_eyre::eyre::eyre;
 use color_eyre::eyre::Result;
-use color_eyre::eyre::{eyre};
 use std::panic;
 use wasm_bindgen::prelude::wasm_bindgen;
 
-use crate::utils::utils::{log_warn, log};
+use crate::utils::utils::{log, log_warn};
 use crate::utils::{get_file_extension, get_file_name, get_output_path, get_parent_dir, join_path};
 
 mod notebook;

@@ -17,7 +17,10 @@ pub struct ExGuid {
 
 impl ExGuid {
     pub fn fallback() -> ExGuid {
-        return ExGuid { guid: Guid::nil(), value: 0 }
+        return ExGuid {
+            guid: Guid::nil(),
+            value: 0,
+        };
     }
 
     pub(crate) fn is_nil(&self) -> bool {
