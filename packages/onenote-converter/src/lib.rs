@@ -46,6 +46,10 @@ pub fn convert(path: &str, output_dir: &str, base_path: &str) -> Result<()> {
             let name: String = unsafe { get_file_name(path) }.unwrap().as_string().unwrap();
             log!("Parsing .one file: {}", name);
 
+            if path.contains("OneNote_RecycleBin") {
+                return Ok(());
+            }
+
             let section = parser.parse_section(path.to_owned())?;
 
             let section_output_dir = unsafe { get_output_path(base_path, output_dir, path) }
@@ -75,7 +79,7 @@ pub fn convert(path: &str, output_dir: &str, base_path: &str) -> Result<()> {
 
             notebook::Renderer::new().render(&notebook, &notebook_name, &notebook_output_dir)?;
         }
-        ext => return Err(eyre!("Invalid file extension: {}, file: {}", ext, path))
+        ext => return Err(eyre!("Invalid file extension: {}, file: {}", ext, path)),
     }
 
     Ok(())

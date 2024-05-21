@@ -5,9 +5,7 @@ use std::fmt;
 use std::fmt::Display;
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
-use web_sys::js_sys::Uint8Array;
 use widestring::U16CString;
-use crate::utils::utils::log_warn;
 
 pub(crate) fn px(inches: f32) -> String {
     format!("{}px", (inches * 48.0).round())
@@ -88,7 +86,7 @@ pub unsafe fn read_dir(path: &str) -> Option<Vec<String>> {
 
     let result_str: String = match result_ptr.as_string() {
         Some(x) => x,
-        _       => String::new(),
+        _ => String::new(),
     };
     let names: Vec<String> = result_str.split('\n').map(|s| s.to_string()).collect_vec();
     Some(names)
