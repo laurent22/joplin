@@ -6,12 +6,12 @@ import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 import Note from '@joplin/lib/models/Note';
 import type { Dispatch } from 'redux';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
-import type { SetFormNote } from './useFormNote';
+import type { OnSetFormNote } from './useFormNote';
 
 const logger = Logger.create('useScheduleSaveCallbacks');
 
 interface Props {
-	setFormNote: RefObject<SetFormNote>;
+	setFormNote: RefObject<OnSetFormNote>;
 	dispatch: Dispatch;
 	editorRef: RefObject<NoteBodyEditorRef>;
 }
