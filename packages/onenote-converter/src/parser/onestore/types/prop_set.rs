@@ -14,6 +14,12 @@ pub(crate) struct PropertySet {
 }
 
 impl PropertySet {
+    pub fn fallback() -> PropertySet {
+        return PropertySet {
+                values: HashMap::from([])
+            };
+    }
+
     pub(crate) fn parse(reader: Reader) -> Result<PropertySet> {
         let count = reader.get_u16()?;
 

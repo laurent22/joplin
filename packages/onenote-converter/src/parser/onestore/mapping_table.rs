@@ -21,6 +21,14 @@ pub(crate) struct MappingTable {
 }
 
 impl MappingTable {
+
+    pub fn fallback() -> MappingTable {
+        return MappingTable {
+                objects: HashMap::from([]),
+                object_spaces: HashMap::from([])
+            };
+    }
+
     pub(crate) fn from_entries<
         I: Iterator<Item = (CompactId, ExGuid)>,
         J: Iterator<Item = (CompactId, CellId)>,

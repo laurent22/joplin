@@ -9,8 +9,10 @@ use crate::parser::one::property_set::{
 };
 use crate::parser::onenote::ink::{parse_ink_data, Ink, InkBoundingBox};
 use crate::parser::onenote::note_tag::{parse_note_tags, NoteTag};
+use crate::parser::onestore::object::Object;
 use crate::parser::onestore::object_space::ObjectSpace;
 use itertools::Itertools;
+use crate::utils::utils::log_warn;
 
 /// A rich text paragraph.
 ///
@@ -372,9 +374,11 @@ pub(crate) fn parse_rich_text(content_id: ExGuid, space: &ObjectSpace) -> Result
 
     // Parse the base paragraph style
     let paragraph_style_object = space
-        .get_object(data.paragraph_style)
-        .ok_or_else(|| ErrorKind::MalformedOneNoteData("paragraph styling is missing".into()))?;
-    let paragraph_style_data = paragraph_style_object::parse(paragraph_style_object)?;
+        .get_object_or_fallback(data.paragraph_style, || {
+            log_warn!("paragraph styling is missing");
+            Object::fallback()
+        });
+    let paragraph_style_data = paragraph_style_object::parse(&paragraph_style_object)?;
     let paragraph_style = parse_style(paragraph_style_data);
 
     // Parse the styles text runs (part 1)

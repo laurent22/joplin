@@ -5,6 +5,7 @@ use crate::parser::one::property::paragraph_alignment::ParagraphAlignment;
 use crate::parser::one::property::{simple, PropertyType};
 use crate::parser::one::property_set::PropertySetId;
 use crate::parser::onestore::object::Object;
+use crate::utils::utils::log_warn;
 
 /// A paragraph style.
 ///
@@ -42,10 +43,8 @@ pub(crate) struct Data {
 
 pub(crate) fn parse(object: &Object) -> Result<Data> {
     if object.id() != PropertySetId::ParagraphStyleObject.as_jcid() {
-        return Err(ErrorKind::MalformedOneNoteFileData(
-            format!("unexpected object type: 0x{:X}", object.id().0).into(),
-        )
-        .into());
+        log_warn!("unexpected object type: 0x{:X}. Using fallback style.", object.id().0);
+        return Ok(Data { charset: Some(Charset::Ansi), bold: false, italic: false, underline: false, strikethrough: false, superscript: false, subscript: false, font: None, font_size: None, font_color: None, highlight: None, next_style: None, style_id: None, paragraph_alignment: None, paragraph_space_before: None, paragraph_space_after: None, paragraph_line_spacing_exact: None, language_code: Some(1033), math_formatting: false, hyperlink: false, hyperlink_protected: false, hidden: false, text_run_is_embedded_object: false, text_run_object_type: None });
     }
 
     let charset = Charset::parse(PropertyType::Charset, object)?;

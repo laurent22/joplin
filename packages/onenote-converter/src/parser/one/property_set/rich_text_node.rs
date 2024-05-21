@@ -8,6 +8,7 @@ use crate::parser::one::property::{simple, PropertyType};
 use crate::parser::one::property_set::note_tag_container::Data as NoteTagData;
 use crate::parser::one::property_set::PropertySetId;
 use crate::parser::onestore::object::Object;
+use crate::utils::utils::log_warn;
 
 /// A rich text paragraph.
 ///
@@ -58,10 +59,19 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
         simple::parse_vec_u32(PropertyType::TextRunIndex, object)?.unwrap_or_default();
     let text_run_data_object =
         ObjectReference::parse_vec(PropertyType::TextRunDataObject, object)?.unwrap_or_default();
-    let paragraph_style = ObjectReference::parse(PropertyType::ParagraphStyle, object)?
-        .ok_or_else(|| {
-            ErrorKind::MalformedOneNoteFileData("rich text has no paragraph style".into())
-        })?;
+    
+    let paragraph_style_result = ObjectReference::parse(PropertyType::ParagraphStyle, object);
+    let paragraph_style = match paragraph_style_result {
+        Ok(Some(style)) => style,
+        Ok(None) => {
+            log_warn!("rich text has no paragraph style");
+            ExGuid::fallback()
+        },
+        Err(e) => {
+            log_warn!("error parsing paragraph style: {:?}", e);
+            ExGuid::fallback()
+        }
+    };
     let paragraph_space_before =
         simple::parse_f32(PropertyType::ParagraphSpaceBefore, object)?.unwrap_or_default();
     let paragraph_space_after =

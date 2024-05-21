@@ -31,6 +31,16 @@ impl<'a, 'b> ObjectSpace<'a> {
         self.objects.get(&id)
     }
 
+    pub(crate) fn get_object_or_fallback<F>(&self, id: ExGuid, fallback_fn: F) -> Object 
+    where
+        F: FnOnce() -> Object<'a>,
+    {
+        match self.get_object(id) {
+            Some(object) => object.to_owned(),
+            None => fallback_fn(),
+        }
+    }
+
     pub(crate) fn content_root(&self) -> Option<ExGuid> {
         self.roots.get(&RevisionRole::DefaultContent).copied()
     }

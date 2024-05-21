@@ -7,6 +7,7 @@ use crate::parser::onestore::object_space::GroupData;
 use crate::parser::onestore::types::jcid::JcId;
 use crate::parser::onestore::types::object_prop_set::ObjectPropSet;
 use crate::parser::reader::Reader;
+use super::types::prop_set::PropertySet;
 
 /// A OneNote data object.
 ///
@@ -54,6 +55,16 @@ impl<'a> Object<'a> {
 }
 
 impl<'a> Object<'a> {
+    pub fn fallback() -> Object<'a> {
+        return Object {
+            jc_id: JcId { 0: 0},
+            context_id: ExGuid::fallback(),
+            file_data: None,
+            mapping: MappingTable::fallback(),
+            props: ObjectPropSet { object_ids: Vec::from([]), object_space_ids: Vec::from([]), context_ids: Vec::from([]), properties: PropertySet::fallback() }
+        };
+    }
+
     pub(crate) fn parse<'b>(
         object_id: ExGuid,
         context_id: ExGuid,
