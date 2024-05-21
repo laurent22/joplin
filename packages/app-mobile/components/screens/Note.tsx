@@ -17,7 +17,7 @@ import Note from '@joplin/lib/models/Note';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Resource from '@joplin/lib/models/Resource';
 import Folder from '@joplin/lib/models/Folder';
-const Clipboard = require('@react-native-community/clipboard').default;
+const Clipboard = require('@react-native-clipboard/clipboard').default;
 const md5 = require('md5');
 const { BackButtonService } = require('../../services/back-button.js');
 import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';

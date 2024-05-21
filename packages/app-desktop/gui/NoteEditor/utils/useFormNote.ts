@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, RefObject } from 'react';
 import { FormNote, defaultFormNote, ResourceInfos } from './types';
 import { clearResourceCache, attachedResources } from './resourceHandling';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
@@ -25,13 +25,14 @@ export interface HookDependencies {
 	decryptionStarted: boolean;
 	noteId: string;
 	isProvisional: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	titleInputRef: any;
+	titleInputRef: RefObject<HTMLInputElement>;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	editorRef: any;
 	onBeforeLoad(event: OnLoadEvent): void;
 	onAfterLoad(event: OnLoadEvent): void;
 }
+
+export type SetFormNote = ReturnType<typeof useState<FormNote>>[1];
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 function installResourceChangeHandler(onResourceChangeHandler: Function) {

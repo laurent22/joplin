@@ -547,6 +547,7 @@ export const toggleSelectedLinesStartWith = (
 		const toLine = doc.lineAt(sel.to);
 		let hasProp = false;
 		let charsAdded = 0;
+		let charsAddedBefore = 0;
 
 		const changes = [];
 		const lines = [];
@@ -585,7 +586,13 @@ export const toggleSelectedLinesStartWith = (
 					insert: '',
 				});
 
-				charsAdded -= match[0].length;
+				const deletedSize = match[0].length;
+				if (contentFrom <= sel.from) {
+					// Math.min: Handles the case where some deleted characters are before sel.from
+					// and others are after.
+					charsAddedBefore -= Math.min(sel.from - contentFrom, deletedSize);
+				}
+				charsAdded -= deletedSize;
 			} else {
 				changes.push({
 					from: contentFrom,
@@ -593,6 +600,9 @@ export const toggleSelectedLinesStartWith = (
 				});
 
 				charsAdded += template.length;
+				if (contentFrom <= sel.from) {
+					charsAddedBefore += template.length;
+				}
 			}
 		}
 
@@ -601,8 +611,7 @@ export const toggleSelectedLinesStartWith = (
 		// added text isn't helpful)
 		let newSel;
 		if (sel.empty && fromLine.number === toLine.number) {
-			const regionEnd = toLine.to + charsAdded;
-			newSel = EditorSelection.cursor(regionEnd);
+			newSel = EditorSelection.cursor(sel.from + charsAddedBefore);
 		} else {
 			newSel = EditorSelection.range(fromLine.from, toLine.to + charsAdded);
 		}

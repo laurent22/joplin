@@ -85,7 +85,7 @@ describe('markdownCommands', () => {
 
 	it('should set headers to the proper levels (when toggling)', async () => {
 		const initialDocText = 'Testing...\nThis is a test.';
-		const editor = await createTestEditor(initialDocText, EditorSelection.cursor(3), []);
+		const editor = await createTestEditor(initialDocText, EditorSelection.cursor('Testing...'.length), []);
 
 		toggleHeaderLevel(1)(editor);
 
@@ -124,7 +124,7 @@ describe('markdownCommands', () => {
 			'Testing...\n\n> # This is a test.\n> ...a test',
 		);
 		expect(mainSel.empty).toBe(true);
-		expect(mainSel.from).toBe('Testing...\n\n> # This is a test.'.length);
+		expect(mainSel.from).toBe('Testing...\n\n> # This'.length);
 
 		toggleHeaderLevel(3)(editor);
 
@@ -273,6 +273,24 @@ describe('markdownCommands', () => {
 		expect(editor.state.selection.main).toMatchObject({
 			from: finalText.length,
 			to: finalText.length,
+		});
+	});
+
+	it('insertOrIncreaseIndent should preserve the cursor location when in a list', async () => {
+		const initialText = '- a\n- b\n- c';
+		const editor = await createTestEditor(
+			initialText,
+			EditorSelection.cursor(5), // In the 2nd list item
+			['BulletList'],
+		);
+
+		insertOrIncreaseIndent(editor);
+
+		expect(editor.state.doc.toString()).toBe('- a\n\t- b\n- c');
+		expect(editor.state.selection.main).toMatchObject({
+			// The indent unit is a single tab, which has length 1.
+			from: 6,
+			to: 6,
 		});
 	});
 });

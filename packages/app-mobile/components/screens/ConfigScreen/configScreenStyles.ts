@@ -97,8 +97,7 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		paddingTop: 3,
 	};
 
-
-	const styles: ConfigScreenStyleSheet = {
+	const styleSheet = StyleSheet.create<ConfigScreenStyleSheet>({
 		body: {
 			flex: 1,
 			justifyContent: 'flex-start',
@@ -205,9 +204,7 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 			fontWeight: 'bold',
 		},
 		sidebarButtonDescriptionText,
-	};
-
-	const styleSheet = StyleSheet.create(styles);
+	});
 
 	return {
 		styleSheet,

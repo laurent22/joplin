@@ -84,6 +84,11 @@ export const StyledListItemAnchor = styled.a`
 	align-items: center;
 	user-select: none;
 	height: 100%;
+
+	/* A different background color is already used to indicate focus for sidebar list items. */
+	&:focus-visible {
+		outline: none;
+	}
 `;
 
 export const StyledShareIcon = styled.i`
