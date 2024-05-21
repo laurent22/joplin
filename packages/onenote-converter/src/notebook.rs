@@ -59,9 +59,7 @@ impl Renderer {
                                 section_group_dir.clone(),
                                 output_dir.to_owned(),
                             )?);
-                        } else {
-                            return Err(eyre!("Nested section groups are not yet supported"));
-                        }
+                        }                     
                     }
 
                     toc.push(templates::notebook::Toc::SectionGroup(
