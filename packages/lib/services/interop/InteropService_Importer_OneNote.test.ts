@@ -98,4 +98,32 @@ describe('InteropService_Importer_OneNote', () => {
 		}
 		BaseModel.setIdGenerator(uuid.create);
 	});
+
+	it('should render the proper tree for notebook with group sections', async () => {
+		const notes = await importNote(`${supportDir}/onenote/group_sections.zip`);
+		const folders = await Folder.all();
+
+		const mainFolder = folders.find(f => f.title === 'Notebook created on OneNote App');
+		const section = folders.find(f => f.title === 'Section');
+		const sectionA1 = folders.find(f => f.title === 'Section A1');
+		const sectionA = folders.find(f => f.title === 'Section A');
+		const sectionB1 = folders.find(f => f.title === 'Section B1');
+		const sectionB = folders.find(f => f.title === 'Section B');
+		const sectionD1 = folders.find(f => f.title === 'Section D1');
+		const sectionD = folders.find(f => f.title === 'Section D');
+
+		expect(section.parent_id).toBe(mainFolder.id);
+		expect(sectionA.parent_id).toBe(mainFolder.id);
+		expect(sectionD.parent_id).toBe(mainFolder.id);
+
+		expect(sectionA1.parent_id).toBe(sectionA.id);
+		expect(sectionB.parent_id).toBe(sectionA.id);
+
+		expect(sectionB1.parent_id).toBe(sectionB.id);
+		expect(sectionD1.parent_id).toBe(sectionD.id);
+
+		expect(notes.filter(n => n.parent_id === sectionA1.id).length).toBe(2);
+		expect(notes.filter(n => n.parent_id === sectionB1.id).length).toBe(2);
+		expect(notes.filter(n => n.parent_id === sectionD1.id).length).toBe(1);
+	});
 });
