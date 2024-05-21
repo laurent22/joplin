@@ -44,7 +44,7 @@ impl Parser {
     /// table of contents of the notebook as well as all contained
     /// sections from the folder that the table of contents file is in.
     pub fn parse_notebook(&mut self, path: String) -> Result<Notebook> {
-        log_warn!("Parsing notebook: {:?}", path);
+        log!("Parsing notebook: {:?}", path);
         let file_content = unsafe { read_file(path.as_str()) }.unwrap();
         let array = Uint8Array::new(&file_content);
         let data = array.to_vec();

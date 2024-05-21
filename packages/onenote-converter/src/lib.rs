@@ -73,11 +73,9 @@ pub fn convert(path: &str, output_dir: &str, base_path: &str) -> Result<()> {
                 .unwrap();
             log!("Notebok directory: {:?}", notebook_output_dir);
 
-            log!("notebook output dir: {:?}", notebook_output_dir);
             notebook::Renderer::new().render(&notebook, &notebook_name, &notebook_output_dir)?;
         }
-        ext => return Err(eyre!("Invalid file extension: {}", ext)),
-        _ => return Err(eyre!("Couldn't determine file type: {:?}", path)),
+        ext => return Err(eyre!("Invalid file extension: {}, file: {}", ext, path))
     }
 
     Ok(())
