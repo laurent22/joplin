@@ -168,103 +168,6 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 </html>"
 `;
 
-exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: OneNote_DeletedPages 1`] = `
-"<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>OneNote_DeletedPages</title>
-    <style>
-        html, body { margin: 0; padding: 0; }
-
-        body {
-            display: flex;
-        }
-
-        nav {
-            height: 100vh;
-            min-width: 200px;
-            max-width: 300px;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-            border-right: 1px solid rgb(235, 235, 235);
-        }
-
-        nav ul {
-            padding: 0;
-            margin: 0;
-            overflow-y: auto;
-            height: 100%;
-        }
-
-        nav li {
-            padding: 10px 20px;
-            border-bottom: 1px solid rgb(235, 235, 235);
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        nav li.active {
-            background-color: rgb(233, 233, 233);
-        }
-
-        nav a {
-            color: black;
-            text-decoration: none;
-        }
-
-        .content {
-            flex: 1;
-        }
-    </style>
-</head>
-<body>
-
-<nav>
-    <ul>
-        
-        <li class="l1"><a href=":/4" target="content" title="asdf">asdf</a></li>
-        
-    </ul>
-</nav>
-<iframe src="" frameborder="0" name="content" class="content"></iframe>
-
-<style>
-    .l2 { padding: 10px 20px 10px 40px }
-    .l3 { padding: 10px 20px 10px 60px }
-    .l4 { padding: 10px 20px 10px 80px }
-    .l5 { padding: 10px 20px 10px 100px }
-</style>
-<script>
-    document.addEventListener('click', function (event) {
-        // If the clicked element doesn't have the right selector, bail
-        if (!event.target.matches('nav a')) return;
-        for (const child of event.target.parentElement.parentElement.children) {
-            child.classList.remove('active');
-        }
-        event.target.parentElement.classList.add('active');
-
-    }, false);
-
-    window.addEventListener('message', (event) => {
-        const activeTarget = event.data;
-
-        for (const link of document.querySelectorAll('nav ul li a')) {
-            if (link.href === activeTarget) {
-                link.parentElement.classList.add('active');
-            }
-        }
-    });
-
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
-
-</body>
-</html>"
-`;
-
 exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: Page with more than one font size 1`] = `
 "<!DOCTYPE html>
 <html lang="en">
@@ -363,17 +266,17 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <nav>
     <ul>
         
-        <li class="l1"><a href=":/10" target="content" title="A simple filename">A simple filename</a></li>
+        <li class="l1"><a href=":/6" target="content" title="A simple filename">A simple filename</a></li>
         
-        <li class="l1"><a href=":/8" target="content" title="A page with a lot of svgs">A page with a lot of svgs</a></li>
+        <li class="l1"><a href=":/4" target="content" title="A page with a lot of svgs">A page with a lot of svgs</a></li>
         
-        <li class="l1"><a href=":/7" target="content" title="A page can have any width it wants?">A page can have any width it wants?</a></li>
+        <li class="l1"><a href=":/3" target="content" title="A page can have any width it wants?">A page can have any width it wants?</a></li>
         
-        <li class="l1"><a href=":/9" target="content" title="A page with text and drawing above it">A page with text and drawing above it</a></li>
+        <li class="l1"><a href=":/5" target="content" title="A page with text and drawing above it">A page with text and drawing above it</a></li>
         
-        <li class="l1"><a href=":/12" target="content" title="text">text</a></li>
+        <li class="l1"><a href=":/8" target="content" title="text">text</a></li>
         
-        <li class="l1"><a href=":/11" target="content" title="Page with more than one font size">Page with more than one font size</a></li>
+        <li class="l1"><a href=":/7" target="content" title="Page with more than one font size">Page with more than one font size</a></li>
         
     </ul>
 </nav>
@@ -411,45 +314,6 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
     }
 </script>
 
-</body>
-</html>"
-`;
-
-exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: asdf 1`] = `
-"<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>asdf</title>
-    <style>
-    * { margin: 0; padding: 0; font-weight: normal; }
-    table, tr, td { border-color: #A3A3A3; }
-    ul, ol { padding: 0; }
-    .title .outline-element { display: inline; }
-    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
-    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
-    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
-    .ink-text { top: 0; left: 0; }
-    .note-tag-icon { position: relative; }
-    .note-tag-icon > svg { position: absolute; }
-    .icon-secondary > svg { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
-
-    
-    </style>
-</head>
-<body>
-
-<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">asdf</span></div>
-</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">terça-feira, 30 de abril de 2024</span></div>
-<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">16:18</span></div>
-</div></div>
-
-<script>
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
 </body>
 </html>"
 `;

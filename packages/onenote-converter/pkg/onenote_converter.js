@@ -186,6 +186,19 @@ function debugString(val) {
     // TODO we could test for more things here, like `Set`s and `Map`s.
     return className;
 }
+
+function handleError(f, args) {
+    try {
+        return f.apply(this, args);
+    } catch (e) {
+        wasm.__wbindgen_exn_store(addHeapObject(e));
+    }
+}
+
+function getArrayU8FromWasm0(ptr, len) {
+    ptr = ptr >>> 0;
+    return getUint8Memory0().subarray(ptr / 1, ptr / 1 + len);
+}
 /**
 * @param {string} input
 * @param {string} output
@@ -200,19 +213,6 @@ module.exports.oneNoteConverter = function(input, output, base_path) {
     const len2 = WASM_VECTOR_LEN;
     wasm.oneNoteConverter(ptr0, len0, ptr1, len1, ptr2, len2);
 };
-
-function handleError(f, args) {
-    try {
-        return f.apply(this, args);
-    } catch (e) {
-        wasm.__wbindgen_exn_store(addHeapObject(e));
-    }
-}
-
-function getArrayU8FromWasm0(ptr, len) {
-    ptr = ptr >>> 0;
-    return getUint8Memory0().subarray(ptr / 1, ptr / 1 + len);
-}
 
 module.exports.__wbg_join_13fcc6aa248ce243 = function() { return handleError(function (arg0, arg1, arg2, arg3) {
     const ret = join(getStringFromWasm0(arg0, arg1), getStringFromWasm0(arg2, arg3));
@@ -247,41 +247,6 @@ module.exports.__wbg_normalizeAndWriteFile_ec3f9624dc064f6f = function() { retur
     return addHeapObject(ret);
 }, arguments) };
 
-module.exports.__wbg_removePrefix_7a999edd559fd0e6 = function() { return handleError(function (arg0, arg1, arg2, arg3) {
-    const ret = removePrefix(getStringFromWasm0(arg0, arg1), getStringFromWasm0(arg2, arg3));
-    return addHeapObject(ret);
-}, arguments) };
-
-module.exports.__wbindgen_string_new = function(arg0, arg1) {
-    const ret = getStringFromWasm0(arg0, arg1);
-    return addHeapObject(ret);
-};
-
-module.exports.__wbg_mkdirSyncRecursive_b92f184dee879e44 = function() { return handleError(function (arg0, arg1) {
-    const ret = mkdirSyncRecursive(getStringFromWasm0(arg0, arg1));
-    return addHeapObject(ret);
-}, arguments) };
-
-module.exports.__wbg_extname_0c314acf648141d7 = function() { return handleError(function (arg0, arg1) {
-    const ret = extname(getStringFromWasm0(arg0, arg1));
-    return addHeapObject(ret);
-}, arguments) };
-
-module.exports.__wbg_basename_8509b1ba32f9422a = function() { return handleError(function (arg0, arg1) {
-    const ret = basename(getStringFromWasm0(arg0, arg1));
-    return addHeapObject(ret);
-}, arguments) };
-
-module.exports.__wbg_getParentDir_3ed7ef3bfa04fc4c = function() { return handleError(function (arg0, arg1) {
-    const ret = getParentDir(getStringFromWasm0(arg0, arg1));
-    return addHeapObject(ret);
-}, arguments) };
-
-module.exports.__wbg_getOutputPath_c8878b16ae903260 = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4, arg5) {
-    const ret = getOutputPath(getStringFromWasm0(arg0, arg1), getStringFromWasm0(arg2, arg3), getStringFromWasm0(arg4, arg5));
-    return addHeapObject(ret);
-}, arguments) };
-
 module.exports.__wbg_readDir_f1ea9d82729fd652 = function() { return handleError(function (arg0, arg1) {
     const ret = readDir(getStringFromWasm0(arg0, arg1));
     return addHeapObject(ret);
@@ -292,10 +257,45 @@ module.exports.__wbg_readFileSync_dce2cb2a612e5268 = function() { return handleE
     return addHeapObject(ret);
 }, arguments) };
 
+module.exports.__wbg_mkdirSyncRecursive_b92f184dee879e44 = function() { return handleError(function (arg0, arg1) {
+    const ret = mkdirSyncRecursive(getStringFromWasm0(arg0, arg1));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_removePrefix_7a999edd559fd0e6 = function() { return handleError(function (arg0, arg1, arg2, arg3) {
+    const ret = removePrefix(getStringFromWasm0(arg0, arg1), getStringFromWasm0(arg2, arg3));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_getOutputPath_c8878b16ae903260 = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4, arg5) {
+    const ret = getOutputPath(getStringFromWasm0(arg0, arg1), getStringFromWasm0(arg2, arg3), getStringFromWasm0(arg4, arg5));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_getParentDir_3ed7ef3bfa04fc4c = function() { return handleError(function (arg0, arg1) {
+    const ret = getParentDir(getStringFromWasm0(arg0, arg1));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_basename_8509b1ba32f9422a = function() { return handleError(function (arg0, arg1) {
+    const ret = basename(getStringFromWasm0(arg0, arg1));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_extname_0c314acf648141d7 = function() { return handleError(function (arg0, arg1) {
+    const ret = extname(getStringFromWasm0(arg0, arg1));
+    return addHeapObject(ret);
+}, arguments) };
+
 module.exports.__wbg_dirname_a04a74019d90c213 = function() { return handleError(function (arg0, arg1) {
     const ret = dirname(getStringFromWasm0(arg0, arg1));
     return addHeapObject(ret);
 }, arguments) };
+
+module.exports.__wbindgen_string_new = function(arg0, arg1) {
+    const ret = getStringFromWasm0(arg0, arg1);
+    return addHeapObject(ret);
+};
 
 module.exports.__wbg_warn_1982e858bdcc0c42 = function(arg0, arg1) {
     console.warn(getObject(arg0), getObject(arg1));
