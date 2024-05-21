@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useCallback } from 'react';
-import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
+import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import TextButton, { TextButtonProps, ButtonType } from '../../../../buttons/TextButton';
+import { PluginCallback } from '../utils/usePluginCallbacks';
 
-export type PluginCallback = (event: ItemEvent)=> void;
 
 interface Props extends Omit<TextButtonProps, 'type'|'item'|'onPress'|'children'> {
 	item: PluginItem;
@@ -27,7 +27,6 @@ const ActionButton: React.FC<Props> = props => {
 	return (
 		<TextButton
 			type={ButtonType.Primary}
-			inline={true}
 			{...props}
 			onPress={onPress}
 			accessibilityLabel={accessibilityLabel}

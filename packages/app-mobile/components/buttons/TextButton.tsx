@@ -17,7 +17,6 @@ interface Props extends Omit<ButtonProps, 'item'|'onPress'|'children'> {
 	type: ButtonType;
 	onPress: ()=> void;
 	children: ReactNode;
-	inline?: boolean;
 }
 
 export type TextButtonProps = Omit<Props, 'themeId'>;

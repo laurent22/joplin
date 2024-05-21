@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { ConfigScreenStyles } from '../configScreenStyles';
 import { View } from 'react-native';
 import { Banner, Button, Text } from 'react-native-paper';
@@ -7,11 +7,13 @@ import { _ } from '@joplin/lib/locale';
 import PluginService, { PluginSettings, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginToggle from './PluginToggle';
 import SearchPlugins from './SearchPlugins';
-import { ItemEvent } from '@joplin/lib/components/shared/config/plugins/types';
+import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import NavService from '@joplin/lib/services/NavService';
 import useRepoApi from './utils/useRepoApi';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
+import PluginInfoModal from './PluginInfoModal';
+import usePluginCallbacks from './utils/usePluginCallbacks';
 
 interface Props {
 	themeId: number;
@@ -58,6 +60,7 @@ const PluginStates: React.FC<Props> = props => {
 	const [repoApiLoaded, setRepoApiLoaded] = useState(false);
 	const [reloadRepoCounter, setRepoReloadCounter] = useState(0);
 	const [updatablePluginIds, setUpdatablePluginIds] = useState<Record<string, boolean>>({});
+	const [shownInDialogItem, setShownInDialogItem] = useState<PluginItem|null>(null);
 
 	const onRepoApiLoaded = useCallback(async (repoApi: RepositoryApi) => {
 		const manifests = Object.values(PluginService.instance().plugins)
@@ -102,6 +105,22 @@ const PluginStates: React.FC<Props> = props => {
 		}
 	};
 
+	const onShowPluginInfo = useCallback((event: ItemEvent) => {
+		setShownInDialogItem(event.item);
+	}, []);
+
+	const onPluginDialogClosed = useCallback(() => {
+		setShownInDialogItem(null);
+	}, []);
+
+	const pluginSettings = useMemo(() => {
+		return PluginService.instance().unserializePluginSettings(props.pluginSettings);
+	}, [props.pluginSettings]);
+
+	const { callbacks: pluginCallbacks, updatingPluginIds } = usePluginCallbacks({
+		pluginSettings, updatePluginStates: props.updatePluginStates, repoApi,
+	});
+
 	const onShowPluginLog = useCallback((event: ItemEvent) => {
 		const pluginId = event.item.manifest.id;
 		void NavService.go('Log', { defaultFilter: pluginId });
@@ -121,10 +140,13 @@ const PluginStates: React.FC<Props> = props => {
 					themeId={props.themeId}
 					pluginId={pluginId}
 					styles={props.styles}
-					pluginSettings={props.pluginSettings}
+					pluginSettings={pluginSettings}
 					updatablePluginIds={updatablePluginIds}
+					updatingPluginIds={updatingPluginIds}
 					updatePluginStates={props.updatePluginStates}
+					onShowPluginInfo={onShowPluginInfo}
 					onShowPluginLog={onShowPluginLog}
+					callbacks={pluginCallbacks}
 					repoApi={repoApi}
 				/>,
 			);
@@ -150,6 +172,16 @@ const PluginStates: React.FC<Props> = props => {
 			{renderRepoApiStatus()}
 			{installedPluginCards}
 			{showSearch ? searchComponent : null}
+			<PluginInfoModal
+				themeId={props.themeId}
+				pluginSettings={pluginSettings}
+				updatablePluginIds={updatablePluginIds}
+				updatingPluginIds={updatingPluginIds}
+				item={shownInDialogItem}
+				visible={!!shownInDialogItem}
+				onModalDismiss={onPluginDialogClosed}
+				pluginCallbacks={pluginCallbacks}
+			/>
 		</View>
 	);
 };

@@ -4,9 +4,9 @@ import shim from '@joplin/lib/shim';
 import * as React from 'react';
 import { View } from 'react-native';
 import { _ } from '@joplin/lib/locale';
-import { PluginCallback } from './ActionButton';
 import RecommendedChip from './RecommendedChip';
 import { Chip } from 'react-native-paper';
+import { PluginCallback } from '../utils/usePluginCallbacks';
 
 interface Props {
 	themeId: number;

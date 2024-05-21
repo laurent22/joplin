@@ -2,23 +2,18 @@ import * as React from 'react';
 import { Card } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
-import ActionButton, { PluginCallback } from './ActionButton';
-import PluginInfoButton from './PluginInfoButton';
+import ActionButton from './ActionButton';
 import { ButtonType } from '../../../../buttons/TextButton';
 import PluginChips from './PluginChips';
 import PluginTitle from './PluginTitle';
+import { UpdateState } from '../utils/useUpdateState';
+import { PluginCallback } from '../utils/usePluginCallbacks';
+import { useCallback } from 'react';
 
 export enum InstallState {
 	NotInstalled,
 	Installing,
 	Installed,
-}
-
-export enum UpdateState {
-	Idle = 1,
-	CanUpdate = 2,
-	Updating = 3,
-	HasBeenUpdated = 4,
 }
 
 interface Props {
@@ -37,6 +32,7 @@ interface Props {
 	onDelete?: PluginCallback;
 	onToggle?: PluginCallback;
 	onShowPluginLog?: PluginCallback;
+	onShowPluginInfo?: PluginCallback;
 }
 
 const PluginBox: React.FC<Props> = props => {
@@ -89,28 +85,22 @@ const PluginBox: React.FC<Props> = props => {
 	const enableButton = <ActionButton item={item} onPress={props.onToggle} title={_('Enable')}/>;
 	const aboutButton = <ActionButton type={ButtonType.Link} item={item} onPress={props.onAboutPress} title={_('About')}/>;
 
-	const renderRightEdgeButton = (buttonProps: { size: number }) => {
-		if (!props.showInfoButton) return null;
-		return (
-			<PluginInfoButton
-				{...buttonProps}
-				themeId={props.themeId}
-				item={props.item}
-				onDelete={props.onDelete}
-				onToggle={props.onToggle}
-				onUpdate={props.onUpdate}
-			/>
-		);
-	};
-
 	const updateStateIsIdle = props.updateState !== UpdateState.Idle;
 
+	const onPress = useCallback(() => {
+		props.onShowPluginInfo?.({ item: props.item });
+	}, [props.onShowPluginInfo, props.item]);
+
 	return (
-		<Card mode='outlined' style={{ margin: 8, opacity: props.isCompatible ? undefined : 0.7 }} testID='plugin-card'>
+		<Card
+			mode='outlined'
+			style={{ margin: 8, opacity: props.isCompatible ? undefined : 0.7 }}
+			onPress={props.onShowPluginInfo ? onPress : null}
+			testID='plugin-card'
+		>
 			<Card.Title
 				title={<PluginTitle manifest={item.manifest} />}
 				subtitle={manifest.description}
-				right={renderRightEdgeButton}
 			/>
 			<Card.Content>
 				<PluginChips

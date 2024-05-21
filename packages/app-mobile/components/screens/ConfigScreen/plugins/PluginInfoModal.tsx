@@ -7,22 +7,24 @@ import getPluginIssueReportUrl from '@joplin/lib/services/plugins/utils/getPlugi
 import { Linking, ScrollView, StyleSheet, View } from 'react-native';
 import DismissibleDialog from '../../../DismissibleDialog';
 import openWebsiteForPlugin from './utils/openWebsiteForPlugin';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginChips from './PluginBox/PluginChips';
 import PluginTitle from './PluginBox/PluginTitle';
-import ActionButton, { PluginCallback } from './PluginBox/ActionButton';
+import ActionButton from './PluginBox/ActionButton';
 import TextButton, { ButtonType } from '../../../buttons/TextButton';
+import useUpdateState, { UpdateState } from './utils/useUpdateState';
+import { PluginCallback, PluginCallbacks } from './utils/usePluginCallbacks';
 
 interface Props {
 	themeId: number;
-	size: number;
 	item: PluginItem|null;
+	updatablePluginIds: Record<string, boolean>;
+	updatingPluginIds: Record<string, boolean>;
 	visible: boolean;
+	pluginSettings: PluginSettings;
 	onModalDismiss: ()=> void;
 
-	onUpdate: PluginCallback;
-	onDelete: PluginCallback;
-	onToggle: PluginCallback;
+	pluginCallbacks: PluginCallbacks;
 }
 
 const styles = StyleSheet.create({
@@ -121,24 +123,47 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 	const deleteButton = (
 		<ActionButton
 			item={props.item}
-			inline={false}
 			type={ButtonType.Delete}
-			onPress={props.onDelete}
+			onPress={props.pluginCallbacks.onDelete}
 			disabled={props.item.deleted}
 			title={props.item.deleted ? _('Deleted') : _('Delete')}
+		/>
+	);
+
+	const updateState = useUpdateState({
+		pluginId: plugin?.id,
+		pluginSettings: props.pluginSettings,
+		updatablePluginIds: props.updatablePluginIds,
+		updatingPluginIds: props.updatingPluginIds,
+	});
+
+	const getUpdateButtonTitle = () => {
+		if (updateState === UpdateState.Updating) return _('Updating...');
+		if (updateState === UpdateState.HasBeenUpdated) return _('Updated');
+		return _('Update');
+	};
+
+	const updateButton = (
+		<ActionButton
+			item={props.item}
+			onPress={props.pluginCallbacks.onUpdate}
+			disabled={updateState !== UpdateState.CanUpdate || !isCompatible}
+			loading={updateState === UpdateState.Updating}
+			title={getUpdateButtonTitle()}
 		/>
 	);
 
 	return <>
 		<ScrollView>
 			{aboutPlugin}
-			<EnabledSwitch item={props.item} onToggle={props.onToggle}/>
+			<EnabledSwitch item={props.item} onToggle={props.pluginCallbacks.onToggle}/>
 			<Divider />
 			<View style={styles.buttonContainer}>
 				<TextButton
 					type={ButtonType.Primary}
 					onPress={onAboutPress}
 				>{_('About')}</TextButton>
+				{updateState !== UpdateState.Idle ? updateButton : null}
 				{deleteButton}
 			</View>
 			<Divider />
