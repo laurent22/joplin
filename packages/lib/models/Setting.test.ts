@@ -426,4 +426,25 @@ describe('models/Setting', () => {
 		}
 	});
 
+	test('should not lose the values of file settings that are registered after the first settings save', async () => {
+		const registerCustom = async () => {
+			await Setting.registerSetting('myCustom', {
+				public: true,
+				value: 'test',
+				type: Setting.TYPE_STRING,
+				storage: SettingStorage.File,
+			});
+		};
+
+		await registerCustom();
+		Setting.setValue('myCustom', 'test2');
+		await Setting.saveAll();
+
+		await Setting.reset();
+		await Setting.load();
+		await Setting.saveAll();
+
+		await registerCustom();
+		expect(Setting.value('myCustom')).toBe('test2');
+	});
 });

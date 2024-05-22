@@ -331,6 +331,7 @@ class Setting extends BaseModel {
 	private static keychainService_: any = null;
 	private static keys_: string[] = null;
 	private static cache_: CacheItem[] = [];
+	private static cachedUnknownSettings_: CacheItem[] = [];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static saveTimeoutId_: any = null;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -360,6 +361,7 @@ class Setting extends BaseModel {
 		this.metadata_ = null;
 		this.keys_ = null;
 		this.cache_ = [];
+		this.cachedUnknownSettings_ = [];
 		this.customMetadata_ = {};
 		this.fileHandler_ = null;
 		this.rootFileHandler_ = null;
@@ -2031,12 +2033,13 @@ class Setting extends BaseModel {
 			this.keys_ = null;
 
 			// Reload the value from the database, if it was already present
-			const valueRow = await this.loadOne(key);
+			const valueRow = await this.loadOne(key) || this.cachedUnknownSettings_.find(item => item.key === key);
 			if (valueRow) {
 				// Remove any duplicate copies of the setting -- if multiple items in cache_
 				// have the same key, we may encounter unique key errors while saving to the
 				// database.
 				this.cache_ = this.cache_.filter(setting => setting.key !== key);
+				this.cachedUnknownSettings_ = this.cachedUnknownSettings_.filter(setting => setting.key !== key);
 
 				this.cache_.push({
 					key: key,
@@ -2175,7 +2178,12 @@ class Setting extends BaseModel {
 			for (let i = 0; i < items.length; i++) {
 				const c = items[i];
 
-				if (!this.keyExists(c.key)) continue;
+				if (!this.keyExists(c.key)) {
+					// Cache the setting differently -- it may be registered later, in which case
+					// its value is still needed.
+					this.cachedUnknownSettings_.push(c);
+					continue;
+				}
 
 				c.value = this.formatValue(c.key, c.value);
 				c.value = this.filterValue(c.key, c.value);
