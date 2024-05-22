@@ -15,6 +15,7 @@ import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import Logger from '@joplin/utils/Logger';
+import eventManager, { EventName } from '@joplin/lib/eventManager';
 
 const logger = Logger.create('useFormNote');
 
@@ -201,6 +202,23 @@ export default function useFormNote(dependencies: HookDependencies) {
 		prevDecryptionStarted, decryptionStarted,
 		refreshFormNote,
 	]);
+
+	useEffect(() => {
+		if (!noteId) return ()=>{};
+
+		type ChangeEventSlice = { itemId: string };
+		const listener = ({ itemId }: ChangeEventSlice) => {
+			if (itemId === noteId) {
+				if (formNoteRef.current.hasChanged) return;
+				refreshFormNote();
+			}
+		};
+		eventManager.on(EventName.ItemChange, listener);
+
+		return () => {
+			eventManager.off(EventName.ItemChange, listener);
+		};
+	}, [noteId, refreshFormNote]);
 
 	useEffect(() => {
 		if (!noteId) {
