@@ -14,6 +14,7 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import Logger from '@joplin/utils/Logger';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
+import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 
 const logger = Logger.create('useFormNote');
 
@@ -39,12 +40,14 @@ export type OnSetFormNote = (newFormNote: FormNote|MapFormNoteCallback)=> void;
 function installResourceChangeHandler(onResourceChangeHandler: ()=> void) {
 	ResourceFetcher.instance().on('downloadComplete', onResourceChangeHandler);
 	ResourceFetcher.instance().on('downloadStarted', onResourceChangeHandler);
+	DecryptionWorker.instance().on('resourceDecrypted', onResourceChangeHandler);
 	eventManager.on(EventName.ResourceChange, onResourceChangeHandler);
 }
 
 function uninstallResourceChangeHandler(onResourceChangeHandler: ()=> void) {
 	ResourceFetcher.instance().off('downloadComplete', onResourceChangeHandler);
 	ResourceFetcher.instance().off('downloadStarted', onResourceChangeHandler);
+	DecryptionWorker.instance().off('resourceDecrypted', onResourceChangeHandler);
 	eventManager.off(EventName.ResourceChange, onResourceChangeHandler);
 }
 
