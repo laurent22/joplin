@@ -271,7 +271,8 @@ export default function useFormNote(dependencies: HookDependencies) {
 		const resourceIds = await Note.linkedResourceIds(formNote.body);
 		if (!event || resourceIds.indexOf(event.id) >= 0) {
 			clearResourceCache();
-			setResourceInfos(await attachedResources(formNote.body));
+			const newResourceInfos = await attachedResources(formNote.body);
+			setResourceInfos(newResourceInfos);
 		}
 	}, [formNote.body]);
 
