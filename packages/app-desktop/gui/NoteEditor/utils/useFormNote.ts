@@ -6,15 +6,14 @@ import { handleResourceDownloadMode } from './resourceHandling';
 import { splitHtml } from '@joplin/renderer/HtmlToHtml';
 import Setting from '@joplin/lib/models/Setting';
 import usePrevious from '../../hooks/usePrevious';
-import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
 
 import { MarkupToHtml } from '@joplin/renderer';
 import Note from '@joplin/lib/models/Note';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
-import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import Logger from '@joplin/utils/Logger';
+import eventManager, { EventName } from '@joplin/lib/eventManager';
 
 const logger = Logger.create('useFormNote');
 
@@ -37,20 +36,16 @@ export interface HookDependencies {
 type MapFormNoteCallback = (previousFormNote: FormNote)=> FormNote;
 export type OnSetFormNote = (newFormNote: FormNote|MapFormNoteCallback)=> void;
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-function installResourceChangeHandler(onResourceChangeHandler: Function) {
+function installResourceChangeHandler(onResourceChangeHandler: ()=> void) {
 	ResourceFetcher.instance().on('downloadComplete', onResourceChangeHandler);
 	ResourceFetcher.instance().on('downloadStarted', onResourceChangeHandler);
-	DecryptionWorker.instance().on('resourceDecrypted', onResourceChangeHandler);
-	ResourceEditWatcher.instance().on('resourceChange', onResourceChangeHandler);
+	eventManager.on(EventName.ResourceChange, onResourceChangeHandler);
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-function uninstallResourceChangeHandler(onResourceChangeHandler: Function) {
+function uninstallResourceChangeHandler(onResourceChangeHandler: ()=> void) {
 	ResourceFetcher.instance().off('downloadComplete', onResourceChangeHandler);
 	ResourceFetcher.instance().off('downloadStarted', onResourceChangeHandler);
-	DecryptionWorker.instance().off('resourceDecrypted', onResourceChangeHandler);
-	ResourceEditWatcher.instance().off('resourceChange', onResourceChangeHandler);
+	eventManager.off(EventName.ResourceChange, onResourceChangeHandler);
 }
 
 function resourceInfosChanged(a: ResourceInfos, b: ResourceInfos): boolean {
@@ -201,6 +196,24 @@ export default function useFormNote(dependencies: HookDependencies) {
 		prevDecryptionStarted, decryptionStarted,
 		refreshFormNote,
 	]);
+
+	useEffect(() => {
+		if (!noteId) return ()=>{};
+
+		type ChangeEventSlice = { itemId: string };
+		const listener = ({ itemId }: ChangeEventSlice) => {
+			if (itemId === noteId) {
+				if (formNoteRef.current.hasChanged) return;
+
+				refreshFormNote();
+			}
+		};
+		eventManager.on(EventName.ItemChange, listener);
+
+		return () => {
+			eventManager.off(EventName.ItemChange, listener);
+		};
+	}, [noteId, refreshFormNote]);
 
 	useEffect(() => {
 		if (!noteId) {

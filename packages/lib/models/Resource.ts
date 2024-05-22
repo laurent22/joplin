@@ -637,7 +637,7 @@ export default class Resource extends BaseItem {
 		}
 
 		const output = await super.save(resource, options);
-		if (isNew) eventManager.emit(EventName.ResourceCreate);
+		eventManager.emit(isNew ? EventName.ResourceCreate : EventName.ResourceChange);
 		return output;
 	}
 
