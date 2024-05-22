@@ -150,6 +150,7 @@ describe('models/Setting', () => {
 
 		await Setting.saveAll();
 		await Setting.reset();
+		await Setting.load();
 
 		await registerCustom();
 		expect(Setting.value('myCustom')).toBe('test2');
