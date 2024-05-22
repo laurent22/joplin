@@ -201,24 +201,6 @@ export default function useFormNote(dependencies: HookDependencies) {
 	]);
 
 	useEffect(() => {
-		if (!noteId) return ()=>{};
-
-		type ChangeEventSlice = { itemId: string };
-		const listener = ({ itemId }: ChangeEventSlice) => {
-			if (itemId === noteId) {
-				if (formNoteRef.current.hasChanged) return;
-
-				refreshFormNote();
-			}
-		};
-		eventManager.on(EventName.ItemChange, listener);
-
-		return () => {
-			eventManager.off(EventName.ItemChange, listener);
-		};
-	}, [noteId, refreshFormNote]);
-
-	useEffect(() => {
 		if (!noteId) {
 			if (formNote.id) setFormNote(defaultFormNote());
 			return () => {};
