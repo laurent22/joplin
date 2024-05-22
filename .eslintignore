@@ -989,12 +989,17 @@ packages/lib/services/folderMirror/FolderMirroringService.js
 packages/lib/services/folderMirror/ItemTree.test.js
 packages/lib/services/folderMirror/ItemTree.js
 packages/lib/services/folderMirror/LinkTracker.js
+packages/lib/services/folderMirror/ResourceTracker.js
+packages/lib/services/folderMirror/constants.js
 packages/lib/services/folderMirror/types.js
 packages/lib/services/folderMirror/utils/debugLogger.js
+packages/lib/services/folderMirror/utils/fillRemoteTree.js
 packages/lib/services/folderMirror/utils/folderInfo/index.js
 packages/lib/services/folderMirror/utils/folderInfo/loadFolderInfo.js
 packages/lib/services/folderMirror/utils/folderInfo/parseFolderIcon.js
 packages/lib/services/folderMirror/utils/folderInfo/writeFolderInfo.js
+packages/lib/services/folderMirror/utils/loadResourceMetadata.js
+packages/lib/services/folderMirror/utils/statToItem.js
 packages/lib/services/interop/InteropService.test.js
 packages/lib/services/interop/InteropService.js
 packages/lib/services/interop/InteropService_Exporter_Base.js

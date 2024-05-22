@@ -1,3 +1,4 @@
-import { FolderEntity, NoteEntity } from '../database/types';
+import { FolderEntity, NoteEntity, ResourceEntity } from '../database/types';
 
 export type FolderItem = FolderEntity | NoteEntity;
+export type FolderOrResourceItem = FolderEntity | NoteEntity | ResourceEntity;

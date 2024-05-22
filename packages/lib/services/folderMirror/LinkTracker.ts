@@ -123,13 +123,10 @@ export default class LinkTracker {
 			if (this.tree.hasId(link)) {
 				return link;
 			}
-			return null;
-		} else {
-			if (this.tree.hasPath(link)) {
-				return this.tree.idAtPath(link);
-			}
-			return null;
+		} else if (this.tree.hasPath(link)) {
+			return this.tree.idAtPath(link);
 		}
+		return null;
 	}
 
 	public onItemUpdate(item: FolderItem) {

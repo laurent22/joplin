@@ -1,23 +1,24 @@
 import { ModelType } from '../../BaseModel';
-import { DirectoryWatchEvent, DirectoryWatchEventType, DirectoryWatcher, Stat } from '../../fs-driver-base';
+import { DirectoryWatchEvent, DirectoryWatchEventType, DirectoryWatcher } from '../../fs-driver-base';
 import Folder, { FolderEntityWithChildren } from '../../models/Folder';
 import Note from '../../models/Note';
 import { friendlySafeFilename } from '../../path-utils';
 import shim from '../../shim';
 import { serialize } from '../../utils/frontMatter';
 import { FolderEntity, NoteEntity } from '../database/types';
-import loadFolderInfo from './utils/folderInfo/loadFolderInfo';
-import { parse as parseFrontMatter } from '../../utils/frontMatter';
-import { basename, dirname, extname, join, normalize, relative } from 'path';
+import { basename, dirname, join, relative } from 'path';
 import writeFolderInfo from './utils/folderInfo/writeFolderInfo';
 import { FolderItem } from './types';
-import ItemTree, { ActionListeners, AddActionListener, AddOrUpdateEvent, noOpActionListeners } from './ItemTree';
+import ItemTree, { ActionListeners, AddOrUpdateEvent, noOpActionListeners } from './ItemTree';
 import uuid from '../../uuid';
 import BaseItem from '../../models/BaseItem';
 import AsyncActionQueue from '../../AsyncActionQueue';
 import { folderInfoFileName } from './utils/folderInfo';
 import LinkTracker, { LinkType } from './LinkTracker';
 import debugLogger from './utils/debugLogger';
+import statToItem from './utils/statToItem';
+import fillRemoteTree from './utils/fillRemoteTree';
+import ResourceTracker from './ResourceTracker';
 const { ALL_NOTES_FILTER_ID } = require('../../reserved-ids.js');
 
 
@@ -40,81 +41,6 @@ const makeItemPaths = (basePath: string, items: FolderItem[]) => {
 	}
 
 	return output;
-};
-
-const statToItem = async (baseFolderPath: string, stat: Stat, remoteTree: ItemTree): Promise<FolderItem|null> => {
-	const base: FolderItem = {
-		updated_time: stat.mtime.getTime(),
-	};
-	const parentPath = normalize(dirname(stat.path));
-	if (remoteTree.hasPath(parentPath)) {
-		base.parent_id = remoteTree.idAtPath(parentPath);
-	} else if (parentPath === '.') {
-		base.parent_id = remoteTree.idAtPath('.');
-	}
-
-	const isFolder = stat.isDirectory();
-
-	let result: FolderItem;
-	if (isFolder) {
-		const folderInfo = await loadFolderInfo(join(baseFolderPath, stat.path));
-		if (folderInfo.id && !await Folder.load(folderInfo.id)) {
-			delete folderInfo.id;
-		}
-		const item: FolderEntity = {
-			...base,
-			title: folderInfo.title,
-			type_: ModelType.Folder,
-		};
-		if (folderInfo.folder_info_updated) {
-			item.updated_time = Math.max(folderInfo.folder_info_updated, item.updated_time);
-		}
-		if (folderInfo.id) {
-			item.id = folderInfo.id;
-		}
-		if (folderInfo.icon) {
-			item.icon = folderInfo.icon;
-		}
-		result = item;
-	} else {
-		if (extname(stat.path) !== '.md') return null;
-
-		const fileContent = await shim.fsDriver().readFile(join(baseFolderPath, stat.path), 'utf8');
-		const { metadata } = parseFrontMatter(fileContent);
-
-		result = {
-			...base,
-			...metadata,
-
-			// Use || to handle the case where the title is empty, which can happen for empty
-			// frontmatter.
-			title: metadata.title || basename(stat.path, '.md'),
-			body: await Note.replaceResourceExternalToInternalLinks(metadata.body ?? ''),
-
-			type_: ModelType.Note,
-		};
-	}
-
-	return result;
-};
-
-const fillRemoteTree = async (baseFolderPath: string, remoteTree: ItemTree, addItemHandler: AddActionListener) => {
-	const stats = await shim.fsDriver().readDirStats(baseFolderPath, { recursive: true });
-
-	// Sort so that parent folders are visited before child folders.
-	stats.sort((a, b) => a.path.length - b.path.length);
-
-	for (const stat of stats) {
-		const item = await statToItem(baseFolderPath, stat, remoteTree);
-		if (!item) continue;
-
-		if (remoteTree.hasId(item.id)) {
-			debugLogger.debug('Removing ID from item with duplicated ID. Item: ', item.title, item.id, 'at', stat.path);
-			delete item.id;
-		}
-
-		await remoteTree.addItemAt(stat.path, item, addItemHandler);
-	}
 };
 
 const keysMatch = (localItem: FolderItem, remoteItem: FolderItem, keys: ((keyof FolderEntity)|(keyof NoteEntity))[]) => {
@@ -237,6 +163,7 @@ export default class {
 	private modifyLocalActions_: ActionListeners;
 	private localTree_: ItemTree;
 	private remoteTree_: ItemTree;
+	private resourceTracker_: ResourceTracker;
 	private actionQueue_: AsyncActionQueue<ActionQueueEvent>;
 	private fullSyncEndListeners_: ((error: unknown)=> void)[] = [];
 	private remoteLinkTracker_: LinkTracker;
@@ -483,7 +410,7 @@ export default class {
 		debugLogger.debug('built local tree');
 
 		const generatedIds: string[] = [];
-		await fillRemoteTree(filePath, this.remoteTree_, {
+		await fillRemoteTree(filePath, this.resourceTracker_, this.remoteTree_, {
 			onAdd: async ({ item }) => {
 				// Items need IDs to be added to the remoteTree.
 				if (!item.id) {
