@@ -10,7 +10,7 @@ import useMessageHandler from './utils/useMessageHandler';
 import useWindowCommandHandler from './utils/useWindowCommandHandler';
 import useDropHandler from './utils/useDropHandler';
 import useMarkupToHtml from './utils/useMarkupToHtml';
-import useFormNote, { OnLoadEvent, SetFormNote } from './utils/useFormNote';
+import useFormNote, { OnLoadEvent, OnSetFormNote } from './utils/useFormNote';
 import useEffectiveNoteId from './utils/useEffectiveNoteId';
 import useFolder from './utils/useFolder';
 import styles_ from './styles';
@@ -68,7 +68,7 @@ function NoteEditor(props: NoteEditorProps) {
 	const isMountedRef = useRef(true);
 	const noteSearchBarRef = useRef(null);
 
-	const setFormNoteRef = useRef<SetFormNote>();
+	const setFormNoteRef = useRef<OnSetFormNote>();
 	const { saveNoteIfWillChange, scheduleSaveNote } = useScheduleSaveCallbacks({
 		setFormNote: setFormNoteRef, dispatch: props.dispatch, editorRef,
 	});
