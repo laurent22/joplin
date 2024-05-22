@@ -84,7 +84,7 @@ describe('models/Setting', () => {
 		expect(Setting.value('myCustom')).toBe('123');
 	}));
 
-	it('should not clear old custom settings', (async () => {
+	it.each([SettingStorage.Database, SettingStorage.File])('should not clear old custom settings if not registered immediately', (async (storage) => {
 		// In general the following should work:
 		//
 		// - Plugin register a new setting
@@ -105,6 +105,7 @@ describe('models/Setting', () => {
 			public: true,
 			value: 'default',
 			type: Setting.TYPE_STRING,
+			storage,
 		});
 
 		Setting.setValue('myCustom', '123');
@@ -119,12 +120,40 @@ describe('models/Setting', () => {
 			public: true,
 			value: 'default',
 			type: Setting.TYPE_STRING,
+			storage,
 		});
 
 		await Setting.saveAll();
 
 		expect(Setting.value('myCustom')).toBe('123');
 	}));
+
+	it.each([SettingStorage.Database, SettingStorage.File])('should not clear old custom settings if not registered until restart', async (storage) => {
+		const registerCustom = async () => {
+			await Setting.registerSetting('myCustom', {
+				public: true,
+				value: 'test',
+				type: Setting.TYPE_STRING,
+				storage,
+			});
+		};
+
+		await registerCustom();
+		Setting.setValue('myCustom', 'test2');
+		await Setting.saveAll();
+
+		await Setting.reset();
+		await Setting.load();
+
+		// Change a file setting
+		Setting.setValue('sync.target', 9);
+
+		await Setting.saveAll();
+		await Setting.reset();
+
+		await registerCustom();
+		expect(Setting.value('myCustom')).toBe('test2');
+	});
 
 	it('should return values with correct type for custom settings', (async () => {
 		await Setting.registerSetting('myCustom', {
@@ -424,27 +453,5 @@ describe('models/Setting', () => {
 			Setting.setValue('myCustom', 'test');
 			await Setting.saveAll();
 		}
-	});
-
-	test('should not lose the values of file settings that are registered after the first settings save', async () => {
-		const registerCustom = async () => {
-			await Setting.registerSetting('myCustom', {
-				public: true,
-				value: 'test',
-				type: Setting.TYPE_STRING,
-				storage: SettingStorage.File,
-			});
-		};
-
-		await registerCustom();
-		Setting.setValue('myCustom', 'test2');
-		await Setting.saveAll();
-
-		await Setting.reset();
-		await Setting.load();
-		await Setting.saveAll();
-
-		await registerCustom();
-		expect(Setting.value('myCustom')).toBe('test2');
 	});
 });
