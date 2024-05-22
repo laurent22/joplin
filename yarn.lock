@@ -6649,7 +6649,7 @@ __metadata:
     "@joplin/renderer": ~3.0
     "@joplin/tools": ~3.0
     "@joplin/utils": ~3.0
-    "@js-draw/material-icons": 1.16.1
+    "@js-draw/material-icons": 1.20.0
     "@react-native-clipboard/clipboard": 1.14.1
     "@react-native-community/datetimepicker": 8.0.0
     "@react-native-community/geolocation": 3.1.0
@@ -6681,7 +6681,7 @@ __metadata:
     jest: 29.7.0
     jest-environment-jsdom: 29.7.0
     jetifier: 2.0.0
-    js-draw: 1.16.1
+    js-draw: 1.20.2
     jsdom: 22.1.0
     lodash: 4.17.21
     md5: 2.3.0
@@ -7368,21 +7368,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@js-draw/material-icons@npm:1.16.1":
-  version: 1.16.1
-  resolution: "@js-draw/material-icons@npm:1.16.1"
+"@js-draw/material-icons@npm:1.20.0":
+  version: 1.20.0
+  resolution: "@js-draw/material-icons@npm:1.20.0"
   peerDependencies:
     js-draw: ^1.0.1
-  checksum: 133dbcd950c4724bfd028ca6ba8b61093c6012016cb5cca6ee6b7f1506d5ff650cec3518ee2a94b7638e32f815cceafc4832ce937d4012b3464ddf070db30c54
+  checksum: 4b0aca3098cd4b4941e1ceb1f5656e14f41476053cf0e2509bbc6a9c095c304e95c1a09c0ba8bb06caecc0e17b2031d4735b17b0e4271800efdc8d40cb4d73e6
   languageName: node
   linkType: hard
 
-"@js-draw/math@npm:^1.16.0":
-  version: 1.16.0
-  resolution: "@js-draw/math@npm:1.16.0"
+"@js-draw/math@npm:^1.19.0":
+  version: 1.19.0
+  resolution: "@js-draw/math@npm:1.19.0"
   dependencies:
     bezier-js: 6.1.3
-  checksum: 2135953eba1817449b9930f3957de5de8d27d560e366c189417d2fcc38c18d6b665b81722d792135f7489cb952e05352c77b50ba6626906abb28017cb48c242c
+  checksum: a82989485e286b034bf8699b7995b8f7b3dc58e8c81c53efe87a6244d2b47382f0217d7a8c445dbed325de191111b1571a2017332bc52136a972c93a5a976532
   languageName: node
   linkType: hard
 
@@ -27263,13 +27263,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-draw@npm:1.16.1":
-  version: 1.16.1
-  resolution: "js-draw@npm:1.16.1"
+"js-draw@npm:1.20.2":
+  version: 1.20.2
+  resolution: "js-draw@npm:1.20.2"
   dependencies:
-    "@js-draw/math": ^1.16.0
+    "@js-draw/math": ^1.19.0
     "@melloware/coloris": 0.22.0
-  checksum: ce678dad408d3cd540f1843d7a677b575cff1801ac02a6726cc1baefeeff22ef36f3951688d9708c700d9b5276b1ef86f4605f8f65daaa9263ebf37199d29744
+  checksum: f0b6e572bbac553a7fac125776efa39602875b4894d27456d36fff53a07b35a35542fe08db7a7fa237d1202384c87d80f0b0a8cd73a0d13242938c643888fd54
   languageName: node
   linkType: hard
 
