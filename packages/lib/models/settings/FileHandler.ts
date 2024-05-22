@@ -52,7 +52,8 @@ export default class FileHandler {
 	public async save(values: SettingValues) {
 		values = { ...values };
 
-		// Don't delete settings that haven't been loaded
+		// Merge with existing settings. This prevents settings stored by disabled or not-yet-loaded
+		// plugins from being deleted.
 		for (const key in this.parsedJsonCache_) {
 			const includesSetting = Object.prototype.hasOwnProperty.call(values, key);
 			if (!includesSetting) {
