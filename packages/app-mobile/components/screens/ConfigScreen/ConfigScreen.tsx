@@ -26,7 +26,7 @@ import ExportProfileButton, { exportProfileButtonTitle } from './NoteExportSecti
 import SettingComponent from './SettingComponent';
 import ExportDebugReportButton, { exportDebugReportTitle } from './NoteExportSection/ExportDebugReportButton';
 import SectionSelector from './SectionSelector';
-import { Button, TextInput } from 'react-native-paper';
+import { TextInput, List } from 'react-native-paper';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
 import PluginUploadButton, { canInstallPluginsFromFile, buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
@@ -674,19 +674,15 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		const renderAdvancedSettings = () => {
 			if (!advancedSettingComps.length) return null;
 
-			const toggleAdvancedLabel = this.state.showAdvancedSettings ? _('Hide Advanced Settings') : _('Show Advanced Settings');
+			const toggleAdvancedLabel = _('Advanced settings');
 			return (
-				<>
-					<Button
-						style={{ marginBottom: 20 }}
-						icon={this.state.showAdvancedSettings ? 'menu-down' : 'menu-right'}
-						onPress={() => this.setState({ showAdvancedSettings: !this.state.showAdvancedSettings })}
-					>
-						<Text>{toggleAdvancedLabel}</Text>
-					</Button>
-
+				<List.Accordion
+					title={toggleAdvancedLabel}
+					expanded={this.state.showAdvancedSettings}
+					onPress={() => this.setState({ showAdvancedSettings: !this.state.showAdvancedSettings })}
+				>
 					{this.state.showAdvancedSettings ? advancedSettingComps : null}
-				</>
+				</List.Accordion>
 			);
 		};
 

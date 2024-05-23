@@ -20,7 +20,6 @@ interface Props {
 
 	callbacks: PluginCallbacks;
 	onShowPluginInfo: PluginCallback;
-	onShowPluginLog: PluginCallback;
 	updatePluginStates: (settingValue: PluginSettings)=> void;
 }
 
@@ -45,7 +44,7 @@ const PluginToggle: React.FC<Props> = props => {
 			item={pluginItem}
 			isCompatible={isCompatible}
 			hasErrors={plugin.hasErrors}
-			onShowPluginLog={props.onShowPluginLog}
+			onShowPluginLog={props.callbacks.onShowPluginLog}
 			onShowPluginInfo={props.onShowPluginInfo}
 			updateState={updateState}
 		/>

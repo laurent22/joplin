@@ -92,6 +92,8 @@ const PluginBox: React.FC<Props> = props => {
 					themeId={props.themeId}
 					item={props.item}
 					hasErrors={props.hasErrors}
+					canUpdate={props.updateState === UpdateState.CanUpdate}
+					onShowPluginLog={props.onShowPluginLog}
 					isCompatible={props.isCompatible}
 				/>
 			</Card.Content>

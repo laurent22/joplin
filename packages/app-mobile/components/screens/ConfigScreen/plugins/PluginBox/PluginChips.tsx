@@ -13,6 +13,7 @@ interface Props {
 	item: PluginItem;
 	hasErrors: boolean;
 	isCompatible: boolean;
+	canUpdate: boolean;
 
 	onShowPluginLog?: PluginCallback;
 }
@@ -63,11 +64,20 @@ const PluginChips: React.FC<Props> = props => {
 		);
 	};
 
+	const renderUpdatableChip = () => {
+		if (!props.isCompatible || !props.canUpdate) return null;
+
+		return (
+			<Chip>{_('Update available')}</Chip>
+		);
+	};
+
 	return <View style={{ flexDirection: 'row', transform: [{ scale: 0.9 }], transformOrigin: 'left' }}>
 		{renderIncompatibleChip()}
 		{renderErrorsChip()}
 		{renderRecommendedChip()}
 		{renderBuiltInChip()}
+		{renderUpdatableChip()}
 	</View>;
 };
 

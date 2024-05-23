@@ -8,7 +8,6 @@ import PluginService, { PluginSettings, SerializedPluginSettings } from '@joplin
 import PluginToggle from './PluginToggle';
 import SearchPlugins from './SearchPlugins';
 import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
-import NavService from '@joplin/lib/services/NavService';
 import useRepoApi from './utils/useRepoApi';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
@@ -128,11 +127,6 @@ const PluginStates: React.FC<Props> = props => {
 		pluginSettings, updatePluginStates: props.updatePluginStates, repoApi,
 	});
 
-	const onShowPluginLog = useCallback((event: ItemEvent) => {
-		const pluginId = event.item.manifest.id;
-		void NavService.go('Log', { defaultFilter: pluginId });
-	}, []);
-
 	const installedPluginCards = [];
 	const pluginService = PluginService.instance();
 
@@ -152,7 +146,6 @@ const PluginStates: React.FC<Props> = props => {
 					updatingPluginIds={updatingPluginIds}
 					updatePluginStates={props.updatePluginStates}
 					onShowPluginInfo={onShowPluginInfo}
-					onShowPluginLog={onShowPluginLog}
 					callbacks={pluginCallbacks}
 					repoApi={repoApi}
 				/>,

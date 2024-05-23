@@ -1,9 +1,10 @@
-import { ItemEvent, OnPluginSettingChangeEvent } from "@joplin/lib/components/shared/config/plugins/types";
-import useOnDeleteHandler from "@joplin/lib/components/shared/config/plugins/useOnDeleteHandler";
-import useOnInstallHandler from "@joplin/lib/components/shared/config/plugins/useOnInstallHandler";
-import { PluginSettings } from "@joplin/lib/services/plugins/PluginService";
-import RepositoryApi from "@joplin/lib/services/plugins/RepositoryApi";
-import { useCallback, useMemo, useState } from "react";
+import { ItemEvent, OnPluginSettingChangeEvent } from '@joplin/lib/components/shared/config/plugins/types';
+import useOnDeleteHandler from '@joplin/lib/components/shared/config/plugins/useOnDeleteHandler';
+import useOnInstallHandler from '@joplin/lib/components/shared/config/plugins/useOnInstallHandler';
+import NavService from '@joplin/lib/services/NavService';
+import { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
+import { useCallback, useMemo, useState } from 'react';
 
 interface Props {
 	updatePluginStates: (settingValue: PluginSettings)=> void;
@@ -18,6 +19,7 @@ export interface PluginCallbacks {
 	onUpdate: PluginCallback;
 	onInstall: PluginCallback;
 	onDelete: PluginCallback;
+	onShowPluginLog: PluginCallback;
 }
 
 const usePluginCallbacks = (props: Props) => {
@@ -48,14 +50,20 @@ const usePluginCallbacks = (props: Props) => {
 		setInstallingPluginIds, props.pluginSettings, props.repoApi, onPluginSettingsChange, false,
 	);
 
+	const onShowPluginLog = useCallback((event: ItemEvent) => {
+		const pluginId = event.item.manifest.id;
+		void NavService.go('Log', { defaultFilter: pluginId });
+	}, []);
+
 	const callbacks = useMemo((): PluginCallbacks => {
 		return {
 			onToggle,
 			onDelete,
 			onUpdate,
 			onInstall,
+			onShowPluginLog,
 		};
-	}, [onToggle, onDelete, onUpdate]);
+	}, [onToggle, onDelete, onUpdate, onInstall, onShowPluginLog]);
 
 	return {
 		callbacks,

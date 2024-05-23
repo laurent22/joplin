@@ -8,7 +8,6 @@ import { Linking, ScrollView, StyleSheet, View, ViewStyle } from 'react-native';
 import DismissibleDialog from '../../../DismissibleDialog';
 import openWebsiteForPlugin from './utils/openWebsiteForPlugin';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
-import PluginChips from './PluginBox/PluginChips';
 import PluginTitle from './PluginBox/PluginTitle';
 import ActionButton from './buttons/ActionButton';
 import TextButton, { ButtonType } from '../../../buttons/TextButton';
@@ -17,6 +16,7 @@ import { PluginCallback, PluginCallbacks } from './utils/usePluginCallbacks';
 import usePluginItem from './utils/usePluginItem';
 import InstallButton from './buttons/InstallButton';
 import { InstallState } from './PluginBox';
+import PluginChips from './PluginBox/PluginChips';
 
 interface Props {
 	themeId: number;
@@ -105,6 +105,13 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 		return service.pluginById(pluginId);
 	}, [pluginId]);
 
+	const updateState = useUpdateState({
+		pluginId: plugin?.id,
+		pluginSettings: props.pluginSettings,
+		updatablePluginIds: props.updatablePluginIds,
+		updatingPluginIds: props.updatingPluginIds,
+	});
+
 	const aboutPlugin = (
 		<Card mode='outlined' style={{ margin: 8 }} testID='plugin-card'>
 			<Card.Content>
@@ -114,7 +121,9 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 					<PluginChips
 						themeId={props.themeId}
 						item={item}
-						hasErrors={plugin?.hasErrors}
+						hasErrors={plugin.hasErrors}
+						canUpdate={false}
+						onShowPluginLog={props.pluginCallbacks.onShowPluginLog}
 						isCompatible={isCompatible}
 					/>
 					<Text>{manifest.description}</Text>
@@ -145,13 +154,6 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 	const onReportFraudulentPress = useCallback(() => {
 		void Linking.openURL('https://github.com/laurent22/joplin/security/advisories/new');
 	}, []);
-
-	const updateState = useUpdateState({
-		pluginId: plugin?.id,
-		pluginSettings: props.pluginSettings,
-		updatablePluginIds: props.updatablePluginIds,
-		updatingPluginIds: props.updatingPluginIds,
-	});
 
 	const getUpdateButtonTitle = () => {
 		if (updateState === UpdateState.Updating) return _('Updating...');
