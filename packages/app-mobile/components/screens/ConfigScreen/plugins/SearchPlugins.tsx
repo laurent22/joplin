@@ -4,8 +4,8 @@ import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { _ } from '@joplin/lib/locale';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import { useCallback, useMemo, useState } from 'react';
-import { FlatList, View } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { TextInput, Text } from 'react-native-paper';
 import PluginBox, { InstallState } from './PluginBox';
 import PluginService, { PluginSettings, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
@@ -29,6 +29,18 @@ interface SearchResultRecord {
 	item: PluginItem;
 	installState: InstallState;
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flexDirection: 'column',
+		margin: 12,
+	},
+	resultsCounter: {
+		margin: 12,
+		marginTop: 17,
+		marginBottom: 4,
+	},
+});
 
 const PluginSearch: React.FC<Props> = props => {
 	const [searchQuery, setSearchQuery] = useState('');
@@ -97,8 +109,16 @@ const PluginSearch: React.FC<Props> = props => {
 		);
 	}, [onInstall, props.themeId]);
 
+	const renderResultsCount = () => {
+		if (!searchQuery.length) return null;
+
+		return <Text style={styles.resultsCounter} variant='labelLarge'>
+			{_('Results (%d):', searchResults.length)}
+		</Text>;
+	};
+
 	return (
-		<View style={{ flexDirection: 'column', margin: 12 }}>
+		<View style={styles.container}>
 			<TextInput
 				testID='searchbar'
 				mode='outlined'
@@ -108,6 +128,7 @@ const PluginSearch: React.FC<Props> = props => {
 				value={searchQuery}
 				editable={props.repoApiInitialized}
 			/>
+			{renderResultsCount()}
 			<FlatList
 				data={searchResults}
 				renderItem={renderResult}
