@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { FormNote, HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
+import { FormNote, HtmlToMarkdownHandler, MarkupToHtmlHandler, ScrollOptions } from './types';
 import contextMenu from './contextMenu';
 import CommandService from '@joplin/lib/services/CommandService';
 import PostMessageService from '@joplin/lib/services/PostMessageService';
@@ -8,7 +8,7 @@ import { reg } from '@joplin/lib/registry';
 const bridge = require('@electron/remote').require('./bridge').default;
 
 // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-export default function useMessageHandler(scrollWhenReady: any, setScrollWhenReady: Function, editorRef: any, setLocalSearchResultCount: Function, dispatch: Function, formNote: FormNote, htmlToMd: HtmlToMarkdownHandler, mdToHtml: MarkupToHtmlHandler) {
+export default function useMessageHandler(scrollWhenReady: ScrollOptions|null, clearScrollWhenReady: ()=> void, editorRef: any, setLocalSearchResultCount: Function, dispatch: Function, formNote: FormNote, htmlToMd: HtmlToMarkdownHandler, mdToHtml: MarkupToHtmlHandler) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return useCallback(async (event: any) => {
 		const msg = event.channel ? event.channel : '';
@@ -25,7 +25,7 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 		} else if (msg === 'noteRenderComplete') {
 			if (scrollWhenReady) {
 				const options = { ...scrollWhenReady };
-				setScrollWhenReady(null);
+				clearScrollWhenReady();
 				editorRef.current.scrollTo(options);
 			}
 		} else if (msg === 'setMarkerCount') {

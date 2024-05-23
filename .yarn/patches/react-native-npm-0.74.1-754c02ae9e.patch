@@ -1,8 +1,8 @@
 diff --git a/ReactAndroid/src/main/java/com/facebook/react/animated/NativeAnimatedModule.java b/ReactAndroid/src/main/java/com/facebook/react/animated/NativeAnimatedModule.java
-index 0f52b73c61625db2a3081c0950b6bdd2b06e3d40..b0fc3de4be0b3a26b638683613c63c783c2739bb 100644
+index 8a719ca35af1cc3a4192c5c5f8258fd4f7fea990..5f8831f81cd164a4f627423427ead92fa286b115 100644
 --- a/ReactAndroid/src/main/java/com/facebook/react/animated/NativeAnimatedModule.java
 +++ b/ReactAndroid/src/main/java/com/facebook/react/animated/NativeAnimatedModule.java
-@@ -38,7 +38,7 @@ import com.facebook.react.uimanager.common.ViewUtil;
+@@ -37,7 +37,7 @@ import com.facebook.react.uimanager.common.ViewUtil;
  import java.util.ArrayList;
  import java.util.List;
  import java.util.Queue;
@@ -11,7 +11,7 @@ index 0f52b73c61625db2a3081c0950b6bdd2b06e3d40..b0fc3de4be0b3a26b638683613c63c78
  import java.util.concurrent.atomic.AtomicReference;
  
  /**
-@@ -151,7 +151,10 @@ public class NativeAnimatedModule extends NativeAnimatedModuleSpec
+@@ -149,7 +149,10 @@ public class NativeAnimatedModule extends NativeAnimatedModuleSpec
    }
  
    private class ConcurrentOperationQueue {

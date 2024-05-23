@@ -36,8 +36,7 @@ interface Props {
 	noteTitle: string;
 	noteIsTodo: number;
 	isProvisional: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	titleInputRef: any;
+	titleInputRef: React.RefObject<HTMLInputElement>;
 	onTitleChange(event: ChangeEvent<HTMLInputElement>): void;
 	disabled: boolean;
 }

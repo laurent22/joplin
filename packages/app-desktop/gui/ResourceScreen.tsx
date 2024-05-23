@@ -7,6 +7,7 @@ const { themeStyle } = require('@joplin/lib/theme');
 import bridge from '../services/bridge';
 const prettyBytes = require('pretty-bytes');
 import Resource from '@joplin/lib/models/Resource';
+import { LoadOptions } from '@joplin/lib/models/utils/types';
 
 interface Style {
 	width: number;
@@ -31,6 +32,7 @@ interface State {
 	resources: InnerResource[] | undefined;
 	sorting: ActiveSorting;
 	isLoading: boolean;
+	filter: string;
 }
 
 interface ResourceTable {
@@ -42,6 +44,7 @@ interface ResourceTable {
 	onResourceDelete: (resource: InnerResource)=> any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onToggleSorting: (order: SortingOrder)=> any;
+	filter: string;
 	themeId: number;
 	style: Style;
 }
@@ -89,6 +92,10 @@ const ResourceTableComp = (props: ResourceTable) => {
 		fontWeight: 'bold',
 	};
 
+	const filteredResources = props.resources.filter(
+		(resource: InnerResource) => !props.filter || resource.title?.includes(props.filter) || resource.id.includes(props.filter),
+	);
+
 	return (
 		<table style={{ width: '100%' }}>
 			<thead>
@@ -100,7 +107,7 @@ const ResourceTableComp = (props: ResourceTable) => {
 				</tr>
 			</thead>
 			<tbody>
-				{props.resources.map((resource: InnerResource, index: number) =>
+				{filteredResources.map((resource: InnerResource, index: number) =>
 					<tr key={index}>
 						<td style={titleCellStyle} className="titleCell">
 							<a
@@ -136,13 +143,15 @@ const getNextSortingOrderType = (s: SortingType): SortingType => {
 	}
 };
 
-const MAX_RESOURCES = 10000;
+const defaultMaxResources = 10000;
+const searchMaxResources = 1000;
 
 class ResourceScreenComponent extends React.Component<Props, State> {
 	public constructor(props: Props) {
 		super(props);
 		this.state = {
 			resources: undefined,
+			filter: '',
 			sorting: {
 				type: 'asc',
 				order: 'name',
@@ -151,22 +160,57 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		};
 	}
 
-	public async reloadResources(sorting: ActiveSorting) {
+	private get maxResources() {
+		// Use a smaller maximum when searching for performance -- results update
+		// when the search input changes.
+		if (this.state.filter) {
+			return searchMaxResources;
+		} else {
+			return defaultMaxResources;
+		}
+	}
+
+	private reloadResourcesCounter = 0;
+	public async reloadResources() {
 		this.setState({ isLoading: true });
+
+		this.reloadResourcesCounter ++;
+		const currentCounterValue = this.reloadResourcesCounter;
+
+		let searchOptions: Partial<LoadOptions> = {};
+		if (this.state.filter) {
+			const search = `%${this.state.filter}%`;
+			searchOptions = {
+				where: 'id LIKE ? OR title LIKE ?',
+				whereParams: [search, search],
+			};
+		}
+
 		const resources = await Resource.all({
 			order: [{
-				by: getSortingOrderColumn(sorting.order),
-				dir: sorting.type,
+				by: getSortingOrderColumn(this.state.sorting.order),
+				dir: this.state.sorting.type,
 				caseInsensitive: true,
 			}],
-			limit: MAX_RESOURCES,
+			limit: this.maxResources,
 			fields: ['title', 'id', 'size', 'file_extension'],
+			...searchOptions,
 		});
+
+		const cancelled = currentCounterValue !== this.reloadResourcesCounter;
+		if (cancelled) return;
+
 		this.setState({ resources, isLoading: false });
 	}
 
 	public componentDidMount() {
-		void this.reloadResources(this.state.sorting);
+		void this.reloadResources();
+	}
+
+	public componentDidUpdate(_prevProps: Props, prevState: State) {
+		if (prevState.sorting !== this.state.sorting || prevState.filter !== this.state.filter) {
+			void this.reloadResources();
+		}
 	}
 
 	public onResourceDelete(resource: InnerResource) {
@@ -185,7 +229,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 			})
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.finally(() => {
-				void this.reloadResources(this.state.sorting);
+				void this.reloadResources();
 			});
 	}
 
@@ -208,8 +252,11 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 			};
 		}
 		this.setState({ sorting: newSorting });
-		void this.reloadResources(newSorting);
 	}
+
+	public onFilterUpdate = (updateEvent: React.ChangeEvent<HTMLInputElement>) => {
+		this.setState({ filter: updateEvent.target.value });
+	};
 
 	public render() {
 		const style = this.props.style;
@@ -236,20 +283,30 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 					<div style={{ ...theme.notificationBox, marginBottom: 10 }}>{
 						_('This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.')
 					}</div>
+					<div style={{ float: 'right' }}>
+						<input
+							style={theme.inputStyle}
+							type="search"
+							value={this.state.filter}
+							onChange={this.onFilterUpdate}
+							placeholder={_('Search...')}
+						/>
+					</div>
 					{this.state.isLoading && <div>{_('Please wait...')}</div>}
 					{!this.state.isLoading && <div>
 						{!this.state.resources && <div>
 							{_('No resources!')}
 						</div>
 						}
-						{this.state.resources && this.state.resources.length === MAX_RESOURCES &&
-							<div>{_('Warning: not all resources shown for performance reasons (limit: %s).', MAX_RESOURCES)}</div>
+						{this.state.resources && this.state.resources.length === this.maxResources &&
+							<div>{_('Warning: not all resources shown for performance reasons (limit: %s).', this.maxResources)}</div>
 						}
 						{this.state.resources && <ResourceTableComp
 							themeId={this.props.themeId}
 							style={style}
 							resources={this.state.resources}
 							sorting={this.state.sorting}
+							filter={this.state.filter}
 							onToggleSorting={(order) => this.onToggleSortOrder(order)}
 							onResourceClick={(resource) => this.openResource(resource)}
 							onResourceDelete={(resource) => this.onResourceDelete(resource)}
