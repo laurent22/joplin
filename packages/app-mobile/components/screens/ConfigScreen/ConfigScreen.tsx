@@ -504,6 +504,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 							key='plugins-install-from-file'
 							pluginSettings={settings[pluginStatesKey]}
 							updatePluginStates={updatePluginStates}
+							styles={this.styles()}
 						/>,
 						pluginUploadButtonSearchText(),
 						{ advanced: true },
