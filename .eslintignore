@@ -612,7 +612,7 @@ packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginTitle.js
-packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedChip.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/StyledChip.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.test.js

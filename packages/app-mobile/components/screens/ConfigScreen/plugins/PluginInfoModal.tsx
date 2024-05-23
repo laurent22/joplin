@@ -65,6 +65,10 @@ const styles = (() => {
 			marginTop: 12,
 			marginBottom: 14,
 		},
+		pluginDescriptionContainer: {
+			marginTop: 8,
+			gap: 8,
+		},
 	});
 })();
 
@@ -117,7 +121,7 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 			<Card.Content>
 				<PluginTitle manifest={manifest}/>
 				<Text variant='bodyMedium'>{_('by %s', manifest.author)}</Text>
-				<View style={{ marginTop: 8 }}>
+				<View style={styles.pluginDescriptionContainer}>
 					<PluginChips
 						themeId={props.themeId}
 						item={item}

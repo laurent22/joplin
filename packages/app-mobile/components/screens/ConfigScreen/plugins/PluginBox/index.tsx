@@ -1,16 +1,16 @@
 import * as React from 'react';
-import { Card } from 'react-native-paper';
+import { Card, Text } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import ActionButton from '../buttons/ActionButton';
 import { ButtonType } from '../../../../buttons/TextButton';
 import PluginChips from './PluginChips';
-import PluginTitle from './PluginTitle';
 import { UpdateState } from '../utils/useUpdateState';
 import { PluginCallback } from '../utils/usePluginCallbacks';
 import { useCallback, useMemo } from 'react';
 import { StyleSheet, ViewStyle } from 'react-native';
 import InstallButton from '../buttons/InstallButton';
+import PluginTitle from './PluginTitle';
 
 export enum InstallState {
 	NotInstalled,
@@ -46,9 +46,8 @@ const useStyles = (compatible: boolean) => {
 				...baseCardStyle,
 				opacity: 0.7,
 			},
-			title: {
-				paddingTop: 10,
-				paddingBottom: 0,
+			content: {
+				gap: 5,
 			},
 		});
 	}, [compatible]);
@@ -81,13 +80,9 @@ const PluginBox: React.FC<Props> = props => {
 			onPress={props.onShowPluginInfo ? onPress : null}
 			testID='plugin-card'
 		>
-			<Card.Title
-				style={styles.title}
-				title={<PluginTitle manifest={item.manifest} />}
-				subtitle={manifest.description}
-				subtitleNumberOfLines={2}
-			/>
-			<Card.Content>
+			<Card.Content style={styles.content}>
+				<PluginTitle manifest={item.manifest} />
+				<Text numberOfLines={2}>{manifest.description}</Text>
 				<PluginChips
 					themeId={props.themeId}
 					item={props.item}
