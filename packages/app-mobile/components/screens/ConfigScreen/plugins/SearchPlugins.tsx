@@ -8,10 +8,10 @@ import { FlatList, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import PluginBox, { InstallState } from './PluginBox';
 import PluginService, { PluginSettings, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
-import useInstallHandler from '@joplin/lib/components/shared/config/plugins/useOnInstallHandler';
-import { OnPluginSettingChangeEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
+import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import openWebsiteForPlugin from './utils/openWebsiteForPlugin';
+import { PluginCallbacks } from './utils/usePluginCallbacks';
 
 interface Props {
 	themeId: number;
@@ -19,6 +19,9 @@ interface Props {
 	repoApiInitialized: boolean;
 	onUpdatePluginStates: (states: PluginSettings)=> void;
 	repoApi: RepositoryApi;
+
+	installingPluginIds: Record<string, boolean>;
+	callbacks: PluginCallbacks;
 }
 
 interface SearchResultRecord {
@@ -42,8 +45,6 @@ const PluginSearch: React.FC<Props> = props => {
 		}
 	}, [searchQuery, props.repoApi, setSearchResultManifests, props.repoApiInitialized]);
 
-	const [installingPluginsIds, setInstallingPluginIds] = useState<Record<string, boolean>>({});
-
 	const pluginSettings = useMemo(() => {
 		return { ...PluginService.instance().unserializePluginSettings(props.pluginSettings) };
 	}, [props.pluginSettings]);
@@ -56,7 +57,7 @@ const PluginSearch: React.FC<Props> = props => {
 			if (settings && !settings.deleted) {
 				installState = InstallState.Installed;
 			}
-			if (installingPluginsIds[manifest.id]) {
+			if (props.installingPluginIds[manifest.id]) {
 				installState = InstallState.Installing;
 			}
 
@@ -76,16 +77,10 @@ const PluginSearch: React.FC<Props> = props => {
 				installState,
 			};
 		});
-	}, [searchResultManifests, installingPluginsIds, pluginSettings]);
+	}, [searchResultManifests, props.installingPluginIds, pluginSettings]);
 
-	const onPluginSettingsChange = useCallback((event: OnPluginSettingChangeEvent) => {
-		props.onUpdatePluginStates(event.value);
-	}, [props.onUpdatePluginStates]);
 
-	const installPlugin = useInstallHandler(
-		setInstallingPluginIds, pluginSettings, props.repoApi, onPluginSettingsChange, false,
-	);
-
+	const onInstall = props.callbacks.onInstall;
 	const renderResult = useCallback(({ item }: { item: SearchResultRecord }) => {
 		const manifest = item.item.manifest;
 
@@ -96,11 +91,11 @@ const PluginSearch: React.FC<Props> = props => {
 				item={item.item}
 				installState={item.installState}
 				isCompatible={PluginService.instance().isCompatible(manifest)}
-				onInstall={installPlugin}
+				onInstall={onInstall}
 				onAboutPress={openWebsiteForPlugin}
 			/>
 		);
-	}, [installPlugin, props.themeId]);
+	}, [onInstall, props.themeId]);
 
 	return (
 		<View style={{ flexDirection: 'column', margin: 12 }}>

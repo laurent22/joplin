@@ -162,6 +162,8 @@ const PluginStates: React.FC<Props> = props => {
 			pluginSettings={props.pluginSettings}
 			themeId={props.themeId}
 			onUpdatePluginStates={props.updatePluginStates}
+			installingPluginIds={installingPluginIds}
+			callbacks={pluginCallbacks}
 			repoApiInitialized={repoApiLoaded}
 			repoApi={repoApi}
 		/>
