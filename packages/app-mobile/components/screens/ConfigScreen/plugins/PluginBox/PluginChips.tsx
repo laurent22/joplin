@@ -2,7 +2,7 @@ import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import shim from '@joplin/lib/shim';
 import * as React from 'react';
-import { Alert, Linking, View } from 'react-native';
+import { Alert, Linking, View, ViewStyle } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import { Chip } from 'react-native-paper';
 import { PluginCallback } from '../utils/usePluginCallbacks';
@@ -34,6 +34,15 @@ const onRecommendedPress = () => {
 		],
 		{ cancelable: true },
 	);
+};
+
+const containerStyle: ViewStyle = {
+	flexDirection: 'row',
+	gap: 4,
+
+	// Smaller than default chip size
+	transform: [{ scale: 0.84 }],
+	transformOrigin: 'left',
 };
 
 const PluginChips: React.FC<Props> = props => {
@@ -101,12 +110,20 @@ const PluginChips: React.FC<Props> = props => {
 		);
 	};
 
-	return <View style={{ flexDirection: 'row', transform: [{ scale: 0.84 }], transformOrigin: 'left' }}>
+	const renderDisabledChip = () => {
+		if (props.item.enabled || !props.item.installed) {
+			return null;
+		}
+		return <Chip>{_('Disabled')}</Chip>;
+	};
+
+	return <View style={containerStyle}>
 		{renderIncompatibleChip()}
 		{renderErrorsChip()}
 		{renderRecommendedChip()}
 		{renderBuiltInChip()}
 		{renderUpdatableChip()}
+		{renderDisabledChip()}
 	</View>;
 };
 
