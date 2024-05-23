@@ -40,12 +40,17 @@ const useStyles = (themeId: number, containerStyle: ViewStyle) => {
 
 				height: windowSize.height * 0.9,
 				width: windowSize.width * 0.97,
+				flexShrink: 1,
 
 				// Center
 				marginLeft: 'auto',
 				marginRight: 'auto',
 
 				...containerStyle,
+			},
+			dialogContainer: {
+				display: 'flex',
+				flexDirection: 'row',
 			},
 		});
 	}, [themeId, windowSize.width, windowSize.height, containerStyle]);
@@ -69,6 +74,7 @@ const DismissibleDialog: React.FC<Props> = props => {
 			visible={props.visible}
 			onDismiss={props.onDismiss}
 			onRequestClose={props.onDismiss}
+			containerStyle={styles.dialogContainer}
 			animationType='fade'
 			transparent={true}
 		>
