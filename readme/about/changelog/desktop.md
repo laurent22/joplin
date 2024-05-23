@@ -14,7 +14,11 @@
 - Fixed: Fix nonbreaking spaces and CRLF break search for adjacent words ([#10417](https://github.com/laurent22/joplin/issues/10417) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Fixed an issue that could cause certain notes not to render when they contain an empty STYLE tag ([0a766d7](https://github.com/laurent22/joplin/commit/0a766d7))
 - Fixed: Maintain cursor position when changing list indentation ([#10441](https://github.com/laurent22/joplin/issues/10441)) ([#10439](https://github.com/laurent22/joplin/issues/10439) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
--Security: Arbitrary JavaScript execution in PDF.js (CVE-2024-4367) ([#10450](https://github.com/laurent22/joplin/issues/10450) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Security: Arbitrary JavaScript execution in PDF.js (CVE-2024-4367) ([#10450](https://github.com/laurent22/joplin/issues/10450) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [v2.14.22](https://github.com/laurent22/joplin/releases/tag/v2.14.22) - 2024-05-22T19:19:02Z
+
+- Security: Arbitrary JavaScript execution in PDF.js (CVE-2024-4367) ([#10450](https://github.com/laurent22/joplin/issues/10450) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
 ## [v3.0.6](https://github.com/laurent22/joplin/releases/tag/v3.0.6) (Pre-release) - 2024-04-27T13:16:04Z
 
