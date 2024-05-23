@@ -883,12 +883,6 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			break;
 		}
 
-		case 'INITIAL_SELECTION_SET':
-			// To allow creating notes when opening the app with all notes and/or tags,
-			// we also need a "last selected folder ID".
-			draft.selectedFolderId ??= draft.settings.activeFolderId;
-			break;
-
 		case 'SMART_FILTER_SELECT':
 			draft.notesParentType = 'SmartFilter';
 			draft.selectedSmartFilterId = action.id;
@@ -1339,6 +1333,12 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 	if (action.type === 'NOTE_DELETE') {
 		handleHistory(draft, action);
+	}
+
+	if (action.type === 'SETTING_UPDATE_ALL' || (action.type === 'SETTING_UPDATE_ONE' && action.key === 'activeFolderId')) {
+		// To allow creating notes when opening the app with all notes and/or tags,
+		// a "last selected folder ID" needs to be set.
+		draft.selectedFolderId ??= draft.settings.activeFolderId;
 	}
 
 	for (const additionalReducer of additionalReducers) {

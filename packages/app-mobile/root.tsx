@@ -725,10 +725,6 @@ async function initialize(dispatch: Function) {
 			});
 		}
 
-		dispatch({
-			type: 'INITIAL_SELECTION_SET',
-		});
-
 		await clearSharedFilesCache();
 	} catch (error) {
 		alert(`Initialization error: ${error.message}`);
