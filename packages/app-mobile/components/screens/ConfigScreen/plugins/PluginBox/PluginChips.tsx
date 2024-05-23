@@ -63,7 +63,7 @@ const PluginChips: React.FC<Props> = props => {
 		);
 	};
 
-	return <View style={{ flexDirection: 'row' }}>
+	return <View style={{ flexDirection: 'row', transform: [{ scale: 0.9 }], transformOrigin: 'left' }}>
 		{renderIncompatibleChip()}
 		{renderErrorsChip()}
 		{renderRecommendedChip()}
