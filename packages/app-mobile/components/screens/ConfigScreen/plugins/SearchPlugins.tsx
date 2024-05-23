@@ -62,6 +62,7 @@ const PluginSearch: React.FC<Props> = props => {
 
 			const item: PluginItem = {
 				manifest,
+				installed: !!settings,
 				enabled: settings && settings.enabled,
 				deleted: settings && !settings.deleted,
 				devMode: false,
@@ -95,7 +96,6 @@ const PluginSearch: React.FC<Props> = props => {
 				item={item.item}
 				installState={item.installState}
 				isCompatible={PluginService.instance().isCompatible(manifest)}
-				showInfoButton={false}
 				onInstall={installPlugin}
 				onAboutPress={openWebsiteForPlugin}
 			/>

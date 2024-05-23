@@ -10,16 +10,20 @@ import openWebsiteForPlugin from './utils/openWebsiteForPlugin';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginChips from './PluginBox/PluginChips';
 import PluginTitle from './PluginBox/PluginTitle';
-import ActionButton from './PluginBox/ActionButton';
+import ActionButton from './buttons/ActionButton';
 import TextButton, { ButtonType } from '../../../buttons/TextButton';
 import useUpdateState, { UpdateState } from './utils/useUpdateState';
 import { PluginCallback, PluginCallbacks } from './utils/usePluginCallbacks';
+import usePluginItem from './utils/usePluginItem';
+import InstallButton from './buttons/InstallButton';
+import { InstallState } from './PluginBox';
 
 interface Props {
 	themeId: number;
-	item: PluginItem|null;
+	initialItem: PluginItem|null;
 	updatablePluginIds: Record<string, boolean>;
 	updatingPluginIds: Record<string, boolean>;
+	installingPluginIds: Record<string, boolean>;
 	visible: boolean;
 	pluginSettings: PluginSettings;
 	onModalDismiss: ()=> void;
@@ -39,6 +43,7 @@ const styles = StyleSheet.create({
 		marginLeft: 10,
 		marginRight: 10,
 		marginTop: 30,
+		marginBottom: 30,
 	},
 	fraudulentPluginButton: {
 		opacity: 0.6,
@@ -63,6 +68,11 @@ const EnabledSwitch: React.FC<EnabledSwitchProps> = props => {
 	const onChange = useCallback(() => {
 		props.onToggle({ item: props.item });
 	}, [props.item, props.onToggle]);
+
+	if (!props.item?.installed || props.item.deleted) {
+		return null;
+	}
+
 	return <View style={styles.enabledSwitchContainer}>
 		<Text>{_('Enabled')}</Text>
 		<Switch value={props.item.enabled} onChange={onChange} />
@@ -70,14 +80,21 @@ const EnabledSwitch: React.FC<EnabledSwitchProps> = props => {
 };
 
 const PluginInfoModalContent: React.FC<Props> = props => {
-	const manifest = props.item.manifest;
+	const pluginId = props.initialItem.manifest.id;
+	const item = usePluginItem(pluginId, props.pluginSettings);
+
+	const manifest = item.manifest;
 	const isCompatible = useMemo(() => {
 		return PluginService.instance().isCompatible(manifest);
 	}, [manifest]);
 
 	const plugin = useMemo(() => {
-		return PluginService.instance().pluginById(manifest.id);
-	}, [manifest]);
+		const service = PluginService.instance();
+		if (!service.pluginIds.includes(pluginId)) {
+			return null;
+		}
+		return service.pluginById(pluginId);
+	}, [pluginId]);
 
 	const aboutPlugin = (
 		<Card mode='outlined' style={{ margin: 8 }} testID='plugin-card'>
@@ -87,7 +104,7 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 				<View style={{ marginTop: 8 }}>
 					<PluginChips
 						themeId={props.themeId}
-						item={props.item}
+						item={item}
 						hasErrors={plugin?.hasErrors}
 						isCompatible={isCompatible}
 					/>
@@ -98,12 +115,12 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 	);
 
 	const onAboutPress = useCallback(() => {
-		void openWebsiteForPlugin({ item: props.item });
-	}, [props.item]);
+		void openWebsiteForPlugin({ item });
+	}, [item]);
 
 	const reportIssueUrl = useMemo(() => {
-		return getPluginIssueReportUrl(props.item.manifest);
-	}, [props.item]);
+		return getPluginIssueReportUrl(manifest);
+	}, [manifest]);
 
 	const onReportIssuePress = useCallback(() => {
 		void Linking.openURL(reportIssueUrl);
@@ -120,16 +137,6 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 		void Linking.openURL('https://github.com/laurent22/joplin/security/advisories/new');
 	}, []);
 
-	const deleteButton = (
-		<ActionButton
-			item={props.item}
-			type={ButtonType.Delete}
-			onPress={props.pluginCallbacks.onDelete}
-			disabled={props.item.deleted}
-			title={props.item.deleted ? _('Deleted') : _('Delete')}
-		/>
-	);
-
 	const updateState = useUpdateState({
 		pluginId: plugin?.id,
 		pluginSettings: props.pluginSettings,
@@ -145,7 +152,8 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 
 	const updateButton = (
 		<ActionButton
-			item={props.item}
+			item={item}
+			type={ButtonType.Secondary}
 			onPress={props.pluginCallbacks.onUpdate}
 			disabled={updateState !== UpdateState.CanUpdate || !isCompatible}
 			loading={updateState === UpdateState.Updating}
@@ -153,20 +161,53 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 		/>
 	);
 
+	const installState = (() => {
+		if (item.installed) return InstallState.Installed;
+		if (props.installingPluginIds[pluginId]) return InstallState.Installing;
+		return InstallState.NotInstalled;
+	})();
+
+	const installButton = (
+		<InstallButton
+			item={item}
+			onInstall={props.pluginCallbacks.onInstall}
+			installState={installState}
+			isCompatible={isCompatible}
+		/>
+	);
+
+	const deleteButton = (
+		<ActionButton
+			item={item}
+			type={ButtonType.Delete}
+			onPress={props.pluginCallbacks.onDelete}
+			disabled={item.builtIn || (item?.deleted ?? true)}
+			title={item?.deleted ? _('Deleted') : _('Delete')}
+		/>
+	);
+
+	const deleteButtonContainer = <>
+		<View style={styles.buttonContainer}>
+			{deleteButton}
+		</View>
+		<Divider />
+	</>;
+
 	return <>
 		<ScrollView>
 			{aboutPlugin}
-			<EnabledSwitch item={props.item} onToggle={props.pluginCallbacks.onToggle}/>
+			<EnabledSwitch item={item} onToggle={props.pluginCallbacks.onToggle}/>
 			<Divider />
 			<View style={styles.buttonContainer}>
+				{!item.installed ? installButton : null}
 				<TextButton
-					type={ButtonType.Primary}
+					type={item.installed ? ButtonType.Primary : ButtonType.Secondary}
 					onPress={onAboutPress}
 				>{_('About')}</TextButton>
 				{updateState !== UpdateState.Idle ? updateButton : null}
-				{deleteButton}
 			</View>
 			<Divider />
+			{ item.installed ? deleteButtonContainer : null }
 			<View style={styles.buttonContainer}>
 				{ reportIssueUrl ? reportIssueButton : null }
 			</View>
@@ -187,7 +228,7 @@ const PluginInfoModal: React.FC<Props> = props => {
 				visible={props.visible}
 				onDismiss={props.onModalDismiss}
 			>
-				{ props.item ? <PluginInfoModalContent {...props}/> : null }
+				{ props.initialItem ? <PluginInfoModalContent {...props}/> : null }
 			</DismissibleDialog>
 		</Portal>
 	);

@@ -610,9 +610,7 @@ packages/app-mobile/components/screens/ConfigScreen/SettingsButton.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsToggle.js
 packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.js
-packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/ActionButton.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.js
-packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginTitle.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedChip.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.js
@@ -623,10 +621,15 @@ packages/app-mobile/components/screens/ConfigScreen/plugins/PluginToggle.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginUploadButton.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.test.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/buttons/ActionButton.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/buttons/InstallButton.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/testUtils/newRepoApi.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/testUtils/pluginServiceSetup.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/utils/openWebsiteForPlugin.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/utils/usePluginCallbacks.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/utils/usePluginItem.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/utils/useRepoApi.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/utils/useUpdateState.js
 packages/app-mobile/components/screens/ConfigScreen/types.js
 packages/app-mobile/components/screens/JoplinCloudLoginScreen.js
 packages/app-mobile/components/screens/LogScreen.js

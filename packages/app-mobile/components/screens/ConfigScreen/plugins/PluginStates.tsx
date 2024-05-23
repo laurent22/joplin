@@ -117,7 +117,7 @@ const PluginStates: React.FC<Props> = props => {
 		return PluginService.instance().unserializePluginSettings(props.pluginSettings);
 	}, [props.pluginSettings]);
 
-	const { callbacks: pluginCallbacks, updatingPluginIds } = usePluginCallbacks({
+	const { callbacks: pluginCallbacks, updatingPluginIds, installingPluginIds } = usePluginCallbacks({
 		pluginSettings, updatePluginStates: props.updatePluginStates, repoApi,
 	});
 
@@ -177,7 +177,8 @@ const PluginStates: React.FC<Props> = props => {
 				pluginSettings={pluginSettings}
 				updatablePluginIds={updatablePluginIds}
 				updatingPluginIds={updatingPluginIds}
-				item={shownInDialogItem}
+				installingPluginIds={installingPluginIds}
+				initialItem={shownInDialogItem}
 				visible={!!shownInDialogItem}
 				onModalDismiss={onPluginDialogClosed}
 				pluginCallbacks={pluginCallbacks}
