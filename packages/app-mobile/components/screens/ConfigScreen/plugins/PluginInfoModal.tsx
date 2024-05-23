@@ -2,9 +2,9 @@ import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import { useCallback, useMemo } from 'react';
-import { Button, Card, Divider, Portal, Switch, Text } from 'react-native-paper';
+import { Card, Divider, List, Portal, Switch, Text } from 'react-native-paper';
 import getPluginIssueReportUrl from '@joplin/lib/services/plugins/utils/getPluginIssueReportUrl';
-import { Linking, ScrollView, StyleSheet, View } from 'react-native';
+import { Linking, ScrollView, StyleSheet, View, ViewStyle } from 'react-native';
 import DismissibleDialog from '../../../DismissibleDialog';
 import openWebsiteForPlugin from './utils/openWebsiteForPlugin';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
@@ -31,33 +31,42 @@ interface Props {
 	pluginCallbacks: PluginCallbacks;
 }
 
-const styles = StyleSheet.create({
-	descriptionText: {
-		marginTop: 5,
-		marginBottom: 5,
-	},
-	buttonContainer: {
+const styles = (() => {
+	const baseButtonContainer: ViewStyle = {
 		display: 'flex',
 		flexDirection: 'column',
 		gap: 20,
 		marginLeft: 10,
 		marginRight: 10,
-		marginTop: 30,
-		marginBottom: 30,
-	},
-	fraudulentPluginButton: {
-		opacity: 0.6,
-	},
-	enabledSwitchContainer: {
-		display: 'flex',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		padding: 10,
-		marginTop: 12,
-		marginBottom: 14,
-	},
-});
+	};
+	return StyleSheet.create({
+		descriptionText: {
+			marginTop: 5,
+			marginBottom: 5,
+		},
+		buttonContainer: {
+			...baseButtonContainer,
+			marginTop: 26,
+			marginBottom: 26,
+		},
+		accordionContent: {
+			...baseButtonContainer,
+			marginTop: 12,
+		},
+		fraudulentPluginButton: {
+			opacity: 0.6,
+		},
+		enabledSwitchContainer: {
+			display: 'flex',
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			alignItems: 'center',
+			padding: 10,
+			marginTop: 12,
+			marginBottom: 14,
+		},
+	});
+})();
 
 interface EnabledSwitchProps {
 	item: PluginItem;
@@ -193,6 +202,18 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 		<Divider />
 	</>;
 
+	const reportIssuesContainer = (
+		<List.Accordion title={_('Report any issues concerning the plugin.')} titleNumberOfLines={2}>
+			<View style={styles.accordionContent}>
+				<TextButton
+					type={ButtonType.Secondary}
+					onPress={onReportFraudulentPress}
+				>{_('Report fraudulent plugin')}</TextButton>
+				{reportIssueButton}
+			</View>
+		</List.Accordion>
+	);
+
 	return <>
 		<ScrollView>
 			{aboutPlugin}
@@ -208,15 +229,8 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 			</View>
 			<Divider />
 			{ item.installed ? deleteButtonContainer : null }
-			<View style={styles.buttonContainer}>
-				{ reportIssueUrl ? reportIssueButton : null }
-			</View>
+			{reportIssuesContainer}
 		</ScrollView>
-		<Button
-			icon='shield-bug'
-			style={styles.fraudulentPluginButton}
-			onPress={onReportFraudulentPress}
-		>{_('Report fraudulent plugin')}</Button>
 	</>;
 };
 

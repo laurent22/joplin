@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Platform, Linking, View, Switch, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions, AccessibilityInfo } from 'react-native';
-import Setting, { AppType, SettingItem, SettingMetadataSection } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingMetadataSection } from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import checkPermissions from '../../../utils/checkPermissions';
@@ -390,7 +390,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		const addSettingComponent = (
 			component: ReactElement,
 			relatedText: string|string[],
-			settingMetadata?: SettingItem,
+			settingMetadata?: { advanced?: boolean },
 		) => {
 			const hiddenBySearch = this.state.searching && !matchesSearchQuery(relatedText);
 			if (component && !hiddenBySearch) {
@@ -506,6 +506,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 							updatePluginStates={updatePluginStates}
 						/>,
 						pluginUploadButtonSearchText(),
+						{ advanced: true },
 					);
 				}
 			} else {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import { ConfigScreenStyles } from '../configScreenStyles';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Banner, Button, Text } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import PluginService, { PluginSettings, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
@@ -54,6 +54,13 @@ const useLoadedPluginIds = () => {
 
 	return loadedPluginIds;
 };
+
+const styles = StyleSheet.create({
+	installedPluginsContainer: {
+		marginLeft: 8,
+		marginRight: 8,
+	},
+});
 
 const PluginStates: React.FC<Props> = props => {
 	const [repoApiError, setRepoApiError] = useState(null);
@@ -170,7 +177,9 @@ const PluginStates: React.FC<Props> = props => {
 	return (
 		<View>
 			{renderRepoApiStatus()}
-			{installedPluginCards}
+			<View style={styles.installedPluginsContainer}>
+				{installedPluginCards}
+			</View>
 			{showSearch ? searchComponent : null}
 			<PluginInfoModal
 				themeId={props.themeId}

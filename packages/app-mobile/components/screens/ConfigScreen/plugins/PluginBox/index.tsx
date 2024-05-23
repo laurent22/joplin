@@ -36,7 +36,9 @@ interface Props {
 const useStyles = (compatible: boolean) => {
 	return useMemo(() => {
 		const baseCardStyle: ViewStyle = {
-			margin: 8,
+			margin: 0,
+			marginTop: 8,
+			padding: 0,
 		};
 
 		return StyleSheet.create({
