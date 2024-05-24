@@ -4,7 +4,6 @@ import shim from '@joplin/lib/shim';
 import * as React from 'react';
 import { Alert, Linking, View, ViewStyle } from 'react-native';
 import { _ } from '@joplin/lib/locale';
-import { Chip } from 'react-native-paper';
 import { PluginCallback } from '../utils/usePluginCallbacks';
 import StyledChip from './StyledChip';
 import { themeStyle } from '../../../../global-style';
@@ -82,7 +81,7 @@ const PluginChips: React.FC<Props> = props => {
 		if (!props.item.builtIn) {
 			return null;
 		}
-		return <Chip icon='code-tags-check'>{_('Built-in')}</Chip>;
+		return <StyledChip icon='code-tags-check'>{_('Built-in')}</StyledChip>;
 	};
 
 	const renderIncompatibleChip = () => {
@@ -106,7 +105,7 @@ const PluginChips: React.FC<Props> = props => {
 		if (!props.isCompatible || !props.canUpdate) return null;
 
 		return (
-			<Chip>{_('Update available')}</Chip>
+			<StyledChip>{_('Update available')}</StyledChip>
 		);
 	};
 
@@ -114,7 +113,7 @@ const PluginChips: React.FC<Props> = props => {
 		if (props.item.enabled || !props.item.installed) {
 			return null;
 		}
-		return <Chip>{_('Disabled')}</Chip>;
+		return <StyledChip>{_('Disabled')}</StyledChip>;
 	};
 
 	return <View style={containerStyle}>

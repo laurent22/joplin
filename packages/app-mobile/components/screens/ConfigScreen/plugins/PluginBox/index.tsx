@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, Text } from 'react-native-paper';
+import { Card, Text, TouchableRipple } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import ActionButton from '../buttons/ActionButton';
@@ -8,7 +8,7 @@ import PluginChips from './PluginChips';
 import { UpdateState } from '../utils/useUpdateState';
 import { PluginCallback } from '../utils/usePluginCallbacks';
 import { useCallback, useMemo } from 'react';
-import { StyleSheet, ViewStyle } from 'react-native';
+import { StyleSheet } from 'react-native';
 import InstallButton from '../buttons/InstallButton';
 import PluginTitle from './PluginTitle';
 
@@ -35,17 +35,16 @@ interface Props {
 
 const useStyles = (compatible: boolean) => {
 	return useMemo(() => {
-		const baseCardStyle: ViewStyle = {
-			margin: 0,
-			marginTop: 8,
-			padding: 0,
-		};
-
 		return StyleSheet.create({
-			card: compatible ? baseCardStyle : {
-				...baseCardStyle,
-				opacity: 0.7,
+			cardContainer: {
+				margin: 0,
+				marginTop: 8,
+				padding: 0,
+				borderRadius: 14,
 			},
+			card: !compatible ? {
+				opacity: 0.7,
+			} : { },
 			content: {
 				gap: 5,
 			},
@@ -74,29 +73,34 @@ const PluginBox: React.FC<Props> = props => {
 	const styles = useStyles(props.isCompatible);
 
 	return (
-		<Card
-			mode='outlined'
-			style={styles.card}
+		<TouchableRipple
+			accessibilityRole='button'
 			onPress={props.onShowPluginInfo ? onPress : null}
-			testID='plugin-card'
+			style={styles.cardContainer}
 		>
-			<Card.Content style={styles.content}>
-				<PluginTitle manifest={item.manifest} />
-				<Text numberOfLines={2}>{manifest.description}</Text>
-				<PluginChips
-					themeId={props.themeId}
-					item={props.item}
-					hasErrors={props.hasErrors}
-					canUpdate={props.updateState === UpdateState.CanUpdate}
-					onShowPluginLog={props.onShowPluginLog}
-					isCompatible={props.isCompatible}
-				/>
-			</Card.Content>
-			<Card.Actions>
-				{props.onAboutPress ? aboutButton : null}
-				{props.onInstall ? installButton : null}
-			</Card.Actions>
-		</Card>
+			<Card
+				mode='outlined'
+				style={styles.card}
+				testID='plugin-card'
+			>
+				<Card.Content style={styles.content}>
+					<PluginTitle manifest={item.manifest} />
+					<Text numberOfLines={2}>{manifest.description}</Text>
+					<PluginChips
+						themeId={props.themeId}
+						item={props.item}
+						hasErrors={props.hasErrors}
+						canUpdate={props.updateState === UpdateState.CanUpdate}
+						onShowPluginLog={props.onShowPluginLog}
+						isCompatible={props.isCompatible}
+					/>
+				</Card.Content>
+				<Card.Actions>
+					{props.onAboutPress ? aboutButton : null}
+					{props.onInstall ? installButton : null}
+				</Card.Actions>
+			</Card>
+		</TouchableRipple>
 	);
 };
 

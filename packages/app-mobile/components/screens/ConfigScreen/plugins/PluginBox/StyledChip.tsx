@@ -2,14 +2,17 @@ import * as React from 'react';
 import { Chip, ChipProps } from 'react-native-paper';
 import { useMemo } from 'react';
 
-
-interface Props extends ChipProps {
+type Props = ({
 	foreground: string;
 	background: string;
-}
+}|{
+	foreground?: undefined;
+	background?: undefined;
+}) & ChipProps;
 
 const RecommendedChip: React.FC<Props> = props => {
 	const themeOverride = useMemo(() => {
+		if (!props.foreground) return {};
 		return {
 			colors: {
 				secondaryContainer: props.background,
@@ -19,9 +22,16 @@ const RecommendedChip: React.FC<Props> = props => {
 		};
 	}, [props.foreground, props.background]);
 
+	const accessibilityProps: Partial<Props> = {};
+	if (!props.onPress) {
+		// TODO: May have no effect until a future version of RN Paper.
+		// See https://github.com/callstack/react-native-paper/pull/4327
+		accessibilityProps.accessibilityRole = 'text';
+	}
+
 	return <Chip
-		icon='crown'
 		theme={themeOverride}
+		{...accessibilityProps}
 		{...props}
 	/>;
 };

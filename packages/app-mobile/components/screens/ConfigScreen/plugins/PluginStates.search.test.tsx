@@ -1,37 +1,14 @@
 import * as React from 'react';
-import RepositoryApi, { InstallMode } from '@joplin/lib/services/plugins/RepositoryApi';
 import { mockMobilePlatform, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 
 import { render, screen, userEvent, waitFor } from '@testing-library/react-native';
 import '@testing-library/react-native/extend-expect';
 
-import SearchPlugins from './SearchPlugins';
-import Setting from '@joplin/lib/models/Setting';
-import { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import pluginServiceSetup from './testUtils/pluginServiceSetup';
-import newRepoApi from './testUtils/newRepoApi';
 import createMockReduxStore from '../../../../utils/testing/createMockReduxStore';
-
-interface WrapperProps {
-	repoApi: RepositoryApi;
-	repoApiInitialized?: boolean;
-	pluginSettings?: PluginSettings;
-	onUpdatePluginStates?: (states: PluginSettings)=> void;
-}
-
-const noOpFunction = ()=>{};
-
-const SearchWrapper = (props: WrapperProps) => {
-	return (
-		<SearchPlugins
-			themeId={Setting.THEME_LIGHT}
-			pluginSettings={props.pluginSettings ?? {}}
-			repoApiInitialized={props.repoApiInitialized ?? true}
-			repoApi={props.repoApi}
-			onUpdatePluginStates={props.onUpdatePluginStates ?? noOpFunction}
-		/>
-	);
-};
+import WrappedPluginStates from './testUtils/WrappedPluginStates';
+import { AppState } from '../../../../utils/types';
+import { Store } from 'redux';
 
 const expectSearchResultCountToBe = async (count: number) => {
 	await waitFor(() => {
@@ -39,16 +16,19 @@ const expectSearchResultCountToBe = async (count: number) => {
 	});
 };
 
-describe('SearchPlugins', () => {
+let reduxStore: Store<AppState>;
+
+describe('PluginStates/search', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);
-		pluginServiceSetup(createMockReduxStore());
+		reduxStore = createMockReduxStore();
+		pluginServiceSetup(reduxStore);
+		mockMobilePlatform('android');
 	});
 
 	it('should find results', async () => {
-		const repoApi = await newRepoApi(InstallMode.Default);
-		render(<SearchWrapper repoApi={repoApi}/>);
+		render(<WrappedPluginStates initialPluginSettings={{}} store={reduxStore}/>);
 
 		const searchBox = screen.queryByPlaceholderText('Search plugins');
 		expect(searchBox).toBeVisible();
@@ -75,8 +55,8 @@ describe('SearchPlugins', () => {
 
 	it('should only show recommended plugin search results on iOS-like environments', async () => {
 		// iOS uses restricted install mode
-		const repoApi = await newRepoApi(InstallMode.Restricted);
-		render(<SearchWrapper repoApi={repoApi}/>);
+		mockMobilePlatform('ios');
+		render(<WrappedPluginStates initialPluginSettings={{}} store={reduxStore}/>);
 
 		const searchBox = screen.queryByPlaceholderText('Search plugins');
 		expect(searchBox).toBeVisible();
@@ -100,9 +80,7 @@ describe('SearchPlugins', () => {
 	});
 
 	it('should mark incompatible plugins as incompatible', async () => {
-		const mock = mockMobilePlatform('android');
-		const repoApi = await newRepoApi(InstallMode.Default);
-		render(<SearchWrapper repoApi={repoApi}/>);
+		render(<WrappedPluginStates initialPluginSettings={{}} store={reduxStore}/>);
 
 		const searchBox = screen.queryByPlaceholderText('Search plugins');
 		const user = userEvent.setup();
@@ -116,7 +94,5 @@ describe('SearchPlugins', () => {
 		await expectSearchResultCountToBe(1);
 		expect(await screen.findByText(/Note list and side bar/i)).toBeVisible();
 		expect(await screen.findByText('Incompatible')).toBeVisible();
-
-		mock.reset();
 	});
 });
