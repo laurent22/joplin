@@ -46,7 +46,7 @@ const loadMockPlugin = async (id: string, name: string, version: string, pluginS
 	});
 };
 
-describe('PluginStates/installed', () => {
+describe('PluginStates.installed', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);

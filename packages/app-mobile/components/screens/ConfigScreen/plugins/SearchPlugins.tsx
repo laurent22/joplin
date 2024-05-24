@@ -123,7 +123,7 @@ const PluginSearch: React.FC<Props> = props => {
 				testID='searchbar'
 				mode='outlined'
 				left={<TextInput.Icon icon='magnify' />}
-				label={_('Search plugins')}
+				placeholder={_('Search plugins')}
 				onChangeText={setSearchQuery}
 				value={searchQuery}
 				editable={props.repoApiInitialized}

@@ -9,6 +9,8 @@ import createMockReduxStore from '../../../../utils/testing/createMockReduxStore
 import WrappedPluginStates from './testUtils/WrappedPluginStates';
 import { AppState } from '../../../../utils/types';
 import { Store } from 'redux';
+import mockRepositoryApiConstructor from './testUtils/mockRepositoryApiConstructor';
+import { resetRepoApi } from './utils/useRepoApi';
 
 const expectSearchResultCountToBe = async (count: number) => {
 	await waitFor(() => {
@@ -16,26 +18,36 @@ const expectSearchResultCountToBe = async (count: number) => {
 	});
 };
 
+// The search box is initially read-only -- waits for it to be editable.
+const getEditableSearchBox = async () => {
+	const searchBox = await screen.findByPlaceholderText('Search plugins');
+	expect(searchBox).toBeVisible();
+
+	await waitFor(() => {
+		expect(searchBox.props.editable).toBe(true);
+	});
+
+	return searchBox;
+};
+
 let reduxStore: Store<AppState>;
 
-describe('PluginStates/search', () => {
+describe('PluginStates.search', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);
 		reduxStore = createMockReduxStore();
 		pluginServiceSetup(reduxStore);
 		mockMobilePlatform('android');
+		resetRepoApi();
+
+		await mockRepositoryApiConstructor();
 	});
 
 	it('should find results', async () => {
-		render(<WrappedPluginStates initialPluginSettings={{}} store={reduxStore}/>);
+		const wrapper = render(<WrappedPluginStates initialPluginSettings={{}} store={reduxStore}/>);
 
-		const searchBox = screen.queryByPlaceholderText('Search plugins');
-		expect(searchBox).toBeVisible();
-
-		// No plugin cards should be visible by default
-		expect(screen.queryAllByTestId('plugin-card')).toHaveLength(0);
-
+		const searchBox = await getEditableSearchBox();
 		const user = userEvent.setup();
 		await user.type(searchBox, 'backlinks');
 
@@ -51,18 +63,24 @@ describe('PluginStates/search', () => {
 		await waitFor(() => {
 			expect(screen.queryAllByTestId('plugin-card').length).toBeGreaterThan(2);
 		});
+
+		wrapper.unmount();
 	});
 
 	it('should only show recommended plugin search results on iOS-like environments', async () => {
 		// iOS uses restricted install mode
 		mockMobilePlatform('ios');
-		render(<WrappedPluginStates initialPluginSettings={{}} store={reduxStore}/>);
+		await mockRepositoryApiConstructor();
 
-		const searchBox = screen.queryByPlaceholderText('Search plugins');
-		expect(searchBox).toBeVisible();
+		const wrapper = render(<WrappedPluginStates initialPluginSettings={{}} store={reduxStore}/>);
+
+		const searchBox = await getEditableSearchBox();
 
 		const user = userEvent.setup();
+		await user.press(searchBox);
 		await user.type(searchBox, 'abc');
+
+		expect(searchBox.props.value).toBe('abc');
 
 		// Should find recommended plugins
 		await expectSearchResultCountToBe(1);
@@ -77,14 +95,18 @@ describe('PluginStates/search', () => {
 		await expectSearchResultCountToBe(1);
 		expect(screen.getByText(/ABC Sheet Music/i)).toBeTruthy();
 		expect(screen.queryByText(/backlink/i)).toBeNull();
+
+		wrapper.unmount();
 	});
 
 	it('should mark incompatible plugins as incompatible', async () => {
-		render(<WrappedPluginStates initialPluginSettings={{}} store={reduxStore}/>);
+		const wrapper = render(<WrappedPluginStates initialPluginSettings={{}} store={reduxStore}/>);
 
-		const searchBox = screen.queryByPlaceholderText('Search plugins');
+		const searchBox = await getEditableSearchBox();
 		const user = userEvent.setup();
+		await user.press(searchBox);
 		await user.type(searchBox, 'abc');
+		expect(searchBox.props.value).toBe('abc');
 
 		await expectSearchResultCountToBe(1);
 		expect(screen.queryByText('Incompatible')).toBeNull();
@@ -94,5 +116,7 @@ describe('PluginStates/search', () => {
 		await expectSearchResultCountToBe(1);
 		expect(await screen.findByText(/Note list and side bar/i)).toBeVisible();
 		expect(await screen.findByText('Incompatible')).toBeVisible();
+
+		wrapper.unmount();
 	});
 });
