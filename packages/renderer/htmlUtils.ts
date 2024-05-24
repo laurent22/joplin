@@ -196,6 +196,7 @@ class HtmlUtils {
 		options.allowedFilePrefixes ??= [];
 
 		const output: string[] = [];
+		let svgStack: string[] = [];
 
 		const tagStack: string[] = [];
 
@@ -208,6 +209,9 @@ class HtmlUtils {
 		// going to be skipped too. This is necessary to prevent certain XSS
 		// attacks. See sanitize_11.md
 		let disallowedTagDepth = 0;
+
+		let isInsideSvg = false;
+		let svgStyle = '';
 
 		// The BASE tag allows changing the base URL from which files are
 		// loaded, and that can break several plugins, such as Katex (which
@@ -225,7 +229,6 @@ class HtmlUtils {
 			'script', 'iframe', 'frameset', 'frame', 'object', 'base',
 			'embed', 'link', 'meta', 'noscript', 'button',
 			'input', 'select', 'textarea', 'option', 'optgroup',
-			'svg',
 
 			// Disallow map and area tags: <area ...> links are currently not
 			// sanitized as well as <a ...> links, allowing potential sandbox
@@ -264,6 +267,13 @@ class HtmlUtils {
 
 				attrs = { ...attrs };
 
+				if (currentTag() === 'svg') {
+					isInsideSvg = true ;
+					svgStyle = attrs.style || '';
+					delete attrs.style;
+					attrs.xmlns = 'http://www.w3.org/2000/svg';
+				}
+
 				// Remove all the attributes that start with "on", which
 				// normally should be JavaScript events. A better solution
 				// would be to blacklist known events only but it seems the
@@ -275,7 +285,7 @@ class HtmlUtils {
 				for (const attrName in attrs) {
 					if (!attrs.hasOwnProperty(attrName)) continue;
 					if (attrName.length <= 2) continue;
-					if (attrName.substr(0, 2) !== 'on') continue;
+					if (attrName.toLowerCase().slice(0, 2) !== 'on') continue;
 					delete attrs[attrName];
 				}
 
@@ -313,12 +323,15 @@ class HtmlUtils {
 				let attrHtml = attributesHtml(attrs);
 				if (attrHtml) attrHtml = ` ${attrHtml}`;
 				const closingSign = isSelfClosingTag(name) ? '/>' : '>';
-				output.push(`<${name}${attrHtml}${closingSign}`);
+				if (isInsideSvg) {
+					svgStack.push(`<${name}${attrHtml}${closingSign}`);
+				} else {
+					output.push(`<${name}${attrHtml}${closingSign}`);
+				}
 			},
 
 			ontext: (decodedText: string) => {
-				if (disallowedTagDepth) return;
-
+				if (disallowedTagDepth || isInsideSvg) return;
 
 				if (currentTag() === 'style') {
 					// For CSS, we have to put the style as-is inside the tag
@@ -341,6 +354,16 @@ class HtmlUtils {
 
 				if (current === name.toLowerCase()) tagStack.pop();
 
+				if (name === 'svg') {
+					svgStack.push('</svg>');
+					tagStack.pop();
+					output.push(`<img style="${svgStyle}" src="data:image/svg+xml;base64,${btoa(svgStack.join(''))}" />`);
+					svgStack = [];
+					svgStyle = '';
+					isInsideSvg = false;
+					return;
+				}
+
 				// The Markdown sanitization code can result in calls like this:
 				//     sanitizeHtml('<invlaid>')
 				//     sanitizeHtml('</invalid>')
@@ -361,10 +384,19 @@ class HtmlUtils {
 				}
 
 				if (isSelfClosingTag(name)) return;
-				output.push(`</${name}>`);
+
+				if (isInsideSvg) {
+					svgStack.push(`</${name}>`);
+				} else {
+					output.push(`</${name}>`);
+				}
 			},
 
-		}, { decodeEntities: true });
+		},
+		{
+			decodeEntities: true,
+			lowerCaseAttributeNames: false,
+		});
 
 		parser.write(html);
 		parser.end();
