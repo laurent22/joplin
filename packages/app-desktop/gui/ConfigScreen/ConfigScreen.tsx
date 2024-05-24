@@ -596,6 +596,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 											size={ButtonSize.Small}
 										/>
 									</div>
+									<div style={{ width: inputStyle.width, minWidth: inputStyle.minWidth }}>
+										{descriptionComp}
+									</div>
 								</div>
 							</div>
 						</div>
