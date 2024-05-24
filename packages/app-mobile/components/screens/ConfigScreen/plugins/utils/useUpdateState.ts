@@ -1,5 +1,5 @@
-import { PluginSettings } from "@joplin/lib/services/plugins/PluginService";
-import { useMemo } from "react";
+import { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import { useMemo } from 'react';
 
 export enum UpdateState {
 	Idle = 1,
