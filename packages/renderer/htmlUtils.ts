@@ -331,7 +331,12 @@ class HtmlUtils {
 			},
 
 			ontext: (decodedText: string) => {
-				if (disallowedTagDepth || isInsideSvg) return;
+				if (disallowedTagDepth) return;
+
+				if (isInsideSvg) {
+					svgElements.push(decodedText);
+					return;
+				}
 
 				if (currentTag() === 'style') {
 					// For CSS, we have to put the style as-is inside the tag
