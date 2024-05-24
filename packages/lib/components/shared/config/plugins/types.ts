@@ -4,7 +4,6 @@ import { PluginManifest } from '../../../../services/plugins/utils/types';
 
 export interface PluginItem {
 	manifest: PluginManifest;
-	installed: boolean;
 	enabled: boolean;
 	deleted: boolean;
 	devMode: boolean;

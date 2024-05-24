@@ -1,23 +1,64 @@
 import * as React from 'react';
-import { createTempDir, mockMobilePlatform, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
+import { createTempDir, mockMobilePlatform, setupDatabaseAndSynchronizer, supportDir, switchClient } from '@joplin/lib/testing/test-utils';
 
-import { act, render, screen, userEvent } from '@testing-library/react-native';
+import { act, render, screen } from '@testing-library/react-native';
 import '@testing-library/react-native/extend-expect';
 
+import Setting from '@joplin/lib/models/Setting';
 import PluginService, { PluginSettings, defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
+import { useCallback, useState } from 'react';
 import pluginServiceSetup from './testUtils/pluginServiceSetup';
-import { writeFile } from 'fs-extra';
+import PluginStates from './PluginStates';
+import configScreenStyles from '../configScreenStyles';
+import { remove, writeFile } from 'fs-extra';
 import { join } from 'path';
 import shim from '@joplin/lib/shim';
 import { resetRepoApi } from './utils/useRepoApi';
 import { Store } from 'redux';
 import { AppState } from '../../../../utils/types';
 import createMockReduxStore from '../../../../utils/testing/createMockReduxStore';
-import WrappedPluginStates from './testUtils/WrappedPluginStates';
-import mockRepositoryApiConstructor from './testUtils/mockRepositoryApiConstructor';
 
+interface WrapperProps {
+	initialPluginSettings: PluginSettings;
+}
 
 let reduxStore: Store<AppState> = null;
+
+const shouldShowBasedOnSettingSearchQuery = ()=>true;
+const PluginStatesWrapper = (props: WrapperProps) => {
+	const styles = configScreenStyles(Setting.THEME_LIGHT);
+
+	const [pluginSettings, setPluginSettings] = useState(() => {
+		return props.initialPluginSettings ?? {};
+	});
+
+	const updatePluginStates = useCallback((newStates: PluginSettings) => {
+		setPluginSettings(newStates);
+	}, []);
+
+	return (
+		<PluginStates
+			styles={styles}
+			themeId={Setting.THEME_LIGHT}
+			updatePluginStates={updatePluginStates}
+			pluginSettings={pluginSettings}
+			shouldShowBasedOnSearchQuery={shouldShowBasedOnSettingSearchQuery}
+		/>
+	);
+};
+
+let repoTempDir: string|null = null;
+const mockRepositoryApiConstructor = async () => {
+	if (repoTempDir) {
+		await remove(repoTempDir);
+	}
+	repoTempDir = await createTempDir();
+
+	RepositoryApi.ofDefaultJoplinRepo = jest.fn((_tempDirPath: string, appType, installMode) => {
+		return new RepositoryApi(`${supportDir}/pluginRepo`, repoTempDir, appType, installMode);
+	});
+};
 
 const loadMockPlugin = async (id: string, name: string, version: string, pluginSettings: PluginSettings) => {
 	const service = PluginService.instance();
@@ -46,12 +87,7 @@ const loadMockPlugin = async (id: string, name: string, version: string, pluginS
 	});
 };
 
-const showInstalledTab = async () => {
-	const installedTab = await screen.findByText('Installed plugins');
-	await userEvent.press(installedTab);
-};
-
-describe('PluginStates.installed', () => {
+describe('PluginStates', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);
@@ -92,27 +128,23 @@ describe('PluginStates.installed', () => {
 		await loadMockPlugin(backlinksPluginId, 'Backlinks to note', '0.0.1', defaultPluginSettings);
 		expect(PluginService.instance().plugins[backlinksPluginId]).toBeTruthy();
 
-		const wrapper = render(
-			<WrappedPluginStates
+		render(
+			<PluginStatesWrapper
 				initialPluginSettings={defaultPluginSettings}
-				store={reduxStore}
 			/>,
 		);
-		await showInstalledTab();
 		expect(await screen.findByText(/^ABC Sheet Music/)).toBeVisible();
 		expect(await screen.findByText(/^Backlinks to note/)).toBeVisible();
 
-		const updateMarkers = await screen.findAllByText('Update available');
+		expect(await screen.findByRole('button', { name: 'Update ABC Sheet Music', disabled: false })).toBeVisible();
 
 		// Backlinks to note should not be updatable on iOS (it's not _recommended).
-		// ABC Sheet Music should always be updatable
+		const backlinksToNoteQuery = { name: 'Update Backlinks to note', disabled: false };
 		if (platform === 'android') {
-			expect(updateMarkers).toHaveLength(2);
+			expect(await screen.findByRole('button', backlinksToNoteQuery)).toBeVisible();
 		} else {
-			expect(updateMarkers).toHaveLength(1);
+			expect(await screen.queryByRole('button', backlinksToNoteQuery)).toBeNull();
 		}
-
-		wrapper.unmount();
 	});
 
 	it('should show the current plugin version on updatable plugins', async () => {
@@ -123,32 +155,24 @@ describe('PluginStates.installed', () => {
 		await loadMockPlugin(abcPluginId, 'ABC Sheet Music', outdatedVersion, defaultPluginSettings);
 		expect(PluginService.instance().plugins[abcPluginId]).toBeTruthy();
 
-		const wrapper = render(
-			<WrappedPluginStates
+		render(
+			<PluginStatesWrapper
 				initialPluginSettings={defaultPluginSettings}
-				store={reduxStore}
 			/>,
 		);
-		await showInstalledTab();
-
-		const abcSheetMusicCard = await screen.findByText(/^ABC Sheet Music/);
-		expect(abcSheetMusicCard).toBeVisible();
-		expect(await screen.findByText('Update available')).toBeVisible();
+		expect(await screen.findByText(/^ABC Sheet Music/)).toBeVisible();
+		expect(await screen.findByRole('button', { name: 'Update ABC Sheet Music', disabled: false })).toBeVisible();
 		expect(await screen.findByText(`v${outdatedVersion}`)).toBeVisible();
-
-		wrapper.unmount();
 	});
 
 	it('should update the list of installed plugins when a plugin is installed and uninstalled', async () => {
 		const pluginSettings: PluginSettings = { };
 
-		const wrapper = render(
-			<WrappedPluginStates
+		render(
+			<PluginStatesWrapper
 				initialPluginSettings={pluginSettings}
-				store={reduxStore}
 			/>,
 		);
-		await showInstalledTab();
 
 		// Initially, no plugins should be visible.
 		expect(screen.queryByText(/^ABC Sheet Music/)).toBeNull();
@@ -167,7 +191,5 @@ describe('PluginStates.installed', () => {
 		await act(() => PluginService.instance().uninstallPlugin(testPluginId1));
 		expect(await screen.findByText(/^A test plugin/)).toBeVisible();
 		expect(screen.queryByText(/^ABC Sheet Music/)).toBeNull();
-
-		wrapper.unmount();
 	});
 });

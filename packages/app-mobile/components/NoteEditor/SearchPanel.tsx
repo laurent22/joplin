@@ -2,12 +2,13 @@
 
 const React = require('react');
 const { useMemo, useState, useEffect } = require('react');
+const MaterialCommunityIcon = require('react-native-vector-icons/MaterialCommunityIcons').default;
 
 import { EditorSettings } from './types';
 import { _ } from '@joplin/lib/locale';
 import { BackHandler, TextInput, View, Text, StyleSheet, ViewStyle } from 'react-native';
 import { Theme } from '@joplin/lib/themes/type';
-import IconButton from '../IconButton';
+import CustomButton from '../CustomButton';
 import { SearchState } from '@joplin/editor/types';
 import { SearchControl } from './types';
 
@@ -42,14 +43,14 @@ interface ActionButtonProps {
 
 const ActionButton = (props: ActionButtonProps) => {
 	return (
-		<IconButton
+		<CustomButton
 			themeId={props.themeId}
-			containerStyle={props.styles.button}
+			style={props.styles.button}
 			onPress={props.onPress}
 			description={props.title}
-			iconName={`material ${props.iconName}`}
-			iconStyle={props.styles.buttonText}
-		/>
+		>
+			<MaterialCommunityIcon name={props.iconName} style={props.styles.buttonText}/>
+		</CustomButton>
 	);
 };
 
@@ -67,9 +68,9 @@ const ToggleButton = (props: ToggleButtonProps) => {
 	const active = props.active;
 
 	return (
-		<IconButton
+		<CustomButton
 			themeId={props.themeId}
-			containerStyle={{
+			style={{
 				...props.styles.toggleButton,
 				...(active ? props.styles.toggleButtonActive : {}),
 			}}
@@ -80,12 +81,11 @@ const ToggleButton = (props: ToggleButtonProps) => {
 			}}
 			description={props.title}
 			accessibilityRole='switch'
-
-			iconName={`material ${props.iconName}`}
-			iconStyle={
+		>
+			<MaterialCommunityIcon name={props.iconName} style={
 				active ? props.styles.activeButtonText : props.styles.buttonText
-			}
-		/>
+			}/>
+		</CustomButton>
 	);
 };
 

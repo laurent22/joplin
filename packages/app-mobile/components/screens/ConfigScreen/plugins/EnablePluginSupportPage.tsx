@@ -3,8 +3,7 @@ import { themeStyle } from '../../../global-style';
 import * as React from 'react';
 import { useMemo } from 'react';
 import { Linking, View, StyleSheet, ViewStyle, TextStyle } from 'react-native';
-import { Card, Divider, Icon, List, Text } from 'react-native-paper';
-import { LinkButton, PrimaryButton } from '../../../buttons';
+import { Button, Card, Divider, Icon, List, Text } from 'react-native-paper';
 
 interface Props {
 	themeId: number;
@@ -51,6 +50,7 @@ const useStyles = (themeId: number) => {
 				marginBottom: 0,
 			},
 			actionButton: {
+				borderRadius: 10,
 				marginLeft: theme.marginLeft * 2,
 				marginRight: theme.marginRight * 2,
 				marginBottom: theme.margin,
@@ -58,6 +58,18 @@ const useStyles = (themeId: number) => {
 		});
 
 		const themeOverride = {
+			secondaryButton: {
+				colors: {
+					primary: theme.color4,
+					outline: theme.color4,
+				},
+			},
+			primaryButton: {
+				colors: {
+					primary: theme.color4,
+					onPrimary: theme.backgroundColor4,
+				},
+			},
 			card: {
 				colors: {
 					outline: theme.codeBorderColor,
@@ -115,8 +127,8 @@ const EnablePluginSupportPage: React.FC<Props> = props => {
 			{renderCard('source-branch-check', _('Open Source'), _('Most plugins have source code available for review on the plugin website.'))}
 			{renderCard('flag-remove', _('Report system'), _('We have a system for reporting and removing problematic plugins.'))}
 			<View>
-				<LinkButton style={styles.actionButton} onPress={onLearnMorePress}>{_('Learn more')}</LinkButton>
-				<PrimaryButton style={styles.actionButton} onPress={props.onEnablePluginSupport}>{_('Enable plugin support')}</PrimaryButton>
+				<Button style={styles.actionButton} theme={themeOverride.secondaryButton} onPress={onLearnMorePress}>{_('Learn more')}</Button>
+				<Button style={styles.actionButton} theme={themeOverride.primaryButton} mode='contained' onPress={props.onEnablePluginSupport}>{_('Enable plugin support')}</Button>
 			</View>
 		</View>
 	);

@@ -14,7 +14,9 @@ import { Theme } from '@joplin/lib/themes/type';
 import * as React from 'react';
 import { ReactNode, useCallback, useState, useEffect } from 'react';
 import { View, ViewStyle } from 'react-native';
-import IconButton from '../../IconButton';
+import CustomButton from '../../CustomButton';
+
+const AntIcon = require('react-native-vector-icons/AntDesign').default;
 
 interface Props {
 	children: ReactNode;
@@ -52,10 +54,10 @@ const ToggleSpaceButton = (props: Props) => {
 				height: additionalPositiveSpace,
 				zIndex: -2,
 			}} />
-			<IconButton
+			<CustomButton
 				themeId={props.themeId}
 				description={'Move toolbar to bottom of screen'}
-				containerStyle={{
+				style={{
 					height: additionalPositiveSpace,
 					width: '100%',
 
@@ -70,10 +72,11 @@ const ToggleSpaceButton = (props: Props) => {
 					alignItems: 'center',
 				}}
 				onPress={onDecreaseSpace}
-
-				iconName='material chevron-down'
-				iconStyle={{ color: theme.color }}
-			/>
+			>
+				<AntIcon name='down' style={{
+					color: theme.color,
+				}}/>
+			</CustomButton>
 		</>
 	);
 

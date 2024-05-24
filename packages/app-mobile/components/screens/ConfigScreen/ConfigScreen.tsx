@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Platform, Linking, View, Switch, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions, AccessibilityInfo } from 'react-native';
-import Setting, { AppType, SettingMetadataSection } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingItem, SettingMetadataSection } from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import checkPermissions from '../../../utils/checkPermissions';
@@ -26,7 +26,7 @@ import ExportProfileButton, { exportProfileButtonTitle } from './NoteExportSecti
 import SettingComponent from './SettingComponent';
 import ExportDebugReportButton, { exportDebugReportTitle } from './NoteExportSection/ExportDebugReportButton';
 import SectionSelector from './SectionSelector';
-import { TextInput, List } from 'react-native-paper';
+import { Button, TextInput } from 'react-native-paper';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
 import PluginUploadButton, { canInstallPluginsFromFile, buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
@@ -390,7 +390,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		const addSettingComponent = (
 			component: ReactElement,
 			relatedText: string|string[],
-			settingMetadata?: { advanced?: boolean },
+			settingMetadata?: SettingItem,
 		) => {
 			const hiddenBySearch = this.state.searching && !matchesSearchQuery(relatedText);
 			if (component && !hiddenBySearch) {
@@ -504,10 +504,8 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 							key='plugins-install-from-file'
 							pluginSettings={settings[pluginStatesKey]}
 							updatePluginStates={updatePluginStates}
-							styles={this.styles()}
 						/>,
 						pluginUploadButtonSearchText(),
-						{ advanced: true },
 					);
 				}
 			} else {
@@ -674,15 +672,19 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		const renderAdvancedSettings = () => {
 			if (!advancedSettingComps.length) return null;
 
-			const toggleAdvancedLabel = _('Advanced settings');
+			const toggleAdvancedLabel = this.state.showAdvancedSettings ? _('Hide Advanced Settings') : _('Show Advanced Settings');
 			return (
-				<List.Accordion
-					title={toggleAdvancedLabel}
-					expanded={this.state.showAdvancedSettings}
-					onPress={() => this.setState({ showAdvancedSettings: !this.state.showAdvancedSettings })}
-				>
+				<>
+					<Button
+						style={{ marginBottom: 20 }}
+						icon={this.state.showAdvancedSettings ? 'menu-down' : 'menu-right'}
+						onPress={() => this.setState({ showAdvancedSettings: !this.state.showAdvancedSettings })}
+					>
+						<Text>{toggleAdvancedLabel}</Text>
+					</Button>
+
 					{this.state.showAdvancedSettings ? advancedSettingComps : null}
-				</List.Accordion>
+				</>
 			);
 		};
 

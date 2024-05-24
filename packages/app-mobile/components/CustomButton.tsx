@@ -2,28 +2,28 @@
 // A button with a long-press action. Long-pressing the button displays a tooltip
 //
 
-import * as React from 'react';
+const React = require('react');
+import { ReactNode } from 'react';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
 import { useState, useMemo, useCallback, useRef } from 'react';
-import { View, Text, Pressable, ViewStyle, StyleSheet, LayoutChangeEvent, LayoutRectangle, Animated, AccessibilityState, AccessibilityRole, TextStyle } from 'react-native';
+import { View, Text, Pressable, ViewStyle, PressableStateCallbackType, StyleProp, StyleSheet, LayoutChangeEvent, LayoutRectangle, Animated, AccessibilityState, AccessibilityRole } from 'react-native';
 import { Menu, MenuOptions, MenuTrigger, renderers } from 'react-native-popup-menu';
-import Icon from './Icon';
 
 type ButtonClickListener = ()=> void;
 interface ButtonProps {
 	onPress: ButtonClickListener;
 
 	// Accessibility label and text shown in a tooltip
-	description: string;
+	description?: string;
 
-	iconName: string;
-	iconStyle: TextStyle;
+	children: ReactNode;
 
 	themeId: number;
 
-	containerStyle?: ViewStyle;
-	contentWrapperStyle?: ViewStyle;
+	style?: ViewStyle;
+	pressedStyle?: ViewStyle;
+	contentStyle?: ViewStyle;
 
 	// Additional accessibility information. See View.accessibilityHint
 	accessibilityHint?: string;
@@ -35,7 +35,7 @@ interface ButtonProps {
 	disabled?: boolean;
 }
 
-const IconButton = (props: ButtonProps) => {
+const CustomButton = (props: ButtonProps) => {
 	const [tooltipVisible, setTooltipVisible] = useState(false);
 	const [buttonLayout, setButtonLayout] = useState<LayoutRectangle|null>(null);
 	const tooltipStyles = useTooltipStyles(props.themeId);
@@ -67,12 +67,26 @@ const IconButton = (props: ButtonProps) => {
 		setTooltipVisible(true);
 	}, []);
 
+	// Select different user-specified styles if selected/unselected.
+	const onStyleChange = useCallback((state: PressableStateCallbackType): StyleProp<ViewStyle> => {
+		let result = { ...props.style };
+
+		if (state.pressed) {
+			result = {
+				...result,
+				...props.pressedStyle,
+			};
+		}
+		return result;
+	}, [props.pressedStyle, props.style]);
+
 	const onButtonLayout = useCallback((event: LayoutChangeEvent) => {
 		const layoutEvt = event.nativeEvent.layout;
 
 		// Copy the layout event
 		setButtonLayout({ ...layoutEvt });
 	}, []);
+
 
 	const button = (
 		<Pressable
@@ -81,7 +95,7 @@ const IconButton = (props: ButtonProps) => {
 			onPressIn={onPressIn}
 			onPressOut={onPressOut}
 
-			style={ props.containerStyle }
+			style={ onStyleChange }
 
 			disabled={ props.disabled ?? false }
 			onLayout={ onButtonLayout }
@@ -93,70 +107,62 @@ const IconButton = (props: ButtonProps) => {
 		>
 			<Animated.View style={{
 				opacity: fadeAnim,
-				...props.contentWrapperStyle,
+				...props.contentStyle,
 			}}>
-				<Icon
-					name={props.iconName}
-					style={props.iconStyle}
-					accessibilityLabel={null}
-				/>
+				{ props.children }
 			</Animated.View>
 		</Pressable>
 	);
 
-	const renderTooltip = () => {
-		if (!props.description) return null;
+	const tooltip = (
+		<View
+			// Any information given by the tooltip should also be provided via
+			// [accessibilityLabel]/[accessibilityHint]. As such, we can hide the tooltip
+			// from the screen reader.
+			// On Android:
+			importantForAccessibility='no-hide-descendants'
+			// On iOS:
+			accessibilityElementsHidden={true}
 
-		return (
-			<View
-				// Any information given by the tooltip should also be provided via
-				// [accessibilityLabel]/[accessibilityHint]. As such, we can hide the tooltip
-				// from the screen reader.
-				// On Android:
-				importantForAccessibility='no-hide-descendants'
-				// On iOS:
-				accessibilityElementsHidden={true}
-
-				// Position the menu beneath the button so the tooltip appears in the
-				// correct location.
-				style={{
-					left: buttonLayout?.x,
-					top: buttonLayout?.y,
-					position: 'absolute',
-					zIndex: -1,
-				}}
-			>
-				<Menu
-					opened={tooltipVisible}
-					renderer={renderers.Popover}
-					rendererProps={{
-						preferredPlacement: 'bottom',
-						anchorStyle: tooltipStyles.anchor,
-					}}>
-					<MenuTrigger
-						// Don't show/hide when pressed (let the Pressable handle opening/closing)
-						disabled={true}
-						style={{
-							// Ensure that the trigger region has the same size as the button.
-							width: buttonLayout?.width ?? 0,
-							height: buttonLayout?.height ?? 0,
-						}}
-					/>
-					<MenuOptions
-						customStyles={{ optionsContainer: tooltipStyles.optionsContainer }}
-					>
-						<Text style={tooltipStyles.text}>
-							{props.description}
-						</Text>
-					</MenuOptions>
-				</Menu>
-			</View>
-		);
-	};
+			// Position the menu beneath the button so the tooltip appears in the
+			// correct location.
+			style={{
+				left: buttonLayout?.x,
+				top: buttonLayout?.y,
+				position: 'absolute',
+				zIndex: -1,
+			}}
+		>
+			<Menu
+				opened={tooltipVisible}
+				renderer={renderers.Popover}
+				rendererProps={{
+					preferredPlacement: 'bottom',
+					anchorStyle: tooltipStyles.anchor,
+				}}>
+				<MenuTrigger
+					// Don't show/hide when pressed (let the Pressable handle opening/closing)
+					disabled={true}
+					style={{
+						// Ensure that the trigger region has the same size as the button.
+						width: buttonLayout?.width ?? 0,
+						height: buttonLayout?.height ?? 0,
+					}}
+				/>
+				<MenuOptions
+					customStyles={{ optionsContainer: tooltipStyles.optionsContainer }}
+				>
+					<Text style={tooltipStyles.text}>
+						{props.description}
+					</Text>
+				</MenuOptions>
+			</Menu>
+		</View>
+	);
 
 	return (
 		<>
-			{renderTooltip()}
+			{props.description ? tooltip : null}
 			{button}
 		</>
 	);
@@ -181,4 +187,4 @@ const useTooltipStyles = (themeId: number) => {
 	}, [themeId]);
 };
 
-export default IconButton;
+export default CustomButton;

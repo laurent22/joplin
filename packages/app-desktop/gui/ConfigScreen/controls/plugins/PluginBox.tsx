@@ -38,7 +38,6 @@ interface Props {
 function manifestToItem(manifest: PluginManifest): PluginItem {
 	return {
 		manifest: manifest,
-		installed: true,
 		enabled: true,
 		deleted: false,
 		devMode: false,

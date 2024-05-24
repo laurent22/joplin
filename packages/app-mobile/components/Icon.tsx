@@ -4,8 +4,8 @@ import { TextStyle, Text } from 'react-native';
 
 const FontAwesomeIcon = require('react-native-vector-icons/FontAwesome5').default;
 const AntIcon = require('react-native-vector-icons/AntDesign').default;
-const MaterialCommunityIcon = require('react-native-vector-icons/MaterialCommunityIcons').default;
-const Ionicon = require('react-native-vector-icons/Ionicons').default;
+const MaterialIcon = require('react-native-vector-icons/MaterialIcons').default;
+
 
 interface Props {
 	name: string;
@@ -53,9 +53,7 @@ const Icon: React.FC<Props> = props => {
 	} else if (namePrefix === 'ant') {
 		return <AntIcon name={nameSuffix} {...sharedProps}/>;
 	} else if (namePrefix === 'material') {
-		return <MaterialCommunityIcon name={nameSuffix} {...sharedProps}/>;
-	} else if (namePrefix === 'ionicon') {
-		return <Ionicon name={nameSuffix} {...sharedProps}/>;
+		return <MaterialIcon name={nameSuffix} {...sharedProps}/>;
 	} else if (namePrefix === 'text') {
 		return (
 			<Text

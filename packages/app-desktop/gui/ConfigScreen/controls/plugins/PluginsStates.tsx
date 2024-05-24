@@ -83,7 +83,6 @@ function usePluginItems(plugins: Plugins, settings: PluginSettings): PluginItem[
 
 			output.push({
 				manifest: plugin.manifest,
-				installed: true,
 				enabled: setting.enabled,
 				deleted: setting.deleted,
 				devMode: plugin.devMode,
