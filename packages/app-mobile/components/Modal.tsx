@@ -15,13 +15,13 @@ const useStyles = () => {
 	return useMemo(() => {
 		return StyleSheet.create({
 			modalContainer: isLandscape ? {
-				marginRight: hasNotch() ? 60 : 0,
-				marginLeft: hasNotch() ? 60 : 0,
-				marginTop: 15,
-				marginBottom: 15,
+				paddingRight: hasNotch() ? 60 : 0,
+				paddingLeft: hasNotch() ? 60 : 0,
+				paddingTop: 15,
+				paddingBottom: 15,
 			} : {
-				marginTop: hasNotch() ? 65 : 15,
-				marginBottom: hasNotch() ? 35 : 15,
+				paddingTop: hasNotch() ? 65 : 15,
+				paddingBottom: hasNotch() ? 35 : 15,
 			},
 		});
 	}, [isLandscape]);

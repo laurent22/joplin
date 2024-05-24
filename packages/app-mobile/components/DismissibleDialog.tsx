@@ -51,6 +51,10 @@ const useStyles = (themeId: number, containerStyle: ViewStyle) => {
 			dialogContainer: {
 				display: 'flex',
 				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'center',
+				flexGrow: 1,
+				backgroundColor: 'rgba(0, 0, 0, 0.5)',
 			},
 		});
 	}, [themeId, windowSize.width, windowSize.height, containerStyle]);
