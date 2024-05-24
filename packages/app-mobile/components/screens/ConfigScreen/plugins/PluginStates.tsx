@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import { ConfigScreenStyles } from '../configScreenStyles';
 import { View, StyleSheet } from 'react-native';
-import { Banner, Button, Text } from 'react-native-paper';
+import { Banner, Text, Button, ProgressBar } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import PluginService, { PluginSettings, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginToggle from './PluginToggle';
@@ -107,7 +107,7 @@ const PluginStates: React.FC<Props> = props => {
 				<Button onPress={reloadPluginRepo}>{_('Retry')}</Button>
 			</View>;
 		} else {
-			return <Text>{_('Loading plugin repository...')}</Text>;
+			return <ProgressBar accessibilityLabel={_('Loading...')} indeterminate={true} />;
 		}
 	};
 
