@@ -87,7 +87,7 @@ describe('PluginStates/installed', () => {
 		await loadMockPlugin(backlinksPluginId, 'Backlinks to note', '0.0.1', defaultPluginSettings);
 		expect(PluginService.instance().plugins[backlinksPluginId]).toBeTruthy();
 
-		render(
+		const wrapper = render(
 			<WrappedPluginStates
 				initialPluginSettings={defaultPluginSettings}
 				store={reduxStore}
@@ -105,6 +105,8 @@ describe('PluginStates/installed', () => {
 		} else {
 			expect(updateMarkers).toHaveLength(1);
 		}
+
+		wrapper.unmount();
 	});
 
 	it('should show the current plugin version on updatable plugins', async () => {
@@ -115,7 +117,7 @@ describe('PluginStates/installed', () => {
 		await loadMockPlugin(abcPluginId, 'ABC Sheet Music', outdatedVersion, defaultPluginSettings);
 		expect(PluginService.instance().plugins[abcPluginId]).toBeTruthy();
 
-		render(
+		const wrapper = render(
 			<WrappedPluginStates
 				initialPluginSettings={defaultPluginSettings}
 				store={reduxStore}
@@ -125,12 +127,14 @@ describe('PluginStates/installed', () => {
 		expect(abcSheetMusicCard).toBeVisible();
 		expect(await screen.findByText('Update available')).toBeVisible();
 		expect(await screen.findByText(`v${outdatedVersion}`)).toBeVisible();
+
+		wrapper.unmount();
 	});
 
 	it('should update the list of installed plugins when a plugin is installed and uninstalled', async () => {
 		const pluginSettings: PluginSettings = { };
 
-		render(
+		const wrapper = render(
 			<WrappedPluginStates
 				initialPluginSettings={pluginSettings}
 				store={reduxStore}
@@ -154,5 +158,7 @@ describe('PluginStates/installed', () => {
 		await act(() => PluginService.instance().uninstallPlugin(testPluginId1));
 		expect(await screen.findByText(/^A test plugin/)).toBeVisible();
 		expect(screen.queryByText(/^ABC Sheet Music/)).toBeNull();
+
+		wrapper.unmount();
 	});
 });
