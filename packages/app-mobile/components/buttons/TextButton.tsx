@@ -38,12 +38,7 @@ const useStyles = ({ themeId }: Props) => {
 					outline: theme.destructiveColor,
 				},
 			},
-			primaryButton: {
-				colors: {
-					primary: theme.color4,
-					onPrimary: theme.backgroundColor4,
-				},
-			},
+			primaryButton: { },
 		};
 
 		return { themeOverride };
