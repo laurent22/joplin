@@ -196,7 +196,7 @@ class HtmlUtils {
 		options.allowedFilePrefixes ??= [];
 
 		const output: string[] = [];
-		let svgStack: string[] = [];
+		let svgElements: string[] = [];
 
 		const tagStack: string[] = [];
 
@@ -324,7 +324,7 @@ class HtmlUtils {
 				if (attrHtml) attrHtml = ` ${attrHtml}`;
 				const closingSign = isSelfClosingTag(name) ? '/>' : '>';
 				if (isInsideSvg) {
-					svgStack.push(`<${name}${attrHtml}${closingSign}`);
+					svgElements.push(`<${name}${attrHtml}${closingSign}`);
 				} else {
 					output.push(`<${name}${attrHtml}${closingSign}`);
 				}
@@ -355,10 +355,10 @@ class HtmlUtils {
 				if (current === name.toLowerCase()) tagStack.pop();
 
 				if (name === 'svg') {
-					svgStack.push('</svg>');
+					svgElements.push('</svg>');
 					tagStack.pop();
-					output.push(`<img style="${svgStyle}" src="data:image/svg+xml;base64,${btoa(svgStack.join(''))}" />`);
-					svgStack = [];
+					output.push(`<img style="${svgStyle}" src="data:image/svg+xml;base64,${btoa(svgElements.join(''))}" />`);
+					svgElements = [];
 					svgStyle = '';
 					isInsideSvg = false;
 					return;
@@ -386,7 +386,7 @@ class HtmlUtils {
 				if (isSelfClosingTag(name)) return;
 
 				if (isInsideSvg) {
-					svgStack.push(`</${name}>`);
+					svgElements.push(`</${name}>`);
 				} else {
 					output.push(`</${name}>`);
 				}
