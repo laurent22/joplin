@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { ConfigScreenStyles } from '../configScreenStyles';
 import { View, StyleSheet } from 'react-native';
 import { Banner, Text, Button, ProgressBar, List, Divider } from 'react-native-paper';
-import { _ } from '@joplin/lib/locale';
+import { _, _n } from '@joplin/lib/locale';
 import PluginService, { PluginSettings, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginToggle from './PluginToggle';
 import SearchPlugins from './SearchPlugins';
@@ -162,7 +162,7 @@ const PluginStates: React.FC<Props> = props => {
 		<List.Accordion
 			title={_('Install new plugins')}
 			description={_('Browse and install community plugins.')}
-			id="2"
+			id='search'
 		>
 			<SearchPlugins
 				pluginSettings={props.pluginSettings}
@@ -182,8 +182,8 @@ const PluginStates: React.FC<Props> = props => {
 			<List.AccordionGroup>
 				<List.Accordion
 					title={_('Installed plugins')}
-					description={_('You currently have %d plugins installed.', installedPluginCards.length)}
-					id="1"
+					description={_n('You currently have %d plugin installed.', 'You currently have %d plugins installed.', pluginIds.length, pluginIds.length)}
+					id='installed'
 				>
 					<View style={styles.installedPluginsContainer}>
 						{installedPluginCards}
