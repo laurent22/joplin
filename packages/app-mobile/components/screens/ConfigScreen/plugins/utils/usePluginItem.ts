@@ -13,6 +13,7 @@ const usePluginItem = (id: string, pluginSettings: PluginSettings): PluginItem =
 	}, [id]);
 
 	return useMemo(() => {
+		if (!plugin) return null;
 		const settings = pluginSettings[id];
 
 		const manifest: PluginManifest|null = plugin?.manifest ?? null;

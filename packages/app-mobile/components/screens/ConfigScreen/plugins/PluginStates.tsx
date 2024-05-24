@@ -141,14 +141,12 @@ const PluginStates: React.FC<Props> = props => {
 					key={`plugin-${pluginId}`}
 					themeId={props.themeId}
 					pluginId={pluginId}
-					styles={props.styles}
 					pluginSettings={pluginSettings}
 					updatablePluginIds={updatablePluginIds}
 					updatingPluginIds={updatingPluginIds}
-					updatePluginStates={props.updatePluginStates}
+					showInstalledChip={false}
 					onShowPluginInfo={onShowPluginInfo}
 					callbacks={pluginCallbacks}
-					repoApi={repoApi}
 				/>,
 			);
 		}
@@ -158,6 +156,8 @@ const PluginStates: React.FC<Props> = props => {
 		!props.shouldShowBasedOnSearchQuery || props.shouldShowBasedOnSearchQuery(searchInputSearchText())
 	);
 
+	const [searchQuery, setSearchQuery] = useState('');
+
 	const searchAccordion = (
 		<List.Accordion
 			title={_('Install new plugins')}
@@ -165,13 +165,19 @@ const PluginStates: React.FC<Props> = props => {
 			id='search'
 		>
 			<SearchPlugins
-				pluginSettings={props.pluginSettings}
+				pluginSettings={pluginSettings}
 				themeId={props.themeId}
 				onUpdatePluginStates={props.updatePluginStates}
 				installingPluginIds={installingPluginIds}
 				callbacks={pluginCallbacks}
 				repoApiInitialized={repoApiLoaded}
 				repoApi={repoApi}
+				updatingPluginIds={updatingPluginIds}
+				updatablePluginIds={updatablePluginIds}
+				onShowPluginInfo={onShowPluginInfo}
+
+				searchQuery={searchQuery}
+				setSearchQuery={setSearchQuery}
 			/>
 		</List.Accordion>
 	);

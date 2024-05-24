@@ -1,10 +1,8 @@
 
 import * as React from 'react';
-import { ConfigScreenStyles } from '../configScreenStyles';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { useMemo } from 'react';
 import PluginBox from './PluginBox';
-import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import useUpdateState from './utils/useUpdateState';
 import { PluginCallback, PluginCallbacks } from './utils/usePluginCallbacks';
 import usePluginItem from './utils/usePluginItem';
@@ -12,15 +10,13 @@ import usePluginItem from './utils/usePluginItem';
 interface Props {
 	pluginId: string;
 	themeId: number;
-	styles: ConfigScreenStyles;
 	pluginSettings: PluginSettings;
 	updatablePluginIds: Record<string, boolean>;
 	updatingPluginIds: Record<string, boolean>;
-	repoApi: RepositoryApi;
+	showInstalledChip: boolean;
 
 	callbacks: PluginCallbacks;
 	onShowPluginInfo: PluginCallback;
-	updatePluginStates: (settingValue: PluginSettings)=> void;
 }
 
 const PluginToggle: React.FC<Props> = props => {
@@ -44,6 +40,7 @@ const PluginToggle: React.FC<Props> = props => {
 			item={pluginItem}
 			isCompatible={isCompatible}
 			hasErrors={plugin.hasErrors}
+			showInstalledChip={props.showInstalledChip}
 			onShowPluginLog={props.callbacks.onShowPluginLog}
 			onShowPluginInfo={props.onShowPluginInfo}
 			updateState={updateState}

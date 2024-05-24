@@ -7,21 +7,29 @@ import { useCallback, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { TextInput, Text } from 'react-native-paper';
 import PluginBox, { InstallState } from './PluginBox';
-import PluginService, { PluginSettings, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import openWebsiteForPlugin from './utils/openWebsiteForPlugin';
-import { PluginCallbacks } from './utils/usePluginCallbacks';
+import { PluginCallback, PluginCallbacks } from './utils/usePluginCallbacks';
+import PluginToggle from './PluginToggle';
 
 interface Props {
 	themeId: number;
-	pluginSettings: SerializedPluginSettings;
+	pluginSettings: PluginSettings;
 	repoApiInitialized: boolean;
 	onUpdatePluginStates: (states: PluginSettings)=> void;
 	repoApi: RepositoryApi;
 
 	installingPluginIds: Record<string, boolean>;
+	updatingPluginIds: Record<string, boolean>;
+	updatablePluginIds: Record<string, boolean>;
+
 	callbacks: PluginCallbacks;
+	onShowPluginInfo: PluginCallback;
+
+	searchQuery: string;
+	setSearchQuery: (newQuery: string)=> void;
 }
 
 interface SearchResultRecord {
@@ -43,7 +51,7 @@ const styles = StyleSheet.create({
 });
 
 const PluginSearch: React.FC<Props> = props => {
-	const [searchQuery, setSearchQuery] = useState('');
+	const { searchQuery, setSearchQuery } = props;
 	const [searchResultManifests, setSearchResultManifests] = useState<PluginManifest[]>([]);
 
 	useAsyncEffect(async event => {
@@ -96,18 +104,34 @@ const PluginSearch: React.FC<Props> = props => {
 	const renderResult = useCallback(({ item }: { item: SearchResultRecord }) => {
 		const manifest = item.item.manifest;
 
-		return (
-			<PluginBox
-				themeId={props.themeId}
-				key={manifest.id}
-				item={item.item}
-				installState={item.installState}
-				isCompatible={PluginService.instance().isCompatible(manifest)}
-				onInstall={onInstall}
-				onAboutPress={openWebsiteForPlugin}
-			/>
-		);
-	}, [onInstall, props.themeId]);
+		if (item.installState === InstallState.Installed && PluginService.instance().isPluginLoaded(manifest.id)) {
+			return (
+				<PluginToggle
+					pluginId={manifest.id}
+					themeId={props.themeId}
+					pluginSettings={props.pluginSettings}
+					updatablePluginIds={props.updatablePluginIds}
+					updatingPluginIds={props.updatingPluginIds}
+					showInstalledChip={true}
+					callbacks={props.callbacks}
+					onShowPluginInfo={props.onShowPluginInfo}
+				/>
+			);
+		} else {
+			return (
+				<PluginBox
+					themeId={props.themeId}
+					key={manifest.id}
+					item={item.item}
+					installState={item.installState}
+					showInstalledChip={false}
+					isCompatible={PluginService.instance().isCompatible(manifest)}
+					onInstall={onInstall}
+					onAboutPress={openWebsiteForPlugin}
+				/>
+			);
+		}
+	}, [onInstall, props.themeId, props.pluginSettings, props.updatingPluginIds, props.updatablePluginIds, props.onShowPluginInfo, props.callbacks]);
 
 	const renderResultsCount = () => {
 		if (!searchQuery.length) return null;

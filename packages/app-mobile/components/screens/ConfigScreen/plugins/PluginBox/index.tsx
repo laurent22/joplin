@@ -22,6 +22,7 @@ interface Props {
 	themeId: number;
 	item: PluginItem;
 	isCompatible: boolean;
+	showInstalledChip: boolean;
 
 	hasErrors?: boolean;
 	installState?: InstallState;
@@ -90,6 +91,7 @@ const PluginBox: React.FC<Props> = props => {
 					<PluginChips
 						themeId={props.themeId}
 						item={props.item}
+						showInstalledChip={props.showInstalledChip}
 						hasErrors={props.hasErrors}
 						canUpdate={props.updateState === UpdateState.CanUpdate}
 						onShowPluginLog={props.onShowPluginLog}

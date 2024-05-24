@@ -14,6 +14,7 @@ interface Props {
 	hasErrors: boolean;
 	isCompatible: boolean;
 	canUpdate: boolean;
+	showInstalledChip: boolean;
 
 	onShowPluginLog?: PluginCallback;
 }
@@ -116,8 +117,16 @@ const PluginChips: React.FC<Props> = props => {
 		return <StyledChip>{_('Disabled')}</StyledChip>;
 	};
 
+	const renderInstalledChip = () => {
+		if (!props.showInstalledChip) {
+			return null;
+		}
+		return <StyledChip>{_('Installed')}</StyledChip>;
+	};
+
 	return <View style={containerStyle}>
 		{renderIncompatibleChip()}
+		{renderInstalledChip()}
 		{renderErrorsChip()}
 		{renderRecommendedChip()}
 		{renderBuiltInChip()}

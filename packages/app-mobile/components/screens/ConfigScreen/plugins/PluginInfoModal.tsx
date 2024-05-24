@@ -125,6 +125,7 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 					<PluginChips
 						themeId={props.themeId}
 						item={item}
+						showInstalledChip={false}
 						hasErrors={plugin.hasErrors}
 						canUpdate={false}
 						onShowPluginLog={props.pluginCallbacks.onShowPluginLog}
