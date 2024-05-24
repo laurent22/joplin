@@ -1204,7 +1204,7 @@ msgstr "Opret en notesbog"
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:9
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
 msgid "Create new profile..."
-msgstr "Opret ny profil..."
+msgstr "Opret ny note..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:166
 msgid "Create notebook"
