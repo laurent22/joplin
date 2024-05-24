@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createTempDir, mockMobilePlatform, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 
-import { act, render, screen } from '@testing-library/react-native';
+import { act, render, screen, userEvent } from '@testing-library/react-native';
 import '@testing-library/react-native/extend-expect';
 
 import PluginService, { PluginSettings, defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
@@ -44,6 +44,11 @@ const loadMockPlugin = async (id: string, name: string, version: string, pluginS
 	await act(async () => {
 		await service.loadAndRunPlugins([pluginPath], pluginSettings);
 	});
+};
+
+const showInstalledTab = async () => {
+	const installedTab = await screen.findByText('Installed plugins');
+	await userEvent.press(installedTab);
 };
 
 describe('PluginStates.installed', () => {
@@ -93,6 +98,7 @@ describe('PluginStates.installed', () => {
 				store={reduxStore}
 			/>,
 		);
+		await showInstalledTab();
 		expect(await screen.findByText(/^ABC Sheet Music/)).toBeVisible();
 		expect(await screen.findByText(/^Backlinks to note/)).toBeVisible();
 
@@ -123,6 +129,8 @@ describe('PluginStates.installed', () => {
 				store={reduxStore}
 			/>,
 		);
+		await showInstalledTab();
+
 		const abcSheetMusicCard = await screen.findByText(/^ABC Sheet Music/);
 		expect(abcSheetMusicCard).toBeVisible();
 		expect(await screen.findByText('Update available')).toBeVisible();
@@ -140,6 +148,7 @@ describe('PluginStates.installed', () => {
 				store={reduxStore}
 			/>,
 		);
+		await showInstalledTab();
 
 		// Initially, no plugins should be visible.
 		expect(screen.queryByText(/^ABC Sheet Music/)).toBeNull();

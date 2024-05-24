@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import { ConfigScreenStyles } from '../configScreenStyles';
 import { View, StyleSheet } from 'react-native';
-import { Banner, Text, Button, ProgressBar } from 'react-native-paper';
+import { Banner, Text, Button, ProgressBar, List, Divider } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import PluginService, { PluginSettings, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginToggle from './PluginToggle';
@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
 	installedPluginsContainer: {
 		marginLeft: 8,
 		marginRight: 8,
+		marginBottom: 10,
 	},
 });
 
@@ -157,25 +158,41 @@ const PluginStates: React.FC<Props> = props => {
 		!props.shouldShowBasedOnSearchQuery || props.shouldShowBasedOnSearchQuery(searchInputSearchText())
 	);
 
-	const searchComponent = (
-		<SearchPlugins
-			pluginSettings={props.pluginSettings}
-			themeId={props.themeId}
-			onUpdatePluginStates={props.updatePluginStates}
-			installingPluginIds={installingPluginIds}
-			callbacks={pluginCallbacks}
-			repoApiInitialized={repoApiLoaded}
-			repoApi={repoApi}
-		/>
+	const searchAccordion = (
+		<List.Accordion
+			title={_('Install new plugins')}
+			description={_('Browse and install community plugins.')}
+			id="2"
+		>
+			<SearchPlugins
+				pluginSettings={props.pluginSettings}
+				themeId={props.themeId}
+				onUpdatePluginStates={props.updatePluginStates}
+				installingPluginIds={installingPluginIds}
+				callbacks={pluginCallbacks}
+				repoApiInitialized={repoApiLoaded}
+				repoApi={repoApi}
+			/>
+		</List.Accordion>
 	);
 
 	return (
 		<View>
 			{renderRepoApiStatus()}
-			<View style={styles.installedPluginsContainer}>
-				{installedPluginCards}
-			</View>
-			{showSearch ? searchComponent : null}
+			<List.AccordionGroup>
+				<List.Accordion
+					title={_('Installed plugins')}
+					description={_('You currently have %d plugins installed.', installedPluginCards.length)}
+					id="1"
+				>
+					<View style={styles.installedPluginsContainer}>
+						{installedPluginCards}
+					</View>
+				</List.Accordion>
+				<Divider/>
+				{showSearch ? searchAccordion : null}
+				<Divider/>
+			</List.AccordionGroup>
 			<PluginInfoModal
 				themeId={props.themeId}
 				pluginSettings={pluginSettings}
