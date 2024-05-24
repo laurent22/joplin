@@ -75,6 +75,7 @@ const PluginBox: React.FC<Props> = props => {
 	return (
 		<TouchableRipple
 			accessibilityRole='button'
+			accessible={true}
 			onPress={props.onShowPluginInfo ? onPress : null}
 			style={styles.cardContainer}
 		>

@@ -96,14 +96,14 @@ describe('PluginStates/installed', () => {
 		expect(await screen.findByText(/^ABC Sheet Music/)).toBeVisible();
 		expect(await screen.findByText(/^Backlinks to note/)).toBeVisible();
 
-		expect(await screen.findByText(/^ABC Sheet Music.*Update available/)).toBeVisible();
+		const updateMarkers = await screen.findAllByText('Update available');
 
 		// Backlinks to note should not be updatable on iOS (it's not _recommended).
-		const backlinksToNoteQuery = { name: /^Backlinks to note.*Update available/ };
+		// ABC Sheet Music should always be updatable
 		if (platform === 'android') {
-			expect(await screen.findByRole('button', backlinksToNoteQuery)).toBeVisible();
+			expect(updateMarkers).toHaveLength(2);
 		} else {
-			expect(await screen.queryByRole('button', backlinksToNoteQuery)).toBeNull();
+			expect(updateMarkers).toHaveLength(1);
 		}
 	});
 
