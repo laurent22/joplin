@@ -108,4 +108,3 @@ libasound
 libatk
 ENOTFOUND
 Scaleway
-Ionicon
