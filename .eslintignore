@@ -510,13 +510,13 @@ packages/app-mobile/commands/util/goToNote.js
 packages/app-mobile/components/ActionButton.js
 packages/app-mobile/components/BackButtonDialogBox.js
 packages/app-mobile/components/CameraView.js
-packages/app-mobile/components/CustomButton.js
 packages/app-mobile/components/DismissibleDialog.js
 packages/app-mobile/components/Dropdown.test.js
 packages/app-mobile/components/Dropdown.js
 packages/app-mobile/components/ExtendedWebView.js
 packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/Icon.js
+packages/app-mobile/components/IconButton.js
 packages/app-mobile/components/Modal.js
 packages/app-mobile/components/ModalDialog.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js

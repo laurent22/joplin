@@ -14,7 +14,7 @@ interface ToggleOverflowButtonProps {
 // Button that shows/hides the overflow menu.
 const ToggleOverflowButton: React.FC<ToggleOverflowButtonProps> = (props: ToggleOverflowButtonProps) => {
 	const spec: ButtonSpec = {
-		icon: 'material more-horiz',
+		icon: 'material dots-horizontal',
 		description:
 			props.overflowVisible ? _('Hide more actions') : _('Show more actions'),
 		active: props.overflowVisible,
