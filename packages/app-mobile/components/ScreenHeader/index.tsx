@@ -381,7 +381,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		const renderUndoButton = () => {
 			return renderTopButton({
-				iconName: 'arrow-undo-circle-sharp',
+				iconName: 'ionicon arrow-undo-circle-sharp',
 				description: _('Undo'),
 				onPress: this.props.onUndoButtonPress,
 				visible: this.props.showUndoButton,
@@ -391,7 +391,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		const renderRedoButton = () => {
 			return renderTopButton({
-				iconName: 'arrow-redo-circle-sharp',
+				iconName: 'ionicon arrow-redo-circle-sharp',
 				description: _('Redo'),
 				onPress: this.props.onRedoButtonPress,
 				visible: this.props.showRedoButton,
