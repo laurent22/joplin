@@ -308,10 +308,6 @@ function useMenu(props: Props) {
 
 		if (Array.isArray(path)) path = path[0];
 
-		const modalMessage = _('Importing from "%s" as "%s" format. Please wait...', path, module.format);
-
-		void CommandService.instance().execute('showModalMessage', modalMessage);
-
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const errors: any[] = [];
 
@@ -320,12 +316,13 @@ function useMenu(props: Props) {
 			format: module.format,
 			outputFormat: module.outputFormat,
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			onProgress: (status: any) => {
-				const statusStrings: string[] = Object.keys(status).map((key: string) => {
-					return `${key}: ${status[key]}`;
+			onProgress: (_status: any) => {
+				props.dispatch({
+					type: 'INTEROP_EXEC',
+					operation: 'import',
+					path: path,
+					format: module.format,
 				});
-
-				void CommandService.instance().execute('showModalMessage', `${modalMessage}\n\n${statusStrings.join('\n')}`);
 			},
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			onError: (error: any) => {
@@ -335,16 +332,27 @@ function useMenu(props: Props) {
 			destinationFolderId: !module.isNoteArchive && moduleSource === 'file' ? props.selectedFolderId : null,
 		};
 
+		props.dispatch({
+			type: 'INTEROP_EXEC',
+			operation: 'import',
+			path: path,
+			format: module.format,
+		});
+
 		const service = InteropService.instance();
 		try {
 			const result = await service.import(importOptions);
 			// eslint-disable-next-line no-console
 			console.info('Import result: ', result);
+
+			props.dispatch({
+				type: 'INTEROP_COMPLETE',
+				operation: 'import',
+				path: path,
+			});
 		} catch (error) {
 			bridge().showErrorMessageBox(error.message);
 		}
-
-		void CommandService.instance().execute('hideModalMessage');
 
 		if (errors.length) {
 			const response = bridge().showErrorMessageBox('There was some errors importing the notes - check the console for more details.\n\nPlease consider sending a bug report to the forum!', {

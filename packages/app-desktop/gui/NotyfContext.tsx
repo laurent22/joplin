@@ -7,5 +7,11 @@ export default React.createContext(
 	new Notyf({
 		// Set your global Notyf configuration here
 		duration: 6000,
+		types: [
+			{
+				type: 'loading',
+				icon: '⌛',
+			},
+		],
 	}),
 );

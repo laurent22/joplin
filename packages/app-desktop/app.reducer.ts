@@ -5,6 +5,7 @@ import iterateItems from './gui/ResizableLayout/utils/iterateItems';
 import { LayoutItem } from './gui/ResizableLayout/utils/types';
 import validateLayout from './gui/ResizableLayout/utils/validateLayout';
 import Logger from '@joplin/utils/Logger';
+import { NotyfNotification } from 'notyf';
 
 const logger = Logger.create('app.reducer');
 
@@ -30,6 +31,14 @@ export interface EditorScrollPercents {
 	[noteId: string]: number;
 }
 
+export interface AppStateInterop {
+	operation: string;
+	path: string;
+	format: string;
+	completed: boolean;
+	notification: NotyfNotification;
+}
+
 export interface AppState extends State {
 	route: AppStateRoute;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -52,6 +61,7 @@ export interface AppState extends State {
 	mainLayout: LayoutItem;
 	dialogs: AppStateDialog[];
 	isResettingLayout: boolean;
+	interop: AppStateInterop[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -76,6 +86,7 @@ export function createAppDefaultState(windowContentSize: any, resourceEditWatche
 		startupPluginsLoaded: false,
 		dialogs: [],
 		isResettingLayout: false,
+		interop: [],
 		...resourceEditWatcherDefaultState,
 	};
 }
@@ -86,6 +97,51 @@ export default function(state: AppState, action: any) {
 
 	try {
 		switch (action.type) {
+
+		case 'INTEROP_EXEC':
+
+			{
+				const interop = newState.interop.slice();
+
+				interop.push({
+					operation: action.operation,
+					path: action.path,
+					format: action.format,
+					completed: false,
+					notification: undefined,
+				});
+
+				newState = { ...state, interop: interop };
+			}
+			break;
+
+		case 'INTEROP_COMPLETE':
+
+			{
+				const interop = newState.interop.slice();
+				const operation = interop.find(interop => interop.operation === action.operation && interop.path === action.path);
+				const newInterop = interop.filter(interop => !(interop.operation === action.operation && interop.path === action.path));
+
+				newInterop.push({ ...operation, completed: true });
+
+				newState = { ...state, interop: newInterop };
+			}
+			break;
+
+		case 'INTEROP_NOTIFICATION_DONE':
+
+			{
+				const interop = newState.interop.slice();
+				const operation = interop.find(interop => interop.operation === action.operation && interop.path === action.path);
+				const newInterop = interop.filter(interop => !(interop.operation === action.operation && interop.path === action.path));
+
+				if (!operation.completed) {
+					newInterop.push({ ...operation, notification: action.notification });
+				}
+
+				newState = { ...state, interop: newInterop };
+			}
+			break;
 
 		case 'NAV_BACK':
 		case 'NAV_GO':

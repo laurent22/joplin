@@ -1,0 +1,54 @@
+body .notyf {
+	color: var(--joplin-color5);
+}
+
+.notyf__toast {
+
+	> .notyf__wrapper {
+
+		> .notyf__message {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+
+			> .cancel {
+				color: var(--joplin-color5);
+				text-decoration: underline;
+				display: flex;
+				align-items: center;
+			}
+
+			> .cancel::after {
+				content: '✖';
+				margin-left: 8px; /* Adjust the space between text and cross */
+			}
+		}
+
+		> .notyf__icon {
+			width: 24px;
+			height: 24px;
+
+			> .notyf__icon--success {
+				background-color: var(--joplin-color5);
+				/* Add an icon for success */
+				//background-image: url('path-to-success-icon.svg');
+				//background-size: cover;
+			}
+
+			> .notyf__icon--error {
+				background-color: var(--joplin-color5);
+				/* Add an icon for error */
+				//background-image: url('path-to-error-icon.svg');
+				//background-size: cover;
+			}
+
+			> .notyf__icon--loading {
+				background-color: var(--joplin-color5);
+				/* Add an icon for loading */
+				//background-image: url('path-to-loading-icon.svg');
+				//background-size: cover;
+			}
+		}
+
+	}
+}
