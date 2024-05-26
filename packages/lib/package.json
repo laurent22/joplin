@@ -33,7 +33,7 @@
     "react": "18.2.0",
     "react-test-renderer": "18.2.0",
     "sharp": "0.33.2",
-    "tesseract.js": "5.0.4",
+    "tesseract.js": "5.0.5",
     "typescript": "5.2.2"
   },
   "dependencies": {

@@ -6627,7 +6627,7 @@ __metadata:
     styled-components: 5.3.11
     styled-system: 5.1.5
     taboverride: 4.0.3
-    tesseract.js: 5.0.4
+    tesseract.js: 5.0.5
     tinymce: 5.10.6
     ts-node: 10.9.2
     typescript: 5.2.2
@@ -6938,7 +6938,7 @@ __metadata:
     string-to-stream: 3.0.1
     tar: 6.2.0
     tcp-port-used: 1.0.2
-    tesseract.js: 5.0.4
+    tesseract.js: 5.0.5
     typescript: 5.2.2
     uglifycss: 0.0.29
     url-parse: 1.5.10
@@ -40856,7 +40856,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tesseract.js@npm:*, tesseract.js@npm:5.0.4":
+"tesseract.js@npm:*":
   version: 5.0.4
   resolution: "tesseract.js@npm:5.0.4"
   dependencies:
@@ -40871,6 +40871,24 @@ __metadata:
     wasm-feature-detect: ^1.2.11
     zlibjs: ^0.3.1
   checksum: 02addebd5b759a8a9b08f21ba60ef1f3f74ed76e497ec52c3a67be2e8f6ef4c7b6807e87a3d35a7f96d3d39d58ffc285eec9a2bb26a32ba62c4604f54c7816c6
+  languageName: node
+  linkType: hard
+
+"tesseract.js@npm:5.0.5":
+  version: 5.0.5
+  resolution: "tesseract.js@npm:5.0.5"
+  dependencies:
+    bmp-js: ^0.1.0
+    idb-keyval: ^6.2.0
+    is-electron: ^2.2.2
+    is-url: ^1.2.4
+    node-fetch: ^2.6.9
+    opencollective-postinstall: ^2.0.3
+    regenerator-runtime: ^0.13.3
+    tesseract.js-core: ^5.0.0
+    wasm-feature-detect: ^1.2.11
+    zlibjs: ^0.3.1
+  checksum: 2cd9e6c58c6a38db6063a99fcfbac8dd8d3ed6a44585b8435d201ba5b3da1649fd0cefe5e3862a0e9cfbe45fa9e1e74c4ee26dd105ac02e7edac263668dd693c
   languageName: node
   linkType: hard
 
