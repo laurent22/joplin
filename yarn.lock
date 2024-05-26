@@ -4142,6 +4142,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@codemirror/lang-liquid@npm:^6.0.0":
+  version: 6.2.1
+  resolution: "@codemirror/lang-liquid@npm:6.2.1"
+  dependencies:
+    "@codemirror/autocomplete": ^6.0.0
+    "@codemirror/lang-html": ^6.0.0
+    "@codemirror/language": ^6.0.0
+    "@codemirror/state": ^6.0.0
+    "@codemirror/view": ^6.0.0
+    "@lezer/common": ^1.0.0
+    "@lezer/highlight": ^1.0.0
+    "@lezer/lr": ^1.3.1
+  checksum: 30819b7e2fc8ed31cad8f4bd242197de72d0853fc2f11be3d4569eab1ac162117d8e55cdd0cd645fbd8fea2d67abf1de8ff0f751b98ea9586918f96209eee5f0
+  languageName: node
+  linkType: hard
+
 "@codemirror/lang-markdown@npm:6.2.4, @codemirror/lang-markdown@npm:^6.0.0":
   version: 6.2.4
   resolution: "@codemirror/lang-markdown@npm:6.2.4"
@@ -4259,9 +4275,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/language-data@npm:6.3.1":
-  version: 6.3.1
-  resolution: "@codemirror/language-data@npm:6.3.1"
+"@codemirror/lang-yaml@npm:^6.0.0":
+  version: 6.1.1
+  resolution: "@codemirror/lang-yaml@npm:6.1.1"
+  dependencies:
+    "@codemirror/autocomplete": ^6.0.0
+    "@codemirror/language": ^6.0.0
+    "@codemirror/state": ^6.0.0
+    "@lezer/common": ^1.2.0
+    "@lezer/highlight": ^1.2.0
+    "@lezer/yaml": ^1.0.0
+  checksum: de219ea58009f1a70b42f8fb367d8c58acd840c26fd498edd9b47c7ad2bdc8615649c0d67658306420cf7a4cfc9bbbd2dd47347e9564d8256f169a2bf5ca8193
+  languageName: node
+  linkType: hard
+
+"@codemirror/language-data@npm:6.4.0":
+  version: 6.4.0
+  resolution: "@codemirror/language-data@npm:6.4.0"
   dependencies:
     "@codemirror/lang-angular": ^0.1.0
     "@codemirror/lang-cpp": ^6.0.0
@@ -4271,6 +4301,7 @@ __metadata:
     "@codemirror/lang-javascript": ^6.0.0
     "@codemirror/lang-json": ^6.0.0
     "@codemirror/lang-less": ^6.0.0
+    "@codemirror/lang-liquid": ^6.0.0
     "@codemirror/lang-markdown": ^6.0.0
     "@codemirror/lang-php": ^6.0.0
     "@codemirror/lang-python": ^6.0.0
@@ -4280,9 +4311,10 @@ __metadata:
     "@codemirror/lang-vue": ^0.1.1
     "@codemirror/lang-wast": ^6.0.0
     "@codemirror/lang-xml": ^6.0.0
+    "@codemirror/lang-yaml": ^6.0.0
     "@codemirror/language": ^6.0.0
     "@codemirror/legacy-modes": ^6.1.0
-  checksum: 38e88edf4eccc7f3d0a2f23906c62dd4281914459a6c9d3967e8ee2351616b65737c7c132cf64e7c99dfa835bbb503ef44718710b2171838c567b6a285cb2938
+  checksum: ab47ad3cf84ad2ab5f197c9328c855c3aac5e09d02468278610a55ccc1f82f00a8c2eb8c6d56febb38ab8f94d8bc5ede7eb4e2f6adf4639e48fade7fb575be47
   languageName: node
   linkType: hard
 
@@ -6784,7 +6816,7 @@ __metadata:
     "@codemirror/lang-html": 6.4.8
     "@codemirror/lang-markdown": 6.2.4
     "@codemirror/language": 6.10.1
-    "@codemirror/language-data": 6.3.1
+    "@codemirror/language-data": 6.4.0
     "@codemirror/legacy-modes": 6.3.3
     "@codemirror/lint": 6.5.0
     "@codemirror/search": 6.5.6
@@ -8236,7 +8268,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/highlight@npm:1.2.0, @lezer/highlight@npm:^1.0.0, @lezer/highlight@npm:^1.1.3":
+"@lezer/highlight@npm:1.2.0, @lezer/highlight@npm:^1.0.0, @lezer/highlight@npm:^1.1.3, @lezer/highlight@npm:^1.2.0":
   version: 1.2.0
   resolution: "@lezer/highlight@npm:1.2.0"
   dependencies:
@@ -8289,7 +8321,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/lr@npm:^1.0.0, @lezer/lr@npm:^1.1.0, @lezer/lr@npm:^1.3.0, @lezer/lr@npm:^1.3.1, @lezer/lr@npm:^1.3.3":
+"@lezer/lr@npm:^1.0.0, @lezer/lr@npm:^1.1.0, @lezer/lr@npm:^1.3.0, @lezer/lr@npm:^1.3.1, @lezer/lr@npm:^1.3.3, @lezer/lr@npm:^1.4.0":
   version: 1.4.0
   resolution: "@lezer/lr@npm:1.4.0"
   dependencies:
@@ -8360,6 +8392,17 @@ __metadata:
     "@lezer/highlight": ^1.0.0
     "@lezer/lr": ^1.0.0
   checksum: 68a82085bff6c1525f4ef03cd9f9dac0132b3e03fe574e0289700dd4475056e40e8744cde15cf5ad6d3760d0d584ff85ce707e26a7c938d0c5fe2e325c1c336e
+  languageName: node
+  linkType: hard
+
+"@lezer/yaml@npm:^1.0.0":
+  version: 1.0.3
+  resolution: "@lezer/yaml@npm:1.0.3"
+  dependencies:
+    "@lezer/common": ^1.2.0
+    "@lezer/highlight": ^1.0.0
+    "@lezer/lr": ^1.4.0
+  checksum: d794e5253e89471293744cb25bf765b2ba50ae60675e82f80b48203f6b53ee7b0209af6e487263dff8ee1490dc0ba797b7c7a77566d645c5213ed55d33ab1572
   languageName: node
   linkType: hard
 

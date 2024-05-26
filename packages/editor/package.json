@@ -31,7 +31,7 @@
     "@codemirror/lang-html": "6.4.8",
     "@codemirror/lang-markdown": "6.2.4",
     "@codemirror/language": "6.10.1",
-    "@codemirror/language-data": "6.3.1",
+    "@codemirror/language-data": "6.4.0",
     "@codemirror/legacy-modes": "6.3.3",
     "@codemirror/lint": "6.5.0",
     "@codemirror/search": "6.5.6",
