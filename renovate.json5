@@ -124,6 +124,7 @@
 		"jsc-android",
 		"org.robolectric:robolectric",
 		"ive",
+		"activesupport",
 
 		// We currently don't have automated tests that verify that the
 		// sidemenus work correctly in the mobile app. Because an update to
