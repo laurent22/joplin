@@ -94,7 +94,7 @@ const EnabledSwitch: React.FC<EnabledSwitchProps> = props => {
 
 const PluginInfoModalContent: React.FC<Props> = props => {
 	const pluginId = props.initialItem.manifest.id;
-	const item = usePluginItem(pluginId, props.pluginSettings);
+	const item = usePluginItem(pluginId, props.pluginSettings, props.initialItem);
 
 	const manifest = item.manifest;
 	const isCompatible = useMemo(() => {

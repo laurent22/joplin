@@ -27,7 +27,7 @@ const PluginToggle: React.FC<Props> = props => {
 		updatingPluginIds: props.updatingPluginIds,
 		pluginSettings: props.pluginSettings,
 	});
-	const pluginItem = usePluginItem(pluginId, props.pluginSettings);
+	const pluginItem = usePluginItem(pluginId, props.pluginSettings, null);
 
 	const plugin = useMemo(() => PluginService.instance().pluginById(pluginId), [pluginId]);
 	const isCompatible = useMemo(() => {
