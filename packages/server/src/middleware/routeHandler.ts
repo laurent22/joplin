@@ -5,9 +5,14 @@ import config from '../config';
 import { userIp } from '../utils/requestUtils';
 import { createCsrfTag } from '../utils/csrf';
 import { getImpersonatorAdminSessionId } from '../routes/admin/utils/users/impersonate';
+import { onRequestComplete, onRequestStart } from '../utils/metrics';
+import { uuidgen } from '@joplin/lib/uuid';
 
 export default async function(ctx: AppContext) {
 	const requestStartTime = Date.now();
+	const requestId = uuidgen();
+
+	onRequestStart(requestId);
 
 	try {
 		const { response: responseObject, path } = await execRequest(ctx.joplin.routes, ctx);
@@ -88,4 +93,6 @@ export default async function(ctx: AppContext) {
 		const requestDuration = Date.now() - requestStartTime;
 		ctx.joplin.appLogger().info(`${ctx.request.method} ${ctx.path} (${ctx.response.status}) (${requestDuration}ms)`);
 	}
+
+	onRequestComplete(requestId);
 }

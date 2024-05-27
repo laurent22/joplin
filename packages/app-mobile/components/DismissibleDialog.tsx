@@ -54,7 +54,6 @@ const useStyles = (themeId: number, containerStyle: ViewStyle) => {
 				justifyContent: 'center',
 				alignItems: 'center',
 				flexGrow: 1,
-				backgroundColor: 'rgba(0, 0, 0, 0.5)',
 			},
 		});
 	}, [themeId, windowSize.width, windowSize.height, containerStyle]);
@@ -80,6 +79,7 @@ const DismissibleDialog: React.FC<Props> = props => {
 			onRequestClose={props.onDismiss}
 			containerStyle={styles.dialogContainer}
 			animationType='fade'
+			backgroundColor='rgba(0, 0, 0, 0.1)'
 			transparent={true}
 		>
 			<Surface style={styles.dialog} elevation={1}>

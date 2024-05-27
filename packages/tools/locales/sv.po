@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Jonatan Nyberg <jonatan@autistici.org>\n"
 "Language-Team: \n"
 "Language: sv\n"
@@ -92,9 +94,8 @@ msgid "&View"
 msgstr "&Visa"
 
 #: packages/app-desktop/gui/MenuBar.tsx:880
-#, fuzzy
 msgid "&Window"
-msgstr "Stäng fönster"
+msgstr "&Fönster"
 
 #: packages/lib/models/Setting.ts:1730 packages/lib/models/Setting.ts:1921
 msgid "%d days"
@@ -138,9 +139,8 @@ msgid "%d notes match this pattern. Delete them?"
 msgstr "%d anteckningar matchar det här mönstret. Ta bort dem?"
 
 #: packages/app-cli/app/command-rmnote.ts:40
-#, fuzzy
 msgid "%d notes will be permanently deleted. Continue?"
-msgstr "Ta bort valda anteckningar"
+msgstr "%d anteckningar kommer att raderas permanent. Fortsätta?"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:227
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:237
@@ -199,7 +199,7 @@ msgstr ""
 
 #: packages/app-mobile/plugins/PluginRunner/dialogs/PluginPanelViewer.tsx:75
 msgid "%s tab opened"
-msgstr ""
+msgstr "Fliken %s öppnad"
 
 #: packages/lib/services/ReportService.ts:286
 #: packages/lib/services/ReportService.ts:287
@@ -266,7 +266,7 @@ msgstr "A5"
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:118
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:77
 msgid "About"
-msgstr ""
+msgstr "Om"
 
 #: packages/app-desktop/gui/MenuBar.tsx:595
 #: packages/app-desktop/gui/MenuBar.tsx:931
@@ -297,7 +297,7 @@ msgstr "Acceptera"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:98
 msgid "Accepted shares"
-msgstr ""
+msgstr "Accepterade delningar"
 
 #: packages/lib/WebDavApi.js:451
 msgid "Access denied: Please check your username and password"
@@ -380,7 +380,7 @@ msgstr ""
 
 #: packages/lib/services/ReportService.ts:227
 msgid "All item sync failures have been marked as \"ignored\"."
-msgstr ""
+msgstr "Alla objektsynkroniseringsfel har markerats som \"ignorerade\"."
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/AllNotesItem.tsx:61
 #: packages/app-mobile/components/screens/Notes.tsx:185
@@ -394,7 +394,7 @@ msgstr "Alla potentiella portar används - rapportera problemet på %s"
 
 #: packages/lib/models/Setting.ts:1228
 msgid "Allows debugging mobile plugins. See %s for details."
-msgstr ""
+msgstr "Tillåter felsökning av mobila insticksmoduler. Se %s för detaljer."
 
 #: packages/app-cli/app/command-config.ts:19
 msgid "Also displays unset and hidden config variables."
@@ -414,7 +414,7 @@ msgstr "Fråga alltid"
 
 #: packages/app-desktop/bridge.ts:421
 msgid "Always open %s files without asking."
-msgstr ""
+msgstr "Öppna alltid %s-filer utan att fråga."
 
 #: packages/lib/models/Setting.ts:1186
 msgid "Always resize"
@@ -561,9 +561,8 @@ msgstr "Auktoriseringstoken:"
 
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:84
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:158
-#, fuzzy
 msgid "Authorise"
-msgstr "Auktoriseringstoken:"
+msgstr "Auktorisera"
 
 #: packages/lib/models/Setting.ts:784
 msgid "Auto"
@@ -583,7 +582,7 @@ msgstr "Sök automatiskt efter uppdateringar"
 
 #: packages/lib/models/Setting.ts:1908
 msgid "Automatically delete notes in the trash after a number of days"
-msgstr ""
+msgstr "Radera anteckningar i papperskorgen automatiskt efter ett antal dagar"
 
 #: packages/lib/models/Setting.ts:907
 msgid "Automatically switch theme to match system theme"
@@ -636,7 +635,7 @@ msgstr "Punktlista"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:37
 msgid "by %s"
-msgstr ""
+msgstr "av %s"
 
 #: packages/server/src/routes/admin/users.ts:160
 msgid "Can Share"
@@ -937,9 +936,8 @@ msgid "Collapse"
 msgstr "Fäll in"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:26
-#, fuzzy
 msgid "Collapse %s"
-msgstr "Fäll in"
+msgstr "Fäll in %s"
 
 #: packages/lib/services/ReportService.ts:351
 msgid "Coming alarms"
@@ -992,6 +990,8 @@ msgid ""
 "Completed with warnings:\n"
 "%s"
 msgstr ""
+"Kompletterad med varningar:\n"
+"%s"
 
 #: packages/lib/Synchronizer.ts:207
 msgid "Completed: %s (%s)"
@@ -999,7 +999,7 @@ msgstr "Slutfört: %s (%s)"
 
 #: packages/lib/models/Note.ts:64
 msgid "completion date"
-msgstr ""
+msgstr "färdigställande datum"
 
 #: packages/server/src/services/TaskService.ts:28
 msgid "Compress old changes"
@@ -1046,9 +1046,8 @@ msgid "Content provided by %s"
 msgstr "Innehåll tillhandahålls av %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:88
-#, fuzzy
 msgid "Content provided by: %s"
-msgstr "Innehåll tillhandahålls av %s"
+msgstr "Innehåll tillhandahållet av: %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:65
 msgid "Continue"
@@ -1093,9 +1092,8 @@ msgstr "Kopiera länkadress"
 
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:90
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:166
-#, fuzzy
 msgid "Copy link to website"
-msgstr "Joplin-webbplats"
+msgstr "Kopiera länken till hemsidan"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:106
 #: packages/app-mobile/components/screens/Note.tsx:1292
@@ -1122,9 +1120,8 @@ msgid "Copy token"
 msgstr "Kopiera token"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:633
-#, fuzzy
 msgid "Copy version info"
-msgstr "Visar versionsinformation"
+msgstr "Kopiera versionsinformation"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:43
 msgid ""
@@ -1440,9 +1437,8 @@ msgstr "Ta bort denna profil?"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:69
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:113
-#, fuzzy
 msgid "Deleted"
-msgstr "Ta bort"
+msgstr "Raderad"
 
 #: packages/lib/Synchronizer.ts:203
 msgid "Deleted local items: %d."
@@ -1454,7 +1450,7 @@ msgstr "Borttagna fjärrobjekt: %d."
 
 #: packages/app-cli/app/command-rmnote.ts:20
 msgid "Deletes notes permanently, skipping the trash."
-msgstr ""
+msgstr "Tar bort anteckningar permanent och hoppar över papperskorgen."
 
 #: packages/app-cli/app/command-rmbook.ts:14
 msgid "Deletes the given notebook."
@@ -1674,12 +1670,11 @@ msgstr "Dropbox-inloggning"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:13
 msgid "Due"
-msgstr ""
+msgstr "Förfaller"
 
 #: packages/lib/models/Note.ts:63
-#, fuzzy
 msgid "due date"
-msgstr "uppdaterat datum"
+msgstr "förfallodatum"
 
 #: packages/app-desktop/gui/MainScreen/commands/duplicateNote.ts:7
 #: packages/app-mobile/components/ScreenHeader/index.tsx:498
@@ -1810,7 +1805,7 @@ msgstr "betonad text"
 #: packages/app-mobile/components/side-menu-content.tsx:157
 #: packages/app-mobile/components/side-menu-content.tsx:161
 msgid "Empty trash"
-msgstr ""
+msgstr "Töm papperskorgen"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:144
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:86
@@ -1893,9 +1888,8 @@ msgid "Enable optical character recognition (OCR)"
 msgstr "Aktivera optisk teckenigenkänning (OCR)"
 
 #: packages/lib/models/Setting.ts:2834
-#, fuzzy
 msgid "Enable or disable plugins"
-msgstr "Hantera dina insticksmoduler"
+msgstr "Aktivera eller inaktivera insticksmoduler"
 
 #: packages/lib/models/Setting.ts:1271
 msgid "Enable PDF viewer"
@@ -1903,9 +1897,8 @@ msgstr "Aktivera PDF-visare"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:131
 #: packages/lib/models/Setting.ts:1239
-#, fuzzy
 msgid "Enable plugin support"
-msgstr "Aktivera fast radbrytning"
+msgstr "Aktivera insticksmodulsstöd"
 
 #: packages/lib/models/Setting.ts:1261
 msgid "Enable soft breaks"
@@ -2062,9 +2055,8 @@ msgid "Expand"
 msgstr "Fäll ut"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:28
-#, fuzzy
 msgid "Expand %s"
-msgstr "Fäll ut"
+msgstr "Fäll ut %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:191
@@ -2144,6 +2136,9 @@ msgid ""
 "internet and able to sync.\n"
 "Error: %s"
 msgstr ""
+"Det gick inte att lämna delningen. Kontrollera att Joplin är ansluten till "
+"internet och kan synkronisera.\n"
+"Fel: %s"
 
 #: packages/app-cli/app/main.js:100
 msgid "Fatal error:"
@@ -2261,9 +2256,8 @@ msgid "Found: %d."
 msgstr "Hittad: %d."
 
 #: packages/app-mobile/components/screens/ConfigScreen/SectionSelector.tsx:43
-#, fuzzy
 msgid "From a plugin"
-msgstr "Bläddra bland alla insticksmoduler"
+msgstr "Från en insticksmodul"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:627
 msgid "FTS enabled: %d"
@@ -2331,7 +2325,7 @@ msgstr "Bevilja auktorisation"
 
 #: packages/app-cli/app/command-sync.ts:116
 msgid "Have you authorised the application login in the above URL?"
-msgstr ""
+msgstr "Har du auktoriserat applikationsinloggningen i ovanstående URL?"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useHeaderButtons.ts:14
 msgid "Header %d"
@@ -2353,7 +2347,7 @@ msgstr "Hjälp"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:125
 msgid "Here's what we do to make plugins safer:"
-msgstr ""
+msgstr "Så här gör vi för att göra insticksmoduler säkrare:"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:629
 msgid "Hermes enabled: %d"
@@ -2441,6 +2435,8 @@ msgid ""
 "If you have already authorised, please wait for the application to sync to "
 "Joplin Cloud."
 msgstr ""
+"Om du redan har auktoriserat, vänta tills applikationen synkroniseras med "
+"Joplin Cloud."
 
 #: packages/app-desktop/ElectronAppWrapper.ts:89
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:360
@@ -2454,9 +2450,8 @@ msgid "Ignore TLS certificate errors"
 msgstr "Ignorera TLS-certifikatfel"
 
 #: packages/lib/services/ReportService.ts:236
-#, fuzzy
 msgid "Ignored items that cannot be synchronised"
-msgstr "Objekt som inte kan synkroniseras"
+msgstr "Ignorerade objekt som inte kan synkroniseras"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:106
 msgid "Images"
@@ -2470,33 +2465,32 @@ msgid "Import"
 msgstr "Importera"
 
 #: packages/lib/models/Setting.ts:2801
-#, fuzzy
 msgid "Import and Export"
-msgstr "Exportera felsökningsrapport"
+msgstr "Import och export"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:66
 msgid ""
 "Import failed. Make sure a JEX file was selected.\n"
 "Details: %s"
 msgstr ""
+"Importen misslyckades. Se till att en JEX-fil har valts.\n"
+"Detaljer: %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:21
 msgid "Import from JEX"
-msgstr ""
+msgstr "Importera från JEX"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:22
 msgid "Import notes from a JEX (Joplin Export) file."
-msgstr ""
+msgstr "Importera anteckningar från en JEX (Joplin Export)-fil."
 
 #: packages/lib/models/Setting.ts:2833
-#, fuzzy
 msgid "Import or export your data"
-msgstr "Exportera dina data"
+msgstr "Importera eller exportera dina data"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:76
-#, fuzzy
 msgid "Imported successfully!"
-msgstr "Exporten lyckades!"
+msgstr "Importen lyckades!"
 
 #: packages/app-desktop/gui/MenuBar.tsx:301
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
@@ -2507,9 +2501,8 @@ msgid "Importing notes..."
 msgstr "Importerar anteckningar..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:26
-#, fuzzy
 msgid "Importing..."
-msgstr "Exporterar..."
+msgstr "Importerar..."
 
 #: packages/app-cli/app/command-import.ts:16
 msgid "Imports data into Joplin."
@@ -2605,13 +2598,12 @@ msgid "In: %s"
 msgstr "I: %s"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:120
-#, fuzzy
 msgid "Incoming shares"
-msgstr "Kommande larm"
+msgstr "Inkommande delningar"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:166
 msgid "Incompatible"
-msgstr ""
+msgstr "Inkompatibel"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:52
 msgid "Increase indent level"
@@ -2732,20 +2724,20 @@ msgstr "Joplin Cloud"
 
 #: packages/app-desktop/gui/Root.tsx:230
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:146
-#, fuzzy
 msgid "Joplin Cloud Login"
-msgstr "Joplin Cloud"
+msgstr "Joplin Cloud Logga in"
 
 #: packages/lib/services/plugins/PluginService.ts:514
-#, fuzzy
 msgid "Joplin Desktop"
-msgstr "Joplin-webbplats"
+msgstr "Joplin Desktop"
 
 #: packages/app-desktop/bridge.ts:419
 msgid ""
 "Joplin doesn't recognise the %s extension. Opening this file could be "
 "dangerous. What would you like to do?"
 msgstr ""
+"Joplin känner inte igen insticksmodulen %s. Det kan vara farligt att öppna "
+"den här filen. Vad skulle du vilja göra?"
 
 #: packages/lib/services/interop/InteropService.ts:149
 #: packages/lib/services/interop/InteropService.ts:66
@@ -2772,9 +2764,8 @@ msgid "Joplin Forum"
 msgstr "Joplin-forum"
 
 #: packages/lib/services/plugins/PluginService.ts:512
-#, fuzzy
 msgid "Joplin Mobile"
-msgstr "Joplin-webbplats"
+msgstr "Joplin Mobile"
 
 #: packages/lib/SyncTargetJoplinServer.ts:61
 msgid "Joplin Server"
@@ -2822,9 +2813,8 @@ msgid "Keep note history for"
 msgstr "Spara anteckningshistorik i"
 
 #: packages/lib/models/Setting.ts:1925
-#, fuzzy
 msgid "Keep notes in the trash for"
-msgstr "Spara anteckningshistorik i"
+msgstr "Förvara anteckningar i papperskorgen för"
 
 #: packages/lib/models/Setting.ts:1558
 msgid "Keyboard Mode"
@@ -2868,7 +2858,7 @@ msgstr "Senare"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:7
 msgid "Latitude"
-msgstr ""
+msgstr "Latitud"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:623
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:231
@@ -2882,9 +2872,8 @@ msgstr "Knappordning"
 #: packages/app-desktop/bridge.ts:424
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:130
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:47
-#, fuzzy
 msgid "Learn more"
-msgstr "Mer indrag"
+msgstr "Läs mer"
 
 #: packages/lib/models/Setting.ts:1899
 msgid "Leave it blank to download the language files from the default website"
@@ -2895,9 +2884,8 @@ msgid "Leave notebook..."
 msgstr "Lämna anteckningsbok..."
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:90
-#, fuzzy
 msgid "Leave share"
-msgstr "Spara ändringar"
+msgstr "Lämna delning"
 
 #: packages/lib/models/Setting.ts:1529
 msgid "Legal"
@@ -2916,6 +2904,8 @@ msgid ""
 "Like any software you install, plugins can potentially cause security issues "
 "or data loss."
 msgstr ""
+"Precis som all programvara du installerar kan insticksmoduler potentiellt "
+"orsaka säkerhetsproblem eller dataförlust."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:108
 msgid "Lines"
@@ -2958,9 +2948,8 @@ msgid "Loaded"
 msgstr "Inläst"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:101
-#, fuzzy
 msgid "Loading plugin repository..."
-msgstr "Det gick inte att ansluta till insticksmodulsförrådet."
+msgstr "Läser in insticksförrådet..."
 
 #: packages/app-desktop/gui/ConfigScreen/FontSearch.tsx:121
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:87
@@ -3004,7 +2993,7 @@ msgstr "Loggar, profiler, synkroniseringsstatus"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:8
 msgid "Longitude"
-msgstr ""
+msgstr "Longitud"
 
 #: packages/app-desktop/gui/MenuBar.tsx:903
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
@@ -3028,9 +3017,8 @@ msgid "Manage profiles"
 msgstr "Hantera profiler"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:569
-#, fuzzy
 msgid "Manage shared notebooks"
-msgstr "Hantera profiler"
+msgstr "Hantera delade anteckningsböcker"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:332
 msgid "Manage your plugins"
@@ -3109,7 +3097,7 @@ msgstr "Mediaspelare, matematik, diagram, innehållsförteckning"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 msgid "Minimise"
-msgstr ""
+msgstr "Minimera"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:320
 msgid "Missing keys"
@@ -3147,6 +3135,8 @@ msgstr "Mer än ett objekt matchar \"%s\". Begränsa din förfråga."
 msgid ""
 "Most plugins have source code available for review on the plugin website."
 msgstr ""
+"De flesta insticksmoduler har källkod tillgänglig för granskning på "
+"insticksmodulens webbplats."
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:587
 msgid "Move %d notes to notebook \"%s\"?"
@@ -3155,17 +3145,16 @@ msgstr "Flytta %d anteckningar till anteckningsboken \"%s\"?"
 #: packages/app-cli/app/command-rmbook.ts:38
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:229
-#, fuzzy
 msgid ""
 "Move notebook \"%s\" to the trash?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will also be moved to the "
 "trash."
 msgstr ""
-"Ta bort anteckningsboken\"%s\"?\n"
+"Flytta anteckningsboken \"%s\" till papperskorgen?\n"
 "\n"
-"Alla anteckningar och delanteckningsböcker i den här anteckningsboken tas "
-"också bort."
+"Alla anteckningar och underanteckningsböcker i den här anteckningsboken "
+"kommer också att flyttas till papperskorgen."
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.ts:8
 msgid "Move to notebook"
@@ -3198,7 +3187,7 @@ msgstr "Ändra aldrig storlek"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/HeaderItem.tsx:46
 msgid "New"
-msgstr ""
+msgstr "Ny"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:10
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
@@ -3278,13 +3267,12 @@ msgid "No active notebook."
 msgstr "Ingen aktiv anteckningsbok."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:38
-#, fuzzy
 msgid "No description"
-msgstr "Länkbeskrivning"
+msgstr "Ingen beskrivning"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:92
 msgid "No incoming shares"
-msgstr ""
+msgstr "Inga inkommande delningar"
 
 #: packages/app-mobile/components/screens/Note.tsx:274
 msgid "No item with ID %s"
@@ -3319,9 +3307,8 @@ msgid "No suggestions"
 msgstr "Inga förslag"
 
 #: packages/app-mobile/plugins/PluginRunner/dialogs/PluginPanelViewer.tsx:120
-#, fuzzy
 msgid "No tab selected"
-msgstr "Ingen anteckningsbok vald."
+msgstr "Ingen flik vald"
 
 #: packages/app-cli/app/command-edit.ts:31
 msgid ""
@@ -3447,9 +3434,8 @@ msgid "Notebook: %s"
 msgstr "Anteckningsbok: %s"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:81
-#, fuzzy
 msgid "Notebook: %s (%s)"
-msgstr "Anteckningsbok: %s"
+msgstr "Anteckningsbok: %s (%s)"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useSidebarListData.ts:58
 #: packages/app-mobile/components/side-menu-content.tsx:561
@@ -3550,9 +3536,8 @@ msgid "Open %s"
 msgstr "Öppna %s"
 
 #: packages/app-desktop/bridge.ts:425
-#, fuzzy
 msgid "Open it"
-msgstr "Öppna"
+msgstr "Öppna den"
 
 #: packages/app-desktop/gui/MainScreen/commands/openPdfViewer.ts:7
 msgid "Open PDF viewer"
@@ -3563,9 +3548,8 @@ msgid "Open profile directory"
 msgstr "Öppna profilmapp"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:127
-#, fuzzy
 msgid "Open Source"
-msgstr "Källa: "
+msgstr "Öppna källa"
 
 #: packages/lib/models/Setting.ts:461
 msgid "Open Sync Wizard..."
@@ -3655,34 +3639,31 @@ msgid "Per user. Minimum of %d users."
 msgstr "Per användare. Minst %d användare."
 
 #: packages/app-desktop/gui/MainScreen/commands/permanentlyDeleteNote.ts:8
-#, fuzzy
 msgid "Permanently delete note"
-msgstr "Ta bort valda anteckningar"
+msgstr "Ta bort anteckning permanent"
 
 #: packages/lib/models/Note.ts:928
-#, fuzzy
 msgid "Permanently delete note \"%s\"?"
-msgstr "Ta bort anteckningen \"%s\"?"
+msgstr "Vill du ta bort anteckningen \"%s\" permanent?"
 
 #: packages/app-cli/app/command-rmbook.ts:36
-#, fuzzy
 msgid ""
 "Permanently delete notebook \"%s\"?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will be permanently deleted."
 msgstr ""
-"Ta bort anteckningsboken? Alla anteckningar och delanteckningsböcker i den "
-"här anteckningsboken tas bort också."
+"Vill du ta bort anteckningsboken \"%s\" permanent?\n"
+"\n"
+"Alla anteckningar och underanteckningsböcker i denna anteckningsbok kommer "
+"att raderas permanent."
 
 #: packages/lib/models/Note.ts:930
-#, fuzzy
 msgid "Permanently delete these %d notes?"
-msgstr "Ta bort dessa %d anteckningar?"
+msgstr "Vill du ta bort dessa %d anteckningar permanent?"
 
 #: packages/app-cli/app/command-rmbook.ts:20
-#, fuzzy
 msgid "Permanently deletes the notebook, skipping the trash."
-msgstr "Ta bort dessa %d anteckningar?"
+msgstr "Tar bort anteckningsboken permanent och hoppar över papperskorgen."
 
 #: packages/app-mobile/components/screens/Note.tsx:497
 msgid "Permission needed"
@@ -3759,9 +3740,10 @@ msgid "Please specify the notebook where the notes should be imported to."
 msgstr "Ange anteckningsboken som anteckningarna ska importeras till."
 
 #: packages/lib/services/plugins/PluginService.ts:508
-#, fuzzy
 msgid "Please upgrade Joplin to version %s or later to use this plugin."
-msgstr "Uppgradera Joplin för att använda denna insticksmodul"
+msgstr ""
+"Uppgradera Joplin till version %s eller senare för att använda denna "
+"insticksmodul."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1375
 msgid ""
@@ -3777,28 +3759,24 @@ msgid "Please wait..."
 msgstr "Vänta..."
 
 #: packages/app-mobile/plugins/PlatformImplementation.ts:53
-#, fuzzy
 msgid "Plugin message"
-msgstr "Insticksmoduler"
+msgstr "Insticksmodulsmeddelande"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:443
-#, fuzzy
 msgid "Plugin panels"
-msgstr "Insticksmodulsverktyg"
+msgstr "Insticksmodulspaneler"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:97
 msgid "Plugin repository failed to load"
-msgstr ""
+msgstr "Det gick inte att läsa in insticksmodulsförrådet"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:27
-#, fuzzy
 msgid "Plugin search"
-msgstr "Insticksmoduler"
+msgstr "Insticksmodulssökning"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:119
-#, fuzzy
 msgid "Plugin security"
-msgstr "Insticksmoduler"
+msgstr "Insticksmodulssäkerhet"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:330
 msgid "Plugin tools"
@@ -3806,7 +3784,7 @@ msgstr "Insticksmodulsverktyg"
 
 #: packages/lib/models/Setting.ts:1227
 msgid "Plugin WebView debugging"
-msgstr ""
+msgstr "Plugin WebView-felsökning"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
@@ -3820,6 +3798,8 @@ msgid ""
 "Plugins extend Joplin with features that are not present by default. Plugins "
 "can extend Joplin's editor, viewer, and more."
 msgstr ""
+"Insticksmoduler utökar Joplin med funktioner som inte finns som standard. "
+"Insticksmoduler kan utöka Joplins redigerare, visare och mer."
 
 #: packages/lib/models/Setting.ts:1534
 msgid "Portrait"
@@ -3907,7 +3887,7 @@ msgstr "Bearbeta raderingar av användare"
 
 #: packages/lib/models/Resource.ts:32
 msgid "Processing"
-msgstr ""
+msgstr "Bearbetning"
 
 #: packages/server/src/routes/admin/users.ts:254
 msgid "Profile"
@@ -4006,14 +3986,12 @@ msgid "Recipients:"
 msgstr "Mottagare:"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:143
-#, fuzzy
 msgid "Recommended"
-msgstr "kommando"
+msgstr "Rekommenderade"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:126
-#, fuzzy
 msgid "Recommended plugins"
-msgstr "kommando"
+msgstr "Rekommenderade insticksmoduler"
 
 #: packages/app-desktop/gui/MenuBar.tsx:732
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
@@ -4091,16 +4069,15 @@ msgstr "Ersätt: "
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:57
 msgid "Report an issue"
-msgstr ""
+msgstr "Rapportera ett problem"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:86
 msgid "Report fraudulent plugin"
-msgstr ""
+msgstr "Rapportera bedräglig insticksmodul"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:128
-#, fuzzy
 msgid "Report system"
-msgstr "Filsystem"
+msgstr "Rapportsystem"
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
 msgid "Reset application layout"
@@ -4142,24 +4119,20 @@ msgid "Restore"
 msgstr "Återställ"
 
 #: packages/app-desktop/gui/MainScreen/commands/restoreNote.ts:10
-#, fuzzy
 msgid "Restore note"
-msgstr "Återställda anteckningar"
+msgstr "Återställ anteckning"
 
 #: packages/app-desktop/gui/MainScreen/commands/restoreFolder.ts:9
-#, fuzzy
 msgid "Restore notebook"
-msgstr "Skapa anteckningsbok"
+msgstr "Återställ anteckningsboken"
 
 #: packages/app-cli/app/command-restore.ts:12
-#, fuzzy
 msgid "Restore the items matching <pattern> from the trash."
-msgstr "Tar bort noterna som matchar <note-pattern>."
+msgstr "Återställ objekten som matchar <pattern> från papperskorgen."
 
 #: packages/lib/services/trash/index.ts:88
-#, fuzzy
 msgid "Restored items"
-msgstr "Återställda anteckningar"
+msgstr "Återställda objekt"
 
 #: packages/lib/services/RevisionService.ts:248
 msgid "Restored Notes"
@@ -4414,9 +4387,8 @@ msgstr "Dela en anteckningsbok med andra"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:82
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:33
-#, fuzzy
 msgid "Share from %s (%s)"
-msgstr "%s = %s (%s)"
+msgstr "Dela från %s (%s)"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:391
 msgid "Share Notebook"
@@ -4431,9 +4403,8 @@ msgid "Share permissions"
 msgstr "Dela behörigheter"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:107
-#, fuzzy
 msgid "Shares"
-msgstr "Dela"
+msgstr "Delningar"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:357
 msgid "Sharing notebook..."
@@ -4469,9 +4440,8 @@ msgid "Show disabled keys"
 msgstr "Visa inaktiverade nycklar"
 
 #: packages/app-desktop/gui/ConfigScreen/FontSearch.tsx:130
-#, fuzzy
 msgid "Show monospace fonts only."
-msgstr "Redigerarens monospace teckensnittsfamilj"
+msgstr "Visa endast monospace-teckensnitt."
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:19
 msgid "Show more actions"
@@ -4590,9 +4560,8 @@ msgstr ""
 "Sorterar objektet efter <field> (t.ex. title, updated_time, created_time)."
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:9
-#, fuzzy
 msgid "Source"
-msgstr "Källa: "
+msgstr "Källa"
 
 #: packages/app-cli/app/command-import.ts:27
 msgid "Source format: %s"
@@ -4604,7 +4573,7 @@ msgstr "Källa: "
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:398
 msgid "Spacer"
-msgstr ""
+msgstr "Spacer"
 
 #: packages/lib/models/Setting.ts:1711
 msgid ""
@@ -4886,7 +4855,7 @@ msgstr "Ta ett foto"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:72
 msgid "Task \"%s\" failed with error: %s"
-msgstr ""
+msgstr "Uppgiften \"%s\" misslyckades med fel: %s"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:32
 msgid "Task list"
@@ -5076,22 +5045,14 @@ msgstr ""
 "anteckningsboken \"%s\"."
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:65
-#, fuzzy
 msgid "The note was successfully moved to the trash."
 msgid_plural "The notes were successfully moved to the trash."
-msgstr[0] ""
-"Den här anteckningen \"%s\" har framgångsrikt återställts till "
-"anteckningsboken \"%s\"."
-msgstr[1] ""
-"Den här anteckningen \"%s\" har framgångsrikt återställts till "
-"anteckningsboken \"%s\"."
+msgstr[0] "Anteckningen har flyttats till papperskorgen."
+msgstr[1] "Anteckningarna flyttades till papperskorgen."
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:63
-#, fuzzy
 msgid "The notebook and its content was successfully moved to the trash."
-msgstr ""
-"Den här anteckningen \"%s\" har framgångsrikt återställts till "
-"anteckningsboken \"%s\"."
+msgstr "Anteckningsboken och dess innehåll har flyttats till papperskorgen."
 
 #: packages/app-mobile/components/screens/folder.js:76
 msgid "The notebook could not be saved: %s"
@@ -5199,9 +5160,8 @@ msgstr ""
 "knappen."
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:9
-#, fuzzy
 msgid "There are no notes in the trash folder."
-msgstr "Spara anteckningshistorik i"
+msgstr "Det finns inga anteckningar i papperskorgen."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:262
 msgid "There are unsaved changes."
@@ -5231,6 +5191,9 @@ msgid ""
 "cause the sync warning to appear, but still aren't synced. To unignore, "
 "click \"retry\"."
 msgstr ""
+"Dessa objekt kunde inte synkroniseras, men har markerats som \"ignorerade\". "
+"De gör inte att synkroniseringsvarningen visas, men de synkroniseras "
+"fortfarande inte. För att ta bort ignorering, klicka på \"försök igen\"."
 
 #: packages/lib/services/ReportService.ts:187
 msgid ""
@@ -5272,7 +5235,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
 msgid "This attachment does not have OCR data (Status: %s)"
-msgstr ""
+msgstr "Denna bilaga har inga OCR-data (Status: %s)"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:54
 #: packages/lib/services/ResourceEditWatcher/index.ts:234
@@ -5346,7 +5309,7 @@ msgstr "Denna anteckning har ingen historik"
 
 #: packages/lib/services/plugins/PluginService.ts:516
 msgid "This plugin doesn't support %s."
-msgstr ""
+msgstr "Denna insticksmodul stöder inte %s."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:505
 msgid ""
@@ -5368,7 +5331,7 @@ msgstr ""
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:11
 msgid "This subfolder of the trash has no notes."
-msgstr ""
+msgstr "Den här undermappen till papperskorgen har inga anteckningar."
 
 #: packages/lib/models/Setting.ts:1295
 msgid ""
@@ -5388,12 +5351,11 @@ msgstr ""
 #: packages/app-desktop/commands/emptyTrash.ts:14
 #: packages/app-mobile/components/side-menu-content.tsx:159
 msgid "This will permanently delete all items in the trash. Continue?"
-msgstr ""
+msgstr "Detta tar permanent bort alla objekt i papperskorgen. Fortsätta?"
 
 #: packages/app-cli/app/command-rmnote.ts:40
-#, fuzzy
 msgid "This will permanently delete the note \"%s\". Continue?"
-msgstr "Ta bort anteckningen \"%s\"?"
+msgstr "Detta kommer att permanent radera anteckningen \"%s\". Fortsätta?"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:60
@@ -5430,12 +5392,12 @@ msgstr ""
 #: packages/app-cli/app/command-sync.ts:110
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:80
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:149
-#, fuzzy
 msgid ""
 "To allow Joplin to synchronise with Joplin Cloud, please login using this "
 "URL:"
 msgstr ""
-"För att tillåta Joplin att synkronisera med Dropbox, följ stegen nedan:"
+"För att tillåta Joplin att synkronisera med Joplin Cloud, vänligen logga in "
+"med denna URL:"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:53
 msgid "To continue, please enter your master password below."
@@ -5502,9 +5464,8 @@ msgid "to-do"
 msgstr "att-göra"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:6
-#, fuzzy
 msgid "To-do"
-msgstr "att-göra"
+msgstr "Att-göra"
 
 #: packages/app-mobile/components/note-item.js:145
 msgid "to-do: %s"
@@ -5572,7 +5533,7 @@ msgstr "Totalt: %d/%d"
 
 #: packages/lib/services/trash/index.ts:44
 msgid "Trash"
-msgstr ""
+msgstr "Papperskorgen"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:320
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:123
@@ -5643,9 +5604,8 @@ msgstr ""
 "skrivbordsapplikationen."
 
 #: packages/app-desktop/bridge.ts:417
-#, fuzzy
 msgid "Unknown file type"
-msgstr "Okänd flagga: %s"
+msgstr "Okänd filtyp"
 
 #: packages/lib/utils/processStartFlags.ts:178
 msgid "Unknown flag: %s"
@@ -5852,7 +5812,7 @@ msgstr "Visa"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:141
 msgid "View OCR text"
-msgstr ""
+msgstr "Visa OCR-text"
 
 #: packages/app-mobile/components/screens/Note.tsx:1099
 msgid "View on map"
@@ -5884,9 +5844,8 @@ msgid "Voice typing..."
 msgstr "Röstskrivning..."
 
 #: packages/lib/services/joplinCloudUtils.ts:26
-#, fuzzy
 msgid "Waiting for authorisation..."
-msgstr "Bevilja auktorisation"
+msgstr "Väntar på auktorisation..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:227
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:116
@@ -5901,12 +5860,16 @@ msgstr ""
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:128
 msgid "We have a system for reporting and removing problematic plugins."
 msgstr ""
+"Vi har ett system för att rapportera och ta bort problematiska "
+"insticksmoduler."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:126
 msgid ""
 "We mark plugins developed by trusted Joplin community members as "
 "\"recommended\"."
 msgstr ""
+"Vi markerar insticksmoduler som utvecklats av betrodda Joplin-"
+"gemenskapsmedlemmar som \"rekommenderade\"."
 
 #: packages/lib/models/Setting.ts:2797 packages/lib/utils/joplinCloud.ts:166
 msgid "Web Clipper"
@@ -5955,9 +5918,8 @@ msgid "Welcome!"
 msgstr "Välkommen!"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:112
-#, fuzzy
 msgid "What are plugins?"
-msgstr "Ta bort insticksmodulen \"%s\"?"
+msgstr "Vad är insticksmoduler?"
 
 #: packages/lib/models/Setting.ts:1164
 msgid "When creating a new note:"
@@ -6013,7 +5975,7 @@ msgstr ""
 
 #: packages/lib/services/joplinCloudUtils.ts:44
 msgid "You are logged in into Joplin Cloud, you can leave this screen now."
-msgstr ""
+msgstr "Du är inloggad på Joplin Cloud, du kan lämna den här skärmen nu."
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "You currently have no notebooks."
@@ -6037,20 +5999,17 @@ msgstr ""
 "krypteringsmetod."
 
 #: packages/lib/services/joplinCloudUtils.ts:52
-#, fuzzy
 msgid ""
 "You were unable to connect to Joplin Cloud. Please check your credentials "
 "and try again. Error:"
 msgstr ""
-"Det uppstod ett fel när du konfigurerade ditt Joplin Cloud-konto. Verifiera "
-"din e-postadress och ditt lösenord och försök igen. Fel var:\n"
-"\n"
-"%s"
+"Du kunde inte ansluta till Joplin Cloud. Kontrollera dina uppgifter och "
+"försök igen. Fel:"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:30
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:545
 msgid "Your account doesn't have access to this feature"
-msgstr ""
+msgstr "Ditt konto har inte åtkomst till den här funktionen"
 
 #: packages/app-cli/app/cli-utils.js:160
 msgid "Your choice: "

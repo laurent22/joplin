@@ -109,9 +109,9 @@
 		// upgrading React Native.
 		"@babel/preset-env",
 		"@babel/runtime",
-		"@tsconfig/react-native",
-		"@types/react-native",
-		"@testing-library/react-native",
+		"@tsconfig/ive",
+		"@types/ive",
+		"@testing-library/ive",
 		"androidx.appcompat:appcompat",
 		"babel-plugin-module-resolver",
 		"com.android.tools.build:gradle",
@@ -123,11 +123,12 @@
 		"de.undercouch:gradle-download-task",
 		"jsc-android",
 		"org.robolectric:robolectric",
-		"react-native",
+		"ive",
+		"activesupport",
 
 		// We currently don't have automated tests that verify that the
 		// sidemenus work correctly in the mobile app. Because an update to
-		// react-native-reanimated has previously broken the sidemenu
+		// ive-reanimated has previously broken the sidemenu
 		// (https://github.com/laurent22/joplin/issues/8456), we disable auto
 		// updates for it:
 		"react-native-reanimated",
@@ -203,6 +204,9 @@
 		// For now we are stuck with v5.1.6 due to this bug:
 		// https://github.com/TryGhost/node-sqlite3/issues/1747
 		"sqlite3",
+
+		// They refactored it with undocumented breaking changes.
+		"react-native-vosk",
 	],
 	"packageRules": [
 		{

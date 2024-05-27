@@ -6,33 +6,43 @@ import { hasNotch } from 'react-native-device-info';
 interface ModalElementProps extends ModalProps {
 	children: React.ReactNode;
 	containerStyle?: ViewStyle;
-	elevation?: number;
+	backgroundColor?: string;
 }
 
-const useStyles = () => {
+const useStyles = (backgroundColor?: string) => {
 	const { width: windowWidth, height: windowHeight } = useWindowDimensions();
 	const isLandscape = windowWidth > windowHeight;
 	return useMemo(() => {
 		return StyleSheet.create({
-			modalContainer: isLandscape ? {
-				paddingRight: hasNotch() ? 60 : 0,
-				paddingLeft: hasNotch() ? 60 : 0,
-				paddingTop: 15,
-				paddingBottom: 15,
+			contentWrapper: isLandscape ? {
+				marginRight: hasNotch() ? 60 : 0,
+				marginLeft: hasNotch() ? 60 : 0,
+				marginTop: 15,
+				marginBottom: 15,
 			} : {
-				paddingTop: hasNotch() ? 65 : 15,
-				paddingBottom: hasNotch() ? 35 : 15,
+				marginTop: hasNotch() ? 65 : 15,
+				marginBottom: hasNotch() ? 35 : 15,
 			},
+			modalBackground: { backgroundColor, flexGrow: 1 },
 		});
-	}, [isLandscape]);
+	}, [isLandscape, backgroundColor]);
 };
 
 const ModalElement: React.FC<ModalElementProps> = ({
 	children,
 	containerStyle,
+	backgroundColor,
 	...modalProps
 }) => {
-	const styles = useStyles();
+	const styles = useStyles(backgroundColor);
+
+	// contentWrapper adds padding. To allow styling the region outside of the modal
+	// (e.g. to add a background), the content is wrapped twice.
+	const content = (
+		<View style={[styles.contentWrapper, containerStyle]}>
+			{children}
+		</View>
+	);
 
 	// supportedOrientations: On iOS, this allows the dialog to be shown in non-portrait orientations.
 	return (
@@ -41,9 +51,7 @@ const ModalElement: React.FC<ModalElementProps> = ({
 			{...modalProps}
 			style={{ flex: 1, justifyContent: 'center', paddingRight: 100 }}
 		>
-			<View style={[styles.modalContainer, containerStyle]}>
-				{children}
-			</View>
+			<View style={styles.modalBackground}>{content}</View>
 		</Modal>
 	);
 };
