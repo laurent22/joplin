@@ -182,13 +182,18 @@ const PluginStates: React.FC<Props> = props => {
 		</List.Accordion>
 	);
 
+	const isSearching = !!props.shouldShowBasedOnSearchQuery;
+	// Don't include the number of installed plugins when searching -- only a few of the total
+	// may be shown by the search.
+	const installedAccordionDescription = !isSearching ? _n('You currently have %d plugin installed.', 'You currently have %d plugins installed.', pluginIds.length, pluginIds.length) : null;
+
 	return (
 		<View>
 			{renderRepoApiStatus()}
 			<List.AccordionGroup>
 				<List.Accordion
 					title={_('Installed plugins')}
-					description={_n('You currently have %d plugin installed.', 'You currently have %d plugins installed.', pluginIds.length, pluginIds.length)}
+					description={installedAccordionDescription}
 					id='installed'
 				>
 					<View style={styles.installedPluginsContainer}>
