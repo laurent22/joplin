@@ -785,6 +785,7 @@ packages/generator-joplin/generators/app/templates/src/index.js
 packages/generator-joplin/tools/updateCategories.js
 packages/htmlpack/src/index.js
 packages/lib/ArrayUtils.js
+packages/lib/AsyncActionQueue.test.js
 packages/lib/AsyncActionQueue.js
 packages/lib/BaseApplication.js
 packages/lib/BaseModel.js
