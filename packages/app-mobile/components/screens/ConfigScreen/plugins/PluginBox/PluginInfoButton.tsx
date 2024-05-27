@@ -7,6 +7,7 @@ import getPluginIssueReportUrl from '@joplin/lib/services/plugins/utils/getPlugi
 import { Linking, ScrollView, StyleSheet, View } from 'react-native';
 import DismissibleDialog from '../../../../DismissibleDialog';
 import openWebsiteForPlugin from '../utils/openWebsiteForPlugin';
+import categoryColors from './categoryColors';
 
 interface Props {
 	themeId: number;
@@ -28,6 +29,24 @@ const styles = StyleSheet.create({
 	fraudulentPluginButton: {
 		opacity: 0.6,
 	},
+	categoryContainer: {
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		marginTop: 10,
+		marginBottom: 10,
+	},
+	categoryBadge: {
+		paddingHorizontal: 8,
+		paddingVertical: 4,
+		borderRadius: 15,
+		marginRight: 5,
+		marginBottom: 5,
+		alignSelf: 'flex-start',
+	},
+	categoryText: {
+		color: 'white',
+		fontWeight: 'bold',
+	},
 });
 
 const PluginInfoModal: React.FC<Props> = props => {
@@ -38,6 +57,31 @@ const PluginInfoModal: React.FC<Props> = props => {
 			<Text style={styles.descriptionText}>{props.item.manifest.description ?? _('No description')}</Text>
 		</View>
 	);
+
+	const renderCategories = () => {
+		const categories = props.item.manifest.categories || [];
+
+		if (!categories || categories.length === 0) {
+			return (
+				<View style={[styles.categoryBadge, { backgroundColor: 'gray' }]}>
+					<Text style={styles.categoryText}>{_('Other')}</Text>
+				</View>
+			);
+		}
+
+		return (
+			<View style={styles.categoryContainer}>
+				{categories.map((category, index) => {
+					const lowerCaseCategory = category.toLowerCase();
+					return (
+						<View key={index} style={[styles.categoryBadge, { backgroundColor: categoryColors[lowerCaseCategory] }]}>
+							<Text style={styles.categoryText}>{category}</Text>
+						</View>
+					);
+				})}
+			</View>
+		);
+	};
 
 	const onAboutPress = useCallback(() => {
 		void openWebsiteForPlugin({ item: props.item });
@@ -63,6 +107,18 @@ const PluginInfoModal: React.FC<Props> = props => {
 		void Linking.openURL('https://github.com/laurent22/joplin/security/advisories/new');
 	}, []);
 
+	const onRepositoryPress = useCallback(() => {
+		if (props.item.manifest.repository_url) {
+			void Linking.openURL(props.item.manifest.repository_url);
+		}
+	}, [props.item.manifest.repository_url]);
+
+	const onHomepagePress = useCallback(() => {
+		if (props.item.manifest.homepage_url) {
+			void Linking.openURL(props.item.manifest.homepage_url);
+		}
+	}, [props.item.manifest.homepage_url]);
+
 	return (
 		<Portal>
 			<DismissibleDialog
@@ -72,11 +128,26 @@ const PluginInfoModal: React.FC<Props> = props => {
 			>
 				<ScrollView>
 					{aboutPlugin}
+					{renderCategories()}
 					<List.Item
 						left={props => <List.Icon {...props} icon='web'/>}
 						title={_('About')}
 						onPress={onAboutPress}
 					/>
+					{props.item.manifest.repository_url && (
+						<List.Item
+							left={props => <List.Icon {...props} icon='source-repository'/>}
+							title={_('Plugin\'s Repository')}
+							onPress={onRepositoryPress}
+						/>
+					)}
+					{props.item.manifest.homepage_url && (
+						<List.Item
+							left={props => <List.Icon {...props} icon='home'/>}
+							title={_('Plugin\'s Homepage')}
+							onPress={onHomepagePress}
+						/>
+					)}
 					{ reportIssueUrl ? reportIssueButton : null }
 				</ScrollView>
 				<Button

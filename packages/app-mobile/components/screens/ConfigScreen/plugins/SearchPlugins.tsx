@@ -4,8 +4,9 @@ import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { _ } from '@joplin/lib/locale';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import { useCallback, useMemo, useState } from 'react';
-import { FlatList, View } from 'react-native';
-import { Searchbar } from 'react-native-paper';
+import { FlatList, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { Searchbar, Menu } from 'react-native-paper';
+const Icon = require('react-native-vector-icons/Ionicons').default;
 import PluginBox, { InstallState } from './PluginBox';
 import PluginService, { PluginSettings, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import useInstallHandler from '@joplin/lib/components/shared/config/plugins/useOnInstallHandler';
@@ -27,20 +28,55 @@ interface SearchResultRecord {
 	installState: InstallState;
 }
 
+const styles = StyleSheet.create({
+	iconButton: {
+		flex: 1,
+		paddingLeft: 10,
+		paddingRight: 10,
+		paddingTop: 10,
+		paddingBottom: 10,
+	},
+	topIcon: {
+		flex: 1,
+		textAlignVertical: 'center',
+	},
+	searchContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+	},
+	searchbar: {
+		flex: 1,
+	},
+});
+
 const PluginSearch: React.FC<Props> = props => {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [searchResultManifests, setSearchResultManifests] = useState<PluginManifest[]>([]);
+
+	const [menuVisible, setMenuVisible] = useState(false);
+	const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+	const categories = ['All', 'appearance', 'developer tools', 'productivity', 'themes', 'integrations', 'viewer', 'search', 'tags', 'editor', 'files', 'personal knowledge management'];
+	const openMenu = () => setMenuVisible(true);
+	const closeMenu = () => setMenuVisible(false);
+
+	const selectCategory = (category: string) => {
+		setSelectedCategory(category === 'All' ? null : category);
+		closeMenu();
+	};
 
 	useAsyncEffect(async event => {
 		if (!searchQuery || !props.repoApiInitialized) {
 			setSearchResultManifests([]);
 		} else {
-			const results = await props.repoApi.search(searchQuery);
+			const searchResults = await props.repoApi.search(searchQuery);
+			const results = selectedCategory ?
+				await props.repoApi.filterSearch(searchResults, selectedCategory) :
+				searchResults;
 			if (event.cancelled) return;
-
 			setSearchResultManifests(results);
 		}
-	}, [searchQuery, props.repoApi, setSearchResultManifests, props.repoApiInitialized]);
+	}, [searchQuery, selectedCategory, props.repoApi, setSearchResultManifests, props.repoApiInitialized]);
 
 	const [installingPluginsIds, setInstallingPluginIds] = useState<Record<string, boolean>>({});
 
@@ -103,13 +139,33 @@ const PluginSearch: React.FC<Props> = props => {
 
 	return (
 		<View style={{ flexDirection: 'column' }}>
-			<Searchbar
-				testID='searchbar'
-				placeholder={_('Search')}
-				onChangeText={setSearchQuery}
-				value={searchQuery}
-				editable={props.repoApiInitialized}
-			/>
+			<View style={styles.searchContainer}>
+				<Searchbar
+					testID='searchbar'
+					placeholder={_('Search')}
+					onChangeText={setSearchQuery}
+					value={searchQuery}
+					editable={props.repoApiInitialized}
+					style={styles.searchbar}
+				/>
+				<Menu
+					visible={menuVisible}
+					onDismiss={closeMenu}
+					anchor={
+						<TouchableOpacity onPress={openMenu} style={styles.iconButton}>
+							<Icon testID='filter-button' name="filter-outline" size={30} />
+						</TouchableOpacity>
+					}
+				>
+					{categories.map(category => (
+						<Menu.Item
+							key={category}
+							onPress={() => selectCategory(category)}
+							title={category}
+						/>
+					))}
+				</Menu>
+			</View>
 			<FlatList
 				data={searchResults}
 				renderItem={renderResult}

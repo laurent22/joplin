@@ -7,10 +7,12 @@ import '@testing-library/react-native/extend-expect';
 
 import SearchPlugins from './SearchPlugins';
 import Setting from '@joplin/lib/models/Setting';
-import { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import pluginServiceSetup from './testUtils/pluginServiceSetup';
 import newRepoApi from './testUtils/newRepoApi';
 import createMockReduxStore from '../../../../utils/testing/createMockReduxStore';
+import { Provider } from 'react-native-paper';
+import { useMemo } from 'react';
 
 interface WrapperProps {
 	repoApi: RepositoryApi;
@@ -22,14 +24,20 @@ interface WrapperProps {
 const noOpFunction = ()=>{};
 
 const SearchWrapper = (props: WrapperProps) => {
+	const serializedPluginSettings = useMemo(() => {
+		return JSON.parse(PluginService.instance().serializePluginSettings(props.pluginSettings ?? {}));
+	}, [props.pluginSettings]);
+
 	return (
-		<SearchPlugins
-			themeId={Setting.THEME_LIGHT}
-			pluginSettings={props.pluginSettings ?? {}}
-			repoApiInitialized={props.repoApiInitialized ?? true}
-			repoApi={props.repoApi}
-			onUpdatePluginStates={props.onUpdatePluginStates ?? noOpFunction}
-		/>
+		<Provider>
+			<SearchPlugins
+				themeId={Setting.THEME_LIGHT}
+				pluginSettings={serializedPluginSettings}
+				repoApiInitialized={props.repoApiInitialized ?? true}
+				repoApi={props.repoApi}
+				onUpdatePluginStates={props.onUpdatePluginStates ?? noOpFunction}
+			/>
+		</Provider>
 	);
 };
 
@@ -117,6 +125,35 @@ describe('SearchPlugins', () => {
 		expect(await screen.findByText(/Note list and side bar/i)).toBeVisible();
 		expect(await screen.findByText('Incompatible')).toBeVisible();
 
+		mock.reset();
+	});
+
+	it('should filter search results by category', async () => {
+		const mock = mockMobilePlatform('android');
+		const repoApi = await newRepoApi(InstallMode.Default);
+		render(<SearchWrapper repoApi={repoApi}/>);
+
+		const searchBox = screen.queryByPlaceholderText('Search');
+		const user = userEvent.setup();
+
+		await user.type(searchBox, 'abc');
+		jest.useFakeTimers();
+		await expectSearchResultCountToBe(1);
+
+		// Simulate opening the category menu
+		const filterButton = screen.getByTestId('filter-button');
+		await user.press(filterButton);
+
+		// Simulate selecting a category
+		const categoryItem = screen.getByText('productivity');
+		await user.press(categoryItem);
+
+		// Verify that no plugins are displayed
+		await expectSearchResultCountToBe(0);
+
+		// Clearing the search input should hide all results
+		await user.clear(searchBox);
+		await expectSearchResultCountToBe(0);
 		mock.reset();
 	});
 });

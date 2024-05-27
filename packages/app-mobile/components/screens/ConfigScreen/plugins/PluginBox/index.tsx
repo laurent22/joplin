@@ -7,6 +7,7 @@ import shim from '@joplin/lib/shim';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import ActionButton, { PluginCallback } from './ActionButton';
 import PluginInfoButton from './PluginInfoButton';
+import categoryColors from './categoryColors';
 
 export enum InstallState {
 	NotInstalled,
@@ -65,6 +66,29 @@ const styles = StyleSheet.create({
 	title: {
 		// Prevents the title text from being clipped on Android
 		verticalAlign: 'middle',
+	},
+	cardHeader: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		position: 'relative',
+	},
+	categoryBadgeContainer: {
+		position: 'absolute',
+		top: 10,
+		right: 10,
+		flexDirection: 'row',
+		alignItems: 'center',
+	},
+	categoryBadge: {
+		paddingHorizontal: 8,
+		paddingVertical: 4,
+		borderRadius: 15,
+		marginLeft: 4,
+	},
+	categoryText: {
+		color: 'white',
+		fontWeight: 'bold',
 	},
 });
 
@@ -171,7 +195,11 @@ const PluginBox: React.FC<Props> = props => {
 		// If .onAboutPress is given (e.g. when searching), there's another way to get information
 		// about the plugin. In this case, we don't show the right-side information link.
 		if (props.onAboutPress) return null;
-		return <PluginInfoButton {...buttonProps} themeId={props.themeId} item={props.item}/>;
+		return (
+			<View style={{ paddingTop: 25 }}>
+				<PluginInfoButton {...buttonProps} themeId={props.themeId} item={props.item}/>
+			</View>
+		);
 	};
 
 	const updateStateIsIdle = props.updateState !== UpdateState.Idle;
@@ -179,15 +207,47 @@ const PluginBox: React.FC<Props> = props => {
 	const titleComponent = <>
 		<Text variant='titleMedium'>{manifest.name}</Text> <Text variant='bodySmall' style={styles.versionText}>v{manifest.version}</Text>
 	</>;
+
+	const renderCategoryBadge = () => {
+		if (!manifest.categories || manifest.categories.length === 0) {
+			return (
+				<View style={styles.categoryBadgeContainer}>
+					<View style={[styles.categoryBadge, { backgroundColor: categoryColors['other'] || 'gray' }]}>
+						<Text style={styles.categoryText}>{_('Other')}</Text>
+					</View>
+				</View>
+			);
+		}
+
+		const category = manifest.categories[0].toLowerCase();
+		const backgroundColor = categoryColors[category] || 'gray';
+
+		return (
+			<View style={styles.categoryBadgeContainer}>
+				<View style={[styles.categoryBadge, { backgroundColor }]}>
+					<Text style={styles.categoryText}>{manifest.categories[0]}</Text>
+				</View>
+				{manifest.categories.length > 1 && (
+					<View style={[styles.categoryBadge, { backgroundColor: 'gray' }]}>
+						<Text style={styles.categoryText}>+</Text>
+					</View>
+				)}
+			</View>
+		);
+	};
+
 	return (
 		<Card style={{ margin: 8, opacity: props.isCompatible ? undefined : 0.75 }} testID='plugin-card'>
-			<Card.Title
-				title={titleComponent}
-				titleStyle={styles.title}
-				subtitle={manifest.description}
-				left={PluginIcon}
-				right={renderRightEdgeButton}
-			/>
+			<View style={styles.cardHeader}>
+				<Card.Title
+					title={titleComponent}
+					titleStyle={styles.title}
+					subtitle={manifest.description}
+					left={PluginIcon}
+					right={renderRightEdgeButton}
+				/>
+				{renderCategoryBadge()}
+			</View>
 			<Card.Content>
 				<View style={{ flexDirection: 'row' }}>
 					{renderIncompatibleChip()}

@@ -228,6 +228,31 @@ export default class RepositoryApi {
 		return output;
 	}
 
+	public async filterSearch(results: PluginManifest[], category: string): Promise<PluginManifest[]> {
+		const output: PluginManifest[] = [];
+
+		for (const manifest of results) {
+			const v = manifest.categories;
+			if (!v) continue;
+
+			if (manifest.categories.includes(category)) {
+				output.push(manifest);
+			}
+		}
+
+		output.sort((m1, m2) => {
+			const m1Compatible = isCompatible(this.appVersion_, this.appType_, m1);
+			const m2Compatible = isCompatible(this.appVersion_, this.appType_, m2);
+			if (m1Compatible && !m2Compatible) return -1;
+			if (!m1Compatible && m2Compatible) return 1;
+			if (m1._recommended && !m2._recommended) return -1;
+			if (!m1._recommended && m2._recommended) return +1;
+			return m1.name.toLowerCase() < m2.name.toLowerCase() ? -1 : +1;
+		});
+
+		return output;
+	}
+
 	// Returns a temporary path, where the plugin has been downloaded to. Temp
 	// file should be deleted by caller.
 	public async downloadPlugin(pluginId: string): Promise<string> {
