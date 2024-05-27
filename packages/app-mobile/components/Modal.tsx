@@ -49,7 +49,6 @@ const ModalElement: React.FC<ModalElementProps> = ({
 		<Modal
 			supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
 			{...modalProps}
-			style={{ flex: 1, justifyContent: 'center', paddingRight: 100 }}
 		>
 			<View style={styles.modalBackground}>{content}</View>
 		</Modal>
