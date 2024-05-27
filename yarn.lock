@@ -7066,7 +7066,7 @@ __metadata:
     markdown-it-sup: 1.0.0
     markdown-it-toc-done-right: 4.2.0
     md5: 2.3.0
-    mermaid: 10.6.1
+    mermaid: 10.9.1
     ts-jest: 29.1.1
     typescript: 5.2.2
   languageName: unknown
@@ -17783,6 +17783,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cytoscape@npm:^3.28.1":
+  version: 3.29.2
+  resolution: "cytoscape@npm:3.29.2"
+  checksum: f42d9dc4e0791b1909d617c0f62fc9a982967362af8d585d4a42b9933887bea697be73d5d94d7bbaae5edccad2ac665dc46a2489271408d64b4fb2dc4ece3c15
+  languageName: node
+  linkType: hard
+
 "d3-array@npm:1 - 2":
   version: 2.12.1
   resolution: "d3-array@npm:2.12.1"
@@ -19777,6 +19784,13 @@ __metadata:
   version: 0.8.2
   resolution: "elkjs@npm:0.8.2"
   checksum: ed615c485fa4ac1e858af509df24fdc9f61f2c6576df5f79f6a31c733fda69f235f53cd36af037aa9d2b8a935cb4f823fbd89d784b67f6e51be5100306ea1b39
+  languageName: node
+  linkType: hard
+
+"elkjs@npm:^0.9.0":
+  version: 0.9.3
+  resolution: "elkjs@npm:0.9.3"
+  checksum: 1293e42e0ea034b39d3719f3816b7b3cbaceb52a3114f2c1bd5ddd969bb1e36ae0afef58e77864fff7a1018dc5e96c177e9b0a40c16e4aaac26eb87f5785be4b
   languageName: node
   linkType: hard
 
@@ -27816,6 +27830,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"katex@npm:^0.16.9":
+  version: 0.16.10
+  resolution: "katex@npm:0.16.10"
+  dependencies:
+    commander: ^8.3.0
+  bin:
+    katex: cli.js
+  checksum: 108e9d810e17840c43eef8d46171096f4cc97852bfd1e2dd1890d9b3435846816e3e98678a31d38bd064eb97eea83b18ff224cb65d5f9511b54ce7ff4359b591
+  languageName: node
+  linkType: hard
+
 "keygrip@npm:~1.1.0":
   version: 1.1.0
   resolution: "keygrip@npm:1.1.0"
@@ -29531,22 +29556,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mermaid@npm:10.6.1":
-  version: 10.6.1
-  resolution: "mermaid@npm:10.6.1"
+"mermaid@npm:10.9.1":
+  version: 10.9.1
+  resolution: "mermaid@npm:10.9.1"
   dependencies:
     "@braintree/sanitize-url": ^6.0.1
     "@types/d3-scale": ^4.0.3
     "@types/d3-scale-chromatic": ^3.0.0
-    cytoscape: ^3.23.0
+    cytoscape: ^3.28.1
     cytoscape-cose-bilkent: ^4.1.0
-    cytoscape-fcose: ^2.1.0
     d3: ^7.4.0
     d3-sankey: ^0.12.3
     dagre-d3-es: 7.0.10
     dayjs: ^1.11.7
     dompurify: ^3.0.5
-    elkjs: ^0.8.2
+    elkjs: ^0.9.0
+    katex: ^0.16.9
     khroma: ^2.0.0
     lodash-es: ^4.17.21
     mdast-util-from-markdown: ^1.3.0
@@ -29555,7 +29580,7 @@ __metadata:
     ts-dedent: ^2.2.0
     uuid: ^9.0.0
     web-worker: ^1.2.0
-  checksum: 60cf621ab811ba112919c867697dbd547df8ad0cf31e4d69044c3d96ac2dac4fa21ebba1936e1b72a060a4aa102924a6b396824a58fae176f48b42d993bbdb0b
+  checksum: ec4f463011205ab031fe27ad95730daf815097be9f161866c9c08ac291118dee99a0e841f6e39e7b480c12287a923b71914931eab8beb048bfd991d9957f11ee
   languageName: node
   linkType: hard
 
