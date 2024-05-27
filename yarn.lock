@@ -27272,7 +27272,7 @@ __metadata:
     strip-ansi: 6.0.1
     tcp-port-used: 1.0.2
     temp: 0.9.4
-    terminal-kit: 3.0.1
+    terminal-kit: 3.0.2
     tkwidgets: 0.5.27
     typescript: 5.2.2
     url-parse: 1.5.10
@@ -39707,10 +39707,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string-kit@npm:^0.17.10":
-  version: 0.17.10
-  resolution: "string-kit@npm:0.17.10"
-  checksum: a9242affeb59192753d4d2bc1acf300b5b80a05014d3378c3627539dca85f78cd6e7d1e29abc3c2c637b69ffc7b4bf83ae4c5917fa79f07e9054f7a6340550c0
+"string-kit@npm:^0.18.1":
+  version: 0.18.2
+  resolution: "string-kit@npm:0.18.2"
+  checksum: b635dec4749bd2d61192fc8babe88b465f66992e124aa71e0045812dd0e14e916cf9ecdcc8de213fca84b3a05e1f1e57fab66d1273520b6d8f9b8b177ce2848a
   languageName: node
   linkType: hard
 
@@ -40802,9 +40802,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"terminal-kit@npm:3.0.1":
-  version: 3.0.1
-  resolution: "terminal-kit@npm:3.0.1"
+"terminal-kit@npm:3.0.2":
+  version: 3.0.2
+  resolution: "terminal-kit@npm:3.0.2"
   dependencies:
     "@cronvel/get-pixels": ^3.4.1
     chroma-js: ^2.4.2
@@ -40812,9 +40812,9 @@ __metadata:
     ndarray: ^1.0.19
     nextgen-events: ^1.5.3
     seventh: ^0.9.2
-    string-kit: ^0.17.10
-    tree-kit: ^0.8.1
-  checksum: d38ad04eddaf2d0a9093ecfafed0ef4d041cb51583577f4f342a3840ab6df4ffaf4b261976ad0a0144c593c5aa289e2c036cc0728c9aec610460665d84943df3
+    string-kit: ^0.18.1
+    tree-kit: ^0.8.7
+  checksum: ba0e5f51dc663d33526153b6a23f727464882ef75d329ab89a8a2d79fa7cc287491e253d9868341913cb6c9cb220d08f41bf50a102c7a3ad50fac28d2cf2b1ee
   languageName: node
   linkType: hard
 
@@ -41406,10 +41406,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tree-kit@npm:^0.8.1":
-  version: 0.8.1
-  resolution: "tree-kit@npm:0.8.1"
-  checksum: 1f74f40028967485b7fe09ebdbc6516e63912c57fedc5242c30c15726a903405095c2adba985eb8308e49261b96c9b1dd6db3f3090bac53a80905fa15f519e20
+"tree-kit@npm:^0.8.7":
+  version: 0.8.7
+  resolution: "tree-kit@npm:0.8.7"
+  checksum: f184e418f93b507742770ba1afe4403a0f803582cf880e9234658eb5d9ad2c94daa7a31cfefeb912715c9e09f6f426bb05dae024ea328858ee7fab26f3177824
   languageName: node
   linkType: hard
 
