@@ -5,7 +5,7 @@ import { View, StyleSheet } from 'react-native';
 import { Banner, Text, Button, ProgressBar, List, Divider } from 'react-native-paper';
 import { _, _n } from '@joplin/lib/locale';
 import PluginService, { PluginSettings, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
-import PluginToggle from './PluginToggle';
+import InstalledPluginBox from './InstalledPluginBox';
 import SearchPlugins from './SearchPlugins';
 import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import useRepoApi from './utils/useRepoApi';
@@ -137,7 +137,7 @@ const PluginStates: React.FC<Props> = props => {
 
 		if (!props.shouldShowBasedOnSearchQuery || props.shouldShowBasedOnSearchQuery(plugin.manifest.name)) {
 			installedPluginCards.push(
-				<PluginToggle
+				<InstalledPluginBox
 					key={`plugin-${pluginId}`}
 					themeId={props.themeId}
 					pluginId={pluginId}

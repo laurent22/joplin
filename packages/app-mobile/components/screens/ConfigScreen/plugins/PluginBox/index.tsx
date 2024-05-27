@@ -22,6 +22,9 @@ interface Props {
 	themeId: number;
 	item: PluginItem;
 	isCompatible: boolean;
+
+	// In some cases, showing an "installed" chip is redundant (e.g. in the "installed plugins"
+	// tab). In other places (e.g. search), an "installed" chip is important.
 	showInstalledChip: boolean;
 
 	hasErrors?: boolean;

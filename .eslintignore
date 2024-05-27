@@ -610,6 +610,7 @@ packages/app-mobile/components/screens/ConfigScreen/SettingsButton.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsToggle.js
 packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/InstalledPluginBox.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginTitle.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/StyledChip.js
@@ -618,7 +619,6 @@ packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.installed.test.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.search.test.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.js
-packages/app-mobile/components/screens/ConfigScreen/plugins/PluginToggle.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginUploadButton.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/buttons/ActionButton.js

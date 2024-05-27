@@ -19,7 +19,7 @@ interface Props {
 	onShowPluginInfo: PluginCallback;
 }
 
-const PluginToggle: React.FC<Props> = props => {
+const InstalledPluginBox: React.FC<Props> = props => {
 	const pluginId = props.pluginId;
 	const updateState = useUpdateState({
 		pluginId,
@@ -48,4 +48,4 @@ const PluginToggle: React.FC<Props> = props => {
 	);
 };
 
-export default PluginToggle;
+export default InstalledPluginBox;

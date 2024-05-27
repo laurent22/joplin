@@ -12,7 +12,7 @@ import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import openWebsiteForPlugin from './utils/openWebsiteForPlugin';
 import { PluginCallback, PluginCallbacks } from './utils/usePluginCallbacks';
-import PluginToggle from './PluginToggle';
+import InstalledPluginBox from './InstalledPluginBox';
 
 interface Props {
 	themeId: number;
@@ -106,7 +106,7 @@ const PluginSearch: React.FC<Props> = props => {
 
 		if (item.installState === InstallState.Installed && PluginService.instance().isPluginLoaded(manifest.id)) {
 			return (
-				<PluginToggle
+				<InstalledPluginBox
 					pluginId={manifest.id}
 					themeId={props.themeId}
 					pluginSettings={props.pluginSettings}
