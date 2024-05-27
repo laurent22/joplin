@@ -23,21 +23,20 @@ export class LimitedDownloadController implements DownloadController {
 	private imagesCount_ = 0;
 	// how many images links the content has
 	private imageCountExpected_ = 0;
-	private isLimitExceeded_ = false;
+	private requestId = '';
 
 	private maxTotalBytes = 0;
 	public readonly maxImagesCount: number;
-	private ownerId = '';
 
-	public constructor(ownerId: string, maxTotalBytes: number, maxImagesCount: number) {
-		this.ownerId = ownerId;
+	public constructor(maxTotalBytes: number, maxImagesCount: number, requestId: string) {
 		this.maxTotalBytes = maxTotalBytes;
 		this.maxImagesCount = maxImagesCount;
+		this.requestId = requestId;
 	}
 
 	public set totalBytes(value: number) {
 		if (this.totalBytes_ >= this.maxTotalBytes) {
-			throw new JoplinError(`Total bytes stored (${this.totalBytes_}) has exceeded the amount established (${this.maxTotalBytes})`, ErrorCode.DownloadLimiter);
+			throw new JoplinError(`${this.requestId}: Total bytes stored (${this.totalBytes_}) has exceeded the amount established (${this.maxTotalBytes})`, ErrorCode.DownloadLimiter);
 		}
 		this.totalBytes_ = value;
 	}
@@ -48,7 +47,7 @@ export class LimitedDownloadController implements DownloadController {
 
 	public set imagesCount(value: number) {
 		if (this.imagesCount_ > this.maxImagesCount) {
-			throw new JoplinError(`Total images to be stored (${this.imagesCount_}) has exceeded the amount established (${this.maxImagesCount})`, ErrorCode.DownloadLimiter);
+			throw new JoplinError(`${this.requestId}: Total images to be stored (${this.imagesCount_}) has exceeded the amount established (${this.maxImagesCount})`, ErrorCode.DownloadLimiter);
 		}
 		this.imagesCount_ = value;
 	}
@@ -78,12 +77,10 @@ export class LimitedDownloadController implements DownloadController {
 	}
 
 	public printStats() {
-		if (!this.isLimitExceeded_) return;
-
-		const owner = `Owner id: ${this.ownerId}`;
-		const totalBytes = `Total bytes stored: ${this.totalBytes}. Maximum: ${this.maxTotalBytes}`;
+		const totalBytes = `Total downloaded: ${bytesToHuman(this.totalBytes)}. Maximum: ${bytesToHuman(this.maxTotalBytes)}`;
 		const totalImages = `Images initiated for download: ${this.imagesCount_}. Maximum: ${this.maxImagesCount}. Expected: ${this.imageCountExpected}`;
-		logger.info(`${owner} - ${totalBytes} - ${totalImages}`);
+		logger.info(`${this.requestId}: ${totalBytes}`);
+		logger.info(`${this.requestId}: ${totalImages}`);
 	}
 
 	public limitMessage() {

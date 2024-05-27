@@ -35,20 +35,12 @@
 			See https://github.com/itinance/react-native-fs/issues/1232 for details. 
 		-->
 		<dict>
-			<key>NSPrivacyAccessedAPITypeReasons</key>
-			<array>
-				<string>C617.1</string>
-			</array>
 			<key>NSPrivacyAccessedAPIType</key>
-			<string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
-		</dict>
-		<dict>
+			<string>NSPrivacyAccessedAPICategoryDiskSpace</string>
 			<key>NSPrivacyAccessedAPITypeReasons</key>
 			<array>
 				<string>E174.1</string>
 			</array>
-			<key>NSPrivacyAccessedAPIType</key>
-			<string>NSPrivacyAccessedAPICategoryDiskSpace</string>
 		</dict>
 	</array>
 	<key>NSPrivacyCollectedDataTypes</key>

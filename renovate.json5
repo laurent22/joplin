@@ -124,6 +124,7 @@
 		"jsc-android",
 		"org.robolectric:robolectric",
 		"react-native",
+		"activesupport",
 
 		// We currently don't have automated tests that verify that the
 		// sidemenus work correctly in the mobile app. Because an update to
@@ -203,6 +204,9 @@
 		// For now we are stuck with v5.1.6 due to this bug:
 		// https://github.com/TryGhost/node-sqlite3/issues/1747
 		"sqlite3",
+
+		// They refactored it with undocumented breaking changes.
+		"react-native-vosk",
 	],
 	"packageRules": [
 		{

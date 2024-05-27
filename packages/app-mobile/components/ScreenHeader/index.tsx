@@ -15,7 +15,7 @@ const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import { State } from '@joplin/lib/reducer';
-import CustomButton from '../CustomButton';
+import IconButton from '../IconButton';
 import FolderPicker from '../FolderPicker';
 import { itemIsInTrash } from '@joplin/lib/services/trash';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
@@ -363,26 +363,25 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const renderTopButton = (options: TopButtonOptions) => {
 			if (!options.visible) return null;
 
-			const icon = <Icon name={options.iconName} style={this.styles().topIcon} />;
 			const viewStyle = options.disabled ? this.styles().iconButtonDisabled : this.styles().iconButton;
 
 			return (
-				<CustomButton
+				<IconButton
 					onPress={options.onPress}
-					style={{ padding: 0 }}
+					containerStyle={{ padding: 0 }}
+					contentWrapperStyle={viewStyle}
 					themeId={themeId}
 					disabled={!!options.disabled}
 					description={options.description}
-					contentStyle={viewStyle}
-				>
-					{icon}
-				</CustomButton>
+					iconName={options.iconName}
+					iconStyle={this.styles().topIcon}
+				/>
 			);
 		};
 
 		const renderUndoButton = () => {
 			return renderTopButton({
-				iconName: 'arrow-undo-circle-sharp',
+				iconName: 'ionicon arrow-undo-circle-sharp',
 				description: _('Undo'),
 				onPress: this.props.onUndoButtonPress,
 				visible: this.props.showUndoButton,
@@ -392,7 +391,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		const renderRedoButton = () => {
 			return renderTopButton({
-				iconName: 'arrow-redo-circle-sharp',
+				iconName: 'ionicon arrow-redo-circle-sharp',
 				description: _('Redo'),
 				onPress: this.props.onRedoButtonPress,
 				visible: this.props.showRedoButton,
@@ -402,30 +401,32 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function selectAllButton(styles: any, onPress: OnPressCallback) {
 			return (
-				<CustomButton
+				<IconButton
 					onPress={onPress}
 
 					themeId={themeId}
 					description={_('Select all')}
-					contentStyle={styles.iconButton}
-				>
-					<Icon name="checkmark-circle-outline" style={styles.topIcon} />
-				</CustomButton>
+					contentWrapperStyle={styles.iconButton}
+
+					iconName="ionicon checkmark-circle-outline"
+					iconStyle={styles.topIcon}
+				/>
 			);
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function searchButton(styles: any, onPress: OnPressCallback) {
 			return (
-				<CustomButton
+				<IconButton
 					onPress={onPress}
 
 					description={_('Search')}
 					themeId={themeId}
-					contentStyle={styles.iconButton}
-				>
-					<Icon name="search" style={styles.topIcon} />
-				</CustomButton>
+					contentWrapperStyle={styles.iconButton}
+
+					iconName='ionicon search'
+					iconStyle={styles.topIcon}
+				/>
 			);
 		}
 
@@ -438,21 +439,22 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			if (allVisiblePanels.length === 0) return null;
 
 			return (
-				<CustomButton
+				<IconButton
 					onPress={onPress}
 					description={_('Plugin panels')}
 					themeId={themeId}
-					contentStyle={styles.iconButton}
-				>
-					<Icon name="extension-puzzle" style={styles.topIcon} />
-				</CustomButton>
+					contentWrapperStyle={styles.iconButton}
+
+					iconName="ionicon extension-puzzle"
+					iconStyle={styles.topIcon}
+				/>
 			);
 		};
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function deleteButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
-				<CustomButton
+				<IconButton
 					onPress={onPress}
 					disabled={disabled}
 
@@ -461,17 +463,18 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					accessibilityHint={
 						disabled ? null : _('Delete selected notes')
 					}
-					contentStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
-				>
-					<Icon name="trash" style={styles.topIcon} />
-				</CustomButton>
+					contentWrapperStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
+
+					iconName='ionicon trash'
+					iconStyle={styles.topIcon}
+				/>
 			);
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function restoreButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
-				<CustomButton
+				<IconButton
 					onPress={onPress}
 					disabled={disabled}
 
@@ -480,17 +483,18 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					accessibilityHint={
 						disabled ? null : _('Restore')
 					}
-					contentStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
-				>
-					<Icon name="reload-circle" style={styles.topIcon} />
-				</CustomButton>
+					contentWrapperStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
+
+					iconName='ionicon reload-circle'
+					iconStyle={styles.topIcon}
+				/>
 			);
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function duplicateButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
-				<CustomButton
+				<IconButton
 					onPress={onPress}
 					disabled={disabled}
 
@@ -499,10 +503,10 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					accessibilityHint={
 						disabled ? null : _('Duplicate selected notes')
 					}
-					contentStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
-				>
-					<Icon name="copy" style={styles.topIcon} />
-				</CustomButton>
+					contentWrapperStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
+					iconName='ionicon copy'
+					iconStyle={styles.topIcon}
+				/>
 			);
 		}
 

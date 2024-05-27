@@ -17,6 +17,13 @@ export default {
 			},
 			{
 				inline: true,
+				// Override the default pre styles. Using the default `white-space: pre`
+				// can cause math expressions to be too tall and break some diagrams.
+				text: 'pre.mermaid > svg { white-space: unset; }',
+				mime: 'text/css',
+			},
+			{
+				inline: true,
 				// Export button in mermaid graph should be shown only on hovering the mermaid graph
 				// ref: https://github.com/laurent22/joplin/issues/6101
 				text: `
