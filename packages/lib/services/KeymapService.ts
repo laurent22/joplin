@@ -416,11 +416,11 @@ export default class KeymapService extends BaseService {
 		return parts.join('+');
 	}
 
-	public on<T extends EventName>(eventName: T, callback: EventListenerCallback<T>) {
+	public on<Name extends EventName>(eventName: Name, callback: EventListenerCallback<Name>) {
 		eventManager.on(eventName, callback);
 	}
 
-	public off<T extends EventName>(eventName: T, callback: EventListenerCallback<T>) {
+	public off<Name extends EventName>(eventName: Name, callback: EventListenerCallback<Name>) {
 		eventManager.off(eventName, callback);
 	}
 

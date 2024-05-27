@@ -74,7 +74,7 @@ type EventArgs = {
 type EventListenerCallbacks = {
 	[n in EventName]: (...args: EventArgs[n])=> void;
 };
-export type EventListenerCallback<T extends EventName> = EventListenerCallbacks[T];
+export type EventListenerCallback<Name extends EventName> = EventListenerCallbacks[Name];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code from before rule was applied
 type AppStateChangeCallback = (event: { value: any })=> void;
@@ -101,19 +101,19 @@ export class EventManager {
 		this.appStateListeners_ = {};
 	}
 
-	public on<T extends EventName>(eventName: T, callback: EventListenerCallback<T>) {
+	public on<Name extends EventName>(eventName: Name, callback: EventListenerCallback<Name>) {
 		return this.emitter_.on(eventName, callback);
 	}
 
-	public emit<T extends EventName>(eventName: T, ...args: EventArgs[T]) {
+	public emit<Name extends EventName>(eventName: Name, ...args: EventArgs[Name]) {
 		return this.emitter_.emit(eventName, ...args);
 	}
 
-	public removeListener<T extends EventName>(eventName: T, callback: EventListenerCallback<T>) {
+	public removeListener<Name extends EventName>(eventName: Name, callback: EventListenerCallback<Name>) {
 		return this.emitter_.removeListener(eventName, callback);
 	}
 
-	public off<T extends EventName>(eventName: T, callback: EventListenerCallback<T>) {
+	public off<Name extends EventName>(eventName: Name, callback: EventListenerCallback<Name>) {
 		return this.removeListener(eventName, callback);
 	}
 
@@ -207,7 +207,7 @@ export class EventManager {
 		}
 	}
 
-	public once<T extends EventName>(eventName: T, callback: EventListenerCallback<T>) {
+	public once<Name extends EventName>(eventName: Name, callback: EventListenerCallback<Name>) {
 		return this.emitter_.once(eventName, callback);
 	}
 
