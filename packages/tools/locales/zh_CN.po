@@ -6,6 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: qx100 <ztymaxwell@gmail.com>\n"
 "Language-Team: zh_CN <737445366KG@Gmail.com>\n"
 "Language: zh_CN\n"
@@ -53,7 +55,7 @@ msgstr "（兼容所见即所得编辑器：%s）"
 #: packages/app-mobile/components/screens/Note.tsx:743
 #: packages/lib/shim-init-node.ts:255
 msgid "(You may disable this prompt in the options)"
-msgstr "您可以在设置中禁用此提示"
+msgstr "（您可以在选项中禁用此提示）"
 
 #: packages/app-desktop/gui/MenuBar.tsx:1012
 #: packages/app-desktop/gui/MenuBar.tsx:715
@@ -132,9 +134,8 @@ msgid "%d notes match this pattern. Delete them?"
 msgstr "有 %d 条笔记匹配。是否删除？"
 
 #: packages/app-cli/app/command-rmnote.ts:40
-#, fuzzy
 msgid "%d notes will be permanently deleted. Continue?"
-msgstr "这将永久删除回收站中的所有条目。是否继续？"
+msgstr "%d 笔记将被永久删除。是否继续？"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:227
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:237
@@ -152,7 +153,7 @@ msgstr "%s (%s) 无法上传：%s"
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:667
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:64
 msgid "%s (%s) would like to share a notebook with you."
-msgstr "%s (%s) 想要分享笔记本给您。"
+msgstr "%s (%s) 想要共享笔记本给您。"
 
 #: packages/lib/services/ReportService.ts:306
 msgid "%s (%s): %s"
@@ -191,7 +192,7 @@ msgstr "%s 未针对同步许多小文件进行优化，因此您的首次同步
 
 #: packages/app-mobile/plugins/PluginRunner/dialogs/PluginPanelViewer.tsx:75
 msgid "%s tab opened"
-msgstr ""
+msgstr "%s 标签已打开"
 
 #: packages/lib/services/ReportService.ts:286
 #: packages/lib/services/ReportService.ts:287
@@ -284,7 +285,7 @@ msgstr "接受"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:98
 msgid "Accepted shares"
-msgstr ""
+msgstr "接受共享"
 
 #: packages/lib/WebDavApi.js:451
 msgid "Access denied: Please check your username and password"
@@ -365,7 +366,7 @@ msgstr "包含笔记，笔记本和标签在内的所有数据将会被永久删
 
 #: packages/lib/services/ReportService.ts:227
 msgid "All item sync failures have been marked as \"ignored\"."
-msgstr ""
+msgstr "所有同步失败的条目都被标记为 \"忽略\"。"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/AllNotesItem.tsx:61
 #: packages/app-mobile/components/screens/Notes.tsx:185
@@ -379,7 +380,7 @@ msgstr "所有默认端口都已经被使用中 - 请在 %s 反馈这个问题"
 
 #: packages/lib/models/Setting.ts:1228
 msgid "Allows debugging mobile plugins. See %s for details."
-msgstr ""
+msgstr "允许调试移动插件。详见 %s。"
 
 #: packages/app-cli/app/command-config.ts:19
 msgid "Also displays unset and hidden config variables."
@@ -399,7 +400,7 @@ msgstr "每次询问"
 
 #: packages/app-desktop/bridge.ts:421
 msgid "Always open %s files without asking."
-msgstr ""
+msgstr "始终打开 %s 文件，无需询问。"
 
 #: packages/lib/models/Setting.ts:1186
 msgid "Always resize"
@@ -558,7 +559,7 @@ msgstr "自动检查更新"
 
 #: packages/lib/models/Setting.ts:1908
 msgid "Automatically delete notes in the trash after a number of days"
-msgstr "几天后自动删除回收站中的笔记"
+msgstr "一段时间后自动删除回收站中的笔记"
 
 #: packages/lib/models/Setting.ts:907
 msgid "Automatically switch theme to match system theme"
@@ -610,11 +611,11 @@ msgstr "无序列表"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:37
 msgid "by %s"
-msgstr ""
+msgstr "由 %s"
 
 #: packages/server/src/routes/admin/users.ts:160
 msgid "Can Share"
-msgstr "分享"
+msgstr "可以共享"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:119
 msgid "Can view"
@@ -899,9 +900,8 @@ msgid "Collapse"
 msgstr "折叠"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:26
-#, fuzzy
 msgid "Collapse %s"
-msgstr "折叠"
+msgstr "折叠 %s"
 
 #: packages/lib/services/ReportService.ts:351
 msgid "Coming alarms"
@@ -952,6 +952,8 @@ msgid ""
 "Completed with warnings:\n"
 "%s"
 msgstr ""
+"已完成，但存在警告：\n"
+"%s"
 
 #: packages/lib/Synchronizer.ts:207
 msgid "Completed: %s (%s)"
@@ -959,7 +961,7 @@ msgstr "已完成：%s（%s）"
 
 #: packages/lib/models/Note.ts:64
 msgid "completion date"
-msgstr ""
+msgstr "完成日期"
 
 #: packages/server/src/services/TaskService.ts:28
 msgid "Compress old changes"
@@ -1067,7 +1069,7 @@ msgstr "复制路径到剪贴板"
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:215
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
-msgstr[0] "复制分享链接"
+msgstr[0] "复制共享链接"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:27
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:552
@@ -1079,9 +1081,8 @@ msgid "Copy token"
 msgstr "复制令牌"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:633
-#, fuzzy
 msgid "Copy version info"
-msgstr "显示版本信息"
+msgstr "复制版本信息"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:43
 msgid ""
@@ -1143,7 +1144,7 @@ msgstr "无法升级主密钥(master key)：%s"
 msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
-msgstr "无法验证此笔记的分享状态 — 正在终止。请在连接到互联网后再次尝试。"
+msgstr "无法验证此笔记的共享状态 — 正在终止。请在连接到互联网后再次尝试。"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
 msgid "Could not verify your identity: %s"
@@ -1403,7 +1404,7 @@ msgstr "已删除远程条目：%d。"
 
 #: packages/app-cli/app/command-rmnote.ts:20
 msgid "Deletes notes permanently, skipping the trash."
-msgstr ""
+msgstr "永久删除笔记并跳过回收站。"
 
 #: packages/app-cli/app/command-rmbook.ts:14
 msgid "Deletes the given notebook."
@@ -1621,9 +1622,8 @@ msgid "Due"
 msgstr "截止日期"
 
 #: packages/lib/models/Note.ts:63
-#, fuzzy
 msgid "due date"
-msgstr "更新日期"
+msgstr "截止日期"
 
 #: packages/app-desktop/gui/MainScreen/commands/duplicateNote.ts:7
 #: packages/app-mobile/components/ScreenHeader/index.tsx:498
@@ -1845,9 +1845,8 @@ msgstr "启用 PDF 查看器"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:131
 #: packages/lib/models/Setting.ts:1239
-#, fuzzy
 msgid "Enable plugin support"
-msgstr "启用 Typographer 支持"
+msgstr "启用插件支持"
 
 #: packages/lib/models/Setting.ts:1261
 msgid "Enable soft breaks"
@@ -2003,9 +2002,8 @@ msgid "Expand"
 msgstr "展开"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:28
-#, fuzzy
 msgid "Expand %s"
-msgstr "展开"
+msgstr "展开 %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:191
@@ -2084,6 +2082,8 @@ msgid ""
 "internet and able to sync.\n"
 "Error: %s"
 msgstr ""
+"离开共享失败。请确认 Joplin 已连接到互联网并能够同步。\n"
+"错误：%s"
 
 #: packages/app-cli/app/main.js:100
 msgid "Fatal error:"
@@ -2285,7 +2285,7 @@ msgstr "帮助"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:125
 msgid "Here's what we do to make plugins safer:"
-msgstr ""
+msgstr "以下是我们为使插件更安全而采取的措施："
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:629
 msgid "Hermes enabled: %d"
@@ -2386,9 +2386,8 @@ msgid "Ignore TLS certificate errors"
 msgstr "忽略 TLS 证书错误"
 
 #: packages/lib/services/ReportService.ts:236
-#, fuzzy
 msgid "Ignored items that cannot be synchronised"
-msgstr "无法同步的条目"
+msgstr "无法同步的被忽略的条目"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:106
 msgid "Images"
@@ -2402,33 +2401,32 @@ msgid "Import"
 msgstr "导入"
 
 #: packages/lib/models/Setting.ts:2801
-#, fuzzy
 msgid "Import and Export"
-msgstr "导出调试报告"
+msgstr "导入和导出"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:66
 msgid ""
 "Import failed. Make sure a JEX file was selected.\n"
 "Details: %s"
 msgstr ""
+"导入失败。确保选择了 JEX 文件。\n"
+"详细信息：%s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:21
 msgid "Import from JEX"
-msgstr ""
+msgstr "从 JEX 导入"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:22
 msgid "Import notes from a JEX (Joplin Export) file."
-msgstr ""
+msgstr "从 JEX（ Joplin 导出格式）文件导入笔记。"
 
 #: packages/lib/models/Setting.ts:2833
-#, fuzzy
 msgid "Import or export your data"
-msgstr "导出数据"
+msgstr "导入或导出数据"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:76
-#, fuzzy
 msgid "Imported successfully!"
-msgstr "导出成功！"
+msgstr "导入成功!"
 
 #: packages/app-desktop/gui/MenuBar.tsx:301
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
@@ -2439,9 +2437,8 @@ msgid "Importing notes..."
 msgstr "正在导入笔记..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:26
-#, fuzzy
 msgid "Importing..."
-msgstr "正在导出..."
+msgstr "正在导入..."
 
 #: packages/app-cli/app/command-import.ts:16
 msgid "Imports data into Joplin."
@@ -2527,13 +2524,12 @@ msgid "In: %s"
 msgstr "已处理：%s"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:120
-#, fuzzy
 msgid "Incoming shares"
-msgstr "临近提醒"
+msgstr "传入的共享"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:166
 msgid "Incompatible"
-msgstr ""
+msgstr "不兼容"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:52
 msgid "Increase indent level"
@@ -2656,15 +2652,14 @@ msgid "Joplin Cloud Login"
 msgstr "Joplin Cloud 登录"
 
 #: packages/lib/services/plugins/PluginService.ts:514
-#, fuzzy
 msgid "Joplin Desktop"
-msgstr "Joplin 官网"
+msgstr "Joplin 桌面端"
 
 #: packages/app-desktop/bridge.ts:419
 msgid ""
 "Joplin doesn't recognise the %s extension. Opening this file could be "
 "dangerous. What would you like to do?"
-msgstr ""
+msgstr "Joplin 无法识别 %s 扩展名。打开这个文件可能会有危险。您想怎么做？"
 
 #: packages/lib/services/interop/InteropService.ts:149
 #: packages/lib/services/interop/InteropService.ts:66
@@ -2690,9 +2685,8 @@ msgid "Joplin Forum"
 msgstr "Joplin 论坛"
 
 #: packages/lib/services/plugins/PluginService.ts:512
-#, fuzzy
 msgid "Joplin Mobile"
-msgstr "Joplin 官网"
+msgstr "Joplin 移动端"
 
 #: packages/lib/SyncTargetJoplinServer.ts:61
 msgid "Joplin Server"
@@ -2796,9 +2790,8 @@ msgstr "布局按钮序列"
 #: packages/app-desktop/bridge.ts:424
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:130
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:47
-#, fuzzy
 msgid "Learn more"
-msgstr "增加缩进"
+msgstr "了解更多"
 
 #: packages/lib/models/Setting.ts:1899
 msgid "Leave it blank to download the language files from the default website"
@@ -2809,9 +2802,8 @@ msgid "Leave notebook..."
 msgstr "离开笔记本..."
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:90
-#, fuzzy
 msgid "Leave share"
-msgstr "保存更改"
+msgstr "离开共享"
 
 #: packages/lib/models/Setting.ts:1529
 msgid "Legal"
@@ -2829,7 +2821,7 @@ msgstr "明亮"
 msgid ""
 "Like any software you install, plugins can potentially cause security issues "
 "or data loss."
-msgstr ""
+msgstr "与您安装的其他任何软件一样，插件也可能导致安全问题或数据丢失。"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:108
 msgid "Lines"
@@ -2940,9 +2932,8 @@ msgid "Manage profiles"
 msgstr "管理配置文件"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:569
-#, fuzzy
 msgid "Manage shared notebooks"
-msgstr "管理配置文件"
+msgstr "管理共享笔记本"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:332
 msgid "Manage your plugins"
@@ -3058,7 +3049,7 @@ msgstr "不止一项匹配 “%s”。请缩小您的检索范围。"
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:127
 msgid ""
 "Most plugins have source code available for review on the plugin website."
-msgstr ""
+msgstr "大多数插件的源代码可在插件网站上查阅。"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:587
 msgid "Move %d notes to notebook \"%s\"?"
@@ -3108,7 +3099,7 @@ msgstr "从不缩放"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/HeaderItem.tsx:46
 msgid "New"
-msgstr ""
+msgstr "新建"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:10
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
@@ -3186,13 +3177,12 @@ msgid "No active notebook."
 msgstr "无有效的笔记本。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:38
-#, fuzzy
 msgid "No description"
-msgstr "链接描述"
+msgstr "无描述"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:92
 msgid "No incoming shares"
-msgstr ""
+msgstr "无传入的共享"
 
 #: packages/app-mobile/components/screens/Note.tsx:274
 msgid "No item with ID %s"
@@ -3227,9 +3217,8 @@ msgid "No suggestions"
 msgstr "没有建议"
 
 #: packages/app-mobile/plugins/PluginRunner/dialogs/PluginPanelViewer.tsx:120
-#, fuzzy
 msgid "No tab selected"
-msgstr "未选择笔记本。"
+msgstr "未选择标签"
 
 #: packages/app-cli/app/command-edit.ts:31
 msgid ""
@@ -3332,7 +3321,7 @@ msgstr "注意：在部分桌面环境下无法工作。"
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:192
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
-msgstr "注意：笔记分享后，便不再在服务器上加密。"
+msgstr "注意：笔记共享后，便不再在服务器上加密。"
 
 #: packages/app-desktop/gui/MenuBar.tsx:849
 msgid "Note&book"
@@ -3352,9 +3341,8 @@ msgid "Notebook: %s"
 msgstr "笔记本：%s"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:81
-#, fuzzy
 msgid "Notebook: %s (%s)"
-msgstr "笔记本：%s"
+msgstr "笔记本：%s (%s)"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useSidebarListData.ts:58
 #: packages/app-mobile/components/side-menu-content.tsx:561
@@ -3453,7 +3441,6 @@ msgid "Open %s"
 msgstr "打开 %s"
 
 #: packages/app-desktop/bridge.ts:425
-#, fuzzy
 msgid "Open it"
 msgstr "打开"
 
@@ -3466,9 +3453,8 @@ msgid "Open profile directory"
 msgstr "打开配置文件目录"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:127
-#, fuzzy
 msgid "Open Source"
-msgstr "来源"
+msgstr "开源"
 
 #: packages/lib/models/Setting.ts:461
 msgid "Open Sync Wizard..."
@@ -3566,21 +3552,22 @@ msgid "Permanently delete note \"%s\"?"
 msgstr "是否永久删除笔记 “%s”？"
 
 #: packages/app-cli/app/command-rmbook.ts:36
-#, fuzzy
 msgid ""
 "Permanently delete notebook \"%s\"?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will be permanently deleted."
-msgstr "是否删除笔记本？所有在该笔记本内的笔记和子笔记本也将同时被删除。"
+msgstr ""
+"是否永久删除笔记本 \"%s\"？\n"
+"\n"
+"所有在该笔记本内的笔记和子笔记本也将同时被删除。"
 
 #: packages/lib/models/Note.ts:930
 msgid "Permanently delete these %d notes?"
 msgstr "是否永久删除这 %d 条笔记？"
 
 #: packages/app-cli/app/command-rmbook.ts:20
-#, fuzzy
 msgid "Permanently deletes the notebook, skipping the trash."
-msgstr "是否永久删除这 %d 条笔记？"
+msgstr "永久删除笔记本并跳过回收站。"
 
 #: packages/app-mobile/components/screens/Note.tsx:497
 msgid "Permission needed"
@@ -3652,9 +3639,8 @@ msgid "Please specify the notebook where the notes should be imported to."
 msgstr "请指定导入笔记的目标笔记本。"
 
 #: packages/lib/services/plugins/PluginService.ts:508
-#, fuzzy
 msgid "Please upgrade Joplin to version %s or later to use this plugin."
-msgstr "请升级 Joplin 以使用此插件"
+msgstr "请升级 Joplin 到 %s 或更新的版本以使用此插件。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1375
 msgid ""
@@ -3672,9 +3658,8 @@ msgid "Plugin message"
 msgstr "插件消息"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:443
-#, fuzzy
 msgid "Plugin panels"
-msgstr "插件工具"
+msgstr "插件面板"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:97
 msgid "Plugin repository failed to load"
@@ -3685,9 +3670,8 @@ msgid "Plugin search"
 msgstr "插件搜索"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:119
-#, fuzzy
 msgid "Plugin security"
-msgstr "插件搜索"
+msgstr "插件安全性"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:330
 msgid "Plugin tools"
@@ -3695,7 +3679,7 @@ msgstr "插件工具"
 
 #: packages/lib/models/Setting.ts:1227
 msgid "Plugin WebView debugging"
-msgstr ""
+msgstr "插件 WebView 调试"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
@@ -3709,6 +3693,8 @@ msgid ""
 "Plugins extend Joplin with features that are not present by default. Plugins "
 "can extend Joplin's editor, viewer, and more."
 msgstr ""
+"插件可扩展 Joplin 默认不具备的功能。插件可以扩展 Joplin 的编辑器、查看器等功"
+"能。"
 
 #: packages/lib/models/Setting.ts:1534
 msgid "Portrait"
@@ -3794,7 +3780,7 @@ msgstr "处理用户删除"
 
 #: packages/lib/models/Resource.ts:32
 msgid "Processing"
-msgstr ""
+msgstr "正在处理"
 
 #: packages/server/src/routes/admin/users.ts:254
 msgid "Profile"
@@ -3838,11 +3824,11 @@ msgstr "公-私钥对："
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
-msgstr "分享笔记..."
+msgstr "发布笔记..."
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:212
 msgid "Publish Notes"
-msgstr "分享笔记"
+msgstr "发布笔记"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:169
 #: packages/lib/utils/joplinCloud.ts:153
@@ -3897,9 +3883,8 @@ msgid "Recommended"
 msgstr "推荐"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:126
-#, fuzzy
 msgid "Recommended plugins"
-msgstr "推荐"
+msgstr "推荐插件"
 
 #: packages/app-desktop/gui/MenuBar.tsx:732
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
@@ -3975,16 +3960,15 @@ msgstr "替换: "
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:57
 msgid "Report an issue"
-msgstr ""
+msgstr "报告问题"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:86
 msgid "Report fraudulent plugin"
-msgstr ""
+msgstr "报告欺诈性插件"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:128
-#, fuzzy
 msgid "Report system"
-msgstr "文件系统"
+msgstr "报告系统"
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
 msgid "Reset application layout"
@@ -4273,7 +4257,7 @@ msgstr ""
 #: packages/app-mobile/components/screens/LogScreen.tsx:56
 #: packages/app-mobile/components/screens/Note.tsx:1254
 msgid "Share"
-msgstr "分享"
+msgstr "共享"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:21
 msgid ""
@@ -4287,30 +4271,28 @@ msgstr "与他人共同协作笔记本"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:82
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:33
-#, fuzzy
 msgid "Share from %s (%s)"
-msgstr "%s = %s (%s)"
+msgstr "从 %s (%s) 共享"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:391
 msgid "Share Notebook"
-msgstr "分享笔记本"
+msgstr "共享笔记本"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.ts:6
 msgid "Share notebook..."
-msgstr "分享笔记本..."
+msgstr "共享笔记本..."
 
 #: packages/lib/utils/joplinCloud.ts:215
 msgid "Share permissions"
 msgstr "共享权限"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:107
-#, fuzzy
 msgid "Shares"
-msgstr "分享"
+msgstr "共享"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:357
 msgid "Sharing notebook..."
-msgstr "分享笔记本中..."
+msgstr "共享笔记本中..."
 
 #: packages/app-cli/app/command-help.ts:45
 msgid "Shortcuts are not available in CLI mode."
@@ -4342,9 +4324,8 @@ msgid "Show disabled keys"
 msgstr "显示禁用的密钥"
 
 #: packages/app-desktop/gui/ConfigScreen/FontSearch.tsx:130
-#, fuzzy
 msgid "Show monospace fonts only."
-msgstr "编辑器等宽字体族"
+msgstr "只显示等宽字体。"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:19
 msgid "Show more actions"
@@ -4469,7 +4450,7 @@ msgstr "来源： "
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:398
 msgid "Spacer"
-msgstr ""
+msgstr "间隔"
 
 #: packages/lib/models/Setting.ts:1711
 msgid ""
@@ -4739,7 +4720,7 @@ msgstr "拍照"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:72
 msgid "Task \"%s\" failed with error: %s"
-msgstr ""
+msgstr "任务 \"%s\" 失败，错误: %s"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:32
 msgid "Task list"
@@ -5015,9 +4996,8 @@ msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "当前没有任何笔记。点击 (+) 按钮创建。"
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:9
-#, fuzzy
 msgid "There are no notes in the trash folder."
-msgstr "将笔记移到回收站"
+msgstr "回收站中没有笔记。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:262
 msgid "There are unsaved changes."
@@ -5047,6 +5027,8 @@ msgid ""
 "cause the sync warning to appear, but still aren't synced. To unignore, "
 "click \"retry\"."
 msgstr ""
+"这些条目未能同步。但由于已标记为 \"忽略\"，因此它们不会导致同步警告。要取消忽"
+"略，请单击 \"重试\"。"
 
 #: packages/lib/services/ReportService.ts:187
 msgid ""
@@ -5084,7 +5066,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
 msgid "This attachment does not have OCR data (Status: %s)"
-msgstr ""
+msgstr "此附件没有 OCR 数据 (状态：%s)"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:54
 #: packages/lib/services/ResourceEditWatcher/index.ts:234
@@ -5148,7 +5130,7 @@ msgstr "此笔记没有历史记录"
 
 #: packages/lib/services/plugins/PluginService.ts:516
 msgid "This plugin doesn't support %s."
-msgstr ""
+msgstr "该插件不支持 %s。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:505
 msgid ""
@@ -5167,7 +5149,7 @@ msgstr ""
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:11
 msgid "This subfolder of the trash has no notes."
-msgstr ""
+msgstr "这个回收站中的子文件夹没有笔记。"
 
 #: packages/lib/models/Setting.ts:1295
 msgid ""
@@ -5188,9 +5170,8 @@ msgid "This will permanently delete all items in the trash. Continue?"
 msgstr "这将永久删除回收站中的所有条目。是否继续？"
 
 #: packages/app-cli/app/command-rmnote.ts:40
-#, fuzzy
 msgid "This will permanently delete the note \"%s\". Continue?"
-msgstr "这将永久删除回收站中的所有条目。是否继续？"
+msgstr "这将永久删除笔记 \"%s\"。是否继续？"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:60
@@ -5426,9 +5407,8 @@ msgstr ""
 "出来创建备份。"
 
 #: packages/app-desktop/bridge.ts:417
-#, fuzzy
 msgid "Unknown file type"
-msgstr "未知标记：%s"
+msgstr "未知文件类型"
 
 #: packages/lib/utils/processStartFlags.ts:178
 msgid "Unknown flag: %s"
@@ -5445,17 +5425,17 @@ msgstr "无序列表"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:164
 msgid "Unpublish note"
-msgstr "取消分享笔记"
+msgstr "取消共享笔记"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:167
 msgid "Unshare"
-msgstr "取消分享"
+msgstr "取消共享"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:380
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
-msgstr "取消分享这个笔记本？收件人将无法再访问到它的内容。"
+msgstr "取消共享这个笔记本？收件人将无法再访问到它的内容。"
 
 #: packages/app-mobile/components/screens/Note.tsx:805
 msgid "Unsupported image type: %s"
@@ -5625,7 +5605,7 @@ msgstr "视图"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:141
 msgid "View OCR text"
-msgstr ""
+msgstr "查看 OCR 文本"
 
 #: packages/app-mobile/components/screens/Note.tsx:1099
 msgid "View on map"
@@ -5671,13 +5651,13 @@ msgstr "警告：由于性能原因无法显示所有资源（最多：%s）。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:128
 msgid "We have a system for reporting and removing problematic plugins."
-msgstr ""
+msgstr "我们有一个报告和移除有问题插件的系统。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:126
 msgid ""
 "We mark plugins developed by trusted Joplin community members as "
 "\"recommended\"."
-msgstr ""
+msgstr "我们将值得信赖的 Joplin 社区成员开发的插件标记为 \"推荐\"。"
 
 #: packages/lib/models/Setting.ts:2797 packages/lib/utils/joplinCloud.ts:166
 msgid "Web Clipper"
@@ -5724,9 +5704,8 @@ msgid "Welcome!"
 msgstr "欢迎！"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:112
-#, fuzzy
 msgid "What are plugins?"
-msgstr "是否删除插件 “%s”？"
+msgstr "什么是插件？"
 
 #: packages/lib/models/Setting.ts:1164
 msgid "When creating a new note:"
@@ -5813,7 +5792,7 @@ msgstr "无法连接到 Joplin Cloud 。请检查您的凭据，然后重试。�
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:30
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:545
 msgid "Your account doesn't have access to this feature"
-msgstr ""
+msgstr "您的账户无法使用此功能"
 
 #: packages/app-cli/app/cli-utils.js:160
 msgid "Your choice: "
