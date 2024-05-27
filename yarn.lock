@@ -6597,7 +6597,7 @@ __metadata:
     immer: 7.0.15
     jest: 29.7.0
     jest-environment-jsdom: 29.7.0
-    js-sha512: 0.8.0
+    js-sha512: 0.9.0
     keytar: 7.9.0
     mark.js: 8.11.1
     md5: 2.3.0
@@ -27308,10 +27308,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-sha512@npm:0.8.0":
-  version: 0.8.0
-  resolution: "js-sha512@npm:0.8.0"
-  checksum: 32ca371ebd14c6c5c83360fd8b036cad2211537bef546b199ac8b901917299cab4c68f7f7c26ae72f836bbce0349cb463df9a62cdb4c90e38090fdb4db89ee87
+"js-sha512@npm:0.9.0":
+  version: 0.9.0
+  resolution: "js-sha512@npm:0.9.0"
+  checksum: da00d207d0c66469f816db9176bb6fc13cfacd1606352910cb0d6ca287946d379c2ba260e0d6ca8d7b3f3b94734c284fe8e609e8bd8212b3f7e0e51be276c90c
   languageName: node
   linkType: hard
 
