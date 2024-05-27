@@ -27,6 +27,8 @@ export const runtime = (): CommandRuntime => {
 
 			void Note.updateGeolocation(newNote.id);
 
+			Setting.openDefaultEditor();
+
 			utils.store.dispatch({
 				type: 'NOTE_SELECT',
 				id: newNote.id,

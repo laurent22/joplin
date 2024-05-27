@@ -1,6 +1,8 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
+import Setting from '@joplin/lib/models/Setting';
+
 
 export const declaration: CommandDeclaration = {
 	name: 'openNote',
@@ -14,6 +16,8 @@ export const runtime = (): CommandRuntime => {
 
 			const folder = await Folder.load(note.parent_id);
 			if (!folder) throw new Error(`Note parent notebook does not exist: ${JSON.stringify(note)}`);
+
+			Setting.openDefaultEditor();
 
 			context.dispatch({
 				type: 'FOLDER_AND_NOTE_SELECT',

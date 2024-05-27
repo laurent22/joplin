@@ -7,6 +7,7 @@ import { LayoutItem } from '../ResizableLayout/utils/types';
 import NoteEditor from '../NoteEditor/NoteEditor';
 import NoteContentPropertiesDialog from '../NoteContentPropertiesDialog';
 import ShareNoteDialog from '../ShareNoteDialog';
+import DefaultEditorDialog from '../DefaultEditorDialog/Dialog';
 import CommandService from '@joplin/lib/services/CommandService';
 import { PluginHtmlContents, PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import Sidebar from '../Sidebar/Sidebar';
@@ -113,6 +114,8 @@ interface State {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	noteContentPropertiesDialogOptions: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	DefaultEditorDialogOptions: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	shareNoteDialogOptions: any;
 	shareFolderDialogOptions: ShareFolderDialogOptions;
 }
@@ -160,6 +163,9 @@ class MainScreenComponent extends React.Component<Props, State> {
 			notePropertiesDialogOptions: {},
 			noteContentPropertiesDialogOptions: {},
 			shareNoteDialogOptions: {},
+			DefaultEditorDialogOptions: {
+				visible: Setting.value('openDefaultEditorDialog'),
+			},
 			shareFolderDialogOptions: {
 				visible: false,
 				folderId: '',
@@ -176,6 +182,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		this.noteContentPropertiesDialog_close = this.noteContentPropertiesDialog_close.bind(this);
 		this.shareNoteDialog_close = this.shareNoteDialog_close.bind(this);
 		this.shareFolderDialog_close = this.shareFolderDialog_close.bind(this);
+		this.defaultEditorDialog_close = this.defaultEditorDialog_close.bind(this);
 		this.resizableLayout_resize = this.resizableLayout_resize.bind(this);
 		this.resizableLayout_renderItem = this.resizableLayout_renderItem.bind(this);
 		this.resizableLayout_moveButtonClick = this.resizableLayout_moveButtonClick.bind(this);
@@ -332,6 +339,10 @@ class MainScreenComponent extends React.Component<Props, State> {
 		this.setState({ shareFolderDialogOptions: { visible: false, folderId: '' } });
 	}
 
+	private defaultEditorDialog_close() {
+		this.setState({ DefaultEditorDialogOptions: { visible: false } });
+	}
+
 	public updateMainLayout(layout: LayoutItem) {
 		this.props.dispatch({
 			type: 'MAIN_LAYOUT_SET',
@@ -372,6 +383,13 @@ class MainScreenComponent extends React.Component<Props, State> {
 			this.props.dispatch({
 				type: this.state.noteContentPropertiesDialogOptions && this.state.noteContentPropertiesDialogOptions.visible ? 'VISIBLE_DIALOGS_ADD' : 'VISIBLE_DIALOGS_REMOVE',
 				name: 'noteContentProperties',
+			});
+		}
+
+		if (this.state.DefaultEditorDialogOptions !== prevState.DefaultEditorDialogOptions) {
+			this.props.dispatch({
+				type: this.state.DefaultEditorDialogOptions && this.state.DefaultEditorDialogOptions.visible ? 'VISIBLE_DIALOGS_ADD' : 'VISIBLE_DIALOGS_REMOVE',
+				name: 'defaultEditor',
 			});
 		}
 
@@ -888,6 +906,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		const notePropertiesDialogOptions = this.state.notePropertiesDialogOptions;
 		const noteContentPropertiesDialogOptions = this.state.noteContentPropertiesDialogOptions;
 		const shareNoteDialogOptions = this.state.shareNoteDialogOptions;
+		const DefaultEditorDialogOptions = this.state.DefaultEditorDialogOptions;
 		const shareFolderDialogOptions = this.state.shareFolderDialogOptions;
 
 		const layoutComp = this.props.mainLayout ? (
@@ -910,6 +929,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 				{notePropertiesDialogOptions.visible && <NotePropertiesDialog themeId={this.props.themeId} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
 				{shareNoteDialogOptions.visible && <ShareNoteDialog themeId={this.props.themeId} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}
 				{shareFolderDialogOptions.visible && <ShareFolderDialog themeId={this.props.themeId} folderId={shareFolderDialogOptions.folderId} onClose={this.shareFolderDialog_close} />}
+				{DefaultEditorDialogOptions.visible && <DefaultEditorDialog themeId={this.props.themeId} onClose={this.defaultEditorDialog_close} /* dispatch={this.props.dispatch}*//>}
 
 				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} themeId={this.props.themeId} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />
 

@@ -243,6 +243,9 @@ export default function useFormNote(dependencies: HookDependencies) {
 			await onAfterLoad({ formNote: newFormNote });
 
 			handleAutoFocus(!!n.is_todo);
+
+			Setting.openDefaultEditor();
+
 		}
 
 		void loadNote();

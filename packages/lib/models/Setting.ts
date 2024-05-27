@@ -1190,6 +1190,32 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
+			defaultNoteEditor: {
+				value: 'RTE',
+				type: SettingItemType.String,
+				section: 'note',
+				isEnum: true,
+				public: true,
+				appTypes: [AppType.Desktop],
+				label: () => _('Default editor'),
+				options: () => {
+					return {
+						RTE: _('Rich text editor'),
+						Markdown: _('Markdown editor'),
+					};
+				},
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
+			'openDefaultEditorDialog': {
+				value: true,
+				type: SettingItemType.Bool,
+				public: false,
+				appTypes: [AppType.Desktop],
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
 
 			'notes.listRendererId': {
 				value: 'compact',
@@ -2917,6 +2943,16 @@ class Setting extends BaseModel {
 		// Not translated for now because only used on Welcome notes (which are not translated)
 		if (name === 'cli') return 'CLI';
 		return name[0].toUpperCase() + name.substr(1).toLowerCase();
+	}
+
+	public static openDefaultEditor() {
+		const editor = this.value('defaultNoteEditor');
+		if (editor === 'RTE') {
+			this.setValue('editor.codeView', false);
+		}
+		if (editor === 'Markdown') {
+			this.setValue('editor.codeView', true);
+		}
 	}
 }
 
