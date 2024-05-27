@@ -36,6 +36,8 @@ interface Props {
 
 const useStyles = (compatible: boolean) => {
 	return useMemo(() => {
+		// For the TouchableRipple to work on Android, the card needs a transparent background.
+		const baseCard = { backgroundColor: 'transparent' };
 		return StyleSheet.create({
 			cardContainer: {
 				margin: 0,
@@ -44,8 +46,9 @@ const useStyles = (compatible: boolean) => {
 				borderRadius: 14,
 			},
 			card: !compatible ? {
+				...baseCard,
 				opacity: 0.7,
-			} : { },
+			} : baseCard,
 			content: {
 				gap: 5,
 			},
