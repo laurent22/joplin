@@ -77,8 +77,8 @@ export default class NoteListUtils {
 						const note = await Note.load(noteIds[i]);
 						const newNote = Note.changeNoteType(note, type);
 						if (newNote === note) continue;
-						await Note.save(newNote, { userSideValidation: true });
-						eventManager.emit(EventName.NoteTypeToggle, { noteId: note.id });
+						const savedNote = await Note.save(newNote, { userSideValidation: true });
+						eventManager.emit(EventName.NoteTypeToggle, { noteId: note.id, note: savedNote });
 					}
 				};
 

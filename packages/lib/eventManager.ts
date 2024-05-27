@@ -1,6 +1,8 @@
 const fastDeepEqual = require('fast-deep-equal');
 import { EventEmitter } from 'events';
 import type { State as AppState } from './reducer';
+import { ModelType } from './BaseModel';
+import { NoteEntity } from './services/database/types';
 
 export enum EventName {
 	ResourceCreate = 'resourceCreate',
@@ -20,8 +22,60 @@ export enum EventName {
 	NoteResourceIndexed = 'noteResourceIndexed',
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code from before rule was applied
-export type EventListenerCallback = (...args: any[])=> void;
+interface ItemChangeEvent {
+	itemType: ModelType;
+	itemId: string;
+	eventType: number;
+}
+
+interface SyncCompleteEvent {
+	withErrors: boolean;
+}
+
+interface ResourceChangeEvent {
+	id: string;
+}
+
+interface NoteContentChangeEvent {
+	note: NoteEntity;
+}
+
+interface NoteAlarmTriggerEvent {
+	noteId: string;
+}
+
+interface SettingsChangeEvent {
+	keys: string[];
+}
+
+interface NoteChangeEvent {
+	noteId: string;
+	note: NoteEntity;
+}
+
+type EventArgs = {
+	[EventName.ResourceCreate]: [];
+	[EventName.ResourceChange]: [ResourceChangeEvent];
+	[EventName.SettingsChange]: [SettingsChangeEvent];
+	[EventName.TodoToggle]: [];
+	[EventName.NoteTypeToggle]: [NoteChangeEvent];
+	[EventName.SyncStart]: [];
+	[EventName.SessionEstablished]: [];
+	[EventName.SyncComplete]: [SyncCompleteEvent];
+	[EventName.ItemChange]: [ItemChangeEvent];
+	[EventName.NoteAlarmTrigger]: [NoteAlarmTriggerEvent];
+	[EventName.AlarmChange]: [NoteChangeEvent];
+	[EventName.KeymapChange]: [];
+	[EventName.NoteContentChange]: [NoteContentChangeEvent];
+	[EventName.OcrServiceResourcesProcessed]: [];
+	[EventName.NoteResourceIndexed]: [];
+};
+
+type EventListenerCallbacks = {
+	[n in EventName]: (...args: EventArgs[n])=> void;
+};
+export type EventListenerCallback<T extends EventName> = EventListenerCallbacks[T];
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code from before rule was applied
 type AppStateChangeCallback = (event: { value: any })=> void;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code from before rule was applied
@@ -47,20 +101,19 @@ export class EventManager {
 		this.appStateListeners_ = {};
 	}
 
-	public on(eventName: EventName, callback: EventListenerCallback) {
+	public on<T extends EventName>(eventName: T, callback: EventListenerCallback<T>) {
 		return this.emitter_.on(eventName, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public emit(eventName: EventName, object: any = null) {
-		return this.emitter_.emit(eventName, object);
+	public emit<T extends EventName>(eventName: T, ...args: EventArgs[T]) {
+		return this.emitter_.emit(eventName, ...args);
 	}
 
-	public removeListener(eventName: string, callback: EventListenerCallback) {
+	public removeListener<T extends EventName>(eventName: T, callback: EventListenerCallback<T>) {
 		return this.emitter_.removeListener(eventName, callback);
 	}
 
-	public off(eventName: EventName, callback: EventListenerCallback) {
+	public off<T extends EventName>(eventName: T, callback: EventListenerCallback<T>) {
 		return this.removeListener(eventName, callback);
 	}
 
@@ -69,7 +122,7 @@ export class EventManager {
 	}
 
 	public filterOff(filterName: string, callback: FilterHandler) {
-		return this.removeListener(`filter:${filterName}`, callback);
+		return this.emitter_.off(`filter:${filterName}`, callback);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -154,7 +207,7 @@ export class EventManager {
 		}
 	}
 
-	public once(eventName: string, callback: EventListenerCallback) {
+	public once<T extends EventName>(eventName: T, callback: EventListenerCallback<T>) {
 		return this.emitter_.once(eventName, callback);
 	}
 
