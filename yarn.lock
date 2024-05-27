@@ -28367,29 +28367,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:15.2.0":
-  version: 15.2.0
-  resolution: "lint-staged@npm:15.2.0"
+"lint-staged@npm:15.2.2":
+  version: 15.2.2
+  resolution: "lint-staged@npm:15.2.2"
   dependencies:
     chalk: 5.3.0
     commander: 11.1.0
     debug: 4.3.4
     execa: 8.0.1
     lilconfig: 3.0.0
-    listr2: 8.0.0
+    listr2: 8.0.1
     micromatch: 4.0.5
     pidtree: 0.6.0
     string-argv: 0.3.2
     yaml: 2.3.4
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 4fb178b8d3ff454f7874697dfbd41017630f61a06296d12ac9dfd578d078c70aff7108b67fab38af94896ef2740a1e7541c1512d0d3c688ed90e6c3af3530f0d
+  checksum: 031718ad3f839475fb1d41bda34bab4330f25814175808169daa2686ff026e5a667a25c95fdf3cd46dac72f9af2c98852565bb62d920992f5e2d3f730c279760
   languageName: node
   linkType: hard
 
-"listr2@npm:8.0.0":
-  version: 8.0.0
-  resolution: "listr2@npm:8.0.0"
+"listr2@npm:8.0.1":
+  version: 8.0.1
+  resolution: "listr2@npm:8.0.1"
   dependencies:
     cli-truncate: ^4.0.0
     colorette: ^2.0.20
@@ -28397,7 +28397,7 @@ __metadata:
     log-update: ^6.0.0
     rfdc: ^1.3.0
     wrap-ansi: ^9.0.0
-  checksum: 5cb110a710d14488c71d2207fc5141256abb1f21cbe5ebc12177ae640f94e040a1ef8c031b70ff9f24c4a8fa57c0825a54b534e52bdfaffc122a81082faae8ed
+  checksum: 4dfeabfa037b3981d0edbf30789971ba727ba4cfcc13051ceaff7a1b3d26509ef2d946015c65c600b0775ec9d1ef58a81937d94c9c03de464b654f429cc7c3ed
   languageName: node
   linkType: hard
 
@@ -37709,7 +37709,7 @@ __metadata:
     http-server: 14.1.1
     husky: 3.1.0
     lerna: 3.22.1
-    lint-staged: 15.2.0
+    lint-staged: 15.2.2
     madge: 6.1.0
     node-gyp: 9.4.1
     nodemon: 3.0.3
