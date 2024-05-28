@@ -2577,6 +2577,10 @@ class Setting extends BaseModel {
 		const keys = this.keys();
 
 		const valuesForFile: SettingValues = {};
+		for (const key of keys) {
+			// undefined => Delete from settings JSON file.
+			valuesForFile[key] = undefined;
+		}
 
 		const queries = [];
 		queries.push(`DELETE FROM settings WHERE key IN ("${keys.join('","')}")`);

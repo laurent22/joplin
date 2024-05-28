@@ -165,6 +165,10 @@ const useEditorControl = (
 				return bodyControl.execCommand(command, ...args);
 			},
 
+			focus() {
+				void bodyControl.execCommand(EditorCommandType.Focus);
+			},
+
 			undo() {
 				bodyControl.undo();
 			},
