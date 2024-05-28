@@ -429,13 +429,16 @@ export const htmlDocIsImageOnly = (html: string) => {
 	let nonImageFound = false;
 	let textFound = false;
 
+	// Ignore these tags that do not result in any Markdown (or HTML) code being generated.
+	const ignoredTags = ['meta', 'head', 'body', 'html'];
+
 	const parser = new htmlparser2.Parser({
 
 		onopentag: (name: string) => {
 			if (name === 'img') {
 				imageCount++;
-			} else if (['meta'].includes(name)) {
-				// We allow these tags since they don't print anything
+			} else if (ignoredTags.includes(name)) {
+				// Skip
 			} else {
 				nonImageFound = true;
 			}
