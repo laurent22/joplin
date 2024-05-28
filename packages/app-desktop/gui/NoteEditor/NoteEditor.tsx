@@ -211,7 +211,7 @@ function NoteEditor(props: NoteEditorProps) {
 			setFormNote(newNote);
 			void scheduleSaveNote(newNote);
 		}
-	}, [handleProvisionalFlag, scheduleNoteListResort, formNote, setFormNote, isNewNote, titleHasBeenManuallyChanged, scheduleSaveNote]);
+	}, [handleProvisionalFlag, formNote, setFormNote, isNewNote, titleHasBeenManuallyChanged, scheduleNoteListResort, scheduleSaveNote]);
 
 	useWindowCommandHandler({
 		dispatch: props.dispatch,
