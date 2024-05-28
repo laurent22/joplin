@@ -51,6 +51,7 @@ import getPluginSettingValue from '@joplin/lib/services/plugins/utils/getPluginS
 import { MarkupLanguage } from '@joplin/renderer';
 import useScrollWhenReadyOptions from './utils/useScrollWhenReadyOptions';
 import useScheduleSaveCallbacks from './utils/useScheduleSaveCallbacks';
+const debounce = require('debounce');
 
 const commands = [
 	require('./commands/showRevisions'),
@@ -158,6 +159,13 @@ function NoteEditor(props: NoteEditorProps) {
 		}
 	}, [props.isProvisional, formNote.id, props.dispatch]);
 
+	const scheduleNoteListResort = useMemo(() => {
+		return debounce(() => {
+			// Although the note list will update automatically, it may take some time.
+			// This forces a faster refresh.
+			props.dispatch({ type: 'NOTE_SORT' });
+		}, 300);
+	}, [props.dispatch]);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onFieldChange = useCallback((field: string, value: any, changeId = 0) => {
@@ -188,6 +196,7 @@ function NoteEditor(props: NoteEditorProps) {
 
 		if (field === 'title') {
 			setTitleHasBeenManuallyChanged(true);
+			scheduleNoteListResort();
 		}
 
 		if (isNewNote && !titleHasBeenManuallyChanged && field === 'body') {
@@ -202,7 +211,7 @@ function NoteEditor(props: NoteEditorProps) {
 			setFormNote(newNote);
 			void scheduleSaveNote(newNote);
 		}
-	}, [handleProvisionalFlag, formNote, setFormNote, isNewNote, titleHasBeenManuallyChanged, scheduleSaveNote]);
+	}, [handleProvisionalFlag, scheduleNoteListResort, formNote, setFormNote, isNewNote, titleHasBeenManuallyChanged, scheduleSaveNote]);
 
 	useWindowCommandHandler({
 		dispatch: props.dispatch,
