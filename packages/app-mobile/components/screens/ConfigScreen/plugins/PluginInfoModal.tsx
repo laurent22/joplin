@@ -81,8 +81,10 @@ interface EnabledSwitchProps {
 }
 
 const EnabledSwitch: React.FC<EnabledSwitchProps> = props => {
-	const onChange = useCallback(() => {
-		props.onToggle({ item: props.item });
+	const onChange = useCallback((value: boolean) => {
+		if (value !== props.item.enabled) {
+			props.onToggle({ item: props.item });
+		}
 	}, [props.item, props.onToggle]);
 
 	if (!props.item?.installed || props.item.deleted) {
@@ -90,8 +92,8 @@ const EnabledSwitch: React.FC<EnabledSwitchProps> = props => {
 	}
 
 	return <View style={styles.enabledSwitchContainer}>
-		<Text>{_('Enabled')}</Text>
-		<Switch value={props.item.enabled} onChange={onChange} />
+		<Text nativeID='enabledLabel'>{_('Enabled')}</Text>
+		<Switch accessibilityLabelledBy='enabledLabel' value={props.item.enabled} onValueChange={onChange} />
 	</View>;
 };
 

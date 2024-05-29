@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createTempDir, mockMobilePlatform, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 
-import { act, render, screen, userEvent } from '@testing-library/react-native';
+import { act, fireEvent, render, screen, userEvent, waitFor } from '@testing-library/react-native';
 import '@testing-library/react-native/extend-expect';
 
 import PluginService, { PluginSettings, defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
@@ -15,6 +15,7 @@ import { AppState } from '../../../../utils/types';
 import createMockReduxStore from '../../../../utils/testing/createMockReduxStore';
 import WrappedPluginStates from './testUtils/WrappedPluginStates';
 import mockRepositoryApiConstructor from './testUtils/mockRepositoryApiConstructor';
+import Setting from '@joplin/lib/models/Setting';
 
 
 let reduxStore: Store<AppState> = null;
@@ -167,6 +168,44 @@ describe('PluginStates.installed', () => {
 		await act(() => PluginService.instance().uninstallPlugin(testPluginId1));
 		expect(await screen.findByText(/^A test plugin/)).toBeVisible();
 		expect(screen.queryByText(/^ABC Sheet Music/)).toBeNull();
+
+		wrapper.unmount();
+	});
+
+	it('should support disabling plugins from the info modal', async () => {
+		const abcPluginId = 'org.joplinapp.plugins.AbcSheetMusic';
+		const defaultPluginSettings: PluginSettings = { [abcPluginId]: defaultPluginSetting() };
+
+		await loadMockPlugin(abcPluginId, 'ABC Sheet Music', '1.2.3', defaultPluginSettings);
+		expect(PluginService.instance().plugins[abcPluginId]).toBeTruthy();
+
+		const wrapper = render(
+			<WrappedPluginStates
+				initialPluginSettings={defaultPluginSettings}
+				store={reduxStore}
+			/>,
+		);
+		await showInstalledTab();
+
+		const card = await screen.findByText('ABC Sheet Music');
+		const user = userEvent.setup();
+
+		// Open the plugin dialog
+		await user.press(card);
+
+		const enabledSwitch = await screen.findByLabelText('Enabled');
+		expect(enabledSwitch).toBeVisible();
+
+		// Use fireEvent instead of userEvent.press -- .press doesn't seem to work
+		// for Switches. Similar issue: https://github.com/callstack/react-native-testing-library/issues/518.
+		fireEvent(enabledSwitch, 'valueChange', false);
+
+		// The plugin should now be disabled
+		await waitFor(() => {
+			expect(Setting.value('plugins.states')).toMatchObject({
+				[abcPluginId]: { enabled: false },
+			});
+		});
 
 		wrapper.unmount();
 	});

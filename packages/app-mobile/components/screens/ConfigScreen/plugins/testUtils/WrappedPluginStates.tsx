@@ -24,6 +24,7 @@ const PluginStatesWrapper = (props: WrapperProps) => {
 
 	const updatePluginStates = useCallback((newStates: PluginSettings) => {
 		setPluginSettings(newStates);
+		Setting.setValue('plugins.states', newStates);
 	}, []);
 
 	return (
