@@ -131,7 +131,7 @@ function extractAuthor(author: unknown): string {
 		return extractAuthor(author[0]);
 	} else if (typeof(author) === 'object') {
 		if ('name' in author) {
-			return author['name'] as string;
+			return (author as { name: string }).name;
 		}
 	}
 
