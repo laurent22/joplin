@@ -6,13 +6,15 @@ import PluginBox from './PluginBox';
 import useUpdateState from './utils/useUpdateState';
 import { PluginCallback, PluginCallbacks } from './utils/usePluginCallbacks';
 import usePluginItem from './utils/usePluginItem';
+import { PluginStatusRecord } from '../types';
 
 interface Props {
-	pluginId: string;
 	themeId: number;
+
+	pluginId: string;
 	pluginSettings: PluginSettings;
-	updatablePluginIds: Record<string, boolean>;
-	updatingPluginIds: Record<string, boolean>;
+	updatablePluginIds: PluginStatusRecord;
+	updatingPluginIds: PluginStatusRecord;
 	showInstalledChip: boolean;
 
 	callbacks: PluginCallbacks;

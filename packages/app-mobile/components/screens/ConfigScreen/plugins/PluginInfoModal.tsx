@@ -17,18 +17,21 @@ import usePluginItem from './utils/usePluginItem';
 import InstallButton from './buttons/InstallButton';
 import { InstallState } from './PluginBox';
 import PluginChips from './PluginBox/PluginChips';
+import { PluginStatusRecord } from '../types';
 
 interface Props {
 	themeId: number;
-	initialItem: PluginItem|null;
-	updatablePluginIds: Record<string, boolean>;
-	updatingPluginIds: Record<string, boolean>;
-	installingPluginIds: Record<string, boolean>;
+
 	visible: boolean;
-	pluginSettings: PluginSettings;
-	onModalDismiss: ()=> void;
+	item: PluginItem|null;
+
+	updatablePluginIds: PluginStatusRecord;
+	updatingPluginIds: PluginStatusRecord;
+	installingPluginIds: PluginStatusRecord;
 
 	pluginCallbacks: PluginCallbacks;
+	pluginSettings: PluginSettings;
+	onModalDismiss: ()=> void;
 }
 
 const styles = (() => {
@@ -93,8 +96,9 @@ const EnabledSwitch: React.FC<EnabledSwitchProps> = props => {
 };
 
 const PluginInfoModalContent: React.FC<Props> = props => {
-	const pluginId = props.initialItem.manifest.id;
-	const item = usePluginItem(pluginId, props.pluginSettings, props.initialItem);
+	const initialItem = props.item;
+	const pluginId = initialItem.manifest.id;
+	const item = usePluginItem(pluginId, props.pluginSettings, initialItem);
 
 	const manifest = item.manifest;
 	const isCompatible = useMemo(() => {
@@ -250,7 +254,7 @@ const PluginInfoModal: React.FC<Props> = props => {
 				size={DialogSize.Small}
 				onDismiss={props.onModalDismiss}
 			>
-				{ props.initialItem ? <PluginInfoModalContent {...props}/> : null }
+				{ props.item ? <PluginInfoModalContent {...props}/> : null }
 			</DismissibleDialog>
 		</Portal>
 	);

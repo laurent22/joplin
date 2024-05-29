@@ -210,7 +210,7 @@ const PluginStates: React.FC<Props> = props => {
 				updatablePluginIds={updatablePluginIds}
 				updatingPluginIds={updatingPluginIds}
 				installingPluginIds={installingPluginIds}
-				initialItem={shownInDialogItem}
+				item={shownInDialogItem}
 				visible={!!shownInDialogItem}
 				onModalDismiss={onPluginDialogClosed}
 				pluginCallbacks={pluginCallbacks}
