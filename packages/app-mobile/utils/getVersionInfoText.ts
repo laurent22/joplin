@@ -15,9 +15,9 @@ const getWebViewVersion = (): string|null => {
 
 const getOSVersion = (): string => {
 	if (Platform.OS === 'android') {
-		return `API ${Platform.Version}`;
+		return _('Android version: %s', `API ${Platform.Version}`);
 	} else {
-		return Platform.Version as string;
+		return _('iOS version: %s', Platform.Version);
 	}
 };
 
@@ -29,7 +29,7 @@ const getVersionInfoText = (pluginStates: PluginSettings) => {
 		appInfo.body,
 		'',
 		webViewVersion ? _('WebView version: %s', webViewVersion) : '',
-		_('OS version: %s', getOSVersion()),
+		getOSVersion(),
 		_('FTS enabled: %d', Setting.value('db.ftsEnabled')),
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		_('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0),
