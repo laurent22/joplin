@@ -17,7 +17,7 @@ import Note from '@joplin/lib/models/Note';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Resource from '@joplin/lib/models/Resource';
 import Folder from '@joplin/lib/models/Folder';
-const Clipboard = require('@react-native-community/clipboard').default;
+const Clipboard = require('@react-native-clipboard/clipboard').default;
 const md5 = require('md5');
 const { BackButtonService } = require('../../services/back-button.js');
 import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';
@@ -192,6 +192,8 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 			voiceTypingDialogShown: false,
 		};
+
+		this.titleTextFieldRef = React.createRef();
 
 		this.saveActionQueues_ = {};
 
@@ -538,7 +540,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	public componentDidUpdate(prevProps: any, prevState: any) {
 		if (this.doFocusUpdate_) {
 			this.doFocusUpdate_ = false;
-			this.focusUpdate();
+			this.scheduleFocusUpdate();
 		}
 
 		if (prevProps.showSideMenu !== this.props.showSideMenu && this.props.showSideMenu) {
@@ -1354,27 +1356,36 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	}
 
 	public scheduleFocusUpdate() {
-		if (this.focusUpdateIID_) shim.clearTimeout(this.focusUpdateIID_);
+		if (this.focusUpdateIID_) shim.clearInterval(this.focusUpdateIID_);
 
-		this.focusUpdateIID_ = shim.setTimeout(() => {
-			this.focusUpdateIID_ = null;
-			this.focusUpdate();
-		}, 100);
-	}
+		const startTime = Date.now();
 
-	public focusUpdate() {
-		if (this.focusUpdateIID_) shim.clearTimeout(this.focusUpdateIID_);
-		this.focusUpdateIID_ = null;
+		this.focusUpdateIID_ = shim.setInterval(() => {
+			if (!this.state.note) return;
 
-		if (!this.state.note) return;
-		let fieldToFocus = this.state.note.is_todo ? 'title' : 'body';
-		if (this.state.mode === 'view') fieldToFocus = '';
+			let fieldToFocus = this.state.note.is_todo ? 'title' : 'body';
+			if (this.state.mode === 'view') fieldToFocus = '';
 
-		// Avoid writing `this.titleTextFieldRef.current` -- titleTextFieldRef may
-		// be undefined.
-		if (fieldToFocus === 'title' && this.titleTextFieldRef?.current) {
-			focus('Note::focusUpdate', this.titleTextFieldRef.current);
-		}
+			let done = false;
+
+			if (fieldToFocus === 'title' && this.titleTextFieldRef?.current) {
+				done = true;
+				focus('Note::focusUpdate::title', this.titleTextFieldRef.current);
+			} else if (fieldToFocus === 'body' && this.editorRef?.current) {
+				done = true;
+				focus('Note::focusUpdate::body', this.editorRef.current);
+			}
+
+			if (Date.now() - startTime > 5000) {
+				logger.warn(`Timeout while trying to set focus on ${fieldToFocus}`);
+				done = true;
+			}
+
+			if (done) {
+				shim.clearInterval(this.focusUpdateIID_);
+				this.focusUpdateIID_ = null;
+			}
+		}, 50);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

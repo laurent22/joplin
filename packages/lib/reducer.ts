@@ -1336,6 +1336,12 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 		handleHistory(draft, action);
 	}
 
+	if (action.type === 'SETTING_UPDATE_ALL' || (action.type === 'SETTING_UPDATE_ONE' && action.key === 'activeFolderId')) {
+		// To allow creating notes when opening the app with all notes and/or tags,
+		// a "last selected folder ID" needs to be set.
+		draft.selectedFolderId ??= draft.settings.activeFolderId;
+	}
+
 	for (const additionalReducer of additionalReducers) {
 		additionalReducer.reducer(draft, action);
 	}

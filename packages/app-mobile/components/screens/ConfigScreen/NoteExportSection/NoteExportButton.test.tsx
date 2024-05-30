@@ -45,5 +45,7 @@ describe('NoteExportButton', () => {
 
 		// With the default folder setup, there should be no warnings
 		expect(view.queryByText(/Warnings/g)).toBeNull();
+
+		view.unmount();
 	});
 });

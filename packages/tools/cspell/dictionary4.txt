@@ -110,3 +110,5 @@ ENOTFOUND
 unsynced
 filesync
 Scaleway
+Inkscape
+Ionicon

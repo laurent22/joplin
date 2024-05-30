@@ -31,7 +31,7 @@ function trimQuotes(rawOutput: string): string {
 		if (index >= 0) {
 			// The plus 2 eats the : and space characters
 			const start = line.substring(0, index + 2);
-			//  The plus 3 eats the quote character
+			// The plus 3 eats the quote character
 			const end = line.substring(index + 3, line.length - 1);
 			return start + end;
 		}
@@ -137,7 +137,7 @@ function extractAuthor(author: unknown): string {
 		return extractAuthor(author[0]);
 	} else if (typeof(author) === 'object') {
 		if ('name' in author) {
-			return author['name'] as string;
+			return (author as { name: string }).name;
 		}
 	}
 

@@ -302,6 +302,8 @@ packages/app-desktop/gui/NoteEditor/utils/useMarkupToHtml.js
 packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js
 packages/app-desktop/gui/NoteEditor/utils/useNoteSearchBar.js
 packages/app-desktop/gui/NoteEditor/utils/usePluginServiceRegistration.js
+packages/app-desktop/gui/NoteEditor/utils/useScheduleSaveCallbacks.js
+packages/app-desktop/gui/NoteEditor/utils/useScrollWhenReadyOptions.js
 packages/app-desktop/gui/NoteEditor/utils/useSearchMarkers.js
 packages/app-desktop/gui/NoteEditor/utils/useWindowCommandHandler.js
 packages/app-desktop/gui/NoteList/NoteList2.js
@@ -488,13 +490,13 @@ packages/app-mobile/commands/util/goToNote.js
 packages/app-mobile/components/ActionButton.js
 packages/app-mobile/components/BackButtonDialogBox.js
 packages/app-mobile/components/CameraView.js
-packages/app-mobile/components/CustomButton.js
 packages/app-mobile/components/DismissibleDialog.js
 packages/app-mobile/components/Dropdown.test.js
 packages/app-mobile/components/Dropdown.js
 packages/app-mobile/components/ExtendedWebView.js
 packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/Icon.js
+packages/app-mobile/components/IconButton.js
 packages/app-mobile/components/Modal.js
 packages/app-mobile/components/ModalDialog.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
@@ -1289,6 +1291,7 @@ packages/renderer/MdToHtml/rules/mermaid.js
 packages/renderer/MdToHtml/rules/sanitize_html.js
 packages/renderer/MdToHtml/rules/source_map.js
 packages/renderer/MdToHtml/rules/tableHorizontallyScrollable.js
+packages/renderer/MdToHtml/rules/utils/defaultRule.js
 packages/renderer/MdToHtml/setupLinkify.js
 packages/renderer/MdToHtml/validateLinks.js
 packages/renderer/assetsToHeaders.js

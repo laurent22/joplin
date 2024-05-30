@@ -7,7 +7,7 @@ import { CreateFromPdfOptions, Implementation as ImagingImplementation } from '@
 import RNVersionInfo from 'react-native-version-info';
 import { _ } from '@joplin/lib/locale';
 import shim from '@joplin/lib/shim';
-import Clipboard from '@react-native-community/clipboard';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 
 
