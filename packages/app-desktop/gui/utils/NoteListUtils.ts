@@ -1,6 +1,5 @@
 import { utils as pluginUtils, PluginStates } from '@joplin/lib/services/plugins/reducer';
 import CommandService from '@joplin/lib/services/CommandService';
-import eventManager, { EventName } from '@joplin/lib/eventManager';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import InteropServiceHelper from '../../InteropServiceHelper';
@@ -77,8 +76,7 @@ export default class NoteListUtils {
 						const note = await Note.load(noteIds[i]);
 						const newNote = Note.changeNoteType(note, type);
 						if (newNote === note) continue;
-						const savedNote = await Note.save(newNote, { userSideValidation: true });
-						eventManager.emit(EventName.NoteTypeToggle, { noteId: note.id, note: savedNote });
+						await Note.save(newNote, { userSideValidation: true });
 					}
 				};
 
