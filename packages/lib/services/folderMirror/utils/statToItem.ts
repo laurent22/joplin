@@ -61,7 +61,7 @@ const statToItem = async (baseFolderPath: string, stat: Stat, remoteTree: ItemTr
 			return null;
 		}
 
-		const metadata = loadResourceMetadata(join(baseFolderPath, path));
+		const metadata = await loadResourceMetadata(join(baseFolderPath, path));
 
 		result = {
 			...base,

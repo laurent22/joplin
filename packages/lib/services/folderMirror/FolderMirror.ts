@@ -20,7 +20,7 @@ import statToItem from './utils/statToItem';
 import fillRemoteTree from './utils/fillRemoteTree';
 import Resource from '../../models/Resource';
 import { resourceMetadataExtension, resourcesDirId, resourcesDirItem, resourcesDirName } from './constants';
-import getResourceMetadataYml from './utils/getResourceMetadataYml';
+import resourceToMetadataYml from './utils/resourceToMetadataYml';
 const { ALL_NOTES_FILTER_ID } = require('../../reserved-ids.js');
 
 
@@ -141,7 +141,7 @@ const getNoteMd = async (note: NoteEntity) => {
 	delete toSave.updated_time;
 	delete toSave.created_time;
 
-	return serialize(toSave, tagTitles, { includeId: true });
+	return serialize(toSave, tagTitles, { includeId: true, replaceResourceLinks: false });
 };
 
 enum FolderMirrorEventType {
@@ -176,10 +176,9 @@ export default class {
 
 		const baseItem = { id: this.baseFolderId, type_: ModelType.Folder };
 
+		this.remoteLinkTracker_ = new LinkTracker(this.onLinkTrackerItemUpdate_);
 		this.localTree_ = new ItemTree(baseItem);
-
-		this.remoteLinkTracker_ = new LinkTracker(LinkType.PathLink, this.onLinkTrackerItemUpdate_);
-		this.remoteTree_ = new ItemTree(baseItem, this.remoteLinkTracker_);
+		this.remoteTree_ = new ItemTree(baseItem, this.remoteLinkTracker_.toEventHandlers(LinkType.PathLink));
 
 		this.actionQueue_ = new AsyncActionQueue();
 		this.actionQueue_.setCanSkipTaskHandler((current, next) => {
@@ -232,7 +231,13 @@ export default class {
 				delete toSave.parent_id;
 				delete toSave.deleted_time;
 
+				// The file has also been changed. TODO: This isn't always true.
+				toSave.blob_updated_time = item.updated_time;
+
 				result = await Resource.save(toSave, { isNew }) as ResourceItem;
+
+				const path = Resource.fullPath(result);
+				await shim.fsDriver().copy(join(baseFilePath, event.path), path);
 
 				// Fill properties that don't exist in the database (but are present for
 				// compatibility).
@@ -310,10 +315,14 @@ export default class {
 					throw new Error('Unsupported path. The .metadata.yml extension is reserved for resource metadata');
 				}
 				const internalSourcePath = Resource.fullPath(item, false);
-				debugLogger.debug('remote.update/copy resource', path, 'from', internalSourcePath, 'to', fullPath);
-				await shim.fsDriver().copy(internalSourcePath, fullPath);
+				debugLogger.debug('remote.update/copy resource', path, 'from', internalSourcePath, 'to', fullPath, 'id', item);
+				if (!await shim.fsDriver().exists(internalSourcePath)) {
+					debugLogger.warn(`Unable to copy resource from internal for item ${item.id}.`);
+				} else {
+					await shim.fsDriver().copy(internalSourcePath, fullPath);
+				}
 
-				const metadata = getResourceMetadataYml(item);
+				const metadata = resourceToMetadataYml(item);
 				await shim.fsDriver().writeFile(`${fullPath}${resourceMetadataExtension}`, metadata, 'utf8');
 			} else {
 				throw new Error(`Cannot handle item with type ${item.type_}`);
@@ -438,18 +447,21 @@ export default class {
 			const noteIdToItemPath = makeItemPaths(basePath, childNotes);
 
 			for (const note of childNotes) {
-				const notePath = noteIdToItemPath.get(note.id);
-				if (!note.deleted_time) {
-					await this.localTree_.addItemAt(notePath, note, noOpActionListeners);
-				}
-
+				// Add resources first, so that their links get processed first.
 				const resourceIds = await Note.linkedResourceIds(note.body ?? '');
 				for (const resourceId of resourceIds) {
+					if (this.localTree_.hasId(resourceId)) continue;
+
 					const resourceFields = ['id', 'title', 'updated_time', 'mime', 'filename', 'file_extension'];
 					const resource: ResourceItem = { ...await Resource.load(resourceId, { fields: resourceFields }) };
 					resource.parent_id = resourcesDirId;
 					resource.deleted_time = 0;
 					await this.localTree_.addItemTo(resourcesDirName, resource, noOpActionListeners);
+				}
+
+				const notePath = noteIdToItemPath.get(note.id);
+				if (!note.deleted_time) {
+					await this.localTree_.addItemAt(notePath, note, noOpActionListeners);
 				}
 			}
 		};
@@ -498,12 +510,14 @@ export default class {
 		if (this.localTree_.hasId(item.id)) {
 			let localItem = this.localTree_.getAtId(item.id);
 
-			// Ensure that all links are database links
+			// Ensure that all links are database links so we can do a comparison
 			if (localItem.type_ === ModelType.Note) {
 				const path = this.localTree_.pathFromId(item.id);
 				const body = (localItem as NoteEntity).body;
 				localItem = {
 					...localItem,
+					// Use remoteLinkTracker_ -- its paths are more likely to be accurate to
+					// the file system after a full sync has completed.
 					body: this.remoteLinkTracker_.convertLinkTypes(LinkType.IdLink, body, path),
 				};
 			}

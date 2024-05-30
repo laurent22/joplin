@@ -4,7 +4,7 @@ import { normalize } from 'path';
 import { ModelType } from '../../BaseModel';
 import { friendlySafeFilename } from '../../path-utils';
 import time from '../../time';
-import LinkTracker from './LinkTracker';
+import { LinkTrackerWrapper } from './LinkTracker';
 
 export interface AddOrUpdateEvent {
 	path: string;
@@ -51,7 +51,7 @@ export default class ItemTree {
 	private pathToItem_: Map<string, FolderItem> = new Map();
 	private idToPath_: Map<string, string> = new Map();
 
-	public constructor(private baseItem: FolderItem, private linkTracker?: LinkTracker) {
+	public constructor(private baseItem: FolderItem, private linkTracker?: LinkTrackerWrapper) {
 		this.linkTracker?.setTree(this);
 		this.resetData();
 	}

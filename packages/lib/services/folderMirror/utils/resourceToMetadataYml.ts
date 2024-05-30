@@ -1,7 +1,7 @@
 import { ResourceEntity } from '../../database/types';
 import * as yaml from 'js-yaml';
 
-const getResourceMetadataYml = (resource: ResourceEntity) => {
+const resourceToMetadataYml = (resource: ResourceEntity) => {
 	const result: Partial<ResourceEntity> = {};
 
 	result.id = resource.id;
@@ -15,4 +15,4 @@ const getResourceMetadataYml = (resource: ResourceEntity) => {
 	return yaml.dump(result);
 };
 
-export default getResourceMetadataYml;
+export default resourceToMetadataYml;

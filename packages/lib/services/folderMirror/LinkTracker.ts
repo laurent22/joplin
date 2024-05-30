@@ -10,6 +10,13 @@ export enum LinkType {
 	IdLink = 'idLink',
 }
 
+export type LinkTrackerWrapper = {
+	onItemUpdate(item: FolderItem): void;
+	onItemMove(item: FolderItem, fromPath: string, toPath: string): Promise<void>;
+	reset(): void;
+	setTree(tree: ItemTree): void;
+};
+
 // TODO: Some of these are taken from urlUtils.js
 const idLinkRegexes = [
 	// Example: [foo](:/12345678901234567890123456789012)
@@ -97,7 +104,6 @@ export default class LinkTracker {
 	private tree: ItemTree;
 
 	public constructor(
-		private linkType: LinkType,
 		private onNoteUpdate: OnNoteUpdateCallback,
 	) {
 	}
@@ -132,7 +138,7 @@ export default class LinkTracker {
 		return null;
 	}
 
-	public onItemUpdate(item: FolderItem) {
+	public onItemUpdate(linkType: LinkType, item: FolderItem) {
 		const isNote = item.type_ === ModelType.Note;
 		const isResource = item.type_ === ModelType.Resource;
 		if (!isNote && !isResource) return;
@@ -149,14 +155,8 @@ export default class LinkTracker {
 			const note = (item as NoteEntity);
 			const body = note.body;
 
-			// Always include ID links. This handles a case where links would otherwise fail to resolve:
-			// - Note A is added from the database. It links to a resource.
-			//   - The resource hasn't been added yet, so the link fails to resolve. It's link stays
-			//     unconverted and is added to the tree as an **ID link**.
-			//   - *After* the links are converted, onItemUpdate is called with note A. Note A still uses
-			//     an ID link, which we check for below:
-			let links = getIdLinks(body);
-			if (this.linkType === LinkType.PathLink) {
+			let links = linkType === LinkType.PathLink ? getPathLinks(body) : getIdLinks(body);
+			if (linkType === LinkType.PathLink) {
 				debugLogger.debug('including path links');
 				links = links.concat(getPathLinks(body));
 			}
@@ -199,9 +199,9 @@ export default class LinkTracker {
 		debugLogger.groupEnd();
 	}
 
-	public async onItemMove(item: FolderItem, fromPath: string, toPath: string) {
+	public async onItemMove(linkType: LinkType, item: FolderItem, fromPath: string, toPath: string) {
 		// Updating links on item move is only necessary for path links
-		if (this.linkType === LinkType.IdLink) return;
+		if (linkType === LinkType.IdLink) return;
 
 		const linkedItems = this.linkTargetIdToSource_.get(item.id);
 		if (!linkedItems) {
@@ -252,9 +252,19 @@ export default class LinkTracker {
 		debugLogger.groupEnd();
 	}
 
+	public toEventHandlers(linkType: LinkType): LinkTrackerWrapper {
+		return {
+			onItemUpdate: item => this.onItemUpdate(linkType, item),
+			onItemMove: (item, fromPath, toPath) => this.onItemMove(linkType, item, fromPath, toPath),
+			reset: () => this.reset(),
+			setTree: (tree) => this.setTree(tree),
+		};
+	}
+
 	public convertLinkTypes(toType: LinkType, text: string, fromPath: string) {
 		debugLogger.debug('convert link types to', toType, 'at', fromPath);
 		debugLogger.group();
+		const originalText = text;
 
 		let otherLinkTypeRegexes;
 		if (toType === LinkType.IdLink) {
@@ -275,7 +285,7 @@ export default class LinkTracker {
 
 				// Can't resolve -- don't replace.
 				if (!targetId) {
-					debugLogger.debug('can\'t resolve:', url);
+					debugLogger.debug('found link but can\'t resolve:', url);
 					return fullMatch;
 				}
 
@@ -289,14 +299,18 @@ export default class LinkTracker {
 					const exhaustivenessCheck: never = toType;
 					return exhaustivenessCheck;
 				}
-				debugLogger.debug('new', url, '->', newUrl);
+				debugLogger.debug('replace', url, '->', newUrl);
 
 				return fullMatch.replace(url, newUrl);
 			});
 			debugLogger.debug('scanned', text, 'with', regex);
 		}
 
+		if (text !== originalText) {
+			debugLogger.debug('text changed', originalText, '->', text);
+		}
 		debugLogger.groupEnd();
+
 		return text;
 	}
 }

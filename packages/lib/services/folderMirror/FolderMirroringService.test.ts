@@ -12,6 +12,7 @@ import createFilesFromPathRecord from '../../utils/pathRecord/createFilesFromPat
 import { NoteEntity } from '../database/types';
 import { ModelType } from '../../BaseModel';
 import verifyDirectoryMatches from '../../utils/pathRecord/verifyDirectoryMatches';
+import Resource from '../../models/Resource';
 
 type ShouldMatchItemCallback = (item: NoteEntity)=> boolean;
 const waitForNoteChange = (itemMatcher?: ShouldMatchItemCallback) => {
@@ -567,5 +568,24 @@ describe('FolderMirroringService', () => {
 		// 	'folder/note.md': `---\ntitle: note\nid: ${note.id}\n---\n\nTest`,
 		// 	'folder/.folder.yml': `title: folder\nid: ${folder.id}\n`,
 		// });
+	});
+
+	test('should add new local resources from disc', async () => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, {
+			'folder/.folder.yml': 'title: folder\nid: invalid',
+			'folder/note.md': '---\ntitle: note\nid: e393d2f435dc4eae8f4dc690055c7960\n---\n\n[resource](../resources/a.txt)',
+			'resources/a.txt': 'Test!',
+		});
+
+		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
+
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		const note = await Note.loadByTitle('note');
+		const resource = await Resource.loadByTitle('a.txt');
+
+		expect(note.body).toBe(`[resource](:/${resource.id})`);
 	});
 });

@@ -73,7 +73,7 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 			tagTitles = tagIds.map((id: string) => context.tagTitles[id]).filter(e => !!e).sort();
 		}
 
-		return serialize(modNote, tagTitles, { includeId: false });
+		return serialize(modNote, tagTitles, { includeId: false, replaceResourceLinks: true });
 	}
 
 }

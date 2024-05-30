@@ -42,6 +42,7 @@ function trimQuotes(rawOutput: string): string {
 
 interface NoteToFrontMatterOptions {
 	includeId: boolean;
+	replaceResourceLinks: boolean;
 }
 
 export const noteToFrontMatter = (note: NoteEntity, tagTitles: string[], options: NoteToFrontMatterOptions) => {
@@ -101,7 +102,10 @@ export const noteToFrontMatter = (note: NoteEntity, tagTitles: string[], options
 };
 
 export const serialize = async (modNote: NoteEntity, tagTitles: string[], options: NoteToFrontMatterOptions) => {
-	const noteContent = await Note.replaceResourceInternalToExternalLinks(await Note.serialize(modNote, ['body']));
+	let noteContent = await Note.serialize(modNote, ['body']);
+	if (options.replaceResourceLinks) {
+		noteContent = await Note.replaceResourceInternalToExternalLinks(noteContent);
+	}
 	const metadata = noteToFrontMatter(modNote, tagTitles, options);
 	return `---\n${metadata}---\n\n${noteContent}`;
 };

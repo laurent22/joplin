@@ -3,6 +3,7 @@ import shim from '../../../shim';
 import * as yaml from 'js-yaml';
 import { ResourceEntity } from '../../database/types';
 import { basename, extname } from 'path';
+import debugLogger from './debugLogger';
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
 
@@ -11,12 +12,14 @@ const loadResourceMetadata = async (resourcePath: string): Promise<ResourceEntit
 
 	const filename = basename(resourcePath);
 	const result: ResourceEntity = {
-		mime: mimeUtils.fromFilename(),
+		mime: mimeUtils.fromFilename(filename),
 		filename,
+		title: filename,
 		file_extension: extname(resourcePath),
 	};
 
 	if (!await shim.fsDriver().exists(metadataPath)) {
+		debugLogger.debug('Couldn\'t find metadata at path', metadataPath);
 		return result;
 	}
 
@@ -40,6 +43,7 @@ const loadResourceMetadata = async (resourcePath: string): Promise<ResourceEntit
 		result.ocr_text = `${metadata.ocr_text}`;
 	}
 
+	debugLogger.debug('Loaded metadata', result);
 	return result;
 };
 

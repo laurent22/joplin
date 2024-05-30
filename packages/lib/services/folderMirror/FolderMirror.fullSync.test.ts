@@ -7,6 +7,7 @@ import createFilesFromPathRecord from '../../utils/pathRecord/createFilesFromPat
 import verifyDirectoryMatches from '../../utils/pathRecord/verifyDirectoryMatches';
 import * as fs from 'fs-extra';
 import shim from '../../shim';
+import Resource from '../../models/Resource';
 const { ALL_NOTES_FILTER_ID } = require('../../reserved-ids.js');
 
 describe('FolderMirror.fullSync', () => {
@@ -552,15 +553,26 @@ describe('FolderMirror.fullSync', () => {
 	test('should store Joplin resources in a resources/ directory', async () => {
 		const tempDir = await createTempDir();
 
-		await createNoteAndResource({ noteTitle: 'note' });
+		const { note, resource } = await createNoteAndResource({ noteTitle: 'note' });
 
 		const mirror = new FolderMirror(tempDir, '');
 		await mirror.fullSync();
 
-		const note = await Note.loadByTitle('note');
+		const checkDirectoryContent = async () => {
+			expect(await fs.readFile(join(tempDir, 'note.md'), 'utf8')).toBe(`---\ntitle: note\nid: ${note.id}\n---\n\n![photo.jpg](./resources/photo.jpg)`);
+			expect(await fs.readFile(join(tempDir, 'resources', 'photo.jpg.metadata.yml'), 'utf8')).toBe(`id: ${resource.id}\ntitle: ${resource.title}\n`);
+			expect(
+				await shim.fsDriver().md5File(join(tempDir, 'resources', 'photo.jpg')),
+			).toBe(
+				await shim.fsDriver().md5File(Resource.fullPath(resource)),
+			);
+		};
 
-		expect(await fs.readFile(join(tempDir, 'note.md'), 'utf8')).toBe(`---\ntitle: note\nid: ${note.id}\n---\n\n![](./resources/photo.jpg)`);
-		expect(await fs.readFile(join(tempDir, 'resources', 'photo.jpg.metadata.yml'), 'utf8')).toBe('test');
+		await checkDirectoryContent();
+
+		// Another full sync shouldn't change the output content.
+		await mirror.fullSync();
+		await checkDirectoryContent();
 	});
 
 	// it('should delete notes locally when deleted remotely', async () => {
