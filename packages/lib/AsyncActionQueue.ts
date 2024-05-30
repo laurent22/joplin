@@ -38,9 +38,9 @@ export default class AsyncActionQueue<Context = void> {
 
 	// Determines whether an item can be skipped in the queue. Prevents data loss in the case that
 	// tasks that do different things are added to the queue.
-	private areItemsIdentical_: CanSkipTaskHandler<Context> = (_a, _b) => true;
+	private canSkipTaskHandler_: CanSkipTaskHandler<Context> = (_current, _next) => true;
 	public setCanSkipTaskHandler(callback: CanSkipTaskHandler<Context>) {
-		this.areItemsIdentical_ = callback;
+		this.canSkipTaskHandler_ = callback;
 	}
 
 	public push(action: QueueItemAction<Context>, context: Context = null) {
@@ -85,7 +85,7 @@ export default class AsyncActionQueue<Context = void> {
 				for (i = 0; i < itemCount; i++) {
 					const current = this.queue_[i];
 					const next = i + 1 < itemCount ? this.queue_[i + 1] : null;
-					if (!next || !this.areItemsIdentical_(current, next)) {
+					if (!next || !this.canSkipTaskHandler_(current, next)) {
 						await current.action(current.context);
 					}
 				}
