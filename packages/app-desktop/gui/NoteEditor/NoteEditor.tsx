@@ -51,6 +51,7 @@ import getPluginSettingValue from '@joplin/lib/services/plugins/utils/getPluginS
 import { MarkupLanguage } from '@joplin/renderer';
 import useScrollWhenReadyOptions from './utils/useScrollWhenReadyOptions';
 import useScheduleSaveCallbacks from './utils/useScheduleSaveCallbacks';
+const debounce = require('debounce');
 
 const commands = [
 	require('./commands/showRevisions'),
@@ -94,7 +95,6 @@ function NoteEditor(props: NoteEditorProps) {
 		onAfterLoad: formNote_afterLoad,
 	});
 	setFormNoteRef.current = setFormNote;
-
 	const formNoteRef = useRef<FormNote>();
 	formNoteRef.current = { ...formNote };
 
@@ -158,9 +158,16 @@ function NoteEditor(props: NoteEditorProps) {
 		}
 	}, [props.isProvisional, formNote.id, props.dispatch]);
 
+	const scheduleNoteListResort = useMemo(() => {
+		return debounce(() => {
+			// Although the note list will update automatically, it may take some time. This
+			// forces an immediate update.
+			props.dispatch({ type: 'NOTE_SORT' });
+		}, 100);
+	}, [props.dispatch]);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onFieldChange = useCallback((field: string, value: any, changeId = 0) => {
+	const onFieldChange = useCallback(async (field: string, value: any, changeId = 0) => {
 		if (!isMountedRef.current) {
 			// When the component is unmounted, various actions can happen which can
 			// trigger onChange events, for example the textarea might be cleared.
@@ -200,9 +207,16 @@ function NoteEditor(props: NoteEditorProps) {
 			// The previously loaded note, that was modified, will be saved via saveNoteIfWillChange()
 		} else {
 			setFormNote(newNote);
-			void scheduleSaveNote(newNote);
+			await scheduleSaveNote(newNote);
 		}
-	}, [handleProvisionalFlag, formNote, setFormNote, isNewNote, titleHasBeenManuallyChanged, scheduleSaveNote]);
+
+		if (field === 'title') {
+			// Scheduling a resort needs to be:
+			// - called after scheduleSaveNote so that the new note title is used for sorting
+			// - debounced because many calls to scheduleSaveNote can resolve at once
+			scheduleNoteListResort();
+		}
+	}, [handleProvisionalFlag, formNote, setFormNote, isNewNote, titleHasBeenManuallyChanged, scheduleNoteListResort, scheduleSaveNote]);
 
 	useWindowCommandHandler({
 		dispatch: props.dispatch,

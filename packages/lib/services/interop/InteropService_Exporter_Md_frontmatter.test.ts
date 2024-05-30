@@ -4,9 +4,9 @@ import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 import time from '../../time';
-import { fieldOrder } from './InteropService_Exporter_Md_frontmatter';
 import * as fs from 'fs-extra';
 import { ExportModuleOutputFormat } from './types';
+import { fieldOrder } from '../../utils/frontMatter';
 
 async function recreateExportDir() {
 	const dir = exportDir();

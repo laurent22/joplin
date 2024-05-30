@@ -49,6 +49,8 @@ describe('MdToHtml', () => {
 						checkboxRenderingType: 2,
 					},
 				};
+			} else if (mdFilename.startsWith('sourcemap_')) {
+				mdToHtmlOptions.mapsToLine = true;
 			}
 
 			const markdown = await shim.fsDriver().readFile(mdFilePath);

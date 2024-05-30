@@ -1189,6 +1189,7 @@ packages/lib/utils/ActionLogger.test.js
 packages/lib/utils/ActionLogger.js
 packages/lib/utils/credentialFiles.js
 packages/lib/utils/focusHandler.js
+packages/lib/utils/frontMatter.js
 packages/lib/utils/ipc/RemoteMessenger.test.js
 packages/lib/utils/ipc/RemoteMessenger.js
 packages/lib/utils/ipc/TestMessenger.js
@@ -1271,6 +1272,7 @@ packages/renderer/MdToHtml/rules/mermaid.js
 packages/renderer/MdToHtml/rules/sanitize_html.js
 packages/renderer/MdToHtml/rules/source_map.js
 packages/renderer/MdToHtml/rules/tableHorizontallyScrollable.js
+packages/renderer/MdToHtml/rules/utils/defaultRule.js
 packages/renderer/MdToHtml/setupLinkify.js
 packages/renderer/MdToHtml/validateLinks.js
 packages/renderer/assetsToHeaders.js

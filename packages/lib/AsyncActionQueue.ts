@@ -31,9 +31,19 @@ export default class AsyncActionQueue<Context = void> {
 	private scheduleProcessingIID_: ReturnType<typeof shim.setInterval>|null = null;
 	private processing_ = false;
 
+	private processingFinishedPromise_: Promise<void>;
+	private onProcessingFinished_: ()=> void;
+
 	public constructor(interval = 100, intervalType: IntervalType = IntervalType.Debounce) {
 		this.interval_ = interval;
 		this.intervalType_ = intervalType;
+		this.resetFinishProcessingPromise_();
+	}
+
+	private resetFinishProcessingPromise_() {
+		this.processingFinishedPromise_ = new Promise<void>(resolve => {
+			this.onProcessingFinished_ = resolve;
+		});
 	}
 
 	// Determines whether an item can be skipped in the queue. Prevents data loss in the case that
@@ -100,6 +110,11 @@ export default class AsyncActionQueue<Context = void> {
 				this.processing_ = false;
 			}
 		}
+
+		if (this.queue_.length === 0) {
+			this.onProcessingFinished_();
+			this.resetFinishProcessingPromise_();
+		}
 	}
 
 	public async reset() {
@@ -109,29 +124,16 @@ export default class AsyncActionQueue<Context = void> {
 		}
 
 		this.queue_ = [];
-		return this.waitForAllDone();
+		return this.processAllNow();
 	}
 
-	// Currently waitForAllDone() already finishes all the actions
-	// as quickly as possible so we can make it an alias.
 	public async processAllNow() {
+		this.scheduleProcessing(1);
 		return this.waitForAllDone();
 	}
 
 	public async waitForAllDone() {
 		if (!this.queue_.length) return Promise.resolve();
-
-		this.scheduleProcessing(1);
-
-		return new Promise((resolve) => {
-			const iid = shim.setInterval(() => {
-				if (this.processing_) return;
-
-				if (!this.queue_.length) {
-					shim.clearInterval(iid);
-					resolve(null);
-				}
-			}, 100);
-		});
+		return this.processingFinishedPromise_;
 	}
 }

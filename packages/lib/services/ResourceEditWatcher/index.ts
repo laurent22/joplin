@@ -299,7 +299,7 @@ export default class ResourceEditWatcher {
 			return;
 		}
 
-		await item.asyncSaveQueue.waitForAllDone();
+		await item.asyncSaveQueue.processAllNow();
 
 		try {
 			if (this.watcher_) this.watcher_.unwatch(item.path);

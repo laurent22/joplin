@@ -51,6 +51,7 @@
 		"@codemirror/lang-php",
 		"@codemirror/lang-rust",
 		"@codemirror/language",
+		"@codemirror/language-data",
 		"@codemirror/legacy-modes",
 		"@codemirror/lint",
 		"@codemirror/search",

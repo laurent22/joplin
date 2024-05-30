@@ -35,6 +35,7 @@ export interface EditorControl extends EditorBodyControl {
 	toggleUnorderedList(): void;
 	toggleTaskList(): void;
 	toggleHeaderLevel(level: number): void;
+	focus(): void;
 
 	scrollSelectionIntoView(): void;
 	showLinkDialog(): void;
