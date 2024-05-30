@@ -9,7 +9,6 @@ export enum EventName {
 	ResourceChange = 'resourceChange',
 	SettingsChange = 'settingsChange',
 	TodoToggle = 'todoToggle',
-	NoteTypeToggle = 'noteTypeToggle',
 	SyncStart = 'syncStart',
 	SessionEstablished = 'sessionEstablished',
 	SyncComplete = 'syncComplete',
@@ -48,7 +47,7 @@ interface SettingsChangeEvent {
 	keys: string[];
 }
 
-interface NoteChangeEvent {
+interface AlarmChangeEvent {
 	noteId: string;
 	note: NoteEntity;
 }
@@ -58,13 +57,12 @@ type EventArgs = {
 	[EventName.ResourceChange]: [ResourceChangeEvent];
 	[EventName.SettingsChange]: [SettingsChangeEvent];
 	[EventName.TodoToggle]: [];
-	[EventName.NoteTypeToggle]: [NoteChangeEvent];
 	[EventName.SyncStart]: [];
 	[EventName.SessionEstablished]: [];
 	[EventName.SyncComplete]: [SyncCompleteEvent];
 	[EventName.ItemChange]: [ItemChangeEvent];
 	[EventName.NoteAlarmTrigger]: [NoteAlarmTriggerEvent];
-	[EventName.AlarmChange]: [NoteChangeEvent];
+	[EventName.AlarmChange]: [AlarmChangeEvent];
 	[EventName.KeymapChange]: [];
 	[EventName.NoteContentChange]: [NoteContentChangeEvent];
 	[EventName.OcrServiceResourcesProcessed]: [];
