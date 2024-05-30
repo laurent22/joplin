@@ -65,7 +65,7 @@ const NoteList = (props: Props) => {
 		props.notes.length,
 	);
 
-	const focusNote = useFocusNote(itemRefs);
+	const focusNote = useFocusNote(itemRefs, props.notes, makeItemIndexVisible);
 
 	const moveNote = useMoveNote(
 		props.notesParentType,
