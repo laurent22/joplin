@@ -17,7 +17,7 @@ interface Props {
 }
 
 const useScheduleSaveCallbacks = (props: Props) => {
-	const scheduleSaveNote = useCallback(async (formNote: FormNote) => {
+	const scheduleSaveNote = useCallback((formNote: FormNote) => {
 		if (!formNote.saveActionQueue) throw new Error('saveActionQueue is not set!!'); // Sanity check
 
 		// reg.logger().debug('Scheduling...', formNote);
@@ -44,6 +44,7 @@ const useScheduleSaveCallbacks = (props: Props) => {
 		};
 
 		formNote.saveActionQueue.push(makeAction(formNote));
+		return formNote.saveActionQueue.waitForAllDone();
 	}, [props.dispatch, props.setFormNote]);
 
 	const saveNoteIfWillChange = useCallback(async (formNote: FormNote) => {
