@@ -96,7 +96,10 @@ export default class LinkTracker {
 	private unresolvedLinkToSourceId_: Map<string, Set<LinkSourceId>> = new Map();
 	private tree: ItemTree;
 
-	public constructor(private linkType: LinkType, private onNoteUpdate: OnNoteUpdateCallback) {
+	public constructor(
+		private linkType: LinkType,
+		private onNoteUpdate: OnNoteUpdateCallback,
+	) {
 	}
 
 	public setTree(tree: ItemTree) {

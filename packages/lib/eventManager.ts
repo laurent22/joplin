@@ -21,7 +21,7 @@ export enum EventName {
 	NoteResourceIndexed = 'noteResourceIndexed',
 }
 
-interface ItemChangeEvent {
+export interface ItemChangeEvent {
 	itemType: ModelType;
 	itemId: string;
 	eventType: number;
