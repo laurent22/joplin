@@ -574,8 +574,8 @@ describe('FolderMirroringService', () => {
 		const tempDir = await createTempDir();
 		await createFilesFromPathRecord(tempDir, {
 			'folder/.folder.yml': 'title: folder\nid: invalid',
-			'folder/note.md': '---\ntitle: note\nid: e393d2f435dc4eae8f4dc690055c7960\n---\n\n[resource](../resources/a.txt)',
-			'resources/a.txt': 'Test!',
+			'folder/note.md': '---\ntitle: note\nid: e393d2f435dc4eae8f4dc690055c7960\n---\n\n[resource](../resources/a-text-file.txt)',
+			'resources/a-text-file.txt': 'Test!',
 		});
 
 		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
@@ -584,7 +584,7 @@ describe('FolderMirroringService', () => {
 		await mirror.waitForIdle();
 
 		const note = await Note.loadByTitle('note');
-		const resource = await Resource.loadByTitle('a.txt');
+		const resource = await Resource.loadByTitle('a-text-file');
 
 		expect(note.body).toBe(`[resource](:/${resource.id})`);
 	});

@@ -50,7 +50,10 @@ const pathLinkRegexes = [
 	// Example: [foo](./foo.md)
 	/\]\((\.\.?\/.*?\.md)(?:\s+".*?")?\)/gi,
 
-	// // Example: [foo]: ./bar.md
+	// Example: [foo](./resources/foo.txt)
+	/\]\((\.\.?\/resources\/[^/]*?)(?:\s+".*?")?\)/gi,
+
+	// Example: [foo]: ./bar.md
 	/[\n]\[[^\]]*\]:\s*(\.\.?\/.*?\.md)/gi,
 
 	// Example: <img src="../resources/foo.png"/>

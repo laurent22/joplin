@@ -11,11 +11,14 @@ const loadResourceMetadata = async (resourcePath: string): Promise<ResourceEntit
 	const metadataPath = `${resourcePath}${resourceMetadataExtension}`;
 
 	const filename = basename(resourcePath);
+	const extension = extname(resourcePath);
 	const result: ResourceEntity = {
 		mime: mimeUtils.fromFilename(filename),
 		filename,
-		title: filename,
-		file_extension: extname(resourcePath),
+		title: filename.substring(0, filename.length - extension.length),
+		// Internally, file_extension should not have a leading ".". Otherwise, the dot will
+		// be repeated when saving.
+		file_extension: extension.replace(/^\./, ''),
 	};
 
 	if (!await shim.fsDriver().exists(metadataPath)) {
