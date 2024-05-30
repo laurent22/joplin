@@ -1,4 +1,4 @@
-package net.cozic.joplin.debug;
+package net.cozic.joplin.versioninfo;
 
 import android.content.pm.PackageInfo;
 import android.os.Build;
@@ -19,12 +19,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DebugPackage implements ReactPackage {
+public class SystemVersionInformationPackage implements ReactPackage {
 
 	@NonNull
 	@Override
 	public List<NativeModule> createNativeModules(@NonNull ReactApplicationContext reactContext) {
-		return Collections.singletonList(new DebugModule(reactContext));
+		return Collections.singletonList(new SystemVersionInformationModule(reactContext));
 	}
 
 	@NonNull
@@ -33,8 +33,8 @@ public class DebugPackage implements ReactPackage {
 		return Collections.emptyList();
 	}
 
-	public static class DebugModule extends ReactContextBaseJavaModule {
-		public DebugModule(@NonNull ReactApplicationContext context) {
+	public static class SystemVersionInformationModule extends ReactContextBaseJavaModule {
+		public SystemVersionInformationModule(@NonNull ReactApplicationContext context) {
 			super(context);
 		}
 
@@ -54,7 +54,7 @@ public class DebugPackage implements ReactPackage {
 		@NonNull
 		@Override
 		public String getName() {
-			return "DebugModule";
+			return "SystemVersionInformationModule";
 		}
 	}
 }
