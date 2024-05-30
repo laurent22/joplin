@@ -1188,6 +1188,7 @@ packages/lib/utils/ActionLogger.test.js
 packages/lib/utils/ActionLogger.js
 packages/lib/utils/credentialFiles.js
 packages/lib/utils/focusHandler.js
+packages/lib/utils/frontMatter.js
 packages/lib/utils/ipc/RemoteMessenger.test.js
 packages/lib/utils/ipc/RemoteMessenger.js
 packages/lib/utils/ipc/TestMessenger.js
