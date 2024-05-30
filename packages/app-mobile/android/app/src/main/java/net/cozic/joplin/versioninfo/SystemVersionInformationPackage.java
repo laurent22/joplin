@@ -46,6 +46,7 @@ public class SystemVersionInformationPackage implements ReactPackage {
 
 				if (webViewPackage != null) {
 					result.put("webViewVersion", webViewPackage.versionName);
+					result.put("webViewPackage", webViewPackage.packageName);
 				}
 			}
 			return result;

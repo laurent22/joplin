@@ -5,10 +5,13 @@ import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/Plug
 import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
 
-const getWebViewVersion = (): string|null => {
+const getWebViewVersionText = () => {
 	if (Platform.OS === 'android') {
 		const constants = NativeModules.SystemVersionInformationModule.getConstants();
-		return constants.webViewVersion;
+		return [
+			_('WebView version: %s', constants.webViewVersion),
+			_('WebView package: %s', constants.webViewPackage),
+		].join('\n');
 	}
 	return null;
 };
@@ -27,15 +30,15 @@ const getVersionInfoText = (pluginStates: PluginSettings) => {
 	const versionInfoLines = [
 		appInfo.body,
 		'',
+		getOSVersion(),
 	];
 
-	const webViewVersion = getWebViewVersion();
+	const webViewVersion = getWebViewVersionText();
 	if (webViewVersion) {
-		versionInfoLines.push(_('WebView version: %s', webViewVersion));
+		versionInfoLines.push(webViewVersion);
 	}
 
 	versionInfoLines.push(
-		getOSVersion(),
 		_('FTS enabled: %d', Setting.value('db.ftsEnabled')),
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code before rule was applied
 		_('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0),
