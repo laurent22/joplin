@@ -8,7 +8,7 @@ import { serialize } from '../../utils/frontMatter';
 import { FolderEntity, NoteEntity } from '../database/types';
 import { basename, dirname, join, relative } from 'path';
 import writeFolderInfo from './utils/folderInfo/writeFolderInfo';
-import { FolderItem } from './types';
+import { FolderItem, ResourceItem } from './types';
 import ItemTree, { ActionListeners, AddOrUpdateEvent, noOpActionListeners } from './ItemTree';
 import uuid from '../../uuid';
 import BaseItem from '../../models/BaseItem';
@@ -18,7 +18,9 @@ import LinkTracker, { LinkType } from './LinkTracker';
 import debugLogger from './utils/debugLogger';
 import statToItem from './utils/statToItem';
 import fillRemoteTree from './utils/fillRemoteTree';
-import ResourceTracker from './ResourceTracker';
+import Resource from '../../models/Resource';
+import { resourceMetadataExtension, resourcesDirId, resourcesDirItem, resourcesDirName } from './constants';
+import getResourceMetadataYml from './utils/getResourceMetadataYml';
 const { ALL_NOTES_FILTER_ID } = require('../../reserved-ids.js');
 
 
@@ -163,7 +165,6 @@ export default class {
 	private modifyLocalActions_: ActionListeners;
 	private localTree_: ItemTree;
 	private remoteTree_: ItemTree;
-	private resourceTracker_: ResourceTracker;
 	private actionQueue_: AsyncActionQueue<ActionQueueEvent>;
 	private fullSyncEndListeners_: ((error: unknown)=> void)[] = [];
 	private remoteLinkTracker_: LinkTracker;
@@ -203,6 +204,9 @@ export default class {
 		const onLocalAddOrUpdate = async (event: AddOrUpdateEvent, isNew: boolean) => {
 			let item = event.item;
 
+			// Don't save virtual items.
+			if (item.virtual) return { ...item };
+
 			// Sometimes, when an item is moved, it is given the deleted flag because it
 			// is first unlinked, then moved.
 			if (item.deleted_time || !('deleted_time' in item)) {
@@ -220,6 +224,20 @@ export default class {
 					body: this.remoteLinkTracker_.convertLinkTypes(LinkType.IdLink, note.body, event.path),
 				};
 				result = await Note.save(toSave, { isNew });
+			} else if (item.type_ === ModelType.Resource) {
+				const resource = item as ResourceItem;
+				const toSave = { ...resource };
+
+				// Remove filled properties
+				delete toSave.parent_id;
+				delete toSave.deleted_time;
+
+				result = await Resource.save(toSave, { isNew }) as ResourceItem;
+
+				// Fill properties that don't exist in the database (but are present for
+				// compatibility).
+				result.parent_id = item.parent_id;
+				result.deleted_time = item.deleted_time;
 			}
 			return result;
 		};
@@ -238,21 +256,28 @@ export default class {
 				await onLocalAddOrUpdate(event, false);
 			},
 			onDelete: async ({ item }): Promise<void> => {
+				if (item.virtual) return;
+
 				debugLogger.debug('onDelete', item.title);
 
 				if (item.type_ === ModelType.Note) {
 					await Note.delete(item.id, { toTrash: true, sourceDescription: 'FileMirroringService' });
-				} else {
+				} else if (item.type_ === ModelType.Folder) {
 					await Folder.delete(item.id, { toTrash: true, sourceDescription: 'FileMirroringService' });
+				} else if (item.type_ === ModelType.Resource) {
+					// No action needed -- Joplin resource deletion is managed elsewhere.
 				}
 			},
 			onMove: async ({ movedItem })=> {
 				debugLogger.debug('onMove', movedItem.title);
+				if (movedItem.virtual) return;
 
 				if (movedItem.type_ === ModelType.Folder) {
 					await Folder.save({ ...movedItem });
-				} else {
+				} else if (movedItem.type_ === ModelType.Note) {
 					await Note.save({ ...movedItem });
+				} else if (movedItem.type_ === ModelType.Resource) {
+					// No action needed -- resources don't have a parent ID.
 				}
 			},
 		};
@@ -263,11 +288,16 @@ export default class {
 			const fullPath = join(baseFilePath, path);
 			if (item.type_ === ModelType.Folder) {
 				await shim.fsDriver().mkdir(fullPath);
-				await writeFolderInfo(fullPath, {
-					id: item.id,
-					icon: (item as FolderEntity).icon,
-					title: item.title,
-				});
+
+				// No need to store .folder.yml for virtual folders --- these folders won't be
+				// added to Joplin.
+				if (!item.virtual) {
+					await writeFolderInfo(fullPath, {
+						id: item.id,
+						icon: (item as FolderEntity).icon,
+						title: item.title,
+					});
+				}
 			} else if (item.type_ === ModelType.Note) {
 				const note = item as NoteEntity;
 				const toSave = {
@@ -275,6 +305,16 @@ export default class {
 					body: this.remoteLinkTracker_.convertLinkTypes(LinkType.PathLink, note.body, path),
 				};
 				await shim.fsDriver().writeFile(fullPath, await getNoteMd(toSave), 'utf8');
+			} else if (item.type_ === ModelType.Resource) {
+				if (fullPath.endsWith(resourceMetadataExtension)) {
+					throw new Error('Unsupported path. The .metadata.yml extension is reserved for resource metadata');
+				}
+				const internalSourcePath = Resource.fullPath(item, false);
+				debugLogger.debug('remote.update/copy resource', path, 'from', internalSourcePath, 'to', fullPath);
+				await shim.fsDriver().copy(internalSourcePath, fullPath);
+
+				const metadata = getResourceMetadataYml(item);
+				await shim.fsDriver().writeFile(`${fullPath}${resourceMetadataExtension}`, metadata, 'utf8');
 			} else {
 				throw new Error(`Cannot handle item with type ${item.type_}`);
 			}
@@ -388,7 +428,6 @@ export default class {
 			const folderIdToItemPath = makeItemPaths(basePath, folders);
 
 			for (const folder of folders) {
-
 				const folderPath = folderIdToItemPath.get(folder.id);
 				await this.localTree_.addItemAt(folderPath, folder, noOpActionListeners);
 				await processFolders(folderPath, folder.id, folder.children || []);
@@ -403,14 +442,24 @@ export default class {
 				if (!note.deleted_time) {
 					await this.localTree_.addItemAt(notePath, note, noOpActionListeners);
 				}
+
+				const resourceIds = await Note.linkedResourceIds(note.body ?? '');
+				for (const resourceId of resourceIds) {
+					const resourceFields = ['id', 'title', 'updated_time', 'mime', 'filename', 'file_extension'];
+					const resource: ResourceItem = { ...await Resource.load(resourceId, { fields: resourceFields }) };
+					resource.parent_id = resourcesDirId;
+					resource.deleted_time = 0;
+					await this.localTree_.addItemTo(resourcesDirName, resource, noOpActionListeners);
+				}
 			}
 		};
 
+		await this.localTree_.addItemAt(resourcesDirName, resourcesDirItem, noOpActionListeners);
 		await processFolders('', baseFolderId, allFolders);
 		debugLogger.debug('built local tree');
 
 		const generatedIds: string[] = [];
-		await fillRemoteTree(filePath, this.resourceTracker_, this.remoteTree_, {
+		await fillRemoteTree(filePath, this.remoteTree_, {
 			onAdd: async ({ item }) => {
 				// Items need IDs to be added to the remoteTree.
 				if (!item.id) {

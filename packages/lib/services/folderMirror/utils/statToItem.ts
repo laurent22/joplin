@@ -1,5 +1,5 @@
 import { basename, dirname, extname, join, normalize } from 'path';
-import { FolderItem, FolderOrResourceItem } from '../types';
+import { FolderItem } from '../types';
 import loadFolderInfo from './folderInfo/loadFolderInfo';
 import Folder from '../../../models/Folder';
 import { FolderEntity } from '../../database/types';
@@ -9,50 +9,52 @@ import { parse as parseFrontMatter } from '../../../utils/frontMatter';
 import Note from '../../../models/Note';
 import { Stat } from '../../../fs-driver-base';
 import ItemTree from '../ItemTree';
-import { resourceMetadataExtension, resourcesDirName } from '../constants';
+import { resourceMetadataExtension, resourcesDirItem, resourcesDirName } from '../constants';
 import loadResourceMetadata from './loadResourceMetadata';
 
-const statToItem = async (baseFolderPath: string, stat: Stat, remoteTree: ItemTree): Promise<FolderOrResourceItem|null> => {
+const statToItem = async (baseFolderPath: string, stat: Stat, remoteTree: ItemTree): Promise<FolderItem|null> => {
 	const base: FolderItem = {
 		updated_time: stat.mtime.getTime(),
 	};
 	const path = stat.path;
 	const parentPath = normalize(dirname(path));
-	const isResource = parentPath === resourcesDirName;
-	if (isResource) {
-		base.parent_id = undefined;
-	} else if (remoteTree.hasPath(parentPath)) {
+	if (remoteTree.hasPath(parentPath)) {
 		base.parent_id = remoteTree.idAtPath(parentPath);
 	} else if (parentPath === '.') {
 		base.parent_id = remoteTree.idAtPath('.');
 	}
 
-	const isFolder = stat.isDirectory();
-
 	const extension = extname(path);
+
+	const isResource = parentPath === resourcesDirName && !path.endsWith(resourceMetadataExtension);
 	const isNote = !isResource && ['.md', '.html'].includes(extension);
+	const isFolder = stat.isDirectory();
 
 	let result: FolderItem;
 	if (isFolder) {
-		const folderInfo = await loadFolderInfo(join(baseFolderPath, path));
-		if (folderInfo.id && !await Folder.load(folderInfo.id)) {
-			delete folderInfo.id;
+		if (path === resourcesDirName) {
+			result = resourcesDirItem;
+		} else {
+			const folderInfo = await loadFolderInfo(join(baseFolderPath, path));
+			if (folderInfo.id && !await Folder.load(folderInfo.id)) {
+				delete folderInfo.id;
+			}
+			const item: FolderEntity = {
+				...base,
+				title: folderInfo.title,
+				type_: ModelType.Folder,
+			};
+			if (folderInfo.folder_info_updated) {
+				item.updated_time = Math.max(folderInfo.folder_info_updated, item.updated_time);
+			}
+			if (folderInfo.id) {
+				item.id = folderInfo.id;
+			}
+			if (folderInfo.icon) {
+				item.icon = folderInfo.icon;
+			}
+			result = item;
 		}
-		const item: FolderEntity = {
-			...base,
-			title: folderInfo.title,
-			type_: ModelType.Folder,
-		};
-		if (folderInfo.folder_info_updated) {
-			item.updated_time = Math.max(folderInfo.folder_info_updated, item.updated_time);
-		}
-		if (folderInfo.id) {
-			item.id = folderInfo.id;
-		}
-		if (folderInfo.icon) {
-			item.icon = folderInfo.icon;
-		}
-		result = item;
 	} else if (isResource) {
 		// Metadata files are processed separately.
 		if (extension === resourceMetadataExtension) {

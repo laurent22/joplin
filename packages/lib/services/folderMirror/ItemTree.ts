@@ -99,14 +99,14 @@ export default class ItemTree {
 	}
 
 	private getUniqueItemPathInParent(parentPath: string, item: FolderItem, allowPresentPaths: string[] = []) {
-		const isFolder = item.type_ === ModelType.Folder;
 		const basename = friendlySafeFilename(item.title);
+		const extension = item.type_ === ModelType.Folder || item.type_ === ModelType.Resource ? '' : '.md';
 
 		let filename;
 		let path;
 		let counter = 0;
 		do {
-			filename = `${basename}${counter ? ` (${counter})` : ''}${isFolder ? '' : '.md'}`;
+			filename = `${basename}${counter ? ` (${counter})` : ''}${extension}`;
 			path = join(parentPath, filename);
 			counter++;
 		} while (this.hasPath(path) && !allowPresentPaths.includes(path));

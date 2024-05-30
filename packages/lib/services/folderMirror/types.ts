@@ -1,4 +1,9 @@
 import { FolderEntity, NoteEntity, ResourceEntity } from '../database/types';
 
-export type FolderItem = FolderEntity | NoteEntity;
-export type FolderOrResourceItem = FolderEntity | NoteEntity | ResourceEntity;
+export type ResourceItem = ResourceEntity & {
+	// For compatibility.
+	parent_id?: string;
+	deleted_time?: number;
+};
+
+export type FolderItem = (FolderEntity | NoteEntity | ResourceItem) & { virtual?: boolean };

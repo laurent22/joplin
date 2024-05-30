@@ -1,6 +1,6 @@
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
-import { createFolderTree, createTempDir, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import { createFolderTree, createNoteAndResource, createTempDir, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import FolderMirror from './FolderMirror';
 import { extname, join } from 'path';
 import createFilesFromPathRecord from '../../utils/pathRecord/createFilesFromPathRecord';
@@ -547,6 +547,20 @@ describe('FolderMirror.fullSync', () => {
 			'note.md': `---\ntitle: note\nid: ${note.id}\n---\n\nTest`,
 			'folder/.folder.yml': `title: folder\nid: ${folder.id}\n`,
 		});
+	});
+
+	test('should store Joplin resources in a resources/ directory', async () => {
+		const tempDir = await createTempDir();
+
+		await createNoteAndResource({ noteTitle: 'note' });
+
+		const mirror = new FolderMirror(tempDir, '');
+		await mirror.fullSync();
+
+		const note = await Note.loadByTitle('note');
+
+		expect(await fs.readFile(join(tempDir, 'note.md'), 'utf8')).toBe(`---\ntitle: note\nid: ${note.id}\n---\n\n![](./resources/photo.jpg)`);
+		expect(await fs.readFile(join(tempDir, 'resources', 'photo.jpg.metadata.yml'), 'utf8')).toBe('test');
 	});
 
 	// it('should delete notes locally when deleted remotely', async () => {

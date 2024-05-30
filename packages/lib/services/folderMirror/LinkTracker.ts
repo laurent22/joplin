@@ -133,49 +133,67 @@ export default class LinkTracker {
 	}
 
 	public onItemUpdate(item: FolderItem) {
-		if (item.type_ !== ModelType.Note) return;
+		const isNote = item.type_ === ModelType.Note;
+		const isResource = item.type_ === ModelType.Resource;
+		if (!isNote && !isResource) return;
 
-		const note = (item as NoteEntity);
-		const notePath = this.tree.pathFromId(note.id);
-		const noteParentPath = dirname(notePath);
-		const body = note.body;
+		const itemPath = this.tree.pathFromId(item.id);
+		const itemParentPath = dirname(itemPath);
 
-		debugLogger.debug(`LinkTracker.onItemUpdate ${item.title}@${notePath}`);
+		debugLogger.debug(`LinkTracker.onItemUpdate ${item.title}@${itemPath}`);
 		debugLogger.group();
 
+		if (isNote) {
+			debugLogger.debug('It\'s a note -- can link to other items');
 
-		const links = this.linkType === LinkType.IdLink ? getIdLinks(body) : getPathLinks(body);
-		debugLogger.debug('link count', links.length);
+			const note = (item as NoteEntity);
+			const body = note.body;
 
-		for (const link of links) {
-			const id = this.resolveLinkToId(link, noteParentPath);
-			if (!id) {
-				const normalizedLink = this.normalizeLink(link, noteParentPath);
-				if (!this.unresolvedLinkToSourceId_.has(normalizedLink)) {
-					this.unresolvedLinkToSourceId_.set(normalizedLink, new Set());
+			// Always include ID links. This handles a case where links would otherwise fail to resolve:
+			// - Note A is added from the database. It links to a resource.
+			//   - The resource hasn't been added yet, so the link fails to resolve. It's link stays
+			//     unconverted and is added to the tree as an **ID link**.
+			//   - *After* the links are converted, onItemUpdate is called with note A. Note A still uses
+			//     an ID link, which we check for below:
+			let links = getIdLinks(body);
+			if (this.linkType === LinkType.PathLink) {
+				debugLogger.debug('including path links');
+				links = links.concat(getPathLinks(body));
+			}
+			debugLogger.debug('link count', links.length);
+
+			for (const link of links) {
+				const id = this.resolveLinkToId(link, itemParentPath);
+				if (!id) {
+					const normalizedLink = this.normalizeLink(link, itemParentPath);
+					if (!this.unresolvedLinkToSourceId_.has(normalizedLink)) {
+						this.unresolvedLinkToSourceId_.set(normalizedLink, new Set());
+					}
+					this.unresolvedLinkToSourceId_.get(normalizedLink).add(note.id);
+					debugLogger.debug('marked link', link, 'to', normalizedLink, 'as unresolved');
+				} else {
+					if (!this.linkTargetIdToSource_.has(id)) {
+						this.linkTargetIdToSource_.set(id, new Set());
+					}
+					this.linkTargetIdToSource_.get(id).add(note.id);
 				}
-				this.unresolvedLinkToSourceId_.get(normalizedLink).add(note.id);
-				debugLogger.debug('marked link', link, 'to', normalizedLink, 'as unresolved');
-			} else {
-				if (!this.linkTargetIdToSource_.has(id)) {
-					this.linkTargetIdToSource_.set(id, new Set());
-				}
-				this.linkTargetIdToSource_.get(id).add(note.id);
 			}
 		}
 
 		for (const [link, sourceIds] of this.unresolvedLinkToSourceId_.entries()) {
-			if (link === `:/${item.id}` || link === notePath) {
+			if (link === `:/${item.id}` || link === itemPath) {
 				debugLogger.debug('resolve', link);
 
 				this.unresolvedLinkToSourceId_.delete(link);
-				const targetId = note.id;
+				const targetId = item.id;
 				if (!this.linkTargetIdToSource_.has(targetId)) {
 					this.linkTargetIdToSource_.set(targetId, new Set());
 				}
 				for (const id of sourceIds) {
 					this.linkTargetIdToSource_.get(targetId).add(id);
 				}
+			} else {
+				debugLogger.debug('Still can\'t resolve ', link);
 			}
 		}
 		debugLogger.groupEnd();

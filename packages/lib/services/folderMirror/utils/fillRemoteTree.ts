@@ -1,12 +1,10 @@
-import { ModelType } from '../../../BaseModel';
 import shim from '../../../shim';
 import ItemTree, { AddActionListener } from '../ItemTree';
-import ResourceTracker from '../ResourceTracker';
 import debugLogger from './debugLogger';
 import statToItem from './statToItem';
 
 
-const fillRemoteTree = async (baseFolderPath: string, resourceTracker: ResourceTracker, remoteTree: ItemTree, addItemHandler: AddActionListener) => {
+const fillRemoteTree = async (baseFolderPath: string, remoteTree: ItemTree, addItemHandler: AddActionListener) => {
 	const stats = await shim.fsDriver().readDirStats(baseFolderPath, { recursive: true });
 
 	// Sort so that parent folders are visited before child folders.
@@ -21,11 +19,7 @@ const fillRemoteTree = async (baseFolderPath: string, resourceTracker: ResourceT
 			delete item.id;
 		}
 
-		if (item.type_ === ModelType.Resource) {
-			resourceTracker.addRemote(stat.path, item);
-		} else {
-			await remoteTree.addItemAt(stat.path, item, addItemHandler);
-		}
+		await remoteTree.addItemAt(stat.path, item, addItemHandler);
 	}
 };
 
