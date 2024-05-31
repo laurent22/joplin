@@ -14,7 +14,10 @@ export const runtime = (): CommandRuntime => {
 	return {
 		execute: async (_context: CommandContext, body = '', todo = false) => {
 			const folderId = Setting.value('activeFolderId');
-			if (!folderId) return;
+			if (!folderId) {
+				logger.warn('Not creating new note -- no active folder ID.');
+				return;
+			}
 
 			const note = await Note.save({
 				body,
