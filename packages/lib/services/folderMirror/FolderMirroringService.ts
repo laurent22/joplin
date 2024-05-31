@@ -88,7 +88,7 @@ export default class FolderMirroringService {
 		} else if (action.type === 'NOTE_UPDATE_ONE') {
 			this.onNoteUpdate(action.note);
 		} else if (action.type === 'FOLDER_UPDATE_ONE') {
-			this.onFolderUpdate(action.folder);
+			this.onFolderUpdate(action.item);
 		} else if (action.type === 'FOLDER_DELETE') {
 			this.onFolderDelete(action.id);
 		}

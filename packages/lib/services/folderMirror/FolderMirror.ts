@@ -151,7 +151,7 @@ enum FolderMirrorEventType {
 	DatabaseItemDelete = 'dbDelete',
 }
 
-type LocalChangeEvent = { type: FolderMirrorEventType.DatabaseItemChange; id: string };
+type LocalChangeEvent = { type: FolderMirrorEventType.DatabaseItemChange; id: string; parentId: string };
 type LocalDeleteEvent = { type: FolderMirrorEventType.DatabaseItemDelete; id: string };
 type WatcherEvent = { type: FolderMirrorEventType.WatcherEvent; event: DirectoryWatchEvent };
 type FullSyncEvent = { type: FolderMirrorEventType.FullSync };
@@ -392,11 +392,14 @@ export default class {
 	}
 
 	public onLocalItemUpdate(item: FolderItem) {
-		// Check both IDs and parent IDs -- parent IDs handle new files. IDs handle resource changes.
-		if (this.watcher_ && (this.localTree_.hasId(item.id) || this.localTree_.hasId(item.parent_id))) {
-			debugLogger.debug('localItemUpdate', item.title);
-			this.actionQueue_.push(this.handleQueueAction, { type: FolderMirrorEventType.DatabaseItemChange, id: item.id });
-		}
+		if (!this.watcher_) return;
+
+		// Note that we can't skip out-of-tree items at this stage -- it's possible that a parent of the
+		// current item will be added by a pending queue action (so we can't check parent/ancestor IDs here).
+		this.actionQueue_.push(
+			this.handleQueueAction,
+			{ type: FolderMirrorEventType.DatabaseItemChange, id: item.id, parentId: item.parent_id },
+		);
 	}
 
 	public async watch() {
@@ -533,8 +536,15 @@ export default class {
 		debugLogger.groupEnd();
 	}
 
-	private async databaseItemChangeTask(id: string) {
+	private async databaseItemChangeTask(id: string, parentId: string) {
+		if (!this.localTree_.hasId(id) && !this.localTree_.hasId(parentId)) {
+			debugLogger.debug('skip item', id, 'not in export dir');
+			return;
+		}
+
 		let item: FolderItem = await BaseItem.loadItemById(id);
+		debugLogger.debug('localItemUpdate', item.title);
+
 		if (item.type_ === ModelType.Resource) {
 			// Resources generally don't have a parent_id or deleted_time, so these need to be added.
 			item = { parent_id: resourcesDirId, deleted_time: 0, ...item };
@@ -731,7 +741,7 @@ export default class {
 			this.fullSyncEndListeners_ = [];
 			break;
 		case FolderMirrorEventType.DatabaseItemChange:
-			return this.databaseItemChangeTask(context.id);
+			return this.databaseItemChangeTask(context.id, context.parentId);
 		case FolderMirrorEventType.DatabaseItemDelete:
 			return this.databaseItemDeleteTask(context.id);
 		case FolderMirrorEventType.WatcherEvent:

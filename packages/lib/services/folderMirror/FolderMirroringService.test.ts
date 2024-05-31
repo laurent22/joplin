@@ -111,6 +111,23 @@ describe('FolderMirroringService', () => {
 		expect(await Note.loadByTitle('test_note')).toMatchObject({ body: 'A note in a folder', parent_id: subfolder.id });
 	});
 
+	test('should create folders remotely when created locally', async () => {
+		const tempDir = await createTempDir();
+		await FolderMirroringService.instance().mirrorFolder(tempDir, '');
+
+		const folder1 = await Folder.save({ title: 'test', parent_id: '' });
+		const folder2 = await Folder.save({ title: 'test2', parent_id: folder1.id });
+		const note = await Note.save({ title: 'note', parent_id: folder2.id, body: 'test' });
+
+		await waitForTestNoteToBeWritten(tempDir);
+
+		await verifyDirectoryMatches(tempDir, {
+			'test/.folder.yml': `title: ${folder1.title}\nid: ${folder1.id}\n`,
+			'test/test2/.folder.yml': `title: ${folder2.title}\nid: ${folder2.id}\n`,
+			'test/test2/note.md': `---\ntitle: ${note.title}\nid: ${note.id}\n---\n\ntest`,
+		});
+	});
+
 	test('should modify items locally when changed in a watched, non-empty remote folder', async () => {
 		const tempDir = await createTempDir();
 		await createFilesFromPathRecord(tempDir, {
