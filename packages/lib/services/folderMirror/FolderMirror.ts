@@ -480,6 +480,8 @@ export default class {
 			const folderIdToItemPath = makeItemPaths(basePath, folders);
 
 			for (const folder of folders) {
+				if (folder.deleted_time) continue;
+
 				const folderPath = folderIdToItemPath.get(folder.id);
 				await this.localTree_.addItemAt(folderPath, folder, noOpActionListeners);
 				await processFolders(folderPath, folder.id, folder.children || []);
@@ -490,6 +492,8 @@ export default class {
 			const noteIdToItemPath = makeItemPaths(basePath, childNotes);
 
 			for (const note of childNotes) {
+				if (note.deleted_time) continue;
+
 				// Add resources first, so that their links get processed first.
 				const resourceIds = await Note.linkedResourceIds(note.body ?? '');
 				for (const resourceId of resourceIds) {

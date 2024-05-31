@@ -575,6 +575,20 @@ describe('FolderMirror.fullSync', () => {
 		await checkDirectoryContent();
 	});
 
+	test('should not fail if a child of a local folder has been deleted', async () => {
+		const tempDir = await createTempDir();
+
+		const folder1 = await Folder.save({ title: 'test', parent_id: '' });
+		await Folder.save({ title: 'deleted', parent_id: folder1.id, deleted_time: Date.now() });
+
+		const mirror = new FolderMirror(tempDir, '');
+		await mirror.fullSync();
+
+		await verifyDirectoryMatches(tempDir, {
+			'test/.folder.yml': `title: test\nid: ${folder1.id}\n`,
+		});
+	});
+
 	// it('should delete notes locally when deleted remotely', async () => {
 	// 	;
 	// });
