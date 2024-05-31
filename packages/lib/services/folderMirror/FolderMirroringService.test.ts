@@ -1,5 +1,5 @@
 import Note from '../../models/Note';
-import { createTempDir, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import { createTempDir, setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
 import FolderMirroringService from './FolderMirroringService';
 import { join } from 'path';
 import * as fs from 'fs-extra';
@@ -13,6 +13,7 @@ import { NoteEntity } from '../database/types';
 import { ModelType } from '../../BaseModel';
 import verifyDirectoryMatches from '../../utils/pathRecord/verifyDirectoryMatches';
 import Resource from '../../models/Resource';
+import shim from '../../shim';
 
 type ShouldMatchItemCallback = (item: NoteEntity)=> boolean;
 const waitForNoteChange = (itemMatcher?: ShouldMatchItemCallback) => {
@@ -605,6 +606,7 @@ describe('FolderMirroringService', () => {
 				title: `new-${i}`,
 				body: `Resource: [resource](:/${newResource.id})\n`,
 			});
+
 			expect(await fs.readFile(Resource.fullPath(newResource), 'utf8')).toBe('New resource');
 		}
 	});
@@ -633,5 +635,32 @@ describe('FolderMirroringService', () => {
 
 		expect(await fs.readFile(join(tempDir, 'resources', 'a-text-file.txt'), 'utf8')).toBe('Updated.');
 		expect(await fs.readFile(join(tempDir, 'resources', 'a-text-file.txt.metadata.yml'), 'utf8')).toBe(`id: ${resource.id}\ntitle: a-text-file\nocr_text: ''\n`);
+	});
+
+	test('should copy new resources to remote when added locally', async () => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, {
+			'note.md': '---\ntitle: note\nid: e383d2f435dc4eae8f4dc690055c7960\n---\n\nTest note',
+		});
+
+		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
+
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		let note = await Note.loadByTitle('note');
+		note = await shim.attachFileToNote(note, `${supportDir}/sample.txt`);
+		expect(note.id).toBe('e383d2f435dc4eae8f4dc690055c7960');
+
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		const resource = await Resource.loadByTitle('sample.txt');
+
+		await verifyDirectoryMatches(tempDir, {
+			'resources/sample.txt': 'just testing',
+			'resources/sample.txt.metadata.yml': `id: ${resource.id}\ntitle: ${resource.title}\nocr_text: ''\n`,
+			'note.md': '---\ntitle: note\nid: e383d2f435dc4eae8f4dc690055c7960\n---\n\nTest note\n\n[sample.txt](./resources/sample.txt)\n\n',
+		});
 	});
 });

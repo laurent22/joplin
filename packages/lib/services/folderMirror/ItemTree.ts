@@ -100,19 +100,25 @@ export default class ItemTree {
 	}
 
 	private getUniqueItemPathInParent(parentPath: string, item: FolderItem, allowPresentPaths: string[] = []) {
-		const basename = friendlySafeFilename(item.title);
+		let baseName = friendlySafeFilename(item.title);
 		let extension = '';
 		if (item.type_ === ModelType.Note) {
 			extension = '.md';
 		} else if (item.type_ === ModelType.Resource) {
-			extension = extname((item as ResourceEntity).filename ?? '');
+			const resource = item as ResourceEntity;
+			// Prefer filename and file_extension, when available.
+			extension = resource.file_extension ?? extname(resource.filename ?? '');
+			baseName = resource.filename ? resource.filename : baseName;
+			if (baseName.endsWith(extension)) {
+				baseName = baseName.substring(0, baseName.length - extension.length);
+			}
 		}
 
 		let filename;
 		let path;
 		let counter = 0;
 		do {
-			filename = `${basename}${counter ? ` (${counter})` : ''}${extension}`;
+			filename = `${baseName}${counter ? ` (${counter})` : ''}${extension}`;
 			path = join(parentPath, filename);
 			counter++;
 		} while (this.hasPath(path) && !allowPresentPaths.includes(path));

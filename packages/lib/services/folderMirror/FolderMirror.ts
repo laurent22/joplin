@@ -231,10 +231,10 @@ export default class {
 				delete toSave.parent_id;
 				delete toSave.deleted_time;
 
-				const localPath = Resource.fullPath(toSave);
-				const remotePath = join(baseFilePath, event.path);
+				let localPath = Resource.fullPath(toSave);
+				const remotePath = join(this.baseFilePath, event.path);
 				let changed = true;
-				if (await shim.fsDriver().exists(localPath)) {
+				if (!isNew && await shim.fsDriver().exists(localPath)) {
 					const localSum = await shim.fsDriver().md5File(localPath);
 					const remoteSum = await shim.fsDriver().md5File(remotePath);
 					changed = (remoteSum !== localSum);
@@ -248,6 +248,10 @@ export default class {
 				result = await Resource.save(toSave, { isNew }) as ResourceItem;
 
 				if (changed) {
+					// localPath may have been set incorrectly if toSave was a new item.
+					localPath = Resource.fullPath(result);
+					debugLogger.debug('copy changed resource', remotePath, '->', localPath, 'item', result);
+
 					await shim.fsDriver().copy(remotePath, localPath);
 				}
 
@@ -326,6 +330,13 @@ export default class {
 				if (fullPath.endsWith(resourceMetadataExtension)) {
 					throw new Error('Unsupported path. The .metadata.yml extension is reserved for resource metadata');
 				}
+
+				// IMPORTANT: Write the metadata first. When writing the resource triggers the file watcher,
+				//            this allows the item ID to be found.
+				// TODO: Remove this workaround & fix the underlying issue.
+				const metadata = resourceToMetadataYml(item);
+				await shim.fsDriver().writeFile(`${fullPath}${resourceMetadataExtension}`, metadata, 'utf8');
+
 				const internalSourcePath = Resource.fullPath(item, false);
 				debugLogger.debug('remote.update/copy resource', path, 'from', internalSourcePath, 'to', fullPath, 'id', item);
 				if (!await shim.fsDriver().exists(internalSourcePath)) {
@@ -333,9 +344,6 @@ export default class {
 				} else {
 					await shim.fsDriver().copy(internalSourcePath, fullPath);
 				}
-
-				const metadata = resourceToMetadataYml(item);
-				await shim.fsDriver().writeFile(`${fullPath}${resourceMetadataExtension}`, metadata, 'utf8');
 			} else {
 				throw new Error(`Cannot handle item with type ${item.type_}`);
 			}
@@ -430,6 +438,24 @@ export default class {
 		});
 	}
 
+	private async addNewLocalResource(id: string, addToRemote: boolean) {
+		if (this.localTree_.hasId(id)) {
+			debugLogger.debug('Not adding resource with id', id, 'because already present.');
+			return null;
+		}
+
+		const resourceFields = ['id', 'title', 'updated_time', 'mime', 'filename', 'file_extension'];
+		const resource: ResourceItem = { ...await Resource.load(id, { fields: resourceFields }) };
+		resource.parent_id = resourcesDirId;
+		resource.deleted_time = 0;
+		await this.localTree_.addItemTo(resourcesDirName, resource, noOpActionListeners);
+		if (addToRemote) {
+			await this.remoteTree_.addItemTo(resourcesDirName, resource, this.modifyRemoteActions_);
+		}
+		debugLogger.debug('Added resource', id, 'to', resourcesDirName);
+		return resource;
+	}
+
 	private async fullSyncTask() {
 		const filePath = this.baseFilePath;
 		const baseFolderId = this.baseFolderId;
@@ -464,13 +490,7 @@ export default class {
 				// Add resources first, so that their links get processed first.
 				const resourceIds = await Note.linkedResourceIds(note.body ?? '');
 				for (const resourceId of resourceIds) {
-					if (this.localTree_.hasId(resourceId)) continue;
-
-					const resourceFields = ['id', 'title', 'updated_time', 'mime', 'filename', 'file_extension'];
-					const resource: ResourceItem = { ...await Resource.load(resourceId, { fields: resourceFields }) };
-					resource.parent_id = resourcesDirId;
-					resource.deleted_time = 0;
-					await this.localTree_.addItemTo(resourcesDirName, resource, noOpActionListeners);
+					await this.addNewLocalResource(resourceId, false);
 				}
 
 				const notePath = noteIdToItemPath.get(note.id);
@@ -524,8 +544,9 @@ export default class {
 
 		debugLogger.debug('onLocalItemUpdate', item.title, 'in', this.localTree_.pathFromId(item.parent_id));
 
+		let localItem: FolderItem|null = null;
 		if (this.localTree_.hasId(item.id)) {
-			let localItem = this.localTree_.getAtId(item.id);
+			localItem = this.localTree_.getAtId(item.id);
 
 			// Ensure that all links are database links so we can do a comparison
 			if (localItem.type_ === ModelType.Note) {
@@ -544,6 +565,24 @@ export default class {
 				return;
 			}
 		}
+
+		if (item.type_ === ModelType.Note) {
+			const oldBody = (localItem as NoteEntity)?.body ?? '';
+			const oldLinkedResources = await Note.linkedResourceIds(oldBody);
+
+			const newBody = (item as NoteEntity).body;
+			const newLinkedResources = await Note.linkedResourceIds(newBody);
+
+			// Handle just-attached resources.
+			// TODO: Should this be done with LinkTracker?
+			for (const resourceId of newLinkedResources) {
+				if (!oldLinkedResources.includes(resourceId)) {
+					debugLogger.debug('new resource id', resourceId);
+					await this.addNewLocalResource(resourceId, true);
+				}
+			}
+		}
+
 		await this.localTree_.processItem(null, item, noOpActionListeners);
 		await this.remoteTree_.processItem(null, item, this.modifyRemoteActions_);
 
