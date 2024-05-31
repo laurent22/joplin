@@ -33,7 +33,8 @@ const statToItem = async (baseFolderPath: string, stat: Stat, remoteTree: ItemTr
 	let result: FolderItem;
 	if (isFolder) {
 		if (path === resourcesDirName) {
-			result = resourcesDirItem;
+			// Virtual resources directory -- handle differently.
+			result = { ...resourcesDirItem, parent_id: base.parent_id };
 		} else {
 			const folderInfo = await loadFolderInfo(join(baseFolderPath, path));
 			if (folderInfo.id && !await Folder.load(folderInfo.id)) {

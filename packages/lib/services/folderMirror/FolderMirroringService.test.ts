@@ -654,13 +654,19 @@ describe('FolderMirroringService', () => {
 		expect(await fs.readFile(join(tempDir, 'resources', 'a-text-file.txt.metadata.yml'), 'utf8')).toBe(`id: ${resource.id}\ntitle: a-text-file\nocr_text: ''\n`);
 	});
 
-	test('should copy new resources to remote when added locally', async () => {
+	test.each([
+		{ hasParent: false },
+		// Previously, the resources directory could be deleted as "moved to a different parent"
+		// when items were added, but only if a non-root folder was being synced.
+		{ hasParent: true },
+	])('should copy new resources to remote when added locally (%#)', async ({ hasParent }) => {
 		const tempDir = await createTempDir();
 		await createFilesFromPathRecord(tempDir, {
 			'note.md': '---\ntitle: note\nid: e383d2f435dc4eae8f4dc690055c7960\n---\n\nTest note',
 		});
 
-		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
+		const baseFolderId = hasParent ? (await Folder.save({ title: 'parent', parent_id: '' })).id : '';
+		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, baseFolderId);
 
 		await waitForTestNoteToBeWritten(tempDir);
 		await mirror.waitForIdle();
@@ -668,6 +674,7 @@ describe('FolderMirroringService', () => {
 		let note = await Note.loadByTitle('note');
 		note = await shim.attachFileToNote(note, `${supportDir}/sample.txt`);
 		expect(note.id).toBe('e383d2f435dc4eae8f4dc690055c7960');
+		expect(note.parent_id).toBe(baseFolderId);
 
 		await waitForTestNoteToBeWritten(tempDir);
 		await mirror.waitForIdle();

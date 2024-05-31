@@ -6,6 +6,7 @@ import { friendlySafeFilename } from '../../path-utils';
 import time from '../../time';
 import { LinkTrackerWrapper } from './LinkTracker';
 import { ResourceEntity } from '../database/types';
+import debugLogger from './utils/debugLogger';
 
 export interface AddOrUpdateEvent {
 	path: string;
@@ -344,6 +345,8 @@ export default class ItemTree {
 				const differentObservedPath = observedPath && observedPath !== this.pathFromId(item.id);
 				const moved = existingItem.parent_id !== item.parent_id || differentObservedPath;
 				if (moved) {
+					debugLogger.debug('processItem/has been moved');
+
 					const newParentId = item.parent_id;
 					if (this.hasId(newParentId)) {
 						// Use the observedPath to handle the case where a file was both moved
@@ -355,6 +358,8 @@ export default class ItemTree {
 						}
 						this.checkRep_();
 					} else {
+						debugLogger.debug('processItem/has been moved -> external folder', newParentId);
+
 						// Moved to an external folder
 						await this.deleteItemAtId(item.id, listeners);
 						canUpdate = false;
