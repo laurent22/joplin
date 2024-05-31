@@ -513,6 +513,61 @@ describe('FolderMirroringService', () => {
 		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
 	});
 
+	test('moving a link source in the database should update its outgoing links in the file system', async () => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, {
+			'resources/resource-1.txt': 'test resource',
+			'folder2/note1.md': '---\ntitle: note1\n---\n\n[other note](../folder1/note2.md), [r](../resources/resource-1.txt)',
+			'folder1/note2.md': '---\ntitle: note2\n---\n\n[link](../folder2/note1.md), [resource](../resources/resource-1.txt)',
+		});
+
+		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
+
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		// Move folder1
+		let folder1 = await Folder.loadByTitle('folder1');
+		folder1 = await Folder.save({ ...folder1, title: 'renamed' });
+
+		const folder2 = await Folder.loadByTitle('folder2');
+		const note2 = await Note.loadByTitle('note2');
+		let note1 = await Note.loadByTitle('note1');
+
+		expect(note1.parent_id).toBe(folder2.id);
+		expect(note2.parent_id).toBe(folder1.id);
+
+		const resource = await Resource.loadByTitle('resource-1');
+		expect(resource).toBeTruthy();
+
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		await verifyDirectoryMatches(tempDir, {
+			'resources/resource-1.txt': 'test resource',
+			'resources/resource-1.txt.metadata.yml': `title: resource-1\nid: ${resource.id}\n`,
+			'renamed/.folder.yml': `title: renamed\nid: ${folder1.id}\n`,
+			'renamed/note2.md': `---\ntitle: note2\nid: ${note2.id}\n---\n\n[link](../folder2/note1.md), [resource](../resources/resource-1.txt)`,
+			'folder2/.folder.yml': `title: folder2\nid: ${folder2.id}\n`,
+			'folder2/note1.md': `---\ntitle: note1\nid: ${note1.id}\n---\n\n[other note](../renamed/note2.md), [r](../resources/resource-1.txt)`,
+		});
+
+		// Move note1
+		note1 = await Note.save({ ...note1, title: 'note1', parent_id: '' });
+
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		await verifyDirectoryMatches(tempDir, {
+			'resources/resource-1.txt': 'test resource',
+			'resources/resource-1.txt.metadata.yml': `title: resource-1\nid: ${resource.id}\n`,
+			'renamed/.folder.yml': `title: renamed\nid: ${folder1.id}\n`,
+			'renamed/note2.md': `---\ntitle: note2\nid: ${note2.id}\n---\n\n[link](../note1.md), [resource](../resources/resource-1.txt)`,
+			'folder2/.folder.yml': `title: folder2\nid: ${folder2.id}\n`,
+			'note1.md': `---\ntitle: note1\nid: ${note1.id}\n---\n\n[other note](./renamed/note2.md), [r](./resources/resource-1.txt)`,
+		});
+	});
+
 	test('should fix invalid note IDs', async () => {
 		const tempDir = await createTempDir();
 		await createFilesFromPathRecord(tempDir, {
