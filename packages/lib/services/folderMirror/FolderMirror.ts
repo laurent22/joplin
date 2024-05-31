@@ -5,7 +5,7 @@ import Note from '../../models/Note';
 import { friendlySafeFilename } from '../../path-utils';
 import shim from '../../shim';
 import { serialize } from '../../utils/frontMatter';
-import { FolderEntity, NoteEntity } from '../database/types';
+import { FolderEntity, NoteEntity, ResourceEntity } from '../database/types';
 import { basename, dirname, join, relative } from 'path';
 import writeFolderInfo from './utils/folderInfo/writeFolderInfo';
 import { FolderItem, ResourceItem } from './types';
@@ -45,7 +45,7 @@ const makeItemPaths = (basePath: string, items: FolderItem[]) => {
 	return output;
 };
 
-const keysMatch = (localItem: FolderItem, remoteItem: FolderItem, keys: ((keyof FolderEntity)|(keyof NoteEntity))[]) => {
+const keysMatch = (localItem: FolderItem, remoteItem: FolderItem, keys: ((keyof FolderEntity)|(keyof NoteEntity)|(keyof ResourceEntity))[]) => {
 	for (const key of keys) {
 		if (key in localItem !== key in remoteItem) {
 			return false;
@@ -231,13 +231,25 @@ export default class {
 				delete toSave.parent_id;
 				delete toSave.deleted_time;
 
-				// The file has also been changed. TODO: This isn't always true.
-				toSave.blob_updated_time = item.updated_time;
+				const localPath = Resource.fullPath(toSave);
+				const remotePath = join(baseFilePath, event.path);
+				let changed = true;
+				if (await shim.fsDriver().exists(localPath)) {
+					const localSum = await shim.fsDriver().md5File(localPath);
+					const remoteSum = await shim.fsDriver().md5File(remotePath);
+					changed = (remoteSum !== localSum);
+				}
+
+				// The file has also been changed.
+				if (changed) {
+					toSave.blob_updated_time = item.updated_time;
+				}
 
 				result = await Resource.save(toSave, { isNew }) as ResourceItem;
 
-				const path = Resource.fullPath(result);
-				await shim.fsDriver().copy(join(baseFilePath, event.path), path);
+				if (changed) {
+					await shim.fsDriver().copy(remotePath, localPath);
+				}
 
 				// Fill properties that don't exist in the database (but are present for
 				// compatibility).
@@ -365,14 +377,16 @@ export default class {
 		debugLogger.groupEnd();
 	};
 
-	public async onLocalItemDelete(id: string) {
+	public onLocalItemDelete(id: string) {
 		if (this.watcher_ && this.localTree_.hasId(id)) {
 			this.actionQueue_.push(this.handleQueueAction, { type: FolderMirrorEventType.DatabaseItemDelete, id });
 		}
 	}
 
 	public onLocalItemUpdate(item: FolderItem) {
-		if (this.watcher_ && this.localTree_.hasId(item.parent_id)) {
+		// Check both IDs and parent IDs -- parent IDs handle new files. IDs handle resource changes.
+		if (this.watcher_ && (this.localTree_.hasId(item.id) || this.localTree_.hasId(item.parent_id))) {
+			debugLogger.debug('localItemUpdate', item.title);
 			this.actionQueue_.push(this.handleQueueAction, { type: FolderMirrorEventType.DatabaseItemChange, id: item.id });
 		}
 	}
@@ -500,9 +514,12 @@ export default class {
 	}
 
 	private async databaseItemChangeTask(id: string) {
-		const item: FolderItem = await BaseItem.loadItemById(id);
-		if (item.type_ !== ModelType.Folder && item.type_ !== ModelType.Note) {
-			throw new Error('databaseItemChangeTask only supports notes and folders');
+		let item: FolderItem = await BaseItem.loadItemById(id);
+		if (item.type_ === ModelType.Resource) {
+			// Resources generally don't have a parent_id or deleted_time, so these need to be added.
+			item = { parent_id: resourcesDirId, deleted_time: 0, ...item };
+		} else if (item.type_ !== ModelType.Folder && item.type_ !== ModelType.Note) {
+			throw new Error('databaseItemChangeTask only supports notes, resources, and folders');
 		}
 
 		debugLogger.debug('onLocalItemUpdate', item.title, 'in', this.localTree_.pathFromId(item.parent_id));
@@ -522,7 +539,7 @@ export default class {
 				};
 			}
 
-			if (keysMatch(localItem, item, ['title', 'body', 'icon', 'parent_id'])) {
+			if (keysMatch(localItem, item, ['title', 'body', 'icon', 'parent_id', 'blob_updated_time'])) {
 				debugLogger.debug('onLocalItemUpdate/skip', item.title, item.deleted_time);
 				return;
 			}

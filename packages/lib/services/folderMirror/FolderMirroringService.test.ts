@@ -573,7 +573,7 @@ describe('FolderMirroringService', () => {
 	test('should add new local resources from disc', async () => {
 		const tempDir = await createTempDir();
 		await createFilesFromPathRecord(tempDir, {
-			'folder/.folder.yml': 'title: folder\nid: invalid',
+			'folder/.folder.yml': 'title: folder\nid: some-id',
 			'folder/note.md': '---\ntitle: note\nid: e393d2f435dc4eae8f4dc690055c7960\n---\n\n[resource](../resources/a-text-file.txt)',
 			'resources/a-text-file.txt': 'Test!',
 		});
@@ -587,5 +587,51 @@ describe('FolderMirroringService', () => {
 		const resource = await Resource.loadByTitle('a-text-file');
 
 		expect(note.body).toBe(`[resource](:/${resource.id})`);
+
+		// Write, then check, three more resource-note pairs.
+		for (let i = 0; i < 3; i++) {
+			await fs.writeFile(join(tempDir, 'resources', `new-resource-${i}.txt`), 'New resource', 'utf8');
+			await fs.writeFile(join(tempDir, `new-${i}.md`), `---\ntitle: new-${i}\n---\nResource: [resource](./resources/new-resource-${i}.txt)\n`, 'utf8');
+		}
+
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		for (let i = 0; i < 3; i++) {
+			const newResource = await Resource.loadByTitle(`new-resource-${i}`);
+			if (!newResource) throw new Error(`Resource new-resource-${i} does not exist.`);
+
+			expect(await Note.loadByTitle(`new-${i}`)).toMatchObject({
+				title: `new-${i}`,
+				body: `Resource: [resource](:/${newResource.id})\n`,
+			});
+			expect(await fs.readFile(Resource.fullPath(newResource), 'utf8')).toBe('New resource');
+		}
+	});
+
+	test('should update remote resources when changed locally', async () => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, {
+			'note.md': '---\ntitle: note\nid: e393d2f435dc4eae8f4dc690055c7960\n---\n\n[resource](./resources/a-text-file.txt)',
+			'resources/a-text-file.txt': 'Test!',
+		});
+
+		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
+
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		const resource = await Resource.loadByTitle('a-text-file');
+		const localPath = Resource.fullPath(resource);
+		expect(await fs.readFile(localPath, 'utf8')).toBe('Test!');
+
+		await fs.writeFile(localPath, 'Updated.', 'utf8');
+		await Resource.save({ ...resource, blob_updated_time: Date.now() });
+
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		expect(await fs.readFile(join(tempDir, 'resources', 'a-text-file.txt'), 'utf8')).toBe('Updated.');
+		expect(await fs.readFile(join(tempDir, 'resources', 'a-text-file.txt.metadata.yml'), 'utf8')).toBe(`id: ${resource.id}\ntitle: a-text-file\nocr_text: ''\n`);
 	});
 });

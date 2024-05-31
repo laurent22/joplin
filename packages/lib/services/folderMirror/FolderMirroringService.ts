@@ -2,6 +2,7 @@ import { normalize } from 'path';
 import { ModelType } from '../../BaseModel';
 import { FolderEntity, NoteEntity } from '../database/types';
 import FolderMirror from './FolderMirror';
+import eventManager, { EventName } from '../../eventManager';
 
 export default class FolderMirroringService {
 	private static instance_: FolderMirroringService|null = null;
@@ -14,7 +15,13 @@ export default class FolderMirroringService {
 	// Maps from directories to mirrors
 	private mirrors_: FolderMirror[] = [];
 
-	public constructor() {}
+	public constructor() {
+		eventManager.on(EventName.ResourceChange, (event) => {
+			for (const mirror of this.mirrors_) {
+				mirror.onLocalItemUpdate({ type_: ModelType.Resource, ...event.resource });
+			}
+		});
+	}
 
 	public async mirrorFolder(outputPath: string, baseFolderId: string) {
 		outputPath = normalize(outputPath);
@@ -51,19 +58,27 @@ export default class FolderMirroringService {
 	}
 
 	public static onFolderDelete(id: string) {
-		return this.mirrors().map(mirror => mirror.onLocalItemDelete(id));
+		for (const mirror of this.mirrors()) {
+			mirror.onLocalItemDelete(id);
+		}
 	}
 
 	public static onFolderUpdate(item: FolderEntity) {
-		return this.mirrors().map(mirror => mirror.onLocalItemUpdate({ type_: ModelType.Folder, ...item }));
+		for (const mirror of this.mirrors()) {
+			mirror.onLocalItemUpdate({ type_: ModelType.Folder, ...item });
+		}
 	}
 
 	public static onNoteUpdate(note: NoteEntity) {
-		return this.mirrors().map(mirror => mirror.onLocalItemUpdate({ type_: ModelType.Note, ...note }));
+		for (const mirror of this.mirrors()) {
+			mirror.onLocalItemUpdate({ type_: ModelType.Note, ...note });
+		}
 	}
 
 	public static onNoteDelete(id: string) {
-		return this.mirrors().map(mirror => mirror.onLocalItemDelete(id));
+		for (const mirror of this.mirrors()) {
+			mirror.onLocalItemDelete(id);
+		}
 	}
 
 	// eslint-disable-next-line -- Currently no better type for action than 'any'.
