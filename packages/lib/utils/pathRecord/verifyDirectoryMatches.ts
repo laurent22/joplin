@@ -2,7 +2,11 @@
 import shim from '../../shim';
 import { join } from 'path';
 
-const verifyDirectoryMatches = async (baseDir: string, fileContents: Record<string, string>) => {
+interface FileContentRecord {
+	[path: string]: string|RegExp;
+}
+
+const verifyDirectoryMatches = async (baseDir: string, fileContents: FileContentRecord) => {
 	for (const path in fileContents) {
 		if (!(await shim.fsDriver().exists(join(baseDir, path)))) {
 			throw new Error(`Expected file ${path} to exist.`);
@@ -10,8 +14,10 @@ const verifyDirectoryMatches = async (baseDir: string, fileContents: Record<stri
 
 		const fileContent = await shim.fsDriver().readFile(join(baseDir, path), 'utf8');
 		const expectedContent = fileContents[path];
-		if (fileContent !== fileContents[path]) {
-			throw new Error(`File ${path} content mismatch. Was ${JSON.stringify(fileContent)}, expected ${JSON.stringify(expectedContent)}.`);
+		const matches = typeof expectedContent === 'string' ? fileContent === expectedContent : expectedContent.exec(fileContent);
+		if (!matches) {
+			const expectedLabel = typeof expectedContent === 'string' ? JSON.stringify(expectedContent) : expectedContent.toString();
+			throw new Error(`File ${path} content mismatch. Was ${JSON.stringify(fileContent)}, expected ${expectedLabel}.`);
 		}
 	}
 

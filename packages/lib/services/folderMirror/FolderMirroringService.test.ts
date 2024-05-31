@@ -264,7 +264,7 @@ describe('FolderMirroringService', () => {
 		await verifyDirectoryMatches(tempDir, {
 			'Test folder/.folder.yml': `title: Test folder\nid: ${folder.id}\n`,
 			'Test folder/Note.md': `---\ntitle: Note\nid: ${note1.id}\n---\n\n`,
-			'Test folder/Note (1).md': `---\ntitle: Note\nid: ${note2.id}\n---\n\n`,
+			'Test folder/Note--1.md': `---\ntitle: Note\nid: ${note2.id}\n---\n\n`,
 			'Test folder/Test note.md': `---\ntitle: Test note\nid: ${note3.id}\n---\n\n`,
 		});
 
@@ -276,7 +276,7 @@ describe('FolderMirroringService', () => {
 		await verifyDirectoryMatches(tempDir, {
 			'Test folder/.folder.yml': `title: Test folder\nid: ${folder.id}\n`,
 			'Test folder/Renamed.md': `---\ntitle: Renamed\nid: ${note1.id}\n---\n\n`,
-			'Test folder/Note (1).md': `---\ntitle: Note\nid: ${note2.id}\n---\n\n`,
+			'Test folder/Note--1.md': `---\ntitle: Note\nid: ${note2.id}\n---\n\n`,
 			'Test folder/Test note.md': `---\ntitle: Test note\nid: ${note3.id}\n---\n\n`,
 		});
 
@@ -291,8 +291,8 @@ describe('FolderMirroringService', () => {
 		await verifyDirectoryMatches(tempDir, {
 			'Test folder/.folder.yml': `title: Test folder\nid: ${folder.id}\n`,
 			'Test folder/Renamed.md': `---\ntitle: Renamed\nid: ${note1.id}\n---\n\n`,
-			'Test folder/Renamed (1).md': `---\ntitle: Renamed\nid: ${note2.id}\n---\n\n`,
-			'Test folder/Renamed (2).md': `---\ntitle: Renamed\nid: ${note3.id}\n---\n\n`,
+			'Test folder/Renamed--1.md': `---\ntitle: Renamed\nid: ${note2.id}\n---\n\n`,
+			'Test folder/Renamed--2.md': `---\ntitle: Renamed\nid: ${note3.id}\n---\n\n`,
 		});
 
 		renameTask = waitForNoteChange();
@@ -303,7 +303,7 @@ describe('FolderMirroringService', () => {
 		await verifyDirectoryMatches(tempDir, {
 			'Test folder/.folder.yml': `title: Test folder\nid: ${folder.id}\n`,
 			'Test folder/Renamed.md': `---\ntitle: Renamed\nid: ${note1.id}\n---\n\n`,
-			'Test folder/Renamed (1).md': `---\ntitle: Renamed\nid: ${note2.id}\n---\n\n`,
+			'Test folder/Renamed--1.md': `---\ntitle: Renamed\nid: ${note2.id}\n---\n\n`,
 			'Renamed.md': `---\ntitle: Renamed\nid: ${note3.id}\n---\n\n`,
 		});
 	});

@@ -21,9 +21,9 @@ describe('ItemTree', () => {
 		expect([...tree.items()]).toMatchObject([
 			['.', baseItem],
 			['Test.md', { title: 'Test', id: '12345678901234567890123456789012' }],
-			['Test (1).md', { title: 'Test', id: '12345678901234567890123456789013' }],
+			['Test--1.md', { title: 'Test', id: '12345678901234567890123456789013' }],
 			['Test', { title: 'Test', id: '12345678901234567890123456789014' }],
-			['Test (1)', { title: 'Test', id: '12345678901234567890123456789015' }],
+			['Test--1', { title: 'Test', id: '12345678901234567890123456789015' }],
 			['Test/Note.md', { title: 'Note', id: '12345678901234567890123456789016' }],
 		]);
 		tree.checkRep_();

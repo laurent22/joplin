@@ -108,6 +108,10 @@ export default class ItemTree {
 			const resource = item as ResourceEntity;
 			// Prefer filename and file_extension, when available.
 			extension = resource.file_extension ?? extname(resource.filename ?? '');
+			if (!extension.startsWith('.')) {
+				extension = `.${extension}`;
+			}
+
 			baseName = resource.filename ? resource.filename : baseName;
 			if (baseName.endsWith(extension)) {
 				baseName = baseName.substring(0, baseName.length - extension.length);
@@ -118,7 +122,9 @@ export default class ItemTree {
 		let path;
 		let counter = 0;
 		do {
-			filename = `${baseName}${counter ? ` (${counter})` : ''}${extension}`;
+			// Duplicated items are given a --1, --2, --3 suffix. This is chosen over
+			// (1), (2), (3), because the latter make markdown link parsing more difficult.
+			filename = `${baseName}${counter ? `--${counter}` : ''}${extension}`;
 			path = join(parentPath, filename);
 			counter++;
 		} while (this.hasPath(path) && !allowPresentPaths.includes(path));

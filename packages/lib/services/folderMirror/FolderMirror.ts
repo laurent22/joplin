@@ -2,7 +2,6 @@ import { ModelType } from '../../BaseModel';
 import { DirectoryWatchEvent, DirectoryWatchEventType, DirectoryWatcher } from '../../fs-driver-base';
 import Folder, { FolderEntityWithChildren } from '../../models/Folder';
 import Note from '../../models/Note';
-import { friendlySafeFilename } from '../../path-utils';
 import shim from '../../shim';
 import { serialize } from '../../utils/frontMatter';
 import { FolderEntity, NoteEntity, ResourceEntity } from '../database/types';
@@ -22,28 +21,6 @@ import Resource from '../../models/Resource';
 import { resourceMetadataExtension, resourcesDirId, resourcesDirItem, resourcesDirName } from './constants';
 import resourceToMetadataYml from './utils/resourceToMetadataYml';
 const { ALL_NOTES_FILTER_ID } = require('../../reserved-ids.js');
-
-
-const makeItemPaths = (basePath: string, items: FolderItem[]) => {
-	const output: Map<string, string> = new Map();
-	const existingFilenames: string[] = [];
-
-	for (const item of items) {
-		const isFolder = item.type_ === ModelType.Folder;
-		const basename = friendlySafeFilename(item.title);
-
-		let filename;
-		let counter = 0;
-		do {
-			filename = `${basename}${counter ? ` (${counter})` : ''}${isFolder ? '' : '.md'}`;
-			counter++;
-		} while (existingFilenames.includes(filename));
-		output.set(item.id, basePath ? join(basePath, filename) : filename);
-		existingFilenames.push(filename);
-	}
-
-	return output;
-};
 
 const keysMatch = (localItem: FolderItem, remoteItem: FolderItem, keys: ((keyof FolderEntity)|(keyof NoteEntity)|(keyof ResourceEntity))[]) => {
 	for (const key of keys) {
@@ -338,7 +315,7 @@ export default class {
 				await shim.fsDriver().writeFile(`${fullPath}${resourceMetadataExtension}`, metadata, 'utf8');
 
 				const internalSourcePath = Resource.fullPath(item, false);
-				debugLogger.debug('remote.update/copy resource', path, 'from', internalSourcePath, 'to', fullPath, 'id', item);
+				debugLogger.debug('remote.update/copy resource', path, 'from', internalSourcePath, 'to', fullPath, 'id', item.id);
 				if (!await shim.fsDriver().exists(internalSourcePath)) {
 					debugLogger.warn(`Unable to copy resource from internal for item ${item.id}.`);
 				} else {
@@ -477,32 +454,40 @@ export default class {
 
 
 		const processFolders = async (basePath: string, parentId: string, folders: FolderEntityWithChildren[]) => {
-			const folderIdToItemPath = makeItemPaths(basePath, folders);
-
 			for (const folder of folders) {
 				if (folder.deleted_time) continue;
 
-				const folderPath = folderIdToItemPath.get(folder.id);
-				await this.localTree_.addItemAt(folderPath, folder, noOpActionListeners);
+				await this.localTree_.addItemTo(basePath, folder, noOpActionListeners);
+				const folderPath = this.localTree_.pathFromId(folder.id);
 				await processFolders(folderPath, folder.id, folder.children || []);
 			}
 
 			const noteFields = ['id', 'title', 'body', 'is_todo', 'parent_id', 'updated_time', 'deleted_time'];
 			const childNotes = await Note.allByParentId(parentId, { fields: noteFields });
-			const noteIdToItemPath = makeItemPaths(basePath, childNotes);
 
 			for (const note of childNotes) {
 				if (note.deleted_time) continue;
 
 				// Add resources first, so that their links get processed first.
-				const resourceIds = await Note.linkedResourceIds(note.body ?? '');
-				for (const resourceId of resourceIds) {
-					await this.addNewLocalResource(resourceId, false);
+				const linkedItems = await Note.linkedItems(note.body ?? '');
+				const linkedResources: ResourceEntity[] = linkedItems.filter(item => item.type_ === ModelType.Resource);
+
+				// Sort the linked resources for consistency when testing (default sorting may involve
+				// ID ordering).
+				linkedResources.sort((a, b) => {
+					const createdTimeDiff = a.created_time - b.created_time;
+					if (createdTimeDiff !== 0) return createdTimeDiff;
+					const updatedTimeDiff = a.updated_time - b.updated_time;
+					if (updatedTimeDiff !== 0) return updatedTimeDiff;
+					return 0;
+				});
+
+				for (const resource of linkedResources) {
+					await this.addNewLocalResource(resource.id, false);
 				}
 
-				const notePath = noteIdToItemPath.get(note.id);
 				if (!note.deleted_time) {
-					await this.localTree_.addItemAt(notePath, note, noOpActionListeners);
+					await this.localTree_.addItemTo(basePath, note, noOpActionListeners);
 				}
 			}
 		};

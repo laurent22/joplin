@@ -1,6 +1,6 @@
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
-import { createFolderTree, createNoteAndResource, createTempDir, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import { createFolderTree, createNoteAndResource, createTempDir, setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
 import FolderMirror from './FolderMirror';
 import { extname, join } from 'path';
 import createFilesFromPathRecord from '../../utils/pathRecord/createFilesFromPathRecord';
@@ -66,7 +66,7 @@ describe('FolderMirror.fullSync', () => {
 				'',
 				'',
 			].join('\n'),
-			[join(folder2.title, folder3.title, `${note3Copy.title} (1).md`)]: [
+			[join(folder2.title, folder3.title, `${note3Copy.title}--1.md`)]: [
 				'---',
 				'title: note3',
 				`id: ${note3Copy.id}`,
@@ -385,7 +385,7 @@ describe('FolderMirror.fullSync', () => {
 
 		await verifyDirectoryMatches(tempDir, {
 			'note.md': '---\ntitle: note\nid: 1234567890abcdef0123123456789012\n---\n\n',
-			'note (1).md': '---\ntitle: note\nid: 000000000000abcf0123123456789012\n---\n\n',
+			'note--1.md': '---\ntitle: note\nid: 000000000000abcf0123123456789012\n---\n\n',
 		});
 	});
 
@@ -425,8 +425,8 @@ describe('FolderMirror.fullSync', () => {
 		const expectedDirectoryContent = {
 			'note1.md': `---\ntitle: note1\nid: ${note1Id}\n---\n\nTest`,
 			'note2.md': `---\ntitle: note2\nid: ${note2Id}\n---\n\n[Test](./note1.md)`,
-			'note2 (1).md': `---\ntitle: note2\nid: ${note3Id}\n---\n\n[Test](./note1.md),[Test](./note1.md)`,
-			'note4.md': `---\ntitle: note4\nid: ${note4Id}\n---\n\n[Test](./note2.md)\n\n[Test link](./note2 (1).md)`,
+			'note2--1.md': `---\ntitle: note2\nid: ${note3Id}\n---\n\n[Test](./note1.md),[Test](./note1.md)`,
+			'note4.md': `---\ntitle: note4\nid: ${note4Id}\n---\n\n[Test](./note2.md)\n\n[Test link](./note2--1.md)`,
 		};
 
 		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
@@ -573,6 +573,43 @@ describe('FolderMirror.fullSync', () => {
 		// Another full sync shouldn't change the output content.
 		await mirror.fullSync();
 		await checkDirectoryContent();
+	});
+
+	test('should correctly title resources with the same name', async () => {
+		const tempDir = await createTempDir();
+
+		const mirror = new FolderMirror(tempDir, '');
+
+		let note = await Note.save({ title: 'test', parent_id: '', body: 'Test' });
+
+		for (let i = 0; i < 3; i++) {
+			note = await shim.attachFileToNote(note, `${supportDir}/sample.txt`);
+		}
+
+		await mirror.fullSync();
+
+		const expected = {
+			'resources/sample.txt': 'just testing',
+			'resources/sample.txt.metadata.yml': /.*/,
+			'resources/sample--1.txt': 'just testing',
+			'resources/sample--1.txt.metadata.yml': /.*/,
+			'resources/sample--2.txt': 'just testing',
+			'resources/sample--2.txt.metadata.yml': /.*/,
+			'test.md': `---\ntitle: test\nid: ${note.id}\n---\n\nTest\n\n[sample.txt](./resources/sample.txt)\n\n\n\n[sample.txt](./resources/sample--1.txt)\n\n\n\n[sample.txt](./resources/sample--2.txt)\n\n`,
+		};
+
+		await verifyDirectoryMatches(tempDir, expected);
+
+		// A resync shouldn't change anything.
+		await mirror.fullSync();
+		await verifyDirectoryMatches(tempDir, expected);
+
+		const updatedNote = await Note.loadByTitle('test');
+		expect(updatedNote).toMatchObject({
+			id: note.id,
+			title: 'test',
+		});
+		expect(updatedNote.body).toMatch(/^Test\n\n\[sample\.txt\]\(:\/.{32}\)\n\n\n\n\[sample\.txt\]\(:\/.{32}\)\n\n\n\n\[sample\.txt\]\(:\/.{32}\)/);
 	});
 
 	test('should not fail if a child of a local folder has been deleted', async () => {
