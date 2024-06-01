@@ -572,6 +572,22 @@ describe('FolderMirroringService', () => {
 			'folder2/.folder.yml': `title: folder2\nid: ${folder2.id}\n`,
 			'note1.md': `---\ntitle: note1\nid: ${note1.id}\n---\n\n[other note](./renamed/note2.md), [r](./resources/resource-1.txt)`,
 		});
+
+		// Internal links should still be database links
+		expect(await Folder.loadByTitle('renamed')).toMatchObject({
+			parent_id: baseId,
+			id: folder1.id,
+		});
+		expect(await Note.loadByTitle('note1')).toMatchObject({
+			parent_id: baseId,
+			id: note1.id,
+			body: `[other note](:/${note2.id}), [r](:/${resource.id})`,
+		});
+		expect(await Note.loadByTitle('note2')).toMatchObject({
+			parent_id: folder1.id,
+			id: note2.id,
+			body: `[link](:/${note1.id}), [resource](:/${resource.id})`,
+		});
 	});
 
 	test('should fix invalid note IDs', async () => {
