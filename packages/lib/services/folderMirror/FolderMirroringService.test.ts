@@ -513,7 +513,10 @@ describe('FolderMirroringService', () => {
 		await verifyDirectoryMatches(tempDir, expectedDirectoryContent);
 	});
 
-	test('moving a link source in the database should update its outgoing links in the file system', async () => {
+	test.each([
+		{ hasParent: false },
+		{ hasParent: true },
+	])('moving a link source in the database should update its outgoing links in the file system (%j)', async ({ hasParent }) => {
 		const tempDir = await createTempDir();
 		await createFilesFromPathRecord(tempDir, {
 			'resources/resource-1.txt': 'test resource',
@@ -521,7 +524,8 @@ describe('FolderMirroringService', () => {
 			'folder1/note2.md': '---\ntitle: note2\n---\n\n[link](../folder2/note1.md), [resource](../resources/resource-1.txt)',
 		});
 
-		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
+		const baseId = hasParent ? (await Folder.save({ title: 'root', parent_id: '' })).id : '';
+		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, baseId);
 
 		await waitForTestNoteToBeWritten(tempDir);
 		await mirror.waitForIdle();
@@ -536,6 +540,8 @@ describe('FolderMirroringService', () => {
 
 		expect(note1.parent_id).toBe(folder2.id);
 		expect(note2.parent_id).toBe(folder1.id);
+		expect(folder1.parent_id).toBe(baseId);
+		expect(folder2.parent_id).toBe(baseId);
 
 		const resource = await Resource.loadByTitle('resource-1');
 		expect(resource).toBeTruthy();
@@ -553,7 +559,7 @@ describe('FolderMirroringService', () => {
 		});
 
 		// Move note1
-		note1 = await Note.save({ ...note1, title: 'note1', parent_id: '' });
+		note1 = await Note.save({ ...note1, title: 'note1', parent_id: baseId });
 
 		await waitForTestNoteToBeWritten(tempDir);
 		await mirror.waitForIdle();
