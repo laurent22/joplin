@@ -560,7 +560,7 @@ describe('FolderMirror.fullSync', () => {
 
 		const checkDirectoryContent = async () => {
 			expect(await fs.readFile(join(tempDir, 'note.md'), 'utf8')).toBe(`---\ntitle: note\nid: ${note.id}\n---\n\n![photo.jpg](./resources/photo.jpg)`);
-			expect(await fs.readFile(join(tempDir, 'resources', 'photo.jpg.metadata.yml'), 'utf8')).toBe(`id: ${resource.id}\ntitle: ${resource.title}\n`);
+			expect(await fs.readFile(join(tempDir, 'resources', 'photo.jpg.metadata.yml'), 'utf8')).toBe(`title: ${resource.title}\nid: ${resource.id}\n`);
 			expect(
 				await shim.fsDriver().md5File(join(tempDir, 'resources', 'photo.jpg')),
 			).toBe(

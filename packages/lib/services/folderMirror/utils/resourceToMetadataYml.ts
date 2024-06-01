@@ -12,7 +12,8 @@ const resourceToMetadataYml = (resource: ResourceEntity) => {
 		result.ocr_text = resource.ocr_text;
 	}
 
-	return yaml.dump(result);
+	const fieldOrder = ['title', 'id', 'ocr_text'];
+	return yaml.dump(result, { sortKeys: (a, b) => fieldOrder.indexOf(a) - fieldOrder.indexOf(b) });
 };
 
 export default resourceToMetadataYml;
