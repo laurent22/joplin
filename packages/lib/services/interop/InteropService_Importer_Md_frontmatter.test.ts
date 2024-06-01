@@ -194,7 +194,7 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', () => {
 		expect(note.todo_completed).toBeGreaterThan(0);
 	});
 
-	test('should import notes that are not tasks', async () => {
+	it('should import notes that are not tasks', async () => {
 		const note = await importTestFile('not_a_task.md');
 
 		expect(note).toMatchObject({
