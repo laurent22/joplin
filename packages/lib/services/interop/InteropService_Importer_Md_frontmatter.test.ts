@@ -193,4 +193,15 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', () => {
 		expect(note.is_todo).toBe(1);
 		expect(note.todo_completed).toBeGreaterThan(0);
 	});
+
+	test('should import notes that are not tasks', async () => {
+		const note = await importTestFile('not_a_task.md');
+
+		expect(note).toMatchObject({
+			title: 'Not a task',
+			body: 'This is a note.',
+			is_todo: 0,
+			todo_completed: 0,
+		});
+	});
 });
