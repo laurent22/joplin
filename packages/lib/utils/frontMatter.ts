@@ -13,7 +13,7 @@ const convertDate = (datetime: number): string => {
 	return time.unixMsToRfc3339Sec(datetime);
 };
 
-export const fieldOrder = ['title', 'id', 'updated', 'created', 'source', 'author', 'latitude', 'longitude', 'altitude', 'completed?', 'due', 'tags'];
+export const fieldOrder = ['title', 'id', 'updated', 'created', 'source', 'author', 'latitude', 'longitude', 'altitude', 'completed?', 'completed_time', 'due', 'tags'];
 
 // There is a special case (negative numbers) where the yaml library will force quotations
 // These need to be stripped
