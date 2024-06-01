@@ -626,6 +626,32 @@ describe('FolderMirror.fullSync', () => {
 		});
 	});
 
+	test('should change a task\'s completed field when changed in a file', async () => {
+		const tempDir = await createTempDir();
+		const task = await Note.save({ is_todo: 1, todo_completed: 0, title: 'Task', body: 'test', parent_id: '' });
+
+		const mirror = new FolderMirror(tempDir, '');
+		await mirror.fullSync();
+
+		await verifyDirectoryMatches(tempDir, {
+			'Task.md': `---\ntitle: Task\nid: ${task.id}\ncompleted?: no\n---\n\ntest`,
+		});
+
+		await fs.writeFile(join(tempDir, 'Task.md'), `---\ntitle: Task\nid: ${task.id}\ncompleted?: yes\n---\n\ntest`);
+		await mirror.fullSync();
+
+		const updatedTask = await Note.load(task.id);
+		expect(updatedTask).toMatchObject({
+			is_todo: 1,
+			body: 'test',
+			parent_id: '',
+		});
+		expect(updatedTask.todo_completed).toBeGreaterThan(0);
+		await verifyDirectoryMatches(tempDir, {
+			'Task.md': `---\ntitle: Task\nid: ${task.id}\ncompleted?: yes\n---\n\ntest`,
+		});
+	});
+
 	// it('should delete notes locally when deleted remotely', async () => {
 	// 	;
 	// });

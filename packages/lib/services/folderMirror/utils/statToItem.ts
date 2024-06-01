@@ -75,6 +75,10 @@ const statToItem = async (baseFolderPath: string, stat: Stat, remoteTree: ItemTr
 		const { metadata } = parseFrontMatter(fileContent);
 
 		result = {
+			// These properties need to be present to allow comparisons to work correctly.
+			is_todo: 0,
+			todo_completed: 0,
+
 			...base,
 			...metadata,
 

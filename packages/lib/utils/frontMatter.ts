@@ -75,6 +75,7 @@ export const noteToFrontMatter = (note: NoteEntity, tagTitles: string[], options
 	if (note.is_todo) {
 		// boolean is not support by the yaml FAILSAFE_SCHEMA
 		md['completed?'] = note.todo_completed ? 'yes' : 'no';
+		if (note.todo_completed) { md['completed_time'] = convertDate(note.todo_completed); }
 	}
 	if (note.todo_due) { md['due'] = convertDate(note.todo_due); }
 
@@ -111,7 +112,7 @@ export const serialize = async (modNote: NoteEntity, tagTitles: string[], option
 };
 
 function isTruthy(str: string): boolean {
-	return str.toLowerCase() in ['true', 'yes'];
+	return ['true', 'yes'].includes(str.toLowerCase());
 }
 
 // Enforces exactly 2 spaces in front of list items
@@ -237,7 +238,7 @@ export const parse = (note: string): ParsedMeta => {
 	if (metadata.is_todo) {
 		if (isTruthy(md['completed?'])) {
 			// Completed time isn't preserved, so we use a sane choice here
-			metadata['todo_completed'] = metadata['user_updated_time'];
+			metadata['todo_completed'] = metadata['user_updated_time'] || Date.now();
 		}
 		if ('due' in md) {
 			const due_date = time.anythingToMs(md['due'], null);

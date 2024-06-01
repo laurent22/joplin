@@ -69,6 +69,17 @@ describe('FolderMirroringService', () => {
 		await FolderMirroringService.instance().reset();
 	});
 
+	test('waitForTestNoteToBeWritten should clean up the files it creates', async () => {
+		const tempDir = await createTempDir();
+
+		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		// Directory should be empty
+		await verifyDirectoryMatches(tempDir, {});
+	});
+
 	test('should return an existing folder mirror, if it exists', async () => {
 		const tempDir = await createTempDir();
 		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');

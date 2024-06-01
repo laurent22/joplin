@@ -92,6 +92,7 @@ export interface MdFrontMatterExport {
 	'longitude'?: number;
 	'altitude'?: number;
 	'completed?'?: string;
+	'completed_time'?: string;
 	'due'?: string;
 	'updated'?: string;
 	'created'?: string;

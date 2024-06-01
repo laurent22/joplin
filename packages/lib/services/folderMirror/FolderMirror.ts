@@ -18,9 +18,13 @@ import debugLogger from './utils/debugLogger';
 import statToItem from './utils/statToItem';
 import fillRemoteTree from './utils/fillRemoteTree';
 import Resource from '../../models/Resource';
-import { resourceMetadataExtension, resourcesDirId, resourcesDirItem, resourcesDirName } from './constants';
+import { itemDiffFields, resourceMetadataExtension, resourcesDirId, resourcesDirItem, resourcesDirName } from './constants';
 import resourceToMetadataYml from './utils/resourceToMetadataYml';
+import Logger from '@joplin/utils/Logger';
 const { ALL_NOTES_FILTER_ID } = require('../../reserved-ids.js');
+
+// A logger for less verbose logs (debugLogger is for very verbose logging).
+const logger = Logger.create('FolderMirror');
 
 const keysMatch = (localItem: FolderItem, remoteItem: FolderItem, keys: ((keyof FolderEntity)|(keyof NoteEntity)|(keyof ResourceEntity))[]) => {
 	for (const key of keys) {
@@ -45,7 +49,7 @@ const mergeTrees = async (localTree: ItemTree, remoteTree: ItemTree, modifyLocal
 			const remoteItem = remoteTree.getAtId(id);
 			const remotePath = remoteTree.pathFromId(id);
 
-			if (!keysMatch(localItem, remoteItem, ['title', 'body', 'icon'])) {
+			if (!keysMatch(localItem, remoteItem, itemDiffFields)) {
 				if (localItem.updated_time > remoteItem.updated_time) {
 					await remoteTree.updateAtPath(remotePath, localItem, modifyRemote);
 				} else {
@@ -202,7 +206,7 @@ export default class {
 				result = await Note.save(toSave, { isNew });
 			} else if (item.type_ === ModelType.Resource) {
 				if (event.path.endsWith(resourceMetadataExtension)) {
-					debugLogger.warn('Attempting to save a metadata file as a new local file. This is probably a mistake. Path:', event.path);
+					logger.warn('Attempting to save a metadata file as a new local file. This is probably a mistake. Path:', event.path);
 				}
 
 				const resource = item as ResourceItem;
@@ -321,7 +325,7 @@ export default class {
 				const internalSourcePath = Resource.fullPath(item, false);
 				debugLogger.debug('remote.update/copy resource', path, 'from', internalSourcePath, 'to', fullPath, 'id', item.id);
 				if (!await shim.fsDriver().exists(internalSourcePath)) {
-					debugLogger.warn(`Unable to copy resource from internal for item ${item.id}.`);
+					logger.warn(`Unable to copy resource from internal for item ${item.id}.`);
 				} else {
 					await shim.fsDriver().copy(internalSourcePath, fullPath);
 				}
@@ -428,7 +432,7 @@ export default class {
 			return null;
 		}
 
-		const resourceFields = ['id', 'title', 'updated_time', 'mime', 'filename', 'file_extension'];
+		const resourceFields = ['id', 'title', 'updated_time', 'blob_updated_time', 'mime', 'filename', 'file_extension'];
 		const resource: ResourceItem = { ...await Resource.load(id, { fields: resourceFields }) };
 		resource.parent_id = resourcesDirId;
 		resource.deleted_time = 0;
@@ -466,7 +470,7 @@ export default class {
 				await processFolders(folderPath, folder.id, folder.children || []);
 			}
 
-			const noteFields = ['id', 'title', 'body', 'is_todo', 'parent_id', 'updated_time', 'deleted_time'];
+			const noteFields = ['id', 'title', 'body', 'is_todo', 'todo_due', 'todo_completed', 'parent_id', 'updated_time', 'deleted_time'];
 			const childNotes = await Note.allByParentId(parentId, { fields: noteFields });
 
 			for (const note of childNotes) {
@@ -563,7 +567,7 @@ export default class {
 				};
 			}
 
-			if (keysMatch(localItem, item, ['title', 'body', 'icon', 'parent_id', 'blob_updated_time'])) {
+			if (keysMatch(localItem, item, [...itemDiffFields, 'parent_id'])) {
 				debugLogger.debug('onLocalItemUpdate/skip', item.title, item.deleted_time);
 				return;
 			}
@@ -703,7 +707,7 @@ export default class {
 						await this.localTree_.optimizeItemPath(item, noOpActionListeners);
 					}
 				} else if (event.type === DirectoryWatchEventType.Unlink) {
-					throw new Error(`Path ${path} was marked as unlinked, but still exists.`);
+					logger.warn(`Path ${path} was marked as unlinked, but still exists.`);
 				} else {
 					const exhaustivenessCheck: never = event.type;
 					return exhaustivenessCheck;
