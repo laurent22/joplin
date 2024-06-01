@@ -201,6 +201,10 @@ export default class {
 				};
 				result = await Note.save(toSave, { isNew });
 			} else if (item.type_ === ModelType.Resource) {
+				if (event.path.endsWith(resourceMetadataExtension)) {
+					debugLogger.warn('Attempting to save a metadata file as a new local file. This is probably a mistake. Path:', event.path);
+				}
+
 				const resource = item as ResourceItem;
 				const toSave = { ...resource };
 
@@ -662,6 +666,12 @@ export default class {
 			debugLogger.debug('Folder info changed');
 			fullPath = dirname(fullPath);
 			path = dirname(path);
+		}
+
+		// Resource metadata updated -- use this to update the resource.
+		if (path.endsWith(resourceMetadataExtension) && dirname(path) === resourcesDirName) {
+			path = path.substring(0, path.length - resourceMetadataExtension.length);
+			fullPath = join(this.baseFilePath, path);
 		}
 
 		try {

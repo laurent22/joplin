@@ -742,4 +742,37 @@ describe('FolderMirroringService', () => {
 			'note.md': '---\ntitle: note\nid: e383d2f435dc4eae8f4dc690055c7960\n---\n\nTest note\n\n[sample.txt](./resources/sample.txt)\n\n',
 		});
 	});
+
+	test('should update resource metadata locally when changed remotely', async () => {
+		const tempDir = await createTempDir();
+		await createFilesFromPathRecord(tempDir, {
+			'resources/resource.js': 'function foo() {}',
+			'note.md': '---\ntitle: note\n---\n\nA [js file](./resources/resource.js).',
+		});
+
+		const mirror = await FolderMirroringService.instance().mirrorFolder(tempDir, '');
+
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		const resource = await Resource.loadByTitle('resource');
+		const note = await Note.loadByTitle('note');
+
+		await verifyDirectoryMatches(tempDir, {
+			'resources/resource.js': 'function foo() {}',
+			'resources/resource.js.metadata.yml': `title: resource\nid: ${resource.id}\n`,
+			'note.md': `---\ntitle: note\nid: ${note.id}\n---\n\nA [js file](./resources/resource.js).`,
+		});
+
+		await fs.writeFile(join(tempDir, 'resources', 'resource.js.metadata.yml'), `title: resource-renamed\nid: ${resource.id}\nocr_text: 'This JS file has OCR text!'\n`);
+
+		await waitForTestNoteToBeWritten(tempDir);
+		await mirror.waitForIdle();
+
+		expect(await Resource.load(resource.id)).toMatchObject({
+			id: resource.id,
+			title: 'resource-renamed',
+			ocr_text: 'This JS file has OCR text!',
+		});
+	});
 });
