@@ -184,4 +184,13 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', () => {
 		const tags = (await Tag.tagsByNoteId(note.id)).map(tag => tag.title).sort();
 		expect(tags).toMatchObject(['tag1', 'tag2']);
 	});
+
+	it('should import completed tasks', async () => {
+		const note = await importTestFile('task_completed.md');
+
+		expect(note.title).toBe('Task');
+		expect(note.body).toBe('This is a test. This task should import as completed.\n');
+		expect(note.is_todo).toBe(1);
+		expect(note.todo_completed).toBeGreaterThan(0);
+	});
 });
