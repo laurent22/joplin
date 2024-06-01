@@ -728,7 +728,7 @@ describe('FolderMirroringService', () => {
 		await mirror.waitForIdle();
 
 		expect(await fs.readFile(join(tempDir, 'resources', 'a-text-file.txt'), 'utf8')).toBe('Updated.');
-		expect(await fs.readFile(join(tempDir, 'resources', 'a-text-file.txt.metadata.yml'), 'utf8')).toBe(`title: a-text-file\nid: ${resource.id}\nocr_text: ''\n`);
+		expect(await fs.readFile(join(tempDir, 'resources', 'a-text-file.txt.metadata.yml'), 'utf8')).toBe(`title: a-text-file\nid: ${resource.id}\n`);
 	});
 
 	test.each([
@@ -760,7 +760,7 @@ describe('FolderMirroringService', () => {
 
 		await verifyDirectoryMatches(tempDir, {
 			'resources/sample.txt': 'just testing',
-			'resources/sample.txt.metadata.yml': `title: ${resource.title}\nid: ${resource.id}\nocr_text: ''\n`,
+			'resources/sample.txt.metadata.yml': `title: ${resource.title}\nid: ${resource.id}\n`,
 			'note.md': '---\ntitle: note\nid: e383d2f435dc4eae8f4dc690055c7960\n---\n\nTest note\n\n[sample.txt](./resources/sample.txt)\n\n',
 		});
 	});

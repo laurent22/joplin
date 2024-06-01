@@ -8,7 +8,7 @@ const resourceToMetadataYml = (resource: ResourceEntity) => {
 	if ('title' in resource) {
 		result.title = resource.title;
 	}
-	if ('ocr_text' in resource) {
+	if (resource.ocr_text) {
 		result.ocr_text = resource.ocr_text;
 	}
 
