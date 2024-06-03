@@ -1,18 +1,13 @@
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
-import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import { useMemo, useRef } from 'react';
+import usePlugin from '../../../../../plugins/hooks/usePlugin';
 
 // initialItem is used when the plugin is not installed. For example, if the plugin item is being
 // created from search results.
 const usePluginItem = (id: string, pluginSettings: PluginSettings, initialItem: PluginItem|null): PluginItem => {
-	const plugin = useMemo(() => {
-		if (!PluginService.instance().pluginIds.includes(id)) {
-			return null;
-		}
-
-		return PluginService.instance().pluginById(id);
-	}, [id]);
+	const plugin = usePlugin(id);
 
 	const lastManifest = useRef<PluginManifest>();
 	if (plugin) {

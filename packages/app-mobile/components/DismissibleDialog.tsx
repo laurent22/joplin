@@ -50,6 +50,8 @@ const useStyles = (themeId: number, containerStyle: ViewStyle, size: DialogSize)
 				borderRadius: 12,
 				padding: 10,
 
+				// Use Math.min with width and height -- the maxWidth and maxHeight style
+				// properties don't seem to limit the size for this.
 				height: Math.min(maxHeight, windowSize.height * 0.9),
 				width: Math.min(maxWidth, windowSize.width * 0.97),
 				flexShrink: 1,

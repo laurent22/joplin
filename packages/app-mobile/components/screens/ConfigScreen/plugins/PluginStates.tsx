@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ConfigScreenStyles } from '../configScreenStyles';
 import { View, StyleSheet } from 'react-native';
 import { Banner, Text, Button, ProgressBar, List, Divider } from 'react-native-paper';
@@ -10,7 +10,6 @@ import SearchPlugins from './SearchPlugins';
 import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import useRepoApi from './utils/useRepoApi';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
-import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import PluginInfoModal from './PluginInfoModal';
 import usePluginCallbacks from './utils/usePluginCallbacks';
 
@@ -44,12 +43,15 @@ const useLoadedPluginIds = () => {
 	}, []);
 	const [loadedPluginIds, setLoadedPluginIds] = useState(getLoadedPlugins);
 
-	useAsyncEffect(async event => {
-		while (!event.cancelled) {
-			await PluginService.instance().waitForLoadedPluginsChange();
+	useEffect(() => {
+		const { remove } = PluginService.instance().addLoadedPluginsChangeListener(() => {
 			setLoadedPluginIds(getLoadedPlugins());
-		}
-	}, []);
+		});
+
+		return () => {
+			remove();
+		};
+	}, [getLoadedPlugins]);
 
 	return loadedPluginIds;
 };

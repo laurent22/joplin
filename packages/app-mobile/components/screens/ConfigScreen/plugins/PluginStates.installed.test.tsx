@@ -209,4 +209,62 @@ describe('PluginStates.installed', () => {
 
 		wrapper.unmount();
 	});
+
+	it('should support updating plugins from the info modal', async () => {
+		await mockRepositoryApiConstructor();
+
+		const abcPluginId = 'org.joplinapp.plugins.AbcSheetMusic';
+
+		const defaultPluginSettings: PluginSettings = {
+			[abcPluginId]: defaultPluginSetting(),
+		};
+
+		// Load an outdated recommended plugin
+		await loadMockPlugin(abcPluginId, 'ABC Sheet Music', '0.0.1', defaultPluginSettings);
+		expect(PluginService.instance().plugins[abcPluginId]).toBeTruthy();
+
+		const wrapper = render(
+			<WrappedPluginStates
+				initialPluginSettings={defaultPluginSettings}
+				store={reduxStore}
+			/>,
+		);
+		await showInstalledTab();
+
+		// Open the plugin dialog
+		const card = await screen.findByText('ABC Sheet Music');
+		const user = userEvent.setup();
+		await user.press(card);
+
+		const updateButton = await screen.findByRole('button', { name: 'Update' });
+		expect(updateButton).toBeVisible();
+		await user.press(updateButton);
+
+		// After updating, the update button should read "updated"
+		const updatedButton = await screen.findByRole('button', { name: 'Updated', disabled: true });
+		expect(updatedButton).toBeVisible();
+
+		// Should be marked as updated.
+		await waitFor(() => {
+			expect(Setting.value('plugins.states')).toMatchObject({
+				[abcPluginId]: { enabled: true, hasBeenUpdated: true },
+			});
+		});
+
+		// Simulate the behavior of the plugin loader -- unloading and reloading plugins is generally
+		// handled elsewhere. This does, however, help verify that the verison number changes correctly
+		// in the UI.
+		await act(async () => {
+			await PluginService.instance().unloadPlugin(abcPluginId);
+			await loadMockPlugin(abcPluginId, 'ABC Sheet Music', '0.0.2', defaultPluginSettings);
+		});
+
+		// Version should change in two places -- the plugin list and the modal.
+		await waitFor(() => {
+			const versionText = screen.getAllByText('v0.0.2');
+			expect(versionText).toHaveLength(2);
+		});
+
+		wrapper.unmount();
+	});
 });

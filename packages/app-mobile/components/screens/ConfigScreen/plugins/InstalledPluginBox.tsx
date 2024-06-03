@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { useMemo } from 'react';

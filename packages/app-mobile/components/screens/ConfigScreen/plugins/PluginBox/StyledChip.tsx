@@ -24,7 +24,7 @@ const RecommendedChip: React.FC<Props> = props => {
 
 	const accessibilityProps: Partial<Props> = {};
 	if (!props.onPress) {
-		// TODO: May have no effect until a future version of RN Paper.
+		// Note: May have no effect until a future version of RN Paper.
 		// See https://github.com/callstack/react-native-paper/pull/4327
 		accessibilityProps.accessibilityRole = 'text';
 	}
