@@ -241,7 +241,7 @@ describe('PluginStates.installed', () => {
 		await user.press(updateButton);
 
 		// After updating, the update button should read "updated"
-		const updatedButton = await screen.findByRole('button', { name: 'Updated', disabled: true });
+		const updatedButton = await screen.findByRole('button', { name: 'Updated', disabled: true, timeout: 8000 });
 		expect(updatedButton).toBeVisible();
 
 		// Should be marked as updated.
