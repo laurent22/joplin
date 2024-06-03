@@ -16,7 +16,7 @@ import { msleep } from '../utils/time';
 import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import prettyBytes = require('pretty-bytes');
 
-const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
+import * as mimeUtils from '@joplin/lib/mime-utils';
 
 // Converts "root:/myfile.txt:" to "myfile.txt"
 const extractNameRegex = /^root:\/(.*):$/;

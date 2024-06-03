@@ -7,7 +7,7 @@ import * as fs from 'fs-extra';
 import { AppContext, RouteType } from '../utils/types';
 import { localFileFromUrl } from '../utils/joplinUtils';
 import { homeUrl, loginUrl } from '../utils/urlUtils';
-const { mime } = require('@joplin/lib/mime-utils.js');
+import * as mime from '@joplin/lib/mime-utils';
 
 const publicDir = `${dirname(dirname(__dirname))}/public`;
 
