@@ -292,7 +292,7 @@ function useMenu(props: Props) {
 	}, []);
 
 	const onImportModuleClick = useCallback(async (module: ImportModule, moduleSource: string) => {
-		let path = null;
+		let path: string | string[] = null;
 
 		if (moduleSource === 'file') {
 			path = await bridge().showOpenDialog({
@@ -318,10 +318,9 @@ function useMenu(props: Props) {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			onProgress: (_status: any) => {
 				props.dispatch({
-					type: 'INTEROP_EXEC',
-					operation: 'import',
+					type: 'INTEROP_IMPORT_EXEC',
 					path: path,
-					format: module.format,
+					message: _('Importing from "%s" as "%s" format. Please wait...', path, module.format),
 				});
 			},
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -333,10 +332,9 @@ function useMenu(props: Props) {
 		};
 
 		props.dispatch({
-			type: 'INTEROP_EXEC',
-			operation: 'import',
+			type: 'INTEROP_IMPORT_EXEC',
 			path: path,
-			format: module.format,
+			message: _('Importing from "%s" as "%s" format. Please wait...', path, module.format),
 		});
 
 		const service = InteropService.instance();
@@ -346,12 +344,18 @@ function useMenu(props: Props) {
 			console.info('Import result: ', result);
 
 			props.dispatch({
-				type: 'INTEROP_COMPLETE',
-				operation: 'import',
+				type: 'INTEROP_IMPORT_COMPLETE',
 				path: path,
+				message: _('Successfully imported from %s.', path),
 			});
 		} catch (error) {
 			bridge().showErrorMessageBox(error.message);
+
+			props.dispatch({
+				type: 'INTEROP_IMPORT_COMPLETE',
+				path: path,
+				message: _('Could not import notes.'),
+			});
 		}
 
 		if (errors.length) {

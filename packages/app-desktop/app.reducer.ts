@@ -32,9 +32,8 @@ export interface EditorScrollPercents {
 }
 
 export interface AppStateInterop {
-	operation: string;
-	path: string;
-	format: string;
+	id: string;
+	message: string;
 	completed: boolean;
 	notification: NotyfNotification;
 }
@@ -61,7 +60,7 @@ export interface AppState extends State {
 	mainLayout: LayoutItem;
 	dialogs: AppStateDialog[];
 	isResettingLayout: boolean;
-	interop: AppStateInterop[];
+	interopTaskProgress: AppStateInterop[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -86,7 +85,7 @@ export function createAppDefaultState(windowContentSize: any, resourceEditWatche
 		startupPluginsLoaded: false,
 		dialogs: [],
 		isResettingLayout: false,
-		interop: [],
+		interopTaskProgress: [],
 		...resourceEditWatcherDefaultState,
 	};
 }
@@ -98,48 +97,81 @@ export default function(state: AppState, action: any) {
 	try {
 		switch (action.type) {
 
-		case 'INTEROP_EXEC':
+		case 'INTEROP_IMPORT_EXEC':
 
 			{
-				const interop = newState.interop.slice();
+				const id = `import:${action.path}`;
+				const interop = newState.interopTaskProgress.slice();
 
 				interop.push({
-					operation: action.operation,
-					path: action.path,
-					format: action.format,
+					id: id,
+					message: action.message,
 					completed: false,
 					notification: undefined,
 				});
 
-				newState = { ...state, interop: interop };
+				newState = { ...state, interopTaskProgress: interop };
 			}
 			break;
 
-		case 'INTEROP_COMPLETE':
+		case 'INTEROP_EXPORT_EXEC':
 
 			{
-				const interop = newState.interop.slice();
-				const operation = interop.find(interop => interop.operation === action.operation && interop.path === action.path);
-				const newInterop = interop.filter(interop => !(interop.operation === action.operation && interop.path === action.path));
+				const id = `export:${action.path}`;
+				const interop = newState.interopTaskProgress.slice();
 
-				newInterop.push({ ...operation, completed: true });
+				interop.push({
+					id: id,
+					message: action.message,
+					completed: false,
+					notification: undefined,
+				});
 
-				newState = { ...state, interop: newInterop };
+				newState = { ...state, interopTaskProgress: interop };
+			}
+			break;
+
+		case 'INTEROP_IMPORT_COMPLETE':
+
+			{
+				const id = `import:${action.path}`;
+				const interop = newState.interopTaskProgress.slice();
+				const operation = interop.find(interop => interop.id === id);
+				const newInterop = interop.filter(interop => !(interop.id === id));
+
+				newInterop.push({ ...operation, message: action.message, completed: true });
+
+				newState = { ...state, interopTaskProgress: newInterop };
+			}
+			break;
+
+		case 'INTEROP_EXPORT_COMPLETE':
+
+			{
+				const id = `export:${action.path}`;
+				const interop = newState.interopTaskProgress.slice();
+				const operation = interop.find(interop => interop.id === id);
+				const newInterop = interop.filter(interop => !(interop.id === id));
+
+				newInterop.push({ ...operation, message: action.message, completed: true });
+
+				newState = { ...state, interopTaskProgress: newInterop };
 			}
 			break;
 
 		case 'INTEROP_NOTIFICATION_DONE':
 
 			{
-				const interop = newState.interop.slice();
-				const operation = interop.find(interop => interop.operation === action.operation && interop.path === action.path);
-				const newInterop = interop.filter(interop => !(interop.operation === action.operation && interop.path === action.path));
+				const id = action.id;
+				const interop = newState.interopTaskProgress.slice();
+				const operation = interop.find(interop => interop.id === id);
+				const newInterop = interop.filter(interop => !(interop.id === id));
 
 				if (!operation.completed) {
 					newInterop.push({ ...operation, notification: action.notification });
 				}
 
-				newState = { ...state, interop: newInterop };
+				newState = { ...state, interopTaskProgress: newInterop };
 			}
 			break;
 

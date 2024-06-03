@@ -177,7 +177,7 @@ export default class InteropServiceHelper {
 	public static async export(_dispatch: Function, module: ExportModule, options: ExportNoteOptions = null) {
 		if (!options) options = {};
 
-		let path = null;
+		let path: string | string[] = null;
 
 		if (module.target === 'file') {
 			const noteId = options.sourceNoteIds && options.sourceNoteIds.length ? options.sourceNoteIds[0] : null;
@@ -196,10 +196,9 @@ export default class InteropServiceHelper {
 		if (Array.isArray(path)) path = path[0];
 
 		_dispatch({
-			type: 'INTEROP_EXEC',
-			operation: 'export',
+			type: 'INTEROP_IMPORT_EXEC',
 			path: path,
-			format: module.format,
+			message: _('Exporting to "%s" as "%s" format. Please wait...', path, module.format),
 		});
 
 		const exportOptions: ExportOptions = {};
@@ -221,13 +220,19 @@ export default class InteropServiceHelper {
 			console.info('Export result: ', result);
 
 			_dispatch({
-				type: 'INTEROP_COMPLETE',
-				operation: 'export',
+				type: 'INTEROP_IMPORT_COMPLETE',
 				path: path,
+				message: _('Successfully exported from %s.', path),
 			});
 		} catch (error) {
 			console.error(error);
 			bridge().showErrorMessageBox(_('Could not export notes: %s', error.message));
+
+			_dispatch({
+				type: 'INTEROP_IMPORT_COMPLETE',
+				path: path,
+				message: _('Could not export notes.'),
+			});
 		}
 	}
 

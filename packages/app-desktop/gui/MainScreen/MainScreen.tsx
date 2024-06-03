@@ -98,7 +98,7 @@ interface Props {
 	notesSortOrderField: string;
 	notesSortOrderReverse: boolean;
 	notesColumns: NoteListColumns;
-	interop: AppStateInterop[];
+	interopTaskProgress: AppStateInterop[];
 }
 
 interface ShareFolderDialogOptions {
@@ -916,7 +916,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} themeId={this.props.themeId} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />
 
 				<InteropNotification
-					interop={this.props.interop}
+					interopTaskProgress={this.props.interopTaskProgress}
 					themeId={this.props.themeId}
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					dispatch={this.props.dispatch as any}
@@ -975,7 +975,7 @@ const mapStateToProps = (state: AppState) => {
 		notesSortOrderField: state.settings['notes.sortOrder.field'],
 		notesSortOrderReverse: state.settings['notes.sortOrder.reverse'],
 		notesColumns: validateColumns(state.settings['notes.columns']),
-		interop: state.interop,
+		interopTaskProgress: state.interopTaskProgress,
 	};
 };
 
