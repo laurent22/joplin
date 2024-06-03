@@ -114,7 +114,9 @@ export default class UserItemModel extends BaseModel<UserItem> {
 
 	public async add(userId: Uuid, itemId: Uuid, options: SaveOptions = {}): Promise<void> {
 		const item = await this.models().item().load(itemId, { fields: ['id', 'name'] });
-		if (!item) return;
+		if (!item) {
+			throw new ErrorNotFound(`No such item: ${itemId}`);
+		}
 		await this.addMulti(userId, [item], options);
 	}
 
@@ -124,10 +126,6 @@ export default class UserItemModel extends BaseModel<UserItem> {
 
 		await this.withTransaction(async () => {
 			for (const item of items) {
-				// Since we are getting items from outside transaction we can't be sure
-				// that the record still exists
-				if (!item) continue;
-
 				if (!('name' in item) || !('id' in item)) throw new Error('item.id and item.name must be set');
 
 				await super.save({

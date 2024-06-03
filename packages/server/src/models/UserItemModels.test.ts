@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models } from '../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, models } from '../utils/testing/testUtils';
 
 describe('UserItemModel', () => {
 
@@ -14,10 +14,10 @@ describe('UserItemModel', () => {
 		await beforeEachDb();
 	});
 
-	test('should skip undefined values instead of crashing', async () => {
-		const { user } = await createUserAndSession(3, false);
-
-		expect(async () => models().userItem().addMulti(user.id, [undefined])).not.toThrow();
+	test('should throw error if item does not exist', async () => {
+		const mockUserId = 'not-a-real-user-id';
+		const mockId = 'not-a-real-item-id';
+		expect(async () => models().userItem().add(mockUserId, mockId)).rejects.toThrow('No such item: not-a-real-item-id');
 	});
 });
 
