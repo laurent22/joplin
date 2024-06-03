@@ -98,7 +98,12 @@ function katexStyle() {
 		{ name: 'fonts/KaTeX_Size3-Regular.woff2' },
 		{ name: 'fonts/KaTeX_Size4-Regular.woff2' },
 		{ name: 'fonts/KaTeX_Typewriter-Regular.woff2' },
-	];
+	].map(e => {
+		return {
+			source: 'katex',
+			...e,
+		};
+	});
 }
 
 // Test if potential opening or closing delimiter
@@ -338,6 +343,7 @@ export default {
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const inlineRenderer = function(tokens: any[], idx: number) {
+			options.context.pluginWasUsed.katex = true;
 			return katexInline(tokens[idx].content);
 		};
 
@@ -355,6 +361,7 @@ export default {
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const blockRenderer = function(tokens: any[], idx: number) {
+			options.context.pluginWasUsed.katex = true;
 			return `${katexBlock(tokens[idx].content)}\n`;
 		};
 
