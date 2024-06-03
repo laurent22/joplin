@@ -1,7 +1,7 @@
 import ElectronAppWrapper from './ElectronAppWrapper';
 import shim from '@joplin/lib/shim';
 import { _, setLocale } from '@joplin/lib/locale';
-import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions } from 'electron';
+import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions, safeStorage } from 'electron';
 import { dirname, toSystemSlashes } from '@joplin/lib/path-utils';
 import { fileUriToPath } from '@joplin/utils/url';
 import { urlDecode } from '@joplin/lib/string-utils';
@@ -485,6 +485,17 @@ export class Bridge {
 		return nativeImage.createFromPath(path);
 	}
 
+	public safeStorage = {
+		isEncryptionAvailable() {
+			return safeStorage.isEncryptionAvailable();
+		},
+		encryptString(data: string) {
+			return safeStorage.encryptString(data).toString('base64');
+		},
+		decryptString(base64Data: string) {
+			return safeStorage.decryptString(Buffer.from(base64Data, 'base64'));
+		},
+	};
 }
 
 let bridge_: Bridge = null;
