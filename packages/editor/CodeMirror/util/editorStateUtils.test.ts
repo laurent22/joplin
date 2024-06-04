@@ -1,6 +1,6 @@
 import {
 	findInlineMatch, MatchSide, RegionSpec, renumberSelectedLists, tabsToSpaces, toggleRegionFormatGlobally,
-} from './markdownReformatter';
+} from './editorStateUtils';
 import { Text as DocumentText, EditorSelection, EditorState } from '@codemirror/state';
 import { indentUnit } from '@codemirror/language';
 import createTestEditor from '../testUtil/createTestEditor';

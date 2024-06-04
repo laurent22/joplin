@@ -11,7 +11,7 @@ import {
 	RegionSpec, growSelectionToNode, renumberSelectedLists,
 	toggleInlineFormatGlobally, toggleRegionFormatGlobally, toggleSelectedLinesStartWith,
 	isIndentationEquivalent, stripBlockquote, tabsToSpaces,
-} from './markdownReformatter';
+} from '../util/editorStateUtils';
 import intersectsSyntaxNode from '../util/isInSyntaxNode';
 
 const startingSpaceRegex = /^(\s*)/;
