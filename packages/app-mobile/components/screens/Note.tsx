@@ -122,8 +122,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	// a re-render.
 	private lastBodyScroll: number|undefined = undefined;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private saveActionQueues_: any;
+	private saveActionQueues_: Record<string, AsyncActionQueue>;
 	private doFocusUpdate_: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private styles_: any;
@@ -595,7 +594,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		shared.uninstallResourceHandling(this.refreshResource);
 
-		this.saveActionQueue(this.state.note.id).processAllNow();
+		void this.saveActionQueue(this.state.note.id).processAllNow();
 
 		// It cannot theoretically be undefined, since componentDidMount should always be called before
 		// componentWillUnmount, but with React Native the impossible often becomes possible.
