@@ -174,7 +174,7 @@ export default class FsDriverBase {
 		let nameToTry = nameNoExt + extension;
 		while (true) {
 			// Check if the filename does not exist in the filesystem and is not reserved
-			const exists = isReserved(nameToTry) || await this.exists(nameToTry);
+			const exists = await this.exists(nameToTry) || isReserved(nameToTry);
 			if (!exists) return nameToTry;
 			if (!markdownSafe) {
 				nameToTry = `${nameNoExt} (${counter})${extension}`;
