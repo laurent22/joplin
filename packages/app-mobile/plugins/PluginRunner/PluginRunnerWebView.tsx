@@ -31,15 +31,24 @@ const usePlugins = (
 ) => {
 	const store = useStore<AppState>();
 	const lastPluginRunner = usePrevious(pluginRunner);
-	const reloadAll = pluginRunner !== lastPluginRunner;
+
+	// Only set reloadAll to true here -- this ensures that all plugins are reloaded,
+	// even if loadPlugins is cancelled and re-run.
+	const reloadAllRef = useRef(false);
+	reloadAllRef.current ||= pluginRunner !== lastPluginRunner;
 
 	useAsyncEffect(async (event) => {
 		if (!webviewLoaded) {
 			return;
 		}
 
-		void loadPlugins({ pluginRunner, pluginSettings, store, reloadAll, cancelEvent: event });
-	}, [pluginRunner, reloadAll, store, webviewLoaded, pluginSettings]);
+		await loadPlugins({ pluginRunner, pluginSettings, store, reloadAll: reloadAllRef.current, cancelEvent: event });
+
+		// A full reload, if it was necessary, has been completed.
+		if (!event.cancelled) {
+			reloadAllRef.current = false;
+		}
+	}, [pluginRunner, store, webviewLoaded, pluginSettings]);
 };
 
 const useUnloadPluginsOnGlobalDisable = (
@@ -137,7 +146,7 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 		return (
 			<>
 				<ExtendedWebView
-					webviewInstanceId='PluginRunner'
+					webviewInstanceId='PluginRunner2'
 					html={html}
 					injectedJavaScript={injectedJs}
 					hasPluginScripts={true}

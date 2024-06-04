@@ -32,13 +32,14 @@ const loadPlugins = async ({ pluginRunner, pluginSettings, store, reloadAll, can
 			logger.info('Reloading all plugins.');
 		}
 
-		for (const pluginId of Object.keys(pluginService.plugins)) {
+		for (const pluginId of pluginService.pluginIds) {
 			if (reloadAll || (pluginSettings[pluginId] && !pluginSettings[pluginId].enabled)) {
 				logger.info('Unloading plugin', pluginId);
 				await pluginService.unloadPlugin(pluginId);
 			}
 
 			if (cancelEvent.cancelled) {
+				logger.info('Cancelled.');
 				return;
 			}
 		}
@@ -49,6 +50,7 @@ const loadPlugins = async ({ pluginRunner, pluginSettings, store, reloadAll, can
 		}
 
 		if (cancelEvent.cancelled) {
+			logger.info('Cancelled.');
 			return;
 		}
 
