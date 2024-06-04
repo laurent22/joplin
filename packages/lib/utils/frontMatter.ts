@@ -101,7 +101,7 @@ export const serialize = async (modNote: NoteEntity, tagTitles: string[]) => {
 };
 
 function isTruthy(str: string): boolean {
-	return str.toLowerCase() in ['true', 'yes'];
+	return ['true', 'yes'].includes(str.toLowerCase());
 }
 
 // Enforces exactly 2 spaces in front of list items
@@ -227,7 +227,7 @@ export const parse = (note: string): ParsedMeta => {
 	if (metadata.is_todo) {
 		if (isTruthy(md['completed?'])) {
 			// Completed time isn't preserved, so we use a sane choice here
-			metadata['todo_completed'] = metadata['user_updated_time'];
+			metadata['todo_completed'] = metadata['user_updated_time'] ?? Date.now();
 		}
 		if ('due' in md) {
 			const due_date = time.anythingToMs(md['due'], null);
