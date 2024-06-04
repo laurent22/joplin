@@ -13,7 +13,7 @@ import { View, StyleSheet, AccessibilityInfo } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
 import { Dispatch } from 'redux';
-import DismissibleDialog from '../../../components/DismissibleDialog';
+import DismissibleDialog, { DialogSize } from '../../../components/DismissibleDialog';
 
 interface Props {
 	themeId: number;
@@ -168,6 +168,7 @@ const PluginPanelViewer: React.FC<Props> = props => {
 			<DismissibleDialog
 				themeId={props.themeId}
 				visible={props.visible}
+				size={DialogSize.Large}
 				onDismiss={onClose}
 			>
 				{renderTabContent()}

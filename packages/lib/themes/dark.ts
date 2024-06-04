@@ -48,6 +48,7 @@ const theme: Theme = {
 	searchMarkerColor: 'black',
 
 	warningBackgroundColor: '#013F74',
+	destructiveColor: '#F07777',
 
 	tableBackgroundColor: 'rgb(40, 41, 42)',
 	codeBackgroundColor: 'rgb(47, 48, 49)',
