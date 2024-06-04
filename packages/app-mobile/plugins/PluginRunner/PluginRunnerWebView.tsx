@@ -13,6 +13,7 @@ import { PluginHtmlContents, PluginStates } from '@joplin/lib/services/plugins/r
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import PluginDialogManager from './dialogs/PluginDialogManager';
 import { AppState } from '../../utils/types';
+import usePrevious from '@joplin/lib/hooks/usePrevious';
 
 const logger = Logger.create('PluginRunnerWebView');
 
@@ -28,15 +29,17 @@ const usePlugins = (
 	webviewLoaded: boolean,
 	pluginSettings: PluginSettings,
 ) => {
-	const store = useStore();
+	const store = useStore<AppState>();
+	const lastPluginRunner = usePrevious(pluginRunner);
+	const reloadAll = pluginRunner !== lastPluginRunner;
 
 	useAsyncEffect(async (event) => {
 		if (!webviewLoaded) {
 			return;
 		}
 
-		void loadPlugins(pluginRunner, pluginSettings, store, event);
-	}, [pluginRunner, store, webviewLoaded, pluginSettings]);
+		void loadPlugins({ pluginRunner, pluginSettings, store, reloadAll, cancelEvent: event });
+	}, [pluginRunner, reloadAll, store, webviewLoaded, pluginSettings]);
 };
 
 const useUnloadPluginsOnGlobalDisable = (
