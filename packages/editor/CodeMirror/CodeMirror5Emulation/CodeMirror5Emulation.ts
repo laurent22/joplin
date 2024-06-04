@@ -9,7 +9,6 @@ import { StreamParser } from '@codemirror/language';
 import Decorator, { LineWidgetOptions, MarkTextOptions } from './Decorator';
 import insertLineAfter from '../editorCommands/insertLineAfter';
 import CodeMirror5BuiltInOptions from './CodeMirror5BuiltInOptions';
-import { RegionSpec, toggleInlineFormatGlobally } from '../util/editorStateUtils';
 const { pregQuote } = require('@joplin/lib/string-utils-common');
 
 
@@ -424,12 +423,6 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 			posFromDocumentPosition(doc, from),
 			posFromDocumentPosition(doc, to),
 			options,
-		);
-	}
-
-	public wrapSelections(start: string, end: string) {
-		this.editor.dispatch(
-			toggleInlineFormatGlobally(this.editor.state, RegionSpec.of({ template: { start, end } })),
 		);
 	}
 
