@@ -16,7 +16,7 @@ import Tag from '../../../models/Tag';
 import Resource from '../../../models/Resource';
 import htmlUtils from '../../../htmlUtils';
 import markupLanguageUtils from '../../../markupLanguageUtils';
-const mimeUtils = require('../../../mime-utils.js').mime;
+import * as mimeUtils from '../../../mime-utils';
 const md5 = require('md5');
 import HtmlToMd from '../../../HtmlToMd';
 const urlUtils = require('../../../urlUtils.js');
