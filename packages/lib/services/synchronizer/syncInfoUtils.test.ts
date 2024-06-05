@@ -322,6 +322,7 @@ describe('syncInfoUtils', () => {
 		expect(result.ppk).toEqual(SyncInfo.defaultValues.ppk.value);
 		expect(result.e2ee).toEqual(SyncInfo.defaultValues.e2ee.value);
 		expect(result.appMinVersion).toEqual(SyncInfo.defaultValues.appMinVersion);
+		expect(result.masterKeys).toEqual(SyncInfo.defaultValues.masterKeys);
 
 		Logger.globalLogger.enabled = true;
 	});
