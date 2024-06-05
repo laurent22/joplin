@@ -1,146 +1,74 @@
 import type { Editor } from 'tinymce';
-import { useEffect } from 'react';
-import { themeStyle } from '@joplin/lib/theme';
+import { useCallback, useEffect } from 'react';
 import { _ } from '@joplin/lib/locale';
 import shim from '@joplin/lib/shim';
 
-const useStyles = (editor: Editor|null, themeId: number) => {
-	useEffect(() => {
-		if (!editor) {
-			return () => {};
+const useLinkTooltips = (editor: Editor|null) => {
+	const resetModifiedTitles = useCallback(() => {
+		for (const element of editor.getDoc().querySelectorAll('a[data-joplin-original-title]')) {
+			element.setAttribute('title', element.getAttribute('data-joplin-original-title') ?? '');
+			element.removeAttribute('data-joplin-original-title');
 		}
-
-		const theme = themeStyle(themeId);
-		const style = document.createElement('style');
-		style.appendChild(document.createTextNode(`
-			@keyframes show-tooltip {
-				0% { opacity: 0; }
-				100% { opacity: 0.8; }
-			}
-			.joplin-link-tooltip {
-				padding-bottom: 10px;
-
-				visibility: hidden;
-				opacity: 0;
-				pointer-events: none;
-
-				display: inline-block;
-				position: fixed;
-
-				transition: 0.2s ease opacity;
-			}
-			.joplin-link-tooltip > div {
-				background-color: ${theme.backgroundColor2};
-				color: ${theme.color2};
-
-				padding: 4px;
-				border-radius: 4px;
-			}
-
-			.joplin-link-tooltip.-visible {
-				visibility: visible;
-				opacity: 0.8;
-			}
-		`));
-		document.head.appendChild(style);
-
-		return () => {
-			style.remove();
-		};
-	}, [editor, themeId]);
-};
-
-const useLinkTooltips = (editor: Editor|null, themeId: number) => {
-	useStyles(editor, themeId);
+	}, [editor]);
 
 	useEffect(() => {
 		if (!editor) return () => {};
 
-		const tooltip = document.createElement('div');
-		const tooltipContent = document.createElement('div');
-		tooltip.replaceChildren(tooltipContent);
-		tooltip.ariaLive = 'polite';
-		tooltip.classList.add('joplin-link-tooltip');
-		document.body.appendChild(tooltip);
-
-		let showAtTimeout: ReturnType<typeof setTimeout>|null = null;
-		const cancelShowTooltip = () => {
-			if (showAtTimeout) {
-				clearTimeout(showAtTimeout);
-				showAtTimeout = null;
-			}
-		};
-		const showTooltipAt = (x: number, y: number) => {
-			cancelShowTooltip();
-
-			const delay = 700;
-			showAtTimeout = setTimeout(() => {
-				x = Math.max(0, Math.min(window.innerWidth - tooltip.clientWidth, x));
-
-				tooltip.style.left = `${x}px`;
-				tooltip.style.top = `${y}px`;
-				tooltip.classList.add('-visible');
-			}, delay);
-		};
-
-		const hideTooltip = () => {
-			tooltip.classList.remove('-visible');
-			tooltipContent.textContent = '';
-			cancelShowTooltip();
-		};
-
 		const onMouseOver = (event: MouseEvent) => {
 			let element = event.target as HTMLElement;
+
+			// mouseover events seem to only target the lowest applicable node in the DOM.
+			// If the user's mouse enters <a><strong></strong></a>, the mouseover event will
+			// target the <strong></strong>. As such, the parent nodes need to be checked:
 			let counter = 0;
 			while (element.tagName !== 'A' || !('href' in element)) {
 				element = element.parentElement;
-				if (!element || counter++ > 5) {
+				counter++;
+				if (!element || counter > 4) {
 					return;
 				}
 			}
 
-			if (shim.isMac()) {
-				tooltipContent.textContent = _('cmd+click to open: %s', element.title || element.href);
-			} else {
-				tooltipContent.textContent = _('ctrl+click to open: %s', element.title || element.href);
+			if (!element.hasAttribute('data-joplin-original-title')) {
+				element.setAttribute('data-joplin-original-title', element.title);
 			}
 
-			const bbox = element.getBoundingClientRect();
-			const frameBBox = editor.getContentAreaContainer().getBoundingClientRect();
-
-			// Position just below the element.
-			showTooltipAt(
-				bbox.left + bbox.width / 2 + frameBBox.left - tooltip.clientWidth / 2,
-				bbox.top - tooltip.clientHeight + frameBBox.top,
-			);
+			if (shim.isMac()) {
+				element.title = _('cmd+click to open: %s', element.title || element.href);
+			} else {
+				element.title = _('ctrl+click to open: %s', element.title || element.href);
+			}
 
 			const onMouseLeave = () => {
-				hideTooltip();
+				resetModifiedTitles();
 				element.removeEventListener('mouseleave', onMouseLeave);
 			};
 			element.addEventListener('mouseleave', onMouseLeave);
 		};
 
-		const clearEventListeners = () => {
+		const clearRootEventListeners = () => {
 			editor.getDoc().removeEventListener('mouseover', onMouseOver);
 		};
 
-		const rebuildEventListeners = () => {
-			clearEventListeners();
-
+		const setUpRootEventListeners = () => {
+			clearRootEventListeners();
 			editor.getDoc().addEventListener('mouseover', onMouseOver, false);
 		};
-		rebuildEventListeners();
-		editor.on('SetContent', rebuildEventListeners);
-		editor.on('keyup', hideTooltip);
-		editor.on('click', hideTooltip);
+		setUpRootEventListeners();
+		editor.on('SetContent', setUpRootEventListeners);
+		editor.on('keyup', resetModifiedTitles);
+		editor.on('click', resetModifiedTitles);
 
 		return () => {
-			editor.off('SetContent', rebuildEventListeners);
-			tooltip.remove();
-			clearEventListeners();
+			resetModifiedTitles();
+			editor.off('SetContent', setUpRootEventListeners);
+			editor.off('keyup', resetModifiedTitles);
+			editor.off('click', resetModifiedTitles);
+			clearRootEventListeners();
 		};
-	}, [editor]);
+	}, [editor, resetModifiedTitles]);
+
+	return { resetModifiedTitles };
 };
 
 export default useLinkTooltips;
