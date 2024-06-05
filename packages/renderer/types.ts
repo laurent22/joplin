@@ -56,6 +56,7 @@ export interface RenderOptions {
 }
 
 export interface RenderResultPluginAsset {
+	source: string;
 	name: string;
 	mime: string;
 	path: string;

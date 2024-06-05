@@ -45,6 +45,7 @@ const input: Theme = {
 	searchMarkerColor: 'black',
 
 	warningBackgroundColor: '#FFD08D',
+	destructiveColor: '#F00000',
 
 	tableBackgroundColor: 'rgb(247, 247, 247)',
 	codeBackgroundColor: 'rgb(243, 243, 243)',
@@ -89,6 +90,7 @@ const expected = `
 	--joplin-color-warn2: #ffcb81;
 	--joplin-color-warn3: #ff7626;
 	--joplin-color-warn-url: #155BDA;
+	--joplin-destructive-color: #F00000;
 	--joplin-divider-color: #dddddd;
 	--joplin-header-background-color: #ffffff;
 	--joplin-odd-background-color: #eeeeee;

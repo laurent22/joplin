@@ -5,8 +5,12 @@ export default {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	assets: function(theme: any) {
 		return [
-			{ name: 'mermaid.min.js' },
-			{ name: 'mermaid_render.js' },
+			{
+				name: 'mermaid.min.js',
+			},
+			{
+				name: 'mermaid_render.js',
+			},
 			{
 				inline: true,
 				// Note: Mermaid is buggy when rendering below a certain width (500px?)
@@ -43,7 +47,12 @@ export default {
 				`.trim(),
 				mime: 'text/css',
 			},
-		];
+		].map(e => {
+			return {
+				source: 'mermaid',
+				...e,
+			};
+		});
 	},
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -59,6 +68,9 @@ export default {
 		markdownIt.renderer.rules.fence = function(tokens: any[], idx: number, options: any, env: any, self: any) {
 			const token = tokens[idx];
 			if (token.info !== 'mermaid') return defaultRender(tokens, idx, options, env, self);
+
+			ruleOptions.context.pluginWasUsed.mermaid = true;
+
 			const contentHtml = markdownIt.utils.escapeHtml(token.content);
 
 			const cssClasses = ['mermaid'];
