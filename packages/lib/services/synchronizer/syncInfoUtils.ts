@@ -269,7 +269,12 @@ export class SyncInfo {
 
 	public load(serialized: string) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const s: any = JSON.parse(serialized);
+		let s: any = {};
+		try {
+			s = JSON.parse(serialized);
+		} catch (error) {
+			logger.error('Error parsing sync info, using default values.', error);
+		}
 		this.version = 'version' in s ? s.version : 0;
 		this.e2ee_ = 'e2ee' in s ? s.e2ee : { value: false, updatedTime: 0 };
 		this.activeMasterKeyId_ = 'activeMasterKeyId' in s ? s.activeMasterKeyId : { value: '', updatedTime: 0 };
