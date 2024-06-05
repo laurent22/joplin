@@ -3179,7 +3179,8 @@ msgstr "새 \"%s\" 노트북이 생성되고 \"%s\" 파일을 여기에 가져�
 
 #: packages/app-desktop/gui/MainScreen/commands/newSubFolder.ts:6
 msgid "New sub-notebook"
-msgstr "새 노트북"
+msgstr "새 서브 노트"
+
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.tsx:195
 msgid "New tags:"
