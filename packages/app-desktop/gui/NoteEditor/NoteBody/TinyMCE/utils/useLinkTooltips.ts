@@ -52,7 +52,7 @@ const useLinkTooltips = (editor: Editor|null) => {
 
 		const setUpRootEventListeners = () => {
 			clearRootEventListeners();
-			editor.getDoc().addEventListener('mouseover', onMouseOver, false);
+			editor.getDoc().addEventListener('mouseover', onMouseOver);
 		};
 		setUpRootEventListeners();
 		editor.on('SetContent', setUpRootEventListeners);
