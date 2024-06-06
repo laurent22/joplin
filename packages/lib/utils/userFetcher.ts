@@ -13,6 +13,7 @@ interface UserApiResponse {
 	inbox_email?: string;
 	can_use_share_permissions?: number;
 	account_type?: number;
+	email: string;
 }
 
 const userFetcher = async () => {
@@ -40,6 +41,7 @@ const userFetcher = async () => {
 	Setting.setValue('sync.10.inboxEmail', owner.inbox_email ? owner.inbox_email : '');
 	Setting.setValue('sync.10.canUseSharePermissions', !!owner.can_use_share_permissions);
 	Setting.setValue('sync.10.accountType', owner.account_type);
+	Setting.setValue('sync.10.userEmail', owner.email);
 };
 
 // Listen to the event only once
