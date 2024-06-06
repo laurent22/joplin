@@ -1,5 +1,6 @@
 import BaseModel from '../BaseModel';
 import migration42 from '../migrations/42';
+import migration48 from '../migrations/48';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const migrationScripts: Record<number, any> = {
@@ -8,6 +9,7 @@ const migrationScripts: Record<number, any> = {
 	33: require('../migrations/33.js'),
 	35: require('../migrations/35.js'),
 	42: migration42,
+	48: migration48,
 };
 
 export default class Migration extends BaseModel {

@@ -868,6 +868,7 @@ packages/lib/markdownUtils.js
 packages/lib/markdownUtils2.test.js
 packages/lib/markupLanguageUtils.js
 packages/lib/migrations/42.js
+packages/lib/migrations/48.js
 packages/lib/mime-utils.js
 packages/lib/models/Alarm.js
 packages/lib/models/BaseItem.test.js
@@ -966,6 +967,7 @@ packages/lib/services/database/migrations/44.js
 packages/lib/services/database/migrations/45.js
 packages/lib/services/database/migrations/46.js
 packages/lib/services/database/migrations/47.js
+packages/lib/services/database/migrations/48.js
 packages/lib/services/database/migrations/index.js
 packages/lib/services/database/sqlStringToLines.js
 packages/lib/services/database/types.js
