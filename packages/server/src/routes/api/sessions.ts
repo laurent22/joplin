@@ -5,14 +5,14 @@ import { ErrorForbidden } from '../../utils/errors';
 import { AppContext } from '../../utils/types';
 import { bodyFields, userIp } from '../../utils/requestUtils';
 import { User } from '../../services/database/types';
-import limiterLoginBruteForce from '../../utils/request/limiterLoginBruteForce';
+import limitBruteForce, { loginLimiterByIp } from '../../utils/request/limitBruteForce';
 
 const router = new Router(RouteType.Api);
 
 router.public = true;
 
 router.post('api/sessions', async (_path: SubPath, ctx: AppContext) => {
-	await limiterLoginBruteForce(userIp(ctx));
+	await limitBruteForce(userIp(ctx), loginLimiterByIp);
 
 	const fields: User = await bodyFields(ctx.req);
 	const user = await ctx.joplin.models.user().login(fields.email, fields.password);

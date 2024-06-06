@@ -6,7 +6,7 @@ import { formParse, userIp } from '../../utils/requestUtils';
 import config from '../../config';
 import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
-import limiterLoginBruteForce from '../../utils/request/limiterLoginBruteForce';
+import limitBruteForce, { loginLimiterByIp } from '../../utils/request/limitBruteForce';
 import { cookieSet } from '../../utils/cookies';
 import { homeUrl } from '../../utils/urlUtils';
 
@@ -32,7 +32,7 @@ router.get('login', async (_path: SubPath, ctx: AppContext) => {
 });
 
 router.post('login', async (_path: SubPath, ctx: AppContext) => {
-	await limiterLoginBruteForce(userIp(ctx));
+	await limitBruteForce(userIp(ctx), loginLimiterByIp);
 
 	try {
 		const body = await formParse(ctx.req);
