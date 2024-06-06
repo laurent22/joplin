@@ -10,4 +10,5 @@
 @use 'gui/NoteListHeader/style.scss' as note-list-header;
 @use 'gui/TrashNotification/style.scss' as trash-notification;
 @use 'gui/Sidebar/style.scss' as sidebar-styles;
+@use 'gui/DefaultEditorDialog/style.scss' as default-editor-dialog;
 @use 'main.scss' as main;

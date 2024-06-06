@@ -1,0 +1,74 @@
+.styled-Root {
+    min-width: 500px;
+    max-width: 1200px;
+}
+
+.editorTargetDescription {
+    height: var(--joplin-height); 
+    margin-top: 1.3em;
+    margin-bottom: 1.3em;
+    line-height: var(--joplin-line-height);
+    font-size: 14px;
+}
+
+.contentRoot {
+    background-color: var(--joplin-background-color3); 
+    padding: 1em;
+    padding-right: 0;
+}
+  
+.editorTargetBoxes {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+  
+.editorTargetTitle {
+    display: flex;
+    flex-direction: row;
+    font-weight: bold;
+    font-size: 1.7em;
+    align-items: center;
+    white-space: nowrap;
+}
+  
+.editorTargetLogo {
+    height: 1.3em;
+    margin-right: 0.4em;
+}
+  
+.editorExample {
+    width: 100%;
+    margin-top: 1em;
+}
+  
+.editorTargetBox {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    font-family: var(--joplin-font-family); 
+    color: var(--joplin-color); 
+    background-color: var(--joplin-background-color); 
+    border: 1px solid var(--joplin-divider-color); 
+    border-radius: 8px;
+    padding: 2em 2.2em 2em 2.2em;
+    margin-right: 1em;
+    max-width: 400px;
+    opacity: 1;
+}
+  
+.selectButton {
+    padding: 10px 10px;
+    height: auto;
+    min-height: auto;
+    max-height: fit-content;
+    font-size: 1em;
+}
+  
+.changeEditorWarning {
+    margin-top: 1em;
+    opacity: 0.8;
+    font-family: var(--joplin-font-family); 
+    color: var(--joplin-color); 
+    font-size: 14px;
+}
