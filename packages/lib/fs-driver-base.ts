@@ -3,7 +3,6 @@ import Setting from './models/Setting';
 import { filename, fileExtension } from './path-utils';
 const md5 = require('md5');
 import { Buffer } from 'buffer';
-import shim from './shim';
 
 export interface Stat {
 	birthtime: Date;
@@ -154,18 +153,11 @@ export default class FsDriverBase {
 		let counter = 1;
 
 		// On Windows, ./FiLe.md and ./file.md are equivalent file paths.
-		const caseSensitiveCompare = !shim.isWindows();
-		if (!caseSensitiveCompare) {
-			// Simplify case-insensitive comparison by lowercasing all reserved names
-			// early.
-			reservedNames = reservedNames.map(name => name.toLowerCase());
-		}
-
+		// As such, to avoid overwriting reserved names, comparisons need to be
+		// case-insensitive.
+		reservedNames = reservedNames.map(name => name.toLowerCase());
 		const isReserved = (testName: string) => {
-			if (!caseSensitiveCompare) {
-				testName = testName.toLowerCase();
-			}
-			return reservedNames.includes(testName);
+			return reservedNames.includes(testName.toLowerCase());
 		};
 
 		const nameNoExt = filename(name, true);

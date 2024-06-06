@@ -1,7 +1,7 @@
 import { join } from 'path';
 import FsDriverNode from './fs-driver-node';
 import shim from './shim';
-import { expectThrow, mockWindowsPlatform, supportDir } from './testing/test-utils';
+import { expectThrow, supportDir } from './testing/test-utils';
 
 const windowsPartitionLetter = __filename[0];
 
@@ -28,9 +28,7 @@ describe('fsDriver', () => {
 		await expectThrow(() => fsDriver.resolveRelativePathWithinDir('/test/temp', '/var/local/no.txt'));
 	});
 
-	it('should compare reserved names in a case-insensitive way in findUniqueFilename on Windows', async () => {
-		const windowsMock = mockWindowsPlatform();
-
+	it('should compare reserved names in a case-insensitive way in findUniqueFilename', async () => {
 		// Compare with filenames in the reserved list should be case insensitive
 		expect(
 			await shim.fsDriver().findUniqueFilename(
@@ -43,7 +41,5 @@ describe('fsDriver', () => {
 		expect(
 			await shim.fsDriver().findUniqueFilename(join(supportDir, 'this-file-does-not-exist.txt'), [join(supportDir, 'some-other-file.txt')]),
 		).toBe(join(supportDir, 'this-file-does-not-exist.txt'));
-
-		windowsMock.reset();
 	});
 });
