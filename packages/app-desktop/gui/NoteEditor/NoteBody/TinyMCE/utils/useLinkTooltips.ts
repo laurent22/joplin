@@ -33,10 +33,19 @@ const useLinkTooltips = (editor: Editor|null) => {
 				element.setAttribute('data-joplin-original-title', element.title);
 			}
 
-			if (shim.isMac()) {
-				element.title = _('cmd+click to open: %s', element.title || element.href);
+			// Avoid showing internal HREFs for resource and note links.
+			if (element.hasAttribute('data-resource-id') && !element.title) {
+				if (shim.isMac()) {
+					element.title = _('Cmd-click to open');
+				} else {
+					element.title = _('Ctrl-click to open');
+				}
 			} else {
-				element.title = _('ctrl+click to open: %s', element.title || element.href);
+				if (shim.isMac()) {
+					element.title = _('Cmd-click to open: %s', element.title || element.href);
+				} else {
+					element.title = _('Ctrl-click to open: %s', element.title || element.href);
+				}
 			}
 
 			const onMouseLeave = () => {
