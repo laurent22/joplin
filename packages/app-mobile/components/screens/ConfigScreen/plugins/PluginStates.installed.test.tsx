@@ -240,8 +240,9 @@ describe('PluginStates.installed', () => {
 		expect(updateButton).toBeVisible();
 		await user.press(updateButton);
 
-		// After updating, the update button should read "updated"
-		const updatedButton = await screen.findByRole('button', { name: 'Updated', disabled: true, timeout: 8000 });
+		// After updating, the update button should read "updated". Use a large
+		// timeout because updating plugins can be slow, particularly in CI.
+		const updatedButton = await screen.findByRole('button', { name: 'Updated', disabled: true, timeout: 16000 });
 		expect(updatedButton).toBeVisible();
 
 		// Should be marked as updated.
