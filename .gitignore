@@ -434,6 +434,7 @@ packages/app-desktop/integration-tests/models/MainScreen.js
 packages/app-desktop/integration-tests/models/NoteEditorScreen.js
 packages/app-desktop/integration-tests/models/SettingsScreen.js
 packages/app-desktop/integration-tests/models/Sidebar.js
+packages/app-desktop/integration-tests/richTextEditor.spec.js
 packages/app-desktop/integration-tests/sidebar.spec.js
 packages/app-desktop/integration-tests/simpleBackup.spec.js
 packages/app-desktop/integration-tests/util/activateMainMenuItem.js
@@ -442,6 +443,7 @@ packages/app-desktop/integration-tests/util/firstNonDevToolsWindow.js
 packages/app-desktop/integration-tests/util/setFilePickerResponse.js
 packages/app-desktop/integration-tests/util/setMessageBoxResponse.js
 packages/app-desktop/integration-tests/util/test.js
+packages/app-desktop/integration-tests/util/waitForNextOpenPath.js
 packages/app-desktop/playwright.config.js
 packages/app-desktop/plugins/GotoAnything.js
 packages/app-desktop/services/bridge.js
@@ -1200,6 +1202,7 @@ packages/lib/themes/solarizedLight.js
 packages/lib/themes/type.js
 packages/lib/time.js
 packages/lib/types.js
+packages/lib/urlUtils.js
 packages/lib/utils/ActionLogger.test.js
 packages/lib/utils/ActionLogger.js
 packages/lib/utils/credentialFiles.js
