@@ -140,7 +140,7 @@
 	"Accept": [
 		""
 	],
-	"Accepted shares": [
+	"Accepted invitations": [
 		""
 	],
 	"Access denied: Please check your username and password": [
@@ -221,6 +221,9 @@
 	"An update is available, do you want to download it now?": [
 		""
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		""
 	],
@@ -281,7 +284,7 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		""
 	],
 	"Automatically delete notes in the trash after a number of days": [
@@ -303,6 +306,9 @@
 		"Grasa"
 	],
 	"Browse all plugins": [
+		""
+	],
+	"Browse and install community plugins.": [
 		""
 	],
 	"Browse...": [
@@ -989,9 +995,6 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		""
 	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
-	],
 	"Fatal error:": [
 		"Neriparebla eraro:"
 	],
@@ -1214,9 +1217,6 @@
 	"In: %s": [
 		"En: %s"
 	],
-	"Incoming shares": [
-		""
-	],
 	"Incompatible": [
 		""
 	],
@@ -1386,9 +1386,6 @@
 	"Loaded": [
 		""
 	],
-	"Loading plugin repository...": [
-		""
-	],
 	"Location": [
 		"Loko"
 	],
@@ -1542,10 +1539,10 @@
 	"No active notebook.": [
 		"Ne estas aktiva notlibro."
 	],
-	"No incoming shares": [
+	"No item with ID %s": [
 		""
 	],
-	"No item with ID %s": [
+	"No new invitations": [
 		""
 	],
 	"No notebook has been specified.": [
@@ -1920,6 +1917,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -1940,6 +1940,9 @@
 	],
 	"Restored Notes": [
 		"Restaŭritaj Notoj"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"Reprovi"
@@ -2761,6 +2764,9 @@
 	"Website and documentation": [
 		"Retejo kaj dokumentado"
 	],
+	"WebView package: %s": [
+		""
+	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		""
 	],
@@ -2795,6 +2801,10 @@
 		""
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You currently have %d plugin installed.": [
+		"",
 		""
 	],
 	"You currently have no notebooks.": [
