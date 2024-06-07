@@ -8,6 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin 2.14.16\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Kim Hye-Rim <kissofsea@gmail.com>\n"
 "Language-Team: \n"
 "Language: ko\n"
@@ -15,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 "X-Poedit-Basepath: ../../..\n"
 "X-Poedit-SearchPath-0: .\n"
 
@@ -3179,7 +3181,7 @@ msgstr "새 \"%s\" 노트북이 생성되고 \"%s\" 파일을 여기에 가져�
 
 #: packages/app-desktop/gui/MainScreen/commands/newSubFolder.ts:6
 msgid "New sub-notebook"
-msgstr "새 노트북"
+msgstr "새 하위 노트북"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.tsx:195
 msgid "New tags:"
