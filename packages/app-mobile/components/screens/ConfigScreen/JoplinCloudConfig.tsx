@@ -3,7 +3,7 @@ import * as React from 'react';
 import { View, Text, Linking } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import SettingsButton from './SettingsButton';
-import { accountTypeToString } from '@joplin/lib/accountTypeUtils';
+import { accountTypeToString } from '@joplin/lib/utils/joplinCloud';
 import { LinkButton } from '../../buttons';
 import { ConfigScreenStyles } from './configScreenStyles';
 

@@ -4,8 +4,8 @@ import { _ } from '@joplin/lib/locale';
 import { clipboard } from 'electron';
 import Button from './Button/Button';
 import { Fragment } from 'react';
-import { accountTypeToString } from '@joplin/lib/accountTypeUtils';
-const bridge = require('@electron/remote').require('./bridge').default;
+import { accountTypeToString } from '@joplin/lib/utils/joplinCloud';
+import bridge = require('@electron/remote').require('./bridge').default;
 
 type JoplinCloudConfigScreenProps = {
 	inboxEmail: string;
