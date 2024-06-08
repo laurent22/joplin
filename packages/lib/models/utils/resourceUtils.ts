@@ -1,5 +1,5 @@
 import type { ResourceEntity } from '../../services/database/types';
-const { mime } = require('../../mime-utils.js');
+import * as mime from '../../mime-utils';
 import { filename } from '@joplin/utils/path';
 
 // This file contains resource-related utilities that do not

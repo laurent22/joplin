@@ -103,4 +103,14 @@ describe('CodeMirrorControl', () => {
 		control.execCommand('deleteLine');
 		expect(control.getValue()).toBe('Hello\n');
 	});
+
+	it('should replace the editor body in a document with CRLF', () => {
+		const initialContent = 'Hello\r\nWorld\r\na';
+		const control = createEditorControl(initialContent);
+		control.setCursor(1, initialContent.length);
+
+		control.updateBody('Hello\r\nWorld\r\n');
+		control.updateBody('Hello\r\nWorld\r\ntest');
+		control.updateBody('Hello\r\n');
+	});
 });

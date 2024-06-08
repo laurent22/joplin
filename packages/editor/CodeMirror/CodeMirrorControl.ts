@@ -102,7 +102,11 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 			// to ensure that the selection stays within the document
 			// (and thus avoids an exception).
 			const mainCursorPosition = this.editor.state.selection.main.anchor;
-			const newCursorPosition = Math.min(mainCursorPosition, newBody.length);
+
+			// The maximum cursor position needs to be calculated using the EditorState,
+			// to correctly account for line endings.
+			const maxCursorPosition = this.editor.state.toText(newBody).length;
+			const newCursorPosition = Math.min(mainCursorPosition, maxCursorPosition);
 
 			this.editor.dispatch(this.editor.state.update({
 				changes: {

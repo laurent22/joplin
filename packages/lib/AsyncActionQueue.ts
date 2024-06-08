@@ -23,14 +23,12 @@ const logger = Logger.create('AsyncActionQueue');
 // they run in the right order, and also to ensure that if multiple actions are emitted
 // only the last one is executed. This is particularly useful to save data in the background.
 // Each queue should be associated with a specific entity (a note, resource, etc.)
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default class AsyncActionQueue<Context = any> {
+export default class AsyncActionQueue<Context = void> {
 
 	private queue_: QueueItem<Context>[] = [];
 	private interval_: number;
 	private intervalType_: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private scheduleProcessingIID_: any = null;
+	private scheduleProcessingIID_: ReturnType<typeof shim.setInterval>|null = null;
 	private processing_ = false;
 
 	private processingFinishedPromise_: Promise<void>;
@@ -50,9 +48,9 @@ export default class AsyncActionQueue<Context = any> {
 
 	// Determines whether an item can be skipped in the queue. Prevents data loss in the case that
 	// tasks that do different things are added to the queue.
-	private areItemsIdentical_: CanSkipTaskHandler<Context> = (_a, _b) => true;
+	private canSkipTaskHandler_: CanSkipTaskHandler<Context> = (_current, _next) => true;
 	public setCanSkipTaskHandler(callback: CanSkipTaskHandler<Context>) {
-		this.areItemsIdentical_ = callback;
+		this.canSkipTaskHandler_ = callback;
 	}
 
 	public push(action: QueueItemAction<Context>, context: Context = null) {
@@ -97,7 +95,7 @@ export default class AsyncActionQueue<Context = any> {
 				for (i = 0; i < itemCount; i++) {
 					const current = this.queue_[i];
 					const next = i + 1 < itemCount ? this.queue_[i + 1] : null;
-					if (!next || !this.areItemsIdentical_(current, next)) {
+					if (!next || !this.canSkipTaskHandler_(current, next)) {
 						await current.action(current.context);
 					}
 				}
@@ -112,7 +110,6 @@ export default class AsyncActionQueue<Context = any> {
 				this.processing_ = false;
 			}
 		}
-		this.processing_ = false;
 
 		if (this.queue_.length === 0) {
 			this.onProcessingFinished_();
@@ -140,4 +137,3 @@ export default class AsyncActionQueue<Context = any> {
 		return this.processingFinishedPromise_;
 	}
 }
-

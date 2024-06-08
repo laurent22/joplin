@@ -142,17 +142,20 @@ export default class PluginService extends BaseService {
 		this.isSafeMode_ = v;
 	}
 
-	public waitForLoadedPluginsChange() {
-		return new Promise<void>(resolve => {
-			this.pluginsChangeListeners_.push(() => resolve());
-		});
+	public addLoadedPluginsChangeListener(listener: ()=> void) {
+		this.pluginsChangeListeners_.push(listener);
+
+		return {
+			remove: () => {
+				this.pluginsChangeListeners_ = this.pluginsChangeListeners_.filter(l => (l !== listener));
+			},
+		};
 	}
 
 	private dispatchPluginsChangeListeners() {
 		for (const listener of this.pluginsChangeListeners_) {
 			listener();
 		}
-		this.pluginsChangeListeners_ = [];
 	}
 
 	private setPluginAt(pluginId: string, plugin: Plugin) {

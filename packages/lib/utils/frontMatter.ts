@@ -238,7 +238,7 @@ export const parse = (note: string): ParsedMeta => {
 	if (metadata.is_todo) {
 		if (isTruthy(md['completed?'])) {
 			// Completed time isn't preserved, so we use a sane choice here
-			metadata['todo_completed'] = metadata['user_updated_time'] || Date.now();
+			metadata['todo_completed'] = metadata['user_updated_time'] ?? Date.now();
 		}
 		if ('due' in md) {
 			const due_date = time.anythingToMs(md['due'], null);

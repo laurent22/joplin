@@ -16,7 +16,7 @@ interface RendererRule {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	install(context: any, ruleOptions: any): any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	assets?(theme: any): any;
+	assets?(theme: any): PluginAsset[];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	plugin?: any;
 	assetPath?: string;
@@ -103,6 +103,7 @@ export interface Options {
 }
 
 interface PluginAsset {
+	source?: string;
 	mime?: string;
 	inline?: boolean;
 	name?: string;
@@ -134,6 +135,15 @@ interface PluginContext {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	userData: any;
 	currentLinks: Link[];
+
+	// This must be set by the plugin to indicate whether the document contains markup that was
+	// processed by the plugin or not. Currently this information is then used to remove unnecessary
+	// plugin assets from the rendered document. This is particularly useful when exporting as HTML
+	// since it can reduce the size from several MB to a few KB.
+	pluginWasUsed: {
+		mermaid: boolean;
+		katex: boolean;
+	};
 }
 
 export interface RuleOptions {
@@ -330,10 +340,14 @@ export default class MdToHtml implements MarkupRenderer {
 					const name = `${pluginName}/${asset.name}`;
 					const assetPath = rule?.assetPath ? `${rule.assetPath}/${asset.name}` : `pluginAssets/${name}`;
 
-					files.push({ ...asset, name: name,
+					files.push({
+						...asset,
+						source: asset.source,
+						name: name,
 						path: assetPath,
 						pathIsAbsolute: !!rule && !!rule.assetPathIsAbsolute,
-						mime: mime });
+						mime: mime,
+					});
 				}
 			}
 		}
@@ -354,7 +368,7 @@ export default class MdToHtml implements MarkupRenderer {
 		if (this.allProcessedAssets_[cacheKey]) return this.allProcessedAssets_[cacheKey];
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const assets: any = {};
+		const assets: PluginAssets = {};
 		for (const key in rules) {
 			if (!this.pluginEnabled(key)) continue;
 			const rule = rules[key];
@@ -494,6 +508,10 @@ export default class MdToHtml implements MarkupRenderer {
 			cache: this.contextCache_,
 			userData: {},
 			currentLinks: [],
+			pluginWasUsed: {
+				mermaid: false,
+				katex: false,
+			},
 		};
 
 		const markdownIt: MarkdownIt = new MarkdownIt({
@@ -622,7 +640,14 @@ export default class MdToHtml implements MarkupRenderer {
 			contentMaxWidth: options.contentMaxWidth,
 		});
 
-		let output = { ...this.allProcessedAssets(allRules, options.theme, options.codeTheme) };
+		let output: RenderResult = { ...this.allProcessedAssets(allRules, options.theme, options.codeTheme) };
+
+		output.pluginAssets = output.pluginAssets.filter(pa => {
+			if (!context.pluginWasUsed.mermaid && pa.source === 'mermaid') return false;
+			if (!context.pluginWasUsed.katex && pa.source === 'katex') return false;
+			return true;
+		});
+
 		cssStrings = cssStrings.concat(output.cssStrings);
 
 		if (this.customCss_) cssStrings.push(this.customCss_);

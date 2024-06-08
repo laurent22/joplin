@@ -152,9 +152,6 @@
 	"Accept": [
 		"Aksepter"
 	],
-	"Accepted shares": [
-		""
-	],
 	"Access denied: Please check your username and password": [
 		""
 	],
@@ -242,6 +239,9 @@
 	"An update is available, do you want to download it now?": [
 		"En oppdatering er tilgjengelig. Vil du laste den ned nå?"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		""
 	],
@@ -308,7 +308,7 @@
 	"Auto-add disabled accounts for deletion": [
 		"Legg automatisk til deaktiverte kontoer for sletting"
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Automatisk lukk klammer, paranteser, fnutter, etc."
 	],
 	"Automatically check for updates": [
@@ -1125,9 +1125,6 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Feilhåndtering: Ikke slett lokal data når synkroniseringsmålet er tomt (ofte resultatet av en miskonfigurering eller bug)"
 	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
-	],
 	"Fatal error:": [
 		"Kritisk feil:"
 	],
@@ -1715,11 +1712,11 @@
 	"No active notebook.": [
 		"Ingen aktiv notatbok."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"Ingen elementer med ID %s"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"Ingen notatbok har blitt spesifisert."
@@ -2147,6 +2144,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -2170,6 +2170,9 @@
 	],
 	"Restored Notes": [
 		"Gjenopprettede notater"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"Prøv igjen"
@@ -3055,6 +3058,9 @@
 	],
 	"Website and documentation": [
 		"Nettsted og dokumentasjon"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Velkommen til Joplin!\n\nSkriv `:help shortcuts` for listen over hurtigtaster eller kun `:help` for brukerinformasjon.\n\nHvis du for eksempel vil opprette en notatbok trykker du `mb`; for å opprette et notat, trykk `mn`."

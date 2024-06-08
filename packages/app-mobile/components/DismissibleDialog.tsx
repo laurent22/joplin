@@ -6,19 +6,31 @@ import { themeStyle } from './global-style';
 import Modal from './Modal';
 import { _ } from '@joplin/lib/locale';
 
+export enum DialogSize {
+	Small = 'small',
+
+	// Ideal for panels and dialogs that should be fullscreen even on large devices
+	Large = 'large',
+}
+
 interface Props {
 	themeId: number;
 	visible: boolean;
 	onDismiss: ()=> void;
 	containerStyle?: ViewStyle;
 	children: React.ReactNode;
+
+	size: DialogSize;
 }
 
-const useStyles = (themeId: number, containerStyle: ViewStyle) => {
+const useStyles = (themeId: number, containerStyle: ViewStyle, size: DialogSize) => {
 	const windowSize = useWindowDimensions();
 
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
+
+		const maxWidth = size === DialogSize.Large ? Infinity : 500;
+		const maxHeight = size === DialogSize.Large ? Infinity : 700;
 
 		return StyleSheet.create({
 			webView: {
@@ -38,8 +50,10 @@ const useStyles = (themeId: number, containerStyle: ViewStyle) => {
 				borderRadius: 12,
 				padding: 10,
 
-				height: windowSize.height * 0.9,
-				width: windowSize.width * 0.97,
+				// Use Math.min with width and height -- the maxWidth and maxHeight style
+				// properties don't seem to limit the size for this.
+				height: Math.min(maxHeight, windowSize.height * 0.9),
+				width: Math.min(maxWidth, windowSize.width * 0.97),
 				flexShrink: 1,
 
 				// Center
@@ -56,11 +70,11 @@ const useStyles = (themeId: number, containerStyle: ViewStyle) => {
 				flexGrow: 1,
 			},
 		});
-	}, [themeId, windowSize.width, windowSize.height, containerStyle]);
+	}, [themeId, windowSize.width, windowSize.height, containerStyle, size]);
 };
 
 const DismissibleDialog: React.FC<Props> = props => {
-	const styles = useStyles(props.themeId, props.containerStyle);
+	const styles = useStyles(props.themeId, props.containerStyle, props.size);
 
 	const closeButton = (
 		<View style={styles.closeButtonContainer}>
