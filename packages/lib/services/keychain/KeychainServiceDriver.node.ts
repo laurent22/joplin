@@ -1,5 +1,4 @@
 import KeychainServiceDriverBase from './KeychainServiceDriverBase';
-import KeychainServiceDriverLegacy from './KeychainServiceDriver.keytar';
 import shim from '../../shim';
 import JoplinDatabase from '../../JoplinDatabase';
 import Logger from '@joplin/utils/Logger';
@@ -16,13 +15,10 @@ const encryptedSettingKey = (key: string) => {
 
 export default class KeychainServiceDriver extends KeychainServiceDriverBase {
 
-	private legacyDriver_: KeychainServiceDriverBase;
 	private tableName = 'settings';
 
 	public constructor(appId: string, clientId: string, private db: JoplinDatabase) {
 		super(appId, clientId);
-
-		this.legacyDriver_ = new KeychainServiceDriverLegacy(appId, clientId);
 	}
 
 	public async setPassword(name: string, password: string): Promise<boolean> {
@@ -34,10 +30,14 @@ export default class KeychainServiceDriver extends KeychainServiceDriverBase {
 				`INSERT OR REPLACE INTO ${this.tableName} (\`key\`, \`value\`) VALUES (?, ?)`,
 				[encryptedSettingKey(name), encrypted],
 			);
-			return true;
+		} else if (shim.keytar()) {
+			logger.debug('Saving password with keytar. ID: ', name);
+			await shim.keytar().setPassword(`${this.appId}.${name}`, `${this.clientId}@joplin`, password);
 		} else {
-			return this.legacyDriver_.setPassword(name, password);
+			// Unsupported.
+			return false;
 		}
+		return true;
 	}
 
 	public async password(name: string): Promise<string> {
@@ -55,8 +55,8 @@ export default class KeychainServiceDriver extends KeychainServiceDriverBase {
 		}
 
 		// Fall back to keytar for compatibility.
-		if (result === null) {
-			result = await this.legacyDriver_.password(name);
+		if (result === null && shim.keytar()) {
+			result = await shim.keytar().getPassword(`${this.appId}.${name}`, `${this.clientId}@joplin`);
 		}
 
 		return result;
@@ -68,7 +68,10 @@ export default class KeychainServiceDriver extends KeychainServiceDriverBase {
 			await this.db.exec(`DELETE FROM ${this.tableName} WHERE key = ?`, [encryptedSettingKey(name)]);
 		}
 
-		await this.legacyDriver_.deletePassword(name);
+		if (shim.keytar()) {
+			logger.debug('Trying to password from the keychain. ID: ', name);
+			await shim.keytar().deletePassword(`${this.appId}.${name}`, `${this.clientId}@joplin`);
+		}
 	}
 
 }
