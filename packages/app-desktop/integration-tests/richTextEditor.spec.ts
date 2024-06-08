@@ -66,9 +66,11 @@ test.describe('richTextEditor', () => {
 		await editor.toggleEditorsButton.click();
 		await editor.richTextEditor.waitFor();
 
+		await editor.richTextEditor.click();
+
 		// Click on the attached file URL
 		const openPathResult = waitForNextOpenPath(electronApp);
-		await editor.getTinyMCEFrameLocator().locator('a').click({ modifiers: ['Control'] });
+		await editor.getTinyMCEFrameLocator().getByRole('link', { name: basename(pathToAttach) }).click({ modifiers: ['Control'] });
 
 		// Should watch the file
 		await mainWindow.getByText(/^The following attachments are being watched for changes/i).waitFor();
