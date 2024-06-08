@@ -38,6 +38,7 @@ export const prependBaseUrl = (url: string, baseUrl: string) => {
 	}
 };
 
+
 const resourceRegex = /^(joplin:\/\/|:\/)([0-9a-zA-Z]{32})(|#[^\s]*)(|\s".*?")$/;
 
 export const isResourceUrl = (url: string) => {
@@ -63,18 +64,25 @@ export const parseResourceUrl = (url: string) => {
 	};
 };
 
-export const parseResourceFileUrl = (url: string, normalizedResourceDir: string) => {
-	let resourceDirPrefix = toFileProtocolPath(normalizedResourceDir);
-	if (!resourceDirPrefix.endsWith('/')) {
-		resourceDirPrefix += '/';
+export const fileUrlToResourceUrl = (fileUrl: string, resourceDir: string) => {
+	let resourceDirUrl = toFileProtocolPath(resourceDir);
+	if (!resourceDirUrl.endsWith('/')) {
+		resourceDirUrl += '/';
 	}
 
-	if (url.startsWith(resourceDirPrefix)) {
-		url = url.substring(resourceDirPrefix.length);
-		// Remove the file extension, keep the hash
-		url = url.replace(/\.[a-z0-9]+(#.*)?$/, '$1');
-		return parseResourceUrl(`joplin://${url}`);
+	if (fileUrl.startsWith(resourceDirUrl)) {
+		let result = fileUrl.substring(resourceDirUrl.length);
+		// Remove the timestamp parameter, keep the hash.
+		result = result.replace(/\?t=\d+(#.*)?$/, '$1');
+		// Remove the file extension.
+		result = result.replace(/\.[a-z0-9]+(#.*)?$/, '$1');
+		result = `joplin://${result}`;
+
+		if (isResourceUrl(result)) {
+			return result;
+		}
 	}
+
 	return null;
 };
 

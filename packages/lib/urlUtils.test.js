@@ -63,8 +63,13 @@ describe('urlUtils', () => {
 			'/home/builder/.config/joplindev-desktop/profile-owmhbsat/resources',
 			{ itemId: '4a12670298dd46abbb140ffc8a10b583', hash: 'foo' },
 		],
+		[
+			'file:///home/builder/.config/joplindev-desktop/profile-owmhbsat/resources/4a12670298dd46abbb140ffc8a10b583.png?t=12345',
+			'/home/builder/.config/joplindev-desktop/profile-owmhbsat/resources',
+			{ itemId: '4a12670298dd46abbb140ffc8a10b583', hash: '' },
+		],
 	])('should detect resource file URLs', (url, resourceDir, expected) => {
-		expect(urlUtils.parseResourceFileUrl(url, resourceDir)).toMatchObject(expected);
+		expect(urlUtils.parseResourceUrl(urlUtils.fileUrlToResourceUrl(url, resourceDir))).toMatchObject(expected);
 	});
 
 	it('should extract resource URLs', (async () => {
