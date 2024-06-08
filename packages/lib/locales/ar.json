@@ -155,9 +155,6 @@
 	"Accept": [
 		"قبول"
 	],
-	"Accepted shares": [
-		""
-	],
 	"Access denied: Please check your username and password": [
 		"تم رفض الدخول: المرجو التأكد من اسم المستخدم و كلمة السر"
 	],
@@ -251,6 +248,9 @@
 	"An update is available, do you want to download it now?": [
 		"يتوفر تحديث ، هل تريد تنزيله الآن؟"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		""
 	],
@@ -320,7 +320,7 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"ادراج النصف الآخر للأقواس و علامات الإقتباس."
 	],
 	"Automatically check for updates": [
@@ -1192,9 +1192,6 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"آمن من الفشل: لا تقم بمسح البيانات المحلية عندما يكون هدف المزامنة فارغًا (غالبًا ما يكون نتيجة لحدوث خطأ في التكوين أو خلل برمجي)"
 	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
-	],
 	"Fatal error:": [
 		"خطأ فادح:"
 	],
@@ -1805,11 +1802,11 @@
 	"No active notebook.": [
 		"لا يوجد دفتر ملاحظات نشط."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"لا يوجد عنصر بالمعرّف %s"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"لم يتم تحديد دفتر ملاحظات."
@@ -2246,6 +2243,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -2263,6 +2263,9 @@
 	],
 	"Restored Notes": [
 		"الملاحظات المستعادة"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"إعادة المحاولة"
@@ -3091,6 +3094,9 @@
 	],
 	"Website and documentation": [
 		"موقع الويب و التوثيق"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"مرحباً بك في Joplin!\n\nأكتب `:help shortcuts` للحصول على قائمة اختصارات لوحة المفاتيح ، أو `:help` فقط لمعلومات الاستخدام.\n\nعلى سبيل المثال ، اضغط `mb` لإنشاء دفتر ملاحظات ، و اضغط `mn` لإنشاء ملاحظة."
