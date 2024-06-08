@@ -1032,8 +1032,9 @@ packages/lib/services/joplinCloudUtils.js
 packages/lib/services/joplinServer/personalizedUserContentBaseUrl.js
 packages/lib/services/keychain/KeychainService.js
 packages/lib/services/keychain/KeychainServiceDriver.dummy.js
+packages/lib/services/keychain/KeychainServiceDriver.electron.js
+packages/lib/services/keychain/KeychainServiceDriver.keytar.js
 packages/lib/services/keychain/KeychainServiceDriver.mobile.js
-packages/lib/services/keychain/KeychainServiceDriver.node.js
 packages/lib/services/keychain/KeychainServiceDriverBase.js
 packages/lib/services/noteList/defaultLeftToRightListRenderer.js
 packages/lib/services/noteList/defaultListRenderer.js
