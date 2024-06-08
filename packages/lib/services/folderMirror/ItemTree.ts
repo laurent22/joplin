@@ -2,11 +2,11 @@ import { dirname, join } from 'path/posix';
 import { FolderItem } from './types';
 import { extname, normalize } from 'path';
 import { ModelType } from '../../BaseModel';
-import { friendlySafeFilename } from '../../path-utils';
 import time from '../../time';
 import { LinkTrackerWrapper } from './LinkTracker';
 import { ResourceEntity } from '../database/types';
 import debugLogger from './utils/debugLogger';
+import encodeTitle from './utils/encodeTitle';
 
 export interface AddOrUpdateEvent {
 	path: string;
@@ -101,7 +101,7 @@ export default class ItemTree {
 	}
 
 	private getUniqueItemPathInParent(parentPath: string, item: FolderItem, allowPresentPaths: string[] = []) {
-		let baseName = friendlySafeFilename(item.title);
+		let baseName = encodeTitle(item.title);
 		let extension = '';
 		if (item.type_ === ModelType.Note) {
 			extension = '.md';

@@ -973,6 +973,8 @@ packages/lib/services/folderMirror/LinkTracker.js
 packages/lib/services/folderMirror/constants.js
 packages/lib/services/folderMirror/types.js
 packages/lib/services/folderMirror/utils/debugLogger.js
+packages/lib/services/folderMirror/utils/decodeTitle.js
+packages/lib/services/folderMirror/utils/encodeTitle.js
 packages/lib/services/folderMirror/utils/fillRemoteTree.js
 packages/lib/services/folderMirror/utils/folderInfo/index.js
 packages/lib/services/folderMirror/utils/folderInfo/loadFolderInfo.js
