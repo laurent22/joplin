@@ -1,7 +1,8 @@
 import KeychainServiceDriverBase from './KeychainServiceDriverBase';
 import shim from '../../shim';
-import JoplinDatabase from '../../JoplinDatabase';
 import Logger from '@joplin/utils/Logger';
+import KvStore from '../KvStore';
+import Setting from '../../models/Setting';
 
 const logger = Logger.create('KeychainServiceDriver.node');
 
@@ -9,16 +10,16 @@ const canUseSafeStorage = () => {
 	return !!shim.electronBridge()?.safeStorage?.isEncryptionAvailable();
 };
 
-const encryptedSettingKey = (key: string) => {
-	return `encryptedValue.${key}`;
-};
+const kvStorePrefix = 'KeychainServiceDriver.secureStore.';
 
 export default class KeychainServiceDriver extends KeychainServiceDriverBase {
 
-	private tableName = 'settings';
-
-	public constructor(appId: string, clientId: string, private db: JoplinDatabase) {
+	public constructor(appId: string, clientId: string) {
 		super(appId, clientId);
+
+		if (canUseSafeStorage() && shim.isLinux()) {
+			logger.info('KeychainService Linux backend: ', shim.electronBridge()?.safeStorage?.getSelectedStorageBackend());
+		}
 	}
 
 	public async setPassword(name: string, password: string): Promise<boolean> {
@@ -26,10 +27,7 @@ export default class KeychainServiceDriver extends KeychainServiceDriverBase {
 			logger.debug('Saving password with electron safe storage. ID: ', name);
 
 			const encrypted = await shim.electronBridge().safeStorage.encryptString(password);
-			await this.db.exec(
-				`INSERT OR REPLACE INTO ${this.tableName} (\`key\`, \`value\`) VALUES (?, ?)`,
-				[encryptedSettingKey(name), encrypted],
-			);
+			await KvStore.instance().setValue(`${kvStorePrefix}${name}`, encrypted);
 		} else if (shim.keytar()) {
 			logger.debug('Saving password with keytar. ID: ', name);
 			await shim.keytar().setPassword(`${this.appId}.${name}`, `${this.clientId}@joplin`, password);
@@ -44,12 +42,15 @@ export default class KeychainServiceDriver extends KeychainServiceDriverBase {
 		let result: string|null = null;
 
 		if (canUseSafeStorage()) {
-			const data = await this.db.selectOne(`SELECT * FROM ${this.tableName} WHERE key = ?`, [encryptedSettingKey(name)]);
-			if (data?.value) {
+			const data = await KvStore.instance().value<string>(`${kvStorePrefix}${name}`);
+			if (data !== null) {
 				try {
-					result = await shim.electronBridge().safeStorage.decryptString(data.value);
+					result = await shim.electronBridge().safeStorage.decryptString(data);
 				} catch (e) {
 					logger.warn('Decryption of a setting failed. Corrupted data or new keychain password? Error:', e);
+					if (shim.isLinux() && Setting.value('env') === 'dev') {
+						logger.warn('If running Joplin in development mode with NodeJS installed from the Snap store, consider retrying with NodeJS installed from a different source.');
+					}
 				}
 			}
 		}
@@ -65,7 +66,7 @@ export default class KeychainServiceDriver extends KeychainServiceDriverBase {
 	public async deletePassword(name: string): Promise<void> {
 		if (canUseSafeStorage()) {
 			logger.debug('Trying to delete encrypted password with id ', name);
-			await this.db.exec(`DELETE FROM ${this.tableName} WHERE key = ?`, [encryptedSettingKey(name)]);
+			await KvStore.instance().deleteValue(`${kvStorePrefix}${name}`);
 		}
 
 		if (shim.keytar()) {

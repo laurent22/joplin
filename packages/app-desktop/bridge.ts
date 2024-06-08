@@ -495,6 +495,10 @@ export class Bridge {
 		decryptString(base64Data: string) {
 			return safeStorage.decryptString(Buffer.from(base64Data, 'base64'));
 		},
+
+		getSelectedStorageBackend() {
+			return safeStorage.getSelectedStorageBackend();
+		},
 	};
 }
 

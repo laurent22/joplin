@@ -17,7 +17,7 @@ import { migrateLocalSyncInfo } from './synchronizer/syncInfoUtils';
 export async function loadKeychainServiceAndSettings(KeychainServiceDriver: any) {
 	const clientIdSetting = await Setting.loadOne('clientId');
 	const clientId = clientIdSetting ? clientIdSetting.value : uuid.create();
-	KeychainService.instance().initialize(new KeychainServiceDriver(Setting.value('appId'), clientId, Setting.db()));
+	KeychainService.instance().initialize(new KeychainServiceDriver(Setting.value('appId'), clientId));
 	Setting.setKeychainService(KeychainService.instance());
 	await Setting.load();
 

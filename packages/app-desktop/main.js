@@ -17,7 +17,7 @@ const determineBaseAppDirs = require('@joplin/lib/determineBaseAppDirs').default
 // our case it's a string like "@joplin/app-desktop". It's also supposed to
 // check the productName key but is not doing it, so here set the
 // application name to the right string.
-electronApp.name = packageInfo.name;
+electronApp.setName(packageInfo.name);
 
 process.on('unhandledRejection', (reason, p) => {
 	console.error('Unhandled promise rejection', p, 'reason:', reason);
