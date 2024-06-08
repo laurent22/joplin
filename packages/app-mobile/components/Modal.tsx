@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useMemo } from 'react';
-import { Modal, ModalProps, StyleSheet, View, ViewStyle, useWindowDimensions } from 'react-native';
+import { RefObject, useCallback, useMemo, useRef } from 'react';
+import { GestureResponderEvent, Modal, ModalProps, StyleSheet, View, ViewStyle, useWindowDimensions } from 'react-native';
 import { hasNotch } from 'react-native-device-info';
 
 interface ModalElementProps extends ModalProps {
@@ -28,6 +28,20 @@ const useStyles = (backgroundColor?: string) => {
 	}, [isLandscape, backgroundColor]);
 };
 
+const useBackdropTouchListeners = (onRequestClose: (event: GestureResponderEvent)=> void, backdropRef: RefObject<View>) => {
+	const onShouldBackgroundCaptureTouch = useCallback((event: GestureResponderEvent) => {
+		return event.target === backdropRef.current && event.nativeEvent.touches.length === 1;
+	}, [backdropRef]);
+
+	const onBackdropTouchFinished = useCallback((event: GestureResponderEvent) => {
+		if (event.target === backdropRef.current) {
+			onRequestClose?.(event);
+		}
+	}, [onRequestClose, backdropRef]);
+
+	return { onShouldBackgroundCaptureTouch, onBackdropTouchFinished };
+};
+
 const ModalElement: React.FC<ModalElementProps> = ({
 	children,
 	containerStyle,
@@ -44,13 +58,21 @@ const ModalElement: React.FC<ModalElementProps> = ({
 		</View>
 	);
 
+	const backdropRef = useRef<View>();
+	const { onShouldBackgroundCaptureTouch, onBackdropTouchFinished } = useBackdropTouchListeners(modalProps.onRequestClose, backdropRef);
+
 	// supportedOrientations: On iOS, this allows the dialog to be shown in non-portrait orientations.
 	return (
 		<Modal
 			supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
 			{...modalProps}
 		>
-			<View style={styles.modalBackground}>{content}</View>
+			<View
+				ref={backdropRef}
+				style={styles.modalBackground}
+				onStartShouldSetResponder={onShouldBackgroundCaptureTouch}
+				onResponderRelease={onBackdropTouchFinished}
+			>{content}</View>
 		</Modal>
 	);
 };
