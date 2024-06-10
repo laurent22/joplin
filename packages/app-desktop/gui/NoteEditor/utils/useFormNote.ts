@@ -306,10 +306,17 @@ export default function useFormNote(dependencies: HookDependencies) {
 		}
 	}, [setFormNote]);
 
+	const setChanged = useCallback((changed: boolean) => {
+		if (formNoteRef.current.hasChanged !== changed) {
+			onSetFormNote({ ...formNoteRef.current, hasChanged: changed });
+		}
+	}, [onSetFormNote]);
+
 	return {
 		isNewNote,
 		formNote,
 		setFormNote: onSetFormNote,
+		setChanged,
 		resourceInfos,
 	};
 }

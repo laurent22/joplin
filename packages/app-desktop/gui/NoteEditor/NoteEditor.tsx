@@ -84,7 +84,7 @@ function NoteEditor(props: NoteEditorProps) {
 
 	const effectiveNoteId = useEffectiveNoteId(props);
 
-	const { formNote, setFormNote, isNewNote, resourceInfos } = useFormNote({
+	const { formNote, setFormNote, isNewNote, resourceInfos, setChanged } = useFormNote({
 		syncStarted: props.syncStarted,
 		decryptionStarted: props.decryptionStarted,
 		noteId: effectiveNoteId,
@@ -396,6 +396,7 @@ function NoteEditor(props: NoteEditorProps) {
 		whiteBackgroundNoteRendering,
 		onChange: onBodyChange,
 		onWillChange: onBodyWillChange,
+		setChanged,
 		onMessage: onMessage,
 		content: formNote.body,
 		contentMarkupLanguage: formNote.markup_language,

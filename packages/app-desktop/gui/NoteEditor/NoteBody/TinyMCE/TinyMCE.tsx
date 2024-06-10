@@ -1240,8 +1240,11 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		async function onKeyDown(event: any) {
+		async function onKeyDown(event: KeyboardEvent) {
+			// Although the onChangeHandler also marks the editor content as changed, it's important
+			// to set changed to true as soon as possible. See https://github.com/laurent22/joplin/issues/8960.
+			props.setChanged(true);
+
 			// It seems "paste as text" is handled automatically on Windows and Linux,
 			// so we need to run the below code only on macOS. If we were to run this
 			// on Windows/Linux, we would have this double-paste issue:
