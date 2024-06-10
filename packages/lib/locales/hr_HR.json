@@ -158,9 +158,6 @@
 	"Accept": [
 		"Prihvati"
 	],
-	"Accepted shares": [
-		""
-	],
 	"Access denied: Please check your username and password": [
 		"Pristup odbijen: Provjeri svoje korisničko ime i lozinku"
 	],
@@ -254,6 +251,9 @@
 	"An update is available, do you want to download it now?": [
 		"Dostupna je nova verzija. Želiš li je sada preuzeti?"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"Svaki e-mail poslan na ovu adresu će se pretvoriti u bilješku i dodati u tvoju zbirku. Bilješka će se spremiti u bilježnicu „Dolazna pošta”"
 	],
@@ -323,7 +323,7 @@
 	"Auto-add disabled accounts for deletion": [
 		"Automatski dodaj deaktivirane račune za brisanje"
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Automatski uskladi zagrade, navodnike itd."
 	],
 	"Automatically check for updates": [
@@ -1210,9 +1210,6 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Sigurnosni mehanizam: Ne briši lokalne podatke kad je cilj sinkronizacije prazan (često se radi o krivoj konfiguraciji ili o programskoj grešci)"
 	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
-	],
 	"Fatal error:": [
 		"Fatalna greška:"
 	],
@@ -1859,11 +1856,11 @@
 	"No active notebook.": [
 		"Nema aktivne bilježnice."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"Nema elementa s ID oznakom %s"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"Nijedna bilježnica nije određena."
@@ -2324,6 +2321,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -2350,6 +2350,9 @@
 	],
 	"Restored Notes": [
 		"Obnovljene bilješke"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"Pokušaj ponovo"
@@ -3280,6 +3283,9 @@
 	],
 	"Website and documentation": [
 		"Web-stranica i dokumentacija"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Dobro došao, dobro došla u Joplin!\n\nUpiši `:help shortcuts` za popis tipkovnih prečaca ili samo`:help` za informacije o korištenju.\n\nNa primjer, za stvaranje bilježnice pritisni `mb`; za stvaranje bilješke pritisni `mn`."

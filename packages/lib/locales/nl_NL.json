@@ -158,9 +158,6 @@
 	"Accept": [
 		"Accepteren"
 	],
-	"Accepted shares": [
-		""
-	],
 	"Access denied: Please check your username and password": [
 		"Geen toegang: Controleer je inlognaam en wachtwoord"
 	],
@@ -254,6 +251,9 @@
 	"An update is available, do you want to download it now?": [
 		"Er is een update beschikbaar. Wilt u deze nu downloaden?"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"Alle email naar dit adres wordt omgezet in een notitie in jouw verzameling. De notitie wordt opgeslagen in het inbox notitieboek"
 	],
@@ -323,7 +323,7 @@
 	"Auto-add disabled accounts for deletion": [
 		"Voeg uitgeschakelde account automatisch toe voor verwijdering"
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Auto-paar accolades, haakjes, citaten, enz."
 	],
 	"Automatically check for updates": [
@@ -1209,9 +1209,6 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Fail-safe: Wis lokale gegevens niet wanneer synchronisatiedoel leeg is (vaak het gevolg van een misconfiguratie of softwarefout)"
 	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
-	],
 	"Fatal error:": [
 		"Fatale fout:"
 	],
@@ -1856,11 +1853,11 @@
 	"No active notebook.": [
 		"Geen actief notitieboek."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"Geen item met ID %s"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"Geen notitieboek opgegeven."
@@ -2321,6 +2318,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -2347,6 +2347,9 @@
 	],
 	"Restored Notes": [
 		"Herstelde notities"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"Opnieuw proberen"
@@ -3274,6 +3277,9 @@
 	],
 	"Website and documentation": [
 		"Website en documentatie"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Welkom bij Joplin!\n\nTyp `:help shortcuts` voor een lijst met sneltoetsen of `:help` voor informatie omtrent het gebruik.\n\nVoorbeeld: om een notitieboek te creëren, drukt u op `mb`; om een notitie te creëren, drukt u op `mn`."

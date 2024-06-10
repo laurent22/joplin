@@ -16,15 +16,15 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:607
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:608
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr "- Kamera: engedélyezze kép készítéséhez és csatolja azt a jegyzethez."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:610
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:611
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr "- Hely: engedélyezze, a geo-location hozzáadását a jegyzethez."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:604
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:605
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
@@ -32,12 +32,12 @@ msgstr ""
 "- Tároló: engedélyezi a fájlok csatolását a jegyzetekhez és engedélyezi a "
 "fájlrendszer szinkronizációt."
 
-#: packages/lib/services/KeymapService.ts:321
-#: packages/lib/services/KeymapService.ts:327
+#: packages/lib/services/KeymapService.ts:322
+#: packages/lib/services/KeymapService.ts:328
 msgid "\"%s\" is missing the required \"%s\" property."
 msgstr "\"%s\" hiányzik a szükséges \"%s\" tulajdonság."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:261
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:262
 msgid "(%s)"
 msgstr "(%s)"
 
@@ -53,48 +53,48 @@ msgstr ""
 msgid "(wysiwyg: %s)"
 msgstr "(wysiwyg: %s)"
 
-#: packages/app-mobile/components/screens/Note.tsx:743
+#: packages/app-mobile/components/screens/Note.tsx:744
 #: packages/lib/shim-init-node.ts:255
 msgid "(You may disable this prompt in the options)"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:1012
-#: packages/app-desktop/gui/MenuBar.tsx:715
+#: packages/app-desktop/gui/MenuBar.tsx:1023
+#: packages/app-desktop/gui/MenuBar.tsx:725
 msgid "&Edit"
 msgstr "Sz&erkesztés"
 
-#: packages/app-desktop/gui/MenuBar.tsx:1008
-#: packages/app-desktop/gui/MenuBar.tsx:589
-#: packages/app-desktop/gui/MenuBar.tsx:669
+#: packages/app-desktop/gui/MenuBar.tsx:1019
+#: packages/app-desktop/gui/MenuBar.tsx:599
+#: packages/app-desktop/gui/MenuBar.tsx:679
 msgid "&File"
 msgstr "&Fájl"
 
-#: packages/app-desktop/gui/MenuBar.tsx:837
+#: packages/app-desktop/gui/MenuBar.tsx:848
 msgid "&Go"
 msgstr "&Ugrás"
 
-#: packages/app-desktop/gui/MenuBar.tsx:890
+#: packages/app-desktop/gui/MenuBar.tsx:901
 msgid "&Help"
 msgstr "&Segítség"
 
-#: packages/app-desktop/gui/MenuBar.tsx:855
+#: packages/app-desktop/gui/MenuBar.tsx:866
 msgid "&Note"
 msgstr "&Jegyzet"
 
-#: packages/app-desktop/gui/MenuBar.tsx:868
+#: packages/app-desktop/gui/MenuBar.tsx:879
 msgid "&Tools"
 msgstr "&Eszközök"
 
-#: packages/app-desktop/gui/MenuBar.tsx:757
+#: packages/app-desktop/gui/MenuBar.tsx:767
 msgid "&View"
 msgstr "&Nézet"
 
-#: packages/app-desktop/gui/MenuBar.tsx:880
+#: packages/app-desktop/gui/MenuBar.tsx:891
 #, fuzzy
 msgid "&Window"
 msgstr "Ablak bezárása"
 
-#: packages/lib/models/Setting.ts:1730 packages/lib/models/Setting.ts:1921
+#: packages/lib/models/Setting.ts:1737 packages/lib/models/Setting.ts:1928
 msgid "%d days"
 msgstr "%d nap"
 
@@ -108,11 +108,11 @@ msgstr ""
 msgid "%d GB storage space"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1500
+#: packages/lib/models/Setting.ts:1507
 msgid "%d hour"
 msgstr "%d óra"
 
-#: packages/lib/models/Setting.ts:1501 packages/lib/models/Setting.ts:1502
+#: packages/lib/models/Setting.ts:1508 packages/lib/models/Setting.ts:1509
 msgid "%d hours"
 msgstr "%d óranként"
 
@@ -127,8 +127,8 @@ msgstr ""
 msgid "%d MB per note or attachment"
 msgstr "Jegyzet csatolmányok"
 
-#: packages/lib/models/Setting.ts:1497 packages/lib/models/Setting.ts:1498
-#: packages/lib/models/Setting.ts:1499
+#: packages/lib/models/Setting.ts:1504 packages/lib/models/Setting.ts:1505
+#: packages/lib/models/Setting.ts:1506
 msgid "%d minutes"
 msgstr "%d percenként"
 
@@ -241,38 +241,38 @@ msgid ""
 "convert the to-do back to a regular note."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1526
+#: packages/lib/models/Setting.ts:1533
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.ts:1524
+#: packages/lib/models/Setting.ts:1531
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.ts:1527
+#: packages/lib/models/Setting.ts:1534
 msgid "A5"
 msgstr "A5"
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:118
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:77
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:74
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:240
 msgid "About"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:595
-#: packages/app-desktop/gui/MenuBar.tsx:931
+#: packages/app-desktop/gui/MenuBar.tsx:605
+#: packages/app-desktop/gui/MenuBar.tsx:942
 msgid "About Joplin"
 msgstr "Joplin névjegy"
 
-#: packages/lib/services/KeymapService.ts:327
-#: packages/lib/services/KeymapService.ts:332
+#: packages/lib/services/KeymapService.ts:328
+#: packages/lib/services/KeymapService.ts:333
 msgid "accelerator"
 msgstr "gyorsbillentyű"
 
-#: packages/lib/services/KeymapService.ts:384
+#: packages/lib/services/KeymapService.ts:385
 msgid "Accelerator \"%s\" is not valid."
 msgstr "Gyorsbillentyű \"%s\" nem érvényes."
 
-#: packages/lib/services/KeymapService.ts:353
+#: packages/lib/services/KeymapService.ts:354
 msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
@@ -286,7 +286,7 @@ msgid "Accept"
 msgstr "Elfogadás"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:98
-msgid "Accepted shares"
+msgid "Accepted invitations"
 msgstr ""
 
 #: packages/lib/WebDavApi.js:451
@@ -301,14 +301,14 @@ msgstr ""
 msgid "Account"
 msgstr ""
 
-#: packages/app-desktop/gui/ResourceScreen.tsx:99
+#: packages/app-desktop/gui/ResourceScreen.tsx:106
 #, fuzzy
 msgid "Action"
 msgstr "Akció"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:58
-#: packages/app-mobile/components/ScreenHeader/index.tsx:655
+#: packages/app-mobile/components/ScreenHeader/index.tsx:659
 #, fuzzy
 msgid "Actions"
 msgstr "Akciók"
@@ -318,11 +318,11 @@ msgid "Active"
 msgstr "Aktív"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:18
-#: packages/app-desktop/gui/MenuBar.tsx:805
+#: packages/app-desktop/gui/MenuBar.tsx:816
 msgid "Actual Size"
 msgstr "Aktív Méret"
 
-#: packages/app-mobile/components/screens/Note.tsx:1537
+#: packages/app-mobile/components/screens/Note.tsx:1547
 msgid "Add body"
 msgstr "Törzsszöveg hozzáadása"
 
@@ -339,7 +339,7 @@ msgstr "Tagek hozzáadása vagy törlése:"
 msgid "Add recipient:"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:1610
+#: packages/app-mobile/components/screens/Note.tsx:1620
 msgid "Add title"
 msgstr "Cím hozzáadása"
 
@@ -347,8 +347,8 @@ msgstr "Cím hozzáadása"
 msgid "Add to dictionary"
 msgstr "Hozzáadás szótárhoz"
 
-#: packages/server/src/services/MustacheService.ts:157
-#: packages/server/src/services/MustacheService.ts:281
+#: packages/server/src/services/MustacheService.ts:162
+#: packages/server/src/services/MustacheService.ts:286
 msgid "Admin"
 msgstr "Adminisztrátor"
 
@@ -356,9 +356,15 @@ msgstr "Adminisztrátor"
 msgid "Admin dashboard"
 msgstr "Adminisztrátori felület"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:138
 msgid "Advanced options"
 msgstr "Haladó beállítások"
+
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:668
+#, fuzzy
+msgid "Advanced settings"
+msgstr "Speciális beállítások megjelenítése"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:196
 msgid "Advanced tools"
@@ -374,7 +380,7 @@ msgid "All item sync failures have been marked as \"ignored\"."
 msgstr ""
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/AllNotesItem.tsx:61
-#: packages/app-mobile/components/screens/Notes.tsx:185
+#: packages/app-mobile/components/screens/Notes.tsx:184
 #: packages/app-mobile/components/side-menu-content.tsx:557
 msgid "All notes"
 msgstr "Minden jegyzet"
@@ -439,18 +445,22 @@ msgstr ""
 msgid "An update is available, do you want to download it now?"
 msgstr "Egy frissítés elérhető, le szeretné tölteni most?"
 
+#: packages/app-mobile/utils/getVersionInfoText.ts:21
+msgid "Android API level: %d"
+msgstr ""
+
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:23
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:533
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:534
 msgid ""
 "Any email sent to this address will be converted into a note and added to "
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2789
+#: packages/lib/models/Setting.ts:2800
 msgid "Appearance"
 msgstr "Megjelenés"
 
-#: packages/lib/models/Setting.ts:2794
+#: packages/lib/models/Setting.ts:2805
 msgid "Application"
 msgstr "Alkalmazás"
 
@@ -458,6 +468,7 @@ msgstr "Alkalmazás"
 msgid "Apply"
 msgstr "Alkalmaz"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:37
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr ""
@@ -484,15 +495,15 @@ msgstr "Csatol..."
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:75
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:673
-#: packages/app-mobile/components/screens/Note.tsx:1127
+#: packages/app-mobile/components/screens/Note.tsx:1128
 msgid "Attach file"
 msgstr "Fájl csatolása"
 
-#: packages/app-mobile/components/screens/Note.tsx:1131
+#: packages/app-mobile/components/screens/Note.tsx:1132
 msgid "Attach photo"
 msgstr "Fotó csatolása"
 
-#: packages/app-mobile/components/screens/Note.tsx:1231
+#: packages/app-mobile/components/screens/Note.tsx:1232
 msgid "Attach..."
 msgstr "Csatol..."
 
@@ -538,6 +549,7 @@ msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "Hitelesítés nem fejeződött be (nem érkezett hitelesítő token)"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:139
 msgid "Authorisation token:"
 msgstr "Hitelesítő token:"
@@ -560,11 +572,11 @@ msgstr ""
 msgid "Auto-pair braces, parentheses, quotations, etc."
 msgstr "Auto-párosítása az idézőjeleknek, zárójeleknek, stb."
 
-#: packages/lib/models/Setting.ts:1471
+#: packages/lib/models/Setting.ts:1478
 msgid "Automatically check for updates"
 msgstr "Automatikus frissítés keresés"
 
-#: packages/lib/models/Setting.ts:1908
+#: packages/lib/models/Setting.ts:1915
 msgid "Automatically delete notes in the trash after a number of days"
 msgstr ""
 
@@ -573,7 +585,8 @@ msgid "Automatically switch theme to match system theme"
 msgstr "Automatikusan kapcsoljon olyan témára, ami egyezik a rendszer témával"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:48
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:795
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:798
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:209
 #: packages/app-mobile/components/ScreenHeader/index.tsx:323
 #: packages/lib/commands/historyBackward.ts:6
@@ -596,17 +609,22 @@ msgstr ""
 msgid "Bold"
 msgstr "Félkövér"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:222
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:320
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:223
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:321
 msgid "Browse all plugins"
+msgstr "Plugin-ok tallózása"
+
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:166
+#, fuzzy
+msgid "Browse and install community plugins."
 msgstr "Plugin-ok tallózása"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:594
 msgid "Browse..."
 msgstr "Tallózás..."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:221
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:151
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:222
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:85
 msgid "Built-in"
 msgstr ""
 
@@ -614,7 +632,7 @@ msgstr ""
 msgid "Bulleted List"
 msgstr "Felsorolás"
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:37
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:129
 msgid "by %s"
 msgstr ""
 
@@ -635,13 +653,15 @@ msgstr ""
 #: packages/app-desktop/bridge.ts:423
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:795
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:798
+#: packages/app-desktop/gui/DialogButtonRow.min.js:38
 #: packages/app-desktop/gui/DialogButtonRow.tsx:79
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:82
 #: packages/app-desktop/gui/MainScreen/commands/permanentlyDeleteNote.ts:20
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
+#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:315
-#: packages/app-desktop/gui/ResourceScreen.tsx:174
+#: packages/app-desktop/gui/ResourceScreen.tsx:218
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:135
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:27
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:71
@@ -651,8 +671,8 @@ msgstr ""
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:107
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:70
 #: packages/app-mobile/components/screens/encryption-config.tsx:192
-#: packages/app-mobile/components/screens/Note.tsx:208
-#: packages/app-mobile/components/screens/Note.tsx:746
+#: packages/app-mobile/components/screens/Note.tsx:209
+#: packages/app-mobile/components/screens/Note.tsx:747
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:155
 #: packages/app-mobile/components/side-menu-content.tsx:167
 #: packages/app-mobile/components/side-menu-content.tsx:217
@@ -688,7 +708,7 @@ msgstr "Titkosított elem nem módosítható"
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Jegyzet nem másolható a \"%s\" jegyzetfüzetbe"
 
-#: packages/app-mobile/components/screens/Notes.tsx:171
+#: packages/app-mobile/components/screens/Notes.tsx:170
 #, fuzzy
 msgid "Cannot create a new note: %s"
 msgstr "Új jegyzet létrehozása."
@@ -794,13 +814,13 @@ msgstr "Karakterek"
 msgid "Characters excluding spaces"
 msgstr "Karaktere szóköz kivételével"
 
-#: packages/app-desktop/gui/MenuBar.tsx:612
-#: packages/app-desktop/gui/MenuBar.tsx:906
+#: packages/app-desktop/gui/MenuBar.tsx:622
+#: packages/app-desktop/gui/MenuBar.tsx:917
 msgid "Check for updates..."
 msgstr "Frissítés keresése..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:249
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:465
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:464
 msgid "Check synchronisation configuration"
 msgstr "Szinkronizációs beállítások ellenőrzése"
 
@@ -816,15 +836,17 @@ msgstr "Jelölőnégyzet lista"
 msgid "Checking... Please wait."
 msgstr "Ellenőrzés... Kérem várjon."
 
-#: packages/app-mobile/components/screens/Note.tsx:1134
+#: packages/app-mobile/components/screens/Note.tsx:1135
 msgid "Choose an option"
 msgstr "Válasszon egy opciót"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:17
 #: packages/app-desktop/gui/ExtensionBadge.tsx:72
 msgid "Chrome Web Store"
 msgstr "Chrome Web Store"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:150
+#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:322
 #: packages/app-mobile/components/screens/search.tsx:193
 msgid "Clear"
@@ -834,6 +856,7 @@ msgstr "Törlés"
 msgid "Clear alarm"
 msgstr "Riasztás törlése"
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:204
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
@@ -843,7 +866,7 @@ msgstr ""
 "nevű jegyzetfüzetbe. A jegyzet aktuális verziója nem lesz kicserélve vagy "
 "módosítva."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:432
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:382
 msgid "Click to add tags..."
 msgstr "Kattintson tag hozzáadáshoz..."
 
@@ -851,13 +874,13 @@ msgstr "Kattintson tag hozzáadáshoz..."
 msgid "Client ID: %s"
 msgstr "Kliens ID: %s"
 
-#: packages/app-desktop/gui/MenuBar.tsx:341
+#: packages/app-desktop/gui/MenuBar.tsx:351
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:176
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:402
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:222
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:274
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:33
-#: packages/app-mobile/components/DismissibleDialog.tsx:61
+#: packages/app-mobile/components/DismissibleDialog.tsx:83
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:163
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useActionButtons.ts:56
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToolbarOverflowRows.tsx:105
@@ -879,7 +902,7 @@ msgid ""
 msgstr ""
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
-#: packages/app-desktop/gui/MenuBar.tsx:677
+#: packages/app-desktop/gui/MenuBar.tsx:687
 msgid "Close Window"
 msgstr "Ablak bezárása"
 
@@ -917,7 +940,7 @@ msgstr ""
 msgid "Coming alarms"
 msgstr "Riasztás beállítása"
 
-#: packages/lib/models/Setting.ts:1640
+#: packages/lib/models/Setting.ts:1647
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -932,7 +955,7 @@ msgstr ""
 "Note that if you make changes to the TLS settings, you must save your "
 "changes before clicking on \"Check synchronisation configuration\"."
 
-#: packages/lib/services/KeymapService.ts:321
+#: packages/lib/services/KeymapService.ts:322
 msgid "command"
 msgstr "parancs"
 
@@ -954,6 +977,7 @@ msgid "Compact"
 msgstr "Befejeződött"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:12
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:70
 msgid "Completed"
 msgstr "Befejeződött"
@@ -981,7 +1005,7 @@ msgid "Compress old changes"
 msgstr ""
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:130
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:851
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:840
 #: packages/app-mobile/components/side-menu-content.tsx:506
 msgid "Configuration"
 msgstr "Beállítások"
@@ -1020,7 +1044,7 @@ msgstr ""
 msgid "Content provided by %s"
 msgstr "Tartalom %s által biztosítva"
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:88
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:100
 #, fuzzy
 msgid "Content provided by: %s"
 msgstr "Tartalom %s által biztosítva"
@@ -1029,11 +1053,11 @@ msgstr "Tartalom %s által biztosítva"
 msgid "Continue"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:1283
+#: packages/app-mobile/components/screens/Note.tsx:1284
 msgid "Convert to note"
 msgstr "Átalakítás jegyzetté"
 
-#: packages/app-mobile/components/screens/Note.tsx:1283
+#: packages/app-mobile/components/screens/Note.tsx:1284
 msgid "Convert to todo"
 msgstr "Átalakítás todo-ra"
 
@@ -1042,7 +1066,7 @@ msgstr "Átalakítás todo-ra"
 msgid "Converting speech to text..."
 msgstr "Átalakítás jegyzetté"
 
-#: packages/app-desktop/gui/MenuBar.tsx:576
+#: packages/app-desktop/gui/MenuBar.tsx:586
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:35
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:94
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:188
@@ -1055,7 +1079,7 @@ msgstr "Dev mód parancs másolása vágólapra"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:207
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:221
-#: packages/app-desktop/gui/utils/NoteListUtils.ts:121
+#: packages/app-desktop/gui/utils/NoteListUtils.ts:119
 msgid "Copy external link"
 msgstr "Külső link másolása"
 
@@ -1073,8 +1097,8 @@ msgstr "Link címének másolása"
 msgid "Copy link to website"
 msgstr "Joplin weboldal"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.ts:106
-#: packages/app-mobile/components/screens/Note.tsx:1292
+#: packages/app-desktop/gui/utils/NoteListUtils.ts:104
+#: packages/app-mobile/components/screens/Note.tsx:1293
 msgid "Copy Markdown link"
 msgstr "Markdown hivatkozás másolása"
 
@@ -1089,16 +1113,17 @@ msgstr[0] "Megosztható hivatkozás másolása"
 msgstr[1] "Megosztható hivatkozások másolása"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:27
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:552
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:553
 #, fuzzy
 msgid "Copy to clipboard"
 msgstr "Útvonal másolása vágólapra"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:208
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:143
 msgid "Copy token"
 msgstr "Token másolása"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:633
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:626
 #, fuzzy
 msgid "Copy version info"
 msgstr "Megjeleníti a verzió információit"
@@ -1129,7 +1154,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:320
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:321
 msgid "Could not connect to plugin repository."
 msgstr "Sikertelen kapcsolódás a plugin adattárhoz."
 
@@ -1169,6 +1194,7 @@ msgstr ""
 msgid "Could not verify your identity: %s"
 msgstr "Jegyzetek nem exportálhatóak: %s"
 
+#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:301
 msgid "Create"
 msgstr "Létrehozás"
@@ -1196,6 +1222,7 @@ msgid "Create user"
 msgstr "Új felhasználó létrehozása"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:14
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:67
 msgid "Created"
 msgstr "Létrehozva"
@@ -1221,12 +1248,13 @@ msgid "Created: "
 msgstr "Létrehozva: "
 
 #: packages/app-cli/app/command-import.ts:51
+#: packages/app-desktop/gui/ImportScreen.min.js:69
 #: packages/app-desktop/gui/ImportScreen.tsx:90
 msgid "Created: %d."
 msgstr "Létrehozva: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:120
-#: packages/app-mobile/components/screens/Note.tsx:1094
+#: packages/app-mobile/components/screens/Note.tsx:1095
 msgid "Created: %s"
 msgstr "Létrehozva: %s"
 
@@ -1242,12 +1270,12 @@ msgstr "Új jegyzetfüzet létrehozása."
 msgid "Creates a new to-do."
 msgstr "Új to-do létrehozása."
 
-#: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:115
+#: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:114
 #, fuzzy
 msgid "Creating new note..."
 msgstr "Új %s létrehozása..."
 
-#: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:115
+#: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:114
 #, fuzzy
 msgid "Creating new to-do..."
 msgstr "Új %s létrehozása..."
@@ -1268,15 +1296,15 @@ msgstr "egyedi sorrend"
 msgid "Custom order"
 msgstr "Egyedi sorrend"
 
-#: packages/lib/models/Setting.ts:1440
+#: packages/lib/models/Setting.ts:1447
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Egyedi stíluslap Joplin-széles app stílushoz"
 
-#: packages/lib/models/Setting.ts:1423
+#: packages/lib/models/Setting.ts:1430
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Egyedi stíluslap Markdown megjelenítéshez"
 
-#: packages/lib/models/Setting.ts:1639
+#: packages/lib/models/Setting.ts:1646
 msgid "Custom TLS certificates"
 msgstr "Egyedi TLS bizonyítvány"
 
@@ -1294,7 +1322,7 @@ msgstr "Kivágás"
 msgid "Dark"
 msgstr "Sötét"
 
-#: packages/server/src/services/MustacheService.ts:116
+#: packages/server/src/services/MustacheService.ts:117
 msgid "Dashboard"
 msgstr ""
 
@@ -1306,7 +1334,7 @@ msgstr "Dátum"
 msgid "Date format"
 msgstr "Dátumforma"
 
-#: packages/lib/models/Setting.ts:1730 packages/lib/models/Setting.ts:1921
+#: packages/lib/models/Setting.ts:1737 packages/lib/models/Setting.ts:1928
 msgid "days"
 msgstr "napok"
 
@@ -1327,8 +1355,8 @@ msgstr "Dekódolt elemek: %s / %s"
 msgid "Decrypting items: %d/%d"
 msgstr "Elemek titkosítása: %d/%d"
 
-#: packages/lib/models/Setting.ts:1354 packages/lib/models/Setting.ts:1361
-#: packages/lib/models/Setting.ts:1562
+#: packages/lib/models/Setting.ts:1361 packages/lib/models/Setting.ts:1368
+#: packages/lib/models/Setting.ts:1569
 msgid "Default"
 msgstr "Alapérték"
 
@@ -1336,20 +1364,20 @@ msgstr "Alapérték"
 msgid "Default: %s"
 msgstr "Alapérték: %s"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:183
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:184
 #: packages/app-desktop/gui/MainScreen/commands/permanentlyDeleteNote.ts:20
-#: packages/app-desktop/gui/ResourceScreen.tsx:115
-#: packages/app-desktop/gui/ResourceScreen.tsx:174
+#: packages/app-desktop/gui/ResourceScreen.tsx:122
+#: packages/app-desktop/gui/ResourceScreen.tsx:218
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:139
-#: packages/app-mobile/components/ScreenHeader/index.tsx:460
-#: packages/app-mobile/components/ScreenHeader/index.tsx:551
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:113
-#: packages/app-mobile/components/screens/Note.tsx:1320
+#: packages/app-mobile/components/ScreenHeader/index.tsx:462
+#: packages/app-mobile/components/ScreenHeader/index.tsx:555
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:207
+#: packages/app-mobile/components/screens/Note.tsx:1321
 #: packages/app-mobile/components/side-menu-content.tsx:246
 msgid "Delete"
 msgstr "Törlés"
 
-#: packages/app-desktop/gui/ResourceScreen.tsx:173
+#: packages/app-desktop/gui/ResourceScreen.tsx:217
 msgid "Delete attachment \"%s\"?"
 msgstr "\"%s\" csatolmány törlése ?"
 
@@ -1365,7 +1393,7 @@ msgstr "Lejárt tokenek törlése"
 msgid "Delete line"
 msgstr "Sor törlése"
 
-#: packages/lib/models/Setting.ts:1464
+#: packages/lib/models/Setting.ts:1471
 msgid "Delete local data and re-download from sync target"
 msgstr ""
 
@@ -1388,7 +1416,7 @@ msgstr "\"%s\" bővítmény törlése?"
 msgid "Delete profile \"%s\""
 msgstr "\"%s\" jegyzet törlése?"
 
-#: packages/app-mobile/components/ScreenHeader/index.tsx:462
+#: packages/app-mobile/components/ScreenHeader/index.tsx:464
 #, fuzzy
 msgid "Delete selected notes"
 msgstr "Ezen jegyzetek törlése?"
@@ -1414,7 +1442,7 @@ msgid "Delete this profile?"
 msgstr "%d jegyzetek törlése?"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:69
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:113
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:207
 #, fuzzy
 msgid "Deleted"
 msgstr "Törlés"
@@ -1465,7 +1493,6 @@ msgid "Directory to synchronise with (absolute path)"
 msgstr "Könyvtár amivel szinkronizálunk (abszolút útvonal)"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:144
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:116
 msgid "Disable"
 msgstr "Letiltás"
 
@@ -1478,6 +1505,7 @@ msgstr "Titkosítás letiltása"
 msgid "Disable safe mode and restart"
 msgstr ""
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:103
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:93
 msgid "Disable Web Clipper Service"
 msgstr "Web Vágó szolgáltatás letiltása"
@@ -1485,8 +1513,9 @@ msgstr "Web Vágó szolgáltatás letiltása"
 #: packages/app-cli/app/command-e2ee.ts:129
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:237
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:138
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:117
 #: packages/app-mobile/components/screens/encryption-config.tsx:306
-#: packages/lib/models/Setting.ts:1496
+#: packages/lib/models/Setting.ts:1503
 msgid "Disabled"
 msgstr "Letiltva"
 
@@ -1507,12 +1536,12 @@ msgid "Discard"
 msgstr "Változások elvetése"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:102
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:271
-#: packages/app-mobile/components/screens/Note.tsx:208
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:270
+#: packages/app-mobile/components/screens/Note.tsx:209
 msgid "Discard changes"
 msgstr "Változások elvetése"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:507
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:457
 msgid "Dismiss"
 msgstr "Elvetés"
 
@@ -1562,7 +1591,7 @@ msgstr "Megjeleníti a használati információkat."
 msgid "Displays version information"
 msgstr "Megjeleníti a verzió információit"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:708
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:711
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
 msgid "Do it now"
 msgstr "Csináld meg most"
@@ -1584,7 +1613,7 @@ msgstr ""
 "adatai dekódolására! A titkosítás engedélyezéséhez, kérem adja meg a jelszót "
 "lent."
 
-#: packages/lib/models/Setting.ts:2835
+#: packages/lib/models/Setting.ts:2846
 #, fuzzy
 msgid "Donate, website"
 msgstr "Joplin weboldal"
@@ -1599,6 +1628,7 @@ msgstr ""
 msgid "Download"
 msgstr "Letöltés"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:174
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:130
 msgid "Download and install the relevant extension for your browser:"
 msgstr "Töltse le és telepítse a releváns böngésző bővítményt:"
@@ -1632,11 +1662,11 @@ msgstr "Erőforrások letöltése..."
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/app-mobile/components/screens/Note.tsx:1238
+#: packages/app-mobile/components/screens/Note.tsx:1239
 msgid "Draw picture"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:917
+#: packages/app-mobile/components/screens/Note.tsx:918
 msgid "Drawing"
 msgstr ""
 
@@ -1662,8 +1692,8 @@ msgid "due date"
 msgstr "frissítési dátum"
 
 #: packages/app-desktop/gui/MainScreen/commands/duplicateNote.ts:7
-#: packages/app-mobile/components/ScreenHeader/index.tsx:498
-#: packages/app-mobile/components/ScreenHeader/index.tsx:557
+#: packages/app-mobile/components/ScreenHeader/index.tsx:502
+#: packages/app-mobile/components/ScreenHeader/index.tsx:561
 msgid "Duplicate"
 msgstr "Duplikált"
 
@@ -1671,7 +1701,7 @@ msgstr "Duplikált"
 msgid "Duplicate line"
 msgstr "Duplikált sor"
 
-#: packages/app-mobile/components/ScreenHeader/index.tsx:500
+#: packages/app-mobile/components/ScreenHeader/index.tsx:504
 #, fuzzy
 msgid "Duplicate selected notes"
 msgstr "Duplikált sor"
@@ -1687,7 +1717,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.ts:119
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:39
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:134
-#: packages/app-mobile/components/screens/Note.tsx:1576
+#: packages/app-mobile/components/screens/Note.tsx:1586
 #: packages/app-mobile/components/side-menu-content.tsx:233
 msgid "Edit"
 msgstr "Szerkesztés"
@@ -1725,23 +1755,23 @@ msgstr ""
 msgid "Editor"
 msgstr "Szerkesztő"
 
-#: packages/lib/models/Setting.ts:1347
+#: packages/lib/models/Setting.ts:1354
 msgid "Editor font"
 msgstr "Szerkesztő betűkészlet"
 
-#: packages/lib/models/Setting.ts:1373
+#: packages/lib/models/Setting.ts:1380
 msgid "Editor font family"
 msgstr "Szerkesztő betű család"
 
-#: packages/lib/models/Setting.ts:1335
+#: packages/lib/models/Setting.ts:1342
 msgid "Editor font size"
 msgstr "Szerkesztő betű méret"
 
-#: packages/lib/models/Setting.ts:1394
+#: packages/lib/models/Setting.ts:1401
 msgid "Editor maximum width"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1386
+#: packages/lib/models/Setting.ts:1393
 #, fuzzy
 msgid "Editor monospace font family"
 msgstr "Szerkesztő betű család"
@@ -1755,7 +1785,7 @@ msgstr "Szerkesztő: %s"
 msgid "Either \"text\" or \"json\""
 msgstr "\"szöveg\" vagy \"json\""
 
-#: packages/lib/models/Setting.ts:1563
+#: packages/lib/models/Setting.ts:1570
 msgid "Emacs"
 msgstr "Emacs"
 
@@ -1765,7 +1795,7 @@ msgid "Email"
 msgstr "Email"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:22
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:532
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:533
 #, fuzzy
 msgid "Email to note"
 msgstr "Jegyzet szerkesztése."
@@ -1774,13 +1804,13 @@ msgstr "Jegyzet szerkesztése."
 msgid "Email to Note"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2828
+#: packages/lib/models/Setting.ts:2839
 #, fuzzy
 msgid "Email To Note, login information"
 msgstr "Megjeleníti a verzió információit"
 
 #: packages/server/src/routes/admin/emails.ts:111
-#: packages/server/src/services/MustacheService.ts:132
+#: packages/server/src/services/MustacheService.ts:133
 msgid "Emails"
 msgstr "Emailek"
 
@@ -1797,7 +1827,6 @@ msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:144
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:86
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:117
 #: packages/app-mobile/components/screens/encryption-config.tsx:184
 msgid "Enable"
 msgstr "Engedélyez"
@@ -1867,7 +1896,7 @@ msgstr "Mermaid diagram támogatás engedélyezése"
 msgid "Enable multimarkdown table extension"
 msgstr "Multimarkdown táblázat bővítmény engedélyezése"
 
-#: packages/lib/models/Setting.ts:1720
+#: packages/lib/models/Setting.ts:1727
 msgid "Enable note history"
 msgstr "Jegyzet előélet engedélyezése"
 
@@ -1875,7 +1904,7 @@ msgstr "Jegyzet előélet engedélyezése"
 msgid "Enable optical character recognition (OCR)"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2834
+#: packages/lib/models/Setting.ts:2845
 #, fuzzy
 msgid "Enable or disable plugins"
 msgstr "Pluginok kezelése"
@@ -1884,7 +1913,7 @@ msgstr "Pluginok kezelése"
 msgid "Enable PDF viewer"
 msgstr "PDF megjelenítő engedélyezése"
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:131
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:119
 #: packages/lib/models/Setting.ts:1239
 #, fuzzy
 msgid "Enable plugin support"
@@ -1915,12 +1944,14 @@ msgstr "Tipográfiai támogatás engedélyezése"
 msgid "Enable video player"
 msgstr "Video lejátszó engedélyezése"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:114
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:104
 msgid "Enable Web Clipper Service"
 msgstr "Web Vágó Szolgáltatás engedélyezése"
 
 #: packages/app-cli/app/command-e2ee.ts:129
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:237
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:95
 #: packages/app-mobile/components/screens/encryption-config.tsx:306
 msgid "Enabled"
 msgstr "Engedélyezve"
@@ -1943,11 +1974,11 @@ msgstr "Titkosítva"
 msgid "Encrypted items cannot be modified"
 msgstr "Titkosított elemek nem módosíthatóak"
 
-#: packages/lib/models/Setting.ts:2796
+#: packages/lib/models/Setting.ts:2807
 msgid "Encryption"
 msgstr "Titkosítás"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:528
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:529
 #: packages/app-mobile/components/screens/encryption-config.tsx:290
 msgid "Encryption Config"
 msgstr "Titkosítás beállítás"
@@ -1993,7 +2024,7 @@ msgid "Enum"
 msgstr "Felsorolás"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:72
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:129
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:64
 #: packages/app-mobile/components/screens/LogScreen.tsx:114
 #: packages/lib/models/Resource.ts:33 packages/lib/models/Resource.ts:410
 msgid "Error"
@@ -2006,9 +2037,10 @@ msgstr "Hiba szerkesztőben a jegyzet megnyitáskor: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:65
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:31
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginUploadButton.tsx:79
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginUploadButton.tsx:83
+#: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:67
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:91
-#: packages/lib/services/KeymapService.ts:209
+#: packages/lib/services/KeymapService.ts:210
 msgid "Error: %s"
 msgstr "Hibák: %s"
 
@@ -2056,12 +2088,12 @@ msgstr ""
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:191
-#: packages/app-desktop/gui/utils/NoteListUtils.ts:169
+#: packages/app-desktop/gui/utils/NoteListUtils.ts:167
 msgid "Export"
 msgstr "Exportálás"
 
-#: packages/app-desktop/gui/MenuBar.tsx:631
-#: packages/app-desktop/gui/MenuBar.tsx:687
+#: packages/app-desktop/gui/MenuBar.tsx:641
+#: packages/app-desktop/gui/MenuBar.tsx:697
 msgid "Export all"
 msgstr "Mindent exportál"
 
@@ -2113,11 +2145,11 @@ msgstr "Adott jegyzet exportálása."
 msgid "Exports only the given notebook."
 msgstr "Adott jegyzetfüzet exportálása."
 
-#: packages/lib/models/Setting.ts:1705
+#: packages/lib/models/Setting.ts:1712
 msgid "Fail-safe"
 msgstr "Hibatűrő"
 
-#: packages/lib/models/Setting.ts:1706
+#: packages/lib/models/Setting.ts:1713
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -2125,19 +2157,12 @@ msgstr ""
 "Hibatűrő: Ne törölje a helyi adatot, ha a távoli adat üres (gyakran rossz "
 "beállítás vagy hiba eredménye)"
 
-#: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:67
-msgid ""
-"Failed to leave share. Please verify that Joplin is connected to the "
-"internet and able to sync.\n"
-"Error: %s"
-msgstr ""
-
 #: packages/app-cli/app/main.js:100
 msgid "Fatal error:"
 msgstr "Végzetes hiba:"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:640
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:648
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:633
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:641
 msgid "Feature flags"
 msgstr ""
 
@@ -2178,19 +2203,20 @@ msgstr ""
 msgid "Find: "
 msgstr "Találtam: %d."
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:10
 #: packages/app-desktop/gui/ExtensionBadge.tsx:65
 msgid "Firefox Extension"
 msgstr "Firefox Bővítmény"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:566
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:567
 msgid "Fix search index"
 msgstr "Keresési index javítása"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:566
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:567
 msgid "Fixing search index..."
 msgstr "Keresési index javítása..."
 
-#: packages/app-desktop/gui/MenuBar.tsx:843
+#: packages/app-desktop/gui/MenuBar.tsx:854
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.ts:7
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.ts:8
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:9
@@ -2210,7 +2236,7 @@ msgstr "Cím legyen a fókusz"
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1685
+#: packages/lib/models/Setting.ts:1692
 msgid "For example \"%s\""
 msgstr ""
 
@@ -2243,6 +2269,7 @@ msgid "Forward"
 msgstr "Tovább"
 
 #: packages/app-cli/app/command-import.ts:50
+#: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-desktop/gui/ImportScreen.tsx:89
 msgid "Found: %d."
 msgstr "Találtam: %d."
@@ -2252,7 +2279,7 @@ msgstr "Találtam: %d."
 msgid "From a plugin"
 msgstr "Plugin-ok tallózása"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:627
+#: packages/app-mobile/utils/getVersionInfoText.ts:42
 msgid "FTS enabled: %d"
 msgstr "FTS engedélyezve: %d"
 
@@ -2265,8 +2292,8 @@ msgstr "Teljes változási napló"
 msgid "Full name"
 msgstr "Teljes változási napló"
 
-#: packages/lib/models/Setting.ts:2787
-#: packages/server/src/services/MustacheService.ts:113
+#: packages/lib/models/Setting.ts:2798
+#: packages/server/src/services/MustacheService.ts:114
 msgid "General"
 msgstr "Általános"
 
@@ -2280,15 +2307,16 @@ msgid_plural "Generating links..."
 msgstr[0] "Link létrehozása..."
 msgstr[1] "Linkek létrehozása..."
 
-#: packages/lib/models/Setting.ts:2830
+#: packages/lib/models/Setting.ts:2841
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
 msgstr ""
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:93
 msgid "Get it now:"
 msgstr "Szerezze be most:"
 
-#: packages/lib/models/Setting.ts:1472
+#: packages/lib/models/Setting.ts:1479
 msgid "Get pre-releases when checking for updates"
 msgstr "Előzetes kiadások beszerzése amikor frissítéseket keresek"
 
@@ -2299,7 +2327,7 @@ msgid ""
 "current configuration."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:1106
+#: packages/app-mobile/components/screens/Note.tsx:1107
 msgid "Go to source URL"
 msgstr "Ugrás forrás URL-re"
 
@@ -2330,31 +2358,26 @@ msgstr "Címsor"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:231
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:265
-#: packages/server/src/services/MustacheService.ts:279
+#: packages/server/src/services/MustacheService.ts:284
 msgid "Help"
 msgstr "Segítség"
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:125
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:113
 msgid "Here's what we do to make plugins safer:"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:629
+#: packages/app-mobile/utils/getVersionInfoText.ts:44
 #, fuzzy
 msgid "Hermes enabled: %d"
 msgstr "FTS engedélyezve: %d"
 
-#: packages/app-desktop/gui/MenuBar.tsx:648
+#: packages/app-desktop/gui/MenuBar.tsx:658
 msgid "Hide %s"
 msgstr "%s elrejtése"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:221
 msgid "Hide advanced"
 msgstr ""
-
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:675
-#, fuzzy
-msgid "Hide Advanced Settings"
-msgstr "Speciális beállítások megjelenítése"
 
 #: packages/server/src/routes/admin/users.ts:206
 #, fuzzy
@@ -2382,8 +2405,8 @@ msgstr ""
 msgid "Highlight"
 msgstr "Kiemelés"
 
-#: packages/server/src/services/MustacheService.ts:145
-#: packages/server/src/services/MustacheService.ts:274
+#: packages/server/src/services/MustacheService.ts:150
+#: packages/server/src/services/MustacheService.ts:279
 msgid "Home"
 msgstr ""
 
@@ -2414,8 +2437,9 @@ msgstr "Ikon"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:168
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:325
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:79
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:66
-#: packages/app-desktop/gui/ResourceScreen.tsx:98
+#: packages/app-desktop/gui/ResourceScreen.tsx:105
 msgid "ID"
 msgstr "ID"
 
@@ -2436,7 +2460,7 @@ msgstr ""
 msgid "Ignore"
 msgstr "Mellőz"
 
-#: packages/lib/models/Setting.ts:1664
+#: packages/lib/models/Setting.ts:1671
 msgid "Ignore TLS certificate errors"
 msgstr "TLS bizonyítvány hibák figyelmen kívül hagyása"
 
@@ -2450,13 +2474,13 @@ msgid "Images"
 msgstr "Képek"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
-#: packages/app-desktop/gui/MenuBar.tsx:627
-#: packages/app-desktop/gui/MenuBar.tsx:684
+#: packages/app-desktop/gui/MenuBar.tsx:637
+#: packages/app-desktop/gui/MenuBar.tsx:694
 #: packages/app-desktop/gui/Root.tsx:231
 msgid "Import"
 msgstr "Importálás"
 
-#: packages/lib/models/Setting.ts:2801
+#: packages/lib/models/Setting.ts:2812
 #, fuzzy
 msgid "Import and Export"
 msgstr "Debug jelentés exportálása"
@@ -2475,7 +2499,7 @@ msgstr ""
 msgid "Import notes from a JEX (Joplin Export) file."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2833
+#: packages/lib/models/Setting.ts:2844
 #, fuzzy
 msgid "Import or export your data"
 msgstr "Mindent exportál"
@@ -2484,7 +2508,7 @@ msgstr "Mindent exportál"
 msgid "Imported successfully!"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:301
+#: packages/app-desktop/gui/MenuBar.tsx:311
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "\"%s\" importálása,\"%s\" formátumban. Kérem várjon..."
 
@@ -2515,7 +2539,7 @@ msgid ""
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:496
+#: packages/app-mobile/components/screens/Note.tsx:497
 msgid ""
 "In order to associate a geo-location with the note, the app needs your "
 "permission to access your location.\n"
@@ -2557,13 +2581,14 @@ msgstr ""
 msgid "In order to synchronise, please upgrade your application to version %s+"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:116
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:214
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:115
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:213
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:120
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "Ahhoz, hogy a Web Vágó működjön csinálja a következőt:"
@@ -2572,17 +2597,12 @@ msgstr "Ahhoz, hogy a Web Vágó működjön csinálja a következőt:"
 msgid "In progress"
 msgstr "Folyamatban"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:617
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:566
 #, fuzzy
 msgid "In: %s"
 msgstr "In: %s"
 
-#: packages/app-mobile/components/screens/ShareManager/index.tsx:120
-#, fuzzy
-msgid "Incoming shares"
-msgstr "Riasztás beállítása"
-
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:166
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:101
 msgid "Incompatible"
 msgstr ""
 
@@ -2598,7 +2618,7 @@ msgstr "Behúzása csökkentése"
 msgid "Indent more"
 msgstr "Behúzás növelése"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:213
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:212
 msgid "Information"
 msgstr "Információ"
 
@@ -2622,23 +2642,34 @@ msgstr "Hiperhivatkozás beszúrása"
 msgid "Insert time"
 msgstr "Dátum-idő beszúrása"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:189
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:77
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:190
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/buttons/InstallButton.tsx:18
 msgid "Install"
 msgstr "Telepítés"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:226
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginUploadButton.tsx:23
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:227
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginUploadButton.tsx:25
 msgid "Install from file"
 msgstr "Telepítés fájlból"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:191
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:78
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:165
+#, fuzzy
+msgid "Install new plugins"
+msgstr "Plugin-ok tallózása"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:192
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/buttons/InstallButton.tsx:19
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:124
 msgid "Installed"
 msgstr "Telepítve"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:190
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:76
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:197
+#, fuzzy
+msgid "Installed plugins"
+msgstr "Telepítve"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:191
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/buttons/InstallButton.tsx:17
 msgid "Installing..."
 msgstr "Telepítés..."
 
@@ -2646,7 +2677,7 @@ msgstr "Telepítés..."
 msgid "Invalid"
 msgstr "Érvénytelen"
 
-#: packages/lib/services/KeymapService.ts:332
+#: packages/lib/services/KeymapService.ts:333
 msgid "Invalid %s: %s."
 msgstr "Érvénytelen %s: %s."
 
@@ -2658,13 +2689,18 @@ msgstr "Érvénytelen válasz: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Érvénytelen parancs: \"%s\""
 
-#: packages/lib/models/Setting.ts:2274
+#: packages/lib/models/Setting.ts:2281
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Érvénytelen opció érték: \"%s\". Lehetséges értékek: %s."
 
 #: packages/app-cli/app/command-e2ee.ts:48
 msgid "Invalid password"
 msgstr "Érvénytelen jelszó: %s"
+
+#: packages/app-mobile/utils/getVersionInfoText.ts:23
+#, fuzzy
+msgid "iOS version: %s"
+msgstr "Új verzió: %s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:60
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useInlineFormattingButtons.ts:24
@@ -2675,8 +2711,8 @@ msgstr "Dőlt"
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Elem \"%s\" nem tölthető le: %s"
 
-#: packages/server/src/services/MustacheService.ts:153
-#: packages/server/src/services/MustacheService.ts:276
+#: packages/server/src/services/MustacheService.ts:158
+#: packages/server/src/services/MustacheService.ts:281
 msgid "Items"
 msgstr "Elemek"
 
@@ -2688,7 +2724,7 @@ msgstr "Elemeket nem lehet dekódolni"
 msgid "Items that cannot be synchronised"
 msgstr "Elemeket nem lehet szinkronizálni"
 
-#: packages/app-desktop/gui/MenuBar.tsx:900
+#: packages/app-desktop/gui/MenuBar.tsx:911
 msgid "Join us on Twitter"
 msgstr ""
 
@@ -2698,7 +2734,7 @@ msgid ""
 "the list below."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2799 packages/lib/SyncTargetJoplinCloud.ts:30
+#: packages/lib/models/Setting.ts:2810 packages/lib/SyncTargetJoplinCloud.ts:30
 msgid "Joplin Cloud"
 msgstr "Joplin Cloud"
 
@@ -2708,7 +2744,7 @@ msgstr "Joplin Cloud"
 msgid "Joplin Cloud Login"
 msgstr "Joplin Cloud"
 
-#: packages/lib/services/plugins/PluginService.ts:514
+#: packages/lib/services/plugins/PluginService.ts:517
 #, fuzzy
 msgid "Joplin Desktop"
 msgstr "Joplin weboldal"
@@ -2736,11 +2772,11 @@ msgid ""
 "will no longer attempt to decrypt them."
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:897
+#: packages/app-desktop/gui/MenuBar.tsx:908
 msgid "Joplin Forum"
 msgstr "Joplin Forum"
 
-#: packages/lib/services/plugins/PluginService.ts:512
+#: packages/lib/services/plugins/PluginService.ts:515
 #, fuzzy
 msgid "Joplin Mobile"
 msgstr "Joplin weboldal"
@@ -2761,6 +2797,7 @@ msgstr "Joplin Szerver jelszó"
 msgid "Joplin Server URL"
 msgstr "Joplin Szerver URL"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:119
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
@@ -2769,7 +2806,7 @@ msgstr ""
 "Joplin Web Vágó segítségével lementhetünk web oldalakat és képernyőképeket a "
 "böngészőből Joplin-ba."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:619
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:620
 msgid "Joplin website"
 msgstr "Joplin weboldal"
 
@@ -2783,16 +2820,16 @@ msgstr ""
 msgid "KaTeX"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1732
+#: packages/lib/models/Setting.ts:1739
 msgid "Keep note history for"
 msgstr "Jegyzet előélet megtartása"
 
-#: packages/lib/models/Setting.ts:1925
+#: packages/lib/models/Setting.ts:1932
 #, fuzzy
 msgid "Keep notes in the trash for"
 msgstr "Jegyzet előélet megtartása"
 
-#: packages/lib/models/Setting.ts:1558
+#: packages/lib/models/Setting.ts:1565
 msgid "Keyboard Mode"
 msgstr "Billentyűzet mód"
 
@@ -2800,7 +2837,7 @@ msgstr "Billentyűzet mód"
 msgid "Keyboard Shortcut"
 msgstr "Gyorsbillentyű"
 
-#: packages/lib/models/Setting.ts:2798
+#: packages/lib/models/Setting.ts:2809
 msgid "Keyboard Shortcuts"
 msgstr "Gyorsbillentyűk"
 
@@ -2814,7 +2851,7 @@ msgstr "Támogatott kulcstartók: %s"
 msgid "Keys that need upgrading"
 msgstr "Mester kulcsok amiket frissíteni kell"
 
-#: packages/lib/models/Setting.ts:1535
+#: packages/lib/models/Setting.ts:1542
 msgid "Landscape"
 msgstr "Fekvő"
 
@@ -2822,7 +2859,7 @@ msgstr "Fekvő"
 msgid "Language"
 msgstr "Nyelv"
 
-#: packages/lib/models/Setting.ts:2825
+#: packages/lib/models/Setting.ts:2836
 #, fuzzy
 msgid "Language, date format"
 msgstr "Dátumforma"
@@ -2831,7 +2868,7 @@ msgstr "Dátumforma"
 msgid "Last error: %s"
 msgstr "Utolsó hiba: %s"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:708
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:711
 msgid "Later"
 msgstr "Később"
 
@@ -2844,35 +2881,35 @@ msgstr ""
 msgid "Layout"
 msgstr "Elrendezés"
 
-#: packages/app-desktop/gui/MenuBar.tsx:766
+#: packages/app-desktop/gui/MenuBar.tsx:777
 msgid "Layout button sequence"
 msgstr "Elrendezés gomb sorrend"
 
 #: packages/app-desktop/bridge.ts:424
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:130
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:47
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:118
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:28
 #, fuzzy
 msgid "Learn more"
 msgstr "Behúzás növelése"
 
-#: packages/lib/models/Setting.ts:1899
+#: packages/lib/models/Setting.ts:1906
 msgid "Leave it blank to download the language files from the default website"
 msgstr ""
+
+#: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:90
+#, fuzzy
+msgid "Leave notebook"
+msgstr "Jegyzet elhagyása…"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
 msgstr "Jegyzet elhagyása…"
 
-#: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:90
-#, fuzzy
-msgid "Leave share"
-msgstr "Változások mentése"
-
-#: packages/lib/models/Setting.ts:1529
+#: packages/lib/models/Setting.ts:1536
 msgid "Legal"
 msgstr "US Legal"
 
-#: packages/lib/models/Setting.ts:1525
+#: packages/lib/models/Setting.ts:1532
 msgid "Letter"
 msgstr "US Levél"
 
@@ -2880,7 +2917,7 @@ msgstr "US Levél"
 msgid "Light"
 msgstr "Világos"
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:122
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:110
 msgid ""
 "Like any software you install, plugins can potentially cause security issues "
 "or data loss."
@@ -2911,7 +2948,7 @@ msgstr[1] "Hivatkozások a vágólapra másolva!"
 msgid "Link text"
 msgstr "félkövér szöveg"
 
-#: packages/app-mobile/components/screens/Note.tsx:294
+#: packages/app-mobile/components/screens/Note.tsx:295
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Hivatkozások a \"%s\" protokollal nem támogatottak"
 
@@ -2930,17 +2967,14 @@ msgstr ""
 msgid "Loaded"
 msgstr "Letöltve"
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:101
-#, fuzzy
-msgid "Loading plugin repository..."
-msgstr "Sikertelen kapcsolódás a plugin adattárhoz."
-
 #: packages/app-desktop/gui/ConfigScreen/FontSearch.tsx:121
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:113
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:87
 #, fuzzy
 msgid "Loading..."
 msgstr "Frissítés..."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:71
 msgid "Location"
 msgstr "Hely"
@@ -2952,9 +2986,9 @@ msgid ""
 "operation."
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:565
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:566
 #: packages/app-mobile/components/screens/LogScreen.tsx:221
-#: packages/server/src/services/MustacheService.ts:277
+#: packages/server/src/services/MustacheService.ts:282
 msgid "Log"
 msgstr "Napló"
 
@@ -2966,11 +3000,11 @@ msgstr "Belép Dropbox-al"
 msgid "Login with OneDrive"
 msgstr "Belép OneDrive-al"
 
-#: packages/server/src/services/MustacheService.ts:280
+#: packages/server/src/services/MustacheService.ts:285
 msgid "Logout"
 msgstr "Kilépés"
 
-#: packages/lib/models/Setting.ts:2832
+#: packages/lib/models/Setting.ts:2843
 msgid "Logs, profiles, sync status"
 msgstr ""
 
@@ -2978,8 +3012,8 @@ msgstr ""
 msgid "Longitude"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:903
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
+#: packages/app-desktop/gui/MenuBar.tsx:914
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:619
 msgid "Make a donation"
 msgstr "Adakozzon"
 
@@ -2996,17 +3030,17 @@ msgstr "Mester jelszó kezelése…"
 msgid "Manage multiple users"
 msgstr "Mester jelszó kezelése"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:563
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:564
 #, fuzzy
 msgid "Manage profiles"
 msgstr "Profil frissítése"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:569
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:570
 #, fuzzy
 msgid "Manage shared notebooks"
 msgstr "Profil frissítése"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:332
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:333
 msgid "Manage your plugins"
 msgstr "Pluginok kezelése"
 
@@ -3024,7 +3058,7 @@ msgstr ""
 msgid "Manual"
 msgstr "Kézi"
 
-#: packages/lib/models/Setting.ts:2792
+#: packages/lib/models/Setting.ts:2803
 #: packages/lib/services/interop/InteropService.ts:118
 #: packages/lib/services/interop/InteropService.ts:155
 msgid "Markdown"
@@ -3043,6 +3077,7 @@ msgstr "Egy to-do készként jelölése."
 msgid "Marks a to-do as non-completed."
 msgstr "Egy to-do befejezetlenkén jelölése."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:74
 msgid "Markup"
 msgstr "Formátum"
@@ -3080,7 +3115,7 @@ msgstr "Jegyzet csatolmányok"
 msgid "Max Total Size"
 msgstr "Aktív Méret"
 
-#: packages/lib/models/Setting.ts:2829
+#: packages/lib/models/Setting.ts:2840
 msgid "Media player, math, diagrams, table of contents"
 msgstr ""
 
@@ -3113,7 +3148,7 @@ msgstr "Mobil adat - auto-szinkronizáció letiltva"
 msgid "More info"
 msgstr "Több info"
 
-#: packages/lib/models/Setting.ts:2802
+#: packages/lib/models/Setting.ts:2813
 msgid "More information"
 msgstr "Több információ"
 
@@ -3121,12 +3156,12 @@ msgstr "Több információ"
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr "Több mint egy elem egyezik ezzel \"%s\". Kérem szűkítse a lekérdezést."
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:127
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:115
 msgid ""
 "Most plugins have source code available for review on the plugin website."
 msgstr ""
 
-#: packages/app-mobile/components/ScreenHeader/index.tsx:587
+#: packages/app-mobile/components/ScreenHeader/index.tsx:591
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr ""
 
@@ -3178,10 +3213,15 @@ msgstr ""
 msgid "New"
 msgstr ""
 
+#: packages/app-mobile/components/screens/ShareManager/index.tsx:120
+#, fuzzy
+msgid "New invitations"
+msgstr "Új verzió: %s"
+
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:10
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
-#: packages/app-mobile/components/screens/Notes.tsx:267
+#: packages/app-mobile/components/screens/Notes.tsx:251
 #: packages/app-mobile/setupQuickActions.ts:18
 msgid "New note"
 msgstr "Új jegyzet"
@@ -3194,6 +3234,7 @@ msgstr "Új jegyzetfüzet"
 msgid "New Notebook"
 msgstr "Új Jegyzetfüzet"
 
+#: packages/app-desktop/gui/ImportScreen.min.js:61
 #: packages/app-desktop/gui/ImportScreen.tsx:81
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -3211,7 +3252,7 @@ msgstr "Új tag-ek:"
 #: packages/app-desktop/gui/MainScreen/commands/newTodo.ts:7
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:120
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
-#: packages/app-mobile/components/screens/Notes.tsx:256
+#: packages/app-mobile/components/screens/Notes.tsx:241
 #: packages/app-mobile/setupQuickActions.ts:19
 msgid "New to-do"
 msgstr "Új to-do"
@@ -3245,7 +3286,7 @@ msgid "no"
 msgstr "nem"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:32
-#: packages/app-mobile/components/screens/Note.tsx:745
+#: packages/app-mobile/components/screens/Note.tsx:746
 #: packages/lib/shim-init-node.ts:256 packages/lib/versionInfo.ts:79
 msgid "No"
 msgstr "Nem"
@@ -3254,18 +3295,13 @@ msgstr "Nem"
 msgid "No active notebook."
 msgstr "Nincs aktív jegyzetfüzet."
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:38
-#, fuzzy
-msgid "No description"
-msgstr "Titkosítás"
-
-#: packages/app-mobile/components/screens/ShareManager/index.tsx:92
-msgid "No incoming shares"
-msgstr ""
-
-#: packages/app-mobile/components/screens/Note.tsx:274
+#: packages/app-mobile/components/screens/Note.tsx:275
 msgid "No item with ID %s"
 msgstr "Nincs ID %s azonosítójú elem"
+
+#: packages/app-mobile/components/screens/ShareManager/index.tsx:92
+msgid "No new invitations"
+msgstr ""
 
 #: packages/app-cli/app/app.ts:104
 msgid "No notebook has been specified."
@@ -3279,7 +3315,7 @@ msgstr "Nincs kiválasztva jegyzetfüzet."
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "Itt nincs jegyzet. Hozzon létre újat az \"Új jegyzet\"-re kattintva."
 
-#: packages/app-desktop/gui/ResourceScreen.tsx:242
+#: packages/app-desktop/gui/ResourceScreen.tsx:298
 msgid "No resources!"
 msgstr "Nincs erőforrás!"
 
@@ -3336,11 +3372,11 @@ msgstr "Csináld meg most"
 msgid "note"
 msgstr "megjegyzés"
 
-#: packages/lib/models/Setting.ts:2790
+#: packages/lib/models/Setting.ts:2801
 msgid "Note"
 msgstr "Megjegyzés"
 
-#: packages/lib/models/Setting.ts:1796
+#: packages/lib/models/Setting.ts:1803
 msgid "Note area growth factor"
 msgstr "Jegyzet terület növekedési faktor"
 
@@ -3348,7 +3384,7 @@ msgstr "Jegyzet terület növekedési faktor"
 msgid "Note attachments"
 msgstr "Jegyzet csatolmányok"
 
-#: packages/app-desktop/gui/MenuBar.tsx:551
+#: packages/app-desktop/gui/MenuBar.tsx:561
 msgid "Note attachments..."
 msgstr "Jegyzet csatolmányok..."
 
@@ -3369,8 +3405,9 @@ msgstr "Jegyzet előélete"
 msgid "Note has been saved."
 msgstr "Jegyzet mentve."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:73
-#: packages/lib/models/Setting.ts:2795
+#: packages/lib/models/Setting.ts:2806
 msgid "Note History"
 msgstr "Jegyzet előélete"
 
@@ -3382,16 +3419,17 @@ msgstr "A jegyzet nem to-do: \"%s\""
 msgid "Note list"
 msgstr "Jegyzet lista"
 
-#: packages/lib/models/Setting.ts:1781
+#: packages/lib/models/Setting.ts:1788
 msgid "Note list growth factor"
 msgstr "Jegyzet lista növekedési faktor"
 
-#: packages/app-desktop/gui/MenuBar.tsx:770
+#: packages/app-desktop/gui/MenuBar.tsx:781
 #, fuzzy
 msgid "Note list style"
 msgstr "Jegyzet lista"
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.ts:7
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:442
 msgid "Note properties"
 msgstr "Jegyzet tulajdonságai"
@@ -3409,15 +3447,15 @@ msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:849
+#: packages/app-desktop/gui/MenuBar.tsx:860
 msgid "Note&book"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2791
+#: packages/lib/models/Setting.ts:2802
 msgid "Notebook"
 msgstr "Jegyzetfüzet"
 
-#: packages/lib/models/Setting.ts:1766
+#: packages/lib/models/Setting.ts:1773
 msgid "Notebook list growth factor"
 msgstr "Jegyzetfüzet lista növekedési faktor"
 
@@ -3446,7 +3484,7 @@ msgstr "Jegyzetfüzet nem nevezhető \"%s\"-nak, az egy fenntartott cím."
 msgid "Notes"
 msgstr "Jegyzetek"
 
-#: packages/lib/models/Setting.ts:2814
+#: packages/lib/models/Setting.ts:2825
 msgid "Notes and settings are stored in: %s"
 msgstr "Jegyzetek és beállítások tárolása itt: %s"
 
@@ -3462,16 +3500,18 @@ msgstr "Számozott lista"
 #: packages/app-desktop/bridge.ts:336 packages/app-desktop/bridge.ts:349
 #: packages/app-desktop/bridge.ts:365 packages/app-desktop/bridge.ts:374
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
+#: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/DialogButtonRow.tsx:71
-#: packages/app-desktop/gui/MenuBar.tsx:576
+#: packages/app-desktop/gui/MenuBar.tsx:586
+#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:308
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:29
 #: packages/app-mobile/components/CameraView.tsx:194
 #: packages/app-mobile/components/ModalDialog.tsx:85
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:215
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:214
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:61
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:163
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:51
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:32
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:98
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:68
 #: packages/app-mobile/components/side-menu-content.tsx:211
 #: packages/app-mobile/plugins/PluginRunner/dialogs/PluginDialogWebView.tsx:128
@@ -3538,7 +3578,7 @@ msgstr "PDF megjelenítő engedélyezése"
 msgid "Open profile directory"
 msgstr "Adatmappa megnyitása"
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:127
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:115
 #, fuzzy
 msgid "Open Source"
 msgstr "Forrás"
@@ -3551,7 +3591,7 @@ msgstr "Sync-varázsló megnyitása…"
 msgid "Open..."
 msgstr "Megnyitás..."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:196
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:195
 msgid "Opening section %s"
 msgstr ""
 
@@ -3562,7 +3602,7 @@ msgid "Operation cancelled"
 msgstr "Művelet megszakítva"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:28
-#: packages/app-desktop/gui/MenuBar.tsx:537
+#: packages/app-desktop/gui/MenuBar.tsx:547
 #: packages/app-desktop/gui/Root.tsx:232
 msgid "Options"
 msgstr "Beállítások"
@@ -3572,7 +3612,7 @@ msgstr "Beállítások"
 msgid "Ordered list"
 msgstr "Új felhasználó létrehozása"
 
-#: packages/app-desktop/gui/MenuBar.tsx:489
+#: packages/app-desktop/gui/MenuBar.tsx:499
 msgid "Other applications..."
 msgstr "Más applikációk…"
 
@@ -3580,11 +3620,11 @@ msgstr "Más applikációk…"
 msgid "Output format: %s"
 msgstr "Kimeneti formátum: %s"
 
-#: packages/lib/models/Setting.ts:1532
+#: packages/lib/models/Setting.ts:1539
 msgid "Page orientation for PDF export"
 msgstr "Oldal tájolás PDF export-hoz"
 
-#: packages/lib/models/Setting.ts:1522
+#: packages/lib/models/Setting.ts:1529
 msgid "Page size for PDF export"
 msgstr "Oldal méret PDF export-hoz"
 
@@ -3661,7 +3701,7 @@ msgstr "%d jegyzetek törlése?"
 msgid "Permanently deletes the notebook, skipping the trash."
 msgstr "%d jegyzetek törlése?"
 
-#: packages/app-mobile/components/screens/Note.tsx:497
+#: packages/app-mobile/components/screens/Note.tsx:498
 msgid "Permission needed"
 msgstr "Hozzáférés szükséges"
 
@@ -3728,7 +3768,7 @@ msgid "Please specify the notebook where the notes should be imported to."
 msgstr ""
 "Kérem adja meg a jegyzetfüzet nevét, ahova a jegyzetek kell importálni."
 
-#: packages/lib/services/plugins/PluginService.ts:508
+#: packages/lib/services/plugins/PluginService.ts:511
 #, fuzzy
 msgid "Please upgrade Joplin to version %s or later to use this plugin."
 msgstr "Kérem frissítse a Joplin-t ezen bővítmény használatához"
@@ -3742,7 +3782,7 @@ msgstr ""
 "a jegyzet szerkesztéséhez."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:116
-#: packages/app-desktop/gui/ResourceScreen.tsx:239
+#: packages/app-desktop/gui/ResourceScreen.tsx:295
 msgid "Please wait..."
 msgstr "Kérem várjon..."
 
@@ -3751,12 +3791,12 @@ msgstr "Kérem várjon..."
 msgid "Plugin message"
 msgstr "Bővítmények"
 
-#: packages/app-mobile/components/ScreenHeader/index.tsx:443
+#: packages/app-mobile/components/ScreenHeader/index.tsx:444
 #, fuzzy
 msgid "Plugin panels"
 msgstr "Bővítmény eszközök"
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:97
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:109
 msgid "Plugin repository failed to load"
 msgstr ""
 
@@ -3765,12 +3805,12 @@ msgstr ""
 msgid "Plugin search"
 msgstr "Bővítmények"
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:119
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:107
 #, fuzzy
 msgid "Plugin security"
 msgstr "Bővítmények"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:330
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:331
 msgid "Plugin tools"
 msgstr "Bővítmény eszközök"
 
@@ -3780,18 +3820,18 @@ msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:521
-#: packages/lib/models/Setting.ts:2793
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:522
+#: packages/lib/models/Setting.ts:2804
 msgid "Plugins"
 msgstr "Bővítmények"
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:115
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:103
 msgid ""
 "Plugins extend Joplin with features that are not present by default. Plugins "
 "can extend Joplin's editor, viewer, and more."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1534
+#: packages/lib/models/Setting.ts:1541
 msgid "Portrait"
 msgstr "Álló"
 
@@ -3807,7 +3847,7 @@ msgstr "Lehetséges értékek: %s."
 msgid "Preferences"
 msgstr "Beállítások"
 
-#: packages/app-desktop/gui/MenuBar.tsx:602
+#: packages/app-desktop/gui/MenuBar.tsx:612
 msgid "Preferences..."
 msgstr "Beállítások..."
 
@@ -3843,6 +3883,7 @@ msgstr ""
 msgid "Previous match"
 msgstr ""
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:365
 msgid "Previous versions of this note"
 msgstr "Jegyzet előző verziói"
@@ -3855,7 +3896,7 @@ msgstr "Nyomtatás"
 msgid "Priority support"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:620
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "Privacy Policy"
 msgstr "Adatvédelmi Irányelvek"
 
@@ -3902,20 +3943,20 @@ msgstr "Profil verzió: %s"
 msgid "Profiles"
 msgstr "Profil"
 
-#: packages/app-mobile/components/screens/Note.tsx:1300
+#: packages/app-mobile/components/screens/Note.tsx:1301
 msgid "Properties"
 msgstr "Tulajdonságok"
 
-#: packages/lib/models/Setting.ts:1674
+#: packages/lib/models/Setting.ts:1681
 #, fuzzy
 msgid "Proxy enabled"
 msgstr "Engedélyezve"
 
-#: packages/lib/models/Setting.ts:1696
+#: packages/lib/models/Setting.ts:1703
 msgid "Proxy timeout (seconds)"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1684
+#: packages/lib/models/Setting.ts:1691
 msgid "Proxy URL"
 msgstr ""
 
@@ -3939,7 +3980,7 @@ msgstr "Jegyzetek publikálálása az internetre"
 #: packages/app-desktop/app.ts:198
 #: packages/app-desktop/ElectronAppWrapper.ts:85
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
-#: packages/app-desktop/gui/MenuBar.tsx:395
+#: packages/app-desktop/gui/MenuBar.tsx:405
 msgid "Quit"
 msgstr "Kilépés"
 
@@ -3951,11 +3992,11 @@ msgstr "Adat újratitkosítása"
 msgid "Re-encryption"
 msgstr "Újratitkosítás"
 
-#: packages/lib/models/Setting.ts:1453
+#: packages/lib/models/Setting.ts:1460
 msgid "Re-upload local data to sync target"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:506
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:456
 msgid "Read more about it"
 msgstr "Olvasson erről többet"
 
@@ -3979,20 +4020,20 @@ msgstr ""
 msgid "Recipients:"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:143
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:78
 #, fuzzy
 msgid "Recommended"
 msgstr "parancs"
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:126
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:114
 #, fuzzy
 msgid "Recommended plugins"
 msgstr "parancs"
 
-#: packages/app-desktop/gui/MenuBar.tsx:732
+#: packages/app-desktop/gui/MenuBar.tsx:742
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:165
-#: packages/app-mobile/components/ScreenHeader/index.tsx:396
+#: packages/app-mobile/components/ScreenHeader/index.tsx:395
 msgid "Redo"
 msgstr "Mégis"
 
@@ -4042,6 +4083,7 @@ msgstr "Tag átnevezése:"
 msgid "Renames the given <item> (note or notebook) to <name>."
 msgstr "Átnevezi az adott  <item> (jegyzet vagy jegyzetfüzet) erre <name>."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:149
 msgid "Renew token"
 msgstr "Token megújítása"
@@ -4063,17 +4105,26 @@ msgstr ""
 msgid "Replace: "
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:57
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:162
 msgid "Report an issue"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginInfoButton.tsx:86
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:219
+msgid "Report any issues concerning the plugin."
+msgstr ""
+
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:224
 msgid "Report fraudulent plugin"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:128
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:116
 #, fuzzy
 msgid "Report system"
+msgstr "Fájl-rendszer"
+
+#: packages/server/src/services/MustacheService.ts:137
+#, fuzzy
+msgid "Reports"
 msgstr "Fájl-rendszer"
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
@@ -4091,6 +4142,7 @@ msgid "Resize large images:"
 msgstr ""
 
 #: packages/app-cli/app/command-import.ts:54
+#: packages/app-desktop/gui/ImportScreen.min.js:72
 #: packages/app-desktop/gui/ImportScreen.tsx:93
 msgid "Resources: %d."
 msgstr "Erőforrások: %d."
@@ -4104,15 +4156,16 @@ msgstr "Újraindítás és frissítés"
 msgid "Restart in safe mode"
 msgstr "Újraindítás és frissítés"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:775
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:778
 msgid "Restart now"
 msgstr "Újraindítás most"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:79
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:203
-#: packages/app-mobile/components/ScreenHeader/index.tsx:479
-#: packages/app-mobile/components/ScreenHeader/index.tsx:481
-#: packages/app-mobile/components/screens/Note.tsx:1308
+#: packages/app-mobile/components/ScreenHeader/index.tsx:482
+#: packages/app-mobile/components/ScreenHeader/index.tsx:484
+#: packages/app-mobile/components/screens/Note.tsx:1309
 #: packages/app-mobile/components/side-menu-content.tsx:178
 msgid "Restore"
 msgstr "Visszaállítás"
@@ -4141,8 +4194,12 @@ msgstr "Visszaállított jegyzetek"
 msgid "Restored Notes"
 msgstr "Visszaállított jegyzetek"
 
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.tsx:140
+msgid "Results (%d):"
+msgstr ""
+
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:133
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:98
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:110
 #: packages/app-mobile/components/screens/status.tsx:140
 msgid "Retry"
 msgstr "Ismét"
@@ -4231,8 +4288,8 @@ msgstr "Mentés másként..."
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:107
 #: packages/app-mobile/components/ScreenHeader/index.tsx:349
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:264
-#: packages/app-mobile/components/screens/Note.tsx:208
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:263
+#: packages/app-mobile/components/screens/Note.tsx:209
 msgid "Save changes"
 msgstr "Változások mentése"
 
@@ -4246,9 +4303,8 @@ msgid "Save geo-location with notes"
 msgstr "Geo-lokáció mentése jegyzetekkel"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:423
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:816
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:805
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:27
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.tsx:108
 #: packages/app-mobile/components/screens/search.tsx:171
 msgid "Search"
 msgstr "Keresés"
@@ -4262,7 +4318,7 @@ msgstr "Bővítmények keresése..."
 msgid "Search for..."
 msgstr "Keresés..."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:160
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:159
 #, fuzzy
 msgid "Search hidden"
 msgstr "Keresés"
@@ -4275,7 +4331,12 @@ msgstr "Keresés összes jegyzetben"
 msgid "Search in current note"
 msgstr "Keresés aktuális jegyzetben"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:160
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.tsx:150
+#, fuzzy
+msgid "Search plugins"
+msgstr "Bővítmények keresése..."
+
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:159
 #, fuzzy
 msgid "Search shown"
 msgstr "Keresés"
@@ -4286,8 +4347,10 @@ msgstr "Keresés:"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:167
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:74
+#: packages/app-desktop/gui/NoteSearchBar.min.js:165
 #: packages/app-desktop/gui/NoteSearchBar.tsx:189
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:817
+#: packages/app-desktop/gui/ResourceScreen.tsx:292
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:806
 msgid "Search..."
 msgstr "Keresés..."
 
@@ -4295,7 +4358,7 @@ msgstr "Keresés..."
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Keres egy adott <pattern> minden jegyetben."
 
-#: packages/lib/models/Setting.ts:1472
+#: packages/lib/models/Setting.ts:1479
 msgid "See the pre-release page for more details: %s"
 msgstr "Nézze meg a előzetes kiadás oldalát a részletekért: %s"
 
@@ -4304,7 +4367,7 @@ msgid "Select"
 msgstr "Kiválasztás"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:50
-#: packages/app-mobile/components/ScreenHeader/index.tsx:409
+#: packages/app-mobile/components/ScreenHeader/index.tsx:408
 msgid "Select all"
 msgstr "Minden kiválasztása"
 
@@ -4321,7 +4384,7 @@ msgstr "Fájl kiválasztása…"
 msgid "Select parent notebook"
 msgstr "Jegyzetfüzet létrehozása"
 
-#: packages/app-desktop/gui/MenuBar.tsx:341
+#: packages/app-desktop/gui/MenuBar.tsx:351
 #, fuzzy
 msgid "Send bug report"
 msgstr "Debug jelentés exportálása"
@@ -4340,7 +4403,7 @@ msgid "Server is running on port %d"
 msgstr "Szerver fut a %d porton"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.ts:11
-#: packages/app-mobile/components/screens/Note.tsx:1245
+#: packages/app-mobile/components/screens/Note.tsx:1246
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:144
 msgid "Set alarm"
 msgstr "Riasztás beállítása"
@@ -4349,7 +4412,7 @@ msgstr "Riasztás beállítása"
 msgid "Set alarm:"
 msgstr "Riasztás beállítása:"
 
-#: packages/lib/models/Setting.ts:1394
+#: packages/lib/models/Setting.ts:1401
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
@@ -4371,7 +4434,7 @@ msgstr ""
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:280
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:41
 #: packages/app-mobile/components/screens/LogScreen.tsx:56
-#: packages/app-mobile/components/screens/Note.tsx:1254
+#: packages/app-mobile/components/screens/Note.tsx:1255
 msgid "Share"
 msgstr "Megosztás"
 
@@ -4424,7 +4487,6 @@ msgid "Show advanced"
 msgstr "Speciális beállítások megjelenítése"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/ToggleAdvancedSettingsButton.tsx:19
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:675
 msgid "Show Advanced Settings"
 msgstr "Speciális beállítások megjelenítése"
 
@@ -4476,11 +4538,11 @@ msgstr ""
 msgid "Shrink large images before adding them to notes."
 msgstr ""
 
-#: packages/app-mobile/root.tsx:1068
+#: packages/app-mobile/root.tsx:1083
 msgid "Side menu closed"
 msgstr ""
 
-#: packages/app-mobile/root.tsx:1068
+#: packages/app-mobile/root.tsx:1083
 msgid "Side menu opened"
 msgstr ""
 
@@ -4489,7 +4551,7 @@ msgstr ""
 msgid "Sidebar"
 msgstr "Oldalsáv"
 
-#: packages/app-desktop/gui/ResourceScreen.tsx:97
+#: packages/app-desktop/gui/ResourceScreen.tsx:104
 msgid "Size"
 msgstr "Méret"
 
@@ -4504,6 +4566,7 @@ msgstr ""
 "dekódolást)"
 
 #: packages/app-cli/app/command-import.ts:53
+#: packages/app-desktop/gui/ImportScreen.min.js:71
 #: packages/app-desktop/gui/ImportScreen.tsx:92
 msgid "Skipped: %d."
 msgstr "Kihagyva: %d."
@@ -4551,7 +4614,7 @@ msgid "Sort notebooks by"
 msgstr "Jegyzetfüzetek rendezése"
 
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:10
-#: packages/app-mobile/components/ScreenHeader/index.tsx:515
+#: packages/app-mobile/components/ScreenHeader/index.tsx:519
 #: packages/lib/models/Setting.ts:976
 msgid "Sort notes by"
 msgstr "Jegyzetek rendezése"
@@ -4580,7 +4643,7 @@ msgstr "Forrás: "
 msgid "Spacer"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1711
+#: packages/lib/models/Setting.ts:1718
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -4596,7 +4659,7 @@ msgstr "Helyesírás-ellenőrző"
 msgid "Split View"
 msgstr "Nézet megosztása"
 
-#: packages/lib/models/Setting.ts:1301
+#: packages/lib/models/Setting.ts:1308
 msgid "Start application minimised in the tray icon"
 msgstr "Alkalmazás indításakor kicsinyítse azt a tálcára"
 
@@ -4635,14 +4698,17 @@ msgstr "Statisztikák..."
 msgid "Status"
 msgstr "Státusz"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:97
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:87
 msgid "Status: %s"
 msgstr "Státusz: %s"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:91
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:81
 msgid "Status: Started on port %d"
 msgstr "Státusz: Elindítva a %d  porton"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:150
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:123
 msgid "Step 1: Enable the clipper service"
 msgstr "1. lépés: Engedélyezze a Web Vágó szolgáltatást"
@@ -4661,6 +4727,7 @@ msgstr ""
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "2. lépés: Írja be a Dropbox által adott kódot:"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:129
 msgid "Step 2: Install the extension"
 msgstr "2. lépés: telepítse a bővítményt"
@@ -4710,16 +4777,16 @@ msgstr "Sor csere le"
 msgid "Swap line up"
 msgstr "Sor csere fel"
 
-#: packages/app-desktop/gui/MainScreen/commands/toggleNoteType.ts:8
+#: packages/app-desktop/gui/MainScreen/commands/toggleNoteType.ts:7
 msgid "Switch between note and to-do type"
 msgstr "Váltás jegyzet és todo típus között"
 
-#: packages/app-desktop/gui/MenuBar.tsx:526
+#: packages/app-desktop/gui/MenuBar.tsx:536
 #: packages/app-mobile/components/side-menu-content.tsx:503
 msgid "Switch profile"
 msgstr "Profil váltása"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.ts:87
+#: packages/app-desktop/gui/utils/NoteListUtils.ts:85
 msgid "Switch to note type"
 msgstr "Váltás jegyzet típusra"
 
@@ -4729,7 +4796,7 @@ msgstr "Váltás jegyzet típusra"
 msgid "Switch to profile %d"
 msgstr "Váltás a %d profilra"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.ts:96
+#: packages/app-desktop/gui/utils/NoteListUtils.ts:94
 msgid "Switch to to-do type"
 msgstr "Váltás to-do típusra"
 
@@ -4745,7 +4812,7 @@ msgstr ""
 msgid "Sync as many devices as you want"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:564
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:565
 msgid "Sync Status"
 msgstr "Szinkronizációs státusz"
 
@@ -4775,16 +4842,16 @@ msgstr "Szinkronizáció verzió: %s"
 msgid "Sync your notes"
 msgstr "Jegyzetek szinkronizálása"
 
-#: packages/lib/models/Setting.ts:2827
+#: packages/lib/models/Setting.ts:2838
 #, fuzzy
 msgid "Sync, encryption, proxy"
 msgstr "Titkosítás engedélyezése"
 
-#: packages/lib/models/Setting.ts:2788
+#: packages/lib/models/Setting.ts:2799
 msgid "Synchronisation"
 msgstr "Szinkronizáció"
 
-#: packages/lib/models/Setting.ts:1493
+#: packages/lib/models/Setting.ts:1500
 msgid "Synchronisation interval"
 msgstr "Szinkronizációs időköz"
 
@@ -4792,7 +4859,7 @@ msgstr "Szinkronizációs időköz"
 msgid "Synchronisation is already in progress."
 msgstr "Szinkronizáció már folyamatban van."
 
-#: packages/app-desktop/gui/MenuBar.tsx:505
+#: packages/app-desktop/gui/MenuBar.tsx:515
 #: packages/app-desktop/gui/Root.tsx:234
 msgid "Synchronisation Status"
 msgstr "Szinkronizációs státusz"
@@ -4811,7 +4878,7 @@ msgstr "Szinkronizációs cél: %s (%s)"
 msgid "Synchronise"
 msgstr "Szinkronizálás"
 
-#: packages/lib/models/Setting.ts:1513
+#: packages/lib/models/Setting.ts:1520
 msgid "Synchronise only over WiFi connection"
 msgstr ""
 
@@ -4827,7 +4894,7 @@ msgstr "Szinkronizálás..."
 msgid "Synchronizing..."
 msgstr "Szinkronizálás..."
 
-#: packages/lib/models/Setting.ts:1528
+#: packages/lib/models/Setting.ts:1535
 msgid "Tabloid"
 msgstr "Tabloid"
 
@@ -4836,6 +4903,7 @@ msgid "tag1, tag2, ..."
 msgstr "tag1, tag2, …"
 
 #: packages/app-cli/app/command-import.ts:55
+#: packages/app-desktop/gui/ImportScreen.min.js:73
 #: packages/app-desktop/gui/ImportScreen.tsx:94
 msgid "Tagged: %d."
 msgstr "Taggelve: %d."
@@ -4843,13 +4911,13 @@ msgstr "Taggelve: %d."
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:7
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:10
 #: packages/app-desktop/gui/Sidebar/hooks/useSidebarListData.ts:77
-#: packages/app-mobile/components/screens/Note.tsx:1275
+#: packages/app-mobile/components/screens/Note.tsx:1276
 #: packages/app-mobile/components/screens/tags.js:101
 #: packages/app-mobile/components/side-menu-content.tsx:500
 msgid "Tags"
 msgstr "Tagek"
 
-#: packages/app-mobile/components/screens/Note.tsx:1132
+#: packages/app-mobile/components/screens/Note.tsx:1133
 msgid "Take photo"
 msgstr "Fotó készítése"
 
@@ -4862,8 +4930,8 @@ msgstr ""
 msgid "Task list"
 msgstr "Feladatok"
 
-#: packages/server/src/services/MustacheService.ts:128
-#: packages/server/src/services/MustacheService.ts:278
+#: packages/server/src/services/MustacheService.ts:129
+#: packages/server/src/services/MustacheService.ts:283
 msgid "Tasks"
 msgstr "Feladatok"
 
@@ -4876,7 +4944,7 @@ msgstr ""
 msgid "Text document"
 msgstr "Szövegszerkesztő parancs"
 
-#: packages/lib/models/Setting.ts:1521
+#: packages/lib/models/Setting.ts:1528
 msgid "Text editor command"
 msgstr "Szövegszerkesztő parancs"
 
@@ -4918,11 +4986,11 @@ msgstr "Az alkalmazás hitelesítve!"
 msgid "The application has been successfully authorised."
 msgstr "Az alkalmazás sikeresen hitelesítve."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:697
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:700
 msgid "The application must be restarted for these changes to take effect."
 msgstr "Az alkalmazást újra kell indítani a változások érvényesítéséhez."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:586
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:535
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -4958,14 +5026,14 @@ msgstr ""
 msgid "The default profile cannot be deleted"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1521
+#: packages/lib/models/Setting.ts:1528
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1768 packages/lib/models/Setting.ts:1783
-#: packages/lib/models/Setting.ts:1798
+#: packages/lib/models/Setting.ts:1775 packages/lib/models/Setting.ts:1790
+#: packages/lib/models/Setting.ts:1805
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -4973,14 +5041,14 @@ msgid ""
 "factor of 1.Restart app to see changes."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:601
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:550
 #, fuzzy
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
 msgstr[0] "A következő csatolmányok változása figyelve van:"
 msgstr[1] "A következő csatolmányok változása figyelve van:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:585
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:534
 msgid "The following attachments are being watched for changes:"
 msgstr "A következő csatolmányok változása figyelve van:"
 
@@ -4995,12 +5063,12 @@ msgstr ""
 "javasolt frissíteni őket. A frissített mester kulcs továbbra is képes lesz "
 "dekódolni és titkosítani az adatait."
 
-#: packages/app-mobile/components/screens/Note.tsx:290
+#: packages/app-mobile/components/screens/Note.tsx:291
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:255
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:44
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:256
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:25
 msgid ""
 "The Joplin team has vetted this plugin and it meets our standards for "
 "security and performance."
@@ -5045,6 +5113,7 @@ msgid "The notebook could not be saved: %s"
 msgstr "A jegyzetfüzet nem menthető el: %s"
 
 #: packages/app-cli/app/command-import.ts:73
+#: packages/app-desktop/gui/ImportScreen.min.js:88
 #: packages/app-desktop/gui/ImportScreen.tsx:110
 msgid "The notes have been imported: %s"
 msgstr "A jegyeztek importálva: %s"
@@ -5105,10 +5174,12 @@ msgstr ""
 msgid "The Web Clipper needs your authorisation to access your data."
 msgstr ""
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:75
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "A Web Vágó szolgáltatás engedélyezve van és automatikusan indul."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:109
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:99
 msgid "The web clipper service is not enabled."
 msgstr "A Web Vágó szolgáltatás nincs engedélyezve."
@@ -5123,7 +5194,7 @@ msgstr ""
 msgid "Theme"
 msgstr "Téma"
 
-#: packages/lib/models/Setting.ts:2826
+#: packages/lib/models/Setting.ts:2837
 #, fuzzy
 msgid "Themes, editor font"
 msgstr "Szerkesztő betűkészlet"
@@ -5137,7 +5208,7 @@ msgstr ""
 msgid "There are no notes in the trash folder."
 msgstr "Jegyzet előélet megtartása"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:262
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:261
 msgid "There are unsaved changes."
 msgstr ""
 
@@ -5173,7 +5244,7 @@ msgid ""
 "(which is displayed in brackets above)."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2811
+#: packages/lib/models/Setting.ts:2822
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -5200,10 +5271,11 @@ msgstr ""
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Ez a csatolmány még nincs letöltve és dekódolva"
 
-#: packages/app-mobile/components/screens/Note.tsx:284
+#: packages/app-mobile/components/screens/Note.tsx:285
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Ez a csatolmány nincs letöltve vagy nincs dekódolva még."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:146
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
@@ -5216,7 +5288,7 @@ msgstr ""
 msgid "This drawing may have unsaved changes."
 msgstr ""
 
-#: packages/app-desktop/gui/ResourceScreen.tsx:237
+#: packages/app-desktop/gui/ResourceScreen.tsx:284
 msgid ""
 "This is an advanced tool to show the attachments that are linked to your "
 "notes. Please be careful when deleting one of them as they cannot be "
@@ -5237,7 +5309,7 @@ msgid_plural "These notes could not be duplicated: %s"
 msgstr[0] "A jegyzetfüzet nem menthető el: %s"
 msgstr[1] "A jegyzetfüzet nem menthető el: %s"
 
-#: packages/app-mobile/components/ScreenHeader/index.tsx:597
+#: packages/app-mobile/components/ScreenHeader/index.tsx:601
 #, fuzzy
 msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
@@ -5248,7 +5320,7 @@ msgstr[1] "A jegyzetfüzet nem menthető el: %s"
 msgid "This note does not have geolocation information."
 msgstr "Ennek a jegyzetnek nincs geolokációs információja."
 
-#: packages/app-mobile/components/screens/Note.tsx:208
+#: packages/app-mobile/components/screens/Note.tsx:209
 msgid "This note has been modified:"
 msgstr "Jegyzet módosult:"
 
@@ -5261,15 +5333,16 @@ msgstr ""
 "Ez a jegyzet üres. Kattintson a \"%s\"-on váltani a szerkesztőt és "
 "szerkeszteni a jegyzetet."
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:129
 msgid "This note has no history"
 msgstr "Jegyzetnek nincs előélete"
 
-#: packages/lib/services/plugins/PluginService.ts:516
+#: packages/lib/services/plugins/PluginService.ts:519
 msgid "This plugin doesn't support %s."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:505
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:455
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
@@ -5277,6 +5350,7 @@ msgstr ""
 "Ennek a Rich Text szerkesztőnek számos korlátja van és javasolt ezekkel "
 "tisztában lenni a használata előtt."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:155
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:124
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
@@ -5330,7 +5404,7 @@ msgstr "cím"
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:136
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:11
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:5
-#: packages/app-desktop/gui/ResourceScreen.tsx:96
+#: packages/app-desktop/gui/ResourceScreen.tsx:103
 msgid "Title"
 msgstr "Cím"
 
@@ -5401,7 +5475,7 @@ msgid ""
 "restart it."
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:601
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:602
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -5426,7 +5500,7 @@ msgstr "to-do"
 msgid "Toggle comment"
 msgstr "Megjegyzés váltása"
 
-#: packages/app-desktop/gui/MenuBar.tsx:915
+#: packages/app-desktop/gui/MenuBar.tsx:926
 msgid "Toggle development tools"
 msgstr "Fejlesztőeszközök váltása"
 
@@ -5442,7 +5516,12 @@ msgstr "Szerkesztő váltása"
 msgid "Toggle external editing"
 msgstr "Külső szerkesztés váltása"
 
-#: packages/lib/models/Setting.ts:2831
+#: packages/app-desktop/gui/MainScreen/commands/toggleMenuBar.ts:7
+#, fuzzy
+msgid "Toggle menu bar"
+msgstr "Oldalsáv váltása"
+
+#: packages/lib/models/Setting.ts:2842
 #, fuzzy
 msgid "Toggle note history, keep notes for"
 msgstr "Jegyzet előélet megtartása"
@@ -5470,11 +5549,12 @@ msgstr "Oldalsáv váltása"
 msgid "Toggle sort order field"
 msgstr "Oldalsáv váltása"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:33
 msgid "Token has been copied to the clipboard!"
 msgstr "Token vágólapra másolva!"
 
-#: packages/lib/models/Setting.ts:2800
+#: packages/lib/models/Setting.ts:2811
 msgid "Tools"
 msgstr "Eszközök"
 
@@ -5491,7 +5571,7 @@ msgstr "Összes: %d/%d"
 msgid "Trash"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:320
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:321
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:123
 msgid "Try again"
 msgstr "Próbálja újra"
@@ -5530,7 +5610,7 @@ msgstr "Írjon be egy új tag-et vagy válasszon a listáról"
 msgid "Type: %s."
 msgstr "Típus: %s."
 
-#: packages/app-mobile/components/screens/Note.tsx:999
+#: packages/app-mobile/components/screens/Note.tsx:1000
 msgid "Unable to edit resource of type %s"
 msgstr ""
 
@@ -5542,10 +5622,10 @@ msgstr ""
 msgid "Uncompleted to-dos on top"
 msgstr "Befejezetlen to-do-k felül"
 
-#: packages/app-desktop/gui/MenuBar.tsx:728
+#: packages/app-desktop/gui/MenuBar.tsx:738
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:118
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:164
-#: packages/app-mobile/components/ScreenHeader/index.tsx:386
+#: packages/app-mobile/components/ScreenHeader/index.tsx:385
 msgid "Undo"
 msgstr "Visszavonás"
 
@@ -5592,26 +5672,32 @@ msgid ""
 "content."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:805
+#: packages/app-mobile/components/screens/Note.tsx:806
 msgid "Unsupported image type: %s"
 msgstr "Nem támogatott kép típus: %s"
 
 #: packages/app-desktop/gui/MainScreen/commands/openItem.ts:41
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:172
 #: packages/app-mobile/commands/openItem.ts:32
 msgid "Unsupported link or message: %s"
 msgstr "Nem támogatott hivatkozás vagy üzenet: %s"
 
-#: packages/app-desktop/gui/ResourceScreen.tsx:109
+#: packages/app-desktop/gui/ResourceScreen.tsx:116
 #: packages/lib/models/BaseItem.ts:914 packages/lib/path-utils.ts:27
 #: packages/lib/path-utils.ts:71
 msgid "Untitled"
 msgstr "Névtelen"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:204
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:95
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:205
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:172
 msgid "Update"
 msgstr "Frissítés"
+
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:109
+#, fuzzy
+msgid "Update available"
+msgstr "Profil frissítése"
 
 #: packages/server/src/routes/admin/users.ts:257
 #: packages/server/src/routes/index/users.ts:91
@@ -5623,11 +5709,12 @@ msgstr "Profil frissítése"
 msgid "Update total sizes"
 msgstr "Frissített helyi elemek: %d."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:206
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:207
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:15
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:68
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:94
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:171
 msgid "Updated"
 msgstr "Frissítve"
 
@@ -5648,16 +5735,17 @@ msgid "Updated: "
 msgstr "Frissített: "
 
 #: packages/app-cli/app/command-import.ts:52
+#: packages/app-desktop/gui/ImportScreen.min.js:70
 #: packages/app-desktop/gui/ImportScreen.tsx:91
 msgid "Updated: %d."
 msgstr "Frissített: %d."
 
-#: packages/app-mobile/components/screens/Note.tsx:1095
+#: packages/app-mobile/components/screens/Note.tsx:1096
 msgid "Updated: %s"
 msgstr "Frissített: %s"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:205
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:93
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:206
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:170
 msgid "Updating..."
 msgstr "Frissítés..."
 
@@ -5669,6 +5757,7 @@ msgstr "Upgrade"
 msgid "Upgrade the sync target to the latest version."
 msgstr "Frissítse a szinkronizációs célt a legfrissebb verzióra."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:72
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:113
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:116
@@ -5681,7 +5770,7 @@ msgstr "URL"
 msgid "Usage: %s"
 msgstr "Használat: %s"
 
-#: packages/lib/models/Setting.ts:1848
+#: packages/lib/models/Setting.ts:1855
 msgid "Use biometrics to secure access to the app"
 msgstr ""
 
@@ -5707,7 +5796,7 @@ msgstr ""
 "Használja a nyilakat az elrendezés elemek mozgatásához. Majd nyomja le az "
 "\"Escape\"-et a kilépéshez."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:566
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:567
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
@@ -5719,26 +5808,26 @@ msgid ""
 "it up later in Settings."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1375
+#: packages/lib/models/Setting.ts:1382
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1388
+#: packages/lib/models/Setting.ts:1395
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:124
+#: packages/server/src/services/MustacheService.ts:125
 msgid "User deletions"
 msgstr ""
 
 #: packages/server/src/routes/admin/users.ts:197
-#: packages/server/src/services/MustacheService.ts:120
-#: packages/server/src/services/MustacheService.ts:275
+#: packages/server/src/services/MustacheService.ts:121
+#: packages/server/src/services/MustacheService.ts:280
 msgid "Users"
 msgstr "Felhasználók"
 
@@ -5758,7 +5847,7 @@ msgstr "Nézet"
 msgid "View OCR text"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:1099
+#: packages/app-mobile/components/screens/Note.tsx:1100
 msgid "View on map"
 msgstr "Mutasd a térképen"
 
@@ -5774,15 +5863,15 @@ msgstr "Mutasd ezeket most"
 msgid "Viewer"
 msgstr "Megjelenítő"
 
-#: packages/lib/models/Setting.ts:1564
+#: packages/lib/models/Setting.ts:1571
 msgid "Vim"
 msgstr "Vim"
 
-#: packages/lib/models/Setting.ts:1900
+#: packages/lib/models/Setting.ts:1907
 msgid "Voice typing language files (URL)"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:1264
+#: packages/app-mobile/components/screens/Note.tsx:1265
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:119
 msgid "Voice typing..."
 msgstr ""
@@ -5793,25 +5882,25 @@ msgid "Waiting for authorisation..."
 msgstr "Engedély megadása"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:227
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:116
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:115
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
-#: packages/app-desktop/gui/ResourceScreen.tsx:246
+#: packages/app-desktop/gui/ResourceScreen.tsx:302
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:128
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:116
 msgid "We have a system for reporting and removing problematic plugins."
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:126
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:114
 msgid ""
 "We mark plugins developed by trusted Joplin community members as "
 "\"recommended\"."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2797 packages/lib/utils/joplinCloud.ts:166
+#: packages/lib/models/Setting.ts:2808 packages/lib/utils/joplinCloud.ts:166
 msgid "Web Clipper"
 msgstr "Web Vágó"
 
@@ -5832,9 +5921,18 @@ msgid "WebDAV username"
 msgstr "WebDAV felhasználónév"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:20
-#: packages/app-desktop/gui/MenuBar.tsx:893
+#: packages/app-desktop/gui/MenuBar.tsx:904
 msgid "Website and documentation"
 msgstr "Web oldal és dokumentáció"
+
+#: packages/app-mobile/utils/getVersionInfoText.ts:13
+msgid "WebView package: %s"
+msgstr ""
+
+#: packages/app-mobile/utils/getVersionInfoText.ts:12
+#, fuzzy
+msgid "WebView version: %s"
+msgstr "Új verzió: %s"
 
 #: packages/app-cli/app/gui/NoteWidget.js:36
 msgid ""
@@ -5850,7 +5948,7 @@ msgstr ""
 msgid "Welcome!"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:112
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:100
 #, fuzzy
 msgid "What are plugins?"
 msgstr "\"%s\" bővítmény törlése?"
@@ -5891,12 +5989,12 @@ msgid "yes"
 msgstr "igen"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:31
-#: packages/app-mobile/components/screens/Note.tsx:744
+#: packages/app-mobile/components/screens/Note.tsx:745
 #: packages/lib/shim-init-node.ts:256 packages/lib/versionInfo.ts:79
 msgid "Yes"
 msgstr "Igen"
 
-#: packages/app-mobile/components/screens/Note.tsx:743
+#: packages/app-mobile/components/screens/Note.tsx:744
 #: packages/lib/shim-init-node.ts:255
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
@@ -5907,11 +6005,18 @@ msgstr ""
 msgid "You are logged in into Joplin Cloud, you can leave this screen now."
 msgstr ""
 
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:190
+#, fuzzy
+msgid "You currently have %d plugin installed."
+msgid_plural "You currently have %d plugins installed."
+msgstr[0] "Önnek nincs egyetlen jegyzetfüzete sem."
+msgstr[1] "Önnek nincs egyetlen jegyzetfüzete sem."
+
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "You currently have no notebooks."
 msgstr "Önnek nincs egyetlen jegyzetfüzete sem."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:280
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:281
 msgid "You do not have any installed plugin."
 msgstr "Nincs telepített bővítmény."
 
@@ -5934,7 +6039,7 @@ msgid ""
 msgstr ""
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:30
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:545
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:546
 msgid "Your account doesn't have access to this feature"
 msgstr ""
 
@@ -5964,14 +6069,30 @@ msgstr "A kamera használatához engedélyre van szükség."
 msgid "Your version: %s"
 msgstr "Verziója: %s"
 
-#: packages/app-desktop/gui/MenuBar.tsx:816
-#: packages/app-desktop/gui/MenuBar.tsx:822
+#: packages/app-desktop/gui/MenuBar.tsx:827
+#: packages/app-desktop/gui/MenuBar.tsx:833
 msgid "Zoom In"
 msgstr "Nagyítás"
 
-#: packages/app-desktop/gui/MenuBar.tsx:829
+#: packages/app-desktop/gui/MenuBar.tsx:840
 msgid "Zoom Out"
 msgstr "Kicsinyítés"
+
+#, fuzzy
+#~ msgid "Incoming shares"
+#~ msgstr "Riasztás beállítása"
+
+#, fuzzy
+#~ msgid "Leave share"
+#~ msgstr "Változások mentése"
+
+#, fuzzy
+#~ msgid "Loading plugin repository..."
+#~ msgstr "Sikertelen kapcsolódás a plugin adattárhoz."
+
+#, fuzzy
+#~ msgid "No description"
+#~ msgstr "Titkosítás"
 
 #~ msgid "Folders"
 #~ msgstr "Mappák"
