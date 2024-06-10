@@ -6,9 +6,9 @@ export const loginLimiterByIp = new RateLimiterMemory({
 	duration: 60, // Per 60 seconds
 });
 
-export const applicationAuthLimiterByIp = new RateLimiterMemory({
-	points: 1, // Up to 1 requests per IP
-	duration: 3, // Per 3 seconds, application auth requests happens every 2 seconds
+export const bruteForceLimiterByIp = new RateLimiterMemory({
+	points: 100,
+	duration: 60,
 });
 
 export default async function(ip: string, limiter: RateLimiterMemory) {
