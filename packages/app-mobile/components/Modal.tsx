@@ -32,18 +32,18 @@ const useStyles = (backgroundColor?: string) => {
 	}, [isLandscape, backgroundColor]);
 };
 
-const useBackdropTouchListeners = (onRequestClose: (event: GestureResponderEvent)=> void, backdropRef: RefObject<View>) => {
+const useBackgroundTouchListeners = (onRequestClose: (event: GestureResponderEvent)=> void, backdropRef: RefObject<View>) => {
 	const onShouldBackgroundCaptureTouch = useCallback((event: GestureResponderEvent) => {
 		return event.target === backdropRef.current && event.nativeEvent.touches.length === 1;
 	}, [backdropRef]);
 
-	const onBackdropTouchFinished = useCallback((event: GestureResponderEvent) => {
+	const onBackgroundTouchFinished = useCallback((event: GestureResponderEvent) => {
 		if (event.target === backdropRef.current) {
 			onRequestClose?.(event);
 		}
 	}, [onRequestClose, backdropRef]);
 
-	return { onShouldBackgroundCaptureTouch, onBackdropTouchFinished };
+	return { onShouldBackgroundCaptureTouch, onBackgroundTouchFinished };
 };
 
 const ModalElement: React.FC<ModalElementProps> = ({
@@ -63,7 +63,7 @@ const ModalElement: React.FC<ModalElementProps> = ({
 	);
 
 	const backgroundRef = useRef<View>();
-	const { onShouldBackgroundCaptureTouch, onBackdropTouchFinished } = useBackdropTouchListeners(modalProps.onRequestClose, backgroundRef);
+	const { onShouldBackgroundCaptureTouch, onBackgroundTouchFinished } = useBackgroundTouchListeners(modalProps.onRequestClose, backgroundRef);
 
 	// supportedOrientations: On iOS, this allows the dialog to be shown in non-portrait orientations.
 	return (
@@ -75,7 +75,7 @@ const ModalElement: React.FC<ModalElementProps> = ({
 				ref={backgroundRef}
 				style={styles.modalBackground}
 				onStartShouldSetResponder={onShouldBackgroundCaptureTouch}
-				onResponderRelease={onBackdropTouchFinished}
+				onResponderRelease={onBackgroundTouchFinished}
 			>{content}</View>
 		</Modal>
 	);
