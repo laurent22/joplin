@@ -137,7 +137,7 @@
 	"Accept": [
 		""
 	],
-	"Accepted shares": [
+	"Accepted invitations": [
 		""
 	],
 	"Access denied: Please check your username and password": [
@@ -218,6 +218,9 @@
 	"An update is available, do you want to download it now?": [
 		"Saadaval on värskendus, kas soovite selle kohe alla laadida?"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		""
 	],
@@ -272,7 +275,7 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Automaatne sidumine traksid, sulg, noteeringud jne."
 	],
 	"Automatically delete notes in the trash after a number of days": [
@@ -294,6 +297,9 @@
 		"Paks"
 	],
 	"Browse all plugins": [
+		""
+	],
+	"Browse and install community plugins.": [
 		""
 	],
 	"Browse...": [
@@ -846,9 +852,6 @@
 	"Fail-safe": [
 		""
 	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
-	],
 	"Fatal error:": [
 		"Parandamatu tõrge:"
 	],
@@ -1196,9 +1199,6 @@
 	"Lists": [
 		""
 	],
-	"Loading plugin repository...": [
-		""
-	],
 	"Location": [
 		"Asukoht"
 	],
@@ -1328,11 +1328,11 @@
 	"No active notebook.": [
 		"Aktiivset märkmikku pole."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"Üksust ID-ga %s ei ole"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"Ühtegi märkmikku pole määratud."
@@ -1685,6 +1685,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -1702,6 +1705,9 @@
 	],
 	"Restored Notes": [
 		"Taastatud märkmed"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"Uuesti"
@@ -2387,6 +2393,9 @@
 	],
 	"Website and documentation": [
 		"Veebileht ja dokumentatsioon"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome!": [
 		""

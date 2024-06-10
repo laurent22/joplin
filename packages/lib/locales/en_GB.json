@@ -167,7 +167,7 @@
 	"Accept": [
 		""
 	],
-	"Accepted shares": [
+	"Accepted invitations": [
 		""
 	],
 	"Access denied: Please check your username and password": [
@@ -216,6 +216,9 @@
 		""
 	],
 	"Advanced options": [
+		""
+	],
+	"Advanced settings": [
 		""
 	],
 	"Advanced tools": [
@@ -267,6 +270,9 @@
 		""
 	],
 	"An update is available, do you want to download it now?": [
+		""
+	],
+	"Android API level: %d": [
 		""
 	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
@@ -341,7 +347,7 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		""
 	],
 	"Automatically check for updates": [
@@ -366,6 +372,9 @@
 		""
 	],
 	"Browse all plugins": [
+		""
+	],
+	"Browse and install community plugins.": [
 		""
 	],
 	"Browse...": [
@@ -1284,9 +1293,6 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		""
 	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
-	],
 	"Fatal error:": [
 		""
 	],
@@ -1432,9 +1438,6 @@
 	"Hide advanced": [
 		""
 	],
-	"Hide Advanced Settings": [
-		""
-	],
 	"Hide disabled": [
 		""
 	],
@@ -1555,9 +1558,6 @@
 	"In: %s": [
 		""
 	],
-	"Incoming shares": [
-		""
-	],
 	"Incompatible": [
 		""
 	],
@@ -1591,7 +1591,13 @@
 	"Install from file": [
 		""
 	],
+	"Install new plugins": [
+		""
+	],
 	"Installed": [
+		""
+	],
+	"Installed plugins": [
 		""
 	],
 	"Installing...": [
@@ -1613,6 +1619,9 @@
 		""
 	],
 	"Invalid password": [
+		""
+	],
+	"iOS version: %s": [
 		""
 	],
 	"Italic": [
@@ -1738,10 +1747,10 @@
 	"Leave it blank to download the language files from the default website": [
 		""
 	],
-	"Leave notebook...": [
+	"Leave notebook": [
 		""
 	],
-	"Leave share": [
+	"Leave notebook...": [
 		""
 	],
 	"Legal": [
@@ -1782,9 +1791,6 @@
 		""
 	],
 	"Loaded": [
-		""
-	],
-	"Loading plugin repository...": [
 		""
 	],
 	"Loading...": [
@@ -1940,6 +1946,9 @@
 	"New": [
 		""
 	],
+	"New invitations": [
+		""
+	],
 	"New note": [
 		""
 	],
@@ -1988,13 +1997,10 @@
 	"No active notebook.": [
 		""
 	],
-	"No description": [
-		""
-	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
+		""
+	],
+	"No new invitations": [
 		""
 	],
 	"No notebook has been specified.": [
@@ -2507,10 +2513,16 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
 	"Report system": [
+		""
+	],
+	"Reports": [
 		""
 	],
 	"Reset application layout": [
@@ -2550,6 +2562,9 @@
 		""
 	],
 	"Restored Notes": [
+		""
+	],
+	"Results (%d):": [
 		""
 	],
 	"Retry": [
@@ -2631,6 +2646,9 @@
 		""
 	],
 	"Search in current note": [
+		""
+	],
+	"Search plugins": [
 		""
 	],
 	"Search shown": [
@@ -3325,6 +3343,9 @@
 	"Toggle external editing": [
 		""
 	],
+	"Toggle menu bar": [
+		""
+	],
 	"Toggle note history, keep notes for": [
 		""
 	],
@@ -3425,6 +3446,9 @@
 		""
 	],
 	"Update": [
+		""
+	],
+	"Update available": [
 		""
 	],
 	"Update profile": [
@@ -3565,6 +3589,12 @@
 	"Website and documentation": [
 		""
 	],
+	"WebView package: %s": [
+		""
+	],
+	"WebView version: %s": [
+		""
+	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		""
 	],
@@ -3605,6 +3635,10 @@
 		""
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You currently have %d plugin installed.": [
+		"",
 		""
 	],
 	"You currently have no notebooks.": [
