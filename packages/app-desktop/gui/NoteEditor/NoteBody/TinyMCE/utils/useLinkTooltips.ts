@@ -33,7 +33,7 @@ const useLinkTooltips = (editor: Editor|null) => {
 				element.setAttribute('data-joplin-original-title', element.title);
 			}
 
-			// Avoid showing internal HREFs for resource and note links.
+			// Avoid showing internal HREFs for note links.
 			if (element.hasAttribute('data-resource-id') && !element.title) {
 				if (shim.isMac()) {
 					element.title = _('Cmd-click to open');
