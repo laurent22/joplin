@@ -29,8 +29,8 @@ const useStyles = (themeId: number, containerStyle: ViewStyle, size: DialogSize)
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
 
-		const maxWidth = size === DialogSize.Large ? windowSize.width * 0.97 : 500;
-		const maxHeight = size === DialogSize.Large ? windowSize.height * 0.9 : 700;
+		const maxWidth = size === DialogSize.Large ? windowSize.width : 500;
+		const maxHeight = size === DialogSize.Large ? windowSize.height : 700;
 
 		return StyleSheet.create({
 			webView: {
@@ -55,6 +55,8 @@ const useStyles = (themeId: number, containerStyle: ViewStyle, size: DialogSize)
 				// Center
 				marginLeft: 'auto',
 				marginRight: 'auto',
+				paddingLeft: 6,
+				paddingRight: 6,
 
 				...containerStyle,
 			},
