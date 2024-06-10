@@ -46,8 +46,6 @@ const useStyles = (themeId: number, containerStyle: ViewStyle, size: DialogSize)
 				justifyContent: 'flex-end',
 			},
 			dialogContainer: {
-				// Use Math.min with width and height -- the maxWidth and maxHeight style
-				// properties don't seem to limit the size for this.
 				maxHeight,
 				maxWidth,
 				width: '100%',
