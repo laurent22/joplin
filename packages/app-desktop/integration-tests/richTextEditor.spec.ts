@@ -70,7 +70,12 @@ test.describe('richTextEditor', () => {
 
 		// Click on the attached file URL
 		const openPathResult = waitForNextOpenPath(electronApp);
-		await editor.getTinyMCEFrameLocator().getByRole('link', { name: basename(pathToAttach) }).click({ modifiers: ['Control'] });
+		const targetLink = editor.getTinyMCEFrameLocator().getByRole('link', { name: basename(pathToAttach) });
+		if (process.platform === 'darwin') {
+			await targetLink.click({ modifiers: ['Meta'] });
+		} else {
+			await targetLink.click({ modifiers: ['Control'] });
+		}
 
 		// Should watch the file
 		await mainWindow.getByText(/^The following attachments are being watched for changes/i).waitFor();
