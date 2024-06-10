@@ -422,5 +422,6 @@ export function accountTypeToString(accountType: AccountType): string {
 	if (accountType === AccountType.Basic) return 'Basic';
 	if (accountType === AccountType.Pro) return 'Pro';
 	if (accountType === AccountType.Team) return 'Team';
-	throw new Error(`Invalid type: ${accountType}`);
+	const exhaustivenessCheck: never = accountType;
+	throw new Error(`Invalid type: ${exhaustivenessCheck}`);
 }
