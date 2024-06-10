@@ -31,7 +31,7 @@ const JoplinCloudConfig = (props: JoplinCloudConfigProps) => {
 	};
 
 	return (
-		<View key="joplinCloud">
+		<View>
 			<View style={props.styles.styleSheet.settingContainerNoBottomBorder}>
 				<Text style={props.styles.styleSheet.settingTextEmphasis}>{accountInformationLabel()}</Text>
 			</View>
