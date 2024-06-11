@@ -4,6 +4,7 @@ import { CurrentProfileVersion, defaultProfile, defaultProfileConfig, DefaultPro
 import { customAlphabet } from 'nanoid/non-secure';
 import { _ } from '../../locale';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const migrateProfileConfig = (profileConfig: any, toVersion: number): ProfileConfig => {
 	let version = 2;
 

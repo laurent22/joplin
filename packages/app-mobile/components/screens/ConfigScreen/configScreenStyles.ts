@@ -15,6 +15,7 @@ export interface ConfigScreenStyleSheet {
 	settingTextEmphasis: TextStyle;
 	linkText: TextStyle;
 	descriptionText: TextStyle;
+	descriptionAlert: TextStyle;
 	warningText: TextStyle;
 
 	sliderUnits: TextStyle;
@@ -96,8 +97,7 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		paddingTop: 3,
 	};
 
-
-	const styles: ConfigScreenStyleSheet = {
+	const styleSheet = StyleSheet.create<ConfigScreenStyleSheet>({
 		body: {
 			flex: 1,
 			justifyContent: 'flex-start',
@@ -116,6 +116,11 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		},
 		descriptionText: {
 			color: theme.colorFaded,
+			fontSize: theme.fontSizeSmaller,
+			flex: 1,
+		},
+		descriptionAlert: {
+			color: theme.color,
 			fontSize: theme.fontSizeSmaller,
 			flex: 1,
 		},
@@ -199,9 +204,7 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 			fontWeight: 'bold',
 		},
 		sidebarButtonDescriptionText,
-	};
-
-	const styleSheet = StyleSheet.create(styles);
+	});
 
 	return {
 		styleSheet,

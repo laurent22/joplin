@@ -26,6 +26,11 @@ export const getResourceDir = (profile: Profile, isSubProfile: boolean) => {
 	return `${getProfilesRootDir()}/resources-${profile.id}`;
 };
 
+export const getPluginDataDir = (profile: Profile, isSubProfile: boolean) => {
+	const suffix = isSubProfile ? `-${profile.id}` : '';
+	return `${getProfilesRootDir()}/plugin-data${suffix}`;
+};
+
 // The suffix is for debugging only
 export const getDatabaseName = (profile: Profile, isSubProfile: boolean, suffix = '') => {
 	if (!isSubProfile) return `joplin${suffix}.sqlite`;

@@ -10,11 +10,7 @@ However **there is a catch**: in Joplin, notes, even when edited with this Rich 
 
 - For a start, **most Markdown plugins will not be compatible**. If you open a Markdown note that makes use of such plugin in the Rich Text editor, it is likely you will lose the plugin special formatting. The only supported plugins are the "fenced" plugins - those that wrap a section of text in triple backticks (for example, KaTeX, Mermaid, etc. are working). You can see a plugin's compatibility on the Markdown config screen.
 
-- It is not possible to have multiple new lines in a row. Because in Markdown, multiple new lines would be collapsed into one when rendered.
-
 - Tables must have a header, because this is a requirement in Markdown. When you create a table, it will let you create it without a header, but under the hood it will add an empty one. And next time you open the note, this empty header will be present.
-
-- List items (bullet points, numbered lists & checkboxes) within table cells can be created but will not be saved correctly; lists within tables are not currently part of any Markdown specification.
 
 - All items in a list must be of the same type, so for example all checkboxes, or all bullet points. If you require two different types, you should create two different lists separated by a horizontal rule or similar.
 

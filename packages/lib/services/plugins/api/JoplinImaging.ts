@@ -35,10 +35,8 @@ export interface PdfInfo {
 }
 
 export interface Implementation {
-	nativeImage: {
-		createFromPath: (path: string)=> Promise<any>;
-		createFromPdf: (path: string, options: CreateFromPdfOptions)=> Promise<any[]>;
-	};
+	createFromPath: (path: string)=> Promise<unknown>;
+	createFromPdf: (path: string, options: CreateFromPdfOptions)=> Promise<unknown[]>;
 	getPdfInfo: (path: string)=> Promise<PdfInfo>;
 }
 
@@ -52,6 +50,7 @@ export type Handle = string;
 
 interface Image {
 	handle: Handle;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	data: any;
 }
 
@@ -95,6 +94,7 @@ export default class JoplinImaging {
 		return image;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private cacheImage(data: any) {
 		const handle = this.createImageHandle();
 		this.images_.push({
@@ -114,8 +114,13 @@ export default class JoplinImaging {
 	// 	return this.cacheImage(this.implementation_.nativeImage.createFromBuffer(buffer, options));
 	// }
 
+	/**
+	 * Creates an image from the provided path. Note that images and PDFs are supported. If you
+	 * provide a URL instead of a local path, the file will be downloaded first then converted to an
+	 * image.
+	 */
 	public async createFromPath(filePath: string): Promise<Handle> {
-		return this.cacheImage(await this.implementation_.nativeImage.createFromPath(filePath));
+		return this.cacheImage(await this.implementation_.createFromPath(filePath));
 	}
 
 	public async createFromResource(resourceId: string): Promise<Handle> {
@@ -123,7 +128,7 @@ export default class JoplinImaging {
 	}
 
 	public async createFromPdfPath(path: string, options?: CreateFromPdfOptions): Promise<Handle[]> {
-		const images = await this.implementation_.nativeImage.createFromPdf(path, options);
+		const images = await this.implementation_.createFromPdf(path, options);
 		return images.map(image => this.cacheImage(image));
 	}
 
@@ -199,6 +204,7 @@ export default class JoplinImaging {
 	 * Creates a new Joplin resource from the image data. The image will be
 	 * first converted to a JPEG.
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async toJpgResource(handle: Handle, resourceProps: any, quality = 80) {
 		const tempFilePath = this.tempFilePath('jpg');
 		await this.toJpgFile(handle, tempFilePath, quality);
@@ -211,6 +217,7 @@ export default class JoplinImaging {
 	 * Creates a new Joplin resource from the image data. The image will be
 	 * first converted to a PNG.
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async toPngResource(handle: Handle, resourceProps: any) {
 		const tempFilePath = this.tempFilePath('png');
 		await this.toPngFile(handle, tempFilePath);

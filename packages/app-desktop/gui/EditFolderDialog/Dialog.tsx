@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, useState, useRef, useEffect } from 'react';
+import { useCallback, useState, useRef, useEffect, useId } from 'react';
 import { _ } from '@joplin/lib/locale';
 import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
 import Dialog from '../Dialog';
@@ -86,6 +86,7 @@ export default function(props: Props) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [onClose, folderTitle, folderIcon, props.folderId, props.parentId]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onFolderTitleChange = useCallback((event: any) => {
 		setFolderTitle(event.target.value);
 	}, []);
@@ -126,13 +127,14 @@ export default function(props: Props) {
 		}
 	}, []);
 
+	const formTitleInputId = useId();
 	function renderForm() {
 		return (
 			<div>
 				<div className="form">
 					<div className="form-input-group">
-						<label>{_('Title')}</label>
-						<StyledInput type="text" ref={titleInputRef} value={folderTitle} onChange={onFolderTitleChange}/>
+						<label htmlFor={formTitleInputId}>{_('Title')}</label>
+						<StyledInput id={formTitleInputId} type="text" ref={titleInputRef} value={folderTitle} onChange={onFolderTitleChange}/>
 					</div>
 
 					<div className="form-input-group">

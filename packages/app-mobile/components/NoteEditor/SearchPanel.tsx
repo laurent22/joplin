@@ -2,13 +2,12 @@
 
 const React = require('react');
 const { useMemo, useState, useEffect } = require('react');
-const MaterialCommunityIcon = require('react-native-vector-icons/MaterialCommunityIcons').default;
 
 import { EditorSettings } from './types';
 import { _ } from '@joplin/lib/locale';
 import { BackHandler, TextInput, View, Text, StyleSheet, ViewStyle } from 'react-native';
 import { Theme } from '@joplin/lib/themes/type';
-import CustomButton from '../CustomButton';
+import IconButton from '../IconButton';
 import { SearchState } from '@joplin/editor/types';
 import { SearchControl } from './types';
 
@@ -33,6 +32,7 @@ export interface SearchPanelProps {
 }
 
 interface ActionButtonProps {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	styles: any;
 	themeId: number;
 	iconName: string;
@@ -42,18 +42,19 @@ interface ActionButtonProps {
 
 const ActionButton = (props: ActionButtonProps) => {
 	return (
-		<CustomButton
+		<IconButton
 			themeId={props.themeId}
-			style={props.styles.button}
+			containerStyle={props.styles.button}
 			onPress={props.onPress}
 			description={props.title}
-		>
-			<MaterialCommunityIcon name={props.iconName} style={props.styles.buttonText}/>
-		</CustomButton>
+			iconName={`material ${props.iconName}`}
+			iconStyle={props.styles.buttonText}
+		/>
 	);
 };
 
 interface ToggleButtonProps {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	styles: any;
 	themeId: number;
 	iconName: string;
@@ -66,9 +67,9 @@ const ToggleButton = (props: ToggleButtonProps) => {
 	const active = props.active;
 
 	return (
-		<CustomButton
+		<IconButton
 			themeId={props.themeId}
-			style={{
+			containerStyle={{
 				...props.styles.toggleButton,
 				...(active ? props.styles.toggleButtonActive : {}),
 			}}
@@ -79,11 +80,12 @@ const ToggleButton = (props: ToggleButtonProps) => {
 			}}
 			description={props.title}
 			accessibilityRole='switch'
-		>
-			<MaterialCommunityIcon name={props.iconName} style={
+
+			iconName={`material ${props.iconName}`}
+			iconStyle={
 				active ? props.styles.activeButtonText : props.styles.buttonText
-			}/>
-		</CustomButton>
+			}
+		/>
 	);
 };
 
@@ -147,6 +149,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 	const state = props.searchState;
 	const control = props.searchControl;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const updateSearchState = (changedData: any) => {
 		const newState = { ...state, ...changedData };
 		control.setSearchState(newState);

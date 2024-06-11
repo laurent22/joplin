@@ -11,6 +11,7 @@ export interface CreateTestUsersOptions {
 	fromNum?: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function handleDebugCommands(argv: any, db: DbConnection, config: Config): Promise<boolean> {
 	if (argv.debugCreateTestUsers) {
 		await createTestUsers(db, config);
@@ -53,7 +54,7 @@ export async function createTestUsers(db: DbConnection, config: Config, options:
 	};
 
 	const password = '111111';
-	const models = newModelFactory(db, config);
+	const models = newModelFactory(db, db, config);
 
 	await truncateTables(db, includedTables);
 
@@ -126,7 +127,7 @@ export async function createTestUsers(db: DbConnection, config: Config, options:
 }
 
 export async function createUserDeletions(db: DbConnection, config: Config) {
-	const models = newModelFactory(db, config);
+	const models = newModelFactory(db, db, config);
 
 	const users = await models.user().all();
 

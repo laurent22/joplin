@@ -330,6 +330,7 @@ export interface SyncItemEntity {
   'item_type'?: number;
   'sync_disabled'?: number;
   'sync_disabled_reason'?: string;
+  'sync_warning_ignored'?: number;
   'sync_target'?: number;
   'sync_time'?: number;
   'type_'?: number;
@@ -434,6 +435,7 @@ export const databaseSchema: DatabaseTables = {
 		item_type: { type: 'number' },
 		sync_disabled: { type: 'number' },
 		sync_disabled_reason: { type: 'string' },
+		sync_warning_ignored: { type: 'number' },
 		sync_target: { type: 'number' },
 		sync_time: { type: 'number' },
 		type_: { type: 'number' },

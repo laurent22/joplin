@@ -19,7 +19,7 @@ const generateChecksumFile = () => {
 		}
 	}
 	if (appImageName === '') {
-		throw 'AppImage not found!';
+		throw new Error('AppImage not found!');
 	}
 	const appImagePath = path.join(distPath, appImageName);
 	const appImageContent = fs.readFileSync(appImagePath);

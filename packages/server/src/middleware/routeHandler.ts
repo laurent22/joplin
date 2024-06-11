@@ -5,9 +5,14 @@ import config from '../config';
 import { userIp } from '../utils/requestUtils';
 import { createCsrfTag } from '../utils/csrf';
 import { getImpersonatorAdminSessionId } from '../routes/admin/utils/users/impersonate';
+import { onRequestComplete, onRequestStart } from '../utils/metrics';
+import { uuidgen } from '@joplin/lib/uuid';
 
 export default async function(ctx: AppContext) {
 	const requestStartTime = Date.now();
+	const requestId = uuidgen();
+
+	onRequestStart(requestId);
 
 	try {
 		const { response: responseObject, path } = await execRequest(ctx.joplin.routes, ctx);
@@ -76,6 +81,7 @@ export default async function(ctx: AppContext) {
 			ctx.response.body = await ctx.joplin.services.mustache.renderView(view);
 		} else { // JSON
 			ctx.response.set('Content-Type', 'application/json');
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const r: any = { error: error.message };
 			if (ctx.joplin.env === Env.Dev && error.stack) r.stack = error.stack;
 			if (error.code) r.code = error.code;
@@ -87,4 +93,6 @@ export default async function(ctx: AppContext) {
 		const requestDuration = Date.now() - requestStartTime;
 		ctx.joplin.appLogger().info(`${ctx.request.method} ${ctx.path} (${ctx.response.status}) (${requestDuration}ms)`);
 	}
+
+	onRequestComplete(requestId);
 }

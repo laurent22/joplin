@@ -1,1 +1,1 @@
-a note taking and to-do app with sync between Linux, macOS, Windows, and mobile
+A note taking and to-do app with sync between Linux, macOS, Windows, and mobile

@@ -1,4 +1,5 @@
 interface CacheEntry {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	object: any;
 	timestamp: number;
 }
@@ -11,6 +12,7 @@ class Cache {
 
 	private cache: CacheEntries = {};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async setAny(key: string, o: any): Promise<void> {
 		this.cache[key] = {
 			object: JSON.stringify(o),
@@ -18,11 +20,13 @@ class Cache {
 		};
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async setObject(key: string, object: any): Promise<void> {
 		if (!object) return;
 		return this.setAny(key, object);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async getAny(key: string): Promise<any> {
 		if (!this.cache[key]) return null;
 		try {

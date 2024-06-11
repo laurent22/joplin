@@ -1,7 +1,9 @@
+import { ThemeStyle } from '@joplin/lib/theme';
+
 const { buildStyle } = require('@joplin/lib/theme');
 
 export default function styles(themeId: number) {
-	return buildStyle('KeymapConfigScreen', themeId, (theme: any) => {
+	return buildStyle('KeymapConfigScreen', themeId, (theme: ThemeStyle) => {
 		return {
 			container: {
 				...theme.containerStyle,

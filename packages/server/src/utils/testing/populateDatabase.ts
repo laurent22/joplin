@@ -319,22 +319,26 @@ const main = async (_options?: Options) => {
 	{
 		const promises = [];
 
-		for (let i = 0; i < 20000; i++) {
-			promises.push((async () => {
-				const user = randomElement(users);
-				const action = randomActionKey();
-				try {
-					const done = await reactions[action](context, user);
-					if (done) updateReport(action);
-					logger().info(`Done action ${i}: ${action}. User: ${user.email}${!done ? ' (Skipped)' : ''}`);
-				} catch (error) {
-					error.message = `Could not do action ${i}: ${action}. User: ${user.email}: ${error.message}`;
-					throw error;
-				}
-			})());
+		const totalActions = 5000;
+		const batchSize = 1000; // Don't change this - it will fail with higher numbers
+		const loopCount = Math.ceil(totalActions / batchSize);
+		for (let loopIndex = 0; loopIndex < loopCount; loopIndex++) {
+			for (let i = 0; i < batchSize; i++) {
+				promises.push((async () => {
+					const user = randomElement(users);
+					const action = randomActionKey();
+					try {
+						const done = await reactions[action](context, user);
+						if (done) updateReport(action);
+						logger().info(`Done action ${i}: ${action}. User: ${user.email}${!done ? ' (Skipped)' : ''}`);
+					} catch (error) {
+						error.message = `Could not do action ${i}: ${action}. User: ${user.email}: ${error.message}`;
+						logger().warn(error.message);
+					}
+				})());
+			}
+			await Promise.all(promises);
 		}
-
-		await Promise.all(promises);
 	}
 
 	// const changeIds = (await models().change().all()).map(c => c.id);

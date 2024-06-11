@@ -84,6 +84,7 @@ const MarkdownToolbar: React.FC<MarkdownToolbarProps> = (props: MarkdownToolbarP
 	);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const useStyles = (styleProps: any, theme: Theme) => {
 	return useMemo(() => {
 		return StyleSheet.create({

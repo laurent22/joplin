@@ -1,6 +1,5 @@
 import { utils as pluginUtils, PluginStates } from '@joplin/lib/services/plugins/reducer';
 import CommandService from '@joplin/lib/services/CommandService';
-import eventManager, { EventName } from '@joplin/lib/eventManager';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import InteropServiceHelper from '../../InteropServiceHelper';
@@ -44,25 +43,30 @@ export default class NoteListUtils {
 
 		if (!includeEncryptedNotes && !includeDeletedNotes) {
 			menu.append(
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				new MenuItem(menuUtils.commandToStatefulMenuItem('setTags', noteIds) as any),
 			);
 
 			menu.append(
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				new MenuItem(menuUtils.commandToStatefulMenuItem('moveToFolder', noteIds) as any),
 			);
 
 			menu.append(
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				new MenuItem(menuUtils.commandToStatefulMenuItem('duplicateNote', noteIds) as any),
 			);
 
 			if (singleNoteId) {
 				const cmd = props.watchedNoteFiles.includes(singleNoteId) ? 'stopExternalEditing' : 'startExternalEditing';
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem(cmd, singleNoteId) as any));
 			}
 
 			if (noteIds.length <= 1) {
 				menu.append(
 					new MenuItem(
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 						menuUtils.commandToStatefulMenuItem('toggleNoteType', noteIds) as any,
 					),
 				);
@@ -73,7 +77,6 @@ export default class NoteListUtils {
 						const newNote = Note.changeNoteType(note, type);
 						if (newNote === note) continue;
 						await Note.save(newNote, { userSideValidation: true });
-						eventManager.emit(EventName.NoteTypeToggle, { noteId: note.id });
 					}
 				};
 
@@ -124,6 +127,7 @@ export default class NoteListUtils {
 			if ([9, 10].includes(Setting.value('sync.target'))) {
 				menu.append(
 					new MenuItem(
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 						menuUtils.commandToStatefulMenuItem('showShareNoteDialog', noteIds.slice()) as any,
 					),
 				);
@@ -155,6 +159,7 @@ export default class NoteListUtils {
 
 			exportMenu.append(
 				new MenuItem(
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					menuUtils.commandToStatefulMenuItem('exportPdf', noteIds) as any,
 				),
 			);
@@ -167,18 +172,21 @@ export default class NoteListUtils {
 		if (includeDeletedNotes) {
 			menu.append(
 				new MenuItem(
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					menuUtils.commandToStatefulMenuItem('restoreNote', noteIds) as any,
 				),
 			);
 
 			menu.append(
 				new MenuItem(
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					menuUtils.commandToStatefulMenuItem('permanentlyDeleteNote', noteIds) as any,
 				),
 			);
 		} else {
 			menu.append(
 				new MenuItem(
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					menuUtils.commandToStatefulMenuItem('deleteNote', noteIds) as any,
 				),
 			);
@@ -192,6 +200,7 @@ export default class NoteListUtils {
 
 			if (cmdService.isEnabled(info.view.commandName)) {
 				menu.append(
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					new MenuItem(menuUtils.commandToStatefulMenuItem(info.view.commandName, noteIds) as any),
 				);
 			}

@@ -2,16 +2,28 @@ import { RuleOptions } from '../../MdToHtml';
 
 export default {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	assets: function(theme: any) {
 		return [
-			{ name: 'mermaid.min.js' },
-			{ name: 'mermaid_render.js' },
+			{
+				name: 'mermaid.min.js',
+			},
+			{
+				name: 'mermaid_render.js',
+			},
 			{
 				inline: true,
 				// Note: Mermaid is buggy when rendering below a certain width (500px?)
 				// so set an arbitrarily high width here for the container. Once the
 				// diagram is rendered it will be reset to 100% in mermaid_render.js
 				text: '.mermaid { width: 640px; }',
+				mime: 'text/css',
+			},
+			{
+				inline: true,
+				// Override the default pre styles. Using the default `white-space: pre`
+				// can cause math expressions to be too tall and break some diagrams.
+				text: 'pre.mermaid > svg { white-space: unset; }',
 				mime: 'text/css',
 			},
 			{
@@ -35,20 +47,30 @@ export default {
 				`.trim(),
 				mime: 'text/css',
 			},
-		];
+		].map(e => {
+			return {
+				source: 'mermaid',
+				...e,
+			};
+		});
 	},
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	plugin: function(markdownIt: any, ruleOptions: RuleOptions) {
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 		const defaultRender: Function = markdownIt.renderer.rules.fence || function(tokens: any[], idx: number, options: any, env: any, self: any) {
 			return self.renderToken(tokens, idx, options, env, self);
 		};
 
 		const exportButtonMarkup = isDesktop(ruleOptions.platformName) ? exportGraphButton(ruleOptions) : '';
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		markdownIt.renderer.rules.fence = function(tokens: any[], idx: number, options: any, env: any, self: any) {
 			const token = tokens[idx];
 			if (token.info !== 'mermaid') return defaultRender(tokens, idx, options, env, self);
+
+			ruleOptions.context.pluginWasUsed.mermaid = true;
+
 			const contentHtml = markdownIt.utils.escapeHtml(token.content);
 
 			const cssClasses = ['mermaid'];

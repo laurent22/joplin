@@ -7,6 +7,7 @@ export interface SyncTargetInfo {
 	supportsSelfHosted: boolean;
 	supportsConfigCheck: boolean;
 	supportsRecursiveLinkedNotes: boolean;
+	supportsShare: boolean;
 	description: string;
 	classRef: typeof BaseSyncTarget;
 }
@@ -37,6 +38,7 @@ export default class SyncTargetRegistry {
 					supportsSelfHosted: SyncTargetClass.supportsSelfHosted(),
 					supportsConfigCheck: SyncTargetClass.supportsConfigCheck(),
 					supportsRecursiveLinkedNotes: SyncTargetClass.supportsRecursiveLinkedNotes(),
+					supportsShare: SyncTargetClass.supportsShare(),
 				};
 				return output;
 			}

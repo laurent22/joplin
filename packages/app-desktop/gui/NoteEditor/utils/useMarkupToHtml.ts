@@ -12,6 +12,7 @@ interface HookDependencies {
 	themeId: number;
 	customCss: string;
 	plugins: PluginStates;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	settingValue: (pluginId: string, key: string)=> any;
 	whiteBackgroundNoteRendering: boolean;
 }
@@ -24,9 +25,9 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
 			customCss: customCss || '',
 		});
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [plugins, customCss]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return useCallback(async (markupLanguage: number, md: string, options: MarkupToHtmlOptions = null): Promise<any> => {
 		options = {
 			replaceResourceInternalToExternalLinks: false,
@@ -61,6 +62,5 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 		});
 
 		return result;
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [themeId, customCss, markupToHtml, whiteBackgroundNoteRendering]);
+	}, [themeId, markupToHtml, whiteBackgroundNoteRendering, deps.settingValue]);
 }

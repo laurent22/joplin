@@ -5,10 +5,12 @@ import * as formidable from 'formidable';
 import { Fields, Files } from 'formidable';
 import { IncomingMessage } from 'http';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export type BodyFields = Record<string, any>;
 
 interface FormParseResult {
 	fields: BodyFields;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	files: any;
 }
 
@@ -21,6 +23,7 @@ interface FormParseRequest extends IncomingMessage {
 	__isMocked: boolean;
 	__parsed: ParsedBody;
 	files: Files;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	body: any;
 }
 
@@ -35,6 +38,7 @@ interface FormParseRequest extends IncomingMessage {
 // As of 2024-01-18, this may no longer be necessary since we reverted to Formidable v2, but keeping
 // it anyway just in case.
 const convertFieldsToKeyValue = (fields: Files | Fields) => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const convertedFields: Record<string, any> = {};
 	for (const [k, v] of Object.entries(fields)) {
 		if (Array.isArray(v)) {
@@ -49,12 +53,14 @@ const convertFieldsToKeyValue = (fields: Files | Fields) => {
 
 // Input should be Koa ctx.req, which corresponds to the native Node request
 export async function formParse(request: IncomingMessage): Promise<FormParseResult> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const req: FormParseRequest = request as any;
 
 	// It's not clear how to get mocked requests to be parsed successfully by
 	// formidable so we use this small hack. If it's mocked, we are running test
 	// units and the request body is already an object and can be returned.
 	if (req.__isMocked) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any = {};
 		if (req.files) output.files = req.files;
 		output.fields = req.body || {};
@@ -73,6 +79,7 @@ export async function formParse(request: IncomingMessage): Promise<FormParseResu
 			allowEmptyFiles: true,
 			minFileSize: 0,
 		});
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		form.parse(req, (error: any, fields: Fields, files: Files) => {
 			if (error) {
 				error.message = `Could not parse form: ${error.message}`;
@@ -94,11 +101,13 @@ export async function formParse(request: IncomingMessage): Promise<FormParseResu
 	});
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function bodyFields<T>(req: any/* , filter:string[] = null*/): Promise<T> {
 	const form = await formParse(req);
 	return form.fields as T;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const bodyFiles = async <T>(req: any/* , filter:string[] = null*/): Promise<T> => {
 	const form = await formParse(req);
 	return form.files as T;
@@ -108,6 +117,7 @@ export function ownerRequired(ctx: AppContext) {
 	if (!ctx.joplin.owner) throw new ErrorForbidden();
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function headerSessionId(headers: any): string {
 	return headers['x-api-auth'] ? headers['x-api-auth'] : '';
 }

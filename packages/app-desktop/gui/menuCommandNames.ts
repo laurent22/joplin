@@ -34,6 +34,7 @@ export default function() {
 		'toggleExternalEditing',
 		'toggleLayoutMoveMode',
 		'resetLayout',
+		'toggleMenuBar',
 		'toggleNoteList',
 		'toggleNotesSortOrderField',
 		'toggleNotesSortOrderReverse',

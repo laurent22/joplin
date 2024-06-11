@@ -9,6 +9,7 @@ declare global {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 declare const webviewLib: any;
 
 const messenger = new WebViewToRNMessenger<NoteViewerLocalApi, NoteViewerRemoteApi>(
@@ -16,10 +17,12 @@ const messenger = new WebViewToRNMessenger<NoteViewerLocalApi, NoteViewerRemoteA
 	null,
 );
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 (window as any).joplinPostMessage_ = (message: string, _args: any) => {
 	return messenger.remoteApi.onPostMessage(message);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 (window as any).webviewApi = {
 	postMessage: messenger.remoteApi.onPostPluginMessage,
 };

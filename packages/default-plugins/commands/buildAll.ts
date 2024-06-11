@@ -1,7 +1,10 @@
 import buildDefaultPlugins from '../buildDefaultPlugins';
 
 const buildAll = (outputDirectory: string) => {
-	return buildDefaultPlugins(outputDirectory, async () => { });
+	return buildDefaultPlugins(outputDirectory, {
+		beforeInstall: async () => { },
+		beforePatch: async () => { },
+	});
 };
 
 export default buildAll;

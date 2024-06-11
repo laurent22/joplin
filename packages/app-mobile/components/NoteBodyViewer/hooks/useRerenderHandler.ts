@@ -75,6 +75,7 @@ const useRerenderHandler = (props: Props) => {
 		createEditPopupSyntax, destroyEditPopupSyntax, pluginSettingKeys,
 	];
 	const previousDeps = usePrevious(effectDependencies, []);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const changedDeps = effectDependencies.reduce((accum: any, dependency: any, index: any) => {
 		if (dependency !== previousDeps[index]) {
 			return { ...accum, [index]: true };
@@ -82,7 +83,8 @@ const useRerenderHandler = (props: Props) => {
 		return accum;
 	}, {});
 	const onlyNoteBodyHasChanged = Object.keys(changedDeps).length === 1 && changedDeps[0];
-	const onlyCheckboxesHaveChanged = previousDeps[0] && changedDeps[0] && onlyCheckboxHasChangedHack(previousDeps[0], props.noteBody);
+	const previousBody = previousDeps[0] as string;
+	const onlyCheckboxesHaveChanged = previousDeps[0] && changedDeps[0] && onlyCheckboxHasChangedHack(previousBody, props.noteBody);
 	const previousHash = usePrevious(props.noteHash, '');
 	const hashChanged = previousHash !== props.noteHash;
 
@@ -104,6 +106,7 @@ const useRerenderHandler = (props: Props) => {
 			return;
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const pluginSettings: Record<string, any> = { };
 		for (const key in pluginSettingKeys) {
 			pluginSettings[key] = Setting.value(`plugin-${key}`);

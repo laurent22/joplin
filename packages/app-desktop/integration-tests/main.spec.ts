@@ -89,50 +89,6 @@ test.describe('main', () => {
 		await expect(viewerFrame.locator('.joplin-editable > .katex').first()).toBeAttached();
 	});
 
-	test('HTML links should be preserved when editing a note in the WYSIWYG editor', async ({ electronApp, mainWindow }) => {
-		const mainScreen = new MainScreen(mainWindow);
-		await mainScreen.createNewNote('Testing!');
-		const editor = mainScreen.noteEditor;
-
-		// Set the note's content
-		await editor.focusCodeMirrorEditor();
-
-		// Attach this file to the note (create a resource ID)
-		await setFilePickerResponse(electronApp, [__filename]);
-		await editor.attachFileButton.click();
-
-		// Wait to render
-		const viewerFrame = editor.getNoteViewerIframe();
-		await viewerFrame.locator('a[data-from-md]').waitFor();
-
-		// Should have an attached resource
-		const codeMirrorContent = await editor.codeMirrorEditor.innerText();
-
-		const resourceUrlExpression = /\[.*\]\(:\/(\w+)\)/;
-		expect(codeMirrorContent).toMatch(resourceUrlExpression);
-		const resourceId = codeMirrorContent.match(resourceUrlExpression)[1];
-
-		// Create a new note with just an HTML link
-		await mainScreen.createNewNote('Another test');
-		await editor.codeMirrorEditor.click();
-		await mainWindow.keyboard.type(`<a href=":/${resourceId}">HTML Link</a>`);
-
-		// Switch to the RTE
-		await editor.toggleEditorsButton.click();
-		await editor.richTextEditor.waitFor();
-
-		// Edit the note to cause the original content to update
-		await editor.getTinyMCEFrameLocator().locator('a').click();
-		await mainWindow.keyboard.type('Test...');
-
-		await editor.toggleEditorsButton.click();
-		await editor.codeMirrorEditor.waitFor();
-
-		// Note should still contain the resource ID and note title
-		const finalCodeMirrorContent = await editor.codeMirrorEditor.innerText();
-		expect(finalCodeMirrorContent).toContain(`:/${resourceId}`);
-	});
-
 	test('should correctly resize large images', async ({ electronApp, mainWindow }) => {
 		const mainScreen = new MainScreen(mainWindow);
 		await mainScreen.createNewNote('Image resize test (part 1)');

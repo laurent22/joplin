@@ -16,7 +16,7 @@ import Tag from '../../../models/Tag';
 import Resource from '../../../models/Resource';
 import htmlUtils from '../../../htmlUtils';
 import markupLanguageUtils from '../../../markupLanguageUtils';
-const mimeUtils = require('../../../mime-utils.js').mime;
+import * as mimeUtils from '../../../mime-utils';
 const md5 = require('md5');
 import HtmlToMd from '../../../HtmlToMd';
 const urlUtils = require('../../../urlUtils.js');
@@ -29,9 +29,11 @@ const { ErrorNotFound } = require('../utils/errors');
 import { fileUriToPath } from '@joplin/utils/url';
 import { NoteEntity, ResourceEntity } from '../../database/types';
 import { DownloadController } from '../../../downloadController';
+import { FetchBlobOptions } from '../../../types';
 
 const logger = Logger.create('routes/notes');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let htmlToMdParser_: any = null;
 
 function htmlToMdParser() {
@@ -41,6 +43,7 @@ function htmlToMdParser() {
 }
 
 type RequestNote = {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	id?: any;
 	parent_id?: string;
 	title: string;
@@ -59,16 +62,19 @@ type RequestNote = {
 	body_html: string;
 	base_url?: string;
 	convert_to: string;
+	source?: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	anchor_names?: any[];
 	image_sizes?: object;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	stylesheets: any;
 };
 
-type FetchOptions = {
+interface FetchOptions extends FetchBlobOptions {
 	timeout?: number;
 	maxRedirects?: number;
 	downloadController?: DownloadController;
-};
+}
 
 
 type DownloadedMediaFile = {
@@ -76,12 +82,13 @@ type DownloadedMediaFile = {
 	path: string;
 };
 
-interface ResourceFromPath extends DownloadedMediaFile {
+export interface ResourceFromPath extends DownloadedMediaFile {
 	resource: ResourceEntity;
 }
 
 
 async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {
 		title: requestNote.title ? requestNote.title : '',
 		body: requestNote.body ? requestNote.body : '',
@@ -160,12 +167,14 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 	if ('longitude' in requestNote) output.longitude = requestNote.longitude;
 	if ('latitude' in requestNote) output.latitude = requestNote.latitude;
 	if ('altitude' in requestNote) output.altitude = requestNote.altitude;
+	if ('source' in requestNote) output.source = requestNote.source;
 
 	if (!output.markup_language) output.markup_language = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function buildNoteStyleSheet(stylesheets: any[]) {
 	if (!stylesheets) return [];
 
@@ -192,6 +201,7 @@ async function buildNoteStyleSheet(stylesheets: any[]) {
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function tryToGuessExtFromMimeType(response: any, mediaPath: string) {
 	const mimeType = mimeTypeFromHeaders(response.headers);
 	if (!mimeType) return mediaPath;
@@ -239,8 +249,6 @@ const isValidUrl = (url: string, isDataUrl: boolean, urlProtocol?: string, allow
 };
 
 export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
-	logger.info('Downloading media file', url);
-
 	// The URL we get to download have been extracted from the Markdown document
 	url = markdownUtils.unescapeLinkUrl(url);
 
@@ -308,20 +316,17 @@ async function downloadMediaFiles(urls: string[], fetchOptions?: FetchOptions, a
 }
 
 export async function createResourcesFromPaths(mediaFiles: DownloadedMediaFile[]) {
-	const resources: Promise<ResourceFromPath>[] = [];
-
-	for (const mediaFile of mediaFiles) {
+	const processFile = async (mediaFile: DownloadedMediaFile) => {
 		try {
-			resources.push(
-				shim.createResourceFromPath(mediaFile.path)
-					// eslint-disable-next-line
-					.then(resource => ({ ...mediaFile, resource }))
-			);
+			const resource = await shim.createResourceFromPath(mediaFile.path);
+			return { ...mediaFile, resource };
 		} catch (error) {
 			logger.warn(`Cannot create resource for ${mediaFile.originalUrl}`, error);
+			return { ...mediaFile, resource: null };
 		}
-	}
+	};
 
+	const resources = mediaFiles.map(processFile);
 	return Promise.all(resources);
 }
 
@@ -336,7 +341,9 @@ async function removeTempFiles(urls: ResourceFromPath[]) {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function replaceUrlsByResources(markupLanguage: number, md: string, urls: ResourceFromPath[], imageSizes: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const imageSizesIndexes: any = {};
 
 	if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
@@ -356,7 +363,7 @@ function replaceUrlsByResources(markupLanguage: number, md: string, urls: Resour
 		//
 		//     /(!?\[.*?\]\()([^\s\)]+)(.*?\))/g
 		//
-		// eslint-disable-next-line no-useless-escape
+		// eslint-disable-next-line no-useless-escape, @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return md.replace(/(!?\[.*?\]\()([^\s\)]+)(.*?\))/g, (_match: any, before: string, url: string, after: string) => {
 			let type = 'link';
 			if (before.startsWith('[embedded_pdf]')) {
@@ -404,12 +411,14 @@ export function extractMediaUrls(markupLanguage: number, text: string): string[]
 }
 
 // Note must have been saved first
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function attachImageFromDataUrl(note: any, imageDataUrl: string, cropRect: any) {
 	const tempDir = Setting.value('tempDir');
 	const mime = mimeUtils.fromDataUrl(imageDataUrl);
 	let ext = mimeUtils.toFileExtension(mime) || '';
 	if (ext) ext = `.${ext}`;
 	const tempFilePath = `${tempDir}/${md5(`${Math.random()}_${Date.now()}`)}${ext}`;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const imageConvOptions: any = {};
 	if (cropRect) imageConvOptions.cropRect = cropRect;
 	await shim.imageFromDataUrl(imageDataUrl, tempFilePath, imageConvOptions);
@@ -418,7 +427,8 @@ async function attachImageFromDataUrl(note: any, imageDataUrl: string, cropRect:
 
 export const extractNoteFromHTML = async (
 	requestNote: RequestNote,
-	requestId: number,
+	requestId: string,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	imageSizes: any,
 	fetchOptions?: FetchOptions,
 	allowedProtocols?: string[],
@@ -431,10 +441,13 @@ export const extractNoteFromHTML = async (
 
 	const mediaFiles = await downloadMediaFiles(mediaUrls, fetchOptions, allowedProtocols);
 
-	logger.info(`Request (${requestId}): Creating resources from paths: ${mediaFiles.length}`);
-
+	logger.info(`Request (${requestId}): Creating resources from paths (resizing images): ${mediaFiles.length}`);
 	const resources = await createResourcesFromPaths(mediaFiles);
+
+	logger.info(`Request (${requestId}): Deleting temporary files`);
 	await removeTempFiles(resources);
+
+	logger.info(`Request (${requestId}): Replacing urls by resources`);
 	note.body = replaceUrlsByResources(note.markup_language, note.body, resources, imageSizes);
 
 	logger.info(`Request (${requestId}): Saving note...`);
@@ -468,7 +481,10 @@ export default async function(request: Request, id: string = null, link: string 
 			throw new ErrorNotFound();
 		}
 
-		return defaultAction(BaseModel.TYPE_NOTE, request, id, link);
+		const sql: string[] = [];
+		if (request.query.include_deleted !== '1') sql.push('deleted_time = 0');
+		if (request.query.include_conflicts !== '1') sql.push('is_conflict = 0');
+		return defaultAction(BaseModel.TYPE_NOTE, request, id, link, null, { sql: sql.join(' AND ') });
 	}
 
 	if (request.method === RequestMethod.POST) {
@@ -484,7 +500,7 @@ export default async function(request: Request, id: string = null, link: string 
 		const allowedProtocolsForDownloadMediaFiles = ['http:', 'https:', 'file:', 'data:'];
 		const extracted = await extractNoteFromHTML(
 			requestNote,
-			requestId,
+			String(requestId),
 			imageSizes,
 			undefined,
 			allowedProtocolsForDownloadMediaFiles,

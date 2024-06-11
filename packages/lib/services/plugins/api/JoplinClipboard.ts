@@ -2,9 +2,12 @@
 
 export default class JoplinClipboard {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private electronClipboard_: any = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private electronNativeImage_: any = null;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(electronClipboard: any, electronNativeImage: any) {
 		this.electronClipboard_ = electronClipboard;
 		this.electronNativeImage_ = electronNativeImage;

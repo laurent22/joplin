@@ -1,17 +1,19 @@
 import { useEffect } from 'react';
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 export default function(frameWindow: any, onSubmit: Function, onDismiss: Function, loadedHtmlHash: string) {
 	const document = frameWindow && frameWindow.document ? frameWindow.document : null;
 
 	useEffect(() => {
 		if (!document) return () => {};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function onFormSubmit(event: any) {
 			event.preventDefault();
 			if (onSubmit) onSubmit();
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function onKeyDown(event: any) {
 			if (event.key === 'Escape') {
 				if (onDismiss) onDismiss();

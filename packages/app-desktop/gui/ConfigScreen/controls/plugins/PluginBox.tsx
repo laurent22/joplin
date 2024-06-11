@@ -7,6 +7,7 @@ import Button, { ButtonLevel } from '../../../Button/Button';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import bridge from '../../../../services/bridge';
 import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
 
 export enum InstallState {
 	NotInstalled = 1,
@@ -37,6 +38,7 @@ interface Props {
 function manifestToItem(manifest: PluginManifest): PluginItem {
 	return {
 		manifest: manifest,
+		installed: true,
 		enabled: true,
 		deleted: false,
 		devMode: false,
@@ -97,6 +99,7 @@ const BoxedLabel = styled.div`
 	margin-top: auto;
 `;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const StyledNameAndVersion = styled.div<{ mb: any }>`
 	font-family: ${props => props.theme.fontFamily};
 	color: ${props => props.theme.color};
@@ -230,7 +233,7 @@ export default function(props: Props) {
 			return (
 				<CellFooter>
 					<NeedUpgradeMessage>
-						{_('Please upgrade Joplin to use this plugin')}
+						{PluginService.instance().describeIncompatibility(props.manifest)}
 					</NeedUpgradeMessage>
 				</CellFooter>
 			);

@@ -12,26 +12,8 @@ import { focus } from '@joplin/lib/utils/focusHandler';
 
 const logger = Logger.create('CodeMirror 6 commands');
 
-const wrapSelectionWithStrings = (editor: CodeMirrorControl, string1: string, string2 = '', defaultText = '') => {
-	if (editor.somethingSelected()) {
-		editor.wrapSelections(string1, string2);
-	} else {
-		editor.wrapSelections(string1 + defaultText, string2);
-
-		// Now select the default text so the user can replace it
-		const selections = editor.listSelections();
-		const newSelections = [];
-		for (let i = 0; i < selections.length; i++) {
-			const s = selections[i];
-			const anchor = { line: s.anchor.line, ch: s.anchor.ch + string1.length };
-			const head = { line: s.head.line, ch: s.head.ch - string2.length };
-			newSelections.push({ anchor: anchor, head: head });
-		}
-		editor.setSelections(newSelections);
-	}
-};
-
 interface Props {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	webviewRef: RefObject<any>;
 	editorRef: RefObject<CodeMirrorControl>;
 	editorContent: string;
@@ -55,6 +37,7 @@ const useEditorCommands = (props: Props) => {
 		};
 
 		return {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			dropItems: async (cmd: any) => {
 				if (cmd.type === 'notes') {
 					editorRef.current.insertText(cmd.markdownTags.join('\n'));
@@ -90,8 +73,11 @@ const useEditorCommands = (props: Props) => {
 			textLink: async () => {
 				const url = await dialogs.prompt(_('Insert Hyperlink'));
 				focus('useEditorCommands::textLink', editorRef.current);
-				if (url) wrapSelectionWithStrings(editorRef.current, '[', `](${url})`);
+				if (url) {
+					editorRef.current.wrapSelections('[', `](${url})`);
+				}
 			},
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			insertText: (value: any) => editorRef.current.insertText(value),
 			attachFile: async () => {
 				const newBody = await commandAttachFileToBody(
@@ -105,7 +91,9 @@ const useEditorCommands = (props: Props) => {
 			'editor.execCommand': (value: CommandValue) => {
 				if (!('args' in value)) value.args = [];
 
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				if ((editorRef.current as any)[value.name]) {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const result = (editorRef.current as any)[value.name](...value.args);
 					return result;
 				} else if (editorRef.current.supportsCommand(value.name)) {

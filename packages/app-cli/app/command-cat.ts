@@ -18,6 +18,7 @@ class Command extends BaseCommand {
 		return [['-v, --verbose', _('Displays the complete information about note.')]];
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public override async action(args: any) {
 		const title = args['note'];
 

@@ -22,6 +22,8 @@ const defaultEnvValues: EnvVariables = {
 	ERROR_STACK_TRACES: false,
 	COOKIES_SECURE: false,
 	RUNNING_IN_DOCKER: false,
+	USERS_WITH_REPLICATION: '', // Temporary
+	HEARTBEAT_MESSAGE_SCHEDULE: '* * * * *',
 
 	// The admin panel is accessible only if this is an admin instance.
 	// Additionally, processing services (those defined in setupTaskService.ts)
@@ -59,6 +61,7 @@ const defaultEnvValues: EnvVariables = {
 	DB_SLOW_QUERY_LOG_MIN_DURATION: 1000,
 	DB_AUTO_MIGRATION: true,
 	DB_ALLOW_INCOMPLETE_MIGRATIONS: false,
+	DB_USE_SLAVE: false,
 
 	POSTGRES_PASSWORD: 'joplin',
 	POSTGRES_DATABASE: 'joplin',
@@ -67,8 +70,16 @@ const defaultEnvValues: EnvVariables = {
 	POSTGRES_PORT: 5432,
 	POSTGRES_CONNECTION_STRING: '',
 
+	SLAVE_POSTGRES_PASSWORD: 'joplin',
+	SLAVE_POSTGRES_DATABASE: 'joplin',
+	SLAVE_POSTGRES_USER: 'joplin',
+	SLAVE_POSTGRES_HOST: '',
+	SLAVE_POSTGRES_PORT: 5432,
+	SLAVE_POSTGRES_CONNECTION_STRING: '',
+
 	// This must be the full path to the database file
 	SQLITE_DATABASE: '',
+	SLAVE_SQLITE_DATABASE: '',
 
 	// ==================================================
 	// Content driver config
@@ -141,6 +152,9 @@ export interface EnvVariables {
 	ERROR_STACK_TRACES: boolean;
 	COOKIES_SECURE: boolean;
 	RUNNING_IN_DOCKER: boolean;
+	USERS_WITH_REPLICATION: string;
+	HEARTBEAT_MESSAGE_SCHEDULE: string;
+
 	MAX_TIME_DRIFT: number;
 	NTP_SERVER: string;
 	DELTA_INCLUDES_ITEMS: boolean;
@@ -157,6 +171,7 @@ export interface EnvVariables {
 	DB_SLOW_QUERY_LOG_MIN_DURATION: number;
 	DB_AUTO_MIGRATION: boolean;
 	DB_ALLOW_INCOMPLETE_MIGRATIONS: boolean;
+	DB_USE_SLAVE: boolean;
 
 	POSTGRES_PASSWORD: string;
 	POSTGRES_DATABASE: string;
@@ -165,7 +180,15 @@ export interface EnvVariables {
 	POSTGRES_PORT: number;
 	POSTGRES_CONNECTION_STRING: string;
 
+	SLAVE_POSTGRES_PASSWORD: string;
+	SLAVE_POSTGRES_DATABASE: string;
+	SLAVE_POSTGRES_USER: string;
+	SLAVE_POSTGRES_HOST: string;
+	SLAVE_POSTGRES_PORT: number;
+	SLAVE_POSTGRES_CONNECTION_STRING: string;
+
 	SQLITE_DATABASE: string;
+	SLAVE_SQLITE_DATABASE: string;
 
 	STORAGE_DRIVER: string;
 	STORAGE_DRIVER_FALLBACK: string;
@@ -214,6 +237,7 @@ const parseBoolean = (s: string): boolean => {
 	throw new Error(`Invalid boolean value: "${s}" (Must be one of "true", "false", "0, "1")`);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function parseEnv(rawEnv: Record<string, string>, defaultOverrides: any = null): EnvVariables {
 	const output: EnvVariables = {
 		...defaultEnvValues,
@@ -229,10 +253,13 @@ export function parseEnv(rawEnv: Record<string, string>, defaultOverrides: any =
 			if (typeof value === 'number') {
 				const v = Number(rawEnvValue);
 				if (isNaN(v)) throw new Error(`Invalid number value "${rawEnvValue}"`);
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				(output as any)[key] = v;
 			} else if (typeof value === 'boolean') {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				(output as any)[key] = parseBoolean(rawEnvValue);
 			} else if (typeof value === 'string') {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				(output as any)[key] = `${rawEnvValue}`;
 			} else {
 				throw new Error(`Invalid env default value type: ${typeof value}`);

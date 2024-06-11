@@ -1,5 +1,5 @@
 // Metro configuration for React Native
-// https://github.com/facebook/react-native
+// https://reactnative.dev/docs/metro
 
 // The technique below to get the symlinked packages to work with the Metro
 // bundler comes from this comment:
@@ -11,7 +11,7 @@
 // https://github.com/facebook/metro/issues/1#issuecomment-511228599
 
 const path = require('path');
-const { getDefaultConfig } = require('metro-config');
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 
 const localPackages = {
 	'@joplin/lib': path.resolve(__dirname, '../lib/'),
@@ -32,12 +32,14 @@ const remappedPackages = {
 	...localPackages,
 };
 
-// Some packages aren't available in react-native and thus must be replaced by browserified
-// versions. For example, this allows us to `import {resolve} from 'path'` rather than
+// cSpell:disable
+// Some packages aren't available in react-native and thus must be polyfilled
+// For example, this allows us to `import {resolve} from 'path'` rather than
 // `const { resolve } = require('path-browserify')` ('path-browerify' doesn't have its own type
 // definitions).
-const browserifiedPackages = ['path'];
-for (const package of browserifiedPackages) {
+// cSpell:enable
+const polyfilledPackages = ['path'];
+for (const package of polyfilledPackages) {
 	remappedPackages[package] = path.resolve(__dirname, `./node_modules/${package}-browserify/`);
 }
 
@@ -46,9 +48,13 @@ for (const [, v] of Object.entries(localPackages)) {
 	watchedFolders.push(v);
 }
 
-const defaultConfig = getDefaultConfig.getDefaultValues(__dirname);
+const defaultConfig = getDefaultConfig(__dirname);
 
-module.exports = {
+// Metro configuration
+// https://facebook.github.io/metro/docs/configuration
+//
+// @type {import('metro-config').MetroConfig}
+const config = {
 	transformer: {
 		getTransformOptions: async () => ({
 			transform: {
@@ -91,3 +97,5 @@ module.exports = {
 	projectRoot: path.resolve(__dirname),
 	watchFolders: watchedFolders,
 };
+
+module.exports = mergeConfig(defaultConfig, config);

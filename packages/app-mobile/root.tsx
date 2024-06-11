@@ -60,7 +60,7 @@ const { TagsScreen } = require('./components/screens/tags.js');
 import ConfigScreen from './components/screens/ConfigScreen/ConfigScreen';
 const { FolderScreen } = require('./components/screens/folder.js');
 import LogScreen from './components/screens/LogScreen';
-const { StatusScreen } = require('./components/screens/status.js');
+import StatusScreen from './components/screens/status';
 const { SearchScreen } = require('./components/screens/search.js');
 const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js');
 import EncryptionConfigScreen from './components/screens/encryption-config';
@@ -72,13 +72,13 @@ const { SideMenuContentNote } = require('./components/side-menu-content-note.js'
 const { DatabaseDriverReactNative } = require('./utils/database-driver-react-native');
 import { reg } from '@joplin/lib/registry';
 const { defaultState } = require('@joplin/lib/reducer');
-const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local');
+import FileApiDriverLocal from '@joplin/lib/file-api-driver-local';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 import { themeStyle } from './components/global-style';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
-const SyncTargetFilesystem = require('@joplin/lib/SyncTargetFilesystem.js');
+import SyncTargetFilesystem from '@joplin/lib/SyncTargetFilesystem';
 const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
@@ -111,12 +111,11 @@ import { setRSA } from '@joplin/lib/services/e2ee/ppk';
 import RSA from './services/e2ee/RSA.react-native';
 import { runIntegrationTests as runRsaIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 import { Theme, ThemeAppearance } from '@joplin/lib/themes/type';
-import { AppState } from './utils/types';
 import ProfileSwitcher from './components/ProfileSwitcher/ProfileSwitcher';
 import ProfileEditor from './components/ProfileSwitcher/ProfileEditor';
 import sensorInfo, { SensorInfo } from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
-import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
+import { getDatabaseName, getPluginDataDir, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
 import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
 import { ReactNode } from 'react';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
@@ -128,13 +127,17 @@ import KeymapService from '@joplin/lib/services/KeymapService';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import initializeCommandService from './utils/initializeCommandService';
 import PlatformImplementation from './plugins/PlatformImplementation';
+import ShareManager from './components/screens/ShareManager';
+import appDefaultState, { DEFAULT_ROUTE } from './utils/appDefaultState';
 
 type SideMenuPosition = 'left' | 'right';
 
 const logger = Logger.create('root');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let storeDispatch: any = function(_action: any) {};
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const logReducerAction = function(action: any) {
 	if (['SIDE_MENU_OPEN_PERCENT', 'SYNC_REPORT_UPDATE'].indexOf(action.type) >= 0) return;
 
@@ -148,6 +151,7 @@ const biometricsEnabled = (sensorInfo: SensorInfo): boolean => {
 	return !!sensorInfo && sensorInfo.enabled;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const generalMiddleware = (store: any) => (next: any) => async (action: any) => {
 	logReducerAction(action);
 	PoorManIntervals.update(); // This function needs to be called regularly so put it here
@@ -156,6 +160,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	const newState = store.getState();
 	let doRefreshFolders = false;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	await reduxSharedMiddleware(store, next, action, storeDispatch as any);
 
 	if (action.type === 'NAV_GO') Keyboard.dismiss();
@@ -210,7 +215,10 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	}
 
 	if (action.type === 'NAV_GO' && action.routeName === 'Notes') {
-		Setting.setValue('activeFolderId', newState.selectedFolderId);
+		if ('selectedFolderId' in newState) {
+			Setting.setValue('activeFolderId', newState.selectedFolderId);
+		}
+
 		const notesParent: NotesParent = {
 			type: action.smartFilterId ? 'SmartFilter' : 'Folder',
 			selectedItemId: action.smartFilterId ? action.smartFilterId : newState.selectedFolderId,
@@ -227,14 +235,17 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	}
 
 	if (doRefreshFolders) {
-		await scheduleRefreshFolders((action: any) => storeDispatch(action));
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		await scheduleRefreshFolders((action: any) => storeDispatch(action), newState.selectedFolderId);
 	}
 
 	return result;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const navHistory: any[] = [];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function historyCanGoBackTo(route: any) {
 	if (route.routeName === 'Note') return false;
 	if (route.routeName === 'Folder') return false;
@@ -247,21 +258,7 @@ function historyCanGoBackTo(route: any) {
 	return true;
 }
 
-const DEFAULT_ROUTE = {
-	type: 'NAV_GO',
-	routeName: 'Notes',
-	smartFilterId: 'c3176726992c11e9ac940492261af972',
-};
-
-const appDefaultState: AppState = { ...defaultState, sideMenuOpenPercent: 0,
-	route: DEFAULT_ROUTE,
-	noteSelectionEnabled: false,
-	noteSideMenuOptions: null,
-	isOnMobileData: false,
-	disableSideMenuGestures: false,
-	showPanelsDialog: false,
-};
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const appReducer = (state = appDefaultState, action: any) => {
 	let newState = state;
 	let historyGoingBack = false;
@@ -450,6 +447,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 const store = createStore(appReducer, applyMiddleware(generalMiddleware));
 storeDispatch = store.dispatch;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function resourceFetcher_downloadComplete(event: any) {
 	if (event.encrypted) {
 		void DecryptionWorker.instance().scheduleStart();
@@ -474,6 +472,21 @@ const initializeTempDir = async () => {
 	return tempDir;
 };
 
+const getInitialActiveFolder = async () => {
+	let folderId = Setting.value('activeFolderId');
+
+	// In some cases (e.g. new profile/install), activeFolderId hasn't been set yet.
+	// Because activeFolderId is used to determine the parent for new notes, initialize
+	// it here:
+	if (!folderId) {
+		folderId = (await Folder.defaultFolder())?.id;
+		if (folderId) {
+			Setting.setValue('activeFolderId', folderId);
+		}
+	}
+	return await Folder.load(folderId);
+};
+
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 async function initialize(dispatch: Function) {
 	shimInit();
@@ -495,6 +508,7 @@ async function initialize(dispatch: Function) {
 	const resourceDir = getResourceDir(currentProfile, isSubProfile);
 	Setting.setConstant('resourceDir', resourceDir);
 	Setting.setConstant('pluginDir', `${getProfilesRootDir()}/plugins`);
+	Setting.setConstant('pluginDataDir', getPluginDataDir(currentProfile, isSubProfile));
 
 	await shim.fsDriver().mkdir(resourceDir);
 
@@ -673,7 +687,8 @@ async function initialize(dispatch: Function) {
 
 		reg.logger().info('Loading folders...');
 
-		await refreshFolders((action: any) => dispatch(action));
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		await refreshFolders((action: any) => dispatch(action), '');
 
 		const tags = await Tag.allWithNotes();
 
@@ -689,10 +704,7 @@ async function initialize(dispatch: Function) {
 		// 	items: masterKeys,
 		// });
 
-		const folderId = Setting.value('activeFolderId');
-		let folder = await Folder.load(folderId);
-
-		if (!folder) folder = await Folder.defaultFolder();
+		const folder = await getInitialActiveFolder();
 
 		dispatch({
 			type: 'FOLDER_SET_COLLAPSED_ALL',
@@ -812,6 +824,7 @@ class AppComponent extends React.Component {
 	private urlOpenListener_: EmitterSubscription|null = null;
 	private appStateChangeListener_: NativeEventSubscription|null = null;
 	private themeChangeListener_: NativeEventSubscription|null = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private dropdownAlert_ = (_data: any) => new Promise<any>(res => res);
 
 	public constructor() {
@@ -833,6 +846,7 @@ class AppComponent extends React.Component {
 			PoorManIntervals.update();
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.handleOpenURL_ = (event: any) => {
 			// logger.info('Sharing: handleOpenURL_: start');
 
@@ -997,6 +1011,7 @@ class AppComponent extends React.Component {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async componentDidUpdate(prevProps: any) {
 		if (this.props.biometricsDone !== prevProps.biometricsDone && this.props.biometricsDone) {
 			logger.info('Sharing: componentDidUpdate: biometricsDone');
@@ -1049,9 +1064,11 @@ class AppComponent extends React.Component {
 		this.setState({ sideMenuWidth: this.getSideMenuWidth() });
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public UNSAFE_componentWillReceiveProps(newProps: any) {
 		if (newProps.syncStarted !== this.lastSyncStarted_) {
-			if (!newProps.syncStarted) void refreshFolders((action: any) => this.props.dispatch(action));
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			if (!newProps.syncStarted) void refreshFolders((action: any) => this.props.dispatch(action), this.props.selectedFolderId);
 			this.lastSyncStarted_ = newProps.syncStarted;
 		}
 	}
@@ -1106,6 +1123,7 @@ class AppComponent extends React.Component {
 			JoplinCloudLogin: { screen: JoplinCloudLoginScreen },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },
+			ShareManager: { screen: ShareManager },
 			ProfileSwitcher: { screen: ProfileSwitcher },
 			ProfileEditor: { screen: ProfileEditor },
 			Log: { screen: LogScreen },
@@ -1157,6 +1175,7 @@ class AppComponent extends React.Component {
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
 							</View>
+							{/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied */}
 							<DropdownAlert alert={(func: any) => (this.dropdownAlert_ = func)} />
 							{ !shouldShowMainContent && <BiometricPopup
 								dispatch={this.props.dispatch}
@@ -1182,7 +1201,16 @@ class AppComponent extends React.Component {
 					...paperTheme.colors,
 					onPrimaryContainer: theme.color5,
 					primaryContainer: theme.backgroundColor5,
-					primary: theme.color,
+
+					outline: theme.codeBorderColor,
+
+					primary: theme.color4,
+					onPrimary: theme.backgroundColor4,
+
+					background: theme.backgroundColor,
+
+					surface: theme.backgroundColor,
+					onSurface: theme.color,
 
 					secondaryContainer: theme.raisedBackgroundColor,
 					onSecondaryContainer: theme.raisedColor,
@@ -1206,6 +1234,7 @@ class AppComponent extends React.Component {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const mapStateToProps = (state: any) => {
 	return {
 		historyCanGoBack: state.historyCanGoBack,

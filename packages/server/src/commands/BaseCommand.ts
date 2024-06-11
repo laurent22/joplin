@@ -31,6 +31,7 @@ export default abstract class BaseCommand {
 		return {};
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public abstract run(argv: any, context: RunContext): Promise<void>;
 
 }

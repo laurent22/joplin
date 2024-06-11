@@ -6,17 +6,22 @@ import type { MenuItem } from 'electron';
 // Roughly based on
 // https://github.com/spaceagetv/electron-playwright-helpers/blob/main/src/menu_helpers.ts
 
-// `menuItemPath` should be a list of menu labels (e.g. [["&JoplinMainMenu", "&File"], "Synchronise"]).
-const activateMainMenuItem = (electronApp: ElectronApplication, menuItemLabel: string) => {
-	return electronApp.evaluate(async ({ Menu }, menuItemLabel) => {
-		const activateItemInSubmenu = (submenu: MenuItem[]) => {
+// If given, `parentMenuLabel` should be the label of the menu containing the target item.
+const activateMainMenuItem = (
+	electronApp: ElectronApplication,
+	targetItemLabel: string,
+	parentMenuLabel?: string,
+) => {
+	return electronApp.evaluate(async ({ Menu }, [targetItemLabel, parentMenuLabel]) => {
+		const activateItemInSubmenu = (submenu: MenuItem[], parentLabel: string) => {
 			for (const item of submenu) {
-				if (item.label === menuItemLabel && item.visible) {
+				const matchesParent = !parentMenuLabel || parentLabel === parentMenuLabel;
+				if (item.label === targetItemLabel && matchesParent && item.visible) {
 					// Found!
 					item.click();
 					return true;
 				} else if (item.submenu) {
-					const foundItem = activateItemInSubmenu(item.submenu.items);
+					const foundItem = activateItemInSubmenu(item.submenu.items, item.label);
 
 					if (foundItem) {
 						return true;
@@ -29,8 +34,8 @@ const activateMainMenuItem = (electronApp: ElectronApplication, menuItemLabel: s
 		};
 
 		const appMenu = Menu.getApplicationMenu();
-		return activateItemInSubmenu(appMenu.items);
-	}, menuItemLabel);
+		return activateItemInSubmenu(appMenu.items, '');
+	}, [targetItemLabel, parentMenuLabel]);
 };
 
 export default activateMainMenuItem;

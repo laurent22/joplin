@@ -16,7 +16,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 const { clipboard } = require('electron');
 import { reg } from '@joplin/lib/registry';
 import ErrorBoundary from '../../../../ErrorBoundary';
-import { EditorKeymap, EditorLanguageType, EditorSettings } from '@joplin/editor/types';
+import { EditorKeymap, EditorLanguageType, EditorSettings, UserEventSource } from '@joplin/editor/types';
 import useStyles from '../utils/useStyles';
 import { EditorEvent, EditorEventType } from '@joplin/editor/events';
 import useScrollHandler from '../utils/useScrollHandler';
@@ -33,6 +33,7 @@ const logDebug = (message: string) => logger.debug(message);
 
 interface RenderedBody {
 	html: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginAssets: any[];
 }
 
@@ -77,11 +78,11 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		}
 	}, [props.content]);
 
-	const onEditorPaste = useCallback(async (event: any = null) => {
+	const onEditorPaste = useCallback(async (event: Event|null = null) => {
 		const resourceMds = await getResourcesFromPasteEvent(event);
 		if (!resourceMds.length) return;
 		if (editorRef.current) {
-			editorRef.current.insertText(resourceMds.join('\n'));
+			editorRef.current.insertText(resourceMds.join('\n'), UserEventSource.Paste);
 		}
 	}, []);
 
@@ -128,7 +129,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	const editorPasteText = useCallback(async () => {
 		if (editorRef.current) {
 			const modifiedMd = await Note.replaceResourceExternalToInternalLinks(clipboard.readText(), { useAbsolutePaths: true });
-			editorRef.current.insertText(modifiedMd);
+			editorRef.current.insertText(modifiedMd, UserEventSource.Paste);
 		}
 	}, []);
 
@@ -183,6 +184,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 				let commandOutput = null;
 				if (cmd.name in commands) {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					commandOutput = (commands as any)[cmd.name](cmd.value);
 				} else if (editorRef.current.supportsCommand(cmd.name)) {
 					commandOutput = editorRef.current.execCommand(cmd.name);
@@ -270,6 +272,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			lineCount = editorRef.current.editor.state.doc.lines;
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const options: any = {
 			pluginAssets: renderedBody.pluginAssets,
 			downloadResources: Setting.value('sync.resourceDownloadMode'),
@@ -349,7 +352,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 		return {
 			language: isHTMLNote ? EditorLanguageType.Html : EditorLanguageType.Markdown,
-			readOnly: props.disabled || props.visiblePanes.indexOf('editor') < 0,
+			readOnly: props.disabled,
 			katexEnabled: Setting.value('markdown.plugin.katex'),
 			themeData: {
 				...styles.globalTheme,
@@ -363,8 +366,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			indentWithTabs: true,
 		};
 	}, [
-		props.contentMarkupLanguage, props.disabled, props.visiblePanes,
-		props.keyboardMode, styles.globalTheme,
+		props.contentMarkupLanguage, props.disabled, props.keyboardMode, styles.globalTheme,
 	]);
 
 	// Update the editor's value

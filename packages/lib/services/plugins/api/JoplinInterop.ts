@@ -26,6 +26,7 @@ export default class JoplinInterop {
 
 	public async registerExportModule(module: ExportModule) {
 		const internalModule = makeExportModule({
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			...module as any,
 			type: ModuleType.Exporter,
 			fileExtensions: module.fileExtensions ? module.fileExtensions : [],

@@ -2,6 +2,7 @@ import { Models } from '../models/factory';
 import { TaskId } from '../services/database/types';
 import TaskService, { Task, taskIdToLabel } from '../services/TaskService';
 import { Services } from '../services/types';
+import { logHeartbeat as logHeartbeatMessage } from './metrics';
 import { Config, Env } from './types';
 
 export default async function(env: Env, models: Models, config: Config, services: Services): Promise<TaskService> {
@@ -73,6 +74,13 @@ export default async function(env: Env, models: Models, config: Config, services
 			description: taskIdToLabel(TaskId.ProcessEmails),
 			schedule: '* * * * *',
 			run: (_models: Models, services: Services) => services.email.runMaintenance(),
+		},
+
+		{
+			id: TaskId.LogHeartbeatMessage,
+			description: taskIdToLabel(TaskId.LogHeartbeatMessage),
+			schedule: config.HEARTBEAT_MESSAGE_SCHEDULE,
+			run: (_models: Models, _services: Services) => logHeartbeatMessage(),
 		},
 	];
 

@@ -8,6 +8,7 @@ const mhchemModule = require('./katex_mhchem.js');
 // to serialize them with json-stringify-safe
 const stringifySafe = require('json-stringify-safe');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function stringifyKatexOptions(options: any) {
 	if (!options) return '';
 
@@ -50,12 +51,14 @@ function stringifyKatexOptions(options: any) {
 	// is created by \begin{align}...\end{align} environments, and doesn't have a "tokens" property.
 
 	if (options.macros) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const toSerialize: any = {};
 		for (const k of Object.keys(options.macros)) {
 			const macro = options.macros[k];
 			if (typeof macro === 'string') {
 				toSerialize[k] = `${macro}_string`;
 			} else {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				const macroText: string[] = macro.tokens.map((t: any) => t.text);
 				toSerialize[k] = `${macroText.join('')}_${macro.numArgs}`;
 			}
@@ -95,11 +98,17 @@ function katexStyle() {
 		{ name: 'fonts/KaTeX_Size3-Regular.woff2' },
 		{ name: 'fonts/KaTeX_Size4-Regular.woff2' },
 		{ name: 'fonts/KaTeX_Typewriter-Regular.woff2' },
-	];
+	].map(e => {
+		return {
+			source: 'katex',
+			...e,
+		};
+	});
 }
 
 // Test if potential opening or closing delimiter
 // Assumes that there is a "$" at state.src[pos]
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function isValidDelim(state: any, pos: number) {
 	const max = state.posMax;
 
@@ -124,6 +133,7 @@ function isValidDelim(state: any, pos: number) {
 	};
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function math_inline(state: any, silent: boolean) {
 	let match, token, res, pos;
 
@@ -199,6 +209,7 @@ function math_inline(state: any, silent: boolean) {
 	return true;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function math_block(state: any, start: number, end: number, silent: boolean) {
 	let firstLine,
 		lastLine,
@@ -279,8 +290,10 @@ function math_block(state: any, start: number, end: number, silent: boolean) {
 	return true;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const cache_: any = {};
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function renderToStringWithCache(latex: string, katexOptions: any) {
 	const cacheKey = md5(escape(latex) + escape(stringifyKatexOptions(katexOptions)));
 	if (cacheKey in cache_) {
@@ -297,18 +310,21 @@ function renderToStringWithCache(latex: string, katexOptions: any) {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function renderKatexError(latex: string, error: any): string {
 	console.error('Katex error for:', latex, error);
 	return `<div class="inline-code">${error.message}</div>`;
 }
 
 export default {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	plugin: function(markdownIt: any, options: RuleOptions) {
 		// Keep macros that persist across Katex blocks to allow defining a macro
 		// in one block and re-using it later in other blocks.
 		// https://github.com/laurent22/joplin/issues/1105
 		if (!options.context.userData.__katex) options.context.userData.__katex = { macros: {} };
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const katexOptions: any = {};
 		katexOptions.macros = options.context.userData.__katex.macros;
 		katexOptions.trust = true;
@@ -325,7 +341,9 @@ export default {
 			return `<span class="joplin-editable"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$">${markdownIt.utils.escapeHtml(latex)}</span>${outputHtml}</span>`;
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const inlineRenderer = function(tokens: any[], idx: number) {
+			options.context.pluginWasUsed.katex = true;
 			return katexInline(tokens[idx].content);
 		};
 
@@ -341,7 +359,9 @@ export default {
 			return `<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">${markdownIt.utils.escapeHtml(latex)}</pre>${outputHtml}</div>`;
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const blockRenderer = function(tokens: any[], idx: number) {
+			options.context.pluginWasUsed.katex = true;
 			return `${katexBlock(tokens[idx].content)}\n`;
 		};
 

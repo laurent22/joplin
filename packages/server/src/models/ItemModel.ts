@@ -16,7 +16,7 @@ import { msleep } from '../utils/time';
 import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import prettyBytes = require('pretty-bytes');
 
-const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
+import * as mimeUtils from '@joplin/lib/mime-utils';
 
 // Converts "root:/myfile.txt:" to "myfile.txt"
 const extractNameRegex = /^root:\/(.*):$/;
@@ -46,6 +46,7 @@ export interface SaveFromRawContentItem {
 
 export interface SaveFromRawContentResultItem {
 	item: Item;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	error: any;
 }
 
@@ -74,8 +75,8 @@ export default class ItemModel extends BaseModel<Item> {
 
 	private static storageDrivers_: Map<StorageDriverConfig, StorageDriverBase> = new Map();
 
-	public constructor(db: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
-		super(db, modelFactory, config);
+	public constructor(db: DbConnection, dbSlave: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
+		super(db, dbSlave, modelFactory, config);
 
 		this.storageDriverConfig_ = config.storageDriver;
 		this.storageDriverConfigFallback_ = config.storageDriverFallback;
@@ -101,7 +102,7 @@ export default class ItemModel extends BaseModel<Item> {
 		let driver = ItemModel.storageDrivers_.get(config);
 
 		if (!driver) {
-			driver = await loadStorageDriver(config, this.db);
+			driver = await loadStorageDriver(config, this.db, this.dbSlave());
 			ItemModel.storageDrivers_.set(config, driver);
 		}
 
@@ -144,6 +145,7 @@ export default class ItemModel extends BaseModel<Item> {
 		const output: Item = {};
 		const propNames = ['id', 'name', 'updated_time', 'created_time'];
 		for (const k of Object.keys(object)) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			if (propNames.includes(k)) (output as any)[k] = (object as any)[k];
 		}
 		return output;
@@ -329,7 +331,7 @@ export default class ItemModel extends BaseModel<Item> {
 			let fromDriver: StorageDriverBase = drivers[item.content_storage_id];
 
 			if (!fromDriver) {
-				fromDriver = await loadStorageDriver(item.content_storage_id, this.db);
+				fromDriver = await loadStorageDriver(item.content_storage_id, this.db, this.dbSlave());
 				drivers[item.content_storage_id] = fromDriver;
 			}
 
@@ -544,6 +546,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public itemToJoplinItem(itemRow: Item): any {
 		if (itemRow.jop_type <= 0) throw new Error(`Not a Joplin item: ${itemRow.id}`);
 		if (!itemRow.content) throw new Error('Item content is missing');
@@ -559,6 +562,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return item;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async loadAsJoplinItem(id: Uuid): Promise<any> {
 		const raw = await this.loadWithContent(id);
 		return this.itemToJoplinItem(raw);
@@ -579,6 +583,7 @@ export default class ItemModel extends BaseModel<Item> {
 			error: Error;
 			resourceIds?: string[];
 			isNote?: boolean;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			joplinItem?: any;
 		}
 
@@ -600,6 +605,7 @@ export default class ItemModel extends BaseModel<Item> {
 						name: rawItem.name,
 					};
 
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					let joplinItem: any = null;
 
 					let resourceIds: string[] = [];
@@ -827,10 +833,12 @@ export default class ItemModel extends BaseModel<Item> {
 		};
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async allForDebug(): Promise<any[]> {
 		const items = await this.all({ fields: ['*'] });
 		return items.map(i => {
 			if (!i.content) return i;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			i.content = i.content.toString() as any;
 			return i;
 		});

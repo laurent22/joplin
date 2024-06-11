@@ -27,6 +27,7 @@ export default class StatusBarWidget extends BaseWidget {
 		this.invalidate();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async prompt(initialText = '', promptString: any = null, options: any = null) {
 		if (this.promptState_) throw new Error('Another prompt already active');
 		if (promptString === null) promptString = ':';
@@ -86,6 +87,7 @@ export default class StatusBarWidget extends BaseWidget {
 
 		// const textStyle = this.promptActive ? (s) => s : chalk.bgBlueBright.white;
 		// const textStyle = (s) => s;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const textStyle = this.promptActive ? (s: any) => s : chalk.gray;
 
 		this.term.drawHLine(this.absoluteInnerX, this.absoluteInnerY, this.innerWidth, textStyle(' '));
@@ -106,6 +108,7 @@ export default class StatusBarWidget extends BaseWidget {
 
 			const isSecurePrompt = !!this.promptState_.secure;
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const options: any = {
 				cancelable: true,
 				history: this.history,
@@ -118,6 +121,7 @@ export default class StatusBarWidget extends BaseWidget {
 			if ('cursorPosition' in this.promptState_) options.cursorPosition = this.promptState_.cursorPosition;
 			if (isSecurePrompt) options.echoChar = true;
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			this.inputEventEmitter_ = this.term.inputField(options, (error: any, input: any) => {
 				let resolveResult = null;
 				const resolveFn = this.promptState_.resolve;

@@ -1,5 +1,5 @@
 import { EditorView, KeyBinding, keymap } from '@codemirror/view';
-import { EditorCommandType, EditorControl, EditorSettings, LogMessageCallback, ContentScriptData, SearchState } from '../types';
+import { EditorCommandType, EditorControl, EditorSettings, LogMessageCallback, ContentScriptData, SearchState, UserEventSource } from '../types';
 import CodeMirror5Emulation from './CodeMirror5Emulation/CodeMirror5Emulation';
 import editorCommands from './editorCommands/editorCommands';
 import { Compartment, EditorSelection, Extension, StateEffect } from '@codemirror/state';
@@ -8,6 +8,7 @@ import { SearchQuery, setSearchQuery } from '@codemirror/search';
 import PluginLoader from './pluginApi/PluginLoader';
 import customEditorCompletion, { editorCompletionSource, enableLanguageDataAutocomplete } from './pluginApi/customEditorCompletion';
 import { CompletionSource } from '@codemirror/autocomplete';
+import { RegionSpec, toggleInlineSelectionFormat } from './util/editorStateUtils';
 
 interface Callbacks {
 	onUndoRedo(): void;
@@ -17,6 +18,7 @@ interface Callbacks {
 	onLogMessage: LogMessageCallback;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 type EditorUserCommand = (...args: any[])=> any;
 
 export default class CodeMirrorControl extends CodeMirror5Emulation implements EditorControl {
@@ -38,6 +40,7 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		return name in editorCommands || this._userCommands.has(name) || super.commandExists(name);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public override execCommand(name: string, ...args: any[]) {
 		let commandOutput;
 		if (this._userCommands.has(name)) {
@@ -87,8 +90,27 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		this.editor.scrollDOM.scrollTop = fraction * maxScroll;
 	}
 
-	public insertText(text: string) {
-		this.editor.dispatch(this.editor.state.replaceSelection(text));
+	public insertText(text: string, userEvent?: UserEventSource) {
+		this.editor.dispatch(this.editor.state.replaceSelection(text), { userEvent });
+	}
+
+	public wrapSelections(start: string, end: string) {
+		const regionSpec = RegionSpec.of({ template: { start, end } });
+
+		this.editor.dispatch(
+			this.editor.state.changeByRange(range => {
+				const update = toggleInlineSelectionFormat(this.editor.state, regionSpec, range);
+				if (!update.range.empty) {
+					// Deselect the start and end characters (roughly preserve the original
+					// selection).
+					update.range = EditorSelection.range(
+						update.range.from + start.length,
+						update.range.to - end.length,
+					);
+				}
+				return update;
+			}),
+		);
 	}
 
 	public updateBody(newBody: string) {
@@ -100,7 +122,11 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 			// to ensure that the selection stays within the document
 			// (and thus avoids an exception).
 			const mainCursorPosition = this.editor.state.selection.main.anchor;
-			const newCursorPosition = Math.min(mainCursorPosition, newBody.length);
+
+			// The maximum cursor position needs to be calculated using the EditorState,
+			// to correctly account for line endings.
+			const maxCursorPosition = this.editor.state.toText(newBody).length;
+			const newCursorPosition = Math.min(mainCursorPosition, maxCursorPosition);
 
 			this.editor.dispatch(this.editor.state.update({
 				changes: {

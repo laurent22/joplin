@@ -15,16 +15,14 @@ const commandsWithDependencies = [
 type SetFormNoteCallback = (callback: (prev: FormNote)=> FormNote)=> void;
 
 interface HookDependencies {
-	formNote: FormNote;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	setShowLocalSearch: Function;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	noteSearchBarRef: any;
 	editorRef: RefObject<NoteBodyEditorRef>;
-	titleInputRef: any;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	saveNoteAndWait: Function;
+	titleInputRef: RefObject<HTMLInputElement>;
 	setFormNote: SetFormNoteCallback;
 }
 
@@ -34,6 +32,7 @@ function editorCommandRuntime(
 	setFormNote: SetFormNoteCallback,
 ): CommandRuntime {
 	return {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		execute: async (_context: CommandContext, ...args: any[]) => {
 			if (!editorRef.current) {
 				reg.logger().warn('Received command, but editor is gone', declaration.name);
@@ -106,6 +105,5 @@ export default function useWindowCommandHandler(dependencies: HookDependencies) 
 				CommandService.instance().unregisterRuntime(command.declaration.name);
 			}
 		};
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [editorRef, setShowLocalSearch, noteSearchBarRef, titleInputRef]);
+	}, [editorRef, setShowLocalSearch, noteSearchBarRef, titleInputRef, setFormNote]);
 }

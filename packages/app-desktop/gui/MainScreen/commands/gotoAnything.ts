@@ -14,6 +14,7 @@ export const declaration: CommandDeclaration = {
 };
 
 function menuItemById(id: string) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return PluginManager.instance().menuItems().find((i: any) => i.id === id);
 }
 
@@ -31,6 +32,7 @@ export const runtime = (): CommandRuntime => {
 			} else if (uiType === UiType.ControlledApi) {
 				// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 				return new Promise((resolve: Function, reject: Function) => {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const menuItem = PluginManager.instance().menuItems().find((i: any) => i.id === 'controlledApi');
 					menuItem.userData = {
 						callback: { resolve, reject },
