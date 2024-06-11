@@ -466,7 +466,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 					);
 
 					if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
-						addSettingButton('go_to_joplin_cloud_login_button', _('Connect to Joplin Cloud'), this.goToJoplinCloudLogin_, { statusComp: statusComp });
+						addSettingButton('go_to_joplin_cloud_login_button', _('Connect to Joplin Cloud'), this.goToJoplinCloudLogin_);
 					}
 
 					addSettingButton('check_sync_config_button', _('Check synchronisation configuration'), this.checkSyncConfig_, { statusComp: statusComp });
