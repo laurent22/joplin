@@ -22,9 +22,6 @@ type JoplinCloudConfigProps = {
 
 export const emailToNoteLabel = () => _('Email to note');
 export const emailToNoteDescription = () => _('Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook');
-export const accountInformationLabel = () => _('Account information');
-export const accountTypeLabel = () => _('Account type');
-export const accountEmailLabel = () => _('Email');
 
 const JoplinCloudConfig = (props: JoplinCloudConfigProps) => {
 
@@ -48,14 +45,14 @@ const JoplinCloudConfig = (props: JoplinCloudConfigProps) => {
 	return (
 		<View>
 			<View style={props.styles.styleSheet.settingContainerNoBottomBorder}>
-				<Text style={props.styles.styleSheet.settingTextEmphasis}>{accountInformationLabel()}</Text>
+				<Text style={props.styles.styleSheet.settingTextEmphasis}>{_('Account information')}</Text>
 			</View>
 			<View style={props.styles.styleSheet.settingContainerNoBottomBorder}>
-				<Text style={props.styles.styleSheet.settingText}>{accountTypeLabel()}</Text>
+				<Text style={props.styles.styleSheet.settingText}>{_('Account type')}</Text>
 				<Text style={props.styles.styleSheet.settingTextEmphasis}>{accountTypeName()}</Text>
 			</View>
 			<View style={props.styles.styleSheet.settingContainerNoBottomBorder}>
-				<Text style={props.styles.styleSheet.settingText}>{accountEmailLabel()}</Text>
+				<Text style={props.styles.styleSheet.settingText}>{_('Email')}</Text>
 				<Text selectable style={props.styles.styleSheet.settingTextEmphasis}>{props.userEmail}</Text>
 			</View>
 			<LinkButton onPress={goToJoplinCloudProfile}>

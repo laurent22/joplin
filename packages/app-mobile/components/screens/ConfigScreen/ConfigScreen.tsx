@@ -34,7 +34,7 @@ import NoteImportButton, { importButtonDefaultTitle, importButtonDescription } f
 import SectionDescription from './SectionDescription';
 import EnablePluginSupportPage from './plugins/EnablePluginSupportPage';
 import getVersionInfoText from '../../../utils/getVersionInfoText';
-import JoplinCloudConfig, { accountEmailLabel, accountInformationLabel, accountTypeLabel, emailToNoteDescription, emailToNoteLabel } from './JoplinCloudConfig';
+import JoplinCloudConfig, { emailToNoteDescription, emailToNoteLabel } from './JoplinCloudConfig';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -540,7 +540,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 					website={this.props.settings['sync.10.website']}
 					styles={this.styles()}
 				/>,
-				[emailToNoteDescription(), emailToNoteLabel(), accountEmailLabel(), accountTypeLabel(), accountInformationLabel()],
+				[emailToNoteDescription(), emailToNoteLabel()],
 			);
 		}
 
