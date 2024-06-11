@@ -4,7 +4,7 @@ import { _ } from '@joplin/lib/locale';
 import { clipboard } from 'electron';
 import Button from './Button/Button';
 import { Fragment } from 'react';
-import { accountTypeToString } from '@joplin/lib/utils/joplinCloud';
+import accountTypeToString from '@joplin/lib/utils/joplinCloud/accountTypeToString';
 import bridge from '../services/bridge';
 
 type JoplinCloudConfigScreenProps = {
