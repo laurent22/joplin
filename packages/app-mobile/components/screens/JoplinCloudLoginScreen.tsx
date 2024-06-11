@@ -145,28 +145,32 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		<View style={styles.root}>
 			<ScreenHeader title={_('Joplin Cloud Login')} />
 			<View style={styles.containerStyle}>
-				<Text style={styles.text}>
-					{_('To allow Joplin to synchronise with Joplin Cloud, please login using this URL:')}
-				</Text>
-				<View style={styles.buttonsContainer}>
-					<View style={{ marginBottom: 20 }}>
-						<Button
-							onPress={onAuthoriseClicked}
-							icon='open-in-new'
-							mode='contained'
-						>
-							{_('Authorise')}
-						</Button>
-					</View>
-					<Text style={styles.smallTextStyle}>Or</Text>
-					<Button
-						onPress={onCopyToClipboardClicked}
-						icon='content-copy'
-						mode='outlined'
-					>{_('Copy link to website')}
-					</Button>
-
-				</View>
+				{ state.active !== 'COMPLETED' ?
+					<React.Fragment>
+						<Text style={styles.text}>
+							{_('To allow Joplin to synchronise with Joplin Cloud, please login using this URL:')}
+						</Text>
+						<View style={styles.buttonsContainer}>
+							<View style={{ marginBottom: 20 }}>
+								<Button
+									onPress={onAuthoriseClicked}
+									icon='open-in-new'
+									mode='contained'
+								>
+									{_('Authorise')}
+								</Button>
+							</View>
+							<Text style={styles.smallTextStyle}>{_('Or')}</Text>
+							<Button
+								onPress={onCopyToClipboardClicked}
+								icon='content-copy'
+								mode='outlined'
+							>{_('Copy link to website')}
+							</Button>
+						</View>
+					</React.Fragment>
+					: null
+				}
 				<Text style={styles[state.className]}>{state.message()}
 					{state.active === 'ERROR' ? (
 						<Text style={styles[state.className]}>{state.errorMessage}</Text>
