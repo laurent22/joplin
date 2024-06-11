@@ -456,6 +456,7 @@ packages/app-desktop/integration-tests/models/MainScreen.js
 packages/app-desktop/integration-tests/models/NoteEditorScreen.js
 packages/app-desktop/integration-tests/models/SettingsScreen.js
 packages/app-desktop/integration-tests/models/Sidebar.js
+packages/app-desktop/integration-tests/noteList.spec.js
 packages/app-desktop/integration-tests/richTextEditor.spec.js
 packages/app-desktop/integration-tests/sidebar.spec.js
 packages/app-desktop/integration-tests/simpleBackup.spec.js
