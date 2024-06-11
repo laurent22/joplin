@@ -535,7 +535,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				<JoplinCloudConfig
 					accountType={this.props.settings['sync.10.accountType']}
 					inboxEmail={this.props.settings['sync.10.inboxEmail']}
-					userEmail={'pedrlz.frn@gmail.com'}
+					userEmail={this.props.settings['sync.10.userEmail']}
 					website={this.props.settings['sync.10.website']}
 					styles={this.styles()}
 				/>,
