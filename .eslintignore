@@ -676,7 +676,9 @@ packages/app-mobile/plugins/PluginRunner/dialogs/hooks/useWebViewSetup.js
 packages/app-mobile/plugins/PluginRunner/types.js
 packages/app-mobile/plugins/PluginRunner/utils/createOnLogHandler.js
 packages/app-mobile/plugins/hooks/usePlugin.js
+packages/app-mobile/plugins/loadPlugins.test.js
 packages/app-mobile/plugins/loadPlugins.js
+packages/app-mobile/plugins/testing/MockPluginRunner.js
 packages/app-mobile/root.js
 packages/app-mobile/services/AlarmServiceDriver.android.js
 packages/app-mobile/services/AlarmServiceDriver.ios.js
