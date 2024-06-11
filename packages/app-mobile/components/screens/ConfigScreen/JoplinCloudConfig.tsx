@@ -36,6 +36,7 @@ const JoplinCloudConfig = (props: JoplinCloudConfigProps) => {
 
 	const accountTypeName = () => {
 		try {
+			if (!props.accountType) return 'Unknown';
 			return accountTypeToString(parseInt(props.accountType, 10));
 		} catch (error) {
 			logger.error(error);
