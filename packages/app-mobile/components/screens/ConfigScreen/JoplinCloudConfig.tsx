@@ -1,5 +1,6 @@
 import { _ } from '@joplin/lib/locale';
 import * as React from 'react';
+import { useCallback } from 'react';
 import { View, Text, Linking } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import SettingsButton from './SettingsButton';
@@ -30,9 +31,9 @@ const JoplinCloudConfig = (props: JoplinCloudConfigProps) => {
 	const isEmailToNoteAvailableInAccount = props.accountType !== '1';
 	const inboxEmailValue = props.inboxEmail ?? '-';
 
-	const goToJoplinCloudProfile = async () => {
+	const goToJoplinCloudProfile = useCallback(async () => {
 		await Linking.openURL(`${props.website}/users/me`);
-	};
+	}, [props.website]);
 
 	const accountTypeName = () => {
 		try {
