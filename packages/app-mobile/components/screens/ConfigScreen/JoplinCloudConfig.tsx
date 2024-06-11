@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { View, Text, Linking } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import SettingsButton from './SettingsButton';
-import accountTypeToString from '@joplin/lib/utils/joplinCloud/accountTypeToString';
+import { accountTypeToString } from '@joplin/lib/utils/joplinCloud/types';
 import { LinkButton } from '../../buttons';
 import { ConfigScreenStyles } from './configScreenStyles';
 import { Divider } from 'react-native-paper';
