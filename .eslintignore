@@ -1019,7 +1019,9 @@ packages/lib/services/folderMirror/utils/folderInfo/index.js
 packages/lib/services/folderMirror/utils/folderInfo/loadFolderInfo.js
 packages/lib/services/folderMirror/utils/folderInfo/parseFolderIcon.js
 packages/lib/services/folderMirror/utils/folderInfo/writeFolderInfo.js
+packages/lib/services/folderMirror/utils/keysMatch.js
 packages/lib/services/folderMirror/utils/loadResourceMetadata.js
+packages/lib/services/folderMirror/utils/mergeTrees.js
 packages/lib/services/folderMirror/utils/resourceToMetadataYml.js
 packages/lib/services/folderMirror/utils/statToItem.js
 packages/lib/services/interop/InteropService.test.js

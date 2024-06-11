@@ -4,7 +4,7 @@ import * as yaml from 'js-yaml';
 import { ResourceEntity } from '../../database/types';
 import { basename, extname } from 'path';
 import debugLogger from './debugLogger';
-const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
+import { fromFilename as mimeFromFilename } from '@joplin/lib/mime-utils';
 
 
 const loadResourceMetadata = async (resourcePath: string): Promise<ResourceEntity> => {
@@ -13,7 +13,7 @@ const loadResourceMetadata = async (resourcePath: string): Promise<ResourceEntit
 	const filename = basename(resourcePath);
 	const extension = extname(resourcePath);
 	const result: ResourceEntity = {
-		mime: mimeUtils.fromFilename(filename),
+		mime: mimeFromFilename(filename),
 		filename,
 		title: filename.substring(0, filename.length - extension.length),
 		// Internally, file_extension should not have a leading ".". Otherwise, the dot will
