@@ -60,7 +60,7 @@ const JoplinCloudConfig = (props: JoplinCloudConfigProps) => {
 			<LinkButton onPress={goToJoplinCloudProfile}>
 				{_('Go to Joplin Cloud profile')}
 			</LinkButton>
-			<Divider style={props.styles.styleSheet.divider} bold />
+			<Divider bold />
 
 			<View style={props.styles.styleSheet.settingContainerNoBottomBorder}>
 				<Text style={props.styles.styleSheet.settingText}>{emailToNoteLabel()}</Text>

@@ -5,7 +5,6 @@ type SidebarButtonStyle = ViewStyle & { height: number };
 
 export interface ConfigScreenStyleSheet {
 	body: ViewStyle;
-	divider: TextStyle;
 
 	settingContainer: ViewStyle;
 	settingContainerNoBottomBorder: ViewStyle;
@@ -103,9 +102,6 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 			flex: 1,
 			justifyContent: 'flex-start',
 			flexDirection: 'column',
-		},
-		divider: {
-			color: theme.dividerColor,
 		},
 		settingContainer: settingContainerStyle,
 		settingContainerNoBottomBorder: {
