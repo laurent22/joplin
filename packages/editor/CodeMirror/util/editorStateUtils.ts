@@ -268,7 +268,7 @@ const toggleInlineRegionSurrounded = (
 
 		changes.push({
 			from: sel.to,
-			insert: spec.template.start,
+			insert: spec.template.end,
 		});
 
 		// If not a caret,
