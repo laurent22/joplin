@@ -533,6 +533,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		if (section.name === 'joplinCloud') {
 			addSettingComponent(
 				<JoplinCloudConfig
+					key="joplin-cloud-config"
 					accountType={this.props.settings['sync.10.accountType']}
 					inboxEmail={this.props.settings['sync.10.inboxEmail']}
 					userEmail={this.props.settings['sync.10.userEmail']}
