@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra';
-import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from '../markdownUtils';
-import { _ } from '../locale';
+import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from '../../markdownUtils';
+import { _ } from '../../locale';
 import { htmlentities } from '@joplin/utils/html';
 
 type FeatureId = string;
@@ -408,20 +408,4 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			footnote: _('Per user. Minimum of %d users.', 2),
 		},
 	};
-}
-
-enum AccountType {
-	Default = 0,
-	Basic = 1,
-	Pro = 2,
-	Team = 3,
-}
-
-export function accountTypeToString(accountType: AccountType): string {
-	if (accountType === AccountType.Default) return 'Default';
-	if (accountType === AccountType.Basic) return 'Basic';
-	if (accountType === AccountType.Pro) return 'Pro';
-	if (accountType === AccountType.Team) return 'Team';
-	const exhaustivenessCheck: never = accountType;
-	throw new Error(`Invalid type: ${exhaustivenessCheck}`);
 }

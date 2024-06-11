@@ -3,9 +3,13 @@ import * as React from 'react';
 import { View, Text, Linking } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import SettingsButton from './SettingsButton';
-import { accountTypeToString } from '@joplin/lib/utils/joplinCloud';
+import accountTypeToString from '@joplin/lib/utils/joplinCloud/accountTypeToString';
 import { LinkButton } from '../../buttons';
 import { ConfigScreenStyles } from './configScreenStyles';
+import { Divider } from 'react-native-paper';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('JoplinCloudConfig');
 
 type JoplinCloudConfigProps = {
 	styles: ConfigScreenStyles;
@@ -30,6 +34,15 @@ const JoplinCloudConfig = (props: JoplinCloudConfigProps) => {
 		await Linking.openURL(`${props.website}/users/me`);
 	};
 
+	const accountTypeName = () => {
+		try {
+			return accountTypeToString(parseInt(props.accountType, 10));
+		} catch (error) {
+			logger.error(error);
+			return 'Unknown';
+		}
+	};
+
 	return (
 		<View>
 			<View style={props.styles.styleSheet.settingContainerNoBottomBorder}>
@@ -37,16 +50,16 @@ const JoplinCloudConfig = (props: JoplinCloudConfigProps) => {
 			</View>
 			<View style={props.styles.styleSheet.settingContainerNoBottomBorder}>
 				<Text style={props.styles.styleSheet.settingText}>{accountTypeLabel()}</Text>
-				<Text style={props.styles.styleSheet.settingTextEmphasis}>{accountTypeToString(parseInt(props.accountType, 10))}</Text>
+				<Text style={props.styles.styleSheet.settingTextEmphasis}>{accountTypeName()}</Text>
 			</View>
 			<View style={props.styles.styleSheet.settingContainerNoBottomBorder}>
 				<Text style={props.styles.styleSheet.settingText}>{accountEmailLabel()}</Text>
-				<Text style={props.styles.styleSheet.settingTextEmphasis}>{props.userEmail}</Text>
+				<Text selectable style={props.styles.styleSheet.settingTextEmphasis}>{props.userEmail}</Text>
 			</View>
 			<LinkButton onPress={goToJoplinCloudProfile}>
 				{_('Go to Joplin Cloud profile')}
 			</LinkButton>
-			<View style={props.styles.styleSheet.settingContainer}/>
+			<Divider style={props.styles.styleSheet.divider} bold />
 
 			<View style={props.styles.styleSheet.settingContainerNoBottomBorder}>
 				<Text style={props.styles.styleSheet.settingText}>{emailToNoteLabel()}</Text>
